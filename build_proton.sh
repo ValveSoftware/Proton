@@ -6,7 +6,7 @@ set -e
 #./build/ <-- built files
 #./dist/ <-- proton build, ready to distribute
 
-mkdir -p dist/ build/wine.win32 build/dist.win32 build/wine.win64
+mkdir -p dist/bin build/wine.win32 build/dist.win32 build/wine.win64
 
 TOP="$PWD"
 RUNTIME_PATH="$TOP/../../runtime/steam-runtime-both/"
@@ -15,6 +15,7 @@ TOOLS_DIR64="$TOP/build/tools.win64"
 TOOLS_DIR32="$TOP/build/tools.win32"
 
 cp -a toolmanifest.vdf dist/
+cp -a proton dist/bin/
 
 #build wine64
 cd "$TOP"/build/wine.win64

@@ -1,0 +1,149 @@
+#!/usr/bin/env python2
+
+#script to launch Wine with the correct environment
+
+import json
+import os
+import shutil
+import subprocess
+import sys
+
+PFX="Proton: "
+
+def log(msg):
+    sys.stdout.write(PFX + msg + os.linesep)
+
+if not ("STEAM_COMPAT_DATA_PATH" in os.environ):
+    log("No compat data path?")
+    sys.exit(1)
+
+prefix = os.environ["STEAM_COMPAT_DATA_PATH"]
+
+bindir = os.path.dirname(sys.argv[0])
+basedir = os.path.dirname(bindir)
+wine_path = bindir + "/wine64"
+
+libdir = basedir + "/lib64:" + basedir + "/lib"
+
+env = dict(os.environ)
+
+env["WINEDEBUG"] = "-all"
+lfile = None
+
+#env["WINEDEBUG"] = "+tid,+seh,+steamclient"
+#lfile = env["HOME"] + "/steam-" + env["SteamGameId"] + ".log"
+
+env["WINEPREFIX"] = prefix
+if "LD_LIBRARY_PATH" in os.environ:
+    env["LD_LIBRARY_PATH"] = libdir + ":" + env["LD_LIBRARY_PATH"]
+else:
+    env["LD_LIBRARY_PATH"] = libdir
+
+if "STEAM_COMPAT_CONFIG" in os.environ:
+    config = os.environ["STEAM_COMPAT_CONFIG"]
+
+if not os.path.isdir(prefix + "/drive_c"):
+    #create prefix
+    subprocess.call([wine_path, "wineboot"], env=env)
+
+    #copy steam files into place
+    steamdir = env["HOME"] + "/.steam/steam/legacycompat/"
+    dst = prefix + "/drive_c/Program Files (x86)/"
+    if not os.path.isdir(dst):
+        dst = prefix + "/drive_c/Program Files/"
+    os.mkdir(dst + "Steam")
+    filestocopy = ["steamclient.dll",
+            "steamclient64.dll",
+            "Steam.dll"]
+    for f in filestocopy:
+        if os.path.isfile(steamdir + f):
+            shutil.copy(steamdir + f, dst + "Steam/" + f)
+
+    #copy openvr files into place
+    dst = prefix + "/drive_c/vrclient/bin/"
+    os.makedirs(dst)
+    shutil.copy(basedir + "/lib/wine/fakedlls/vrclient.dll", dst)
+    shutil.copy(basedir + "/lib64/wine/fakedlls/vrclient_x64.dll", dst)
+    os.makedirs(prefix + "/drive_c/users/" + env["USER"] + "/Local Settings/Application Data/openvr")
+
+#parse linux openvr config and present it in win32 format to the app.
+#logic from openvr's CVRPathRegistry_Public::GetPaths
+
+#check environment for overrides
+vr_runtime = None
+if "VR_OVERRIDE" in env:
+    vr_runtime = env["VR_OVERRIDE"]
+    env.pop("VR_OVERRIDE")
+
+vr_config = None
+if "VR_CONFIG_PATH" in env:
+    vr_config = env["VR_CONFIG_PATH"]
+    env.pop("VR_CONFIG_PATH")
+
+vr_log = None
+if "VR_LOG_PATH" in env:
+    vr_log = env["VR_LOG_PATH"]
+    env.pop("VR_LOG_PATH")
+
+#load from json if needed
+if vr_runtime is None or \
+        vr_config is None or \
+        vr_log is None:
+    try:
+        if "XDG_CONFIG_HOME" in env:
+            path = env["XDG_CONFIG_HOME"]
+        else:
+            path = env["HOME"] + "/.config"
+        path = path + "/openvr/openvrpaths.vrpath"
+
+        j = json.load(open(path, "r"))
+
+        if vr_runtime is None:
+            vr_runtime = j["runtime"][0]
+
+        if vr_config is None:
+            vr_config = j["config"][0]
+
+        if vr_log is None:
+            vr_log = j["log"][0]
+    except:
+        pass
+
+#remove existing file
+vrpaths_name = prefix + "/drive_c/users/" + env["USER"] + "/Local Settings/Application Data/openvr/openvrpaths.vrpath"
+if os.path.exists(vrpaths_name):
+    os.remove(vrpaths_name)
+
+#dump new file
+if not vr_runtime is None:
+    try:
+        env["PROTON_VR_RUNTIME"] = vr_runtime
+
+        j = { "runtime": [ "C:\\vrclient\\", "C:\\vrclient" ] }
+
+        if not vr_config is None:
+            win_vr_config = subprocess.check_output([wine_path, "winepath", "-w", vr_config], env=env)
+            j["config"] = [ win_vr_config.strip() ]
+
+        if not vr_log is None:
+            win_vr_log = subprocess.check_output([wine_path, "winepath", "-w", vr_log], env=env)
+            j["log"] = [ win_vr_log.strip() ]
+
+        j["version"] = 1
+        j["jsonid"] = "vrpathreg"
+
+        json.dump(j, open(vrpaths_name, "w"), indent=2)
+    except:
+        pass
+
+#start target app
+args = [wine_path] + sys.argv[1:]
+
+if lfile == None:
+    subprocess.call(args, env=env)
+else:
+    if os.path.exists(lfile):
+        os.remove(lfile)
+    subprocess.call(args, env=env, stdout=open(lfile, "w"), stderr=subprocess.STDOUT)
+
+sys.exit(0)
