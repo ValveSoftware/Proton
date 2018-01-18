@@ -296,8 +296,6 @@ def handle_class(sdkver, classnode):
     cfile = open("%s.c" % winname, "a")
     if not file_exists:
         cfile.write("""/* This file is auto-generated, do not edit. */
-
-#include "config.h"
 #include "wine/port.h"
 
 #include <stdarg.h>
