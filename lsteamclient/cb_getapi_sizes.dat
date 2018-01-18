@@ -1,0 +1,392 @@
+case 512: /* LobbyKicked_t_20 */
+    return 20;
+case 513: /* LobbyCreated_t_12 */
+    return 12;
+case 3413: /* RemoveUGCDependencyResult_t_20 */
+    return 20;
+case 515: /* PSNGameBootInviteResult_t_9 */
+    return 9;
+case 516: /* FavoritesListAccountsUpdated_t_4 */
+    return 4;
+case 4101: /* MusicPlayerRemoteWillActivate_t_1 */
+    return 1;
+case 4102: /* MusicPlayerRemoteWillDeactivate_t_1 */
+    return 1;
+case 4103: /* MusicPlayerRemoteToFront_t_1 */
+    return 1;
+case 4104: /* MusicPlayerWillQuit_t_1 */
+    return 1;
+case 4105: /* MusicPlayerWantsPlay_t_1 */
+    return 1;
+case 4106: /* MusicPlayerWantsPause_t_1 */
+    return 1;
+case 4107: /* MusicPlayerWantsPlayPrevious_t_1 */
+    return 1;
+case 4108: /* MusicPlayerWantsPlayNext_t_1 */
+    return 1;
+case 4109: /* MusicPlayerWantsShuffled_t_1 */
+    return 1;
+case 4110: /* MusicPlayerWantsLooped_t_1 */
+    return 1;
+case 4525: /* HTML_UpdateToolTip_t_8 */
+    return 8;
+case 4624: /* GetOPFSettingsResult_t_8 */
+    return 8;
+case 3416: /* GetAppDependenciesResult_t_148 */
+    return 148;
+case 4114: /* MusicPlayerWantsPlayingRepeatStatus_t_4 */
+    return 4;
+case 4611: /* GetVideoURLResult_t_264 */
+    return 264;
+case 3417: /* DeleteItemResult_t_12 */
+    return 12;
+case 4527: /* HTML_BrowserRestarted_t_8 */
+    return 8;
+case 514: /* RequestFriendsLobbiesResponse_t_24 */
+    return 24;
+case 2101: /* HTTPRequestCompleted_t_24 */
+    return 24;
+case 2102: /* HTTPRequestHeadersReceived_t_12 */
+    return 12;
+case 2103: /* HTTPRequestDataReceived_t_20 */
+    return 20;
+case 4605: /* BroadcastUploadStop_t_4 */
+    return 4;
+case 3410: /* StartPlaytimeTrackingResult_t_4 */
+    return 4;
+case 3412: /* AddUGCDependencyResult_t_20 */
+    return 20;
+case 1101: /* UserStatsReceived_t_20 */
+    return 20;
+case 1102: /* UserStatsStored_t_12 */
+    return 12;
+case 1103: /* UserAchievementStored_t_148 */
+    return 148;
+case 1104: /* LeaderboardFindResult_t_12 */
+    return 12;
+case 1105: /* LeaderboardScoresDownloaded_t_20 */
+    return 20;
+case 1106: /* LeaderboardScoreUploaded_t_28 */
+    return 28;
+case 1107: /* NumberOfCurrentPlayers_t_8 */
+    return 8;
+case 1108: /* UserStatsUnloaded_t_8 */
+    return 8;
+case 1109: /* UserAchievementIconFetched_t_144 */
+    return 144;
+case 1110: /* GlobalAchievementPercentagesReady_t_12 */
+    return 12;
+case 1111: /* LeaderboardUGCSet_t_12 */
+    return 12;
+case 1112: /* PS3TrophiesInstalled_t_20 */
+    return 20;
+case 4700: /* SteamInventoryResultReady_t_8 */
+    return 8;
+case 4701: /* SteamInventoryFullUpdate_t_4 */
+    return 4;
+case 4702: /* SteamInventoryDefinitionUpdate_t_1 */
+    return 1;
+case 4703: /* SteamInventoryEligiblePromoItemDefIDs_t_20 */
+    return 20;
+case 4704: /* SteamInventoryStartPurchaseResult_t_20 */
+    return 20;
+case 4705: /* SteamInventoryRequestPricesResult_t_8 */
+    return 8;
+case 101: /* SteamServersConnected_t_1 */
+    return 1;
+case 102: /* SteamServerConnectFailure_t_8 */
+    return 8;
+case 103: /* SteamServersDisconnected_t_4 */
+    return 4;
+case 113: /* ClientGameServerDeny_t_16 */
+    return 16;
+case 115: /* GSPolicyResponse_t_1 */
+    return 1;
+case 117: /* IPCFailure_t_1 */
+    return 1;
+case 125: /* LicensesUpdated_t_1 */
+    return 1;
+case 3414: /* AddAppDependencyResult_t_16 */
+    return 16;
+case 143: /* ValidateAuthTicketResponse_t_20 */
+    return 20;
+case 152: /* MicroTxnAuthorizationResponse_t_16 */
+    return 16;
+case 154: /* EncryptedAppTicketResponse_t_4 */
+    return 4;
+case 4523: /* HTML_StatusText_t_8 */
+    return 8;
+case 2501: /* SteamUnifiedMessagesSendMethodResult_t_24 */
+    return 24;
+case 3415: /* RemoveAppDependencyResult_t_16 */
+    return 16;
+case 163: /* GetAuthSessionTicketResponse_t_8 */
+    return 8;
+case 164: /* GameWebCallback_t_256 */
+    return 256;
+case 165: /* StoreAuthURLResponse_t_512 */
+    return 512;
+case 1702: /* GCMessageFailed_t_1 */
+    return 1;
+case 1201: /* SocketStatusCallback_t_20 */
+    return 20;
+case 1202: /* P2PSessionRequest_t_8 */
+    return 8;
+case 1203: /* P2PSessionConnectFail_t_9 */
+    return 9;
+case 4524: /* HTML_ShowToolTip_t_8 */
+    return 8;
+case 701: /* IPCountry_t_1 */
+    return 1;
+case 702: /* LowBatteryPower_t_1 */
+    return 1;
+case 703: /* SteamAPICallCompleted_t_16 */
+    return 16;
+case 704: /* SteamShutdown_t_1 */
+    return 1;
+case 705: /* CheckFileSignature_t_4 */
+    return 4;
+case 201: /* GSClientApprove_t_16 */
+    return 16;
+case 714: /* GamepadTextInputDismissed_t_8 */
+    return 8;
+case 203: /* GSClientKick_t_12 */
+    return 12;
+case 206: /* GSClientAchievementStatus_t_140 */
+    return 140;
+case 207: /* GSGameplayStats_t_16 */
+    return 16;
+case 208: /* GSClientGroupStatus_t_18 */
+    return 18;
+case 209: /* GSReputation_t_32 */
+    return 32;
+case 210: /* AssociateWithClanResult_t_4 */
+    return 4;
+case 211: /* ComputeNewPlayerCompatibilityResult_t_24 */
+    return 24;
+case 2301: /* ScreenshotReady_t_8 */
+    return 8;
+case 2302: /* ScreenshotRequested_t_1 */
+    return 1;
+case 1800: /* GSStatsReceived_t_12 */
+    return 12;
+case 1801: /* GSStatsStored_t_12 */
+    return 12;
+case 1301: /* RemoteStorageAppSyncedClient_t_12 */
+    return 12;
+case 1302: /* RemoteStorageAppSyncedServer_t_12 */
+    return 12;
+case 1303: /* RemoteStorageAppSyncProgress_t_280 */
+    return 280;
+case 1305: /* RemoteStorageAppSyncStatusCheck_t_8 */
+    return 8;
+case 1306: /* RemoteStorageConflictResolution_t_8 */
+    return 8;
+case 1307: /* RemoteStorageFileShareResult_t_272 */
+    return 272;
+case 1308: /* RemoteStorageDownloadUGCResult_t_32 */
+    return 32;
+case 1309: /* RemoteStoragePublishFileResult_t_16 */
+    return 16;
+case 1310: /* RemoteStorageGetPublishedFileDetailsResult_t_1732 */
+    return 1732;
+case 1311: /* RemoteStorageDeletePublishedFileResult_t_12 */
+    return 12;
+case 1312: /* RemoteStorageEnumerateUserPublishedFilesResult_t_412 */
+    return 412;
+case 1313: /* RemoteStorageSubscribePublishedFileResult_t_12 */
+    return 12;
+case 1314: /* RemoteStorageEnumerateUserSubscribedFilesResult_t_612 */
+    return 612;
+case 1315: /* RemoteStorageUnsubscribePublishedFileResult_t_12 */
+    return 12;
+case 1316: /* RemoteStorageUpdatePublishedFileResult_t_16 */
+    return 16;
+case 1317: /* RemoteStorageDownloadUGCResult_t_288 */
+    return 288;
+case 1318: /* RemoteStorageGetPublishedFileDetailsResult_t_9748 */
+    return 9748;
+case 1319: /* RemoteStorageEnumerateWorkshopFilesResult_t_620 */
+    return 620;
+case 1320: /* RemoteStorageGetPublishedItemVoteDetailsResult_t_28 */
+    return 28;
+case 1321: /* RemoteStoragePublishedFileSubscribed_t_12 */
+    return 12;
+case 1322: /* RemoteStoragePublishedFileUnsubscribed_t_12 */
+    return 12;
+case 1323: /* RemoteStoragePublishedFileDeleted_t_12 */
+    return 12;
+case 1324: /* RemoteStorageUpdateUserPublishedItemVoteResult_t_12 */
+    return 12;
+case 1325: /* RemoteStorageUserVoteDetails_t_16 */
+    return 16;
+case 1326: /* RemoteStorageEnumerateUserSharedWorkshopFilesResult_t_412 */
+    return 412;
+case 1327: /* RemoteStorageSetUserPublishedFileActionResult_t_16 */
+    return 16;
+case 1328: /* RemoteStorageEnumeratePublishedFilesByUserActionResult_t_616 */
+    return 616;
+case 1329: /* RemoteStoragePublishFileProgress_t_12 */
+    return 12;
+case 1330: /* RemoteStoragePublishedFileUpdated_t_20 */
+    return 20;
+case 1331: /* RemoteStorageFileWriteAsyncComplete_t_4 */
+    return 4;
+case 1332: /* RemoteStorageFileReadAsyncComplete_t_20 */
+    return 20;
+case 3901: /* SteamAppInstalled_t_4 */
+    return 4;
+case 3902: /* SteamAppUninstalled_t_4 */
+    return 4;
+case 3401: /* SteamUGCQueryCompleted_t_24 */
+    return 24;
+case 3402: /* SteamUGCRequestUGCDetailsResult_t_9768 */
+    return 9768;
+case 331: /* GameOverlayActivated_t_1 */
+    return 1;
+case 332: /* GameServerChangeRequested_t_128 */
+    return 128;
+case 333: /* GameLobbyJoinRequested_t_16 */
+    return 16;
+case 334: /* AvatarImageLoaded_t_20 */
+    return 20;
+case 335: /* ClanOfficerListResponse_t_16 */
+    return 16;
+case 336: /* FriendRichPresenceUpdate_t_12 */
+    return 12;
+case 337: /* GameRichPresenceJoinRequested_t_264 */
+    return 264;
+case 338: /* GameConnectedClanChatMsg_t_20 */
+    return 20;
+case 339: /* GameConnectedChatJoin_t_16 */
+    return 16;
+case 340: /* GameConnectedChatLeave_t_18 */
+    return 18;
+case 341: /* DownloadClanActivityCountsResult_t_1 */
+    return 1;
+case 342: /* JoinClanChatRoomCompletionResult_t_12 */
+    return 12;
+case 343: /* GameConnectedFriendChatMsg_t_12 */
+    return 12;
+case 344: /* FriendsGetFollowerCount_t_16 */
+    return 16;
+case 345: /* FriendsIsFollowing_t_16 */
+    return 16;
+case 346: /* FriendsEnumerateFollowingList_t_412 */
+    return 412;
+case 347: /* SetPersonaNameResponse_t_8 */
+    return 8;
+case 5001: /* SteamParentalSettingsChanged_t_1 */
+    return 1;
+case 4501: /* HTML_BrowserReady_t_4 */
+    return 4;
+case 4502: /* HTML_NeedsPaint_t_48 */
+    return 48;
+case 4503: /* HTML_StartRequest_t_20 */
+    return 20;
+case 4504: /* HTML_CloseBrowser_t_4 */
+    return 4;
+case 4505: /* HTML_URLChanged_t_24 */
+    return 24;
+case 4506: /* HTML_FinishedRequest_t_12 */
+    return 12;
+case 4507: /* HTML_OpenLinkInNewTab_t_8 */
+    return 8;
+case 4508: /* HTML_ChangedTitle_t_8 */
+    return 8;
+case 4509: /* HTML_SearchResults_t_12 */
+    return 12;
+case 4510: /* HTML_CanGoBackAndForward_t_8 */
+    return 8;
+case 4511: /* HTML_HorizontalScroll_t_24 */
+    return 24;
+case 4512: /* HTML_VerticalScroll_t_24 */
+    return 24;
+case 4001: /* PlaybackStatusHasChanged_t_1 */
+    return 1;
+case 4002: /* VolumeHasChanged_t_4 */
+    return 4;
+case 4515: /* HTML_JSConfirm_t_8 */
+    return 8;
+case 4516: /* HTML_FileOpenDialog_t_12 */
+    return 12;
+case 4517: /* HTML_ComboNeedsPaint_t_16 */
+    return 16;
+case 4518: /* HTML_ShowPopup_t_4 */
+    return 4;
+case 4519: /* HTML_HidePopup_t_4 */
+    return 4;
+case 4520: /* HTML_SizePopup_t_20 */
+    return 20;
+case 4521: /* HTML_NewWindow_t_28 */
+    return 28;
+case 4522: /* HTML_SetCursor_t_8 */
+    return 8;
+case 4011: /* MusicPlayerWantsVolume_t_4 */
+    return 4;
+case 4012: /* MusicPlayerSelectsQueueEntry_t_4 */
+    return 4;
+case 4013: /* MusicPlayerSelectsPlaylistEntry_t_4 */
+    return 4;
+case 4526: /* HTML_HideToolTip_t_4 */
+    return 4;
+case 304: /* PersonaStateChange_t_12 */
+    return 12;
+case 202: /* GSClientDeny_t_140 */
+    return 140;
+case 3403: /* CreateItemResult_t_16 */
+    return 16;
+case 1014: /* NewLaunchQueryParameters_t_1 */
+    return 1;
+case 4513: /* HTML_LinkAtPosition_t_20 */
+    return 20;
+case 3404: /* SubmitItemUpdateResult_t_16 */
+    return 16;
+case 4514: /* HTML_JSAlert_t_8 */
+    return 8;
+case 3405: /* ItemInstalled_t_12 */
+    return 12;
+case 511: /* LobbyClosing_t_8 */
+    return 8;
+case 3406: /* DownloadItemResult_t_16 */
+    return 16;
+case 3407: /* UserFavoriteItemsListChanged_t_16 */
+    return 16;
+case 1701: /* GCMessageAvailable_t_4 */
+    return 4;
+case 3408: /* SetUserItemVoteResult_t_16 */
+    return 16;
+case 3409: /* GetUserItemVoteResult_t_16 */
+    return 16;
+case 1001: /* AppDataChanged_t_8 */
+    return 8;
+case 1005: /* DlcInstalled_t_4 */
+    return 4;
+case 1021: /* AppProofOfPurchaseKeyResponse_t_252 */
+    return 252;
+case 1008: /* RegisterActivationCodeResponse_t_8 */
+    return 8;
+case 3411: /* StopPlaytimeTrackingResult_t_4 */
+    return 4;
+case 1013: /* AppProofOfPurchaseKeyResponse_t_72 */
+    return 72;
+case 502: /* FavoritesListChanged_t_28 */
+    return 28;
+case 503: /* LobbyInvite_t_24 */
+    return 24;
+case 504: /* LobbyEnter_t_20 */
+    return 20;
+case 505: /* LobbyDataUpdate_t_20 */
+    return 20;
+case 506: /* LobbyChatUpdate_t_28 */
+    return 28;
+case 507: /* LobbyChatMsg_t_24 */
+    return 24;
+case 4604: /* BroadcastUploadStart_t_1 */
+    return 1;
+case 509: /* LobbyGameCreated_t_24 */
+    return 24;
+case 510: /* LobbyMatchList_t_4 */
+    return 4;
+case 1023: /* FileDetailsResult_t_36 */
+    return 36;

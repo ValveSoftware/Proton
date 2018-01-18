@@ -1,0 +1,9 @@
+# Generated from /home/valve/steampfx/drive_c/Program Files/Steam/steamclient.dll by winedump.
+MODULE    = lsteamclient.dll
+
+EXTRADEFS = -Wno-unused-variable -Wno-attributes -DSTEAM_API_EXPORTS
+
+
+C_SRCS = \
+	steamclient_main.c \
+	steamclient_wrappers.c \

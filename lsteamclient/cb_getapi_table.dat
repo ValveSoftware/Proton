@@ -1,0 +1,1200 @@
+case 512:
+    switch(callback_len){
+    default:
+    case sizeof(struct winLobbyKicked_t_20): cb_LobbyKicked_t_20(lin_callback, callback); break;
+    case sizeof(struct winLobbyKicked_t_16): cb_LobbyKicked_t_16(lin_callback, callback); break;
+    }
+    break;
+case 513:
+    switch(callback_len){
+    default:
+    case sizeof(struct winLobbyCreated_t_12): cb_LobbyCreated_t_12(lin_callback, callback); break;
+    }
+    break;
+case 3413:
+    switch(callback_len){
+    default:
+    case sizeof(struct winRemoveUGCDependencyResult_t_20): cb_RemoveUGCDependencyResult_t_20(lin_callback, callback); break;
+    }
+    break;
+case 515:
+    switch(callback_len){
+    default:
+    case sizeof(struct winPSNGameBootInviteResult_t_9): cb_PSNGameBootInviteResult_t_9(lin_callback, callback); break;
+    }
+    break;
+case 516:
+    switch(callback_len){
+    default:
+    case sizeof(struct winFavoritesListAccountsUpdated_t_4): cb_FavoritesListAccountsUpdated_t_4(lin_callback, callback); break;
+    }
+    break;
+case 4101:
+    switch(callback_len){
+    default:
+    case sizeof(struct winMusicPlayerRemoteWillActivate_t_1): cb_MusicPlayerRemoteWillActivate_t_1(lin_callback, callback); break;
+    }
+    break;
+case 4102:
+    switch(callback_len){
+    default:
+    case sizeof(struct winMusicPlayerRemoteWillDeactivate_t_1): cb_MusicPlayerRemoteWillDeactivate_t_1(lin_callback, callback); break;
+    }
+    break;
+case 4103:
+    switch(callback_len){
+    default:
+    case sizeof(struct winMusicPlayerRemoteToFront_t_1): cb_MusicPlayerRemoteToFront_t_1(lin_callback, callback); break;
+    }
+    break;
+case 4104:
+    switch(callback_len){
+    default:
+    case sizeof(struct winMusicPlayerWillQuit_t_1): cb_MusicPlayerWillQuit_t_1(lin_callback, callback); break;
+    }
+    break;
+case 4105:
+    switch(callback_len){
+    default:
+    case sizeof(struct winMusicPlayerWantsPlay_t_1): cb_MusicPlayerWantsPlay_t_1(lin_callback, callback); break;
+    }
+    break;
+case 4106:
+    switch(callback_len){
+    default:
+    case sizeof(struct winMusicPlayerWantsPause_t_1): cb_MusicPlayerWantsPause_t_1(lin_callback, callback); break;
+    }
+    break;
+case 4107:
+    switch(callback_len){
+    default:
+    case sizeof(struct winMusicPlayerWantsPlayPrevious_t_1): cb_MusicPlayerWantsPlayPrevious_t_1(lin_callback, callback); break;
+    }
+    break;
+case 4108:
+    switch(callback_len){
+    default:
+    case sizeof(struct winMusicPlayerWantsPlayNext_t_1): cb_MusicPlayerWantsPlayNext_t_1(lin_callback, callback); break;
+    }
+    break;
+case 4109:
+    switch(callback_len){
+    default:
+    case sizeof(struct winMusicPlayerWantsShuffled_t_1): cb_MusicPlayerWantsShuffled_t_1(lin_callback, callback); break;
+    }
+    break;
+case 4110:
+    switch(callback_len){
+    default:
+    case sizeof(struct winMusicPlayerWantsLooped_t_1): cb_MusicPlayerWantsLooped_t_1(lin_callback, callback); break;
+    }
+    break;
+case 4525:
+    switch(callback_len){
+    default:
+    case sizeof(struct winHTML_UpdateToolTip_t_8): cb_HTML_UpdateToolTip_t_8(lin_callback, callback); break;
+    }
+    break;
+case 4624:
+    switch(callback_len){
+    default:
+    case sizeof(struct winGetOPFSettingsResult_t_8): cb_GetOPFSettingsResult_t_8(lin_callback, callback); break;
+    }
+    break;
+case 3416:
+    switch(callback_len){
+    default:
+    case sizeof(struct winGetAppDependenciesResult_t_148): cb_GetAppDependenciesResult_t_148(lin_callback, callback); break;
+    }
+    break;
+case 4114:
+    switch(callback_len){
+    default:
+    case sizeof(struct winMusicPlayerWantsPlayingRepeatStatus_t_4): cb_MusicPlayerWantsPlayingRepeatStatus_t_4(lin_callback, callback); break;
+    }
+    break;
+case 4611:
+    switch(callback_len){
+    default:
+    case sizeof(struct winGetVideoURLResult_t_264): cb_GetVideoURLResult_t_264(lin_callback, callback); break;
+    }
+    break;
+case 3417:
+    switch(callback_len){
+    default:
+    case sizeof(struct winDeleteItemResult_t_12): cb_DeleteItemResult_t_12(lin_callback, callback); break;
+    }
+    break;
+case 4527:
+    switch(callback_len){
+    default:
+    case sizeof(struct winHTML_BrowserRestarted_t_8): cb_HTML_BrowserRestarted_t_8(lin_callback, callback); break;
+    }
+    break;
+case 514:
+    switch(callback_len){
+    default:
+    case sizeof(struct winRequestFriendsLobbiesResponse_t_24): cb_RequestFriendsLobbiesResponse_t_24(lin_callback, callback); break;
+    }
+    break;
+case 2101:
+    switch(callback_len){
+    default:
+    case sizeof(struct winHTTPRequestCompleted_t_24): cb_HTTPRequestCompleted_t_24(lin_callback, callback); break;
+    case sizeof(struct winHTTPRequestCompleted_t_20): cb_HTTPRequestCompleted_t_20(lin_callback, callback); break;
+    }
+    break;
+case 2102:
+    switch(callback_len){
+    default:
+    case sizeof(struct winHTTPRequestHeadersReceived_t_12): cb_HTTPRequestHeadersReceived_t_12(lin_callback, callback); break;
+    }
+    break;
+case 2103:
+    switch(callback_len){
+    default:
+    case sizeof(struct winHTTPRequestDataReceived_t_20): cb_HTTPRequestDataReceived_t_20(lin_callback, callback); break;
+    }
+    break;
+case 4605:
+    switch(callback_len){
+    default:
+    case sizeof(struct winBroadcastUploadStop_t_4): cb_BroadcastUploadStop_t_4(lin_callback, callback); break;
+    }
+    break;
+case 3410:
+    switch(callback_len){
+    default:
+    case sizeof(struct winStartPlaytimeTrackingResult_t_4): cb_StartPlaytimeTrackingResult_t_4(lin_callback, callback); break;
+    }
+    break;
+case 3412:
+    switch(callback_len){
+    default:
+    case sizeof(struct winAddUGCDependencyResult_t_20): cb_AddUGCDependencyResult_t_20(lin_callback, callback); break;
+    }
+    break;
+case 1101:
+    switch(callback_len){
+    default:
+    case sizeof(struct winUserStatsReceived_t_20): cb_UserStatsReceived_t_20(lin_callback, callback); break;
+    case sizeof(struct winUserStatsReceived_t_12): cb_UserStatsReceived_t_12(lin_callback, callback); break;
+    }
+    break;
+case 1102:
+    switch(callback_len){
+    default:
+    case sizeof(struct winUserStatsStored_t_12): cb_UserStatsStored_t_12(lin_callback, callback); break;
+    }
+    break;
+case 1103:
+    switch(callback_len){
+    default:
+    case sizeof(struct winUserAchievementStored_t_148): cb_UserAchievementStored_t_148(lin_callback, callback); break;
+    }
+    break;
+case 1104:
+    switch(callback_len){
+    default:
+    case sizeof(struct winLeaderboardFindResult_t_12): cb_LeaderboardFindResult_t_12(lin_callback, callback); break;
+    }
+    break;
+case 1105:
+    switch(callback_len){
+    default:
+    case sizeof(struct winLeaderboardScoresDownloaded_t_20): cb_LeaderboardScoresDownloaded_t_20(lin_callback, callback); break;
+    }
+    break;
+case 1106:
+    switch(callback_len){
+    default:
+    case sizeof(struct winLeaderboardScoreUploaded_t_28): cb_LeaderboardScoreUploaded_t_28(lin_callback, callback); break;
+    }
+    break;
+case 1107:
+    switch(callback_len){
+    default:
+    case sizeof(struct winNumberOfCurrentPlayers_t_8): cb_NumberOfCurrentPlayers_t_8(lin_callback, callback); break;
+    }
+    break;
+case 1108:
+    switch(callback_len){
+    default:
+    case sizeof(struct winUserStatsUnloaded_t_8): cb_UserStatsUnloaded_t_8(lin_callback, callback); break;
+    }
+    break;
+case 1109:
+    switch(callback_len){
+    default:
+    case sizeof(struct winUserAchievementIconFetched_t_144): cb_UserAchievementIconFetched_t_144(lin_callback, callback); break;
+    }
+    break;
+case 1110:
+    switch(callback_len){
+    default:
+    case sizeof(struct winGlobalAchievementPercentagesReady_t_12): cb_GlobalAchievementPercentagesReady_t_12(lin_callback, callback); break;
+    }
+    break;
+case 1111:
+    switch(callback_len){
+    default:
+    case sizeof(struct winLeaderboardUGCSet_t_12): cb_LeaderboardUGCSet_t_12(lin_callback, callback); break;
+    }
+    break;
+case 1112:
+    switch(callback_len){
+    default:
+    case sizeof(struct winPS3TrophiesInstalled_t_20): cb_PS3TrophiesInstalled_t_20(lin_callback, callback); break;
+    case sizeof(struct winGlobalStatsReceived_t_12): cb_GlobalStatsReceived_t_12(lin_callback, callback); break;
+    }
+    break;
+case 4700:
+    switch(callback_len){
+    default:
+    case sizeof(struct winSteamInventoryResultReady_t_8): cb_SteamInventoryResultReady_t_8(lin_callback, callback); break;
+    }
+    break;
+case 4701:
+    switch(callback_len){
+    default:
+    case sizeof(struct winSteamInventoryFullUpdate_t_4): cb_SteamInventoryFullUpdate_t_4(lin_callback, callback); break;
+    }
+    break;
+case 4702:
+    switch(callback_len){
+    default:
+    case sizeof(struct winSteamInventoryDefinitionUpdate_t_1): cb_SteamInventoryDefinitionUpdate_t_1(lin_callback, callback); break;
+    }
+    break;
+case 4703:
+    switch(callback_len){
+    default:
+    case sizeof(struct winSteamInventoryEligiblePromoItemDefIDs_t_20): cb_SteamInventoryEligiblePromoItemDefIDs_t_20(lin_callback, callback); break;
+    }
+    break;
+case 4704:
+    switch(callback_len){
+    default:
+    case sizeof(struct winSteamInventoryStartPurchaseResult_t_20): cb_SteamInventoryStartPurchaseResult_t_20(lin_callback, callback); break;
+    }
+    break;
+case 4705:
+    switch(callback_len){
+    default:
+    case sizeof(struct winSteamInventoryRequestPricesResult_t_8): cb_SteamInventoryRequestPricesResult_t_8(lin_callback, callback); break;
+    }
+    break;
+case 101:
+    switch(callback_len){
+    default:
+    case sizeof(struct winSteamServersConnected_t_1): cb_SteamServersConnected_t_1(lin_callback, callback); break;
+    }
+    break;
+case 102:
+    switch(callback_len){
+    default:
+    case sizeof(struct winSteamServerConnectFailure_t_8): cb_SteamServerConnectFailure_t_8(lin_callback, callback); break;
+    case sizeof(struct winSteamServerConnectFailure_t_4): cb_SteamServerConnectFailure_t_4(lin_callback, callback); break;
+    }
+    break;
+case 103:
+    switch(callback_len){
+    default:
+    case sizeof(struct winSteamServersDisconnected_t_4): cb_SteamServersDisconnected_t_4(lin_callback, callback); break;
+    }
+    break;
+case 113:
+    switch(callback_len){
+    default:
+    case sizeof(struct winClientGameServerDeny_t_16): cb_ClientGameServerDeny_t_16(lin_callback, callback); break;
+    }
+    break;
+case 115:
+    switch(callback_len){
+    default:
+    case sizeof(struct winGSPolicyResponse_t_1): cb_GSPolicyResponse_t_1(lin_callback, callback); break;
+    }
+    break;
+case 117:
+    switch(callback_len){
+    default:
+    case sizeof(struct winIPCFailure_t_1): cb_IPCFailure_t_1(lin_callback, callback); break;
+    }
+    break;
+case 125:
+    switch(callback_len){
+    default:
+    case sizeof(struct winLicensesUpdated_t_1): cb_LicensesUpdated_t_1(lin_callback, callback); break;
+    }
+    break;
+case 3414:
+    switch(callback_len){
+    default:
+    case sizeof(struct winAddAppDependencyResult_t_16): cb_AddAppDependencyResult_t_16(lin_callback, callback); break;
+    }
+    break;
+case 143:
+    switch(callback_len){
+    default:
+    case sizeof(struct winValidateAuthTicketResponse_t_20): cb_ValidateAuthTicketResponse_t_20(lin_callback, callback); break;
+    case sizeof(struct winValidateAuthTicketResponse_t_12): cb_ValidateAuthTicketResponse_t_12(lin_callback, callback); break;
+    }
+    break;
+case 152:
+    switch(callback_len){
+    default:
+    case sizeof(struct winMicroTxnAuthorizationResponse_t_16): cb_MicroTxnAuthorizationResponse_t_16(lin_callback, callback); break;
+    }
+    break;
+case 154:
+    switch(callback_len){
+    default:
+    case sizeof(struct winEncryptedAppTicketResponse_t_4): cb_EncryptedAppTicketResponse_t_4(lin_callback, callback); break;
+    }
+    break;
+case 4523:
+    switch(callback_len){
+    default:
+    case sizeof(struct winHTML_StatusText_t_8): cb_HTML_StatusText_t_8(lin_callback, callback); break;
+    }
+    break;
+case 2501:
+    switch(callback_len){
+    default:
+    case sizeof(struct winSteamUnifiedMessagesSendMethodResult_t_24): cb_SteamUnifiedMessagesSendMethodResult_t_24(lin_callback, callback); break;
+    }
+    break;
+case 3415:
+    switch(callback_len){
+    default:
+    case sizeof(struct winRemoveAppDependencyResult_t_16): cb_RemoveAppDependencyResult_t_16(lin_callback, callback); break;
+    }
+    break;
+case 163:
+    switch(callback_len){
+    default:
+    case sizeof(struct winGetAuthSessionTicketResponse_t_8): cb_GetAuthSessionTicketResponse_t_8(lin_callback, callback); break;
+    }
+    break;
+case 164:
+    switch(callback_len){
+    default:
+    case sizeof(struct winGameWebCallback_t_256): cb_GameWebCallback_t_256(lin_callback, callback); break;
+    }
+    break;
+case 165:
+    switch(callback_len){
+    default:
+    case sizeof(struct winStoreAuthURLResponse_t_512): cb_StoreAuthURLResponse_t_512(lin_callback, callback); break;
+    }
+    break;
+case 1702:
+    switch(callback_len){
+    default:
+    case sizeof(struct winGCMessageFailed_t_1): cb_GCMessageFailed_t_1(lin_callback, callback); break;
+    }
+    break;
+case 1201:
+    switch(callback_len){
+    default:
+    case sizeof(struct winSocketStatusCallback_t_20): cb_SocketStatusCallback_t_20(lin_callback, callback); break;
+    }
+    break;
+case 1202:
+    switch(callback_len){
+    default:
+    case sizeof(struct winP2PSessionRequest_t_8): cb_P2PSessionRequest_t_8(lin_callback, callback); break;
+    }
+    break;
+case 1203:
+    switch(callback_len){
+    default:
+    case sizeof(struct winP2PSessionConnectFail_t_9): cb_P2PSessionConnectFail_t_9(lin_callback, callback); break;
+    }
+    break;
+case 4524:
+    switch(callback_len){
+    default:
+    case sizeof(struct winHTML_ShowToolTip_t_8): cb_HTML_ShowToolTip_t_8(lin_callback, callback); break;
+    }
+    break;
+case 701:
+    switch(callback_len){
+    default:
+    case sizeof(struct winIPCountry_t_1): cb_IPCountry_t_1(lin_callback, callback); break;
+    }
+    break;
+case 702:
+    switch(callback_len){
+    default:
+    case sizeof(struct winLowBatteryPower_t_1): cb_LowBatteryPower_t_1(lin_callback, callback); break;
+    }
+    break;
+case 703:
+    switch(callback_len){
+    default:
+    case sizeof(struct winSteamAPICallCompleted_t_16): cb_SteamAPICallCompleted_t_16(lin_callback, callback); break;
+    case sizeof(struct winSteamAPICallCompleted_t_8): cb_SteamAPICallCompleted_t_8(lin_callback, callback); break;
+    }
+    break;
+case 704:
+    switch(callback_len){
+    default:
+    case sizeof(struct winSteamShutdown_t_1): cb_SteamShutdown_t_1(lin_callback, callback); break;
+    }
+    break;
+case 705:
+    switch(callback_len){
+    default:
+    case sizeof(struct winCheckFileSignature_t_4): cb_CheckFileSignature_t_4(lin_callback, callback); break;
+    }
+    break;
+case 201:
+    switch(callback_len){
+    default:
+    case sizeof(struct winGSClientApprove_t_16): cb_GSClientApprove_t_16(lin_callback, callback); break;
+    case sizeof(struct winGSClientApprove_t_8): cb_GSClientApprove_t_8(lin_callback, callback); break;
+    }
+    break;
+case 714:
+    switch(callback_len){
+    default:
+    case sizeof(struct winGamepadTextInputDismissed_t_8): cb_GamepadTextInputDismissed_t_8(lin_callback, callback); break;
+    }
+    break;
+case 203:
+    switch(callback_len){
+    default:
+    case sizeof(struct winGSClientKick_t_12): cb_GSClientKick_t_12(lin_callback, callback); break;
+    }
+    break;
+case 206:
+    switch(callback_len){
+    default:
+    case sizeof(struct winGSClientAchievementStatus_t_140): cb_GSClientAchievementStatus_t_140(lin_callback, callback); break;
+    }
+    break;
+case 207:
+    switch(callback_len){
+    default:
+    case sizeof(struct winGSGameplayStats_t_16): cb_GSGameplayStats_t_16(lin_callback, callback); break;
+    }
+    break;
+case 208:
+    switch(callback_len){
+    default:
+    case sizeof(struct winGSClientGroupStatus_t_18): cb_GSClientGroupStatus_t_18(lin_callback, callback); break;
+    }
+    break;
+case 209:
+    switch(callback_len){
+    default:
+    case sizeof(struct winGSReputation_t_32): cb_GSReputation_t_32(lin_callback, callback); break;
+    }
+    break;
+case 210:
+    switch(callback_len){
+    default:
+    case sizeof(struct winAssociateWithClanResult_t_4): cb_AssociateWithClanResult_t_4(lin_callback, callback); break;
+    }
+    break;
+case 211:
+    switch(callback_len){
+    default:
+    case sizeof(struct winComputeNewPlayerCompatibilityResult_t_24): cb_ComputeNewPlayerCompatibilityResult_t_24(lin_callback, callback); break;
+    case sizeof(struct winComputeNewPlayerCompatibilityResult_t_16): cb_ComputeNewPlayerCompatibilityResult_t_16(lin_callback, callback); break;
+    }
+    break;
+case 2301:
+    switch(callback_len){
+    default:
+    case sizeof(struct winScreenshotReady_t_8): cb_ScreenshotReady_t_8(lin_callback, callback); break;
+    }
+    break;
+case 2302:
+    switch(callback_len){
+    default:
+    case sizeof(struct winScreenshotRequested_t_1): cb_ScreenshotRequested_t_1(lin_callback, callback); break;
+    }
+    break;
+case 1800:
+    switch(callback_len){
+    default:
+    case sizeof(struct winGSStatsReceived_t_12): cb_GSStatsReceived_t_12(lin_callback, callback); break;
+    }
+    break;
+case 1801:
+    switch(callback_len){
+    default:
+    case sizeof(struct winGSStatsStored_t_12): cb_GSStatsStored_t_12(lin_callback, callback); break;
+    }
+    break;
+case 1301:
+    switch(callback_len){
+    default:
+    case sizeof(struct winRemoteStorageAppSyncedClient_t_12): cb_RemoteStorageAppSyncedClient_t_12(lin_callback, callback); break;
+    }
+    break;
+case 1302:
+    switch(callback_len){
+    default:
+    case sizeof(struct winRemoteStorageAppSyncedServer_t_12): cb_RemoteStorageAppSyncedServer_t_12(lin_callback, callback); break;
+    }
+    break;
+case 1303:
+    switch(callback_len){
+    default:
+    case sizeof(struct winRemoteStorageAppSyncProgress_t_280): cb_RemoteStorageAppSyncProgress_t_280(lin_callback, callback); break;
+    }
+    break;
+case 1305:
+    switch(callback_len){
+    default:
+    case sizeof(struct winRemoteStorageAppSyncStatusCheck_t_8): cb_RemoteStorageAppSyncStatusCheck_t_8(lin_callback, callback); break;
+    }
+    break;
+case 1306:
+    switch(callback_len){
+    default:
+    case sizeof(struct winRemoteStorageConflictResolution_t_8): cb_RemoteStorageConflictResolution_t_8(lin_callback, callback); break;
+    }
+    break;
+case 1307:
+    switch(callback_len){
+    default:
+    case sizeof(struct winRemoteStorageFileShareResult_t_272): cb_RemoteStorageFileShareResult_t_272(lin_callback, callback); break;
+    case sizeof(struct winRemoteStorageFileShareResult_t_12): cb_RemoteStorageFileShareResult_t_12(lin_callback, callback); break;
+    }
+    break;
+case 1308:
+    switch(callback_len){
+    default:
+    case sizeof(struct winRemoteStorageDownloadUGCResult_t_32): cb_RemoteStorageDownloadUGCResult_t_32(lin_callback, callback); break;
+    }
+    break;
+case 1309:
+    switch(callback_len){
+    default:
+    case sizeof(struct winRemoteStoragePublishFileResult_t_16): cb_RemoteStoragePublishFileResult_t_16(lin_callback, callback); break;
+    case sizeof(struct winRemoteStoragePublishFileResult_t_12): cb_RemoteStoragePublishFileResult_t_12(lin_callback, callback); break;
+    }
+    break;
+case 1310:
+    switch(callback_len){
+    default:
+    case sizeof(struct winRemoteStorageGetPublishedFileDetailsResult_t_1732): cb_RemoteStorageGetPublishedFileDetailsResult_t_1732(lin_callback, callback); break;
+    }
+    break;
+case 1311:
+    switch(callback_len){
+    default:
+    case sizeof(struct winRemoteStorageDeletePublishedFileResult_t_12): cb_RemoteStorageDeletePublishedFileResult_t_12(lin_callback, callback); break;
+    }
+    break;
+case 1312:
+    switch(callback_len){
+    default:
+    case sizeof(struct winRemoteStorageEnumerateUserPublishedFilesResult_t_412): cb_RemoteStorageEnumerateUserPublishedFilesResult_t_412(lin_callback, callback); break;
+    }
+    break;
+case 1313:
+    switch(callback_len){
+    default:
+    case sizeof(struct winRemoteStorageSubscribePublishedFileResult_t_12): cb_RemoteStorageSubscribePublishedFileResult_t_12(lin_callback, callback); break;
+    case sizeof(struct winRemoteStorageSubscribePublishedFileResult_t_4): cb_RemoteStorageSubscribePublishedFileResult_t_4(lin_callback, callback); break;
+    }
+    break;
+case 1314:
+    switch(callback_len){
+    default:
+    case sizeof(struct winRemoteStorageEnumerateUserSubscribedFilesResult_t_612): cb_RemoteStorageEnumerateUserSubscribedFilesResult_t_612(lin_callback, callback); break;
+    }
+    break;
+case 1315:
+    switch(callback_len){
+    default:
+    case sizeof(struct winRemoteStorageUnsubscribePublishedFileResult_t_12): cb_RemoteStorageUnsubscribePublishedFileResult_t_12(lin_callback, callback); break;
+    case sizeof(struct winRemoteStorageUnsubscribePublishedFileResult_t_4): cb_RemoteStorageUnsubscribePublishedFileResult_t_4(lin_callback, callback); break;
+    }
+    break;
+case 1316:
+    switch(callback_len){
+    default:
+    case sizeof(struct winRemoteStorageUpdatePublishedFileResult_t_16): cb_RemoteStorageUpdatePublishedFileResult_t_16(lin_callback, callback); break;
+    case sizeof(struct winRemoteStorageUpdatePublishedFileResult_t_12): cb_RemoteStorageUpdatePublishedFileResult_t_12(lin_callback, callback); break;
+    }
+    break;
+case 1317:
+    switch(callback_len){
+    default:
+    case sizeof(struct winRemoteStorageDownloadUGCResult_t_288): cb_RemoteStorageDownloadUGCResult_t_288(lin_callback, callback); break;
+    }
+    break;
+case 1318:
+    switch(callback_len){
+    default:
+    case sizeof(struct winRemoteStorageGetPublishedFileDetailsResult_t_9748): cb_RemoteStorageGetPublishedFileDetailsResult_t_9748(lin_callback, callback); break;
+    case sizeof(struct winRemoteStorageGetPublishedFileDetailsResult_t_9744): cb_RemoteStorageGetPublishedFileDetailsResult_t_9744(lin_callback, callback); break;
+    case sizeof(struct winRemoteStorageGetPublishedFileDetailsResult_t_9484): cb_RemoteStorageGetPublishedFileDetailsResult_t_9484(lin_callback, callback); break;
+    }
+    break;
+case 1319:
+    switch(callback_len){
+    default:
+    case sizeof(struct winRemoteStorageEnumerateWorkshopFilesResult_t_620): cb_RemoteStorageEnumerateWorkshopFilesResult_t_620(lin_callback, callback); break;
+    case sizeof(struct winRemoteStorageEnumerateWorkshopFilesResult_t_612): cb_RemoteStorageEnumerateWorkshopFilesResult_t_612(lin_callback, callback); break;
+    }
+    break;
+case 1320:
+    switch(callback_len){
+    default:
+    case sizeof(struct winRemoteStorageGetPublishedItemVoteDetailsResult_t_28): cb_RemoteStorageGetPublishedItemVoteDetailsResult_t_28(lin_callback, callback); break;
+    }
+    break;
+case 1321:
+    switch(callback_len){
+    default:
+    case sizeof(struct winRemoteStoragePublishedFileSubscribed_t_12): cb_RemoteStoragePublishedFileSubscribed_t_12(lin_callback, callback); break;
+    }
+    break;
+case 1322:
+    switch(callback_len){
+    default:
+    case sizeof(struct winRemoteStoragePublishedFileUnsubscribed_t_12): cb_RemoteStoragePublishedFileUnsubscribed_t_12(lin_callback, callback); break;
+    }
+    break;
+case 1323:
+    switch(callback_len){
+    default:
+    case sizeof(struct winRemoteStoragePublishedFileDeleted_t_12): cb_RemoteStoragePublishedFileDeleted_t_12(lin_callback, callback); break;
+    }
+    break;
+case 1324:
+    switch(callback_len){
+    default:
+    case sizeof(struct winRemoteStorageUpdateUserPublishedItemVoteResult_t_12): cb_RemoteStorageUpdateUserPublishedItemVoteResult_t_12(lin_callback, callback); break;
+    }
+    break;
+case 1325:
+    switch(callback_len){
+    default:
+    case sizeof(struct winRemoteStorageUserVoteDetails_t_16): cb_RemoteStorageUserVoteDetails_t_16(lin_callback, callback); break;
+    }
+    break;
+case 1326:
+    switch(callback_len){
+    default:
+    case sizeof(struct winRemoteStorageEnumerateUserSharedWorkshopFilesResult_t_412): cb_RemoteStorageEnumerateUserSharedWorkshopFilesResult_t_412(lin_callback, callback); break;
+    }
+    break;
+case 1327:
+    switch(callback_len){
+    default:
+    case sizeof(struct winRemoteStorageSetUserPublishedFileActionResult_t_16): cb_RemoteStorageSetUserPublishedFileActionResult_t_16(lin_callback, callback); break;
+    }
+    break;
+case 1328:
+    switch(callback_len){
+    default:
+    case sizeof(struct winRemoteStorageEnumeratePublishedFilesByUserActionResult_t_616): cb_RemoteStorageEnumeratePublishedFilesByUserActionResult_t_616(lin_callback, callback); break;
+    }
+    break;
+case 1329:
+    switch(callback_len){
+    default:
+    case sizeof(struct winRemoteStoragePublishFileProgress_t_12): cb_RemoteStoragePublishFileProgress_t_12(lin_callback, callback); break;
+    }
+    break;
+case 1330:
+    switch(callback_len){
+    default:
+    case sizeof(struct winRemoteStoragePublishedFileUpdated_t_20): cb_RemoteStoragePublishedFileUpdated_t_20(lin_callback, callback); break;
+    }
+    break;
+case 1331:
+    switch(callback_len){
+    default:
+    case sizeof(struct winRemoteStorageFileWriteAsyncComplete_t_4): cb_RemoteStorageFileWriteAsyncComplete_t_4(lin_callback, callback); break;
+    }
+    break;
+case 1332:
+    switch(callback_len){
+    default:
+    case sizeof(struct winRemoteStorageFileReadAsyncComplete_t_20): cb_RemoteStorageFileReadAsyncComplete_t_20(lin_callback, callback); break;
+    }
+    break;
+case 3901:
+    switch(callback_len){
+    default:
+    case sizeof(struct winSteamAppInstalled_t_4): cb_SteamAppInstalled_t_4(lin_callback, callback); break;
+    }
+    break;
+case 3902:
+    switch(callback_len){
+    default:
+    case sizeof(struct winSteamAppUninstalled_t_4): cb_SteamAppUninstalled_t_4(lin_callback, callback); break;
+    }
+    break;
+case 3401:
+    switch(callback_len){
+    default:
+    case sizeof(struct winSteamUGCQueryCompleted_t_24): cb_SteamUGCQueryCompleted_t_24(lin_callback, callback); break;
+    }
+    break;
+case 3402:
+    switch(callback_len){
+    default:
+    case sizeof(struct winSteamUGCRequestUGCDetailsResult_t_9768): cb_SteamUGCRequestUGCDetailsResult_t_9768(lin_callback, callback); break;
+    case sizeof(struct winSteamUGCRequestUGCDetailsResult_t_9760): cb_SteamUGCRequestUGCDetailsResult_t_9760(lin_callback, callback); break;
+    }
+    break;
+case 331:
+    switch(callback_len){
+    default:
+    case sizeof(struct winGameOverlayActivated_t_1): cb_GameOverlayActivated_t_1(lin_callback, callback); break;
+    }
+    break;
+case 332:
+    switch(callback_len){
+    default:
+    case sizeof(struct winGameServerChangeRequested_t_128): cb_GameServerChangeRequested_t_128(lin_callback, callback); break;
+    }
+    break;
+case 333:
+    switch(callback_len){
+    default:
+    case sizeof(struct winGameLobbyJoinRequested_t_16): cb_GameLobbyJoinRequested_t_16(lin_callback, callback); break;
+    }
+    break;
+case 334:
+    switch(callback_len){
+    default:
+    case sizeof(struct winAvatarImageLoaded_t_20): cb_AvatarImageLoaded_t_20(lin_callback, callback); break;
+    }
+    break;
+case 335:
+    switch(callback_len){
+    default:
+    case sizeof(struct winClanOfficerListResponse_t_16): cb_ClanOfficerListResponse_t_16(lin_callback, callback); break;
+    }
+    break;
+case 336:
+    switch(callback_len){
+    default:
+    case sizeof(struct winFriendRichPresenceUpdate_t_12): cb_FriendRichPresenceUpdate_t_12(lin_callback, callback); break;
+    }
+    break;
+case 337:
+    switch(callback_len){
+    default:
+    case sizeof(struct winGameRichPresenceJoinRequested_t_264): cb_GameRichPresenceJoinRequested_t_264(lin_callback, callback); break;
+    }
+    break;
+case 338:
+    switch(callback_len){
+    default:
+    case sizeof(struct winGameConnectedClanChatMsg_t_20): cb_GameConnectedClanChatMsg_t_20(lin_callback, callback); break;
+    case sizeof(struct winNameHistoryResponse_t_8): cb_NameHistoryResponse_t_8(lin_callback, callback); break;
+    }
+    break;
+case 339:
+    switch(callback_len){
+    default:
+    case sizeof(struct winGameConnectedChatJoin_t_16): cb_GameConnectedChatJoin_t_16(lin_callback, callback); break;
+    }
+    break;
+case 340:
+    switch(callback_len){
+    default:
+    case sizeof(struct winGameConnectedChatLeave_t_18): cb_GameConnectedChatLeave_t_18(lin_callback, callback); break;
+    }
+    break;
+case 341:
+    switch(callback_len){
+    default:
+    case sizeof(struct winDownloadClanActivityCountsResult_t_1): cb_DownloadClanActivityCountsResult_t_1(lin_callback, callback); break;
+    }
+    break;
+case 342:
+    switch(callback_len){
+    default:
+    case sizeof(struct winJoinClanChatRoomCompletionResult_t_12): cb_JoinClanChatRoomCompletionResult_t_12(lin_callback, callback); break;
+    }
+    break;
+case 343:
+    switch(callback_len){
+    default:
+    case sizeof(struct winGameConnectedFriendChatMsg_t_12): cb_GameConnectedFriendChatMsg_t_12(lin_callback, callback); break;
+    }
+    break;
+case 344:
+    switch(callback_len){
+    default:
+    case sizeof(struct winFriendsGetFollowerCount_t_16): cb_FriendsGetFollowerCount_t_16(lin_callback, callback); break;
+    }
+    break;
+case 345:
+    switch(callback_len){
+    default:
+    case sizeof(struct winFriendsIsFollowing_t_16): cb_FriendsIsFollowing_t_16(lin_callback, callback); break;
+    }
+    break;
+case 346:
+    switch(callback_len){
+    default:
+    case sizeof(struct winFriendsEnumerateFollowingList_t_412): cb_FriendsEnumerateFollowingList_t_412(lin_callback, callback); break;
+    }
+    break;
+case 347:
+    switch(callback_len){
+    default:
+    case sizeof(struct winSetPersonaNameResponse_t_8): cb_SetPersonaNameResponse_t_8(lin_callback, callback); break;
+    }
+    break;
+case 5001:
+    switch(callback_len){
+    default:
+    case sizeof(struct winSteamParentalSettingsChanged_t_1): cb_SteamParentalSettingsChanged_t_1(lin_callback, callback); break;
+    }
+    break;
+case 4501:
+    switch(callback_len){
+    default:
+    case sizeof(struct winHTML_BrowserReady_t_4): cb_HTML_BrowserReady_t_4(lin_callback, callback); break;
+    }
+    break;
+case 4502:
+    switch(callback_len){
+    default:
+    case sizeof(struct winHTML_NeedsPaint_t_48): cb_HTML_NeedsPaint_t_48(lin_callback, callback); break;
+    }
+    break;
+case 4503:
+    switch(callback_len){
+    default:
+    case sizeof(struct winHTML_StartRequest_t_20): cb_HTML_StartRequest_t_20(lin_callback, callback); break;
+    }
+    break;
+case 4504:
+    switch(callback_len){
+    default:
+    case sizeof(struct winHTML_CloseBrowser_t_4): cb_HTML_CloseBrowser_t_4(lin_callback, callback); break;
+    }
+    break;
+case 4505:
+    switch(callback_len){
+    default:
+    case sizeof(struct winHTML_URLChanged_t_24): cb_HTML_URLChanged_t_24(lin_callback, callback); break;
+    }
+    break;
+case 4506:
+    switch(callback_len){
+    default:
+    case sizeof(struct winHTML_FinishedRequest_t_12): cb_HTML_FinishedRequest_t_12(lin_callback, callback); break;
+    }
+    break;
+case 4507:
+    switch(callback_len){
+    default:
+    case sizeof(struct winHTML_OpenLinkInNewTab_t_8): cb_HTML_OpenLinkInNewTab_t_8(lin_callback, callback); break;
+    }
+    break;
+case 4508:
+    switch(callback_len){
+    default:
+    case sizeof(struct winHTML_ChangedTitle_t_8): cb_HTML_ChangedTitle_t_8(lin_callback, callback); break;
+    }
+    break;
+case 4509:
+    switch(callback_len){
+    default:
+    case sizeof(struct winHTML_SearchResults_t_12): cb_HTML_SearchResults_t_12(lin_callback, callback); break;
+    }
+    break;
+case 4510:
+    switch(callback_len){
+    default:
+    case sizeof(struct winHTML_CanGoBackAndForward_t_8): cb_HTML_CanGoBackAndForward_t_8(lin_callback, callback); break;
+    }
+    break;
+case 4511:
+    switch(callback_len){
+    default:
+    case sizeof(struct winHTML_HorizontalScroll_t_24): cb_HTML_HorizontalScroll_t_24(lin_callback, callback); break;
+    }
+    break;
+case 4512:
+    switch(callback_len){
+    default:
+    case sizeof(struct winHTML_VerticalScroll_t_24): cb_HTML_VerticalScroll_t_24(lin_callback, callback); break;
+    }
+    break;
+case 4001:
+    switch(callback_len){
+    default:
+    case sizeof(struct winPlaybackStatusHasChanged_t_1): cb_PlaybackStatusHasChanged_t_1(lin_callback, callback); break;
+    }
+    break;
+case 4002:
+    switch(callback_len){
+    default:
+    case sizeof(struct winVolumeHasChanged_t_4): cb_VolumeHasChanged_t_4(lin_callback, callback); break;
+    }
+    break;
+case 4515:
+    switch(callback_len){
+    default:
+    case sizeof(struct winHTML_JSConfirm_t_8): cb_HTML_JSConfirm_t_8(lin_callback, callback); break;
+    }
+    break;
+case 4516:
+    switch(callback_len){
+    default:
+    case sizeof(struct winHTML_FileOpenDialog_t_12): cb_HTML_FileOpenDialog_t_12(lin_callback, callback); break;
+    }
+    break;
+case 4517:
+    switch(callback_len){
+    default:
+    case sizeof(struct winHTML_ComboNeedsPaint_t_16): cb_HTML_ComboNeedsPaint_t_16(lin_callback, callback); break;
+    }
+    break;
+case 4518:
+    switch(callback_len){
+    default:
+    case sizeof(struct winHTML_ShowPopup_t_4): cb_HTML_ShowPopup_t_4(lin_callback, callback); break;
+    }
+    break;
+case 4519:
+    switch(callback_len){
+    default:
+    case sizeof(struct winHTML_HidePopup_t_4): cb_HTML_HidePopup_t_4(lin_callback, callback); break;
+    }
+    break;
+case 4520:
+    switch(callback_len){
+    default:
+    case sizeof(struct winHTML_SizePopup_t_20): cb_HTML_SizePopup_t_20(lin_callback, callback); break;
+    }
+    break;
+case 4521:
+    switch(callback_len){
+    default:
+    case sizeof(struct winHTML_NewWindow_t_28): cb_HTML_NewWindow_t_28(lin_callback, callback); break;
+    case sizeof(struct winHTML_NewWindow_t_24): cb_HTML_NewWindow_t_24(lin_callback, callback); break;
+    }
+    break;
+case 4522:
+    switch(callback_len){
+    default:
+    case sizeof(struct winHTML_SetCursor_t_8): cb_HTML_SetCursor_t_8(lin_callback, callback); break;
+    }
+    break;
+case 4011:
+    switch(callback_len){
+    default:
+    case sizeof(struct winMusicPlayerWantsVolume_t_4): cb_MusicPlayerWantsVolume_t_4(lin_callback, callback); break;
+    }
+    break;
+case 4012:
+    switch(callback_len){
+    default:
+    case sizeof(struct winMusicPlayerSelectsQueueEntry_t_4): cb_MusicPlayerSelectsQueueEntry_t_4(lin_callback, callback); break;
+    }
+    break;
+case 4013:
+    switch(callback_len){
+    default:
+    case sizeof(struct winMusicPlayerSelectsPlaylistEntry_t_4): cb_MusicPlayerSelectsPlaylistEntry_t_4(lin_callback, callback); break;
+    }
+    break;
+case 4526:
+    switch(callback_len){
+    default:
+    case sizeof(struct winHTML_HideToolTip_t_4): cb_HTML_HideToolTip_t_4(lin_callback, callback); break;
+    }
+    break;
+case 304:
+    switch(callback_len){
+    default:
+    case sizeof(struct winPersonaStateChange_t_12): cb_PersonaStateChange_t_12(lin_callback, callback); break;
+    }
+    break;
+case 202:
+    switch(callback_len){
+    default:
+    case sizeof(struct winGSClientDeny_t_140): cb_GSClientDeny_t_140(lin_callback, callback); break;
+    }
+    break;
+case 3403:
+    switch(callback_len){
+    default:
+    case sizeof(struct winCreateItemResult_t_16): cb_CreateItemResult_t_16(lin_callback, callback); break;
+    }
+    break;
+case 1014:
+    switch(callback_len){
+    default:
+    case sizeof(struct winNewLaunchQueryParameters_t_1): cb_NewLaunchQueryParameters_t_1(lin_callback, callback); break;
+    }
+    break;
+case 4513:
+    switch(callback_len){
+    default:
+    case sizeof(struct winHTML_LinkAtPosition_t_20): cb_HTML_LinkAtPosition_t_20(lin_callback, callback); break;
+    }
+    break;
+case 3404:
+    switch(callback_len){
+    default:
+    case sizeof(struct winSubmitItemUpdateResult_t_16): cb_SubmitItemUpdateResult_t_16(lin_callback, callback); break;
+    case sizeof(struct winSubmitItemUpdateResult_t_8): cb_SubmitItemUpdateResult_t_8(lin_callback, callback); break;
+    }
+    break;
+case 4514:
+    switch(callback_len){
+    default:
+    case sizeof(struct winHTML_JSAlert_t_8): cb_HTML_JSAlert_t_8(lin_callback, callback); break;
+    }
+    break;
+case 3405:
+    switch(callback_len){
+    default:
+    case sizeof(struct winItemInstalled_t_12): cb_ItemInstalled_t_12(lin_callback, callback); break;
+    }
+    break;
+case 511:
+    switch(callback_len){
+    default:
+    case sizeof(struct winLobbyClosing_t_8): cb_LobbyClosing_t_8(lin_callback, callback); break;
+    }
+    break;
+case 3406:
+    switch(callback_len){
+    default:
+    case sizeof(struct winDownloadItemResult_t_16): cb_DownloadItemResult_t_16(lin_callback, callback); break;
+    }
+    break;
+case 3407:
+    switch(callback_len){
+    default:
+    case sizeof(struct winUserFavoriteItemsListChanged_t_16): cb_UserFavoriteItemsListChanged_t_16(lin_callback, callback); break;
+    }
+    break;
+case 1701:
+    switch(callback_len){
+    default:
+    case sizeof(struct winGCMessageAvailable_t_4): cb_GCMessageAvailable_t_4(lin_callback, callback); break;
+    }
+    break;
+case 3408:
+    switch(callback_len){
+    default:
+    case sizeof(struct winSetUserItemVoteResult_t_16): cb_SetUserItemVoteResult_t_16(lin_callback, callback); break;
+    }
+    break;
+case 3409:
+    switch(callback_len){
+    default:
+    case sizeof(struct winGetUserItemVoteResult_t_16): cb_GetUserItemVoteResult_t_16(lin_callback, callback); break;
+    }
+    break;
+case 1001:
+    switch(callback_len){
+    default:
+    case sizeof(struct winAppDataChanged_t_8): cb_AppDataChanged_t_8(lin_callback, callback); break;
+    }
+    break;
+case 1005:
+    switch(callback_len){
+    default:
+    case sizeof(struct winDlcInstalled_t_4): cb_DlcInstalled_t_4(lin_callback, callback); break;
+    }
+    break;
+case 1021:
+    switch(callback_len){
+    default:
+    case sizeof(struct winAppProofOfPurchaseKeyResponse_t_252): cb_AppProofOfPurchaseKeyResponse_t_252(lin_callback, callback); break;
+    }
+    break;
+case 1008:
+    switch(callback_len){
+    default:
+    case sizeof(struct winRegisterActivationCodeResponse_t_8): cb_RegisterActivationCodeResponse_t_8(lin_callback, callback); break;
+    }
+    break;
+case 3411:
+    switch(callback_len){
+    default:
+    case sizeof(struct winStopPlaytimeTrackingResult_t_4): cb_StopPlaytimeTrackingResult_t_4(lin_callback, callback); break;
+    }
+    break;
+case 1013:
+    switch(callback_len){
+    default:
+    case sizeof(struct winAppProofOfPurchaseKeyResponse_t_72): cb_AppProofOfPurchaseKeyResponse_t_72(lin_callback, callback); break;
+    }
+    break;
+case 502:
+    switch(callback_len){
+    default:
+    case sizeof(struct winFavoritesListChanged_t_28): cb_FavoritesListChanged_t_28(lin_callback, callback); break;
+    case sizeof(struct winFavoritesListChanged_t_24): cb_FavoritesListChanged_t_24(lin_callback, callback); break;
+    }
+    break;
+case 503:
+    switch(callback_len){
+    default:
+    case sizeof(struct winLobbyInvite_t_24): cb_LobbyInvite_t_24(lin_callback, callback); break;
+    case sizeof(struct winLobbyInvite_t_16): cb_LobbyInvite_t_16(lin_callback, callback); break;
+    }
+    break;
+case 504:
+    switch(callback_len){
+    default:
+    case sizeof(struct winLobbyEnter_t_20): cb_LobbyEnter_t_20(lin_callback, callback); break;
+    }
+    break;
+case 505:
+    switch(callback_len){
+    default:
+    case sizeof(struct winLobbyDataUpdate_t_20): cb_LobbyDataUpdate_t_20(lin_callback, callback); break;
+    case sizeof(struct winLobbyDataUpdate_t_16): cb_LobbyDataUpdate_t_16(lin_callback, callback); break;
+    }
+    break;
+case 506:
+    switch(callback_len){
+    default:
+    case sizeof(struct winLobbyChatUpdate_t_28): cb_LobbyChatUpdate_t_28(lin_callback, callback); break;
+    }
+    break;
+case 507:
+    switch(callback_len){
+    default:
+    case sizeof(struct winLobbyChatMsg_t_24): cb_LobbyChatMsg_t_24(lin_callback, callback); break;
+    }
+    break;
+case 4604:
+    switch(callback_len){
+    default:
+    case sizeof(struct winBroadcastUploadStart_t_1): cb_BroadcastUploadStart_t_1(lin_callback, callback); break;
+    }
+    break;
+case 509:
+    switch(callback_len){
+    default:
+    case sizeof(struct winLobbyGameCreated_t_24): cb_LobbyGameCreated_t_24(lin_callback, callback); break;
+    }
+    break;
+case 510:
+    switch(callback_len){
+    default:
+    case sizeof(struct winLobbyMatchList_t_4): cb_LobbyMatchList_t_4(lin_callback, callback); break;
+    }
+    break;
+case 1023:
+    switch(callback_len){
+    default:
+    case sizeof(struct winFileDetailsResult_t_36): cb_FileDetailsResult_t_36(lin_callback, callback); break;
+    }
+    break;
