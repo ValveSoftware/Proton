@@ -319,19 +319,12 @@ def handle_class(sdkver, classnode):
     if already_generated:
         return
     winname = "win%s" % classnode.spelling
-    if not winname in generated_c_files:
-        generated_c_files.append(winname)
     cppname = "cpp%s_%s" % (classnode.spelling, iface_version)
-    generated_cpp_files.append(cppname)
 
     file_exists = os.path.isfile("%s.c" % winname)
     cfile = open("%s.c" % winname, "a")
     if not file_exists:
         cfile.write("""/* This file is auto-generated, do not edit. */
-
-#include "config.h"
-#include "wine/port.h"
-
 #include <stdarg.h>
 #include <stdint.h>
 
@@ -433,7 +426,6 @@ def handle_struct(sdkver, struct, which):
     file_exists = os.path.isfile(cppname)
     cppfile = open(cppname, "a")
     if not file_exists:
-        generated_cpp_files.append(filename_base)
         cppfile.write("#include <stdlib.h>\n");
         cppfile.write("#include <string.h>\n");
         cppfile.write("#include \"vrclient_private.h\"\n")
@@ -500,9 +492,6 @@ def handle_struct(sdkver, struct, which):
 
 #clang.cindex.Config.set_library_file("/usr/lib/llvm-3.8/lib/libclang-3.8.so.1");
 
-generated_c_files = []
-generated_cpp_files = []
-
 prog = re.compile("^.*const\s*char.* (\w*)_Version.*\"(.*)\"")
 for sdkver in sdk_versions:
     iface_versions = {}
@@ -548,18 +537,3 @@ for sdkver in sdk_versions:
 for f in cpp_files_need_close_brace:
     m = open(f, "a")
     m.write("\n}\n")
-
-
-m = open("Makefile.in", "a")
-for f in generated_c_files:
-    m.write("\t%s.c \\\n" % f)
-m.write("\nCPP_SRCS = \\\n")
-for f in generated_cpp_files:
-    m.write("\t%s.cpp \\\n" % f)
-
-m = open("../vrclient/Makefile.in", "a")
-for f in generated_c_files:
-    m.write("\t%s.c \\\n" % f)
-m.write("\nCPP_SRCS = \\\n")
-for f in generated_cpp_files:
-    m.write("\t%s.cpp \\\n" % f)

@@ -1,7 +1,0 @@
-MODULE    = vrclient_x64.dll
-
-EXTRADEFS = -Wno-unused-variable -Wno-attributes -DGNUC
-CPPFLAGS = -std=c++0x
-
-C_SRCS = \
-	vrclient_main.c \
