@@ -72,4 +72,37 @@ cd "$TOP"/build/lsteamclient.win32/
 CXXFLAGS=-Wno-attributes PATH="$TOOLS_DIR32/bin:$PATH" "$RUNTIME_PATH/shell-i386.sh" make -j1
 cp -a lsteamclient.dll.so "$TOP"/dist/lib/wine/
 
+#build 64-bit vrclient
+cd "$TOP"
+rm -rf build/vrclient_x64
+cp -a vrclient_x64 build/vrclient_x64
+cd "$TOP"/build/vrclient_x64/
+"$RUNTIME_PATH/shell-amd64.sh" "$TOP"/wine/tools/winemaker/winemaker \
+    --nosource-fix --nolower-include --nodlls --nomsvcrt \
+    -I"$TOOLS_DIR64"/include/ \
+    -I"$TOOLS_DIR64"/include/wine/ \
+    -I"$TOOLS_DIR64"/include/wine/windows/ \
+    -L"$TOOLS_DIR64"/lib64/ \
+    -L"$TOOLS_DIR64"/lib64/wine/ \
+    --dll .
+CXXFLAGS="-Wno-attributes -std=c++0x" PATH="$TOOLS_DIR64/bin:$PATH" "$RUNTIME_PATH/shell-amd64.sh" make
+cp -a vrclient_x64.dll.so "$TOP"/dist/lib64/wine/
+
+#build 32-bit vrclient
+cd "$TOP"
+rm -rf build/vrclient
+cp -a vrclient_x64 build/vrclient
+cd "$TOP"/build/vrclient/
+mv vrclient_x64.spec vrclient.spec
+"$RUNTIME_PATH/shell-i386.sh" "$TOP"/wine/tools/winemaker/winemaker \
+    --nosource-fix --nolower-include --nodlls --nomsvcrt --wine32 \
+    -I"$TOOLS_DIR32"/include/ \
+    -I"$TOOLS_DIR32"/include/wine/ \
+    -I"$TOOLS_DIR32"/include/wine/windows/ \
+    -L"$TOOLS_DIR32"/lib/ \
+    -L"$TOOLS_DIR32"/lib/wine/ \
+    --dll .
+CXXFLAGS="-Wno-attributes -std=c++0x" PATH="$TOOLS_DIR32/bin:$PATH" "$RUNTIME_PATH/shell-i386.sh" make
+cp -a vrclient.dll.so "$TOP"/dist/lib/wine/
+
 echo "Proton ready in dist/"

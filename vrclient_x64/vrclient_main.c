@@ -1,5 +1,3 @@
-#include "config.h"
-
 #include <stdarg.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -13,6 +11,8 @@
 #include "wine/debug.h"
 #include "wine/library.h"
 
+#include "vrclient_private.h"
+
 WINE_DEFAULT_DEBUG_CHANNEL(vrclient);
 
 BOOL WINAPI DllMain(HINSTANCE instance, DWORD reason, void *reserved)
@@ -21,8 +21,6 @@ BOOL WINAPI DllMain(HINSTANCE instance, DWORD reason, void *reserved)
 
     switch (reason)
     {
-        case DLL_WINE_PREATTACH:
-            return FALSE;    /* prefer native version */
         case DLL_PROCESS_ATTACH:
             DisableThreadLibraryCalls(instance);
             break;
