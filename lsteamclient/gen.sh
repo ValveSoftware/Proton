@@ -8,3 +8,5 @@ rm cpp*.h
 rm cb*.h
 rm cb*.cpp
 rm cb*.dat
+
+./gen_wrapper.py

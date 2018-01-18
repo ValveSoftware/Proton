@@ -1,7 +1,5 @@
 /* Linux-to-Windows conversions (i.e. callbacks) here. */
 
-#include "config.h"
-
 #include <stdarg.h>
 
 #include "windef.h"

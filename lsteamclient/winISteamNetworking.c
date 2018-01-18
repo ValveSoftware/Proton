@@ -1,8 +1,4 @@
 /* This file is auto-generated, do not edit. */
-
-#include "config.h"
-#include "wine/port.h"
-
 #include <stdarg.h>
 
 #include "windef.h"
