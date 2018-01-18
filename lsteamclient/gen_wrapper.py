@@ -290,10 +290,7 @@ def handle_class(sdkver, classnode):
     if already_generated:
         return
     winname = "win%s" % classnode.spelling
-    if not winname in generated_c_files:
-        generated_c_files.append(winname)
     cppname = "cpp%s_%s" % (classnode.spelling, iface_version)
-    generated_cpp_files.append(cppname)
 
     file_exists = os.path.isfile("%s.c" % winname)
     cfile = open("%s.c" % winname, "a")
@@ -410,7 +407,6 @@ def handle_callback_struct(sdkver, callback, cb_num):
     file_exists = os.path.isfile(cppname)
     cppfile = open(cppname, "a")
     if not file_exists:
-        generated_cpp_files.append(filename_base)
         cppfile.write("#include \"steamclient_private.h\"\n")
         cppfile.write("#include \"steam_defs.h\"\n")
         cppfile.write("#include \"steamworks_sdk_%s/steam_api.h\"\n" % sdkver)
@@ -480,9 +476,6 @@ def handle_callback_maybe(sdkver, callback):
 
 #clang.cindex.Config.set_library_file("/usr/lib/llvm-3.8/lib/libclang-3.8.so.1");
 
-generated_c_files = []
-generated_cpp_files = []
-
 prog = re.compile("^#define\s*(\w*)\s*\"(.*)\"")
 for sdkver in sdk_versions:
     iface_versions = {}
@@ -534,10 +527,3 @@ for cb in cb_table.keys():
     for struct in cb_table[cb][1]:
         getapifile.write("    case sizeof(struct win%s): cb_%s(lin_callback, callback); break;\n" % (struct, struct))
     getapifile.write("    }\n    break;\n")
-
-m = open("Makefile.in", "a")
-for f in generated_c_files:
-    m.write("\t%s.c \\\n" % f)
-m.write("\nCPP_SRCS = \\\n")
-for f in generated_cpp_files:
-    m.write("\t%s.cpp \\\n" % f)
