@@ -87,7 +87,9 @@ cd "$TOP"/build/vrclient_x64/
     -L"$TOOLS_DIR64"/lib64/wine/ \
     --dll .
 CXXFLAGS="-Wno-attributes -std=c++0x" PATH="$TOOLS_DIR64/bin:$PATH" "$RUNTIME_PATH/shell-amd64.sh" make
+PATH="$TOOLS_DIR64/bin:$PATH" "$RUNTIME_PATH/shell-amd64.sh" winebuild --dll --fake-module -E vrclient_x64.spec -o vrclient_x64.dll.fake
 cp -a vrclient_x64.dll.so "$TOP"/dist/lib64/wine/
+cp -a vrclient_x64.dll.fake "$TOP"/dist/lib64/wine/fakedlls/vrclient_x64.dll
 
 #build 32-bit vrclient
 cd "$TOP"
@@ -104,6 +106,8 @@ mv vrclient_x64.spec vrclient.spec
     -L"$TOOLS_DIR32"/lib/wine/ \
     --dll .
 CXXFLAGS="-Wno-attributes -std=c++0x" PATH="$TOOLS_DIR32/bin:$PATH" "$RUNTIME_PATH/shell-i386.sh" make
+PATH="$TOOLS_DIR32/bin:$PATH" "$RUNTIME_PATH/shell-i386.sh" winebuild --dll --fake-module -E vrclient.spec -o vrclient.dll.fake
 cp -a vrclient.dll.so "$TOP"/dist/lib/wine/
+cp -a vrclient.dll.fake "$TOP"/dist/lib/wine/fakedlls/vrclient.dll
 
 echo "Proton ready in dist/"
