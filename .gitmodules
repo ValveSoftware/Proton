@@ -1,0 +1,3 @@
+[submodule "wine"]
+    path = wine
+    url = https://github.com/ValveSoftware/wine/
