@@ -15,6 +15,12 @@ PFX="Proton: "
 def log(msg):
     sys.stdout.write(PFX + msg + os.linesep)
 
+def run_wine(args):
+    if lfile == None:
+        subprocess.call(args, env=env)
+    else:
+        subprocess.call(args, env=env, stdout=lfile, stderr=subprocess.STDOUT)
+
 if not ("STEAM_COMPAT_DATA_PATH" in os.environ):
     log("No compat data path?")
     sys.exit(1)
@@ -40,10 +46,17 @@ prefix = os.environ["STEAM_COMPAT_DATA_PATH"]
 env = dict(os.environ)
 
 env["WINEDEBUG"] = "-all"
-lfile = None
+lfile_path = None
 
 #env["WINEDEBUG"] = "+tid,+seh,+steamclient"
-#lfile = env["HOME"] + "/steam-" + env["SteamGameId"] + ".log"
+#lfile_path = env["HOME"] + "/steam-" + env["SteamGameId"] + ".log"
+
+if not lfile_path is None:
+    if os.path.exists(lfile_path):
+        os.remove(lfile_path)
+    lfile = open(lfile_path, "w")
+else:
+    lfile = None
 
 env["WINEPREFIX"] = prefix
 if "LD_LIBRARY_PATH" in os.environ:
@@ -56,7 +69,7 @@ if "STEAM_COMPAT_CONFIG" in os.environ:
 
 if not os.path.isdir(prefix + "/drive_c"):
     #create prefix
-    subprocess.call([wine_path, "wineboot"], env=env)
+    run_wine([wine_path, "wineboot"])
 
     #copy steam files into place
     steamdir = env["HOME"] + "/.steam/steam/legacycompat/"
@@ -134,11 +147,11 @@ if not vr_runtime is None:
         j = { "runtime": [ "C:\\vrclient\\", "C:\\vrclient" ] }
 
         if not vr_config is None:
-            win_vr_config = subprocess.check_output([wine_path, "winepath", "-w", vr_config], env=env)
+            win_vr_config = subprocess.check_output([wine_path, "winepath", "-w", vr_config], env=env, stderr=open("/dev/null", "w"))
             j["config"] = [ win_vr_config.strip() ]
 
         if not vr_log is None:
-            win_vr_log = subprocess.check_output([wine_path, "winepath", "-w", vr_log], env=env)
+            win_vr_log = subprocess.check_output([wine_path, "winepath", "-w", vr_log], env=env, stderr=open("/dev/null", "w"))
             j["log"] = [ win_vr_log.strip() ]
 
         j["version"] = 1
@@ -149,13 +162,6 @@ if not vr_runtime is None:
         pass
 
 #start target app
-args = [wine_path] + sys.argv[1:]
-
-if lfile == None:
-    subprocess.call(args, env=env)
-else:
-    if os.path.exists(lfile):
-        os.remove(lfile)
-    subprocess.call(args, env=env, stdout=open(lfile, "w"), stderr=subprocess.STDOUT)
+run_wine([wine_path] + sys.argv[1:])
 
 sys.exit(0)
