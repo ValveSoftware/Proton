@@ -6,16 +6,13 @@ set -e
 #./build/ <-- built files
 #./dist/ <-- proton build, ready to distribute
 
-mkdir -p dist/bin build/wine.win32 build/dist.win32 build/wine.win64
-
 TOP="$PWD"
 RUNTIME_PATH="$TOP/../../runtime/steam-runtime-both/"
-DST_DIR="$TOP/dist"
+DST_DIR="$TOP/build/dist"
 TOOLS_DIR64="$TOP/build/tools.win64"
 TOOLS_DIR32="$TOP/build/tools.win32"
 
-cp -a toolmanifest.vdf dist/
-cp -a proton dist/bin/
+mkdir -p dist "$DST_DIR"/bin build/wine.win32 build/dist.win32 build/wine.win64
 
 #build wine64
 cd "$TOP"/build/wine.win64
@@ -54,7 +51,7 @@ cd "$TOP"/build/lsteamclient.win64/
     -L"$TOOLS_DIR64"/lib64/wine/ \
     --dll .
 CXXFLAGS=-Wno-attributes PATH="$TOOLS_DIR64/bin:$PATH" "$RUNTIME_PATH/shell-amd64.sh" make
-cp -a lsteamclient.dll.so "$TOP"/dist/lib64/wine/
+cp -a lsteamclient.dll.so "$DST_DIR"/lib64/wine/
 
 #build 32-bit lsteamclient
 cd "$TOP"
@@ -71,7 +68,7 @@ cd "$TOP"/build/lsteamclient.win32/
     -L"$TOOLS_DIR32"/lib/wine/ \
     --dll .
 CXXFLAGS=-Wno-attributes PATH="$TOOLS_DIR32/bin:$PATH" "$RUNTIME_PATH/shell-i386.sh" make -j1
-cp -a lsteamclient.dll.so "$TOP"/dist/lib/wine/
+cp -a lsteamclient.dll.so "$DST_DIR"/lib/wine/
 
 #build 64-bit vrclient
 cd "$TOP"
@@ -88,8 +85,8 @@ cd "$TOP"/build/vrclient_x64/
     --dll .
 CXXFLAGS="-Wno-attributes -std=c++0x" PATH="$TOOLS_DIR64/bin:$PATH" "$RUNTIME_PATH/shell-amd64.sh" make
 PATH="$TOOLS_DIR64/bin:$PATH" "$RUNTIME_PATH/shell-amd64.sh" winebuild --dll --fake-module -E vrclient_x64.spec -o vrclient_x64.dll.fake
-cp -a vrclient_x64.dll.so "$TOP"/dist/lib64/wine/
-cp -a vrclient_x64.dll.fake "$TOP"/dist/lib64/wine/fakedlls/vrclient_x64.dll
+cp -a vrclient_x64.dll.so "$DST_DIR"/lib64/wine/
+cp -a vrclient_x64.dll.fake "$DST_DIR"/lib64/wine/fakedlls/vrclient_x64.dll
 
 #build 32-bit vrclient
 cd "$TOP"
@@ -107,7 +104,17 @@ mv vrclient_x64.spec vrclient.spec
     --dll .
 CXXFLAGS="-Wno-attributes -std=c++0x" PATH="$TOOLS_DIR32/bin:$PATH" "$RUNTIME_PATH/shell-i386.sh" make
 PATH="$TOOLS_DIR32/bin:$PATH" "$RUNTIME_PATH/shell-i386.sh" winebuild --dll --fake-module -E vrclient.spec -o vrclient.dll.fake
-cp -a vrclient.dll.so "$TOP"/dist/lib/wine/
-cp -a vrclient.dll.fake "$TOP"/dist/lib/wine/fakedlls/vrclient.dll
+cp -a vrclient.dll.so "$DST_DIR"/lib/wine/
+cp -a vrclient.dll.fake "$DST_DIR"/lib/wine/fakedlls/vrclient.dll
+
+echo "Packaging..."
+cd "$TOP"
+
+#the difference between -1 and -9 is about 20 MB, so prioritize quick startup over file size
+tar -C build/dist -c . | gzip -c -1 > dist/proton_dist.tar.gz
+
+cp -a toolmanifest.vdf dist/
+cp -a proton dist/
+date '+%s' > dist/version
 
 echo "Proton ready in dist/"

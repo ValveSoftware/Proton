@@ -1,4 +1,4 @@
 "manifest"
 {
-  "commandline" "/bin/proton"
+  "commandline" "/proton"
 }

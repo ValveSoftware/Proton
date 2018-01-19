@@ -2,11 +2,13 @@
 
 #script to launch Wine with the correct environment
 
+import filecmp
 import json
 import os
 import shutil
 import subprocess
 import sys
+import tarfile
 
 PFX="Proton: "
 
@@ -17,13 +19,23 @@ if not ("STEAM_COMPAT_DATA_PATH" in os.environ):
     log("No compat data path?")
     sys.exit(1)
 
-prefix = os.environ["STEAM_COMPAT_DATA_PATH"]
-
-bindir = os.path.dirname(sys.argv[0])
-basedir = os.path.dirname(bindir)
+basedir = os.path.dirname(sys.argv[0])
+bindir = basedir + "/dist/bin/"
+libdir = basedir + "/dist/lib64:" + basedir + "/dist/lib"
 wine_path = bindir + "/wine64"
 
-libdir = basedir + "/lib64:" + basedir + "/lib"
+#extract if needed
+if not os.path.exists(basedir + "/dist") or \
+        not os.path.exists(basedir + "/dist/version") or \
+        not filecmp.cmp(basedir + "/version", basedir + "/dist/version"):
+    if os.path.exists(basedir + "/dist"):
+        shutil.rmtree(basedir + "/dist")
+    tar = tarfile.open(basedir + "/proton_dist.tar.gz", mode="r:gz")
+    tar.extractall(path=basedir + "/dist")
+    tar.close()
+    shutil.copy(basedir + "/version", basedir + "/dist/")
+
+prefix = os.environ["STEAM_COMPAT_DATA_PATH"]
 
 env = dict(os.environ)
 
@@ -62,8 +74,8 @@ if not os.path.isdir(prefix + "/drive_c"):
     #copy openvr files into place
     dst = prefix + "/drive_c/vrclient/bin/"
     os.makedirs(dst)
-    shutil.copy(basedir + "/lib/wine/fakedlls/vrclient.dll", dst)
-    shutil.copy(basedir + "/lib64/wine/fakedlls/vrclient_x64.dll", dst)
+    shutil.copy(basedir + "/dist/lib/wine/fakedlls/vrclient.dll", dst)
+    shutil.copy(basedir + "/dist/lib64/wine/fakedlls/vrclient_x64.dll", dst)
     os.makedirs(prefix + "/drive_c/users/" + env["USER"] + "/Local Settings/Application Data/openvr")
 
 #parse linux openvr config and present it in win32 format to the app.
