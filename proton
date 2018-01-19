@@ -89,7 +89,6 @@ if not os.path.isdir(prefix + "/drive_c"):
     os.makedirs(dst)
     shutil.copy(basedir + "/dist/lib/wine/fakedlls/vrclient.dll", dst)
     shutil.copy(basedir + "/dist/lib64/wine/fakedlls/vrclient_x64.dll", dst)
-    os.makedirs(prefix + "/drive_c/users/" + env["USER"] + "/Local Settings/Application Data/openvr")
 
 #parse linux openvr config and present it in win32 format to the app.
 #logic from openvr's CVRPathRegistry_Public::GetPaths
@@ -134,8 +133,14 @@ if vr_runtime is None or \
     except:
         pass
 
+try:
+    os.makedirs(prefix + "/drive_c/users/steamuser/Local Settings/Application Data/openvr")
+except:
+    #already exists
+    pass
+
 #remove existing file
-vrpaths_name = prefix + "/drive_c/users/" + env["USER"] + "/Local Settings/Application Data/openvr/openvrpaths.vrpath"
+vrpaths_name = prefix + "/drive_c/users/steamuser/Local Settings/Application Data/openvr/openvrpaths.vrpath"
 if os.path.exists(vrpaths_name):
     os.remove(vrpaths_name)
 
