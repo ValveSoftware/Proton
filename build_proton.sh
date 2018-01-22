@@ -107,6 +107,12 @@ PATH="$TOOLS_DIR32/bin:$PATH" "$RUNTIME_PATH/shell-i386.sh" winebuild --dll --fa
 cp -a vrclient.dll.so "$DST_DIR"/lib/wine/
 cp -a vrclient.dll.fake "$DST_DIR"/lib/wine/fakedlls/vrclient.dll
 
+echo "Creating default wine prefix..."
+cd "$TOP"
+rm -rf "$DST_DIR"/share/default_pfx
+WINEPREFIX="$DST_DIR"/share/default_pfx "$RUNTIME_PATH/shell-amd64.sh" "$DST_DIR/bin/wine64" wineboot
+WINEPREFIX="$DST_DIR"/share/default_pfx "$RUNTIME_PATH/shell-amd64.sh" "$DST_DIR/bin/wineserver" -w
+
 echo "Packaging..."
 cd "$TOP"
 

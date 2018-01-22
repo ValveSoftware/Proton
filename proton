@@ -41,7 +41,7 @@ if not os.path.exists(basedir + "/dist") or \
     tar.close()
     shutil.copy(basedir + "/version", basedir + "/dist/")
 
-prefix = os.environ["STEAM_COMPAT_DATA_PATH"]
+prefix = os.environ["STEAM_COMPAT_DATA_PATH"] + "/pfx/"
 
 env = dict(os.environ)
 
@@ -67,28 +67,30 @@ else:
 if "STEAM_COMPAT_CONFIG" in os.environ:
     config = os.environ["STEAM_COMPAT_CONFIG"]
 
-if not os.path.isdir(prefix + "/drive_c"):
-    #create prefix
-    run_wine([wine_path, "wineboot"])
+if not os.path.isdir(prefix):
+    #copy default prefix into place
+    shutil.copytree(basedir + "/dist/share/default_pfx", prefix, symlinks=True)
 
-    #copy steam files into place
-    steamdir = env["HOME"] + "/.steam/steam/legacycompat/"
-    dst = prefix + "/drive_c/Program Files (x86)/"
-    if not os.path.isdir(dst):
-        dst = prefix + "/drive_c/Program Files/"
+#copy steam files into place
+steamdir = env["HOME"] + "/.steam/steam/legacycompat/"
+dst = prefix + "/drive_c/Program Files (x86)/"
+try:
     os.mkdir(dst + "Steam")
-    filestocopy = ["steamclient.dll",
-            "steamclient64.dll",
-            "Steam.dll"]
-    for f in filestocopy:
-        if os.path.isfile(steamdir + f):
-            shutil.copy(steamdir + f, dst + "Steam/" + f)
+except:
+    #already exists
+    pass
+filestocopy = ["steamclient.dll",
+        "steamclient64.dll",
+        "Steam.dll"]
+for f in filestocopy:
+    if os.path.isfile(steamdir + f):
+        shutil.copy(steamdir + f, dst + "Steam/" + f)
 
-    #copy openvr files into place
-    dst = prefix + "/drive_c/vrclient/bin/"
-    os.makedirs(dst)
-    shutil.copy(basedir + "/dist/lib/wine/fakedlls/vrclient.dll", dst)
-    shutil.copy(basedir + "/dist/lib64/wine/fakedlls/vrclient_x64.dll", dst)
+#copy openvr files into place
+dst = prefix + "/drive_c/vrclient/bin/"
+os.makedirs(dst)
+shutil.copy(basedir + "/dist/lib/wine/fakedlls/vrclient.dll", dst)
+shutil.copy(basedir + "/dist/lib64/wine/fakedlls/vrclient_x64.dll", dst)
 
 #parse linux openvr config and present it in win32 format to the app.
 #logic from openvr's CVRPathRegistry_Public::GetPaths
