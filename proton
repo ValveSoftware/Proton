@@ -21,6 +21,13 @@ def run_wine(args):
     else:
         subprocess.call(args, env=env, stdout=lfile, stderr=subprocess.STDOUT)
 
+def makedirs(path):
+    try:
+        os.makedirs(path)
+    except:
+        #already exists
+        pass
+
 if not ("STEAM_COMPAT_DATA_PATH" in os.environ):
     log("No compat data path?")
     sys.exit(1)
@@ -74,11 +81,7 @@ if not os.path.isdir(prefix):
 #copy steam files into place
 steamdir = env["HOME"] + "/.steam/steam/legacycompat/"
 dst = prefix + "/drive_c/Program Files (x86)/"
-try:
-    os.mkdir(dst + "Steam")
-except:
-    #already exists
-    pass
+makedirs(dst + "Steam")
 filestocopy = ["steamclient.dll",
         "steamclient64.dll",
         "Steam.dll"]
@@ -88,7 +91,7 @@ for f in filestocopy:
 
 #copy openvr files into place
 dst = prefix + "/drive_c/vrclient/bin/"
-os.makedirs(dst)
+makedirs(dst)
 shutil.copy(basedir + "/dist/lib/wine/fakedlls/vrclient.dll", dst)
 shutil.copy(basedir + "/dist/lib64/wine/fakedlls/vrclient_x64.dll", dst)
 
@@ -135,11 +138,7 @@ if vr_runtime is None or \
     except:
         pass
 
-try:
-    os.makedirs(prefix + "/drive_c/users/steamuser/Local Settings/Application Data/openvr")
-except:
-    #already exists
-    pass
+makedirs(prefix + "/drive_c/users/steamuser/Local Settings/Application Data/openvr")
 
 #remove existing file
 vrpaths_name = prefix + "/drive_c/users/steamuser/Local Settings/Application Data/openvr/openvrpaths.vrpath"
