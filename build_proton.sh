@@ -109,12 +109,6 @@ PATH="$TOOLS_DIR32/bin:$PATH" $I386_WRAPPER winebuild --dll --fake-module -E vrc
 cp -a vrclient.dll.so "$DST_DIR"/lib/wine/
 cp -a vrclient.dll.fake "$DST_DIR"/lib/wine/fakedlls/vrclient.dll
 
-echo "Creating default wine prefix..."
-cd "$TOP"
-rm -rf "$DST_DIR"/share/default_pfx
-WINEPREFIX="$DST_DIR"/share/default_pfx $AMD64_WRAPPER "$DST_DIR/bin/wine64" wineboot
-WINEPREFIX="$DST_DIR"/share/default_pfx $AMD64_WRAPPER "$DST_DIR/bin/wineserver" -w
-
 echo "Packaging..."
 cd "$TOP"
 

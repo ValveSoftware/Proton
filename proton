@@ -32,6 +32,9 @@ if not ("STEAM_COMPAT_DATA_PATH" in os.environ):
     log("No compat data path?")
     sys.exit(1)
 
+if "STEAM_COMPAT_CONFIG" in os.environ:
+    config = os.environ["STEAM_COMPAT_CONFIG"]
+
 basedir = os.path.dirname(sys.argv[0])
 bindir = basedir + "/dist/bin/"
 libdir = basedir + "/dist/lib64:" + basedir + "/dist/lib"
@@ -48,8 +51,6 @@ if not os.path.exists(basedir + "/dist") or \
     tar.close()
     shutil.copy(basedir + "/version", basedir + "/dist/")
 
-prefix = os.environ["STEAM_COMPAT_DATA_PATH"] + "/pfx/"
-
 env = dict(os.environ)
 
 env["WINEDEBUG"] = "-all"
@@ -65,14 +66,19 @@ if not lfile_path is None:
 else:
     lfile = None
 
-env["WINEPREFIX"] = prefix
 if "LD_LIBRARY_PATH" in os.environ:
     env["LD_LIBRARY_PATH"] = libdir + ":" + env["LD_LIBRARY_PATH"]
 else:
     env["LD_LIBRARY_PATH"] = libdir
 
-if "STEAM_COMPAT_CONFIG" in os.environ:
-    config = os.environ["STEAM_COMPAT_CONFIG"]
+if not os.path.isdir(basedir + "/dist/share/default_pfx"):
+    #make default prefix
+    env["WINEPREFIX"] = basedir + "/dist/share/default_pfx"
+    run_wine([wine_path, "wineboot"])
+    run_wine([bindir + "/wineserver", "-w"])
+
+prefix = os.environ["STEAM_COMPAT_DATA_PATH"] + "/pfx/"
+env["WINEPREFIX"] = prefix
 
 if not os.path.isdir(prefix):
     #copy default prefix into place
