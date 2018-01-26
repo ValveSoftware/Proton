@@ -75,6 +75,10 @@ if not os.path.isdir(basedir + "/dist/share/default_pfx"):
     #make default prefix
     env["WINEPREFIX"] = basedir + "/dist/share/default_pfx"
     run_wine([wine_path, "wineboot"])
+    run_wine([wine_path, basedir + "/dist/share/contrib/VulkanRT-1.0.65.1-Installer.exe", "/S"])
+    run_wine([wine_path, "regedit", basedir + "/dist/share/contrib/winevulkan.reg"])
+    shutil.copy(basedir + "/dist/share/contrib/winevulkan.json", basedir + "/dist/share/default_pfx/drive_c/windows/system32/winevulkan.json")
+    shutil.copy(basedir + "/dist/share/contrib/winevulkan.json", basedir + "/dist/share/default_pfx/drive_c/windows/syswow64/winevulkan.json")
     run_wine([bindir + "/wineserver", "-w"])
 
 prefix = os.environ["STEAM_COMPAT_DATA_PATH"] + "/pfx/"

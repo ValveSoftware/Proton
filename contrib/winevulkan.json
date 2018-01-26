@@ -1,0 +1,7 @@
+{
+    "file_format_version": "1.0.0",
+    "ICD": {
+        "library_path": "C:\\windows\\system32\\winevulkan.dll",
+        "api_version": "1.0.51"
+    }
+}
