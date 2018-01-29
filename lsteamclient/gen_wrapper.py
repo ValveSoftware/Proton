@@ -146,6 +146,11 @@ print_sizes = []
 
 class_versions = {}
 
+def handle_destructor(cfile, classname, winclassname, method):
+    cfile.write("DEFINE_THISCALL_WRAPPER(%s_destructor, 4)\n" % winclassname)
+    cfile.write("void __thiscall %s_destructor(%s *_this)\n{/* never called */}\n\n" % (winclassname, winclassname))
+    return "destructor"
+
 def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, existing_methods):
     used_name = method.spelling
     idx = '2'
@@ -334,6 +339,8 @@ WINE_DEFAULT_DEBUG_CHANNEL(steamclient);
     for child in children:
         if child.kind == clang.cindex.CursorKind.CXX_METHOD:
             methods.append(handle_method(cfile, classnode.spelling, winclassname, cppname, child, cpp, cpp_h, methods))
+        elif child.kind == clang.cindex.CursorKind.DESTRUCTOR:
+            methods.append(handle_destructor(cfile, classnode.spelling, winclassname, child))
 
     cfile.write("extern vtable_ptr %s_vtable;\n\n" % winclassname)
     cfile.write("#ifndef __GNUC__\n")
