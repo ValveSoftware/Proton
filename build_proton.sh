@@ -131,11 +131,6 @@ fi
 cp -a vrclient.dll.so "$DST_DIR"/lib/wine/
 cp -a vrclient.dll.fake "$DST_DIR"/lib/wine/fakedlls/vrclient.dll
 
-#copy runtime installers
-cd "$TOP"
-mkdir -p "$DST_DIR"/share/contrib/
-cp -a contrib/* "$DST_DIR"/share/contrib/
-
 echo "Packaging..."
 cd "$TOP"
 

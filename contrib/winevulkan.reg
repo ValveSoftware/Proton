@@ -1,4 +1,0 @@
-Windows Registry Editor Version 5.00
-
-[HKEY_LOCAL_MACHINE\Software\Khronos\Vulkan\Drivers]
-"C:\\windows\\system32\\winevulkan.json"=dword:00000000
