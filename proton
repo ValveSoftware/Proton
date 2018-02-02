@@ -173,7 +173,16 @@ if not vr_runtime is None:
     except:
         pass
 
-#start target app
-run_wine([wine_path] + sys.argv[1:])
+#determine mode
+if sys.argv[1] == "run":
+    #start target app
+    run_wine([wine_path] + sys.argv[2:])
+elif sys.argv[1] == "translatepath":
+    #get windows path equivalent
+    path = subprocess.check_output([wine_path, "winepath", "-w", sys.argv[2]], env=env, stderr=open("/dev/null", "w"))
+    stdout.write(path)
+else:
+    #???
+    sys.exit(1)
 
 sys.exit(0)

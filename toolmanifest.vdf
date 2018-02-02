@@ -1,4 +1,5 @@
 "manifest"
 {
-  "commandline" "/proton"
+  "commandline" "/proton run"
+  "commandline_translatepath" = "/proton winepath"
 }
