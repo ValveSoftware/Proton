@@ -266,7 +266,9 @@ def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, e
                 if do_lin_to_win and do_lin_to_win[1] == param.spelling or \
                         do_wrap and do_wrap[1] == param.spelling:
                     cpp.write("&lin")
-                    if do_lin_to_win and do_lin_to_win[0] == "VREvent_t":
+                    if do_lin_to_win and \
+                            (do_lin_to_win[0] == "VREvent_t" or \
+                             do_lin_to_win[0] == "VRControllerState001_t"):
                         next_is_size = True
                 elif do_unwrap and do_unwrap[1] == param.spelling:
                     cpp.write("struct_%s_%s_unwrap(%s)" % (strip_ns(do_unwrap[0]), display_sdkver(sdkver), do_unwrap[1]))
