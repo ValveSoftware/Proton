@@ -19,12 +19,21 @@
 /* Copied from dlls/msvcrt/cxx.h */
 #undef __thiscall
 
-#define __ASM_NAME(name) name
-#define __ASM_DEFINE_FUNC(name,suffix,code) asm(".text\n\t.align 4\n\t.globl " #name suffix "\n\t.type " #name suffix ",@function\n" #name suffix ":\n\t.cfi_startproc\n\t" code "\n\t.cfi_endproc\n\t.previous");
-#define __ASM_GLOBAL_FUNC(name,code) __ASM_DEFINE_FUNC(name,"",code)
-#define __ASM_STDCALL(args) ""
+#ifdef __APPLE__
+# define __ASM_NAME(name) "_" name
+#else
+# define __ASM_NAME(name) name
+#endif
 
 #ifdef __i386__  /* thiscall functions are i386-specific */
+
+#ifdef __APPLE__
+# define __ASM_DEFINE_FUNC(name,suffix,code) asm(".text\n\t.align 4\n\t.globl _" #name suffix "\n\t\n_" #name suffix ":\n\t.cfi_startproc\n\t" code "\n\t.cfi_endproc\n\t.previous");
+#else
+# define __ASM_DEFINE_FUNC(name,suffix,code) asm(".text\n\t.align 4\n\t.globl " #name suffix "\n\t.type " #name suffix ",@function\n" #name suffix ":\n\t.cfi_startproc\n\t" code "\n\t.cfi_endproc\n\t.previous");
+#endif
+#define __ASM_GLOBAL_FUNC(name,code) __ASM_DEFINE_FUNC(name,"",code)
+#define __ASM_STDCALL(args) ""
 
 #define THISCALL(func) __thiscall_ ## func
 #define THISCALL_NAME(func) __ASM_NAME("__thiscall_" #func)

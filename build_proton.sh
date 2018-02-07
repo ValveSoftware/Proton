@@ -7,14 +7,20 @@ set -e
 #./dist/ <-- proton build, ready to distribute
 
 TOP="$PWD"
-RUNTIME_PATH="$TOP/../../runtime/steam-runtime-both/"
-AMD64_WRAPPER="schroot --chroot steamrt_scout_beta_amd64 --"
-I386_WRAPPER="schroot --chroot steamrt_scout_beta_i386 --"
-DST_DIR="$TOP/build/dist"
-TOOLS_DIR64="$TOP/build/tools.win64"
-TOOLS_DIR32="$TOP/build/tools.win32"
 
-STRIPFLAGS='-s'
+PLATFORM=$(uname)
+if [ "$PLATFORM" == "Darwin" ]; then
+    CC="ccache clang -g"
+    STRIPFLAGS=''
+    AMD64_WRAPPER=""
+    I386_WRAPPER=""
+else
+    CC="ccache gcc -g"
+    STRIPFLAGS='-s'
+    AMD64_WRAPPER="schroot --chroot steamrt_scout_beta_amd64 --"
+    I386_WRAPPER="schroot --chroot steamrt_scout_beta_i386 --"
+fi
+
 STRIP='strip'
 if [ "$1" == "--debug" ]; then
     #don't strip
@@ -22,11 +28,15 @@ if [ "$1" == "--debug" ]; then
     STRIP=''
 fi
 
+DST_DIR="$TOP/build/dist"
+TOOLS_DIR64="$TOP/build/tools.win64"
+TOOLS_DIR32="$TOP/build/tools.win32"
+
 mkdir -p dist "$DST_DIR"/bin build/wine.win32 build/dist.win32 build/wine.win64
 
 #build wine64
 cd "$TOP"/build/wine.win64
-CC="ccache gcc" $AMD64_WRAPPER "$TOP"/wine/configure --enable-win64 --disable-tests --prefix="$DST_DIR"
+CC="$CC" $AMD64_WRAPPER "$TOP"/wine/configure --enable-win64 --disable-tests --prefix="$DST_DIR"
 $AMD64_WRAPPER make -j5
 INSTALL_PROGRAM_FLAGS="$STRIPFLAGS" $AMD64_WRAPPER make install-lib
 INSTALL_PROGRAM_FLAGS="$STRIPFLAGS" $AMD64_WRAPPER make prefix="$TOOLS_DIR64" libdir="$TOOLS_DIR64/lib64" dlldir="$TOOLS_DIR64/lib64/wine" install-dev install-lib
@@ -35,7 +45,7 @@ rm -rf "$DST_DIR/share/man/"
 
 #build wine32
 cd "$TOP"/build/wine.win32
-CC="ccache gcc" $I386_WRAPPER "$TOP"/wine/configure --disable-tests --prefix="$TOP/build/dist.win32/"
+CC="$CC" $I386_WRAPPER "$TOP"/wine/configure --disable-tests --prefix="$TOP/build/dist.win32/"
 $I386_WRAPPER make -j5
 INSTALL_PROGRAM_FLAGS="$STRIPFLAGS" $I386_WRAPPER make install-lib
 INSTALL_PROGRAM_FLAGS="$STRIPFLAGS" $I386_WRAPPER make prefix="$TOOLS_DIR32" libdir="$TOOLS_DIR32/lib" dlldir="$TOOLS_DIR32/lib/wine" install-dev install-lib
@@ -45,7 +55,9 @@ INSTALL_PROGRAM_FLAGS="$STRIPFLAGS" $I386_WRAPPER make prefix="$TOOLS_DIR32" lib
 cd "$TOP"/build/dist.win32/
 cp -a lib "$DST_DIR"/
 cp -a bin/wine "$DST_DIR"/bin/
-cp -a bin/wine-preloader "$DST_DIR"/bin/
+if [ "$PLATFORM" != "Darwin" ]; then
+    cp -a bin/wine-preloader "$DST_DIR"/bin/
+fi
 cp -a bin/wineserver "$DST_DIR"/bin/wineserver32
 
 #build 64-bit lsteamclient
