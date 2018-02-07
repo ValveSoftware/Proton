@@ -74,7 +74,7 @@ $AMD64_WRAPPER "$TOP"/wine/tools/winemaker/winemaker \
     -L"$TOOLS_DIR64"/lib64/ \
     -L"$TOOLS_DIR64"/lib64/wine/ \
     --dll .
-CXXFLAGS=-Wno-attributes PATH="$TOOLS_DIR64/bin:$PATH" $AMD64_WRAPPER make
+CXXFLAGS="-Wno-attributes -O2" CFLAGS="-O2" PATH="$TOOLS_DIR64/bin:$PATH" $AMD64_WRAPPER make
 if [ x"$STRIP" != x ]; then
     $AMD64_WRAPPER "$STRIP" lsteamclient.dll.so
 fi
@@ -94,7 +94,7 @@ $I386_WRAPPER "$TOP"/wine/tools/winemaker/winemaker \
     -L"$TOOLS_DIR32"/lib/ \
     -L"$TOOLS_DIR32"/lib/wine/ \
     --dll .
-CXXFLAGS=-Wno-attributes PATH="$TOOLS_DIR32/bin:$PATH" $I386_WRAPPER make -j1
+CXXFLAGS="-Wno-attributes -O2" CFLAGS="-O2" PATH="$TOOLS_DIR32/bin:$PATH" $I386_WRAPPER make
 if [ x"$STRIP" != x ]; then
     $I386_WRAPPER "$STRIP" lsteamclient.dll.so
 fi
@@ -113,7 +113,7 @@ $AMD64_WRAPPER "$TOP"/wine/tools/winemaker/winemaker \
     -L"$TOOLS_DIR64"/lib64/ \
     -L"$TOOLS_DIR64"/lib64/wine/ \
     --dll .
-CXXFLAGS="-Wno-attributes -std=c++0x" PATH="$TOOLS_DIR64/bin:$PATH" $AMD64_WRAPPER make
+CXXFLAGS="-Wno-attributes -std=c++0x -O2" CFLAGS="-O2" PATH="$TOOLS_DIR64/bin:$PATH" $AMD64_WRAPPER make
 PATH="$TOOLS_DIR64/bin:$PATH" $AMD64_WRAPPER winebuild --dll --fake-module -E vrclient_x64.spec -o vrclient_x64.dll.fake
 if [ x"$STRIP" != x ]; then
     $AMD64_WRAPPER "$STRIP" vrclient_x64.dll.so
@@ -135,7 +135,7 @@ $I386_WRAPPER "$TOP"/wine/tools/winemaker/winemaker \
     -L"$TOOLS_DIR32"/lib/ \
     -L"$TOOLS_DIR32"/lib/wine/ \
     --dll .
-CXXFLAGS="-Wno-attributes -std=c++0x" PATH="$TOOLS_DIR32/bin:$PATH" $I386_WRAPPER make
+CXXFLAGS="-Wno-attributes -std=c++0x -O2" CFLAGS="-O2" PATH="$TOOLS_DIR32/bin:$PATH" $I386_WRAPPER make
 PATH="$TOOLS_DIR32/bin:$PATH" $I386_WRAPPER winebuild --dll --fake-module -E vrclient.spec -o vrclient.dll.fake
 if [ x"$STRIP" != x ]; then
     $I386_WRAPPER "$STRIP" vrclient.dll.so
