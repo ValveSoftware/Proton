@@ -182,7 +182,7 @@ elif sys.argv[1] == "translatepath":
     path = subprocess.check_output([wine_path, "winepath", "-w", sys.argv[2]], env=env, stderr=open("/dev/null", "w"))
     stdout.write(path)
 else:
-    #???
+    stdout.write("Need a verb.")
     sys.exit(1)
 
 sys.exit(0)
