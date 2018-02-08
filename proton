@@ -59,12 +59,12 @@ lfile_path = None
 #env["WINEDEBUG"] = "+tid,+seh,+steamclient"
 #lfile_path = env["HOME"] + "/steam-" + env["SteamGameId"] + ".log"
 
-if not lfile_path is None:
+if lfile_path is None:
+    lfile = open("/dev/null", "w")
+else:
     if os.path.exists(lfile_path):
         os.remove(lfile_path)
     lfile = open(lfile_path, "w")
-else:
-    lfile = None
 
 if "LD_LIBRARY_PATH" in os.environ:
     env["LD_LIBRARY_PATH"] = libdir + ":" + env["LD_LIBRARY_PATH"]
