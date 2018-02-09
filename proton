@@ -33,7 +33,12 @@ if not ("STEAM_COMPAT_DATA_PATH" in os.environ):
     sys.exit(1)
 
 if "STEAM_COMPAT_CONFIG" in os.environ:
-    config = os.environ["STEAM_COMPAT_CONFIG"]
+    config_opts = os.environ["STEAM_COMPAT_CONFIG"].split(",")
+else:
+    config_opts = []
+
+if "PROTON_USE_DXVK" in os.environ:
+    config_opts.append("dxvk")
 
 basedir = os.path.dirname(sys.argv[0])
 bindir = basedir + "/dist/bin/"
@@ -172,6 +177,26 @@ if not vr_runtime is None:
         json.dump(j, open(vrpaths_name, "w"), indent=2)
     except:
         pass
+
+def make_dxvk_links(dll_dir, link_dir):
+    if os.path.lexists(link_dir + "/d3d11.dll"):
+        os.remove(link_dir + "/d3d11.dll")
+    if os.path.lexists(link_dir + "/dxgi.dll"):
+        os.remove(link_dir + "/dxgi.dll")
+    os.symlink(dll_dir + "/d3d11.dll", link_dir + "/d3d11.dll")
+    os.symlink(dll_dir + "/dxgi.dll", link_dir + "/dxgi.dll")
+
+if "dxvk" in config_opts:
+    make_dxvk_links(basedir + "/dist/lib64/wine/dxvk/",
+        prefix + "drive_c/windows/system32")
+    make_dxvk_links(basedir + "/dist/lib/wine/dxvk/",
+        prefix + "drive_c/windows/syswow64")
+    env["WINEDLLOVERRIDES"] = "dxgi,d3d11=n"
+else:
+    make_dxvk_links(basedir + "/dist/lib64/wine/",
+        prefix + "drive_c/windows/system32")
+    make_dxvk_links(basedir + "/dist/lib/wine/",
+        prefix + "drive_c/windows/syswow64")
 
 #determine mode
 if sys.argv[1] == "run":
