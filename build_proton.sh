@@ -143,6 +143,32 @@ fi
 cp -a vrclient.dll.so "$DST_DIR"/lib/wine/
 cp -a vrclient.dll.fake "$DST_DIR"/lib/wine/fakedlls/vrclient.dll
 
+#build dxvk
+
+#unfortunately the Steam runtime chroot is too old to build dxvk, so
+#we have to build it in the host system
+
+#requires meson >= 0.43 and posix thread enabled mingw-w64, on debian:
+#  update-alternatives --config i686-w64-mingw32-g++
+#  update-alternatives --config i686-w64-mingw32-gcc
+#  update-alternatives --config x86_64-w64-mingw32-g++
+#  update-alternatives --config x86_64-w64-mingw32-gcc
+cd "$TOP"
+if [ ! -e dxvk/proton.win64.built ]; then
+    PATH="$TOP"/glslang/bin/:"$PATH" bash ./build_dxvk.sh win64
+fi
+if [ ! -e dxvk/proton.win32.built ]; then
+    PATH="$TOP"/glslang/bin/:"$PATH" bash ./build_dxvk.sh win32
+fi
+
+mkdir -p "$DST_DIR"/lib/wine/dxvk
+cp -a dxvk/dist.win32/bin/dxgi.dll "$DST_DIR"/lib/wine/dxvk/
+cp -a dxvk/dist.win32/bin/d3d11.dll "$DST_DIR"/lib/wine/dxvk/
+
+mkdir -p "$DST_DIR"/lib64/wine/dxvk
+cp -a dxvk/dist.win64/bin/dxgi.dll "$DST_DIR"/lib64/wine/dxvk/
+cp -a dxvk/dist.win64/bin/d3d11.dll "$DST_DIR"/lib64/wine/dxvk/
+
 echo "Packaging..."
 cd "$TOP"
 
