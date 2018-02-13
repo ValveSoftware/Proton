@@ -209,7 +209,23 @@ else:
 #determine mode
 if sys.argv[1] == "run":
     #start target app
-    run_wine([wine_path] + sys.argv[2:])
+    if "PROTON_DUMP_DEBUG_COMMAND" in env:
+        f = open("/tmp/proton_dbg_cmd", "w")
+        f.write("#!/bin/bash\n\n")
+        f.write("cd " + os.getcwd() + "\n")
+        f.write("SteamGameId=\"" + env["SteamGameId"] + "\" \\\n")
+        f.write("\tSteamAppId=\"" + env["SteamAppId"] + "\" \\\n")
+        f.write("\tPATH=\"" + env["PATH"] + "\" \\\n")
+        f.write("\tWINEDLLPATH=\"" + env["WINEDLLPATH"] + "\" \\\n")
+        f.write("\tLD_LIBRARY_PATH=\"" + env["LD_LIBRARY_PATH"] + "\" \\\n")
+        f.write("\tWINEPREFIX=\"" + env["WINEPREFIX"] + "\" \\\n")
+        f.write("\t" + wine_path + " winedbg")
+        for arg in sys.argv[2:]:
+            f.write(" \"" + arg + "\"")
+        f.write("\n")
+        f.close()
+    else:
+        run_wine([wine_path] + sys.argv[2:])
 elif sys.argv[1] == "translatepath":
     #get windows path equivalent
     path = subprocess.check_output([wine_path, "winepath", "-w", sys.argv[2]], env=env, stderr=open("/dev/null", "w"))
