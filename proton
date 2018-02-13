@@ -61,7 +61,7 @@ env = dict(os.environ)
 env["WINEDEBUG"] = "-all"
 lfile_path = None
 
-#env["WINEDEBUG"] = "+tid,+seh,+steamclient"
+#env["WINEDEBUG"] = "+timestamp,+tid,+seh"
 #lfile_path = env["HOME"] + "/steam-" + env["SteamGameId"] + ".log"
 
 if lfile_path is None:
