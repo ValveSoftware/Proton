@@ -42,7 +42,8 @@ if "PROTON_USE_DXVK" in os.environ:
 
 basedir = os.path.dirname(sys.argv[0])
 bindir = basedir + "/dist/bin/"
-libdir = basedir + "/dist/lib64:" + basedir + "/dist/lib"
+libdir = basedir + "/dist/lib"
+lib64dir = basedir + "/dist/lib64"
 wine_path = bindir + "/wine64"
 
 #extract if needed
@@ -72,9 +73,16 @@ else:
     lfile = open(lfile_path, "w")
 
 if "LD_LIBRARY_PATH" in os.environ:
-    env["LD_LIBRARY_PATH"] = libdir + ":" + env["LD_LIBRARY_PATH"]
+    env["LD_LIBRARY_PATH"] = lib64dir + ":" + libdir + ":" + env["LD_LIBRARY_PATH"]
 else:
-    env["LD_LIBRARY_PATH"] = libdir
+    env["LD_LIBRARY_PATH"] = lib64dir + ":" + libdir
+
+env["WINEDLLPATH"] = lib64dir + "/wine:" + libdir + "/wine"
+
+if "PATH" in os.environ:
+    env["PATH"] = bindir + ":" + env["PATH"]
+else:
+    env["PATH"] = bindir
 
 if not os.path.isdir(basedir + "/dist/share/default_pfx"):
     #make default prefix
