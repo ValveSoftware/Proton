@@ -12,6 +12,8 @@ TYPE="$1"
 
 cd "$TOP"/dxvk
 
+sed -i -e 's/^exe_wrapper.*$//' build-$TYPE.txt
+
 meson --prefix="$TOP"/dxvk/dist.$TYPE --cross-file build-$TYPE.txt build.$TYPE
 
 cd build.$TYPE
