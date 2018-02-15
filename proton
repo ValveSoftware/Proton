@@ -11,10 +11,19 @@ import subprocess
 import sys
 import tarfile
 
+CURRENT_PREFIX_VERSION="3.0-1"
+
 PFX="Proton: "
 
 def log(msg):
     sys.stdout.write(PFX + msg + os.linesep)
+    sys.stdout.flush()
+
+def upgrade_pfx(old_ver):
+    if old_ver == CURRENT_PREFIX_VERSION:
+        return
+    log("Upgrading prefix from " + str(old_ver) + " to " + CURRENT_PREFIX_VERSION)
+    #nothing to do, yet
 
 def run_wine(args):
     if lfile == None:
@@ -97,6 +106,16 @@ env["WINEPREFIX"] = prefix
 if not os.path.isdir(prefix):
     #copy default prefix into place
     shutil.copytree(basedir + "/dist/share/default_pfx", prefix, symlinks=True)
+
+version_file = os.environ["STEAM_COMPAT_DATA_PATH"] + "/version"
+if os.path.exists(version_file):
+    with open(version_file, "r") as f:
+        upgrade_pfx(f.readline().strip())
+else:
+    upgrade_pfx(None)
+
+with open(version_file, "w") as f:
+    f.write(CURRENT_PREFIX_VERSION + "\n")
 
 #copy steam files into place
 steamdir = env["HOME"] + "/.steam/root/legacycompat/"
