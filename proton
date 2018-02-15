@@ -235,33 +235,40 @@ def determine_architecture(path):
             return ARCH_I386
         return ARCH_UNKNOWN
 
+def dump_dbg_script(path, cmd, descr):
+    f = open(path, "w")
+    f.write("#!/bin/bash\n")
+    f.write("#" + descr + "\n\n")
+    f.write("cd \"" + os.getcwd() + "\"\n")
+    f.write("SteamGameId=\"" + env["SteamGameId"] + "\" \\\n")
+    f.write("\tSteamAppId=\"" + env["SteamAppId"] + "\" \\\n")
+    f.write("\tPATH=\"" + env["PATH"] + "\" \\\n")
+    f.write("\tWINEDEBUG=-all\\\n")
+    f.write("\tWINEDLLPATH=\"" + env["WINEDLLPATH"] + "\" \\\n")
+    f.write("\tLD_LIBRARY_PATH=\"" + env["LD_LIBRARY_PATH"] + "\" \\\n")
+    f.write("\tWINEPREFIX=\"" + env["WINEPREFIX"] + "\" \\\n")
+    if "PROTON_VR_RUNTIME" in env:
+        f.write("\tPROTON_VR_RUNTIME=\"" + env["PROTON_VR_RUNTIME"] + "\" \\\n")
+    if "WINEDLLOVERRIDES" in env:
+        f.write("\tWINEDLLOVERRIDES=\"" + env["WINEDLLOVERRIDES"] + "\" \\\n")
+    arch = determine_architecture(sys.argv[2])
+    if arch == ARCH_X86_64:
+        f.write("\t\"" + bindir + "wine64\"")
+    else:
+        f.write("\t\"" + bindir + "wine\"")
+    for arg in cmd:
+        f.write(" \"" + arg + "\"")
+    f.write("\n")
+    f.close()
+    os.chmod(path, 0755)
+
 #determine mode
 if sys.argv[1] == "run":
     #start target app
     if "PROTON_DUMP_DEBUG_COMMAND" in env:
-        f = open("/tmp/proton_dbg_cmd", "w")
-        f.write("#!/bin/bash\n\n")
-        f.write("cd \"" + os.getcwd() + "\"\n")
-        f.write("SteamGameId=\"" + env["SteamGameId"] + "\" \\\n")
-        f.write("\tSteamAppId=\"" + env["SteamAppId"] + "\" \\\n")
-        f.write("\tPATH=\"" + env["PATH"] + "\" \\\n")
-        f.write("\tWINEDEBUG=-all\\\n")
-        f.write("\tWINEDLLPATH=\"" + env["WINEDLLPATH"] + "\" \\\n")
-        f.write("\tLD_LIBRARY_PATH=\"" + env["LD_LIBRARY_PATH"] + "\" \\\n")
-        f.write("\tWINEPREFIX=\"" + env["WINEPREFIX"] + "\" \\\n")
-        if "PROTON_VR_RUNTIME" in env:
-            f.write("\tPROTON_VR_RUNTIME=\"" + env["PROTON_VR_RUNTIME"] + "\" \\\n")
-        if "WINEDLLOVERRIDES" in env:
-            f.write("\tWINEDLLOVERRIDES=\"" + env["WINEDLLOVERRIDES"] + "\" \\\n")
-        arch = determine_architecture(sys.argv[2])
-        if arch == ARCH_X86_64:
-            f.write("\t\"" + bindir + "wine64\" winedbg")
-        else:
-            f.write("\t\"" + bindir + "wine\" winedbg")
-        for arg in sys.argv[2:]:
-            f.write(" \"" + arg + "\"")
-        f.write("\n")
-        f.close()
+        dump_dbg_script("/tmp/proton_dbg", ["winedbg", "$@"], "Run winedbg (with args)")
+        dump_dbg_script("/tmp/proton_dbg_run", ["winedbg"] + sys.argv[2:], "Run winedbg with the game loaded")
+        dump_dbg_script("/tmp/proton_run", ["$@"], "Run an arbitrary command")
     else:
         run_wine([wine_path] + sys.argv[2:])
 elif sys.argv[1] == "translatepath":
