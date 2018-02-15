@@ -219,6 +219,10 @@ if sys.argv[1] == "run":
         f.write("\tWINEDLLPATH=\"" + env["WINEDLLPATH"] + "\" \\\n")
         f.write("\tLD_LIBRARY_PATH=\"" + env["LD_LIBRARY_PATH"] + "\" \\\n")
         f.write("\tWINEPREFIX=\"" + env["WINEPREFIX"] + "\" \\\n")
+        if "PROTON_VR_RUNTIME" in env:
+            f.write("\tPROTON_VR_RUNTIME=\"" + env["PROTON_VR_RUNTIME"] + "\" \\\n")
+        if "WINEDLLOVERRIDES" in env:
+            f.write("\tWINEDLLOVERRIDES=\"" + env["WINEDLLOVERRIDES"] + "\" \\\n")
         f.write("\t" + wine_path + " winedbg")
         for arg in sys.argv[2:]:
             f.write(" \"" + arg + "\"")
