@@ -212,7 +212,7 @@ if sys.argv[1] == "run":
     if "PROTON_DUMP_DEBUG_COMMAND" in env:
         f = open("/tmp/proton_dbg_cmd", "w")
         f.write("#!/bin/bash\n\n")
-        f.write("cd " + os.getcwd() + "\n")
+        f.write("cd \"" + os.getcwd() + "\"\n")
         f.write("SteamGameId=\"" + env["SteamGameId"] + "\" \\\n")
         f.write("\tSteamAppId=\"" + env["SteamAppId"] + "\" \\\n")
         f.write("\tPATH=\"" + env["PATH"] + "\" \\\n")
