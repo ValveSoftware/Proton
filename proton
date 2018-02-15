@@ -98,7 +98,7 @@ if not os.path.isdir(prefix):
     shutil.copytree(basedir + "/dist/share/default_pfx", prefix, symlinks=True)
 
 #copy steam files into place
-steamdir = env["HOME"] + "/.steam/steam/legacycompat/"
+steamdir = env["HOME"] + "/.steam/root/legacycompat/"
 dst = prefix + "/drive_c/Program Files (x86)/"
 makedirs(dst + "Steam")
 filestocopy = ["steamclient.dll",
