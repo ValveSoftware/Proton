@@ -245,6 +245,7 @@ if sys.argv[1] == "run":
         f.write("SteamGameId=\"" + env["SteamGameId"] + "\" \\\n")
         f.write("\tSteamAppId=\"" + env["SteamAppId"] + "\" \\\n")
         f.write("\tPATH=\"" + env["PATH"] + "\" \\\n")
+        f.write("\tWINEDEBUG=-all\\\n")
         f.write("\tWINEDLLPATH=\"" + env["WINEDLLPATH"] + "\" \\\n")
         f.write("\tLD_LIBRARY_PATH=\"" + env["LD_LIBRARY_PATH"] + "\" \\\n")
         f.write("\tWINEPREFIX=\"" + env["WINEPREFIX"] + "\" \\\n")
