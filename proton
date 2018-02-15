@@ -6,6 +6,7 @@ import filecmp
 import json
 import os
 import shutil
+import struct
 import subprocess
 import sys
 import tarfile
@@ -206,6 +207,34 @@ else:
     make_dxvk_links(basedir + "/dist/lib/wine/",
         prefix + "drive_c/windows/syswow64")
 
+ARCH_UNKNOWN=0
+ARCH_I386=1
+ARCH_X86_64=2
+def determine_architecture(path):
+    #algorithm from file's msdos magic file
+    with open(path, "rb") as f:
+        magic = f.read(2)
+        if magic != "MZ":
+            return ARCH_UNKNOWN
+        f.seek(0x18)
+        reloc = struct.unpack('<H', f.read(2))[0]
+        if reloc < 0x40:
+            #DOS
+            return ARCH_I386
+        f.seek(0x3c)
+        pe_offs = struct.unpack('<L', f.read(4))[0]
+        f.seek(pe_offs)
+        magic = f.read(4)
+        if magic != "PE\0\0":
+            return ARCH_UNKNOWN
+        f.seek(pe_offs + 4)
+        arch = struct.unpack('<H', f.read(2))[0]
+        if arch == 0x8664:
+            return ARCH_X86_64
+        if arch == 0x014c:
+            return ARCH_I386
+        return ARCH_UNKNOWN
+
 #determine mode
 if sys.argv[1] == "run":
     #start target app
@@ -223,7 +252,11 @@ if sys.argv[1] == "run":
             f.write("\tPROTON_VR_RUNTIME=\"" + env["PROTON_VR_RUNTIME"] + "\" \\\n")
         if "WINEDLLOVERRIDES" in env:
             f.write("\tWINEDLLOVERRIDES=\"" + env["WINEDLLOVERRIDES"] + "\" \\\n")
-        f.write("\t" + wine_path + " winedbg")
+        arch = determine_architecture(sys.argv[2])
+        if arch == ARCH_X86_64:
+            f.write("\t\"" + bindir + "wine64\" winedbg")
+        else:
+            f.write("\t\"" + bindir + "wine\" winedbg")
         for arg in sys.argv[2:]:
             f.write(" \"" + arg + "\"")
         f.write("\n")
