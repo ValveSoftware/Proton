@@ -11,21 +11,24 @@ TOP="$PWD"
 PLATFORM=$(uname)
 if [ "$PLATFORM" == "Darwin" ]; then
     CC="ccache clang -g"
-    STRIPFLAGS=''
     AMD64_WRAPPER=""
     I386_WRAPPER=""
 else
     CC="ccache gcc -g"
-    STRIPFLAGS='-s'
     AMD64_WRAPPER="schroot --chroot steamrt_scout_beta_amd64 --"
     I386_WRAPPER="schroot --chroot steamrt_scout_beta_i386 --"
 fi
 
-STRIP='strip'
-if [ "$1" == "--debug" ]; then
-    #don't strip
-    STRIPFLAGS=''
+if [ "$1" == "--release" ]; then
+    STRIP='strip'
+    if [ "$PLATFORM" == "Darwin" ]; then
+        STRIPFLAGS=''
+    else
+        STRIPFLAGS='-s'
+    fi
+else
     STRIP=''
+    STRIPFLAGS=''
 fi
 
 DST_DIR="$TOP/build/dist"
