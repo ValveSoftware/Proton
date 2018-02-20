@@ -126,7 +126,10 @@ filestocopy = ["steamclient.dll",
         "Steam.dll"]
 for f in filestocopy:
     if os.path.isfile(steamdir + f):
-        shutil.copy(steamdir + f, dst + "Steam/" + f)
+        dstfile = dst + "Steam/" + f
+        if os.path.isfile(dstfile):
+            os.remove(dstfile)
+        shutil.copy(steamdir + f, dstfile)
 
 #copy openvr files into place
 dst = prefix + "/drive_c/vrclient/bin/"
