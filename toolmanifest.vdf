@@ -1,5 +1,6 @@
 "manifest"
 {
   "commandline" "/proton run"
-  "commandline_translatepath" = "/proton translatepath"
+  "commandline_getnativepath" = "/proton getnativepath"
+  "commandline_getcompatpath" = "/proton getcompatpath"
 }
