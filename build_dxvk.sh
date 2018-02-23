@@ -18,11 +18,17 @@ meson --prefix="$TOP"/dxvk/dist.$TYPE --cross-file build-$TYPE.txt build.$TYPE
 
 cd build.$TYPE
 
-meson configure -Dprefix="$TOP"/dxvk/dist.$TYPE
-meson configure -Dbuildtype=release
+meson configure -Dprefix="$TOP"/dxvk -Dbuildtype=release
 
 ninja
-ninja install
+
+#build on Arch Linux and deploy into git, see build_proton.sh
+mkdir -p "$TOP"/dxvk.$TYPE
+cp src/dxgi/dxgi.dll "$TOP"/dxvk.$TYPE/
+strip "$TOP"/dxvk.$TYPE/dxgi.dll
+cp src/d3d11/d3d11.dll "$TOP"/dxvk.$TYPE/
+strip "$TOP"/dxvk.$TYPE/d3d11.dll
+echo "build_dxvk: $TYPE build done"
 
 #mark as built
-touch "$TOP"/dxvk/proton.$TYPE.built
+#touch "$TOP"/dxvk/proton.$TYPE.built

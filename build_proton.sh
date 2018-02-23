@@ -148,6 +148,14 @@ cp -a vrclient.dll.fake "$DST_DIR"/lib/wine/fakedlls/vrclient.dll
 
 #build dxvk
 
+#Debian 9 is too old to build dxvk, so I gave up and I'm building it on my Arch
+#Linux box and checking the binaries into Git instead. Blech. --aeikum
+cd "$TOP"
+cp "dxvk.win64/dxgi.dll" "$DST_DIR"/lib64/wine/dxvk/
+cp "dxvk.win64/d3d11.dll" "$DST_DIR"/lib64/wine/dxvk/
+cp "dxvk.win32/dxgi.dll" "$DST_DIR"/lib/wine/dxvk/
+cp "dxvk.win32/d3d11.dll" "$DST_DIR"/lib/wine/dxvk/
+
 #unfortunately the Steam runtime chroot is too old to build dxvk, so
 #we have to build it in the host system
 
@@ -156,21 +164,21 @@ cp -a vrclient.dll.fake "$DST_DIR"/lib/wine/fakedlls/vrclient.dll
 #  update-alternatives --config i686-w64-mingw32-gcc
 #  update-alternatives --config x86_64-w64-mingw32-g++
 #  update-alternatives --config x86_64-w64-mingw32-gcc
-cd "$TOP"
-if [ ! -e dxvk/proton.win64.built ]; then
-    PATH="$TOP"/glslang/bin/:"$PATH" bash ./build_dxvk.sh win64
-fi
-if [ ! -e dxvk/proton.win32.built ]; then
-    PATH="$TOP"/glslang/bin/:"$PATH" bash ./build_dxvk.sh win32
-fi
-
-mkdir -p "$DST_DIR"/lib/wine/dxvk
-cp -a dxvk/dist.win32/bin/dxgi.dll "$DST_DIR"/lib/wine/dxvk/
-cp -a dxvk/dist.win32/bin/d3d11.dll "$DST_DIR"/lib/wine/dxvk/
-
-mkdir -p "$DST_DIR"/lib64/wine/dxvk
-cp -a dxvk/dist.win64/bin/dxgi.dll "$DST_DIR"/lib64/wine/dxvk/
-cp -a dxvk/dist.win64/bin/d3d11.dll "$DST_DIR"/lib64/wine/dxvk/
+#cd "$TOP"
+#if [ ! -e dxvk/proton.win64.built ]; then
+#    PATH="$TOP"/glslang/bin/:"$PATH" bash ./build_dxvk.sh win64
+#fi
+#if [ ! -e dxvk/proton.win32.built ]; then
+#    PATH="$TOP"/glslang/bin/:"$PATH" bash ./build_dxvk.sh win32
+#fi
+#
+#mkdir -p "$DST_DIR"/lib/wine/dxvk
+#cp -a dxvk/dist.win32/bin/dxgi.dll "$DST_DIR"/lib/wine/dxvk/
+#cp -a dxvk/dist.win32/bin/d3d11.dll "$DST_DIR"/lib/wine/dxvk/
+#
+#mkdir -p "$DST_DIR"/lib64/wine/dxvk
+#cp -a dxvk/dist.win64/bin/dxgi.dll "$DST_DIR"/lib64/wine/dxvk/
+#cp -a dxvk/dist.win64/bin/d3d11.dll "$DST_DIR"/lib64/wine/dxvk/
 
 echo "Packaging..."
 cd "$TOP"
