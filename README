@@ -1,0 +1,26 @@
+Proton is a tool for use with the Steam for Linux client which allows games
+which are exclusive to Windows to run on Linux operating systems. It uses Wine
+to facilitate this.
+
+To build Proton, set up a Debian machine with the Steam chroots as documented
+in the Steam Runtime repository:
+
+  https://github.com/ValveSoftware/steam-runtime
+
+You should then be able to build Proton using the "build_proton.sh" script.
+Some package installation will be necessary, for example the mingw-w64 cross
+compiler will be needed, as well as various runtime libraries such as Vulkan.
+Examine the output near the end of build/wine.win{64,32}/config.log to ensure
+you have all of the relevant libraries installed in each chroot.
+
+  TODO: Better document setting up the build machine.
+
+Once built, the dist/ directory will contain the files which can be distributed
+through Steam. For testing purposes, you should be able to clear out the files
+in your steamapps/common/Proton directory and replace them with the contents of
+dist/. The proton script will unpack the files on first run.
+
+NOTE: For now, dxvk requires build-time components that are too new for Debian
+9. It's recommended to build the DLLs on Arch Linux, where dxvk is actively
+being developed. This may be resolved in dxvk in the future, or may be worked
+around by using a newer Debian release. See comments in build_proton.sh.
