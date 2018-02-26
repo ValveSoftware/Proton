@@ -151,8 +151,10 @@ cp -a vrclient.dll.fake "$DST_DIR"/lib/wine/fakedlls/vrclient.dll
 #Debian 9 is too old to build dxvk, so I gave up and I'm building it on my Arch
 #Linux box and checking the binaries into Git instead. Blech. --aeikum
 cd "$TOP"
+mkdir -p "$DST_DIR"/lib64/wine/dxvk
 cp "dxvk.win64/dxgi.dll" "$DST_DIR"/lib64/wine/dxvk/
 cp "dxvk.win64/d3d11.dll" "$DST_DIR"/lib64/wine/dxvk/
+mkdir -p "$DST_DIR"/lib/wine/dxvk
 cp "dxvk.win32/dxgi.dll" "$DST_DIR"/lib/wine/dxvk/
 cp "dxvk.win32/d3d11.dll" "$DST_DIR"/lib/wine/dxvk/
 
