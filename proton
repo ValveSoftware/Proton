@@ -296,11 +296,11 @@ if sys.argv[1] == "run":
 elif sys.argv[1] == "getcompatpath":
     #linux -> windows path
     path = subprocess.check_output([wine_path, "winepath", "-w", sys.argv[2]], env=env, stderr=open("/dev/null", "w"))
-    stdout.write(path)
+    sys.stdout.write(path)
 elif sys.argv[1] == "getnativepath":
     #windows -> linux path
     path = subprocess.check_output([wine_path, "winepath", sys.argv[2]], env=env, stderr=open("/dev/null", "w"))
-    stdout.write(path)
+    sys.stdout.write(path)
 else:
     log("Need a verb.")
     sys.exit(1)
