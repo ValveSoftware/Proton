@@ -195,11 +195,11 @@ if not vr_runtime is None:
         j = { "runtime": [ "C:\\vrclient\\", "C:\\vrclient" ] }
 
         if not vr_config is None:
-            win_vr_config = subprocess.check_output([wine_path, "winepath", "-w", vr_config], env=env, stderr=open("/dev/null", "w"))
+            win_vr_config = subprocess.check_output([wine_path, "winepath", "-w", vr_config], env=env, stderr=lfile)
             j["config"] = [ win_vr_config.strip() ]
 
         if not vr_log is None:
-            win_vr_log = subprocess.check_output([wine_path, "winepath", "-w", vr_log], env=env, stderr=open("/dev/null", "w"))
+            win_vr_log = subprocess.check_output([wine_path, "winepath", "-w", vr_log], env=env, stderr=lfile)
             j["log"] = [ win_vr_log.strip() ]
 
         j["version"] = 1
@@ -295,11 +295,11 @@ if sys.argv[1] == "run":
         run_wine([wine_path] + sys.argv[2:])
 elif sys.argv[1] == "getcompatpath":
     #linux -> windows path
-    path = subprocess.check_output([wine_path, "winepath", "-w", sys.argv[2]], env=env, stderr=open("/dev/null", "w"))
+    path = subprocess.check_output([wine_path, "winepath", "-w", sys.argv[2]], env=env, stderr=lfile)
     sys.stdout.write(path)
 elif sys.argv[1] == "getnativepath":
     #windows -> linux path
-    path = subprocess.check_output([wine_path, "winepath", sys.argv[2]], env=env, stderr=open("/dev/null", "w"))
+    path = subprocess.check_output([wine_path, "winepath", sys.argv[2]], env=env, stderr=lfile)
     sys.stdout.write(path)
 else:
     log("Need a verb.")
