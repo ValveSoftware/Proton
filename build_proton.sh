@@ -2,27 +2,146 @@
 
 set -e
 
+JOBS=-j5
+
 #./wine/ <-- wine source
 #./build/ <-- built files
 #./dist/ <-- proton build, ready to distribute
 
+build_freetype()
+{
+    cd "$TOP"/freetype2
+
+    sed -i -e 's/^LIBRARY.*/LIBRARY=libprotonfreetype/' builds/unix/unix-cc.in
+
+    bash ./autogen.sh
+
+    #freetype 32-bit
+    cd "$TOP"
+    mkdir -p build/freetype.win32
+    cd build/freetype.win32
+    "$TOP"/freetype2/configure --prefix="$TOOLS_DIR32" --without-png --host i686-apple-darwin CFLAGS='-m32' LDFLAGS=-m32 PKG_CONFIG=false
+    make $JOBS
+    make install
+    cp ./.libs/*.dylib "$DST_DIR"/lib
+
+    #freetype 64-bit
+    cd "$TOP"
+    mkdir -p build/freetype.win64
+    cd build/freetype.win64
+    "$TOP"/freetype2/configure --prefix="$TOOLS_DIR64" --without-png --host x86_64-apple-darwin PKG_CONFIG=false
+    make $JOBS
+    make install
+    cp ./.libs/*.dylib "$DST_DIR"/lib64
+}
+
+build_libpng()
+{
+    cd "$TOP"/libpng
+    if [ ! -e 'configure' ]; then
+        sed -i -e 's/libpng@PNGLIB_MAJOR@@PNGLIB_MINOR@/libprotonpng@PNGLIB_MAJOR@@PNGLIB_MINOR@/' Makefile.am
+
+        bash ./autogen.sh
+    fi
+
+    #libpng 32-bit
+    cd "$TOP"
+    mkdir -p build/libpng.win32
+    cd build/libpng.win32
+    "$TOP"/libpng/configure --prefix="$TOOLS_DIR32" --host i686-apple-darwin CFLAGS='-m32' LDFLAGS=-m32
+    make $JOBS
+    make install
+    cp ./.libs/*.dylib "$DST_DIR"/lib
+
+    #libpng 64-bit
+    cd "$TOP"
+    mkdir -p build/libpng.win64
+    cd build/libpng.win64
+    "$TOP"/libpng/configure --prefix="$TOOLS_DIR64" --host x86_64-apple-darwin
+    make $JOBS
+    make install
+    cp ./.libs/libproton*.dylib "$DST_DIR"/lib64
+}
+
+build_libjpeg()
+{
+    cd "$TOP"/libjpeg-turbo
+    if [ ! -e 'configure' ]; then
+        autoreconf -fiv
+    fi
+
+    #if this fails with an nasm error, install a newer nasm with
+    #homebrew or the like and put it into your PATH
+
+    #libjpeg 32-bit
+    cd "$TOP"
+    mkdir -p build/libjpeg.win32
+    cd build/libjpeg.win32
+    "$TOP"/libjpeg-turbo/configure --prefix="$TOOLS_DIR32" --host i686-apple-darwin CFLAGS='-O3 -m32' LDFLAGS=-m32
+    make $JOBS
+    make install
+    mv "$TOOLS_DIR32"/lib/lib{,proton}jpeg.dylib
+    cp ./.libs/libjpeg.dylib "$DST_DIR"/lib/libprotonjpeg.dylib
+
+    #libjpeg 64-bit
+    cd "$TOP"
+    mkdir -p build/libjpeg.win64
+    cd build/libjpeg.win64
+    "$TOP"/libjpeg-turbo/configure --prefix="$TOOLS_DIR64" --host x86_64-apple-darwin
+    make $JOBS
+    make install
+    mv "$TOOLS_DIR64"/lib/lib{,proton}jpeg.dylib
+    cp ./.libs/libjpeg.dylib "$DST_DIR"/lib64/libprotonjpeg.dylib
+}
+
+build_libSDL()
+{
+    cd "$TOP"/SDL-mirror
+    bash ./autogen.sh
+
+    #libsdl2 32-bit
+    cd "$TOP"
+    mkdir -p build/SDL2.win32
+    cd build/SDL2.win32
+    "$TOP"/SDL-mirror/configure --prefix="$TOOLS_DIR32" --host i686-apple-darwin CFLAGS='-m32' LDFLAGS=-m32
+    make $JOBS
+    make install-hdrs
+    make install-lib
+    cp ./build/.libs/*.dylib "$DST_DIR"/lib
+
+    #libsdl2 64-bit
+    cd "$TOP"
+    mkdir -p build/SDL2.win64
+    cd build/SDL2.win64
+    "$TOP"/SDL-mirror/configure --prefix="$TOOLS_DIR64" --host x86_64-apple-darwin
+    make $JOBS
+    make install-hdrs
+    make install-lib
+    cp ./build/.libs/*.dylib "$DST_DIR"/lib64
+}
+
 TOP="$PWD"
+MAKE=make
 
 PLATFORM=$(uname)
 if [ "$PLATFORM" == "Darwin" ]; then
     CC="ccache clang -g"
     AMD64_WRAPPER=""
     I386_WRAPPER=""
+    CC32="$CC -m32"
+    CC64="$CC -m64"
 else
     CC="ccache gcc -g"
     AMD64_WRAPPER="schroot --chroot steamrt_scout_beta_amd64 --"
     I386_WRAPPER="schroot --chroot steamrt_scout_beta_i386 --"
+    CC32="$CC -m32"
+    CC64="$CC -m64"
 fi
 
 if [ "$1" == "--release" ]; then
     STRIP='strip'
     if [ "$PLATFORM" == "Darwin" ]; then
-        STRIPFLAGS=''
+        STRIPFLAGS='-x'
     else
         STRIPFLAGS='-s'
     fi
@@ -36,11 +155,55 @@ TOOLS_DIR64="$TOP/build/tools.win64"
 TOOLS_DIR32="$TOP/build/tools.win32"
 
 mkdir -p dist "$DST_DIR"/bin build/wine.win32 build/dist.win32 build/wine.win64
+mkdir -p "$DST_DIR"/lib "$DST_DIR"/lib64 "$TOOLS_DIR64"/lib64 "$TOOLS_DIR32"/lib
+
+if [ "$PLATFORM" == "Darwin" ]; then
+    build_freetype
+
+    FREETYPE32_CFLAGS="-I$TOOLS_DIR32/include/freetype2"
+    FREETYPE32_LIBS="-L$TOOLS_DIR32/lib -lprotonfreetype -framework CoreServices -framework ApplicationServices -lz"
+    ac_cv_lib_soname_freetype32=libprotonfreetype.dylib
+
+    FREETYPE64_CFLAGS="-I$TOOLS_DIR64/include/freetype2"
+    FREETYPE64_LIBS="-L$TOOLS_DIR64/lib -lprotonfreetype"
+    ac_cv_lib_soname_freetype64=libprotonfreetype.dylib
+
+
+    build_libpng
+
+    PNG32_CFLAGS="-I$TOOLS_DIR32/include"
+    PNG32_LIBS="-L$TOOLS_DIR32/lib -lprotonpng"
+    ac_cv_lib_soname_png32=libprotonpng16.dylib
+
+    PNG64_CFLAGS="-I$TOOLS_DIR64/include"
+    PNG64_LIBS="-L$TOOLS_DIR64/lib -lprotonpng"
+    ac_cv_lib_soname_png64=libprotonpng16.dylib
+
+
+    build_libjpeg
+
+    JPEG32_CFLAGS="-I$TOOLS_DIR32/include"
+    JPEG32_LIBS="-L$TOOLS_DIR32/lib -lprotonjpeg"
+    ac_cv_lib_soname_jpeg32=libprotonjpeg.dylib
+
+    JPEG64_CFLAGS="-I$TOOLS_DIR64/include"
+    JPEG64_LIBS="-L$TOOLS_DIR64/lib -lprotonjpeg"
+    ac_cv_lib_soname_jpeg64=libprotonjpeg.dylib
+
+
+    build_libSDL
+fi
+
 
 #build wine64
 cd "$TOP"/build/wine.win64
-CC="$CC" $AMD64_WRAPPER "$TOP"/wine/configure --enable-win64 --disable-tests --prefix="$DST_DIR"
-$AMD64_WRAPPER make -j5
+CFLAGS="-I$TOOLS_DIR64/include" LDFLAGS="-L$TOOLS_DIR64/lib" PKG_CONFIG_PATH="$TOOLS_DIR64/lib/pkgconfig" CC="$CC" \
+    PNG_CFLAGS="$PNG64_CFLAGS" PNG_LIBS="$PNG64_LIBS" ac_cv_lib_soname_png="$ac_cv_lib_soname_png64" \
+    JPEG_CFLAGS="$JPEG64_CFLAGS" JPEG_LIBS="$JPEG64_LIBS" ac_cv_lib_soname_jpeg="$ac_cv_lib_soname_jpeg64" \
+    FREETYPE_CFLAGS="$FREETYPE64_CFLAGS" FREETYPE_LIBS="$FREETYPE64_LIBS" ac_cv_lib_soname_freetype="$ac_cv_lib_soname_freetype64" \
+    $AMD64_WRAPPER "$TOP"/wine/configure \
+    --enable-win64 --disable-tests --prefix="$DST_DIR" 
+$AMD64_WRAPPER make $JOBS
 INSTALL_PROGRAM_FLAGS="$STRIPFLAGS" $AMD64_WRAPPER make install-lib
 INSTALL_PROGRAM_FLAGS="$STRIPFLAGS" $AMD64_WRAPPER make prefix="$TOOLS_DIR64" libdir="$TOOLS_DIR64/lib64" dlldir="$TOOLS_DIR64/lib64/wine" install-dev install-lib
 rm -f "$DST_DIR"/bin/{msiexec,notepad,regedit,regsvr32,wineboot,winecfg,wineconsole,winedbg,winefile,winemine,winepath}
@@ -48,8 +211,13 @@ rm -rf "$DST_DIR/share/man/"
 
 #build wine32
 cd "$TOP"/build/wine.win32
-CC="$CC" $I386_WRAPPER "$TOP"/wine/configure --disable-tests --prefix="$TOP/build/dist.win32/"
-$I386_WRAPPER make -j5
+CFLAGS="-I$TOOLS_DIR32/include" LDFLAGS="-L$TOOLS_DIR32/lib" PKG_CONFIG_PATH="$TOOLS_DIR32/lib/pkgconfig" CC="$CC" \
+    PNG_CFLAGS="$PNG32_CFLAGS" PNG_LIBS="$PNG32_LIBS" ac_cv_lib_soname_png="$ac_cv_lib_soname_png32" \
+    JPEG_CFLAGS="$JPEG32_CFLAGS" JPEG_LIBS="$JPEG32_LIBS" ac_cv_lib_soname_jpeg="$ac_cv_lib_soname_jpeg32" \
+    FREETYPE_CFLAGS="$FREETYPE32_CFLAGS" FREETYPE_LIBS="$FREETYPE32_LIBS" ac_cv_lib_soname_freetype="$ac_cv_lib_soname_freetype32" \
+    $I386_WRAPPER "$TOP"/wine/configure \
+    --disable-tests --prefix="$TOP/build/dist.win32/"
+$I386_WRAPPER make $JOBS
 INSTALL_PROGRAM_FLAGS="$STRIPFLAGS" $I386_WRAPPER make install-lib
 INSTALL_PROGRAM_FLAGS="$STRIPFLAGS" $I386_WRAPPER make prefix="$TOOLS_DIR32" libdir="$TOOLS_DIR32/lib" dlldir="$TOOLS_DIR32/lib/wine" install-dev install-lib
 
@@ -77,7 +245,7 @@ $AMD64_WRAPPER "$TOP"/wine/tools/winemaker/winemaker \
     -L"$TOOLS_DIR64"/lib64/ \
     -L"$TOOLS_DIR64"/lib64/wine/ \
     --dll .
-CXXFLAGS="-Wno-attributes -O2" CFLAGS="-O2" PATH="$TOOLS_DIR64/bin:$PATH" $AMD64_WRAPPER make
+CXXFLAGS="-Wno-attributes -O2" CFLAGS="-O2" PATH="$TOOLS_DIR64/bin:$PATH" $AMD64_WRAPPER make $JOBS
 if [ x"$STRIP" != x ]; then
     $AMD64_WRAPPER "$STRIP" lsteamclient.dll.so
 fi
@@ -97,7 +265,7 @@ $I386_WRAPPER "$TOP"/wine/tools/winemaker/winemaker \
     -L"$TOOLS_DIR32"/lib/ \
     -L"$TOOLS_DIR32"/lib/wine/ \
     --dll .
-CXXFLAGS="-Wno-attributes -O2" CFLAGS="-O2" PATH="$TOOLS_DIR32/bin:$PATH" $I386_WRAPPER make
+CXXFLAGS="-Wno-attributes -O2" CFLAGS="-O2" PATH="$TOOLS_DIR32/bin:$PATH" $I386_WRAPPER make $JOBS
 if [ x"$STRIP" != x ]; then
     $I386_WRAPPER "$STRIP" lsteamclient.dll.so
 fi
@@ -116,7 +284,7 @@ $AMD64_WRAPPER "$TOP"/wine/tools/winemaker/winemaker \
     -L"$TOOLS_DIR64"/lib64/ \
     -L"$TOOLS_DIR64"/lib64/wine/ \
     --dll .
-CXXFLAGS="-Wno-attributes -std=c++0x -O2" CFLAGS="-O2" PATH="$TOOLS_DIR64/bin:$PATH" $AMD64_WRAPPER make
+CXXFLAGS="-Wno-attributes -std=c++0x -O2" CFLAGS="-O2" PATH="$TOOLS_DIR64/bin:$PATH" $AMD64_WRAPPER make $JOBS
 PATH="$TOOLS_DIR64/bin:$PATH" $AMD64_WRAPPER winebuild --dll --fake-module -E vrclient_x64.spec -o vrclient_x64.dll.fake
 if [ x"$STRIP" != x ]; then
     $AMD64_WRAPPER "$STRIP" vrclient_x64.dll.so
@@ -138,7 +306,7 @@ $I386_WRAPPER "$TOP"/wine/tools/winemaker/winemaker \
     -L"$TOOLS_DIR32"/lib/ \
     -L"$TOOLS_DIR32"/lib/wine/ \
     --dll .
-CXXFLAGS="-Wno-attributes -std=c++0x -O2" CFLAGS="-O2" PATH="$TOOLS_DIR32/bin:$PATH" $I386_WRAPPER make
+CXXFLAGS="-Wno-attributes -std=c++0x -O2" CFLAGS="-O2" PATH="$TOOLS_DIR32/bin:$PATH" $I386_WRAPPER make $JOBS
 PATH="$TOOLS_DIR32/bin:$PATH" $I386_WRAPPER winebuild --dll --fake-module -E vrclient.spec -o vrclient.dll.fake
 if [ x"$STRIP" != x ]; then
     $I386_WRAPPER "$STRIP" vrclient.dll.so
@@ -146,41 +314,43 @@ fi
 cp -a vrclient.dll.so "$DST_DIR"/lib/wine/
 cp -a vrclient.dll.fake "$DST_DIR"/lib/wine/fakedlls/vrclient.dll
 
-#build dxvk
+if [ "$PLATFORM" != "Darwin" ]; then
+    #build dxvk
 
-#Debian 9 is too old to build dxvk, so I gave up and I'm building it on my Arch
-#Linux box and checking the binaries into Git instead. Blech. --aeikum
-cd "$TOP"
-mkdir -p "$DST_DIR"/lib64/wine/dxvk
-cp "dxvk.win64/dxgi.dll" "$DST_DIR"/lib64/wine/dxvk/
-cp "dxvk.win64/d3d11.dll" "$DST_DIR"/lib64/wine/dxvk/
-mkdir -p "$DST_DIR"/lib/wine/dxvk
-cp "dxvk.win32/dxgi.dll" "$DST_DIR"/lib/wine/dxvk/
-cp "dxvk.win32/d3d11.dll" "$DST_DIR"/lib/wine/dxvk/
+    #Debian 9 is too old to build dxvk, so I gave up and I'm building it on my Arch
+    #Linux box and checking the binaries into Git instead. Blech. --aeikum
+    cd "$TOP"
+    mkdir -p "$DST_DIR"/lib64/wine/dxvk
+    cp "dxvk.win64/dxgi.dll" "$DST_DIR"/lib64/wine/dxvk/
+    cp "dxvk.win64/d3d11.dll" "$DST_DIR"/lib64/wine/dxvk/
+    mkdir -p "$DST_DIR"/lib/wine/dxvk
+    cp "dxvk.win32/dxgi.dll" "$DST_DIR"/lib/wine/dxvk/
+    cp "dxvk.win32/d3d11.dll" "$DST_DIR"/lib/wine/dxvk/
 
-#unfortunately the Steam runtime chroot is too old to build dxvk, so
-#we have to build it in the host system
+    #unfortunately the Steam runtime chroot is too old to build dxvk, so
+    #we have to build it in the host system
 
-#requires meson >= 0.43 and posix thread enabled mingw-w64, on debian:
-#  update-alternatives --config i686-w64-mingw32-g++
-#  update-alternatives --config i686-w64-mingw32-gcc
-#  update-alternatives --config x86_64-w64-mingw32-g++
-#  update-alternatives --config x86_64-w64-mingw32-gcc
-#cd "$TOP"
-#if [ ! -e dxvk/proton.win64.built ]; then
-#    PATH="$TOP"/glslang/bin/:"$PATH" bash ./build_dxvk.sh win64
-#fi
-#if [ ! -e dxvk/proton.win32.built ]; then
-#    PATH="$TOP"/glslang/bin/:"$PATH" bash ./build_dxvk.sh win32
-#fi
-#
-#mkdir -p "$DST_DIR"/lib/wine/dxvk
-#cp -a dxvk/dist.win32/bin/dxgi.dll "$DST_DIR"/lib/wine/dxvk/
-#cp -a dxvk/dist.win32/bin/d3d11.dll "$DST_DIR"/lib/wine/dxvk/
-#
-#mkdir -p "$DST_DIR"/lib64/wine/dxvk
-#cp -a dxvk/dist.win64/bin/dxgi.dll "$DST_DIR"/lib64/wine/dxvk/
-#cp -a dxvk/dist.win64/bin/d3d11.dll "$DST_DIR"/lib64/wine/dxvk/
+    #requires meson >= 0.43 and posix thread enabled mingw-w64, on debian:
+    #  update-alternatives --config i686-w64-mingw32-g++
+    #  update-alternatives --config i686-w64-mingw32-gcc
+    #  update-alternatives --config x86_64-w64-mingw32-g++
+    #  update-alternatives --config x86_64-w64-mingw32-gcc
+    #cd "$TOP"
+    #if [ ! -e dxvk/proton.win64.built ]; then
+    #    PATH="$TOP"/glslang/bin/:"$PATH" bash ./build_dxvk.sh win64
+    #fi
+    #if [ ! -e dxvk/proton.win32.built ]; then
+    #    PATH="$TOP"/glslang/bin/:"$PATH" bash ./build_dxvk.sh win32
+    #fi
+    #
+    #mkdir -p "$DST_DIR"/lib/wine/dxvk
+    #cp -a dxvk/dist.win32/bin/dxgi.dll "$DST_DIR"/lib/wine/dxvk/
+    #cp -a dxvk/dist.win32/bin/d3d11.dll "$DST_DIR"/lib/wine/dxvk/
+    #
+    #mkdir -p "$DST_DIR"/lib64/wine/dxvk
+    #cp -a dxvk/dist.win64/bin/dxgi.dll "$DST_DIR"/lib64/wine/dxvk/
+    #cp -a dxvk/dist.win64/bin/d3d11.dll "$DST_DIR"/lib64/wine/dxvk/
+fi
 
 echo "Packaging..."
 cd "$TOP"
