@@ -7,3 +7,6 @@
 [submodule "freetype2"]
 	path = freetype2
 	url = git://git.sv.nongnu.org/freetype/freetype2.git
+[submodule "libpng"]
+	path = libpng
+	url = https://github.com/glennrp/libpng.git
