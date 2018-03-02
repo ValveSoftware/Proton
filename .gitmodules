@@ -13,3 +13,6 @@
 [submodule "libjpeg-turbo"]
 	path = libjpeg-turbo
 	url = https://github.com/libjpeg-turbo/libjpeg-turbo.git
+[submodule "SDL-mirror"]
+	path = SDL-mirror
+	url = https://github.com/spurious/SDL-mirror.git
