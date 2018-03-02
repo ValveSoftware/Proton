@@ -4,3 +4,6 @@
 [submodule "dxvk"]
 	path = dxvk
 	url = https://github.com/doitsujin/dxvk.git
+[submodule "freetype2"]
+	path = freetype2
+	url = git://git.sv.nongnu.org/freetype/freetype2.git
