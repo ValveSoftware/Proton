@@ -23,7 +23,10 @@ build_freetype()
     "$TOP"/freetype2/configure --prefix="$TOOLS_DIR32" --without-png --host i686-apple-darwin CFLAGS='-m32' LDFLAGS=-m32 PKG_CONFIG=false
     make $JOBS
     make install
-    cp ./.libs/*.dylib "$DST_DIR"/lib
+    cp ./.libs/libprotonfreetype.dylib "$DST_DIR"/lib
+    if [ x"$RELEASE_BUILD" != x ]; then
+        $STRIP "$DST_DIR"/lib/libprotonfreetype.dylib
+    fi
 
     #freetype 64-bit
     cd "$TOP"
@@ -32,7 +35,10 @@ build_freetype()
     "$TOP"/freetype2/configure --prefix="$TOOLS_DIR64" --without-png --host x86_64-apple-darwin PKG_CONFIG=false
     make $JOBS
     make install
-    cp ./.libs/*.dylib "$DST_DIR"/lib64
+    cp ./.libs/libprotonfreetype.dylib "$DST_DIR"/lib64
+    if [ x"$RELEASE_BUILD" != x ]; then
+        $STRIP "$DST_DIR"/lib64/libprotonfreetype.dylib
+    fi
 }
 
 build_libpng()
@@ -51,7 +57,10 @@ build_libpng()
     "$TOP"/libpng/configure --prefix="$TOOLS_DIR32" --host i686-apple-darwin CFLAGS='-m32' LDFLAGS=-m32
     make $JOBS
     make install
-    cp ./.libs/*.dylib "$DST_DIR"/lib
+    cp ./.libs/libprotonpng16.dylib "$DST_DIR"/lib
+    if [ x"$RELEASE_BUILD" != x ]; then
+        $STRIP "$DST_DIR"/lib/libprotonpng16.dylib
+    fi
 
     #libpng 64-bit
     cd "$TOP"
@@ -60,7 +69,10 @@ build_libpng()
     "$TOP"/libpng/configure --prefix="$TOOLS_DIR64" --host x86_64-apple-darwin
     make $JOBS
     make install
-    cp ./.libs/libproton*.dylib "$DST_DIR"/lib64
+    cp ./.libs/libprotonpng16.dylib "$DST_DIR"/lib64
+    if [ x"$RELEASE_BUILD" != x ]; then
+        $STRIP "$DST_DIR"/lib64/libprotonpng16.dylib
+    fi
 }
 
 build_libjpeg()
@@ -82,6 +94,9 @@ build_libjpeg()
     make install
     mv "$TOOLS_DIR32"/lib/lib{,proton}jpeg.dylib
     cp ./.libs/libjpeg.dylib "$DST_DIR"/lib/libprotonjpeg.dylib
+    if [ x"$RELEASE_BUILD" != x ]; then
+        $STRIP "$DST_DIR"/lib/libprotonjpeg.dylib
+    fi
 
     #libjpeg 64-bit
     cd "$TOP"
@@ -92,6 +107,9 @@ build_libjpeg()
     make install
     mv "$TOOLS_DIR64"/lib/lib{,proton}jpeg.dylib
     cp ./.libs/libjpeg.dylib "$DST_DIR"/lib64/libprotonjpeg.dylib
+    if [ x"$RELEASE_BUILD" != x ]; then
+        $STRIP "$DST_DIR"/lib64/libprotonjpeg.dylib
+    fi
 }
 
 build_libSDL()
@@ -107,7 +125,10 @@ build_libSDL()
     make $JOBS
     make install-hdrs
     make install-lib
-    cp ./build/.libs/*.dylib "$DST_DIR"/lib
+    cp ./build/.libs/libSDL2.dylib "$DST_DIR"/lib
+    if [ x"$RELEASE_BUILD" != x ]; then
+        $STRIP "$DST_DIR"/lib/libSDL2.dylib
+    fi
 
     #libsdl2 64-bit
     cd "$TOP"
@@ -117,7 +138,10 @@ build_libSDL()
     make $JOBS
     make install-hdrs
     make install-lib
-    cp ./build/.libs/*.dylib "$DST_DIR"/lib64
+    cp ./build/.libs/libSDL2.dylib "$DST_DIR"/lib64
+    if [ x"$RELEASE_BUILD" != x ]; then
+        $STRIP "$DST_DIR"/lib64/libSDL2.dylib
+    fi
 }
 
 TOP="$PWD"
@@ -138,16 +162,18 @@ else
     CC64="$CC -m64"
 fi
 
-if [ "$1" == "--release" ]; then
-    STRIP='strip'
-    if [ "$PLATFORM" == "Darwin" ]; then
-        STRIPFLAGS='-x'
-    else
-        STRIPFLAGS='-s'
-    fi
+if [ "$PLATFORM" == "Darwin" ]; then
+    STRIP='strip -x'
 else
-    STRIP=''
-    STRIPFLAGS=''
+    STRIP='strip'
+fi
+
+if [ "$1" == "--release" ]; then
+    RELEASE_BUILD=1
+    INSTALL_PROGRAM_FLAGS='-s'
+else
+    RELEASE_BUILD=1
+    INSTALL_PROGRAM_FLAGS=''
 fi
 
 DST_DIR="$TOP/build/dist"
@@ -197,29 +223,29 @@ fi
 
 #build wine64
 cd "$TOP"/build/wine.win64
-CFLAGS="-I$TOOLS_DIR64/include" LDFLAGS="-L$TOOLS_DIR64/lib" PKG_CONFIG_PATH="$TOOLS_DIR64/lib/pkgconfig" CC="$CC" \
+STRIP="$STRIP" CFLAGS="-I$TOOLS_DIR64/include" LDFLAGS="-L$TOOLS_DIR64/lib" PKG_CONFIG_PATH="$TOOLS_DIR64/lib/pkgconfig" CC="$CC" \
     PNG_CFLAGS="$PNG64_CFLAGS" PNG_LIBS="$PNG64_LIBS" ac_cv_lib_soname_png="$ac_cv_lib_soname_png64" \
     JPEG_CFLAGS="$JPEG64_CFLAGS" JPEG_LIBS="$JPEG64_LIBS" ac_cv_lib_soname_jpeg="$ac_cv_lib_soname_jpeg64" \
     FREETYPE_CFLAGS="$FREETYPE64_CFLAGS" FREETYPE_LIBS="$FREETYPE64_LIBS" ac_cv_lib_soname_freetype="$ac_cv_lib_soname_freetype64" \
     $AMD64_WRAPPER "$TOP"/wine/configure \
-    --enable-win64 --disable-tests --prefix="$DST_DIR" 
-$AMD64_WRAPPER make $JOBS
-INSTALL_PROGRAM_FLAGS="$STRIPFLAGS" $AMD64_WRAPPER make install-lib
-INSTALL_PROGRAM_FLAGS="$STRIPFLAGS" $AMD64_WRAPPER make prefix="$TOOLS_DIR64" libdir="$TOOLS_DIR64/lib64" dlldir="$TOOLS_DIR64/lib64/wine" install-dev install-lib
+    --enable-win64 --disable-tests --prefix="$DST_DIR"
+STRIP="$STRIP" $AMD64_WRAPPER make $JOBS
+INSTALL_PROGRAM_FLAGS="$INSTALL_PROGRAM_FLAGS" STRIP="$STRIP" $AMD64_WRAPPER make install-lib
+INSTALL_PROGRAM_FLAGS="$INSTALL_PROGRAM_FLAGS" STRIP="$STRIP" $AMD64_WRAPPER make prefix="$TOOLS_DIR64" libdir="$TOOLS_DIR64/lib64" dlldir="$TOOLS_DIR64/lib64/wine" install-dev install-lib
 rm -f "$DST_DIR"/bin/{msiexec,notepad,regedit,regsvr32,wineboot,winecfg,wineconsole,winedbg,winefile,winemine,winepath}
 rm -rf "$DST_DIR/share/man/"
 
 #build wine32
 cd "$TOP"/build/wine.win32
-CFLAGS="-I$TOOLS_DIR32/include" LDFLAGS="-L$TOOLS_DIR32/lib" PKG_CONFIG_PATH="$TOOLS_DIR32/lib/pkgconfig" CC="$CC" \
+STRIP="$STRIP" CFLAGS="-I$TOOLS_DIR32/include" LDFLAGS="-L$TOOLS_DIR32/lib" PKG_CONFIG_PATH="$TOOLS_DIR32/lib/pkgconfig" CC="$CC" \
     PNG_CFLAGS="$PNG32_CFLAGS" PNG_LIBS="$PNG32_LIBS" ac_cv_lib_soname_png="$ac_cv_lib_soname_png32" \
     JPEG_CFLAGS="$JPEG32_CFLAGS" JPEG_LIBS="$JPEG32_LIBS" ac_cv_lib_soname_jpeg="$ac_cv_lib_soname_jpeg32" \
     FREETYPE_CFLAGS="$FREETYPE32_CFLAGS" FREETYPE_LIBS="$FREETYPE32_LIBS" ac_cv_lib_soname_freetype="$ac_cv_lib_soname_freetype32" \
     $I386_WRAPPER "$TOP"/wine/configure \
     --disable-tests --prefix="$TOP/build/dist.win32/"
-$I386_WRAPPER make $JOBS
-INSTALL_PROGRAM_FLAGS="$STRIPFLAGS" $I386_WRAPPER make install-lib
-INSTALL_PROGRAM_FLAGS="$STRIPFLAGS" $I386_WRAPPER make prefix="$TOOLS_DIR32" libdir="$TOOLS_DIR32/lib" dlldir="$TOOLS_DIR32/lib/wine" install-dev install-lib
+STRIP="$STRIP" $I386_WRAPPER make $JOBS
+INSTALL_PROGRAM_FLAGS="$INSTALL_PROGRAM_FLAGS" STRIP="$STRIP" $I386_WRAPPER make install-lib
+INSTALL_PROGRAM_FLAGS="$INSTALL_PROGRAM_FLAGS" STRIP="$STRIP" $I386_WRAPPER make prefix="$TOOLS_DIR32" libdir="$TOOLS_DIR32/lib" dlldir="$TOOLS_DIR32/lib/wine" install-dev install-lib
 
 #install 32-bit stuff manually, see
 # https://wiki.winehq.org/Packaging#WoW64_Workarounds
@@ -247,7 +273,7 @@ $AMD64_WRAPPER "$TOP"/wine/tools/winemaker/winemaker \
     --dll .
 CXXFLAGS="-Wno-attributes -O2" CFLAGS="-O2" PATH="$TOOLS_DIR64/bin:$PATH" $AMD64_WRAPPER make $JOBS
 if [ x"$STRIP" != x ]; then
-    $AMD64_WRAPPER "$STRIP" lsteamclient.dll.so
+    $AMD64_WRAPPER $STRIP lsteamclient.dll.so
 fi
 cp -a lsteamclient.dll.so "$DST_DIR"/lib64/wine/
 
@@ -267,7 +293,7 @@ $I386_WRAPPER "$TOP"/wine/tools/winemaker/winemaker \
     --dll .
 CXXFLAGS="-Wno-attributes -O2" CFLAGS="-O2" PATH="$TOOLS_DIR32/bin:$PATH" $I386_WRAPPER make $JOBS
 if [ x"$STRIP" != x ]; then
-    $I386_WRAPPER "$STRIP" lsteamclient.dll.so
+    $I386_WRAPPER $STRIP lsteamclient.dll.so
 fi
 cp -a lsteamclient.dll.so "$DST_DIR"/lib/wine/
 
@@ -287,7 +313,7 @@ $AMD64_WRAPPER "$TOP"/wine/tools/winemaker/winemaker \
 CXXFLAGS="-Wno-attributes -std=c++0x -O2" CFLAGS="-O2" PATH="$TOOLS_DIR64/bin:$PATH" $AMD64_WRAPPER make $JOBS
 PATH="$TOOLS_DIR64/bin:$PATH" $AMD64_WRAPPER winebuild --dll --fake-module -E vrclient_x64.spec -o vrclient_x64.dll.fake
 if [ x"$STRIP" != x ]; then
-    $AMD64_WRAPPER "$STRIP" vrclient_x64.dll.so
+    $AMD64_WRAPPER $STRIP vrclient_x64.dll.so
 fi
 cp -a vrclient_x64.dll.so "$DST_DIR"/lib64/wine/
 cp -a vrclient_x64.dll.fake "$DST_DIR"/lib64/wine/fakedlls/vrclient_x64.dll
@@ -309,7 +335,7 @@ $I386_WRAPPER "$TOP"/wine/tools/winemaker/winemaker \
 CXXFLAGS="-Wno-attributes -std=c++0x -O2" CFLAGS="-O2" PATH="$TOOLS_DIR32/bin:$PATH" $I386_WRAPPER make $JOBS
 PATH="$TOOLS_DIR32/bin:$PATH" $I386_WRAPPER winebuild --dll --fake-module -E vrclient.spec -o vrclient.dll.fake
 if [ x"$STRIP" != x ]; then
-    $I386_WRAPPER "$STRIP" vrclient.dll.so
+    $I386_WRAPPER $STRIP vrclient.dll.so
 fi
 cp -a vrclient.dll.so "$DST_DIR"/lib/wine/
 cp -a vrclient.dll.fake "$DST_DIR"/lib/wine/fakedlls/vrclient.dll
