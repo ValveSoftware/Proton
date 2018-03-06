@@ -15,6 +15,11 @@ CURRENT_PREFIX_VERSION="3.0-1"
 
 PFX="Proton: "
 
+if "Darwin" in os.uname()[0]:
+    ld_path_var = "DYLD_LIBRARY_PATH"
+else:
+    ld_path_var = "LD_LIBRARY_PATH"
+
 def log(msg):
     sys.stdout.write(PFX + msg + os.linesep)
     sys.stdout.flush()
@@ -82,10 +87,10 @@ else:
         os.remove(lfile_path)
     lfile = open(lfile_path, "w")
 
-if "LD_LIBRARY_PATH" in os.environ:
-    env["LD_LIBRARY_PATH"] = lib64dir + ":" + libdir + ":" + env["LD_LIBRARY_PATH"]
+if ld_path_var in os.environ:
+    env[ld_path_var] = lib64dir + ":" + libdir + ":" + env[ld_path_var]
 else:
-    env["LD_LIBRARY_PATH"] = lib64dir + ":" + libdir
+    env[ld_path_var] = lib64dir + ":" + libdir
 
 env["WINEDLLPATH"] = lib64dir + "/wine:" + libdir + "/wine"
 
@@ -267,7 +272,7 @@ def dump_dbg_script(path, cmd, descr):
     f.write("\tPATH=\"" + env["PATH"] + "\" \\\n")
     f.write("\tWINEDEBUG=-all\\\n")
     f.write("\tWINEDLLPATH=\"" + env["WINEDLLPATH"] + "\" \\\n")
-    f.write("\tLD_LIBRARY_PATH=\"" + env["LD_LIBRARY_PATH"] + "\" \\\n")
+    f.write("\t" + ld_path_var + "=\"" + env[ld_path_var] + "\" \\\n")
     f.write("\tWINEPREFIX=\"" + env["WINEPREFIX"] + "\" \\\n")
     if "PROTON_VR_RUNTIME" in env:
         f.write("\tPROTON_VR_RUNTIME=\"" + env["PROTON_VR_RUNTIME"] + "\" \\\n")
