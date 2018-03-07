@@ -112,6 +112,33 @@ build_libjpeg()
     fi
 }
 
+build_openal()
+{
+    #openal 32-bit
+    cd "$TOP"
+    mkdir -p build/openal.win32
+    cd build/openal.win32
+    cmake "$TOP"/openal-soft -DCMAKE_C_FLAGS="-m32" -DCMAKE_INSTALL_PREFIX="$TOOLS_DIR32"
+    make $JOBS VERBOSE=1
+    make install VERBOSE=1
+    cp ./libopenal.dylib "$DST_DIR"/lib/libopenal.1.dylib
+    if [ x"$RELEASE_BUILD" != x ]; then
+        $STRIP "$DST_DIR"/lib/libopenal.1.dylib
+    fi
+
+    #openal 64-bit
+    cd "$TOP"
+    mkdir -p build/openal.win64
+    cd build/openal.win64
+    cmake "$TOP"/openal-soft -DCMAKE_INSTALL_PREFIX="$TOOLS_DIR64"
+    make $JOBS VERBOSE=1
+    make install VERBOSE=1
+    cp ./libopenal.dylib "$DST_DIR"/lib64/libopenal.1.dylib
+    if [ x"$RELEASE_BUILD" != x ]; then
+        $STRIP "$DST_DIR"/lib64/libopenal.1.dylib
+    fi
+}
+
 build_libSDL()
 {
     cd "$TOP"/SDL-mirror
@@ -212,6 +239,7 @@ if [ "$PLATFORM" == "Darwin" ]; then
     JPEG64_LIBS="-L$TOOLS_DIR64/lib -lprotonjpeg"
     ac_cv_lib_soname_jpeg64=libprotonjpeg.dylib
 
+    build_openal
 
     build_libSDL
 fi
