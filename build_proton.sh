@@ -20,7 +20,7 @@ build_freetype()
     cd "$TOP"
     mkdir -p build/freetype.win32
     cd build/freetype.win32
-    "$TOP"/freetype2/configure --prefix="$TOOLS_DIR32" --without-png --host i686-apple-darwin CFLAGS='-m32' LDFLAGS=-m32 PKG_CONFIG=false
+    "$TOP"/freetype2/configure --prefix="$TOOLS_DIR32" --without-png --host i686-apple-darwin CFLAGS='-m32 -g -O2' LDFLAGS=-m32 PKG_CONFIG=false
     make $JOBS
     make install
     cp ./.libs/libprotonfreetype.dylib "$DST_DIR"/lib
@@ -54,7 +54,7 @@ build_libpng()
     cd "$TOP"
     mkdir -p build/libpng.win32
     cd build/libpng.win32
-    "$TOP"/libpng/configure --prefix="$TOOLS_DIR32" --host i686-apple-darwin CFLAGS='-m32' LDFLAGS=-m32
+    "$TOP"/libpng/configure --prefix="$TOOLS_DIR32" --host i686-apple-darwin CFLAGS='-m32 -g -O2' LDFLAGS=-m32
     make $JOBS
     make install
     cp ./.libs/libprotonpng16.dylib "$DST_DIR"/lib
@@ -89,7 +89,7 @@ build_libjpeg()
     cd "$TOP"
     mkdir -p build/libjpeg.win32
     cd build/libjpeg.win32
-    "$TOP"/libjpeg-turbo/configure --prefix="$TOOLS_DIR32" --host i686-apple-darwin CFLAGS='-O3 -m32' LDFLAGS=-m32
+    "$TOP"/libjpeg-turbo/configure --prefix="$TOOLS_DIR32" --host i686-apple-darwin CFLAGS='-O3 -g -m32' LDFLAGS=-m32
     make $JOBS
     make install
     mv "$TOOLS_DIR32"/lib/lib{,proton}jpeg.dylib
@@ -121,7 +121,7 @@ build_libSDL()
     cd "$TOP"
     mkdir -p build/SDL2.win32
     cd build/SDL2.win32
-    "$TOP"/SDL-mirror/configure --prefix="$TOOLS_DIR32" --host i686-apple-darwin CFLAGS='-m32' LDFLAGS=-m32
+    "$TOP"/SDL-mirror/configure --prefix="$TOOLS_DIR32" --host i686-apple-darwin CFLAGS='-m32 -g -O2' LDFLAGS=-m32
     make $JOBS
     make install-hdrs
     make install-lib
@@ -149,17 +149,13 @@ MAKE=make
 
 PLATFORM=$(uname)
 if [ "$PLATFORM" == "Darwin" ]; then
-    CC="ccache clang -g"
+    CC="ccache clang"
     AMD64_WRAPPER=""
     I386_WRAPPER=""
-    CC32="$CC -m32"
-    CC64="$CC -m64"
 else
-    CC="ccache gcc -g"
+    CC="ccache gcc"
     AMD64_WRAPPER="schroot --chroot steamrt_scout_beta_amd64 --"
     I386_WRAPPER="schroot --chroot steamrt_scout_beta_i386 --"
-    CC32="$CC -m32"
-    CC64="$CC -m64"
 fi
 
 if [ "$PLATFORM" == "Darwin" ]; then
@@ -223,7 +219,7 @@ fi
 
 #build wine64
 cd "$TOP"/build/wine.win64
-STRIP="$STRIP" CFLAGS="-I$TOOLS_DIR64/include" LDFLAGS="-L$TOOLS_DIR64/lib" PKG_CONFIG_PATH="$TOOLS_DIR64/lib/pkgconfig" CC="$CC" \
+STRIP="$STRIP" CFLAGS="-I$TOOLS_DIR64/include -g -O2" LDFLAGS="-L$TOOLS_DIR64/lib" PKG_CONFIG_PATH="$TOOLS_DIR64/lib/pkgconfig" CC="$CC" \
     PNG_CFLAGS="$PNG64_CFLAGS" PNG_LIBS="$PNG64_LIBS" ac_cv_lib_soname_png="$ac_cv_lib_soname_png64" \
     JPEG_CFLAGS="$JPEG64_CFLAGS" JPEG_LIBS="$JPEG64_LIBS" ac_cv_lib_soname_jpeg="$ac_cv_lib_soname_jpeg64" \
     FREETYPE_CFLAGS="$FREETYPE64_CFLAGS" FREETYPE_LIBS="$FREETYPE64_LIBS" ac_cv_lib_soname_freetype="$ac_cv_lib_soname_freetype64" \
@@ -237,7 +233,7 @@ rm -rf "$DST_DIR/share/man/"
 
 #build wine32
 cd "$TOP"/build/wine.win32
-STRIP="$STRIP" CFLAGS="-I$TOOLS_DIR32/include" LDFLAGS="-L$TOOLS_DIR32/lib" PKG_CONFIG_PATH="$TOOLS_DIR32/lib/pkgconfig" CC="$CC" \
+STRIP="$STRIP" CFLAGS="-I$TOOLS_DIR32/include -g -O2" LDFLAGS="-L$TOOLS_DIR32/lib" PKG_CONFIG_PATH="$TOOLS_DIR32/lib/pkgconfig" CC="$CC" \
     PNG_CFLAGS="$PNG32_CFLAGS" PNG_LIBS="$PNG32_LIBS" ac_cv_lib_soname_png="$ac_cv_lib_soname_png32" \
     JPEG_CFLAGS="$JPEG32_CFLAGS" JPEG_LIBS="$JPEG32_LIBS" ac_cv_lib_soname_jpeg="$ac_cv_lib_soname_jpeg32" \
     FREETYPE_CFLAGS="$FREETYPE32_CFLAGS" FREETYPE_LIBS="$FREETYPE32_LIBS" ac_cv_lib_soname_freetype="$ac_cv_lib_soname_freetype32" \
@@ -271,7 +267,7 @@ $AMD64_WRAPPER "$TOP"/wine/tools/winemaker/winemaker \
     -L"$TOOLS_DIR64"/lib64/ \
     -L"$TOOLS_DIR64"/lib64/wine/ \
     --dll .
-CXXFLAGS="-Wno-attributes -O2" CFLAGS="-O2" PATH="$TOOLS_DIR64/bin:$PATH" $AMD64_WRAPPER make $JOBS
+CXXFLAGS="-Wno-attributes -O2" CFLAGS="-O2 -g" PATH="$TOOLS_DIR64/bin:$PATH" $AMD64_WRAPPER make $JOBS
 if [ x"$STRIP" != x ]; then
     $AMD64_WRAPPER $STRIP lsteamclient.dll.so
 fi
@@ -291,7 +287,7 @@ $I386_WRAPPER "$TOP"/wine/tools/winemaker/winemaker \
     -L"$TOOLS_DIR32"/lib/ \
     -L"$TOOLS_DIR32"/lib/wine/ \
     --dll .
-CXXFLAGS="-Wno-attributes -O2" CFLAGS="-O2" PATH="$TOOLS_DIR32/bin:$PATH" $I386_WRAPPER make $JOBS
+CXXFLAGS="-Wno-attributes -O2" CFLAGS="-O2 -g" PATH="$TOOLS_DIR32/bin:$PATH" $I386_WRAPPER make $JOBS
 if [ x"$STRIP" != x ]; then
     $I386_WRAPPER $STRIP lsteamclient.dll.so
 fi
@@ -310,7 +306,7 @@ $AMD64_WRAPPER "$TOP"/wine/tools/winemaker/winemaker \
     -L"$TOOLS_DIR64"/lib64/ \
     -L"$TOOLS_DIR64"/lib64/wine/ \
     --dll .
-CXXFLAGS="-Wno-attributes -std=c++0x -O2" CFLAGS="-O2" PATH="$TOOLS_DIR64/bin:$PATH" $AMD64_WRAPPER make $JOBS
+CXXFLAGS="-Wno-attributes -std=c++0x -O2 -g" CFLAGS="-O2 -g" PATH="$TOOLS_DIR64/bin:$PATH" $AMD64_WRAPPER make $JOBS
 PATH="$TOOLS_DIR64/bin:$PATH" $AMD64_WRAPPER winebuild --dll --fake-module -E vrclient_x64.spec -o vrclient_x64.dll.fake
 if [ x"$STRIP" != x ]; then
     $AMD64_WRAPPER $STRIP vrclient_x64.dll.so
@@ -332,7 +328,7 @@ $I386_WRAPPER "$TOP"/wine/tools/winemaker/winemaker \
     -L"$TOOLS_DIR32"/lib/ \
     -L"$TOOLS_DIR32"/lib/wine/ \
     --dll .
-CXXFLAGS="-Wno-attributes -std=c++0x -O2" CFLAGS="-O2" PATH="$TOOLS_DIR32/bin:$PATH" $I386_WRAPPER make $JOBS
+CXXFLAGS="-Wno-attributes -std=c++0x -O2 -g" CFLAGS="-O2 -g" PATH="$TOOLS_DIR32/bin:$PATH" $I386_WRAPPER make $JOBS
 PATH="$TOOLS_DIR32/bin:$PATH" $I386_WRAPPER winebuild --dll --fake-module -E vrclient.spec -o vrclient.dll.fake
 if [ x"$STRIP" != x ]; then
     $I386_WRAPPER $STRIP vrclient.dll.so
