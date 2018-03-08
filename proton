@@ -123,7 +123,7 @@ with open(version_file, "w") as f:
     f.write(CURRENT_PREFIX_VERSION + "\n")
 
 #copy steam files into place
-steamdir = env["HOME"] + "/.steam/root/legacycompat/"
+steamdir = os.path.dirname(env["STEAM_CLIENT_CONFIG_FILE"]) + "/legacycompat/"
 dst = prefix + "/drive_c/Program Files (x86)/"
 makedirs(dst + "Steam")
 filestocopy = ["steamclient.dll",
