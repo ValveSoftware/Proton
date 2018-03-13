@@ -21,8 +21,8 @@ else:
     ld_path_var = "LD_LIBRARY_PATH"
 
 def log(msg):
-    sys.stdout.write(PFX + msg + os.linesep)
-    sys.stdout.flush()
+    sys.stderr.write(PFX + msg + os.linesep)
+    sys.stderr.flush()
 
 def upgrade_pfx(old_ver):
     if old_ver == CURRENT_PREFIX_VERSION:
