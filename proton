@@ -301,11 +301,11 @@ def dump_dbg_script(path, cmd, descr):
 #determine mode
 if sys.argv[1] == "run":
     #start target app
-    if "PROTON_DUMP_DEBUG_COMMAND" in os.environ:
+#    if "PROTON_DUMP_DEBUG_COMMAND" in os.environ: #for now, we are always dumping these
         dump_dbg_script("/tmp/proton_dbg", ["winedbg", "$@"], "Run winedbg (with args)")
         dump_dbg_script("/tmp/proton_dbg_run", ["winedbg"] + sys.argv[2:], "Run winedbg with the game loaded")
         dump_dbg_script("/tmp/proton_run", ["$@"], "Run an arbitrary command")
-    else:
+#    else: #see above
         run_wine([wine_path] + sys.argv[2:])
 elif sys.argv[1] == "getcompatpath":
     #linux -> windows path
