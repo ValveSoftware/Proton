@@ -78,7 +78,7 @@ env["WINEDEBUG"] = "-all"
 lfile_path = None
 
 #env["WINEDEBUG"] = "+timestamp,+tid,+seh"
-#lfile_path = env["HOME"] + "/steam-" + env["SteamGameId"] + ".log"
+#lfile_path = os.environ["HOME"] + "/steam-" + os.environ["SteamGameId"] + ".log"
 
 if lfile_path is None:
     lfile = open("/dev/null", "w")
@@ -88,14 +88,14 @@ else:
     lfile = open(lfile_path, "w")
 
 if ld_path_var in os.environ:
-    env[ld_path_var] = lib64dir + ":" + libdir + ":" + env[ld_path_var]
+    env[ld_path_var] = lib64dir + ":" + libdir + ":" + os.environ[ld_path_var]
 else:
     env[ld_path_var] = lib64dir + ":" + libdir
 
 env["WINEDLLPATH"] = lib64dir + "/wine:" + libdir + "/wine"
 
 if "PATH" in os.environ:
-    env["PATH"] = bindir + ":" + env["PATH"]
+    env["PATH"] = bindir + ":" + os.environ["PATH"]
 else:
     env["PATH"] = bindir
 
@@ -174,10 +174,11 @@ if vr_runtime is None or \
         vr_config is None or \
         vr_log is None:
     try:
-        if "XDG_CONFIG_HOME" in env:
-            path = env["XDG_CONFIG_HOME"]
+        #TODO: support mac
+        if "XDG_CONFIG_HOME" in os.environ:
+            path = os.environ["XDG_CONFIG_HOME"]
         else:
-            path = env["HOME"] + "/.config"
+            path = os.environ["HOME"] + "/.config"
         path = path + "/openvr/openvrpaths.vrpath"
 
         j = json.load(open(path, "r"))
@@ -300,7 +301,7 @@ def dump_dbg_script(path, cmd, descr):
 #determine mode
 if sys.argv[1] == "run":
     #start target app
-    if "PROTON_DUMP_DEBUG_COMMAND" in env:
+    if "PROTON_DUMP_DEBUG_COMMAND" in os.environ:
         dump_dbg_script("/tmp/proton_dbg", ["winedbg", "$@"], "Run winedbg (with args)")
         dump_dbg_script("/tmp/proton_dbg_run", ["winedbg"] + sys.argv[2:], "Run winedbg with the game loaded")
         dump_dbg_script("/tmp/proton_run", ["$@"], "Run an arbitrary command")
