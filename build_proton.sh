@@ -410,7 +410,11 @@ tar -C build/dist -c . | gzip -c -1 > dist/proton_dist.tar.gz
 
 cp -a toolmanifest.vdf dist/
 cp -a proton dist/
-cp -a LICENSE dist/
+if [ "$PLATFORM" == "Darwin" ]; then
+    cp -a LICENSE.osx dist/LICENSE
+else
+    cp -a LICENSE.lin dist/LICENSE
+fi
 date '+%s' > dist/version
 
 echo "Proton ready in dist/"
