@@ -123,18 +123,26 @@ with open(version_file, "w") as f:
     f.write(CURRENT_PREFIX_VERSION + "\n")
 
 #copy steam files into place
-steamdir = os.path.dirname(env["STEAM_CLIENT_CONFIG_FILE"]) + "/legacycompat/"
+if "STEAM_COMPAT_CLIENT_INSTALL_PATH" in os.environ:
+    #modern steam client sets this
+    steamdir = os.environ["STEAM_COMPAT_CLIENT_INSTALL_PATH"]
+elif "STEAM_CLIENT_CONFIG_FILE" in os.environ:
+    #fallback for old steam clients (should remove once changes graduate)
+    steamdir = os.path.dirname(os.environ["STEAM_CLIENT_CONFIG_FILE"])
+else:
+    #linux-only fallback, really shouldn't get here
+    steamdir = os.environ["HOME"] + ".steam/root/"
 dst = prefix + "/drive_c/Program Files (x86)/"
 makedirs(dst + "Steam")
 filestocopy = ["steamclient.dll",
         "steamclient64.dll",
         "Steam.dll"]
 for f in filestocopy:
-    if os.path.isfile(steamdir + f):
+    if os.path.isfile(steamdir + "/legacycompat/" + f):
         dstfile = dst + "Steam/" + f
         if os.path.isfile(dstfile):
             os.remove(dstfile)
-        shutil.copy(steamdir + f, dstfile)
+        shutil.copy(steamdir + "/legacycompat/" + f, dstfile)
 
 #copy openvr files into place
 dst = prefix + "/drive_c/vrclient/bin/"
