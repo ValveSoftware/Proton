@@ -1,9 +1,9 @@
-Proton is a tool for use with the Steam for Linux client which allows games
-which are exclusive to Windows to run on Linux operating systems. It uses Wine
+Proton is a tool for use with the Steam client which allows games which are
+exclusive to Windows to run on Linux and macOS operating systems. It uses Wine
 to facilitate this.
 
-To build Proton, set up a Debian machine with the Steam chroots as documented
-in the Steam Runtime repository:
+To build Proton for Linux, set up a Debian machine with the Steam chroots as
+documented in the Steam Runtime repository:
 
   https://github.com/ValveSoftware/steam-runtime
 
@@ -14,6 +14,11 @@ Examine the output near the end of build/wine.win{64,32}/config.log to ensure
 you have all of the relevant libraries installed in each chroot.
 
   TODO: Better document setting up the build machine.
+
+To build Proton for macOS, install the latest Xcode command line tools, as
+well as cmake (for openal-soft) and a recent nasm (for libjpeg-turbo). You can
+use a packager like Homebrew to find these packages. Then run
+"build_proton.sh".
 
 Once built, the dist/ directory will contain the files which can be distributed
 through Steam. For testing purposes, you should be able to clear out the files
