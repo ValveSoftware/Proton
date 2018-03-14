@@ -271,15 +271,12 @@ def determine_architecture(path):
             return ARCH_I386
         return ARCH_UNKNOWN
 
-def dump_dbg_script(path, cmd, descr):
-    f = open(path, "w")
-    f.write("#!/bin/bash\n")
-    f.write("#" + descr + "\n\n")
-    f.write("cd \"" + os.getcwd() + "\"\n")
+def dump_dbg_env(f):
     f.write("SteamGameId=\"" + env["SteamGameId"] + "\" \\\n")
     f.write("\tSteamAppId=\"" + env["SteamAppId"] + "\" \\\n")
+    f.write("\tTERM=\"xterm\" \\\n") #XXX
     f.write("\tPATH=\"" + env["PATH"] + "\" \\\n")
-    f.write("\tWINEDEBUG=-all\\\n")
+    f.write("\tWINEDEBUG=\"-all\" \\\n")
     f.write("\tWINEDLLPATH=\"" + env["WINEDLLPATH"] + "\" \\\n")
     f.write("\t" + ld_path_var + "=\"" + env[ld_path_var] + "\" \\\n")
     f.write("\tWINEPREFIX=\"" + env["WINEPREFIX"] + "\" \\\n")
@@ -287,24 +284,95 @@ def dump_dbg_script(path, cmd, descr):
         f.write("\tPROTON_VR_RUNTIME=\"" + env["PROTON_VR_RUNTIME"] + "\" \\\n")
     if "WINEDLLOVERRIDES" in env:
         f.write("\tWINEDLLOVERRIDES=\"" + env["WINEDLLOVERRIDES"] + "\" \\\n")
+
+def dump_dbg_scripts():
     arch = determine_architecture(sys.argv[2])
     if arch == ARCH_X86_64:
-        f.write("\t\"" + bindir + "wine64\"")
+        wine_name = "\"" + bindir + "wine64\""
     else:
-        f.write("\t\"" + bindir + "wine\"")
-    for arg in cmd:
-        f.write(" \"" + arg + "\"")
-    f.write("\n")
-    f.close()
-    os.chmod(path, 0755)
+        wine_name = "\"" + bindir + "wine\""
+
+    exe_name = os.path.basename(sys.argv[2])
+
+    with open("/tmp/proton_winedbg", "w") as f:
+        f.write("#!/bin/bash\n")
+        f.write("#Run winedbg with args\n\n")
+        f.write("cd \"" + os.getcwd() + "\"\n")
+        dump_dbg_env(f)
+        f.write("\t" + wine_name + " winedbg \"$@\"\n")
+    os.chmod("/tmp/proton_winedbg", 0755)
+
+    with open("/tmp/proton_winedbg_run", "w") as f:
+        f.write("#!/bin/bash\n")
+        f.write("#Run winedbg and prepare to run game or given program\n\n")
+        f.write("cd \"" + os.getcwd() + "\"\n")
+        f.write("DEF_CMD=(")
+        first = True
+        for arg in sys.argv[2:]:
+            if first:
+                f.write("\"" + arg + "\"")
+                first = False
+            else:
+                f.write(" \"" + arg + "\"")
+        f.write(")\n")
+        dump_dbg_env(f)
+        f.write("\t" + wine_name + " winedbg \"${@:-${DEF_CMD[@]}}\"\n")
+    os.chmod("/tmp/proton_winedbg_run", 0755)
+
+    with open("/tmp/proton_gdb_attach", "w") as f:
+        f.write("#!/bin/bash\n")
+        f.write("#Run winedbg in gdb mode and auto-attach to already-running program\n\n")
+        f.write("cd \"" + os.getcwd() + "\"\n")
+        f.write("EXE_NAME=${1:-\"" + exe_name + "\"}\n")
+        f.write("WPID_HEX=$(/tmp/proton_winedbg --command 'info process' | grep -i \"$EXE_NAME\" | cut -f2 -d' ' | tr -d '0')\n")
+        f.write("if [ -z \"$WPID_HEX\" ]; then \n")
+        f.write("    echo \"Program does not appear to be running: \\\"$EXE_NAME\\\"\"\n")
+        f.write("    exit 1\n")
+        f.write("fi\n")
+        f.write("WPID_DEC=$(printf %d 0x$WPID_HEX)\n")
+        dump_dbg_env(f)
+        f.write("\t" + wine_name + " winedbg --gdb $WPID_DEC\n")
+    os.chmod("/tmp/proton_gdb_attach", 0755)
+
+    with open("/tmp/proton_gdb_run", "w") as f:
+        f.write("#!/bin/bash\n")
+        f.write("#Run winedbg in gdb mode and prepare to run game or given program\n\n")
+        f.write("cd \"" + os.getcwd() + "\"\n")
+        f.write("DEF_CMD=(")
+        first = True
+        for arg in sys.argv[2:]:
+            if first:
+                f.write("\"" + arg + "\"")
+                first = False
+            else:
+                f.write(" \"" + arg + "\"")
+        f.write(")\n")
+        dump_dbg_env(f)
+        f.write("\t" + wine_name + " winedbg --gdb \"${@:-${DEF_CMD[@]}}\"\n")
+    os.chmod("/tmp/proton_gdb_run", 0755)
+
+    with open("/tmp/proton_run", "w") as f:
+        f.write("#!/bin/bash\n")
+        f.write("#Run game or given command in environment\n\n")
+        f.write("cd \"" + os.getcwd() + "\"\n")
+        f.write("DEF_CMD=(")
+        first = True
+        for arg in sys.argv[2:]:
+            if first:
+                f.write("\"" + arg + "\"")
+                first = False
+            else:
+                f.write(" \"" + arg + "\"")
+        f.write(")\n")
+        dump_dbg_env(f)
+        f.write("\t" + wine_name + " \"${@:-${DEF_CMD[@]}}\"\n")
+    os.chmod("/tmp/proton_run", 0755)
 
 #determine mode
 if sys.argv[1] == "run":
     #start target app
-#    if "PROTON_DUMP_DEBUG_COMMAND" in os.environ: #for now, we are always dumping these
-        dump_dbg_script("/tmp/proton_dbg", ["winedbg", "$@"], "Run winedbg (with args)")
-        dump_dbg_script("/tmp/proton_dbg_run", ["winedbg"] + sys.argv[2:], "Run winedbg with the game loaded")
-        dump_dbg_script("/tmp/proton_run", ["$@"], "Run an arbitrary command")
+#    if "PROTON_DUMP_DEBUG_COMMAND" in os.environ: #for now, we are always dumping the debug scripts
+        dump_dbg_scripts()
 #    else: #see above
         run_wine([wine_path] + sys.argv[2:])
 elif sys.argv[1] == "getcompatpath":
