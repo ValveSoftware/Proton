@@ -409,6 +409,7 @@ cd "$TOP"
 tar -C build/dist -c . | gzip -c -1 > dist/proton_dist.tar.gz
 
 cp -a toolmanifest.vdf dist/
+cp -a filelock.py dist/
 cp -a proton dist/
 if [ "$PLATFORM" == "Darwin" ]; then
     cp -a LICENSE.osx dist/LICENSE

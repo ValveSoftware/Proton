@@ -11,6 +11,8 @@ import subprocess
 import sys
 import tarfile
 
+from filelock import FileLock, Timeout
+
 CURRENT_PREFIX_VERSION="3.0-1"
 
 PFX="Proton: "
@@ -62,15 +64,17 @@ lib64dir = basedir + "/dist/lib64"
 wine_path = bindir + "/wine64"
 
 #extract if needed
-if not os.path.exists(basedir + "/dist") or \
-        not os.path.exists(basedir + "/dist/version") or \
-        not filecmp.cmp(basedir + "/version", basedir + "/dist/version"):
-    if os.path.exists(basedir + "/dist"):
-        shutil.rmtree(basedir + "/dist")
-    tar = tarfile.open(basedir + "/proton_dist.tar.gz", mode="r:gz")
-    tar.extractall(path=basedir + "/dist")
-    tar.close()
-    shutil.copy(basedir + "/version", basedir + "/dist/")
+dist_lock = FileLock(basedir + "/dist.lock", timeout=-1)
+with dist_lock:
+    if not os.path.exists(basedir + "/dist") or \
+            not os.path.exists(basedir + "/dist/version") or \
+            not filecmp.cmp(basedir + "/version", basedir + "/dist/version"):
+        if os.path.exists(basedir + "/dist"):
+            shutil.rmtree(basedir + "/dist")
+        tar = tarfile.open(basedir + "/proton_dist.tar.gz", mode="r:gz")
+        tar.extractall(path=basedir + "/dist")
+        tar.close()
+        shutil.copy(basedir + "/version", basedir + "/dist/")
 
 env = dict(os.environ)
 
@@ -99,11 +103,12 @@ if "PATH" in os.environ:
 else:
     env["PATH"] = bindir
 
-if not os.path.isdir(basedir + "/dist/share/default_pfx"):
-    #make default prefix
-    env["WINEPREFIX"] = basedir + "/dist/share/default_pfx"
-    run_wine([wine_path, "wineboot"])
-    run_wine([bindir + "/wineserver", "-w"])
+with dist_lock:
+    if not os.path.isdir(basedir + "/dist/share/default_pfx"):
+        #make default prefix
+        env["WINEPREFIX"] = basedir + "/dist/share/default_pfx"
+        run_wine([wine_path, "wineboot"])
+        run_wine([bindir + "/wineserver", "-w"])
 
 prefix = os.environ["STEAM_COMPAT_DATA_PATH"] + "/pfx/"
 env["WINEPREFIX"] = prefix
