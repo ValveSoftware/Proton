@@ -13,6 +13,8 @@ import tarfile
 
 from filelock import FileLock, Timeout
 
+#WITH_WINEDEBUG="+timestamp,+pid,+tid,+seh"
+
 CURRENT_PREFIX_VERSION="3.0-1"
 
 PFX="Proton: "
@@ -78,18 +80,15 @@ with dist_lock:
 
 env = dict(os.environ)
 
-env["WINEDEBUG"] = "-all"
-lfile_path = None
-
-#env["WINEDEBUG"] = "+timestamp,+tid,+seh"
-#lfile_path = os.environ["HOME"] + "/steam-" + os.environ["SteamGameId"] + ".log"
-
-if lfile_path is None:
-    lfile = open("/dev/null", "w")
-else:
+try:
+    env["WINEDEBUG"] = WITH_WINEDEBUG
+    lfile_path = os.environ["HOME"] + "/steam-" + os.environ["SteamGameId"] + ".log"
     if os.path.exists(lfile_path):
         os.remove(lfile_path)
     lfile = open(lfile_path, "w")
+except (NameError, KeyError): #WITH_WINEDEBUG is unset, or SteamGameId is unset
+    env["WINEDEBUG"] = "-all"
+    lfile = open("/dev/null", "w")
 
 if ld_path_var in os.environ:
     env[ld_path_var] = lib64dir + ":" + libdir + ":" + os.environ[ld_path_var]
@@ -279,14 +278,16 @@ def determine_architecture(path):
         return ARCH_UNKNOWN
 
 def dump_dbg_env(f):
-    f.write("SteamGameId=\"" + env["SteamGameId"] + "\" \\\n")
-    f.write("\tSteamAppId=\"" + env["SteamAppId"] + "\" \\\n")
+    f.write("PATH=\"" + env["PATH"] + "\" \\\n")
     f.write("\tTERM=\"xterm\" \\\n") #XXX
-    f.write("\tPATH=\"" + env["PATH"] + "\" \\\n")
     f.write("\tWINEDEBUG=\"-all\" \\\n")
     f.write("\tWINEDLLPATH=\"" + env["WINEDLLPATH"] + "\" \\\n")
     f.write("\t" + ld_path_var + "=\"" + env[ld_path_var] + "\" \\\n")
     f.write("\tWINEPREFIX=\"" + env["WINEPREFIX"] + "\" \\\n")
+    if "SteamGameId" in env:
+        f.write("\tSteamGameId=\"" + env["SteamGameId"] + "\" \\\n")
+    if "SteamAppId" in env:
+        f.write("\tSteamAppId=\"" + env["SteamAppId"] + "\" \\\n")
     if "PROTON_VR_RUNTIME" in env:
         f.write("\tPROTON_VR_RUNTIME=\"" + env["PROTON_VR_RUNTIME"] + "\" \\\n")
     if "WINEDLLOVERRIDES" in env:
