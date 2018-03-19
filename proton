@@ -15,7 +15,7 @@ from filelock import FileLock, Timeout
 
 #WITH_WINEDEBUG="+timestamp,+pid,+tid,+seh"
 
-CURRENT_PREFIX_VERSION="3.0-1"
+CURRENT_PREFIX_VERSION="3.4-1"
 
 PFX="Proton: "
 
