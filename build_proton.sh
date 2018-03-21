@@ -447,6 +447,9 @@ case "$BUILD_COMPONENTS" in
     "vrclient") build_vrclient32; build_vrclient64 ;;
     "vrclient32") build_vrclient32 ;;
     "vrclient64") build_vrclient64 ;;
+    "lsteamclient") build_lsteamclient32; build_lsteamclient64 ;;
+    "lsteamclient32") build_lsteamclient32 ;;
+    "lsteamclient64") build_lsteamclient64 ;;
     *) echo "Invalid build components: $BUILD_COMPONENTS" ;;
 esac
 
