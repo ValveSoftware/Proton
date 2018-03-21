@@ -203,7 +203,7 @@ DST_DIR="$TOP/build/dist"
 TOOLS_DIR64="$TOP/build/tools.win64"
 TOOLS_DIR32="$TOP/build/tools.win32"
 
-mkdir -p dist "$DST_DIR"/bin build/wine.win32 build/dist.win32 build/wine.win64
+mkdir -p "$TOP"/dist "$DST_DIR"/bin "$TOP"/build/wine.win32 "$TOP"/build/dist.win32 "$TOP"/build/wine.win64
 mkdir -p "$DST_DIR"/lib "$DST_DIR"/lib64 "$TOOLS_DIR64"/lib64 "$TOOLS_DIR32"/lib
 
 if [ "$PLATFORM" == "Darwin" ]; then
