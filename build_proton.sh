@@ -199,6 +199,17 @@ else
     INSTALL_PROGRAM_FLAGS=''
 fi
 
+BUILD_COMPONENTS='all'
+if [ "$#" -ge 2 ]; then
+    for (( i=1; i <= $# - 1; i++)); do
+        if [ "${!i}" == "--build" ]; then
+            j=$((i+1))
+            BUILD_COMPONENTS="${!j}"
+            break
+        fi
+    done
+fi
+
 DST_DIR="$TOP/build/dist"
 TOOLS_DIR64="$TOP/build/tools.win64"
 TOOLS_DIR32="$TOP/build/tools.win32"
@@ -244,125 +255,136 @@ if [ "$PLATFORM" == "Darwin" ]; then
     build_libSDL
 fi
 
+function build_wine64
+{
+    cd "$TOP"/build/wine.win64
+    STRIP="$STRIP" CFLAGS="-I$TOOLS_DIR64/include -g -O2" LDFLAGS="-L$TOOLS_DIR64/lib" PKG_CONFIG_PATH="$TOOLS_DIR64/lib/pkgconfig" CC="$CC" \
+        PNG_CFLAGS="$PNG64_CFLAGS" PNG_LIBS="$PNG64_LIBS" ac_cv_lib_soname_png="$ac_cv_lib_soname_png64" \
+        JPEG_CFLAGS="$JPEG64_CFLAGS" JPEG_LIBS="$JPEG64_LIBS" ac_cv_lib_soname_jpeg="$ac_cv_lib_soname_jpeg64" \
+        FREETYPE_CFLAGS="$FREETYPE64_CFLAGS" FREETYPE_LIBS="$FREETYPE64_LIBS" ac_cv_lib_soname_freetype="$ac_cv_lib_soname_freetype64" \
+        $AMD64_WRAPPER "$TOP"/wine/configure \
+        --enable-win64 --disable-tests --prefix="$DST_DIR"
+    STRIP="$STRIP" $AMD64_WRAPPER make $JOBS
+    INSTALL_PROGRAM_FLAGS="$INSTALL_PROGRAM_FLAGS" STRIP="$STRIP" $AMD64_WRAPPER make install-lib
+    INSTALL_PROGRAM_FLAGS="$INSTALL_PROGRAM_FLAGS" STRIP="$STRIP" $AMD64_WRAPPER make prefix="$TOOLS_DIR64" libdir="$TOOLS_DIR64/lib64" dlldir="$TOOLS_DIR64/lib64/wine" install-dev install-lib
+    rm -f "$DST_DIR"/bin/{msiexec,notepad,regedit,regsvr32,wineboot,winecfg,wineconsole,winedbg,winefile,winemine,winepath}
+    rm -rf "$DST_DIR/share/man/"
+}
 
-#build wine64
-cd "$TOP"/build/wine.win64
-STRIP="$STRIP" CFLAGS="-I$TOOLS_DIR64/include -g -O2" LDFLAGS="-L$TOOLS_DIR64/lib" PKG_CONFIG_PATH="$TOOLS_DIR64/lib/pkgconfig" CC="$CC" \
-    PNG_CFLAGS="$PNG64_CFLAGS" PNG_LIBS="$PNG64_LIBS" ac_cv_lib_soname_png="$ac_cv_lib_soname_png64" \
-    JPEG_CFLAGS="$JPEG64_CFLAGS" JPEG_LIBS="$JPEG64_LIBS" ac_cv_lib_soname_jpeg="$ac_cv_lib_soname_jpeg64" \
-    FREETYPE_CFLAGS="$FREETYPE64_CFLAGS" FREETYPE_LIBS="$FREETYPE64_LIBS" ac_cv_lib_soname_freetype="$ac_cv_lib_soname_freetype64" \
-    $AMD64_WRAPPER "$TOP"/wine/configure \
-    --enable-win64 --disable-tests --prefix="$DST_DIR"
-STRIP="$STRIP" $AMD64_WRAPPER make $JOBS
-INSTALL_PROGRAM_FLAGS="$INSTALL_PROGRAM_FLAGS" STRIP="$STRIP" $AMD64_WRAPPER make install-lib
-INSTALL_PROGRAM_FLAGS="$INSTALL_PROGRAM_FLAGS" STRIP="$STRIP" $AMD64_WRAPPER make prefix="$TOOLS_DIR64" libdir="$TOOLS_DIR64/lib64" dlldir="$TOOLS_DIR64/lib64/wine" install-dev install-lib
-rm -f "$DST_DIR"/bin/{msiexec,notepad,regedit,regsvr32,wineboot,winecfg,wineconsole,winedbg,winefile,winemine,winepath}
-rm -rf "$DST_DIR/share/man/"
+function build_wine32
+{
+    cd "$TOP"/build/wine.win32
+    STRIP="$STRIP" CFLAGS="-I$TOOLS_DIR32/include -g -O2" LDFLAGS="-L$TOOLS_DIR32/lib" PKG_CONFIG_PATH="$TOOLS_DIR32/lib/pkgconfig" CC="$CC" \
+        PNG_CFLAGS="$PNG32_CFLAGS" PNG_LIBS="$PNG32_LIBS" ac_cv_lib_soname_png="$ac_cv_lib_soname_png32" \
+        JPEG_CFLAGS="$JPEG32_CFLAGS" JPEG_LIBS="$JPEG32_LIBS" ac_cv_lib_soname_jpeg="$ac_cv_lib_soname_jpeg32" \
+        FREETYPE_CFLAGS="$FREETYPE32_CFLAGS" FREETYPE_LIBS="$FREETYPE32_LIBS" ac_cv_lib_soname_freetype="$ac_cv_lib_soname_freetype32" \
+        $I386_WRAPPER "$TOP"/wine/configure \
+        --disable-tests --prefix="$TOP/build/dist.win32/"
+    STRIP="$STRIP" $I386_WRAPPER make $JOBS
+    INSTALL_PROGRAM_FLAGS="$INSTALL_PROGRAM_FLAGS" STRIP="$STRIP" $I386_WRAPPER make install-lib
+    INSTALL_PROGRAM_FLAGS="$INSTALL_PROGRAM_FLAGS" STRIP="$STRIP" $I386_WRAPPER make prefix="$TOOLS_DIR32" libdir="$TOOLS_DIR32/lib" dlldir="$TOOLS_DIR32/lib/wine" install-dev install-lib
 
-#build wine32
-cd "$TOP"/build/wine.win32
-STRIP="$STRIP" CFLAGS="-I$TOOLS_DIR32/include -g -O2" LDFLAGS="-L$TOOLS_DIR32/lib" PKG_CONFIG_PATH="$TOOLS_DIR32/lib/pkgconfig" CC="$CC" \
-    PNG_CFLAGS="$PNG32_CFLAGS" PNG_LIBS="$PNG32_LIBS" ac_cv_lib_soname_png="$ac_cv_lib_soname_png32" \
-    JPEG_CFLAGS="$JPEG32_CFLAGS" JPEG_LIBS="$JPEG32_LIBS" ac_cv_lib_soname_jpeg="$ac_cv_lib_soname_jpeg32" \
-    FREETYPE_CFLAGS="$FREETYPE32_CFLAGS" FREETYPE_LIBS="$FREETYPE32_LIBS" ac_cv_lib_soname_freetype="$ac_cv_lib_soname_freetype32" \
-    $I386_WRAPPER "$TOP"/wine/configure \
-    --disable-tests --prefix="$TOP/build/dist.win32/"
-STRIP="$STRIP" $I386_WRAPPER make $JOBS
-INSTALL_PROGRAM_FLAGS="$INSTALL_PROGRAM_FLAGS" STRIP="$STRIP" $I386_WRAPPER make install-lib
-INSTALL_PROGRAM_FLAGS="$INSTALL_PROGRAM_FLAGS" STRIP="$STRIP" $I386_WRAPPER make prefix="$TOOLS_DIR32" libdir="$TOOLS_DIR32/lib" dlldir="$TOOLS_DIR32/lib/wine" install-dev install-lib
+    #install 32-bit stuff manually, see
+    # https://wiki.winehq.org/Packaging#WoW64_Workarounds
+    cd "$TOP"/build/dist.win32/
+    cp -a lib "$DST_DIR"/
+    cp -a bin/wine "$DST_DIR"/bin/
+    if [ "$PLATFORM" != "Darwin" ]; then
+        cp -a bin/wine-preloader "$DST_DIR"/bin/
+    fi
+    cp -a bin/wineserver "$DST_DIR"/bin/wineserver32
+}
 
-#install 32-bit stuff manually, see
-# https://wiki.winehq.org/Packaging#WoW64_Workarounds
-cd "$TOP"/build/dist.win32/
-cp -a lib "$DST_DIR"/
-cp -a bin/wine "$DST_DIR"/bin/
-if [ "$PLATFORM" != "Darwin" ]; then
-    cp -a bin/wine-preloader "$DST_DIR"/bin/
-fi
-cp -a bin/wineserver "$DST_DIR"/bin/wineserver32
+function build_lsteamclient64
+{
+    cd "$TOP"
+    rm -rf build/lsteamclient.win64
+    cp -a lsteamclient build/lsteamclient.win64
+    cd "$TOP"/build/lsteamclient.win64/
+    $AMD64_WRAPPER "$TOP"/wine/tools/winemaker/winemaker \
+        --nosource-fix --nolower-include --nodlls --nomsvcrt \
+        -DSTEAM_API_EXPORTS \
+        -I"$TOOLS_DIR64"/include/ \
+        -I"$TOOLS_DIR64"/include/wine/ \
+        -I"$TOOLS_DIR64"/include/wine/windows/ \
+        -L"$TOOLS_DIR64"/lib64/ \
+        -L"$TOOLS_DIR64"/lib64/wine/ \
+        --dll .
+    CXXFLAGS="-Wno-attributes -O2" CFLAGS="-O2 -g" PATH="$TOOLS_DIR64/bin:$PATH" $AMD64_WRAPPER make $JOBS
+    if [ x"$STRIP" != x ]; then
+        $AMD64_WRAPPER $STRIP lsteamclient.dll.so
+    fi
+    cp -a lsteamclient.dll.so "$DST_DIR"/lib64/wine/
+}
 
-#build 64-bit lsteamclient
-cd "$TOP"
-rm -rf build/lsteamclient.win64
-cp -a lsteamclient build/lsteamclient.win64
-cd "$TOP"/build/lsteamclient.win64/
-$AMD64_WRAPPER "$TOP"/wine/tools/winemaker/winemaker \
-    --nosource-fix --nolower-include --nodlls --nomsvcrt \
-    -DSTEAM_API_EXPORTS \
-    -I"$TOOLS_DIR64"/include/ \
-    -I"$TOOLS_DIR64"/include/wine/ \
-    -I"$TOOLS_DIR64"/include/wine/windows/ \
-    -L"$TOOLS_DIR64"/lib64/ \
-    -L"$TOOLS_DIR64"/lib64/wine/ \
-    --dll .
-CXXFLAGS="-Wno-attributes -O2" CFLAGS="-O2 -g" PATH="$TOOLS_DIR64/bin:$PATH" $AMD64_WRAPPER make $JOBS
-if [ x"$STRIP" != x ]; then
-    $AMD64_WRAPPER $STRIP lsteamclient.dll.so
-fi
-cp -a lsteamclient.dll.so "$DST_DIR"/lib64/wine/
+function build_lsteamclient32
+{
+    cd "$TOP"
+    rm -rf build/lsteamclient.win32
+    cp -a lsteamclient build/lsteamclient.win32
+    cd "$TOP"/build/lsteamclient.win32/
+    $I386_WRAPPER "$TOP"/wine/tools/winemaker/winemaker \
+        --nosource-fix --nolower-include --nodlls --nomsvcrt --wine32 \
+        -DSTEAM_API_EXPORTS \
+        -I"$TOOLS_DIR32"/include/ \
+        -I"$TOOLS_DIR32"/include/wine/ \
+        -I"$TOOLS_DIR32"/include/wine/windows/ \
+        -L"$TOOLS_DIR32"/lib/ \
+        -L"$TOOLS_DIR32"/lib/wine/ \
+        --dll .
+    CXXFLAGS="-Wno-attributes -O2" CFLAGS="-O2 -g" PATH="$TOOLS_DIR32/bin:$PATH" $I386_WRAPPER make $JOBS
+    if [ x"$STRIP" != x ]; then
+        $I386_WRAPPER $STRIP lsteamclient.dll.so
+    fi
+    cp -a lsteamclient.dll.so "$DST_DIR"/lib/wine/
+}
 
-#build 32-bit lsteamclient
-cd "$TOP"
-rm -rf build/lsteamclient.win32
-cp -a lsteamclient build/lsteamclient.win32
-cd "$TOP"/build/lsteamclient.win32/
-$I386_WRAPPER "$TOP"/wine/tools/winemaker/winemaker \
-    --nosource-fix --nolower-include --nodlls --nomsvcrt --wine32 \
-    -DSTEAM_API_EXPORTS \
-    -I"$TOOLS_DIR32"/include/ \
-    -I"$TOOLS_DIR32"/include/wine/ \
-    -I"$TOOLS_DIR32"/include/wine/windows/ \
-    -L"$TOOLS_DIR32"/lib/ \
-    -L"$TOOLS_DIR32"/lib/wine/ \
-    --dll .
-CXXFLAGS="-Wno-attributes -O2" CFLAGS="-O2 -g" PATH="$TOOLS_DIR32/bin:$PATH" $I386_WRAPPER make $JOBS
-if [ x"$STRIP" != x ]; then
-    $I386_WRAPPER $STRIP lsteamclient.dll.so
-fi
-cp -a lsteamclient.dll.so "$DST_DIR"/lib/wine/
+function build_vrclient64
+{
+    cd "$TOP"
+    rm -rf build/vrclient_x64
+    cp -a vrclient_x64 build/vrclient_x64
+    cd "$TOP"/build/vrclient_x64/
+    $AMD64_WRAPPER "$TOP"/wine/tools/winemaker/winemaker \
+        --nosource-fix --nolower-include --nodlls --nomsvcrt \
+        -I"$TOOLS_DIR64"/include/ \
+        -I"$TOOLS_DIR64"/include/wine/ \
+        -I"$TOOLS_DIR64"/include/wine/windows/ \
+        -L"$TOOLS_DIR64"/lib64/ \
+        -L"$TOOLS_DIR64"/lib64/wine/ \
+        --dll .
+    CXXFLAGS="-Wno-attributes -std=c++0x -O2 -g" CFLAGS="-O2 -g" PATH="$TOOLS_DIR64/bin:$PATH" $AMD64_WRAPPER make $JOBS
+    PATH="$TOOLS_DIR64/bin:$PATH" $AMD64_WRAPPER winebuild --dll --fake-module -E vrclient_x64.spec -o vrclient_x64.dll.fake
+    if [ x"$STRIP" != x ]; then
+        $AMD64_WRAPPER $STRIP vrclient_x64.dll.so
+    fi
+    cp -a vrclient_x64.dll.so "$DST_DIR"/lib64/wine/
+    cp -a vrclient_x64.dll.fake "$DST_DIR"/lib64/wine/fakedlls/vrclient_x64.dll
+}
 
-#build 64-bit vrclient
-cd "$TOP"
-rm -rf build/vrclient_x64
-cp -a vrclient_x64 build/vrclient_x64
-cd "$TOP"/build/vrclient_x64/
-$AMD64_WRAPPER "$TOP"/wine/tools/winemaker/winemaker \
-    --nosource-fix --nolower-include --nodlls --nomsvcrt \
-    -I"$TOOLS_DIR64"/include/ \
-    -I"$TOOLS_DIR64"/include/wine/ \
-    -I"$TOOLS_DIR64"/include/wine/windows/ \
-    -L"$TOOLS_DIR64"/lib64/ \
-    -L"$TOOLS_DIR64"/lib64/wine/ \
-    --dll .
-CXXFLAGS="-Wno-attributes -std=c++0x -O2 -g" CFLAGS="-O2 -g" PATH="$TOOLS_DIR64/bin:$PATH" $AMD64_WRAPPER make $JOBS
-PATH="$TOOLS_DIR64/bin:$PATH" $AMD64_WRAPPER winebuild --dll --fake-module -E vrclient_x64.spec -o vrclient_x64.dll.fake
-if [ x"$STRIP" != x ]; then
-    $AMD64_WRAPPER $STRIP vrclient_x64.dll.so
-fi
-cp -a vrclient_x64.dll.so "$DST_DIR"/lib64/wine/
-cp -a vrclient_x64.dll.fake "$DST_DIR"/lib64/wine/fakedlls/vrclient_x64.dll
-
-#build 32-bit vrclient
-cd "$TOP"
-rm -rf build/vrclient
-cp -a vrclient_x64 build/vrclient
-cd "$TOP"/build/vrclient/
-mv vrclient_x64.spec vrclient.spec
-$I386_WRAPPER "$TOP"/wine/tools/winemaker/winemaker \
-    --nosource-fix --nolower-include --nodlls --nomsvcrt --wine32 \
-    -I"$TOOLS_DIR32"/include/ \
-    -I"$TOOLS_DIR32"/include/wine/ \
-    -I"$TOOLS_DIR32"/include/wine/windows/ \
-    -L"$TOOLS_DIR32"/lib/ \
-    -L"$TOOLS_DIR32"/lib/wine/ \
-    --dll .
-CXXFLAGS="-Wno-attributes -std=c++0x -O2 -g" CFLAGS="-O2 -g" PATH="$TOOLS_DIR32/bin:$PATH" $I386_WRAPPER make $JOBS
-PATH="$TOOLS_DIR32/bin:$PATH" $I386_WRAPPER winebuild --dll --fake-module -E vrclient.spec -o vrclient.dll.fake
-if [ x"$STRIP" != x ]; then
-    $I386_WRAPPER $STRIP vrclient.dll.so
-fi
-cp -a vrclient.dll.so "$DST_DIR"/lib/wine/
-cp -a vrclient.dll.fake "$DST_DIR"/lib/wine/fakedlls/vrclient.dll
+function build_vrclient32
+{
+    cd "$TOP"
+    rm -rf build/vrclient
+    cp -a vrclient_x64 build/vrclient
+    cd "$TOP"/build/vrclient/
+    mv vrclient_x64.spec vrclient.spec
+    $I386_WRAPPER "$TOP"/wine/tools/winemaker/winemaker \
+        --nosource-fix --nolower-include --nodlls --nomsvcrt --wine32 \
+        -I"$TOOLS_DIR32"/include/ \
+        -I"$TOOLS_DIR32"/include/wine/ \
+        -I"$TOOLS_DIR32"/include/wine/windows/ \
+        -L"$TOOLS_DIR32"/lib/ \
+        -L"$TOOLS_DIR32"/lib/wine/ \
+        --dll .
+    CXXFLAGS="-Wno-attributes -std=c++0x -O2 -g" CFLAGS="-O2 -g" PATH="$TOOLS_DIR32/bin:$PATH" $I386_WRAPPER make $JOBS
+    PATH="$TOOLS_DIR32/bin:$PATH" $I386_WRAPPER winebuild --dll --fake-module -E vrclient.spec -o vrclient.dll.fake
+    if [ x"$STRIP" != x ]; then
+        $I386_WRAPPER $STRIP vrclient.dll.so
+    fi
+    cp -a vrclient.dll.so "$DST_DIR"/lib/wine/
+    cp -a vrclient.dll.fake "$DST_DIR"/lib/wine/fakedlls/vrclient.dll
+}
 
 if [ "$PLATFORM" != "Darwin" ]; then
     #build dxvk
@@ -401,6 +423,24 @@ if [ "$PLATFORM" != "Darwin" ]; then
     #cp -a dxvk/dist.win64/bin/dxgi.dll "$DST_DIR"/lib64/wine/dxvk/
     #cp -a dxvk/dist.win64/bin/d3d11.dll "$DST_DIR"/lib64/wine/dxvk/
 fi
+
+case "$BUILD_COMPONENTS" in
+    "all")
+        build_wine64
+        build_wine32
+        build_lsteamclient64
+        build_lsteamclient32
+        build_vrclient64
+        build_vrclient32
+        ;;
+    "wine") build_wine64; build_wine32 ;;
+    "wine32") build_wine64 ;;
+    "wine64") build_wine64 ;;
+    "vrclient") build_vrclient32; build_vrclient64 ;;
+    "vrclient32") build_vrclient32 ;;
+    "vrclient64") build_vrclient64 ;;
+    *) echo "Invalid build components: $BUILD_COMPONENTS" ;;
+esac
 
 echo "Packaging..."
 cd "$TOP"
