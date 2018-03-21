@@ -191,14 +191,6 @@ else
     STRIP='strip'
 fi
 
-if [ "$1" == "--release" ]; then
-    RELEASE_BUILD=1
-    INSTALL_PROGRAM_FLAGS='-s'
-else
-    RELEASE_BUILD=1
-    INSTALL_PROGRAM_FLAGS=''
-fi
-
 BUILD_COMPONENTS='all'
 if [ "$#" -ge 2 ]; then
     for (( i=1; i <= $# - 1; i++)); do
@@ -209,6 +201,22 @@ if [ "$#" -ge 2 ]; then
         fi
     done
 fi
+
+PACKAGE=false
+if [ "$BUILD_COMPONENTS" == "all" ]; then
+    PACKAGE=true
+fi
+
+RELEASE_BUILD=1
+INSTALL_PROGRAM_FLAGS=''
+for param in "$@"; do
+    if [ "$param" == "--release" ]; then
+        RELEASE_BUILD=1
+        INSTALL_PROGRAM_FLAGS='-s'
+    elif [ "$param" == "--package" ]; then
+        PACKAGE=true
+    fi
+done
 
 DST_DIR="$TOP/build/dist"
 TOOLS_DIR64="$TOP/build/tools.win64"
@@ -442,20 +450,22 @@ case "$BUILD_COMPONENTS" in
     *) echo "Invalid build components: $BUILD_COMPONENTS" ;;
 esac
 
-echo "Packaging..."
-cd "$TOP"
+if [ "$PACKAGE" = true ]; then
+    echo "Packaging..."
+    cd "$TOP"
 
-#the difference between -1 and -9 is about 20 MB, so prioritize quick startup over file size
-tar -C build/dist -c . | gzip -c -1 > dist/proton_dist.tar.gz
+    #the difference between -1 and -9 is about 20 MB, so prioritize quick startup over file size
+    tar -C build/dist -c . | gzip -c -1 > dist/proton_dist.tar.gz
 
-cp -a toolmanifest.vdf dist/
-cp -a filelock.py dist/
-cp -a proton dist/
-if [ "$PLATFORM" == "Darwin" ]; then
+    cp -a toolmanifest.vdf dist/
+    cp -a filelock.py dist/
+    cp -a proton dist/
+    if [ "$PLATFORM" == "Darwin" ]; then
     cp -a LICENSE.osx dist/LICENSE
-else
+    else
     cp -a LICENSE.lin dist/LICENSE
-fi
-date '+%s' > dist/version
+    fi
+    date '+%s' > dist/version
 
-echo "Proton ready in dist/"
+    echo "Proton ready in dist/"
+fi
