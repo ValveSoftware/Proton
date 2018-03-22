@@ -19,3 +19,6 @@
 [submodule "openal-soft"]
 	path = openal-soft
 	url = https://github.com/kcat/openal-soft.git
+[submodule "MoltenVK"]
+	path = MoltenVK
+	url = https://github.com/KhronosGroup/MoltenVK.git
