@@ -183,6 +183,14 @@ else
     CC="ccache gcc"
     AMD64_WRAPPER="schroot --chroot steamrt_scout_beta_amd64 --"
     I386_WRAPPER="schroot --chroot steamrt_scout_beta_i386 --"
+
+    gcc_ver=$($AMD64_WRAPPER gcc -v 2>&1 | grep 'gcc version' | cut -d' ' -f3)
+    gcc_maj=$(echo $gcc_ver | cut -d'.' -f1)
+    gcc_min=$(echo $gcc_ver | cut -d'.' -f2)
+    if [ $gcc_maj -lt 5 -o '(' $gcc_maj -eq 5 -a $gcc_min -lt 3 ')' ]; then
+        echo "need gcc >= 5.3"
+        exit 1
+    fi
 fi
 
 if [ "$PLATFORM" == "Darwin" ]; then
