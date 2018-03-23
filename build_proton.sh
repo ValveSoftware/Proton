@@ -184,6 +184,18 @@ build_libSDL()
     fi
 }
 
+build_moltenvk()
+{
+    #requires Xcode >= 9
+    cd "$TOP"/MoltenVK/
+    ./fetchDependencies
+    xcodebuild -scheme 'MoltenVK (Release)' build
+
+    cp -a Package/Release/MoltenVK/include/* "$TOOLS_DIR64"/include/
+    cp -a Package/Release/MoltenVK/macOS/libMoltenVK.dylib "$TOOLS_DIR64"/lib/
+    cp -a Package/Release/MoltenVK/macOS/libMoltenVK.dylib "$DST_DIR"/lib64/
+}
+
 if [ "$PLATFORM" == "Darwin" ]; then
     STRIP='strip -x'
 else
@@ -288,6 +300,8 @@ if [ "$PLATFORM" == "Darwin" ]; then
     build_openal
 
     build_libSDL
+
+    build_moltenvk
 fi
 
 function build_wine64
