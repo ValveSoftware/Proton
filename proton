@@ -59,6 +59,9 @@ else:
 if "PROTON_USE_DXVK" in os.environ:
     config_opts.append("dxvk")
 
+if "PROTON_NO_D3D11" in os.environ:
+    config_opts.append("nod3d11")
+
 basedir = os.path.dirname(sys.argv[0])
 bindir = basedir + "/dist/bin/"
 libdir = basedir + "/dist/lib"
@@ -79,6 +82,7 @@ with dist_lock:
         shutil.copy(basedir + "/version", basedir + "/dist/")
 
 env = dict(os.environ)
+dlloverrides = {}
 
 try:
     env["WINEDEBUG"] = WITH_WINEDEBUG
@@ -242,12 +246,26 @@ with prefix_lock:
             prefix + "drive_c/windows/system32")
         make_dxvk_links(basedir + "/dist/lib/wine/dxvk/",
             prefix + "drive_c/windows/syswow64")
-        env["WINEDLLOVERRIDES"] = "dxgi,d3d11=n"
+        dlloverrides["dxgi"] = "n"
+        dlloverrides["d3d11"] = "n"
     else:
         make_dxvk_links(basedir + "/dist/lib64/wine/",
             prefix + "drive_c/windows/system32")
         make_dxvk_links(basedir + "/dist/lib/wine/",
             prefix + "drive_c/windows/syswow64")
+
+if "nod3d11" in config_opts:
+    dlloverrides["d3d11"] = ""
+    if "dxgi" in dlloverrides:
+        del dlloverrides["dxgi"]
+
+s = ""
+for dll, setting in dlloverrides.iteritems():
+    if len(s) > 0:
+        s = s + ";" + dll + "=" + setting
+    else:
+        s = dll + "=" + setting
+env["WINEDLLOVERRIDES"] = s
 
 ARCH_UNKNOWN=0
 ARCH_I386=1
