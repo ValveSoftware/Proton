@@ -29,3 +29,27 @@ NOTE: For now, dxvk requires build-time components that are too new for Debian
 9. It's recommended to build the DLLs on Arch Linux, where dxvk is actively
 being developed. This may be resolved in dxvk in the future, or may be worked
 around by using a newer Debian release. See comments in build_proton.sh.
+
+
+----
+RUNTIME CONFIG OPTIONS
+----
+
+Proton can be tuned at runtime to help certain games run. The runtime
+configuration options are documented here. Options can either be defined in a
+comma-separated list stored in the STEAM_COMPAT_CONFIG environment variable
+when running Proton (the Steam client does this), or passed through the
+presence of individual environment variables as documented below.
+
+All of the below are runtime options. They do not effect permanent changes to
+the Wine prefix. Removing the option will revert to the previous behavior.
+
+----
+Run game with DXVK instead of wined3d.
+Compat config string: dxvk
+Environment variable: PROTON_USE_DXVK
+
+----
+Disable d3d11.dll, for games which can fall back to and run better with d3d9.
+Compat config string: nod3d11
+Environment variable: PROTON_NO_D3D11
