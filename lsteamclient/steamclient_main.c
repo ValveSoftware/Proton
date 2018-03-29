@@ -98,15 +98,20 @@ static int load_steamclient(void)
         return 1;
 
 #ifdef __APPLE__
-    steamclient_lib = wine_dlopen("steamclient.dylib", RTLD_NOW, NULL, 0);
+    if(getenv("STEAM_COMPAT_CLIENT_INSTALL_PATH")){
+        snprintf(path, PATH_MAX, "%s/steamclient.dylib", getenv("STEAM_COMPAT_CLIENT_INSTALL_PATH"));
+    }else{
+        WARN("Old Steam client, falling back to DYLD environment to locate native steamclient library\n");
+        strcpy(path, "steamclient.dylib");
+    }
 #else
 #ifdef _WIN64
     snprintf(path, PATH_MAX, "%s/.steam/sdk64/steamclient.so", getenv("HOME"));
 #else
     snprintf(path, PATH_MAX, "%s/.steam/sdk32/steamclient.so", getenv("HOME"));
 #endif
-    steamclient_lib = wine_dlopen(path, RTLD_NOW, NULL, 0);
 #endif
+    steamclient_lib = wine_dlopen(path, RTLD_NOW, NULL, 0);
     if(!steamclient_lib){
         ERR("unable to load native steamclient library\n");
         return 0;
