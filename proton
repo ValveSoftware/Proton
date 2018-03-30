@@ -269,28 +269,33 @@ ARCH_I386=1
 ARCH_X86_64=2
 def determine_architecture(path):
     #algorithm from file's msdos magic file
-    with open(path, "rb") as f:
-        magic = f.read(2)
-        if magic != "MZ":
+    try:
+        with open(path, "rb") as f:
+            magic = f.read(2)
+            if magic != "MZ":
+                return ARCH_UNKNOWN
+            f.seek(0x18)
+            reloc = struct.unpack('<H', f.read(2))[0]
+            if reloc < 0x40:
+                #DOS
+                return ARCH_I386
+            f.seek(0x3c)
+            pe_offs = struct.unpack('<L', f.read(4))[0]
+            f.seek(pe_offs)
+            magic = f.read(4)
+            if magic != "PE\0\0":
+                return ARCH_UNKNOWN
+            f.seek(pe_offs + 4)
+            arch = struct.unpack('<H', f.read(2))[0]
+            if arch == 0x8664:
+                return ARCH_X86_64
+            if arch == 0x014c:
+                return ARCH_I386
             return ARCH_UNKNOWN
-        f.seek(0x18)
-        reloc = struct.unpack('<H', f.read(2))[0]
-        if reloc < 0x40:
-            #DOS
-            return ARCH_I386
-        f.seek(0x3c)
-        pe_offs = struct.unpack('<L', f.read(4))[0]
-        f.seek(pe_offs)
-        magic = f.read(4)
-        if magic != "PE\0\0":
-            return ARCH_UNKNOWN
-        f.seek(pe_offs + 4)
-        arch = struct.unpack('<H', f.read(2))[0]
-        if arch == 0x8664:
-            return ARCH_X86_64
-        if arch == 0x014c:
-            return ARCH_I386
+    except:
         return ARCH_UNKNOWN
+
+game_arch = determine_architecture(sys.argv[2])
 
 def dump_dbg_env(f):
     f.write("PATH=\"" + env["PATH"] + "\" \\\n")
@@ -309,8 +314,7 @@ def dump_dbg_env(f):
         f.write("\tWINEDLLOVERRIDES=\"" + env["WINEDLLOVERRIDES"] + "\" \\\n")
 
 def dump_dbg_scripts():
-    arch = determine_architecture(sys.argv[2])
-    if arch == ARCH_X86_64:
+    if game_arch == ARCH_X86_64:
         wine_name = "\"" + bindir + "wine64\""
     else:
         wine_name = "\"" + bindir + "wine\""
@@ -388,7 +392,10 @@ def dump_dbg_scripts():
                 f.write(" \"" + arg + "\"")
         f.write(")\n")
         dump_dbg_env(f)
-        f.write("\t" + wine_name + " \"${@:-${DEF_CMD[@]}}\"\n")
+        if game_arch == ARCH_UNKNOWN:
+            f.write("\t" + wine_name + " start \"${@:-${DEF_CMD[@]}}\"\n")
+        else:
+            f.write("\t" + wine_name + " \"${@:-${DEF_CMD[@]}}\"\n")
     os.chmod("/tmp/proton_run", 0755)
 
 #determine mode
@@ -397,7 +404,11 @@ if sys.argv[1] == "run":
 #    if "PROTON_DUMP_DEBUG_COMMAND" in os.environ: #for now, we are always dumping the debug scripts
         dump_dbg_scripts()
 #    else: #see above
-        run_wine([wine_path] + sys.argv[2:])
+        if game_arch == ARCH_UNKNOWN:
+            #probably a batch script or something, hopefully start.exe can handle it
+            run_wine([wine_path, "start", "/unix"] + sys.argv[2:])
+        else:
+            run_wine([wine_path] + sys.argv[2:])
 elif sys.argv[1] == "getcompatpath":
     #linux -> windows path
     path = subprocess.check_output([wine_path, "winepath", "-w", sys.argv[2]], env=env, stderr=lfile)
