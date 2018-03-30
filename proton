@@ -35,10 +35,7 @@ def upgrade_pfx(old_ver):
     #nothing to do, yet
 
 def run_wine(args):
-    if lfile == None:
-        subprocess.call(args, env=env)
-    else:
-        subprocess.call(args, env=env, stdout=lfile, stderr=subprocess.STDOUT)
+    subprocess.call(args, env=env, stderr=lfile)
 
 def makedirs(path):
     try:
@@ -89,10 +86,10 @@ try:
     lfile_path = os.environ["HOME"] + "/steam-" + os.environ["SteamGameId"] + ".log"
     if os.path.exists(lfile_path):
         os.remove(lfile_path)
-    lfile = open(lfile_path, "w")
+    lfile = open(lfile_path, "w+")
 except (NameError, KeyError): #WITH_WINEDEBUG is unset, or SteamGameId is unset
     env["WINEDEBUG"] = "-all"
-    lfile = open("/dev/null", "w")
+    lfile = None
 
 if ld_path_var in os.environ:
     env[ld_path_var] = lib64dir + ":" + libdir + ":" + os.environ[ld_path_var]
