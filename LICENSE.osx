@@ -47,5 +47,15 @@ Visit the libpng homepage at
 
 ---- ---- ---- ----
 
+Parts of this software are based on the OpenVR SDK, which is
+
+    Copyright (c) 2015, Valve Corporation
+
+Visit OpenVR at
+
+    https://github.com/ValveSoftware/openvr/
+
+---- ---- ---- ----
+
 The rest of this software is available under Steam's standard licensing,
 included with your Steam client.

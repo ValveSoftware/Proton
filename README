@@ -30,6 +30,10 @@ NOTE: For now, dxvk requires build-time components that are too new for Debian
 being developed. This may be resolved in dxvk in the future, or may be worked
 around by using a newer Debian release. See comments in build_proton.sh.
 
+Each component of this software is used under the terms of their licenses.
+See the LICENSE files here, as well as the LICENSE, COPYING, etc files in each
+submodule and directory for details.
+
 
 ----
 RUNTIME CONFIG OPTIONS
