@@ -60,3 +60,4 @@ EVRCompositorError ivrcompositor_submit(
 #define TRACE WINE_TRACE
 #define ERR WINE_ERR
 #define WARN WINE_WARN
+#define FIXME WINE_FIXME
