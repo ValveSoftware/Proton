@@ -1,3 +1,5 @@
+#include <stdint.h>
+
 /* TODO these should be generated */
 typedef struct __winISteamClient winISteamClient;
 typedef struct __winISteamUser winISteamUser;
@@ -31,6 +33,9 @@ typedef struct __winX winX;
 void *create_win_interface(const char *name, void *linux_side);
 unsigned int steamclient_unix_path_to_dos_path(unsigned int api_result, char *inout, unsigned int inout_bytes);
 void *create_LinuxMatchmakingServerListResponse(void *win);
+
+void get_dxgi_output_info(void *cpp_func, void *linux_side, int32_t *adapter_idx);
+void get_dxgi_output_info2(void *cpp_func, void *linux_side, int32_t *adapter_idx, int32_t *output_idx);
 
 #define TRACE WINE_TRACE
 #define ERR WINE_ERR

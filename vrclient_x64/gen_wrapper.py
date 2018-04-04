@@ -120,6 +120,17 @@ print_sizes = []
 
 class_versions = {}
 
+def ivrsystem_get_dxgi_output_info(cppname, method):
+    param_count = len([p for p in method.get_children() if p.kind == clang.cindex.CursorKind.PARM_DECL])
+    return {
+        1: "get_dxgi_output_info",
+        2: "get_dxgi_output_info2"
+    }.get(param_count, "unhandled_get_dxgi_output_info_method")
+
+method_overrides = [
+    ("IVRSystem", "GetDXGIOutputInfo", ivrsystem_get_dxgi_output_info)
+]
+
 def display_sdkver(s):
     if s.startswith("v"):
         s = s[1:]
@@ -239,7 +250,14 @@ def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, e
     if should_gen_wrapper:
         cfile.write("create_win_interface(pchNameAndVersion,\n        ")
 
-    cfile.write("%s_%s(_this->linux_side" % (cppname, used_name))
+    for classname_pattern, methodname, override_generator in method_overrides:
+        if used_name == methodname and classname_pattern in classname:
+            cfile.write(override_generator(cppname, method))
+            cfile.write("(%s_%s, _this->linux_side" % (cppname, used_name))
+            break
+    else:
+        cfile.write("%s_%s(_this->linux_side" % (cppname, used_name))
+
     cpp.write("((%s*)linux_side)->%s(" % (classname, method.spelling))
     unnamed = 'a'
     first = True

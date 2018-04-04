@@ -78,7 +78,7 @@ DEFINE_THISCALL_WRAPPER(winIVRSystem_IVRSystem_019_GetDXGIOutputInfo, 12)
 void __thiscall winIVRSystem_IVRSystem_019_GetDXGIOutputInfo(winIVRSystem_IVRSystem_019 *_this, int32_t * pnAdapterIndex)
 {
     TRACE("%p\n", _this);
-    cppIVRSystem_IVRSystem_019_GetDXGIOutputInfo(_this->linux_side, pnAdapterIndex);
+    get_dxgi_output_info(cppIVRSystem_IVRSystem_019_GetDXGIOutputInfo, _this->linux_side, pnAdapterIndex);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRSystem_IVRSystem_019_GetOutputDevice, 24)
@@ -487,7 +487,7 @@ DEFINE_THISCALL_WRAPPER(winIVRSystem_IVRSystem_017_GetDXGIOutputInfo, 12)
 void __thiscall winIVRSystem_IVRSystem_017_GetDXGIOutputInfo(winIVRSystem_IVRSystem_017 *_this, int32_t * pnAdapterIndex)
 {
     TRACE("%p\n", _this);
-    cppIVRSystem_IVRSystem_017_GetDXGIOutputInfo(_this->linux_side, pnAdapterIndex);
+    get_dxgi_output_info(cppIVRSystem_IVRSystem_017_GetDXGIOutputInfo, _this->linux_side, pnAdapterIndex);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRSystem_IVRSystem_017_GetOutputDevice, 24)
@@ -880,7 +880,7 @@ DEFINE_THISCALL_WRAPPER(winIVRSystem_IVRSystem_016_GetDXGIOutputInfo, 12)
 void __thiscall winIVRSystem_IVRSystem_016_GetDXGIOutputInfo(winIVRSystem_IVRSystem_016 *_this, int32_t * pnAdapterIndex)
 {
     TRACE("%p\n", _this);
-    cppIVRSystem_IVRSystem_016_GetDXGIOutputInfo(_this->linux_side, pnAdapterIndex);
+    get_dxgi_output_info(cppIVRSystem_IVRSystem_016_GetDXGIOutputInfo, _this->linux_side, pnAdapterIndex);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRSystem_IVRSystem_016_GetOutputDevice, 16)
@@ -1273,7 +1273,7 @@ DEFINE_THISCALL_WRAPPER(winIVRSystem_IVRSystem_015_GetDXGIOutputInfo, 12)
 void __thiscall winIVRSystem_IVRSystem_015_GetDXGIOutputInfo(winIVRSystem_IVRSystem_015 *_this, int32_t * pnAdapterIndex)
 {
     TRACE("%p\n", _this);
-    cppIVRSystem_IVRSystem_015_GetDXGIOutputInfo(_this->linux_side, pnAdapterIndex);
+    get_dxgi_output_info(cppIVRSystem_IVRSystem_015_GetDXGIOutputInfo, _this->linux_side, pnAdapterIndex);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRSystem_IVRSystem_015_IsDisplayOnDesktop, 4)
@@ -1658,7 +1658,7 @@ DEFINE_THISCALL_WRAPPER(winIVRSystem_IVRSystem_014_GetDXGIOutputInfo, 12)
 void __thiscall winIVRSystem_IVRSystem_014_GetDXGIOutputInfo(winIVRSystem_IVRSystem_014 *_this, int32_t * pnAdapterIndex)
 {
     TRACE("%p\n", _this);
-    cppIVRSystem_IVRSystem_014_GetDXGIOutputInfo(_this->linux_side, pnAdapterIndex);
+    get_dxgi_output_info(cppIVRSystem_IVRSystem_014_GetDXGIOutputInfo, _this->linux_side, pnAdapterIndex);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRSystem_IVRSystem_014_IsDisplayOnDesktop, 4)
@@ -2044,7 +2044,7 @@ DEFINE_THISCALL_WRAPPER(winIVRSystem_IVRSystem_012_GetDXGIOutputInfo, 12)
 void __thiscall winIVRSystem_IVRSystem_012_GetDXGIOutputInfo(winIVRSystem_IVRSystem_012 *_this, int32_t * pnAdapterIndex)
 {
     TRACE("%p\n", _this);
-    cppIVRSystem_IVRSystem_012_GetDXGIOutputInfo(_this->linux_side, pnAdapterIndex);
+    get_dxgi_output_info(cppIVRSystem_IVRSystem_012_GetDXGIOutputInfo, _this->linux_side, pnAdapterIndex);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRSystem_IVRSystem_012_IsDisplayOnDesktop, 4)
@@ -2430,7 +2430,7 @@ DEFINE_THISCALL_WRAPPER(winIVRSystem_IVRSystem_011_GetDXGIOutputInfo, 12)
 void __thiscall winIVRSystem_IVRSystem_011_GetDXGIOutputInfo(winIVRSystem_IVRSystem_011 *_this, int32_t * pnAdapterIndex)
 {
     TRACE("%p\n", _this);
-    cppIVRSystem_IVRSystem_011_GetDXGIOutputInfo(_this->linux_side, pnAdapterIndex);
+    get_dxgi_output_info(cppIVRSystem_IVRSystem_011_GetDXGIOutputInfo, _this->linux_side, pnAdapterIndex);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRSystem_IVRSystem_011_IsDisplayOnDesktop, 4)
@@ -2832,7 +2832,7 @@ DEFINE_THISCALL_WRAPPER(winIVRSystem_IVRSystem_010_GetDXGIOutputInfo, 12)
 void __thiscall winIVRSystem_IVRSystem_010_GetDXGIOutputInfo(winIVRSystem_IVRSystem_010 *_this, int32_t * pnAdapterIndex)
 {
     TRACE("%p\n", _this);
-    cppIVRSystem_IVRSystem_010_GetDXGIOutputInfo(_this->linux_side, pnAdapterIndex);
+    get_dxgi_output_info(cppIVRSystem_IVRSystem_010_GetDXGIOutputInfo, _this->linux_side, pnAdapterIndex);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRSystem_IVRSystem_010_IsDisplayOnDesktop, 4)
@@ -3234,7 +3234,7 @@ DEFINE_THISCALL_WRAPPER(winIVRSystem_IVRSystem_009_GetDXGIOutputInfo, 12)
 void __thiscall winIVRSystem_IVRSystem_009_GetDXGIOutputInfo(winIVRSystem_IVRSystem_009 *_this, int32_t * pnAdapterIndex)
 {
     TRACE("%p\n", _this);
-    cppIVRSystem_IVRSystem_009_GetDXGIOutputInfo(_this->linux_side, pnAdapterIndex);
+    get_dxgi_output_info(cppIVRSystem_IVRSystem_009_GetDXGIOutputInfo, _this->linux_side, pnAdapterIndex);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRSystem_IVRSystem_009_IsDisplayOnDesktop, 4)
@@ -3618,7 +3618,7 @@ DEFINE_THISCALL_WRAPPER(winIVRSystem_IVRSystem_006_GetDXGIOutputInfo, 20)
 void __thiscall winIVRSystem_IVRSystem_006_GetDXGIOutputInfo(winIVRSystem_IVRSystem_006 *_this, int32_t * pnAdapterIndex, int32_t * pnAdapterOutputIndex)
 {
     TRACE("%p\n", _this);
-    cppIVRSystem_IVRSystem_006_GetDXGIOutputInfo(_this->linux_side, pnAdapterIndex, pnAdapterOutputIndex);
+    get_dxgi_output_info2(cppIVRSystem_IVRSystem_006_GetDXGIOutputInfo, _this->linux_side, pnAdapterIndex, pnAdapterOutputIndex);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRSystem_IVRSystem_006_AttachToWindow, 12)
@@ -3988,7 +3988,7 @@ DEFINE_THISCALL_WRAPPER(winIVRSystem_IVRSystem_005_GetDXGIOutputInfo, 20)
 void __thiscall winIVRSystem_IVRSystem_005_GetDXGIOutputInfo(winIVRSystem_IVRSystem_005 *_this, int32_t * pnAdapterIndex, int32_t * pnAdapterOutputIndex)
 {
     TRACE("%p\n", _this);
-    cppIVRSystem_IVRSystem_005_GetDXGIOutputInfo(_this->linux_side, pnAdapterIndex, pnAdapterOutputIndex);
+    get_dxgi_output_info2(cppIVRSystem_IVRSystem_005_GetDXGIOutputInfo, _this->linux_side, pnAdapterIndex, pnAdapterOutputIndex);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRSystem_IVRSystem_005_AttachToWindow, 12)
@@ -4317,7 +4317,7 @@ DEFINE_THISCALL_WRAPPER(winIVRSystem_IVRSystem_004_GetDXGIOutputInfo, 20)
 void __thiscall winIVRSystem_IVRSystem_004_GetDXGIOutputInfo(winIVRSystem_IVRSystem_004 *_this, int32_t * pnAdapterIndex, int32_t * pnAdapterOutputIndex)
 {
     TRACE("%p\n", _this);
-    cppIVRSystem_IVRSystem_004_GetDXGIOutputInfo(_this->linux_side, pnAdapterIndex, pnAdapterOutputIndex);
+    get_dxgi_output_info2(cppIVRSystem_IVRSystem_004_GetDXGIOutputInfo, _this->linux_side, pnAdapterIndex, pnAdapterOutputIndex);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRSystem_IVRSystem_004_AttachToWindow, 12)
@@ -4638,7 +4638,7 @@ DEFINE_THISCALL_WRAPPER(winIVRSystem_IVRSystem_003_GetDXGIOutputInfo, 20)
 void __thiscall winIVRSystem_IVRSystem_003_GetDXGIOutputInfo(winIVRSystem_IVRSystem_003 *_this, int32_t * pnAdapterIndex, int32_t * pnAdapterOutputIndex)
 {
     TRACE("%p\n", _this);
-    cppIVRSystem_IVRSystem_003_GetDXGIOutputInfo(_this->linux_side, pnAdapterIndex, pnAdapterOutputIndex);
+    get_dxgi_output_info2(cppIVRSystem_IVRSystem_003_GetDXGIOutputInfo, _this->linux_side, pnAdapterIndex, pnAdapterOutputIndex);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRSystem_IVRSystem_003_AttachToWindow, 12)

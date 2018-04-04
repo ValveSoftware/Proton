@@ -133,3 +133,16 @@ void *CDECL VRClientCoreFactory(const char *name, int *return_code)
 
     return create_win_interface(name, vrclient_VRClientCoreFactory(name, return_code));
 }
+
+void get_dxgi_output_info(void *cpp_func, void *linux_side, int32_t *adapter_idx)
+{
+    TRACE("%p\n", adapter_idx);
+    *adapter_idx = 0;
+}
+
+void get_dxgi_output_info2(void *cpp_func, void *linux_side, int32_t *adapter_idx, int32_t *output_idx)
+{
+    TRACE("%p, %p\n", adapter_idx, output_idx);
+    *adapter_idx = 0;
+    *output_idx = 0;
+}
