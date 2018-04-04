@@ -491,9 +491,9 @@ if [ "$PACKAGE" = true ]; then
     cp -a filelock.py dist/
     cp -a proton dist/
     if [ "$PLATFORM" == "Darwin" ]; then
-    cp -a LICENSE.osx dist/LICENSE
+    cp -a dist.LICENSE.osx dist/LICENSE
     else
-    cp -a LICENSE.lin dist/LICENSE
+    cp -a dist.LICENSE.lin dist/LICENSE
     fi
     date '+%s' > dist/version
 
