@@ -19,7 +19,6 @@ typedef int
         EVRButtonId,
         EVRRenderModelError,
         EVRCompositorError,
-        EVRCompositorTimingMode,
         EVRApplicationError,
         EVRApplicationProperty,
         EVRApplicationTransitionState,
@@ -223,5 +222,12 @@ typedef enum EVRSubmitFlags
     // This flag can be combined with Submit_TextureWithPose to pass a VRTextureWithPoseAndDepth_t.
     Submit_TextureWithDepth = 0x10,
 } EVRSubmitFlags;
+
+typedef enum EVRCompositorTimingMode
+{
+    VRCompositorTimingMode_Implicit = 0,
+    VRCompositorTimingMode_Explicit_RuntimePerformsPostPresentHandoff = 1,
+    VRCompositorTimingMode_Explicit_ApplicationPerformsPostPresentHandoff = 2,
+} EVRCompositorTimingMode;
 
 #endif

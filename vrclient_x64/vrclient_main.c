@@ -138,13 +138,15 @@ void *CDECL VRClientCoreFactory(const char *name, int *return_code)
     return create_win_interface(name, vrclient_VRClientCoreFactory(name, return_code));
 }
 
-void get_dxgi_output_info(void *cpp_func, void *linux_side, int32_t *adapter_idx)
+void get_dxgi_output_info(void *cpp_func, void *linux_side,
+        int32_t *adapter_idx, unsigned int version)
 {
     TRACE("%p\n", adapter_idx);
     *adapter_idx = 0;
 }
 
-void get_dxgi_output_info2(void *cpp_func, void *linux_side, int32_t *adapter_idx, int32_t *output_idx)
+void get_dxgi_output_info2(void *cpp_func, void *linux_side,
+        int32_t *adapter_idx, int32_t *output_idx, unsigned int version)
 {
     TRACE("%p, %p\n", adapter_idx, output_idx);
     *adapter_idx = 0;
@@ -190,7 +192,7 @@ static CDECL void d3d11_texture_callback(unsigned int gl_texture, const void *da
 void ivrcompositor_005_submit(
         void (*cpp_func)(void *, Hmd_Eye, void *, Compositor_TextureBounds *),
         void *linux_side, Hmd_Eye eye, void *texture, Compositor_TextureBounds *bounds,
-        struct compositor_data *user_data)
+        unsigned int version, struct compositor_data *user_data)
 {
     TRACE("%p, %#x, %p, %p\n", linux_side, eye, texture, bounds);
 
@@ -200,7 +202,7 @@ void ivrcompositor_005_submit(
 VRCompositorError ivrcompositor_006_submit(
         VRCompositorError (*cpp_func)(void *, Hmd_Eye, void *, VRTextureBounds_t *),
         void *linux_side, Hmd_Eye eye, void *texture, VRTextureBounds_t *bounds,
-        struct compositor_data *user_data)
+        unsigned int version, struct compositor_data *user_data)
 {
     TRACE("%p, %#x, %p, %p\n", linux_side, eye, texture, bounds);
 
@@ -210,7 +212,7 @@ VRCompositorError ivrcompositor_006_submit(
 VRCompositorError ivrcompositor_007_submit(
         VRCompositorError (*cpp_func)(void *, Hmd_Eye, GraphicsAPIConvention, void *, VRTextureBounds_t *),
         void *linux_side, Hmd_Eye eye, GraphicsAPIConvention api, void *texture, VRTextureBounds_t *bounds,
-        struct compositor_data *user_data)
+        unsigned int version, struct compositor_data *user_data)
 {
     TRACE("%p, %#x, %#x, %p, %p\n", linux_side, eye, api, texture, bounds);
 
@@ -220,12 +222,15 @@ VRCompositorError ivrcompositor_007_submit(
     return cpp_func(linux_side, eye, api, texture, bounds);
 }
 
+#include "cppIVRCompositor_IVRCompositor_021.h"
+#include "cppIVRCompositor_IVRCompositor_022.h"
+
 VRCompositorError ivrcompositor_008_submit(
         VRCompositorError (*cpp_func)(void *, Hmd_Eye, GraphicsAPIConvention, void *,
         VRTextureBounds_t *, VRSubmitFlags_t),
         void *linux_side, Hmd_Eye eye, GraphicsAPIConvention api, void *texture,
         VRTextureBounds_t *bounds, VRSubmitFlags_t flags,
-        struct compositor_data *user_data)
+        unsigned int version, struct compositor_data *user_data)
 {
     TRACE("%p, %#x, %#x, %p, %p, %#x\n", linux_side, eye, api, texture, bounds, flags);
 
@@ -238,7 +243,7 @@ VRCompositorError ivrcompositor_008_submit(
 EVRCompositorError ivrcompositor_submit(
         EVRCompositorError (*cpp_func)(void *, EVREye, Texture_t *, VRTextureBounds_t *, EVRSubmitFlags),
         void *linux_side, EVREye eye, Texture_t *texture, VRTextureBounds_t *bounds, EVRSubmitFlags flags,
-        struct compositor_data *user_data)
+        unsigned int version, struct compositor_data *user_data)
 {
     IWineD3D11Texture2D *wine_texture;
     IWineD3D11Device *wined3d_device;
@@ -288,6 +293,23 @@ EVRCompositorError ivrcompositor_submit(
                     ERR("Failed to get device, hr %#x.\n", hr);
                     user_data->wined3d_device = NULL;
                 }
+
+                TRACE("Enabling explicit timing mode.\n");
+                switch (version)
+                {
+                    case 21:
+                        cppIVRCompositor_IVRCompositor_021_SetExplicitTimingMode(linux_side,
+                                VRCompositorTimingMode_Explicit_ApplicationPerformsPostPresentHandoff);
+                        break;
+                    case 22:
+                        cppIVRCompositor_IVRCompositor_022_SetExplicitTimingMode(linux_side,
+                                VRCompositorTimingMode_Explicit_ApplicationPerformsPostPresentHandoff);
+                        break;
+                    default:
+                        FIXME("Version %u not supported.\n", version);
+                        user_data->wined3d_device = NULL;
+                        break;
+                }
             }
             device->lpVtbl->Release(device);
 
@@ -324,7 +346,7 @@ static CDECL void d3d11_post_present_handoff_callback(const void *data, unsigned
 }
 
 void ivrcompositor_post_present_handoff(void (*cpp_func)(void *),
-        void *linux_side, struct compositor_data *user_data)
+        void *linux_side, unsigned int version, struct compositor_data *user_data)
 {
     struct post_present_handoff_data data;
     IWineD3D11Device *wined3d_device;

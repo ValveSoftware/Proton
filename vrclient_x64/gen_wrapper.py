@@ -159,7 +159,7 @@ def display_sdkver(s):
 def strip_ns(name):
     return name.replace("vr::","")
 
-def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, existing_methods):
+def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, existing_methods, iface_version):
     used_name = method.spelling
     idx = '2'
     while used_name in existing_methods:
@@ -325,6 +325,7 @@ def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, e
     if should_gen_wrapper:
         cfile.write(")")
     if is_method_overridden:
+        cfile.write(", %s" % iface_version[iface_version.find("_") + 1:].lstrip("0"))
         for classname_pattern, user_data_type in method_overrides_data:
             if classname_pattern in classname:
                 cfile.write(", &_this->user_data")
@@ -422,7 +423,7 @@ WINE_DEFAULT_DEBUG_CHANNEL(vrclient);
     methods = []
     for child in children:
         if child.kind == clang.cindex.CursorKind.CXX_METHOD:
-            methods.append(handle_method(cfile, classnode.spelling, winclassname, cppname, child, cpp, cpp_h, methods))
+            methods.append(handle_method(cfile, classnode.spelling, winclassname, cppname, child, cpp, cpp_h, methods, iface_version))
 
     cfile.write("extern vtable_ptr %s_vtable;\n\n" % winclassname)
     cfile.write("#ifndef __GNUC__\n")
