@@ -1,5 +1,18 @@
 #!/bin/bash
 
+usage()
+{
+    echo "$1: [component ... ] [--release] [--package]"
+    echo "Build the Proton Steam Tool"
+    echo "Component can be one or more of:"
+    echo "  wine, wine32, wine64"
+    echo "  vrclient, vrclient32, vrclient64"
+    echo "  lsteamclient, lsteamclient32, lsteamclient64"
+    echo "or all, which is the default.  The 'all' component also implies --package"
+    echo "--release causes symbols to be stripped of debug info."
+    echo "--package creates the tar ball in dist/."
+}
+
 set -e
 
 JOBS=-j5
@@ -201,6 +214,9 @@ for param in "$@"; do
         INSTALL_PROGRAM_FLAGS='-s'
     elif [ "$param" == "--package" ]; then
         PACKAGE=true
+    else
+        usage `basename $0`
+        exit 1
     fi
 done
 
