@@ -74,6 +74,12 @@ EVRCompositorError ivrcompositor_submit(
 
 void ivrcompositor_post_present_handoff(void (*cpp_func)(void *),
         void *linux_side, unsigned int version, struct compositor_data *user_data);
+
+EVRCompositorError ivrcompositor_wait_get_poses(
+        EVRCompositorError (cpp_func)(void *, TrackedDevicePose_t *, uint32_t, TrackedDevicePose_t *, uint32_t),
+        void *linux_side, TrackedDevicePose_t *render_poses, uint32_t render_pose_count,
+        TrackedDevicePose_t *game_poses, uint32_t game_pose_count,
+        unsigned int version, struct compositor_data *user_data);
 #endif  /* __cplusplus */
 
 #define TRACE WINE_TRACE

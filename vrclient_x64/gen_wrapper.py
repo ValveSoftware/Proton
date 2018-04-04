@@ -141,10 +141,17 @@ def ivrcompositor_submit(cppname, method):
 def ivrcompositor_post_present_handoff(cppname, method):
     return "ivrcompositor_post_present_handoff"
 
+def ivrcompositor_wait_get_poses(cppname, method):
+    for version in ["021", "022"]:
+        if version in cppname:
+            return "ivrcompositor_wait_get_poses"
+    return None
+
 method_overrides = [
     ("IVRSystem", "GetDXGIOutputInfo", ivrsystem_get_dxgi_output_info),
     ("IVRCompositor", "Submit", ivrcompositor_submit),
     ("IVRCompositor", "PostPresentHandoff", ivrcompositor_post_present_handoff),
+    ("IVRCompositor", "WaitGetPoses", ivrcompositor_wait_get_poses),
 ]
 
 method_overrides_data = [
@@ -273,10 +280,11 @@ def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, e
     is_method_overridden = False
     for classname_pattern, methodname, override_generator in method_overrides:
         if used_name == methodname and classname_pattern in classname:
-            cfile.write(override_generator(cppname, method))
-            cfile.write("(%s_%s, _this->linux_side" % (cppname, used_name))
-            is_method_overridden = True
-            break
+            fn_name = override_generator(cppname, method)
+            if fn_name:
+                cfile.write("%s(%s_%s, _this->linux_side" % (fn_name, cppname, used_name))
+                is_method_overridden = True
+                break
     else:
         cfile.write("%s_%s(_this->linux_side" % (cppname, used_name))
 

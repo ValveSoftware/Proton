@@ -366,3 +366,69 @@ void ivrcompositor_post_present_handoff(void (*cpp_func)(void *),
 
     cpp_func(linux_side);
 }
+
+struct explicit_timing_data
+{
+    void *linux_side;
+    unsigned int version;
+};
+
+#include "cppIVRCompositor_IVRCompositor_021.h"
+#include "cppIVRCompositor_IVRCompositor_022.h"
+
+static CDECL void d3d11_explicit_timing_callback(const void *data, unsigned int data_size)
+{
+    const struct explicit_timing_data *callback_data = data;
+    EVRCompositorError error;
+
+    TRACE("data {%p, %u}\n", data, data_size);
+
+    switch (callback_data->version)
+    {
+        case 21:
+            error = cppIVRCompositor_IVRCompositor_021_SubmitExplicitTimingData(callback_data->linux_side);
+            break;
+        case 22:
+            error = cppIVRCompositor_IVRCompositor_022_SubmitExplicitTimingData(callback_data->linux_side);
+            break;
+        default:
+            ERR("Unexpected version %#x\n", callback_data->version);
+    }
+
+    if (error)
+        ERR("error %#x\n", error);
+}
+
+EVRCompositorError ivrcompositor_wait_get_poses(
+        EVRCompositorError (cpp_func)(void *, TrackedDevicePose_t *, uint32_t, TrackedDevicePose_t *, uint32_t),
+        void *linux_side, TrackedDevicePose_t *render_poses, uint32_t render_pose_count,
+        TrackedDevicePose_t *game_poses, uint32_t game_pose_count,
+        unsigned int version, struct compositor_data *user_data)
+{
+    struct explicit_timing_data data;
+    IWineD3D11Device *wined3d_device;
+    EVRCompositorError r;
+
+    TRACE("%p, %p, %u, %p, %u\n", linux_side, render_poses, render_pose_count, game_poses, game_pose_count);
+
+    r = cpp_func(linux_side, render_poses, render_pose_count, game_poses, game_pose_count);
+
+    if ((wined3d_device = user_data->wined3d_device))
+    {
+        TRACE("wined3d device %p\n", wined3d_device);
+
+        /* We need to call IVRCompositor::SubmitExplicitTimingData() before the
+         * first flush of the frame.
+         *
+         * Sending IVRCompositor::SubmitExplicitTimingData() to the command
+         * stream immediately after IVRCompositor::WaitGetPoses() seems
+         * reasonable.
+         */
+        data.linux_side = linux_side;
+        data.version = version;
+        wined3d_device->lpVtbl->run_on_command_stream(wined3d_device,
+                d3d11_explicit_timing_callback, &data, sizeof(data));
+    }
+
+    return r;
+}
