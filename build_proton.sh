@@ -171,28 +171,6 @@ build_libSDL()
     fi
 }
 
-TOP="$PWD"
-MAKE=make
-
-PLATFORM=$(uname)
-if [ "$PLATFORM" == "Darwin" ]; then
-    CC="ccache clang"
-    AMD64_WRAPPER=""
-    I386_WRAPPER=""
-else
-    CC="ccache gcc"
-    AMD64_WRAPPER="schroot --chroot steamrt_scout_beta_amd64 --"
-    I386_WRAPPER="schroot --chroot steamrt_scout_beta_i386 --"
-
-    gcc_ver=$($AMD64_WRAPPER gcc -v 2>&1 | grep 'gcc version' | cut -d' ' -f3)
-    gcc_maj=$(echo $gcc_ver | cut -d'.' -f1)
-    gcc_min=$(echo $gcc_ver | cut -d'.' -f2)
-    if [ $gcc_maj -lt 5 -o '(' $gcc_maj -eq 5 -a $gcc_min -lt 3 ')' ]; then
-        echo "need gcc >= 5.3"
-        exit 1
-    fi
-fi
-
 if [ "$PLATFORM" == "Darwin" ]; then
     STRIP='strip -x'
 else
@@ -225,6 +203,31 @@ for param in "$@"; do
         PACKAGE=true
     fi
 done
+
+TOP="$PWD"
+MAKE=make
+if [ x"$RELEASE_BUILD" == x ]; then
+    set +e; CCACHE=`which ccache`; set -e
+fi
+
+PLATFORM=$(uname)
+if [ "$PLATFORM" == "Darwin" ]; then
+    CC="$CCACHE clang"
+    AMD64_WRAPPER=""
+    I386_WRAPPER=""
+else
+    CC="$CCACHE gcc"
+    AMD64_WRAPPER="schroot --chroot steamrt_scout_beta_amd64 --"
+    I386_WRAPPER="schroot --chroot steamrt_scout_beta_i386 --"
+
+    gcc_ver=$($AMD64_WRAPPER gcc -v 2>&1 | grep 'gcc version' | cut -d' ' -f3)
+    gcc_maj=$(echo $gcc_ver | cut -d'.' -f1)
+    gcc_min=$(echo $gcc_ver | cut -d'.' -f2)
+    if [ $gcc_maj -lt 5 -o '(' $gcc_maj -eq 5 -a $gcc_min -lt 3 ')' ]; then
+        echo "need gcc >= 5.3"
+        exit 1
+    fi
+fi
 
 DST_DIR="$TOP/build/dist"
 TOOLS_DIR64="$TOP/build/tools.win64"
