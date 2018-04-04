@@ -60,7 +60,7 @@ void __asm_dummy_vtables(void) {
 
 winIVRExtendedDisplay_IVRExtendedDisplay_001 *create_winIVRExtendedDisplay_IVRExtendedDisplay_001(void *linux_side)
 {
-    winIVRExtendedDisplay_IVRExtendedDisplay_001 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winIVRExtendedDisplay_IVRExtendedDisplay_001));
+    winIVRExtendedDisplay_IVRExtendedDisplay_001 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRExtendedDisplay_IVRExtendedDisplay_001));
     TRACE("-> %p\n", r);
     r->vtable = &winIVRExtendedDisplay_IVRExtendedDisplay_001_vtable;
     r->linux_side = linux_side;

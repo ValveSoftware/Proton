@@ -284,7 +284,7 @@ void __asm_dummy_vtables(void) {
 
 winIVRApplications_IVRApplications_006 *create_winIVRApplications_IVRApplications_006(void *linux_side)
 {
-    winIVRApplications_IVRApplications_006 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winIVRApplications_IVRApplications_006));
+    winIVRApplications_IVRApplications_006 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRApplications_IVRApplications_006));
     TRACE("-> %p\n", r);
     r->vtable = &winIVRApplications_IVRApplications_006_vtable;
     r->linux_side = linux_side;
@@ -503,7 +503,7 @@ void __asm_dummy_vtables(void) {
 
 winIVRApplications_IVRApplications_005 *create_winIVRApplications_IVRApplications_005(void *linux_side)
 {
-    winIVRApplications_IVRApplications_005 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winIVRApplications_IVRApplications_005));
+    winIVRApplications_IVRApplications_005 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRApplications_IVRApplications_005));
     TRACE("-> %p\n", r);
     r->vtable = &winIVRApplications_IVRApplications_005_vtable;
     r->linux_side = linux_side;
@@ -714,7 +714,7 @@ void __asm_dummy_vtables(void) {
 
 winIVRApplications_IVRApplications_004 *create_winIVRApplications_IVRApplications_004(void *linux_side)
 {
-    winIVRApplications_IVRApplications_004 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winIVRApplications_IVRApplications_004));
+    winIVRApplications_IVRApplications_004 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRApplications_IVRApplications_004));
     TRACE("-> %p\n", r);
     r->vtable = &winIVRApplications_IVRApplications_004_vtable;
     r->linux_side = linux_side;
@@ -909,7 +909,7 @@ void __asm_dummy_vtables(void) {
 
 winIVRApplications_IVRApplications_003 *create_winIVRApplications_IVRApplications_003(void *linux_side)
 {
-    winIVRApplications_IVRApplications_003 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winIVRApplications_IVRApplications_003));
+    winIVRApplications_IVRApplications_003 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRApplications_IVRApplications_003));
     TRACE("-> %p\n", r);
     r->vtable = &winIVRApplications_IVRApplications_003_vtable;
     r->linux_side = linux_side;
@@ -1096,7 +1096,7 @@ void __asm_dummy_vtables(void) {
 
 winIVRApplications_IVRApplications_002 *create_winIVRApplications_IVRApplications_002(void *linux_side)
 {
-    winIVRApplications_IVRApplications_002 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winIVRApplications_IVRApplications_002));
+    winIVRApplications_IVRApplications_002 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRApplications_IVRApplications_002));
     TRACE("-> %p\n", r);
     r->vtable = &winIVRApplications_IVRApplications_002_vtable;
     r->linux_side = linux_side;
@@ -1291,7 +1291,7 @@ void __asm_dummy_vtables(void) {
 
 winIVRApplications_IVRApplications_001 *create_winIVRApplications_IVRApplications_001(void *linux_side)
 {
-    winIVRApplications_IVRApplications_001 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winIVRApplications_IVRApplications_001));
+    winIVRApplications_IVRApplications_001 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRApplications_IVRApplications_001));
     TRACE("-> %p\n", r);
     r->vtable = &winIVRApplications_IVRApplications_001_vtable;
     r->linux_side = linux_side;

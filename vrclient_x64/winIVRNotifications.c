@@ -52,7 +52,7 @@ void __asm_dummy_vtables(void) {
 
 winIVRNotifications_IVRNotifications_002 *create_winIVRNotifications_IVRNotifications_002(void *linux_side)
 {
-    winIVRNotifications_IVRNotifications_002 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winIVRNotifications_IVRNotifications_002));
+    winIVRNotifications_IVRNotifications_002 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRNotifications_IVRNotifications_002));
     TRACE("-> %p\n", r);
     r->vtable = &winIVRNotifications_IVRNotifications_002_vtable;
     r->linux_side = linux_side;
@@ -103,7 +103,7 @@ void __asm_dummy_vtables(void) {
 
 winIVRNotifications_IVRNotifications_001 *create_winIVRNotifications_IVRNotifications_001(void *linux_side)
 {
-    winIVRNotifications_IVRNotifications_001 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winIVRNotifications_IVRNotifications_001));
+    winIVRNotifications_IVRNotifications_001 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRNotifications_IVRNotifications_001));
     TRACE("-> %p\n", r);
     r->vtable = &winIVRNotifications_IVRNotifications_001_vtable;
     r->linux_side = linux_side;

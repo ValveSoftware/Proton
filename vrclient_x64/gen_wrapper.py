@@ -138,9 +138,17 @@ def ivrcompositor_submit(cppname, method):
         return "ivrcompositor_008_submit"
     return "ivrcompositor_submit"
 
+def ivrcompositor_post_present_handoff(cppname, method):
+    return "ivrcompositor_post_present_handoff"
+
 method_overrides = [
     ("IVRSystem", "GetDXGIOutputInfo", ivrsystem_get_dxgi_output_info),
     ("IVRCompositor", "Submit", ivrcompositor_submit),
+    ("IVRCompositor", "PostPresentHandoff", ivrcompositor_post_present_handoff),
+]
+
+method_overrides_data = [
+    ("IVRCompositor", "struct compositor_data"),
 ]
 
 def display_sdkver(s):
@@ -262,10 +270,12 @@ def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, e
     if should_gen_wrapper:
         cfile.write("create_win_interface(pchNameAndVersion,\n        ")
 
+    is_method_overridden = False
     for classname_pattern, methodname, override_generator in method_overrides:
         if used_name == methodname and classname_pattern in classname:
             cfile.write(override_generator(cppname, method))
             cfile.write("(%s_%s, _this->linux_side" % (cppname, used_name))
+            is_method_overridden = True
             break
     else:
         cfile.write("%s_%s(_this->linux_side" % (cppname, used_name))
@@ -314,6 +324,11 @@ def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, e
                     cpp.write("(%s)%s" % (param.type.spelling, param.spelling))
     if should_gen_wrapper:
         cfile.write(")")
+    if is_method_overridden:
+        for classname_pattern, user_data_type in method_overrides_data:
+            if classname_pattern in classname:
+                cfile.write(", &_this->user_data")
+                break
     cfile.write(");\n")
     cpp.write(");\n")
     if returns_record:
@@ -399,6 +414,10 @@ WINE_DEFAULT_DEBUG_CHANNEL(vrclient);
     cfile.write("typedef struct __%s {\n" % winclassname)
     cfile.write("    vtable_ptr *vtable;\n")
     cfile.write("    void *linux_side;\n")
+    for classname_pattern, user_data_type in method_overrides_data:
+        if classname_pattern in classnode.spelling:
+            cfile.write("    %s user_data;\n" % user_data_type)
+            break
     cfile.write("} %s;\n\n" % winclassname)
     methods = []
     for child in children:
@@ -417,7 +436,7 @@ WINE_DEFAULT_DEBUG_CHANNEL(vrclient);
     cfile.write("}\n")
     cfile.write("#endif\n\n")
     cfile.write("%s *create_%s(void *linux_side)\n{\n" % (winclassname, winclassname))
-    cfile.write("    %s *r = HeapAlloc(GetProcessHeap(), 0, sizeof(%s));\n" % (winclassname, winclassname))
+    cfile.write("    %s *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(%s));\n" % (winclassname, winclassname))
     cfile.write("    TRACE(\"-> %p\\n\", r);\n")
     cfile.write("    r->vtable = &%s_vtable;\n" % winclassname)
     cfile.write("    r->linux_side = linux_side;\n")

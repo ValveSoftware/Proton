@@ -692,7 +692,7 @@ void __asm_dummy_vtables(void) {
 
 winIVROverlay_IVROverlay_018 *create_winIVROverlay_IVROverlay_018(void *linux_side)
 {
-    winIVROverlay_IVROverlay_018 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winIVROverlay_IVROverlay_018));
+    winIVROverlay_IVROverlay_018 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVROverlay_IVROverlay_018));
     TRACE("-> %p\n", r);
     r->vtable = &winIVROverlay_IVROverlay_018_vtable;
     r->linux_side = linux_side;
@@ -1383,7 +1383,7 @@ void __asm_dummy_vtables(void) {
 
 winIVROverlay_IVROverlay_017 *create_winIVROverlay_IVROverlay_017(void *linux_side)
 {
-    winIVROverlay_IVROverlay_017 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winIVROverlay_IVROverlay_017));
+    winIVROverlay_IVROverlay_017 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVROverlay_IVROverlay_017));
     TRACE("-> %p\n", r);
     r->vtable = &winIVROverlay_IVROverlay_017_vtable;
     r->linux_side = linux_side;
@@ -2058,7 +2058,7 @@ void __asm_dummy_vtables(void) {
 
 winIVROverlay_IVROverlay_016 *create_winIVROverlay_IVROverlay_016(void *linux_side)
 {
-    winIVROverlay_IVROverlay_016 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winIVROverlay_IVROverlay_016));
+    winIVROverlay_IVROverlay_016 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVROverlay_IVROverlay_016));
     TRACE("-> %p\n", r);
     r->vtable = &winIVROverlay_IVROverlay_016_vtable;
     r->linux_side = linux_side;
@@ -2685,7 +2685,7 @@ void __asm_dummy_vtables(void) {
 
 winIVROverlay_IVROverlay_014 *create_winIVROverlay_IVROverlay_014(void *linux_side)
 {
-    winIVROverlay_IVROverlay_014 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winIVROverlay_IVROverlay_014));
+    winIVROverlay_IVROverlay_014 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVROverlay_IVROverlay_014));
     TRACE("-> %p\n", r);
     r->vtable = &winIVROverlay_IVROverlay_014_vtable;
     r->linux_side = linux_side;
@@ -3296,7 +3296,7 @@ void __asm_dummy_vtables(void) {
 
 winIVROverlay_IVROverlay_013 *create_winIVROverlay_IVROverlay_013(void *linux_side)
 {
-    winIVROverlay_IVROverlay_013 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winIVROverlay_IVROverlay_013));
+    winIVROverlay_IVROverlay_013 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVROverlay_IVROverlay_013));
     TRACE("-> %p\n", r);
     r->vtable = &winIVROverlay_IVROverlay_013_vtable;
     r->linux_side = linux_side;
@@ -3867,7 +3867,7 @@ void __asm_dummy_vtables(void) {
 
 winIVROverlay_IVROverlay_012 *create_winIVROverlay_IVROverlay_012(void *linux_side)
 {
-    winIVROverlay_IVROverlay_012 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winIVROverlay_IVROverlay_012));
+    winIVROverlay_IVROverlay_012 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVROverlay_IVROverlay_012));
     TRACE("-> %p\n", r);
     r->vtable = &winIVROverlay_IVROverlay_012_vtable;
     r->linux_side = linux_side;
@@ -4430,7 +4430,7 @@ void __asm_dummy_vtables(void) {
 
 winIVROverlay_IVROverlay_011 *create_winIVROverlay_IVROverlay_011(void *linux_side)
 {
-    winIVROverlay_IVROverlay_011 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winIVROverlay_IVROverlay_011));
+    winIVROverlay_IVROverlay_011 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVROverlay_IVROverlay_011));
     TRACE("-> %p\n", r);
     r->vtable = &winIVROverlay_IVROverlay_011_vtable;
     r->linux_side = linux_side;
@@ -4961,7 +4961,7 @@ void __asm_dummy_vtables(void) {
 
 winIVROverlay_IVROverlay_010 *create_winIVROverlay_IVROverlay_010(void *linux_side)
 {
-    winIVROverlay_IVROverlay_010 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winIVROverlay_IVROverlay_010));
+    winIVROverlay_IVROverlay_010 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVROverlay_IVROverlay_010));
     TRACE("-> %p\n", r);
     r->vtable = &winIVROverlay_IVROverlay_010_vtable;
     r->linux_side = linux_side;
@@ -5468,7 +5468,7 @@ void __asm_dummy_vtables(void) {
 
 winIVROverlay_IVROverlay_008 *create_winIVROverlay_IVROverlay_008(void *linux_side)
 {
-    winIVROverlay_IVROverlay_008 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winIVROverlay_IVROverlay_008));
+    winIVROverlay_IVROverlay_008 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVROverlay_IVROverlay_008));
     TRACE("-> %p\n", r);
     r->vtable = &winIVROverlay_IVROverlay_008_vtable;
     r->linux_side = linux_side;
@@ -5951,7 +5951,7 @@ void __asm_dummy_vtables(void) {
 
 winIVROverlay_IVROverlay_007 *create_winIVROverlay_IVROverlay_007(void *linux_side)
 {
-    winIVROverlay_IVROverlay_007 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winIVROverlay_IVROverlay_007));
+    winIVROverlay_IVROverlay_007 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVROverlay_IVROverlay_007));
     TRACE("-> %p\n", r);
     r->vtable = &winIVROverlay_IVROverlay_007_vtable;
     r->linux_side = linux_side;
@@ -6394,7 +6394,7 @@ void __asm_dummy_vtables(void) {
 
 winIVROverlay_IVROverlay_005 *create_winIVROverlay_IVROverlay_005(void *linux_side)
 {
-    winIVROverlay_IVROverlay_005 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winIVROverlay_IVROverlay_005));
+    winIVROverlay_IVROverlay_005 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVROverlay_IVROverlay_005));
     TRACE("-> %p\n", r);
     r->vtable = &winIVROverlay_IVROverlay_005_vtable;
     r->linux_side = linux_side;
@@ -6805,7 +6805,7 @@ void __asm_dummy_vtables(void) {
 
 winIVROverlay_IVROverlay_004 *create_winIVROverlay_IVROverlay_004(void *linux_side)
 {
-    winIVROverlay_IVROverlay_004 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winIVROverlay_IVROverlay_004));
+    winIVROverlay_IVROverlay_004 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVROverlay_IVROverlay_004));
     TRACE("-> %p\n", r);
     r->vtable = &winIVROverlay_IVROverlay_004_vtable;
     r->linux_side = linux_side;
@@ -7200,7 +7200,7 @@ void __asm_dummy_vtables(void) {
 
 winIVROverlay_IVROverlay_003 *create_winIVROverlay_IVROverlay_003(void *linux_side)
 {
-    winIVROverlay_IVROverlay_003 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winIVROverlay_IVROverlay_003));
+    winIVROverlay_IVROverlay_003 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVROverlay_IVROverlay_003));
     TRACE("-> %p\n", r);
     r->vtable = &winIVROverlay_IVROverlay_003_vtable;
     r->linux_side = linux_side;
@@ -7563,7 +7563,7 @@ void __asm_dummy_vtables(void) {
 
 winIVROverlay_IVROverlay_002 *create_winIVROverlay_IVROverlay_002(void *linux_side)
 {
-    winIVROverlay_IVROverlay_002 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winIVROverlay_IVROverlay_002));
+    winIVROverlay_IVROverlay_002 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVROverlay_IVROverlay_002));
     TRACE("-> %p\n", r);
     r->vtable = &winIVROverlay_IVROverlay_002_vtable;
     r->linux_side = linux_side;
@@ -7910,7 +7910,7 @@ void __asm_dummy_vtables(void) {
 
 winIVROverlay_IVROverlay_001 *create_winIVROverlay_IVROverlay_001(void *linux_side)
 {
-    winIVROverlay_IVROverlay_001 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winIVROverlay_IVROverlay_001));
+    winIVROverlay_IVROverlay_001 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVROverlay_IVROverlay_001));
     TRACE("-> %p\n", r);
     r->vtable = &winIVROverlay_IVROverlay_001_vtable;
     r->linux_side = linux_side;

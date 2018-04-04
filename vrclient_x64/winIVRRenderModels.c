@@ -180,7 +180,7 @@ void __asm_dummy_vtables(void) {
 
 winIVRRenderModels_IVRRenderModels_005 *create_winIVRRenderModels_IVRRenderModels_005(void *linux_side)
 {
-    winIVRRenderModels_IVRRenderModels_005 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winIVRRenderModels_IVRRenderModels_005));
+    winIVRRenderModels_IVRRenderModels_005 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRRenderModels_IVRRenderModels_005));
     TRACE("-> %p\n", r);
     r->vtable = &winIVRRenderModels_IVRRenderModels_005_vtable;
     r->linux_side = linux_side;
@@ -319,7 +319,7 @@ void __asm_dummy_vtables(void) {
 
 winIVRRenderModels_IVRRenderModels_004 *create_winIVRRenderModels_IVRRenderModels_004(void *linux_side)
 {
-    winIVRRenderModels_IVRRenderModels_004 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winIVRRenderModels_IVRRenderModels_004));
+    winIVRRenderModels_IVRRenderModels_004 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRRenderModels_IVRRenderModels_004));
     TRACE("-> %p\n", r);
     r->vtable = &winIVRRenderModels_IVRRenderModels_004_vtable;
     r->linux_side = linux_side;
@@ -442,7 +442,7 @@ void __asm_dummy_vtables(void) {
 
 winIVRRenderModels_IVRRenderModels_002 *create_winIVRRenderModels_IVRRenderModels_002(void *linux_side)
 {
-    winIVRRenderModels_IVRRenderModels_002 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winIVRRenderModels_IVRRenderModels_002));
+    winIVRRenderModels_IVRRenderModels_002 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRRenderModels_IVRRenderModels_002));
     TRACE("-> %p\n", r);
     r->vtable = &winIVRRenderModels_IVRRenderModels_002_vtable;
     r->linux_side = linux_side;
@@ -501,7 +501,7 @@ void __asm_dummy_vtables(void) {
 
 winIVRRenderModels_IVRRenderModels_001 *create_winIVRRenderModels_IVRRenderModels_001(void *linux_side)
 {
-    winIVRRenderModels_IVRRenderModels_001 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winIVRRenderModels_IVRRenderModels_001));
+    winIVRRenderModels_IVRRenderModels_001 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRRenderModels_IVRRenderModels_001));
     TRACE("-> %p\n", r);
     r->vtable = &winIVRRenderModels_IVRRenderModels_001_vtable;
     r->linux_side = linux_side;

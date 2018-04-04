@@ -132,7 +132,7 @@ void __asm_dummy_vtables(void) {
 
 winIVRSettings_IVRSettings_002 *create_winIVRSettings_IVRSettings_002(void *linux_side)
 {
-    winIVRSettings_IVRSettings_002 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winIVRSettings_IVRSettings_002));
+    winIVRSettings_IVRSettings_002 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRSettings_IVRSettings_002));
     TRACE("-> %p\n", r);
     r->vtable = &winIVRSettings_IVRSettings_002_vtable;
     r->linux_side = linux_side;
@@ -255,7 +255,7 @@ void __asm_dummy_vtables(void) {
 
 winIVRSettings_IVRSettings_001 *create_winIVRSettings_IVRSettings_001(void *linux_side)
 {
-    winIVRSettings_IVRSettings_001 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winIVRSettings_IVRSettings_001));
+    winIVRSettings_IVRSettings_001 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRSettings_IVRSettings_001));
     TRACE("-> %p\n", r);
     r->vtable = &winIVRSettings_IVRSettings_001_vtable;
     r->linux_side = linux_side;

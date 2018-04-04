@@ -418,7 +418,7 @@ void __asm_dummy_vtables(void) {
 
 winIVRSystem_IVRSystem_019 *create_winIVRSystem_IVRSystem_019(void *linux_side)
 {
-    winIVRSystem_IVRSystem_019 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winIVRSystem_IVRSystem_019));
+    winIVRSystem_IVRSystem_019 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRSystem_IVRSystem_019));
     TRACE("-> %p\n", r);
     r->vtable = &winIVRSystem_IVRSystem_019_vtable;
     r->linux_side = linux_side;
@@ -811,7 +811,7 @@ void __asm_dummy_vtables(void) {
 
 winIVRSystem_IVRSystem_017 *create_winIVRSystem_IVRSystem_017(void *linux_side)
 {
-    winIVRSystem_IVRSystem_017 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winIVRSystem_IVRSystem_017));
+    winIVRSystem_IVRSystem_017 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRSystem_IVRSystem_017));
     TRACE("-> %p\n", r);
     r->vtable = &winIVRSystem_IVRSystem_017_vtable;
     r->linux_side = linux_side;
@@ -1204,7 +1204,7 @@ void __asm_dummy_vtables(void) {
 
 winIVRSystem_IVRSystem_016 *create_winIVRSystem_IVRSystem_016(void *linux_side)
 {
-    winIVRSystem_IVRSystem_016 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winIVRSystem_IVRSystem_016));
+    winIVRSystem_IVRSystem_016 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRSystem_IVRSystem_016));
     TRACE("-> %p\n", r);
     r->vtable = &winIVRSystem_IVRSystem_016_vtable;
     r->linux_side = linux_side;
@@ -1589,7 +1589,7 @@ void __asm_dummy_vtables(void) {
 
 winIVRSystem_IVRSystem_015 *create_winIVRSystem_IVRSystem_015(void *linux_side)
 {
-    winIVRSystem_IVRSystem_015 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winIVRSystem_IVRSystem_015));
+    winIVRSystem_IVRSystem_015 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRSystem_IVRSystem_015));
     TRACE("-> %p\n", r);
     r->vtable = &winIVRSystem_IVRSystem_015_vtable;
     r->linux_side = linux_side;
@@ -1974,7 +1974,7 @@ void __asm_dummy_vtables(void) {
 
 winIVRSystem_IVRSystem_014 *create_winIVRSystem_IVRSystem_014(void *linux_side)
 {
-    winIVRSystem_IVRSystem_014 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winIVRSystem_IVRSystem_014));
+    winIVRSystem_IVRSystem_014 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRSystem_IVRSystem_014));
     TRACE("-> %p\n", r);
     r->vtable = &winIVRSystem_IVRSystem_014_vtable;
     r->linux_side = linux_side;
@@ -2360,7 +2360,7 @@ void __asm_dummy_vtables(void) {
 
 winIVRSystem_IVRSystem_012 *create_winIVRSystem_IVRSystem_012(void *linux_side)
 {
-    winIVRSystem_IVRSystem_012 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winIVRSystem_IVRSystem_012));
+    winIVRSystem_IVRSystem_012 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRSystem_IVRSystem_012));
     TRACE("-> %p\n", r);
     r->vtable = &winIVRSystem_IVRSystem_012_vtable;
     r->linux_side = linux_side;
@@ -2762,7 +2762,7 @@ void __asm_dummy_vtables(void) {
 
 winIVRSystem_IVRSystem_011 *create_winIVRSystem_IVRSystem_011(void *linux_side)
 {
-    winIVRSystem_IVRSystem_011 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winIVRSystem_IVRSystem_011));
+    winIVRSystem_IVRSystem_011 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRSystem_IVRSystem_011));
     TRACE("-> %p\n", r);
     r->vtable = &winIVRSystem_IVRSystem_011_vtable;
     r->linux_side = linux_side;
@@ -3164,7 +3164,7 @@ void __asm_dummy_vtables(void) {
 
 winIVRSystem_IVRSystem_010 *create_winIVRSystem_IVRSystem_010(void *linux_side)
 {
-    winIVRSystem_IVRSystem_010 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winIVRSystem_IVRSystem_010));
+    winIVRSystem_IVRSystem_010 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRSystem_IVRSystem_010));
     TRACE("-> %p\n", r);
     r->vtable = &winIVRSystem_IVRSystem_010_vtable;
     r->linux_side = linux_side;
@@ -3534,7 +3534,7 @@ void __asm_dummy_vtables(void) {
 
 winIVRSystem_IVRSystem_009 *create_winIVRSystem_IVRSystem_009(void *linux_side)
 {
-    winIVRSystem_IVRSystem_009 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winIVRSystem_IVRSystem_009));
+    winIVRSystem_IVRSystem_009 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRSystem_IVRSystem_009));
     TRACE("-> %p\n", r);
     r->vtable = &winIVRSystem_IVRSystem_009_vtable;
     r->linux_side = linux_side;
@@ -3904,7 +3904,7 @@ void __asm_dummy_vtables(void) {
 
 winIVRSystem_IVRSystem_006 *create_winIVRSystem_IVRSystem_006(void *linux_side)
 {
-    winIVRSystem_IVRSystem_006 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winIVRSystem_IVRSystem_006));
+    winIVRSystem_IVRSystem_006 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRSystem_IVRSystem_006));
     TRACE("-> %p\n", r);
     r->vtable = &winIVRSystem_IVRSystem_006_vtable;
     r->linux_side = linux_side;
@@ -4233,7 +4233,7 @@ void __asm_dummy_vtables(void) {
 
 winIVRSystem_IVRSystem_005 *create_winIVRSystem_IVRSystem_005(void *linux_side)
 {
-    winIVRSystem_IVRSystem_005 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winIVRSystem_IVRSystem_005));
+    winIVRSystem_IVRSystem_005 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRSystem_IVRSystem_005));
     TRACE("-> %p\n", r);
     r->vtable = &winIVRSystem_IVRSystem_005_vtable;
     r->linux_side = linux_side;
@@ -4554,7 +4554,7 @@ void __asm_dummy_vtables(void) {
 
 winIVRSystem_IVRSystem_004 *create_winIVRSystem_IVRSystem_004(void *linux_side)
 {
-    winIVRSystem_IVRSystem_004 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winIVRSystem_IVRSystem_004));
+    winIVRSystem_IVRSystem_004 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRSystem_IVRSystem_004));
     TRACE("-> %p\n", r);
     r->vtable = &winIVRSystem_IVRSystem_004_vtable;
     r->linux_side = linux_side;
@@ -4891,7 +4891,7 @@ void __asm_dummy_vtables(void) {
 
 winIVRSystem_IVRSystem_003 *create_winIVRSystem_IVRSystem_003(void *linux_side)
 {
-    winIVRSystem_IVRSystem_003 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winIVRSystem_IVRSystem_003));
+    winIVRSystem_IVRSystem_003 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRSystem_IVRSystem_003));
     TRACE("-> %p\n", r);
     r->vtable = &winIVRSystem_IVRSystem_003_vtable;
     r->linux_side = linux_side;

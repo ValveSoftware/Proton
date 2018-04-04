@@ -52,7 +52,7 @@ void __asm_dummy_vtables(void) {
 
 winIVRDriverManager_IVRDriverManager_001 *create_winIVRDriverManager_IVRDriverManager_001(void *linux_side)
 {
-    winIVRDriverManager_IVRDriverManager_001 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winIVRDriverManager_IVRDriverManager_001));
+    winIVRDriverManager_IVRDriverManager_001 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRDriverManager_IVRDriverManager_001));
     TRACE("-> %p\n", r);
     r->vtable = &winIVRDriverManager_IVRDriverManager_001_vtable;
     r->linux_side = linux_side;

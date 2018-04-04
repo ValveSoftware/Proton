@@ -93,7 +93,7 @@ void __asm_dummy_vtables(void) {
 
 winIVRClientCore_IVRClientCore_003 *create_winIVRClientCore_IVRClientCore_003(void *linux_side)
 {
-    winIVRClientCore_IVRClientCore_003 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winIVRClientCore_IVRClientCore_003));
+    winIVRClientCore_IVRClientCore_003 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRClientCore_IVRClientCore_003));
     TRACE("-> %p\n", r);
     r->vtable = &winIVRClientCore_IVRClientCore_003_vtable;
     r->linux_side = linux_side;
@@ -177,7 +177,7 @@ void __asm_dummy_vtables(void) {
 
 winIVRClientCore_IVRClientCore_002 *create_winIVRClientCore_IVRClientCore_002(void *linux_side)
 {
-    winIVRClientCore_IVRClientCore_002 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winIVRClientCore_IVRClientCore_002));
+    winIVRClientCore_IVRClientCore_002 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRClientCore_IVRClientCore_002));
     TRACE("-> %p\n", r);
     r->vtable = &winIVRClientCore_IVRClientCore_002_vtable;
     r->linux_side = linux_side;

@@ -92,7 +92,7 @@ void __asm_dummy_vtables(void) {
 
 winIVRScreenshots_IVRScreenshots_001 *create_winIVRScreenshots_IVRScreenshots_001(void *linux_side)
 {
-    winIVRScreenshots_IVRScreenshots_001 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winIVRScreenshots_IVRScreenshots_001));
+    winIVRScreenshots_IVRScreenshots_001 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRScreenshots_IVRScreenshots_001));
     TRACE("-> %p\n", r);
     r->vtable = &winIVRScreenshots_IVRScreenshots_001_vtable;
     r->linux_side = linux_side;

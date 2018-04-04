@@ -132,7 +132,7 @@ void __asm_dummy_vtables(void) {
 
 winIVRTrackedCamera_IVRTrackedCamera_003 *create_winIVRTrackedCamera_IVRTrackedCamera_003(void *linux_side)
 {
-    winIVRTrackedCamera_IVRTrackedCamera_003 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winIVRTrackedCamera_IVRTrackedCamera_003));
+    winIVRTrackedCamera_IVRTrackedCamera_003 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRTrackedCamera_IVRTrackedCamera_003));
     TRACE("-> %p\n", r);
     r->vtable = &winIVRTrackedCamera_IVRTrackedCamera_003_vtable;
     r->linux_side = linux_side;
@@ -223,7 +223,7 @@ void __asm_dummy_vtables(void) {
 
 winIVRTrackedCamera_IVRTrackedCamera_002 *create_winIVRTrackedCamera_IVRTrackedCamera_002(void *linux_side)
 {
-    winIVRTrackedCamera_IVRTrackedCamera_002 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winIVRTrackedCamera_IVRTrackedCamera_002));
+    winIVRTrackedCamera_IVRTrackedCamera_002 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRTrackedCamera_IVRTrackedCamera_002));
     TRACE("-> %p\n", r);
     r->vtable = &winIVRTrackedCamera_IVRTrackedCamera_002_vtable;
     r->linux_side = linux_side;
@@ -394,7 +394,7 @@ void __asm_dummy_vtables(void) {
 
 winIVRTrackedCamera_IVRTrackedCamera_001 *create_winIVRTrackedCamera_IVRTrackedCamera_001(void *linux_side)
 {
-    winIVRTrackedCamera_IVRTrackedCamera_001 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winIVRTrackedCamera_IVRTrackedCamera_001));
+    winIVRTrackedCamera_IVRTrackedCamera_001 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRTrackedCamera_IVRTrackedCamera_001));
     TRACE("-> %p\n", r);
     r->vtable = &winIVRTrackedCamera_IVRTrackedCamera_001_vtable;
     r->linux_side = linux_side;

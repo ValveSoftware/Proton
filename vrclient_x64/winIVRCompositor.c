@@ -21,6 +21,7 @@ WINE_DEFAULT_DEBUG_CHANNEL(vrclient);
 typedef struct __winIVRCompositor_IVRCompositor_022 {
     vtable_ptr *vtable;
     void *linux_side;
+    struct compositor_data user_data;
 } winIVRCompositor_IVRCompositor_022;
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_022_SetTrackingSpace, 8)
@@ -62,7 +63,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_022_Submit, 28)
 EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_022_Submit(winIVRCompositor_IVRCompositor_022 *_this, EVREye eEye, Texture_t * pTexture, VRTextureBounds_t * pBounds, EVRSubmitFlags nSubmitFlags)
 {
     TRACE("%p\n", _this);
-    return ivrcompositor_submit(cppIVRCompositor_IVRCompositor_022_Submit, _this->linux_side, eEye, pTexture, pBounds, nSubmitFlags);
+    return ivrcompositor_submit(cppIVRCompositor_IVRCompositor_022_Submit, _this->linux_side, eEye, pTexture, pBounds, nSubmitFlags, &_this->user_data);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_022_ClearLastSubmittedFrame, 4)
@@ -76,7 +77,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_022_PostPresentHandoff, 4
 void __thiscall winIVRCompositor_IVRCompositor_022_PostPresentHandoff(winIVRCompositor_IVRCompositor_022 *_this)
 {
     TRACE("%p\n", _this);
-    cppIVRCompositor_IVRCompositor_022_PostPresentHandoff(_this->linux_side);
+    ivrcompositor_post_present_handoff(cppIVRCompositor_IVRCompositor_022_PostPresentHandoff, _this->linux_side, &_this->user_data);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_022_GetFrameTiming, 16)
@@ -381,7 +382,7 @@ void __asm_dummy_vtables(void) {
 
 winIVRCompositor_IVRCompositor_022 *create_winIVRCompositor_IVRCompositor_022(void *linux_side)
 {
-    winIVRCompositor_IVRCompositor_022 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winIVRCompositor_IVRCompositor_022));
+    winIVRCompositor_IVRCompositor_022 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRCompositor_IVRCompositor_022));
     TRACE("-> %p\n", r);
     r->vtable = &winIVRCompositor_IVRCompositor_022_vtable;
     r->linux_side = linux_side;
@@ -393,6 +394,7 @@ winIVRCompositor_IVRCompositor_022 *create_winIVRCompositor_IVRCompositor_022(vo
 typedef struct __winIVRCompositor_IVRCompositor_021 {
     vtable_ptr *vtable;
     void *linux_side;
+    struct compositor_data user_data;
 } winIVRCompositor_IVRCompositor_021;
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_021_SetTrackingSpace, 8)
@@ -434,7 +436,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_021_Submit, 28)
 EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_021_Submit(winIVRCompositor_IVRCompositor_021 *_this, EVREye eEye, Texture_t * pTexture, VRTextureBounds_t * pBounds, EVRSubmitFlags nSubmitFlags)
 {
     TRACE("%p\n", _this);
-    return ivrcompositor_submit(cppIVRCompositor_IVRCompositor_021_Submit, _this->linux_side, eEye, pTexture, pBounds, nSubmitFlags);
+    return ivrcompositor_submit(cppIVRCompositor_IVRCompositor_021_Submit, _this->linux_side, eEye, pTexture, pBounds, nSubmitFlags, &_this->user_data);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_021_ClearLastSubmittedFrame, 4)
@@ -448,7 +450,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_021_PostPresentHandoff, 4
 void __thiscall winIVRCompositor_IVRCompositor_021_PostPresentHandoff(winIVRCompositor_IVRCompositor_021 *_this)
 {
     TRACE("%p\n", _this);
-    cppIVRCompositor_IVRCompositor_021_PostPresentHandoff(_this->linux_side);
+    ivrcompositor_post_present_handoff(cppIVRCompositor_IVRCompositor_021_PostPresentHandoff, _this->linux_side, &_this->user_data);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_021_GetFrameTiming, 16)
@@ -753,7 +755,7 @@ void __asm_dummy_vtables(void) {
 
 winIVRCompositor_IVRCompositor_021 *create_winIVRCompositor_IVRCompositor_021(void *linux_side)
 {
-    winIVRCompositor_IVRCompositor_021 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winIVRCompositor_IVRCompositor_021));
+    winIVRCompositor_IVRCompositor_021 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRCompositor_IVRCompositor_021));
     TRACE("-> %p\n", r);
     r->vtable = &winIVRCompositor_IVRCompositor_021_vtable;
     r->linux_side = linux_side;
@@ -765,6 +767,7 @@ winIVRCompositor_IVRCompositor_021 *create_winIVRCompositor_IVRCompositor_021(vo
 typedef struct __winIVRCompositor_IVRCompositor_020 {
     vtable_ptr *vtable;
     void *linux_side;
+    struct compositor_data user_data;
 } winIVRCompositor_IVRCompositor_020;
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_020_SetTrackingSpace, 8)
@@ -806,7 +809,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_020_Submit, 28)
 EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_020_Submit(winIVRCompositor_IVRCompositor_020 *_this, EVREye eEye, Texture_t * pTexture, VRTextureBounds_t * pBounds, EVRSubmitFlags nSubmitFlags)
 {
     TRACE("%p\n", _this);
-    return ivrcompositor_submit(cppIVRCompositor_IVRCompositor_020_Submit, _this->linux_side, eEye, pTexture, pBounds, nSubmitFlags);
+    return ivrcompositor_submit(cppIVRCompositor_IVRCompositor_020_Submit, _this->linux_side, eEye, pTexture, pBounds, nSubmitFlags, &_this->user_data);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_020_ClearLastSubmittedFrame, 4)
@@ -820,7 +823,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_020_PostPresentHandoff, 4
 void __thiscall winIVRCompositor_IVRCompositor_020_PostPresentHandoff(winIVRCompositor_IVRCompositor_020 *_this)
 {
     TRACE("%p\n", _this);
-    cppIVRCompositor_IVRCompositor_020_PostPresentHandoff(_this->linux_side);
+    ivrcompositor_post_present_handoff(cppIVRCompositor_IVRCompositor_020_PostPresentHandoff, _this->linux_side, &_this->user_data);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_020_GetFrameTiming, 16)
@@ -1109,7 +1112,7 @@ void __asm_dummy_vtables(void) {
 
 winIVRCompositor_IVRCompositor_020 *create_winIVRCompositor_IVRCompositor_020(void *linux_side)
 {
-    winIVRCompositor_IVRCompositor_020 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winIVRCompositor_IVRCompositor_020));
+    winIVRCompositor_IVRCompositor_020 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRCompositor_IVRCompositor_020));
     TRACE("-> %p\n", r);
     r->vtable = &winIVRCompositor_IVRCompositor_020_vtable;
     r->linux_side = linux_side;
@@ -1121,6 +1124,7 @@ winIVRCompositor_IVRCompositor_020 *create_winIVRCompositor_IVRCompositor_020(vo
 typedef struct __winIVRCompositor_IVRCompositor_019 {
     vtable_ptr *vtable;
     void *linux_side;
+    struct compositor_data user_data;
 } winIVRCompositor_IVRCompositor_019;
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_019_SetTrackingSpace, 8)
@@ -1162,7 +1166,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_019_Submit, 28)
 EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_019_Submit(winIVRCompositor_IVRCompositor_019 *_this, EVREye eEye, Texture_t * pTexture, VRTextureBounds_t * pBounds, EVRSubmitFlags nSubmitFlags)
 {
     TRACE("%p\n", _this);
-    return ivrcompositor_submit(cppIVRCompositor_IVRCompositor_019_Submit, _this->linux_side, eEye, pTexture, pBounds, nSubmitFlags);
+    return ivrcompositor_submit(cppIVRCompositor_IVRCompositor_019_Submit, _this->linux_side, eEye, pTexture, pBounds, nSubmitFlags, &_this->user_data);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_019_ClearLastSubmittedFrame, 4)
@@ -1176,7 +1180,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_019_PostPresentHandoff, 4
 void __thiscall winIVRCompositor_IVRCompositor_019_PostPresentHandoff(winIVRCompositor_IVRCompositor_019 *_this)
 {
     TRACE("%p\n", _this);
-    cppIVRCompositor_IVRCompositor_019_PostPresentHandoff(_this->linux_side);
+    ivrcompositor_post_present_handoff(cppIVRCompositor_IVRCompositor_019_PostPresentHandoff, _this->linux_side, &_this->user_data);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_019_GetFrameTiming, 16)
@@ -1457,7 +1461,7 @@ void __asm_dummy_vtables(void) {
 
 winIVRCompositor_IVRCompositor_019 *create_winIVRCompositor_IVRCompositor_019(void *linux_side)
 {
-    winIVRCompositor_IVRCompositor_019 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winIVRCompositor_IVRCompositor_019));
+    winIVRCompositor_IVRCompositor_019 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRCompositor_IVRCompositor_019));
     TRACE("-> %p\n", r);
     r->vtable = &winIVRCompositor_IVRCompositor_019_vtable;
     r->linux_side = linux_side;
@@ -1469,6 +1473,7 @@ winIVRCompositor_IVRCompositor_019 *create_winIVRCompositor_IVRCompositor_019(vo
 typedef struct __winIVRCompositor_IVRCompositor_018 {
     vtable_ptr *vtable;
     void *linux_side;
+    struct compositor_data user_data;
 } winIVRCompositor_IVRCompositor_018;
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_018_SetTrackingSpace, 8)
@@ -1510,7 +1515,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_018_Submit, 28)
 EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_018_Submit(winIVRCompositor_IVRCompositor_018 *_this, EVREye eEye, Texture_t * pTexture, VRTextureBounds_t * pBounds, EVRSubmitFlags nSubmitFlags)
 {
     TRACE("%p\n", _this);
-    return ivrcompositor_submit(cppIVRCompositor_IVRCompositor_018_Submit, _this->linux_side, eEye, pTexture, pBounds, nSubmitFlags);
+    return ivrcompositor_submit(cppIVRCompositor_IVRCompositor_018_Submit, _this->linux_side, eEye, pTexture, pBounds, nSubmitFlags, &_this->user_data);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_018_ClearLastSubmittedFrame, 4)
@@ -1524,7 +1529,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_018_PostPresentHandoff, 4
 void __thiscall winIVRCompositor_IVRCompositor_018_PostPresentHandoff(winIVRCompositor_IVRCompositor_018 *_this)
 {
     TRACE("%p\n", _this);
-    cppIVRCompositor_IVRCompositor_018_PostPresentHandoff(_this->linux_side);
+    ivrcompositor_post_present_handoff(cppIVRCompositor_IVRCompositor_018_PostPresentHandoff, _this->linux_side, &_this->user_data);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_018_GetFrameTiming, 16)
@@ -1789,7 +1794,7 @@ void __asm_dummy_vtables(void) {
 
 winIVRCompositor_IVRCompositor_018 *create_winIVRCompositor_IVRCompositor_018(void *linux_side)
 {
-    winIVRCompositor_IVRCompositor_018 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winIVRCompositor_IVRCompositor_018));
+    winIVRCompositor_IVRCompositor_018 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRCompositor_IVRCompositor_018));
     TRACE("-> %p\n", r);
     r->vtable = &winIVRCompositor_IVRCompositor_018_vtable;
     r->linux_side = linux_side;
@@ -1801,6 +1806,7 @@ winIVRCompositor_IVRCompositor_018 *create_winIVRCompositor_IVRCompositor_018(vo
 typedef struct __winIVRCompositor_IVRCompositor_016 {
     vtable_ptr *vtable;
     void *linux_side;
+    struct compositor_data user_data;
 } winIVRCompositor_IVRCompositor_016;
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_016_SetTrackingSpace, 8)
@@ -1842,7 +1848,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_016_Submit, 28)
 EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_016_Submit(winIVRCompositor_IVRCompositor_016 *_this, EVREye eEye, Texture_t * pTexture, VRTextureBounds_t * pBounds, EVRSubmitFlags nSubmitFlags)
 {
     TRACE("%p\n", _this);
-    return ivrcompositor_submit(cppIVRCompositor_IVRCompositor_016_Submit, _this->linux_side, eEye, pTexture, pBounds, nSubmitFlags);
+    return ivrcompositor_submit(cppIVRCompositor_IVRCompositor_016_Submit, _this->linux_side, eEye, pTexture, pBounds, nSubmitFlags, &_this->user_data);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_016_ClearLastSubmittedFrame, 4)
@@ -1856,7 +1862,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_016_PostPresentHandoff, 4
 void __thiscall winIVRCompositor_IVRCompositor_016_PostPresentHandoff(winIVRCompositor_IVRCompositor_016 *_this)
 {
     TRACE("%p\n", _this);
-    cppIVRCompositor_IVRCompositor_016_PostPresentHandoff(_this->linux_side);
+    ivrcompositor_post_present_handoff(cppIVRCompositor_IVRCompositor_016_PostPresentHandoff, _this->linux_side, &_this->user_data);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_016_GetFrameTiming, 16)
@@ -2096,7 +2102,7 @@ void __asm_dummy_vtables(void) {
 
 winIVRCompositor_IVRCompositor_016 *create_winIVRCompositor_IVRCompositor_016(void *linux_side)
 {
-    winIVRCompositor_IVRCompositor_016 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winIVRCompositor_IVRCompositor_016));
+    winIVRCompositor_IVRCompositor_016 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRCompositor_IVRCompositor_016));
     TRACE("-> %p\n", r);
     r->vtable = &winIVRCompositor_IVRCompositor_016_vtable;
     r->linux_side = linux_side;
@@ -2108,6 +2114,7 @@ winIVRCompositor_IVRCompositor_016 *create_winIVRCompositor_IVRCompositor_016(vo
 typedef struct __winIVRCompositor_IVRCompositor_015 {
     vtable_ptr *vtable;
     void *linux_side;
+    struct compositor_data user_data;
 } winIVRCompositor_IVRCompositor_015;
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_015_SetTrackingSpace, 8)
@@ -2149,7 +2156,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_015_Submit, 28)
 EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_015_Submit(winIVRCompositor_IVRCompositor_015 *_this, EVREye eEye, Texture_t * pTexture, VRTextureBounds_t * pBounds, EVRSubmitFlags nSubmitFlags)
 {
     TRACE("%p\n", _this);
-    return ivrcompositor_submit(cppIVRCompositor_IVRCompositor_015_Submit, _this->linux_side, eEye, pTexture, pBounds, nSubmitFlags);
+    return ivrcompositor_submit(cppIVRCompositor_IVRCompositor_015_Submit, _this->linux_side, eEye, pTexture, pBounds, nSubmitFlags, &_this->user_data);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_015_ClearLastSubmittedFrame, 4)
@@ -2163,7 +2170,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_015_PostPresentHandoff, 4
 void __thiscall winIVRCompositor_IVRCompositor_015_PostPresentHandoff(winIVRCompositor_IVRCompositor_015 *_this)
 {
     TRACE("%p\n", _this);
-    cppIVRCompositor_IVRCompositor_015_PostPresentHandoff(_this->linux_side);
+    ivrcompositor_post_present_handoff(cppIVRCompositor_IVRCompositor_015_PostPresentHandoff, _this->linux_side, &_this->user_data);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_015_GetFrameTiming, 16)
@@ -2419,7 +2426,7 @@ void __asm_dummy_vtables(void) {
 
 winIVRCompositor_IVRCompositor_015 *create_winIVRCompositor_IVRCompositor_015(void *linux_side)
 {
-    winIVRCompositor_IVRCompositor_015 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winIVRCompositor_IVRCompositor_015));
+    winIVRCompositor_IVRCompositor_015 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRCompositor_IVRCompositor_015));
     TRACE("-> %p\n", r);
     r->vtable = &winIVRCompositor_IVRCompositor_015_vtable;
     r->linux_side = linux_side;
@@ -2431,6 +2438,7 @@ winIVRCompositor_IVRCompositor_015 *create_winIVRCompositor_IVRCompositor_015(vo
 typedef struct __winIVRCompositor_IVRCompositor_014 {
     vtable_ptr *vtable;
     void *linux_side;
+    struct compositor_data user_data;
 } winIVRCompositor_IVRCompositor_014;
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_014_SetTrackingSpace, 8)
@@ -2472,7 +2480,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_014_Submit, 28)
 EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_014_Submit(winIVRCompositor_IVRCompositor_014 *_this, EVREye eEye, Texture_t * pTexture, VRTextureBounds_t * pBounds, EVRSubmitFlags nSubmitFlags)
 {
     TRACE("%p\n", _this);
-    return ivrcompositor_submit(cppIVRCompositor_IVRCompositor_014_Submit, _this->linux_side, eEye, pTexture, pBounds, nSubmitFlags);
+    return ivrcompositor_submit(cppIVRCompositor_IVRCompositor_014_Submit, _this->linux_side, eEye, pTexture, pBounds, nSubmitFlags, &_this->user_data);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_014_ClearLastSubmittedFrame, 4)
@@ -2486,7 +2494,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_014_PostPresentHandoff, 4
 void __thiscall winIVRCompositor_IVRCompositor_014_PostPresentHandoff(winIVRCompositor_IVRCompositor_014 *_this)
 {
     TRACE("%p\n", _this);
-    cppIVRCompositor_IVRCompositor_014_PostPresentHandoff(_this->linux_side);
+    ivrcompositor_post_present_handoff(cppIVRCompositor_IVRCompositor_014_PostPresentHandoff, _this->linux_side, &_this->user_data);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_014_GetFrameTiming, 16)
@@ -2678,7 +2686,7 @@ void __asm_dummy_vtables(void) {
 
 winIVRCompositor_IVRCompositor_014 *create_winIVRCompositor_IVRCompositor_014(void *linux_side)
 {
-    winIVRCompositor_IVRCompositor_014 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winIVRCompositor_IVRCompositor_014));
+    winIVRCompositor_IVRCompositor_014 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRCompositor_IVRCompositor_014));
     TRACE("-> %p\n", r);
     r->vtable = &winIVRCompositor_IVRCompositor_014_vtable;
     r->linux_side = linux_side;
@@ -2690,6 +2698,7 @@ winIVRCompositor_IVRCompositor_014 *create_winIVRCompositor_IVRCompositor_014(vo
 typedef struct __winIVRCompositor_IVRCompositor_013 {
     vtable_ptr *vtable;
     void *linux_side;
+    struct compositor_data user_data;
 } winIVRCompositor_IVRCompositor_013;
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_013_SetTrackingSpace, 8)
@@ -2731,7 +2740,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_013_Submit, 28)
 EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_013_Submit(winIVRCompositor_IVRCompositor_013 *_this, EVREye eEye, Texture_t * pTexture, VRTextureBounds_t * pBounds, EVRSubmitFlags nSubmitFlags)
 {
     TRACE("%p\n", _this);
-    return ivrcompositor_submit(cppIVRCompositor_IVRCompositor_013_Submit, _this->linux_side, eEye, pTexture, pBounds, nSubmitFlags);
+    return ivrcompositor_submit(cppIVRCompositor_IVRCompositor_013_Submit, _this->linux_side, eEye, pTexture, pBounds, nSubmitFlags, &_this->user_data);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_013_ClearLastSubmittedFrame, 4)
@@ -2745,7 +2754,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_013_PostPresentHandoff, 4
 void __thiscall winIVRCompositor_IVRCompositor_013_PostPresentHandoff(winIVRCompositor_IVRCompositor_013 *_this)
 {
     TRACE("%p\n", _this);
-    cppIVRCompositor_IVRCompositor_013_PostPresentHandoff(_this->linux_side);
+    ivrcompositor_post_present_handoff(cppIVRCompositor_IVRCompositor_013_PostPresentHandoff, _this->linux_side, &_this->user_data);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_013_GetFrameTiming, 16)
@@ -2921,7 +2930,7 @@ void __asm_dummy_vtables(void) {
 
 winIVRCompositor_IVRCompositor_013 *create_winIVRCompositor_IVRCompositor_013(void *linux_side)
 {
-    winIVRCompositor_IVRCompositor_013 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winIVRCompositor_IVRCompositor_013));
+    winIVRCompositor_IVRCompositor_013 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRCompositor_IVRCompositor_013));
     TRACE("-> %p\n", r);
     r->vtable = &winIVRCompositor_IVRCompositor_013_vtable;
     r->linux_side = linux_side;
@@ -2933,6 +2942,7 @@ winIVRCompositor_IVRCompositor_013 *create_winIVRCompositor_IVRCompositor_013(vo
 typedef struct __winIVRCompositor_IVRCompositor_012 {
     vtable_ptr *vtable;
     void *linux_side;
+    struct compositor_data user_data;
 } winIVRCompositor_IVRCompositor_012;
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_012_SetTrackingSpace, 8)
@@ -2974,7 +2984,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_012_Submit, 28)
 EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_012_Submit(winIVRCompositor_IVRCompositor_012 *_this, EVREye eEye, Texture_t * pTexture, VRTextureBounds_t * pBounds, EVRSubmitFlags nSubmitFlags)
 {
     TRACE("%p\n", _this);
-    return ivrcompositor_submit(cppIVRCompositor_IVRCompositor_012_Submit, _this->linux_side, eEye, pTexture, pBounds, nSubmitFlags);
+    return ivrcompositor_submit(cppIVRCompositor_IVRCompositor_012_Submit, _this->linux_side, eEye, pTexture, pBounds, nSubmitFlags, &_this->user_data);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_012_ClearLastSubmittedFrame, 4)
@@ -2988,7 +2998,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_012_PostPresentHandoff, 4
 void __thiscall winIVRCompositor_IVRCompositor_012_PostPresentHandoff(winIVRCompositor_IVRCompositor_012 *_this)
 {
     TRACE("%p\n", _this);
-    cppIVRCompositor_IVRCompositor_012_PostPresentHandoff(_this->linux_side);
+    ivrcompositor_post_present_handoff(cppIVRCompositor_IVRCompositor_012_PostPresentHandoff, _this->linux_side, &_this->user_data);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_012_GetFrameTiming, 16)
@@ -3156,7 +3166,7 @@ void __asm_dummy_vtables(void) {
 
 winIVRCompositor_IVRCompositor_012 *create_winIVRCompositor_IVRCompositor_012(void *linux_side)
 {
-    winIVRCompositor_IVRCompositor_012 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winIVRCompositor_IVRCompositor_012));
+    winIVRCompositor_IVRCompositor_012 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRCompositor_IVRCompositor_012));
     TRACE("-> %p\n", r);
     r->vtable = &winIVRCompositor_IVRCompositor_012_vtable;
     r->linux_side = linux_side;
@@ -3168,6 +3178,7 @@ winIVRCompositor_IVRCompositor_012 *create_winIVRCompositor_IVRCompositor_012(vo
 typedef struct __winIVRCompositor_IVRCompositor_011 {
     vtable_ptr *vtable;
     void *linux_side;
+    struct compositor_data user_data;
 } winIVRCompositor_IVRCompositor_011;
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_011_SetTrackingSpace, 8)
@@ -3202,7 +3213,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_011_Submit, 28)
 EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_011_Submit(winIVRCompositor_IVRCompositor_011 *_this, EVREye eEye, Texture_t * pTexture, VRTextureBounds_t * pBounds, EVRSubmitFlags nSubmitFlags)
 {
     TRACE("%p\n", _this);
-    return ivrcompositor_submit(cppIVRCompositor_IVRCompositor_011_Submit, _this->linux_side, eEye, pTexture, pBounds, nSubmitFlags);
+    return ivrcompositor_submit(cppIVRCompositor_IVRCompositor_011_Submit, _this->linux_side, eEye, pTexture, pBounds, nSubmitFlags, &_this->user_data);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_011_ClearLastSubmittedFrame, 4)
@@ -3216,7 +3227,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_011_PostPresentHandoff, 4
 void __thiscall winIVRCompositor_IVRCompositor_011_PostPresentHandoff(winIVRCompositor_IVRCompositor_011 *_this)
 {
     TRACE("%p\n", _this);
-    cppIVRCompositor_IVRCompositor_011_PostPresentHandoff(_this->linux_side);
+    ivrcompositor_post_present_handoff(cppIVRCompositor_IVRCompositor_011_PostPresentHandoff, _this->linux_side, &_this->user_data);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_011_GetFrameTiming, 16)
@@ -3375,7 +3386,7 @@ void __asm_dummy_vtables(void) {
 
 winIVRCompositor_IVRCompositor_011 *create_winIVRCompositor_IVRCompositor_011(void *linux_side)
 {
-    winIVRCompositor_IVRCompositor_011 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winIVRCompositor_IVRCompositor_011));
+    winIVRCompositor_IVRCompositor_011 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRCompositor_IVRCompositor_011));
     TRACE("-> %p\n", r);
     r->vtable = &winIVRCompositor_IVRCompositor_011_vtable;
     r->linux_side = linux_side;
@@ -3387,6 +3398,7 @@ winIVRCompositor_IVRCompositor_011 *create_winIVRCompositor_IVRCompositor_011(vo
 typedef struct __winIVRCompositor_IVRCompositor_010 {
     vtable_ptr *vtable;
     void *linux_side;
+    struct compositor_data user_data;
 } winIVRCompositor_IVRCompositor_010;
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_010_SetTrackingSpace, 8)
@@ -3421,7 +3433,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_010_Submit, 28)
 EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_010_Submit(winIVRCompositor_IVRCompositor_010 *_this, EVREye eEye, Texture_t * pTexture, VRTextureBounds_t * pBounds, EVRSubmitFlags nSubmitFlags)
 {
     TRACE("%p\n", _this);
-    return ivrcompositor_submit(cppIVRCompositor_IVRCompositor_010_Submit, _this->linux_side, eEye, pTexture, pBounds, nSubmitFlags);
+    return ivrcompositor_submit(cppIVRCompositor_IVRCompositor_010_Submit, _this->linux_side, eEye, pTexture, pBounds, nSubmitFlags, &_this->user_data);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_010_ClearLastSubmittedFrame, 4)
@@ -3435,7 +3447,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_010_PostPresentHandoff, 4
 void __thiscall winIVRCompositor_IVRCompositor_010_PostPresentHandoff(winIVRCompositor_IVRCompositor_010 *_this)
 {
     TRACE("%p\n", _this);
-    cppIVRCompositor_IVRCompositor_010_PostPresentHandoff(_this->linux_side);
+    ivrcompositor_post_present_handoff(cppIVRCompositor_IVRCompositor_010_PostPresentHandoff, _this->linux_side, &_this->user_data);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_010_GetFrameTiming, 16)
@@ -3594,7 +3606,7 @@ void __asm_dummy_vtables(void) {
 
 winIVRCompositor_IVRCompositor_010 *create_winIVRCompositor_IVRCompositor_010(void *linux_side)
 {
-    winIVRCompositor_IVRCompositor_010 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winIVRCompositor_IVRCompositor_010));
+    winIVRCompositor_IVRCompositor_010 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRCompositor_IVRCompositor_010));
     TRACE("-> %p\n", r);
     r->vtable = &winIVRCompositor_IVRCompositor_010_vtable;
     r->linux_side = linux_side;
@@ -3606,6 +3618,7 @@ winIVRCompositor_IVRCompositor_010 *create_winIVRCompositor_IVRCompositor_010(vo
 typedef struct __winIVRCompositor_IVRCompositor_009 {
     vtable_ptr *vtable;
     void *linux_side;
+    struct compositor_data user_data;
 } winIVRCompositor_IVRCompositor_009;
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_009_SetTrackingSpace, 8)
@@ -3640,7 +3653,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_009_Submit, 28)
 EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_009_Submit(winIVRCompositor_IVRCompositor_009 *_this, EVREye eEye, Texture_t * pTexture, VRTextureBounds_t * pBounds, EVRSubmitFlags nSubmitFlags)
 {
     TRACE("%p\n", _this);
-    return ivrcompositor_submit(cppIVRCompositor_IVRCompositor_009_Submit, _this->linux_side, eEye, pTexture, pBounds, nSubmitFlags);
+    return ivrcompositor_submit(cppIVRCompositor_IVRCompositor_009_Submit, _this->linux_side, eEye, pTexture, pBounds, nSubmitFlags, &_this->user_data);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_009_ClearLastSubmittedFrame, 4)
@@ -3654,7 +3667,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_009_PostPresentHandoff, 4
 void __thiscall winIVRCompositor_IVRCompositor_009_PostPresentHandoff(winIVRCompositor_IVRCompositor_009 *_this)
 {
     TRACE("%p\n", _this);
-    cppIVRCompositor_IVRCompositor_009_PostPresentHandoff(_this->linux_side);
+    ivrcompositor_post_present_handoff(cppIVRCompositor_IVRCompositor_009_PostPresentHandoff, _this->linux_side, &_this->user_data);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_009_GetFrameTiming, 16)
@@ -3813,7 +3826,7 @@ void __asm_dummy_vtables(void) {
 
 winIVRCompositor_IVRCompositor_009 *create_winIVRCompositor_IVRCompositor_009(void *linux_side)
 {
-    winIVRCompositor_IVRCompositor_009 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winIVRCompositor_IVRCompositor_009));
+    winIVRCompositor_IVRCompositor_009 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRCompositor_IVRCompositor_009));
     TRACE("-> %p\n", r);
     r->vtable = &winIVRCompositor_IVRCompositor_009_vtable;
     r->linux_side = linux_side;
@@ -3825,6 +3838,7 @@ winIVRCompositor_IVRCompositor_009 *create_winIVRCompositor_IVRCompositor_009(vo
 typedef struct __winIVRCompositor_IVRCompositor_008 {
     vtable_ptr *vtable;
     void *linux_side;
+    struct compositor_data user_data;
 } winIVRCompositor_IVRCompositor_008;
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_008_GetLastError, 16)
@@ -3873,7 +3887,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_008_Submit, 32)
 VRCompositorError __thiscall winIVRCompositor_IVRCompositor_008_Submit(winIVRCompositor_IVRCompositor_008 *_this, Hmd_Eye eEye, GraphicsAPIConvention eTextureType, void * pTexture, VRTextureBounds_t * pBounds, VRSubmitFlags_t nSubmitFlags)
 {
     TRACE("%p\n", _this);
-    return ivrcompositor_008_submit(cppIVRCompositor_IVRCompositor_008_Submit, _this->linux_side, eEye, eTextureType, pTexture, pBounds, nSubmitFlags);
+    return ivrcompositor_008_submit(cppIVRCompositor_IVRCompositor_008_Submit, _this->linux_side, eEye, eTextureType, pTexture, pBounds, nSubmitFlags, &_this->user_data);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_008_ClearLastSubmittedFrame, 4)
@@ -4048,7 +4062,7 @@ void __asm_dummy_vtables(void) {
 
 winIVRCompositor_IVRCompositor_008 *create_winIVRCompositor_IVRCompositor_008(void *linux_side)
 {
-    winIVRCompositor_IVRCompositor_008 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winIVRCompositor_IVRCompositor_008));
+    winIVRCompositor_IVRCompositor_008 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRCompositor_IVRCompositor_008));
     TRACE("-> %p\n", r);
     r->vtable = &winIVRCompositor_IVRCompositor_008_vtable;
     r->linux_side = linux_side;
@@ -4060,6 +4074,7 @@ winIVRCompositor_IVRCompositor_008 *create_winIVRCompositor_IVRCompositor_008(vo
 typedef struct __winIVRCompositor_IVRCompositor_007 {
     vtable_ptr *vtable;
     void *linux_side;
+    struct compositor_data user_data;
 } winIVRCompositor_IVRCompositor_007;
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_007_GetLastError, 16)
@@ -4108,7 +4123,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_007_Submit, 28)
 VRCompositorError __thiscall winIVRCompositor_IVRCompositor_007_Submit(winIVRCompositor_IVRCompositor_007 *_this, Hmd_Eye eEye, GraphicsAPIConvention eTextureType, void * pTexture, VRTextureBounds_t * pBounds)
 {
     TRACE("%p\n", _this);
-    return ivrcompositor_007_submit(cppIVRCompositor_IVRCompositor_007_Submit, _this->linux_side, eEye, eTextureType, pTexture, pBounds);
+    return ivrcompositor_007_submit(cppIVRCompositor_IVRCompositor_007_Submit, _this->linux_side, eEye, eTextureType, pTexture, pBounds, &_this->user_data);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_007_ClearLastSubmittedFrame, 4)
@@ -4227,7 +4242,7 @@ void __asm_dummy_vtables(void) {
 
 winIVRCompositor_IVRCompositor_007 *create_winIVRCompositor_IVRCompositor_007(void *linux_side)
 {
-    winIVRCompositor_IVRCompositor_007 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winIVRCompositor_IVRCompositor_007));
+    winIVRCompositor_IVRCompositor_007 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRCompositor_IVRCompositor_007));
     TRACE("-> %p\n", r);
     r->vtable = &winIVRCompositor_IVRCompositor_007_vtable;
     r->linux_side = linux_side;
@@ -4239,6 +4254,7 @@ winIVRCompositor_IVRCompositor_007 *create_winIVRCompositor_IVRCompositor_007(vo
 typedef struct __winIVRCompositor_IVRCompositor_006 {
     vtable_ptr *vtable;
     void *linux_side;
+    struct compositor_data user_data;
 } winIVRCompositor_IVRCompositor_006;
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_006_GetLastError, 16)
@@ -4294,7 +4310,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_006_Submit, 24)
 VRCompositorError __thiscall winIVRCompositor_IVRCompositor_006_Submit(winIVRCompositor_IVRCompositor_006 *_this, Hmd_Eye eEye, void * pTexture, VRTextureBounds_t * pBounds)
 {
     TRACE("%p\n", _this);
-    return ivrcompositor_006_submit(cppIVRCompositor_IVRCompositor_006_Submit, _this->linux_side, eEye, pTexture, pBounds);
+    return ivrcompositor_006_submit(cppIVRCompositor_IVRCompositor_006_Submit, _this->linux_side, eEye, pTexture, pBounds, &_this->user_data);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_006_ClearLastSubmittedFrame, 4)
@@ -4414,7 +4430,7 @@ void __asm_dummy_vtables(void) {
 
 winIVRCompositor_IVRCompositor_006 *create_winIVRCompositor_IVRCompositor_006(void *linux_side)
 {
-    winIVRCompositor_IVRCompositor_006 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winIVRCompositor_IVRCompositor_006));
+    winIVRCompositor_IVRCompositor_006 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRCompositor_IVRCompositor_006));
     TRACE("-> %p\n", r);
     r->vtable = &winIVRCompositor_IVRCompositor_006_vtable;
     r->linux_side = linux_side;
@@ -4426,6 +4442,7 @@ winIVRCompositor_IVRCompositor_006 *create_winIVRCompositor_IVRCompositor_006(vo
 typedef struct __winIVRCompositor_IVRCompositor_005 {
     vtable_ptr *vtable;
     void *linux_side;
+    struct compositor_data user_data;
 } winIVRCompositor_IVRCompositor_005;
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_005_GetLastError, 16)
@@ -4481,7 +4498,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_005_Submit, 24)
 void __thiscall winIVRCompositor_IVRCompositor_005_Submit(winIVRCompositor_IVRCompositor_005 *_this, Hmd_Eye eEye, void * pTexture, Compositor_TextureBounds * pBounds)
 {
     TRACE("%p\n", _this);
-    ivrcompositor_005_submit(cppIVRCompositor_IVRCompositor_005_Submit, _this->linux_side, eEye, pTexture, pBounds);
+    ivrcompositor_005_submit(cppIVRCompositor_IVRCompositor_005_Submit, _this->linux_side, eEye, pTexture, pBounds, &_this->user_data);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_005_ClearLastSubmittedFrame, 4)
@@ -4633,7 +4650,7 @@ void __asm_dummy_vtables(void) {
 
 winIVRCompositor_IVRCompositor_005 *create_winIVRCompositor_IVRCompositor_005(void *linux_side)
 {
-    winIVRCompositor_IVRCompositor_005 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winIVRCompositor_IVRCompositor_005));
+    winIVRCompositor_IVRCompositor_005 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRCompositor_IVRCompositor_005));
     TRACE("-> %p\n", r);
     r->vtable = &winIVRCompositor_IVRCompositor_005_vtable;
     r->linux_side = linux_side;

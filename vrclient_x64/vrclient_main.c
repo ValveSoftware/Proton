@@ -189,7 +189,8 @@ static CDECL void d3d11_texture_callback(unsigned int gl_texture, const void *da
 
 void ivrcompositor_005_submit(
         void (*cpp_func)(void *, Hmd_Eye, void *, Compositor_TextureBounds *),
-        void *linux_side, Hmd_Eye eye, void *texture, Compositor_TextureBounds *bounds)
+        void *linux_side, Hmd_Eye eye, void *texture, Compositor_TextureBounds *bounds,
+        struct compositor_data *user_data)
 {
     TRACE("%p, %#x, %p, %p\n", linux_side, eye, texture, bounds);
 
@@ -198,7 +199,8 @@ void ivrcompositor_005_submit(
 
 VRCompositorError ivrcompositor_006_submit(
         VRCompositorError (*cpp_func)(void *, Hmd_Eye, void *, VRTextureBounds_t *),
-        void *linux_side, Hmd_Eye eye, void *texture, VRTextureBounds_t *bounds)
+        void *linux_side, Hmd_Eye eye, void *texture, VRTextureBounds_t *bounds,
+        struct compositor_data *user_data)
 {
     TRACE("%p, %#x, %p, %p\n", linux_side, eye, texture, bounds);
 
@@ -207,7 +209,8 @@ VRCompositorError ivrcompositor_006_submit(
 
 VRCompositorError ivrcompositor_007_submit(
         VRCompositorError (*cpp_func)(void *, Hmd_Eye, GraphicsAPIConvention, void *, VRTextureBounds_t *),
-        void *linux_side, Hmd_Eye eye, GraphicsAPIConvention api, void *texture, VRTextureBounds_t *bounds)
+        void *linux_side, Hmd_Eye eye, GraphicsAPIConvention api, void *texture, VRTextureBounds_t *bounds,
+        struct compositor_data *user_data)
 {
     TRACE("%p, %#x, %#x, %p, %p\n", linux_side, eye, api, texture, bounds);
 
@@ -221,7 +224,8 @@ VRCompositorError ivrcompositor_008_submit(
         VRCompositorError (*cpp_func)(void *, Hmd_Eye, GraphicsAPIConvention, void *,
         VRTextureBounds_t *, VRSubmitFlags_t),
         void *linux_side, Hmd_Eye eye, GraphicsAPIConvention api, void *texture,
-        VRTextureBounds_t *bounds, VRSubmitFlags_t flags)
+        VRTextureBounds_t *bounds, VRSubmitFlags_t flags,
+        struct compositor_data *user_data)
 {
     TRACE("%p, %#x, %#x, %p, %p, %#x\n", linux_side, eye, api, texture, bounds, flags);
 
@@ -233,11 +237,14 @@ VRCompositorError ivrcompositor_008_submit(
 
 EVRCompositorError ivrcompositor_submit(
         EVRCompositorError (*cpp_func)(void *, EVREye, Texture_t *, VRTextureBounds_t *, EVRSubmitFlags),
-        void *linux_side, EVREye eye, Texture_t *texture, VRTextureBounds_t *bounds, EVRSubmitFlags flags)
+        void *linux_side, EVREye eye, Texture_t *texture, VRTextureBounds_t *bounds, EVRSubmitFlags flags,
+        struct compositor_data *user_data)
 {
     IWineD3D11Texture2D *wine_texture;
+    IWineD3D11Device *wined3d_device;
     struct submit_data submit_data;
     IUnknown *texture_iface;
+    ID3D11Device *device;
     HRESULT hr;
 
     TRACE("%p, %#x, %p, %p, %#x\n", linux_side, eye, texture, bounds, flags);
@@ -262,6 +269,28 @@ EVRCompositorError ivrcompositor_submit(
                 return cpp_func(linux_side, eye, texture, bounds, flags);
             }
 
+            wine_texture->lpVtbl->GetDevice(wine_texture, &device);
+            if (user_data->d3d11_device != device)
+            {
+                if (user_data->d3d11_device)
+                    FIXME("Previous submit was from different D3D11 device.\n");
+
+                user_data->d3d11_device = device;
+
+                if (SUCCEEDED(hr = device->lpVtbl->QueryInterface(device,
+                        &IID_IWineD3D11Device, (void **)&wined3d_device)))
+                {
+                    user_data->wined3d_device = wined3d_device;
+                    wined3d_device->lpVtbl->Release(wined3d_device);
+                }
+                else
+                {
+                    ERR("Failed to get device, hr %#x.\n", hr);
+                    user_data->wined3d_device = NULL;
+                }
+            }
+            device->lpVtbl->Release(device);
+
             submit_data.linux_side = linux_side;
             submit_data.submit = cpp_func;
             submit_data.eye = eye;
@@ -277,4 +306,41 @@ EVRCompositorError ivrcompositor_submit(
         default:
             return cpp_func(linux_side, eye, texture, bounds, flags);
     }
+}
+
+struct post_present_handoff_data
+{
+    void *linux_side;
+    void (*post_present_handoff)(void *linux_side);
+};
+
+static CDECL void d3d11_post_present_handoff_callback(const void *data, unsigned int data_size)
+{
+    const struct post_present_handoff_data *callback_data = data;
+
+    TRACE("data {%p, %u}\n", data, data_size);
+
+    callback_data->post_present_handoff(callback_data->linux_side);
+}
+
+void ivrcompositor_post_present_handoff(void (*cpp_func)(void *),
+        void *linux_side, struct compositor_data *user_data)
+{
+    struct post_present_handoff_data data;
+    IWineD3D11Device *wined3d_device;
+
+    TRACE("%p\n", linux_side);
+
+    if ((wined3d_device = user_data->wined3d_device))
+    {
+        TRACE("wined3d device %p\n", wined3d_device);
+
+        data.linux_side = linux_side;
+        data.post_present_handoff = cpp_func;
+        wined3d_device->lpVtbl->run_on_command_stream(wined3d_device,
+                d3d11_post_present_handoff_callback, &data, sizeof(data));
+        return;
+    }
+
+    cpp_func(linux_side);
 }

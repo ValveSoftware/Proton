@@ -52,7 +52,7 @@ void __asm_dummy_vtables(void) {
 
 winIVRResources_IVRResources_001 *create_winIVRResources_IVRResources_001(void *linux_side)
 {
-    winIVRResources_IVRResources_001 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winIVRResources_IVRResources_001));
+    winIVRResources_IVRResources_001 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRResources_IVRResources_001));
     TRACE("-> %p\n", r);
     r->vtable = &winIVRResources_IVRResources_001_vtable;
     r->linux_side = linux_side;

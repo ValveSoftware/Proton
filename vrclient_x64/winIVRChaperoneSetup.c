@@ -196,7 +196,7 @@ void __asm_dummy_vtables(void) {
 
 winIVRChaperoneSetup_IVRChaperoneSetup_005 *create_winIVRChaperoneSetup_IVRChaperoneSetup_005(void *linux_side)
 {
-    winIVRChaperoneSetup_IVRChaperoneSetup_005 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winIVRChaperoneSetup_IVRChaperoneSetup_005));
+    winIVRChaperoneSetup_IVRChaperoneSetup_005 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRChaperoneSetup_IVRChaperoneSetup_005));
     TRACE("-> %p\n", r);
     r->vtable = &winIVRChaperoneSetup_IVRChaperoneSetup_005_vtable;
     r->linux_side = linux_side;
@@ -351,7 +351,7 @@ void __asm_dummy_vtables(void) {
 
 winIVRChaperoneSetup_IVRChaperoneSetup_004 *create_winIVRChaperoneSetup_IVRChaperoneSetup_004(void *linux_side)
 {
-    winIVRChaperoneSetup_IVRChaperoneSetup_004 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winIVRChaperoneSetup_IVRChaperoneSetup_004));
+    winIVRChaperoneSetup_IVRChaperoneSetup_004 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRChaperoneSetup_IVRChaperoneSetup_004));
     TRACE("-> %p\n", r);
     r->vtable = &winIVRChaperoneSetup_IVRChaperoneSetup_004_vtable;
     r->linux_side = linux_side;
