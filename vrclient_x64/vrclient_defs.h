@@ -4,7 +4,6 @@ typedef char bool; /* 1 byte on modern visual studio c++ */
 /* enums */
 typedef int
         EVREye,
-        ETextureType,
         ETrackingUniverseOrigin,
         ETrackedDeviceClass,
         EDeviceActivityLevel,
@@ -15,13 +14,11 @@ typedef int
         EVREventType,
         EVRControllerAxisType,
         EVRFirmwareError,
-        EGraphicsAPIConvention,
         EVRInitError,
         EVRApplicationType,
         EVRButtonId,
         EVRRenderModelError,
         EVRCompositorError,
-        EVRSubmitFlags,
         EVRCompositorTimingMode,
         EVRApplicationError,
         EVRApplicationProperty,
@@ -48,7 +45,6 @@ typedef int
         EVRScreenshotPropertyFilenames,
         EVRScreenshotType,
         Hmd_Eye,
-        GraphicsAPIConvention,
         TrackingUniverseOrigin,
         TrackedDeviceClass,
         TrackedDeviceProperty,
@@ -78,8 +74,6 @@ typedef uint32_t PropertyTypeTag_t;
 /* never dereferenced */
 typedef struct VROverlayIntersectionParams_t VROverlayIntersectionParams_t;
 typedef struct VROverlayIntersectionResults_t VROverlayIntersectionResults_t;
-typedef struct VRTextureBounds_t VRTextureBounds_t;
-typedef struct Texture_t Texture_t;
 typedef struct RenderModel_ComponentState_t RenderModel_ComponentState_t;
 typedef struct RenderModel_ControllerMode_State_t RenderModel_ControllerMode_State_t;
 typedef struct RenderModel_t RenderModel_t;
@@ -95,7 +89,6 @@ typedef struct CameraVideoStreamFrameHeader_t CameraVideoStreamFrameHeader_t;
 typedef struct Compositor_OverlaySettings Compositor_OverlaySettings;
 typedef struct ChaperoneSoftBoundsInfo_t ChaperoneSoftBoundsInfo_t;
 typedef struct ChaperoneSeatedBoundsInfo_t ChaperoneSeatedBoundsInfo_t;
-typedef struct Compositor_TextureBounds Compositor_TextureBounds;
 typedef struct NotificationBitmap NotificationBitmap;
 typedef struct ComponentState_t ComponentState_t;
 typedef struct CameraVideoStreamFrame_t CameraVideoStreamFrame_t;
@@ -170,5 +163,65 @@ typedef struct HiddenAreaMesh_t
         const HmdVector2_t *pVertexData;
         uint32_t unTriangleCount;
 } HiddenAreaMesh_t;
+
+typedef enum EGraphicsAPIConvention
+{
+    API_DirectX = 0,
+    API_OpenGL = 1,
+} EGraphicsAPIConvention;
+
+typedef EGraphicsAPIConvention GraphicsAPIConvention;
+
+typedef struct VRTextureBounds_t
+{
+    float uMin, vMin;
+    float uMax, vMax;
+} VRTextureBounds_t;
+
+typedef VRTextureBounds_t Compositor_TextureBounds;
+
+typedef enum ETextureType
+{
+    TextureType_DirectX = 0, // Handle is an ID3D11Texture
+    TextureType_OpenGL = 1,  // Handle is an OpenGL texture name or an OpenGL render buffer name, depending on submit flags
+    TextureType_Vulkan = 2, // Handle is a pointer to a VRVulkanTextureData_t structure
+    TextureType_IOSurface = 3, // Handle is a macOS cross-process-sharable IOSurfaceRef
+    TextureType_DirectX12 = 4, // Handle is a pointer to a D3D12TextureData_t structure
+} ETextureType;
+
+typedef struct Texture_t
+{
+    void *handle;
+    ETextureType eType;
+    EColorSpace eColorSpace;
+} Texture_t;
+
+typedef enum EVRSubmitFlags
+{
+    // Simple render path. App submits rendered left and right eye images with no lens distortion correction applied.
+    Submit_Default = 0x00,
+
+    // App submits final left and right eye images with lens distortion already applied (lens distortion makes the images appear
+    // barrel distorted with chromatic aberration correction applied). The app would have used the data returned by
+    // vr::IVRSystem::ComputeDistortion() to apply the correct distortion to the rendered images before calling Submit().
+    Submit_LensDistortionAlreadyApplied = 0x01,
+
+    // If the texture pointer passed in is actually a renderbuffer (e.g. for MSAA in OpenGL) then set this flag.
+    Submit_GlRenderBuffer = 0x02,
+
+    // Do not use
+    Submit_Reserved = 0x04,
+
+    Submit_Screenshot = 0x04,
+    Submit_VulkanTexture = 0x04,
+
+    // Set to indicate that pTexture is a pointer to a VRTextureWithPose_t.
+    // This flag can be combined with Submit_TextureWithDepth to pass a VRTextureWithPoseAndDepth_t.
+    Submit_TextureWithPose = 0x08,
+
+    // Set to indicate that pTexture is a pointer to a VRTextureWithDepth_t.
+    // This flag can be combined with Submit_TextureWithPose to pass a VRTextureWithPoseAndDepth_t.
+    Submit_TextureWithDepth = 0x10,
+} EVRSubmitFlags;
 
 #endif
