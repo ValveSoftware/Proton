@@ -127,8 +127,20 @@ def ivrsystem_get_dxgi_output_info(cppname, method):
         2: "get_dxgi_output_info2"
     }.get(param_count, "unhandled_get_dxgi_output_info_method")
 
+def ivrcompositor_submit(cppname, method):
+    if "005" in cppname:
+        return "ivrcompositor_005_submit"
+    if "006" in cppname:
+        return "ivrcompositor_006_submit"
+    if "007" in cppname:
+        return "ivrcompositor_007_submit"
+    if "008" in cppname:
+        return "ivrcompositor_008_submit"
+    return "ivrcompositor_submit"
+
 method_overrides = [
-    ("IVRSystem", "GetDXGIOutputInfo", ivrsystem_get_dxgi_output_info)
+    ("IVRSystem", "GetDXGIOutputInfo", ivrsystem_get_dxgi_output_info),
+    ("IVRCompositor", "Submit", ivrcompositor_submit),
 ]
 
 def display_sdkver(s):

@@ -11,6 +11,7 @@
 #include "wine/debug.h"
 #include "wine/library.h"
 
+#include "vrclient_defs.h"
 #include "vrclient_private.h"
 
 WINE_DEFAULT_DEBUG_CHANNEL(vrclient);
@@ -145,4 +146,51 @@ void get_dxgi_output_info2(void *cpp_func, void *linux_side, int32_t *adapter_id
     TRACE("%p, %p\n", adapter_idx, output_idx);
     *adapter_idx = 0;
     *output_idx = 0;
+}
+
+void ivrcompositor_005_submit(
+        void (*cpp_func)(void *, Hmd_Eye, void *, Compositor_TextureBounds *),
+        void *linux_side, Hmd_Eye eye, void *texture, Compositor_TextureBounds *bounds)
+{
+    TRACE("%p, %#x, %p, %p\n", linux_side, eye, texture, bounds);
+
+    return cpp_func(linux_side, eye, texture, bounds);
+}
+
+VRCompositorError ivrcompositor_006_submit(
+        VRCompositorError (*cpp_func)(void *, Hmd_Eye, void *, VRTextureBounds_t *),
+        void *linux_side, Hmd_Eye eye, void *texture, VRTextureBounds_t *bounds)
+{
+    TRACE("%p, %#x, %p, %p\n", linux_side, eye, texture, bounds);
+
+    return cpp_func(linux_side, eye, texture, bounds);
+}
+
+VRCompositorError ivrcompositor_007_submit(
+        VRCompositorError (*cpp_func)(void *, Hmd_Eye, GraphicsAPIConvention, void *, VRTextureBounds_t *),
+        void *linux_side, Hmd_Eye eye, GraphicsAPIConvention api, void *texture, VRTextureBounds_t *bounds)
+{
+    TRACE("%p, %#x, %#x, %p, %p\n", linux_side, eye, api, texture, bounds);
+
+    return cpp_func(linux_side, eye, api, texture, bounds);
+}
+
+VRCompositorError ivrcompositor_008_submit(
+        VRCompositorError (*cpp_func)(void *, Hmd_Eye, GraphicsAPIConvention, void *,
+        VRTextureBounds_t *, VRSubmitFlags_t),
+        void *linux_side, Hmd_Eye eye, GraphicsAPIConvention api, void *texture,
+        VRTextureBounds_t *bounds, VRSubmitFlags_t flags)
+{
+    TRACE("%p, %#x, %#x, %p, %p, %#x\n", linux_side, eye, api, texture, bounds, flags);
+
+    return cpp_func(linux_side, eye, api, texture, bounds, flags);
+}
+
+EVRCompositorError ivrcompositor_submit(
+        EVRCompositorError (*cpp_func)(void *, EVREye, Texture_t *, VRTextureBounds_t *, EVRSubmitFlags),
+        void *linux_side, EVREye eye, Texture_t *texture, VRTextureBounds_t *bounds, EVRSubmitFlags flags)
+{
+    TRACE("%p, %#x, %p, %p, %#x\n", linux_side, eye, texture, bounds, flags);
+
+    return cpp_func(linux_side, eye, texture, bounds, flags);
 }
