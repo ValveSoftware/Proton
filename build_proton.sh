@@ -16,6 +16,7 @@ usage()
 set -e
 
 JOBS=-j5
+PLATFORM=$(uname)
 
 #./wine/ <-- wine source
 #./build/ <-- built files
@@ -238,7 +239,6 @@ if [ x"$RELEASE_BUILD" == x ]; then
     set +e; CCACHE=`which ccache`; set -e
 fi
 
-PLATFORM=$(uname)
 if [ "$PLATFORM" == "Darwin" ]; then
     CC="$CCACHE clang"
     AMD64_WRAPPER=""
