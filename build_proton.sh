@@ -219,7 +219,6 @@ if [ "$BUILD_COMPONENTS" == "all" ]; then
     PACKAGE=true
 fi
 
-RELEASE_BUILD=1
 INSTALL_PROGRAM_FLAGS=''
 for param in "$@"; do
     if [ "$param" == "--release" ]; then
