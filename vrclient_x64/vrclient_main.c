@@ -138,6 +138,31 @@ void *CDECL VRClientCoreFactory(const char *name, int *return_code)
     return create_win_interface(name, vrclient_VRClientCoreFactory(name, return_code));
 }
 
+static VkDevice_T *(WINAPI *get_native_VkDevice)(VkDevice_T *);
+static VkInstance_T *(WINAPI *get_native_VkInstance)(VkInstance_T *);
+static VkPhysicalDevice_T *(WINAPI *get_native_VkPhysicalDevice)(VkPhysicalDevice_T *);
+static VkQueue_T *(WINAPI *get_native_VkQueue)(VkQueue_T *);
+
+static void load_vk_unwrappers(void)
+{
+    static HMODULE h = NULL;
+
+    if(h)
+        /* already loaded */
+        return;
+
+    h = LoadLibraryA("winevulkan");
+    if(!h){
+        ERR("unable to load winevulkan\n");
+        return;
+    }
+
+    get_native_VkDevice = (void*)GetProcAddress(h, "__wine_get_native_VkDevice");
+    get_native_VkInstance = (void*)GetProcAddress(h, "__wine_get_native_VkInstance");
+    get_native_VkPhysicalDevice = (void*)GetProcAddress(h, "__wine_get_native_VkPhysicalDevice");
+    get_native_VkQueue = (void*)GetProcAddress(h, "__wine_get_native_VkQueue");
+}
+
 void get_dxgi_output_info(void *cpp_func, void *linux_side,
         int32_t *adapter_idx, unsigned int version)
 {
@@ -325,6 +350,34 @@ EVRCompositorError ivrcompositor_submit(
             wine_texture->lpVtbl->Release(wine_texture);
 
             return 0;
+
+        case TextureType_Vulkan:
+        {
+            struct VRVulkanTextureData_t our_vkdata, *their_vkdata;
+            Texture_t our_texture;
+
+            if (flags & (Submit_TextureWithPose | Submit_TextureWithDepth))
+            {
+                FIXME("Submit with pose or depth is not supported.\n");
+                flags &= ~(Submit_TextureWithPose | Submit_TextureWithDepth);
+            }
+
+            load_vk_unwrappers();
+
+            their_vkdata = (struct VRVulkanTextureData_t*)texture->handle;
+
+            our_vkdata = *their_vkdata;
+            our_vkdata.m_pDevice = get_native_VkDevice(our_vkdata.m_pDevice);
+            our_vkdata.m_pPhysicalDevice = get_native_VkPhysicalDevice(our_vkdata.m_pPhysicalDevice);
+            our_vkdata.m_pInstance = get_native_VkInstance(our_vkdata.m_pInstance);
+            our_vkdata.m_pQueue = get_native_VkQueue(our_vkdata.m_pQueue);
+
+            our_texture = *texture;
+            our_texture.handle = &our_vkdata;
+
+            return cpp_func(linux_side, eye, &our_texture, bounds, flags);
+        }
+
         default:
             return cpp_func(linux_side, eye, texture, bounds, flags);
     }

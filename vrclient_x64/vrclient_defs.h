@@ -188,6 +188,17 @@ typedef enum ETextureType
     TextureType_DirectX12 = 4, // Handle is a pointer to a D3D12TextureData_t structure
 } ETextureType;
 
+struct VRVulkanTextureData_t
+{
+    uint64_t m_nImage; // VkImage
+    VkDevice_T *m_pDevice;
+    VkPhysicalDevice_T *m_pPhysicalDevice;
+    VkInstance_T *m_pInstance;
+    VkQueue_T *m_pQueue;
+    uint32_t m_nQueueFamilyIndex;
+    uint32_t m_nWidth, m_nHeight, m_nFormat, m_nSampleCount;
+};
+
 typedef struct Texture_t
 {
     void *handle;
