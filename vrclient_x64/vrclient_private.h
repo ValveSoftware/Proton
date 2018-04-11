@@ -80,6 +80,11 @@ EVRCompositorError ivrcompositor_wait_get_poses(
         void *linux_side, TrackedDevicePose_t *render_poses, uint32_t render_pose_count,
         TrackedDevicePose_t *game_poses, uint32_t game_pose_count,
         unsigned int version, struct compositor_data *user_data);
+
+uint32_t ivrcompositor_get_vulkan_device_extensions_required(
+        uint32_t (*cpp_func)(void *, VkPhysicalDevice_T *, char *, uint32_t),
+        void *linux_side, VkPhysicalDevice_T *phys_dev, char *value, uint32_t bufsize,
+        unsigned int version, struct compositor_data *user_data);
 #endif  /* __cplusplus */
 
 #define TRACE WINE_TRACE

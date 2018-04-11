@@ -309,7 +309,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_022_GetVulkanDeviceExtens
 uint32_t __thiscall winIVRCompositor_IVRCompositor_022_GetVulkanDeviceExtensionsRequired(winIVRCompositor_IVRCompositor_022 *_this, VkPhysicalDevice_T * pPhysicalDevice, char * pchValue, uint32_t unBufferSize)
 {
     TRACE("%p\n", _this);
-    return cppIVRCompositor_IVRCompositor_022_GetVulkanDeviceExtensionsRequired(_this->linux_side, pPhysicalDevice, pchValue, unBufferSize);
+    return ivrcompositor_get_vulkan_device_extensions_required(cppIVRCompositor_IVRCompositor_022_GetVulkanDeviceExtensionsRequired, _this->linux_side, pPhysicalDevice, pchValue, unBufferSize, 22, &_this->user_data);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_022_SetExplicitTimingMode, 8)
@@ -682,7 +682,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_021_GetVulkanDeviceExtens
 uint32_t __thiscall winIVRCompositor_IVRCompositor_021_GetVulkanDeviceExtensionsRequired(winIVRCompositor_IVRCompositor_021 *_this, VkPhysicalDevice_T * pPhysicalDevice, char * pchValue, uint32_t unBufferSize)
 {
     TRACE("%p\n", _this);
-    return cppIVRCompositor_IVRCompositor_021_GetVulkanDeviceExtensionsRequired(_this->linux_side, pPhysicalDevice, pchValue, unBufferSize);
+    return ivrcompositor_get_vulkan_device_extensions_required(cppIVRCompositor_IVRCompositor_021_GetVulkanDeviceExtensionsRequired, _this->linux_side, pPhysicalDevice, pchValue, unBufferSize, 21, &_this->user_data);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_021_SetExplicitTimingMode, 5)
@@ -1055,7 +1055,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_020_GetVulkanDeviceExtens
 uint32_t __thiscall winIVRCompositor_IVRCompositor_020_GetVulkanDeviceExtensionsRequired(winIVRCompositor_IVRCompositor_020 *_this, VkPhysicalDevice_T * pPhysicalDevice, char * pchValue, uint32_t unBufferSize)
 {
     TRACE("%p\n", _this);
-    return cppIVRCompositor_IVRCompositor_020_GetVulkanDeviceExtensionsRequired(_this->linux_side, pPhysicalDevice, pchValue, unBufferSize);
+    return ivrcompositor_get_vulkan_device_extensions_required(cppIVRCompositor_IVRCompositor_020_GetVulkanDeviceExtensionsRequired, _this->linux_side, pPhysicalDevice, pchValue, unBufferSize, 20, &_this->user_data);
 }
 
 extern vtable_ptr winIVRCompositor_IVRCompositor_020_vtable;
@@ -1405,7 +1405,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_019_GetVulkanDeviceExtens
 uint32_t __thiscall winIVRCompositor_IVRCompositor_019_GetVulkanDeviceExtensionsRequired(winIVRCompositor_IVRCompositor_019 *_this, VkPhysicalDevice_T * pPhysicalDevice, char * pchValue, uint32_t unBufferSize)
 {
     TRACE("%p\n", _this);
-    return cppIVRCompositor_IVRCompositor_019_GetVulkanDeviceExtensionsRequired(_this->linux_side, pPhysicalDevice, pchValue, unBufferSize);
+    return ivrcompositor_get_vulkan_device_extensions_required(cppIVRCompositor_IVRCompositor_019_GetVulkanDeviceExtensionsRequired, _this->linux_side, pPhysicalDevice, pchValue, unBufferSize, 19, &_this->user_data);
 }
 
 extern vtable_ptr winIVRCompositor_IVRCompositor_019_vtable;

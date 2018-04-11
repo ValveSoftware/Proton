@@ -485,3 +485,15 @@ EVRCompositorError ivrcompositor_wait_get_poses(
 
     return r;
 }
+
+uint32_t ivrcompositor_get_vulkan_device_extensions_required(
+        uint32_t (*cpp_func)(void *, VkPhysicalDevice_T *, char *, uint32_t),
+        void *linux_side, VkPhysicalDevice_T *phys_dev, char *value, uint32_t bufsize,
+        unsigned int version, struct compositor_data *user_data)
+{
+    load_vk_unwrappers();
+
+    phys_dev = get_native_VkPhysicalDevice(phys_dev);
+
+    return cpp_func(linux_side, phys_dev, value, bufsize);
+}

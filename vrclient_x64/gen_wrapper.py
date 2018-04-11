@@ -147,11 +147,15 @@ def ivrcompositor_wait_get_poses(cppname, method):
             return "ivrcompositor_wait_get_poses"
     return None
 
+def ivrcompositor_get_vulkan_device_extensions_required(cppname, method):
+    return "ivrcompositor_get_vulkan_device_extensions_required"
+
 method_overrides = [
     ("IVRSystem", "GetDXGIOutputInfo", ivrsystem_get_dxgi_output_info),
     ("IVRCompositor", "Submit", ivrcompositor_submit),
     ("IVRCompositor", "PostPresentHandoff", ivrcompositor_post_present_handoff),
     ("IVRCompositor", "WaitGetPoses", ivrcompositor_wait_get_poses),
+    ("IVRCompositor", "GetVulkanDeviceExtensionsRequired", ivrcompositor_get_vulkan_device_extensions_required),
 ]
 
 method_overrides_data = [
