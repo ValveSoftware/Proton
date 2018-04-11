@@ -85,7 +85,7 @@ DEFINE_THISCALL_WRAPPER(winIVRSystem_IVRSystem_019_GetOutputDevice, 24)
 void __thiscall winIVRSystem_IVRSystem_019_GetOutputDevice(winIVRSystem_IVRSystem_019 *_this, uint64_t * pnDevice, ETextureType textureType, VkInstance_T * pInstance)
 {
     TRACE("%p\n", _this);
-    cppIVRSystem_IVRSystem_019_GetOutputDevice(_this->linux_side, pnDevice, textureType, pInstance);
+    ivrsystem_get_output_device(cppIVRSystem_IVRSystem_019_GetOutputDevice, _this->linux_side, pnDevice, textureType, pInstance, 19);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRSystem_IVRSystem_019_IsDisplayOnDesktop, 4)
@@ -494,7 +494,7 @@ DEFINE_THISCALL_WRAPPER(winIVRSystem_IVRSystem_017_GetOutputDevice, 24)
 void __thiscall winIVRSystem_IVRSystem_017_GetOutputDevice(winIVRSystem_IVRSystem_017 *_this, uint64_t * pnDevice, ETextureType textureType, VkInstance_T * pInstance)
 {
     TRACE("%p\n", _this);
-    cppIVRSystem_IVRSystem_017_GetOutputDevice(_this->linux_side, pnDevice, textureType, pInstance);
+    ivrsystem_get_output_device(cppIVRSystem_IVRSystem_017_GetOutputDevice, _this->linux_side, pnDevice, textureType, pInstance, 17);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRSystem_IVRSystem_017_IsDisplayOnDesktop, 4)
@@ -887,7 +887,7 @@ DEFINE_THISCALL_WRAPPER(winIVRSystem_IVRSystem_016_GetOutputDevice, 16)
 void __thiscall winIVRSystem_IVRSystem_016_GetOutputDevice(winIVRSystem_IVRSystem_016 *_this, uint64_t * pnDevice, ETextureType textureType)
 {
     TRACE("%p\n", _this);
-    cppIVRSystem_IVRSystem_016_GetOutputDevice(_this->linux_side, pnDevice, textureType);
+    ivrsystem_016_get_output_device(cppIVRSystem_IVRSystem_016_GetOutputDevice, _this->linux_side, pnDevice, textureType, 16);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRSystem_IVRSystem_016_IsDisplayOnDesktop, 4)

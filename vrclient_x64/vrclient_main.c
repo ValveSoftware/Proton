@@ -141,6 +141,7 @@ void *CDECL VRClientCoreFactory(const char *name, int *return_code)
 static VkDevice_T *(WINAPI *get_native_VkDevice)(VkDevice_T *);
 static VkInstance_T *(WINAPI *get_native_VkInstance)(VkInstance_T *);
 static VkPhysicalDevice_T *(WINAPI *get_native_VkPhysicalDevice)(VkPhysicalDevice_T *);
+static VkPhysicalDevice_T *(WINAPI *get_wrapped_VkPhysicalDevice)(VkInstance_T *, VkPhysicalDevice_T *);
 static VkQueue_T *(WINAPI *get_native_VkQueue)(VkQueue_T *);
 
 static void load_vk_unwrappers(void)
@@ -160,6 +161,7 @@ static void load_vk_unwrappers(void)
     get_native_VkDevice = (void*)GetProcAddress(h, "__wine_get_native_VkDevice");
     get_native_VkInstance = (void*)GetProcAddress(h, "__wine_get_native_VkInstance");
     get_native_VkPhysicalDevice = (void*)GetProcAddress(h, "__wine_get_native_VkPhysicalDevice");
+    get_wrapped_VkPhysicalDevice = (void*)GetProcAddress(h, "__wine_get_wrapped_VkPhysicalDevice");
     get_native_VkQueue = (void*)GetProcAddress(h, "__wine_get_native_VkQueue");
 }
 
@@ -176,6 +178,41 @@ void get_dxgi_output_info2(void *cpp_func, void *linux_side,
     TRACE("%p, %p\n", adapter_idx, output_idx);
     *adapter_idx = 0;
     *output_idx = 0;
+}
+
+void ivrsystem_016_get_output_device(
+        void (*cpp_func)(void *, uint64_t *, ETextureType),
+        void *linux_side, uint64_t *out_device, ETextureType type,
+        unsigned int version)
+{
+    cpp_func(linux_side, out_device, type);
+}
+
+void ivrsystem_get_output_device(
+        void (*cpp_func)(void *, uint64_t *, ETextureType, VkInstance_T *),
+        void *linux_side, uint64_t *out_device, ETextureType type,
+        VkInstance_T *wrapped_instance, unsigned int version)
+{
+    switch(type){
+        case TextureType_Vulkan:
+        {
+            VkInstance_T *native_instance;
+
+            load_vk_unwrappers();
+
+            native_instance = get_native_VkInstance(wrapped_instance);
+
+            cpp_func(linux_side, out_device, type, native_instance);
+
+            *out_device = (uint64_t)(intptr_t)get_wrapped_VkPhysicalDevice(wrapped_instance,
+                    (VkPhysicalDevice_T *)(intptr_t)*out_device);
+
+            return;
+        }
+        default:
+            cpp_func(linux_side, out_device, type, wrapped_instance);
+            return;
+    }
 }
 
 struct submit_data

@@ -127,6 +127,12 @@ def ivrsystem_get_dxgi_output_info(cppname, method):
         2: "get_dxgi_output_info2"
     }.get(param_count, "unhandled_get_dxgi_output_info_method")
 
+def ivrsystem_get_output_device(cppname, method):
+    #introduced in 016, changed in 017
+    if "016" in cppname:
+        return "ivrsystem_016_get_output_device"
+    return "ivrsystem_get_output_device"
+
 def ivrcompositor_submit(cppname, method):
     if "005" in cppname:
         return "ivrcompositor_005_submit"
@@ -152,6 +158,7 @@ def ivrcompositor_get_vulkan_device_extensions_required(cppname, method):
 
 method_overrides = [
     ("IVRSystem", "GetDXGIOutputInfo", ivrsystem_get_dxgi_output_info),
+    ("IVRSystem", "GetOutputDevice", ivrsystem_get_output_device),
     ("IVRCompositor", "Submit", ivrcompositor_submit),
     ("IVRCompositor", "PostPresentHandoff", ivrcompositor_post_present_handoff),
     ("IVRCompositor", "WaitGetPoses", ivrcompositor_wait_get_poses),

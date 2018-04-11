@@ -48,6 +48,14 @@ void get_dxgi_output_info(void *cpp_func, void *linux_side,
         int32_t *adapter_idx, unsigned int version);
 void get_dxgi_output_info2(void *cpp_func, void *linux_side,
         int32_t *adapter_idx, int32_t *output_idx, unsigned int version);
+void ivrsystem_016_get_output_device(
+        void (*cpp_func)(void *, uint64_t *, ETextureType),
+        void *linux_side, uint64_t *out_device, ETextureType type,
+        unsigned int version);
+void ivrsystem_get_output_device(
+        void (*cpp_func)(void *, uint64_t *, ETextureType, VkInstance_T *),
+        void *linux_side, uint64_t *out_device, ETextureType type,
+        VkInstance_T *wrapped_instance, unsigned int version);
 
 void ivrcompositor_005_submit(
         void (*cpp_func)(void *, Hmd_Eye, void *, Compositor_TextureBounds *),
