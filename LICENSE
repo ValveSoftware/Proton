@@ -9,4 +9,4 @@ level contents of the Proton project.
 
 Proton uses a variety of other software, each of which is governed
 by its own license.  Those licenses are contained in a file named
-LICENSE at the top of each directory.
+LICENSE or COPYING in each directory.
