@@ -17,6 +17,9 @@
 #include "initguid.h"
 #include "wined3d-interop.h"
 
+#include "cppIVRCompositor_IVRCompositor_021.h"
+#include "cppIVRCompositor_IVRCompositor_022.h"
+
 WINE_DEFAULT_DEBUG_CHANNEL(vrclient);
 
 BOOL WINAPI DllMain(HINSTANCE instance, DWORD reason, void *reserved)
@@ -284,9 +287,6 @@ VRCompositorError ivrcompositor_007_submit(
     return cpp_func(linux_side, eye, api, texture, bounds);
 }
 
-#include "cppIVRCompositor_IVRCompositor_021.h"
-#include "cppIVRCompositor_IVRCompositor_022.h"
-
 VRCompositorError ivrcompositor_008_submit(
         VRCompositorError (*cpp_func)(void *, Hmd_Eye, GraphicsAPIConvention, void *,
         VRTextureBounds_t *, VRSubmitFlags_t),
@@ -462,9 +462,6 @@ struct explicit_timing_data
     void *linux_side;
     unsigned int version;
 };
-
-#include "cppIVRCompositor_IVRCompositor_021.h"
-#include "cppIVRCompositor_IVRCompositor_022.h"
 
 static CDECL void d3d11_explicit_timing_callback(const void *data, unsigned int data_size)
 {
