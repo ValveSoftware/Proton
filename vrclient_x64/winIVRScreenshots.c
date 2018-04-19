@@ -99,3 +99,9 @@ winIVRScreenshots_IVRScreenshots_001 *create_winIVRScreenshots_IVRScreenshots_00
     return r;
 }
 
+void destroy_winIVRScreenshots_IVRScreenshots_001(void *object)
+{
+    TRACE("%p\n", object);
+    HeapFree(GetProcessHeap(), 0, object);
+}
+

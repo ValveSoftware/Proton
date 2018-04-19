@@ -59,6 +59,12 @@ winIVRNotifications_IVRNotifications_002 *create_winIVRNotifications_IVRNotifica
     return r;
 }
 
+void destroy_winIVRNotifications_IVRNotifications_002(void *object)
+{
+    TRACE("%p\n", object);
+    HeapFree(GetProcessHeap(), 0, object);
+}
+
 #include "cppIVRNotifications_IVRNotifications_001.h"
 
 typedef struct __winIVRNotifications_IVRNotifications_001 {
@@ -108,5 +114,11 @@ winIVRNotifications_IVRNotifications_001 *create_winIVRNotifications_IVRNotifica
     r->vtable = &winIVRNotifications_IVRNotifications_001_vtable;
     r->linux_side = linux_side;
     return r;
+}
+
+void destroy_winIVRNotifications_IVRNotifications_001(void *object)
+{
+    TRACE("%p\n", object);
+    HeapFree(GetProcessHeap(), 0, object);
 }
 

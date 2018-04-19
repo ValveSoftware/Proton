@@ -389,6 +389,12 @@ winIVRCompositor_IVRCompositor_022 *create_winIVRCompositor_IVRCompositor_022(vo
     return r;
 }
 
+void destroy_winIVRCompositor_IVRCompositor_022(void *object)
+{
+    TRACE("%p\n", object);
+    HeapFree(GetProcessHeap(), 0, object);
+}
+
 #include "cppIVRCompositor_IVRCompositor_021.h"
 
 typedef struct __winIVRCompositor_IVRCompositor_021 {
@@ -762,6 +768,12 @@ winIVRCompositor_IVRCompositor_021 *create_winIVRCompositor_IVRCompositor_021(vo
     return r;
 }
 
+void destroy_winIVRCompositor_IVRCompositor_021(void *object)
+{
+    TRACE("%p\n", object);
+    HeapFree(GetProcessHeap(), 0, object);
+}
+
 #include "cppIVRCompositor_IVRCompositor_020.h"
 
 typedef struct __winIVRCompositor_IVRCompositor_020 {
@@ -1119,6 +1131,12 @@ winIVRCompositor_IVRCompositor_020 *create_winIVRCompositor_IVRCompositor_020(vo
     return r;
 }
 
+void destroy_winIVRCompositor_IVRCompositor_020(void *object)
+{
+    TRACE("%p\n", object);
+    HeapFree(GetProcessHeap(), 0, object);
+}
+
 #include "cppIVRCompositor_IVRCompositor_019.h"
 
 typedef struct __winIVRCompositor_IVRCompositor_019 {
@@ -1468,6 +1486,12 @@ winIVRCompositor_IVRCompositor_019 *create_winIVRCompositor_IVRCompositor_019(vo
     return r;
 }
 
+void destroy_winIVRCompositor_IVRCompositor_019(void *object)
+{
+    TRACE("%p\n", object);
+    HeapFree(GetProcessHeap(), 0, object);
+}
+
 #include "cppIVRCompositor_IVRCompositor_018.h"
 
 typedef struct __winIVRCompositor_IVRCompositor_018 {
@@ -1801,6 +1825,12 @@ winIVRCompositor_IVRCompositor_018 *create_winIVRCompositor_IVRCompositor_018(vo
     return r;
 }
 
+void destroy_winIVRCompositor_IVRCompositor_018(void *object)
+{
+    TRACE("%p\n", object);
+    HeapFree(GetProcessHeap(), 0, object);
+}
+
 #include "cppIVRCompositor_IVRCompositor_016.h"
 
 typedef struct __winIVRCompositor_IVRCompositor_016 {
@@ -2107,6 +2137,12 @@ winIVRCompositor_IVRCompositor_016 *create_winIVRCompositor_IVRCompositor_016(vo
     r->vtable = &winIVRCompositor_IVRCompositor_016_vtable;
     r->linux_side = linux_side;
     return r;
+}
+
+void destroy_winIVRCompositor_IVRCompositor_016(void *object)
+{
+    TRACE("%p\n", object);
+    HeapFree(GetProcessHeap(), 0, object);
 }
 
 #include "cppIVRCompositor_IVRCompositor_015.h"
@@ -2433,6 +2469,12 @@ winIVRCompositor_IVRCompositor_015 *create_winIVRCompositor_IVRCompositor_015(vo
     return r;
 }
 
+void destroy_winIVRCompositor_IVRCompositor_015(void *object)
+{
+    TRACE("%p\n", object);
+    HeapFree(GetProcessHeap(), 0, object);
+}
+
 #include "cppIVRCompositor_IVRCompositor_014.h"
 
 typedef struct __winIVRCompositor_IVRCompositor_014 {
@@ -2693,6 +2735,12 @@ winIVRCompositor_IVRCompositor_014 *create_winIVRCompositor_IVRCompositor_014(vo
     return r;
 }
 
+void destroy_winIVRCompositor_IVRCompositor_014(void *object)
+{
+    TRACE("%p\n", object);
+    HeapFree(GetProcessHeap(), 0, object);
+}
+
 #include "cppIVRCompositor_IVRCompositor_013.h"
 
 typedef struct __winIVRCompositor_IVRCompositor_013 {
@@ -2937,6 +2985,12 @@ winIVRCompositor_IVRCompositor_013 *create_winIVRCompositor_IVRCompositor_013(vo
     return r;
 }
 
+void destroy_winIVRCompositor_IVRCompositor_013(void *object)
+{
+    TRACE("%p\n", object);
+    HeapFree(GetProcessHeap(), 0, object);
+}
+
 #include "cppIVRCompositor_IVRCompositor_012.h"
 
 typedef struct __winIVRCompositor_IVRCompositor_012 {
@@ -3173,6 +3227,12 @@ winIVRCompositor_IVRCompositor_012 *create_winIVRCompositor_IVRCompositor_012(vo
     return r;
 }
 
+void destroy_winIVRCompositor_IVRCompositor_012(void *object)
+{
+    TRACE("%p\n", object);
+    HeapFree(GetProcessHeap(), 0, object);
+}
+
 #include "cppIVRCompositor_IVRCompositor_011.h"
 
 typedef struct __winIVRCompositor_IVRCompositor_011 {
@@ -3391,6 +3451,12 @@ winIVRCompositor_IVRCompositor_011 *create_winIVRCompositor_IVRCompositor_011(vo
     r->vtable = &winIVRCompositor_IVRCompositor_011_vtable;
     r->linux_side = linux_side;
     return r;
+}
+
+void destroy_winIVRCompositor_IVRCompositor_011(void *object)
+{
+    TRACE("%p\n", object);
+    HeapFree(GetProcessHeap(), 0, object);
 }
 
 #include "cppIVRCompositor_IVRCompositor_010.h"
@@ -3613,6 +3679,12 @@ winIVRCompositor_IVRCompositor_010 *create_winIVRCompositor_IVRCompositor_010(vo
     return r;
 }
 
+void destroy_winIVRCompositor_IVRCompositor_010(void *object)
+{
+    TRACE("%p\n", object);
+    HeapFree(GetProcessHeap(), 0, object);
+}
+
 #include "cppIVRCompositor_IVRCompositor_009.h"
 
 typedef struct __winIVRCompositor_IVRCompositor_009 {
@@ -3831,6 +3903,12 @@ winIVRCompositor_IVRCompositor_009 *create_winIVRCompositor_IVRCompositor_009(vo
     r->vtable = &winIVRCompositor_IVRCompositor_009_vtable;
     r->linux_side = linux_side;
     return r;
+}
+
+void destroy_winIVRCompositor_IVRCompositor_009(void *object)
+{
+    TRACE("%p\n", object);
+    HeapFree(GetProcessHeap(), 0, object);
 }
 
 #include "cppIVRCompositor_IVRCompositor_008.h"
@@ -4069,6 +4147,12 @@ winIVRCompositor_IVRCompositor_008 *create_winIVRCompositor_IVRCompositor_008(vo
     return r;
 }
 
+void destroy_winIVRCompositor_IVRCompositor_008(void *object)
+{
+    TRACE("%p\n", object);
+    HeapFree(GetProcessHeap(), 0, object);
+}
+
 #include "cppIVRCompositor_IVRCompositor_007.h"
 
 typedef struct __winIVRCompositor_IVRCompositor_007 {
@@ -4247,6 +4331,12 @@ winIVRCompositor_IVRCompositor_007 *create_winIVRCompositor_IVRCompositor_007(vo
     r->vtable = &winIVRCompositor_IVRCompositor_007_vtable;
     r->linux_side = linux_side;
     return r;
+}
+
+void destroy_winIVRCompositor_IVRCompositor_007(void *object)
+{
+    TRACE("%p\n", object);
+    HeapFree(GetProcessHeap(), 0, object);
 }
 
 #include "cppIVRCompositor_IVRCompositor_006.h"
@@ -4435,6 +4525,12 @@ winIVRCompositor_IVRCompositor_006 *create_winIVRCompositor_IVRCompositor_006(vo
     r->vtable = &winIVRCompositor_IVRCompositor_006_vtable;
     r->linux_side = linux_side;
     return r;
+}
+
+void destroy_winIVRCompositor_IVRCompositor_006(void *object)
+{
+    TRACE("%p\n", object);
+    HeapFree(GetProcessHeap(), 0, object);
 }
 
 #include "cppIVRCompositor_IVRCompositor_005.h"
@@ -4655,5 +4751,11 @@ winIVRCompositor_IVRCompositor_005 *create_winIVRCompositor_IVRCompositor_005(vo
     r->vtable = &winIVRCompositor_IVRCompositor_005_vtable;
     r->linux_side = linux_side;
     return r;
+}
+
+void destroy_winIVRCompositor_IVRCompositor_005(void *object)
+{
+    TRACE("%p\n", object);
+    HeapFree(GetProcessHeap(), 0, object);
 }
 

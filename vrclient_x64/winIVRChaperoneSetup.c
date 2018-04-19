@@ -203,6 +203,12 @@ winIVRChaperoneSetup_IVRChaperoneSetup_005 *create_winIVRChaperoneSetup_IVRChape
     return r;
 }
 
+void destroy_winIVRChaperoneSetup_IVRChaperoneSetup_005(void *object)
+{
+    TRACE("%p\n", object);
+    HeapFree(GetProcessHeap(), 0, object);
+}
+
 #include "cppIVRChaperoneSetup_IVRChaperoneSetup_004.h"
 
 typedef struct __winIVRChaperoneSetup_IVRChaperoneSetup_004 {
@@ -356,5 +362,11 @@ winIVRChaperoneSetup_IVRChaperoneSetup_004 *create_winIVRChaperoneSetup_IVRChape
     r->vtable = &winIVRChaperoneSetup_IVRChaperoneSetup_004_vtable;
     r->linux_side = linux_side;
     return r;
+}
+
+void destroy_winIVRChaperoneSetup_IVRChaperoneSetup_004(void *object)
+{
+    TRACE("%p\n", object);
+    HeapFree(GetProcessHeap(), 0, object);
 }
 

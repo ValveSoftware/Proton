@@ -139,6 +139,12 @@ winIVRSettings_IVRSettings_002 *create_winIVRSettings_IVRSettings_002(void *linu
     return r;
 }
 
+void destroy_winIVRSettings_IVRSettings_002(void *object)
+{
+    TRACE("%p\n", object);
+    HeapFree(GetProcessHeap(), 0, object);
+}
+
 #include "cppIVRSettings_IVRSettings_001.h"
 
 typedef struct __winIVRSettings_IVRSettings_001 {
@@ -260,5 +266,11 @@ winIVRSettings_IVRSettings_001 *create_winIVRSettings_IVRSettings_001(void *linu
     r->vtable = &winIVRSettings_IVRSettings_001_vtable;
     r->linux_side = linux_side;
     return r;
+}
+
+void destroy_winIVRSettings_IVRSettings_001(void *object)
+{
+    TRACE("%p\n", object);
+    HeapFree(GetProcessHeap(), 0, object);
 }
 

@@ -120,6 +120,17 @@ print_sizes = []
 
 class_versions = {}
 
+def ivrclientcore_init(cppname, method):
+    if "002" in cppname:
+        return "ivrclientcore_002_init"
+    return "ivrclientcore_init"
+
+def ivrclientcore_get_generic_interface(cppname, method):
+    return "ivrclientcore_get_generic_interface"
+
+def ivrclientcore_cleanup(cppname, method):
+    return "ivrclientcore_cleanup"
+
 def ivrsystem_get_dxgi_output_info(cppname, method):
     param_count = len([p for p in method.get_children() if p.kind == clang.cindex.CursorKind.PARM_DECL])
     return {
@@ -157,6 +168,9 @@ def ivrcompositor_get_vulkan_device_extensions_required(cppname, method):
     return "ivrcompositor_get_vulkan_device_extensions_required"
 
 method_overrides = [
+    ("IVRClientCore", "Init", ivrclientcore_init),
+    ("IVRClientCore", "GetGenericInterface", ivrclientcore_get_generic_interface),
+    ("IVRClientCore", "Cleanup", ivrclientcore_cleanup),
     ("IVRSystem", "GetDXGIOutputInfo", ivrsystem_get_dxgi_output_info),
     ("IVRSystem", "GetOutputDevice", ivrsystem_get_output_device),
     ("IVRCompositor", "Submit", ivrcompositor_submit),
@@ -166,6 +180,7 @@ method_overrides = [
 ]
 
 method_overrides_data = [
+    ("IVRClientCore", "struct client_core_data"),
     ("IVRCompositor", "struct compositor_data"),
 ]
 
@@ -283,8 +298,7 @@ def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, e
         cfile.write("    return ")
         cpp.write("    return ")
 
-    should_gen_wrapper = strip_ns(method.result_type.spelling).startswith("IVR") or \
-            used_name.startswith("GetGenericInterface")
+    should_gen_wrapper = strip_ns(method.result_type.spelling).startswith("IVR")
     if should_gen_wrapper:
         cfile.write("create_win_interface(pchNameAndVersion,\n        ")
 
@@ -461,6 +475,9 @@ WINE_DEFAULT_DEBUG_CHANNEL(vrclient);
     cfile.write("    r->vtable = &%s_vtable;\n" % winclassname)
     cfile.write("    r->linux_side = linux_side;\n")
     cfile.write("    return r;\n}\n\n")
+    cfile.write("void destroy_%s(void *object)\n{\n" % winclassname)
+    cfile.write("    TRACE(\"%p\\n\", object);\n")
+    cfile.write("    HeapFree(GetProcessHeap(), 0, object);\n}\n\n")
 
     cpp.write("#ifdef __cplusplus\n}\n#endif\n")
     cpp_h.write("#ifdef __cplusplus\n}\n#endif\n")
@@ -468,8 +485,11 @@ WINE_DEFAULT_DEBUG_CHANNEL(vrclient);
     constructors = open("win_constructors.h", "a")
     constructors.write("extern void *create_%s(void *);\n" % winclassname)
 
+    destructors = open("win_destructors.h", "a")
+    destructors.write("extern void destroy_%s(void *);\n" % winclassname)
+
     constructors = open("win_constructors_table.dat", "a")
-    constructors.write("    {\"%s\", &create_%s},\n" % (iface_version, winclassname))
+    constructors.write("    {\"%s\", &create_%s, &destroy_%s},\n" % (iface_version, winclassname, winclassname))
     if iface_version in aliases.keys():
         for alias in aliases[iface_version]:
             constructors.write("    {\"%s\", &create_%s}, /* alias */\n" % (alias, winclassname))

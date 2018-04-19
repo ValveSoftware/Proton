@@ -139,6 +139,12 @@ winIVRTrackedCamera_IVRTrackedCamera_003 *create_winIVRTrackedCamera_IVRTrackedC
     return r;
 }
 
+void destroy_winIVRTrackedCamera_IVRTrackedCamera_003(void *object)
+{
+    TRACE("%p\n", object);
+    HeapFree(GetProcessHeap(), 0, object);
+}
+
 #include "cppIVRTrackedCamera_IVRTrackedCamera_002.h"
 
 typedef struct __winIVRTrackedCamera_IVRTrackedCamera_002 {
@@ -228,6 +234,12 @@ winIVRTrackedCamera_IVRTrackedCamera_002 *create_winIVRTrackedCamera_IVRTrackedC
     r->vtable = &winIVRTrackedCamera_IVRTrackedCamera_002_vtable;
     r->linux_side = linux_side;
     return r;
+}
+
+void destroy_winIVRTrackedCamera_IVRTrackedCamera_002(void *object)
+{
+    TRACE("%p\n", object);
+    HeapFree(GetProcessHeap(), 0, object);
 }
 
 #include "cppIVRTrackedCamera_IVRTrackedCamera_001.h"
@@ -399,5 +411,11 @@ winIVRTrackedCamera_IVRTrackedCamera_001 *create_winIVRTrackedCamera_IVRTrackedC
     r->vtable = &winIVRTrackedCamera_IVRTrackedCamera_001_vtable;
     r->linux_side = linux_side;
     return r;
+}
+
+void destroy_winIVRTrackedCamera_IVRTrackedCamera_001(void *object)
+{
+    TRACE("%p\n", object);
+    HeapFree(GetProcessHeap(), 0, object);
 }
 

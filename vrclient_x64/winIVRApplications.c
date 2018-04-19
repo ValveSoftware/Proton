@@ -291,6 +291,12 @@ winIVRApplications_IVRApplications_006 *create_winIVRApplications_IVRApplication
     return r;
 }
 
+void destroy_winIVRApplications_IVRApplications_006(void *object)
+{
+    TRACE("%p\n", object);
+    HeapFree(GetProcessHeap(), 0, object);
+}
+
 #include "cppIVRApplications_IVRApplications_005.h"
 
 typedef struct __winIVRApplications_IVRApplications_005 {
@@ -510,6 +516,12 @@ winIVRApplications_IVRApplications_005 *create_winIVRApplications_IVRApplication
     return r;
 }
 
+void destroy_winIVRApplications_IVRApplications_005(void *object)
+{
+    TRACE("%p\n", object);
+    HeapFree(GetProcessHeap(), 0, object);
+}
+
 #include "cppIVRApplications_IVRApplications_004.h"
 
 typedef struct __winIVRApplications_IVRApplications_004 {
@@ -721,6 +733,12 @@ winIVRApplications_IVRApplications_004 *create_winIVRApplications_IVRApplication
     return r;
 }
 
+void destroy_winIVRApplications_IVRApplications_004(void *object)
+{
+    TRACE("%p\n", object);
+    HeapFree(GetProcessHeap(), 0, object);
+}
+
 #include "cppIVRApplications_IVRApplications_003.h"
 
 typedef struct __winIVRApplications_IVRApplications_003 {
@@ -916,6 +934,12 @@ winIVRApplications_IVRApplications_003 *create_winIVRApplications_IVRApplication
     return r;
 }
 
+void destroy_winIVRApplications_IVRApplications_003(void *object)
+{
+    TRACE("%p\n", object);
+    HeapFree(GetProcessHeap(), 0, object);
+}
+
 #include "cppIVRApplications_IVRApplications_002.h"
 
 typedef struct __winIVRApplications_IVRApplications_002 {
@@ -1101,6 +1125,12 @@ winIVRApplications_IVRApplications_002 *create_winIVRApplications_IVRApplication
     r->vtable = &winIVRApplications_IVRApplications_002_vtable;
     r->linux_side = linux_side;
     return r;
+}
+
+void destroy_winIVRApplications_IVRApplications_002(void *object)
+{
+    TRACE("%p\n", object);
+    HeapFree(GetProcessHeap(), 0, object);
 }
 
 #include "cppIVRApplications_IVRApplications_001.h"
@@ -1296,5 +1326,11 @@ winIVRApplications_IVRApplications_001 *create_winIVRApplications_IVRApplication
     r->vtable = &winIVRApplications_IVRApplications_001_vtable;
     r->linux_side = linux_side;
     return r;
+}
+
+void destroy_winIVRApplications_IVRApplications_001(void *object)
+{
+    TRACE("%p\n", object);
+    HeapFree(GetProcessHeap(), 0, object);
 }
 

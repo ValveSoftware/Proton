@@ -38,11 +38,39 @@ void *create_LinuxMatchmakingServerListResponse(void *win);
 typedef struct ID3D11Device ID3D11Device;
 typedef struct IWineD3D11Device IWineD3D11Device;
 
+struct generic_interface
+{
+    void *object;
+    void (*dtor)(void *);
+};
+
+struct client_core_data
+{
+    CRITICAL_SECTION critical_section;
+    struct generic_interface *created_interfaces;
+    SIZE_T created_interface_count;
+    SIZE_T created_interfaces_size;
+};
+
 struct compositor_data
 {
     ID3D11Device *d3d11_device;
     IWineD3D11Device *wined3d_device;
 };
+
+EVRInitError ivrclientcore_002_init(EVRInitError (*cpp_func)(void *, EVRApplicationType),
+        void *linux_side, EVRApplicationType application_type,
+        unsigned int version, struct client_core_data *user_data);
+EVRInitError ivrclientcore_init(EVRInitError (*cpp_func)(void *, EVRApplicationType, const char *),
+        void *linux_side, EVRApplicationType application_type, const char *startup_info,
+        unsigned int version, struct client_core_data *user_data);
+
+void *ivrclientcore_get_generic_interface(void *(*cpp_func)(void *, const char *, EVRInitError *),
+        void *linux_side, const char *name_and_version, EVRInitError *error,
+        unsigned int version, struct client_core_data *user_data);
+
+void ivrclientcore_cleanup(void (*cpp_func)(void *), void *linux_side,
+        unsigned int version, struct client_core_data *user_data);
 
 void get_dxgi_output_info(void *cpp_func, void *linux_side,
         int32_t *adapter_idx, unsigned int version);

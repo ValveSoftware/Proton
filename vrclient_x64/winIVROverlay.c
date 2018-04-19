@@ -699,6 +699,12 @@ winIVROverlay_IVROverlay_018 *create_winIVROverlay_IVROverlay_018(void *linux_si
     return r;
 }
 
+void destroy_winIVROverlay_IVROverlay_018(void *object)
+{
+    TRACE("%p\n", object);
+    HeapFree(GetProcessHeap(), 0, object);
+}
+
 #include "cppIVROverlay_IVROverlay_017.h"
 
 typedef struct __winIVROverlay_IVROverlay_017 {
@@ -1390,6 +1396,12 @@ winIVROverlay_IVROverlay_017 *create_winIVROverlay_IVROverlay_017(void *linux_si
     return r;
 }
 
+void destroy_winIVROverlay_IVROverlay_017(void *object)
+{
+    TRACE("%p\n", object);
+    HeapFree(GetProcessHeap(), 0, object);
+}
+
 #include "cppIVROverlay_IVROverlay_016.h"
 
 typedef struct __winIVROverlay_IVROverlay_016 {
@@ -2065,6 +2077,12 @@ winIVROverlay_IVROverlay_016 *create_winIVROverlay_IVROverlay_016(void *linux_si
     return r;
 }
 
+void destroy_winIVROverlay_IVROverlay_016(void *object)
+{
+    TRACE("%p\n", object);
+    HeapFree(GetProcessHeap(), 0, object);
+}
+
 #include "cppIVROverlay_IVROverlay_014.h"
 
 typedef struct __winIVROverlay_IVROverlay_014 {
@@ -2692,6 +2710,12 @@ winIVROverlay_IVROverlay_014 *create_winIVROverlay_IVROverlay_014(void *linux_si
     return r;
 }
 
+void destroy_winIVROverlay_IVROverlay_014(void *object)
+{
+    TRACE("%p\n", object);
+    HeapFree(GetProcessHeap(), 0, object);
+}
+
 #include "cppIVROverlay_IVROverlay_013.h"
 
 typedef struct __winIVROverlay_IVROverlay_013 {
@@ -3303,6 +3327,12 @@ winIVROverlay_IVROverlay_013 *create_winIVROverlay_IVROverlay_013(void *linux_si
     return r;
 }
 
+void destroy_winIVROverlay_IVROverlay_013(void *object)
+{
+    TRACE("%p\n", object);
+    HeapFree(GetProcessHeap(), 0, object);
+}
+
 #include "cppIVROverlay_IVROverlay_012.h"
 
 typedef struct __winIVROverlay_IVROverlay_012 {
@@ -3874,6 +3904,12 @@ winIVROverlay_IVROverlay_012 *create_winIVROverlay_IVROverlay_012(void *linux_si
     return r;
 }
 
+void destroy_winIVROverlay_IVROverlay_012(void *object)
+{
+    TRACE("%p\n", object);
+    HeapFree(GetProcessHeap(), 0, object);
+}
+
 #include "cppIVROverlay_IVROverlay_011.h"
 
 typedef struct __winIVROverlay_IVROverlay_011 {
@@ -4437,6 +4473,12 @@ winIVROverlay_IVROverlay_011 *create_winIVROverlay_IVROverlay_011(void *linux_si
     return r;
 }
 
+void destroy_winIVROverlay_IVROverlay_011(void *object)
+{
+    TRACE("%p\n", object);
+    HeapFree(GetProcessHeap(), 0, object);
+}
+
 #include "cppIVROverlay_IVROverlay_010.h"
 
 typedef struct __winIVROverlay_IVROverlay_010 {
@@ -4968,6 +5010,12 @@ winIVROverlay_IVROverlay_010 *create_winIVROverlay_IVROverlay_010(void *linux_si
     return r;
 }
 
+void destroy_winIVROverlay_IVROverlay_010(void *object)
+{
+    TRACE("%p\n", object);
+    HeapFree(GetProcessHeap(), 0, object);
+}
+
 #include "cppIVROverlay_IVROverlay_008.h"
 
 typedef struct __winIVROverlay_IVROverlay_008 {
@@ -5475,6 +5523,12 @@ winIVROverlay_IVROverlay_008 *create_winIVROverlay_IVROverlay_008(void *linux_si
     return r;
 }
 
+void destroy_winIVROverlay_IVROverlay_008(void *object)
+{
+    TRACE("%p\n", object);
+    HeapFree(GetProcessHeap(), 0, object);
+}
+
 #include "cppIVROverlay_IVROverlay_007.h"
 
 typedef struct __winIVROverlay_IVROverlay_007 {
@@ -5958,6 +6012,12 @@ winIVROverlay_IVROverlay_007 *create_winIVROverlay_IVROverlay_007(void *linux_si
     return r;
 }
 
+void destroy_winIVROverlay_IVROverlay_007(void *object)
+{
+    TRACE("%p\n", object);
+    HeapFree(GetProcessHeap(), 0, object);
+}
+
 #include "cppIVROverlay_IVROverlay_005.h"
 
 typedef struct __winIVROverlay_IVROverlay_005 {
@@ -6401,6 +6461,12 @@ winIVROverlay_IVROverlay_005 *create_winIVROverlay_IVROverlay_005(void *linux_si
     return r;
 }
 
+void destroy_winIVROverlay_IVROverlay_005(void *object)
+{
+    TRACE("%p\n", object);
+    HeapFree(GetProcessHeap(), 0, object);
+}
+
 #include "cppIVROverlay_IVROverlay_004.h"
 
 typedef struct __winIVROverlay_IVROverlay_004 {
@@ -6812,6 +6878,12 @@ winIVROverlay_IVROverlay_004 *create_winIVROverlay_IVROverlay_004(void *linux_si
     return r;
 }
 
+void destroy_winIVROverlay_IVROverlay_004(void *object)
+{
+    TRACE("%p\n", object);
+    HeapFree(GetProcessHeap(), 0, object);
+}
+
 #include "cppIVROverlay_IVROverlay_003.h"
 
 typedef struct __winIVROverlay_IVROverlay_003 {
@@ -7207,6 +7279,12 @@ winIVROverlay_IVROverlay_003 *create_winIVROverlay_IVROverlay_003(void *linux_si
     return r;
 }
 
+void destroy_winIVROverlay_IVROverlay_003(void *object)
+{
+    TRACE("%p\n", object);
+    HeapFree(GetProcessHeap(), 0, object);
+}
+
 #include "cppIVROverlay_IVROverlay_002.h"
 
 typedef struct __winIVROverlay_IVROverlay_002 {
@@ -7570,6 +7648,12 @@ winIVROverlay_IVROverlay_002 *create_winIVROverlay_IVROverlay_002(void *linux_si
     return r;
 }
 
+void destroy_winIVROverlay_IVROverlay_002(void *object)
+{
+    TRACE("%p\n", object);
+    HeapFree(GetProcessHeap(), 0, object);
+}
+
 #include "cppIVROverlay_IVROverlay_001.h"
 
 typedef struct __winIVROverlay_IVROverlay_001 {
@@ -7915,5 +7999,11 @@ winIVROverlay_IVROverlay_001 *create_winIVROverlay_IVROverlay_001(void *linux_si
     r->vtable = &winIVROverlay_IVROverlay_001_vtable;
     r->linux_side = linux_side;
     return r;
+}
+
+void destroy_winIVROverlay_IVROverlay_001(void *object)
+{
+    TRACE("%p\n", object);
+    HeapFree(GetProcessHeap(), 0, object);
 }
 

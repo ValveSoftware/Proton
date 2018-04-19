@@ -187,6 +187,12 @@ winIVRRenderModels_IVRRenderModels_005 *create_winIVRRenderModels_IVRRenderModel
     return r;
 }
 
+void destroy_winIVRRenderModels_IVRRenderModels_005(void *object)
+{
+    TRACE("%p\n", object);
+    HeapFree(GetProcessHeap(), 0, object);
+}
+
 #include "cppIVRRenderModels_IVRRenderModels_004.h"
 
 typedef struct __winIVRRenderModels_IVRRenderModels_004 {
@@ -326,6 +332,12 @@ winIVRRenderModels_IVRRenderModels_004 *create_winIVRRenderModels_IVRRenderModel
     return r;
 }
 
+void destroy_winIVRRenderModels_IVRRenderModels_004(void *object)
+{
+    TRACE("%p\n", object);
+    HeapFree(GetProcessHeap(), 0, object);
+}
+
 #include "cppIVRRenderModels_IVRRenderModels_002.h"
 
 typedef struct __winIVRRenderModels_IVRRenderModels_002 {
@@ -449,6 +461,12 @@ winIVRRenderModels_IVRRenderModels_002 *create_winIVRRenderModels_IVRRenderModel
     return r;
 }
 
+void destroy_winIVRRenderModels_IVRRenderModels_002(void *object)
+{
+    TRACE("%p\n", object);
+    HeapFree(GetProcessHeap(), 0, object);
+}
+
 #include "cppIVRRenderModels_IVRRenderModels_001.h"
 
 typedef struct __winIVRRenderModels_IVRRenderModels_001 {
@@ -506,5 +524,11 @@ winIVRRenderModels_IVRRenderModels_001 *create_winIVRRenderModels_IVRRenderModel
     r->vtable = &winIVRRenderModels_IVRRenderModels_001_vtable;
     r->linux_side = linux_side;
     return r;
+}
+
+void destroy_winIVRRenderModels_IVRRenderModels_001(void *object)
+{
+    TRACE("%p\n", object);
+    HeapFree(GetProcessHeap(), 0, object);
 }
 

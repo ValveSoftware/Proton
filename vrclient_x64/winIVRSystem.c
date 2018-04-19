@@ -425,6 +425,12 @@ winIVRSystem_IVRSystem_019 *create_winIVRSystem_IVRSystem_019(void *linux_side)
     return r;
 }
 
+void destroy_winIVRSystem_IVRSystem_019(void *object)
+{
+    TRACE("%p\n", object);
+    HeapFree(GetProcessHeap(), 0, object);
+}
+
 #include "cppIVRSystem_IVRSystem_017.h"
 
 typedef struct __winIVRSystem_IVRSystem_017 {
@@ -816,6 +822,12 @@ winIVRSystem_IVRSystem_017 *create_winIVRSystem_IVRSystem_017(void *linux_side)
     r->vtable = &winIVRSystem_IVRSystem_017_vtable;
     r->linux_side = linux_side;
     return r;
+}
+
+void destroy_winIVRSystem_IVRSystem_017(void *object)
+{
+    TRACE("%p\n", object);
+    HeapFree(GetProcessHeap(), 0, object);
 }
 
 #include "cppIVRSystem_IVRSystem_016.h"
@@ -1211,6 +1223,12 @@ winIVRSystem_IVRSystem_016 *create_winIVRSystem_IVRSystem_016(void *linux_side)
     return r;
 }
 
+void destroy_winIVRSystem_IVRSystem_016(void *object)
+{
+    TRACE("%p\n", object);
+    HeapFree(GetProcessHeap(), 0, object);
+}
+
 #include "cppIVRSystem_IVRSystem_015.h"
 
 typedef struct __winIVRSystem_IVRSystem_015 {
@@ -1594,6 +1612,12 @@ winIVRSystem_IVRSystem_015 *create_winIVRSystem_IVRSystem_015(void *linux_side)
     r->vtable = &winIVRSystem_IVRSystem_015_vtable;
     r->linux_side = linux_side;
     return r;
+}
+
+void destroy_winIVRSystem_IVRSystem_015(void *object)
+{
+    TRACE("%p\n", object);
+    HeapFree(GetProcessHeap(), 0, object);
 }
 
 #include "cppIVRSystem_IVRSystem_014.h"
@@ -1981,6 +2005,12 @@ winIVRSystem_IVRSystem_014 *create_winIVRSystem_IVRSystem_014(void *linux_side)
     return r;
 }
 
+void destroy_winIVRSystem_IVRSystem_014(void *object)
+{
+    TRACE("%p\n", object);
+    HeapFree(GetProcessHeap(), 0, object);
+}
+
 #include "cppIVRSystem_IVRSystem_012.h"
 
 typedef struct __winIVRSystem_IVRSystem_012 {
@@ -2365,6 +2395,12 @@ winIVRSystem_IVRSystem_012 *create_winIVRSystem_IVRSystem_012(void *linux_side)
     r->vtable = &winIVRSystem_IVRSystem_012_vtable;
     r->linux_side = linux_side;
     return r;
+}
+
+void destroy_winIVRSystem_IVRSystem_012(void *object)
+{
+    TRACE("%p\n", object);
+    HeapFree(GetProcessHeap(), 0, object);
 }
 
 #include "cppIVRSystem_IVRSystem_011.h"
@@ -2769,6 +2805,12 @@ winIVRSystem_IVRSystem_011 *create_winIVRSystem_IVRSystem_011(void *linux_side)
     return r;
 }
 
+void destroy_winIVRSystem_IVRSystem_011(void *object)
+{
+    TRACE("%p\n", object);
+    HeapFree(GetProcessHeap(), 0, object);
+}
+
 #include "cppIVRSystem_IVRSystem_010.h"
 
 typedef struct __winIVRSystem_IVRSystem_010 {
@@ -3171,6 +3213,12 @@ winIVRSystem_IVRSystem_010 *create_winIVRSystem_IVRSystem_010(void *linux_side)
     return r;
 }
 
+void destroy_winIVRSystem_IVRSystem_010(void *object)
+{
+    TRACE("%p\n", object);
+    HeapFree(GetProcessHeap(), 0, object);
+}
+
 #include "cppIVRSystem_IVRSystem_009.h"
 
 typedef struct __winIVRSystem_IVRSystem_009 {
@@ -3539,6 +3587,12 @@ winIVRSystem_IVRSystem_009 *create_winIVRSystem_IVRSystem_009(void *linux_side)
     r->vtable = &winIVRSystem_IVRSystem_009_vtable;
     r->linux_side = linux_side;
     return r;
+}
+
+void destroy_winIVRSystem_IVRSystem_009(void *object)
+{
+    TRACE("%p\n", object);
+    HeapFree(GetProcessHeap(), 0, object);
 }
 
 #include "cppIVRSystem_IVRSystem_006.h"
@@ -3911,6 +3965,12 @@ winIVRSystem_IVRSystem_006 *create_winIVRSystem_IVRSystem_006(void *linux_side)
     return r;
 }
 
+void destroy_winIVRSystem_IVRSystem_006(void *object)
+{
+    TRACE("%p\n", object);
+    HeapFree(GetProcessHeap(), 0, object);
+}
+
 #include "cppIVRSystem_IVRSystem_005.h"
 
 typedef struct __winIVRSystem_IVRSystem_005 {
@@ -4240,6 +4300,12 @@ winIVRSystem_IVRSystem_005 *create_winIVRSystem_IVRSystem_005(void *linux_side)
     return r;
 }
 
+void destroy_winIVRSystem_IVRSystem_005(void *object)
+{
+    TRACE("%p\n", object);
+    HeapFree(GetProcessHeap(), 0, object);
+}
+
 #include "cppIVRSystem_IVRSystem_004.h"
 
 typedef struct __winIVRSystem_IVRSystem_004 {
@@ -4559,6 +4625,12 @@ winIVRSystem_IVRSystem_004 *create_winIVRSystem_IVRSystem_004(void *linux_side)
     r->vtable = &winIVRSystem_IVRSystem_004_vtable;
     r->linux_side = linux_side;
     return r;
+}
+
+void destroy_winIVRSystem_IVRSystem_004(void *object)
+{
+    TRACE("%p\n", object);
+    HeapFree(GetProcessHeap(), 0, object);
 }
 
 #include "cppIVRSystem_IVRSystem_003.h"
@@ -4896,5 +4968,11 @@ winIVRSystem_IVRSystem_003 *create_winIVRSystem_IVRSystem_003(void *linux_side)
     r->vtable = &winIVRSystem_IVRSystem_003_vtable;
     r->linux_side = linux_side;
     return r;
+}
+
+void destroy_winIVRSystem_IVRSystem_003(void *object)
+{
+    TRACE("%p\n", object);
+    HeapFree(GetProcessHeap(), 0, object);
 }
 

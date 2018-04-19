@@ -67,3 +67,9 @@ winIVRExtendedDisplay_IVRExtendedDisplay_001 *create_winIVRExtendedDisplay_IVREx
     return r;
 }
 
+void destroy_winIVRExtendedDisplay_IVRExtendedDisplay_001(void *object)
+{
+    TRACE("%p\n", object);
+    HeapFree(GetProcessHeap(), 0, object);
+}
+

@@ -65,18 +65,52 @@ uint32 vrclient_unix_path_to_dos_path(uint32 api_result, char *inout, uint32 ino
 }
 #endif
 
+static BOOL array_reserve(void **elements, SIZE_T *capacity, SIZE_T count, SIZE_T size)
+{
+    SIZE_T max_capacity, new_capacity;
+    void *new_elements;
+
+    if (count <= *capacity)
+        return TRUE;
+
+    max_capacity = ~(SIZE_T)0 / size;
+    if (count > max_capacity)
+        return FALSE;
+
+    new_capacity = max(1, *capacity);
+    while (new_capacity < count && new_capacity <= max_capacity / 2)
+        new_capacity *= 2;
+    if (new_capacity < count)
+        new_capacity = count;
+
+    if (!*elements)
+        new_elements = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, new_capacity * size);
+    else
+        new_elements = HeapReAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, *elements, new_capacity * size);
+    if (!new_elements)
+        return FALSE;
+
+    *elements = new_elements;
+    *capacity = new_capacity;
+    return TRUE;
+}
+
 #include "win_constructors.h"
+#include "win_destructors.h"
+
+typedef void (*pfn_dtor)(void *);
 
 static const struct {
     const char *iface_version;
     void *(*ctor)(void *);
+    void (*dtor)(void *);
 } constructors[] = {
 #include "win_constructors_table.dat"
 };
 
 void *create_win_interface(const char *name, void *linux_side)
 {
-    int i;
+    unsigned int i;
 
     TRACE("trying to create %s\n", name);
 
@@ -89,6 +123,18 @@ void *create_win_interface(const char *name, void *linux_side)
     }
 
     ERR("Don't recognize interface name: %s\n", name);
+
+    return NULL;
+}
+
+static pfn_dtor get_win_destructor(const char *name)
+{
+    unsigned int i;
+
+    for(i = 0; i < sizeof(constructors) / sizeof(*constructors); ++i){
+        if(!strcmp(name, constructors[i].iface_version))
+            return constructors[i].dtor;
+    }
 
     return NULL;
 }
@@ -166,6 +212,93 @@ static void load_vk_unwrappers(void)
     get_native_VkPhysicalDevice = (void*)GetProcAddress(h, "__wine_get_native_VkPhysicalDevice");
     get_wrapped_VkPhysicalDevice = (void*)GetProcAddress(h, "__wine_get_wrapped_VkPhysicalDevice");
     get_native_VkQueue = (void*)GetProcAddress(h, "__wine_get_native_VkQueue");
+}
+
+EVRInitError ivrclientcore_002_init(EVRInitError (*cpp_func)(void *, EVRApplicationType),
+        void *linux_side, EVRApplicationType application_type,
+        unsigned int version, struct client_core_data *user_data)
+{
+    TRACE("%p, %#x\n", linux_side, application_type);
+    InitializeCriticalSection(&user_data->critical_section);
+    return cpp_func(linux_side, application_type);
+}
+
+EVRInitError ivrclientcore_init(EVRInitError (*cpp_func)(void *, EVRApplicationType, const char *),
+        void *linux_side, EVRApplicationType application_type, const char *startup_info,
+        unsigned int version, struct client_core_data *user_data)
+{
+    TRACE("%p, %#x, %p\n", linux_side, application_type, startup_info);
+    InitializeCriticalSection(&user_data->critical_section);
+    return cpp_func(linux_side, application_type, startup_info);
+}
+
+void *ivrclientcore_get_generic_interface(void *(*cpp_func)(void *, const char *, EVRInitError *),
+        void *linux_side, const char *name_and_version, EVRInitError *error,
+        unsigned int version, struct client_core_data *user_data)
+{
+    struct generic_interface *iface;
+    pfn_dtor destructor;
+    void *win_object;
+    void *object;
+
+    TRACE("%p, %p, %p\n", linux_side, name_and_version, error);
+
+    if (!(object = cpp_func(linux_side, name_and_version, error)))
+    {
+        WARN("Failed to create %s.\n", name_and_version);
+        return NULL;
+    }
+
+    if (!(win_object = create_win_interface(name_and_version, object)))
+    {
+        ERR("Failed to create win object %s.\n", name_and_version);
+        return NULL;
+    }
+
+    if ((destructor = get_win_destructor(name_and_version)))
+    {
+        EnterCriticalSection(&user_data->critical_section);
+        if (array_reserve((void **)&user_data->created_interfaces,
+                &user_data->created_interfaces_size, user_data->created_interface_count + 1,
+                sizeof(*user_data->created_interfaces)))
+        {
+            iface = &user_data->created_interfaces[user_data->created_interface_count++];
+            iface->object = win_object;
+            iface->dtor = destructor;
+        }
+        else
+        {
+            ERR("Failed to add interface to array.\n");
+        }
+        LeaveCriticalSection(&user_data->critical_section);
+    }
+
+    return win_object;
+}
+
+void ivrclientcore_cleanup(void (*cpp_func)(void *), void *linux_side,
+        unsigned int version, struct client_core_data *user_data)
+{
+    struct generic_interface *iface;
+    SIZE_T i;
+
+    TRACE("%p\n", linux_side);
+
+    EnterCriticalSection(&user_data->critical_section);
+    for (i = 0; i < user_data->created_interface_count; ++i)
+    {
+        iface = &user_data->created_interfaces[i];
+
+        iface->dtor(iface->object);
+    }
+    HeapFree(GetProcessHeap(), 0, user_data->created_interfaces);
+    user_data->created_interfaces = NULL;
+    user_data->created_interfaces_size = 0;
+    user_data->created_interface_count = 0;
+    LeaveCriticalSection(&user_data->critical_section);
+
+    DeleteCriticalSection(&user_data->critical_section);
+    cpp_func(linux_side);
 }
 
 void get_dxgi_output_info(void *cpp_func, void *linux_side,

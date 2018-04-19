@@ -59,3 +59,9 @@ winIVRResources_IVRResources_001 *create_winIVRResources_IVRResources_001(void *
     return r;
 }
 
+void destroy_winIVRResources_IVRResources_001(void *object)
+{
+    TRACE("%p\n", object);
+    HeapFree(GetProcessHeap(), 0, object);
+}
+

@@ -59,3 +59,9 @@ winIVRDriverManager_IVRDriverManager_001 *create_winIVRDriverManager_IVRDriverMa
     return r;
 }
 
+void destroy_winIVRDriverManager_IVRDriverManager_001(void *object)
+{
+    TRACE("%p\n", object);
+    HeapFree(GetProcessHeap(), 0, object);
+}
+
