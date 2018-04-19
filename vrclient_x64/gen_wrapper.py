@@ -180,8 +180,8 @@ method_overrides = [
 ]
 
 method_overrides_data = [
-    ("IVRClientCore", "struct client_core_data"),
-    ("IVRCompositor", "struct compositor_data"),
+    ("IVRClientCore", "struct client_core_data", None),
+    ("IVRCompositor", "struct compositor_data", "destroy_compositor_data"),
 ]
 
 def display_sdkver(s):
@@ -359,7 +359,7 @@ def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, e
         cfile.write(")")
     if is_method_overridden:
         cfile.write(", %s" % iface_version[iface_version.find("_") + 1:].lstrip("0"))
-        for classname_pattern, user_data_type in method_overrides_data:
+        for classname_pattern, user_data_type, _ in method_overrides_data:
             if classname_pattern in classname:
                 cfile.write(", &_this->user_data")
                 break
@@ -448,7 +448,7 @@ WINE_DEFAULT_DEBUG_CHANNEL(vrclient);
     cfile.write("typedef struct __%s {\n" % winclassname)
     cfile.write("    vtable_ptr *vtable;\n")
     cfile.write("    void *linux_side;\n")
-    for classname_pattern, user_data_type in method_overrides_data:
+    for classname_pattern, user_data_type, _ in method_overrides_data:
         if classname_pattern in classnode.spelling:
             cfile.write("    %s user_data;\n" % user_data_type)
             break
@@ -477,6 +477,11 @@ WINE_DEFAULT_DEBUG_CHANNEL(vrclient);
     cfile.write("    return r;\n}\n\n")
     cfile.write("void destroy_%s(void *object)\n{\n" % winclassname)
     cfile.write("    TRACE(\"%p\\n\", object);\n")
+    for classname_pattern, user_data_type, user_data_destructor in method_overrides_data:
+        if user_data_destructor and classname_pattern in classnode.spelling:
+            cfile.write("    struct __%s *win_object = object;\n" % winclassname)
+            cfile.write("    %s(&win_object->user_data);\n" % user_data_destructor)
+            break
     cfile.write("    HeapFree(GetProcessHeap(), 0, object);\n}\n\n")
 
     cpp.write("#ifdef __cplusplus\n}\n#endif\n")

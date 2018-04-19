@@ -392,6 +392,8 @@ winIVRCompositor_IVRCompositor_022 *create_winIVRCompositor_IVRCompositor_022(vo
 void destroy_winIVRCompositor_IVRCompositor_022(void *object)
 {
     TRACE("%p\n", object);
+    struct __winIVRCompositor_IVRCompositor_022 *win_object = object;
+    destroy_compositor_data(&win_object->user_data);
     HeapFree(GetProcessHeap(), 0, object);
 }
 
@@ -771,6 +773,8 @@ winIVRCompositor_IVRCompositor_021 *create_winIVRCompositor_IVRCompositor_021(vo
 void destroy_winIVRCompositor_IVRCompositor_021(void *object)
 {
     TRACE("%p\n", object);
+    struct __winIVRCompositor_IVRCompositor_021 *win_object = object;
+    destroy_compositor_data(&win_object->user_data);
     HeapFree(GetProcessHeap(), 0, object);
 }
 
@@ -1134,6 +1138,8 @@ winIVRCompositor_IVRCompositor_020 *create_winIVRCompositor_IVRCompositor_020(vo
 void destroy_winIVRCompositor_IVRCompositor_020(void *object)
 {
     TRACE("%p\n", object);
+    struct __winIVRCompositor_IVRCompositor_020 *win_object = object;
+    destroy_compositor_data(&win_object->user_data);
     HeapFree(GetProcessHeap(), 0, object);
 }
 
@@ -1489,6 +1495,8 @@ winIVRCompositor_IVRCompositor_019 *create_winIVRCompositor_IVRCompositor_019(vo
 void destroy_winIVRCompositor_IVRCompositor_019(void *object)
 {
     TRACE("%p\n", object);
+    struct __winIVRCompositor_IVRCompositor_019 *win_object = object;
+    destroy_compositor_data(&win_object->user_data);
     HeapFree(GetProcessHeap(), 0, object);
 }
 
@@ -1828,6 +1836,8 @@ winIVRCompositor_IVRCompositor_018 *create_winIVRCompositor_IVRCompositor_018(vo
 void destroy_winIVRCompositor_IVRCompositor_018(void *object)
 {
     TRACE("%p\n", object);
+    struct __winIVRCompositor_IVRCompositor_018 *win_object = object;
+    destroy_compositor_data(&win_object->user_data);
     HeapFree(GetProcessHeap(), 0, object);
 }
 
@@ -2142,6 +2152,8 @@ winIVRCompositor_IVRCompositor_016 *create_winIVRCompositor_IVRCompositor_016(vo
 void destroy_winIVRCompositor_IVRCompositor_016(void *object)
 {
     TRACE("%p\n", object);
+    struct __winIVRCompositor_IVRCompositor_016 *win_object = object;
+    destroy_compositor_data(&win_object->user_data);
     HeapFree(GetProcessHeap(), 0, object);
 }
 
@@ -2472,6 +2484,8 @@ winIVRCompositor_IVRCompositor_015 *create_winIVRCompositor_IVRCompositor_015(vo
 void destroy_winIVRCompositor_IVRCompositor_015(void *object)
 {
     TRACE("%p\n", object);
+    struct __winIVRCompositor_IVRCompositor_015 *win_object = object;
+    destroy_compositor_data(&win_object->user_data);
     HeapFree(GetProcessHeap(), 0, object);
 }
 
@@ -2738,6 +2752,8 @@ winIVRCompositor_IVRCompositor_014 *create_winIVRCompositor_IVRCompositor_014(vo
 void destroy_winIVRCompositor_IVRCompositor_014(void *object)
 {
     TRACE("%p\n", object);
+    struct __winIVRCompositor_IVRCompositor_014 *win_object = object;
+    destroy_compositor_data(&win_object->user_data);
     HeapFree(GetProcessHeap(), 0, object);
 }
 
@@ -2988,6 +3004,8 @@ winIVRCompositor_IVRCompositor_013 *create_winIVRCompositor_IVRCompositor_013(vo
 void destroy_winIVRCompositor_IVRCompositor_013(void *object)
 {
     TRACE("%p\n", object);
+    struct __winIVRCompositor_IVRCompositor_013 *win_object = object;
+    destroy_compositor_data(&win_object->user_data);
     HeapFree(GetProcessHeap(), 0, object);
 }
 
@@ -3230,6 +3248,8 @@ winIVRCompositor_IVRCompositor_012 *create_winIVRCompositor_IVRCompositor_012(vo
 void destroy_winIVRCompositor_IVRCompositor_012(void *object)
 {
     TRACE("%p\n", object);
+    struct __winIVRCompositor_IVRCompositor_012 *win_object = object;
+    destroy_compositor_data(&win_object->user_data);
     HeapFree(GetProcessHeap(), 0, object);
 }
 
@@ -3456,6 +3476,8 @@ winIVRCompositor_IVRCompositor_011 *create_winIVRCompositor_IVRCompositor_011(vo
 void destroy_winIVRCompositor_IVRCompositor_011(void *object)
 {
     TRACE("%p\n", object);
+    struct __winIVRCompositor_IVRCompositor_011 *win_object = object;
+    destroy_compositor_data(&win_object->user_data);
     HeapFree(GetProcessHeap(), 0, object);
 }
 
@@ -3682,6 +3704,8 @@ winIVRCompositor_IVRCompositor_010 *create_winIVRCompositor_IVRCompositor_010(vo
 void destroy_winIVRCompositor_IVRCompositor_010(void *object)
 {
     TRACE("%p\n", object);
+    struct __winIVRCompositor_IVRCompositor_010 *win_object = object;
+    destroy_compositor_data(&win_object->user_data);
     HeapFree(GetProcessHeap(), 0, object);
 }
 
@@ -3908,6 +3932,8 @@ winIVRCompositor_IVRCompositor_009 *create_winIVRCompositor_IVRCompositor_009(vo
 void destroy_winIVRCompositor_IVRCompositor_009(void *object)
 {
     TRACE("%p\n", object);
+    struct __winIVRCompositor_IVRCompositor_009 *win_object = object;
+    destroy_compositor_data(&win_object->user_data);
     HeapFree(GetProcessHeap(), 0, object);
 }
 
@@ -4150,6 +4176,8 @@ winIVRCompositor_IVRCompositor_008 *create_winIVRCompositor_IVRCompositor_008(vo
 void destroy_winIVRCompositor_IVRCompositor_008(void *object)
 {
     TRACE("%p\n", object);
+    struct __winIVRCompositor_IVRCompositor_008 *win_object = object;
+    destroy_compositor_data(&win_object->user_data);
     HeapFree(GetProcessHeap(), 0, object);
 }
 
@@ -4336,6 +4364,8 @@ winIVRCompositor_IVRCompositor_007 *create_winIVRCompositor_IVRCompositor_007(vo
 void destroy_winIVRCompositor_IVRCompositor_007(void *object)
 {
     TRACE("%p\n", object);
+    struct __winIVRCompositor_IVRCompositor_007 *win_object = object;
+    destroy_compositor_data(&win_object->user_data);
     HeapFree(GetProcessHeap(), 0, object);
 }
 
@@ -4530,6 +4560,8 @@ winIVRCompositor_IVRCompositor_006 *create_winIVRCompositor_IVRCompositor_006(vo
 void destroy_winIVRCompositor_IVRCompositor_006(void *object)
 {
     TRACE("%p\n", object);
+    struct __winIVRCompositor_IVRCompositor_006 *win_object = object;
+    destroy_compositor_data(&win_object->user_data);
     HeapFree(GetProcessHeap(), 0, object);
 }
 
@@ -4756,6 +4788,8 @@ winIVRCompositor_IVRCompositor_005 *create_winIVRCompositor_IVRCompositor_005(vo
 void destroy_winIVRCompositor_IVRCompositor_005(void *object)
 {
     TRACE("%p\n", object);
+    struct __winIVRCompositor_IVRCompositor_005 *win_object = object;
+    destroy_compositor_data(&win_object->user_data);
     HeapFree(GetProcessHeap(), 0, object);
 }
 

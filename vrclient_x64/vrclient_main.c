@@ -664,3 +664,17 @@ uint32_t ivrcompositor_get_vulkan_device_extensions_required(
 
     return cpp_func(linux_side, phys_dev, value, bufsize);
 }
+
+void destroy_compositor_data(struct compositor_data *data)
+{
+    IWineD3D11Device *wined3d_device;
+
+    TRACE("%p\n", data);
+
+    if ((wined3d_device = data->wined3d_device))
+    {
+        TRACE("Waiting for device %p\n", wined3d_device);
+
+        wined3d_device->lpVtbl->wait_idle(wined3d_device);
+    }
+}

@@ -58,6 +58,8 @@ struct compositor_data
     IWineD3D11Device *wined3d_device;
 };
 
+void destroy_compositor_data(struct compositor_data *data);
+
 EVRInitError ivrclientcore_002_init(EVRInitError (*cpp_func)(void *, EVRApplicationType),
         void *linux_side, EVRApplicationType application_type,
         unsigned int version, struct client_core_data *user_data);
