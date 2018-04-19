@@ -2,7 +2,7 @@
 
 usage()
 {
-    echo "$1: [component ... ] [--release] [--package]"
+    echo "$1: [--build component] [--release] [--package]"
     echo "Build the Proton Steam Tool"
     echo "Component can be one or more of:"
     echo "  wine, wine32, wine64"
@@ -203,34 +203,32 @@ else
     STRIP='strip'
 fi
 
-BUILD_COMPONENTS='all'
-if [ "$#" -ge 2 ]; then
-    for (( i=1; i <= $# - 1; i++)); do
-        if [ "${!i}" == "--build" ]; then
-            j=$((i+1))
-            BUILD_COMPONENTS="${!j}"
-            break
-        fi
-    done
-fi
-
 PACKAGE=false
-if [ "$BUILD_COMPONENTS" == "all" ]; then
-    PACKAGE=true
-fi
-
+BUILD_COMPONENTS='all'
 INSTALL_PROGRAM_FLAGS=''
-for param in "$@"; do
+for (( i=1; i <= $#; i++)); do
+    param="${!i}"
     if [ "$param" == "--release" ]; then
         RELEASE_BUILD=1
         INSTALL_PROGRAM_FLAGS='-s'
     elif [ "$param" == "--package" ]; then
         PACKAGE=true
+    elif [ "$param" == "--build" ]; then
+        i=$((i+1))
+        if [ "$i" -gt "$#" ]; then
+            usage `basename $0`
+            exit 1
+        fi
+        BUILD_COMPONENTS="${!i}"
     else
         usage `basename $0`
         exit 1
     fi
 done
+
+if [ "$BUILD_COMPONENTS" == "all" ]; then
+    PACKAGE=true
+fi
 
 TOP="$PWD"
 MAKE=make
