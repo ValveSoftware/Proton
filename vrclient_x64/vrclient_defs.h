@@ -1,5 +1,7 @@
 #ifndef __cplusplus
+#ifndef bool
 typedef char bool; /* 1 byte on modern visual studio c++ */
+#endif
 
 /* enums */
 typedef int
