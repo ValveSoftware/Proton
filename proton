@@ -31,7 +31,7 @@ def log(msg):
 def upgrade_pfx(old_ver):
     if old_ver == CURRENT_PREFIX_VERSION:
         return
-    log("Upgrading prefix from " + str(old_ver) + " to " + CURRENT_PREFIX_VERSION)
+    log("Upgrading prefix from " + str(old_ver) + " to " + CURRENT_PREFIX_VERSION + " (" + os.environ["STEAM_COMPAT_DATA_PATH"] + ")")
     #nothing to do, yet
 
 def run_wine(args):
