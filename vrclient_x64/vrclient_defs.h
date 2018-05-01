@@ -208,6 +208,32 @@ typedef struct Texture_t
     EColorSpace eColorSpace;
 } Texture_t;
 
+typedef struct VRTextureWithPose_t
+{
+    Texture_t texture;
+	HmdMatrix34_t mDeviceToAbsoluteTracking;
+} VRTextureWithPose_t;
+
+typedef struct VRTextureDepthInfo_t
+{
+	void* handle;
+	HmdMatrix44_t mProjection;
+	HmdVector2_t vRange;
+} VRTextureDepthInfo_t;
+
+typedef struct VRTextureWithDepth_t
+{
+    Texture_t texture;
+	VRTextureDepthInfo_t depth;
+} VRTextureWithDepth_t;
+
+typedef struct VRTextureWithPoseAndDepth_t
+{
+    Texture_t texture;
+	HmdMatrix34_t mDeviceToAbsoluteTracking;
+	VRTextureDepthInfo_t depth;
+} VRTextureWithPoseAndDepth_t;
+
 typedef enum EVRSubmitFlags
 {
     // Simple render path. App submits rendered left and right eye images with no lens distortion correction applied.

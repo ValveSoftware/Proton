@@ -359,22 +359,53 @@ struct submit_data
 
     EVREye eye;
     Texture_t texture;
+    VRTextureWithPose_t texture_pose;
+    VRTextureWithDepth_t texture_depth;
+    VRTextureWithPoseAndDepth_t texture_both;
     VRTextureBounds_t bounds;
     EVRSubmitFlags flags;
 };
 
-static CDECL void d3d11_texture_callback(unsigned int gl_texture, const void *data, unsigned int data_size)
+static CDECL void d3d11_texture_callback(unsigned int gl_texture, unsigned int gl_depth_texture, const void *data, unsigned int data_size)
 {
     const struct submit_data *submit_data = data;
     VRCompositorError error = 0;
     VRTextureBounds_t bounds;
-    Texture_t texture;
+    Texture_t texture, *tex;
+    VRTextureWithPose_t texture_pose;
+    VRTextureWithDepth_t texture_depth;
+    VRTextureWithPoseAndDepth_t texture_both;
 
     TRACE("texture %u, data {%p, %u}\n", gl_texture, data, data_size);
 
-    texture = submit_data->texture;
-    texture.handle = (void *)(UINT_PTR)gl_texture;
-    texture.eType = TextureType_OpenGL;
+    switch(submit_data->flags & (Submit_TextureWithPose | Submit_TextureWithDepth)){
+    case 0:
+        texture = submit_data->texture;
+        texture.handle = (void *)(UINT_PTR)gl_texture;
+        texture.eType = TextureType_OpenGL;
+        tex = &texture;
+        break;
+    case Submit_TextureWithPose:
+        texture_pose = submit_data->texture_pose;
+        texture_pose.texture.handle = (void *)(UINT_PTR)gl_texture;
+        texture_pose.texture.eType = TextureType_OpenGL;
+        tex = (Texture_t *)&texture_pose;
+        break;
+    case Submit_TextureWithDepth:
+        texture_depth = submit_data->texture_depth;
+        texture_depth.texture.handle = (void *)(UINT_PTR)gl_texture;
+        texture_depth.texture.eType = TextureType_OpenGL;
+        texture_depth.depth.handle = (void *)(UINT_PTR)gl_depth_texture;
+        tex = (Texture_t *)&texture_depth;
+        break;
+    case Submit_TextureWithPose | Submit_TextureWithDepth:
+        texture_both = submit_data->texture_both;
+        texture_both.texture.handle = (void *)(UINT_PTR)gl_texture;
+        texture_both.texture.eType = TextureType_OpenGL;
+        texture_both.depth.handle = (void *)(UINT_PTR)gl_depth_texture;
+        tex = (Texture_t *)&texture_both;
+        break;
+    }
 
     /* Textures are upside-down in wined3d. */
     bounds = submit_data->bounds;
@@ -382,7 +413,7 @@ static CDECL void d3d11_texture_callback(unsigned int gl_texture, const void *da
     bounds.vMax = submit_data->bounds.vMin;
 
     error = submit_data->submit(submit_data->linux_side, submit_data->eye,
-            &texture, &bounds, submit_data->flags);
+            tex, &bounds, submit_data->flags);
     if (error)
         ERR("error %#x\n", error);
 }
@@ -443,7 +474,7 @@ EVRCompositorError ivrcompositor_submit(
     IWineD3D11Texture2D *wine_texture;
     IWineD3D11Device *wined3d_device;
     struct submit_data submit_data;
-    IUnknown *texture_iface;
+    IUnknown *texture_iface, *depth_texture = NULL;
     ID3D11Device *device;
     HRESULT hr;
 
@@ -453,12 +484,6 @@ EVRCompositorError ivrcompositor_submit(
     {
         case TextureType_DirectX:
             TRACE("D3D11\n");
-
-            if (flags & (Submit_TextureWithPose | Submit_TextureWithDepth))
-            {
-                FIXME("Submit with pose or depth is not supported.\n");
-                flags &= ~(Submit_TextureWithPose | Submit_TextureWithDepth);
-            }
 
             texture_iface = texture->handle;
             hr = texture_iface->lpVtbl->QueryInterface(texture_iface,
@@ -511,11 +536,26 @@ EVRCompositorError ivrcompositor_submit(
             submit_data.linux_side = linux_side;
             submit_data.submit = cpp_func;
             submit_data.eye = eye;
-            submit_data.texture = *texture;
+            switch(flags & (Submit_TextureWithPose | Submit_TextureWithDepth)){
+            case 0:
+                submit_data.texture = *texture;
+                break;
+            case Submit_TextureWithPose:
+                submit_data.texture_pose = *(VRTextureWithPose_t *)texture;
+                break;
+            case Submit_TextureWithDepth:
+                submit_data.texture_depth = *(VRTextureWithDepth_t *)texture;
+                depth_texture = (IUnknown*)submit_data.texture_depth.depth.handle;
+                break;
+            case Submit_TextureWithPose | Submit_TextureWithDepth:
+                submit_data.texture_both = *(VRTextureWithPoseAndDepth_t *)texture;
+                depth_texture = (IUnknown*)submit_data.texture_both.depth.handle;
+                break;
+            }
             submit_data.bounds = *bounds;
             submit_data.flags = flags;
             wine_texture->lpVtbl->access_gl_texture(wine_texture,
-                    d3d11_texture_callback, &submit_data, sizeof(submit_data));
+                    d3d11_texture_callback, depth_texture, &submit_data, sizeof(submit_data));
 
             wine_texture->lpVtbl->Release(wine_texture);
 
@@ -523,14 +563,11 @@ EVRCompositorError ivrcompositor_submit(
 
         case TextureType_Vulkan:
         {
-            struct VRVulkanTextureData_t our_vkdata, *their_vkdata;
-            Texture_t our_texture;
-
-            if (flags & (Submit_TextureWithPose | Submit_TextureWithDepth))
-            {
-                FIXME("Submit with pose or depth is not supported.\n");
-                flags &= ~(Submit_TextureWithPose | Submit_TextureWithDepth);
-            }
+            struct VRVulkanTextureData_t our_vkdata, our_depth_vkdata, *their_vkdata;
+            Texture_t our_texture, *tex;
+            VRTextureWithPose_t our_pose;
+            VRTextureWithDepth_t our_depth;
+            VRTextureWithPoseAndDepth_t our_both;
 
             load_vk_unwrappers();
 
@@ -542,10 +579,56 @@ EVRCompositorError ivrcompositor_submit(
             our_vkdata.m_pInstance = get_native_VkInstance(our_vkdata.m_pInstance);
             our_vkdata.m_pQueue = get_native_VkQueue(our_vkdata.m_pQueue);
 
-            our_texture = *texture;
-            our_texture.handle = &our_vkdata;
+            switch(flags & (Submit_TextureWithPose | Submit_TextureWithDepth)){
+            case 0:
+                our_texture = *texture;
+                our_texture.handle = &our_vkdata;
+                tex = (Texture_t *)&our_texture;
+                break;
 
-            return cpp_func(linux_side, eye, &our_texture, bounds, flags);
+            case Submit_TextureWithPose:
+                our_pose = *(VRTextureWithPose_t *)texture;
+                our_pose.texture.handle = &our_vkdata;
+                tex = (Texture_t *)&our_pose;
+                break;
+
+            case Submit_TextureWithDepth:
+                our_depth = *(VRTextureWithDepth_t *)texture;
+
+                our_depth.texture.handle = &our_vkdata;
+
+                their_vkdata = (struct VRVulkanTextureData_t *)our_depth.depth.handle;
+                our_depth_vkdata = *their_vkdata;
+                our_depth_vkdata.m_pDevice = get_native_VkDevice(our_depth_vkdata.m_pDevice);
+                our_depth_vkdata.m_pPhysicalDevice = get_native_VkPhysicalDevice(our_depth_vkdata.m_pPhysicalDevice);
+                our_depth_vkdata.m_pInstance = get_native_VkInstance(our_depth_vkdata.m_pInstance);
+                our_depth_vkdata.m_pQueue = get_native_VkQueue(our_depth_vkdata.m_pQueue);
+
+                our_depth.depth.handle = &our_depth_vkdata;
+
+                tex = (Texture_t *)&our_depth;
+                break;
+
+            case Submit_TextureWithPose | Submit_TextureWithDepth:
+                our_both = *(VRTextureWithPoseAndDepth_t *)texture;
+
+                our_both.texture.handle = &our_vkdata;
+
+                their_vkdata = (struct VRVulkanTextureData_t *)our_both.depth.handle;
+                our_depth_vkdata = *their_vkdata;
+                our_depth_vkdata.m_pDevice = get_native_VkDevice(our_depth_vkdata.m_pDevice);
+                our_depth_vkdata.m_pPhysicalDevice = get_native_VkPhysicalDevice(our_depth_vkdata.m_pPhysicalDevice);
+                our_depth_vkdata.m_pInstance = get_native_VkInstance(our_depth_vkdata.m_pInstance);
+                our_depth_vkdata.m_pQueue = get_native_VkQueue(our_depth_vkdata.m_pQueue);
+
+                our_both.depth.handle = &our_depth_vkdata;
+
+                tex = (Texture_t *)&our_both;
+                break;
+            }
+
+
+            return cpp_func(linux_side, eye, tex, bounds, flags);
         }
 
         default:
