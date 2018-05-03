@@ -37,6 +37,7 @@ void *create_LinuxMatchmakingServerListResponse(void *win);
 #ifndef __cplusplus
 typedef struct ID3D11Device ID3D11Device;
 typedef struct IWineD3D11Device IWineD3D11Device;
+typedef struct IDXGIVkInteropDevice IDXGIVkInteropDevice;
 
 struct generic_interface
 {
@@ -56,6 +57,7 @@ struct compositor_data
 {
     ID3D11Device *d3d11_device;
     IWineD3D11Device *wined3d_device;
+    IDXGIVkInteropDevice *dxvk_device;
 };
 
 void destroy_compositor_data(struct compositor_data *data);

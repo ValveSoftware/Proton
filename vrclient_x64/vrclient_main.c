@@ -15,6 +15,7 @@
 #include "vrclient_private.h"
 
 #include "initguid.h"
+#include "dxvk-interop.h"
 #include "wined3d-interop.h"
 
 #include "cppIVRCompositor_IVRCompositor_021.h"
@@ -447,11 +448,15 @@ EVRCompositorError ivrcompositor_submit(
     ID3D11Device *device;
     HRESULT hr;
 
+    IDXGIVkInteropSurface *dxvk_surface;
+    IDXGIVkInteropDevice *dxvk_device;
+
     TRACE("%p, %#x, %p, %p, %#x\n", linux_side, eye, texture, bounds, flags);
 
     switch (texture->eType)
     {
         case TextureType_DirectX:
+        {
             TRACE("D3D11\n");
 
             if (flags & (Submit_TextureWithPose | Submit_TextureWithDepth))
@@ -463,63 +468,143 @@ EVRCompositorError ivrcompositor_submit(
             texture_iface = texture->handle;
             hr = texture_iface->lpVtbl->QueryInterface(texture_iface,
                     &IID_IWineD3D11Texture2D, (void **)&wine_texture);
-            if (FAILED(hr))
-            {
-                ERR("Invalid D3D11 texture %p.\n", texture);
-                return cpp_func(linux_side, eye, texture, bounds, flags);
-            }
+            if (SUCCEEDED(hr)) {
 
-            wine_texture->lpVtbl->GetDevice(wine_texture, &device);
-            if (user_data->d3d11_device != device)
-            {
-                if (user_data->d3d11_device)
-                    FIXME("Previous submit was from different D3D11 device.\n");
-
-                user_data->d3d11_device = device;
-
-                if (SUCCEEDED(hr = device->lpVtbl->QueryInterface(device,
-                        &IID_IWineD3D11Device, (void **)&wined3d_device)))
+                wine_texture->lpVtbl->GetDevice(wine_texture, &device);
+                if (user_data->d3d11_device != device)
                 {
-                    user_data->wined3d_device = wined3d_device;
-                    wined3d_device->lpVtbl->Release(wined3d_device);
-                }
-                else
-                {
-                    ERR("Failed to get device, hr %#x.\n", hr);
-                    user_data->wined3d_device = NULL;
-                }
+                    if (user_data->d3d11_device)
+                        FIXME("Previous submit was from different D3D11 device.\n");
 
-                TRACE("Enabling explicit timing mode.\n");
-                switch (version)
-                {
-                    case 21:
-                        cppIVRCompositor_IVRCompositor_021_SetExplicitTimingMode(linux_side,
-                                VRCompositorTimingMode_Explicit_ApplicationPerformsPostPresentHandoff);
-                        break;
-                    case 22:
-                        cppIVRCompositor_IVRCompositor_022_SetExplicitTimingMode(linux_side,
-                                VRCompositorTimingMode_Explicit_ApplicationPerformsPostPresentHandoff);
-                        break;
-                    default:
-                        FIXME("Version %u not supported.\n", version);
+                    user_data->d3d11_device = device;
+
+                    if (SUCCEEDED(hr = device->lpVtbl->QueryInterface(device,
+                            &IID_IWineD3D11Device, (void **)&wined3d_device)))
+                    {
+                        user_data->wined3d_device = wined3d_device;
+                        wined3d_device->lpVtbl->Release(wined3d_device);
+                    }
+                    else
+                    {
+                        ERR("Failed to get device, hr %#x.\n", hr);
                         user_data->wined3d_device = NULL;
-                        break;
+                    }
+
+                    TRACE("Enabling explicit timing mode.\n");
+                    switch (version)
+                    {
+                        case 21:
+                            cppIVRCompositor_IVRCompositor_021_SetExplicitTimingMode(linux_side,
+                                    VRCompositorTimingMode_Explicit_ApplicationPerformsPostPresentHandoff);
+                            break;
+                        case 22:
+                            cppIVRCompositor_IVRCompositor_022_SetExplicitTimingMode(linux_side,
+                                    VRCompositorTimingMode_Explicit_ApplicationPerformsPostPresentHandoff);
+                            break;
+                        default:
+                            FIXME("Version %u not supported.\n", version);
+                            user_data->wined3d_device = NULL;
+                            break;
+                    }
                 }
+                device->lpVtbl->Release(device);
+
+                submit_data.linux_side = linux_side;
+                submit_data.submit = cpp_func;
+                submit_data.eye = eye;
+                submit_data.texture = *texture;
+                submit_data.bounds = *bounds;
+                submit_data.flags = flags;
+                wine_texture->lpVtbl->access_gl_texture(wine_texture,
+                        d3d11_texture_callback, &submit_data, sizeof(submit_data));
+
+                wine_texture->lpVtbl->Release(wine_texture);
+
+                return 0;
             }
-            device->lpVtbl->Release(device);
 
-            submit_data.linux_side = linux_side;
-            submit_data.submit = cpp_func;
-            submit_data.eye = eye;
-            submit_data.texture = *texture;
-            submit_data.bounds = *bounds;
-            submit_data.flags = flags;
-            wine_texture->lpVtbl->access_gl_texture(wine_texture,
-                    d3d11_texture_callback, &submit_data, sizeof(submit_data));
+            hr = texture_iface->lpVtbl->QueryInterface(texture_iface,
+                    &IID_IDXGIVkInteropSurface, (void **)&dxvk_surface);
 
-            wine_texture->lpVtbl->Release(wine_texture);
+            if (SUCCEEDED(hr)) {
+                struct VRVulkanTextureData_t vkdata;
+                struct Texture_t vktexture;
 
-            return 0;
+                VkImage image_handle;
+                VkImageLayout image_layout;
+                VkImageCreateInfo image_info;
+                VkImageSubresourceRange subresources;
+
+                EVRCompositorError err;
+
+                dxvk_surface->lpVtbl->GetDevice(
+                    dxvk_surface, &dxvk_device);
+                
+                user_data->dxvk_device = dxvk_device;
+
+                dxvk_device->lpVtbl->GetVulkanHandles(
+                    dxvk_device,
+                    &vkdata.m_pInstance,
+                    &vkdata.m_pPhysicalDevice,
+                    &vkdata.m_pDevice);
+
+                dxvk_device->lpVtbl->GetSubmissionQueue(
+                    dxvk_device,
+                    &vkdata.m_pQueue,
+                    &vkdata.m_nQueueFamilyIndex);
+
+                // DXVK needs this to be initialized correctly
+                image_info.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
+                image_info.pNext = NULL;
+
+                dxvk_surface->lpVtbl->GetVulkanImageInfo(
+                    dxvk_surface, &image_handle,
+                    &image_layout, &image_info);
+
+                load_vk_unwrappers();
+
+                vkdata.m_nImage = (uint64_t)image_handle;
+                vkdata.m_pDevice = get_native_VkDevice(vkdata.m_pDevice);
+                vkdata.m_pPhysicalDevice = get_native_VkPhysicalDevice(vkdata.m_pPhysicalDevice);
+                vkdata.m_pInstance = get_native_VkInstance(vkdata.m_pInstance);
+                vkdata.m_pQueue = get_native_VkQueue(vkdata.m_pQueue);
+                vkdata.m_nWidth = image_info.extent.width;
+                vkdata.m_nHeight = image_info.extent.height;
+                vkdata.m_nFormat = image_info.format;
+                vkdata.m_nSampleCount = image_info.samples;
+
+                vktexture = *texture;
+                vktexture.handle = &vkdata;
+                vktexture.eType = TextureType_Vulkan;
+
+                subresources.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+                subresources.baseMipLevel = 0;
+                subresources.levelCount = image_info.mipLevels;
+                subresources.baseArrayLayer = 0;
+                subresources.layerCount = image_info.arrayLayers;
+
+                dxvk_device->lpVtbl->TransitionSurfaceLayout(
+                    dxvk_device, dxvk_surface, &subresources,
+                    image_layout, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
+                dxvk_device->lpVtbl->FlushRenderingCommands(dxvk_device);
+                dxvk_device->lpVtbl->LockSubmissionQueue(dxvk_device);
+
+                err = cpp_func(linux_side, eye, &vktexture, bounds, flags);
+
+                dxvk_device->lpVtbl->ReleaseSubmissionQueue(dxvk_device);
+                dxvk_device->lpVtbl->TransitionSurfaceLayout(
+                    dxvk_device, dxvk_surface, &subresources,
+                    VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, image_layout);
+
+                dxvk_device->lpVtbl->Release(dxvk_device);
+                dxvk_surface->lpVtbl->Release(dxvk_surface);
+                return err;
+            }
+
+            ERR("Invalid D3D11 texture %p.\n", texture);
+            return cpp_func(linux_side, eye, texture, bounds, flags);
+        }
+
 
         case TextureType_Vulkan:
         {
@@ -587,7 +672,13 @@ void ivrcompositor_post_present_handoff(void (*cpp_func)(void *),
         return;
     }
 
+    if (user_data->dxvk_device)
+        user_data->dxvk_device->lpVtbl->LockSubmissionQueue(user_data->dxvk_device);
+    
     cpp_func(linux_side);
+
+    if (user_data->dxvk_device)
+        user_data->dxvk_device->lpVtbl->ReleaseSubmissionQueue(user_data->dxvk_device);
 }
 
 struct explicit_timing_data
@@ -631,7 +722,13 @@ EVRCompositorError ivrcompositor_wait_get_poses(
 
     TRACE("%p, %p, %u, %p, %u\n", linux_side, render_poses, render_pose_count, game_poses, game_pose_count);
 
+    if (user_data->dxvk_device)
+        user_data->dxvk_device->lpVtbl->LockSubmissionQueue(user_data->dxvk_device);
+
     r = cpp_func(linux_side, render_poses, render_pose_count, game_poses, game_pose_count);
+
+    if (user_data->dxvk_device)
+        user_data->dxvk_device->lpVtbl->ReleaseSubmissionQueue(user_data->dxvk_device);
 
     if ((wined3d_device = user_data->wined3d_device))
     {
