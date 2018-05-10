@@ -77,7 +77,7 @@ Next, you need to repeat the process, but for amd64:
         ./setup_chroot.sh --beta --amd64
         schroot --chroot steamrt_scout_beta_amd64
 
-And then repeat all of the commands to install gcc and Wine depenedencies again.
+And then repeat all of the commands to install gcc and Wine dependencies again.
 
 Finally, change your directory back to proton, and run:
 
