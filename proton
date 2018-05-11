@@ -13,7 +13,9 @@ import tarfile
 
 from filelock import FileLock, Timeout
 
+# For performance, all logging is turned off by default. It can be enabled here.
 #WITH_WINEDEBUG="+timestamp,+pid,+tid,+seh"
+#WITH_DXVK_LOG_LEVEL="info"
 
 CURRENT_PREFIX_VERSION="3.7-1"
 
@@ -90,6 +92,11 @@ try:
 except (NameError, KeyError): #WITH_WINEDEBUG is unset, or SteamGameId is unset
     env["WINEDEBUG"] = "-all"
     lfile = None
+
+try:
+    env["DXVK_LOG_LEVEL"] = WITH_DXVK_LOG_LEVEL
+except NameError: #WITH_DXVK_LOG_LEVEL is unset
+    env["DXVK_LOG_LEVEL"] = "none"
 
 if ld_path_var in os.environ:
     env[ld_path_var] = lib64dir + ":" + libdir + ":" + os.environ[ld_path_var]
