@@ -319,6 +319,8 @@ def dump_dbg_env(f):
         f.write("\tPROTON_VR_RUNTIME=\"" + env["PROTON_VR_RUNTIME"] + "\" \\\n")
     if "WINEDLLOVERRIDES" in env:
         f.write("\tWINEDLLOVERRIDES=\"" + env["WINEDLLOVERRIDES"] + "\" \\\n")
+    if "STEAM_COMPAT_CLIENT_INSTALL_PATH" in env:
+        f.write("\tSTEAM_COMPAT_CLIENT_INSTALL_PATH=\"" + env["STEAM_COMPAT_CLIENT_INSTALL_PATH"] + "\" \\\n")
 
 def dump_dbg_scripts():
     if game_arch == ARCH_X86_64:
