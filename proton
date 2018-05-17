@@ -50,16 +50,21 @@ if not ("STEAM_COMPAT_DATA_PATH" in os.environ):
     log("No compat data path?")
     sys.exit(1)
 
+def check_environment(env_name, config_name):
+    if not env_name in os.environ:
+        return
+    if os.environ[env_name] == "0" or len(os.environ[env_name]) == 0:
+        config_opts.remove(config_name)
+    else:
+        config_opts.add(config_name)
+
 if "STEAM_COMPAT_CONFIG" in os.environ:
-    config_opts = os.environ["STEAM_COMPAT_CONFIG"].split(",")
+    config_opts = set(os.environ["STEAM_COMPAT_CONFIG"].split(","))
 else:
-    config_opts = []
+    config_opts = set()
 
-if "PROTON_USE_DXVK" in os.environ:
-    config_opts.append("dxvk")
-
-if "PROTON_NO_D3D11" in os.environ:
-    config_opts.append("nod3d11")
+check_environment("PROTON_USE_WINED3D11", "wined3d11")
+check_environment("PROTON_NO_D3D11", "nod3d11")
 
 basedir = os.path.dirname(sys.argv[0])
 bindir = basedir + "/dist/bin/"
@@ -245,18 +250,20 @@ with prefix_lock:
         os.symlink(dll_dir + "/d3d11.dll", link_dir + "/d3d11.dll")
         os.symlink(dll_dir + "/dxgi.dll", link_dir + "/dxgi.dll")
 
-    if "dxvk" in config_opts:
+    if "wined3d11" in config_opts:
+        #use gl-based wined3d for d3d11
+        make_dxvk_links(basedir + "/dist/lib64/wine/",
+            prefix + "drive_c/windows/system32")
+        make_dxvk_links(basedir + "/dist/lib/wine/",
+            prefix + "drive_c/windows/syswow64")
+    else:
+        #use vulkan-based dxvk for d3d11
         make_dxvk_links(basedir + "/dist/lib64/wine/dxvk/",
             prefix + "drive_c/windows/system32")
         make_dxvk_links(basedir + "/dist/lib/wine/dxvk/",
             prefix + "drive_c/windows/syswow64")
         dlloverrides["dxgi"] = "n"
         dlloverrides["d3d11"] = "n"
-    else:
-        make_dxvk_links(basedir + "/dist/lib64/wine/",
-            prefix + "drive_c/windows/system32")
-        make_dxvk_links(basedir + "/dist/lib/wine/",
-            prefix + "drive_c/windows/syswow64")
 
 if "nod3d11" in config_opts:
     dlloverrides["d3d11"] = ""

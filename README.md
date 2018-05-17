@@ -133,17 +133,18 @@ submodule and directory for details.
 ----
 Runtime Config Options
 ----
-Proton can be tuned at runtime to help certain games run.  Options can either
-be defined in a comma-separated list stored in the <tt>STEAM_COMPAT_CONFIG</tt>
-environment variable when running Proton (the Steam client does this),
-or passed through the presence of individual environment variables as documented below.
+Proton can be tuned at runtime to help certain games run. The Steam client sets
+some options for known games using the <tt>STEAM_COMPAT_CONFIG</tt> variable.
+You can override these options using the environment variables described below.
+To enable an option, set the variable to a non-<tt>0</tt> value.  To disable an
+option, set the variable to <tt>0</tt>.
 
 All of the below are runtime options. They do not effect permanent changes to
 the Wine prefix. Removing the option will revert to the previous behavior.
 
 | Compat config string  | Environment Variable           | Description  |
 | :-------------------- | :----------------------------- | :----------- |
-|     <tt>dxvk</tt>     |    <tt>PROTON_USE_DXVK</tt>    | Run the game with DXVK instead of wined3d. |
-|     <tt>nod3d11</tt>  |    <tt>PROTON_NO_D3D11</tt>    | Disable <tt>d3d11.dll</tt>, for games which can fall back to and run better with d3d9. |
+| <tt>wined3d11</tt>    | <tt>PROTON_USE_WINED3D11</tt>  | Use OpenGL-based wined3d instead of Vulkan-based DXVK for d3d11. |
+| <tt>nod3d11</tt>      | <tt>PROTON_NO_D3D11</tt>       | Disable <tt>d3d11.dll</tt>, for games which can fall back to and run better with d3d9. |
 
 <!-- Target:  GitHub Flavor Markdown.  To test locally:  pandoc -f markdown_github -t html README.md  -->
