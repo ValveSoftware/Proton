@@ -15,7 +15,12 @@
 #include "vrclient_private.h"
 
 #include "initguid.h"
+
+#if !defined(__APPLE__) || defined(__x86_64__)
+/* 32-bit Mac doesn't support Vulkan and thus DXVK */
 #include "dxvk-interop.h"
+#endif
+
 #include "wined3d-interop.h"
 
 #include "cppIVRCompositor_IVRCompositor_021.h"
@@ -478,9 +483,10 @@ EVRCompositorError ivrcompositor_submit(
     IUnknown *texture_iface, *depth_texture = NULL;
     ID3D11Device *device;
     HRESULT hr;
-
+#if !defined(__APPLE__) || defined(__x86_64__)
     IDXGIVkInteropSurface *dxvk_surface;
     IDXGIVkInteropDevice *dxvk_device;
+#endif
 
     TRACE("%p, %#x, %p, %p, %#x\n", linux_side, eye, texture, bounds, flags);
 
@@ -563,6 +569,7 @@ EVRCompositorError ivrcompositor_submit(
                 return 0;
             }
 
+#if !defined(__APPLE__) || defined(__x86_64__)
             hr = texture_iface->lpVtbl->QueryInterface(texture_iface,
                     &IID_IDXGIVkInteropSurface, (void **)&dxvk_surface);
 
@@ -640,6 +647,7 @@ EVRCompositorError ivrcompositor_submit(
                 dxvk_surface->lpVtbl->Release(dxvk_surface);
                 return err;
             }
+#endif
 
             ERR("Invalid D3D11 texture %p.\n", texture);
             return cpp_func(linux_side, eye, texture, bounds, flags);
@@ -755,13 +763,17 @@ void ivrcompositor_post_present_handoff(void (*cpp_func)(void *),
         return;
     }
 
+#if !defined(__APPLE__) || defined(__x86_64__)
     if (user_data->dxvk_device)
         user_data->dxvk_device->lpVtbl->LockSubmissionQueue(user_data->dxvk_device);
+#endif
     
     cpp_func(linux_side);
 
+#if !defined(__APPLE__) || defined(__x86_64__)
     if (user_data->dxvk_device)
         user_data->dxvk_device->lpVtbl->ReleaseSubmissionQueue(user_data->dxvk_device);
+#endif
 }
 
 struct explicit_timing_data
@@ -805,13 +817,17 @@ EVRCompositorError ivrcompositor_wait_get_poses(
 
     TRACE("%p, %p, %u, %p, %u\n", linux_side, render_poses, render_pose_count, game_poses, game_pose_count);
 
+#if !defined(__APPLE__) || defined(__x86_64__)
     if (user_data->dxvk_device)
         user_data->dxvk_device->lpVtbl->LockSubmissionQueue(user_data->dxvk_device);
+#endif
 
     r = cpp_func(linux_side, render_poses, render_pose_count, game_poses, game_pose_count);
 
+#if !defined(__APPLE__) || defined(__x86_64__)
     if (user_data->dxvk_device)
         user_data->dxvk_device->lpVtbl->ReleaseSubmissionQueue(user_data->dxvk_device);
+#endif
 
     if ((wined3d_device = user_data->wined3d_device))
     {

@@ -57,7 +57,9 @@ struct compositor_data
 {
     ID3D11Device *d3d11_device;
     IWineD3D11Device *wined3d_device;
+#if !defined(__APPLE__) || defined(__x86_64__)
     IDXGIVkInteropDevice *dxvk_device;
+#endif
 };
 
 void destroy_compositor_data(struct compositor_data *data);
