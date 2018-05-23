@@ -79,6 +79,10 @@ Next, you need to repeat the process, but for amd64:
 
 And then repeat all of the commands to install gcc and Wine dependencies again.
 
+In addition, your host system will need to be able to run Wine in both 64- and
+32-bit modes in order to create the default prefix. It is recommended to
+install Wine from your package manager, including its optional dependencies.
+
 Finally, change your directory back to proton, and run:
 
         cd ../proton

@@ -497,6 +497,11 @@ if [ "$PACKAGE" = true ]; then
     echo "Packaging..."
     cd "$TOP"
 
+    #create default prefix
+    rm -rf "$TOP"/build/dist/share/default_pfx/
+    WINEPREFIX="$TOP"/build/dist/share/default_pfx/ ./build/dist/bin/wine64 wineboot
+    WINEPREFIX="$TOP"/build/dist/share/default_pfx/ ./build/dist/bin/wineserver -w
+
     #the difference between -1 and -9 is about 20 MB, so prioritize quick startup over file size
     tar -C build/dist -c . | gzip -c -1 > dist/proton_dist.tar.gz
 
