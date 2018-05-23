@@ -499,8 +499,13 @@ if [ "$PACKAGE" = true ]; then
 
     #create default prefix
     rm -rf "$TOP"/build/dist/share/default_pfx/
-    WINEPREFIX="$TOP"/build/dist/share/default_pfx/ ./build/dist/bin/wine64 wineboot
-    WINEPREFIX="$TOP"/build/dist/share/default_pfx/ ./build/dist/bin/wineserver -w
+    if [ "$PLATFORM" != "Darwin" ]; then
+        RUNTIME_RUNSH="$HOME"/steam-runtime/run.sh
+    else
+        RUNTIME_RUNSH=""
+    fi
+    WINEPREFIX="$TOP"/build/dist/share/default_pfx/ "$RUNTIME_RUNSH" ./build/dist/bin/wine64 wineboot
+    WINEPREFIX="$TOP"/build/dist/share/default_pfx/ "$RUNTIME_RUNSH" ./build/dist/bin/wineserver -w
 
     #the difference between -1 and -9 is about 20 MB, so prioritize quick startup over file size
     tar -C build/dist -c . | gzip -c -1 > dist/proton_dist.tar.gz
