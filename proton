@@ -54,7 +54,7 @@ def check_environment(env_name, config_name):
     if not env_name in os.environ:
         return
     if os.environ[env_name] == "0" or len(os.environ[env_name]) == 0:
-        config_opts.remove(config_name)
+        config_opts.discard(config_name)
     else:
         config_opts.add(config_name)
 
