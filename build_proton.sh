@@ -580,7 +580,7 @@ if [ "$PACKAGE" = true ]; then
     #create default prefix
     rm -rf "$TOP"/build/dist/share/default_pfx/
     if [ "$PLATFORM" != "Darwin" ]; then
-        RUNTIME_RUNSH="$HOME"/steam-runtime/run.sh
+        RUNTIME_RUNSH="$HOME"/steam-runtime/runtime/run.sh
     else
         RUNTIME_RUNSH=""
     fi

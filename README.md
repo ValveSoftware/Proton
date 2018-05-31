@@ -44,8 +44,8 @@ changes to the <tt>wine/</tt> directory.
 ---
 Building for Linux
 ---
-To build Proton for Linux, set up a Debian machine with the Steam chroots as
-documented in the Steam Runtime repository:
+To build Proton for Linux, set up a Debian machine with the Steam runtime and
+chroots as documented in the Steam Runtime repository:
 
   <https://github.com/ValveSoftware/steam-runtime>
 
@@ -56,6 +56,8 @@ not be complete.
         cd ~
         git clone https://github.com/ValveSoftware/steam-runtime.git
         cd steam-runtime
+        #install the end-user steam runtime:
+        ./build-runtime.py
         #install the 32-bit scout_beta runtime:
         ./setup_chroot.sh --beta --i386
         #enter the 32-bit runtime:
