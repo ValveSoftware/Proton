@@ -14,7 +14,7 @@ import tarfile
 from filelock import FileLock, Timeout
 
 # For performance, all logging is turned off by default. It can be enabled here.
-#WITH_WINEDEBUG="+timestamp,+pid,+tid,+seh"
+#WITH_WINEDEBUG="+timestamp,+pid,+tid,+seh,+debugstr"
 #WITH_DXVK_LOG_LEVEL="info"
 
 CURRENT_PREFIX_VERSION="3.7-1"
