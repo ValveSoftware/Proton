@@ -472,6 +472,86 @@ git submodule status -- dxvk > "$DST_DIR"/lib/wine/dxvk/version
 #cp -a dxvk/dist.win64/bin/dxgi.dll "$DST_DIR"/lib64/wine/dxvk/
 #cp -a dxvk/dist.win64/bin/d3d11.dll "$DST_DIR"/lib64/wine/dxvk/
 
+#build ffmpeg
+function build_ffmpeg
+{
+    if [ ! '(' -e "$TOOLS_DIR64/lib/libavcodec.so" -o -e "$TOOLS_DIR64/lib/libavcodec.dylib" ')' ]; then
+        #ffmpeg 32-bit
+        cd "$TOP"
+        mkdir -p build/ffmpeg.win32
+        cd build/ffmpeg.win32
+        $I386_WRAPPER "$TOP"/ffmpeg/configure --prefix="$TOOLS_DIR32" \
+                --disable-static \
+                --enable-shared \
+                --disable-programs \
+                --disable-doc \
+                --disable-avdevice \
+                --disable-avformat \
+                --disable-swresample \
+                --disable-swscale \
+                --disable-postproc \
+                --disable-avfilter \
+                --disable-alsa \
+                --disable-iconv \
+                --disable-libxcb_shape \
+                --disable-libxcb_shm \
+                --disable-libxcb_xfixes \
+                --disable-sdl2 \
+                --disable-xlib \
+                --disable-zlib \
+                --disable-bzlib \
+                --disable-libxcb \
+                --disable-vaapi \
+                --disable-vdpau \
+                --disable-everything \
+                --enable-decoder=wmav2 \
+                --enable-decoder=adpcm_ms
+        $I386_WRAPPER make $JOBS
+        $I386_WRAPPER make install
+
+
+        #ffmpeg 64-bit
+        cd "$TOP"
+        mkdir -p build/ffmpeg.win64
+        cd build/ffmpeg.win64
+        $AMD64_WRAPPER "$TOP"/ffmpeg/configure --prefix="$TOOLS_DIR64" \
+                --disable-static \
+                --enable-shared \
+                --disable-programs \
+                --disable-doc \
+                --disable-avdevice \
+                --disable-avformat \
+                --disable-swresample \
+                --disable-swscale \
+                --disable-postproc \
+                --disable-avfilter \
+                --disable-alsa \
+                --disable-iconv \
+                --disable-libxcb_shape \
+                --disable-libxcb_shm \
+                --disable-libxcb_xfixes \
+                --disable-sdl2 \
+                --disable-xlib \
+                --disable-zlib \
+                --disable-bzlib \
+                --disable-libxcb \
+                --disable-vaapi \
+                --disable-vdpau \
+                --disable-everything \
+                --enable-decoder=wmav2 \
+                --enable-decoder=adpcm_ms
+        $AMD64_WRAPPER make $JOBS
+        $AMD64_WRAPPER make install
+    fi
+
+    cp -L "$TOOLS_DIR32"/lib/libavcodec* "$DST_DIR"/lib/
+    cp -L "$TOOLS_DIR32"/lib/libavutil* "$DST_DIR"/lib/
+    cp -L "$TOOLS_DIR64"/lib/libavcodec* "$DST_DIR"/lib64/
+    cp -L "$TOOLS_DIR64"/lib/libavutil* "$DST_DIR"/lib64/
+}
+
+build_ffmpeg
+
 case "$BUILD_COMPONENTS" in
     "all")
         build_wine64

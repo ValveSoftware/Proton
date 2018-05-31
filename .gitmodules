@@ -22,3 +22,6 @@
 [submodule "MoltenVK"]
 	path = MoltenVK
 	url = https://github.com/KhronosGroup/MoltenVK.git
+[submodule "ffmpeg"]
+	path = ffmpeg
+	url = https://git.ffmpeg.org/ffmpeg.git
