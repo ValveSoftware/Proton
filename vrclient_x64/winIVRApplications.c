@@ -14,6 +14,8 @@
 
 #include "struct_converters.h"
 
+#include "flatapi.h"
+
 WINE_DEFAULT_DEBUG_CHANNEL(vrclient);
 
 #include "cppIVRApplications_IVRApplications_006.h"
@@ -297,6 +299,61 @@ void destroy_winIVRApplications_IVRApplications_006(void *object)
     HeapFree(GetProcessHeap(), 0, object);
 }
 
+winIVRApplications_IVRApplications_006 *create_winIVRApplications_IVRApplications_006_FnTable(void *linux_side)
+{
+    winIVRApplications_IVRApplications_006 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRApplications_IVRApplications_006));
+    struct thunk *thunks = alloc_thunks(31);
+    struct thunk **vtable = HeapAlloc(GetProcessHeap(), 0, 31 * sizeof(*vtable));
+    int i;
+
+    TRACE("-> %p, vtable %p, thunks %p\n", r, vtable, thunks);
+    init_thunk(&thunks[0], r, winIVRApplications_IVRApplications_006_AddApplicationManifest);
+    init_thunk(&thunks[1], r, winIVRApplications_IVRApplications_006_RemoveApplicationManifest);
+    init_thunk(&thunks[2], r, winIVRApplications_IVRApplications_006_IsApplicationInstalled);
+    init_thunk(&thunks[3], r, winIVRApplications_IVRApplications_006_GetApplicationCount);
+    init_thunk(&thunks[4], r, winIVRApplications_IVRApplications_006_GetApplicationKeyByIndex);
+    init_thunk(&thunks[5], r, winIVRApplications_IVRApplications_006_GetApplicationKeyByProcessId);
+    init_thunk(&thunks[6], r, winIVRApplications_IVRApplications_006_LaunchApplication);
+    init_thunk(&thunks[7], r, winIVRApplications_IVRApplications_006_LaunchTemplateApplication);
+    init_thunk(&thunks[8], r, winIVRApplications_IVRApplications_006_LaunchApplicationFromMimeType);
+    init_thunk(&thunks[9], r, winIVRApplications_IVRApplications_006_LaunchDashboardOverlay);
+    init_thunk(&thunks[10], r, winIVRApplications_IVRApplications_006_CancelApplicationLaunch);
+    init_thunk(&thunks[11], r, winIVRApplications_IVRApplications_006_IdentifyApplication);
+    init_thunk(&thunks[12], r, winIVRApplications_IVRApplications_006_GetApplicationProcessId);
+    init_thunk(&thunks[13], r, winIVRApplications_IVRApplications_006_GetApplicationsErrorNameFromEnum);
+    init_thunk(&thunks[14], r, winIVRApplications_IVRApplications_006_GetApplicationPropertyString);
+    init_thunk(&thunks[15], r, winIVRApplications_IVRApplications_006_GetApplicationPropertyBool);
+    init_thunk(&thunks[16], r, winIVRApplications_IVRApplications_006_GetApplicationPropertyUint64);
+    init_thunk(&thunks[17], r, winIVRApplications_IVRApplications_006_SetApplicationAutoLaunch);
+    init_thunk(&thunks[18], r, winIVRApplications_IVRApplications_006_GetApplicationAutoLaunch);
+    init_thunk(&thunks[19], r, winIVRApplications_IVRApplications_006_SetDefaultApplicationForMimeType);
+    init_thunk(&thunks[20], r, winIVRApplications_IVRApplications_006_GetDefaultApplicationForMimeType);
+    init_thunk(&thunks[21], r, winIVRApplications_IVRApplications_006_GetApplicationSupportedMimeTypes);
+    init_thunk(&thunks[22], r, winIVRApplications_IVRApplications_006_GetApplicationsThatSupportMimeType);
+    init_thunk(&thunks[23], r, winIVRApplications_IVRApplications_006_GetApplicationLaunchArguments);
+    init_thunk(&thunks[24], r, winIVRApplications_IVRApplications_006_GetStartingApplication);
+    init_thunk(&thunks[25], r, winIVRApplications_IVRApplications_006_GetTransitionState);
+    init_thunk(&thunks[26], r, winIVRApplications_IVRApplications_006_PerformApplicationPrelaunchCheck);
+    init_thunk(&thunks[27], r, winIVRApplications_IVRApplications_006_GetApplicationsTransitionStateNameFromEnum);
+    init_thunk(&thunks[28], r, winIVRApplications_IVRApplications_006_IsQuitUserPromptRequested);
+    init_thunk(&thunks[29], r, winIVRApplications_IVRApplications_006_LaunchInternalProcess);
+    init_thunk(&thunks[30], r, winIVRApplications_IVRApplications_006_GetCurrentSceneProcessId);
+    for (i = 0; i < 31; i++)
+        vtable[i] = &thunks[i];
+    r->linux_side = linux_side;
+    r->vtable = (void *)vtable;
+    return r;
+}
+
+void destroy_winIVRApplications_IVRApplications_006_FnTable(void *object)
+{
+    winIVRApplications_IVRApplications_006 *win_object = object;
+    TRACE("%p\n", win_object);
+    VirtualFree(win_object->vtable[0], 0, MEM_RELEASE);
+    HeapFree(GetProcessHeap(), 0, win_object->vtable);
+    HeapFree(GetProcessHeap(), 0, win_object);
+}
+
 #include "cppIVRApplications_IVRApplications_005.h"
 
 typedef struct __winIVRApplications_IVRApplications_005 {
@@ -522,6 +579,54 @@ void destroy_winIVRApplications_IVRApplications_005(void *object)
     HeapFree(GetProcessHeap(), 0, object);
 }
 
+winIVRApplications_IVRApplications_005 *create_winIVRApplications_IVRApplications_005_FnTable(void *linux_side)
+{
+    winIVRApplications_IVRApplications_005 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRApplications_IVRApplications_005));
+    struct thunk *thunks = alloc_thunks(24);
+    struct thunk **vtable = HeapAlloc(GetProcessHeap(), 0, 24 * sizeof(*vtable));
+    int i;
+
+    TRACE("-> %p, vtable %p, thunks %p\n", r, vtable, thunks);
+    init_thunk(&thunks[0], r, winIVRApplications_IVRApplications_005_AddApplicationManifest);
+    init_thunk(&thunks[1], r, winIVRApplications_IVRApplications_005_RemoveApplicationManifest);
+    init_thunk(&thunks[2], r, winIVRApplications_IVRApplications_005_IsApplicationInstalled);
+    init_thunk(&thunks[3], r, winIVRApplications_IVRApplications_005_GetApplicationCount);
+    init_thunk(&thunks[4], r, winIVRApplications_IVRApplications_005_GetApplicationKeyByIndex);
+    init_thunk(&thunks[5], r, winIVRApplications_IVRApplications_005_GetApplicationKeyByProcessId);
+    init_thunk(&thunks[6], r, winIVRApplications_IVRApplications_005_LaunchApplication);
+    init_thunk(&thunks[7], r, winIVRApplications_IVRApplications_005_LaunchTemplateApplication);
+    init_thunk(&thunks[8], r, winIVRApplications_IVRApplications_005_LaunchDashboardOverlay);
+    init_thunk(&thunks[9], r, winIVRApplications_IVRApplications_005_CancelApplicationLaunch);
+    init_thunk(&thunks[10], r, winIVRApplications_IVRApplications_005_IdentifyApplication);
+    init_thunk(&thunks[11], r, winIVRApplications_IVRApplications_005_GetApplicationProcessId);
+    init_thunk(&thunks[12], r, winIVRApplications_IVRApplications_005_GetApplicationsErrorNameFromEnum);
+    init_thunk(&thunks[13], r, winIVRApplications_IVRApplications_005_GetApplicationPropertyString);
+    init_thunk(&thunks[14], r, winIVRApplications_IVRApplications_005_GetApplicationPropertyBool);
+    init_thunk(&thunks[15], r, winIVRApplications_IVRApplications_005_GetApplicationPropertyUint64);
+    init_thunk(&thunks[16], r, winIVRApplications_IVRApplications_005_SetApplicationAutoLaunch);
+    init_thunk(&thunks[17], r, winIVRApplications_IVRApplications_005_GetApplicationAutoLaunch);
+    init_thunk(&thunks[18], r, winIVRApplications_IVRApplications_005_GetStartingApplication);
+    init_thunk(&thunks[19], r, winIVRApplications_IVRApplications_005_GetTransitionState);
+    init_thunk(&thunks[20], r, winIVRApplications_IVRApplications_005_PerformApplicationPrelaunchCheck);
+    init_thunk(&thunks[21], r, winIVRApplications_IVRApplications_005_GetApplicationsTransitionStateNameFromEnum);
+    init_thunk(&thunks[22], r, winIVRApplications_IVRApplications_005_IsQuitUserPromptRequested);
+    init_thunk(&thunks[23], r, winIVRApplications_IVRApplications_005_LaunchInternalProcess);
+    for (i = 0; i < 24; i++)
+        vtable[i] = &thunks[i];
+    r->linux_side = linux_side;
+    r->vtable = (void *)vtable;
+    return r;
+}
+
+void destroy_winIVRApplications_IVRApplications_005_FnTable(void *object)
+{
+    winIVRApplications_IVRApplications_005 *win_object = object;
+    TRACE("%p\n", win_object);
+    VirtualFree(win_object->vtable[0], 0, MEM_RELEASE);
+    HeapFree(GetProcessHeap(), 0, win_object->vtable);
+    HeapFree(GetProcessHeap(), 0, win_object);
+}
+
 #include "cppIVRApplications_IVRApplications_004.h"
 
 typedef struct __winIVRApplications_IVRApplications_004 {
@@ -739,6 +844,53 @@ void destroy_winIVRApplications_IVRApplications_004(void *object)
     HeapFree(GetProcessHeap(), 0, object);
 }
 
+winIVRApplications_IVRApplications_004 *create_winIVRApplications_IVRApplications_004_FnTable(void *linux_side)
+{
+    winIVRApplications_IVRApplications_004 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRApplications_IVRApplications_004));
+    struct thunk *thunks = alloc_thunks(23);
+    struct thunk **vtable = HeapAlloc(GetProcessHeap(), 0, 23 * sizeof(*vtable));
+    int i;
+
+    TRACE("-> %p, vtable %p, thunks %p\n", r, vtable, thunks);
+    init_thunk(&thunks[0], r, winIVRApplications_IVRApplications_004_AddApplicationManifest);
+    init_thunk(&thunks[1], r, winIVRApplications_IVRApplications_004_RemoveApplicationManifest);
+    init_thunk(&thunks[2], r, winIVRApplications_IVRApplications_004_IsApplicationInstalled);
+    init_thunk(&thunks[3], r, winIVRApplications_IVRApplications_004_GetApplicationCount);
+    init_thunk(&thunks[4], r, winIVRApplications_IVRApplications_004_GetApplicationKeyByIndex);
+    init_thunk(&thunks[5], r, winIVRApplications_IVRApplications_004_GetApplicationKeyByProcessId);
+    init_thunk(&thunks[6], r, winIVRApplications_IVRApplications_004_LaunchApplication);
+    init_thunk(&thunks[7], r, winIVRApplications_IVRApplications_004_LaunchDashboardOverlay);
+    init_thunk(&thunks[8], r, winIVRApplications_IVRApplications_004_CancelApplicationLaunch);
+    init_thunk(&thunks[9], r, winIVRApplications_IVRApplications_004_IdentifyApplication);
+    init_thunk(&thunks[10], r, winIVRApplications_IVRApplications_004_GetApplicationProcessId);
+    init_thunk(&thunks[11], r, winIVRApplications_IVRApplications_004_GetApplicationsErrorNameFromEnum);
+    init_thunk(&thunks[12], r, winIVRApplications_IVRApplications_004_GetApplicationPropertyString);
+    init_thunk(&thunks[13], r, winIVRApplications_IVRApplications_004_GetApplicationPropertyBool);
+    init_thunk(&thunks[14], r, winIVRApplications_IVRApplications_004_GetApplicationPropertyUint64);
+    init_thunk(&thunks[15], r, winIVRApplications_IVRApplications_004_SetApplicationAutoLaunch);
+    init_thunk(&thunks[16], r, winIVRApplications_IVRApplications_004_GetApplicationAutoLaunch);
+    init_thunk(&thunks[17], r, winIVRApplications_IVRApplications_004_GetStartingApplication);
+    init_thunk(&thunks[18], r, winIVRApplications_IVRApplications_004_GetTransitionState);
+    init_thunk(&thunks[19], r, winIVRApplications_IVRApplications_004_PerformApplicationPrelaunchCheck);
+    init_thunk(&thunks[20], r, winIVRApplications_IVRApplications_004_GetApplicationsTransitionStateNameFromEnum);
+    init_thunk(&thunks[21], r, winIVRApplications_IVRApplications_004_IsQuitUserPromptRequested);
+    init_thunk(&thunks[22], r, winIVRApplications_IVRApplications_004_LaunchInternalProcess);
+    for (i = 0; i < 23; i++)
+        vtable[i] = &thunks[i];
+    r->linux_side = linux_side;
+    r->vtable = (void *)vtable;
+    return r;
+}
+
+void destroy_winIVRApplications_IVRApplications_004_FnTable(void *object)
+{
+    winIVRApplications_IVRApplications_004 *win_object = object;
+    TRACE("%p\n", win_object);
+    VirtualFree(win_object->vtable[0], 0, MEM_RELEASE);
+    HeapFree(GetProcessHeap(), 0, win_object->vtable);
+    HeapFree(GetProcessHeap(), 0, win_object);
+}
+
 #include "cppIVRApplications_IVRApplications_003.h"
 
 typedef struct __winIVRApplications_IVRApplications_003 {
@@ -940,6 +1092,51 @@ void destroy_winIVRApplications_IVRApplications_003(void *object)
     HeapFree(GetProcessHeap(), 0, object);
 }
 
+winIVRApplications_IVRApplications_003 *create_winIVRApplications_IVRApplications_003_FnTable(void *linux_side)
+{
+    winIVRApplications_IVRApplications_003 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRApplications_IVRApplications_003));
+    struct thunk *thunks = alloc_thunks(21);
+    struct thunk **vtable = HeapAlloc(GetProcessHeap(), 0, 21 * sizeof(*vtable));
+    int i;
+
+    TRACE("-> %p, vtable %p, thunks %p\n", r, vtable, thunks);
+    init_thunk(&thunks[0], r, winIVRApplications_IVRApplications_003_AddApplicationManifest);
+    init_thunk(&thunks[1], r, winIVRApplications_IVRApplications_003_RemoveApplicationManifest);
+    init_thunk(&thunks[2], r, winIVRApplications_IVRApplications_003_IsApplicationInstalled);
+    init_thunk(&thunks[3], r, winIVRApplications_IVRApplications_003_GetApplicationCount);
+    init_thunk(&thunks[4], r, winIVRApplications_IVRApplications_003_GetApplicationKeyByIndex);
+    init_thunk(&thunks[5], r, winIVRApplications_IVRApplications_003_GetApplicationKeyByProcessId);
+    init_thunk(&thunks[6], r, winIVRApplications_IVRApplications_003_LaunchApplication);
+    init_thunk(&thunks[7], r, winIVRApplications_IVRApplications_003_LaunchDashboardOverlay);
+    init_thunk(&thunks[8], r, winIVRApplications_IVRApplications_003_IdentifyApplication);
+    init_thunk(&thunks[9], r, winIVRApplications_IVRApplications_003_GetApplicationProcessId);
+    init_thunk(&thunks[10], r, winIVRApplications_IVRApplications_003_GetApplicationsErrorNameFromEnum);
+    init_thunk(&thunks[11], r, winIVRApplications_IVRApplications_003_GetApplicationPropertyString);
+    init_thunk(&thunks[12], r, winIVRApplications_IVRApplications_003_GetApplicationPropertyBool);
+    init_thunk(&thunks[13], r, winIVRApplications_IVRApplications_003_GetApplicationPropertyUint64);
+    init_thunk(&thunks[14], r, winIVRApplications_IVRApplications_003_SetApplicationAutoLaunch);
+    init_thunk(&thunks[15], r, winIVRApplications_IVRApplications_003_GetApplicationAutoLaunch);
+    init_thunk(&thunks[16], r, winIVRApplications_IVRApplications_003_GetStartingApplication);
+    init_thunk(&thunks[17], r, winIVRApplications_IVRApplications_003_GetTransitionState);
+    init_thunk(&thunks[18], r, winIVRApplications_IVRApplications_003_PerformApplicationPrelaunchCheck);
+    init_thunk(&thunks[19], r, winIVRApplications_IVRApplications_003_GetApplicationsTransitionStateNameFromEnum);
+    init_thunk(&thunks[20], r, winIVRApplications_IVRApplications_003_IsQuitUserPromptRequested);
+    for (i = 0; i < 21; i++)
+        vtable[i] = &thunks[i];
+    r->linux_side = linux_side;
+    r->vtable = (void *)vtable;
+    return r;
+}
+
+void destroy_winIVRApplications_IVRApplications_003_FnTable(void *object)
+{
+    winIVRApplications_IVRApplications_003 *win_object = object;
+    TRACE("%p\n", win_object);
+    VirtualFree(win_object->vtable[0], 0, MEM_RELEASE);
+    HeapFree(GetProcessHeap(), 0, win_object->vtable);
+    HeapFree(GetProcessHeap(), 0, win_object);
+}
+
 #include "cppIVRApplications_IVRApplications_002.h"
 
 typedef struct __winIVRApplications_IVRApplications_002 {
@@ -1131,6 +1328,50 @@ void destroy_winIVRApplications_IVRApplications_002(void *object)
 {
     TRACE("%p\n", object);
     HeapFree(GetProcessHeap(), 0, object);
+}
+
+winIVRApplications_IVRApplications_002 *create_winIVRApplications_IVRApplications_002_FnTable(void *linux_side)
+{
+    winIVRApplications_IVRApplications_002 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRApplications_IVRApplications_002));
+    struct thunk *thunks = alloc_thunks(20);
+    struct thunk **vtable = HeapAlloc(GetProcessHeap(), 0, 20 * sizeof(*vtable));
+    int i;
+
+    TRACE("-> %p, vtable %p, thunks %p\n", r, vtable, thunks);
+    init_thunk(&thunks[0], r, winIVRApplications_IVRApplications_002_AddApplicationManifest);
+    init_thunk(&thunks[1], r, winIVRApplications_IVRApplications_002_RemoveApplicationManifest);
+    init_thunk(&thunks[2], r, winIVRApplications_IVRApplications_002_IsApplicationInstalled);
+    init_thunk(&thunks[3], r, winIVRApplications_IVRApplications_002_GetApplicationCount);
+    init_thunk(&thunks[4], r, winIVRApplications_IVRApplications_002_GetApplicationKeyByIndex);
+    init_thunk(&thunks[5], r, winIVRApplications_IVRApplications_002_GetApplicationKeyByProcessId);
+    init_thunk(&thunks[6], r, winIVRApplications_IVRApplications_002_LaunchApplication);
+    init_thunk(&thunks[7], r, winIVRApplications_IVRApplications_002_LaunchDashboardOverlay);
+    init_thunk(&thunks[8], r, winIVRApplications_IVRApplications_002_IdentifyApplication);
+    init_thunk(&thunks[9], r, winIVRApplications_IVRApplications_002_GetApplicationProcessId);
+    init_thunk(&thunks[10], r, winIVRApplications_IVRApplications_002_GetApplicationsErrorNameFromEnum);
+    init_thunk(&thunks[11], r, winIVRApplications_IVRApplications_002_GetApplicationPropertyString);
+    init_thunk(&thunks[12], r, winIVRApplications_IVRApplications_002_GetApplicationPropertyBool);
+    init_thunk(&thunks[13], r, winIVRApplications_IVRApplications_002_SetApplicationAutoLaunch);
+    init_thunk(&thunks[14], r, winIVRApplications_IVRApplications_002_GetApplicationAutoLaunch);
+    init_thunk(&thunks[15], r, winIVRApplications_IVRApplications_002_GetStartingApplication);
+    init_thunk(&thunks[16], r, winIVRApplications_IVRApplications_002_GetTransitionState);
+    init_thunk(&thunks[17], r, winIVRApplications_IVRApplications_002_PerformApplicationPrelaunchCheck);
+    init_thunk(&thunks[18], r, winIVRApplications_IVRApplications_002_GetApplicationsTransitionStateNameFromEnum);
+    init_thunk(&thunks[19], r, winIVRApplications_IVRApplications_002_IsQuitUserPromptRequested);
+    for (i = 0; i < 20; i++)
+        vtable[i] = &thunks[i];
+    r->linux_side = linux_side;
+    r->vtable = (void *)vtable;
+    return r;
+}
+
+void destroy_winIVRApplications_IVRApplications_002_FnTable(void *object)
+{
+    winIVRApplications_IVRApplications_002 *win_object = object;
+    TRACE("%p\n", win_object);
+    VirtualFree(win_object->vtable[0], 0, MEM_RELEASE);
+    HeapFree(GetProcessHeap(), 0, win_object->vtable);
+    HeapFree(GetProcessHeap(), 0, win_object);
 }
 
 #include "cppIVRApplications_IVRApplications_001.h"
@@ -1332,5 +1573,50 @@ void destroy_winIVRApplications_IVRApplications_001(void *object)
 {
     TRACE("%p\n", object);
     HeapFree(GetProcessHeap(), 0, object);
+}
+
+winIVRApplications_IVRApplications_001 *create_winIVRApplications_IVRApplications_001_FnTable(void *linux_side)
+{
+    winIVRApplications_IVRApplications_001 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRApplications_IVRApplications_001));
+    struct thunk *thunks = alloc_thunks(21);
+    struct thunk **vtable = HeapAlloc(GetProcessHeap(), 0, 21 * sizeof(*vtable));
+    int i;
+
+    TRACE("-> %p, vtable %p, thunks %p\n", r, vtable, thunks);
+    init_thunk(&thunks[0], r, winIVRApplications_IVRApplications_001_AddApplicationManifest);
+    init_thunk(&thunks[1], r, winIVRApplications_IVRApplications_001_RemoveApplicationManifest);
+    init_thunk(&thunks[2], r, winIVRApplications_IVRApplications_001_IsApplicationInstalled);
+    init_thunk(&thunks[3], r, winIVRApplications_IVRApplications_001_GetApplicationCount);
+    init_thunk(&thunks[4], r, winIVRApplications_IVRApplications_001_GetApplicationKeyByIndex);
+    init_thunk(&thunks[5], r, winIVRApplications_IVRApplications_001_GetApplicationKeyByProcessId);
+    init_thunk(&thunks[6], r, winIVRApplications_IVRApplications_001_LaunchApplication);
+    init_thunk(&thunks[7], r, winIVRApplications_IVRApplications_001_LaunchDashboardOverlay);
+    init_thunk(&thunks[8], r, winIVRApplications_IVRApplications_001_IdentifyApplication);
+    init_thunk(&thunks[9], r, winIVRApplications_IVRApplications_001_GetApplicationProcessId);
+    init_thunk(&thunks[10], r, winIVRApplications_IVRApplications_001_GetApplicationsErrorNameFromEnum);
+    init_thunk(&thunks[11], r, winIVRApplications_IVRApplications_001_GetApplicationPropertyString);
+    init_thunk(&thunks[12], r, winIVRApplications_IVRApplications_001_GetApplicationPropertyBool);
+    init_thunk(&thunks[13], r, winIVRApplications_IVRApplications_001_GetHomeApplication);
+    init_thunk(&thunks[14], r, winIVRApplications_IVRApplications_001_SetHomeApplication);
+    init_thunk(&thunks[15], r, winIVRApplications_IVRApplications_001_SetApplicationAutoLaunch);
+    init_thunk(&thunks[16], r, winIVRApplications_IVRApplications_001_GetApplicationAutoLaunch);
+    init_thunk(&thunks[17], r, winIVRApplications_IVRApplications_001_GetStartingApplication);
+    init_thunk(&thunks[18], r, winIVRApplications_IVRApplications_001_GetTransitionState);
+    init_thunk(&thunks[19], r, winIVRApplications_IVRApplications_001_PerformApplicationPrelaunchCheck);
+    init_thunk(&thunks[20], r, winIVRApplications_IVRApplications_001_GetApplicationsTransitionStateNameFromEnum);
+    for (i = 0; i < 21; i++)
+        vtable[i] = &thunks[i];
+    r->linux_side = linux_side;
+    r->vtable = (void *)vtable;
+    return r;
+}
+
+void destroy_winIVRApplications_IVRApplications_001_FnTable(void *object)
+{
+    winIVRApplications_IVRApplications_001 *win_object = object;
+    TRACE("%p\n", win_object);
+    VirtualFree(win_object->vtable[0], 0, MEM_RELEASE);
+    HeapFree(GetProcessHeap(), 0, win_object->vtable);
+    HeapFree(GetProcessHeap(), 0, win_object);
 }
 

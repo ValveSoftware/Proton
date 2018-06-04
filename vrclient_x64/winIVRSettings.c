@@ -14,6 +14,8 @@
 
 #include "struct_converters.h"
 
+#include "flatapi.h"
+
 WINE_DEFAULT_DEBUG_CHANNEL(vrclient);
 
 #include "cppIVRSettings_IVRSettings_002.h"
@@ -145,6 +147,42 @@ void destroy_winIVRSettings_IVRSettings_002(void *object)
     HeapFree(GetProcessHeap(), 0, object);
 }
 
+winIVRSettings_IVRSettings_002 *create_winIVRSettings_IVRSettings_002_FnTable(void *linux_side)
+{
+    winIVRSettings_IVRSettings_002 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRSettings_IVRSettings_002));
+    struct thunk *thunks = alloc_thunks(12);
+    struct thunk **vtable = HeapAlloc(GetProcessHeap(), 0, 12 * sizeof(*vtable));
+    int i;
+
+    TRACE("-> %p, vtable %p, thunks %p\n", r, vtable, thunks);
+    init_thunk(&thunks[0], r, winIVRSettings_IVRSettings_002_GetSettingsErrorNameFromEnum);
+    init_thunk(&thunks[1], r, winIVRSettings_IVRSettings_002_Sync);
+    init_thunk(&thunks[2], r, winIVRSettings_IVRSettings_002_SetBool);
+    init_thunk(&thunks[3], r, winIVRSettings_IVRSettings_002_SetInt32);
+    init_thunk(&thunks[4], r, winIVRSettings_IVRSettings_002_SetFloat);
+    init_thunk(&thunks[5], r, winIVRSettings_IVRSettings_002_SetString);
+    init_thunk(&thunks[6], r, winIVRSettings_IVRSettings_002_GetBool);
+    init_thunk(&thunks[7], r, winIVRSettings_IVRSettings_002_GetInt32);
+    init_thunk(&thunks[8], r, winIVRSettings_IVRSettings_002_GetFloat);
+    init_thunk(&thunks[9], r, winIVRSettings_IVRSettings_002_GetString);
+    init_thunk(&thunks[10], r, winIVRSettings_IVRSettings_002_RemoveSection);
+    init_thunk(&thunks[11], r, winIVRSettings_IVRSettings_002_RemoveKeyInSection);
+    for (i = 0; i < 12; i++)
+        vtable[i] = &thunks[i];
+    r->linux_side = linux_side;
+    r->vtable = (void *)vtable;
+    return r;
+}
+
+void destroy_winIVRSettings_IVRSettings_002_FnTable(void *object)
+{
+    winIVRSettings_IVRSettings_002 *win_object = object;
+    TRACE("%p\n", win_object);
+    VirtualFree(win_object->vtable[0], 0, MEM_RELEASE);
+    HeapFree(GetProcessHeap(), 0, win_object->vtable);
+    HeapFree(GetProcessHeap(), 0, win_object);
+}
+
 #include "cppIVRSettings_IVRSettings_001.h"
 
 typedef struct __winIVRSettings_IVRSettings_001 {
@@ -272,5 +310,41 @@ void destroy_winIVRSettings_IVRSettings_001(void *object)
 {
     TRACE("%p\n", object);
     HeapFree(GetProcessHeap(), 0, object);
+}
+
+winIVRSettings_IVRSettings_001 *create_winIVRSettings_IVRSettings_001_FnTable(void *linux_side)
+{
+    winIVRSettings_IVRSettings_001 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRSettings_IVRSettings_001));
+    struct thunk *thunks = alloc_thunks(12);
+    struct thunk **vtable = HeapAlloc(GetProcessHeap(), 0, 12 * sizeof(*vtable));
+    int i;
+
+    TRACE("-> %p, vtable %p, thunks %p\n", r, vtable, thunks);
+    init_thunk(&thunks[0], r, winIVRSettings_IVRSettings_001_GetSettingsErrorNameFromEnum);
+    init_thunk(&thunks[1], r, winIVRSettings_IVRSettings_001_Sync);
+    init_thunk(&thunks[2], r, winIVRSettings_IVRSettings_001_GetBool);
+    init_thunk(&thunks[3], r, winIVRSettings_IVRSettings_001_SetBool);
+    init_thunk(&thunks[4], r, winIVRSettings_IVRSettings_001_GetInt32);
+    init_thunk(&thunks[5], r, winIVRSettings_IVRSettings_001_SetInt32);
+    init_thunk(&thunks[6], r, winIVRSettings_IVRSettings_001_GetFloat);
+    init_thunk(&thunks[7], r, winIVRSettings_IVRSettings_001_SetFloat);
+    init_thunk(&thunks[8], r, winIVRSettings_IVRSettings_001_GetString);
+    init_thunk(&thunks[9], r, winIVRSettings_IVRSettings_001_SetString);
+    init_thunk(&thunks[10], r, winIVRSettings_IVRSettings_001_RemoveSection);
+    init_thunk(&thunks[11], r, winIVRSettings_IVRSettings_001_RemoveKeyInSection);
+    for (i = 0; i < 12; i++)
+        vtable[i] = &thunks[i];
+    r->linux_side = linux_side;
+    r->vtable = (void *)vtable;
+    return r;
+}
+
+void destroy_winIVRSettings_IVRSettings_001_FnTable(void *object)
+{
+    winIVRSettings_IVRSettings_001 *win_object = object;
+    TRACE("%p\n", win_object);
+    VirtualFree(win_object->vtable[0], 0, MEM_RELEASE);
+    HeapFree(GetProcessHeap(), 0, win_object->vtable);
+    HeapFree(GetProcessHeap(), 0, win_object);
 }
 

@@ -14,6 +14,8 @@
 
 #include "struct_converters.h"
 
+#include "flatapi.h"
+
 WINE_DEFAULT_DEBUG_CHANNEL(vrclient);
 
 #include "cppIVRTrackedCamera_IVRTrackedCamera_003.h"
@@ -145,6 +147,42 @@ void destroy_winIVRTrackedCamera_IVRTrackedCamera_003(void *object)
     HeapFree(GetProcessHeap(), 0, object);
 }
 
+winIVRTrackedCamera_IVRTrackedCamera_003 *create_winIVRTrackedCamera_IVRTrackedCamera_003_FnTable(void *linux_side)
+{
+    winIVRTrackedCamera_IVRTrackedCamera_003 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRTrackedCamera_IVRTrackedCamera_003));
+    struct thunk *thunks = alloc_thunks(12);
+    struct thunk **vtable = HeapAlloc(GetProcessHeap(), 0, 12 * sizeof(*vtable));
+    int i;
+
+    TRACE("-> %p, vtable %p, thunks %p\n", r, vtable, thunks);
+    init_thunk(&thunks[0], r, winIVRTrackedCamera_IVRTrackedCamera_003_GetCameraErrorNameFromEnum);
+    init_thunk(&thunks[1], r, winIVRTrackedCamera_IVRTrackedCamera_003_HasCamera);
+    init_thunk(&thunks[2], r, winIVRTrackedCamera_IVRTrackedCamera_003_GetCameraFrameSize);
+    init_thunk(&thunks[3], r, winIVRTrackedCamera_IVRTrackedCamera_003_GetCameraIntrinsics);
+    init_thunk(&thunks[4], r, winIVRTrackedCamera_IVRTrackedCamera_003_GetCameraProjection);
+    init_thunk(&thunks[5], r, winIVRTrackedCamera_IVRTrackedCamera_003_AcquireVideoStreamingService);
+    init_thunk(&thunks[6], r, winIVRTrackedCamera_IVRTrackedCamera_003_ReleaseVideoStreamingService);
+    init_thunk(&thunks[7], r, winIVRTrackedCamera_IVRTrackedCamera_003_GetVideoStreamFrameBuffer);
+    init_thunk(&thunks[8], r, winIVRTrackedCamera_IVRTrackedCamera_003_GetVideoStreamTextureSize);
+    init_thunk(&thunks[9], r, winIVRTrackedCamera_IVRTrackedCamera_003_GetVideoStreamTextureD3D11);
+    init_thunk(&thunks[10], r, winIVRTrackedCamera_IVRTrackedCamera_003_GetVideoStreamTextureGL);
+    init_thunk(&thunks[11], r, winIVRTrackedCamera_IVRTrackedCamera_003_ReleaseVideoStreamTextureGL);
+    for (i = 0; i < 12; i++)
+        vtable[i] = &thunks[i];
+    r->linux_side = linux_side;
+    r->vtable = (void *)vtable;
+    return r;
+}
+
+void destroy_winIVRTrackedCamera_IVRTrackedCamera_003_FnTable(void *object)
+{
+    winIVRTrackedCamera_IVRTrackedCamera_003 *win_object = object;
+    TRACE("%p\n", win_object);
+    VirtualFree(win_object->vtable[0], 0, MEM_RELEASE);
+    HeapFree(GetProcessHeap(), 0, win_object->vtable);
+    HeapFree(GetProcessHeap(), 0, win_object);
+}
+
 #include "cppIVRTrackedCamera_IVRTrackedCamera_002.h"
 
 typedef struct __winIVRTrackedCamera_IVRTrackedCamera_002 {
@@ -240,6 +278,38 @@ void destroy_winIVRTrackedCamera_IVRTrackedCamera_002(void *object)
 {
     TRACE("%p\n", object);
     HeapFree(GetProcessHeap(), 0, object);
+}
+
+winIVRTrackedCamera_IVRTrackedCamera_002 *create_winIVRTrackedCamera_IVRTrackedCamera_002_FnTable(void *linux_side)
+{
+    winIVRTrackedCamera_IVRTrackedCamera_002 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRTrackedCamera_IVRTrackedCamera_002));
+    struct thunk *thunks = alloc_thunks(8);
+    struct thunk **vtable = HeapAlloc(GetProcessHeap(), 0, 8 * sizeof(*vtable));
+    int i;
+
+    TRACE("-> %p, vtable %p, thunks %p\n", r, vtable, thunks);
+    init_thunk(&thunks[0], r, winIVRTrackedCamera_IVRTrackedCamera_002_GetCameraErrorNameFromEnum);
+    init_thunk(&thunks[1], r, winIVRTrackedCamera_IVRTrackedCamera_002_HasCamera);
+    init_thunk(&thunks[2], r, winIVRTrackedCamera_IVRTrackedCamera_002_GetCameraFrameSize);
+    init_thunk(&thunks[3], r, winIVRTrackedCamera_IVRTrackedCamera_002_GetCameraIntrinisics);
+    init_thunk(&thunks[4], r, winIVRTrackedCamera_IVRTrackedCamera_002_GetCameraProjection);
+    init_thunk(&thunks[5], r, winIVRTrackedCamera_IVRTrackedCamera_002_AcquireVideoStreamingService);
+    init_thunk(&thunks[6], r, winIVRTrackedCamera_IVRTrackedCamera_002_ReleaseVideoStreamingService);
+    init_thunk(&thunks[7], r, winIVRTrackedCamera_IVRTrackedCamera_002_GetVideoStreamFrameBuffer);
+    for (i = 0; i < 8; i++)
+        vtable[i] = &thunks[i];
+    r->linux_side = linux_side;
+    r->vtable = (void *)vtable;
+    return r;
+}
+
+void destroy_winIVRTrackedCamera_IVRTrackedCamera_002_FnTable(void *object)
+{
+    winIVRTrackedCamera_IVRTrackedCamera_002 *win_object = object;
+    TRACE("%p\n", win_object);
+    VirtualFree(win_object->vtable[0], 0, MEM_RELEASE);
+    HeapFree(GetProcessHeap(), 0, win_object->vtable);
+    HeapFree(GetProcessHeap(), 0, win_object);
 }
 
 #include "cppIVRTrackedCamera_IVRTrackedCamera_001.h"
@@ -417,5 +487,47 @@ void destroy_winIVRTrackedCamera_IVRTrackedCamera_001(void *object)
 {
     TRACE("%p\n", object);
     HeapFree(GetProcessHeap(), 0, object);
+}
+
+winIVRTrackedCamera_IVRTrackedCamera_001 *create_winIVRTrackedCamera_IVRTrackedCamera_001_FnTable(void *linux_side)
+{
+    winIVRTrackedCamera_IVRTrackedCamera_001 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRTrackedCamera_IVRTrackedCamera_001));
+    struct thunk *thunks = alloc_thunks(18);
+    struct thunk **vtable = HeapAlloc(GetProcessHeap(), 0, 18 * sizeof(*vtable));
+    int i;
+
+    TRACE("-> %p, vtable %p, thunks %p\n", r, vtable, thunks);
+    init_thunk(&thunks[0], r, winIVRTrackedCamera_IVRTrackedCamera_001_HasCamera);
+    init_thunk(&thunks[1], r, winIVRTrackedCamera_IVRTrackedCamera_001_GetCameraFirmwareDescription);
+    init_thunk(&thunks[2], r, winIVRTrackedCamera_IVRTrackedCamera_001_GetCameraFrameDimensions);
+    init_thunk(&thunks[3], r, winIVRTrackedCamera_IVRTrackedCamera_001_SetCameraVideoStreamFormat);
+    init_thunk(&thunks[4], r, winIVRTrackedCamera_IVRTrackedCamera_001_GetCameraVideoStreamFormat);
+    init_thunk(&thunks[5], r, winIVRTrackedCamera_IVRTrackedCamera_001_EnableCameraForStreaming);
+    init_thunk(&thunks[6], r, winIVRTrackedCamera_IVRTrackedCamera_001_StartVideoStream);
+    init_thunk(&thunks[7], r, winIVRTrackedCamera_IVRTrackedCamera_001_StopVideoStream);
+    init_thunk(&thunks[8], r, winIVRTrackedCamera_IVRTrackedCamera_001_IsVideoStreamActive);
+    init_thunk(&thunks[9], r, winIVRTrackedCamera_IVRTrackedCamera_001_GetVideoStreamElapsedTime);
+    init_thunk(&thunks[10], r, winIVRTrackedCamera_IVRTrackedCamera_001_GetVideoStreamFrame);
+    init_thunk(&thunks[11], r, winIVRTrackedCamera_IVRTrackedCamera_001_ReleaseVideoStreamFrame);
+    init_thunk(&thunks[12], r, winIVRTrackedCamera_IVRTrackedCamera_001_SetAutoExposure);
+    init_thunk(&thunks[13], r, winIVRTrackedCamera_IVRTrackedCamera_001_PauseVideoStream);
+    init_thunk(&thunks[14], r, winIVRTrackedCamera_IVRTrackedCamera_001_ResumeVideoStream);
+    init_thunk(&thunks[15], r, winIVRTrackedCamera_IVRTrackedCamera_001_IsVideoStreamPaused);
+    init_thunk(&thunks[16], r, winIVRTrackedCamera_IVRTrackedCamera_001_GetCameraDistortion);
+    init_thunk(&thunks[17], r, winIVRTrackedCamera_IVRTrackedCamera_001_GetCameraProjection);
+    for (i = 0; i < 18; i++)
+        vtable[i] = &thunks[i];
+    r->linux_side = linux_side;
+    r->vtable = (void *)vtable;
+    return r;
+}
+
+void destroy_winIVRTrackedCamera_IVRTrackedCamera_001_FnTable(void *object)
+{
+    winIVRTrackedCamera_IVRTrackedCamera_001 *win_object = object;
+    TRACE("%p\n", win_object);
+    VirtualFree(win_object->vtable[0], 0, MEM_RELEASE);
+    HeapFree(GetProcessHeap(), 0, win_object->vtable);
+    HeapFree(GetProcessHeap(), 0, win_object);
 }
 

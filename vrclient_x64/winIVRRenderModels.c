@@ -14,6 +14,8 @@
 
 #include "struct_converters.h"
 
+#include "flatapi.h"
+
 WINE_DEFAULT_DEBUG_CHANNEL(vrclient);
 
 #include "cppIVRRenderModels_IVRRenderModels_005.h"
@@ -193,6 +195,48 @@ void destroy_winIVRRenderModels_IVRRenderModels_005(void *object)
     HeapFree(GetProcessHeap(), 0, object);
 }
 
+winIVRRenderModels_IVRRenderModels_005 *create_winIVRRenderModels_IVRRenderModels_005_FnTable(void *linux_side)
+{
+    winIVRRenderModels_IVRRenderModels_005 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRRenderModels_IVRRenderModels_005));
+    struct thunk *thunks = alloc_thunks(18);
+    struct thunk **vtable = HeapAlloc(GetProcessHeap(), 0, 18 * sizeof(*vtable));
+    int i;
+
+    TRACE("-> %p, vtable %p, thunks %p\n", r, vtable, thunks);
+    init_thunk(&thunks[0], r, winIVRRenderModels_IVRRenderModels_005_LoadRenderModel_Async);
+    init_thunk(&thunks[1], r, winIVRRenderModels_IVRRenderModels_005_FreeRenderModel);
+    init_thunk(&thunks[2], r, winIVRRenderModels_IVRRenderModels_005_LoadTexture_Async);
+    init_thunk(&thunks[3], r, winIVRRenderModels_IVRRenderModels_005_FreeTexture);
+    init_thunk(&thunks[4], r, winIVRRenderModels_IVRRenderModels_005_LoadTextureD3D11_Async);
+    init_thunk(&thunks[5], r, winIVRRenderModels_IVRRenderModels_005_LoadIntoTextureD3D11_Async);
+    init_thunk(&thunks[6], r, winIVRRenderModels_IVRRenderModels_005_FreeTextureD3D11);
+    init_thunk(&thunks[7], r, winIVRRenderModels_IVRRenderModels_005_GetRenderModelName);
+    init_thunk(&thunks[8], r, winIVRRenderModels_IVRRenderModels_005_GetRenderModelCount);
+    init_thunk(&thunks[9], r, winIVRRenderModels_IVRRenderModels_005_GetComponentCount);
+    init_thunk(&thunks[10], r, winIVRRenderModels_IVRRenderModels_005_GetComponentName);
+    init_thunk(&thunks[11], r, winIVRRenderModels_IVRRenderModels_005_GetComponentButtonMask);
+    init_thunk(&thunks[12], r, winIVRRenderModels_IVRRenderModels_005_GetComponentRenderModelName);
+    init_thunk(&thunks[13], r, winIVRRenderModels_IVRRenderModels_005_GetComponentState);
+    init_thunk(&thunks[14], r, winIVRRenderModels_IVRRenderModels_005_RenderModelHasComponent);
+    init_thunk(&thunks[15], r, winIVRRenderModels_IVRRenderModels_005_GetRenderModelThumbnailURL);
+    init_thunk(&thunks[16], r, winIVRRenderModels_IVRRenderModels_005_GetRenderModelOriginalPath);
+    init_thunk(&thunks[17], r, winIVRRenderModels_IVRRenderModels_005_GetRenderModelErrorNameFromEnum);
+    for (i = 0; i < 18; i++)
+        vtable[i] = &thunks[i];
+    r->linux_side = linux_side;
+    r->vtable = (void *)vtable;
+    return r;
+}
+
+void destroy_winIVRRenderModels_IVRRenderModels_005_FnTable(void *object)
+{
+    winIVRRenderModels_IVRRenderModels_005 *win_object = object;
+    TRACE("%p\n", win_object);
+    VirtualFree(win_object->vtable[0], 0, MEM_RELEASE);
+    HeapFree(GetProcessHeap(), 0, win_object->vtable);
+    HeapFree(GetProcessHeap(), 0, win_object);
+}
+
 #include "cppIVRRenderModels_IVRRenderModels_004.h"
 
 typedef struct __winIVRRenderModels_IVRRenderModels_004 {
@@ -338,6 +382,44 @@ void destroy_winIVRRenderModels_IVRRenderModels_004(void *object)
     HeapFree(GetProcessHeap(), 0, object);
 }
 
+winIVRRenderModels_IVRRenderModels_004 *create_winIVRRenderModels_IVRRenderModels_004_FnTable(void *linux_side)
+{
+    winIVRRenderModels_IVRRenderModels_004 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRRenderModels_IVRRenderModels_004));
+    struct thunk *thunks = alloc_thunks(14);
+    struct thunk **vtable = HeapAlloc(GetProcessHeap(), 0, 14 * sizeof(*vtable));
+    int i;
+
+    TRACE("-> %p, vtable %p, thunks %p\n", r, vtable, thunks);
+    init_thunk(&thunks[0], r, winIVRRenderModels_IVRRenderModels_004_LoadRenderModel_Async);
+    init_thunk(&thunks[1], r, winIVRRenderModels_IVRRenderModels_004_FreeRenderModel);
+    init_thunk(&thunks[2], r, winIVRRenderModels_IVRRenderModels_004_LoadTexture_Async);
+    init_thunk(&thunks[3], r, winIVRRenderModels_IVRRenderModels_004_FreeTexture);
+    init_thunk(&thunks[4], r, winIVRRenderModels_IVRRenderModels_004_LoadTextureD3D11_Async);
+    init_thunk(&thunks[5], r, winIVRRenderModels_IVRRenderModels_004_FreeTextureD3D11);
+    init_thunk(&thunks[6], r, winIVRRenderModels_IVRRenderModels_004_GetRenderModelName);
+    init_thunk(&thunks[7], r, winIVRRenderModels_IVRRenderModels_004_GetRenderModelCount);
+    init_thunk(&thunks[8], r, winIVRRenderModels_IVRRenderModels_004_GetComponentCount);
+    init_thunk(&thunks[9], r, winIVRRenderModels_IVRRenderModels_004_GetComponentName);
+    init_thunk(&thunks[10], r, winIVRRenderModels_IVRRenderModels_004_GetComponentButtonMask);
+    init_thunk(&thunks[11], r, winIVRRenderModels_IVRRenderModels_004_GetComponentRenderModelName);
+    init_thunk(&thunks[12], r, winIVRRenderModels_IVRRenderModels_004_GetComponentState);
+    init_thunk(&thunks[13], r, winIVRRenderModels_IVRRenderModels_004_RenderModelHasComponent);
+    for (i = 0; i < 14; i++)
+        vtable[i] = &thunks[i];
+    r->linux_side = linux_side;
+    r->vtable = (void *)vtable;
+    return r;
+}
+
+void destroy_winIVRRenderModels_IVRRenderModels_004_FnTable(void *object)
+{
+    winIVRRenderModels_IVRRenderModels_004 *win_object = object;
+    TRACE("%p\n", win_object);
+    VirtualFree(win_object->vtable[0], 0, MEM_RELEASE);
+    HeapFree(GetProcessHeap(), 0, win_object->vtable);
+    HeapFree(GetProcessHeap(), 0, win_object);
+}
+
 #include "cppIVRRenderModels_IVRRenderModels_002.h"
 
 typedef struct __winIVRRenderModels_IVRRenderModels_002 {
@@ -467,6 +549,42 @@ void destroy_winIVRRenderModels_IVRRenderModels_002(void *object)
     HeapFree(GetProcessHeap(), 0, object);
 }
 
+winIVRRenderModels_IVRRenderModels_002 *create_winIVRRenderModels_IVRRenderModels_002_FnTable(void *linux_side)
+{
+    winIVRRenderModels_IVRRenderModels_002 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRRenderModels_IVRRenderModels_002));
+    struct thunk *thunks = alloc_thunks(12);
+    struct thunk **vtable = HeapAlloc(GetProcessHeap(), 0, 12 * sizeof(*vtable));
+    int i;
+
+    TRACE("-> %p, vtable %p, thunks %p\n", r, vtable, thunks);
+    init_thunk(&thunks[0], r, winIVRRenderModels_IVRRenderModels_002_LoadRenderModel);
+    init_thunk(&thunks[1], r, winIVRRenderModels_IVRRenderModels_002_FreeRenderModel);
+    init_thunk(&thunks[2], r, winIVRRenderModels_IVRRenderModels_002_LoadTexture);
+    init_thunk(&thunks[3], r, winIVRRenderModels_IVRRenderModels_002_FreeTexture);
+    init_thunk(&thunks[4], r, winIVRRenderModels_IVRRenderModels_002_GetRenderModelName);
+    init_thunk(&thunks[5], r, winIVRRenderModels_IVRRenderModels_002_GetRenderModelCount);
+    init_thunk(&thunks[6], r, winIVRRenderModels_IVRRenderModels_002_GetComponentCount);
+    init_thunk(&thunks[7], r, winIVRRenderModels_IVRRenderModels_002_GetComponentName);
+    init_thunk(&thunks[8], r, winIVRRenderModels_IVRRenderModels_002_GetComponentButtonMask);
+    init_thunk(&thunks[9], r, winIVRRenderModels_IVRRenderModels_002_GetComponentRenderModelName);
+    init_thunk(&thunks[10], r, winIVRRenderModels_IVRRenderModels_002_GetComponentState);
+    init_thunk(&thunks[11], r, winIVRRenderModels_IVRRenderModels_002_RenderModelHasComponent);
+    for (i = 0; i < 12; i++)
+        vtable[i] = &thunks[i];
+    r->linux_side = linux_side;
+    r->vtable = (void *)vtable;
+    return r;
+}
+
+void destroy_winIVRRenderModels_IVRRenderModels_002_FnTable(void *object)
+{
+    winIVRRenderModels_IVRRenderModels_002 *win_object = object;
+    TRACE("%p\n", win_object);
+    VirtualFree(win_object->vtable[0], 0, MEM_RELEASE);
+    HeapFree(GetProcessHeap(), 0, win_object->vtable);
+    HeapFree(GetProcessHeap(), 0, win_object);
+}
+
 #include "cppIVRRenderModels_IVRRenderModels_001.h"
 
 typedef struct __winIVRRenderModels_IVRRenderModels_001 {
@@ -530,5 +648,33 @@ void destroy_winIVRRenderModels_IVRRenderModels_001(void *object)
 {
     TRACE("%p\n", object);
     HeapFree(GetProcessHeap(), 0, object);
+}
+
+winIVRRenderModels_IVRRenderModels_001 *create_winIVRRenderModels_IVRRenderModels_001_FnTable(void *linux_side)
+{
+    winIVRRenderModels_IVRRenderModels_001 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRRenderModels_IVRRenderModels_001));
+    struct thunk *thunks = alloc_thunks(4);
+    struct thunk **vtable = HeapAlloc(GetProcessHeap(), 0, 4 * sizeof(*vtable));
+    int i;
+
+    TRACE("-> %p, vtable %p, thunks %p\n", r, vtable, thunks);
+    init_thunk(&thunks[0], r, winIVRRenderModels_IVRRenderModels_001_LoadRenderModel);
+    init_thunk(&thunks[1], r, winIVRRenderModels_IVRRenderModels_001_FreeRenderModel);
+    init_thunk(&thunks[2], r, winIVRRenderModels_IVRRenderModels_001_GetRenderModelName);
+    init_thunk(&thunks[3], r, winIVRRenderModels_IVRRenderModels_001_GetRenderModelCount);
+    for (i = 0; i < 4; i++)
+        vtable[i] = &thunks[i];
+    r->linux_side = linux_side;
+    r->vtable = (void *)vtable;
+    return r;
+}
+
+void destroy_winIVRRenderModels_IVRRenderModels_001_FnTable(void *object)
+{
+    winIVRRenderModels_IVRRenderModels_001 *win_object = object;
+    TRACE("%p\n", win_object);
+    VirtualFree(win_object->vtable[0], 0, MEM_RELEASE);
+    HeapFree(GetProcessHeap(), 0, win_object->vtable);
+    HeapFree(GetProcessHeap(), 0, win_object);
 }
 

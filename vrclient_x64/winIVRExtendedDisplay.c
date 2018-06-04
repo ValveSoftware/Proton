@@ -14,6 +14,8 @@
 
 #include "struct_converters.h"
 
+#include "flatapi.h"
+
 WINE_DEFAULT_DEBUG_CHANNEL(vrclient);
 
 #include "cppIVRExtendedDisplay_IVRExtendedDisplay_001.h"
@@ -71,5 +73,32 @@ void destroy_winIVRExtendedDisplay_IVRExtendedDisplay_001(void *object)
 {
     TRACE("%p\n", object);
     HeapFree(GetProcessHeap(), 0, object);
+}
+
+winIVRExtendedDisplay_IVRExtendedDisplay_001 *create_winIVRExtendedDisplay_IVRExtendedDisplay_001_FnTable(void *linux_side)
+{
+    winIVRExtendedDisplay_IVRExtendedDisplay_001 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRExtendedDisplay_IVRExtendedDisplay_001));
+    struct thunk *thunks = alloc_thunks(3);
+    struct thunk **vtable = HeapAlloc(GetProcessHeap(), 0, 3 * sizeof(*vtable));
+    int i;
+
+    TRACE("-> %p, vtable %p, thunks %p\n", r, vtable, thunks);
+    init_thunk(&thunks[0], r, winIVRExtendedDisplay_IVRExtendedDisplay_001_GetWindowBounds);
+    init_thunk(&thunks[1], r, winIVRExtendedDisplay_IVRExtendedDisplay_001_GetEyeOutputViewport);
+    init_thunk(&thunks[2], r, winIVRExtendedDisplay_IVRExtendedDisplay_001_GetDXGIOutputInfo);
+    for (i = 0; i < 3; i++)
+        vtable[i] = &thunks[i];
+    r->linux_side = linux_side;
+    r->vtable = (void *)vtable;
+    return r;
+}
+
+void destroy_winIVRExtendedDisplay_IVRExtendedDisplay_001_FnTable(void *object)
+{
+    winIVRExtendedDisplay_IVRExtendedDisplay_001 *win_object = object;
+    TRACE("%p\n", win_object);
+    VirtualFree(win_object->vtable[0], 0, MEM_RELEASE);
+    HeapFree(GetProcessHeap(), 0, win_object->vtable);
+    HeapFree(GetProcessHeap(), 0, win_object);
 }
 

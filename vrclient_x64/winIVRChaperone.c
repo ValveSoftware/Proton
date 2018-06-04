@@ -14,6 +14,8 @@
 
 #include "struct_converters.h"
 
+#include "flatapi.h"
+
 WINE_DEFAULT_DEBUG_CHANNEL(vrclient);
 
 #include "cppIVRChaperone_IVRChaperone_003.h"
@@ -111,6 +113,38 @@ void destroy_winIVRChaperone_IVRChaperone_003(void *object)
 {
     TRACE("%p\n", object);
     HeapFree(GetProcessHeap(), 0, object);
+}
+
+winIVRChaperone_IVRChaperone_003 *create_winIVRChaperone_IVRChaperone_003_FnTable(void *linux_side)
+{
+    winIVRChaperone_IVRChaperone_003 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRChaperone_IVRChaperone_003));
+    struct thunk *thunks = alloc_thunks(8);
+    struct thunk **vtable = HeapAlloc(GetProcessHeap(), 0, 8 * sizeof(*vtable));
+    int i;
+
+    TRACE("-> %p, vtable %p, thunks %p\n", r, vtable, thunks);
+    init_thunk(&thunks[0], r, winIVRChaperone_IVRChaperone_003_GetCalibrationState);
+    init_thunk(&thunks[1], r, winIVRChaperone_IVRChaperone_003_GetPlayAreaSize);
+    init_thunk(&thunks[2], r, winIVRChaperone_IVRChaperone_003_GetPlayAreaRect);
+    init_thunk(&thunks[3], r, winIVRChaperone_IVRChaperone_003_ReloadInfo);
+    init_thunk(&thunks[4], r, winIVRChaperone_IVRChaperone_003_SetSceneColor);
+    init_thunk(&thunks[5], r, winIVRChaperone_IVRChaperone_003_GetBoundsColor);
+    init_thunk(&thunks[6], r, winIVRChaperone_IVRChaperone_003_AreBoundsVisible);
+    init_thunk(&thunks[7], r, winIVRChaperone_IVRChaperone_003_ForceBoundsVisible);
+    for (i = 0; i < 8; i++)
+        vtable[i] = &thunks[i];
+    r->linux_side = linux_side;
+    r->vtable = (void *)vtable;
+    return r;
+}
+
+void destroy_winIVRChaperone_IVRChaperone_003_FnTable(void *object)
+{
+    winIVRChaperone_IVRChaperone_003 *win_object = object;
+    TRACE("%p\n", win_object);
+    VirtualFree(win_object->vtable[0], 0, MEM_RELEASE);
+    HeapFree(GetProcessHeap(), 0, win_object->vtable);
+    HeapFree(GetProcessHeap(), 0, win_object);
 }
 
 #include "cppIVRChaperone_IVRChaperone_002.h"
@@ -216,5 +250,38 @@ void destroy_winIVRChaperone_IVRChaperone_002(void *object)
 {
     TRACE("%p\n", object);
     HeapFree(GetProcessHeap(), 0, object);
+}
+
+winIVRChaperone_IVRChaperone_002 *create_winIVRChaperone_IVRChaperone_002_FnTable(void *linux_side)
+{
+    winIVRChaperone_IVRChaperone_002 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRChaperone_IVRChaperone_002));
+    struct thunk *thunks = alloc_thunks(9);
+    struct thunk **vtable = HeapAlloc(GetProcessHeap(), 0, 9 * sizeof(*vtable));
+    int i;
+
+    TRACE("-> %p, vtable %p, thunks %p\n", r, vtable, thunks);
+    init_thunk(&thunks[0], r, winIVRChaperone_IVRChaperone_002_GetCalibrationState);
+    init_thunk(&thunks[1], r, winIVRChaperone_IVRChaperone_002_GetSoftBoundsInfo);
+    init_thunk(&thunks[2], r, winIVRChaperone_IVRChaperone_002_GetHardBoundsInfo);
+    init_thunk(&thunks[3], r, winIVRChaperone_IVRChaperone_002_GetSeatedBoundsInfo);
+    init_thunk(&thunks[4], r, winIVRChaperone_IVRChaperone_002_ReloadInfo);
+    init_thunk(&thunks[5], r, winIVRChaperone_IVRChaperone_002_SetSceneColor);
+    init_thunk(&thunks[6], r, winIVRChaperone_IVRChaperone_002_GetBoundsColor);
+    init_thunk(&thunks[7], r, winIVRChaperone_IVRChaperone_002_AreBoundsVisible);
+    init_thunk(&thunks[8], r, winIVRChaperone_IVRChaperone_002_ForceBoundsVisible);
+    for (i = 0; i < 9; i++)
+        vtable[i] = &thunks[i];
+    r->linux_side = linux_side;
+    r->vtable = (void *)vtable;
+    return r;
+}
+
+void destroy_winIVRChaperone_IVRChaperone_002_FnTable(void *object)
+{
+    winIVRChaperone_IVRChaperone_002 *win_object = object;
+    TRACE("%p\n", win_object);
+    VirtualFree(win_object->vtable[0], 0, MEM_RELEASE);
+    HeapFree(GetProcessHeap(), 0, win_object->vtable);
+    HeapFree(GetProcessHeap(), 0, win_object);
 }
 

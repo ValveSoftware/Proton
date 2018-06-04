@@ -422,6 +422,8 @@ def handle_class(sdkver, classnode):
 
 #include "struct_converters.h"
 
+#include "flatapi.h"
+
 WINE_DEFAULT_DEBUG_CHANNEL(vrclient);
 
 """)
@@ -446,7 +448,7 @@ WINE_DEFAULT_DEBUG_CHANNEL(vrclient);
     winclassname = "win%s_%s" % (classnode.spelling, iface_version)
     cfile.write("#include \"%s.h\"\n\n" % cppname)
     cfile.write("typedef struct __%s {\n" % winclassname)
-    cfile.write("    vtable_ptr *vtable;\n")
+    cfile.write("    vtable_ptr *vtable;\n") # make sure to keep this first (flat API depends on it)
     cfile.write("    void *linux_side;\n")
     for classname_pattern, user_data_type, _ in method_overrides_data:
         if classname_pattern in classnode.spelling:
@@ -484,17 +486,45 @@ WINE_DEFAULT_DEBUG_CHANNEL(vrclient);
             break
     cfile.write("    HeapFree(GetProcessHeap(), 0, object);\n}\n\n")
 
+    # flat (FnTable) API
+    cfile.write("%s *create_%s_FnTable(void *linux_side)\n{\n" % (winclassname, winclassname))
+    cfile.write("    %s *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(%s));\n" % (winclassname, winclassname))
+    cfile.write("    struct thunk *thunks = alloc_thunks(%d);\n" % len(methods))
+    cfile.write("    struct thunk **vtable = HeapAlloc(GetProcessHeap(), 0, %d * sizeof(*vtable));\n" % len(methods))
+    cfile.write("    int i;\n\n")
+    cfile.write("    TRACE(\"-> %p, vtable %p, thunks %p\\n\", r, vtable, thunks);\n")
+    for i in range(len(methods)):
+        cfile.write("    init_thunk(&thunks[%d], r, %s_%s);\n" %(i, winclassname, methods[i]))
+    cfile.write("    for (i = 0; i < %d; i++)\n" % len(methods))
+    cfile.write("        vtable[i] = &thunks[i];\n")
+    cfile.write("    r->linux_side = linux_side;\n")
+    cfile.write("    r->vtable = (void *)vtable;\n")
+    cfile.write("    return r;\n}\n\n")
+    cfile.write("void destroy_%s_FnTable(void *object)\n{\n" % winclassname)
+    cfile.write("    %s *win_object = object;\n" % winclassname)
+    cfile.write("    TRACE(\"%p\\n\", win_object);\n")
+    for classname_pattern, user_data_type, user_data_destructor in method_overrides_data:
+        if user_data_destructor and classname_pattern in classnode.spelling:
+            cfile.write("    %s(&win_object->user_data);\n" % user_data_destructor)
+            break
+    cfile.write("    VirtualFree(win_object->vtable[0], 0, MEM_RELEASE);\n")
+    cfile.write("    HeapFree(GetProcessHeap(), 0, win_object->vtable);\n")
+    cfile.write("    HeapFree(GetProcessHeap(), 0, win_object);\n}\n\n")
+
     cpp.write("#ifdef __cplusplus\n}\n#endif\n")
     cpp_h.write("#ifdef __cplusplus\n}\n#endif\n")
 
     constructors = open("win_constructors.h", "a")
     constructors.write("extern void *create_%s(void *);\n" % winclassname)
+    constructors.write("extern void *create_%s_FnTable(void *);\n" % winclassname)
 
     destructors = open("win_destructors.h", "a")
     destructors.write("extern void destroy_%s(void *);\n" % winclassname)
+    destructors.write("extern void destroy_%s_FnTable(void *);\n" % winclassname)
 
     constructors = open("win_constructors_table.dat", "a")
     constructors.write("    {\"%s\", &create_%s, &destroy_%s},\n" % (iface_version, winclassname, winclassname))
+    constructors.write("    {\"FnTable:%s\", &create_%s_FnTable, &destroy_%s_FnTable},\n" % (iface_version, winclassname, winclassname))
     if iface_version in aliases.keys():
         for alias in aliases[iface_version]:
             constructors.write("    {\"%s\", &create_%s}, /* alias */\n" % (alias, winclassname))

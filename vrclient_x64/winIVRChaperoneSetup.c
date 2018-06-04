@@ -14,6 +14,8 @@
 
 #include "struct_converters.h"
 
+#include "flatapi.h"
+
 WINE_DEFAULT_DEBUG_CHANNEL(vrclient);
 
 #include "cppIVRChaperoneSetup_IVRChaperoneSetup_005.h"
@@ -209,6 +211,50 @@ void destroy_winIVRChaperoneSetup_IVRChaperoneSetup_005(void *object)
     HeapFree(GetProcessHeap(), 0, object);
 }
 
+winIVRChaperoneSetup_IVRChaperoneSetup_005 *create_winIVRChaperoneSetup_IVRChaperoneSetup_005_FnTable(void *linux_side)
+{
+    winIVRChaperoneSetup_IVRChaperoneSetup_005 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRChaperoneSetup_IVRChaperoneSetup_005));
+    struct thunk *thunks = alloc_thunks(20);
+    struct thunk **vtable = HeapAlloc(GetProcessHeap(), 0, 20 * sizeof(*vtable));
+    int i;
+
+    TRACE("-> %p, vtable %p, thunks %p\n", r, vtable, thunks);
+    init_thunk(&thunks[0], r, winIVRChaperoneSetup_IVRChaperoneSetup_005_CommitWorkingCopy);
+    init_thunk(&thunks[1], r, winIVRChaperoneSetup_IVRChaperoneSetup_005_RevertWorkingCopy);
+    init_thunk(&thunks[2], r, winIVRChaperoneSetup_IVRChaperoneSetup_005_GetWorkingPlayAreaSize);
+    init_thunk(&thunks[3], r, winIVRChaperoneSetup_IVRChaperoneSetup_005_GetWorkingPlayAreaRect);
+    init_thunk(&thunks[4], r, winIVRChaperoneSetup_IVRChaperoneSetup_005_GetWorkingCollisionBoundsInfo);
+    init_thunk(&thunks[5], r, winIVRChaperoneSetup_IVRChaperoneSetup_005_GetLiveCollisionBoundsInfo);
+    init_thunk(&thunks[6], r, winIVRChaperoneSetup_IVRChaperoneSetup_005_GetWorkingSeatedZeroPoseToRawTrackingPose);
+    init_thunk(&thunks[7], r, winIVRChaperoneSetup_IVRChaperoneSetup_005_GetWorkingStandingZeroPoseToRawTrackingPose);
+    init_thunk(&thunks[8], r, winIVRChaperoneSetup_IVRChaperoneSetup_005_SetWorkingPlayAreaSize);
+    init_thunk(&thunks[9], r, winIVRChaperoneSetup_IVRChaperoneSetup_005_SetWorkingCollisionBoundsInfo);
+    init_thunk(&thunks[10], r, winIVRChaperoneSetup_IVRChaperoneSetup_005_SetWorkingSeatedZeroPoseToRawTrackingPose);
+    init_thunk(&thunks[11], r, winIVRChaperoneSetup_IVRChaperoneSetup_005_SetWorkingStandingZeroPoseToRawTrackingPose);
+    init_thunk(&thunks[12], r, winIVRChaperoneSetup_IVRChaperoneSetup_005_ReloadFromDisk);
+    init_thunk(&thunks[13], r, winIVRChaperoneSetup_IVRChaperoneSetup_005_GetLiveSeatedZeroPoseToRawTrackingPose);
+    init_thunk(&thunks[14], r, winIVRChaperoneSetup_IVRChaperoneSetup_005_SetWorkingCollisionBoundsTagsInfo);
+    init_thunk(&thunks[15], r, winIVRChaperoneSetup_IVRChaperoneSetup_005_GetLiveCollisionBoundsTagsInfo);
+    init_thunk(&thunks[16], r, winIVRChaperoneSetup_IVRChaperoneSetup_005_SetWorkingPhysicalBoundsInfo);
+    init_thunk(&thunks[17], r, winIVRChaperoneSetup_IVRChaperoneSetup_005_GetLivePhysicalBoundsInfo);
+    init_thunk(&thunks[18], r, winIVRChaperoneSetup_IVRChaperoneSetup_005_ExportLiveToBuffer);
+    init_thunk(&thunks[19], r, winIVRChaperoneSetup_IVRChaperoneSetup_005_ImportFromBufferToWorking);
+    for (i = 0; i < 20; i++)
+        vtable[i] = &thunks[i];
+    r->linux_side = linux_side;
+    r->vtable = (void *)vtable;
+    return r;
+}
+
+void destroy_winIVRChaperoneSetup_IVRChaperoneSetup_005_FnTable(void *object)
+{
+    winIVRChaperoneSetup_IVRChaperoneSetup_005 *win_object = object;
+    TRACE("%p\n", win_object);
+    VirtualFree(win_object->vtable[0], 0, MEM_RELEASE);
+    HeapFree(GetProcessHeap(), 0, win_object->vtable);
+    HeapFree(GetProcessHeap(), 0, win_object);
+}
+
 #include "cppIVRChaperoneSetup_IVRChaperoneSetup_004.h"
 
 typedef struct __winIVRChaperoneSetup_IVRChaperoneSetup_004 {
@@ -368,5 +414,45 @@ void destroy_winIVRChaperoneSetup_IVRChaperoneSetup_004(void *object)
 {
     TRACE("%p\n", object);
     HeapFree(GetProcessHeap(), 0, object);
+}
+
+winIVRChaperoneSetup_IVRChaperoneSetup_004 *create_winIVRChaperoneSetup_IVRChaperoneSetup_004_FnTable(void *linux_side)
+{
+    winIVRChaperoneSetup_IVRChaperoneSetup_004 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRChaperoneSetup_IVRChaperoneSetup_004));
+    struct thunk *thunks = alloc_thunks(16);
+    struct thunk **vtable = HeapAlloc(GetProcessHeap(), 0, 16 * sizeof(*vtable));
+    int i;
+
+    TRACE("-> %p, vtable %p, thunks %p\n", r, vtable, thunks);
+    init_thunk(&thunks[0], r, winIVRChaperoneSetup_IVRChaperoneSetup_004_CommitWorkingCopy);
+    init_thunk(&thunks[1], r, winIVRChaperoneSetup_IVRChaperoneSetup_004_RevertWorkingCopy);
+    init_thunk(&thunks[2], r, winIVRChaperoneSetup_IVRChaperoneSetup_004_GetWorkingPlayAreaSize);
+    init_thunk(&thunks[3], r, winIVRChaperoneSetup_IVRChaperoneSetup_004_GetWorkingPlayAreaRect);
+    init_thunk(&thunks[4], r, winIVRChaperoneSetup_IVRChaperoneSetup_004_GetWorkingCollisionBoundsInfo);
+    init_thunk(&thunks[5], r, winIVRChaperoneSetup_IVRChaperoneSetup_004_GetLiveCollisionBoundsInfo);
+    init_thunk(&thunks[6], r, winIVRChaperoneSetup_IVRChaperoneSetup_004_GetWorkingSeatedZeroPoseToRawTrackingPose);
+    init_thunk(&thunks[7], r, winIVRChaperoneSetup_IVRChaperoneSetup_004_GetWorkingStandingZeroPoseToRawTrackingPose);
+    init_thunk(&thunks[8], r, winIVRChaperoneSetup_IVRChaperoneSetup_004_SetWorkingPlayAreaSize);
+    init_thunk(&thunks[9], r, winIVRChaperoneSetup_IVRChaperoneSetup_004_SetWorkingCollisionBoundsInfo);
+    init_thunk(&thunks[10], r, winIVRChaperoneSetup_IVRChaperoneSetup_004_SetWorkingSeatedZeroPoseToRawTrackingPose);
+    init_thunk(&thunks[11], r, winIVRChaperoneSetup_IVRChaperoneSetup_004_SetWorkingStandingZeroPoseToRawTrackingPose);
+    init_thunk(&thunks[12], r, winIVRChaperoneSetup_IVRChaperoneSetup_004_ReloadFromDisk);
+    init_thunk(&thunks[13], r, winIVRChaperoneSetup_IVRChaperoneSetup_004_GetLiveSeatedZeroPoseToRawTrackingPose);
+    init_thunk(&thunks[14], r, winIVRChaperoneSetup_IVRChaperoneSetup_004_SetWorkingWallTagInfo);
+    init_thunk(&thunks[15], r, winIVRChaperoneSetup_IVRChaperoneSetup_004_GetLiveWallTagInfo);
+    for (i = 0; i < 16; i++)
+        vtable[i] = &thunks[i];
+    r->linux_side = linux_side;
+    r->vtable = (void *)vtable;
+    return r;
+}
+
+void destroy_winIVRChaperoneSetup_IVRChaperoneSetup_004_FnTable(void *object)
+{
+    winIVRChaperoneSetup_IVRChaperoneSetup_004 *win_object = object;
+    TRACE("%p\n", win_object);
+    VirtualFree(win_object->vtable[0], 0, MEM_RELEASE);
+    HeapFree(GetProcessHeap(), 0, win_object->vtable);
+    HeapFree(GetProcessHeap(), 0, win_object);
 }
 

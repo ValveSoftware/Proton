@@ -14,6 +14,8 @@
 
 #include "struct_converters.h"
 
+#include "flatapi.h"
+
 WINE_DEFAULT_DEBUG_CHANNEL(vrclient);
 
 #include "cppIVRDriverManager_IVRDriverManager_001.h"
@@ -63,5 +65,31 @@ void destroy_winIVRDriverManager_IVRDriverManager_001(void *object)
 {
     TRACE("%p\n", object);
     HeapFree(GetProcessHeap(), 0, object);
+}
+
+winIVRDriverManager_IVRDriverManager_001 *create_winIVRDriverManager_IVRDriverManager_001_FnTable(void *linux_side)
+{
+    winIVRDriverManager_IVRDriverManager_001 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRDriverManager_IVRDriverManager_001));
+    struct thunk *thunks = alloc_thunks(2);
+    struct thunk **vtable = HeapAlloc(GetProcessHeap(), 0, 2 * sizeof(*vtable));
+    int i;
+
+    TRACE("-> %p, vtable %p, thunks %p\n", r, vtable, thunks);
+    init_thunk(&thunks[0], r, winIVRDriverManager_IVRDriverManager_001_GetDriverCount);
+    init_thunk(&thunks[1], r, winIVRDriverManager_IVRDriverManager_001_GetDriverName);
+    for (i = 0; i < 2; i++)
+        vtable[i] = &thunks[i];
+    r->linux_side = linux_side;
+    r->vtable = (void *)vtable;
+    return r;
+}
+
+void destroy_winIVRDriverManager_IVRDriverManager_001_FnTable(void *object)
+{
+    winIVRDriverManager_IVRDriverManager_001 *win_object = object;
+    TRACE("%p\n", win_object);
+    VirtualFree(win_object->vtable[0], 0, MEM_RELEASE);
+    HeapFree(GetProcessHeap(), 0, win_object->vtable);
+    HeapFree(GetProcessHeap(), 0, win_object);
 }
 

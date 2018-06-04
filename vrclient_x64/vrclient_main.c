@@ -23,6 +23,8 @@
 
 #include "wined3d-interop.h"
 
+#include "flatapi.h"
+
 #include "cppIVRCompositor_IVRCompositor_021.h"
 #include "cppIVRCompositor_IVRCompositor_022.h"
 
@@ -242,6 +244,7 @@ void *ivrclientcore_get_generic_interface(void *(*cpp_func)(void *, const char *
         void *linux_side, const char *name_and_version, EVRInitError *error,
         unsigned int version, struct client_core_data *user_data)
 {
+    const char *cpp_name_and_version = name_and_version;
     struct generic_interface *iface;
     pfn_dtor destructor;
     void *win_object;
@@ -249,7 +252,12 @@ void *ivrclientcore_get_generic_interface(void *(*cpp_func)(void *, const char *
 
     TRACE("%p, %p, %p\n", linux_side, name_and_version, error);
 
-    if (!(object = cpp_func(linux_side, name_and_version, error)))
+    /* In theory we could pass this along, but we'd have to generate a separate
+     * set of thunks for it. Hopefully this will work as it is. */
+    if (name_and_version && !strncmp(name_and_version, "FnTable:", 8))
+        cpp_name_and_version += 8;
+
+    if (!(object = cpp_func(linux_side, cpp_name_and_version, error)))
     {
         WARN("Failed to create %s.\n", name_and_version);
         return NULL;
@@ -279,6 +287,8 @@ void *ivrclientcore_get_generic_interface(void *(*cpp_func)(void *, const char *
         LeaveCriticalSection(&user_data->critical_section);
     }
 
+    if (name_and_version && !strncmp(name_and_version, "FnTable:", 8))
+        return *((void **)win_object);
     return win_object;
 }
 
@@ -874,3 +884,30 @@ void destroy_compositor_data(struct compositor_data *data)
         wined3d_device->lpVtbl->wait_idle(wined3d_device);
     }
 }
+
+/* call_flat_method() definition */
+#ifdef __i386__
+asm(".text\n\t"
+    ".align 4\n\t"
+    ".globl call_flat_method\n\t"
+    ".type call_flat_method, @function\n"
+    "call_flat_method:\n\t"
+    "popl %eax\n\t"
+    "pushl %ecx\n\t"
+    "pushl %eax\n\t"
+    "jmp *%edx");
+#else
+asm(".text\n\t"
+    ".align 4\n\t"
+    ".globl call_flat_method\n\t"
+    ".type call_flat_method, @function\n"
+    "call_flat_method:\n\t"
+    "popq %rax\n\t" // return address
+    "pushq %r9\n\t"
+    "pushq %rax\n\t"
+    "movq %r8, %r9\n\t" // shift over arguments
+    "movq %rdx, %r8\n\t"
+    "movq %rcx, %rdx\n\t"
+    "movq %r10, %rcx\n\t" // add This pointer
+    "jmp *%r11");
+#endif

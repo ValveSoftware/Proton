@@ -14,6 +14,8 @@
 
 #include "struct_converters.h"
 
+#include "flatapi.h"
+
 WINE_DEFAULT_DEBUG_CHANNEL(vrclient);
 
 #include "cppIVRSystem_IVRSystem_019.h"
@@ -431,6 +433,77 @@ void destroy_winIVRSystem_IVRSystem_019(void *object)
     HeapFree(GetProcessHeap(), 0, object);
 }
 
+winIVRSystem_IVRSystem_019 *create_winIVRSystem_IVRSystem_019_FnTable(void *linux_side)
+{
+    winIVRSystem_IVRSystem_019 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRSystem_IVRSystem_019));
+    struct thunk *thunks = alloc_thunks(47);
+    struct thunk **vtable = HeapAlloc(GetProcessHeap(), 0, 47 * sizeof(*vtable));
+    int i;
+
+    TRACE("-> %p, vtable %p, thunks %p\n", r, vtable, thunks);
+    init_thunk(&thunks[0], r, winIVRSystem_IVRSystem_019_GetRecommendedRenderTargetSize);
+    init_thunk(&thunks[1], r, winIVRSystem_IVRSystem_019_GetProjectionMatrix);
+    init_thunk(&thunks[2], r, winIVRSystem_IVRSystem_019_GetProjectionRaw);
+    init_thunk(&thunks[3], r, winIVRSystem_IVRSystem_019_ComputeDistortion);
+    init_thunk(&thunks[4], r, winIVRSystem_IVRSystem_019_GetEyeToHeadTransform);
+    init_thunk(&thunks[5], r, winIVRSystem_IVRSystem_019_GetTimeSinceLastVsync);
+    init_thunk(&thunks[6], r, winIVRSystem_IVRSystem_019_GetD3D9AdapterIndex);
+    init_thunk(&thunks[7], r, winIVRSystem_IVRSystem_019_GetDXGIOutputInfo);
+    init_thunk(&thunks[8], r, winIVRSystem_IVRSystem_019_GetOutputDevice);
+    init_thunk(&thunks[9], r, winIVRSystem_IVRSystem_019_IsDisplayOnDesktop);
+    init_thunk(&thunks[10], r, winIVRSystem_IVRSystem_019_SetDisplayVisibility);
+    init_thunk(&thunks[11], r, winIVRSystem_IVRSystem_019_GetDeviceToAbsoluteTrackingPose);
+    init_thunk(&thunks[12], r, winIVRSystem_IVRSystem_019_ResetSeatedZeroPose);
+    init_thunk(&thunks[13], r, winIVRSystem_IVRSystem_019_GetSeatedZeroPoseToStandingAbsoluteTrackingPose);
+    init_thunk(&thunks[14], r, winIVRSystem_IVRSystem_019_GetRawZeroPoseToStandingAbsoluteTrackingPose);
+    init_thunk(&thunks[15], r, winIVRSystem_IVRSystem_019_GetSortedTrackedDeviceIndicesOfClass);
+    init_thunk(&thunks[16], r, winIVRSystem_IVRSystem_019_GetTrackedDeviceActivityLevel);
+    init_thunk(&thunks[17], r, winIVRSystem_IVRSystem_019_ApplyTransform);
+    init_thunk(&thunks[18], r, winIVRSystem_IVRSystem_019_GetTrackedDeviceIndexForControllerRole);
+    init_thunk(&thunks[19], r, winIVRSystem_IVRSystem_019_GetControllerRoleForTrackedDeviceIndex);
+    init_thunk(&thunks[20], r, winIVRSystem_IVRSystem_019_GetTrackedDeviceClass);
+    init_thunk(&thunks[21], r, winIVRSystem_IVRSystem_019_IsTrackedDeviceConnected);
+    init_thunk(&thunks[22], r, winIVRSystem_IVRSystem_019_GetBoolTrackedDeviceProperty);
+    init_thunk(&thunks[23], r, winIVRSystem_IVRSystem_019_GetFloatTrackedDeviceProperty);
+    init_thunk(&thunks[24], r, winIVRSystem_IVRSystem_019_GetInt32TrackedDeviceProperty);
+    init_thunk(&thunks[25], r, winIVRSystem_IVRSystem_019_GetUint64TrackedDeviceProperty);
+    init_thunk(&thunks[26], r, winIVRSystem_IVRSystem_019_GetMatrix34TrackedDeviceProperty);
+    init_thunk(&thunks[27], r, winIVRSystem_IVRSystem_019_GetArrayTrackedDeviceProperty);
+    init_thunk(&thunks[28], r, winIVRSystem_IVRSystem_019_GetStringTrackedDeviceProperty);
+    init_thunk(&thunks[29], r, winIVRSystem_IVRSystem_019_GetPropErrorNameFromEnum);
+    init_thunk(&thunks[30], r, winIVRSystem_IVRSystem_019_PollNextEvent);
+    init_thunk(&thunks[31], r, winIVRSystem_IVRSystem_019_PollNextEventWithPose);
+    init_thunk(&thunks[32], r, winIVRSystem_IVRSystem_019_GetEventTypeNameFromEnum);
+    init_thunk(&thunks[33], r, winIVRSystem_IVRSystem_019_GetHiddenAreaMesh);
+    init_thunk(&thunks[34], r, winIVRSystem_IVRSystem_019_GetControllerState);
+    init_thunk(&thunks[35], r, winIVRSystem_IVRSystem_019_GetControllerStateWithPose);
+    init_thunk(&thunks[36], r, winIVRSystem_IVRSystem_019_TriggerHapticPulse);
+    init_thunk(&thunks[37], r, winIVRSystem_IVRSystem_019_GetButtonIdNameFromEnum);
+    init_thunk(&thunks[38], r, winIVRSystem_IVRSystem_019_GetControllerAxisTypeNameFromEnum);
+    init_thunk(&thunks[39], r, winIVRSystem_IVRSystem_019_IsInputAvailable);
+    init_thunk(&thunks[40], r, winIVRSystem_IVRSystem_019_IsSteamVRDrawingControllers);
+    init_thunk(&thunks[41], r, winIVRSystem_IVRSystem_019_ShouldApplicationPause);
+    init_thunk(&thunks[42], r, winIVRSystem_IVRSystem_019_ShouldApplicationReduceRenderingWork);
+    init_thunk(&thunks[43], r, winIVRSystem_IVRSystem_019_DriverDebugRequest);
+    init_thunk(&thunks[44], r, winIVRSystem_IVRSystem_019_PerformFirmwareUpdate);
+    init_thunk(&thunks[45], r, winIVRSystem_IVRSystem_019_AcknowledgeQuit_Exiting);
+    init_thunk(&thunks[46], r, winIVRSystem_IVRSystem_019_AcknowledgeQuit_UserPrompt);
+    for (i = 0; i < 47; i++)
+        vtable[i] = &thunks[i];
+    r->linux_side = linux_side;
+    r->vtable = (void *)vtable;
+    return r;
+}
+
+void destroy_winIVRSystem_IVRSystem_019_FnTable(void *object)
+{
+    winIVRSystem_IVRSystem_019 *win_object = object;
+    TRACE("%p\n", win_object);
+    VirtualFree(win_object->vtable[0], 0, MEM_RELEASE);
+    HeapFree(GetProcessHeap(), 0, win_object->vtable);
+    HeapFree(GetProcessHeap(), 0, win_object);
+}
+
 #include "cppIVRSystem_IVRSystem_017.h"
 
 typedef struct __winIVRSystem_IVRSystem_017 {
@@ -828,6 +901,75 @@ void destroy_winIVRSystem_IVRSystem_017(void *object)
 {
     TRACE("%p\n", object);
     HeapFree(GetProcessHeap(), 0, object);
+}
+
+winIVRSystem_IVRSystem_017 *create_winIVRSystem_IVRSystem_017_FnTable(void *linux_side)
+{
+    winIVRSystem_IVRSystem_017 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRSystem_IVRSystem_017));
+    struct thunk *thunks = alloc_thunks(45);
+    struct thunk **vtable = HeapAlloc(GetProcessHeap(), 0, 45 * sizeof(*vtable));
+    int i;
+
+    TRACE("-> %p, vtable %p, thunks %p\n", r, vtable, thunks);
+    init_thunk(&thunks[0], r, winIVRSystem_IVRSystem_017_GetRecommendedRenderTargetSize);
+    init_thunk(&thunks[1], r, winIVRSystem_IVRSystem_017_GetProjectionMatrix);
+    init_thunk(&thunks[2], r, winIVRSystem_IVRSystem_017_GetProjectionRaw);
+    init_thunk(&thunks[3], r, winIVRSystem_IVRSystem_017_ComputeDistortion);
+    init_thunk(&thunks[4], r, winIVRSystem_IVRSystem_017_GetEyeToHeadTransform);
+    init_thunk(&thunks[5], r, winIVRSystem_IVRSystem_017_GetTimeSinceLastVsync);
+    init_thunk(&thunks[6], r, winIVRSystem_IVRSystem_017_GetD3D9AdapterIndex);
+    init_thunk(&thunks[7], r, winIVRSystem_IVRSystem_017_GetDXGIOutputInfo);
+    init_thunk(&thunks[8], r, winIVRSystem_IVRSystem_017_GetOutputDevice);
+    init_thunk(&thunks[9], r, winIVRSystem_IVRSystem_017_IsDisplayOnDesktop);
+    init_thunk(&thunks[10], r, winIVRSystem_IVRSystem_017_SetDisplayVisibility);
+    init_thunk(&thunks[11], r, winIVRSystem_IVRSystem_017_GetDeviceToAbsoluteTrackingPose);
+    init_thunk(&thunks[12], r, winIVRSystem_IVRSystem_017_ResetSeatedZeroPose);
+    init_thunk(&thunks[13], r, winIVRSystem_IVRSystem_017_GetSeatedZeroPoseToStandingAbsoluteTrackingPose);
+    init_thunk(&thunks[14], r, winIVRSystem_IVRSystem_017_GetRawZeroPoseToStandingAbsoluteTrackingPose);
+    init_thunk(&thunks[15], r, winIVRSystem_IVRSystem_017_GetSortedTrackedDeviceIndicesOfClass);
+    init_thunk(&thunks[16], r, winIVRSystem_IVRSystem_017_GetTrackedDeviceActivityLevel);
+    init_thunk(&thunks[17], r, winIVRSystem_IVRSystem_017_ApplyTransform);
+    init_thunk(&thunks[18], r, winIVRSystem_IVRSystem_017_GetTrackedDeviceIndexForControllerRole);
+    init_thunk(&thunks[19], r, winIVRSystem_IVRSystem_017_GetControllerRoleForTrackedDeviceIndex);
+    init_thunk(&thunks[20], r, winIVRSystem_IVRSystem_017_GetTrackedDeviceClass);
+    init_thunk(&thunks[21], r, winIVRSystem_IVRSystem_017_IsTrackedDeviceConnected);
+    init_thunk(&thunks[22], r, winIVRSystem_IVRSystem_017_GetBoolTrackedDeviceProperty);
+    init_thunk(&thunks[23], r, winIVRSystem_IVRSystem_017_GetFloatTrackedDeviceProperty);
+    init_thunk(&thunks[24], r, winIVRSystem_IVRSystem_017_GetInt32TrackedDeviceProperty);
+    init_thunk(&thunks[25], r, winIVRSystem_IVRSystem_017_GetUint64TrackedDeviceProperty);
+    init_thunk(&thunks[26], r, winIVRSystem_IVRSystem_017_GetMatrix34TrackedDeviceProperty);
+    init_thunk(&thunks[27], r, winIVRSystem_IVRSystem_017_GetStringTrackedDeviceProperty);
+    init_thunk(&thunks[28], r, winIVRSystem_IVRSystem_017_GetPropErrorNameFromEnum);
+    init_thunk(&thunks[29], r, winIVRSystem_IVRSystem_017_PollNextEvent);
+    init_thunk(&thunks[30], r, winIVRSystem_IVRSystem_017_PollNextEventWithPose);
+    init_thunk(&thunks[31], r, winIVRSystem_IVRSystem_017_GetEventTypeNameFromEnum);
+    init_thunk(&thunks[32], r, winIVRSystem_IVRSystem_017_GetHiddenAreaMesh);
+    init_thunk(&thunks[33], r, winIVRSystem_IVRSystem_017_GetControllerState);
+    init_thunk(&thunks[34], r, winIVRSystem_IVRSystem_017_GetControllerStateWithPose);
+    init_thunk(&thunks[35], r, winIVRSystem_IVRSystem_017_TriggerHapticPulse);
+    init_thunk(&thunks[36], r, winIVRSystem_IVRSystem_017_GetButtonIdNameFromEnum);
+    init_thunk(&thunks[37], r, winIVRSystem_IVRSystem_017_GetControllerAxisTypeNameFromEnum);
+    init_thunk(&thunks[38], r, winIVRSystem_IVRSystem_017_CaptureInputFocus);
+    init_thunk(&thunks[39], r, winIVRSystem_IVRSystem_017_ReleaseInputFocus);
+    init_thunk(&thunks[40], r, winIVRSystem_IVRSystem_017_IsInputFocusCapturedByAnotherProcess);
+    init_thunk(&thunks[41], r, winIVRSystem_IVRSystem_017_DriverDebugRequest);
+    init_thunk(&thunks[42], r, winIVRSystem_IVRSystem_017_PerformFirmwareUpdate);
+    init_thunk(&thunks[43], r, winIVRSystem_IVRSystem_017_AcknowledgeQuit_Exiting);
+    init_thunk(&thunks[44], r, winIVRSystem_IVRSystem_017_AcknowledgeQuit_UserPrompt);
+    for (i = 0; i < 45; i++)
+        vtable[i] = &thunks[i];
+    r->linux_side = linux_side;
+    r->vtable = (void *)vtable;
+    return r;
+}
+
+void destroy_winIVRSystem_IVRSystem_017_FnTable(void *object)
+{
+    winIVRSystem_IVRSystem_017 *win_object = object;
+    TRACE("%p\n", win_object);
+    VirtualFree(win_object->vtable[0], 0, MEM_RELEASE);
+    HeapFree(GetProcessHeap(), 0, win_object->vtable);
+    HeapFree(GetProcessHeap(), 0, win_object);
 }
 
 #include "cppIVRSystem_IVRSystem_016.h"
@@ -1229,6 +1371,75 @@ void destroy_winIVRSystem_IVRSystem_016(void *object)
     HeapFree(GetProcessHeap(), 0, object);
 }
 
+winIVRSystem_IVRSystem_016 *create_winIVRSystem_IVRSystem_016_FnTable(void *linux_side)
+{
+    winIVRSystem_IVRSystem_016 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRSystem_IVRSystem_016));
+    struct thunk *thunks = alloc_thunks(45);
+    struct thunk **vtable = HeapAlloc(GetProcessHeap(), 0, 45 * sizeof(*vtable));
+    int i;
+
+    TRACE("-> %p, vtable %p, thunks %p\n", r, vtable, thunks);
+    init_thunk(&thunks[0], r, winIVRSystem_IVRSystem_016_GetRecommendedRenderTargetSize);
+    init_thunk(&thunks[1], r, winIVRSystem_IVRSystem_016_GetProjectionMatrix);
+    init_thunk(&thunks[2], r, winIVRSystem_IVRSystem_016_GetProjectionRaw);
+    init_thunk(&thunks[3], r, winIVRSystem_IVRSystem_016_ComputeDistortion);
+    init_thunk(&thunks[4], r, winIVRSystem_IVRSystem_016_GetEyeToHeadTransform);
+    init_thunk(&thunks[5], r, winIVRSystem_IVRSystem_016_GetTimeSinceLastVsync);
+    init_thunk(&thunks[6], r, winIVRSystem_IVRSystem_016_GetD3D9AdapterIndex);
+    init_thunk(&thunks[7], r, winIVRSystem_IVRSystem_016_GetDXGIOutputInfo);
+    init_thunk(&thunks[8], r, winIVRSystem_IVRSystem_016_GetOutputDevice);
+    init_thunk(&thunks[9], r, winIVRSystem_IVRSystem_016_IsDisplayOnDesktop);
+    init_thunk(&thunks[10], r, winIVRSystem_IVRSystem_016_SetDisplayVisibility);
+    init_thunk(&thunks[11], r, winIVRSystem_IVRSystem_016_GetDeviceToAbsoluteTrackingPose);
+    init_thunk(&thunks[12], r, winIVRSystem_IVRSystem_016_ResetSeatedZeroPose);
+    init_thunk(&thunks[13], r, winIVRSystem_IVRSystem_016_GetSeatedZeroPoseToStandingAbsoluteTrackingPose);
+    init_thunk(&thunks[14], r, winIVRSystem_IVRSystem_016_GetRawZeroPoseToStandingAbsoluteTrackingPose);
+    init_thunk(&thunks[15], r, winIVRSystem_IVRSystem_016_GetSortedTrackedDeviceIndicesOfClass);
+    init_thunk(&thunks[16], r, winIVRSystem_IVRSystem_016_GetTrackedDeviceActivityLevel);
+    init_thunk(&thunks[17], r, winIVRSystem_IVRSystem_016_ApplyTransform);
+    init_thunk(&thunks[18], r, winIVRSystem_IVRSystem_016_GetTrackedDeviceIndexForControllerRole);
+    init_thunk(&thunks[19], r, winIVRSystem_IVRSystem_016_GetControllerRoleForTrackedDeviceIndex);
+    init_thunk(&thunks[20], r, winIVRSystem_IVRSystem_016_GetTrackedDeviceClass);
+    init_thunk(&thunks[21], r, winIVRSystem_IVRSystem_016_IsTrackedDeviceConnected);
+    init_thunk(&thunks[22], r, winIVRSystem_IVRSystem_016_GetBoolTrackedDeviceProperty);
+    init_thunk(&thunks[23], r, winIVRSystem_IVRSystem_016_GetFloatTrackedDeviceProperty);
+    init_thunk(&thunks[24], r, winIVRSystem_IVRSystem_016_GetInt32TrackedDeviceProperty);
+    init_thunk(&thunks[25], r, winIVRSystem_IVRSystem_016_GetUint64TrackedDeviceProperty);
+    init_thunk(&thunks[26], r, winIVRSystem_IVRSystem_016_GetMatrix34TrackedDeviceProperty);
+    init_thunk(&thunks[27], r, winIVRSystem_IVRSystem_016_GetStringTrackedDeviceProperty);
+    init_thunk(&thunks[28], r, winIVRSystem_IVRSystem_016_GetPropErrorNameFromEnum);
+    init_thunk(&thunks[29], r, winIVRSystem_IVRSystem_016_PollNextEvent);
+    init_thunk(&thunks[30], r, winIVRSystem_IVRSystem_016_PollNextEventWithPose);
+    init_thunk(&thunks[31], r, winIVRSystem_IVRSystem_016_GetEventTypeNameFromEnum);
+    init_thunk(&thunks[32], r, winIVRSystem_IVRSystem_016_GetHiddenAreaMesh);
+    init_thunk(&thunks[33], r, winIVRSystem_IVRSystem_016_GetControllerState);
+    init_thunk(&thunks[34], r, winIVRSystem_IVRSystem_016_GetControllerStateWithPose);
+    init_thunk(&thunks[35], r, winIVRSystem_IVRSystem_016_TriggerHapticPulse);
+    init_thunk(&thunks[36], r, winIVRSystem_IVRSystem_016_GetButtonIdNameFromEnum);
+    init_thunk(&thunks[37], r, winIVRSystem_IVRSystem_016_GetControllerAxisTypeNameFromEnum);
+    init_thunk(&thunks[38], r, winIVRSystem_IVRSystem_016_CaptureInputFocus);
+    init_thunk(&thunks[39], r, winIVRSystem_IVRSystem_016_ReleaseInputFocus);
+    init_thunk(&thunks[40], r, winIVRSystem_IVRSystem_016_IsInputFocusCapturedByAnotherProcess);
+    init_thunk(&thunks[41], r, winIVRSystem_IVRSystem_016_DriverDebugRequest);
+    init_thunk(&thunks[42], r, winIVRSystem_IVRSystem_016_PerformFirmwareUpdate);
+    init_thunk(&thunks[43], r, winIVRSystem_IVRSystem_016_AcknowledgeQuit_Exiting);
+    init_thunk(&thunks[44], r, winIVRSystem_IVRSystem_016_AcknowledgeQuit_UserPrompt);
+    for (i = 0; i < 45; i++)
+        vtable[i] = &thunks[i];
+    r->linux_side = linux_side;
+    r->vtable = (void *)vtable;
+    return r;
+}
+
+void destroy_winIVRSystem_IVRSystem_016_FnTable(void *object)
+{
+    winIVRSystem_IVRSystem_016 *win_object = object;
+    TRACE("%p\n", win_object);
+    VirtualFree(win_object->vtable[0], 0, MEM_RELEASE);
+    HeapFree(GetProcessHeap(), 0, win_object->vtable);
+    HeapFree(GetProcessHeap(), 0, win_object);
+}
+
 #include "cppIVRSystem_IVRSystem_015.h"
 
 typedef struct __winIVRSystem_IVRSystem_015 {
@@ -1618,6 +1829,74 @@ void destroy_winIVRSystem_IVRSystem_015(void *object)
 {
     TRACE("%p\n", object);
     HeapFree(GetProcessHeap(), 0, object);
+}
+
+winIVRSystem_IVRSystem_015 *create_winIVRSystem_IVRSystem_015_FnTable(void *linux_side)
+{
+    winIVRSystem_IVRSystem_015 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRSystem_IVRSystem_015));
+    struct thunk *thunks = alloc_thunks(44);
+    struct thunk **vtable = HeapAlloc(GetProcessHeap(), 0, 44 * sizeof(*vtable));
+    int i;
+
+    TRACE("-> %p, vtable %p, thunks %p\n", r, vtable, thunks);
+    init_thunk(&thunks[0], r, winIVRSystem_IVRSystem_015_GetRecommendedRenderTargetSize);
+    init_thunk(&thunks[1], r, winIVRSystem_IVRSystem_015_GetProjectionMatrix);
+    init_thunk(&thunks[2], r, winIVRSystem_IVRSystem_015_GetProjectionRaw);
+    init_thunk(&thunks[3], r, winIVRSystem_IVRSystem_015_ComputeDistortion);
+    init_thunk(&thunks[4], r, winIVRSystem_IVRSystem_015_GetEyeToHeadTransform);
+    init_thunk(&thunks[5], r, winIVRSystem_IVRSystem_015_GetTimeSinceLastVsync);
+    init_thunk(&thunks[6], r, winIVRSystem_IVRSystem_015_GetD3D9AdapterIndex);
+    init_thunk(&thunks[7], r, winIVRSystem_IVRSystem_015_GetDXGIOutputInfo);
+    init_thunk(&thunks[8], r, winIVRSystem_IVRSystem_015_IsDisplayOnDesktop);
+    init_thunk(&thunks[9], r, winIVRSystem_IVRSystem_015_SetDisplayVisibility);
+    init_thunk(&thunks[10], r, winIVRSystem_IVRSystem_015_GetDeviceToAbsoluteTrackingPose);
+    init_thunk(&thunks[11], r, winIVRSystem_IVRSystem_015_ResetSeatedZeroPose);
+    init_thunk(&thunks[12], r, winIVRSystem_IVRSystem_015_GetSeatedZeroPoseToStandingAbsoluteTrackingPose);
+    init_thunk(&thunks[13], r, winIVRSystem_IVRSystem_015_GetRawZeroPoseToStandingAbsoluteTrackingPose);
+    init_thunk(&thunks[14], r, winIVRSystem_IVRSystem_015_GetSortedTrackedDeviceIndicesOfClass);
+    init_thunk(&thunks[15], r, winIVRSystem_IVRSystem_015_GetTrackedDeviceActivityLevel);
+    init_thunk(&thunks[16], r, winIVRSystem_IVRSystem_015_ApplyTransform);
+    init_thunk(&thunks[17], r, winIVRSystem_IVRSystem_015_GetTrackedDeviceIndexForControllerRole);
+    init_thunk(&thunks[18], r, winIVRSystem_IVRSystem_015_GetControllerRoleForTrackedDeviceIndex);
+    init_thunk(&thunks[19], r, winIVRSystem_IVRSystem_015_GetTrackedDeviceClass);
+    init_thunk(&thunks[20], r, winIVRSystem_IVRSystem_015_IsTrackedDeviceConnected);
+    init_thunk(&thunks[21], r, winIVRSystem_IVRSystem_015_GetBoolTrackedDeviceProperty);
+    init_thunk(&thunks[22], r, winIVRSystem_IVRSystem_015_GetFloatTrackedDeviceProperty);
+    init_thunk(&thunks[23], r, winIVRSystem_IVRSystem_015_GetInt32TrackedDeviceProperty);
+    init_thunk(&thunks[24], r, winIVRSystem_IVRSystem_015_GetUint64TrackedDeviceProperty);
+    init_thunk(&thunks[25], r, winIVRSystem_IVRSystem_015_GetMatrix34TrackedDeviceProperty);
+    init_thunk(&thunks[26], r, winIVRSystem_IVRSystem_015_GetStringTrackedDeviceProperty);
+    init_thunk(&thunks[27], r, winIVRSystem_IVRSystem_015_GetPropErrorNameFromEnum);
+    init_thunk(&thunks[28], r, winIVRSystem_IVRSystem_015_PollNextEvent);
+    init_thunk(&thunks[29], r, winIVRSystem_IVRSystem_015_PollNextEventWithPose);
+    init_thunk(&thunks[30], r, winIVRSystem_IVRSystem_015_GetEventTypeNameFromEnum);
+    init_thunk(&thunks[31], r, winIVRSystem_IVRSystem_015_GetHiddenAreaMesh);
+    init_thunk(&thunks[32], r, winIVRSystem_IVRSystem_015_GetControllerState);
+    init_thunk(&thunks[33], r, winIVRSystem_IVRSystem_015_GetControllerStateWithPose);
+    init_thunk(&thunks[34], r, winIVRSystem_IVRSystem_015_TriggerHapticPulse);
+    init_thunk(&thunks[35], r, winIVRSystem_IVRSystem_015_GetButtonIdNameFromEnum);
+    init_thunk(&thunks[36], r, winIVRSystem_IVRSystem_015_GetControllerAxisTypeNameFromEnum);
+    init_thunk(&thunks[37], r, winIVRSystem_IVRSystem_015_CaptureInputFocus);
+    init_thunk(&thunks[38], r, winIVRSystem_IVRSystem_015_ReleaseInputFocus);
+    init_thunk(&thunks[39], r, winIVRSystem_IVRSystem_015_IsInputFocusCapturedByAnotherProcess);
+    init_thunk(&thunks[40], r, winIVRSystem_IVRSystem_015_DriverDebugRequest);
+    init_thunk(&thunks[41], r, winIVRSystem_IVRSystem_015_PerformFirmwareUpdate);
+    init_thunk(&thunks[42], r, winIVRSystem_IVRSystem_015_AcknowledgeQuit_Exiting);
+    init_thunk(&thunks[43], r, winIVRSystem_IVRSystem_015_AcknowledgeQuit_UserPrompt);
+    for (i = 0; i < 44; i++)
+        vtable[i] = &thunks[i];
+    r->linux_side = linux_side;
+    r->vtable = (void *)vtable;
+    return r;
+}
+
+void destroy_winIVRSystem_IVRSystem_015_FnTable(void *object)
+{
+    winIVRSystem_IVRSystem_015 *win_object = object;
+    TRACE("%p\n", win_object);
+    VirtualFree(win_object->vtable[0], 0, MEM_RELEASE);
+    HeapFree(GetProcessHeap(), 0, win_object->vtable);
+    HeapFree(GetProcessHeap(), 0, win_object);
 }
 
 #include "cppIVRSystem_IVRSystem_014.h"
@@ -2011,6 +2290,74 @@ void destroy_winIVRSystem_IVRSystem_014(void *object)
     HeapFree(GetProcessHeap(), 0, object);
 }
 
+winIVRSystem_IVRSystem_014 *create_winIVRSystem_IVRSystem_014_FnTable(void *linux_side)
+{
+    winIVRSystem_IVRSystem_014 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRSystem_IVRSystem_014));
+    struct thunk *thunks = alloc_thunks(44);
+    struct thunk **vtable = HeapAlloc(GetProcessHeap(), 0, 44 * sizeof(*vtable));
+    int i;
+
+    TRACE("-> %p, vtable %p, thunks %p\n", r, vtable, thunks);
+    init_thunk(&thunks[0], r, winIVRSystem_IVRSystem_014_GetRecommendedRenderTargetSize);
+    init_thunk(&thunks[1], r, winIVRSystem_IVRSystem_014_GetProjectionMatrix);
+    init_thunk(&thunks[2], r, winIVRSystem_IVRSystem_014_GetProjectionRaw);
+    init_thunk(&thunks[3], r, winIVRSystem_IVRSystem_014_ComputeDistortion);
+    init_thunk(&thunks[4], r, winIVRSystem_IVRSystem_014_GetEyeToHeadTransform);
+    init_thunk(&thunks[5], r, winIVRSystem_IVRSystem_014_GetTimeSinceLastVsync);
+    init_thunk(&thunks[6], r, winIVRSystem_IVRSystem_014_GetD3D9AdapterIndex);
+    init_thunk(&thunks[7], r, winIVRSystem_IVRSystem_014_GetDXGIOutputInfo);
+    init_thunk(&thunks[8], r, winIVRSystem_IVRSystem_014_IsDisplayOnDesktop);
+    init_thunk(&thunks[9], r, winIVRSystem_IVRSystem_014_SetDisplayVisibility);
+    init_thunk(&thunks[10], r, winIVRSystem_IVRSystem_014_GetDeviceToAbsoluteTrackingPose);
+    init_thunk(&thunks[11], r, winIVRSystem_IVRSystem_014_ResetSeatedZeroPose);
+    init_thunk(&thunks[12], r, winIVRSystem_IVRSystem_014_GetSeatedZeroPoseToStandingAbsoluteTrackingPose);
+    init_thunk(&thunks[13], r, winIVRSystem_IVRSystem_014_GetRawZeroPoseToStandingAbsoluteTrackingPose);
+    init_thunk(&thunks[14], r, winIVRSystem_IVRSystem_014_GetSortedTrackedDeviceIndicesOfClass);
+    init_thunk(&thunks[15], r, winIVRSystem_IVRSystem_014_GetTrackedDeviceActivityLevel);
+    init_thunk(&thunks[16], r, winIVRSystem_IVRSystem_014_ApplyTransform);
+    init_thunk(&thunks[17], r, winIVRSystem_IVRSystem_014_GetTrackedDeviceIndexForControllerRole);
+    init_thunk(&thunks[18], r, winIVRSystem_IVRSystem_014_GetControllerRoleForTrackedDeviceIndex);
+    init_thunk(&thunks[19], r, winIVRSystem_IVRSystem_014_GetTrackedDeviceClass);
+    init_thunk(&thunks[20], r, winIVRSystem_IVRSystem_014_IsTrackedDeviceConnected);
+    init_thunk(&thunks[21], r, winIVRSystem_IVRSystem_014_GetBoolTrackedDeviceProperty);
+    init_thunk(&thunks[22], r, winIVRSystem_IVRSystem_014_GetFloatTrackedDeviceProperty);
+    init_thunk(&thunks[23], r, winIVRSystem_IVRSystem_014_GetInt32TrackedDeviceProperty);
+    init_thunk(&thunks[24], r, winIVRSystem_IVRSystem_014_GetUint64TrackedDeviceProperty);
+    init_thunk(&thunks[25], r, winIVRSystem_IVRSystem_014_GetMatrix34TrackedDeviceProperty);
+    init_thunk(&thunks[26], r, winIVRSystem_IVRSystem_014_GetStringTrackedDeviceProperty);
+    init_thunk(&thunks[27], r, winIVRSystem_IVRSystem_014_GetPropErrorNameFromEnum);
+    init_thunk(&thunks[28], r, winIVRSystem_IVRSystem_014_PollNextEvent);
+    init_thunk(&thunks[29], r, winIVRSystem_IVRSystem_014_PollNextEventWithPose);
+    init_thunk(&thunks[30], r, winIVRSystem_IVRSystem_014_GetEventTypeNameFromEnum);
+    init_thunk(&thunks[31], r, winIVRSystem_IVRSystem_014_GetHiddenAreaMesh);
+    init_thunk(&thunks[32], r, winIVRSystem_IVRSystem_014_GetControllerState);
+    init_thunk(&thunks[33], r, winIVRSystem_IVRSystem_014_GetControllerStateWithPose);
+    init_thunk(&thunks[34], r, winIVRSystem_IVRSystem_014_TriggerHapticPulse);
+    init_thunk(&thunks[35], r, winIVRSystem_IVRSystem_014_GetButtonIdNameFromEnum);
+    init_thunk(&thunks[36], r, winIVRSystem_IVRSystem_014_GetControllerAxisTypeNameFromEnum);
+    init_thunk(&thunks[37], r, winIVRSystem_IVRSystem_014_CaptureInputFocus);
+    init_thunk(&thunks[38], r, winIVRSystem_IVRSystem_014_ReleaseInputFocus);
+    init_thunk(&thunks[39], r, winIVRSystem_IVRSystem_014_IsInputFocusCapturedByAnotherProcess);
+    init_thunk(&thunks[40], r, winIVRSystem_IVRSystem_014_DriverDebugRequest);
+    init_thunk(&thunks[41], r, winIVRSystem_IVRSystem_014_PerformFirmwareUpdate);
+    init_thunk(&thunks[42], r, winIVRSystem_IVRSystem_014_AcknowledgeQuit_Exiting);
+    init_thunk(&thunks[43], r, winIVRSystem_IVRSystem_014_AcknowledgeQuit_UserPrompt);
+    for (i = 0; i < 44; i++)
+        vtable[i] = &thunks[i];
+    r->linux_side = linux_side;
+    r->vtable = (void *)vtable;
+    return r;
+}
+
+void destroy_winIVRSystem_IVRSystem_014_FnTable(void *object)
+{
+    winIVRSystem_IVRSystem_014 *win_object = object;
+    TRACE("%p\n", win_object);
+    VirtualFree(win_object->vtable[0], 0, MEM_RELEASE);
+    HeapFree(GetProcessHeap(), 0, win_object->vtable);
+    HeapFree(GetProcessHeap(), 0, win_object);
+}
+
 #include "cppIVRSystem_IVRSystem_012.h"
 
 typedef struct __winIVRSystem_IVRSystem_012 {
@@ -2401,6 +2748,74 @@ void destroy_winIVRSystem_IVRSystem_012(void *object)
 {
     TRACE("%p\n", object);
     HeapFree(GetProcessHeap(), 0, object);
+}
+
+winIVRSystem_IVRSystem_012 *create_winIVRSystem_IVRSystem_012_FnTable(void *linux_side)
+{
+    winIVRSystem_IVRSystem_012 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRSystem_IVRSystem_012));
+    struct thunk *thunks = alloc_thunks(44);
+    struct thunk **vtable = HeapAlloc(GetProcessHeap(), 0, 44 * sizeof(*vtable));
+    int i;
+
+    TRACE("-> %p, vtable %p, thunks %p\n", r, vtable, thunks);
+    init_thunk(&thunks[0], r, winIVRSystem_IVRSystem_012_GetRecommendedRenderTargetSize);
+    init_thunk(&thunks[1], r, winIVRSystem_IVRSystem_012_GetProjectionMatrix);
+    init_thunk(&thunks[2], r, winIVRSystem_IVRSystem_012_GetProjectionRaw);
+    init_thunk(&thunks[3], r, winIVRSystem_IVRSystem_012_ComputeDistortion);
+    init_thunk(&thunks[4], r, winIVRSystem_IVRSystem_012_GetEyeToHeadTransform);
+    init_thunk(&thunks[5], r, winIVRSystem_IVRSystem_012_GetTimeSinceLastVsync);
+    init_thunk(&thunks[6], r, winIVRSystem_IVRSystem_012_GetD3D9AdapterIndex);
+    init_thunk(&thunks[7], r, winIVRSystem_IVRSystem_012_GetDXGIOutputInfo);
+    init_thunk(&thunks[8], r, winIVRSystem_IVRSystem_012_IsDisplayOnDesktop);
+    init_thunk(&thunks[9], r, winIVRSystem_IVRSystem_012_SetDisplayVisibility);
+    init_thunk(&thunks[10], r, winIVRSystem_IVRSystem_012_GetDeviceToAbsoluteTrackingPose);
+    init_thunk(&thunks[11], r, winIVRSystem_IVRSystem_012_ResetSeatedZeroPose);
+    init_thunk(&thunks[12], r, winIVRSystem_IVRSystem_012_GetSeatedZeroPoseToStandingAbsoluteTrackingPose);
+    init_thunk(&thunks[13], r, winIVRSystem_IVRSystem_012_GetRawZeroPoseToStandingAbsoluteTrackingPose);
+    init_thunk(&thunks[14], r, winIVRSystem_IVRSystem_012_GetSortedTrackedDeviceIndicesOfClass);
+    init_thunk(&thunks[15], r, winIVRSystem_IVRSystem_012_GetTrackedDeviceActivityLevel);
+    init_thunk(&thunks[16], r, winIVRSystem_IVRSystem_012_ApplyTransform);
+    init_thunk(&thunks[17], r, winIVRSystem_IVRSystem_012_GetTrackedDeviceIndexForControllerRole);
+    init_thunk(&thunks[18], r, winIVRSystem_IVRSystem_012_GetControllerRoleForTrackedDeviceIndex);
+    init_thunk(&thunks[19], r, winIVRSystem_IVRSystem_012_GetTrackedDeviceClass);
+    init_thunk(&thunks[20], r, winIVRSystem_IVRSystem_012_IsTrackedDeviceConnected);
+    init_thunk(&thunks[21], r, winIVRSystem_IVRSystem_012_GetBoolTrackedDeviceProperty);
+    init_thunk(&thunks[22], r, winIVRSystem_IVRSystem_012_GetFloatTrackedDeviceProperty);
+    init_thunk(&thunks[23], r, winIVRSystem_IVRSystem_012_GetInt32TrackedDeviceProperty);
+    init_thunk(&thunks[24], r, winIVRSystem_IVRSystem_012_GetUint64TrackedDeviceProperty);
+    init_thunk(&thunks[25], r, winIVRSystem_IVRSystem_012_GetMatrix34TrackedDeviceProperty);
+    init_thunk(&thunks[26], r, winIVRSystem_IVRSystem_012_GetStringTrackedDeviceProperty);
+    init_thunk(&thunks[27], r, winIVRSystem_IVRSystem_012_GetPropErrorNameFromEnum);
+    init_thunk(&thunks[28], r, winIVRSystem_IVRSystem_012_PollNextEvent);
+    init_thunk(&thunks[29], r, winIVRSystem_IVRSystem_012_PollNextEventWithPose);
+    init_thunk(&thunks[30], r, winIVRSystem_IVRSystem_012_GetEventTypeNameFromEnum);
+    init_thunk(&thunks[31], r, winIVRSystem_IVRSystem_012_GetHiddenAreaMesh);
+    init_thunk(&thunks[32], r, winIVRSystem_IVRSystem_012_GetControllerState);
+    init_thunk(&thunks[33], r, winIVRSystem_IVRSystem_012_GetControllerStateWithPose);
+    init_thunk(&thunks[34], r, winIVRSystem_IVRSystem_012_TriggerHapticPulse);
+    init_thunk(&thunks[35], r, winIVRSystem_IVRSystem_012_GetButtonIdNameFromEnum);
+    init_thunk(&thunks[36], r, winIVRSystem_IVRSystem_012_GetControllerAxisTypeNameFromEnum);
+    init_thunk(&thunks[37], r, winIVRSystem_IVRSystem_012_CaptureInputFocus);
+    init_thunk(&thunks[38], r, winIVRSystem_IVRSystem_012_ReleaseInputFocus);
+    init_thunk(&thunks[39], r, winIVRSystem_IVRSystem_012_IsInputFocusCapturedByAnotherProcess);
+    init_thunk(&thunks[40], r, winIVRSystem_IVRSystem_012_DriverDebugRequest);
+    init_thunk(&thunks[41], r, winIVRSystem_IVRSystem_012_PerformFirmwareUpdate);
+    init_thunk(&thunks[42], r, winIVRSystem_IVRSystem_012_AcknowledgeQuit_Exiting);
+    init_thunk(&thunks[43], r, winIVRSystem_IVRSystem_012_AcknowledgeQuit_UserPrompt);
+    for (i = 0; i < 44; i++)
+        vtable[i] = &thunks[i];
+    r->linux_side = linux_side;
+    r->vtable = (void *)vtable;
+    return r;
+}
+
+void destroy_winIVRSystem_IVRSystem_012_FnTable(void *object)
+{
+    winIVRSystem_IVRSystem_012 *win_object = object;
+    TRACE("%p\n", win_object);
+    VirtualFree(win_object->vtable[0], 0, MEM_RELEASE);
+    HeapFree(GetProcessHeap(), 0, win_object->vtable);
+    HeapFree(GetProcessHeap(), 0, win_object);
 }
 
 #include "cppIVRSystem_IVRSystem_011.h"
@@ -2811,6 +3226,76 @@ void destroy_winIVRSystem_IVRSystem_011(void *object)
     HeapFree(GetProcessHeap(), 0, object);
 }
 
+winIVRSystem_IVRSystem_011 *create_winIVRSystem_IVRSystem_011_FnTable(void *linux_side)
+{
+    winIVRSystem_IVRSystem_011 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRSystem_IVRSystem_011));
+    struct thunk *thunks = alloc_thunks(46);
+    struct thunk **vtable = HeapAlloc(GetProcessHeap(), 0, 46 * sizeof(*vtable));
+    int i;
+
+    TRACE("-> %p, vtable %p, thunks %p\n", r, vtable, thunks);
+    init_thunk(&thunks[0], r, winIVRSystem_IVRSystem_011_GetRecommendedRenderTargetSize);
+    init_thunk(&thunks[1], r, winIVRSystem_IVRSystem_011_GetProjectionMatrix);
+    init_thunk(&thunks[2], r, winIVRSystem_IVRSystem_011_GetProjectionRaw);
+    init_thunk(&thunks[3], r, winIVRSystem_IVRSystem_011_ComputeDistortion);
+    init_thunk(&thunks[4], r, winIVRSystem_IVRSystem_011_GetEyeToHeadTransform);
+    init_thunk(&thunks[5], r, winIVRSystem_IVRSystem_011_GetTimeSinceLastVsync);
+    init_thunk(&thunks[6], r, winIVRSystem_IVRSystem_011_GetD3D9AdapterIndex);
+    init_thunk(&thunks[7], r, winIVRSystem_IVRSystem_011_GetDXGIOutputInfo);
+    init_thunk(&thunks[8], r, winIVRSystem_IVRSystem_011_IsDisplayOnDesktop);
+    init_thunk(&thunks[9], r, winIVRSystem_IVRSystem_011_SetDisplayVisibility);
+    init_thunk(&thunks[10], r, winIVRSystem_IVRSystem_011_GetDeviceToAbsoluteTrackingPose);
+    init_thunk(&thunks[11], r, winIVRSystem_IVRSystem_011_ResetSeatedZeroPose);
+    init_thunk(&thunks[12], r, winIVRSystem_IVRSystem_011_GetSeatedZeroPoseToStandingAbsoluteTrackingPose);
+    init_thunk(&thunks[13], r, winIVRSystem_IVRSystem_011_GetRawZeroPoseToStandingAbsoluteTrackingPose);
+    init_thunk(&thunks[14], r, winIVRSystem_IVRSystem_011_GetSortedTrackedDeviceIndicesOfClass);
+    init_thunk(&thunks[15], r, winIVRSystem_IVRSystem_011_GetTrackedDeviceActivityLevel);
+    init_thunk(&thunks[16], r, winIVRSystem_IVRSystem_011_ApplyTransform);
+    init_thunk(&thunks[17], r, winIVRSystem_IVRSystem_011_GetTrackedDeviceIndexForControllerRole);
+    init_thunk(&thunks[18], r, winIVRSystem_IVRSystem_011_GetControllerRoleForTrackedDeviceIndex);
+    init_thunk(&thunks[19], r, winIVRSystem_IVRSystem_011_GetTrackedDeviceClass);
+    init_thunk(&thunks[20], r, winIVRSystem_IVRSystem_011_IsTrackedDeviceConnected);
+    init_thunk(&thunks[21], r, winIVRSystem_IVRSystem_011_GetBoolTrackedDeviceProperty);
+    init_thunk(&thunks[22], r, winIVRSystem_IVRSystem_011_GetFloatTrackedDeviceProperty);
+    init_thunk(&thunks[23], r, winIVRSystem_IVRSystem_011_GetInt32TrackedDeviceProperty);
+    init_thunk(&thunks[24], r, winIVRSystem_IVRSystem_011_GetUint64TrackedDeviceProperty);
+    init_thunk(&thunks[25], r, winIVRSystem_IVRSystem_011_GetMatrix34TrackedDeviceProperty);
+    init_thunk(&thunks[26], r, winIVRSystem_IVRSystem_011_GetStringTrackedDeviceProperty);
+    init_thunk(&thunks[27], r, winIVRSystem_IVRSystem_011_GetPropErrorNameFromEnum);
+    init_thunk(&thunks[28], r, winIVRSystem_IVRSystem_011_PollNextEvent);
+    init_thunk(&thunks[29], r, winIVRSystem_IVRSystem_011_PollNextEventWithPose);
+    init_thunk(&thunks[30], r, winIVRSystem_IVRSystem_011_GetEventTypeNameFromEnum);
+    init_thunk(&thunks[31], r, winIVRSystem_IVRSystem_011_GetHiddenAreaMesh);
+    init_thunk(&thunks[32], r, winIVRSystem_IVRSystem_011_GetControllerState);
+    init_thunk(&thunks[33], r, winIVRSystem_IVRSystem_011_GetControllerStateWithPose);
+    init_thunk(&thunks[34], r, winIVRSystem_IVRSystem_011_TriggerHapticPulse);
+    init_thunk(&thunks[35], r, winIVRSystem_IVRSystem_011_GetButtonIdNameFromEnum);
+    init_thunk(&thunks[36], r, winIVRSystem_IVRSystem_011_GetControllerAxisTypeNameFromEnum);
+    init_thunk(&thunks[37], r, winIVRSystem_IVRSystem_011_CaptureInputFocus);
+    init_thunk(&thunks[38], r, winIVRSystem_IVRSystem_011_ReleaseInputFocus);
+    init_thunk(&thunks[39], r, winIVRSystem_IVRSystem_011_IsInputFocusCapturedByAnotherProcess);
+    init_thunk(&thunks[40], r, winIVRSystem_IVRSystem_011_DriverDebugRequest);
+    init_thunk(&thunks[41], r, winIVRSystem_IVRSystem_011_PerformFirmwareUpdate);
+    init_thunk(&thunks[42], r, winIVRSystem_IVRSystem_011_AcknowledgeQuit_Exiting);
+    init_thunk(&thunks[43], r, winIVRSystem_IVRSystem_011_AcknowledgeQuit_UserPrompt);
+    init_thunk(&thunks[44], r, winIVRSystem_IVRSystem_011_PerformanceTestEnableCapture);
+    init_thunk(&thunks[45], r, winIVRSystem_IVRSystem_011_PerformanceTestReportFidelityLevelChange);
+    for (i = 0; i < 46; i++)
+        vtable[i] = &thunks[i];
+    r->linux_side = linux_side;
+    r->vtable = (void *)vtable;
+    return r;
+}
+
+void destroy_winIVRSystem_IVRSystem_011_FnTable(void *object)
+{
+    winIVRSystem_IVRSystem_011 *win_object = object;
+    TRACE("%p\n", win_object);
+    VirtualFree(win_object->vtable[0], 0, MEM_RELEASE);
+    HeapFree(GetProcessHeap(), 0, win_object->vtable);
+    HeapFree(GetProcessHeap(), 0, win_object);
+}
+
 #include "cppIVRSystem_IVRSystem_010.h"
 
 typedef struct __winIVRSystem_IVRSystem_010 {
@@ -3219,6 +3704,76 @@ void destroy_winIVRSystem_IVRSystem_010(void *object)
     HeapFree(GetProcessHeap(), 0, object);
 }
 
+winIVRSystem_IVRSystem_010 *create_winIVRSystem_IVRSystem_010_FnTable(void *linux_side)
+{
+    winIVRSystem_IVRSystem_010 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRSystem_IVRSystem_010));
+    struct thunk *thunks = alloc_thunks(46);
+    struct thunk **vtable = HeapAlloc(GetProcessHeap(), 0, 46 * sizeof(*vtable));
+    int i;
+
+    TRACE("-> %p, vtable %p, thunks %p\n", r, vtable, thunks);
+    init_thunk(&thunks[0], r, winIVRSystem_IVRSystem_010_GetRecommendedRenderTargetSize);
+    init_thunk(&thunks[1], r, winIVRSystem_IVRSystem_010_GetProjectionMatrix);
+    init_thunk(&thunks[2], r, winIVRSystem_IVRSystem_010_GetProjectionRaw);
+    init_thunk(&thunks[3], r, winIVRSystem_IVRSystem_010_ComputeDistortion);
+    init_thunk(&thunks[4], r, winIVRSystem_IVRSystem_010_GetEyeToHeadTransform);
+    init_thunk(&thunks[5], r, winIVRSystem_IVRSystem_010_GetTimeSinceLastVsync);
+    init_thunk(&thunks[6], r, winIVRSystem_IVRSystem_010_GetD3D9AdapterIndex);
+    init_thunk(&thunks[7], r, winIVRSystem_IVRSystem_010_GetDXGIOutputInfo);
+    init_thunk(&thunks[8], r, winIVRSystem_IVRSystem_010_IsDisplayOnDesktop);
+    init_thunk(&thunks[9], r, winIVRSystem_IVRSystem_010_SetDisplayVisibility);
+    init_thunk(&thunks[10], r, winIVRSystem_IVRSystem_010_GetDeviceToAbsoluteTrackingPose);
+    init_thunk(&thunks[11], r, winIVRSystem_IVRSystem_010_ResetSeatedZeroPose);
+    init_thunk(&thunks[12], r, winIVRSystem_IVRSystem_010_GetSeatedZeroPoseToStandingAbsoluteTrackingPose);
+    init_thunk(&thunks[13], r, winIVRSystem_IVRSystem_010_GetRawZeroPoseToStandingAbsoluteTrackingPose);
+    init_thunk(&thunks[14], r, winIVRSystem_IVRSystem_010_GetSortedTrackedDeviceIndicesOfClass);
+    init_thunk(&thunks[15], r, winIVRSystem_IVRSystem_010_GetTrackedDeviceActivityLevel);
+    init_thunk(&thunks[16], r, winIVRSystem_IVRSystem_010_ApplyTransform);
+    init_thunk(&thunks[17], r, winIVRSystem_IVRSystem_010_GetTrackedDeviceIndexForControllerRole);
+    init_thunk(&thunks[18], r, winIVRSystem_IVRSystem_010_GetControllerRoleForTrackedDeviceIndex);
+    init_thunk(&thunks[19], r, winIVRSystem_IVRSystem_010_GetTrackedDeviceClass);
+    init_thunk(&thunks[20], r, winIVRSystem_IVRSystem_010_IsTrackedDeviceConnected);
+    init_thunk(&thunks[21], r, winIVRSystem_IVRSystem_010_GetBoolTrackedDeviceProperty);
+    init_thunk(&thunks[22], r, winIVRSystem_IVRSystem_010_GetFloatTrackedDeviceProperty);
+    init_thunk(&thunks[23], r, winIVRSystem_IVRSystem_010_GetInt32TrackedDeviceProperty);
+    init_thunk(&thunks[24], r, winIVRSystem_IVRSystem_010_GetUint64TrackedDeviceProperty);
+    init_thunk(&thunks[25], r, winIVRSystem_IVRSystem_010_GetMatrix34TrackedDeviceProperty);
+    init_thunk(&thunks[26], r, winIVRSystem_IVRSystem_010_GetStringTrackedDeviceProperty);
+    init_thunk(&thunks[27], r, winIVRSystem_IVRSystem_010_GetPropErrorNameFromEnum);
+    init_thunk(&thunks[28], r, winIVRSystem_IVRSystem_010_PollNextEvent);
+    init_thunk(&thunks[29], r, winIVRSystem_IVRSystem_010_PollNextEventWithPose);
+    init_thunk(&thunks[30], r, winIVRSystem_IVRSystem_010_GetEventTypeNameFromEnum);
+    init_thunk(&thunks[31], r, winIVRSystem_IVRSystem_010_GetHiddenAreaMesh);
+    init_thunk(&thunks[32], r, winIVRSystem_IVRSystem_010_GetControllerState);
+    init_thunk(&thunks[33], r, winIVRSystem_IVRSystem_010_GetControllerStateWithPose);
+    init_thunk(&thunks[34], r, winIVRSystem_IVRSystem_010_TriggerHapticPulse);
+    init_thunk(&thunks[35], r, winIVRSystem_IVRSystem_010_GetButtonIdNameFromEnum);
+    init_thunk(&thunks[36], r, winIVRSystem_IVRSystem_010_GetControllerAxisTypeNameFromEnum);
+    init_thunk(&thunks[37], r, winIVRSystem_IVRSystem_010_CaptureInputFocus);
+    init_thunk(&thunks[38], r, winIVRSystem_IVRSystem_010_ReleaseInputFocus);
+    init_thunk(&thunks[39], r, winIVRSystem_IVRSystem_010_IsInputFocusCapturedByAnotherProcess);
+    init_thunk(&thunks[40], r, winIVRSystem_IVRSystem_010_DriverDebugRequest);
+    init_thunk(&thunks[41], r, winIVRSystem_IVRSystem_010_PerformFirmwareUpdate);
+    init_thunk(&thunks[42], r, winIVRSystem_IVRSystem_010_AcknowledgeQuit_Exiting);
+    init_thunk(&thunks[43], r, winIVRSystem_IVRSystem_010_AcknowledgeQuit_UserPrompt);
+    init_thunk(&thunks[44], r, winIVRSystem_IVRSystem_010_PerformanceTestEnableCapture);
+    init_thunk(&thunks[45], r, winIVRSystem_IVRSystem_010_PerformanceTestReportFidelityLevelChange);
+    for (i = 0; i < 46; i++)
+        vtable[i] = &thunks[i];
+    r->linux_side = linux_side;
+    r->vtable = (void *)vtable;
+    return r;
+}
+
+void destroy_winIVRSystem_IVRSystem_010_FnTable(void *object)
+{
+    winIVRSystem_IVRSystem_010 *win_object = object;
+    TRACE("%p\n", win_object);
+    VirtualFree(win_object->vtable[0], 0, MEM_RELEASE);
+    HeapFree(GetProcessHeap(), 0, win_object->vtable);
+    HeapFree(GetProcessHeap(), 0, win_object);
+}
+
 #include "cppIVRSystem_IVRSystem_009.h"
 
 typedef struct __winIVRSystem_IVRSystem_009 {
@@ -3593,6 +4148,72 @@ void destroy_winIVRSystem_IVRSystem_009(void *object)
 {
     TRACE("%p\n", object);
     HeapFree(GetProcessHeap(), 0, object);
+}
+
+winIVRSystem_IVRSystem_009 *create_winIVRSystem_IVRSystem_009_FnTable(void *linux_side)
+{
+    winIVRSystem_IVRSystem_009 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRSystem_IVRSystem_009));
+    struct thunk *thunks = alloc_thunks(42);
+    struct thunk **vtable = HeapAlloc(GetProcessHeap(), 0, 42 * sizeof(*vtable));
+    int i;
+
+    TRACE("-> %p, vtable %p, thunks %p\n", r, vtable, thunks);
+    init_thunk(&thunks[0], r, winIVRSystem_IVRSystem_009_GetRecommendedRenderTargetSize);
+    init_thunk(&thunks[1], r, winIVRSystem_IVRSystem_009_GetProjectionMatrix);
+    init_thunk(&thunks[2], r, winIVRSystem_IVRSystem_009_GetProjectionRaw);
+    init_thunk(&thunks[3], r, winIVRSystem_IVRSystem_009_ComputeDistortion);
+    init_thunk(&thunks[4], r, winIVRSystem_IVRSystem_009_GetEyeToHeadTransform);
+    init_thunk(&thunks[5], r, winIVRSystem_IVRSystem_009_GetTimeSinceLastVsync);
+    init_thunk(&thunks[6], r, winIVRSystem_IVRSystem_009_GetD3D9AdapterIndex);
+    init_thunk(&thunks[7], r, winIVRSystem_IVRSystem_009_GetDXGIOutputInfo);
+    init_thunk(&thunks[8], r, winIVRSystem_IVRSystem_009_IsDisplayOnDesktop);
+    init_thunk(&thunks[9], r, winIVRSystem_IVRSystem_009_SetDisplayVisibility);
+    init_thunk(&thunks[10], r, winIVRSystem_IVRSystem_009_GetDeviceToAbsoluteTrackingPose);
+    init_thunk(&thunks[11], r, winIVRSystem_IVRSystem_009_ResetSeatedZeroPose);
+    init_thunk(&thunks[12], r, winIVRSystem_IVRSystem_009_GetSeatedZeroPoseToStandingAbsoluteTrackingPose);
+    init_thunk(&thunks[13], r, winIVRSystem_IVRSystem_009_GetRawZeroPoseToStandingAbsoluteTrackingPose);
+    init_thunk(&thunks[14], r, winIVRSystem_IVRSystem_009_GetSortedTrackedDeviceIndicesOfClass);
+    init_thunk(&thunks[15], r, winIVRSystem_IVRSystem_009_GetTrackedDeviceActivityLevel);
+    init_thunk(&thunks[16], r, winIVRSystem_IVRSystem_009_ApplyTransform);
+    init_thunk(&thunks[17], r, winIVRSystem_IVRSystem_009_GetTrackedDeviceClass);
+    init_thunk(&thunks[18], r, winIVRSystem_IVRSystem_009_IsTrackedDeviceConnected);
+    init_thunk(&thunks[19], r, winIVRSystem_IVRSystem_009_GetBoolTrackedDeviceProperty);
+    init_thunk(&thunks[20], r, winIVRSystem_IVRSystem_009_GetFloatTrackedDeviceProperty);
+    init_thunk(&thunks[21], r, winIVRSystem_IVRSystem_009_GetInt32TrackedDeviceProperty);
+    init_thunk(&thunks[22], r, winIVRSystem_IVRSystem_009_GetUint64TrackedDeviceProperty);
+    init_thunk(&thunks[23], r, winIVRSystem_IVRSystem_009_GetMatrix34TrackedDeviceProperty);
+    init_thunk(&thunks[24], r, winIVRSystem_IVRSystem_009_GetStringTrackedDeviceProperty);
+    init_thunk(&thunks[25], r, winIVRSystem_IVRSystem_009_GetPropErrorNameFromEnum);
+    init_thunk(&thunks[26], r, winIVRSystem_IVRSystem_009_PollNextEvent);
+    init_thunk(&thunks[27], r, winIVRSystem_IVRSystem_009_PollNextEventWithPose);
+    init_thunk(&thunks[28], r, winIVRSystem_IVRSystem_009_GetEventTypeNameFromEnum);
+    init_thunk(&thunks[29], r, winIVRSystem_IVRSystem_009_GetHiddenAreaMesh);
+    init_thunk(&thunks[30], r, winIVRSystem_IVRSystem_009_GetControllerState);
+    init_thunk(&thunks[31], r, winIVRSystem_IVRSystem_009_GetControllerStateWithPose);
+    init_thunk(&thunks[32], r, winIVRSystem_IVRSystem_009_TriggerHapticPulse);
+    init_thunk(&thunks[33], r, winIVRSystem_IVRSystem_009_GetButtonIdNameFromEnum);
+    init_thunk(&thunks[34], r, winIVRSystem_IVRSystem_009_GetControllerAxisTypeNameFromEnum);
+    init_thunk(&thunks[35], r, winIVRSystem_IVRSystem_009_CaptureInputFocus);
+    init_thunk(&thunks[36], r, winIVRSystem_IVRSystem_009_ReleaseInputFocus);
+    init_thunk(&thunks[37], r, winIVRSystem_IVRSystem_009_IsInputFocusCapturedByAnotherProcess);
+    init_thunk(&thunks[38], r, winIVRSystem_IVRSystem_009_DriverDebugRequest);
+    init_thunk(&thunks[39], r, winIVRSystem_IVRSystem_009_PerformFirmwareUpdate);
+    init_thunk(&thunks[40], r, winIVRSystem_IVRSystem_009_AcknowledgeQuit_Exiting);
+    init_thunk(&thunks[41], r, winIVRSystem_IVRSystem_009_AcknowledgeQuit_UserPrompt);
+    for (i = 0; i < 42; i++)
+        vtable[i] = &thunks[i];
+    r->linux_side = linux_side;
+    r->vtable = (void *)vtable;
+    return r;
+}
+
+void destroy_winIVRSystem_IVRSystem_009_FnTable(void *object)
+{
+    winIVRSystem_IVRSystem_009 *win_object = object;
+    TRACE("%p\n", win_object);
+    VirtualFree(win_object->vtable[0], 0, MEM_RELEASE);
+    HeapFree(GetProcessHeap(), 0, win_object->vtable);
+    HeapFree(GetProcessHeap(), 0, win_object);
 }
 
 #include "cppIVRSystem_IVRSystem_006.h"
@@ -3971,6 +4592,72 @@ void destroy_winIVRSystem_IVRSystem_006(void *object)
     HeapFree(GetProcessHeap(), 0, object);
 }
 
+winIVRSystem_IVRSystem_006 *create_winIVRSystem_IVRSystem_006_FnTable(void *linux_side)
+{
+    winIVRSystem_IVRSystem_006 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRSystem_IVRSystem_006));
+    struct thunk *thunks = alloc_thunks(42);
+    struct thunk **vtable = HeapAlloc(GetProcessHeap(), 0, 42 * sizeof(*vtable));
+    int i;
+
+    TRACE("-> %p, vtable %p, thunks %p\n", r, vtable, thunks);
+    init_thunk(&thunks[0], r, winIVRSystem_IVRSystem_006_GetWindowBounds);
+    init_thunk(&thunks[1], r, winIVRSystem_IVRSystem_006_GetRecommendedRenderTargetSize);
+    init_thunk(&thunks[2], r, winIVRSystem_IVRSystem_006_GetEyeOutputViewport);
+    init_thunk(&thunks[3], r, winIVRSystem_IVRSystem_006_GetProjectionMatrix);
+    init_thunk(&thunks[4], r, winIVRSystem_IVRSystem_006_GetProjectionRaw);
+    init_thunk(&thunks[5], r, winIVRSystem_IVRSystem_006_ComputeDistortion);
+    init_thunk(&thunks[6], r, winIVRSystem_IVRSystem_006_GetEyeToHeadTransform);
+    init_thunk(&thunks[7], r, winIVRSystem_IVRSystem_006_GetTimeSinceLastVsync);
+    init_thunk(&thunks[8], r, winIVRSystem_IVRSystem_006_GetD3D9AdapterIndex);
+    init_thunk(&thunks[9], r, winIVRSystem_IVRSystem_006_GetDXGIOutputInfo);
+    init_thunk(&thunks[10], r, winIVRSystem_IVRSystem_006_AttachToWindow);
+    init_thunk(&thunks[11], r, winIVRSystem_IVRSystem_006_GetDeviceToAbsoluteTrackingPose);
+    init_thunk(&thunks[12], r, winIVRSystem_IVRSystem_006_ResetSeatedZeroPose);
+    init_thunk(&thunks[13], r, winIVRSystem_IVRSystem_006_GetSeatedZeroPoseToStandingAbsoluteTrackingPose);
+    init_thunk(&thunks[14], r, winIVRSystem_IVRSystem_006_GetRawZeroPoseToStandingAbsoluteTrackingPose);
+    init_thunk(&thunks[15], r, winIVRSystem_IVRSystem_006_GetSortedTrackedDeviceIndicesOfClass);
+    init_thunk(&thunks[16], r, winIVRSystem_IVRSystem_006_GetTrackedDeviceActivityLevel);
+    init_thunk(&thunks[17], r, winIVRSystem_IVRSystem_006_GetTrackedDeviceClass);
+    init_thunk(&thunks[18], r, winIVRSystem_IVRSystem_006_IsTrackedDeviceConnected);
+    init_thunk(&thunks[19], r, winIVRSystem_IVRSystem_006_GetBoolTrackedDeviceProperty);
+    init_thunk(&thunks[20], r, winIVRSystem_IVRSystem_006_GetFloatTrackedDeviceProperty);
+    init_thunk(&thunks[21], r, winIVRSystem_IVRSystem_006_GetInt32TrackedDeviceProperty);
+    init_thunk(&thunks[22], r, winIVRSystem_IVRSystem_006_GetUint64TrackedDeviceProperty);
+    init_thunk(&thunks[23], r, winIVRSystem_IVRSystem_006_GetMatrix34TrackedDeviceProperty);
+    init_thunk(&thunks[24], r, winIVRSystem_IVRSystem_006_GetStringTrackedDeviceProperty);
+    init_thunk(&thunks[25], r, winIVRSystem_IVRSystem_006_GetPropErrorNameFromEnum);
+    init_thunk(&thunks[26], r, winIVRSystem_IVRSystem_006_PollNextEvent);
+    init_thunk(&thunks[27], r, winIVRSystem_IVRSystem_006_PollNextEventWithPose);
+    init_thunk(&thunks[28], r, winIVRSystem_IVRSystem_006_GetEventTypeNameFromEnum);
+    init_thunk(&thunks[29], r, winIVRSystem_IVRSystem_006_GetHiddenAreaMesh);
+    init_thunk(&thunks[30], r, winIVRSystem_IVRSystem_006_GetControllerState);
+    init_thunk(&thunks[31], r, winIVRSystem_IVRSystem_006_GetControllerStateWithPose);
+    init_thunk(&thunks[32], r, winIVRSystem_IVRSystem_006_TriggerHapticPulse);
+    init_thunk(&thunks[33], r, winIVRSystem_IVRSystem_006_GetButtonIdNameFromEnum);
+    init_thunk(&thunks[34], r, winIVRSystem_IVRSystem_006_GetControllerAxisTypeNameFromEnum);
+    init_thunk(&thunks[35], r, winIVRSystem_IVRSystem_006_CaptureInputFocus);
+    init_thunk(&thunks[36], r, winIVRSystem_IVRSystem_006_ReleaseInputFocus);
+    init_thunk(&thunks[37], r, winIVRSystem_IVRSystem_006_IsInputFocusCapturedByAnotherProcess);
+    init_thunk(&thunks[38], r, winIVRSystem_IVRSystem_006_DriverDebugRequest);
+    init_thunk(&thunks[39], r, winIVRSystem_IVRSystem_006_PerformFirmwareUpdate);
+    init_thunk(&thunks[40], r, winIVRSystem_IVRSystem_006_IsDisplayOnDesktop);
+    init_thunk(&thunks[41], r, winIVRSystem_IVRSystem_006_SetDisplayVisibility);
+    for (i = 0; i < 42; i++)
+        vtable[i] = &thunks[i];
+    r->linux_side = linux_side;
+    r->vtable = (void *)vtable;
+    return r;
+}
+
+void destroy_winIVRSystem_IVRSystem_006_FnTable(void *object)
+{
+    winIVRSystem_IVRSystem_006 *win_object = object;
+    TRACE("%p\n", win_object);
+    VirtualFree(win_object->vtable[0], 0, MEM_RELEASE);
+    HeapFree(GetProcessHeap(), 0, win_object->vtable);
+    HeapFree(GetProcessHeap(), 0, win_object);
+}
+
 #include "cppIVRSystem_IVRSystem_005.h"
 
 typedef struct __winIVRSystem_IVRSystem_005 {
@@ -4306,6 +4993,67 @@ void destroy_winIVRSystem_IVRSystem_005(void *object)
     HeapFree(GetProcessHeap(), 0, object);
 }
 
+winIVRSystem_IVRSystem_005 *create_winIVRSystem_IVRSystem_005_FnTable(void *linux_side)
+{
+    winIVRSystem_IVRSystem_005 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRSystem_IVRSystem_005));
+    struct thunk *thunks = alloc_thunks(37);
+    struct thunk **vtable = HeapAlloc(GetProcessHeap(), 0, 37 * sizeof(*vtable));
+    int i;
+
+    TRACE("-> %p, vtable %p, thunks %p\n", r, vtable, thunks);
+    init_thunk(&thunks[0], r, winIVRSystem_IVRSystem_005_GetWindowBounds);
+    init_thunk(&thunks[1], r, winIVRSystem_IVRSystem_005_GetRecommendedRenderTargetSize);
+    init_thunk(&thunks[2], r, winIVRSystem_IVRSystem_005_GetEyeOutputViewport);
+    init_thunk(&thunks[3], r, winIVRSystem_IVRSystem_005_GetProjectionMatrix);
+    init_thunk(&thunks[4], r, winIVRSystem_IVRSystem_005_GetProjectionRaw);
+    init_thunk(&thunks[5], r, winIVRSystem_IVRSystem_005_ComputeDistortion);
+    init_thunk(&thunks[6], r, winIVRSystem_IVRSystem_005_GetEyeToHeadTransform);
+    init_thunk(&thunks[7], r, winIVRSystem_IVRSystem_005_GetTimeSinceLastVsync);
+    init_thunk(&thunks[8], r, winIVRSystem_IVRSystem_005_GetD3D9AdapterIndex);
+    init_thunk(&thunks[9], r, winIVRSystem_IVRSystem_005_GetDXGIOutputInfo);
+    init_thunk(&thunks[10], r, winIVRSystem_IVRSystem_005_AttachToWindow);
+    init_thunk(&thunks[11], r, winIVRSystem_IVRSystem_005_GetDeviceToAbsoluteTrackingPose);
+    init_thunk(&thunks[12], r, winIVRSystem_IVRSystem_005_ResetSeatedZeroPose);
+    init_thunk(&thunks[13], r, winIVRSystem_IVRSystem_005_GetSeatedZeroPoseToStandingAbsoluteTrackingPose);
+    init_thunk(&thunks[14], r, winIVRSystem_IVRSystem_005_GetSortedTrackedDeviceIndicesOfClass);
+    init_thunk(&thunks[15], r, winIVRSystem_IVRSystem_005_GetTrackedDeviceClass);
+    init_thunk(&thunks[16], r, winIVRSystem_IVRSystem_005_IsTrackedDeviceConnected);
+    init_thunk(&thunks[17], r, winIVRSystem_IVRSystem_005_GetBoolTrackedDeviceProperty);
+    init_thunk(&thunks[18], r, winIVRSystem_IVRSystem_005_GetFloatTrackedDeviceProperty);
+    init_thunk(&thunks[19], r, winIVRSystem_IVRSystem_005_GetInt32TrackedDeviceProperty);
+    init_thunk(&thunks[20], r, winIVRSystem_IVRSystem_005_GetUint64TrackedDeviceProperty);
+    init_thunk(&thunks[21], r, winIVRSystem_IVRSystem_005_GetMatrix34TrackedDeviceProperty);
+    init_thunk(&thunks[22], r, winIVRSystem_IVRSystem_005_GetStringTrackedDeviceProperty);
+    init_thunk(&thunks[23], r, winIVRSystem_IVRSystem_005_GetPropErrorNameFromEnum);
+    init_thunk(&thunks[24], r, winIVRSystem_IVRSystem_005_PollNextEvent);
+    init_thunk(&thunks[25], r, winIVRSystem_IVRSystem_005_PollNextEventWithPose);
+    init_thunk(&thunks[26], r, winIVRSystem_IVRSystem_005_GetEventTypeNameFromEnum);
+    init_thunk(&thunks[27], r, winIVRSystem_IVRSystem_005_GetHiddenAreaMesh);
+    init_thunk(&thunks[28], r, winIVRSystem_IVRSystem_005_GetControllerState);
+    init_thunk(&thunks[29], r, winIVRSystem_IVRSystem_005_GetControllerStateWithPose);
+    init_thunk(&thunks[30], r, winIVRSystem_IVRSystem_005_TriggerHapticPulse);
+    init_thunk(&thunks[31], r, winIVRSystem_IVRSystem_005_GetButtonIdNameFromEnum);
+    init_thunk(&thunks[32], r, winIVRSystem_IVRSystem_005_GetControllerAxisTypeNameFromEnum);
+    init_thunk(&thunks[33], r, winIVRSystem_IVRSystem_005_CaptureInputFocus);
+    init_thunk(&thunks[34], r, winIVRSystem_IVRSystem_005_ReleaseInputFocus);
+    init_thunk(&thunks[35], r, winIVRSystem_IVRSystem_005_IsInputFocusCapturedByAnotherProcess);
+    init_thunk(&thunks[36], r, winIVRSystem_IVRSystem_005_DriverDebugRequest);
+    for (i = 0; i < 37; i++)
+        vtable[i] = &thunks[i];
+    r->linux_side = linux_side;
+    r->vtable = (void *)vtable;
+    return r;
+}
+
+void destroy_winIVRSystem_IVRSystem_005_FnTable(void *object)
+{
+    winIVRSystem_IVRSystem_005 *win_object = object;
+    TRACE("%p\n", win_object);
+    VirtualFree(win_object->vtable[0], 0, MEM_RELEASE);
+    HeapFree(GetProcessHeap(), 0, win_object->vtable);
+    HeapFree(GetProcessHeap(), 0, win_object);
+}
+
 #include "cppIVRSystem_IVRSystem_004.h"
 
 typedef struct __winIVRSystem_IVRSystem_004 {
@@ -4631,6 +5379,66 @@ void destroy_winIVRSystem_IVRSystem_004(void *object)
 {
     TRACE("%p\n", object);
     HeapFree(GetProcessHeap(), 0, object);
+}
+
+winIVRSystem_IVRSystem_004 *create_winIVRSystem_IVRSystem_004_FnTable(void *linux_side)
+{
+    winIVRSystem_IVRSystem_004 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRSystem_IVRSystem_004));
+    struct thunk *thunks = alloc_thunks(36);
+    struct thunk **vtable = HeapAlloc(GetProcessHeap(), 0, 36 * sizeof(*vtable));
+    int i;
+
+    TRACE("-> %p, vtable %p, thunks %p\n", r, vtable, thunks);
+    init_thunk(&thunks[0], r, winIVRSystem_IVRSystem_004_GetWindowBounds);
+    init_thunk(&thunks[1], r, winIVRSystem_IVRSystem_004_GetRecommendedRenderTargetSize);
+    init_thunk(&thunks[2], r, winIVRSystem_IVRSystem_004_GetEyeOutputViewport);
+    init_thunk(&thunks[3], r, winIVRSystem_IVRSystem_004_GetProjectionMatrix);
+    init_thunk(&thunks[4], r, winIVRSystem_IVRSystem_004_GetProjectionRaw);
+    init_thunk(&thunks[5], r, winIVRSystem_IVRSystem_004_ComputeDistortion);
+    init_thunk(&thunks[6], r, winIVRSystem_IVRSystem_004_GetEyeToHeadTransform);
+    init_thunk(&thunks[7], r, winIVRSystem_IVRSystem_004_GetTimeSinceLastVsync);
+    init_thunk(&thunks[8], r, winIVRSystem_IVRSystem_004_GetD3D9AdapterIndex);
+    init_thunk(&thunks[9], r, winIVRSystem_IVRSystem_004_GetDXGIOutputInfo);
+    init_thunk(&thunks[10], r, winIVRSystem_IVRSystem_004_AttachToWindow);
+    init_thunk(&thunks[11], r, winIVRSystem_IVRSystem_004_GetDeviceToAbsoluteTrackingPose);
+    init_thunk(&thunks[12], r, winIVRSystem_IVRSystem_004_ResetSeatedZeroPose);
+    init_thunk(&thunks[13], r, winIVRSystem_IVRSystem_004_GetSeatedZeroPoseToStandingAbsoluteTrackingPose);
+    init_thunk(&thunks[14], r, winIVRSystem_IVRSystem_004_GetTrackedDeviceClass);
+    init_thunk(&thunks[15], r, winIVRSystem_IVRSystem_004_IsTrackedDeviceConnected);
+    init_thunk(&thunks[16], r, winIVRSystem_IVRSystem_004_GetBoolTrackedDeviceProperty);
+    init_thunk(&thunks[17], r, winIVRSystem_IVRSystem_004_GetFloatTrackedDeviceProperty);
+    init_thunk(&thunks[18], r, winIVRSystem_IVRSystem_004_GetInt32TrackedDeviceProperty);
+    init_thunk(&thunks[19], r, winIVRSystem_IVRSystem_004_GetUint64TrackedDeviceProperty);
+    init_thunk(&thunks[20], r, winIVRSystem_IVRSystem_004_GetMatrix34TrackedDeviceProperty);
+    init_thunk(&thunks[21], r, winIVRSystem_IVRSystem_004_GetStringTrackedDeviceProperty);
+    init_thunk(&thunks[22], r, winIVRSystem_IVRSystem_004_GetPropErrorNameFromEnum);
+    init_thunk(&thunks[23], r, winIVRSystem_IVRSystem_004_PollNextEvent);
+    init_thunk(&thunks[24], r, winIVRSystem_IVRSystem_004_PollNextEventWithPose);
+    init_thunk(&thunks[25], r, winIVRSystem_IVRSystem_004_GetEventTypeNameFromEnum);
+    init_thunk(&thunks[26], r, winIVRSystem_IVRSystem_004_GetHiddenAreaMesh);
+    init_thunk(&thunks[27], r, winIVRSystem_IVRSystem_004_GetControllerState);
+    init_thunk(&thunks[28], r, winIVRSystem_IVRSystem_004_GetControllerStateWithPose);
+    init_thunk(&thunks[29], r, winIVRSystem_IVRSystem_004_TriggerHapticPulse);
+    init_thunk(&thunks[30], r, winIVRSystem_IVRSystem_004_GetButtonIdNameFromEnum);
+    init_thunk(&thunks[31], r, winIVRSystem_IVRSystem_004_GetControllerAxisTypeNameFromEnum);
+    init_thunk(&thunks[32], r, winIVRSystem_IVRSystem_004_CaptureInputFocus);
+    init_thunk(&thunks[33], r, winIVRSystem_IVRSystem_004_ReleaseInputFocus);
+    init_thunk(&thunks[34], r, winIVRSystem_IVRSystem_004_IsInputFocusCapturedByAnotherProcess);
+    init_thunk(&thunks[35], r, winIVRSystem_IVRSystem_004_DriverDebugRequest);
+    for (i = 0; i < 36; i++)
+        vtable[i] = &thunks[i];
+    r->linux_side = linux_side;
+    r->vtable = (void *)vtable;
+    return r;
+}
+
+void destroy_winIVRSystem_IVRSystem_004_FnTable(void *object)
+{
+    winIVRSystem_IVRSystem_004 *win_object = object;
+    TRACE("%p\n", win_object);
+    VirtualFree(win_object->vtable[0], 0, MEM_RELEASE);
+    HeapFree(GetProcessHeap(), 0, win_object->vtable);
+    HeapFree(GetProcessHeap(), 0, win_object);
 }
 
 #include "cppIVRSystem_IVRSystem_003.h"
@@ -4974,5 +5782,67 @@ void destroy_winIVRSystem_IVRSystem_003(void *object)
 {
     TRACE("%p\n", object);
     HeapFree(GetProcessHeap(), 0, object);
+}
+
+winIVRSystem_IVRSystem_003 *create_winIVRSystem_IVRSystem_003_FnTable(void *linux_side)
+{
+    winIVRSystem_IVRSystem_003 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRSystem_IVRSystem_003));
+    struct thunk *thunks = alloc_thunks(38);
+    struct thunk **vtable = HeapAlloc(GetProcessHeap(), 0, 38 * sizeof(*vtable));
+    int i;
+
+    TRACE("-> %p, vtable %p, thunks %p\n", r, vtable, thunks);
+    init_thunk(&thunks[0], r, winIVRSystem_IVRSystem_003_GetWindowBounds);
+    init_thunk(&thunks[1], r, winIVRSystem_IVRSystem_003_GetRecommendedRenderTargetSize);
+    init_thunk(&thunks[2], r, winIVRSystem_IVRSystem_003_GetEyeOutputViewport);
+    init_thunk(&thunks[3], r, winIVRSystem_IVRSystem_003_GetProjectionMatrix);
+    init_thunk(&thunks[4], r, winIVRSystem_IVRSystem_003_GetProjectionRaw);
+    init_thunk(&thunks[5], r, winIVRSystem_IVRSystem_003_ComputeDistortion);
+    init_thunk(&thunks[6], r, winIVRSystem_IVRSystem_003_GetEyeToHeadTransform);
+    init_thunk(&thunks[7], r, winIVRSystem_IVRSystem_003_GetTimeSinceLastVsync);
+    init_thunk(&thunks[8], r, winIVRSystem_IVRSystem_003_GetD3D9AdapterIndex);
+    init_thunk(&thunks[9], r, winIVRSystem_IVRSystem_003_GetDXGIOutputInfo);
+    init_thunk(&thunks[10], r, winIVRSystem_IVRSystem_003_AttachToWindow);
+    init_thunk(&thunks[11], r, winIVRSystem_IVRSystem_003_GetDeviceToAbsoluteTrackingPose);
+    init_thunk(&thunks[12], r, winIVRSystem_IVRSystem_003_ResetSeatedZeroPose);
+    init_thunk(&thunks[13], r, winIVRSystem_IVRSystem_003_GetSeatedZeroPoseToStandingAbsoluteTrackingPose);
+    init_thunk(&thunks[14], r, winIVRSystem_IVRSystem_003_LoadRenderModel);
+    init_thunk(&thunks[15], r, winIVRSystem_IVRSystem_003_FreeRenderModel);
+    init_thunk(&thunks[16], r, winIVRSystem_IVRSystem_003_GetTrackedDeviceClass);
+    init_thunk(&thunks[17], r, winIVRSystem_IVRSystem_003_IsTrackedDeviceConnected);
+    init_thunk(&thunks[18], r, winIVRSystem_IVRSystem_003_GetBoolTrackedDeviceProperty);
+    init_thunk(&thunks[19], r, winIVRSystem_IVRSystem_003_GetFloatTrackedDeviceProperty);
+    init_thunk(&thunks[20], r, winIVRSystem_IVRSystem_003_GetInt32TrackedDeviceProperty);
+    init_thunk(&thunks[21], r, winIVRSystem_IVRSystem_003_GetUint64TrackedDeviceProperty);
+    init_thunk(&thunks[22], r, winIVRSystem_IVRSystem_003_GetMatrix34TrackedDeviceProperty);
+    init_thunk(&thunks[23], r, winIVRSystem_IVRSystem_003_GetStringTrackedDeviceProperty);
+    init_thunk(&thunks[24], r, winIVRSystem_IVRSystem_003_GetPropErrorNameFromEnum);
+    init_thunk(&thunks[25], r, winIVRSystem_IVRSystem_003_PollNextEvent);
+    init_thunk(&thunks[26], r, winIVRSystem_IVRSystem_003_PollNextEventWithPose);
+    init_thunk(&thunks[27], r, winIVRSystem_IVRSystem_003_GetEventTypeNameFromEnum);
+    init_thunk(&thunks[28], r, winIVRSystem_IVRSystem_003_GetHiddenAreaMesh);
+    init_thunk(&thunks[29], r, winIVRSystem_IVRSystem_003_GetControllerState);
+    init_thunk(&thunks[30], r, winIVRSystem_IVRSystem_003_GetControllerStateWithPose);
+    init_thunk(&thunks[31], r, winIVRSystem_IVRSystem_003_TriggerHapticPulse);
+    init_thunk(&thunks[32], r, winIVRSystem_IVRSystem_003_GetButtonIdNameFromEnum);
+    init_thunk(&thunks[33], r, winIVRSystem_IVRSystem_003_GetControllerAxisTypeNameFromEnum);
+    init_thunk(&thunks[34], r, winIVRSystem_IVRSystem_003_HandleControllerOverlayInteractionAsMouse);
+    init_thunk(&thunks[35], r, winIVRSystem_IVRSystem_003_CaptureInputFocus);
+    init_thunk(&thunks[36], r, winIVRSystem_IVRSystem_003_ReleaseInputFocus);
+    init_thunk(&thunks[37], r, winIVRSystem_IVRSystem_003_IsInputFocusCapturedByAnotherProcess);
+    for (i = 0; i < 38; i++)
+        vtable[i] = &thunks[i];
+    r->linux_side = linux_side;
+    r->vtable = (void *)vtable;
+    return r;
+}
+
+void destroy_winIVRSystem_IVRSystem_003_FnTable(void *object)
+{
+    winIVRSystem_IVRSystem_003 *win_object = object;
+    TRACE("%p\n", win_object);
+    VirtualFree(win_object->vtable[0], 0, MEM_RELEASE);
+    HeapFree(GetProcessHeap(), 0, win_object->vtable);
+    HeapFree(GetProcessHeap(), 0, win_object);
 }
 

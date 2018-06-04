@@ -14,6 +14,8 @@
 
 #include "struct_converters.h"
 
+#include "flatapi.h"
+
 WINE_DEFAULT_DEBUG_CHANNEL(vrclient);
 
 #include "cppIVROverlay_IVROverlay_018.h"
@@ -703,6 +705,112 @@ void destroy_winIVROverlay_IVROverlay_018(void *object)
 {
     TRACE("%p\n", object);
     HeapFree(GetProcessHeap(), 0, object);
+}
+
+winIVROverlay_IVROverlay_018 *create_winIVROverlay_IVROverlay_018_FnTable(void *linux_side)
+{
+    winIVROverlay_IVROverlay_018 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVROverlay_IVROverlay_018));
+    struct thunk *thunks = alloc_thunks(82);
+    struct thunk **vtable = HeapAlloc(GetProcessHeap(), 0, 82 * sizeof(*vtable));
+    int i;
+
+    TRACE("-> %p, vtable %p, thunks %p\n", r, vtable, thunks);
+    init_thunk(&thunks[0], r, winIVROverlay_IVROverlay_018_FindOverlay);
+    init_thunk(&thunks[1], r, winIVROverlay_IVROverlay_018_CreateOverlay);
+    init_thunk(&thunks[2], r, winIVROverlay_IVROverlay_018_DestroyOverlay);
+    init_thunk(&thunks[3], r, winIVROverlay_IVROverlay_018_SetHighQualityOverlay);
+    init_thunk(&thunks[4], r, winIVROverlay_IVROverlay_018_GetHighQualityOverlay);
+    init_thunk(&thunks[5], r, winIVROverlay_IVROverlay_018_GetOverlayKey);
+    init_thunk(&thunks[6], r, winIVROverlay_IVROverlay_018_GetOverlayName);
+    init_thunk(&thunks[7], r, winIVROverlay_IVROverlay_018_SetOverlayName);
+    init_thunk(&thunks[8], r, winIVROverlay_IVROverlay_018_GetOverlayImageData);
+    init_thunk(&thunks[9], r, winIVROverlay_IVROverlay_018_GetOverlayErrorNameFromEnum);
+    init_thunk(&thunks[10], r, winIVROverlay_IVROverlay_018_SetOverlayRenderingPid);
+    init_thunk(&thunks[11], r, winIVROverlay_IVROverlay_018_GetOverlayRenderingPid);
+    init_thunk(&thunks[12], r, winIVROverlay_IVROverlay_018_SetOverlayFlag);
+    init_thunk(&thunks[13], r, winIVROverlay_IVROverlay_018_GetOverlayFlag);
+    init_thunk(&thunks[14], r, winIVROverlay_IVROverlay_018_SetOverlayColor);
+    init_thunk(&thunks[15], r, winIVROverlay_IVROverlay_018_GetOverlayColor);
+    init_thunk(&thunks[16], r, winIVROverlay_IVROverlay_018_SetOverlayAlpha);
+    init_thunk(&thunks[17], r, winIVROverlay_IVROverlay_018_GetOverlayAlpha);
+    init_thunk(&thunks[18], r, winIVROverlay_IVROverlay_018_SetOverlayTexelAspect);
+    init_thunk(&thunks[19], r, winIVROverlay_IVROverlay_018_GetOverlayTexelAspect);
+    init_thunk(&thunks[20], r, winIVROverlay_IVROverlay_018_SetOverlaySortOrder);
+    init_thunk(&thunks[21], r, winIVROverlay_IVROverlay_018_GetOverlaySortOrder);
+    init_thunk(&thunks[22], r, winIVROverlay_IVROverlay_018_SetOverlayWidthInMeters);
+    init_thunk(&thunks[23], r, winIVROverlay_IVROverlay_018_GetOverlayWidthInMeters);
+    init_thunk(&thunks[24], r, winIVROverlay_IVROverlay_018_SetOverlayAutoCurveDistanceRangeInMeters);
+    init_thunk(&thunks[25], r, winIVROverlay_IVROverlay_018_GetOverlayAutoCurveDistanceRangeInMeters);
+    init_thunk(&thunks[26], r, winIVROverlay_IVROverlay_018_SetOverlayTextureColorSpace);
+    init_thunk(&thunks[27], r, winIVROverlay_IVROverlay_018_GetOverlayTextureColorSpace);
+    init_thunk(&thunks[28], r, winIVROverlay_IVROverlay_018_SetOverlayTextureBounds);
+    init_thunk(&thunks[29], r, winIVROverlay_IVROverlay_018_GetOverlayTextureBounds);
+    init_thunk(&thunks[30], r, winIVROverlay_IVROverlay_018_GetOverlayRenderModel);
+    init_thunk(&thunks[31], r, winIVROverlay_IVROverlay_018_SetOverlayRenderModel);
+    init_thunk(&thunks[32], r, winIVROverlay_IVROverlay_018_GetOverlayTransformType);
+    init_thunk(&thunks[33], r, winIVROverlay_IVROverlay_018_SetOverlayTransformAbsolute);
+    init_thunk(&thunks[34], r, winIVROverlay_IVROverlay_018_GetOverlayTransformAbsolute);
+    init_thunk(&thunks[35], r, winIVROverlay_IVROverlay_018_SetOverlayTransformTrackedDeviceRelative);
+    init_thunk(&thunks[36], r, winIVROverlay_IVROverlay_018_GetOverlayTransformTrackedDeviceRelative);
+    init_thunk(&thunks[37], r, winIVROverlay_IVROverlay_018_SetOverlayTransformTrackedDeviceComponent);
+    init_thunk(&thunks[38], r, winIVROverlay_IVROverlay_018_GetOverlayTransformTrackedDeviceComponent);
+    init_thunk(&thunks[39], r, winIVROverlay_IVROverlay_018_GetOverlayTransformOverlayRelative);
+    init_thunk(&thunks[40], r, winIVROverlay_IVROverlay_018_SetOverlayTransformOverlayRelative);
+    init_thunk(&thunks[41], r, winIVROverlay_IVROverlay_018_ShowOverlay);
+    init_thunk(&thunks[42], r, winIVROverlay_IVROverlay_018_HideOverlay);
+    init_thunk(&thunks[43], r, winIVROverlay_IVROverlay_018_IsOverlayVisible);
+    init_thunk(&thunks[44], r, winIVROverlay_IVROverlay_018_GetTransformForOverlayCoordinates);
+    init_thunk(&thunks[45], r, winIVROverlay_IVROverlay_018_PollNextOverlayEvent);
+    init_thunk(&thunks[46], r, winIVROverlay_IVROverlay_018_GetOverlayInputMethod);
+    init_thunk(&thunks[47], r, winIVROverlay_IVROverlay_018_SetOverlayInputMethod);
+    init_thunk(&thunks[48], r, winIVROverlay_IVROverlay_018_GetOverlayMouseScale);
+    init_thunk(&thunks[49], r, winIVROverlay_IVROverlay_018_SetOverlayMouseScale);
+    init_thunk(&thunks[50], r, winIVROverlay_IVROverlay_018_ComputeOverlayIntersection);
+    init_thunk(&thunks[51], r, winIVROverlay_IVROverlay_018_IsHoverTargetOverlay);
+    init_thunk(&thunks[52], r, winIVROverlay_IVROverlay_018_GetGamepadFocusOverlay);
+    init_thunk(&thunks[53], r, winIVROverlay_IVROverlay_018_SetGamepadFocusOverlay);
+    init_thunk(&thunks[54], r, winIVROverlay_IVROverlay_018_SetOverlayNeighbor);
+    init_thunk(&thunks[55], r, winIVROverlay_IVROverlay_018_MoveGamepadFocusToNeighbor);
+    init_thunk(&thunks[56], r, winIVROverlay_IVROverlay_018_SetOverlayDualAnalogTransform);
+    init_thunk(&thunks[57], r, winIVROverlay_IVROverlay_018_GetOverlayDualAnalogTransform);
+    init_thunk(&thunks[58], r, winIVROverlay_IVROverlay_018_SetOverlayTexture);
+    init_thunk(&thunks[59], r, winIVROverlay_IVROverlay_018_ClearOverlayTexture);
+    init_thunk(&thunks[60], r, winIVROverlay_IVROverlay_018_SetOverlayRaw);
+    init_thunk(&thunks[61], r, winIVROverlay_IVROverlay_018_SetOverlayFromFile);
+    init_thunk(&thunks[62], r, winIVROverlay_IVROverlay_018_GetOverlayTexture);
+    init_thunk(&thunks[63], r, winIVROverlay_IVROverlay_018_ReleaseNativeOverlayHandle);
+    init_thunk(&thunks[64], r, winIVROverlay_IVROverlay_018_GetOverlayTextureSize);
+    init_thunk(&thunks[65], r, winIVROverlay_IVROverlay_018_CreateDashboardOverlay);
+    init_thunk(&thunks[66], r, winIVROverlay_IVROverlay_018_IsDashboardVisible);
+    init_thunk(&thunks[67], r, winIVROverlay_IVROverlay_018_IsActiveDashboardOverlay);
+    init_thunk(&thunks[68], r, winIVROverlay_IVROverlay_018_SetDashboardOverlaySceneProcess);
+    init_thunk(&thunks[69], r, winIVROverlay_IVROverlay_018_GetDashboardOverlaySceneProcess);
+    init_thunk(&thunks[70], r, winIVROverlay_IVROverlay_018_ShowDashboard);
+    init_thunk(&thunks[71], r, winIVROverlay_IVROverlay_018_GetPrimaryDashboardDevice);
+    init_thunk(&thunks[72], r, winIVROverlay_IVROverlay_018_ShowKeyboard);
+    init_thunk(&thunks[73], r, winIVROverlay_IVROverlay_018_ShowKeyboardForOverlay);
+    init_thunk(&thunks[74], r, winIVROverlay_IVROverlay_018_GetKeyboardText);
+    init_thunk(&thunks[75], r, winIVROverlay_IVROverlay_018_HideKeyboard);
+    init_thunk(&thunks[76], r, winIVROverlay_IVROverlay_018_SetKeyboardTransformAbsolute);
+    init_thunk(&thunks[77], r, winIVROverlay_IVROverlay_018_SetKeyboardPositionForOverlay);
+    init_thunk(&thunks[78], r, winIVROverlay_IVROverlay_018_SetOverlayIntersectionMask);
+    init_thunk(&thunks[79], r, winIVROverlay_IVROverlay_018_GetOverlayFlags);
+    init_thunk(&thunks[80], r, winIVROverlay_IVROverlay_018_ShowMessageOverlay);
+    init_thunk(&thunks[81], r, winIVROverlay_IVROverlay_018_CloseMessageOverlay);
+    for (i = 0; i < 82; i++)
+        vtable[i] = &thunks[i];
+    r->linux_side = linux_side;
+    r->vtable = (void *)vtable;
+    return r;
+}
+
+void destroy_winIVROverlay_IVROverlay_018_FnTable(void *object)
+{
+    winIVROverlay_IVROverlay_018 *win_object = object;
+    TRACE("%p\n", win_object);
+    VirtualFree(win_object->vtable[0], 0, MEM_RELEASE);
+    HeapFree(GetProcessHeap(), 0, win_object->vtable);
+    HeapFree(GetProcessHeap(), 0, win_object);
 }
 
 #include "cppIVROverlay_IVROverlay_017.h"
@@ -1402,6 +1510,113 @@ void destroy_winIVROverlay_IVROverlay_017(void *object)
     HeapFree(GetProcessHeap(), 0, object);
 }
 
+winIVROverlay_IVROverlay_017 *create_winIVROverlay_IVROverlay_017_FnTable(void *linux_side)
+{
+    winIVROverlay_IVROverlay_017 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVROverlay_IVROverlay_017));
+    struct thunk *thunks = alloc_thunks(83);
+    struct thunk **vtable = HeapAlloc(GetProcessHeap(), 0, 83 * sizeof(*vtable));
+    int i;
+
+    TRACE("-> %p, vtable %p, thunks %p\n", r, vtable, thunks);
+    init_thunk(&thunks[0], r, winIVROverlay_IVROverlay_017_FindOverlay);
+    init_thunk(&thunks[1], r, winIVROverlay_IVROverlay_017_CreateOverlay);
+    init_thunk(&thunks[2], r, winIVROverlay_IVROverlay_017_DestroyOverlay);
+    init_thunk(&thunks[3], r, winIVROverlay_IVROverlay_017_SetHighQualityOverlay);
+    init_thunk(&thunks[4], r, winIVROverlay_IVROverlay_017_GetHighQualityOverlay);
+    init_thunk(&thunks[5], r, winIVROverlay_IVROverlay_017_GetOverlayKey);
+    init_thunk(&thunks[6], r, winIVROverlay_IVROverlay_017_GetOverlayName);
+    init_thunk(&thunks[7], r, winIVROverlay_IVROverlay_017_SetOverlayName);
+    init_thunk(&thunks[8], r, winIVROverlay_IVROverlay_017_GetOverlayImageData);
+    init_thunk(&thunks[9], r, winIVROverlay_IVROverlay_017_GetOverlayErrorNameFromEnum);
+    init_thunk(&thunks[10], r, winIVROverlay_IVROverlay_017_SetOverlayRenderingPid);
+    init_thunk(&thunks[11], r, winIVROverlay_IVROverlay_017_GetOverlayRenderingPid);
+    init_thunk(&thunks[12], r, winIVROverlay_IVROverlay_017_SetOverlayFlag);
+    init_thunk(&thunks[13], r, winIVROverlay_IVROverlay_017_GetOverlayFlag);
+    init_thunk(&thunks[14], r, winIVROverlay_IVROverlay_017_SetOverlayColor);
+    init_thunk(&thunks[15], r, winIVROverlay_IVROverlay_017_GetOverlayColor);
+    init_thunk(&thunks[16], r, winIVROverlay_IVROverlay_017_SetOverlayAlpha);
+    init_thunk(&thunks[17], r, winIVROverlay_IVROverlay_017_GetOverlayAlpha);
+    init_thunk(&thunks[18], r, winIVROverlay_IVROverlay_017_SetOverlayTexelAspect);
+    init_thunk(&thunks[19], r, winIVROverlay_IVROverlay_017_GetOverlayTexelAspect);
+    init_thunk(&thunks[20], r, winIVROverlay_IVROverlay_017_SetOverlaySortOrder);
+    init_thunk(&thunks[21], r, winIVROverlay_IVROverlay_017_GetOverlaySortOrder);
+    init_thunk(&thunks[22], r, winIVROverlay_IVROverlay_017_SetOverlayWidthInMeters);
+    init_thunk(&thunks[23], r, winIVROverlay_IVROverlay_017_GetOverlayWidthInMeters);
+    init_thunk(&thunks[24], r, winIVROverlay_IVROverlay_017_SetOverlayAutoCurveDistanceRangeInMeters);
+    init_thunk(&thunks[25], r, winIVROverlay_IVROverlay_017_GetOverlayAutoCurveDistanceRangeInMeters);
+    init_thunk(&thunks[26], r, winIVROverlay_IVROverlay_017_SetOverlayTextureColorSpace);
+    init_thunk(&thunks[27], r, winIVROverlay_IVROverlay_017_GetOverlayTextureColorSpace);
+    init_thunk(&thunks[28], r, winIVROverlay_IVROverlay_017_SetOverlayTextureBounds);
+    init_thunk(&thunks[29], r, winIVROverlay_IVROverlay_017_GetOverlayTextureBounds);
+    init_thunk(&thunks[30], r, winIVROverlay_IVROverlay_017_GetOverlayRenderModel);
+    init_thunk(&thunks[31], r, winIVROverlay_IVROverlay_017_SetOverlayRenderModel);
+    init_thunk(&thunks[32], r, winIVROverlay_IVROverlay_017_GetOverlayTransformType);
+    init_thunk(&thunks[33], r, winIVROverlay_IVROverlay_017_SetOverlayTransformAbsolute);
+    init_thunk(&thunks[34], r, winIVROverlay_IVROverlay_017_GetOverlayTransformAbsolute);
+    init_thunk(&thunks[35], r, winIVROverlay_IVROverlay_017_SetOverlayTransformTrackedDeviceRelative);
+    init_thunk(&thunks[36], r, winIVROverlay_IVROverlay_017_GetOverlayTransformTrackedDeviceRelative);
+    init_thunk(&thunks[37], r, winIVROverlay_IVROverlay_017_SetOverlayTransformTrackedDeviceComponent);
+    init_thunk(&thunks[38], r, winIVROverlay_IVROverlay_017_GetOverlayTransformTrackedDeviceComponent);
+    init_thunk(&thunks[39], r, winIVROverlay_IVROverlay_017_GetOverlayTransformOverlayRelative);
+    init_thunk(&thunks[40], r, winIVROverlay_IVROverlay_017_SetOverlayTransformOverlayRelative);
+    init_thunk(&thunks[41], r, winIVROverlay_IVROverlay_017_ShowOverlay);
+    init_thunk(&thunks[42], r, winIVROverlay_IVROverlay_017_HideOverlay);
+    init_thunk(&thunks[43], r, winIVROverlay_IVROverlay_017_IsOverlayVisible);
+    init_thunk(&thunks[44], r, winIVROverlay_IVROverlay_017_GetTransformForOverlayCoordinates);
+    init_thunk(&thunks[45], r, winIVROverlay_IVROverlay_017_PollNextOverlayEvent);
+    init_thunk(&thunks[46], r, winIVROverlay_IVROverlay_017_GetOverlayInputMethod);
+    init_thunk(&thunks[47], r, winIVROverlay_IVROverlay_017_SetOverlayInputMethod);
+    init_thunk(&thunks[48], r, winIVROverlay_IVROverlay_017_GetOverlayMouseScale);
+    init_thunk(&thunks[49], r, winIVROverlay_IVROverlay_017_SetOverlayMouseScale);
+    init_thunk(&thunks[50], r, winIVROverlay_IVROverlay_017_ComputeOverlayIntersection);
+    init_thunk(&thunks[51], r, winIVROverlay_IVROverlay_017_HandleControllerOverlayInteractionAsMouse);
+    init_thunk(&thunks[52], r, winIVROverlay_IVROverlay_017_IsHoverTargetOverlay);
+    init_thunk(&thunks[53], r, winIVROverlay_IVROverlay_017_GetGamepadFocusOverlay);
+    init_thunk(&thunks[54], r, winIVROverlay_IVROverlay_017_SetGamepadFocusOverlay);
+    init_thunk(&thunks[55], r, winIVROverlay_IVROverlay_017_SetOverlayNeighbor);
+    init_thunk(&thunks[56], r, winIVROverlay_IVROverlay_017_MoveGamepadFocusToNeighbor);
+    init_thunk(&thunks[57], r, winIVROverlay_IVROverlay_017_SetOverlayDualAnalogTransform);
+    init_thunk(&thunks[58], r, winIVROverlay_IVROverlay_017_GetOverlayDualAnalogTransform);
+    init_thunk(&thunks[59], r, winIVROverlay_IVROverlay_017_SetOverlayTexture);
+    init_thunk(&thunks[60], r, winIVROverlay_IVROverlay_017_ClearOverlayTexture);
+    init_thunk(&thunks[61], r, winIVROverlay_IVROverlay_017_SetOverlayRaw);
+    init_thunk(&thunks[62], r, winIVROverlay_IVROverlay_017_SetOverlayFromFile);
+    init_thunk(&thunks[63], r, winIVROverlay_IVROverlay_017_GetOverlayTexture);
+    init_thunk(&thunks[64], r, winIVROverlay_IVROverlay_017_ReleaseNativeOverlayHandle);
+    init_thunk(&thunks[65], r, winIVROverlay_IVROverlay_017_GetOverlayTextureSize);
+    init_thunk(&thunks[66], r, winIVROverlay_IVROverlay_017_CreateDashboardOverlay);
+    init_thunk(&thunks[67], r, winIVROverlay_IVROverlay_017_IsDashboardVisible);
+    init_thunk(&thunks[68], r, winIVROverlay_IVROverlay_017_IsActiveDashboardOverlay);
+    init_thunk(&thunks[69], r, winIVROverlay_IVROverlay_017_SetDashboardOverlaySceneProcess);
+    init_thunk(&thunks[70], r, winIVROverlay_IVROverlay_017_GetDashboardOverlaySceneProcess);
+    init_thunk(&thunks[71], r, winIVROverlay_IVROverlay_017_ShowDashboard);
+    init_thunk(&thunks[72], r, winIVROverlay_IVROverlay_017_GetPrimaryDashboardDevice);
+    init_thunk(&thunks[73], r, winIVROverlay_IVROverlay_017_ShowKeyboard);
+    init_thunk(&thunks[74], r, winIVROverlay_IVROverlay_017_ShowKeyboardForOverlay);
+    init_thunk(&thunks[75], r, winIVROverlay_IVROverlay_017_GetKeyboardText);
+    init_thunk(&thunks[76], r, winIVROverlay_IVROverlay_017_HideKeyboard);
+    init_thunk(&thunks[77], r, winIVROverlay_IVROverlay_017_SetKeyboardTransformAbsolute);
+    init_thunk(&thunks[78], r, winIVROverlay_IVROverlay_017_SetKeyboardPositionForOverlay);
+    init_thunk(&thunks[79], r, winIVROverlay_IVROverlay_017_SetOverlayIntersectionMask);
+    init_thunk(&thunks[80], r, winIVROverlay_IVROverlay_017_GetOverlayFlags);
+    init_thunk(&thunks[81], r, winIVROverlay_IVROverlay_017_ShowMessageOverlay);
+    init_thunk(&thunks[82], r, winIVROverlay_IVROverlay_017_CloseMessageOverlay);
+    for (i = 0; i < 83; i++)
+        vtable[i] = &thunks[i];
+    r->linux_side = linux_side;
+    r->vtable = (void *)vtable;
+    return r;
+}
+
+void destroy_winIVROverlay_IVROverlay_017_FnTable(void *object)
+{
+    winIVROverlay_IVROverlay_017 *win_object = object;
+    TRACE("%p\n", win_object);
+    VirtualFree(win_object->vtable[0], 0, MEM_RELEASE);
+    HeapFree(GetProcessHeap(), 0, win_object->vtable);
+    HeapFree(GetProcessHeap(), 0, win_object);
+}
+
 #include "cppIVROverlay_IVROverlay_016.h"
 
 typedef struct __winIVROverlay_IVROverlay_016 {
@@ -2083,6 +2298,111 @@ void destroy_winIVROverlay_IVROverlay_016(void *object)
     HeapFree(GetProcessHeap(), 0, object);
 }
 
+winIVROverlay_IVROverlay_016 *create_winIVROverlay_IVROverlay_016_FnTable(void *linux_side)
+{
+    winIVROverlay_IVROverlay_016 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVROverlay_IVROverlay_016));
+    struct thunk *thunks = alloc_thunks(81);
+    struct thunk **vtable = HeapAlloc(GetProcessHeap(), 0, 81 * sizeof(*vtable));
+    int i;
+
+    TRACE("-> %p, vtable %p, thunks %p\n", r, vtable, thunks);
+    init_thunk(&thunks[0], r, winIVROverlay_IVROverlay_016_FindOverlay);
+    init_thunk(&thunks[1], r, winIVROverlay_IVROverlay_016_CreateOverlay);
+    init_thunk(&thunks[2], r, winIVROverlay_IVROverlay_016_DestroyOverlay);
+    init_thunk(&thunks[3], r, winIVROverlay_IVROverlay_016_SetHighQualityOverlay);
+    init_thunk(&thunks[4], r, winIVROverlay_IVROverlay_016_GetHighQualityOverlay);
+    init_thunk(&thunks[5], r, winIVROverlay_IVROverlay_016_GetOverlayKey);
+    init_thunk(&thunks[6], r, winIVROverlay_IVROverlay_016_GetOverlayName);
+    init_thunk(&thunks[7], r, winIVROverlay_IVROverlay_016_SetOverlayName);
+    init_thunk(&thunks[8], r, winIVROverlay_IVROverlay_016_GetOverlayImageData);
+    init_thunk(&thunks[9], r, winIVROverlay_IVROverlay_016_GetOverlayErrorNameFromEnum);
+    init_thunk(&thunks[10], r, winIVROverlay_IVROverlay_016_SetOverlayRenderingPid);
+    init_thunk(&thunks[11], r, winIVROverlay_IVROverlay_016_GetOverlayRenderingPid);
+    init_thunk(&thunks[12], r, winIVROverlay_IVROverlay_016_SetOverlayFlag);
+    init_thunk(&thunks[13], r, winIVROverlay_IVROverlay_016_GetOverlayFlag);
+    init_thunk(&thunks[14], r, winIVROverlay_IVROverlay_016_SetOverlayColor);
+    init_thunk(&thunks[15], r, winIVROverlay_IVROverlay_016_GetOverlayColor);
+    init_thunk(&thunks[16], r, winIVROverlay_IVROverlay_016_SetOverlayAlpha);
+    init_thunk(&thunks[17], r, winIVROverlay_IVROverlay_016_GetOverlayAlpha);
+    init_thunk(&thunks[18], r, winIVROverlay_IVROverlay_016_SetOverlayTexelAspect);
+    init_thunk(&thunks[19], r, winIVROverlay_IVROverlay_016_GetOverlayTexelAspect);
+    init_thunk(&thunks[20], r, winIVROverlay_IVROverlay_016_SetOverlaySortOrder);
+    init_thunk(&thunks[21], r, winIVROverlay_IVROverlay_016_GetOverlaySortOrder);
+    init_thunk(&thunks[22], r, winIVROverlay_IVROverlay_016_SetOverlayWidthInMeters);
+    init_thunk(&thunks[23], r, winIVROverlay_IVROverlay_016_GetOverlayWidthInMeters);
+    init_thunk(&thunks[24], r, winIVROverlay_IVROverlay_016_SetOverlayAutoCurveDistanceRangeInMeters);
+    init_thunk(&thunks[25], r, winIVROverlay_IVROverlay_016_GetOverlayAutoCurveDistanceRangeInMeters);
+    init_thunk(&thunks[26], r, winIVROverlay_IVROverlay_016_SetOverlayTextureColorSpace);
+    init_thunk(&thunks[27], r, winIVROverlay_IVROverlay_016_GetOverlayTextureColorSpace);
+    init_thunk(&thunks[28], r, winIVROverlay_IVROverlay_016_SetOverlayTextureBounds);
+    init_thunk(&thunks[29], r, winIVROverlay_IVROverlay_016_GetOverlayTextureBounds);
+    init_thunk(&thunks[30], r, winIVROverlay_IVROverlay_016_GetOverlayRenderModel);
+    init_thunk(&thunks[31], r, winIVROverlay_IVROverlay_016_SetOverlayRenderModel);
+    init_thunk(&thunks[32], r, winIVROverlay_IVROverlay_016_GetOverlayTransformType);
+    init_thunk(&thunks[33], r, winIVROverlay_IVROverlay_016_SetOverlayTransformAbsolute);
+    init_thunk(&thunks[34], r, winIVROverlay_IVROverlay_016_GetOverlayTransformAbsolute);
+    init_thunk(&thunks[35], r, winIVROverlay_IVROverlay_016_SetOverlayTransformTrackedDeviceRelative);
+    init_thunk(&thunks[36], r, winIVROverlay_IVROverlay_016_GetOverlayTransformTrackedDeviceRelative);
+    init_thunk(&thunks[37], r, winIVROverlay_IVROverlay_016_SetOverlayTransformTrackedDeviceComponent);
+    init_thunk(&thunks[38], r, winIVROverlay_IVROverlay_016_GetOverlayTransformTrackedDeviceComponent);
+    init_thunk(&thunks[39], r, winIVROverlay_IVROverlay_016_GetOverlayTransformOverlayRelative);
+    init_thunk(&thunks[40], r, winIVROverlay_IVROverlay_016_SetOverlayTransformOverlayRelative);
+    init_thunk(&thunks[41], r, winIVROverlay_IVROverlay_016_ShowOverlay);
+    init_thunk(&thunks[42], r, winIVROverlay_IVROverlay_016_HideOverlay);
+    init_thunk(&thunks[43], r, winIVROverlay_IVROverlay_016_IsOverlayVisible);
+    init_thunk(&thunks[44], r, winIVROverlay_IVROverlay_016_GetTransformForOverlayCoordinates);
+    init_thunk(&thunks[45], r, winIVROverlay_IVROverlay_016_PollNextOverlayEvent);
+    init_thunk(&thunks[46], r, winIVROverlay_IVROverlay_016_GetOverlayInputMethod);
+    init_thunk(&thunks[47], r, winIVROverlay_IVROverlay_016_SetOverlayInputMethod);
+    init_thunk(&thunks[48], r, winIVROverlay_IVROverlay_016_GetOverlayMouseScale);
+    init_thunk(&thunks[49], r, winIVROverlay_IVROverlay_016_SetOverlayMouseScale);
+    init_thunk(&thunks[50], r, winIVROverlay_IVROverlay_016_ComputeOverlayIntersection);
+    init_thunk(&thunks[51], r, winIVROverlay_IVROverlay_016_HandleControllerOverlayInteractionAsMouse);
+    init_thunk(&thunks[52], r, winIVROverlay_IVROverlay_016_IsHoverTargetOverlay);
+    init_thunk(&thunks[53], r, winIVROverlay_IVROverlay_016_GetGamepadFocusOverlay);
+    init_thunk(&thunks[54], r, winIVROverlay_IVROverlay_016_SetGamepadFocusOverlay);
+    init_thunk(&thunks[55], r, winIVROverlay_IVROverlay_016_SetOverlayNeighbor);
+    init_thunk(&thunks[56], r, winIVROverlay_IVROverlay_016_MoveGamepadFocusToNeighbor);
+    init_thunk(&thunks[57], r, winIVROverlay_IVROverlay_016_SetOverlayTexture);
+    init_thunk(&thunks[58], r, winIVROverlay_IVROverlay_016_ClearOverlayTexture);
+    init_thunk(&thunks[59], r, winIVROverlay_IVROverlay_016_SetOverlayRaw);
+    init_thunk(&thunks[60], r, winIVROverlay_IVROverlay_016_SetOverlayFromFile);
+    init_thunk(&thunks[61], r, winIVROverlay_IVROverlay_016_GetOverlayTexture);
+    init_thunk(&thunks[62], r, winIVROverlay_IVROverlay_016_ReleaseNativeOverlayHandle);
+    init_thunk(&thunks[63], r, winIVROverlay_IVROverlay_016_GetOverlayTextureSize);
+    init_thunk(&thunks[64], r, winIVROverlay_IVROverlay_016_CreateDashboardOverlay);
+    init_thunk(&thunks[65], r, winIVROverlay_IVROverlay_016_IsDashboardVisible);
+    init_thunk(&thunks[66], r, winIVROverlay_IVROverlay_016_IsActiveDashboardOverlay);
+    init_thunk(&thunks[67], r, winIVROverlay_IVROverlay_016_SetDashboardOverlaySceneProcess);
+    init_thunk(&thunks[68], r, winIVROverlay_IVROverlay_016_GetDashboardOverlaySceneProcess);
+    init_thunk(&thunks[69], r, winIVROverlay_IVROverlay_016_ShowDashboard);
+    init_thunk(&thunks[70], r, winIVROverlay_IVROverlay_016_GetPrimaryDashboardDevice);
+    init_thunk(&thunks[71], r, winIVROverlay_IVROverlay_016_ShowKeyboard);
+    init_thunk(&thunks[72], r, winIVROverlay_IVROverlay_016_ShowKeyboardForOverlay);
+    init_thunk(&thunks[73], r, winIVROverlay_IVROverlay_016_GetKeyboardText);
+    init_thunk(&thunks[74], r, winIVROverlay_IVROverlay_016_HideKeyboard);
+    init_thunk(&thunks[75], r, winIVROverlay_IVROverlay_016_SetKeyboardTransformAbsolute);
+    init_thunk(&thunks[76], r, winIVROverlay_IVROverlay_016_SetKeyboardPositionForOverlay);
+    init_thunk(&thunks[77], r, winIVROverlay_IVROverlay_016_SetOverlayIntersectionMask);
+    init_thunk(&thunks[78], r, winIVROverlay_IVROverlay_016_GetOverlayFlags);
+    init_thunk(&thunks[79], r, winIVROverlay_IVROverlay_016_ShowMessageOverlay);
+    init_thunk(&thunks[80], r, winIVROverlay_IVROverlay_016_CloseMessageOverlay);
+    for (i = 0; i < 81; i++)
+        vtable[i] = &thunks[i];
+    r->linux_side = linux_side;
+    r->vtable = (void *)vtable;
+    return r;
+}
+
+void destroy_winIVROverlay_IVROverlay_016_FnTable(void *object)
+{
+    winIVROverlay_IVROverlay_016 *win_object = object;
+    TRACE("%p\n", win_object);
+    VirtualFree(win_object->vtable[0], 0, MEM_RELEASE);
+    HeapFree(GetProcessHeap(), 0, win_object->vtable);
+    HeapFree(GetProcessHeap(), 0, win_object);
+}
+
 #include "cppIVROverlay_IVROverlay_014.h"
 
 typedef struct __winIVROverlay_IVROverlay_014 {
@@ -2716,6 +3036,105 @@ void destroy_winIVROverlay_IVROverlay_014(void *object)
     HeapFree(GetProcessHeap(), 0, object);
 }
 
+winIVROverlay_IVROverlay_014 *create_winIVROverlay_IVROverlay_014_FnTable(void *linux_side)
+{
+    winIVROverlay_IVROverlay_014 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVROverlay_IVROverlay_014));
+    struct thunk *thunks = alloc_thunks(75);
+    struct thunk **vtable = HeapAlloc(GetProcessHeap(), 0, 75 * sizeof(*vtable));
+    int i;
+
+    TRACE("-> %p, vtable %p, thunks %p\n", r, vtable, thunks);
+    init_thunk(&thunks[0], r, winIVROverlay_IVROverlay_014_FindOverlay);
+    init_thunk(&thunks[1], r, winIVROverlay_IVROverlay_014_CreateOverlay);
+    init_thunk(&thunks[2], r, winIVROverlay_IVROverlay_014_DestroyOverlay);
+    init_thunk(&thunks[3], r, winIVROverlay_IVROverlay_014_SetHighQualityOverlay);
+    init_thunk(&thunks[4], r, winIVROverlay_IVROverlay_014_GetHighQualityOverlay);
+    init_thunk(&thunks[5], r, winIVROverlay_IVROverlay_014_GetOverlayKey);
+    init_thunk(&thunks[6], r, winIVROverlay_IVROverlay_014_GetOverlayName);
+    init_thunk(&thunks[7], r, winIVROverlay_IVROverlay_014_GetOverlayImageData);
+    init_thunk(&thunks[8], r, winIVROverlay_IVROverlay_014_GetOverlayErrorNameFromEnum);
+    init_thunk(&thunks[9], r, winIVROverlay_IVROverlay_014_SetOverlayRenderingPid);
+    init_thunk(&thunks[10], r, winIVROverlay_IVROverlay_014_GetOverlayRenderingPid);
+    init_thunk(&thunks[11], r, winIVROverlay_IVROverlay_014_SetOverlayFlag);
+    init_thunk(&thunks[12], r, winIVROverlay_IVROverlay_014_GetOverlayFlag);
+    init_thunk(&thunks[13], r, winIVROverlay_IVROverlay_014_SetOverlayColor);
+    init_thunk(&thunks[14], r, winIVROverlay_IVROverlay_014_GetOverlayColor);
+    init_thunk(&thunks[15], r, winIVROverlay_IVROverlay_014_SetOverlayAlpha);
+    init_thunk(&thunks[16], r, winIVROverlay_IVROverlay_014_GetOverlayAlpha);
+    init_thunk(&thunks[17], r, winIVROverlay_IVROverlay_014_SetOverlayTexelAspect);
+    init_thunk(&thunks[18], r, winIVROverlay_IVROverlay_014_GetOverlayTexelAspect);
+    init_thunk(&thunks[19], r, winIVROverlay_IVROverlay_014_SetOverlaySortOrder);
+    init_thunk(&thunks[20], r, winIVROverlay_IVROverlay_014_GetOverlaySortOrder);
+    init_thunk(&thunks[21], r, winIVROverlay_IVROverlay_014_SetOverlayWidthInMeters);
+    init_thunk(&thunks[22], r, winIVROverlay_IVROverlay_014_GetOverlayWidthInMeters);
+    init_thunk(&thunks[23], r, winIVROverlay_IVROverlay_014_SetOverlayAutoCurveDistanceRangeInMeters);
+    init_thunk(&thunks[24], r, winIVROverlay_IVROverlay_014_GetOverlayAutoCurveDistanceRangeInMeters);
+    init_thunk(&thunks[25], r, winIVROverlay_IVROverlay_014_SetOverlayTextureColorSpace);
+    init_thunk(&thunks[26], r, winIVROverlay_IVROverlay_014_GetOverlayTextureColorSpace);
+    init_thunk(&thunks[27], r, winIVROverlay_IVROverlay_014_SetOverlayTextureBounds);
+    init_thunk(&thunks[28], r, winIVROverlay_IVROverlay_014_GetOverlayTextureBounds);
+    init_thunk(&thunks[29], r, winIVROverlay_IVROverlay_014_GetOverlayTransformType);
+    init_thunk(&thunks[30], r, winIVROverlay_IVROverlay_014_SetOverlayTransformAbsolute);
+    init_thunk(&thunks[31], r, winIVROverlay_IVROverlay_014_GetOverlayTransformAbsolute);
+    init_thunk(&thunks[32], r, winIVROverlay_IVROverlay_014_SetOverlayTransformTrackedDeviceRelative);
+    init_thunk(&thunks[33], r, winIVROverlay_IVROverlay_014_GetOverlayTransformTrackedDeviceRelative);
+    init_thunk(&thunks[34], r, winIVROverlay_IVROverlay_014_SetOverlayTransformTrackedDeviceComponent);
+    init_thunk(&thunks[35], r, winIVROverlay_IVROverlay_014_GetOverlayTransformTrackedDeviceComponent);
+    init_thunk(&thunks[36], r, winIVROverlay_IVROverlay_014_ShowOverlay);
+    init_thunk(&thunks[37], r, winIVROverlay_IVROverlay_014_HideOverlay);
+    init_thunk(&thunks[38], r, winIVROverlay_IVROverlay_014_IsOverlayVisible);
+    init_thunk(&thunks[39], r, winIVROverlay_IVROverlay_014_GetTransformForOverlayCoordinates);
+    init_thunk(&thunks[40], r, winIVROverlay_IVROverlay_014_PollNextOverlayEvent);
+    init_thunk(&thunks[41], r, winIVROverlay_IVROverlay_014_GetOverlayInputMethod);
+    init_thunk(&thunks[42], r, winIVROverlay_IVROverlay_014_SetOverlayInputMethod);
+    init_thunk(&thunks[43], r, winIVROverlay_IVROverlay_014_GetOverlayMouseScale);
+    init_thunk(&thunks[44], r, winIVROverlay_IVROverlay_014_SetOverlayMouseScale);
+    init_thunk(&thunks[45], r, winIVROverlay_IVROverlay_014_ComputeOverlayIntersection);
+    init_thunk(&thunks[46], r, winIVROverlay_IVROverlay_014_HandleControllerOverlayInteractionAsMouse);
+    init_thunk(&thunks[47], r, winIVROverlay_IVROverlay_014_IsHoverTargetOverlay);
+    init_thunk(&thunks[48], r, winIVROverlay_IVROverlay_014_GetGamepadFocusOverlay);
+    init_thunk(&thunks[49], r, winIVROverlay_IVROverlay_014_SetGamepadFocusOverlay);
+    init_thunk(&thunks[50], r, winIVROverlay_IVROverlay_014_SetOverlayNeighbor);
+    init_thunk(&thunks[51], r, winIVROverlay_IVROverlay_014_MoveGamepadFocusToNeighbor);
+    init_thunk(&thunks[52], r, winIVROverlay_IVROverlay_014_SetOverlayTexture);
+    init_thunk(&thunks[53], r, winIVROverlay_IVROverlay_014_ClearOverlayTexture);
+    init_thunk(&thunks[54], r, winIVROverlay_IVROverlay_014_SetOverlayRaw);
+    init_thunk(&thunks[55], r, winIVROverlay_IVROverlay_014_SetOverlayFromFile);
+    init_thunk(&thunks[56], r, winIVROverlay_IVROverlay_014_GetOverlayTexture);
+    init_thunk(&thunks[57], r, winIVROverlay_IVROverlay_014_ReleaseNativeOverlayHandle);
+    init_thunk(&thunks[58], r, winIVROverlay_IVROverlay_014_GetOverlayTextureSize);
+    init_thunk(&thunks[59], r, winIVROverlay_IVROverlay_014_CreateDashboardOverlay);
+    init_thunk(&thunks[60], r, winIVROverlay_IVROverlay_014_IsDashboardVisible);
+    init_thunk(&thunks[61], r, winIVROverlay_IVROverlay_014_IsActiveDashboardOverlay);
+    init_thunk(&thunks[62], r, winIVROverlay_IVROverlay_014_SetDashboardOverlaySceneProcess);
+    init_thunk(&thunks[63], r, winIVROverlay_IVROverlay_014_GetDashboardOverlaySceneProcess);
+    init_thunk(&thunks[64], r, winIVROverlay_IVROverlay_014_ShowDashboard);
+    init_thunk(&thunks[65], r, winIVROverlay_IVROverlay_014_GetPrimaryDashboardDevice);
+    init_thunk(&thunks[66], r, winIVROverlay_IVROverlay_014_ShowKeyboard);
+    init_thunk(&thunks[67], r, winIVROverlay_IVROverlay_014_ShowKeyboardForOverlay);
+    init_thunk(&thunks[68], r, winIVROverlay_IVROverlay_014_GetKeyboardText);
+    init_thunk(&thunks[69], r, winIVROverlay_IVROverlay_014_HideKeyboard);
+    init_thunk(&thunks[70], r, winIVROverlay_IVROverlay_014_SetKeyboardTransformAbsolute);
+    init_thunk(&thunks[71], r, winIVROverlay_IVROverlay_014_SetKeyboardPositionForOverlay);
+    init_thunk(&thunks[72], r, winIVROverlay_IVROverlay_014_SetOverlayIntersectionMask);
+    init_thunk(&thunks[73], r, winIVROverlay_IVROverlay_014_GetOverlayFlags);
+    init_thunk(&thunks[74], r, winIVROverlay_IVROverlay_014_ShowMessageOverlay);
+    for (i = 0; i < 75; i++)
+        vtable[i] = &thunks[i];
+    r->linux_side = linux_side;
+    r->vtable = (void *)vtable;
+    return r;
+}
+
+void destroy_winIVROverlay_IVROverlay_014_FnTable(void *object)
+{
+    winIVROverlay_IVROverlay_014 *win_object = object;
+    TRACE("%p\n", win_object);
+    VirtualFree(win_object->vtable[0], 0, MEM_RELEASE);
+    HeapFree(GetProcessHeap(), 0, win_object->vtable);
+    HeapFree(GetProcessHeap(), 0, win_object);
+}
+
 #include "cppIVROverlay_IVROverlay_013.h"
 
 typedef struct __winIVROverlay_IVROverlay_013 {
@@ -3333,6 +3752,103 @@ void destroy_winIVROverlay_IVROverlay_013(void *object)
     HeapFree(GetProcessHeap(), 0, object);
 }
 
+winIVROverlay_IVROverlay_013 *create_winIVROverlay_IVROverlay_013_FnTable(void *linux_side)
+{
+    winIVROverlay_IVROverlay_013 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVROverlay_IVROverlay_013));
+    struct thunk *thunks = alloc_thunks(73);
+    struct thunk **vtable = HeapAlloc(GetProcessHeap(), 0, 73 * sizeof(*vtable));
+    int i;
+
+    TRACE("-> %p, vtable %p, thunks %p\n", r, vtable, thunks);
+    init_thunk(&thunks[0], r, winIVROverlay_IVROverlay_013_FindOverlay);
+    init_thunk(&thunks[1], r, winIVROverlay_IVROverlay_013_CreateOverlay);
+    init_thunk(&thunks[2], r, winIVROverlay_IVROverlay_013_DestroyOverlay);
+    init_thunk(&thunks[3], r, winIVROverlay_IVROverlay_013_SetHighQualityOverlay);
+    init_thunk(&thunks[4], r, winIVROverlay_IVROverlay_013_GetHighQualityOverlay);
+    init_thunk(&thunks[5], r, winIVROverlay_IVROverlay_013_GetOverlayKey);
+    init_thunk(&thunks[6], r, winIVROverlay_IVROverlay_013_GetOverlayName);
+    init_thunk(&thunks[7], r, winIVROverlay_IVROverlay_013_GetOverlayImageData);
+    init_thunk(&thunks[8], r, winIVROverlay_IVROverlay_013_GetOverlayErrorNameFromEnum);
+    init_thunk(&thunks[9], r, winIVROverlay_IVROverlay_013_SetOverlayRenderingPid);
+    init_thunk(&thunks[10], r, winIVROverlay_IVROverlay_013_GetOverlayRenderingPid);
+    init_thunk(&thunks[11], r, winIVROverlay_IVROverlay_013_SetOverlayFlag);
+    init_thunk(&thunks[12], r, winIVROverlay_IVROverlay_013_GetOverlayFlag);
+    init_thunk(&thunks[13], r, winIVROverlay_IVROverlay_013_SetOverlayColor);
+    init_thunk(&thunks[14], r, winIVROverlay_IVROverlay_013_GetOverlayColor);
+    init_thunk(&thunks[15], r, winIVROverlay_IVROverlay_013_SetOverlayAlpha);
+    init_thunk(&thunks[16], r, winIVROverlay_IVROverlay_013_GetOverlayAlpha);
+    init_thunk(&thunks[17], r, winIVROverlay_IVROverlay_013_SetOverlayTexelAspect);
+    init_thunk(&thunks[18], r, winIVROverlay_IVROverlay_013_GetOverlayTexelAspect);
+    init_thunk(&thunks[19], r, winIVROverlay_IVROverlay_013_SetOverlaySortOrder);
+    init_thunk(&thunks[20], r, winIVROverlay_IVROverlay_013_GetOverlaySortOrder);
+    init_thunk(&thunks[21], r, winIVROverlay_IVROverlay_013_SetOverlayWidthInMeters);
+    init_thunk(&thunks[22], r, winIVROverlay_IVROverlay_013_GetOverlayWidthInMeters);
+    init_thunk(&thunks[23], r, winIVROverlay_IVROverlay_013_SetOverlayAutoCurveDistanceRangeInMeters);
+    init_thunk(&thunks[24], r, winIVROverlay_IVROverlay_013_GetOverlayAutoCurveDistanceRangeInMeters);
+    init_thunk(&thunks[25], r, winIVROverlay_IVROverlay_013_SetOverlayTextureColorSpace);
+    init_thunk(&thunks[26], r, winIVROverlay_IVROverlay_013_GetOverlayTextureColorSpace);
+    init_thunk(&thunks[27], r, winIVROverlay_IVROverlay_013_SetOverlayTextureBounds);
+    init_thunk(&thunks[28], r, winIVROverlay_IVROverlay_013_GetOverlayTextureBounds);
+    init_thunk(&thunks[29], r, winIVROverlay_IVROverlay_013_GetOverlayTransformType);
+    init_thunk(&thunks[30], r, winIVROverlay_IVROverlay_013_SetOverlayTransformAbsolute);
+    init_thunk(&thunks[31], r, winIVROverlay_IVROverlay_013_GetOverlayTransformAbsolute);
+    init_thunk(&thunks[32], r, winIVROverlay_IVROverlay_013_SetOverlayTransformTrackedDeviceRelative);
+    init_thunk(&thunks[33], r, winIVROverlay_IVROverlay_013_GetOverlayTransformTrackedDeviceRelative);
+    init_thunk(&thunks[34], r, winIVROverlay_IVROverlay_013_SetOverlayTransformTrackedDeviceComponent);
+    init_thunk(&thunks[35], r, winIVROverlay_IVROverlay_013_GetOverlayTransformTrackedDeviceComponent);
+    init_thunk(&thunks[36], r, winIVROverlay_IVROverlay_013_ShowOverlay);
+    init_thunk(&thunks[37], r, winIVROverlay_IVROverlay_013_HideOverlay);
+    init_thunk(&thunks[38], r, winIVROverlay_IVROverlay_013_IsOverlayVisible);
+    init_thunk(&thunks[39], r, winIVROverlay_IVROverlay_013_GetTransformForOverlayCoordinates);
+    init_thunk(&thunks[40], r, winIVROverlay_IVROverlay_013_PollNextOverlayEvent);
+    init_thunk(&thunks[41], r, winIVROverlay_IVROverlay_013_GetOverlayInputMethod);
+    init_thunk(&thunks[42], r, winIVROverlay_IVROverlay_013_SetOverlayInputMethod);
+    init_thunk(&thunks[43], r, winIVROverlay_IVROverlay_013_GetOverlayMouseScale);
+    init_thunk(&thunks[44], r, winIVROverlay_IVROverlay_013_SetOverlayMouseScale);
+    init_thunk(&thunks[45], r, winIVROverlay_IVROverlay_013_ComputeOverlayIntersection);
+    init_thunk(&thunks[46], r, winIVROverlay_IVROverlay_013_HandleControllerOverlayInteractionAsMouse);
+    init_thunk(&thunks[47], r, winIVROverlay_IVROverlay_013_IsHoverTargetOverlay);
+    init_thunk(&thunks[48], r, winIVROverlay_IVROverlay_013_GetGamepadFocusOverlay);
+    init_thunk(&thunks[49], r, winIVROverlay_IVROverlay_013_SetGamepadFocusOverlay);
+    init_thunk(&thunks[50], r, winIVROverlay_IVROverlay_013_SetOverlayNeighbor);
+    init_thunk(&thunks[51], r, winIVROverlay_IVROverlay_013_MoveGamepadFocusToNeighbor);
+    init_thunk(&thunks[52], r, winIVROverlay_IVROverlay_013_SetOverlayTexture);
+    init_thunk(&thunks[53], r, winIVROverlay_IVROverlay_013_ClearOverlayTexture);
+    init_thunk(&thunks[54], r, winIVROverlay_IVROverlay_013_SetOverlayRaw);
+    init_thunk(&thunks[55], r, winIVROverlay_IVROverlay_013_SetOverlayFromFile);
+    init_thunk(&thunks[56], r, winIVROverlay_IVROverlay_013_GetOverlayTexture);
+    init_thunk(&thunks[57], r, winIVROverlay_IVROverlay_013_ReleaseNativeOverlayHandle);
+    init_thunk(&thunks[58], r, winIVROverlay_IVROverlay_013_GetOverlayTextureSize);
+    init_thunk(&thunks[59], r, winIVROverlay_IVROverlay_013_CreateDashboardOverlay);
+    init_thunk(&thunks[60], r, winIVROverlay_IVROverlay_013_IsDashboardVisible);
+    init_thunk(&thunks[61], r, winIVROverlay_IVROverlay_013_IsActiveDashboardOverlay);
+    init_thunk(&thunks[62], r, winIVROverlay_IVROverlay_013_SetDashboardOverlaySceneProcess);
+    init_thunk(&thunks[63], r, winIVROverlay_IVROverlay_013_GetDashboardOverlaySceneProcess);
+    init_thunk(&thunks[64], r, winIVROverlay_IVROverlay_013_ShowDashboard);
+    init_thunk(&thunks[65], r, winIVROverlay_IVROverlay_013_GetPrimaryDashboardDevice);
+    init_thunk(&thunks[66], r, winIVROverlay_IVROverlay_013_ShowKeyboard);
+    init_thunk(&thunks[67], r, winIVROverlay_IVROverlay_013_ShowKeyboardForOverlay);
+    init_thunk(&thunks[68], r, winIVROverlay_IVROverlay_013_GetKeyboardText);
+    init_thunk(&thunks[69], r, winIVROverlay_IVROverlay_013_HideKeyboard);
+    init_thunk(&thunks[70], r, winIVROverlay_IVROverlay_013_SetKeyboardTransformAbsolute);
+    init_thunk(&thunks[71], r, winIVROverlay_IVROverlay_013_SetKeyboardPositionForOverlay);
+    init_thunk(&thunks[72], r, winIVROverlay_IVROverlay_013_SetOverlayIntersectionMask);
+    for (i = 0; i < 73; i++)
+        vtable[i] = &thunks[i];
+    r->linux_side = linux_side;
+    r->vtable = (void *)vtable;
+    return r;
+}
+
+void destroy_winIVROverlay_IVROverlay_013_FnTable(void *object)
+{
+    winIVROverlay_IVROverlay_013 *win_object = object;
+    TRACE("%p\n", win_object);
+    VirtualFree(win_object->vtable[0], 0, MEM_RELEASE);
+    HeapFree(GetProcessHeap(), 0, win_object->vtable);
+    HeapFree(GetProcessHeap(), 0, win_object);
+}
+
 #include "cppIVROverlay_IVROverlay_012.h"
 
 typedef struct __winIVROverlay_IVROverlay_012 {
@@ -3910,6 +4426,98 @@ void destroy_winIVROverlay_IVROverlay_012(void *object)
     HeapFree(GetProcessHeap(), 0, object);
 }
 
+winIVROverlay_IVROverlay_012 *create_winIVROverlay_IVROverlay_012_FnTable(void *linux_side)
+{
+    winIVROverlay_IVROverlay_012 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVROverlay_IVROverlay_012));
+    struct thunk *thunks = alloc_thunks(68);
+    struct thunk **vtable = HeapAlloc(GetProcessHeap(), 0, 68 * sizeof(*vtable));
+    int i;
+
+    TRACE("-> %p, vtable %p, thunks %p\n", r, vtable, thunks);
+    init_thunk(&thunks[0], r, winIVROverlay_IVROverlay_012_FindOverlay);
+    init_thunk(&thunks[1], r, winIVROverlay_IVROverlay_012_CreateOverlay);
+    init_thunk(&thunks[2], r, winIVROverlay_IVROverlay_012_DestroyOverlay);
+    init_thunk(&thunks[3], r, winIVROverlay_IVROverlay_012_SetHighQualityOverlay);
+    init_thunk(&thunks[4], r, winIVROverlay_IVROverlay_012_GetHighQualityOverlay);
+    init_thunk(&thunks[5], r, winIVROverlay_IVROverlay_012_GetOverlayKey);
+    init_thunk(&thunks[6], r, winIVROverlay_IVROverlay_012_GetOverlayName);
+    init_thunk(&thunks[7], r, winIVROverlay_IVROverlay_012_GetOverlayImageData);
+    init_thunk(&thunks[8], r, winIVROverlay_IVROverlay_012_GetOverlayErrorNameFromEnum);
+    init_thunk(&thunks[9], r, winIVROverlay_IVROverlay_012_SetOverlayRenderingPid);
+    init_thunk(&thunks[10], r, winIVROverlay_IVROverlay_012_GetOverlayRenderingPid);
+    init_thunk(&thunks[11], r, winIVROverlay_IVROverlay_012_SetOverlayFlag);
+    init_thunk(&thunks[12], r, winIVROverlay_IVROverlay_012_GetOverlayFlag);
+    init_thunk(&thunks[13], r, winIVROverlay_IVROverlay_012_SetOverlayColor);
+    init_thunk(&thunks[14], r, winIVROverlay_IVROverlay_012_GetOverlayColor);
+    init_thunk(&thunks[15], r, winIVROverlay_IVROverlay_012_SetOverlayAlpha);
+    init_thunk(&thunks[16], r, winIVROverlay_IVROverlay_012_GetOverlayAlpha);
+    init_thunk(&thunks[17], r, winIVROverlay_IVROverlay_012_SetOverlayWidthInMeters);
+    init_thunk(&thunks[18], r, winIVROverlay_IVROverlay_012_GetOverlayWidthInMeters);
+    init_thunk(&thunks[19], r, winIVROverlay_IVROverlay_012_SetOverlayAutoCurveDistanceRangeInMeters);
+    init_thunk(&thunks[20], r, winIVROverlay_IVROverlay_012_GetOverlayAutoCurveDistanceRangeInMeters);
+    init_thunk(&thunks[21], r, winIVROverlay_IVROverlay_012_SetOverlayTextureColorSpace);
+    init_thunk(&thunks[22], r, winIVROverlay_IVROverlay_012_GetOverlayTextureColorSpace);
+    init_thunk(&thunks[23], r, winIVROverlay_IVROverlay_012_SetOverlayTextureBounds);
+    init_thunk(&thunks[24], r, winIVROverlay_IVROverlay_012_GetOverlayTextureBounds);
+    init_thunk(&thunks[25], r, winIVROverlay_IVROverlay_012_GetOverlayTransformType);
+    init_thunk(&thunks[26], r, winIVROverlay_IVROverlay_012_SetOverlayTransformAbsolute);
+    init_thunk(&thunks[27], r, winIVROverlay_IVROverlay_012_GetOverlayTransformAbsolute);
+    init_thunk(&thunks[28], r, winIVROverlay_IVROverlay_012_SetOverlayTransformTrackedDeviceRelative);
+    init_thunk(&thunks[29], r, winIVROverlay_IVROverlay_012_GetOverlayTransformTrackedDeviceRelative);
+    init_thunk(&thunks[30], r, winIVROverlay_IVROverlay_012_SetOverlayTransformTrackedDeviceComponent);
+    init_thunk(&thunks[31], r, winIVROverlay_IVROverlay_012_GetOverlayTransformTrackedDeviceComponent);
+    init_thunk(&thunks[32], r, winIVROverlay_IVROverlay_012_ShowOverlay);
+    init_thunk(&thunks[33], r, winIVROverlay_IVROverlay_012_HideOverlay);
+    init_thunk(&thunks[34], r, winIVROverlay_IVROverlay_012_IsOverlayVisible);
+    init_thunk(&thunks[35], r, winIVROverlay_IVROverlay_012_GetTransformForOverlayCoordinates);
+    init_thunk(&thunks[36], r, winIVROverlay_IVROverlay_012_PollNextOverlayEvent);
+    init_thunk(&thunks[37], r, winIVROverlay_IVROverlay_012_GetOverlayInputMethod);
+    init_thunk(&thunks[38], r, winIVROverlay_IVROverlay_012_SetOverlayInputMethod);
+    init_thunk(&thunks[39], r, winIVROverlay_IVROverlay_012_GetOverlayMouseScale);
+    init_thunk(&thunks[40], r, winIVROverlay_IVROverlay_012_SetOverlayMouseScale);
+    init_thunk(&thunks[41], r, winIVROverlay_IVROverlay_012_ComputeOverlayIntersection);
+    init_thunk(&thunks[42], r, winIVROverlay_IVROverlay_012_HandleControllerOverlayInteractionAsMouse);
+    init_thunk(&thunks[43], r, winIVROverlay_IVROverlay_012_IsHoverTargetOverlay);
+    init_thunk(&thunks[44], r, winIVROverlay_IVROverlay_012_GetGamepadFocusOverlay);
+    init_thunk(&thunks[45], r, winIVROverlay_IVROverlay_012_SetGamepadFocusOverlay);
+    init_thunk(&thunks[46], r, winIVROverlay_IVROverlay_012_SetOverlayNeighbor);
+    init_thunk(&thunks[47], r, winIVROverlay_IVROverlay_012_MoveGamepadFocusToNeighbor);
+    init_thunk(&thunks[48], r, winIVROverlay_IVROverlay_012_SetOverlayTexture);
+    init_thunk(&thunks[49], r, winIVROverlay_IVROverlay_012_ClearOverlayTexture);
+    init_thunk(&thunks[50], r, winIVROverlay_IVROverlay_012_SetOverlayRaw);
+    init_thunk(&thunks[51], r, winIVROverlay_IVROverlay_012_SetOverlayFromFile);
+    init_thunk(&thunks[52], r, winIVROverlay_IVROverlay_012_GetOverlayTexture);
+    init_thunk(&thunks[53], r, winIVROverlay_IVROverlay_012_ReleaseNativeOverlayHandle);
+    init_thunk(&thunks[54], r, winIVROverlay_IVROverlay_012_GetOverlayTextureSize);
+    init_thunk(&thunks[55], r, winIVROverlay_IVROverlay_012_CreateDashboardOverlay);
+    init_thunk(&thunks[56], r, winIVROverlay_IVROverlay_012_IsDashboardVisible);
+    init_thunk(&thunks[57], r, winIVROverlay_IVROverlay_012_IsActiveDashboardOverlay);
+    init_thunk(&thunks[58], r, winIVROverlay_IVROverlay_012_SetDashboardOverlaySceneProcess);
+    init_thunk(&thunks[59], r, winIVROverlay_IVROverlay_012_GetDashboardOverlaySceneProcess);
+    init_thunk(&thunks[60], r, winIVROverlay_IVROverlay_012_ShowDashboard);
+    init_thunk(&thunks[61], r, winIVROverlay_IVROverlay_012_GetPrimaryDashboardDevice);
+    init_thunk(&thunks[62], r, winIVROverlay_IVROverlay_012_ShowKeyboard);
+    init_thunk(&thunks[63], r, winIVROverlay_IVROverlay_012_ShowKeyboardForOverlay);
+    init_thunk(&thunks[64], r, winIVROverlay_IVROverlay_012_GetKeyboardText);
+    init_thunk(&thunks[65], r, winIVROverlay_IVROverlay_012_HideKeyboard);
+    init_thunk(&thunks[66], r, winIVROverlay_IVROverlay_012_SetKeyboardTransformAbsolute);
+    init_thunk(&thunks[67], r, winIVROverlay_IVROverlay_012_SetKeyboardPositionForOverlay);
+    for (i = 0; i < 68; i++)
+        vtable[i] = &thunks[i];
+    r->linux_side = linux_side;
+    r->vtable = (void *)vtable;
+    return r;
+}
+
+void destroy_winIVROverlay_IVROverlay_012_FnTable(void *object)
+{
+    winIVROverlay_IVROverlay_012 *win_object = object;
+    TRACE("%p\n", win_object);
+    VirtualFree(win_object->vtable[0], 0, MEM_RELEASE);
+    HeapFree(GetProcessHeap(), 0, win_object->vtable);
+    HeapFree(GetProcessHeap(), 0, win_object);
+}
+
 #include "cppIVROverlay_IVROverlay_011.h"
 
 typedef struct __winIVROverlay_IVROverlay_011 {
@@ -4479,6 +5087,97 @@ void destroy_winIVROverlay_IVROverlay_011(void *object)
     HeapFree(GetProcessHeap(), 0, object);
 }
 
+winIVROverlay_IVROverlay_011 *create_winIVROverlay_IVROverlay_011_FnTable(void *linux_side)
+{
+    winIVROverlay_IVROverlay_011 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVROverlay_IVROverlay_011));
+    struct thunk *thunks = alloc_thunks(67);
+    struct thunk **vtable = HeapAlloc(GetProcessHeap(), 0, 67 * sizeof(*vtable));
+    int i;
+
+    TRACE("-> %p, vtable %p, thunks %p\n", r, vtable, thunks);
+    init_thunk(&thunks[0], r, winIVROverlay_IVROverlay_011_FindOverlay);
+    init_thunk(&thunks[1], r, winIVROverlay_IVROverlay_011_CreateOverlay);
+    init_thunk(&thunks[2], r, winIVROverlay_IVROverlay_011_DestroyOverlay);
+    init_thunk(&thunks[3], r, winIVROverlay_IVROverlay_011_SetHighQualityOverlay);
+    init_thunk(&thunks[4], r, winIVROverlay_IVROverlay_011_GetHighQualityOverlay);
+    init_thunk(&thunks[5], r, winIVROverlay_IVROverlay_011_GetOverlayKey);
+    init_thunk(&thunks[6], r, winIVROverlay_IVROverlay_011_GetOverlayName);
+    init_thunk(&thunks[7], r, winIVROverlay_IVROverlay_011_GetOverlayImageData);
+    init_thunk(&thunks[8], r, winIVROverlay_IVROverlay_011_GetOverlayErrorNameFromEnum);
+    init_thunk(&thunks[9], r, winIVROverlay_IVROverlay_011_SetOverlayRenderingPid);
+    init_thunk(&thunks[10], r, winIVROverlay_IVROverlay_011_GetOverlayRenderingPid);
+    init_thunk(&thunks[11], r, winIVROverlay_IVROverlay_011_SetOverlayFlag);
+    init_thunk(&thunks[12], r, winIVROverlay_IVROverlay_011_GetOverlayFlag);
+    init_thunk(&thunks[13], r, winIVROverlay_IVROverlay_011_SetOverlayColor);
+    init_thunk(&thunks[14], r, winIVROverlay_IVROverlay_011_GetOverlayColor);
+    init_thunk(&thunks[15], r, winIVROverlay_IVROverlay_011_SetOverlayAlpha);
+    init_thunk(&thunks[16], r, winIVROverlay_IVROverlay_011_GetOverlayAlpha);
+    init_thunk(&thunks[17], r, winIVROverlay_IVROverlay_011_SetOverlayWidthInMeters);
+    init_thunk(&thunks[18], r, winIVROverlay_IVROverlay_011_GetOverlayWidthInMeters);
+    init_thunk(&thunks[19], r, winIVROverlay_IVROverlay_011_SetOverlayAutoCurveDistanceRangeInMeters);
+    init_thunk(&thunks[20], r, winIVROverlay_IVROverlay_011_GetOverlayAutoCurveDistanceRangeInMeters);
+    init_thunk(&thunks[21], r, winIVROverlay_IVROverlay_011_SetOverlayTextureColorSpace);
+    init_thunk(&thunks[22], r, winIVROverlay_IVROverlay_011_GetOverlayTextureColorSpace);
+    init_thunk(&thunks[23], r, winIVROverlay_IVROverlay_011_SetOverlayTextureBounds);
+    init_thunk(&thunks[24], r, winIVROverlay_IVROverlay_011_GetOverlayTextureBounds);
+    init_thunk(&thunks[25], r, winIVROverlay_IVROverlay_011_GetOverlayTransformType);
+    init_thunk(&thunks[26], r, winIVROverlay_IVROverlay_011_SetOverlayTransformAbsolute);
+    init_thunk(&thunks[27], r, winIVROverlay_IVROverlay_011_GetOverlayTransformAbsolute);
+    init_thunk(&thunks[28], r, winIVROverlay_IVROverlay_011_SetOverlayTransformTrackedDeviceRelative);
+    init_thunk(&thunks[29], r, winIVROverlay_IVROverlay_011_GetOverlayTransformTrackedDeviceRelative);
+    init_thunk(&thunks[30], r, winIVROverlay_IVROverlay_011_SetOverlayTransformTrackedDeviceComponent);
+    init_thunk(&thunks[31], r, winIVROverlay_IVROverlay_011_GetOverlayTransformTrackedDeviceComponent);
+    init_thunk(&thunks[32], r, winIVROverlay_IVROverlay_011_ShowOverlay);
+    init_thunk(&thunks[33], r, winIVROverlay_IVROverlay_011_HideOverlay);
+    init_thunk(&thunks[34], r, winIVROverlay_IVROverlay_011_IsOverlayVisible);
+    init_thunk(&thunks[35], r, winIVROverlay_IVROverlay_011_GetTransformForOverlayCoordinates);
+    init_thunk(&thunks[36], r, winIVROverlay_IVROverlay_011_PollNextOverlayEvent);
+    init_thunk(&thunks[37], r, winIVROverlay_IVROverlay_011_GetOverlayInputMethod);
+    init_thunk(&thunks[38], r, winIVROverlay_IVROverlay_011_SetOverlayInputMethod);
+    init_thunk(&thunks[39], r, winIVROverlay_IVROverlay_011_GetOverlayMouseScale);
+    init_thunk(&thunks[40], r, winIVROverlay_IVROverlay_011_SetOverlayMouseScale);
+    init_thunk(&thunks[41], r, winIVROverlay_IVROverlay_011_ComputeOverlayIntersection);
+    init_thunk(&thunks[42], r, winIVROverlay_IVROverlay_011_HandleControllerOverlayInteractionAsMouse);
+    init_thunk(&thunks[43], r, winIVROverlay_IVROverlay_011_IsHoverTargetOverlay);
+    init_thunk(&thunks[44], r, winIVROverlay_IVROverlay_011_GetGamepadFocusOverlay);
+    init_thunk(&thunks[45], r, winIVROverlay_IVROverlay_011_SetGamepadFocusOverlay);
+    init_thunk(&thunks[46], r, winIVROverlay_IVROverlay_011_SetOverlayNeighbor);
+    init_thunk(&thunks[47], r, winIVROverlay_IVROverlay_011_MoveGamepadFocusToNeighbor);
+    init_thunk(&thunks[48], r, winIVROverlay_IVROverlay_011_SetOverlayTexture);
+    init_thunk(&thunks[49], r, winIVROverlay_IVROverlay_011_ClearOverlayTexture);
+    init_thunk(&thunks[50], r, winIVROverlay_IVROverlay_011_SetOverlayRaw);
+    init_thunk(&thunks[51], r, winIVROverlay_IVROverlay_011_SetOverlayFromFile);
+    init_thunk(&thunks[52], r, winIVROverlay_IVROverlay_011_GetOverlayTexture);
+    init_thunk(&thunks[53], r, winIVROverlay_IVROverlay_011_ReleaseNativeOverlayHandle);
+    init_thunk(&thunks[54], r, winIVROverlay_IVROverlay_011_CreateDashboardOverlay);
+    init_thunk(&thunks[55], r, winIVROverlay_IVROverlay_011_IsDashboardVisible);
+    init_thunk(&thunks[56], r, winIVROverlay_IVROverlay_011_IsActiveDashboardOverlay);
+    init_thunk(&thunks[57], r, winIVROverlay_IVROverlay_011_SetDashboardOverlaySceneProcess);
+    init_thunk(&thunks[58], r, winIVROverlay_IVROverlay_011_GetDashboardOverlaySceneProcess);
+    init_thunk(&thunks[59], r, winIVROverlay_IVROverlay_011_ShowDashboard);
+    init_thunk(&thunks[60], r, winIVROverlay_IVROverlay_011_GetPrimaryDashboardDevice);
+    init_thunk(&thunks[61], r, winIVROverlay_IVROverlay_011_ShowKeyboard);
+    init_thunk(&thunks[62], r, winIVROverlay_IVROverlay_011_ShowKeyboardForOverlay);
+    init_thunk(&thunks[63], r, winIVROverlay_IVROverlay_011_GetKeyboardText);
+    init_thunk(&thunks[64], r, winIVROverlay_IVROverlay_011_HideKeyboard);
+    init_thunk(&thunks[65], r, winIVROverlay_IVROverlay_011_SetKeyboardTransformAbsolute);
+    init_thunk(&thunks[66], r, winIVROverlay_IVROverlay_011_SetKeyboardPositionForOverlay);
+    for (i = 0; i < 67; i++)
+        vtable[i] = &thunks[i];
+    r->linux_side = linux_side;
+    r->vtable = (void *)vtable;
+    return r;
+}
+
+void destroy_winIVROverlay_IVROverlay_011_FnTable(void *object)
+{
+    winIVROverlay_IVROverlay_011 *win_object = object;
+    TRACE("%p\n", win_object);
+    VirtualFree(win_object->vtable[0], 0, MEM_RELEASE);
+    HeapFree(GetProcessHeap(), 0, win_object->vtable);
+    HeapFree(GetProcessHeap(), 0, win_object);
+}
+
 #include "cppIVROverlay_IVROverlay_010.h"
 
 typedef struct __winIVROverlay_IVROverlay_010 {
@@ -5016,6 +5715,93 @@ void destroy_winIVROverlay_IVROverlay_010(void *object)
     HeapFree(GetProcessHeap(), 0, object);
 }
 
+winIVROverlay_IVROverlay_010 *create_winIVROverlay_IVROverlay_010_FnTable(void *linux_side)
+{
+    winIVROverlay_IVROverlay_010 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVROverlay_IVROverlay_010));
+    struct thunk *thunks = alloc_thunks(63);
+    struct thunk **vtable = HeapAlloc(GetProcessHeap(), 0, 63 * sizeof(*vtable));
+    int i;
+
+    TRACE("-> %p, vtable %p, thunks %p\n", r, vtable, thunks);
+    init_thunk(&thunks[0], r, winIVROverlay_IVROverlay_010_FindOverlay);
+    init_thunk(&thunks[1], r, winIVROverlay_IVROverlay_010_CreateOverlay);
+    init_thunk(&thunks[2], r, winIVROverlay_IVROverlay_010_DestroyOverlay);
+    init_thunk(&thunks[3], r, winIVROverlay_IVROverlay_010_SetHighQualityOverlay);
+    init_thunk(&thunks[4], r, winIVROverlay_IVROverlay_010_GetHighQualityOverlay);
+    init_thunk(&thunks[5], r, winIVROverlay_IVROverlay_010_GetOverlayKey);
+    init_thunk(&thunks[6], r, winIVROverlay_IVROverlay_010_GetOverlayName);
+    init_thunk(&thunks[7], r, winIVROverlay_IVROverlay_010_GetOverlayImageData);
+    init_thunk(&thunks[8], r, winIVROverlay_IVROverlay_010_GetOverlayErrorNameFromEnum);
+    init_thunk(&thunks[9], r, winIVROverlay_IVROverlay_010_SetOverlayFlag);
+    init_thunk(&thunks[10], r, winIVROverlay_IVROverlay_010_GetOverlayFlag);
+    init_thunk(&thunks[11], r, winIVROverlay_IVROverlay_010_SetOverlayColor);
+    init_thunk(&thunks[12], r, winIVROverlay_IVROverlay_010_GetOverlayColor);
+    init_thunk(&thunks[13], r, winIVROverlay_IVROverlay_010_SetOverlayAlpha);
+    init_thunk(&thunks[14], r, winIVROverlay_IVROverlay_010_GetOverlayAlpha);
+    init_thunk(&thunks[15], r, winIVROverlay_IVROverlay_010_SetOverlayWidthInMeters);
+    init_thunk(&thunks[16], r, winIVROverlay_IVROverlay_010_GetOverlayWidthInMeters);
+    init_thunk(&thunks[17], r, winIVROverlay_IVROverlay_010_SetOverlayAutoCurveDistanceRangeInMeters);
+    init_thunk(&thunks[18], r, winIVROverlay_IVROverlay_010_GetOverlayAutoCurveDistanceRangeInMeters);
+    init_thunk(&thunks[19], r, winIVROverlay_IVROverlay_010_SetOverlayTextureColorSpace);
+    init_thunk(&thunks[20], r, winIVROverlay_IVROverlay_010_GetOverlayTextureColorSpace);
+    init_thunk(&thunks[21], r, winIVROverlay_IVROverlay_010_SetOverlayTextureBounds);
+    init_thunk(&thunks[22], r, winIVROverlay_IVROverlay_010_GetOverlayTextureBounds);
+    init_thunk(&thunks[23], r, winIVROverlay_IVROverlay_010_GetOverlayTransformType);
+    init_thunk(&thunks[24], r, winIVROverlay_IVROverlay_010_SetOverlayTransformAbsolute);
+    init_thunk(&thunks[25], r, winIVROverlay_IVROverlay_010_GetOverlayTransformAbsolute);
+    init_thunk(&thunks[26], r, winIVROverlay_IVROverlay_010_SetOverlayTransformTrackedDeviceRelative);
+    init_thunk(&thunks[27], r, winIVROverlay_IVROverlay_010_GetOverlayTransformTrackedDeviceRelative);
+    init_thunk(&thunks[28], r, winIVROverlay_IVROverlay_010_SetOverlayTransformTrackedDeviceComponent);
+    init_thunk(&thunks[29], r, winIVROverlay_IVROverlay_010_GetOverlayTransformTrackedDeviceComponent);
+    init_thunk(&thunks[30], r, winIVROverlay_IVROverlay_010_ShowOverlay);
+    init_thunk(&thunks[31], r, winIVROverlay_IVROverlay_010_HideOverlay);
+    init_thunk(&thunks[32], r, winIVROverlay_IVROverlay_010_IsOverlayVisible);
+    init_thunk(&thunks[33], r, winIVROverlay_IVROverlay_010_GetTransformForOverlayCoordinates);
+    init_thunk(&thunks[34], r, winIVROverlay_IVROverlay_010_PollNextOverlayEvent);
+    init_thunk(&thunks[35], r, winIVROverlay_IVROverlay_010_GetOverlayInputMethod);
+    init_thunk(&thunks[36], r, winIVROverlay_IVROverlay_010_SetOverlayInputMethod);
+    init_thunk(&thunks[37], r, winIVROverlay_IVROverlay_010_GetOverlayMouseScale);
+    init_thunk(&thunks[38], r, winIVROverlay_IVROverlay_010_SetOverlayMouseScale);
+    init_thunk(&thunks[39], r, winIVROverlay_IVROverlay_010_ComputeOverlayIntersection);
+    init_thunk(&thunks[40], r, winIVROverlay_IVROverlay_010_HandleControllerOverlayInteractionAsMouse);
+    init_thunk(&thunks[41], r, winIVROverlay_IVROverlay_010_IsHoverTargetOverlay);
+    init_thunk(&thunks[42], r, winIVROverlay_IVROverlay_010_GetGamepadFocusOverlay);
+    init_thunk(&thunks[43], r, winIVROverlay_IVROverlay_010_SetGamepadFocusOverlay);
+    init_thunk(&thunks[44], r, winIVROverlay_IVROverlay_010_SetOverlayNeighbor);
+    init_thunk(&thunks[45], r, winIVROverlay_IVROverlay_010_MoveGamepadFocusToNeighbor);
+    init_thunk(&thunks[46], r, winIVROverlay_IVROverlay_010_SetOverlayTexture);
+    init_thunk(&thunks[47], r, winIVROverlay_IVROverlay_010_ClearOverlayTexture);
+    init_thunk(&thunks[48], r, winIVROverlay_IVROverlay_010_SetOverlayRaw);
+    init_thunk(&thunks[49], r, winIVROverlay_IVROverlay_010_SetOverlayFromFile);
+    init_thunk(&thunks[50], r, winIVROverlay_IVROverlay_010_CreateDashboardOverlay);
+    init_thunk(&thunks[51], r, winIVROverlay_IVROverlay_010_IsDashboardVisible);
+    init_thunk(&thunks[52], r, winIVROverlay_IVROverlay_010_IsActiveDashboardOverlay);
+    init_thunk(&thunks[53], r, winIVROverlay_IVROverlay_010_SetDashboardOverlaySceneProcess);
+    init_thunk(&thunks[54], r, winIVROverlay_IVROverlay_010_GetDashboardOverlaySceneProcess);
+    init_thunk(&thunks[55], r, winIVROverlay_IVROverlay_010_ShowDashboard);
+    init_thunk(&thunks[56], r, winIVROverlay_IVROverlay_010_GetPrimaryDashboardDevice);
+    init_thunk(&thunks[57], r, winIVROverlay_IVROverlay_010_ShowKeyboard);
+    init_thunk(&thunks[58], r, winIVROverlay_IVROverlay_010_ShowKeyboardForOverlay);
+    init_thunk(&thunks[59], r, winIVROverlay_IVROverlay_010_GetKeyboardText);
+    init_thunk(&thunks[60], r, winIVROverlay_IVROverlay_010_HideKeyboard);
+    init_thunk(&thunks[61], r, winIVROverlay_IVROverlay_010_SetKeyboardTransformAbsolute);
+    init_thunk(&thunks[62], r, winIVROverlay_IVROverlay_010_SetKeyboardPositionForOverlay);
+    for (i = 0; i < 63; i++)
+        vtable[i] = &thunks[i];
+    r->linux_side = linux_side;
+    r->vtable = (void *)vtable;
+    return r;
+}
+
+void destroy_winIVROverlay_IVROverlay_010_FnTable(void *object)
+{
+    winIVROverlay_IVROverlay_010 *win_object = object;
+    TRACE("%p\n", win_object);
+    VirtualFree(win_object->vtable[0], 0, MEM_RELEASE);
+    HeapFree(GetProcessHeap(), 0, win_object->vtable);
+    HeapFree(GetProcessHeap(), 0, win_object);
+}
+
 #include "cppIVROverlay_IVROverlay_008.h"
 
 typedef struct __winIVROverlay_IVROverlay_008 {
@@ -5529,6 +6315,90 @@ void destroy_winIVROverlay_IVROverlay_008(void *object)
     HeapFree(GetProcessHeap(), 0, object);
 }
 
+winIVROverlay_IVROverlay_008 *create_winIVROverlay_IVROverlay_008_FnTable(void *linux_side)
+{
+    winIVROverlay_IVROverlay_008 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVROverlay_IVROverlay_008));
+    struct thunk *thunks = alloc_thunks(60);
+    struct thunk **vtable = HeapAlloc(GetProcessHeap(), 0, 60 * sizeof(*vtable));
+    int i;
+
+    TRACE("-> %p, vtable %p, thunks %p\n", r, vtable, thunks);
+    init_thunk(&thunks[0], r, winIVROverlay_IVROverlay_008_FindOverlay);
+    init_thunk(&thunks[1], r, winIVROverlay_IVROverlay_008_CreateOverlay);
+    init_thunk(&thunks[2], r, winIVROverlay_IVROverlay_008_DestroyOverlay);
+    init_thunk(&thunks[3], r, winIVROverlay_IVROverlay_008_SetHighQualityOverlay);
+    init_thunk(&thunks[4], r, winIVROverlay_IVROverlay_008_GetHighQualityOverlay);
+    init_thunk(&thunks[5], r, winIVROverlay_IVROverlay_008_GetOverlayKey);
+    init_thunk(&thunks[6], r, winIVROverlay_IVROverlay_008_GetOverlayName);
+    init_thunk(&thunks[7], r, winIVROverlay_IVROverlay_008_GetOverlayImageData);
+    init_thunk(&thunks[8], r, winIVROverlay_IVROverlay_008_GetOverlayErrorNameFromEnum);
+    init_thunk(&thunks[9], r, winIVROverlay_IVROverlay_008_SetOverlayFlag);
+    init_thunk(&thunks[10], r, winIVROverlay_IVROverlay_008_GetOverlayFlag);
+    init_thunk(&thunks[11], r, winIVROverlay_IVROverlay_008_SetOverlayColor);
+    init_thunk(&thunks[12], r, winIVROverlay_IVROverlay_008_GetOverlayColor);
+    init_thunk(&thunks[13], r, winIVROverlay_IVROverlay_008_SetOverlayAlpha);
+    init_thunk(&thunks[14], r, winIVROverlay_IVROverlay_008_GetOverlayAlpha);
+    init_thunk(&thunks[15], r, winIVROverlay_IVROverlay_008_SetOverlayWidthInMeters);
+    init_thunk(&thunks[16], r, winIVROverlay_IVROverlay_008_GetOverlayWidthInMeters);
+    init_thunk(&thunks[17], r, winIVROverlay_IVROverlay_008_SetOverlayAutoCurveDistanceRangeInMeters);
+    init_thunk(&thunks[18], r, winIVROverlay_IVROverlay_008_GetOverlayAutoCurveDistanceRangeInMeters);
+    init_thunk(&thunks[19], r, winIVROverlay_IVROverlay_008_SetOverlayTextureColorSpace);
+    init_thunk(&thunks[20], r, winIVROverlay_IVROverlay_008_GetOverlayTextureColorSpace);
+    init_thunk(&thunks[21], r, winIVROverlay_IVROverlay_008_SetOverlayTextureBounds);
+    init_thunk(&thunks[22], r, winIVROverlay_IVROverlay_008_GetOverlayTextureBounds);
+    init_thunk(&thunks[23], r, winIVROverlay_IVROverlay_008_GetOverlayTransformType);
+    init_thunk(&thunks[24], r, winIVROverlay_IVROverlay_008_SetOverlayTransformAbsolute);
+    init_thunk(&thunks[25], r, winIVROverlay_IVROverlay_008_GetOverlayTransformAbsolute);
+    init_thunk(&thunks[26], r, winIVROverlay_IVROverlay_008_SetOverlayTransformTrackedDeviceRelative);
+    init_thunk(&thunks[27], r, winIVROverlay_IVROverlay_008_GetOverlayTransformTrackedDeviceRelative);
+    init_thunk(&thunks[28], r, winIVROverlay_IVROverlay_008_ShowOverlay);
+    init_thunk(&thunks[29], r, winIVROverlay_IVROverlay_008_HideOverlay);
+    init_thunk(&thunks[30], r, winIVROverlay_IVROverlay_008_IsOverlayVisible);
+    init_thunk(&thunks[31], r, winIVROverlay_IVROverlay_008_GetTransformForOverlayCoordinates);
+    init_thunk(&thunks[32], r, winIVROverlay_IVROverlay_008_PollNextOverlayEvent);
+    init_thunk(&thunks[33], r, winIVROverlay_IVROverlay_008_GetOverlayInputMethod);
+    init_thunk(&thunks[34], r, winIVROverlay_IVROverlay_008_SetOverlayInputMethod);
+    init_thunk(&thunks[35], r, winIVROverlay_IVROverlay_008_GetOverlayMouseScale);
+    init_thunk(&thunks[36], r, winIVROverlay_IVROverlay_008_SetOverlayMouseScale);
+    init_thunk(&thunks[37], r, winIVROverlay_IVROverlay_008_ComputeOverlayIntersection);
+    init_thunk(&thunks[38], r, winIVROverlay_IVROverlay_008_HandleControllerOverlayInteractionAsMouse);
+    init_thunk(&thunks[39], r, winIVROverlay_IVROverlay_008_IsHoverTargetOverlay);
+    init_thunk(&thunks[40], r, winIVROverlay_IVROverlay_008_GetGamepadFocusOverlay);
+    init_thunk(&thunks[41], r, winIVROverlay_IVROverlay_008_SetGamepadFocusOverlay);
+    init_thunk(&thunks[42], r, winIVROverlay_IVROverlay_008_SetOverlayNeighbor);
+    init_thunk(&thunks[43], r, winIVROverlay_IVROverlay_008_MoveGamepadFocusToNeighbor);
+    init_thunk(&thunks[44], r, winIVROverlay_IVROverlay_008_SetOverlayTexture);
+    init_thunk(&thunks[45], r, winIVROverlay_IVROverlay_008_ClearOverlayTexture);
+    init_thunk(&thunks[46], r, winIVROverlay_IVROverlay_008_SetOverlayRaw);
+    init_thunk(&thunks[47], r, winIVROverlay_IVROverlay_008_SetOverlayFromFile);
+    init_thunk(&thunks[48], r, winIVROverlay_IVROverlay_008_CreateDashboardOverlay);
+    init_thunk(&thunks[49], r, winIVROverlay_IVROverlay_008_IsDashboardVisible);
+    init_thunk(&thunks[50], r, winIVROverlay_IVROverlay_008_IsActiveDashboardOverlay);
+    init_thunk(&thunks[51], r, winIVROverlay_IVROverlay_008_SetDashboardOverlaySceneProcess);
+    init_thunk(&thunks[52], r, winIVROverlay_IVROverlay_008_GetDashboardOverlaySceneProcess);
+    init_thunk(&thunks[53], r, winIVROverlay_IVROverlay_008_ShowDashboard);
+    init_thunk(&thunks[54], r, winIVROverlay_IVROverlay_008_ShowKeyboard);
+    init_thunk(&thunks[55], r, winIVROverlay_IVROverlay_008_ShowKeyboardForOverlay);
+    init_thunk(&thunks[56], r, winIVROverlay_IVROverlay_008_GetKeyboardText);
+    init_thunk(&thunks[57], r, winIVROverlay_IVROverlay_008_HideKeyboard);
+    init_thunk(&thunks[58], r, winIVROverlay_IVROverlay_008_SetKeyboardTransformAbsolute);
+    init_thunk(&thunks[59], r, winIVROverlay_IVROverlay_008_SetKeyboardPositionForOverlay);
+    for (i = 0; i < 60; i++)
+        vtable[i] = &thunks[i];
+    r->linux_side = linux_side;
+    r->vtable = (void *)vtable;
+    return r;
+}
+
+void destroy_winIVROverlay_IVROverlay_008_FnTable(void *object)
+{
+    winIVROverlay_IVROverlay_008 *win_object = object;
+    TRACE("%p\n", win_object);
+    VirtualFree(win_object->vtable[0], 0, MEM_RELEASE);
+    HeapFree(GetProcessHeap(), 0, win_object->vtable);
+    HeapFree(GetProcessHeap(), 0, win_object);
+}
+
 #include "cppIVROverlay_IVROverlay_007.h"
 
 typedef struct __winIVROverlay_IVROverlay_007 {
@@ -6018,6 +6888,87 @@ void destroy_winIVROverlay_IVROverlay_007(void *object)
     HeapFree(GetProcessHeap(), 0, object);
 }
 
+winIVROverlay_IVROverlay_007 *create_winIVROverlay_IVROverlay_007_FnTable(void *linux_side)
+{
+    winIVROverlay_IVROverlay_007 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVROverlay_IVROverlay_007));
+    struct thunk *thunks = alloc_thunks(57);
+    struct thunk **vtable = HeapAlloc(GetProcessHeap(), 0, 57 * sizeof(*vtable));
+    int i;
+
+    TRACE("-> %p, vtable %p, thunks %p\n", r, vtable, thunks);
+    init_thunk(&thunks[0], r, winIVROverlay_IVROverlay_007_FindOverlay);
+    init_thunk(&thunks[1], r, winIVROverlay_IVROverlay_007_CreateOverlay);
+    init_thunk(&thunks[2], r, winIVROverlay_IVROverlay_007_DestroyOverlay);
+    init_thunk(&thunks[3], r, winIVROverlay_IVROverlay_007_SetHighQualityOverlay);
+    init_thunk(&thunks[4], r, winIVROverlay_IVROverlay_007_GetHighQualityOverlay);
+    init_thunk(&thunks[5], r, winIVROverlay_IVROverlay_007_GetOverlayKey);
+    init_thunk(&thunks[6], r, winIVROverlay_IVROverlay_007_GetOverlayName);
+    init_thunk(&thunks[7], r, winIVROverlay_IVROverlay_007_GetOverlayImageData);
+    init_thunk(&thunks[8], r, winIVROverlay_IVROverlay_007_GetOverlayErrorNameFromEnum);
+    init_thunk(&thunks[9], r, winIVROverlay_IVROverlay_007_SetOverlayFlag);
+    init_thunk(&thunks[10], r, winIVROverlay_IVROverlay_007_GetOverlayFlag);
+    init_thunk(&thunks[11], r, winIVROverlay_IVROverlay_007_SetOverlayColor);
+    init_thunk(&thunks[12], r, winIVROverlay_IVROverlay_007_GetOverlayColor);
+    init_thunk(&thunks[13], r, winIVROverlay_IVROverlay_007_SetOverlayAlpha);
+    init_thunk(&thunks[14], r, winIVROverlay_IVROverlay_007_GetOverlayAlpha);
+    init_thunk(&thunks[15], r, winIVROverlay_IVROverlay_007_SetOverlayWidthInMeters);
+    init_thunk(&thunks[16], r, winIVROverlay_IVROverlay_007_GetOverlayWidthInMeters);
+    init_thunk(&thunks[17], r, winIVROverlay_IVROverlay_007_SetOverlayAutoCurveDistanceRangeInMeters);
+    init_thunk(&thunks[18], r, winIVROverlay_IVROverlay_007_GetOverlayAutoCurveDistanceRangeInMeters);
+    init_thunk(&thunks[19], r, winIVROverlay_IVROverlay_007_SetOverlayTextureColorSpace);
+    init_thunk(&thunks[20], r, winIVROverlay_IVROverlay_007_GetOverlayTextureColorSpace);
+    init_thunk(&thunks[21], r, winIVROverlay_IVROverlay_007_SetOverlayTextureBounds);
+    init_thunk(&thunks[22], r, winIVROverlay_IVROverlay_007_GetOverlayTextureBounds);
+    init_thunk(&thunks[23], r, winIVROverlay_IVROverlay_007_GetOverlayTransformType);
+    init_thunk(&thunks[24], r, winIVROverlay_IVROverlay_007_SetOverlayTransformAbsolute);
+    init_thunk(&thunks[25], r, winIVROverlay_IVROverlay_007_GetOverlayTransformAbsolute);
+    init_thunk(&thunks[26], r, winIVROverlay_IVROverlay_007_SetOverlayTransformTrackedDeviceRelative);
+    init_thunk(&thunks[27], r, winIVROverlay_IVROverlay_007_GetOverlayTransformTrackedDeviceRelative);
+    init_thunk(&thunks[28], r, winIVROverlay_IVROverlay_007_ShowOverlay);
+    init_thunk(&thunks[29], r, winIVROverlay_IVROverlay_007_HideOverlay);
+    init_thunk(&thunks[30], r, winIVROverlay_IVROverlay_007_IsOverlayVisible);
+    init_thunk(&thunks[31], r, winIVROverlay_IVROverlay_007_PollNextOverlayEvent);
+    init_thunk(&thunks[32], r, winIVROverlay_IVROverlay_007_GetOverlayInputMethod);
+    init_thunk(&thunks[33], r, winIVROverlay_IVROverlay_007_SetOverlayInputMethod);
+    init_thunk(&thunks[34], r, winIVROverlay_IVROverlay_007_GetOverlayMouseScale);
+    init_thunk(&thunks[35], r, winIVROverlay_IVROverlay_007_SetOverlayMouseScale);
+    init_thunk(&thunks[36], r, winIVROverlay_IVROverlay_007_ComputeOverlayIntersection);
+    init_thunk(&thunks[37], r, winIVROverlay_IVROverlay_007_HandleControllerOverlayInteractionAsMouse);
+    init_thunk(&thunks[38], r, winIVROverlay_IVROverlay_007_IsHoverTargetOverlay);
+    init_thunk(&thunks[39], r, winIVROverlay_IVROverlay_007_GetGamepadFocusOverlay);
+    init_thunk(&thunks[40], r, winIVROverlay_IVROverlay_007_SetGamepadFocusOverlay);
+    init_thunk(&thunks[41], r, winIVROverlay_IVROverlay_007_SetOverlayNeighbor);
+    init_thunk(&thunks[42], r, winIVROverlay_IVROverlay_007_MoveGamepadFocusToNeighbor);
+    init_thunk(&thunks[43], r, winIVROverlay_IVROverlay_007_SetOverlayTexture);
+    init_thunk(&thunks[44], r, winIVROverlay_IVROverlay_007_ClearOverlayTexture);
+    init_thunk(&thunks[45], r, winIVROverlay_IVROverlay_007_SetOverlayRaw);
+    init_thunk(&thunks[46], r, winIVROverlay_IVROverlay_007_SetOverlayFromFile);
+    init_thunk(&thunks[47], r, winIVROverlay_IVROverlay_007_CreateDashboardOverlay);
+    init_thunk(&thunks[48], r, winIVROverlay_IVROverlay_007_IsDashboardVisible);
+    init_thunk(&thunks[49], r, winIVROverlay_IVROverlay_007_IsActiveDashboardOverlay);
+    init_thunk(&thunks[50], r, winIVROverlay_IVROverlay_007_SetDashboardOverlaySceneProcess);
+    init_thunk(&thunks[51], r, winIVROverlay_IVROverlay_007_GetDashboardOverlaySceneProcess);
+    init_thunk(&thunks[52], r, winIVROverlay_IVROverlay_007_ShowDashboard);
+    init_thunk(&thunks[53], r, winIVROverlay_IVROverlay_007_ShowKeyboard);
+    init_thunk(&thunks[54], r, winIVROverlay_IVROverlay_007_ShowKeyboardForOverlay);
+    init_thunk(&thunks[55], r, winIVROverlay_IVROverlay_007_GetKeyboardText);
+    init_thunk(&thunks[56], r, winIVROverlay_IVROverlay_007_HideKeyboard);
+    for (i = 0; i < 57; i++)
+        vtable[i] = &thunks[i];
+    r->linux_side = linux_side;
+    r->vtable = (void *)vtable;
+    return r;
+}
+
+void destroy_winIVROverlay_IVROverlay_007_FnTable(void *object)
+{
+    winIVROverlay_IVROverlay_007 *win_object = object;
+    TRACE("%p\n", win_object);
+    VirtualFree(win_object->vtable[0], 0, MEM_RELEASE);
+    HeapFree(GetProcessHeap(), 0, win_object->vtable);
+    HeapFree(GetProcessHeap(), 0, win_object);
+}
+
 #include "cppIVROverlay_IVROverlay_005.h"
 
 typedef struct __winIVROverlay_IVROverlay_005 {
@@ -6467,6 +7418,82 @@ void destroy_winIVROverlay_IVROverlay_005(void *object)
     HeapFree(GetProcessHeap(), 0, object);
 }
 
+winIVROverlay_IVROverlay_005 *create_winIVROverlay_IVROverlay_005_FnTable(void *linux_side)
+{
+    winIVROverlay_IVROverlay_005 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVROverlay_IVROverlay_005));
+    struct thunk *thunks = alloc_thunks(52);
+    struct thunk **vtable = HeapAlloc(GetProcessHeap(), 0, 52 * sizeof(*vtable));
+    int i;
+
+    TRACE("-> %p, vtable %p, thunks %p\n", r, vtable, thunks);
+    init_thunk(&thunks[0], r, winIVROverlay_IVROverlay_005_FindOverlay);
+    init_thunk(&thunks[1], r, winIVROverlay_IVROverlay_005_CreateOverlay);
+    init_thunk(&thunks[2], r, winIVROverlay_IVROverlay_005_DestroyOverlay);
+    init_thunk(&thunks[3], r, winIVROverlay_IVROverlay_005_SetHighQualityOverlay);
+    init_thunk(&thunks[4], r, winIVROverlay_IVROverlay_005_GetHighQualityOverlay);
+    init_thunk(&thunks[5], r, winIVROverlay_IVROverlay_005_GetOverlayKey);
+    init_thunk(&thunks[6], r, winIVROverlay_IVROverlay_005_GetOverlayName);
+    init_thunk(&thunks[7], r, winIVROverlay_IVROverlay_005_GetOverlayImageData);
+    init_thunk(&thunks[8], r, winIVROverlay_IVROverlay_005_GetOverlayErrorNameFromEnum);
+    init_thunk(&thunks[9], r, winIVROverlay_IVROverlay_005_SetOverlayFlag);
+    init_thunk(&thunks[10], r, winIVROverlay_IVROverlay_005_GetOverlayFlag);
+    init_thunk(&thunks[11], r, winIVROverlay_IVROverlay_005_SetOverlayColor);
+    init_thunk(&thunks[12], r, winIVROverlay_IVROverlay_005_GetOverlayColor);
+    init_thunk(&thunks[13], r, winIVROverlay_IVROverlay_005_SetOverlayAlpha);
+    init_thunk(&thunks[14], r, winIVROverlay_IVROverlay_005_GetOverlayAlpha);
+    init_thunk(&thunks[15], r, winIVROverlay_IVROverlay_005_SetOverlayGamma);
+    init_thunk(&thunks[16], r, winIVROverlay_IVROverlay_005_GetOverlayGamma);
+    init_thunk(&thunks[17], r, winIVROverlay_IVROverlay_005_SetOverlayWidthInMeters);
+    init_thunk(&thunks[18], r, winIVROverlay_IVROverlay_005_GetOverlayWidthInMeters);
+    init_thunk(&thunks[19], r, winIVROverlay_IVROverlay_005_SetOverlayAutoCurveDistanceRangeInMeters);
+    init_thunk(&thunks[20], r, winIVROverlay_IVROverlay_005_GetOverlayAutoCurveDistanceRangeInMeters);
+    init_thunk(&thunks[21], r, winIVROverlay_IVROverlay_005_SetOverlayTextureBounds);
+    init_thunk(&thunks[22], r, winIVROverlay_IVROverlay_005_GetOverlayTextureBounds);
+    init_thunk(&thunks[23], r, winIVROverlay_IVROverlay_005_GetOverlayTransformType);
+    init_thunk(&thunks[24], r, winIVROverlay_IVROverlay_005_SetOverlayTransformAbsolute);
+    init_thunk(&thunks[25], r, winIVROverlay_IVROverlay_005_GetOverlayTransformAbsolute);
+    init_thunk(&thunks[26], r, winIVROverlay_IVROverlay_005_SetOverlayTransformTrackedDeviceRelative);
+    init_thunk(&thunks[27], r, winIVROverlay_IVROverlay_005_GetOverlayTransformTrackedDeviceRelative);
+    init_thunk(&thunks[28], r, winIVROverlay_IVROverlay_005_ShowOverlay);
+    init_thunk(&thunks[29], r, winIVROverlay_IVROverlay_005_HideOverlay);
+    init_thunk(&thunks[30], r, winIVROverlay_IVROverlay_005_IsOverlayVisible);
+    init_thunk(&thunks[31], r, winIVROverlay_IVROverlay_005_PollNextOverlayEvent);
+    init_thunk(&thunks[32], r, winIVROverlay_IVROverlay_005_GetOverlayInputMethod);
+    init_thunk(&thunks[33], r, winIVROverlay_IVROverlay_005_SetOverlayInputMethod);
+    init_thunk(&thunks[34], r, winIVROverlay_IVROverlay_005_GetOverlayMouseScale);
+    init_thunk(&thunks[35], r, winIVROverlay_IVROverlay_005_SetOverlayMouseScale);
+    init_thunk(&thunks[36], r, winIVROverlay_IVROverlay_005_ComputeOverlayIntersection);
+    init_thunk(&thunks[37], r, winIVROverlay_IVROverlay_005_HandleControllerOverlayInteractionAsMouse);
+    init_thunk(&thunks[38], r, winIVROverlay_IVROverlay_005_IsFocusOverlay);
+    init_thunk(&thunks[39], r, winIVROverlay_IVROverlay_005_SetOverlayTexture);
+    init_thunk(&thunks[40], r, winIVROverlay_IVROverlay_005_ClearOverlayTexture);
+    init_thunk(&thunks[41], r, winIVROverlay_IVROverlay_005_SetOverlayRaw);
+    init_thunk(&thunks[42], r, winIVROverlay_IVROverlay_005_SetOverlayFromFile);
+    init_thunk(&thunks[43], r, winIVROverlay_IVROverlay_005_CreateDashboardOverlay);
+    init_thunk(&thunks[44], r, winIVROverlay_IVROverlay_005_IsDashboardVisible);
+    init_thunk(&thunks[45], r, winIVROverlay_IVROverlay_005_IsActiveDashboardOverlay);
+    init_thunk(&thunks[46], r, winIVROverlay_IVROverlay_005_SetDashboardOverlaySceneProcess);
+    init_thunk(&thunks[47], r, winIVROverlay_IVROverlay_005_GetDashboardOverlaySceneProcess);
+    init_thunk(&thunks[48], r, winIVROverlay_IVROverlay_005_ShowDashboard);
+    init_thunk(&thunks[49], r, winIVROverlay_IVROverlay_005_ShowKeyboard);
+    init_thunk(&thunks[50], r, winIVROverlay_IVROverlay_005_GetKeyboardText);
+    init_thunk(&thunks[51], r, winIVROverlay_IVROverlay_005_HideKeyboard);
+    for (i = 0; i < 52; i++)
+        vtable[i] = &thunks[i];
+    r->linux_side = linux_side;
+    r->vtable = (void *)vtable;
+    return r;
+}
+
+void destroy_winIVROverlay_IVROverlay_005_FnTable(void *object)
+{
+    winIVROverlay_IVROverlay_005 *win_object = object;
+    TRACE("%p\n", win_object);
+    VirtualFree(win_object->vtable[0], 0, MEM_RELEASE);
+    HeapFree(GetProcessHeap(), 0, win_object->vtable);
+    HeapFree(GetProcessHeap(), 0, win_object);
+}
+
 #include "cppIVROverlay_IVROverlay_004.h"
 
 typedef struct __winIVROverlay_IVROverlay_004 {
@@ -6884,6 +7911,78 @@ void destroy_winIVROverlay_IVROverlay_004(void *object)
     HeapFree(GetProcessHeap(), 0, object);
 }
 
+winIVROverlay_IVROverlay_004 *create_winIVROverlay_IVROverlay_004_FnTable(void *linux_side)
+{
+    winIVROverlay_IVROverlay_004 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVROverlay_IVROverlay_004));
+    struct thunk *thunks = alloc_thunks(48);
+    struct thunk **vtable = HeapAlloc(GetProcessHeap(), 0, 48 * sizeof(*vtable));
+    int i;
+
+    TRACE("-> %p, vtable %p, thunks %p\n", r, vtable, thunks);
+    init_thunk(&thunks[0], r, winIVROverlay_IVROverlay_004_FindOverlay);
+    init_thunk(&thunks[1], r, winIVROverlay_IVROverlay_004_CreateOverlay);
+    init_thunk(&thunks[2], r, winIVROverlay_IVROverlay_004_DestroyOverlay);
+    init_thunk(&thunks[3], r, winIVROverlay_IVROverlay_004_SetHighQualityOverlay);
+    init_thunk(&thunks[4], r, winIVROverlay_IVROverlay_004_GetHighQualityOverlay);
+    init_thunk(&thunks[5], r, winIVROverlay_IVROverlay_004_GetOverlayKey);
+    init_thunk(&thunks[6], r, winIVROverlay_IVROverlay_004_GetOverlayName);
+    init_thunk(&thunks[7], r, winIVROverlay_IVROverlay_004_GetOverlayImageData);
+    init_thunk(&thunks[8], r, winIVROverlay_IVROverlay_004_GetOverlayErrorNameFromEnum);
+    init_thunk(&thunks[9], r, winIVROverlay_IVROverlay_004_SetOverlayFlag);
+    init_thunk(&thunks[10], r, winIVROverlay_IVROverlay_004_GetOverlayFlag);
+    init_thunk(&thunks[11], r, winIVROverlay_IVROverlay_004_SetOverlayColor);
+    init_thunk(&thunks[12], r, winIVROverlay_IVROverlay_004_GetOverlayColor);
+    init_thunk(&thunks[13], r, winIVROverlay_IVROverlay_004_SetOverlayAlpha);
+    init_thunk(&thunks[14], r, winIVROverlay_IVROverlay_004_GetOverlayAlpha);
+    init_thunk(&thunks[15], r, winIVROverlay_IVROverlay_004_SetOverlayGamma);
+    init_thunk(&thunks[16], r, winIVROverlay_IVROverlay_004_GetOverlayGamma);
+    init_thunk(&thunks[17], r, winIVROverlay_IVROverlay_004_SetOverlayWidthInMeters);
+    init_thunk(&thunks[18], r, winIVROverlay_IVROverlay_004_GetOverlayWidthInMeters);
+    init_thunk(&thunks[19], r, winIVROverlay_IVROverlay_004_SetOverlayAutoCurveDistanceRangeInMeters);
+    init_thunk(&thunks[20], r, winIVROverlay_IVROverlay_004_GetOverlayAutoCurveDistanceRangeInMeters);
+    init_thunk(&thunks[21], r, winIVROverlay_IVROverlay_004_SetOverlayTextureBounds);
+    init_thunk(&thunks[22], r, winIVROverlay_IVROverlay_004_GetOverlayTextureBounds);
+    init_thunk(&thunks[23], r, winIVROverlay_IVROverlay_004_GetOverlayTransformType);
+    init_thunk(&thunks[24], r, winIVROverlay_IVROverlay_004_SetOverlayTransformAbsolute);
+    init_thunk(&thunks[25], r, winIVROverlay_IVROverlay_004_GetOverlayTransformAbsolute);
+    init_thunk(&thunks[26], r, winIVROverlay_IVROverlay_004_SetOverlayTransformTrackedDeviceRelative);
+    init_thunk(&thunks[27], r, winIVROverlay_IVROverlay_004_GetOverlayTransformTrackedDeviceRelative);
+    init_thunk(&thunks[28], r, winIVROverlay_IVROverlay_004_ShowOverlay);
+    init_thunk(&thunks[29], r, winIVROverlay_IVROverlay_004_HideOverlay);
+    init_thunk(&thunks[30], r, winIVROverlay_IVROverlay_004_IsOverlayVisible);
+    init_thunk(&thunks[31], r, winIVROverlay_IVROverlay_004_PollNextOverlayEvent);
+    init_thunk(&thunks[32], r, winIVROverlay_IVROverlay_004_GetOverlayInputMethod);
+    init_thunk(&thunks[33], r, winIVROverlay_IVROverlay_004_SetOverlayInputMethod);
+    init_thunk(&thunks[34], r, winIVROverlay_IVROverlay_004_GetOverlayMouseScale);
+    init_thunk(&thunks[35], r, winIVROverlay_IVROverlay_004_SetOverlayMouseScale);
+    init_thunk(&thunks[36], r, winIVROverlay_IVROverlay_004_ComputeOverlayIntersection);
+    init_thunk(&thunks[37], r, winIVROverlay_IVROverlay_004_HandleControllerOverlayInteractionAsMouse);
+    init_thunk(&thunks[38], r, winIVROverlay_IVROverlay_004_SetOverlayTexture);
+    init_thunk(&thunks[39], r, winIVROverlay_IVROverlay_004_ClearOverlayTexture);
+    init_thunk(&thunks[40], r, winIVROverlay_IVROverlay_004_SetOverlayRaw);
+    init_thunk(&thunks[41], r, winIVROverlay_IVROverlay_004_SetOverlayFromFile);
+    init_thunk(&thunks[42], r, winIVROverlay_IVROverlay_004_CreateDashboardOverlay);
+    init_thunk(&thunks[43], r, winIVROverlay_IVROverlay_004_IsDashboardVisible);
+    init_thunk(&thunks[44], r, winIVROverlay_IVROverlay_004_IsActiveDashboardOverlay);
+    init_thunk(&thunks[45], r, winIVROverlay_IVROverlay_004_SetDashboardOverlaySceneProcess);
+    init_thunk(&thunks[46], r, winIVROverlay_IVROverlay_004_GetDashboardOverlaySceneProcess);
+    init_thunk(&thunks[47], r, winIVROverlay_IVROverlay_004_ShowDashboard);
+    for (i = 0; i < 48; i++)
+        vtable[i] = &thunks[i];
+    r->linux_side = linux_side;
+    r->vtable = (void *)vtable;
+    return r;
+}
+
+void destroy_winIVROverlay_IVROverlay_004_FnTable(void *object)
+{
+    winIVROverlay_IVROverlay_004 *win_object = object;
+    TRACE("%p\n", win_object);
+    VirtualFree(win_object->vtable[0], 0, MEM_RELEASE);
+    HeapFree(GetProcessHeap(), 0, win_object->vtable);
+    HeapFree(GetProcessHeap(), 0, win_object);
+}
+
 #include "cppIVROverlay_IVROverlay_003.h"
 
 typedef struct __winIVROverlay_IVROverlay_003 {
@@ -7285,6 +8384,76 @@ void destroy_winIVROverlay_IVROverlay_003(void *object)
     HeapFree(GetProcessHeap(), 0, object);
 }
 
+winIVROverlay_IVROverlay_003 *create_winIVROverlay_IVROverlay_003_FnTable(void *linux_side)
+{
+    winIVROverlay_IVROverlay_003 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVROverlay_IVROverlay_003));
+    struct thunk *thunks = alloc_thunks(46);
+    struct thunk **vtable = HeapAlloc(GetProcessHeap(), 0, 46 * sizeof(*vtable));
+    int i;
+
+    TRACE("-> %p, vtable %p, thunks %p\n", r, vtable, thunks);
+    init_thunk(&thunks[0], r, winIVROverlay_IVROverlay_003_FindOverlay);
+    init_thunk(&thunks[1], r, winIVROverlay_IVROverlay_003_CreateOverlay);
+    init_thunk(&thunks[2], r, winIVROverlay_IVROverlay_003_DestroyOverlay);
+    init_thunk(&thunks[3], r, winIVROverlay_IVROverlay_003_SetHighQualityOverlay);
+    init_thunk(&thunks[4], r, winIVROverlay_IVROverlay_003_GetHighQualityOverlay);
+    init_thunk(&thunks[5], r, winIVROverlay_IVROverlay_003_GetOverlayKey);
+    init_thunk(&thunks[6], r, winIVROverlay_IVROverlay_003_GetOverlayName);
+    init_thunk(&thunks[7], r, winIVROverlay_IVROverlay_003_GetOverlayImageData);
+    init_thunk(&thunks[8], r, winIVROverlay_IVROverlay_003_GetOverlayErrorNameFromEnum);
+    init_thunk(&thunks[9], r, winIVROverlay_IVROverlay_003_SetOverlayFlag);
+    init_thunk(&thunks[10], r, winIVROverlay_IVROverlay_003_GetOverlayFlag);
+    init_thunk(&thunks[11], r, winIVROverlay_IVROverlay_003_SetOverlayColor);
+    init_thunk(&thunks[12], r, winIVROverlay_IVROverlay_003_GetOverlayColor);
+    init_thunk(&thunks[13], r, winIVROverlay_IVROverlay_003_SetOverlayAlpha);
+    init_thunk(&thunks[14], r, winIVROverlay_IVROverlay_003_GetOverlayAlpha);
+    init_thunk(&thunks[15], r, winIVROverlay_IVROverlay_003_SetOverlayGamma);
+    init_thunk(&thunks[16], r, winIVROverlay_IVROverlay_003_GetOverlayGamma);
+    init_thunk(&thunks[17], r, winIVROverlay_IVROverlay_003_SetOverlayWidthInMeters);
+    init_thunk(&thunks[18], r, winIVROverlay_IVROverlay_003_GetOverlayWidthInMeters);
+    init_thunk(&thunks[19], r, winIVROverlay_IVROverlay_003_SetOverlayTextureBounds);
+    init_thunk(&thunks[20], r, winIVROverlay_IVROverlay_003_GetOverlayTextureBounds);
+    init_thunk(&thunks[21], r, winIVROverlay_IVROverlay_003_GetOverlayTransformType);
+    init_thunk(&thunks[22], r, winIVROverlay_IVROverlay_003_SetOverlayTransformAbsolute);
+    init_thunk(&thunks[23], r, winIVROverlay_IVROverlay_003_GetOverlayTransformAbsolute);
+    init_thunk(&thunks[24], r, winIVROverlay_IVROverlay_003_SetOverlayTransformTrackedDeviceRelative);
+    init_thunk(&thunks[25], r, winIVROverlay_IVROverlay_003_GetOverlayTransformTrackedDeviceRelative);
+    init_thunk(&thunks[26], r, winIVROverlay_IVROverlay_003_ShowOverlay);
+    init_thunk(&thunks[27], r, winIVROverlay_IVROverlay_003_HideOverlay);
+    init_thunk(&thunks[28], r, winIVROverlay_IVROverlay_003_IsOverlayVisible);
+    init_thunk(&thunks[29], r, winIVROverlay_IVROverlay_003_PollNextOverlayEvent);
+    init_thunk(&thunks[30], r, winIVROverlay_IVROverlay_003_GetOverlayInputMethod);
+    init_thunk(&thunks[31], r, winIVROverlay_IVROverlay_003_SetOverlayInputMethod);
+    init_thunk(&thunks[32], r, winIVROverlay_IVROverlay_003_GetOverlayMouseScale);
+    init_thunk(&thunks[33], r, winIVROverlay_IVROverlay_003_SetOverlayMouseScale);
+    init_thunk(&thunks[34], r, winIVROverlay_IVROverlay_003_ComputeOverlayIntersection);
+    init_thunk(&thunks[35], r, winIVROverlay_IVROverlay_003_HandleControllerOverlayInteractionAsMouse);
+    init_thunk(&thunks[36], r, winIVROverlay_IVROverlay_003_SetOverlayTexture);
+    init_thunk(&thunks[37], r, winIVROverlay_IVROverlay_003_ClearOverlayTexture);
+    init_thunk(&thunks[38], r, winIVROverlay_IVROverlay_003_SetOverlayRaw);
+    init_thunk(&thunks[39], r, winIVROverlay_IVROverlay_003_SetOverlayFromFile);
+    init_thunk(&thunks[40], r, winIVROverlay_IVROverlay_003_CreateDashboardOverlay);
+    init_thunk(&thunks[41], r, winIVROverlay_IVROverlay_003_IsDashboardVisible);
+    init_thunk(&thunks[42], r, winIVROverlay_IVROverlay_003_IsActiveDashboardOverlay);
+    init_thunk(&thunks[43], r, winIVROverlay_IVROverlay_003_SetDashboardOverlaySceneProcess);
+    init_thunk(&thunks[44], r, winIVROverlay_IVROverlay_003_GetDashboardOverlaySceneProcess);
+    init_thunk(&thunks[45], r, winIVROverlay_IVROverlay_003_ShowDashboard);
+    for (i = 0; i < 46; i++)
+        vtable[i] = &thunks[i];
+    r->linux_side = linux_side;
+    r->vtable = (void *)vtable;
+    return r;
+}
+
+void destroy_winIVROverlay_IVROverlay_003_FnTable(void *object)
+{
+    winIVROverlay_IVROverlay_003 *win_object = object;
+    TRACE("%p\n", win_object);
+    VirtualFree(win_object->vtable[0], 0, MEM_RELEASE);
+    HeapFree(GetProcessHeap(), 0, win_object->vtable);
+    HeapFree(GetProcessHeap(), 0, win_object);
+}
+
 #include "cppIVROverlay_IVROverlay_002.h"
 
 typedef struct __winIVROverlay_IVROverlay_002 {
@@ -7654,6 +8823,72 @@ void destroy_winIVROverlay_IVROverlay_002(void *object)
     HeapFree(GetProcessHeap(), 0, object);
 }
 
+winIVROverlay_IVROverlay_002 *create_winIVROverlay_IVROverlay_002_FnTable(void *linux_side)
+{
+    winIVROverlay_IVROverlay_002 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVROverlay_IVROverlay_002));
+    struct thunk *thunks = alloc_thunks(42);
+    struct thunk **vtable = HeapAlloc(GetProcessHeap(), 0, 42 * sizeof(*vtable));
+    int i;
+
+    TRACE("-> %p, vtable %p, thunks %p\n", r, vtable, thunks);
+    init_thunk(&thunks[0], r, winIVROverlay_IVROverlay_002_FindOverlay);
+    init_thunk(&thunks[1], r, winIVROverlay_IVROverlay_002_CreateOverlay);
+    init_thunk(&thunks[2], r, winIVROverlay_IVROverlay_002_DestroyOverlay);
+    init_thunk(&thunks[3], r, winIVROverlay_IVROverlay_002_SetHighQualityOverlay);
+    init_thunk(&thunks[4], r, winIVROverlay_IVROverlay_002_GetHighQualityOverlay);
+    init_thunk(&thunks[5], r, winIVROverlay_IVROverlay_002_GetOverlayErrorNameFromEnum);
+    init_thunk(&thunks[6], r, winIVROverlay_IVROverlay_002_SetOverlayFlag);
+    init_thunk(&thunks[7], r, winIVROverlay_IVROverlay_002_GetOverlayFlag);
+    init_thunk(&thunks[8], r, winIVROverlay_IVROverlay_002_SetOverlayColor);
+    init_thunk(&thunks[9], r, winIVROverlay_IVROverlay_002_GetOverlayColor);
+    init_thunk(&thunks[10], r, winIVROverlay_IVROverlay_002_SetOverlayAlpha);
+    init_thunk(&thunks[11], r, winIVROverlay_IVROverlay_002_GetOverlayAlpha);
+    init_thunk(&thunks[12], r, winIVROverlay_IVROverlay_002_SetOverlayGamma);
+    init_thunk(&thunks[13], r, winIVROverlay_IVROverlay_002_GetOverlayGamma);
+    init_thunk(&thunks[14], r, winIVROverlay_IVROverlay_002_SetOverlayWidthInMeters);
+    init_thunk(&thunks[15], r, winIVROverlay_IVROverlay_002_GetOverlayWidthInMeters);
+    init_thunk(&thunks[16], r, winIVROverlay_IVROverlay_002_SetOverlayTextureBounds);
+    init_thunk(&thunks[17], r, winIVROverlay_IVROverlay_002_GetOverlayTextureBounds);
+    init_thunk(&thunks[18], r, winIVROverlay_IVROverlay_002_GetOverlayTransformType);
+    init_thunk(&thunks[19], r, winIVROverlay_IVROverlay_002_SetOverlayTransformAbsolute);
+    init_thunk(&thunks[20], r, winIVROverlay_IVROverlay_002_GetOverlayTransformAbsolute);
+    init_thunk(&thunks[21], r, winIVROverlay_IVROverlay_002_SetOverlayTransformTrackedDeviceRelative);
+    init_thunk(&thunks[22], r, winIVROverlay_IVROverlay_002_GetOverlayTransformTrackedDeviceRelative);
+    init_thunk(&thunks[23], r, winIVROverlay_IVROverlay_002_ShowOverlay);
+    init_thunk(&thunks[24], r, winIVROverlay_IVROverlay_002_HideOverlay);
+    init_thunk(&thunks[25], r, winIVROverlay_IVROverlay_002_IsOverlayVisible);
+    init_thunk(&thunks[26], r, winIVROverlay_IVROverlay_002_PollNextOverlayEvent);
+    init_thunk(&thunks[27], r, winIVROverlay_IVROverlay_002_GetOverlayInputMethod);
+    init_thunk(&thunks[28], r, winIVROverlay_IVROverlay_002_SetOverlayInputMethod);
+    init_thunk(&thunks[29], r, winIVROverlay_IVROverlay_002_GetOverlayMouseScale);
+    init_thunk(&thunks[30], r, winIVROverlay_IVROverlay_002_SetOverlayMouseScale);
+    init_thunk(&thunks[31], r, winIVROverlay_IVROverlay_002_ComputeOverlayIntersection);
+    init_thunk(&thunks[32], r, winIVROverlay_IVROverlay_002_HandleControllerOverlayInteractionAsMouse);
+    init_thunk(&thunks[33], r, winIVROverlay_IVROverlay_002_SetOverlayTexture);
+    init_thunk(&thunks[34], r, winIVROverlay_IVROverlay_002_ClearOverlayTexture);
+    init_thunk(&thunks[35], r, winIVROverlay_IVROverlay_002_SetOverlayRaw);
+    init_thunk(&thunks[36], r, winIVROverlay_IVROverlay_002_SetOverlayFromFile);
+    init_thunk(&thunks[37], r, winIVROverlay_IVROverlay_002_CreateDashboardOverlay);
+    init_thunk(&thunks[38], r, winIVROverlay_IVROverlay_002_IsDashboardVisible);
+    init_thunk(&thunks[39], r, winIVROverlay_IVROverlay_002_IsActiveDashboardOverlay);
+    init_thunk(&thunks[40], r, winIVROverlay_IVROverlay_002_SetDashboardOverlaySceneProcess);
+    init_thunk(&thunks[41], r, winIVROverlay_IVROverlay_002_GetDashboardOverlaySceneProcess);
+    for (i = 0; i < 42; i++)
+        vtable[i] = &thunks[i];
+    r->linux_side = linux_side;
+    r->vtable = (void *)vtable;
+    return r;
+}
+
+void destroy_winIVROverlay_IVROverlay_002_FnTable(void *object)
+{
+    winIVROverlay_IVROverlay_002 *win_object = object;
+    TRACE("%p\n", win_object);
+    VirtualFree(win_object->vtable[0], 0, MEM_RELEASE);
+    HeapFree(GetProcessHeap(), 0, win_object->vtable);
+    HeapFree(GetProcessHeap(), 0, win_object);
+}
+
 #include "cppIVROverlay_IVROverlay_001.h"
 
 typedef struct __winIVROverlay_IVROverlay_001 {
@@ -8005,5 +9240,69 @@ void destroy_winIVROverlay_IVROverlay_001(void *object)
 {
     TRACE("%p\n", object);
     HeapFree(GetProcessHeap(), 0, object);
+}
+
+winIVROverlay_IVROverlay_001 *create_winIVROverlay_IVROverlay_001_FnTable(void *linux_side)
+{
+    winIVROverlay_IVROverlay_001 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVROverlay_IVROverlay_001));
+    struct thunk *thunks = alloc_thunks(40);
+    struct thunk **vtable = HeapAlloc(GetProcessHeap(), 0, 40 * sizeof(*vtable));
+    int i;
+
+    TRACE("-> %p, vtable %p, thunks %p\n", r, vtable, thunks);
+    init_thunk(&thunks[0], r, winIVROverlay_IVROverlay_001_FindOverlay);
+    init_thunk(&thunks[1], r, winIVROverlay_IVROverlay_001_CreateOverlay);
+    init_thunk(&thunks[2], r, winIVROverlay_IVROverlay_001_DestroyOverlay);
+    init_thunk(&thunks[3], r, winIVROverlay_IVROverlay_001_SetHighQualityOverlay);
+    init_thunk(&thunks[4], r, winIVROverlay_IVROverlay_001_GetHighQualityOverlay);
+    init_thunk(&thunks[5], r, winIVROverlay_IVROverlay_001_GetOverlayErrorNameFromEnum);
+    init_thunk(&thunks[6], r, winIVROverlay_IVROverlay_001_SetOverlayFlag);
+    init_thunk(&thunks[7], r, winIVROverlay_IVROverlay_001_GetOverlayFlag);
+    init_thunk(&thunks[8], r, winIVROverlay_IVROverlay_001_SetOverlayAlpha);
+    init_thunk(&thunks[9], r, winIVROverlay_IVROverlay_001_GetOverlayAlpha);
+    init_thunk(&thunks[10], r, winIVROverlay_IVROverlay_001_SetOverlayGamma);
+    init_thunk(&thunks[11], r, winIVROverlay_IVROverlay_001_GetOverlayGamma);
+    init_thunk(&thunks[12], r, winIVROverlay_IVROverlay_001_SetOverlayWidthInMeters);
+    init_thunk(&thunks[13], r, winIVROverlay_IVROverlay_001_GetOverlayWidthInMeters);
+    init_thunk(&thunks[14], r, winIVROverlay_IVROverlay_001_SetOverlayTextureBounds);
+    init_thunk(&thunks[15], r, winIVROverlay_IVROverlay_001_GetOverlayTextureBounds);
+    init_thunk(&thunks[16], r, winIVROverlay_IVROverlay_001_GetOverlayTransformType);
+    init_thunk(&thunks[17], r, winIVROverlay_IVROverlay_001_SetOverlayTransformAbsolute);
+    init_thunk(&thunks[18], r, winIVROverlay_IVROverlay_001_GetOverlayTransformAbsolute);
+    init_thunk(&thunks[19], r, winIVROverlay_IVROverlay_001_SetOverlayTransformTrackedDeviceRelative);
+    init_thunk(&thunks[20], r, winIVROverlay_IVROverlay_001_GetOverlayTransformTrackedDeviceRelative);
+    init_thunk(&thunks[21], r, winIVROverlay_IVROverlay_001_GetOverlayVisibility);
+    init_thunk(&thunks[22], r, winIVROverlay_IVROverlay_001_SetOverlayVisibility);
+    init_thunk(&thunks[23], r, winIVROverlay_IVROverlay_001_ShowOverlay);
+    init_thunk(&thunks[24], r, winIVROverlay_IVROverlay_001_HideOverlay);
+    init_thunk(&thunks[25], r, winIVROverlay_IVROverlay_001_IsOverlayVisible);
+    init_thunk(&thunks[26], r, winIVROverlay_IVROverlay_001_PollNextOverlayEvent);
+    init_thunk(&thunks[27], r, winIVROverlay_IVROverlay_001_GetOverlayInputMethod);
+    init_thunk(&thunks[28], r, winIVROverlay_IVROverlay_001_SetOverlayInputMethod);
+    init_thunk(&thunks[29], r, winIVROverlay_IVROverlay_001_GetOverlayMouseScale);
+    init_thunk(&thunks[30], r, winIVROverlay_IVROverlay_001_SetOverlayMouseScale);
+    init_thunk(&thunks[31], r, winIVROverlay_IVROverlay_001_ComputeOverlayIntersection);
+    init_thunk(&thunks[32], r, winIVROverlay_IVROverlay_001_HandleControllerOverlayInteractionAsMouse);
+    init_thunk(&thunks[33], r, winIVROverlay_IVROverlay_001_SetOverlayTexture);
+    init_thunk(&thunks[34], r, winIVROverlay_IVROverlay_001_SetOverlayRaw);
+    init_thunk(&thunks[35], r, winIVROverlay_IVROverlay_001_SetOverlayFromFile);
+    init_thunk(&thunks[36], r, winIVROverlay_IVROverlay_001_IsSystemOverlayVisible);
+    init_thunk(&thunks[37], r, winIVROverlay_IVROverlay_001_IsActiveSystemOverlay);
+    init_thunk(&thunks[38], r, winIVROverlay_IVROverlay_001_SetSystemOverlaySceneProcess);
+    init_thunk(&thunks[39], r, winIVROverlay_IVROverlay_001_GetSystemOverlaySceneProcess);
+    for (i = 0; i < 40; i++)
+        vtable[i] = &thunks[i];
+    r->linux_side = linux_side;
+    r->vtable = (void *)vtable;
+    return r;
+}
+
+void destroy_winIVROverlay_IVROverlay_001_FnTable(void *object)
+{
+    winIVROverlay_IVROverlay_001 *win_object = object;
+    TRACE("%p\n", win_object);
+    VirtualFree(win_object->vtable[0], 0, MEM_RELEASE);
+    HeapFree(GetProcessHeap(), 0, win_object->vtable);
+    HeapFree(GetProcessHeap(), 0, win_object);
 }
 

@@ -14,6 +14,8 @@
 
 #include "struct_converters.h"
 
+#include "flatapi.h"
+
 WINE_DEFAULT_DEBUG_CHANNEL(vrclient);
 
 #include "cppIVRClientCore_IVRClientCore_003.h"
@@ -106,6 +108,37 @@ void destroy_winIVRClientCore_IVRClientCore_003(void *object)
     HeapFree(GetProcessHeap(), 0, object);
 }
 
+winIVRClientCore_IVRClientCore_003 *create_winIVRClientCore_IVRClientCore_003_FnTable(void *linux_side)
+{
+    winIVRClientCore_IVRClientCore_003 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRClientCore_IVRClientCore_003));
+    struct thunk *thunks = alloc_thunks(7);
+    struct thunk **vtable = HeapAlloc(GetProcessHeap(), 0, 7 * sizeof(*vtable));
+    int i;
+
+    TRACE("-> %p, vtable %p, thunks %p\n", r, vtable, thunks);
+    init_thunk(&thunks[0], r, winIVRClientCore_IVRClientCore_003_Init);
+    init_thunk(&thunks[1], r, winIVRClientCore_IVRClientCore_003_Cleanup);
+    init_thunk(&thunks[2], r, winIVRClientCore_IVRClientCore_003_IsInterfaceVersionValid);
+    init_thunk(&thunks[3], r, winIVRClientCore_IVRClientCore_003_GetGenericInterface);
+    init_thunk(&thunks[4], r, winIVRClientCore_IVRClientCore_003_BIsHmdPresent);
+    init_thunk(&thunks[5], r, winIVRClientCore_IVRClientCore_003_GetEnglishStringForHmdError);
+    init_thunk(&thunks[6], r, winIVRClientCore_IVRClientCore_003_GetIDForVRInitError);
+    for (i = 0; i < 7; i++)
+        vtable[i] = &thunks[i];
+    r->linux_side = linux_side;
+    r->vtable = (void *)vtable;
+    return r;
+}
+
+void destroy_winIVRClientCore_IVRClientCore_003_FnTable(void *object)
+{
+    winIVRClientCore_IVRClientCore_003 *win_object = object;
+    TRACE("%p\n", win_object);
+    VirtualFree(win_object->vtable[0], 0, MEM_RELEASE);
+    HeapFree(GetProcessHeap(), 0, win_object->vtable);
+    HeapFree(GetProcessHeap(), 0, win_object);
+}
+
 #include "cppIVRClientCore_IVRClientCore_002.h"
 
 typedef struct __winIVRClientCore_IVRClientCore_002 {
@@ -194,5 +227,36 @@ void destroy_winIVRClientCore_IVRClientCore_002(void *object)
 {
     TRACE("%p\n", object);
     HeapFree(GetProcessHeap(), 0, object);
+}
+
+winIVRClientCore_IVRClientCore_002 *create_winIVRClientCore_IVRClientCore_002_FnTable(void *linux_side)
+{
+    winIVRClientCore_IVRClientCore_002 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRClientCore_IVRClientCore_002));
+    struct thunk *thunks = alloc_thunks(7);
+    struct thunk **vtable = HeapAlloc(GetProcessHeap(), 0, 7 * sizeof(*vtable));
+    int i;
+
+    TRACE("-> %p, vtable %p, thunks %p\n", r, vtable, thunks);
+    init_thunk(&thunks[0], r, winIVRClientCore_IVRClientCore_002_Init);
+    init_thunk(&thunks[1], r, winIVRClientCore_IVRClientCore_002_Cleanup);
+    init_thunk(&thunks[2], r, winIVRClientCore_IVRClientCore_002_IsInterfaceVersionValid);
+    init_thunk(&thunks[3], r, winIVRClientCore_IVRClientCore_002_GetGenericInterface);
+    init_thunk(&thunks[4], r, winIVRClientCore_IVRClientCore_002_BIsHmdPresent);
+    init_thunk(&thunks[5], r, winIVRClientCore_IVRClientCore_002_GetEnglishStringForHmdError);
+    init_thunk(&thunks[6], r, winIVRClientCore_IVRClientCore_002_GetIDForVRInitError);
+    for (i = 0; i < 7; i++)
+        vtable[i] = &thunks[i];
+    r->linux_side = linux_side;
+    r->vtable = (void *)vtable;
+    return r;
+}
+
+void destroy_winIVRClientCore_IVRClientCore_002_FnTable(void *object)
+{
+    winIVRClientCore_IVRClientCore_002 *win_object = object;
+    TRACE("%p\n", win_object);
+    VirtualFree(win_object->vtable[0], 0, MEM_RELEASE);
+    HeapFree(GetProcessHeap(), 0, win_object->vtable);
+    HeapFree(GetProcessHeap(), 0, win_object);
 }
 
