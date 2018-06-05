@@ -58,7 +58,11 @@ typedef int
         NotificationError_t,
         VROverlayError,
         VROverlayVisibility,
-        ECameraVideoStreamFormat;
+        ECameraVideoStreamFormat,
+        EVRInputError,
+        EIOBufferError,
+        EVRSkeletalTransformSpace,
+        EIOBufferMode;
 
 typedef uint32_t DriverId_t;
 typedef uint32_t TrackedDeviceIndex_t;
@@ -73,6 +77,10 @@ typedef uint64_t TrackedCameraHandle_t;
 typedef uint32_t PropertyTypeTag_t;
 typedef uint64_t PropertyContainerHandle_t;
 typedef PropertyContainerHandle_t DriverHandle_t;
+typedef uint64_t IOBufferHandle_t;
+typedef uint64_t VRActionHandle_t;
+typedef uint64_t VRActionSetHandle_t;
+typedef uint64_t VRInputValueHandle_t;
 
 /* never dereferenced */
 typedef struct VROverlayIntersectionParams_t VROverlayIntersectionParams_t;
@@ -101,6 +109,13 @@ typedef struct VkDevice_T VkDevice_T;
 typedef struct VkPhysicalDevice_T VkPhysicalDevice_T;
 typedef struct VkInstance_T VkInstance_T;
 typedef struct VkQueue_T VkQueue_T;
+typedef struct InputDigitalActionData_t InputDigitalActionData_t;
+typedef struct InputSkeletonActionData_t InputSkeletonActionData_t;
+typedef struct InputPoseActionData_t InputPoseActionData_t;
+typedef struct InputAnalogActionData_t InputAnalogActionData_t;
+typedef struct VRActiveActionSet_t VRActiveActionSet_t;
+typedef struct VRBoneTransform_t VRBoneTransform_t;
+typedef struct InputOriginInfo_t InputOriginInfo_t;
 
 /* dereferenced structs */
 typedef struct HmdMatrix34_t

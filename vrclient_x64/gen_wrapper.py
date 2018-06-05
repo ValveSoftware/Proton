@@ -59,6 +59,8 @@ files = [
         "IVRDriverManager",
         "IVRExtendedDisplay",
         "IVRNotifications",
+        "IVRInput",
+        "IVRIOBuffer",
         "IVROverlay",
         "IVRRenderModels",
         "IVRResources",
@@ -622,7 +624,7 @@ def handle_struct(sdkver, struct, which):
 
 #clang.cindex.Config.set_library_file("/usr/lib/llvm-3.8/lib/libclang-3.8.so.1");
 
-prog = re.compile("^.*const\s*char.* (\w*)_Version.*\"(.*)\"")
+prog = re.compile("^.*const\s*char.* \*?(\w*)_Version.*\"(.*)\"")
 for sdkver in sdk_versions:
     iface_versions = {}
     print("sdkver is: " + sdkver)
