@@ -942,7 +942,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_020_WaitGetPoses, 28)
 EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_020_WaitGetPoses(winIVRCompositor_IVRCompositor_020 *_this, TrackedDevicePose_t * pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t * pGamePoseArray, uint32_t unGamePoseArrayCount)
 {
     TRACE("%p\n", _this);
-    return cppIVRCompositor_IVRCompositor_020_WaitGetPoses(_this->linux_side, pRenderPoseArray, unRenderPoseArrayCount, pGamePoseArray, unGamePoseArrayCount);
+    return ivrcompositor_wait_get_poses(cppIVRCompositor_IVRCompositor_020_WaitGetPoses, _this->linux_side, pRenderPoseArray, unRenderPoseArrayCount, pGamePoseArray, unGamePoseArrayCount, 20, &_this->user_data);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_020_GetLastPoses, 28)
@@ -1373,7 +1373,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_019_WaitGetPoses, 28)
 EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_019_WaitGetPoses(winIVRCompositor_IVRCompositor_019 *_this, TrackedDevicePose_t * pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t * pGamePoseArray, uint32_t unGamePoseArrayCount)
 {
     TRACE("%p\n", _this);
-    return cppIVRCompositor_IVRCompositor_019_WaitGetPoses(_this->linux_side, pRenderPoseArray, unRenderPoseArrayCount, pGamePoseArray, unGamePoseArrayCount);
+    return ivrcompositor_wait_get_poses(cppIVRCompositor_IVRCompositor_019_WaitGetPoses, _this->linux_side, pRenderPoseArray, unRenderPoseArrayCount, pGamePoseArray, unGamePoseArrayCount, 19, &_this->user_data);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_019_GetLastPoses, 28)
@@ -1795,7 +1795,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_018_WaitGetPoses, 28)
 EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_018_WaitGetPoses(winIVRCompositor_IVRCompositor_018 *_this, TrackedDevicePose_t * pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t * pGamePoseArray, uint32_t unGamePoseArrayCount)
 {
     TRACE("%p\n", _this);
-    return cppIVRCompositor_IVRCompositor_018_WaitGetPoses(_this->linux_side, pRenderPoseArray, unRenderPoseArrayCount, pGamePoseArray, unGamePoseArrayCount);
+    return ivrcompositor_wait_get_poses(cppIVRCompositor_IVRCompositor_018_WaitGetPoses, _this->linux_side, pRenderPoseArray, unRenderPoseArrayCount, pGamePoseArray, unGamePoseArrayCount, 18, &_this->user_data);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_018_GetLastPoses, 28)
@@ -2199,7 +2199,7 @@ DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_016_WaitGetPoses, 28)
 EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_016_WaitGetPoses(winIVRCompositor_IVRCompositor_016 *_this, TrackedDevicePose_t * pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t * pGamePoseArray, uint32_t unGamePoseArrayCount)
 {
     TRACE("%p\n", _this);
-    return cppIVRCompositor_IVRCompositor_016_WaitGetPoses(_this->linux_side, pRenderPoseArray, unRenderPoseArrayCount, pGamePoseArray, unGamePoseArrayCount);
+    return ivrcompositor_wait_get_poses(cppIVRCompositor_IVRCompositor_016_WaitGetPoses, _this->linux_side, pRenderPoseArray, unRenderPoseArrayCount, pGamePoseArray, unGamePoseArrayCount, 16, &_this->user_data);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_016_GetLastPoses, 28)

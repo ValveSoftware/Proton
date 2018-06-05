@@ -159,7 +159,7 @@ def ivrcompositor_post_present_handoff(cppname, method):
     return "ivrcompositor_post_present_handoff"
 
 def ivrcompositor_wait_get_poses(cppname, method):
-    for version in ["021", "022"]:
+    for version in ["016", "018", "019", "020", "021", "022"]:
         if version in cppname:
             return "ivrcompositor_wait_get_poses"
     return None

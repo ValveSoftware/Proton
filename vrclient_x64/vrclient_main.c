@@ -25,6 +25,7 @@
 
 #include "flatapi.h"
 
+#include "cppIVRClientCore_IVRClientCore_003.h"
 #include "cppIVRCompositor_IVRCompositor_021.h"
 #include "cppIVRCompositor_IVRCompositor_022.h"
 
@@ -482,6 +483,14 @@ VRCompositorError ivrcompositor_008_submit(
     return cpp_func(linux_side, eye, api, texture, bounds, flags);
 }
 
+static void *our_compositor;
+
+static void get_our_compositor(void)
+{
+    void *client_core = vrclient_VRClientCoreFactory("IVRClientCore_003", NULL);
+    our_compositor = cppIVRClientCore_IVRClientCore_003_GetGenericInterface(client_core, "IVRCompositor_022", NULL);
+}
+
 EVRCompositorError ivrcompositor_submit(
         EVRCompositorError (*cpp_func)(void *, EVREye, Texture_t *, VRTextureBounds_t *, EVRSubmitFlags),
         void *linux_side, EVREye eye, Texture_t *texture, VRTextureBounds_t *bounds, EVRSubmitFlags flags,
@@ -514,6 +523,8 @@ EVRCompositorError ivrcompositor_submit(
                 wine_texture->lpVtbl->GetDevice(wine_texture, &device);
                 if (user_data->d3d11_device != device)
                 {
+                    void *timing_compositor = linux_side;
+
                     if (user_data->d3d11_device)
                         FIXME("Previous submit was from different D3D11 device.\n");
 
@@ -534,17 +545,23 @@ EVRCompositorError ivrcompositor_submit(
                     TRACE("Enabling explicit timing mode.\n");
                     switch (version)
                     {
+                        /* older, supported versions */
                         case 21:
                             cppIVRCompositor_IVRCompositor_021_SetExplicitTimingMode(linux_side,
                                     VRCompositorTimingMode_Explicit_ApplicationPerformsPostPresentHandoff);
                             break;
-                        case 22:
-                            cppIVRCompositor_IVRCompositor_022_SetExplicitTimingMode(linux_side,
-                                    VRCompositorTimingMode_Explicit_ApplicationPerformsPostPresentHandoff);
-                            break;
                         default:
-                            FIXME("Version %u not supported.\n", version);
-                            user_data->wined3d_device = NULL;
+                            {
+                                if(!our_compositor){
+                                    TRACE("Performing hack for old compositor version %u.\n", version);
+                                    get_our_compositor();
+                                }
+                                timing_compositor = our_compositor;
+                            }
+                            /* fall through, below version MUST match version in get_our_compositor() */
+                        case 22:
+                            cppIVRCompositor_IVRCompositor_022_SetExplicitTimingMode(timing_compositor,
+                                    VRCompositorTimingMode_Explicit_ApplicationPerformsPostPresentHandoff);
                             break;
                     }
                 }
@@ -796,6 +813,7 @@ static CDECL void d3d11_explicit_timing_callback(const void *data, unsigned int 
 {
     const struct explicit_timing_data *callback_data = data;
     EVRCompositorError error;
+    void *timing_compositor = callback_data->linux_side;
 
     TRACE("data {%p, %u}\n", data, data_size);
 
@@ -804,11 +822,18 @@ static CDECL void d3d11_explicit_timing_callback(const void *data, unsigned int 
         case 21:
             error = cppIVRCompositor_IVRCompositor_021_SubmitExplicitTimingData(callback_data->linux_side);
             break;
-        case 22:
-            error = cppIVRCompositor_IVRCompositor_022_SubmitExplicitTimingData(callback_data->linux_side);
-            break;
         default:
-            ERR("Unexpected version %#x\n", callback_data->version);
+            {
+                if(!our_compositor){
+                    TRACE("Performing hack for old compositor version %u.\n", callback_data->version);
+                    get_our_compositor();
+                }
+                timing_compositor = our_compositor;
+            }
+            /* fall through, below version MUST match version in get_our_compositor() */
+        case 22:
+            error = cppIVRCompositor_IVRCompositor_022_SubmitExplicitTimingData(timing_compositor);
+            break;
     }
 
     if (error)
