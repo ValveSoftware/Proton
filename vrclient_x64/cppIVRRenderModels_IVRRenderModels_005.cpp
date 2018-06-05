@@ -1,6 +1,6 @@
 #include "vrclient_private.h"
 #include "vrclient_defs.h"
-#include "openvr_v1.0.12/ivrclientcore.h"
+#include "openvr_v1.0.15/ivrclientcore.h"
 using namespace vr;
 extern "C" {
 #include "struct_converters.h"
@@ -9,34 +9,34 @@ extern "C" {
 #ifdef __cplusplus
 extern "C" {
 #endif
-vr::EVRRenderModelError cppIVRRenderModels_IVRRenderModels_005_LoadRenderModel_Async(void *linux_side, const char * pchRenderModelName, winRenderModel_t_1012 ** ppRenderModel)
+vr::EVRRenderModelError cppIVRRenderModels_IVRRenderModels_005_LoadRenderModel_Async(void *linux_side, const char * pchRenderModelName, winRenderModel_t_1015 ** ppRenderModel)
 {
     RenderModel_t *lin;
     vr::EVRRenderModelError _ret;
     _ret = ((IVRRenderModels*)linux_side)->LoadRenderModel_Async((const char *)pchRenderModelName, &lin);
     if(_ret == 0)
-        *ppRenderModel = struct_RenderModel_t_1012_wrap(lin);
+        *ppRenderModel = struct_RenderModel_t_1015_wrap(lin);
     return _ret;
 }
 
-void cppIVRRenderModels_IVRRenderModels_005_FreeRenderModel(void *linux_side, winRenderModel_t_1012 * pRenderModel)
+void cppIVRRenderModels_IVRRenderModels_005_FreeRenderModel(void *linux_side, winRenderModel_t_1015 * pRenderModel)
 {
-    ((IVRRenderModels*)linux_side)->FreeRenderModel(struct_RenderModel_t_1012_unwrap(pRenderModel));
+    ((IVRRenderModels*)linux_side)->FreeRenderModel(struct_RenderModel_t_1015_unwrap(pRenderModel));
 }
 
-vr::EVRRenderModelError cppIVRRenderModels_IVRRenderModels_005_LoadTexture_Async(void *linux_side, TextureID_t textureId, winRenderModel_TextureMap_t_1012 ** ppTexture)
+vr::EVRRenderModelError cppIVRRenderModels_IVRRenderModels_005_LoadTexture_Async(void *linux_side, TextureID_t textureId, winRenderModel_TextureMap_t_1015 ** ppTexture)
 {
     RenderModel_TextureMap_t *lin;
     vr::EVRRenderModelError _ret;
     _ret = ((IVRRenderModels*)linux_side)->LoadTexture_Async((vr::TextureID_t)textureId, &lin);
     if(_ret == 0)
-        *ppTexture = struct_RenderModel_TextureMap_t_1012_wrap(lin);
+        *ppTexture = struct_RenderModel_TextureMap_t_1015_wrap(lin);
     return _ret;
 }
 
-void cppIVRRenderModels_IVRRenderModels_005_FreeTexture(void *linux_side, winRenderModel_TextureMap_t_1012 * pTexture)
+void cppIVRRenderModels_IVRRenderModels_005_FreeTexture(void *linux_side, winRenderModel_TextureMap_t_1015 * pTexture)
 {
-    ((IVRRenderModels*)linux_side)->FreeTexture(struct_RenderModel_TextureMap_t_1012_unwrap(pTexture));
+    ((IVRRenderModels*)linux_side)->FreeTexture(struct_RenderModel_TextureMap_t_1015_unwrap(pTexture));
 }
 
 vr::EVRRenderModelError cppIVRRenderModels_IVRRenderModels_005_LoadTextureD3D11_Async(void *linux_side, TextureID_t textureId, void * pD3D11Device, void ** ppD3D11Texture2D)

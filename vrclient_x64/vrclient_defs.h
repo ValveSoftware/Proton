@@ -71,6 +71,8 @@ typedef void *glSharedTextureHandle_t;
 typedef uint64_t VROverlayHandle_t;
 typedef uint64_t TrackedCameraHandle_t;
 typedef uint32_t PropertyTypeTag_t;
+typedef uint64_t PropertyContainerHandle_t;
+typedef PropertyContainerHandle_t DriverHandle_t;
 
 /* never dereferenced */
 typedef struct VROverlayIntersectionParams_t VROverlayIntersectionParams_t;

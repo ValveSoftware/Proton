@@ -39,6 +39,13 @@ uint32_t __thiscall winIVRDriverManager_IVRDriverManager_001_GetDriverName(winIV
     return cppIVRDriverManager_IVRDriverManager_001_GetDriverName(_this->linux_side, nDriver, pchValue, unBufferSize);
 }
 
+DEFINE_THISCALL_WRAPPER(winIVRDriverManager_IVRDriverManager_001_GetDriverHandle, 12)
+DriverHandle_t __thiscall winIVRDriverManager_IVRDriverManager_001_GetDriverHandle(winIVRDriverManager_IVRDriverManager_001 *_this, const char * pchDriverName)
+{
+    TRACE("%p\n", _this);
+    return cppIVRDriverManager_IVRDriverManager_001_GetDriverHandle(_this->linux_side, pchDriverName);
+}
+
 extern vtable_ptr winIVRDriverManager_IVRDriverManager_001_vtable;
 
 #ifndef __GNUC__
@@ -47,6 +54,7 @@ void __asm_dummy_vtables(void) {
     __ASM_VTABLE(winIVRDriverManager_IVRDriverManager_001,
         VTABLE_ADD_FUNC(winIVRDriverManager_IVRDriverManager_001_GetDriverCount)
         VTABLE_ADD_FUNC(winIVRDriverManager_IVRDriverManager_001_GetDriverName)
+        VTABLE_ADD_FUNC(winIVRDriverManager_IVRDriverManager_001_GetDriverHandle)
     );
 #ifndef __GNUC__
 }
@@ -70,14 +78,15 @@ void destroy_winIVRDriverManager_IVRDriverManager_001(void *object)
 winIVRDriverManager_IVRDriverManager_001 *create_winIVRDriverManager_IVRDriverManager_001_FnTable(void *linux_side)
 {
     winIVRDriverManager_IVRDriverManager_001 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRDriverManager_IVRDriverManager_001));
-    struct thunk *thunks = alloc_thunks(2);
-    struct thunk **vtable = HeapAlloc(GetProcessHeap(), 0, 2 * sizeof(*vtable));
+    struct thunk *thunks = alloc_thunks(3);
+    struct thunk **vtable = HeapAlloc(GetProcessHeap(), 0, 3 * sizeof(*vtable));
     int i;
 
     TRACE("-> %p, vtable %p, thunks %p\n", r, vtable, thunks);
     init_thunk(&thunks[0], r, winIVRDriverManager_IVRDriverManager_001_GetDriverCount);
     init_thunk(&thunks[1], r, winIVRDriverManager_IVRDriverManager_001_GetDriverName);
-    for (i = 0; i < 2; i++)
+    init_thunk(&thunks[2], r, winIVRDriverManager_IVRDriverManager_001_GetDriverHandle);
+    for (i = 0; i < 3; i++)
         vtable[i] = &thunks[i];
     r->linux_side = linux_side;
     r->vtable = (void *)vtable;
