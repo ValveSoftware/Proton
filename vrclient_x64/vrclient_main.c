@@ -23,6 +23,7 @@
 
 #include "wined3d-interop.h"
 
+#include "cxx.h"
 #include "flatapi.h"
 
 #include "cppIVRClientCore_IVRClientCore_003.h"
@@ -912,21 +913,13 @@ void destroy_compositor_data(struct compositor_data *data)
 
 /* call_flat_method() definition */
 #ifdef __i386__
-asm(".text\n\t"
-    ".align 4\n\t"
-    ".globl call_flat_method\n\t"
-    ".type call_flat_method, @function\n"
-    "call_flat_method:\n\t"
+__ASM_GLOBAL_FUNC(call_flat_method,
     "popl %eax\n\t"
     "pushl %ecx\n\t"
     "pushl %eax\n\t"
     "jmp *%edx");
 #else
-asm(".text\n\t"
-    ".align 4\n\t"
-    ".globl call_flat_method\n\t"
-    ".type call_flat_method, @function\n"
-    "call_flat_method:\n\t"
+__ASM_GLOBAL_FUNC(call_flat_method,
     "popq %rax\n\t" // return address
     "pushq %r9\n\t"
     "pushq %rax\n\t"

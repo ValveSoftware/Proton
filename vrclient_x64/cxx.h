@@ -21,23 +21,22 @@
 
 #ifdef __APPLE__
 # define __ASM_NAME(name) "_" name
-#else
-# define __ASM_NAME(name) name
-#endif
-
-#ifdef __i386__  /* thiscall functions are i386-specific */
-
-#ifdef __APPLE__
+# define FORCE_ALIGN
 # define __ASM_DEFINE_FUNC(name,suffix,code) asm(".text\n\t.align 4\n\t.globl _" #name suffix "\n\t\n_" #name suffix ":\n\t.cfi_startproc\n\t" code "\n\t.cfi_endproc\n\t.previous");
 #else
+# define __ASM_NAME(name) name
+# define FORCE_ALIGN __attribute__((__force_align_arg_pointer__))
 # define __ASM_DEFINE_FUNC(name,suffix,code) asm(".text\n\t.align 4\n\t.globl " #name suffix "\n\t.type " #name suffix ",@function\n" #name suffix ":\n\t.cfi_startproc\n\t" code "\n\t.cfi_endproc\n\t.previous");
 #endif
+
 #define __ASM_GLOBAL_FUNC(name,code) __ASM_DEFINE_FUNC(name,"",code)
 #define __ASM_STDCALL(args) ""
 
+#ifdef __i386__  /* thiscall functions are i386-specific */
+
 #define THISCALL(func) __thiscall_ ## func
 #define THISCALL_NAME(func) __ASM_NAME("__thiscall_" #func)
-#define __thiscall __stdcall __attribute__((__force_align_arg_pointer__))
+#define __thiscall __stdcall FORCE_ALIGN
 #define DEFINE_THISCALL_WRAPPER(func,args) \
     extern void THISCALL(func)(void); \
     __ASM_GLOBAL_FUNC(__thiscall_ ## func, \
@@ -49,7 +48,7 @@
 
 #define THISCALL(func) func
 #define THISCALL_NAME(func) __ASM_NAME(#func)
-#define __thiscall __cdecl __attribute__((__force_align_arg_pointer__))
+#define __thiscall __cdecl FORCE_ALIGN
 #define DEFINE_THISCALL_WRAPPER(func,args) /* nothing */
 
 #endif /* __i386__ */
