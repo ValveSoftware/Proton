@@ -485,10 +485,19 @@ VRCompositorError ivrcompositor_008_submit(
 
 static void *our_compositor;
 
-static void get_our_compositor(void)
+static BOOL WINAPI create_our_compositor(INIT_ONCE *once, void *param, void **context)
 {
-    void *client_core = vrclient_VRClientCoreFactory("IVRClientCore_003", NULL);
-    our_compositor = cppIVRClientCore_IVRClientCore_003_GetGenericInterface(client_core, "IVRCompositor_022", NULL);
+    void *core = vrclient_VRClientCoreFactory("IVRClientCore_003", NULL);
+    our_compositor = cppIVRClientCore_IVRClientCore_003_GetGenericInterface(core, "IVRCompositor_022", NULL);
+    WARN("Created our compositor %p.\n", our_compositor);
+    return TRUE;
+}
+
+static void *get_our_compositor(void)
+{
+    static INIT_ONCE init_once = INIT_ONCE_STATIC_INIT;
+    InitOnceExecuteOnce(&init_once, create_our_compositor, NULL, NULL);
+    return our_compositor;
 }
 
 EVRCompositorError ivrcompositor_submit(
@@ -551,14 +560,9 @@ EVRCompositorError ivrcompositor_submit(
                                     VRCompositorTimingMode_Explicit_ApplicationPerformsPostPresentHandoff);
                             break;
                         default:
-                            {
-                                if(!our_compositor){
-                                    TRACE("Performing hack for old compositor version %u.\n", version);
-                                    get_our_compositor();
-                                }
-                                timing_compositor = our_compositor;
-                            }
-                            /* fall through, below version MUST match version in get_our_compositor() */
+                            timing_compositor = get_our_compositor();
+                            WARN("Performing our compositor hack for old compositor version %u.\n", version);
+                            /* fall through, below version MUST match version in create_our_compositor() */
                         case 22:
                             cppIVRCompositor_IVRCompositor_022_SetExplicitTimingMode(timing_compositor,
                                     VRCompositorTimingMode_Explicit_ApplicationPerformsPostPresentHandoff);
@@ -823,14 +827,8 @@ static CDECL void d3d11_explicit_timing_callback(const void *data, unsigned int 
             error = cppIVRCompositor_IVRCompositor_021_SubmitExplicitTimingData(callback_data->linux_side);
             break;
         default:
-            {
-                if(!our_compositor){
-                    TRACE("Performing hack for old compositor version %u.\n", callback_data->version);
-                    get_our_compositor();
-                }
-                timing_compositor = our_compositor;
-            }
-            /* fall through, below version MUST match version in get_our_compositor() */
+            timing_compositor = get_our_compositor();
+            /* fall through, below version MUST match version in create_our_compositor() */
         case 22:
             error = cppIVRCompositor_IVRCompositor_022_SubmitExplicitTimingData(timing_compositor);
             break;
