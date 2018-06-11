@@ -128,29 +128,28 @@ build_libjpeg()
 
 build_openal()
 {
-    #openal 32-bit
-    cd "$TOP"
-    mkdir -p build/openal.win32
-    cd build/openal.win32
-    cmake "$TOP"/openal-soft -DCMAKE_C_FLAGS="-m32" -DCMAKE_INSTALL_PREFIX="$TOOLS_DIR32"
-    make $JOBS VERBOSE=1
-    make install VERBOSE=1
-    cp ./libopenal.dylib "$DST_DIR"/lib/libopenal.1.dylib
-    if [ x"$RELEASE_BUILD" != x ]; then
-        $STRIP "$DST_DIR"/lib/libopenal.1.dylib
+    if [ ! -e "$TOOLS_DIR64"/lib/libopenal.$LIB_SUFFIX ]; then
+        #openal 32-bit
+        cd "$TOP"
+        mkdir -p build/openal.win32
+        cd build/openal.win32
+        $I386_WRAPPER $CMAKE32 "$TOP"/openal-soft -DCMAKE_C_FLAGS="-m32" -DCMAKE_INSTALL_PREFIX="$TOOLS_DIR32"
+        $I386_WRAPPER make $JOBS VERBOSE=1
+        $I386_WRAPPER make install VERBOSE=1
+
+        #openal 64-bit
+        cd "$TOP"
+        mkdir -p build/openal.win64
+        cd build/openal.win64
+        $AMD64_WRAPPER $CMAKE64 "$TOP"/openal-soft -DCMAKE_INSTALL_PREFIX="$TOOLS_DIR64"
+        $AMD64_WRAPPER make $JOBS VERBOSE=1
+        $AMD64_WRAPPER make install VERBOSE=1
     fi
 
-    #openal 64-bit
-    cd "$TOP"
-    mkdir -p build/openal.win64
-    cd build/openal.win64
-    cmake "$TOP"/openal-soft -DCMAKE_INSTALL_PREFIX="$TOOLS_DIR64"
-    make $JOBS VERBOSE=1
-    make install VERBOSE=1
-    cp ./libopenal.dylib "$DST_DIR"/lib64/libopenal.1.dylib
-    if [ x"$RELEASE_BUILD" != x ]; then
-        $STRIP "$DST_DIR"/lib64/libopenal.1.dylib
-    fi
+    cp -L "$TOOLS_DIR32"/lib/libopenal* "$DST_DIR"/lib/
+    cp -L "$TOOLS_DIR64"/lib/libopenal* "$DST_DIR"/lib64/
+    $STRIP "$DST_DIR"/lib/libopenal.$LIB_SUFFIX
+    $STRIP "$DST_DIR"/lib64/libopenal.$LIB_SUFFIX
 }
 
 build_libSDL()
@@ -198,8 +197,10 @@ build_moltenvk()
 }
 
 if [ "$PLATFORM" == "Darwin" ]; then
+    LIB_SUFFIX="dylib"
     STRIP='strip -x'
 else
+    LIB_SUFFIX="so"
     STRIP='strip'
 fi
 
@@ -240,10 +241,22 @@ if [ "$PLATFORM" == "Darwin" ]; then
     CC="$CCACHE clang"
     AMD64_WRAPPER=""
     I386_WRAPPER=""
+    CMAKE32="cmake"
+    CMAKE64="cmake"
 else
     CC="$CCACHE gcc"
     AMD64_WRAPPER="schroot --chroot steamrt_scout_beta_amd64 --"
     I386_WRAPPER="schroot --chroot steamrt_scout_beta_i386 --"
+    if [ -e "$HOME/opt32/bin/cmake" ]; then
+        CMAKE32="$HOME/opt32/bin/cmake"
+    else
+        CMAKE32="cmake"
+    fi
+    if [ -e "$HOME/opt64/bin/cmake" ]; then
+        CMAKE64="$HOME/opt64/bin/cmake"
+    else
+        CMAKE64="cmake"
+    fi
 
     gcc_ver=$($AMD64_WRAPPER gcc -v 2>&1 | grep 'gcc version' | cut -d' ' -f3)
     gcc_maj=$(echo $gcc_ver | cut -d'.' -f1)
@@ -293,8 +306,6 @@ if [ "$PLATFORM" == "Darwin" ]; then
     JPEG64_CFLAGS="-I$TOOLS_DIR64/include"
     JPEG64_LIBS="-L$TOOLS_DIR64/lib -lprotonjpeg"
     ac_cv_lib_soname_jpeg64=libprotonjpeg.dylib
-
-    build_openal
 
     build_libSDL
 
@@ -475,7 +486,7 @@ git submodule status -- dxvk > "$DST_DIR"/lib/wine/dxvk/version
 #build ffmpeg
 function build_ffmpeg
 {
-    if [ ! '(' -e "$TOOLS_DIR64/lib/libavcodec.so" -o -e "$TOOLS_DIR64/lib/libavcodec.dylib" ')' ]; then
+    if [ ! -e "$TOOLS_DIR64/lib/libavcodec.$LIB_SUFFIX" ]; then
         #ffmpeg 32-bit
         cd "$TOP"
         mkdir -p build/ffmpeg.win32
@@ -551,6 +562,8 @@ function build_ffmpeg
 }
 
 build_ffmpeg
+
+build_openal
 
 case "$BUILD_COMPONENTS" in
     "all")

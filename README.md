@@ -33,7 +33,7 @@ obtain the various submodules that go into building Proton:
 
         cd proton
         #for linux:
-        git submodule update --init wine dxvk ffmpeg
+        git submodule update --init wine dxvk ffmpeg openal-soft
         #for macos:
         git submodule update --init
 
@@ -84,7 +84,11 @@ And then repeat all of the commands to install gcc and Wine dependencies again.
 In addition, your host system will need to be able to run Wine in both 64- and
 32-bit modes in order to create the default prefix. It is recommended to
 install Wine from your package manager, including its optional dependencies.
-You will also need the Steam runtime located at $HOME/steam-runtime.
+
+The openal-soft build system requires cmake 3.0.2 or later, which is newer than
+the Steam runtime SDK provides. You will need to build and install a newer
+cmake into each of the runtimes. For convenience, the build_proton.sh script
+will attempt to use cmake from ~/opt32/bin/ and ~/opt64/bin/, if available.
 
 Finally, change your directory back to proton, and run:
 
