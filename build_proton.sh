@@ -19,43 +19,41 @@ JOBS=-j5
 PLATFORM=$(uname)
 
 #./wine/ <-- wine source
-#./build/ <-- built files
+#./build/ <-- build files
 #./dist/ <-- proton build, ready to distribute
 
-build_freetype()
+function build_freetype
 {
     cd "$TOP"/freetype2
 
-    sed -i -e 's/^LIBRARY.*/LIBRARY=libprotonfreetype/' builds/unix/unix-cc.in
+    if [ ! -e "$TOOLS_DIR64"/lib/libprotonfreetype.$LIB_SUFFIX ]; then
+        sed -i -e 's/^LIBRARY.*/LIBRARY=libprotonfreetype/' builds/unix/unix-cc.in
 
-    bash ./autogen.sh
+        bash ./autogen.sh
 
-    #freetype 32-bit
-    cd "$TOP"
-    mkdir -p build/freetype.win32
-    cd build/freetype.win32
-    "$TOP"/freetype2/configure --prefix="$TOOLS_DIR32" --without-png --host i686-apple-darwin CFLAGS='-m32 -g -O2' LDFLAGS=-m32 PKG_CONFIG=false
-    make $JOBS
-    make install
-    cp ./.libs/libprotonfreetype.dylib "$DST_DIR"/lib
-    if [ x"$RELEASE_BUILD" != x ]; then
-        $STRIP "$DST_DIR"/lib/libprotonfreetype.dylib
+        #freetype 32-bit
+        mkdir -p "$TOP"/build/freetype.win32
+        cd "$TOP"/build/freetype.win32
+        "$TOP"/freetype2/configure --prefix="$TOOLS_DIR32" --without-png --host i686-apple-darwin CFLAGS='-m32 -g -O2' LDFLAGS=-m32 PKG_CONFIG=false
+        make $JOBS
+        make install
+
+        #freetype 64-bit
+        mkdir -p "$TOP"/build/freetype.win64
+        cd "$TOP"/build/freetype.win64
+        "$TOP"/freetype2/configure --prefix="$TOOLS_DIR64" --without-png --host x86_64-apple-darwin PKG_CONFIG=false
+        make $JOBS
+        make install
     fi
 
-    #freetype 64-bit
-    cd "$TOP"
-    mkdir -p build/freetype.win64
-    cd build/freetype.win64
-    "$TOP"/freetype2/configure --prefix="$TOOLS_DIR64" --without-png --host x86_64-apple-darwin PKG_CONFIG=false
-    make $JOBS
-    make install
-    cp ./.libs/libprotonfreetype.dylib "$DST_DIR"/lib64
-    if [ x"$RELEASE_BUILD" != x ]; then
-        $STRIP "$DST_DIR"/lib64/libprotonfreetype.dylib
-    fi
+    cp "$TOOLS_DIR32"/lib/libprotonfreetype.dylib "$DST_DIR"/lib
+    $STRIP "$DST_DIR"/lib/libprotonfreetype.dylib
+
+    cp "$TOOLS_DIR64"/lib/libprotonfreetype.dylib "$DST_DIR"/lib64
+    $STRIP "$DST_DIR"/lib64/libprotonfreetype.dylib
 }
 
-build_libpng()
+function build_libpng
 {
     cd "$TOP"/libpng
     if [ ! -e 'configure' ]; then
@@ -64,32 +62,30 @@ build_libpng()
         bash ./autogen.sh
     fi
 
-    #libpng 32-bit
-    cd "$TOP"
-    mkdir -p build/libpng.win32
-    cd build/libpng.win32
-    "$TOP"/libpng/configure --prefix="$TOOLS_DIR32" --host i686-apple-darwin CFLAGS='-m32 -g -O2' LDFLAGS=-m32
-    make $JOBS
-    make install
-    cp ./.libs/libprotonpng16.dylib "$DST_DIR"/lib
-    if [ x"$RELEASE_BUILD" != x ]; then
-        $STRIP "$DST_DIR"/lib/libprotonpng16.dylib
+    if [ ! -e "$TOOLS_DIR64"/lib/libprotonpng16.$LIB_SUFFIX ]; then
+        #libpng 32-bit
+        mkdir -p "$TOP"/build/libpng.win32
+        cd "$TOP"/build/libpng.win32
+        "$TOP"/libpng/configure --prefix="$TOOLS_DIR32" --host i686-apple-darwin CFLAGS='-m32 -g -O2' LDFLAGS=-m32
+        make $JOBS
+        make install
+
+        #libpng 64-bit
+        mkdir -p "$TOP"/build/libpng.win64
+        cd "$TOP"/build/libpng.win64
+        "$TOP"/libpng/configure --prefix="$TOOLS_DIR64" --host x86_64-apple-darwin
+        make $JOBS
+        make install
     fi
 
-    #libpng 64-bit
-    cd "$TOP"
-    mkdir -p build/libpng.win64
-    cd build/libpng.win64
-    "$TOP"/libpng/configure --prefix="$TOOLS_DIR64" --host x86_64-apple-darwin
-    make $JOBS
-    make install
-    cp ./.libs/libprotonpng16.dylib "$DST_DIR"/lib64
-    if [ x"$RELEASE_BUILD" != x ]; then
-        $STRIP "$DST_DIR"/lib64/libprotonpng16.dylib
-    fi
+    cp "$TOOLS_DIR32"/lib/libprotonpng16.dylib "$DST_DIR"/lib
+    $STRIP "$DST_DIR"/lib/libprotonpng16.dylib
+
+    cp "$TOOLS_DIR64"/lib/libprotonpng16.dylib "$DST_DIR"/lib64
+    $STRIP "$DST_DIR"/lib64/libprotonpng16.dylib
 }
 
-build_libjpeg()
+function build_libjpeg
 {
     cd "$TOP"/libjpeg-turbo
     if [ ! -e 'configure' ]; then
@@ -99,34 +95,32 @@ build_libjpeg()
     #if this fails with an nasm error, install a newer nasm with
     #homebrew or the like and put it into your PATH
 
-    #libjpeg 32-bit
-    cd "$TOP"
-    mkdir -p build/libjpeg.win32
-    cd build/libjpeg.win32
-    "$TOP"/libjpeg-turbo/configure --prefix="$TOOLS_DIR32" --host i686-apple-darwin CFLAGS='-O3 -g -m32' LDFLAGS=-m32
-    make $JOBS
-    make install
-    mv "$TOOLS_DIR32"/lib/lib{,proton}jpeg.dylib
-    cp ./.libs/libjpeg.dylib "$DST_DIR"/lib/libprotonjpeg.dylib
-    if [ x"$RELEASE_BUILD" != x ]; then
-        $STRIP "$DST_DIR"/lib/libprotonjpeg.dylib
+    if [ ! -e "$TOOLS_DIR64"/lib/libprotonjpeg.$LIB_SUFFIX ]; then
+        #libjpeg 32-bit
+        mkdir -p "$TOP"/build/libjpeg.win32
+        cd "$TOP"/build/libjpeg.win32
+        "$TOP"/libjpeg-turbo/configure --prefix="$TOOLS_DIR32" --host i686-apple-darwin CFLAGS='-O3 -g -m32' LDFLAGS=-m32
+        make $JOBS
+        make install
+        mv "$TOOLS_DIR32"/lib/lib{,proton}jpeg.dylib
+
+        #libjpeg 64-bit
+        mkdir -p "$TOP"/build/libjpeg.win64
+        cd "$TOP"/build/libjpeg.win64
+        "$TOP"/libjpeg-turbo/configure --prefix="$TOOLS_DIR64" --host x86_64-apple-darwin
+        make $JOBS
+        make install
+        mv "$TOOLS_DIR64"/lib/lib{,proton}jpeg.dylib
     fi
 
-    #libjpeg 64-bit
-    cd "$TOP"
-    mkdir -p build/libjpeg.win64
-    cd build/libjpeg.win64
-    "$TOP"/libjpeg-turbo/configure --prefix="$TOOLS_DIR64" --host x86_64-apple-darwin
-    make $JOBS
-    make install
-    mv "$TOOLS_DIR64"/lib/lib{,proton}jpeg.dylib
-    cp ./.libs/libjpeg.dylib "$DST_DIR"/lib64/libprotonjpeg.dylib
-    if [ x"$RELEASE_BUILD" != x ]; then
-        $STRIP "$DST_DIR"/lib64/libprotonjpeg.dylib
-    fi
+    cp "$TOOLS_DIR32"/lib/libprotonjpeg.dylib "$DST_DIR"/lib/
+    $STRIP "$DST_DIR"/lib/libprotonjpeg.dylib
+
+    cp "$TOOLS_DIR64"/lib/libprotonjpeg.dylib "$DST_DIR"/lib64/
+    $STRIP "$DST_DIR"/lib64/libprotonjpeg.dylib
 }
 
-build_openal()
+function build_openal
 {
     if [ ! -e "$TOOLS_DIR64"/lib/libopenal.$LIB_SUFFIX ]; then
         #openal 32-bit
@@ -152,165 +146,129 @@ build_openal()
     $STRIP "$DST_DIR"/lib64/libopenal.$LIB_SUFFIX
 }
 
-build_libSDL()
+function build_libSDL
 {
-    cd "$TOP"/SDL-mirror
-    bash ./autogen.sh
+    if [ ! -e "$TOOLS_DIR64/lib/libSDL2.$LIB_SUFFIX" ]; then
+        cd "$TOP"/SDL-mirror
+        bash ./autogen.sh
 
-    #libsdl2 32-bit
-    cd "$TOP"
-    mkdir -p build/SDL2.win32
-    cd build/SDL2.win32
-    "$TOP"/SDL-mirror/configure --prefix="$TOOLS_DIR32" --host i686-apple-darwin CFLAGS='-m32 -g -O2' LDFLAGS=-m32
-    make $JOBS
-    make install-hdrs
-    make install-lib
-    cp ./build/.libs/libSDL2.dylib "$DST_DIR"/lib
-    if [ x"$RELEASE_BUILD" != x ]; then
-        $STRIP "$DST_DIR"/lib/libSDL2.dylib
+        #libsdl2 32-bit
+        cd "$TOP"
+        mkdir -p build/SDL2.win32
+        cd build/SDL2.win32
+        "$TOP"/SDL-mirror/configure --prefix="$TOOLS_DIR32" --host i686-apple-darwin CFLAGS='-m32 -g -O2' LDFLAGS=-m32
+        make $JOBS
+        make install-hdrs
+        make install-lib
+
+        #libsdl2 64-bit
+        cd "$TOP"
+        mkdir -p build/SDL2.win64
+        cd build/SDL2.win64
+        "$TOP"/SDL-mirror/configure --prefix="$TOOLS_DIR64" --host x86_64-apple-darwin
+        make $JOBS
+        make install-hdrs
+        make install-lib
     fi
 
-    #libsdl2 64-bit
-    cd "$TOP"
-    mkdir -p build/SDL2.win64
-    cd build/SDL2.win64
-    "$TOP"/SDL-mirror/configure --prefix="$TOOLS_DIR64" --host x86_64-apple-darwin
-    make $JOBS
-    make install-hdrs
-    make install-lib
-    cp ./build/.libs/libSDL2.dylib "$DST_DIR"/lib64
-    if [ x"$RELEASE_BUILD" != x ]; then
-        $STRIP "$DST_DIR"/lib64/libSDL2.dylib
-    fi
+    cp "$TOOLS_DIR32"/lib/libSDL2.$LIB_SUFFIX "$DST_DIR"/lib
+    $STRIP "$DST_DIR"/lib/libSDL2.dylib
+
+    cp "$TOOLS_DIR64"/lib/libSDL2.$LIB_SUFFIX "$DST_DIR"/lib64
+    $STRIP "$DST_DIR"/lib64/libSDL2.dylib
 }
 
-build_moltenvk()
+function build_moltenvk
 {
     #requires Xcode >= 9
     cd "$TOP"/MoltenVK/
-    ./fetchDependencies
-    xcodebuild -scheme 'MoltenVK (Release)' build
+
+    if [ ! -e "Package/Release/MoltenVK/macOS/libMoltenVK.dylib" ]; then
+        ./fetchDependencies
+        xcodebuild -scheme 'MoltenVK (Release)' build
+    fi
 
     cp -a Package/Release/MoltenVK/include/* "$TOOLS_DIR64"/include/
     cp -a Package/Release/MoltenVK/macOS/libMoltenVK.dylib "$TOOLS_DIR64"/lib/
     cp -a Package/Release/MoltenVK/macOS/libMoltenVK.dylib "$DST_DIR"/lib64/
 }
 
-if [ "$PLATFORM" == "Darwin" ]; then
-    LIB_SUFFIX="dylib"
-    STRIP='strip -x'
-else
-    LIB_SUFFIX="so"
-    STRIP='strip'
-fi
+function build_ffmpeg
+{
+    if [ ! -e "$TOOLS_DIR64/lib/libavcodec.$LIB_SUFFIX" ]; then
+        #ffmpeg 32-bit
+        cd "$TOP"
+        mkdir -p build/ffmpeg.win32
+        cd build/ffmpeg.win32
+        $I386_WRAPPER "$TOP"/ffmpeg/configure --prefix="$TOOLS_DIR32" \
+                --disable-static \
+                --enable-shared \
+                --disable-programs \
+                --disable-doc \
+                --disable-avdevice \
+                --disable-avformat \
+                --disable-swresample \
+                --disable-swscale \
+                --disable-postproc \
+                --disable-avfilter \
+                --disable-alsa \
+                --disable-iconv \
+                --disable-libxcb_shape \
+                --disable-libxcb_shm \
+                --disable-libxcb_xfixes \
+                --disable-sdl2 \
+                --disable-xlib \
+                --disable-zlib \
+                --disable-bzlib \
+                --disable-libxcb \
+                --disable-vaapi \
+                --disable-vdpau \
+                --disable-everything \
+                --enable-decoder=wmav2 \
+                --enable-decoder=adpcm_ms
+        $I386_WRAPPER make $JOBS
+        $I386_WRAPPER make install
 
-PACKAGE=false
-BUILD_COMPONENTS='all'
-INSTALL_PROGRAM_FLAGS=''
-for (( i=1; i <= $#; i++)); do
-    param="${!i}"
-    if [ "$param" == "--release" ]; then
-        RELEASE_BUILD=1
-        INSTALL_PROGRAM_FLAGS='-s'
-    elif [ "$param" == "--package" ]; then
-        PACKAGE=true
-    elif [ "$param" == "--build" ]; then
-        i=$((i+1))
-        if [ "$i" -gt "$#" ]; then
-            usage `basename $0`
-            exit 1
-        fi
-        BUILD_COMPONENTS="${!i}"
-    else
-        usage `basename $0`
-        exit 1
+
+        #ffmpeg 64-bit
+        cd "$TOP"
+        mkdir -p build/ffmpeg.win64
+        cd build/ffmpeg.win64
+        $AMD64_WRAPPER "$TOP"/ffmpeg/configure --prefix="$TOOLS_DIR64" \
+                --disable-static \
+                --enable-shared \
+                --disable-programs \
+                --disable-doc \
+                --disable-avdevice \
+                --disable-avformat \
+                --disable-swresample \
+                --disable-swscale \
+                --disable-postproc \
+                --disable-avfilter \
+                --disable-alsa \
+                --disable-iconv \
+                --disable-libxcb_shape \
+                --disable-libxcb_shm \
+                --disable-libxcb_xfixes \
+                --disable-sdl2 \
+                --disable-xlib \
+                --disable-zlib \
+                --disable-bzlib \
+                --disable-libxcb \
+                --disable-vaapi \
+                --disable-vdpau \
+                --disable-everything \
+                --enable-decoder=wmav2 \
+                --enable-decoder=adpcm_ms
+        $AMD64_WRAPPER make $JOBS
+        $AMD64_WRAPPER make install
     fi
-done
 
-if [ "$BUILD_COMPONENTS" == "all" ]; then
-    PACKAGE=true
-fi
-
-TOP="$PWD"
-MAKE=make
-if [ x"$RELEASE_BUILD" == x ]; then
-    set +e; CCACHE=`which ccache`; set -e
-fi
-
-if [ "$PLATFORM" == "Darwin" ]; then
-    CC="$CCACHE clang"
-    AMD64_WRAPPER=""
-    I386_WRAPPER=""
-    CMAKE32="cmake"
-    CMAKE64="cmake"
-else
-    CC="$CCACHE gcc"
-    AMD64_WRAPPER="schroot --chroot steamrt_scout_beta_amd64 --"
-    I386_WRAPPER="schroot --chroot steamrt_scout_beta_i386 --"
-    if [ -e "$HOME/opt32/bin/cmake" ]; then
-        CMAKE32="$HOME/opt32/bin/cmake"
-    else
-        CMAKE32="cmake"
-    fi
-    if [ -e "$HOME/opt64/bin/cmake" ]; then
-        CMAKE64="$HOME/opt64/bin/cmake"
-    else
-        CMAKE64="cmake"
-    fi
-
-    gcc_ver=$($AMD64_WRAPPER gcc -v 2>&1 | grep 'gcc version' | cut -d' ' -f3)
-    gcc_maj=$(echo $gcc_ver | cut -d'.' -f1)
-    gcc_min=$(echo $gcc_ver | cut -d'.' -f2)
-    if [ $gcc_maj -lt 5 -o '(' $gcc_maj -eq 5 -a $gcc_min -lt 3 ')' ]; then
-        echo "need gcc >= 5.3"
-        exit 1
-    fi
-fi
-
-DST_DIR="$TOP/build/dist"
-TOOLS_DIR64="$TOP/build/tools.win64"
-TOOLS_DIR32="$TOP/build/tools.win32"
-
-mkdir -p "$TOP"/dist "$DST_DIR"/bin "$TOP"/build/wine.win32 "$TOP"/build/dist.win32 "$TOP"/build/wine.win64
-mkdir -p "$DST_DIR"/lib "$DST_DIR"/lib64 "$TOOLS_DIR64"/lib64 "$TOOLS_DIR32"/lib
-
-if [ "$PLATFORM" == "Darwin" ]; then
-    build_freetype
-
-    FREETYPE32_CFLAGS="-I$TOOLS_DIR32/include/freetype2"
-    FREETYPE32_LIBS="-L$TOOLS_DIR32/lib -lprotonfreetype -framework CoreServices -framework ApplicationServices -lz"
-    ac_cv_lib_soname_freetype32=libprotonfreetype.dylib
-
-    FREETYPE64_CFLAGS="-I$TOOLS_DIR64/include/freetype2"
-    FREETYPE64_LIBS="-L$TOOLS_DIR64/lib -lprotonfreetype"
-    ac_cv_lib_soname_freetype64=libprotonfreetype.dylib
-
-
-    build_libpng
-
-    PNG32_CFLAGS="-I$TOOLS_DIR32/include"
-    PNG32_LIBS="-L$TOOLS_DIR32/lib -lprotonpng"
-    ac_cv_lib_soname_png32=libprotonpng16.dylib
-
-    PNG64_CFLAGS="-I$TOOLS_DIR64/include"
-    PNG64_LIBS="-L$TOOLS_DIR64/lib -lprotonpng"
-    ac_cv_lib_soname_png64=libprotonpng16.dylib
-
-
-    build_libjpeg
-
-    JPEG32_CFLAGS="-I$TOOLS_DIR32/include"
-    JPEG32_LIBS="-L$TOOLS_DIR32/lib -lprotonjpeg"
-    ac_cv_lib_soname_jpeg32=libprotonjpeg.dylib
-
-    JPEG64_CFLAGS="-I$TOOLS_DIR64/include"
-    JPEG64_LIBS="-L$TOOLS_DIR64/lib -lprotonjpeg"
-    ac_cv_lib_soname_jpeg64=libprotonjpeg.dylib
-
-    build_libSDL
-
-    build_moltenvk
-fi
+    cp -L "$TOOLS_DIR32"/lib/libavcodec* "$DST_DIR"/lib/
+    cp -L "$TOOLS_DIR32"/lib/libavutil* "$DST_DIR"/lib/
+    cp -L "$TOOLS_DIR64"/lib/libavcodec* "$DST_DIR"/lib64/
+    cp -L "$TOOLS_DIR64"/lib/libavutil* "$DST_DIR"/lib64/
+}
 
 function build_wine64
 {
@@ -443,6 +401,127 @@ function build_vrclient32
     cp -a vrclient.dll.fake "$DST_DIR"/lib/wine/fakedlls/vrclient.dll
 }
 
+
+
+PACKAGE=false
+BUILD_COMPONENTS='all'
+INSTALL_PROGRAM_FLAGS=''
+for (( i=1; i <= $#; i++)); do
+    param="${!i}"
+    if [ "$param" == "--release" ]; then
+        RELEASE_BUILD=1
+        INSTALL_PROGRAM_FLAGS='-s'
+    elif [ "$param" == "--package" ]; then
+        PACKAGE=true
+    elif [ "$param" == "--build" ]; then
+        i=$((i+1))
+        if [ "$i" -gt "$#" ]; then
+            usage `basename $0`
+            exit 1
+        fi
+        BUILD_COMPONENTS="${!i}"
+    else
+        usage `basename $0`
+        exit 1
+    fi
+done
+
+if [ "$BUILD_COMPONENTS" == "all" ]; then
+    PACKAGE=true
+fi
+
+TOP="$PWD"
+DST_DIR="$TOP/build/dist"
+TOOLS_DIR64="$TOP/build/tools.win64"
+TOOLS_DIR32="$TOP/build/tools.win32"
+mkdir -p "$TOP"/dist
+mkdir -p "$TOP"/build/wine.win{32,64} "$TOP"/build/dist.win32
+mkdir -p "$DST_DIR"/{bin,lib,lib64}
+mkdir -p "$TOOLS_DIR64"/lib{,64}
+
+if [ x"$RELEASE_BUILD" == x ]; then
+    set +e; CCACHE=`which ccache`; set -e
+fi
+
+if [ "$PLATFORM" == "Darwin" ]; then
+    CC="$CCACHE clang"
+    AMD64_WRAPPER=""
+    I386_WRAPPER=""
+    STRIP='strip -x'
+    MAKE="make"
+    LIB_SUFFIX="dylib"
+    CMAKE32="cmake"
+    CMAKE64="cmake"
+else
+    CC="$CCACHE gcc"
+    AMD64_WRAPPER="schroot --chroot steamrt_scout_beta_amd64 --"
+    I386_WRAPPER="schroot --chroot steamrt_scout_beta_i386 --"
+    STRIP='strip'
+    MAKE="make"
+    LIB_SUFFIX="so"
+
+    if [ -e "$HOME/opt32/bin/cmake" ]; then
+        CMAKE32="$HOME/opt32/bin/cmake"
+    else
+        CMAKE32="cmake"
+    fi
+    if [ -e "$HOME/opt64/bin/cmake" ]; then
+        CMAKE64="$HOME/opt64/bin/cmake"
+    else
+        CMAKE64="cmake"
+    fi
+
+    gcc_ver=$($AMD64_WRAPPER gcc -v 2>&1 | grep 'gcc version' | cut -d' ' -f3)
+    gcc_maj=$(echo $gcc_ver | cut -d'.' -f1)
+    gcc_min=$(echo $gcc_ver | cut -d'.' -f2)
+    if [ $gcc_maj -lt 5 -o '(' $gcc_maj -eq 5 -a $gcc_min -lt 3 ')' ]; then
+        echo "need gcc >= 5.3"
+        exit 1
+    fi
+fi
+
+if [ "$PLATFORM" == "Darwin" ]; then
+    build_freetype
+
+    FREETYPE32_CFLAGS="-I$TOOLS_DIR32/include/freetype2"
+    FREETYPE32_LIBS="-L$TOOLS_DIR32/lib -lprotonfreetype -framework CoreServices -framework ApplicationServices -lz"
+    ac_cv_lib_soname_freetype32=libprotonfreetype.dylib
+
+    FREETYPE64_CFLAGS="-I$TOOLS_DIR64/include/freetype2"
+    FREETYPE64_LIBS="-L$TOOLS_DIR64/lib -lprotonfreetype"
+    ac_cv_lib_soname_freetype64=libprotonfreetype.dylib
+
+
+    build_libpng
+
+    PNG32_CFLAGS="-I$TOOLS_DIR32/include"
+    PNG32_LIBS="-L$TOOLS_DIR32/lib -lprotonpng"
+    ac_cv_lib_soname_png32=libprotonpng16.dylib
+
+    PNG64_CFLAGS="-I$TOOLS_DIR64/include"
+    PNG64_LIBS="-L$TOOLS_DIR64/lib -lprotonpng"
+    ac_cv_lib_soname_png64=libprotonpng16.dylib
+
+
+    build_libjpeg
+
+    JPEG32_CFLAGS="-I$TOOLS_DIR32/include"
+    JPEG32_LIBS="-L$TOOLS_DIR32/lib -lprotonjpeg"
+    ac_cv_lib_soname_jpeg32=libprotonjpeg.dylib
+
+    JPEG64_CFLAGS="-I$TOOLS_DIR64/include"
+    JPEG64_LIBS="-L$TOOLS_DIR64/lib -lprotonjpeg"
+    ac_cv_lib_soname_jpeg64=libprotonjpeg.dylib
+
+    build_libSDL
+
+    build_moltenvk
+fi
+
+build_ffmpeg
+
+build_openal
+
 #build dxvk
 
 #Debian 9 is too old to build dxvk, so I gave up and I'm building it on my Arch
@@ -482,88 +561,6 @@ git submodule status -- dxvk > "$DST_DIR"/lib/wine/dxvk/version
 #mkdir -p "$DST_DIR"/lib64/wine/dxvk
 #cp -a dxvk/dist.win64/bin/dxgi.dll "$DST_DIR"/lib64/wine/dxvk/
 #cp -a dxvk/dist.win64/bin/d3d11.dll "$DST_DIR"/lib64/wine/dxvk/
-
-#build ffmpeg
-function build_ffmpeg
-{
-    if [ ! -e "$TOOLS_DIR64/lib/libavcodec.$LIB_SUFFIX" ]; then
-        #ffmpeg 32-bit
-        cd "$TOP"
-        mkdir -p build/ffmpeg.win32
-        cd build/ffmpeg.win32
-        $I386_WRAPPER "$TOP"/ffmpeg/configure --prefix="$TOOLS_DIR32" \
-                --disable-static \
-                --enable-shared \
-                --disable-programs \
-                --disable-doc \
-                --disable-avdevice \
-                --disable-avformat \
-                --disable-swresample \
-                --disable-swscale \
-                --disable-postproc \
-                --disable-avfilter \
-                --disable-alsa \
-                --disable-iconv \
-                --disable-libxcb_shape \
-                --disable-libxcb_shm \
-                --disable-libxcb_xfixes \
-                --disable-sdl2 \
-                --disable-xlib \
-                --disable-zlib \
-                --disable-bzlib \
-                --disable-libxcb \
-                --disable-vaapi \
-                --disable-vdpau \
-                --disable-everything \
-                --enable-decoder=wmav2 \
-                --enable-decoder=adpcm_ms
-        $I386_WRAPPER make $JOBS
-        $I386_WRAPPER make install
-
-
-        #ffmpeg 64-bit
-        cd "$TOP"
-        mkdir -p build/ffmpeg.win64
-        cd build/ffmpeg.win64
-        $AMD64_WRAPPER "$TOP"/ffmpeg/configure --prefix="$TOOLS_DIR64" \
-                --disable-static \
-                --enable-shared \
-                --disable-programs \
-                --disable-doc \
-                --disable-avdevice \
-                --disable-avformat \
-                --disable-swresample \
-                --disable-swscale \
-                --disable-postproc \
-                --disable-avfilter \
-                --disable-alsa \
-                --disable-iconv \
-                --disable-libxcb_shape \
-                --disable-libxcb_shm \
-                --disable-libxcb_xfixes \
-                --disable-sdl2 \
-                --disable-xlib \
-                --disable-zlib \
-                --disable-bzlib \
-                --disable-libxcb \
-                --disable-vaapi \
-                --disable-vdpau \
-                --disable-everything \
-                --enable-decoder=wmav2 \
-                --enable-decoder=adpcm_ms
-        $AMD64_WRAPPER make $JOBS
-        $AMD64_WRAPPER make install
-    fi
-
-    cp -L "$TOOLS_DIR32"/lib/libavcodec* "$DST_DIR"/lib/
-    cp -L "$TOOLS_DIR32"/lib/libavutil* "$DST_DIR"/lib/
-    cp -L "$TOOLS_DIR64"/lib/libavcodec* "$DST_DIR"/lib64/
-    cp -L "$TOOLS_DIR64"/lib/libavutil* "$DST_DIR"/lib64/
-}
-
-build_ffmpeg
-
-build_openal
 
 case "$BUILD_COMPONENTS" in
     "all")
