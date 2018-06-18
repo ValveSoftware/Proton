@@ -278,6 +278,7 @@ function build_wine64
         JPEG_CFLAGS="$JPEG64_CFLAGS" JPEG_LIBS="$JPEG64_LIBS" ac_cv_lib_soname_jpeg="$ac_cv_lib_soname_jpeg64" \
         FREETYPE_CFLAGS="$FREETYPE64_CFLAGS" FREETYPE_LIBS="$FREETYPE64_LIBS" ac_cv_lib_soname_freetype="$ac_cv_lib_soname_freetype64" \
         $AMD64_WRAPPER "$TOP"/wine/configure \
+        --without-curses \
         --enable-win64 --disable-tests --prefix="$DST_DIR"
     STRIP="$STRIP" $AMD64_WRAPPER make $JOBS
     INSTALL_PROGRAM_FLAGS="$INSTALL_PROGRAM_FLAGS" STRIP="$STRIP" $AMD64_WRAPPER make install-lib
@@ -294,6 +295,7 @@ function build_wine32
         JPEG_CFLAGS="$JPEG32_CFLAGS" JPEG_LIBS="$JPEG32_LIBS" ac_cv_lib_soname_jpeg="$ac_cv_lib_soname_jpeg32" \
         FREETYPE_CFLAGS="$FREETYPE32_CFLAGS" FREETYPE_LIBS="$FREETYPE32_LIBS" ac_cv_lib_soname_freetype="$ac_cv_lib_soname_freetype32" \
         $I386_WRAPPER "$TOP"/wine/configure \
+        --without-curses \
         --disable-tests --prefix="$TOP/build/dist.win32/"
     STRIP="$STRIP" $I386_WRAPPER make $JOBS
     INSTALL_PROGRAM_FLAGS="$INSTALL_PROGRAM_FLAGS" STRIP="$STRIP" $I386_WRAPPER make install-lib
