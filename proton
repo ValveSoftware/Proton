@@ -65,6 +65,7 @@ else:
 
 check_environment("PROTON_USE_WINED3D11", "wined3d11")
 check_environment("PROTON_NO_D3D11", "nod3d11")
+check_environment("PROTON_NO_ESYNC", "noesync")
 
 basedir = os.path.dirname(sys.argv[0])
 bindir = basedir + "/dist/bin/"
@@ -109,6 +110,9 @@ else:
     env[ld_path_var] = lib64dir + ":" + libdir
 
 env["WINEDLLPATH"] = lib64dir + "/wine:" + libdir + "/wine"
+
+if not "noesync" in config_opts:
+    env["WINEESYNC"] = "1"
 
 if "PATH" in os.environ:
     env["PATH"] = bindir + ":" + os.environ["PATH"]
