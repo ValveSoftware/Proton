@@ -330,11 +330,6 @@ def dump_dbg_env(f):
         f.write("\tSTEAM_COMPAT_CLIENT_INSTALL_PATH=\"" + env["STEAM_COMPAT_CLIENT_INSTALL_PATH"] + "\" \\\n")
 
 def dump_dbg_scripts():
-    if game_arch == ARCH_X86_64:
-        wine_name = "\"" + bindir + "wine64\""
-    else:
-        wine_name = "\"" + bindir + "wine\""
-
     exe_name = os.path.basename(sys.argv[2])
 
     with open("/tmp/proton_winedbg", "w") as f:
@@ -342,7 +337,7 @@ def dump_dbg_scripts():
         f.write("#Run winedbg with args\n\n")
         f.write("cd \"" + os.getcwd() + "\"\n")
         dump_dbg_env(f)
-        f.write("\t" + wine_name + " winedbg \"$@\"\n")
+        f.write("\t\"" + wine_path + "\" winedbg \"$@\"\n")
     os.chmod("/tmp/proton_winedbg", 0755)
 
     with open("/tmp/proton_winedbg_run", "w") as f:
@@ -359,7 +354,7 @@ def dump_dbg_scripts():
                 f.write(" \"" + arg + "\"")
         f.write(")\n")
         dump_dbg_env(f)
-        f.write("\t" + wine_name + " winedbg \"${@:-${DEF_CMD[@]}}\"\n")
+        f.write("\t\"" + wine_path + "\" winedbg \"${@:-${DEF_CMD[@]}}\"\n")
     os.chmod("/tmp/proton_winedbg_run", 0755)
 
     with open("/tmp/proton_gdb_attach", "w") as f:
@@ -374,7 +369,7 @@ def dump_dbg_scripts():
         f.write("fi\n")
         f.write("WPID_DEC=$(printf %d 0x$WPID_HEX)\n")
         dump_dbg_env(f)
-        f.write("\t" + wine_name + " winedbg --gdb $WPID_DEC\n")
+        f.write("\t\"" + wine_path + "\" winedbg --gdb $WPID_DEC\n")
     os.chmod("/tmp/proton_gdb_attach", 0755)
 
     with open("/tmp/proton_gdb_run", "w") as f:
@@ -391,7 +386,7 @@ def dump_dbg_scripts():
                 f.write(" \"" + arg + "\"")
         f.write(")\n")
         dump_dbg_env(f)
-        f.write("\t" + wine_name + " winedbg --gdb \"${@:-${DEF_CMD[@]}}\"\n")
+        f.write("\t\"" + wine_path + "\" winedbg --gdb \"${@:-${DEF_CMD[@]}}\"\n")
     os.chmod("/tmp/proton_gdb_run", 0755)
 
     with open("/tmp/proton_run", "w") as f:
@@ -409,9 +404,9 @@ def dump_dbg_scripts():
         f.write(")\n")
         dump_dbg_env(f)
         if game_arch == ARCH_UNKNOWN:
-            f.write("\t" + wine_name + " start \"${@:-${DEF_CMD[@]}}\"\n")
+            f.write("\t\"" + wine_path + "\" start \"${@:-${DEF_CMD[@]}}\"\n")
         else:
-            f.write("\t" + wine_name + " \"${@:-${DEF_CMD[@]}}\"\n")
+            f.write("\t\"" + wine_path + "\" \"${@:-${DEF_CMD[@]}}\"\n")
     os.chmod("/tmp/proton_run", 0755)
 
 #determine mode
