@@ -309,7 +309,6 @@ function build_wine32
     if [ "$PLATFORM" != "Darwin" ]; then
         cp -a bin/wine-preloader "$DST_DIR"/bin/
     fi
-    cp -a bin/wineserver "$DST_DIR"/bin/wineserver32
 }
 
 function build_lsteamclient64
