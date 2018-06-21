@@ -13,9 +13,8 @@ import tarfile
 
 from filelock import FileLock, Timeout
 
-# For performance, all logging is turned off by default. It can be enabled here.
-#WITH_WINEDEBUG="+timestamp,+pid,+tid,+seh,+debugstr"
-#WITH_DXVK_LOG_LEVEL="info"
+#To enable debug logging, copy "user_settings.sample.py" to "user_settings.py"
+#and edit it if needed.
 
 CURRENT_PREFIX_VERSION="3.7-1"
 
@@ -50,23 +49,6 @@ if not ("STEAM_COMPAT_DATA_PATH" in os.environ):
     log("No compat data path?")
     sys.exit(1)
 
-def check_environment(env_name, config_name):
-    if not env_name in os.environ:
-        return
-    if os.environ[env_name] == "0" or len(os.environ[env_name]) == 0:
-        config_opts.discard(config_name)
-    else:
-        config_opts.add(config_name)
-
-if "STEAM_COMPAT_CONFIG" in os.environ:
-    config_opts = set(os.environ["STEAM_COMPAT_CONFIG"].split(","))
-else:
-    config_opts = set()
-
-check_environment("PROTON_USE_WINED3D11", "wined3d11")
-check_environment("PROTON_NO_D3D11", "nod3d11")
-check_environment("PROTON_NO_ESYNC", "noesync")
-
 basedir = os.path.dirname(sys.argv[0])
 bindir = basedir + "/dist/bin/"
 libdir = basedir + "/dist/lib"
@@ -89,20 +71,9 @@ with dist_lock:
 env = dict(os.environ)
 dlloverrides = {}
 
-try:
-    env["WINEDEBUG"] = WITH_WINEDEBUG
-    lfile_path = os.environ["HOME"] + "/steam-" + os.environ["SteamGameId"] + ".log"
-    if os.path.exists(lfile_path):
-        os.remove(lfile_path)
-    lfile = open(lfile_path, "w+")
-except (NameError, KeyError): #WITH_WINEDEBUG is unset, or SteamGameId is unset
-    env["WINEDEBUG"] = "-all"
-    lfile = None
-
-try:
-    env["DXVK_LOG_LEVEL"] = WITH_DXVK_LOG_LEVEL
-except NameError: #WITH_DXVK_LOG_LEVEL is unset
-    env["DXVK_LOG_LEVEL"] = "none"
+#for performance, logging is disabled by default; override with user_settings.py
+env["DXVK_LOG_LEVEL"] = "none"
+env["WINEDEBUG"] = "-all"
 
 if ld_path_var in os.environ:
     env[ld_path_var] = lib64dir + ":" + libdir + ":" + os.environ[ld_path_var]
@@ -110,9 +81,6 @@ else:
     env[ld_path_var] = lib64dir + ":" + libdir
 
 env["WINEDLLPATH"] = lib64dir + "/wine:" + libdir + "/wine"
-
-if not "noesync" in config_opts:
-    env["WINEESYNC"] = "1"
 
 if "PATH" in os.environ:
     env["PATH"] = bindir + ":" + os.environ["PATH"]
@@ -128,6 +96,38 @@ with dist_lock:
 
 prefix = os.environ["STEAM_COMPAT_DATA_PATH"] + "/pfx/"
 env["WINEPREFIX"] = prefix
+
+#load environment overrides
+if os.path.exists(basedir + "/user_settings.py"):
+    import user_settings
+    env.update(user_settings.user_settings)
+
+def check_environment(env_name, config_name):
+    if not env_name in env:
+        return
+    if env[env_name] == "0" or len(env[env_name]) == 0:
+        config_opts.discard(config_name)
+    else:
+        config_opts.add(config_name)
+
+if "STEAM_COMPAT_CONFIG" in os.environ:
+    config_opts = set(os.environ["STEAM_COMPAT_CONFIG"].split(","))
+else:
+    config_opts = set()
+
+check_environment("PROTON_USE_WINED3D11", "wined3d11")
+check_environment("PROTON_NO_D3D11", "nod3d11")
+check_environment("PROTON_NO_ESYNC", "noesync")
+
+if not "noesync" in config_opts:
+    env["WINEESYNC"] = "1"
+
+lfile = None
+if env["WINEDEBUG"] != "-all":
+    lfile_path = os.environ["HOME"] + "/steam-" + os.environ["SteamGameId"] + ".log"
+    if os.path.exists(lfile_path):
+        os.remove(lfile_path)
+    lfile = open(lfile_path, "w+")
 
 prefix_lock = FileLock(os.environ["STEAM_COMPAT_DATA_PATH"] + "/pfx.lock", timeout=-1)
 with prefix_lock:

@@ -161,8 +161,12 @@ Runtime Config Options
 Proton can be tuned at runtime to help certain games run. The Steam client sets
 some options for known games using the <tt>STEAM_COMPAT_CONFIG</tt> variable.
 You can override these options using the environment variables described below.
+The best way to set these environment overrides is by renaming
+"user_settings.sample.py" to "user_settings.py" and modifying it appropriately.
+
 To enable an option, set the variable to a non-<tt>0</tt> value.  To disable an
-option, set the variable to <tt>0</tt>.
+option, set the variable to <tt>0</tt>. To use Steam's default configuration, do
+not specify the variable at all.
 
 All of the below are runtime options. They do not effect permanent changes to
 the Wine prefix. Removing the option will revert to the previous behavior.
