@@ -18,6 +18,8 @@ set -e
 JOBS=-j5
 PLATFORM=$(uname)
 
+[ -z "$STEAM_RUNTIME" ] && STEAM_RUNTIME="$HOME/steam-runtime"
+
 #./wine/ <-- wine source
 #./build/ <-- build files
 #./dist/ <-- proton build, ready to distribute
@@ -593,7 +595,7 @@ if [ "$PACKAGE" = true ]; then
     #create default prefix
     rm -rf "$TOP"/build/dist/share/default_pfx/
     if [ "$PLATFORM" != "Darwin" ]; then
-        RUNTIME_RUNSH="$HOME"/steam-runtime/runtime/run.sh
+        RUNTIME_RUNSH="$STEAM_RUNTIME"/runtime/run.sh
     else
         RUNTIME_RUNSH=""
     fi
