@@ -65,7 +65,7 @@ not be complete.
 
 This will enter the chroot environment, where you would issue the following commands:
 
-        sudo apt-get install gcc-5 g++-5 g++-5-multilib flex bison libosmesa6-dev libpcap-dev libhal-dev libsane-dev libv4l-dev libgphoto2-2-dev libcapi20-dev libgsm1-dev libmpg123-dev libvulkan-dev libxslt1-dev
+        sudo apt-get install gcc-5 g++-5 g++-5-multilib flex bison libosmesa6-dev libpcap-dev libhal-dev libsane-dev libv4l-dev libgphoto2-2-dev libcapi20-dev libgsm1-dev libmpg123-dev libvulkan-dev libxslt1-dev nasm yasm
         sudo update-alternatives --install `which gcc` gcc `which gcc-5` 50
         sudo update-alternatives --set gcc `which gcc-5`
         sudo update-alternatives --install `which g++` g++ `which g++-5` 50
