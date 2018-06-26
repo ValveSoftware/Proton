@@ -2,7 +2,7 @@
 
 usage()
 {
-    echo "$1: [--build component] [--release] [--package]"
+    echo "$1: [--build component] [--release] [--package] [--with-ffmpeg]"
     echo "Build the Proton Steam Tool"
     echo "Component can be one or more of:"
     echo "  wine, wine32, wine64"
@@ -11,6 +11,7 @@ usage()
     echo "or all, which is the default.  The 'all' component also implies --package"
     echo "--release causes symbols to be stripped of debug info."
     echo "--package creates the tar ball in dist/."
+    echo "--with-ffmpeg builds FFmpeg for WMA audio support"
 }
 
 set -e
@@ -423,6 +424,8 @@ for (( i=1; i <= $#; i++)); do
             exit 1
         fi
         BUILD_COMPONENTS="${!i}"
+    elif [ "$param" == "--with-ffmpeg" ]; then
+        WITH_FFMPEG=1
     else
         usage `basename $0`
         exit 1
@@ -523,7 +526,9 @@ if [ "$PLATFORM" == "Darwin" ]; then
     build_moltenvk
 fi
 
-build_ffmpeg
+if [ "$WITH_FFMPEG" = 1 ]; then
+    build_ffmpeg
+fi
 
 build_openal
 
