@@ -203,7 +203,9 @@ function build_ffmpeg
         cd "$TOP"
         mkdir -p build/ffmpeg.win32
         cd build/ffmpeg.win32
-        $I386_WRAPPER "$TOP"/ffmpeg/configure --prefix="$TOOLS_DIR32" \
+        $I386_WRAPPER "$TOP"/ffmpeg/configure \
+                --extra-cflags="$FFMPEG_CROSS_CFLAGS" --extra-ldflags="$FFMPEG_CROSS_LDFLAGS" \
+                --prefix="$TOOLS_DIR32" \
                 --disable-static \
                 --enable-shared \
                 --disable-programs \
@@ -459,6 +461,8 @@ if [ "$PLATFORM" == "Darwin" ]; then
     CMAKE32="cmake"
     CMAKE64="cmake"
     WITHOUT_X="--without-x"
+    FFMPEG_CROSS_CFLAGS="-m32"
+    FFMPEG_CROSS_LDFLAGS="-m32"
 else
     CC="$CCACHE gcc"
     AMD64_WRAPPER="schroot --chroot steamrt_scout_beta_amd64 --"
@@ -467,6 +471,8 @@ else
     MAKE="make"
     LIB_SUFFIX="so"
     WITHOUT_X=""
+    FFMPEG_CROSS_CFLAGS=""
+    FFMPEG_CROSS_LDFLAGS=""
 
     if [ -e "$HOME/opt32/bin/cmake" ]; then
         CMAKE32="$HOME/opt32/bin/cmake"
