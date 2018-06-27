@@ -123,11 +123,14 @@ if not "noesync" in config_opts:
     env["WINEESYNC"] = "1"
 
 lfile = None
-if env["WINEDEBUG"] != "-all":
-    lfile_path = os.environ["HOME"] + "/steam-" + os.environ["SteamGameId"] + ".log"
-    if os.path.exists(lfile_path):
-        os.remove(lfile_path)
-    lfile = open(lfile_path, "w+")
+if "SteamGameId" in env:
+    if env["WINEDEBUG"] != "-all":
+        lfile_path = os.environ["HOME"] + "/steam-" + os.environ["SteamGameId"] + ".log"
+        if os.path.exists(lfile_path):
+            os.remove(lfile_path)
+        lfile = open(lfile_path, "w+")
+else:
+    env["WINEDEBUG"] = "-all"
 
 prefix_lock = FileLock(os.environ["STEAM_COMPAT_DATA_PATH"] + "/pfx.lock", timeout=-1)
 with prefix_lock:
