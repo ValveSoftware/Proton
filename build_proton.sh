@@ -407,6 +407,41 @@ function build_vrclient32
     cp -a vrclient.dll.fake "$DST_DIR"/lib/wine/fakedlls/vrclient.dll
 }
 
+function build_dxvk
+{
+    #unfortunately the Steam chroots are too old to build DXVK, so we have to
+    #build it in the host system
+    if [ ! -e "$TOP/build/dxvk.win64/bin/d3d11.dll" ]; then
+        cd "$TOP"/dxvk
+        mkdir -p "$TOP"/build/dxvk.win32
+        cd "$TOP"/dxvk
+        PATH="$TOP/glslang/bin/:$PATH" meson --prefix="$TOP"/build/dxvk.win32 --cross-file build-win32.txt "$TOP"/build/dxvk.win32
+        cd "$TOP"/build/dxvk.win32
+        PATH="$TOP/glslang/bin/:$PATH" meson configure -Dbuildtype=release
+        PATH="$TOP/glslang/bin/:$PATH" ninja
+        PATH="$TOP/glslang/bin/:$PATH" ninja install
+
+        cd "$TOP"/dxvk
+        mkdir -p "$TOP"/build/dxvk.win64
+        PATH="$TOP/glslang/bin/:$PATH" meson --prefix="$TOP"/build/dxvk.win64 --cross-file build-win64.txt "$TOP"/build/dxvk.win64
+        cd "$TOP"/build/dxvk.win64
+        PATH="$TOP/glslang/bin/:$PATH" meson configure -Dbuildtype=release
+        PATH="$TOP/glslang/bin/:$PATH" ninja
+        PATH="$TOP/glslang/bin/:$PATH" ninja install
+    fi
+
+    cd "$TOP"
+    mkdir -p "$DST_DIR"/lib64/wine/dxvk
+    cp "$TOP/build/dxvk.win64/bin/dxgi.dll" "$DST_DIR"/lib64/wine/dxvk/
+    cp "$TOP/build/dxvk.win64/bin/d3d11.dll" "$DST_DIR"/lib64/wine/dxvk/
+    git submodule status -- dxvk > "$DST_DIR"/lib64/wine/dxvk/version
+
+    mkdir -p "$DST_DIR"/lib/wine/dxvk
+    cp "$TOP/build/dxvk.win32/bin/dxgi.dll" "$DST_DIR"/lib/wine/dxvk/
+    cp "$TOP/build/dxvk.win32/bin/d3d11.dll" "$DST_DIR"/lib/wine/dxvk/
+    git submodule status -- dxvk > "$DST_DIR"/lib/wine/dxvk/version
+}
+
 
 
 PACKAGE=false
@@ -538,45 +573,7 @@ fi
 
 build_openal
 
-#build dxvk
-
-#Debian 9 is too old to build dxvk, so I gave up and I'm building it on my Arch
-#Linux box and checking the binaries into Git instead. Blech. --aeikum
-cd "$TOP"
-
-mkdir -p "$DST_DIR"/lib64/wine/dxvk
-cp "dxvk.win64/dxgi.dll" "$DST_DIR"/lib64/wine/dxvk/
-cp "dxvk.win64/d3d11.dll" "$DST_DIR"/lib64/wine/dxvk/
-git submodule status -- dxvk > "$DST_DIR"/lib64/wine/dxvk/version
-
-mkdir -p "$DST_DIR"/lib/wine/dxvk
-cp "dxvk.win32/dxgi.dll" "$DST_DIR"/lib/wine/dxvk/
-cp "dxvk.win32/d3d11.dll" "$DST_DIR"/lib/wine/dxvk/
-git submodule status -- dxvk > "$DST_DIR"/lib/wine/dxvk/version
-
-#unfortunately the Steam runtime chroot is too old to build dxvk, so
-#we have to build it in the host system
-
-#requires meson >= 0.43 and posix thread enabled mingw-w64, on debian:
-#  update-alternatives --config i686-w64-mingw32-g++
-#  update-alternatives --config i686-w64-mingw32-gcc
-#  update-alternatives --config x86_64-w64-mingw32-g++
-#  update-alternatives --config x86_64-w64-mingw32-gcc
-#cd "$TOP"
-#if [ ! -e dxvk/proton.win64.built ]; then
-#    PATH="$TOP"/glslang/bin/:"$PATH" bash ./build_dxvk.sh win64
-#fi
-#if [ ! -e dxvk/proton.win32.built ]; then
-#    PATH="$TOP"/glslang/bin/:"$PATH" bash ./build_dxvk.sh win32
-#fi
-#
-#mkdir -p "$DST_DIR"/lib/wine/dxvk
-#cp -a dxvk/dist.win32/bin/dxgi.dll "$DST_DIR"/lib/wine/dxvk/
-#cp -a dxvk/dist.win32/bin/d3d11.dll "$DST_DIR"/lib/wine/dxvk/
-#
-#mkdir -p "$DST_DIR"/lib64/wine/dxvk
-#cp -a dxvk/dist.win64/bin/dxgi.dll "$DST_DIR"/lib64/wine/dxvk/
-#cp -a dxvk/dist.win64/bin/d3d11.dll "$DST_DIR"/lib64/wine/dxvk/
+build_dxvk
 
 case "$BUILD_COMPONENTS" in
     "all")
