@@ -99,8 +99,14 @@ env["WINEPREFIX"] = prefix
 
 #load environment overrides
 if os.path.exists(basedir + "/user_settings.py"):
-    import user_settings
-    env.update(user_settings.user_settings)
+    try:
+        import user_settings
+        env.update(user_settings.user_settings)
+    except e:
+        log("************************************************")
+        log("THERE IS AN ERROR IN YOUR user_settings.py FILE:")
+        log("%s" % sys.exc_info()[1])
+        log("************************************************")
 
 def check_environment(env_name, config_name):
     if not env_name in env:
