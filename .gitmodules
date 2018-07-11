@@ -3,7 +3,7 @@
     url = https://github.com/ValveSoftware/wine/
 [submodule "dxvk"]
 	path = dxvk
-	url = https://github.com/doitsujin/dxvk.git
+	url = https://github.com/ValveSoftware/dxvk/
 [submodule "freetype2"]
 	path = freetype2
 	url = git://git.sv.nongnu.org/freetype/freetype2.git
