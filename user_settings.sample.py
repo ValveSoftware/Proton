@@ -4,7 +4,7 @@
 
 user_settings = {
     #logs are saved to $HOME/steam-$STEAM_APP_ID.log, overwriting any previous log with that name
-    "WINEDEBUG": "+timestamp,+pid,+tid,+seh,+debugstr",
+    "WINEDEBUG": "+timestamp,+pid,+tid,+seh,+debugstr,+module",
 
     "DXVK_LOG_LEVEL": "info",
 
