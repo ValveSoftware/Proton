@@ -610,6 +610,9 @@ if [ "$PACKAGE" = true ]; then
     WINEPREFIX="$TOP"/build/dist/share/default_pfx/ $RUNTIME_RUNSH ./build/dist/bin/wine64 wineboot
     WINEPREFIX="$TOP"/build/dist/share/default_pfx/ $RUNTIME_RUNSH ./build/dist/bin/wineserver -w
 
+    cp -a openvr/bin/win32/openvr_api.dll "$TOP"/build/dist/lib/wine/dxvk/openvr_api_dxvk.dll
+    cp -a openvr/bin/win64/openvr_api.dll "$TOP"/build/dist/lib64/wine/dxvk/openvr_api_dxvk.dll
+
     #the difference between -1 and -9 is about 20 MB, so prioritize quick startup over file size
     tar -C build/dist -c . | gzip -c -1 > dist/proton_dist.tar.gz
 

@@ -33,7 +33,7 @@ obtain the various submodules that go into building Proton:
 
         cd proton
         #for linux:
-        git submodule update --init wine dxvk ffmpeg openal-soft
+        git submodule update --init wine dxvk ffmpeg openal-soft openvr
         #for macos:
         git submodule update --init
 

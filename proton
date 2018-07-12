@@ -176,6 +176,9 @@ with prefix_lock:
     shutil.copy(basedir + "/dist/lib/wine/fakedlls/vrclient.dll", dst)
     shutil.copy(basedir + "/dist/lib64/wine/fakedlls/vrclient_x64.dll", dst)
 
+    shutil.copy(basedir + "/dist/lib/wine/dxvk/openvr_api_dxvk.dll", prefix + "/drive_c/windows/syswow64/")
+    shutil.copy(basedir + "/dist/lib64/wine/dxvk/openvr_api_dxvk.dll", prefix + "/drive_c/windows/system32/")
+
     #parse linux openvr config and present it in win32 format to the app.
     #logic from openvr's CVRPathRegistry_Public::GetPaths
 
