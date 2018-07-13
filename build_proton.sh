@@ -596,8 +596,23 @@ case "$BUILD_COMPONENTS" in
     *) echo "Invalid build components: $BUILD_COMPONENTS" ;;
 esac
 
+function setup_wine_gecko
+{
+    mkdir -p "$DST_DIR"/share/wine/gecko/
+    if [ -e "$TOP/../gecko/wine_gecko-$1-$2.msi" ]; then
+        cp "$TOP/../gecko/wine_gecko-$1-$2.msi" "$DST_DIR"/share/wine/gecko/
+    else
+        mkdir -p contrib/
+        if [ ! -e "contrib/wine_gecko-$1-$2.msi" ]; then
+            echo ">>>> Downloading wine-gecko. To avoid this in future, put it here: $TOP/../gecko/wine_gecko-$1-$2.msi"
+            wget -O "contrib/wine_gecko-$1-$2.msi" "https://dl.winehq.org/wine/wine-gecko/$1/wine_gecko-$1-$2.msi"
+        fi
+        cp "contrib/wine_gecko-$1-$2.msi" "$DST_DIR"/share/wine/gecko/
+    fi
+}
+
 if [ "$PACKAGE" = true ]; then
-    echo "Packaging..."
+    echo ">>>> Packaging..."
     cd "$TOP"
 
     #create default prefix
@@ -612,6 +627,9 @@ if [ "$PACKAGE" = true ]; then
 
     cp -a openvr/bin/win32/openvr_api.dll "$TOP"/build/dist/lib/wine/dxvk/openvr_api_dxvk.dll
     cp -a openvr/bin/win64/openvr_api.dll "$TOP"/build/dist/lib64/wine/dxvk/openvr_api_dxvk.dll
+
+    setup_wine_gecko "2.47" "x86"
+    setup_wine_gecko "2.47" "x86_64"
 
     #the difference between -1 and -9 is about 20 MB, so prioritize quick startup over file size
     tar -C build/dist -c . | gzip -c -1 > dist/proton_dist.tar.gz
