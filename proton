@@ -45,6 +45,28 @@ def makedirs(path):
         #already exists
         pass
 
+def real_copy(src, dst):
+    if os.path.islink(src):
+        os.symlink(os.readlink(src), dst)
+    else:
+        shutil.copy(src,dst)
+
+def mergedirs(src, dst):
+    for src_dir, dirs, files in os.walk(src):
+        dst_dir = src_dir.replace(src, dst, 1)
+        if not os.path.exists(dst_dir):
+            os.makedirs(dst_dir)
+        for dir_ in dirs:
+            src_file = os.path.join(src_dir, dir_)
+            dst_file = os.path.join(dst_dir, dir_)
+            if os.path.islink(src_file) and not os.path.exists(dst_file):
+                real_copy(src_file, dst_file)
+        for file_ in files:
+            src_file = os.path.join(src_dir, file_)
+            dst_file = os.path.join(dst_dir, file_)
+            if not os.path.exists(dst_file):
+                real_copy(src_file, dst_file)
+
 if not ("STEAM_COMPAT_DATA_PATH" in os.environ):
     log("No compat data path?")
     sys.exit(1)
@@ -140,9 +162,9 @@ else:
 
 prefix_lock = FileLock(os.environ["STEAM_COMPAT_DATA_PATH"] + "/pfx.lock", timeout=-1)
 with prefix_lock:
-    if not os.path.isdir(prefix):
+    if not os.path.exists(prefix + "/user.reg"):
         #copy default prefix into place
-        shutil.copytree(basedir + "/dist/share/default_pfx", prefix, symlinks=True)
+        mergedirs(basedir + "/dist/share/default_pfx", prefix)
 
     version_file = os.environ["STEAM_COMPAT_DATA_PATH"] + "/version"
     if os.path.exists(version_file):
