@@ -75,3 +75,9 @@ This software contains openal-soft licensed under the LGPL 2.
 Visit openal-soft at
 
     https://github.com/kcat/openal-soft/
+
+---- ---- ---- ----
+
+Parts of this software are based on the AMD AGS library, which is
+
+    Copyright (c) 2017 Advanced Micro Devices, Inc. All rights reserved.
