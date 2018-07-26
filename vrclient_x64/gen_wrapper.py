@@ -125,6 +125,9 @@ print_sizes = []
 
 class_versions = {}
 
+def get_param_count(f):
+    return len([p for p in f.get_children() if p.kind == clang.cindex.CursorKind.PARM_DECL])
+
 def ivrclientcore_init(cppname, method):
     if "002" in cppname:
         return "ivrclientcore_002_init"
@@ -137,7 +140,7 @@ def ivrclientcore_cleanup(cppname, method):
     return "ivrclientcore_cleanup"
 
 def ivrsystem_get_dxgi_output_info(cppname, method):
-    param_count = len([p for p in method.get_children() if p.kind == clang.cindex.CursorKind.PARM_DECL])
+    param_count = get_param_count(method)
     return {
         1: "get_dxgi_output_info",
         2: "get_dxgi_output_info2"
@@ -461,9 +464,11 @@ WINE_DEFAULT_DEBUG_CHANNEL(vrclient);
             break
     cfile.write("} %s;\n\n" % winclassname)
     methods = []
+    methods_param_count = []
     for child in children:
         if child.kind == clang.cindex.CursorKind.CXX_METHOD:
             methods.append(handle_method(cfile, classnode.spelling, winclassname, cppname, child, cpp, cpp_h, methods, iface_version))
+            methods_param_count.append(get_param_count(child))
 
     cfile.write("extern vtable_ptr %s_vtable;\n\n" % winclassname)
     cfile.write("#ifndef __GNUC__\n")
@@ -499,7 +504,11 @@ WINE_DEFAULT_DEBUG_CHANNEL(vrclient);
     cfile.write("    int i;\n\n")
     cfile.write("    TRACE(\"-> %p, vtable %p, thunks %p\\n\", r, vtable, thunks);\n")
     for i in range(len(methods)):
-        cfile.write("    init_thunk(&thunks[%d], r, %s_%s);\n" %(i, winclassname, methods[i]))
+        param_count = methods_param_count[i]
+        if param_count > 9:
+            # Additional call_flat_method() variants are needed to handle more parameters.
+            sys.exit("Unhandled parameter count %s for method %s" % (param_count, methods[i]))
+        cfile.write("    init_thunk(&thunks[%d], r, %s_%s, %s);\n" % (i, winclassname, methods[i], param_count))
     cfile.write("    for (i = 0; i < %d; i++)\n" % len(methods))
     cfile.write("        vtable[i] = &thunks[i];\n")
     cfile.write("    r->linux_side = linux_side;\n")

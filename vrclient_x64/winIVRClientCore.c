@@ -116,13 +116,13 @@ winIVRClientCore_IVRClientCore_003 *create_winIVRClientCore_IVRClientCore_003_Fn
     int i;
 
     TRACE("-> %p, vtable %p, thunks %p\n", r, vtable, thunks);
-    init_thunk(&thunks[0], r, winIVRClientCore_IVRClientCore_003_Init);
-    init_thunk(&thunks[1], r, winIVRClientCore_IVRClientCore_003_Cleanup);
-    init_thunk(&thunks[2], r, winIVRClientCore_IVRClientCore_003_IsInterfaceVersionValid);
-    init_thunk(&thunks[3], r, winIVRClientCore_IVRClientCore_003_GetGenericInterface);
-    init_thunk(&thunks[4], r, winIVRClientCore_IVRClientCore_003_BIsHmdPresent);
-    init_thunk(&thunks[5], r, winIVRClientCore_IVRClientCore_003_GetEnglishStringForHmdError);
-    init_thunk(&thunks[6], r, winIVRClientCore_IVRClientCore_003_GetIDForVRInitError);
+    init_thunk(&thunks[0], r, winIVRClientCore_IVRClientCore_003_Init, 2);
+    init_thunk(&thunks[1], r, winIVRClientCore_IVRClientCore_003_Cleanup, 0);
+    init_thunk(&thunks[2], r, winIVRClientCore_IVRClientCore_003_IsInterfaceVersionValid, 1);
+    init_thunk(&thunks[3], r, winIVRClientCore_IVRClientCore_003_GetGenericInterface, 2);
+    init_thunk(&thunks[4], r, winIVRClientCore_IVRClientCore_003_BIsHmdPresent, 0);
+    init_thunk(&thunks[5], r, winIVRClientCore_IVRClientCore_003_GetEnglishStringForHmdError, 1);
+    init_thunk(&thunks[6], r, winIVRClientCore_IVRClientCore_003_GetIDForVRInitError, 1);
     for (i = 0; i < 7; i++)
         vtable[i] = &thunks[i];
     r->linux_side = linux_side;
@@ -237,13 +237,13 @@ winIVRClientCore_IVRClientCore_002 *create_winIVRClientCore_IVRClientCore_002_Fn
     int i;
 
     TRACE("-> %p, vtable %p, thunks %p\n", r, vtable, thunks);
-    init_thunk(&thunks[0], r, winIVRClientCore_IVRClientCore_002_Init);
-    init_thunk(&thunks[1], r, winIVRClientCore_IVRClientCore_002_Cleanup);
-    init_thunk(&thunks[2], r, winIVRClientCore_IVRClientCore_002_IsInterfaceVersionValid);
-    init_thunk(&thunks[3], r, winIVRClientCore_IVRClientCore_002_GetGenericInterface);
-    init_thunk(&thunks[4], r, winIVRClientCore_IVRClientCore_002_BIsHmdPresent);
-    init_thunk(&thunks[5], r, winIVRClientCore_IVRClientCore_002_GetEnglishStringForHmdError);
-    init_thunk(&thunks[6], r, winIVRClientCore_IVRClientCore_002_GetIDForVRInitError);
+    init_thunk(&thunks[0], r, winIVRClientCore_IVRClientCore_002_Init, 1);
+    init_thunk(&thunks[1], r, winIVRClientCore_IVRClientCore_002_Cleanup, 0);
+    init_thunk(&thunks[2], r, winIVRClientCore_IVRClientCore_002_IsInterfaceVersionValid, 1);
+    init_thunk(&thunks[3], r, winIVRClientCore_IVRClientCore_002_GetGenericInterface, 2);
+    init_thunk(&thunks[4], r, winIVRClientCore_IVRClientCore_002_BIsHmdPresent, 0);
+    init_thunk(&thunks[5], r, winIVRClientCore_IVRClientCore_002_GetEnglishStringForHmdError, 1);
+    init_thunk(&thunks[6], r, winIVRClientCore_IVRClientCore_002_GetIDForVRInitError, 1);
     for (i = 0; i < 7; i++)
         vtable[i] = &thunks[i];
     r->linux_side = linux_side;

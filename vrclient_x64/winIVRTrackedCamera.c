@@ -155,18 +155,18 @@ winIVRTrackedCamera_IVRTrackedCamera_003 *create_winIVRTrackedCamera_IVRTrackedC
     int i;
 
     TRACE("-> %p, vtable %p, thunks %p\n", r, vtable, thunks);
-    init_thunk(&thunks[0], r, winIVRTrackedCamera_IVRTrackedCamera_003_GetCameraErrorNameFromEnum);
-    init_thunk(&thunks[1], r, winIVRTrackedCamera_IVRTrackedCamera_003_HasCamera);
-    init_thunk(&thunks[2], r, winIVRTrackedCamera_IVRTrackedCamera_003_GetCameraFrameSize);
-    init_thunk(&thunks[3], r, winIVRTrackedCamera_IVRTrackedCamera_003_GetCameraIntrinsics);
-    init_thunk(&thunks[4], r, winIVRTrackedCamera_IVRTrackedCamera_003_GetCameraProjection);
-    init_thunk(&thunks[5], r, winIVRTrackedCamera_IVRTrackedCamera_003_AcquireVideoStreamingService);
-    init_thunk(&thunks[6], r, winIVRTrackedCamera_IVRTrackedCamera_003_ReleaseVideoStreamingService);
-    init_thunk(&thunks[7], r, winIVRTrackedCamera_IVRTrackedCamera_003_GetVideoStreamFrameBuffer);
-    init_thunk(&thunks[8], r, winIVRTrackedCamera_IVRTrackedCamera_003_GetVideoStreamTextureSize);
-    init_thunk(&thunks[9], r, winIVRTrackedCamera_IVRTrackedCamera_003_GetVideoStreamTextureD3D11);
-    init_thunk(&thunks[10], r, winIVRTrackedCamera_IVRTrackedCamera_003_GetVideoStreamTextureGL);
-    init_thunk(&thunks[11], r, winIVRTrackedCamera_IVRTrackedCamera_003_ReleaseVideoStreamTextureGL);
+    init_thunk(&thunks[0], r, winIVRTrackedCamera_IVRTrackedCamera_003_GetCameraErrorNameFromEnum, 1);
+    init_thunk(&thunks[1], r, winIVRTrackedCamera_IVRTrackedCamera_003_HasCamera, 2);
+    init_thunk(&thunks[2], r, winIVRTrackedCamera_IVRTrackedCamera_003_GetCameraFrameSize, 5);
+    init_thunk(&thunks[3], r, winIVRTrackedCamera_IVRTrackedCamera_003_GetCameraIntrinsics, 4);
+    init_thunk(&thunks[4], r, winIVRTrackedCamera_IVRTrackedCamera_003_GetCameraProjection, 5);
+    init_thunk(&thunks[5], r, winIVRTrackedCamera_IVRTrackedCamera_003_AcquireVideoStreamingService, 2);
+    init_thunk(&thunks[6], r, winIVRTrackedCamera_IVRTrackedCamera_003_ReleaseVideoStreamingService, 1);
+    init_thunk(&thunks[7], r, winIVRTrackedCamera_IVRTrackedCamera_003_GetVideoStreamFrameBuffer, 6);
+    init_thunk(&thunks[8], r, winIVRTrackedCamera_IVRTrackedCamera_003_GetVideoStreamTextureSize, 5);
+    init_thunk(&thunks[9], r, winIVRTrackedCamera_IVRTrackedCamera_003_GetVideoStreamTextureD3D11, 6);
+    init_thunk(&thunks[10], r, winIVRTrackedCamera_IVRTrackedCamera_003_GetVideoStreamTextureGL, 5);
+    init_thunk(&thunks[11], r, winIVRTrackedCamera_IVRTrackedCamera_003_ReleaseVideoStreamTextureGL, 2);
     for (i = 0; i < 12; i++)
         vtable[i] = &thunks[i];
     r->linux_side = linux_side;
@@ -288,14 +288,14 @@ winIVRTrackedCamera_IVRTrackedCamera_002 *create_winIVRTrackedCamera_IVRTrackedC
     int i;
 
     TRACE("-> %p, vtable %p, thunks %p\n", r, vtable, thunks);
-    init_thunk(&thunks[0], r, winIVRTrackedCamera_IVRTrackedCamera_002_GetCameraErrorNameFromEnum);
-    init_thunk(&thunks[1], r, winIVRTrackedCamera_IVRTrackedCamera_002_HasCamera);
-    init_thunk(&thunks[2], r, winIVRTrackedCamera_IVRTrackedCamera_002_GetCameraFrameSize);
-    init_thunk(&thunks[3], r, winIVRTrackedCamera_IVRTrackedCamera_002_GetCameraIntrinisics);
-    init_thunk(&thunks[4], r, winIVRTrackedCamera_IVRTrackedCamera_002_GetCameraProjection);
-    init_thunk(&thunks[5], r, winIVRTrackedCamera_IVRTrackedCamera_002_AcquireVideoStreamingService);
-    init_thunk(&thunks[6], r, winIVRTrackedCamera_IVRTrackedCamera_002_ReleaseVideoStreamingService);
-    init_thunk(&thunks[7], r, winIVRTrackedCamera_IVRTrackedCamera_002_GetVideoStreamFrameBuffer);
+    init_thunk(&thunks[0], r, winIVRTrackedCamera_IVRTrackedCamera_002_GetCameraErrorNameFromEnum, 1);
+    init_thunk(&thunks[1], r, winIVRTrackedCamera_IVRTrackedCamera_002_HasCamera, 2);
+    init_thunk(&thunks[2], r, winIVRTrackedCamera_IVRTrackedCamera_002_GetCameraFrameSize, 5);
+    init_thunk(&thunks[3], r, winIVRTrackedCamera_IVRTrackedCamera_002_GetCameraIntrinisics, 4);
+    init_thunk(&thunks[4], r, winIVRTrackedCamera_IVRTrackedCamera_002_GetCameraProjection, 5);
+    init_thunk(&thunks[5], r, winIVRTrackedCamera_IVRTrackedCamera_002_AcquireVideoStreamingService, 2);
+    init_thunk(&thunks[6], r, winIVRTrackedCamera_IVRTrackedCamera_002_ReleaseVideoStreamingService, 1);
+    init_thunk(&thunks[7], r, winIVRTrackedCamera_IVRTrackedCamera_002_GetVideoStreamFrameBuffer, 6);
     for (i = 0; i < 8; i++)
         vtable[i] = &thunks[i];
     r->linux_side = linux_side;
@@ -497,24 +497,24 @@ winIVRTrackedCamera_IVRTrackedCamera_001 *create_winIVRTrackedCamera_IVRTrackedC
     int i;
 
     TRACE("-> %p, vtable %p, thunks %p\n", r, vtable, thunks);
-    init_thunk(&thunks[0], r, winIVRTrackedCamera_IVRTrackedCamera_001_HasCamera);
-    init_thunk(&thunks[1], r, winIVRTrackedCamera_IVRTrackedCamera_001_GetCameraFirmwareDescription);
-    init_thunk(&thunks[2], r, winIVRTrackedCamera_IVRTrackedCamera_001_GetCameraFrameDimensions);
-    init_thunk(&thunks[3], r, winIVRTrackedCamera_IVRTrackedCamera_001_SetCameraVideoStreamFormat);
-    init_thunk(&thunks[4], r, winIVRTrackedCamera_IVRTrackedCamera_001_GetCameraVideoStreamFormat);
-    init_thunk(&thunks[5], r, winIVRTrackedCamera_IVRTrackedCamera_001_EnableCameraForStreaming);
-    init_thunk(&thunks[6], r, winIVRTrackedCamera_IVRTrackedCamera_001_StartVideoStream);
-    init_thunk(&thunks[7], r, winIVRTrackedCamera_IVRTrackedCamera_001_StopVideoStream);
-    init_thunk(&thunks[8], r, winIVRTrackedCamera_IVRTrackedCamera_001_IsVideoStreamActive);
-    init_thunk(&thunks[9], r, winIVRTrackedCamera_IVRTrackedCamera_001_GetVideoStreamElapsedTime);
-    init_thunk(&thunks[10], r, winIVRTrackedCamera_IVRTrackedCamera_001_GetVideoStreamFrame);
-    init_thunk(&thunks[11], r, winIVRTrackedCamera_IVRTrackedCamera_001_ReleaseVideoStreamFrame);
-    init_thunk(&thunks[12], r, winIVRTrackedCamera_IVRTrackedCamera_001_SetAutoExposure);
-    init_thunk(&thunks[13], r, winIVRTrackedCamera_IVRTrackedCamera_001_PauseVideoStream);
-    init_thunk(&thunks[14], r, winIVRTrackedCamera_IVRTrackedCamera_001_ResumeVideoStream);
-    init_thunk(&thunks[15], r, winIVRTrackedCamera_IVRTrackedCamera_001_IsVideoStreamPaused);
-    init_thunk(&thunks[16], r, winIVRTrackedCamera_IVRTrackedCamera_001_GetCameraDistortion);
-    init_thunk(&thunks[17], r, winIVRTrackedCamera_IVRTrackedCamera_001_GetCameraProjection);
+    init_thunk(&thunks[0], r, winIVRTrackedCamera_IVRTrackedCamera_001_HasCamera, 1);
+    init_thunk(&thunks[1], r, winIVRTrackedCamera_IVRTrackedCamera_001_GetCameraFirmwareDescription, 3);
+    init_thunk(&thunks[2], r, winIVRTrackedCamera_IVRTrackedCamera_001_GetCameraFrameDimensions, 4);
+    init_thunk(&thunks[3], r, winIVRTrackedCamera_IVRTrackedCamera_001_SetCameraVideoStreamFormat, 2);
+    init_thunk(&thunks[4], r, winIVRTrackedCamera_IVRTrackedCamera_001_GetCameraVideoStreamFormat, 1);
+    init_thunk(&thunks[5], r, winIVRTrackedCamera_IVRTrackedCamera_001_EnableCameraForStreaming, 2);
+    init_thunk(&thunks[6], r, winIVRTrackedCamera_IVRTrackedCamera_001_StartVideoStream, 1);
+    init_thunk(&thunks[7], r, winIVRTrackedCamera_IVRTrackedCamera_001_StopVideoStream, 1);
+    init_thunk(&thunks[8], r, winIVRTrackedCamera_IVRTrackedCamera_001_IsVideoStreamActive, 1);
+    init_thunk(&thunks[9], r, winIVRTrackedCamera_IVRTrackedCamera_001_GetVideoStreamElapsedTime, 1);
+    init_thunk(&thunks[10], r, winIVRTrackedCamera_IVRTrackedCamera_001_GetVideoStreamFrame, 1);
+    init_thunk(&thunks[11], r, winIVRTrackedCamera_IVRTrackedCamera_001_ReleaseVideoStreamFrame, 2);
+    init_thunk(&thunks[12], r, winIVRTrackedCamera_IVRTrackedCamera_001_SetAutoExposure, 2);
+    init_thunk(&thunks[13], r, winIVRTrackedCamera_IVRTrackedCamera_001_PauseVideoStream, 1);
+    init_thunk(&thunks[14], r, winIVRTrackedCamera_IVRTrackedCamera_001_ResumeVideoStream, 1);
+    init_thunk(&thunks[15], r, winIVRTrackedCamera_IVRTrackedCamera_001_IsVideoStreamPaused, 1);
+    init_thunk(&thunks[16], r, winIVRTrackedCamera_IVRTrackedCamera_001_GetCameraDistortion, 5);
+    init_thunk(&thunks[17], r, winIVRTrackedCamera_IVRTrackedCamera_001_GetCameraProjection, 6);
     for (i = 0; i < 18; i++)
         vtable[i] = &thunks[i];
     r->linux_side = linux_side;

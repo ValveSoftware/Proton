@@ -83,9 +83,9 @@ winIVRExtendedDisplay_IVRExtendedDisplay_001 *create_winIVRExtendedDisplay_IVREx
     int i;
 
     TRACE("-> %p, vtable %p, thunks %p\n", r, vtable, thunks);
-    init_thunk(&thunks[0], r, winIVRExtendedDisplay_IVRExtendedDisplay_001_GetWindowBounds);
-    init_thunk(&thunks[1], r, winIVRExtendedDisplay_IVRExtendedDisplay_001_GetEyeOutputViewport);
-    init_thunk(&thunks[2], r, winIVRExtendedDisplay_IVRExtendedDisplay_001_GetDXGIOutputInfo);
+    init_thunk(&thunks[0], r, winIVRExtendedDisplay_IVRExtendedDisplay_001_GetWindowBounds, 4);
+    init_thunk(&thunks[1], r, winIVRExtendedDisplay_IVRExtendedDisplay_001_GetEyeOutputViewport, 5);
+    init_thunk(&thunks[2], r, winIVRExtendedDisplay_IVRExtendedDisplay_001_GetDXGIOutputInfo, 2);
     for (i = 0; i < 3; i++)
         vtable[i] = &thunks[i];
     r->linux_side = linux_side;

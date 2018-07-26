@@ -1,6 +1,5 @@
 /* asm thunks for the flat (FnTable) API */
 
-extern void call_flat_method(void);
 #ifdef __i386__
 #include "pshpack1.h"
 struct thunk
@@ -15,7 +14,9 @@ struct thunk
 };
 #include "poppack.h"
 
-static inline void init_thunk( struct thunk *thunk, void *this, void *proc )
+extern void call_flat_method(void);
+
+static inline void init_thunk( struct thunk *thunk, void *this, void *proc, int param_count )
 {
   thunk->mov_ecx = 0xb9;
   thunk->this = this;
@@ -48,12 +49,27 @@ static const struct thunk thunk_template =
     { 0xff, 0xe0 }            /* jmp *%rax */
 };
 
-static inline void init_thunk( struct thunk *thunk, void *this, void *proc )
+typedef void (*pfn_call_flat_method)(void);
+
+extern void call_flat_method3(void);
+extern void call_flat_method4(void);
+extern void call_flat_method9(void);
+
+static inline pfn_call_flat_method get_call_flat_method_pfn( int param_count )
+{
+    if (param_count <= 3)
+        return call_flat_method3;
+    if (param_count <= 4)
+        return call_flat_method4;
+    return call_flat_method9;
+}
+
+static inline void init_thunk( struct thunk *thunk, void *this, void *proc, int param_count )
 {
     *thunk = thunk_template;
     thunk->this = this;
     thunk->proc = proc;
-    thunk->call_flat = call_flat_method;
+    thunk->call_flat = get_call_flat_method_pfn(param_count);
 }
 
 #endif

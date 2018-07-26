@@ -99,11 +99,11 @@ winIVRIOBuffer_IVRIOBuffer_001 *create_winIVRIOBuffer_IVRIOBuffer_001_FnTable(vo
     int i;
 
     TRACE("-> %p, vtable %p, thunks %p\n", r, vtable, thunks);
-    init_thunk(&thunks[0], r, winIVRIOBuffer_IVRIOBuffer_001_Open);
-    init_thunk(&thunks[1], r, winIVRIOBuffer_IVRIOBuffer_001_Close);
-    init_thunk(&thunks[2], r, winIVRIOBuffer_IVRIOBuffer_001_Read);
-    init_thunk(&thunks[3], r, winIVRIOBuffer_IVRIOBuffer_001_Write);
-    init_thunk(&thunks[4], r, winIVRIOBuffer_IVRIOBuffer_001_PropertyContainer);
+    init_thunk(&thunks[0], r, winIVRIOBuffer_IVRIOBuffer_001_Open, 5);
+    init_thunk(&thunks[1], r, winIVRIOBuffer_IVRIOBuffer_001_Close, 1);
+    init_thunk(&thunks[2], r, winIVRIOBuffer_IVRIOBuffer_001_Read, 4);
+    init_thunk(&thunks[3], r, winIVRIOBuffer_IVRIOBuffer_001_Write, 3);
+    init_thunk(&thunks[4], r, winIVRIOBuffer_IVRIOBuffer_001_PropertyContainer, 1);
     for (i = 0; i < 5; i++)
         vtable[i] = &thunks[i];
     r->linux_side = linux_side;
