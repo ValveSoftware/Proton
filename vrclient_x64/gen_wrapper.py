@@ -400,6 +400,8 @@ def get_iface_version(classname):
     class_versions[classname].append(ver)
     return (ver, False)
 
+max_c_api_param_count = 0
+
 def handle_class(sdkver, classnode):
     print("handle_class: " + classnode.displayname)
     children = list(classnode.get_children())
@@ -505,9 +507,8 @@ WINE_DEFAULT_DEBUG_CHANNEL(vrclient);
     cfile.write("    TRACE(\"-> %p, vtable %p, thunks %p\\n\", r, vtable, thunks);\n")
     for i in range(len(methods)):
         param_count = methods_param_count[i]
-        if param_count > 9:
-            # Additional call_flat_method() variants are needed to handle more parameters.
-            sys.exit("Unhandled parameter count %s for method %s" % (param_count, methods[i]))
+        global max_c_api_param_count
+        max_c_api_param_count = max(param_count, max_c_api_param_count)
         cfile.write("    init_thunk(&thunks[%d], r, %s_%s, %s);\n" % (i, winclassname, methods[i], param_count))
     cfile.write("    for (i = 0; i < %d; i++)\n" % len(methods))
     cfile.write("        vtable[i] = &thunks[i];\n")
@@ -629,6 +630,80 @@ def handle_struct(sdkver, struct, which):
     generated_struct_handlers.append(handler_name)
 
 
+def generate_x64_call_flat_method(cfile, param_count):
+    assert param_count >= 4
+    def l(line):
+        cfile.write(line + '\n')
+
+    stack_space = 0x20 # shadow register space
+    stack_space += 0x8 * (param_count - 3)
+    stack_space |= 0x8
+    src_offset = 0x20 + 0x8 + stack_space # shadow register space + ret
+    dst_offset = 0x20
+
+    l(r"__ASM_GLOBAL_FUNC(call_flat_method%s," % param_count)
+    l(r'    "subq $0x%x, %%rsp\n\t"' % stack_space);
+
+    l(r'    "movq %%r9, 0x%x(%%rsp)\n\t"' % dst_offset)
+    dst_offset += 8
+
+    for i in range(5, param_count + 1):
+        l(r'    "movq 0x%x(%%rsp), %%rax\n\t" // copy parameter' % src_offset)
+        l(r'    "movq %%rax, 0x%x(%%rsp)\n\t"' % dst_offset)
+        src_offset += 8
+        dst_offset += 8
+
+    l(r'    "movq %r8, %r9\n\t" // shift over arguments')
+    l(r'    "movq %rdx, %r8\n\t"')
+    l(r'    "movq %rcx, %rdx\n\t"')
+    l(r'    "movq %r10, %rcx\n\t" // add This pointer')
+
+    l(r'    "call *%r11\n\t"')
+    l(r'    "addq $0x%x, %%rsp\n\t"' % stack_space);
+    l(r'    "ret");')
+    l(r'extern void call_flat_method%s(void);' % param_count);
+
+def generate_flatapi_c():
+    with open("flatapi.c", "w") as f:
+        f.write(r"""/* This file is auto-generated, do not edit. */
+
+#include <stdarg.h>
+
+#include "windef.h"
+#include "winbase.h"
+
+#include "cxx.h"
+#include "flatapi.h"
+
+#ifdef __i386__
+__ASM_GLOBAL_FUNC(call_flat_method,
+    "popl %eax\n\t"
+    "pushl %ecx\n\t"
+    "pushl %eax\n\t"
+    "jmp *%edx");
+#else
+// handles "this" and up to 3 parameters
+__ASM_GLOBAL_FUNC(call_flat_method,
+    "movq %r8, %r9\n\t" // shift over arguments
+    "movq %rdx, %r8\n\t"
+    "movq %rcx, %rdx\n\t"
+    "movq %r10, %rcx\n\t" // add This pointer
+    "jmp *%r11");
+extern void call_flat_method(void);
+""")
+
+        for i in range(4, max_c_api_param_count + 1):
+            f.write("\n")
+            generate_x64_call_flat_method(f, i)
+
+        f.write('\npfn_call_flat_method get_call_flat_method_pfn( int param_count )\n{\n')
+        f.write('    if (param_count <= 3) return call_flat_method;\n')
+        for i in range(4, max_c_api_param_count):
+            f.write('    if (param_count == %s) return call_flat_method%s;\n' % (i, i))
+        f.write('    return call_flat_method%s;\n' % max_c_api_param_count)
+        f.write('}\n')
+
+        f.write("#endif\n")
 
 
 #clang.cindex.Config.set_library_file("/usr/lib/llvm-3.8/lib/libclang-3.8.so.1");
@@ -678,3 +753,5 @@ for sdkver in sdk_versions:
 for f in cpp_files_need_close_brace:
     m = open(f, "a")
     m.write("\n}\n")
+
+generate_flatapi_c()

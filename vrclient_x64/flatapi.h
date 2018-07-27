@@ -51,18 +51,7 @@ static const struct thunk thunk_template =
 
 typedef void (*pfn_call_flat_method)(void);
 
-extern void call_flat_method3(void);
-extern void call_flat_method4(void);
-extern void call_flat_method9(void);
-
-static inline pfn_call_flat_method get_call_flat_method_pfn( int param_count )
-{
-    if (param_count <= 3)
-        return call_flat_method3;
-    if (param_count <= 4)
-        return call_flat_method4;
-    return call_flat_method9;
-}
+extern pfn_call_flat_method get_call_flat_method_pfn( int param_count );
 
 static inline void init_thunk( struct thunk *thunk, void *this, void *proc, int param_count )
 {

@@ -23,7 +23,6 @@
 
 #include "wined3d-interop.h"
 
-#include "cxx.h"
 #include "flatapi.h"
 
 #include "cppIVRClientCore_IVRClientCore_003.h"
@@ -910,53 +909,3 @@ void destroy_compositor_data(struct compositor_data *data)
         wined3d_device->lpVtbl->wait_idle(wined3d_device);
     }
 }
-
-/* call_flat_method() definition */
-#ifdef __i386__
-__ASM_GLOBAL_FUNC(call_flat_method,
-    "popl %eax\n\t"
-    "pushl %ecx\n\t"
-    "pushl %eax\n\t"
-    "jmp *%edx");
-#else
-// handles "this" and up to 3 parameters
-__ASM_GLOBAL_FUNC(call_flat_method3,
-    "movq %r8, %r9\n\t" // shift over arguments
-    "movq %rdx, %r8\n\t"
-    "movq %rcx, %rdx\n\t"
-    "movq %r10, %rcx\n\t" // add This pointer
-    "jmp *%r11");
-
-__ASM_GLOBAL_FUNC(call_flat_method4,
-    "subq $0x28, %rsp\n\t" // shadow register space and 1 parameter
-    "movq %r9, 0x20(%rsp)\n\t"
-    "movq %r8, %r9\n\t" // shift over arguments
-    "movq %rdx, %r8\n\t"
-    "movq %rcx, %rdx\n\t"
-    "movq %r10, %rcx\n\t" // add This pointer
-    "call *%r11\n\t"
-    "addq $0x28, %rsp\n\t"
-    "ret");
-
-// handles "this" and up to 9 parameters
-__ASM_GLOBAL_FUNC(call_flat_method9,
-    "subq $0x58, %rsp\n\t" // shadow register space and 6 parameters
-    "movq %r9, 0x20(%rsp)\n\t"
-    "movq 0x80(%rsp), %rax\n\t" // copy parameters
-    "movq %rax, 0x28(%rsp)\n\t"
-    "movq 0x88(%rsp), %rax\n\t"
-    "movq %rax, 0x30(%rsp)\n\t"
-    "movq 0x90(%rsp), %rax\n\t"
-    "movq %rax, 0x38(%rsp)\n\t"
-    "movq 0x98(%rsp), %rax\n\t"
-    "movq %rax, 0x40(%rsp)\n\t"
-    "movq 0xa0(%rsp), %rax\n\t"
-    "movq %rax, 0x48(%rsp)\n\t"
-    "movq %r8, %r9\n\t" // shift over arguments
-    "movq %rdx, %r8\n\t"
-    "movq %rcx, %rdx\n\t"
-    "movq %r10, %rcx\n\t" // add This pointer
-    "call *%r11\n\t"
-    "addq $0x58, %rsp\n\t"
-    "ret");
-#endif
