@@ -420,7 +420,7 @@ winIVRCompositor_IVRCompositor_022 *create_winIVRCompositor_IVRCompositor_022_Fn
     init_thunk(&thunks[10], r, winIVRCompositor_IVRCompositor_022_GetFrameTimeRemaining, 0, FALSE, FALSE);
     init_thunk(&thunks[11], r, winIVRCompositor_IVRCompositor_022_GetCumulativeStats, 2, FALSE, FALSE);
     init_thunk(&thunks[12], r, winIVRCompositor_IVRCompositor_022_FadeToColor, 6, TRUE, TRUE);
-    init_thunk(&thunks[13], r, winIVRCompositor_IVRCompositor_022_GetCurrentFadeColor, 1, FALSE, FALSE);
+    init_thunk(&thunks[13], r, winIVRCompositor_IVRCompositor_022_GetCurrentFadeColor, 2, FALSE, FALSE);
     init_thunk(&thunks[14], r, winIVRCompositor_IVRCompositor_022_FadeGrid, 2, TRUE, FALSE);
     init_thunk(&thunks[15], r, winIVRCompositor_IVRCompositor_022_GetCurrentGridAlpha, 0, FALSE, FALSE);
     init_thunk(&thunks[16], r, winIVRCompositor_IVRCompositor_022_SetSkyboxOverride, 2, FALSE, FALSE);
@@ -869,7 +869,7 @@ winIVRCompositor_IVRCompositor_021 *create_winIVRCompositor_IVRCompositor_021_Fn
     init_thunk(&thunks[10], r, winIVRCompositor_IVRCompositor_021_GetFrameTimeRemaining, 0, FALSE, FALSE);
     init_thunk(&thunks[11], r, winIVRCompositor_IVRCompositor_021_GetCumulativeStats, 2, FALSE, FALSE);
     init_thunk(&thunks[12], r, winIVRCompositor_IVRCompositor_021_FadeToColor, 6, TRUE, TRUE);
-    init_thunk(&thunks[13], r, winIVRCompositor_IVRCompositor_021_GetCurrentFadeColor, 1, FALSE, FALSE);
+    init_thunk(&thunks[13], r, winIVRCompositor_IVRCompositor_021_GetCurrentFadeColor, 2, FALSE, FALSE);
     init_thunk(&thunks[14], r, winIVRCompositor_IVRCompositor_021_FadeGrid, 2, TRUE, FALSE);
     init_thunk(&thunks[15], r, winIVRCompositor_IVRCompositor_021_GetCurrentGridAlpha, 0, FALSE, FALSE);
     init_thunk(&thunks[16], r, winIVRCompositor_IVRCompositor_021_SetSkyboxOverride, 2, FALSE, FALSE);
@@ -1302,7 +1302,7 @@ winIVRCompositor_IVRCompositor_020 *create_winIVRCompositor_IVRCompositor_020_Fn
     init_thunk(&thunks[10], r, winIVRCompositor_IVRCompositor_020_GetFrameTimeRemaining, 0, FALSE, FALSE);
     init_thunk(&thunks[11], r, winIVRCompositor_IVRCompositor_020_GetCumulativeStats, 2, FALSE, FALSE);
     init_thunk(&thunks[12], r, winIVRCompositor_IVRCompositor_020_FadeToColor, 6, TRUE, TRUE);
-    init_thunk(&thunks[13], r, winIVRCompositor_IVRCompositor_020_GetCurrentFadeColor, 1, FALSE, FALSE);
+    init_thunk(&thunks[13], r, winIVRCompositor_IVRCompositor_020_GetCurrentFadeColor, 2, FALSE, FALSE);
     init_thunk(&thunks[14], r, winIVRCompositor_IVRCompositor_020_FadeGrid, 2, TRUE, FALSE);
     init_thunk(&thunks[15], r, winIVRCompositor_IVRCompositor_020_GetCurrentGridAlpha, 0, FALSE, FALSE);
     init_thunk(&thunks[16], r, winIVRCompositor_IVRCompositor_020_SetSkyboxOverride, 2, FALSE, FALSE);
@@ -1725,7 +1725,7 @@ winIVRCompositor_IVRCompositor_019 *create_winIVRCompositor_IVRCompositor_019_Fn
     init_thunk(&thunks[10], r, winIVRCompositor_IVRCompositor_019_GetFrameTimeRemaining, 0, FALSE, FALSE);
     init_thunk(&thunks[11], r, winIVRCompositor_IVRCompositor_019_GetCumulativeStats, 2, FALSE, FALSE);
     init_thunk(&thunks[12], r, winIVRCompositor_IVRCompositor_019_FadeToColor, 6, TRUE, TRUE);
-    init_thunk(&thunks[13], r, winIVRCompositor_IVRCompositor_019_GetCurrentFadeColor, 1, FALSE, FALSE);
+    init_thunk(&thunks[13], r, winIVRCompositor_IVRCompositor_019_GetCurrentFadeColor, 2, FALSE, FALSE);
     init_thunk(&thunks[14], r, winIVRCompositor_IVRCompositor_019_FadeGrid, 2, TRUE, FALSE);
     init_thunk(&thunks[15], r, winIVRCompositor_IVRCompositor_019_GetCurrentGridAlpha, 0, FALSE, FALSE);
     init_thunk(&thunks[16], r, winIVRCompositor_IVRCompositor_019_SetSkyboxOverride, 2, FALSE, FALSE);
@@ -2131,7 +2131,7 @@ winIVRCompositor_IVRCompositor_018 *create_winIVRCompositor_IVRCompositor_018_Fn
     init_thunk(&thunks[10], r, winIVRCompositor_IVRCompositor_018_GetFrameTimeRemaining, 0, FALSE, FALSE);
     init_thunk(&thunks[11], r, winIVRCompositor_IVRCompositor_018_GetCumulativeStats, 2, FALSE, FALSE);
     init_thunk(&thunks[12], r, winIVRCompositor_IVRCompositor_018_FadeToColor, 6, TRUE, TRUE);
-    init_thunk(&thunks[13], r, winIVRCompositor_IVRCompositor_018_GetCurrentFadeColor, 1, FALSE, FALSE);
+    init_thunk(&thunks[13], r, winIVRCompositor_IVRCompositor_018_GetCurrentFadeColor, 2, FALSE, FALSE);
     init_thunk(&thunks[14], r, winIVRCompositor_IVRCompositor_018_FadeGrid, 2, TRUE, FALSE);
     init_thunk(&thunks[15], r, winIVRCompositor_IVRCompositor_018_GetCurrentGridAlpha, 0, FALSE, FALSE);
     init_thunk(&thunks[16], r, winIVRCompositor_IVRCompositor_018_SetSkyboxOverride, 2, FALSE, FALSE);

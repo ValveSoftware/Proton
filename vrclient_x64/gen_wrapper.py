@@ -402,10 +402,13 @@ max_c_api_param_count = 0
 def get_capi_thunk_params(method):
     def toBOOL(x):
         return "TRUE" if x else "FALSE"
-    params = get_params(method)
-    param_count = len(params)
-    has_float_params = any(x.type.spelling == "float" for x in params)
-    is_4th_float = param_count >= 4 and params[3].type.spelling == "float"
+    returns_record = method.result_type.get_canonical().kind == clang.cindex.TypeKind.RECORD
+    param_types = map(lambda x: x.type, get_params(method))
+    if returns_record:
+        param_types.insert(0, method.result_type)
+    param_count = len(param_types)
+    has_float_params = any(x.spelling == "float" for x in param_types)
+    is_4th_float = param_count >= 4 and param_types[3].spelling == "float"
     return "%s, %s, %s" % (param_count, toBOOL(has_float_params), toBOOL(is_4th_float))
 
 def handle_class(sdkver, classnode):
