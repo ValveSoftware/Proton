@@ -75,8 +75,8 @@ winIVRNotifications_IVRNotifications_002 *create_winIVRNotifications_IVRNotifica
     int i;
 
     TRACE("-> %p, vtable %p, thunks %p\n", r, vtable, thunks);
-    init_thunk(&thunks[0], r, winIVRNotifications_IVRNotifications_002_CreateNotification, 7);
-    init_thunk(&thunks[1], r, winIVRNotifications_IVRNotifications_002_RemoveNotification, 1);
+    init_thunk(&thunks[0], r, winIVRNotifications_IVRNotifications_002_CreateNotification, 7, FALSE, FALSE);
+    init_thunk(&thunks[1], r, winIVRNotifications_IVRNotifications_002_RemoveNotification, 1, FALSE, FALSE);
     for (i = 0; i < 2; i++)
         vtable[i] = &thunks[i];
     r->linux_side = linux_side;
@@ -158,9 +158,9 @@ winIVRNotifications_IVRNotifications_001 *create_winIVRNotifications_IVRNotifica
     int i;
 
     TRACE("-> %p, vtable %p, thunks %p\n", r, vtable, thunks);
-    init_thunk(&thunks[0], r, winIVRNotifications_IVRNotifications_001_GetErrorString, 3);
-    init_thunk(&thunks[1], r, winIVRNotifications_IVRNotifications_001_CreateNotification, 7);
-    init_thunk(&thunks[2], r, winIVRNotifications_IVRNotifications_001_DismissNotification, 1);
+    init_thunk(&thunks[0], r, winIVRNotifications_IVRNotifications_001_GetErrorString, 3, FALSE, FALSE);
+    init_thunk(&thunks[1], r, winIVRNotifications_IVRNotifications_001_CreateNotification, 7, FALSE, FALSE);
+    init_thunk(&thunks[2], r, winIVRNotifications_IVRNotifications_001_DismissNotification, 1, FALSE, FALSE);
     for (i = 0; i < 3; i++)
         vtable[i] = &thunks[i];
     r->linux_side = linux_side;

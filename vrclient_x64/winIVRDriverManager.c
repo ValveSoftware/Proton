@@ -83,9 +83,9 @@ winIVRDriverManager_IVRDriverManager_001 *create_winIVRDriverManager_IVRDriverMa
     int i;
 
     TRACE("-> %p, vtable %p, thunks %p\n", r, vtable, thunks);
-    init_thunk(&thunks[0], r, winIVRDriverManager_IVRDriverManager_001_GetDriverCount, 0);
-    init_thunk(&thunks[1], r, winIVRDriverManager_IVRDriverManager_001_GetDriverName, 3);
-    init_thunk(&thunks[2], r, winIVRDriverManager_IVRDriverManager_001_GetDriverHandle, 1);
+    init_thunk(&thunks[0], r, winIVRDriverManager_IVRDriverManager_001_GetDriverCount, 0, FALSE, FALSE);
+    init_thunk(&thunks[1], r, winIVRDriverManager_IVRDriverManager_001_GetDriverName, 3, FALSE, FALSE);
+    init_thunk(&thunks[2], r, winIVRDriverManager_IVRDriverManager_001_GetDriverHandle, 1, FALSE, FALSE);
     for (i = 0; i < 3; i++)
         vtable[i] = &thunks[i];
     r->linux_side = linux_side;

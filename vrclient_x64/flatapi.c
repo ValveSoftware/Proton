@@ -24,6 +24,17 @@ __ASM_GLOBAL_FUNC(call_flat_method,
     "jmp *%r11");
 extern void call_flat_method(void);
 
+__ASM_GLOBAL_FUNC(call_flat_method_f,
+    "movq %r8, %r9\n\t" // shift over arguments
+    "movq %rdx, %r8\n\t"
+    "movq %rcx, %rdx\n\t"
+    "movq %r10, %rcx\n\t" // add This pointer
+    "movq %xmm2, %xmm3\n\t"
+    "movq %xmm1, %xmm2\n\t"
+    "movq %xmm0, %xmm1\n\t"
+    "jmp *%r11");
+extern void call_flat_method_f(void);
+
 __ASM_GLOBAL_FUNC(call_flat_method4,
     "subq $0x28, %rsp\n\t"
     "movq %r9, 0x20(%rsp)\n\t"
@@ -126,8 +137,251 @@ __ASM_GLOBAL_FUNC(call_flat_method9,
     "ret");
 extern void call_flat_method9(void);
 
-pfn_call_flat_method get_call_flat_method_pfn( int param_count )
+__ASM_GLOBAL_FUNC(call_flat_method4_f,
+    "subq $0x28, %rsp\n\t"
+    "movq %r9, 0x20(%rsp)\n\t"
+    "movq %r8, %r9\n\t" // shift over arguments
+    "movq %rdx, %r8\n\t"
+    "movq %rcx, %rdx\n\t"
+    "movq %r10, %rcx\n\t" // add This pointer
+    "movq %xmm2, %xmm3\n\t"
+    "movq %xmm1, %xmm2\n\t"
+    "movq %xmm0, %xmm1\n\t"
+    "call *%r11\n\t"
+    "addq $0x28, %rsp\n\t"
+    "ret");
+extern void call_flat_method4_f(void);
+
+__ASM_GLOBAL_FUNC(call_flat_method4_f_f,
+    "subq $0x28, %rsp\n\t"
+    "movq %xmm3, 0x20(%rsp)\n\t"
+    "movq %r8, %r9\n\t" // shift over arguments
+    "movq %rdx, %r8\n\t"
+    "movq %rcx, %rdx\n\t"
+    "movq %r10, %rcx\n\t" // add This pointer
+    "movq %xmm2, %xmm3\n\t"
+    "movq %xmm1, %xmm2\n\t"
+    "movq %xmm0, %xmm1\n\t"
+    "call *%r11\n\t"
+    "addq $0x28, %rsp\n\t"
+    "ret");
+extern void call_flat_method4_f_f(void);
+
+__ASM_GLOBAL_FUNC(call_flat_method5_f,
+    "subq $0x38, %rsp\n\t"
+    "movq %r9, 0x20(%rsp)\n\t"
+    "movq 0x60(%rsp), %rax\n\t" // copy parameter
+    "movq %rax, 0x28(%rsp)\n\t"
+    "movq %r8, %r9\n\t" // shift over arguments
+    "movq %rdx, %r8\n\t"
+    "movq %rcx, %rdx\n\t"
+    "movq %r10, %rcx\n\t" // add This pointer
+    "movq %xmm2, %xmm3\n\t"
+    "movq %xmm1, %xmm2\n\t"
+    "movq %xmm0, %xmm1\n\t"
+    "call *%r11\n\t"
+    "addq $0x38, %rsp\n\t"
+    "ret");
+extern void call_flat_method5_f(void);
+
+__ASM_GLOBAL_FUNC(call_flat_method5_f_f,
+    "subq $0x38, %rsp\n\t"
+    "movq %xmm3, 0x20(%rsp)\n\t"
+    "movq 0x60(%rsp), %rax\n\t" // copy parameter
+    "movq %rax, 0x28(%rsp)\n\t"
+    "movq %r8, %r9\n\t" // shift over arguments
+    "movq %rdx, %r8\n\t"
+    "movq %rcx, %rdx\n\t"
+    "movq %r10, %rcx\n\t" // add This pointer
+    "movq %xmm2, %xmm3\n\t"
+    "movq %xmm1, %xmm2\n\t"
+    "movq %xmm0, %xmm1\n\t"
+    "call *%r11\n\t"
+    "addq $0x38, %rsp\n\t"
+    "ret");
+extern void call_flat_method5_f_f(void);
+
+__ASM_GLOBAL_FUNC(call_flat_method6_f,
+    "subq $0x38, %rsp\n\t"
+    "movq %r9, 0x20(%rsp)\n\t"
+    "movq 0x60(%rsp), %rax\n\t" // copy parameter
+    "movq %rax, 0x28(%rsp)\n\t"
+    "movq 0x68(%rsp), %rax\n\t" // copy parameter
+    "movq %rax, 0x30(%rsp)\n\t"
+    "movq %r8, %r9\n\t" // shift over arguments
+    "movq %rdx, %r8\n\t"
+    "movq %rcx, %rdx\n\t"
+    "movq %r10, %rcx\n\t" // add This pointer
+    "movq %xmm2, %xmm3\n\t"
+    "movq %xmm1, %xmm2\n\t"
+    "movq %xmm0, %xmm1\n\t"
+    "call *%r11\n\t"
+    "addq $0x38, %rsp\n\t"
+    "ret");
+extern void call_flat_method6_f(void);
+
+__ASM_GLOBAL_FUNC(call_flat_method6_f_f,
+    "subq $0x38, %rsp\n\t"
+    "movq %xmm3, 0x20(%rsp)\n\t"
+    "movq 0x60(%rsp), %rax\n\t" // copy parameter
+    "movq %rax, 0x28(%rsp)\n\t"
+    "movq 0x68(%rsp), %rax\n\t" // copy parameter
+    "movq %rax, 0x30(%rsp)\n\t"
+    "movq %r8, %r9\n\t" // shift over arguments
+    "movq %rdx, %r8\n\t"
+    "movq %rcx, %rdx\n\t"
+    "movq %r10, %rcx\n\t" // add This pointer
+    "movq %xmm2, %xmm3\n\t"
+    "movq %xmm1, %xmm2\n\t"
+    "movq %xmm0, %xmm1\n\t"
+    "call *%r11\n\t"
+    "addq $0x38, %rsp\n\t"
+    "ret");
+extern void call_flat_method6_f_f(void);
+
+__ASM_GLOBAL_FUNC(call_flat_method7_f,
+    "subq $0x48, %rsp\n\t"
+    "movq %r9, 0x20(%rsp)\n\t"
+    "movq 0x70(%rsp), %rax\n\t" // copy parameter
+    "movq %rax, 0x28(%rsp)\n\t"
+    "movq 0x78(%rsp), %rax\n\t" // copy parameter
+    "movq %rax, 0x30(%rsp)\n\t"
+    "movq 0x80(%rsp), %rax\n\t" // copy parameter
+    "movq %rax, 0x38(%rsp)\n\t"
+    "movq %r8, %r9\n\t" // shift over arguments
+    "movq %rdx, %r8\n\t"
+    "movq %rcx, %rdx\n\t"
+    "movq %r10, %rcx\n\t" // add This pointer
+    "movq %xmm2, %xmm3\n\t"
+    "movq %xmm1, %xmm2\n\t"
+    "movq %xmm0, %xmm1\n\t"
+    "call *%r11\n\t"
+    "addq $0x48, %rsp\n\t"
+    "ret");
+extern void call_flat_method7_f(void);
+
+__ASM_GLOBAL_FUNC(call_flat_method7_f_f,
+    "subq $0x48, %rsp\n\t"
+    "movq %xmm3, 0x20(%rsp)\n\t"
+    "movq 0x70(%rsp), %rax\n\t" // copy parameter
+    "movq %rax, 0x28(%rsp)\n\t"
+    "movq 0x78(%rsp), %rax\n\t" // copy parameter
+    "movq %rax, 0x30(%rsp)\n\t"
+    "movq 0x80(%rsp), %rax\n\t" // copy parameter
+    "movq %rax, 0x38(%rsp)\n\t"
+    "movq %r8, %r9\n\t" // shift over arguments
+    "movq %rdx, %r8\n\t"
+    "movq %rcx, %rdx\n\t"
+    "movq %r10, %rcx\n\t" // add This pointer
+    "movq %xmm2, %xmm3\n\t"
+    "movq %xmm1, %xmm2\n\t"
+    "movq %xmm0, %xmm1\n\t"
+    "call *%r11\n\t"
+    "addq $0x48, %rsp\n\t"
+    "ret");
+extern void call_flat_method7_f_f(void);
+
+__ASM_GLOBAL_FUNC(call_flat_method8_f,
+    "subq $0x48, %rsp\n\t"
+    "movq %r9, 0x20(%rsp)\n\t"
+    "movq 0x70(%rsp), %rax\n\t" // copy parameter
+    "movq %rax, 0x28(%rsp)\n\t"
+    "movq 0x78(%rsp), %rax\n\t" // copy parameter
+    "movq %rax, 0x30(%rsp)\n\t"
+    "movq 0x80(%rsp), %rax\n\t" // copy parameter
+    "movq %rax, 0x38(%rsp)\n\t"
+    "movq 0x88(%rsp), %rax\n\t" // copy parameter
+    "movq %rax, 0x40(%rsp)\n\t"
+    "movq %r8, %r9\n\t" // shift over arguments
+    "movq %rdx, %r8\n\t"
+    "movq %rcx, %rdx\n\t"
+    "movq %r10, %rcx\n\t" // add This pointer
+    "movq %xmm2, %xmm3\n\t"
+    "movq %xmm1, %xmm2\n\t"
+    "movq %xmm0, %xmm1\n\t"
+    "call *%r11\n\t"
+    "addq $0x48, %rsp\n\t"
+    "ret");
+extern void call_flat_method8_f(void);
+
+__ASM_GLOBAL_FUNC(call_flat_method8_f_f,
+    "subq $0x48, %rsp\n\t"
+    "movq %xmm3, 0x20(%rsp)\n\t"
+    "movq 0x70(%rsp), %rax\n\t" // copy parameter
+    "movq %rax, 0x28(%rsp)\n\t"
+    "movq 0x78(%rsp), %rax\n\t" // copy parameter
+    "movq %rax, 0x30(%rsp)\n\t"
+    "movq 0x80(%rsp), %rax\n\t" // copy parameter
+    "movq %rax, 0x38(%rsp)\n\t"
+    "movq 0x88(%rsp), %rax\n\t" // copy parameter
+    "movq %rax, 0x40(%rsp)\n\t"
+    "movq %r8, %r9\n\t" // shift over arguments
+    "movq %rdx, %r8\n\t"
+    "movq %rcx, %rdx\n\t"
+    "movq %r10, %rcx\n\t" // add This pointer
+    "movq %xmm2, %xmm3\n\t"
+    "movq %xmm1, %xmm2\n\t"
+    "movq %xmm0, %xmm1\n\t"
+    "call *%r11\n\t"
+    "addq $0x48, %rsp\n\t"
+    "ret");
+extern void call_flat_method8_f_f(void);
+
+__ASM_GLOBAL_FUNC(call_flat_method9_f,
+    "subq $0x58, %rsp\n\t"
+    "movq %r9, 0x20(%rsp)\n\t"
+    "movq 0x80(%rsp), %rax\n\t" // copy parameter
+    "movq %rax, 0x28(%rsp)\n\t"
+    "movq 0x88(%rsp), %rax\n\t" // copy parameter
+    "movq %rax, 0x30(%rsp)\n\t"
+    "movq 0x90(%rsp), %rax\n\t" // copy parameter
+    "movq %rax, 0x38(%rsp)\n\t"
+    "movq 0x98(%rsp), %rax\n\t" // copy parameter
+    "movq %rax, 0x40(%rsp)\n\t"
+    "movq 0xa0(%rsp), %rax\n\t" // copy parameter
+    "movq %rax, 0x48(%rsp)\n\t"
+    "movq %r8, %r9\n\t" // shift over arguments
+    "movq %rdx, %r8\n\t"
+    "movq %rcx, %rdx\n\t"
+    "movq %r10, %rcx\n\t" // add This pointer
+    "movq %xmm2, %xmm3\n\t"
+    "movq %xmm1, %xmm2\n\t"
+    "movq %xmm0, %xmm1\n\t"
+    "call *%r11\n\t"
+    "addq $0x58, %rsp\n\t"
+    "ret");
+extern void call_flat_method9_f(void);
+
+__ASM_GLOBAL_FUNC(call_flat_method9_f_f,
+    "subq $0x58, %rsp\n\t"
+    "movq %xmm3, 0x20(%rsp)\n\t"
+    "movq 0x80(%rsp), %rax\n\t" // copy parameter
+    "movq %rax, 0x28(%rsp)\n\t"
+    "movq 0x88(%rsp), %rax\n\t" // copy parameter
+    "movq %rax, 0x30(%rsp)\n\t"
+    "movq 0x90(%rsp), %rax\n\t" // copy parameter
+    "movq %rax, 0x38(%rsp)\n\t"
+    "movq 0x98(%rsp), %rax\n\t" // copy parameter
+    "movq %rax, 0x40(%rsp)\n\t"
+    "movq 0xa0(%rsp), %rax\n\t" // copy parameter
+    "movq %rax, 0x48(%rsp)\n\t"
+    "movq %r8, %r9\n\t" // shift over arguments
+    "movq %rdx, %r8\n\t"
+    "movq %rcx, %rdx\n\t"
+    "movq %r10, %rcx\n\t" // add This pointer
+    "movq %xmm2, %xmm3\n\t"
+    "movq %xmm1, %xmm2\n\t"
+    "movq %xmm0, %xmm1\n\t"
+    "call *%r11\n\t"
+    "addq $0x58, %rsp\n\t"
+    "ret");
+extern void call_flat_method9_f_f(void);
+
+pfn_call_flat_method
+get_call_flat_method_pfn( int param_count, BOOL has_floats, BOOL is_4th_float )
 {
+    if (!has_floats)
+    {
     if (param_count <= 3) return call_flat_method;
     if (param_count == 4) return call_flat_method4;
     if (param_count == 5) return call_flat_method5;
@@ -135,5 +389,23 @@ pfn_call_flat_method get_call_flat_method_pfn( int param_count )
     if (param_count == 7) return call_flat_method7;
     if (param_count == 8) return call_flat_method8;
     return call_flat_method9;
+    }
+    if (is_4th_float)
+    {
+    if (param_count <= 3) return call_flat_method_f;
+    if (param_count == 4) return call_flat_method4_f_f;
+    if (param_count == 5) return call_flat_method5_f_f;
+    if (param_count == 6) return call_flat_method6_f_f;
+    if (param_count == 7) return call_flat_method7_f_f;
+    if (param_count == 8) return call_flat_method8_f_f;
+    return call_flat_method9_f_f;
+    }
+    if (param_count <= 3) return call_flat_method_f;
+    if (param_count == 4) return call_flat_method4_f;
+    if (param_count == 5) return call_flat_method5_f;
+    if (param_count == 6) return call_flat_method6_f;
+    if (param_count == 7) return call_flat_method7_f;
+    if (param_count == 8) return call_flat_method8_f;
+    return call_flat_method9_f;
 }
 #endif

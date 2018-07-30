@@ -75,8 +75,8 @@ winIVRResources_IVRResources_001 *create_winIVRResources_IVRResources_001_FnTabl
     int i;
 
     TRACE("-> %p, vtable %p, thunks %p\n", r, vtable, thunks);
-    init_thunk(&thunks[0], r, winIVRResources_IVRResources_001_LoadSharedResource, 3);
-    init_thunk(&thunks[1], r, winIVRResources_IVRResources_001_GetResourceFullPath, 4);
+    init_thunk(&thunks[0], r, winIVRResources_IVRResources_001_LoadSharedResource, 3, FALSE, FALSE);
+    init_thunk(&thunks[1], r, winIVRResources_IVRResources_001_GetResourceFullPath, 4, FALSE, FALSE);
     for (i = 0; i < 2; i++)
         vtable[i] = &thunks[i];
     r->linux_side = linux_side;

@@ -123,14 +123,14 @@ winIVRChaperone_IVRChaperone_003 *create_winIVRChaperone_IVRChaperone_003_FnTabl
     int i;
 
     TRACE("-> %p, vtable %p, thunks %p\n", r, vtable, thunks);
-    init_thunk(&thunks[0], r, winIVRChaperone_IVRChaperone_003_GetCalibrationState, 0);
-    init_thunk(&thunks[1], r, winIVRChaperone_IVRChaperone_003_GetPlayAreaSize, 2);
-    init_thunk(&thunks[2], r, winIVRChaperone_IVRChaperone_003_GetPlayAreaRect, 1);
-    init_thunk(&thunks[3], r, winIVRChaperone_IVRChaperone_003_ReloadInfo, 0);
-    init_thunk(&thunks[4], r, winIVRChaperone_IVRChaperone_003_SetSceneColor, 1);
-    init_thunk(&thunks[5], r, winIVRChaperone_IVRChaperone_003_GetBoundsColor, 4);
-    init_thunk(&thunks[6], r, winIVRChaperone_IVRChaperone_003_AreBoundsVisible, 0);
-    init_thunk(&thunks[7], r, winIVRChaperone_IVRChaperone_003_ForceBoundsVisible, 1);
+    init_thunk(&thunks[0], r, winIVRChaperone_IVRChaperone_003_GetCalibrationState, 0, FALSE, FALSE);
+    init_thunk(&thunks[1], r, winIVRChaperone_IVRChaperone_003_GetPlayAreaSize, 2, FALSE, FALSE);
+    init_thunk(&thunks[2], r, winIVRChaperone_IVRChaperone_003_GetPlayAreaRect, 1, FALSE, FALSE);
+    init_thunk(&thunks[3], r, winIVRChaperone_IVRChaperone_003_ReloadInfo, 0, FALSE, FALSE);
+    init_thunk(&thunks[4], r, winIVRChaperone_IVRChaperone_003_SetSceneColor, 1, FALSE, FALSE);
+    init_thunk(&thunks[5], r, winIVRChaperone_IVRChaperone_003_GetBoundsColor, 4, TRUE, FALSE);
+    init_thunk(&thunks[6], r, winIVRChaperone_IVRChaperone_003_AreBoundsVisible, 0, FALSE, FALSE);
+    init_thunk(&thunks[7], r, winIVRChaperone_IVRChaperone_003_ForceBoundsVisible, 1, FALSE, FALSE);
     for (i = 0; i < 8; i++)
         vtable[i] = &thunks[i];
     r->linux_side = linux_side;
@@ -260,15 +260,15 @@ winIVRChaperone_IVRChaperone_002 *create_winIVRChaperone_IVRChaperone_002_FnTabl
     int i;
 
     TRACE("-> %p, vtable %p, thunks %p\n", r, vtable, thunks);
-    init_thunk(&thunks[0], r, winIVRChaperone_IVRChaperone_002_GetCalibrationState, 0);
-    init_thunk(&thunks[1], r, winIVRChaperone_IVRChaperone_002_GetSoftBoundsInfo, 1);
-    init_thunk(&thunks[2], r, winIVRChaperone_IVRChaperone_002_GetHardBoundsInfo, 2);
-    init_thunk(&thunks[3], r, winIVRChaperone_IVRChaperone_002_GetSeatedBoundsInfo, 1);
-    init_thunk(&thunks[4], r, winIVRChaperone_IVRChaperone_002_ReloadInfo, 0);
-    init_thunk(&thunks[5], r, winIVRChaperone_IVRChaperone_002_SetSceneColor, 1);
-    init_thunk(&thunks[6], r, winIVRChaperone_IVRChaperone_002_GetBoundsColor, 2);
-    init_thunk(&thunks[7], r, winIVRChaperone_IVRChaperone_002_AreBoundsVisible, 0);
-    init_thunk(&thunks[8], r, winIVRChaperone_IVRChaperone_002_ForceBoundsVisible, 1);
+    init_thunk(&thunks[0], r, winIVRChaperone_IVRChaperone_002_GetCalibrationState, 0, FALSE, FALSE);
+    init_thunk(&thunks[1], r, winIVRChaperone_IVRChaperone_002_GetSoftBoundsInfo, 1, FALSE, FALSE);
+    init_thunk(&thunks[2], r, winIVRChaperone_IVRChaperone_002_GetHardBoundsInfo, 2, FALSE, FALSE);
+    init_thunk(&thunks[3], r, winIVRChaperone_IVRChaperone_002_GetSeatedBoundsInfo, 1, FALSE, FALSE);
+    init_thunk(&thunks[4], r, winIVRChaperone_IVRChaperone_002_ReloadInfo, 0, FALSE, FALSE);
+    init_thunk(&thunks[5], r, winIVRChaperone_IVRChaperone_002_SetSceneColor, 1, FALSE, FALSE);
+    init_thunk(&thunks[6], r, winIVRChaperone_IVRChaperone_002_GetBoundsColor, 2, FALSE, FALSE);
+    init_thunk(&thunks[7], r, winIVRChaperone_IVRChaperone_002_AreBoundsVisible, 0, FALSE, FALSE);
+    init_thunk(&thunks[8], r, winIVRChaperone_IVRChaperone_002_ForceBoundsVisible, 1, FALSE, FALSE);
     for (i = 0; i < 9; i++)
         vtable[i] = &thunks[i];
     r->linux_side = linux_side;

@@ -203,24 +203,24 @@ winIVRRenderModels_IVRRenderModels_005 *create_winIVRRenderModels_IVRRenderModel
     int i;
 
     TRACE("-> %p, vtable %p, thunks %p\n", r, vtable, thunks);
-    init_thunk(&thunks[0], r, winIVRRenderModels_IVRRenderModels_005_LoadRenderModel_Async, 2);
-    init_thunk(&thunks[1], r, winIVRRenderModels_IVRRenderModels_005_FreeRenderModel, 1);
-    init_thunk(&thunks[2], r, winIVRRenderModels_IVRRenderModels_005_LoadTexture_Async, 2);
-    init_thunk(&thunks[3], r, winIVRRenderModels_IVRRenderModels_005_FreeTexture, 1);
-    init_thunk(&thunks[4], r, winIVRRenderModels_IVRRenderModels_005_LoadTextureD3D11_Async, 3);
-    init_thunk(&thunks[5], r, winIVRRenderModels_IVRRenderModels_005_LoadIntoTextureD3D11_Async, 2);
-    init_thunk(&thunks[6], r, winIVRRenderModels_IVRRenderModels_005_FreeTextureD3D11, 1);
-    init_thunk(&thunks[7], r, winIVRRenderModels_IVRRenderModels_005_GetRenderModelName, 3);
-    init_thunk(&thunks[8], r, winIVRRenderModels_IVRRenderModels_005_GetRenderModelCount, 0);
-    init_thunk(&thunks[9], r, winIVRRenderModels_IVRRenderModels_005_GetComponentCount, 1);
-    init_thunk(&thunks[10], r, winIVRRenderModels_IVRRenderModels_005_GetComponentName, 4);
-    init_thunk(&thunks[11], r, winIVRRenderModels_IVRRenderModels_005_GetComponentButtonMask, 2);
-    init_thunk(&thunks[12], r, winIVRRenderModels_IVRRenderModels_005_GetComponentRenderModelName, 4);
-    init_thunk(&thunks[13], r, winIVRRenderModels_IVRRenderModels_005_GetComponentState, 5);
-    init_thunk(&thunks[14], r, winIVRRenderModels_IVRRenderModels_005_RenderModelHasComponent, 2);
-    init_thunk(&thunks[15], r, winIVRRenderModels_IVRRenderModels_005_GetRenderModelThumbnailURL, 4);
-    init_thunk(&thunks[16], r, winIVRRenderModels_IVRRenderModels_005_GetRenderModelOriginalPath, 4);
-    init_thunk(&thunks[17], r, winIVRRenderModels_IVRRenderModels_005_GetRenderModelErrorNameFromEnum, 1);
+    init_thunk(&thunks[0], r, winIVRRenderModels_IVRRenderModels_005_LoadRenderModel_Async, 2, FALSE, FALSE);
+    init_thunk(&thunks[1], r, winIVRRenderModels_IVRRenderModels_005_FreeRenderModel, 1, FALSE, FALSE);
+    init_thunk(&thunks[2], r, winIVRRenderModels_IVRRenderModels_005_LoadTexture_Async, 2, FALSE, FALSE);
+    init_thunk(&thunks[3], r, winIVRRenderModels_IVRRenderModels_005_FreeTexture, 1, FALSE, FALSE);
+    init_thunk(&thunks[4], r, winIVRRenderModels_IVRRenderModels_005_LoadTextureD3D11_Async, 3, FALSE, FALSE);
+    init_thunk(&thunks[5], r, winIVRRenderModels_IVRRenderModels_005_LoadIntoTextureD3D11_Async, 2, FALSE, FALSE);
+    init_thunk(&thunks[6], r, winIVRRenderModels_IVRRenderModels_005_FreeTextureD3D11, 1, FALSE, FALSE);
+    init_thunk(&thunks[7], r, winIVRRenderModels_IVRRenderModels_005_GetRenderModelName, 3, FALSE, FALSE);
+    init_thunk(&thunks[8], r, winIVRRenderModels_IVRRenderModels_005_GetRenderModelCount, 0, FALSE, FALSE);
+    init_thunk(&thunks[9], r, winIVRRenderModels_IVRRenderModels_005_GetComponentCount, 1, FALSE, FALSE);
+    init_thunk(&thunks[10], r, winIVRRenderModels_IVRRenderModels_005_GetComponentName, 4, FALSE, FALSE);
+    init_thunk(&thunks[11], r, winIVRRenderModels_IVRRenderModels_005_GetComponentButtonMask, 2, FALSE, FALSE);
+    init_thunk(&thunks[12], r, winIVRRenderModels_IVRRenderModels_005_GetComponentRenderModelName, 4, FALSE, FALSE);
+    init_thunk(&thunks[13], r, winIVRRenderModels_IVRRenderModels_005_GetComponentState, 5, FALSE, FALSE);
+    init_thunk(&thunks[14], r, winIVRRenderModels_IVRRenderModels_005_RenderModelHasComponent, 2, FALSE, FALSE);
+    init_thunk(&thunks[15], r, winIVRRenderModels_IVRRenderModels_005_GetRenderModelThumbnailURL, 4, FALSE, FALSE);
+    init_thunk(&thunks[16], r, winIVRRenderModels_IVRRenderModels_005_GetRenderModelOriginalPath, 4, FALSE, FALSE);
+    init_thunk(&thunks[17], r, winIVRRenderModels_IVRRenderModels_005_GetRenderModelErrorNameFromEnum, 1, FALSE, FALSE);
     for (i = 0; i < 18; i++)
         vtable[i] = &thunks[i];
     r->linux_side = linux_side;
@@ -390,20 +390,20 @@ winIVRRenderModels_IVRRenderModels_004 *create_winIVRRenderModels_IVRRenderModel
     int i;
 
     TRACE("-> %p, vtable %p, thunks %p\n", r, vtable, thunks);
-    init_thunk(&thunks[0], r, winIVRRenderModels_IVRRenderModels_004_LoadRenderModel_Async, 2);
-    init_thunk(&thunks[1], r, winIVRRenderModels_IVRRenderModels_004_FreeRenderModel, 1);
-    init_thunk(&thunks[2], r, winIVRRenderModels_IVRRenderModels_004_LoadTexture_Async, 2);
-    init_thunk(&thunks[3], r, winIVRRenderModels_IVRRenderModels_004_FreeTexture, 1);
-    init_thunk(&thunks[4], r, winIVRRenderModels_IVRRenderModels_004_LoadTextureD3D11_Async, 3);
-    init_thunk(&thunks[5], r, winIVRRenderModels_IVRRenderModels_004_FreeTextureD3D11, 1);
-    init_thunk(&thunks[6], r, winIVRRenderModels_IVRRenderModels_004_GetRenderModelName, 3);
-    init_thunk(&thunks[7], r, winIVRRenderModels_IVRRenderModels_004_GetRenderModelCount, 0);
-    init_thunk(&thunks[8], r, winIVRRenderModels_IVRRenderModels_004_GetComponentCount, 1);
-    init_thunk(&thunks[9], r, winIVRRenderModels_IVRRenderModels_004_GetComponentName, 4);
-    init_thunk(&thunks[10], r, winIVRRenderModels_IVRRenderModels_004_GetComponentButtonMask, 2);
-    init_thunk(&thunks[11], r, winIVRRenderModels_IVRRenderModels_004_GetComponentRenderModelName, 4);
-    init_thunk(&thunks[12], r, winIVRRenderModels_IVRRenderModels_004_GetComponentState, 5);
-    init_thunk(&thunks[13], r, winIVRRenderModels_IVRRenderModels_004_RenderModelHasComponent, 2);
+    init_thunk(&thunks[0], r, winIVRRenderModels_IVRRenderModels_004_LoadRenderModel_Async, 2, FALSE, FALSE);
+    init_thunk(&thunks[1], r, winIVRRenderModels_IVRRenderModels_004_FreeRenderModel, 1, FALSE, FALSE);
+    init_thunk(&thunks[2], r, winIVRRenderModels_IVRRenderModels_004_LoadTexture_Async, 2, FALSE, FALSE);
+    init_thunk(&thunks[3], r, winIVRRenderModels_IVRRenderModels_004_FreeTexture, 1, FALSE, FALSE);
+    init_thunk(&thunks[4], r, winIVRRenderModels_IVRRenderModels_004_LoadTextureD3D11_Async, 3, FALSE, FALSE);
+    init_thunk(&thunks[5], r, winIVRRenderModels_IVRRenderModels_004_FreeTextureD3D11, 1, FALSE, FALSE);
+    init_thunk(&thunks[6], r, winIVRRenderModels_IVRRenderModels_004_GetRenderModelName, 3, FALSE, FALSE);
+    init_thunk(&thunks[7], r, winIVRRenderModels_IVRRenderModels_004_GetRenderModelCount, 0, FALSE, FALSE);
+    init_thunk(&thunks[8], r, winIVRRenderModels_IVRRenderModels_004_GetComponentCount, 1, FALSE, FALSE);
+    init_thunk(&thunks[9], r, winIVRRenderModels_IVRRenderModels_004_GetComponentName, 4, FALSE, FALSE);
+    init_thunk(&thunks[10], r, winIVRRenderModels_IVRRenderModels_004_GetComponentButtonMask, 2, FALSE, FALSE);
+    init_thunk(&thunks[11], r, winIVRRenderModels_IVRRenderModels_004_GetComponentRenderModelName, 4, FALSE, FALSE);
+    init_thunk(&thunks[12], r, winIVRRenderModels_IVRRenderModels_004_GetComponentState, 5, FALSE, FALSE);
+    init_thunk(&thunks[13], r, winIVRRenderModels_IVRRenderModels_004_RenderModelHasComponent, 2, FALSE, FALSE);
     for (i = 0; i < 14; i++)
         vtable[i] = &thunks[i];
     r->linux_side = linux_side;
@@ -557,18 +557,18 @@ winIVRRenderModels_IVRRenderModels_002 *create_winIVRRenderModels_IVRRenderModel
     int i;
 
     TRACE("-> %p, vtable %p, thunks %p\n", r, vtable, thunks);
-    init_thunk(&thunks[0], r, winIVRRenderModels_IVRRenderModels_002_LoadRenderModel, 2);
-    init_thunk(&thunks[1], r, winIVRRenderModels_IVRRenderModels_002_FreeRenderModel, 1);
-    init_thunk(&thunks[2], r, winIVRRenderModels_IVRRenderModels_002_LoadTexture, 2);
-    init_thunk(&thunks[3], r, winIVRRenderModels_IVRRenderModels_002_FreeTexture, 1);
-    init_thunk(&thunks[4], r, winIVRRenderModels_IVRRenderModels_002_GetRenderModelName, 3);
-    init_thunk(&thunks[5], r, winIVRRenderModels_IVRRenderModels_002_GetRenderModelCount, 0);
-    init_thunk(&thunks[6], r, winIVRRenderModels_IVRRenderModels_002_GetComponentCount, 1);
-    init_thunk(&thunks[7], r, winIVRRenderModels_IVRRenderModels_002_GetComponentName, 4);
-    init_thunk(&thunks[8], r, winIVRRenderModels_IVRRenderModels_002_GetComponentButtonMask, 2);
-    init_thunk(&thunks[9], r, winIVRRenderModels_IVRRenderModels_002_GetComponentRenderModelName, 4);
-    init_thunk(&thunks[10], r, winIVRRenderModels_IVRRenderModels_002_GetComponentState, 4);
-    init_thunk(&thunks[11], r, winIVRRenderModels_IVRRenderModels_002_RenderModelHasComponent, 2);
+    init_thunk(&thunks[0], r, winIVRRenderModels_IVRRenderModels_002_LoadRenderModel, 2, FALSE, FALSE);
+    init_thunk(&thunks[1], r, winIVRRenderModels_IVRRenderModels_002_FreeRenderModel, 1, FALSE, FALSE);
+    init_thunk(&thunks[2], r, winIVRRenderModels_IVRRenderModels_002_LoadTexture, 2, FALSE, FALSE);
+    init_thunk(&thunks[3], r, winIVRRenderModels_IVRRenderModels_002_FreeTexture, 1, FALSE, FALSE);
+    init_thunk(&thunks[4], r, winIVRRenderModels_IVRRenderModels_002_GetRenderModelName, 3, FALSE, FALSE);
+    init_thunk(&thunks[5], r, winIVRRenderModels_IVRRenderModels_002_GetRenderModelCount, 0, FALSE, FALSE);
+    init_thunk(&thunks[6], r, winIVRRenderModels_IVRRenderModels_002_GetComponentCount, 1, FALSE, FALSE);
+    init_thunk(&thunks[7], r, winIVRRenderModels_IVRRenderModels_002_GetComponentName, 4, FALSE, FALSE);
+    init_thunk(&thunks[8], r, winIVRRenderModels_IVRRenderModels_002_GetComponentButtonMask, 2, FALSE, FALSE);
+    init_thunk(&thunks[9], r, winIVRRenderModels_IVRRenderModels_002_GetComponentRenderModelName, 4, FALSE, FALSE);
+    init_thunk(&thunks[10], r, winIVRRenderModels_IVRRenderModels_002_GetComponentState, 4, FALSE, FALSE);
+    init_thunk(&thunks[11], r, winIVRRenderModels_IVRRenderModels_002_RenderModelHasComponent, 2, FALSE, FALSE);
     for (i = 0; i < 12; i++)
         vtable[i] = &thunks[i];
     r->linux_side = linux_side;
@@ -658,10 +658,10 @@ winIVRRenderModels_IVRRenderModels_001 *create_winIVRRenderModels_IVRRenderModel
     int i;
 
     TRACE("-> %p, vtable %p, thunks %p\n", r, vtable, thunks);
-    init_thunk(&thunks[0], r, winIVRRenderModels_IVRRenderModels_001_LoadRenderModel, 2);
-    init_thunk(&thunks[1], r, winIVRRenderModels_IVRRenderModels_001_FreeRenderModel, 1);
-    init_thunk(&thunks[2], r, winIVRRenderModels_IVRRenderModels_001_GetRenderModelName, 3);
-    init_thunk(&thunks[3], r, winIVRRenderModels_IVRRenderModels_001_GetRenderModelCount, 0);
+    init_thunk(&thunks[0], r, winIVRRenderModels_IVRRenderModels_001_LoadRenderModel, 2, FALSE, FALSE);
+    init_thunk(&thunks[1], r, winIVRRenderModels_IVRRenderModels_001_FreeRenderModel, 1, FALSE, FALSE);
+    init_thunk(&thunks[2], r, winIVRRenderModels_IVRRenderModels_001_GetRenderModelName, 3, FALSE, FALSE);
+    init_thunk(&thunks[3], r, winIVRRenderModels_IVRRenderModels_001_GetRenderModelCount, 0, FALSE, FALSE);
     for (i = 0; i < 4; i++)
         vtable[i] = &thunks[i];
     r->linux_side = linux_side;

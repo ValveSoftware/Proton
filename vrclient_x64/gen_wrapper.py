@@ -128,9 +128,6 @@ class_versions = {}
 def get_params(f):
     return [p for p in f.get_children() if p.kind == clang.cindex.CursorKind.PARM_DECL]
 
-def get_param_count(f):
-    return len(get_params(f))
-
 def ivrclientcore_init(cppname, method):
     if "002" in cppname:
         return "ivrclientcore_002_init"
@@ -143,7 +140,7 @@ def ivrclientcore_cleanup(cppname, method):
     return "ivrclientcore_cleanup"
 
 def ivrsystem_get_dxgi_output_info(cppname, method):
-    param_count = get_param_count(method)
+    param_count = len(get_params(method))
     return {
         1: "get_dxgi_output_info",
         2: "get_dxgi_output_info2"
@@ -402,6 +399,15 @@ def get_iface_version(classname):
 
 max_c_api_param_count = 0
 
+def get_capi_thunk_params(method):
+    def toBOOL(x):
+        return "TRUE" if x else "FALSE"
+    params = get_params(method)
+    param_count = len(params)
+    has_float_params = any(x.type.spelling == "float" for x in params)
+    is_4th_float = param_count >= 4 and params[3].type.spelling == "float"
+    return "%s, %s, %s" % (param_count, toBOOL(has_float_params), toBOOL(is_4th_float))
+
 def handle_class(sdkver, classnode):
     print("handle_class: " + classnode.displayname)
     children = list(classnode.get_children())
@@ -466,18 +472,18 @@ WINE_DEFAULT_DEBUG_CHANNEL(vrclient);
             break
     cfile.write("} %s;\n\n" % winclassname)
     methods = []
-    methods_param_count = []
+    method_names = []
     for child in children:
         if child.kind == clang.cindex.CursorKind.CXX_METHOD:
-            methods.append(handle_method(cfile, classnode.spelling, winclassname, cppname, child, cpp, cpp_h, methods, iface_version))
-            methods_param_count.append(get_param_count(child))
+            method_names.append(handle_method(cfile, classnode.spelling, winclassname, cppname, child, cpp, cpp_h, method_names, iface_version))
+            methods.append(child)
 
     cfile.write("extern vtable_ptr %s_vtable;\n\n" % winclassname)
     cfile.write("#ifndef __GNUC__\n")
     cfile.write("void __asm_dummy_vtables(void) {\n")
     cfile.write("#endif\n")
     cfile.write("    __ASM_VTABLE(%s,\n" % winclassname)
-    for method in methods:
+    for method in method_names:
         cfile.write("        VTABLE_ADD_FUNC(%s_%s)\n" % (winclassname, method))
     cfile.write("    );\n")
     cfile.write("#ifndef __GNUC__\n")
@@ -506,10 +512,10 @@ WINE_DEFAULT_DEBUG_CHANNEL(vrclient);
     cfile.write("    int i;\n\n")
     cfile.write("    TRACE(\"-> %p, vtable %p, thunks %p\\n\", r, vtable, thunks);\n")
     for i in range(len(methods)):
-        param_count = methods_param_count[i]
+        thunk_params = get_capi_thunk_params(methods[i])
         global max_c_api_param_count
-        max_c_api_param_count = max(param_count, max_c_api_param_count)
-        cfile.write("    init_thunk(&thunks[%d], r, %s_%s, %s);\n" % (i, winclassname, methods[i], param_count))
+        max_c_api_param_count = max(len(get_params(methods[i])), max_c_api_param_count)
+        cfile.write("    init_thunk(&thunks[%d], r, %s_%s, %s);\n" % (i, winclassname, method_names[i], thunk_params))
     cfile.write("    for (i = 0; i < %d; i++)\n" % len(methods))
     cfile.write("        vtable[i] = &thunks[i];\n")
     cfile.write("    r->linux_side = linux_side;\n")
@@ -630,8 +636,10 @@ def handle_struct(sdkver, struct, which):
     generated_struct_handlers.append(handler_name)
 
 
-def generate_x64_call_flat_method(cfile, param_count):
+def generate_x64_call_flat_method(cfile, param_count, has_floats, is_4th_float):
     assert param_count >= 4
+    if is_4th_float:
+        assert has_floats
     def l(line):
         cfile.write(line + '\n')
 
@@ -641,10 +649,15 @@ def generate_x64_call_flat_method(cfile, param_count):
     src_offset = 0x20 + 0x8 + stack_space # shadow register space + ret
     dst_offset = 0x20
 
-    l(r"__ASM_GLOBAL_FUNC(call_flat_method%s," % param_count)
+    name = "call_flat_method%s%s%s" % (param_count, "_f" if has_floats else "", "_f" if is_4th_float else "")
+
+    l(r"__ASM_GLOBAL_FUNC(%s," % name)
     l(r'    "subq $0x%x, %%rsp\n\t"' % stack_space);
 
-    l(r'    "movq %%r9, 0x%x(%%rsp)\n\t"' % dst_offset)
+    if is_4th_float:
+        l(r'    "movq %%xmm3, 0x%x(%%rsp)\n\t"' % dst_offset)
+    else:
+        l(r'    "movq %%r9, 0x%x(%%rsp)\n\t"' % dst_offset)
     dst_offset += 8
 
     for i in range(5, param_count + 1):
@@ -658,10 +671,15 @@ def generate_x64_call_flat_method(cfile, param_count):
     l(r'    "movq %rcx, %rdx\n\t"')
     l(r'    "movq %r10, %rcx\n\t" // add This pointer')
 
+    if has_floats:
+        l(r'    "movq %xmm2, %xmm3\n\t"')
+        l(r'    "movq %xmm1, %xmm2\n\t"')
+        l(r'    "movq %xmm0, %xmm1\n\t"')
+
     l(r'    "call *%r11\n\t"')
     l(r'    "addq $0x%x, %%rsp\n\t"' % stack_space);
     l(r'    "ret");')
-    l(r'extern void call_flat_method%s(void);' % param_count);
+    l(r'extern void %s(void);' % name);
 
 def generate_flatapi_c():
     with open("flatapi.c", "w") as f:
@@ -690,17 +708,48 @@ __ASM_GLOBAL_FUNC(call_flat_method,
     "movq %r10, %rcx\n\t" // add This pointer
     "jmp *%r11");
 extern void call_flat_method(void);
+
+__ASM_GLOBAL_FUNC(call_flat_method_f,
+    "movq %r8, %r9\n\t" // shift over arguments
+    "movq %rdx, %r8\n\t"
+    "movq %rcx, %rdx\n\t"
+    "movq %r10, %rcx\n\t" // add This pointer
+    "movq %xmm2, %xmm3\n\t"
+    "movq %xmm1, %xmm2\n\t"
+    "movq %xmm0, %xmm1\n\t"
+    "jmp *%r11");
+extern void call_flat_method_f(void);
 """)
 
         for i in range(4, max_c_api_param_count + 1):
             f.write("\n")
-            generate_x64_call_flat_method(f, i)
+            generate_x64_call_flat_method(f, i, False, False)
+        for i in range(4, max_c_api_param_count + 1):
+            f.write("\n")
+            generate_x64_call_flat_method(f, i, True, False)
+            f.write("\n")
+            generate_x64_call_flat_method(f, i, True, True)
 
-        f.write('\npfn_call_flat_method get_call_flat_method_pfn( int param_count )\n{\n')
+        f.write('\npfn_call_flat_method\n')
+        f.write('get_call_flat_method_pfn( int param_count, BOOL has_floats, BOOL is_4th_float )\n{\n')
+        f.write('    if (!has_floats)\n')
+        f.write('    {\n')
         f.write('    if (param_count <= 3) return call_flat_method;\n')
         for i in range(4, max_c_api_param_count):
             f.write('    if (param_count == %s) return call_flat_method%s;\n' % (i, i))
         f.write('    return call_flat_method%s;\n' % max_c_api_param_count)
+        f.write('    }\n')
+        f.write('    if (is_4th_float)\n')
+        f.write('    {\n')
+        f.write('    if (param_count <= 3) return call_flat_method_f;\n')
+        for i in range(4, max_c_api_param_count):
+            f.write('    if (param_count == %s) return call_flat_method%s_f_f;\n' % (i, i))
+        f.write('    return call_flat_method%s_f_f;\n' % max_c_api_param_count)
+        f.write('    }\n')
+        f.write('    if (param_count <= 3) return call_flat_method_f;\n')
+        for i in range(4, max_c_api_param_count):
+            f.write('    if (param_count == %s) return call_flat_method%s_f;\n' % (i, i))
+        f.write('    return call_flat_method%s_f;\n' % max_c_api_param_count)
         f.write('}\n')
 
         f.write("#endif\n")

@@ -155,18 +155,18 @@ winIVRSettings_IVRSettings_002 *create_winIVRSettings_IVRSettings_002_FnTable(vo
     int i;
 
     TRACE("-> %p, vtable %p, thunks %p\n", r, vtable, thunks);
-    init_thunk(&thunks[0], r, winIVRSettings_IVRSettings_002_GetSettingsErrorNameFromEnum, 1);
-    init_thunk(&thunks[1], r, winIVRSettings_IVRSettings_002_Sync, 2);
-    init_thunk(&thunks[2], r, winIVRSettings_IVRSettings_002_SetBool, 4);
-    init_thunk(&thunks[3], r, winIVRSettings_IVRSettings_002_SetInt32, 4);
-    init_thunk(&thunks[4], r, winIVRSettings_IVRSettings_002_SetFloat, 4);
-    init_thunk(&thunks[5], r, winIVRSettings_IVRSettings_002_SetString, 4);
-    init_thunk(&thunks[6], r, winIVRSettings_IVRSettings_002_GetBool, 3);
-    init_thunk(&thunks[7], r, winIVRSettings_IVRSettings_002_GetInt32, 3);
-    init_thunk(&thunks[8], r, winIVRSettings_IVRSettings_002_GetFloat, 3);
-    init_thunk(&thunks[9], r, winIVRSettings_IVRSettings_002_GetString, 5);
-    init_thunk(&thunks[10], r, winIVRSettings_IVRSettings_002_RemoveSection, 2);
-    init_thunk(&thunks[11], r, winIVRSettings_IVRSettings_002_RemoveKeyInSection, 3);
+    init_thunk(&thunks[0], r, winIVRSettings_IVRSettings_002_GetSettingsErrorNameFromEnum, 1, FALSE, FALSE);
+    init_thunk(&thunks[1], r, winIVRSettings_IVRSettings_002_Sync, 2, FALSE, FALSE);
+    init_thunk(&thunks[2], r, winIVRSettings_IVRSettings_002_SetBool, 4, FALSE, FALSE);
+    init_thunk(&thunks[3], r, winIVRSettings_IVRSettings_002_SetInt32, 4, FALSE, FALSE);
+    init_thunk(&thunks[4], r, winIVRSettings_IVRSettings_002_SetFloat, 4, TRUE, FALSE);
+    init_thunk(&thunks[5], r, winIVRSettings_IVRSettings_002_SetString, 4, FALSE, FALSE);
+    init_thunk(&thunks[6], r, winIVRSettings_IVRSettings_002_GetBool, 3, FALSE, FALSE);
+    init_thunk(&thunks[7], r, winIVRSettings_IVRSettings_002_GetInt32, 3, FALSE, FALSE);
+    init_thunk(&thunks[8], r, winIVRSettings_IVRSettings_002_GetFloat, 3, FALSE, FALSE);
+    init_thunk(&thunks[9], r, winIVRSettings_IVRSettings_002_GetString, 5, FALSE, FALSE);
+    init_thunk(&thunks[10], r, winIVRSettings_IVRSettings_002_RemoveSection, 2, FALSE, FALSE);
+    init_thunk(&thunks[11], r, winIVRSettings_IVRSettings_002_RemoveKeyInSection, 3, FALSE, FALSE);
     for (i = 0; i < 12; i++)
         vtable[i] = &thunks[i];
     r->linux_side = linux_side;
@@ -320,18 +320,18 @@ winIVRSettings_IVRSettings_001 *create_winIVRSettings_IVRSettings_001_FnTable(vo
     int i;
 
     TRACE("-> %p, vtable %p, thunks %p\n", r, vtable, thunks);
-    init_thunk(&thunks[0], r, winIVRSettings_IVRSettings_001_GetSettingsErrorNameFromEnum, 1);
-    init_thunk(&thunks[1], r, winIVRSettings_IVRSettings_001_Sync, 2);
-    init_thunk(&thunks[2], r, winIVRSettings_IVRSettings_001_GetBool, 4);
-    init_thunk(&thunks[3], r, winIVRSettings_IVRSettings_001_SetBool, 4);
-    init_thunk(&thunks[4], r, winIVRSettings_IVRSettings_001_GetInt32, 4);
-    init_thunk(&thunks[5], r, winIVRSettings_IVRSettings_001_SetInt32, 4);
-    init_thunk(&thunks[6], r, winIVRSettings_IVRSettings_001_GetFloat, 4);
-    init_thunk(&thunks[7], r, winIVRSettings_IVRSettings_001_SetFloat, 4);
-    init_thunk(&thunks[8], r, winIVRSettings_IVRSettings_001_GetString, 6);
-    init_thunk(&thunks[9], r, winIVRSettings_IVRSettings_001_SetString, 4);
-    init_thunk(&thunks[10], r, winIVRSettings_IVRSettings_001_RemoveSection, 2);
-    init_thunk(&thunks[11], r, winIVRSettings_IVRSettings_001_RemoveKeyInSection, 3);
+    init_thunk(&thunks[0], r, winIVRSettings_IVRSettings_001_GetSettingsErrorNameFromEnum, 1, FALSE, FALSE);
+    init_thunk(&thunks[1], r, winIVRSettings_IVRSettings_001_Sync, 2, FALSE, FALSE);
+    init_thunk(&thunks[2], r, winIVRSettings_IVRSettings_001_GetBool, 4, FALSE, FALSE);
+    init_thunk(&thunks[3], r, winIVRSettings_IVRSettings_001_SetBool, 4, FALSE, FALSE);
+    init_thunk(&thunks[4], r, winIVRSettings_IVRSettings_001_GetInt32, 4, FALSE, FALSE);
+    init_thunk(&thunks[5], r, winIVRSettings_IVRSettings_001_SetInt32, 4, FALSE, FALSE);
+    init_thunk(&thunks[6], r, winIVRSettings_IVRSettings_001_GetFloat, 4, TRUE, FALSE);
+    init_thunk(&thunks[7], r, winIVRSettings_IVRSettings_001_SetFloat, 4, TRUE, FALSE);
+    init_thunk(&thunks[8], r, winIVRSettings_IVRSettings_001_GetString, 6, FALSE, FALSE);
+    init_thunk(&thunks[9], r, winIVRSettings_IVRSettings_001_SetString, 4, FALSE, FALSE);
+    init_thunk(&thunks[10], r, winIVRSettings_IVRSettings_001_RemoveSection, 2, FALSE, FALSE);
+    init_thunk(&thunks[11], r, winIVRSettings_IVRSettings_001_RemoveKeyInSection, 3, FALSE, FALSE);
     for (i = 0; i < 12; i++)
         vtable[i] = &thunks[i];
     r->linux_side = linux_side;

@@ -16,7 +16,8 @@ struct thunk
 
 extern void call_flat_method(void);
 
-static inline void init_thunk( struct thunk *thunk, void *this, void *proc, int param_count )
+static inline void init_thunk( struct thunk *thunk, void *this, void *proc,
+                               int param_count, BOOL has_floats, BOOL is_4th_float )
 {
   thunk->mov_ecx = 0xb9;
   thunk->this = this;
@@ -51,14 +52,16 @@ static const struct thunk thunk_template =
 
 typedef void (*pfn_call_flat_method)(void);
 
-extern pfn_call_flat_method get_call_flat_method_pfn( int param_count );
+extern pfn_call_flat_method
+get_call_flat_method_pfn( int param_count, BOOL has_floats, BOOL is_4th_float );
 
-static inline void init_thunk( struct thunk *thunk, void *this, void *proc, int param_count )
+static inline void init_thunk( struct thunk *thunk, void *this, void *proc,
+                               int param_count, BOOL has_floats, BOOL is_4th_float )
 {
     *thunk = thunk_template;
     thunk->this = this;
     thunk->proc = proc;
-    thunk->call_flat = get_call_flat_method_pfn(param_count);
+    thunk->call_flat = get_call_flat_method_pfn(param_count, has_floats, is_4th_float);
 }
 
 #endif

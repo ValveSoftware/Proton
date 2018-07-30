@@ -115,13 +115,13 @@ winIVRScreenshots_IVRScreenshots_001 *create_winIVRScreenshots_IVRScreenshots_00
     int i;
 
     TRACE("-> %p, vtable %p, thunks %p\n", r, vtable, thunks);
-    init_thunk(&thunks[0], r, winIVRScreenshots_IVRScreenshots_001_RequestScreenshot, 4);
-    init_thunk(&thunks[1], r, winIVRScreenshots_IVRScreenshots_001_HookScreenshot, 2);
-    init_thunk(&thunks[2], r, winIVRScreenshots_IVRScreenshots_001_GetScreenshotPropertyType, 2);
-    init_thunk(&thunks[3], r, winIVRScreenshots_IVRScreenshots_001_GetScreenshotPropertyFilename, 5);
-    init_thunk(&thunks[4], r, winIVRScreenshots_IVRScreenshots_001_UpdateScreenshotProgress, 2);
-    init_thunk(&thunks[5], r, winIVRScreenshots_IVRScreenshots_001_TakeStereoScreenshot, 3);
-    init_thunk(&thunks[6], r, winIVRScreenshots_IVRScreenshots_001_SubmitScreenshot, 4);
+    init_thunk(&thunks[0], r, winIVRScreenshots_IVRScreenshots_001_RequestScreenshot, 4, FALSE, FALSE);
+    init_thunk(&thunks[1], r, winIVRScreenshots_IVRScreenshots_001_HookScreenshot, 2, FALSE, FALSE);
+    init_thunk(&thunks[2], r, winIVRScreenshots_IVRScreenshots_001_GetScreenshotPropertyType, 2, FALSE, FALSE);
+    init_thunk(&thunks[3], r, winIVRScreenshots_IVRScreenshots_001_GetScreenshotPropertyFilename, 5, FALSE, FALSE);
+    init_thunk(&thunks[4], r, winIVRScreenshots_IVRScreenshots_001_UpdateScreenshotProgress, 2, TRUE, FALSE);
+    init_thunk(&thunks[5], r, winIVRScreenshots_IVRScreenshots_001_TakeStereoScreenshot, 3, FALSE, FALSE);
+    init_thunk(&thunks[6], r, winIVRScreenshots_IVRScreenshots_001_SubmitScreenshot, 4, FALSE, FALSE);
     for (i = 0; i < 7; i++)
         vtable[i] = &thunks[i];
     r->linux_side = linux_side;
