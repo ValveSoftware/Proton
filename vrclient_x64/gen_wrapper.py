@@ -125,8 +125,11 @@ print_sizes = []
 
 class_versions = {}
 
+def get_params(f):
+    return [p for p in f.get_children() if p.kind == clang.cindex.CursorKind.PARM_DECL]
+
 def get_param_count(f):
-    return len([p for p in f.get_children() if p.kind == clang.cindex.CursorKind.PARM_DECL])
+    return len(get_params(f))
 
 def ivrclientcore_init(cppname, method):
     if "002" in cppname:
@@ -211,9 +214,8 @@ def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, e
         parambytes = 8 #_this + return pointer
     else:
         parambytes = 4 #_this
-    for param in list(method.get_children()):
-        if param.kind == clang.cindex.CursorKind.PARM_DECL:
-            parambytes += param.type.get_size()
+    for param in get_params(method):
+        parambytes += param.type.get_size()
     cfile.write("DEFINE_THISCALL_WRAPPER(%s_%s, %s)\n" % (winclassname, used_name, parambytes))
     cpp_h.write("extern ")
     if strip_ns(method.result_type.spelling).startswith("IVR"):
@@ -237,34 +239,33 @@ def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, e
     do_lin_to_win = None
     do_wrap = None
     do_unwrap = None
-    for param in list(method.get_children()):
-        if param.kind == clang.cindex.CursorKind.PARM_DECL:
-            if param.type.kind == clang.cindex.TypeKind.POINTER and \
-                    param.type.get_pointee().kind == clang.cindex.TypeKind.UNEXPOSED:
-                #unspecified function pointer
-                typename = "void *"
-            else:
-                typename = param.type.spelling.split("::")[-1].replace("&", "*");
-                if param.type.kind == clang.cindex.TypeKind.POINTER:
-                    if strip_ns(param.type.get_pointee().get_canonical().spelling) in user_structs:
-                        do_lin_to_win = (strip_ns(param.type.get_pointee().get_canonical().spelling), param.spelling)
-                        typename = "win" + do_lin_to_win[0] + "_" + display_sdkver(sdkver) + " *"
-                    elif strip_ns(param.type.get_pointee().get_canonical().spelling) in system_structs:
-                        do_unwrap = (strip_ns(param.type.get_pointee().get_canonical().spelling), param.spelling)
-                        typename = "win" + do_unwrap[0] + "_" + display_sdkver(sdkver) + " *"
-                    elif param.type.get_pointee().kind == clang.cindex.TypeKind.POINTER and \
-                            strip_ns(param.type.get_pointee().get_pointee().get_canonical().spelling) in system_structs:
-                        do_wrap = (strip_ns(param.type.get_pointee().get_pointee().get_canonical().spelling), param.spelling)
-                        typename = "win" + do_wrap[0] + "_" + display_sdkver(sdkver) + " **"
-            if param.spelling == "":
-                cfile.write(", %s _%s" % (typename, unnamed))
-                cpp.write(", %s _%s" % (typename, unnamed))
-                cpp_h.write(", %s" % typename)
-                unnamed = chr(ord(unnamed) + 1)
-            else:
-                cfile.write(", %s %s" % (typename, param.spelling))
-                cpp.write(", %s %s" % (typename, param.spelling))
-                cpp_h.write(", %s" % (typename))
+    for param in get_params(method):
+        if param.type.kind == clang.cindex.TypeKind.POINTER and \
+                param.type.get_pointee().kind == clang.cindex.TypeKind.UNEXPOSED:
+            #unspecified function pointer
+            typename = "void *"
+        else:
+            typename = param.type.spelling.split("::")[-1].replace("&", "*");
+            if param.type.kind == clang.cindex.TypeKind.POINTER:
+                if strip_ns(param.type.get_pointee().get_canonical().spelling) in user_structs:
+                    do_lin_to_win = (strip_ns(param.type.get_pointee().get_canonical().spelling), param.spelling)
+                    typename = "win" + do_lin_to_win[0] + "_" + display_sdkver(sdkver) + " *"
+                elif strip_ns(param.type.get_pointee().get_canonical().spelling) in system_structs:
+                    do_unwrap = (strip_ns(param.type.get_pointee().get_canonical().spelling), param.spelling)
+                    typename = "win" + do_unwrap[0] + "_" + display_sdkver(sdkver) + " *"
+                elif param.type.get_pointee().kind == clang.cindex.TypeKind.POINTER and \
+                        strip_ns(param.type.get_pointee().get_pointee().get_canonical().spelling) in system_structs:
+                    do_wrap = (strip_ns(param.type.get_pointee().get_pointee().get_canonical().spelling), param.spelling)
+                    typename = "win" + do_wrap[0] + "_" + display_sdkver(sdkver) + " **"
+        if param.spelling == "":
+            cfile.write(", %s _%s" % (typename, unnamed))
+            cpp.write(", %s _%s" % (typename, unnamed))
+            cpp_h.write(", %s" % typename)
+            unnamed = chr(ord(unnamed) + 1)
+        else:
+            cfile.write(", %s %s" % (typename, param.spelling))
+            cpp.write(", %s %s" % (typename, param.spelling))
+            cpp_h.write(", %s" % (typename))
     cfile.write(")\n{\n")
     cpp.write(")\n{\n")
     cpp_h.write(");\n")
@@ -325,44 +326,43 @@ def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, e
     unnamed = 'a'
     first = True
     next_is_size = False
-    for param in list(method.get_children()):
-        if param.kind == clang.cindex.CursorKind.PARM_DECL:
-            if not first:
-                cpp.write(", ")
-            else:
-                first = False
-            if char_param_is_unix_path:
-                if param.type.spelling == "char *":
-                    path_param_name = param.spelling
-                elif not path_param_name is None and \
-                        (param.type.spelling == "uint32" or
-                                param.type.spelling == "int"):
-                    path_size_param_name = param.spelling
-            if param.spelling == "":
-                cfile.write(", _%s" % unnamed)
-                cpp.write("(%s)_%s" % (param.type.spelling, unnamed))
-                unnamed = chr(ord(unnamed) + 1)
-            else:
-                cfile.write(", %s" % param.spelling)
-                if do_lin_to_win and do_lin_to_win[1] == param.spelling or \
-                        do_wrap and do_wrap[1] == param.spelling:
-                    cpp.write("&lin")
-                    if do_lin_to_win and \
-                            (do_lin_to_win[0] == "VREvent_t" or \
-                             do_lin_to_win[0] == "VRControllerState001_t"):
-                        next_is_size = True
-                elif do_unwrap and do_unwrap[1] == param.spelling:
-                    cpp.write("struct_%s_%s_unwrap(%s)" % (strip_ns(do_unwrap[0]), display_sdkver(sdkver), do_unwrap[1]))
-                elif next_is_size:
-                    next_is_size = False
-                    if param.type.spelling == "uint32_t":
-                        cpp.write("sizeof(lin)")
-                    else:
-                        cpp.write("(%s)%s" % (param.type.spelling, param.spelling))
-                elif "&" in param.type.spelling:
-                    cpp.write("*%s" % param.spelling)
+    for param in get_params(method):
+        if not first:
+            cpp.write(", ")
+        else:
+            first = False
+        if char_param_is_unix_path:
+            if param.type.spelling == "char *":
+                path_param_name = param.spelling
+            elif not path_param_name is None and \
+                    (param.type.spelling == "uint32" or
+                            param.type.spelling == "int"):
+                path_size_param_name = param.spelling
+        if param.spelling == "":
+            cfile.write(", _%s" % unnamed)
+            cpp.write("(%s)_%s" % (param.type.spelling, unnamed))
+            unnamed = chr(ord(unnamed) + 1)
+        else:
+            cfile.write(", %s" % param.spelling)
+            if do_lin_to_win and do_lin_to_win[1] == param.spelling or \
+                    do_wrap and do_wrap[1] == param.spelling:
+                cpp.write("&lin")
+                if do_lin_to_win and \
+                        (do_lin_to_win[0] == "VREvent_t" or \
+                         do_lin_to_win[0] == "VRControllerState001_t"):
+                    next_is_size = True
+            elif do_unwrap and do_unwrap[1] == param.spelling:
+                cpp.write("struct_%s_%s_unwrap(%s)" % (strip_ns(do_unwrap[0]), display_sdkver(sdkver), do_unwrap[1]))
+            elif next_is_size:
+                next_is_size = False
+                if param.type.spelling == "uint32_t":
+                    cpp.write("sizeof(lin)")
                 else:
                     cpp.write("(%s)%s" % (param.type.spelling, param.spelling))
+            elif "&" in param.type.spelling:
+                cpp.write("*%s" % param.spelling)
+            else:
+                cpp.write("(%s)%s" % (param.type.spelling, param.spelling))
     if should_gen_wrapper:
         cfile.write(")")
     if is_method_overridden:
