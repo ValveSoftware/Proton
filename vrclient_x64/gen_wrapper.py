@@ -422,8 +422,8 @@ def handle_class(sdkver, classnode):
     winname = "win%s" % classnode.spelling
     cppname = "cpp%s_%s" % (classnode.spelling, iface_version)
 
-    file_exists = os.path.isfile("%s.c" % winname)
-    cfile = open("%s.c" % winname, "a")
+    file_exists = os.path.isfile("vrclient_x64/%s.c" % winname)
+    cfile = open("vrclient_x64/%s.c" % winname, "a")
     if not file_exists:
         cfile.write("""/* This file is auto-generated, do not edit. */
 #include <stdarg.h>
@@ -447,7 +447,7 @@ WINE_DEFAULT_DEBUG_CHANNEL(vrclient);
 
 """)
 
-    cpp = open("%s.cpp" % cppname, "w")
+    cpp = open("vrclient_x64/%s.cpp" % cppname, "w")
     cpp.write("#include \"vrclient_private.h\"\n")
     cpp.write("#include \"vrclient_defs.h\"\n")
     if os.path.isfile("openvr_%s/ivrclientcore.h" % sdkver):
@@ -461,7 +461,7 @@ WINE_DEFAULT_DEBUG_CHANNEL(vrclient);
     cpp.write("#include \"%s.h\"\n" % cppname)
     cpp.write("#ifdef __cplusplus\nextern \"C\" {\n#endif\n")
 
-    cpp_h = open("%s.h" % cppname, "w")
+    cpp_h = open("vrclient_x64/%s.h" % cppname, "w")
     cpp_h.write("#ifdef __cplusplus\nextern \"C\" {\n#endif\n")
 
     winclassname = "win%s_%s" % (classnode.spelling, iface_version)
@@ -538,15 +538,15 @@ WINE_DEFAULT_DEBUG_CHANNEL(vrclient);
     cpp.write("#ifdef __cplusplus\n}\n#endif\n")
     cpp_h.write("#ifdef __cplusplus\n}\n#endif\n")
 
-    constructors = open("win_constructors.h", "a")
+    constructors = open("vrclient_x64/win_constructors.h", "a")
     constructors.write("extern void *create_%s(void *);\n" % winclassname)
     constructors.write("extern void *create_%s_FnTable(void *);\n" % winclassname)
 
-    destructors = open("win_destructors.h", "a")
+    destructors = open("vrclient_x64/win_destructors.h", "a")
     destructors.write("extern void destroy_%s(void *);\n" % winclassname)
     destructors.write("extern void destroy_%s_FnTable(void *);\n" % winclassname)
 
-    constructors = open("win_constructors_table.dat", "a")
+    constructors = open("vrclient_x64/win_constructors_table.dat", "a")
     constructors.write("    {\"%s\", &create_%s, &destroy_%s},\n" % (iface_version, winclassname, winclassname))
     constructors.write("    {\"FnTable:%s\", &create_%s_FnTable, &destroy_%s_FnTable},\n" % (iface_version, winclassname, winclassname))
     if iface_version in aliases.keys():
@@ -573,7 +573,7 @@ def handle_struct(sdkver, struct, which):
         return
 
     filename_base = "struct_converters_%s" % display_sdkver(sdkver)
-    cppname = "%s.cpp" % filename_base
+    cppname = "vrclient_x64/%s.cpp" % filename_base
     file_exists = os.path.isfile(cppname)
     cppfile = open(cppname, "a")
     if not file_exists:
@@ -587,7 +587,7 @@ def handle_struct(sdkver, struct, which):
         cppfile.write("#include \"struct_converters.h\"\n")
         cpp_files_need_close_brace.append(cppname)
 
-    hfile = open("struct_converters.h", "a")
+    hfile = open("vrclient_x64/struct_converters.h", "a")
 
     hfile.write("typedef struct win%s win%s;\n" % (handler_name, handler_name))
 
@@ -685,7 +685,7 @@ def generate_x64_call_flat_method(cfile, param_count, has_floats, is_4th_float):
     l(r'extern void %s(void);' % name);
 
 def generate_flatapi_c():
-    with open("flatapi.c", "w") as f:
+    with open("vrclient_x64/flatapi.c", "w") as f:
         f.write(r"""/* This file is auto-generated, do not edit. */
 
 #include <stdarg.h>
