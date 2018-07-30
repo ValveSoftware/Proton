@@ -8,4 +8,7 @@ rm vrclient_x64/cpp*.h
 rm vrclient_x64/struct*.h
 rm vrclient_x64/struct*.cpp
 
+rm tests/*_autogen.c
+rm tests/*_autogen.h
+
 ./gen_wrapper.py

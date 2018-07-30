@@ -384,6 +384,23 @@ function build_vrclient64
     cp -a vrclient_x64.dll.fake "$DST_DIR"/lib64/wine/fakedlls/vrclient_x64.dll
 }
 
+function build_vrclient64_tests
+{
+    build_vrclient64
+
+    cp -a vrclient_x64/flatapi.c tests/
+    $AMD64_WRAPPER "$TOP"/wine/tools/winemaker/winemaker \
+        --nosource-fix --nolower-include --nodlls --nomsvcrt \
+        -I"$TOOLS_DIR64"/include/ \
+        -I"$TOOLS_DIR64"/include/wine/ \
+        -I"$TOOLS_DIR64"/include/wine/windows/ \
+        -I../vrclient_x64/ \
+        -L"$TOOLS_DIR64"/lib64/ \
+        -L"$TOOLS_DIR64"/lib64/wine/ \
+        tests
+    CXXFLAGS="-Wno-attributes -std=c++0x -O2 -g" CFLAGS="-O2 -g" PATH="$TOOLS_DIR64/bin:$PATH" $AMD64_WRAPPER make $JOBS -C tests
+}
+
 function build_vrclient32
 {
     cd "$TOP"
@@ -408,6 +425,23 @@ function build_vrclient32
     fi
     cp -a vrclient/vrclient.dll.so "$DST_DIR"/lib/wine/
     cp -a vrclient.dll.fake "$DST_DIR"/lib/wine/fakedlls/vrclient.dll
+}
+
+function build_vrclient32_tests
+{
+    build_vrclient32
+
+    cp -a vrclient/flatapi.c tests/
+    $I386_WRAPPER "$TOP"/wine/tools/winemaker/winemaker \
+        --nosource-fix --nolower-include --nodlls --nomsvcrt \
+        -I"$TOOLS_DIR32"/include/ \
+        -I"$TOOLS_DIR32"/include/wine/ \
+        -I"$TOOLS_DIR32"/include/wine/windows/ \
+        -I../vrclient/ \
+        -L"$TOOLS_DIR32"/lib/ \
+        -L"$TOOLS_DIR32"/lib/wine/ \
+        tests
+    CXXFLAGS="-Wno-attributes -std=c++0x -O2 -g" CFLAGS="-O2 -g" PATH="$TOOLS_DIR32/bin:$PATH" $I386_WRAPPER make $JOBS -C tests
 }
 
 function build_dxvk
@@ -596,6 +630,7 @@ case "$BUILD_COMPONENTS" in
     "lsteamclient") build_lsteamclient32; build_lsteamclient64 ;;
     "lsteamclient32") build_lsteamclient32 ;;
     "lsteamclient64") build_lsteamclient64 ;;
+    "vrclient_tests") build_vrclient32_tests; build_vrclient64_tests ;;
     *) echo "Invalid build components: $BUILD_COMPONENTS" ;;
 esac
 

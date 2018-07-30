@@ -553,6 +553,8 @@ WINE_DEFAULT_DEBUG_CHANNEL(vrclient);
         for alias in aliases[iface_version]:
             constructors.write("    {\"%s\", &create_%s}, /* alias */\n" % (alias, winclassname))
 
+    generate_c_api_thunk_tests(winclassname, methods, method_names)
+
 
 generated_struct_handlers = []
 cpp_files_need_close_brace = []
@@ -757,6 +759,190 @@ extern void call_flat_method_f(void);
 
         f.write("#endif\n")
 
+def generate_c_api_method_test(f, header, thunks_c, class_name, method_name, method):
+    thunk_params = get_capi_thunk_params(method)
+    f.write("\n    init_thunk(t, this_ptr_value, %s_%s, %s);\n" % (class_name, method_name, thunk_params))
+    f.write("    ")
+    header.write("\n")
+    thunks_c.write("\n")
+
+    returns_record = method.result_type.get_canonical().kind == clang.cindex.TypeKind.RECORD
+    if returns_record:
+        f.write("%s *" % strip_ns(method.result_type.spelling))
+        header.write("%s *" % strip_ns(method.result_type.spelling))
+        thunks_c.write("%s *" % strip_ns(method.result_type.spelling))
+    else:
+        f.write("%s " % strip_ns(method.result_type.spelling))
+        header.write("%s " % strip_ns(method.result_type.spelling))
+        thunks_c.write("%s " % strip_ns(method.result_type.spelling))
+    first_param = True
+    f.write('(__stdcall *capi_%s_%s)(' % (class_name, method_name))
+    header.write('__thiscall %s_%s(void *_this' % (class_name, method_name))
+    thunks_c.write('__thiscall %s_%s(void *_this' % (class_name, method_name))
+    if returns_record:
+        f.write("%s *_r" % strip_ns(method.result_type.spelling))
+        first_param = False
+        header.write(", %s *_r" % strip_ns(method.result_type.spelling))
+        thunks_c.write(", %s *_r" % strip_ns(method.result_type.spelling))
+
+    for param in get_params(method):
+        if param.type.kind == clang.cindex.TypeKind.POINTER \
+                and param.type.get_pointee().kind == clang.cindex.TypeKind.UNEXPOSED:
+            typename = "void *"
+        else:
+            typename = param.type.spelling.split("::")[-1].replace("&", "*");
+        if not first_param:
+            f.write(", ")
+        first_param = False
+        f.write("%s %s" % (typename, param.spelling))
+        header.write(", %s %s" % (typename, param.spelling))
+        thunks_c.write(", %s %s" % (typename, param.spelling))
+    f.write(") = (void *)t;\n")
+    header.write(");\n")
+    thunks_c.write(")\n{\n")
+
+    thunks_c.write("    push_ptr_parameter(_this);\n")
+    if returns_record:
+        thunks_c.write("    push_ptr_parameter(_r);\n")
+    for param in get_params(method):
+        param_size = param.type.get_size()
+        if param.type.kind == clang.cindex.TypeKind.POINTER \
+                or param.type.spelling.endswith("&") \
+                or param.type.spelling == "vr::glSharedTextureHandle_t":
+            typename = "ptr"
+        elif param.type.spelling == "bool":
+            typename = "bool"
+        elif param.type.spelling == "float":
+            typename = "float"
+        elif param.type.spelling == "vr::HmdRect2_t":
+            typename = "HmdRect2"
+        elif param.type.spelling == "vr::HmdVector2_t":
+            typename = "HmdVector2"
+        elif param.type.spelling == "vr::HmdVector3_t":
+            typename = "HmdVector3"
+        elif param.type.spelling == "vr::HmdColor_t":
+            typename = "HmdColor"
+        elif param_size == 8:
+            typename = "uint64"
+        elif param_size == 4 or param_size == 2:
+            typename = "uint32"
+        else:
+            typename = "unknown"
+        thunks_c.write("    push_%s_parameter(%s);\n" % (typename, param.spelling))
+    if method.result_type.kind != clang.cindex.TypeKind.VOID:
+        thunks_c.write("    return 0;\n")
+    thunks_c.write("}\n")
+
+    parameter_checks = []
+    def add_parameter_check(typename, value):
+        parameter_checks.append("check_%s_parameter(\"%s_%s\", %s)" % (typename, class_name, method_name, value))
+    add_parameter_check("ptr", "this_ptr_value")
+    f.write("\n")
+    f.write("    clear_parameters();\n")
+    f.write("    capi_%s_%s(" % (class_name, method_name))
+    first_param = True
+    if returns_record:
+        f.write("data_ptr_value")
+        first_param = False
+        add_parameter_check("ptr", "data_ptr_value")
+    for i, param in enumerate(get_params(method)):
+        i += 1
+        param_size = param.type.get_size()
+        if param.type.kind == clang.cindex.TypeKind.POINTER \
+                or param.type.spelling.endswith("&") \
+                or param.type.spelling == "vr::glSharedTextureHandle_t":
+            v = "(void *)%s" % i
+            add_parameter_check("ptr", v)
+        elif param.type.spelling == "bool":
+            v = "1"
+            add_parameter_check("bool", v)
+        elif param.type.spelling == "float":
+            v = "%s.0f" % i
+            add_parameter_check("float", v)
+        elif param.type.spelling == "vr::HmdRect2_t":
+            v = "DEFAULT_RECT";
+            add_parameter_check("HmdRect2", v)
+        elif param.type.spelling == "vr::HmdVector2_t":
+            v = "DEFAULT_VECTOR2";
+            add_parameter_check("HmdVector2", v)
+        elif param.type.spelling == "vr::HmdVector3_t":
+            v = "DEFAULT_VECTOR3";
+            add_parameter_check("HmdVector3", v)
+        elif param.type.spelling == "vr::HmdColor_t":
+            v = "DEFAULT_COLOR";
+            add_parameter_check("HmdColor", v)
+        elif param_size == 8:
+            v = str(i)
+            add_parameter_check("uint64", v)
+        elif param_size == 4 or param_size == 2:
+            v = str(i)
+            add_parameter_check("uint32", v)
+        if not first_param:
+            f.write(", ")
+        first_param = False
+        f.write(v)
+    f.write(");\n")
+    for c in parameter_checks:
+        f.write("    %s;\n" % c)
+
+def generate_c_api_thunk_tests(winclassname, methods, method_names):
+    class_name = re.sub(r'^win[A-Za-z]+_', '', winclassname)
+
+    filename = "tests/capi_thunks_autogen.h"
+    file_exists = os.path.isfile(filename)
+    header = open(filename, "a")
+    if not file_exists:
+        header.write("""/* This file is auto-generated, do not edit. */
+#include <stdarg.h>
+#include <stdint.h>
+
+#include "windef.h"
+#include "winbase.h"
+
+#include "cxx.h"
+#include "flatapi.h"
+#include "vrclient_defs.h"
+
+#include "capi_thunks.h"
+""")
+    header.write("\nvoid test_capi_thunks_%s(void);\n" % class_name)
+
+    filename = "tests/capi_thunks_autogen.c"
+    file_exists = os.path.isfile(filename)
+    thunks_c = open(filename, "a")
+    if not file_exists:
+        thunks_c.write("""/* This file is auto-generated, do not edit. */
+#include "capi_thunks_autogen.h"
+""")
+
+    filename = "tests/capi_thunks_tests_autogen.c"
+    file_exists = os.path.isfile(filename)
+    with open(filename, "a") as f:
+        if not file_exists:
+            f.write("""/* This file is auto-generated, do not edit. */
+#include "capi_thunks_autogen.h"
+""")
+        f.write("\nvoid test_capi_thunks_%s(void)\n{\n" % class_name)
+        f.write("    struct thunk *t = alloc_thunks(1);\n");
+        for i in range(len(methods)):
+            generate_c_api_method_test(f, header, thunks_c, class_name, method_names[i], methods[i])
+        f.write("    VirtualFree(t, 0, MEM_RELEASE);\n")
+        f.write("}\n")
+
+    filename = "tests/main_autogen.c"
+    file_exists = os.path.isfile(filename)
+    with open(filename, "a") as f:
+        if not file_exists:
+            f.write("""/* This file is auto-generated, do not edit. */
+#include "capi_thunks_autogen.h"
+
+#include <stdio.h>
+
+int main(void)
+{
+""")
+        f.write("    test_capi_thunks_%s();\n" % class_name)
+
 
 #clang.cindex.Config.set_library_file("/usr/lib/llvm-3.8/lib/libclang-3.8.so.1");
 
@@ -805,5 +991,9 @@ for sdkver in sdk_versions:
 for f in cpp_files_need_close_brace:
     m = open(f, "a")
     m.write("\n}\n")
+
+with open("tests/main_autogen.c", "a") as f:
+    f.write("    printf(\"All tests executed.\\n\");\n")
+    f.write("}\n")
 
 generate_flatapi_c()
