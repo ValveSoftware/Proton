@@ -807,33 +807,36 @@ def generate_c_api_method_test(f, header, thunks_c, class_name, method_name, met
     header.write(");\n")
     thunks_c.write(")\n{\n")
 
-    thunks_c.write("    push_ptr_parameter(_this);\n")
-    if returns_record:
-        thunks_c.write("    push_ptr_parameter(_r);\n")
-    for param in get_params(method):
+    def get_param_typename(param):
         param_size = param.type.get_size()
         if param.type.kind == clang.cindex.TypeKind.POINTER \
                 or param.type.spelling.endswith("&") \
                 or param.type.spelling == "vr::glSharedTextureHandle_t":
-            typename = "ptr"
+            return "ptr"
         elif param.type.spelling == "bool":
-            typename = "bool"
+            return "bool"
         elif param.type.spelling == "float":
-            typename = "float"
+            return "float"
         elif param.type.spelling == "vr::HmdRect2_t":
-            typename = "HmdRect2"
+            return "HmdRect2"
         elif param.type.spelling == "vr::HmdVector2_t":
-            typename = "HmdVector2"
+            return "HmdVector2"
         elif param.type.spelling == "vr::HmdVector3_t":
-            typename = "HmdVector3"
+            return "HmdVector3"
         elif param.type.spelling == "vr::HmdColor_t":
-            typename = "HmdColor"
+            return "HmdColor"
         elif param_size == 8:
-            typename = "uint64"
+            return "uint64"
         elif param_size == 4 or param_size == 2:
-            typename = "uint32"
+            return "uint32"
         else:
-            typename = "unknown"
+            return "unknown"
+
+    thunks_c.write("    push_ptr_parameter(_this);\n")
+    if returns_record:
+        thunks_c.write("    push_ptr_parameter(_r);\n")
+    for param in get_params(method):
+        typename = get_param_typename(param)
         thunks_c.write("    push_%s_parameter(%s);\n" % (typename, param.spelling))
     if method.result_type.kind != clang.cindex.TypeKind.VOID:
         thunks_c.write("    return 0;\n")
@@ -853,40 +856,28 @@ def generate_c_api_method_test(f, header, thunks_c, class_name, method_name, met
         add_parameter_check("ptr", "data_ptr_value")
     for i, param in enumerate(get_params(method)):
         i += 1
-        param_size = param.type.get_size()
-        if param.type.kind == clang.cindex.TypeKind.POINTER \
-                or param.type.spelling.endswith("&") \
-                or param.type.spelling == "vr::glSharedTextureHandle_t":
+        typename = get_param_typename(param)
+        if typename == "ptr":
             v = "(void *)%s" % i
-            add_parameter_check("ptr", v)
-        elif param.type.spelling == "bool":
+        elif typename == "bool":
             v = "1"
-            add_parameter_check("bool", v)
-        elif param.type.spelling == "float":
+        elif typename == "float":
             v = "%s.0f" % i
-            add_parameter_check("float", v)
-        elif param.type.spelling == "vr::HmdRect2_t":
-            v = "DEFAULT_RECT";
-            add_parameter_check("HmdRect2", v)
-        elif param.type.spelling == "vr::HmdVector2_t":
-            v = "DEFAULT_VECTOR2";
-            add_parameter_check("HmdVector2", v)
-        elif param.type.spelling == "vr::HmdVector3_t":
-            v = "DEFAULT_VECTOR3";
-            add_parameter_check("HmdVector3", v)
-        elif param.type.spelling == "vr::HmdColor_t":
-            v = "DEFAULT_COLOR";
-            add_parameter_check("HmdColor", v)
-        elif param_size == 8:
+        elif typename == "HmdRect2":
+            v = "DEFAULT_RECT"
+        elif typename == "HmdVector2":
+            v = "DEFAULT_VECTOR2"
+        elif typename == "HmdVector3":
+            v = "DEFAULT_VECTOR3"
+        elif typename == "HmdColor":
+            v = "DEFAULT_COLOR"
+        else:
             v = str(i)
-            add_parameter_check("uint64", v)
-        elif param_size == 4 or param_size == 2:
-            v = str(i)
-            add_parameter_check("uint32", v)
         if not first_param:
             f.write(", ")
         first_param = False
         f.write(v)
+        add_parameter_check(typename, v)
     f.write(");\n")
     for c in parameter_checks:
         f.write("    %s;\n" % c)
