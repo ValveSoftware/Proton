@@ -683,9 +683,9 @@ def generate_x64_call_flat_method(cfile, param_count, has_floats, is_4th_float):
     l(r'    "movq %r10, %rcx\n\t" // add This pointer')
 
     if has_floats:
-        l(r'    "movq %xmm2, %xmm3\n\t"')
-        l(r'    "movq %xmm1, %xmm2\n\t"')
-        l(r'    "movq %xmm0, %xmm1\n\t"')
+        l(r'    "movaps %xmm2, %xmm3\n\t"')
+        l(r'    "movaps %xmm1, %xmm2\n\t"')
+        l(r'    "movaps %xmm0, %xmm1\n\t"')
 
     l(r'    "call *%r11\n\t"')
     l(r'    "addq $0x%x, %%rsp\n\t"' % stack_space);
@@ -725,9 +725,9 @@ __ASM_GLOBAL_FUNC(call_flat_method_f,
     "movq %rdx, %r8\n\t"
     "movq %rcx, %rdx\n\t"
     "movq %r10, %rcx\n\t" // add This pointer
-    "movq %xmm2, %xmm3\n\t"
-    "movq %xmm1, %xmm2\n\t"
-    "movq %xmm0, %xmm1\n\t"
+    "movaps %xmm2, %xmm3\n\t"
+    "movaps %xmm1, %xmm2\n\t"
+    "movaps %xmm0, %xmm1\n\t"
     "jmp *%r11");
 extern void call_flat_method_f(void);
 """)

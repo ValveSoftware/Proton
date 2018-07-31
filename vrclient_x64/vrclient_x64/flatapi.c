@@ -29,9 +29,9 @@ __ASM_GLOBAL_FUNC(call_flat_method_f,
     "movq %rdx, %r8\n\t"
     "movq %rcx, %rdx\n\t"
     "movq %r10, %rcx\n\t" // add This pointer
-    "movq %xmm2, %xmm3\n\t"
-    "movq %xmm1, %xmm2\n\t"
-    "movq %xmm0, %xmm1\n\t"
+    "movaps %xmm2, %xmm3\n\t"
+    "movaps %xmm1, %xmm2\n\t"
+    "movaps %xmm0, %xmm1\n\t"
     "jmp *%r11");
 extern void call_flat_method_f(void);
 
@@ -144,9 +144,9 @@ __ASM_GLOBAL_FUNC(call_flat_method4_f,
     "movq %rdx, %r8\n\t"
     "movq %rcx, %rdx\n\t"
     "movq %r10, %rcx\n\t" // add This pointer
-    "movq %xmm2, %xmm3\n\t"
-    "movq %xmm1, %xmm2\n\t"
-    "movq %xmm0, %xmm1\n\t"
+    "movaps %xmm2, %xmm3\n\t"
+    "movaps %xmm1, %xmm2\n\t"
+    "movaps %xmm0, %xmm1\n\t"
     "call *%r11\n\t"
     "addq $0x28, %rsp\n\t"
     "ret");
@@ -159,9 +159,9 @@ __ASM_GLOBAL_FUNC(call_flat_method4_f_f,
     "movq %rdx, %r8\n\t"
     "movq %rcx, %rdx\n\t"
     "movq %r10, %rcx\n\t" // add This pointer
-    "movq %xmm2, %xmm3\n\t"
-    "movq %xmm1, %xmm2\n\t"
-    "movq %xmm0, %xmm1\n\t"
+    "movaps %xmm2, %xmm3\n\t"
+    "movaps %xmm1, %xmm2\n\t"
+    "movaps %xmm0, %xmm1\n\t"
     "call *%r11\n\t"
     "addq $0x28, %rsp\n\t"
     "ret");
@@ -176,9 +176,9 @@ __ASM_GLOBAL_FUNC(call_flat_method5_f,
     "movq %rdx, %r8\n\t"
     "movq %rcx, %rdx\n\t"
     "movq %r10, %rcx\n\t" // add This pointer
-    "movq %xmm2, %xmm3\n\t"
-    "movq %xmm1, %xmm2\n\t"
-    "movq %xmm0, %xmm1\n\t"
+    "movaps %xmm2, %xmm3\n\t"
+    "movaps %xmm1, %xmm2\n\t"
+    "movaps %xmm0, %xmm1\n\t"
     "call *%r11\n\t"
     "addq $0x38, %rsp\n\t"
     "ret");
@@ -193,9 +193,9 @@ __ASM_GLOBAL_FUNC(call_flat_method5_f_f,
     "movq %rdx, %r8\n\t"
     "movq %rcx, %rdx\n\t"
     "movq %r10, %rcx\n\t" // add This pointer
-    "movq %xmm2, %xmm3\n\t"
-    "movq %xmm1, %xmm2\n\t"
-    "movq %xmm0, %xmm1\n\t"
+    "movaps %xmm2, %xmm3\n\t"
+    "movaps %xmm1, %xmm2\n\t"
+    "movaps %xmm0, %xmm1\n\t"
     "call *%r11\n\t"
     "addq $0x38, %rsp\n\t"
     "ret");
@@ -212,9 +212,9 @@ __ASM_GLOBAL_FUNC(call_flat_method6_f,
     "movq %rdx, %r8\n\t"
     "movq %rcx, %rdx\n\t"
     "movq %r10, %rcx\n\t" // add This pointer
-    "movq %xmm2, %xmm3\n\t"
-    "movq %xmm1, %xmm2\n\t"
-    "movq %xmm0, %xmm1\n\t"
+    "movaps %xmm2, %xmm3\n\t"
+    "movaps %xmm1, %xmm2\n\t"
+    "movaps %xmm0, %xmm1\n\t"
     "call *%r11\n\t"
     "addq $0x38, %rsp\n\t"
     "ret");
@@ -231,9 +231,9 @@ __ASM_GLOBAL_FUNC(call_flat_method6_f_f,
     "movq %rdx, %r8\n\t"
     "movq %rcx, %rdx\n\t"
     "movq %r10, %rcx\n\t" // add This pointer
-    "movq %xmm2, %xmm3\n\t"
-    "movq %xmm1, %xmm2\n\t"
-    "movq %xmm0, %xmm1\n\t"
+    "movaps %xmm2, %xmm3\n\t"
+    "movaps %xmm1, %xmm2\n\t"
+    "movaps %xmm0, %xmm1\n\t"
     "call *%r11\n\t"
     "addq $0x38, %rsp\n\t"
     "ret");
@@ -252,9 +252,9 @@ __ASM_GLOBAL_FUNC(call_flat_method7_f,
     "movq %rdx, %r8\n\t"
     "movq %rcx, %rdx\n\t"
     "movq %r10, %rcx\n\t" // add This pointer
-    "movq %xmm2, %xmm3\n\t"
-    "movq %xmm1, %xmm2\n\t"
-    "movq %xmm0, %xmm1\n\t"
+    "movaps %xmm2, %xmm3\n\t"
+    "movaps %xmm1, %xmm2\n\t"
+    "movaps %xmm0, %xmm1\n\t"
     "call *%r11\n\t"
     "addq $0x48, %rsp\n\t"
     "ret");
@@ -273,9 +273,9 @@ __ASM_GLOBAL_FUNC(call_flat_method7_f_f,
     "movq %rdx, %r8\n\t"
     "movq %rcx, %rdx\n\t"
     "movq %r10, %rcx\n\t" // add This pointer
-    "movq %xmm2, %xmm3\n\t"
-    "movq %xmm1, %xmm2\n\t"
-    "movq %xmm0, %xmm1\n\t"
+    "movaps %xmm2, %xmm3\n\t"
+    "movaps %xmm1, %xmm2\n\t"
+    "movaps %xmm0, %xmm1\n\t"
     "call *%r11\n\t"
     "addq $0x48, %rsp\n\t"
     "ret");
@@ -296,9 +296,9 @@ __ASM_GLOBAL_FUNC(call_flat_method8_f,
     "movq %rdx, %r8\n\t"
     "movq %rcx, %rdx\n\t"
     "movq %r10, %rcx\n\t" // add This pointer
-    "movq %xmm2, %xmm3\n\t"
-    "movq %xmm1, %xmm2\n\t"
-    "movq %xmm0, %xmm1\n\t"
+    "movaps %xmm2, %xmm3\n\t"
+    "movaps %xmm1, %xmm2\n\t"
+    "movaps %xmm0, %xmm1\n\t"
     "call *%r11\n\t"
     "addq $0x48, %rsp\n\t"
     "ret");
@@ -319,9 +319,9 @@ __ASM_GLOBAL_FUNC(call_flat_method8_f_f,
     "movq %rdx, %r8\n\t"
     "movq %rcx, %rdx\n\t"
     "movq %r10, %rcx\n\t" // add This pointer
-    "movq %xmm2, %xmm3\n\t"
-    "movq %xmm1, %xmm2\n\t"
-    "movq %xmm0, %xmm1\n\t"
+    "movaps %xmm2, %xmm3\n\t"
+    "movaps %xmm1, %xmm2\n\t"
+    "movaps %xmm0, %xmm1\n\t"
     "call *%r11\n\t"
     "addq $0x48, %rsp\n\t"
     "ret");
@@ -344,9 +344,9 @@ __ASM_GLOBAL_FUNC(call_flat_method9_f,
     "movq %rdx, %r8\n\t"
     "movq %rcx, %rdx\n\t"
     "movq %r10, %rcx\n\t" // add This pointer
-    "movq %xmm2, %xmm3\n\t"
-    "movq %xmm1, %xmm2\n\t"
-    "movq %xmm0, %xmm1\n\t"
+    "movaps %xmm2, %xmm3\n\t"
+    "movaps %xmm1, %xmm2\n\t"
+    "movaps %xmm0, %xmm1\n\t"
     "call *%r11\n\t"
     "addq $0x58, %rsp\n\t"
     "ret");
@@ -369,9 +369,9 @@ __ASM_GLOBAL_FUNC(call_flat_method9_f_f,
     "movq %rdx, %r8\n\t"
     "movq %rcx, %rdx\n\t"
     "movq %r10, %rcx\n\t" // add This pointer
-    "movq %xmm2, %xmm3\n\t"
-    "movq %xmm1, %xmm2\n\t"
-    "movq %xmm0, %xmm1\n\t"
+    "movaps %xmm2, %xmm3\n\t"
+    "movaps %xmm1, %xmm2\n\t"
+    "movaps %xmm0, %xmm1\n\t"
     "call *%r11\n\t"
     "addq $0x58, %rsp\n\t"
     "ret");
