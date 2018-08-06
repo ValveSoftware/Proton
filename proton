@@ -466,6 +466,9 @@ elif sys.argv[1] == "getnativepath":
     #windows -> linux path
     path = subprocess.check_output([wine_path, "winepath", sys.argv[2]], env=env, stderr=lfile)
     sys.stdout.write(path)
+elif sys.argv[1] == "waitforexit":
+    #wait for wineserver to shut down
+    run_wine([bindir + "/wineserver", "-w"])
 else:
     log("Need a verb.")
     sys.exit(1)
