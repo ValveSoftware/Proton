@@ -447,9 +447,7 @@ def dump_dbg_scripts():
             f.write("\t\"" + wine_path + "\" \"${@:-${DEF_CMD[@]}}\"\n")
     os.chmod("/tmp/proton_run", 0755)
 
-#determine mode
-if sys.argv[1] == "run":
-    #start target app
+def run():
 #    if "PROTON_DUMP_DEBUG_COMMAND" in os.environ: #for now, we are always dumping the debug scripts
         dump_dbg_scripts()
 #    else: #see above
@@ -458,6 +456,16 @@ if sys.argv[1] == "run":
             run_wine([wine_path, "start", "/unix"] + sys.argv[2:])
         else:
             run_wine([wine_path] + sys.argv[2:])
+
+#determine mode
+if sys.argv[1] == "run":
+    #start target app
+    run()
+elif sys.argv[1] == "waitforexitandrun":
+    #wait for wineserver to shut down
+    run_wine([bindir + "/wineserver", "-w"])
+    #then run
+    run()
 elif sys.argv[1] == "getcompatpath":
     #linux -> windows path
     path = subprocess.check_output([wine_path, "winepath", "-w", sys.argv[2]], env=env, stderr=lfile)
@@ -466,9 +474,6 @@ elif sys.argv[1] == "getnativepath":
     #windows -> linux path
     path = subprocess.check_output([wine_path, "winepath", sys.argv[2]], env=env, stderr=lfile)
     sys.stdout.write(path)
-elif sys.argv[1] == "waitforexit":
-    #wait for wineserver to shut down
-    run_wine([bindir + "/wineserver", "-w"])
 else:
     log("Need a verb.")
     sys.exit(1)
