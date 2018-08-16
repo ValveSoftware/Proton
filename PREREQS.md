@@ -9,7 +9,7 @@ Linux users with NVIDIA graphics cards should install the latest NVIDIA propriet
 ```
 sudo add-apt-repository ppa:graphics-drivers/ppa
 sudo apt update
-sudo apt install nvidia-396
+sudo apt install nvidia-driver-396
 ```
 
 Provide your user password when requested and reboot after the last command completes to ensure the driver has updated correctly.  
@@ -25,6 +25,8 @@ Linux users with AMD or Intel graphics cards should install recent versions of M
 sudo add-apt-repository ppa:paulo-miguel-dias/mesa
 sudo apt update
 sudo apt dist-upgrade
+sudo apt install mesa-vulkan-drivers
+sudo apt install mesa-vulkan-drivers:i386
 ```
 
 Provide your user password when requested and reboot after the last command completes to ensure the driver has updated correctly.
@@ -42,7 +44,7 @@ VR is not currently supported on Intel graphics.
 # GRAPHICS DRIVERS REQUIREMENTS - GENERAL
 
 ## DirectX 11 games:
-You will need NVIDIA 396.51 or Mesa 18.1.x at a minimum. LLVM7 is recommended to play DX11 games without GPU hangs.
+You will need NVIDIA 396.51 or Mesa 18.1.x at a minimum. LLVM7 or above is recommended to play DX11 games without GPU hangs.
 
 # FD LIMIT REQUIREMENTS
 
