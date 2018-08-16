@@ -44,4 +44,6 @@ VR is not currently supported on Intel graphics.
 ## DirectX 11 games:
 You will need NVIDIA 396.51 or Mesa 18.1.x at a minimum. LLVM7 is recommended to play DX11 games without GPU hangs.
 
+# FD LIMIT REQUIREMENTS
 
+Proton uses the 'esync' patchset for performance improvements in multi-threaded games. It can require a higher File Descriptor limit per process than what it set up by default in some distributions. If you're not running Ubuntu, SteamOS or Debian, please follow the instructions over at https://github.com/zfigura/wine/blob/esync/README.esync to increase your FD limit.
