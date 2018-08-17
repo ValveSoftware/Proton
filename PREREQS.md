@@ -23,7 +23,7 @@ Linux users with AMD or Intel graphics cards should install recent versions of M
 ```
 sudo add-apt-repository ppa:paulo-miguel-dias/mesa
 sudo apt dist-upgrade
-sudo apt install mesa-vulkan-drivers mesa-vulkan-drivers:i386
+sudo apt install mesa-vulkan-drivers mesa-vulkan-drivers:i386 libwayland-egl1 libwayland-egl1:i386
 ```
 
 Provide your user password when requested and reboot after the last command completes to ensure the driver has updated correctly.
