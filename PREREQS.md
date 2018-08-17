@@ -8,7 +8,6 @@ Linux users with NVIDIA graphics cards should install the latest NVIDIA propriet
 
 ```
 sudo add-apt-repository ppa:graphics-drivers/ppa
-sudo apt update
 sudo apt install nvidia-driver-396
 ```
 
@@ -23,7 +22,6 @@ Linux users with AMD or Intel graphics cards should install recent versions of M
 
 ```
 sudo add-apt-repository ppa:paulo-miguel-dias/mesa
-sudo apt update
 sudo apt dist-upgrade
 sudo apt install mesa-vulkan-drivers mesa-vulkan-drivers:i386
 ```
@@ -34,8 +32,8 @@ In addition, AMD users that want to play VR games should also add this repositor
 
 ```
 sudo add-apt-repository ppa:kisak/steamvr4pk
-sudo apt update
 sudo apt dist-upgrade
+sudo apt install linux-generic-steamvr-18.04
 ```
 
 VR is not currently supported on Intel graphics.
