@@ -251,10 +251,10 @@ with prefix_lock:
         except:
             pass
 
-    makedirs(prefix + "/drive_c/users/" + os.environ["USER"] + "/Local Settings/Application Data/openvr")
+    makedirs(prefix + "/drive_c/users/steamuser/Local Settings/Application Data/openvr")
 
     #remove existing file
-    vrpaths_name = prefix + "/drive_c/users/" + os.environ["USER"] + "/Local Settings/Application Data/openvr/openvrpaths.vrpath"
+    vrpaths_name = prefix + "/drive_c/users/steamuser/Local Settings/Application Data/openvr/openvrpaths.vrpath"
     if os.path.exists(vrpaths_name):
         os.remove(vrpaths_name)
 
