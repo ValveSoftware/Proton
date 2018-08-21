@@ -13,6 +13,35 @@ endif
 export CC
 export CXX
 
+# Local name of this build, for dist/install steps
+BUILD_NAME := proton-localbuild
+SRCDIR := ..
+
+# Selected container mode shell
+CONTAINER_SHELL_BASE = sudo docker run --rm -i -v $(HOME):$(HOME) -w $(CURDIR) \
+                                       -v /etc/passwd:/etc/passwd:ro -u $(shell id -u):$(shell id -g) -h $(shell hostname) \
+                                       -v /tmp:/tmp $(SELECTED_CONTAINER) /bin/bash
+CONTAINER32 := steamrt-proton-dev32
+CONTAINER64 := steamrt-proton-dev
+SELECTED_CONTAINER := $(CONTAINER32)
+CONTAINER_SHELL32 := $(CONTAINER_SHELL_BASE)
+SELECTED_CONTAINER := $(CONTAINER64)
+CONTAINER_SHELL64 := $(CONTAINER_SHELL_BASE)
+undefine SELECTED_CONTAINER
+
+$(info Testing configured 64bit container)
+ifneq ($(shell $(CONTAINER_SHELL64) -c "echo hi"), hi)
+$(error "Cannot run commands in 64bit container")
+endif
+$(info Testing configured 32bit container)
+ifneq ($(shell $(CONTAINER_SHELL32) -c "echo hi"), hi)
+$(error "Cannot run commands in 32bit container")
+endif
+
+# FIXME Don't bother in native
+SUBMAKE_JOBS ?= 24
+MAKE := make -j$(SUBMAKE_JOBS)
+
 # FIXME OS X-vs-others stuff
 LIB_SUFFIX := "so"
 STRIP := strip
@@ -39,10 +68,6 @@ WITHOUT_X :=
 # FIXME Configure stuff needs to set these maybe
 INSTALL_PROGRAM_FLAGS :=
 
-# Local name of this build, for dist/install steps
-BUILD_NAME := proton-localbuild
-SRCDIR := ..
-
 # Many of the configure steps below depend on the makefile itself, such that they are dirtied by changing the recipes
 # that create them.  This can be annoying when working on the makefile, building with NO_MAKEFILE_DEPENDENCY=1 disables
 # this.
@@ -55,7 +80,8 @@ COMPAT_MANIFEST_TEMPLATE := $(SRCDIR)/compatibilitytool.vdf.template
 
 TOOLS_DIR32 := ./obj-tools32
 TOOLS_DIR64 := ./obj-tools64
-DST_DIR := ./dist
+DST_BASE := ./dist
+DST_DIR := $(DST_BASE)/dist
 
 FREETYPE := $(SRCDIR)/freetype2
 FREETYPE_OBJ32 := ./obj-freetype32
@@ -146,36 +172,46 @@ all64_configure: $(addsuffix 64_configure,$(GOAL_TARGETS))
 ##
 
 # FIXME Missing license step
+
+$(DST_DIR):
+	mkdir -p $@
+
 DIST_COPY_FILES := toolmanifest.vdf filelock.py proton user_settings.sample.py
-DIST_COPY_TARGETS := $(addprefix $(DST_DIR)/,$(DIST_SRC_FILES))
+DIST_COPY_TARGETS := $(addprefix $(DST_BASE)/,$(DIST_COPY_FILES))
 DIST_VERSION := $(DST_DIR)/version
+DIST_VERSION_OUTER := $(DST_BASE)/version
 DIST_OVR32 := $(DST_DIR)/lib/wine/dxvk/openvr_api_dxvk.dll
 DIST_OVR64 := $(DST_DIR)/lib64/wine/dxvk/openvr_api_dxvk.dll
 DIST_PREFIX := $(DST_DIR)/share/default_pfx/
-DIST_COMPAT_MANIFEST := $(DST_DIR)/compatibilitytool.vdf
+DIST_COMPAT_MANIFEST := $(DST_BASE)/compatibilitytool.vdf
 
-DIST_TARGETS := $(DIST_COPY_TARGETS) $(DIST_VERSION) $(DIST_OVR32) $(DIST_OVR64) $(DIST_COMPAT_MANIFEST)
+DIST_TARGETS := $(DIST_COPY_TARGETS) $(DIST_VERSION) $(DIST_VERSION_OUTER) $(DIST_OVR32) $(DIST_OVR64) $(DIST_COMPAT_MANIFEST)
 
-$(DIST_OVR32): $(SRCDIR)/openvr/bin/win32/openvr_api.dll
+$(DIST_OVR32): $(SRCDIR)/openvr/bin/win32/openvr_api.dll | $(DST_DIR)
+	mkdir -p $(DST_DIR)/lib/wine/dxvk
 	cp -a $< $@
 
-$(DIST_OVR64): $(SRCDIR)/openvr/bin/win64/openvr_api.dll
+$(DIST_OVR64): $(SRCDIR)/openvr/bin/win64/openvr_api.dll | $(DST_DIR)
+	mkdir -p $(DST_DIR)/lib64/wine/dxvk
 	cp -a $< $@
 
-$(DIST_COPY_TARGETS):
+$(DIST_COPY_TARGETS): | $(DST_DIR)
 	cp -a $(SRCDIR)/$(notdir $@) $@
 
-$(DIST_VERSION):
+$(DIST_VERSION): | $(DST_DIR)
 	date '+%s' > $@
 
-$(DIST_COMPAT_MANIFEST): $(COMPAT_MANIFEST_TEMPLATE) $(MAKEFILE_DEP)
+$(DIST_VERSION_OUTER): $(DIST_VERSION) | $(DST_DIR)
+	cp $< $@
+
+$(DIST_COMPAT_MANIFEST): $(COMPAT_MANIFEST_TEMPLATE) $(MAKEFILE_DEP) | $(DST_DIR)
 	sed -r 's|//##DISPLAY_NAME##|"display_name" "'$(BUILD_NAME)'"|' $< > $@
 
 .PHONY: dist
 
 # Only drag in WINE_OUT if they need to be built at all, otherwise this doesn't imply a rebuild of wine.  If wine is in
 # the explicit targets, specify that this should occur after.
-dist: $(DIST_TARGETS) | $(WINE_OUT) $(filter $(MAKECMDGOALS),wine64 wine32 wine)
+dist: $(DIST_TARGETS) | $(WINE_OUT) $(filter $(MAKECMDGOALS),wine64 wine32 wine) $(DST_DIR)
 	WINEPREFIX=$(abspath $(DIST_PREFIX)) $(WINE_OUT_BIN) wineboot && \
 		WINEPREFIX=$(abspath $(DIST_PREFIX)) $(WINE_OUT_SERVER) -w
 
@@ -239,6 +275,7 @@ OPENAL_CONFIGURE_FILES64 := $(OPENAL_OBJ64)/Makefile
 
 
 # 64bit-configure
+$(OPENAL_CONFIGURE_FILES64): SHELL = $(CONTAINER_SHELL64)
 $(OPENAL_CONFIGURE_FILES64): $(OPENAL)/CMakeLists.txt $(MAKEFILE_DEP) | $(OPENAL_OBJ64)
 	cd $(dir $@) && \
 		cmake $(abspath $(OPENAL)) -DCMAKE_INSTALL_PREFIX="$(abspath $(TOOLS_DIR64))" \
@@ -246,6 +283,7 @@ $(OPENAL_CONFIGURE_FILES64): $(OPENAL)/CMakeLists.txt $(MAKEFILE_DEP) | $(OPENAL
 			-DCMAKE_INSTALL_LIBDIR="lib"
 
 # 32-bit configure
+$(OPENAL_CONFIGURE_FILES32): SHELL = $(CONTAINER_SHELL32)
 $(OPENAL_CONFIGURE_FILES32): $(OPENAL)/CMakeLists.txt $(MAKEFILE_DEP) | $(OPENAL_OBJ32)
 	cd $(dir $@) && \
 		cmake $(abspath $(OPENAL)) \
@@ -266,22 +304,24 @@ openal_configure32: $(OPENAL_CONFIGURE_FILES32)
 
 openal: openal32 openal64
 
+openal64: SHELL = $(CONTAINER_SHELL64)
 openal64: $(OPENAL_CONFIGURE_FILES64)
 	cd $(OPENAL_OBJ64) && \
 		$(MAKE) VERBOSE=1 && \
-		$(MAKE) install VERBOSE=1
+		$(MAKE) install VERBOSE=1 && \
+		mkdir -p ../$(DST_DIR)/lib64 && \
+		cp -L ../$(TOOLS_DIR64)/lib/libopenal* ../$(DST_DIR)/lib64/ && \
+		[ x"$(STRIP)" = x ] || $(STRIP) ../$(DST_DIR)/lib64/libopenal.$(LIB_SUFFIX)
 
-	cp -L "$(TOOLS_DIR64)"/lib/libopenal* "$(DST_DIR)"/lib64/
-	[ x"$(STRIP)" = x ] || $(STRIP) "$(DST_DIR)"/lib64/libopenal.$(LIB_SUFFIX)
 
-
+openal32: SHELL = $(CONTAINER_SHELL32)
 openal32: $(OPENAL_CONFIGURE_FILES32)
 	cd $(OPENAL_OBJ32) && \
-	$(MAKE) VERBOSE=1 && \
-	$(MAKE) install VERBOSE=1
-
-	cp -L "$(TOOLS_DIR32)"/lib/libopenal* "$(DST_DIR)"/lib/
-	[ x"$(STRIP)" = x ] || $(STRIP) "$(DST_DIR)"/lib/libopenal.$(LIB_SUFFIX)
+		$(MAKE) VERBOSE=1 && \
+		$(MAKE) install VERBOSE=1 && \
+		mkdir -p ../$(DST_DIR)/lib && \
+		cp -L ../$(TOOLS_DIR32)/lib/libopenal* ../$(DST_DIR)/lib/ && \
+		[ x"$(STRIP)" = x ] || $(STRIP) ../$(DST_DIR)/lib/libopenal.$(LIB_SUFFIX)
 
 
 ##
@@ -294,6 +334,7 @@ FFMPEG_CONFIGURE_FILES32 := $(FFMPEG_OBJ32)/Makefile
 FFMPEG_CONFIGURE_FILES64 := $(FFMPEG_OBJ64)/Makefile
 
 # 64bit-configure
+$(FFMPEG_CONFIGURE_FILES64): SHELL = $(CONTAINER_SHELL64)
 $(FFMPEG_CONFIGURE_FILES64): $(FFMPEG)/configure $(MAKEFILE_DEP) | $(FFMPEG_OBJ64)
 	cd $(dir $@) && \
 		$(abspath $(FFMPEG))/configure \
@@ -323,11 +364,12 @@ $(FFMPEG_CONFIGURE_FILES64): $(FFMPEG)/configure $(MAKEFILE_DEP) | $(FFMPEG_OBJ6
 			--disable-vdpau \
 			--disable-everything \
 			--enable-decoder=wmav2 \
-			--enable-decoder=adpcm_ms
-	# ffmpeg's configure script doesn't update the timestamp on this guy in the case of a no-op
-	[ ! -f $(dir $@)/Makefile ] || touch $(dir $@)/Makefile
+			--enable-decoder=adpcm_ms && \
+		# ffmpeg's configure script doesn't update the timestamp on this guy in the case of a no-op
+		[ ! -f ./Makefile ] || touch ./Makefile
 
 # 32-bit configure
+$(FFMPEG_CONFIGURE_FILES32): SHELL = $(CONTAINER_SHELL32)
 $(FFMPEG_CONFIGURE_FILES32): $(FFMPEG)/configure $(MAKEFILE_DEP) | $(FFMPEG_OBJ32)
 	cd $(dir $@) && \
 		$(abspath $(FFMPEG))/configure \
@@ -358,9 +400,9 @@ $(FFMPEG_CONFIGURE_FILES32): $(FFMPEG)/configure $(MAKEFILE_DEP) | $(FFMPEG_OBJ3
 			--disable-vdpau \
 			--disable-everything \
 			--enable-decoder=wmav2 \
-			--enable-decoder=adpcm_ms
-	# ffmpeg's configure script doesn't update the timestamp on this guy in the case of a no-op
-	[ ! -f $(dir $@)/Makefile ] || touch $(dir $@)/Makefile
+			--enable-decoder=adpcm_ms && \
+		# ffmpeg's configure script doesn't update the timestamp on this guy in the case of a no-op
+		[ ! -f ./Makefile ] || touch ./Makefile
 
 ## ffmpeg goals
 
@@ -376,11 +418,13 @@ ffmpeg_configure32: $(FFMPEG_CONFIGURE_FILES32)
 
 ffmpeg: ffmpeg32 ffmpeg64
 
+ffmpeg64: SHELL = $(CONTAINER_SHELL64)
 ffmpeg64: $(FFMPEG_CONFIGURE_FILES64)
 	cd $(FFMPEG_OBJ64) && \
 	$(MAKE) && \
 	$(MAKE) install
 
+ffmpeg32: SHELL = $(CONTAINER_SHELL32)
 ffmpeg32: $(FFMPEG_CONFIGURE_FILES32)
 	cd $(FFMPEG_OBJ32) && \
 	$(MAKE) && \
@@ -396,6 +440,7 @@ LSTEAMCLIENT_CONFIGURE_FILES32 := $(LSTEAMCLIENT_OBJ32)/Makefile
 LSTEAMCLIENT_CONFIGURE_FILES64 := $(LSTEAMCLIENT_OBJ64)/Makefile
 
 # 64bit-configure
+$(LSTEAMCLIENT_CONFIGURE_FILES64): SHELL = $(CONTAINER_SHELL64)
 $(LSTEAMCLIENT_CONFIGURE_FILES64): $(LSTEAMCLIENT) $(WINEMAKER) $(MAKEFILE_DEP) | $(LSTEAMCLIENT_OBJ64)
 	cd $(dir $@) && \
 		$(WINEMAKER) --nosource-fix --nolower-include --nodlls --nomsvcrt \
@@ -405,14 +450,15 @@ $(LSTEAMCLIENT_CONFIGURE_FILES64): $(LSTEAMCLIENT) $(WINEMAKER) $(MAKEFILE_DEP) 
 			-I"../$(TOOLS_DIR64)"/include/wine/windows/ \
 			-L"../$(TOOLS_DIR64)"/lib64/ \
 			-L"../$(TOOLS_DIR64)"/lib64/wine/ \
-			--dll ../$(LSTEAMCLIENT)
-	cp $(LSTEAMCLIENT)/Makefile $(dir $@)
-	# Point makefile back at srcdir
-	echo >> $(dir $@)/Makefile 'SRCDIR := ../$(LSTEAMCLIENT)'
-	echo >> $(dir $@)/Makefile 'vpath % $$(SRCDIR)'
-	echo >> $(dir $@)/Makefile 'lsteamclient_dll_LDFLAGS := $$(patsubst %.spec,$$(SRCDIR)/%.spec,$$(lsteamclient_dll_LDFLAGS))'
+			--dll ../$(LSTEAMCLIENT) && \
+		cp ../$(LSTEAMCLIENT)/Makefile . && \
+		# Point makefile back at srcdir
+		echo >> ./Makefile 'SRCDIR := ../$(LSTEAMCLIENT)' && \
+		echo >> ./Makefile 'vpath % $$(SRCDIR)' && \
+		echo >> ./Makefile 'lsteamclient_dll_LDFLAGS := $$(patsubst %.spec,$$(SRCDIR)/%.spec,$$(lsteamclient_dll_LDFLAGS))'
 
 # 32-bit configure
+$(LSTEAMCLIENT_CONFIGURE_FILES32): SHELL = $(CONTAINER_SHELL32)
 $(LSTEAMCLIENT_CONFIGURE_FILES32): $(LSTEAMCLIENT) $(WINEMAKER) $(MAKEFILE_DEP) | $(LSTEAMCLIENT_OBJ32)
 	cd $(dir $@) && \
 		$(WINEMAKER) --nosource-fix --nolower-include --nodlls --nomsvcrt --wine32 \
@@ -422,12 +468,12 @@ $(LSTEAMCLIENT_CONFIGURE_FILES32): $(LSTEAMCLIENT) $(WINEMAKER) $(MAKEFILE_DEP) 
 			-I"../$(TOOLS_DIR32)"/include/wine/windows/ \
 			-L"../$(TOOLS_DIR32)"/lib/ \
 			-L"../$(TOOLS_DIR32)"/lib/wine/ \
-			--dll ../$(LSTEAMCLIENT)
-	cp $(LSTEAMCLIENT)/Makefile $(dir $@)
-	# Point makefile back at srcdir
-	echo >> $(dir $@)/Makefile 'SRCDIR := ../$(LSTEAMCLIENT)'
-	echo >> $(dir $@)/Makefile 'vpath % $$(SRCDIR)'
-	echo >> $(dir $@)/Makefile 'lsteamclient_dll_LDFLAGS := -m32 $$(patsubst %.spec,$$(SRCDIR)/%.spec,$$(lsteamclient_dll_LDFLAGS))'
+			--dll ../$(LSTEAMCLIENT) && \
+		cp $(LSTEAMCLIENT)/Makefile . && \
+		# Point makefile back at srcdir
+		echo >> ./Makefile 'SRCDIR := ../$(LSTEAMCLIENT)' && \
+		echo >> ./Makefile 'vpath % $$(SRCDIR)' && \
+		echo >> ./Makefile 'lsteamclient_dll_LDFLAGS := -m32 $$(patsubst %.spec,$$(SRCDIR)/%.spec,$$(lsteamclient_dll_LDFLAGS))'
 
 ## lsteamclient goals
 
@@ -441,6 +487,7 @@ lsteamclient_configure32: $(LSTEAMCLIENT_CONFIGURE_FILES32)
 
 lsteamclient: lsteamclient32 lsteamclient64
 
+lsteamclient64: SHELL = $(CONTAINER_SHELL64)
 lsteamclient64: $(LSTEAMCLIENT_CONFIGURE_FILES64)
 	cd $(LSTEAMCLIENT_OBJ64) && \
 		CXXFLAGS="-Wno-attributes -O2" CFLAGS="-O2 -g" PATH="$(TOOLS_DIR64)/bin:$(PATH)" $(MAKE)
@@ -448,6 +495,7 @@ lsteamclient64: $(LSTEAMCLIENT_CONFIGURE_FILES64)
 	[ x"$(STRIP)" = x ] || $(STRIP) "$(LSTEAMCLIENT_OBJ64)"/lsteamclient.dll.so
 	cp -a $(LSTEAMCLIENT_OBJ64)/lsteamclient.dll.so "$(DST_DIR)"/lib64/wine/
 
+lsteamclient32: SHELL = $(CONTAINER_SHELL32)
 lsteamclient32: $(LSTEAMCLIENT_CONFIGURE_FILES32)
 	cd $(LSTEAMCLIENT_OBJ32) && \
 		LDFLAGS="-m32" CXXFLAGS="-m32 -Wno-attributes -O2" CFLAGS="-m32 -O2 -g" PATH="$(TOOLS_DIR32)/bin:$(PATH)" \
@@ -466,6 +514,7 @@ WINE_CONFIGURE_FILES32 := $(WINE_OBJ32)/Makefile
 WINE_CONFIGURE_FILES64 := $(WINE_OBJ64)/Makefile
 
 # 64bit-configure
+$(WINE_CONFIGURE_FILES64): SHELL = $(CONTAINER_SHELL64)
 $(WINE_CONFIGURE_FILES64): $(MAKEFILE_DEP) | $(WINE_OBJ64)
 	cd $(dir $@) && \
 	STRIP="$(STRIP)" \
@@ -488,6 +537,7 @@ $(WINE_CONFIGURE_FILES64): $(MAKEFILE_DEP) | $(WINE_OBJ64)
 		--enable-win64 --disable-tests --prefix="$(abspath $(DST_DIR))"
 
 # 32-bit configure
+$(WINE_CONFIGURE_FILES32): SHELL = $(CONTAINER_SHELL32)
 $(WINE_CONFIGURE_FILES32): $(MAKEFILE_DEP) | $(WINE_OBJ32)
 	cd $(dir $@) && \
 	STRIP="$(STRIP)" \
@@ -524,9 +574,10 @@ wine: wine32 wine64
 # WINE_OUT are outputs needed by other rules, though we don't explicitly track all state here -- make all or make wine
 # are needed to ensure all deps are up to date, this just ensures 'make dist' will trag in wine if you've never built
 # wine.
+$(WINE_OUT) wine64: SHELL = $(CONTAINER_SHELL64)
 $(WINE_OUT) wine64: $(WINE_CONFIGURE_FILES64)
-	cd $(WINE_OBJ64) && \
-	STRIP="$(STRIP)" $(MAKE) && \
+	+cd $(WINE_OBJ64) && \
+	env STRIP="$(STRIP)" $(MAKE) && \
 	INSTALL_PROGRAM_FLAGS="$(INSTALL_PROGRAM_FLAGS)" STRIP="$(STRIP)" $(MAKE) install-lib && \
 	INSTALL_PROGRAM_FLAGS="$(INSTALL_PROGRAM_FLAGS)" STRIP="$(STRIP)" $(MAKE) \
 		prefix="$(abspath $(TOOLS_DIR64))" libdir="$(abspath $(TOOLS_DIR64))/lib64" \
@@ -536,24 +587,24 @@ $(WINE_OUT) wine64: $(WINE_CONFIGURE_FILES64)
 	rm -f "$(DST_DIR)"/bin/{msiexec,notepad,regedit,regsvr32,wineboot,winecfg,wineconsole,winedbg,winefile,winemine,winepath}
 	rm -rf "$(DST_DIR)/share/man/"
 
+wine32: SHELL = $(CONTAINER_SHELL32)
 wine32: $(WINE_CONFIGURE_FILES32)
 	cd $(WINE_OBJ32) && \
 	STRIP="$(STRIP)" \
-		$(MAKE) && \
+		$(MAKE) $(SUBMAKE_FLAGS) && \
 	INSTALL_PROGRAM_FLAGS="$(INSTALL_PROGRAM_FLAGS)" STRIP="$(STRIP)" \
-		$(MAKE) install-lib && \
+		$(MAKE) $(SUBMAKE_FLAGS) install-lib && \
 	INSTALL_PROGRAM_FLAGS="$(INSTALL_PROGRAM_FLAGS)" STRIP="$(STRIP)" \
-		$(MAKE) \
+		$(MAKE) $(SUBMAKE_FLAGS) \
 			prefix="$(abspath $(TOOLS_DIR32))" libdir="$(abspath $(TOOLS_DIR32))/lib" \
 			dlldir="$(abspath $(TOOLS_DIR32))/lib/wine" \
-			install-dev install-lib
-
+			install-dev install-lib && \
 	# installing 32-bit stuff manually, see
 	#   https://wiki.winehq.org/Packaging#WoW64_Workarounds
-	cp -a "$(WINE_DST32)"/lib "$(DST_DIR)"/
-	cp -a "$(WINE_DST32)"/bin/wine "$(DST_DIR)"/bin
+	cp -a "../$(WINE_DST32)"/lib "../$(DST_DIR)"/ && \
+	cp -a "../$(WINE_DST32)"/bin/wine "../$(DST_DIR)"/bin && \
 	# FIXME not on Darwin
-	cp -a "$(WINE_DST32)"/bin/wine-preloader "$(DST_DIR)"/bin/
+	cp -a "../$(WINE_DST32)"/bin/wine-preloader "../$(DST_DIR)"/bin/
 
 ##
 ## vrclient
@@ -566,6 +617,7 @@ VRCLIENT_CONFIGURE_FILES64 := $(VRCLIENT_OBJ64)/Makefile
 
 # The source directory for vrclient32 is a synthetic symlink clone of the oddly named vrclient_x64 with the spec files
 # renamed.
+$(VRCLIENT32): SHELL = $(CONTAINER_SHELL32)
 $(VRCLIENT32): $(VRCLIENT) $(MAKEFILE_DEP)
 	rm -rf ./$(VRCLIENT32)
 	mkdir -p $(VRCLIENT32)/vrclient
@@ -574,24 +626,26 @@ $(VRCLIENT32): $(VRCLIENT) $(MAKEFILE_DEP)
 	mv $(VRCLIENT32)/vrclient/vrclient_x64.spec $(VRCLIENT32)/vrclient/vrclient.spec
 
 # 64bit-configure
+$(VRCLIENT_CONFIGURE_FILES64): SHELL = $(CONTAINER_SHELL64)
 $(VRCLIENT_CONFIGURE_FILES64): $(MAKEFILE_DEP) $(VRCLIENT) $(VRCLIENT)/vrclient_x64 | $(VRCLIENT_OBJ64)
 	cd $(VRCLIENT) && \
-	$(WINEMAKER) --nosource-fix --nolower-include --nodlls --nomsvcrt \
-		--nosource-fix --nolower-include --nodlls --nomsvcrt \
-		-I"$(abspath $(TOOLS_DIR64))"/include/ \
-		-I"$(abspath $(TOOLS_DIR64))"/include/wine/ \
-		-I"$(abspath $(TOOLS_DIR64))"/include/wine/windows/ \
-		-I"$(abspath $(VRCLIENT))" \
-		-L"$(abspath $(TOOLS_DIR64))"/lib64/ \
-		-L"$(abspath $(TOOLS_DIR64))"/lib64/wine/ \
-		--dll vrclient_x64
-	cp $(VRCLIENT)/vrclient_x64/Makefile $(dir $@)
-	# Point makefile back at srcdir
-	echo >> $(dir $@)/Makefile 'SRCDIR := ../$(VRCLIENT)/vrclient_x64'
-	echo >> $(dir $@)/Makefile 'vpath % $$(SRCDIR)'
-	echo >> $(dir $@)/Makefile 'vrclient_x64_dll_LDFLAGS := $$(patsubst %.spec,$$(SRCDIR)/%.spec,$$(vrclient_x64_dll_LDFLAGS))'
+		$(WINEMAKER) --nosource-fix --nolower-include --nodlls --nomsvcrt \
+			--nosource-fix --nolower-include --nodlls --nomsvcrt \
+			-I"$(abspath $(TOOLS_DIR64))"/include/ \
+			-I"$(abspath $(TOOLS_DIR64))"/include/wine/ \
+			-I"$(abspath $(TOOLS_DIR64))"/include/wine/windows/ \
+			-I"$(abspath $(VRCLIENT))" \
+			-L"$(abspath $(TOOLS_DIR64))"/lib64/ \
+			-L"$(abspath $(TOOLS_DIR64))"/lib64/wine/ \
+			--dll vrclient_x64 && \
+		cp ../$(VRCLIENT)/vrclient_x64/Makefile ../$(dir $@) && \
+		# Point makefile back at srcdir
+		echo >> ../$(dir $@)/Makefile 'SRCDIR := ../$(VRCLIENT)/vrclient_x64' && \
+		echo >> ../$(dir $@)/Makefile 'vpath % $$(SRCDIR)' && \
+		echo >> ../$(dir $@)/Makefile 'vrclient_x64_dll_LDFLAGS := $$(patsubst %.spec,$$(SRCDIR)/%.spec,$$(vrclient_x64_dll_LDFLAGS))'
 
 # 32-bit configure
+$(VRCLIENT_CONFIGURE_FILES32): SHELL = $(CONTAINER_SHELL32)
 $(VRCLIENT_CONFIGURE_FILES32): $(MAKEFILE_DEP) $(VRCLIENT32) | $(VRCLIENT_OBJ32)
 	$(WINEMAKER) --nosource-fix --nolower-include --nodlls --nomsvcrt \
 		--wine32 \
@@ -601,12 +655,11 @@ $(VRCLIENT_CONFIGURE_FILES32): $(MAKEFILE_DEP) $(VRCLIENT32) | $(VRCLIENT_OBJ32)
 		-I"$(abspath $(VRCLIENT))" \
 		-L"$(abspath $(TOOLS_DIR32))"/lib/ \
 		-L"$(abspath $(TOOLS_DIR32))"/lib/wine/ \
-		--dll $(VRCLIENT32)/vrclient
-
-	cp $(VRCLIENT32)/vrclient/Makefile $(dir $@)
+		--dll $(VRCLIENT32)/vrclient && \
+	cp $(VRCLIENT32)/vrclient/Makefile $(dir $@) && \
 	# Point makefile back at srcdir
-	echo >> $(dir $@)/Makefile 'SRCDIR := ../$(VRCLIENT32)/vrclient'
-	echo >> $(dir $@)/Makefile 'vpath % $$(SRCDIR)'
+	echo >> $(dir $@)/Makefile 'SRCDIR := ../$(VRCLIENT32)/vrclient' && \
+	echo >> $(dir $@)/Makefile 'vpath % $$(SRCDIR)' && \
 	echo >> $(dir $@)/Makefile 'vrclient_dll_LDFLAGS := -m32 $$(patsubst %.spec,$$(SRCDIR)/%.spec,$$(vrclient_dll_LDFLAGS))'
 
 
