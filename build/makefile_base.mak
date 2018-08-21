@@ -149,10 +149,18 @@ all64_configure: $(addsuffix 64_configure,$(GOAL_TARGETS))
 DIST_COPY_FILES := toolmanifest.vdf filelock.py proton user_settings.sample.py
 DIST_COPY_TARGETS := $(addprefix $(DST_DIR)/,$(DIST_SRC_FILES))
 DIST_VERSION := $(DST_DIR)/version
+DIST_OVR32 := $(DST_DIR)/lib/wine/dxvk/openvr_api_dxvk.dll
+DIST_OVR64 := $(DST_DIR)/lib64/wine/dxvk/openvr_api_dxvk.dll
 DIST_PREFIX := $(DST_DIR)/share/default_pfx/
 DIST_COMPAT_MANIFEST := $(DST_DIR)/compatibilitytool.vdf
 
-DIST_TARGETS := $(DIST_COPY_TARGETS) $(DIST_VERSION) $(DIST_COMPAT_MANIFEST)
+DIST_TARGETS := $(DIST_COPY_TARGETS) $(DIST_VERSION) $(DIST_OVR32) $(DIST_OVR64) $(DIST_COMPAT_MANIFEST)
+
+$(DIST_OVR32): $(SRCDIR)/openvr/bin/win32/openvr_api.dll
+	cp -a $< $@
+
+$(DIST_OVR64): $(SRCDIR)/openvr/bin/win64/openvr_api.dll
+	cp -a $< $@
 
 $(DIST_COPY_TARGETS):
 	cp -a $(SRCDIR)/$(notdir $@) $@
