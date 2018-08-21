@@ -81,6 +81,11 @@ WINE_OBJ32 := ./obj-wine32
 WINE_OBJ64 := ./obj-wine64
 WINEMAKER := $(abspath $(WINE)/tools/winemaker/winemaker)
 
+# Wine outputs that need to exist for other steps (dist)
+WINE_OUT_BIN := $(DST_DIR)/bin/wine64
+WINE_OUT_SERVER := $(DST_DIR)/bin/wineserver
+WINE_OUT := $(WINE_OUT_BIN) $(WINE_OUT_SERVER)
+
 VRCLIENT := $(SRCDIR)/vrclient_x64
 VRCLIENT32 := ./syn-vrclient32
 VRCLIENT_OBJ64 := ./obj-vrclient64
@@ -144,6 +149,7 @@ all64_configure: $(addsuffix 64_configure,$(GOAL_TARGETS))
 DIST_COPY_FILES := toolmanifest.vdf filelock.py proton user_settings.sample.py
 DIST_COPY_TARGETS := $(addprefix $(DST_DIR)/,$(DIST_SRC_FILES))
 DIST_VERSION := $(DST_DIR)/version
+DIST_PREFIX := $(DST_DIR)/share/default_pfx/
 DIST_COMPAT_MANIFEST := $(DST_DIR)/compatibilitytool.vdf
 
 DIST_TARGETS := $(DIST_COPY_TARGETS) $(DIST_VERSION) $(DIST_COMPAT_MANIFEST)
@@ -157,7 +163,13 @@ $(DIST_VERSION):
 $(DIST_COMPAT_MANIFEST): $(COMPAT_MANIFEST_TEMPLATE) $(MAKEFILE_DEP)
 	sed -r 's|//##DISPLAY_NAME##|"display_name" "'$(BUILD_NAME)'"|' $< > $@
 
-dist: $(DIST_TARGETS)
+.PHONY: dist
+
+# Only drag in WINE_OUT if they need to be built at all, otherwise this doesn't imply a rebuild of wine.  If wine is in
+# the explicit targets, specify that this should occur after.
+dist: $(DIST_TARGETS) | $(WINE_OUT) $(filter $(MAKECMDGOALS),wine64 wine32 wine)
+	WINEPREFIX=$(abspath $(DIST_PREFIX)) $(WINE_OUT_BIN) wineboot && \
+		WINEPREFIX=$(abspath $(DIST_PREFIX)) $(WINE_OUT_SERVER) -w
 
 ##
 ## freetype
@@ -501,7 +513,10 @@ wine_configure32: $(WINE_CONFIGURE_FILES32)
 
 wine: wine32 wine64
 
-wine64: $(WINE_CONFIGURE_FILES64)
+# WINE_OUT are outputs needed by other rules, though we don't explicitly track all state here -- make all or make wine
+# are needed to ensure all deps are up to date, this just ensures 'make dist' will trag in wine if you've never built
+# wine.
+$(WINE_OUT) wine64: $(WINE_CONFIGURE_FILES64)
 	cd $(WINE_OBJ64) && \
 	STRIP="$(STRIP)" $(MAKE) && \
 	INSTALL_PROGRAM_FLAGS="$(INSTALL_PROGRAM_FLAGS)" STRIP="$(STRIP)" $(MAKE) install-lib && \
