@@ -133,6 +133,25 @@ all32_configure: $(addsuffix 32_configure,$(GOAL_TARGETS))
 all64_configure: $(addsuffix 64_configure,$(GOAL_TARGETS))
 
 ##
+## install -- steps to finalize the install
+##
+
+# FIXME Missing license step
+DIST_COPY_FILES := toolmanifest.vdf filelock.py proton user_settings.sample.py
+DIST_COPY_TARGETS := $(addprefix $(DST_DIR)/,$(DIST_SRC_FILES))
+DIST_VERSION := $(DST_DIR)/version
+
+DIST_TARGETS := $(DIST_COPY_TARGETS) $(DIST_VERSION)
+
+$(DIST_COPY_TARGETS):
+	cp -a $(SRCDIR)/$(notdir $@) $@
+
+$(DIST_VERSION):
+	date '+%s' > $@
+
+dist: $(DIST_TARGETS)
+
+##
 ## freetype
 ##
 
