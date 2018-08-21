@@ -10,6 +10,14 @@ source code is provided to enable advanced users the ability to alter
 Proton.  For example, some users may wish to use a different version of Wine with
 a particular title.
 
+---
+Getting Started with Proton from Steam Play
+---
+**Make sure you are opted into the Client Beta!**
+**Proton requires graphics drivers that are more recent than what is typically packaged in distributions; please head to this page for more information: https://github.com/ValveSoftware/Proton/blob/proton_3.7/PREREQS.md**
+---
+Obtaining Proton from source
+---
 **NOTE:** If you are not comfortable in a command line terminal, or if you find
 any of the information presented in here strange and uncomfortable, then
 this is probably not for you.  The instructions are likely to be incomplete
@@ -18,9 +26,6 @@ or guarantee that anyone will help you with this process.
 
 We strongly recommend that most users use the production build of Proton.
 
----
-Obtaining Proton
----
 The most current source for Proton is here:
   <https://github.com/ValveSoftware/Proton>
 
