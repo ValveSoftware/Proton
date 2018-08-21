@@ -42,6 +42,8 @@ VR is not currently supported on Intel graphics.
 
 ## DirectX 11 games:
 You will need NVIDIA 396.51 or Mesa 18.1.x at a minimum. LLVM7 or above is recommended to play DX11 games without GPU hangs.
+## Core OpenGL games (DOOM 2016, Google Earth VR, etc):
+You will need Mesa 18.2.0 at a minimum.
 
 # FD LIMIT REQUIREMENTS
 
