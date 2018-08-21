@@ -40,7 +40,15 @@ WITHOUT_X :=
 INSTALL_PROGRAM_FLAGS :=
 
 SRCDIR := ..
-MAKEFILE := ./Makefile
+
+# Many of the configure steps below depend on the makefile itself, such that they are dirtied by changing the recipes
+# that create them.  This can be annoying when working on the makefile, building with NO_MAKEFILE_DEPENDENCY=1 disables
+# this.
+MAKEFILE_DEP := ./Makefile
+ifeq ($(NO_MAKEFILE_DEPENDENCY),1)
+MAKEFILE_DEP :=
+endif
+
 TOOLS_DIR32 := ./obj-tools32
 TOOLS_DIR64 := ./obj-tools64
 DST_DIR := ./dist
@@ -144,14 +152,14 @@ FREETYPE_CONFIGURE_FILES64 := $(FREETYPE_OBJ64)/unix-cc.mk $(FREETYPE_OBJ64)/Mak
 
 # 64-bit configure
 # FIXME --prefix="$TOOLS_DIR64"
-$(FREETYPE_CONFIGURE_FILES64): $(FREETYPE_AUTOGEN_FILES) $(MAKEFILE) | $(FREETYPE_OBJ64)
+$(FREETYPE_CONFIGURE_FILES64): $(FREETYPE_AUTOGEN_FILES) $(MAKEFILE_DEP) | $(FREETYPE_OBJ64)
 	cd $(dir $@) && \
 		$(abspath $(FREETYPE)/configure) CC="$(CC)" CXX="$(CXX)" --without-png --host x86_64-apple-darwin \
 				PKG_CONFIG=false && \
 			echo 'LIBRARY := libprotonfreetype' >> unix-cc.mk
 
 # 32bit-configure
-$(FREETYPE_CONFIGURE_FILES32): $(FREETYPE_AUTOGEN_FILES) $(MAKEFILE) | $(FREETYPE_OBJ32)
+$(FREETYPE_CONFIGURE_FILES32): $(FREETYPE_AUTOGEN_FILES) $(MAKEFILE_DEP) | $(FREETYPE_OBJ32)
 	cd $(dir $@) && \
 		$(abspath $(FREETYPE)/configure) CC="$(CC)" CXX="$(CXX)" --without-png --host i686-apple-darwin \
 			CFLAGS='-m32 -g -O2' LDFLAGS=-m32 PKG_CONFIG=false && \
@@ -184,14 +192,14 @@ OPENAL_CONFIGURE_FILES64 := $(OPENAL_OBJ64)/Makefile
 
 
 # 64bit-configure
-$(OPENAL_CONFIGURE_FILES64): $(OPENAL)/CMakeLists.txt $(MAKEFILE) | $(OPENAL_OBJ64)
+$(OPENAL_CONFIGURE_FILES64): $(OPENAL)/CMakeLists.txt $(MAKEFILE_DEP) | $(OPENAL_OBJ64)
 	cd $(dir $@) && \
 		cmake $(abspath $(OPENAL)) -DCMAKE_INSTALL_PREFIX="$(abspath $(TOOLS_DIR64))" \
 			-DALSOFT_EXAMPLES=Off -DALSOFT_UTILS=Off -DALSOFT_TESTS=Off \
 			-DCMAKE_INSTALL_LIBDIR="lib"
 
 # 32-bit configure
-$(OPENAL_CONFIGURE_FILES32): $(OPENAL)/CMakeLists.txt $(MAKEFILE) | $(OPENAL_OBJ32)
+$(OPENAL_CONFIGURE_FILES32): $(OPENAL)/CMakeLists.txt $(MAKEFILE_DEP) | $(OPENAL_OBJ32)
 	cd $(dir $@) && \
 		cmake $(abspath $(OPENAL)) \
 			-DCMAKE_INSTALL_PREFIX="$(abspath $(TOOLS_DIR32))" \
@@ -239,7 +247,7 @@ FFMPEG_CONFIGURE_FILES32 := $(FFMPEG_OBJ32)/Makefile
 FFMPEG_CONFIGURE_FILES64 := $(FFMPEG_OBJ64)/Makefile
 
 # 64bit-configure
-$(FFMPEG_CONFIGURE_FILES64): $(FFMPEG)/configure $(MAKEFILE) | $(FFMPEG_OBJ64)
+$(FFMPEG_CONFIGURE_FILES64): $(FFMPEG)/configure $(MAKEFILE_DEP) | $(FFMPEG_OBJ64)
 	cd $(dir $@) && \
 		$(abspath $(FFMPEG))/configure \
 			--cc="$(CC)" --cxx="$(CXX)" \
@@ -273,7 +281,7 @@ $(FFMPEG_CONFIGURE_FILES64): $(FFMPEG)/configure $(MAKEFILE) | $(FFMPEG_OBJ64)
 	[ ! -f $(dir $@)/Makefile ] || touch $(dir $@)/Makefile
 
 # 32-bit configure
-$(FFMPEG_CONFIGURE_FILES32): $(FFMPEG)/configure $(MAKEFILE) | $(FFMPEG_OBJ32)
+$(FFMPEG_CONFIGURE_FILES32): $(FFMPEG)/configure $(MAKEFILE_DEP) | $(FFMPEG_OBJ32)
 	cd $(dir $@) && \
 		$(abspath $(FFMPEG))/configure \
 			--cc="$(CC)" --cxx="$(CXX)" \
@@ -341,7 +349,7 @@ LSTEAMCLIENT_CONFIGURE_FILES32 := $(LSTEAMCLIENT_OBJ32)/Makefile
 LSTEAMCLIENT_CONFIGURE_FILES64 := $(LSTEAMCLIENT_OBJ64)/Makefile
 
 # 64bit-configure
-$(LSTEAMCLIENT_CONFIGURE_FILES64): $(LSTEAMCLIENT) $(WINEMAKER) $(MAKEFILE) | $(LSTEAMCLIENT_OBJ64)
+$(LSTEAMCLIENT_CONFIGURE_FILES64): $(LSTEAMCLIENT) $(WINEMAKER) $(MAKEFILE_DEP) | $(LSTEAMCLIENT_OBJ64)
 	cd $(dir $@) && \
 		$(WINEMAKER) --nosource-fix --nolower-include --nodlls --nomsvcrt \
 			-DSTEAM_API_EXPORTS \
@@ -358,7 +366,7 @@ $(LSTEAMCLIENT_CONFIGURE_FILES64): $(LSTEAMCLIENT) $(WINEMAKER) $(MAKEFILE) | $(
 	echo >> $(dir $@)/Makefile 'lsteamclient_dll_LDFLAGS := $$(patsubst %.spec,$$(SRCDIR)/%.spec,$$(lsteamclient_dll_LDFLAGS))'
 
 # 32-bit configure
-$(LSTEAMCLIENT_CONFIGURE_FILES32): $(LSTEAMCLIENT) $(WINEMAKER) $(MAKEFILE) | $(LSTEAMCLIENT_OBJ32)
+$(LSTEAMCLIENT_CONFIGURE_FILES32): $(LSTEAMCLIENT) $(WINEMAKER) $(MAKEFILE_DEP) | $(LSTEAMCLIENT_OBJ32)
 	cd $(dir $@) && \
 		$(WINEMAKER) --nosource-fix --nolower-include --nodlls --nomsvcrt --wine32 \
 			-DSTEAM_API_EXPORTS \
@@ -411,7 +419,7 @@ WINE_CONFIGURE_FILES32 := $(WINE_OBJ32)/Makefile
 WINE_CONFIGURE_FILES64 := $(WINE_OBJ64)/Makefile
 
 # 64bit-configure
-$(WINE_CONFIGURE_FILES64): $(MAKEFILE) | $(WINE_OBJ64)
+$(WINE_CONFIGURE_FILES64): $(MAKEFILE_DEP) | $(WINE_OBJ64)
 	cd $(dir $@) && \
 	STRIP="$(STRIP)" \
 	CFLAGS="-I$(abspath $(TOOLS_DIR64))/include -g -O2" \
@@ -433,7 +441,7 @@ $(WINE_CONFIGURE_FILES64): $(MAKEFILE) | $(WINE_OBJ64)
 		--enable-win64 --disable-tests --prefix="$(abspath $(DST_DIR))"
 
 # 32-bit configure
-$(WINE_CONFIGURE_FILES32): $(MAKEFILE) | $(WINE_OBJ32)
+$(WINE_CONFIGURE_FILES32): $(MAKEFILE_DEP) | $(WINE_OBJ32)
 	cd $(dir $@) && \
 	STRIP="$(STRIP)" \
 	CFLAGS="-I$(abspath $(TOOLS_DIR32))/include -g -O2" \
@@ -508,7 +516,7 @@ VRCLIENT_CONFIGURE_FILES64 := $(VRCLIENT_OBJ64)/Makefile
 
 # The source directory for vrclient32 is a synthetic symlink clone of the oddly named vrclient_x64 with the spec files
 # renamed.
-$(VRCLIENT32): $(VRCLIENT) $(MAKEFILE)
+$(VRCLIENT32): $(VRCLIENT) $(MAKEFILE_DEP)
 	rm -rf ./$(VRCLIENT32)
 	mkdir -p $(VRCLIENT32)/vrclient
 	cd $(VRCLIENT32)/vrclient && \
@@ -516,7 +524,7 @@ $(VRCLIENT32): $(VRCLIENT) $(MAKEFILE)
 	mv $(VRCLIENT32)/vrclient/vrclient_x64.spec $(VRCLIENT32)/vrclient/vrclient.spec
 
 # 64bit-configure
-$(VRCLIENT_CONFIGURE_FILES64): $(MAKEFILE) $(VRCLIENT) $(VRCLIENT)/vrclient_x64 | $(VRCLIENT_OBJ64)
+$(VRCLIENT_CONFIGURE_FILES64): $(MAKEFILE_DEP) $(VRCLIENT) $(VRCLIENT)/vrclient_x64 | $(VRCLIENT_OBJ64)
 	cd $(VRCLIENT) && \
 	$(WINEMAKER) --nosource-fix --nolower-include --nodlls --nomsvcrt \
 		--nosource-fix --nolower-include --nodlls --nomsvcrt \
@@ -534,7 +542,7 @@ $(VRCLIENT_CONFIGURE_FILES64): $(MAKEFILE) $(VRCLIENT) $(VRCLIENT)/vrclient_x64 
 	echo >> $(dir $@)/Makefile 'vrclient_x64_dll_LDFLAGS := $$(patsubst %.spec,$$(SRCDIR)/%.spec,$$(vrclient_x64_dll_LDFLAGS))'
 
 # 32-bit configure
-$(VRCLIENT_CONFIGURE_FILES32): $(MAKEFILE) $(VRCLIENT32) | $(VRCLIENT_OBJ32)
+$(VRCLIENT_CONFIGURE_FILES32): $(MAKEFILE_DEP) $(VRCLIENT32) | $(VRCLIENT_OBJ32)
 	$(WINEMAKER) --nosource-fix --nolower-include --nodlls --nomsvcrt \
 		--wine32 \
 		-I"$(abspath $(TOOLS_DIR32))"/include/ \
@@ -596,7 +604,7 @@ DXVK_CONFIGURE_FILES32 := $(DXVK_OBJ32)/build.ninja
 DXVK_CONFIGURE_FILES64 := $(DXVK_OBJ64)/build.ninja
 
 # 64bit-configure
-$(DXVK_CONFIGURE_FILES64): $(MAKEFILE) | $(DXVK_OBJ64)
+$(DXVK_CONFIGURE_FILES64): $(MAKEFILE_DEP) | $(DXVK_OBJ64)
 	cd "$(DXVK)" && \
 		PATH="$(abspath $(SRCDIR))/glslang/bin/:$(PATH)" \
 			meson --prefix="$(abspath $(DXVK_OBJ64))" --cross-file build-win64.txt "$(abspath $(DXVK_OBJ64))"
@@ -605,7 +613,7 @@ $(DXVK_CONFIGURE_FILES64): $(MAKEFILE) | $(DXVK_OBJ64)
 		PATH="$(abspath $(SRCDIR))/glslang/bin/:$(PATH)" meson configure -Dbuildtype=release
 
 # 32-bit configure
-$(DXVK_CONFIGURE_FILES32): $(MAKEFILE) | $(DXVK_OBJ32)
+$(DXVK_CONFIGURE_FILES32): $(MAKEFILE_DEP) | $(DXVK_OBJ32)
 	cd "$(DXVK)" && \
 		PATH="$(abspath $(SRCDIR))/glslang/bin/:$(PATH)" \
 			meson --prefix="$(abspath $(DXVK_OBJ32))" --cross-file build-win32.txt "$(abspath $(DXVK_OBJ32))"
@@ -645,7 +653,6 @@ dxvk32: $(DXVK_CONFIGURE_FILES32)
 	cp "$(DXVK_OBJ32)"/bin/dxgi.dll "$(DST_DIR)"/lib/wine/dxvk/
 	cp "$(DXVK_OBJ32)"/bin/d3d11.dll "$(DST_DIR)"/lib/wine/dxvk/
 	( cd $(SRCDIR) && git submodule status -- dxvk ) > "$(DST_DIR)"/lib/wine/dxvk/version
-
 
 # TODO FIXME OS X
 # FIXME TODO build_libpng
