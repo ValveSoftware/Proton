@@ -39,6 +39,8 @@ WITHOUT_X :=
 # FIXME Configure stuff needs to set these maybe
 INSTALL_PROGRAM_FLAGS :=
 
+# Local name of this build, for dist/install steps
+BUILD_NAME := proton-localbuild
 SRCDIR := ..
 
 # Many of the configure steps below depend on the makefile itself, such that they are dirtied by changing the recipes
@@ -48,6 +50,8 @@ MAKEFILE_DEP := ./Makefile
 ifeq ($(NO_MAKEFILE_DEPENDENCY),1)
 MAKEFILE_DEP :=
 endif
+
+COMPAT_MANIFEST_TEMPLATE := $(SRCDIR)/compatibilitytool.vdf.template
 
 TOOLS_DIR32 := ./obj-tools32
 TOOLS_DIR64 := ./obj-tools64
@@ -140,14 +144,18 @@ all64_configure: $(addsuffix 64_configure,$(GOAL_TARGETS))
 DIST_COPY_FILES := toolmanifest.vdf filelock.py proton user_settings.sample.py
 DIST_COPY_TARGETS := $(addprefix $(DST_DIR)/,$(DIST_SRC_FILES))
 DIST_VERSION := $(DST_DIR)/version
+DIST_COMPAT_MANIFEST := $(DST_DIR)/compatibilitytool.vdf
 
-DIST_TARGETS := $(DIST_COPY_TARGETS) $(DIST_VERSION)
+DIST_TARGETS := $(DIST_COPY_TARGETS) $(DIST_VERSION) $(DIST_COMPAT_MANIFEST)
 
 $(DIST_COPY_TARGETS):
 	cp -a $(SRCDIR)/$(notdir $@) $@
 
 $(DIST_VERSION):
 	date '+%s' > $@
+
+$(DIST_COMPAT_MANIFEST): $(COMPAT_MANIFEST_TEMPLATE) $(MAKEFILE_DEP)
+	sed -r 's|//##DISPLAY_NAME##|"display_name" "'$(BUILD_NAME)'"|' $< > $@
 
 dist: $(DIST_TARGETS)
 
