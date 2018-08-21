@@ -1,0 +1,25 @@
+"compatibilitytools"
+{
+  "compat_tools"
+  {
+    "proton-localbuild" // Internal name of this tool
+    {
+      // Can register this tool with Steam in two ways:
+      //
+      // - The tool can be placed as a subdirectory in compatibilitytools.d, in which case this
+      //   should be '.'
+      //
+      // - This manifest can be placed directly in compatibilitytools.d, in which case this should
+      //   be the relative or absolute path to the tool's dist directory.
+      "install_path" "."
+
+      // For this template, we're going to substitute the display_name key in here, e.g.:
+      // "display_name" "Proton - local build 3/2"
+
+      //##DISPLAY_NAME##
+
+      "from_oslist"  "windows"
+      "to_oslist"    "linux"
+    }
+  }
+}
