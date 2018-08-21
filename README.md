@@ -14,8 +14,8 @@ a particular title.
 Getting Started with Proton from Steam Play
 ---
 
-*Make sure you are opted into the Client Beta!
-*Proton requires graphics drivers that are more recent than what is typically packaged in distributions; please head to this page for more information: https://github.com/ValveSoftware/Proton/blob/proton_3.7/PREREQS.md
+* Make sure you are opted into the [Steam Client Beta](https://steamcommunity.com/sharedfiles/filedetails/?id=182912431)! 
+* Proton requires graphics drivers that are more recent than what is typically packaged in most distributions; please read the [list of requirements and quickstart for Ubuntu 18.04 users](https://github.com/ValveSoftware/Proton/blob/proton_3.7/PREREQS.md)
 
 ---
 Obtaining Proton from source
