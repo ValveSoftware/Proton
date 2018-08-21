@@ -36,20 +36,44 @@ export CC
 export CXX
 
 # Local name of this build, for dist/install steps
-BUILD_NAME := proton-localbuild
-SRCDIR := ..
+# TODO Let configure.sh set/propagate this
+BUILD_NAME ?= proton-localbuild
 
 # Selected container mode shell
-CONTAINER_SHELL_BASE = sudo docker run --rm --init -v $(HOME):$(HOME) -w $(CURDIR) \
-                                       -v /etc/passwd:/etc/passwd:ro -u $(shell id -u):$(shell id -g) -h $(shell hostname) \
-                                       -v /tmp:/tmp $(SELECTED_CONTAINER) /dev/init -sg -- /bin/bash
-CONTAINER32 := steamrt-proton-dev32
-CONTAINER64 := steamrt-proton-dev
-SELECTED_CONTAINER := $(CONTAINER32)
-CONTAINER_SHELL32 := $(CONTAINER_SHELL_BASE)
-SELECTED_CONTAINER := $(CONTAINER64)
-CONTAINER_SHELL64 := $(CONTAINER_SHELL_BASE)
-undefine SELECTED_CONTAINER
+DOCKER_SHELL_BASE = sudo docker run --rm --init -v $(HOME):$(HOME) -w $(CURDIR) \
+                                    -v /etc/passwd:/etc/passwd:ro -u $(shell id -u):$(shell id -g) -h $(shell hostname) \
+                                    -v /tmp:/tmp $(SELECT_DOCKER_IMAGE) /dev/init -sg -- /bin/bash
+
+# If STEAMRT64_MODE/STEAMRT32_MODE is set, set the nested SELECT_DOCKER_IMAGE to the _IMAGE variable and eval
+# DOCKER_SHELL_BASE with it to create the CONTAINER_SHELL setting.
+ifeq ($(STEAMRT64_MODE),docker)
+	SELECT_DOCKER_IMAGE := $(STEAMRT64_IMAGE)
+	CONTAINER_SHELL64 := $(DOCKER_SHELL_BASE)
+else ifneq ($(STEAMRT64_MODE),)
+	foo := $(error Unrecognized STEAMRT64_MODE $(STEAMRT64_MODE))
+endif
+ifeq ($(STEAMRT32_MODE),docker)
+	SELECT_DOCKER_IMAGE := $(STEAMRT32_IMAGE)
+	CONTAINER_SHELL32 := $(DOCKER_SHELL_BASE)
+else ifneq ($(STEAMRT32_MODE),)
+	foo := $(error Unrecognized STEAMRT32_MODE $(STEAMRT32_MODE))
+endif
+undefine SELECT_DOCKER_IMAGE
+
+# If we're using containers to sub-invoke the various builds, jobserver won't work, have some silly auto-jobs
+# controllable by SUBMAKE_JOBS.  Not ideal.
+ifneq ($(CONTAINER_SHELL32)$(CONTAINER_SHELL64),)
+	SUBMAKE_JOBS ?= 24
+	MAKE := make -j$(SUBMAKE_JOBS)
+endif
+
+# Use default shell if no STEAMRT_ variables setup a container to invoke.  Commands will just run natively.
+ifndef CONTAINER_SHELL64
+	CONTAINER_SHELL64 := $(SHELL)
+endif
+ifndef CONTAINER_SHELL32
+	CONTAINER_SHELL32 := $(SHELL)
+endif
 
 $(info Testing configured 64bit container)
 ifneq ($(shell $(CONTAINER_SHELL64) -c "echo hi"), hi)
@@ -60,11 +84,7 @@ ifneq ($(shell $(CONTAINER_SHELL32) -c "echo hi"), hi)
 $(error "Cannot run commands in 32bit container")
 endif
 
-# FIXME Don't bother in native
-SUBMAKE_JOBS ?= 24
-MAKE := make -j$(SUBMAKE_JOBS)
-
-# FIXME OS X-vs-others stuff
+# TODO Used by build_proton for the OS X steps
 LIB_SUFFIX := "so"
 STRIP := strip
 FREETYPE32_CFLAGS :=
@@ -93,7 +113,7 @@ INSTALL_PROGRAM_FLAGS :=
 # Many of the configure steps below depend on the makefile itself, such that they are dirtied by changing the recipes
 # that create them.  This can be annoying when working on the makefile, building with NO_MAKEFILE_DEPENDENCY=1 disables
 # this.
-MAKEFILE_DEP := ./Makefile
+MAKEFILE_DEP := $(MAKEFILE_LIST)
 ifeq ($(NO_MAKEFILE_DEPENDENCY),1)
 MAKEFILE_DEP :=
 endif
@@ -176,7 +196,11 @@ $(OBJ_DIRS):
 
 # FIXME OS X-only targets freetype
 
-.PHONY: all all64 all32
+.PHONY: all all64 all32 default
+
+# Produce a working dist directory by default
+default: all dist
+.DEFAULT_GOAL := default
 
 # FIXME ffmpeg is optional
 
