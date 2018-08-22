@@ -1,4 +1,4 @@
-#!/usr/bin/python2.7
+#!/usr/bin/env python2.7
 
 #to enable these settings, name this file "user_settings.py"
 
