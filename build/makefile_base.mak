@@ -156,7 +156,9 @@ $(OBJ_DIRS):
 
 .PHONY: all all64 all32
 
-GOAL_TARGETS_LIBS := openal ffmpeg lsteamclient vrclient dxvk
+# FIXME ffmpeg is optional
+
+GOAL_TARGETS_LIBS := openal lsteamclient vrclient dxvk dist
 GOAL_TARGETS      := wine $(GOAL_TARGETS_LIBS)
 
 all: $(GOAL_TARGETS)
