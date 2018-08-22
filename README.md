@@ -99,21 +99,22 @@ cmake into each of the runtimes. For convenience, the build_proton.sh script
 will attempt to use cmake from ~/opt32/bin/ and ~/opt64/bin/, if available.
 
 The following example session obtained and built cmake:
-    cd /tmp
-    wget https://cmake.org/files/v3.11/cmake-3.11.4.tar.gz
-    schroot --chroot steamrt_scout_beta_i386
-    tar -xzf cmake-3.11.4.tar.gz
-    cd cmake-3.11.4
-    ./configure --parallel=4 --prefix=~/opt32
-    make -j 4 && make install
-    exit
-    rm -rf cmake-3.11.4
-    schroot --chroot steamrt_scout_beta_amd64
-    tar -xzf cmake-3.11.4.tar.gz
-    cd cmake-3.11.4
-    ./configure --parallel=4 --prefix=~/opt64
-    make -j 4 && make install
-    exit
+
+      cd /tmp
+      wget https://cmake.org/files/v3.11/cmake-3.11.4.tar.gz
+      schroot --chroot steamrt_scout_beta_i386
+      tar -xzf cmake-3.11.4.tar.gz
+      cd cmake-3.11.4
+      ./configure --parallel=4 --prefix=~/opt32
+      make -j 4 && make install
+      exit
+      rm -rf cmake-3.11.4
+      schroot --chroot steamrt_scout_beta_amd64
+      tar -xzf cmake-3.11.4.tar.gz
+      cd cmake-3.11.4
+      ./configure --parallel=4 --prefix=~/opt64
+      make -j 4 && make install
+      exit
 
 
 Finally, change your directory back to proton, and run:
