@@ -107,6 +107,7 @@ dlloverrides = {}
 #for performance, logging is disabled by default; override with user_settings.py
 env["DXVK_LOG_LEVEL"] = "none"
 env["WINEDEBUG"] = "-all"
+env.pop("WINEARCH", "")
 
 if ld_path_var in os.environ:
     env[ld_path_var] = lib64dir + ":" + libdir + ":" + os.environ[ld_path_var]
