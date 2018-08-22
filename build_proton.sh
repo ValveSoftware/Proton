@@ -444,6 +444,27 @@ function build_vrclient32_tests
     CXXFLAGS="-Wno-attributes -std=c++0x -O2 -g" CFLAGS="-O2 -g" PATH="$TOOLS_DIR32/bin:$PATH" $I386_WRAPPER make $JOBS -C tests
 }
 
+function build_glslang
+{
+    if [ ! -e "$TOOLS_DIR64"/bin/glslangValidator]; then
+        #glslang 32-bit
+        cd "$TOP"
+        mkdir -p build/glslang.win32
+        cd build/glslang.win32
+        $I386_WRAPPER $CMAKE32 "$TOP"/glslang -DCMAKE_C_FLAGS="-m32" -DCMAKE_INSTALL_PREFIX="$TOOLS_DIR32"
+        $I386_WRAPPER make $JOBS VERBOSE=1
+        $I386_WRAPPER make install VERBOSE=1
+
+        #glslang 64-bit
+        cd "$TOP"
+        mkdir -p build/glslang.win64
+        cd build/glslang.win64
+        $AMD64_WRAPPER $CMAKE64 "$TOP"/glslang -DCMAKE_INSTALL_PREFIX="$TOOLS_DIR64"
+        $AMD64_WRAPPER make $JOBS VERBOSE=1
+        $AMD64_WRAPPER make install VERBOSE=1
+    fi
+}
+
 function build_dxvk
 {
     #unfortunately the Steam chroots are too old to build DXVK, so we have to
@@ -452,17 +473,17 @@ function build_dxvk
         cd "$TOP"/dxvk
         mkdir -p "$TOP"/build/dxvk.win32
         cd "$TOP"/dxvk
-        PATH="$TOP/glslang/bin/:$PATH" meson --strip --buildtype="release" --prefix="$TOP"/build/dxvk.win32 --cross-file build-win32.txt "$TOP"/build/dxvk.win32
+        PATH="$TOOLS_DIR32/bin/:$PATH" meson --strip --buildtype="release" --prefix="$TOP"/build/dxvk.win32 --cross-file build-win32.txt "$TOP"/build/dxvk.win32
         cd "$TOP"/build/dxvk.win32
-        PATH="$TOP/glslang/bin/:$PATH" ninja
-        PATH="$TOP/glslang/bin/:$PATH" ninja install
+        PATH="$TOOLS_DIR32/bin/:$PATH" ninja
+        PATH="$TOOLS_DIR32/bin/:$PATH" ninja install
 
         cd "$TOP"/dxvk
         mkdir -p "$TOP"/build/dxvk.win64
-        PATH="$TOP/glslang/bin/:$PATH" meson --strip --buildtype="release" --prefix="$TOP"/build/dxvk.win64 --cross-file build-win64.txt "$TOP"/build/dxvk.win64
+        PATH="$TOOLS_DIR64/bin/:$PATH" meson --strip --buildtype="release" --prefix="$TOP"/build/dxvk.win64 --cross-file build-win64.txt "$TOP"/build/dxvk.win64
         cd "$TOP"/build/dxvk.win64
-        PATH="$TOP/glslang/bin/:$PATH" ninja
-        PATH="$TOP/glslang/bin/:$PATH" ninja install
+        PATH="$TOOLS_DIR64/bin/:$PATH" ninja
+        PATH="$TOOLS_DIR64/bin/:$PATH" ninja install
     fi
 
     cd "$TOP"
@@ -607,6 +628,8 @@ if [ "$WITH_FFMPEG" = 1 ]; then
 fi
 
 build_openal
+
+build_glslang
 
 build_dxvk
 

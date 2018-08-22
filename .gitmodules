@@ -28,3 +28,6 @@
 [submodule "openvr"]
 	path = openvr
 	url = https://github.com/ValveSoftware/openvr
+[submodule "glslang"]
+	path = glslang
+	url = https://github.com/KhronosGroup/glslang
