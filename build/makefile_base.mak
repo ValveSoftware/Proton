@@ -121,6 +121,12 @@ DXVK := $(SRCDIR)/dxvk
 DXVK_OBJ32 := ./obj-dxvk32
 DXVK_OBJ64 := ./obj-dxvk64
 
+CMAKE := $(SRCDIR)/cmake
+CMAKE_OBJ32 := ./obj-cmake32
+CMAKE_OBJ64 := ./obj-cmake64
+CMAKE_BIN32 := $(CMAKE_OBJ32)/built/bin/cmake
+CMAKE_BIN64 := $(CMAKE_OBJ64)/built/bin/cmake
+
 ## Object directories
 OBJ_DIRS := $(TOOLS_DIR32)        $(TOOLS_DIR64)        \
             $(FREETYPE_OBJ32)     $(FREETYPE_OBJ64)     \
@@ -129,7 +135,8 @@ OBJ_DIRS := $(TOOLS_DIR32)        $(TOOLS_DIR64)        \
             $(LSTEAMCLIENT_OBJ32) $(LSTEAMCLIENT_OBJ64) \
             $(WINE_OBJ32)         $(WINE_OBJ64)         \
             $(VRCLIENT_OBJ32)     $(VRCLIENT_OBJ64)     \
-            $(DXVK_OBJ32)         $(DXVK_OBJ64)
+            $(DXVK_OBJ32)         $(DXVK_OBJ64)         \
+            $(CMAKE_OBJ32)        $(CMAKE_OBJ64)
 
 $(OBJ_DIRS):
 	mkdir -p $@
@@ -276,17 +283,17 @@ OPENAL_CONFIGURE_FILES64 := $(OPENAL_OBJ64)/Makefile
 
 # 64bit-configure
 $(OPENAL_CONFIGURE_FILES64): SHELL = $(CONTAINER_SHELL64)
-$(OPENAL_CONFIGURE_FILES64): $(OPENAL)/CMakeLists.txt $(MAKEFILE_DEP) | $(OPENAL_OBJ64)
+$(OPENAL_CONFIGURE_FILES64): $(OPENAL)/CMakeLists.txt $(MAKEFILE_DEP) $(CMAKE_BIN64) | $(OPENAL_OBJ64)
 	cd $(dir $@) && \
-		cmake $(abspath $(OPENAL)) -DCMAKE_INSTALL_PREFIX="$(abspath $(TOOLS_DIR64))" \
+		../$(CMAKE_BIN64) $(abspath $(OPENAL)) -DCMAKE_INSTALL_PREFIX="$(abspath $(TOOLS_DIR64))" \
 			-DALSOFT_EXAMPLES=Off -DALSOFT_UTILS=Off -DALSOFT_TESTS=Off \
 			-DCMAKE_INSTALL_LIBDIR="lib"
 
 # 32-bit configure
 $(OPENAL_CONFIGURE_FILES32): SHELL = $(CONTAINER_SHELL32)
-$(OPENAL_CONFIGURE_FILES32): $(OPENAL)/CMakeLists.txt $(MAKEFILE_DEP) | $(OPENAL_OBJ32)
+$(OPENAL_CONFIGURE_FILES32): $(OPENAL)/CMakeLists.txt $(MAKEFILE_DEP) $(CMAKE_BIN32) | $(OPENAL_OBJ32)
 	cd $(dir $@) && \
-		cmake $(abspath $(OPENAL)) \
+		../$(CMAKE_BIN32) $(abspath $(OPENAL)) \
 			-DCMAKE_INSTALL_PREFIX="$(abspath $(TOOLS_DIR32))" \
 			-DALSOFT_EXAMPLES=Off -DALSOFT_UTILS=Off -DALSOFT_TESTS=Off \
 			-DCMAKE_INSTALL_LIBDIR="lib" \
@@ -696,6 +703,54 @@ vrclient32: $(VRCLIENT_CONFIGURE_FILES32)
 	[ x"$(STRIP)" = x ] || $(STRIP) $(VRCLIENT_OBJ32)/vrclient.dll.so
 	cp -a $(VRCLIENT_OBJ32)/vrclient.dll.so "$(DST_DIR)"/lib/wine/
 	cp -a $(VRCLIENT_OBJ32)/vrclient.dll.fake "$(DST_DIR)"/lib/wine/fakedlls/vrclient.dll
+
+##
+## cmake -- necessary for openal, not part of steam runtime
+##
+
+# FIXME Don't bother with this in native mode
+
+## Create & configure object directory for cmake
+
+CMAKE_CONFIGURE_FILES32 := $(CMAKE_OBJ32)/Makefile
+CMAKE_CONFIGURE_FILES64 := $(CMAKE_OBJ64)/Makefile
+
+# 64-bit configure
+$(CMAKE_CONFIGURE_FILES64): SHELL = $(CONTAINER_SHELL64)
+$(CMAKE_CONFIGURE_FILES64): $(MAKEFILE_DEP) | $(CMAKE_OBJ64)
+	cd "$(CMAKE_OBJ64)" && \
+		../$(CMAKE)/configure --parallel=$(SUBMAKE_JOBS) --prefix=$(abspath $(CMAKE_OBJ64))/built
+
+# 32-bit configure
+$(CMAKE_CONFIGURE_FILES32): SHELL = $(CONTAINER_SHELL32)
+$(CMAKE_CONFIGURE_FILES32): $(MAKEFILE_DEP) | $(CMAKE_OBJ32)
+	cd "$(CMAKE_OBJ32)" && \
+		../$(CMAKE)/configure --parallel=$(SUBMAKE_JOBS) --prefix=$(abspath $(CMAKE_OBJ32))/built
+
+
+## cmake goals
+
+.PHONY: cmake cmake_configure cmake32 cmake64 cmake_configure32 cmake_configure64
+
+cmake_configure: $(CMAKE_CONFIGURE_FILES32) $(CMAKE_CONFIGURE_FILES64)
+
+cmake_configure32: $(CMAKE_CONFIGURE_FILES32)
+
+cmake_configure64: $(CMAKE_CONFIGURE_FILES64)
+
+cmake: cmake32 cmake64
+
+$(CMAKE_BIN64) cmake64: SHELL = $(CONTAINER_SHELL64)
+$(CMAKE_BIN64) cmake64: $(CMAKE_CONFIGURE_FILES64)
+	cd $(CMAKE_OBJ64) && \
+		$(MAKE) && $(MAKE) install && \
+		touch ../$(CMAKE_BIN64)
+
+$(CMAKE_BIN32) cmake32: SHELL = $(CONTAINER_SHELL32)
+$(CMAKE_BIN32) cmake32: $(CMAKE_CONFIGURE_FILES32)
+	cd $(CMAKE_OBJ32) && \
+		$(MAKE) && $(MAKE) install && \
+		touch ../$(CMAKE_BIN32)
 
 ##
 ## dxvk
