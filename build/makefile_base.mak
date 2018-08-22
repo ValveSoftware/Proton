@@ -111,6 +111,13 @@ WINEMAKER := $(abspath $(WINE)/tools/winemaker/winemaker)
 WINE_OUT_BIN := $(DST_DIR)/bin/wine64
 WINE_OUT_SERVER := $(DST_DIR)/bin/wineserver
 WINE_OUT := $(WINE_OUT_BIN) $(WINE_OUT_SERVER)
+# Tool-only build outputs needed for other projects
+WINEGCC32 := $(TOOLS_DIR32)/bin/winegcc
+WINEBUILD32 := $(TOOLS_DIR32)/bin/winebuild
+WINE_BUILDTOOLS32 := $(WINEGCC32) $(WINEBUILD32)
+WINEGCC64 := $(TOOLS_DIR64)/bin/winegcc
+WINEBUILD64 := $(TOOLS_DIR64)/bin/winebuild
+WINE_BUILDTOOLS64 := $(WINEGCC64) $(WINEBUILD64)
 
 VRCLIENT := $(SRCDIR)/vrclient_x64
 VRCLIENT32 := ./syn-vrclient32
@@ -495,21 +502,22 @@ lsteamclient_configure32: $(LSTEAMCLIENT_CONFIGURE_FILES32)
 lsteamclient: lsteamclient32 lsteamclient64
 
 lsteamclient64: SHELL = $(CONTAINER_SHELL64)
-lsteamclient64: $(LSTEAMCLIENT_CONFIGURE_FILES64)
+lsteamclient64: $(LSTEAMCLIENT_CONFIGURE_FILES64) | $(WINE_BUILDTOOLS64) $(filter $(MAKECMDGOALS),wine64 wine32 wine)
 	cd $(LSTEAMCLIENT_OBJ64) && \
-		CXXFLAGS="-Wno-attributes -O2" CFLAGS="-O2 -g" PATH="$(TOOLS_DIR64)/bin:$(PATH)" $(MAKE)
+		PATH="$(abspath $(TOOLS_DIR64))/bin:$(PATH)" \
+		CXXFLAGS="-Wno-attributes -O2" CFLAGS="-O2 -g" $(MAKE) && \
+		[ x"$(STRIP)" = x ] || $(STRIP) ../$(LSTEAMCLIENT_OBJ64)/lsteamclient.dll.so && \
+		cp -a ./lsteamclient.dll.so ../$(DST_DIR)/lib64/wine/
 
-	[ x"$(STRIP)" = x ] || $(STRIP) "$(LSTEAMCLIENT_OBJ64)"/lsteamclient.dll.so
-	cp -a $(LSTEAMCLIENT_OBJ64)/lsteamclient.dll.so "$(DST_DIR)"/lib64/wine/
-
+# FIXME Should depend on wine outputs
 lsteamclient32: SHELL = $(CONTAINER_SHELL32)
-lsteamclient32: $(LSTEAMCLIENT_CONFIGURE_FILES32)
+lsteamclient32: $(LSTEAMCLIENT_CONFIGURE_FILES32) | $(WINE_BUILDTOOLS32) $(filter $(MAKECMDGOALS),wine64 wine32 wine)
 	cd $(LSTEAMCLIENT_OBJ32) && \
-		LDFLAGS="-m32" CXXFLAGS="-m32 -Wno-attributes -O2" CFLAGS="-m32 -O2 -g" PATH="$(TOOLS_DIR32)/bin:$(PATH)" \
-			$(MAKE)
-
-	[ x"$(STRIP)" = x ] || $(STRIP) "$(LSTEAMCLIENT_OBJ32)"/lsteamclient.dll.so
-	cp -a $(LSTEAMCLIENT_OBJ32)/lsteamclient.dll.so "$(DST_DIR)"/lib/wine/
+		PATH="$(abspath $(TOOLS_DIR32))/bin:$(PATH)" \
+		LDFLAGS="-m32" CXXFLAGS="-m32 -Wno-attributes -O2" CFLAGS="-m32 -O2 -g" \
+			$(MAKE) && \
+		[ x"$(STRIP)" = x ] || $(STRIP) ../$(LSTEAMCLIENT_OBJ32)/lsteamclient.dll.so && \
+		cp -a ./lsteamclient.dll.so ../$(DST_DIR)/lib/wine/
 
 ##
 ## wine
@@ -578,40 +586,40 @@ wine_configure32: $(WINE_CONFIGURE_FILES32)
 
 wine: wine32 wine64
 
-# WINE_OUT are outputs needed by other rules, though we don't explicitly track all state here -- make all or make wine
-# are needed to ensure all deps are up to date, this just ensures 'make dist' will trag in wine if you've never built
-# wine.
-$(WINE_OUT) wine64: SHELL = $(CONTAINER_SHELL64)
-$(WINE_OUT) wine64: $(WINE_CONFIGURE_FILES64)
-	+cd $(WINE_OBJ64) && \
-	env STRIP="$(STRIP)" $(MAKE) && \
-	INSTALL_PROGRAM_FLAGS="$(INSTALL_PROGRAM_FLAGS)" STRIP="$(STRIP)" $(MAKE) install-lib && \
-	INSTALL_PROGRAM_FLAGS="$(INSTALL_PROGRAM_FLAGS)" STRIP="$(STRIP)" $(MAKE) \
-		prefix="$(abspath $(TOOLS_DIR64))" libdir="$(abspath $(TOOLS_DIR64))/lib64" \
-		dlldir="$(abspath $(TOOLS_DIR64))/lib64/wine" \
-		install-dev install-lib
+# WINE_OUT and WINE_BUILDTOOLS are outputs needed by other rules, though we don't explicitly track all state here --
+# make all or make wine are needed to ensure all deps are up to date, this just ensures 'make dist' or 'make vrclient'
+# will drag in wine if you've never built wine.
+$(WINE_BUILDTOOLS64) $(WINE_OUT) wine64: SHELL = $(CONTAINER_SHELL64)
+$(WINE_BUILDTOOLS64) $(WINE_OUT) wine64: $(WINE_CONFIGURE_FILES64)
+	cd $(WINE_OBJ64) && \
+		env STRIP="$(STRIP)" $(MAKE) && \
+		INSTALL_PROGRAM_FLAGS="$(INSTALL_PROGRAM_FLAGS)" STRIP="$(STRIP)" $(MAKE) install-lib && \
+		INSTALL_PROGRAM_FLAGS="$(INSTALL_PROGRAM_FLAGS)" STRIP="$(STRIP)" $(MAKE) \
+			prefix="$(abspath $(TOOLS_DIR64))" libdir="$(abspath $(TOOLS_DIR64))/lib64" \
+			dlldir="$(abspath $(TOOLS_DIR64))/lib64/wine" \
+			install-dev install-lib && \
+		rm -f ../$(DST_DIR)/bin/{msiexec,notepad,regedit,regsvr32,wineboot,winecfg,wineconsole,winedbg,winefile,winemine,winepath}
+		rm -rf ../$(DST_DIR)/share/man/
 
-	rm -f "$(DST_DIR)"/bin/{msiexec,notepad,regedit,regsvr32,wineboot,winecfg,wineconsole,winedbg,winefile,winemine,winepath}
-	rm -rf "$(DST_DIR)/share/man/"
-
-wine32: SHELL = $(CONTAINER_SHELL32)
-wine32: $(WINE_CONFIGURE_FILES32)
+## This installs 32-bit stuff manually, see
+##   https://wiki.winehq.org/Packaging#WoW64_Workarounds
+$(WINE_BUILDTOOLS32) wine32: SHELL = $(CONTAINER_SHELL32)
+$(WINE_BUILDTOOLS32) wine32: $(WINE_CONFIGURE_FILES32)
 	cd $(WINE_OBJ32) && \
 	STRIP="$(STRIP)" \
-		$(MAKE) $(SUBMAKE_FLAGS) && \
+		$(MAKE) && \
 	INSTALL_PROGRAM_FLAGS="$(INSTALL_PROGRAM_FLAGS)" STRIP="$(STRIP)" \
-		$(MAKE) $(SUBMAKE_FLAGS) install-lib && \
+		$(MAKE) install-lib && \
 	INSTALL_PROGRAM_FLAGS="$(INSTALL_PROGRAM_FLAGS)" STRIP="$(STRIP)" \
-		$(MAKE) $(SUBMAKE_FLAGS) \
+		$(MAKE) \
 			prefix="$(abspath $(TOOLS_DIR32))" libdir="$(abspath $(TOOLS_DIR32))/lib" \
 			dlldir="$(abspath $(TOOLS_DIR32))/lib/wine" \
 			install-dev install-lib && \
-	# installing 32-bit stuff manually, see
-	#   https://wiki.winehq.org/Packaging#WoW64_Workarounds
-	cp -a "../$(WINE_DST32)"/lib "../$(DST_DIR)"/ && \
-	cp -a "../$(WINE_DST32)"/bin/wine "../$(DST_DIR)"/bin && \
-	# FIXME not on Darwin
-	cp -a "../$(WINE_DST32)"/bin/wine-preloader "../$(DST_DIR)"/bin/
+	mkdir -p ../$(DST_DIR)/{lib,bin} && \
+	cp -a ../$(WINE_DST32)/lib ../$(DST_DIR)/ && \
+	cp -a ../$(WINE_DST32)/bin/wine ../$(DST_DIR)/bin && \
+	cp -a ../$(WINE_DST32)/bin/wine-preloader ../$(DST_DIR)/bin/
+# FIXME not on Darwin^
 
 ##
 ## vrclient
@@ -682,27 +690,29 @@ vrclient_configure64: $(VRCLIENT_CONFIGURE_FILES64)
 
 vrclient: vrclient32 vrclient64
 
-vrclient64: $(VRCLIENT_CONFIGURE_FILES64)
+# FIXME ../$(WINE_OBJ32)/tools/winebuild needs to be part of wine dep chain
+
+vrclient64: SHELL = $(CONTAINER_SHELL64)
+vrclient64: $(VRCLIENT_CONFIGURE_FILES64) | $(WINE_BUILDTOOLS64) $(filter $(MAKECMDGOALS),wine64 wine32 wine)
 	cd $(VRCLIENT_OBJ64) && \
-	CXXFLAGS="-Wno-attributes -std=c++0x -O2 -g" CFLAGS="-O2 -g" PATH="$(abspath $(TOOLS_DIR64))/bin:$(PATH)" \
-		$(MAKE) && \
-	PATH="$(abspath $(TOOLS_DIR64))/bin:$(PATH)" \
-		winebuild --dll --fake-module -E ../$(VRCLIENT)/vrclient_x64/vrclient_x64.spec -o vrclient_x64.dll.fake
+		CXXFLAGS="-Wno-attributes -std=c++0x -O2 -g" CFLAGS="-O2 -g" PATH="$(abspath $(TOOLS_DIR64))/bin:$(PATH)" \
+			$(MAKE) && \
+		PATH=$(abspath $(TOOLS_DIR64))/bin:$(PATH) \
+			winebuild --dll --fake-module -E ../$(VRCLIENT)/vrclient_x64/vrclient_x64.spec -o vrclient_x64.dll.fake && \
+		[ x"$(STRIP)" = x ] || $(STRIP) ../$(VRCLIENT_OBJ64)/vrclient_x64.dll.so && \
+		cp -a ../$(VRCLIENT_OBJ64)/vrclient_x64.dll.so ../$(DST_DIR)/lib64/wine/ && \
+		cp -a ../$(VRCLIENT_OBJ64)/vrclient_x64.dll.fake ../$(DST_DIR)/lib64/wine/fakedlls/vrclient_x64.dll
 
-	[ x"$(STRIP)" = x ] || $(STRIP) $(VRCLIENT_OBJ64)/vrclient_x64.dll.so
-	cp -a $(VRCLIENT_OBJ64)/vrclient_x64.dll.so "$(DST_DIR)"/lib64/wine/
-	cp -a $(VRCLIENT_OBJ64)/vrclient_x64.dll.fake "$(DST_DIR)"/lib64/wine/fakedlls/vrclient_x64.dll
-
-vrclient32: $(VRCLIENT_CONFIGURE_FILES32)
+vrclient32: SHELL = $(CONTAINER_SHELL32)
+vrclient32: $(VRCLIENT_CONFIGURE_FILES32) | $(WINE_BUILDTOOLS32) $(filter $(MAKECMDGOALS),wine64 wine32 wine)
 	cd $(VRCLIENT_OBJ32) && \
-	LDFLAGS="-m32" CXXFLAGS="-m32 -Wno-attributes -std=c++0x -O2 -g" CFLAGS="-m32 -O2 -g" PATH="$(abspath $(TOOLS_DIR32))/bin:$(PATH)" \
-		$(MAKE) && \
-	PATH="$(abspath $(TOOLS_DIR32))/bin:$(PATH)" \
-		winebuild --dll --fake-module -E ../$(VRCLIENT32)/vrclient/vrclient.spec -o vrclient.dll.fake
-
-	[ x"$(STRIP)" = x ] || $(STRIP) $(VRCLIENT_OBJ32)/vrclient.dll.so
-	cp -a $(VRCLIENT_OBJ32)/vrclient.dll.so "$(DST_DIR)"/lib/wine/
-	cp -a $(VRCLIENT_OBJ32)/vrclient.dll.fake "$(DST_DIR)"/lib/wine/fakedlls/vrclient.dll
+		LDFLAGS="-m32" CXXFLAGS="-m32 -Wno-attributes -std=c++0x -O2 -g" CFLAGS="-m32 -O2 -g" PATH="$(abspath $(TOOLS_DIR32))/bin:$(PATH)" \
+			$(MAKE) && \
+		PATH=$(abspath $(TOOLS_DIR32))/bin:$(PATH) \
+			winebuild --dll --fake-module -E ../$(VRCLIENT32)/vrclient/vrclient.spec -o vrclient.dll.fake && \
+		[ x"$(STRIP)" = x ] || $(STRIP) ../$(VRCLIENT_OBJ32)/vrclient.dll.so && \
+		cp -a ../$(VRCLIENT_OBJ32)/vrclient.dll.so ../$(DST_DIR)/lib/wine/ && \
+		cp -a ../$(VRCLIENT_OBJ32)/vrclient.dll.fake ../$(DST_DIR)/lib/wine/fakedlls/vrclient.dll
 
 ##
 ## cmake -- necessary for openal, not part of steam runtime
