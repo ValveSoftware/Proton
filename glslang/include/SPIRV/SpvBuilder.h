@@ -1,6 +1,7 @@
 //
 // Copyright (C) 2014-2015 LunarG, Inc.
 // Copyright (C) 2015-2016 Google, Inc.
+// Copyright (C) 2017 ARM Limited.
 //
 // All rights reserved.
 //
@@ -55,6 +56,7 @@
 #include <set>
 #include <sstream>
 #include <stack>
+#include <unordered_map>
 
 namespace spv {
 
@@ -64,6 +66,8 @@ public:
     virtual ~Builder();
 
     static const int maxMatrixSize = 4;
+
+    unsigned int getSpvVersion() const { return spvVersion; }
 
     void setSource(spv::SourceLanguage lang, int version)
     {
@@ -149,7 +153,7 @@ public:
     bool isAggregate(Id resultId)    const { return isAggregateType(getTypeId(resultId)); }
     bool isSampledImage(Id resultId) const { return isSampledImageType(getTypeId(resultId)); }
 
-    bool isBoolType(Id typeId)         const { return groupedTypes[OpTypeBool].size() > 0 && typeId == groupedTypes[OpTypeBool].back()->getResultId(); }
+    bool isBoolType(Id typeId)               { return groupedTypes[OpTypeBool].size() > 0 && typeId == groupedTypes[OpTypeBool].back()->getResultId(); }
     bool isIntType(Id typeId)          const { return getTypeClass(typeId) == OpTypeInt && module.getInstruction(typeId)->getImmediateOperand(1) != 0; }
     bool isUintType(Id typeId)         const { return getTypeClass(typeId) == OpTypeInt && module.getInstruction(typeId)->getImmediateOperand(1) == 0; }
     bool isFloatType(Id typeId)        const { return getTypeClass(typeId) == OpTypeFloat; }
@@ -211,19 +215,18 @@ public:
 
     // For making new constants (will return old constant if the requested one was already made).
     Id makeBoolConstant(bool b, bool specConstant = false);
+    Id makeInt8Constant(int i, bool specConstant = false)        { return makeIntConstant(makeIntType(8),  (unsigned)i, specConstant); }
+    Id makeUint8Constant(unsigned u, bool specConstant = false)  { return makeIntConstant(makeUintType(8),           u, specConstant); }
+    Id makeInt16Constant(int i, bool specConstant = false)       { return makeIntConstant(makeIntType(16),  (unsigned)i, specConstant); }
+    Id makeUint16Constant(unsigned u, bool specConstant = false) { return makeIntConstant(makeUintType(16),           u, specConstant); }
     Id makeIntConstant(int i, bool specConstant = false)         { return makeIntConstant(makeIntType(32),  (unsigned)i, specConstant); }
     Id makeUintConstant(unsigned u, bool specConstant = false)   { return makeIntConstant(makeUintType(32),           u, specConstant); }
     Id makeInt64Constant(long long i, bool specConstant = false)            { return makeInt64Constant(makeIntType(64),  (unsigned long long)i, specConstant); }
     Id makeUint64Constant(unsigned long long u, bool specConstant = false)  { return makeInt64Constant(makeUintType(64),                     u, specConstant); }
-#ifdef AMD_EXTENSIONS
-    Id makeInt16Constant(short i, bool specConstant = false)        { return makeIntConstant(makeIntType(16),      (unsigned)((unsigned short)i), specConstant); }
-    Id makeUint16Constant(unsigned short u, bool specConstant = false)  { return makeIntConstant(makeUintType(16), (unsigned)u, specConstant); }
-#endif
     Id makeFloatConstant(float f, bool specConstant = false);
     Id makeDoubleConstant(double d, bool specConstant = false);
-#ifdef AMD_EXTENSIONS
     Id makeFloat16Constant(float f16, bool specConstant = false);
-#endif
+    Id makeFpConstant(Id type, double d, bool specConstant = false);
 
     // Turn the array of constants into a proper spv constant of the requested type.
     Id makeCompositeConstant(Id type, const std::vector<Id>& comps, bool specConst = false);
@@ -234,7 +237,10 @@ public:
     void addName(Id, const char* name);
     void addMemberName(Id, int member, const char* name);
     void addDecoration(Id, Decoration, int num = -1);
+    void addDecoration(Id, Decoration, const char*);
+    void addDecorationId(Id id, Decoration, Id idDecoration);
     void addMemberDecoration(Id, unsigned int member, Decoration, int num = -1);
+    void addMemberDecoration(Id, unsigned int member, Decoration, const char*);
 
     // At the end of what block do the next create*() instructions go?
     void setBuildPoint(Block* bp) { buildPoint = bp; }
@@ -330,7 +336,7 @@ public:
     // Generally, the type of 'scalar' does not need to be the same type as the components in 'vector'.
     // The type of the created vector is a vector of components of the same type as the scalar.
     //
-    // Note: One of the arguments will change, with the result coming back that way rather than 
+    // Note: One of the arguments will change, with the result coming back that way rather than
     // through the return value.
     void promoteScalar(Decoration precision, Id& left, Id& right);
 
@@ -548,7 +554,7 @@ public:
     void accessChainStore(Id rvalue);
 
     // use accessChain and swizzle to load an r-value
-    Id accessChainLoad(Decoration precision, Id ResultType);
+    Id accessChainLoad(Decoration precision, Decoration nonUniform, Id ResultType);
 
     // get the direct pointer for an l-value
     Id accessChainGetLValue();
@@ -557,9 +563,15 @@ public:
     // based on the type of the base and the chain of dereferences.
     Id accessChainGetInferredType();
 
-    // Remove OpDecorate instructions whose operands are defined in unreachable
-    // blocks.
-    void eliminateDeadDecorations();
+    // Add capabilities, extensions, remove unneeded decorations, etc., 
+    // based on the resulting SPIR-V.
+    void postProcess();
+
+    // Hook to visit each instruction in a block in a function
+    void postProcess(Instruction& inst);
+    // Hook to visit each instruction in a reachable block in a function.
+    void postProcessReachable(Instruction& inst);
+
     void dump(std::vector<unsigned int>&) const;
 
     void createBranch(Block* block);
@@ -576,9 +588,10 @@ public:
  protected:
     Id makeIntConstant(Id typeId, unsigned value, bool specConstant);
     Id makeInt64Constant(Id typeId, unsigned long long value, bool specConstant);
-    Id findScalarConstant(Op typeClass, Op opcode, Id typeId, unsigned value) const;
-    Id findScalarConstant(Op typeClass, Op opcode, Id typeId, unsigned v1, unsigned v2) const;
-    Id findCompositeConstant(Op typeClass, const std::vector<Id>& comps) const;
+    Id findScalarConstant(Op typeClass, Op opcode, Id typeId, unsigned value);
+    Id findScalarConstant(Op typeClass, Op opcode, Id typeId, unsigned v1, unsigned v2);
+    Id findCompositeConstant(Op typeClass, const std::vector<Id>& comps);
+    Id findStructConstant(Id typeId, const std::vector<Id>& comps);
     Id collapseAccessChain();
     void remapDynamicSwizzle();
     void transferAccessChainSwizzle(bool dynamic);
@@ -616,15 +629,15 @@ public:
     std::vector<std::unique_ptr<Instruction> > entryPoints;
     std::vector<std::unique_ptr<Instruction> > executionModes;
     std::vector<std::unique_ptr<Instruction> > names;
-    std::vector<std::unique_ptr<Instruction> > lines;
     std::vector<std::unique_ptr<Instruction> > decorations;
     std::vector<std::unique_ptr<Instruction> > constantsTypesGlobals;
     std::vector<std::unique_ptr<Instruction> > externals;
     std::vector<std::unique_ptr<Function> > functions;
 
      // not output, internally used for quick & dirty canonical (unique) creation
-    std::vector<Instruction*> groupedConstants[OpConstant];  // all types appear before OpConstant
-    std::vector<Instruction*> groupedTypes[OpConstant];
+    std::unordered_map<unsigned int, std::vector<Instruction*>> groupedConstants;       // map type opcodes to constant inst.
+    std::unordered_map<unsigned int, std::vector<Instruction*>> groupedStructConstants; // map struct-id to constant instructions
+    std::unordered_map<unsigned int, std::vector<Instruction*>> groupedTypes;           // map type opcodes to type instructions
 
     // stack of switches
     std::stack<Block*> switchMerges;

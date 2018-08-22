@@ -34,7 +34,7 @@
 
 #pragma once
 
-#if _MSC_VER >= 1900
+#if defined(_MSC_VER) && _MSC_VER >= 1900
     #pragma warning(disable : 4464) // relative include path contains '..'
 #endif
 
