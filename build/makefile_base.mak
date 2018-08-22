@@ -390,8 +390,8 @@ $(FFMPEG_CONFIGURE_FILES64): $(FFMPEG)/configure $(MAKEFILE_DEP) | $(FFMPEG_OBJ6
 			--disable-everything \
 			--enable-decoder=wmav2 \
 			--enable-decoder=adpcm_ms && \
-		# ffmpeg's configure script doesn't update the timestamp on this guy in the case of a no-op
 		[ ! -f ./Makefile ] || touch ./Makefile
+# ^ ffmpeg's configure script doesn't update the timestamp on this guy in the case of a no-op
 
 # 32-bit configure
 $(FFMPEG_CONFIGURE_FILES32): SHELL = $(CONTAINER_SHELL32)
@@ -426,8 +426,8 @@ $(FFMPEG_CONFIGURE_FILES32): $(FFMPEG)/configure $(MAKEFILE_DEP) | $(FFMPEG_OBJ3
 			--disable-everything \
 			--enable-decoder=wmav2 \
 			--enable-decoder=adpcm_ms && \
-		# ffmpeg's configure script doesn't update the timestamp on this guy in the case of a no-op
 		[ ! -f ./Makefile ] || touch ./Makefile
+# ^ ffmpeg's configure script doesn't update the timestamp on this guy in the case of a no-op
 
 ## ffmpeg goals
 
@@ -447,13 +447,15 @@ ffmpeg64: SHELL = $(CONTAINER_SHELL64)
 ffmpeg64: $(FFMPEG_CONFIGURE_FILES64)
 	cd $(FFMPEG_OBJ64) && \
 	$(MAKE) && \
-	$(MAKE) install
+	$(MAKE) install && \
+	cp -L ../$(TOOLS_DIR64)/lib/{libavcodec,libavutil}* ../$(DST_DIR)/lib64
 
 ffmpeg32: SHELL = $(CONTAINER_SHELL32)
 ffmpeg32: $(FFMPEG_CONFIGURE_FILES32)
 	cd $(FFMPEG_OBJ32) && \
 	$(MAKE) && \
-	$(MAKE) install
+	$(MAKE) install && \
+	cp -L ../$(TOOLS_DIR32)/lib/{libavcodec,libavutil}* ../$(DST_DIR)/lib
 
 ##
 ## lsteamclient
@@ -477,7 +479,6 @@ $(LSTEAMCLIENT_CONFIGURE_FILES64): $(LSTEAMCLIENT) $(WINEMAKER) $(MAKEFILE_DEP) 
 			-L"../$(TOOLS_DIR64)"/lib64/wine/ \
 			--dll ../$(LSTEAMCLIENT) && \
 		cp ../$(LSTEAMCLIENT)/Makefile . && \
-		# Point makefile back at srcdir
 		echo >> ./Makefile 'SRCDIR := ../$(LSTEAMCLIENT)' && \
 		echo >> ./Makefile 'vpath % $$(SRCDIR)' && \
 		echo >> ./Makefile 'lsteamclient_dll_LDFLAGS := $$(patsubst %.spec,$$(SRCDIR)/%.spec,$$(lsteamclient_dll_LDFLAGS))'
@@ -494,8 +495,7 @@ $(LSTEAMCLIENT_CONFIGURE_FILES32): $(LSTEAMCLIENT) $(WINEMAKER) $(MAKEFILE_DEP) 
 			-L"../$(TOOLS_DIR32)"/lib/ \
 			-L"../$(TOOLS_DIR32)"/lib/wine/ \
 			--dll ../$(LSTEAMCLIENT) && \
-		cp $(LSTEAMCLIENT)/Makefile . && \
-		# Point makefile back at srcdir
+		cp ../$(LSTEAMCLIENT)/Makefile . && \
 		echo >> ./Makefile 'SRCDIR := ../$(LSTEAMCLIENT)' && \
 		echo >> ./Makefile 'vpath % $$(SRCDIR)' && \
 		echo >> ./Makefile 'lsteamclient_dll_LDFLAGS := -m32 $$(patsubst %.spec,$$(SRCDIR)/%.spec,$$(lsteamclient_dll_LDFLAGS))'
@@ -670,11 +670,10 @@ $(VRCLIENT_CONFIGURE_FILES64): $(MAKEFILE_DEP) $(VRCLIENT) $(VRCLIENT)/vrclient_
 			-L"$(abspath $(TOOLS_DIR64))"/lib64/ \
 			-L"$(abspath $(TOOLS_DIR64))"/lib64/wine/ \
 			--dll vrclient_x64 && \
-		cp ../$(VRCLIENT)/vrclient_x64/Makefile ../$(dir $@) && \
-		# Point makefile back at srcdir
-		echo >> ../$(dir $@)/Makefile 'SRCDIR := ../$(VRCLIENT)/vrclient_x64' && \
-		echo >> ../$(dir $@)/Makefile 'vpath % $$(SRCDIR)' && \
-		echo >> ../$(dir $@)/Makefile 'vrclient_x64_dll_LDFLAGS := $$(patsubst %.spec,$$(SRCDIR)/%.spec,$$(vrclient_x64_dll_LDFLAGS))'
+		cp ./vrclient_x64/Makefile $(abspath $(dir $@)) && \
+		echo >> $(abspath $(dir $@))/Makefile 'SRCDIR := ../$(VRCLIENT)/vrclient_x64' && \
+		echo >> $(abspath $(dir $@))/Makefile 'vpath % $$(SRCDIR)' && \
+		echo >> $(abspath $(dir $@))/Makefile 'vrclient_x64_dll_LDFLAGS := $$(patsubst %.spec,$$(SRCDIR)/%.spec,$$(vrclient_x64_dll_LDFLAGS))'
 
 # 32-bit configure
 $(VRCLIENT_CONFIGURE_FILES32): SHELL = $(CONTAINER_SHELL32)
@@ -689,7 +688,6 @@ $(VRCLIENT_CONFIGURE_FILES32): $(MAKEFILE_DEP) $(VRCLIENT32) | $(VRCLIENT_OBJ32)
 		-L"$(abspath $(TOOLS_DIR32))"/lib/wine/ \
 		--dll $(VRCLIENT32)/vrclient && \
 	cp $(VRCLIENT32)/vrclient/Makefile $(dir $@) && \
-	# Point makefile back at srcdir
 	echo >> $(dir $@)/Makefile 'SRCDIR := ../$(VRCLIENT32)/vrclient' && \
 	echo >> $(dir $@)/Makefile 'vpath % $$(SRCDIR)' && \
 	echo >> $(dir $@)/Makefile 'vrclient_dll_LDFLAGS := -m32 $$(patsubst %.spec,$$(SRCDIR)/%.spec,$$(vrclient_dll_LDFLAGS))'
