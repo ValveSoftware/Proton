@@ -131,6 +131,9 @@ with dist_lock:
 prefix = os.environ["STEAM_COMPAT_DATA_PATH"] + "/pfx/"
 env["WINEPREFIX"] = prefix
 
+if "PROTON_LOG" in env:
+    env["WINEDEBUG"] = "+timestamp,+pid,+tid,+seh,+debugstr,+module"
+
 #load environment overrides
 if os.path.exists(basedir + "/user_settings.py"):
     try:
