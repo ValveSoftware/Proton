@@ -170,8 +170,11 @@ Runtime Config Options
 Proton can be tuned at runtime to help certain games run. The Steam client sets
 some options for known games using the <tt>STEAM_COMPAT_CONFIG</tt> variable.
 You can override these options using the environment variables described below.
-The best way to set these environment overrides is by renaming
+The best way to set these environment overrides for all games is by renaming
 "user_settings.sample.py" to "user_settings.py" and modifying it appropriately.
+If you want to set a specific game to a different setting than the defaults, 
+use the `Set Launch Options` under the games `Properties`. You can launch the
+game as you would make it `YOUR_VARIABLE=1 %command%` [(source)](https://superuser.com/questions/954041/how-to-set-an-environment-variable-for-an-specific-game-on-steam-for-linux#980437).
 
 To enable an option, set the variable to a non-<tt>0</tt> value.  To disable an
 option, set the variable to <tt>0</tt>. To use Steam's default configuration, do
