@@ -129,10 +129,10 @@ libraries in each chroot. Search for '<tt>executing Makefile commands</tt>' in
 <tt>config.log</tt> to find messages about missing libraries. It is normal to be missing
 a few libraries, including OpenCL, OSS, and libav.
 
-**NOTE:** For now, dxvk requires build-time components that are too new for
-Debian 9. It's recommended to build the DLLs on Arch Linux, where dxvk is
-actively being developed. This may be resolved in dxvk in the future, or may
-be worked around by using a newer Debian release. See comments in <tt>build_proton.sh</tt>.
+**NOTE:** The build_proton.sh script builds most components inside the Steam runtime
+chroot.  However, dxvk will not build in that environment, so the build_proton.sh
+script will build it on your local system.  This will require you to be able to
+build dxvk on your local system; refer to [the dxvk README.md](https://github.com/ValveSoftware/dxvk/blob/master/README.md) for more details.
 
 ---
 Building for macOS
