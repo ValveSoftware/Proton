@@ -385,15 +385,18 @@ def dump_dbg_env(f):
 def dump_dbg_scripts():
     exe_name = os.path.basename(sys.argv[2])
 
-    with open("/tmp/proton_winedbg", "w") as f:
+    dir = "/tmp/proton_" + os.environ["USER"] + "/"
+    makedirs(dir)
+
+    with open(dir + "winedbg", "w") as f:
         f.write("#!/bin/bash\n")
         f.write("#Run winedbg with args\n\n")
         f.write("cd \"" + os.getcwd() + "\"\n")
         dump_dbg_env(f)
         f.write("\t\"" + wine_path + "\" winedbg \"$@\"\n")
-    os.chmod("/tmp/proton_winedbg", 0755)
+    os.chmod(dir + "winedbg", 0755)
 
-    with open("/tmp/proton_winedbg_run", "w") as f:
+    with open(dir + "winedbg_run", "w") as f:
         f.write("#!/bin/bash\n")
         f.write("#Run winedbg and prepare to run game or given program\n\n")
         f.write("cd \"" + os.getcwd() + "\"\n")
@@ -408,14 +411,14 @@ def dump_dbg_scripts():
         f.write(")\n")
         dump_dbg_env(f)
         f.write("\t\"" + wine_path + "\" winedbg \"${@:-${DEF_CMD[@]}}\"\n")
-    os.chmod("/tmp/proton_winedbg_run", 0755)
+    os.chmod(dir + "winedbg_run", 0755)
 
-    with open("/tmp/proton_gdb_attach", "w") as f:
+    with open(dir + "gdb_attach", "w") as f:
         f.write("#!/bin/bash\n")
         f.write("#Run winedbg in gdb mode and auto-attach to already-running program\n\n")
         f.write("cd \"" + os.getcwd() + "\"\n")
         f.write("EXE_NAME=${1:-\"" + exe_name + "\"}\n")
-        f.write("WPID_HEX=$(/tmp/proton_winedbg --command 'info process' | grep -i \"$EXE_NAME\" | cut -f2 -d' ' | tr -d '0')\n")
+        f.write("WPID_HEX=$(\"" + dir + "winedbg\" --command 'info process' | grep -i \"$EXE_NAME\" | cut -f2 -d' ' | tr -d '0')\n")
         f.write("if [ -z \"$WPID_HEX\" ]; then \n")
         f.write("    echo \"Program does not appear to be running: \\\"$EXE_NAME\\\"\"\n")
         f.write("    exit 1\n")
@@ -423,9 +426,9 @@ def dump_dbg_scripts():
         f.write("WPID_DEC=$(printf %d 0x$WPID_HEX)\n")
         dump_dbg_env(f)
         f.write("\t\"" + wine_path + "\" winedbg --gdb $WPID_DEC\n")
-    os.chmod("/tmp/proton_gdb_attach", 0755)
+    os.chmod(dir + "gdb_attach", 0755)
 
-    with open("/tmp/proton_gdb_run", "w") as f:
+    with open(dir + "gdb_run", "w") as f:
         f.write("#!/bin/bash\n")
         f.write("#Run winedbg in gdb mode and prepare to run game or given program\n\n")
         f.write("cd \"" + os.getcwd() + "\"\n")
@@ -440,9 +443,9 @@ def dump_dbg_scripts():
         f.write(")\n")
         dump_dbg_env(f)
         f.write("\t\"" + wine_path + "\" winedbg --gdb \"${@:-${DEF_CMD[@]}}\"\n")
-    os.chmod("/tmp/proton_gdb_run", 0755)
+    os.chmod(dir + "gdb_run", 0755)
 
-    with open("/tmp/proton_run", "w") as f:
+    with open(dir + "run", "w") as f:
         f.write("#!/bin/bash\n")
         f.write("#Run game or given command in environment\n\n")
         f.write("cd \"" + os.getcwd() + "\"\n")
@@ -460,14 +463,14 @@ def dump_dbg_scripts():
             f.write("\t\"" + wine_path + "\" start \"${@:-${DEF_CMD[@]}}\"\n")
         else:
             f.write("\t\"" + wine_path + "\" \"${@:-${DEF_CMD[@]}}\"\n")
-    os.chmod("/tmp/proton_run", 0755)
+    os.chmod(dir + "run", 0755)
 
 def run():
     if "PROTON_DUMP_DEBUG_COMMANDS" in os.environ:
         try:
             dump_dbg_scripts()
         except:
-            log("Unable to write debug scripts to /tmp/, probably someone else already owns them.")
+            log("Unable to write debug scripts! " + str(sys.exc_info()[1]))
     if game_arch == ARCH_UNKNOWN:
         #probably a batch script or something, hopefully start.exe can handle it
         run_wine([wine_path, "start", "/unix"] + sys.argv[2:])
