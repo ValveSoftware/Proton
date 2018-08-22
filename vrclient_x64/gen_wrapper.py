@@ -1,4 +1,4 @@
-#!/usr/bin/python2
+#!/usr/bin/env python2
 
 #NOTE: If you make modifications here, consider whether they should
 #be duplicated in ../lsteamclient/gen_wrapper.py
