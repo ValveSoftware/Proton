@@ -566,6 +566,9 @@ else
     fi
 fi
 
+if [ "$($I386_WRAPPER ls $CCACHE 2>/dev/null)" = "" ]; then CCACHE=""; fi
+if [ "$($AMD64_WRAPPER ls $CCACHE 2>/dev/null)" = "" ]; then CCACHE=""; fi
+
 if [ "$PLATFORM" == "Darwin" ]; then
     build_freetype
 
