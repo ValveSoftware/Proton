@@ -18,9 +18,9 @@ BUILD_NAME := proton-localbuild
 SRCDIR := ..
 
 # Selected container mode shell
-CONTAINER_SHELL_BASE = sudo docker run --rm -i -v $(HOME):$(HOME) -w $(CURDIR) \
+CONTAINER_SHELL_BASE = sudo docker run --rm --init -v $(HOME):$(HOME) -w $(CURDIR) \
                                        -v /etc/passwd:/etc/passwd:ro -u $(shell id -u):$(shell id -g) -h $(shell hostname) \
-                                       -v /tmp:/tmp $(SELECTED_CONTAINER) /bin/bash
+                                       -v /tmp:/tmp $(SELECTED_CONTAINER) /dev/init -sg -- /bin/bash
 CONTAINER32 := steamrt-proton-dev32
 CONTAINER64 := steamrt-proton-dev
 SELECTED_CONTAINER := $(CONTAINER32)
