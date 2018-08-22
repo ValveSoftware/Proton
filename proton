@@ -1,4 +1,4 @@
-#!/usr/bin/python2.7
+#!/usr/bin/python3
 
 #script to launch Wine with the correct environment
 
@@ -309,7 +309,7 @@ if "nod3d11" in config_opts:
         del dlloverrides["dxgi"]
 
 s = ""
-for dll, setting in dlloverrides.iteritems():
+for dll, setting in dlloverrides.items():
     if len(s) > 0:
         s = s + ";" + dll + "=" + setting
     else:
@@ -376,7 +376,7 @@ def dump_dbg_scripts():
         f.write("cd \"" + os.getcwd() + "\"\n")
         dump_dbg_env(f)
         f.write("\t\"" + wine_path + "\" winedbg \"$@\"\n")
-    os.chmod("/tmp/proton_winedbg", 0755)
+    os.chmod("/tmp/proton_winedbg", 0o755)
 
     with open("/tmp/proton_winedbg_run", "w") as f:
         f.write("#!/bin/bash\n")
@@ -393,7 +393,7 @@ def dump_dbg_scripts():
         f.write(")\n")
         dump_dbg_env(f)
         f.write("\t\"" + wine_path + "\" winedbg \"${@:-${DEF_CMD[@]}}\"\n")
-    os.chmod("/tmp/proton_winedbg_run", 0755)
+    os.chmod("/tmp/proton_winedbg_run", 0o755)
 
     with open("/tmp/proton_gdb_attach", "w") as f:
         f.write("#!/bin/bash\n")
@@ -408,7 +408,7 @@ def dump_dbg_scripts():
         f.write("WPID_DEC=$(printf %d 0x$WPID_HEX)\n")
         dump_dbg_env(f)
         f.write("\t\"" + wine_path + "\" winedbg --gdb $WPID_DEC\n")
-    os.chmod("/tmp/proton_gdb_attach", 0755)
+    os.chmod("/tmp/proton_gdb_attach", 0o755)
 
     with open("/tmp/proton_gdb_run", "w") as f:
         f.write("#!/bin/bash\n")
@@ -425,7 +425,7 @@ def dump_dbg_scripts():
         f.write(")\n")
         dump_dbg_env(f)
         f.write("\t\"" + wine_path + "\" winedbg --gdb \"${@:-${DEF_CMD[@]}}\"\n")
-    os.chmod("/tmp/proton_gdb_run", 0755)
+    os.chmod("/tmp/proton_gdb_run", 0o755)
 
     with open("/tmp/proton_run", "w") as f:
         f.write("#!/bin/bash\n")
@@ -445,7 +445,7 @@ def dump_dbg_scripts():
             f.write("\t\"" + wine_path + "\" start \"${@:-${DEF_CMD[@]}}\"\n")
         else:
             f.write("\t\"" + wine_path + "\" \"${@:-${DEF_CMD[@]}}\"\n")
-    os.chmod("/tmp/proton_run", 0755)
+    os.chmod("/tmp/proton_run", 0o755)
 
 def run():
 #    if "PROTON_DUMP_DEBUG_COMMAND" in os.environ: #for now, we are always dumping the debug scripts
@@ -469,11 +469,11 @@ elif sys.argv[1] == "waitforexitandrun":
 elif sys.argv[1] == "getcompatpath":
     #linux -> windows path
     path = subprocess.check_output([wine_path, "winepath", "-w", sys.argv[2]], env=env, stderr=lfile)
-    sys.stdout.write(path)
+    sys.stdout.write(path.decode('utf-8'))
 elif sys.argv[1] == "getnativepath":
     #windows -> linux path
     path = subprocess.check_output([wine_path, "winepath", sys.argv[2]], env=env, stderr=lfile)
-    sys.stdout.write(path)
+    sys.stdout.write(path.decode('utf-8'))
 else:
     log("Need a verb.")
     sys.exit(1)
