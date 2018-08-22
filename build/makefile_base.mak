@@ -160,26 +160,35 @@ GOAL_TARGETS_LIBS := openal ffmpeg lsteamclient vrclient dxvk
 GOAL_TARGETS      := wine $(GOAL_TARGETS_LIBS)
 
 all: $(GOAL_TARGETS)
+	@echo ":: make $@ succeeded"
 
 all32: $(addsuffix 32,$(GOAL_TARGETS))
+	@echo ":: make $@ succeeded"
 
 all64: $(addsuffix 64,$(GOAL_TARGETS))
+	@echo ":: make $@ succeeded"
 
 # Libraries (not wine) only -- wine has a length install step that runs unconditionally, so this is useful for updating
 # incremental builds when not iterating on wine itself.
 
 all-lib: $(GOAL_TARGETS_LIBS)
+	@echo ":: make $@ succeeded"
 
 all32-lib: $(addsuffix 32,$(GOAL_TARGETS_LIBS))
+	@echo ":: make $@ succeeded"
 
 all64-lib: $(addsuffix 64,$(GOAL_TARGETS_LIBS))
+	@echo ":: make $@ succeeded"
 
 # Explicit reconfigure all targets
 all_configure: $(addsuffix _configure,$(GOAL_TARGETS))
+	@echo ":: make $@ succeeded"
 
 all32_configure: $(addsuffix 32_configure,$(GOAL_TARGETS))
+	@echo ":: make $@ succeeded"
 
 all64_configure: $(addsuffix 64_configure,$(GOAL_TARGETS))
+	@echo ":: make $@ succeeded"
 
 ##
 ## install -- steps to finalize the install
