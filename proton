@@ -463,14 +463,16 @@ def dump_dbg_scripts():
     os.chmod("/tmp/proton_run", 0755)
 
 def run():
-#    if "PROTON_DUMP_DEBUG_COMMAND" in os.environ: #for now, we are always dumping the debug scripts
-        dump_dbg_scripts()
-#    else: #see above
-        if game_arch == ARCH_UNKNOWN:
-            #probably a batch script or something, hopefully start.exe can handle it
-            run_wine([wine_path, "start", "/unix"] + sys.argv[2:])
-        else:
-            run_wine([wine_path] + sys.argv[2:])
+    if "PROTON_DUMP_DEBUG_COMMANDS" in os.environ:
+        try:
+            dump_dbg_scripts()
+        except:
+            log("Unable to write debug scripts to /tmp/, probably someone else already owns them.")
+    if game_arch == ARCH_UNKNOWN:
+        #probably a batch script or something, hopefully start.exe can handle it
+        run_wine([wine_path, "start", "/unix"] + sys.argv[2:])
+    else:
+        run_wine([wine_path] + sys.argv[2:])
 
 #determine mode
 if sys.argv[1] == "run":
