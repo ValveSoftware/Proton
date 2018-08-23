@@ -448,7 +448,7 @@ function build_vrclient32_tests
 
 function build_glslang
 {
-    if [ ! -e "$TOOLS_DIR64"/bin/glslangValidator]; then
+    if [ ! -e "$TOOLS_DIR64/bin/glslangValidator" ]; then
         #glslang 32-bit
         cd "$TOP"
         mkdir -p build/glslang.win32
