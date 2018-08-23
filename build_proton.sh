@@ -452,17 +452,15 @@ function build_dxvk
         cd "$TOP"/dxvk
         mkdir -p "$TOP"/build/dxvk.win32
         cd "$TOP"/dxvk
-        PATH="$TOP/glslang/bin/:$PATH" meson --prefix="$TOP"/build/dxvk.win32 --cross-file build-win32.txt "$TOP"/build/dxvk.win32
+        PATH="$TOP/glslang/bin/:$PATH" meson --strip --buildtype="release" --prefix="$TOP"/build/dxvk.win32 --cross-file build-win32.txt "$TOP"/build/dxvk.win32
         cd "$TOP"/build/dxvk.win32
-        PATH="$TOP/glslang/bin/:$PATH" meson configure -Dbuildtype=release
         PATH="$TOP/glslang/bin/:$PATH" ninja
         PATH="$TOP/glslang/bin/:$PATH" ninja install
 
         cd "$TOP"/dxvk
         mkdir -p "$TOP"/build/dxvk.win64
-        PATH="$TOP/glslang/bin/:$PATH" meson --prefix="$TOP"/build/dxvk.win64 --cross-file build-win64.txt "$TOP"/build/dxvk.win64
+        PATH="$TOP/glslang/bin/:$PATH" meson --strip --buildtype="release" --prefix="$TOP"/build/dxvk.win64 --cross-file build-win64.txt "$TOP"/build/dxvk.win64
         cd "$TOP"/build/dxvk.win64
-        PATH="$TOP/glslang/bin/:$PATH" meson configure -Dbuildtype=release
         PATH="$TOP/glslang/bin/:$PATH" ninja
         PATH="$TOP/glslang/bin/:$PATH" ninja install
     fi
