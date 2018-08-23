@@ -8,7 +8,7 @@ Linux users with NVIDIA graphics cards should install the latest NVIDIA propriet
 
 ```
 sudo add-apt-repository ppa:graphics-drivers/ppa
-sudo apt install nvidia-driver-396
+sudo apt install nvidia-driver-396 # or nvidia-396
 ```
 
 Provide your user password when requested and reboot after the last command completes to ensure the driver has updated correctly.  
