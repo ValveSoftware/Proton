@@ -175,10 +175,12 @@ function build_libSDL
     fi
 
     cp "$TOOLS_DIR32"/lib/libSDL2.$LIB_SUFFIX "$DST_DIR"/lib
-    $STRIP "$DST_DIR"/lib/libSDL2.dylib
+    $STRIP "$DST_DIR"/lib/libSDL2.$LIB_SUFFIX
+    install_name_tool -id @rpath/libSDL2.$LIB_SUFFIX "$DST_DIR"/lib/libSDL2.$LIB_SUFFIX
 
     cp "$TOOLS_DIR64"/lib/libSDL2.$LIB_SUFFIX "$DST_DIR"/lib64
-    $STRIP "$DST_DIR"/lib64/libSDL2.dylib
+    $STRIP "$DST_DIR"/lib64/libSDL2.$LIB_SUFFIX
+    install_name_tool -id @rpath/libSDL2.$LIB_SUFFIX "$DST_DIR"/lib64/libSDL2.$LIB_SUFFIX
 }
 
 function build_moltenvk
