@@ -16,7 +16,7 @@ from filelock import FileLock, Timeout
 #To enable debug logging, copy "user_settings.sample.py" to "user_settings.py"
 #and edit it if needed.
 
-CURRENT_PREFIX_VERSION="3.7-1"
+CURRENT_PREFIX_VERSION="3.7-2"
 
 PFX="Proton: "
 
@@ -32,8 +32,19 @@ def log(msg):
 def upgrade_pfx(old_ver):
     if old_ver == CURRENT_PREFIX_VERSION:
         return
+
     log("Upgrading prefix from " + str(old_ver) + " to " + CURRENT_PREFIX_VERSION + " (" + os.environ["STEAM_COMPAT_DATA_PATH"] + ")")
-    #nothing to do, yet
+
+    if old_ver == None:
+        return
+
+    old_proton_ver, old_prefix_ver = old_ver.split('-')
+
+    if old_proton_ver == "3.7" and old_prefix_ver == "1":
+        if not os.path.exists(prefix + "/drive_c/windows/syswow64/kernel32.dll"):
+            #shipped a busted 64-bit-only installation on 20180822. detect and wipe clean
+            log("Detected broken 64-bit-only installation, re-creating prefix.")
+            shutil.rmtree(prefix)
 
 def run_wine(args):
     subprocess.call(args, env=env, stderr=lfile)
@@ -162,16 +173,16 @@ else:
 
 prefix_lock = FileLock(os.environ["STEAM_COMPAT_DATA_PATH"] + "/pfx.lock", timeout=-1)
 with prefix_lock:
-    if not os.path.exists(prefix + "/user.reg"):
-        #copy default prefix into place
-        mergedirs(basedir + "/dist/share/default_pfx", prefix)
-
     version_file = os.environ["STEAM_COMPAT_DATA_PATH"] + "/version"
     if os.path.exists(version_file):
         with open(version_file, "r") as f:
             upgrade_pfx(f.readline().strip())
     else:
         upgrade_pfx(None)
+
+    if not os.path.exists(prefix + "/user.reg"):
+        #copy default prefix into place
+        mergedirs(basedir + "/dist/share/default_pfx", prefix)
 
     with open(version_file, "w") as f:
         f.write(CURRENT_PREFIX_VERSION + "\n")
