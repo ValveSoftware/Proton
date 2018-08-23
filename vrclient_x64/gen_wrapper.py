@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python
 
 #NOTE: If you make modifications here, consider whether they should
 #be duplicated in ../lsteamclient/gen_wrapper.py
@@ -403,7 +403,7 @@ def get_capi_thunk_params(method):
     def toBOOL(x):
         return "TRUE" if x else "FALSE"
     returns_record = method.result_type.get_canonical().kind == clang.cindex.TypeKind.RECORD
-    param_types = map(lambda x: x.type, get_params(method))
+    param_types = [x.type for x in get_params(method)]
     if returns_record:
         param_types.insert(0, method.result_type)
     param_count = len(param_types)
@@ -970,7 +970,7 @@ for sdkver in sdk_versions:
 
         diagnostics = list(tu.diagnostics)
         if len(diagnostics) > 0:
-            print 'There were parse errors'
+            print('There were parse errors')
             pprint.pprint(diagnostics)
         else:
             children = list(tu.cursor.get_children())

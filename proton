@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 
 #script to launch Wine with the correct environment
 
@@ -309,7 +309,8 @@ if "nod3d11" in config_opts:
         del dlloverrides["dxgi"]
 
 s = ""
-for dll, setting in dlloverrides.items():
+for dll in dlloverrides:
+    setting = dlloverrides[dll]
     if len(s) > 0:
         s = s + ";" + dll + "=" + setting
     else:
@@ -457,6 +458,13 @@ def run():
         else:
             run_wine([wine_path] + sys.argv[2:])
 
+if sys.version_info[0] == 2:
+    binary_stdout = sys.stdout
+elif sys.version_info[0] == 3:
+    binary_stdout = sys.stdout.buffer
+else:
+    raise Exception("Unsuported python version")
+
 #determine mode
 if sys.argv[1] == "run":
     #start target app
@@ -469,11 +477,11 @@ elif sys.argv[1] == "waitforexitandrun":
 elif sys.argv[1] == "getcompatpath":
     #linux -> windows path
     path = subprocess.check_output([wine_path, "winepath", "-w", sys.argv[2]], env=env, stderr=lfile)
-    sys.stdout.write(path.decode('utf-8'))
+    binary_stdout.write(path)
 elif sys.argv[1] == "getnativepath":
     #windows -> linux path
     path = subprocess.check_output([wine_path, "winepath", sys.argv[2]], env=env, stderr=lfile)
-    sys.stdout.write(path.decode('utf-8'))
+    binary_stdout.write(path)
 else:
     log("Need a verb.")
     sys.exit(1)
