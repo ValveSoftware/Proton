@@ -16,7 +16,7 @@ usage()
 
 set -e
 
-JOBS=-j$(expr `nproc 2>/dev/null||sysctl -n hw.ncpu 2>/dev/null||echo 4` + 1)
+JOBS=-j"$(( $(nproc 2>/dev/null||sysctl -n hw.ncpu 2>/dev/null||echo 4) + 1))"
 PLATFORM=$(uname)
 
 [ -z "$STEAM_RUNTIME" ] && STEAM_RUNTIME="$HOME/steam-runtime"
