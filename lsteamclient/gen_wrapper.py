@@ -1,7 +1,9 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python
 
 #NOTE: If you make modifications here, consider whether they should
 #be duplicated in ../vrclient/gen_wrapper.py
+
+from __future__ import print_function
 
 import pprint
 import sys
@@ -502,7 +504,7 @@ for sdkver in sdk_versions:
 
         diagnostics = list(tu.diagnostics)
         if len(diagnostics) > 0:
-            print 'There were parse errors'
+            print('There were parse errors')
             pprint.pprint(diagnostics)
         else:
             children = list(tu.cursor.get_children())
