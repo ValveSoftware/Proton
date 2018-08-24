@@ -620,7 +620,7 @@ case "$BUILD_COMPONENTS" in
         build_vrclient32
         ;;
     "wine") build_wine64; build_wine32 ;;
-    "wine32") build_wine64 ;;
+    "wine32") build_wine32 ;;
     "wine64") build_wine64 ;;
     "vrclient") build_vrclient32; build_vrclient64 ;;
     "vrclient32") build_vrclient32 ;;
