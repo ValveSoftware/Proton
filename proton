@@ -2,6 +2,8 @@
 
 #script to launch Wine with the correct environment
 
+from __future__ import print_function
+
 import filecmp
 import json
 import os
