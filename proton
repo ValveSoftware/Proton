@@ -342,7 +342,7 @@ def determine_architecture(path):
     try:
         with open(path, "rb") as f:
             magic = f.read(2)
-            if magic != "MZ":
+            if magic != b"MZ":
                 return ARCH_UNKNOWN
             f.seek(0x18)
             reloc = struct.unpack('<H', f.read(2))[0]
@@ -353,7 +353,7 @@ def determine_architecture(path):
             pe_offs = struct.unpack('<L', f.read(4))[0]
             f.seek(pe_offs)
             magic = f.read(4)
-            if magic != "PE\0\0":
+            if magic != b"PE\0\0":
                 return ARCH_UNKNOWN
             f.seek(pe_offs + 4)
             arch = struct.unpack('<H', f.read(2))[0]
