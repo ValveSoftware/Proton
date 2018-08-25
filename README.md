@@ -190,7 +190,8 @@ the Wine prefix. Removing the option will revert to the previous behavior.
 | Compat config string  | Environment Variable           | Description  |
 | :-------------------- | :----------------------------- | :----------- |
 |                       | <tt>PROTON_LOG</tt>            | Convenience method for dumping a useful debug log to `$HOME/steam-$APPID.log`. For more thorough logging, use `user_settings.py`. |
-|                       | <tt>PROTON_DUMP_DEBUG_COMMANDS</tt> | When running a game, Proton will write some useful debug scripts for that game into <tt>/tmp/proton_$USER/</tt>. |
+|                       | <tt>PROTON_DUMP_DEBUG_COMMANDS</tt> | When running a game, Proton will write some useful debug scripts for that game into `$PROTON_DEBUG_DIR/proton_$USER/`. |
+|                       | `PROTON_DEBUG_DIR`             | Root directory for the proton debug scripts, `/tmp` by default. |
 | <tt>wined3d11</tt>    | <tt>PROTON_USE_WINED3D11</tt>  | Use OpenGL-based wined3d instead of Vulkan-based DXVK for d3d11. |
 | <tt>nod3d11</tt>      | <tt>PROTON_NO_D3D11</tt>       | Disable <tt>d3d11.dll</tt>, for games which can fall back to and run better with d3d9. |
 | <tt>noesync</tt>      | <tt>PROTON_NO_ESYNC</tt>       | Do not use eventfd-based in-process synchronization primitives. |
