@@ -48,3 +48,11 @@ You will need Mesa 18.2.0 at a minimum.
 # FD LIMIT REQUIREMENTS
 
 Proton uses the 'esync' patchset for performance improvements in multi-threaded games. It can require a higher File Descriptor limit per process than what it set up by default in some distributions. If you're not running Ubuntu, SteamOS or Debian, please follow the instructions over at https://github.com/zfigura/wine/blob/esync/README.esync to increase your FD limit.
+
+# Python 2 REQUIREMENTS
+
+Proton uses the Python 2 which is not installed on recent distributions such as Ubuntu 18.04. On Debian/Ubuntu based distribution, you can install Python 2 by following:
+
+```
+sudo apt install python-minimal
+```
