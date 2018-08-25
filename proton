@@ -388,7 +388,7 @@ def dump_dbg_env(f):
 def dump_dbg_scripts():
     exe_name = os.path.basename(sys.argv[2])
 
-    dir = "/tmp/proton_" + os.environ["USER"] + "/"
+    dir = env.get("PROTON_DEBUG_DIR", "/tmp") + "/proton_" + os.environ["USER"] + "/"
     makedirs(dir)
 
     with open(dir + "winedbg", "w") as f:
@@ -469,7 +469,7 @@ def dump_dbg_scripts():
     os.chmod(dir + "run", 0o755)
 
 def run():
-    if "PROTON_DUMP_DEBUG_COMMANDS" in os.environ:
+    if "PROTON_DUMP_DEBUG_COMMANDS" in env:
         try:
             dump_dbg_scripts()
         except:
