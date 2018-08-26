@@ -84,7 +84,10 @@ if not ("STEAM_COMPAT_DATA_PATH" in os.environ):
     log("No compat data path?")
     sys.exit(1)
 
-basedir = os.path.dirname(sys.argv[0])
+env = dict(os.environ)
+dlloverrides = {}
+
+basedir = env.get("WINE_BASEDIR", os.path.dirname(sys.argv[0]))
 bindir = basedir + "/dist/bin/"
 libdir = basedir + "/dist/lib"
 lib64dir = basedir + "/dist/lib64"
@@ -103,8 +106,6 @@ with dist_lock:
         tar.close()
         shutil.copy(basedir + "/version", basedir + "/dist/")
 
-env = dict(os.environ)
-dlloverrides = {}
 
 #for performance, logging is disabled by default; override with user_settings.py
 env["DXVK_LOG_LEVEL"] = "none"
