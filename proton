@@ -485,7 +485,7 @@ if sys.version_info[0] == 2:
 elif sys.version_info[0] == 3:
     binary_stdout = sys.stdout.buffer
 else:
-    raise Exception("Unsuported python version")
+    raise Exception("Unsupported python version")
 
 #determine mode
 if sys.argv[1] == "run":
