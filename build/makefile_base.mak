@@ -1,3 +1,8 @@
+
+# TODO Missing vs build_proton
+#   - Package/tarball step
+#   - setup_wine_gecko
+
 ##
 ## Nested make
 ##
@@ -107,7 +112,7 @@ JPEG64_LIBS :=
 JPEG64_AUTOCONF :=
 WITHOUT_X :=
 
-# FIXME Configure stuff needs to set these maybe
+# TODO Release/debug configuration
 INSTALL_PROGRAM_FLAGS :=
 
 # Many of the configure steps below depend on the makefile itself, such that they are dirtied by changing the recipes
@@ -136,7 +141,8 @@ OPENAL_OBJ64 := ./obj-openal64
 FFMPEG := $(SRCDIR)/ffmpeg
 FFMPEG_OBJ32 := ./obj-ffmpeg32
 FFMPEG_OBJ64 := ./obj-ffmpeg64
-FFMPEG_CROSS_CFLAGS := # FIXME Both of these are -m32 on Darwin
+# TODO if perserving OS X support
+FFMPEG_CROSS_CFLAGS :=
 FFMPEG_CROSS_LDFLAGS :=
 
 LSTEAMCLIENT := $(SRCDIR)/lsteamclient
@@ -194,7 +200,7 @@ $(OBJ_DIRS):
 ## Targets
 ##
 
-# FIXME OS X-only targets freetype
+# TODO OS X targets freetype
 
 .PHONY: all all64 all32 default
 
@@ -202,7 +208,7 @@ $(OBJ_DIRS):
 default: all dist
 .DEFAULT_GOAL := default
 
-# FIXME ffmpeg is optional
+# TODO ffmpeg is optional, disabled
 
 GOAL_TARGETS_LIBS := openal lsteamclient vrclient dxvk dist
 GOAL_TARGETS      := wine $(GOAL_TARGETS_LIBS)
@@ -303,7 +309,7 @@ install: dist
 ## freetype
 ##
 
-# FIXME OS X, not final
+# TODO OS X, not final
 
 ## Autogen steps for freetype
 FREETYPE_AUTOGEN_FILES := $(FREETYPE)/builds/unix/configure
@@ -313,12 +319,12 @@ $(FREETYPE_AUTOGEN_FILES): $(FREETYPE)/builds/unix/configure.raw $(FREETYPE)/aut
 
 ## Create & configure object directory for freetype
 
-# FIXME Configure had --prefix="$TOOLS_DIR32"
+# TODO  --prefix="$TOOLS_DIR32"
 FREETYPE_CONFIGURE_FILES32 := $(FREETYPE_OBJ32)/unix-cc.mk $(FREETYPE_OBJ32)/Makefile
 FREETYPE_CONFIGURE_FILES64 := $(FREETYPE_OBJ64)/unix-cc.mk $(FREETYPE_OBJ64)/Makefile
 
 # 64-bit configure
-# FIXME --prefix="$TOOLS_DIR64"
+# TODO --prefix="$TOOLS_DIR64"
 $(FREETYPE_CONFIGURE_FILES64): $(FREETYPE_AUTOGEN_FILES) $(MAKEFILE_DEP) | $(FREETYPE_OBJ64)
 	cd $(dir $@) && \
 		$(abspath $(FREETYPE)/configure) CC="$(CC)" CXX="$(CXX)" --without-png --host x86_64-apple-darwin \
@@ -334,7 +340,7 @@ $(FREETYPE_CONFIGURE_FILES32): $(FREETYPE_AUTOGEN_FILES) $(MAKEFILE_DEP) | $(FRE
 
 ## Freetype goals
 
-# FIXME freetype has some output-to-toolsdir output file... no copy-from-tools step for dist
+# TODO copy-from-tools step for dist
 
 .PHONY: freetype freetype_autogen freetype_configure freetype_configure32 freetype_configure64
 
@@ -356,7 +362,6 @@ freetype: $(FREETYPE_CONFIGURE_FILES32) $(FREETYPE_CONFIGURE_FILES64)
 
 OPENAL_CONFIGURE_FILES32 := $(OPENAL_OBJ32)/Makefile
 OPENAL_CONFIGURE_FILES64 := $(OPENAL_OBJ64)/Makefile
-
 
 # 64bit-configure
 $(OPENAL_CONFIGURE_FILES64): SHELL = $(CONTAINER_SHELL64)
@@ -490,8 +495,6 @@ $(FFMPEG_CONFIGURE_FILES32): $(FFMPEG)/configure $(MAKEFILE_DEP) | $(FFMPEG_OBJ3
 
 ## ffmpeg goals
 
-# FIXME ffmpeg is optional in build_proton
-
 .PHONY: ffmpeg ffmpeg_configure ffmpeg32 ffmpeg64 ffmpeg_configure32 ffmpeg_configure64
 
 ffmpeg_configure: $(FFMPEG_CONFIGURE_FILES32) $(FFMPEG_CONFIGURE_FILES64)
@@ -579,7 +582,6 @@ lsteamclient64: $(LSTEAMCLIENT_CONFIGURE_FILES64) | $(WINE_BUILDTOOLS64) $(filte
 		[ x"$(STRIP)" = x ] || $(STRIP) ../$(LSTEAMCLIENT_OBJ64)/lsteamclient.dll.so && \
 		cp -a ./lsteamclient.dll.so ../$(DST_DIR)/lib64/wine/
 
-# FIXME Should depend on wine outputs
 lsteamclient32: SHELL = $(CONTAINER_SHELL32)
 lsteamclient32: $(LSTEAMCLIENT_CONFIGURE_FILES32) | $(WINE_BUILDTOOLS32) $(filter $(MAKECMDGOALS),wine64 wine32 wine)
 	cd $(LSTEAMCLIENT_OBJ32) && \
@@ -695,7 +697,7 @@ wine32-intermediate: $(WINE_CONFIGURE_FILES32)
 	cp -a ../$(WINE_DST32)/lib ../$(DST_DIR)/ && \
 	cp -a ../$(WINE_DST32)/bin/wine ../$(DST_DIR)/bin && \
 	cp -a ../$(WINE_DST32)/bin/wine-preloader ../$(DST_DIR)/bin/
-# FIXME not on Darwin^
+# TODO not on Darwin^
 
 ##
 ## vrclient
@@ -764,8 +766,6 @@ vrclient_configure64: $(VRCLIENT_CONFIGURE_FILES64)
 
 vrclient: vrclient32 vrclient64
 
-# FIXME ../$(WINE_OBJ32)/tools/winebuild needs to be part of wine dep chain
-
 vrclient64: SHELL = $(CONTAINER_SHELL64)
 vrclient64: $(VRCLIENT_CONFIGURE_FILES64) | $(WINE_BUILDTOOLS64) $(filter $(MAKECMDGOALS),wine64 wine32 wine)
 	cd $(VRCLIENT_OBJ64) && \
@@ -792,7 +792,7 @@ vrclient32: $(VRCLIENT_CONFIGURE_FILES32) | $(WINE_BUILDTOOLS32) $(filter $(MAKE
 ## cmake -- necessary for openal, not part of steam runtime
 ##
 
-# FIXME Don't bother with this in native mode
+# TODO Don't bother with this in native mode
 
 ## Create & configure object directory for cmake
 
@@ -847,6 +847,8 @@ cmake32-intermediate: $(CMAKE_CONFIGURE_FILES32) $(filter $(MAKECMDGOALS),cmake3
 ##
 ## dxvk
 ##
+
+# TODO Builds outside container, could simplify a lot if it did not.
 
 ## Create & configure object directory for dxvk
 
@@ -904,15 +906,15 @@ dxvk32: $(DXVK_CONFIGURE_FILES32)
 	cp "$(DXVK_OBJ32)"/bin/d3d11.dll "$(DST_DIR)"/lib/wine/dxvk/
 	( cd $(SRCDIR) && git submodule status -- dxvk ) > "$(DST_DIR)"/lib/wine/dxvk/version
 
-# TODO FIXME OS X
-# FIXME TODO build_libpng
-# FIXME TODO build_libjpeg
-# FIXME TODO build_libSDL
-# FIXME TODO build_moltenvk
+# TODO OS X
+#  build_libpng
+#  build_libjpeg
+#  build_libSDL
+#  build_moltenvk
 
-# TODO FIXME Tests
-# FIXME TODO build_vrclient64_tests
-# FIXME TODO build_vrclient32_tests
+# TODO Tests
+#  build_vrclient64_tests
+#  build_vrclient32_tests
 
 
 endif # End of NESTED_MAKE from beginning
