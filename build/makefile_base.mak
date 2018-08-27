@@ -1,8 +1,30 @@
 ##
+## Nested make
+##
+
+ifneq ($(NO_NESTED_MAKE),1)
+# Pass all variables/goals to ourselves as a sub-make such that we will get a trailing error message upon failure.  (We
+# invoke a lot of long-running build-steps, and make fails to re-print errors when they happened ten thousand lines
+# ago.)
+export
+.DEFAULT_GOAL := default
+.PHONY: $(MAKECMDGOALS) default nested_make
+$(MAKECMDGOALS): nested_make
+
+nested_make:
+	$(MAKE) $(MAKECMDGOALS) -f ../build/makefile_base.mak NO_NESTED_MAKE=1
+
+else # (Rest of the file is the else)
+
+##
 ## Config
 ##
 
-# FIXME If CC is coming from make's defaults or nowhere, use our own default.  Otherwise respect environment.
+ifeq ($(SRCDIR),)
+	foo := $(error SRCDIR not set, do not include makefile_base directly, run ./configure.sh to generate Makefile)
+endif
+
+# If CC is coming from make's defaults or nowhere, use our own default.  Otherwise respect environment.
 ifneq ($(filter default undefined,$(origin CC)),)
 	CC = ccache gcc
 endif
@@ -854,3 +876,6 @@ dxvk32: $(DXVK_CONFIGURE_FILES32)
 # TODO FIXME Tests
 # FIXME TODO build_vrclient64_tests
 # FIXME TODO build_vrclient32_tests
+
+
+endif # End of NESTED_MAKE from beginning
