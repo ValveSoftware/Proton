@@ -239,13 +239,15 @@ all64_configure: $(addsuffix 64_configure,$(GOAL_TARGETS))
 	@echo ":: make $@ succeeded"
 
 ##
-## install -- steps to finalize the install
+## dist/install -- steps to finalize the install
 ##
 
 # FIXME Missing license step
 
 $(DST_DIR):
 	mkdir -p $@
+
+STEAM_DIR := $(HOME)/.steam/root
 
 DIST_COPY_FILES := toolmanifest.vdf filelock.py proton user_settings.sample.py
 DIST_COPY_TARGETS := $(addprefix $(DST_BASE)/,$(DIST_COPY_FILES))
@@ -285,6 +287,13 @@ $(DIST_COMPAT_MANIFEST): $(COMPAT_MANIFEST_TEMPLATE) $(MAKEFILE_DEP) | $(DST_DIR
 dist: $(DIST_TARGETS) | $(WINE_OUT) $(filter $(MAKECMDGOALS),wine64 wine32 wine) $(DST_DIR)
 	WINEPREFIX=$(abspath $(DIST_PREFIX)) $(WINE_OUT_BIN) wineboot && \
 		WINEPREFIX=$(abspath $(DIST_PREFIX)) $(WINE_OUT_SERVER) -w
+
+install: dist
+	if [ ! -d $(STEAM_DIR) ]; then echo >&2 "!! "$(STEAM_DIR)" does not exist, cannot install"; return 1; fi
+	mkdir -p $(STEAM_DIR)/compatibilitytools.d/$(BUILD_NAME)
+	cp -a $(DST_BASE)/* $(STEAM_DIR)/compatibilitytools.d/$(BUILD_NAME)
+	@echo "Installed Proton to "$(STEAM_DIR)/compatibilitytools.d/$(BUILD_NAME)
+	@echo "You may need to restart Steam to select this tool"
 
 ##
 ## freetype
