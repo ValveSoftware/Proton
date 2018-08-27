@@ -333,7 +333,7 @@ function build_lsteamclient64
         --dll .
     CXXFLAGS="-Wno-attributes -O2" CFLAGS="-O2 -g" PATH="$TOOLS_DIR64/bin:$PATH" $AMD64_WRAPPER make $JOBS
     if [ x"$STRIP" != x ]; then
-        $AMD64_WRAPPER $STRIP lsteamclient.dll.so
+        $AMD64_WRAPPER "$STRIP" lsteamclient.dll.so
     fi
     cp -a lsteamclient.dll.so "$DST_DIR"/lib64/wine/
 }
@@ -355,7 +355,7 @@ function build_lsteamclient32
         --dll .
     CXXFLAGS="-Wno-attributes -O2" CFLAGS="-O2 -g" PATH="$TOOLS_DIR32/bin:$PATH" $I386_WRAPPER make $JOBS
     if [ x"$STRIP" != x ]; then
-        $I386_WRAPPER $STRIP lsteamclient.dll.so
+        $I386_WRAPPER "$STRIP" lsteamclient.dll.so
     fi
     cp -a lsteamclient.dll.so "$DST_DIR"/lib/wine/
 }
@@ -378,7 +378,7 @@ function build_vrclient64
     CXXFLAGS="-Wno-attributes -std=c++0x -O2 -g" CFLAGS="-O2 -g" PATH="$TOOLS_DIR64/bin:$PATH" $AMD64_WRAPPER make $JOBS -C vrclient_x64
     PATH="$TOOLS_DIR64/bin:$PATH" $AMD64_WRAPPER winebuild --dll --fake-module -E vrclient_x64/vrclient_x64.spec -o vrclient_x64.dll.fake
     if [ x"$STRIP" != x ]; then
-        $AMD64_WRAPPER $STRIP vrclient_x64/vrclient_x64.dll.so
+        $AMD64_WRAPPER "$STRIP" vrclient_x64/vrclient_x64.dll.so
     fi
     cp -a vrclient_x64/vrclient_x64.dll.so "$DST_DIR"/lib64/wine/
     cp -a vrclient_x64.dll.fake "$DST_DIR"/lib64/wine/fakedlls/vrclient_x64.dll
@@ -421,7 +421,7 @@ function build_vrclient32
     CXXFLAGS="-Wno-attributes -std=c++0x -O2 -g" CFLAGS="-O2 -g" PATH="$TOOLS_DIR32/bin:$PATH" $I386_WRAPPER make $JOBS -C vrclient
     PATH="$TOOLS_DIR32/bin:$PATH" $I386_WRAPPER winebuild --dll --fake-module -E vrclient/vrclient.spec -o vrclient.dll.fake
     if [ x"$STRIP" != x ]; then
-        $I386_WRAPPER $STRIP vrclient/vrclient.dll.so
+        $I386_WRAPPER "$STRIP" vrclient/vrclient.dll.so
     fi
     cp -a vrclient/vrclient.dll.so "$DST_DIR"/lib/wine/
     cp -a vrclient.dll.fake "$DST_DIR"/lib/wine/fakedlls/vrclient.dll
