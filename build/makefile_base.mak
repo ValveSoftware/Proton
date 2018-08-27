@@ -242,8 +242,6 @@ all64_configure: $(addsuffix 64_configure,$(GOAL_TARGETS))
 ## dist/install -- steps to finalize the install
 ##
 
-# FIXME Missing license step
-
 $(DST_DIR):
 	mkdir -p $@
 
@@ -257,8 +255,14 @@ DIST_OVR32 := $(DST_DIR)/lib/wine/dxvk/openvr_api_dxvk.dll
 DIST_OVR64 := $(DST_DIR)/lib64/wine/dxvk/openvr_api_dxvk.dll
 DIST_PREFIX := $(DST_DIR)/share/default_pfx/
 DIST_COMPAT_MANIFEST := $(DST_BASE)/compatibilitytool.vdf
+DIST_LICENSE := $(DST_DIR)/LICENSE
 
-DIST_TARGETS := $(DIST_COPY_TARGETS) $(DIST_VERSION) $(DIST_VERSION_OUTER) $(DIST_OVR32) $(DIST_OVR64) $(DIST_COMPAT_MANIFEST)
+DIST_TARGETS := $(DIST_COPY_TARGETS) $(DIST_VERSION) $(DIST_VERSION_OUTER) $(DIST_OVR32) $(DIST_OVR64) \
+                $(DIST_COMPAT_MANIFEST) $(DIST_LICENSE)
+
+# TODO OS X license
+$(DIST_LICENSE): $(SRCDIR)/dist.LICENSE.lin
+	cp -a $< $@
 
 $(DIST_OVR32): $(SRCDIR)/openvr/bin/win32/openvr_api.dll | $(DST_DIR)
 	mkdir -p $(DST_DIR)/lib/wine/dxvk
