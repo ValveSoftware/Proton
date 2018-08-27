@@ -589,8 +589,12 @@ wine: wine32 wine64
 # WINE_OUT and WINE_BUILDTOOLS are outputs needed by other rules, though we don't explicitly track all state here --
 # make all or make wine are needed to ensure all deps are up to date, this just ensures 'make dist' or 'make vrclient'
 # will drag in wine if you've never built wine.
-$(WINE_BUILDTOOLS64) $(WINE_OUT) wine64: SHELL = $(CONTAINER_SHELL64)
-$(WINE_BUILDTOOLS64) $(WINE_OUT) wine64: $(WINE_CONFIGURE_FILES64)
+.INTERMEDIATE: wine64-intermediate wine32-intermediate
+
+$(WINE_BUILDTOOLS64) $(WINE_OUT) wine64: wine64-intermediate
+
+wine64-intermediate: SHELL = $(CONTAINER_SHELL64)
+wine64-intermediate: $(WINE_CONFIGURE_FILES64)
 	cd $(WINE_OBJ64) && \
 		env STRIP="$(STRIP)" $(MAKE) && \
 		INSTALL_PROGRAM_FLAGS="$(INSTALL_PROGRAM_FLAGS)" STRIP="$(STRIP)" $(MAKE) install-lib && \
@@ -603,8 +607,10 @@ $(WINE_BUILDTOOLS64) $(WINE_OUT) wine64: $(WINE_CONFIGURE_FILES64)
 
 ## This installs 32-bit stuff manually, see
 ##   https://wiki.winehq.org/Packaging#WoW64_Workarounds
-$(WINE_BUILDTOOLS32) wine32: SHELL = $(CONTAINER_SHELL32)
-$(WINE_BUILDTOOLS32) wine32: $(WINE_CONFIGURE_FILES32)
+$(WINE_BUILDTOOLS32) wine32: wine32-intermediate
+
+wine32-intermediate: SHELL = $(CONTAINER_SHELL32)
+wine32-intermediate: $(WINE_CONFIGURE_FILES32)
 	cd $(WINE_OBJ32) && \
 	STRIP="$(STRIP)" \
 		$(MAKE) && \
@@ -750,14 +756,22 @@ cmake_configure64: $(CMAKE_CONFIGURE_FILES64)
 
 cmake: cmake32 cmake64
 
-$(CMAKE_BIN64) cmake64: SHELL = $(CONTAINER_SHELL64)
-$(CMAKE_BIN64) cmake64: $(CMAKE_CONFIGURE_FILES64)
+# These have multiple targets that come from one invocation.  The way to do that is to have both targets on a single
+# intermediate.
+.INTERMEDIATE: cmake64-intermediate cmake32-intermediate
+
+$(CMAKE_BIN64) cmake64: cmake64-intermediate
+
+cmake64-intermediate: SHELL = $(CONTAINER_SHELL64)
+cmake64-intermediate: $(CMAKE_CONFIGURE_FILES64) $(filter $(MAKECMDGOALS),cmake64)
 	cd $(CMAKE_OBJ64) && \
 		$(MAKE) && $(MAKE) install && \
 		touch ../$(CMAKE_BIN64)
 
-$(CMAKE_BIN32) cmake32: SHELL = $(CONTAINER_SHELL32)
-$(CMAKE_BIN32) cmake32: $(CMAKE_CONFIGURE_FILES32)
+$(CMAKE_BIN32) cmake32: cmake32-intermediate
+
+cmake32-intermediate: SHELL = $(CONTAINER_SHELL32)
+cmake32-intermediate: $(CMAKE_CONFIGURE_FILES32) $(filter $(MAKECMDGOALS),cmake32)
 	cd $(CMAKE_OBJ32) && \
 		$(MAKE) && $(MAKE) install && \
 		touch ../$(CMAKE_BIN32)
