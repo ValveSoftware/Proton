@@ -28,6 +28,7 @@ else # (Rest of the file is the else)
 # We expect the configure script to conditionally set the following:
 #   SRCDIR          - Path to source
 #   NO_DXVK         - 1 if skipping DXVK steps
+#   OSX             - 1 if OS X build
 #   STEAMRT64_MODE  - 'docker' or '' for automatic Steam Runtime container
 #   STEAMRT64_IMAGE - Name of the image if mode is set
 #   STEAMRT32_MODE  - Same as above for 32-bit container (can be different type)
@@ -132,6 +133,10 @@ MAKEFILE_DEP :=
 endif
 
 COMPAT_MANIFEST_TEMPLATE := $(SRCDIR)/compatibilitytool.vdf.template
+LICENSE := $(SRCDIR)/dist.LICENSE.lin
+ifeq ($(OSX),1)
+	LICENSE := $(SRCDIR)/dist.LICENSE.osx
+endif
 
 TOOLS_DIR32 := ./obj-tools32
 TOOLS_DIR64 := ./obj-tools64
@@ -276,8 +281,7 @@ DIST_LICENSE := $(DST_DIR)/LICENSE
 DIST_TARGETS := $(DIST_COPY_TARGETS) $(DIST_VERSION) $(DIST_VERSION_OUTER) $(DIST_OVR32) $(DIST_OVR64) \
                 $(DIST_COMPAT_MANIFEST) $(DIST_LICENSE)
 
-# TODO OS X license
-$(DIST_LICENSE): $(SRCDIR)/dist.LICENSE.lin
+$(DIST_LICENSE): $(LICENSE)
 	cp -a $< $@
 
 $(DIST_OVR32): $(SRCDIR)/openvr/bin/win32/openvr_api.dll | $(DST_DIR)

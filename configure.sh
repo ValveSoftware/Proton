@@ -90,6 +90,11 @@ function configure() {
     echo >> "$MAKEFILE" "NO_DXVK := 1"
   fi
 
+  # OS X?
+  if [[ -n $OSX ]]; then
+    echo >> "$MAKEFILE" "OSX := 1"
+  fi
+
   # SteamRT
   echo >> "$MAKEFILE" "STEAMRT64_MODE  := $(escape_for_make "$steamrt64_type")"
   echo >> "$MAKEFILE" "STEAMRT64_IMAGE := $(escape_for_make "$steamrt64_name")"
