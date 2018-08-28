@@ -237,7 +237,6 @@ OPENAL_OBJ64 := ./obj-openal64
 FFMPEG := $(SRCDIR)/ffmpeg
 FFMPEG_OBJ32 := ./obj-ffmpeg32
 FFMPEG_OBJ64 := ./obj-ffmpeg64
-# TODO if perserving OS X support
 FFMPEG_CROSS_CFLAGS :=
 FFMPEG_CROSS_LDFLAGS :=
 
@@ -1319,9 +1318,6 @@ dxvk32: $(DXVK_CONFIGURE_FILES32)
 
 endif # NO_DXVK
 
-# TODO OS X
-#  build_moltenvk
-
 # TODO Tests
 #  build_vrclient64_tests
 #  build_vrclient32_tests
@@ -1336,8 +1332,6 @@ endif # NO_DXVK
 # Produce a working dist directory by default
 default: all dist
 .DEFAULT_GOAL := default
-
-# TODO ffmpeg is optional, disabled
 
 # For suffixes 64/32/_configure64/_configure32 automatically check if they exist compared to ALL_TARGETS and make
 # all_configure32/etc aliases
