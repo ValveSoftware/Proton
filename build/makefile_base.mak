@@ -210,9 +210,12 @@ default: all dist
 
 # TODO ffmpeg is optional, disabled
 
-GOAL_TARGETS_LIBS := openal lsteamclient vrclient dxvk dist
-GOAL_TARGETS      := wine $(GOAL_TARGETS_LIBS)
+# All top level goals.  Lazy evaluated so they can be added below.
+GOAL_TARGETS = $(GOAL_TARGETS_LIBS)
+# Excluding goals like wine and dist that are either long running or slow per invocation
+GOAL_TARGETS_LIBS =
 
+# All target
 all: $(GOAL_TARGETS)
 	@echo ":: make $@ succeeded"
 
@@ -224,7 +227,6 @@ all64: $(addsuffix 64,$(GOAL_TARGETS))
 
 # Libraries (not wine) only -- wine has a length install step that runs unconditionally, so this is useful for updating
 # incremental builds when not iterating on wine itself.
-
 all-lib: $(GOAL_TARGETS_LIBS)
 	@echo ":: make $@ succeeded"
 
@@ -291,6 +293,8 @@ $(DIST_COMPAT_MANIFEST): $(COMPAT_MANIFEST_TEMPLATE) $(MAKEFILE_DEP) | $(DST_DIR
 	sed -r 's|//##DISPLAY_NAME##|"display_name" "'$(BUILD_NAME)'"|' $< > $@
 
 .PHONY: dist
+
+GOAL_TARGETS += dist
 
 # Only drag in WINE_OUT if they need to be built at all, otherwise this doesn't imply a rebuild of wine.  If wine is in
 # the explicit targets, specify that this should occur after.
@@ -384,6 +388,7 @@ $(OPENAL_CONFIGURE_FILES32): $(OPENAL)/CMakeLists.txt $(MAKEFILE_DEP) $(CMAKE_BI
 ## OpenAL goals
 
 .PHONY: openal openal_configure openal32 openal64 openal_configure32 openal_configure64
+GOAL_TARGETS_LIBS += openal
 
 openal_configure: $(OPENAL_CONFIGURE_FILES32) $(OPENAL_CONFIGURE_FILES64)
 
@@ -566,6 +571,8 @@ $(LSTEAMCLIENT_CONFIGURE_FILES32): $(LSTEAMCLIENT) $(WINEMAKER) $(MAKEFILE_DEP) 
 
 .PHONY: lsteamclient lsteamclient_configure lsteamclient32 lsteamclient64 lsteamclient_configure32 lsteamclient_configure64
 
+GOAL_TARGETS_LIBS += lsteamclient
+
 lsteamclient_configure: $(LSTEAMCLIENT_CONFIGURE_FILES32) $(LSTEAMCLIENT_CONFIGURE_FILES64)
 
 lsteamclient_configure64: $(LSTEAMCLIENT_CONFIGURE_FILES64)
@@ -649,6 +656,8 @@ $(WINE_CONFIGURE_FILES32): $(MAKEFILE_DEP) | $(WINE_OBJ32)
 ## wine goals
 
 .PHONY: wine wine_configure wine32 wine64 wine_configure32 wine_configure64
+
+GOAL_TARGETS += wine
 
 wine_configure: $(WINE_CONFIGURE_FILES32) $(WINE_CONFIGURE_FILES64)
 
@@ -758,6 +767,8 @@ $(VRCLIENT_CONFIGURE_FILES32): $(MAKEFILE_DEP) $(VRCLIENT32) | $(VRCLIENT_OBJ32)
 
 .PHONY: vrclient vrclient_configure vrclient32 vrclient64 vrclient_configure32 vrclient_configure64
 
+GOAL_TARGETS_LIBS += vrclient
+
 vrclient_configure: $(VRCLIENT_CONFIGURE_FILES32) $(VRCLIENT_CONFIGURE_FILES64)
 
 vrclient_configure32: $(VRCLIENT_CONFIGURE_FILES32)
@@ -852,6 +863,8 @@ cmake32-intermediate: $(CMAKE_CONFIGURE_FILES32) $(filter $(MAKECMDGOALS),cmake3
 
 ## Create & configure object directory for dxvk
 
+ifneq ($(NO_DXVK),1) # May be disabled by configure
+
 DXVK_CONFIGURE_FILES32 := $(DXVK_OBJ32)/build.ninja
 DXVK_CONFIGURE_FILES64 := $(DXVK_OBJ64)/build.ninja
 
@@ -876,6 +889,8 @@ $(DXVK_CONFIGURE_FILES32): $(MAKEFILE_DEP) | $(DXVK_OBJ32)
 ## dxvk goals
 
 .PHONY: dxvk dxvk_configure dxvk32 dxvk64 dxvk_configure32 dxvk_configure64
+
+GOAL_TARGETS_LIBS += dxvk
 
 dxvk_configure: $(DXVK_CONFIGURE_FILES32) $(DXVK_CONFIGURE_FILES64)
 
@@ -905,6 +920,8 @@ dxvk32: $(DXVK_CONFIGURE_FILES32)
 	cp "$(DXVK_OBJ32)"/bin/dxgi.dll "$(DST_DIR)"/lib/wine/dxvk/
 	cp "$(DXVK_OBJ32)"/bin/d3d11.dll "$(DST_DIR)"/lib/wine/dxvk/
 	( cd $(SRCDIR) && git submodule status -- dxvk ) > "$(DST_DIR)"/lib/wine/dxvk/version
+
+endif # NO_DXVK
 
 # TODO OS X
 #  build_libpng
