@@ -27,6 +27,7 @@ else # (Rest of the file is the else)
 
 # We expect the configure script to conditionally set the following:
 #   SRCDIR          - Path to source
+#   BUILD_NAME      - Name of the build for manifests etc.
 #   NO_DXVK         - 1 if skipping DXVK steps
 #   OSX             - 1 if OS X build
 #   STEAMRT64_MODE  - 'docker' or '' for automatic Steam Runtime container
@@ -48,10 +49,6 @@ endif
 
 export CC
 export CXX
-
-# Local name of this build, for dist/install steps
-# TODO Let configure.sh set/propagate this
-BUILD_NAME ?= proton-localbuild
 
 # Selected container mode shell
 DOCKER_SHELL_BASE = sudo docker run --rm --init -v $(HOME):$(HOME) -w $(CURDIR) \
