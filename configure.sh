@@ -117,7 +117,7 @@ function configure() {
   echo >> "$MAKEFILE" ""
   echo >> "$MAKEFILE" "include \$(SRCDIR)/build/makefile_base.mak"
 
-  stat "Created $MAKEFILE, run now make to build."
+  stat "Created $MAKEFILE, now run make to build."
   stat "  See BUILDING.md for make targets and instructions"
 }
 
