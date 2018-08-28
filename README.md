@@ -180,10 +180,10 @@ Proton can be tuned at runtime to help certain games run. The Steam client sets
 some options for known games using the <tt>STEAM_COMPAT_CONFIG</tt> variable.
 You can override these options using the environment variables described below.
 The best way to set these environment overrides for all games is by renaming
-"user_settings.sample.py" to "user_settings.py" and modifying it appropriately.
-If you want to set different `PROTON_` variables than the "user_settings.py" for a specific game, 
-use the `Set Launch Options` under the games `Properties`. You can launch the
-game as you would with `PROTON_VARIABLE=1 %command%` [(source)](https://superuser.com/questions/954041/how-to-set-an-environment-variable-for-an-specific-game-on-steam-for-linux#980437).
+`user_settings.sample.py` to `user_settings.py` and modifying it appropriately.
+If you want to change the runtime configuration for a specific game, you can
+use the `Set Launch Options` setting in the game's `Properties` dialog in the Steam client. You can launch the
+game as you would with "`PROTON_VARIABLE=1 %command%`" [(source)](https://superuser.com/questions/954041/how-to-set-an-environment-variable-for-an-specific-game-on-steam-for-linux#980437).
 
 To enable an option, set the variable to a non-<tt>0</tt> value.  To disable an
 option, set the variable to <tt>0</tt>. To use Steam's default configuration, do
@@ -194,6 +194,9 @@ the Wine prefix. Removing the option will revert to the previous behavior.
 
 | Compat config string  | Environment Variable           | Description  |
 | :-------------------- | :----------------------------- | :----------- |
+|                       | <tt>PROTON_LOG</tt>            | Convenience method for dumping a useful debug log to `$HOME/steam-$APPID.log`. For more thorough logging, use `user_settings.py`. |
+|                       | <tt>PROTON_DUMP_DEBUG_COMMANDS</tt> | When running a game, Proton will write some useful debug scripts for that game into `$PROTON_DEBUG_DIR/proton_$USER/`. |
+|                       | <tt>PROTON_DEBUG_DIR<tt>       | Root directory for the Proton debug scripts, `/tmp` by default. |
 | <tt>wined3d11</tt>    | <tt>PROTON_USE_WINED3D11</tt>  | Use OpenGL-based wined3d instead of Vulkan-based DXVK for d3d11. |
 | <tt>nod3d11</tt>      | <tt>PROTON_NO_D3D11</tt>       | Disable <tt>d3d11.dll</tt>, for games which can fall back to and run better with d3d9. |
 | <tt>noesync</tt>      | <tt>PROTON_NO_ESYNC</tt>       | Do not use eventfd-based in-process synchronization primitives. |

@@ -1,6 +1,8 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python
 
 #script to launch Wine with the correct environment
+
+from __future__ import print_function
 
 import filecmp
 import json
@@ -107,6 +109,7 @@ dlloverrides = {}
 #for performance, logging is disabled by default; override with user_settings.py
 env["DXVK_LOG_LEVEL"] = "none"
 env["WINEDEBUG"] = "-all"
+env.pop("WINEARCH", "")
 
 if ld_path_var in os.environ:
     env[ld_path_var] = lib64dir + ":" + libdir + ":" + os.environ[ld_path_var]
@@ -129,6 +132,9 @@ with dist_lock:
 
 prefix = os.environ["STEAM_COMPAT_DATA_PATH"] + "/pfx/"
 env["WINEPREFIX"] = prefix
+
+if "PROTON_LOG" in env:
+    env["WINEDEBUG"] = "+timestamp,+pid,+tid,+seh,+debugstr,+module"
 
 #load environment overrides
 if os.path.exists(basedir + "/user_settings.py"):
@@ -320,7 +326,8 @@ if "nod3d11" in config_opts:
         del dlloverrides["dxgi"]
 
 s = ""
-for dll, setting in dlloverrides.iteritems():
+for dll in dlloverrides:
+    setting = dlloverrides[dll]
     if len(s) > 0:
         s = s + ";" + dll + "=" + setting
     else:
@@ -335,7 +342,7 @@ def determine_architecture(path):
     try:
         with open(path, "rb") as f:
             magic = f.read(2)
-            if magic != "MZ":
+            if magic != b"MZ":
                 return ARCH_UNKNOWN
             f.seek(0x18)
             reloc = struct.unpack('<H', f.read(2))[0]
@@ -346,7 +353,7 @@ def determine_architecture(path):
             pe_offs = struct.unpack('<L', f.read(4))[0]
             f.seek(pe_offs)
             magic = f.read(4)
-            if magic != "PE\0\0":
+            if magic != b"PE\0\0":
                 return ARCH_UNKNOWN
             f.seek(pe_offs + 4)
             arch = struct.unpack('<H', f.read(2))[0]
@@ -381,15 +388,18 @@ def dump_dbg_env(f):
 def dump_dbg_scripts():
     exe_name = os.path.basename(sys.argv[2])
 
-    with open("/tmp/proton_winedbg", "w") as f:
+    dir = env.get("PROTON_DEBUG_DIR", "/tmp") + "/proton_" + os.environ["USER"] + "/"
+    makedirs(dir)
+
+    with open(dir + "winedbg", "w") as f:
         f.write("#!/bin/bash\n")
         f.write("#Run winedbg with args\n\n")
         f.write("cd \"" + os.getcwd() + "\"\n")
         dump_dbg_env(f)
         f.write("\t\"" + wine_path + "\" winedbg \"$@\"\n")
-    os.chmod("/tmp/proton_winedbg", 0755)
+    os.chmod(dir + "winedbg", 0o755)
 
-    with open("/tmp/proton_winedbg_run", "w") as f:
+    with open(dir + "winedbg_run", "w") as f:
         f.write("#!/bin/bash\n")
         f.write("#Run winedbg and prepare to run game or given program\n\n")
         f.write("cd \"" + os.getcwd() + "\"\n")
@@ -404,14 +414,14 @@ def dump_dbg_scripts():
         f.write(")\n")
         dump_dbg_env(f)
         f.write("\t\"" + wine_path + "\" winedbg \"${@:-${DEF_CMD[@]}}\"\n")
-    os.chmod("/tmp/proton_winedbg_run", 0755)
+    os.chmod(dir + "winedbg_run", 0o755)
 
-    with open("/tmp/proton_gdb_attach", "w") as f:
+    with open(dir + "gdb_attach", "w") as f:
         f.write("#!/bin/bash\n")
         f.write("#Run winedbg in gdb mode and auto-attach to already-running program\n\n")
         f.write("cd \"" + os.getcwd() + "\"\n")
         f.write("EXE_NAME=${1:-\"" + exe_name + "\"}\n")
-        f.write("WPID_HEX=$(/tmp/proton_winedbg --command 'info process' | grep -i \"$EXE_NAME\" | cut -f2 -d' ' | tr -d '0')\n")
+        f.write("WPID_HEX=$(\"" + dir + "winedbg\" --command 'info process' | grep -i \"$EXE_NAME\" | cut -f2 -d' ' | tr -d '0')\n")
         f.write("if [ -z \"$WPID_HEX\" ]; then \n")
         f.write("    echo \"Program does not appear to be running: \\\"$EXE_NAME\\\"\"\n")
         f.write("    exit 1\n")
@@ -419,9 +429,9 @@ def dump_dbg_scripts():
         f.write("WPID_DEC=$(printf %d 0x$WPID_HEX)\n")
         dump_dbg_env(f)
         f.write("\t\"" + wine_path + "\" winedbg --gdb $WPID_DEC\n")
-    os.chmod("/tmp/proton_gdb_attach", 0755)
+    os.chmod(dir + "gdb_attach", 0o755)
 
-    with open("/tmp/proton_gdb_run", "w") as f:
+    with open(dir + "gdb_run", "w") as f:
         f.write("#!/bin/bash\n")
         f.write("#Run winedbg in gdb mode and prepare to run game or given program\n\n")
         f.write("cd \"" + os.getcwd() + "\"\n")
@@ -436,9 +446,9 @@ def dump_dbg_scripts():
         f.write(")\n")
         dump_dbg_env(f)
         f.write("\t\"" + wine_path + "\" winedbg --gdb \"${@:-${DEF_CMD[@]}}\"\n")
-    os.chmod("/tmp/proton_gdb_run", 0755)
+    os.chmod(dir + "gdb_run", 0o755)
 
-    with open("/tmp/proton_run", "w") as f:
+    with open(dir + "run", "w") as f:
         f.write("#!/bin/bash\n")
         f.write("#Run game or given command in environment\n\n")
         f.write("cd \"" + os.getcwd() + "\"\n")
@@ -456,17 +466,26 @@ def dump_dbg_scripts():
             f.write("\t\"" + wine_path + "\" start \"${@:-${DEF_CMD[@]}}\"\n")
         else:
             f.write("\t\"" + wine_path + "\" \"${@:-${DEF_CMD[@]}}\"\n")
-    os.chmod("/tmp/proton_run", 0755)
+    os.chmod(dir + "run", 0o755)
 
 def run():
-#    if "PROTON_DUMP_DEBUG_COMMAND" in os.environ: #for now, we are always dumping the debug scripts
-        dump_dbg_scripts()
-#    else: #see above
-        if game_arch == ARCH_UNKNOWN:
-            #probably a batch script or something, hopefully start.exe can handle it
-            run_wine([wine_path, "start", "/unix"] + sys.argv[2:])
-        else:
-            run_wine([wine_path] + sys.argv[2:])
+    if "PROTON_DUMP_DEBUG_COMMANDS" in env:
+        try:
+            dump_dbg_scripts()
+        except:
+            log("Unable to write debug scripts! " + str(sys.exc_info()[1]))
+    if game_arch == ARCH_UNKNOWN:
+        #probably a batch script or something, hopefully start.exe can handle it
+        run_wine([wine_path, "start", "/unix"] + sys.argv[2:])
+    else:
+        run_wine([wine_path] + sys.argv[2:])
+
+if sys.version_info[0] == 2:
+    binary_stdout = sys.stdout
+elif sys.version_info[0] == 3:
+    binary_stdout = sys.stdout.buffer
+else:
+    raise Exception("Unsupported python version")
 
 #determine mode
 if sys.argv[1] == "run":
@@ -480,11 +499,11 @@ elif sys.argv[1] == "waitforexitandrun":
 elif sys.argv[1] == "getcompatpath":
     #linux -> windows path
     path = subprocess.check_output([wine_path, "winepath", "-w", sys.argv[2]], env=env, stderr=lfile)
-    sys.stdout.write(path)
+    binary_stdout.write(path)
 elif sys.argv[1] == "getnativepath":
     #windows -> linux path
     path = subprocess.check_output([wine_path, "winepath", sys.argv[2]], env=env, stderr=lfile)
-    sys.stdout.write(path)
+    binary_stdout.write(path)
 else:
     log("Need a verb.")
     sys.exit(1)

@@ -16,7 +16,7 @@ usage()
 
 set -e
 
-JOBS=-j5
+JOBS=-j"$(( $(nproc 2>/dev/null||sysctl -n hw.ncpu 2>/dev/null||echo 4) + 1))"
 PLATFORM=$(uname)
 
 [ -z "$STEAM_RUNTIME" ] && STEAM_RUNTIME="$HOME/steam-runtime"
@@ -29,7 +29,7 @@ function build_freetype
 {
     cd "$TOP"/freetype2
 
-    if [ ! -e "$TOOLS_DIR64"/lib/libprotonfreetype.$LIB_SUFFIX ]; then
+    if [ ! -e "$TOOLS_DIR64"/lib/libprotonfreetype."$LIB_SUFFIX" ]; then
         sed -i -e 's/^LIBRARY.*/LIBRARY=libprotonfreetype/' builds/unix/unix-cc.in
 
         bash ./autogen.sh
@@ -65,7 +65,7 @@ function build_libpng
         bash ./autogen.sh
     fi
 
-    if [ ! -e "$TOOLS_DIR64"/lib/libprotonpng16.$LIB_SUFFIX ]; then
+    if [ ! -e "$TOOLS_DIR64"/lib/libprotonpng16."$LIB_SUFFIX" ]; then
         #libpng 32-bit
         mkdir -p "$TOP"/build/libpng.win32
         cd "$TOP"/build/libpng.win32
@@ -98,7 +98,7 @@ function build_libjpeg
     #if this fails with an nasm error, install a newer nasm with
     #homebrew or the like and put it into your PATH
 
-    if [ ! -e "$TOOLS_DIR64"/lib/libprotonjpeg.$LIB_SUFFIX ]; then
+    if [ ! -e "$TOOLS_DIR64"/lib/libprotonjpeg."$LIB_SUFFIX" ]; then
         #libjpeg 32-bit
         mkdir -p "$TOP"/build/libjpeg.win32
         cd "$TOP"/build/libjpeg.win32
@@ -125,12 +125,12 @@ function build_libjpeg
 
 function build_openal
 {
-    if [ ! -e "$TOOLS_DIR64"/lib/libopenal.$LIB_SUFFIX ]; then
+    if [ ! -e "$TOOLS_DIR64"/lib/libopenal."$LIB_SUFFIX" ]; then
         #openal 32-bit
         cd "$TOP"
         mkdir -p build/openal.win32
         cd build/openal.win32
-        $I386_WRAPPER $CMAKE32 "$TOP"/openal-soft -DALSOFT_EXAMPLES=OFF -DCMAKE_C_FLAGS="-m32" -DCMAKE_INSTALL_PREFIX="$TOOLS_DIR32"
+        $I386_WRAPPER "$CMAKE32" "$TOP"/openal-soft -DALSOFT_EXAMPLES=OFF -DCMAKE_C_FLAGS="-m32" -DCMAKE_INSTALL_PREFIX="$TOOLS_DIR32"
         $I386_WRAPPER make $JOBS VERBOSE=1
         $I386_WRAPPER make install VERBOSE=1
 
@@ -138,15 +138,15 @@ function build_openal
         cd "$TOP"
         mkdir -p build/openal.win64
         cd build/openal.win64
-        $AMD64_WRAPPER $CMAKE64 "$TOP"/openal-soft -DCMAKE_INSTALL_PREFIX="$TOOLS_DIR64"
+        $AMD64_WRAPPER "$CMAKE64" "$TOP"/openal-soft -DCMAKE_INSTALL_PREFIX="$TOOLS_DIR64"
         $AMD64_WRAPPER make $JOBS VERBOSE=1
         $AMD64_WRAPPER make install VERBOSE=1
     fi
 
     cp -L "$TOOLS_DIR32"/lib/libopenal* "$DST_DIR"/lib/
     cp -L "$TOOLS_DIR64"/lib/libopenal* "$DST_DIR"/lib64/
-    $STRIP "$DST_DIR"/lib/libopenal.$LIB_SUFFIX
-    $STRIP "$DST_DIR"/lib64/libopenal.$LIB_SUFFIX
+    $STRIP "$DST_DIR"/lib/libopenal."$LIB_SUFFIX"
+    $STRIP "$DST_DIR"/lib64/libopenal."$LIB_SUFFIX"
 }
 
 function build_libSDL
@@ -174,13 +174,13 @@ function build_libSDL
         make install-lib
     fi
 
-    cp "$TOOLS_DIR32"/lib/libSDL2.$LIB_SUFFIX "$DST_DIR"/lib
-    $STRIP "$DST_DIR"/lib/libSDL2.$LIB_SUFFIX
-    install_name_tool -id @rpath/libSDL2.$LIB_SUFFIX "$DST_DIR"/lib/libSDL2.$LIB_SUFFIX
+    cp "$TOOLS_DIR32"/lib/libSDL2."$LIB_SUFFIX" "$DST_DIR"/lib
+    $STRIP "$DST_DIR"/lib/libSDL2."$LIB_SUFFIX"
+    install_name_tool -id @rpath/libSDL2."$LIB_SUFFIX" "$DST_DIR"/lib/libSDL2."$LIB_SUFFIX"
 
     cp "$TOOLS_DIR64"/lib/libSDL2.$LIB_SUFFIX "$DST_DIR"/lib64
-    $STRIP "$DST_DIR"/lib64/libSDL2.$LIB_SUFFIX
-    install_name_tool -id @rpath/libSDL2.$LIB_SUFFIX "$DST_DIR"/lib64/libSDL2.$LIB_SUFFIX
+    $STRIP "$DST_DIR"/lib64/libSDL2."$LIB_SUFFIX"
+    install_name_tool -id @rpath/libSDL2."$LIB_SUFFIX" "$DST_DIR"/lib64/libSDL2."$LIB_SUFFIX"
 }
 
 function build_moltenvk
@@ -285,7 +285,7 @@ function build_wine64
         JPEG_CFLAGS="$JPEG64_CFLAGS" JPEG_LIBS="$JPEG64_LIBS" ac_cv_lib_soname_jpeg="$ac_cv_lib_soname_jpeg64" \
         FREETYPE_CFLAGS="$FREETYPE64_CFLAGS" FREETYPE_LIBS="$FREETYPE64_LIBS" ac_cv_lib_soname_freetype="$ac_cv_lib_soname_freetype64" \
         $AMD64_WRAPPER "$TOP"/wine/configure \
-        --without-curses $WITHOUT_X \
+        --without-curses "$WITHOUT_X" \
         --enable-win64 --disable-tests --prefix="$DST_DIR"
     STRIP="$STRIP" $AMD64_WRAPPER make $JOBS
     INSTALL_PROGRAM_FLAGS="$INSTALL_PROGRAM_FLAGS" STRIP="$STRIP" $AMD64_WRAPPER make install-lib
@@ -302,7 +302,7 @@ function build_wine32
         JPEG_CFLAGS="$JPEG32_CFLAGS" JPEG_LIBS="$JPEG32_LIBS" ac_cv_lib_soname_jpeg="$ac_cv_lib_soname_jpeg32" \
         FREETYPE_CFLAGS="$FREETYPE32_CFLAGS" FREETYPE_LIBS="$FREETYPE32_LIBS" ac_cv_lib_soname_freetype="$ac_cv_lib_soname_freetype32" \
         $I386_WRAPPER "$TOP"/wine/configure \
-        --without-curses $WITHOUT_X \
+        --without-curses "$WITHOUT_X" \
         --disable-tests --prefix="$TOP/build/dist.win32/"
     STRIP="$STRIP" $I386_WRAPPER make $JOBS
     INSTALL_PROGRAM_FLAGS="$INSTALL_PROGRAM_FLAGS" STRIP="$STRIP" $I386_WRAPPER make install-lib
@@ -515,14 +515,14 @@ for (( i=1; i <= $#; i++)); do
     elif [ "$param" == "--build" ]; then
         i=$((i+1))
         if [ "$i" -gt "$#" ]; then
-            usage `basename $0`
+            usage "$(basename "$0")"
             exit 1
         fi
         BUILD_COMPONENTS="${!i}"
     elif [ "$param" == "--with-ffmpeg" ]; then
         WITH_FFMPEG=1
     else
-        usage `basename $0`
+        usage "$(basename "$0")"
         exit 1
     fi
 done
@@ -541,7 +541,7 @@ mkdir -p "$DST_DIR"/{bin,lib,lib64}
 mkdir -p "$TOOLS_DIR64"/lib{,64}
 
 if [ x"$RELEASE_BUILD" == x ]; then
-    set +e; CCACHE=`which ccache`; set -e
+    set +e; CCACHE="$(command -v ccache)"; set -e
 fi
 
 if [ "$PLATFORM" == "Darwin" ]; then
@@ -579,9 +579,9 @@ else
     fi
 
     gcc_ver=$($AMD64_WRAPPER gcc -v 2>&1 | grep 'gcc version' | cut -d' ' -f3)
-    gcc_maj=$(echo $gcc_ver | cut -d'.' -f1)
-    gcc_min=$(echo $gcc_ver | cut -d'.' -f2)
-    if [ $gcc_maj -lt 5 -o '(' $gcc_maj -eq 5 -a $gcc_min -lt 3 ')' ]; then
+    gcc_maj=$(echo "$gcc_ver" | cut -d'.' -f1)
+    gcc_min=$(echo "$gcc_ver" | cut -d'.' -f2)
+    if [ "$gcc_maj" -lt 5 ] || { [ "$gcc_maj" -eq 5 ] && [ "$gcc_min" -lt 3 ];}; then
         echo "need gcc >= 5.3"
         exit 1
     fi
@@ -645,7 +645,7 @@ case "$BUILD_COMPONENTS" in
         build_vrclient32
         ;;
     "wine") build_wine64; build_wine32 ;;
-    "wine32") build_wine64 ;;
+    "wine32") build_wine32 ;;
     "wine64") build_wine64 ;;
     "vrclient") build_vrclient32; build_vrclient64 ;;
     "vrclient32") build_vrclient32 ;;
