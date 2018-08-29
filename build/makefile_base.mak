@@ -69,7 +69,8 @@ ifeq ($(STEAMRT32_MODE),docker)
 else ifneq ($(STEAMRT32_MODE),)
 	foo := $(error Unrecognized STEAMRT32_MODE $(STEAMRT32_MODE))
 endif
-undefine SELECT_DOCKER_IMAGE
+
+SELECT_DOCKER_IMAGE :=
 
 # If we're using containers to sub-invoke the various builds, jobserver won't work, have some silly auto-jobs
 # controllable by SUBMAKE_JOBS.  Not ideal.
