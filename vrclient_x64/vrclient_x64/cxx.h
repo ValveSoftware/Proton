@@ -19,6 +19,8 @@
 /* Copied from dlls/msvcrt/cxx.h */
 #undef __thiscall
 
+#define __ASM_CFI(str) str
+
 #ifdef __APPLE__
 # define __ASM_NAME(name) "_" name
 # define FORCE_ALIGN

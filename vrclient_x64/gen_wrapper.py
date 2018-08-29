@@ -664,6 +664,7 @@ def generate_x64_call_flat_method(cfile, param_count, has_floats, is_4th_float):
 
     l(r"__ASM_GLOBAL_FUNC(%s," % name)
     l(r'    "subq $0x%x, %%rsp\n\t"' % stack_space);
+    l(r'    __ASM_CFI(".cfi_adjust_cfa_offset %d\n\t")' % stack_space)
 
     if is_4th_float:
         l(r'    "movq %%xmm3, 0x%x(%%rsp)\n\t"' % dst_offset)
@@ -689,6 +690,7 @@ def generate_x64_call_flat_method(cfile, param_count, has_floats, is_4th_float):
 
     l(r'    "call *%r11\n\t"')
     l(r'    "addq $0x%x, %%rsp\n\t"' % stack_space);
+    l(r'    __ASM_CFI(".cfi_adjust_cfa_offset -%d\n\t")' % stack_space)
     l(r'    "ret");')
     l(r'extern void %s(void);' % name);
 

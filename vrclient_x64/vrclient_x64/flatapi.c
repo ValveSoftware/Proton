@@ -37,6 +37,7 @@ extern void call_flat_method_f(void);
 
 __ASM_GLOBAL_FUNC(call_flat_method4,
     "subq $0x28, %rsp\n\t"
+    __ASM_CFI(".cfi_adjust_cfa_offset 40\n\t")
     "movq %r9, 0x20(%rsp)\n\t"
     "movq %r8, %r9\n\t" // shift over arguments
     "movq %rdx, %r8\n\t"
@@ -44,11 +45,13 @@ __ASM_GLOBAL_FUNC(call_flat_method4,
     "movq %r10, %rcx\n\t" // add This pointer
     "call *%r11\n\t"
     "addq $0x28, %rsp\n\t"
+    __ASM_CFI(".cfi_adjust_cfa_offset -40\n\t")
     "ret");
 extern void call_flat_method4(void);
 
 __ASM_GLOBAL_FUNC(call_flat_method5,
     "subq $0x38, %rsp\n\t"
+    __ASM_CFI(".cfi_adjust_cfa_offset 56\n\t")
     "movq %r9, 0x20(%rsp)\n\t"
     "movq 0x60(%rsp), %rax\n\t" // copy parameter
     "movq %rax, 0x28(%rsp)\n\t"
@@ -58,11 +61,13 @@ __ASM_GLOBAL_FUNC(call_flat_method5,
     "movq %r10, %rcx\n\t" // add This pointer
     "call *%r11\n\t"
     "addq $0x38, %rsp\n\t"
+    __ASM_CFI(".cfi_adjust_cfa_offset -56\n\t")
     "ret");
 extern void call_flat_method5(void);
 
 __ASM_GLOBAL_FUNC(call_flat_method6,
     "subq $0x38, %rsp\n\t"
+    __ASM_CFI(".cfi_adjust_cfa_offset 56\n\t")
     "movq %r9, 0x20(%rsp)\n\t"
     "movq 0x60(%rsp), %rax\n\t" // copy parameter
     "movq %rax, 0x28(%rsp)\n\t"
@@ -74,11 +79,13 @@ __ASM_GLOBAL_FUNC(call_flat_method6,
     "movq %r10, %rcx\n\t" // add This pointer
     "call *%r11\n\t"
     "addq $0x38, %rsp\n\t"
+    __ASM_CFI(".cfi_adjust_cfa_offset -56\n\t")
     "ret");
 extern void call_flat_method6(void);
 
 __ASM_GLOBAL_FUNC(call_flat_method7,
     "subq $0x48, %rsp\n\t"
+    __ASM_CFI(".cfi_adjust_cfa_offset 72\n\t")
     "movq %r9, 0x20(%rsp)\n\t"
     "movq 0x70(%rsp), %rax\n\t" // copy parameter
     "movq %rax, 0x28(%rsp)\n\t"
@@ -92,11 +99,13 @@ __ASM_GLOBAL_FUNC(call_flat_method7,
     "movq %r10, %rcx\n\t" // add This pointer
     "call *%r11\n\t"
     "addq $0x48, %rsp\n\t"
+    __ASM_CFI(".cfi_adjust_cfa_offset -72\n\t")
     "ret");
 extern void call_flat_method7(void);
 
 __ASM_GLOBAL_FUNC(call_flat_method8,
     "subq $0x48, %rsp\n\t"
+    __ASM_CFI(".cfi_adjust_cfa_offset 72\n\t")
     "movq %r9, 0x20(%rsp)\n\t"
     "movq 0x70(%rsp), %rax\n\t" // copy parameter
     "movq %rax, 0x28(%rsp)\n\t"
@@ -112,11 +121,13 @@ __ASM_GLOBAL_FUNC(call_flat_method8,
     "movq %r10, %rcx\n\t" // add This pointer
     "call *%r11\n\t"
     "addq $0x48, %rsp\n\t"
+    __ASM_CFI(".cfi_adjust_cfa_offset -72\n\t")
     "ret");
 extern void call_flat_method8(void);
 
 __ASM_GLOBAL_FUNC(call_flat_method9,
     "subq $0x58, %rsp\n\t"
+    __ASM_CFI(".cfi_adjust_cfa_offset 88\n\t")
     "movq %r9, 0x20(%rsp)\n\t"
     "movq 0x80(%rsp), %rax\n\t" // copy parameter
     "movq %rax, 0x28(%rsp)\n\t"
@@ -134,11 +145,13 @@ __ASM_GLOBAL_FUNC(call_flat_method9,
     "movq %r10, %rcx\n\t" // add This pointer
     "call *%r11\n\t"
     "addq $0x58, %rsp\n\t"
+    __ASM_CFI(".cfi_adjust_cfa_offset -88\n\t")
     "ret");
 extern void call_flat_method9(void);
 
 __ASM_GLOBAL_FUNC(call_flat_method4_f,
     "subq $0x28, %rsp\n\t"
+    __ASM_CFI(".cfi_adjust_cfa_offset 40\n\t")
     "movq %r9, 0x20(%rsp)\n\t"
     "movq %r8, %r9\n\t" // shift over arguments
     "movq %rdx, %r8\n\t"
@@ -149,11 +162,13 @@ __ASM_GLOBAL_FUNC(call_flat_method4_f,
     "movaps %xmm0, %xmm1\n\t"
     "call *%r11\n\t"
     "addq $0x28, %rsp\n\t"
+    __ASM_CFI(".cfi_adjust_cfa_offset -40\n\t")
     "ret");
 extern void call_flat_method4_f(void);
 
 __ASM_GLOBAL_FUNC(call_flat_method4_f_f,
     "subq $0x28, %rsp\n\t"
+    __ASM_CFI(".cfi_adjust_cfa_offset 40\n\t")
     "movq %xmm3, 0x20(%rsp)\n\t"
     "movq %r8, %r9\n\t" // shift over arguments
     "movq %rdx, %r8\n\t"
@@ -164,11 +179,13 @@ __ASM_GLOBAL_FUNC(call_flat_method4_f_f,
     "movaps %xmm0, %xmm1\n\t"
     "call *%r11\n\t"
     "addq $0x28, %rsp\n\t"
+    __ASM_CFI(".cfi_adjust_cfa_offset -40\n\t")
     "ret");
 extern void call_flat_method4_f_f(void);
 
 __ASM_GLOBAL_FUNC(call_flat_method5_f,
     "subq $0x38, %rsp\n\t"
+    __ASM_CFI(".cfi_adjust_cfa_offset 56\n\t")
     "movq %r9, 0x20(%rsp)\n\t"
     "movq 0x60(%rsp), %rax\n\t" // copy parameter
     "movq %rax, 0x28(%rsp)\n\t"
@@ -181,11 +198,13 @@ __ASM_GLOBAL_FUNC(call_flat_method5_f,
     "movaps %xmm0, %xmm1\n\t"
     "call *%r11\n\t"
     "addq $0x38, %rsp\n\t"
+    __ASM_CFI(".cfi_adjust_cfa_offset -56\n\t")
     "ret");
 extern void call_flat_method5_f(void);
 
 __ASM_GLOBAL_FUNC(call_flat_method5_f_f,
     "subq $0x38, %rsp\n\t"
+    __ASM_CFI(".cfi_adjust_cfa_offset 56\n\t")
     "movq %xmm3, 0x20(%rsp)\n\t"
     "movq 0x60(%rsp), %rax\n\t" // copy parameter
     "movq %rax, 0x28(%rsp)\n\t"
@@ -198,11 +217,13 @@ __ASM_GLOBAL_FUNC(call_flat_method5_f_f,
     "movaps %xmm0, %xmm1\n\t"
     "call *%r11\n\t"
     "addq $0x38, %rsp\n\t"
+    __ASM_CFI(".cfi_adjust_cfa_offset -56\n\t")
     "ret");
 extern void call_flat_method5_f_f(void);
 
 __ASM_GLOBAL_FUNC(call_flat_method6_f,
     "subq $0x38, %rsp\n\t"
+    __ASM_CFI(".cfi_adjust_cfa_offset 56\n\t")
     "movq %r9, 0x20(%rsp)\n\t"
     "movq 0x60(%rsp), %rax\n\t" // copy parameter
     "movq %rax, 0x28(%rsp)\n\t"
@@ -217,11 +238,13 @@ __ASM_GLOBAL_FUNC(call_flat_method6_f,
     "movaps %xmm0, %xmm1\n\t"
     "call *%r11\n\t"
     "addq $0x38, %rsp\n\t"
+    __ASM_CFI(".cfi_adjust_cfa_offset -56\n\t")
     "ret");
 extern void call_flat_method6_f(void);
 
 __ASM_GLOBAL_FUNC(call_flat_method6_f_f,
     "subq $0x38, %rsp\n\t"
+    __ASM_CFI(".cfi_adjust_cfa_offset 56\n\t")
     "movq %xmm3, 0x20(%rsp)\n\t"
     "movq 0x60(%rsp), %rax\n\t" // copy parameter
     "movq %rax, 0x28(%rsp)\n\t"
@@ -236,11 +259,13 @@ __ASM_GLOBAL_FUNC(call_flat_method6_f_f,
     "movaps %xmm0, %xmm1\n\t"
     "call *%r11\n\t"
     "addq $0x38, %rsp\n\t"
+    __ASM_CFI(".cfi_adjust_cfa_offset -56\n\t")
     "ret");
 extern void call_flat_method6_f_f(void);
 
 __ASM_GLOBAL_FUNC(call_flat_method7_f,
     "subq $0x48, %rsp\n\t"
+    __ASM_CFI(".cfi_adjust_cfa_offset 72\n\t")
     "movq %r9, 0x20(%rsp)\n\t"
     "movq 0x70(%rsp), %rax\n\t" // copy parameter
     "movq %rax, 0x28(%rsp)\n\t"
@@ -257,11 +282,13 @@ __ASM_GLOBAL_FUNC(call_flat_method7_f,
     "movaps %xmm0, %xmm1\n\t"
     "call *%r11\n\t"
     "addq $0x48, %rsp\n\t"
+    __ASM_CFI(".cfi_adjust_cfa_offset -72\n\t")
     "ret");
 extern void call_flat_method7_f(void);
 
 __ASM_GLOBAL_FUNC(call_flat_method7_f_f,
     "subq $0x48, %rsp\n\t"
+    __ASM_CFI(".cfi_adjust_cfa_offset 72\n\t")
     "movq %xmm3, 0x20(%rsp)\n\t"
     "movq 0x70(%rsp), %rax\n\t" // copy parameter
     "movq %rax, 0x28(%rsp)\n\t"
@@ -278,11 +305,13 @@ __ASM_GLOBAL_FUNC(call_flat_method7_f_f,
     "movaps %xmm0, %xmm1\n\t"
     "call *%r11\n\t"
     "addq $0x48, %rsp\n\t"
+    __ASM_CFI(".cfi_adjust_cfa_offset -72\n\t")
     "ret");
 extern void call_flat_method7_f_f(void);
 
 __ASM_GLOBAL_FUNC(call_flat_method8_f,
     "subq $0x48, %rsp\n\t"
+    __ASM_CFI(".cfi_adjust_cfa_offset 72\n\t")
     "movq %r9, 0x20(%rsp)\n\t"
     "movq 0x70(%rsp), %rax\n\t" // copy parameter
     "movq %rax, 0x28(%rsp)\n\t"
@@ -301,11 +330,13 @@ __ASM_GLOBAL_FUNC(call_flat_method8_f,
     "movaps %xmm0, %xmm1\n\t"
     "call *%r11\n\t"
     "addq $0x48, %rsp\n\t"
+    __ASM_CFI(".cfi_adjust_cfa_offset -72\n\t")
     "ret");
 extern void call_flat_method8_f(void);
 
 __ASM_GLOBAL_FUNC(call_flat_method8_f_f,
     "subq $0x48, %rsp\n\t"
+    __ASM_CFI(".cfi_adjust_cfa_offset 72\n\t")
     "movq %xmm3, 0x20(%rsp)\n\t"
     "movq 0x70(%rsp), %rax\n\t" // copy parameter
     "movq %rax, 0x28(%rsp)\n\t"
@@ -324,11 +355,13 @@ __ASM_GLOBAL_FUNC(call_flat_method8_f_f,
     "movaps %xmm0, %xmm1\n\t"
     "call *%r11\n\t"
     "addq $0x48, %rsp\n\t"
+    __ASM_CFI(".cfi_adjust_cfa_offset -72\n\t")
     "ret");
 extern void call_flat_method8_f_f(void);
 
 __ASM_GLOBAL_FUNC(call_flat_method9_f,
     "subq $0x58, %rsp\n\t"
+    __ASM_CFI(".cfi_adjust_cfa_offset 88\n\t")
     "movq %r9, 0x20(%rsp)\n\t"
     "movq 0x80(%rsp), %rax\n\t" // copy parameter
     "movq %rax, 0x28(%rsp)\n\t"
@@ -349,11 +382,13 @@ __ASM_GLOBAL_FUNC(call_flat_method9_f,
     "movaps %xmm0, %xmm1\n\t"
     "call *%r11\n\t"
     "addq $0x58, %rsp\n\t"
+    __ASM_CFI(".cfi_adjust_cfa_offset -88\n\t")
     "ret");
 extern void call_flat_method9_f(void);
 
 __ASM_GLOBAL_FUNC(call_flat_method9_f_f,
     "subq $0x58, %rsp\n\t"
+    __ASM_CFI(".cfi_adjust_cfa_offset 88\n\t")
     "movq %xmm3, 0x20(%rsp)\n\t"
     "movq 0x80(%rsp), %rax\n\t" // copy parameter
     "movq %rax, 0x28(%rsp)\n\t"
@@ -374,6 +409,7 @@ __ASM_GLOBAL_FUNC(call_flat_method9_f_f,
     "movaps %xmm0, %xmm1\n\t"
     "call *%r11\n\t"
     "addq $0x58, %rsp\n\t"
+    __ASM_CFI(".cfi_adjust_cfa_offset -88\n\t")
     "ret");
 extern void call_flat_method9_f_f(void);
 
