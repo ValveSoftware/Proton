@@ -729,7 +729,6 @@ VRCLIENT_CONFIGURE_FILES64 := $(VRCLIENT_OBJ64)/Makefile
 
 # The source directory for vrclient32 is a synthetic symlink clone of the oddly named vrclient_x64 with the spec files
 # renamed.
-$(VRCLIENT32): SHELL = $(CONTAINER_SHELL32)
 $(VRCLIENT32): $(VRCLIENT) $(MAKEFILE_DEP)
 	rm -rf ./$(VRCLIENT32)
 	mkdir -p $(VRCLIENT32)/vrclient
