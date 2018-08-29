@@ -606,10 +606,9 @@ if [ "$WITH_FFMPEG" = 1 ]; then
     build_ffmpeg
 fi
 
-build_openal
-
 case "$BUILD_COMPONENTS" in
     "all")
+        build_openal
         build_dxvk
         build_wine64
         build_wine32
