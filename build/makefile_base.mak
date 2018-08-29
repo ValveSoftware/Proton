@@ -17,7 +17,7 @@ export
 $(MAKECMDGOALS): nested_make
 
 nested_make:
-	$(MAKE) $(MAKECMDGOALS) -f ../build/makefile_base.mak NO_NESTED_MAKE=1
+	$(MAKE) $(MAKECMDGOALS) -f $(firstword $(MAKEFILE_LIST)) NO_NESTED_MAKE=1
 
 else # (Rest of the file is the else)
 
