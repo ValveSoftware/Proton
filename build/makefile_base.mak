@@ -22,7 +22,7 @@ nested_make:
 else # (Rest of the file is the else)
 
 ##
-## Config
+## General/global config
 ##
 
 # We expect the configure script to conditionally set the following:
@@ -96,32 +96,6 @@ ifneq ($(shell $(CONTAINER_SHELL32) -c "echo hi"), hi)
 $(error "Cannot run commands in 32bit container")
 endif
 
-# TODO Used by build_proton for the OS X steps
-LIB_SUFFIX := "so"
-STRIP := strip
-FREETYPE32_CFLAGS :=
-FREETYPE32_LIBS :=
-FREETYPE32_AUTOCONF :=
-FREETYPE64_CFLAGS :=
-FREETYPE64_LIBS :=
-FREETYPE64_AUTOCONF :=
-PNG32_CFLAGS :=
-PNG32_LIBS :=
-PNG32_AUTOCONF :=
-PNG64_CFLAGS :=
-PNG64_LIBS :=
-PNG64_AUTOCONF :=
-JPEG32_CFLAGS :=
-JPEG32_LIBS :=
-JPEG32_AUTOCONF :=
-JPEG64_CFLAGS :=
-JPEG64_LIBS :=
-JPEG64_AUTOCONF :=
-WITHOUT_X :=
-
-# TODO Release/debug configuration
-INSTALL_PROGRAM_FLAGS :=
-
 # Many of the configure steps below depend on the makefile itself, such that they are dirtied by changing the recipes
 # that create them.  This can be annoying when working on the makefile, building with NO_MAKEFILE_DEPENDENCY=1 disables
 # this.
@@ -129,6 +103,89 @@ MAKEFILE_DEP := $(MAKEFILE_LIST)
 ifeq ($(NO_MAKEFILE_DEPENDENCY),1)
 MAKEFILE_DEP :=
 endif
+
+# TODO Release/debug configuration
+INSTALL_PROGRAM_FLAGS :=
+
+##
+## Platform-specific variables
+##
+
+LIB_SUFFIX := "so"
+STRIP := strip
+FREETYPE32_CFLAGS :=
+FREETYPE32_LIBS :=
+FREETYPE64_CFLAGS :=
+FREETYPE64_LIBS :=
+PNG32_CFLAGS :=
+PNG32_LIBS :=
+PNG64_CFLAGS :=
+PNG64_LIBS :=
+JPEG32_CFLAGS :=
+JPEG32_LIBS :=
+JPEG64_CFLAGS :=
+JPEG64_LIBS :=
+WINE32_AUTOCONF :=
+WINE64_AUTOCONF :=
+
+# Use $(call QUOTE,$(VAR)) to flatten a list to a single element (for feeding to a shell)
+
+# OS X specific
+ifeq ($(OSX),1)
+STRIP := strip -x
+LIB_SUFFIX := dylib
+WINE32_AUTOCONF := --without-x \
+                   ac_cv_lib_soname_freetype32=libprotonfreetype.dylib \
+                   ac_cv_lib_soname_png32=libprotonpng16.dylib \
+                   ac_cv_lib_soname_jpeg32=libprotonjpeg.dylib
+WINE64_AUTOCONF := --without-x \
+                   ac_cv_lib_soname_freetype64=libprotonfreetype.dylib \
+                   ac_cv_lib_soname_png64=libprotonpng16.dylib \
+                   ac_cv_lib_soname_jpeg64=libprotonjpeg.dylib
+
+FREETYPE32_CFLAGS := -I$(abspath $(TOOLS_DIR32))/include/freetype2
+FREETYPE32_LIBS   := -L$(abspath $(TOOLS_DIR32))/lib -lprotonfreetype -framework CoreServices -framework ApplicationServices -lz
+FREETYPE64_CFLAGS := -I$(abspath $(TOOLS_DIR64))/include/freetype2
+FREETYPE64_LIBS   := -L$(abspath $(TOOLS_DIR64))/lib -lprotonfreetype
+PNG32_CFLAGS      := -I$(abspath $(TOOLS_DIR32))/include
+PNG32_LIBS        := -L$(abspath $(TOOLS_DIR32))/lib -lprotonpng
+PNG64_CFLAGS      := -I$(abspath $(TOOLS_DIR64))/include
+PNG64_LIBS        := -L$(abspath $(TOOLS_DIR64))/lib -lprotonpng
+JPEG32_CFLAGS     := -I$(abspath $(TOOLS_DIR32))/include
+JPEG32_LIBS       := -L$(abspath $(TOOLS_DIR32))/lib -lprotonjpeg
+JPEG64_CFLAGS     := -I$(abspath $(TOOLS_DIR64))/include
+JPEG64_LIBS       := -L$(abspath $(TOOLS_DIR64))/lib -lprotonjpeg
+endif
+
+# Make magic: We don't want the variables listed here to be lists, just single elements with spaces in them for passing
+# to shells. But we don't want someone forgetting to type "\ " to cause bizarre bugs.  Just let them be entered
+# free-form above, then enforce flattening on them all.
+QUOTED_VARIABLES := LIB_SUFFIX \
+                    STRIP \
+                    FREETYPE32_CFLAGS \
+                    FREETYPE32_LIBS \
+                    FREETYPE64_CFLAGS \
+                    FREETYPE64_LIBS \
+                    PNG32_CFLAGS \
+                    PNG32_LIBS \
+                    PNG64_CFLAGS \
+                    PNG64_LIBS \
+                    JPEG32_CFLAGS \
+                    JPEG32_LIBS \
+                    JPEG64_CFLAGS \
+                    JPEG64_LIBS \
+                    WINE32_AUTOCONF \
+                    WINE64_AUTOCONF
+
+# v-- This flattens a list when called. Don't look directly into it.
+QUOTE = $(subst $(eval) ,\ ,$(1))
+QUOTE_VARIABLE = $(eval $(1) := $$(call QUOTE,$$($(1))))
+QUOTE_VARIABLE_LIST = $(foreach a,$(1),$(call QUOTE_VARIABLE,$(a)))
+$(call QUOTE_VARIABLE_LIST,$(QUOTED_VARIABLES))
+
+##
+## Target configs
+##
 
 COMPAT_MANIFEST_TEMPLATE := $(SRCDIR)/compatibilitytool.vdf.template
 LICENSE := $(SRCDIR)/dist.LICENSE.lin
@@ -641,47 +698,47 @@ WINE_CONFIGURE_FILES64 := $(WINE_OBJ64)/Makefile
 $(WINE_CONFIGURE_FILES64): SHELL = $(CONTAINER_SHELL64)
 $(WINE_CONFIGURE_FILES64): $(MAKEFILE_DEP) | $(WINE_OBJ64) $(FREETYPE_OUT64)
 	cd $(dir $@) && \
-	STRIP="$(STRIP)" \
-	CFLAGS="-I$(abspath $(TOOLS_DIR64))/include -g -O2" \
-	LDFLAGS="-L$(abspath $(TOOLS_DIR64))/lib" \
-	PKG_CONFIG_PATH="$(abspath $(TOOLS_DIR64))/lib/pkgconfig" \
-	CC="$(CC)" \
-	CXX="$(CXX)" \
-	PNG_CFLAGS="$(PNG64_CFLAGS)" \
-	PNG_LIBS="$(PNG64_LIBS)" \
-	JPEG_CFLAGS="$(JPEG64_CFLAGS)" \
-	JPEG_LIBS="$(JPEG64_LIBS)" \
-	FREETYPE_CFLAGS="$(FREETYPE64_CFLAGS)" \
-	FREETYPE_LIBS="$(FREETYPE64_LIBS)" \
+	STRIP=$(STRIP) \
+	CFLAGS=-I$(abspath $(TOOLS_DIR64))"/include -g -O2" \
+	LDFLAGS=-L$(abspath $(TOOLS_DIR64))/lib \
+	PKG_CONFIG_PATH=$(abspath $(TOOLS_DIR64))/lib/pkgconfig \
+	CC=$(CC) \
+	CXX=$(CXX) \
+	PNG_CFLAGS=$(PNG64_CFLAGS) \
+	PNG_LIBS=$(PNG64_LIBS) \
+	JPEG_CFLAGS=$(JPEG64_CFLAGS) \
+	JPEG_LIBS=$(JPEG64_LIBS) \
+	FREETYPE_CFLAGS=$(FREETYPE64_CFLAGS) \
+	FREETYPE_LIBS=$(FREETYPE64_LIBS) \
 	../$(WINE)/configure \
 		$(FREETYPE64_AUTOCONF) \
 		$(JPEG64_AUTOCONF) \
 		$(PNG64_AUTOCONF) \
-		--without-curses $(WITHOUT_X) \
-		--enable-win64 --disable-tests --prefix="$(abspath $(DST_DIR))"
+		--without-curses $(WINE_AUTOCONF) \
+		--enable-win64 --disable-tests --prefix=$(abspath $(DST_DIR))
 
 # 32-bit configure
 $(WINE_CONFIGURE_FILES32): SHELL = $(CONTAINER_SHELL32)
 $(WINE_CONFIGURE_FILES32): $(MAKEFILE_DEP) | $(WINE_OBJ32) $(FREETYPE_OUT32)
 	cd $(dir $@) && \
-	STRIP="$(STRIP)" \
-	CFLAGS="-I$(abspath $(TOOLS_DIR32))/include -g -O2" \
-	LDFLAGS="-L$(abspath $(TOOLS_DIR32))/lib" \
-	PKG_CONFIG_PATH="$(abspath $(TOOLS_DIR32))/lib/pkgconfig" \
-	CC="$(CC)" \
-	CXX="$(CXX)" \
-	PNG_CFLAGS="$(PNG32_CFLAGS)" \
-	PNG_LIBS="$(PNG32_LIBS)" \
-	JPEG_CFLAGS="$(JPEG32_CFLAGS)" \
-	JPEG_LIBS="$(JPEG32_LIBS)" \
-	FREETYPE_CFLAGS="$(FREETYPE32_CFLAGS)" \
-	FREETYPE_LIBS="$(FREETYPE32_LIBS)" \
+	STRIP=$(STRIP) \
+	CFLAGS=-I$(abspath $(TOOLS_DIR32))"/include -g -O2" \
+	LDFLAGS=-L$(abspath $(TOOLS_DIR32))/lib \
+	PKG_CONFIG_PATH=$(abspath $(TOOLS_DIR32))/lib/pkgconfig \
+	CC=$(CC) \
+	CXX=$(CXX) \
+	PNG_CFLAGS=$(PNG32_CFLAGS) \
+	PNG_LIBS=$(PNG32_LIBS) \
+	JPEG_CFLAGS=$(JPEG32_CFLAGS) \
+	JPEG_LIBS=$(JPEG32_LIBS) \
+	FREETYPE_CFLAGS=$(FREETYPE32_CFLAGS) \
+	FREETYPE_LIBS=$(FREETYPE32_LIBS) \
 	../$(WINE)/configure \
 		$(FREETYPE32_AUTOCONF) \
 		$(JPEG32_AUTOCONF) \
 		$(PNG32_AUTOCONF) \
-		--without-curses $(WITHOUT_X) \
-		--disable-tests --prefix="$(abspath $(WINE_DST32))"
+		--without-curses $(WINE_AUTOCONF) \
+		--disable-tests --prefix=$(abspath $(WINE_DST32))
 
 ## wine goals
 
@@ -707,11 +764,11 @@ $(WINE_BUILDTOOLS64) $(WINE_OUT) wine64: wine64-intermediate
 wine64-intermediate: SHELL = $(CONTAINER_SHELL64)
 wine64-intermediate: $(WINE_CONFIGURE_FILES64)
 	cd $(WINE_OBJ64) && \
-		env STRIP="$(STRIP)" $(MAKE) && \
-		INSTALL_PROGRAM_FLAGS="$(INSTALL_PROGRAM_FLAGS)" STRIP="$(STRIP)" $(MAKE) install-lib && \
-		INSTALL_PROGRAM_FLAGS="$(INSTALL_PROGRAM_FLAGS)" STRIP="$(STRIP)" $(MAKE) \
-			prefix="$(abspath $(TOOLS_DIR64))" libdir="$(abspath $(TOOLS_DIR64))/lib64" \
-			dlldir="$(abspath $(TOOLS_DIR64))/lib64/wine" \
+		env STRIP=$(STRIP) $(MAKE) && \
+		INSTALL_PROGRAM_FLAGS=$(INSTALL_PROGRAM_FLAGS) STRIP=$(STRIP) $(MAKE) install-lib && \
+		INSTALL_PROGRAM_FLAGS=$(INSTALL_PROGRAM_FLAGS) STRIP=$(STRIP) $(MAKE) \
+			prefix=$(abspath $(TOOLS_DIR64)) libdir=$(abspath $(TOOLS_DIR64))/lib64 \
+			dlldir=$(abspath $(TOOLS_DIR64))/lib64/wine \
 			install-dev install-lib && \
 		rm -f ../$(DST_DIR)/bin/{msiexec,notepad,regedit,regsvr32,wineboot,winecfg,wineconsole,winedbg,winefile,winemine,winepath}
 		rm -rf ../$(DST_DIR)/share/man/
@@ -725,12 +782,12 @@ wine32-intermediate: $(WINE_CONFIGURE_FILES32)
 	cd $(WINE_OBJ32) && \
 	STRIP="$(STRIP)" \
 		$(MAKE) && \
-	INSTALL_PROGRAM_FLAGS="$(INSTALL_PROGRAM_FLAGS)" STRIP="$(STRIP)" \
+	INSTALL_PROGRAM_FLAGS=$(INSTALL_PROGRAM_FLAGS) STRIP=$(STRIP) \
 		$(MAKE) install-lib && \
-	INSTALL_PROGRAM_FLAGS="$(INSTALL_PROGRAM_FLAGS)" STRIP="$(STRIP)" \
+	INSTALL_PROGRAM_FLAGS=$(INSTALL_PROGRAM_FLAGS) STRIP=$(STRIP) \
 		$(MAKE) \
-			prefix="$(abspath $(TOOLS_DIR32))" libdir="$(abspath $(TOOLS_DIR32))/lib" \
-			dlldir="$(abspath $(TOOLS_DIR32))/lib/wine" \
+			prefix=$(abspath $(TOOLS_DIR32)) libdir=$(abspath $(TOOLS_DIR32))/lib \
+			dlldir=$(abspath $(TOOLS_DIR32))/lib/wine \
 			install-dev install-lib && \
 	mkdir -p ../$(DST_DIR)/{lib,bin} && \
 	cp -a ../$(WINE_DST32)/lib ../$(DST_DIR)/ && \
