@@ -88,7 +88,7 @@ basedir = os.path.dirname(sys.argv[0])
 bindir = basedir + "/dist/bin/"
 libdir = basedir + "/dist/lib"
 lib64dir = basedir + "/dist/lib64"
-wine_path = bindir + "/wine64"
+wine_path = bindir + "/wine"
 
 #extract if needed
 dist_lock = FileLock(basedir + "/dist.lock", timeout=-1)
@@ -190,6 +190,11 @@ with prefix_lock:
         #copy default prefix into place
         mergedirs(basedir + "/dist/share/default_pfx", prefix)
 
+    if os.path.exists(prefix + "/drive_c/windows/syswow64"):
+        pfx_arch = "win64"
+    else:
+        pfx_arch = "win32"
+
     with open(version_file, "w") as f:
         f.write(CURRENT_PREFIX_VERSION + "\n")
 
@@ -203,7 +208,12 @@ with prefix_lock:
     else:
         #linux-only fallback, really shouldn't get here
         steamdir = os.environ["HOME"] + ".steam/root/"
-    dst = prefix + "/drive_c/Program Files (x86)/"
+
+    if pfx_arch == "win64":
+        dst = prefix + "/drive_c/Program Files (x86)/"
+    else:
+        dst = prefix + "/drive_c/Program Files/"
+
     makedirs(dst + "Steam")
     filestocopy = ["steamclient.dll",
             "steamclient64.dll",
@@ -221,8 +231,11 @@ with prefix_lock:
     shutil.copy(basedir + "/dist/lib/wine/fakedlls/vrclient.dll", dst)
     shutil.copy(basedir + "/dist/lib64/wine/fakedlls/vrclient_x64.dll", dst)
 
-    shutil.copy(basedir + "/dist/lib/wine/dxvk/openvr_api_dxvk.dll", prefix + "/drive_c/windows/syswow64/")
-    shutil.copy(basedir + "/dist/lib64/wine/dxvk/openvr_api_dxvk.dll", prefix + "/drive_c/windows/system32/")
+    if pfx_arch == "win64":
+        shutil.copy(basedir + "/dist/lib/wine/dxvk/openvr_api_dxvk.dll", prefix + "/drive_c/windows/syswow64/")
+        shutil.copy(basedir + "/dist/lib64/wine/dxvk/openvr_api_dxvk.dll", prefix + "/drive_c/windows/system32/")
+    else:
+        shutil.copy(basedir + "/dist/lib/wine/dxvk/openvr_api_dxvk.dll", prefix + "/drive_c/windows/system32/")
 
     #parse linux openvr config and present it in win32 format to the app.
     #logic from openvr's CVRPathRegistry_Public::GetPaths
@@ -307,16 +320,24 @@ with prefix_lock:
 
     if "wined3d11" in config_opts:
         #use gl-based wined3d for d3d11
-        make_dxvk_links(basedir + "/dist/lib64/wine/",
-            prefix + "drive_c/windows/system32")
-        make_dxvk_links(basedir + "/dist/lib/wine/",
-            prefix + "drive_c/windows/syswow64")
+        if pfx_arch == "win64":
+            make_dxvk_links(basedir + "/dist/lib64/wine/",
+                prefix + "drive_c/windows/system32")
+            make_dxvk_links(basedir + "/dist/lib/wine/",
+                prefix + "drive_c/windows/syswow64")
+        else:
+            make_dxvk_links(basedir + "/dist/lib/wine/",
+                prefix + "drive_c/windows/system32")
     else:
         #use vulkan-based dxvk for d3d11
-        make_dxvk_links(basedir + "/dist/lib64/wine/dxvk/",
-            prefix + "drive_c/windows/system32")
-        make_dxvk_links(basedir + "/dist/lib/wine/dxvk/",
-            prefix + "drive_c/windows/syswow64")
+        if pfx_arch == "win64":
+            make_dxvk_links(basedir + "/dist/lib64/wine/dxvk/",
+                prefix + "drive_c/windows/system32")
+            make_dxvk_links(basedir + "/dist/lib/wine/dxvk/",
+                prefix + "drive_c/windows/syswow64")
+        else:
+            make_dxvk_links(basedir + "/dist/lib/wine/dxvk/",
+                prefix + "drive_c/windows/system32")
         dlloverrides["dxgi"] = "n"
         dlloverrides["d3d11"] = "n"
 
