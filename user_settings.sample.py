@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 #to enable these settings, name this file "user_settings.py"
 
 user_settings = {

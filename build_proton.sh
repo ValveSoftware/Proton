@@ -672,13 +672,16 @@ if [ "$PACKAGE" = true ]; then
 
     cp -a toolmanifest.vdf dist/
     cp -a filelock.py dist/
-    cp -a proton dist/
     cp -a user_settings.sample.py dist/
     if [ "$PLATFORM" == "Darwin" ]; then
-    cp -a dist.LICENSE.osx dist/LICENSE
+        cp -a dist.LICENSE.osx dist/LICENSE
+        sed -e 's/@PYTHON_NAME@/python/' proton.in > dist/proton
     else
-    cp -a dist.LICENSE.lin dist/LICENSE
+        cp -a dist.LICENSE.lin dist/LICENSE
+        #work around Ubuntu 18.04 failing to ship a python by default
+        sed -e 's/@PYTHON_NAME@/python3/' proton.in > dist/proton
     fi
+    chmod 755 dist/proton
     date '+%s' > dist/version
 
     echo "Proton ready in dist/"
