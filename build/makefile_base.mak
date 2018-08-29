@@ -144,6 +144,8 @@ DST_DIR := $(DST_BASE)/dist
 FREETYPE := $(SRCDIR)/freetype2
 FREETYPE_OBJ32 := ./obj-freetype32
 FREETYPE_OBJ64 := ./obj-freetype64
+FREETYPE_OUT64 := $(TOOLS_DIR64)/lib/libprotonfreetype.dylib
+FREETYPE_OUT32 := $(TOOLS_DIR32)/lib/libprotonfreetype.dylib
 
 OPENAL := $(SRCDIR)/openal-soft
 OPENAL_OBJ32 := ./obj-openal32
@@ -210,8 +212,6 @@ $(OBJ_DIRS):
 ##
 ## Targets
 ##
-
-# TODO OS X targets freetype
 
 .PHONY: all all64 all32 default
 
@@ -323,7 +323,7 @@ install: dist
 ## freetype
 ##
 
-# TODO OS X, not final
+ifeq ($(OSX),1) # currently only for OS X builds
 
 ## Autogen steps for freetype
 FREETYPE_AUTOGEN_FILES := $(FREETYPE)/builds/unix/configure
@@ -333,30 +333,29 @@ $(FREETYPE_AUTOGEN_FILES): $(FREETYPE)/builds/unix/configure.raw $(FREETYPE)/aut
 
 ## Create & configure object directory for freetype
 
-# TODO  --prefix="$TOOLS_DIR32"
 FREETYPE_CONFIGURE_FILES32 := $(FREETYPE_OBJ32)/unix-cc.mk $(FREETYPE_OBJ32)/Makefile
 FREETYPE_CONFIGURE_FILES64 := $(FREETYPE_OBJ64)/unix-cc.mk $(FREETYPE_OBJ64)/Makefile
 
 # 64-bit configure
-# TODO --prefix="$TOOLS_DIR64"
 $(FREETYPE_CONFIGURE_FILES64): $(FREETYPE_AUTOGEN_FILES) $(MAKEFILE_DEP) | $(FREETYPE_OBJ64)
 	cd $(dir $@) && \
-		$(abspath $(FREETYPE)/configure) CC="$(CC)" CXX="$(CXX)" --without-png --host x86_64-apple-darwin \
-				PKG_CONFIG=false && \
-			echo 'LIBRARY := libprotonfreetype' >> unix-cc.mk
+		$(abspath $(FREETYPE)/configure) CC="$(CC)" CXX="$(CXX)" PKG_CONFIG=false \
+			--prefix=$(abspath $(TOOLS_DIR64)) --without-png --host x86_64-apple-darwin && \
+		echo 'LIBRARY := libprotonfreetype' >> unix-cc.mk
 
 # 32bit-configure
 $(FREETYPE_CONFIGURE_FILES32): $(FREETYPE_AUTOGEN_FILES) $(MAKEFILE_DEP) | $(FREETYPE_OBJ32)
 	cd $(dir $@) && \
-		$(abspath $(FREETYPE)/configure) CC="$(CC)" CXX="$(CXX)" --without-png --host i686-apple-darwin \
-			CFLAGS='-m32 -g -O2' LDFLAGS=-m32 PKG_CONFIG=false && \
+		$(abspath $(FREETYPE)/configure) CC="$(CC)" CXX="$(CXX)" PKG_CONFIG=false \
+			CFLAGS='-m32 -g -O2' LDFLAGS=-m32 \
+			--prefix=$(abspath $(TOOLS_DIR32)) --without-png --host i686-apple-darwin && \
 		echo 'LIBRARY := libprotonfreetype' >> unix-cc.mk
 
 ## Freetype goals
 
-# TODO copy-from-tools step for dist
+.PHONY: freetype freetype32 freetype64 freetype_autogen freetype_configure freetype_configure32 freetype_configure64
 
-.PHONY: freetype freetype_autogen freetype_configure freetype_configure32 freetype_configure64
+GOAL_TARGETS += freetype
 
 freetype_configure: $(FREETYPE_CONFIGURE_FILES32) $(FREETYPE_CONFIGURE_FILES64)
 
@@ -366,7 +365,28 @@ freetype_configure32: $(FREETYPE_CONFIGURE_FILES32)
 
 freetype_autogen: $(FREETYPE_AUTOGEN_FILES)
 
-freetype: $(FREETYPE_CONFIGURE_FILES32) $(FREETYPE_CONFIGURE_FILES64)
+freetype: freetype32 freetype64
+
+# Make silliness to make both the explicit freetype goal and the outfile come from the same recipe
+.INTERMEDIATE: freetype64-intermediate freetype32-intermediate
+
+$(FREETYPE_OUT64) freetype64: freetype64-intermediate
+
+$(FREETYPE_OUT32) freetype32: freetype32-intermediate
+
+freetype64-intermediate: $(FREETYPE_CONFIGURE_FILES64)
+	$(MAKE) -C $(FREETYPE_OBJ64)
+	$(MAKE) -C $(FREETYPE_OBJ64) install
+	cp $(FREETYPE_OUT64) $(DST_DIR)/lib64
+	$(STRIP) $(DST_DIR)/lib64/libprotonfreetype.dylib
+
+freetype32-intermediate: $(FREETYPE_CONFIGURE_FILES32)
+	$(MAKE) -C $(FREETYPE_OBJ32)
+	$(MAKE) -C $(FREETYPE_OBJ32) install
+	cp $(FREETYPE_OUT32) $(DST_DIR)/lib
+	$(STRIP) $(DST_DIR)/lib/libprotonfreetype.dylib
+
+endif # ifeq ($(OSX),1)
 
 ##
 ## OpenAL
@@ -619,7 +639,7 @@ WINE_CONFIGURE_FILES64 := $(WINE_OBJ64)/Makefile
 
 # 64bit-configure
 $(WINE_CONFIGURE_FILES64): SHELL = $(CONTAINER_SHELL64)
-$(WINE_CONFIGURE_FILES64): $(MAKEFILE_DEP) | $(WINE_OBJ64)
+$(WINE_CONFIGURE_FILES64): $(MAKEFILE_DEP) | $(WINE_OBJ64) $(FREETYPE_OUT64)
 	cd $(dir $@) && \
 	STRIP="$(STRIP)" \
 	CFLAGS="-I$(abspath $(TOOLS_DIR64))/include -g -O2" \
@@ -642,7 +662,7 @@ $(WINE_CONFIGURE_FILES64): $(MAKEFILE_DEP) | $(WINE_OBJ64)
 
 # 32-bit configure
 $(WINE_CONFIGURE_FILES32): SHELL = $(CONTAINER_SHELL32)
-$(WINE_CONFIGURE_FILES32): $(MAKEFILE_DEP) | $(WINE_OBJ32)
+$(WINE_CONFIGURE_FILES32): $(MAKEFILE_DEP) | $(WINE_OBJ32) $(FREETYPE_OUT32)
 	cd $(dir $@) && \
 	STRIP="$(STRIP)" \
 	CFLAGS="-I$(abspath $(TOOLS_DIR32))/include -g -O2" \
