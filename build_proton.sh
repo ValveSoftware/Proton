@@ -608,10 +608,9 @@ fi
 
 build_openal
 
-build_dxvk
-
 case "$BUILD_COMPONENTS" in
     "all")
+        build_dxvk
         build_wine64
         build_wine32
         build_lsteamclient64
