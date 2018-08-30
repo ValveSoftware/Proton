@@ -274,6 +274,13 @@ LIBJPEG_OBJ64 := ./obj-libjpeg64
 LIBJPEG_OUT64 := $(TOOLS_DIR64)/lib/libprotonjpeg.dylib
 LIBJPEG_OUT32 := $(TOOLS_DIR32)/lib/libprotonjpeg.dylib
 
+LIBSDL := $(SRCDIR)/SDL-mirror
+LIBSDLPROTON := ./syn-libsdl
+LIBSDL_OBJ32 := ./obj-libsdl32
+LIBSDL_OBJ64 := ./obj-libsdl64
+LIBSDL_OUT64 := $(TOOLS_DIR64)/lib/libSDL2.dylib
+LIBSDL_OUT32 := $(TOOLS_DIR32)/lib/libSDL2.dylib
+
 ## Object directories
 OBJ_DIRS := $(TOOLS_DIR32)        $(TOOLS_DIR64)        \
             $(FREETYPE_OBJ32)     $(FREETYPE_OBJ64)     \
@@ -285,7 +292,8 @@ OBJ_DIRS := $(TOOLS_DIR32)        $(TOOLS_DIR64)        \
             $(DXVK_OBJ32)         $(DXVK_OBJ64)         \
             $(CMAKE_OBJ32)        $(CMAKE_OBJ64)        \
             $(LIBPNG_OBJ32)       $(LIBPNG_OBJ64)       \
-            $(LIBJPEG_OBJ32)      $(LIBJPEG_OBJ64)
+            $(LIBJPEG_OBJ32)      $(LIBJPEG_OBJ64)      \
+            $(LIBSDL_OBJ32)       $(LIBSDL_OBJ64)
 
 $(OBJ_DIRS):
 	mkdir -p $@
@@ -612,6 +620,77 @@ libjpeg32-intermediate: $(LIBJPEG_CONFIGURE_FILES32)
 endif # ifeq ($(OSX),1)
 
 ##
+## libsdl
+##
+
+ifeq ($(OSX),1) # currently only for OS X builds
+
+## Synthetic libsdl for autogen
+$(LIBSDLPROTON)/.created: $(LIBSDL) $(MAKEFILE_DEP) $(LIBSDL)/configure.in $(LIBSDL)/autogen.sh
+	rm -rf ./$(LIBSDLPROTON)
+	mkdir -p $(LIBSDLPROTON)/
+	cd $(LIBSDLPROTON)/ && \
+		ln -sfv ../$(LIBSDL)/* .
+	rm -f $(LIBSDLPROTON)/configure
+	cd $(LIBSDLPROTON) && ./autogen.sh
+	touch $(LIBSDLPROTON)/.created
+
+$(LIBSDLPROTON): $(LIBSDLPROTON)/.created
+
+## Create & configure object directory for libsdl
+
+LIBSDL_CONFIGURE_FILES32 := $(LIBSDL_OBJ32)/Makefile
+LIBSDL_CONFIGURE_FILES64 := $(LIBSDL_OBJ64)/Makefile
+
+# 64-bit configure
+$(LIBSDL_CONFIGURE_FILES64): $(LIBSDL_AUTOGEN_FILES) $(MAKEFILE_DEP) $(LIBSDLPROTON) | $(LIBSDL_OBJ64)
+	cd $(dir $@) && \
+		$(abspath $(LIBSDLPROTON)/configure) --prefix=$(abspath $(TOOLS_DIR64)) --host x86_64-apple-darwin
+
+# 32bit-configure
+$(LIBSDL_CONFIGURE_FILES32): $(LIBSDL_AUTOGEN_FILES) $(MAKEFILE_DEP) $(LIBSDLPROTON) | $(LIBSDL_OBJ32)
+	cd $(dir $@) && \
+		$(abspath $(LIBSDLPROTON)/configure) --prefix=$(abspath $(TOOLS_DIR32)) --host i686-apple-darwin \
+			CFLAGS='-m32 -g -O2' LDFLAGS=-m32
+
+## Libsdl goals
+
+.PHONY: libsdl libsdl32 libsdl64 libsdl_configure libsdl_configure32 libsdl_configure64
+
+GOAL_TARGETS += libsdl
+
+libsdl_configure: $(LIBSDL_CONFIGURE_FILES32) $(LIBSDL_CONFIGURE_FILES64)
+
+libsdl_configure64: $(LIBSDL_CONFIGURE_FILES64)
+
+libsdl_configure32: $(LIBSDL_CONFIGURE_FILES32)
+
+libsdl: libsdl32 libsdl64
+
+# Make silliness to make both the explicit libsdl goal and the outfile come from the same recipe
+.INTERMEDIATE: libsdl64-intermediate libsdl32-intermediate
+
+$(LIBSDL_OUT64) libsdl64: libsdl64-intermediate
+
+$(LIBSDL_OUT32) libsdl32: libsdl32-intermediate
+
+libsdl64-intermediate: $(LIBSDL_CONFIGURE_FILES64)
+	$(MAKE) -C $(LIBSDL_OBJ64)
+	$(MAKE) -C $(LIBSDL_OBJ64) install-hdrs
+	$(MAKE) -C $(LIBSDL_OBJ64) install-lib
+	cp $(LIBSDL_OUT64) $(DST_DIR)/lib64
+	$(STRIP) $(DST_DIR)/lib64/libSDL2.dylib
+
+libsdl32-intermediate: $(LIBSDL_CONFIGURE_FILES32)
+	$(MAKE) -C $(LIBSDL_OBJ32)
+	$(MAKE) -C $(LIBSDL_OBJ32) install-hdrs
+	$(MAKE) -C $(LIBSDL_OBJ32) install-lib
+	cp $(LIBSDL_OUT32) $(DST_DIR)/lib
+	$(STRIP) $(DST_DIR)/lib/libSDL2.dylib
+
+endif # ifeq ($(OSX),1)
+
+##
 ## OpenAL
 ##
 
@@ -862,7 +941,7 @@ WINE_CONFIGURE_FILES64 := $(WINE_OBJ64)/Makefile
 
 # 64bit-configure
 $(WINE_CONFIGURE_FILES64): SHELL = $(CONTAINER_SHELL64)
-$(WINE_CONFIGURE_FILES64): $(MAKEFILE_DEP) | $(WINE_OBJ64) $(FREETYPE_OUT64) $(LIBPNG_OUT64) $(LIBJPEG_OUT64)
+$(WINE_CONFIGURE_FILES64): $(MAKEFILE_DEP) | $(WINE_OBJ64) $(FREETYPE_OUT64) $(LIBPNG_OUT64) $(LIBJPEG_OUT64) $(LIBSDL_OUT64)
 	cd $(dir $@) && \
 	STRIP=$(STRIP) \
 	CFLAGS=-I$(abspath $(TOOLS_DIR64))"/include -g -O2" \
@@ -885,7 +964,7 @@ $(WINE_CONFIGURE_FILES64): $(MAKEFILE_DEP) | $(WINE_OBJ64) $(FREETYPE_OUT64) $(L
 
 # 32-bit configure
 $(WINE_CONFIGURE_FILES32): SHELL = $(CONTAINER_SHELL32)
-$(WINE_CONFIGURE_FILES32): $(MAKEFILE_DEP) | $(WINE_OBJ32) $(FREETYPE_OUT32) $(LIBPNG_OUT32) $(LIBJPEG_OUT32)
+$(WINE_CONFIGURE_FILES32): $(MAKEFILE_DEP) | $(WINE_OBJ32) $(FREETYPE_OUT32) $(LIBPNG_OUT32) $(LIBJPEG_OUT32) $(LIBSDL_OUT32)
 	cd $(dir $@) && \
 	STRIP=$(STRIP) \
 	CFLAGS=-I$(abspath $(TOOLS_DIR32))"/include -g -O2" \
@@ -1176,7 +1255,6 @@ dxvk32: $(DXVK_CONFIGURE_FILES32)
 endif # NO_DXVK
 
 # TODO OS X
-#  build_libSDL
 #  build_moltenvk
 
 # TODO Tests
