@@ -1,6 +1,12 @@
 ## Available in Proton 3.7 Beta:
 ###### 3.7-5:
 - Performance improvements for timing APIs in CPU-limited scenarios
+- Automatically capture mouse in fullscreen windows is enabled by default.
+- More display ratios have smaller resolutions available.
+- Fix a crash on old versions of SDL.
+- Fix for mouse cursor drifting in Deus Ex.
+- Debug script dump directory can be configured with `PROTON_DEBUG_DIR`.
+- Further improvements to fullscreen focus and python3 compatibility.
 ###### 3.7-4:
 - Support python3 as well as python2. This removes the requirement for python2 to be installed.
 - DXVK updated to v0.70, view that changelog here: https://github.com/doitsujin/dxvk/releases DXVK's DX10 support is not yet enabled.
