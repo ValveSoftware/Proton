@@ -260,6 +260,13 @@ CMAKE_OBJ64 := ./obj-cmake64
 CMAKE_BIN32 := $(CMAKE_OBJ32)/built/bin/cmake
 CMAKE_BIN64 := $(CMAKE_OBJ64)/built/bin/cmake
 
+LIBPNG := $(SRCDIR)/libpng
+LIBPNGPROTON := ./syn-libpng
+LIBPNG_OBJ32 := ./obj-libpng32
+LIBPNG_OBJ64 := ./obj-libpng64
+LIBPNG_OUT64 := $(TOOLS_DIR64)/lib/libprotonpng16.dylib
+LIBPNG_OUT32 := $(TOOLS_DIR32)/lib/libprotonpng16.dylib
+
 ## Object directories
 OBJ_DIRS := $(TOOLS_DIR32)        $(TOOLS_DIR64)        \
             $(FREETYPE_OBJ32)     $(FREETYPE_OBJ64)     \
@@ -269,7 +276,8 @@ OBJ_DIRS := $(TOOLS_DIR32)        $(TOOLS_DIR64)        \
             $(WINE_OBJ32)         $(WINE_OBJ64)         \
             $(VRCLIENT_OBJ32)     $(VRCLIENT_OBJ64)     \
             $(DXVK_OBJ32)         $(DXVK_OBJ64)         \
-            $(CMAKE_OBJ32)        $(CMAKE_OBJ64)
+            $(CMAKE_OBJ32)        $(CMAKE_OBJ64)        \
+            $(LIBPNG_OBJ32)       $(LIBPNG_OBJ64)
 
 $(OBJ_DIRS):
 	mkdir -p $@
@@ -450,6 +458,77 @@ freetype32-intermediate: $(FREETYPE_CONFIGURE_FILES32)
 	$(MAKE) -C $(FREETYPE_OBJ32) install
 	cp $(FREETYPE_OUT32) $(DST_DIR)/lib
 	$(STRIP) $(DST_DIR)/lib/libprotonfreetype.dylib
+
+endif # ifeq ($(OSX),1)
+
+##
+## libpng
+##
+
+ifeq ($(OSX),1) # currently only for OS X builds
+
+## Synthetic libpng with modified Makefile.am for autogen
+$(LIBPNGPROTON)/.created: $(LIBPNG) $(MAKEFILE_DEP) $(LIBPNG)/autogen.sh $(LIBPNG)/configure.ac
+	rm -rf ./$(LIBPNGPROTON)
+	mkdir -p $(LIBPNGPROTON)/
+	cd $(LIBPNGPROTON)/ && \
+		ln -sfv ../$(LIBPNG)/* .
+	rm $(LIBPNGPROTON)/Makefile.am
+	cp $(LIBPNG)/Makefile.am $(LIBPNGPROTON)
+	sed -i -e 's/libpng@PNGLIB_MAJOR@@PNGLIB_MINOR@/libprotonpng@PNGLIB_MAJOR@@PNGLIB_MINOR@/' $(LIBPNGPROTON)/Makefile.am
+	cd $(LIBPNGPROTON) && ./autogen.sh --maintainer
+	touch $(LIBPNGPROTON)/.created
+
+$(LIBPNGPROTON): $(LIBPNGPROTON)/.created
+
+## Create & configure object directory for libpng
+
+LIBPNG_CONFIGURE_FILES32 := $(LIBPNG_OBJ32)/Makefile
+LIBPNG_CONFIGURE_FILES64 := $(LIBPNG_OBJ64)/Makefile
+
+# 64-bit configure
+$(LIBPNG_CONFIGURE_FILES64): $(LIBPNG_AUTOGEN_FILES) $(MAKEFILE_DEP) $(LIBPNGPROTON) | $(LIBPNG_OBJ64)
+	cd $(dir $@) && \
+		$(abspath $(LIBPNGPROTON)/configure) --prefix=$(abspath $(TOOLS_DIR64)) --host x86_64-apple-darwin
+
+# 32bit-configure
+$(LIBPNG_CONFIGURE_FILES32): $(LIBPNG_AUTOGEN_FILES) $(MAKEFILE_DEP) $(LIBPNGPROTON) | $(LIBPNG_OBJ32)
+	cd $(dir $@) && \
+		$(abspath $(LIBPNGPROTON)/configure) --prefix=$(abspath $(TOOLS_DIR32)) --host i686-apple-darwin \
+			CFLAGS='-m32 -g -O2' LDFLAGS=-m32
+
+## Libpng goals
+
+.PHONY: libpng libpng32 libpng64 libpng_configure libpng_configure32 libpng_configure64
+
+GOAL_TARGETS += libpng
+
+libpng_configure: $(LIBPNG_CONFIGURE_FILES32) $(LIBPNG_CONFIGURE_FILES64)
+
+libpng_configure64: $(LIBPNG_CONFIGURE_FILES64)
+
+libpng_configure32: $(LIBPNG_CONFIGURE_FILES32)
+
+libpng: libpng32 libpng64
+
+# Make silliness to make both the explicit libpng goal and the outfile come from the same recipe
+.INTERMEDIATE: libpng64-intermediate libpng32-intermediate
+
+$(LIBPNG_OUT64) libpng64: libpng64-intermediate
+
+$(LIBPNG_OUT32) libpng32: libpng32-intermediate
+
+libpng64-intermediate: $(LIBPNG_CONFIGURE_FILES64)
+	$(MAKE) -C $(LIBPNG_OBJ64)
+	$(MAKE) -C $(LIBPNG_OBJ64) install
+	cp $(LIBPNG_OUT64) $(DST_DIR)/lib64
+	$(STRIP) $(DST_DIR)/lib64/libprotonpng16.dylib
+
+libpng32-intermediate: $(LIBPNG_CONFIGURE_FILES32)
+	$(MAKE) -C $(LIBPNG_OBJ32)
+	$(MAKE) -C $(LIBPNG_OBJ32) install
+	cp $(LIBPNG_OUT32) $(DST_DIR)/lib
+	$(STRIP) $(DST_DIR)/lib/libprotonpng16.dylib
 
 endif # ifeq ($(OSX),1)
 
@@ -704,7 +783,7 @@ WINE_CONFIGURE_FILES64 := $(WINE_OBJ64)/Makefile
 
 # 64bit-configure
 $(WINE_CONFIGURE_FILES64): SHELL = $(CONTAINER_SHELL64)
-$(WINE_CONFIGURE_FILES64): $(MAKEFILE_DEP) | $(WINE_OBJ64) $(FREETYPE_OUT64)
+$(WINE_CONFIGURE_FILES64): $(MAKEFILE_DEP) | $(WINE_OBJ64) $(FREETYPE_OUT64) $(LIBPNG_OUT64)
 	cd $(dir $@) && \
 	STRIP=$(STRIP) \
 	CFLAGS=-I$(abspath $(TOOLS_DIR64))"/include -g -O2" \
@@ -727,7 +806,7 @@ $(WINE_CONFIGURE_FILES64): $(MAKEFILE_DEP) | $(WINE_OBJ64) $(FREETYPE_OUT64)
 
 # 32-bit configure
 $(WINE_CONFIGURE_FILES32): SHELL = $(CONTAINER_SHELL32)
-$(WINE_CONFIGURE_FILES32): $(MAKEFILE_DEP) | $(WINE_OBJ32) $(FREETYPE_OUT32)
+$(WINE_CONFIGURE_FILES32): $(MAKEFILE_DEP) | $(WINE_OBJ32) $(FREETYPE_OUT32) $(LIBPNG_OUT32)
 	cd $(dir $@) && \
 	STRIP=$(STRIP) \
 	CFLAGS=-I$(abspath $(TOOLS_DIR32))"/include -g -O2" \
@@ -1018,7 +1097,6 @@ dxvk32: $(DXVK_CONFIGURE_FILES32)
 endif # NO_DXVK
 
 # TODO OS X
-#  build_libpng
 #  build_libjpeg
 #  build_libSDL
 #  build_moltenvk
