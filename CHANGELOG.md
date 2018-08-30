@@ -1,4 +1,6 @@
 ## Available in Proton 3.7 Beta:
+###### 3.7-5:
+- Performance improvements for timing APIs in CPU-limited scenarios
 ###### 3.7-4:
 - Support python3 as well as python2. This removes the requirement for python2 to be installed.
 - DXVK updated to v0.70, view that changelog here: https://github.com/doitsujin/dxvk/releases DXVK's DX10 support is not yet enabled.
