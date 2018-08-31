@@ -84,11 +84,47 @@ if not ("STEAM_COMPAT_DATA_PATH" in os.environ):
     log("No compat data path?")
     sys.exit(1)
 
+ARCH_UNKNOWN=0
+ARCH_I386=1
+ARCH_X86_64=2
+def determine_architecture(path):
+    #algorithm from file's msdos magic file
+    try:
+        with open(path, "rb") as f:
+            magic = f.read(2)
+            if magic != b"MZ":
+                return ARCH_UNKNOWN
+            f.seek(0x18)
+            reloc = struct.unpack('<H', f.read(2))[0]
+            if reloc < 0x40:
+                #DOS
+                return ARCH_I386
+            f.seek(0x3c)
+            pe_offs = struct.unpack('<L', f.read(4))[0]
+            f.seek(pe_offs)
+            magic = f.read(4)
+            if magic != b"PE\0\0":
+                return ARCH_UNKNOWN
+            f.seek(pe_offs + 4)
+            arch = struct.unpack('<H', f.read(2))[0]
+            if arch == 0x8664:
+                return ARCH_X86_64
+            if arch == 0x014c:
+                return ARCH_I386
+            return ARCH_UNKNOWN
+    except:
+        return ARCH_UNKNOWN
+
+game_arch = determine_architecture(sys.argv[2])
+
 basedir = os.path.dirname(sys.argv[0])
 bindir = basedir + "/dist/bin/"
 libdir = basedir + "/dist/lib"
 lib64dir = basedir + "/dist/lib64"
-wine_path = bindir + "/wine64"
+if game_arch == ARCH_X86_64:
+    wine_path = bindir + "/wine64"
+else:
+    wine_path = bindir + "/wine"
 
 #extract if needed
 dist_lock = FileLock(basedir + "/dist.lock", timeout=-1)
@@ -333,39 +369,6 @@ for dll in dlloverrides:
     else:
         s = dll + "=" + setting
 env["WINEDLLOVERRIDES"] = s
-
-ARCH_UNKNOWN=0
-ARCH_I386=1
-ARCH_X86_64=2
-def determine_architecture(path):
-    #algorithm from file's msdos magic file
-    try:
-        with open(path, "rb") as f:
-            magic = f.read(2)
-            if magic != b"MZ":
-                return ARCH_UNKNOWN
-            f.seek(0x18)
-            reloc = struct.unpack('<H', f.read(2))[0]
-            if reloc < 0x40:
-                #DOS
-                return ARCH_I386
-            f.seek(0x3c)
-            pe_offs = struct.unpack('<L', f.read(4))[0]
-            f.seek(pe_offs)
-            magic = f.read(4)
-            if magic != b"PE\0\0":
-                return ARCH_UNKNOWN
-            f.seek(pe_offs + 4)
-            arch = struct.unpack('<H', f.read(2))[0]
-            if arch == 0x8664:
-                return ARCH_X86_64
-            if arch == 0x014c:
-                return ARCH_I386
-            return ARCH_UNKNOWN
-    except:
-        return ARCH_UNKNOWN
-
-game_arch = determine_architecture(sys.argv[2])
 
 def dump_dbg_env(f):
     f.write("PATH=\"" + env["PATH"] + "\" \\\n")
