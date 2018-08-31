@@ -288,6 +288,11 @@ LIBSDL_OBJ64 := ./obj-libsdl64
 LIBSDL_OUT64 := $(TOOLS_DIR64)/lib/libSDL2.dylib
 LIBSDL_OUT32 := $(TOOLS_DIR32)/lib/libSDL2.dylib
 
+MOLTENVK := $(SRCDIR)/MoltenVK
+MOLTENVKPROTON := ./syn-MoltenVK
+MOLTENVK_OBJ := ./obj-moltenvk
+MOLTENVK_OUT := $(TOOLS_DIR64)/lib/libMoltenVK.dylib
+
 ## Object directories
 OBJ_DIRS := $(TOOLS_DIR32)        $(TOOLS_DIR64)        \
             $(FREETYPE_OBJ32)     $(FREETYPE_OBJ64)     \
@@ -300,7 +305,8 @@ OBJ_DIRS := $(TOOLS_DIR32)        $(TOOLS_DIR64)        \
             $(CMAKE_OBJ32)        $(CMAKE_OBJ64)        \
             $(LIBPNG_OBJ32)       $(LIBPNG_OBJ64)       \
             $(LIBJPEG_OBJ32)      $(LIBJPEG_OBJ64)      \
-            $(LIBSDL_OBJ32)       $(LIBSDL_OBJ64)
+            $(LIBSDL_OBJ32)       $(LIBSDL_OBJ64)       \
+            $(MOLTENVK_OBJ)
 
 $(OBJ_DIRS):
 	mkdir -p $@
@@ -626,6 +632,60 @@ libjpeg32-intermediate: $(LIBJPEG_CONFIGURE_FILES32)
 
 endif # ifeq ($(OSX),1)
 
+
+##
+## moltenvk
+##
+
+ifeq ($(OSX),1) # currently only for OS X builds
+ifneq ($(NO_DXVK),1) # May be disabled by configure
+
+## Symlink'd moltenvk directory because it has hard-coded build steps that look for ./Package
+$(MOLTENVKPROTON)/.created: $(MOLTENVK) $(MAKEFILE_DEP) $(MOLTENVK_OBJ) | $(MOLTENVK)/External
+	rm -rf ./$(MOLTENVKPROTON)
+	mkdir -p $(MOLTENVKPROTON)/
+	cd $(MOLTENVKPROTON)/ && \
+		ln -sfv ../$(MOLTENVK)/* .
+	# Package -> obj-moltenvk/Package
+	rm -f $(MOLTENVKPROTON)/Package
+	cd $(MOLTENVKPROTON)/ && \
+		ln -sv ../$(MOLTENVK_OBJ)/Package
+	touch $(MOLTENVKPROTON)/.created
+
+# This needs to exist before we do symlinking
+$(MOLTENVK)/External:
+	mkdir -p $@
+
+$(MOLTENVKPROTON): $(MOLTENVKPROTON)/.created
+
+## Moltenvk goals
+
+.PHONY: moltenvk
+
+GOAL_TARGETS += moltenvk
+
+# Make silliness to make both the explicit moltenvk goal and the outfile come from the same recipe
+.INTERMEDIATE: moltenvk-intermediate
+
+$(MOLTENVK_OUT) moltenvk: moltenvk-intermediate
+
+# The ./fetchDependencies step is not contained within the build directory, but the way it works is very messy to split
+# out as such.  We could run it in the symlink'd directory, but then we'd be fetching all of its dependencies per build,
+# when they are invariant.  This should still work decently with multiple builds, though perhaps not running them in
+# parallel.
+moltenvk-intermediate: $(MAKEFILE_DEP) $(MOLTENVKPROTON) | $(MOLTENVK_OBJ)
+	cd $(MOLTENVK) && ./fetchDependencies
+	mkdir -p $(MOLTENVK_OBJ)/Package
+	cd $(MOLTENVKPROTON) && xcodebuild -scheme 'MoltenVK (Release)' build -derivedDataPath $(abspath $(MOLTENVK_OBJ)) \
+		BUILD_DIR=$(abspath $(MOLTENVK_OBJ)) CC= CXX=
+
+	cp -a $(MOLTENVK_OBJ)/Package/Release/MoltenVK/include/* $(TOOLS_DIR64)/include/
+	cp -a $(MOLTENVK_OBJ)/Package/Release/MoltenVK/macOS/libMoltenVK.dylib $(TOOLS_DIR64)/lib/
+	cp -a $(MOLTENVK_OBJ)/Package/Release/MoltenVK/macOS/libMoltenVK.dylib $(DST_DIR)/lib64/
+
+endif # ifneq($(NO_DXVK),1)
+endif # ifeq ($(OSX),1)
+
 ##
 ## libsdl
 ##
@@ -948,7 +1008,7 @@ WINE_CONFIGURE_FILES64 := $(WINE_OBJ64)/Makefile
 
 # 64bit-configure
 $(WINE_CONFIGURE_FILES64): SHELL = $(CONTAINER_SHELL64)
-$(WINE_CONFIGURE_FILES64): $(MAKEFILE_DEP) | $(WINE_OBJ64) $(FREETYPE_OUT64) $(LIBPNG_OUT64) $(LIBJPEG_OUT64) $(LIBSDL_OUT64)
+$(WINE_CONFIGURE_FILES64): $(MAKEFILE_DEP) | $(WINE_OBJ64) $(FREETYPE_OUT64) $(LIBPNG_OUT64) $(LIBJPEG_OUT64) $(LIBSDL_OUT64) $(MOLTENVK_OUT)
 	cd $(dir $@) && \
 		STRIP=$(STRIP_QUOTED) \
 		CFLAGS=-I$(abspath $(TOOLS_DIR64))"/include -g -O2" \
@@ -971,7 +1031,7 @@ $(WINE_CONFIGURE_FILES64): $(MAKEFILE_DEP) | $(WINE_OBJ64) $(FREETYPE_OUT64) $(L
 
 # 32-bit configure
 $(WINE_CONFIGURE_FILES32): SHELL = $(CONTAINER_SHELL32)
-$(WINE_CONFIGURE_FILES32): $(MAKEFILE_DEP) | $(WINE_OBJ32) $(FREETYPE_OUT32) $(LIBPNG_OUT32) $(LIBJPEG_OUT32) $(LIBSDL_OUT32)
+$(WINE_CONFIGURE_FILES32): $(MAKEFILE_DEP) | $(WINE_OBJ32) $(FREETYPE_OUT32) $(LIBPNG_OUT32) $(LIBJPEG_OUT32) $(LIBSDL_OUT32) $(MOLTENVK_OUT)
 	cd $(dir $@) && \
 		STRIP=$(STRIP_QUOTED) \
 		CFLAGS=-I$(abspath $(TOOLS_DIR32))"/include -g -O2" \
