@@ -311,53 +311,14 @@ OBJ_DIRS := $(TOOLS_DIR32)        $(TOOLS_DIR64)        \
 $(OBJ_DIRS):
 	mkdir -p $@
 
-##
-## Targets
-##
-
-.PHONY: all all64 all32 default
-
-# Produce a working dist directory by default
-default: all dist
-.DEFAULT_GOAL := default
-
-# TODO ffmpeg is optional, disabled
-
 # All top level goals.  Lazy evaluated so they can be added below.
 GOAL_TARGETS = $(GOAL_TARGETS_LIBS)
 # Excluding goals like wine and dist that are either long running or slow per invocation
 GOAL_TARGETS_LIBS =
-
-# All target
-all: $(GOAL_TARGETS)
-	@echo ":: make $@ succeeded"
-
-all32: $(addsuffix 32,$(GOAL_TARGETS))
-	@echo ":: make $@ succeeded"
-
-all64: $(addsuffix 64,$(GOAL_TARGETS))
-	@echo ":: make $@ succeeded"
-
-# Libraries (not wine) only -- wine has a length install step that runs unconditionally, so this is useful for updating
-# incremental builds when not iterating on wine itself.
-all-lib: $(GOAL_TARGETS_LIBS)
-	@echo ":: make $@ succeeded"
-
-all32-lib: $(addsuffix 32,$(GOAL_TARGETS_LIBS))
-	@echo ":: make $@ succeeded"
-
-all64-lib: $(addsuffix 64,$(GOAL_TARGETS_LIBS))
-	@echo ":: make $@ succeeded"
-
-# Explicit reconfigure all targets
-all_configure: $(addsuffix _configure,$(GOAL_TARGETS))
-	@echo ":: make $@ succeeded"
-
-all32_configure: $(addsuffix 32_configure,$(GOAL_TARGETS))
-	@echo ":: make $@ succeeded"
-
-all64_configure: $(addsuffix 64_configure,$(GOAL_TARGETS))
-	@echo ":: make $@ succeeded"
+# Targets that have to be asked for explicitly
+OPTIONAL_TARGETS =
+# Any explicit thing, superset
+ALL_TARGETS =
 
 ##
 ## dist/install -- steps to finalize the install
@@ -406,6 +367,7 @@ $(DIST_COMPAT_MANIFEST): $(COMPAT_MANIFEST_TEMPLATE) $(MAKEFILE_DEP) | $(DST_DIR
 
 .PHONY: dist
 
+ALL_TARGETS += dist
 GOAL_TARGETS += dist
 
 # Only drag in WINE_OUT if they need to be built at all, otherwise this doesn't imply a rebuild of wine.  If wine is in
@@ -454,10 +416,12 @@ $(FREETYPE_CONFIGURE_FILES32): $(FREETYPE_AUTOGEN_FILES) $(MAKEFILE_DEP) | $(FRE
 		echo 'LIBRARY := libprotonfreetype' >> unix-cc.mk
 
 ## Freetype goals
+FREETYPE_TARGETS = freetype freetype32 freetype64 freetype_autogen freetype_configure freetype_configure32 freetype_configure64
 
-.PHONY: freetype freetype32 freetype64 freetype_autogen freetype_configure freetype_configure32 freetype_configure64
+ALL_TARGETS += $(FREETYPE_TARGETS)
+GOAL_TARGETS_LIBS += freetype
 
-GOAL_TARGETS += freetype
+.PHONY: $(FREETYPE_TARGETS)
 
 freetype_configure: $(FREETYPE_CONFIGURE_FILES32) $(FREETYPE_CONFIGURE_FILES64)
 
@@ -527,10 +491,12 @@ $(LIBPNG_CONFIGURE_FILES32): $(LIBPNG_AUTOGEN_FILES) $(MAKEFILE_DEP) $(LIBPNGPRO
 			CFLAGS='-m32 -g -O2' LDFLAGS=-m32
 
 ## Libpng goals
+LIBPNG_TARGETS = libpng libpng32 libpng64 libpng_configure libpng_configure32 libpng_configure64
 
-.PHONY: libpng libpng32 libpng64 libpng_configure libpng_configure32 libpng_configure64
+ALL_TARGETS += $(LIBPNG_TARGETS)
+GOAL_TARGETS_LIBS += libpng
 
-GOAL_TARGETS += libpng
+.PHONY: $(LIBPNG_TARGETS)
 
 libpng_configure: $(LIBPNG_CONFIGURE_FILES32) $(LIBPNG_CONFIGURE_FILES64)
 
@@ -596,10 +562,12 @@ $(LIBJPEG_CONFIGURE_FILES32): $(LIBJPEG_AUTOGEN_FILES) $(MAKEFILE_DEP) $(LIBJPEG
 			CFLAGS='-O3 -g -m32' LDFLAGS=-m32
 
 ## Libjpeg goals
+LIBJPEG_TARGETS = libjpeg libjpeg32 libjpeg64 libjpeg_configure libjpeg_configure32 libjpeg_configure64
 
-.PHONY: libjpeg libjpeg32 libjpeg64 libjpeg_configure libjpeg_configure32 libjpeg_configure64
+ALL_TARGETS += $(LIBJPEG_TARGETS)
+GOAL_TARGETS_LIBS += libjpeg
 
-GOAL_TARGETS += libjpeg
+.PHONY: $(LIBJPEG_TARGETS)
 
 libjpeg_configure: $(LIBJPEG_CONFIGURE_FILES32) $(LIBJPEG_CONFIGURE_FILES64)
 
@@ -662,7 +630,8 @@ $(MOLTENVKPROTON): $(MOLTENVKPROTON)/.created
 
 .PHONY: moltenvk
 
-GOAL_TARGETS += moltenvk
+ALL_TARGETS += moltenvk
+GOAL_TARGETS_LIBS += moltenvk
 
 # Make silliness to make both the explicit moltenvk goal and the outfile come from the same recipe
 .INTERMEDIATE: moltenvk-intermediate
@@ -721,10 +690,12 @@ $(LIBSDL_CONFIGURE_FILES32): $(LIBSDL_AUTOGEN_FILES) $(MAKEFILE_DEP) $(LIBSDLPRO
 			CFLAGS='-m32 -g -O2' LDFLAGS=-m32
 
 ## Libsdl goals
+LIBSDL_TARGETS = libsdl libsdl32 libsdl64 libsdl_configure libsdl_configure32 libsdl_configure64
 
-.PHONY: libsdl libsdl32 libsdl64 libsdl_configure libsdl_configure32 libsdl_configure64
+ALL_TARGETS += $(LIBSDL_TARGETS)
+GOAL_TARGETS_LIBS += libsdl
 
-GOAL_TARGETS += libsdl
+.PHONY: $(LIBSDL_TARGETS)
 
 libsdl_configure: $(LIBSDL_CONFIGURE_FILES32) $(LIBSDL_CONFIGURE_FILES64)
 
@@ -785,9 +756,12 @@ $(OPENAL_CONFIGURE_FILES32): $(OPENAL)/CMakeLists.txt $(MAKEFILE_DEP) $(CMAKE_BI
 			-DCMAKE_C_FLAGS="-m32" -DCMAKE_CXX_FLAGS="-m32"
 
 ## OpenAL goals
+OPENAL_TARGETS = openal openal_configure openal32 openal64 openal_configure32 openal_configure64
 
-.PHONY: openal openal_configure openal32 openal64 openal_configure32 openal_configure64
+ALL_TARGETS += $(OPENAL_TARGETS)
 GOAL_TARGETS_LIBS += openal
+
+.PHONY: $(OPENAL_TARGETS)
 
 openal_configure: $(OPENAL_CONFIGURE_FILES32) $(OPENAL_CONFIGURE_FILES64)
 
@@ -898,8 +872,12 @@ $(FFMPEG_CONFIGURE_FILES32): $(FFMPEG)/configure $(MAKEFILE_DEP) | $(FFMPEG_OBJ3
 # ^ ffmpeg's configure script doesn't update the timestamp on this guy in the case of a no-op
 
 ## ffmpeg goals
+FFMPEG_TARGETS = ffmpeg ffmpeg_configure ffmpeg32 ffmpeg64 ffmpeg_configure32 ffmpeg_configure64
 
-.PHONY: ffmpeg ffmpeg_configure ffmpeg32 ffmpeg64 ffmpeg_configure32 ffmpeg_configure64
+ALL_TARGETS += $(FFMPEG_TARGETS)
+OPTIONAL_TARGETS += $(FFMPEG_TARGETS)
+
+.PHONY: $(FFMPEG_TARGETS)
 
 ffmpeg_configure: $(FFMPEG_CONFIGURE_FILES32) $(FFMPEG_CONFIGURE_FILES64)
 
@@ -967,10 +945,12 @@ $(LSTEAMCLIENT_CONFIGURE_FILES32): $(LSTEAMCLIENT) $(MAKEFILE_DEP) | $(LSTEAMCLI
 		echo >> ./Makefile 'lsteamclient_dll_LDFLAGS := -m32 $$(patsubst %.spec,$$(SRCDIR)/%.spec,$$(lsteamclient_dll_LDFLAGS))'
 
 ## lsteamclient goals
+LSTEAMCLIENT_TARGETS = lsteamclient lsteamclient_configure lsteamclient32 lsteamclient64 lsteamclient_configure32 lsteamclient_configure64
 
-.PHONY: lsteamclient lsteamclient_configure lsteamclient32 lsteamclient64 lsteamclient_configure32 lsteamclient_configure64
-
+ALL_TARGETS += $(LSTEAMCLIENT_TARGETS)
 GOAL_TARGETS_LIBS += lsteamclient
+
+.PHONY: $(LSTEAMCLIENT_TARGETS)
 
 lsteamclient_configure: $(LSTEAMCLIENT_CONFIGURE_FILES32) $(LSTEAMCLIENT_CONFIGURE_FILES64)
 
@@ -1061,10 +1041,12 @@ $(WINE_CONFIGURE_FILES32): $(MAKEFILE_DEP) | $(WINE_OBJ32) $(WINE_ORDER_DEPS32)
 			--disable-tests --prefix=$(abspath $(WINE_DST32))
 
 ## wine goals
+WINE_TARGETS = wine wine_configure wine32 wine64 wine_configure32 wine_configure64
 
-.PHONY: wine wine_configure wine32 wine64 wine_configure32 wine_configure64
-
+ALL_TARGETS += $(WINE_TARGETS)
 GOAL_TARGETS += wine
+
+.PHONY: $(WINE_TARGETS)
 
 wine_configure: $(WINE_CONFIGURE_FILES32) $(WINE_CONFIGURE_FILES64)
 
@@ -1173,10 +1155,12 @@ $(VRCLIENT_CONFIGURE_FILES32): $(MAKEFILE_DEP) $(VRCLIENT32) | $(VRCLIENT_OBJ32)
 
 
 ## vrclient goals
+VRCLIENT_TARGETS = vrclient vrclient_configure vrclient32 vrclient64 vrclient_configure32 vrclient_configure64
 
-.PHONY: vrclient vrclient_configure vrclient32 vrclient64 vrclient_configure32 vrclient_configure64
-
+ALL_TARGETS += $(VRCLIENT_TARGETS)
 GOAL_TARGETS_LIBS += vrclient
+
+.PHONY: $(VRCLIENT_TARGETS)
 
 vrclient_configure: $(VRCLIENT_CONFIGURE_FILES32) $(VRCLIENT_CONFIGURE_FILES64)
 
@@ -1233,8 +1217,11 @@ $(CMAKE_CONFIGURE_FILES32): $(MAKEFILE_DEP) | $(CMAKE_OBJ32)
 
 
 ## cmake goals
+CMAKE_TARGETS = cmake cmake_configure cmake32 cmake64 cmake_configure32 cmake_configure64
 
-.PHONY: cmake cmake_configure cmake32 cmake64 cmake_configure32 cmake_configure64
+ALL_TARGETS += $(CMAKE_TARGETS)
+
+.PHONY: $(CMAKE_TARGETS)
 
 cmake_configure: $(CMAKE_CONFIGURE_FILES32) $(CMAKE_CONFIGURE_FILES64)
 
@@ -1296,10 +1283,12 @@ $(DXVK_CONFIGURE_FILES32): $(MAKEFILE_DEP) | $(DXVK_OBJ32)
 		PATH="$(abspath $(SRCDIR))/glslang/bin/:$(PATH)" meson configure -Dbuildtype=release
 
 ## dxvk goals
+DXVK_TARGETS = dxvk dxvk_configure dxvk32 dxvk64 dxvk_configure32 dxvk_configure64
 
-.PHONY: dxvk dxvk_configure dxvk32 dxvk64 dxvk_configure32 dxvk_configure64
-
+ALL_TARGETS += $(DXVK_TARGETS)
 GOAL_TARGETS_LIBS += dxvk
+
+.PHONY: $(DXVK_TARGETS)
 
 dxvk_configure: $(DXVK_CONFIGURE_FILES32) $(DXVK_CONFIGURE_FILES64)
 
@@ -1339,5 +1328,77 @@ endif # NO_DXVK
 #  build_vrclient64_tests
 #  build_vrclient32_tests
 
+
+##
+## Targets
+##
+
+.PHONY: all all64 all32 default help targets
+
+# Produce a working dist directory by default
+default: all dist
+.DEFAULT_GOAL := default
+
+# TODO ffmpeg is optional, disabled
+
+# For suffixes 64/32/_configure64/_configure32 automatically check if they exist compared to ALL_TARGETS and make
+# all_configure32/etc aliases
+GOAL_TARGETS64           := $(filter $(addsuffix 64,$(GOAL_TARGETS)),$(ALL_TARGETS))
+GOAL_TARGETS32           := $(filter $(addsuffix 32,$(GOAL_TARGETS)),$(ALL_TARGETS))
+GOAL_TARGETS_LIBS64      := $(filter $(addsuffix 64,$(GOAL_TARGETS_LIBS)),$(ALL_TARGETS))
+GOAL_TARGETS_LIBS32      := $(filter $(addsuffix 32,$(GOAL_TARGETS_LIBS)),$(ALL_TARGETS))
+GOAL_TARGETS_CONFIGURE   := $(filter $(addsuffix _configure,$(GOAL_TARGETS)),$(ALL_TARGETS))
+GOAL_TARGETS_CONFIGURE64 := $(filter $(addsuffix _configure64,$(GOAL_TARGETS)),$(ALL_TARGETS))
+GOAL_TARGETS_CONFIGURE32 := $(filter $(addsuffix _configure32,$(GOAL_TARGETS)),$(ALL_TARGETS))
+
+# Anything in all-targets that didn't end up in here
+OTHER_TARGETS := $(filter-out $(ALL_TARGETS),$(GOAL_TARGETS) $(OPTIONAL_TARGETS) $(GOAL_TARGETS64) $(GOAL_TARGETS32) \
+                                             $(GOAL_TARGETS_LIBS64) $(GOAL_TARGETS_LIBS32) $(GOAL_TARGETS_CONFIGURE) \
+                                             $(GOAL_TARGETS_CONFIGURE64) $(GOAL_TARGETS_CONFIGURE32))
+
+help: targets
+targets:
+	$(info Default targets      (make all):              $(strip $(GOAL_TARGETS)))
+	$(info Default targets      (make all_lib):          $(strip $(GOAL_TARGETS_LIBS)))
+	$(info Default targets      (make all_configure):    $(strip $(GOAL_TARGETS_CONFIGURE)))
+	$(info Default targets      (make all64):            $(strip $(GOAL_TARGETS64)))
+	$(info Default targets      (make all32):            $(strip $(GOAL_TARGETS32)))
+	$(info Default targets      (make all64_lib):        $(strip $(GOAL_TARGETS_LIBS64)))
+	$(info Default targets      (make all32_lib):        $(strip $(GOAL_TARGETS_LIBS32)))
+	$(info Reconfigure targets  (make all64_configure):  $(strip $(GOAL_TARGETS_CONFIGURE64)))
+	$(info Reconfigure targets  (make all32_configure):  $(strip $(GOAL_TARGETS_CONFIGURE32)))
+	$(info Optional targets: $(OPTIONAL_TARGETS))
+	$(info Other targets:    $(OTHER_TARGETS))
+
+# All target
+all: $(GOAL_TARGETS)
+	@echo ":: make $@ succeeded"
+
+all32: $(GOAL_TARGETS32)
+	@echo ":: make $@ succeeded"
+
+all64: $(GOAL_TARGETS64)
+	@echo ":: make $@ succeeded"
+
+# Libraries (not wine) only -- wine has a length install step that runs unconditionally, so this is useful for updating
+# incremental builds when not iterating on wine itself.
+all_lib: $(GOAL_TARGETS_LIBS)
+	@echo ":: make $@ succeeded"
+
+all32_lib: $(GOAL_TARGETS_LIBS32)
+	@echo ":: make $@ succeeded"
+
+all64_lib: $(GOAL_TARGETS_LIBS64)
+	@echo ":: make $@ succeeded"
+
+# Explicit reconfigure all targets
+all_configure: $(GOAL_TARGETS_CONFIGURE)
+	@echo ":: make $@ succeeded"
+
+all32_configure: $(GOAL_TARGETS_CONFIGURE32)
+	@echo ":: make $@ succeeded"
+
+all64_configure: $(GOAL_TARGETS_CONFIGURE64)
+	@echo ":: make $@ succeeded"
 
 endif # End of NESTED_MAKE from beginning
