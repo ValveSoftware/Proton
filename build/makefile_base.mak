@@ -14,7 +14,7 @@ ifneq ($(NO_NESTED_MAKE),1)
 export
 .DEFAULT_GOAL := default
 .PHONY: $(MAKECMDGOALS) default nested_make
-$(MAKECMDGOALS): nested_make
+default $(MAKECMDGOALS): nested_make
 
 nested_make:
 	$(MAKE) $(MAKECMDGOALS) -f $(firstword $(MAKEFILE_LIST)) NO_NESTED_MAKE=1
