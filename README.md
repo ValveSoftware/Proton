@@ -89,7 +89,7 @@ Next, you need to repeat the process, but for amd64:
 
 And then repeat all of the commands to install gcc and Wine dependencies again.
 
-In addition, your host system will need to be able to run Wine in both 64- and
+In addition, your host system will need to be able to run Wine in both 64-bit and
 32-bit modes in order to create the default prefix. It is recommended to
 install Wine from your package manager, including its optional dependencies.
 
@@ -138,7 +138,7 @@ build dxvk on your local system; refer to [the dxvk README.md](https://github.co
 Building for macOS
 ---
 To build Proton for macOS, install the latest Xcode command line tools, as
-well as cmake (for openal-soft) and a recent nasm (for libjpeg-turbo), libtool, and automake. You can
+well as cmake (for openal-soft), a recent nasm (for libjpeg-turbo), libtool, and automake. You can
 use a packager like [Homebrew](https://brew.sh/) to find these packages.
 
         brew install cmake nasm libtool automake
