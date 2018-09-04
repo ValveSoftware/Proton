@@ -161,13 +161,13 @@ ifeq ($(OSX),1)
 STRIP := strip -x
 LIB_SUFFIX := dylib
 WINE32_AUTOCONF := --without-x \
-                   ac_cv_lib_soname_freetype32=libprotonfreetype.dylib \
-                   ac_cv_lib_soname_png32=libprotonpng16.dylib \
-                   ac_cv_lib_soname_jpeg32=libprotonjpeg.dylib
+                   ac_cv_lib_soname_freetype=libprotonfreetype.dylib \
+                   ac_cv_lib_soname_png=libprotonpng16.dylib \
+                   ac_cv_lib_soname_jpeg=libprotonjpeg.dylib
 WINE64_AUTOCONF := --without-x \
-                   ac_cv_lib_soname_freetype64=libprotonfreetype.dylib \
-                   ac_cv_lib_soname_png64=libprotonpng16.dylib \
-                   ac_cv_lib_soname_jpeg64=libprotonjpeg.dylib
+                   ac_cv_lib_soname_freetype=libprotonfreetype.dylib \
+                   ac_cv_lib_soname_png=libprotonpng16.dylib \
+                   ac_cv_lib_soname_jpeg=libprotonjpeg.dylib
 
 FREETYPE32_CFLAGS := -I$(abspath $(TOOLS_DIR32))/include/freetype2
 FREETYPE32_LIBS   := -L$(abspath $(TOOLS_DIR32))/lib -lprotonfreetype -framework CoreServices -framework ApplicationServices -lz
@@ -198,9 +198,7 @@ QUOTED_VARIABLES := LIB_SUFFIX \
                     JPEG32_CFLAGS \
                     JPEG32_LIBS \
                     JPEG64_CFLAGS \
-                    JPEG64_LIBS \
-                    WINE32_AUTOCONF \
-                    WINE64_AUTOCONF
+                    JPEG64_LIBS
 
 # v-- This flattens a list when called. Don't look directly into it.
 QUOTE = $(subst $(eval) ,\ ,$(1))
@@ -1015,10 +1013,8 @@ $(WINE_CONFIGURE_FILES64): $(MAKEFILE_DEP) | $(WINE_OBJ64) $(WINE_ORDER_DEPS64)
 		FREETYPE_CFLAGS=$(FREETYPE64_CFLAGS) \
 		FREETYPE_LIBS=$(FREETYPE64_LIBS) \
 		../$(WINE)/configure \
-			$(FREETYPE64_AUTOCONF) \
-			$(JPEG64_AUTOCONF) \
-			$(PNG64_AUTOCONF) \
-			--without-curses $(WINE_AUTOCONF) \
+			$(WINE64_AUTOCONF) \
+			--without-curses \
 			--enable-win64 --disable-tests --prefix=$(abspath $(DST_DIR))
 
 # 32-bit configure
@@ -1038,10 +1034,8 @@ $(WINE_CONFIGURE_FILES32): $(MAKEFILE_DEP) | $(WINE_OBJ32) $(WINE_ORDER_DEPS32)
 		FREETYPE_CFLAGS=$(FREETYPE32_CFLAGS) \
 		FREETYPE_LIBS=$(FREETYPE32_LIBS) \
 		../$(WINE)/configure \
-			$(FREETYPE32_AUTOCONF) \
-			$(JPEG32_AUTOCONF) \
-			$(PNG32_AUTOCONF) \
-			--without-curses $(WINE_AUTOCONF) \
+			$(WINE32_AUTOCONF) \
+			--without-curses \
 			--disable-tests --prefix=$(abspath $(WINE_DST32))
 
 ## wine goals
