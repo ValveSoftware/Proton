@@ -112,8 +112,26 @@ ifeq ($(NO_MAKEFILE_DEPENDENCY),1)
 MAKEFILE_DEP :=
 endif
 
+##
+## Global config
+##
+
+TOOLS_DIR32 := ./obj-tools32
+TOOLS_DIR64 := ./obj-tools64
+DST_BASE := ./dist
+DST_DIR := $(DST_BASE)/dist
+
 # TODO Release/debug configuration
 INSTALL_PROGRAM_FLAGS :=
+
+# All top level goals.  Lazy evaluated so they can be added below.
+GOAL_TARGETS = $(GOAL_TARGETS_LIBS)
+# Excluding goals like wine and dist that are either long running or slow per invocation
+GOAL_TARGETS_LIBS =
+# Targets that have to be asked for explicitly
+OPTIONAL_TARGETS =
+# Any explicit thing, superset
+ALL_TARGETS =
 
 ##
 ## Platform-specific variables
@@ -207,11 +225,6 @@ LICENSE := $(SRCDIR)/dist.LICENSE.lin
 ifeq ($(OSX),1)
 	LICENSE := $(SRCDIR)/dist.LICENSE.osx
 endif
-
-TOOLS_DIR32 := ./obj-tools32
-TOOLS_DIR64 := ./obj-tools64
-DST_BASE := ./dist
-DST_DIR := $(DST_BASE)/dist
 
 FREETYPE := $(SRCDIR)/freetype2
 FREETYPE_OBJ32 := ./obj-freetype32
@@ -310,15 +323,6 @@ OBJ_DIRS := $(TOOLS_DIR32)        $(TOOLS_DIR64)        \
 
 $(OBJ_DIRS):
 	mkdir -p $@
-
-# All top level goals.  Lazy evaluated so they can be added below.
-GOAL_TARGETS = $(GOAL_TARGETS_LIBS)
-# Excluding goals like wine and dist that are either long running or slow per invocation
-GOAL_TARGETS_LIBS =
-# Targets that have to be asked for explicitly
-OPTIONAL_TARGETS =
-# Any explicit thing, superset
-ALL_TARGETS =
 
 ##
 ## dist/install -- steps to finalize the install
