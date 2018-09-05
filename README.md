@@ -164,7 +164,7 @@ use the Steam client to verify local files, it will restore the production versi
 of Proton.
 
 Each component of this software is used under the terms of their licenses.
-See the <tt>LICENSE</tt> files [here](https://github.com/ValveSoftware/Proton/blob/proton_3.7/LICENSE.proton), as well as the <tt>LICENSE</tt>, <tt>COPYING</tt>, etc files in each
+See the <tt>LICENSE</tt> files [here](LICENSE.proton), as well as the <tt>LICENSE</tt>, <tt>COPYING</tt>, etc files in each
 submodule and directory for details.
 
 
