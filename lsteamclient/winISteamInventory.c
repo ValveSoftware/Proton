@@ -317,10 +317,10 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamInventory_STEAMINVENTORY_INTERFACE_V002_GetItemPrice)
         VTABLE_ADD_FUNC(winISteamInventory_STEAMINVENTORY_INTERFACE_V002_StartUpdateProperties)
         VTABLE_ADD_FUNC(winISteamInventory_STEAMINVENTORY_INTERFACE_V002_RemoveProperty)
-        VTABLE_ADD_FUNC(winISteamInventory_STEAMINVENTORY_INTERFACE_V002_SetProperty)
-        VTABLE_ADD_FUNC(winISteamInventory_STEAMINVENTORY_INTERFACE_V002_SetProperty_2)
-        VTABLE_ADD_FUNC(winISteamInventory_STEAMINVENTORY_INTERFACE_V002_SetProperty_3)
         VTABLE_ADD_FUNC(winISteamInventory_STEAMINVENTORY_INTERFACE_V002_SetProperty_4)
+        VTABLE_ADD_FUNC(winISteamInventory_STEAMINVENTORY_INTERFACE_V002_SetProperty_3)
+        VTABLE_ADD_FUNC(winISteamInventory_STEAMINVENTORY_INTERFACE_V002_SetProperty_2)
+        VTABLE_ADD_FUNC(winISteamInventory_STEAMINVENTORY_INTERFACE_V002_SetProperty)
         VTABLE_ADD_FUNC(winISteamInventory_STEAMINVENTORY_INTERFACE_V002_SubmitUpdateProperties)
     );
 #ifndef __GNUC__

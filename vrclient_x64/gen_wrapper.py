@@ -204,10 +204,15 @@ def strip_ns(name):
 
 def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, existing_methods, iface_version):
     used_name = method.spelling
-    idx = '2'
-    while used_name in existing_methods:
-        used_name = "%s_%s" % (method.spelling, idx)
-        idx = chr(ord(idx) + 1)
+    if used_name in existing_methods:
+        number = '2'
+        while used_name in existing_methods:
+            idx = existing_methods.index(used_name)
+            used_name = "%s_%s" % (method.spelling, number)
+            number = chr(ord(number) + 1)
+        existing_methods.insert(idx, used_name)
+    else:
+        existing_methods.append(used_name)
     returns_record = method.result_type.get_canonical().kind == clang.cindex.TypeKind.RECORD
     if returns_record:
         parambytes = 8 #_this + return pointer
@@ -385,7 +390,6 @@ def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, e
         cpp.write("    return _ret;\n")
     cfile.write("}\n\n")
     cpp.write("}\n\n")
-    return used_name
 
 def get_iface_version(classname):
     if classname in iface_versions.keys():
@@ -480,7 +484,7 @@ WINE_DEFAULT_DEBUG_CHANNEL(vrclient);
     method_names = []
     for child in children:
         if child.kind == clang.cindex.CursorKind.CXX_METHOD:
-            method_names.append(handle_method(cfile, classnode.spelling, winclassname, cppname, child, cpp, cpp_h, method_names, iface_version))
+            handle_method(cfile, classnode.spelling, winclassname, cppname, child, cpp, cpp_h, method_names, iface_version)
             methods.append(child)
 
     cfile.write("extern vtable_ptr %s_vtable;\n\n" % winclassname)

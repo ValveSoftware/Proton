@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2
 
 #NOTE: If you make modifications here, consider whether they should
 #be duplicated in ../vrclient/gen_wrapper.py
@@ -155,10 +155,15 @@ def handle_destructor(cfile, classname, winclassname, method):
 
 def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, existing_methods):
     used_name = method.spelling
-    idx = '2'
-    while used_name in existing_methods:
-        used_name = "%s_%s" % (method.spelling, idx)
-        idx = chr(ord(idx) + 1)
+    if used_name in existing_methods:
+        number = '2'
+        while used_name in existing_methods:
+            idx = existing_methods.index(used_name)
+            used_name = "%s_%s" % (method.spelling, number)
+            number = chr(ord(number) + 1)
+        existing_methods.insert(idx, used_name)
+    else:
+        existing_methods.append(used_name)
     returns_record = method.result_type.get_canonical().kind == clang.cindex.TypeKind.RECORD
     if returns_record:
         parambytes = 8 #_this + return pointer
@@ -273,7 +278,6 @@ def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, e
         cfile.write("    return steamclient_unix_path_to_dos_path(path_result, %s, %s);\n" % (path_param_name, path_size_param_name))
     cfile.write("}\n\n")
     cpp.write("}\n\n")
-    return used_name
 
 def get_iface_version(classname):
     # ISteamClient -> STEAMCLIENT_INTERFACE_VERSION
@@ -340,7 +344,7 @@ WINE_DEFAULT_DEBUG_CHANNEL(steamclient);
     methods = []
     for child in children:
         if child.kind == clang.cindex.CursorKind.CXX_METHOD:
-            methods.append(handle_method(cfile, classnode.spelling, winclassname, cppname, child, cpp, cpp_h, methods))
+            handle_method(cfile, classnode.spelling, winclassname, cppname, child, cpp, cpp_h, methods)
         elif child.kind == clang.cindex.CursorKind.DESTRUCTOR:
             methods.append(handle_destructor(cfile, classnode.spelling, winclassname, child))
 
@@ -500,7 +504,7 @@ for sdkver in sdk_versions:
         if not os.path.isfile(input_name):
             continue
         index = clang.cindex.Index.create()
-        tu = index.parse(input_name, args=['-x', 'c++', '-m32', '-Isteamworks_sdk_%s/' % sdkver, '-I/usr/lib/clang/5.0.1/include/'])
+        tu = index.parse(input_name, args=['-x', 'c++', '-m32', '-Isteamworks_sdk_%s/' % sdkver, '-I/usr/lib/clang/6.0.1/include/'])
 
         diagnostics = list(tu.diagnostics)
         if len(diagnostics) > 0:
