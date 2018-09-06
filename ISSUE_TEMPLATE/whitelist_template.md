@@ -1,9 +1,11 @@
 # Whitelist Request
 - Name of the game to be whitelisted:
-- Steam AppID of the game: 
+- Steam AppID of the game:
 
 ## System Information
-- Driver-/(LLVM-)/kernel- version/GPU: <!-- e.g. Mesa 18.2/7.0.0/4.17/RX 580 -->
+- GPU: <!-- e.g. RX 580 or GTX 970 -->
+- Driver/LLVM version: <!-- e.g. Mesa 18.2/7.0.0 or nvidia 396.54 -->
+- Kernel version: <!-- e.g. 4.17 -->
 - Link to full system information report as [Gist](https://gist.github.com/):
 - Proton version:
 

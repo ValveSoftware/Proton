@@ -1,9 +1,11 @@
 # Compatibility Report
 - Name of the game with compatibility issues:
-- Steam AppID of the game: 
+- Steam AppID of the game:
 
 ## System Information
-- Driver-/(LLVM-)/kernel- version/GPU: <!-- e.g. Mesa 18.2/7.0.0/4.17/RX 580 -->
+- GPU: <!-- e.g. RX 580 or GTX 970 -->
+- Driver/LLVM version: <!-- e.g. Mesa 18.2/7.0.0 or nvidia 396.54 -->
+- Kernel version: <!-- e.g. 4.17 -->
 - Link to full system information report as [Gist](https://gist.github.com/):
 - Proton version:
 
@@ -29,7 +31,7 @@ and drop the generated `$HOME/steam-$APPID.log` into this issue report -->
    `Help` > `System Information` in the Steam client on your machine.
 4. Please copy it to your clipboard by pressing `Ctrl+A` and then `Ctrl+C`.
    Then paste it in a [Gist](https://gist.github.com/) and post the link in
-   this issue to prevent chaos by too much info in one place.
+   this issue.
 5. Please search for open issues and pull requests by the name of the game and
    find out whether they are relevant and should be referenced above.
 -->
