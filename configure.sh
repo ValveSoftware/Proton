@@ -130,6 +130,7 @@ arg_steamrt64=""
 arg_no_steamrt=""
 arg_force_dxvk=""
 arg_build_name=""
+arg_help=""
 invalid_args=""
 function parse_args() {
   local arg;
@@ -160,7 +161,9 @@ function parse_args() {
     fi
 
     # The args
-    if [[ $arg = --build-name ]]; then
+    if [[ $arg = --help || $arg = --usage ]]; then
+      arg_help=1
+    elif [[ $arg = --build-name ]]; then
       arg_build_name="$val"
       val_used=1
     elif [[ $arg = --osx-force-dxvk ]]; then
@@ -212,6 +215,7 @@ usage() {
   "$1" "  out-of-tree build directories (e.g. mkdir mybuild && cd mybuild && ../configure.sh)"
   "$1" ""
   "$1" "  Options"
+  "$1" "    --help / --usage     Show this help text and exit"
   "$1" "    --build-name=<name>  Set the name of the build that displays when used in Steam"
   "$1" ""
   "$1" "    --osx-force-dxvk     Attempt to build DXVK on OS X - not currently functioning,"
@@ -236,6 +240,7 @@ usage() {
 
 [[ $# -gt 0 ]] || usage info
 parse_args "$@" || usage err
+[[ -z $arg_help ]] || usage info
 
 # Sanity check arguments
 if [[ -n $arg_no_steamrt && (-n $arg_steamrt32 || -n $arg_steamrt64) ]]; then
