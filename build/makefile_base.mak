@@ -41,10 +41,18 @@ endif
 
 # If CC is coming from make's defaults or nowhere, use our own default.  Otherwise respect environment.
 ifneq ($(filter default undefined,$(origin CC)),)
-	CC = ccache gcc
+	ifeq ($(OSX),1)
+		CC = ccache clang
+	else
+		CC = ccache gcc
+	endif
 endif
 ifneq ($(filter default undefined,$(origin CXX)),)
-	CXX = ccache g++
+	ifeq ($(OSX),1)
+		CXX = ccache clang++
+	else
+		CXX = ccache g++
+	endif
 endif
 
 export CC
