@@ -1,4 +1,4 @@
-#!/usr/bin/env @PYTHON_NAME@
+#!/usr/bin/env python
 
 #script to launch Wine with the correct environment
 
@@ -509,5 +509,3 @@ else:
     sys.exit(1)
 
 sys.exit(0)
-
-# vim: set syntax=python:
