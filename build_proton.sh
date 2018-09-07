@@ -290,6 +290,21 @@ function build_wine64
     INSTALL_PROGRAM_FLAGS="$INSTALL_PROGRAM_FLAGS" STRIP="$STRIP" $AMD64_WRAPPER make prefix="$TOOLS_DIR64" libdir="$TOOLS_DIR64/lib64" dlldir="$TOOLS_DIR64/lib64/wine" install-dev install-lib
     rm -f "$DST_DIR"/bin/{msiexec,notepad,regedit,regsvr32,wineboot,winecfg,wineconsole,winedbg,winefile,winemine,winepath}
     rm -rf "$DST_DIR/share/man/"
+
+    mkdir -p "$TOOLS_DIR64"/lib/pkgconfig/
+    cat > "$TOOLS_DIR64"/lib/pkgconfig/proton.pc <<EOF
+prefix=$TOOLS_DIR64
+exec_prefix=\${prefix}
+libdir=\${exec_prefix}/lib64
+includedir=\${prefix}/include
+
+Name: Proton
+Description: Proton
+Requires:
+Version: 3.16
+Libs: -L\${libdir} -L\${libdir}/wine
+Cflags: -I\${includedir} -I\${includedir}/wine -I\${includedir}/wine/windows
+EOF
 }
 
 function build_wine32
@@ -314,6 +329,19 @@ function build_wine32
     if [ "$PLATFORM" != "Darwin" ]; then
         cp -a bin/wine-preloader "$DST_DIR"/bin/
     fi
+    cat > "$TOOLS_DIR32"/lib/pkgconfig/proton.pc <<EOF
+prefix=$TOOLS_DIR32
+exec_prefix=\${prefix}
+libdir=\${exec_prefix}/lib
+includedir=\${prefix}/include
+
+Name: Proton
+Description: Proton
+Requires:
+Version: 3.16
+Libs: -L\${libdir} -L\${libdir}/wine
+Cflags: -I\${includedir} -I\${includedir}/wine -I\${includedir}/wine/windows
+EOF
 }
 
 function build_lsteamclient64
@@ -448,33 +476,58 @@ function build_dxvk
 {
     #unfortunately the Steam chroots are too old to build DXVK, so we have to
     #build it in the host system
-    if [ ! -e "$TOP/build/dxvk.win64/bin/d3d11.dll" ]; then
+    if [ ! -e "$TOP/build/dxvk.win64/lib/dxgi.dll.so" ]; then
         cd "$TOP"/dxvk
         mkdir -p "$TOP"/build/dxvk.win32
-        cd "$TOP"/dxvk
-        PATH="$TOP/glslang/bin/:$PATH" meson --strip --buildtype="release" --prefix="$TOP"/build/dxvk.win32 --cross-file build-win32.txt "$TOP"/build/dxvk.win32
+        PATH="$TOP/glslang/bin/:$TOP/build/tools.win32/bin/:$PATH" \
+            PKG_CONFIG_PATH=$TOOLS_DIR32/lib/pkgconfig/ \
+            meson \
+            --strip \
+            --buildtype="release" \
+            --prefix="$TOP"/build/dxvk.win32 \
+            --cross-file build-wine32.txt \
+            "$TOP"/build/dxvk.win32
         cd "$TOP"/build/dxvk.win32
-        PATH="$TOP/glslang/bin/:$PATH" ninja
-        PATH="$TOP/glslang/bin/:$PATH" ninja install
+        PATH="$TOP/glslang/bin/:$TOP/build/tools.win32/bin/:$PATH" ninja
+        PATH="$TOP/glslang/bin/:$TOP/build/tools.win32/bin/:$PATH" ninja install
 
         cd "$TOP"/dxvk
         mkdir -p "$TOP"/build/dxvk.win64
-        PATH="$TOP/glslang/bin/:$PATH" meson --strip --buildtype="release" --prefix="$TOP"/build/dxvk.win64 --cross-file build-win64.txt "$TOP"/build/dxvk.win64
+        PATH="$TOP/glslang/bin/:$TOP/build/tools.win64/bin/:$PATH" \
+            PKG_CONFIG_PATH=$TOOLS_DIR64/lib/pkgconfig/ \
+            meson \
+            --strip \
+            --buildtype="release" \
+            --prefix="$TOP"/build/dxvk.win64 \
+            --cross-file build-wine64.txt \
+            "$TOP"/build/dxvk.win64
         cd "$TOP"/build/dxvk.win64
-        PATH="$TOP/glslang/bin/:$PATH" ninja
-        PATH="$TOP/glslang/bin/:$PATH" ninja install
+        PATH="$TOP/glslang/bin/:$TOP/build/tools.win64/bin/:$PATH" ninja
+        PATH="$TOP/glslang/bin/:$TOP/build/tools.win64/bin/:$PATH" ninja install
     fi
 
     cd "$TOP"
     mkdir -p "$DST_DIR"/lib64/wine/dxvk
-    cp "$TOP/build/dxvk.win64/bin/dxgi.dll" "$DST_DIR"/lib64/wine/dxvk/
-    cp "$TOP/build/dxvk.win64/bin/d3d11.dll" "$DST_DIR"/lib64/wine/dxvk/
+    cp "$TOP"/build/dxvk.win64/lib/*.dll.so "$DST_DIR"/lib64/wine/dxvk/
     git submodule status -- dxvk > "$DST_DIR"/lib64/wine/dxvk/version
+    #move replaced .dll.sos into a wined3d directory
+    mkdir -p "$DST_DIR"/lib64/wine/wined3d
+    for f in "$DST_DIR"/lib64/wine/dxvk/*.dll.so; do
+        if [ -e "$DST_DIR"/lib64/wine/$(basename $f) ]; then
+            mv "$DST_DIR"/lib64/wine/$(basename $f) "$DST_DIR"/lib64/wine/wined3d/
+        fi
+    done
 
     mkdir -p "$DST_DIR"/lib/wine/dxvk
-    cp "$TOP/build/dxvk.win32/bin/dxgi.dll" "$DST_DIR"/lib/wine/dxvk/
-    cp "$TOP/build/dxvk.win32/bin/d3d11.dll" "$DST_DIR"/lib/wine/dxvk/
+    cp "$TOP"/build/dxvk.win32/lib/*.dll.so "$DST_DIR"/lib/wine/dxvk/
     git submodule status -- dxvk > "$DST_DIR"/lib/wine/dxvk/version
+    #move replaced .dll.sos into a wined3d directory
+    mkdir -p "$DST_DIR"/lib/wine/wined3d
+    for f in "$DST_DIR"/lib/wine/dxvk/*.dll.so; do
+        if [ -e "$DST_DIR"/lib/wine/$(basename $f) ]; then
+            mv "$DST_DIR"/lib/wine/$(basename $f) "$DST_DIR"/lib/wine/wined3d/
+        fi
+    done
 }
 
 
@@ -609,9 +662,9 @@ fi
 case "$BUILD_COMPONENTS" in
     "all")
         build_openal
-        build_dxvk
         build_wine64
         build_wine32
+        build_dxvk
         build_lsteamclient64
         build_lsteamclient32
         build_vrclient64
@@ -659,8 +712,8 @@ if [ "$PACKAGE" = true ]; then
     WINEPREFIX="$TOP"/build/dist/share/default_pfx/ $RUNTIME_RUNSH ./build/dist/bin/wine64 wineboot
     WINEPREFIX="$TOP"/build/dist/share/default_pfx/ $RUNTIME_RUNSH ./build/dist/bin/wineserver -w
 
-    cp -a openvr/bin/win32/openvr_api.dll "$TOP"/build/dist/lib/wine/dxvk/openvr_api_dxvk.dll
-    cp -a openvr/bin/win64/openvr_api.dll "$TOP"/build/dist/lib64/wine/dxvk/openvr_api_dxvk.dll
+    cp -a openvr/bin/linux32/libopenvr_api.so "$TOP"/build/dist/lib/libopenvr_api_dxvk.so
+    cp -a openvr/bin/linux64/libopenvr_api.so "$TOP"/build/dist/lib64/libopenvr_api_dxvk.so
 
     setup_wine_gecko "2.47" "x86"
     setup_wine_gecko "2.47" "x86_64"
