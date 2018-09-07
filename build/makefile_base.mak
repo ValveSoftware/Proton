@@ -29,6 +29,7 @@ else # (Rest of the file is the else)
 #   SRCDIR          - Path to source
 #   BUILD_NAME      - Name of the build for manifests etc.
 #   NO_DXVK         - 1 if skipping DXVK steps
+#   WITH_FFMPEG     - 1 if including ffmpeg steps
 #   OSX             - 1 if OS X build
 #   STEAMRT64_MODE  - 'docker' or '' for automatic Steam Runtime container
 #   STEAMRT64_IMAGE - Name of the image if mode is set
@@ -128,8 +129,6 @@ INSTALL_PROGRAM_FLAGS :=
 GOAL_TARGETS = $(GOAL_TARGETS_LIBS)
 # Excluding goals like wine and dist that are either long running or slow per invocation
 GOAL_TARGETS_LIBS =
-# Targets that have to be asked for explicitly
-OPTIONAL_TARGETS =
 # Any explicit thing, superset
 ALL_TARGETS =
 
@@ -796,7 +795,7 @@ openal32: $(OPENAL_CONFIGURE_FILES32)
 ## ffmpeg
 ##
 
-## Create & configure object directory for ffmpeg
+ifeq ($(WITH_FFMPEG),1)
 
 FFMPEG_CONFIGURE_FILES32 := $(FFMPEG_OBJ32)/Makefile
 FFMPEG_CONFIGURE_FILES64 := $(FFMPEG_OBJ64)/Makefile
@@ -876,7 +875,7 @@ $(FFMPEG_CONFIGURE_FILES32): $(FFMPEG)/configure $(MAKEFILE_DEP) | $(FFMPEG_OBJ3
 FFMPEG_TARGETS = ffmpeg ffmpeg_configure ffmpeg32 ffmpeg64 ffmpeg_configure32 ffmpeg_configure64
 
 ALL_TARGETS += $(FFMPEG_TARGETS)
-OPTIONAL_TARGETS += $(FFMPEG_TARGETS)
+GOAL_TARGETS_LIBS += ffmpeg
 
 .PHONY: $(FFMPEG_TARGETS)
 
@@ -901,6 +900,8 @@ ffmpeg32: $(FFMPEG_CONFIGURE_FILES32)
 	$(MAKE) && \
 	$(MAKE) install && \
 	cp -L ../$(TOOLS_DIR32)/lib/{libavcodec,libavutil}* ../$(DST_DIR)/lib
+
+endif # ifeq ($(WITH_FFMPEG),1)
 
 ##
 ## lsteamclient
@@ -1343,7 +1344,7 @@ GOAL_TARGETS_CONFIGURE64 := $(filter $(addsuffix _configure64,$(GOAL_TARGETS)),$
 GOAL_TARGETS_CONFIGURE32 := $(filter $(addsuffix _configure32,$(GOAL_TARGETS)),$(ALL_TARGETS))
 
 # Anything in all-targets that didn't end up in here
-OTHER_TARGETS := $(filter-out $(ALL_TARGETS),$(GOAL_TARGETS) $(OPTIONAL_TARGETS) $(GOAL_TARGETS64) $(GOAL_TARGETS32) \
+OTHER_TARGETS := $(filter-out $(ALL_TARGETS),$(GOAL_TARGETS) $(GOAL_TARGETS64) $(GOAL_TARGETS32) \
                                              $(GOAL_TARGETS_LIBS64) $(GOAL_TARGETS_LIBS32) $(GOAL_TARGETS_CONFIGURE) \
                                              $(GOAL_TARGETS_CONFIGURE64) $(GOAL_TARGETS_CONFIGURE32))
 
@@ -1358,7 +1359,6 @@ targets:
 	$(info Default targets      (make all32_lib):        $(strip $(GOAL_TARGETS_LIBS32)))
 	$(info Reconfigure targets  (make all64_configure):  $(strip $(GOAL_TARGETS_CONFIGURE64)))
 	$(info Reconfigure targets  (make all32_configure):  $(strip $(GOAL_TARGETS_CONFIGURE32)))
-	$(info Optional targets: $(OPTIONAL_TARGETS))
 	$(info Other targets:    $(OTHER_TARGETS))
 
 # All target

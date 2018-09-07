@@ -102,6 +102,11 @@ function configure() {
     echo >> "$MAKEFILE" "NO_DXVK := 1"
   fi
 
+  # ffmpeg?
+  if [[ -n $arg_ffmpeg ]]; then
+    echo >> "$MAKEFILE" "WITH_FFMPEG := 1"
+  fi
+
   # OS X?
   if [[ -n $OSX ]]; then
     echo >> "$MAKEFILE" "OSX := 1"
@@ -129,6 +134,7 @@ arg_steamrt32=""
 arg_steamrt64=""
 arg_no_steamrt=""
 arg_force_dxvk=""
+arg_ffmpeg=""
 arg_build_name=""
 arg_help=""
 invalid_args=""
@@ -166,6 +172,8 @@ function parse_args() {
     elif [[ $arg = --build-name ]]; then
       arg_build_name="$val"
       val_used=1
+    elif [[ $arg = --with-ffmpeg ]]; then
+      arg_ffmpeg=1
     elif [[ $arg = --osx-force-dxvk ]]; then
       arg_force_dxvk=1
     elif [[ $arg = --steam-runtime32 ]]; then
@@ -216,10 +224,13 @@ usage() {
   "$1" ""
   "$1" "  Options"
   "$1" "    --help / --usage     Show this help text and exit"
+  "$1" ""
   "$1" "    --build-name=<name>  Set the name of the build that displays when used in Steam"
   "$1" ""
   "$1" "    --osx-force-dxvk     Attempt to build DXVK on OS X - not currently functioning,"
   "$1" "                         development use"
+  "$1" ""
+  "$1" "    --with-ffmpeg        Build ffmpeg for WMA audio support"
   "$1" ""
   "$1" "  Steam Runtime"
   "$1" "    Proton builds that are to be installed & run under the steam client must be built with"
