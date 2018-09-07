@@ -18,7 +18,7 @@ from filelock import FileLock, Timeout
 #To enable debug logging, copy "user_settings.sample.py" to "user_settings.py"
 #and edit it if needed.
 
-CURRENT_PREFIX_VERSION="3.7-2"
+CURRENT_PREFIX_VERSION="3.16-1"
 
 PFX="Proton: "
 
