@@ -1,4 +1,9 @@
 ## Available in Proton 3.7 Beta:
+###### 3.7-6:
+- Fix failure to start VR games.
+- Improvements to fullscreen games running at non-native resolutions.
+- Compatibility fix for games that use Steam integration.
+- Return to previous D3D10 behavior in DXVK to allow games to fallback to D3D9.
 ###### 3.7-5:
 - Performance improvements for timing APIs in CPU-limited scenarios
 - Automatically capture mouse in fullscreen windows is enabled by default.
