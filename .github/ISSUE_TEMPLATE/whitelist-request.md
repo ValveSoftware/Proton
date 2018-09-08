@@ -17,7 +17,7 @@ about: Games tested and found to have no issues.
 
 ## I confirm:
 - [ ] that pressing the `Play` button in the Steam client is sufficient.
-- [ ] that [runtime config options](https://github.com/ValveSoftware/Proton#runtime-config-options)
+- [ ] that no [runtime config options](https://github.com/ValveSoftware/Proton#runtime-config-options)
       are necessary to run the game.
 - [ ] that no workarounds other than the mentioned ones are necessary.
 
