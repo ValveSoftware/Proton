@@ -1114,7 +1114,7 @@ wine32-intermediate: $(WINE_CONFIGURE_FILES32)
 		mkdir -p ../$(DST_DIR)/{lib,bin} && \
 		cp -a ../$(WINE_DST32)/lib ../$(DST_DIR)/ && \
 		cp -a ../$(WINE_DST32)/bin/wine ../$(DST_DIR)/bin && \
-		[ "x"$(OSX) != "x1" ] || cp -a ../$(WINE_DST32)/bin/wine-preloader ../$(DST_DIR)/bin/
+		[ "x"$(OSX) = "x1" ] || cp -a ../$(WINE_DST32)/bin/wine-preloader ../$(DST_DIR)/bin/
 
 ##
 ## vrclient
