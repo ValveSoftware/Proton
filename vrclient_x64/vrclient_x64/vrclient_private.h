@@ -1,5 +1,10 @@
 #include <stdint.h>
 
+/* 32-bit Mac doesn't support Vulkan and thus DXVK */
+#if !defined(__APPLE__) || defined(__x86_64__)
+#define VRCLIENT_HAVE_DXVK
+#endif
+
 /* TODO these should be generated */
 typedef struct __winISteamClient winISteamClient;
 typedef struct __winISteamUser winISteamUser;
@@ -57,7 +62,7 @@ struct compositor_data
 {
     ID3D11Device *d3d11_device;
     IWineD3D11Device *wined3d_device;
-#if !defined(__APPLE__) || defined(__x86_64__)
+#ifdef VRCLIENT_HAVE_DXVK
     IDXGIVkInteropDevice *dxvk_device;
 #endif
 };

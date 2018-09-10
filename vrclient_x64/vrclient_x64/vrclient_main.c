@@ -16,8 +16,7 @@
 
 #include "initguid.h"
 
-#if !defined(__APPLE__) || defined(__x86_64__)
-/* 32-bit Mac doesn't support Vulkan and thus DXVK */
+#ifdef VRCLIENT_HAVE_DXVK
 #include "dxvk-interop.h"
 #endif
 
@@ -583,7 +582,7 @@ static EVRCompositorError ivrcompositor_submit_wined3d(
     return 0;
 }
 
-#if !defined(__APPLE__) || defined(__x86_64__)
+#ifdef VRCLIENT_HAVE_DXVK
 static EVRCompositorError ivrcompositor_submit_dxvk(
         EVRCompositorError (*cpp_func)(void *, EVREye, Texture_t *, VRTextureBounds_t *, EVRSubmitFlags),
         void *linux_side, EVREye eye, Texture_t *texture, VRTextureBounds_t *bounds, EVRSubmitFlags flags,
@@ -753,7 +752,7 @@ EVRCompositorError ivrcompositor_submit(
                         eye, texture, bounds, flags, version, user_data, wine_texture);
             }
 
-#if !defined(__APPLE__) || defined(__x86_64__)
+#ifdef VRCLIENT_HAVE_DXVK
             {
                 IDXGIVkInteropSurface *dxvk_surface;
 
@@ -813,14 +812,14 @@ void ivrcompositor_post_present_handoff(void (*cpp_func)(void *),
         return;
     }
 
-#if !defined(__APPLE__) || defined(__x86_64__)
+#ifdef VRCLIENT_HAVE_DXVK
     if (user_data->dxvk_device)
         user_data->dxvk_device->lpVtbl->LockSubmissionQueue(user_data->dxvk_device);
 #endif
 
     cpp_func(linux_side);
 
-#if !defined(__APPLE__) || defined(__x86_64__)
+#ifdef VRCLIENT_HAVE_DXVK
     if (user_data->dxvk_device)
         user_data->dxvk_device->lpVtbl->ReleaseSubmissionQueue(user_data->dxvk_device);
 #endif
@@ -869,14 +868,14 @@ EVRCompositorError ivrcompositor_wait_get_poses(
 
     TRACE("%p, %p, %u, %p, %u\n", linux_side, render_poses, render_pose_count, game_poses, game_pose_count);
 
-#if !defined(__APPLE__) || defined(__x86_64__)
+#ifdef VRCLIENT_HAVE_DXVK
     if (user_data->dxvk_device)
         user_data->dxvk_device->lpVtbl->LockSubmissionQueue(user_data->dxvk_device);
 #endif
 
     r = cpp_func(linux_side, render_poses, render_pose_count, game_poses, game_pose_count);
 
-#if !defined(__APPLE__) || defined(__x86_64__)
+#ifdef VRCLIENT_HAVE_DXVK
     if (user_data->dxvk_device)
         user_data->dxvk_device->lpVtbl->ReleaseSubmissionQueue(user_data->dxvk_device);
 #endif
