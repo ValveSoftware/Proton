@@ -597,6 +597,9 @@ static EVRCompositorError ivrcompositor_submit_dxvk(
     vkdata.m_nFormat = image_info.format;
     vkdata.m_nSampleCount = image_info.samples;
 
+    if (flags & (Submit_TextureWithPose | Submit_TextureWithDepth))
+        FIXME("Unhandled flags %#x.\n", flags & (Submit_TextureWithPose | Submit_TextureWithDepth));
+
     vktexture = *texture;
     vktexture.handle = &vkdata;
     vktexture.eType = TextureType_Vulkan;
