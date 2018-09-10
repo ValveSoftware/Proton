@@ -654,6 +654,79 @@ static EVRCompositorError ivrcompositor_submit_dxvk(
 }
 #endif
 
+static EVRCompositorError ivrcompositor_submit_vulkan(
+        EVRCompositorError (*cpp_func)(void *, EVREye, Texture_t *, VRTextureBounds_t *, EVRSubmitFlags),
+        void *linux_side, EVREye eye, Texture_t *texture, VRTextureBounds_t *bounds, EVRSubmitFlags flags,
+        unsigned int version, struct compositor_data *user_data)
+{
+    struct VRVulkanTextureData_t our_vkdata, our_depth_vkdata, *their_vkdata;
+    VRTextureWithPoseAndDepth_t our_both;
+    VRTextureWithDepth_t our_depth;
+    VRTextureWithPose_t our_pose;
+    Texture_t our_texture, *tex;
+
+    load_vk_unwrappers();
+
+    their_vkdata = (struct VRVulkanTextureData_t *)texture->handle;
+
+    our_vkdata = *their_vkdata;
+    our_vkdata.m_pDevice = get_native_VkDevice(our_vkdata.m_pDevice);
+    our_vkdata.m_pPhysicalDevice = get_native_VkPhysicalDevice(our_vkdata.m_pPhysicalDevice);
+    our_vkdata.m_pInstance = get_native_VkInstance(our_vkdata.m_pInstance);
+    our_vkdata.m_pQueue = get_native_VkQueue(our_vkdata.m_pQueue);
+
+    switch (flags & (Submit_TextureWithPose | Submit_TextureWithDepth))
+    {
+        case 0:
+            our_texture = *texture;
+            our_texture.handle = &our_vkdata;
+            tex = (Texture_t *)&our_texture;
+            break;
+
+        case Submit_TextureWithPose:
+            our_pose = *(VRTextureWithPose_t *)texture;
+            our_pose.texture.handle = &our_vkdata;
+            tex = (Texture_t *)&our_pose;
+            break;
+
+        case Submit_TextureWithDepth:
+            our_depth = *(VRTextureWithDepth_t *)texture;
+
+            our_depth.texture.handle = &our_vkdata;
+
+            their_vkdata = (struct VRVulkanTextureData_t *)our_depth.depth.handle;
+            our_depth_vkdata = *their_vkdata;
+            our_depth_vkdata.m_pDevice = get_native_VkDevice(our_depth_vkdata.m_pDevice);
+            our_depth_vkdata.m_pPhysicalDevice = get_native_VkPhysicalDevice(our_depth_vkdata.m_pPhysicalDevice);
+            our_depth_vkdata.m_pInstance = get_native_VkInstance(our_depth_vkdata.m_pInstance);
+            our_depth_vkdata.m_pQueue = get_native_VkQueue(our_depth_vkdata.m_pQueue);
+
+            our_depth.depth.handle = &our_depth_vkdata;
+
+            tex = (Texture_t *)&our_depth;
+            break;
+
+        case Submit_TextureWithPose | Submit_TextureWithDepth:
+            our_both = *(VRTextureWithPoseAndDepth_t *)texture;
+
+            our_both.texture.handle = &our_vkdata;
+
+            their_vkdata = (struct VRVulkanTextureData_t *)our_both.depth.handle;
+            our_depth_vkdata = *their_vkdata;
+            our_depth_vkdata.m_pDevice = get_native_VkDevice(our_depth_vkdata.m_pDevice);
+            our_depth_vkdata.m_pPhysicalDevice = get_native_VkPhysicalDevice(our_depth_vkdata.m_pPhysicalDevice);
+            our_depth_vkdata.m_pInstance = get_native_VkInstance(our_depth_vkdata.m_pInstance);
+            our_depth_vkdata.m_pQueue = get_native_VkQueue(our_depth_vkdata.m_pQueue);
+
+            our_both.depth.handle = &our_depth_vkdata;
+
+            tex = (Texture_t *)&our_both;
+            break;
+    }
+
+    return cpp_func(linux_side, eye, tex, bounds, flags);
+}
+
 EVRCompositorError ivrcompositor_submit(
         EVRCompositorError (*cpp_func)(void *, EVREye, Texture_t *, VRTextureBounds_t *, EVRSubmitFlags),
         void *linux_side, EVREye eye, Texture_t *texture, VRTextureBounds_t *bounds, EVRSubmitFlags flags,
@@ -698,74 +771,8 @@ EVRCompositorError ivrcompositor_submit(
         }
 
         case TextureType_Vulkan:
-        {
-            struct VRVulkanTextureData_t our_vkdata, our_depth_vkdata, *their_vkdata;
-            Texture_t our_texture, *tex;
-            VRTextureWithPose_t our_pose;
-            VRTextureWithDepth_t our_depth;
-            VRTextureWithPoseAndDepth_t our_both;
-
-            load_vk_unwrappers();
-
-            their_vkdata = (struct VRVulkanTextureData_t*)texture->handle;
-
-            our_vkdata = *their_vkdata;
-            our_vkdata.m_pDevice = get_native_VkDevice(our_vkdata.m_pDevice);
-            our_vkdata.m_pPhysicalDevice = get_native_VkPhysicalDevice(our_vkdata.m_pPhysicalDevice);
-            our_vkdata.m_pInstance = get_native_VkInstance(our_vkdata.m_pInstance);
-            our_vkdata.m_pQueue = get_native_VkQueue(our_vkdata.m_pQueue);
-
-            switch(flags & (Submit_TextureWithPose | Submit_TextureWithDepth)){
-            case 0:
-                our_texture = *texture;
-                our_texture.handle = &our_vkdata;
-                tex = (Texture_t *)&our_texture;
-                break;
-
-            case Submit_TextureWithPose:
-                our_pose = *(VRTextureWithPose_t *)texture;
-                our_pose.texture.handle = &our_vkdata;
-                tex = (Texture_t *)&our_pose;
-                break;
-
-            case Submit_TextureWithDepth:
-                our_depth = *(VRTextureWithDepth_t *)texture;
-
-                our_depth.texture.handle = &our_vkdata;
-
-                their_vkdata = (struct VRVulkanTextureData_t *)our_depth.depth.handle;
-                our_depth_vkdata = *their_vkdata;
-                our_depth_vkdata.m_pDevice = get_native_VkDevice(our_depth_vkdata.m_pDevice);
-                our_depth_vkdata.m_pPhysicalDevice = get_native_VkPhysicalDevice(our_depth_vkdata.m_pPhysicalDevice);
-                our_depth_vkdata.m_pInstance = get_native_VkInstance(our_depth_vkdata.m_pInstance);
-                our_depth_vkdata.m_pQueue = get_native_VkQueue(our_depth_vkdata.m_pQueue);
-
-                our_depth.depth.handle = &our_depth_vkdata;
-
-                tex = (Texture_t *)&our_depth;
-                break;
-
-            case Submit_TextureWithPose | Submit_TextureWithDepth:
-                our_both = *(VRTextureWithPoseAndDepth_t *)texture;
-
-                our_both.texture.handle = &our_vkdata;
-
-                their_vkdata = (struct VRVulkanTextureData_t *)our_both.depth.handle;
-                our_depth_vkdata = *their_vkdata;
-                our_depth_vkdata.m_pDevice = get_native_VkDevice(our_depth_vkdata.m_pDevice);
-                our_depth_vkdata.m_pPhysicalDevice = get_native_VkPhysicalDevice(our_depth_vkdata.m_pPhysicalDevice);
-                our_depth_vkdata.m_pInstance = get_native_VkInstance(our_depth_vkdata.m_pInstance);
-                our_depth_vkdata.m_pQueue = get_native_VkQueue(our_depth_vkdata.m_pQueue);
-
-                our_both.depth.handle = &our_depth_vkdata;
-
-                tex = (Texture_t *)&our_both;
-                break;
-            }
-
-
-            return cpp_func(linux_side, eye, tex, bounds, flags);
-        }
+            return ivrcompositor_submit_vulkan(cpp_func, linux_side,
+                    eye, texture, bounds, flags, version, user_data);
 
         default:
             return cpp_func(linux_side, eye, texture, bounds, flags);
