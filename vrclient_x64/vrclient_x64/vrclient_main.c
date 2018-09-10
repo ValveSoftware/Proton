@@ -44,35 +44,6 @@ BOOL WINAPI DllMain(HINSTANCE instance, DWORD reason, void *reserved)
     return TRUE;
 }
 
-
-#if 0
-uint32 vrclient_unix_path_to_dos_path(uint32 api_result, char *inout, uint32 inout_bytes)
-{
-    WCHAR *converted;
-    uint32 r;
-
-    if(api_result == 0)
-        return 0;
-
-    converted = wine_get_dos_file_name(inout);
-    if(!converted){
-        WARN("Unable to convert unix filename to DOS: %s\n", inout);
-        *inout = 0;
-        return 0;
-    }
-
-    r = WideCharToMultiByte(CP_ACP, 0, converted, -1, inout, inout_bytes,
-            NULL, NULL);
-
-    HeapFree(GetProcessHeap(), 0, converted);
-
-    if(r > 0)
-        return r - 1;
-
-    return 0;
-}
-#endif
-
 static BOOL array_reserve(void **elements, SIZE_T *capacity, SIZE_T count, SIZE_T size)
 {
     SIZE_T max_capacity, new_capacity;
