@@ -500,16 +500,96 @@ static void *get_our_compositor(void)
     return our_compositor;
 }
 
+static EVRCompositorError ivrcompositor_submit_wined3d(
+        EVRCompositorError (*cpp_func)(void *, EVREye, Texture_t *, VRTextureBounds_t *, EVRSubmitFlags),
+        void *linux_side, EVREye eye, Texture_t *texture, VRTextureBounds_t *bounds, EVRSubmitFlags flags,
+        unsigned int version, struct compositor_data *user_data, IWineD3D11Texture2D *wine_texture)
+{
+    IWineD3D11Device *wined3d_device;
+    struct submit_data submit_data;
+    IUnknown *depth_texture = NULL;
+    ID3D11Device *device;
+    HRESULT hr;
+
+    wine_texture->lpVtbl->GetDevice(wine_texture, &device);
+    if (user_data->d3d11_device != device)
+    {
+        void *timing_compositor = linux_side;
+
+        if (user_data->d3d11_device)
+            FIXME("Previous submit was from different D3D11 device.\n");
+
+        user_data->d3d11_device = device;
+
+        if (SUCCEEDED(hr = device->lpVtbl->QueryInterface(device,
+                &IID_IWineD3D11Device, (void **)&wined3d_device)))
+        {
+            user_data->wined3d_device = wined3d_device;
+            wined3d_device->lpVtbl->Release(wined3d_device);
+        }
+        else
+        {
+            ERR("Failed to get device, hr %#x.\n", hr);
+            user_data->wined3d_device = NULL;
+        }
+
+        TRACE("Enabling explicit timing mode.\n");
+        switch (version)
+        {
+            /* older, supported versions */
+            case 21:
+                cppIVRCompositor_IVRCompositor_021_SetExplicitTimingMode(linux_side,
+                        VRCompositorTimingMode_Explicit_ApplicationPerformsPostPresentHandoff);
+                break;
+            default:
+                timing_compositor = get_our_compositor();
+                WARN("Performing our compositor hack for old compositor version %u.\n", version);
+                /* fall through, below version MUST match version in create_our_compositor() */
+            case 22:
+                cppIVRCompositor_IVRCompositor_022_SetExplicitTimingMode(timing_compositor,
+                        VRCompositorTimingMode_Explicit_ApplicationPerformsPostPresentHandoff);
+                break;
+        }
+    }
+    device->lpVtbl->Release(device);
+
+    submit_data.linux_side = linux_side;
+    submit_data.submit = cpp_func;
+    submit_data.eye = eye;
+    switch (flags & (Submit_TextureWithPose | Submit_TextureWithDepth))
+    {
+        case 0:
+            submit_data.texture = *texture;
+            break;
+        case Submit_TextureWithPose:
+            submit_data.texture_pose = *(VRTextureWithPose_t *)texture;
+            break;
+        case Submit_TextureWithDepth:
+            submit_data.texture_depth = *(VRTextureWithDepth_t *)texture;
+            depth_texture = (IUnknown *)submit_data.texture_depth.depth.handle;
+            break;
+        case Submit_TextureWithPose | Submit_TextureWithDepth:
+            submit_data.texture_both = *(VRTextureWithPoseAndDepth_t *)texture;
+            depth_texture = (IUnknown *)submit_data.texture_both.depth.handle;
+            break;
+    }
+    submit_data.bounds = *bounds;
+    submit_data.flags = flags;
+    wine_texture->lpVtbl->access_gl_texture(wine_texture,
+            d3d11_texture_callback, depth_texture, &submit_data, sizeof(submit_data));
+
+    wine_texture->lpVtbl->Release(wine_texture);
+
+    return 0;
+}
+
 EVRCompositorError ivrcompositor_submit(
         EVRCompositorError (*cpp_func)(void *, EVREye, Texture_t *, VRTextureBounds_t *, EVRSubmitFlags),
         void *linux_side, EVREye eye, Texture_t *texture, VRTextureBounds_t *bounds, EVRSubmitFlags flags,
         unsigned int version, struct compositor_data *user_data)
 {
     IWineD3D11Texture2D *wine_texture;
-    IWineD3D11Device *wined3d_device;
-    struct submit_data submit_data;
-    IUnknown *texture_iface, *depth_texture = NULL;
-    ID3D11Device *device;
+    IUnknown *texture_iface;
     HRESULT hr;
 #if !defined(__APPLE__) || defined(__x86_64__)
     IDXGIVkInteropSurface *dxvk_surface;
@@ -525,79 +605,12 @@ EVRCompositorError ivrcompositor_submit(
             TRACE("D3D11\n");
 
             texture_iface = texture->handle;
-            hr = texture_iface->lpVtbl->QueryInterface(texture_iface,
-                    &IID_IWineD3D11Texture2D, (void **)&wine_texture);
-            if (SUCCEEDED(hr)) {
 
-                wine_texture->lpVtbl->GetDevice(wine_texture, &device);
-                if (user_data->d3d11_device != device)
-                {
-                    void *timing_compositor = linux_side;
-
-                    if (user_data->d3d11_device)
-                        FIXME("Previous submit was from different D3D11 device.\n");
-
-                    user_data->d3d11_device = device;
-
-                    if (SUCCEEDED(hr = device->lpVtbl->QueryInterface(device,
-                            &IID_IWineD3D11Device, (void **)&wined3d_device)))
-                    {
-                        user_data->wined3d_device = wined3d_device;
-                        wined3d_device->lpVtbl->Release(wined3d_device);
-                    }
-                    else
-                    {
-                        ERR("Failed to get device, hr %#x.\n", hr);
-                        user_data->wined3d_device = NULL;
-                    }
-
-                    TRACE("Enabling explicit timing mode.\n");
-                    switch (version)
-                    {
-                        /* older, supported versions */
-                        case 21:
-                            cppIVRCompositor_IVRCompositor_021_SetExplicitTimingMode(linux_side,
-                                    VRCompositorTimingMode_Explicit_ApplicationPerformsPostPresentHandoff);
-                            break;
-                        default:
-                            timing_compositor = get_our_compositor();
-                            WARN("Performing our compositor hack for old compositor version %u.\n", version);
-                            /* fall through, below version MUST match version in create_our_compositor() */
-                        case 22:
-                            cppIVRCompositor_IVRCompositor_022_SetExplicitTimingMode(timing_compositor,
-                                    VRCompositorTimingMode_Explicit_ApplicationPerformsPostPresentHandoff);
-                            break;
-                    }
-                }
-                device->lpVtbl->Release(device);
-
-                submit_data.linux_side = linux_side;
-                submit_data.submit = cpp_func;
-                submit_data.eye = eye;
-                switch(flags & (Submit_TextureWithPose | Submit_TextureWithDepth)){
-                    case 0:
-                        submit_data.texture = *texture;
-                        break;
-                    case Submit_TextureWithPose:
-                        submit_data.texture_pose = *(VRTextureWithPose_t *)texture;
-                        break;
-                    case Submit_TextureWithDepth:
-                        submit_data.texture_depth = *(VRTextureWithDepth_t *)texture;
-                        depth_texture = (IUnknown*)submit_data.texture_depth.depth.handle;
-                        break;
-                    case Submit_TextureWithPose | Submit_TextureWithDepth:
-                        submit_data.texture_both = *(VRTextureWithPoseAndDepth_t *)texture;
-                        depth_texture = (IUnknown*)submit_data.texture_both.depth.handle;
-                        break;
-                }
-                submit_data.bounds = *bounds;
-                submit_data.flags = flags;
-                wine_texture->lpVtbl->access_gl_texture(wine_texture,
-                        d3d11_texture_callback, depth_texture, &submit_data, sizeof(submit_data));
-
-                wine_texture->lpVtbl->Release(wine_texture);
-
-                return 0;
+            if (SUCCEEDED(hr = texture_iface->lpVtbl->QueryInterface(texture_iface,
+                    &IID_IWineD3D11Texture2D, (void **)&wine_texture)))
+            {
+                return ivrcompositor_submit_wined3d(cpp_func, linux_side,
+                        eye, texture, bounds, flags, version, user_data, wine_texture);
             }
 
 #if !defined(__APPLE__) || defined(__x86_64__)
@@ -798,7 +811,7 @@ void ivrcompositor_post_present_handoff(void (*cpp_func)(void *),
     if (user_data->dxvk_device)
         user_data->dxvk_device->lpVtbl->LockSubmissionQueue(user_data->dxvk_device);
 #endif
-    
+
     cpp_func(linux_side);
 
 #if !defined(__APPLE__) || defined(__x86_64__)
