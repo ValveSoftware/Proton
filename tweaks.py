@@ -11,6 +11,27 @@ provided by Proton community and not game developer.
 
 
 TWEAKS_DB = {
+    # Call of Duty® (2003)
+    '2620': {
+        'env': {
+            'MESA_EXTENSION_MAX_YEAR': '2003',
+            '__GL_ExtensionStringVersion': '17700',
+        }
+    },
+    # STAR WARS™ Jedi Knight - Jedi Academy™
+    '6020': {
+        'env': {
+            'MESA_EXTENSION_MAX_YEAR': '2003',
+            '__GL_ExtensionStringVersion': '17700',
+        }
+    },
+    # STAR WARS™ Jedi Knight II - Jedi Outcast™
+    '6030': {
+        'env': {
+            'MESA_EXTENSION_MAX_YEAR': '2003',
+            '__GL_ExtensionStringVersion': '17700',
+        }
+    },
 }
 
 
