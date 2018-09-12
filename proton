@@ -14,6 +14,7 @@ import sys
 import tarfile
 
 from filelock import FileLock, Timeout
+from tweaks import Tweaks
 
 #To enable debug logging, copy "user_settings.sample.py" to "user_settings.py"
 #and edit it if needed.
@@ -196,6 +197,9 @@ with dist_lock:
 
 prefix = os.environ["STEAM_COMPAT_DATA_PATH"] + "/pfx/"
 env["WINEPREFIX"] = prefix
+
+game_tweaks = Tweaks(env.get("SteamAppId"))
+env.update(game_tweaks.env)
 
 if "PROTON_LOG" in env:
     env["WINEDEBUG"] = "+timestamp,+pid,+tid,+seh,+debugstr,+module"

@@ -227,7 +227,7 @@ $(DST_DIR):
 
 STEAM_DIR := $(HOME)/.steam/root
 
-DIST_COPY_FILES := toolmanifest.vdf filelock.py proton proton_3.7_tracked_files user_settings.sample.py
+DIST_COPY_FILES := toolmanifest.vdf filelock.py tweaks.py proton proton_3.7_tracked_files user_settings.sample.py
 DIST_COPY_TARGETS := $(addprefix $(DST_BASE)/,$(DIST_COPY_FILES))
 DIST_VERSION := $(DST_DIR)/version
 DIST_OVR32 := $(DST_DIR)/lib/openvr_api_dxvk.so
