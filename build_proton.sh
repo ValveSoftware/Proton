@@ -672,6 +672,7 @@ if [ "$PACKAGE" = true ]; then
 
     cp -a toolmanifest.vdf dist/
     cp -a filelock.py dist/
+    cp -a tweaks.py dist/
     cp -a user_settings.sample.py dist/
     if [ "$PLATFORM" == "Darwin" ]; then
         cp -a dist.LICENSE.osx dist/LICENSE
