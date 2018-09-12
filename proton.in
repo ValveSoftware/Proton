@@ -137,15 +137,26 @@ if "PROTON_LOG" in env:
     env["WINEDEBUG"] = "+timestamp,+pid,+tid,+seh,+debugstr,+module"
 
 #load environment overrides
-if os.path.exists(basedir + "/user_settings.py"):
+if os.path.exists(os.environ["STEAM_COMPAT_DATA_PATH"] + "/user_settings_pfx.py"):
     try:
-        import user_settings
-        env.update(user_settings.user_settings)
+        sys.path.append(os.environ["STEAM_COMPAT_DATA_PATH"])
+        from user_settings_pfx import user_settings
+        env.update(user_settings)
     except e:
-        log("************************************************")
-        log("THERE IS AN ERROR IN YOUR user_settings.py FILE:")
+        log("****************************************************")
+        log("THERE IS AN ERROR IN YOUR user_settings_pfx.py FILE:")
         log("%s" % sys.exc_info()[1])
-        log("************************************************")
+        log("****************************************************")
+else:
+    if os.path.exists(basedir + "/user_settings.py"):
+        try:
+            import user_settings
+            env.update(user_settings.user_settings)
+        except e:
+            log("************************************************")
+            log("THERE IS AN ERROR IN YOUR user_settings.py FILE:")
+            log("%s" % sys.exc_info()[1])
+            log("************************************************")
 
 def check_environment(env_name, config_name):
     if not env_name in env:
