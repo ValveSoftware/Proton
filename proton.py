@@ -1,4 +1,4 @@
-#!/usr/bin/env @PYTHON_NAME@
+#!/usr/bin/env python
 
 #script to launch Wine with the correct environment
 
@@ -84,7 +84,7 @@ if not ("STEAM_COMPAT_DATA_PATH" in os.environ):
     log("No compat data path?")
     sys.exit(1)
 
-basedir = os.path.dirname(sys.argv[0])
+basedir = os.path.dirname(os.path.abspath(__file__))
 bindir = basedir + "/dist/bin/"
 libdir = basedir + "/dist/lib"
 lib64dir = basedir + "/dist/lib64"
@@ -509,5 +509,3 @@ else:
     sys.exit(1)
 
 sys.exit(0)
-
-# vim: set syntax=python:

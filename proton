@@ -1,0 +1,22 @@
+#!/bin/sh
+
+# List of python commands to try, in order
+pythons="python3 python python2"
+
+# Get proton's path, relative to this script's
+# Note: this won't work if it was called from the $PATH
+PROTON_PATH=$(dirname "$0")/proton.py
+
+for python in $pythons
+do
+	# Try every python. The "x" is here to avoid an empty string
+	if [ $($python -c "print('success')" 2>/dev/null )x = "success"x ]
+	then
+		exec $python "$PROTON_PATH" "$@"
+	fi
+done
+
+echo >&2 "Error: could not start python. The following was tried: $pythons"
+echo >&2 "Hint: is python installed on the system?"
+
+exit 1
