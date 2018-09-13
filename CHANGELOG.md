@@ -1,4 +1,4 @@
-## Available in Proton 3.7 Beta:
+## Available in Proton 3.7:
 ###### 3.7-6:
 - Fix failure to start VR games.
 - Improvements to fullscreen games running at non-native resolutions.
@@ -19,7 +19,6 @@
 - Some useful default logging can be enabled with `PROTON_LOG=1 %command%` in the Steam game launch options. Logs will be dumped to $HOME/steam-$APPID.log. WINEDEBUG can still be set in user_settings.py for more extensive debugging.
 - Debug scripts are no longer dumped to /tmp/ by default. They must now be enabled with `PROTON_DUMP_DEBUG_COMMANDS=1 %command%` in the Steam game launch options. They have also been moved to /tmp/proton_$USER/.
 - Controllers will hopefully no longer cause long delays on startup on some systems (winehq bug 45084).
-## Available in Proton 3.7:
 ###### 3.7-3:
  - Fixed missing 32-bit libraries
 ###### 3.7-2:
