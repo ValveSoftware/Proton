@@ -522,6 +522,8 @@ def run():
             dump_dbg_scripts()
         except OSError:
             log("Unable to write debug scripts! " + str(sys.exc_info()[1]))
+    if game_tweaks.needs_fonts:
+        game_tweaks.import_fonts()
     if game_arch == ARCH_UNKNOWN:
         #probably a batch script or something, hopefully start.exe can handle it
         run_wine([wine_path, "start", "/unix"] + sys.argv[2:])
