@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 """
 This module lists game-specific tweaks, that cannot be handled by other means
