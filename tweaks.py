@@ -62,6 +62,70 @@ TWEAKS_DB = {
             '__GL_ExtensionStringVersion': '17700',
         }
     },
+    # EVE Online
+    '8500': {
+        'needs_fonts': True,
+    },
+    # Age of Empires® III: Complete Collection
+    '105450': {
+        'needs_fonts': True,
+    },
+    # EverQuest® II Free-To-Play. Your Way.™
+    '201230': {
+        'needs_fonts': True,
+    },
+    # Tesla Effect: A Tex Murphy Adventure
+    '261510': {
+        'needs_fonts': True,
+    },
+    # Grand Theft Auto V
+    '271590': {
+        'needs_fonts': True,
+    },
+    # The Entente Gold
+    '285480': {
+        'needs_fonts': True,
+    },
+    # Order of Battle: World War II
+    '312450': {
+        'needs_fonts': True,
+    },
+    # Town of Salem
+    '334230': {
+        'needs_fonts': True,
+    },
+    # Business Tour - Online Multiplayer Board Game
+    '397900': {
+        'needs_fonts': True,
+    },
+    # Dungeons & Darkness
+    '479990': {
+        'needs_fonts': True,
+    },
+    # Cold Waters
+    '541210': {
+        'needs_fonts': True,
+    },
+    # PC Building Simulator
+    '621060': {
+        'needs_fonts': True,
+    },
+    # D&D Lords of Waterdeep
+    '644390': {
+        'needs_fonts': True,
+    },
+    # Mirror
+    '644560': {
+        'needs_fonts': True,
+    },
+    # Changed
+    '814540': {
+        'needs_fonts': True,
+    },
+    # Fox Hime Zero
+    '844930': {
+        'needs_fonts': True,
+    },
 }
 
 
