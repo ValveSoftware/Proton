@@ -34,6 +34,11 @@ Wine settings for the specific game, etc.).  The purpose is similar to
 provided by Proton community and not game developer.
 """
 
+import os
+import shutil
+import subprocess
+import sys
+
 
 TWEAKS_DB = {
     # Call of Duty® (2003)
@@ -60,12 +65,110 @@ TWEAKS_DB = {
 }
 
 
-class Tweaks:  # pylint: disable=too-few-public-methods
+def log(msg):  # pylint: disable=missing-docstring
+    sys.stderr.write('Proton: ' + msg + os.linesep)
+    sys.stderr.flush()
+
+
+def find_font_with_fc(family, style):
+    """Find path to font using fontconfig"""
+
+    pattern = '{}:style={}'.format(family, style or 'Regular')
+    try:
+        out = subprocess.check_output(['fc-list', '-f', '%{file}', pattern])
+        path = out.decode('utf-8')
+        if os.access(path, os.R_OK):
+            return path
+    except FileNotFoundError:  # in case fc-list is not installed
+        pass
+    return ''
+
+
+def install_file(src, dst):
+    """Try to create hardlink (copy file as fallback)"""
+    try:
+        os.link(src, dst)
+    except OSError:
+        shutil.copy(src, dst)
+
+
+class Tweaks:
     """
     Class grouping tweaks for a specific game
     """
 
     def __init__(self, appid):
         self.env = {}
+        self.needs_fonts = False
+        self.prefix = os.environ['STEAM_COMPAT_DATA_PATH'] + '/pfx/'
         if appid in TWEAKS_DB:
             self.env = TWEAKS_DB[appid].get('env') or {}
+            self.needs_fonts = TWEAKS_DB[appid].get('needs_fonts') or False
+
+
+    def import_fonts(self):
+        """Import missing fonts to game's Wine prefix
+
+        This function will query fontconfig looking for specific fonts,
+        otherwise it will look into ~/.wine/ and finally into /usr/share/fonts/.
+
+        Installation consists only of putting files into default Windows font
+        directory - there's no need to use regedit (unlike in winetricks), Wine
+        will detect and register fonts on next run.
+
+        Fonts will probably not be recognized if installed while application is
+        running in Wine.
+        """
+
+        ms_core_fonts = [
+            ('Arial', '', 'arial.ttf'),
+            ('Arial', 'Bold', 'arialbd.ttf'),
+            ('Arial', 'Italic', 'ariali.ttf'),
+            ('Arial', 'Bold Italic', 'arialbi.ttf'),
+            ('Arial Black', '', 'ariblk.ttf'),
+            ('Comic Sans MS', '', 'comic.ttf'),
+            ('Comic Sans MS', 'Bold', 'comicbd.ttf'),
+            ('Courier New', '', 'cour.ttf'),
+            ('Courier New', 'Bold', 'courbd.ttf'),
+            ('Courier New', 'Italic', 'couri.ttf'),
+            ('Courier New', 'Bold Italic', 'courbi.ttf'),
+            ('Georgia', '', 'georgia.ttf'),
+            ('Georgia', 'Bold', 'georgiab.ttf'),
+            ('Georgia', 'Italic', 'georgiai.ttf'),
+            ('Georgia', 'Bold Italic', 'georgiaz.ttf'),
+            ('Impact', '', 'impact.ttf'),
+            ('Times New Roman', '', 'times.ttf'),
+            ('Times New Roman', 'Bold', 'timesbd.ttf'),
+            ('Times New Roman', 'Italic', 'timesi.ttf'),
+            ('Times New Roman', 'Bold Italic', 'timesbi.ttf'),
+            ('Trebuchet MS', '', 'trebuc.ttf'),
+            ('Trebuchet MS', 'Bold', 'trebucbd.ttf'),
+            ('Trebuchet MS', 'Italic', 'trebucit.ttf'),
+            ('Trebuchet MS', 'Bold Italic', 'trebucbi.ttf'),
+            ('Verdana', '', 'verdana.ttf'),
+            ('Verdana', 'Bold', 'verdanab.ttf'),
+            ('Verdana', 'Italic', 'verdanai.ttf'),
+            ('Verdana', 'Bold Italic', 'verdanaz.ttf'),
+            ('Webdings', '', 'webdings.ttf')
+        ]
+        for font in ms_core_fonts:
+            if not self.is_font_installed(font[0]):
+                self._install_ttf_font(*font)
+
+
+    def is_font_installed(self, file_name):  # pylint: disable=missing-docstring
+        return os.access(self.prefix + '/drive_c/windows/Fonts/' + file_name, os.F_OK)
+
+
+    def _install_ttf_font(self, family, style, file_name):
+        font_name = ' '.join(filter(lambda x: x, [family, style]))
+        test_path = lambda path: path if os.access(path, os.R_OK) else ''
+        path = find_font_with_fc(family, style) or \
+               test_path(os.environ["HOME"] + '/.wine/drive_c/windows/Fonts/' + file_name) or \
+               test_path('/usr/share/truetype/' + file_name) or \
+               test_path('/usr/share/msttcore/' + file_name)
+        if path:
+            log('Installing {} from: {}'.format(font_name, path))
+            install_file(path, self.prefix + '/drive_c/windows/Fonts/' + file_name)
+        else:
+            log('Missing font: {}'.format(font_name))
