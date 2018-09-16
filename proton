@@ -516,7 +516,9 @@ def dump_dbg_scripts():
             f.write("\t\"" + wine_path + "\" \"${@:-${DEF_CMD[@]}}\"\n")
     os.chmod(dir + "run", 0o755)
 
-def run():
+
+def run(args):
+    args = game_tweaks.modify_command(args)
     if "PROTON_DUMP_DEBUG_COMMANDS" in env:
         try:
             dump_dbg_scripts()
@@ -526,9 +528,9 @@ def run():
         game_tweaks.import_fonts()
     if game_arch == ARCH_UNKNOWN:
         #probably a batch script or something, hopefully start.exe can handle it
-        run_wine([wine_path, "start", "/unix"] + sys.argv[2:])
+        run_wine([wine_path, "start", "/unix"] + args)
     else:
-        run_wine([wine_path] + sys.argv[2:])
+        run_wine([wine_path] + args)
 
 if sys.version_info[0] == 2:
     binary_stdout = sys.stdout
@@ -542,11 +544,11 @@ if __name__ == '__main__':
     # Determine mode
     if sys.argv[1] == "run":
         # Start target app
-        run()
+        run(sys.argv[2:])
     elif sys.argv[1] == "waitforexitandrun":
         # Wait for wineserver to shut down
         run_wine([bindir + "/wineserver", "-w"])
-        run()
+        run(sys.argv[2:])
     elif sys.argv[1] == "getcompatpath":
         # linux -> windows path
         path = subprocess.check_output([wine_path, "winepath", "-w", sys.argv[2]], env=env, stderr=lfile)
