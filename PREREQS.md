@@ -8,7 +8,15 @@ Linux users with NVIDIA graphics cards should install the latest NVIDIA propriet
 
 ```
 sudo add-apt-repository ppa:graphics-drivers/ppa
+```
+Before you install the driver, Ubuntu requires the installation of the relative nvidia kernel source. Otherwise the driver installation will fail. So:
+```
+sudo apt install nvidia-kernel-source-396
+```
+Now install the driver
+```
 sudo apt install nvidia-driver-396
+
 ```
 
 Provide your user password when requested and reboot after the last command completes to ensure the driver has updated correctly.  
