@@ -495,27 +495,27 @@ elif sys.version_info[0] == 3:
 else:
     raise Exception("Unsupported python version")
 
-#determine mode
-if sys.argv[1] == "run":
-    #start target app
-    run()
-elif sys.argv[1] == "waitforexitandrun":
-    #wait for wineserver to shut down
-    run_wine([bindir + "/wineserver", "-w"])
-    #then run
-    run()
-elif sys.argv[1] == "getcompatpath":
-    #linux -> windows path
-    path = subprocess.check_output([wine_path, "winepath", "-w", sys.argv[2]], env=env, stderr=lfile)
-    binary_stdout.write(path)
-elif sys.argv[1] == "getnativepath":
-    #windows -> linux path
-    path = subprocess.check_output([wine_path, "winepath", sys.argv[2]], env=env, stderr=lfile)
-    binary_stdout.write(path)
-else:
-    log("Need a verb.")
-    sys.exit(1)
 
-sys.exit(0)
+if __name__ == '__main__':
+    # Determine mode
+    if sys.argv[1] == "run":
+        # Start target app
+        run()
+    elif sys.argv[1] == "waitforexitandrun":
+        # Wait for wineserver to shut down
+        run_wine([bindir + "/wineserver", "-w"])
+        run()
+    elif sys.argv[1] == "getcompatpath":
+        # linux -> windows path
+        path = subprocess.check_output([wine_path, "winepath", "-w", sys.argv[2]], env=env, stderr=lfile)
+        binary_stdout.write(path)
+    elif sys.argv[1] == "getnativepath":
+        # windows -> linux path
+        path = subprocess.check_output([wine_path, "winepath", sys.argv[2]], env=env, stderr=lfile)
+        binary_stdout.write(path)
+    else:
+        log("Need a verb.")
+        sys.exit(1)
+    sys.exit(0)
 
 # vim: set syntax=python:
