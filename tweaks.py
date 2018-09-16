@@ -35,6 +35,7 @@ provided by Proton community and not game developer.
 """
 
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -162,12 +163,31 @@ class Tweaks:
     """
 
     def __init__(self, appid):
+        self.prefix = os.environ['STEAM_COMPAT_DATA_PATH'] + '/pfx/'
         self.env = {}
         self.needs_fonts = False
-        self.prefix = os.environ['STEAM_COMPAT_DATA_PATH'] + '/pfx/'
+        self.commands = {}
         if appid in TWEAKS_DB:
             self.env = TWEAKS_DB[appid].get('env') or {}
             self.needs_fonts = TWEAKS_DB[appid].get('needs_fonts') or False
+            self.commands = TWEAKS_DB[appid].get('commands') or {}
+
+
+    def modify_command(self, args):
+        """Add commandline parameters defined for this app
+
+        If user decides to modify 'Set launch options' and append some args,
+        then it will override whatever is defined in TWEAKS_DB.
+
+        Games can provide multiple binaries, each binary can have
+        separate list of tweaked commandline args.
+        """
+        cmd = args[-1]
+        for expr, extra_args in self.commands.items():
+            exe_pattern = re.compile(expr)
+            if exe_pattern.match(cmd):
+                return args + extra_args
+        return args
 
 
     def import_fonts(self):
