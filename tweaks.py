@@ -61,6 +61,10 @@ TWEAKS_DB = {
         'env': {
             'MESA_EXTENSION_MAX_YEAR': '2003',
             '__GL_ExtensionStringVersion': '17700',
+        },
+        'commands': {
+            r'.*jk2sp.exe$': ['+r_ignorehwgamma', '1'],
+            r'.*jk2mp.exe$': ['+r_ignorehwgamma', '1'],
         }
     },
     # EVE Online
