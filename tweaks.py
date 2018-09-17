@@ -171,6 +171,8 @@ class Tweaks:
         self.env = {}
         self.needs_fonts = False
         self.commands = {}
+        if os.environ.get('PROTON_NO_TWEAKS') == '1':
+            return
         if appid in TWEAKS_DB:
             self.env = TWEAKS_DB[appid].get('env') or {}
             self.needs_fonts = TWEAKS_DB[appid].get('needs_fonts') or False
