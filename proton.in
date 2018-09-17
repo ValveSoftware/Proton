@@ -391,16 +391,20 @@ def dump_dbg_env(f):
     if "STEAM_COMPAT_CLIENT_INSTALL_PATH" in env:
         f.write("\tSTEAM_COMPAT_CLIENT_INSTALL_PATH=\"" + env["STEAM_COMPAT_CLIENT_INSTALL_PATH"] + "\" \\\n")
 
-def dump_dbg_scripts():
-    exe_name = os.path.basename(sys.argv[2])
+def dump_dbg_scripts(args):
+    exe_name = os.path.basename(args[0])
 
     dir = env.get("PROTON_DEBUG_DIR", "/tmp") + "/proton_" + os.environ["USER"] + "/"
     makedirs(dir)
 
+    def quote(strings):
+        """Equivalent of "$@" in bash"""
+        return ' '.join('"{}"'.format(s) for s in strings)
+
     with open(dir + "winedbg", "w") as f:
         f.write("#!/bin/bash\n")
         f.write("#Run winedbg with args\n\n")
-        f.write("cd \"" + os.getcwd() + "\"\n")
+        f.write('cd "' + os.getcwd() + '"\n')
         dump_dbg_env(f)
         f.write("\t\"" + wine_path + "\" winedbg \"$@\"\n")
     os.chmod(dir + "winedbg", 0o755)
@@ -408,16 +412,8 @@ def dump_dbg_scripts():
     with open(dir + "winedbg_run", "w") as f:
         f.write("#!/bin/bash\n")
         f.write("#Run winedbg and prepare to run game or given program\n\n")
-        f.write("cd \"" + os.getcwd() + "\"\n")
-        f.write("DEF_CMD=(")
-        first = True
-        for arg in sys.argv[2:]:
-            if first:
-                f.write("\"" + arg + "\"")
-                first = False
-            else:
-                f.write(" \"" + arg + "\"")
-        f.write(")\n")
+        f.write('cd "' + os.getcwd() + '"\n')
+        f.write('DEF_CMD=(' + quote(args) + ')\n')
         dump_dbg_env(f)
         f.write("\t\"" + wine_path + "\" winedbg \"${@:-${DEF_CMD[@]}}\"\n")
     os.chmod(dir + "winedbg_run", 0o755)
@@ -440,16 +436,8 @@ def dump_dbg_scripts():
     with open(dir + "gdb_run", "w") as f:
         f.write("#!/bin/bash\n")
         f.write("#Run winedbg in gdb mode and prepare to run game or given program\n\n")
-        f.write("cd \"" + os.getcwd() + "\"\n")
-        f.write("DEF_CMD=(")
-        first = True
-        for arg in sys.argv[2:]:
-            if first:
-                f.write("\"" + arg + "\"")
-                first = False
-            else:
-                f.write(" \"" + arg + "\"")
-        f.write(")\n")
+        f.write('cd "' + os.getcwd() + '"\n')
+        f.write('DEF_CMD=(' + quote(args) + ')\n')
         dump_dbg_env(f)
         f.write("\t\"" + wine_path + "\" winedbg --gdb \"${@:-${DEF_CMD[@]}}\"\n")
     os.chmod(dir + "gdb_run", 0o755)
@@ -457,16 +445,8 @@ def dump_dbg_scripts():
     with open(dir + "run", "w") as f:
         f.write("#!/bin/bash\n")
         f.write("#Run game or given command in environment\n\n")
-        f.write("cd \"" + os.getcwd() + "\"\n")
-        f.write("DEF_CMD=(")
-        first = True
-        for arg in sys.argv[2:]:
-            if first:
-                f.write("\"" + arg + "\"")
-                first = False
-            else:
-                f.write(" \"" + arg + "\"")
-        f.write(")\n")
+        f.write('cd "' + os.getcwd() + '"\n')
+        f.write('DEF_CMD=(' + quote(args) + ')\n')
         dump_dbg_env(f)
         if game_arch == ARCH_UNKNOWN:
             f.write("\t\"" + wine_path + "\" start \"${@:-${DEF_CMD[@]}}\"\n")
@@ -479,7 +459,7 @@ def run(args):
     args = game_tweaks.modify_command(args)
     if "PROTON_DUMP_DEBUG_COMMANDS" in env:
         try:
-            dump_dbg_scripts()
+            dump_dbg_scripts(args)
         except:
             log("Unable to write debug scripts! " + str(sys.exc_info()[1]))
     if game_tweaks.needs_fonts:
