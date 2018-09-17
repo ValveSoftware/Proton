@@ -374,6 +374,8 @@ def dump_dbg_env(f):
     f.write("\tWINEDLLPATH=\"" + env["WINEDLLPATH"] + "\" \\\n")
     f.write("\t" + ld_path_var + "=\"" + env[ld_path_var] + "\" \\\n")
     f.write("\tWINEPREFIX=\"" + env["WINEPREFIX"] + "\" \\\n")
+    if "WINEESYNC" in env:
+        f.write("\tWINEESYNC=\"" + env["WINEESYNC"] + "\" \\\n")
     if "SteamGameId" in env:
         f.write("\tSteamGameId=\"" + env["SteamGameId"] + "\" \\\n")
     if "SteamAppId" in env:
