@@ -217,7 +217,7 @@ class Tweaks:
             ('Webdings', '', 'webdings.ttf')
         ]
         for font in ms_core_fonts:
-            if not self.is_font_installed(font[0]):
+            if not self.is_font_installed(font[2]):
                 self._install_ttf_font(*font)
 
 
