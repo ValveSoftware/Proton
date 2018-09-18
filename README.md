@@ -6,7 +6,7 @@ exclusive to Windows to run on Linux and macOS operating systems. It uses Wine
 to facilitate this.
 
 Most users will prefer to use Proton provided by the Steam client itself.  The
-source code is provided to enable advanced users the ability to alter
+source code is provided to give advanced users the ability to alter
 Proton.  For example, some users may wish to use a different version of Wine with
 a particular title.
 
