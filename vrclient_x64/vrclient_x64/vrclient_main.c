@@ -353,11 +353,12 @@ struct submit_data
     EVRSubmitFlags flags;
 };
 
-static CDECL void d3d11_texture_callback(unsigned int gl_texture, unsigned int gl_depth_texture, const void *data, unsigned int data_size)
+static CDECL void d3d11_texture_callback(unsigned int gl_texture, unsigned int gl_depth_texture,
+        const void *data, unsigned int data_size)
 {
     const struct submit_data *submit_data = data;
+    VRTextureBounds_t bounds = submit_data->bounds;
     VRCompositorError error = 0;
-    VRTextureBounds_t bounds;
     Texture_t texture, *tex;
     VRTextureWithPose_t texture_pose;
     VRTextureWithDepth_t texture_depth;
@@ -393,11 +394,6 @@ static CDECL void d3d11_texture_callback(unsigned int gl_texture, unsigned int g
         tex = (Texture_t *)&texture_both;
         break;
     }
-
-    /* Textures are upside-down in wined3d. */
-    bounds = submit_data->bounds;
-    bounds.vMin = submit_data->bounds.vMax;
-    bounds.vMax = submit_data->bounds.vMin;
 
     error = submit_data->submit(submit_data->linux_side, submit_data->eye,
             tex, &bounds, submit_data->flags);
@@ -453,23 +449,6 @@ VRCompositorError ivrcompositor_008_submit(
     return cpp_func(linux_side, eye, api, texture, bounds, flags);
 }
 
-static void *our_compositor;
-
-static BOOL WINAPI create_our_compositor(INIT_ONCE *once, void *param, void **context)
-{
-    void *core = vrclient_VRClientCoreFactory("IVRClientCore_003", NULL);
-    our_compositor = cppIVRClientCore_IVRClientCore_003_GetGenericInterface(core, "IVRCompositor_022", NULL);
-    WARN("Created our compositor %p.\n", our_compositor);
-    return TRUE;
-}
-
-static void *get_our_compositor(void)
-{
-    static INIT_ONCE init_once = INIT_ONCE_STATIC_INIT;
-    InitOnceExecuteOnce(&init_once, create_our_compositor, NULL, NULL);
-    return our_compositor;
-}
-
 static EVRCompositorError ivrcompositor_submit_wined3d(
         EVRCompositorError (*cpp_func)(void *, EVREye, Texture_t *, VRTextureBounds_t *, EVRSubmitFlags),
         void *linux_side, EVREye eye, Texture_t *texture, VRTextureBounds_t *bounds, EVRSubmitFlags flags,
@@ -478,14 +457,14 @@ static EVRCompositorError ivrcompositor_submit_wined3d(
     IWineD3D11Device *wined3d_device;
     struct submit_data submit_data;
     IUnknown *depth_texture = NULL;
+    EVRCompositorError error = 0;
     ID3D11Device *device;
+    BOOL async = FALSE;
     HRESULT hr;
 
     wine_texture->lpVtbl->GetDevice(wine_texture, &device);
     if (user_data->d3d11_device != device)
     {
-        void *timing_compositor = linux_side;
-
         if (user_data->d3d11_device)
             FIXME("Previous submit was from different D3D11 device.\n");
 
@@ -503,54 +482,104 @@ static EVRCompositorError ivrcompositor_submit_wined3d(
             user_data->wined3d_device = NULL;
         }
 
-        TRACE("Enabling explicit timing mode.\n");
         switch (version)
         {
-            /* older, supported versions */
+            /* older versions */
+            default:
+                TRACE("Using synchronous mode.\n");
+                break;
             case 21:
+                TRACE("Enabling explicit timing mode.\n");
+                async = TRUE;
                 cppIVRCompositor_IVRCompositor_021_SetExplicitTimingMode(linux_side,
                         VRCompositorTimingMode_Explicit_ApplicationPerformsPostPresentHandoff);
                 break;
-            default:
-                timing_compositor = get_our_compositor();
-                WARN("Performing our compositor hack for old compositor version %u.\n", version);
-                /* fall through, below version MUST match version in create_our_compositor() */
             case 22:
-                cppIVRCompositor_IVRCompositor_022_SetExplicitTimingMode(timing_compositor,
+                TRACE("Enabling explicit timing mode.\n");
+                async = TRUE;
+                cppIVRCompositor_IVRCompositor_022_SetExplicitTimingMode(linux_side,
                         VRCompositorTimingMode_Explicit_ApplicationPerformsPostPresentHandoff);
                 break;
         }
     }
     device->lpVtbl->Release(device);
 
-    submit_data.linux_side = linux_side;
-    submit_data.submit = cpp_func;
-    submit_data.eye = eye;
-    switch (flags & (Submit_TextureWithPose | Submit_TextureWithDepth))
-    {
-        case 0:
-            submit_data.texture = *texture;
-            break;
-        case Submit_TextureWithPose:
-            submit_data.texture_pose = *(VRTextureWithPose_t *)texture;
-            break;
-        case Submit_TextureWithDepth:
-            submit_data.texture_depth = *(VRTextureWithDepth_t *)texture;
-            depth_texture = (IUnknown *)submit_data.texture_depth.depth.handle;
-            break;
-        case Submit_TextureWithPose | Submit_TextureWithDepth:
-            submit_data.texture_both = *(VRTextureWithPoseAndDepth_t *)texture;
-            depth_texture = (IUnknown *)submit_data.texture_both.depth.handle;
-            break;
-    }
+    /* Textures are upside-down in wined3d. */
     submit_data.bounds = *bounds;
-    submit_data.flags = flags;
-    wine_texture->lpVtbl->access_gl_texture(wine_texture,
-            d3d11_texture_callback, depth_texture, &submit_data, sizeof(submit_data));
+    submit_data.bounds.vMin = bounds->vMax;
+    submit_data.bounds.vMax = bounds->vMin;
+
+    if (async)
+    {
+        submit_data.linux_side = linux_side;
+        submit_data.submit = cpp_func;
+        submit_data.eye = eye;
+        switch (flags & (Submit_TextureWithPose | Submit_TextureWithDepth))
+        {
+            case 0:
+                submit_data.texture = *texture;
+                break;
+            case Submit_TextureWithPose:
+                submit_data.texture_pose = *(VRTextureWithPose_t *)texture;
+                break;
+            case Submit_TextureWithDepth:
+                submit_data.texture_depth = *(VRTextureWithDepth_t *)texture;
+                depth_texture = (IUnknown *)submit_data.texture_depth.depth.handle;
+                break;
+            case Submit_TextureWithPose | Submit_TextureWithDepth:
+                submit_data.texture_both = *(VRTextureWithPoseAndDepth_t *)texture;
+                depth_texture = (IUnknown *)submit_data.texture_both.depth.handle;
+                break;
+        }
+        submit_data.flags = flags;
+        wine_texture->lpVtbl->access_gl_texture(wine_texture,
+                d3d11_texture_callback, depth_texture, &submit_data, sizeof(submit_data));
+    }
+    else
+    {
+        unsigned int gl_texture;
+        Texture_t *tex;
+
+        gl_texture = wine_texture->lpVtbl->get_gl_texture(wine_texture);
+
+        switch (flags & (Submit_TextureWithPose | Submit_TextureWithDepth))
+        {
+            case 0:
+                submit_data.texture = *texture;
+                submit_data.texture.handle = (void *)(UINT_PTR)gl_texture;
+                submit_data.texture.eType = TextureType_OpenGL;
+                tex = &submit_data.texture;
+                break;
+            case Submit_TextureWithPose:
+                submit_data.texture_pose = *(VRTextureWithPose_t *)texture;
+                submit_data.texture_pose.texture.handle = (void *)(UINT_PTR)gl_texture;
+                submit_data.texture_pose.texture.eType = TextureType_OpenGL;
+                tex = (Texture_t *)&submit_data.texture_pose;
+                break;
+            case Submit_TextureWithDepth:
+                submit_data.texture_depth = *(VRTextureWithDepth_t *)texture;
+                submit_data.texture_depth.texture.handle = (void *)(UINT_PTR)gl_texture;
+                submit_data.texture_depth.texture.eType = TextureType_OpenGL;
+                FIXME("Unhandled depth texture.\n");
+                submit_data.texture_depth.depth.handle = (void *)(UINT_PTR)0;
+                tex = (Texture_t *)&submit_data.texture_depth;
+                break;
+            case Submit_TextureWithPose | Submit_TextureWithDepth:
+                submit_data.texture_both = *(VRTextureWithPoseAndDepth_t *)texture;
+                submit_data.texture_both.texture.handle = (void *)(UINT_PTR)gl_texture;
+                submit_data.texture_both.texture.eType = TextureType_OpenGL;
+                FIXME("Unhandled depth texture.\n");
+                submit_data.texture_both.depth.handle = (void *)(UINT_PTR)0;
+                tex = (Texture_t *)&submit_data.texture_both;
+                break;
+        }
+
+        error = cpp_func(linux_side, eye, tex, &submit_data.bounds, flags);
+    }
 
     wine_texture->lpVtbl->Release(wine_texture);
 
-    return 0;
+    return error;
 }
 
 #ifdef VRCLIENT_HAVE_DXVK
@@ -809,7 +838,6 @@ static CDECL void d3d11_explicit_timing_callback(const void *data, unsigned int 
 {
     const struct explicit_timing_data *callback_data = data;
     EVRCompositorError error;
-    void *timing_compositor = callback_data->linux_side;
 
     TRACE("data {%p, %u}\n", data, data_size);
 
@@ -818,11 +846,11 @@ static CDECL void d3d11_explicit_timing_callback(const void *data, unsigned int 
         case 21:
             error = cppIVRCompositor_IVRCompositor_021_SubmitExplicitTimingData(callback_data->linux_side);
             break;
-        default:
-            timing_compositor = get_our_compositor();
-            /* fall through, below version MUST match version in create_our_compositor() */
         case 22:
-            error = cppIVRCompositor_IVRCompositor_022_SubmitExplicitTimingData(timing_compositor);
+            error = cppIVRCompositor_IVRCompositor_022_SubmitExplicitTimingData(callback_data->linux_side);
+            break;
+        default:
+            FIXME("Unhandled version %u.\n", callback_data->version);
             break;
     }
 
@@ -856,7 +884,7 @@ EVRCompositorError ivrcompositor_wait_get_poses(
 
     if ((wined3d_device = user_data->wined3d_device))
     {
-        TRACE("wined3d device %p\n", wined3d_device);
+        TRACE("wined3d device %p.\n", wined3d_device);
 
         /* We need to call IVRCompositor::SubmitExplicitTimingData() before the
          * first flush of the frame.
@@ -865,10 +893,13 @@ EVRCompositorError ivrcompositor_wait_get_poses(
          * stream immediately after IVRCompositor::WaitGetPoses() seems
          * reasonable.
          */
-        data.linux_side = linux_side;
-        data.version = version;
-        wined3d_device->lpVtbl->run_on_command_stream(wined3d_device,
-                d3d11_explicit_timing_callback, &data, sizeof(data));
+        if (version == 21 || version == 22)
+        {
+            data.linux_side = linux_side;
+            data.version = version;
+            wined3d_device->lpVtbl->run_on_command_stream(wined3d_device,
+                    d3d11_explicit_timing_callback, &data, sizeof(data));
+        }
     }
 
     return r;
