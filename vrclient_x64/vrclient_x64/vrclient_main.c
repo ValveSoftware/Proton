@@ -197,18 +197,32 @@ EVRInitError ivrclientcore_002_init(EVRInitError (*cpp_func)(void *, EVRApplicat
         void *linux_side, EVRApplicationType application_type,
         unsigned int version, struct client_core_data *user_data)
 {
+    EVRInitError error;
+
     TRACE("%p, %#x\n", linux_side, application_type);
+
     InitializeCriticalSection(&user_data->critical_section);
-    return cpp_func(linux_side, application_type);
+
+    error = cpp_func(linux_side, application_type);
+    if (error)
+        ERR("error %#x\n", error);
+    return error;
 }
 
 EVRInitError ivrclientcore_init(EVRInitError (*cpp_func)(void *, EVRApplicationType, const char *),
         void *linux_side, EVRApplicationType application_type, const char *startup_info,
         unsigned int version, struct client_core_data *user_data)
 {
+    EVRInitError error;
+
     TRACE("%p, %#x, %p\n", linux_side, application_type, startup_info);
+
     InitializeCriticalSection(&user_data->critical_section);
-    return cpp_func(linux_side, application_type, startup_info);
+
+    error = cpp_func(linux_side, application_type, startup_info);
+    if (error)
+        ERR("error %#x\n", error);
+    return error;
 }
 
 void *ivrclientcore_get_generic_interface(void *(*cpp_func)(void *, const char *, EVRInitError *),
