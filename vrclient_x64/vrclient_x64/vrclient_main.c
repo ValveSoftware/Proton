@@ -454,9 +454,10 @@ static EVRCompositorError ivrcompositor_submit_wined3d(
         void *linux_side, EVREye eye, Texture_t *texture, VRTextureBounds_t *bounds, EVRSubmitFlags flags,
         unsigned int version, struct compositor_data *user_data, IWineD3D11Texture2D *wine_texture)
 {
+    IWineD3D11Texture2D *depth_texture = NULL;
+    IUnknown *depth_texture_unk = NULL;
     IWineD3D11Device *wined3d_device;
     struct submit_data submit_data;
-    IUnknown *depth_texture = NULL;
     EVRCompositorError error = 0;
     ID3D11Device *device;
     BOOL async = FALSE;
@@ -504,78 +505,88 @@ static EVRCompositorError ivrcompositor_submit_wined3d(
     }
     device->lpVtbl->Release(device);
 
+    submit_data.linux_side = linux_side;
+    submit_data.submit = cpp_func;
+    submit_data.eye = eye;
+    submit_data.flags = flags;
     /* Textures are upside-down in wined3d. */
     submit_data.bounds = *bounds;
     submit_data.bounds.vMin = bounds->vMax;
     submit_data.bounds.vMax = bounds->vMin;
 
+    switch (flags & (Submit_TextureWithPose | Submit_TextureWithDepth))
+    {
+        case 0:
+            submit_data.texture = *texture;
+            break;
+        case Submit_TextureWithPose:
+            submit_data.texture_pose = *(VRTextureWithPose_t *)texture;
+            break;
+        case Submit_TextureWithDepth:
+            submit_data.texture_depth = *(VRTextureWithDepth_t *)texture;
+            depth_texture_unk = submit_data.texture_depth.depth.handle;
+            break;
+        case Submit_TextureWithPose | Submit_TextureWithDepth:
+            submit_data.texture_both = *(VRTextureWithPoseAndDepth_t *)texture;
+            depth_texture_unk = submit_data.texture_both.depth.handle;
+            break;
+    }
+
+    if (depth_texture_unk)
+    {
+        if (FAILED(hr = depth_texture_unk->lpVtbl->QueryInterface(depth_texture_unk,
+                &IID_IWineD3D11Texture2D, (void **)&depth_texture)))
+            ERR("Failed to get IWineD3D11Texture2D from depth texture.\n");
+    }
+
     if (async)
     {
-        submit_data.linux_side = linux_side;
-        submit_data.submit = cpp_func;
-        submit_data.eye = eye;
-        switch (flags & (Submit_TextureWithPose | Submit_TextureWithDepth))
-        {
-            case 0:
-                submit_data.texture = *texture;
-                break;
-            case Submit_TextureWithPose:
-                submit_data.texture_pose = *(VRTextureWithPose_t *)texture;
-                break;
-            case Submit_TextureWithDepth:
-                submit_data.texture_depth = *(VRTextureWithDepth_t *)texture;
-                depth_texture = (IUnknown *)submit_data.texture_depth.depth.handle;
-                break;
-            case Submit_TextureWithPose | Submit_TextureWithDepth:
-                submit_data.texture_both = *(VRTextureWithPoseAndDepth_t *)texture;
-                depth_texture = (IUnknown *)submit_data.texture_both.depth.handle;
-                break;
-        }
-        submit_data.flags = flags;
         wine_texture->lpVtbl->access_gl_texture(wine_texture,
                 d3d11_texture_callback, depth_texture, &submit_data, sizeof(submit_data));
     }
     else
     {
-        unsigned int gl_texture;
-        Texture_t *tex;
+        unsigned int gl_texture, gl_depth_texture = 0;
+        void *linux_texture;
 
         gl_texture = wine_texture->lpVtbl->get_gl_texture(wine_texture);
+        if (depth_texture)
+        {
+            gl_depth_texture = depth_texture->lpVtbl->get_gl_texture(depth_texture);
+            TRACE("Depth texture %u.\n", gl_depth_texture);
+        }
 
         switch (flags & (Submit_TextureWithPose | Submit_TextureWithDepth))
         {
             case 0:
-                submit_data.texture = *texture;
                 submit_data.texture.handle = (void *)(UINT_PTR)gl_texture;
                 submit_data.texture.eType = TextureType_OpenGL;
-                tex = &submit_data.texture;
+                linux_texture = &submit_data.texture;
                 break;
             case Submit_TextureWithPose:
-                submit_data.texture_pose = *(VRTextureWithPose_t *)texture;
                 submit_data.texture_pose.texture.handle = (void *)(UINT_PTR)gl_texture;
                 submit_data.texture_pose.texture.eType = TextureType_OpenGL;
-                tex = (Texture_t *)&submit_data.texture_pose;
+                linux_texture = &submit_data.texture_pose;
                 break;
             case Submit_TextureWithDepth:
-                submit_data.texture_depth = *(VRTextureWithDepth_t *)texture;
                 submit_data.texture_depth.texture.handle = (void *)(UINT_PTR)gl_texture;
                 submit_data.texture_depth.texture.eType = TextureType_OpenGL;
-                FIXME("Unhandled depth texture.\n");
-                submit_data.texture_depth.depth.handle = (void *)(UINT_PTR)0;
-                tex = (Texture_t *)&submit_data.texture_depth;
+                submit_data.texture_depth.depth.handle = (void *)(UINT_PTR)gl_depth_texture;
+                linux_texture = &submit_data.texture_depth;
                 break;
             case Submit_TextureWithPose | Submit_TextureWithDepth:
-                submit_data.texture_both = *(VRTextureWithPoseAndDepth_t *)texture;
                 submit_data.texture_both.texture.handle = (void *)(UINT_PTR)gl_texture;
                 submit_data.texture_both.texture.eType = TextureType_OpenGL;
-                FIXME("Unhandled depth texture.\n");
-                submit_data.texture_both.depth.handle = (void *)(UINT_PTR)0;
-                tex = (Texture_t *)&submit_data.texture_both;
+                submit_data.texture_both.depth.handle = (void *)(UINT_PTR)gl_depth_texture;
+                linux_texture = &submit_data.texture_both;
                 break;
         }
 
-        error = cpp_func(linux_side, eye, tex, &submit_data.bounds, flags);
+        error = cpp_func(linux_side, eye, linux_texture, &submit_data.bounds, flags);
     }
+
+    if (depth_texture)
+        depth_texture->lpVtbl->Release(depth_texture);
 
     wine_texture->lpVtbl->Release(wine_texture);
 
