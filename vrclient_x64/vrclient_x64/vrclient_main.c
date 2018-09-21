@@ -358,15 +358,18 @@ static CDECL void d3d11_texture_callback(unsigned int gl_texture, unsigned int g
 {
     const struct submit_data *submit_data = data;
     VRTextureBounds_t bounds = submit_data->bounds;
-    VRCompositorError error = 0;
-    Texture_t texture, *tex;
-    VRTextureWithPose_t texture_pose;
-    VRTextureWithDepth_t texture_depth;
     VRTextureWithPoseAndDepth_t texture_both;
+    VRTextureWithDepth_t texture_depth;
+    VRTextureWithPose_t texture_pose;
+    VRCompositorError error = 0;
+    Texture_t texture;
+    void *tex;
 
-    TRACE("texture %u, data {%p, %u}\n", gl_texture, data, data_size);
+    TRACE("texture %u, depth_texture %u, data {%p, %u}\n",
+            gl_texture, gl_depth_texture, data, data_size);
 
-    switch(submit_data->flags & (Submit_TextureWithPose | Submit_TextureWithDepth)){
+    switch (submit_data->flags & (Submit_TextureWithPose | Submit_TextureWithDepth))
+    {
     case 0:
         texture = submit_data->texture;
         texture.handle = (void *)(UINT_PTR)gl_texture;
@@ -377,21 +380,21 @@ static CDECL void d3d11_texture_callback(unsigned int gl_texture, unsigned int g
         texture_pose = submit_data->texture_pose;
         texture_pose.texture.handle = (void *)(UINT_PTR)gl_texture;
         texture_pose.texture.eType = TextureType_OpenGL;
-        tex = (Texture_t *)&texture_pose;
+        tex = &texture_pose;
         break;
     case Submit_TextureWithDepth:
         texture_depth = submit_data->texture_depth;
         texture_depth.texture.handle = (void *)(UINT_PTR)gl_texture;
         texture_depth.texture.eType = TextureType_OpenGL;
         texture_depth.depth.handle = (void *)(UINT_PTR)gl_depth_texture;
-        tex = (Texture_t *)&texture_depth;
+        tex = &texture_depth;
         break;
     case Submit_TextureWithPose | Submit_TextureWithDepth:
         texture_both = submit_data->texture_both;
         texture_both.texture.handle = (void *)(UINT_PTR)gl_texture;
         texture_both.texture.eType = TextureType_OpenGL;
         texture_both.depth.handle = (void *)(UINT_PTR)gl_depth_texture;
-        tex = (Texture_t *)&texture_both;
+        tex = &texture_both;
         break;
     }
 
@@ -676,11 +679,12 @@ static EVRCompositorError ivrcompositor_submit_vulkan(
     VRTextureWithPoseAndDepth_t our_both;
     VRTextureWithDepth_t our_depth;
     VRTextureWithPose_t our_pose;
-    Texture_t our_texture, *tex;
+    Texture_t our_texture;
+    void *tex;
 
     load_vk_unwrappers();
 
-    their_vkdata = (struct VRVulkanTextureData_t *)texture->handle;
+    their_vkdata = texture->handle;
 
     our_vkdata = *their_vkdata;
     our_vkdata.m_pDevice = get_native_VkDevice(our_vkdata.m_pDevice);
@@ -693,13 +697,13 @@ static EVRCompositorError ivrcompositor_submit_vulkan(
         case 0:
             our_texture = *texture;
             our_texture.handle = &our_vkdata;
-            tex = (Texture_t *)&our_texture;
+            tex = &our_texture;
             break;
 
         case Submit_TextureWithPose:
             our_pose = *(VRTextureWithPose_t *)texture;
             our_pose.texture.handle = &our_vkdata;
-            tex = (Texture_t *)&our_pose;
+            tex = &our_pose;
             break;
 
         case Submit_TextureWithDepth:
@@ -716,7 +720,7 @@ static EVRCompositorError ivrcompositor_submit_vulkan(
 
             our_depth.depth.handle = &our_depth_vkdata;
 
-            tex = (Texture_t *)&our_depth;
+            tex = &our_depth;
             break;
 
         case Submit_TextureWithPose | Submit_TextureWithDepth:
@@ -724,7 +728,7 @@ static EVRCompositorError ivrcompositor_submit_vulkan(
 
             our_both.texture.handle = &our_vkdata;
 
-            their_vkdata = (struct VRVulkanTextureData_t *)our_both.depth.handle;
+            their_vkdata = our_both.depth.handle;
             our_depth_vkdata = *their_vkdata;
             our_depth_vkdata.m_pDevice = get_native_VkDevice(our_depth_vkdata.m_pDevice);
             our_depth_vkdata.m_pPhysicalDevice = get_native_VkPhysicalDevice(our_depth_vkdata.m_pPhysicalDevice);
@@ -733,7 +737,7 @@ static EVRCompositorError ivrcompositor_submit_vulkan(
 
             our_both.depth.handle = &our_depth_vkdata;
 
-            tex = (Texture_t *)&our_both;
+            tex = &our_both;
             break;
     }
 
