@@ -16,6 +16,11 @@ usage()
 
 set -e
 
+if (( EUID == 0 )); then
+    echo 'Do not run this script as root.'
+    exit 1
+fi
+
 JOBS=-j"$(( $(nproc 2>/dev/null||sysctl -n hw.ncpu 2>/dev/null||echo 4) + 1))"
 PLATFORM=$(uname)
 
