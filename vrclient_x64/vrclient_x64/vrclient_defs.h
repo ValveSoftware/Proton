@@ -19,7 +19,6 @@ typedef int
         EVRInitError,
         EVRApplicationType,
         EVRButtonId,
-        EVRRenderModelError,
         EVRCompositorError,
         EVRApplicationError,
         EVRApplicationProperty,
@@ -285,5 +284,12 @@ typedef enum EVRCompositorTimingMode
     VRCompositorTimingMode_Explicit_RuntimePerformsPostPresentHandoff = 1,
     VRCompositorTimingMode_Explicit_ApplicationPerformsPostPresentHandoff = 2,
 } EVRCompositorTimingMode;
+
+typedef enum EVRRenderModelError
+{
+    VRRenderModelError_None = 0,
+    VRRenderModelError_Loading = 100,
+    VRRenderModelError_NotSupported = 200,
+} EVRRenderModelError;
 
 #endif

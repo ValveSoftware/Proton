@@ -64,7 +64,7 @@ DEFINE_THISCALL_WRAPPER(winIVRRenderModels_IVRRenderModels_005_LoadIntoTextureD3
 EVRRenderModelError __thiscall winIVRRenderModels_IVRRenderModels_005_LoadIntoTextureD3D11_Async(winIVRRenderModels_IVRRenderModels_005 *_this, TextureID_t textureId, void * pDstTexture)
 {
     TRACE("%p\n", _this);
-    return cppIVRRenderModels_IVRRenderModels_005_LoadIntoTextureD3D11_Async(_this->linux_side, textureId, pDstTexture);
+    return ivrrendermodels_load_into_texture_d3d11_async(cppIVRRenderModels_IVRRenderModels_005_LoadIntoTextureD3D11_Async, _this->linux_side, textureId, pDstTexture, 5);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRRenderModels_IVRRenderModels_005_FreeTextureD3D11, 12)

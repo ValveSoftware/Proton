@@ -132,6 +132,11 @@ uint32_t ivrcompositor_get_vulkan_device_extensions_required(
         uint32_t (*cpp_func)(void *, VkPhysicalDevice_T *, char *, uint32_t),
         void *linux_side, VkPhysicalDevice_T *phys_dev, char *value, uint32_t bufsize,
         unsigned int version, struct compositor_data *user_data);
+
+EVRRenderModelError ivrrendermodels_load_into_texture_d3d11_async(
+        EVRRenderModelError (*cpp_func)(void *, TextureID_t, void *),
+        void *linux_side, TextureID_t texture_id, void *dst_texture, unsigned int version);
+
 #endif  /* __cplusplus */
 
 #define TRACE WINE_TRACE

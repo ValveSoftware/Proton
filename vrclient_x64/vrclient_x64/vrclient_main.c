@@ -28,6 +28,11 @@
 #include "cppIVRCompositor_IVRCompositor_021.h"
 #include "cppIVRCompositor_IVRCompositor_022.h"
 
+typedef struct winRenderModel_t_1015 winRenderModel_t_1015;
+typedef struct winRenderModel_TextureMap_t_1015 winRenderModel_TextureMap_t_1015;
+
+#include "cppIVRRenderModels_IVRRenderModels_005.h"
+
 WINE_DEFAULT_DEBUG_CHANNEL(vrclient);
 
 BOOL WINAPI DllMain(HINSTANCE instance, DWORD reason, void *reserved)
@@ -944,6 +949,89 @@ uint32_t ivrcompositor_get_vulkan_device_extensions_required(
     phys_dev = get_native_VkPhysicalDevice(phys_dev);
 
     return cpp_func(linux_side, phys_dev, value, bufsize);
+}
+
+struct winRenderModel_TextureMap_t_1015 {
+    uint16_t unWidth;
+    uint16_t unHeight;
+    const uint8_t *rubTextureMapData;
+}  __attribute__ ((ms_struct));
+
+static EVRRenderModelError load_into_texture_d3d11(ID3D11Texture2D *texture,
+        const struct winRenderModel_TextureMap_t_1015 *data)
+{
+    D3D11_TEXTURE2D_DESC texture_desc;
+    ID3D11DeviceContext *context;
+    ID3D11Device *device;
+
+    texture->lpVtbl->GetDesc(texture, &texture_desc);
+
+    TRACE("Format %#x, width %u, height %u.\n",
+            texture_desc.Format, texture_desc.Width, texture_desc.Height);
+    TRACE("Array size %u, miplevels %u.\n",
+            texture_desc.ArraySize, texture_desc.MipLevels);
+
+    if (texture_desc.Format != DXGI_FORMAT_R8G8B8A8_UNORM_SRGB)
+    {
+        FIXME("Unexpected format %#x.\n", texture_desc.Format);
+        return VRRenderModelError_NotSupported;
+    }
+    if (texture_desc.Width != data->unWidth)
+    {
+        FIXME("Unexpected width %u.\n", texture_desc.Width);
+        return VRRenderModelError_NotSupported;
+    }
+    if (texture_desc.Height != data->unHeight)
+    {
+        FIXME("Unexpected height %u.\n", texture_desc.Height);
+        return VRRenderModelError_NotSupported;
+    }
+
+    texture->lpVtbl->GetDevice(texture, &device);
+    device->lpVtbl->GetImmediateContext(device, &context);
+    device->lpVtbl->Release(device);
+
+    context->lpVtbl->UpdateSubresource(context, (ID3D11Resource *)texture,
+            0, NULL, data->rubTextureMapData, data->unWidth * 4 * sizeof(uint8_t), 0);
+
+    context->lpVtbl->Release(context);
+    return VRRenderModelError_None;
+}
+
+EVRRenderModelError ivrrendermodels_load_into_texture_d3d11_async(
+        EVRRenderModelError (*cpp_func)(void *, TextureID_t, void *),
+        void *linux_side, TextureID_t texture_id, void *dst_texture, unsigned int version)
+{
+    struct winRenderModel_TextureMap_t_1015 *texture_map;
+    IUnknown *unk = dst_texture;
+    EVRRenderModelError error;
+    ID3D11Texture2D *texture;
+
+    error = cppIVRRenderModels_IVRRenderModels_005_LoadTexture_Async(linux_side, texture_id, &texture_map);
+    if (error == VRRenderModelError_Loading)
+    {
+        TRACE("Loading.\n");
+        return error;
+    }
+    if (error != VRRenderModelError_None)
+    {
+        WARN("Failed to load texture %#x.\n", error);
+        return error;
+    }
+
+    if (SUCCEEDED(unk->lpVtbl->QueryInterface(unk, &IID_ID3D11Texture2D, (void **)&texture)))
+    {
+        error = load_into_texture_d3d11(texture, texture_map);
+        texture->lpVtbl->Release(texture);
+    }
+    else
+    {
+        FIXME("Expected 2D texture.\n");
+        error = VRRenderModelError_NotSupported;
+    }
+
+    cppIVRRenderModels_IVRRenderModels_005_FreeTexture(linux_side, texture_map);
+    return error;
 }
 
 void destroy_compositor_data(struct compositor_data *data)

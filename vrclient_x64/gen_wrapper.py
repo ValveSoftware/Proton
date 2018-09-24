@@ -177,6 +177,10 @@ def ivrcompositor_wait_get_poses(cppname, method):
 def ivrcompositor_get_vulkan_device_extensions_required(cppname, method):
     return "ivrcompositor_get_vulkan_device_extensions_required"
 
+def ivrrendermodels_load_into_texture_d3d11_async(cppname, method):
+    assert "005" in cppname
+    return "ivrrendermodels_load_into_texture_d3d11_async"
+
 method_overrides = [
     ("IVRClientCore", "Init", ivrclientcore_init),
     ("IVRClientCore", "GetGenericInterface", ivrclientcore_get_generic_interface),
@@ -187,6 +191,7 @@ method_overrides = [
     ("IVRCompositor", "PostPresentHandoff", ivrcompositor_post_present_handoff),
     ("IVRCompositor", "WaitGetPoses", ivrcompositor_wait_get_poses),
     ("IVRCompositor", "GetVulkanDeviceExtensionsRequired", ivrcompositor_get_vulkan_device_extensions_required),
+    ("IVRRenderModels", "LoadIntoTextureD3D11_Async", ivrrendermodels_load_into_texture_d3d11_async),
 ]
 
 method_overrides_data = [
