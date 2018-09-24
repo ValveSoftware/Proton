@@ -88,7 +88,7 @@ basedir = os.path.dirname(sys.argv[0])
 bindir = basedir + "/dist/bin/"
 libdir = basedir + "/dist/lib"
 lib64dir = basedir + "/dist/lib64"
-wine_path = bindir + "/wine64"
+wine_path = bindir + "/wine"
 
 #extract if needed
 dist_lock = FileLock(basedir + "/dist.lock", timeout=-1)
