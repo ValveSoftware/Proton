@@ -300,9 +300,18 @@ with prefix_lock:
     def make_dxvk_links(dll_dir, link_dir):
         if os.path.lexists(link_dir + "/d3d11.dll"):
             os.remove(link_dir + "/d3d11.dll")
+        if os.path.lexists(link_dir + "/d3d10.dll"):
+            os.remove(link_dir + "/d3d10.dll")
+        if os.path.lexists(link_dir + "/d3d10_1.dll"):
+            os.remove(link_dir + "/d3d10_1.dll")
+        if os.path.lexists(link_dir + "/d3d10core.dll"):
+            os.remove(link_dir + "/d3d10core.dll")
         if os.path.lexists(link_dir + "/dxgi.dll"):
             os.remove(link_dir + "/dxgi.dll")
         os.symlink(dll_dir + "/d3d11.dll", link_dir + "/d3d11.dll")
+        os.symlink(dll_dir + "/d3d10.dll", link_dir + "/d3d10.dll")
+        os.symlink(dll_dir + "/d3d10_1.dll", link_dir + "/d3d10_1.dll")
+        os.symlink(dll_dir + "/d3d10core.dll", link_dir + "/d3d10core.dll")
         os.symlink(dll_dir + "/dxgi.dll", link_dir + "/dxgi.dll")
 
     if "wined3d11" in config_opts:
@@ -319,6 +328,9 @@ with prefix_lock:
             prefix + "drive_c/windows/syswow64")
         dlloverrides["dxgi"] = "n"
         dlloverrides["d3d11"] = "n"
+        dlloverrides["d3d10"] = "n"
+        dlloverrides["d3d10_1"] = "n"
+        dlloverrides["d3d10core"] = "n"
 
 if "nod3d11" in config_opts:
     dlloverrides["d3d11"] = ""
