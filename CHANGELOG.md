@@ -1,3 +1,8 @@
+## Available in Proton 3.7 Beta:
+###### 3.7-7:
+- Improvements to alt-tab and fullscreen behavior in many games.
+- Fix mouse behavior in some games and mice with high sample rates.
+- Update DXVK to v0.80.
 ## Available in Proton 3.7:
 ###### 3.7-6:
 - Fix failure to start VR games.
