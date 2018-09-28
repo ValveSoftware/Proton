@@ -50,12 +50,8 @@ endif
 export CC
 export CXX
 
-# If set below, we're invoking some build steps in a container that requires sudo -- will test sudo and show a warning
-# at build start.
-USING_SUDO_CONTAINER :=
-
 # Selected container mode shell
-DOCKER_SHELL_BASE = sudo docker run --rm --init -v $(HOME):$(HOME) -w $(CURDIR) -e HOME=$(HOME) \
+DOCKER_SHELL_BASE = docker run --rm --init -v $(HOME):$(HOME) -w $(CURDIR) -e HOME=$(HOME) \
                                     -v /etc/passwd:/etc/passwd:ro -u $(shell id -u):$(shell id -g) -h $(shell hostname) \
                                     -v /tmp:/tmp $(SELECT_DOCKER_IMAGE) /dev/init -sg -- /bin/bash
 
@@ -64,14 +60,12 @@ DOCKER_SHELL_BASE = sudo docker run --rm --init -v $(HOME):$(HOME) -w $(CURDIR) 
 ifeq ($(STEAMRT64_MODE),docker)
 	SELECT_DOCKER_IMAGE := $(STEAMRT64_IMAGE)
 	CONTAINER_SHELL64 := $(DOCKER_SHELL_BASE)
-	USING_SUDO_CONTAINER := 1
 else ifneq ($(STEAMRT64_MODE),)
 	foo := $(error Unrecognized STEAMRT64_MODE $(STEAMRT64_MODE))
 endif
 ifeq ($(STEAMRT32_MODE),docker)
 	SELECT_DOCKER_IMAGE := $(STEAMRT32_IMAGE)
 	CONTAINER_SHELL32 := $(DOCKER_SHELL_BASE)
-	USING_SUDO_CONTAINER := 1
 else ifneq ($(STEAMRT32_MODE),)
 	foo := $(error Unrecognized STEAMRT32_MODE $(STEAMRT32_MODE))
 endif
@@ -91,16 +85,6 @@ ifndef CONTAINER_SHELL64
 endif
 ifndef CONTAINER_SHELL32
 	CONTAINER_SHELL32 := $(SHELL)
-endif
-
-# Using a sudo container? Make sure we have sudo and show warning
-ifeq ($(USING_SUDO_CONTAINER),1)
-$(info :: NOTE: Some build steps will run in a container, which invokes sudo automatically)
-$(info ::       If building in parallel (-j) this can result in sudo prompts buried in the output)
-$(info :: Testing sudo access now)
-ifneq ($(shell sudo echo hi),hi)
-$(error Failed to invoke sudo)
-endif
 endif
 
 # Helper to test
