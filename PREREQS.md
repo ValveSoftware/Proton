@@ -28,6 +28,22 @@ sudo apt install mesa-vulkan-drivers mesa-vulkan-drivers:i386
 
 Provide your user password when requested and reboot after the last command completes to ensure the driver has updated correctly.
 
+On Radeon R9 200/300 series you have to blacklist radeon module and add following parameters to amdgpu:
+
+```
+echo "blacklist radeon" | sudo tee --append /etc/modprobe.d/blacklist.conf
+echo "options amdgpu si_support=1 cik_support=1" | sudo tee --append /etc/modprobe.d/amdgpu.conf
+sudo update-initramfs -u
+sudo reboot
+```
+
+After reboot check that vulkan is loaded properly:
+
+```
+sudo apt install vulkan-utils
+vulkaninfo
+```
+
 In addition, AMD users that want to play VR games should also add this repository: https://launchpad.net/~kisak/+archive/ubuntu/steamvr4pk
 
 ```
