@@ -469,11 +469,17 @@ function build_dxvk
     mkdir -p "$DST_DIR"/lib64/wine/dxvk
     cp "$TOP/build/dxvk.win64/bin/dxgi.dll" "$DST_DIR"/lib64/wine/dxvk/
     cp "$TOP/build/dxvk.win64/bin/d3d11.dll" "$DST_DIR"/lib64/wine/dxvk/
+    cp "$TOP/build/dxvk.win64/bin/d3d10.dll" "$DST_DIR"/lib64/wine/dxvk/
+    cp "$TOP/build/dxvk.win64/bin/d3d10_1.dll" "$DST_DIR"/lib64/wine/dxvk/
+    cp "$TOP/build/dxvk.win64/bin/d3d10core.dll" "$DST_DIR"/lib64/wine/dxvk/
     git submodule status -- dxvk > "$DST_DIR"/lib64/wine/dxvk/version
 
     mkdir -p "$DST_DIR"/lib/wine/dxvk
     cp "$TOP/build/dxvk.win32/bin/dxgi.dll" "$DST_DIR"/lib/wine/dxvk/
     cp "$TOP/build/dxvk.win32/bin/d3d11.dll" "$DST_DIR"/lib/wine/dxvk/
+    cp "$TOP/build/dxvk.win32/bin/d3d10.dll" "$DST_DIR"/lib/wine/dxvk/
+    cp "$TOP/build/dxvk.win32/bin/d3d10_1.dll" "$DST_DIR"/lib/wine/dxvk/
+    cp "$TOP/build/dxvk.win32/bin/d3d10core.dll" "$DST_DIR"/lib/wine/dxvk/
     git submodule status -- dxvk > "$DST_DIR"/lib/wine/dxvk/version
 }
 
