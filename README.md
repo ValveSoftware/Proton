@@ -13,7 +13,7 @@ a particular title.
 ---
 Getting Started with Proton from Steam Play
 ---
-
+* As the new Steam Play is still in Beta, it is recommended that you opt into the [Steam Client Beta](https://steamcommunity.com/sharedfiles/filedetails/?id=182912431) for the latest features and fixes.
 * Proton requires graphics drivers that are more recent than what is typically packaged in most distributions; please read the [list of requirements and quickstart for Ubuntu 18.04 users](https://github.com/ValveSoftware/Proton/blob/proton_3.7/PREREQS.md)
 * Install and play games! Please refer to [this post](https://steamcommunity.com/games/221410/announcements/detail/1696055855739350561) for more information.
 
