@@ -18,10 +18,10 @@ https://launchpad.net/~graphics-drivers/+archive/ubuntu/ppa
 
 ## AMD/Intel
 
-Linux users with AMD or Intel graphics cards should install recent versions of Mesa and LLVM through this repository: https://launchpad.net/~paulo-miguel-dias/+archive/ubuntu/mesa
+Linux users with AMD or Intel graphics cards should install recent versions of Mesa and LLVM through this repository: https://launchpad.net/~paulo-miguel-dias/+archive/ubuntu/pkppa
 
 ```
-sudo add-apt-repository ppa:paulo-miguel-dias/mesa
+sudo add-apt-repository ppa:paulo-miguel-dias/pkppa
 sudo apt dist-upgrade
 sudo apt install mesa-vulkan-drivers mesa-vulkan-drivers:i386
 ```
