@@ -4,7 +4,7 @@ Some of the newest titles available on Linux with Steam Play require cutting-edg
 
 ## NVIDIA
 
-Linux users with NVIDIA graphics cards should install the latest NVIDIA proprietary drivers; version 396.54 is required. They can be installed directly from Canonical's repository for third-party drivers:
+Linux users with NVIDIA graphics cards should install the latest NVIDIA proprietary drivers; a version newer than 396.54 is required. They can be installed directly from Canonical's repository for third-party drivers:
 
 ```
 sudo add-apt-repository ppa:graphics-drivers/ppa
