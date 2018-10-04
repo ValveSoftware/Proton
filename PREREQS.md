@@ -18,6 +18,8 @@ https://launchpad.net/~graphics-drivers/+archive/ubuntu/ppa
 
 ## AMD/Intel
 
+**VR Users should skip this section and see AMD+VR instead.**
+
 Linux users with AMD or Intel graphics cards should install recent versions of Mesa and LLVM through this repository: https://launchpad.net/~paulo-miguel-dias/+archive/ubuntu/pkppa
 
 ```
@@ -28,15 +30,13 @@ sudo apt install mesa-vulkan-drivers mesa-vulkan-drivers:i386
 
 Provide your user password when requested and reboot after the last command completes to ensure the driver has updated correctly.
 
-In addition, AMD users that want to play VR games should also add this repository: https://launchpad.net/~kisak/+archive/ubuntu/steamvr4pk
-
-```
-sudo add-apt-repository ppa:kisak/steamvr4pk
-sudo apt dist-upgrade
-sudo apt install linux-generic-steamvr-18.04
-```
-
 VR is not currently supported on Intel graphics.
+
+## AMD + VR
+
+For users running VR on AMD, please follow the driver installation instructions
+from the SteamVR for Linux github project:
+https://github.com/ValveSoftware/SteamVR-for-Linux#amd
 
 # GRAPHICS DRIVERS REQUIREMENTS - GENERAL
 
