@@ -1,6 +1,5 @@
 
 # TODO Missing vs build_proton
-#   - Package/tarball step
 #   - setup_wine_gecko
 
 ##
@@ -115,6 +114,7 @@ TOOLS_DIR32 := ./obj-tools32
 TOOLS_DIR64 := ./obj-tools64
 DST_BASE := ./dist
 DST_DIR := $(DST_BASE)/dist
+DEPLOY_DIR := ./deploy
 
 # TODO Release/debug configuration
 INSTALL_PROGRAM_FLAGS :=
@@ -270,6 +270,11 @@ dist: $(DIST_TARGETS) | $(WINE_OUT) $(filter $(MAKECMDGOALS),wine64 wine32 wine)
 	rm -rf $(abspath $(DIST_PREFIX)) && \
 	WINEPREFIX=$(abspath $(DIST_PREFIX)) $(WINE_OUT_BIN) wineboot && \
 		WINEPREFIX=$(abspath $(DIST_PREFIX)) $(WINE_OUT_SERVER) -w
+
+deploy: dist
+	mkdir -p $(DEPLOY_DIR) && \
+	cp -a $(DEPLOY_COPY_TARGETS) $(DEPLOY_DIR) && \
+	tar -C $(DST_DIR) -c . | gzip -c -1 > $(DEPLOY_DIR)/proton_dist.tar.gz
 
 install: dist
 	if [ ! -d $(STEAM_DIR) ]; then echo >&2 "!! "$(STEAM_DIR)" does not exist, cannot install"; return 1; fi
