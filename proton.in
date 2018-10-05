@@ -307,9 +307,9 @@ with prefix_lock:
 
     if "wined3d11" in config_opts:
         #use gl-based wined3d for d3d11
-        make_dxvk_links(basedir + "/dist/lib64/wine/",
+        make_dxvk_links(basedir + "/dist/lib64/wine/fakedlls/",
             prefix + "drive_c/windows/system32")
-        make_dxvk_links(basedir + "/dist/lib/wine/",
+        make_dxvk_links(basedir + "/dist/lib/wine/fakedlls/",
             prefix + "drive_c/windows/syswow64")
     else:
         #use vulkan-based dxvk for d3d11
