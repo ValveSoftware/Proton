@@ -1,7 +1,3 @@
-
-# TODO Missing vs build_proton
-#   - setup_wine_gecko
-
 ##
 ## Nested make
 ##
@@ -156,6 +152,10 @@ CXX_QUOTED   = $(call QUOTE,$(CXX))
 COMPAT_MANIFEST_TEMPLATE := $(SRCDIR)/compatibilitytool.vdf.template
 LICENSE := $(SRCDIR)/dist.LICENSE
 
+GECKO_VER := 2.47
+GECKO32_MSI := wine_gecko-$(GECKO_VER)-x86.msi
+GECKO64_MSI := wine_gecko-$(GECKO_VER)-x86_64.msi
+
 OPENAL := $(SRCDIR)/openal-soft
 OPENAL_OBJ32 := ./obj-openal32
 OPENAL_OBJ64 := ./obj-openal64
@@ -233,9 +233,12 @@ DIST_OVR64 := $(DST_DIR)/lib64/openvr_api_dxvk.so
 DIST_PREFIX := $(DST_DIR)/share/default_pfx/
 DIST_COMPAT_MANIFEST := $(DST_BASE)/compatibilitytool.vdf
 DIST_LICENSE := $(DST_BASE)/LICENSE
+DIST_GECKO_DIR := $(DST_DIR)/share/wine/gecko
+DIST_GECKO32 := $(DIST_GECKO_DIR)/$(GECKO32_MSI)
+DIST_GECKO64 := $(DIST_GECKO_DIR)/$(GECKO64_MSI)
 
 DIST_TARGETS := $(DIST_COPY_TARGETS) $(DIST_VERSION) $(DIST_OVR32) $(DIST_OVR64) \
-                $(DIST_COMPAT_MANIFEST) $(DIST_LICENSE)
+                $(DIST_GECKO32) $(DIST_GECKO64) $(DIST_COMPAT_MANIFEST) $(DIST_LICENSE)
 
 DEPLOY_COPY_TARGETS := $(DIST_COPY_TARGETS) $(DIST_VERSION) $(DIST_LICENSE)
 
@@ -258,6 +261,33 @@ $(DIST_VERSION): | $(DST_DIR)
 
 $(DIST_COMPAT_MANIFEST): $(COMPAT_MANIFEST_TEMPLATE) $(MAKEFILE_DEP) | $(DST_DIR)
 	sed -r 's|//##DISPLAY_NAME##|"display_name" "'$(BUILD_NAME)'"|' $< > $@
+
+$(DIST_GECKO_DIR):
+	mkdir -p $@
+
+$(DIST_GECKO64): | $(DIST_GECKO_DIR)
+	if [ -e "$(SRCDIR)/../gecko/$(GECKO64_MSI)" ]; then \
+		cp "$(SRCDIR)/../gecko/$(GECKO64_MSI)" "$@"; \
+	else \
+		mkdir -p $(SRCDIR)/contrib/; \
+		if [ ! -e "$(SRCDIR)/contrib/$(GECKO64_MSI)" ]; then \
+			echo ">>>> Downloading wine-gecko. To avoid this in future, put it here: $(SRCDIR)/../gecko/$(GECKO64_MSI)"; \
+			wget -O "$(SRCDIR)/contrib/$(GECKO64_MSI)" "https://dl.winehq.org/wine/wine-gecko/$(GECKO_VER)/$(GECKO64_MSI)"; \
+		fi; \
+		cp "$(SRCDIR)/contrib/$(GECKO64_MSI)" "$@"; \
+	fi
+
+$(DIST_GECKO32): | $(DIST_GECKO_DIR)
+	if [ -e "$(SRCDIR)/../gecko/$(GECKO32_MSI)" ]; then \
+		cp "$(SRCDIR)/../gecko/$(GECKO32_MSI)" "$@"; \
+	else \
+		mkdir -p $(SRCDIR)/contrib/; \
+		if [ ! -e "$(SRCDIR)/contrib/$(GECKO32_MSI)" ]; then \
+			echo ">>>> Downloading wine-gecko. To avoid this in future, put it here: $(SRCDIR)/../gecko/$(GECKO32_MSI)"; \
+			wget -O "$(SRCDIR)/contrib/$(GECKO32_MSI)" "https://dl.winehq.org/wine/wine-gecko/$(GECKO_VER)/$(GECKO32_MSI)"; \
+		fi; \
+		cp "$(SRCDIR)/contrib/$(GECKO32_MSI)" "$@"; \
+	fi
 
 .PHONY: dist
 
