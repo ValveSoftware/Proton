@@ -2,8 +2,8 @@
 Introduction
 ---
 Proton is a tool for use with the Steam client which allows games which are
-exclusive to Windows to run on Linux and macOS operating systems. It uses Wine
-to facilitate this.
+exclusive to Windows to run on the Linux operating system. It uses Wine to
+facilitate this.
 
 Most users will prefer to use Proton provided by the Steam client itself.  The
 source code is provided to enable advanced users the ability to alter
@@ -39,9 +39,6 @@ After cloning the Proton git repository, the next step will be to
 obtain the various submodules that go into building Proton:
 
         cd proton
-        #for linux:
-        git submodule update --init wine dxvk ffmpeg openal-soft openvr
-        #for macos:
         git submodule update --init
 
 If you wish to change any subcomponent, now is the time to do so.
@@ -49,7 +46,7 @@ For example, if you wish make changes to Wine, you would apply those
 changes to the <tt>wine/</tt> directory.
 
 ---
-Building for Linux
+Building
 ---
 To build Proton for Linux, set up a Debian machine with the Steam runtime and
 chroots as documented in the Steam Runtime repository:
@@ -133,24 +130,6 @@ chroot.  However, dxvk will not build in that environment, so the build_proton.s
 script will build it on your local system.  This will require you to be able to
 build dxvk on your local system; refer to [the dxvk README.md](https://github.com/ValveSoftware/dxvk/blob/master/README.md) for more details.
 
----
-Building for macOS
----
-To build Proton for macOS, install the latest Xcode command line tools, as
-well as cmake (for openal-soft), a recent nasm (for libjpeg-turbo), libtool, and automake. You can
-use a packager like [Homebrew](https://brew.sh/) to find these packages.
-
-        brew install cmake nasm libtool automake
-
-Then run:
-
-        ./build_proton.sh
-
-TODO - Surely there are other dependencies we have not listed there.
-
-It is important to examine the output near the end of
-<tt>build/wine.win{64,32}/config.log</tt> to ensure that you have all of the
-relevant libraries required to build Wine properly.
 
 ---
 Deploying

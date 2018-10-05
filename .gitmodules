@@ -4,24 +4,9 @@
 [submodule "dxvk"]
 	path = dxvk
 	url = https://github.com/ValveSoftware/dxvk/
-[submodule "freetype2"]
-	path = freetype2
-	url = https://git.savannah.nongnu.org/r/freetype/freetype2.git/
-[submodule "libpng"]
-	path = libpng
-	url = https://github.com/glennrp/libpng.git
-[submodule "libjpeg-turbo"]
-	path = libjpeg-turbo
-	url = https://github.com/libjpeg-turbo/libjpeg-turbo.git
-[submodule "SDL-mirror"]
-	path = SDL-mirror
-	url = https://github.com/spurious/SDL-mirror.git
 [submodule "openal-soft"]
 	path = openal-soft
 	url = https://github.com/kcat/openal-soft.git
-[submodule "MoltenVK"]
-	path = MoltenVK
-	url = https://github.com/KhronosGroup/MoltenVK.git
 [submodule "ffmpeg"]
 	path = ffmpeg
 	url = https://git.ffmpeg.org/ffmpeg.git

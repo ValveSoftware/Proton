@@ -1,4 +1,4 @@
-#!/usr/bin/env @PYTHON_NAME@
+#!/usr/bin/env python3
 
 #script to launch Wine with the correct environment
 
