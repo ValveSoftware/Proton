@@ -48,103 +48,107 @@ changes to the <tt>wine/</tt> directory.
 ---
 Building
 ---
-To build Proton for Linux, set up a Debian machine with the Steam runtime and
-chroots as documented in the Steam Runtime repository:
+The following instructions describe how we create the build environment for the
+production builds of Proton. For reproducibility and security reasons, we build
+inside of a Debian 9 virtual machine. However, you should be able to follow
+these instructions on other distributions as well.
 
-  <https://github.com/ValveSoftware/steam-runtime>
+The Steam Runtime provides a clean and consistent set of libraries. Software
+distributed through Steam should depend only on libraries available through the
+runtime, and so we build in that environment for production Proton builds.
+However, if you are simply making a build for yourself, you can skip the Docker
+and Steam Runtime setup steps below, as they take a very long time to set up.
+At configure-time, pass the `--no-steam-runtime` flag instead of the Docker
+flags shown here.
 
-In addition, you will need to install gcc-5 and a long list of dependencies
-required for Wine. The following set of commands is an example session, and may
-not be complete.
+The build system uses Docker containers. It requires your user to be able to
+usefully run Docker containers, which generally means [your user needs to be in
+the "docker" group](https://docs.docker.com/install/linux/linux-postinstall/),
+which can have [security
+implications](https://docs.docker.com/engine/security/security/).
+
+Starting from a stock Debian 9 installation, you will need to install the
+`gpgv2`, `gnupg2`, `g++`, and `g++-6-multilib` packages from the
+Debian repos.  You will also need to install `meson` version 0.43 or later,
+which can be [acquired from backports](https://backports.debian.org/Instructions/). Next,
+[install Docker-CE from the official Docker repositories](https://docs.docker.com/install/linux/docker-ce/debian/).
+Finally, since we will need to be able to run Wine during the build process,
+[install the `winehq-devel` package from the official WineHQ repositories](https://wiki.winehq.org/Debian).
+This will pull in all of the dependencies required to run wine. You can then
+(and we do) uninstall the `winehq-devel` package in order to ensure that a
+system Wine installation does not interfere with your build process.
+
+Next we set up the Steam runtime build environments. Here we use the
+`wip-docker` branch to get access to the Docker images.
 
         cd ~
         git clone https://github.com/ValveSoftware/steam-runtime.git
         cd steam-runtime
-        #install the end-user steam runtime:
-        ./build-runtime.py
-        #install the 32-bit scout_beta runtime:
-        ./setup_chroot.sh --beta --i386
-        #enter the 32-bit runtime:
-        schroot --chroot steamrt_scout_beta_i386
+        git checkout -b wip-docker origin/wip-docker
 
-This will enter the chroot environment, where you would issue the following commands:
+The steps below will build the Docker images. Each step will take a significant
+amount of time. Note the path to a file in the `proton` directory. See the
+previous section for instructions on cloning Proton.
 
-        sudo apt-get install gcc-5 g++-5 g++-5-multilib flex bison libosmesa6-dev libpcap-dev libhal-dev libsane-dev libv4l-dev libgphoto2-2-dev libcapi20-dev libgsm1-dev libmpg123-dev libvulkan-dev libxslt1-dev nasm yasm
-        sudo update-alternatives --install `which gcc` gcc `which gcc-5` 50
-        sudo update-alternatives --set gcc `which gcc-5`
-        sudo update-alternatives --install `which g++` g++ `which g++-5` 50
-        sudo update-alternatives --set g++ `which g++-5`
-        sudo update-alternatives --install `which cpp` cpp-bin `which cpp-5` 50
-        sudo update-alternatives --set cpp-bin `which cpp-5`
-        exit
+        cd ~
+        #set up the 64-bit Docker image for building Proton
+        ./steam-runtime/setup_docker.sh --beta amd64 --extra-bootstrap=./proton/steamrt-bootstrap.sh steam-proton-dev
+        #set up the 32-bit Docker image for building Proton
+        ./steam-runtime/setup_docker.sh --beta i386 --extra-bootstrap=./proton/steamrt-bootstrap.sh steam-proton-dev32
 
-Next, you need to repeat the process, but for amd64:
+With the build system set up, we can configure Proton and kick off the build.
+If you are not building in the runtime, pass `--no-steam-runtime` to
+`configure.sh` instead.
 
-        ./setup_chroot.sh --beta --amd64
-        schroot --chroot steamrt_scout_beta_amd64
+        mkdir proton/mybuild/
+        cd proton/mybuild
+        ../configure.sh --steam-runtime64=docker:steam-proton-dev --steam-runtime32=docker:steam-proton-dev32
+        make -j6 all dist
 
-And then repeat all of the commands to install gcc and Wine dependencies again.
+**Tip**: If you are building without the Steam runtime as shown here, you
+should first run `make obj-wine64/Makefile obj-wine32/Makefile` and check the
+files `obj-wine64/config.log` and `obj-wine32/config.log` for missing packages.
+Search for `won't be supported`. A couple of missing packages are normal:
+`opencv`, `gstreamer`, `vkd3d`, `oss`, and `libavcodec`. More than that may
+indicate a problem. One easy way to install the dependencies required to build
+Wine is to use `apt-get`'s `build-dep` feature.
 
-In addition, your host system will need to be able to run Wine in both 64-bit and
-32-bit modes in order to create the default prefix. It is recommended to
-install Wine from your package manager, including its optional dependencies.
-
-The openal-soft build system requires cmake 3.0.2 or later, which is newer than
-the Steam runtime SDK provides. You will need to build and install a newer
-cmake into each of the runtimes. For convenience, the build_proton.sh script
-will attempt to use cmake from ~/opt32/bin/ and ~/opt64/bin/, if available.
-
-The following example session obtained and built cmake:
-
-      cd /tmp
-      wget https://cmake.org/files/v3.11/cmake-3.11.4.tar.gz
-      schroot --chroot steamrt_scout_beta_i386
-      tar -xzf cmake-3.11.4.tar.gz
-      cd cmake-3.11.4
-      ./configure --parallel=4 --prefix=~/opt32
-      make -j 4 && make install
-      exit
-      rm -rf cmake-3.11.4
-      schroot --chroot steamrt_scout_beta_amd64
-      tar -xzf cmake-3.11.4.tar.gz
-      cd cmake-3.11.4
-      ./configure --parallel=4 --prefix=~/opt64
-      make -j 4 && make install
-      exit
-
-
-Finally, change your directory back to proton, and run:
-
-        cd ../proton
-        ./build_proton.sh
-
-That should configure and build Wine, and then package the result up into
-<tt>dist/</tt>. It is important to examine the output near the end of
-<tt>build/wine.win{64,32}/config.log</tt> to ensure that you have all of the relevant
-libraries in each chroot. Search for '<tt>executing Makefile commands</tt>' in
-<tt>config.log</tt> to find messages about missing libraries. It is normal to be missing
-a few libraries, including OpenCL, OSS, and libav.
-
-**NOTE:** The build_proton.sh script builds most components inside the Steam runtime
-chroot.  However, dxvk will not build in that environment, so the build_proton.sh
-script will build it on your local system.  This will require you to be able to
-build dxvk on your local system; refer to [the dxvk README.md](https://github.com/ValveSoftware/dxvk/blob/master/README.md) for more details.
-
+The `mybuild/dist` folder now contains a build of Proton which you can install
+manually or with `make install` to install into your user's Steam installation.
+See the next section for more details.
 
 ---
 Deploying
 ---
-Once built, the <tt>dist/</tt> directory will contain the files which can be distributed
-through Steam. For testing purposes, you should be able to clear out the files
-in your <tt>steamapps/common/Proton</tt> directory and replace them with the contents of
-<tt>dist/</tt>. The <tt>proton</tt> script will unpack the files on first run.  Note that if you
-use the Steam client to verify local files, it will restore the production version
-of Proton.
+Steam ships with several versions of Proton, which games will use by default or
+that you can select in Steam Settings's SteamPlay page. Steam also supports
+running games with local builds of Proton, which you can install on your
+machine.
 
-Each component of this software is used under the terms of their licenses.
-See the <tt>LICENSE</tt> files here, as well as the <tt>LICENSE</tt>, <tt>COPYING</tt>, etc files in each
-submodule and directory for details.
+To install a local build of Proton into Steam, make a new directory in
+`~/.steam/steam/compatibilitytools.d/` with a tool name of your choosing and
+place the contents of `dist` into that folder. The `make install` target will
+perform this task for you, installing the Proton build into the Steam folder
+for the current user. You will have to restart the Steam client for it to pick
+up on a new tool.
 
+A correct local tool installation should look like this:
+
+        compatibilitytools.d/my_proton/
+        ├── compatibilitytool.vdf
+        ├── filelock.py
+        ├── LICENSE
+        ├── proton
+        ├── proton_dist.tar.gz
+        ├── toolmanifest.vdf
+        ├── user_settings.sample.py
+        └── version
+
+Each component of this software is used under the terms of their licenses.  See
+the <tt>LICENSE</tt> files here, as well as the <tt>LICENSE</tt>,
+<tt>COPYING</tt>, etc files in each submodule and directory for details. If you
+distribute a built version of Proton to other users, you must adhere to the
+terms of these licenses.
 
 ----
 Runtime Config Options

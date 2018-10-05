@@ -109,7 +109,7 @@ function configure() {
   echo >> "$MAKEFILE" "include \$(SRCDIR)/build/makefile_base.mak"
 
   stat "Created $MAKEFILE, now run make to build."
-  stat "  See BUILDING.md for make targets and instructions"
+  stat "  See README.md for make targets and instructions"
 }
 
 #
@@ -214,11 +214,11 @@ usage() {
   "$1" ""
   "$1" "  Steam Runtime"
   "$1" "    Proton builds that are to be installed & run under the steam client must be built with"
-  "$1" "    the Steam Runtime SDK to ensure compatibility.  See BUILDING.md for more information."
+  "$1" "    the Steam Runtime SDK to ensure compatibility.  See README.md for more information."
   "$1" ""
   "$1" "    --steam-runtime64=docker:<image>  Automatically invoke the Steam Runtime SDK in <image>"
   "$1" "                                      for build steps that must be run in an SDK"
-  "$1" "                                      environment.  See BUILDING.md for instructions to"
+  "$1" "                                      environment.  See README.md for instructions to"
   "$1" "                                      create this image."
   "$1" ""
   "$1" "    --steam-runtime32=docker:<image>  The 32-bit docker image to use for steps that require"
