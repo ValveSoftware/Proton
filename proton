@@ -373,7 +373,10 @@ for dll in dlloverrides:
         s = s + ";" + dll + "=" + setting
     else:
         s = dll + "=" + setting
-env["WINEDLLOVERRIDES"] = s
+if "WINEDLLOVERRIDES" in os.environ:
+    env["WINEDLLOVERRIDES"] = os.environ["WINEDLLOVERRIDES"] + ";" + s
+else:
+    env["WINEDLLOVERRIDES"] = s
 
 ARCH_UNKNOWN=0
 ARCH_I386=1
