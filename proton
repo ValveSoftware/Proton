@@ -504,6 +504,8 @@ def run(args):
             dump_dbg_scripts(args)
         except OSError:
             log("Unable to write debug scripts! " + str(sys.exc_info()[1]))
+    if game_tweaks.needs_config():
+        game_tweaks.create_config()
     if game_tweaks.needs_fonts:
         game_tweaks.import_fonts()
     if game_arch == ARCH_UNKNOWN:
