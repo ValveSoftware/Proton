@@ -9,6 +9,7 @@ Wine settings for the specific game, etc.).  The purpose is similar to
 provided by Proton community and not game developer.
 """
 
+import configparser
 import os
 import re
 import shutil
@@ -60,6 +61,14 @@ TWEAKS_DB = {
     # EverQuest® II Free-To-Play. Your Way.™
     '201230': {
         'needs_fonts': True,
+    },
+    # Tomb Raider I
+    '224960': {
+        'conf_file': 'glide_fix.conf',
+        'conf_dict': {'glide': {'glide': 'emu'}},
+        'commands': {
+            r'.*dosbox.exe$': ['-conf', 'glide_fix.conf'],
+        }
     },
     # Tesla Effect: A Tex Murphy Adventure
     '261510': {
@@ -153,12 +162,27 @@ class Tweaks:
         self.env = {}
         self.needs_fonts = False
         self.commands = {}
+        self.conf_file = ''
+        self.conf_dict = {}
         if os.environ.get('PROTON_NO_TWEAKS') == '1':
             return
         if appid in TWEAKS_DB:
-            self.env = TWEAKS_DB[appid].get('env') or {}
-            self.needs_fonts = TWEAKS_DB[appid].get('needs_fonts') or False
-            self.commands = TWEAKS_DB[appid].get('commands') or {}
+            for name, value in TWEAKS_DB[appid].items():
+                self.__dict__[name] = value or self.__dict__[name]
+
+
+    def needs_config(self):  # pylint: disable=missing-docstring
+        exists = lambda: os.access(self.conf_file, os.F_OK)
+        return self.conf_file and self.conf_dict and not exists()
+
+
+    def create_config(self):
+        """Create configuration file in ini format
+        """
+        conf = configparser.ConfigParser()
+        conf.read_dict(self.conf_dict)
+        with open(self.conf_file, 'w') as file:
+            conf.write(file)
 
 
     def modify_command(self, args):
@@ -170,10 +194,9 @@ class Tweaks:
         Games can provide multiple binaries, each binary can have
         separate list of tweaked commandline args.
         """
-        cmd = args[-1]
         for expr, extra_args in self.commands.items():
             exe_pattern = re.compile(expr)
-            if exe_pattern.match(cmd):
+            if any(exe_pattern.match(arg) for arg in args):
                 return args + extra_args
         return args
 
