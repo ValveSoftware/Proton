@@ -158,7 +158,7 @@ class Tweaks:
     """
 
     def __init__(self, appid):
-        self.prefix = os.environ['STEAM_COMPAT_DATA_PATH'] + '/pfx/'
+        self.prefix = os.path.join(os.environ['STEAM_COMPAT_DATA_PATH'], 'pfx')
         self.env = {}
         self.needs_fonts = False
         self.commands = {}
@@ -252,18 +252,21 @@ class Tweaks:
 
 
     def is_font_installed(self, file_name):  # pylint: disable=missing-docstring
-        return os.access(self.prefix + '/drive_c/windows/Fonts/' + file_name, os.F_OK)
+        path = os.path.join(self.prefix, 'drive_c/windows/Fonts', file_name)
+        return os.access(path, os.F_OK)
 
 
     def _install_ttf_font(self, family, style, file_name):
         font_name = ' '.join(filter(lambda x: x, [family, style]))
         test_path = lambda path: path if os.access(path, os.R_OK) else ''
-        path = find_font_with_fc(family, style) or \
-               test_path(os.environ["HOME"] + '/.wine/drive_c/windows/Fonts/' + file_name) or \
-               test_path('/usr/share/truetype/' + file_name) or \
-               test_path('/usr/share/msttcore/' + file_name)
-        if path:
-            log('Installing {} from: {}'.format(font_name, path))
-            install_file(path, self.prefix + '/drive_c/windows/Fonts/' + file_name)
+        home_wine_fonts = os.path.join(os.environ['HOME'], '.wine/drive_c/windows/Fonts')
+        src = find_font_with_fc(family, style) or \
+              test_path(os.path.join(home_wine_fonts, file_name)) or \
+              test_path(os.path.join('/usr/share/truetype', file_name)) or \
+              test_path(os.path.join('/usr/share/msttcore', file_name))
+        if src:
+            log('Installing {} from: {}'.format(font_name, src))
+            dst = os.path.join(self.prefix, 'drive_c/windows/Fonts', file_name)
+            install_file(src, dst)
         else:
             log('Missing font: {}'.format(font_name))
