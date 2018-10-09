@@ -102,6 +102,10 @@ TWEAKS_DB = {
     '541210': {
         'needs_fonts': True,
     },
+    # Hungry Flame
+    '586970': {
+        'needs_fonts': True,
+    },
     # PC Building Simulator
     '621060': {
         'needs_fonts': True,
