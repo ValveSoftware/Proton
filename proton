@@ -31,6 +31,30 @@ def log(msg):
     sys.stderr.write(PFX + msg + os.linesep)
     sys.stderr.flush()
 
+def remove_tracked_files(prefix):
+    if not os.path.exists(prefix + "/tracked_files"):
+        log("Prefix has no tracked_files??")
+        return
+
+    with open(prefix + "/tracked_files", "r") as tracked_files:
+        dirs = []
+        for f in tracked_files:
+            path = prefix + "/pfx/" + f.strip()
+            if os.path.exists(path):
+                if os.path.isfile(path) or os.path.islink(path):
+                    os.remove(path)
+                else:
+                    dirs.append(path)
+        for d in dirs:
+            try:
+                os.rmdir(d)
+            except OSError:
+                #not empty
+                pass
+
+    os.remove(prefix + "/tracked_files")
+    os.remove(prefix + "/version")
+
 def upgrade_pfx(old_ver):
     if old_ver == CURRENT_PREFIX_VERSION:
         return
@@ -41,12 +65,26 @@ def upgrade_pfx(old_ver):
         return
 
     old_proton_ver, old_prefix_ver = old_ver.split('-')
+    old_proton_maj, old_proton_min = old_proton_ver.split('.')
+    new_proton_ver, new_prefix_ver = CURRENT_PREFIX_VERSION.split('-')
+    new_proton_maj, new_proton_min = new_proton_ver.split('.')
+
+    if int(new_proton_maj) < int(old_proton_maj) or \
+            (int(new_proton_maj) == int(old_proton_maj) and \
+             int(new_proton_min) < int(old_proton_min)):
+        log("Removing newer prefix")
+        if old_proton_ver == "3.7" and not os.path.exists(os.environ["STEAM_COMPAT_DATA_PATH"] + "/tracked_files"):
+            #proton 3.7 did not generate tracked_files, so copy it into place first
+            shutil.copy(basedir + "/proton_3.7_tracked_files", os.environ["STEAM_COMPAT_DATA_PATH"] + "/tracked_files")
+        remove_tracked_files(os.environ["STEAM_COMPAT_DATA_PATH"])
+        return
 
     if old_proton_ver == "3.7" and old_prefix_ver == "1":
         if not os.path.exists(prefix + "/drive_c/windows/syswow64/kernel32.dll"):
             #shipped a busted 64-bit-only installation on 20180822. detect and wipe clean
             log("Detected broken 64-bit-only installation, re-creating prefix.")
             shutil.rmtree(prefix)
+            return
 
     if old_proton_ver == "3.7":
         #proton 3.7 used symlinks to install DXVK. this is no longer needed,
@@ -73,7 +111,6 @@ def upgrade_pfx(old_ver):
         shutil.copy(dll_dir + "/d3d11.dll", link_dir + "/d3d11.dll")
         shutil.copy(dll_dir + "/dxgi.dll", link_dir + "/dxgi.dll")
 
-
 def run_wine(args):
     subprocess.call(args, env=env, stderr=lfile)
 
@@ -90,11 +127,15 @@ def real_copy(src, dst):
     else:
         shutil.copy(src,dst)
 
-def mergedirs(src, dst):
+def mergedirs(src, dst, tracked_files):
     for src_dir, dirs, files in os.walk(src):
+        rel_dir = src_dir.replace(src, "", 1).lstrip('/')
+        if len(rel_dir) > 0:
+            rel_dir = rel_dir + "/"
         dst_dir = src_dir.replace(src, dst, 1)
         if not os.path.exists(dst_dir):
             os.makedirs(dst_dir)
+            tracked_files.write(rel_dir + "\n")
         for dir_ in dirs:
             src_file = os.path.join(src_dir, dir_)
             dst_file = os.path.join(dst_dir, dir_)
@@ -105,6 +146,7 @@ def mergedirs(src, dst):
             dst_file = os.path.join(dst_dir, file_)
             if not os.path.exists(dst_file):
                 real_copy(src_file, dst_file)
+                tracked_files.write(rel_dir + file_ + "\n")
 
 if not ("STEAM_COMPAT_DATA_PATH" in os.environ):
     log("No compat data path?")
@@ -219,7 +261,8 @@ with prefix_lock:
 
     if not os.path.exists(prefix + "/user.reg"):
         #copy default prefix into place
-        mergedirs(basedir + "/dist/share/default_pfx", prefix)
+        mergedirs(basedir + "/dist/share/default_pfx", prefix,
+                open(os.environ["STEAM_COMPAT_DATA_PATH"] + "/tracked_files", "w"))
 
     with open(version_file, "w") as f:
         f.write(CURRENT_PREFIX_VERSION + "\n")
