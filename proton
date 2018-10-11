@@ -21,11 +21,7 @@ from filelock import FileLock, Timeout
 CURRENT_PREFIX_VERSION="3.16-1"
 
 PFX="Proton: "
-
-if "Darwin" in os.uname()[0]:
-    ld_path_var = "DYLD_LIBRARY_PATH"
-else:
-    ld_path_var = "LD_LIBRARY_PATH"
+ld_path_var = "LD_LIBRARY_PATH"
 
 def log(msg):
     sys.stderr.write(PFX + msg + os.linesep)
@@ -117,7 +113,7 @@ def run_wine(args):
 def makedirs(path):
     try:
         os.makedirs(path)
-    except:
+    except OSError:
         #already exists
         pass
 
@@ -261,8 +257,8 @@ with prefix_lock:
 
     if not os.path.exists(prefix + "/user.reg"):
         #copy default prefix into place
-        mergedirs(basedir + "/dist/share/default_pfx", prefix,
-                open(os.environ["STEAM_COMPAT_DATA_PATH"] + "/tracked_files", "w"))
+        with open(os.environ["STEAM_COMPAT_DATA_PATH"] + "/tracked_files", "w") as tfiles:
+            mergedirs(basedir + "/dist/share/default_pfx", prefix, tfiles)
 
     with open(version_file, "w") as f:
         f.write(CURRENT_PREFIX_VERSION + "\n")
@@ -271,9 +267,6 @@ with prefix_lock:
     if "STEAM_COMPAT_CLIENT_INSTALL_PATH" in os.environ:
         #modern steam client sets this
         steamdir = os.environ["STEAM_COMPAT_CLIENT_INSTALL_PATH"]
-    elif "STEAM_CLIENT_CONFIG_FILE" in os.environ:
-        #fallback for old steam clients (should remove once changes graduate)
-        steamdir = os.path.dirname(os.environ["STEAM_CLIENT_CONFIG_FILE"])
     else:
         #linux-only fallback, really shouldn't get here
         steamdir = os.environ["HOME"] + ".steam/root/"
@@ -319,14 +312,14 @@ with prefix_lock:
             vr_config is None or \
             vr_log is None:
         try:
-            #TODO: support mac
             if "XDG_CONFIG_HOME" in os.environ:
                 path = os.environ["XDG_CONFIG_HOME"]
             else:
                 path = os.environ["HOME"] + "/.config"
             path = path + "/openvr/openvrpaths.vrpath"
 
-            j = json.load(open(path, "r"))
+            with open(path, "r") as jfile:
+                j = json.load(jfile)
 
             if vr_runtime is None:
                 vr_runtime = j["runtime"][0]
@@ -336,7 +329,7 @@ with prefix_lock:
 
             if vr_log is None:
                 vr_log = j["log"][0]
-        except:
+        except (ValueError, OSError):
             pass
 
     makedirs(prefix + "/drive_c/users/steamuser/Local Settings/Application Data/openvr")
@@ -364,8 +357,9 @@ with prefix_lock:
             j["version"] = 1
             j["jsonid"] = "vrpathreg"
 
-            json.dump(j, open(vrpaths_name, "w"), indent=2)
-        except:
+            with open(vrpaths_name, "w") as vfile:
+                json.dump(j, vfile, indent=2)
+        except (ValueError, OSError):
             log("Unable to write VR config! " + str(sys.exc_info()[1]))
 
 if "nod3d11" in config_opts:
@@ -410,7 +404,7 @@ def determine_architecture(path):
             if arch == 0x014c:
                 return ARCH_I386
             return ARCH_UNKNOWN
-    except:
+    except OSError:
         return ARCH_UNKNOWN
 
 game_arch = determine_architecture(sys.argv[2])
@@ -522,7 +516,7 @@ def run():
     if "PROTON_DUMP_DEBUG_COMMANDS" in env:
         try:
             dump_dbg_scripts()
-        except:
+        except OSError:
             log("Unable to write debug scripts! " + str(sys.exc_info()[1]))
     if game_arch == ARCH_UNKNOWN:
         #probably a batch script or something, hopefully start.exe can handle it
