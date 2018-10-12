@@ -1,0 +1,15 @@
+diff --git a/LiberationMono-Regular.sfd b/LiberationMono-Regular.sfd
+index 0cedbd4..13b9a63 100644
+--- a/LiberationMono-Regular.sfd
++++ b/LiberationMono-Regular.sfd
+@@ -3931,6 +3931,10 @@ ShortTable: maxp 16
+   3
+   1
+ EndShort
++TtfTable: VDMX 94
++!!!!"!!**$!<E0/!"B2J!!iQ/s8E!)!"&](!"&]4s8;p*!"8i*!"8i9s8;p,!"Ao*!"Ju<s82j-
++!"Ju+!"],?s82j/!"],,!"o8Bs8)d0!"f2-!#,DFs8)cr
++EndTtf
+ LangName: 1033 "" "" "Regular" "Ascender - Liberation Mono" "" "Version 2.00.3" "" "Liberation is a trademark of Red Hat, Inc. registered in U.S. Patent and Trademark Office and certain other jurisdictions." "Ascender Corporation" "Steve Matteson" "Based on Cousine, which was designed by Steve Matteson as an innovative, refreshing sans serif design that is metrically compatible with Courier New+ISIA. Cousine offers improved on-screen readability characteristics and the pan-European WGL character set and solves the needs of developers looking for width-compatible fonts to address document portability across platforms." "http://www.ascendercorp.com/" "http://www.ascendercorp.com/typedesigners.html" "Licensed under the SIL Open Font License, Version 1.1" "http://scripts.sil.org/OFL" 
+ GaspTable: 3 8 2 17 1 65535 3 0
+ Encoding: UnicodeBmp

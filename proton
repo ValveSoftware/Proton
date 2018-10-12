@@ -127,6 +127,7 @@ basedir = os.path.dirname(sys.argv[0])
 bindir = basedir + "/dist/bin/"
 libdir = basedir + "/dist/lib"
 lib64dir = basedir + "/dist/lib64"
+fontsdir = basedir + "/dist/share/fonts"
 wine_path = bindir + "/wine"
 
 #extract if needed
@@ -221,6 +222,25 @@ if "SteamGameId" in env:
 else:
     env["WINEDEBUG"] = "-all"
 
+def create_fonts_symlinks(prefix_path):
+    fontsmap = [
+        ( "LiberationSans-Regular.ttf", "arial.ttf" ),
+        ( "LiberationSans-Bold.ttf", "arialbd.ttf" ),
+        ( "LiberationSerif-Regular.ttf", "times.ttf" ),
+        ( "LiberationMono-Regular.ttf", "cour.ttf" ),
+    ]
+
+    windowsfonts = prefix_path + "/drive_c/windows/Fonts"
+    for p in fontsmap:
+        lname = os.path.join(windowsfonts, p[1])
+        fname = os.path.join(fontsdir, p[0])
+        if os.path.lexists(lname):
+            if os.path.islink(lname):
+                os.remove(lname)
+                os.symlink(fname, lname)
+        else:
+            os.symlink(fname, lname)
+
 prefix_lock = FileLock(os.environ["STEAM_COMPAT_DATA_PATH"] + "/pfx.lock", timeout=-1)
 with prefix_lock:
     version_file = os.environ["STEAM_COMPAT_DATA_PATH"] + "/version"
@@ -237,6 +257,9 @@ with prefix_lock:
 
     with open(version_file, "w") as f:
         f.write(CURRENT_PREFIX_VERSION + "\n")
+
+    #create font files symlinks
+    create_fonts_symlinks(prefix)
 
     #copy steam files into place
     if "STEAM_COMPAT_CLIENT_INSTALL_PATH" in os.environ:

@@ -215,6 +215,9 @@ CMAKE_OBJ64 := ./obj-cmake64
 CMAKE_BIN32 := $(CMAKE_OBJ32)/built/bin/cmake
 CMAKE_BIN64 := $(CMAKE_OBJ64)/built/bin/cmake
 
+FONTS := $(SRCDIR)/fonts
+FONTS_OBJ := ./obj-fonts
+
 ## Object directories
 OBJ_DIRS := $(TOOLS_DIR32)        $(TOOLS_DIR64)        \
             $(OPENAL_OBJ32)       $(OPENAL_OBJ64)       \
@@ -248,9 +251,11 @@ DIST_LICENSE := $(DST_BASE)/LICENSE
 DIST_GECKO_DIR := $(DST_DIR)/share/wine/gecko
 DIST_GECKO32 := $(DIST_GECKO_DIR)/$(GECKO32_MSI)
 DIST_GECKO64 := $(DIST_GECKO_DIR)/$(GECKO64_MSI)
+DIST_FONTS := $(DST_DIR)/share/fonts
 
 DIST_TARGETS := $(DIST_COPY_TARGETS) $(DIST_VERSION) $(DIST_OVR32) $(DIST_OVR64) \
-                $(DIST_GECKO32) $(DIST_GECKO64) $(DIST_COMPAT_MANIFEST) $(DIST_LICENSE)
+                $(DIST_GECKO32) $(DIST_GECKO64) $(DIST_COMPAT_MANIFEST) $(DIST_LICENSE) \
+                $(DIST_FONTS)
 
 DEPLOY_COPY_TARGETS := $(DIST_COPY_TARGETS) $(DIST_VERSION) $(DIST_LICENSE)
 
@@ -302,6 +307,10 @@ $(DIST_GECKO32): | $(DIST_GECKO_DIR)
 		cp "$(SRCDIR)/contrib/$(GECKO32_MSI)" "$@"; \
 	fi
 
+$(DIST_FONTS): fonts
+	mkdir -p $@
+	cp $(FONTS_OBJ)/*.ttf "$@"
+
 .PHONY: dist
 
 ALL_TARGETS += dist
@@ -312,7 +321,11 @@ GOAL_TARGETS += dist
 dist: $(DIST_TARGETS) | $(WINE_OUT) $(filter $(MAKECMDGOALS),wine64 wine32 wine) $(DST_DIR)
 	rm -rf $(abspath $(DIST_PREFIX)) && \
 	WINEPREFIX=$(abspath $(DIST_PREFIX)) $(WINE_OUT_BIN) wineboot && \
-		WINEPREFIX=$(abspath $(DIST_PREFIX)) $(WINE_OUT_SERVER) -w
+		WINEPREFIX=$(abspath $(DIST_PREFIX)) $(WINE_OUT_SERVER) -w && \
+		ln -s $(FONTLINKPATH)/LiberationSans-Regular.ttf $(abspath $(DIST_PREFIX))/drive_c/windows/Fonts/arial.ttf && \
+		ln -s $(FONTLINKPATH)/LiberationSans-Bold.ttf $(abspath $(DIST_PREFIX))/drive_c/windows/Fonts/arialbd.ttf && \
+		ln -s $(FONTLINKPATH)/LiberationSerif-Regular.ttf $(abspath $(DIST_PREFIX))/drive_c/windows/Fonts/times.ttf && \
+		ln -s $(FONTLINKPATH)/LiberationMono-Regular.ttf $(abspath $(DIST_PREFIX))/drive_c/windows/Fonts/cour.ttf
 
 deploy: dist | $(filter-out dist deploy install,$(MAKECMDGOALS))
 	mkdir -p $(DEPLOY_DIR) && \
@@ -916,6 +929,53 @@ endif # NO_DXVK
 #  build_vrclient64_tests
 #  build_vrclient32_tests
 
+ALL_TARGETS += fonts
+GOAL_TARGETS += fonts
+
+.PHONY: fonts
+
+FONTFORGE = fontforge -quiet
+FONTSCRIPT = $(FONTS)/scripts/generatefont.pe
+FONTLINKPATH = ../../../../fonts
+
+LIBERATION_SRCDIR = $(FONTS)/liberation-fonts/src
+
+LIBERATION_SANS_REGULAR_SFD = LiberationSans-Regular.sfd
+LIBERATION_SANS_BOLD_SFD = LiberationSans-Bold.sfd
+LIBERATION_SERIF_REGULAR_SFD = LiberationSerif-Regular.sfd
+LIBERATION_MONO_REGULAR_SFD = LiberationMono-Regular.sfd
+
+LIBERATION_SANS_REGULAR_TTF = $(addprefix $(FONTS_OBJ)/, $(LIBERATION_SANS_REGULAR_SFD:.sfd=.ttf))
+LIBERATION_SANS_BOLD_TTF = $(addprefix $(FONTS_OBJ)/, $(LIBERATION_SANS_BOLD_SFD:.sfd=.ttf))
+LIBERATION_SERIF_REGULAR_TTF = $(addprefix $(FONTS_OBJ)/, $(LIBERATION_SERIF_REGULAR_SFD:.sfd=.ttf))
+LIBERATION_MONO_REGULAR_TTF = $(addprefix $(FONTS_OBJ)/, $(LIBERATION_MONO_REGULAR_SFD:.sfd=.ttf))
+
+LIBERATION_SFDS = $(LIBERATION_SANS_REGULAR_SFD) $(LIBERATION_SANS_BOLD_SFD) $(LIBERATION_SERIF_REGULAR_SFD) $(LIBERATION_MONO_REGULAR_SFD)
+FONT_TTFS = $(LIBERATION_SANS_REGULAR_TTF) $(LIBERATION_SANS_BOLD_TTF) \
+            $(LIBERATION_SERIF_REGULAR_TTF) $(LIBERATION_MONO_REGULAR_TTF)
+FONTS_SRC = $(FONT_TTFS:.ttf=.sfd)
+
+$(LIBERATION_SANS_REGULAR_TTF): $(FONTS_SRC) $(FONTSCRIPT)
+	$(FONTFORGE) -script $(FONTSCRIPT) $(@:.ttf=.sfd) "Arial" "Arial" "Arial"
+
+$(LIBERATION_SANS_BOLD_TTF): $(FONTS_SRC) $(FONTSCRIPT)
+	$(FONTFORGE) -script $(FONTSCRIPT) $(@:.ttf=.sfd) "Arial-Bold" "Arial" "Arial Bold"
+
+$(LIBERATION_SERIF_REGULAR_TTF): $(FONTS_SRC) $(FONTSCRIPT)
+	$(FONTFORGE) -script $(FONTSCRIPT) $(@:.ttf=.sfd) "TimesNewRoman" "Times New Roman" "Times New Roman"
+
+$(LIBERATION_MONO_REGULAR_TTF): $(FONTS_SRC) $(FONTSCRIPT)
+	patch $(@:.ttf=.sfd) $(FONTS)/patches/$(LIBERATION_MONO_REGULAR_SFD:.sfd=.patch)
+	$(FONTFORGE) -script $(FONTSCRIPT) $(@:.ttf=.sfd) "CourierNew" "Courier New" "Courier New"
+
+$(FONTS_OBJ):
+	mkdir -p $@
+
+$(FONTS_SRC): $(FONTS_OBJ)
+	cp -n $(addprefix $(LIBERATION_SRCDIR)/, $(LIBERATION_SFDS)) $<
+
+fonts: $(LIBERATION_SANS_REGULAR_TTF) $(LIBERATION_SANS_BOLD_TTF) \
+       $(LIBERATION_SERIF_REGULAR_TTF) $(LIBERATION_MONO_REGULAR_TTF) | $(FONTS_SRC)
 
 ##
 ## Targets
