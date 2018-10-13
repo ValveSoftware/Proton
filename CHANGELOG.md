@@ -2,7 +2,7 @@
 ###### 3.16-1:
 - Rebased Proton patches onto Wine 3.16.
 - Updated Vulkan support in Wine to 1.1.86, plus support for transform feedback.
-- DXVK has been updated to 0.81 plus support for transform feedback which should fix missing models in many D3D11 games. This requires new driver support. DXVK release notes can be found here: https://github.com/doitsujin/dxvk/releases/tag/v0.81
+- DXVK has been updated to [0.81](https://github.com/doitsujin/dxvk/releases/tag/v0.81) plus support for transform feedback which should fix missing models in many D3D11 games. *Transform feedback requires using Mesa git or NVIDIA's 396.54.09 Vulkan Beta driver*. 
 - DXVK's d3d10 mode is now enabled by default.
 - DXVK is now built as a native Linux library, which may give a small performance boost, and should make debugging easier for DXVK and driver developers.
 - Missing textures for models in some VR games has been resolved.
