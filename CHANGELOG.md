@@ -1,3 +1,13 @@
+## Available in Proton 3.16 Beta:
+###### 3.16-1:
+- Rebased Proton patches onto Wine 3.16.
+- Updated Vulkan support in Wine to 1.1.86, plus support for transform feedback.
+- DXVK has been updated to 0.81 plus support for transform feedback which should fix missing models in many D3D11 games. This requires new driver support. DXVK release notes can be found here: https://github.com/doitsujin/dxvk/releases/tag/v0.81
+- DXVK's d3d10 mode is now enabled by default.
+- DXVK is now built as a native Linux library, which may give a small performance boost, and should make debugging easier for DXVK and driver developers.
+- Missing textures for models in some VR games has been resolved.
+- Ask the window manager to bypass the compositor in fullscreen mode. This may improve performance in some situations.
+- All new makefile-based build system.
 ## Available in Proton 3.7:
 ###### 3.7-8:
 - Minor compatibility fixes in preparation for future Proton versions.
