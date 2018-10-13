@@ -140,7 +140,7 @@ To build Proton for macOS, install the latest Xcode command line tools, as
 well as cmake (for openal-soft), a recent nasm (for libjpeg-turbo), libtool, and automake. You can
 use a packager like [Homebrew](https://brew.sh/) to find these packages.
 
-        brew install cmake nasm libtool automake
+        brew install cmake nasm libtool automake meson mingw-w64 wget
 
 Then run:
 
