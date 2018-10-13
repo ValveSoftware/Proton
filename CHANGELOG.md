@@ -1,7 +1,6 @@
-## Available in Proton 3.7 Beta:
+## Available in Proton 3.7:
 ###### 3.7-8:
 - Minor compatibility fixes in preparation for future Proton versions.
-## Available in Proton 3.7:
 ###### 3.7-7:
 - Improvements to alt-tab and fullscreen behavior in many games.
 - Fix mouse behavior in some games and mice with high sample rates.
