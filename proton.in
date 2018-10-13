@@ -14,6 +14,7 @@ import sys
 import tarfile
 
 from filelock import FileLock, Timeout
+from tweaks import Tweaks
 
 #To enable debug logging, copy "user_settings.sample.py" to "user_settings.py"
 #and edit it if needed.
@@ -170,6 +171,9 @@ with dist_lock:
 
 prefix = os.environ["STEAM_COMPAT_DATA_PATH"] + "/pfx/"
 env["WINEPREFIX"] = prefix
+
+game_tweaks = Tweaks(env.get("SteamAppId"))
+env.update(game_tweaks.env)
 
 if "PROTON_LOG" in env:
     env["WINEDEBUG"] = "+timestamp,+pid,+tid,+seh,+debugstr,+module"
@@ -426,16 +430,20 @@ def dump_dbg_env(f):
     if "STEAM_COMPAT_CLIENT_INSTALL_PATH" in env:
         f.write("\tSTEAM_COMPAT_CLIENT_INSTALL_PATH=\"" + env["STEAM_COMPAT_CLIENT_INSTALL_PATH"] + "\" \\\n")
 
-def dump_dbg_scripts():
-    exe_name = os.path.basename(sys.argv[2])
+def dump_dbg_scripts(args):
+    exe_name = os.path.basename(args[0])
 
     dir = env.get("PROTON_DEBUG_DIR", "/tmp") + "/proton_" + os.environ["USER"] + "/"
     makedirs(dir)
 
+    def quote(strings):
+        """Equivalent of "$@" in bash"""
+        return ' '.join('"{}"'.format(s) for s in strings)
+
     with open(dir + "winedbg", "w") as f:
         f.write("#!/bin/bash\n")
         f.write("#Run winedbg with args\n\n")
-        f.write("cd \"" + os.getcwd() + "\"\n")
+        f.write('cd "' + os.getcwd() + '"\n')
         dump_dbg_env(f)
         f.write("\t\"" + wine_path + "\" winedbg \"$@\"\n")
     os.chmod(dir + "winedbg", 0o755)
@@ -443,16 +451,8 @@ def dump_dbg_scripts():
     with open(dir + "winedbg_run", "w") as f:
         f.write("#!/bin/bash\n")
         f.write("#Run winedbg and prepare to run game or given program\n\n")
-        f.write("cd \"" + os.getcwd() + "\"\n")
-        f.write("DEF_CMD=(")
-        first = True
-        for arg in sys.argv[2:]:
-            if first:
-                f.write("\"" + arg + "\"")
-                first = False
-            else:
-                f.write(" \"" + arg + "\"")
-        f.write(")\n")
+        f.write('cd "' + os.getcwd() + '"\n')
+        f.write('DEF_CMD=(' + quote(args) + ')\n')
         dump_dbg_env(f)
         f.write("\t\"" + wine_path + "\" winedbg \"${@:-${DEF_CMD[@]}}\"\n")
     os.chmod(dir + "winedbg_run", 0o755)
@@ -475,16 +475,8 @@ def dump_dbg_scripts():
     with open(dir + "gdb_run", "w") as f:
         f.write("#!/bin/bash\n")
         f.write("#Run winedbg in gdb mode and prepare to run game or given program\n\n")
-        f.write("cd \"" + os.getcwd() + "\"\n")
-        f.write("DEF_CMD=(")
-        first = True
-        for arg in sys.argv[2:]:
-            if first:
-                f.write("\"" + arg + "\"")
-                first = False
-            else:
-                f.write(" \"" + arg + "\"")
-        f.write(")\n")
+        f.write('cd "' + os.getcwd() + '"\n')
+        f.write('DEF_CMD=(' + quote(args) + ')\n')
         dump_dbg_env(f)
         f.write("\t\"" + wine_path + "\" winedbg --gdb \"${@:-${DEF_CMD[@]}}\"\n")
     os.chmod(dir + "gdb_run", 0o755)
@@ -492,16 +484,8 @@ def dump_dbg_scripts():
     with open(dir + "run", "w") as f:
         f.write("#!/bin/bash\n")
         f.write("#Run game or given command in environment\n\n")
-        f.write("cd \"" + os.getcwd() + "\"\n")
-        f.write("DEF_CMD=(")
-        first = True
-        for arg in sys.argv[2:]:
-            if first:
-                f.write("\"" + arg + "\"")
-                first = False
-            else:
-                f.write(" \"" + arg + "\"")
-        f.write(")\n")
+        f.write('cd "' + os.getcwd() + '"\n')
+        f.write('DEF_CMD=(' + quote(args) + ')\n')
         dump_dbg_env(f)
         if game_arch == ARCH_UNKNOWN:
             f.write("\t\"" + wine_path + "\" start \"${@:-${DEF_CMD[@]}}\"\n")
@@ -509,17 +493,23 @@ def dump_dbg_scripts():
             f.write("\t\"" + wine_path + "\" \"${@:-${DEF_CMD[@]}}\"\n")
     os.chmod(dir + "run", 0o755)
 
-def run():
+
+def run(args):
+    args = game_tweaks.modify_command(args)
     if "PROTON_DUMP_DEBUG_COMMANDS" in env:
         try:
-            dump_dbg_scripts()
+            dump_dbg_scripts(args)
         except:
             log("Unable to write debug scripts! " + str(sys.exc_info()[1]))
+    if game_tweaks.needs_config():
+        game_tweaks.create_config()
+    if game_tweaks.needs_fonts:
+        game_tweaks.import_fonts()
     if game_arch == ARCH_UNKNOWN:
         #probably a batch script or something, hopefully start.exe can handle it
-        run_wine([wine_path, "start", "/unix"] + sys.argv[2:])
+        run_wine([wine_path, "start", "/unix"] + args)
     else:
-        run_wine([wine_path] + sys.argv[2:])
+        run_wine([wine_path] + args)
 
 if sys.version_info[0] == 2:
     binary_stdout = sys.stdout
@@ -528,27 +518,27 @@ elif sys.version_info[0] == 3:
 else:
     raise Exception("Unsupported python version")
 
-#determine mode
-if sys.argv[1] == "run":
-    #start target app
-    run()
-elif sys.argv[1] == "waitforexitandrun":
-    #wait for wineserver to shut down
-    run_wine([bindir + "/wineserver", "-w"])
-    #then run
-    run()
-elif sys.argv[1] == "getcompatpath":
-    #linux -> windows path
-    path = subprocess.check_output([wine_path, "winepath", "-w", sys.argv[2]], env=env, stderr=lfile)
-    binary_stdout.write(path)
-elif sys.argv[1] == "getnativepath":
-    #windows -> linux path
-    path = subprocess.check_output([wine_path, "winepath", sys.argv[2]], env=env, stderr=lfile)
-    binary_stdout.write(path)
-else:
-    log("Need a verb.")
-    sys.exit(1)
 
-sys.exit(0)
+if __name__ == '__main__':
+    # Determine mode
+    if sys.argv[1] == "run":
+        # Start target app
+        run(sys.argv[2:])
+    elif sys.argv[1] == "waitforexitandrun":
+        # Wait for wineserver to shut down
+        run_wine([bindir + "/wineserver", "-w"])
+        run(sys.argv[2:])
+    elif sys.argv[1] == "getcompatpath":
+        # linux -> windows path
+        path = subprocess.check_output([wine_path, "winepath", "-w", sys.argv[2]], env=env, stderr=lfile)
+        binary_stdout.write(path)
+    elif sys.argv[1] == "getnativepath":
+        # windows -> linux path
+        path = subprocess.check_output([wine_path, "winepath", sys.argv[2]], env=env, stderr=lfile)
+        binary_stdout.write(path)
+    else:
+        log("Need a verb.")
+        sys.exit(1)
+    sys.exit(0)
 
 # vim: set syntax=python:

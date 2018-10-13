@@ -672,6 +672,7 @@ if [ "$PACKAGE" = true ]; then
 
     cp -a toolmanifest.vdf dist/
     cp -a filelock.py dist/
+    cp -a tweaks.py dist/
     cp -a user_settings.sample.py dist/
     cp -a proton_3.7_tracked_files dist/
     if [ "$PLATFORM" == "Darwin" ]; then
