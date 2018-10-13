@@ -2,7 +2,7 @@
 {
   "compat_tools"
   {
-    "proton-localbuild" // Internal name of this tool
+    "##BUILD_NAME##" // Internal name of this tool
     {
       // Can register this tool with Steam in two ways:
       //
@@ -14,9 +14,7 @@
       "install_path" "."
 
       // For this template, we're going to substitute the display_name key in here, e.g.:
-      // "display_name" "Proton - local build 3/2"
-
-      //##DISPLAY_NAME##
+      "display_name" "##BUILD_NAME##"
 
       "from_oslist"  "windows"
       "to_oslist"    "linux"
