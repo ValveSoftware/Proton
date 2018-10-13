@@ -260,6 +260,7 @@ $(DIST_COPY_TARGETS): | $(DST_DIR)
 
 $(DIST_VERSION): | $(DST_DIR)
 	date '+%s' > $@
+	cp $(DIST_VERSION) $(DST_BASE)/
 
 $(DIST_COMPAT_MANIFEST): $(COMPAT_MANIFEST_TEMPLATE) $(MAKEFILE_DEP) | $(DST_DIR)
 	sed -r 's|//##DISPLAY_NAME##|"display_name" "'$(BUILD_NAME)'"|' $< > $@
