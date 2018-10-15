@@ -188,18 +188,23 @@ if os.path.exists(basedir + "/user_settings.py"):
 
 def check_environment(env_name, config_name):
     if not env_name in env:
-        return
+        return False
     if env[env_name] == "0" or len(env[env_name]) == 0:
         config_opts.discard(config_name)
     else:
         config_opts.add(config_name)
+    return True
 
 if "STEAM_COMPAT_CONFIG" in os.environ:
     config_opts = set(os.environ["STEAM_COMPAT_CONFIG"].split(","))
 else:
     config_opts = set()
 
-check_environment("PROTON_USE_WINED3D11", "wined3d11")
+if "wined3d11" in config_opts:
+    config_opts.add("wined3d")
+
+if not check_environment("PROTON_USE_WINED3D", "wined3d"):
+    check_environment("PROTON_USE_WINED3D11", "wined3d")
 check_environment("PROTON_NO_D3D11", "nod3d11")
 check_environment("PROTON_NO_ESYNC", "noesync")
 
@@ -335,28 +340,29 @@ with prefix_lock:
         except (ValueError, OSError):
             log("Unable to write VR config! " + str(sys.exc_info()[1]))
 
+    dxvkfiles = ("d3d11", "d3d10", "d3d10core", "d3d10_1", "dxgi")
     def make_dxvk_links(dll_dir, link_dir):
-        if os.path.lexists(link_dir + "/d3d11.dll"):
-            os.remove(link_dir + "/d3d11.dll")
-        if os.path.lexists(link_dir + "/dxgi.dll"):
-            os.remove(link_dir + "/dxgi.dll")
-        os.symlink(dll_dir + "/d3d11.dll", link_dir + "/d3d11.dll")
-        os.symlink(dll_dir + "/dxgi.dll", link_dir + "/dxgi.dll")
+        for f in dxvkfiles:
+            dst = link_dir + "/" + f + ".dll"
+            src = dll_dir + "/" + f + ".dll"
+            if os.path.lexists(dst):
+                os.remove(dst)
+            os.symlink(src, dst)
 
-    if "wined3d11" in config_opts:
-        #use gl-based wined3d for d3d11
+    if "wined3d" in config_opts:
+        #use gl-based wined3d for d3d11 and d3d10
         make_dxvk_links(basedir + "/dist/lib64/wine/fakedlls/",
             prefix + "drive_c/windows/system32")
         make_dxvk_links(basedir + "/dist/lib/wine/fakedlls/",
             prefix + "drive_c/windows/syswow64")
     else:
-        #use vulkan-based dxvk for d3d11
+        #use vulkan-based dxvk for d3d11 and d3d10
         make_dxvk_links(basedir + "/dist/lib64/wine/dxvk/",
             prefix + "drive_c/windows/system32")
         make_dxvk_links(basedir + "/dist/lib/wine/dxvk/",
             prefix + "drive_c/windows/syswow64")
-        dlloverrides["dxgi"] = "n"
-        dlloverrides["d3d11"] = "n"
+        for f in dxvkfiles:
+            dlloverrides[f] = "n"
 
 if "nod3d11" in config_opts:
     dlloverrides["d3d11"] = ""
