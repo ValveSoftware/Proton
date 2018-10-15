@@ -312,10 +312,8 @@ with prefix_lock:
             vr_config is None or \
             vr_log is None:
         try:
-            if "XDG_CONFIG_HOME" in os.environ:
-                path = os.environ["XDG_CONFIG_HOME"]
-            else:
-                path = os.environ["HOME"] + "/.config"
+            
+            path = os.environ.get("XDG_CONFIG_HOME", os.environ["HOME"] + "/.config")
             path = path + "/openvr/openvrpaths.vrpath"
 
             with open(path, "r") as jfile:
