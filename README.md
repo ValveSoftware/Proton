@@ -68,7 +68,7 @@ which can have [security
 implications](https://docs.docker.com/engine/security/security/).
 
 Starting from a stock Debian 9 installation, you will need to install the
-`gpgv2`, `gnupg2`, `g++`, and `g++-6-multilib` packages from the
+`gpgv2`, `gnupg2`, `g++`, `g++-6-multilib`, and `mingw-w64` packages from the
 Debian repos.  You will also need to install `meson` version 0.43 or later,
 which can be [acquired from backports](https://backports.debian.org/Instructions/). Next,
 [install Docker-CE from the official Docker repositories](https://docs.docker.com/install/linux/docker-ce/debian/).
@@ -77,6 +77,13 @@ Finally, since we will need to be able to run Wine during the build process,
 This will pull in all of the dependencies required to run wine. You can then
 (and we do) uninstall the `winehq-devel` package in order to ensure that a
 system Wine installation does not interfere with your build process.
+
+DXVK requires that we choose the posix alternative for the mingw-w64 compilers:
+
+        sudo update-alternatives --set x86_64-w64-mingw32-gcc `which x86_64-w64-mingw32-gcc-posix`
+        sudo update-alternatives --set x86_64-w64-mingw32-g++ `which x86_64-w64-mingw32-g++-posix`
+        sudo update-alternatives --set i686-w64-mingw32-gcc `which i686-w64-mingw32-gcc-posix`
+        sudo update-alternatives --set i686-w64-mingw32-g++ `which i686-w64-mingw32-g++-posix`
 
 Next we set up the Steam runtime build environments. Here we use the
 `wip-docker` branch to get access to the Docker images.

@@ -82,31 +82,6 @@ def upgrade_pfx(old_ver):
             shutil.rmtree(prefix)
             return
 
-    if old_proton_ver == "3.7":
-        #proton 3.7 used symlinks to install DXVK. this is no longer needed,
-        #restore to correct wine configuration
-        log("Fixing up d3d11 symlinks")
-
-        #64-bit
-        link_dir = prefix + "drive_c/windows/system32"
-        dll_dir = basedir + "/dist/lib64/wine/fakedlls"
-        if os.path.lexists(link_dir + "/d3d11.dll"):
-            os.remove(link_dir + "/d3d11.dll")
-        if os.path.lexists(link_dir + "/dxgi.dll"):
-            os.remove(link_dir + "/dxgi.dll")
-        shutil.copy(dll_dir + "/d3d11.dll", link_dir + "/d3d11.dll")
-        shutil.copy(dll_dir + "/dxgi.dll", link_dir + "/dxgi.dll")
-
-        #32-bit
-        link_dir = prefix + "drive_c/windows/syswow64"
-        dll_dir = basedir + "/dist/lib/wine/fakedlls"
-        if os.path.lexists(link_dir + "/d3d11.dll"):
-            os.remove(link_dir + "/d3d11.dll")
-        if os.path.lexists(link_dir + "/dxgi.dll"):
-            os.remove(link_dir + "/dxgi.dll")
-        shutil.copy(dll_dir + "/d3d11.dll", link_dir + "/d3d11.dll")
-        shutil.copy(dll_dir + "/dxgi.dll", link_dir + "/dxgi.dll")
-
 def run_wine(args):
     subprocess.call(args, env=env, stderr=lfile)
 
@@ -231,11 +206,6 @@ check_environment("PROTON_NO_ESYNC", "noesync")
 if not "noesync" in config_opts:
     env["WINEESYNC"] = "1"
 
-if "wined3d11" in config_opts:
-    env["WINEDLLPATH"] = lib64dir + "/wine/wined3d:" + libdir + "/wine/wined3d:" + env["WINEDLLPATH"]
-else:
-    env["WINEDLLPATH"] = lib64dir + "/wine/dxvk:" + libdir + "/wine/dxvk:" + env["WINEDLLPATH"]
-
 lfile = None
 if "SteamGameId" in env:
     if env["WINEDEBUG"] != "-all":
@@ -287,6 +257,9 @@ with prefix_lock:
     makedirs(dst)
     shutil.copy(basedir + "/dist/lib/wine/fakedlls/vrclient.dll", dst)
     shutil.copy(basedir + "/dist/lib64/wine/fakedlls/vrclient_x64.dll", dst)
+
+    shutil.copy(basedir + "/dist/lib/wine/dxvk/openvr_api_dxvk.dll", prefix + "/drive_c/windows/syswow64/")
+    shutil.copy(basedir + "/dist/lib64/wine/dxvk/openvr_api_dxvk.dll", prefix + "/drive_c/windows/system32/")
 
     #parse linux openvr config and present it in win32 format to the app.
     #logic from openvr's CVRPathRegistry_Public::GetPaths
@@ -361,6 +334,29 @@ with prefix_lock:
                 json.dump(j, vfile, indent=2)
         except (ValueError, OSError):
             log("Unable to write VR config! " + str(sys.exc_info()[1]))
+
+    def make_dxvk_links(dll_dir, link_dir):
+        if os.path.lexists(link_dir + "/d3d11.dll"):
+            os.remove(link_dir + "/d3d11.dll")
+        if os.path.lexists(link_dir + "/dxgi.dll"):
+            os.remove(link_dir + "/dxgi.dll")
+        os.symlink(dll_dir + "/d3d11.dll", link_dir + "/d3d11.dll")
+        os.symlink(dll_dir + "/dxgi.dll", link_dir + "/dxgi.dll")
+
+    if "wined3d11" in config_opts:
+        #use gl-based wined3d for d3d11
+        make_dxvk_links(basedir + "/dist/lib64/wine/",
+            prefix + "drive_c/windows/system32")
+        make_dxvk_links(basedir + "/dist/lib/wine/",
+            prefix + "drive_c/windows/syswow64")
+    else:
+        #use vulkan-based dxvk for d3d11
+        make_dxvk_links(basedir + "/dist/lib64/wine/dxvk/",
+            prefix + "drive_c/windows/system32")
+        make_dxvk_links(basedir + "/dist/lib/wine/dxvk/",
+            prefix + "drive_c/windows/syswow64")
+        dlloverrides["dxgi"] = "n"
+        dlloverrides["d3d11"] = "n"
 
 if "nod3d11" in config_opts:
     dlloverrides["d3d11"] = ""
