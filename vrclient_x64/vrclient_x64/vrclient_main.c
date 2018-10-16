@@ -650,6 +650,10 @@ static EVRCompositorError ivrcompositor_submit_dxvk(
     load_vk_unwrappers();
 
     vkdata.m_nImage = (uint64_t)image_handle;
+    vkdata.m_pDevice = get_native_VkDevice(vkdata.m_pDevice);
+    vkdata.m_pPhysicalDevice = get_native_VkPhysicalDevice(vkdata.m_pPhysicalDevice);
+    vkdata.m_pInstance = get_native_VkInstance(vkdata.m_pInstance);
+    vkdata.m_pQueue = get_native_VkQueue(vkdata.m_pQueue);
     vkdata.m_nWidth = image_info.extent.width;
     vkdata.m_nHeight = image_info.extent.height;
     vkdata.m_nFormat = image_info.format;

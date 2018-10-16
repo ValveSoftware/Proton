@@ -68,7 +68,7 @@ which can have [security
 implications](https://docs.docker.com/engine/security/security/).
 
 Starting from a stock Debian 9 installation, you will need to install the
-`gpgv2`, `gnupg2`, `g++`, and `g++-6-multilib` packages from the
+`gpgv2`, `gnupg2`, `g++`, `g++-6-multilib`, and `mingw-w64` packages from the
 Debian repos.  You will also need to install `meson` version 0.43 or later,
 which can be [acquired from backports](https://backports.debian.org/Instructions/). Next,
 [install Docker-CE from the official Docker repositories](https://docs.docker.com/install/linux/docker-ce/debian/).
@@ -77,6 +77,13 @@ Finally, since we will need to be able to run Wine during the build process,
 This will pull in all of the dependencies required to run wine. You can then
 (and we do) uninstall the `winehq-devel` package in order to ensure that a
 system Wine installation does not interfere with your build process.
+
+DXVK requires that we choose the posix alternative for the mingw-w64 compilers:
+
+        sudo update-alternatives --set x86_64-w64-mingw32-gcc `which x86_64-w64-mingw32-gcc-posix`
+        sudo update-alternatives --set x86_64-w64-mingw32-g++ `which x86_64-w64-mingw32-g++-posix`
+        sudo update-alternatives --set i686-w64-mingw32-gcc `which i686-w64-mingw32-gcc-posix`
+        sudo update-alternatives --set i686-w64-mingw32-g++ `which i686-w64-mingw32-g++-posix`
 
 Next we set up the Steam runtime build environments. Here we use the
 `wip-docker` branch to get access to the Docker images.
@@ -174,7 +181,7 @@ the Wine prefix. Removing the option will revert to the previous behavior.
 |                       | <tt>PROTON_LOG</tt>            | Convenience method for dumping a useful debug log to `$HOME/steam-$APPID.log`. For more thorough logging, use `user_settings.py`. |
 |                       | <tt>PROTON_DUMP_DEBUG_COMMANDS</tt> | When running a game, Proton will write some useful debug scripts for that game into `$PROTON_DEBUG_DIR/proton_$USER/`. |
 |                       | <tt>PROTON_DEBUG_DIR<tt>       | Root directory for the Proton debug scripts, `/tmp` by default. |
-| <tt>wined3d11</tt>    | <tt>PROTON_USE_WINED3D11</tt>  | Use OpenGL-based wined3d instead of Vulkan-based DXVK for d3d11. |
+| <tt>wined3d</tt>      | <tt>PROTON_USE_WINED3D</tt>    | Use OpenGL-based wined3d instead of Vulkan-based DXVK for d3d11 and d3d10. This used to be called `PROTON_USE_WINED3D11`, which is now an alias for this same option. |
 | <tt>nod3d11</tt>      | <tt>PROTON_NO_D3D11</tt>       | Disable <tt>d3d11.dll</tt>, for games which can fall back to and run better with d3d9. |
 | <tt>noesync</tt>      | <tt>PROTON_NO_ESYNC</tt>       | Do not use eventfd-based in-process synchronization primitives. |
 

@@ -230,8 +230,8 @@ STEAM_DIR := $(HOME)/.steam/root
 DIST_COPY_FILES := toolmanifest.vdf filelock.py proton proton_3.7_tracked_files user_settings.sample.py
 DIST_COPY_TARGETS := $(addprefix $(DST_BASE)/,$(DIST_COPY_FILES))
 DIST_VERSION := $(DST_DIR)/version
-DIST_OVR32 := $(DST_DIR)/lib/openvr_api_dxvk.so
-DIST_OVR64 := $(DST_DIR)/lib64/openvr_api_dxvk.so
+DIST_OVR32 := $(DST_DIR)/lib/wine/dxvk/openvr_api_dxvk.dll
+DIST_OVR64 := $(DST_DIR)/lib64/wine/dxvk/openvr_api_dxvk.dll
 DIST_PREFIX := $(DST_DIR)/share/default_pfx/
 DIST_COMPAT_MANIFEST := $(DST_BASE)/compatibilitytool.vdf
 DIST_LICENSE := $(DST_BASE)/LICENSE
@@ -247,12 +247,12 @@ DEPLOY_COPY_TARGETS := $(DIST_COPY_TARGETS) $(DIST_VERSION) $(DIST_LICENSE)
 $(DIST_LICENSE): $(LICENSE)
 	cp -a $< $@
 
-$(DIST_OVR32): $(SRCDIR)/openvr/bin/linux32/libopenvr_api.so | $(DST_DIR)
-	mkdir -p $(DST_DIR)/lib/
+$(DIST_OVR32): $(SRCDIR)/openvr/bin/win32/openvr_api.dll | $(DST_DIR)
+	mkdir -p $(DST_DIR)/lib/wine/dxvk
 	cp -a $< $@
 
-$(DIST_OVR64): $(SRCDIR)/openvr/bin/linux64/libopenvr_api.so | $(DST_DIR)
-	mkdir -p $(DST_DIR)/lib64/
+$(DIST_OVR64): $(SRCDIR)/openvr/bin/win64/openvr_api.dll | $(DST_DIR)
+	mkdir -p $(DST_DIR)/lib64/wine/dxvk
 	cp -a $< $@
 
 $(DIST_COPY_TARGETS): | $(DST_DIR)
@@ -831,24 +831,22 @@ DXVK_CONFIGURE_FILES32 := $(DXVK_OBJ32)/build.ninja
 DXVK_CONFIGURE_FILES64 := $(DXVK_OBJ64)/build.ninja
 
 # 64bit-configure
-# the sed junk is to work around meson being unable to pass linker args to
-# cross-file builds.
-$(DXVK_CONFIGURE_FILES64): $(MAKEFILE_DEP) $(WINE_BUILDTOOLS64) | $(DXVK_OBJ64)
+$(DXVK_CONFIGURE_FILES64): $(MAKEFILE_DEP) | $(DXVK_OBJ64)
 	cd "$(DXVK)" && \
-		sed -e "s|@PROTON_C_LINK_ARGS@|'-L$(abspath $(TOOLS_DIR64))/lib64', '-L$(abspath $(TOOLS_DIR64))/lib64/wine'|" \
-		    -e "s|@PROTON_C_ARGS@|'-I$(abspath $(TOOLS_DIR64))/include', '-I$(abspath $(TOOLS_DIR64))/include/wine', '-I$(abspath $(TOOLS_DIR64))/include/wine/windows'|" \
-			< build-wine64.txt > proton-build-wine64.txt && \
-		PATH="$(abspath $(SRCDIR))/glslang/bin/:$(abspath $(TOOLS_DIR64))/bin/:$(PATH)" \
-			meson --libdir=lib/ --prefix="$(abspath $(DXVK_OBJ64))" --cross-file proton-build-wine64.txt --buildtype=release "$(abspath $(DXVK_OBJ64))"
+		PATH="$(abspath $(SRCDIR))/glslang/bin/:$(PATH)" \
+			meson --prefix="$(abspath $(DXVK_OBJ64))" --cross-file build-win64.txt "$(abspath $(DXVK_OBJ64))"
+
+	cd "$(DXVK_OBJ64)" && \
+		PATH="$(abspath $(SRCDIR))/glslang/bin/:$(PATH)" meson configure -Dbuildtype=release
 
 # 32-bit configure
-$(DXVK_CONFIGURE_FILES32): $(MAKEFILE_DEP) $(WINE_BUILDTOOLS32) | $(DXVK_OBJ32)
+$(DXVK_CONFIGURE_FILES32): $(MAKEFILE_DEP) | $(DXVK_OBJ32)
 	cd "$(DXVK)" && \
-		sed -e "s|@PROTON_C_LINK_ARGS@|'-L$(abspath $(TOOLS_DIR32))/lib', '-L$(abspath $(TOOLS_DIR32))/lib/wine'|" \
-		    -e "s|@PROTON_C_ARGS@|'-I$(abspath $(TOOLS_DIR32))/include', '-I$(abspath $(TOOLS_DIR32))/include/wine', '-I$(abspath $(TOOLS_DIR32))/include/wine/windows'|" \
-			< build-wine32.txt > proton-build-wine32.txt && \
-		PATH="$(abspath $(SRCDIR))/glslang/bin/:$(abspath $(TOOLS_DIR32))/bin/:$(PATH)" \
-			meson --libdir=lib/ --prefix="$(abspath $(DXVK_OBJ32))" --cross-file proton-build-wine32.txt --buildtype=release "$(abspath $(DXVK_OBJ32))"
+		PATH="$(abspath $(SRCDIR))/glslang/bin/:$(PATH)" \
+			meson --prefix="$(abspath $(DXVK_OBJ32))" --cross-file build-win32.txt "$(abspath $(DXVK_OBJ32))"
+
+	cd "$(DXVK_OBJ32)" && \
+		PATH="$(abspath $(SRCDIR))/glslang/bin/:$(PATH)" meson configure -Dbuildtype=release
 
 ## dxvk goals
 DXVK_TARGETS = dxvk dxvk_configure dxvk32 dxvk64 dxvk_configure32 dxvk_configure64
@@ -867,31 +865,31 @@ dxvk_configure32: $(DXVK_CONFIGURE_FILES32)
 dxvk: dxvk32 dxvk64
 
 dxvk64: $(DXVK_CONFIGURE_FILES64)
-	(cd "$(DXVK_OBJ64)" && \
-		PATH="$(abspath $(SRCDIR))/glslang/bin/:$(abspath $(TOOLS_DIR64))/bin/:$(PATH)" ninja && \
-		PATH="$(abspath $(SRCDIR))/glslang/bin/:$(abspath $(TOOLS_DIR64))/bin/:$(PATH)" ninja install) && \
-		mkdir -p "$(DST_DIR)"/lib64/wine/dxvk "$(DST_DIR)"/lib64/wine/wined3d && \
-		cp -a "$(DXVK_OBJ64)"/lib/*.dll.so "$(DST_DIR)"/lib64/wine/dxvk && \
-		( cd $(SRCDIR) && git submodule status -- dxvk ) > "$(DST_DIR)"/lib64/wine/dxvk/version && \
-		for f in "$(DST_DIR)"/lib64/wine/dxvk/*.dll.so; do \
-			if [ -e "$(DST_DIR)"/lib64/wine/$$(basename $$f) ]; then \
-				mv "$(DST_DIR)"/lib64/wine/$$(basename $$f) "$(DST_DIR)"/lib64/wine/wined3d/; \
-			fi; \
-		done
+	cd "$(DXVK_OBJ64)" && \
+		PATH="$(abspath $(SRCDIR))/glslang/bin/:$(PATH)" ninja && \
+		PATH="$(abspath $(SRCDIR))/glslang/bin/:$(PATH)" ninja install
+
+	mkdir -p "$(DST_DIR)/lib64/wine/dxvk"
+	cp "$(DXVK_OBJ64)"/bin/dxgi.dll "$(DST_DIR)"/lib64/wine/dxvk
+	cp "$(DXVK_OBJ64)"/bin/d3d11.dll "$(DST_DIR)"/lib64/wine/dxvk
+	cp "$(DXVK_OBJ64)"/bin/d3d10.dll "$(DST_DIR)"/lib64/wine/dxvk
+	cp "$(DXVK_OBJ64)"/bin/d3d10_1.dll "$(DST_DIR)"/lib64/wine/dxvk
+	cp "$(DXVK_OBJ64)"/bin/d3d10core.dll "$(DST_DIR)"/lib64/wine/dxvk
+	( cd $(SRCDIR) && git submodule status -- dxvk ) > "$(DST_DIR)"/lib64/wine/dxvk/version
 
 
 dxvk32: $(DXVK_CONFIGURE_FILES32)
-	(cd "$(DXVK_OBJ32)" && \
-		PATH="$(abspath $(SRCDIR))/glslang/bin/:$(abspath $(TOOLS_DIR32)/bin/):$(PATH)" ninja && \
-		PATH="$(abspath $(SRCDIR))/glslang/bin/:$(abspath $(TOOLS_DIR32)/bin/):$(PATH)" ninja install) && \
-		mkdir -p "$(DST_DIR)"/lib/wine/dxvk "$(DST_DIR)"/lib/wine/wined3d && \
-		cp -a "$(DXVK_OBJ32)"/lib/*.dll.so "$(DST_DIR)"/lib/wine/dxvk && \
-		( cd $(SRCDIR) && git submodule status -- dxvk ) > "$(DST_DIR)"/lib/wine/dxvk/version && \
-		for f in "$(DST_DIR)"/lib/wine/dxvk/*.dll.so; do \
-			if [ -e "$(DST_DIR)"/lib/wine/$$(basename $$f) ]; then \
-				mv "$(DST_DIR)"/lib/wine/$$(basename $$f) "$(DST_DIR)"/lib/wine/wined3d/; \
-			fi; \
-		done
+	cd "$(DXVK_OBJ32)" && \
+		PATH="$(abspath $(SRCDIR))/glslang/bin/:$(PATH)" ninja && \
+		PATH="$(abspath $(SRCDIR))/glslang/bin/:$(PATH)" ninja install
+
+	mkdir -p "$(DST_DIR)"/lib/wine/dxvk
+	cp "$(DXVK_OBJ32)"/bin/dxgi.dll "$(DST_DIR)"/lib/wine/dxvk/
+	cp "$(DXVK_OBJ32)"/bin/d3d11.dll "$(DST_DIR)"/lib/wine/dxvk/
+	cp "$(DXVK_OBJ32)"/bin/d3d10.dll "$(DST_DIR)"/lib/wine/dxvk/
+	cp "$(DXVK_OBJ32)"/bin/d3d10_1.dll "$(DST_DIR)"/lib/wine/dxvk/
+	cp "$(DXVK_OBJ32)"/bin/d3d10core.dll "$(DST_DIR)"/lib/wine/dxvk/
+	( cd $(SRCDIR) && git submodule status -- dxvk ) > "$(DST_DIR)"/lib/wine/dxvk/version
 
 endif # NO_DXVK
 
