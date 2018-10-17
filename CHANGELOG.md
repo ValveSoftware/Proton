@@ -1,4 +1,9 @@
 ## Available in Proton 3.16 Beta:
+###### 3.16-2:
+- DXVK is again built as a Windows DLL, due to incompatibilities with the Steam runtime. This should fix widespread crashes with Direct3D 11 titles.
+- DXVK updated to 0.90.
+- Fix for alt-tab crashing on Unreal Engine 1 games, including Deus Ex.
+- PROTON_USE_WINED3D11 is now called PROTON_USE_WINED3D to reflect that this variable affects more than Direct3D 11. The old name still works as an alias.
 ###### 3.16-1:
 - Rebased Proton patches onto Wine 3.16.
 - Updated Vulkan support in Wine to 1.1.86, plus support for transform feedback.
