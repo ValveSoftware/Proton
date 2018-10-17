@@ -853,17 +853,19 @@ ifneq ($(NO_DXVK),1) # May be disabled by configure
 DXVK_CONFIGURE_FILES32 := $(DXVK_OBJ32)/build.ninja
 DXVK_CONFIGURE_FILES64 := $(DXVK_OBJ64)/build.ninja
 
-# 64bit-configure
+# 64bit-configure.  Pass --reconfigure if already configured (due to e.g. makefile changing)
 $(DXVK_CONFIGURE_FILES64): $(MAKEFILE_DEP) | $(DXVK_OBJ64)
 	cd "$(DXVK)" && \
+		[[ ! -e $(abspath $(DXVK_OBJ64))/build.ninja ]] || reconf=--reconfigure && \
 		PATH="$(abspath $(SRCDIR))/glslang/bin/:$(PATH)" \
-			meson --prefix="$(abspath $(DXVK_OBJ64))" --cross-file build-win64.txt --strip --buildtype=release "$(abspath $(DXVK_OBJ64))"
+			meson --prefix="$(abspath $(DXVK_OBJ64))" $$reconf --cross-file build-win64.txt --strip --buildtype=release "$(abspath $(DXVK_OBJ64))"
 
-# 32-bit configure
+# 32-bit configure.  Pass --reconfigure if already configured (due to e.g. makefile changing)
 $(DXVK_CONFIGURE_FILES32): $(MAKEFILE_DEP) | $(DXVK_OBJ32)
 	cd "$(DXVK)" && \
+		[[ ! -e $(abspath $(DXVK_OBJ32))/build.ninja ]] || reconf=--reconfigure && \
 		PATH="$(abspath $(SRCDIR))/glslang/bin/:$(PATH)" \
-			meson --prefix="$(abspath $(DXVK_OBJ32))" --cross-file build-win32.txt --strip --buildtype=release "$(abspath $(DXVK_OBJ32))"
+			meson --prefix="$(abspath $(DXVK_OBJ32))" $$reconf --cross-file build-win32.txt --strip --buildtype=release "$(abspath $(DXVK_OBJ32))"
 
 ## dxvk goals
 DXVK_TARGETS = dxvk dxvk_configure dxvk32 dxvk64 dxvk_configure32 dxvk_configure64
