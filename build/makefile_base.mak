@@ -482,12 +482,14 @@ ffmpeg64: SHELL = $(CONTAINER_SHELL64)
 ffmpeg64: $(FFMPEG_CONFIGURE_FILES64)
 	+$(MAKE) -C $(FFMPEG_OBJ64)
 	+$(MAKE) -C $(FFMPEG_OBJ64) install
+	mkdir -pv $(DST_DIR)/lib64
 	cp -L $(TOOLS_DIR64)/lib/{libavcodec,libavutil}* $(DST_DIR)/lib64
 
 ffmpeg32: SHELL = $(CONTAINER_SHELL32)
 ffmpeg32: $(FFMPEG_CONFIGURE_FILES32)
 	+$(MAKE) -C $(FFMPEG_OBJ32)
 	+$(MAKE) -C $(FFMPEG_OBJ32) install
+	mkdir -pv $(DST_DIR)/lib
 	cp -L $(TOOLS_DIR32)/lib/{libavcodec,libavutil}* $(DST_DIR)/lib
 
 endif # ifeq ($(WITH_FFMPEG),1)
@@ -573,6 +575,7 @@ lsteamclient64: $(LSTEAMCLIENT_CONFIGURE_FILES64) | $(WINE_BUILDTOOLS64) $(filte
 	+env PATH="$(abspath $(TOOLS_DIR64))/bin:$(PATH)" CXXFLAGS="-Wno-attributes $(OPTIMIZE_FLAGS) -g" CFLAGS="$(OPTIMIZE_FLAGS) -g" \
 		$(MAKE) -C $(LSTEAMCLIENT_OBJ64)
 	[ x"$(STRIP)" = x ] || $(STRIP) $(LSTEAMCLIENT_OBJ64)/lsteamclient.dll.so
+	mkdir -pv $(DST_DIR)/lib64/wine/
 	cp -a $(LSTEAMCLIENT_OBJ64)/lsteamclient.dll.so $(DST_DIR)/lib64/wine/
 
 lsteamclient32: SHELL = $(CONTAINER_SHELL32)
@@ -580,6 +583,7 @@ lsteamclient32: $(LSTEAMCLIENT_CONFIGURE_FILES32) | $(WINE_BUILDTOOLS32) $(filte
 	+env PATH="$(abspath $(TOOLS_DIR32))/bin:$(PATH)" LDFLAGS="-m32" CXXFLAGS="-m32 -Wno-attributes $(OPTIMIZE_FLAGS) -g" CFLAGS="-m32 $(OPTIMIZE_FLAGS) -g" \
 		$(MAKE) -C $(LSTEAMCLIENT_OBJ32)
 	[ x"$(STRIP)" = x ] || $(STRIP) $(LSTEAMCLIENT_OBJ32)/lsteamclient.dll.so
+	mkdir -pv $(DST_DIR)/lib/wine/
 	cp -a $(LSTEAMCLIENT_OBJ32)/lsteamclient.dll.so $(DST_DIR)/lib/wine/
 
 ##
@@ -760,6 +764,7 @@ vrclient64: $(VRCLIENT_CONFIGURE_FILES64) | $(WINE_BUILDTOOLS64) $(filter $(MAKE
 		PATH=$(abspath $(TOOLS_DIR64))/bin:$(PATH) \
 			winebuild --dll --fake-module -E ../$(VRCLIENT)/vrclient_x64/vrclient_x64.spec -o vrclient_x64.dll.fake && \
 		[ x"$(STRIP)" = x ] || $(STRIP) ../$(VRCLIENT_OBJ64)/vrclient_x64.dll.so && \
+		mkdir -pv ../$(DST_DIR)/lib64/wine/fakedlls && \
 		cp -a ../$(VRCLIENT_OBJ64)/vrclient_x64.dll.so ../$(DST_DIR)/lib64/wine/ && \
 		cp -a ../$(VRCLIENT_OBJ64)/vrclient_x64.dll.fake ../$(DST_DIR)/lib64/wine/fakedlls/vrclient_x64.dll
 
@@ -771,6 +776,7 @@ vrclient32: $(VRCLIENT_CONFIGURE_FILES32) | $(WINE_BUILDTOOLS32) $(filter $(MAKE
 		PATH=$(abspath $(TOOLS_DIR32))/bin:$(PATH) \
 			winebuild --dll --fake-module -E ../$(VRCLIENT32)/vrclient/vrclient.spec -o vrclient.dll.fake && \
 		[ x"$(STRIP)" = x ] || $(STRIP) ../$(VRCLIENT_OBJ32)/vrclient.dll.so && \
+		mkdir -pv ../$(DST_DIR)/lib/wine/fakedlls && \
 		cp -a ../$(VRCLIENT_OBJ32)/vrclient.dll.so ../$(DST_DIR)/lib/wine/ && \
 		cp -a ../$(VRCLIENT_OBJ32)/vrclient.dll.fake ../$(DST_DIR)/lib/wine/fakedlls/vrclient.dll
 
