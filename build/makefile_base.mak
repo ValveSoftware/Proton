@@ -171,6 +171,8 @@ FFMPEG_CROSS_CFLAGS :=
 FFMPEG_CROSS_LDFLAGS :=
 
 LSTEAMCLIENT := $(SRCDIR)/lsteamclient
+LSTEAMCLIENT32 := ./syn-lsteamclient32/lsteamclient
+LSTEAMCLIENT64 := ./syn-lsteamclient64/lsteamclient
 LSTEAMCLIENT_OBJ32 := ./obj-lsteamclient32
 LSTEAMCLIENT_OBJ64 := ./obj-lsteamclient64
 
@@ -494,6 +496,23 @@ endif # ifeq ($(WITH_FFMPEG),1)
 ## lsteamclient
 ##
 
+# The source directory for lsteamclient is a synthetic symlink clone of the source directory, because we need to run
+# winemaker in tree and it can stomp itself in parallel builds.
+$(LSTEAMCLIENT64)/.created: $(LSTEAMCLIENT) $(MAKEFILE_DEP)
+	rm -rf ./$(LSTEAMCLIENT64)
+	mkdir -p $(LSTEAMCLIENT64)/
+	cd $(LSTEAMCLIENT64)/ && ln -sfv ../../$(LSTEAMCLIENT)/* .
+	touch $@
+
+$(LSTEAMCLIENT32)/.created: $(LSTEAMCLIENT) $(MAKEFILE_DEP)
+	rm -rf ./$(LSTEAMCLIENT32)
+	mkdir -p $(LSTEAMCLIENT32)/
+	cd $(LSTEAMCLIENT32)/ && ln -sfv ../../$(LSTEAMCLIENT)/* .
+	touch $@
+
+$(LSTEAMCLIENT64): $(LSTEAMCLIENT64)/.created
+$(LSTEAMCLIENT32): $(LSTEAMCLIENT32)/.created
+
 ## Create & configure object directory for lsteamclient
 
 LSTEAMCLIENT_CONFIGURE_FILES32 := $(LSTEAMCLIENT_OBJ32)/Makefile
@@ -501,7 +520,7 @@ LSTEAMCLIENT_CONFIGURE_FILES64 := $(LSTEAMCLIENT_OBJ64)/Makefile
 
 # 64bit-configure
 $(LSTEAMCLIENT_CONFIGURE_FILES64): SHELL = $(CONTAINER_SHELL64)
-$(LSTEAMCLIENT_CONFIGURE_FILES64): $(LSTEAMCLIENT) $(MAKEFILE_DEP) | $(LSTEAMCLIENT_OBJ64) $(WINEMAKER)
+$(LSTEAMCLIENT_CONFIGURE_FILES64): $(LSTEAMCLIENT64) $(MAKEFILE_DEP) | $(LSTEAMCLIENT_OBJ64) $(WINEMAKER)
 	cd $(dir $@) && \
 		$(WINEMAKER) --nosource-fix --nolower-include --nodlls --nomsvcrt \
 			-DSTEAM_API_EXPORTS \
@@ -510,15 +529,15 @@ $(LSTEAMCLIENT_CONFIGURE_FILES64): $(LSTEAMCLIENT) $(MAKEFILE_DEP) | $(LSTEAMCLI
 			-I"../$(TOOLS_DIR64)"/include/wine/windows/ \
 			-L"../$(TOOLS_DIR64)"/lib64/ \
 			-L"../$(TOOLS_DIR64)"/lib64/wine/ \
-			--dll ../$(LSTEAMCLIENT) && \
-		cp ../$(LSTEAMCLIENT)/Makefile . && \
-		echo >> ./Makefile 'SRCDIR := ../$(LSTEAMCLIENT)' && \
+			--dll ../$(LSTEAMCLIENT64) && \
+		cp ../$(LSTEAMCLIENT64)/Makefile . && \
+		echo >> ./Makefile 'SRCDIR := ../$(LSTEAMCLIENT64)' && \
 		echo >> ./Makefile 'vpath % $$(SRCDIR)' && \
 		echo >> ./Makefile 'lsteamclient_dll_LDFLAGS := $$(patsubst %.spec,$$(SRCDIR)/%.spec,$$(lsteamclient_dll_LDFLAGS))'
 
 # 32-bit configure
 $(LSTEAMCLIENT_CONFIGURE_FILES32): SHELL = $(CONTAINER_SHELL32)
-$(LSTEAMCLIENT_CONFIGURE_FILES32): $(LSTEAMCLIENT) $(MAKEFILE_DEP) | $(LSTEAMCLIENT_OBJ32) $(WINEMAKER)
+$(LSTEAMCLIENT_CONFIGURE_FILES32): $(LSTEAMCLIENT32) $(MAKEFILE_DEP) | $(LSTEAMCLIENT_OBJ32) $(WINEMAKER)
 	cd $(dir $@) && \
 		$(WINEMAKER) --nosource-fix --nolower-include --nodlls --nomsvcrt --wine32 \
 			-DSTEAM_API_EXPORTS \
@@ -527,9 +546,9 @@ $(LSTEAMCLIENT_CONFIGURE_FILES32): $(LSTEAMCLIENT) $(MAKEFILE_DEP) | $(LSTEAMCLI
 			-I"../$(TOOLS_DIR32)"/include/wine/windows/ \
 			-L"../$(TOOLS_DIR32)"/lib/ \
 			-L"../$(TOOLS_DIR32)"/lib/wine/ \
-			--dll ../$(LSTEAMCLIENT) && \
-		cp ../$(LSTEAMCLIENT)/Makefile . && \
-		echo >> ./Makefile 'SRCDIR := ../$(LSTEAMCLIENT)' && \
+			--dll ../$(LSTEAMCLIENT32) && \
+		cp ../$(LSTEAMCLIENT32)/Makefile . && \
+		echo >> ./Makefile 'SRCDIR := ../$(LSTEAMCLIENT32)' && \
 		echo >> ./Makefile 'vpath % $$(SRCDIR)' && \
 		echo >> ./Makefile 'lsteamclient_dll_LDFLAGS := -m32 $$(patsubst %.spec,$$(SRCDIR)/%.spec,$$(lsteamclient_dll_LDFLAGS))'
 
