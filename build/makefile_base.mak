@@ -312,6 +312,7 @@ deploy: dist | $(filter-out dist deploy install,$(MAKECMDGOALS))
 	mkdir -p $(DEPLOY_DIR) && \
 	cp -a $(DEPLOY_COPY_TARGETS) $(DEPLOY_DIR) && \
 	tar -C $(DST_DIR) -c . | gzip -c -1 > $(DEPLOY_DIR)/proton_dist.tar.gz
+	@echo "Created deployment tarball at "$(DEPLOY_DIR)"/proton_dist.tar.gz"
 
 install: dist | $(filter-out dist deploy install,$(MAKECMDGOALS))
 	if [ ! -d $(STEAM_DIR) ]; then echo >&2 "!! "$(STEAM_DIR)" does not exist, cannot install"; return 1; fi
