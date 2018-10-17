@@ -47,6 +47,10 @@ endif
 export CC
 export CXX
 
+cc-option = $(shell if test -z "`echo 'void*p=1;' | \
+              $(1) $(2) -S -o /dev/null -xc - 2>&1 | grep -- $(2) -`"; \
+              then echo "$(2)"; else echo "$(3)"; fi ;)
+
 # Selected container mode shell
 DOCKER_SHELL_BASE = docker run --rm --init -v $(HOME):$(HOME) -w $(CURDIR) -e HOME=$(HOME) \
                                     -v /etc/passwd:/etc/passwd:ro -u $(shell id -u):$(shell id -g) -h $(shell hostname) \
@@ -132,7 +136,7 @@ STRIP := strip
 WINE32_AUTOCONF :=
 WINE64_AUTOCONF :=
 
-OPTIMIZE_FLAGS := -O2 -mmmx -msse -msse2 -mfpmath=sse
+OPTIMIZE_FLAGS := -O2 -march=nocona $(call cc-option,$(CC),-mtune=core-avx2,) -mfpmath=sse
 
 # Use $(call QUOTE,$(VAR)) to flatten a list to a single element (for feeding to a shell)
 
