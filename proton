@@ -239,12 +239,16 @@ else:
 lfile = None
 if "SteamGameId" in env:
     if env["WINEDEBUG"] != "-all":
-        lfile_path = os.environ["HOME"] + "/steam-" + os.environ["SteamGameId"] + ".log"
+        lfile_path = os.environ["HOME"] + "/steam-proton-" + os.environ["SteamGameId"] + ".log"
         if os.path.exists(lfile_path):
             os.remove(lfile_path)
         lfile = open(lfile_path, "w+")
 else:
-    env["WINEDEBUG"] = "-all"
+    if env["WINEDEBUG"] != "-all":
+        lfile_path = os.environ["HOME"] + "/steam-proton-unknown" + ".log"
+        if os.path.exists(lfile_path):
+            os.remove(lfile_path)
+        lfile = open(lfile_path, "w+")
 
 prefix_lock = FileLock(os.environ["STEAM_COMPAT_DATA_PATH"] + "/pfx.lock", timeout=-1)
 with prefix_lock:
