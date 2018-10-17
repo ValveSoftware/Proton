@@ -829,17 +829,13 @@ DXVK_CONFIGURE_FILES64 := $(DXVK_OBJ64)/build.ninja
 $(DXVK_CONFIGURE_FILES64): $(MAKEFILE_DEP) | $(DXVK_OBJ64)
 	cd "$(DXVK)" && \
 		PATH="$(abspath $(SRCDIR))/glslang/bin/:$(PATH)" \
-			meson --prefix="$(abspath $(DXVK_OBJ64))" --cross-file build-win64.txt "$(abspath $(DXVK_OBJ64))"
-	cd "$(DXVK_OBJ64)" && \
-		PATH="$(abspath $(SRCDIR))/glslang/bin/:$(PATH)" meson configure -Dbuildtype=release
+			meson --prefix="$(abspath $(DXVK_OBJ64))" --cross-file build-win64.txt --strip --buildtype=release "$(abspath $(DXVK_OBJ64))"
 
 # 32-bit configure
 $(DXVK_CONFIGURE_FILES32): $(MAKEFILE_DEP) | $(DXVK_OBJ32)
 	cd "$(DXVK)" && \
 		PATH="$(abspath $(SRCDIR))/glslang/bin/:$(PATH)" \
-			meson --prefix="$(abspath $(DXVK_OBJ32))" --cross-file build-win32.txt "$(abspath $(DXVK_OBJ32))"
-	cd "$(DXVK_OBJ32)" && \
-		PATH="$(abspath $(SRCDIR))/glslang/bin/:$(PATH)" meson configure -Dbuildtype=release
+			meson --prefix="$(abspath $(DXVK_OBJ32))" --cross-file build-win32.txt --strip --buildtype=release "$(abspath $(DXVK_OBJ32))"
 
 ## dxvk goals
 DXVK_TARGETS = dxvk dxvk_configure dxvk32 dxvk64 dxvk_configure32 dxvk_configure64
