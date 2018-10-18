@@ -12,7 +12,7 @@ export
 default $(MAKECMDGOALS): nested_make
 
 nested_make:
-	$(MAKE) $(MAKECMDGOALS) -f $(firstword $(MAKEFILE_LIST)) NO_NESTED_MAKE=1
+	+$(MAKE) $(MAKECMDGOALS) -f $(firstword $(MAKEFILE_LIST)) NO_NESTED_MAKE=1
 
 else # (Rest of the file is the else)
 
@@ -131,6 +131,8 @@ ALL_TARGETS =
 STRIP := strip
 WINE32_AUTOCONF :=
 WINE64_AUTOCONF :=
+
+OPTIMIZE_FLAGS := -O2 -mmmx -msse -msse2 -mfpmath=sse
 
 # Use $(call QUOTE,$(VAR)) to flatten a list to a single element (for feeding to a shell)
 
@@ -362,22 +364,20 @@ openal: openal32 openal64
 
 openal64: SHELL = $(CONTAINER_SHELL64)
 openal64: $(OPENAL_CONFIGURE_FILES64)
-	cd $(OPENAL_OBJ64) && \
-		$(MAKE) VERBOSE=1 && \
-		$(MAKE) install VERBOSE=1 && \
-		mkdir -p ../$(DST_DIR)/lib64 && \
-		cp -L ../$(TOOLS_DIR64)/lib/libopenal* ../$(DST_DIR)/lib64/ && \
-		[ x"$(STRIP)" = x ] || $(STRIP) ../$(DST_DIR)/lib64/libopenal.so
+	+$(MAKE) -C $(OPENAL_OBJ64) VERBOSE=1
+	+$(MAKE) -C $(OPENAL_OBJ64) install VERBOSE=1
+	mkdir -p $(DST_DIR)/lib64
+	cp -L $(TOOLS_DIR64)/lib/libopenal* $(DST_DIR)/lib64/
+	[ x"$(STRIP)" = x ] || $(STRIP) $(DST_DIR)/lib64/libopenal.so
 
 
 openal32: SHELL = $(CONTAINER_SHELL32)
 openal32: $(OPENAL_CONFIGURE_FILES32)
-	cd $(OPENAL_OBJ32) && \
-		$(MAKE) VERBOSE=1 && \
-		$(MAKE) install VERBOSE=1 && \
-		mkdir -p ../$(DST_DIR)/lib && \
-		cp -L ../$(TOOLS_DIR32)/lib/libopenal* ../$(DST_DIR)/lib/ && \
-		[ x"$(STRIP)" = x ] || $(STRIP) ../$(DST_DIR)/lib/libopenal.so
+	+$(MAKE) -C $(OPENAL_OBJ32) VERBOSE=1
+	+$(MAKE) -C $(OPENAL_OBJ32) install VERBOSE=1
+	mkdir -p $(DST_DIR)/lib
+	cp -L $(TOOLS_DIR32)/lib/libopenal* $(DST_DIR)/lib/
+	[ x"$(STRIP)" = x ] || $(STRIP) $(DST_DIR)/lib/libopenal.so
 
 
 ##
@@ -478,17 +478,15 @@ ffmpeg: ffmpeg32 ffmpeg64
 
 ffmpeg64: SHELL = $(CONTAINER_SHELL64)
 ffmpeg64: $(FFMPEG_CONFIGURE_FILES64)
-	cd $(FFMPEG_OBJ64) && \
-	$(MAKE) && \
-	$(MAKE) install && \
-	cp -L ../$(TOOLS_DIR64)/lib/{libavcodec,libavutil}* ../$(DST_DIR)/lib64
+	+$(MAKE) -C $(FFMPEG_OBJ64)
+	+$(MAKE) -C $(FFMPEG_OBJ64) install
+	cp -L $(TOOLS_DIR64)/lib/{libavcodec,libavutil}* $(DST_DIR)/lib64
 
 ffmpeg32: SHELL = $(CONTAINER_SHELL32)
 ffmpeg32: $(FFMPEG_CONFIGURE_FILES32)
-	cd $(FFMPEG_OBJ32) && \
-	$(MAKE) && \
-	$(MAKE) install && \
-	cp -L ../$(TOOLS_DIR32)/lib/{libavcodec,libavutil}* ../$(DST_DIR)/lib
+	+$(MAKE) -C $(FFMPEG_OBJ32)
+	+$(MAKE) -C $(FFMPEG_OBJ32) install
+	cp -L $(TOOLS_DIR32)/lib/{libavcodec,libavutil}* $(DST_DIR)/lib
 
 endif # ifeq ($(WITH_FFMPEG),1)
 
@@ -553,20 +551,17 @@ lsteamclient: lsteamclient32 lsteamclient64
 
 lsteamclient64: SHELL = $(CONTAINER_SHELL64)
 lsteamclient64: $(LSTEAMCLIENT_CONFIGURE_FILES64) | $(WINE_BUILDTOOLS64) $(filter $(MAKECMDGOALS),wine64 wine32 wine)
-	cd $(LSTEAMCLIENT_OBJ64) && \
-		PATH="$(abspath $(TOOLS_DIR64))/bin:$(PATH)" \
-		CXXFLAGS="-Wno-attributes -O2" CFLAGS="-O2 -g" $(MAKE) && \
-		[ x"$(STRIP)" = x ] || $(STRIP) ../$(LSTEAMCLIENT_OBJ64)/lsteamclient.dll.so && \
-		cp -a ./lsteamclient.dll.so ../$(DST_DIR)/lib64/wine/
+	+env PATH="$(abspath $(TOOLS_DIR64))/bin:$(PATH)" CXXFLAGS="-Wno-attributes $(OPTIMIZE_FLAGS) -g" CFLAGS="$(OPTIMIZE_FLAGS) -g" \
+		$(MAKE) -C $(LSTEAMCLIENT_OBJ64)
+	[ x"$(STRIP)" = x ] || $(STRIP) $(LSTEAMCLIENT_OBJ64)/lsteamclient.dll.so
+	cp -a $(LSTEAMCLIENT_OBJ64)/lsteamclient.dll.so $(DST_DIR)/lib64/wine/
 
 lsteamclient32: SHELL = $(CONTAINER_SHELL32)
 lsteamclient32: $(LSTEAMCLIENT_CONFIGURE_FILES32) | $(WINE_BUILDTOOLS32) $(filter $(MAKECMDGOALS),wine64 wine32 wine)
-	cd $(LSTEAMCLIENT_OBJ32) && \
-		PATH="$(abspath $(TOOLS_DIR32))/bin:$(PATH)" \
-		LDFLAGS="-m32" CXXFLAGS="-m32 -Wno-attributes -O2" CFLAGS="-m32 -O2 -g" \
-			$(MAKE) && \
-		[ x"$(STRIP)" = x ] || $(STRIP) ../$(LSTEAMCLIENT_OBJ32)/lsteamclient.dll.so && \
-		cp -a ./lsteamclient.dll.so ../$(DST_DIR)/lib/wine/
+	+env PATH="$(abspath $(TOOLS_DIR32))/bin:$(PATH)" LDFLAGS="-m32" CXXFLAGS="-m32 -Wno-attributes $(OPTIMIZE_FLAGS) -g" CFLAGS="-m32 $(OPTIMIZE_FLAGS) -g" \
+		$(MAKE) -C $(LSTEAMCLIENT_OBJ32)
+	[ x"$(STRIP)" = x ] || $(STRIP) $(LSTEAMCLIENT_OBJ32)/lsteamclient.dll.so
+	cp -a $(LSTEAMCLIENT_OBJ32)/lsteamclient.dll.so $(DST_DIR)/lib/wine/
 
 ##
 ## wine
@@ -577,12 +572,28 @@ lsteamclient32: $(LSTEAMCLIENT_CONFIGURE_FILES32) | $(WINE_BUILDTOOLS32) $(filte
 WINE_CONFIGURE_FILES32 := $(WINE_OBJ32)/Makefile
 WINE_CONFIGURE_FILES64 := $(WINE_OBJ64)/Makefile
 
+WINE_COMMON_MAKE_ARGS := \
+	STRIP="$(STRIP_QUOTED)" \
+	INSTALL_PROGRAM_FLAGS="$(INSTALL_PROGRAM_FLAGS)"
+
+WINE64_MAKE_ARGS := \
+	$(WINE_COMMON_MAKE_ARGS) \
+	prefix="$(abspath $(TOOLS_DIR64))" \
+	libdir="$(abspath $(TOOLS_DIR64))/lib64" \
+	dlldir="$(abspath $(TOOLS_DIR64))/lib64/wine"
+
+WINE32_MAKE_ARGS := \
+	$(WINE_COMMON_MAKE_ARGS) \
+	prefix="$(abspath $(TOOLS_DIR32))" \
+	libdir="$(abspath $(TOOLS_DIR32))/lib" \
+	dlldir="$(abspath $(TOOLS_DIR32))/lib/wine"
+
 # 64bit-configure
 $(WINE_CONFIGURE_FILES64): SHELL = $(CONTAINER_SHELL64)
 $(WINE_CONFIGURE_FILES64): $(MAKEFILE_DEP) | $(WINE_OBJ64)
 	cd $(dir $@) && \
 		STRIP=$(STRIP_QUOTED) \
-		CFLAGS=-I$(abspath $(TOOLS_DIR64))"/include -g -O2" \
+		CFLAGS=-I$(abspath $(TOOLS_DIR64))"/include -g $(OPTIMIZE_FLAGS)" \
 		LDFLAGS=-L$(abspath $(TOOLS_DIR64))/lib \
 		PKG_CONFIG_PATH=$(abspath $(TOOLS_DIR64))/lib/pkgconfig \
 		CC=$(CC_QUOTED) \
@@ -597,7 +608,7 @@ $(WINE_CONFIGURE_FILES32): SHELL = $(CONTAINER_SHELL32)
 $(WINE_CONFIGURE_FILES32): $(MAKEFILE_DEP) | $(WINE_OBJ32) $(WINE_ORDER_DEPS32)
 	cd $(dir $@) && \
 		STRIP=$(STRIP_QUOTED) \
-		CFLAGS=-I$(abspath $(TOOLS_DIR32))"/include -g -O2" \
+		CFLAGS=-I$(abspath $(TOOLS_DIR32))"/include -g $(OPTIMIZE_FLAGS)" \
 		LDFLAGS=-L$(abspath $(TOOLS_DIR32))/lib \
 		PKG_CONFIG_PATH=$(abspath $(TOOLS_DIR32))/lib/pkgconfig \
 		CC=$(CC_QUOTED) \
@@ -632,18 +643,11 @@ $(WINE_BUILDTOOLS64) $(WINE_OUT) wine64: wine64-intermediate
 
 wine64-intermediate: SHELL = $(CONTAINER_SHELL64)
 wine64-intermediate: $(WINE_CONFIGURE_FILES64)
-	cd $(WINE_OBJ64) && \
-		STRIP=$(STRIP_QUOTED) \
-			$(MAKE) && \
-		INSTALL_PROGRAM_FLAGS=$(INSTALL_PROGRAM_FLAGS) STRIP=$(STRIP_QUOTED) \
-			$(MAKE) install-lib && \
-		INSTALL_PROGRAM_FLAGS=$(INSTALL_PROGRAM_FLAGS) STRIP=$(STRIP_QUOTED) \
-			$(MAKE) \
-				prefix=$(abspath $(TOOLS_DIR64)) libdir=$(abspath $(TOOLS_DIR64))/lib64 \
-				dlldir=$(abspath $(TOOLS_DIR64))/lib64/wine \
-				install-dev install-lib && \
-		rm -f ../$(DST_DIR)/bin/{msiexec,notepad,regedit,regsvr32,wineboot,winecfg,wineconsole,winedbg,winefile,winemine,winepath}
-		rm -rf ../$(DST_DIR)/share/man/
+	+$(MAKE) -C $(WINE_OBJ64) $(WINE_COMMON_MAKE_ARGS)
+	+$(MAKE) -C $(WINE_OBJ64) $(WINE_COMMON_MAKE_ARGS) install-lib
+	+$(MAKE) -C $(WINE_OBJ64) $(WINE64_MAKE_ARGS) install-lib install-dev
+	rm -f $(DST_DIR)/bin/{msiexec,notepad,regedit,regsvr32,wineboot,winecfg,wineconsole,winedbg,winefile,winemine,winepath}
+	rm -rf $(DST_DIR)/share/man/
 
 ## This installs 32-bit stuff manually, see
 ##   https://wiki.winehq.org/Packaging#WoW64_Workarounds
@@ -651,20 +655,13 @@ $(WINE_BUILDTOOLS32) wine32: wine32-intermediate
 
 wine32-intermediate: SHELL = $(CONTAINER_SHELL32)
 wine32-intermediate: $(WINE_CONFIGURE_FILES32)
-	cd $(WINE_OBJ32) && \
-		STRIP=$(STRIP_QUOTED) \
-			$(MAKE) && \
-		INSTALL_PROGRAM_FLAGS=$(INSTALL_PROGRAM_FLAGS) STRIP=$(STRIP_QUOTED) \
-			$(MAKE) install-lib && \
-		INSTALL_PROGRAM_FLAGS=$(INSTALL_PROGRAM_FLAGS) STRIP=$(STRIP_QUOTED) \
-			$(MAKE) \
-				prefix=$(abspath $(TOOLS_DIR32)) libdir=$(abspath $(TOOLS_DIR32))/lib \
-				dlldir=$(abspath $(TOOLS_DIR32))/lib/wine \
-				install-dev install-lib && \
-		mkdir -p ../$(DST_DIR)/{lib,bin} && \
-		cp -a ../$(WINE_DST32)/lib ../$(DST_DIR)/ && \
-		cp -a ../$(WINE_DST32)/bin/wine ../$(DST_DIR)/bin && \
-		cp -a ../$(WINE_DST32)/bin/wine-preloader ../$(DST_DIR)/bin/
+	+$(MAKE) -C $(WINE_OBJ32) $(WINE_COMMON_MAKE_ARGS)
+	+$(MAKE) -C $(WINE_OBJ32) $(WINE_COMMON_MAKE_ARGS) install-lib
+	+$(MAKE) -C $(WINE_OBJ32) $(WINE32_MAKE_ARGS) install-lib install-dev
+	mkdir -p $(DST_DIR)/{lib,bin}
+	cp -a $(WINE_DST32)/lib $(DST_DIR)/
+	cp -a $(WINE_DST32)/bin/wine $(DST_DIR)/bin/
+	cp -a $(WINE_DST32)/bin/wine-preloader $(DST_DIR)/bin/
 
 ##
 ## vrclient
@@ -738,9 +735,9 @@ vrclient: vrclient32 vrclient64
 
 vrclient64: SHELL = $(CONTAINER_SHELL64)
 vrclient64: $(VRCLIENT_CONFIGURE_FILES64) | $(WINE_BUILDTOOLS64) $(filter $(MAKECMDGOALS),wine64 wine32 wine)
+	+env CXXFLAGS="-Wno-attributes -std=c++0x $(OPTIMIZE_FLAGS) -g" CFLAGS="$(OPTIMIZE_FLAGS) -g" PATH="$(abspath $(TOOLS_DIR64))/bin:$(PATH)" \
+		$(MAKE) -C $(VRCLIENT_OBJ64)
 	cd $(VRCLIENT_OBJ64) && \
-		CXXFLAGS="-Wno-attributes -std=c++0x -O2 -g" CFLAGS="-O2 -g" PATH="$(abspath $(TOOLS_DIR64))/bin:$(PATH)" \
-			$(MAKE) && \
 		PATH=$(abspath $(TOOLS_DIR64))/bin:$(PATH) \
 			winebuild --dll --fake-module -E ../$(VRCLIENT)/vrclient_x64/vrclient_x64.spec -o vrclient_x64.dll.fake && \
 		[ x"$(STRIP)" = x ] || $(STRIP) ../$(VRCLIENT_OBJ64)/vrclient_x64.dll.so && \
@@ -749,9 +746,9 @@ vrclient64: $(VRCLIENT_CONFIGURE_FILES64) | $(WINE_BUILDTOOLS64) $(filter $(MAKE
 
 vrclient32: SHELL = $(CONTAINER_SHELL32)
 vrclient32: $(VRCLIENT_CONFIGURE_FILES32) | $(WINE_BUILDTOOLS32) $(filter $(MAKECMDGOALS),wine64 wine32 wine)
+	+env LDFLAGS="-m32" CXXFLAGS="-m32 -Wno-attributes -std=c++0x $(OPTIMIZE_FLAGS) -g" CFLAGS="-m32 $(OPTIMIZE_FLAGS) -g" PATH="$(abspath $(TOOLS_DIR32))/bin:$(PATH)" \
+		$(MAKE) -C $(VRCLIENT_OBJ32)
 	cd $(VRCLIENT_OBJ32) && \
-		LDFLAGS="-m32" CXXFLAGS="-m32 -Wno-attributes -std=c++0x -O2 -g" CFLAGS="-m32 -O2 -g" PATH="$(abspath $(TOOLS_DIR32))/bin:$(PATH)" \
-			$(MAKE) && \
 		PATH=$(abspath $(TOOLS_DIR32))/bin:$(PATH) \
 			winebuild --dll --fake-module -E ../$(VRCLIENT32)/vrclient/vrclient.spec -o vrclient.dll.fake && \
 		[ x"$(STRIP)" = x ] || $(STRIP) ../$(VRCLIENT_OBJ32)/vrclient.dll.so && \
@@ -805,17 +802,17 @@ $(CMAKE_BIN64) cmake64: cmake64-intermediate
 
 cmake64-intermediate: SHELL = $(CONTAINER_SHELL64)
 cmake64-intermediate: $(CMAKE_CONFIGURE_FILES64) $(filter $(MAKECMDGOALS),cmake64)
-	cd $(CMAKE_OBJ64) && \
-		$(MAKE) && $(MAKE) install && \
-		touch ../$(CMAKE_BIN64)
+	+$(MAKE) -C $(CMAKE_OBJ64)
+	+$(MAKE) -C $(CMAKE_OBJ64) install
+	touch $(CMAKE_BIN64)
 
 $(CMAKE_BIN32) cmake32: cmake32-intermediate
 
 cmake32-intermediate: SHELL = $(CONTAINER_SHELL32)
 cmake32-intermediate: $(CMAKE_CONFIGURE_FILES32) $(filter $(MAKECMDGOALS),cmake32)
-	cd $(CMAKE_OBJ32) && \
-		$(MAKE) && $(MAKE) install && \
-		touch ../$(CMAKE_BIN32)
+	+$(MAKE) -C $(CMAKE_OBJ32)
+	+$(MAKE) -C $(CMAKE_OBJ32) install
+	touch $(CMAKE_BIN32)
 
 ##
 ## dxvk
@@ -834,19 +831,13 @@ DXVK_CONFIGURE_FILES64 := $(DXVK_OBJ64)/build.ninja
 $(DXVK_CONFIGURE_FILES64): $(MAKEFILE_DEP) | $(DXVK_OBJ64)
 	cd "$(DXVK)" && \
 		PATH="$(abspath $(SRCDIR))/glslang/bin/:$(PATH)" \
-			meson --prefix="$(abspath $(DXVK_OBJ64))" --cross-file build-win64.txt "$(abspath $(DXVK_OBJ64))"
-
-	cd "$(DXVK_OBJ64)" && \
-		PATH="$(abspath $(SRCDIR))/glslang/bin/:$(PATH)" meson configure -Dbuildtype=release
+			meson --prefix="$(abspath $(DXVK_OBJ64))" --cross-file build-win64.txt --strip --buildtype=release "$(abspath $(DXVK_OBJ64))"
 
 # 32-bit configure
 $(DXVK_CONFIGURE_FILES32): $(MAKEFILE_DEP) | $(DXVK_OBJ32)
 	cd "$(DXVK)" && \
 		PATH="$(abspath $(SRCDIR))/glslang/bin/:$(PATH)" \
-			meson --prefix="$(abspath $(DXVK_OBJ32))" --cross-file build-win32.txt "$(abspath $(DXVK_OBJ32))"
-
-	cd "$(DXVK_OBJ32)" && \
-		PATH="$(abspath $(SRCDIR))/glslang/bin/:$(PATH)" meson configure -Dbuildtype=release
+			meson --prefix="$(abspath $(DXVK_OBJ32))" --cross-file build-win32.txt --strip --buildtype=release "$(abspath $(DXVK_OBJ32))"
 
 ## dxvk goals
 DXVK_TARGETS = dxvk dxvk_configure dxvk32 dxvk64 dxvk_configure32 dxvk_configure64
@@ -865,10 +856,7 @@ dxvk_configure32: $(DXVK_CONFIGURE_FILES32)
 dxvk: dxvk32 dxvk64
 
 dxvk64: $(DXVK_CONFIGURE_FILES64)
-	cd "$(DXVK_OBJ64)" && \
-		PATH="$(abspath $(SRCDIR))/glslang/bin/:$(PATH)" ninja && \
-		PATH="$(abspath $(SRCDIR))/glslang/bin/:$(PATH)" ninja install
-
+	env PATH="$(abspath $(SRCDIR))/glslang/bin/:$(PATH)" ninja -C "$(DXVK_OBJ64)" install
 	mkdir -p "$(DST_DIR)/lib64/wine/dxvk"
 	cp "$(DXVK_OBJ64)"/bin/dxgi.dll "$(DST_DIR)"/lib64/wine/dxvk
 	cp "$(DXVK_OBJ64)"/bin/d3d11.dll "$(DST_DIR)"/lib64/wine/dxvk
@@ -879,10 +867,7 @@ dxvk64: $(DXVK_CONFIGURE_FILES64)
 
 
 dxvk32: $(DXVK_CONFIGURE_FILES32)
-	cd "$(DXVK_OBJ32)" && \
-		PATH="$(abspath $(SRCDIR))/glslang/bin/:$(PATH)" ninja && \
-		PATH="$(abspath $(SRCDIR))/glslang/bin/:$(PATH)" ninja install
-
+	env PATH="$(abspath $(SRCDIR))/glslang/bin/:$(PATH)" ninja -C "$(DXVK_OBJ32)" install
 	mkdir -p "$(DST_DIR)"/lib/wine/dxvk
 	cp "$(DXVK_OBJ32)"/bin/dxgi.dll "$(DST_DIR)"/lib/wine/dxvk/
 	cp "$(DXVK_OBJ32)"/bin/d3d11.dll "$(DST_DIR)"/lib/wine/dxvk/
