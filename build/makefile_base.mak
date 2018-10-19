@@ -47,6 +47,10 @@ endif
 export CC
 export CXX
 
+cc-option = $(shell if test -z "`echo 'void*p=1;' | \
+              $(1) $(2) -S -o /dev/null -xc - 2>&1 | grep -- $(2) -`"; \
+              then echo "$(2)"; else echo "$(3)"; fi ;)
+
 # Selected container mode shell
 DOCKER_SHELL_BASE = docker run --rm --init -v $(HOME):$(HOME) -w $(CURDIR) -e HOME=$(HOME) \
                                     -v /etc/passwd:/etc/passwd:ro -u $(shell id -u):$(shell id -g) -h $(shell hostname) \
@@ -132,7 +136,9 @@ STRIP := strip
 WINE32_AUTOCONF :=
 WINE64_AUTOCONF :=
 
-OPTIMIZE_FLAGS := -O2 -mmmx -msse -msse2 -mfpmath=sse
+OPTIMIZE_FLAGS := -O2 -march=nocona $(call cc-option,$(CC),-mtune=core-avx2,) -mfpmath=sse
+SANITY_FLAGS   := -fwrapv -fno-strict-aliasing
+COMMON_FLAGS   := $(OPTIMIZE_FLAGS) $(SANITY_FLAGS)
 
 # Use $(call QUOTE,$(VAR)) to flatten a list to a single element (for feeding to a shell)
 
@@ -171,6 +177,8 @@ FFMPEG_CROSS_CFLAGS :=
 FFMPEG_CROSS_LDFLAGS :=
 
 LSTEAMCLIENT := $(SRCDIR)/lsteamclient
+LSTEAMCLIENT32 := ./syn-lsteamclient32/lsteamclient
+LSTEAMCLIENT64 := ./syn-lsteamclient64/lsteamclient
 LSTEAMCLIENT_OBJ32 := ./obj-lsteamclient32
 LSTEAMCLIENT_OBJ64 := ./obj-lsteamclient64
 
@@ -306,12 +314,13 @@ dist: $(DIST_TARGETS) | $(WINE_OUT) $(filter $(MAKECMDGOALS),wine64 wine32 wine)
 	WINEPREFIX=$(abspath $(DIST_PREFIX)) $(WINE_OUT_BIN) wineboot && \
 		WINEPREFIX=$(abspath $(DIST_PREFIX)) $(WINE_OUT_SERVER) -w
 
-deploy: dist
+deploy: dist | $(filter-out dist deploy install,$(MAKECMDGOALS))
 	mkdir -p $(DEPLOY_DIR) && \
 	cp -a $(DEPLOY_COPY_TARGETS) $(DEPLOY_DIR) && \
 	tar -C $(DST_DIR) -c . | gzip -c -1 > $(DEPLOY_DIR)/proton_dist.tar.gz
+	@echo "Created deployment tarball at "$(DEPLOY_DIR)"/proton_dist.tar.gz"
 
-install: dist
+install: dist | $(filter-out dist deploy install,$(MAKECMDGOALS))
 	if [ ! -d $(STEAM_DIR) ]; then echo >&2 "!! "$(STEAM_DIR)" does not exist, cannot install"; return 1; fi
 	mkdir -p $(STEAM_DIR)/compatibilitytools.d/$(BUILD_NAME)
 	cp -a $(DST_BASE)/* $(STEAM_DIR)/compatibilitytools.d/$(BUILD_NAME)
@@ -480,12 +489,14 @@ ffmpeg64: SHELL = $(CONTAINER_SHELL64)
 ffmpeg64: $(FFMPEG_CONFIGURE_FILES64)
 	+$(MAKE) -C $(FFMPEG_OBJ64)
 	+$(MAKE) -C $(FFMPEG_OBJ64) install
+	mkdir -pv $(DST_DIR)/lib64
 	cp -L $(TOOLS_DIR64)/lib/{libavcodec,libavutil}* $(DST_DIR)/lib64
 
 ffmpeg32: SHELL = $(CONTAINER_SHELL32)
 ffmpeg32: $(FFMPEG_CONFIGURE_FILES32)
 	+$(MAKE) -C $(FFMPEG_OBJ32)
 	+$(MAKE) -C $(FFMPEG_OBJ32) install
+	mkdir -pv $(DST_DIR)/lib
 	cp -L $(TOOLS_DIR32)/lib/{libavcodec,libavutil}* $(DST_DIR)/lib
 
 endif # ifeq ($(WITH_FFMPEG),1)
@@ -494,6 +505,23 @@ endif # ifeq ($(WITH_FFMPEG),1)
 ## lsteamclient
 ##
 
+# The source directory for lsteamclient is a synthetic symlink clone of the source directory, because we need to run
+# winemaker in tree and it can stomp itself in parallel builds.
+$(LSTEAMCLIENT64)/.created: $(LSTEAMCLIENT) $(MAKEFILE_DEP)
+	rm -rf ./$(LSTEAMCLIENT64)
+	mkdir -p $(LSTEAMCLIENT64)/
+	cd $(LSTEAMCLIENT64)/ && ln -sfv ../../$(LSTEAMCLIENT)/* .
+	touch $@
+
+$(LSTEAMCLIENT32)/.created: $(LSTEAMCLIENT) $(MAKEFILE_DEP)
+	rm -rf ./$(LSTEAMCLIENT32)
+	mkdir -p $(LSTEAMCLIENT32)/
+	cd $(LSTEAMCLIENT32)/ && ln -sfv ../../$(LSTEAMCLIENT)/* .
+	touch $@
+
+$(LSTEAMCLIENT64): $(LSTEAMCLIENT64)/.created
+$(LSTEAMCLIENT32): $(LSTEAMCLIENT32)/.created
+
 ## Create & configure object directory for lsteamclient
 
 LSTEAMCLIENT_CONFIGURE_FILES32 := $(LSTEAMCLIENT_OBJ32)/Makefile
@@ -501,7 +529,7 @@ LSTEAMCLIENT_CONFIGURE_FILES64 := $(LSTEAMCLIENT_OBJ64)/Makefile
 
 # 64bit-configure
 $(LSTEAMCLIENT_CONFIGURE_FILES64): SHELL = $(CONTAINER_SHELL64)
-$(LSTEAMCLIENT_CONFIGURE_FILES64): $(LSTEAMCLIENT) $(MAKEFILE_DEP) | $(LSTEAMCLIENT_OBJ64) $(WINEMAKER)
+$(LSTEAMCLIENT_CONFIGURE_FILES64): $(LSTEAMCLIENT64) $(MAKEFILE_DEP) | $(LSTEAMCLIENT_OBJ64) $(WINEMAKER)
 	cd $(dir $@) && \
 		$(WINEMAKER) --nosource-fix --nolower-include --nodlls --nomsvcrt \
 			-DSTEAM_API_EXPORTS \
@@ -510,15 +538,15 @@ $(LSTEAMCLIENT_CONFIGURE_FILES64): $(LSTEAMCLIENT) $(MAKEFILE_DEP) | $(LSTEAMCLI
 			-I"../$(TOOLS_DIR64)"/include/wine/windows/ \
 			-L"../$(TOOLS_DIR64)"/lib64/ \
 			-L"../$(TOOLS_DIR64)"/lib64/wine/ \
-			--dll ../$(LSTEAMCLIENT) && \
-		cp ../$(LSTEAMCLIENT)/Makefile . && \
-		echo >> ./Makefile 'SRCDIR := ../$(LSTEAMCLIENT)' && \
+			--dll ../$(LSTEAMCLIENT64) && \
+		cp ../$(LSTEAMCLIENT64)/Makefile . && \
+		echo >> ./Makefile 'SRCDIR := ../$(LSTEAMCLIENT64)' && \
 		echo >> ./Makefile 'vpath % $$(SRCDIR)' && \
 		echo >> ./Makefile 'lsteamclient_dll_LDFLAGS := $$(patsubst %.spec,$$(SRCDIR)/%.spec,$$(lsteamclient_dll_LDFLAGS))'
 
 # 32-bit configure
 $(LSTEAMCLIENT_CONFIGURE_FILES32): SHELL = $(CONTAINER_SHELL32)
-$(LSTEAMCLIENT_CONFIGURE_FILES32): $(LSTEAMCLIENT) $(MAKEFILE_DEP) | $(LSTEAMCLIENT_OBJ32) $(WINEMAKER)
+$(LSTEAMCLIENT_CONFIGURE_FILES32): $(LSTEAMCLIENT32) $(MAKEFILE_DEP) | $(LSTEAMCLIENT_OBJ32) $(WINEMAKER)
 	cd $(dir $@) && \
 		$(WINEMAKER) --nosource-fix --nolower-include --nodlls --nomsvcrt --wine32 \
 			-DSTEAM_API_EXPORTS \
@@ -527,9 +555,9 @@ $(LSTEAMCLIENT_CONFIGURE_FILES32): $(LSTEAMCLIENT) $(MAKEFILE_DEP) | $(LSTEAMCLI
 			-I"../$(TOOLS_DIR32)"/include/wine/windows/ \
 			-L"../$(TOOLS_DIR32)"/lib/ \
 			-L"../$(TOOLS_DIR32)"/lib/wine/ \
-			--dll ../$(LSTEAMCLIENT) && \
-		cp ../$(LSTEAMCLIENT)/Makefile . && \
-		echo >> ./Makefile 'SRCDIR := ../$(LSTEAMCLIENT)' && \
+			--dll ../$(LSTEAMCLIENT32) && \
+		cp ../$(LSTEAMCLIENT32)/Makefile . && \
+		echo >> ./Makefile 'SRCDIR := ../$(LSTEAMCLIENT32)' && \
 		echo >> ./Makefile 'vpath % $$(SRCDIR)' && \
 		echo >> ./Makefile 'lsteamclient_dll_LDFLAGS := -m32 $$(patsubst %.spec,$$(SRCDIR)/%.spec,$$(lsteamclient_dll_LDFLAGS))'
 
@@ -551,16 +579,18 @@ lsteamclient: lsteamclient32 lsteamclient64
 
 lsteamclient64: SHELL = $(CONTAINER_SHELL64)
 lsteamclient64: $(LSTEAMCLIENT_CONFIGURE_FILES64) | $(WINE_BUILDTOOLS64) $(filter $(MAKECMDGOALS),wine64 wine32 wine)
-	+env PATH="$(abspath $(TOOLS_DIR64))/bin:$(PATH)" CXXFLAGS="-Wno-attributes $(OPTIMIZE_FLAGS) -g" CFLAGS="$(OPTIMIZE_FLAGS) -g" \
+	+env PATH="$(abspath $(TOOLS_DIR64))/bin:$(PATH)" CXXFLAGS="-Wno-attributes $(COMMON_FLAGS) -g" CFLAGS="$(COMMON_FLAGS) -g" \
 		$(MAKE) -C $(LSTEAMCLIENT_OBJ64)
 	[ x"$(STRIP)" = x ] || $(STRIP) $(LSTEAMCLIENT_OBJ64)/lsteamclient.dll.so
+	mkdir -pv $(DST_DIR)/lib64/wine/
 	cp -a $(LSTEAMCLIENT_OBJ64)/lsteamclient.dll.so $(DST_DIR)/lib64/wine/
 
 lsteamclient32: SHELL = $(CONTAINER_SHELL32)
 lsteamclient32: $(LSTEAMCLIENT_CONFIGURE_FILES32) | $(WINE_BUILDTOOLS32) $(filter $(MAKECMDGOALS),wine64 wine32 wine)
-	+env PATH="$(abspath $(TOOLS_DIR32))/bin:$(PATH)" LDFLAGS="-m32" CXXFLAGS="-m32 -Wno-attributes $(OPTIMIZE_FLAGS) -g" CFLAGS="-m32 $(OPTIMIZE_FLAGS) -g" \
+	+env PATH="$(abspath $(TOOLS_DIR32))/bin:$(PATH)" LDFLAGS="-m32" CXXFLAGS="-m32 -Wno-attributes $(COMMON_FLAGS) -g" CFLAGS="-m32 $(COMMON_FLAGS) -g" \
 		$(MAKE) -C $(LSTEAMCLIENT_OBJ32)
 	[ x"$(STRIP)" = x ] || $(STRIP) $(LSTEAMCLIENT_OBJ32)/lsteamclient.dll.so
+	mkdir -pv $(DST_DIR)/lib/wine/
 	cp -a $(LSTEAMCLIENT_OBJ32)/lsteamclient.dll.so $(DST_DIR)/lib/wine/
 
 ##
@@ -593,7 +623,7 @@ $(WINE_CONFIGURE_FILES64): SHELL = $(CONTAINER_SHELL64)
 $(WINE_CONFIGURE_FILES64): $(MAKEFILE_DEP) | $(WINE_OBJ64)
 	cd $(dir $@) && \
 		STRIP=$(STRIP_QUOTED) \
-		CFLAGS=-I$(abspath $(TOOLS_DIR64))"/include -g $(OPTIMIZE_FLAGS)" \
+		CFLAGS=-I$(abspath $(TOOLS_DIR64))"/include -g $(COMMON_FLAGS)" \
 		LDFLAGS=-L$(abspath $(TOOLS_DIR64))/lib \
 		PKG_CONFIG_PATH=$(abspath $(TOOLS_DIR64))/lib/pkgconfig \
 		CC=$(CC_QUOTED) \
@@ -608,7 +638,7 @@ $(WINE_CONFIGURE_FILES32): SHELL = $(CONTAINER_SHELL32)
 $(WINE_CONFIGURE_FILES32): $(MAKEFILE_DEP) | $(WINE_OBJ32) $(WINE_ORDER_DEPS32)
 	cd $(dir $@) && \
 		STRIP=$(STRIP_QUOTED) \
-		CFLAGS=-I$(abspath $(TOOLS_DIR32))"/include -g $(OPTIMIZE_FLAGS)" \
+		CFLAGS=-I$(abspath $(TOOLS_DIR32))"/include -g $(COMMON_FLAGS)" \
 		LDFLAGS=-L$(abspath $(TOOLS_DIR32))/lib \
 		PKG_CONFIG_PATH=$(abspath $(TOOLS_DIR32))/lib/pkgconfig \
 		CC=$(CC_QUOTED) \
@@ -735,23 +765,25 @@ vrclient: vrclient32 vrclient64
 
 vrclient64: SHELL = $(CONTAINER_SHELL64)
 vrclient64: $(VRCLIENT_CONFIGURE_FILES64) | $(WINE_BUILDTOOLS64) $(filter $(MAKECMDGOALS),wine64 wine32 wine)
-	+env CXXFLAGS="-Wno-attributes -std=c++0x $(OPTIMIZE_FLAGS) -g" CFLAGS="$(OPTIMIZE_FLAGS) -g" PATH="$(abspath $(TOOLS_DIR64))/bin:$(PATH)" \
+	+env CXXFLAGS="-Wno-attributes -std=c++0x $(COMMON_FLAGS) -g" CFLAGS="$(COMMON_FLAGS) -g" PATH="$(abspath $(TOOLS_DIR64))/bin:$(PATH)" \
 		$(MAKE) -C $(VRCLIENT_OBJ64)
 	cd $(VRCLIENT_OBJ64) && \
 		PATH=$(abspath $(TOOLS_DIR64))/bin:$(PATH) \
 			winebuild --dll --fake-module -E ../$(VRCLIENT)/vrclient_x64/vrclient_x64.spec -o vrclient_x64.dll.fake && \
 		[ x"$(STRIP)" = x ] || $(STRIP) ../$(VRCLIENT_OBJ64)/vrclient_x64.dll.so && \
+		mkdir -pv ../$(DST_DIR)/lib64/wine/fakedlls && \
 		cp -a ../$(VRCLIENT_OBJ64)/vrclient_x64.dll.so ../$(DST_DIR)/lib64/wine/ && \
 		cp -a ../$(VRCLIENT_OBJ64)/vrclient_x64.dll.fake ../$(DST_DIR)/lib64/wine/fakedlls/vrclient_x64.dll
 
 vrclient32: SHELL = $(CONTAINER_SHELL32)
 vrclient32: $(VRCLIENT_CONFIGURE_FILES32) | $(WINE_BUILDTOOLS32) $(filter $(MAKECMDGOALS),wine64 wine32 wine)
-	+env LDFLAGS="-m32" CXXFLAGS="-m32 -Wno-attributes -std=c++0x $(OPTIMIZE_FLAGS) -g" CFLAGS="-m32 $(OPTIMIZE_FLAGS) -g" PATH="$(abspath $(TOOLS_DIR32))/bin:$(PATH)" \
+	+env LDFLAGS="-m32" CXXFLAGS="-m32 -Wno-attributes -std=c++0x $(COMMON_FLAGS) -g" CFLAGS="-m32 $(COMMON_FLAGS) -g" PATH="$(abspath $(TOOLS_DIR32))/bin:$(PATH)" \
 		$(MAKE) -C $(VRCLIENT_OBJ32)
 	cd $(VRCLIENT_OBJ32) && \
 		PATH=$(abspath $(TOOLS_DIR32))/bin:$(PATH) \
 			winebuild --dll --fake-module -E ../$(VRCLIENT32)/vrclient/vrclient.spec -o vrclient.dll.fake && \
 		[ x"$(STRIP)" = x ] || $(STRIP) ../$(VRCLIENT_OBJ32)/vrclient.dll.so && \
+		mkdir -pv ../$(DST_DIR)/lib/wine/fakedlls && \
 		cp -a ../$(VRCLIENT_OBJ32)/vrclient.dll.so ../$(DST_DIR)/lib/wine/ && \
 		cp -a ../$(VRCLIENT_OBJ32)/vrclient.dll.fake ../$(DST_DIR)/lib/wine/fakedlls/vrclient.dll
 
@@ -827,17 +859,19 @@ ifneq ($(NO_DXVK),1) # May be disabled by configure
 DXVK_CONFIGURE_FILES32 := $(DXVK_OBJ32)/build.ninja
 DXVK_CONFIGURE_FILES64 := $(DXVK_OBJ64)/build.ninja
 
-# 64bit-configure
+# 64bit-configure.  Pass --reconfigure if already configured (due to e.g. makefile changing)
 $(DXVK_CONFIGURE_FILES64): $(MAKEFILE_DEP) | $(DXVK_OBJ64)
 	cd "$(DXVK)" && \
+		[[ ! -e $(abspath $(DXVK_OBJ64))/build.ninja ]] || reconf=--reconfigure && \
 		PATH="$(abspath $(SRCDIR))/glslang/bin/:$(PATH)" \
-			meson --prefix="$(abspath $(DXVK_OBJ64))" --cross-file build-win64.txt --strip --buildtype=release "$(abspath $(DXVK_OBJ64))"
+			meson --prefix="$(abspath $(DXVK_OBJ64))" $$reconf --cross-file build-win64.txt --strip --buildtype=release "$(abspath $(DXVK_OBJ64))"
 
-# 32-bit configure
+# 32-bit configure.  Pass --reconfigure if already configured (due to e.g. makefile changing)
 $(DXVK_CONFIGURE_FILES32): $(MAKEFILE_DEP) | $(DXVK_OBJ32)
 	cd "$(DXVK)" && \
+		[[ ! -e $(abspath $(DXVK_OBJ32))/build.ninja ]] || reconf=--reconfigure && \
 		PATH="$(abspath $(SRCDIR))/glslang/bin/:$(PATH)" \
-			meson --prefix="$(abspath $(DXVK_OBJ32))" --cross-file build-win32.txt --strip --buildtype=release "$(abspath $(DXVK_OBJ32))"
+			meson --prefix="$(abspath $(DXVK_OBJ32))" $$reconf --cross-file build-win32.txt --strip --buildtype=release "$(abspath $(DXVK_OBJ32))"
 
 ## dxvk goals
 DXVK_TARGETS = dxvk dxvk_configure dxvk32 dxvk64 dxvk_configure32 dxvk_configure64

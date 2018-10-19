@@ -1,3 +1,9 @@
-dist/
-build/
-contrib/
+/dist
+/build
+/contrib
+/dist-*
+/obj-*
+/syn-*
+
+/Makefile
+/vrclient_x64/vrclient_x64/Makefile
