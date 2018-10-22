@@ -45,7 +45,7 @@ uint32 steamclient_unix_path_to_dos_path(uint32 api_result, char *inout, uint32 
         return 0;
     }
 
-    r = WideCharToMultiByte(CP_ACP, 0, converted, -1, inout, inout_bytes,
+    r = WideCharToMultiByte(CP_UNIXCP, 0, converted, -1, inout, inout_bytes,
             NULL, NULL);
 
     HeapFree(GetProcessHeap(), 0, converted);
