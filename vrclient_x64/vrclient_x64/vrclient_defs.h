@@ -61,7 +61,8 @@ typedef int
         EVRInputError,
         EIOBufferError,
         EVRSkeletalTransformSpace,
-        EIOBufferMode;
+        EIOBufferMode,
+        EVRSkeletalMotionRange;
 
 typedef uint32_t DriverId_t;
 typedef uint32_t TrackedDeviceIndex_t;
@@ -115,6 +116,7 @@ typedef struct InputAnalogActionData_t InputAnalogActionData_t;
 typedef struct VRActiveActionSet_t VRActiveActionSet_t;
 typedef struct VRBoneTransform_t VRBoneTransform_t;
 typedef struct InputOriginInfo_t InputOriginInfo_t;
+typedef struct InputSkeletalActionData_t InputSkeletalActionData_t;
 
 /* dereferenced structs */
 typedef struct HmdMatrix34_t

@@ -18,6 +18,225 @@
 
 WINE_DEFAULT_DEBUG_CHANNEL(vrclient);
 
+#include "cppIVRInput_IVRInput_004.h"
+
+typedef struct __winIVRInput_IVRInput_004 {
+    vtable_ptr *vtable;
+    void *linux_side;
+} winIVRInput_IVRInput_004;
+
+DEFINE_THISCALL_WRAPPER(winIVRInput_IVRInput_004_SetActionManifestPath, 12)
+EVRInputError __thiscall winIVRInput_IVRInput_004_SetActionManifestPath(winIVRInput_IVRInput_004 *_this, const char * pchActionManifestPath)
+{
+    TRACE("%p\n", _this);
+    return cppIVRInput_IVRInput_004_SetActionManifestPath(_this->linux_side, pchActionManifestPath);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVRInput_IVRInput_004_GetActionSetHandle, 20)
+EVRInputError __thiscall winIVRInput_IVRInput_004_GetActionSetHandle(winIVRInput_IVRInput_004 *_this, const char * pchActionSetName, VRActionSetHandle_t * pHandle)
+{
+    TRACE("%p\n", _this);
+    return cppIVRInput_IVRInput_004_GetActionSetHandle(_this->linux_side, pchActionSetName, pHandle);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVRInput_IVRInput_004_GetActionHandle, 20)
+EVRInputError __thiscall winIVRInput_IVRInput_004_GetActionHandle(winIVRInput_IVRInput_004 *_this, const char * pchActionName, VRActionHandle_t * pHandle)
+{
+    TRACE("%p\n", _this);
+    return cppIVRInput_IVRInput_004_GetActionHandle(_this->linux_side, pchActionName, pHandle);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVRInput_IVRInput_004_GetInputSourceHandle, 20)
+EVRInputError __thiscall winIVRInput_IVRInput_004_GetInputSourceHandle(winIVRInput_IVRInput_004 *_this, const char * pchInputSourcePath, VRInputValueHandle_t * pHandle)
+{
+    TRACE("%p\n", _this);
+    return cppIVRInput_IVRInput_004_GetInputSourceHandle(_this->linux_side, pchInputSourcePath, pHandle);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVRInput_IVRInput_004_UpdateActionState, 20)
+EVRInputError __thiscall winIVRInput_IVRInput_004_UpdateActionState(winIVRInput_IVRInput_004 *_this, VRActiveActionSet_t * pSets, uint32_t unSizeOfVRSelectedActionSet_t, uint32_t unSetCount)
+{
+    TRACE("%p\n", _this);
+    return cppIVRInput_IVRInput_004_UpdateActionState(_this->linux_side, pSets, unSizeOfVRSelectedActionSet_t, unSetCount);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVRInput_IVRInput_004_GetDigitalActionData, 32)
+EVRInputError __thiscall winIVRInput_IVRInput_004_GetDigitalActionData(winIVRInput_IVRInput_004 *_this, VRActionHandle_t action, InputDigitalActionData_t * pActionData, uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice)
+{
+    TRACE("%p\n", _this);
+    return cppIVRInput_IVRInput_004_GetDigitalActionData(_this->linux_side, action, pActionData, unActionDataSize, ulRestrictToDevice);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVRInput_IVRInput_004_GetAnalogActionData, 32)
+EVRInputError __thiscall winIVRInput_IVRInput_004_GetAnalogActionData(winIVRInput_IVRInput_004 *_this, VRActionHandle_t action, InputAnalogActionData_t * pActionData, uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice)
+{
+    TRACE("%p\n", _this);
+    return cppIVRInput_IVRInput_004_GetAnalogActionData(_this->linux_side, action, pActionData, unActionDataSize, ulRestrictToDevice);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVRInput_IVRInput_004_GetPoseActionData, 40)
+EVRInputError __thiscall winIVRInput_IVRInput_004_GetPoseActionData(winIVRInput_IVRInput_004 *_this, VRActionHandle_t action, ETrackingUniverseOrigin eOrigin, float fPredictedSecondsFromNow, InputPoseActionData_t * pActionData, uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice)
+{
+    TRACE("%p\n", _this);
+    return cppIVRInput_IVRInput_004_GetPoseActionData(_this->linux_side, action, eOrigin, fPredictedSecondsFromNow, pActionData, unActionDataSize, ulRestrictToDevice);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVRInput_IVRInput_004_GetSkeletalActionData, 32)
+EVRInputError __thiscall winIVRInput_IVRInput_004_GetSkeletalActionData(winIVRInput_IVRInput_004 *_this, VRActionHandle_t action, InputSkeletalActionData_t * pActionData, uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice)
+{
+    TRACE("%p\n", _this);
+    return cppIVRInput_IVRInput_004_GetSkeletalActionData(_this->linux_side, action, pActionData, unActionDataSize, ulRestrictToDevice);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVRInput_IVRInput_004_GetSkeletalBoneData, 40)
+EVRInputError __thiscall winIVRInput_IVRInput_004_GetSkeletalBoneData(winIVRInput_IVRInput_004 *_this, VRActionHandle_t action, EVRSkeletalTransformSpace eTransformSpace, EVRSkeletalMotionRange eMotionRange, VRBoneTransform_t * pTransformArray, uint32_t unTransformArrayCount, VRInputValueHandle_t ulRestrictToDevice)
+{
+    TRACE("%p\n", _this);
+    return cppIVRInput_IVRInput_004_GetSkeletalBoneData(_this->linux_side, action, eTransformSpace, eMotionRange, pTransformArray, unTransformArrayCount, ulRestrictToDevice);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVRInput_IVRInput_004_GetSkeletalBoneDataCompressed, 48)
+EVRInputError __thiscall winIVRInput_IVRInput_004_GetSkeletalBoneDataCompressed(winIVRInput_IVRInput_004 *_this, VRActionHandle_t action, EVRSkeletalTransformSpace eTransformSpace, EVRSkeletalMotionRange eMotionRange, void * pvCompressedData, uint32_t unCompressedSize, uint32_t * punRequiredCompressedSize, VRInputValueHandle_t ulRestrictToDevice)
+{
+    TRACE("%p\n", _this);
+    return cppIVRInput_IVRInput_004_GetSkeletalBoneDataCompressed(_this->linux_side, action, eTransformSpace, eMotionRange, pvCompressedData, unCompressedSize, punRequiredCompressedSize, ulRestrictToDevice);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVRInput_IVRInput_004_DecompressSkeletalBoneData, 36)
+EVRInputError __thiscall winIVRInput_IVRInput_004_DecompressSkeletalBoneData(winIVRInput_IVRInput_004 *_this, void * pvCompressedBuffer, uint32_t unCompressedBufferSize, EVRSkeletalTransformSpace * peTransformSpace, VRBoneTransform_t * pTransformArray, uint32_t unTransformArrayCount)
+{
+    TRACE("%p\n", _this);
+    return cppIVRInput_IVRInput_004_DecompressSkeletalBoneData(_this->linux_side, pvCompressedBuffer, unCompressedBufferSize, peTransformSpace, pTransformArray, unTransformArrayCount);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVRInput_IVRInput_004_TriggerHapticVibrationAction, 36)
+EVRInputError __thiscall winIVRInput_IVRInput_004_TriggerHapticVibrationAction(winIVRInput_IVRInput_004 *_this, VRActionHandle_t action, float fStartSecondsFromNow, float fDurationSeconds, float fFrequency, float fAmplitude, VRInputValueHandle_t ulRestrictToDevice)
+{
+    TRACE("%p\n", _this);
+    return cppIVRInput_IVRInput_004_TriggerHapticVibrationAction(_this->linux_side, action, fStartSecondsFromNow, fDurationSeconds, fFrequency, fAmplitude, ulRestrictToDevice);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVRInput_IVRInput_004_GetActionOrigins, 32)
+EVRInputError __thiscall winIVRInput_IVRInput_004_GetActionOrigins(winIVRInput_IVRInput_004 *_this, VRActionSetHandle_t actionSetHandle, VRActionHandle_t digitalActionHandle, VRInputValueHandle_t * originsOut, uint32_t originOutCount)
+{
+    TRACE("%p\n", _this);
+    return cppIVRInput_IVRInput_004_GetActionOrigins(_this->linux_side, actionSetHandle, digitalActionHandle, originsOut, originOutCount);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVRInput_IVRInput_004_GetOriginLocalizedName, 24)
+EVRInputError __thiscall winIVRInput_IVRInput_004_GetOriginLocalizedName(winIVRInput_IVRInput_004 *_this, VRInputValueHandle_t origin, char * pchNameArray, uint32_t unNameArraySize)
+{
+    TRACE("%p\n", _this);
+    return cppIVRInput_IVRInput_004_GetOriginLocalizedName(_this->linux_side, origin, pchNameArray, unNameArraySize);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVRInput_IVRInput_004_GetOriginTrackedDeviceInfo, 24)
+EVRInputError __thiscall winIVRInput_IVRInput_004_GetOriginTrackedDeviceInfo(winIVRInput_IVRInput_004 *_this, VRInputValueHandle_t origin, InputOriginInfo_t * pOriginInfo, uint32_t unOriginInfoSize)
+{
+    TRACE("%p\n", _this);
+    return cppIVRInput_IVRInput_004_GetOriginTrackedDeviceInfo(_this->linux_side, origin, pOriginInfo, unOriginInfoSize);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVRInput_IVRInput_004_ShowActionOrigins, 20)
+EVRInputError __thiscall winIVRInput_IVRInput_004_ShowActionOrigins(winIVRInput_IVRInput_004 *_this, VRActionSetHandle_t actionSetHandle, VRActionHandle_t ulActionHandle)
+{
+    TRACE("%p\n", _this);
+    return cppIVRInput_IVRInput_004_ShowActionOrigins(_this->linux_side, actionSetHandle, ulActionHandle);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVRInput_IVRInput_004_ShowBindingsForActionSet, 28)
+EVRInputError __thiscall winIVRInput_IVRInput_004_ShowBindingsForActionSet(winIVRInput_IVRInput_004 *_this, VRActiveActionSet_t * pSets, uint32_t unSizeOfVRSelectedActionSet_t, uint32_t unSetCount, VRInputValueHandle_t originToHighlight)
+{
+    TRACE("%p\n", _this);
+    return cppIVRInput_IVRInput_004_ShowBindingsForActionSet(_this->linux_side, pSets, unSizeOfVRSelectedActionSet_t, unSetCount, originToHighlight);
+}
+
+extern vtable_ptr winIVRInput_IVRInput_004_vtable;
+
+#ifndef __GNUC__
+void __asm_dummy_vtables(void) {
+#endif
+    __ASM_VTABLE(winIVRInput_IVRInput_004,
+        VTABLE_ADD_FUNC(winIVRInput_IVRInput_004_SetActionManifestPath)
+        VTABLE_ADD_FUNC(winIVRInput_IVRInput_004_GetActionSetHandle)
+        VTABLE_ADD_FUNC(winIVRInput_IVRInput_004_GetActionHandle)
+        VTABLE_ADD_FUNC(winIVRInput_IVRInput_004_GetInputSourceHandle)
+        VTABLE_ADD_FUNC(winIVRInput_IVRInput_004_UpdateActionState)
+        VTABLE_ADD_FUNC(winIVRInput_IVRInput_004_GetDigitalActionData)
+        VTABLE_ADD_FUNC(winIVRInput_IVRInput_004_GetAnalogActionData)
+        VTABLE_ADD_FUNC(winIVRInput_IVRInput_004_GetPoseActionData)
+        VTABLE_ADD_FUNC(winIVRInput_IVRInput_004_GetSkeletalActionData)
+        VTABLE_ADD_FUNC(winIVRInput_IVRInput_004_GetSkeletalBoneData)
+        VTABLE_ADD_FUNC(winIVRInput_IVRInput_004_GetSkeletalBoneDataCompressed)
+        VTABLE_ADD_FUNC(winIVRInput_IVRInput_004_DecompressSkeletalBoneData)
+        VTABLE_ADD_FUNC(winIVRInput_IVRInput_004_TriggerHapticVibrationAction)
+        VTABLE_ADD_FUNC(winIVRInput_IVRInput_004_GetActionOrigins)
+        VTABLE_ADD_FUNC(winIVRInput_IVRInput_004_GetOriginLocalizedName)
+        VTABLE_ADD_FUNC(winIVRInput_IVRInput_004_GetOriginTrackedDeviceInfo)
+        VTABLE_ADD_FUNC(winIVRInput_IVRInput_004_ShowActionOrigins)
+        VTABLE_ADD_FUNC(winIVRInput_IVRInput_004_ShowBindingsForActionSet)
+    );
+#ifndef __GNUC__
+}
+#endif
+
+winIVRInput_IVRInput_004 *create_winIVRInput_IVRInput_004(void *linux_side)
+{
+    winIVRInput_IVRInput_004 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRInput_IVRInput_004));
+    TRACE("-> %p\n", r);
+    r->vtable = &winIVRInput_IVRInput_004_vtable;
+    r->linux_side = linux_side;
+    return r;
+}
+
+void destroy_winIVRInput_IVRInput_004(void *object)
+{
+    TRACE("%p\n", object);
+    HeapFree(GetProcessHeap(), 0, object);
+}
+
+winIVRInput_IVRInput_004 *create_winIVRInput_IVRInput_004_FnTable(void *linux_side)
+{
+    winIVRInput_IVRInput_004 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRInput_IVRInput_004));
+    struct thunk *thunks = alloc_thunks(18);
+    struct thunk **vtable = HeapAlloc(GetProcessHeap(), 0, 18 * sizeof(*vtable));
+    int i;
+
+    TRACE("-> %p, vtable %p, thunks %p\n", r, vtable, thunks);
+    init_thunk(&thunks[0], r, winIVRInput_IVRInput_004_SetActionManifestPath, 1, FALSE, FALSE);
+    init_thunk(&thunks[1], r, winIVRInput_IVRInput_004_GetActionSetHandle, 2, FALSE, FALSE);
+    init_thunk(&thunks[2], r, winIVRInput_IVRInput_004_GetActionHandle, 2, FALSE, FALSE);
+    init_thunk(&thunks[3], r, winIVRInput_IVRInput_004_GetInputSourceHandle, 2, FALSE, FALSE);
+    init_thunk(&thunks[4], r, winIVRInput_IVRInput_004_UpdateActionState, 3, FALSE, FALSE);
+    init_thunk(&thunks[5], r, winIVRInput_IVRInput_004_GetDigitalActionData, 4, FALSE, FALSE);
+    init_thunk(&thunks[6], r, winIVRInput_IVRInput_004_GetAnalogActionData, 4, FALSE, FALSE);
+    init_thunk(&thunks[7], r, winIVRInput_IVRInput_004_GetPoseActionData, 6, TRUE, FALSE);
+    init_thunk(&thunks[8], r, winIVRInput_IVRInput_004_GetSkeletalActionData, 4, FALSE, FALSE);
+    init_thunk(&thunks[9], r, winIVRInput_IVRInput_004_GetSkeletalBoneData, 6, FALSE, FALSE);
+    init_thunk(&thunks[10], r, winIVRInput_IVRInput_004_GetSkeletalBoneDataCompressed, 7, FALSE, FALSE);
+    init_thunk(&thunks[11], r, winIVRInput_IVRInput_004_DecompressSkeletalBoneData, 5, FALSE, FALSE);
+    init_thunk(&thunks[12], r, winIVRInput_IVRInput_004_TriggerHapticVibrationAction, 6, TRUE, TRUE);
+    init_thunk(&thunks[13], r, winIVRInput_IVRInput_004_GetActionOrigins, 4, FALSE, FALSE);
+    init_thunk(&thunks[14], r, winIVRInput_IVRInput_004_GetOriginLocalizedName, 3, FALSE, FALSE);
+    init_thunk(&thunks[15], r, winIVRInput_IVRInput_004_GetOriginTrackedDeviceInfo, 3, FALSE, FALSE);
+    init_thunk(&thunks[16], r, winIVRInput_IVRInput_004_ShowActionOrigins, 2, FALSE, FALSE);
+    init_thunk(&thunks[17], r, winIVRInput_IVRInput_004_ShowBindingsForActionSet, 4, FALSE, FALSE);
+    for (i = 0; i < 18; i++)
+        vtable[i] = &thunks[i];
+    r->linux_side = linux_side;
+    r->vtable = (void *)vtable;
+    return r;
+}
+
+void destroy_winIVRInput_IVRInput_004_FnTable(void *object)
+{
+    winIVRInput_IVRInput_004 *win_object = object;
+    TRACE("%p\n", win_object);
+    VirtualFree(win_object->vtable[0], 0, MEM_RELEASE);
+    HeapFree(GetProcessHeap(), 0, win_object->vtable);
+    HeapFree(GetProcessHeap(), 0, win_object);
+}
+
 #include "cppIVRInput_IVRInput_003.h"
 
 typedef struct __winIVRInput_IVRInput_003 {

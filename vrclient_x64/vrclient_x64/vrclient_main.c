@@ -1007,7 +1007,14 @@ EVRRenderModelError ivrrendermodels_load_into_texture_d3d11_async(
     EVRRenderModelError error;
     ID3D11Texture2D *texture;
 
-    error = cppIVRRenderModels_IVRRenderModels_005_LoadTexture_Async(linux_side, texture_id, &texture_map);
+    switch(version){
+    case 5:
+        error = cppIVRRenderModels_IVRRenderModels_005_LoadTexture_Async(linux_side, texture_id, &texture_map);
+        break;
+    case 6:
+        error = cppIVRRenderModels_IVRRenderModels_006_LoadTexture_Async(linux_side, texture_id, &texture_map);
+        break;
+    }
     if (error == VRRenderModelError_Loading)
     {
         TRACE("Loading.\n");

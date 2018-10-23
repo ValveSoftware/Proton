@@ -1,6 +1,6 @@
 #include "vrclient_private.h"
 #include "vrclient_defs.h"
-#include "openvr_v1.0.15/ivrclientcore.h"
+#include "openvr_v1.0.17/ivrclientcore.h"
 using namespace vr;
 extern "C" {
 #include "struct_converters.h"
@@ -234,12 +234,12 @@ vr::EVROverlayError cppIVROverlay_IVROverlay_018_GetTransformForOverlayCoordinat
     return ((IVROverlay*)linux_side)->GetTransformForOverlayCoordinates((vr::VROverlayHandle_t)ulOverlayHandle, (vr::ETrackingUniverseOrigin)eTrackingOrigin, (vr::HmdVector2_t)coordinatesInOverlay, (vr::HmdMatrix34_t *)pmatTransform);
 }
 
-bool cppIVROverlay_IVROverlay_018_PollNextOverlayEvent(void *linux_side, VROverlayHandle_t ulOverlayHandle, winVREvent_t_1015 * pEvent, uint32_t uncbVREvent)
+bool cppIVROverlay_IVROverlay_018_PollNextOverlayEvent(void *linux_side, VROverlayHandle_t ulOverlayHandle, winVREvent_t_1017 * pEvent, uint32_t uncbVREvent)
 {
     VREvent_t lin;
     bool _ret;
     _ret = ((IVROverlay*)linux_side)->PollNextOverlayEvent((vr::VROverlayHandle_t)ulOverlayHandle, &lin, sizeof(lin));
-    struct_VREvent_t_1015_lin_to_win(&lin, pEvent);
+    struct_VREvent_t_1017_lin_to_win(&lin, pEvent);
     return _ret;
 }
 

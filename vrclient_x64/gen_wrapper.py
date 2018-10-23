@@ -12,6 +12,8 @@ import os
 import re
 
 sdk_versions = [
+    "v1.0.17",
+    "v1.0.16",
     "v1.0.15",
     "v1.0.14",
     "v1.0.13",
@@ -178,7 +180,7 @@ def ivrcompositor_get_vulkan_device_extensions_required(cppname, method):
     return "ivrcompositor_get_vulkan_device_extensions_required"
 
 def ivrrendermodels_load_into_texture_d3d11_async(cppname, method):
-    assert "005" in cppname
+    assert "005" in cppname or "006" in cppname
     return "ivrrendermodels_load_into_texture_d3d11_async"
 
 method_overrides = [
@@ -970,7 +972,7 @@ for sdkver in sdk_versions:
         if not os.path.isfile(input_name):
             continue
         index = clang.cindex.Index.create()
-        tu = index.parse(input_name, args=['-x', 'c++', '-std=c++11', '-DGNUC', '-Iopenvr_%s/' % sdkver, '-I/usr/lib/clang/5.0.0/include/'])
+        tu = index.parse(input_name, args=['-x', 'c++', '-std=c++11', '-DGNUC', '-Iopenvr_%s/' % sdkver, '-I/usr/lib/clang/7.0.0/include/'])
 
         diagnostics = list(tu.diagnostics)
         if len(diagnostics) > 0:

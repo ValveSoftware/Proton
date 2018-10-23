@@ -18,6 +18,171 @@
 
 WINE_DEFAULT_DEBUG_CHANNEL(vrclient);
 
+#include "cppIVRTrackedCamera_IVRTrackedCamera_004.h"
+
+typedef struct __winIVRTrackedCamera_IVRTrackedCamera_004 {
+    vtable_ptr *vtable;
+    void *linux_side;
+} winIVRTrackedCamera_IVRTrackedCamera_004;
+
+DEFINE_THISCALL_WRAPPER(winIVRTrackedCamera_IVRTrackedCamera_004_GetCameraErrorNameFromEnum, 8)
+const char * __thiscall winIVRTrackedCamera_IVRTrackedCamera_004_GetCameraErrorNameFromEnum(winIVRTrackedCamera_IVRTrackedCamera_004 *_this, EVRTrackedCameraError eCameraError)
+{
+    TRACE("%p\n", _this);
+    return cppIVRTrackedCamera_IVRTrackedCamera_004_GetCameraErrorNameFromEnum(_this->linux_side, eCameraError);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVRTrackedCamera_IVRTrackedCamera_004_HasCamera, 16)
+EVRTrackedCameraError __thiscall winIVRTrackedCamera_IVRTrackedCamera_004_HasCamera(winIVRTrackedCamera_IVRTrackedCamera_004 *_this, TrackedDeviceIndex_t nDeviceIndex, bool * pHasCamera)
+{
+    TRACE("%p\n", _this);
+    return cppIVRTrackedCamera_IVRTrackedCamera_004_HasCamera(_this->linux_side, nDeviceIndex, pHasCamera);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVRTrackedCamera_IVRTrackedCamera_004_GetCameraFrameSize, 36)
+EVRTrackedCameraError __thiscall winIVRTrackedCamera_IVRTrackedCamera_004_GetCameraFrameSize(winIVRTrackedCamera_IVRTrackedCamera_004 *_this, TrackedDeviceIndex_t nDeviceIndex, EVRTrackedCameraFrameType eFrameType, uint32_t * pnWidth, uint32_t * pnHeight, uint32_t * pnFrameBufferSize)
+{
+    TRACE("%p\n", _this);
+    return cppIVRTrackedCamera_IVRTrackedCamera_004_GetCameraFrameSize(_this->linux_side, nDeviceIndex, eFrameType, pnWidth, pnHeight, pnFrameBufferSize);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVRTrackedCamera_IVRTrackedCamera_004_GetCameraIntrinsics, 28)
+EVRTrackedCameraError __thiscall winIVRTrackedCamera_IVRTrackedCamera_004_GetCameraIntrinsics(winIVRTrackedCamera_IVRTrackedCamera_004 *_this, TrackedDeviceIndex_t nDeviceIndex, EVRTrackedCameraFrameType eFrameType, HmdVector2_t * pFocalLength, HmdVector2_t * pCenter)
+{
+    TRACE("%p\n", _this);
+    return cppIVRTrackedCamera_IVRTrackedCamera_004_GetCameraIntrinsics(_this->linux_side, nDeviceIndex, eFrameType, pFocalLength, pCenter);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVRTrackedCamera_IVRTrackedCamera_004_GetCameraProjection, 28)
+EVRTrackedCameraError __thiscall winIVRTrackedCamera_IVRTrackedCamera_004_GetCameraProjection(winIVRTrackedCamera_IVRTrackedCamera_004 *_this, TrackedDeviceIndex_t nDeviceIndex, EVRTrackedCameraFrameType eFrameType, float flZNear, float flZFar, HmdMatrix44_t * pProjection)
+{
+    TRACE("%p\n", _this);
+    return cppIVRTrackedCamera_IVRTrackedCamera_004_GetCameraProjection(_this->linux_side, nDeviceIndex, eFrameType, flZNear, flZFar, pProjection);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVRTrackedCamera_IVRTrackedCamera_004_AcquireVideoStreamingService, 16)
+EVRTrackedCameraError __thiscall winIVRTrackedCamera_IVRTrackedCamera_004_AcquireVideoStreamingService(winIVRTrackedCamera_IVRTrackedCamera_004 *_this, TrackedDeviceIndex_t nDeviceIndex, TrackedCameraHandle_t * pHandle)
+{
+    TRACE("%p\n", _this);
+    return cppIVRTrackedCamera_IVRTrackedCamera_004_AcquireVideoStreamingService(_this->linux_side, nDeviceIndex, pHandle);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVRTrackedCamera_IVRTrackedCamera_004_ReleaseVideoStreamingService, 12)
+EVRTrackedCameraError __thiscall winIVRTrackedCamera_IVRTrackedCamera_004_ReleaseVideoStreamingService(winIVRTrackedCamera_IVRTrackedCamera_004 *_this, TrackedCameraHandle_t hTrackedCamera)
+{
+    TRACE("%p\n", _this);
+    return cppIVRTrackedCamera_IVRTrackedCamera_004_ReleaseVideoStreamingService(_this->linux_side, hTrackedCamera);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVRTrackedCamera_IVRTrackedCamera_004_GetVideoStreamFrameBuffer, 40)
+EVRTrackedCameraError __thiscall winIVRTrackedCamera_IVRTrackedCamera_004_GetVideoStreamFrameBuffer(winIVRTrackedCamera_IVRTrackedCamera_004 *_this, TrackedCameraHandle_t hTrackedCamera, EVRTrackedCameraFrameType eFrameType, void * pFrameBuffer, uint32_t nFrameBufferSize, CameraVideoStreamFrameHeader_t * pFrameHeader, uint32_t nFrameHeaderSize)
+{
+    TRACE("%p\n", _this);
+    return cppIVRTrackedCamera_IVRTrackedCamera_004_GetVideoStreamFrameBuffer(_this->linux_side, hTrackedCamera, eFrameType, pFrameBuffer, nFrameBufferSize, pFrameHeader, nFrameHeaderSize);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVRTrackedCamera_IVRTrackedCamera_004_GetVideoStreamTextureSize, 36)
+EVRTrackedCameraError __thiscall winIVRTrackedCamera_IVRTrackedCamera_004_GetVideoStreamTextureSize(winIVRTrackedCamera_IVRTrackedCamera_004 *_this, TrackedDeviceIndex_t nDeviceIndex, EVRTrackedCameraFrameType eFrameType, VRTextureBounds_t * pTextureBounds, uint32_t * pnWidth, uint32_t * pnHeight)
+{
+    TRACE("%p\n", _this);
+    return cppIVRTrackedCamera_IVRTrackedCamera_004_GetVideoStreamTextureSize(_this->linux_side, nDeviceIndex, eFrameType, pTextureBounds, pnWidth, pnHeight);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVRTrackedCamera_IVRTrackedCamera_004_GetVideoStreamTextureD3D11, 44)
+EVRTrackedCameraError __thiscall winIVRTrackedCamera_IVRTrackedCamera_004_GetVideoStreamTextureD3D11(winIVRTrackedCamera_IVRTrackedCamera_004 *_this, TrackedCameraHandle_t hTrackedCamera, EVRTrackedCameraFrameType eFrameType, void * pD3D11DeviceOrResource, void ** ppD3D11ShaderResourceView, CameraVideoStreamFrameHeader_t * pFrameHeader, uint32_t nFrameHeaderSize)
+{
+    TRACE("%p\n", _this);
+    return cppIVRTrackedCamera_IVRTrackedCamera_004_GetVideoStreamTextureD3D11(_this->linux_side, hTrackedCamera, eFrameType, pD3D11DeviceOrResource, ppD3D11ShaderResourceView, pFrameHeader, nFrameHeaderSize);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVRTrackedCamera_IVRTrackedCamera_004_GetVideoStreamTextureGL, 36)
+EVRTrackedCameraError __thiscall winIVRTrackedCamera_IVRTrackedCamera_004_GetVideoStreamTextureGL(winIVRTrackedCamera_IVRTrackedCamera_004 *_this, TrackedCameraHandle_t hTrackedCamera, EVRTrackedCameraFrameType eFrameType, glUInt_t * pglTextureId, CameraVideoStreamFrameHeader_t * pFrameHeader, uint32_t nFrameHeaderSize)
+{
+    TRACE("%p\n", _this);
+    return cppIVRTrackedCamera_IVRTrackedCamera_004_GetVideoStreamTextureGL(_this->linux_side, hTrackedCamera, eFrameType, pglTextureId, pFrameHeader, nFrameHeaderSize);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVRTrackedCamera_IVRTrackedCamera_004_ReleaseVideoStreamTextureGL, 16)
+EVRTrackedCameraError __thiscall winIVRTrackedCamera_IVRTrackedCamera_004_ReleaseVideoStreamTextureGL(winIVRTrackedCamera_IVRTrackedCamera_004 *_this, TrackedCameraHandle_t hTrackedCamera, glUInt_t glTextureId)
+{
+    TRACE("%p\n", _this);
+    return cppIVRTrackedCamera_IVRTrackedCamera_004_ReleaseVideoStreamTextureGL(_this->linux_side, hTrackedCamera, glTextureId);
+}
+
+extern vtable_ptr winIVRTrackedCamera_IVRTrackedCamera_004_vtable;
+
+#ifndef __GNUC__
+void __asm_dummy_vtables(void) {
+#endif
+    __ASM_VTABLE(winIVRTrackedCamera_IVRTrackedCamera_004,
+        VTABLE_ADD_FUNC(winIVRTrackedCamera_IVRTrackedCamera_004_GetCameraErrorNameFromEnum)
+        VTABLE_ADD_FUNC(winIVRTrackedCamera_IVRTrackedCamera_004_HasCamera)
+        VTABLE_ADD_FUNC(winIVRTrackedCamera_IVRTrackedCamera_004_GetCameraFrameSize)
+        VTABLE_ADD_FUNC(winIVRTrackedCamera_IVRTrackedCamera_004_GetCameraIntrinsics)
+        VTABLE_ADD_FUNC(winIVRTrackedCamera_IVRTrackedCamera_004_GetCameraProjection)
+        VTABLE_ADD_FUNC(winIVRTrackedCamera_IVRTrackedCamera_004_AcquireVideoStreamingService)
+        VTABLE_ADD_FUNC(winIVRTrackedCamera_IVRTrackedCamera_004_ReleaseVideoStreamingService)
+        VTABLE_ADD_FUNC(winIVRTrackedCamera_IVRTrackedCamera_004_GetVideoStreamFrameBuffer)
+        VTABLE_ADD_FUNC(winIVRTrackedCamera_IVRTrackedCamera_004_GetVideoStreamTextureSize)
+        VTABLE_ADD_FUNC(winIVRTrackedCamera_IVRTrackedCamera_004_GetVideoStreamTextureD3D11)
+        VTABLE_ADD_FUNC(winIVRTrackedCamera_IVRTrackedCamera_004_GetVideoStreamTextureGL)
+        VTABLE_ADD_FUNC(winIVRTrackedCamera_IVRTrackedCamera_004_ReleaseVideoStreamTextureGL)
+    );
+#ifndef __GNUC__
+}
+#endif
+
+winIVRTrackedCamera_IVRTrackedCamera_004 *create_winIVRTrackedCamera_IVRTrackedCamera_004(void *linux_side)
+{
+    winIVRTrackedCamera_IVRTrackedCamera_004 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRTrackedCamera_IVRTrackedCamera_004));
+    TRACE("-> %p\n", r);
+    r->vtable = &winIVRTrackedCamera_IVRTrackedCamera_004_vtable;
+    r->linux_side = linux_side;
+    return r;
+}
+
+void destroy_winIVRTrackedCamera_IVRTrackedCamera_004(void *object)
+{
+    TRACE("%p\n", object);
+    HeapFree(GetProcessHeap(), 0, object);
+}
+
+winIVRTrackedCamera_IVRTrackedCamera_004 *create_winIVRTrackedCamera_IVRTrackedCamera_004_FnTable(void *linux_side)
+{
+    winIVRTrackedCamera_IVRTrackedCamera_004 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRTrackedCamera_IVRTrackedCamera_004));
+    struct thunk *thunks = alloc_thunks(12);
+    struct thunk **vtable = HeapAlloc(GetProcessHeap(), 0, 12 * sizeof(*vtable));
+    int i;
+
+    TRACE("-> %p, vtable %p, thunks %p\n", r, vtable, thunks);
+    init_thunk(&thunks[0], r, winIVRTrackedCamera_IVRTrackedCamera_004_GetCameraErrorNameFromEnum, 1, FALSE, FALSE);
+    init_thunk(&thunks[1], r, winIVRTrackedCamera_IVRTrackedCamera_004_HasCamera, 2, FALSE, FALSE);
+    init_thunk(&thunks[2], r, winIVRTrackedCamera_IVRTrackedCamera_004_GetCameraFrameSize, 5, FALSE, FALSE);
+    init_thunk(&thunks[3], r, winIVRTrackedCamera_IVRTrackedCamera_004_GetCameraIntrinsics, 4, FALSE, FALSE);
+    init_thunk(&thunks[4], r, winIVRTrackedCamera_IVRTrackedCamera_004_GetCameraProjection, 5, TRUE, TRUE);
+    init_thunk(&thunks[5], r, winIVRTrackedCamera_IVRTrackedCamera_004_AcquireVideoStreamingService, 2, FALSE, FALSE);
+    init_thunk(&thunks[6], r, winIVRTrackedCamera_IVRTrackedCamera_004_ReleaseVideoStreamingService, 1, FALSE, FALSE);
+    init_thunk(&thunks[7], r, winIVRTrackedCamera_IVRTrackedCamera_004_GetVideoStreamFrameBuffer, 6, FALSE, FALSE);
+    init_thunk(&thunks[8], r, winIVRTrackedCamera_IVRTrackedCamera_004_GetVideoStreamTextureSize, 5, FALSE, FALSE);
+    init_thunk(&thunks[9], r, winIVRTrackedCamera_IVRTrackedCamera_004_GetVideoStreamTextureD3D11, 6, FALSE, FALSE);
+    init_thunk(&thunks[10], r, winIVRTrackedCamera_IVRTrackedCamera_004_GetVideoStreamTextureGL, 5, FALSE, FALSE);
+    init_thunk(&thunks[11], r, winIVRTrackedCamera_IVRTrackedCamera_004_ReleaseVideoStreamTextureGL, 2, FALSE, FALSE);
+    for (i = 0; i < 12; i++)
+        vtable[i] = &thunks[i];
+    r->linux_side = linux_side;
+    r->vtable = (void *)vtable;
+    return r;
+}
+
+void destroy_winIVRTrackedCamera_IVRTrackedCamera_004_FnTable(void *object)
+{
+    winIVRTrackedCamera_IVRTrackedCamera_004 *win_object = object;
+    TRACE("%p\n", win_object);
+    VirtualFree(win_object->vtable[0], 0, MEM_RELEASE);
+    HeapFree(GetProcessHeap(), 0, win_object->vtable);
+    HeapFree(GetProcessHeap(), 0, win_object);
+}
+
 #include "cppIVRTrackedCamera_IVRTrackedCamera_003.h"
 
 typedef struct __winIVRTrackedCamera_IVRTrackedCamera_003 {
