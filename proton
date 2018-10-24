@@ -13,7 +13,7 @@ import subprocess
 import sys
 import tarfile
 
-from filelock import FileLock, Timeout
+from filelock import FileLock
 
 #To enable debug logging, copy "user_settings.sample.py" to "user_settings.py"
 #and edit it if needed.
@@ -57,7 +57,7 @@ def upgrade_pfx(old_ver):
 
     log("Upgrading prefix from " + str(old_ver) + " to " + CURRENT_PREFIX_VERSION + " (" + os.environ["STEAM_COMPAT_DATA_PATH"] + ")")
 
-    if old_ver == None:
+    if old_ver is None:
         return
 
     old_proton_ver, old_prefix_ver = old_ver.split('-')
@@ -119,7 +119,7 @@ def mergedirs(src, dst, tracked_files):
                 real_copy(src_file, dst_file)
                 tracked_files.write(rel_dir + file_ + "\n")
 
-if not ("STEAM_COMPAT_DATA_PATH" in os.environ):
+if not "STEAM_COMPAT_DATA_PATH" in os.environ:
     log("No compat data path?")
     sys.exit(1)
 
@@ -181,7 +181,7 @@ if os.path.exists(basedir + "/user_settings.py"):
     try:
         import user_settings
         env.update(user_settings.user_settings)
-    except e:
+    except:
         log("************************************************")
         log("THERE IS AN ERROR IN YOUR user_settings.py FILE:")
         log("%s" % sys.exc_info()[1])
@@ -457,18 +457,18 @@ def dump_dbg_env(f):
 def dump_dbg_scripts():
     exe_name = os.path.basename(sys.argv[2])
 
-    dir = env.get("PROTON_DEBUG_DIR", "/tmp") + "/proton_" + os.environ["USER"] + "/"
-    makedirs(dir)
+    tmpdir = env.get("PROTON_DEBUG_DIR", "/tmp") + "/proton_" + os.environ["USER"] + "/"
+    makedirs(tmpdir)
 
-    with open(dir + "winedbg", "w") as f:
+    with open(tmpdir + "winedbg", "w") as f:
         f.write("#!/bin/bash\n")
         f.write("#Run winedbg with args\n\n")
         f.write("cd \"" + os.getcwd() + "\"\n")
         dump_dbg_env(f)
         f.write("\t\"" + wine_path + "\" winedbg \"$@\"\n")
-    os.chmod(dir + "winedbg", 0o755)
+    os.chmod(tmpdir + "winedbg", 0o755)
 
-    with open(dir + "winedbg_run", "w") as f:
+    with open(tmpdir + "winedbg_run", "w") as f:
         f.write("#!/bin/bash\n")
         f.write("#Run winedbg and prepare to run game or given program\n\n")
         f.write("cd \"" + os.getcwd() + "\"\n")
@@ -483,14 +483,14 @@ def dump_dbg_scripts():
         f.write(")\n")
         dump_dbg_env(f)
         f.write("\t\"" + wine_path + "\" winedbg \"${@:-${DEF_CMD[@]}}\"\n")
-    os.chmod(dir + "winedbg_run", 0o755)
+    os.chmod(tmpdir + "winedbg_run", 0o755)
 
-    with open(dir + "gdb_attach", "w") as f:
+    with open(tmpdir + "gdb_attach", "w") as f:
         f.write("#!/bin/bash\n")
         f.write("#Run winedbg in gdb mode and auto-attach to already-running program\n\n")
         f.write("cd \"" + os.getcwd() + "\"\n")
         f.write("EXE_NAME=${1:-\"" + exe_name + "\"}\n")
-        f.write("WPID_HEX=$(\"" + dir + "winedbg\" --command 'info process' | grep -i \"$EXE_NAME\" | cut -f2 -d' ' | tr -d '0')\n")
+        f.write("WPID_HEX=$(\"" + tmpdir + "winedbg\" --command 'info process' | grep -i \"$EXE_NAME\" | cut -f2 -d' ' | tr -d '0')\n")
         f.write("if [ -z \"$WPID_HEX\" ]; then \n")
         f.write("    echo \"Program does not appear to be running: \\\"$EXE_NAME\\\"\"\n")
         f.write("    exit 1\n")
@@ -498,9 +498,9 @@ def dump_dbg_scripts():
         f.write("WPID_DEC=$(printf %d 0x$WPID_HEX)\n")
         dump_dbg_env(f)
         f.write("\t\"" + wine_path + "\" winedbg --gdb $WPID_DEC\n")
-    os.chmod(dir + "gdb_attach", 0o755)
+    os.chmod(tmpdir + "gdb_attach", 0o755)
 
-    with open(dir + "gdb_run", "w") as f:
+    with open(tmpdir + "gdb_run", "w") as f:
         f.write("#!/bin/bash\n")
         f.write("#Run winedbg in gdb mode and prepare to run game or given program\n\n")
         f.write("cd \"" + os.getcwd() + "\"\n")
@@ -515,9 +515,9 @@ def dump_dbg_scripts():
         f.write(")\n")
         dump_dbg_env(f)
         f.write("\t\"" + wine_path + "\" winedbg --gdb \"${@:-${DEF_CMD[@]}}\"\n")
-    os.chmod(dir + "gdb_run", 0o755)
+    os.chmod(tmpdir + "gdb_run", 0o755)
 
-    with open(dir + "run", "w") as f:
+    with open(tmpdir + "run", "w") as f:
         f.write("#!/bin/bash\n")
         f.write("#Run game or given command in environment\n\n")
         f.write("cd \"" + os.getcwd() + "\"\n")
@@ -535,7 +535,7 @@ def dump_dbg_scripts():
             f.write("\t\"" + wine_path + "\" start \"${@:-${DEF_CMD[@]}}\"\n")
         else:
             f.write("\t\"" + wine_path + "\" \"${@:-${DEF_CMD[@]}}\"\n")
-    os.chmod(dir + "run", 0o755)
+    os.chmod(tmpdir + "run", 0o755)
 
 def run():
     if "PROTON_DUMP_DEBUG_COMMANDS" in env:
