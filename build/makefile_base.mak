@@ -876,7 +876,7 @@ DXVK_CONFIGURE_FILES32 := $(DXVK_OBJ32)/build.ninja
 DXVK_CONFIGURE_FILES64 := $(DXVK_OBJ64)/build.ninja
 
 # 64bit-configure.  Remove coredata file if already configured (due to e.g. makefile changing)
-$(DXVK_CONFIGURE_FILES64): $(MAKEFILE_DEP) | $(DXVK_OBJ64)
+$(DXVK_CONFIGURE_FILES64): $(MAKEFILE_DEP) $(DXVK)/build-win64.txt | $(DXVK_OBJ64)
 	if [ -e "$(abspath $(DXVK_OBJ64))"/build.ninja ]; then \
 		rm -f "$(abspath $(DXVK_OBJ64))"/meson-private/coredata.dat; \
 	fi
@@ -885,7 +885,7 @@ $(DXVK_CONFIGURE_FILES64): $(MAKEFILE_DEP) | $(DXVK_OBJ64)
 		meson --prefix="$(abspath $(DXVK_OBJ64))" --cross-file build-win64.txt --strip --buildtype=release "$(abspath $(DXVK_OBJ64))"
 
 # 32-bit configure.  Remove coredata file if already configured (due to e.g. makefile changing)
-$(DXVK_CONFIGURE_FILES32): $(MAKEFILE_DEP) | $(DXVK_OBJ32)
+$(DXVK_CONFIGURE_FILES32): $(MAKEFILE_DEP) $(DXVK)/build-win32.txt | $(DXVK_OBJ32)
 	if [ -e "$(abspath $(DXVK_OBJ32))"/build.ninja ]; then \
 		rm -f "$(abspath $(DXVK_OBJ32))"/meson-private/coredata.dat; \
 	fi
