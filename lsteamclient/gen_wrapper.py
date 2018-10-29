@@ -411,7 +411,7 @@ def handle_callback_struct(sdkver, callback, cb_num):
 
     generated_cb_ids.append(cb_id)
 
-    filename_base = "cb_converters_%s" % sdkver
+    filename_base = "struct_converters_%s" % sdkver
     cppname = "%s.cpp" % filename_base
     file_exists = os.path.isfile(cppname)
     cppfile = open(cppname, "a")
@@ -427,10 +427,10 @@ def handle_callback_struct(sdkver, callback, cb_num):
         cppfile.write("extern \"C\" {\n")
         cpp_files_need_close_brace.append(cppname)
 
-    datfile = open("cb_converters.dat", "a")
+    datfile = open("struct_converters.dat", "a")
     datfile.write("case 0x%08x: win_msg->m_cubParam = sizeof(struct win%s); win_msg->m_pubParam = HeapAlloc(GetProcessHeap(), 0, win_msg->m_cubParam); cb_%s(lin_msg.m_pubParam, win_msg->m_pubParam); break;\n" % (cb_id, handler_name, handler_name))
 
-    hfile = open("cb_converters.h", "a")
+    hfile = open("struct_converters.h", "a")
     hfile.write("struct win%s {\n" % handler_name)
     for m in callback.get_children():
         if m.kind == clang.cindex.CursorKind.FIELD_DECL:
