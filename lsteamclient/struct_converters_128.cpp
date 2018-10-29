@@ -42,6 +42,24 @@ void cb_RemoteStorageFileShareResult_t_12(void *l, void *w)
 }
 
 #pragma pack( push, 8 )
+struct winSteamUGCQueryCompleted_t_20 {
+    UGCQueryHandle_t m_handle;
+    EResult m_eResult;
+    uint32 m_unNumResultsReturned;
+    uint32 m_unTotalMatchingResults;
+}  __attribute__ ((ms_struct));
+#pragma pack( pop )
+void cb_SteamUGCQueryCompleted_t_20(void *l, void *w)
+{
+    SteamUGCQueryCompleted_t *lin = (SteamUGCQueryCompleted_t *)l;
+    struct winSteamUGCQueryCompleted_t_20 *win = (struct winSteamUGCQueryCompleted_t_20 *)w;
+    win->m_handle = lin->m_handle;
+    win->m_eResult = lin->m_eResult;
+    win->m_unNumResultsReturned = lin->m_unNumResultsReturned;
+    win->m_unTotalMatchingResults = lin->m_unTotalMatchingResults;
+}
+
+#pragma pack( push, 8 )
 struct winSteamUGCRequestUGCDetailsResult_t_9760 {
     SteamUGCDetails_t m_details;
 }  __attribute__ ((ms_struct));

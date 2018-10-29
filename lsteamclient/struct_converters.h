@@ -1699,6 +1699,14 @@ struct winHTML_NewWindow_t_24 {
 extern void cb_HTML_NewWindow_t_24(void *l, void *w);
 
 #pragma pack( push, 8 )
+struct winSteamUGCRequestUGCDetailsResult_t_9764 {
+    SteamUGCDetails_t m_details;
+    bool m_bCachedData;
+}  __attribute__ ((ms_struct));
+#pragma pack( pop )
+extern void cb_SteamUGCRequestUGCDetailsResult_t_9764(void *l, void *w);
+
+#pragma pack( push, 8 )
 struct winFavoritesListChanged_t_24 {
     uint32 m_nIP;
     uint32 m_nQueryPort;
@@ -1717,6 +1725,16 @@ struct winRemoteStorageFileShareResult_t_12 {
 }  __attribute__ ((ms_struct));
 #pragma pack( pop )
 extern void cb_RemoteStorageFileShareResult_t_12(void *l, void *w);
+
+#pragma pack( push, 8 )
+struct winSteamUGCQueryCompleted_t_20 {
+    UGCQueryHandle_t m_handle;
+    EResult m_eResult;
+    uint32 m_unNumResultsReturned;
+    uint32 m_unTotalMatchingResults;
+}  __attribute__ ((ms_struct));
+#pragma pack( pop )
+extern void cb_SteamUGCQueryCompleted_t_20(void *l, void *w);
 
 #pragma pack( push, 8 )
 struct winSteamUGCRequestUGCDetailsResult_t_9760 {
@@ -1806,6 +1824,31 @@ struct winRemoteStorageUnsubscribePublishedFileResult_t_4 {
 }  __attribute__ ((ms_struct));
 #pragma pack( pop )
 extern void cb_RemoteStorageUnsubscribePublishedFileResult_t_4(void *l, void *w);
+
+#pragma pack( push, 8 )
+struct winRemoteStorageGetPublishedFileDetailsResult_t_9740 {
+    EResult m_eResult;
+    PublishedFileId_t m_nPublishedFileId;
+    AppId_t m_nCreatorAppID;
+    AppId_t m_nConsumerAppID;
+    char m_rgchTitle[129];
+    char m_rgchDescription[8000];
+    UGCHandle_t m_hFile;
+    UGCHandle_t m_hPreviewFile;
+    uint64 m_ulSteamIDOwner;
+    uint32 m_rtimeCreated;
+    uint32 m_rtimeUpdated;
+    ERemoteStoragePublishedFileVisibility m_eVisibility;
+    bool m_bBanned;
+    char m_rgchTags[1025];
+    bool m_bTagsTruncated;
+    char m_pchFileName[260];
+    int32 m_nFileSize;
+    int32 m_nPreviewFileSize;
+    char m_rgchURL[256];
+}  __attribute__ ((ms_struct));
+#pragma pack( pop )
+extern void cb_RemoteStorageGetPublishedFileDetailsResult_t_9740(void *l, void *w);
 
 #pragma pack( push, 8 )
 struct winRemoteStorageGetPublishedFileDetailsResult_t_9484 {

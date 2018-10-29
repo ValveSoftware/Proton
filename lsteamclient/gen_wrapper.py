@@ -389,27 +389,51 @@ cb_table = {}
 #layout.
 #TODO: could we optimize this by detecting if the structs are the
 #same layout at generation-time?
-def handle_callback_struct(sdkver, callback, cb_num):
-    handler_name = "%s_%s" % (callback.displayname, callback.type.get_size())
+def handle_struct(sdkver, struct):
+    members = struct.get_children()
+    cb_num = None
+    for c in members:
+        if c.kind == clang.cindex.CursorKind.ENUM_DECL:
+            enums = c.get_children()
+            for e in enums:
+                if e.displayname == "k_iCallback":
+                    cb_num = e.enum_value
 
-    if handler_name in generated_cb_handlers:
-        # we already have a handler for the callback struct of this size
+    if cb_num is None:
+        struct_name = "%s_%s" % (struct.displayname, sdkver)
+        handler_name = "struct_%s" % struct_name;
         return
+    else:
+        #for callbacks, we use the linux struct size in the cb dispatch switch
+        struct_name = "%s_%s" % (struct.displayname, struct.type.get_size())
+        handler_name = "cb_%s" % struct_name;
+        if handler_name in generated_cb_handlers:
+            # we already have a handler for the callback struct of this size
+            return
+        if handler_name in skip_structs:
+            # due to padding, some structs have the same width across versions of
+            # the SDK. since we key our lin->win conversion on the win struct size,
+            # we can skip the smaller structs and just write into the padding on
+            # older versions
+            # TODO: we could automate this. see comment near skip_structs declaration
+            return
 
-    if handler_name in skip_structs:
-        # due to padding, some structs have the same width across versions of
-        # the SDK. since we key our lin->win conversion on the win struct size,
-        # we can skip the smaller structs and just write into the padding on
-        # older versions
-        # TODO: we could automate this. see comment near skip_structs declaration
-        return
+        cb_id = cb_num | (struct.type.get_size() << 16)
+        if cb_id in generated_cb_ids:
+            # either this cb changed name, or steam used the same ID for different structs
+            return
 
-    cb_id = cb_num | (callback.type.get_size() << 16)
-    if cb_id in generated_cb_ids:
-        # either this cb changed name, or steam used the same ID for different structs
-        return
+        generated_cb_ids.append(cb_id)
 
-    generated_cb_ids.append(cb_id)
+        datfile = open("struct_converters.dat", "a")
+        datfile.write("case 0x%08x: win_msg->m_cubParam = sizeof(struct win%s); win_msg->m_pubParam = HeapAlloc(GetProcessHeap(), 0, win_msg->m_cubParam); %s(lin_msg.m_pubParam, win_msg->m_pubParam); break;\n" % (cb_id, struct_name, handler_name))
+
+        generated_cb_handlers.append(handler_name)
+
+        if not cb_num in cb_table.keys():
+            # latest SDK linux size, list of windows struct names
+            cb_table[cb_num] = (struct.type.get_size(), [])
+        cb_table[cb_num][1].append(struct_name)
 
     filename_base = "struct_converters_%s" % sdkver
     cppname = "%s.cpp" % filename_base
@@ -427,13 +451,10 @@ def handle_callback_struct(sdkver, callback, cb_num):
         cppfile.write("extern \"C\" {\n")
         cpp_files_need_close_brace.append(cppname)
 
-    datfile = open("struct_converters.dat", "a")
-    datfile.write("case 0x%08x: win_msg->m_cubParam = sizeof(struct win%s); win_msg->m_pubParam = HeapAlloc(GetProcessHeap(), 0, win_msg->m_cubParam); cb_%s(lin_msg.m_pubParam, win_msg->m_pubParam); break;\n" % (cb_id, handler_name, handler_name))
-
     hfile = open("struct_converters.h", "a")
     hfile.write("#pragma pack( push, 8 )\n")
-    hfile.write("struct win%s {\n" % handler_name)
-    for m in callback.get_children():
+    hfile.write("struct win%s {\n" % struct_name)
+    for m in struct.get_children():
         if m.kind == clang.cindex.CursorKind.FIELD_DECL:
             if m.type.kind == clang.cindex.TypeKind.CONSTANTARRAY:
                 hfile.write("    %s %s[%u];\n" % (m.type.element_type.spelling, m.displayname, m.type.element_count))
@@ -441,11 +462,11 @@ def handle_callback_struct(sdkver, callback, cb_num):
                 hfile.write("    %s %s;\n" % (m.type.spelling, m.displayname))
     hfile.write("}  __attribute__ ((ms_struct));\n")
     hfile.write("#pragma pack( pop )\n")
-    hfile.write("extern void cb_%s(void *l, void *w);\n\n" % handler_name)
+    hfile.write("extern void %s(void *l, void *w);\n\n" % handler_name)
 
     cppfile.write("#pragma pack( push, 8 )\n")
-    cppfile.write("struct win%s {\n" % handler_name)
-    for m in callback.get_children():
+    cppfile.write("struct win%s {\n" % struct_name)
+    for m in struct.get_children():
         if m.kind == clang.cindex.CursorKind.FIELD_DECL:
             if m.type.kind == clang.cindex.TypeKind.CONSTANTARRAY:
                 cppfile.write("    %s %s[%u];\n" % (m.type.element_type.spelling, m.displayname, m.type.element_count))
@@ -454,10 +475,10 @@ def handle_callback_struct(sdkver, callback, cb_num):
     cppfile.write("}  __attribute__ ((ms_struct));\n")
     cppfile.write("#pragma pack( pop )\n")
 
-    cppfile.write("void cb_%s(void *l, void *w)\n{\n" % handler_name)
-    cppfile.write("    %s *lin = (%s *)l;\n" % (callback.displayname, callback.displayname))
-    cppfile.write("    struct win%s *win = (struct win%s *)w;\n" % (handler_name, handler_name))
-    for m in callback.get_children():
+    cppfile.write("void %s(void *l, void *w)\n{\n" % handler_name)
+    cppfile.write("    %s *lin = (%s *)l;\n" % (struct.displayname, struct.displayname))
+    cppfile.write("    struct win%s *win = (struct win%s *)w;\n" % (struct_name, struct_name))
+    for m in struct.get_children():
         if m.kind == clang.cindex.CursorKind.FIELD_DECL:
             if m.type.kind == clang.cindex.TypeKind.CONSTANTARRAY:
                 #TODO: if this is a struct, or packed differently, we'll have to
@@ -466,26 +487,6 @@ def handle_callback_struct(sdkver, callback, cb_num):
             else:
                 cppfile.write("    win->%s = lin->%s;\n" % (m.displayname, m.displayname))
     cppfile.write("}\n\n")
-
-    generated_cb_handlers.append(handler_name)
-
-    if not cb_num in cb_table.keys():
-        # latest SDK linux size, list of windows struct names
-        cb_table[cb_num] = (callback.type.get_size(), [])
-    cb_table[cb_num][1].append(handler_name)
-
-
-def handle_callback_maybe(sdkver, callback):
-    members = callback.get_children()
-    for c in members:
-        if c.kind == clang.cindex.CursorKind.ENUM_DECL:
-            enums = c.get_children()
-            for e in enums:
-                if e.displayname == "k_iCallback":
-                    handle_callback_struct(sdkver, callback, e.enum_value)
-
-
-
 
 #clang.cindex.Config.set_library_file("/usr/lib/llvm-3.8/lib/libclang-3.8.so.1");
 
@@ -521,7 +522,7 @@ for sdkver in sdk_versions:
                     handle_class(sdkver, child)
                 if child.kind == clang.cindex.CursorKind.STRUCT_DECL or \
                         child.kind == clang.cindex.CursorKind.CLASS_DECL:
-                    handle_callback_maybe(sdkver, child)
+                    handle_struct(sdkver, child)
                 if child.displayname in print_sizes:
                     sys.stdout.write("size of %s is %u\n" % (child.displayname, child.type.get_size()))
 
