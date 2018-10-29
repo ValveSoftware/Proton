@@ -234,7 +234,7 @@ void win_to_lin_struct_FriendGameInfo_t_142(void *w, void *l)
 {
     FriendGameInfo_t *lin = (FriendGameInfo_t *)l;
     struct winFriendGameInfo_t_142 *win = (struct winFriendGameInfo_t_142 *)w;
-    win_to_lin_struct_CGameID_142(&win->m_gameID, &lin->m_gameID);
+    lin->m_gameID = win->m_gameID;
     lin->m_unGameIP = win->m_unGameIP;
     lin->m_usGamePort = win->m_usGamePort;
     lin->m_usQueryPort = win->m_usQueryPort;
@@ -245,7 +245,7 @@ void lin_to_win_struct_FriendGameInfo_t_142(void *l, void *w)
 {
     FriendGameInfo_t *lin = (FriendGameInfo_t *)l;
     struct winFriendGameInfo_t_142 *win = (struct winFriendGameInfo_t_142 *)w;
-    lin_to_win_struct_CGameID_142(&lin->m_gameID, &win->m_gameID);
+    win->m_gameID = lin->m_gameID;
     win->m_unGameIP = lin->m_unGameIP;
     win->m_usGamePort = lin->m_usGamePort;
     win->m_usQueryPort = lin->m_usQueryPort;
@@ -616,28 +616,6 @@ void cb_GamepadTextInputDismissed_t_8(void *l, void *w)
     struct winGamepadTextInputDismissed_t_8 *win = (struct winGamepadTextInputDismissed_t_8 *)w;
     win->m_bSubmitted = lin->m_bSubmitted;
     win->m_unSubmittedText = lin->m_unSubmittedText;
-}
-
-#pragma pack( push, 8 )
-struct winMatchMakingKeyValuePair_t_142 {
-    char m_szKey[256];
-    char m_szValue[256];
-}  __attribute__ ((ms_struct));
-#pragma pack( pop )
-void win_to_lin_struct_MatchMakingKeyValuePair_t_142(void *w, void *l)
-{
-    MatchMakingKeyValuePair_t *lin = (MatchMakingKeyValuePair_t *)l;
-    struct winMatchMakingKeyValuePair_t_142 *win = (struct winMatchMakingKeyValuePair_t_142 *)w;
-    memcpy(lin->m_szKey, win->m_szKey, sizeof(lin->m_szKey));
-    memcpy(lin->m_szValue, win->m_szValue, sizeof(lin->m_szValue));
-}
-
-void lin_to_win_struct_MatchMakingKeyValuePair_t_142(void *l, void *w)
-{
-    MatchMakingKeyValuePair_t *lin = (MatchMakingKeyValuePair_t *)l;
-    struct winMatchMakingKeyValuePair_t_142 *win = (struct winMatchMakingKeyValuePair_t_142 *)w;
-    memcpy(win->m_szKey, lin->m_szKey, sizeof(win->m_szKey));
-    memcpy(win->m_szValue, lin->m_szValue, sizeof(win->m_szValue));
 }
 
 #pragma pack( push, 8 )
@@ -1626,7 +1604,7 @@ void cb_UserAchievementIconFetched_t_144(void *l, void *w)
 {
     UserAchievementIconFetched_t *lin = (UserAchievementIconFetched_t *)l;
     struct winUserAchievementIconFetched_t_144 *win = (struct winUserAchievementIconFetched_t_144 *)w;
-    lin_to_win_struct_CGameID_142(&lin->m_nGameID, &win->m_nGameID);
+    win->m_nGameID = lin->m_nGameID;
     memcpy(win->m_rgchAchievementName, lin->m_rgchAchievementName, sizeof(win->m_rgchAchievementName));
     win->m_bAchieved = lin->m_bAchieved;
     win->m_nIconHandle = lin->m_nIconHandle;

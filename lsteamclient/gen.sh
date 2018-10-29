@@ -9,5 +9,6 @@ rm struct*.h
 rm struct*.cpp
 rm struct*.dat
 rm cb*.dat
+rm cb*.h
 
 ./gen_wrapper.py

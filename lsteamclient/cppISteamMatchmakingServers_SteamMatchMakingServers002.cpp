@@ -2,18 +2,15 @@
 #include "steam_defs.h"
 #include "steamworks_sdk_142/steam_api.h"
 #include "cppISteamMatchmakingServers_SteamMatchMakingServers002.h"
+#include "struct_converters_142.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
 HServerListRequest cppISteamMatchmakingServers_SteamMatchMakingServers002_RequestInternetServerList(void *linux_side, AppId_t iApp, MatchMakingKeyValuePair_t ** ppchFilters, uint32 nFilters, ISteamMatchmakingServerListResponse * pRequestServersResponse)
 {
-    MatchMakingKeyValuePair_t ** *lin_ppchFilters = malloc(sizeof(MatchMakingKeyValuePair_t **) * nFilters);
-    for(int i = 0; i < nFilters; ++i)
-        win_to_lin_struct_MatchMakingKeyValuePair_t **_142(ppchFilters[i], &lin_ppchFilters[i]);
     ISteamMatchmakingServerListResponse lin_pRequestServersResponse;
     win_to_lin_struct_ISteamMatchmakingServerListResponse_142(pRequestServersResponse, &lin_pRequestServersResponse);
-    HServerListRequest retval = ((ISteamMatchmakingServers*)linux_side)->RequestInternetServerList((AppId_t)iApp, &lin_ppchFilters, (uint32)nFilters, (ISteamMatchmakingServerListResponse *)pRequestServersResponse);
-    lin_to_win_struct_MatchMakingKeyValuePair_t *_142(&lin_ppchFilters, ppchFilters);
+    HServerListRequest retval = ((ISteamMatchmakingServers*)linux_side)->RequestInternetServerList((AppId_t)iApp, (MatchMakingKeyValuePair_t **)ppchFilters, (uint32)nFilters, (ISteamMatchmakingServerListResponse *)pRequestServersResponse);
     lin_to_win_struct_ISteamMatchmakingServerListResponse_142(&lin_pRequestServersResponse, pRequestServersResponse);
     return retval;
 }
@@ -29,52 +26,36 @@ HServerListRequest cppISteamMatchmakingServers_SteamMatchMakingServers002_Reques
 
 HServerListRequest cppISteamMatchmakingServers_SteamMatchMakingServers002_RequestFriendsServerList(void *linux_side, AppId_t iApp, MatchMakingKeyValuePair_t ** ppchFilters, uint32 nFilters, ISteamMatchmakingServerListResponse * pRequestServersResponse)
 {
-    MatchMakingKeyValuePair_t ** *lin_ppchFilters = malloc(sizeof(MatchMakingKeyValuePair_t **) * nFilters);
-    for(int i = 0; i < nFilters; ++i)
-        win_to_lin_struct_MatchMakingKeyValuePair_t **_142(ppchFilters[i], &lin_ppchFilters[i]);
     ISteamMatchmakingServerListResponse lin_pRequestServersResponse;
     win_to_lin_struct_ISteamMatchmakingServerListResponse_142(pRequestServersResponse, &lin_pRequestServersResponse);
-    HServerListRequest retval = ((ISteamMatchmakingServers*)linux_side)->RequestFriendsServerList((AppId_t)iApp, &lin_ppchFilters, (uint32)nFilters, (ISteamMatchmakingServerListResponse *)pRequestServersResponse);
-    lin_to_win_struct_MatchMakingKeyValuePair_t *_142(&lin_ppchFilters, ppchFilters);
+    HServerListRequest retval = ((ISteamMatchmakingServers*)linux_side)->RequestFriendsServerList((AppId_t)iApp, (MatchMakingKeyValuePair_t **)ppchFilters, (uint32)nFilters, (ISteamMatchmakingServerListResponse *)pRequestServersResponse);
     lin_to_win_struct_ISteamMatchmakingServerListResponse_142(&lin_pRequestServersResponse, pRequestServersResponse);
     return retval;
 }
 
 HServerListRequest cppISteamMatchmakingServers_SteamMatchMakingServers002_RequestFavoritesServerList(void *linux_side, AppId_t iApp, MatchMakingKeyValuePair_t ** ppchFilters, uint32 nFilters, ISteamMatchmakingServerListResponse * pRequestServersResponse)
 {
-    MatchMakingKeyValuePair_t ** *lin_ppchFilters = malloc(sizeof(MatchMakingKeyValuePair_t **) * nFilters);
-    for(int i = 0; i < nFilters; ++i)
-        win_to_lin_struct_MatchMakingKeyValuePair_t **_142(ppchFilters[i], &lin_ppchFilters[i]);
     ISteamMatchmakingServerListResponse lin_pRequestServersResponse;
     win_to_lin_struct_ISteamMatchmakingServerListResponse_142(pRequestServersResponse, &lin_pRequestServersResponse);
-    HServerListRequest retval = ((ISteamMatchmakingServers*)linux_side)->RequestFavoritesServerList((AppId_t)iApp, &lin_ppchFilters, (uint32)nFilters, (ISteamMatchmakingServerListResponse *)pRequestServersResponse);
-    lin_to_win_struct_MatchMakingKeyValuePair_t *_142(&lin_ppchFilters, ppchFilters);
+    HServerListRequest retval = ((ISteamMatchmakingServers*)linux_side)->RequestFavoritesServerList((AppId_t)iApp, (MatchMakingKeyValuePair_t **)ppchFilters, (uint32)nFilters, (ISteamMatchmakingServerListResponse *)pRequestServersResponse);
     lin_to_win_struct_ISteamMatchmakingServerListResponse_142(&lin_pRequestServersResponse, pRequestServersResponse);
     return retval;
 }
 
 HServerListRequest cppISteamMatchmakingServers_SteamMatchMakingServers002_RequestHistoryServerList(void *linux_side, AppId_t iApp, MatchMakingKeyValuePair_t ** ppchFilters, uint32 nFilters, ISteamMatchmakingServerListResponse * pRequestServersResponse)
 {
-    MatchMakingKeyValuePair_t ** *lin_ppchFilters = malloc(sizeof(MatchMakingKeyValuePair_t **) * nFilters);
-    for(int i = 0; i < nFilters; ++i)
-        win_to_lin_struct_MatchMakingKeyValuePair_t **_142(ppchFilters[i], &lin_ppchFilters[i]);
     ISteamMatchmakingServerListResponse lin_pRequestServersResponse;
     win_to_lin_struct_ISteamMatchmakingServerListResponse_142(pRequestServersResponse, &lin_pRequestServersResponse);
-    HServerListRequest retval = ((ISteamMatchmakingServers*)linux_side)->RequestHistoryServerList((AppId_t)iApp, &lin_ppchFilters, (uint32)nFilters, (ISteamMatchmakingServerListResponse *)pRequestServersResponse);
-    lin_to_win_struct_MatchMakingKeyValuePair_t *_142(&lin_ppchFilters, ppchFilters);
+    HServerListRequest retval = ((ISteamMatchmakingServers*)linux_side)->RequestHistoryServerList((AppId_t)iApp, (MatchMakingKeyValuePair_t **)ppchFilters, (uint32)nFilters, (ISteamMatchmakingServerListResponse *)pRequestServersResponse);
     lin_to_win_struct_ISteamMatchmakingServerListResponse_142(&lin_pRequestServersResponse, pRequestServersResponse);
     return retval;
 }
 
 HServerListRequest cppISteamMatchmakingServers_SteamMatchMakingServers002_RequestSpectatorServerList(void *linux_side, AppId_t iApp, MatchMakingKeyValuePair_t ** ppchFilters, uint32 nFilters, ISteamMatchmakingServerListResponse * pRequestServersResponse)
 {
-    MatchMakingKeyValuePair_t ** *lin_ppchFilters = malloc(sizeof(MatchMakingKeyValuePair_t **) * nFilters);
-    for(int i = 0; i < nFilters; ++i)
-        win_to_lin_struct_MatchMakingKeyValuePair_t **_142(ppchFilters[i], &lin_ppchFilters[i]);
     ISteamMatchmakingServerListResponse lin_pRequestServersResponse;
     win_to_lin_struct_ISteamMatchmakingServerListResponse_142(pRequestServersResponse, &lin_pRequestServersResponse);
-    HServerListRequest retval = ((ISteamMatchmakingServers*)linux_side)->RequestSpectatorServerList((AppId_t)iApp, &lin_ppchFilters, (uint32)nFilters, (ISteamMatchmakingServerListResponse *)pRequestServersResponse);
-    lin_to_win_struct_MatchMakingKeyValuePair_t *_142(&lin_ppchFilters, ppchFilters);
+    HServerListRequest retval = ((ISteamMatchmakingServers*)linux_side)->RequestSpectatorServerList((AppId_t)iApp, (MatchMakingKeyValuePair_t **)ppchFilters, (uint32)nFilters, (ISteamMatchmakingServerListResponse *)pRequestServersResponse);
     lin_to_win_struct_ISteamMatchmakingServerListResponse_142(&lin_pRequestServersResponse, pRequestServersResponse);
     return retval;
 }

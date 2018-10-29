@@ -3,6 +3,7 @@
 #include "steamworks_sdk_142/steam_api.h"
 #include "steamworks_sdk_142/isteamgameserverstats.h"
 #include "cppISteamGameServerStats_SteamGameServerStats001.h"
+#include "struct_converters_142.h"
 #ifdef __cplusplus
 extern "C" {
 #endif

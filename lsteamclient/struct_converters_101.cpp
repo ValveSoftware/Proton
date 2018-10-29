@@ -32,28 +32,6 @@ void lin_to_win_struct_CallbackMsg_t_101(void *l, void *w)
 }
 
 #pragma pack( push, 8 )
-struct winMatchMakingKeyValuePair_t_101 {
-    char m_szKey[256];
-    char m_szValue[256];
-}  __attribute__ ((ms_struct));
-#pragma pack( pop )
-void win_to_lin_struct_MatchMakingKeyValuePair_t_101(void *w, void *l)
-{
-    MatchMakingKeyValuePair_t *lin = (MatchMakingKeyValuePair_t *)l;
-    struct winMatchMakingKeyValuePair_t_101 *win = (struct winMatchMakingKeyValuePair_t_101 *)w;
-    memcpy(lin->m_szKey, win->m_szKey, sizeof(lin->m_szKey));
-    memcpy(lin->m_szValue, win->m_szValue, sizeof(lin->m_szValue));
-}
-
-void lin_to_win_struct_MatchMakingKeyValuePair_t_101(void *l, void *w)
-{
-    MatchMakingKeyValuePair_t *lin = (MatchMakingKeyValuePair_t *)l;
-    struct winMatchMakingKeyValuePair_t_101 *win = (struct winMatchMakingKeyValuePair_t_101 *)w;
-    memcpy(win->m_szKey, lin->m_szKey, sizeof(win->m_szKey));
-    memcpy(win->m_szValue, lin->m_szValue, sizeof(win->m_szValue));
-}
-
-#pragma pack( push, 8 )
 struct winservernetadr_t_101 {
     uint16 m_usConnectionPort;
     uint16 m_usQueryPort;

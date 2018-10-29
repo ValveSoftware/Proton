@@ -2,6 +2,7 @@
 #include "steam_defs.h"
 #include "steamworks_sdk_123a/steam_api.h"
 #include "cppISteamUser_SteamUser016.h"
+#include "struct_converters_123a.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -32,10 +33,7 @@ void cppISteamUser_SteamUser016_TerminateGameConnection(void *linux_side, uint32
 
 void cppISteamUser_SteamUser016_TrackAppUsageEvent(void *linux_side, CGameID gameID, int eAppUsageEvent, const char * pchExtraInfo)
 {
-    CGameID lin_gameID;
-    win_to_lin_struct_CGameID_123a(&gameID, &lin_gameID);
-    ((ISteamUser*)linux_side)->TrackAppUsageEvent(lin_gameID, (int)eAppUsageEvent, (const char *)pchExtraInfo);
-    lin_to_win_struct_CGameID_123a(&lin_gameID, &gameID);
+    ((ISteamUser*)linux_side)->TrackAppUsageEvent((CGameID)gameID, (int)eAppUsageEvent, (const char *)pchExtraInfo);
 }
 
 bool cppISteamUser_SteamUser016_GetUserDataFolder(void *linux_side, char * pchBuffer, int cubBuffer)

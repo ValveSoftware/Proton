@@ -2,6 +2,7 @@
 #include "steam_defs.h"
 #include "steamworks_sdk_139/steam_api.h"
 #include "cppISteamVideo_STEAMVIDEO_INTERFACE_V001.h"
+#include "struct_converters_139.h"
 #ifdef __cplusplus
 extern "C" {
 #endif

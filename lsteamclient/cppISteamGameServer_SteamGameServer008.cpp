@@ -3,6 +3,7 @@
 #include "steamworks_sdk_104/steam_api.h"
 #include "steamworks_sdk_104/isteamgameserver.h"
 #include "cppISteamGameServer_SteamGameServer008.h"
+#include "struct_converters_104.h"
 #ifdef __cplusplus
 extern "C" {
 #endif

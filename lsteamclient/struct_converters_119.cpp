@@ -46,7 +46,7 @@ void win_to_lin_struct_FriendGameInfo_t_119(void *w, void *l)
 {
     FriendGameInfo_t *lin = (FriendGameInfo_t *)l;
     struct winFriendGameInfo_t_119 *win = (struct winFriendGameInfo_t_119 *)w;
-    win_to_lin_struct_CGameID_119(&win->m_gameID, &lin->m_gameID);
+    lin->m_gameID = win->m_gameID;
     lin->m_unGameIP = win->m_unGameIP;
     lin->m_usGamePort = win->m_usGamePort;
     lin->m_usQueryPort = win->m_usQueryPort;
@@ -57,7 +57,7 @@ void lin_to_win_struct_FriendGameInfo_t_119(void *l, void *w)
 {
     FriendGameInfo_t *lin = (FriendGameInfo_t *)l;
     struct winFriendGameInfo_t_119 *win = (struct winFriendGameInfo_t_119 *)w;
-    lin_to_win_struct_CGameID_119(&lin->m_gameID, &win->m_gameID);
+    win->m_gameID = lin->m_gameID;
     win->m_unGameIP = lin->m_unGameIP;
     win->m_usGamePort = lin->m_usGamePort;
     win->m_usQueryPort = lin->m_usQueryPort;
@@ -84,28 +84,6 @@ void lin_to_win_struct_FriendSessionStateInfo_t_119(void *l, void *w)
     struct winFriendSessionStateInfo_t_119 *win = (struct winFriendSessionStateInfo_t_119 *)w;
     win->m_uiOnlineSessionInstances = lin->m_uiOnlineSessionInstances;
     win->m_uiPublishedToFriendsSessionInstance = lin->m_uiPublishedToFriendsSessionInstance;
-}
-
-#pragma pack( push, 8 )
-struct winMatchMakingKeyValuePair_t_119 {
-    char m_szKey[256];
-    char m_szValue[256];
-}  __attribute__ ((ms_struct));
-#pragma pack( pop )
-void win_to_lin_struct_MatchMakingKeyValuePair_t_119(void *w, void *l)
-{
-    MatchMakingKeyValuePair_t *lin = (MatchMakingKeyValuePair_t *)l;
-    struct winMatchMakingKeyValuePair_t_119 *win = (struct winMatchMakingKeyValuePair_t_119 *)w;
-    memcpy(lin->m_szKey, win->m_szKey, sizeof(lin->m_szKey));
-    memcpy(lin->m_szValue, win->m_szValue, sizeof(lin->m_szValue));
-}
-
-void lin_to_win_struct_MatchMakingKeyValuePair_t_119(void *l, void *w)
-{
-    MatchMakingKeyValuePair_t *lin = (MatchMakingKeyValuePair_t *)l;
-    struct winMatchMakingKeyValuePair_t_119 *win = (struct winMatchMakingKeyValuePair_t_119 *)w;
-    memcpy(win->m_szKey, lin->m_szKey, sizeof(win->m_szKey));
-    memcpy(win->m_szValue, lin->m_szValue, sizeof(win->m_szValue));
 }
 
 #pragma pack( push, 8 )
@@ -223,54 +201,6 @@ void lin_to_win_struct_SteamParamStringArray_t_119(void *l, void *w)
     struct winSteamParamStringArray_t_119 *win = (struct winSteamParamStringArray_t_119 *)w;
     win->m_ppStrings = lin->m_ppStrings;
     win->m_nNumStrings = lin->m_nNumStrings;
-}
-
-#pragma pack( push, 8 )
-struct winRemoteStorageGetPublishedFileDetailsResult_t_9740 {
-    EResult m_eResult;
-    PublishedFileId_t m_nPublishedFileId;
-    AppId_t m_nCreatorAppID;
-    AppId_t m_nConsumerAppID;
-    char m_rgchTitle[129];
-    char m_rgchDescription[8000];
-    UGCHandle_t m_hFile;
-    UGCHandle_t m_hPreviewFile;
-    uint64 m_ulSteamIDOwner;
-    uint32 m_rtimeCreated;
-    uint32 m_rtimeUpdated;
-    ERemoteStoragePublishedFileVisibility m_eVisibility;
-    bool m_bBanned;
-    char m_rgchTags[1025];
-    bool m_bTagsTruncated;
-    char m_pchFileName[260];
-    int32 m_nFileSize;
-    int32 m_nPreviewFileSize;
-    char m_rgchURL[256];
-}  __attribute__ ((ms_struct));
-#pragma pack( pop )
-void cb_RemoteStorageGetPublishedFileDetailsResult_t_9740(void *l, void *w)
-{
-    RemoteStorageGetPublishedFileDetailsResult_t *lin = (RemoteStorageGetPublishedFileDetailsResult_t *)l;
-    struct winRemoteStorageGetPublishedFileDetailsResult_t_9740 *win = (struct winRemoteStorageGetPublishedFileDetailsResult_t_9740 *)w;
-    win->m_eResult = lin->m_eResult;
-    win->m_nPublishedFileId = lin->m_nPublishedFileId;
-    win->m_nCreatorAppID = lin->m_nCreatorAppID;
-    win->m_nConsumerAppID = lin->m_nConsumerAppID;
-    memcpy(win->m_rgchTitle, lin->m_rgchTitle, sizeof(win->m_rgchTitle));
-    memcpy(win->m_rgchDescription, lin->m_rgchDescription, sizeof(win->m_rgchDescription));
-    win->m_hFile = lin->m_hFile;
-    win->m_hPreviewFile = lin->m_hPreviewFile;
-    win->m_ulSteamIDOwner = lin->m_ulSteamIDOwner;
-    win->m_rtimeCreated = lin->m_rtimeCreated;
-    win->m_rtimeUpdated = lin->m_rtimeUpdated;
-    win->m_eVisibility = lin->m_eVisibility;
-    win->m_bBanned = lin->m_bBanned;
-    memcpy(win->m_rgchTags, lin->m_rgchTags, sizeof(win->m_rgchTags));
-    win->m_bTagsTruncated = lin->m_bTagsTruncated;
-    memcpy(win->m_pchFileName, lin->m_pchFileName, sizeof(win->m_pchFileName));
-    win->m_nFileSize = lin->m_nFileSize;
-    win->m_nPreviewFileSize = lin->m_nPreviewFileSize;
-    memcpy(win->m_rgchURL, lin->m_rgchURL, sizeof(win->m_rgchURL));
 }
 
 #pragma pack( push, 8 )

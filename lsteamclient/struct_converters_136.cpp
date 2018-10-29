@@ -74,7 +74,7 @@ void win_to_lin_struct_FriendGameInfo_t_136(void *w, void *l)
 {
     FriendGameInfo_t *lin = (FriendGameInfo_t *)l;
     struct winFriendGameInfo_t_136 *win = (struct winFriendGameInfo_t_136 *)w;
-    win_to_lin_struct_CGameID_136(&win->m_gameID, &lin->m_gameID);
+    lin->m_gameID = win->m_gameID;
     lin->m_unGameIP = win->m_unGameIP;
     lin->m_usGamePort = win->m_usGamePort;
     lin->m_usQueryPort = win->m_usQueryPort;
@@ -85,7 +85,7 @@ void lin_to_win_struct_FriendGameInfo_t_136(void *l, void *w)
 {
     FriendGameInfo_t *lin = (FriendGameInfo_t *)l;
     struct winFriendGameInfo_t_136 *win = (struct winFriendGameInfo_t_136 *)w;
-    lin_to_win_struct_CGameID_136(&lin->m_gameID, &win->m_gameID);
+    win->m_gameID = lin->m_gameID;
     win->m_unGameIP = lin->m_unGameIP;
     win->m_usGamePort = lin->m_usGamePort;
     win->m_usQueryPort = lin->m_usQueryPort;
@@ -124,28 +124,6 @@ void cb_SteamAPICallCompleted_t_8(void *l, void *w)
     SteamAPICallCompleted_t *lin = (SteamAPICallCompleted_t *)l;
     struct winSteamAPICallCompleted_t_8 *win = (struct winSteamAPICallCompleted_t_8 *)w;
     win->m_hAsyncCall = lin->m_hAsyncCall;
-}
-
-#pragma pack( push, 8 )
-struct winMatchMakingKeyValuePair_t_136 {
-    char m_szKey[256];
-    char m_szValue[256];
-}  __attribute__ ((ms_struct));
-#pragma pack( pop )
-void win_to_lin_struct_MatchMakingKeyValuePair_t_136(void *w, void *l)
-{
-    MatchMakingKeyValuePair_t *lin = (MatchMakingKeyValuePair_t *)l;
-    struct winMatchMakingKeyValuePair_t_136 *win = (struct winMatchMakingKeyValuePair_t_136 *)w;
-    memcpy(lin->m_szKey, win->m_szKey, sizeof(lin->m_szKey));
-    memcpy(lin->m_szValue, win->m_szValue, sizeof(lin->m_szValue));
-}
-
-void lin_to_win_struct_MatchMakingKeyValuePair_t_136(void *l, void *w)
-{
-    MatchMakingKeyValuePair_t *lin = (MatchMakingKeyValuePair_t *)l;
-    struct winMatchMakingKeyValuePair_t_136 *win = (struct winMatchMakingKeyValuePair_t_136 *)w;
-    memcpy(win->m_szKey, lin->m_szKey, sizeof(win->m_szKey));
-    memcpy(win->m_szValue, lin->m_szValue, sizeof(win->m_szValue));
 }
 
 #pragma pack( push, 8 )

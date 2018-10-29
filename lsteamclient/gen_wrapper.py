@@ -139,9 +139,16 @@ aliases = {
 # having clang parse those and detect when the MS-style padding results
 # in identical struct widths. But there's only a couple, so let's cheat...
 skip_structs = [
-        "RemoteStorageGetPublishedFileDetailsResult_t_9740",
-        "SteamUGCQueryCompleted_t_20",
-        "SteamUGCRequestUGCDetailsResult_t_9764"
+        "cb_RemoteStorageGetPublishedFileDetailsResult_t_9740",
+        "cb_SteamUGCQueryCompleted_t_20",
+        "cb_SteamUGCRequestUGCDetailsResult_t_9764"
+]
+
+# these structs are manually confirmed to be equivalent
+exempt_structs = [
+        "CSteamID",
+        "CGameID",
+        "MatchMakingKeyValuePair_t"
 ]
 
 print_sizes = []
@@ -210,7 +217,7 @@ def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, e
             while real_type.kind == clang.cindex.TypeKind.POINTER:
                 real_type = real_type.get_pointee()
             if real_type.kind == clang.cindex.TypeKind.RECORD and \
-                    real_type.spelling != "CSteamID":
+                    not real_type.spelling in exempt_structs:
                 need_convert.append(param)
 
             if param.spelling == "":
@@ -234,13 +241,7 @@ def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, e
     if char_param_is_unix_path:
         cfile.write("    uint32 path_result;\n")
     for param in need_convert:
-        if param.spelling == "ppchFilters":
-            #manually handle double pointer ppchFilters
-            #if we need to automate this, we could figure out how the annotation syntax converts into cindex
-            cpp.write("    %s *lin_%s = malloc(sizeof(%s) * nFilters);\n" % (param.type.spelling, param.spelling, param.type.spelling))
-            cpp.write("    for(int i = 0; i < nFilters; ++i)\n")
-            cpp.write("        win_to_lin_struct_%s_%s(%s[i], &lin_%s[i]);\n" % (param.type.spelling, sdkver, param.spelling, param.spelling))
-        elif param.type.kind == clang.cindex.TypeKind.POINTER:
+        if param.type.kind == clang.cindex.TypeKind.POINTER:
             #handle single pointers, but not double pointers
             assert(param.type.get_pointee().kind == clang.cindex.TypeKind.RECORD)
             cpp.write("    %s lin_%s;\n" % (strip_const(param.type.get_pointee().spelling), param.spelling))
@@ -299,8 +300,7 @@ def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, e
                 cpp.write("(%s)%s" % (param.type.spelling, param.spelling))
             elif param in need_convert:
                 cfile.write(", %s" % param.spelling)
-                if param.type.kind != clang.cindex.TypeKind.POINTER or \
-                        param.spelling == "ppchFilter":
+                if param.type.kind != clang.cindex.TypeKind.POINTER:
                     cpp.write("lin_%s" % (param.spelling))
                 else:
                     cpp.write("&lin_%s" % (param.spelling))
@@ -377,6 +377,7 @@ WINE_DEFAULT_DEBUG_CHANNEL(steamclient);
     if not fname == "steam_api.h":
         cpp.write("#include \"steamworks_sdk_%s/%s\"\n" % (sdkver, fname))
     cpp.write("#include \"%s.h\"\n" % cppname)
+    cpp.write("#include \"struct_converters_%s.h\"\n" % sdkver)
     cpp.write("#ifdef __cplusplus\nextern \"C\" {\n#endif\n")
 
     cpp_h = open("%s.h" % cppname, "w")
@@ -455,11 +456,16 @@ def handle_struct(sdkver, struct):
     if cb_num is None:
         if not has_fields:
             return
-        if struct.displayname == "CSteamID":
+        if struct.displayname in exempt_structs:
             return
         struct_name = "%s_%s" % (struct.displayname, sdkver)
         w2l_handler_name = "win_to_lin_struct_%s" % struct_name;
         l2w_handler_name = "lin_to_win_struct_%s" % struct_name;
+
+        hfile = open("struct_converters_%s.h" % sdkver, "a")
+        hfile.write("extern void %s(void *w, void *l);\n" % w2l_handler_name)
+        hfile.write("extern void %s(void *l, void *w);\n\n" % l2w_handler_name)
+
     else:
         #for callbacks, we use the linux struct size in the cb dispatch switch
         struct_name = "%s_%s" % (struct.displayname, struct.type.get_size())
@@ -482,7 +488,7 @@ def handle_struct(sdkver, struct):
 
         generated_cb_ids.append(cb_id)
 
-        datfile = open("struct_converters.dat", "a")
+        datfile = open("cb_converters.dat", "a")
         datfile.write("case 0x%08x: win_msg->m_cubParam = sizeof(struct win%s); win_msg->m_pubParam = HeapAlloc(GetProcessHeap(), 0, win_msg->m_cubParam); %s(lin_msg.m_pubParam, win_msg->m_pubParam); break;\n" % (cb_id, struct_name, l2w_handler_name))
 
         generated_cb_handlers.append(l2w_handler_name)
@@ -491,6 +497,20 @@ def handle_struct(sdkver, struct):
             # latest SDK linux size, list of windows struct names
             cb_table[cb_num] = (struct.type.get_size(), [])
         cb_table[cb_num][1].append(struct_name)
+
+        hfile = open("cb_converters.h", "a")
+        hfile.write("#pragma pack( push, 8 )\n")
+        hfile.write("struct win%s {\n" % struct_name)
+        for m in struct.get_children():
+            if m.kind == clang.cindex.CursorKind.FIELD_DECL:
+                if m.type.kind == clang.cindex.TypeKind.CONSTANTARRAY:
+                    hfile.write("    %s %s[%u];\n" % (m.type.element_type.spelling, m.displayname, m.type.element_count))
+                else:
+                    hfile.write("    %s %s;\n" % (m.type.spelling, m.displayname))
+        hfile.write("}  __attribute__ ((ms_struct));\n")
+        hfile.write("#pragma pack( pop )\n")
+        hfile.write("extern void %s(void *l, void *w);\n\n" % l2w_handler_name)
+
 
     filename_base = "struct_converters_%s" % sdkver
     cppname = "%s.cpp" % filename_base
@@ -508,25 +528,6 @@ def handle_struct(sdkver, struct):
         cppfile.write("extern \"C\" {\n")
         cpp_files_need_close_brace.append(cppname)
 
-    hfile = open("struct_converters.h", "a")
-    if cb_num:
-        hfile.write("#pragma pack( push, 8 )\n")
-        hfile.write("struct win%s {\n" % struct_name)
-        for m in struct.get_children():
-            if m.kind == clang.cindex.CursorKind.FIELD_DECL:
-                if m.type.kind == clang.cindex.TypeKind.CONSTANTARRAY:
-                    hfile.write("    %s %s[%u];\n" % (m.type.element_type.spelling, m.displayname, m.type.element_count))
-                else:
-                    hfile.write("    %s %s;\n" % (m.type.spelling, m.displayname))
-        hfile.write("}  __attribute__ ((ms_struct));\n")
-        hfile.write("#pragma pack( pop )\n")
-
-    if w2l_handler_name:
-        hfile.write("extern void %s(void *w, void *l);\n" % w2l_handler_name)
-    if l2w_handler_name:
-        hfile.write("extern void %s(void *l, void *w);\n" % l2w_handler_name)
-    hfile.write("\n")
-
     cppfile.write("#pragma pack( push, 8 )\n")
     cppfile.write("struct win%s {\n" % struct_name)
     for m in struct.get_children():
@@ -542,10 +543,10 @@ def handle_struct(sdkver, struct):
         if m.kind == clang.cindex.CursorKind.FIELD_DECL:
             if m.type.kind == clang.cindex.TypeKind.CONSTANTARRAY:
                 assert(m.type.element_type.kind != clang.cindex.TypeKind.RECORD or \
-                        m.type.element_type.spelling == "CSteamID") #if this fails, we need struct array copy
+                        m.type.element_type.spelling in exempt_structs) #if this fails, we need struct array copy
                 cppfile.write("    memcpy(%s->%s, %s->%s, sizeof(%s->%s));\n" % (dst, m.displayname, src, m.displayname, dst, m.displayname))
             elif m.type.kind == clang.cindex.TypeKind.RECORD and \
-                    m.type.spelling != "CSteamID":
+                    not m.type.spelling in exempt_structs:
                 cppfile.write("    %s_to_%s_struct_%s_%s(&%s->%s, &%s->%s);\n" % (src, dst, m.type.spelling, sdkver, src, m.displayname, dst, m.displayname))
             else:
                 cppfile.write("    %s->%s = %s->%s;\n" % (dst, m.displayname, src, m.displayname))

@@ -635,7 +635,6 @@ case 1318:
     default:
     case sizeof(struct winRemoteStorageGetPublishedFileDetailsResult_t_9748): cb_RemoteStorageGetPublishedFileDetailsResult_t_9748(lin_callback, callback); break;
     case sizeof(struct winRemoteStorageGetPublishedFileDetailsResult_t_9744): cb_RemoteStorageGetPublishedFileDetailsResult_t_9744(lin_callback, callback); break;
-    case sizeof(struct winRemoteStorageGetPublishedFileDetailsResult_t_9740): cb_RemoteStorageGetPublishedFileDetailsResult_t_9740(lin_callback, callback); break;
     case sizeof(struct winRemoteStorageGetPublishedFileDetailsResult_t_9484): cb_RemoteStorageGetPublishedFileDetailsResult_t_9484(lin_callback, callback); break;
     }
     break;
@@ -740,14 +739,12 @@ case 3401:
     switch(callback_len){
     default:
     case sizeof(struct winSteamUGCQueryCompleted_t_24): cb_SteamUGCQueryCompleted_t_24(lin_callback, callback); break;
-    case sizeof(struct winSteamUGCQueryCompleted_t_20): cb_SteamUGCQueryCompleted_t_20(lin_callback, callback); break;
     }
     break;
 case 3402:
     switch(callback_len){
     default:
     case sizeof(struct winSteamUGCRequestUGCDetailsResult_t_9768): cb_SteamUGCRequestUGCDetailsResult_t_9768(lin_callback, callback); break;
-    case sizeof(struct winSteamUGCRequestUGCDetailsResult_t_9764): cb_SteamUGCRequestUGCDetailsResult_t_9764(lin_callback, callback); break;
     case sizeof(struct winSteamUGCRequestUGCDetailsResult_t_9760): cb_SteamUGCRequestUGCDetailsResult_t_9760(lin_callback, callback); break;
     }
     break;

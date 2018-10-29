@@ -2,6 +2,7 @@
 #include "steam_defs.h"
 #include "steamworks_sdk_101/steam_api.h"
 #include "cppISteamMatchmaking_SteamMatchMaking002.h"
+#include "struct_converters_101.h"
 #ifdef __cplusplus
 extern "C" {
 #endif

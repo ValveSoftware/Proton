@@ -2,6 +2,7 @@
 #include "steam_defs.h"
 #include "steamworks_sdk_141/steam_api.h"
 #include "cppISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001.h"
+#include "struct_converters_141.h"
 #ifdef __cplusplus
 extern "C" {
 #endif

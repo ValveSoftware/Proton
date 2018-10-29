@@ -2,6 +2,7 @@
 #include "steam_defs.h"
 #include "steamworks_sdk_117/steam_api.h"
 #include "cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005.h"
+#include "struct_converters_117.h"
 #ifdef __cplusplus
 extern "C" {
 #endif

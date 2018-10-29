@@ -2,6 +2,7 @@
 #include "steam_defs.h"
 #include "steamworks_sdk_134/steam_api.h"
 #include "cppISteamController_STEAMCONTROLLER_INTERFACE_VERSION.h"
+#include "struct_converters_134.h"
 #ifdef __cplusplus
 extern "C" {
 #endif

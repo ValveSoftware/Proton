@@ -2,6 +2,7 @@
 #include "steam_defs.h"
 #include "steamworks_sdk_142/steam_api.h"
 #include "cppISteamInventory_STEAMINVENTORY_INTERFACE_V002.h"
+#include "struct_converters_142.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
