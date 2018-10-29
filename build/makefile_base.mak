@@ -549,6 +549,7 @@ $(LSTEAMCLIENT_CONFIGURE_FILES64): $(LSTEAMCLIENT64) $(MAKEFILE_DEP) | $(LSTEAMC
 	cd $(dir $@) && \
 		$(WINEMAKER) --nosource-fix --nolower-include --nodlls --nomsvcrt \
 			-DSTEAM_API_EXPORTS \
+			-Dprivate=public -Dprotected=public \
 			-I"../$(TOOLS_DIR64)"/include/ \
 			-I"../$(TOOLS_DIR64)"/include/wine/ \
 			-I"../$(TOOLS_DIR64)"/include/wine/windows/ \
@@ -566,6 +567,7 @@ $(LSTEAMCLIENT_CONFIGURE_FILES32): $(LSTEAMCLIENT32) $(MAKEFILE_DEP) | $(LSTEAMC
 	cd $(dir $@) && \
 		$(WINEMAKER) --nosource-fix --nolower-include --nodlls --nomsvcrt --wine32 \
 			-DSTEAM_API_EXPORTS \
+			-Dprivate=public -Dprotected=public \
 			-I"../$(TOOLS_DIR32)"/include/ \
 			-I"../$(TOOLS_DIR32)"/include/wine/ \
 			-I"../$(TOOLS_DIR32)"/include/wine/windows/ \

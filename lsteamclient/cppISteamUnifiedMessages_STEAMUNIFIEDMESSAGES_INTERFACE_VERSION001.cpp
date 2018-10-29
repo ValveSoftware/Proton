@@ -2,10 +2,10 @@
 #include "steam_defs.h"
 #include "steamworks_sdk_141/steam_api.h"
 #include "cppISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001.h"
-#include "struct_converters_141.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
+#include "struct_converters_141.h"
 ClientUnifiedMessageHandle cppISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_SendMethod(void *linux_side, const char * pchServiceMethod, const void * pRequestBuffer, uint32 unRequestBufferSize, uint64 unContext)
 {
     return ((ISteamUnifiedMessages*)linux_side)->SendMethod((const char *)pchServiceMethod, (const void *)pRequestBuffer, (uint32)unRequestBufferSize, (uint64)unContext);

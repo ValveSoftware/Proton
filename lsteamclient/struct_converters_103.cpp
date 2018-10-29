@@ -11,7 +11,7 @@ struct winCallbackMsg_t_103 {
     int m_cubParam;
 }  __attribute__ ((ms_struct));
 #pragma pack( pop )
-void win_to_lin_struct_CallbackMsg_t_103(void *w, void *l)
+void win_to_lin_struct_CallbackMsg_t_103(const void *w, void *l)
 {
     CallbackMsg_t *lin = (CallbackMsg_t *)l;
     struct winCallbackMsg_t_103 *win = (struct winCallbackMsg_t_103 *)w;
@@ -21,7 +21,7 @@ void win_to_lin_struct_CallbackMsg_t_103(void *w, void *l)
     lin->m_cubParam = win->m_cubParam;
 }
 
-void lin_to_win_struct_CallbackMsg_t_103(void *l, void *w)
+void lin_to_win_struct_CallbackMsg_t_103(const void *l, void *w)
 {
     CallbackMsg_t *lin = (CallbackMsg_t *)l;
     struct winCallbackMsg_t_103 *win = (struct winCallbackMsg_t_103 *)w;
@@ -40,7 +40,7 @@ struct winFriendGameInfo_t_103 {
     CSteamID m_steamIDLobby;
 }  __attribute__ ((ms_struct));
 #pragma pack( pop )
-void win_to_lin_struct_FriendGameInfo_t_103(void *w, void *l)
+void win_to_lin_struct_FriendGameInfo_t_103(const void *w, void *l)
 {
     FriendGameInfo_t *lin = (FriendGameInfo_t *)l;
     struct winFriendGameInfo_t_103 *win = (struct winFriendGameInfo_t_103 *)w;
@@ -51,7 +51,7 @@ void win_to_lin_struct_FriendGameInfo_t_103(void *w, void *l)
     lin->m_steamIDLobby = win->m_steamIDLobby;
 }
 
-void lin_to_win_struct_FriendGameInfo_t_103(void *l, void *w)
+void lin_to_win_struct_FriendGameInfo_t_103(const void *l, void *w)
 {
     FriendGameInfo_t *lin = (FriendGameInfo_t *)l;
     struct winFriendGameInfo_t_103 *win = (struct winFriendGameInfo_t_103 *)w;
@@ -69,7 +69,7 @@ struct winservernetadr_t_103 {
     uint32 m_unIP;
 }  __attribute__ ((ms_struct));
 #pragma pack( pop )
-void win_to_lin_struct_servernetadr_t_103(void *w, void *l)
+void win_to_lin_struct_servernetadr_t_103(const void *w, void *l)
 {
     servernetadr_t *lin = (servernetadr_t *)l;
     struct winservernetadr_t_103 *win = (struct winservernetadr_t_103 *)w;
@@ -78,7 +78,7 @@ void win_to_lin_struct_servernetadr_t_103(void *w, void *l)
     lin->m_unIP = win->m_unIP;
 }
 
-void lin_to_win_struct_servernetadr_t_103(void *l, void *w)
+void lin_to_win_struct_servernetadr_t_103(const void *l, void *w)
 {
     servernetadr_t *lin = (servernetadr_t *)l;
     struct winservernetadr_t_103 *win = (struct winservernetadr_t_103 *)w;
@@ -108,7 +108,7 @@ struct wingameserveritem_t_103 {
     char m_szGameTags[128];
 }  __attribute__ ((ms_struct));
 #pragma pack( pop )
-void win_to_lin_struct_gameserveritem_t_103(void *w, void *l)
+void win_to_lin_struct_gameserveritem_t_103(const void *w, void *l)
 {
     gameserveritem_t *lin = (gameserveritem_t *)l;
     struct wingameserveritem_t_103 *win = (struct wingameserveritem_t_103 *)w;
@@ -131,7 +131,7 @@ void win_to_lin_struct_gameserveritem_t_103(void *w, void *l)
     memcpy(lin->m_szGameTags, win->m_szGameTags, sizeof(lin->m_szGameTags));
 }
 
-void lin_to_win_struct_gameserveritem_t_103(void *l, void *w)
+void lin_to_win_struct_gameserveritem_t_103(const void *l, void *w)
 {
     gameserveritem_t *lin = (gameserveritem_t *)l;
     struct wingameserveritem_t_103 *win = (struct wingameserveritem_t_103 *)w;
@@ -152,28 +152,6 @@ void lin_to_win_struct_gameserveritem_t_103(void *l, void *w)
     win->m_nServerVersion = lin->m_nServerVersion;
     memcpy(win->m_szServerName, lin->m_szServerName, sizeof(win->m_szServerName));
     memcpy(win->m_szGameTags, lin->m_szGameTags, sizeof(win->m_szGameTags));
-}
-
-#pragma pack( push, 8 )
-struct winCCallbackBase_103 {
-    uint8 m_nCallbackFlags;
-    int m_iCallback;
-}  __attribute__ ((ms_struct));
-#pragma pack( pop )
-void win_to_lin_struct_CCallbackBase_103(void *w, void *l)
-{
-    CCallbackBase *lin = (CCallbackBase *)l;
-    struct winCCallbackBase_103 *win = (struct winCCallbackBase_103 *)w;
-    lin->m_nCallbackFlags = win->m_nCallbackFlags;
-    lin->m_iCallback = win->m_iCallback;
-}
-
-void lin_to_win_struct_CCallbackBase_103(void *l, void *w)
-{
-    CCallbackBase *lin = (CCallbackBase *)l;
-    struct winCCallbackBase_103 *win = (struct winCCallbackBase_103 *)w;
-    win->m_nCallbackFlags = lin->m_nCallbackFlags;
-    win->m_iCallback = lin->m_iCallback;
 }
 
 

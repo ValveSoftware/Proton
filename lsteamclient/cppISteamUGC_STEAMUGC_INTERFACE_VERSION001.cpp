@@ -2,10 +2,10 @@
 #include "steam_defs.h"
 #include "steamworks_sdk_128/steam_api.h"
 #include "cppISteamUGC_STEAMUGC_INTERFACE_VERSION001.h"
-#include "struct_converters_128.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
+#include "struct_converters_128.h"
 UGCQueryHandle_t cppISteamUGC_STEAMUGC_INTERFACE_VERSION001_CreateQueryUserUGCRequest(void *linux_side, AccountID_t unAccountID, EUserUGCList eListType, EUGCMatchingUGCType eMatchingUGCType, EUserUGCListSortOrder eSortOrder, AppId_t nCreatorAppID, AppId_t nConsumerAppID, uint32 unPage)
 {
     return ((ISteamUGC*)linux_side)->CreateQueryUserUGCRequest((AccountID_t)unAccountID, (EUserUGCList)eListType, (EUGCMatchingUGCType)eMatchingUGCType, (EUserUGCListSortOrder)eSortOrder, (AppId_t)nCreatorAppID, (AppId_t)nConsumerAppID, (uint32)unPage);

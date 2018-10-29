@@ -3,10 +3,10 @@
 #include "steamworks_sdk_142/steam_api.h"
 #include "steamworks_sdk_142/isteamgameserver.h"
 #include "cppISteamGameServer_SteamGameServer012.h"
-#include "struct_converters_142.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
+#include "struct_converters_142.h"
 bool cppISteamGameServer_SteamGameServer012_InitGameServer(void *linux_side, uint32 unIP, uint16 usGamePort, uint16 usQueryPort, uint32 unFlags, AppId_t nGameAppId, const char * pchVersionString)
 {
     return ((ISteamGameServer*)linux_side)->InitGameServer((uint32)unIP, (uint16)usGamePort, (uint16)usQueryPort, (uint32)unFlags, (AppId_t)nGameAppId, (const char *)pchVersionString);

@@ -148,7 +148,10 @@ skip_structs = [
 exempt_structs = [
         "CSteamID",
         "CGameID",
-        "MatchMakingKeyValuePair_t"
+        "MatchMakingKeyValuePair_t",
+        "CCallbackBase",
+        "SteamPS3Params_t",
+        "ValvePackingSentinel_t"
 ]
 
 # callback classes for which we have a linux wrapper
@@ -328,7 +331,8 @@ def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, e
     cfile.write("}\n\n")
     for param in need_convert:
         if param.type.kind == clang.cindex.TypeKind.POINTER:
-            cpp.write("    lin_to_win_struct_%s_%s(&lin_%s, %s);\n" % (param.type.get_pointee().spelling, sdkver, param.spelling, param.spelling))
+            if not "const " in param.type.spelling: #don't modify const arguments
+                cpp.write("    lin_to_win_struct_%s_%s(&lin_%s, %s);\n" % (param.type.get_pointee().spelling, sdkver, param.spelling, param.spelling))
         else:
             cpp.write("    lin_to_win_struct_%s_%s(&lin_%s, &%s);\n" % (param.type.spelling, sdkver, param.spelling, param.spelling))
     if method.result_type.kind != clang.cindex.TypeKind.VOID and \
@@ -387,8 +391,8 @@ WINE_DEFAULT_DEBUG_CHANNEL(steamclient);
     if not fname == "steam_api.h":
         cpp.write("#include \"steamworks_sdk_%s/%s\"\n" % (sdkver, fname))
     cpp.write("#include \"%s.h\"\n" % cppname)
-    cpp.write("#include \"struct_converters_%s.h\"\n" % sdkver)
     cpp.write("#ifdef __cplusplus\nextern \"C\" {\n#endif\n")
+    cpp.write("#include \"struct_converters_%s.h\"\n" % sdkver)
 
     cpp_h = open("%s.h" % cppname, "w")
     cpp_h.write("#ifdef __cplusplus\nextern \"C\" {\n#endif\n")
@@ -466,15 +470,15 @@ def handle_struct(sdkver, struct):
     if cb_num is None:
         if not has_fields:
             return
-        if struct.displayname in exempt_structs:
+        if struct.spelling == "" or struct.displayname in exempt_structs:
             return
         struct_name = "%s_%s" % (struct.displayname, sdkver)
         w2l_handler_name = "win_to_lin_struct_%s" % struct_name;
         l2w_handler_name = "lin_to_win_struct_%s" % struct_name;
 
         hfile = open("struct_converters_%s.h" % sdkver, "a")
-        hfile.write("extern void %s(void *w, void *l);\n" % w2l_handler_name)
-        hfile.write("extern void %s(void *l, void *w);\n\n" % l2w_handler_name)
+        hfile.write("extern void %s(const void *w, void *l);\n" % w2l_handler_name)
+        hfile.write("extern void %s(const void *l, void *w);\n\n" % l2w_handler_name)
 
     else:
         #for callbacks, we use the linux struct size in the cb dispatch switch
@@ -562,7 +566,7 @@ def handle_struct(sdkver, struct):
                 cppfile.write("    %s->%s = %s->%s;\n" % (dst, m.displayname, src, m.displayname))
 
     if w2l_handler_name:
-        cppfile.write("void %s(void *w, void *l)\n{\n" % w2l_handler_name)
+        cppfile.write("void %s(const void *w, void *l)\n{\n" % w2l_handler_name)
         cppfile.write("    %s *lin = (%s *)l;\n" % (struct.displayname, struct.displayname))
         cppfile.write("    struct win%s *win = (struct win%s *)w;\n" % (struct_name, struct_name))
         for m in struct.get_children():
@@ -570,7 +574,7 @@ def handle_struct(sdkver, struct):
         cppfile.write("}\n\n")
 
     if l2w_handler_name:
-        cppfile.write("void %s(void *l, void *w)\n{\n" % l2w_handler_name)
+        cppfile.write("void %s(const void *l, void *w)\n{\n" % l2w_handler_name)
         cppfile.write("    %s *lin = (%s *)l;\n" % (struct.displayname, struct.displayname))
         cppfile.write("    struct win%s *win = (struct win%s *)w;\n" % (struct_name, struct_name))
         for m in struct.get_children():

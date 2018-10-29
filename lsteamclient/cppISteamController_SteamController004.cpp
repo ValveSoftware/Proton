@@ -2,10 +2,10 @@
 #include "steam_defs.h"
 #include "steamworks_sdk_138a/steam_api.h"
 #include "cppISteamController_SteamController004.h"
-#include "struct_converters_138a.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
+#include "struct_converters_138a.h"
 bool cppISteamController_SteamController004_Init(void *linux_side)
 {
     return ((ISteamController*)linux_side)->Init();

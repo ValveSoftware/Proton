@@ -2,10 +2,10 @@
 #include "steam_defs.h"
 #include "steamworks_sdk_132/steam_api.h"
 #include "cppISteamUGC_STEAMUGC_INTERFACE_VERSION003.h"
-#include "struct_converters_132.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
+#include "struct_converters_132.h"
 UGCQueryHandle_t cppISteamUGC_STEAMUGC_INTERFACE_VERSION003_CreateQueryUserUGCRequest(void *linux_side, AccountID_t unAccountID, EUserUGCList eListType, EUGCMatchingUGCType eMatchingUGCType, EUserUGCListSortOrder eSortOrder, AppId_t nCreatorAppID, AppId_t nConsumerAppID, uint32 unPage)
 {
     return ((ISteamUGC*)linux_side)->CreateQueryUserUGCRequest((AccountID_t)unAccountID, (EUserUGCList)eListType, (EUGCMatchingUGCType)eMatchingUGCType, (EUserUGCListSortOrder)eSortOrder, (AppId_t)nCreatorAppID, (AppId_t)nConsumerAppID, (uint32)unPage);
@@ -115,7 +115,6 @@ bool cppISteamUGC_STEAMUGC_INTERFACE_VERSION003_SetItemTags(void *linux_side, UG
     SteamParamStringArray_t lin_pTags;
     win_to_lin_struct_SteamParamStringArray_t_132(pTags, &lin_pTags);
     bool retval = ((ISteamUGC*)linux_side)->SetItemTags((UGCUpdateHandle_t)updateHandle, &lin_pTags);
-    lin_to_win_struct_const SteamParamStringArray_t_132(&lin_pTags, pTags);
     return retval;
 }
 

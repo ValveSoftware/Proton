@@ -2,10 +2,10 @@
 #include "steam_defs.h"
 #include "steamworks_sdk_139/steam_api.h"
 #include "cppISteamInventory_STEAMINVENTORY_INTERFACE_V001.h"
-#include "struct_converters_139.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
+#include "struct_converters_139.h"
 EResult cppISteamInventory_STEAMINVENTORY_INTERFACE_V001_GetResultStatus(void *linux_side, SteamInventoryResult_t resultHandle)
 {
     return ((ISteamInventory*)linux_side)->GetResultStatus((SteamInventoryResult_t)resultHandle);

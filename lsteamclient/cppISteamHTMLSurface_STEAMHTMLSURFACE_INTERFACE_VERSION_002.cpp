@@ -2,10 +2,10 @@
 #include "steam_defs.h"
 #include "steamworks_sdk_133a/steam_api.h"
 #include "cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002.h"
-#include "struct_converters_133a.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
+#include "struct_converters_133a.h"
 bool cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_Init(void *linux_side)
 {
     return ((ISteamHTMLSurface*)linux_side)->Init();

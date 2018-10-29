@@ -11,7 +11,7 @@ struct winCallbackMsg_t_101 {
     int m_cubParam;
 }  __attribute__ ((ms_struct));
 #pragma pack( pop )
-void win_to_lin_struct_CallbackMsg_t_101(void *w, void *l)
+void win_to_lin_struct_CallbackMsg_t_101(const void *w, void *l)
 {
     CallbackMsg_t *lin = (CallbackMsg_t *)l;
     struct winCallbackMsg_t_101 *win = (struct winCallbackMsg_t_101 *)w;
@@ -21,7 +21,7 @@ void win_to_lin_struct_CallbackMsg_t_101(void *w, void *l)
     lin->m_cubParam = win->m_cubParam;
 }
 
-void lin_to_win_struct_CallbackMsg_t_101(void *l, void *w)
+void lin_to_win_struct_CallbackMsg_t_101(const void *l, void *w)
 {
     CallbackMsg_t *lin = (CallbackMsg_t *)l;
     struct winCallbackMsg_t_101 *win = (struct winCallbackMsg_t_101 *)w;
@@ -38,7 +38,7 @@ struct winservernetadr_t_101 {
     uint32 m_unIP;
 }  __attribute__ ((ms_struct));
 #pragma pack( pop )
-void win_to_lin_struct_servernetadr_t_101(void *w, void *l)
+void win_to_lin_struct_servernetadr_t_101(const void *w, void *l)
 {
     servernetadr_t *lin = (servernetadr_t *)l;
     struct winservernetadr_t_101 *win = (struct winservernetadr_t_101 *)w;
@@ -47,7 +47,7 @@ void win_to_lin_struct_servernetadr_t_101(void *w, void *l)
     lin->m_unIP = win->m_unIP;
 }
 
-void lin_to_win_struct_servernetadr_t_101(void *l, void *w)
+void lin_to_win_struct_servernetadr_t_101(const void *l, void *w)
 {
     servernetadr_t *lin = (servernetadr_t *)l;
     struct winservernetadr_t_101 *win = (struct winservernetadr_t_101 *)w;
@@ -77,7 +77,7 @@ struct wingameserveritem_t_101 {
     char m_szGameTags[128];
 }  __attribute__ ((ms_struct));
 #pragma pack( pop )
-void win_to_lin_struct_gameserveritem_t_101(void *w, void *l)
+void win_to_lin_struct_gameserveritem_t_101(const void *w, void *l)
 {
     gameserveritem_t *lin = (gameserveritem_t *)l;
     struct wingameserveritem_t_101 *win = (struct wingameserveritem_t_101 *)w;
@@ -100,7 +100,7 @@ void win_to_lin_struct_gameserveritem_t_101(void *w, void *l)
     memcpy(lin->m_szGameTags, win->m_szGameTags, sizeof(lin->m_szGameTags));
 }
 
-void lin_to_win_struct_gameserveritem_t_101(void *l, void *w)
+void lin_to_win_struct_gameserveritem_t_101(const void *l, void *w)
 {
     gameserveritem_t *lin = (gameserveritem_t *)l;
     struct wingameserveritem_t_101 *win = (struct wingameserveritem_t_101 *)w;
@@ -121,28 +121,6 @@ void lin_to_win_struct_gameserveritem_t_101(void *l, void *w)
     win->m_nServerVersion = lin->m_nServerVersion;
     memcpy(win->m_szServerName, lin->m_szServerName, sizeof(win->m_szServerName));
     memcpy(win->m_szGameTags, lin->m_szGameTags, sizeof(win->m_szGameTags));
-}
-
-#pragma pack( push, 8 )
-struct winCCallbackBase_101 {
-    uint8 m_nCallbackFlags;
-    int m_iCallback;
-}  __attribute__ ((ms_struct));
-#pragma pack( pop )
-void win_to_lin_struct_CCallbackBase_101(void *w, void *l)
-{
-    CCallbackBase *lin = (CCallbackBase *)l;
-    struct winCCallbackBase_101 *win = (struct winCCallbackBase_101 *)w;
-    lin->m_nCallbackFlags = win->m_nCallbackFlags;
-    lin->m_iCallback = win->m_iCallback;
-}
-
-void lin_to_win_struct_CCallbackBase_101(void *l, void *w)
-{
-    CCallbackBase *lin = (CCallbackBase *)l;
-    struct winCCallbackBase_101 *win = (struct winCCallbackBase_101 *)w;
-    win->m_nCallbackFlags = lin->m_nCallbackFlags;
-    win->m_iCallback = lin->m_iCallback;
 }
 
 

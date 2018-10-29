@@ -13,7 +13,7 @@ struct winCallbackMsg_t_118 {
     int m_cubParam;
 }  __attribute__ ((ms_struct));
 #pragma pack( pop )
-void win_to_lin_struct_CallbackMsg_t_118(void *w, void *l)
+void win_to_lin_struct_CallbackMsg_t_118(const void *w, void *l)
 {
     CallbackMsg_t *lin = (CallbackMsg_t *)l;
     struct winCallbackMsg_t_118 *win = (struct winCallbackMsg_t_118 *)w;
@@ -23,7 +23,7 @@ void win_to_lin_struct_CallbackMsg_t_118(void *w, void *l)
     lin->m_cubParam = win->m_cubParam;
 }
 
-void lin_to_win_struct_CallbackMsg_t_118(void *l, void *w)
+void lin_to_win_struct_CallbackMsg_t_118(const void *l, void *w)
 {
     CallbackMsg_t *lin = (CallbackMsg_t *)l;
     struct winCallbackMsg_t_118 *win = (struct winCallbackMsg_t_118 *)w;
@@ -42,7 +42,7 @@ struct winFriendGameInfo_t_118 {
     CSteamID m_steamIDLobby;
 }  __attribute__ ((ms_struct));
 #pragma pack( pop )
-void win_to_lin_struct_FriendGameInfo_t_118(void *w, void *l)
+void win_to_lin_struct_FriendGameInfo_t_118(const void *w, void *l)
 {
     FriendGameInfo_t *lin = (FriendGameInfo_t *)l;
     struct winFriendGameInfo_t_118 *win = (struct winFriendGameInfo_t_118 *)w;
@@ -53,7 +53,7 @@ void win_to_lin_struct_FriendGameInfo_t_118(void *w, void *l)
     lin->m_steamIDLobby = win->m_steamIDLobby;
 }
 
-void lin_to_win_struct_FriendGameInfo_t_118(void *l, void *w)
+void lin_to_win_struct_FriendGameInfo_t_118(const void *l, void *w)
 {
     FriendGameInfo_t *lin = (FriendGameInfo_t *)l;
     struct winFriendGameInfo_t_118 *win = (struct winFriendGameInfo_t_118 *)w;
@@ -70,7 +70,7 @@ struct winFriendSessionStateInfo_t_118 {
     uint8 m_uiPublishedToFriendsSessionInstance;
 }  __attribute__ ((ms_struct));
 #pragma pack( pop )
-void win_to_lin_struct_FriendSessionStateInfo_t_118(void *w, void *l)
+void win_to_lin_struct_FriendSessionStateInfo_t_118(const void *w, void *l)
 {
     FriendSessionStateInfo_t *lin = (FriendSessionStateInfo_t *)l;
     struct winFriendSessionStateInfo_t_118 *win = (struct winFriendSessionStateInfo_t_118 *)w;
@@ -78,7 +78,7 @@ void win_to_lin_struct_FriendSessionStateInfo_t_118(void *w, void *l)
     lin->m_uiPublishedToFriendsSessionInstance = win->m_uiPublishedToFriendsSessionInstance;
 }
 
-void lin_to_win_struct_FriendSessionStateInfo_t_118(void *l, void *w)
+void lin_to_win_struct_FriendSessionStateInfo_t_118(const void *l, void *w)
 {
     FriendSessionStateInfo_t *lin = (FriendSessionStateInfo_t *)l;
     struct winFriendSessionStateInfo_t_118 *win = (struct winFriendSessionStateInfo_t_118 *)w;
@@ -93,7 +93,7 @@ struct winservernetadr_t_118 {
     uint32 m_unIP;
 }  __attribute__ ((ms_struct));
 #pragma pack( pop )
-void win_to_lin_struct_servernetadr_t_118(void *w, void *l)
+void win_to_lin_struct_servernetadr_t_118(const void *w, void *l)
 {
     servernetadr_t *lin = (servernetadr_t *)l;
     struct winservernetadr_t_118 *win = (struct winservernetadr_t_118 *)w;
@@ -102,7 +102,7 @@ void win_to_lin_struct_servernetadr_t_118(void *w, void *l)
     lin->m_unIP = win->m_unIP;
 }
 
-void lin_to_win_struct_servernetadr_t_118(void *l, void *w)
+void lin_to_win_struct_servernetadr_t_118(const void *l, void *w)
 {
     servernetadr_t *lin = (servernetadr_t *)l;
     struct winservernetadr_t_118 *win = (struct winservernetadr_t_118 *)w;
@@ -133,7 +133,7 @@ struct wingameserveritem_t_118 {
     CSteamID m_steamID;
 }  __attribute__ ((ms_struct));
 #pragma pack( pop )
-void win_to_lin_struct_gameserveritem_t_118(void *w, void *l)
+void win_to_lin_struct_gameserveritem_t_118(const void *w, void *l)
 {
     gameserveritem_t *lin = (gameserveritem_t *)l;
     struct wingameserveritem_t_118 *win = (struct wingameserveritem_t_118 *)w;
@@ -157,7 +157,7 @@ void win_to_lin_struct_gameserveritem_t_118(void *w, void *l)
     lin->m_steamID = win->m_steamID;
 }
 
-void lin_to_win_struct_gameserveritem_t_118(void *l, void *w)
+void lin_to_win_struct_gameserveritem_t_118(const void *l, void *w)
 {
     gameserveritem_t *lin = (gameserveritem_t *)l;
     struct wingameserveritem_t_118 *win = (struct wingameserveritem_t_118 *)w;
@@ -187,7 +187,7 @@ struct winSteamParamStringArray_t_118 {
     int32 m_nNumStrings;
 }  __attribute__ ((ms_struct));
 #pragma pack( pop )
-void win_to_lin_struct_SteamParamStringArray_t_118(void *w, void *l)
+void win_to_lin_struct_SteamParamStringArray_t_118(const void *w, void *l)
 {
     SteamParamStringArray_t *lin = (SteamParamStringArray_t *)l;
     struct winSteamParamStringArray_t_118 *win = (struct winSteamParamStringArray_t_118 *)w;
@@ -195,7 +195,7 @@ void win_to_lin_struct_SteamParamStringArray_t_118(void *w, void *l)
     lin->m_nNumStrings = win->m_nNumStrings;
 }
 
-void lin_to_win_struct_SteamParamStringArray_t_118(void *l, void *w)
+void lin_to_win_struct_SteamParamStringArray_t_118(const void *l, void *w)
 {
     SteamParamStringArray_t *lin = (SteamParamStringArray_t *)l;
     struct winSteamParamStringArray_t_118 *win = (struct winSteamParamStringArray_t_118 *)w;
@@ -225,7 +225,7 @@ struct winRemoteStorageGetPublishedFileDetailsResult_t_9484 {
     int32 m_nPreviewFileSize;
 }  __attribute__ ((ms_struct));
 #pragma pack( pop )
-void cb_RemoteStorageGetPublishedFileDetailsResult_t_9484(void *l, void *w)
+void cb_RemoteStorageGetPublishedFileDetailsResult_t_9484(const void *l, void *w)
 {
     RemoteStorageGetPublishedFileDetailsResult_t *lin = (RemoteStorageGetPublishedFileDetailsResult_t *)l;
     struct winRemoteStorageGetPublishedFileDetailsResult_t_9484 *win = (struct winRemoteStorageGetPublishedFileDetailsResult_t_9484 *)w;
@@ -258,7 +258,7 @@ struct winLeaderboardEntry_t_118 {
     UGCHandle_t m_hUGC;
 }  __attribute__ ((ms_struct));
 #pragma pack( pop )
-void win_to_lin_struct_LeaderboardEntry_t_118(void *w, void *l)
+void win_to_lin_struct_LeaderboardEntry_t_118(const void *w, void *l)
 {
     LeaderboardEntry_t *lin = (LeaderboardEntry_t *)l;
     struct winLeaderboardEntry_t_118 *win = (struct winLeaderboardEntry_t_118 *)w;
@@ -269,7 +269,7 @@ void win_to_lin_struct_LeaderboardEntry_t_118(void *w, void *l)
     lin->m_hUGC = win->m_hUGC;
 }
 
-void lin_to_win_struct_LeaderboardEntry_t_118(void *l, void *w)
+void lin_to_win_struct_LeaderboardEntry_t_118(const void *l, void *w)
 {
     LeaderboardEntry_t *lin = (LeaderboardEntry_t *)l;
     struct winLeaderboardEntry_t_118 *win = (struct winLeaderboardEntry_t_118 *)w;
@@ -292,7 +292,7 @@ struct winP2PSessionState_t_118 {
     uint16 m_nRemotePort;
 }  __attribute__ ((ms_struct));
 #pragma pack( pop )
-void win_to_lin_struct_P2PSessionState_t_118(void *w, void *l)
+void win_to_lin_struct_P2PSessionState_t_118(const void *w, void *l)
 {
     P2PSessionState_t *lin = (P2PSessionState_t *)l;
     struct winP2PSessionState_t_118 *win = (struct winP2PSessionState_t_118 *)w;
@@ -306,7 +306,7 @@ void win_to_lin_struct_P2PSessionState_t_118(void *w, void *l)
     lin->m_nRemotePort = win->m_nRemotePort;
 }
 
-void lin_to_win_struct_P2PSessionState_t_118(void *l, void *w)
+void lin_to_win_struct_P2PSessionState_t_118(const void *l, void *w)
 {
     P2PSessionState_t *lin = (P2PSessionState_t *)l;
     struct winP2PSessionState_t_118 *win = (struct winP2PSessionState_t_118 *)w;
@@ -321,28 +321,6 @@ void lin_to_win_struct_P2PSessionState_t_118(void *l, void *w)
 }
 
 #pragma pack( push, 8 )
-struct winCCallbackBase_118 {
-    uint8 m_nCallbackFlags;
-    int m_iCallback;
-}  __attribute__ ((ms_struct));
-#pragma pack( pop )
-void win_to_lin_struct_CCallbackBase_118(void *w, void *l)
-{
-    CCallbackBase *lin = (CCallbackBase *)l;
-    struct winCCallbackBase_118 *win = (struct winCCallbackBase_118 *)w;
-    lin->m_nCallbackFlags = win->m_nCallbackFlags;
-    lin->m_iCallback = win->m_iCallback;
-}
-
-void lin_to_win_struct_CCallbackBase_118(void *l, void *w)
-{
-    CCallbackBase *lin = (CCallbackBase *)l;
-    struct winCCallbackBase_118 *win = (struct winCCallbackBase_118 *)w;
-    win->m_nCallbackFlags = lin->m_nCallbackFlags;
-    win->m_iCallback = lin->m_iCallback;
-}
-
-#pragma pack( push, 8 )
 struct winComputeNewPlayerCompatibilityResult_t_16 {
     EResult m_eResult;
     int m_cPlayersThatDontLikeCandidate;
@@ -350,7 +328,7 @@ struct winComputeNewPlayerCompatibilityResult_t_16 {
     int m_cClanPlayersThatDontLikeCandidate;
 }  __attribute__ ((ms_struct));
 #pragma pack( pop )
-void cb_ComputeNewPlayerCompatibilityResult_t_16(void *l, void *w)
+void cb_ComputeNewPlayerCompatibilityResult_t_16(const void *l, void *w)
 {
     ComputeNewPlayerCompatibilityResult_t *lin = (ComputeNewPlayerCompatibilityResult_t *)l;
     struct winComputeNewPlayerCompatibilityResult_t_16 *win = (struct winComputeNewPlayerCompatibilityResult_t_16 *)w;

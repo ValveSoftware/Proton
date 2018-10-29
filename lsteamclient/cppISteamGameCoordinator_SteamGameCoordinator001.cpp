@@ -3,10 +3,10 @@
 #include "steamworks_sdk_142/steam_api.h"
 #include "steamworks_sdk_142/isteamgamecoordinator.h"
 #include "cppISteamGameCoordinator_SteamGameCoordinator001.h"
-#include "struct_converters_142.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
+#include "struct_converters_142.h"
 EGCResults cppISteamGameCoordinator_SteamGameCoordinator001_SendMessage(void *linux_side, uint32 unMsgType, const void * pubData, uint32 cubData)
 {
     return ((ISteamGameCoordinator*)linux_side)->SendMessage((uint32)unMsgType, (const void *)pubData, (uint32)cubData);

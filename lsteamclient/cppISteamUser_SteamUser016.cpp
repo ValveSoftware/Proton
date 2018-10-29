@@ -2,10 +2,10 @@
 #include "steam_defs.h"
 #include "steamworks_sdk_123a/steam_api.h"
 #include "cppISteamUser_SteamUser016.h"
-#include "struct_converters_123a.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
+#include "struct_converters_123a.h"
 HSteamUser cppISteamUser_SteamUser016_GetHSteamUser(void *linux_side)
 {
     return ((ISteamUser*)linux_side)->GetHSteamUser();

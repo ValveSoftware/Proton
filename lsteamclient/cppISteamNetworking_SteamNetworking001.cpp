@@ -2,10 +2,10 @@
 #include "steam_defs.h"
 #include "steamworks_sdk_102/steam_api.h"
 #include "cppISteamNetworking_SteamNetworking001.h"
-#include "struct_converters_102.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
+#include "struct_converters_102.h"
 SNetListenSocket_t cppISteamNetworking_SteamNetworking001_CreateListenSocket(void *linux_side, int nVirtualP2PPort, uint32 nIP, uint16 nPort)
 {
     return ((ISteamNetworking*)linux_side)->CreateListenSocket((int)nVirtualP2PPort, (uint32)nIP, (uint16)nPort);

@@ -3,10 +3,10 @@
 #include "steamworks_sdk_142/steam_api.h"
 #include "steamworks_sdk_142/isteamgameserverstats.h"
 #include "cppISteamGameServerStats_SteamGameServerStats001.h"
-#include "struct_converters_142.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
+#include "struct_converters_142.h"
 SteamAPICall_t cppISteamGameServerStats_SteamGameServerStats001_RequestUserStats(void *linux_side, CSteamID steamIDUser)
 {
     return ((ISteamGameServerStats*)linux_side)->RequestUserStats((CSteamID)steamIDUser);

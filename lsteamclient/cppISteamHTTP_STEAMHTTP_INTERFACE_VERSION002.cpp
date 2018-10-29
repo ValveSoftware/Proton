@@ -2,10 +2,10 @@
 #include "steam_defs.h"
 #include "steamworks_sdk_142/steam_api.h"
 #include "cppISteamHTTP_STEAMHTTP_INTERFACE_VERSION002.h"
-#include "struct_converters_142.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
+#include "struct_converters_142.h"
 HTTPRequestHandle cppISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_CreateHTTPRequest(void *linux_side, EHTTPMethod eHTTPRequestMethod, const char * pchAbsoluteURL)
 {
     return ((ISteamHTTP*)linux_side)->CreateHTTPRequest((EHTTPMethod)eHTTPRequestMethod, (const char *)pchAbsoluteURL);
