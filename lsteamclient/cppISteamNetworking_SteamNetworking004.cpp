@@ -32,7 +32,11 @@ bool cppISteamNetworking_SteamNetworking004_CloseP2PSessionWithUser(void *linux_
 
 bool cppISteamNetworking_SteamNetworking004_GetP2PSessionState(void *linux_side, CSteamID steamIDRemote, P2PSessionState_t * pConnectionState)
 {
-    return ((ISteamNetworking*)linux_side)->GetP2PSessionState((CSteamID)steamIDRemote, (P2PSessionState_t *)pConnectionState);
+    P2PSessionState_t lin_pConnectionState;
+    win_to_lin_struct_P2PSessionState_t_112(pConnectionState, &lin_pConnectionState);
+    bool retval = ((ISteamNetworking*)linux_side)->GetP2PSessionState((CSteamID)steamIDRemote, &lin_pConnectionState);
+    lin_to_win_struct_P2PSessionState_t_112(&lin_pConnectionState, pConnectionState);
+    return retval;
 }
 
 SNetListenSocket_t cppISteamNetworking_SteamNetworking004_CreateListenSocket(void *linux_side, int nVirtualP2PPort, uint32 nIP, uint16 nPort, bool bAllowUseOfPacketRelay)

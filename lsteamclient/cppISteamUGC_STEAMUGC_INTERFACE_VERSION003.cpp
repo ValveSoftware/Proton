@@ -22,7 +22,11 @@ SteamAPICall_t cppISteamUGC_STEAMUGC_INTERFACE_VERSION003_SendQueryUGCRequest(vo
 
 bool cppISteamUGC_STEAMUGC_INTERFACE_VERSION003_GetQueryUGCResult(void *linux_side, UGCQueryHandle_t handle, uint32 index, SteamUGCDetails_t * pDetails)
 {
-    return ((ISteamUGC*)linux_side)->GetQueryUGCResult((UGCQueryHandle_t)handle, (uint32)index, (SteamUGCDetails_t *)pDetails);
+    SteamUGCDetails_t lin_pDetails;
+    win_to_lin_struct_SteamUGCDetails_t_132(pDetails, &lin_pDetails);
+    bool retval = ((ISteamUGC*)linux_side)->GetQueryUGCResult((UGCQueryHandle_t)handle, (uint32)index, &lin_pDetails);
+    lin_to_win_struct_SteamUGCDetails_t_132(&lin_pDetails, pDetails);
+    return retval;
 }
 
 bool cppISteamUGC_STEAMUGC_INTERFACE_VERSION003_ReleaseQueryUGCRequest(void *linux_side, UGCQueryHandle_t handle)
@@ -107,7 +111,11 @@ bool cppISteamUGC_STEAMUGC_INTERFACE_VERSION003_SetItemVisibility(void *linux_si
 
 bool cppISteamUGC_STEAMUGC_INTERFACE_VERSION003_SetItemTags(void *linux_side, UGCUpdateHandle_t updateHandle, const SteamParamStringArray_t * pTags)
 {
-    return ((ISteamUGC*)linux_side)->SetItemTags((UGCUpdateHandle_t)updateHandle, (const SteamParamStringArray_t *)pTags);
+    SteamParamStringArray_t lin_pTags;
+    win_to_lin_struct_SteamParamStringArray_t_132(pTags, &lin_pTags);
+    bool retval = ((ISteamUGC*)linux_side)->SetItemTags((UGCUpdateHandle_t)updateHandle, &lin_pTags);
+    lin_to_win_struct_const SteamParamStringArray_t_132(&lin_pTags, pTags);
+    return retval;
 }
 
 bool cppISteamUGC_STEAMUGC_INTERFACE_VERSION003_SetItemContent(void *linux_side, UGCUpdateHandle_t handle, const char * pszContentFolder)

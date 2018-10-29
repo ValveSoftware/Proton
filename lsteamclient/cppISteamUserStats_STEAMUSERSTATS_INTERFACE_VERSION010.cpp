@@ -147,7 +147,11 @@ SteamAPICall_t cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_DownloadLe
 
 bool cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetDownloadedLeaderboardEntry(void *linux_side, SteamLeaderboardEntries_t hSteamLeaderboardEntries, int index, LeaderboardEntry_t * pLeaderboardEntry, int32 * pDetails, int cDetailsMax)
 {
-    return ((ISteamUserStats*)linux_side)->GetDownloadedLeaderboardEntry((SteamLeaderboardEntries_t)hSteamLeaderboardEntries, (int)index, (LeaderboardEntry_t *)pLeaderboardEntry, (int32 *)pDetails, (int)cDetailsMax);
+    LeaderboardEntry_t lin_pLeaderboardEntry;
+    win_to_lin_struct_LeaderboardEntry_t_119(pLeaderboardEntry, &lin_pLeaderboardEntry);
+    bool retval = ((ISteamUserStats*)linux_side)->GetDownloadedLeaderboardEntry((SteamLeaderboardEntries_t)hSteamLeaderboardEntries, (int)index, &lin_pLeaderboardEntry, (int32 *)pDetails, (int)cDetailsMax);
+    lin_to_win_struct_LeaderboardEntry_t_119(&lin_pLeaderboardEntry, pLeaderboardEntry);
+    return retval;
 }
 
 SteamAPICall_t cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_UploadLeaderboardScore(void *linux_side, SteamLeaderboard_t hSteamLeaderboard, ELeaderboardUploadScoreMethod eLeaderboardUploadScoreMethod, int32 nScore, const int32 * pScoreDetails, int cScoreDetailsCount)

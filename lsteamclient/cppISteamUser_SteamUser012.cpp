@@ -32,7 +32,10 @@ void cppISteamUser_SteamUser012_TerminateGameConnection(void *linux_side, uint32
 
 void cppISteamUser_SteamUser012_TrackAppUsageEvent(void *linux_side, CGameID gameID, int eAppUsageEvent, const char * pchExtraInfo)
 {
-    ((ISteamUser*)linux_side)->TrackAppUsageEvent((CGameID)gameID, (int)eAppUsageEvent, (const char *)pchExtraInfo);
+    CGameID lin_gameID;
+    win_to_lin_struct_CGameID_105(&gameID, &lin_gameID);
+    ((ISteamUser*)linux_side)->TrackAppUsageEvent(lin_gameID, (int)eAppUsageEvent, (const char *)pchExtraInfo);
+    lin_to_win_struct_CGameID_105(&lin_gameID, &gameID);
 }
 
 bool cppISteamUser_SteamUser012_GetUserDataFolder(void *linux_side, char * pchBuffer, int cubBuffer)

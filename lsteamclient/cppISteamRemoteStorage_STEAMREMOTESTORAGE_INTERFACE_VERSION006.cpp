@@ -122,7 +122,11 @@ UGCHandle_t cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_GetCa
 
 SteamAPICall_t cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_PublishWorkshopFile(void *linux_side, const char * pchFile, const char * pchPreviewFile, AppId_t nConsumerAppId, const char * pchTitle, const char * pchDescription, ERemoteStoragePublishedFileVisibility eVisibility, SteamParamStringArray_t * pTags, EWorkshopFileType eWorkshopFileType)
 {
-    return ((ISteamRemoteStorage*)linux_side)->PublishWorkshopFile((const char *)pchFile, (const char *)pchPreviewFile, (AppId_t)nConsumerAppId, (const char *)pchTitle, (const char *)pchDescription, (ERemoteStoragePublishedFileVisibility)eVisibility, (SteamParamStringArray_t *)pTags, (EWorkshopFileType)eWorkshopFileType);
+    SteamParamStringArray_t lin_pTags;
+    win_to_lin_struct_SteamParamStringArray_t_119(pTags, &lin_pTags);
+    SteamAPICall_t retval = ((ISteamRemoteStorage*)linux_side)->PublishWorkshopFile((const char *)pchFile, (const char *)pchPreviewFile, (AppId_t)nConsumerAppId, (const char *)pchTitle, (const char *)pchDescription, (ERemoteStoragePublishedFileVisibility)eVisibility, &lin_pTags, (EWorkshopFileType)eWorkshopFileType);
+    lin_to_win_struct_SteamParamStringArray_t_119(&lin_pTags, pTags);
+    return retval;
 }
 
 PublishedFileUpdateHandle_t cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_CreatePublishedFileUpdateRequest(void *linux_side, PublishedFileId_t unPublishedFileId)
@@ -157,7 +161,11 @@ bool cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_UpdatePublis
 
 bool cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_UpdatePublishedFileTags(void *linux_side, PublishedFileUpdateHandle_t updateHandle, SteamParamStringArray_t * pTags)
 {
-    return ((ISteamRemoteStorage*)linux_side)->UpdatePublishedFileTags((PublishedFileUpdateHandle_t)updateHandle, (SteamParamStringArray_t *)pTags);
+    SteamParamStringArray_t lin_pTags;
+    win_to_lin_struct_SteamParamStringArray_t_119(pTags, &lin_pTags);
+    bool retval = ((ISteamRemoteStorage*)linux_side)->UpdatePublishedFileTags((PublishedFileUpdateHandle_t)updateHandle, &lin_pTags);
+    lin_to_win_struct_SteamParamStringArray_t_119(&lin_pTags, pTags);
+    return retval;
 }
 
 SteamAPICall_t cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_CommitPublishedFileUpdate(void *linux_side, PublishedFileUpdateHandle_t updateHandle)
@@ -217,12 +225,23 @@ SteamAPICall_t cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_Ge
 
 SteamAPICall_t cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_EnumerateUserSharedWorkshopFiles(void *linux_side, CSteamID steamId, uint32 unStartIndex, SteamParamStringArray_t * pRequiredTags, SteamParamStringArray_t * pExcludedTags)
 {
-    return ((ISteamRemoteStorage*)linux_side)->EnumerateUserSharedWorkshopFiles((CSteamID)steamId, (uint32)unStartIndex, (SteamParamStringArray_t *)pRequiredTags, (SteamParamStringArray_t *)pExcludedTags);
+    SteamParamStringArray_t lin_pRequiredTags;
+    win_to_lin_struct_SteamParamStringArray_t_119(pRequiredTags, &lin_pRequiredTags);
+    SteamParamStringArray_t lin_pExcludedTags;
+    win_to_lin_struct_SteamParamStringArray_t_119(pExcludedTags, &lin_pExcludedTags);
+    SteamAPICall_t retval = ((ISteamRemoteStorage*)linux_side)->EnumerateUserSharedWorkshopFiles((CSteamID)steamId, (uint32)unStartIndex, &lin_pRequiredTags, &lin_pExcludedTags);
+    lin_to_win_struct_SteamParamStringArray_t_119(&lin_pRequiredTags, pRequiredTags);
+    lin_to_win_struct_SteamParamStringArray_t_119(&lin_pExcludedTags, pExcludedTags);
+    return retval;
 }
 
 SteamAPICall_t cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_PublishVideo(void *linux_side, const char * pchVideoURL, const char * pchPreviewFile, AppId_t nConsumerAppId, const char * pchTitle, const char * pchDescription, ERemoteStoragePublishedFileVisibility eVisibility, SteamParamStringArray_t * pTags)
 {
-    return ((ISteamRemoteStorage*)linux_side)->PublishVideo((const char *)pchVideoURL, (const char *)pchPreviewFile, (AppId_t)nConsumerAppId, (const char *)pchTitle, (const char *)pchDescription, (ERemoteStoragePublishedFileVisibility)eVisibility, (SteamParamStringArray_t *)pTags);
+    SteamParamStringArray_t lin_pTags;
+    win_to_lin_struct_SteamParamStringArray_t_119(pTags, &lin_pTags);
+    SteamAPICall_t retval = ((ISteamRemoteStorage*)linux_side)->PublishVideo((const char *)pchVideoURL, (const char *)pchPreviewFile, (AppId_t)nConsumerAppId, (const char *)pchTitle, (const char *)pchDescription, (ERemoteStoragePublishedFileVisibility)eVisibility, &lin_pTags);
+    lin_to_win_struct_SteamParamStringArray_t_119(&lin_pTags, pTags);
+    return retval;
 }
 
 SteamAPICall_t cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_SetUserPublishedFileAction(void *linux_side, PublishedFileId_t unPublishedFileId, EWorkshopFileAction eAction)
@@ -237,7 +256,14 @@ SteamAPICall_t cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_En
 
 SteamAPICall_t cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_EnumeratePublishedWorkshopFiles(void *linux_side, EWorkshopEnumerationType eEnumerationType, uint32 unStartIndex, uint32 unCount, uint32 unDays, SteamParamStringArray_t * pTags, SteamParamStringArray_t * pUserTags)
 {
-    return ((ISteamRemoteStorage*)linux_side)->EnumeratePublishedWorkshopFiles((EWorkshopEnumerationType)eEnumerationType, (uint32)unStartIndex, (uint32)unCount, (uint32)unDays, (SteamParamStringArray_t *)pTags, (SteamParamStringArray_t *)pUserTags);
+    SteamParamStringArray_t lin_pTags;
+    win_to_lin_struct_SteamParamStringArray_t_119(pTags, &lin_pTags);
+    SteamParamStringArray_t lin_pUserTags;
+    win_to_lin_struct_SteamParamStringArray_t_119(pUserTags, &lin_pUserTags);
+    SteamAPICall_t retval = ((ISteamRemoteStorage*)linux_side)->EnumeratePublishedWorkshopFiles((EWorkshopEnumerationType)eEnumerationType, (uint32)unStartIndex, (uint32)unCount, (uint32)unDays, &lin_pTags, &lin_pUserTags);
+    lin_to_win_struct_SteamParamStringArray_t_119(&lin_pTags, pTags);
+    lin_to_win_struct_SteamParamStringArray_t_119(&lin_pUserTags, pUserTags);
+    return retval;
 }
 
 #ifdef __cplusplus

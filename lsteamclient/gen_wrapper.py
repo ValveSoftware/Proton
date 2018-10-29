@@ -148,6 +148,9 @@ print_sizes = []
 
 class_versions = {}
 
+def strip_const(typename):
+    return typename.replace("const ", "", 1)
+
 def handle_destructor(cfile, classname, winclassname, method):
     cfile.write("DEFINE_THISCALL_WRAPPER(%s_destructor, 4)\n" % winclassname)
     cfile.write("void __thiscall %s_destructor(%s *_this)\n{/* never called */}\n\n" % (winclassname, winclassname))
@@ -192,6 +195,7 @@ def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, e
     if returns_record:
         cfile.write(", %s *_r" % method.result_type.spelling)
     unnamed = 'a'
+    need_convert = []
     for param in list(method.get_children()):
         if param.kind == clang.cindex.CursorKind.PARM_DECL:
             if param.type.kind == clang.cindex.TypeKind.POINTER and \
@@ -200,6 +204,15 @@ def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, e
                 typename = "void *"
             else:
                 typename = param.type.spelling.split("::")[-1];
+
+            #assume pointers are out-params and structs are in-params
+            real_type = param.type;
+            while real_type.kind == clang.cindex.TypeKind.POINTER:
+                real_type = real_type.get_pointee()
+            if real_type.kind == clang.cindex.TypeKind.RECORD and \
+                    real_type.spelling != "CSteamID":
+                need_convert.append(param)
+
             if param.spelling == "":
                 cfile.write(", %s _%s" % (typename, unnamed))
                 cpp.write(", %s _%s" % (typename, unnamed))
@@ -220,20 +233,39 @@ def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, e
 
     if char_param_is_unix_path:
         cfile.write("    uint32 path_result;\n")
+    for param in need_convert:
+        if param.spelling == "ppchFilters":
+            #manually handle double pointer ppchFilters
+            #if we need to automate this, we could figure out how the annotation syntax converts into cindex
+            cpp.write("    %s *lin_%s = malloc(sizeof(%s) * nFilters);\n" % (param.type.spelling, param.spelling, param.type.spelling))
+            cpp.write("    for(int i = 0; i < nFilters; ++i)\n")
+            cpp.write("        win_to_lin_struct_%s_%s(%s[i], &lin_%s[i]);\n" % (param.type.spelling, sdkver, param.spelling, param.spelling))
+        elif param.type.kind == clang.cindex.TypeKind.POINTER:
+            #handle single pointers, but not double pointers
+            assert(param.type.get_pointee().kind == clang.cindex.TypeKind.RECORD)
+            cpp.write("    %s lin_%s;\n" % (strip_const(param.type.get_pointee().spelling), param.spelling))
+            cpp.write("    win_to_lin_struct_%s_%s(%s, &lin_%s);\n" % (strip_const(param.type.get_pointee().spelling), sdkver, param.spelling, param.spelling))
+        else:
+            #raw structs
+            cpp.write("    %s lin_%s;\n" % (param.type.spelling, param.spelling))
+            cpp.write("    win_to_lin_struct_%s_%s(&%s, &lin_%s);\n" % (param.type.spelling, sdkver, param.spelling, param.spelling))
 
     cfile.write("    TRACE(\"%p\\n\", _this);\n")
 
     if method.result_type.kind == clang.cindex.TypeKind.VOID:
         cfile.write("    ")
-        cpp.write("    ")
     elif char_param_is_unix_path:
         cfile.write("    path_result = ")
-        cpp.write("    return ")
     elif returns_record:
         cfile.write("    *_r = ")
-        cpp.write("    return ")
     else:
         cfile.write("    return ")
+
+    if method.result_type.kind == clang.cindex.TypeKind.VOID:
+        cpp.write("    ")
+    elif len(need_convert) > 0:
+        cpp.write("    %s retval = " % (method.result_type.spelling))
+    else:
         cpp.write("    return ")
 
     should_gen_wrapper = method.result_type.spelling.startswith("ISteam") or \
@@ -265,6 +297,13 @@ def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, e
             elif "ISteamMatchmakingServerListResponse" in param.type.spelling:
                 cfile.write(", create_LinuxMatchmakingServerListResponse(%s)" % param.spelling)
                 cpp.write("(%s)%s" % (param.type.spelling, param.spelling))
+            elif param in need_convert:
+                cfile.write(", %s" % param.spelling)
+                if param.type.kind != clang.cindex.TypeKind.POINTER or \
+                        param.spelling == "ppchFilter":
+                    cpp.write("lin_%s" % (param.spelling))
+                else:
+                    cpp.write("&lin_%s" % (param.spelling))
             else:
                 cfile.write(", %s" % param.spelling)
                 cpp.write("(%s)%s" % (param.type.spelling, param.spelling))
@@ -277,6 +316,14 @@ def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, e
     if char_param_is_unix_path and not path_param_name is None and not path_size_param_name is None:
         cfile.write("    return steamclient_unix_path_to_dos_path(path_result, %s, %s);\n" % (path_param_name, path_size_param_name))
     cfile.write("}\n\n")
+    for param in need_convert:
+        if param.type.kind == clang.cindex.TypeKind.POINTER:
+            cpp.write("    lin_to_win_struct_%s_%s(&lin_%s, %s);\n" % (param.type.get_pointee().spelling, sdkver, param.spelling, param.spelling))
+        else:
+            cpp.write("    lin_to_win_struct_%s_%s(&lin_%s, &%s);\n" % (param.type.spelling, sdkver, param.spelling, param.spelling))
+    if method.result_type.kind != clang.cindex.TypeKind.VOID and \
+            len(need_convert) > 0:
+        cpp.write("    return retval;\n")
     cpp.write("}\n\n")
 
 def get_iface_version(classname):
