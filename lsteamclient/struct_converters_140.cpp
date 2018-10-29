@@ -5,10 +5,12 @@
 #include "steamworks_sdk_140/isteamgameserverstats.h"
 #include "steamworks_sdk_140/isteamgamecoordinator.h"
 extern "C" {
+#pragma pack( push, 8 )
 struct winSubmitItemUpdateResult_t_8 {
     EResult m_eResult;
     bool m_bUserNeedsToAcceptWorkshopLegalAgreement;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_SubmitItemUpdateResult_t_8(void *l, void *w)
 {
     SubmitItemUpdateResult_t *lin = (SubmitItemUpdateResult_t *)l;

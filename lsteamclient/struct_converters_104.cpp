@@ -3,9 +3,11 @@
 #include "steamworks_sdk_104/steam_api.h"
 #include "steamworks_sdk_104/isteamgameserver.h"
 extern "C" {
+#pragma pack( push, 8 )
 struct winLobbyClosing_t_8 {
     uint64 m_ulSteamIDLobby;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_LobbyClosing_t_8(void *l, void *w)
 {
     LobbyClosing_t *lin = (LobbyClosing_t *)l;
@@ -13,10 +15,12 @@ void cb_LobbyClosing_t_8(void *l, void *w)
     win->m_ulSteamIDLobby = lin->m_ulSteamIDLobby;
 }
 
+#pragma pack( push, 8 )
 struct winLobbyKicked_t_16 {
     uint64 m_ulSteamIDLobby;
     uint64 m_ulSteamIDAdmin;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_LobbyKicked_t_16(void *l, void *w)
 {
     LobbyKicked_t *lin = (LobbyKicked_t *)l;

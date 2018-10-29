@@ -5,9 +5,11 @@
 #include "steamworks_sdk_134/isteamgameserverstats.h"
 #include "steamworks_sdk_134/isteamgamecoordinator.h"
 extern "C" {
+#pragma pack( push, 8 )
 struct winSteamServerConnectFailure_t_4 {
     EResult m_eResult;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_SteamServerConnectFailure_t_4(void *l, void *w)
 {
     SteamServerConnectFailure_t *lin = (SteamServerConnectFailure_t *)l;

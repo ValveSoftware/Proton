@@ -5,6 +5,7 @@
 #include "steamworks_sdk_117/isteamgameserverstats.h"
 #include "steamworks_sdk_117/isteamgamecoordinator.h"
 extern "C" {
+#pragma pack( push, 8 )
 struct winRemoteStorageGetPublishedFileDetailsResult_t_1732 {
     EResult m_eResult;
     PublishedFileId_t m_nPublishedFileId;
@@ -23,6 +24,7 @@ struct winRemoteStorageGetPublishedFileDetailsResult_t_1732 {
     bool m_bTagsTruncated;
     char m_pchFileName[260];
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_RemoteStorageGetPublishedFileDetailsResult_t_1732(void *l, void *w)
 {
     RemoteStorageGetPublishedFileDetailsResult_t *lin = (RemoteStorageGetPublishedFileDetailsResult_t *)l;

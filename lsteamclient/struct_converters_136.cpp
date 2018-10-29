@@ -5,9 +5,11 @@
 #include "steamworks_sdk_136/isteamgameserverstats.h"
 #include "steamworks_sdk_136/isteamgamecoordinator.h"
 extern "C" {
+#pragma pack( push, 8 )
 struct winSteamAPICallCompleted_t_8 {
     SteamAPICall_t m_hAsyncCall;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_SteamAPICallCompleted_t_8(void *l, void *w)
 {
     SteamAPICallCompleted_t *lin = (SteamAPICallCompleted_t *)l;
@@ -15,11 +17,13 @@ void cb_SteamAPICallCompleted_t_8(void *l, void *w)
     win->m_hAsyncCall = lin->m_hAsyncCall;
 }
 
+#pragma pack( push, 8 )
 struct winAppProofOfPurchaseKeyResponse_t_72 {
     EResult m_eResult;
     uint32 m_nAppID;
     char m_rgchKey[64];
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_AppProofOfPurchaseKeyResponse_t_72(void *l, void *w)
 {
     AppProofOfPurchaseKeyResponse_t *lin = (AppProofOfPurchaseKeyResponse_t *)l;

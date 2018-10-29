@@ -5,12 +5,14 @@
 #include "steamworks_sdk_132/isteamgameserverstats.h"
 #include "steamworks_sdk_132/isteamgamecoordinator.h"
 extern "C" {
+#pragma pack( push, 8 )
 struct winHTTPRequestCompleted_t_20 {
     HTTPRequestHandle m_hRequest;
     uint64 m_ulContextValue;
     bool m_bRequestSuccessful;
     EHTTPStatusCode m_eStatusCode;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_HTTPRequestCompleted_t_20(void *l, void *w)
 {
     HTTPRequestCompleted_t *lin = (HTTPRequestCompleted_t *)l;
@@ -21,12 +23,14 @@ void cb_HTTPRequestCompleted_t_20(void *l, void *w)
     win->m_eStatusCode = lin->m_eStatusCode;
 }
 
+#pragma pack( push, 8 )
 struct winHTML_ComboNeedsPaint_t_16 {
     HHTMLBrowser unBrowserHandle;
     const char * pBGRA;
     uint32 unWide;
     uint32 unTall;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_HTML_ComboNeedsPaint_t_16(void *l, void *w)
 {
     HTML_ComboNeedsPaint_t *lin = (HTML_ComboNeedsPaint_t *)l;
@@ -37,9 +41,11 @@ void cb_HTML_ComboNeedsPaint_t_16(void *l, void *w)
     win->unTall = lin->unTall;
 }
 
+#pragma pack( push, 8 )
 struct winHTML_ShowPopup_t_4 {
     HHTMLBrowser unBrowserHandle;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_HTML_ShowPopup_t_4(void *l, void *w)
 {
     HTML_ShowPopup_t *lin = (HTML_ShowPopup_t *)l;
@@ -47,9 +53,11 @@ void cb_HTML_ShowPopup_t_4(void *l, void *w)
     win->unBrowserHandle = lin->unBrowserHandle;
 }
 
+#pragma pack( push, 8 )
 struct winHTML_HidePopup_t_4 {
     HHTMLBrowser unBrowserHandle;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_HTML_HidePopup_t_4(void *l, void *w)
 {
     HTML_HidePopup_t *lin = (HTML_HidePopup_t *)l;
@@ -57,6 +65,7 @@ void cb_HTML_HidePopup_t_4(void *l, void *w)
     win->unBrowserHandle = lin->unBrowserHandle;
 }
 
+#pragma pack( push, 8 )
 struct winHTML_SizePopup_t_20 {
     HHTMLBrowser unBrowserHandle;
     uint32 unX;
@@ -64,6 +73,7 @@ struct winHTML_SizePopup_t_20 {
     uint32 unWide;
     uint32 unTall;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_HTML_SizePopup_t_20(void *l, void *w)
 {
     HTML_SizePopup_t *lin = (HTML_SizePopup_t *)l;
@@ -75,6 +85,7 @@ void cb_HTML_SizePopup_t_20(void *l, void *w)
     win->unTall = lin->unTall;
 }
 
+#pragma pack( push, 8 )
 struct winHTML_NewWindow_t_24 {
     HHTMLBrowser unBrowserHandle;
     const char * pchURL;
@@ -83,6 +94,7 @@ struct winHTML_NewWindow_t_24 {
     uint32 unWide;
     uint32 unTall;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_HTML_NewWindow_t_24(void *l, void *w)
 {
     HTML_NewWindow_t *lin = (HTML_NewWindow_t *)l;

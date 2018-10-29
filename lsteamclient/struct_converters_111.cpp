@@ -5,10 +5,12 @@
 #include "steamworks_sdk_111/isteamgameserverstats.h"
 #include "steamworks_sdk_111/isteamgamecoordinator.h"
 extern "C" {
+#pragma pack( push, 8 )
 struct winLobbyDataUpdate_t_16 {
     uint64 m_ulSteamIDLobby;
     uint64 m_ulSteamIDMember;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_LobbyDataUpdate_t_16(void *l, void *w)
 {
     LobbyDataUpdate_t *lin = (LobbyDataUpdate_t *)l;

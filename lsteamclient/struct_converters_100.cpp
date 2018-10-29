@@ -3,11 +3,13 @@
 #include "steamworks_sdk_100/steam_api.h"
 #include "steamworks_sdk_100/isteamgameserver.h"
 extern "C" {
+#pragma pack( push, 8 )
 struct winAppDataChanged_t_8 {
     uint32 m_nAppID;
     bool m_bBySteamUI;
     bool m_bCDDBUpdate;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_AppDataChanged_t_8(void *l, void *w)
 {
     AppDataChanged_t *lin = (AppDataChanged_t *)l;

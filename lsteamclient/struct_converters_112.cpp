@@ -5,10 +5,12 @@
 #include "steamworks_sdk_112/isteamgameserverstats.h"
 #include "steamworks_sdk_112/isteamgamecoordinator.h"
 extern "C" {
+#pragma pack( push, 8 )
 struct winLobbyInvite_t_16 {
     uint64 m_ulSteamIDUser;
     uint64 m_ulSteamIDLobby;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_LobbyInvite_t_16(void *l, void *w)
 {
     LobbyInvite_t *lin = (LobbyInvite_t *)l;

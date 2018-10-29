@@ -5,10 +5,12 @@
 #include "steamworks_sdk_124/isteamgameserverstats.h"
 #include "steamworks_sdk_124/isteamgamecoordinator.h"
 extern "C" {
+#pragma pack( push, 8 )
 struct winRemoteStoragePublishFileResult_t_12 {
     EResult m_eResult;
     PublishedFileId_t m_nPublishedFileId;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_RemoteStoragePublishFileResult_t_12(void *l, void *w)
 {
     RemoteStoragePublishFileResult_t *lin = (RemoteStoragePublishFileResult_t *)l;
@@ -17,10 +19,12 @@ void cb_RemoteStoragePublishFileResult_t_12(void *l, void *w)
     win->m_nPublishedFileId = lin->m_nPublishedFileId;
 }
 
+#pragma pack( push, 8 )
 struct winRemoteStorageUpdatePublishedFileResult_t_12 {
     EResult m_eResult;
     PublishedFileId_t m_nPublishedFileId;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_RemoteStorageUpdatePublishedFileResult_t_12(void *l, void *w)
 {
     RemoteStorageUpdatePublishedFileResult_t *lin = (RemoteStorageUpdatePublishedFileResult_t *)l;
@@ -29,6 +33,7 @@ void cb_RemoteStorageUpdatePublishedFileResult_t_12(void *l, void *w)
     win->m_nPublishedFileId = lin->m_nPublishedFileId;
 }
 
+#pragma pack( push, 8 )
 struct winRemoteStorageEnumerateWorkshopFilesResult_t_612 {
     EResult m_eResult;
     int32 m_nResultsReturned;
@@ -36,6 +41,7 @@ struct winRemoteStorageEnumerateWorkshopFilesResult_t_612 {
     PublishedFileId_t m_rgPublishedFileId[50];
     float m_rgScore[50];
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_RemoteStorageEnumerateWorkshopFilesResult_t_612(void *l, void *w)
 {
     RemoteStorageEnumerateWorkshopFilesResult_t *lin = (RemoteStorageEnumerateWorkshopFilesResult_t *)l;

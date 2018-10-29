@@ -431,6 +431,7 @@ def handle_callback_struct(sdkver, callback, cb_num):
     datfile.write("case 0x%08x: win_msg->m_cubParam = sizeof(struct win%s); win_msg->m_pubParam = HeapAlloc(GetProcessHeap(), 0, win_msg->m_cubParam); cb_%s(lin_msg.m_pubParam, win_msg->m_pubParam); break;\n" % (cb_id, handler_name, handler_name))
 
     hfile = open("struct_converters.h", "a")
+    hfile.write("#pragma pack( push, 8 )\n")
     hfile.write("struct win%s {\n" % handler_name)
     for m in callback.get_children():
         if m.kind == clang.cindex.CursorKind.FIELD_DECL:
@@ -439,8 +440,10 @@ def handle_callback_struct(sdkver, callback, cb_num):
             else:
                 hfile.write("    %s %s;\n" % (m.type.spelling, m.displayname))
     hfile.write("}  __attribute__ ((ms_struct));\n")
-    hfile.write("extern void cb_%s(void *l, void *w);\n" % handler_name)
+    hfile.write("#pragma pack( pop )\n")
+    hfile.write("extern void cb_%s(void *l, void *w);\n\n" % handler_name)
 
+    cppfile.write("#pragma pack( push, 8 )\n")
     cppfile.write("struct win%s {\n" % handler_name)
     for m in callback.get_children():
         if m.kind == clang.cindex.CursorKind.FIELD_DECL:
@@ -449,6 +452,7 @@ def handle_callback_struct(sdkver, callback, cb_num):
             else:
                 cppfile.write("    %s %s;\n" % (m.type.spelling, m.displayname))
     cppfile.write("}  __attribute__ ((ms_struct));\n")
+    cppfile.write("#pragma pack( pop )\n")
 
     cppfile.write("void cb_%s(void *l, void *w)\n{\n" % handler_name)
     cppfile.write("    %s *lin = (%s *)l;\n" % (callback.displayname, callback.displayname))

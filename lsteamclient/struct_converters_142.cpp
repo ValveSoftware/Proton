@@ -5,18 +5,22 @@
 #include "steamworks_sdk_142/isteamgameserverstats.h"
 #include "steamworks_sdk_142/isteamgamecoordinator.h"
 extern "C" {
+#pragma pack( push, 8 )
 struct winSteamServersConnected_t_1 {
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_SteamServersConnected_t_1(void *l, void *w)
 {
     SteamServersConnected_t *lin = (SteamServersConnected_t *)l;
     struct winSteamServersConnected_t_1 *win = (struct winSteamServersConnected_t_1 *)w;
 }
 
+#pragma pack( push, 8 )
 struct winSteamServerConnectFailure_t_8 {
     EResult m_eResult;
     bool m_bStillRetrying;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_SteamServerConnectFailure_t_8(void *l, void *w)
 {
     SteamServerConnectFailure_t *lin = (SteamServerConnectFailure_t *)l;
@@ -25,9 +29,11 @@ void cb_SteamServerConnectFailure_t_8(void *l, void *w)
     win->m_bStillRetrying = lin->m_bStillRetrying;
 }
 
+#pragma pack( push, 8 )
 struct winSteamServersDisconnected_t_4 {
     EResult m_eResult;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_SteamServersDisconnected_t_4(void *l, void *w)
 {
     SteamServersDisconnected_t *lin = (SteamServersDisconnected_t *)l;
@@ -35,6 +41,7 @@ void cb_SteamServersDisconnected_t_4(void *l, void *w)
     win->m_eResult = lin->m_eResult;
 }
 
+#pragma pack( push, 8 )
 struct winClientGameServerDeny_t_16 {
     uint32 m_uAppID;
     uint32 m_unGameServerIP;
@@ -42,6 +49,7 @@ struct winClientGameServerDeny_t_16 {
     uint16 m_bSecure;
     uint32 m_uReason;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_ClientGameServerDeny_t_16(void *l, void *w)
 {
     ClientGameServerDeny_t *lin = (ClientGameServerDeny_t *)l;
@@ -53,9 +61,11 @@ void cb_ClientGameServerDeny_t_16(void *l, void *w)
     win->m_uReason = lin->m_uReason;
 }
 
+#pragma pack( push, 8 )
 struct winIPCFailure_t_1 {
     uint8 m_eFailureType;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_IPCFailure_t_1(void *l, void *w)
 {
     IPCFailure_t *lin = (IPCFailure_t *)l;
@@ -63,19 +73,23 @@ void cb_IPCFailure_t_1(void *l, void *w)
     win->m_eFailureType = lin->m_eFailureType;
 }
 
+#pragma pack( push, 8 )
 struct winLicensesUpdated_t_1 {
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_LicensesUpdated_t_1(void *l, void *w)
 {
     LicensesUpdated_t *lin = (LicensesUpdated_t *)l;
     struct winLicensesUpdated_t_1 *win = (struct winLicensesUpdated_t_1 *)w;
 }
 
+#pragma pack( push, 8 )
 struct winValidateAuthTicketResponse_t_20 {
     CSteamID m_SteamID;
     EAuthSessionResponse m_eAuthSessionResponse;
     CSteamID m_OwnerSteamID;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_ValidateAuthTicketResponse_t_20(void *l, void *w)
 {
     ValidateAuthTicketResponse_t *lin = (ValidateAuthTicketResponse_t *)l;
@@ -85,11 +99,13 @@ void cb_ValidateAuthTicketResponse_t_20(void *l, void *w)
     win->m_OwnerSteamID = lin->m_OwnerSteamID;
 }
 
+#pragma pack( push, 8 )
 struct winMicroTxnAuthorizationResponse_t_16 {
     uint32 m_unAppID;
     uint64 m_ulOrderID;
     uint8 m_bAuthorized;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_MicroTxnAuthorizationResponse_t_16(void *l, void *w)
 {
     MicroTxnAuthorizationResponse_t *lin = (MicroTxnAuthorizationResponse_t *)l;
@@ -99,9 +115,11 @@ void cb_MicroTxnAuthorizationResponse_t_16(void *l, void *w)
     win->m_bAuthorized = lin->m_bAuthorized;
 }
 
+#pragma pack( push, 8 )
 struct winEncryptedAppTicketResponse_t_4 {
     EResult m_eResult;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_EncryptedAppTicketResponse_t_4(void *l, void *w)
 {
     EncryptedAppTicketResponse_t *lin = (EncryptedAppTicketResponse_t *)l;
@@ -109,10 +127,12 @@ void cb_EncryptedAppTicketResponse_t_4(void *l, void *w)
     win->m_eResult = lin->m_eResult;
 }
 
+#pragma pack( push, 8 )
 struct winGetAuthSessionTicketResponse_t_8 {
     HAuthTicket m_hAuthTicket;
     EResult m_eResult;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_GetAuthSessionTicketResponse_t_8(void *l, void *w)
 {
     GetAuthSessionTicketResponse_t *lin = (GetAuthSessionTicketResponse_t *)l;
@@ -121,9 +141,11 @@ void cb_GetAuthSessionTicketResponse_t_8(void *l, void *w)
     win->m_eResult = lin->m_eResult;
 }
 
+#pragma pack( push, 8 )
 struct winGameWebCallback_t_256 {
     char m_szURL[256];
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_GameWebCallback_t_256(void *l, void *w)
 {
     GameWebCallback_t *lin = (GameWebCallback_t *)l;
@@ -131,9 +153,11 @@ void cb_GameWebCallback_t_256(void *l, void *w)
     memcpy(win->m_szURL, lin->m_szURL, sizeof(win->m_szURL));
 }
 
+#pragma pack( push, 8 )
 struct winStoreAuthURLResponse_t_512 {
     char m_szURL[512];
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_StoreAuthURLResponse_t_512(void *l, void *w)
 {
     StoreAuthURLResponse_t *lin = (StoreAuthURLResponse_t *)l;
@@ -141,10 +165,12 @@ void cb_StoreAuthURLResponse_t_512(void *l, void *w)
     memcpy(win->m_szURL, lin->m_szURL, sizeof(win->m_szURL));
 }
 
+#pragma pack( push, 8 )
 struct winPersonaStateChange_t_12 {
     uint64 m_ulSteamID;
     int m_nChangeFlags;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_PersonaStateChange_t_12(void *l, void *w)
 {
     PersonaStateChange_t *lin = (PersonaStateChange_t *)l;
@@ -153,9 +179,11 @@ void cb_PersonaStateChange_t_12(void *l, void *w)
     win->m_nChangeFlags = lin->m_nChangeFlags;
 }
 
+#pragma pack( push, 8 )
 struct winGameOverlayActivated_t_1 {
     uint8 m_bActive;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_GameOverlayActivated_t_1(void *l, void *w)
 {
     GameOverlayActivated_t *lin = (GameOverlayActivated_t *)l;
@@ -163,10 +191,12 @@ void cb_GameOverlayActivated_t_1(void *l, void *w)
     win->m_bActive = lin->m_bActive;
 }
 
+#pragma pack( push, 8 )
 struct winGameServerChangeRequested_t_128 {
     char m_rgchServer[64];
     char m_rgchPassword[64];
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_GameServerChangeRequested_t_128(void *l, void *w)
 {
     GameServerChangeRequested_t *lin = (GameServerChangeRequested_t *)l;
@@ -175,10 +205,12 @@ void cb_GameServerChangeRequested_t_128(void *l, void *w)
     memcpy(win->m_rgchPassword, lin->m_rgchPassword, sizeof(win->m_rgchPassword));
 }
 
+#pragma pack( push, 8 )
 struct winGameLobbyJoinRequested_t_16 {
     CSteamID m_steamIDLobby;
     CSteamID m_steamIDFriend;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_GameLobbyJoinRequested_t_16(void *l, void *w)
 {
     GameLobbyJoinRequested_t *lin = (GameLobbyJoinRequested_t *)l;
@@ -187,12 +219,14 @@ void cb_GameLobbyJoinRequested_t_16(void *l, void *w)
     win->m_steamIDFriend = lin->m_steamIDFriend;
 }
 
+#pragma pack( push, 8 )
 struct winAvatarImageLoaded_t_20 {
     CSteamID m_steamID;
     int m_iImage;
     int m_iWide;
     int m_iTall;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_AvatarImageLoaded_t_20(void *l, void *w)
 {
     AvatarImageLoaded_t *lin = (AvatarImageLoaded_t *)l;
@@ -203,11 +237,13 @@ void cb_AvatarImageLoaded_t_20(void *l, void *w)
     win->m_iTall = lin->m_iTall;
 }
 
+#pragma pack( push, 8 )
 struct winClanOfficerListResponse_t_16 {
     CSteamID m_steamIDClan;
     int m_cOfficers;
     uint8 m_bSuccess;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_ClanOfficerListResponse_t_16(void *l, void *w)
 {
     ClanOfficerListResponse_t *lin = (ClanOfficerListResponse_t *)l;
@@ -217,10 +253,12 @@ void cb_ClanOfficerListResponse_t_16(void *l, void *w)
     win->m_bSuccess = lin->m_bSuccess;
 }
 
+#pragma pack( push, 8 )
 struct winFriendRichPresenceUpdate_t_12 {
     CSteamID m_steamIDFriend;
     AppId_t m_nAppID;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_FriendRichPresenceUpdate_t_12(void *l, void *w)
 {
     FriendRichPresenceUpdate_t *lin = (FriendRichPresenceUpdate_t *)l;
@@ -229,10 +267,12 @@ void cb_FriendRichPresenceUpdate_t_12(void *l, void *w)
     win->m_nAppID = lin->m_nAppID;
 }
 
+#pragma pack( push, 8 )
 struct winGameRichPresenceJoinRequested_t_264 {
     CSteamID m_steamIDFriend;
     char m_rgchConnect[256];
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_GameRichPresenceJoinRequested_t_264(void *l, void *w)
 {
     GameRichPresenceJoinRequested_t *lin = (GameRichPresenceJoinRequested_t *)l;
@@ -241,11 +281,13 @@ void cb_GameRichPresenceJoinRequested_t_264(void *l, void *w)
     memcpy(win->m_rgchConnect, lin->m_rgchConnect, sizeof(win->m_rgchConnect));
 }
 
+#pragma pack( push, 8 )
 struct winGameConnectedClanChatMsg_t_20 {
     CSteamID m_steamIDClanChat;
     CSteamID m_steamIDUser;
     int m_iMessageID;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_GameConnectedClanChatMsg_t_20(void *l, void *w)
 {
     GameConnectedClanChatMsg_t *lin = (GameConnectedClanChatMsg_t *)l;
@@ -255,10 +297,12 @@ void cb_GameConnectedClanChatMsg_t_20(void *l, void *w)
     win->m_iMessageID = lin->m_iMessageID;
 }
 
+#pragma pack( push, 8 )
 struct winGameConnectedChatJoin_t_16 {
     CSteamID m_steamIDClanChat;
     CSteamID m_steamIDUser;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_GameConnectedChatJoin_t_16(void *l, void *w)
 {
     GameConnectedChatJoin_t *lin = (GameConnectedChatJoin_t *)l;
@@ -267,12 +311,14 @@ void cb_GameConnectedChatJoin_t_16(void *l, void *w)
     win->m_steamIDUser = lin->m_steamIDUser;
 }
 
+#pragma pack( push, 8 )
 struct winGameConnectedChatLeave_t_18 {
     CSteamID m_steamIDClanChat;
     CSteamID m_steamIDUser;
     bool m_bKicked;
     bool m_bDropped;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_GameConnectedChatLeave_t_18(void *l, void *w)
 {
     GameConnectedChatLeave_t *lin = (GameConnectedChatLeave_t *)l;
@@ -283,9 +329,11 @@ void cb_GameConnectedChatLeave_t_18(void *l, void *w)
     win->m_bDropped = lin->m_bDropped;
 }
 
+#pragma pack( push, 8 )
 struct winDownloadClanActivityCountsResult_t_1 {
     bool m_bSuccess;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_DownloadClanActivityCountsResult_t_1(void *l, void *w)
 {
     DownloadClanActivityCountsResult_t *lin = (DownloadClanActivityCountsResult_t *)l;
@@ -293,10 +341,12 @@ void cb_DownloadClanActivityCountsResult_t_1(void *l, void *w)
     win->m_bSuccess = lin->m_bSuccess;
 }
 
+#pragma pack( push, 8 )
 struct winJoinClanChatRoomCompletionResult_t_12 {
     CSteamID m_steamIDClanChat;
     EChatRoomEnterResponse m_eChatRoomEnterResponse;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_JoinClanChatRoomCompletionResult_t_12(void *l, void *w)
 {
     JoinClanChatRoomCompletionResult_t *lin = (JoinClanChatRoomCompletionResult_t *)l;
@@ -305,10 +355,12 @@ void cb_JoinClanChatRoomCompletionResult_t_12(void *l, void *w)
     win->m_eChatRoomEnterResponse = lin->m_eChatRoomEnterResponse;
 }
 
+#pragma pack( push, 8 )
 struct winGameConnectedFriendChatMsg_t_12 {
     CSteamID m_steamIDUser;
     int m_iMessageID;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_GameConnectedFriendChatMsg_t_12(void *l, void *w)
 {
     GameConnectedFriendChatMsg_t *lin = (GameConnectedFriendChatMsg_t *)l;
@@ -317,11 +369,13 @@ void cb_GameConnectedFriendChatMsg_t_12(void *l, void *w)
     win->m_iMessageID = lin->m_iMessageID;
 }
 
+#pragma pack( push, 8 )
 struct winFriendsGetFollowerCount_t_16 {
     EResult m_eResult;
     CSteamID m_steamID;
     int m_nCount;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_FriendsGetFollowerCount_t_16(void *l, void *w)
 {
     FriendsGetFollowerCount_t *lin = (FriendsGetFollowerCount_t *)l;
@@ -331,11 +385,13 @@ void cb_FriendsGetFollowerCount_t_16(void *l, void *w)
     win->m_nCount = lin->m_nCount;
 }
 
+#pragma pack( push, 8 )
 struct winFriendsIsFollowing_t_16 {
     EResult m_eResult;
     CSteamID m_steamID;
     bool m_bIsFollowing;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_FriendsIsFollowing_t_16(void *l, void *w)
 {
     FriendsIsFollowing_t *lin = (FriendsIsFollowing_t *)l;
@@ -345,12 +401,14 @@ void cb_FriendsIsFollowing_t_16(void *l, void *w)
     win->m_bIsFollowing = lin->m_bIsFollowing;
 }
 
+#pragma pack( push, 8 )
 struct winFriendsEnumerateFollowingList_t_412 {
     EResult m_eResult;
     CSteamID m_rgSteamID[50];
     int32 m_nResultsReturned;
     int32 m_nTotalResultCount;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_FriendsEnumerateFollowingList_t_412(void *l, void *w)
 {
     FriendsEnumerateFollowingList_t *lin = (FriendsEnumerateFollowingList_t *)l;
@@ -361,11 +419,13 @@ void cb_FriendsEnumerateFollowingList_t_412(void *l, void *w)
     win->m_nTotalResultCount = lin->m_nTotalResultCount;
 }
 
+#pragma pack( push, 8 )
 struct winSetPersonaNameResponse_t_8 {
     bool m_bSuccess;
     bool m_bLocalSuccess;
     EResult m_result;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_SetPersonaNameResponse_t_8(void *l, void *w)
 {
     SetPersonaNameResponse_t *lin = (SetPersonaNameResponse_t *)l;
@@ -375,17 +435,21 @@ void cb_SetPersonaNameResponse_t_8(void *l, void *w)
     win->m_result = lin->m_result;
 }
 
+#pragma pack( push, 8 )
 struct winIPCountry_t_1 {
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_IPCountry_t_1(void *l, void *w)
 {
     IPCountry_t *lin = (IPCountry_t *)l;
     struct winIPCountry_t_1 *win = (struct winIPCountry_t_1 *)w;
 }
 
+#pragma pack( push, 8 )
 struct winLowBatteryPower_t_1 {
     uint8 m_nMinutesBatteryLeft;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_LowBatteryPower_t_1(void *l, void *w)
 {
     LowBatteryPower_t *lin = (LowBatteryPower_t *)l;
@@ -393,11 +457,13 @@ void cb_LowBatteryPower_t_1(void *l, void *w)
     win->m_nMinutesBatteryLeft = lin->m_nMinutesBatteryLeft;
 }
 
+#pragma pack( push, 8 )
 struct winSteamAPICallCompleted_t_16 {
     SteamAPICall_t m_hAsyncCall;
     int m_iCallback;
     uint32 m_cubParam;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_SteamAPICallCompleted_t_16(void *l, void *w)
 {
     SteamAPICallCompleted_t *lin = (SteamAPICallCompleted_t *)l;
@@ -407,17 +473,21 @@ void cb_SteamAPICallCompleted_t_16(void *l, void *w)
     win->m_cubParam = lin->m_cubParam;
 }
 
+#pragma pack( push, 8 )
 struct winSteamShutdown_t_1 {
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_SteamShutdown_t_1(void *l, void *w)
 {
     SteamShutdown_t *lin = (SteamShutdown_t *)l;
     struct winSteamShutdown_t_1 *win = (struct winSteamShutdown_t_1 *)w;
 }
 
+#pragma pack( push, 8 )
 struct winCheckFileSignature_t_4 {
     ECheckFileSignature m_eCheckFileSignature;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_CheckFileSignature_t_4(void *l, void *w)
 {
     CheckFileSignature_t *lin = (CheckFileSignature_t *)l;
@@ -425,10 +495,12 @@ void cb_CheckFileSignature_t_4(void *l, void *w)
     win->m_eCheckFileSignature = lin->m_eCheckFileSignature;
 }
 
+#pragma pack( push, 8 )
 struct winGamepadTextInputDismissed_t_8 {
     bool m_bSubmitted;
     uint32 m_unSubmittedText;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_GamepadTextInputDismissed_t_8(void *l, void *w)
 {
     GamepadTextInputDismissed_t *lin = (GamepadTextInputDismissed_t *)l;
@@ -437,6 +509,7 @@ void cb_GamepadTextInputDismissed_t_8(void *l, void *w)
     win->m_unSubmittedText = lin->m_unSubmittedText;
 }
 
+#pragma pack( push, 8 )
 struct winFavoritesListChanged_t_28 {
     uint32 m_nIP;
     uint32 m_nQueryPort;
@@ -446,6 +519,7 @@ struct winFavoritesListChanged_t_28 {
     bool m_bAdd;
     AccountID_t m_unAccountId;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_FavoritesListChanged_t_28(void *l, void *w)
 {
     FavoritesListChanged_t *lin = (FavoritesListChanged_t *)l;
@@ -459,11 +533,13 @@ void cb_FavoritesListChanged_t_28(void *l, void *w)
     win->m_unAccountId = lin->m_unAccountId;
 }
 
+#pragma pack( push, 8 )
 struct winLobbyInvite_t_24 {
     uint64 m_ulSteamIDUser;
     uint64 m_ulSteamIDLobby;
     uint64 m_ulGameID;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_LobbyInvite_t_24(void *l, void *w)
 {
     LobbyInvite_t *lin = (LobbyInvite_t *)l;
@@ -473,12 +549,14 @@ void cb_LobbyInvite_t_24(void *l, void *w)
     win->m_ulGameID = lin->m_ulGameID;
 }
 
+#pragma pack( push, 8 )
 struct winLobbyEnter_t_20 {
     uint64 m_ulSteamIDLobby;
     uint32 m_rgfChatPermissions;
     bool m_bLocked;
     uint32 m_EChatRoomEnterResponse;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_LobbyEnter_t_20(void *l, void *w)
 {
     LobbyEnter_t *lin = (LobbyEnter_t *)l;
@@ -489,11 +567,13 @@ void cb_LobbyEnter_t_20(void *l, void *w)
     win->m_EChatRoomEnterResponse = lin->m_EChatRoomEnterResponse;
 }
 
+#pragma pack( push, 8 )
 struct winLobbyDataUpdate_t_20 {
     uint64 m_ulSteamIDLobby;
     uint64 m_ulSteamIDMember;
     uint8 m_bSuccess;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_LobbyDataUpdate_t_20(void *l, void *w)
 {
     LobbyDataUpdate_t *lin = (LobbyDataUpdate_t *)l;
@@ -503,12 +583,14 @@ void cb_LobbyDataUpdate_t_20(void *l, void *w)
     win->m_bSuccess = lin->m_bSuccess;
 }
 
+#pragma pack( push, 8 )
 struct winLobbyChatUpdate_t_28 {
     uint64 m_ulSteamIDLobby;
     uint64 m_ulSteamIDUserChanged;
     uint64 m_ulSteamIDMakingChange;
     uint32 m_rgfChatMemberStateChange;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_LobbyChatUpdate_t_28(void *l, void *w)
 {
     LobbyChatUpdate_t *lin = (LobbyChatUpdate_t *)l;
@@ -519,12 +601,14 @@ void cb_LobbyChatUpdate_t_28(void *l, void *w)
     win->m_rgfChatMemberStateChange = lin->m_rgfChatMemberStateChange;
 }
 
+#pragma pack( push, 8 )
 struct winLobbyChatMsg_t_24 {
     uint64 m_ulSteamIDLobby;
     uint64 m_ulSteamIDUser;
     uint8 m_eChatEntryType;
     uint32 m_iChatID;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_LobbyChatMsg_t_24(void *l, void *w)
 {
     LobbyChatMsg_t *lin = (LobbyChatMsg_t *)l;
@@ -535,12 +619,14 @@ void cb_LobbyChatMsg_t_24(void *l, void *w)
     win->m_iChatID = lin->m_iChatID;
 }
 
+#pragma pack( push, 8 )
 struct winLobbyGameCreated_t_24 {
     uint64 m_ulSteamIDLobby;
     uint64 m_ulSteamIDGameServer;
     uint32 m_unIP;
     uint16 m_usPort;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_LobbyGameCreated_t_24(void *l, void *w)
 {
     LobbyGameCreated_t *lin = (LobbyGameCreated_t *)l;
@@ -551,9 +637,11 @@ void cb_LobbyGameCreated_t_24(void *l, void *w)
     win->m_usPort = lin->m_usPort;
 }
 
+#pragma pack( push, 8 )
 struct winLobbyMatchList_t_4 {
     uint32 m_nLobbiesMatching;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_LobbyMatchList_t_4(void *l, void *w)
 {
     LobbyMatchList_t *lin = (LobbyMatchList_t *)l;
@@ -561,11 +649,13 @@ void cb_LobbyMatchList_t_4(void *l, void *w)
     win->m_nLobbiesMatching = lin->m_nLobbiesMatching;
 }
 
+#pragma pack( push, 8 )
 struct winLobbyKicked_t_20 {
     uint64 m_ulSteamIDLobby;
     uint64 m_ulSteamIDAdmin;
     uint8 m_bKickedDueToDisconnect;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_LobbyKicked_t_20(void *l, void *w)
 {
     LobbyKicked_t *lin = (LobbyKicked_t *)l;
@@ -575,10 +665,12 @@ void cb_LobbyKicked_t_20(void *l, void *w)
     win->m_bKickedDueToDisconnect = lin->m_bKickedDueToDisconnect;
 }
 
+#pragma pack( push, 8 )
 struct winLobbyCreated_t_12 {
     EResult m_eResult;
     uint64 m_ulSteamIDLobby;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_LobbyCreated_t_12(void *l, void *w)
 {
     LobbyCreated_t *lin = (LobbyCreated_t *)l;
@@ -587,10 +679,12 @@ void cb_LobbyCreated_t_12(void *l, void *w)
     win->m_ulSteamIDLobby = lin->m_ulSteamIDLobby;
 }
 
+#pragma pack( push, 8 )
 struct winPSNGameBootInviteResult_t_9 {
     bool m_bGameBootInviteExists;
     CSteamID m_steamIDLobby;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_PSNGameBootInviteResult_t_9(void *l, void *w)
 {
     PSNGameBootInviteResult_t *lin = (PSNGameBootInviteResult_t *)l;
@@ -599,9 +693,11 @@ void cb_PSNGameBootInviteResult_t_9(void *l, void *w)
     win->m_steamIDLobby = lin->m_steamIDLobby;
 }
 
+#pragma pack( push, 8 )
 struct winFavoritesListAccountsUpdated_t_4 {
     EResult m_eResult;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_FavoritesListAccountsUpdated_t_4(void *l, void *w)
 {
     FavoritesListAccountsUpdated_t *lin = (FavoritesListAccountsUpdated_t *)l;
@@ -609,11 +705,13 @@ void cb_FavoritesListAccountsUpdated_t_4(void *l, void *w)
     win->m_eResult = lin->m_eResult;
 }
 
+#pragma pack( push, 8 )
 struct winRemoteStorageAppSyncedClient_t_12 {
     AppId_t m_nAppID;
     EResult m_eResult;
     int m_unNumDownloads;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_RemoteStorageAppSyncedClient_t_12(void *l, void *w)
 {
     RemoteStorageAppSyncedClient_t *lin = (RemoteStorageAppSyncedClient_t *)l;
@@ -623,11 +721,13 @@ void cb_RemoteStorageAppSyncedClient_t_12(void *l, void *w)
     win->m_unNumDownloads = lin->m_unNumDownloads;
 }
 
+#pragma pack( push, 8 )
 struct winRemoteStorageAppSyncedServer_t_12 {
     AppId_t m_nAppID;
     EResult m_eResult;
     int m_unNumUploads;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_RemoteStorageAppSyncedServer_t_12(void *l, void *w)
 {
     RemoteStorageAppSyncedServer_t *lin = (RemoteStorageAppSyncedServer_t *)l;
@@ -637,6 +737,7 @@ void cb_RemoteStorageAppSyncedServer_t_12(void *l, void *w)
     win->m_unNumUploads = lin->m_unNumUploads;
 }
 
+#pragma pack( push, 8 )
 struct winRemoteStorageAppSyncProgress_t_280 {
     char m_rgchCurrentFile[260];
     AppId_t m_nAppID;
@@ -644,6 +745,7 @@ struct winRemoteStorageAppSyncProgress_t_280 {
     double m_dAppPercentComplete;
     bool m_bUploading;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_RemoteStorageAppSyncProgress_t_280(void *l, void *w)
 {
     RemoteStorageAppSyncProgress_t *lin = (RemoteStorageAppSyncProgress_t *)l;
@@ -655,10 +757,12 @@ void cb_RemoteStorageAppSyncProgress_t_280(void *l, void *w)
     win->m_bUploading = lin->m_bUploading;
 }
 
+#pragma pack( push, 8 )
 struct winRemoteStorageAppSyncStatusCheck_t_8 {
     AppId_t m_nAppID;
     EResult m_eResult;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_RemoteStorageAppSyncStatusCheck_t_8(void *l, void *w)
 {
     RemoteStorageAppSyncStatusCheck_t *lin = (RemoteStorageAppSyncStatusCheck_t *)l;
@@ -667,11 +771,13 @@ void cb_RemoteStorageAppSyncStatusCheck_t_8(void *l, void *w)
     win->m_eResult = lin->m_eResult;
 }
 
+#pragma pack( push, 8 )
 struct winRemoteStorageFileShareResult_t_272 {
     EResult m_eResult;
     UGCHandle_t m_hFile;
     char m_rgchFilename[260];
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_RemoteStorageFileShareResult_t_272(void *l, void *w)
 {
     RemoteStorageFileShareResult_t *lin = (RemoteStorageFileShareResult_t *)l;
@@ -681,11 +787,13 @@ void cb_RemoteStorageFileShareResult_t_272(void *l, void *w)
     memcpy(win->m_rgchFilename, lin->m_rgchFilename, sizeof(win->m_rgchFilename));
 }
 
+#pragma pack( push, 8 )
 struct winRemoteStoragePublishFileResult_t_16 {
     EResult m_eResult;
     PublishedFileId_t m_nPublishedFileId;
     bool m_bUserNeedsToAcceptWorkshopLegalAgreement;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_RemoteStoragePublishFileResult_t_16(void *l, void *w)
 {
     RemoteStoragePublishFileResult_t *lin = (RemoteStoragePublishFileResult_t *)l;
@@ -695,10 +803,12 @@ void cb_RemoteStoragePublishFileResult_t_16(void *l, void *w)
     win->m_bUserNeedsToAcceptWorkshopLegalAgreement = lin->m_bUserNeedsToAcceptWorkshopLegalAgreement;
 }
 
+#pragma pack( push, 8 )
 struct winRemoteStorageDeletePublishedFileResult_t_12 {
     EResult m_eResult;
     PublishedFileId_t m_nPublishedFileId;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_RemoteStorageDeletePublishedFileResult_t_12(void *l, void *w)
 {
     RemoteStorageDeletePublishedFileResult_t *lin = (RemoteStorageDeletePublishedFileResult_t *)l;
@@ -707,12 +817,14 @@ void cb_RemoteStorageDeletePublishedFileResult_t_12(void *l, void *w)
     win->m_nPublishedFileId = lin->m_nPublishedFileId;
 }
 
+#pragma pack( push, 8 )
 struct winRemoteStorageEnumerateUserPublishedFilesResult_t_412 {
     EResult m_eResult;
     int32 m_nResultsReturned;
     int32 m_nTotalResultCount;
     PublishedFileId_t m_rgPublishedFileId[50];
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_RemoteStorageEnumerateUserPublishedFilesResult_t_412(void *l, void *w)
 {
     RemoteStorageEnumerateUserPublishedFilesResult_t *lin = (RemoteStorageEnumerateUserPublishedFilesResult_t *)l;
@@ -723,10 +835,12 @@ void cb_RemoteStorageEnumerateUserPublishedFilesResult_t_412(void *l, void *w)
     memcpy(win->m_rgPublishedFileId, lin->m_rgPublishedFileId, sizeof(win->m_rgPublishedFileId));
 }
 
+#pragma pack( push, 8 )
 struct winRemoteStorageSubscribePublishedFileResult_t_12 {
     EResult m_eResult;
     PublishedFileId_t m_nPublishedFileId;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_RemoteStorageSubscribePublishedFileResult_t_12(void *l, void *w)
 {
     RemoteStorageSubscribePublishedFileResult_t *lin = (RemoteStorageSubscribePublishedFileResult_t *)l;
@@ -735,6 +849,7 @@ void cb_RemoteStorageSubscribePublishedFileResult_t_12(void *l, void *w)
     win->m_nPublishedFileId = lin->m_nPublishedFileId;
 }
 
+#pragma pack( push, 8 )
 struct winRemoteStorageEnumerateUserSubscribedFilesResult_t_612 {
     EResult m_eResult;
     int32 m_nResultsReturned;
@@ -742,6 +857,7 @@ struct winRemoteStorageEnumerateUserSubscribedFilesResult_t_612 {
     PublishedFileId_t m_rgPublishedFileId[50];
     uint32 m_rgRTimeSubscribed[50];
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_RemoteStorageEnumerateUserSubscribedFilesResult_t_612(void *l, void *w)
 {
     RemoteStorageEnumerateUserSubscribedFilesResult_t *lin = (RemoteStorageEnumerateUserSubscribedFilesResult_t *)l;
@@ -753,10 +869,12 @@ void cb_RemoteStorageEnumerateUserSubscribedFilesResult_t_612(void *l, void *w)
     memcpy(win->m_rgRTimeSubscribed, lin->m_rgRTimeSubscribed, sizeof(win->m_rgRTimeSubscribed));
 }
 
+#pragma pack( push, 8 )
 struct winRemoteStorageUnsubscribePublishedFileResult_t_12 {
     EResult m_eResult;
     PublishedFileId_t m_nPublishedFileId;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_RemoteStorageUnsubscribePublishedFileResult_t_12(void *l, void *w)
 {
     RemoteStorageUnsubscribePublishedFileResult_t *lin = (RemoteStorageUnsubscribePublishedFileResult_t *)l;
@@ -765,11 +883,13 @@ void cb_RemoteStorageUnsubscribePublishedFileResult_t_12(void *l, void *w)
     win->m_nPublishedFileId = lin->m_nPublishedFileId;
 }
 
+#pragma pack( push, 8 )
 struct winRemoteStorageUpdatePublishedFileResult_t_16 {
     EResult m_eResult;
     PublishedFileId_t m_nPublishedFileId;
     bool m_bUserNeedsToAcceptWorkshopLegalAgreement;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_RemoteStorageUpdatePublishedFileResult_t_16(void *l, void *w)
 {
     RemoteStorageUpdatePublishedFileResult_t *lin = (RemoteStorageUpdatePublishedFileResult_t *)l;
@@ -779,6 +899,7 @@ void cb_RemoteStorageUpdatePublishedFileResult_t_16(void *l, void *w)
     win->m_bUserNeedsToAcceptWorkshopLegalAgreement = lin->m_bUserNeedsToAcceptWorkshopLegalAgreement;
 }
 
+#pragma pack( push, 8 )
 struct winRemoteStorageDownloadUGCResult_t_288 {
     EResult m_eResult;
     UGCHandle_t m_hFile;
@@ -787,6 +908,7 @@ struct winRemoteStorageDownloadUGCResult_t_288 {
     char m_pchFileName[260];
     uint64 m_ulSteamIDOwner;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_RemoteStorageDownloadUGCResult_t_288(void *l, void *w)
 {
     RemoteStorageDownloadUGCResult_t *lin = (RemoteStorageDownloadUGCResult_t *)l;
@@ -799,6 +921,7 @@ void cb_RemoteStorageDownloadUGCResult_t_288(void *l, void *w)
     win->m_ulSteamIDOwner = lin->m_ulSteamIDOwner;
 }
 
+#pragma pack( push, 8 )
 struct winRemoteStorageGetPublishedFileDetailsResult_t_9748 {
     EResult m_eResult;
     PublishedFileId_t m_nPublishedFileId;
@@ -822,6 +945,7 @@ struct winRemoteStorageGetPublishedFileDetailsResult_t_9748 {
     EWorkshopFileType m_eFileType;
     bool m_bAcceptedForUse;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_RemoteStorageGetPublishedFileDetailsResult_t_9748(void *l, void *w)
 {
     RemoteStorageGetPublishedFileDetailsResult_t *lin = (RemoteStorageGetPublishedFileDetailsResult_t *)l;
@@ -849,6 +973,7 @@ void cb_RemoteStorageGetPublishedFileDetailsResult_t_9748(void *l, void *w)
     win->m_bAcceptedForUse = lin->m_bAcceptedForUse;
 }
 
+#pragma pack( push, 8 )
 struct winRemoteStorageEnumerateWorkshopFilesResult_t_620 {
     EResult m_eResult;
     int32 m_nResultsReturned;
@@ -858,6 +983,7 @@ struct winRemoteStorageEnumerateWorkshopFilesResult_t_620 {
     AppId_t m_nAppId;
     uint32 m_unStartIndex;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_RemoteStorageEnumerateWorkshopFilesResult_t_620(void *l, void *w)
 {
     RemoteStorageEnumerateWorkshopFilesResult_t *lin = (RemoteStorageEnumerateWorkshopFilesResult_t *)l;
@@ -871,6 +997,7 @@ void cb_RemoteStorageEnumerateWorkshopFilesResult_t_620(void *l, void *w)
     win->m_unStartIndex = lin->m_unStartIndex;
 }
 
+#pragma pack( push, 8 )
 struct winRemoteStorageGetPublishedItemVoteDetailsResult_t_28 {
     EResult m_eResult;
     PublishedFileId_t m_unPublishedFileId;
@@ -879,6 +1006,7 @@ struct winRemoteStorageGetPublishedItemVoteDetailsResult_t_28 {
     int32 m_nReports;
     float m_fScore;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_RemoteStorageGetPublishedItemVoteDetailsResult_t_28(void *l, void *w)
 {
     RemoteStorageGetPublishedItemVoteDetailsResult_t *lin = (RemoteStorageGetPublishedItemVoteDetailsResult_t *)l;
@@ -891,10 +1019,12 @@ void cb_RemoteStorageGetPublishedItemVoteDetailsResult_t_28(void *l, void *w)
     win->m_fScore = lin->m_fScore;
 }
 
+#pragma pack( push, 8 )
 struct winRemoteStoragePublishedFileSubscribed_t_12 {
     PublishedFileId_t m_nPublishedFileId;
     AppId_t m_nAppID;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_RemoteStoragePublishedFileSubscribed_t_12(void *l, void *w)
 {
     RemoteStoragePublishedFileSubscribed_t *lin = (RemoteStoragePublishedFileSubscribed_t *)l;
@@ -903,10 +1033,12 @@ void cb_RemoteStoragePublishedFileSubscribed_t_12(void *l, void *w)
     win->m_nAppID = lin->m_nAppID;
 }
 
+#pragma pack( push, 8 )
 struct winRemoteStoragePublishedFileUnsubscribed_t_12 {
     PublishedFileId_t m_nPublishedFileId;
     AppId_t m_nAppID;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_RemoteStoragePublishedFileUnsubscribed_t_12(void *l, void *w)
 {
     RemoteStoragePublishedFileUnsubscribed_t *lin = (RemoteStoragePublishedFileUnsubscribed_t *)l;
@@ -915,10 +1047,12 @@ void cb_RemoteStoragePublishedFileUnsubscribed_t_12(void *l, void *w)
     win->m_nAppID = lin->m_nAppID;
 }
 
+#pragma pack( push, 8 )
 struct winRemoteStoragePublishedFileDeleted_t_12 {
     PublishedFileId_t m_nPublishedFileId;
     AppId_t m_nAppID;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_RemoteStoragePublishedFileDeleted_t_12(void *l, void *w)
 {
     RemoteStoragePublishedFileDeleted_t *lin = (RemoteStoragePublishedFileDeleted_t *)l;
@@ -927,10 +1061,12 @@ void cb_RemoteStoragePublishedFileDeleted_t_12(void *l, void *w)
     win->m_nAppID = lin->m_nAppID;
 }
 
+#pragma pack( push, 8 )
 struct winRemoteStorageUpdateUserPublishedItemVoteResult_t_12 {
     EResult m_eResult;
     PublishedFileId_t m_nPublishedFileId;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_RemoteStorageUpdateUserPublishedItemVoteResult_t_12(void *l, void *w)
 {
     RemoteStorageUpdateUserPublishedItemVoteResult_t *lin = (RemoteStorageUpdateUserPublishedItemVoteResult_t *)l;
@@ -939,11 +1075,13 @@ void cb_RemoteStorageUpdateUserPublishedItemVoteResult_t_12(void *l, void *w)
     win->m_nPublishedFileId = lin->m_nPublishedFileId;
 }
 
+#pragma pack( push, 8 )
 struct winRemoteStorageUserVoteDetails_t_16 {
     EResult m_eResult;
     PublishedFileId_t m_nPublishedFileId;
     EWorkshopVote m_eVote;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_RemoteStorageUserVoteDetails_t_16(void *l, void *w)
 {
     RemoteStorageUserVoteDetails_t *lin = (RemoteStorageUserVoteDetails_t *)l;
@@ -953,12 +1091,14 @@ void cb_RemoteStorageUserVoteDetails_t_16(void *l, void *w)
     win->m_eVote = lin->m_eVote;
 }
 
+#pragma pack( push, 8 )
 struct winRemoteStorageEnumerateUserSharedWorkshopFilesResult_t_412 {
     EResult m_eResult;
     int32 m_nResultsReturned;
     int32 m_nTotalResultCount;
     PublishedFileId_t m_rgPublishedFileId[50];
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_RemoteStorageEnumerateUserSharedWorkshopFilesResult_t_412(void *l, void *w)
 {
     RemoteStorageEnumerateUserSharedWorkshopFilesResult_t *lin = (RemoteStorageEnumerateUserSharedWorkshopFilesResult_t *)l;
@@ -969,11 +1109,13 @@ void cb_RemoteStorageEnumerateUserSharedWorkshopFilesResult_t_412(void *l, void 
     memcpy(win->m_rgPublishedFileId, lin->m_rgPublishedFileId, sizeof(win->m_rgPublishedFileId));
 }
 
+#pragma pack( push, 8 )
 struct winRemoteStorageSetUserPublishedFileActionResult_t_16 {
     EResult m_eResult;
     PublishedFileId_t m_nPublishedFileId;
     EWorkshopFileAction m_eAction;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_RemoteStorageSetUserPublishedFileActionResult_t_16(void *l, void *w)
 {
     RemoteStorageSetUserPublishedFileActionResult_t *lin = (RemoteStorageSetUserPublishedFileActionResult_t *)l;
@@ -983,6 +1125,7 @@ void cb_RemoteStorageSetUserPublishedFileActionResult_t_16(void *l, void *w)
     win->m_eAction = lin->m_eAction;
 }
 
+#pragma pack( push, 8 )
 struct winRemoteStorageEnumeratePublishedFilesByUserActionResult_t_616 {
     EResult m_eResult;
     EWorkshopFileAction m_eAction;
@@ -991,6 +1134,7 @@ struct winRemoteStorageEnumeratePublishedFilesByUserActionResult_t_616 {
     PublishedFileId_t m_rgPublishedFileId[50];
     uint32 m_rgRTimeUpdated[50];
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_RemoteStorageEnumeratePublishedFilesByUserActionResult_t_616(void *l, void *w)
 {
     RemoteStorageEnumeratePublishedFilesByUserActionResult_t *lin = (RemoteStorageEnumeratePublishedFilesByUserActionResult_t *)l;
@@ -1003,10 +1147,12 @@ void cb_RemoteStorageEnumeratePublishedFilesByUserActionResult_t_616(void *l, vo
     memcpy(win->m_rgRTimeUpdated, lin->m_rgRTimeUpdated, sizeof(win->m_rgRTimeUpdated));
 }
 
+#pragma pack( push, 8 )
 struct winRemoteStoragePublishFileProgress_t_12 {
     double m_dPercentFile;
     bool m_bPreview;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_RemoteStoragePublishFileProgress_t_12(void *l, void *w)
 {
     RemoteStoragePublishFileProgress_t *lin = (RemoteStoragePublishFileProgress_t *)l;
@@ -1015,11 +1161,13 @@ void cb_RemoteStoragePublishFileProgress_t_12(void *l, void *w)
     win->m_bPreview = lin->m_bPreview;
 }
 
+#pragma pack( push, 8 )
 struct winRemoteStoragePublishedFileUpdated_t_20 {
     PublishedFileId_t m_nPublishedFileId;
     AppId_t m_nAppID;
     uint64 m_ulUnused;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_RemoteStoragePublishedFileUpdated_t_20(void *l, void *w)
 {
     RemoteStoragePublishedFileUpdated_t *lin = (RemoteStoragePublishedFileUpdated_t *)l;
@@ -1029,9 +1177,11 @@ void cb_RemoteStoragePublishedFileUpdated_t_20(void *l, void *w)
     win->m_ulUnused = lin->m_ulUnused;
 }
 
+#pragma pack( push, 8 )
 struct winRemoteStorageFileWriteAsyncComplete_t_4 {
     EResult m_eResult;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_RemoteStorageFileWriteAsyncComplete_t_4(void *l, void *w)
 {
     RemoteStorageFileWriteAsyncComplete_t *lin = (RemoteStorageFileWriteAsyncComplete_t *)l;
@@ -1039,12 +1189,14 @@ void cb_RemoteStorageFileWriteAsyncComplete_t_4(void *l, void *w)
     win->m_eResult = lin->m_eResult;
 }
 
+#pragma pack( push, 8 )
 struct winRemoteStorageFileReadAsyncComplete_t_20 {
     SteamAPICall_t m_hFileReadAsync;
     EResult m_eResult;
     uint32 m_nOffset;
     uint32 m_cubRead;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_RemoteStorageFileReadAsyncComplete_t_20(void *l, void *w)
 {
     RemoteStorageFileReadAsyncComplete_t *lin = (RemoteStorageFileReadAsyncComplete_t *)l;
@@ -1055,11 +1207,13 @@ void cb_RemoteStorageFileReadAsyncComplete_t_20(void *l, void *w)
     win->m_cubRead = lin->m_cubRead;
 }
 
+#pragma pack( push, 8 )
 struct winUserStatsReceived_t_20 {
     uint64 m_nGameID;
     EResult m_eResult;
     CSteamID m_steamIDUser;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_UserStatsReceived_t_20(void *l, void *w)
 {
     UserStatsReceived_t *lin = (UserStatsReceived_t *)l;
@@ -1069,10 +1223,12 @@ void cb_UserStatsReceived_t_20(void *l, void *w)
     win->m_steamIDUser = lin->m_steamIDUser;
 }
 
+#pragma pack( push, 8 )
 struct winUserStatsStored_t_12 {
     uint64 m_nGameID;
     EResult m_eResult;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_UserStatsStored_t_12(void *l, void *w)
 {
     UserStatsStored_t *lin = (UserStatsStored_t *)l;
@@ -1081,6 +1237,7 @@ void cb_UserStatsStored_t_12(void *l, void *w)
     win->m_eResult = lin->m_eResult;
 }
 
+#pragma pack( push, 8 )
 struct winUserAchievementStored_t_148 {
     uint64 m_nGameID;
     bool m_bGroupAchievement;
@@ -1088,6 +1245,7 @@ struct winUserAchievementStored_t_148 {
     uint32 m_nCurProgress;
     uint32 m_nMaxProgress;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_UserAchievementStored_t_148(void *l, void *w)
 {
     UserAchievementStored_t *lin = (UserAchievementStored_t *)l;
@@ -1099,10 +1257,12 @@ void cb_UserAchievementStored_t_148(void *l, void *w)
     win->m_nMaxProgress = lin->m_nMaxProgress;
 }
 
+#pragma pack( push, 8 )
 struct winLeaderboardFindResult_t_12 {
     SteamLeaderboard_t m_hSteamLeaderboard;
     uint8 m_bLeaderboardFound;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_LeaderboardFindResult_t_12(void *l, void *w)
 {
     LeaderboardFindResult_t *lin = (LeaderboardFindResult_t *)l;
@@ -1111,11 +1271,13 @@ void cb_LeaderboardFindResult_t_12(void *l, void *w)
     win->m_bLeaderboardFound = lin->m_bLeaderboardFound;
 }
 
+#pragma pack( push, 8 )
 struct winLeaderboardScoresDownloaded_t_20 {
     SteamLeaderboard_t m_hSteamLeaderboard;
     SteamLeaderboardEntries_t m_hSteamLeaderboardEntries;
     int m_cEntryCount;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_LeaderboardScoresDownloaded_t_20(void *l, void *w)
 {
     LeaderboardScoresDownloaded_t *lin = (LeaderboardScoresDownloaded_t *)l;
@@ -1125,6 +1287,7 @@ void cb_LeaderboardScoresDownloaded_t_20(void *l, void *w)
     win->m_cEntryCount = lin->m_cEntryCount;
 }
 
+#pragma pack( push, 8 )
 struct winLeaderboardScoreUploaded_t_28 {
     uint8 m_bSuccess;
     SteamLeaderboard_t m_hSteamLeaderboard;
@@ -1133,6 +1296,7 @@ struct winLeaderboardScoreUploaded_t_28 {
     int m_nGlobalRankNew;
     int m_nGlobalRankPrevious;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_LeaderboardScoreUploaded_t_28(void *l, void *w)
 {
     LeaderboardScoreUploaded_t *lin = (LeaderboardScoreUploaded_t *)l;
@@ -1145,10 +1309,12 @@ void cb_LeaderboardScoreUploaded_t_28(void *l, void *w)
     win->m_nGlobalRankPrevious = lin->m_nGlobalRankPrevious;
 }
 
+#pragma pack( push, 8 )
 struct winNumberOfCurrentPlayers_t_8 {
     uint8 m_bSuccess;
     int32 m_cPlayers;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_NumberOfCurrentPlayers_t_8(void *l, void *w)
 {
     NumberOfCurrentPlayers_t *lin = (NumberOfCurrentPlayers_t *)l;
@@ -1157,9 +1323,11 @@ void cb_NumberOfCurrentPlayers_t_8(void *l, void *w)
     win->m_cPlayers = lin->m_cPlayers;
 }
 
+#pragma pack( push, 8 )
 struct winUserStatsUnloaded_t_8 {
     CSteamID m_steamIDUser;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_UserStatsUnloaded_t_8(void *l, void *w)
 {
     UserStatsUnloaded_t *lin = (UserStatsUnloaded_t *)l;
@@ -1167,12 +1335,14 @@ void cb_UserStatsUnloaded_t_8(void *l, void *w)
     win->m_steamIDUser = lin->m_steamIDUser;
 }
 
+#pragma pack( push, 8 )
 struct winUserAchievementIconFetched_t_144 {
     CGameID m_nGameID;
     char m_rgchAchievementName[128];
     bool m_bAchieved;
     int m_nIconHandle;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_UserAchievementIconFetched_t_144(void *l, void *w)
 {
     UserAchievementIconFetched_t *lin = (UserAchievementIconFetched_t *)l;
@@ -1183,10 +1353,12 @@ void cb_UserAchievementIconFetched_t_144(void *l, void *w)
     win->m_nIconHandle = lin->m_nIconHandle;
 }
 
+#pragma pack( push, 8 )
 struct winGlobalAchievementPercentagesReady_t_12 {
     uint64 m_nGameID;
     EResult m_eResult;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_GlobalAchievementPercentagesReady_t_12(void *l, void *w)
 {
     GlobalAchievementPercentagesReady_t *lin = (GlobalAchievementPercentagesReady_t *)l;
@@ -1195,10 +1367,12 @@ void cb_GlobalAchievementPercentagesReady_t_12(void *l, void *w)
     win->m_eResult = lin->m_eResult;
 }
 
+#pragma pack( push, 8 )
 struct winLeaderboardUGCSet_t_12 {
     EResult m_eResult;
     SteamLeaderboard_t m_hSteamLeaderboard;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_LeaderboardUGCSet_t_12(void *l, void *w)
 {
     LeaderboardUGCSet_t *lin = (LeaderboardUGCSet_t *)l;
@@ -1207,11 +1381,13 @@ void cb_LeaderboardUGCSet_t_12(void *l, void *w)
     win->m_hSteamLeaderboard = lin->m_hSteamLeaderboard;
 }
 
+#pragma pack( push, 8 )
 struct winPS3TrophiesInstalled_t_20 {
     uint64 m_nGameID;
     EResult m_eResult;
     uint64 m_ulRequiredDiskSpace;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_PS3TrophiesInstalled_t_20(void *l, void *w)
 {
     PS3TrophiesInstalled_t *lin = (PS3TrophiesInstalled_t *)l;
@@ -1221,10 +1397,12 @@ void cb_PS3TrophiesInstalled_t_20(void *l, void *w)
     win->m_ulRequiredDiskSpace = lin->m_ulRequiredDiskSpace;
 }
 
+#pragma pack( push, 8 )
 struct winGlobalStatsReceived_t_12 {
     uint64 m_nGameID;
     EResult m_eResult;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_GlobalStatsReceived_t_12(void *l, void *w)
 {
     GlobalStatsReceived_t *lin = (GlobalStatsReceived_t *)l;
@@ -1233,9 +1411,11 @@ void cb_GlobalStatsReceived_t_12(void *l, void *w)
     win->m_eResult = lin->m_eResult;
 }
 
+#pragma pack( push, 8 )
 struct winDlcInstalled_t_4 {
     AppId_t m_nAppID;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_DlcInstalled_t_4(void *l, void *w)
 {
     DlcInstalled_t *lin = (DlcInstalled_t *)l;
@@ -1243,10 +1423,12 @@ void cb_DlcInstalled_t_4(void *l, void *w)
     win->m_nAppID = lin->m_nAppID;
 }
 
+#pragma pack( push, 8 )
 struct winRegisterActivationCodeResponse_t_8 {
     ERegisterActivationCodeResult m_eResult;
     uint32 m_unPackageRegistered;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_RegisterActivationCodeResponse_t_8(void *l, void *w)
 {
     RegisterActivationCodeResponse_t *lin = (RegisterActivationCodeResponse_t *)l;
@@ -1255,20 +1437,24 @@ void cb_RegisterActivationCodeResponse_t_8(void *l, void *w)
     win->m_unPackageRegistered = lin->m_unPackageRegistered;
 }
 
+#pragma pack( push, 8 )
 struct winNewLaunchQueryParameters_t_1 {
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_NewLaunchQueryParameters_t_1(void *l, void *w)
 {
     NewLaunchQueryParameters_t *lin = (NewLaunchQueryParameters_t *)l;
     struct winNewLaunchQueryParameters_t_1 *win = (struct winNewLaunchQueryParameters_t_1 *)w;
 }
 
+#pragma pack( push, 8 )
 struct winAppProofOfPurchaseKeyResponse_t_252 {
     EResult m_eResult;
     uint32 m_nAppID;
     uint32 m_cchKeyLength;
     char m_rgchKey[240];
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_AppProofOfPurchaseKeyResponse_t_252(void *l, void *w)
 {
     AppProofOfPurchaseKeyResponse_t *lin = (AppProofOfPurchaseKeyResponse_t *)l;
@@ -1279,12 +1465,14 @@ void cb_AppProofOfPurchaseKeyResponse_t_252(void *l, void *w)
     memcpy(win->m_rgchKey, lin->m_rgchKey, sizeof(win->m_rgchKey));
 }
 
+#pragma pack( push, 8 )
 struct winFileDetailsResult_t_36 {
     EResult m_eResult;
     uint64 m_ulFileSize;
     uint8 m_FileSHA[20];
     uint32 m_unFlags;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_FileDetailsResult_t_36(void *l, void *w)
 {
     FileDetailsResult_t *lin = (FileDetailsResult_t *)l;
@@ -1295,9 +1483,11 @@ void cb_FileDetailsResult_t_36(void *l, void *w)
     win->m_unFlags = lin->m_unFlags;
 }
 
+#pragma pack( push, 8 )
 struct winP2PSessionRequest_t_8 {
     CSteamID m_steamIDRemote;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_P2PSessionRequest_t_8(void *l, void *w)
 {
     P2PSessionRequest_t *lin = (P2PSessionRequest_t *)l;
@@ -1305,10 +1495,12 @@ void cb_P2PSessionRequest_t_8(void *l, void *w)
     win->m_steamIDRemote = lin->m_steamIDRemote;
 }
 
+#pragma pack( push, 8 )
 struct winP2PSessionConnectFail_t_9 {
     CSteamID m_steamIDRemote;
     uint8 m_eP2PSessionError;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_P2PSessionConnectFail_t_9(void *l, void *w)
 {
     P2PSessionConnectFail_t *lin = (P2PSessionConnectFail_t *)l;
@@ -1317,12 +1509,14 @@ void cb_P2PSessionConnectFail_t_9(void *l, void *w)
     win->m_eP2PSessionError = lin->m_eP2PSessionError;
 }
 
+#pragma pack( push, 8 )
 struct winSocketStatusCallback_t_20 {
     SNetSocket_t m_hSocket;
     SNetListenSocket_t m_hListenSocket;
     CSteamID m_steamIDRemote;
     int m_eSNetSocketState;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_SocketStatusCallback_t_20(void *l, void *w)
 {
     SocketStatusCallback_t *lin = (SocketStatusCallback_t *)l;
@@ -1333,10 +1527,12 @@ void cb_SocketStatusCallback_t_20(void *l, void *w)
     win->m_eSNetSocketState = lin->m_eSNetSocketState;
 }
 
+#pragma pack( push, 8 )
 struct winScreenshotReady_t_8 {
     ScreenshotHandle m_hLocal;
     EResult m_eResult;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_ScreenshotReady_t_8(void *l, void *w)
 {
     ScreenshotReady_t *lin = (ScreenshotReady_t *)l;
@@ -1345,25 +1541,31 @@ void cb_ScreenshotReady_t_8(void *l, void *w)
     win->m_eResult = lin->m_eResult;
 }
 
+#pragma pack( push, 8 )
 struct winScreenshotRequested_t_1 {
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_ScreenshotRequested_t_1(void *l, void *w)
 {
     ScreenshotRequested_t *lin = (ScreenshotRequested_t *)l;
     struct winScreenshotRequested_t_1 *win = (struct winScreenshotRequested_t_1 *)w;
 }
 
+#pragma pack( push, 8 )
 struct winPlaybackStatusHasChanged_t_1 {
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_PlaybackStatusHasChanged_t_1(void *l, void *w)
 {
     PlaybackStatusHasChanged_t *lin = (PlaybackStatusHasChanged_t *)l;
     struct winPlaybackStatusHasChanged_t_1 *win = (struct winPlaybackStatusHasChanged_t_1 *)w;
 }
 
+#pragma pack( push, 8 )
 struct winVolumeHasChanged_t_4 {
     float m_flNewVolume;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_VolumeHasChanged_t_4(void *l, void *w)
 {
     VolumeHasChanged_t *lin = (VolumeHasChanged_t *)l;
@@ -1371,73 +1573,91 @@ void cb_VolumeHasChanged_t_4(void *l, void *w)
     win->m_flNewVolume = lin->m_flNewVolume;
 }
 
+#pragma pack( push, 8 )
 struct winMusicPlayerRemoteWillActivate_t_1 {
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_MusicPlayerRemoteWillActivate_t_1(void *l, void *w)
 {
     MusicPlayerRemoteWillActivate_t *lin = (MusicPlayerRemoteWillActivate_t *)l;
     struct winMusicPlayerRemoteWillActivate_t_1 *win = (struct winMusicPlayerRemoteWillActivate_t_1 *)w;
 }
 
+#pragma pack( push, 8 )
 struct winMusicPlayerRemoteWillDeactivate_t_1 {
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_MusicPlayerRemoteWillDeactivate_t_1(void *l, void *w)
 {
     MusicPlayerRemoteWillDeactivate_t *lin = (MusicPlayerRemoteWillDeactivate_t *)l;
     struct winMusicPlayerRemoteWillDeactivate_t_1 *win = (struct winMusicPlayerRemoteWillDeactivate_t_1 *)w;
 }
 
+#pragma pack( push, 8 )
 struct winMusicPlayerRemoteToFront_t_1 {
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_MusicPlayerRemoteToFront_t_1(void *l, void *w)
 {
     MusicPlayerRemoteToFront_t *lin = (MusicPlayerRemoteToFront_t *)l;
     struct winMusicPlayerRemoteToFront_t_1 *win = (struct winMusicPlayerRemoteToFront_t_1 *)w;
 }
 
+#pragma pack( push, 8 )
 struct winMusicPlayerWillQuit_t_1 {
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_MusicPlayerWillQuit_t_1(void *l, void *w)
 {
     MusicPlayerWillQuit_t *lin = (MusicPlayerWillQuit_t *)l;
     struct winMusicPlayerWillQuit_t_1 *win = (struct winMusicPlayerWillQuit_t_1 *)w;
 }
 
+#pragma pack( push, 8 )
 struct winMusicPlayerWantsPlay_t_1 {
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_MusicPlayerWantsPlay_t_1(void *l, void *w)
 {
     MusicPlayerWantsPlay_t *lin = (MusicPlayerWantsPlay_t *)l;
     struct winMusicPlayerWantsPlay_t_1 *win = (struct winMusicPlayerWantsPlay_t_1 *)w;
 }
 
+#pragma pack( push, 8 )
 struct winMusicPlayerWantsPause_t_1 {
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_MusicPlayerWantsPause_t_1(void *l, void *w)
 {
     MusicPlayerWantsPause_t *lin = (MusicPlayerWantsPause_t *)l;
     struct winMusicPlayerWantsPause_t_1 *win = (struct winMusicPlayerWantsPause_t_1 *)w;
 }
 
+#pragma pack( push, 8 )
 struct winMusicPlayerWantsPlayPrevious_t_1 {
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_MusicPlayerWantsPlayPrevious_t_1(void *l, void *w)
 {
     MusicPlayerWantsPlayPrevious_t *lin = (MusicPlayerWantsPlayPrevious_t *)l;
     struct winMusicPlayerWantsPlayPrevious_t_1 *win = (struct winMusicPlayerWantsPlayPrevious_t_1 *)w;
 }
 
+#pragma pack( push, 8 )
 struct winMusicPlayerWantsPlayNext_t_1 {
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_MusicPlayerWantsPlayNext_t_1(void *l, void *w)
 {
     MusicPlayerWantsPlayNext_t *lin = (MusicPlayerWantsPlayNext_t *)l;
     struct winMusicPlayerWantsPlayNext_t_1 *win = (struct winMusicPlayerWantsPlayNext_t_1 *)w;
 }
 
+#pragma pack( push, 8 )
 struct winMusicPlayerWantsShuffled_t_1 {
     bool m_bShuffled;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_MusicPlayerWantsShuffled_t_1(void *l, void *w)
 {
     MusicPlayerWantsShuffled_t *lin = (MusicPlayerWantsShuffled_t *)l;
@@ -1445,9 +1665,11 @@ void cb_MusicPlayerWantsShuffled_t_1(void *l, void *w)
     win->m_bShuffled = lin->m_bShuffled;
 }
 
+#pragma pack( push, 8 )
 struct winMusicPlayerWantsLooped_t_1 {
     bool m_bLooped;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_MusicPlayerWantsLooped_t_1(void *l, void *w)
 {
     MusicPlayerWantsLooped_t *lin = (MusicPlayerWantsLooped_t *)l;
@@ -1455,9 +1677,11 @@ void cb_MusicPlayerWantsLooped_t_1(void *l, void *w)
     win->m_bLooped = lin->m_bLooped;
 }
 
+#pragma pack( push, 8 )
 struct winMusicPlayerWantsVolume_t_4 {
     float m_flNewVolume;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_MusicPlayerWantsVolume_t_4(void *l, void *w)
 {
     MusicPlayerWantsVolume_t *lin = (MusicPlayerWantsVolume_t *)l;
@@ -1465,9 +1689,11 @@ void cb_MusicPlayerWantsVolume_t_4(void *l, void *w)
     win->m_flNewVolume = lin->m_flNewVolume;
 }
 
+#pragma pack( push, 8 )
 struct winMusicPlayerSelectsQueueEntry_t_4 {
     int nID;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_MusicPlayerSelectsQueueEntry_t_4(void *l, void *w)
 {
     MusicPlayerSelectsQueueEntry_t *lin = (MusicPlayerSelectsQueueEntry_t *)l;
@@ -1475,9 +1701,11 @@ void cb_MusicPlayerSelectsQueueEntry_t_4(void *l, void *w)
     win->nID = lin->nID;
 }
 
+#pragma pack( push, 8 )
 struct winMusicPlayerSelectsPlaylistEntry_t_4 {
     int nID;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_MusicPlayerSelectsPlaylistEntry_t_4(void *l, void *w)
 {
     MusicPlayerSelectsPlaylistEntry_t *lin = (MusicPlayerSelectsPlaylistEntry_t *)l;
@@ -1485,9 +1713,11 @@ void cb_MusicPlayerSelectsPlaylistEntry_t_4(void *l, void *w)
     win->nID = lin->nID;
 }
 
+#pragma pack( push, 8 )
 struct winMusicPlayerWantsPlayingRepeatStatus_t_4 {
     int m_nPlayingRepeatStatus;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_MusicPlayerWantsPlayingRepeatStatus_t_4(void *l, void *w)
 {
     MusicPlayerWantsPlayingRepeatStatus_t *lin = (MusicPlayerWantsPlayingRepeatStatus_t *)l;
@@ -1495,6 +1725,7 @@ void cb_MusicPlayerWantsPlayingRepeatStatus_t_4(void *l, void *w)
     win->m_nPlayingRepeatStatus = lin->m_nPlayingRepeatStatus;
 }
 
+#pragma pack( push, 8 )
 struct winHTTPRequestCompleted_t_24 {
     HTTPRequestHandle m_hRequest;
     uint64 m_ulContextValue;
@@ -1502,6 +1733,7 @@ struct winHTTPRequestCompleted_t_24 {
     EHTTPStatusCode m_eStatusCode;
     uint32 m_unBodySize;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_HTTPRequestCompleted_t_24(void *l, void *w)
 {
     HTTPRequestCompleted_t *lin = (HTTPRequestCompleted_t *)l;
@@ -1513,10 +1745,12 @@ void cb_HTTPRequestCompleted_t_24(void *l, void *w)
     win->m_unBodySize = lin->m_unBodySize;
 }
 
+#pragma pack( push, 8 )
 struct winHTTPRequestHeadersReceived_t_12 {
     HTTPRequestHandle m_hRequest;
     uint64 m_ulContextValue;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_HTTPRequestHeadersReceived_t_12(void *l, void *w)
 {
     HTTPRequestHeadersReceived_t *lin = (HTTPRequestHeadersReceived_t *)l;
@@ -1525,12 +1759,14 @@ void cb_HTTPRequestHeadersReceived_t_12(void *l, void *w)
     win->m_ulContextValue = lin->m_ulContextValue;
 }
 
+#pragma pack( push, 8 )
 struct winHTTPRequestDataReceived_t_20 {
     HTTPRequestHandle m_hRequest;
     uint64 m_ulContextValue;
     uint32 m_cOffset;
     uint32 m_cBytesReceived;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_HTTPRequestDataReceived_t_20(void *l, void *w)
 {
     HTTPRequestDataReceived_t *lin = (HTTPRequestDataReceived_t *)l;
@@ -1541,6 +1777,7 @@ void cb_HTTPRequestDataReceived_t_20(void *l, void *w)
     win->m_cBytesReceived = lin->m_cBytesReceived;
 }
 
+#pragma pack( push, 8 )
 struct winSteamUGCQueryCompleted_t_24 {
     UGCQueryHandle_t m_handle;
     EResult m_eResult;
@@ -1548,6 +1785,7 @@ struct winSteamUGCQueryCompleted_t_24 {
     uint32 m_unTotalMatchingResults;
     bool m_bCachedData;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_SteamUGCQueryCompleted_t_24(void *l, void *w)
 {
     SteamUGCQueryCompleted_t *lin = (SteamUGCQueryCompleted_t *)l;
@@ -1559,10 +1797,12 @@ void cb_SteamUGCQueryCompleted_t_24(void *l, void *w)
     win->m_bCachedData = lin->m_bCachedData;
 }
 
+#pragma pack( push, 8 )
 struct winSteamUGCRequestUGCDetailsResult_t_9768 {
     SteamUGCDetails_t m_details;
     bool m_bCachedData;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_SteamUGCRequestUGCDetailsResult_t_9768(void *l, void *w)
 {
     SteamUGCRequestUGCDetailsResult_t *lin = (SteamUGCRequestUGCDetailsResult_t *)l;
@@ -1571,11 +1811,13 @@ void cb_SteamUGCRequestUGCDetailsResult_t_9768(void *l, void *w)
     win->m_bCachedData = lin->m_bCachedData;
 }
 
+#pragma pack( push, 8 )
 struct winCreateItemResult_t_16 {
     EResult m_eResult;
     PublishedFileId_t m_nPublishedFileId;
     bool m_bUserNeedsToAcceptWorkshopLegalAgreement;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_CreateItemResult_t_16(void *l, void *w)
 {
     CreateItemResult_t *lin = (CreateItemResult_t *)l;
@@ -1585,11 +1827,13 @@ void cb_CreateItemResult_t_16(void *l, void *w)
     win->m_bUserNeedsToAcceptWorkshopLegalAgreement = lin->m_bUserNeedsToAcceptWorkshopLegalAgreement;
 }
 
+#pragma pack( push, 8 )
 struct winSubmitItemUpdateResult_t_16 {
     EResult m_eResult;
     bool m_bUserNeedsToAcceptWorkshopLegalAgreement;
     PublishedFileId_t m_nPublishedFileId;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_SubmitItemUpdateResult_t_16(void *l, void *w)
 {
     SubmitItemUpdateResult_t *lin = (SubmitItemUpdateResult_t *)l;
@@ -1599,10 +1843,12 @@ void cb_SubmitItemUpdateResult_t_16(void *l, void *w)
     win->m_nPublishedFileId = lin->m_nPublishedFileId;
 }
 
+#pragma pack( push, 8 )
 struct winItemInstalled_t_12 {
     AppId_t m_unAppID;
     PublishedFileId_t m_nPublishedFileId;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_ItemInstalled_t_12(void *l, void *w)
 {
     ItemInstalled_t *lin = (ItemInstalled_t *)l;
@@ -1611,11 +1857,13 @@ void cb_ItemInstalled_t_12(void *l, void *w)
     win->m_nPublishedFileId = lin->m_nPublishedFileId;
 }
 
+#pragma pack( push, 8 )
 struct winDownloadItemResult_t_16 {
     AppId_t m_unAppID;
     PublishedFileId_t m_nPublishedFileId;
     EResult m_eResult;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_DownloadItemResult_t_16(void *l, void *w)
 {
     DownloadItemResult_t *lin = (DownloadItemResult_t *)l;
@@ -1625,11 +1873,13 @@ void cb_DownloadItemResult_t_16(void *l, void *w)
     win->m_eResult = lin->m_eResult;
 }
 
+#pragma pack( push, 8 )
 struct winUserFavoriteItemsListChanged_t_16 {
     PublishedFileId_t m_nPublishedFileId;
     EResult m_eResult;
     bool m_bWasAddRequest;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_UserFavoriteItemsListChanged_t_16(void *l, void *w)
 {
     UserFavoriteItemsListChanged_t *lin = (UserFavoriteItemsListChanged_t *)l;
@@ -1639,11 +1889,13 @@ void cb_UserFavoriteItemsListChanged_t_16(void *l, void *w)
     win->m_bWasAddRequest = lin->m_bWasAddRequest;
 }
 
+#pragma pack( push, 8 )
 struct winSetUserItemVoteResult_t_16 {
     PublishedFileId_t m_nPublishedFileId;
     EResult m_eResult;
     bool m_bVoteUp;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_SetUserItemVoteResult_t_16(void *l, void *w)
 {
     SetUserItemVoteResult_t *lin = (SetUserItemVoteResult_t *)l;
@@ -1653,6 +1905,7 @@ void cb_SetUserItemVoteResult_t_16(void *l, void *w)
     win->m_bVoteUp = lin->m_bVoteUp;
 }
 
+#pragma pack( push, 8 )
 struct winGetUserItemVoteResult_t_16 {
     PublishedFileId_t m_nPublishedFileId;
     EResult m_eResult;
@@ -1660,6 +1913,7 @@ struct winGetUserItemVoteResult_t_16 {
     bool m_bVotedDown;
     bool m_bVoteSkipped;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_GetUserItemVoteResult_t_16(void *l, void *w)
 {
     GetUserItemVoteResult_t *lin = (GetUserItemVoteResult_t *)l;
@@ -1671,9 +1925,11 @@ void cb_GetUserItemVoteResult_t_16(void *l, void *w)
     win->m_bVoteSkipped = lin->m_bVoteSkipped;
 }
 
+#pragma pack( push, 8 )
 struct winStartPlaytimeTrackingResult_t_4 {
     EResult m_eResult;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_StartPlaytimeTrackingResult_t_4(void *l, void *w)
 {
     StartPlaytimeTrackingResult_t *lin = (StartPlaytimeTrackingResult_t *)l;
@@ -1681,9 +1937,11 @@ void cb_StartPlaytimeTrackingResult_t_4(void *l, void *w)
     win->m_eResult = lin->m_eResult;
 }
 
+#pragma pack( push, 8 )
 struct winStopPlaytimeTrackingResult_t_4 {
     EResult m_eResult;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_StopPlaytimeTrackingResult_t_4(void *l, void *w)
 {
     StopPlaytimeTrackingResult_t *lin = (StopPlaytimeTrackingResult_t *)l;
@@ -1691,11 +1949,13 @@ void cb_StopPlaytimeTrackingResult_t_4(void *l, void *w)
     win->m_eResult = lin->m_eResult;
 }
 
+#pragma pack( push, 8 )
 struct winAddUGCDependencyResult_t_20 {
     EResult m_eResult;
     PublishedFileId_t m_nPublishedFileId;
     PublishedFileId_t m_nChildPublishedFileId;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_AddUGCDependencyResult_t_20(void *l, void *w)
 {
     AddUGCDependencyResult_t *lin = (AddUGCDependencyResult_t *)l;
@@ -1705,11 +1965,13 @@ void cb_AddUGCDependencyResult_t_20(void *l, void *w)
     win->m_nChildPublishedFileId = lin->m_nChildPublishedFileId;
 }
 
+#pragma pack( push, 8 )
 struct winRemoveUGCDependencyResult_t_20 {
     EResult m_eResult;
     PublishedFileId_t m_nPublishedFileId;
     PublishedFileId_t m_nChildPublishedFileId;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_RemoveUGCDependencyResult_t_20(void *l, void *w)
 {
     RemoveUGCDependencyResult_t *lin = (RemoveUGCDependencyResult_t *)l;
@@ -1719,11 +1981,13 @@ void cb_RemoveUGCDependencyResult_t_20(void *l, void *w)
     win->m_nChildPublishedFileId = lin->m_nChildPublishedFileId;
 }
 
+#pragma pack( push, 8 )
 struct winAddAppDependencyResult_t_16 {
     EResult m_eResult;
     PublishedFileId_t m_nPublishedFileId;
     AppId_t m_nAppID;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_AddAppDependencyResult_t_16(void *l, void *w)
 {
     AddAppDependencyResult_t *lin = (AddAppDependencyResult_t *)l;
@@ -1733,11 +1997,13 @@ void cb_AddAppDependencyResult_t_16(void *l, void *w)
     win->m_nAppID = lin->m_nAppID;
 }
 
+#pragma pack( push, 8 )
 struct winRemoveAppDependencyResult_t_16 {
     EResult m_eResult;
     PublishedFileId_t m_nPublishedFileId;
     AppId_t m_nAppID;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_RemoveAppDependencyResult_t_16(void *l, void *w)
 {
     RemoveAppDependencyResult_t *lin = (RemoveAppDependencyResult_t *)l;
@@ -1747,6 +2013,7 @@ void cb_RemoveAppDependencyResult_t_16(void *l, void *w)
     win->m_nAppID = lin->m_nAppID;
 }
 
+#pragma pack( push, 8 )
 struct winGetAppDependenciesResult_t_148 {
     EResult m_eResult;
     PublishedFileId_t m_nPublishedFileId;
@@ -1754,6 +2021,7 @@ struct winGetAppDependenciesResult_t_148 {
     uint32 m_nNumAppDependencies;
     uint32 m_nTotalNumAppDependencies;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_GetAppDependenciesResult_t_148(void *l, void *w)
 {
     GetAppDependenciesResult_t *lin = (GetAppDependenciesResult_t *)l;
@@ -1765,10 +2033,12 @@ void cb_GetAppDependenciesResult_t_148(void *l, void *w)
     win->m_nTotalNumAppDependencies = lin->m_nTotalNumAppDependencies;
 }
 
+#pragma pack( push, 8 )
 struct winDeleteItemResult_t_12 {
     EResult m_eResult;
     PublishedFileId_t m_nPublishedFileId;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_DeleteItemResult_t_12(void *l, void *w)
 {
     DeleteItemResult_t *lin = (DeleteItemResult_t *)l;
@@ -1777,9 +2047,11 @@ void cb_DeleteItemResult_t_12(void *l, void *w)
     win->m_nPublishedFileId = lin->m_nPublishedFileId;
 }
 
+#pragma pack( push, 8 )
 struct winSteamAppInstalled_t_4 {
     AppId_t m_nAppID;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_SteamAppInstalled_t_4(void *l, void *w)
 {
     SteamAppInstalled_t *lin = (SteamAppInstalled_t *)l;
@@ -1787,9 +2059,11 @@ void cb_SteamAppInstalled_t_4(void *l, void *w)
     win->m_nAppID = lin->m_nAppID;
 }
 
+#pragma pack( push, 8 )
 struct winSteamAppUninstalled_t_4 {
     AppId_t m_nAppID;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_SteamAppUninstalled_t_4(void *l, void *w)
 {
     SteamAppUninstalled_t *lin = (SteamAppUninstalled_t *)l;
@@ -1797,9 +2071,11 @@ void cb_SteamAppUninstalled_t_4(void *l, void *w)
     win->m_nAppID = lin->m_nAppID;
 }
 
+#pragma pack( push, 8 )
 struct winHTML_BrowserReady_t_4 {
     HHTMLBrowser unBrowserHandle;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_HTML_BrowserReady_t_4(void *l, void *w)
 {
     HTML_BrowserReady_t *lin = (HTML_BrowserReady_t *)l;
@@ -1807,6 +2083,7 @@ void cb_HTML_BrowserReady_t_4(void *l, void *w)
     win->unBrowserHandle = lin->unBrowserHandle;
 }
 
+#pragma pack( push, 8 )
 struct winHTML_NeedsPaint_t_48 {
     HHTMLBrowser unBrowserHandle;
     const char * pBGRA;
@@ -1821,6 +2098,7 @@ struct winHTML_NeedsPaint_t_48 {
     float flPageScale;
     uint32 unPageSerial;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_HTML_NeedsPaint_t_48(void *l, void *w)
 {
     HTML_NeedsPaint_t *lin = (HTML_NeedsPaint_t *)l;
@@ -1839,6 +2117,7 @@ void cb_HTML_NeedsPaint_t_48(void *l, void *w)
     win->unPageSerial = lin->unPageSerial;
 }
 
+#pragma pack( push, 8 )
 struct winHTML_StartRequest_t_20 {
     HHTMLBrowser unBrowserHandle;
     const char * pchURL;
@@ -1846,6 +2125,7 @@ struct winHTML_StartRequest_t_20 {
     const char * pchPostData;
     bool bIsRedirect;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_HTML_StartRequest_t_20(void *l, void *w)
 {
     HTML_StartRequest_t *lin = (HTML_StartRequest_t *)l;
@@ -1857,9 +2137,11 @@ void cb_HTML_StartRequest_t_20(void *l, void *w)
     win->bIsRedirect = lin->bIsRedirect;
 }
 
+#pragma pack( push, 8 )
 struct winHTML_CloseBrowser_t_4 {
     HHTMLBrowser unBrowserHandle;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_HTML_CloseBrowser_t_4(void *l, void *w)
 {
     HTML_CloseBrowser_t *lin = (HTML_CloseBrowser_t *)l;
@@ -1867,6 +2149,7 @@ void cb_HTML_CloseBrowser_t_4(void *l, void *w)
     win->unBrowserHandle = lin->unBrowserHandle;
 }
 
+#pragma pack( push, 8 )
 struct winHTML_URLChanged_t_24 {
     HHTMLBrowser unBrowserHandle;
     const char * pchURL;
@@ -1875,6 +2158,7 @@ struct winHTML_URLChanged_t_24 {
     const char * pchPageTitle;
     bool bNewNavigation;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_HTML_URLChanged_t_24(void *l, void *w)
 {
     HTML_URLChanged_t *lin = (HTML_URLChanged_t *)l;
@@ -1887,11 +2171,13 @@ void cb_HTML_URLChanged_t_24(void *l, void *w)
     win->bNewNavigation = lin->bNewNavigation;
 }
 
+#pragma pack( push, 8 )
 struct winHTML_FinishedRequest_t_12 {
     HHTMLBrowser unBrowserHandle;
     const char * pchURL;
     const char * pchPageTitle;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_HTML_FinishedRequest_t_12(void *l, void *w)
 {
     HTML_FinishedRequest_t *lin = (HTML_FinishedRequest_t *)l;
@@ -1901,10 +2187,12 @@ void cb_HTML_FinishedRequest_t_12(void *l, void *w)
     win->pchPageTitle = lin->pchPageTitle;
 }
 
+#pragma pack( push, 8 )
 struct winHTML_OpenLinkInNewTab_t_8 {
     HHTMLBrowser unBrowserHandle;
     const char * pchURL;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_HTML_OpenLinkInNewTab_t_8(void *l, void *w)
 {
     HTML_OpenLinkInNewTab_t *lin = (HTML_OpenLinkInNewTab_t *)l;
@@ -1913,10 +2201,12 @@ void cb_HTML_OpenLinkInNewTab_t_8(void *l, void *w)
     win->pchURL = lin->pchURL;
 }
 
+#pragma pack( push, 8 )
 struct winHTML_ChangedTitle_t_8 {
     HHTMLBrowser unBrowserHandle;
     const char * pchTitle;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_HTML_ChangedTitle_t_8(void *l, void *w)
 {
     HTML_ChangedTitle_t *lin = (HTML_ChangedTitle_t *)l;
@@ -1925,11 +2215,13 @@ void cb_HTML_ChangedTitle_t_8(void *l, void *w)
     win->pchTitle = lin->pchTitle;
 }
 
+#pragma pack( push, 8 )
 struct winHTML_SearchResults_t_12 {
     HHTMLBrowser unBrowserHandle;
     uint32 unResults;
     uint32 unCurrentMatch;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_HTML_SearchResults_t_12(void *l, void *w)
 {
     HTML_SearchResults_t *lin = (HTML_SearchResults_t *)l;
@@ -1939,11 +2231,13 @@ void cb_HTML_SearchResults_t_12(void *l, void *w)
     win->unCurrentMatch = lin->unCurrentMatch;
 }
 
+#pragma pack( push, 8 )
 struct winHTML_CanGoBackAndForward_t_8 {
     HHTMLBrowser unBrowserHandle;
     bool bCanGoBack;
     bool bCanGoForward;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_HTML_CanGoBackAndForward_t_8(void *l, void *w)
 {
     HTML_CanGoBackAndForward_t *lin = (HTML_CanGoBackAndForward_t *)l;
@@ -1953,6 +2247,7 @@ void cb_HTML_CanGoBackAndForward_t_8(void *l, void *w)
     win->bCanGoForward = lin->bCanGoForward;
 }
 
+#pragma pack( push, 8 )
 struct winHTML_HorizontalScroll_t_24 {
     HHTMLBrowser unBrowserHandle;
     uint32 unScrollMax;
@@ -1961,6 +2256,7 @@ struct winHTML_HorizontalScroll_t_24 {
     bool bVisible;
     uint32 unPageSize;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_HTML_HorizontalScroll_t_24(void *l, void *w)
 {
     HTML_HorizontalScroll_t *lin = (HTML_HorizontalScroll_t *)l;
@@ -1973,6 +2269,7 @@ void cb_HTML_HorizontalScroll_t_24(void *l, void *w)
     win->unPageSize = lin->unPageSize;
 }
 
+#pragma pack( push, 8 )
 struct winHTML_VerticalScroll_t_24 {
     HHTMLBrowser unBrowserHandle;
     uint32 unScrollMax;
@@ -1981,6 +2278,7 @@ struct winHTML_VerticalScroll_t_24 {
     bool bVisible;
     uint32 unPageSize;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_HTML_VerticalScroll_t_24(void *l, void *w)
 {
     HTML_VerticalScroll_t *lin = (HTML_VerticalScroll_t *)l;
@@ -1993,6 +2291,7 @@ void cb_HTML_VerticalScroll_t_24(void *l, void *w)
     win->unPageSize = lin->unPageSize;
 }
 
+#pragma pack( push, 8 )
 struct winHTML_LinkAtPosition_t_20 {
     HHTMLBrowser unBrowserHandle;
     uint32 x;
@@ -2001,6 +2300,7 @@ struct winHTML_LinkAtPosition_t_20 {
     bool bInput;
     bool bLiveLink;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_HTML_LinkAtPosition_t_20(void *l, void *w)
 {
     HTML_LinkAtPosition_t *lin = (HTML_LinkAtPosition_t *)l;
@@ -2013,10 +2313,12 @@ void cb_HTML_LinkAtPosition_t_20(void *l, void *w)
     win->bLiveLink = lin->bLiveLink;
 }
 
+#pragma pack( push, 8 )
 struct winHTML_JSAlert_t_8 {
     HHTMLBrowser unBrowserHandle;
     const char * pchMessage;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_HTML_JSAlert_t_8(void *l, void *w)
 {
     HTML_JSAlert_t *lin = (HTML_JSAlert_t *)l;
@@ -2025,10 +2327,12 @@ void cb_HTML_JSAlert_t_8(void *l, void *w)
     win->pchMessage = lin->pchMessage;
 }
 
+#pragma pack( push, 8 )
 struct winHTML_JSConfirm_t_8 {
     HHTMLBrowser unBrowserHandle;
     const char * pchMessage;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_HTML_JSConfirm_t_8(void *l, void *w)
 {
     HTML_JSConfirm_t *lin = (HTML_JSConfirm_t *)l;
@@ -2037,11 +2341,13 @@ void cb_HTML_JSConfirm_t_8(void *l, void *w)
     win->pchMessage = lin->pchMessage;
 }
 
+#pragma pack( push, 8 )
 struct winHTML_FileOpenDialog_t_12 {
     HHTMLBrowser unBrowserHandle;
     const char * pchTitle;
     const char * pchInitialFile;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_HTML_FileOpenDialog_t_12(void *l, void *w)
 {
     HTML_FileOpenDialog_t *lin = (HTML_FileOpenDialog_t *)l;
@@ -2051,6 +2357,7 @@ void cb_HTML_FileOpenDialog_t_12(void *l, void *w)
     win->pchInitialFile = lin->pchInitialFile;
 }
 
+#pragma pack( push, 8 )
 struct winHTML_NewWindow_t_28 {
     HHTMLBrowser unBrowserHandle;
     const char * pchURL;
@@ -2060,6 +2367,7 @@ struct winHTML_NewWindow_t_28 {
     uint32 unTall;
     HHTMLBrowser unNewWindow_BrowserHandle;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_HTML_NewWindow_t_28(void *l, void *w)
 {
     HTML_NewWindow_t *lin = (HTML_NewWindow_t *)l;
@@ -2073,10 +2381,12 @@ void cb_HTML_NewWindow_t_28(void *l, void *w)
     win->unNewWindow_BrowserHandle = lin->unNewWindow_BrowserHandle;
 }
 
+#pragma pack( push, 8 )
 struct winHTML_SetCursor_t_8 {
     HHTMLBrowser unBrowserHandle;
     uint32 eMouseCursor;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_HTML_SetCursor_t_8(void *l, void *w)
 {
     HTML_SetCursor_t *lin = (HTML_SetCursor_t *)l;
@@ -2085,10 +2395,12 @@ void cb_HTML_SetCursor_t_8(void *l, void *w)
     win->eMouseCursor = lin->eMouseCursor;
 }
 
+#pragma pack( push, 8 )
 struct winHTML_StatusText_t_8 {
     HHTMLBrowser unBrowserHandle;
     const char * pchMsg;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_HTML_StatusText_t_8(void *l, void *w)
 {
     HTML_StatusText_t *lin = (HTML_StatusText_t *)l;
@@ -2097,10 +2409,12 @@ void cb_HTML_StatusText_t_8(void *l, void *w)
     win->pchMsg = lin->pchMsg;
 }
 
+#pragma pack( push, 8 )
 struct winHTML_ShowToolTip_t_8 {
     HHTMLBrowser unBrowserHandle;
     const char * pchMsg;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_HTML_ShowToolTip_t_8(void *l, void *w)
 {
     HTML_ShowToolTip_t *lin = (HTML_ShowToolTip_t *)l;
@@ -2109,10 +2423,12 @@ void cb_HTML_ShowToolTip_t_8(void *l, void *w)
     win->pchMsg = lin->pchMsg;
 }
 
+#pragma pack( push, 8 )
 struct winHTML_UpdateToolTip_t_8 {
     HHTMLBrowser unBrowserHandle;
     const char * pchMsg;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_HTML_UpdateToolTip_t_8(void *l, void *w)
 {
     HTML_UpdateToolTip_t *lin = (HTML_UpdateToolTip_t *)l;
@@ -2121,9 +2437,11 @@ void cb_HTML_UpdateToolTip_t_8(void *l, void *w)
     win->pchMsg = lin->pchMsg;
 }
 
+#pragma pack( push, 8 )
 struct winHTML_HideToolTip_t_4 {
     HHTMLBrowser unBrowserHandle;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_HTML_HideToolTip_t_4(void *l, void *w)
 {
     HTML_HideToolTip_t *lin = (HTML_HideToolTip_t *)l;
@@ -2131,10 +2449,12 @@ void cb_HTML_HideToolTip_t_4(void *l, void *w)
     win->unBrowserHandle = lin->unBrowserHandle;
 }
 
+#pragma pack( push, 8 )
 struct winHTML_BrowserRestarted_t_8 {
     HHTMLBrowser unBrowserHandle;
     HHTMLBrowser unOldBrowserHandle;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_HTML_BrowserRestarted_t_8(void *l, void *w)
 {
     HTML_BrowserRestarted_t *lin = (HTML_BrowserRestarted_t *)l;
@@ -2143,10 +2463,12 @@ void cb_HTML_BrowserRestarted_t_8(void *l, void *w)
     win->unOldBrowserHandle = lin->unOldBrowserHandle;
 }
 
+#pragma pack( push, 8 )
 struct winSteamInventoryResultReady_t_8 {
     SteamInventoryResult_t m_handle;
     EResult m_result;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_SteamInventoryResultReady_t_8(void *l, void *w)
 {
     SteamInventoryResultReady_t *lin = (SteamInventoryResultReady_t *)l;
@@ -2155,9 +2477,11 @@ void cb_SteamInventoryResultReady_t_8(void *l, void *w)
     win->m_result = lin->m_result;
 }
 
+#pragma pack( push, 8 )
 struct winSteamInventoryFullUpdate_t_4 {
     SteamInventoryResult_t m_handle;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_SteamInventoryFullUpdate_t_4(void *l, void *w)
 {
     SteamInventoryFullUpdate_t *lin = (SteamInventoryFullUpdate_t *)l;
@@ -2165,20 +2489,24 @@ void cb_SteamInventoryFullUpdate_t_4(void *l, void *w)
     win->m_handle = lin->m_handle;
 }
 
+#pragma pack( push, 8 )
 struct winSteamInventoryDefinitionUpdate_t_1 {
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_SteamInventoryDefinitionUpdate_t_1(void *l, void *w)
 {
     SteamInventoryDefinitionUpdate_t *lin = (SteamInventoryDefinitionUpdate_t *)l;
     struct winSteamInventoryDefinitionUpdate_t_1 *win = (struct winSteamInventoryDefinitionUpdate_t_1 *)w;
 }
 
+#pragma pack( push, 8 )
 struct winSteamInventoryEligiblePromoItemDefIDs_t_20 {
     EResult m_result;
     CSteamID m_steamID;
     int m_numEligiblePromoItemDefs;
     bool m_bCachedData;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_SteamInventoryEligiblePromoItemDefIDs_t_20(void *l, void *w)
 {
     SteamInventoryEligiblePromoItemDefIDs_t *lin = (SteamInventoryEligiblePromoItemDefIDs_t *)l;
@@ -2189,11 +2517,13 @@ void cb_SteamInventoryEligiblePromoItemDefIDs_t_20(void *l, void *w)
     win->m_bCachedData = lin->m_bCachedData;
 }
 
+#pragma pack( push, 8 )
 struct winSteamInventoryStartPurchaseResult_t_20 {
     EResult m_result;
     uint64 m_ulOrderID;
     uint64 m_ulTransID;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_SteamInventoryStartPurchaseResult_t_20(void *l, void *w)
 {
     SteamInventoryStartPurchaseResult_t *lin = (SteamInventoryStartPurchaseResult_t *)l;
@@ -2203,10 +2533,12 @@ void cb_SteamInventoryStartPurchaseResult_t_20(void *l, void *w)
     win->m_ulTransID = lin->m_ulTransID;
 }
 
+#pragma pack( push, 8 )
 struct winSteamInventoryRequestPricesResult_t_8 {
     EResult m_result;
     char m_rgchCurrency[4];
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_SteamInventoryRequestPricesResult_t_8(void *l, void *w)
 {
     SteamInventoryRequestPricesResult_t *lin = (SteamInventoryRequestPricesResult_t *)l;
@@ -2215,17 +2547,21 @@ void cb_SteamInventoryRequestPricesResult_t_8(void *l, void *w)
     memcpy(win->m_rgchCurrency, lin->m_rgchCurrency, sizeof(win->m_rgchCurrency));
 }
 
+#pragma pack( push, 8 )
 struct winBroadcastUploadStart_t_1 {
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_BroadcastUploadStart_t_1(void *l, void *w)
 {
     BroadcastUploadStart_t *lin = (BroadcastUploadStart_t *)l;
     struct winBroadcastUploadStart_t_1 *win = (struct winBroadcastUploadStart_t_1 *)w;
 }
 
+#pragma pack( push, 8 )
 struct winBroadcastUploadStop_t_4 {
     EBroadcastUploadResult m_eResult;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_BroadcastUploadStop_t_4(void *l, void *w)
 {
     BroadcastUploadStop_t *lin = (BroadcastUploadStop_t *)l;
@@ -2233,11 +2569,13 @@ void cb_BroadcastUploadStop_t_4(void *l, void *w)
     win->m_eResult = lin->m_eResult;
 }
 
+#pragma pack( push, 8 )
 struct winGetVideoURLResult_t_264 {
     EResult m_eResult;
     AppId_t m_unVideoAppID;
     char m_rgchURL[256];
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_GetVideoURLResult_t_264(void *l, void *w)
 {
     GetVideoURLResult_t *lin = (GetVideoURLResult_t *)l;
@@ -2247,10 +2585,12 @@ void cb_GetVideoURLResult_t_264(void *l, void *w)
     memcpy(win->m_rgchURL, lin->m_rgchURL, sizeof(win->m_rgchURL));
 }
 
+#pragma pack( push, 8 )
 struct winGetOPFSettingsResult_t_8 {
     EResult m_eResult;
     AppId_t m_unVideoAppID;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_GetOPFSettingsResult_t_8(void *l, void *w)
 {
     GetOPFSettingsResult_t *lin = (GetOPFSettingsResult_t *)l;
@@ -2259,18 +2599,22 @@ void cb_GetOPFSettingsResult_t_8(void *l, void *w)
     win->m_unVideoAppID = lin->m_unVideoAppID;
 }
 
+#pragma pack( push, 8 )
 struct winSteamParentalSettingsChanged_t_1 {
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_SteamParentalSettingsChanged_t_1(void *l, void *w)
 {
     SteamParentalSettingsChanged_t *lin = (SteamParentalSettingsChanged_t *)l;
     struct winSteamParentalSettingsChanged_t_1 *win = (struct winSteamParentalSettingsChanged_t_1 *)w;
 }
 
+#pragma pack( push, 8 )
 struct winGSClientApprove_t_16 {
     CSteamID m_SteamID;
     CSteamID m_OwnerSteamID;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_GSClientApprove_t_16(void *l, void *w)
 {
     GSClientApprove_t *lin = (GSClientApprove_t *)l;
@@ -2279,11 +2623,13 @@ void cb_GSClientApprove_t_16(void *l, void *w)
     win->m_OwnerSteamID = lin->m_OwnerSteamID;
 }
 
+#pragma pack( push, 8 )
 struct winGSClientDeny_t_140 {
     CSteamID m_SteamID;
     EDenyReason m_eDenyReason;
     char m_rgchOptionalText[128];
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_GSClientDeny_t_140(void *l, void *w)
 {
     GSClientDeny_t *lin = (GSClientDeny_t *)l;
@@ -2293,10 +2639,12 @@ void cb_GSClientDeny_t_140(void *l, void *w)
     memcpy(win->m_rgchOptionalText, lin->m_rgchOptionalText, sizeof(win->m_rgchOptionalText));
 }
 
+#pragma pack( push, 8 )
 struct winGSClientKick_t_12 {
     CSteamID m_SteamID;
     EDenyReason m_eDenyReason;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_GSClientKick_t_12(void *l, void *w)
 {
     GSClientKick_t *lin = (GSClientKick_t *)l;
@@ -2305,11 +2653,13 @@ void cb_GSClientKick_t_12(void *l, void *w)
     win->m_eDenyReason = lin->m_eDenyReason;
 }
 
+#pragma pack( push, 8 )
 struct winGSClientAchievementStatus_t_140 {
     uint64 m_SteamID;
     char m_pchAchievement[128];
     bool m_bUnlocked;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_GSClientAchievementStatus_t_140(void *l, void *w)
 {
     GSClientAchievementStatus_t *lin = (GSClientAchievementStatus_t *)l;
@@ -2319,9 +2669,11 @@ void cb_GSClientAchievementStatus_t_140(void *l, void *w)
     win->m_bUnlocked = lin->m_bUnlocked;
 }
 
+#pragma pack( push, 8 )
 struct winGSPolicyResponse_t_1 {
     uint8 m_bSecure;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_GSPolicyResponse_t_1(void *l, void *w)
 {
     GSPolicyResponse_t *lin = (GSPolicyResponse_t *)l;
@@ -2329,12 +2681,14 @@ void cb_GSPolicyResponse_t_1(void *l, void *w)
     win->m_bSecure = lin->m_bSecure;
 }
 
+#pragma pack( push, 8 )
 struct winGSGameplayStats_t_16 {
     EResult m_eResult;
     int32 m_nRank;
     uint32 m_unTotalConnects;
     uint32 m_unTotalMinutesPlayed;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_GSGameplayStats_t_16(void *l, void *w)
 {
     GSGameplayStats_t *lin = (GSGameplayStats_t *)l;
@@ -2345,12 +2699,14 @@ void cb_GSGameplayStats_t_16(void *l, void *w)
     win->m_unTotalMinutesPlayed = lin->m_unTotalMinutesPlayed;
 }
 
+#pragma pack( push, 8 )
 struct winGSClientGroupStatus_t_18 {
     CSteamID m_SteamIDUser;
     CSteamID m_SteamIDGroup;
     bool m_bMember;
     bool m_bOfficer;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_GSClientGroupStatus_t_18(void *l, void *w)
 {
     GSClientGroupStatus_t *lin = (GSClientGroupStatus_t *)l;
@@ -2361,6 +2717,7 @@ void cb_GSClientGroupStatus_t_18(void *l, void *w)
     win->m_bOfficer = lin->m_bOfficer;
 }
 
+#pragma pack( push, 8 )
 struct winGSReputation_t_32 {
     EResult m_eResult;
     uint32 m_unReputationScore;
@@ -2370,6 +2727,7 @@ struct winGSReputation_t_32 {
     uint64 m_ulBannedGameID;
     uint32 m_unBanExpires;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_GSReputation_t_32(void *l, void *w)
 {
     GSReputation_t *lin = (GSReputation_t *)l;
@@ -2383,9 +2741,11 @@ void cb_GSReputation_t_32(void *l, void *w)
     win->m_unBanExpires = lin->m_unBanExpires;
 }
 
+#pragma pack( push, 8 )
 struct winAssociateWithClanResult_t_4 {
     EResult m_eResult;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_AssociateWithClanResult_t_4(void *l, void *w)
 {
     AssociateWithClanResult_t *lin = (AssociateWithClanResult_t *)l;
@@ -2393,6 +2753,7 @@ void cb_AssociateWithClanResult_t_4(void *l, void *w)
     win->m_eResult = lin->m_eResult;
 }
 
+#pragma pack( push, 8 )
 struct winComputeNewPlayerCompatibilityResult_t_24 {
     EResult m_eResult;
     int m_cPlayersThatDontLikeCandidate;
@@ -2400,6 +2761,7 @@ struct winComputeNewPlayerCompatibilityResult_t_24 {
     int m_cClanPlayersThatDontLikeCandidate;
     CSteamID m_SteamIDCandidate;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_ComputeNewPlayerCompatibilityResult_t_24(void *l, void *w)
 {
     ComputeNewPlayerCompatibilityResult_t *lin = (ComputeNewPlayerCompatibilityResult_t *)l;
@@ -2411,10 +2773,12 @@ void cb_ComputeNewPlayerCompatibilityResult_t_24(void *l, void *w)
     win->m_SteamIDCandidate = lin->m_SteamIDCandidate;
 }
 
+#pragma pack( push, 8 )
 struct winGSStatsReceived_t_12 {
     EResult m_eResult;
     CSteamID m_steamIDUser;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_GSStatsReceived_t_12(void *l, void *w)
 {
     GSStatsReceived_t *lin = (GSStatsReceived_t *)l;
@@ -2423,10 +2787,12 @@ void cb_GSStatsReceived_t_12(void *l, void *w)
     win->m_steamIDUser = lin->m_steamIDUser;
 }
 
+#pragma pack( push, 8 )
 struct winGSStatsStored_t_12 {
     EResult m_eResult;
     CSteamID m_steamIDUser;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_GSStatsStored_t_12(void *l, void *w)
 {
     GSStatsStored_t *lin = (GSStatsStored_t *)l;
@@ -2435,9 +2801,11 @@ void cb_GSStatsStored_t_12(void *l, void *w)
     win->m_steamIDUser = lin->m_steamIDUser;
 }
 
+#pragma pack( push, 8 )
 struct winGCMessageAvailable_t_4 {
     uint32 m_nMessageSize;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_GCMessageAvailable_t_4(void *l, void *w)
 {
     GCMessageAvailable_t *lin = (GCMessageAvailable_t *)l;
@@ -2445,8 +2813,10 @@ void cb_GCMessageAvailable_t_4(void *l, void *w)
     win->m_nMessageSize = lin->m_nMessageSize;
 }
 
+#pragma pack( push, 8 )
 struct winGCMessageFailed_t_1 {
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_GCMessageFailed_t_1(void *l, void *w)
 {
     GCMessageFailed_t *lin = (GCMessageFailed_t *)l;

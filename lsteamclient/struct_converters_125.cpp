@@ -5,10 +5,12 @@
 #include "steamworks_sdk_125/isteamgameserverstats.h"
 #include "steamworks_sdk_125/isteamgamecoordinator.h"
 extern "C" {
+#pragma pack( push, 8 )
 struct winValidateAuthTicketResponse_t_12 {
     CSteamID m_SteamID;
     EAuthSessionResponse m_eAuthSessionResponse;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_ValidateAuthTicketResponse_t_12(void *l, void *w)
 {
     ValidateAuthTicketResponse_t *lin = (ValidateAuthTicketResponse_t *)l;
@@ -17,6 +19,7 @@ void cb_ValidateAuthTicketResponse_t_12(void *l, void *w)
     win->m_eAuthSessionResponse = lin->m_eAuthSessionResponse;
 }
 
+#pragma pack( push, 8 )
 struct winRemoteStorageGetPublishedFileDetailsResult_t_9744 {
     EResult m_eResult;
     PublishedFileId_t m_nPublishedFileId;
@@ -39,6 +42,7 @@ struct winRemoteStorageGetPublishedFileDetailsResult_t_9744 {
     char m_rgchURL[256];
     EWorkshopFileType m_eFileType;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_RemoteStorageGetPublishedFileDetailsResult_t_9744(void *l, void *w)
 {
     RemoteStorageGetPublishedFileDetailsResult_t *lin = (RemoteStorageGetPublishedFileDetailsResult_t *)l;
@@ -65,9 +69,11 @@ void cb_RemoteStorageGetPublishedFileDetailsResult_t_9744(void *l, void *w)
     win->m_eFileType = lin->m_eFileType;
 }
 
+#pragma pack( push, 8 )
 struct winGSClientApprove_t_8 {
     CSteamID m_SteamID;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_GSClientApprove_t_8(void *l, void *w)
 {
     GSClientApprove_t *lin = (GSClientApprove_t *)l;

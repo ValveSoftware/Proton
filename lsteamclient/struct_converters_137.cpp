@@ -5,10 +5,12 @@
 #include "steamworks_sdk_137/isteamgameserverstats.h"
 #include "steamworks_sdk_137/isteamgamecoordinator.h"
 extern "C" {
+#pragma pack( push, 8 )
 struct winRemoteStorageConflictResolution_t_8 {
     AppId_t m_nAppID;
     EResult m_eResult;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_RemoteStorageConflictResolution_t_8(void *l, void *w)
 {
     RemoteStorageConflictResolution_t *lin = (RemoteStorageConflictResolution_t *)l;

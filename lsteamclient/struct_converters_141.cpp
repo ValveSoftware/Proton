@@ -5,12 +5,14 @@
 #include "steamworks_sdk_141/isteamgameserverstats.h"
 #include "steamworks_sdk_141/isteamgamecoordinator.h"
 extern "C" {
+#pragma pack( push, 8 )
 struct winSteamUnifiedMessagesSendMethodResult_t_24 {
     ClientUnifiedMessageHandle m_hHandle;
     uint64 m_unContext;
     EResult m_eResult;
     uint32 m_unResponseSize;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_SteamUnifiedMessagesSendMethodResult_t_24(void *l, void *w)
 {
     SteamUnifiedMessagesSendMethodResult_t *lin = (SteamUnifiedMessagesSendMethodResult_t *)l;

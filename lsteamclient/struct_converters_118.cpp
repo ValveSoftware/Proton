@@ -5,6 +5,7 @@
 #include "steamworks_sdk_118/isteamgameserverstats.h"
 #include "steamworks_sdk_118/isteamgamecoordinator.h"
 extern "C" {
+#pragma pack( push, 8 )
 struct winRemoteStorageGetPublishedFileDetailsResult_t_9484 {
     EResult m_eResult;
     PublishedFileId_t m_nPublishedFileId;
@@ -25,6 +26,7 @@ struct winRemoteStorageGetPublishedFileDetailsResult_t_9484 {
     int32 m_nFileSize;
     int32 m_nPreviewFileSize;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_RemoteStorageGetPublishedFileDetailsResult_t_9484(void *l, void *w)
 {
     RemoteStorageGetPublishedFileDetailsResult_t *lin = (RemoteStorageGetPublishedFileDetailsResult_t *)l;
@@ -49,12 +51,14 @@ void cb_RemoteStorageGetPublishedFileDetailsResult_t_9484(void *l, void *w)
     win->m_nPreviewFileSize = lin->m_nPreviewFileSize;
 }
 
+#pragma pack( push, 8 )
 struct winComputeNewPlayerCompatibilityResult_t_16 {
     EResult m_eResult;
     int m_cPlayersThatDontLikeCandidate;
     int m_cPlayersThatCandidateDoesntLike;
     int m_cClanPlayersThatDontLikeCandidate;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 void cb_ComputeNewPlayerCompatibilityResult_t_16(void *l, void *w)
 {
     ComputeNewPlayerCompatibilityResult_t *lin = (ComputeNewPlayerCompatibilityResult_t *)l;
