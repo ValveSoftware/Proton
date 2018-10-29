@@ -151,6 +151,14 @@ exempt_structs = [
         "MatchMakingKeyValuePair_t"
 ]
 
+# callback classes for which we have a linux wrapper
+wrapped_classes = [
+        "ISteamMatchmakingServerListResponse",
+        "ISteamMatchmakingPingResponse",
+        "ISteamMatchmakingPlayersResponse",
+        "ISteamMatchmakingRulesResponse"
+]
+
 print_sizes = []
 
 class_versions = {}
@@ -217,7 +225,8 @@ def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, e
             while real_type.kind == clang.cindex.TypeKind.POINTER:
                 real_type = real_type.get_pointee()
             if real_type.kind == clang.cindex.TypeKind.RECORD and \
-                    not real_type.spelling in exempt_structs:
+                    not real_type.spelling in exempt_structs and \
+                    not real_type.spelling in wrapped_classes:
                 need_convert.append(param)
 
             if param.spelling == "":
@@ -295,8 +304,9 @@ def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, e
                 cfile.write(", _%s" % unnamed)
                 cpp.write("(%s)_%s" % (param.type.spelling, unnamed))
                 unnamed = chr(ord(unnamed) + 1)
-            elif "ISteamMatchmakingServerListResponse" in param.type.spelling:
-                cfile.write(", create_LinuxMatchmakingServerListResponse(%s)" % param.spelling)
+            elif param.type.kind == clang.cindex.TypeKind.POINTER and \
+                    param.type.get_pointee().spelling in wrapped_classes:
+                cfile.write(", create_Linux%s(%s)" % (param.type.get_pointee().spelling, param.spelling))
                 cpp.write("(%s)%s" % (param.type.spelling, param.spelling))
             elif param in need_convert:
                 cfile.write(", %s" % param.spelling)

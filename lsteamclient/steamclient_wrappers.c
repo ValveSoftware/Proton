@@ -39,6 +39,7 @@ DEFINE_VTBL_WRAPPER(48);
 
 #endif
 
+/***** ISteamMatchmakingServerListResponse *****/
 typedef struct winServerListResponse {
     const vtable_ptr *vtable;
 } winServerListResponse;
@@ -78,16 +79,170 @@ struct gccServerListResponseVtbl {
     gccServerListResponse_RefreshComplete
 };
 
-void *create_LinuxMatchmakingServerListResponse(void *win)
+void *create_LinuxISteamMatchmakingServerListResponse(void *win)
 {
     struct gccServerListResponse *ret;
 
+    /* FIXME: When is it save to free this? CancelServerQuery? */
     ret = (struct gccServerListResponse *)HeapAlloc(GetProcessHeap(), 0, sizeof(*ret));
     if(!ret)
         return NULL;
 
     ret->vtable = &gccServerListResponse_vtbl;
     ret->win_side = (struct winServerListResponse*)win;
+
+    return ret;
+}
+
+/***** ISteamMatchmakingPingResponse *****/
+typedef struct winPingResponse {
+    const vtable_ptr *vtable;
+} winPingResponse;
+
+struct gccPingResponse {
+    void *vtable;
+    struct winPingResponse *win_side;
+};
+
+void gccPingResponse_ServerResponded(struct gccPingResponse *_this, gameserveritem_t *server)
+{
+    TRACE("%p/%p\n", _this, _this->win_side);
+    CALL_VTBL_FUNC(_this->win_side, 0, void, (winPingResponse *, gameserveritem_t *), (_this->win_side, server));
+}
+
+void gccPingResponse_ServerFailedToRespond(struct gccPingResponse *_this)
+{
+    TRACE("%p/%p\n", _this, _this->win_side);
+    CALL_VTBL_FUNC(_this->win_side, 4, void, (winPingResponse *), (_this->win_side));
+}
+
+struct gccPingResponseVtbl {
+    void (*ServerResponded)(struct gccPingResponse *, gameserveritem_t *);
+
+    void (*ServerFailedToRespond)(struct gccPingResponse *);
+} gccPingResponse_vtbl = {
+    gccPingResponse_ServerResponded,
+    gccPingResponse_ServerFailedToRespond
+};
+
+void *create_LinuxISteamMatchmakingPingResponse(void *win)
+{
+    struct gccPingResponse *ret;
+
+    ret = (struct gccPingResponse *)HeapAlloc(GetProcessHeap(), 0, sizeof(*ret));
+    if(!ret)
+        return NULL;
+
+    ret->vtable = &gccPingResponse_vtbl;
+    ret->win_side = (struct winPingResponse*)win;
+
+    return ret;
+}
+
+/***** ISteamMatchmakingPlayersResponse *****/
+typedef struct winPlayersResponse {
+    const vtable_ptr *vtable;
+} winPlayersResponse;
+
+struct gccPlayersResponse {
+    void *vtable;
+    struct winPlayersResponse *win_side;
+};
+
+void gccPlayersResponse_AddPlayerToList(struct gccPlayersResponse *_this, const char *pchName, int nScore, float flTimePlayed)
+{
+    TRACE("%p/%p\n", _this, _this->win_side);
+    CALL_VTBL_FUNC(_this->win_side, 0, void, (winPlayersResponse *, const char *, int, float), (_this->win_side, pchName, nScore, flTimePlayed));
+}
+
+void gccPlayersResponse_PlayersFailedToRespond(struct gccPlayersResponse *_this)
+{
+    TRACE("%p/%p\n", _this, _this->win_side);
+    CALL_VTBL_FUNC(_this->win_side, 4, void, (winPlayersResponse *), (_this->win_side));
+}
+
+void gccPlayersResponse_PlayersRefreshComplete(struct gccPlayersResponse *_this)
+{
+    TRACE("%p/%p\n", _this, _this->win_side);
+    CALL_VTBL_FUNC(_this->win_side, 8, void, (winPlayersResponse *), (_this->win_side));
+}
+
+struct gccPlayersResponseVtbl {
+    void (*AddPlayerToList)(struct gccPlayersResponse *, const char *, int, float);
+
+    void (*PlayersFailedToRespond)(struct gccPlayersResponse *);
+
+    void (*PlayersRefreshComplete)(struct gccPlayersResponse *);
+} gccPlayersResponse_vtbl = {
+    gccPlayersResponse_AddPlayerToList,
+    gccPlayersResponse_PlayersFailedToRespond,
+    gccPlayersResponse_PlayersRefreshComplete
+};
+
+void *create_LinuxISteamMatchmakingPlayersResponse(void *win)
+{
+    struct gccPlayersResponse *ret;
+
+    ret = (struct gccPlayersResponse *)HeapAlloc(GetProcessHeap(), 0, sizeof(*ret));
+    if(!ret)
+        return NULL;
+
+    ret->vtable = &gccPlayersResponse_vtbl;
+    ret->win_side = (struct winPlayersResponse*)win;
+
+    return ret;
+}
+
+/***** ISteamMatchmakingRulesResponse *****/
+typedef struct winRulesResponse {
+    const vtable_ptr *vtable;
+} winRulesResponse;
+
+struct gccRulesResponse {
+    void *vtable;
+    struct winRulesResponse *win_side;
+};
+
+void gccRulesResponse_RulesResponded(struct gccRulesResponse *_this, const char *pchRule, const char *pchValue)
+{
+    TRACE("%p/%p\n", _this, _this->win_side);
+    CALL_VTBL_FUNC(_this->win_side, 0, void, (winRulesResponse *, const char *, const char *), (_this->win_side, pchRule, pchValue));
+}
+
+void gccRulesResponse_RulesFailedToRespond(struct gccRulesResponse *_this)
+{
+    TRACE("%p/%p\n", _this, _this->win_side);
+    CALL_VTBL_FUNC(_this->win_side, 4, void, (winRulesResponse *), (_this->win_side));
+}
+
+void gccRulesResponse_RulesRefreshComplete(struct gccRulesResponse *_this)
+{
+    TRACE("%p/%p\n", _this, _this->win_side);
+    CALL_VTBL_FUNC(_this->win_side, 8, void, (winRulesResponse *), (_this->win_side));
+}
+
+struct gccRulesResponseVtbl {
+    void (*RulesResponded)(struct gccRulesResponse *, const char *, const char*);
+
+    void (*RulesFailedToRespond)(struct gccRulesResponse *);
+
+    void (*RulesRefreshComplete)(struct gccRulesResponse *);
+} gccRulesResponse_vtbl = {
+    gccRulesResponse_RulesResponded,
+    gccRulesResponse_RulesFailedToRespond,
+    gccRulesResponse_RulesRefreshComplete
+};
+
+void *create_LinuxISteamMatchmakingRulesResponse(void *win)
+{
+    struct gccRulesResponse *ret;
+
+    ret = (struct gccRulesResponse *)HeapAlloc(GetProcessHeap(), 0, sizeof(*ret));
+    if(!ret)
+        return NULL;
+
+    ret->vtable = &gccRulesResponse_vtbl;
+    ret->win_side = (struct winRulesResponse*)win;
 
     return ret;
 }

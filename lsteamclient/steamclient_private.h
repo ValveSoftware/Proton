@@ -30,7 +30,10 @@ typedef struct __winX winX;
 
 void *create_win_interface(const char *name, void *linux_side);
 unsigned int steamclient_unix_path_to_dos_path(unsigned int api_result, char *inout, unsigned int inout_bytes);
-void *create_LinuxMatchmakingServerListResponse(void *win);
+void *create_LinuxISteamMatchmakingServerListResponse(void *win);
+void *create_LinuxISteamMatchmakingPingResponse(void *win);
+void *create_LinuxISteamMatchmakingPlayersResponse(void *win);
+void *create_LinuxISteamMatchmakingRulesResponse(void *win);
 
 #define TRACE WINE_TRACE
 #define ERR WINE_ERR
