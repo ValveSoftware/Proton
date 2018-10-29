@@ -195,7 +195,7 @@ def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, e
     for param in list(method.get_children()):
         if param.kind == clang.cindex.CursorKind.PARM_DECL:
             if param.type.kind == clang.cindex.TypeKind.POINTER and \
-                    param.type.get_pointee().kind == clang.cindex.TypeKind.UNEXPOSED:
+                    param.type.get_pointee().kind == clang.cindex.TypeKind.FUNCTIONPROTO:
                 #unspecified function pointer
                 typename = "void *"
             else:
@@ -504,7 +504,7 @@ for sdkver in sdk_versions:
         if not os.path.isfile(input_name):
             continue
         index = clang.cindex.Index.create()
-        tu = index.parse(input_name, args=['-x', 'c++', '-m32', '-Isteamworks_sdk_%s/' % sdkver, '-I/usr/lib/clang/6.0.1/include/'])
+        tu = index.parse(input_name, args=['-x', 'c++', '-m32', '-Isteamworks_sdk_%s/' % sdkver, '-I/usr/lib/clang/7.0.0/include/'])
 
         diagnostics = list(tu.diagnostics)
         if len(diagnostics) > 0:
