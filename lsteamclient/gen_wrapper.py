@@ -392,25 +392,35 @@ cb_table = {}
 def handle_struct(sdkver, struct):
     members = struct.get_children()
     cb_num = None
+    has_fields = False
     for c in members:
         if c.kind == clang.cindex.CursorKind.ENUM_DECL:
             enums = c.get_children()
             for e in enums:
                 if e.displayname == "k_iCallback":
                     cb_num = e.enum_value
+        if c.kind == clang.cindex.CursorKind.FIELD_DECL:
+            has_fields = True
+
+    w2l_handler_name = None
+    l2w_handler_name = None
 
     if cb_num is None:
+        if not has_fields:
+            return
+        if struct.displayname == "CSteamID":
+            return
         struct_name = "%s_%s" % (struct.displayname, sdkver)
-        handler_name = "struct_%s" % struct_name;
-        return
+        w2l_handler_name = "win_to_lin_struct_%s" % struct_name;
+        l2w_handler_name = "lin_to_win_struct_%s" % struct_name;
     else:
         #for callbacks, we use the linux struct size in the cb dispatch switch
         struct_name = "%s_%s" % (struct.displayname, struct.type.get_size())
-        handler_name = "cb_%s" % struct_name;
-        if handler_name in generated_cb_handlers:
+        l2w_handler_name = "cb_%s" % struct_name;
+        if l2w_handler_name in generated_cb_handlers:
             # we already have a handler for the callback struct of this size
             return
-        if handler_name in skip_structs:
+        if l2w_handler_name in skip_structs:
             # due to padding, some structs have the same width across versions of
             # the SDK. since we key our lin->win conversion on the win struct size,
             # we can skip the smaller structs and just write into the padding on
@@ -426,9 +436,9 @@ def handle_struct(sdkver, struct):
         generated_cb_ids.append(cb_id)
 
         datfile = open("struct_converters.dat", "a")
-        datfile.write("case 0x%08x: win_msg->m_cubParam = sizeof(struct win%s); win_msg->m_pubParam = HeapAlloc(GetProcessHeap(), 0, win_msg->m_cubParam); %s(lin_msg.m_pubParam, win_msg->m_pubParam); break;\n" % (cb_id, struct_name, handler_name))
+        datfile.write("case 0x%08x: win_msg->m_cubParam = sizeof(struct win%s); win_msg->m_pubParam = HeapAlloc(GetProcessHeap(), 0, win_msg->m_cubParam); %s(lin_msg.m_pubParam, win_msg->m_pubParam); break;\n" % (cb_id, struct_name, l2w_handler_name))
 
-        generated_cb_handlers.append(handler_name)
+        generated_cb_handlers.append(l2w_handler_name)
 
         if not cb_num in cb_table.keys():
             # latest SDK linux size, list of windows struct names
@@ -452,17 +462,23 @@ def handle_struct(sdkver, struct):
         cpp_files_need_close_brace.append(cppname)
 
     hfile = open("struct_converters.h", "a")
-    hfile.write("#pragma pack( push, 8 )\n")
-    hfile.write("struct win%s {\n" % struct_name)
-    for m in struct.get_children():
-        if m.kind == clang.cindex.CursorKind.FIELD_DECL:
-            if m.type.kind == clang.cindex.TypeKind.CONSTANTARRAY:
-                hfile.write("    %s %s[%u];\n" % (m.type.element_type.spelling, m.displayname, m.type.element_count))
-            else:
-                hfile.write("    %s %s;\n" % (m.type.spelling, m.displayname))
-    hfile.write("}  __attribute__ ((ms_struct));\n")
-    hfile.write("#pragma pack( pop )\n")
-    hfile.write("extern void %s(void *l, void *w);\n\n" % handler_name)
+    if cb_num:
+        hfile.write("#pragma pack( push, 8 )\n")
+        hfile.write("struct win%s {\n" % struct_name)
+        for m in struct.get_children():
+            if m.kind == clang.cindex.CursorKind.FIELD_DECL:
+                if m.type.kind == clang.cindex.TypeKind.CONSTANTARRAY:
+                    hfile.write("    %s %s[%u];\n" % (m.type.element_type.spelling, m.displayname, m.type.element_count))
+                else:
+                    hfile.write("    %s %s;\n" % (m.type.spelling, m.displayname))
+        hfile.write("}  __attribute__ ((ms_struct));\n")
+        hfile.write("#pragma pack( pop )\n")
+
+    if w2l_handler_name:
+        hfile.write("extern void %s(void *w, void *l);\n" % w2l_handler_name)
+    if l2w_handler_name:
+        hfile.write("extern void %s(void *l, void *w);\n" % l2w_handler_name)
+    hfile.write("\n")
 
     cppfile.write("#pragma pack( push, 8 )\n")
     cppfile.write("struct win%s {\n" % struct_name)
@@ -475,18 +491,33 @@ def handle_struct(sdkver, struct):
     cppfile.write("}  __attribute__ ((ms_struct));\n")
     cppfile.write("#pragma pack( pop )\n")
 
-    cppfile.write("void %s(void *l, void *w)\n{\n" % handler_name)
-    cppfile.write("    %s *lin = (%s *)l;\n" % (struct.displayname, struct.displayname))
-    cppfile.write("    struct win%s *win = (struct win%s *)w;\n" % (struct_name, struct_name))
-    for m in struct.get_children():
+    def handle_field(m, src, dst):
         if m.kind == clang.cindex.CursorKind.FIELD_DECL:
             if m.type.kind == clang.cindex.TypeKind.CONSTANTARRAY:
-                #TODO: if this is a struct, or packed differently, we'll have to
-                # copy each element in a for-loop
-                cppfile.write("    memcpy(win->%s, lin->%s, sizeof(win->%s));\n" % (m.displayname, m.displayname, m.displayname))
+                assert(m.type.element_type.kind != clang.cindex.TypeKind.RECORD or \
+                        m.type.element_type.spelling == "CSteamID") #if this fails, we need struct array copy
+                cppfile.write("    memcpy(%s->%s, %s->%s, sizeof(%s->%s));\n" % (dst, m.displayname, src, m.displayname, dst, m.displayname))
+            elif m.type.kind == clang.cindex.TypeKind.RECORD and \
+                    m.type.spelling != "CSteamID":
+                cppfile.write("    %s_to_%s_struct_%s_%s(&%s->%s, &%s->%s);\n" % (src, dst, m.type.spelling, sdkver, src, m.displayname, dst, m.displayname))
             else:
-                cppfile.write("    win->%s = lin->%s;\n" % (m.displayname, m.displayname))
-    cppfile.write("}\n\n")
+                cppfile.write("    %s->%s = %s->%s;\n" % (dst, m.displayname, src, m.displayname))
+
+    if w2l_handler_name:
+        cppfile.write("void %s(void *w, void *l)\n{\n" % w2l_handler_name)
+        cppfile.write("    %s *lin = (%s *)l;\n" % (struct.displayname, struct.displayname))
+        cppfile.write("    struct win%s *win = (struct win%s *)w;\n" % (struct_name, struct_name))
+        for m in struct.get_children():
+            handle_field(m, "win", "lin")
+        cppfile.write("}\n\n")
+
+    if l2w_handler_name:
+        cppfile.write("void %s(void *l, void *w)\n{\n" % l2w_handler_name)
+        cppfile.write("    %s *lin = (%s *)l;\n" % (struct.displayname, struct.displayname))
+        cppfile.write("    struct win%s *win = (struct win%s *)w;\n" % (struct_name, struct_name))
+        for m in struct.get_children():
+            handle_field(m, "lin", "win")
+        cppfile.write("}\n\n")
 
 #clang.cindex.Config.set_library_file("/usr/lib/llvm-3.8/lib/libclang-3.8.so.1");
 

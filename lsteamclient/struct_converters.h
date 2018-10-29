@@ -1,3 +1,9 @@
+extern void win_to_lin_struct_ValvePackingSentinel_t_142(void *w, void *l);
+extern void lin_to_win_struct_ValvePackingSentinel_t_142(void *l, void *w);
+
+extern void win_to_lin_struct_CallbackMsg_t_142(void *w, void *l);
+extern void lin_to_win_struct_CallbackMsg_t_142(void *l, void *w);
+
 #pragma pack( push, 8 )
 struct winSteamServersConnected_t_1 {
 }  __attribute__ ((ms_struct));
@@ -89,6 +95,12 @@ struct winStoreAuthURLResponse_t_512 {
 }  __attribute__ ((ms_struct));
 #pragma pack( pop )
 extern void cb_StoreAuthURLResponse_t_512(void *l, void *w);
+
+extern void win_to_lin_struct_FriendGameInfo_t_142(void *w, void *l);
+extern void lin_to_win_struct_FriendGameInfo_t_142(void *l, void *w);
+
+extern void win_to_lin_struct_FriendSessionStateInfo_t_142(void *w, void *l);
+extern void lin_to_win_struct_FriendSessionStateInfo_t_142(void *l, void *w);
 
 #pragma pack( push, 8 )
 struct winPersonaStateChange_t_12 {
@@ -286,6 +298,15 @@ struct winGamepadTextInputDismissed_t_8 {
 #pragma pack( pop )
 extern void cb_GamepadTextInputDismissed_t_8(void *l, void *w);
 
+extern void win_to_lin_struct_MatchMakingKeyValuePair_t_142(void *w, void *l);
+extern void lin_to_win_struct_MatchMakingKeyValuePair_t_142(void *l, void *w);
+
+extern void win_to_lin_struct_servernetadr_t_142(void *w, void *l);
+extern void lin_to_win_struct_servernetadr_t_142(void *l, void *w);
+
+extern void win_to_lin_struct_gameserveritem_t_142(void *w, void *l);
+extern void lin_to_win_struct_gameserveritem_t_142(void *l, void *w);
+
 #pragma pack( push, 8 )
 struct winFavoritesListChanged_t_28 {
     uint32 m_nIP;
@@ -395,6 +416,9 @@ struct winFavoritesListAccountsUpdated_t_4 {
 }  __attribute__ ((ms_struct));
 #pragma pack( pop )
 extern void cb_FavoritesListAccountsUpdated_t_4(void *l, void *w);
+
+extern void win_to_lin_struct_SteamParamStringArray_t_142(void *w, void *l);
+extern void lin_to_win_struct_SteamParamStringArray_t_142(void *l, void *w);
 
 #pragma pack( push, 8 )
 struct winRemoteStorageAppSyncedClient_t_12 {
@@ -675,6 +699,9 @@ struct winRemoteStorageFileReadAsyncComplete_t_20 {
 #pragma pack( pop )
 extern void cb_RemoteStorageFileReadAsyncComplete_t_20(void *l, void *w);
 
+extern void win_to_lin_struct_LeaderboardEntry_t_142(void *w, void *l);
+extern void lin_to_win_struct_LeaderboardEntry_t_142(void *l, void *w);
+
 #pragma pack( push, 8 )
 struct winUserStatsReceived_t_20 {
     uint64 m_nGameID;
@@ -830,6 +857,9 @@ struct winFileDetailsResult_t_36 {
 }  __attribute__ ((ms_struct));
 #pragma pack( pop )
 extern void cb_FileDetailsResult_t_36(void *l, void *w);
+
+extern void win_to_lin_struct_P2PSessionState_t_142(void *w, void *l);
+extern void lin_to_win_struct_P2PSessionState_t_142(void *l, void *w);
 
 #pragma pack( push, 8 )
 struct winP2PSessionRequest_t_8 {
@@ -1001,6 +1031,18 @@ struct winHTTPRequestDataReceived_t_20 {
 }  __attribute__ ((ms_struct));
 #pragma pack( pop )
 extern void cb_HTTPRequestDataReceived_t_20(void *l, void *w);
+
+extern void win_to_lin_struct_ControllerAnalogActionData_t_142(void *w, void *l);
+extern void lin_to_win_struct_ControllerAnalogActionData_t_142(void *l, void *w);
+
+extern void win_to_lin_struct_ControllerDigitalActionData_t_142(void *w, void *l);
+extern void lin_to_win_struct_ControllerDigitalActionData_t_142(void *l, void *w);
+
+extern void win_to_lin_struct_ControllerMotionData_t_142(void *w, void *l);
+extern void lin_to_win_struct_ControllerMotionData_t_142(void *l, void *w);
+
+extern void win_to_lin_struct_SteamUGCDetails_t_142(void *w, void *l);
+extern void lin_to_win_struct_SteamUGCDetails_t_142(void *l, void *w);
 
 #pragma pack( push, 8 )
 struct winSteamUGCQueryCompleted_t_24 {
@@ -1387,6 +1429,9 @@ struct winHTML_BrowserRestarted_t_8 {
 #pragma pack( pop )
 extern void cb_HTML_BrowserRestarted_t_8(void *l, void *w);
 
+extern void win_to_lin_struct_SteamItemDetails_t_142(void *w, void *l);
+extern void lin_to_win_struct_SteamItemDetails_t_142(void *l, void *w);
+
 #pragma pack( push, 8 )
 struct winSteamInventoryResultReady_t_8 {
     SteamInventoryResult_t m_handle;
@@ -1470,6 +1515,15 @@ struct winSteamParentalSettingsChanged_t_1 {
 }  __attribute__ ((ms_struct));
 #pragma pack( pop )
 extern void cb_SteamParentalSettingsChanged_t_1(void *l, void *w);
+
+extern void win_to_lin_struct_CSteamAPIContext_142(void *w, void *l);
+extern void lin_to_win_struct_CSteamAPIContext_142(void *l, void *w);
+
+extern void win_to_lin_struct_CCallbackBase_142(void *w, void *l);
+extern void lin_to_win_struct_CCallbackBase_142(void *l, void *w);
+
+extern void win_to_lin_struct_ValvePackingSentinel_t_142(void *w, void *l);
+extern void lin_to_win_struct_ValvePackingSentinel_t_142(void *l, void *w);
 
 #pragma pack( push, 8 )
 struct winGSClientApprove_t_16 {
@@ -1563,6 +1617,9 @@ struct winComputeNewPlayerCompatibilityResult_t_24 {
 #pragma pack( pop )
 extern void cb_ComputeNewPlayerCompatibilityResult_t_24(void *l, void *w);
 
+extern void win_to_lin_struct_ValvePackingSentinel_t_142(void *w, void *l);
+extern void lin_to_win_struct_ValvePackingSentinel_t_142(void *l, void *w);
+
 #pragma pack( push, 8 )
 struct winGSStatsReceived_t_12 {
     EResult m_eResult;
@@ -1579,6 +1636,9 @@ struct winGSStatsStored_t_12 {
 #pragma pack( pop )
 extern void cb_GSStatsStored_t_12(void *l, void *w);
 
+extern void win_to_lin_struct_ValvePackingSentinel_t_142(void *w, void *l);
+extern void lin_to_win_struct_ValvePackingSentinel_t_142(void *l, void *w);
+
 #pragma pack( push, 8 )
 struct winGCMessageAvailable_t_4 {
     uint32 m_nMessageSize;
@@ -1592,6 +1652,39 @@ struct winGCMessageFailed_t_1 {
 #pragma pack( pop )
 extern void cb_GCMessageFailed_t_1(void *l, void *w);
 
+extern void win_to_lin_struct_ValvePackingSentinel_t_142(void *w, void *l);
+extern void lin_to_win_struct_ValvePackingSentinel_t_142(void *l, void *w);
+
+extern void win_to_lin_struct_ValvePackingSentinel_t_141(void *w, void *l);
+extern void lin_to_win_struct_ValvePackingSentinel_t_141(void *l, void *w);
+
+extern void win_to_lin_struct_CallbackMsg_t_141(void *w, void *l);
+extern void lin_to_win_struct_CallbackMsg_t_141(void *l, void *w);
+
+extern void win_to_lin_struct_FriendGameInfo_t_141(void *w, void *l);
+extern void lin_to_win_struct_FriendGameInfo_t_141(void *l, void *w);
+
+extern void win_to_lin_struct_FriendSessionStateInfo_t_141(void *w, void *l);
+extern void lin_to_win_struct_FriendSessionStateInfo_t_141(void *l, void *w);
+
+extern void win_to_lin_struct_MatchMakingKeyValuePair_t_141(void *w, void *l);
+extern void lin_to_win_struct_MatchMakingKeyValuePair_t_141(void *l, void *w);
+
+extern void win_to_lin_struct_servernetadr_t_141(void *w, void *l);
+extern void lin_to_win_struct_servernetadr_t_141(void *l, void *w);
+
+extern void win_to_lin_struct_gameserveritem_t_141(void *w, void *l);
+extern void lin_to_win_struct_gameserveritem_t_141(void *l, void *w);
+
+extern void win_to_lin_struct_SteamParamStringArray_t_141(void *w, void *l);
+extern void lin_to_win_struct_SteamParamStringArray_t_141(void *l, void *w);
+
+extern void win_to_lin_struct_LeaderboardEntry_t_141(void *w, void *l);
+extern void lin_to_win_struct_LeaderboardEntry_t_141(void *l, void *w);
+
+extern void win_to_lin_struct_P2PSessionState_t_141(void *w, void *l);
+extern void lin_to_win_struct_P2PSessionState_t_141(void *l, void *w);
+
 #pragma pack( push, 8 )
 struct winSteamUnifiedMessagesSendMethodResult_t_24 {
     ClientUnifiedMessageHandle m_hHandle;
@@ -1602,6 +1695,81 @@ struct winSteamUnifiedMessagesSendMethodResult_t_24 {
 #pragma pack( pop )
 extern void cb_SteamUnifiedMessagesSendMethodResult_t_24(void *l, void *w);
 
+extern void win_to_lin_struct_ControllerAnalogActionData_t_141(void *w, void *l);
+extern void lin_to_win_struct_ControllerAnalogActionData_t_141(void *l, void *w);
+
+extern void win_to_lin_struct_ControllerDigitalActionData_t_141(void *w, void *l);
+extern void lin_to_win_struct_ControllerDigitalActionData_t_141(void *l, void *w);
+
+extern void win_to_lin_struct_ControllerMotionData_t_141(void *w, void *l);
+extern void lin_to_win_struct_ControllerMotionData_t_141(void *l, void *w);
+
+extern void win_to_lin_struct_SteamUGCDetails_t_141(void *w, void *l);
+extern void lin_to_win_struct_SteamUGCDetails_t_141(void *l, void *w);
+
+extern void win_to_lin_struct_SteamItemDetails_t_141(void *w, void *l);
+extern void lin_to_win_struct_SteamItemDetails_t_141(void *l, void *w);
+
+extern void win_to_lin_struct_CSteamAPIContext_141(void *w, void *l);
+extern void lin_to_win_struct_CSteamAPIContext_141(void *l, void *w);
+
+extern void win_to_lin_struct_CCallbackBase_141(void *w, void *l);
+extern void lin_to_win_struct_CCallbackBase_141(void *l, void *w);
+
+extern void win_to_lin_struct_ValvePackingSentinel_t_141(void *w, void *l);
+extern void lin_to_win_struct_ValvePackingSentinel_t_141(void *l, void *w);
+
+extern void win_to_lin_struct_ValvePackingSentinel_t_141(void *w, void *l);
+extern void lin_to_win_struct_ValvePackingSentinel_t_141(void *l, void *w);
+
+extern void win_to_lin_struct_ValvePackingSentinel_t_141(void *w, void *l);
+extern void lin_to_win_struct_ValvePackingSentinel_t_141(void *l, void *w);
+
+extern void win_to_lin_struct_ValvePackingSentinel_t_141(void *w, void *l);
+extern void lin_to_win_struct_ValvePackingSentinel_t_141(void *l, void *w);
+
+extern void win_to_lin_struct_ValvePackingSentinel_t_140(void *w, void *l);
+extern void lin_to_win_struct_ValvePackingSentinel_t_140(void *l, void *w);
+
+extern void win_to_lin_struct_CallbackMsg_t_140(void *w, void *l);
+extern void lin_to_win_struct_CallbackMsg_t_140(void *l, void *w);
+
+extern void win_to_lin_struct_FriendGameInfo_t_140(void *w, void *l);
+extern void lin_to_win_struct_FriendGameInfo_t_140(void *l, void *w);
+
+extern void win_to_lin_struct_FriendSessionStateInfo_t_140(void *w, void *l);
+extern void lin_to_win_struct_FriendSessionStateInfo_t_140(void *l, void *w);
+
+extern void win_to_lin_struct_MatchMakingKeyValuePair_t_140(void *w, void *l);
+extern void lin_to_win_struct_MatchMakingKeyValuePair_t_140(void *l, void *w);
+
+extern void win_to_lin_struct_servernetadr_t_140(void *w, void *l);
+extern void lin_to_win_struct_servernetadr_t_140(void *l, void *w);
+
+extern void win_to_lin_struct_gameserveritem_t_140(void *w, void *l);
+extern void lin_to_win_struct_gameserveritem_t_140(void *l, void *w);
+
+extern void win_to_lin_struct_SteamParamStringArray_t_140(void *w, void *l);
+extern void lin_to_win_struct_SteamParamStringArray_t_140(void *l, void *w);
+
+extern void win_to_lin_struct_LeaderboardEntry_t_140(void *w, void *l);
+extern void lin_to_win_struct_LeaderboardEntry_t_140(void *l, void *w);
+
+extern void win_to_lin_struct_P2PSessionState_t_140(void *w, void *l);
+extern void lin_to_win_struct_P2PSessionState_t_140(void *l, void *w);
+
+extern void win_to_lin_struct_ControllerAnalogActionData_t_140(void *w, void *l);
+extern void lin_to_win_struct_ControllerAnalogActionData_t_140(void *l, void *w);
+
+extern void win_to_lin_struct_ControllerDigitalActionData_t_140(void *w, void *l);
+extern void lin_to_win_struct_ControllerDigitalActionData_t_140(void *l, void *w);
+
+extern void win_to_lin_struct_ControllerMotionData_t_140(void *w, void *l);
+extern void lin_to_win_struct_ControllerMotionData_t_140(void *l, void *w);
+
+extern void win_to_lin_struct_SteamUGCDetails_t_140(void *w, void *l);
+extern void lin_to_win_struct_SteamUGCDetails_t_140(void *l, void *w);
+
 #pragma pack( push, 8 )
 struct winSubmitItemUpdateResult_t_8 {
     EResult m_eResult;
@@ -1609,6 +1777,228 @@ struct winSubmitItemUpdateResult_t_8 {
 }  __attribute__ ((ms_struct));
 #pragma pack( pop )
 extern void cb_SubmitItemUpdateResult_t_8(void *l, void *w);
+
+extern void win_to_lin_struct_SteamItemDetails_t_140(void *w, void *l);
+extern void lin_to_win_struct_SteamItemDetails_t_140(void *l, void *w);
+
+extern void win_to_lin_struct_CSteamAPIContext_140(void *w, void *l);
+extern void lin_to_win_struct_CSteamAPIContext_140(void *l, void *w);
+
+extern void win_to_lin_struct_CCallbackBase_140(void *w, void *l);
+extern void lin_to_win_struct_CCallbackBase_140(void *l, void *w);
+
+extern void win_to_lin_struct_ValvePackingSentinel_t_140(void *w, void *l);
+extern void lin_to_win_struct_ValvePackingSentinel_t_140(void *l, void *w);
+
+extern void win_to_lin_struct_ValvePackingSentinel_t_140(void *w, void *l);
+extern void lin_to_win_struct_ValvePackingSentinel_t_140(void *l, void *w);
+
+extern void win_to_lin_struct_ValvePackingSentinel_t_140(void *w, void *l);
+extern void lin_to_win_struct_ValvePackingSentinel_t_140(void *l, void *w);
+
+extern void win_to_lin_struct_ValvePackingSentinel_t_139(void *w, void *l);
+extern void lin_to_win_struct_ValvePackingSentinel_t_139(void *l, void *w);
+
+extern void win_to_lin_struct_CallbackMsg_t_139(void *w, void *l);
+extern void lin_to_win_struct_CallbackMsg_t_139(void *l, void *w);
+
+extern void win_to_lin_struct_FriendGameInfo_t_139(void *w, void *l);
+extern void lin_to_win_struct_FriendGameInfo_t_139(void *l, void *w);
+
+extern void win_to_lin_struct_FriendSessionStateInfo_t_139(void *w, void *l);
+extern void lin_to_win_struct_FriendSessionStateInfo_t_139(void *l, void *w);
+
+extern void win_to_lin_struct_MatchMakingKeyValuePair_t_139(void *w, void *l);
+extern void lin_to_win_struct_MatchMakingKeyValuePair_t_139(void *l, void *w);
+
+extern void win_to_lin_struct_servernetadr_t_139(void *w, void *l);
+extern void lin_to_win_struct_servernetadr_t_139(void *l, void *w);
+
+extern void win_to_lin_struct_gameserveritem_t_139(void *w, void *l);
+extern void lin_to_win_struct_gameserveritem_t_139(void *l, void *w);
+
+extern void win_to_lin_struct_SteamParamStringArray_t_139(void *w, void *l);
+extern void lin_to_win_struct_SteamParamStringArray_t_139(void *l, void *w);
+
+extern void win_to_lin_struct_LeaderboardEntry_t_139(void *w, void *l);
+extern void lin_to_win_struct_LeaderboardEntry_t_139(void *l, void *w);
+
+extern void win_to_lin_struct_P2PSessionState_t_139(void *w, void *l);
+extern void lin_to_win_struct_P2PSessionState_t_139(void *l, void *w);
+
+extern void win_to_lin_struct_ControllerAnalogActionData_t_139(void *w, void *l);
+extern void lin_to_win_struct_ControllerAnalogActionData_t_139(void *l, void *w);
+
+extern void win_to_lin_struct_ControllerDigitalActionData_t_139(void *w, void *l);
+extern void lin_to_win_struct_ControllerDigitalActionData_t_139(void *l, void *w);
+
+extern void win_to_lin_struct_ControllerMotionData_t_139(void *w, void *l);
+extern void lin_to_win_struct_ControllerMotionData_t_139(void *l, void *w);
+
+extern void win_to_lin_struct_SteamUGCDetails_t_139(void *w, void *l);
+extern void lin_to_win_struct_SteamUGCDetails_t_139(void *l, void *w);
+
+extern void win_to_lin_struct_SteamItemDetails_t_139(void *w, void *l);
+extern void lin_to_win_struct_SteamItemDetails_t_139(void *l, void *w);
+
+extern void win_to_lin_struct_CSteamAPIContext_139(void *w, void *l);
+extern void lin_to_win_struct_CSteamAPIContext_139(void *l, void *w);
+
+extern void win_to_lin_struct_CCallbackBase_139(void *w, void *l);
+extern void lin_to_win_struct_CCallbackBase_139(void *l, void *w);
+
+extern void win_to_lin_struct_ValvePackingSentinel_t_139(void *w, void *l);
+extern void lin_to_win_struct_ValvePackingSentinel_t_139(void *l, void *w);
+
+extern void win_to_lin_struct_ValvePackingSentinel_t_139(void *w, void *l);
+extern void lin_to_win_struct_ValvePackingSentinel_t_139(void *l, void *w);
+
+extern void win_to_lin_struct_ValvePackingSentinel_t_139(void *w, void *l);
+extern void lin_to_win_struct_ValvePackingSentinel_t_139(void *l, void *w);
+
+extern void win_to_lin_struct_ValvePackingSentinel_t_138a(void *w, void *l);
+extern void lin_to_win_struct_ValvePackingSentinel_t_138a(void *l, void *w);
+
+extern void win_to_lin_struct_CallbackMsg_t_138a(void *w, void *l);
+extern void lin_to_win_struct_CallbackMsg_t_138a(void *l, void *w);
+
+extern void win_to_lin_struct_FriendGameInfo_t_138a(void *w, void *l);
+extern void lin_to_win_struct_FriendGameInfo_t_138a(void *l, void *w);
+
+extern void win_to_lin_struct_FriendSessionStateInfo_t_138a(void *w, void *l);
+extern void lin_to_win_struct_FriendSessionStateInfo_t_138a(void *l, void *w);
+
+extern void win_to_lin_struct_MatchMakingKeyValuePair_t_138a(void *w, void *l);
+extern void lin_to_win_struct_MatchMakingKeyValuePair_t_138a(void *l, void *w);
+
+extern void win_to_lin_struct_servernetadr_t_138a(void *w, void *l);
+extern void lin_to_win_struct_servernetadr_t_138a(void *l, void *w);
+
+extern void win_to_lin_struct_gameserveritem_t_138a(void *w, void *l);
+extern void lin_to_win_struct_gameserveritem_t_138a(void *l, void *w);
+
+extern void win_to_lin_struct_SteamParamStringArray_t_138a(void *w, void *l);
+extern void lin_to_win_struct_SteamParamStringArray_t_138a(void *l, void *w);
+
+extern void win_to_lin_struct_LeaderboardEntry_t_138a(void *w, void *l);
+extern void lin_to_win_struct_LeaderboardEntry_t_138a(void *l, void *w);
+
+extern void win_to_lin_struct_P2PSessionState_t_138a(void *w, void *l);
+extern void lin_to_win_struct_P2PSessionState_t_138a(void *l, void *w);
+
+extern void win_to_lin_struct_ControllerAnalogActionData_t_138a(void *w, void *l);
+extern void lin_to_win_struct_ControllerAnalogActionData_t_138a(void *l, void *w);
+
+extern void win_to_lin_struct_ControllerDigitalActionData_t_138a(void *w, void *l);
+extern void lin_to_win_struct_ControllerDigitalActionData_t_138a(void *l, void *w);
+
+extern void win_to_lin_struct_ControllerMotionData_t_138a(void *w, void *l);
+extern void lin_to_win_struct_ControllerMotionData_t_138a(void *l, void *w);
+
+extern void win_to_lin_struct_SteamUGCDetails_t_138a(void *w, void *l);
+extern void lin_to_win_struct_SteamUGCDetails_t_138a(void *l, void *w);
+
+extern void win_to_lin_struct_SteamItemDetails_t_138a(void *w, void *l);
+extern void lin_to_win_struct_SteamItemDetails_t_138a(void *l, void *w);
+
+extern void win_to_lin_struct_CSteamAPIContext_138a(void *w, void *l);
+extern void lin_to_win_struct_CSteamAPIContext_138a(void *l, void *w);
+
+extern void win_to_lin_struct_CCallbackBase_138a(void *w, void *l);
+extern void lin_to_win_struct_CCallbackBase_138a(void *l, void *w);
+
+extern void win_to_lin_struct_ValvePackingSentinel_t_138a(void *w, void *l);
+extern void lin_to_win_struct_ValvePackingSentinel_t_138a(void *l, void *w);
+
+extern void win_to_lin_struct_ValvePackingSentinel_t_138a(void *w, void *l);
+extern void lin_to_win_struct_ValvePackingSentinel_t_138a(void *l, void *w);
+
+extern void win_to_lin_struct_ValvePackingSentinel_t_138a(void *w, void *l);
+extern void lin_to_win_struct_ValvePackingSentinel_t_138a(void *l, void *w);
+
+extern void win_to_lin_struct_ValvePackingSentinel_t_138(void *w, void *l);
+extern void lin_to_win_struct_ValvePackingSentinel_t_138(void *l, void *w);
+
+extern void win_to_lin_struct_CallbackMsg_t_138(void *w, void *l);
+extern void lin_to_win_struct_CallbackMsg_t_138(void *l, void *w);
+
+extern void win_to_lin_struct_FriendGameInfo_t_138(void *w, void *l);
+extern void lin_to_win_struct_FriendGameInfo_t_138(void *l, void *w);
+
+extern void win_to_lin_struct_FriendSessionStateInfo_t_138(void *w, void *l);
+extern void lin_to_win_struct_FriendSessionStateInfo_t_138(void *l, void *w);
+
+extern void win_to_lin_struct_MatchMakingKeyValuePair_t_138(void *w, void *l);
+extern void lin_to_win_struct_MatchMakingKeyValuePair_t_138(void *l, void *w);
+
+extern void win_to_lin_struct_servernetadr_t_138(void *w, void *l);
+extern void lin_to_win_struct_servernetadr_t_138(void *l, void *w);
+
+extern void win_to_lin_struct_gameserveritem_t_138(void *w, void *l);
+extern void lin_to_win_struct_gameserveritem_t_138(void *l, void *w);
+
+extern void win_to_lin_struct_SteamParamStringArray_t_138(void *w, void *l);
+extern void lin_to_win_struct_SteamParamStringArray_t_138(void *l, void *w);
+
+extern void win_to_lin_struct_LeaderboardEntry_t_138(void *w, void *l);
+extern void lin_to_win_struct_LeaderboardEntry_t_138(void *l, void *w);
+
+extern void win_to_lin_struct_P2PSessionState_t_138(void *w, void *l);
+extern void lin_to_win_struct_P2PSessionState_t_138(void *l, void *w);
+
+extern void win_to_lin_struct_ControllerAnalogActionData_t_138(void *w, void *l);
+extern void lin_to_win_struct_ControllerAnalogActionData_t_138(void *l, void *w);
+
+extern void win_to_lin_struct_ControllerDigitalActionData_t_138(void *w, void *l);
+extern void lin_to_win_struct_ControllerDigitalActionData_t_138(void *l, void *w);
+
+extern void win_to_lin_struct_ControllerMotionData_t_138(void *w, void *l);
+extern void lin_to_win_struct_ControllerMotionData_t_138(void *l, void *w);
+
+extern void win_to_lin_struct_SteamUGCDetails_t_138(void *w, void *l);
+extern void lin_to_win_struct_SteamUGCDetails_t_138(void *l, void *w);
+
+extern void win_to_lin_struct_SteamItemDetails_t_138(void *w, void *l);
+extern void lin_to_win_struct_SteamItemDetails_t_138(void *l, void *w);
+
+extern void win_to_lin_struct_CSteamAPIContext_138(void *w, void *l);
+extern void lin_to_win_struct_CSteamAPIContext_138(void *l, void *w);
+
+extern void win_to_lin_struct_CCallbackBase_138(void *w, void *l);
+extern void lin_to_win_struct_CCallbackBase_138(void *l, void *w);
+
+extern void win_to_lin_struct_ValvePackingSentinel_t_138(void *w, void *l);
+extern void lin_to_win_struct_ValvePackingSentinel_t_138(void *l, void *w);
+
+extern void win_to_lin_struct_ValvePackingSentinel_t_138(void *w, void *l);
+extern void lin_to_win_struct_ValvePackingSentinel_t_138(void *l, void *w);
+
+extern void win_to_lin_struct_ValvePackingSentinel_t_138(void *w, void *l);
+extern void lin_to_win_struct_ValvePackingSentinel_t_138(void *l, void *w);
+
+extern void win_to_lin_struct_ValvePackingSentinel_t_137(void *w, void *l);
+extern void lin_to_win_struct_ValvePackingSentinel_t_137(void *l, void *w);
+
+extern void win_to_lin_struct_CallbackMsg_t_137(void *w, void *l);
+extern void lin_to_win_struct_CallbackMsg_t_137(void *l, void *w);
+
+extern void win_to_lin_struct_FriendGameInfo_t_137(void *w, void *l);
+extern void lin_to_win_struct_FriendGameInfo_t_137(void *l, void *w);
+
+extern void win_to_lin_struct_FriendSessionStateInfo_t_137(void *w, void *l);
+extern void lin_to_win_struct_FriendSessionStateInfo_t_137(void *l, void *w);
+
+extern void win_to_lin_struct_MatchMakingKeyValuePair_t_137(void *w, void *l);
+extern void lin_to_win_struct_MatchMakingKeyValuePair_t_137(void *l, void *w);
+
+extern void win_to_lin_struct_servernetadr_t_137(void *w, void *l);
+extern void lin_to_win_struct_servernetadr_t_137(void *l, void *w);
+
+extern void win_to_lin_struct_gameserveritem_t_137(void *w, void *l);
+extern void lin_to_win_struct_gameserveritem_t_137(void *l, void *w);
+
+extern void win_to_lin_struct_SteamParamStringArray_t_137(void *w, void *l);
+extern void lin_to_win_struct_SteamParamStringArray_t_137(void *l, void *w);
 
 #pragma pack( push, 8 )
 struct winRemoteStorageConflictResolution_t_8 {
@@ -1618,12 +2008,72 @@ struct winRemoteStorageConflictResolution_t_8 {
 #pragma pack( pop )
 extern void cb_RemoteStorageConflictResolution_t_8(void *l, void *w);
 
+extern void win_to_lin_struct_LeaderboardEntry_t_137(void *w, void *l);
+extern void lin_to_win_struct_LeaderboardEntry_t_137(void *l, void *w);
+
+extern void win_to_lin_struct_P2PSessionState_t_137(void *w, void *l);
+extern void lin_to_win_struct_P2PSessionState_t_137(void *l, void *w);
+
+extern void win_to_lin_struct_ControllerAnalogActionData_t_137(void *w, void *l);
+extern void lin_to_win_struct_ControllerAnalogActionData_t_137(void *l, void *w);
+
+extern void win_to_lin_struct_ControllerDigitalActionData_t_137(void *w, void *l);
+extern void lin_to_win_struct_ControllerDigitalActionData_t_137(void *l, void *w);
+
+extern void win_to_lin_struct_SteamUGCDetails_t_137(void *w, void *l);
+extern void lin_to_win_struct_SteamUGCDetails_t_137(void *l, void *w);
+
+extern void win_to_lin_struct_SteamItemDetails_t_137(void *w, void *l);
+extern void lin_to_win_struct_SteamItemDetails_t_137(void *l, void *w);
+
+extern void win_to_lin_struct_CSteamAPIContext_137(void *w, void *l);
+extern void lin_to_win_struct_CSteamAPIContext_137(void *l, void *w);
+
+extern void win_to_lin_struct_CCallbackBase_137(void *w, void *l);
+extern void lin_to_win_struct_CCallbackBase_137(void *l, void *w);
+
+extern void win_to_lin_struct_ValvePackingSentinel_t_137(void *w, void *l);
+extern void lin_to_win_struct_ValvePackingSentinel_t_137(void *l, void *w);
+
+extern void win_to_lin_struct_ValvePackingSentinel_t_137(void *w, void *l);
+extern void lin_to_win_struct_ValvePackingSentinel_t_137(void *l, void *w);
+
+extern void win_to_lin_struct_ValvePackingSentinel_t_137(void *w, void *l);
+extern void lin_to_win_struct_ValvePackingSentinel_t_137(void *l, void *w);
+
+extern void win_to_lin_struct_ValvePackingSentinel_t_136(void *w, void *l);
+extern void lin_to_win_struct_ValvePackingSentinel_t_136(void *l, void *w);
+
+extern void win_to_lin_struct_CallbackMsg_t_136(void *w, void *l);
+extern void lin_to_win_struct_CallbackMsg_t_136(void *l, void *w);
+
+extern void win_to_lin_struct_FriendGameInfo_t_136(void *w, void *l);
+extern void lin_to_win_struct_FriendGameInfo_t_136(void *l, void *w);
+
+extern void win_to_lin_struct_FriendSessionStateInfo_t_136(void *w, void *l);
+extern void lin_to_win_struct_FriendSessionStateInfo_t_136(void *l, void *w);
+
 #pragma pack( push, 8 )
 struct winSteamAPICallCompleted_t_8 {
     SteamAPICall_t m_hAsyncCall;
 }  __attribute__ ((ms_struct));
 #pragma pack( pop )
 extern void cb_SteamAPICallCompleted_t_8(void *l, void *w);
+
+extern void win_to_lin_struct_MatchMakingKeyValuePair_t_136(void *w, void *l);
+extern void lin_to_win_struct_MatchMakingKeyValuePair_t_136(void *l, void *w);
+
+extern void win_to_lin_struct_servernetadr_t_136(void *w, void *l);
+extern void lin_to_win_struct_servernetadr_t_136(void *l, void *w);
+
+extern void win_to_lin_struct_gameserveritem_t_136(void *w, void *l);
+extern void lin_to_win_struct_gameserveritem_t_136(void *l, void *w);
+
+extern void win_to_lin_struct_SteamParamStringArray_t_136(void *w, void *l);
+extern void lin_to_win_struct_SteamParamStringArray_t_136(void *l, void *w);
+
+extern void win_to_lin_struct_LeaderboardEntry_t_136(void *w, void *l);
+extern void lin_to_win_struct_LeaderboardEntry_t_136(void *l, void *w);
 
 #pragma pack( push, 8 )
 struct winAppProofOfPurchaseKeyResponse_t_72 {
@@ -1634,12 +2084,381 @@ struct winAppProofOfPurchaseKeyResponse_t_72 {
 #pragma pack( pop )
 extern void cb_AppProofOfPurchaseKeyResponse_t_72(void *l, void *w);
 
+extern void win_to_lin_struct_P2PSessionState_t_136(void *w, void *l);
+extern void lin_to_win_struct_P2PSessionState_t_136(void *l, void *w);
+
+extern void win_to_lin_struct_ControllerAnalogActionData_t_136(void *w, void *l);
+extern void lin_to_win_struct_ControllerAnalogActionData_t_136(void *l, void *w);
+
+extern void win_to_lin_struct_ControllerDigitalActionData_t_136(void *w, void *l);
+extern void lin_to_win_struct_ControllerDigitalActionData_t_136(void *l, void *w);
+
+extern void win_to_lin_struct_SteamUGCDetails_t_136(void *w, void *l);
+extern void lin_to_win_struct_SteamUGCDetails_t_136(void *l, void *w);
+
+extern void win_to_lin_struct_SteamItemDetails_t_136(void *w, void *l);
+extern void lin_to_win_struct_SteamItemDetails_t_136(void *l, void *w);
+
+extern void win_to_lin_struct_CCallbackBase_136(void *w, void *l);
+extern void lin_to_win_struct_CCallbackBase_136(void *l, void *w);
+
+extern void win_to_lin_struct_ValvePackingSentinel_t_136(void *w, void *l);
+extern void lin_to_win_struct_ValvePackingSentinel_t_136(void *l, void *w);
+
+extern void win_to_lin_struct_ValvePackingSentinel_t_136(void *w, void *l);
+extern void lin_to_win_struct_ValvePackingSentinel_t_136(void *l, void *w);
+
+extern void win_to_lin_struct_ValvePackingSentinel_t_136(void *w, void *l);
+extern void lin_to_win_struct_ValvePackingSentinel_t_136(void *l, void *w);
+
+extern void win_to_lin_struct_ValvePackingSentinel_t_135a(void *w, void *l);
+extern void lin_to_win_struct_ValvePackingSentinel_t_135a(void *l, void *w);
+
+extern void win_to_lin_struct_CallbackMsg_t_135a(void *w, void *l);
+extern void lin_to_win_struct_CallbackMsg_t_135a(void *l, void *w);
+
+extern void win_to_lin_struct_FriendGameInfo_t_135a(void *w, void *l);
+extern void lin_to_win_struct_FriendGameInfo_t_135a(void *l, void *w);
+
+extern void win_to_lin_struct_FriendSessionStateInfo_t_135a(void *w, void *l);
+extern void lin_to_win_struct_FriendSessionStateInfo_t_135a(void *l, void *w);
+
+extern void win_to_lin_struct_MatchMakingKeyValuePair_t_135a(void *w, void *l);
+extern void lin_to_win_struct_MatchMakingKeyValuePair_t_135a(void *l, void *w);
+
+extern void win_to_lin_struct_servernetadr_t_135a(void *w, void *l);
+extern void lin_to_win_struct_servernetadr_t_135a(void *l, void *w);
+
+extern void win_to_lin_struct_gameserveritem_t_135a(void *w, void *l);
+extern void lin_to_win_struct_gameserveritem_t_135a(void *l, void *w);
+
+extern void win_to_lin_struct_SteamParamStringArray_t_135a(void *w, void *l);
+extern void lin_to_win_struct_SteamParamStringArray_t_135a(void *l, void *w);
+
+extern void win_to_lin_struct_LeaderboardEntry_t_135a(void *w, void *l);
+extern void lin_to_win_struct_LeaderboardEntry_t_135a(void *l, void *w);
+
+extern void win_to_lin_struct_P2PSessionState_t_135a(void *w, void *l);
+extern void lin_to_win_struct_P2PSessionState_t_135a(void *l, void *w);
+
+extern void win_to_lin_struct_ControllerAnalogActionData_t_135a(void *w, void *l);
+extern void lin_to_win_struct_ControllerAnalogActionData_t_135a(void *l, void *w);
+
+extern void win_to_lin_struct_ControllerDigitalActionData_t_135a(void *w, void *l);
+extern void lin_to_win_struct_ControllerDigitalActionData_t_135a(void *l, void *w);
+
+extern void win_to_lin_struct_SteamUGCDetails_t_135a(void *w, void *l);
+extern void lin_to_win_struct_SteamUGCDetails_t_135a(void *l, void *w);
+
+extern void win_to_lin_struct_SteamItemDetails_t_135a(void *w, void *l);
+extern void lin_to_win_struct_SteamItemDetails_t_135a(void *l, void *w);
+
+extern void win_to_lin_struct_CCallbackBase_135a(void *w, void *l);
+extern void lin_to_win_struct_CCallbackBase_135a(void *l, void *w);
+
+extern void win_to_lin_struct_ValvePackingSentinel_t_135a(void *w, void *l);
+extern void lin_to_win_struct_ValvePackingSentinel_t_135a(void *l, void *w);
+
+extern void win_to_lin_struct_ValvePackingSentinel_t_135a(void *w, void *l);
+extern void lin_to_win_struct_ValvePackingSentinel_t_135a(void *l, void *w);
+
+extern void win_to_lin_struct_ValvePackingSentinel_t_135a(void *w, void *l);
+extern void lin_to_win_struct_ValvePackingSentinel_t_135a(void *l, void *w);
+
+extern void win_to_lin_struct_ValvePackingSentinel_t_135(void *w, void *l);
+extern void lin_to_win_struct_ValvePackingSentinel_t_135(void *l, void *w);
+
+extern void win_to_lin_struct_CallbackMsg_t_135(void *w, void *l);
+extern void lin_to_win_struct_CallbackMsg_t_135(void *l, void *w);
+
+extern void win_to_lin_struct_FriendGameInfo_t_135(void *w, void *l);
+extern void lin_to_win_struct_FriendGameInfo_t_135(void *l, void *w);
+
+extern void win_to_lin_struct_FriendSessionStateInfo_t_135(void *w, void *l);
+extern void lin_to_win_struct_FriendSessionStateInfo_t_135(void *l, void *w);
+
+extern void win_to_lin_struct_MatchMakingKeyValuePair_t_135(void *w, void *l);
+extern void lin_to_win_struct_MatchMakingKeyValuePair_t_135(void *l, void *w);
+
+extern void win_to_lin_struct_servernetadr_t_135(void *w, void *l);
+extern void lin_to_win_struct_servernetadr_t_135(void *l, void *w);
+
+extern void win_to_lin_struct_gameserveritem_t_135(void *w, void *l);
+extern void lin_to_win_struct_gameserveritem_t_135(void *l, void *w);
+
+extern void win_to_lin_struct_SteamParamStringArray_t_135(void *w, void *l);
+extern void lin_to_win_struct_SteamParamStringArray_t_135(void *l, void *w);
+
+extern void win_to_lin_struct_LeaderboardEntry_t_135(void *w, void *l);
+extern void lin_to_win_struct_LeaderboardEntry_t_135(void *l, void *w);
+
+extern void win_to_lin_struct_P2PSessionState_t_135(void *w, void *l);
+extern void lin_to_win_struct_P2PSessionState_t_135(void *l, void *w);
+
+extern void win_to_lin_struct_ControllerAnalogActionData_t_135(void *w, void *l);
+extern void lin_to_win_struct_ControllerAnalogActionData_t_135(void *l, void *w);
+
+extern void win_to_lin_struct_ControllerDigitalActionData_t_135(void *w, void *l);
+extern void lin_to_win_struct_ControllerDigitalActionData_t_135(void *l, void *w);
+
+extern void win_to_lin_struct_SteamUGCDetails_t_135(void *w, void *l);
+extern void lin_to_win_struct_SteamUGCDetails_t_135(void *l, void *w);
+
+extern void win_to_lin_struct_SteamItemDetails_t_135(void *w, void *l);
+extern void lin_to_win_struct_SteamItemDetails_t_135(void *l, void *w);
+
+extern void win_to_lin_struct_CCallbackBase_135(void *w, void *l);
+extern void lin_to_win_struct_CCallbackBase_135(void *l, void *w);
+
+extern void win_to_lin_struct_ValvePackingSentinel_t_135(void *w, void *l);
+extern void lin_to_win_struct_ValvePackingSentinel_t_135(void *l, void *w);
+
+extern void win_to_lin_struct_ValvePackingSentinel_t_135(void *w, void *l);
+extern void lin_to_win_struct_ValvePackingSentinel_t_135(void *l, void *w);
+
+extern void win_to_lin_struct_ValvePackingSentinel_t_135(void *w, void *l);
+extern void lin_to_win_struct_ValvePackingSentinel_t_135(void *l, void *w);
+
+extern void win_to_lin_struct_ValvePackingSentinel_t_134(void *w, void *l);
+extern void lin_to_win_struct_ValvePackingSentinel_t_134(void *l, void *w);
+
+extern void win_to_lin_struct_CallbackMsg_t_134(void *w, void *l);
+extern void lin_to_win_struct_CallbackMsg_t_134(void *l, void *w);
+
 #pragma pack( push, 8 )
 struct winSteamServerConnectFailure_t_4 {
     EResult m_eResult;
 }  __attribute__ ((ms_struct));
 #pragma pack( pop )
 extern void cb_SteamServerConnectFailure_t_4(void *l, void *w);
+
+extern void win_to_lin_struct_FriendGameInfo_t_134(void *w, void *l);
+extern void lin_to_win_struct_FriendGameInfo_t_134(void *l, void *w);
+
+extern void win_to_lin_struct_FriendSessionStateInfo_t_134(void *w, void *l);
+extern void lin_to_win_struct_FriendSessionStateInfo_t_134(void *l, void *w);
+
+extern void win_to_lin_struct_MatchMakingKeyValuePair_t_134(void *w, void *l);
+extern void lin_to_win_struct_MatchMakingKeyValuePair_t_134(void *l, void *w);
+
+extern void win_to_lin_struct_servernetadr_t_134(void *w, void *l);
+extern void lin_to_win_struct_servernetadr_t_134(void *l, void *w);
+
+extern void win_to_lin_struct_gameserveritem_t_134(void *w, void *l);
+extern void lin_to_win_struct_gameserveritem_t_134(void *l, void *w);
+
+extern void win_to_lin_struct_SteamParamStringArray_t_134(void *w, void *l);
+extern void lin_to_win_struct_SteamParamStringArray_t_134(void *l, void *w);
+
+extern void win_to_lin_struct_LeaderboardEntry_t_134(void *w, void *l);
+extern void lin_to_win_struct_LeaderboardEntry_t_134(void *l, void *w);
+
+extern void win_to_lin_struct_P2PSessionState_t_134(void *w, void *l);
+extern void lin_to_win_struct_P2PSessionState_t_134(void *l, void *w);
+
+extern void win_to_lin_struct_SteamControllerState001_t_134(void *w, void *l);
+extern void lin_to_win_struct_SteamControllerState001_t_134(void *l, void *w);
+
+extern void win_to_lin_struct_SteamUGCDetails_t_134(void *w, void *l);
+extern void lin_to_win_struct_SteamUGCDetails_t_134(void *l, void *w);
+
+extern void win_to_lin_struct_SteamItemDetails_t_134(void *w, void *l);
+extern void lin_to_win_struct_SteamItemDetails_t_134(void *l, void *w);
+
+extern void win_to_lin_struct_CCallbackBase_134(void *w, void *l);
+extern void lin_to_win_struct_CCallbackBase_134(void *l, void *w);
+
+extern void win_to_lin_struct_ValvePackingSentinel_t_134(void *w, void *l);
+extern void lin_to_win_struct_ValvePackingSentinel_t_134(void *l, void *w);
+
+extern void win_to_lin_struct_ValvePackingSentinel_t_134(void *w, void *l);
+extern void lin_to_win_struct_ValvePackingSentinel_t_134(void *l, void *w);
+
+extern void win_to_lin_struct_ValvePackingSentinel_t_134(void *w, void *l);
+extern void lin_to_win_struct_ValvePackingSentinel_t_134(void *l, void *w);
+
+extern void win_to_lin_struct_ValvePackingSentinel_t_133b(void *w, void *l);
+extern void lin_to_win_struct_ValvePackingSentinel_t_133b(void *l, void *w);
+
+extern void win_to_lin_struct_CallbackMsg_t_133b(void *w, void *l);
+extern void lin_to_win_struct_CallbackMsg_t_133b(void *l, void *w);
+
+extern void win_to_lin_struct_FriendGameInfo_t_133b(void *w, void *l);
+extern void lin_to_win_struct_FriendGameInfo_t_133b(void *l, void *w);
+
+extern void win_to_lin_struct_FriendSessionStateInfo_t_133b(void *w, void *l);
+extern void lin_to_win_struct_FriendSessionStateInfo_t_133b(void *l, void *w);
+
+extern void win_to_lin_struct_MatchMakingKeyValuePair_t_133b(void *w, void *l);
+extern void lin_to_win_struct_MatchMakingKeyValuePair_t_133b(void *l, void *w);
+
+extern void win_to_lin_struct_servernetadr_t_133b(void *w, void *l);
+extern void lin_to_win_struct_servernetadr_t_133b(void *l, void *w);
+
+extern void win_to_lin_struct_gameserveritem_t_133b(void *w, void *l);
+extern void lin_to_win_struct_gameserveritem_t_133b(void *l, void *w);
+
+extern void win_to_lin_struct_SteamParamStringArray_t_133b(void *w, void *l);
+extern void lin_to_win_struct_SteamParamStringArray_t_133b(void *l, void *w);
+
+extern void win_to_lin_struct_LeaderboardEntry_t_133b(void *w, void *l);
+extern void lin_to_win_struct_LeaderboardEntry_t_133b(void *l, void *w);
+
+extern void win_to_lin_struct_P2PSessionState_t_133b(void *w, void *l);
+extern void lin_to_win_struct_P2PSessionState_t_133b(void *l, void *w);
+
+extern void win_to_lin_struct_SteamControllerState001_t_133b(void *w, void *l);
+extern void lin_to_win_struct_SteamControllerState001_t_133b(void *l, void *w);
+
+extern void win_to_lin_struct_SteamUGCDetails_t_133b(void *w, void *l);
+extern void lin_to_win_struct_SteamUGCDetails_t_133b(void *l, void *w);
+
+extern void win_to_lin_struct_SteamItemDetails_t_133b(void *w, void *l);
+extern void lin_to_win_struct_SteamItemDetails_t_133b(void *l, void *w);
+
+extern void win_to_lin_struct_CCallbackBase_133b(void *w, void *l);
+extern void lin_to_win_struct_CCallbackBase_133b(void *l, void *w);
+
+extern void win_to_lin_struct_ValvePackingSentinel_t_133b(void *w, void *l);
+extern void lin_to_win_struct_ValvePackingSentinel_t_133b(void *l, void *w);
+
+extern void win_to_lin_struct_ValvePackingSentinel_t_133b(void *w, void *l);
+extern void lin_to_win_struct_ValvePackingSentinel_t_133b(void *l, void *w);
+
+extern void win_to_lin_struct_ValvePackingSentinel_t_133b(void *w, void *l);
+extern void lin_to_win_struct_ValvePackingSentinel_t_133b(void *l, void *w);
+
+extern void win_to_lin_struct_ValvePackingSentinel_t_133a(void *w, void *l);
+extern void lin_to_win_struct_ValvePackingSentinel_t_133a(void *l, void *w);
+
+extern void win_to_lin_struct_CallbackMsg_t_133a(void *w, void *l);
+extern void lin_to_win_struct_CallbackMsg_t_133a(void *l, void *w);
+
+extern void win_to_lin_struct_FriendGameInfo_t_133a(void *w, void *l);
+extern void lin_to_win_struct_FriendGameInfo_t_133a(void *l, void *w);
+
+extern void win_to_lin_struct_FriendSessionStateInfo_t_133a(void *w, void *l);
+extern void lin_to_win_struct_FriendSessionStateInfo_t_133a(void *l, void *w);
+
+extern void win_to_lin_struct_MatchMakingKeyValuePair_t_133a(void *w, void *l);
+extern void lin_to_win_struct_MatchMakingKeyValuePair_t_133a(void *l, void *w);
+
+extern void win_to_lin_struct_servernetadr_t_133a(void *w, void *l);
+extern void lin_to_win_struct_servernetadr_t_133a(void *l, void *w);
+
+extern void win_to_lin_struct_gameserveritem_t_133a(void *w, void *l);
+extern void lin_to_win_struct_gameserveritem_t_133a(void *l, void *w);
+
+extern void win_to_lin_struct_SteamParamStringArray_t_133a(void *w, void *l);
+extern void lin_to_win_struct_SteamParamStringArray_t_133a(void *l, void *w);
+
+extern void win_to_lin_struct_LeaderboardEntry_t_133a(void *w, void *l);
+extern void lin_to_win_struct_LeaderboardEntry_t_133a(void *l, void *w);
+
+extern void win_to_lin_struct_P2PSessionState_t_133a(void *w, void *l);
+extern void lin_to_win_struct_P2PSessionState_t_133a(void *l, void *w);
+
+extern void win_to_lin_struct_SteamControllerState001_t_133a(void *w, void *l);
+extern void lin_to_win_struct_SteamControllerState001_t_133a(void *l, void *w);
+
+extern void win_to_lin_struct_SteamUGCDetails_t_133a(void *w, void *l);
+extern void lin_to_win_struct_SteamUGCDetails_t_133a(void *l, void *w);
+
+extern void win_to_lin_struct_SteamItemDetails_t_133a(void *w, void *l);
+extern void lin_to_win_struct_SteamItemDetails_t_133a(void *l, void *w);
+
+extern void win_to_lin_struct_CCallbackBase_133a(void *w, void *l);
+extern void lin_to_win_struct_CCallbackBase_133a(void *l, void *w);
+
+extern void win_to_lin_struct_ValvePackingSentinel_t_133a(void *w, void *l);
+extern void lin_to_win_struct_ValvePackingSentinel_t_133a(void *l, void *w);
+
+extern void win_to_lin_struct_ValvePackingSentinel_t_133a(void *w, void *l);
+extern void lin_to_win_struct_ValvePackingSentinel_t_133a(void *l, void *w);
+
+extern void win_to_lin_struct_ValvePackingSentinel_t_133a(void *w, void *l);
+extern void lin_to_win_struct_ValvePackingSentinel_t_133a(void *l, void *w);
+
+extern void win_to_lin_struct_ValvePackingSentinel_t_133(void *w, void *l);
+extern void lin_to_win_struct_ValvePackingSentinel_t_133(void *l, void *w);
+
+extern void win_to_lin_struct_CallbackMsg_t_133(void *w, void *l);
+extern void lin_to_win_struct_CallbackMsg_t_133(void *l, void *w);
+
+extern void win_to_lin_struct_FriendGameInfo_t_133(void *w, void *l);
+extern void lin_to_win_struct_FriendGameInfo_t_133(void *l, void *w);
+
+extern void win_to_lin_struct_FriendSessionStateInfo_t_133(void *w, void *l);
+extern void lin_to_win_struct_FriendSessionStateInfo_t_133(void *l, void *w);
+
+extern void win_to_lin_struct_MatchMakingKeyValuePair_t_133(void *w, void *l);
+extern void lin_to_win_struct_MatchMakingKeyValuePair_t_133(void *l, void *w);
+
+extern void win_to_lin_struct_servernetadr_t_133(void *w, void *l);
+extern void lin_to_win_struct_servernetadr_t_133(void *l, void *w);
+
+extern void win_to_lin_struct_gameserveritem_t_133(void *w, void *l);
+extern void lin_to_win_struct_gameserveritem_t_133(void *l, void *w);
+
+extern void win_to_lin_struct_SteamParamStringArray_t_133(void *w, void *l);
+extern void lin_to_win_struct_SteamParamStringArray_t_133(void *l, void *w);
+
+extern void win_to_lin_struct_LeaderboardEntry_t_133(void *w, void *l);
+extern void lin_to_win_struct_LeaderboardEntry_t_133(void *l, void *w);
+
+extern void win_to_lin_struct_P2PSessionState_t_133(void *w, void *l);
+extern void lin_to_win_struct_P2PSessionState_t_133(void *l, void *w);
+
+extern void win_to_lin_struct_SteamControllerState001_t_133(void *w, void *l);
+extern void lin_to_win_struct_SteamControllerState001_t_133(void *l, void *w);
+
+extern void win_to_lin_struct_SteamUGCDetails_t_133(void *w, void *l);
+extern void lin_to_win_struct_SteamUGCDetails_t_133(void *l, void *w);
+
+extern void win_to_lin_struct_SteamItemDetails_t_133(void *w, void *l);
+extern void lin_to_win_struct_SteamItemDetails_t_133(void *l, void *w);
+
+extern void win_to_lin_struct_CCallbackBase_133(void *w, void *l);
+extern void lin_to_win_struct_CCallbackBase_133(void *l, void *w);
+
+extern void win_to_lin_struct_ValvePackingSentinel_t_133(void *w, void *l);
+extern void lin_to_win_struct_ValvePackingSentinel_t_133(void *l, void *w);
+
+extern void win_to_lin_struct_ValvePackingSentinel_t_133(void *w, void *l);
+extern void lin_to_win_struct_ValvePackingSentinel_t_133(void *l, void *w);
+
+extern void win_to_lin_struct_ValvePackingSentinel_t_133(void *w, void *l);
+extern void lin_to_win_struct_ValvePackingSentinel_t_133(void *l, void *w);
+
+extern void win_to_lin_struct_ValvePackingSentinel_t_132(void *w, void *l);
+extern void lin_to_win_struct_ValvePackingSentinel_t_132(void *l, void *w);
+
+extern void win_to_lin_struct_CallbackMsg_t_132(void *w, void *l);
+extern void lin_to_win_struct_CallbackMsg_t_132(void *l, void *w);
+
+extern void win_to_lin_struct_FriendGameInfo_t_132(void *w, void *l);
+extern void lin_to_win_struct_FriendGameInfo_t_132(void *l, void *w);
+
+extern void win_to_lin_struct_FriendSessionStateInfo_t_132(void *w, void *l);
+extern void lin_to_win_struct_FriendSessionStateInfo_t_132(void *l, void *w);
+
+extern void win_to_lin_struct_MatchMakingKeyValuePair_t_132(void *w, void *l);
+extern void lin_to_win_struct_MatchMakingKeyValuePair_t_132(void *l, void *w);
+
+extern void win_to_lin_struct_servernetadr_t_132(void *w, void *l);
+extern void lin_to_win_struct_servernetadr_t_132(void *l, void *w);
+
+extern void win_to_lin_struct_gameserveritem_t_132(void *w, void *l);
+extern void lin_to_win_struct_gameserveritem_t_132(void *l, void *w);
+
+extern void win_to_lin_struct_SteamParamStringArray_t_132(void *w, void *l);
+extern void lin_to_win_struct_SteamParamStringArray_t_132(void *l, void *w);
+
+extern void win_to_lin_struct_LeaderboardEntry_t_132(void *w, void *l);
+extern void lin_to_win_struct_LeaderboardEntry_t_132(void *l, void *w);
+
+extern void win_to_lin_struct_P2PSessionState_t_132(void *w, void *l);
+extern void lin_to_win_struct_P2PSessionState_t_132(void *l, void *w);
 
 #pragma pack( push, 8 )
 struct winHTTPRequestCompleted_t_20 {
@@ -1650,6 +2469,12 @@ struct winHTTPRequestCompleted_t_20 {
 }  __attribute__ ((ms_struct));
 #pragma pack( pop )
 extern void cb_HTTPRequestCompleted_t_20(void *l, void *w);
+
+extern void win_to_lin_struct_SteamControllerState_t_132(void *w, void *l);
+extern void lin_to_win_struct_SteamControllerState_t_132(void *l, void *w);
+
+extern void win_to_lin_struct_SteamUGCDetails_t_132(void *w, void *l);
+extern void lin_to_win_struct_SteamUGCDetails_t_132(void *l, void *w);
 
 #pragma pack( push, 8 )
 struct winHTML_ComboNeedsPaint_t_16 {
@@ -1698,6 +2523,201 @@ struct winHTML_NewWindow_t_24 {
 #pragma pack( pop )
 extern void cb_HTML_NewWindow_t_24(void *l, void *w);
 
+extern void win_to_lin_struct_SteamItemDetails_t_132(void *w, void *l);
+extern void lin_to_win_struct_SteamItemDetails_t_132(void *l, void *w);
+
+extern void win_to_lin_struct_CCallbackBase_132(void *w, void *l);
+extern void lin_to_win_struct_CCallbackBase_132(void *l, void *w);
+
+extern void win_to_lin_struct_ValvePackingSentinel_t_132(void *w, void *l);
+extern void lin_to_win_struct_ValvePackingSentinel_t_132(void *l, void *w);
+
+extern void win_to_lin_struct_ValvePackingSentinel_t_132(void *w, void *l);
+extern void lin_to_win_struct_ValvePackingSentinel_t_132(void *l, void *w);
+
+extern void win_to_lin_struct_ValvePackingSentinel_t_132(void *w, void *l);
+extern void lin_to_win_struct_ValvePackingSentinel_t_132(void *l, void *w);
+
+extern void win_to_lin_struct__131(void *w, void *l);
+extern void lin_to_win_struct__131(void *l, void *w);
+
+extern void win_to_lin_struct_CallbackMsg_t_131(void *w, void *l);
+extern void lin_to_win_struct_CallbackMsg_t_131(void *l, void *w);
+
+extern void win_to_lin_struct_FriendGameInfo_t_131(void *w, void *l);
+extern void lin_to_win_struct_FriendGameInfo_t_131(void *l, void *w);
+
+extern void win_to_lin_struct_FriendSessionStateInfo_t_131(void *w, void *l);
+extern void lin_to_win_struct_FriendSessionStateInfo_t_131(void *l, void *w);
+
+extern void win_to_lin_struct_MatchMakingKeyValuePair_t_131(void *w, void *l);
+extern void lin_to_win_struct_MatchMakingKeyValuePair_t_131(void *l, void *w);
+
+extern void win_to_lin_struct_servernetadr_t_131(void *w, void *l);
+extern void lin_to_win_struct_servernetadr_t_131(void *l, void *w);
+
+extern void win_to_lin_struct_gameserveritem_t_131(void *w, void *l);
+extern void lin_to_win_struct_gameserveritem_t_131(void *l, void *w);
+
+extern void win_to_lin_struct_SteamParamStringArray_t_131(void *w, void *l);
+extern void lin_to_win_struct_SteamParamStringArray_t_131(void *l, void *w);
+
+extern void win_to_lin_struct_LeaderboardEntry_t_131(void *w, void *l);
+extern void lin_to_win_struct_LeaderboardEntry_t_131(void *l, void *w);
+
+extern void win_to_lin_struct_P2PSessionState_t_131(void *w, void *l);
+extern void lin_to_win_struct_P2PSessionState_t_131(void *l, void *w);
+
+extern void win_to_lin_struct__131(void *w, void *l);
+extern void lin_to_win_struct__131(void *l, void *w);
+
+extern void win_to_lin_struct_SteamUGCDetails_t_131(void *w, void *l);
+extern void lin_to_win_struct_SteamUGCDetails_t_131(void *l, void *w);
+
+extern void win_to_lin_struct_CCallbackBase_131(void *w, void *l);
+extern void lin_to_win_struct_CCallbackBase_131(void *l, void *w);
+
+extern void win_to_lin_struct__131(void *w, void *l);
+extern void lin_to_win_struct__131(void *l, void *w);
+
+extern void win_to_lin_struct__131(void *w, void *l);
+extern void lin_to_win_struct__131(void *l, void *w);
+
+extern void win_to_lin_struct__131(void *w, void *l);
+extern void lin_to_win_struct__131(void *l, void *w);
+
+extern void win_to_lin_struct__130(void *w, void *l);
+extern void lin_to_win_struct__130(void *l, void *w);
+
+extern void win_to_lin_struct_CallbackMsg_t_130(void *w, void *l);
+extern void lin_to_win_struct_CallbackMsg_t_130(void *l, void *w);
+
+extern void win_to_lin_struct_FriendGameInfo_t_130(void *w, void *l);
+extern void lin_to_win_struct_FriendGameInfo_t_130(void *l, void *w);
+
+extern void win_to_lin_struct_FriendSessionStateInfo_t_130(void *w, void *l);
+extern void lin_to_win_struct_FriendSessionStateInfo_t_130(void *l, void *w);
+
+extern void win_to_lin_struct_MatchMakingKeyValuePair_t_130(void *w, void *l);
+extern void lin_to_win_struct_MatchMakingKeyValuePair_t_130(void *l, void *w);
+
+extern void win_to_lin_struct_servernetadr_t_130(void *w, void *l);
+extern void lin_to_win_struct_servernetadr_t_130(void *l, void *w);
+
+extern void win_to_lin_struct_gameserveritem_t_130(void *w, void *l);
+extern void lin_to_win_struct_gameserveritem_t_130(void *l, void *w);
+
+extern void win_to_lin_struct_SteamParamStringArray_t_130(void *w, void *l);
+extern void lin_to_win_struct_SteamParamStringArray_t_130(void *l, void *w);
+
+extern void win_to_lin_struct_LeaderboardEntry_t_130(void *w, void *l);
+extern void lin_to_win_struct_LeaderboardEntry_t_130(void *l, void *w);
+
+extern void win_to_lin_struct_P2PSessionState_t_130(void *w, void *l);
+extern void lin_to_win_struct_P2PSessionState_t_130(void *l, void *w);
+
+extern void win_to_lin_struct__130(void *w, void *l);
+extern void lin_to_win_struct__130(void *l, void *w);
+
+extern void win_to_lin_struct_SteamUGCDetails_t_130(void *w, void *l);
+extern void lin_to_win_struct_SteamUGCDetails_t_130(void *l, void *w);
+
+extern void win_to_lin_struct_CCallbackBase_130(void *w, void *l);
+extern void lin_to_win_struct_CCallbackBase_130(void *l, void *w);
+
+extern void win_to_lin_struct__130(void *w, void *l);
+extern void lin_to_win_struct__130(void *l, void *w);
+
+extern void win_to_lin_struct__130(void *w, void *l);
+extern void lin_to_win_struct__130(void *l, void *w);
+
+extern void win_to_lin_struct__130(void *w, void *l);
+extern void lin_to_win_struct__130(void *l, void *w);
+
+extern void win_to_lin_struct__129a(void *w, void *l);
+extern void lin_to_win_struct__129a(void *l, void *w);
+
+extern void win_to_lin_struct_CallbackMsg_t_129a(void *w, void *l);
+extern void lin_to_win_struct_CallbackMsg_t_129a(void *l, void *w);
+
+extern void win_to_lin_struct_FriendGameInfo_t_129a(void *w, void *l);
+extern void lin_to_win_struct_FriendGameInfo_t_129a(void *l, void *w);
+
+extern void win_to_lin_struct_FriendSessionStateInfo_t_129a(void *w, void *l);
+extern void lin_to_win_struct_FriendSessionStateInfo_t_129a(void *l, void *w);
+
+extern void win_to_lin_struct_MatchMakingKeyValuePair_t_129a(void *w, void *l);
+extern void lin_to_win_struct_MatchMakingKeyValuePair_t_129a(void *l, void *w);
+
+extern void win_to_lin_struct_servernetadr_t_129a(void *w, void *l);
+extern void lin_to_win_struct_servernetadr_t_129a(void *l, void *w);
+
+extern void win_to_lin_struct_gameserveritem_t_129a(void *w, void *l);
+extern void lin_to_win_struct_gameserveritem_t_129a(void *l, void *w);
+
+extern void win_to_lin_struct_SteamParamStringArray_t_129a(void *w, void *l);
+extern void lin_to_win_struct_SteamParamStringArray_t_129a(void *l, void *w);
+
+extern void win_to_lin_struct_LeaderboardEntry_t_129a(void *w, void *l);
+extern void lin_to_win_struct_LeaderboardEntry_t_129a(void *l, void *w);
+
+extern void win_to_lin_struct_P2PSessionState_t_129a(void *w, void *l);
+extern void lin_to_win_struct_P2PSessionState_t_129a(void *l, void *w);
+
+extern void win_to_lin_struct__129a(void *w, void *l);
+extern void lin_to_win_struct__129a(void *l, void *w);
+
+extern void win_to_lin_struct_SteamUGCDetails_t_129a(void *w, void *l);
+extern void lin_to_win_struct_SteamUGCDetails_t_129a(void *l, void *w);
+
+extern void win_to_lin_struct_CCallbackBase_129a(void *w, void *l);
+extern void lin_to_win_struct_CCallbackBase_129a(void *l, void *w);
+
+extern void win_to_lin_struct__129a(void *w, void *l);
+extern void lin_to_win_struct__129a(void *l, void *w);
+
+extern void win_to_lin_struct__129a(void *w, void *l);
+extern void lin_to_win_struct__129a(void *l, void *w);
+
+extern void win_to_lin_struct__129a(void *w, void *l);
+extern void lin_to_win_struct__129a(void *l, void *w);
+
+extern void win_to_lin_struct__129(void *w, void *l);
+extern void lin_to_win_struct__129(void *l, void *w);
+
+extern void win_to_lin_struct_CallbackMsg_t_129(void *w, void *l);
+extern void lin_to_win_struct_CallbackMsg_t_129(void *l, void *w);
+
+extern void win_to_lin_struct_FriendGameInfo_t_129(void *w, void *l);
+extern void lin_to_win_struct_FriendGameInfo_t_129(void *l, void *w);
+
+extern void win_to_lin_struct_FriendSessionStateInfo_t_129(void *w, void *l);
+extern void lin_to_win_struct_FriendSessionStateInfo_t_129(void *l, void *w);
+
+extern void win_to_lin_struct_MatchMakingKeyValuePair_t_129(void *w, void *l);
+extern void lin_to_win_struct_MatchMakingKeyValuePair_t_129(void *l, void *w);
+
+extern void win_to_lin_struct_servernetadr_t_129(void *w, void *l);
+extern void lin_to_win_struct_servernetadr_t_129(void *l, void *w);
+
+extern void win_to_lin_struct_gameserveritem_t_129(void *w, void *l);
+extern void lin_to_win_struct_gameserveritem_t_129(void *l, void *w);
+
+extern void win_to_lin_struct_SteamParamStringArray_t_129(void *w, void *l);
+extern void lin_to_win_struct_SteamParamStringArray_t_129(void *l, void *w);
+
+extern void win_to_lin_struct_LeaderboardEntry_t_129(void *w, void *l);
+extern void lin_to_win_struct_LeaderboardEntry_t_129(void *l, void *w);
+
+extern void win_to_lin_struct_P2PSessionState_t_129(void *w, void *l);
+extern void lin_to_win_struct_P2PSessionState_t_129(void *l, void *w);
+
+extern void win_to_lin_struct__129(void *w, void *l);
+extern void lin_to_win_struct__129(void *l, void *w);
+
+extern void win_to_lin_struct_SteamUGCDetails_t_129(void *w, void *l);
+extern void lin_to_win_struct_SteamUGCDetails_t_129(void *l, void *w);
+
 #pragma pack( push, 8 )
 struct winSteamUGCRequestUGCDetailsResult_t_9764 {
     SteamUGCDetails_t m_details;
@@ -1705,6 +2725,39 @@ struct winSteamUGCRequestUGCDetailsResult_t_9764 {
 }  __attribute__ ((ms_struct));
 #pragma pack( pop )
 extern void cb_SteamUGCRequestUGCDetailsResult_t_9764(void *l, void *w);
+
+extern void win_to_lin_struct_CCallbackBase_129(void *w, void *l);
+extern void lin_to_win_struct_CCallbackBase_129(void *l, void *w);
+
+extern void win_to_lin_struct__129(void *w, void *l);
+extern void lin_to_win_struct__129(void *l, void *w);
+
+extern void win_to_lin_struct__129(void *w, void *l);
+extern void lin_to_win_struct__129(void *l, void *w);
+
+extern void win_to_lin_struct__129(void *w, void *l);
+extern void lin_to_win_struct__129(void *l, void *w);
+
+extern void win_to_lin_struct__128(void *w, void *l);
+extern void lin_to_win_struct__128(void *l, void *w);
+
+extern void win_to_lin_struct_CallbackMsg_t_128(void *w, void *l);
+extern void lin_to_win_struct_CallbackMsg_t_128(void *l, void *w);
+
+extern void win_to_lin_struct_FriendGameInfo_t_128(void *w, void *l);
+extern void lin_to_win_struct_FriendGameInfo_t_128(void *l, void *w);
+
+extern void win_to_lin_struct_FriendSessionStateInfo_t_128(void *w, void *l);
+extern void lin_to_win_struct_FriendSessionStateInfo_t_128(void *l, void *w);
+
+extern void win_to_lin_struct_MatchMakingKeyValuePair_t_128(void *w, void *l);
+extern void lin_to_win_struct_MatchMakingKeyValuePair_t_128(void *l, void *w);
+
+extern void win_to_lin_struct_servernetadr_t_128(void *w, void *l);
+extern void lin_to_win_struct_servernetadr_t_128(void *l, void *w);
+
+extern void win_to_lin_struct_gameserveritem_t_128(void *w, void *l);
+extern void lin_to_win_struct_gameserveritem_t_128(void *l, void *w);
 
 #pragma pack( push, 8 )
 struct winFavoritesListChanged_t_24 {
@@ -1718,6 +2771,9 @@ struct winFavoritesListChanged_t_24 {
 #pragma pack( pop )
 extern void cb_FavoritesListChanged_t_24(void *l, void *w);
 
+extern void win_to_lin_struct_SteamParamStringArray_t_128(void *w, void *l);
+extern void lin_to_win_struct_SteamParamStringArray_t_128(void *l, void *w);
+
 #pragma pack( push, 8 )
 struct winRemoteStorageFileShareResult_t_12 {
     EResult m_eResult;
@@ -1725,6 +2781,18 @@ struct winRemoteStorageFileShareResult_t_12 {
 }  __attribute__ ((ms_struct));
 #pragma pack( pop )
 extern void cb_RemoteStorageFileShareResult_t_12(void *l, void *w);
+
+extern void win_to_lin_struct_LeaderboardEntry_t_128(void *w, void *l);
+extern void lin_to_win_struct_LeaderboardEntry_t_128(void *l, void *w);
+
+extern void win_to_lin_struct_P2PSessionState_t_128(void *w, void *l);
+extern void lin_to_win_struct_P2PSessionState_t_128(void *l, void *w);
+
+extern void win_to_lin_struct__128(void *w, void *l);
+extern void lin_to_win_struct__128(void *l, void *w);
+
+extern void win_to_lin_struct_SteamUGCDetails_t_128(void *w, void *l);
+extern void lin_to_win_struct_SteamUGCDetails_t_128(void *l, void *w);
 
 #pragma pack( push, 8 )
 struct winSteamUGCQueryCompleted_t_20 {
@@ -1743,6 +2811,162 @@ struct winSteamUGCRequestUGCDetailsResult_t_9760 {
 #pragma pack( pop )
 extern void cb_SteamUGCRequestUGCDetailsResult_t_9760(void *l, void *w);
 
+extern void win_to_lin_struct_CCallbackBase_128(void *w, void *l);
+extern void lin_to_win_struct_CCallbackBase_128(void *l, void *w);
+
+extern void win_to_lin_struct__128(void *w, void *l);
+extern void lin_to_win_struct__128(void *l, void *w);
+
+extern void win_to_lin_struct__128(void *w, void *l);
+extern void lin_to_win_struct__128(void *l, void *w);
+
+extern void win_to_lin_struct__128(void *w, void *l);
+extern void lin_to_win_struct__128(void *l, void *w);
+
+extern void win_to_lin_struct__127(void *w, void *l);
+extern void lin_to_win_struct__127(void *l, void *w);
+
+extern void win_to_lin_struct_CallbackMsg_t_127(void *w, void *l);
+extern void lin_to_win_struct_CallbackMsg_t_127(void *l, void *w);
+
+extern void win_to_lin_struct_FriendGameInfo_t_127(void *w, void *l);
+extern void lin_to_win_struct_FriendGameInfo_t_127(void *l, void *w);
+
+extern void win_to_lin_struct_FriendSessionStateInfo_t_127(void *w, void *l);
+extern void lin_to_win_struct_FriendSessionStateInfo_t_127(void *l, void *w);
+
+extern void win_to_lin_struct_MatchMakingKeyValuePair_t_127(void *w, void *l);
+extern void lin_to_win_struct_MatchMakingKeyValuePair_t_127(void *l, void *w);
+
+extern void win_to_lin_struct_servernetadr_t_127(void *w, void *l);
+extern void lin_to_win_struct_servernetadr_t_127(void *l, void *w);
+
+extern void win_to_lin_struct_gameserveritem_t_127(void *w, void *l);
+extern void lin_to_win_struct_gameserveritem_t_127(void *l, void *w);
+
+extern void win_to_lin_struct_SteamParamStringArray_t_127(void *w, void *l);
+extern void lin_to_win_struct_SteamParamStringArray_t_127(void *l, void *w);
+
+extern void win_to_lin_struct_LeaderboardEntry_t_127(void *w, void *l);
+extern void lin_to_win_struct_LeaderboardEntry_t_127(void *l, void *w);
+
+extern void win_to_lin_struct_P2PSessionState_t_127(void *w, void *l);
+extern void lin_to_win_struct_P2PSessionState_t_127(void *l, void *w);
+
+extern void win_to_lin_struct__127(void *w, void *l);
+extern void lin_to_win_struct__127(void *l, void *w);
+
+extern void win_to_lin_struct_SteamUGCDetails_t_127(void *w, void *l);
+extern void lin_to_win_struct_SteamUGCDetails_t_127(void *l, void *w);
+
+extern void win_to_lin_struct_CCallbackBase_127(void *w, void *l);
+extern void lin_to_win_struct_CCallbackBase_127(void *l, void *w);
+
+extern void win_to_lin_struct__127(void *w, void *l);
+extern void lin_to_win_struct__127(void *l, void *w);
+
+extern void win_to_lin_struct__127(void *w, void *l);
+extern void lin_to_win_struct__127(void *l, void *w);
+
+extern void win_to_lin_struct__127(void *w, void *l);
+extern void lin_to_win_struct__127(void *l, void *w);
+
+extern void win_to_lin_struct__126a(void *w, void *l);
+extern void lin_to_win_struct__126a(void *l, void *w);
+
+extern void win_to_lin_struct_CallbackMsg_t_126a(void *w, void *l);
+extern void lin_to_win_struct_CallbackMsg_t_126a(void *l, void *w);
+
+extern void win_to_lin_struct_FriendGameInfo_t_126a(void *w, void *l);
+extern void lin_to_win_struct_FriendGameInfo_t_126a(void *l, void *w);
+
+extern void win_to_lin_struct_FriendSessionStateInfo_t_126a(void *w, void *l);
+extern void lin_to_win_struct_FriendSessionStateInfo_t_126a(void *l, void *w);
+
+extern void win_to_lin_struct_MatchMakingKeyValuePair_t_126a(void *w, void *l);
+extern void lin_to_win_struct_MatchMakingKeyValuePair_t_126a(void *l, void *w);
+
+extern void win_to_lin_struct_servernetadr_t_126a(void *w, void *l);
+extern void lin_to_win_struct_servernetadr_t_126a(void *l, void *w);
+
+extern void win_to_lin_struct_gameserveritem_t_126a(void *w, void *l);
+extern void lin_to_win_struct_gameserveritem_t_126a(void *l, void *w);
+
+extern void win_to_lin_struct_SteamParamStringArray_t_126a(void *w, void *l);
+extern void lin_to_win_struct_SteamParamStringArray_t_126a(void *l, void *w);
+
+extern void win_to_lin_struct_LeaderboardEntry_t_126a(void *w, void *l);
+extern void lin_to_win_struct_LeaderboardEntry_t_126a(void *l, void *w);
+
+extern void win_to_lin_struct_P2PSessionState_t_126a(void *w, void *l);
+extern void lin_to_win_struct_P2PSessionState_t_126a(void *l, void *w);
+
+extern void win_to_lin_struct_SteamUGCDetails_t_126a(void *w, void *l);
+extern void lin_to_win_struct_SteamUGCDetails_t_126a(void *l, void *w);
+
+extern void win_to_lin_struct_CCallbackBase_126a(void *w, void *l);
+extern void lin_to_win_struct_CCallbackBase_126a(void *l, void *w);
+
+extern void win_to_lin_struct__126a(void *w, void *l);
+extern void lin_to_win_struct__126a(void *l, void *w);
+
+extern void win_to_lin_struct__126a(void *w, void *l);
+extern void lin_to_win_struct__126a(void *l, void *w);
+
+extern void win_to_lin_struct__126a(void *w, void *l);
+extern void lin_to_win_struct__126a(void *l, void *w);
+
+extern void win_to_lin_struct__126(void *w, void *l);
+extern void lin_to_win_struct__126(void *l, void *w);
+
+extern void win_to_lin_struct_CallbackMsg_t_126(void *w, void *l);
+extern void lin_to_win_struct_CallbackMsg_t_126(void *l, void *w);
+
+extern void win_to_lin_struct_FriendGameInfo_t_126(void *w, void *l);
+extern void lin_to_win_struct_FriendGameInfo_t_126(void *l, void *w);
+
+extern void win_to_lin_struct_FriendSessionStateInfo_t_126(void *w, void *l);
+extern void lin_to_win_struct_FriendSessionStateInfo_t_126(void *l, void *w);
+
+extern void win_to_lin_struct_MatchMakingKeyValuePair_t_126(void *w, void *l);
+extern void lin_to_win_struct_MatchMakingKeyValuePair_t_126(void *l, void *w);
+
+extern void win_to_lin_struct_servernetadr_t_126(void *w, void *l);
+extern void lin_to_win_struct_servernetadr_t_126(void *l, void *w);
+
+extern void win_to_lin_struct_gameserveritem_t_126(void *w, void *l);
+extern void lin_to_win_struct_gameserveritem_t_126(void *l, void *w);
+
+extern void win_to_lin_struct_SteamParamStringArray_t_126(void *w, void *l);
+extern void lin_to_win_struct_SteamParamStringArray_t_126(void *l, void *w);
+
+extern void win_to_lin_struct_LeaderboardEntry_t_126(void *w, void *l);
+extern void lin_to_win_struct_LeaderboardEntry_t_126(void *l, void *w);
+
+extern void win_to_lin_struct_P2PSessionState_t_126(void *w, void *l);
+extern void lin_to_win_struct_P2PSessionState_t_126(void *l, void *w);
+
+extern void win_to_lin_struct_SteamUGCDetails_t_126(void *w, void *l);
+extern void lin_to_win_struct_SteamUGCDetails_t_126(void *l, void *w);
+
+extern void win_to_lin_struct_CCallbackBase_126(void *w, void *l);
+extern void lin_to_win_struct_CCallbackBase_126(void *l, void *w);
+
+extern void win_to_lin_struct__126(void *w, void *l);
+extern void lin_to_win_struct__126(void *l, void *w);
+
+extern void win_to_lin_struct__126(void *w, void *l);
+extern void lin_to_win_struct__126(void *l, void *w);
+
+extern void win_to_lin_struct__126(void *w, void *l);
+extern void lin_to_win_struct__126(void *l, void *w);
+
+extern void win_to_lin_struct__125(void *w, void *l);
+extern void lin_to_win_struct__125(void *l, void *w);
+
+extern void win_to_lin_struct_CallbackMsg_t_125(void *w, void *l);
+extern void lin_to_win_struct_CallbackMsg_t_125(void *l, void *w);
+
 #pragma pack( push, 8 )
 struct winValidateAuthTicketResponse_t_12 {
     CSteamID m_SteamID;
@@ -1750,6 +2974,24 @@ struct winValidateAuthTicketResponse_t_12 {
 }  __attribute__ ((ms_struct));
 #pragma pack( pop )
 extern void cb_ValidateAuthTicketResponse_t_12(void *l, void *w);
+
+extern void win_to_lin_struct_FriendGameInfo_t_125(void *w, void *l);
+extern void lin_to_win_struct_FriendGameInfo_t_125(void *l, void *w);
+
+extern void win_to_lin_struct_FriendSessionStateInfo_t_125(void *w, void *l);
+extern void lin_to_win_struct_FriendSessionStateInfo_t_125(void *l, void *w);
+
+extern void win_to_lin_struct_MatchMakingKeyValuePair_t_125(void *w, void *l);
+extern void lin_to_win_struct_MatchMakingKeyValuePair_t_125(void *l, void *w);
+
+extern void win_to_lin_struct_servernetadr_t_125(void *w, void *l);
+extern void lin_to_win_struct_servernetadr_t_125(void *l, void *w);
+
+extern void win_to_lin_struct_gameserveritem_t_125(void *w, void *l);
+extern void lin_to_win_struct_gameserveritem_t_125(void *l, void *w);
+
+extern void win_to_lin_struct_SteamParamStringArray_t_125(void *w, void *l);
+extern void lin_to_win_struct_SteamParamStringArray_t_125(void *l, void *w);
 
 #pragma pack( push, 8 )
 struct winRemoteStorageGetPublishedFileDetailsResult_t_9744 {
@@ -1777,12 +3019,54 @@ struct winRemoteStorageGetPublishedFileDetailsResult_t_9744 {
 #pragma pack( pop )
 extern void cb_RemoteStorageGetPublishedFileDetailsResult_t_9744(void *l, void *w);
 
+extern void win_to_lin_struct_LeaderboardEntry_t_125(void *w, void *l);
+extern void lin_to_win_struct_LeaderboardEntry_t_125(void *l, void *w);
+
+extern void win_to_lin_struct_P2PSessionState_t_125(void *w, void *l);
+extern void lin_to_win_struct_P2PSessionState_t_125(void *l, void *w);
+
+extern void win_to_lin_struct_CCallbackBase_125(void *w, void *l);
+extern void lin_to_win_struct_CCallbackBase_125(void *l, void *w);
+
+extern void win_to_lin_struct__125(void *w, void *l);
+extern void lin_to_win_struct__125(void *l, void *w);
+
 #pragma pack( push, 8 )
 struct winGSClientApprove_t_8 {
     CSteamID m_SteamID;
 }  __attribute__ ((ms_struct));
 #pragma pack( pop )
 extern void cb_GSClientApprove_t_8(void *l, void *w);
+
+extern void win_to_lin_struct__125(void *w, void *l);
+extern void lin_to_win_struct__125(void *l, void *w);
+
+extern void win_to_lin_struct__125(void *w, void *l);
+extern void lin_to_win_struct__125(void *l, void *w);
+
+extern void win_to_lin_struct__124(void *w, void *l);
+extern void lin_to_win_struct__124(void *l, void *w);
+
+extern void win_to_lin_struct_CallbackMsg_t_124(void *w, void *l);
+extern void lin_to_win_struct_CallbackMsg_t_124(void *l, void *w);
+
+extern void win_to_lin_struct_FriendGameInfo_t_124(void *w, void *l);
+extern void lin_to_win_struct_FriendGameInfo_t_124(void *l, void *w);
+
+extern void win_to_lin_struct_FriendSessionStateInfo_t_124(void *w, void *l);
+extern void lin_to_win_struct_FriendSessionStateInfo_t_124(void *l, void *w);
+
+extern void win_to_lin_struct_MatchMakingKeyValuePair_t_124(void *w, void *l);
+extern void lin_to_win_struct_MatchMakingKeyValuePair_t_124(void *l, void *w);
+
+extern void win_to_lin_struct_servernetadr_t_124(void *w, void *l);
+extern void lin_to_win_struct_servernetadr_t_124(void *l, void *w);
+
+extern void win_to_lin_struct_gameserveritem_t_124(void *w, void *l);
+extern void lin_to_win_struct_gameserveritem_t_124(void *l, void *w);
+
+extern void win_to_lin_struct_SteamParamStringArray_t_124(void *w, void *l);
+extern void lin_to_win_struct_SteamParamStringArray_t_124(void *l, void *w);
 
 #pragma pack( push, 8 )
 struct winRemoteStoragePublishFileResult_t_12 {
@@ -1811,6 +3095,129 @@ struct winRemoteStorageEnumerateWorkshopFilesResult_t_612 {
 #pragma pack( pop )
 extern void cb_RemoteStorageEnumerateWorkshopFilesResult_t_612(void *l, void *w);
 
+extern void win_to_lin_struct_LeaderboardEntry_t_124(void *w, void *l);
+extern void lin_to_win_struct_LeaderboardEntry_t_124(void *l, void *w);
+
+extern void win_to_lin_struct_P2PSessionState_t_124(void *w, void *l);
+extern void lin_to_win_struct_P2PSessionState_t_124(void *l, void *w);
+
+extern void win_to_lin_struct_CCallbackBase_124(void *w, void *l);
+extern void lin_to_win_struct_CCallbackBase_124(void *l, void *w);
+
+extern void win_to_lin_struct__124(void *w, void *l);
+extern void lin_to_win_struct__124(void *l, void *w);
+
+extern void win_to_lin_struct__124(void *w, void *l);
+extern void lin_to_win_struct__124(void *l, void *w);
+
+extern void win_to_lin_struct__124(void *w, void *l);
+extern void lin_to_win_struct__124(void *l, void *w);
+
+extern void win_to_lin_struct__123a(void *w, void *l);
+extern void lin_to_win_struct__123a(void *l, void *w);
+
+extern void win_to_lin_struct_CallbackMsg_t_123a(void *w, void *l);
+extern void lin_to_win_struct_CallbackMsg_t_123a(void *l, void *w);
+
+extern void win_to_lin_struct_FriendGameInfo_t_123a(void *w, void *l);
+extern void lin_to_win_struct_FriendGameInfo_t_123a(void *l, void *w);
+
+extern void win_to_lin_struct_FriendSessionStateInfo_t_123a(void *w, void *l);
+extern void lin_to_win_struct_FriendSessionStateInfo_t_123a(void *l, void *w);
+
+extern void win_to_lin_struct_MatchMakingKeyValuePair_t_123a(void *w, void *l);
+extern void lin_to_win_struct_MatchMakingKeyValuePair_t_123a(void *l, void *w);
+
+extern void win_to_lin_struct_servernetadr_t_123a(void *w, void *l);
+extern void lin_to_win_struct_servernetadr_t_123a(void *l, void *w);
+
+extern void win_to_lin_struct_gameserveritem_t_123a(void *w, void *l);
+extern void lin_to_win_struct_gameserveritem_t_123a(void *l, void *w);
+
+extern void win_to_lin_struct_SteamParamStringArray_t_123a(void *w, void *l);
+extern void lin_to_win_struct_SteamParamStringArray_t_123a(void *l, void *w);
+
+extern void win_to_lin_struct_LeaderboardEntry_t_123a(void *w, void *l);
+extern void lin_to_win_struct_LeaderboardEntry_t_123a(void *l, void *w);
+
+extern void win_to_lin_struct_P2PSessionState_t_123a(void *w, void *l);
+extern void lin_to_win_struct_P2PSessionState_t_123a(void *l, void *w);
+
+extern void win_to_lin_struct_CCallbackBase_123a(void *w, void *l);
+extern void lin_to_win_struct_CCallbackBase_123a(void *l, void *w);
+
+extern void win_to_lin_struct__123a(void *w, void *l);
+extern void lin_to_win_struct__123a(void *l, void *w);
+
+extern void win_to_lin_struct__123a(void *w, void *l);
+extern void lin_to_win_struct__123a(void *l, void *w);
+
+extern void win_to_lin_struct__123a(void *w, void *l);
+extern void lin_to_win_struct__123a(void *l, void *w);
+
+extern void win_to_lin_struct__123(void *w, void *l);
+extern void lin_to_win_struct__123(void *l, void *w);
+
+extern void win_to_lin_struct_CallbackMsg_t_123(void *w, void *l);
+extern void lin_to_win_struct_CallbackMsg_t_123(void *l, void *w);
+
+extern void win_to_lin_struct_FriendGameInfo_t_123(void *w, void *l);
+extern void lin_to_win_struct_FriendGameInfo_t_123(void *l, void *w);
+
+extern void win_to_lin_struct_FriendSessionStateInfo_t_123(void *w, void *l);
+extern void lin_to_win_struct_FriendSessionStateInfo_t_123(void *l, void *w);
+
+extern void win_to_lin_struct_MatchMakingKeyValuePair_t_123(void *w, void *l);
+extern void lin_to_win_struct_MatchMakingKeyValuePair_t_123(void *l, void *w);
+
+extern void win_to_lin_struct_servernetadr_t_123(void *w, void *l);
+extern void lin_to_win_struct_servernetadr_t_123(void *l, void *w);
+
+extern void win_to_lin_struct_gameserveritem_t_123(void *w, void *l);
+extern void lin_to_win_struct_gameserveritem_t_123(void *l, void *w);
+
+extern void win_to_lin_struct_SteamParamStringArray_t_123(void *w, void *l);
+extern void lin_to_win_struct_SteamParamStringArray_t_123(void *l, void *w);
+
+extern void win_to_lin_struct_LeaderboardEntry_t_123(void *w, void *l);
+extern void lin_to_win_struct_LeaderboardEntry_t_123(void *l, void *w);
+
+extern void win_to_lin_struct_P2PSessionState_t_123(void *w, void *l);
+extern void lin_to_win_struct_P2PSessionState_t_123(void *l, void *w);
+
+extern void win_to_lin_struct_CCallbackBase_123(void *w, void *l);
+extern void lin_to_win_struct_CCallbackBase_123(void *l, void *w);
+
+extern void win_to_lin_struct__123(void *w, void *l);
+extern void lin_to_win_struct__123(void *l, void *w);
+
+extern void win_to_lin_struct__123(void *w, void *l);
+extern void lin_to_win_struct__123(void *l, void *w);
+
+extern void win_to_lin_struct__123(void *w, void *l);
+extern void lin_to_win_struct__123(void *l, void *w);
+
+extern void win_to_lin_struct_CallbackMsg_t_122(void *w, void *l);
+extern void lin_to_win_struct_CallbackMsg_t_122(void *l, void *w);
+
+extern void win_to_lin_struct_FriendGameInfo_t_122(void *w, void *l);
+extern void lin_to_win_struct_FriendGameInfo_t_122(void *l, void *w);
+
+extern void win_to_lin_struct_FriendSessionStateInfo_t_122(void *w, void *l);
+extern void lin_to_win_struct_FriendSessionStateInfo_t_122(void *l, void *w);
+
+extern void win_to_lin_struct_MatchMakingKeyValuePair_t_122(void *w, void *l);
+extern void lin_to_win_struct_MatchMakingKeyValuePair_t_122(void *l, void *w);
+
+extern void win_to_lin_struct_servernetadr_t_122(void *w, void *l);
+extern void lin_to_win_struct_servernetadr_t_122(void *l, void *w);
+
+extern void win_to_lin_struct_gameserveritem_t_122(void *w, void *l);
+extern void lin_to_win_struct_gameserveritem_t_122(void *l, void *w);
+
+extern void win_to_lin_struct_SteamParamStringArray_t_122(void *w, void *l);
+extern void lin_to_win_struct_SteamParamStringArray_t_122(void *l, void *w);
+
 #pragma pack( push, 8 )
 struct winRemoteStorageSubscribePublishedFileResult_t_4 {
     EResult m_eResult;
@@ -1824,6 +3231,96 @@ struct winRemoteStorageUnsubscribePublishedFileResult_t_4 {
 }  __attribute__ ((ms_struct));
 #pragma pack( pop )
 extern void cb_RemoteStorageUnsubscribePublishedFileResult_t_4(void *l, void *w);
+
+extern void win_to_lin_struct_LeaderboardEntry_t_122(void *w, void *l);
+extern void lin_to_win_struct_LeaderboardEntry_t_122(void *l, void *w);
+
+extern void win_to_lin_struct_P2PSessionState_t_122(void *w, void *l);
+extern void lin_to_win_struct_P2PSessionState_t_122(void *l, void *w);
+
+extern void win_to_lin_struct_CCallbackBase_122(void *w, void *l);
+extern void lin_to_win_struct_CCallbackBase_122(void *l, void *w);
+
+extern void win_to_lin_struct_CallbackMsg_t_121(void *w, void *l);
+extern void lin_to_win_struct_CallbackMsg_t_121(void *l, void *w);
+
+extern void win_to_lin_struct_FriendGameInfo_t_121(void *w, void *l);
+extern void lin_to_win_struct_FriendGameInfo_t_121(void *l, void *w);
+
+extern void win_to_lin_struct_FriendSessionStateInfo_t_121(void *w, void *l);
+extern void lin_to_win_struct_FriendSessionStateInfo_t_121(void *l, void *w);
+
+extern void win_to_lin_struct_MatchMakingKeyValuePair_t_121(void *w, void *l);
+extern void lin_to_win_struct_MatchMakingKeyValuePair_t_121(void *l, void *w);
+
+extern void win_to_lin_struct_servernetadr_t_121(void *w, void *l);
+extern void lin_to_win_struct_servernetadr_t_121(void *l, void *w);
+
+extern void win_to_lin_struct_gameserveritem_t_121(void *w, void *l);
+extern void lin_to_win_struct_gameserveritem_t_121(void *l, void *w);
+
+extern void win_to_lin_struct_SteamParamStringArray_t_121(void *w, void *l);
+extern void lin_to_win_struct_SteamParamStringArray_t_121(void *l, void *w);
+
+extern void win_to_lin_struct_LeaderboardEntry_t_121(void *w, void *l);
+extern void lin_to_win_struct_LeaderboardEntry_t_121(void *l, void *w);
+
+extern void win_to_lin_struct_P2PSessionState_t_121(void *w, void *l);
+extern void lin_to_win_struct_P2PSessionState_t_121(void *l, void *w);
+
+extern void win_to_lin_struct_CCallbackBase_121(void *w, void *l);
+extern void lin_to_win_struct_CCallbackBase_121(void *l, void *w);
+
+extern void win_to_lin_struct_CallbackMsg_t_120(void *w, void *l);
+extern void lin_to_win_struct_CallbackMsg_t_120(void *l, void *w);
+
+extern void win_to_lin_struct_FriendGameInfo_t_120(void *w, void *l);
+extern void lin_to_win_struct_FriendGameInfo_t_120(void *l, void *w);
+
+extern void win_to_lin_struct_FriendSessionStateInfo_t_120(void *w, void *l);
+extern void lin_to_win_struct_FriendSessionStateInfo_t_120(void *l, void *w);
+
+extern void win_to_lin_struct_MatchMakingKeyValuePair_t_120(void *w, void *l);
+extern void lin_to_win_struct_MatchMakingKeyValuePair_t_120(void *l, void *w);
+
+extern void win_to_lin_struct_servernetadr_t_120(void *w, void *l);
+extern void lin_to_win_struct_servernetadr_t_120(void *l, void *w);
+
+extern void win_to_lin_struct_gameserveritem_t_120(void *w, void *l);
+extern void lin_to_win_struct_gameserveritem_t_120(void *l, void *w);
+
+extern void win_to_lin_struct_SteamParamStringArray_t_120(void *w, void *l);
+extern void lin_to_win_struct_SteamParamStringArray_t_120(void *l, void *w);
+
+extern void win_to_lin_struct_LeaderboardEntry_t_120(void *w, void *l);
+extern void lin_to_win_struct_LeaderboardEntry_t_120(void *l, void *w);
+
+extern void win_to_lin_struct_P2PSessionState_t_120(void *w, void *l);
+extern void lin_to_win_struct_P2PSessionState_t_120(void *l, void *w);
+
+extern void win_to_lin_struct_CCallbackBase_120(void *w, void *l);
+extern void lin_to_win_struct_CCallbackBase_120(void *l, void *w);
+
+extern void win_to_lin_struct_CallbackMsg_t_119(void *w, void *l);
+extern void lin_to_win_struct_CallbackMsg_t_119(void *l, void *w);
+
+extern void win_to_lin_struct_FriendGameInfo_t_119(void *w, void *l);
+extern void lin_to_win_struct_FriendGameInfo_t_119(void *l, void *w);
+
+extern void win_to_lin_struct_FriendSessionStateInfo_t_119(void *w, void *l);
+extern void lin_to_win_struct_FriendSessionStateInfo_t_119(void *l, void *w);
+
+extern void win_to_lin_struct_MatchMakingKeyValuePair_t_119(void *w, void *l);
+extern void lin_to_win_struct_MatchMakingKeyValuePair_t_119(void *l, void *w);
+
+extern void win_to_lin_struct_servernetadr_t_119(void *w, void *l);
+extern void lin_to_win_struct_servernetadr_t_119(void *l, void *w);
+
+extern void win_to_lin_struct_gameserveritem_t_119(void *w, void *l);
+extern void lin_to_win_struct_gameserveritem_t_119(void *l, void *w);
+
+extern void win_to_lin_struct_SteamParamStringArray_t_119(void *w, void *l);
+extern void lin_to_win_struct_SteamParamStringArray_t_119(void *l, void *w);
 
 #pragma pack( push, 8 )
 struct winRemoteStorageGetPublishedFileDetailsResult_t_9740 {
@@ -1850,6 +3347,36 @@ struct winRemoteStorageGetPublishedFileDetailsResult_t_9740 {
 #pragma pack( pop )
 extern void cb_RemoteStorageGetPublishedFileDetailsResult_t_9740(void *l, void *w);
 
+extern void win_to_lin_struct_LeaderboardEntry_t_119(void *w, void *l);
+extern void lin_to_win_struct_LeaderboardEntry_t_119(void *l, void *w);
+
+extern void win_to_lin_struct_P2PSessionState_t_119(void *w, void *l);
+extern void lin_to_win_struct_P2PSessionState_t_119(void *l, void *w);
+
+extern void win_to_lin_struct_CCallbackBase_119(void *w, void *l);
+extern void lin_to_win_struct_CCallbackBase_119(void *l, void *w);
+
+extern void win_to_lin_struct_CallbackMsg_t_118(void *w, void *l);
+extern void lin_to_win_struct_CallbackMsg_t_118(void *l, void *w);
+
+extern void win_to_lin_struct_FriendGameInfo_t_118(void *w, void *l);
+extern void lin_to_win_struct_FriendGameInfo_t_118(void *l, void *w);
+
+extern void win_to_lin_struct_FriendSessionStateInfo_t_118(void *w, void *l);
+extern void lin_to_win_struct_FriendSessionStateInfo_t_118(void *l, void *w);
+
+extern void win_to_lin_struct_MatchMakingKeyValuePair_t_118(void *w, void *l);
+extern void lin_to_win_struct_MatchMakingKeyValuePair_t_118(void *l, void *w);
+
+extern void win_to_lin_struct_servernetadr_t_118(void *w, void *l);
+extern void lin_to_win_struct_servernetadr_t_118(void *l, void *w);
+
+extern void win_to_lin_struct_gameserveritem_t_118(void *w, void *l);
+extern void lin_to_win_struct_gameserveritem_t_118(void *l, void *w);
+
+extern void win_to_lin_struct_SteamParamStringArray_t_118(void *w, void *l);
+extern void lin_to_win_struct_SteamParamStringArray_t_118(void *l, void *w);
+
 #pragma pack( push, 8 )
 struct winRemoteStorageGetPublishedFileDetailsResult_t_9484 {
     EResult m_eResult;
@@ -1874,6 +3401,15 @@ struct winRemoteStorageGetPublishedFileDetailsResult_t_9484 {
 #pragma pack( pop )
 extern void cb_RemoteStorageGetPublishedFileDetailsResult_t_9484(void *l, void *w);
 
+extern void win_to_lin_struct_LeaderboardEntry_t_118(void *w, void *l);
+extern void lin_to_win_struct_LeaderboardEntry_t_118(void *l, void *w);
+
+extern void win_to_lin_struct_P2PSessionState_t_118(void *w, void *l);
+extern void lin_to_win_struct_P2PSessionState_t_118(void *l, void *w);
+
+extern void win_to_lin_struct_CCallbackBase_118(void *w, void *l);
+extern void lin_to_win_struct_CCallbackBase_118(void *l, void *w);
+
 #pragma pack( push, 8 )
 struct winComputeNewPlayerCompatibilityResult_t_16 {
     EResult m_eResult;
@@ -1883,6 +3419,27 @@ struct winComputeNewPlayerCompatibilityResult_t_16 {
 }  __attribute__ ((ms_struct));
 #pragma pack( pop )
 extern void cb_ComputeNewPlayerCompatibilityResult_t_16(void *l, void *w);
+
+extern void win_to_lin_struct_CallbackMsg_t_117(void *w, void *l);
+extern void lin_to_win_struct_CallbackMsg_t_117(void *l, void *w);
+
+extern void win_to_lin_struct_FriendGameInfo_t_117(void *w, void *l);
+extern void lin_to_win_struct_FriendGameInfo_t_117(void *l, void *w);
+
+extern void win_to_lin_struct_MatchMakingKeyValuePair_t_117(void *w, void *l);
+extern void lin_to_win_struct_MatchMakingKeyValuePair_t_117(void *l, void *w);
+
+extern void win_to_lin_struct_servernetadr_t_117(void *w, void *l);
+extern void lin_to_win_struct_servernetadr_t_117(void *l, void *w);
+
+extern void win_to_lin_struct_gameserveritem_t_117(void *w, void *l);
+extern void lin_to_win_struct_gameserveritem_t_117(void *l, void *w);
+
+extern void win_to_lin_struct_SteamParamStringArray_t_117(void *w, void *l);
+extern void lin_to_win_struct_SteamParamStringArray_t_117(void *l, void *w);
+
+extern void win_to_lin_struct_RemoteStorageUpdatePublishedFileRequest_t_117(void *w, void *l);
+extern void lin_to_win_struct_RemoteStorageUpdatePublishedFileRequest_t_117(void *l, void *w);
 
 #pragma pack( push, 8 )
 struct winRemoteStorageGetPublishedFileDetailsResult_t_1732 {
@@ -1906,6 +3463,21 @@ struct winRemoteStorageGetPublishedFileDetailsResult_t_1732 {
 #pragma pack( pop )
 extern void cb_RemoteStorageGetPublishedFileDetailsResult_t_1732(void *l, void *w);
 
+extern void win_to_lin_struct_LeaderboardEntry_t_117(void *w, void *l);
+extern void lin_to_win_struct_LeaderboardEntry_t_117(void *l, void *w);
+
+extern void win_to_lin_struct_P2PSessionState_t_117(void *w, void *l);
+extern void lin_to_win_struct_P2PSessionState_t_117(void *l, void *w);
+
+extern void win_to_lin_struct_CCallbackBase_117(void *w, void *l);
+extern void lin_to_win_struct_CCallbackBase_117(void *l, void *w);
+
+extern void win_to_lin_struct_CallbackMsg_t_116(void *w, void *l);
+extern void lin_to_win_struct_CallbackMsg_t_116(void *l, void *w);
+
+extern void win_to_lin_struct_FriendGameInfo_t_116(void *w, void *l);
+extern void lin_to_win_struct_FriendGameInfo_t_116(void *l, void *w);
+
 #pragma pack( push, 8 )
 struct winNameHistoryResponse_t_8 {
     int m_cSuccessfulLookups;
@@ -1913,6 +3485,15 @@ struct winNameHistoryResponse_t_8 {
 }  __attribute__ ((ms_struct));
 #pragma pack( pop )
 extern void cb_NameHistoryResponse_t_8(void *l, void *w);
+
+extern void win_to_lin_struct_MatchMakingKeyValuePair_t_116(void *w, void *l);
+extern void lin_to_win_struct_MatchMakingKeyValuePair_t_116(void *l, void *w);
+
+extern void win_to_lin_struct_servernetadr_t_116(void *w, void *l);
+extern void lin_to_win_struct_servernetadr_t_116(void *l, void *w);
+
+extern void win_to_lin_struct_gameserveritem_t_116(void *w, void *l);
+extern void lin_to_win_struct_gameserveritem_t_116(void *l, void *w);
 
 #pragma pack( push, 8 )
 struct winRemoteStorageDownloadUGCResult_t_32 {
@@ -1926,6 +3507,102 @@ struct winRemoteStorageDownloadUGCResult_t_32 {
 #pragma pack( pop )
 extern void cb_RemoteStorageDownloadUGCResult_t_32(void *l, void *w);
 
+extern void win_to_lin_struct_LeaderboardEntry_t_116(void *w, void *l);
+extern void lin_to_win_struct_LeaderboardEntry_t_116(void *l, void *w);
+
+extern void win_to_lin_struct_P2PSessionState_t_116(void *w, void *l);
+extern void lin_to_win_struct_P2PSessionState_t_116(void *l, void *w);
+
+extern void win_to_lin_struct_CCallbackBase_116(void *w, void *l);
+extern void lin_to_win_struct_CCallbackBase_116(void *l, void *w);
+
+extern void win_to_lin_struct_CallbackMsg_t_115(void *w, void *l);
+extern void lin_to_win_struct_CallbackMsg_t_115(void *l, void *w);
+
+extern void win_to_lin_struct_FriendGameInfo_t_115(void *w, void *l);
+extern void lin_to_win_struct_FriendGameInfo_t_115(void *l, void *w);
+
+extern void win_to_lin_struct_MatchMakingKeyValuePair_t_115(void *w, void *l);
+extern void lin_to_win_struct_MatchMakingKeyValuePair_t_115(void *l, void *w);
+
+extern void win_to_lin_struct_servernetadr_t_115(void *w, void *l);
+extern void lin_to_win_struct_servernetadr_t_115(void *l, void *w);
+
+extern void win_to_lin_struct_gameserveritem_t_115(void *w, void *l);
+extern void lin_to_win_struct_gameserveritem_t_115(void *l, void *w);
+
+extern void win_to_lin_struct_LeaderboardEntry_t_115(void *w, void *l);
+extern void lin_to_win_struct_LeaderboardEntry_t_115(void *l, void *w);
+
+extern void win_to_lin_struct_P2PSessionState_t_115(void *w, void *l);
+extern void lin_to_win_struct_P2PSessionState_t_115(void *l, void *w);
+
+extern void win_to_lin_struct_CCallbackBase_115(void *w, void *l);
+extern void lin_to_win_struct_CCallbackBase_115(void *l, void *w);
+
+extern void win_to_lin_struct_CallbackMsg_t_114(void *w, void *l);
+extern void lin_to_win_struct_CallbackMsg_t_114(void *l, void *w);
+
+extern void win_to_lin_struct_FriendGameInfo_t_114(void *w, void *l);
+extern void lin_to_win_struct_FriendGameInfo_t_114(void *l, void *w);
+
+extern void win_to_lin_struct_MatchMakingKeyValuePair_t_114(void *w, void *l);
+extern void lin_to_win_struct_MatchMakingKeyValuePair_t_114(void *l, void *w);
+
+extern void win_to_lin_struct_servernetadr_t_114(void *w, void *l);
+extern void lin_to_win_struct_servernetadr_t_114(void *l, void *w);
+
+extern void win_to_lin_struct_gameserveritem_t_114(void *w, void *l);
+extern void lin_to_win_struct_gameserveritem_t_114(void *l, void *w);
+
+extern void win_to_lin_struct_LeaderboardEntry_t_114(void *w, void *l);
+extern void lin_to_win_struct_LeaderboardEntry_t_114(void *l, void *w);
+
+extern void win_to_lin_struct_P2PSessionState_t_114(void *w, void *l);
+extern void lin_to_win_struct_P2PSessionState_t_114(void *l, void *w);
+
+extern void win_to_lin_struct_CCallbackBase_114(void *w, void *l);
+extern void lin_to_win_struct_CCallbackBase_114(void *l, void *w);
+
+extern void win_to_lin_struct_CallbackMsg_t_113(void *w, void *l);
+extern void lin_to_win_struct_CallbackMsg_t_113(void *l, void *w);
+
+extern void win_to_lin_struct_FriendGameInfo_t_113(void *w, void *l);
+extern void lin_to_win_struct_FriendGameInfo_t_113(void *l, void *w);
+
+extern void win_to_lin_struct_MatchMakingKeyValuePair_t_113(void *w, void *l);
+extern void lin_to_win_struct_MatchMakingKeyValuePair_t_113(void *l, void *w);
+
+extern void win_to_lin_struct_servernetadr_t_113(void *w, void *l);
+extern void lin_to_win_struct_servernetadr_t_113(void *l, void *w);
+
+extern void win_to_lin_struct_gameserveritem_t_113(void *w, void *l);
+extern void lin_to_win_struct_gameserveritem_t_113(void *l, void *w);
+
+extern void win_to_lin_struct_LeaderboardEntry_t_113(void *w, void *l);
+extern void lin_to_win_struct_LeaderboardEntry_t_113(void *l, void *w);
+
+extern void win_to_lin_struct_P2PSessionState_t_113(void *w, void *l);
+extern void lin_to_win_struct_P2PSessionState_t_113(void *l, void *w);
+
+extern void win_to_lin_struct_CCallbackBase_113(void *w, void *l);
+extern void lin_to_win_struct_CCallbackBase_113(void *l, void *w);
+
+extern void win_to_lin_struct_CallbackMsg_t_112(void *w, void *l);
+extern void lin_to_win_struct_CallbackMsg_t_112(void *l, void *w);
+
+extern void win_to_lin_struct_FriendGameInfo_t_112(void *w, void *l);
+extern void lin_to_win_struct_FriendGameInfo_t_112(void *l, void *w);
+
+extern void win_to_lin_struct_MatchMakingKeyValuePair_t_112(void *w, void *l);
+extern void lin_to_win_struct_MatchMakingKeyValuePair_t_112(void *l, void *w);
+
+extern void win_to_lin_struct_servernetadr_t_112(void *w, void *l);
+extern void lin_to_win_struct_servernetadr_t_112(void *l, void *w);
+
+extern void win_to_lin_struct_gameserveritem_t_112(void *w, void *l);
+extern void lin_to_win_struct_gameserveritem_t_112(void *l, void *w);
+
 #pragma pack( push, 8 )
 struct winLobbyInvite_t_16 {
     uint64 m_ulSteamIDUser;
@@ -1934,6 +3611,33 @@ struct winLobbyInvite_t_16 {
 #pragma pack( pop )
 extern void cb_LobbyInvite_t_16(void *l, void *w);
 
+extern void win_to_lin_struct_LeaderboardEntry_t_112(void *w, void *l);
+extern void lin_to_win_struct_LeaderboardEntry_t_112(void *l, void *w);
+
+extern void win_to_lin_struct_P2PSessionState_t_112(void *w, void *l);
+extern void lin_to_win_struct_P2PSessionState_t_112(void *l, void *w);
+
+extern void win_to_lin_struct_SteamPS3Params_t_112(void *w, void *l);
+extern void lin_to_win_struct_SteamPS3Params_t_112(void *l, void *w);
+
+extern void win_to_lin_struct_CCallbackBase_112(void *w, void *l);
+extern void lin_to_win_struct_CCallbackBase_112(void *l, void *w);
+
+extern void win_to_lin_struct_CallbackMsg_t_111(void *w, void *l);
+extern void lin_to_win_struct_CallbackMsg_t_111(void *l, void *w);
+
+extern void win_to_lin_struct_FriendGameInfo_t_111(void *w, void *l);
+extern void lin_to_win_struct_FriendGameInfo_t_111(void *l, void *w);
+
+extern void win_to_lin_struct_MatchMakingKeyValuePair_t_111(void *w, void *l);
+extern void lin_to_win_struct_MatchMakingKeyValuePair_t_111(void *l, void *w);
+
+extern void win_to_lin_struct_servernetadr_t_111(void *w, void *l);
+extern void lin_to_win_struct_servernetadr_t_111(void *l, void *w);
+
+extern void win_to_lin_struct_gameserveritem_t_111(void *w, void *l);
+extern void lin_to_win_struct_gameserveritem_t_111(void *l, void *w);
+
 #pragma pack( push, 8 )
 struct winLobbyDataUpdate_t_16 {
     uint64 m_ulSteamIDLobby;
@@ -1941,6 +3645,177 @@ struct winLobbyDataUpdate_t_16 {
 }  __attribute__ ((ms_struct));
 #pragma pack( pop )
 extern void cb_LobbyDataUpdate_t_16(void *l, void *w);
+
+extern void win_to_lin_struct_LeaderboardEntry_t_111(void *w, void *l);
+extern void lin_to_win_struct_LeaderboardEntry_t_111(void *l, void *w);
+
+extern void win_to_lin_struct_P2PSessionState_t_111(void *w, void *l);
+extern void lin_to_win_struct_P2PSessionState_t_111(void *l, void *w);
+
+extern void win_to_lin_struct_SteamPS3Params_t_111(void *w, void *l);
+extern void lin_to_win_struct_SteamPS3Params_t_111(void *l, void *w);
+
+extern void win_to_lin_struct_CCallbackBase_111(void *w, void *l);
+extern void lin_to_win_struct_CCallbackBase_111(void *l, void *w);
+
+extern void win_to_lin_struct_CallbackMsg_t_110(void *w, void *l);
+extern void lin_to_win_struct_CallbackMsg_t_110(void *l, void *w);
+
+extern void win_to_lin_struct_FriendGameInfo_t_110(void *w, void *l);
+extern void lin_to_win_struct_FriendGameInfo_t_110(void *l, void *w);
+
+extern void win_to_lin_struct_MatchMakingKeyValuePair_t_110(void *w, void *l);
+extern void lin_to_win_struct_MatchMakingKeyValuePair_t_110(void *l, void *w);
+
+extern void win_to_lin_struct_servernetadr_t_110(void *w, void *l);
+extern void lin_to_win_struct_servernetadr_t_110(void *l, void *w);
+
+extern void win_to_lin_struct_gameserveritem_t_110(void *w, void *l);
+extern void lin_to_win_struct_gameserveritem_t_110(void *l, void *w);
+
+extern void win_to_lin_struct_LeaderboardEntry_t_110(void *w, void *l);
+extern void lin_to_win_struct_LeaderboardEntry_t_110(void *l, void *w);
+
+extern void win_to_lin_struct_P2PSessionState_t_110(void *w, void *l);
+extern void lin_to_win_struct_P2PSessionState_t_110(void *l, void *w);
+
+extern void win_to_lin_struct_CCallbackBase_110(void *w, void *l);
+extern void lin_to_win_struct_CCallbackBase_110(void *l, void *w);
+
+extern void win_to_lin_struct_CallbackMsg_t_109(void *w, void *l);
+extern void lin_to_win_struct_CallbackMsg_t_109(void *l, void *w);
+
+extern void win_to_lin_struct_FriendGameInfo_t_109(void *w, void *l);
+extern void lin_to_win_struct_FriendGameInfo_t_109(void *l, void *w);
+
+extern void win_to_lin_struct_MatchMakingKeyValuePair_t_109(void *w, void *l);
+extern void lin_to_win_struct_MatchMakingKeyValuePair_t_109(void *l, void *w);
+
+extern void win_to_lin_struct_servernetadr_t_109(void *w, void *l);
+extern void lin_to_win_struct_servernetadr_t_109(void *l, void *w);
+
+extern void win_to_lin_struct_gameserveritem_t_109(void *w, void *l);
+extern void lin_to_win_struct_gameserveritem_t_109(void *l, void *w);
+
+extern void win_to_lin_struct_LeaderboardEntry_t_109(void *w, void *l);
+extern void lin_to_win_struct_LeaderboardEntry_t_109(void *l, void *w);
+
+extern void win_to_lin_struct_P2PSessionState_t_109(void *w, void *l);
+extern void lin_to_win_struct_P2PSessionState_t_109(void *l, void *w);
+
+extern void win_to_lin_struct_CCallbackBase_109(void *w, void *l);
+extern void lin_to_win_struct_CCallbackBase_109(void *l, void *w);
+
+extern void win_to_lin_struct_CallbackMsg_t_108(void *w, void *l);
+extern void lin_to_win_struct_CallbackMsg_t_108(void *l, void *w);
+
+extern void win_to_lin_struct_FriendGameInfo_t_108(void *w, void *l);
+extern void lin_to_win_struct_FriendGameInfo_t_108(void *l, void *w);
+
+extern void win_to_lin_struct_MatchMakingKeyValuePair_t_108(void *w, void *l);
+extern void lin_to_win_struct_MatchMakingKeyValuePair_t_108(void *l, void *w);
+
+extern void win_to_lin_struct_servernetadr_t_108(void *w, void *l);
+extern void lin_to_win_struct_servernetadr_t_108(void *l, void *w);
+
+extern void win_to_lin_struct_gameserveritem_t_108(void *w, void *l);
+extern void lin_to_win_struct_gameserveritem_t_108(void *l, void *w);
+
+extern void win_to_lin_struct_LeaderboardEntry_t_108(void *w, void *l);
+extern void lin_to_win_struct_LeaderboardEntry_t_108(void *l, void *w);
+
+extern void win_to_lin_struct_P2PSessionState_t_108(void *w, void *l);
+extern void lin_to_win_struct_P2PSessionState_t_108(void *l, void *w);
+
+extern void win_to_lin_struct_CCallbackBase_108(void *w, void *l);
+extern void lin_to_win_struct_CCallbackBase_108(void *l, void *w);
+
+extern void win_to_lin_struct_CallbackMsg_t_107(void *w, void *l);
+extern void lin_to_win_struct_CallbackMsg_t_107(void *l, void *w);
+
+extern void win_to_lin_struct_FriendGameInfo_t_107(void *w, void *l);
+extern void lin_to_win_struct_FriendGameInfo_t_107(void *l, void *w);
+
+extern void win_to_lin_struct_MatchMakingKeyValuePair_t_107(void *w, void *l);
+extern void lin_to_win_struct_MatchMakingKeyValuePair_t_107(void *l, void *w);
+
+extern void win_to_lin_struct_servernetadr_t_107(void *w, void *l);
+extern void lin_to_win_struct_servernetadr_t_107(void *l, void *w);
+
+extern void win_to_lin_struct_gameserveritem_t_107(void *w, void *l);
+extern void lin_to_win_struct_gameserveritem_t_107(void *l, void *w);
+
+extern void win_to_lin_struct_LeaderboardEntry_t_107(void *w, void *l);
+extern void lin_to_win_struct_LeaderboardEntry_t_107(void *l, void *w);
+
+extern void win_to_lin_struct_P2PSessionState_t_107(void *w, void *l);
+extern void lin_to_win_struct_P2PSessionState_t_107(void *l, void *w);
+
+extern void win_to_lin_struct_CCallbackBase_107(void *w, void *l);
+extern void lin_to_win_struct_CCallbackBase_107(void *l, void *w);
+
+extern void win_to_lin_struct_CallbackMsg_t_106(void *w, void *l);
+extern void lin_to_win_struct_CallbackMsg_t_106(void *l, void *w);
+
+extern void win_to_lin_struct_FriendGameInfo_t_106(void *w, void *l);
+extern void lin_to_win_struct_FriendGameInfo_t_106(void *l, void *w);
+
+extern void win_to_lin_struct_MatchMakingKeyValuePair_t_106(void *w, void *l);
+extern void lin_to_win_struct_MatchMakingKeyValuePair_t_106(void *l, void *w);
+
+extern void win_to_lin_struct_servernetadr_t_106(void *w, void *l);
+extern void lin_to_win_struct_servernetadr_t_106(void *l, void *w);
+
+extern void win_to_lin_struct_gameserveritem_t_106(void *w, void *l);
+extern void lin_to_win_struct_gameserveritem_t_106(void *l, void *w);
+
+extern void win_to_lin_struct_LeaderboardEntry_t_106(void *w, void *l);
+extern void lin_to_win_struct_LeaderboardEntry_t_106(void *l, void *w);
+
+extern void win_to_lin_struct_P2PSessionState_t_106(void *w, void *l);
+extern void lin_to_win_struct_P2PSessionState_t_106(void *l, void *w);
+
+extern void win_to_lin_struct_CCallbackBase_106(void *w, void *l);
+extern void lin_to_win_struct_CCallbackBase_106(void *l, void *w);
+
+extern void win_to_lin_struct_CallbackMsg_t_105(void *w, void *l);
+extern void lin_to_win_struct_CallbackMsg_t_105(void *l, void *w);
+
+extern void win_to_lin_struct_FriendGameInfo_t_105(void *w, void *l);
+extern void lin_to_win_struct_FriendGameInfo_t_105(void *l, void *w);
+
+extern void win_to_lin_struct_MatchMakingKeyValuePair_t_105(void *w, void *l);
+extern void lin_to_win_struct_MatchMakingKeyValuePair_t_105(void *l, void *w);
+
+extern void win_to_lin_struct_servernetadr_t_105(void *w, void *l);
+extern void lin_to_win_struct_servernetadr_t_105(void *l, void *w);
+
+extern void win_to_lin_struct_gameserveritem_t_105(void *w, void *l);
+extern void lin_to_win_struct_gameserveritem_t_105(void *l, void *w);
+
+extern void win_to_lin_struct_LeaderboardEntry_t_105(void *w, void *l);
+extern void lin_to_win_struct_LeaderboardEntry_t_105(void *l, void *w);
+
+extern void win_to_lin_struct_P2PSessionState_t_105(void *w, void *l);
+extern void lin_to_win_struct_P2PSessionState_t_105(void *l, void *w);
+
+extern void win_to_lin_struct_CCallbackBase_105(void *w, void *l);
+extern void lin_to_win_struct_CCallbackBase_105(void *l, void *w);
+
+extern void win_to_lin_struct_CallbackMsg_t_104(void *w, void *l);
+extern void lin_to_win_struct_CallbackMsg_t_104(void *l, void *w);
+
+extern void win_to_lin_struct_FriendGameInfo_t_104(void *w, void *l);
+extern void lin_to_win_struct_FriendGameInfo_t_104(void *l, void *w);
+
+extern void win_to_lin_struct_MatchMakingKeyValuePair_t_104(void *w, void *l);
+extern void lin_to_win_struct_MatchMakingKeyValuePair_t_104(void *l, void *w);
+
+extern void win_to_lin_struct_servernetadr_t_104(void *w, void *l);
+extern void lin_to_win_struct_servernetadr_t_104(void *l, void *w);
+
+extern void win_to_lin_struct_gameserveritem_t_104(void *w, void *l);
+extern void lin_to_win_struct_gameserveritem_t_104(void *l, void *w);
 
 #pragma pack( push, 8 )
 struct winLobbyClosing_t_8 {
@@ -1956,6 +3831,42 @@ struct winLobbyKicked_t_16 {
 }  __attribute__ ((ms_struct));
 #pragma pack( pop )
 extern void cb_LobbyKicked_t_16(void *l, void *w);
+
+extern void win_to_lin_struct_LeaderboardEntry_t_104(void *w, void *l);
+extern void lin_to_win_struct_LeaderboardEntry_t_104(void *l, void *w);
+
+extern void win_to_lin_struct_CCallbackBase_104(void *w, void *l);
+extern void lin_to_win_struct_CCallbackBase_104(void *l, void *w);
+
+extern void win_to_lin_struct_CallbackMsg_t_103(void *w, void *l);
+extern void lin_to_win_struct_CallbackMsg_t_103(void *l, void *w);
+
+extern void win_to_lin_struct_FriendGameInfo_t_103(void *w, void *l);
+extern void lin_to_win_struct_FriendGameInfo_t_103(void *l, void *w);
+
+extern void win_to_lin_struct_MatchMakingKeyValuePair_t_103(void *w, void *l);
+extern void lin_to_win_struct_MatchMakingKeyValuePair_t_103(void *l, void *w);
+
+extern void win_to_lin_struct_servernetadr_t_103(void *w, void *l);
+extern void lin_to_win_struct_servernetadr_t_103(void *l, void *w);
+
+extern void win_to_lin_struct_gameserveritem_t_103(void *w, void *l);
+extern void lin_to_win_struct_gameserveritem_t_103(void *l, void *w);
+
+extern void win_to_lin_struct_CCallbackBase_103(void *w, void *l);
+extern void lin_to_win_struct_CCallbackBase_103(void *l, void *w);
+
+extern void win_to_lin_struct_CallbackMsg_t_102(void *w, void *l);
+extern void lin_to_win_struct_CallbackMsg_t_102(void *l, void *w);
+
+extern void win_to_lin_struct_MatchMakingKeyValuePair_t_102(void *w, void *l);
+extern void lin_to_win_struct_MatchMakingKeyValuePair_t_102(void *l, void *w);
+
+extern void win_to_lin_struct_servernetadr_t_102(void *w, void *l);
+extern void lin_to_win_struct_servernetadr_t_102(void *l, void *w);
+
+extern void win_to_lin_struct_gameserveritem_t_102(void *w, void *l);
+extern void lin_to_win_struct_gameserveritem_t_102(void *l, void *w);
 
 #pragma pack( push, 8 )
 struct winRequestFriendsLobbiesResponse_t_24 {
@@ -1975,6 +3886,36 @@ struct winUserStatsReceived_t_12 {
 #pragma pack( pop )
 extern void cb_UserStatsReceived_t_12(void *l, void *w);
 
+extern void win_to_lin_struct_CCallbackBase_102(void *w, void *l);
+extern void lin_to_win_struct_CCallbackBase_102(void *l, void *w);
+
+extern void win_to_lin_struct_CallbackMsg_t_101(void *w, void *l);
+extern void lin_to_win_struct_CallbackMsg_t_101(void *l, void *w);
+
+extern void win_to_lin_struct_MatchMakingKeyValuePair_t_101(void *w, void *l);
+extern void lin_to_win_struct_MatchMakingKeyValuePair_t_101(void *l, void *w);
+
+extern void win_to_lin_struct_servernetadr_t_101(void *w, void *l);
+extern void lin_to_win_struct_servernetadr_t_101(void *l, void *w);
+
+extern void win_to_lin_struct_gameserveritem_t_101(void *w, void *l);
+extern void lin_to_win_struct_gameserveritem_t_101(void *l, void *w);
+
+extern void win_to_lin_struct_CCallbackBase_101(void *w, void *l);
+extern void lin_to_win_struct_CCallbackBase_101(void *l, void *w);
+
+extern void win_to_lin_struct_CallbackMsg_t_100(void *w, void *l);
+extern void lin_to_win_struct_CallbackMsg_t_100(void *l, void *w);
+
+extern void win_to_lin_struct_MatchMakingKeyValuePair_t_100(void *w, void *l);
+extern void lin_to_win_struct_MatchMakingKeyValuePair_t_100(void *l, void *w);
+
+extern void win_to_lin_struct_servernetadr_t_100(void *w, void *l);
+extern void lin_to_win_struct_servernetadr_t_100(void *l, void *w);
+
+extern void win_to_lin_struct_gameserveritem_t_100(void *w, void *l);
+extern void lin_to_win_struct_gameserveritem_t_100(void *l, void *w);
+
 #pragma pack( push, 8 )
 struct winAppDataChanged_t_8 {
     uint32 m_nAppID;
@@ -1983,4 +3924,7 @@ struct winAppDataChanged_t_8 {
 }  __attribute__ ((ms_struct));
 #pragma pack( pop )
 extern void cb_AppDataChanged_t_8(void *l, void *w);
+
+extern void win_to_lin_struct_CCallbackBase_100(void *w, void *l);
+extern void lin_to_win_struct_CCallbackBase_100(void *l, void *w);
 

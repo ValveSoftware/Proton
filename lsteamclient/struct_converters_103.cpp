@@ -1,30 +1,30 @@
 #include "steamclient_private.h"
 #include "steam_defs.h"
-#include "steamworks_sdk_102/steam_api.h"
-#include "steamworks_sdk_102/isteamgameserver.h"
+#include "steamworks_sdk_103/steam_api.h"
+#include "steamworks_sdk_103/isteamgameserver.h"
 extern "C" {
 #pragma pack( push, 8 )
-struct winCallbackMsg_t_102 {
+struct winCallbackMsg_t_103 {
     HSteamUser m_hSteamUser;
     int m_iCallback;
     uint8 * m_pubParam;
     int m_cubParam;
 }  __attribute__ ((ms_struct));
 #pragma pack( pop )
-void win_to_lin_struct_CallbackMsg_t_102(void *w, void *l)
+void win_to_lin_struct_CallbackMsg_t_103(void *w, void *l)
 {
     CallbackMsg_t *lin = (CallbackMsg_t *)l;
-    struct winCallbackMsg_t_102 *win = (struct winCallbackMsg_t_102 *)w;
+    struct winCallbackMsg_t_103 *win = (struct winCallbackMsg_t_103 *)w;
     lin->m_hSteamUser = win->m_hSteamUser;
     lin->m_iCallback = win->m_iCallback;
     lin->m_pubParam = win->m_pubParam;
     lin->m_cubParam = win->m_cubParam;
 }
 
-void lin_to_win_struct_CallbackMsg_t_102(void *l, void *w)
+void lin_to_win_struct_CallbackMsg_t_103(void *l, void *w)
 {
     CallbackMsg_t *lin = (CallbackMsg_t *)l;
-    struct winCallbackMsg_t_102 *win = (struct winCallbackMsg_t_102 *)w;
+    struct winCallbackMsg_t_103 *win = (struct winCallbackMsg_t_103 *)w;
     win->m_hSteamUser = lin->m_hSteamUser;
     win->m_iCallback = lin->m_iCallback;
     win->m_pubParam = lin->m_pubParam;
@@ -32,54 +32,85 @@ void lin_to_win_struct_CallbackMsg_t_102(void *l, void *w)
 }
 
 #pragma pack( push, 8 )
-struct winMatchMakingKeyValuePair_t_102 {
+struct winFriendGameInfo_t_103 {
+    CGameID m_gameID;
+    uint32 m_unGameIP;
+    uint16 m_usGamePort;
+    uint16 m_usQueryPort;
+    CSteamID m_steamIDLobby;
+}  __attribute__ ((ms_struct));
+#pragma pack( pop )
+void win_to_lin_struct_FriendGameInfo_t_103(void *w, void *l)
+{
+    FriendGameInfo_t *lin = (FriendGameInfo_t *)l;
+    struct winFriendGameInfo_t_103 *win = (struct winFriendGameInfo_t_103 *)w;
+    win_to_lin_struct_CGameID_103(&win->m_gameID, &lin->m_gameID);
+    lin->m_unGameIP = win->m_unGameIP;
+    lin->m_usGamePort = win->m_usGamePort;
+    lin->m_usQueryPort = win->m_usQueryPort;
+    lin->m_steamIDLobby = win->m_steamIDLobby;
+}
+
+void lin_to_win_struct_FriendGameInfo_t_103(void *l, void *w)
+{
+    FriendGameInfo_t *lin = (FriendGameInfo_t *)l;
+    struct winFriendGameInfo_t_103 *win = (struct winFriendGameInfo_t_103 *)w;
+    lin_to_win_struct_CGameID_103(&lin->m_gameID, &win->m_gameID);
+    win->m_unGameIP = lin->m_unGameIP;
+    win->m_usGamePort = lin->m_usGamePort;
+    win->m_usQueryPort = lin->m_usQueryPort;
+    win->m_steamIDLobby = lin->m_steamIDLobby;
+}
+
+#pragma pack( push, 8 )
+struct winMatchMakingKeyValuePair_t_103 {
     char m_szKey[256];
     char m_szValue[256];
 }  __attribute__ ((ms_struct));
 #pragma pack( pop )
-void win_to_lin_struct_MatchMakingKeyValuePair_t_102(void *w, void *l)
+void win_to_lin_struct_MatchMakingKeyValuePair_t_103(void *w, void *l)
 {
     MatchMakingKeyValuePair_t *lin = (MatchMakingKeyValuePair_t *)l;
-    struct winMatchMakingKeyValuePair_t_102 *win = (struct winMatchMakingKeyValuePair_t_102 *)w;
+    struct winMatchMakingKeyValuePair_t_103 *win = (struct winMatchMakingKeyValuePair_t_103 *)w;
     memcpy(lin->m_szKey, win->m_szKey, sizeof(lin->m_szKey));
     memcpy(lin->m_szValue, win->m_szValue, sizeof(lin->m_szValue));
 }
 
-void lin_to_win_struct_MatchMakingKeyValuePair_t_102(void *l, void *w)
+void lin_to_win_struct_MatchMakingKeyValuePair_t_103(void *l, void *w)
 {
     MatchMakingKeyValuePair_t *lin = (MatchMakingKeyValuePair_t *)l;
-    struct winMatchMakingKeyValuePair_t_102 *win = (struct winMatchMakingKeyValuePair_t_102 *)w;
+    struct winMatchMakingKeyValuePair_t_103 *win = (struct winMatchMakingKeyValuePair_t_103 *)w;
     memcpy(win->m_szKey, lin->m_szKey, sizeof(win->m_szKey));
     memcpy(win->m_szValue, lin->m_szValue, sizeof(win->m_szValue));
 }
 
 #pragma pack( push, 8 )
-struct winservernetadr_t_102 {
+struct winservernetadr_t_103 {
     uint16 m_usConnectionPort;
     uint16 m_usQueryPort;
     uint32 m_unIP;
 }  __attribute__ ((ms_struct));
 #pragma pack( pop )
-void win_to_lin_struct_servernetadr_t_102(void *w, void *l)
+void win_to_lin_struct_servernetadr_t_103(void *w, void *l)
 {
     servernetadr_t *lin = (servernetadr_t *)l;
-    struct winservernetadr_t_102 *win = (struct winservernetadr_t_102 *)w;
+    struct winservernetadr_t_103 *win = (struct winservernetadr_t_103 *)w;
     lin->m_usConnectionPort = win->m_usConnectionPort;
     lin->m_usQueryPort = win->m_usQueryPort;
     lin->m_unIP = win->m_unIP;
 }
 
-void lin_to_win_struct_servernetadr_t_102(void *l, void *w)
+void lin_to_win_struct_servernetadr_t_103(void *l, void *w)
 {
     servernetadr_t *lin = (servernetadr_t *)l;
-    struct winservernetadr_t_102 *win = (struct winservernetadr_t_102 *)w;
+    struct winservernetadr_t_103 *win = (struct winservernetadr_t_103 *)w;
     win->m_usConnectionPort = lin->m_usConnectionPort;
     win->m_usQueryPort = lin->m_usQueryPort;
     win->m_unIP = lin->m_unIP;
 }
 
 #pragma pack( push, 8 )
-struct wingameserveritem_t_102 {
+struct wingameserveritem_t_103 {
     servernetadr_t m_NetAdr;
     int m_nPing;
     bool m_bHadSuccessfulResponse;
@@ -99,11 +130,11 @@ struct wingameserveritem_t_102 {
     char m_szGameTags[128];
 }  __attribute__ ((ms_struct));
 #pragma pack( pop )
-void win_to_lin_struct_gameserveritem_t_102(void *w, void *l)
+void win_to_lin_struct_gameserveritem_t_103(void *w, void *l)
 {
     gameserveritem_t *lin = (gameserveritem_t *)l;
-    struct wingameserveritem_t_102 *win = (struct wingameserveritem_t_102 *)w;
-    win_to_lin_struct_servernetadr_t_102(&win->m_NetAdr, &lin->m_NetAdr);
+    struct wingameserveritem_t_103 *win = (struct wingameserveritem_t_103 *)w;
+    win_to_lin_struct_servernetadr_t_103(&win->m_NetAdr, &lin->m_NetAdr);
     lin->m_nPing = win->m_nPing;
     lin->m_bHadSuccessfulResponse = win->m_bHadSuccessfulResponse;
     lin->m_bDoNotRefresh = win->m_bDoNotRefresh;
@@ -122,11 +153,11 @@ void win_to_lin_struct_gameserveritem_t_102(void *w, void *l)
     memcpy(lin->m_szGameTags, win->m_szGameTags, sizeof(lin->m_szGameTags));
 }
 
-void lin_to_win_struct_gameserveritem_t_102(void *l, void *w)
+void lin_to_win_struct_gameserveritem_t_103(void *l, void *w)
 {
     gameserveritem_t *lin = (gameserveritem_t *)l;
-    struct wingameserveritem_t_102 *win = (struct wingameserveritem_t_102 *)w;
-    lin_to_win_struct_servernetadr_t_102(&lin->m_NetAdr, &win->m_NetAdr);
+    struct wingameserveritem_t_103 *win = (struct wingameserveritem_t_103 *)w;
+    lin_to_win_struct_servernetadr_t_103(&lin->m_NetAdr, &win->m_NetAdr);
     win->m_nPing = lin->m_nPing;
     win->m_bHadSuccessfulResponse = lin->m_bHadSuccessfulResponse;
     win->m_bDoNotRefresh = lin->m_bDoNotRefresh;
@@ -146,55 +177,23 @@ void lin_to_win_struct_gameserveritem_t_102(void *l, void *w)
 }
 
 #pragma pack( push, 8 )
-struct winRequestFriendsLobbiesResponse_t_24 {
-    uint64 m_ulSteamIDFriend;
-    uint64 m_ulSteamIDLobby;
-    int m_cResultIndex;
-    int m_cResultsTotal;
-}  __attribute__ ((ms_struct));
-#pragma pack( pop )
-void cb_RequestFriendsLobbiesResponse_t_24(void *l, void *w)
-{
-    RequestFriendsLobbiesResponse_t *lin = (RequestFriendsLobbiesResponse_t *)l;
-    struct winRequestFriendsLobbiesResponse_t_24 *win = (struct winRequestFriendsLobbiesResponse_t_24 *)w;
-    win->m_ulSteamIDFriend = lin->m_ulSteamIDFriend;
-    win->m_ulSteamIDLobby = lin->m_ulSteamIDLobby;
-    win->m_cResultIndex = lin->m_cResultIndex;
-    win->m_cResultsTotal = lin->m_cResultsTotal;
-}
-
-#pragma pack( push, 8 )
-struct winUserStatsReceived_t_12 {
-    uint64 m_nGameID;
-    EResult m_eResult;
-}  __attribute__ ((ms_struct));
-#pragma pack( pop )
-void cb_UserStatsReceived_t_12(void *l, void *w)
-{
-    UserStatsReceived_t *lin = (UserStatsReceived_t *)l;
-    struct winUserStatsReceived_t_12 *win = (struct winUserStatsReceived_t_12 *)w;
-    win->m_nGameID = lin->m_nGameID;
-    win->m_eResult = lin->m_eResult;
-}
-
-#pragma pack( push, 8 )
-struct winCCallbackBase_102 {
+struct winCCallbackBase_103 {
     uint8 m_nCallbackFlags;
     int m_iCallback;
 }  __attribute__ ((ms_struct));
 #pragma pack( pop )
-void win_to_lin_struct_CCallbackBase_102(void *w, void *l)
+void win_to_lin_struct_CCallbackBase_103(void *w, void *l)
 {
     CCallbackBase *lin = (CCallbackBase *)l;
-    struct winCCallbackBase_102 *win = (struct winCCallbackBase_102 *)w;
+    struct winCCallbackBase_103 *win = (struct winCCallbackBase_103 *)w;
     lin->m_nCallbackFlags = win->m_nCallbackFlags;
     lin->m_iCallback = win->m_iCallback;
 }
 
-void lin_to_win_struct_CCallbackBase_102(void *l, void *w)
+void lin_to_win_struct_CCallbackBase_103(void *l, void *w)
 {
     CCallbackBase *lin = (CCallbackBase *)l;
-    struct winCCallbackBase_102 *win = (struct winCCallbackBase_102 *)w;
+    struct winCCallbackBase_103 *win = (struct winCCallbackBase_103 *)w;
     win->m_nCallbackFlags = lin->m_nCallbackFlags;
     win->m_iCallback = lin->m_iCallback;
 }
