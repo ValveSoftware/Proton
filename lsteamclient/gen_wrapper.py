@@ -446,6 +446,24 @@ generated_cb_ids = []
 cpp_files_need_close_brace = []
 cb_table = {}
 
+def needs_conversion(struct):
+    windows_struct = None
+    sys.stdout.write("looking for " + struct.spelling + "\n")
+    for child in list(windows_build.cursor.get_children()):
+        if struct.spelling == child.spelling:
+            windows_struct = child.type
+            break
+    assert(not windows_struct is None) #must find windows_struct
+    for field in struct.get_fields():
+        if struct.get_offset(field.spelling) != windows_struct.get_offset(field.spelling):
+            return True
+        if field.type.kind == clang.cindex.TypeKind.RECORD and \
+                not field.type.spelling in exempt_structs and \
+                needs_conversion(field.type):
+            return True
+    return False
+
+
 #because of struct packing differences between win32 and linux, we
 #need to convert these structs from their linux layout to the win32
 #layout.
@@ -477,6 +495,11 @@ def handle_struct(sdkver, struct):
         l2w_handler_name = "lin_to_win_struct_%s" % struct_name;
 
         hfile = open("struct_converters_%s.h" % sdkver, "a")
+
+        #quit here so the .h is always created
+        if not needs_conversion(struct.type):
+            return
+
         hfile.write("extern void %s(const void *w, void *l);\n" % w2l_handler_name)
         hfile.write("extern void %s(const void *l, void *w);\n\n" % l2w_handler_name)
 
@@ -602,22 +625,28 @@ for sdkver in sdk_versions:
         if not os.path.isfile(input_name):
             continue
         index = clang.cindex.Index.create()
-        tu = index.parse(input_name, args=['-x', 'c++', '-m32', '-Isteamworks_sdk_%s/' % sdkver, '-I/usr/lib/clang/7.0.0/include/'])
+        linux_build = index.parse(input_name, args=['-x', 'c++', '-m32', '-Isteamworks_sdk_%s/' % sdkver, '-I/usr/lib/clang/7.0.0/include/'])
 
-        diagnostics = list(tu.diagnostics)
+        diagnostics = list(linux_build.diagnostics)
         if len(diagnostics) > 0:
             print('There were parse errors')
             pprint.pprint(diagnostics)
         else:
-            children = list(tu.cursor.get_children())
-            for child in children:
-                if child.kind == clang.cindex.CursorKind.CLASS_DECL and child.displayname in classes:
-                    handle_class(sdkver, child)
-                if child.kind == clang.cindex.CursorKind.STRUCT_DECL or \
-                        child.kind == clang.cindex.CursorKind.CLASS_DECL:
-                    handle_struct(sdkver, child)
-                if child.displayname in print_sizes:
-                    sys.stdout.write("size of %s is %u\n" % (child.displayname, child.type.get_size()))
+            windows_build = index.parse(input_name, args=['-x', 'c++', '-m32', '-Isteamworks_sdk_%s/' % sdkver, '-I/usr/lib/clang/7.0.0/include/', '-mms-bitfields', '-U__linux__', '-Wno-incompatible-ms-struct'])
+            diagnostics = list(windows_build.diagnostics)
+            if len(diagnostics) > 0:
+                print('There were parse errors (windows build)')
+                pprint.pprint(diagnostics)
+            else:
+                children = list(linux_build.cursor.get_children())
+                for child in children:
+                    if child.kind == clang.cindex.CursorKind.CLASS_DECL and child.displayname in classes:
+                        handle_class(sdkver, child)
+                    if child.kind == clang.cindex.CursorKind.STRUCT_DECL or \
+                            child.kind == clang.cindex.CursorKind.CLASS_DECL:
+                        handle_struct(sdkver, child)
+                    if child.displayname in print_sizes:
+                        sys.stdout.write("size of %s is %u\n" % (child.displayname, child.type.get_size()))
 
 for f in cpp_files_need_close_brace:
     m = open(f, "a")
