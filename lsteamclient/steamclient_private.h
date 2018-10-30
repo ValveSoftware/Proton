@@ -34,6 +34,8 @@ void *create_LinuxISteamMatchmakingServerListResponse(void *win);
 void *create_LinuxISteamMatchmakingPingResponse(void *win);
 void *create_LinuxISteamMatchmakingPlayersResponse(void *win);
 void *create_LinuxISteamMatchmakingRulesResponse(void *win);
+
+typedef uint64 SteamAPICall_t; //for ancient SDKs
 bool do_cb_wrap(HSteamPipe pipe, void *linux_side, bool (*cpp_func)(void *, SteamAPICall_t, void *, int, int, bool *), SteamAPICall_t call, void *callback, int callback_len, int cb_expected, bool *failed);
 
 #define TRACE WINE_TRACE
