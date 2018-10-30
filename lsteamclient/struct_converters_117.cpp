@@ -6,7 +6,7 @@
 #include "steamworks_sdk_117/isteamgamecoordinator.h"
 extern "C" {
 #pragma pack( push, 8 )
-struct winRemoteStorageGetPublishedFileDetailsResult_t_1732 {
+struct winRemoteStorageGetPublishedFileDetailsResult_t_1744 {
     EResult m_eResult;
     PublishedFileId_t m_nPublishedFileId;
     AppId_t m_nCreatorAppID;
@@ -25,10 +25,10 @@ struct winRemoteStorageGetPublishedFileDetailsResult_t_1732 {
     char m_pchFileName[260];
 }  __attribute__ ((ms_struct));
 #pragma pack( pop )
-void cb_RemoteStorageGetPublishedFileDetailsResult_t_1732(const void *l, void *w)
+void cb_RemoteStorageGetPublishedFileDetailsResult_t_1744(const void *l, void *w)
 {
     RemoteStorageGetPublishedFileDetailsResult_t *lin = (RemoteStorageGetPublishedFileDetailsResult_t *)l;
-    struct winRemoteStorageGetPublishedFileDetailsResult_t_1732 *win = (struct winRemoteStorageGetPublishedFileDetailsResult_t_1732 *)w;
+    struct winRemoteStorageGetPublishedFileDetailsResult_t_1744 *win = (struct winRemoteStorageGetPublishedFileDetailsResult_t_1744 *)w;
     win->m_eResult = lin->m_eResult;
     win->m_nPublishedFileId = lin->m_nPublishedFileId;
     win->m_nCreatorAppID = lin->m_nCreatorAppID;

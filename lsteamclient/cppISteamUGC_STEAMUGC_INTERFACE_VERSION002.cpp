@@ -112,10 +112,7 @@ bool cppISteamUGC_STEAMUGC_INTERFACE_VERSION002_SetItemVisibility(void *linux_si
 
 bool cppISteamUGC_STEAMUGC_INTERFACE_VERSION002_SetItemTags(void *linux_side, UGCUpdateHandle_t updateHandle, const SteamParamStringArray_t * pTags)
 {
-    SteamParamStringArray_t lin_pTags;
-    win_to_lin_struct_SteamParamStringArray_t_130(pTags, &lin_pTags);
-    bool retval = ((ISteamUGC*)linux_side)->SetItemTags((UGCUpdateHandle_t)updateHandle, &lin_pTags);
-    return retval;
+    return ((ISteamUGC*)linux_side)->SetItemTags((UGCUpdateHandle_t)updateHandle, (const SteamParamStringArray_t *)pTags);
 }
 
 bool cppISteamUGC_STEAMUGC_INTERFACE_VERSION002_SetItemContent(void *linux_side, UGCUpdateHandle_t handle, const char * pszContentFolder)

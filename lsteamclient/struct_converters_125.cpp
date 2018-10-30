@@ -6,21 +6,7 @@
 #include "steamworks_sdk_125/isteamgamecoordinator.h"
 extern "C" {
 #pragma pack( push, 8 )
-struct winValidateAuthTicketResponse_t_12 {
-    CSteamID m_SteamID;
-    EAuthSessionResponse m_eAuthSessionResponse;
-}  __attribute__ ((ms_struct));
-#pragma pack( pop )
-void cb_ValidateAuthTicketResponse_t_12(const void *l, void *w)
-{
-    ValidateAuthTicketResponse_t *lin = (ValidateAuthTicketResponse_t *)l;
-    struct winValidateAuthTicketResponse_t_12 *win = (struct winValidateAuthTicketResponse_t_12 *)w;
-    win->m_SteamID = lin->m_SteamID;
-    win->m_eAuthSessionResponse = lin->m_eAuthSessionResponse;
-}
-
-#pragma pack( push, 8 )
-struct winRemoteStorageGetPublishedFileDetailsResult_t_9744 {
+struct winRemoteStorageGetPublishedFileDetailsResult_t_9752 {
     EResult m_eResult;
     PublishedFileId_t m_nPublishedFileId;
     AppId_t m_nCreatorAppID;
@@ -43,10 +29,10 @@ struct winRemoteStorageGetPublishedFileDetailsResult_t_9744 {
     EWorkshopFileType m_eFileType;
 }  __attribute__ ((ms_struct));
 #pragma pack( pop )
-void cb_RemoteStorageGetPublishedFileDetailsResult_t_9744(const void *l, void *w)
+void cb_RemoteStorageGetPublishedFileDetailsResult_t_9752(const void *l, void *w)
 {
     RemoteStorageGetPublishedFileDetailsResult_t *lin = (RemoteStorageGetPublishedFileDetailsResult_t *)l;
-    struct winRemoteStorageGetPublishedFileDetailsResult_t_9744 *win = (struct winRemoteStorageGetPublishedFileDetailsResult_t_9744 *)w;
+    struct winRemoteStorageGetPublishedFileDetailsResult_t_9752 *win = (struct winRemoteStorageGetPublishedFileDetailsResult_t_9752 *)w;
     win->m_eResult = lin->m_eResult;
     win->m_nPublishedFileId = lin->m_nPublishedFileId;
     win->m_nCreatorAppID = lin->m_nCreatorAppID;
@@ -98,18 +84,6 @@ void lin_to_win_struct_LeaderboardEntry_t_125(const void *l, void *w)
     win->m_nScore = lin->m_nScore;
     win->m_cDetails = lin->m_cDetails;
     win->m_hUGC = lin->m_hUGC;
-}
-
-#pragma pack( push, 8 )
-struct winGSClientApprove_t_8 {
-    CSteamID m_SteamID;
-}  __attribute__ ((ms_struct));
-#pragma pack( pop )
-void cb_GSClientApprove_t_8(const void *l, void *w)
-{
-    GSClientApprove_t *lin = (GSClientApprove_t *)l;
-    struct winGSClientApprove_t_8 *win = (struct winGSClientApprove_t_8 *)w;
-    win->m_SteamID = lin->m_SteamID;
 }
 
 

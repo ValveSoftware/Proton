@@ -6,37 +6,15 @@
 #include "steamworks_sdk_128/isteamgamecoordinator.h"
 extern "C" {
 #pragma pack( push, 8 )
-struct winFavoritesListChanged_t_24 {
-    uint32 m_nIP;
-    uint32 m_nQueryPort;
-    uint32 m_nConnPort;
-    uint32 m_nAppID;
-    uint32 m_nFlags;
-    bool m_bAdd;
-}  __attribute__ ((ms_struct));
-#pragma pack( pop )
-void cb_FavoritesListChanged_t_24(const void *l, void *w)
-{
-    FavoritesListChanged_t *lin = (FavoritesListChanged_t *)l;
-    struct winFavoritesListChanged_t_24 *win = (struct winFavoritesListChanged_t_24 *)w;
-    win->m_nIP = lin->m_nIP;
-    win->m_nQueryPort = lin->m_nQueryPort;
-    win->m_nConnPort = lin->m_nConnPort;
-    win->m_nAppID = lin->m_nAppID;
-    win->m_nFlags = lin->m_nFlags;
-    win->m_bAdd = lin->m_bAdd;
-}
-
-#pragma pack( push, 8 )
-struct winRemoteStorageFileShareResult_t_12 {
+struct winRemoteStorageFileShareResult_t_16 {
     EResult m_eResult;
     UGCHandle_t m_hFile;
 }  __attribute__ ((ms_struct));
 #pragma pack( pop )
-void cb_RemoteStorageFileShareResult_t_12(const void *l, void *w)
+void cb_RemoteStorageFileShareResult_t_16(const void *l, void *w)
 {
     RemoteStorageFileShareResult_t *lin = (RemoteStorageFileShareResult_t *)l;
-    struct winRemoteStorageFileShareResult_t_12 *win = (struct winRemoteStorageFileShareResult_t_12 *)w;
+    struct winRemoteStorageFileShareResult_t_16 *win = (struct winRemoteStorageFileShareResult_t_16 *)w;
     win->m_eResult = lin->m_eResult;
     win->m_hFile = lin->m_hFile;
 }
@@ -164,14 +142,14 @@ void lin_to_win_struct_SteamUGCDetails_t_128(const void *l, void *w)
 }
 
 #pragma pack( push, 8 )
-struct winSteamUGCRequestUGCDetailsResult_t_9760 {
-    SteamUGCDetails_t m_details;
+struct winSteamUGCRequestUGCDetailsResult_t_9768 {
+    winSteamUGCDetails_t_128 m_details;
 }  __attribute__ ((ms_struct));
 #pragma pack( pop )
-void cb_SteamUGCRequestUGCDetailsResult_t_9760(const void *l, void *w)
+void cb_SteamUGCRequestUGCDetailsResult_t_9768(const void *l, void *w)
 {
     SteamUGCRequestUGCDetailsResult_t *lin = (SteamUGCRequestUGCDetailsResult_t *)l;
-    struct winSteamUGCRequestUGCDetailsResult_t_9760 *win = (struct winSteamUGCRequestUGCDetailsResult_t_9760 *)w;
+    struct winSteamUGCRequestUGCDetailsResult_t_9768 *win = (struct winSteamUGCRequestUGCDetailsResult_t_9768 *)w;
     lin_to_win_struct_SteamUGCDetails_t_128(&lin->m_details, &win->m_details);
 }
 

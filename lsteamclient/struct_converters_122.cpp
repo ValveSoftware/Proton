@@ -6,30 +6,6 @@
 #include "steamworks_sdk_122/isteamgamecoordinator.h"
 extern "C" {
 #pragma pack( push, 8 )
-struct winRemoteStorageSubscribePublishedFileResult_t_4 {
-    EResult m_eResult;
-}  __attribute__ ((ms_struct));
-#pragma pack( pop )
-void cb_RemoteStorageSubscribePublishedFileResult_t_4(const void *l, void *w)
-{
-    RemoteStorageSubscribePublishedFileResult_t *lin = (RemoteStorageSubscribePublishedFileResult_t *)l;
-    struct winRemoteStorageSubscribePublishedFileResult_t_4 *win = (struct winRemoteStorageSubscribePublishedFileResult_t_4 *)w;
-    win->m_eResult = lin->m_eResult;
-}
-
-#pragma pack( push, 8 )
-struct winRemoteStorageUnsubscribePublishedFileResult_t_4 {
-    EResult m_eResult;
-}  __attribute__ ((ms_struct));
-#pragma pack( pop )
-void cb_RemoteStorageUnsubscribePublishedFileResult_t_4(const void *l, void *w)
-{
-    RemoteStorageUnsubscribePublishedFileResult_t *lin = (RemoteStorageUnsubscribePublishedFileResult_t *)l;
-    struct winRemoteStorageUnsubscribePublishedFileResult_t_4 *win = (struct winRemoteStorageUnsubscribePublishedFileResult_t_4 *)w;
-    win->m_eResult = lin->m_eResult;
-}
-
-#pragma pack( push, 8 )
 struct winLeaderboardEntry_t_122 {
     CSteamID m_steamIDUser;
     int32 m_nGlobalRank;

@@ -6,18 +6,6 @@
 #include "steamworks_sdk_136/isteamgamecoordinator.h"
 extern "C" {
 #pragma pack( push, 8 )
-struct winSteamAPICallCompleted_t_8 {
-    SteamAPICall_t m_hAsyncCall;
-}  __attribute__ ((ms_struct));
-#pragma pack( pop )
-void cb_SteamAPICallCompleted_t_8(const void *l, void *w)
-{
-    SteamAPICallCompleted_t *lin = (SteamAPICallCompleted_t *)l;
-    struct winSteamAPICallCompleted_t_8 *win = (struct winSteamAPICallCompleted_t_8 *)w;
-    win->m_hAsyncCall = lin->m_hAsyncCall;
-}
-
-#pragma pack( push, 8 )
 struct winLeaderboardEntry_t_136 {
     CSteamID m_steamIDUser;
     int32 m_nGlobalRank;
@@ -46,22 +34,6 @@ void lin_to_win_struct_LeaderboardEntry_t_136(const void *l, void *w)
     win->m_nScore = lin->m_nScore;
     win->m_cDetails = lin->m_cDetails;
     win->m_hUGC = lin->m_hUGC;
-}
-
-#pragma pack( push, 8 )
-struct winAppProofOfPurchaseKeyResponse_t_72 {
-    EResult m_eResult;
-    uint32 m_nAppID;
-    char m_rgchKey[64];
-}  __attribute__ ((ms_struct));
-#pragma pack( pop )
-void cb_AppProofOfPurchaseKeyResponse_t_72(const void *l, void *w)
-{
-    AppProofOfPurchaseKeyResponse_t *lin = (AppProofOfPurchaseKeyResponse_t *)l;
-    struct winAppProofOfPurchaseKeyResponse_t_72 *win = (struct winAppProofOfPurchaseKeyResponse_t_72 *)w;
-    win->m_eResult = lin->m_eResult;
-    win->m_nAppID = lin->m_nAppID;
-    memcpy(win->m_rgchKey, lin->m_rgchKey, sizeof(win->m_rgchKey));
 }
 
 #pragma pack( push, 8 )

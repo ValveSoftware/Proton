@@ -6,18 +6,6 @@
 #include "steamworks_sdk_134/isteamgamecoordinator.h"
 extern "C" {
 #pragma pack( push, 8 )
-struct winSteamServerConnectFailure_t_4 {
-    EResult m_eResult;
-}  __attribute__ ((ms_struct));
-#pragma pack( pop )
-void cb_SteamServerConnectFailure_t_4(const void *l, void *w)
-{
-    SteamServerConnectFailure_t *lin = (SteamServerConnectFailure_t *)l;
-    struct winSteamServerConnectFailure_t_4 *win = (struct winSteamServerConnectFailure_t_4 *)w;
-    win->m_eResult = lin->m_eResult;
-}
-
-#pragma pack( push, 8 )
 struct winLeaderboardEntry_t_134 {
     CSteamID m_steamIDUser;
     int32 m_nGlobalRank;

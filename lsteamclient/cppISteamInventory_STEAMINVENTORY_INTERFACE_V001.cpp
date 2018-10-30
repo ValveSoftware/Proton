@@ -13,11 +13,7 @@ EResult cppISteamInventory_STEAMINVENTORY_INTERFACE_V001_GetResultStatus(void *l
 
 bool cppISteamInventory_STEAMINVENTORY_INTERFACE_V001_GetResultItems(void *linux_side, SteamInventoryResult_t resultHandle, SteamItemDetails_t * pOutItemsArray, uint32 * punOutItemsArraySize)
 {
-    SteamItemDetails_t lin_pOutItemsArray;
-    win_to_lin_struct_SteamItemDetails_t_139(pOutItemsArray, &lin_pOutItemsArray);
-    bool retval = ((ISteamInventory*)linux_side)->GetResultItems((SteamInventoryResult_t)resultHandle, &lin_pOutItemsArray, (uint32 *)punOutItemsArraySize);
-    lin_to_win_struct_SteamItemDetails_t_139(&lin_pOutItemsArray, pOutItemsArray);
-    return retval;
+    return ((ISteamInventory*)linux_side)->GetResultItems((SteamInventoryResult_t)resultHandle, (SteamItemDetails_t *)pOutItemsArray, (uint32 *)punOutItemsArraySize);
 }
 
 uint32 cppISteamInventory_STEAMINVENTORY_INTERFACE_V001_GetResultTimestamp(void *linux_side, SteamInventoryResult_t resultHandle)

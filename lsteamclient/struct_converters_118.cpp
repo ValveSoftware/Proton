@@ -6,7 +6,7 @@
 #include "steamworks_sdk_118/isteamgamecoordinator.h"
 extern "C" {
 #pragma pack( push, 8 )
-struct winRemoteStorageGetPublishedFileDetailsResult_t_9484 {
+struct winRemoteStorageGetPublishedFileDetailsResult_t_9496 {
     EResult m_eResult;
     PublishedFileId_t m_nPublishedFileId;
     AppId_t m_nCreatorAppID;
@@ -27,10 +27,10 @@ struct winRemoteStorageGetPublishedFileDetailsResult_t_9484 {
     int32 m_nPreviewFileSize;
 }  __attribute__ ((ms_struct));
 #pragma pack( pop )
-void cb_RemoteStorageGetPublishedFileDetailsResult_t_9484(const void *l, void *w)
+void cb_RemoteStorageGetPublishedFileDetailsResult_t_9496(const void *l, void *w)
 {
     RemoteStorageGetPublishedFileDetailsResult_t *lin = (RemoteStorageGetPublishedFileDetailsResult_t *)l;
-    struct winRemoteStorageGetPublishedFileDetailsResult_t_9484 *win = (struct winRemoteStorageGetPublishedFileDetailsResult_t_9484 *)w;
+    struct winRemoteStorageGetPublishedFileDetailsResult_t_9496 *win = (struct winRemoteStorageGetPublishedFileDetailsResult_t_9496 *)w;
     win->m_eResult = lin->m_eResult;
     win->m_nPublishedFileId = lin->m_nPublishedFileId;
     win->m_nCreatorAppID = lin->m_nCreatorAppID;
@@ -80,24 +80,6 @@ void lin_to_win_struct_LeaderboardEntry_t_118(const void *l, void *w)
     win->m_nScore = lin->m_nScore;
     win->m_cDetails = lin->m_cDetails;
     win->m_hUGC = lin->m_hUGC;
-}
-
-#pragma pack( push, 8 )
-struct winComputeNewPlayerCompatibilityResult_t_16 {
-    EResult m_eResult;
-    int m_cPlayersThatDontLikeCandidate;
-    int m_cPlayersThatCandidateDoesntLike;
-    int m_cClanPlayersThatDontLikeCandidate;
-}  __attribute__ ((ms_struct));
-#pragma pack( pop )
-void cb_ComputeNewPlayerCompatibilityResult_t_16(const void *l, void *w)
-{
-    ComputeNewPlayerCompatibilityResult_t *lin = (ComputeNewPlayerCompatibilityResult_t *)l;
-    struct winComputeNewPlayerCompatibilityResult_t_16 *win = (struct winComputeNewPlayerCompatibilityResult_t_16 *)w;
-    win->m_eResult = lin->m_eResult;
-    win->m_cPlayersThatDontLikeCandidate = lin->m_cPlayersThatDontLikeCandidate;
-    win->m_cPlayersThatCandidateDoesntLike = lin->m_cPlayersThatCandidateDoesntLike;
-    win->m_cClanPlayersThatDontLikeCandidate = lin->m_cClanPlayersThatDontLikeCandidate;
 }
 
 

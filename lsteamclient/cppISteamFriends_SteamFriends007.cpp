@@ -48,11 +48,7 @@ const char * cppISteamFriends_SteamFriends007_GetFriendPersonaName(void *linux_s
 
 bool cppISteamFriends_SteamFriends007_GetFriendGamePlayed(void *linux_side, CSteamID steamIDFriend, FriendGameInfo_t * pFriendGameInfo)
 {
-    FriendGameInfo_t lin_pFriendGameInfo;
-    win_to_lin_struct_FriendGameInfo_t_111(pFriendGameInfo, &lin_pFriendGameInfo);
-    bool retval = ((ISteamFriends*)linux_side)->GetFriendGamePlayed((CSteamID)steamIDFriend, &lin_pFriendGameInfo);
-    lin_to_win_struct_FriendGameInfo_t_111(&lin_pFriendGameInfo, pFriendGameInfo);
-    return retval;
+    return ((ISteamFriends*)linux_side)->GetFriendGamePlayed((CSteamID)steamIDFriend, (FriendGameInfo_t *)pFriendGameInfo);
 }
 
 const char * cppISteamFriends_SteamFriends007_GetFriendPersonaNameHistory(void *linux_side, CSteamID steamIDFriend, int iPersonaName)

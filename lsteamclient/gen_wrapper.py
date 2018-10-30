@@ -135,24 +135,22 @@ aliases = {
 #    "STEAMUSERSTATS_INTERFACE_VERSION009":["STEAMUSERSTATS_INTERFACE_VERSION008"],
 }
 
-# TODO: we could do this automatically by creating temp files and
-# having clang parse those and detect when the MS-style padding results
-# in identical struct widths. But there's only a couple, so let's cheat...
-skip_structs = [
-        "cb_RemoteStorageGetPublishedFileDetailsResult_t_9740",
-        "cb_SteamUGCQueryCompleted_t_20",
-        "cb_SteamUGCRequestUGCDetailsResult_t_9764"
-]
-
 # these structs are manually confirmed to be equivalent
 exempt_structs = [
         "CSteamID",
         "CGameID",
-        "MatchMakingKeyValuePair_t",
         "CCallbackBase",
         "SteamPS3Params_t",
         "ValvePackingSentinel_t"
 ]
+
+#struct_conversion_cache = {
+#    '142': {
+#                'SteamUGCDetails_t': True,
+#                'SteamUGCQueryCompleted_t': False
+#           }
+#}
+struct_conversion_cache = {}
 
 # callback classes for which we have a linux wrapper
 wrapped_classes = [
@@ -168,6 +166,32 @@ class_versions = {}
 
 def strip_const(typename):
     return typename.replace("const ", "", 1)
+
+def find_windows_struct(struct):
+    for child in list(windows_build.cursor.get_children()):
+        if strip_const(struct.spelling) == child.spelling:
+            return child.type
+    return None
+
+def struct_needs_conversion_nocache(struct):
+    if strip_const(struct.spelling) in exempt_structs:
+        return False
+    windows_struct = find_windows_struct(struct)
+    assert(not windows_struct is None) #must find windows_struct
+    for field in struct.get_fields():
+        if struct.get_offset(field.spelling) != windows_struct.get_offset(field.spelling):
+            return True
+        if field.type.kind == clang.cindex.TypeKind.RECORD and \
+                struct_needs_conversion(field.type):
+            return True
+    return False
+
+def struct_needs_conversion(struct):
+    if not sdkver in struct_conversion_cache:
+        struct_conversion_cache[sdkver] = {}
+    if not strip_const(struct.spelling) in struct_conversion_cache[sdkver]:
+        struct_conversion_cache[sdkver][strip_const(struct.spelling)] = struct_needs_conversion_nocache(struct)
+    return struct_conversion_cache[sdkver][strip_const(struct.spelling)]
 
 def handle_destructor(cfile, classname, winclassname, method):
     cfile.write("DEFINE_THISCALL_WRAPPER(%s_destructor, 4)\n" % winclassname)
@@ -228,8 +252,8 @@ def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, e
             while real_type.kind == clang.cindex.TypeKind.POINTER:
                 real_type = real_type.get_pointee()
             if real_type.kind == clang.cindex.TypeKind.RECORD and \
-                    not real_type.spelling in exempt_structs and \
-                    not real_type.spelling in wrapped_classes:
+                    not real_type.spelling in wrapped_classes and \
+                    struct_needs_conversion(real_type):
                 need_convert.append(param)
 
             if param.spelling == "":
@@ -446,24 +470,6 @@ generated_cb_ids = []
 cpp_files_need_close_brace = []
 cb_table = {}
 
-def needs_conversion(struct):
-    windows_struct = None
-    sys.stdout.write("looking for " + struct.spelling + "\n")
-    for child in list(windows_build.cursor.get_children()):
-        if struct.spelling == child.spelling:
-            windows_struct = child.type
-            break
-    assert(not windows_struct is None) #must find windows_struct
-    for field in struct.get_fields():
-        if struct.get_offset(field.spelling) != windows_struct.get_offset(field.spelling):
-            return True
-        if field.type.kind == clang.cindex.TypeKind.RECORD and \
-                not field.type.spelling in exempt_structs and \
-                needs_conversion(field.type):
-            return True
-    return False
-
-
 #because of struct packing differences between win32 and linux, we
 #need to convert these structs from their linux layout to the win32
 #layout.
@@ -486,36 +492,32 @@ def handle_struct(sdkver, struct):
     l2w_handler_name = None
 
     if cb_num is None:
+        #open here so the .h is always created
+        hfile = open("struct_converters_%s.h" % sdkver, "a")
+
         if not has_fields:
             return
-        if struct.spelling == "" or struct.displayname in exempt_structs:
+        if struct.spelling == "":
             return
+        if not struct_needs_conversion(struct.type):
+            return
+
         struct_name = "%s_%s" % (struct.displayname, sdkver)
         w2l_handler_name = "win_to_lin_struct_%s" % struct_name;
         l2w_handler_name = "lin_to_win_struct_%s" % struct_name;
-
-        hfile = open("struct_converters_%s.h" % sdkver, "a")
-
-        #quit here so the .h is always created
-        if not needs_conversion(struct.type):
-            return
 
         hfile.write("extern void %s(const void *w, void *l);\n" % w2l_handler_name)
         hfile.write("extern void %s(const void *l, void *w);\n\n" % l2w_handler_name)
 
     else:
-        #for callbacks, we use the linux struct size in the cb dispatch switch
-        struct_name = "%s_%s" % (struct.displayname, struct.type.get_size())
+        #for callbacks, we use the windows struct size in the cb dispatch switch
+        windows_struct = find_windows_struct(struct.type)
+        struct_name = "%s_%s" % (struct.displayname, windows_struct.get_size())
         l2w_handler_name = "cb_%s" % struct_name;
         if l2w_handler_name in generated_cb_handlers:
             # we already have a handler for the callback struct of this size
             return
-        if l2w_handler_name in skip_structs:
-            # due to padding, some structs have the same width across versions of
-            # the SDK. since we key our lin->win conversion on the win struct size,
-            # we can skip the smaller structs and just write into the padding on
-            # older versions
-            # TODO: we could automate this. see comment near skip_structs declaration
+        if not struct_needs_conversion(struct.type):
             return
 
         cb_id = cb_num | (struct.type.get_size() << 16)
@@ -531,9 +533,9 @@ def handle_struct(sdkver, struct):
         generated_cb_handlers.append(l2w_handler_name)
 
         if not cb_num in cb_table.keys():
-            # latest SDK linux size, list of windows struct names
+            # latest SDK linux size, list of windows struct sizes and names
             cb_table[cb_num] = (struct.type.get_size(), [])
-        cb_table[cb_num][1].append(struct_name)
+        cb_table[cb_num][1].append((windows_struct.get_size(), struct_name))
 
         hfile = open("cb_converters.h", "a")
         hfile.write("#pragma pack( push, 8 )\n")
@@ -571,6 +573,9 @@ def handle_struct(sdkver, struct):
         if m.kind == clang.cindex.CursorKind.FIELD_DECL:
             if m.type.kind == clang.cindex.TypeKind.CONSTANTARRAY:
                 cppfile.write("    %s %s[%u];\n" % (m.type.element_type.spelling, m.displayname, m.type.element_count))
+            elif m.type.kind == clang.cindex.TypeKind.RECORD and \
+                    struct_needs_conversion(m.type):
+                cppfile.write("    win%s_%s %s;\n" % (m.type.spelling, sdkver, m.displayname))
             else:
                 cppfile.write("    %s %s;\n" % (m.type.spelling, m.displayname))
     cppfile.write("}  __attribute__ ((ms_struct));\n")
@@ -580,10 +585,10 @@ def handle_struct(sdkver, struct):
         if m.kind == clang.cindex.CursorKind.FIELD_DECL:
             if m.type.kind == clang.cindex.TypeKind.CONSTANTARRAY:
                 assert(m.type.element_type.kind != clang.cindex.TypeKind.RECORD or \
-                        m.type.element_type.spelling in exempt_structs) #if this fails, we need struct array copy
+                        not struct_needs_conversion(m.type.element_type))
                 cppfile.write("    memcpy(%s->%s, %s->%s, sizeof(%s->%s));\n" % (dst, m.displayname, src, m.displayname, dst, m.displayname))
             elif m.type.kind == clang.cindex.TypeKind.RECORD and \
-                    not m.type.spelling in exempt_structs:
+                    struct_needs_conversion(m.type):
                 cppfile.write("    %s_to_%s_struct_%s_%s(&%s->%s, &%s->%s);\n" % (src, dst, m.type.spelling, sdkver, src, m.displayname, dst, m.displayname))
             else:
                 cppfile.write("    %s->%s = %s->%s;\n" % (dst, m.displayname, src, m.displayname))
@@ -655,11 +660,11 @@ for f in cpp_files_need_close_brace:
 getapifile = open("cb_getapi_table.dat", "w")
 cbsizefile = open("cb_getapi_sizes.dat", "w")
 for cb in cb_table.keys():
-    cbsizefile.write("case %u: /* %s */\n" % (cb, cb_table[cb][1][0]))
+    cbsizefile.write("case %u: /* %s */\n" % (cb, cb_table[cb][1][0][1]))
     cbsizefile.write("    return %u;\n" % cb_table[cb][0])
     getapifile.write("case %u:\n" % cb)
     getapifile.write("    switch(callback_len){\n")
     getapifile.write("    default:\n") # the first one should be the latest, should best support future SDK versions
-    for struct in cb_table[cb][1]:
-        getapifile.write("    case sizeof(struct win%s): cb_%s(lin_callback, callback); break;\n" % (struct, struct))
+    for (size, name) in cb_table[cb][1]:
+        getapifile.write("    case %s: cb_%s(lin_callback, callback); break;\n" % (size, name))
     getapifile.write("    }\n    break;\n")

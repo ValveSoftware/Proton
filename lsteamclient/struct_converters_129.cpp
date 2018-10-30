@@ -127,5 +127,19 @@ void lin_to_win_struct_SteamUGCDetails_t_129(const void *l, void *w)
     win->m_flScore = lin->m_flScore;
 }
 
+#pragma pack( push, 8 )
+struct winSteamUGCRequestUGCDetailsResult_t_9776 {
+    winSteamUGCDetails_t_129 m_details;
+    bool m_bCachedData;
+}  __attribute__ ((ms_struct));
+#pragma pack( pop )
+void cb_SteamUGCRequestUGCDetailsResult_t_9776(const void *l, void *w)
+{
+    SteamUGCRequestUGCDetailsResult_t *lin = (SteamUGCRequestUGCDetailsResult_t *)l;
+    struct winSteamUGCRequestUGCDetailsResult_t_9776 *win = (struct winSteamUGCRequestUGCDetailsResult_t_9776 *)w;
+    lin_to_win_struct_SteamUGCDetails_t_129(&lin->m_details, &win->m_details);
+    win->m_bCachedData = lin->m_bCachedData;
+}
+
 
 }

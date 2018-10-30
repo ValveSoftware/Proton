@@ -37,17 +37,17 @@ void lin_to_win_struct_LeaderboardEntry_t_132(const void *l, void *w)
 }
 
 #pragma pack( push, 8 )
-struct winHTTPRequestCompleted_t_20 {
+struct winHTTPRequestCompleted_t_24 {
     HTTPRequestHandle m_hRequest;
     uint64 m_ulContextValue;
     bool m_bRequestSuccessful;
     EHTTPStatusCode m_eStatusCode;
 }  __attribute__ ((ms_struct));
 #pragma pack( pop )
-void cb_HTTPRequestCompleted_t_20(const void *l, void *w)
+void cb_HTTPRequestCompleted_t_24(const void *l, void *w)
 {
     HTTPRequestCompleted_t *lin = (HTTPRequestCompleted_t *)l;
-    struct winHTTPRequestCompleted_t_20 *win = (struct winHTTPRequestCompleted_t_20 *)w;
+    struct winHTTPRequestCompleted_t_24 *win = (struct winHTTPRequestCompleted_t_24 *)w;
     win->m_hRequest = lin->m_hRequest;
     win->m_ulContextValue = lin->m_ulContextValue;
     win->m_bRequestSuccessful = lin->m_bRequestSuccessful;
@@ -146,90 +146,6 @@ void lin_to_win_struct_SteamUGCDetails_t_132(const void *l, void *w)
     win->m_unVotesDown = lin->m_unVotesDown;
     win->m_flScore = lin->m_flScore;
     win->m_unNumChildren = lin->m_unNumChildren;
-}
-
-#pragma pack( push, 8 )
-struct winHTML_ComboNeedsPaint_t_16 {
-    HHTMLBrowser unBrowserHandle;
-    const char * pBGRA;
-    uint32 unWide;
-    uint32 unTall;
-}  __attribute__ ((ms_struct));
-#pragma pack( pop )
-void cb_HTML_ComboNeedsPaint_t_16(const void *l, void *w)
-{
-    HTML_ComboNeedsPaint_t *lin = (HTML_ComboNeedsPaint_t *)l;
-    struct winHTML_ComboNeedsPaint_t_16 *win = (struct winHTML_ComboNeedsPaint_t_16 *)w;
-    win->unBrowserHandle = lin->unBrowserHandle;
-    win->pBGRA = lin->pBGRA;
-    win->unWide = lin->unWide;
-    win->unTall = lin->unTall;
-}
-
-#pragma pack( push, 8 )
-struct winHTML_ShowPopup_t_4 {
-    HHTMLBrowser unBrowserHandle;
-}  __attribute__ ((ms_struct));
-#pragma pack( pop )
-void cb_HTML_ShowPopup_t_4(const void *l, void *w)
-{
-    HTML_ShowPopup_t *lin = (HTML_ShowPopup_t *)l;
-    struct winHTML_ShowPopup_t_4 *win = (struct winHTML_ShowPopup_t_4 *)w;
-    win->unBrowserHandle = lin->unBrowserHandle;
-}
-
-#pragma pack( push, 8 )
-struct winHTML_HidePopup_t_4 {
-    HHTMLBrowser unBrowserHandle;
-}  __attribute__ ((ms_struct));
-#pragma pack( pop )
-void cb_HTML_HidePopup_t_4(const void *l, void *w)
-{
-    HTML_HidePopup_t *lin = (HTML_HidePopup_t *)l;
-    struct winHTML_HidePopup_t_4 *win = (struct winHTML_HidePopup_t_4 *)w;
-    win->unBrowserHandle = lin->unBrowserHandle;
-}
-
-#pragma pack( push, 8 )
-struct winHTML_SizePopup_t_20 {
-    HHTMLBrowser unBrowserHandle;
-    uint32 unX;
-    uint32 unY;
-    uint32 unWide;
-    uint32 unTall;
-}  __attribute__ ((ms_struct));
-#pragma pack( pop )
-void cb_HTML_SizePopup_t_20(const void *l, void *w)
-{
-    HTML_SizePopup_t *lin = (HTML_SizePopup_t *)l;
-    struct winHTML_SizePopup_t_20 *win = (struct winHTML_SizePopup_t_20 *)w;
-    win->unBrowserHandle = lin->unBrowserHandle;
-    win->unX = lin->unX;
-    win->unY = lin->unY;
-    win->unWide = lin->unWide;
-    win->unTall = lin->unTall;
-}
-
-#pragma pack( push, 8 )
-struct winHTML_NewWindow_t_24 {
-    HHTMLBrowser unBrowserHandle;
-    const char * pchURL;
-    uint32 unX;
-    uint32 unY;
-    uint32 unWide;
-    uint32 unTall;
-}  __attribute__ ((ms_struct));
-#pragma pack( pop )
-void cb_HTML_NewWindow_t_24(const void *l, void *w)
-{
-    HTML_NewWindow_t *lin = (HTML_NewWindow_t *)l;
-    struct winHTML_NewWindow_t_24 *win = (struct winHTML_NewWindow_t_24 *)w;
-    win->unBrowserHandle = lin->unBrowserHandle;
-    win->pchURL = lin->pchURL;
-    win->unX = lin->unX;
-    win->unY = lin->unY;
-    win->unWide = lin->unWide;
-    win->unTall = lin->unTall;
 }
 
 

@@ -118,29 +118,17 @@ UGCHandle_t cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_GetCa
 
 SteamAPICall_t cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_PublishFile(void *linux_side, const char * pchFile, const char * pchPreviewFile, AppId_t nConsumerAppId, const char * pchTitle, const char * pchDescription, ERemoteStoragePublishedFileVisibility eVisibility, SteamParamStringArray_t * pTags)
 {
-    SteamParamStringArray_t lin_pTags;
-    win_to_lin_struct_SteamParamStringArray_t_117(pTags, &lin_pTags);
-    SteamAPICall_t retval = ((ISteamRemoteStorage*)linux_side)->PublishFile((const char *)pchFile, (const char *)pchPreviewFile, (AppId_t)nConsumerAppId, (const char *)pchTitle, (const char *)pchDescription, (ERemoteStoragePublishedFileVisibility)eVisibility, &lin_pTags);
-    lin_to_win_struct_SteamParamStringArray_t_117(&lin_pTags, pTags);
-    return retval;
+    return ((ISteamRemoteStorage*)linux_side)->PublishFile((const char *)pchFile, (const char *)pchPreviewFile, (AppId_t)nConsumerAppId, (const char *)pchTitle, (const char *)pchDescription, (ERemoteStoragePublishedFileVisibility)eVisibility, (SteamParamStringArray_t *)pTags);
 }
 
 SteamAPICall_t cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_PublishWorkshopFile(void *linux_side, const char * pchFile, const char * pchPreviewFile, AppId_t nConsumerAppId, const char * pchTitle, const char * pchDescription, SteamParamStringArray_t * pTags)
 {
-    SteamParamStringArray_t lin_pTags;
-    win_to_lin_struct_SteamParamStringArray_t_117(pTags, &lin_pTags);
-    SteamAPICall_t retval = ((ISteamRemoteStorage*)linux_side)->PublishWorkshopFile((const char *)pchFile, (const char *)pchPreviewFile, (AppId_t)nConsumerAppId, (const char *)pchTitle, (const char *)pchDescription, &lin_pTags);
-    lin_to_win_struct_SteamParamStringArray_t_117(&lin_pTags, pTags);
-    return retval;
+    return ((ISteamRemoteStorage*)linux_side)->PublishWorkshopFile((const char *)pchFile, (const char *)pchPreviewFile, (AppId_t)nConsumerAppId, (const char *)pchTitle, (const char *)pchDescription, (SteamParamStringArray_t *)pTags);
 }
 
 SteamAPICall_t cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_UpdatePublishedFile(void *linux_side, RemoteStorageUpdatePublishedFileRequest_t updatePublishedFileRequest)
 {
-    RemoteStorageUpdatePublishedFileRequest_t lin_updatePublishedFileRequest;
-    win_to_lin_struct_RemoteStorageUpdatePublishedFileRequest_t_117(&updatePublishedFileRequest, &lin_updatePublishedFileRequest);
-    SteamAPICall_t retval = ((ISteamRemoteStorage*)linux_side)->UpdatePublishedFile(lin_updatePublishedFileRequest);
-    lin_to_win_struct_RemoteStorageUpdatePublishedFileRequest_t_117(&lin_updatePublishedFileRequest, &updatePublishedFileRequest);
-    return retval;
+    return ((ISteamRemoteStorage*)linux_side)->UpdatePublishedFile((RemoteStorageUpdatePublishedFileRequest_t)updatePublishedFileRequest);
 }
 
 SteamAPICall_t cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_GetPublishedFileDetails(void *linux_side, PublishedFileId_t unPublishedFileId)

@@ -38,11 +38,7 @@ bool cppISteamNetworking_SteamNetworking005_CloseP2PChannelWithUser(void *linux_
 
 bool cppISteamNetworking_SteamNetworking005_GetP2PSessionState(void *linux_side, CSteamID steamIDRemote, P2PSessionState_t * pConnectionState)
 {
-    P2PSessionState_t lin_pConnectionState;
-    win_to_lin_struct_P2PSessionState_t_142(pConnectionState, &lin_pConnectionState);
-    bool retval = ((ISteamNetworking*)linux_side)->GetP2PSessionState((CSteamID)steamIDRemote, &lin_pConnectionState);
-    lin_to_win_struct_P2PSessionState_t_142(&lin_pConnectionState, pConnectionState);
-    return retval;
+    return ((ISteamNetworking*)linux_side)->GetP2PSessionState((CSteamID)steamIDRemote, (P2PSessionState_t *)pConnectionState);
 }
 
 bool cppISteamNetworking_SteamNetworking005_AllowP2PPacketRelay(void *linux_side, bool bAllow)

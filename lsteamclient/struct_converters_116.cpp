@@ -6,21 +6,7 @@
 #include "steamworks_sdk_116/isteamgamecoordinator.h"
 extern "C" {
 #pragma pack( push, 8 )
-struct winNameHistoryResponse_t_8 {
-    int m_cSuccessfulLookups;
-    int m_cFailedLookups;
-}  __attribute__ ((ms_struct));
-#pragma pack( pop )
-void cb_NameHistoryResponse_t_8(const void *l, void *w)
-{
-    NameHistoryResponse_t *lin = (NameHistoryResponse_t *)l;
-    struct winNameHistoryResponse_t_8 *win = (struct winNameHistoryResponse_t_8 *)w;
-    win->m_cSuccessfulLookups = lin->m_cSuccessfulLookups;
-    win->m_cFailedLookups = lin->m_cFailedLookups;
-}
-
-#pragma pack( push, 8 )
-struct winRemoteStorageDownloadUGCResult_t_32 {
+struct winRemoteStorageDownloadUGCResult_t_40 {
     EResult m_eResult;
     UGCHandle_t m_hFile;
     AppId_t m_nAppID;
@@ -29,10 +15,10 @@ struct winRemoteStorageDownloadUGCResult_t_32 {
     uint64 m_ulSteamIDOwner;
 }  __attribute__ ((ms_struct));
 #pragma pack( pop )
-void cb_RemoteStorageDownloadUGCResult_t_32(const void *l, void *w)
+void cb_RemoteStorageDownloadUGCResult_t_40(const void *l, void *w)
 {
     RemoteStorageDownloadUGCResult_t *lin = (RemoteStorageDownloadUGCResult_t *)l;
-    struct winRemoteStorageDownloadUGCResult_t_32 *win = (struct winRemoteStorageDownloadUGCResult_t_32 *)w;
+    struct winRemoteStorageDownloadUGCResult_t_40 *win = (struct winRemoteStorageDownloadUGCResult_t_40 *)w;
     win->m_eResult = lin->m_eResult;
     win->m_hFile = lin->m_hFile;
     win->m_nAppID = lin->m_nAppID;

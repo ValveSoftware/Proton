@@ -23,11 +23,7 @@ void cppISteamController_STEAMCONTROLLER_INTERFACE_VERSION_RunFrame(void *linux_
 
 bool cppISteamController_STEAMCONTROLLER_INTERFACE_VERSION_GetControllerState(void *linux_side, uint32 unControllerIndex, SteamControllerState001_t * pState)
 {
-    SteamControllerState001_t lin_pState;
-    win_to_lin_struct_SteamControllerState001_t_134(pState, &lin_pState);
-    bool retval = ((ISteamController*)linux_side)->GetControllerState((uint32)unControllerIndex, &lin_pState);
-    lin_to_win_struct_SteamControllerState001_t_134(&lin_pState, pState);
-    return retval;
+    return ((ISteamController*)linux_side)->GetControllerState((uint32)unControllerIndex, (SteamControllerState001_t *)pState);
 }
 
 void cppISteamController_STEAMCONTROLLER_INTERFACE_VERSION_TriggerHapticPulse(void *linux_side, uint32 unControllerIndex, ESteamControllerPad eTargetPad, unsigned short usDurationMicroSec)

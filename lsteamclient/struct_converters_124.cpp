@@ -6,35 +6,35 @@
 #include "steamworks_sdk_124/isteamgamecoordinator.h"
 extern "C" {
 #pragma pack( push, 8 )
-struct winRemoteStoragePublishFileResult_t_12 {
+struct winRemoteStoragePublishFileResult_t_16 {
     EResult m_eResult;
     PublishedFileId_t m_nPublishedFileId;
 }  __attribute__ ((ms_struct));
 #pragma pack( pop )
-void cb_RemoteStoragePublishFileResult_t_12(const void *l, void *w)
+void cb_RemoteStoragePublishFileResult_t_16(const void *l, void *w)
 {
     RemoteStoragePublishFileResult_t *lin = (RemoteStoragePublishFileResult_t *)l;
-    struct winRemoteStoragePublishFileResult_t_12 *win = (struct winRemoteStoragePublishFileResult_t_12 *)w;
+    struct winRemoteStoragePublishFileResult_t_16 *win = (struct winRemoteStoragePublishFileResult_t_16 *)w;
     win->m_eResult = lin->m_eResult;
     win->m_nPublishedFileId = lin->m_nPublishedFileId;
 }
 
 #pragma pack( push, 8 )
-struct winRemoteStorageUpdatePublishedFileResult_t_12 {
+struct winRemoteStorageUpdatePublishedFileResult_t_16 {
     EResult m_eResult;
     PublishedFileId_t m_nPublishedFileId;
 }  __attribute__ ((ms_struct));
 #pragma pack( pop )
-void cb_RemoteStorageUpdatePublishedFileResult_t_12(const void *l, void *w)
+void cb_RemoteStorageUpdatePublishedFileResult_t_16(const void *l, void *w)
 {
     RemoteStorageUpdatePublishedFileResult_t *lin = (RemoteStorageUpdatePublishedFileResult_t *)l;
-    struct winRemoteStorageUpdatePublishedFileResult_t_12 *win = (struct winRemoteStorageUpdatePublishedFileResult_t_12 *)w;
+    struct winRemoteStorageUpdatePublishedFileResult_t_16 *win = (struct winRemoteStorageUpdatePublishedFileResult_t_16 *)w;
     win->m_eResult = lin->m_eResult;
     win->m_nPublishedFileId = lin->m_nPublishedFileId;
 }
 
 #pragma pack( push, 8 )
-struct winRemoteStorageEnumerateWorkshopFilesResult_t_612 {
+struct winRemoteStorageEnumerateWorkshopFilesResult_t_616 {
     EResult m_eResult;
     int32 m_nResultsReturned;
     int32 m_nTotalResultCount;
@@ -42,10 +42,10 @@ struct winRemoteStorageEnumerateWorkshopFilesResult_t_612 {
     float m_rgScore[50];
 }  __attribute__ ((ms_struct));
 #pragma pack( pop )
-void cb_RemoteStorageEnumerateWorkshopFilesResult_t_612(const void *l, void *w)
+void cb_RemoteStorageEnumerateWorkshopFilesResult_t_616(const void *l, void *w)
 {
     RemoteStorageEnumerateWorkshopFilesResult_t *lin = (RemoteStorageEnumerateWorkshopFilesResult_t *)l;
-    struct winRemoteStorageEnumerateWorkshopFilesResult_t_612 *win = (struct winRemoteStorageEnumerateWorkshopFilesResult_t_612 *)w;
+    struct winRemoteStorageEnumerateWorkshopFilesResult_t_616 *win = (struct winRemoteStorageEnumerateWorkshopFilesResult_t_616 *)w;
     win->m_eResult = lin->m_eResult;
     win->m_nResultsReturned = lin->m_nResultsReturned;
     win->m_nTotalResultCount = lin->m_nTotalResultCount;

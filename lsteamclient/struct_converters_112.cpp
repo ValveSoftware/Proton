@@ -6,20 +6,6 @@
 #include "steamworks_sdk_112/isteamgamecoordinator.h"
 extern "C" {
 #pragma pack( push, 8 )
-struct winLobbyInvite_t_16 {
-    uint64 m_ulSteamIDUser;
-    uint64 m_ulSteamIDLobby;
-}  __attribute__ ((ms_struct));
-#pragma pack( pop )
-void cb_LobbyInvite_t_16(const void *l, void *w)
-{
-    LobbyInvite_t *lin = (LobbyInvite_t *)l;
-    struct winLobbyInvite_t_16 *win = (struct winLobbyInvite_t_16 *)w;
-    win->m_ulSteamIDUser = lin->m_ulSteamIDUser;
-    win->m_ulSteamIDLobby = lin->m_ulSteamIDLobby;
-}
-
-#pragma pack( push, 8 )
 struct winLeaderboardEntry_t_112 {
     CSteamID m_steamIDUser;
     int32 m_nGlobalRank;

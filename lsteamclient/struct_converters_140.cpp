@@ -130,19 +130,5 @@ void lin_to_win_struct_SteamUGCDetails_t_140(const void *l, void *w)
     win->m_unNumChildren = lin->m_unNumChildren;
 }
 
-#pragma pack( push, 8 )
-struct winSubmitItemUpdateResult_t_8 {
-    EResult m_eResult;
-    bool m_bUserNeedsToAcceptWorkshopLegalAgreement;
-}  __attribute__ ((ms_struct));
-#pragma pack( pop )
-void cb_SubmitItemUpdateResult_t_8(const void *l, void *w)
-{
-    SubmitItemUpdateResult_t *lin = (SubmitItemUpdateResult_t *)l;
-    struct winSubmitItemUpdateResult_t_8 *win = (struct winSubmitItemUpdateResult_t_8 *)w;
-    win->m_eResult = lin->m_eResult;
-    win->m_bUserNeedsToAcceptWorkshopLegalAgreement = lin->m_bUserNeedsToAcceptWorkshopLegalAgreement;
-}
-
 
 }
