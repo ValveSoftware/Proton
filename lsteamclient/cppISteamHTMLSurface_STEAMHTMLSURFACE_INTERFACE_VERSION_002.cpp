@@ -1,6 +1,6 @@
-#include "steamclient_private.h"
 #include "steam_defs.h"
 #include "steamworks_sdk_133a/steam_api.h"
+#include "steamclient_private.h"
 #include "cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002.h"
 #ifdef __cplusplus
 extern "C" {

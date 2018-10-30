@@ -1,7 +1,7 @@
-#include "steamclient_private.h"
 #include "steam_defs.h"
 #include "steamworks_sdk_100/steam_api.h"
 #include "steamworks_sdk_100/isteamgameserver.h"
+#include "steamclient_private.h"
 #include "cppISteamGameServer_SteamGameServer004.h"
 #ifdef __cplusplus
 extern "C" {

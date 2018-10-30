@@ -1,9 +1,9 @@
-#include "steamclient_private.h"
 #include "steam_defs.h"
 #include "steamworks_sdk_123a/steam_api.h"
 #include "steamworks_sdk_123a/isteamgameserver.h"
 #include "steamworks_sdk_123a/isteamgameserverstats.h"
 #include "steamworks_sdk_123a/isteamgamecoordinator.h"
+#include "steamclient_private.h"
 extern "C" {
 #pragma pack( push, 8 )
 struct winLeaderboardEntry_t_123a {

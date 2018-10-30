@@ -1,7 +1,7 @@
-#include "steamclient_private.h"
 #include "steam_defs.h"
 #include "steamworks_sdk_142/steam_api.h"
 #include "steamworks_sdk_142/isteamparentalsettings.h"
+#include "steamclient_private.h"
 #include "cppISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001.h"
 #ifdef __cplusplus
 extern "C" {

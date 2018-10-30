@@ -1,9 +1,9 @@
-#include "steamclient_private.h"
 #include "steam_defs.h"
 #include "steamworks_sdk_125/steam_api.h"
 #include "steamworks_sdk_125/isteamgameserver.h"
 #include "steamworks_sdk_125/isteamgameserverstats.h"
 #include "steamworks_sdk_125/isteamgamecoordinator.h"
+#include "steamclient_private.h"
 extern "C" {
 #pragma pack( push, 8 )
 struct winRemoteStorageGetPublishedFileDetailsResult_t_9752 {

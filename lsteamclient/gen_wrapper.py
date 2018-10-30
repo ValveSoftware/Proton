@@ -413,11 +413,11 @@ WINE_DEFAULT_DEBUG_CHANNEL(steamclient);
 """)
 
     cpp = open("%s.cpp" % cppname, "w")
-    cpp.write("#include \"steamclient_private.h\"\n")
     cpp.write("#include \"steam_defs.h\"\n")
     cpp.write("#include \"steamworks_sdk_%s/steam_api.h\"\n" % sdkver)
     if not fname == "steam_api.h":
         cpp.write("#include \"steamworks_sdk_%s/%s\"\n" % (sdkver, fname))
+    cpp.write("#include \"steamclient_private.h\"\n")
     cpp.write("#include \"%s.h\"\n" % cppname)
     cpp.write("#ifdef __cplusplus\nextern \"C\" {\n#endif\n")
     cpp.write("#include \"struct_converters_%s.h\"\n" % sdkver)
@@ -550,7 +550,6 @@ def handle_struct(sdkver, struct):
     file_exists = os.path.isfile(cppname)
     cppfile = open(cppname, "a")
     if not file_exists:
-        cppfile.write("#include \"steamclient_private.h\"\n")
         cppfile.write("#include \"steam_defs.h\"\n")
         cppfile.write("#include \"steamworks_sdk_%s/steam_api.h\"\n" % sdkver)
         cppfile.write("#include \"steamworks_sdk_%s/isteamgameserver.h\"\n" % (sdkver))
@@ -558,6 +557,7 @@ def handle_struct(sdkver, struct):
             cppfile.write("#include \"steamworks_sdk_%s/isteamgameserverstats.h\"\n" % (sdkver))
         if os.path.isfile("steamworks_sdk_%s/isteamgamecoordinator.h" % sdkver):
             cppfile.write("#include \"steamworks_sdk_%s/isteamgamecoordinator.h\"\n" % sdkver)
+        cppfile.write("#include \"steamclient_private.h\"\n")
         cppfile.write("extern \"C\" {\n")
         cpp_files_need_close_brace.append(cppname)
 

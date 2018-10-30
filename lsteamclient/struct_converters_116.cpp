@@ -1,9 +1,9 @@
-#include "steamclient_private.h"
 #include "steam_defs.h"
 #include "steamworks_sdk_116/steam_api.h"
 #include "steamworks_sdk_116/isteamgameserver.h"
 #include "steamworks_sdk_116/isteamgameserverstats.h"
 #include "steamworks_sdk_116/isteamgamecoordinator.h"
+#include "steamclient_private.h"
 extern "C" {
 #pragma pack( push, 8 )
 struct winRemoteStorageDownloadUGCResult_t_40 {

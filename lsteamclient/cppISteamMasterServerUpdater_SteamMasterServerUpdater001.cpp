@@ -1,7 +1,7 @@
-#include "steamclient_private.h"
 #include "steam_defs.h"
 #include "steamworks_sdk_116/steam_api.h"
 #include "steamworks_sdk_116/isteammasterserverupdater.h"
+#include "steamclient_private.h"
 #include "cppISteamMasterServerUpdater_SteamMasterServerUpdater001.h"
 #ifdef __cplusplus
 extern "C" {
