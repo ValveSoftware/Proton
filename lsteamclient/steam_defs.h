@@ -1,47 +1,12 @@
-typedef int EHTMLMouseButton, EHTMLKeyModifiers;
+#include <stdint.h>
+typedef uint32_t EHTMLMouseButton, EHTMLKeyModifiers;
 
 #ifndef __cplusplus
 #ifndef bool
 typedef char bool; /* 1 byte on modern visual studio c++ */
 #endif
 
-typedef int EAccountType;
-typedef int EUniverse;
-typedef int ENotificationPosition;
-typedef int ESteamAPICallFailure;
-typedef int EGamepadTextInputMode;
-typedef int EGamepadTextInputLineMode;
-typedef int EVoiceResult;
-typedef int EBeginAuthSessionResult;
-typedef int EUserHasLicenseForAppResult;
-typedef int EPersonaState;
-typedef int EFriendRelationship;
-typedef int EPersonaState;
-typedef int EOverlayToStoreFlag;
-typedef int EChatEntryType;
-typedef int ELobbyType;
-typedef int ELobbyDistanceFilter;
-typedef int ELobbyComparison;
-typedef int EMatchMakingServerResponse;
-typedef int ELeaderboardSortMethod;
-typedef int ELeaderboardDisplayType;
-typedef int ELeaderboardDataRequest;
-typedef int ELeaderboardUploadScoreMethod;
-typedef int EP2PSend;
-typedef int ESNetSocketConnectionType;
-typedef int ERemoteStoragePublishedFileVisibility;
-typedef int EWorkshopFileAction;
-typedef int EWorkshopEnumerationType;
-typedef int ERemoteStoragePlatform;
-typedef int EUGCReadAction;
-typedef int EWorkshopFileType;
-typedef int EWorkshopVideoProvider;
-typedef int EVRScreenshotType;
-typedef int EHTTPMethod;
-typedef int EResult;
-typedef int ESteamControllerPad;
-typedef int EControllerActionOrigin;
-typedef int EUserUGCList,
+typedef uint32_t EUserUGCList,
         EUGCMatchingUGCType,
         EUserUGCListSortOrder,
         EUGCQuery,
@@ -59,23 +24,55 @@ typedef int EUserUGCList,
         EBroadcastUploadResult,
         EGCResults,
         ESteamInputType,
-        EParentalFeature
+        EParentalFeature,
+        EAccountType,
+        EUniverse,
+        ENotificationPosition,
+        ESteamAPICallFailure,
+        EGamepadTextInputMode,
+        EGamepadTextInputLineMode,
+        EVoiceResult,
+        EBeginAuthSessionResult,
+        EUserHasLicenseForAppResult,
+        EPersonaState,
+        EFriendRelationship,
+        EPersonaState,
+        EOverlayToStoreFlag,
+        EChatEntryType,
+        ELobbyType,
+        ELobbyDistanceFilter,
+        ELobbyComparison,
+        EMatchMakingServerResponse,
+        ELeaderboardSortMethod,
+        ELeaderboardDisplayType,
+        ELeaderboardDataRequest,
+        ELeaderboardUploadScoreMethod,
+        EP2PSend,
+        ESNetSocketConnectionType,
+        ERemoteStoragePublishedFileVisibility,
+        EWorkshopFileAction,
+        EWorkshopEnumerationType,
+        ERemoteStoragePlatform,
+        EUGCReadAction,
+        EWorkshopFileType,
+        EWorkshopVideoProvider,
+        EVRScreenshotType,
+        EHTTPMethod,
+        EResult,
+        ESteamControllerPad,
+        EControllerActionOrigin,
+        EMatchMakingType,
+        AudioPlayback_Status
 ;
-typedef int EMatchMakingType;
-typedef int AudioPlayback_Status;
 
 /* these are PODs, so just copy the data. hopefully the
  * packing and alignment are the same... */
 typedef struct CSteamID { unsigned char a[8]; } CSteamID;
 typedef struct CGameID { unsigned char a[8]; } CGameID;
-typedef struct MatchMakingKeyValuePair_t { unsigned char a[64]; } MatchMakingKeyValuePair_t;
-typedef struct gameserveritem_t { unsigned char a[372]; } gameserveritem_t;
-typedef struct LeaderboardEntry_t { unsigned char a[28]; } LeaderboardEntry_t;
 typedef struct RemoteStorageUpdatePublishedFileRequest_t { unsigned char a[40]; } RemoteStorageUpdatePublishedFileRequest_t;
 typedef struct ControllerAnalogActionData_t { unsigned char a[13]; } ControllerAnalogActionData_t;
 typedef struct ControllerDigitalActionData_t { unsigned char a[2]; } ControllerDigitalActionData_t;
 typedef struct ControllerMotionData_t { unsigned char a[40]; } ControllerMotionData_t;
-typedef struct SteamUGCDetails_t { unsigned char a[9764]; } SteamUGCDetails_t;
 
 /* never dereferenced */
 typedef struct FriendGameInfo_t FriendGameInfo_t;
@@ -85,24 +82,26 @@ typedef struct ISteamMatchmakingServerListResponse ISteamMatchmakingServerListRe
 typedef struct ISteamMatchmakingPingResponse ISteamMatchmakingPingResponse;
 typedef struct ISteamMatchmakingPlayersResponse ISteamMatchmakingPlayersResponse;
 typedef struct ISteamMatchmakingRulesResponse ISteamMatchmakingRulesResponse;
-typedef struct RemoteStorageUpdatePublishedFileRequest_t RemoteStorageUpdatePublishedFileRequest_t;
 typedef struct SteamControllerState001_t SteamControllerState001_t;
 typedef struct SteamItemDetails_t SteamItemDetails_t;
+typedef struct LeaderboardEntry_t LeaderboardEntry_t;
+typedef struct SteamUGCDetails_t SteamUGCDetails_t;
+typedef struct gameserveritem_t gameserveritem_t;
+typedef struct MatchMakingKeyValuePair_t MatchMakingKeyValuePair_t;
 
 /* FIXME: we don't care about fn pointer types, just pass 'em through */
 typedef void *SteamAPI_CheckCallbackRegistered_t;
 typedef void *SteamAPIWarningMessageHook_t;
 typedef void *SteamAPI_PostAPIResultInProcess_t;
 
-typedef unsigned char uint8;
-typedef unsigned char uint8;
-typedef signed char int8;
-typedef short int16;
-typedef unsigned short uint16;
-typedef int int32;
-typedef unsigned int uint32;
-typedef long long int64;
-typedef unsigned long long uint64;
+typedef uint8_t uint8;
+typedef int8_t int8;
+typedef int16_t int16;
+typedef uint16_t uint16;
+typedef int32_t int32;
+typedef uint32_t uint32;
+typedef int64_t int64;
+typedef uint64_t uint64;
 typedef int64 lint64;
 typedef uint64 ulint64;
 typedef uint8 Salt_t[8];
