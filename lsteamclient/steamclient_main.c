@@ -89,6 +89,7 @@ static void *(*steamclient_CreateInterface)(const char *name, int *return_code);
 static bool (*steamclient_BGetCallback)(HSteamPipe a, CallbackMsg_t *b, int32 *c);
 static bool (*steamclient_GetAPICallResult)(HSteamPipe, SteamAPICall_t, void *, int, int, bool *);
 static bool (*steamclient_FreeLastCallback)(HSteamPipe);
+static void (*steamclient_ReleaseThreadLocalMemory)(int);
 
 static int load_steamclient(void)
 {
@@ -138,6 +139,12 @@ static int load_steamclient(void)
     steamclient_FreeLastCallback = wine_dlsym(steamclient_lib, "Steam_FreeLastCallback", NULL, 0);
     if(!steamclient_FreeLastCallback){
         ERR("unable to load FreeLastCallback method\n");
+        return 0;
+    }
+
+    steamclient_ReleaseThreadLocalMemory = wine_dlsym(steamclient_lib, "Steam_ReleaseThreadLocalMemory", NULL, 0);
+    if(!steamclient_ReleaseThreadLocalMemory){
+        ERR("unable to load ReleaseThreadLocalMemory method\n");
         return 0;
     }
 
@@ -266,6 +273,16 @@ bool CDECL Steam_FreeLastCallback(HSteamPipe pipe)
     last_cb = NULL;
 
     return steamclient_FreeLastCallback(pipe);
+}
+
+void CDECL Steam_ReleaseThreadLocalMemory(int bThreadExit)
+{
+    TRACE("%d\n", bThreadExit);
+
+    if(!load_steamclient())
+        return;
+
+    steamclient_ReleaseThreadLocalMemory(bThreadExit);
 }
 
 void CDECL Breakpad_SteamMiniDumpInit(uint32_t a, const char *b, const char *c)

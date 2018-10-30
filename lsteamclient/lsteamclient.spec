@@ -34,7 +34,7 @@
 32 stub Steam_InitiateGameConnection
 33 stub Steam_LogOff
 34 stub Steam_LogOn
-35 stub Steam_ReleaseThreadLocalMemory
+35 cdecl Steam_ReleaseThreadLocalMemory(long)
 36 stub Steam_ReleaseUser
 37 stub Steam_SetLocalIPBinding
 38 stub Steam_TerminateGameConnection
