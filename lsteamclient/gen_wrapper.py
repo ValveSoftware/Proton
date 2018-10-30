@@ -305,12 +305,16 @@ def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, e
     else:
         cpp.write("    return ")
 
+    should_do_cb_wrap = "GetAPICallResult" in used_name
     should_gen_wrapper = method.result_type.spelling.startswith("ISteam") or \
             used_name.startswith("GetISteamGenericInterface")
-    if should_gen_wrapper:
-        cfile.write("create_win_interface(pchVersion,\n        ")
 
-    cfile.write("%s_%s(_this->linux_side" % (cppname, used_name))
+    if should_do_cb_wrap:
+        cfile.write("do_cb_wrap(0, _this->linux_side, &%s_%s" % (cppname, used_name))
+    else:
+        if should_gen_wrapper:
+            cfile.write("create_win_interface(pchVersion,\n        ")
+        cfile.write("%s_%s(_this->linux_side" % (cppname, used_name))
     cpp.write("((%s*)linux_side)->%s(" % (classname, method.spelling))
     unnamed = 'a'
     first = True

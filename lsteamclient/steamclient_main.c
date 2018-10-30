@@ -208,27 +208,34 @@ static int get_callback_len(int cb)
     return 0;
 }
 
-bool CDECL Steam_GetAPICallResult(HSteamPipe pipe, SteamAPICall_t call,
-        void *callback, int callback_len, int cb_expected, bool *failed)
+bool do_cb_wrap(HSteamPipe pipe, void *linux_side,
+        bool (*cpp_func)(void *, SteamAPICall_t, void *, int, int, bool *),
+        SteamAPICall_t call, void *callback, int callback_len, int cb_expected, bool *failed)
 {
     void *lin_callback = NULL;
     int lin_callback_len;
     bool ret;
 
-    TRACE("%u, x, %p, %u, %u, %p\n", pipe, callback, callback_len, cb_expected, failed);
-
-    if(!load_steamclient())
-        return 0;
-
     lin_callback_len = get_callback_len(cb_expected);
-    if(!lin_callback_len)
+    if(!lin_callback_len){
         /* structs are compatible, pass on through */
-        return steamclient_GetAPICallResult(pipe, call, callback, callback_len, cb_expected, failed);
+        if(!cpp_func){
+            if(!load_steamclient())
+                return 0;
+            return steamclient_GetAPICallResult(pipe, call, callback, callback_len, cb_expected, failed);
+        }
+        return cpp_func(linux_side, call, callback, callback_len, cb_expected, failed);
+    }
 
     /* structs require conversion */
     lin_callback = HeapAlloc(GetProcessHeap(), 0, lin_callback_len);
 
-    ret = steamclient_GetAPICallResult(pipe, call, lin_callback, lin_callback_len, cb_expected, failed);
+    if(!cpp_func){
+        if(!load_steamclient())
+            return 0;
+        ret = steamclient_GetAPICallResult(pipe, call, lin_callback, lin_callback_len, cb_expected, failed);
+    }else
+        ret = cpp_func(linux_side, call, lin_callback, lin_callback_len, cb_expected, failed);
 
     if(ret){
         switch(cb_expected){
@@ -239,6 +246,13 @@ bool CDECL Steam_GetAPICallResult(HSteamPipe pipe, SteamAPICall_t call,
     HeapFree(GetProcessHeap(), 0, lin_callback);
 
     return ret;
+}
+
+bool CDECL Steam_GetAPICallResult(HSteamPipe pipe, SteamAPICall_t call,
+        void *callback, int callback_len, int cb_expected, bool *failed)
+{
+    TRACE("%u, x, %p, %u, %u, %p\n", pipe, callback, callback_len, cb_expected, failed);
+    return do_cb_wrap(pipe, NULL, NULL, call, callback, callback_len, cb_expected, failed);
 }
 
 bool CDECL Steam_FreeLastCallback(HSteamPipe pipe)
