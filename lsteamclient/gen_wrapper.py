@@ -532,7 +532,7 @@ def handle_struct(sdkver, struct):
         generated_cb_ids.append(cb_id)
 
         datfile = open("cb_converters.dat", "a")
-        datfile.write("case 0x%08x: win_msg->m_cubParam = sizeof(struct win%s); win_msg->m_pubParam = HeapAlloc(GetProcessHeap(), 0, win_msg->m_cubParam); %s(lin_msg.m_pubParam, win_msg->m_pubParam); break;\n" % (cb_id, struct_name, l2w_handler_name))
+        datfile.write("case 0x%08x: win_msg->m_cubParam = %s; win_msg->m_pubParam = HeapAlloc(GetProcessHeap(), 0, win_msg->m_cubParam); %s(lin_msg.m_pubParam, win_msg->m_pubParam); break;\n" % (cb_id, windows_struct.get_size(), l2w_handler_name))
 
         generated_cb_handlers.append(l2w_handler_name)
 
@@ -542,16 +542,6 @@ def handle_struct(sdkver, struct):
         cb_table[cb_num][1].append((windows_struct.get_size(), struct_name))
 
         hfile = open("cb_converters.h", "a")
-        hfile.write("#pragma pack( push, 8 )\n")
-        hfile.write("struct win%s {\n" % struct_name)
-        for m in struct.get_children():
-            if m.kind == clang.cindex.CursorKind.FIELD_DECL:
-                if m.type.kind == clang.cindex.TypeKind.CONSTANTARRAY:
-                    hfile.write("    %s %s[%u];\n" % (m.type.element_type.spelling, m.displayname, m.type.element_count))
-                else:
-                    hfile.write("    %s %s;\n" % (m.type.spelling, m.displayname))
-        hfile.write("}  __attribute__ ((ms_struct));\n")
-        hfile.write("#pragma pack( pop )\n")
         hfile.write("extern void %s(void *l, void *w);\n\n" % l2w_handler_name)
 
 
