@@ -6,11 +6,11 @@
 Vagrant.configure(2) do |config|
   config.vm.box = "generic/debian9"
 
-  # Uncomment to increase guest resources from the default
-  #config.vm.provider "virtualbox" do |v|
-  #  v.memory = 2048
-  #  v.cpus = 4
-  #end
+  config.vm.provider "virtualbox" do |v|
+    v.cpus = `nproc`.to_i
+    # meminfo shows KB and we need to convert to MB
+    v.memory = `grep 'MemTotal' /proc/meminfo | sed -e 's/MemTotal://' -e 's/ kB//'`.to_i / 1024 / 2
+  end
 
   config.vm.synced_folder ".", "/home/vagrant/proton", type: "rsync", rsync__exclude: [".git/", "/output/"], rsync__args: ["--verbose", "--archive", "-z", "--links", "--update"]
 
