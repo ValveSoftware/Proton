@@ -12,7 +12,7 @@ Vagrant.configure(2) do |config|
     v.memory = `grep 'MemTotal' /proc/meminfo | sed -e 's/MemTotal://' -e 's/ kB//'`.to_i / 1024 / 2
   end
 
-  config.vm.synced_folder ".", "/home/vagrant/proton", type: "rsync", rsync__exclude: [".git/", "/output/"], rsync__args: ["--verbose", "--archive", "-z", "--links", "--update"]
+  config.vm.synced_folder ".", "/home/vagrant/proton", type: "rsync", rsync__exclude: ["/output/"], rsync__args: ["--verbose", "--archive", "-z", "--links", "--update"]
 
   config.vm.provision "shell", privileged: "true", inline: <<-SHELL
     dpkg --add-architecture i386
