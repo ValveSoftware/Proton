@@ -15,9 +15,9 @@ set -xe
 apt-get install -y gcc-5 g++-5 g++-5-multilib flex bison libosmesa6-dev libpcap-dev \
                    libhal-dev libsane-dev libv4l-dev libgphoto2-2-dev libcapi20-dev \
                    libgsm1-dev libmpg123-dev libvulkan-dev libxslt1-dev nasm yasm ccache
-update-alternatives --install `which gcc` gcc `which gcc-5` 50
-update-alternatives --set gcc `which gcc-5`
-update-alternatives --install `which g++` g++ `which g++-5` 50
-update-alternatives --set g++ `which g++-5`
-update-alternatives --install `which cpp` cpp-bin `which cpp-5` 50
-update-alternatives --set cpp-bin `which cpp-5`
+update-alternatives --install "$(command -v gcc)" gcc "$(command -v gcc-5)" 50
+update-alternatives --set gcc "$(command -v gcc-5)"
+update-alternatives --install "$(command -v g++)" g++ "$(command -v g++-5)" 50
+update-alternatives --set g++ "$(command -v g++-5)"
+update-alternatives --install "$(command -v cpp)" cpp-bin "$(command -v cpp-5)" 50
+update-alternatives --set cpp-bin "$(command -v cpp-5)"
