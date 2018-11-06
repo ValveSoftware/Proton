@@ -19,7 +19,10 @@ if [[ $(tput colors 2>/dev/null || echo 0) -gt 0 ]]; then
   COLOR_CLEAR=$'\e[0m'
 fi
 
-sh_quote() { local quoted="$(printf '%q ' "$@")"; [[ $# -eq 0 ]] || echo "${quoted:0:-1}"; }
+sh_quote() { 
+        local quoted
+        quoted="$(printf '%q ' "$@")"; [[ $# -eq 0 ]] || echo "${quoted:0:-1}"; 
+}
 err()      { echo >&2 "${COLOR_ERR}!!${COLOR_CLEAR} $*"; }
 stat()     { echo >&2 "${COLOR_STAT}::${COLOR_CLEAR} $*"; }
 info()     { echo >&2 "${COLOR_INFO}::${COLOR_CLEAR} $*"; }
@@ -72,7 +75,8 @@ function configure() {
   check_steamrt_image "$steamrt64_type" "$steamrt64_name"
   check_steamrt_image "$steamrt32_type" "$steamrt32_name"
 
-  local srcdir="$(dirname "$0")"
+  local srcdir
+  srcdir="$(dirname "$0")"
 
   # Build name
   local build_name="$arg_build_name"
@@ -142,7 +146,7 @@ function parse_args() {
     fi
 
     # Looks like an argument does it have a --foo=bar value?
-    if [[ ${arg%=*} != $arg ]]; then
+    if [[ ${arg%=*} != "$arg" ]]; then
       val="${arg#*=}"
       arg="${arg%=*}"
       val_passed=1
@@ -173,11 +177,11 @@ function parse_args() {
     fi
 
     # Check if this arg used the value and shouldn't have or vice-versa
-    if [[ -n $val_used && ! -n $val_passed ]]; then
+    if [[ -n $val_used && -z $val_passed ]]; then
       # "--arg val" form, used $2 as the value.
 
       # Don't allow this if it looked like "--arg --val"
-      if [[ ${val#--} != $val ]]; then
+      if [[ ${val#--} != "$val" ]]; then
         err "Ambiguous format for argument with value \"$arg $val\""
         err "  (use $arg=$val or $arg='' $val)"
         return 1
