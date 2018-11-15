@@ -14,6 +14,7 @@ import sys
 import tarfile
 
 from filelock import FileLock
+import fontconfig as fc
 
 #To enable debug logging, copy "user_settings.sample.py" to "user_settings.py"
 #and edit it if needed.
@@ -223,17 +224,33 @@ else:
     env["WINEDEBUG"] = "-all"
 
 def create_fonts_symlinks(prefix_path):
-    fontsmap = [
-        ( "LiberationSans-Regular.ttf", "arial.ttf" ),
-        ( "LiberationSans-Bold.ttf", "arialbd.ttf" ),
-        ( "LiberationSerif-Regular.ttf", "times.ttf" ),
-        ( "LiberationMono-Regular.ttf", "cour.ttf" ),
+    conf = fc.Config.get_current()
+    fonts = [
+        ("arial", "LiberationSans-Regular.ttf", "arial.ttf" ),
+        ("arial:bold", "LiberationSans-Bold.ttf", "arialbd.ttf" ),
+        ("times", "LiberationSerif-Regular.ttf", "times.ttf" ),
+        ("courier", "LiberationMono-Regular.ttf", "cour.ttf" ),
     ]
+
+    fontsmap = []
+    for pat_str, fallback, fontname in fonts:
+        # Create a pattern object
+        pat = fc.Pattern.name_parse(pat_str)
+        # Fill in defaults
+        conf.substitute(pat, fc.FC.MatchPattern)
+        pat.default_substitute()
+
+        res, status = conf.font_match(pat)
+        if status != fc.FC.ResultMatch:
+            log("Could not find a font matching " + pat_str + ", falling back to " + fallback)
+            fontsmap.append((os.path.join(fontsdir, fallback), fontname))
+        else:
+            fontsmap.append((res.get(fc.PROP.FILE, 0)[0], fontname))
 
     windowsfonts = prefix_path + "/drive_c/windows/Fonts"
     for p in fontsmap:
         lname = os.path.join(windowsfonts, p[1])
-        fname = os.path.join(fontsdir, p[0])
+        fname = p[0]
         if os.path.lexists(lname):
             if os.path.islink(lname):
                 os.remove(lname)

@@ -81,3 +81,9 @@ Visit openal-soft at
 Parts of this software are based on the AMD AGS library, which is
 
     Copyright (c) 2017 Advanced Micro Devices, Inc. All rights reserved.
+
+---- ---- ---- ----
+
+This software contains python_fontconfig licensed under the LGPL 2.1
+
+    Copyright 2016, 2018 by Lawrence D'Oliveiro <ldo@geek-central.gen.nz>.
