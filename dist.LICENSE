@@ -84,6 +84,10 @@ Parts of this software are based on the AMD AGS library, which is
 
 ---- ---- ---- ----
 
-This software contains python_fontconfig licensed under the LGPL 2.1
+This software contains python_fontconfig licensed under the LGPL 2.1 python_fontconfig is
 
     Copyright 2016, 2018 by Lawrence D'Oliveiro <ldo@geek-central.gen.nz>.
+
+Visit python_fontconfig at
+
+    https://github.com/ldo/python_fontconfig.git
