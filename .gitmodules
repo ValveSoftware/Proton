@@ -19,3 +19,6 @@
 [submodule "fonts/liberation-fonts"]
 	path = fonts/liberation-fonts
 	url = https://github.com/liberationfonts/liberation-fonts
+[submodule "FAudio"]
+	path = FAudio
+	url = https://github.com/FNA-XNA/FAudio/

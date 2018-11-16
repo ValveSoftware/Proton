@@ -178,6 +178,10 @@ FFMPEG_OBJ64 := ./obj-ffmpeg64
 FFMPEG_CROSS_CFLAGS :=
 FFMPEG_CROSS_LDFLAGS :=
 
+FAUDIO := $(SRCDIR)/FAudio
+FAUDIO_OBJ32 := ./obj-faudio32
+FAUDIO_OBJ64 := ./obj-faudio64
+
 LSTEAMCLIENT := $(SRCDIR)/lsteamclient
 LSTEAMCLIENT32 := ./syn-lsteamclient32/lsteamclient
 LSTEAMCLIENT64 := ./syn-lsteamclient64/lsteamclient
@@ -224,6 +228,7 @@ FONTS_OBJ := ./obj-fonts
 OBJ_DIRS := $(TOOLS_DIR32)        $(TOOLS_DIR64)        \
             $(OPENAL_OBJ32)       $(OPENAL_OBJ64)       \
             $(FFMPEG_OBJ32)       $(FFMPEG_OBJ64)       \
+            $(FAUDIO_OBJ32)       $(FAUDIO_OBJ64)       \
             $(LSTEAMCLIENT_OBJ32) $(LSTEAMCLIENT_OBJ64) \
             $(WINE_OBJ32)         $(WINE_OBJ64)         \
             $(VRCLIENT_OBJ32)     $(VRCLIENT_OBJ64)     \
@@ -519,6 +524,41 @@ ffmpeg32: $(FFMPEG_CONFIGURE_FILES32)
 
 endif # ifeq ($(WITH_FFMPEG),1)
 
+##
+## FAudio
+##
+
+FAUDIO_MAKEFLAGS = FAUDIO_RELEASE=1 DISABLE_XNASONG=1
+ifeq ($WITH_FFMPEG),1)
+FAUDIO_MAKEFLAGS += FAUDIO_FFMPEG=1
+endif # ifeq ($(WITH_FFMPEG),1)
+
+FAUDIO_TARGETS = faudio faudio32 faudio64
+
+ALL_TARGETS += $(FAUDIO_TARGETS)
+GOAL_TARGETS_LIBS += faudio
+
+.PHONY: faudio faudio32 faudio64
+
+faudio: faudio32 faudio64
+
+faudio64: SHELL = $(CONTAINER_SHELL64)
+faudio64: $(FFMPEG_TARGETS)
+	mkdir -p $(FAUDIO_OBJ64)
+	+$(MAKE) -C $(FAUDIO) $(FAUDIO_MAKEFLAGS) FAUDIO_OUT="$(abspath $(FAUDIO_OBJ64))"
+	+$(MAKE) -C $(FAUDIO) $(FAUDIO_MAKEFLAGS) FAUDIO_OUT="$(abspath $(FAUDIO_OBJ64))" INSTALL_PREFIX="$(abspath $(TOOLS_DIR64))" install
+	mkdir -p $(DST_DIR)/lib64
+	cp -L $(TOOLS_DIR64)/lib/libFAudio.so $(DST_DIR)/lib64/libFAudio.so
+	[ x"$(STRIP)" = x ] || $(STRIP) $(DST_DIR)/lib64/libFAudio.so
+
+faudio32: SHELL = $(CONTAINER_SHELL32)
+faudio32: $(FFMPEG_TARGETS)
+	mkdir -p $(FAUDIO_OBJ32)
+	+$(MAKE) -C $(FAUDIO) $(FAUDIO_MAKEFLAGS) FAUDIO_OUT="$(abspath $(FAUDIO_OBJ32))"
+	+$(MAKE) -C $(FAUDIO) $(FAUDIO_MAKEFLAGS) FAUDIO_OUT="$(abspath $(FAUDIO_OBJ32))" INSTALL_PREFIX="$(abspath $(TOOLS_DIR32))" install
+	mkdir -p $(DST_DIR)/lib
+	cp -L $(TOOLS_DIR32)/lib/libFAudio.so $(DST_DIR)/lib/libFAudio.so
+	[ x"$(STRIP)" = x ] || $(STRIP) $(DST_DIR)/lib/libFAudio.so
 ##
 ## lsteamclient
 ##
