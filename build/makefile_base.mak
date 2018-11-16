@@ -2,6 +2,8 @@
 ## Nested make
 ##
 
+SHELL := /bin/bash
+
 ifneq ($(NO_NESTED_MAKE),1)
 # Pass all variables/goals to ourselves as a sub-make such that we will get a trailing error message upon failure.  (We
 # invoke a lot of long-running build-steps, and make fails to re-print errors when they happened ten thousand lines
