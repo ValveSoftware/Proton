@@ -19,8 +19,10 @@ about: Game compatibility issues.
 - [ ] that I haven't found an existing compatibility report for this game.
 - [ ] that I have checked whether there are updates for my system available.
 
-<!-- Please add `PROTON_LOG=1 %command%` to the game's launch options and drag
-and drop the generated `$HOME/steam-$APPID.log` into this issue report -->
+## Proton Log
+<!-- Please add `PROTON_LOG=1 %command%` to the game's launch options and
+either drag and drop the generated `$HOME/steam-$APPID.log` into this
+issue report, or include a link to where you published it, like on Gist.-->
 
 ## Symptoms <!-- What's the problem? -->
 
