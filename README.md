@@ -34,7 +34,7 @@ The most current source for Proton is here:
 
 Which you can clone to your system with this command:
 
-       git clone https://github.com/ValveSoftware/Proton.git proton
+        git clone https://github.com/ValveSoftware/Proton.git proton
 
 After cloning the Proton git repository, the next step will be to
 obtain the various submodules that go into building Proton:
@@ -49,89 +49,114 @@ changes to the <tt>wine/</tt> directory.
 ---
 Building
 ---
-The following instructions describe how we create the build environment for the
-production builds of Proton. For reproducibility and security reasons, we build
-inside of a Debian 9 virtual machine. However, you should be able to follow
-these instructions on other distributions as well.
+At a high level, the build instructions are:
 
+1. Set up your build environment
+1. Configure the build
+1. Build Proton
+1. Install Proton locally (optional)
+
+See below for more details on all of these steps. Please read all of the
+instructions before proceeding.
+
+---
+Set up the build environment
+---
+Proton has a lot of build-time dependencies. The following instructions
+describe how we create the build environment for the production builds of
+Proton. For reproducibility and security reasons, we will be setting up a
+Debian 9 virtual machine. However, you should be able to follow these
+instructions on other distributions as well.
+
+Proton provides a Vagrantfile, which will automatically set up the Debian 9 VM
+for you. After installing [Vagrant](https://www.vagrantup.com/), initialize the
+VM by running from within the Proton directory:
+
+        vagrant up
+
+It will take a long time to download and install the Steam runtime containers
+and so on. Eventually it will complete. You can SSH into the virtual machine
+with:
+
+        vagrant ssh
+
+The Vagrantfile is set up to rsync the `proton` directory into the VM on boot,
+and it will create a `build` directory in `$HOME` that is ready for you to run
+`make`. On the host machine, you can use `vagrant rsync-auto` to have Vagrant
+automatically sync changes on your host machine into the build machine. It is
+recommended that you make changes on your host machine, and then perform the
+build in the VM. Any changes you make in the `proton` directory on the VM may
+be overwritten by later rsync updates from the host machine.
+
+The Vagrantfile also creates a directory called `vagrant_share` in the `proton`
+directory of your host machine, which is mounted at `/vagrant` within the VM.
+You can use this shared folder to move your Proton build out of the VM, or as
+one way to copy files into the VM.
+
+If you do not wish to use Vagrant, you can reference Vagrantfile and
+`vagrant-user-setup.sh` for the list of dependencies and instructions on how to
+set up your own machine or another VM of your choosing.
+
+When you are done with the VM, you can shut it down from the host machine:
+
+        vagrant halt
+
+Please read the Vagrant documentation for more information about how to use
+Vagrant VMs.
+
+---
+Alternative: Building without the Steam Runtime
+---
 The Steam Runtime provides a clean and consistent set of libraries. Software
 distributed through Steam should depend only on libraries available through the
-runtime, and so we build in that environment for production Proton builds.
-However, if you are simply making a build for yourself, you can skip the Docker
-and Steam Runtime setup steps below, as they take a very long time to set up.
-At configure-time, pass the `--no-steam-runtime` flag instead of the Docker
-flags shown here.
+runtime, and so we build in that environment for production Proton builds. The
+Vagrantfile described above will set this up for you.  However, if you are
+simply making a build for yourself, you may want to skip setting up the Steam
+runtime, as it takes a very long time to set up. To do this, edit the
+`vagrant-user-setup.sh` script appropriately before running `vagrant up`.
 
-The build system uses Docker containers. It requires your user to be able to
-usefully run Docker containers, which generally means [your user needs to be in
-the "docker" group](https://docs.docker.com/install/linux/linux-postinstall/),
-which can have [security
-implications](https://docs.docker.com/engine/security/security/).
-
-Starting from a stock Debian 9 installation, you will need to install the
-`gpgv2`, `gnupg2`, `g++`, `g++-6-multilib`, and `mingw-w64` packages from the
-Debian repos.  You will also need to install `meson` version 0.43 or later,
-which can be [acquired from backports](https://backports.debian.org/Instructions/). Next,
-[install Docker-CE from the official Docker repositories](https://docs.docker.com/install/linux/docker-ce/debian/).
-Finally, since we will need to be able to run Wine during the build process,
-[install the `winehq-devel` package from the official WineHQ repositories](https://wiki.winehq.org/Debian).
-This will pull in all of the dependencies required to run wine. You can then
-(and we do) uninstall the `winehq-devel` package in order to ensure that a
-system Wine installation does not interfere with your build process.
-
-DXVK requires that we choose the posix alternative for the mingw-w64 compilers:
-
-        sudo update-alternatives --set x86_64-w64-mingw32-gcc `which x86_64-w64-mingw32-gcc-posix`
-        sudo update-alternatives --set x86_64-w64-mingw32-g++ `which x86_64-w64-mingw32-g++-posix`
-        sudo update-alternatives --set i686-w64-mingw32-gcc `which i686-w64-mingw32-gcc-posix`
-        sudo update-alternatives --set i686-w64-mingw32-g++ `which i686-w64-mingw32-g++-posix`
-
-Next we set up the Steam runtime build environments. Here we use the
-`wip-docker` branch to get access to the Docker images.
-
-        cd ~
-        git clone https://github.com/ValveSoftware/steam-runtime.git
-        cd steam-runtime
-        git checkout -b wip-docker origin/wip-docker
-
-The steps below will build the Docker images. Each step will take a significant
-amount of time. Note the path to a file in the `proton` directory. See the
-previous section for instructions on cloning Proton.
-
-        cd ~
-        #set up the 64-bit Docker image for building Proton
-        ./steam-runtime/setup_docker.sh --beta amd64 --extra-bootstrap=./proton/steamrt-bootstrap.sh steam-proton-dev
-        #set up the 32-bit Docker image for building Proton
-        ./steam-runtime/setup_docker.sh --beta i386 --extra-bootstrap=./proton/steamrt-bootstrap.sh steam-proton-dev32
-
-With the build system set up, we can configure Proton and kick off the build.
-If you are not building in the runtime, pass `--no-steam-runtime` to
-`configure.sh` instead.
+---
+Configure the build
+---
+After setting up the build system, it is time to run the configure script which
+will generate the Makefile to build your project. The Vagrantfile is set up to
+do this automatically for you in a directory called `$HOME/build` within the
+VM. If you are configuring manually, run these steps:
 
         mkdir proton/mybuild/
         cd proton/mybuild
         ../configure.sh --steam-runtime64=docker:steam-proton-dev --steam-runtime32=docker:steam-proton-dev32
-        make -j6 all dist
 
-**Tip**: If you are building without the Steam runtime as shown here, you
-should first run `make obj-wine64/Makefile obj-wine32/Makefile` and check the
-files `obj-wine64/config.log` and `obj-wine32/config.log` for missing packages.
+If you are building without the Steam runtime, then instead use:
+
+        ../configure.sh --no-steam-runtime
+
+**Tip**: If you are building without the Steam runtime, you should now run
+`make obj-wine64/Makefile obj-wine32/Makefile` and check the files
+`obj-wine64/config.log` and `obj-wine32/config.log` for missing packages.
 Search for `won't be supported`. A couple of missing packages are normal:
-`opencv`, `gstreamer`, `vkd3d`, `oss`, and `libavcodec`. More than that may
-indicate a problem. One easy way to install the dependencies required to build
-Wine is to use `apt-get`'s `build-dep` feature.
+`opencv`, `gstreamer`, `vkd3d`, `oss`. More than that may indicate a problem.
+Please see your distro's documentation to acquire the considerable build
+dependencies for Wine.
 
-The `mybuild/dist` folder now contains a build of Proton which you can install
+---
+Build Proton
+---
+A couple of Makefile targets are provided. `make dist` will create a Proton
+installation that you can install locally with `make install`. `make deploy`
+will package Proton up for distribution via Steamworks.
+
+The `dist/` folder now contains a build of Proton which you can install
 manually or with `make install` to install into your user's Steam installation.
 See the next section for more details.
 
 ---
-Deploying
+Install Proton locally
 ---
 Steam ships with several versions of Proton, which games will use by default or
 that you can select in Steam Settings's SteamPlay page. Steam also supports
 running games with local builds of Proton, which you can install on your
-machine.
+machine. The `install` target will perform the below steps for you.
 
 To install a local build of Proton into Steam, make a new directory in
 `~/.steam/steam/compatibilitytools.d/` with a tool name of your choosing and

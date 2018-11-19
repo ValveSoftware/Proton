@@ -12,6 +12,7 @@ Vagrant.configure(2) do |config|
     v.memory = `grep 'MemTotal' /proc/meminfo | sed -e 's/MemTotal://' -e 's/ kB//'`.to_i / 1024 / 2
   end
 
+  #set up shared and rsynced folders
   config.vm.synced_folder "./vagrant_share/", "/vagrant/", id: "share", create: true
   config.vm.synced_folder ".", "/home/vagrant/proton", id: "proton", type: "rsync", rsync__exclude: ["/output/", "vagrant_share"], rsync__args: ["--verbose", "--archive", "-z", "--links", "--update"]
 
@@ -19,22 +20,33 @@ Vagrant.configure(2) do |config|
     dpkg --add-architecture i386
     apt-get update
     apt-get install -y apt-transport-https ca-certificates curl gnupg2 software-properties-common
+
     #add winehq repo
     curl -fsSL https://dl.winehq.org/wine-builds/Release.key | apt-key add -
     echo 'deb http://dl.winehq.org/wine-builds/debian stretch main' > /etc/apt/sources.list.d/winehq.list
+
     #add backports
     echo 'deb http://ftp.debian.org/debian stretch-backports main' > /etc/apt/sources.list.d/backports.list
+
     #add docker repo
     curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add -
     add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/debian stretch stable"
+
+    #install host build-time dependencies
     apt-get update
-	apt-get install -y gpgv2 gnupg2 g++ g++-6-multilib mingw-w64 git docker-ce winehq-devel fontforge-nox
-    apt-get remove -y winehq-devel
+    apt-get install -y gpgv2 gnupg2 g++ g++-6-multilib mingw-w64 git docker-ce winehq-devel fontforge-nox
     apt-get -y -t stretch-backports install meson
+
+    #remove system Wine installation to ensure no accidental leakage
+    apt-get remove -y winehq-devel
+
+    #configure posix mingw-w64 alternative for DXVK
     update-alternatives --set x86_64-w64-mingw32-gcc `which x86_64-w64-mingw32-gcc-posix`
     update-alternatives --set x86_64-w64-mingw32-g++ `which x86_64-w64-mingw32-g++-posix`
     update-alternatives --set i686-w64-mingw32-gcc `which i686-w64-mingw32-gcc-posix`
     update-alternatives --set i686-w64-mingw32-g++ `which i686-w64-mingw32-g++-posix`
+
+    #allow vagrant user to run docker
     adduser vagrant docker
   SHELL
 
