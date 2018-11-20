@@ -229,8 +229,11 @@ const char * __thiscall winISteamController_SteamController006_GetStringForActio
 DEFINE_THISCALL_WRAPPER(winISteamController_SteamController006_GetGlyphForActionOrigin, 8)
 const char * __thiscall winISteamController_SteamController006_GetGlyphForActionOrigin(winISteamController_SteamController006 *_this, EControllerActionOrigin eOrigin)
 {
+    const char *path_result;
     TRACE("%p\n", _this);
-    return cppISteamController_SteamController006_GetGlyphForActionOrigin(_this->linux_side, eOrigin);
+    path_result = cppISteamController_SteamController006_GetGlyphForActionOrigin(_this->linux_side, eOrigin);
+    path_result = steamclient_isteamcontroller_getglyph(eOrigin, path_result);
+    return path_result;
 }
 
 DEFINE_THISCALL_WRAPPER(winISteamController_SteamController006_GetInputTypeForHandle, 12)
@@ -479,8 +482,11 @@ const char * __thiscall winISteamController_SteamController005_GetStringForActio
 DEFINE_THISCALL_WRAPPER(winISteamController_SteamController005_GetGlyphForActionOrigin, 8)
 const char * __thiscall winISteamController_SteamController005_GetGlyphForActionOrigin(winISteamController_SteamController005 *_this, EControllerActionOrigin eOrigin)
 {
+    const char *path_result;
     TRACE("%p\n", _this);
-    return cppISteamController_SteamController005_GetGlyphForActionOrigin(_this->linux_side, eOrigin);
+    path_result = cppISteamController_SteamController005_GetGlyphForActionOrigin(_this->linux_side, eOrigin);
+    path_result = steamclient_isteamcontroller_getglyph(eOrigin, path_result);
+    return path_result;
 }
 
 extern vtable_ptr winISteamController_SteamController005_vtable;
@@ -910,8 +916,10 @@ typedef struct __winISteamController_STEAMCONTROLLER_INTERFACE_VERSION {
 DEFINE_THISCALL_WRAPPER(winISteamController_STEAMCONTROLLER_INTERFACE_VERSION_Init, 8)
 bool __thiscall winISteamController_STEAMCONTROLLER_INTERFACE_VERSION_Init(winISteamController_STEAMCONTROLLER_INTERFACE_VERSION *_this, const char * pchAbsolutePathToControllerConfigVDF)
 {
+    char lin_pchAbsolutePathToControllerConfigVDF[PATH_MAX];
+    steamclient_dos_path_to_unix_path(pchAbsolutePathToControllerConfigVDF, lin_pchAbsolutePathToControllerConfigVDF);
     TRACE("%p\n", _this);
-    return cppISteamController_STEAMCONTROLLER_INTERFACE_VERSION_Init(_this->linux_side, pchAbsolutePathToControllerConfigVDF);
+    return cppISteamController_STEAMCONTROLLER_INTERFACE_VERSION_Init(_this->linux_side, pchAbsolutePathToControllerConfigVDF ? lin_pchAbsolutePathToControllerConfigVDF : NULL);
 }
 
 DEFINE_THISCALL_WRAPPER(winISteamController_STEAMCONTROLLER_INTERFACE_VERSION_Shutdown, 4)

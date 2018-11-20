@@ -247,6 +247,12 @@ case 4704:
     case 24: cb_SteamInventoryStartPurchaseResult_t_24(lin_callback, callback); break;
     }
     break;
+case 4516:
+    switch(callback_len){
+    default:
+    case 12: cb_HTML_FileOpenDialog_t_12(lin_callback, callback); break;
+    }
+    break;
 case 1023:
     switch(callback_len){
     default:

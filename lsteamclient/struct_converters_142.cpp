@@ -789,6 +789,23 @@ void cb_DeleteItemResult_t_16(const void *l, void *w)
 }
 
 #pragma pack( push, 8 )
+struct winHTML_FileOpenDialog_t_12 {
+    HHTMLBrowser unBrowserHandle;
+    const char * pchTitle;
+    const char * pchInitialFile;
+}  __attribute__ ((ms_struct));
+#pragma pack( pop )
+void cb_HTML_FileOpenDialog_t_12(const void *l, void *w)
+{
+    HTML_FileOpenDialog_t *lin = (HTML_FileOpenDialog_t *)l;
+    struct winHTML_FileOpenDialog_t_12 *win = (struct winHTML_FileOpenDialog_t_12 *)w;
+    win->unBrowserHandle = lin->unBrowserHandle;
+    win->pchTitle = lin->pchTitle;
+    steamclient_unix_path_to_dos_path(1, lin->pchInitialFile, g_tmppath, sizeof(g_tmppath));
+    win->pchInitialFile = g_tmppath;
+}
+
+#pragma pack( push, 8 )
 struct winSteamInventoryStartPurchaseResult_t_24 {
     EResult m_result;
     uint64 m_ulOrderID;

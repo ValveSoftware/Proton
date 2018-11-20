@@ -78,5 +78,7 @@ case 3417: /* DeleteItemResult_t_16 */
     return 12;
 case 4704: /* SteamInventoryStartPurchaseResult_t_24 */
     return 20;
+case 4516: /* HTML_FileOpenDialog_t_12 */
+    return 12;
 case 1023: /* FileDetailsResult_t_40 */
     return 36;

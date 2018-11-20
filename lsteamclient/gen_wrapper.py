@@ -164,6 +164,188 @@ print_sizes = []
 
 class_versions = {}
 
+path_conversions = [
+        {
+            "parent_name": "GetAppInstallDir",
+            "l2w_names": ["pchDirectory"],
+            "l2w_lens": ["cchNameMax"],
+            "w2l_names": [],
+            "w2l_arrays": [],
+            "return_is_size": True
+        },
+        {
+            "parent_name": "GetAppInstallDir",
+            "l2w_names": ["pchFolder"],
+            "l2w_lens": ["cchFolderBufferSize"],
+            "w2l_names": [],
+            "w2l_arrays": [],
+            "return_is_size": True
+        },
+        {
+            "parent_name": "GetFileDetails",
+            "l2w_names": [],
+            "l2w_lens": [],
+            "w2l_names": ["pszFileName"],
+            "w2l_arrays": [False],
+            "return_is_size": True
+        },
+        {
+            "parent_name": "GetGlyphForActionOrigin",
+            "l2w_names": [None], #return value
+            "l2w_lens": [None],
+            "w2l_names": [],
+            "w2l_arrays": [],
+            "return_is_size": False
+        },
+        ### ISteamGameServer::SetModDir - "Just the folder name, not the whole path. I.e. "Spacewar"."
+        {
+            "parent_name": "FileLoadDialogResponse",
+            "l2w_names": [],
+            "l2w_lens": [],
+            "w2l_names": ["pchSelectedFiles"],
+            "w2l_arrays": [True],
+            "return_is_size": False
+        },
+        {
+            "parent_name": "HTML_FileOpenDialog_t",
+            "l2w_names": ["pchInitialFile"],
+            "l2w_lens": [None],
+            "w2l_names": [],
+            "w2l_arrays": [],
+            "return_is_size": False
+        },
+        ### XXX: some URLs could be file: protocol
+        {
+            "parent_name": "PublishWorkshopFile",
+            "l2w_names": [],
+            "l2w_lens": [],
+            "w2l_names": ["pchFile", "pchPreviewFile"],
+            "w2l_arrays": [False, False],
+            "return_is_size": False
+        },
+        {
+            "parent_name": "UpdatePublishedFileFile",
+            "l2w_names": [],
+            "l2w_lens": [],
+            "w2l_names": ["pchFile"],
+            "w2l_arrays": [False],
+            "return_is_size": False
+        },
+        {
+            "parent_name": "UpdatePublishedFilePreviewFile",
+            "l2w_names": [],
+            "l2w_lens": [],
+            "w2l_names": ["pchPreviewFile"],
+            "w2l_arrays": [False],
+            "return_is_size": False
+        },
+        {
+            "parent_name": "PublishVideo",
+            "l2w_names": [],
+            "l2w_lens": [],
+            "w2l_names": ["pchPreviewFile"],
+            "w2l_arrays": [False],
+            "return_is_size": False
+        },
+        {
+            "parent_name": "AddScreenshotToLibrary",
+            "l2w_names": [],
+            "l2w_lens": [],
+            "w2l_names": ["pchFilename", "pchThumbnailFilename"],
+            "w2l_arrays": [False, False],
+            "return_is_size": False
+        },
+        {
+            "parent_name": "AddVRScreenshotToLibrary",
+            "l2w_names": [],
+            "l2w_lens": [],
+            "w2l_names": ["pchFilename", "pchVRFilename"],
+            "w2l_arrays": [False, False],
+            "return_is_size": False
+        },
+        {
+            "parent_name": "UGCDownloadToLocation",
+            "l2w_names": [],
+            "l2w_lens": [],
+            "w2l_names": ["pchLocation"],
+            "w2l_arrays": [False],
+            "return_is_size": False
+        },
+        ### is GetQueryUGCAdditionalPreview URL a file:?
+        {
+            "parent_name": "SetItemContent",
+            "l2w_names": [],
+            "l2w_lens": [],
+            "w2l_names": ["pszContentFolder"],
+            "w2l_arrays": [False],
+            "return_is_size": False
+        },
+        {
+            "parent_name": "SetItemPreview",
+            "l2w_names": [],
+            "l2w_lens": [],
+            "w2l_names": ["pszPreviewFile"],
+            "w2l_arrays": [False],
+            "return_is_size": False
+        },
+        {
+            "parent_name": "AddItemPreviewFile",
+            "l2w_names": [],
+            "l2w_lens": [],
+            "w2l_names": ["pszPreviewFile"],
+            "w2l_arrays": [False],
+            "return_is_size": False
+        },
+        {
+            "parent_name": "UpdateItemPreviewFile",
+            "l2w_names": [],
+            "l2w_lens": [],
+            "w2l_names": ["pszPreviewFile"],
+            "w2l_arrays": [False],
+            "return_is_size": False
+        },
+        {
+            "parent_name": "GetItemInstallInfo",
+            "l2w_names": ["pchFolder"],
+            "l2w_lens": ["cchFolderSize"],
+            "w2l_names": [],
+            "w2l_arrays": [],
+            "return_is_size": False
+        },
+        {
+            "parent_name": "BInitWorkshopForGameServer",
+            "l2w_names": [],
+            "l2w_lens": [],
+            "w2l_names": ["pszFolder"],
+            "w2l_arrays": [False],
+            "return_is_size": False
+        },
+        {
+            "parent_name": "GetUserDataFolder",
+            "l2w_names": ["pchBuffer"],
+            "l2w_lens": ["cubBuffer"],
+            "w2l_names": [],
+            "w2l_arrays": [],
+            "return_is_size": False
+        },
+        {
+            "parent_name": "CheckFileSignature",
+            "l2w_names": [],
+            "l2w_lens": [],
+            "w2l_names": ["szFileName"],
+            "w2l_arrays": [False],
+            "return_is_size": False
+        },
+        {
+            "parent_name": "Init",
+            "l2w_names": [],
+            "l2w_lens": [],
+            "w2l_names": ["pchAbsolutePathToControllerConfigVDF"],
+            "w2l_arrays": [False],
+            "return_is_size": False
+        }
+]
+
 def strip_const(typename):
     return typename.replace("const ", "", 1)
 
@@ -184,6 +366,9 @@ def struct_needs_conversion_nocache(struct):
         if field.type.kind == clang.cindex.TypeKind.RECORD and \
                 struct_needs_conversion(field.type):
             return True
+    path_conv = get_path_converter(struct)
+    if path_conv:
+        return True
     return False
 
 def struct_needs_conversion(struct):
@@ -197,6 +382,21 @@ def handle_destructor(cfile, classname, winclassname, method):
     cfile.write("DEFINE_THISCALL_WRAPPER(%s_destructor, 4)\n" % winclassname)
     cfile.write("void __thiscall %s_destructor(%s *_this)\n{/* never called */}\n\n" % (winclassname, winclassname))
     return "destructor"
+
+def get_path_converter(parent):
+    for conv in path_conversions:
+        if conv["parent_name"] in parent.spelling:
+            if None in conv["l2w_names"]:
+                return conv
+            if type(parent) == clang.cindex.Type:
+                children = list(parent.get_fields())
+            else:
+                children = list(parent.get_children())
+            for child in children:
+                if child.spelling in conv["w2l_names"] or \
+                        child.spelling in conv["l2w_names"]:
+                    return conv
+    return None
 
 def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, existing_methods):
     used_name = method.spelling
@@ -269,13 +469,24 @@ def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, e
     cpp.write(")\n{\n")
     cpp_h.write(");\n")
 
-    char_param_is_unix_path = "GetAppInstallDir" in used_name or \
-            "GetItemInstallInfo" in used_name
-    path_param_name = None
-    path_size_param_name = None
+    path_conv = get_path_converter(method)
 
-    if char_param_is_unix_path:
-        cfile.write("    uint32 path_result;\n")
+    if path_conv:
+        for i in range(len(path_conv["w2l_names"])):
+            if path_conv["w2l_arrays"][i]:
+                cfile.write("    const char **lin_%s = steamclient_dos_to_unix_stringlist(%s);\n" % (path_conv["w2l_names"][i], path_conv["w2l_names"][i]))
+                # TODO
+                pass
+            else:
+                cfile.write("    char lin_%s[PATH_MAX];\n" % path_conv["w2l_names"][i])
+                cfile.write("    steamclient_dos_path_to_unix_path(%s, lin_%s);\n" % (path_conv["w2l_names"][i], path_conv["w2l_names"][i]))
+        if None in path_conv["l2w_names"]:
+            cfile.write("    const char *path_result;\n")
+        elif path_conv["return_is_size"]:
+            cfile.write("    uint32 path_result;\n")
+        elif len(path_conv["l2w_names"]) > 0:
+            cfile.write("    %s path_result;\n" % method.result_type.spelling)
+
     for param in need_convert:
         if param.type.kind == clang.cindex.TypeKind.POINTER:
             #handle single pointers, but not double pointers
@@ -291,7 +502,7 @@ def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, e
 
     if method.result_type.kind == clang.cindex.TypeKind.VOID:
         cfile.write("    ")
-    elif char_param_is_unix_path:
+    elif path_conv and (len(path_conv["l2w_names"]) > 0 or path_conv["return_is_size"]):
         cfile.write("    path_result = ")
     elif returns_record:
         cfile.write("    *_r = ")
@@ -324,13 +535,6 @@ def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, e
                 cpp.write(", ")
             else:
                 first = False
-            if char_param_is_unix_path:
-                if param.type.spelling == "char *":
-                    path_param_name = param.spelling
-                elif not path_param_name is None and \
-                        (param.type.spelling == "uint32" or
-                                param.type.spelling == "int"):
-                    path_size_param_name = param.spelling
             if param.spelling == "":
                 cfile.write(", _%s" % unnamed)
                 cpp.write("(%s)_%s" % (param.type.spelling, unnamed))
@@ -338,6 +542,9 @@ def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, e
             elif param.type.kind == clang.cindex.TypeKind.POINTER and \
                     param.type.get_pointee().spelling in wrapped_classes:
                 cfile.write(", create_Linux%s(%s)" % (param.type.get_pointee().spelling, param.spelling))
+                cpp.write("(%s)%s" % (param.type.spelling, param.spelling))
+            elif path_conv and param.spelling in path_conv["w2l_names"]:
+                cfile.write(", %s ? lin_%s : NULL" % (param.spelling, param.spelling))
                 cpp.write("(%s)%s" % (param.type.spelling, param.spelling))
             elif param in need_convert:
                 cfile.write(", %s" % param.spelling)
@@ -354,8 +561,22 @@ def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, e
     cpp.write(");\n")
     if returns_record:
         cfile.write("    return _r;\n")
-    if char_param_is_unix_path and not path_param_name is None and not path_size_param_name is None:
-        cfile.write("    return steamclient_unix_path_to_dos_path(path_result, %s, %s);\n" % (path_param_name, path_size_param_name))
+    if path_conv and len(path_conv["l2w_names"]) > 0:
+        for i in range(len(path_conv["l2w_names"])):
+            if path_conv["l2w_names"][i]:
+                cfile.write("    ")
+                if path_conv["return_is_size"]:
+                    cfile.write("path_result = ")
+                cfile.write("steamclient_unix_path_to_dos_path(path_result, %s, %s, %s);\n" % (path_conv["l2w_names"][i], path_conv["l2w_names"][i], path_conv["l2w_lens"][i]))
+            else:
+                #string is in return value
+                #ISteamController::GetGlyphForActionOrigin is the only user here for now
+                cfile.write("    path_result = steamclient_isteamcontroller_getglyph(eOrigin, path_result);\n")
+        cfile.write("    return path_result;\n")
+    if path_conv:
+        for i in range(len(path_conv["w2l_names"])):
+            if path_conv["w2l_arrays"][i]:
+                cfile.write("    steamclient_free_stringlist(lin_%s);\n" % path_conv["w2l_names"][i])
     cfile.write("}\n\n")
     for param in need_convert:
         if param.type.kind == clang.cindex.TypeKind.POINTER:
@@ -477,8 +698,6 @@ cb_table = {}
 #because of struct packing differences between win32 and linux, we
 #need to convert these structs from their linux layout to the win32
 #layout.
-#TODO: could we optimize this by detecting if the structs are the
-#same layout at generation-time?
 def handle_struct(sdkver, struct):
     members = struct.get_children()
     cb_num = None
@@ -575,6 +794,8 @@ def handle_struct(sdkver, struct):
     cppfile.write("}  __attribute__ ((ms_struct));\n")
     cppfile.write("#pragma pack( pop )\n")
 
+    path_conv = get_path_converter(struct.type)
+
     def handle_field(m, src, dst):
         if m.kind == clang.cindex.CursorKind.FIELD_DECL:
             if m.type.kind == clang.cindex.TypeKind.CONSTANTARRAY:
@@ -584,6 +805,9 @@ def handle_struct(sdkver, struct):
             elif m.type.kind == clang.cindex.TypeKind.RECORD and \
                     struct_needs_conversion(m.type):
                 cppfile.write("    %s_to_%s_struct_%s_%s(&%s->%s, &%s->%s);\n" % (src, dst, m.type.spelling, sdkver, src, m.displayname, dst, m.displayname))
+            elif path_conv and m.displayname in path_conv["l2w_names"]:
+                cppfile.write("    steamclient_unix_path_to_dos_path(1, %s->%s, g_tmppath, sizeof(g_tmppath));\n" % (src, m.displayname))
+                cppfile.write("    %s->%s = g_tmppath;\n" % (dst, m.displayname))
             else:
                 cppfile.write("    %s->%s = %s->%s;\n" % (dst, m.displayname, src, m.displayname))
 

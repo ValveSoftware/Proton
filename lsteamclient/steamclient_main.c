@@ -16,6 +16,10 @@
 
 WINE_DEFAULT_DEBUG_CHANNEL(steamclient);
 
+char g_tmppath[PATH_MAX];
+
+static char *controller_glyphs[512]; /* at least k_EControllerActionOrigin_Count */
+
 BOOL WINAPI DllMain(HINSTANCE instance, DWORD reason, void *reserved)
 {
     TRACE("(%p, %u, %p)\n", instance, reason, reserved);
@@ -30,30 +34,107 @@ BOOL WINAPI DllMain(HINSTANCE instance, DWORD reason, void *reserved)
     return TRUE;
 }
 
-uint32 steamclient_unix_path_to_dos_path(uint32 api_result, char *inout, uint32 inout_bytes)
+/* returns the number of bytes written to dst, not including the NUL terminator */
+unsigned int steamclient_unix_path_to_dos_path(bool api_result, const char *src, char *dst, uint32 dst_bytes)
 {
-    WCHAR *converted;
+    WCHAR *dosW;
     uint32 r;
 
-    if(api_result == 0)
+    *dst = 0;
+
+    if(!src || !api_result)
         return 0;
 
-    converted = wine_get_dos_file_name(inout);
-    if(!converted){
-        WARN("Unable to convert unix filename to DOS: %s\n", inout);
-        *inout = 0;
+    dosW = wine_get_dos_file_name(src);
+    if(!dosW){
+        WARN("Unable to convert unix filename to DOS: %s\n", src);
         return 0;
     }
 
-    r = WideCharToMultiByte(CP_UNIXCP, 0, converted, -1, inout, inout_bytes,
+    r = WideCharToMultiByte(CP_UNIXCP, 0, dosW, -1, dst, dst_bytes,
             NULL, NULL);
 
-    HeapFree(GetProcessHeap(), 0, converted);
+    HeapFree(GetProcessHeap(), 0, dosW);
 
-    if(r > 0)
-        return r - 1;
+    return r == 0 ? 0 : r - 1;
+}
 
-    return 0;
+/* returns non-zero on success, zero on failure */
+bool steamclient_dos_path_to_unix_path(const char *src, char *dst)
+{
+    WCHAR srcW[PATH_MAX];
+    char *unix_fn;
+    uint32 r;
+
+    *dst = 0;
+
+    if(!src)
+        return 0;
+
+    r = MultiByteToWideChar(CP_UNIXCP, 0, src, -1, srcW, PATH_MAX);
+    if(r == 0)
+        return 0;
+
+    unix_fn = wine_get_unix_file_name(srcW);
+    if(!unix_fn){
+        WARN("Unable to convert DOS filename to unix: %s\n", src);
+        return 0;
+    }
+
+    strncpy(dst, unix_fn, PATH_MAX);
+
+    HeapFree(GetProcessHeap(), 0, unix_fn);
+
+    return 1;
+}
+
+const char **steamclient_dos_to_unix_stringlist(const char **src)
+{
+    size_t len;
+    const char **s;
+    char **out, **o;
+    WCHAR scratch[PATH_MAX];
+
+    if(!src)
+        return NULL;
+
+    len = sizeof(char*); /* NUL */
+    for(s = src; *s; ++s)
+        len += sizeof(char*);
+
+    out = HeapAlloc(GetProcessHeap(), 0, len);
+
+    for(s = src, o = out; *s; ++s, ++o){
+        MultiByteToWideChar(CP_UNIXCP, 0, *s, -1, scratch, sizeof(scratch)/sizeof(*scratch));
+        *o = wine_get_unix_file_name(scratch);
+    }
+
+    *o = NULL;
+
+    return (const char **)out;
+}
+
+void steamclient_free_stringlist(const char **out)
+{
+    if(out){
+        const char **o;
+        for(o = out; *o; o++)
+            HeapFree(GetProcessHeap(), 0, (char *)*o);
+        HeapFree(GetProcessHeap(), 0, out);
+    }
+}
+
+const char *steamclient_isteamcontroller_getglyph(int origin, const char *lin_path)
+{
+    if(!lin_path)
+        return NULL;
+
+    if(!controller_glyphs[origin])
+        controller_glyphs[origin] = HeapAlloc(GetProcessHeap(), 0, PATH_MAX);
+
+    steamclient_unix_path_to_dos_path(1, lin_path, controller_glyphs[origin], PATH_MAX);
+
+    return controller_glyphs[origin];
 }
 
 #include "win_constructors.h"
