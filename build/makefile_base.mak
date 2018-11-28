@@ -528,9 +528,9 @@ endif # ifeq ($(WITH_FFMPEG),1)
 ## FAudio
 ##
 
-FAUDIO_MAKEFLAGS = FAUDIO_RELEASE=1 DISABLE_XNASONG=1
-ifeq ($WITH_FFMPEG),1)
-FAUDIO_MAKEFLAGS += FAUDIO_FFMPEG=1
+FAUDIO_CMAKE_FLAGS = -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_LIBDIR="lib" -DXNASONG=OFF
+ifeq ($(WITH_FFMPEG),1)
+FAUDIO_CMAKE_FLAGS += -DFFMPEG=ON
 endif # ifeq ($(WITH_FFMPEG),1)
 
 FAUDIO_TARGETS = faudio faudio32 faudio64
@@ -542,23 +542,40 @@ GOAL_TARGETS_LIBS += faudio
 
 faudio: faudio32 faudio64
 
-faudio64: SHELL = $(CONTAINER_SHELL64)
-faudio64: $(FFMPEG_TARGETS)
-	mkdir -p $(FAUDIO_OBJ64)
-	+$(MAKE) -C $(FAUDIO) $(FAUDIO_MAKEFLAGS) FAUDIO_OUT="$(abspath $(FAUDIO_OBJ64))"
-	+$(MAKE) -C $(FAUDIO) $(FAUDIO_MAKEFLAGS) FAUDIO_OUT="$(abspath $(FAUDIO_OBJ64))" INSTALL_PREFIX="$(abspath $(TOOLS_DIR64))" install
-	mkdir -p $(DST_DIR)/lib64
-	cp -L $(TOOLS_DIR64)/lib/libFAudio.so $(DST_DIR)/lib64/libFAudio.so
-	[ x"$(STRIP)" = x ] || $(STRIP) $(DST_DIR)/lib64/libFAudio.so
+FAUDIO_CONFIGURE_FILES32 := $(FAUDIO_OBJ32)/Makefile
+FAUDIO_CONFIGURE_FILES64 := $(FAUDIO_OBJ64)/Makefile
+
+$(FAUDIO_CONFIGURE_FILES32): SHELL = $(CONTAINER_SHELL32)
+$(FAUDIO_CONFIGURE_FILES32): $(FAUDIO)/CMakeLists.txt $(MAKEFILE_DEP) $(CMAKE_BIN32) | $(FAUDIO_OBJ32)
+	cd $(dir $@) && \
+		../$(CMAKE_BIN32) $(abspath $(FAUDIO)) \
+			-DCMAKE_INSTALL_PREFIX="$(abspath $(TOOLS_DIR32))" \
+			$(FAUDIO_CMAKE_FLAGS) \
+			-DCMAKE_C_FLAGS="-m32" -DCMAKE_CXX_FLAGS="-m32"
+
+$(FAUDIO_CONFIGURE_FILES64): SHELL = $(CONTAINER_SHELL64)
+$(FAUDIO_CONFIGURE_FILES64): $(FAUDIO)/CMakeLists.txt $(MAKEFILE_DEP) $(CMAKE_BIN64) | $(FAUDIO_OBJ64)
+	cd $(dir $@) && \
+		../$(CMAKE_BIN64) $(abspath $(FAUDIO)) \
+			-DCMAKE_INSTALL_PREFIX="$(abspath $(TOOLS_DIR64))" \
+			$(FAUDIO_CMAKE_FLAGS)
 
 faudio32: SHELL = $(CONTAINER_SHELL32)
-faudio32: $(FFMPEG_TARGETS)
-	mkdir -p $(FAUDIO_OBJ32)
-	+$(MAKE) -C $(FAUDIO) $(FAUDIO_MAKEFLAGS) FAUDIO_OUT="$(abspath $(FAUDIO_OBJ32))"
-	+$(MAKE) -C $(FAUDIO) $(FAUDIO_MAKEFLAGS) FAUDIO_OUT="$(abspath $(FAUDIO_OBJ32))" INSTALL_PREFIX="$(abspath $(TOOLS_DIR32))" install
+faudio32: $(FAUDIO_CONFIGURE_FILES32)
+	+$(MAKE) -C $(FAUDIO_OBJ32) VERBOSE=1
+	+$(MAKE) -C $(FAUDIO_OBJ32) install VERBOSE=1
 	mkdir -p $(DST_DIR)/lib
-	cp -L $(TOOLS_DIR32)/lib/libFAudio.so $(DST_DIR)/lib/libFAudio.so
+	cp -L $(TOOLS_DIR32)/lib/libFAudio* $(DST_DIR)/lib/
 	[ x"$(STRIP)" = x ] || $(STRIP) $(DST_DIR)/lib/libFAudio.so
+
+faudio64: SHELL = $(CONTAINER_SHELL64)
+faudio64: $(FAUDIO_CONFIGURE_FILES64)
+	+$(MAKE) -C $(FAUDIO_OBJ64) VERBOSE=1
+	+$(MAKE) -C $(FAUDIO_OBJ64) install VERBOSE=1
+	mkdir -p $(DST_DIR)/lib64
+	cp -L $(TOOLS_DIR64)/lib/libFAudio* $(DST_DIR)/lib64/
+	[ x"$(STRIP)" = x ] || $(STRIP) $(DST_DIR)/lib64/libFAudio.so
+
 ##
 ## lsteamclient
 ##
