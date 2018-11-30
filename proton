@@ -60,27 +60,39 @@ def upgrade_pfx(old_ver):
     if old_ver is None:
         return
 
-    old_proton_ver, old_prefix_ver = old_ver.split('-')
-    old_proton_maj, old_proton_min = old_proton_ver.split('.')
-    new_proton_ver, new_prefix_ver = CURRENT_PREFIX_VERSION.split('-')
-    new_proton_maj, new_proton_min = new_proton_ver.split('.')
-
-    if int(new_proton_maj) < int(old_proton_maj) or \
-            (int(new_proton_maj) == int(old_proton_maj) and \
-             int(new_proton_min) < int(old_proton_min)):
-        log("Removing newer prefix")
-        if old_proton_ver == "3.7" and not os.path.exists(os.environ["STEAM_COMPAT_DATA_PATH"] + "/tracked_files"):
-            #proton 3.7 did not generate tracked_files, so copy it into place first
-            shutil.copy(basedir + "/proton_3.7_tracked_files", os.environ["STEAM_COMPAT_DATA_PATH"] + "/tracked_files")
-        remove_tracked_files(os.environ["STEAM_COMPAT_DATA_PATH"])
+    if not '-' in old_ver:
+        #How can this happen??
+        log("Prefix has an invalid version?! You may want to back up user files and delete this prefix.")
+        #If it does, just let the Wine upgrade happen and hope it works...
         return
 
-    if old_proton_ver == "3.7" and old_prefix_ver == "1":
-        if not os.path.exists(prefix + "/drive_c/windows/syswow64/kernel32.dll"):
-            #shipped a busted 64-bit-only installation on 20180822. detect and wipe clean
-            log("Detected broken 64-bit-only installation, re-creating prefix.")
-            shutil.rmtree(prefix)
+    try:
+        old_proton_ver, old_prefix_ver = old_ver.split('-')
+        old_proton_maj, old_proton_min = old_proton_ver.split('.')
+        new_proton_ver, new_prefix_ver = CURRENT_PREFIX_VERSION.split('-')
+        new_proton_maj, new_proton_min = new_proton_ver.split('.')
+
+        if int(new_proton_maj) < int(old_proton_maj) or \
+                (int(new_proton_maj) == int(old_proton_maj) and \
+                 int(new_proton_min) < int(old_proton_min)):
+            log("Removing newer prefix")
+            if old_proton_ver == "3.7" and not os.path.exists(os.environ["STEAM_COMPAT_DATA_PATH"] + "/tracked_files"):
+                #proton 3.7 did not generate tracked_files, so copy it into place first
+                shutil.copy(basedir + "/proton_3.7_tracked_files", os.environ["STEAM_COMPAT_DATA_PATH"] + "/tracked_files")
+            remove_tracked_files(os.environ["STEAM_COMPAT_DATA_PATH"])
             return
+
+        if old_proton_ver == "3.7" and old_prefix_ver == "1":
+            if not os.path.exists(prefix + "/drive_c/windows/syswow64/kernel32.dll"):
+                #shipped a busted 64-bit-only installation on 20180822. detect and wipe clean
+                log("Detected broken 64-bit-only installation, re-creating prefix.")
+                shutil.rmtree(prefix)
+                return
+
+    except ValueError:
+        log("Prefix has an invalid version?! You may want to back up user files and delete this prefix.")
+        #Just let the Wine upgrade happen and hope it works...
+        return
 
 def run_wine(args):
     subprocess.call(args, env=env, stderr=lfile)
