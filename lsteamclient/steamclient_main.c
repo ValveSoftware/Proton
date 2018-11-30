@@ -59,31 +59,49 @@ unsigned int steamclient_unix_path_to_dos_path(bool api_result, const char *src,
     return r == 0 ? 0 : r - 1;
 }
 
+#define IS_ABSOLUTE(x) (*x == '/' || *x == '\\' || (*x && *(x + 1) == ':'))
+
 /* returns non-zero on success, zero on failure */
 bool steamclient_dos_path_to_unix_path(const char *src, char *dst)
 {
-    WCHAR srcW[PATH_MAX];
-    char *unix_fn;
-    uint32 r;
-
     *dst = 0;
 
-    if(!src)
+    if(!src || !*src)
         return 0;
 
-    r = MultiByteToWideChar(CP_UNIXCP, 0, src, -1, srcW, PATH_MAX);
-    if(r == 0)
-        return 0;
+    if(IS_ABSOLUTE(src)){
+        /* absolute path, use wine conversion */
+        WCHAR srcW[PATH_MAX];
+        char *unix_path;
+        uint32 r;
 
-    unix_fn = wine_get_unix_file_name(srcW);
-    if(!unix_fn){
-        WARN("Unable to convert DOS filename to unix: %s\n", src);
-        return 0;
+        r = MultiByteToWideChar(CP_UNIXCP, 0, src, -1, srcW, PATH_MAX);
+        if(r == 0)
+            return 0;
+
+        unix_path = wine_get_unix_file_name(srcW);
+        if(!unix_path){
+            WARN("Unable to convert DOS filename to unix: %s\n", src);
+            return 0;
+        }
+
+        strncpy(dst, unix_path, PATH_MAX);
+
+        HeapFree(GetProcessHeap(), 0, unix_path);
+    }else{
+        /* relative path, just fix up backslashes */
+        const char *s;
+        char *d;
+
+        for(s = src, d = dst; *src; ++s, ++d){
+            if(*s == '\\')
+                *d = '/';
+            else
+                *d = *s;
+        }
+
+        *d = 0;
     }
-
-    strncpy(dst, unix_fn, PATH_MAX);
-
-    HeapFree(GetProcessHeap(), 0, unix_fn);
 
     return 1;
 }
@@ -105,8 +123,21 @@ const char **steamclient_dos_to_unix_stringlist(const char **src)
     out = HeapAlloc(GetProcessHeap(), 0, len);
 
     for(s = src, o = out; *s; ++s, ++o){
-        MultiByteToWideChar(CP_UNIXCP, 0, *s, -1, scratch, sizeof(scratch)/sizeof(*scratch));
-        *o = wine_get_unix_file_name(scratch);
+        if(IS_ABSOLUTE(*s)){
+            MultiByteToWideChar(CP_UNIXCP, 0, *s, -1, scratch, sizeof(scratch)/sizeof(*scratch));
+            *o = wine_get_unix_file_name(scratch);
+        }else{
+            const char *r;
+            char *l;
+            *o = HeapAlloc(GetProcessHeap(), 0, strlen(*s) + 1);
+            for(l = *s, r = *o; *l; ++l, ++r){
+                if(*r == '\\')
+                    *l = '/';
+                else
+                    *l = *r;
+            }
+            *l = 0;
+        }
     }
 
     *o = NULL;
