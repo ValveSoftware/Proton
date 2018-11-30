@@ -231,6 +231,7 @@ def create_fonts_symlinks(prefix_path):
     ]
 
     windowsfonts = prefix_path + "/drive_c/windows/Fonts"
+    makedirs(windowsfonts)
     for p in fontsmap:
         lname = os.path.join(windowsfonts, p[1])
         fname = os.path.join(fontsdir, p[0])
