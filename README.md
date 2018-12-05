@@ -93,16 +93,17 @@ directory of your host machine, which is mounted at `/vagrant` within the VM.
 You can use this shared folder to move your Proton build out of the VM, or as
 one way to copy files into the VM.
 
-If you do not wish to use Vagrant, you can reference Vagrantfile and
-`vagrant-user-setup.sh` for the list of dependencies and instructions on how to
-set up your own machine or another VM of your choosing.
-
 When you are done with the VM, you can shut it down from the host machine:
 
         vagrant halt
 
 Please read the Vagrant documentation for more information about how to use
 Vagrant VMs.
+
+If you do not wish to use Vagrant, you can read through both Vagrantfile and
+`vagrant-user-setup.sh` for the list of dependencies and instructions on how to
+set up your own machine or another VM of your choosing. It is aimed at Debian
+9, but you should be able to adapt them for other distributions.
 
 ---
 Alternative: Building without the Steam Runtime
@@ -142,13 +143,12 @@ dependencies for Wine.
 ---
 Build Proton
 ---
-A couple of Makefile targets are provided. `make dist` will create a Proton
-installation that you can install locally with `make install`. `make deploy`
-will package Proton up for distribution via Steamworks.
+A couple of Makefile targets are provided.
 
-The `dist/` folder now contains a build of Proton which you can install
-manually or with `make install` to install into your user's Steam installation.
-See the next section for more details.
+`make dist` will create a Proton installation in `dist/` that you can install
+manually (see below), or automatically with `make install`.
+
+`make deploy` will package Proton up for distribution via Steamworks.
 
 ---
 Install Proton locally
