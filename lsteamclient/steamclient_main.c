@@ -53,7 +53,7 @@ unsigned int steamclient_unix_path_to_dos_path(bool api_result, const char *src,
         return 0;
     }
 
-    r = WideCharToMultiByte(CP_UNIXCP, 0, dosW, -1, dst, dst_bytes,
+    r = WideCharToMultiByte(CP_ACP, 0, dosW, -1, dst, dst_bytes,
             NULL, NULL);
 
     HeapFree(GetProcessHeap(), 0, dosW);
