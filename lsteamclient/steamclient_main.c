@@ -40,12 +40,14 @@ unsigned int steamclient_unix_path_to_dos_path(bool api_result, const char *src,
     WCHAR *dosW;
     uint32 r;
 
-    *dst = 0;
-
-    if(!src || !api_result)
+    if(!src || !api_result){
+        *dst = 0;
         return 0;
+    }
 
     dosW = wine_get_dos_file_name(src);
+    *dst = 0;
+
     if(!dosW){
         WARN("Unable to convert unix filename to DOS: %s\n", src);
         return 0;
