@@ -132,7 +132,7 @@ const char **steamclient_dos_to_unix_stringlist(const char **src)
             const char *r;
             char *l;
             *o = HeapAlloc(GetProcessHeap(), 0, strlen(*s) + 1);
-            for(l = *s, r = *o; *l; ++l, ++r){
+            for(r = *s, l = *o; *r; ++l, ++r){
                 if(*r == '\\')
                     *l = '/';
                 else
