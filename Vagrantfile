@@ -14,7 +14,7 @@ Vagrant.configure(2) do |config|
 
   #set up shared and rsynced folders
   config.vm.synced_folder "./vagrant_share/", "/vagrant/", id: "share", create: true
-  config.vm.synced_folder ".", "/home/vagrant/proton", id: "proton", type: "rsync", rsync__exclude: ["/output/", "vagrant_share"], rsync__args: ["--verbose", "--archive", "-z", "--links", "--update"]
+  config.vm.synced_folder ".", "/home/vagrant/proton", id: "proton", type: "rsync", rsync__exclude: [".git/", "/output/", "vagrant_share"], rsync__args: ["--verbose", "--archive", "-z", "--links", "--update"]
 
   #this is where the VM is initialized on first setup
   config.vm.provision "shell", privileged: "true", inline: <<-SHELL
