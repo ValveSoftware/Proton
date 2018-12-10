@@ -27,6 +27,7 @@ sdk_versions = [
     "v1.0.5",
     "v1.0.4",
     "v1.0.3",
+    "v1.0.3a",
     "v1.0.2",
     "v1.0.1",
     "v1.0.0",
@@ -97,7 +98,6 @@ aliases = {
     #is compatible.
 #    "SteamClient012":["SteamClient013"],
 #    "SteamUtils004":["SteamUtils003"], # TimeShift uses SteamUtils003
-
 
     #leaving these commented-out. let's see if they turn up in practice,
     #and handle them correctly if so.
@@ -171,7 +171,7 @@ def ivrcompositor_post_present_handoff(cppname, method):
     return "ivrcompositor_post_present_handoff"
 
 def ivrcompositor_wait_get_poses(cppname, method):
-    for version in ["016", "018", "019", "020", "021", "022"]:
+    for version in ["016", "017","018", "019", "020", "021", "022"]:
         if version in cppname:
             return "ivrcompositor_wait_get_poses"
     return None
@@ -564,7 +564,8 @@ WINE_DEFAULT_DEBUG_CHANNEL(vrclient);
     constructors.write("    {\"FnTable:%s\", &create_%s_FnTable, &destroy_%s_FnTable},\n" % (iface_version, winclassname, winclassname))
     if iface_version in aliases.keys():
         for alias in aliases[iface_version]:
-            constructors.write("    {\"%s\", &create_%s}, /* alias */\n" % (alias, winclassname))
+            constructors.write("    {\"%s\", &create_%s, &destroy_%s}, /* alias */\n" % (alias, winclassname, winclassname))
+            constructors.write("    {\"FnTable:%s\", &create_%s_FnTable, &destroy_%s_FnTable},\n" % (alias, winclassname, winclassname))
 
     generate_c_api_thunk_tests(winclassname, methods, method_names)
 
