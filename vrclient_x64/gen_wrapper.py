@@ -26,6 +26,7 @@ sdk_versions = [
     "v1.0.6",
     "v1.0.5",
     "v1.0.4",
+    "v1.0.3a", #non-public build used by The Lab, see Proton github PR#2075
     "v1.0.3",
     "v1.0.2",
     "v1.0.1",
@@ -171,7 +172,7 @@ def ivrcompositor_post_present_handoff(cppname, method):
     return "ivrcompositor_post_present_handoff"
 
 def ivrcompositor_wait_get_poses(cppname, method):
-    for version in ["016", "018", "019", "020", "021", "022"]:
+    for version in ["016", "017", "018", "019", "020", "021", "022"]:
         if version in cppname:
             return "ivrcompositor_wait_get_poses"
     return None
@@ -564,7 +565,8 @@ WINE_DEFAULT_DEBUG_CHANNEL(vrclient);
     constructors.write("    {\"FnTable:%s\", &create_%s_FnTable, &destroy_%s_FnTable},\n" % (iface_version, winclassname, winclassname))
     if iface_version in aliases.keys():
         for alias in aliases[iface_version]:
-            constructors.write("    {\"%s\", &create_%s}, /* alias */\n" % (alias, winclassname))
+            constructors.write("    {\"%s\", &create_%s, &destroy_%s}, /* alias */\n" % (alias, winclassname, winclassname))
+            constructors.write("    {\"FnTable:%s\", &create_%s_FnTable, &destroy_%s_FnTable},\n" % (alias, winclassname, winclassname))
 
     generate_c_api_thunk_tests(winclassname, methods, method_names)
 

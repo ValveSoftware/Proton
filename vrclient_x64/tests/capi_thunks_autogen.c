@@ -8181,6 +8181,248 @@ EVROverlayError __thiscall IVROverlay_013_SetOverlayIntersectionMask(void *_this
     return 0;
 }
 
+void __thiscall IVRCompositor_017_SetTrackingSpace(void *_this, ETrackingUniverseOrigin eOrigin)
+{
+    push_ptr_parameter(_this);
+    push_uint32_parameter(eOrigin);
+}
+
+ETrackingUniverseOrigin __thiscall IVRCompositor_017_GetTrackingSpace(void *_this)
+{
+    push_ptr_parameter(_this);
+    return 0;
+}
+
+EVRCompositorError __thiscall IVRCompositor_017_WaitGetPoses(void *_this, TrackedDevicePose_t * pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t * pGamePoseArray, uint32_t unGamePoseArrayCount)
+{
+    push_ptr_parameter(_this);
+    push_ptr_parameter(pRenderPoseArray);
+    push_uint32_parameter(unRenderPoseArrayCount);
+    push_ptr_parameter(pGamePoseArray);
+    push_uint32_parameter(unGamePoseArrayCount);
+    return 0;
+}
+
+EVRCompositorError __thiscall IVRCompositor_017_GetLastPoses(void *_this, TrackedDevicePose_t * pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t * pGamePoseArray, uint32_t unGamePoseArrayCount)
+{
+    push_ptr_parameter(_this);
+    push_ptr_parameter(pRenderPoseArray);
+    push_uint32_parameter(unRenderPoseArrayCount);
+    push_ptr_parameter(pGamePoseArray);
+    push_uint32_parameter(unGamePoseArrayCount);
+    return 0;
+}
+
+EVRCompositorError __thiscall IVRCompositor_017_GetLastPoseForTrackedDeviceIndex(void *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDevicePose_t * pOutputPose, TrackedDevicePose_t * pOutputGamePose)
+{
+    push_ptr_parameter(_this);
+    push_uint32_parameter(unDeviceIndex);
+    push_ptr_parameter(pOutputPose);
+    push_ptr_parameter(pOutputGamePose);
+    return 0;
+}
+
+EVRCompositorError __thiscall IVRCompositor_017_Submit(void *_this, EVREye eEye, Texture_t * pTexture, VRTextureBounds_t * pBounds, EVRSubmitFlags nSubmitFlags)
+{
+    push_ptr_parameter(_this);
+    push_uint32_parameter(eEye);
+    push_ptr_parameter(pTexture);
+    push_ptr_parameter(pBounds);
+    push_uint32_parameter(nSubmitFlags);
+    return 0;
+}
+
+void __thiscall IVRCompositor_017_ClearLastSubmittedFrame(void *_this)
+{
+    push_ptr_parameter(_this);
+}
+
+void __thiscall IVRCompositor_017_PostPresentHandoff(void *_this)
+{
+    push_ptr_parameter(_this);
+}
+
+bool __thiscall IVRCompositor_017_GetFrameTiming(void *_this, Compositor_FrameTiming * pTiming, uint32_t unFramesAgo)
+{
+    push_ptr_parameter(_this);
+    push_ptr_parameter(pTiming);
+    push_uint32_parameter(unFramesAgo);
+    return 0;
+}
+
+uint32_t __thiscall IVRCompositor_017_GetFrameTimings(void *_this, Compositor_FrameTiming * pTiming, uint32_t nFrames)
+{
+    push_ptr_parameter(_this);
+    push_ptr_parameter(pTiming);
+    push_uint32_parameter(nFrames);
+    return 0;
+}
+
+float __thiscall IVRCompositor_017_GetFrameTimeRemaining(void *_this)
+{
+    push_ptr_parameter(_this);
+    return 0;
+}
+
+void __thiscall IVRCompositor_017_GetCumulativeStats(void *_this, Compositor_CumulativeStats * pStats, uint32_t nStatsSizeInBytes)
+{
+    push_ptr_parameter(_this);
+    push_ptr_parameter(pStats);
+    push_uint32_parameter(nStatsSizeInBytes);
+}
+
+void __thiscall IVRCompositor_017_FadeToColor(void *_this, float fSeconds, float fRed, float fGreen, float fBlue, float fAlpha, bool bBackground)
+{
+    push_ptr_parameter(_this);
+    push_float_parameter(fSeconds);
+    push_float_parameter(fRed);
+    push_float_parameter(fGreen);
+    push_float_parameter(fBlue);
+    push_float_parameter(fAlpha);
+    push_bool_parameter(bBackground);
+}
+
+void __thiscall IVRCompositor_017_FadeGrid(void *_this, float fSeconds, bool bFadeIn)
+{
+    push_ptr_parameter(_this);
+    push_float_parameter(fSeconds);
+    push_bool_parameter(bFadeIn);
+}
+
+EVRCompositorError __thiscall IVRCompositor_017_SetSkyboxOverride(void *_this, Texture_t * pTextures, uint32_t unTextureCount)
+{
+    push_ptr_parameter(_this);
+    push_ptr_parameter(pTextures);
+    push_uint32_parameter(unTextureCount);
+    return 0;
+}
+
+void __thiscall IVRCompositor_017_ClearSkyboxOverride(void *_this)
+{
+    push_ptr_parameter(_this);
+}
+
+void __thiscall IVRCompositor_017_CompositorBringToFront(void *_this)
+{
+    push_ptr_parameter(_this);
+}
+
+void __thiscall IVRCompositor_017_CompositorGoToBack(void *_this)
+{
+    push_ptr_parameter(_this);
+}
+
+void __thiscall IVRCompositor_017_CompositorQuit(void *_this)
+{
+    push_ptr_parameter(_this);
+}
+
+bool __thiscall IVRCompositor_017_IsFullscreen(void *_this)
+{
+    push_ptr_parameter(_this);
+    return 0;
+}
+
+uint32_t __thiscall IVRCompositor_017_GetCurrentSceneFocusProcess(void *_this)
+{
+    push_ptr_parameter(_this);
+    return 0;
+}
+
+uint32_t __thiscall IVRCompositor_017_GetLastFrameRenderer(void *_this)
+{
+    push_ptr_parameter(_this);
+    return 0;
+}
+
+bool __thiscall IVRCompositor_017_CanRenderScene(void *_this)
+{
+    push_ptr_parameter(_this);
+    return 0;
+}
+
+void __thiscall IVRCompositor_017_ShowMirrorWindow(void *_this)
+{
+    push_ptr_parameter(_this);
+}
+
+void __thiscall IVRCompositor_017_HideMirrorWindow(void *_this)
+{
+    push_ptr_parameter(_this);
+}
+
+bool __thiscall IVRCompositor_017_IsMirrorWindowVisible(void *_this)
+{
+    push_ptr_parameter(_this);
+    return 0;
+}
+
+void __thiscall IVRCompositor_017_CompositorDumpImages(void *_this)
+{
+    push_ptr_parameter(_this);
+}
+
+bool __thiscall IVRCompositor_017_ShouldAppRenderWithLowResources(void *_this)
+{
+    push_ptr_parameter(_this);
+    return 0;
+}
+
+void __thiscall IVRCompositor_017_ForceInterleavedReprojectionOn(void *_this, bool bOverride)
+{
+    push_ptr_parameter(_this);
+    push_bool_parameter(bOverride);
+}
+
+void __thiscall IVRCompositor_017_ForceReconnectProcess(void *_this)
+{
+    push_ptr_parameter(_this);
+}
+
+void __thiscall IVRCompositor_017_SuspendRendering(void *_this, bool bSuspend)
+{
+    push_ptr_parameter(_this);
+    push_bool_parameter(bSuspend);
+}
+
+EVRCompositorError __thiscall IVRCompositor_017_GetMirrorTextureD3D11(void *_this, EVREye eEye, void * pD3D11DeviceOrResource, void ** ppD3D11ShaderResourceView)
+{
+    push_ptr_parameter(_this);
+    push_uint32_parameter(eEye);
+    push_ptr_parameter(pD3D11DeviceOrResource);
+    push_ptr_parameter(ppD3D11ShaderResourceView);
+    return 0;
+}
+
+EVRCompositorError __thiscall IVRCompositor_017_GetMirrorTextureGL(void *_this, EVREye eEye, glUInt_t * pglTextureId, glSharedTextureHandle_t * pglSharedTextureHandle)
+{
+    push_ptr_parameter(_this);
+    push_uint32_parameter(eEye);
+    push_ptr_parameter(pglTextureId);
+    push_ptr_parameter(pglSharedTextureHandle);
+    return 0;
+}
+
+bool __thiscall IVRCompositor_017_ReleaseSharedGLTexture(void *_this, glUInt_t glTextureId, glSharedTextureHandle_t glSharedTextureHandle)
+{
+    push_ptr_parameter(_this);
+    push_uint32_parameter(glTextureId);
+    push_ptr_parameter(glSharedTextureHandle);
+    return 0;
+}
+
+void __thiscall IVRCompositor_017_LockGLSharedTextureForAccess(void *_this, glSharedTextureHandle_t glSharedTextureHandle)
+{
+    push_ptr_parameter(_this);
+    push_ptr_parameter(glSharedTextureHandle);
+}
+
+void __thiscall IVRCompositor_017_UnlockGLSharedTextureForAccess(void *_this, glSharedTextureHandle_t glSharedTextureHandle)
+{
+    push_ptr_parameter(_this);
+    push_ptr_parameter(glSharedTextureHandle);
+}
+
 void __thiscall IVRSystem_012_GetRecommendedRenderTargetSize(void *_this, uint32_t * pnWidth, uint32_t * pnHeight)
 {
     push_ptr_parameter(_this);

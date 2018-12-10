@@ -64,6 +64,8 @@
     {"FnTable:IVRCompositor_018", &create_winIVRCompositor_IVRCompositor_018_FnTable, &destroy_winIVRCompositor_IVRCompositor_018_FnTable},
     {"IVROverlay_013", &create_winIVROverlay_IVROverlay_013, &destroy_winIVROverlay_IVROverlay_013},
     {"FnTable:IVROverlay_013", &create_winIVROverlay_IVROverlay_013_FnTable, &destroy_winIVROverlay_IVROverlay_013_FnTable},
+    {"IVRCompositor_017", &create_winIVRCompositor_IVRCompositor_017, &destroy_winIVRCompositor_IVRCompositor_017},
+    {"FnTable:IVRCompositor_017", &create_winIVRCompositor_IVRCompositor_017_FnTable, &destroy_winIVRCompositor_IVRCompositor_017_FnTable},
     {"IVRSystem_012", &create_winIVRSystem_IVRSystem_012, &destroy_winIVRSystem_IVRSystem_012},
     {"FnTable:IVRSystem_012", &create_winIVRSystem_IVRSystem_012_FnTable, &destroy_winIVRSystem_IVRSystem_012_FnTable},
     {"IVRCompositor_016", &create_winIVRCompositor_IVRCompositor_016, &destroy_winIVRCompositor_IVRCompositor_016},

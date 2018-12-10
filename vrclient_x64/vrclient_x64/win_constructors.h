@@ -64,6 +64,8 @@ extern void *create_winIVRCompositor_IVRCompositor_018(void *);
 extern void *create_winIVRCompositor_IVRCompositor_018_FnTable(void *);
 extern void *create_winIVROverlay_IVROverlay_013(void *);
 extern void *create_winIVROverlay_IVROverlay_013_FnTable(void *);
+extern void *create_winIVRCompositor_IVRCompositor_017(void *);
+extern void *create_winIVRCompositor_IVRCompositor_017_FnTable(void *);
 extern void *create_winIVRSystem_IVRSystem_012(void *);
 extern void *create_winIVRSystem_IVRSystem_012_FnTable(void *);
 extern void *create_winIVRCompositor_IVRCompositor_016(void *);
