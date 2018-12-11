@@ -340,8 +340,8 @@ with prefix_lock:
 
             if vr_log is None:
                 vr_log = j["log"][0]
-        except (ValueError, OSError):
-            pass
+        except (TypeError, ValueError, OSError):
+            log("Missing or invalid openvrpaths.vrpath file! " + str(sys.exc_info()[1]))
 
     makedirs(prefix + "/drive_c/users/steamuser/Local Settings/Application Data/openvr")
 
