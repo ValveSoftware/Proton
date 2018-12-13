@@ -8,6 +8,6 @@ git clone https://github.com/ValveSoftware/steam-runtime.git
 #configure proton build
 mkdir build
 cd build
-../proton/configure.sh --steam-runtime64=docker:steam-proton-dev --steam-runtime32=docker:steam-proton-dev32
+../proton/configure.sh --steam-runtime64=docker:steam-proton-dev --steam-runtime32=docker:steam-proton-dev32 --with-ffmpeg
 #if building without the runtime, use:
-#../proton/configure.sh --no-steam-runtime
+#../proton/configure.sh --no-steam-runtime --with-ffmpeg

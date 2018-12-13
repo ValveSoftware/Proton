@@ -126,11 +126,11 @@ VM. If you are configuring manually, run these steps:
 
         mkdir proton/mybuild/
         cd proton/mybuild
-        ../configure.sh --steam-runtime64=docker:steam-proton-dev --steam-runtime32=docker:steam-proton-dev32
+        ../configure.sh --steam-runtime64=docker:steam-proton-dev --steam-runtime32=docker:steam-proton-dev32 --with-ffmpeg
 
 If you are building without the Steam runtime, then instead use:
 
-        ../configure.sh --no-steam-runtime
+        ../configure.sh --no-steam-runtime --with-ffmpeg
 
 **Tip**: If you are building without the Steam runtime, you should now run
 `make obj-wine64/Makefile obj-wine32/Makefile` and check the files

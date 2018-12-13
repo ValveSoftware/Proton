@@ -434,7 +434,6 @@ $(FFMPEG_CONFIGURE_FILES64): $(FFMPEG)/configure $(MAKEFILE_DEP) | $(FFMPEG_OBJ6
 			--disable-doc \
 			--disable-avdevice \
 			--disable-avformat \
-			--disable-swresample \
 			--disable-swscale \
 			--disable-postproc \
 			--disable-avfilter \
@@ -470,7 +469,6 @@ $(FFMPEG_CONFIGURE_FILES32): $(FFMPEG)/configure $(MAKEFILE_DEP) | $(FFMPEG_OBJ3
 			--disable-doc \
 			--disable-avdevice \
 			--disable-avformat \
-			--disable-swresample \
 			--disable-swscale \
 			--disable-postproc \
 			--disable-avfilter \
@@ -513,14 +511,14 @@ ffmpeg64: $(FFMPEG_CONFIGURE_FILES64)
 	+$(MAKE) -C $(FFMPEG_OBJ64)
 	+$(MAKE) -C $(FFMPEG_OBJ64) install
 	mkdir -pv $(DST_DIR)/lib64
-	cp -L $(TOOLS_DIR64)/lib/{libavcodec,libavutil}* $(DST_DIR)/lib64
+	cp -L $(TOOLS_DIR64)/lib/{libavcodec,libavutil,libswresample}* $(DST_DIR)/lib64
 
 ffmpeg32: SHELL = $(CONTAINER_SHELL32)
 ffmpeg32: $(FFMPEG_CONFIGURE_FILES32)
 	+$(MAKE) -C $(FFMPEG_OBJ32)
 	+$(MAKE) -C $(FFMPEG_OBJ32) install
 	mkdir -pv $(DST_DIR)/lib
-	cp -L $(TOOLS_DIR32)/lib/{libavcodec,libavutil}* $(DST_DIR)/lib
+	cp -L $(TOOLS_DIR32)/lib/{libavcodec,libavutil,libswresample}* $(DST_DIR)/lib
 
 endif # ifeq ($(WITH_FFMPEG),1)
 
@@ -547,18 +545,23 @@ FAUDIO_CONFIGURE_FILES64 := $(FAUDIO_OBJ64)/Makefile
 
 $(FAUDIO_CONFIGURE_FILES32): SHELL = $(CONTAINER_SHELL32)
 $(FAUDIO_CONFIGURE_FILES32): $(FAUDIO)/CMakeLists.txt $(MAKEFILE_DEP) $(CMAKE_BIN32) | $(FAUDIO_OBJ32)
+
 	cd $(dir $@) && \
 		../$(CMAKE_BIN32) $(abspath $(FAUDIO)) \
 			-DCMAKE_INSTALL_PREFIX="$(abspath $(TOOLS_DIR32))" \
 			$(FAUDIO_CMAKE_FLAGS) \
+			-DFFmpeg_INCLUDE_DIR="$(abspath $(TOOLS_DIR32))/include" \
 			-DCMAKE_C_FLAGS="-m32" -DCMAKE_CXX_FLAGS="-m32"
 
 $(FAUDIO_CONFIGURE_FILES64): SHELL = $(CONTAINER_SHELL64)
 $(FAUDIO_CONFIGURE_FILES64): $(FAUDIO)/CMakeLists.txt $(MAKEFILE_DEP) $(CMAKE_BIN64) | $(FAUDIO_OBJ64)
+
 	cd $(dir $@) && \
 		../$(CMAKE_BIN64) $(abspath $(FAUDIO)) \
 			-DCMAKE_INSTALL_PREFIX="$(abspath $(TOOLS_DIR64))" \
-			$(FAUDIO_CMAKE_FLAGS)
+			$(FAUDIO_CMAKE_FLAGS) \
+			-DFFmpeg_INCLUDE_DIR="$(abspath $(TOOLS_DIR64))/include"
+			
 
 faudio32: SHELL = $(CONTAINER_SHELL32)
 faudio32: $(FAUDIO_CONFIGURE_FILES32)
