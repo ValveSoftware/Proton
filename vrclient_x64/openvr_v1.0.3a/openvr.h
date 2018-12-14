@@ -145,6 +145,7 @@ enum ETrackingResult
 	TrackingResult_Running_OutOfRange		= 201,
 };
 
+static const uint32_t k_unTrackingStringSize = 32;
 static const uint32_t k_unMaxDriverDebugResponseSize = 32768;
 
 /** Used to pass device IDs to API calls */
@@ -1136,10 +1137,10 @@ public:
 	* application is doing something fancy like infinite Z */
 	virtual void GetProjectionRaw( EVREye eEye, float *pfLeft, float *pfRight, float *pfTop, float *pfBottom ) = 0;
 
-	/** Gets the result of the distortion function for the specified eye and input UVs. UVs go from 0,0 in 
+	/** Returns the result of the distortion function for the specified eye and input UVs. UVs go from 0,0 in 
 	* the upper left of that eye's viewport and 1,1 in the lower right of that eye's viewport.
-	* Returns true for success. Otherwise, returns false, and distortion coordinates are not suitable. */
-	virtual bool ComputeDistortion( EVREye eEye, float fU, float fV, DistortionCoordinates_t *pDistortionCoordinates ) = 0;
+	* Values may be NAN to indicate an error has occurred. */
+	virtual DistortionCoordinates_t ComputeDistortion( EVREye eEye, float fU, float fV ) = 0;
 
 	/** Returns the transform from eye space to the head space. Eye space is the per-eye flavor of head
 	* space that provides stereo disparity. Instead of Model * View * Projection the sequence is Model * View * Eye^-1 * Projection. 
@@ -1275,7 +1276,7 @@ public:
 
 	/** Returns a string property. If the device index is not valid or the property is not a string type this function will 
 	* return 0. Otherwise it returns the length of the number of bytes necessary to hold this string including the trailing
-	* null. Strings will always fit in buffers of k_unMaxPropertyStringSize characters. */
+	* null. Strings will generally fit in buffers of k_unTrackingStringSize characters. */
 	virtual uint32_t GetStringTrackedDeviceProperty( vr::TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, VR_OUT_STRING() char *pchValue, uint32_t unBufferSize, ETrackedPropertyError *pError = 0L ) = 0;
 
 	/** returns a string that corresponds with the specified property error. The string will be the name 
@@ -2094,14 +2095,7 @@ public:
 	/** Gets current tracking space returned by WaitGetPoses */
 	virtual ETrackingUniverseOrigin GetTrackingSpace() = 0;
 
-	/** Scene applications should call this function to get poses to render with (and optionally poses predicted an additional frame out to use for gameplay).
-	* This function will block until "running start" milliseconds before the start of the frame, and should be called at the last moment before needing to
-	* start rendering.
-	*
-	* Return codes:
-	*	- IsNotSceneApplication (make sure to call VR_Init with VRApplicaiton_Scene)
-	*	- DoNotHaveFocus (some other app has taken focus - this will throttle the call to 10hz to reduce the impact on that app)
-	*/
+	/** Returns pose(s) to use to render scene (and optionally poses predicted two frames out for gameplay). */
 	virtual EVRCompositorError WaitGetPoses( VR_ARRAY_COUNT(unRenderPoseArrayCount) TrackedDevicePose_t* pRenderPoseArray, uint32_t unRenderPoseArrayCount,
 		VR_ARRAY_COUNT(unGamePoseArrayCount) TrackedDevicePose_t* pGamePoseArray, uint32_t unGamePoseArrayCount ) = 0;
 
@@ -2119,15 +2113,6 @@ public:
 	*
 	* OpenGL dirty state:
 	*	glBindTexture
-	*
-	* Return codes:
-	*	- IsNotSceneApplication (make sure to call VR_Init with VRApplicaiton_Scene)
-	*	- DoNotHaveFocus (some other app has taken focus)
-	*	- TextureIsOnWrongDevice (application did not use proper AdapterIndex - see IVRSystem.GetDXGIOutputInfo)
-	*	- SharedTexturesNotSupported (application needs to call CreateDXGIFactory1 or later before creating DX device)
-	*	- TextureUsesUnsupportedFormat (scene textures must be compatible with DXGI sharing rules - e.g. uncompressed, no mips, etc.)
-	*	- InvalidTexture (usually means bad arguments passed in)
-	*	- AlreadySubmitted (app has submitted two left textures or two right textures in a single frame - i.e. before calling WaitGetPoses again)
 	*/
 	virtual EVRCompositorError Submit( EVREye eEye, const Texture_t *pTexture, const VRTextureBounds_t* pBounds = 0, EVRSubmitFlags nSubmitFlags = Submit_Default ) = 0;
 
