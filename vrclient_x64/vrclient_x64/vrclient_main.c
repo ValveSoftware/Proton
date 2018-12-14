@@ -32,8 +32,8 @@ typedef struct winRenderModel_t_1015 winRenderModel_t_1015;
 typedef struct winRenderModel_TextureMap_t_1015 winRenderModel_TextureMap_t_1015;
 #include "cppIVRRenderModels_IVRRenderModels_005.h"
 
-typedef struct winRenderModel_t_1017 winRenderModel_t_1017;
-typedef struct winRenderModel_TextureMap_t_1017 winRenderModel_TextureMap_t_1017;
+typedef struct winRenderModel_t_113b winRenderModel_t_113b;
+typedef struct winRenderModel_TextureMap_t_113b winRenderModel_TextureMap_t_113b;
 #include "cppIVRRenderModels_IVRRenderModels_006.h"
 
 WINE_DEFAULT_DEBUG_CHANNEL(vrclient);

@@ -1,10 +1,10 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-extern EVRRenderModelError cppIVRRenderModels_IVRRenderModels_006_LoadRenderModel_Async(void *, const char *, winRenderModel_t_1017 **);
-extern void cppIVRRenderModels_IVRRenderModels_006_FreeRenderModel(void *, winRenderModel_t_1017 *);
-extern EVRRenderModelError cppIVRRenderModels_IVRRenderModels_006_LoadTexture_Async(void *, TextureID_t, winRenderModel_TextureMap_t_1017 **);
-extern void cppIVRRenderModels_IVRRenderModels_006_FreeTexture(void *, winRenderModel_TextureMap_t_1017 *);
+extern EVRRenderModelError cppIVRRenderModels_IVRRenderModels_006_LoadRenderModel_Async(void *, const char *, winRenderModel_t_113b **);
+extern void cppIVRRenderModels_IVRRenderModels_006_FreeRenderModel(void *, winRenderModel_t_113b *);
+extern EVRRenderModelError cppIVRRenderModels_IVRRenderModels_006_LoadTexture_Async(void *, TextureID_t, winRenderModel_TextureMap_t_113b **);
+extern void cppIVRRenderModels_IVRRenderModels_006_FreeTexture(void *, winRenderModel_TextureMap_t_113b *);
 extern EVRRenderModelError cppIVRRenderModels_IVRRenderModels_006_LoadTextureD3D11_Async(void *, TextureID_t, void *, void **);
 extern EVRRenderModelError cppIVRRenderModels_IVRRenderModels_006_LoadIntoTextureD3D11_Async(void *, TextureID_t, void *);
 extern void cppIVRRenderModels_IVRRenderModels_006_FreeTextureD3D11(void *, void *);

@@ -328,6 +328,13 @@ EVRCompositorError __thiscall winIVRCompositor_IVRCompositor_022_SubmitExplicitT
     return cppIVRCompositor_IVRCompositor_022_SubmitExplicitTimingData(_this->linux_side);
 }
 
+DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_022_IsMotionSmoothingEnabled, 4)
+bool __thiscall winIVRCompositor_IVRCompositor_022_IsMotionSmoothingEnabled(winIVRCompositor_IVRCompositor_022 *_this)
+{
+    TRACE("%p\n", _this);
+    return cppIVRCompositor_IVRCompositor_022_IsMotionSmoothingEnabled(_this->linux_side);
+}
+
 extern vtable_ptr winIVRCompositor_IVRCompositor_022_vtable;
 
 #ifndef __GNUC__
@@ -377,6 +384,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_022_GetVulkanDeviceExtensionsRequired)
         VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_022_SetExplicitTimingMode)
         VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_022_SubmitExplicitTimingData)
+        VTABLE_ADD_FUNC(winIVRCompositor_IVRCompositor_022_IsMotionSmoothingEnabled)
     );
 #ifndef __GNUC__
 }
@@ -402,8 +410,8 @@ void destroy_winIVRCompositor_IVRCompositor_022(void *object)
 winIVRCompositor_IVRCompositor_022 *create_winIVRCompositor_IVRCompositor_022_FnTable(void *linux_side)
 {
     winIVRCompositor_IVRCompositor_022 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRCompositor_IVRCompositor_022));
-    struct thunk *thunks = alloc_thunks(43);
-    struct thunk **vtable = HeapAlloc(GetProcessHeap(), 0, 43 * sizeof(*vtable));
+    struct thunk *thunks = alloc_thunks(44);
+    struct thunk **vtable = HeapAlloc(GetProcessHeap(), 0, 44 * sizeof(*vtable));
     int i;
 
     TRACE("-> %p, vtable %p, thunks %p\n", r, vtable, thunks);
@@ -450,7 +458,8 @@ winIVRCompositor_IVRCompositor_022 *create_winIVRCompositor_IVRCompositor_022_Fn
     init_thunk(&thunks[40], r, winIVRCompositor_IVRCompositor_022_GetVulkanDeviceExtensionsRequired, 3, FALSE, FALSE);
     init_thunk(&thunks[41], r, winIVRCompositor_IVRCompositor_022_SetExplicitTimingMode, 1, FALSE, FALSE);
     init_thunk(&thunks[42], r, winIVRCompositor_IVRCompositor_022_SubmitExplicitTimingData, 0, FALSE, FALSE);
-    for (i = 0; i < 43; i++)
+    init_thunk(&thunks[43], r, winIVRCompositor_IVRCompositor_022_IsMotionSmoothingEnabled, 0, FALSE, FALSE);
+    for (i = 0; i < 44; i++)
         vtable[i] = &thunks[i];
     r->linux_side = linux_side;
     r->vtable = (void *)vtable;
