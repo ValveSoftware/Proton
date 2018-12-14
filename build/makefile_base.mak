@@ -191,6 +191,10 @@ LSTEAMCLIENT64 := ./syn-lsteamclient64/lsteamclient
 LSTEAMCLIENT_OBJ32 := ./obj-lsteamclient32
 LSTEAMCLIENT_OBJ64 := ./obj-lsteamclient64
 
+STEAMEXE_SRC := $(SRCDIR)/steam_helper
+STEAMEXE_OBJ := ./obj-steam
+STEAMEXE_SYN := ./syn-steam/steam
+
 WINE := $(SRCDIR)/wine
 WINE_DST32 := ./dist-wine32
 WINE_OBJ32 := ./obj-wine32
@@ -232,6 +236,7 @@ OBJ_DIRS := $(TOOLS_DIR32)        $(TOOLS_DIR64)        \
             $(FFMPEG_OBJ32)       $(FFMPEG_OBJ64)       \
             $(FAUDIO_OBJ32)       $(FAUDIO_OBJ64)       \
             $(LSTEAMCLIENT_OBJ32) $(LSTEAMCLIENT_OBJ64) \
+            $(STEAMEXE_OBJ)                             \
             $(WINE_OBJ32)         $(WINE_OBJ64)         \
             $(VRCLIENT_OBJ32)     $(VRCLIENT_OBJ64)     \
             $(DXVK_OBJ32)         $(DXVK_OBJ64)         \
@@ -337,7 +342,7 @@ $(DIST_FONTS): fonts
 ALL_TARGETS += dist
 GOAL_TARGETS += dist
 
-dist: $(DIST_TARGETS) wine vrclient lsteamclient dxvk | $(DST_DIR)
+dist: $(DIST_TARGETS) wine vrclient lsteamclient steam dxvk | $(DST_DIR)
 	echo `date '+%s'` `GIT_DIR=$(abspath $(SRCDIR)/.git) git describe --tags` > $(DIST_VERSION)
 	cp $(DIST_VERSION) $(DST_BASE)/
 	rm -rf $(abspath $(DIST_PREFIX)) && \
@@ -633,6 +638,56 @@ lsteamclient32: $(LSTEAMCLIENT_CONFIGURE_FILES32) | $(WINE_BUILDTOOLS32) $(filte
 	[ x"$(STRIP)" = x ] || $(STRIP) $(LSTEAMCLIENT_OBJ32)/lsteamclient.dll.so
 	mkdir -pv $(DST_DIR)/lib/wine/
 	cp -a $(LSTEAMCLIENT_OBJ32)/lsteamclient.dll.so $(DST_DIR)/lib/wine/
+
+## steam.exe
+
+$(STEAMEXE_SYN)/.created: $(STEAMEXE_SRC) $(MAKEFILE_DEP)
+	rm -rf $(STEAMEXE_SYN)
+	mkdir -p $(STEAMEXE_SYN)/
+	cd $(STEAMEXE_SYN)/ && ln -sfv ../../$(STEAMEXE_SRC)/* .
+	touch $@
+
+$(STEAMEXE_SYN): $(STEAMEXE_SYN)/.created
+
+STEAMEXE_CONFIGURE_FILES := $(STEAMEXE_OBJ)/Makefile
+
+# 32-bit configure
+$(STEAMEXE_CONFIGURE_FILES): SHELL = $(CONTAINER_SHELL32)
+$(STEAMEXE_CONFIGURE_FILES): $(STEAMEXE_SYN) $(MAKEFILE_DEP) | $(STEAMEXE_OBJ) $(WINEMAKER)
+	cd $(dir $@) && \
+		$(WINEMAKER) --nosource-fix --nolower-include --nodlls --nomsvcrt --wine32 \
+			-I"../$(TOOLS_DIR32)"/include/ \
+			-I"../$(TOOLS_DIR32)"/include/wine/ \
+			-I"../$(TOOLS_DIR32)"/include/wine/windows/ \
+			-I"../$(SRCDIR)"/lsteamclient/steamworks_sdk_142/ \
+			-L"../$(TOOLS_DIR32)"/lib/ \
+			-L"../$(TOOLS_DIR32)"/lib/wine/ \
+			-L"../$(SRCDIR)"/steam_helper/ \
+			--guiexe ../$(STEAMEXE_SYN) && \
+		cp ../$(STEAMEXE_SYN)/Makefile . && \
+		echo >> ./Makefile 'SRCDIR := ../$(STEAMEXE_SYN)' && \
+		echo >> ./Makefile 'vpath % $$(SRCDIR)' && \
+		echo >> ./Makefile 'steam_exe_LDFLAGS := -m32 -lsteam_api $$(steam_exe_LDFLAGS)'
+
+## steam goals
+STEAMEXE_TARGETS = steam steam_configure
+
+ALL_TARGETS += $(STEAMEXE_TARGETS)
+GOAL_TARGETS_LIBS += steam
+
+.PHONY: $(STEAMEXE_TARGETS)
+
+steam_configure: $(STEAMEXE_CONFIGURE_FILES)
+
+steam: SHELL = $(CONTAINER_SHELL32)
+steam: $(STEAMEXE_CONFIGURE_FILES) | $(WINE_BUILDTOOLS32) $(filter $(MAKECMDGOALS),wine64 wine32 wine)
+	+env PATH="$(abspath $(TOOLS_DIR32))/bin:$(PATH)" LDFLAGS="-m32" CXXFLAGS="-m32 -Wno-attributes $(COMMON_FLAGS) -g" CFLAGS="-m32 $(COMMON_FLAGS) -g" \
+		$(MAKE) -C $(STEAMEXE_OBJ)
+	[ x"$(STRIP)" = x ] || $(STRIP) $(STEAMEXE_OBJ)/steam.exe.so
+	mkdir -pv $(DST_DIR)/lib/wine/
+	cp -a $(STEAMEXE_OBJ)/steam.exe.so $(DST_DIR)/lib/wine/
+	cp $(STEAMEXE_SRC)/libsteam_api.so $(DST_DIR)/lib/
+
 
 ##
 ## wine

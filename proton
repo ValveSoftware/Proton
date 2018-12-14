@@ -609,9 +609,9 @@ def run():
             log("Unable to write debug scripts! " + str(sys.exc_info()[1]))
     if game_arch == ARCH_UNKNOWN:
         #probably a batch script or something, hopefully start.exe can handle it
-        run_wine([wine_path, "start", "/unix"] + sys.argv[2:])
+        run_wine([wine_path, "steam", "start", "/unix"] + sys.argv[2:])
     else:
-        run_wine([wine_path] + sys.argv[2:])
+        run_wine([wine_path, "steam"] + sys.argv[2:])
 
 if sys.version_info[0] == 2:
     binary_stdout = sys.stdout
