@@ -220,9 +220,16 @@ if not check_environment("PROTON_USE_WINED3D", "wined3d"):
     check_environment("PROTON_USE_WINED3D11", "wined3d")
 check_environment("PROTON_NO_D3D11", "nod3d11")
 check_environment("PROTON_NO_ESYNC", "noesync")
+check_environment("PROTON_FORCE_LARGE_ADDRESS_AWARE", "forcelgadd")
 
 if not "noesync" in config_opts:
     env["WINEESYNC"] = "1"
+
+if "forcelgadd" in config_opts:
+    #forcelgadd should be used just for testing whether a game is helped by
+    #setting LARGE_ADDRESS_AWARE. If it does, then add an AppDefault in the
+    #registry, so that it doesn't impact every executable in the prefix.
+    env["WINE_LARGE_ADDRESS_AWARE"] = "1"
 
 lfile = None
 if "SteamGameId" in env:
@@ -466,6 +473,8 @@ def dump_dbg_env(f):
         f.write("\tWINEDLLOVERRIDES=\"" + env["WINEDLLOVERRIDES"] + "\" \\\n")
     if "STEAM_COMPAT_CLIENT_INSTALL_PATH" in env:
         f.write("\tSTEAM_COMPAT_CLIENT_INSTALL_PATH=\"" + env["STEAM_COMPAT_CLIENT_INSTALL_PATH"] + "\" \\\n")
+    if "WINE_LARGE_ADDRESS_AWARE" in env:
+        f.write("\tWINE_LARGE_ADDRESS_AWARE=\"" + env["WINE_LARGE_ADDRESS_AWARE"] + "\" \\\n")
 
 def dump_dbg_scripts():
     exe_name = os.path.basename(sys.argv[2])
