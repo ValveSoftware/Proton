@@ -219,6 +219,7 @@ if "wined3d11" in config_opts:
 if not check_environment("PROTON_USE_WINED3D", "wined3d"):
     check_environment("PROTON_USE_WINED3D11", "wined3d")
 check_environment("PROTON_NO_D3D11", "nod3d11")
+check_environment("PROTON_NO_D3D10", "nod3d10")
 check_environment("PROTON_NO_ESYNC", "noesync")
 check_environment("PROTON_FORCE_LARGE_ADDRESS_AWARE", "forcelgadd")
 
@@ -415,6 +416,11 @@ if "nod3d11" in config_opts:
     dlloverrides["d3d11"] = ""
     if "dxgi" in dlloverrides:
         del dlloverrides["dxgi"]
+
+if "nod3d10" in config_opts:
+    dlloverrides["d3d10_1"] = ""
+    dlloverrides["d3d10"] = ""
+    dlloverrides["dxgi"] = ""
 
 s = ""
 for dll in dlloverrides:
