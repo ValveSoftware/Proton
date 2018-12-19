@@ -404,6 +404,7 @@ if "nod3d11" in config_opts:
         del dlloverrides["dxgi"]
 
 if "nod3d10" in config_opts:
+    dlloverrides["d3d10_1"] = ""
     dlloverrides["d3d10"] = ""
     dlloverrides["dxgi"] = ""
 
