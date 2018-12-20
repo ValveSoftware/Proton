@@ -238,6 +238,13 @@ if "SteamGameId" in env:
         if os.path.exists(lfile_path):
             os.remove(lfile_path)
         lfile = open(lfile_path, "w+")
+        lfile.write("======================\n")
+        with open(basedir + "/version", "r") as f:
+            lfile.write("Proton: " + f.readline().strip() + "\n")
+        lfile.write("SteamGameId: " + env["SteamGameId"] + "\n")
+        lfile.write("Command: " + str(sys.argv[2:]) + "\n")
+        lfile.write("======================\n")
+        lfile.flush()
 else:
     env["WINEDEBUG"] = "-all"
 
