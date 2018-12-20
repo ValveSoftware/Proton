@@ -168,10 +168,6 @@ GECKO_VER := 2.47
 GECKO32_MSI := wine_gecko-$(GECKO_VER)-x86.msi
 GECKO64_MSI := wine_gecko-$(GECKO_VER)-x86_64.msi
 
-OPENAL := $(SRCDIR)/openal-soft
-OPENAL_OBJ32 := ./obj-openal32
-OPENAL_OBJ64 := ./obj-openal64
-
 FFMPEG := $(SRCDIR)/ffmpeg
 FFMPEG_OBJ32 := ./obj-ffmpeg32
 FFMPEG_OBJ64 := ./obj-ffmpeg64
@@ -226,7 +222,6 @@ FONTS_OBJ := ./obj-fonts
 
 ## Object directories
 OBJ_DIRS := $(TOOLS_DIR32)        $(TOOLS_DIR64)        \
-            $(OPENAL_OBJ32)       $(OPENAL_OBJ64)       \
             $(FFMPEG_OBJ32)       $(FFMPEG_OBJ64)       \
             $(FAUDIO_OBJ32)       $(FAUDIO_OBJ64)       \
             $(LSTEAMCLIENT_OBJ32) $(LSTEAMCLIENT_OBJ64) \
@@ -349,67 +344,6 @@ install: dist | $(filter-out dist deploy install,$(MAKECMDGOALS))
 	cp -a $(DST_BASE)/* $(STEAM_DIR)/compatibilitytools.d/$(BUILD_NAME)
 	@echo "Installed Proton to "$(STEAM_DIR)/compatibilitytools.d/$(BUILD_NAME)
 	@echo "You may need to restart Steam to select this tool"
-
-
-##
-## OpenAL
-##
-
-## Create & configure object directory for openal
-
-OPENAL_CONFIGURE_FILES32 := $(OPENAL_OBJ32)/Makefile
-OPENAL_CONFIGURE_FILES64 := $(OPENAL_OBJ64)/Makefile
-
-# 64bit-configure
-$(OPENAL_CONFIGURE_FILES64): SHELL = $(CONTAINER_SHELL64)
-$(OPENAL_CONFIGURE_FILES64): $(OPENAL)/CMakeLists.txt $(MAKEFILE_DEP) $(CMAKE_BIN64) | $(OPENAL_OBJ64)
-	cd $(dir $@) && \
-		../$(CMAKE_BIN64) $(abspath $(OPENAL)) -DCMAKE_INSTALL_PREFIX="$(abspath $(TOOLS_DIR64))" \
-			-DALSOFT_EXAMPLES=Off -DALSOFT_UTILS=Off -DALSOFT_TESTS=Off \
-			-DCMAKE_INSTALL_LIBDIR="lib"
-
-# 32-bit configure
-$(OPENAL_CONFIGURE_FILES32): SHELL = $(CONTAINER_SHELL32)
-$(OPENAL_CONFIGURE_FILES32): $(OPENAL)/CMakeLists.txt $(MAKEFILE_DEP) $(CMAKE_BIN32) | $(OPENAL_OBJ32)
-	cd $(dir $@) && \
-		../$(CMAKE_BIN32) $(abspath $(OPENAL)) \
-			-DCMAKE_INSTALL_PREFIX="$(abspath $(TOOLS_DIR32))" \
-			-DALSOFT_EXAMPLES=Off -DALSOFT_UTILS=Off -DALSOFT_TESTS=Off \
-			-DCMAKE_INSTALL_LIBDIR="lib" \
-			-DCMAKE_C_FLAGS="-m32" -DCMAKE_CXX_FLAGS="-m32"
-
-## OpenAL goals
-OPENAL_TARGETS = openal openal_configure openal32 openal64 openal_configure32 openal_configure64
-
-ALL_TARGETS += $(OPENAL_TARGETS)
-GOAL_TARGETS_LIBS += openal
-
-.PHONY: $(OPENAL_TARGETS)
-
-openal_configure: $(OPENAL_CONFIGURE_FILES32) $(OPENAL_CONFIGURE_FILES64)
-
-openal_configure64: $(OPENAL_CONFIGURE_FILES64)
-
-openal_configure32: $(OPENAL_CONFIGURE_FILES32)
-
-openal: openal32 openal64
-
-openal64: SHELL = $(CONTAINER_SHELL64)
-openal64: $(OPENAL_CONFIGURE_FILES64)
-	+$(MAKE) -C $(OPENAL_OBJ64) VERBOSE=1
-	+$(MAKE) -C $(OPENAL_OBJ64) install VERBOSE=1
-	mkdir -p $(DST_DIR)/lib64
-	cp -L $(TOOLS_DIR64)/lib/libopenal* $(DST_DIR)/lib64/
-	[ x"$(STRIP)" = x ] || $(STRIP) $(DST_DIR)/lib64/libopenal.so
-
-
-openal32: SHELL = $(CONTAINER_SHELL32)
-openal32: $(OPENAL_CONFIGURE_FILES32)
-	+$(MAKE) -C $(OPENAL_OBJ32) VERBOSE=1
-	+$(MAKE) -C $(OPENAL_OBJ32) install VERBOSE=1
-	mkdir -p $(DST_DIR)/lib
-	cp -L $(TOOLS_DIR32)/lib/libopenal* $(DST_DIR)/lib/
-	[ x"$(STRIP)" = x ] || $(STRIP) $(DST_DIR)/lib/libopenal.so
 
 
 ##
@@ -865,7 +799,7 @@ vrclient32: $(VRCLIENT_CONFIGURE_FILES32) | $(WINE_BUILDTOOLS32) $(filter $(MAKE
 		cp -a ../$(VRCLIENT_OBJ32)/vrclient.dll.fake ../$(DST_DIR)/lib/wine/fakedlls/vrclient.dll
 
 ##
-## cmake -- necessary for openal, not part of steam runtime
+## cmake -- necessary for FAudio, not part of steam runtime
 ##
 
 # TODO Don't bother with this in native mode
