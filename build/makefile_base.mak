@@ -242,8 +242,24 @@ $(DST_DIR):
 
 STEAM_DIR := $(HOME)/.steam/root
 
-DIST_COPY_FILES := toolmanifest.vdf filelock.py proton proton_3.7_tracked_files user_settings.sample.py
-DIST_COPY_TARGETS := $(addprefix $(DST_BASE)/,$(DIST_COPY_FILES))
+TOOLMANIFEST_TARGET := $(addprefix $(DST_BASE)/,toolmanifest.vdf)
+$(TOOLMANIFEST_TARGET): $(addprefix $(SRCDIR)/,toolmanifest.vdf)
+
+FILELOCK_TARGET := $(addprefix $(DST_BASE)/,filelock.py)
+$(FILELOCK_TARGET): $(addprefix $(SRCDIR)/,filelock.py)
+
+PROTON_PY_TARGET := $(addprefix $(DST_BASE)/,proton)
+$(PROTON_PY_TARGET): $(addprefix $(SRCDIR)/,proton)
+
+PROTON37_TRACKED_FILES_TARGET := $(addprefix $(DST_BASE)/,proton_3.7_tracked_files)
+$(PROTON37_TRACKED_FILES_TARGET): $(addprefix $(SRCDIR)/,proton_3.7_tracked_files)
+
+USER_SETTINGS_PY_TARGET := $(addprefix $(DST_BASE)/,user_settings.sample.py)
+$(USER_SETTINGS_PY_TARGET): $(addprefix $(SRCDIR)/,user_settings.sample.py)
+
+DIST_COPY_TARGETS := $(TOOLMANIFEST_TARGET) $(FILELOCK_TARGET) $(PROTON_PY_TARGET) \
+                     $(PROTON37_TRACKED_FILES_TARGET) $(USER_SETTINGS_PY_TARGET)
+
 DIST_VERSION := $(DST_DIR)/version
 DIST_OVR32 := $(DST_DIR)/lib/wine/dxvk/openvr_api_dxvk.dll
 DIST_OVR64 := $(DST_DIR)/lib64/wine/dxvk/openvr_api_dxvk.dll
