@@ -40,6 +40,9 @@ unsigned int steamclient_unix_path_to_dos_path(bool api_result, const char *src,
     WCHAR *dosW;
     uint32 r;
 
+    if(!dst || !dst_bytes)
+        return 0;
+
     if(!src || !api_result){
         *dst = 0;
         return 0;
