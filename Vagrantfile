@@ -24,7 +24,7 @@ Vagrant.configure(2) do |config|
     apt-get install -y apt-transport-https ca-certificates curl gnupg2 software-properties-common
 
     #add winehq repo
-    curl -fsSL https://dl.winehq.org/wine-builds/Release.key | apt-key add -
+    curl -fsSL https://dl.winehq.org/wine-builds/winehq.key | apt-key add -
     echo 'deb http://dl.winehq.org/wine-builds/debian stretch main' > /etc/apt/sources.list.d/winehq.list
 
     #add docker repo
