@@ -178,7 +178,7 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_SetV
     cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_SetVerticalScroll(_this->linux_side, unBrowserHandle, nAbsolutePixelScroll);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_SetKeyFocus, 9)
+DEFINE_THISCALL_WRAPPER(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_SetKeyFocus, 12)
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_SetKeyFocus(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004 *_this, HHTMLBrowser unBrowserHandle, bool bHasKeyFocus)
 {
     TRACE("%p\n", _this);
@@ -206,7 +206,7 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_Past
     cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_PasteFromClipboard(_this->linux_side, unBrowserHandle);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_Find, 14)
+DEFINE_THISCALL_WRAPPER(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_Find, 20)
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_Find(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004 *_this, HHTMLBrowser unBrowserHandle, const char * pchSearchStr, bool bCurrentlyInFind, bool bReverse)
 {
     TRACE("%p\n", _this);
@@ -227,7 +227,7 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_GetL
     cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_GetLinkAtPosition(_this->linux_side, unBrowserHandle, x, y);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_SetCookie, 26)
+DEFINE_THISCALL_WRAPPER(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_SetCookie, 32)
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_SetCookie(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004 *_this, const char * pchHostname, const char * pchKey, const char * pchValue, const char * pchPath, RTime32 nExpires, bool bSecure, bool bHTTPOnly)
 {
     TRACE("%p\n", _this);
@@ -241,7 +241,7 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_SetP
     cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_SetPageScaleFactor(_this->linux_side, unBrowserHandle, flZoom, nPointX, nPointY);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_SetBackgroundMode, 9)
+DEFINE_THISCALL_WRAPPER(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_SetBackgroundMode, 12)
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_SetBackgroundMode(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004 *_this, HHTMLBrowser unBrowserHandle, bool bBackgroundMode)
 {
     TRACE("%p\n", _this);
@@ -255,14 +255,14 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_SetD
     cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_SetDPIScalingFactor(_this->linux_side, unBrowserHandle, flDPIScaling);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_AllowStartRequest, 9)
+DEFINE_THISCALL_WRAPPER(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_AllowStartRequest, 12)
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_AllowStartRequest(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004 *_this, HHTMLBrowser unBrowserHandle, bool bAllowed)
 {
     TRACE("%p\n", _this);
     cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_AllowStartRequest(_this->linux_side, unBrowserHandle, bAllowed);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_JSDialogResponse, 9)
+DEFINE_THISCALL_WRAPPER(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_JSDialogResponse, 12)
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_JSDialogResponse(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004 *_this, HHTMLBrowser unBrowserHandle, bool bResult)
 {
     TRACE("%p\n", _this);
@@ -500,7 +500,7 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_SetV
     cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_SetVerticalScroll(_this->linux_side, unBrowserHandle, nAbsolutePixelScroll);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_SetKeyFocus, 9)
+DEFINE_THISCALL_WRAPPER(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_SetKeyFocus, 12)
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_SetKeyFocus(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003 *_this, HHTMLBrowser unBrowserHandle, bool bHasKeyFocus)
 {
     TRACE("%p\n", _this);
@@ -528,7 +528,7 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_Past
     cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_PasteFromClipboard(_this->linux_side, unBrowserHandle);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_Find, 14)
+DEFINE_THISCALL_WRAPPER(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_Find, 20)
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_Find(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003 *_this, HHTMLBrowser unBrowserHandle, const char * pchSearchStr, bool bCurrentlyInFind, bool bReverse)
 {
     TRACE("%p\n", _this);
@@ -549,7 +549,7 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_GetL
     cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_GetLinkAtPosition(_this->linux_side, unBrowserHandle, x, y);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_SetCookie, 26)
+DEFINE_THISCALL_WRAPPER(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_SetCookie, 32)
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_SetCookie(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003 *_this, const char * pchHostname, const char * pchKey, const char * pchValue, const char * pchPath, RTime32 nExpires, bool bSecure, bool bHTTPOnly)
 {
     TRACE("%p\n", _this);
@@ -563,21 +563,21 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_SetP
     cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_SetPageScaleFactor(_this->linux_side, unBrowserHandle, flZoom, nPointX, nPointY);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_SetBackgroundMode, 9)
+DEFINE_THISCALL_WRAPPER(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_SetBackgroundMode, 12)
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_SetBackgroundMode(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003 *_this, HHTMLBrowser unBrowserHandle, bool bBackgroundMode)
 {
     TRACE("%p\n", _this);
     cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_SetBackgroundMode(_this->linux_side, unBrowserHandle, bBackgroundMode);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_AllowStartRequest, 9)
+DEFINE_THISCALL_WRAPPER(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_AllowStartRequest, 12)
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_AllowStartRequest(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003 *_this, HHTMLBrowser unBrowserHandle, bool bAllowed)
 {
     TRACE("%p\n", _this);
     cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_AllowStartRequest(_this->linux_side, unBrowserHandle, bAllowed);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_JSDialogResponse, 9)
+DEFINE_THISCALL_WRAPPER(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_JSDialogResponse, 12)
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_JSDialogResponse(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003 *_this, HHTMLBrowser unBrowserHandle, bool bResult)
 {
     TRACE("%p\n", _this);
@@ -814,7 +814,7 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_SetV
     cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_SetVerticalScroll(_this->linux_side, unBrowserHandle, nAbsolutePixelScroll);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_SetKeyFocus, 9)
+DEFINE_THISCALL_WRAPPER(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_SetKeyFocus, 12)
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_SetKeyFocus(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002 *_this, HHTMLBrowser unBrowserHandle, bool bHasKeyFocus)
 {
     TRACE("%p\n", _this);
@@ -842,7 +842,7 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_Past
     cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_PasteFromClipboard(_this->linux_side, unBrowserHandle);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_Find, 14)
+DEFINE_THISCALL_WRAPPER(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_Find, 20)
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_Find(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002 *_this, HHTMLBrowser unBrowserHandle, const char * pchSearchStr, bool bCurrentlyInFind, bool bReverse)
 {
     TRACE("%p\n", _this);
@@ -863,7 +863,7 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_GetL
     cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_GetLinkAtPosition(_this->linux_side, unBrowserHandle, x, y);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_SetCookie, 26)
+DEFINE_THISCALL_WRAPPER(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_SetCookie, 32)
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_SetCookie(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002 *_this, const char * pchHostname, const char * pchKey, const char * pchValue, const char * pchPath, RTime32 nExpires, bool bSecure, bool bHTTPOnly)
 {
     TRACE("%p\n", _this);
@@ -877,14 +877,14 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_SetP
     cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_SetPageScaleFactor(_this->linux_side, unBrowserHandle, flZoom, nPointX, nPointY);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_AllowStartRequest, 9)
+DEFINE_THISCALL_WRAPPER(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_AllowStartRequest, 12)
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_AllowStartRequest(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002 *_this, HHTMLBrowser unBrowserHandle, bool bAllowed)
 {
     TRACE("%p\n", _this);
     cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_AllowStartRequest(_this->linux_side, unBrowserHandle, bAllowed);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_JSDialogResponse, 9)
+DEFINE_THISCALL_WRAPPER(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_JSDialogResponse, 12)
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_JSDialogResponse(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002 *_this, HHTMLBrowser unBrowserHandle, bool bResult)
 {
     TRACE("%p\n", _this);
@@ -1120,7 +1120,7 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_SetV
     cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_SetVerticalScroll(_this->linux_side, unBrowserHandle, nAbsolutePixelScroll);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_SetKeyFocus, 9)
+DEFINE_THISCALL_WRAPPER(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_SetKeyFocus, 12)
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_SetKeyFocus(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001 *_this, HHTMLBrowser unBrowserHandle, bool bHasKeyFocus)
 {
     TRACE("%p\n", _this);
@@ -1148,7 +1148,7 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_Past
     cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_PasteFromClipboard(_this->linux_side, unBrowserHandle);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_Find, 14)
+DEFINE_THISCALL_WRAPPER(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_Find, 20)
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_Find(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001 *_this, HHTMLBrowser unBrowserHandle, const char * pchSearchStr, bool bCurrentlyInFind, bool bReverse)
 {
     TRACE("%p\n", _this);
@@ -1169,14 +1169,14 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_GetL
     cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_GetLinkAtPosition(_this->linux_side, unBrowserHandle, x, y);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_AllowStartRequest, 9)
+DEFINE_THISCALL_WRAPPER(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_AllowStartRequest, 12)
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_AllowStartRequest(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001 *_this, HHTMLBrowser unBrowserHandle, bool bAllowed)
 {
     TRACE("%p\n", _this);
     cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_AllowStartRequest(_this->linux_side, unBrowserHandle, bAllowed);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_JSDialogResponse, 9)
+DEFINE_THISCALL_WRAPPER(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_JSDialogResponse, 12)
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_JSDialogResponse(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001 *_this, HHTMLBrowser unBrowserHandle, bool bResult)
 {
     TRACE("%p\n", _this);

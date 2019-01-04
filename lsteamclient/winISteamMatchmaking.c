@@ -34,14 +34,14 @@ bool __thiscall winISteamMatchmaking_SteamMatchMaking009_GetFavoriteGame(winISte
     return cppISteamMatchmaking_SteamMatchMaking009_GetFavoriteGame(_this->linux_side, iGame, pnAppID, pnIP, pnConnPort, pnQueryPort, punFlags, pRTime32LastPlayedOnServer);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamMatchmaking_SteamMatchMaking009_AddFavoriteGame, 24)
+DEFINE_THISCALL_WRAPPER(winISteamMatchmaking_SteamMatchMaking009_AddFavoriteGame, 28)
 int __thiscall winISteamMatchmaking_SteamMatchMaking009_AddFavoriteGame(winISteamMatchmaking_SteamMatchMaking009 *_this, AppId_t nAppID, uint32 nIP, uint16 nConnPort, uint16 nQueryPort, uint32 unFlags, uint32 rTime32LastPlayedOnServer)
 {
     TRACE("%p\n", _this);
     return cppISteamMatchmaking_SteamMatchMaking009_AddFavoriteGame(_this->linux_side, nAppID, nIP, nConnPort, nQueryPort, unFlags, rTime32LastPlayedOnServer);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamMatchmaking_SteamMatchMaking009_RemoveFavoriteGame, 20)
+DEFINE_THISCALL_WRAPPER(winISteamMatchmaking_SteamMatchMaking009_RemoveFavoriteGame, 24)
 bool __thiscall winISteamMatchmaking_SteamMatchMaking009_RemoveFavoriteGame(winISteamMatchmaking_SteamMatchMaking009 *_this, AppId_t nAppID, uint32 nIP, uint16 nConnPort, uint16 nQueryPort, uint32 unFlags)
 {
     TRACE("%p\n", _this);
@@ -225,7 +225,7 @@ bool __thiscall winISteamMatchmaking_SteamMatchMaking009_RequestLobbyData(winISt
     return cppISteamMatchmaking_SteamMatchMaking009_RequestLobbyData(_this->linux_side, steamIDLobby);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamMatchmaking_SteamMatchMaking009_SetLobbyGameServer, 26)
+DEFINE_THISCALL_WRAPPER(winISteamMatchmaking_SteamMatchMaking009_SetLobbyGameServer, 28)
 void __thiscall winISteamMatchmaking_SteamMatchMaking009_SetLobbyGameServer(winISteamMatchmaking_SteamMatchMaking009 *_this, CSteamID steamIDLobby, uint32 unGameServerIP, uint16 unGameServerPort, CSteamID steamIDGameServer)
 {
     TRACE("%p\n", _this);
@@ -260,7 +260,7 @@ bool __thiscall winISteamMatchmaking_SteamMatchMaking009_SetLobbyType(winISteamM
     return cppISteamMatchmaking_SteamMatchMaking009_SetLobbyType(_this->linux_side, steamIDLobby, eLobbyType);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamMatchmaking_SteamMatchMaking009_SetLobbyJoinable, 13)
+DEFINE_THISCALL_WRAPPER(winISteamMatchmaking_SteamMatchMaking009_SetLobbyJoinable, 16)
 bool __thiscall winISteamMatchmaking_SteamMatchMaking009_SetLobbyJoinable(winISteamMatchmaking_SteamMatchMaking009 *_this, CSteamID steamIDLobby, bool bLobbyJoinable)
 {
     TRACE("%p\n", _this);
@@ -368,14 +368,14 @@ bool __thiscall winISteamMatchmaking_SteamMatchMaking008_GetFavoriteGame(winISte
     return cppISteamMatchmaking_SteamMatchMaking008_GetFavoriteGame(_this->linux_side, iGame, pnAppID, pnIP, pnConnPort, pnQueryPort, punFlags, pRTime32LastPlayedOnServer);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamMatchmaking_SteamMatchMaking008_AddFavoriteGame, 24)
+DEFINE_THISCALL_WRAPPER(winISteamMatchmaking_SteamMatchMaking008_AddFavoriteGame, 28)
 int __thiscall winISteamMatchmaking_SteamMatchMaking008_AddFavoriteGame(winISteamMatchmaking_SteamMatchMaking008 *_this, AppId_t nAppID, uint32 nIP, uint16 nConnPort, uint16 nQueryPort, uint32 unFlags, uint32 rTime32LastPlayedOnServer)
 {
     TRACE("%p\n", _this);
     return cppISteamMatchmaking_SteamMatchMaking008_AddFavoriteGame(_this->linux_side, nAppID, nIP, nConnPort, nQueryPort, unFlags, rTime32LastPlayedOnServer);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamMatchmaking_SteamMatchMaking008_RemoveFavoriteGame, 20)
+DEFINE_THISCALL_WRAPPER(winISteamMatchmaking_SteamMatchMaking008_RemoveFavoriteGame, 24)
 bool __thiscall winISteamMatchmaking_SteamMatchMaking008_RemoveFavoriteGame(winISteamMatchmaking_SteamMatchMaking008 *_this, AppId_t nAppID, uint32 nIP, uint16 nConnPort, uint16 nQueryPort, uint32 unFlags)
 {
     TRACE("%p\n", _this);
@@ -552,7 +552,7 @@ bool __thiscall winISteamMatchmaking_SteamMatchMaking008_RequestLobbyData(winISt
     return cppISteamMatchmaking_SteamMatchMaking008_RequestLobbyData(_this->linux_side, steamIDLobby);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamMatchmaking_SteamMatchMaking008_SetLobbyGameServer, 26)
+DEFINE_THISCALL_WRAPPER(winISteamMatchmaking_SteamMatchMaking008_SetLobbyGameServer, 28)
 void __thiscall winISteamMatchmaking_SteamMatchMaking008_SetLobbyGameServer(winISteamMatchmaking_SteamMatchMaking008 *_this, CSteamID steamIDLobby, uint32 unGameServerIP, uint16 unGameServerPort, CSteamID steamIDGameServer)
 {
     TRACE("%p\n", _this);
@@ -587,7 +587,7 @@ bool __thiscall winISteamMatchmaking_SteamMatchMaking008_SetLobbyType(winISteamM
     return cppISteamMatchmaking_SteamMatchMaking008_SetLobbyType(_this->linux_side, steamIDLobby, eLobbyType);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamMatchmaking_SteamMatchMaking008_SetLobbyJoinable, 13)
+DEFINE_THISCALL_WRAPPER(winISteamMatchmaking_SteamMatchMaking008_SetLobbyJoinable, 16)
 bool __thiscall winISteamMatchmaking_SteamMatchMaking008_SetLobbyJoinable(winISteamMatchmaking_SteamMatchMaking008 *_this, CSteamID steamIDLobby, bool bLobbyJoinable)
 {
     TRACE("%p\n", _this);
@@ -686,14 +686,14 @@ bool __thiscall winISteamMatchmaking_SteamMatchMaking007_GetFavoriteGame(winISte
     return cppISteamMatchmaking_SteamMatchMaking007_GetFavoriteGame(_this->linux_side, iGame, pnAppID, pnIP, pnConnPort, pnQueryPort, punFlags, pRTime32LastPlayedOnServer);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamMatchmaking_SteamMatchMaking007_AddFavoriteGame, 24)
+DEFINE_THISCALL_WRAPPER(winISteamMatchmaking_SteamMatchMaking007_AddFavoriteGame, 28)
 int __thiscall winISteamMatchmaking_SteamMatchMaking007_AddFavoriteGame(winISteamMatchmaking_SteamMatchMaking007 *_this, AppId_t nAppID, uint32 nIP, uint16 nConnPort, uint16 nQueryPort, uint32 unFlags, uint32 rTime32LastPlayedOnServer)
 {
     TRACE("%p\n", _this);
     return cppISteamMatchmaking_SteamMatchMaking007_AddFavoriteGame(_this->linux_side, nAppID, nIP, nConnPort, nQueryPort, unFlags, rTime32LastPlayedOnServer);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamMatchmaking_SteamMatchMaking007_RemoveFavoriteGame, 20)
+DEFINE_THISCALL_WRAPPER(winISteamMatchmaking_SteamMatchMaking007_RemoveFavoriteGame, 24)
 bool __thiscall winISteamMatchmaking_SteamMatchMaking007_RemoveFavoriteGame(winISteamMatchmaking_SteamMatchMaking007 *_this, AppId_t nAppID, uint32 nIP, uint16 nConnPort, uint16 nQueryPort, uint32 unFlags)
 {
     TRACE("%p\n", _this);
@@ -856,7 +856,7 @@ bool __thiscall winISteamMatchmaking_SteamMatchMaking007_RequestLobbyData(winISt
     return cppISteamMatchmaking_SteamMatchMaking007_RequestLobbyData(_this->linux_side, steamIDLobby);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamMatchmaking_SteamMatchMaking007_SetLobbyGameServer, 26)
+DEFINE_THISCALL_WRAPPER(winISteamMatchmaking_SteamMatchMaking007_SetLobbyGameServer, 28)
 void __thiscall winISteamMatchmaking_SteamMatchMaking007_SetLobbyGameServer(winISteamMatchmaking_SteamMatchMaking007 *_this, CSteamID steamIDLobby, uint32 unGameServerIP, uint16 unGameServerPort, CSteamID steamIDGameServer)
 {
     TRACE("%p\n", _this);
@@ -891,7 +891,7 @@ bool __thiscall winISteamMatchmaking_SteamMatchMaking007_SetLobbyType(winISteamM
     return cppISteamMatchmaking_SteamMatchMaking007_SetLobbyType(_this->linux_side, steamIDLobby, eLobbyType);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamMatchmaking_SteamMatchMaking007_SetLobbyJoinable, 13)
+DEFINE_THISCALL_WRAPPER(winISteamMatchmaking_SteamMatchMaking007_SetLobbyJoinable, 16)
 bool __thiscall winISteamMatchmaking_SteamMatchMaking007_SetLobbyJoinable(winISteamMatchmaking_SteamMatchMaking007 *_this, CSteamID steamIDLobby, bool bLobbyJoinable)
 {
     TRACE("%p\n", _this);
@@ -988,14 +988,14 @@ bool __thiscall winISteamMatchmaking_SteamMatchMaking006_GetFavoriteGame(winISte
     return cppISteamMatchmaking_SteamMatchMaking006_GetFavoriteGame(_this->linux_side, iGame, pnAppID, pnIP, pnConnPort, pnQueryPort, punFlags, pRTime32LastPlayedOnServer);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamMatchmaking_SteamMatchMaking006_AddFavoriteGame, 24)
+DEFINE_THISCALL_WRAPPER(winISteamMatchmaking_SteamMatchMaking006_AddFavoriteGame, 28)
 int __thiscall winISteamMatchmaking_SteamMatchMaking006_AddFavoriteGame(winISteamMatchmaking_SteamMatchMaking006 *_this, AppId_t nAppID, uint32 nIP, uint16 nConnPort, uint16 nQueryPort, uint32 unFlags, uint32 rTime32LastPlayedOnServer)
 {
     TRACE("%p\n", _this);
     return cppISteamMatchmaking_SteamMatchMaking006_AddFavoriteGame(_this->linux_side, nAppID, nIP, nConnPort, nQueryPort, unFlags, rTime32LastPlayedOnServer);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamMatchmaking_SteamMatchMaking006_RemoveFavoriteGame, 20)
+DEFINE_THISCALL_WRAPPER(winISteamMatchmaking_SteamMatchMaking006_RemoveFavoriteGame, 24)
 bool __thiscall winISteamMatchmaking_SteamMatchMaking006_RemoveFavoriteGame(winISteamMatchmaking_SteamMatchMaking006 *_this, AppId_t nAppID, uint32 nIP, uint16 nConnPort, uint16 nQueryPort, uint32 unFlags)
 {
     TRACE("%p\n", _this);
@@ -1130,7 +1130,7 @@ bool __thiscall winISteamMatchmaking_SteamMatchMaking006_RequestLobbyData(winISt
     return cppISteamMatchmaking_SteamMatchMaking006_RequestLobbyData(_this->linux_side, steamIDLobby);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamMatchmaking_SteamMatchMaking006_SetLobbyGameServer, 26)
+DEFINE_THISCALL_WRAPPER(winISteamMatchmaking_SteamMatchMaking006_SetLobbyGameServer, 28)
 void __thiscall winISteamMatchmaking_SteamMatchMaking006_SetLobbyGameServer(winISteamMatchmaking_SteamMatchMaking006 *_this, CSteamID steamIDLobby, uint32 unGameServerIP, uint16 unGameServerPort, CSteamID steamIDGameServer)
 {
     TRACE("%p\n", _this);
@@ -1242,14 +1242,14 @@ bool __thiscall winISteamMatchmaking_SteamMatchMaking005_GetFavoriteGame(winISte
     return cppISteamMatchmaking_SteamMatchMaking005_GetFavoriteGame(_this->linux_side, iGame, pnAppID, pnIP, pnConnPort, pnQueryPort, punFlags, pRTime32LastPlayedOnServer);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamMatchmaking_SteamMatchMaking005_AddFavoriteGame, 24)
+DEFINE_THISCALL_WRAPPER(winISteamMatchmaking_SteamMatchMaking005_AddFavoriteGame, 28)
 int __thiscall winISteamMatchmaking_SteamMatchMaking005_AddFavoriteGame(winISteamMatchmaking_SteamMatchMaking005 *_this, AppId_t nAppID, uint32 nIP, uint16 nConnPort, uint16 nQueryPort, uint32 unFlags, uint32 rTime32LastPlayedOnServer)
 {
     TRACE("%p\n", _this);
     return cppISteamMatchmaking_SteamMatchMaking005_AddFavoriteGame(_this->linux_side, nAppID, nIP, nConnPort, nQueryPort, unFlags, rTime32LastPlayedOnServer);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamMatchmaking_SteamMatchMaking005_RemoveFavoriteGame, 20)
+DEFINE_THISCALL_WRAPPER(winISteamMatchmaking_SteamMatchMaking005_RemoveFavoriteGame, 24)
 bool __thiscall winISteamMatchmaking_SteamMatchMaking005_RemoveFavoriteGame(winISteamMatchmaking_SteamMatchMaking005 *_this, AppId_t nAppID, uint32 nIP, uint16 nConnPort, uint16 nQueryPort, uint32 unFlags)
 {
     TRACE("%p\n", _this);
@@ -1391,7 +1391,7 @@ bool __thiscall winISteamMatchmaking_SteamMatchMaking005_RequestLobbyData(winISt
     return cppISteamMatchmaking_SteamMatchMaking005_RequestLobbyData(_this->linux_side, steamIDLobby);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamMatchmaking_SteamMatchMaking005_SetLobbyGameServer, 26)
+DEFINE_THISCALL_WRAPPER(winISteamMatchmaking_SteamMatchMaking005_SetLobbyGameServer, 28)
 void __thiscall winISteamMatchmaking_SteamMatchMaking005_SetLobbyGameServer(winISteamMatchmaking_SteamMatchMaking005 *_this, CSteamID steamIDLobby, uint32 unGameServerIP, uint16 unGameServerPort, CSteamID steamIDGameServer)
 {
     TRACE("%p\n", _this);
@@ -1520,14 +1520,14 @@ bool __thiscall winISteamMatchmaking_SteamMatchMaking004_GetFavoriteGame(winISte
     return cppISteamMatchmaking_SteamMatchMaking004_GetFavoriteGame(_this->linux_side, iGame, pnAppID, pnIP, pnConnPort, pnQueryPort, punFlags, pRTime32LastPlayedOnServer);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamMatchmaking_SteamMatchMaking004_AddFavoriteGame, 24)
+DEFINE_THISCALL_WRAPPER(winISteamMatchmaking_SteamMatchMaking004_AddFavoriteGame, 28)
 int __thiscall winISteamMatchmaking_SteamMatchMaking004_AddFavoriteGame(winISteamMatchmaking_SteamMatchMaking004 *_this, AppId_t nAppID, uint32 nIP, uint16 nConnPort, uint16 nQueryPort, uint32 unFlags, uint32 rTime32LastPlayedOnServer)
 {
     TRACE("%p\n", _this);
     return cppISteamMatchmaking_SteamMatchMaking004_AddFavoriteGame(_this->linux_side, nAppID, nIP, nConnPort, nQueryPort, unFlags, rTime32LastPlayedOnServer);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamMatchmaking_SteamMatchMaking004_RemoveFavoriteGame, 20)
+DEFINE_THISCALL_WRAPPER(winISteamMatchmaking_SteamMatchMaking004_RemoveFavoriteGame, 24)
 bool __thiscall winISteamMatchmaking_SteamMatchMaking004_RemoveFavoriteGame(winISteamMatchmaking_SteamMatchMaking004 *_this, AppId_t nAppID, uint32 nIP, uint16 nConnPort, uint16 nQueryPort, uint32 unFlags)
 {
     TRACE("%p\n", _this);
@@ -1570,7 +1570,7 @@ CSteamID *__thiscall winISteamMatchmaking_SteamMatchMaking004_GetLobbyByIndex(wi
     return _r;
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamMatchmaking_SteamMatchMaking004_CreateLobby, 5)
+DEFINE_THISCALL_WRAPPER(winISteamMatchmaking_SteamMatchMaking004_CreateLobby, 8)
 void __thiscall winISteamMatchmaking_SteamMatchMaking004_CreateLobby(winISteamMatchmaking_SteamMatchMaking004 *_this, bool bPrivate)
 {
     TRACE("%p\n", _this);
@@ -1662,7 +1662,7 @@ bool __thiscall winISteamMatchmaking_SteamMatchMaking004_RequestLobbyData(winISt
     return cppISteamMatchmaking_SteamMatchMaking004_RequestLobbyData(_this->linux_side, steamIDLobby);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamMatchmaking_SteamMatchMaking004_SetLobbyGameServer, 26)
+DEFINE_THISCALL_WRAPPER(winISteamMatchmaking_SteamMatchMaking004_SetLobbyGameServer, 28)
 void __thiscall winISteamMatchmaking_SteamMatchMaking004_SetLobbyGameServer(winISteamMatchmaking_SteamMatchMaking004 *_this, CSteamID steamIDLobby, uint32 unGameServerIP, uint16 unGameServerPort, CSteamID steamIDGameServer)
 {
     TRACE("%p\n", _this);
@@ -1765,14 +1765,14 @@ bool __thiscall winISteamMatchmaking_SteamMatchMaking003_GetFavoriteGame(winISte
     return cppISteamMatchmaking_SteamMatchMaking003_GetFavoriteGame(_this->linux_side, iGame, pnAppID, pnIP, pnConnPort, pnQueryPort, punFlags, pRTime32LastPlayedOnServer);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamMatchmaking_SteamMatchMaking003_AddFavoriteGame, 24)
+DEFINE_THISCALL_WRAPPER(winISteamMatchmaking_SteamMatchMaking003_AddFavoriteGame, 28)
 int __thiscall winISteamMatchmaking_SteamMatchMaking003_AddFavoriteGame(winISteamMatchmaking_SteamMatchMaking003 *_this, AppId_t nAppID, uint32 nIP, uint16 nConnPort, uint16 nQueryPort, uint32 unFlags, uint32 rTime32LastPlayedOnServer)
 {
     TRACE("%p\n", _this);
     return cppISteamMatchmaking_SteamMatchMaking003_AddFavoriteGame(_this->linux_side, nAppID, nIP, nConnPort, nQueryPort, unFlags, rTime32LastPlayedOnServer);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamMatchmaking_SteamMatchMaking003_RemoveFavoriteGame, 20)
+DEFINE_THISCALL_WRAPPER(winISteamMatchmaking_SteamMatchMaking003_RemoveFavoriteGame, 24)
 bool __thiscall winISteamMatchmaking_SteamMatchMaking003_RemoveFavoriteGame(winISteamMatchmaking_SteamMatchMaking003 *_this, AppId_t nAppID, uint32 nIP, uint16 nConnPort, uint16 nQueryPort, uint32 unFlags)
 {
     TRACE("%p\n", _this);
@@ -1815,7 +1815,7 @@ CSteamID *__thiscall winISteamMatchmaking_SteamMatchMaking003_GetLobbyByIndex(wi
     return _r;
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamMatchmaking_SteamMatchMaking003_CreateLobby, 5)
+DEFINE_THISCALL_WRAPPER(winISteamMatchmaking_SteamMatchMaking003_CreateLobby, 8)
 void __thiscall winISteamMatchmaking_SteamMatchMaking003_CreateLobby(winISteamMatchmaking_SteamMatchMaking003 *_this, bool bPrivate)
 {
     TRACE("%p\n", _this);
@@ -1907,7 +1907,7 @@ bool __thiscall winISteamMatchmaking_SteamMatchMaking003_RequestLobbyData(winISt
     return cppISteamMatchmaking_SteamMatchMaking003_RequestLobbyData(_this->linux_side, steamIDLobby);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamMatchmaking_SteamMatchMaking003_SetLobbyGameServer, 26)
+DEFINE_THISCALL_WRAPPER(winISteamMatchmaking_SteamMatchMaking003_SetLobbyGameServer, 28)
 void __thiscall winISteamMatchmaking_SteamMatchMaking003_SetLobbyGameServer(winISteamMatchmaking_SteamMatchMaking003 *_this, CSteamID steamIDLobby, uint32 unGameServerIP, uint16 unGameServerPort, CSteamID steamIDGameServer)
 {
     TRACE("%p\n", _this);
@@ -1935,7 +1935,7 @@ int __thiscall winISteamMatchmaking_SteamMatchMaking003_GetLobbyMemberLimit(winI
     return cppISteamMatchmaking_SteamMatchMaking003_GetLobbyMemberLimit(_this->linux_side, steamIDLobby);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamMatchmaking_SteamMatchMaking003_SetLobbyVoiceEnabled, 13)
+DEFINE_THISCALL_WRAPPER(winISteamMatchmaking_SteamMatchMaking003_SetLobbyVoiceEnabled, 16)
 void __thiscall winISteamMatchmaking_SteamMatchMaking003_SetLobbyVoiceEnabled(winISteamMatchmaking_SteamMatchMaking003 *_this, CSteamID steamIDLobby, bool bVoiceEnabled)
 {
     TRACE("%p\n", _this);
@@ -2018,14 +2018,14 @@ bool __thiscall winISteamMatchmaking_SteamMatchMaking002_GetFavoriteGame(winISte
     return cppISteamMatchmaking_SteamMatchMaking002_GetFavoriteGame(_this->linux_side, iGame, pnAppID, pnIP, pnConnPort, pnQueryPort, punFlags, pRTime32LastPlayedOnServer);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamMatchmaking_SteamMatchMaking002_AddFavoriteGame, 24)
+DEFINE_THISCALL_WRAPPER(winISteamMatchmaking_SteamMatchMaking002_AddFavoriteGame, 28)
 int __thiscall winISteamMatchmaking_SteamMatchMaking002_AddFavoriteGame(winISteamMatchmaking_SteamMatchMaking002 *_this, AppId_t nAppID, uint32 nIP, uint16 nConnPort, uint16 nQueryPort, uint32 unFlags, uint32 rTime32LastPlayedOnServer)
 {
     TRACE("%p\n", _this);
     return cppISteamMatchmaking_SteamMatchMaking002_AddFavoriteGame(_this->linux_side, nAppID, nIP, nConnPort, nQueryPort, unFlags, rTime32LastPlayedOnServer);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamMatchmaking_SteamMatchMaking002_RemoveFavoriteGame, 20)
+DEFINE_THISCALL_WRAPPER(winISteamMatchmaking_SteamMatchMaking002_RemoveFavoriteGame, 24)
 bool __thiscall winISteamMatchmaking_SteamMatchMaking002_RemoveFavoriteGame(winISteamMatchmaking_SteamMatchMaking002 *_this, AppId_t nAppID, uint32 nIP, uint16 nConnPort, uint16 nQueryPort, uint32 unFlags)
 {
     TRACE("%p\n", _this);
@@ -2047,7 +2047,7 @@ CSteamID *__thiscall winISteamMatchmaking_SteamMatchMaking002_GetLobbyByIndex(wi
     return _r;
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamMatchmaking_SteamMatchMaking002_CreateLobby, 5)
+DEFINE_THISCALL_WRAPPER(winISteamMatchmaking_SteamMatchMaking002_CreateLobby, 8)
 void __thiscall winISteamMatchmaking_SteamMatchMaking002_CreateLobby(winISteamMatchmaking_SteamMatchMaking002 *_this, bool bPrivate)
 {
     TRACE("%p\n", _this);
@@ -2139,7 +2139,7 @@ bool __thiscall winISteamMatchmaking_SteamMatchMaking002_RequestLobbyData(winISt
     return cppISteamMatchmaking_SteamMatchMaking002_RequestLobbyData(_this->linux_side, steamIDLobby);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamMatchmaking_SteamMatchMaking002_SetLobbyGameServer, 26)
+DEFINE_THISCALL_WRAPPER(winISteamMatchmaking_SteamMatchMaking002_SetLobbyGameServer, 28)
 void __thiscall winISteamMatchmaking_SteamMatchMaking002_SetLobbyGameServer(winISteamMatchmaking_SteamMatchMaking002 *_this, CSteamID steamIDLobby, uint32 unGameServerIP, uint16 unGameServerPort, CSteamID steamIDGameServer)
 {
     TRACE("%p\n", _this);
@@ -2207,14 +2207,14 @@ bool __thiscall winISteamMatchmaking_SteamMatchMaking001_GetFavoriteGame(winISte
     return cppISteamMatchmaking_SteamMatchMaking001_GetFavoriteGame(_this->linux_side, iGame, pnAppID, pnIP, pnConnPort, punFlags, pRTime32LastPlayedOnServer);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamMatchmaking_SteamMatchMaking001_AddFavoriteGame, 22)
+DEFINE_THISCALL_WRAPPER(winISteamMatchmaking_SteamMatchMaking001_AddFavoriteGame, 24)
 int __thiscall winISteamMatchmaking_SteamMatchMaking001_AddFavoriteGame(winISteamMatchmaking_SteamMatchMaking001 *_this, uint32 nAppID, uint32 nIP, uint16 nConnPort, uint32 unFlags, uint32 rTime32LastPlayedOnServer)
 {
     TRACE("%p\n", _this);
     return cppISteamMatchmaking_SteamMatchMaking001_AddFavoriteGame(_this->linux_side, nAppID, nIP, nConnPort, unFlags, rTime32LastPlayedOnServer);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamMatchmaking_SteamMatchMaking001_RemoveFavoriteGame, 18)
+DEFINE_THISCALL_WRAPPER(winISteamMatchmaking_SteamMatchMaking001_RemoveFavoriteGame, 20)
 bool __thiscall winISteamMatchmaking_SteamMatchMaking001_RemoveFavoriteGame(winISteamMatchmaking_SteamMatchMaking001 *_this, uint32 nAppID, uint32 nIP, uint16 nConnPort, uint32 unFlags)
 {
     TRACE("%p\n", _this);
@@ -2228,14 +2228,14 @@ bool __thiscall winISteamMatchmaking_SteamMatchMaking001_GetFavoriteGame2(winISt
     return cppISteamMatchmaking_SteamMatchMaking001_GetFavoriteGame2(_this->linux_side, iGame, pnAppID, pnIP, pnConnPort, pnQueryPort, punFlags, pRTime32LastPlayedOnServer);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamMatchmaking_SteamMatchMaking001_AddFavoriteGame2, 24)
+DEFINE_THISCALL_WRAPPER(winISteamMatchmaking_SteamMatchMaking001_AddFavoriteGame2, 28)
 int __thiscall winISteamMatchmaking_SteamMatchMaking001_AddFavoriteGame2(winISteamMatchmaking_SteamMatchMaking001 *_this, uint32 nAppID, uint32 nIP, uint16 nConnPort, uint16 nQueryPort, uint32 unFlags, uint32 rTime32LastPlayedOnServer)
 {
     TRACE("%p\n", _this);
     return cppISteamMatchmaking_SteamMatchMaking001_AddFavoriteGame2(_this->linux_side, nAppID, nIP, nConnPort, nQueryPort, unFlags, rTime32LastPlayedOnServer);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamMatchmaking_SteamMatchMaking001_RemoveFavoriteGame2, 20)
+DEFINE_THISCALL_WRAPPER(winISteamMatchmaking_SteamMatchMaking001_RemoveFavoriteGame2, 24)
 bool __thiscall winISteamMatchmaking_SteamMatchMaking001_RemoveFavoriteGame2(winISteamMatchmaking_SteamMatchMaking001 *_this, uint32 nAppID, uint32 nIP, uint16 nConnPort, uint16 nQueryPort, uint32 unFlags)
 {
     TRACE("%p\n", _this);
@@ -2257,7 +2257,7 @@ CSteamID *__thiscall winISteamMatchmaking_SteamMatchMaking001_GetLobbyByIndex(wi
     return _r;
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamMatchmaking_SteamMatchMaking001_CreateLobby, 13)
+DEFINE_THISCALL_WRAPPER(winISteamMatchmaking_SteamMatchMaking001_CreateLobby, 16)
 void __thiscall winISteamMatchmaking_SteamMatchMaking001_CreateLobby(winISteamMatchmaking_SteamMatchMaking001 *_this, uint64 ulGameID, bool bPrivate)
 {
     TRACE("%p\n", _this);

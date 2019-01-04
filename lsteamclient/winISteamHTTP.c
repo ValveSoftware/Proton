@@ -139,7 +139,7 @@ bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_SetHTTPRequestRawPo
     return cppISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_SetHTTPRequestRawPostBody(_this->linux_side, hRequest, pchContentType, pubBody, unBodyLen);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_CreateCookieContainer, 5)
+DEFINE_THISCALL_WRAPPER(winISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_CreateCookieContainer, 8)
 HTTPCookieContainerHandle __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_CreateCookieContainer(winISteamHTTP_STEAMHTTP_INTERFACE_VERSION002 *_this, bool bAllowResponsesToModify)
 {
     TRACE("%p\n", _this);
@@ -174,7 +174,7 @@ bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_SetHTTPRequestUserA
     return cppISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_SetHTTPRequestUserAgentInfo(_this->linux_side, hRequest, pchUserAgentInfo);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_SetHTTPRequestRequiresVerifiedCertificate, 9)
+DEFINE_THISCALL_WRAPPER(winISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_SetHTTPRequestRequiresVerifiedCertificate, 12)
 bool __thiscall winISteamHTTP_STEAMHTTP_INTERFACE_VERSION002_SetHTTPRequestRequiresVerifiedCertificate(winISteamHTTP_STEAMHTTP_INTERFACE_VERSION002 *_this, HTTPRequestHandle hRequest, bool bRequireVerifiedCertificate)
 {
     TRACE("%p\n", _this);

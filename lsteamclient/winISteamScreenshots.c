@@ -45,7 +45,7 @@ void __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_Trigg
     cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_TriggerScreenshot(_this->linux_side);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_HookScreenshots, 5)
+DEFINE_THISCALL_WRAPPER(winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_HookScreenshots, 8)
 void __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_HookScreenshots(winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003 *_this, bool bHook)
 {
     TRACE("%p\n", _this);
@@ -152,7 +152,7 @@ void __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_Trigg
     cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_TriggerScreenshot(_this->linux_side);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_HookScreenshots, 5)
+DEFINE_THISCALL_WRAPPER(winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_HookScreenshots, 8)
 void __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_HookScreenshots(winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002 *_this, bool bHook)
 {
     TRACE("%p\n", _this);
@@ -239,7 +239,7 @@ void __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001_Trigg
     cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001_TriggerScreenshot(_this->linux_side);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001_HookScreenshots, 5)
+DEFINE_THISCALL_WRAPPER(winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001_HookScreenshots, 8)
 void __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001_HookScreenshots(winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001 *_this, bool bHook)
 {
     TRACE("%p\n", _this);

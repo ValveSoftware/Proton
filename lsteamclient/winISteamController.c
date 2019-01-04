@@ -155,28 +155,28 @@ void __thiscall winISteamController_SteamController006_StopAnalogActionMomentum(
     cppISteamController_SteamController006_StopAnalogActionMomentum(_this->linux_side, controllerHandle, eAction);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamController_SteamController006_TriggerHapticPulse, 18)
+DEFINE_THISCALL_WRAPPER(winISteamController_SteamController006_TriggerHapticPulse, 20)
 void __thiscall winISteamController_SteamController006_TriggerHapticPulse(winISteamController_SteamController006 *_this, ControllerHandle_t controllerHandle, ESteamControllerPad eTargetPad, unsigned short usDurationMicroSec)
 {
     TRACE("%p\n", _this);
     cppISteamController_SteamController006_TriggerHapticPulse(_this->linux_side, controllerHandle, eTargetPad, usDurationMicroSec);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamController_SteamController006_TriggerRepeatedHapticPulse, 26)
+DEFINE_THISCALL_WRAPPER(winISteamController_SteamController006_TriggerRepeatedHapticPulse, 32)
 void __thiscall winISteamController_SteamController006_TriggerRepeatedHapticPulse(winISteamController_SteamController006 *_this, ControllerHandle_t controllerHandle, ESteamControllerPad eTargetPad, unsigned short usDurationMicroSec, unsigned short usOffMicroSec, unsigned short unRepeat, unsigned int nFlags)
 {
     TRACE("%p\n", _this);
     cppISteamController_SteamController006_TriggerRepeatedHapticPulse(_this->linux_side, controllerHandle, eTargetPad, usDurationMicroSec, usOffMicroSec, unRepeat, nFlags);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamController_SteamController006_TriggerVibration, 16)
+DEFINE_THISCALL_WRAPPER(winISteamController_SteamController006_TriggerVibration, 20)
 void __thiscall winISteamController_SteamController006_TriggerVibration(winISteamController_SteamController006 *_this, ControllerHandle_t controllerHandle, unsigned short usLeftSpeed, unsigned short usRightSpeed)
 {
     TRACE("%p\n", _this);
     cppISteamController_SteamController006_TriggerVibration(_this->linux_side, controllerHandle, usLeftSpeed, usRightSpeed);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamController_SteamController006_SetLEDColor, 19)
+DEFINE_THISCALL_WRAPPER(winISteamController_SteamController006_SetLEDColor, 28)
 void __thiscall winISteamController_SteamController006_SetLEDColor(winISteamController_SteamController006 *_this, ControllerHandle_t controllerHandle, uint8 nColorR, uint8 nColorG, uint8 nColorB, unsigned int nFlags)
 {
     TRACE("%p\n", _this);
@@ -408,28 +408,28 @@ void __thiscall winISteamController_SteamController005_StopAnalogActionMomentum(
     cppISteamController_SteamController005_StopAnalogActionMomentum(_this->linux_side, controllerHandle, eAction);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamController_SteamController005_TriggerHapticPulse, 18)
+DEFINE_THISCALL_WRAPPER(winISteamController_SteamController005_TriggerHapticPulse, 20)
 void __thiscall winISteamController_SteamController005_TriggerHapticPulse(winISteamController_SteamController005 *_this, ControllerHandle_t controllerHandle, ESteamControllerPad eTargetPad, unsigned short usDurationMicroSec)
 {
     TRACE("%p\n", _this);
     cppISteamController_SteamController005_TriggerHapticPulse(_this->linux_side, controllerHandle, eTargetPad, usDurationMicroSec);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamController_SteamController005_TriggerRepeatedHapticPulse, 26)
+DEFINE_THISCALL_WRAPPER(winISteamController_SteamController005_TriggerRepeatedHapticPulse, 32)
 void __thiscall winISteamController_SteamController005_TriggerRepeatedHapticPulse(winISteamController_SteamController005 *_this, ControllerHandle_t controllerHandle, ESteamControllerPad eTargetPad, unsigned short usDurationMicroSec, unsigned short usOffMicroSec, unsigned short unRepeat, unsigned int nFlags)
 {
     TRACE("%p\n", _this);
     cppISteamController_SteamController005_TriggerRepeatedHapticPulse(_this->linux_side, controllerHandle, eTargetPad, usDurationMicroSec, usOffMicroSec, unRepeat, nFlags);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamController_SteamController005_TriggerVibration, 16)
+DEFINE_THISCALL_WRAPPER(winISteamController_SteamController005_TriggerVibration, 20)
 void __thiscall winISteamController_SteamController005_TriggerVibration(winISteamController_SteamController005 *_this, ControllerHandle_t controllerHandle, unsigned short usLeftSpeed, unsigned short usRightSpeed)
 {
     TRACE("%p\n", _this);
     cppISteamController_SteamController005_TriggerVibration(_this->linux_side, controllerHandle, usLeftSpeed, usRightSpeed);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamController_SteamController005_SetLEDColor, 19)
+DEFINE_THISCALL_WRAPPER(winISteamController_SteamController005_SetLEDColor, 28)
 void __thiscall winISteamController_SteamController005_SetLEDColor(winISteamController_SteamController005 *_this, ControllerHandle_t controllerHandle, uint8 nColorR, uint8 nColorG, uint8 nColorB, unsigned int nFlags)
 {
     TRACE("%p\n", _this);
@@ -649,14 +649,14 @@ void __thiscall winISteamController_SteamController004_StopAnalogActionMomentum(
     cppISteamController_SteamController004_StopAnalogActionMomentum(_this->linux_side, controllerHandle, eAction);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamController_SteamController004_TriggerHapticPulse, 18)
+DEFINE_THISCALL_WRAPPER(winISteamController_SteamController004_TriggerHapticPulse, 20)
 void __thiscall winISteamController_SteamController004_TriggerHapticPulse(winISteamController_SteamController004 *_this, ControllerHandle_t controllerHandle, ESteamControllerPad eTargetPad, unsigned short usDurationMicroSec)
 {
     TRACE("%p\n", _this);
     cppISteamController_SteamController004_TriggerHapticPulse(_this->linux_side, controllerHandle, eTargetPad, usDurationMicroSec);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamController_SteamController004_TriggerRepeatedHapticPulse, 26)
+DEFINE_THISCALL_WRAPPER(winISteamController_SteamController004_TriggerRepeatedHapticPulse, 32)
 void __thiscall winISteamController_SteamController004_TriggerRepeatedHapticPulse(winISteamController_SteamController004 *_this, ControllerHandle_t controllerHandle, ESteamControllerPad eTargetPad, unsigned short usDurationMicroSec, unsigned short usOffMicroSec, unsigned short unRepeat, unsigned int nFlags)
 {
     TRACE("%p\n", _this);
@@ -855,14 +855,14 @@ void __thiscall winISteamController_SteamController003_StopAnalogActionMomentum(
     cppISteamController_SteamController003_StopAnalogActionMomentum(_this->linux_side, controllerHandle, eAction);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamController_SteamController003_TriggerHapticPulse, 18)
+DEFINE_THISCALL_WRAPPER(winISteamController_SteamController003_TriggerHapticPulse, 20)
 void __thiscall winISteamController_SteamController003_TriggerHapticPulse(winISteamController_SteamController003 *_this, ControllerHandle_t controllerHandle, ESteamControllerPad eTargetPad, unsigned short usDurationMicroSec)
 {
     TRACE("%p\n", _this);
     cppISteamController_SteamController003_TriggerHapticPulse(_this->linux_side, controllerHandle, eTargetPad, usDurationMicroSec);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamController_SteamController003_TriggerRepeatedHapticPulse, 26)
+DEFINE_THISCALL_WRAPPER(winISteamController_SteamController003_TriggerRepeatedHapticPulse, 32)
 void __thiscall winISteamController_SteamController003_TriggerRepeatedHapticPulse(winISteamController_SteamController003 *_this, ControllerHandle_t controllerHandle, ESteamControllerPad eTargetPad, unsigned short usDurationMicroSec, unsigned short usOffMicroSec, unsigned short unRepeat, unsigned int nFlags)
 {
     TRACE("%p\n", _this);
@@ -943,7 +943,7 @@ bool __thiscall winISteamController_STEAMCONTROLLER_INTERFACE_VERSION_GetControl
     return cppISteamController_STEAMCONTROLLER_INTERFACE_VERSION_GetControllerState(_this->linux_side, unControllerIndex, pState);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamController_STEAMCONTROLLER_INTERFACE_VERSION_TriggerHapticPulse, 14)
+DEFINE_THISCALL_WRAPPER(winISteamController_STEAMCONTROLLER_INTERFACE_VERSION_TriggerHapticPulse, 16)
 void __thiscall winISteamController_STEAMCONTROLLER_INTERFACE_VERSION_TriggerHapticPulse(winISteamController_STEAMCONTROLLER_INTERFACE_VERSION *_this, uint32 unControllerIndex, ESteamControllerPad eTargetPad, unsigned short usDurationMicroSec)
 {
     TRACE("%p\n", _this);

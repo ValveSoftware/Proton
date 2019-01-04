@@ -41,7 +41,7 @@ bool __thiscall winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_BIsCu
     return cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_BIsCurrentMusicRemote(_this->linux_side);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_BActivationSuccess, 5)
+DEFINE_THISCALL_WRAPPER(winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_BActivationSuccess, 8)
 bool __thiscall winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_BActivationSuccess(winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001 *_this, bool bValue)
 {
     TRACE("%p\n", _this);
@@ -62,42 +62,42 @@ bool __thiscall winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_SetPN
     return cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_SetPNGIcon_64x64(_this->linux_side, pvBuffer, cbBufferLength);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_EnablePlayPrevious, 5)
+DEFINE_THISCALL_WRAPPER(winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_EnablePlayPrevious, 8)
 bool __thiscall winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_EnablePlayPrevious(winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001 *_this, bool bValue)
 {
     TRACE("%p\n", _this);
     return cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_EnablePlayPrevious(_this->linux_side, bValue);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_EnablePlayNext, 5)
+DEFINE_THISCALL_WRAPPER(winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_EnablePlayNext, 8)
 bool __thiscall winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_EnablePlayNext(winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001 *_this, bool bValue)
 {
     TRACE("%p\n", _this);
     return cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_EnablePlayNext(_this->linux_side, bValue);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_EnableShuffled, 5)
+DEFINE_THISCALL_WRAPPER(winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_EnableShuffled, 8)
 bool __thiscall winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_EnableShuffled(winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001 *_this, bool bValue)
 {
     TRACE("%p\n", _this);
     return cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_EnableShuffled(_this->linux_side, bValue);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_EnableLooped, 5)
+DEFINE_THISCALL_WRAPPER(winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_EnableLooped, 8)
 bool __thiscall winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_EnableLooped(winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001 *_this, bool bValue)
 {
     TRACE("%p\n", _this);
     return cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_EnableLooped(_this->linux_side, bValue);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_EnableQueue, 5)
+DEFINE_THISCALL_WRAPPER(winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_EnableQueue, 8)
 bool __thiscall winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_EnableQueue(winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001 *_this, bool bValue)
 {
     TRACE("%p\n", _this);
     return cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_EnableQueue(_this->linux_side, bValue);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_EnablePlaylists, 5)
+DEFINE_THISCALL_WRAPPER(winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_EnablePlaylists, 8)
 bool __thiscall winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_EnablePlaylists(winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001 *_this, bool bValue)
 {
     TRACE("%p\n", _this);
@@ -111,14 +111,14 @@ bool __thiscall winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_Updat
     return cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_UpdatePlaybackStatus(_this->linux_side, nStatus);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_UpdateShuffled, 5)
+DEFINE_THISCALL_WRAPPER(winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_UpdateShuffled, 8)
 bool __thiscall winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_UpdateShuffled(winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001 *_this, bool bValue)
 {
     TRACE("%p\n", _this);
     return cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_UpdateShuffled(_this->linux_side, bValue);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_UpdateLooped, 5)
+DEFINE_THISCALL_WRAPPER(winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_UpdateLooped, 8)
 bool __thiscall winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_UpdateLooped(winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001 *_this, bool bValue)
 {
     TRACE("%p\n", _this);
@@ -139,7 +139,7 @@ bool __thiscall winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_Curre
     return cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_CurrentEntryWillChange(_this->linux_side);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_CurrentEntryIsAvailable, 5)
+DEFINE_THISCALL_WRAPPER(winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_CurrentEntryIsAvailable, 8)
 bool __thiscall winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_CurrentEntryIsAvailable(winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001 *_this, bool bAvailable)
 {
     TRACE("%p\n", _this);

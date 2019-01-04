@@ -167,7 +167,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetUserAc
     return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetUserAchievementAndUnlockTime(_this->linux_side, steamIDUser, pchName, pbAchieved, punUnlockTime);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_ResetAllStats, 5)
+DEFINE_THISCALL_WRAPPER(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_ResetAllStats, 8)
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_ResetAllStats(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011 *_this, bool bAchievementsToo)
 {
     TRACE("%p\n", _this);
@@ -524,7 +524,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetUserAc
     return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_GetUserAchievementAndUnlockTime(_this->linux_side, steamIDUser, pchName, pbAchieved, punUnlockTime);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_ResetAllStats, 5)
+DEFINE_THISCALL_WRAPPER(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_ResetAllStats, 8)
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010_ResetAllStats(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010 *_this, bool bAchievementsToo)
 {
     TRACE("%p\n", _this);
@@ -879,7 +879,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetUserAc
     return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_GetUserAchievementAndUnlockTime(_this->linux_side, steamIDUser, pchName, pbAchieved, punUnlockTime);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_ResetAllStats, 5)
+DEFINE_THISCALL_WRAPPER(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_ResetAllStats, 8)
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009_ResetAllStats(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009 *_this, bool bAchievementsToo)
 {
     TRACE("%p\n", _this);
@@ -1162,7 +1162,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetUserAc
     return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetUserAchievementAndUnlockTime(_this->linux_side, steamIDUser, pchName, pbAchieved, punUnlockTime);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_ResetAllStats, 5)
+DEFINE_THISCALL_WRAPPER(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_ResetAllStats, 8)
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_ResetAllStats(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008 *_this, bool bAchievementsToo)
 {
     TRACE("%p\n", _this);
@@ -1437,7 +1437,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetUserAc
     return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_GetUserAchievementAndUnlockTime(_this->linux_side, steamIDUser, pchName, pbAchieved, punUnlockTime);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_ResetAllStats, 5)
+DEFINE_THISCALL_WRAPPER(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_ResetAllStats, 8)
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007_ResetAllStats(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007 *_this, bool bAchievementsToo)
 {
     TRACE("%p\n", _this);
@@ -1690,7 +1690,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetUserAc
     return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetUserAchievement(_this->linux_side, steamIDUser, pchName, pbAchieved);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_ResetAllStats, 5)
+DEFINE_THISCALL_WRAPPER(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_ResetAllStats, 8)
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_ResetAllStats(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006 *_this, bool bAchievementsToo)
 {
     TRACE("%p\n", _this);
@@ -1941,7 +1941,7 @@ bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetUserAc
     return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_GetUserAchievement(_this->linux_side, steamIDUser, pchName, pbAchieved);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_ResetAllStats, 5)
+DEFINE_THISCALL_WRAPPER(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_ResetAllStats, 8)
 bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005_ResetAllStats(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005 *_this, bool bAchievementsToo)
 {
     TRACE("%p\n", _this);
