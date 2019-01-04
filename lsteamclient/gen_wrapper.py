@@ -10,6 +10,7 @@ import sys
 import clang.cindex
 import os
 import re
+import math
 
 sdk_versions = [
     "142",
@@ -416,7 +417,7 @@ def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, e
         parambytes = 4 #_this
     for param in list(method.get_children()):
         if param.kind == clang.cindex.CursorKind.PARM_DECL:
-            parambytes += param.type.get_size()
+            parambytes += int(math.ceil(param.type.get_size()/4.0) * 4)
     cfile.write("DEFINE_THISCALL_WRAPPER(%s_%s, %s)\n" % (winclassname, used_name, parambytes))
     cpp_h.write("extern ")
     if method.result_type.spelling.startswith("ISteam"):

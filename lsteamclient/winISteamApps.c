@@ -132,7 +132,7 @@ bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetCurrentBetaName(
     return cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetCurrentBetaName(_this->linux_side, pchName, cchNameBufferSize);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamApps_STEAMAPPS_INTERFACE_VERSION008_MarkContentCorrupt, 5)
+DEFINE_THISCALL_WRAPPER(winISteamApps_STEAMAPPS_INTERFACE_VERSION008_MarkContentCorrupt, 8)
 bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_MarkContentCorrupt(winISteamApps_STEAMAPPS_INTERFACE_VERSION008 *_this, bool bMissingFilesOnly)
 {
     TRACE("%p\n", _this);
@@ -374,7 +374,7 @@ bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetCurrentBetaName(
     return cppISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetCurrentBetaName(_this->linux_side, pchName, cchNameBufferSize);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamApps_STEAMAPPS_INTERFACE_VERSION007_MarkContentCorrupt, 5)
+DEFINE_THISCALL_WRAPPER(winISteamApps_STEAMAPPS_INTERFACE_VERSION007_MarkContentCorrupt, 8)
 bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION007_MarkContentCorrupt(winISteamApps_STEAMAPPS_INTERFACE_VERSION007 *_this, bool bMissingFilesOnly)
 {
     TRACE("%p\n", _this);
@@ -597,7 +597,7 @@ bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION006_GetCurrentBetaName(
     return cppISteamApps_STEAMAPPS_INTERFACE_VERSION006_GetCurrentBetaName(_this->linux_side, pchName, cchNameBufferSize);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamApps_STEAMAPPS_INTERFACE_VERSION006_MarkContentCorrupt, 5)
+DEFINE_THISCALL_WRAPPER(winISteamApps_STEAMAPPS_INTERFACE_VERSION006_MarkContentCorrupt, 8)
 bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION006_MarkContentCorrupt(winISteamApps_STEAMAPPS_INTERFACE_VERSION006 *_this, bool bMissingFilesOnly)
 {
     TRACE("%p\n", _this);
@@ -804,7 +804,7 @@ bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION005_GetCurrentBetaName(
     return cppISteamApps_STEAMAPPS_INTERFACE_VERSION005_GetCurrentBetaName(_this->linux_side, pchName, cchNameBufferSize);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamApps_STEAMAPPS_INTERFACE_VERSION005_MarkContentCorrupt, 5)
+DEFINE_THISCALL_WRAPPER(winISteamApps_STEAMAPPS_INTERFACE_VERSION005_MarkContentCorrupt, 8)
 bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION005_MarkContentCorrupt(winISteamApps_STEAMAPPS_INTERFACE_VERSION005 *_this, bool bMissingFilesOnly)
 {
     TRACE("%p\n", _this);

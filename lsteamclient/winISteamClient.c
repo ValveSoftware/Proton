@@ -71,7 +71,7 @@ winISteamGameServer * __thiscall winISteamClient_SteamClient017_GetISteamGameSer
         cppISteamClient_SteamClient017_GetISteamGameServer(_this->linux_side, hSteamUser, hSteamPipe, pchVersion));
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient017_SetLocalIPBinding, 10)
+DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient017_SetLocalIPBinding, 12)
 void __thiscall winISteamClient_SteamClient017_SetLocalIPBinding(winISteamClient_SteamClient017 *_this, uint32 unIP, uint16 usPort)
 {
     TRACE("%p\n", _this);
@@ -417,7 +417,7 @@ winISteamGameServer * __thiscall winISteamClient_SteamClient016_GetISteamGameSer
         cppISteamClient_SteamClient016_GetISteamGameServer(_this->linux_side, hSteamUser, hSteamPipe, pchVersion));
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient016_SetLocalIPBinding, 10)
+DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient016_SetLocalIPBinding, 12)
 void __thiscall winISteamClient_SteamClient016_SetLocalIPBinding(winISteamClient_SteamClient016 *_this, uint32 unIP, uint16 usPort)
 {
     TRACE("%p\n", _this);
@@ -737,7 +737,7 @@ winISteamGameServer * __thiscall winISteamClient_SteamClient015_GetISteamGameSer
         cppISteamClient_SteamClient015_GetISteamGameServer(_this->linux_side, hSteamUser, hSteamPipe, pchVersion));
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient015_SetLocalIPBinding, 10)
+DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient015_SetLocalIPBinding, 12)
 void __thiscall winISteamClient_SteamClient015_SetLocalIPBinding(winISteamClient_SteamClient015 *_this, uint32 unIP, uint16 usPort)
 {
     TRACE("%p\n", _this);
@@ -1024,7 +1024,7 @@ winISteamGameServer * __thiscall winISteamClient_SteamClient014_GetISteamGameSer
         cppISteamClient_SteamClient014_GetISteamGameServer(_this->linux_side, hSteamUser, hSteamPipe, pchVersion));
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient014_SetLocalIPBinding, 10)
+DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient014_SetLocalIPBinding, 12)
 void __thiscall winISteamClient_SteamClient014_SetLocalIPBinding(winISteamClient_SteamClient014 *_this, uint32 unIP, uint16 usPort)
 {
     TRACE("%p\n", _this);
@@ -1302,7 +1302,7 @@ winISteamGameServer * __thiscall winISteamClient_SteamClient012_GetISteamGameSer
         cppISteamClient_SteamClient012_GetISteamGameServer(_this->linux_side, hSteamUser, hSteamPipe, pchVersion));
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient012_SetLocalIPBinding, 10)
+DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient012_SetLocalIPBinding, 12)
 void __thiscall winISteamClient_SteamClient012_SetLocalIPBinding(winISteamClient_SteamClient012 *_this, uint32 unIP, uint16 usPort)
 {
     TRACE("%p\n", _this);
@@ -1562,7 +1562,7 @@ winISteamGameServer * __thiscall winISteamClient_SteamClient011_GetISteamGameSer
         cppISteamClient_SteamClient011_GetISteamGameServer(_this->linux_side, hSteamUser, hSteamPipe, pchVersion));
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient011_SetLocalIPBinding, 10)
+DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient011_SetLocalIPBinding, 12)
 void __thiscall winISteamClient_SteamClient011_SetLocalIPBinding(winISteamClient_SteamClient011 *_this, uint32 unIP, uint16 usPort)
 {
     TRACE("%p\n", _this);
@@ -1804,7 +1804,7 @@ winISteamGameServer * __thiscall winISteamClient_SteamClient010_GetISteamGameSer
         cppISteamClient_SteamClient010_GetISteamGameServer(_this->linux_side, hSteamUser, hSteamPipe, pchVersion));
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient010_SetLocalIPBinding, 10)
+DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient010_SetLocalIPBinding, 12)
 void __thiscall winISteamClient_SteamClient010_SetLocalIPBinding(winISteamClient_SteamClient010 *_this, uint32 unIP, uint16 usPort)
 {
     TRACE("%p\n", _this);
@@ -2037,7 +2037,7 @@ winISteamGameServer * __thiscall winISteamClient_SteamClient009_GetISteamGameSer
         cppISteamClient_SteamClient009_GetISteamGameServer(_this->linux_side, hSteamUser, hSteamPipe, pchVersion));
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient009_SetLocalIPBinding, 10)
+DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient009_SetLocalIPBinding, 12)
 void __thiscall winISteamClient_SteamClient009_SetLocalIPBinding(winISteamClient_SteamClient009 *_this, uint32 unIP, uint16 usPort)
 {
     TRACE("%p\n", _this);
@@ -2253,7 +2253,7 @@ winISteamGameServer * __thiscall winISteamClient_SteamClient008_GetISteamGameSer
         cppISteamClient_SteamClient008_GetISteamGameServer(_this->linux_side, hSteamUser, hSteamPipe, pchVersion));
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient008_SetLocalIPBinding, 10)
+DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient008_SetLocalIPBinding, 12)
 void __thiscall winISteamClient_SteamClient008_SetLocalIPBinding(winISteamClient_SteamClient008 *_this, uint32 unIP, uint16 usPort)
 {
     TRACE("%p\n", _this);
@@ -2460,7 +2460,7 @@ winISteamGameServer * __thiscall winISteamClient_SteamClient007_GetISteamGameSer
         cppISteamClient_SteamClient007_GetISteamGameServer(_this->linux_side, hSteamUser, hSteamPipe, pchVersion));
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient007_SetLocalIPBinding, 10)
+DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient007_SetLocalIPBinding, 12)
 void __thiscall winISteamClient_SteamClient007_SetLocalIPBinding(winISteamClient_SteamClient007 *_this, uint32 unIP, uint16 usPort)
 {
     TRACE("%p\n", _this);

@@ -83,7 +83,7 @@ bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V002_SerializeResult
     return cppISteamInventory_STEAMINVENTORY_INTERFACE_V002_SerializeResult(_this->linux_side, resultHandle, pOutBuffer, punOutBufferSize);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamInventory_STEAMINVENTORY_INTERFACE_V002_DeserializeResult, 17)
+DEFINE_THISCALL_WRAPPER(winISteamInventory_STEAMINVENTORY_INTERFACE_V002_DeserializeResult, 20)
 bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V002_DeserializeResult(winISteamInventory_STEAMINVENTORY_INTERFACE_V002 *_this, SteamInventoryResult_t * pOutResultHandle, const void * pBuffer, uint32 unBufferSize, bool bRESERVED_MUST_BE_FALSE)
 {
     TRACE("%p\n", _this);
@@ -251,7 +251,7 @@ bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V002_SetProperty(win
     return cppISteamInventory_STEAMINVENTORY_INTERFACE_V002_SetProperty(_this->linux_side, handle, nItemID, pchPropertyName, pchPropertyValue);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamInventory_STEAMINVENTORY_INTERFACE_V002_SetProperty_2, 25)
+DEFINE_THISCALL_WRAPPER(winISteamInventory_STEAMINVENTORY_INTERFACE_V002_SetProperty_2, 28)
 bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V002_SetProperty_2(winISteamInventory_STEAMINVENTORY_INTERFACE_V002 *_this, SteamInventoryUpdateHandle_t handle, SteamItemInstanceID_t nItemID, const char * pchPropertyName, bool bValue)
 {
     TRACE("%p\n", _this);
@@ -399,7 +399,7 @@ bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V001_SerializeResult
     return cppISteamInventory_STEAMINVENTORY_INTERFACE_V001_SerializeResult(_this->linux_side, resultHandle, pOutBuffer, punOutBufferSize);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamInventory_STEAMINVENTORY_INTERFACE_V001_DeserializeResult, 17)
+DEFINE_THISCALL_WRAPPER(winISteamInventory_STEAMINVENTORY_INTERFACE_V001_DeserializeResult, 20)
 bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V001_DeserializeResult(winISteamInventory_STEAMINVENTORY_INTERFACE_V001 *_this, SteamInventoryResult_t * pOutResultHandle, const void * pBuffer, uint32 unBufferSize, bool bRESERVED_MUST_BE_FALSE)
 {
     TRACE("%p\n", _this);

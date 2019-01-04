@@ -111,21 +111,21 @@ void __thiscall winISteamMatchmakingServers_SteamMatchMakingServers002_RefreshSe
     cppISteamMatchmakingServers_SteamMatchMakingServers002_RefreshServer(_this->linux_side, hRequest, iServer);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamMatchmakingServers_SteamMatchMakingServers002_PingServer, 14)
+DEFINE_THISCALL_WRAPPER(winISteamMatchmakingServers_SteamMatchMakingServers002_PingServer, 16)
 HServerQuery __thiscall winISteamMatchmakingServers_SteamMatchMakingServers002_PingServer(winISteamMatchmakingServers_SteamMatchMakingServers002 *_this, uint32 unIP, uint16 usPort, ISteamMatchmakingPingResponse * pRequestServersResponse)
 {
     TRACE("%p\n", _this);
     return cppISteamMatchmakingServers_SteamMatchMakingServers002_PingServer(_this->linux_side, unIP, usPort, create_LinuxISteamMatchmakingPingResponse(pRequestServersResponse));
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamMatchmakingServers_SteamMatchMakingServers002_PlayerDetails, 14)
+DEFINE_THISCALL_WRAPPER(winISteamMatchmakingServers_SteamMatchMakingServers002_PlayerDetails, 16)
 HServerQuery __thiscall winISteamMatchmakingServers_SteamMatchMakingServers002_PlayerDetails(winISteamMatchmakingServers_SteamMatchMakingServers002 *_this, uint32 unIP, uint16 usPort, ISteamMatchmakingPlayersResponse * pRequestServersResponse)
 {
     TRACE("%p\n", _this);
     return cppISteamMatchmakingServers_SteamMatchMakingServers002_PlayerDetails(_this->linux_side, unIP, usPort, create_LinuxISteamMatchmakingPlayersResponse(pRequestServersResponse));
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamMatchmakingServers_SteamMatchMakingServers002_ServerRules, 14)
+DEFINE_THISCALL_WRAPPER(winISteamMatchmakingServers_SteamMatchMakingServers002_ServerRules, 16)
 HServerQuery __thiscall winISteamMatchmakingServers_SteamMatchMakingServers002_ServerRules(winISteamMatchmakingServers_SteamMatchMakingServers002 *_this, uint32 unIP, uint16 usPort, ISteamMatchmakingRulesResponse * pRequestServersResponse)
 {
     TRACE("%p\n", _this);
@@ -267,21 +267,21 @@ void __thiscall winISteamMatchmakingServers_SteamMatchMakingServers001_RefreshSe
     cppISteamMatchmakingServers_SteamMatchMakingServers001_RefreshServer(_this->linux_side, eType, iServer);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamMatchmakingServers_SteamMatchMakingServers001_PingServer, 14)
+DEFINE_THISCALL_WRAPPER(winISteamMatchmakingServers_SteamMatchMakingServers001_PingServer, 16)
 HServerQuery __thiscall winISteamMatchmakingServers_SteamMatchMakingServers001_PingServer(winISteamMatchmakingServers_SteamMatchMakingServers001 *_this, uint32 unIP, uint16 usPort, ISteamMatchmakingPingResponse * pRequestServersResponse)
 {
     TRACE("%p\n", _this);
     return cppISteamMatchmakingServers_SteamMatchMakingServers001_PingServer(_this->linux_side, unIP, usPort, create_LinuxISteamMatchmakingPingResponse(pRequestServersResponse));
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamMatchmakingServers_SteamMatchMakingServers001_PlayerDetails, 14)
+DEFINE_THISCALL_WRAPPER(winISteamMatchmakingServers_SteamMatchMakingServers001_PlayerDetails, 16)
 HServerQuery __thiscall winISteamMatchmakingServers_SteamMatchMakingServers001_PlayerDetails(winISteamMatchmakingServers_SteamMatchMakingServers001 *_this, uint32 unIP, uint16 usPort, ISteamMatchmakingPlayersResponse * pRequestServersResponse)
 {
     TRACE("%p\n", _this);
     return cppISteamMatchmakingServers_SteamMatchMakingServers001_PlayerDetails(_this->linux_side, unIP, usPort, create_LinuxISteamMatchmakingPlayersResponse(pRequestServersResponse));
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamMatchmakingServers_SteamMatchMakingServers001_ServerRules, 14)
+DEFINE_THISCALL_WRAPPER(winISteamMatchmakingServers_SteamMatchMakingServers001_ServerRules, 16)
 HServerQuery __thiscall winISteamMatchmakingServers_SteamMatchMakingServers001_ServerRules(winISteamMatchmakingServers_SteamMatchMakingServers001 *_this, uint32 unIP, uint16 usPort, ISteamMatchmakingRulesResponse * pRequestServersResponse)
 {
     TRACE("%p\n", _this);

@@ -119,21 +119,21 @@ FriendsGroupID_t __thiscall winISteamFriends_SteamFriends015_GetFriendsGroupIDBy
     return cppISteamFriends_SteamFriends015_GetFriendsGroupIDByIndex(_this->linux_side, iFG);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends015_GetFriendsGroupName, 6)
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends015_GetFriendsGroupName, 8)
 const char * __thiscall winISteamFriends_SteamFriends015_GetFriendsGroupName(winISteamFriends_SteamFriends015 *_this, FriendsGroupID_t friendsGroupID)
 {
     TRACE("%p\n", _this);
     return cppISteamFriends_SteamFriends015_GetFriendsGroupName(_this->linux_side, friendsGroupID);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends015_GetFriendsGroupMembersCount, 6)
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends015_GetFriendsGroupMembersCount, 8)
 int __thiscall winISteamFriends_SteamFriends015_GetFriendsGroupMembersCount(winISteamFriends_SteamFriends015 *_this, FriendsGroupID_t friendsGroupID)
 {
     TRACE("%p\n", _this);
     return cppISteamFriends_SteamFriends015_GetFriendsGroupMembersCount(_this->linux_side, friendsGroupID);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends015_GetFriendsGroupMembersList, 14)
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends015_GetFriendsGroupMembersList, 16)
 void __thiscall winISteamFriends_SteamFriends015_GetFriendsGroupMembersList(winISteamFriends_SteamFriends015 *_this, FriendsGroupID_t friendsGroupID, CSteamID * pOutSteamIDMembers, int nMembersCount)
 {
     TRACE("%p\n", _this);
@@ -212,7 +212,7 @@ bool __thiscall winISteamFriends_SteamFriends015_IsUserInSource(winISteamFriends
     return cppISteamFriends_SteamFriends015_IsUserInSource(_this->linux_side, steamIDUser, steamIDSource);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends015_SetInGameVoiceSpeaking, 13)
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends015_SetInGameVoiceSpeaking, 16)
 void __thiscall winISteamFriends_SteamFriends015_SetInGameVoiceSpeaking(winISteamFriends_SteamFriends015 *_this, CSteamID steamIDUser, bool bSpeaking)
 {
     TRACE("%p\n", _this);
@@ -282,7 +282,7 @@ int __thiscall winISteamFriends_SteamFriends015_GetLargeFriendAvatar(winISteamFr
     return cppISteamFriends_SteamFriends015_GetLargeFriendAvatar(_this->linux_side, steamIDFriend);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends015_RequestUserInformation, 13)
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends015_RequestUserInformation, 16)
 bool __thiscall winISteamFriends_SteamFriends015_RequestUserInformation(winISteamFriends_SteamFriends015 *_this, CSteamID steamIDUser, bool bRequireNameOnly)
 {
     TRACE("%p\n", _this);
@@ -475,7 +475,7 @@ bool __thiscall winISteamFriends_SteamFriends015_CloseClanChatWindowInSteam(winI
     return cppISteamFriends_SteamFriends015_CloseClanChatWindowInSteam(_this->linux_side, steamIDClanChat);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends015_SetListenForFriendsMessages, 5)
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends015_SetListenForFriendsMessages, 8)
 bool __thiscall winISteamFriends_SteamFriends015_SetListenForFriendsMessages(winISteamFriends_SteamFriends015 *_this, bool bInterceptEnabled)
 {
     TRACE("%p\n", _this);
@@ -780,7 +780,7 @@ bool __thiscall winISteamFriends_SteamFriends014_IsUserInSource(winISteamFriends
     return cppISteamFriends_SteamFriends014_IsUserInSource(_this->linux_side, steamIDUser, steamIDSource);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends014_SetInGameVoiceSpeaking, 13)
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends014_SetInGameVoiceSpeaking, 16)
 void __thiscall winISteamFriends_SteamFriends014_SetInGameVoiceSpeaking(winISteamFriends_SteamFriends014 *_this, CSteamID steamIDUser, bool bSpeaking)
 {
     TRACE("%p\n", _this);
@@ -850,7 +850,7 @@ int __thiscall winISteamFriends_SteamFriends014_GetLargeFriendAvatar(winISteamFr
     return cppISteamFriends_SteamFriends014_GetLargeFriendAvatar(_this->linux_side, steamIDFriend);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends014_RequestUserInformation, 13)
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends014_RequestUserInformation, 16)
 bool __thiscall winISteamFriends_SteamFriends014_RequestUserInformation(winISteamFriends_SteamFriends014 *_this, CSteamID steamIDUser, bool bRequireNameOnly)
 {
     TRACE("%p\n", _this);
@@ -1043,7 +1043,7 @@ bool __thiscall winISteamFriends_SteamFriends014_CloseClanChatWindowInSteam(winI
     return cppISteamFriends_SteamFriends014_CloseClanChatWindowInSteam(_this->linux_side, steamIDClanChat);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends014_SetListenForFriendsMessages, 5)
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends014_SetListenForFriendsMessages, 8)
 bool __thiscall winISteamFriends_SteamFriends014_SetListenForFriendsMessages(winISteamFriends_SteamFriends014 *_this, bool bInterceptEnabled)
 {
     TRACE("%p\n", _this);
@@ -1319,7 +1319,7 @@ bool __thiscall winISteamFriends_SteamFriends013_IsUserInSource(winISteamFriends
     return cppISteamFriends_SteamFriends013_IsUserInSource(_this->linux_side, steamIDUser, steamIDSource);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends013_SetInGameVoiceSpeaking, 13)
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends013_SetInGameVoiceSpeaking, 16)
 void __thiscall winISteamFriends_SteamFriends013_SetInGameVoiceSpeaking(winISteamFriends_SteamFriends013 *_this, CSteamID steamIDUser, bool bSpeaking)
 {
     TRACE("%p\n", _this);
@@ -1389,7 +1389,7 @@ int __thiscall winISteamFriends_SteamFriends013_GetLargeFriendAvatar(winISteamFr
     return cppISteamFriends_SteamFriends013_GetLargeFriendAvatar(_this->linux_side, steamIDFriend);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends013_RequestUserInformation, 13)
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends013_RequestUserInformation, 16)
 bool __thiscall winISteamFriends_SteamFriends013_RequestUserInformation(winISteamFriends_SteamFriends013 *_this, CSteamID steamIDUser, bool bRequireNameOnly)
 {
     TRACE("%p\n", _this);
@@ -1582,7 +1582,7 @@ bool __thiscall winISteamFriends_SteamFriends013_CloseClanChatWindowInSteam(winI
     return cppISteamFriends_SteamFriends013_CloseClanChatWindowInSteam(_this->linux_side, steamIDClanChat);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends013_SetListenForFriendsMessages, 5)
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends013_SetListenForFriendsMessages, 8)
 bool __thiscall winISteamFriends_SteamFriends013_SetListenForFriendsMessages(winISteamFriends_SteamFriends013 *_this, bool bInterceptEnabled)
 {
     TRACE("%p\n", _this);
@@ -1857,7 +1857,7 @@ bool __thiscall winISteamFriends_SteamFriends011_IsUserInSource(winISteamFriends
     return cppISteamFriends_SteamFriends011_IsUserInSource(_this->linux_side, steamIDUser, steamIDSource);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends011_SetInGameVoiceSpeaking, 13)
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends011_SetInGameVoiceSpeaking, 16)
 void __thiscall winISteamFriends_SteamFriends011_SetInGameVoiceSpeaking(winISteamFriends_SteamFriends011 *_this, CSteamID steamIDUser, bool bSpeaking)
 {
     TRACE("%p\n", _this);
@@ -1927,7 +1927,7 @@ int __thiscall winISteamFriends_SteamFriends011_GetLargeFriendAvatar(winISteamFr
     return cppISteamFriends_SteamFriends011_GetLargeFriendAvatar(_this->linux_side, steamIDFriend);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends011_RequestUserInformation, 13)
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends011_RequestUserInformation, 16)
 bool __thiscall winISteamFriends_SteamFriends011_RequestUserInformation(winISteamFriends_SteamFriends011 *_this, CSteamID steamIDUser, bool bRequireNameOnly)
 {
     TRACE("%p\n", _this);
@@ -2120,7 +2120,7 @@ bool __thiscall winISteamFriends_SteamFriends011_CloseClanChatWindowInSteam(winI
     return cppISteamFriends_SteamFriends011_CloseClanChatWindowInSteam(_this->linux_side, steamIDClanChat);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends011_SetListenForFriendsMessages, 5)
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends011_SetListenForFriendsMessages, 8)
 bool __thiscall winISteamFriends_SteamFriends011_SetListenForFriendsMessages(winISteamFriends_SteamFriends011 *_this, bool bInterceptEnabled)
 {
     TRACE("%p\n", _this);
@@ -2381,7 +2381,7 @@ bool __thiscall winISteamFriends_SteamFriends009_IsUserInSource(winISteamFriends
     return cppISteamFriends_SteamFriends009_IsUserInSource(_this->linux_side, steamIDUser, steamIDSource);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends009_SetInGameVoiceSpeaking, 13)
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends009_SetInGameVoiceSpeaking, 16)
 void __thiscall winISteamFriends_SteamFriends009_SetInGameVoiceSpeaking(winISteamFriends_SteamFriends009 *_this, CSteamID steamIDUser, bool bSpeaking)
 {
     TRACE("%p\n", _this);
@@ -2451,7 +2451,7 @@ int __thiscall winISteamFriends_SteamFriends009_GetLargeFriendAvatar(winISteamFr
     return cppISteamFriends_SteamFriends009_GetLargeFriendAvatar(_this->linux_side, steamIDFriend);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends009_RequestUserInformation, 13)
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends009_RequestUserInformation, 16)
 bool __thiscall winISteamFriends_SteamFriends009_RequestUserInformation(winISteamFriends_SteamFriends009 *_this, CSteamID steamIDUser, bool bRequireNameOnly)
 {
     TRACE("%p\n", _this);
@@ -2766,7 +2766,7 @@ bool __thiscall winISteamFriends_SteamFriends008_IsUserInSource(winISteamFriends
     return cppISteamFriends_SteamFriends008_IsUserInSource(_this->linux_side, steamIDUser, steamIDSource);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends008_SetInGameVoiceSpeaking, 13)
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends008_SetInGameVoiceSpeaking, 16)
 void __thiscall winISteamFriends_SteamFriends008_SetInGameVoiceSpeaking(winISteamFriends_SteamFriends008 *_this, CSteamID steamIDUser, bool bSpeaking)
 {
     TRACE("%p\n", _this);
@@ -2836,7 +2836,7 @@ int __thiscall winISteamFriends_SteamFriends008_GetLargeFriendAvatar(winISteamFr
     return cppISteamFriends_SteamFriends008_GetLargeFriendAvatar(_this->linux_side, steamIDFriend);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends008_RequestUserInformation, 13)
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends008_RequestUserInformation, 16)
 bool __thiscall winISteamFriends_SteamFriends008_RequestUserInformation(winISteamFriends_SteamFriends008 *_this, CSteamID steamIDUser, bool bRequireNameOnly)
 {
     TRACE("%p\n", _this);
@@ -3070,7 +3070,7 @@ bool __thiscall winISteamFriends_SteamFriends007_IsUserInSource(winISteamFriends
     return cppISteamFriends_SteamFriends007_IsUserInSource(_this->linux_side, steamIDUser, steamIDSource);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends007_SetInGameVoiceSpeaking, 13)
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends007_SetInGameVoiceSpeaking, 16)
 void __thiscall winISteamFriends_SteamFriends007_SetInGameVoiceSpeaking(winISteamFriends_SteamFriends007 *_this, CSteamID steamIDUser, bool bSpeaking)
 {
     TRACE("%p\n", _this);
@@ -3331,7 +3331,7 @@ bool __thiscall winISteamFriends_SteamFriends006_IsUserInSource(winISteamFriends
     return cppISteamFriends_SteamFriends006_IsUserInSource(_this->linux_side, steamIDUser, steamIDSource);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends006_SetInGameVoiceSpeaking, 13)
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends006_SetInGameVoiceSpeaking, 16)
 void __thiscall winISteamFriends_SteamFriends006_SetInGameVoiceSpeaking(winISteamFriends_SteamFriends006 *_this, CSteamID steamIDUser, bool bSpeaking)
 {
     TRACE("%p\n", _this);
@@ -3562,7 +3562,7 @@ bool __thiscall winISteamFriends_SteamFriends005_IsUserInSource(winISteamFriends
     return cppISteamFriends_SteamFriends005_IsUserInSource(_this->linux_side, steamIDUser, steamIDSource);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends005_SetInGameVoiceSpeaking, 13)
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends005_SetInGameVoiceSpeaking, 16)
 void __thiscall winISteamFriends_SteamFriends005_SetInGameVoiceSpeaking(winISteamFriends_SteamFriends005 *_this, CSteamID steamIDUser, bool bSpeaking)
 {
     TRACE("%p\n", _this);
@@ -3784,7 +3784,7 @@ bool __thiscall winISteamFriends_SteamFriends004_IsUserInSource(winISteamFriends
     return cppISteamFriends_SteamFriends004_IsUserInSource(_this->linux_side, steamIDUser, steamIDSource);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends004_SetInGameVoiceSpeaking, 13)
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends004_SetInGameVoiceSpeaking, 16)
 void __thiscall winISteamFriends_SteamFriends004_SetInGameVoiceSpeaking(winISteamFriends_SteamFriends004 *_this, CSteamID steamIDUser, bool bSpeaking)
 {
     TRACE("%p\n", _this);
@@ -3974,7 +3974,7 @@ bool __thiscall winISteamFriends_SteamFriends003_IsUserInSource(winISteamFriends
     return cppISteamFriends_SteamFriends003_IsUserInSource(_this->linux_side, steamIDUser, steamIDSource);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends003_SetInGameVoiceSpeaking, 13)
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends003_SetInGameVoiceSpeaking, 16)
 void __thiscall winISteamFriends_SteamFriends003_SetInGameVoiceSpeaking(winISteamFriends_SteamFriends003 *_this, CSteamID steamIDUser, bool bSpeaking)
 {
     TRACE("%p\n", _this);

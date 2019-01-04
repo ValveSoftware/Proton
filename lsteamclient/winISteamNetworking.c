@@ -69,49 +69,49 @@ bool __thiscall winISteamNetworking_SteamNetworking005_GetP2PSessionState(winISt
     return cppISteamNetworking_SteamNetworking005_GetP2PSessionState(_this->linux_side, steamIDRemote, pConnectionState);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamNetworking_SteamNetworking005_AllowP2PPacketRelay, 5)
+DEFINE_THISCALL_WRAPPER(winISteamNetworking_SteamNetworking005_AllowP2PPacketRelay, 8)
 bool __thiscall winISteamNetworking_SteamNetworking005_AllowP2PPacketRelay(winISteamNetworking_SteamNetworking005 *_this, bool bAllow)
 {
     TRACE("%p\n", _this);
     return cppISteamNetworking_SteamNetworking005_AllowP2PPacketRelay(_this->linux_side, bAllow);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamNetworking_SteamNetworking005_CreateListenSocket, 15)
+DEFINE_THISCALL_WRAPPER(winISteamNetworking_SteamNetworking005_CreateListenSocket, 20)
 SNetListenSocket_t __thiscall winISteamNetworking_SteamNetworking005_CreateListenSocket(winISteamNetworking_SteamNetworking005 *_this, int nVirtualP2PPort, uint32 nIP, uint16 nPort, bool bAllowUseOfPacketRelay)
 {
     TRACE("%p\n", _this);
     return cppISteamNetworking_SteamNetworking005_CreateListenSocket(_this->linux_side, nVirtualP2PPort, nIP, nPort, bAllowUseOfPacketRelay);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamNetworking_SteamNetworking005_CreateP2PConnectionSocket, 21)
+DEFINE_THISCALL_WRAPPER(winISteamNetworking_SteamNetworking005_CreateP2PConnectionSocket, 24)
 SNetSocket_t __thiscall winISteamNetworking_SteamNetworking005_CreateP2PConnectionSocket(winISteamNetworking_SteamNetworking005 *_this, CSteamID steamIDTarget, int nVirtualPort, int nTimeoutSec, bool bAllowUseOfPacketRelay)
 {
     TRACE("%p\n", _this);
     return cppISteamNetworking_SteamNetworking005_CreateP2PConnectionSocket(_this->linux_side, steamIDTarget, nVirtualPort, nTimeoutSec, bAllowUseOfPacketRelay);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamNetworking_SteamNetworking005_CreateConnectionSocket, 14)
+DEFINE_THISCALL_WRAPPER(winISteamNetworking_SteamNetworking005_CreateConnectionSocket, 16)
 SNetSocket_t __thiscall winISteamNetworking_SteamNetworking005_CreateConnectionSocket(winISteamNetworking_SteamNetworking005 *_this, uint32 nIP, uint16 nPort, int nTimeoutSec)
 {
     TRACE("%p\n", _this);
     return cppISteamNetworking_SteamNetworking005_CreateConnectionSocket(_this->linux_side, nIP, nPort, nTimeoutSec);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamNetworking_SteamNetworking005_DestroySocket, 9)
+DEFINE_THISCALL_WRAPPER(winISteamNetworking_SteamNetworking005_DestroySocket, 12)
 bool __thiscall winISteamNetworking_SteamNetworking005_DestroySocket(winISteamNetworking_SteamNetworking005 *_this, SNetSocket_t hSocket, bool bNotifyRemoteEnd)
 {
     TRACE("%p\n", _this);
     return cppISteamNetworking_SteamNetworking005_DestroySocket(_this->linux_side, hSocket, bNotifyRemoteEnd);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamNetworking_SteamNetworking005_DestroyListenSocket, 9)
+DEFINE_THISCALL_WRAPPER(winISteamNetworking_SteamNetworking005_DestroyListenSocket, 12)
 bool __thiscall winISteamNetworking_SteamNetworking005_DestroyListenSocket(winISteamNetworking_SteamNetworking005 *_this, SNetListenSocket_t hSocket, bool bNotifyRemoteEnd)
 {
     TRACE("%p\n", _this);
     return cppISteamNetworking_SteamNetworking005_DestroyListenSocket(_this->linux_side, hSocket, bNotifyRemoteEnd);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamNetworking_SteamNetworking005_SendDataOnSocket, 17)
+DEFINE_THISCALL_WRAPPER(winISteamNetworking_SteamNetworking005_SendDataOnSocket, 20)
 bool __thiscall winISteamNetworking_SteamNetworking005_SendDataOnSocket(winISteamNetworking_SteamNetworking005 *_this, SNetSocket_t hSocket, void * pubData, uint32 cubData, bool bReliable)
 {
     TRACE("%p\n", _this);
@@ -265,42 +265,42 @@ bool __thiscall winISteamNetworking_SteamNetworking004_GetP2PSessionState(winISt
     return cppISteamNetworking_SteamNetworking004_GetP2PSessionState(_this->linux_side, steamIDRemote, pConnectionState);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamNetworking_SteamNetworking004_CreateListenSocket, 15)
+DEFINE_THISCALL_WRAPPER(winISteamNetworking_SteamNetworking004_CreateListenSocket, 20)
 SNetListenSocket_t __thiscall winISteamNetworking_SteamNetworking004_CreateListenSocket(winISteamNetworking_SteamNetworking004 *_this, int nVirtualP2PPort, uint32 nIP, uint16 nPort, bool bAllowUseOfPacketRelay)
 {
     TRACE("%p\n", _this);
     return cppISteamNetworking_SteamNetworking004_CreateListenSocket(_this->linux_side, nVirtualP2PPort, nIP, nPort, bAllowUseOfPacketRelay);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamNetworking_SteamNetworking004_CreateP2PConnectionSocket, 21)
+DEFINE_THISCALL_WRAPPER(winISteamNetworking_SteamNetworking004_CreateP2PConnectionSocket, 24)
 SNetSocket_t __thiscall winISteamNetworking_SteamNetworking004_CreateP2PConnectionSocket(winISteamNetworking_SteamNetworking004 *_this, CSteamID steamIDTarget, int nVirtualPort, int nTimeoutSec, bool bAllowUseOfPacketRelay)
 {
     TRACE("%p\n", _this);
     return cppISteamNetworking_SteamNetworking004_CreateP2PConnectionSocket(_this->linux_side, steamIDTarget, nVirtualPort, nTimeoutSec, bAllowUseOfPacketRelay);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamNetworking_SteamNetworking004_CreateConnectionSocket, 14)
+DEFINE_THISCALL_WRAPPER(winISteamNetworking_SteamNetworking004_CreateConnectionSocket, 16)
 SNetSocket_t __thiscall winISteamNetworking_SteamNetworking004_CreateConnectionSocket(winISteamNetworking_SteamNetworking004 *_this, uint32 nIP, uint16 nPort, int nTimeoutSec)
 {
     TRACE("%p\n", _this);
     return cppISteamNetworking_SteamNetworking004_CreateConnectionSocket(_this->linux_side, nIP, nPort, nTimeoutSec);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamNetworking_SteamNetworking004_DestroySocket, 9)
+DEFINE_THISCALL_WRAPPER(winISteamNetworking_SteamNetworking004_DestroySocket, 12)
 bool __thiscall winISteamNetworking_SteamNetworking004_DestroySocket(winISteamNetworking_SteamNetworking004 *_this, SNetSocket_t hSocket, bool bNotifyRemoteEnd)
 {
     TRACE("%p\n", _this);
     return cppISteamNetworking_SteamNetworking004_DestroySocket(_this->linux_side, hSocket, bNotifyRemoteEnd);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamNetworking_SteamNetworking004_DestroyListenSocket, 9)
+DEFINE_THISCALL_WRAPPER(winISteamNetworking_SteamNetworking004_DestroyListenSocket, 12)
 bool __thiscall winISteamNetworking_SteamNetworking004_DestroyListenSocket(winISteamNetworking_SteamNetworking004 *_this, SNetListenSocket_t hSocket, bool bNotifyRemoteEnd)
 {
     TRACE("%p\n", _this);
     return cppISteamNetworking_SteamNetworking004_DestroyListenSocket(_this->linux_side, hSocket, bNotifyRemoteEnd);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamNetworking_SteamNetworking004_SendDataOnSocket, 17)
+DEFINE_THISCALL_WRAPPER(winISteamNetworking_SteamNetworking004_SendDataOnSocket, 20)
 bool __thiscall winISteamNetworking_SteamNetworking004_SendDataOnSocket(winISteamNetworking_SteamNetworking004 *_this, SNetSocket_t hSocket, void * pubData, uint32 cubData, bool bReliable)
 {
     TRACE("%p\n", _this);
@@ -452,42 +452,42 @@ bool __thiscall winISteamNetworking_SteamNetworking003_GetP2PSessionState(winISt
     return cppISteamNetworking_SteamNetworking003_GetP2PSessionState(_this->linux_side, steamIDRemote, pConnectionState);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamNetworking_SteamNetworking003_CreateListenSocket, 15)
+DEFINE_THISCALL_WRAPPER(winISteamNetworking_SteamNetworking003_CreateListenSocket, 20)
 SNetListenSocket_t __thiscall winISteamNetworking_SteamNetworking003_CreateListenSocket(winISteamNetworking_SteamNetworking003 *_this, int nVirtualP2PPort, uint32 nIP, uint16 nPort, bool bAllowUseOfPacketRelay)
 {
     TRACE("%p\n", _this);
     return cppISteamNetworking_SteamNetworking003_CreateListenSocket(_this->linux_side, nVirtualP2PPort, nIP, nPort, bAllowUseOfPacketRelay);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamNetworking_SteamNetworking003_CreateP2PConnectionSocket, 21)
+DEFINE_THISCALL_WRAPPER(winISteamNetworking_SteamNetworking003_CreateP2PConnectionSocket, 24)
 SNetSocket_t __thiscall winISteamNetworking_SteamNetworking003_CreateP2PConnectionSocket(winISteamNetworking_SteamNetworking003 *_this, CSteamID steamIDTarget, int nVirtualPort, int nTimeoutSec, bool bAllowUseOfPacketRelay)
 {
     TRACE("%p\n", _this);
     return cppISteamNetworking_SteamNetworking003_CreateP2PConnectionSocket(_this->linux_side, steamIDTarget, nVirtualPort, nTimeoutSec, bAllowUseOfPacketRelay);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamNetworking_SteamNetworking003_CreateConnectionSocket, 14)
+DEFINE_THISCALL_WRAPPER(winISteamNetworking_SteamNetworking003_CreateConnectionSocket, 16)
 SNetSocket_t __thiscall winISteamNetworking_SteamNetworking003_CreateConnectionSocket(winISteamNetworking_SteamNetworking003 *_this, uint32 nIP, uint16 nPort, int nTimeoutSec)
 {
     TRACE("%p\n", _this);
     return cppISteamNetworking_SteamNetworking003_CreateConnectionSocket(_this->linux_side, nIP, nPort, nTimeoutSec);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamNetworking_SteamNetworking003_DestroySocket, 9)
+DEFINE_THISCALL_WRAPPER(winISteamNetworking_SteamNetworking003_DestroySocket, 12)
 bool __thiscall winISteamNetworking_SteamNetworking003_DestroySocket(winISteamNetworking_SteamNetworking003 *_this, SNetSocket_t hSocket, bool bNotifyRemoteEnd)
 {
     TRACE("%p\n", _this);
     return cppISteamNetworking_SteamNetworking003_DestroySocket(_this->linux_side, hSocket, bNotifyRemoteEnd);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamNetworking_SteamNetworking003_DestroyListenSocket, 9)
+DEFINE_THISCALL_WRAPPER(winISteamNetworking_SteamNetworking003_DestroyListenSocket, 12)
 bool __thiscall winISteamNetworking_SteamNetworking003_DestroyListenSocket(winISteamNetworking_SteamNetworking003 *_this, SNetListenSocket_t hSocket, bool bNotifyRemoteEnd)
 {
     TRACE("%p\n", _this);
     return cppISteamNetworking_SteamNetworking003_DestroyListenSocket(_this->linux_side, hSocket, bNotifyRemoteEnd);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamNetworking_SteamNetworking003_SendDataOnSocket, 17)
+DEFINE_THISCALL_WRAPPER(winISteamNetworking_SteamNetworking003_SendDataOnSocket, 20)
 bool __thiscall winISteamNetworking_SteamNetworking003_SendDataOnSocket(winISteamNetworking_SteamNetworking003 *_this, SNetSocket_t hSocket, void * pubData, uint32 cubData, bool bReliable)
 {
     TRACE("%p\n", _this);
@@ -597,42 +597,42 @@ typedef struct __winISteamNetworking_SteamNetworking002 {
     void *linux_side;
 } winISteamNetworking_SteamNetworking002;
 
-DEFINE_THISCALL_WRAPPER(winISteamNetworking_SteamNetworking002_CreateListenSocket, 15)
+DEFINE_THISCALL_WRAPPER(winISteamNetworking_SteamNetworking002_CreateListenSocket, 20)
 SNetListenSocket_t __thiscall winISteamNetworking_SteamNetworking002_CreateListenSocket(winISteamNetworking_SteamNetworking002 *_this, int nVirtualP2PPort, uint32 nIP, uint16 nPort, bool bAllowUseOfPacketRelay)
 {
     TRACE("%p\n", _this);
     return cppISteamNetworking_SteamNetworking002_CreateListenSocket(_this->linux_side, nVirtualP2PPort, nIP, nPort, bAllowUseOfPacketRelay);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamNetworking_SteamNetworking002_CreateP2PConnectionSocket, 21)
+DEFINE_THISCALL_WRAPPER(winISteamNetworking_SteamNetworking002_CreateP2PConnectionSocket, 24)
 SNetSocket_t __thiscall winISteamNetworking_SteamNetworking002_CreateP2PConnectionSocket(winISteamNetworking_SteamNetworking002 *_this, CSteamID steamIDTarget, int nVirtualPort, int nTimeoutSec, bool bAllowUseOfPacketRelay)
 {
     TRACE("%p\n", _this);
     return cppISteamNetworking_SteamNetworking002_CreateP2PConnectionSocket(_this->linux_side, steamIDTarget, nVirtualPort, nTimeoutSec, bAllowUseOfPacketRelay);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamNetworking_SteamNetworking002_CreateConnectionSocket, 14)
+DEFINE_THISCALL_WRAPPER(winISteamNetworking_SteamNetworking002_CreateConnectionSocket, 16)
 SNetSocket_t __thiscall winISteamNetworking_SteamNetworking002_CreateConnectionSocket(winISteamNetworking_SteamNetworking002 *_this, uint32 nIP, uint16 nPort, int nTimeoutSec)
 {
     TRACE("%p\n", _this);
     return cppISteamNetworking_SteamNetworking002_CreateConnectionSocket(_this->linux_side, nIP, nPort, nTimeoutSec);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamNetworking_SteamNetworking002_DestroySocket, 9)
+DEFINE_THISCALL_WRAPPER(winISteamNetworking_SteamNetworking002_DestroySocket, 12)
 bool __thiscall winISteamNetworking_SteamNetworking002_DestroySocket(winISteamNetworking_SteamNetworking002 *_this, SNetSocket_t hSocket, bool bNotifyRemoteEnd)
 {
     TRACE("%p\n", _this);
     return cppISteamNetworking_SteamNetworking002_DestroySocket(_this->linux_side, hSocket, bNotifyRemoteEnd);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamNetworking_SteamNetworking002_DestroyListenSocket, 9)
+DEFINE_THISCALL_WRAPPER(winISteamNetworking_SteamNetworking002_DestroyListenSocket, 12)
 bool __thiscall winISteamNetworking_SteamNetworking002_DestroyListenSocket(winISteamNetworking_SteamNetworking002 *_this, SNetListenSocket_t hSocket, bool bNotifyRemoteEnd)
 {
     TRACE("%p\n", _this);
     return cppISteamNetworking_SteamNetworking002_DestroyListenSocket(_this->linux_side, hSocket, bNotifyRemoteEnd);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamNetworking_SteamNetworking002_SendDataOnSocket, 17)
+DEFINE_THISCALL_WRAPPER(winISteamNetworking_SteamNetworking002_SendDataOnSocket, 20)
 bool __thiscall winISteamNetworking_SteamNetworking002_SendDataOnSocket(winISteamNetworking_SteamNetworking002 *_this, SNetSocket_t hSocket, void * pubData, uint32 cubData, bool bReliable)
 {
     TRACE("%p\n", _this);
@@ -736,7 +736,7 @@ typedef struct __winISteamNetworking_SteamNetworking001 {
     void *linux_side;
 } winISteamNetworking_SteamNetworking001;
 
-DEFINE_THISCALL_WRAPPER(winISteamNetworking_SteamNetworking001_CreateListenSocket, 14)
+DEFINE_THISCALL_WRAPPER(winISteamNetworking_SteamNetworking001_CreateListenSocket, 16)
 SNetListenSocket_t __thiscall winISteamNetworking_SteamNetworking001_CreateListenSocket(winISteamNetworking_SteamNetworking001 *_this, int nVirtualP2PPort, uint32 nIP, uint16 nPort)
 {
     TRACE("%p\n", _this);
@@ -750,28 +750,28 @@ SNetSocket_t __thiscall winISteamNetworking_SteamNetworking001_CreateP2PConnecti
     return cppISteamNetworking_SteamNetworking001_CreateP2PConnectionSocket(_this->linux_side, steamIDTarget, nVirtualPort, nTimeoutSec);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamNetworking_SteamNetworking001_CreateConnectionSocket, 14)
+DEFINE_THISCALL_WRAPPER(winISteamNetworking_SteamNetworking001_CreateConnectionSocket, 16)
 SNetSocket_t __thiscall winISteamNetworking_SteamNetworking001_CreateConnectionSocket(winISteamNetworking_SteamNetworking001 *_this, uint32 nIP, uint16 nPort, int nTimeoutSec)
 {
     TRACE("%p\n", _this);
     return cppISteamNetworking_SteamNetworking001_CreateConnectionSocket(_this->linux_side, nIP, nPort, nTimeoutSec);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamNetworking_SteamNetworking001_DestroySocket, 9)
+DEFINE_THISCALL_WRAPPER(winISteamNetworking_SteamNetworking001_DestroySocket, 12)
 bool __thiscall winISteamNetworking_SteamNetworking001_DestroySocket(winISteamNetworking_SteamNetworking001 *_this, SNetSocket_t hSocket, bool bNotifyRemoteEnd)
 {
     TRACE("%p\n", _this);
     return cppISteamNetworking_SteamNetworking001_DestroySocket(_this->linux_side, hSocket, bNotifyRemoteEnd);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamNetworking_SteamNetworking001_DestroyListenSocket, 9)
+DEFINE_THISCALL_WRAPPER(winISteamNetworking_SteamNetworking001_DestroyListenSocket, 12)
 bool __thiscall winISteamNetworking_SteamNetworking001_DestroyListenSocket(winISteamNetworking_SteamNetworking001 *_this, SNetListenSocket_t hSocket, bool bNotifyRemoteEnd)
 {
     TRACE("%p\n", _this);
     return cppISteamNetworking_SteamNetworking001_DestroyListenSocket(_this->linux_side, hSocket, bNotifyRemoteEnd);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamNetworking_SteamNetworking001_SendDataOnSocket, 17)
+DEFINE_THISCALL_WRAPPER(winISteamNetworking_SteamNetworking001_SendDataOnSocket, 20)
 bool __thiscall winISteamNetworking_SteamNetworking001_SendDataOnSocket(winISteamNetworking_SteamNetworking001 *_this, SNetSocket_t hSocket, void * pubData, uint32 cubData, bool bReliable)
 {
     TRACE("%p\n", _this);
