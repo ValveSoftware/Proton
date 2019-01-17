@@ -177,6 +177,12 @@ A correct local tool installation should look like this:
         ├── user_settings.sample.py
         └── version
 
+To enable your local build in Steam, go to the Steam Play section of the
+Settings window. In the "Compatibility tool:" list, you should see
+"proton-localbuild". Check the box labeled "Use this tool instead of
+game-specific selections from Steam", and select "proton-localbuild" in the
+list.
+
 Each component of this software is used under the terms of their licenses.  See
 the <tt>LICENSE</tt> files here, as well as the <tt>LICENSE</tt>,
 <tt>COPYING</tt>, etc files in each submodule and directory for details. If you
