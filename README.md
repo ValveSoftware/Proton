@@ -159,7 +159,7 @@ running games with local builds of Proton, which you can install on your
 machine. The `install` target will perform the below steps for you.
 
 To install a local build of Proton into Steam, make a new directory in
-`~/.steam/steam/compatibilitytools.d/` with a tool name of your choosing and
+`~/.steam/root/compatibilitytools.d/` with a tool name of your choosing and
 place the contents of `dist` into that folder. The `make install` target will
 perform this task for you, installing the Proton build into the Steam folder
 for the current user. You will have to restart the Steam client for it to pick
