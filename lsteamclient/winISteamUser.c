@@ -66,8 +66,11 @@ void __thiscall winISteamUser_SteamUser019_TrackAppUsageEvent(winISteamUser_Stea
 DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser019_GetUserDataFolder, 12)
 bool __thiscall winISteamUser_SteamUser019_GetUserDataFolder(winISteamUser_SteamUser019 *_this, char * pchBuffer, int cubBuffer)
 {
+    bool path_result;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser019_GetUserDataFolder(_this->linux_side, pchBuffer, cubBuffer);
+    path_result = cppISteamUser_SteamUser019_GetUserDataFolder(_this->linux_side, pchBuffer, cubBuffer);
+    steamclient_unix_path_to_dos_path(path_result, pchBuffer, pchBuffer, cubBuffer);
+    return path_result;
 }
 
 DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser019_StartVoiceRecording, 4)
@@ -326,8 +329,11 @@ void __thiscall winISteamUser_SteamUser018_TrackAppUsageEvent(winISteamUser_Stea
 DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser018_GetUserDataFolder, 12)
 bool __thiscall winISteamUser_SteamUser018_GetUserDataFolder(winISteamUser_SteamUser018 *_this, char * pchBuffer, int cubBuffer)
 {
+    bool path_result;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser018_GetUserDataFolder(_this->linux_side, pchBuffer, cubBuffer);
+    path_result = cppISteamUser_SteamUser018_GetUserDataFolder(_this->linux_side, pchBuffer, cubBuffer);
+    steamclient_unix_path_to_dos_path(path_result, pchBuffer, pchBuffer, cubBuffer);
+    return path_result;
 }
 
 DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser018_StartVoiceRecording, 4)
@@ -554,8 +560,11 @@ void __thiscall winISteamUser_SteamUser017_TrackAppUsageEvent(winISteamUser_Stea
 DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser017_GetUserDataFolder, 12)
 bool __thiscall winISteamUser_SteamUser017_GetUserDataFolder(winISteamUser_SteamUser017 *_this, char * pchBuffer, int cubBuffer)
 {
+    bool path_result;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser017_GetUserDataFolder(_this->linux_side, pchBuffer, cubBuffer);
+    path_result = cppISteamUser_SteamUser017_GetUserDataFolder(_this->linux_side, pchBuffer, cubBuffer);
+    steamclient_unix_path_to_dos_path(path_result, pchBuffer, pchBuffer, cubBuffer);
+    return path_result;
 }
 
 DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser017_StartVoiceRecording, 4)
@@ -774,8 +783,11 @@ void __thiscall winISteamUser_SteamUser016_TrackAppUsageEvent(winISteamUser_Stea
 DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser016_GetUserDataFolder, 12)
 bool __thiscall winISteamUser_SteamUser016_GetUserDataFolder(winISteamUser_SteamUser016 *_this, char * pchBuffer, int cubBuffer)
 {
+    bool path_result;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser016_GetUserDataFolder(_this->linux_side, pchBuffer, cubBuffer);
+    path_result = cppISteamUser_SteamUser016_GetUserDataFolder(_this->linux_side, pchBuffer, cubBuffer);
+    steamclient_unix_path_to_dos_path(path_result, pchBuffer, pchBuffer, cubBuffer);
+    return path_result;
 }
 
 DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser016_StartVoiceRecording, 4)
@@ -978,8 +990,11 @@ void __thiscall winISteamUser_SteamUser014_TrackAppUsageEvent(winISteamUser_Stea
 DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser014_GetUserDataFolder, 12)
 bool __thiscall winISteamUser_SteamUser014_GetUserDataFolder(winISteamUser_SteamUser014 *_this, char * pchBuffer, int cubBuffer)
 {
+    bool path_result;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser014_GetUserDataFolder(_this->linux_side, pchBuffer, cubBuffer);
+    path_result = cppISteamUser_SteamUser014_GetUserDataFolder(_this->linux_side, pchBuffer, cubBuffer);
+    steamclient_unix_path_to_dos_path(path_result, pchBuffer, pchBuffer, cubBuffer);
+    return path_result;
 }
 
 DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser014_StartVoiceRecording, 4)
@@ -1174,8 +1189,11 @@ void __thiscall winISteamUser_SteamUser013_TrackAppUsageEvent(winISteamUser_Stea
 DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser013_GetUserDataFolder, 12)
 bool __thiscall winISteamUser_SteamUser013_GetUserDataFolder(winISteamUser_SteamUser013 *_this, char * pchBuffer, int cubBuffer)
 {
+    bool path_result;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser013_GetUserDataFolder(_this->linux_side, pchBuffer, cubBuffer);
+    path_result = cppISteamUser_SteamUser013_GetUserDataFolder(_this->linux_side, pchBuffer, cubBuffer);
+    steamclient_unix_path_to_dos_path(path_result, pchBuffer, pchBuffer, cubBuffer);
+    return path_result;
 }
 
 DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser013_StartVoiceRecording, 4)
@@ -1338,8 +1356,11 @@ void __thiscall winISteamUser_SteamUser012_TrackAppUsageEvent(winISteamUser_Stea
 DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser012_GetUserDataFolder, 12)
 bool __thiscall winISteamUser_SteamUser012_GetUserDataFolder(winISteamUser_SteamUser012 *_this, char * pchBuffer, int cubBuffer)
 {
+    bool path_result;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser012_GetUserDataFolder(_this->linux_side, pchBuffer, cubBuffer);
+    path_result = cppISteamUser_SteamUser012_GetUserDataFolder(_this->linux_side, pchBuffer, cubBuffer);
+    steamclient_unix_path_to_dos_path(path_result, pchBuffer, pchBuffer, cubBuffer);
+    return path_result;
 }
 
 DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser012_StartVoiceRecording, 4)
@@ -1494,8 +1515,11 @@ void __thiscall winISteamUser_SteamUser011_TrackAppUsageEvent(winISteamUser_Stea
 DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser011_GetUserDataFolder, 12)
 bool __thiscall winISteamUser_SteamUser011_GetUserDataFolder(winISteamUser_SteamUser011 *_this, char * pchBuffer, int cubBuffer)
 {
+    bool path_result;
     TRACE("%p\n", _this);
-    return cppISteamUser_SteamUser011_GetUserDataFolder(_this->linux_side, pchBuffer, cubBuffer);
+    path_result = cppISteamUser_SteamUser011_GetUserDataFolder(_this->linux_side, pchBuffer, cubBuffer);
+    steamclient_unix_path_to_dos_path(path_result, pchBuffer, pchBuffer, cubBuffer);
+    return path_result;
 }
 
 DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser011_StartVoiceRecording, 4)

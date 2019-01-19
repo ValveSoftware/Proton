@@ -2,6 +2,8 @@
 ## Nested make
 ##
 
+SHELL := /bin/bash
+
 ifneq ($(NO_NESTED_MAKE),1)
 # Pass all variables/goals to ourselves as a sub-make such that we will get a trailing error message upon failure.  (We
 # invoke a lot of long-running build-steps, and make fails to re-print errors when they happened ten thousand lines
@@ -166,15 +168,15 @@ GECKO_VER := 2.47
 GECKO32_MSI := wine_gecko-$(GECKO_VER)-x86.msi
 GECKO64_MSI := wine_gecko-$(GECKO_VER)-x86_64.msi
 
-OPENAL := $(SRCDIR)/openal-soft
-OPENAL_OBJ32 := ./obj-openal32
-OPENAL_OBJ64 := ./obj-openal64
-
 FFMPEG := $(SRCDIR)/ffmpeg
 FFMPEG_OBJ32 := ./obj-ffmpeg32
 FFMPEG_OBJ64 := ./obj-ffmpeg64
 FFMPEG_CROSS_CFLAGS :=
 FFMPEG_CROSS_LDFLAGS :=
+
+FAUDIO := $(SRCDIR)/FAudio
+FAUDIO_OBJ32 := ./obj-faudio32
+FAUDIO_OBJ64 := ./obj-faudio64
 
 LSTEAMCLIENT := $(SRCDIR)/lsteamclient
 LSTEAMCLIENT32 := ./syn-lsteamclient32/lsteamclient
@@ -220,8 +222,8 @@ FONTS_OBJ := ./obj-fonts
 
 ## Object directories
 OBJ_DIRS := $(TOOLS_DIR32)        $(TOOLS_DIR64)        \
-            $(OPENAL_OBJ32)       $(OPENAL_OBJ64)       \
             $(FFMPEG_OBJ32)       $(FFMPEG_OBJ64)       \
+            $(FAUDIO_OBJ32)       $(FAUDIO_OBJ64)       \
             $(LSTEAMCLIENT_OBJ32) $(LSTEAMCLIENT_OBJ64) \
             $(WINE_OBJ32)         $(WINE_OBJ64)         \
             $(VRCLIENT_OBJ32)     $(VRCLIENT_OBJ64)     \
@@ -345,67 +347,6 @@ install: dist | $(filter-out dist deploy install,$(MAKECMDGOALS))
 
 
 ##
-## OpenAL
-##
-
-## Create & configure object directory for openal
-
-OPENAL_CONFIGURE_FILES32 := $(OPENAL_OBJ32)/Makefile
-OPENAL_CONFIGURE_FILES64 := $(OPENAL_OBJ64)/Makefile
-
-# 64bit-configure
-$(OPENAL_CONFIGURE_FILES64): SHELL = $(CONTAINER_SHELL64)
-$(OPENAL_CONFIGURE_FILES64): $(OPENAL)/CMakeLists.txt $(MAKEFILE_DEP) $(CMAKE_BIN64) | $(OPENAL_OBJ64)
-	cd $(dir $@) && \
-		../$(CMAKE_BIN64) $(abspath $(OPENAL)) -DCMAKE_INSTALL_PREFIX="$(abspath $(TOOLS_DIR64))" \
-			-DALSOFT_EXAMPLES=Off -DALSOFT_UTILS=Off -DALSOFT_TESTS=Off \
-			-DCMAKE_INSTALL_LIBDIR="lib"
-
-# 32-bit configure
-$(OPENAL_CONFIGURE_FILES32): SHELL = $(CONTAINER_SHELL32)
-$(OPENAL_CONFIGURE_FILES32): $(OPENAL)/CMakeLists.txt $(MAKEFILE_DEP) $(CMAKE_BIN32) | $(OPENAL_OBJ32)
-	cd $(dir $@) && \
-		../$(CMAKE_BIN32) $(abspath $(OPENAL)) \
-			-DCMAKE_INSTALL_PREFIX="$(abspath $(TOOLS_DIR32))" \
-			-DALSOFT_EXAMPLES=Off -DALSOFT_UTILS=Off -DALSOFT_TESTS=Off \
-			-DCMAKE_INSTALL_LIBDIR="lib" \
-			-DCMAKE_C_FLAGS="-m32" -DCMAKE_CXX_FLAGS="-m32"
-
-## OpenAL goals
-OPENAL_TARGETS = openal openal_configure openal32 openal64 openal_configure32 openal_configure64
-
-ALL_TARGETS += $(OPENAL_TARGETS)
-GOAL_TARGETS_LIBS += openal
-
-.PHONY: $(OPENAL_TARGETS)
-
-openal_configure: $(OPENAL_CONFIGURE_FILES32) $(OPENAL_CONFIGURE_FILES64)
-
-openal_configure64: $(OPENAL_CONFIGURE_FILES64)
-
-openal_configure32: $(OPENAL_CONFIGURE_FILES32)
-
-openal: openal32 openal64
-
-openal64: SHELL = $(CONTAINER_SHELL64)
-openal64: $(OPENAL_CONFIGURE_FILES64)
-	+$(MAKE) -C $(OPENAL_OBJ64) VERBOSE=1
-	+$(MAKE) -C $(OPENAL_OBJ64) install VERBOSE=1
-	mkdir -p $(DST_DIR)/lib64
-	cp -L $(TOOLS_DIR64)/lib/libopenal* $(DST_DIR)/lib64/
-	[ x"$(STRIP)" = x ] || $(STRIP) $(DST_DIR)/lib64/libopenal.so
-
-
-openal32: SHELL = $(CONTAINER_SHELL32)
-openal32: $(OPENAL_CONFIGURE_FILES32)
-	+$(MAKE) -C $(OPENAL_OBJ32) VERBOSE=1
-	+$(MAKE) -C $(OPENAL_OBJ32) install VERBOSE=1
-	mkdir -p $(DST_DIR)/lib
-	cp -L $(TOOLS_DIR32)/lib/libopenal* $(DST_DIR)/lib/
-	[ x"$(STRIP)" = x ] || $(STRIP) $(DST_DIR)/lib/libopenal.so
-
-
-##
 ## ffmpeg
 ##
 
@@ -516,6 +457,58 @@ ffmpeg32: $(FFMPEG_CONFIGURE_FILES32)
 	cp -L $(TOOLS_DIR32)/lib/{libavcodec,libavutil}* $(DST_DIR)/lib
 
 endif # ifeq ($(WITH_FFMPEG),1)
+
+##
+## FAudio
+##
+
+FAUDIO_CMAKE_FLAGS = -DCMAKE_BUILD_TYPE=Release -DFORCE_ENABLE_DEBUGCONFIGURATION=ON -DLOG_ASSERTIONS=ON -DCMAKE_INSTALL_LIBDIR="lib" -DXNASONG=OFF
+ifeq ($(WITH_FFMPEG),1)
+FAUDIO_CMAKE_FLAGS += -DFFMPEG=ON
+endif # ifeq ($(WITH_FFMPEG),1)
+
+FAUDIO_TARGETS = faudio faudio32 faudio64
+
+ALL_TARGETS += $(FAUDIO_TARGETS)
+GOAL_TARGETS_LIBS += faudio
+
+.PHONY: faudio faudio32 faudio64
+
+faudio: faudio32 faudio64
+
+FAUDIO_CONFIGURE_FILES32 := $(FAUDIO_OBJ32)/Makefile
+FAUDIO_CONFIGURE_FILES64 := $(FAUDIO_OBJ64)/Makefile
+
+$(FAUDIO_CONFIGURE_FILES32): SHELL = $(CONTAINER_SHELL32)
+$(FAUDIO_CONFIGURE_FILES32): $(FAUDIO)/CMakeLists.txt $(MAKEFILE_DEP) $(CMAKE_BIN32) | $(FAUDIO_OBJ32)
+	cd $(dir $@) && \
+		../$(CMAKE_BIN32) $(abspath $(FAUDIO)) \
+			-DCMAKE_INSTALL_PREFIX="$(abspath $(TOOLS_DIR32))" \
+			$(FAUDIO_CMAKE_FLAGS) \
+			-DCMAKE_C_FLAGS="-m32" -DCMAKE_CXX_FLAGS="-m32"
+
+$(FAUDIO_CONFIGURE_FILES64): SHELL = $(CONTAINER_SHELL64)
+$(FAUDIO_CONFIGURE_FILES64): $(FAUDIO)/CMakeLists.txt $(MAKEFILE_DEP) $(CMAKE_BIN64) | $(FAUDIO_OBJ64)
+	cd $(dir $@) && \
+		../$(CMAKE_BIN64) $(abspath $(FAUDIO)) \
+			-DCMAKE_INSTALL_PREFIX="$(abspath $(TOOLS_DIR64))" \
+			$(FAUDIO_CMAKE_FLAGS)
+
+faudio32: SHELL = $(CONTAINER_SHELL32)
+faudio32: $(FAUDIO_CONFIGURE_FILES32)
+	+$(MAKE) -C $(FAUDIO_OBJ32) VERBOSE=1
+	+$(MAKE) -C $(FAUDIO_OBJ32) install VERBOSE=1
+	mkdir -p $(DST_DIR)/lib
+	cp -L $(TOOLS_DIR32)/lib/libFAudio* $(DST_DIR)/lib/
+	[ x"$(STRIP)" = x ] || $(STRIP) $(DST_DIR)/lib/libFAudio.so
+
+faudio64: SHELL = $(CONTAINER_SHELL64)
+faudio64: $(FAUDIO_CONFIGURE_FILES64)
+	+$(MAKE) -C $(FAUDIO_OBJ64) VERBOSE=1
+	+$(MAKE) -C $(FAUDIO_OBJ64) install VERBOSE=1
+	mkdir -p $(DST_DIR)/lib64
+	cp -L $(TOOLS_DIR64)/lib/libFAudio* $(DST_DIR)/lib64/
+	[ x"$(STRIP)" = x ] || $(STRIP) $(DST_DIR)/lib64/libFAudio.so
 
 ##
 ## lsteamclient
@@ -641,7 +634,7 @@ $(WINE_CONFIGURE_FILES64): SHELL = $(CONTAINER_SHELL64)
 $(WINE_CONFIGURE_FILES64): $(MAKEFILE_DEP) | $(WINE_OBJ64)
 	cd $(dir $@) && \
 		STRIP=$(STRIP_QUOTED) \
-		CFLAGS=-I$(abspath $(TOOLS_DIR64))"/include -g $(COMMON_FLAGS)" \
+		CFLAGS="-I$(abspath $(TOOLS_DIR64))/include -I$(abspath $(SRCDIR))/contrib/include -g $(COMMON_FLAGS)" \
 		LDFLAGS=-L$(abspath $(TOOLS_DIR64))/lib \
 		PKG_CONFIG_PATH=$(abspath $(TOOLS_DIR64))/lib/pkgconfig \
 		CC=$(CC_QUOTED) \
@@ -656,7 +649,7 @@ $(WINE_CONFIGURE_FILES32): SHELL = $(CONTAINER_SHELL32)
 $(WINE_CONFIGURE_FILES32): $(MAKEFILE_DEP) | $(WINE_OBJ32) $(WINE_ORDER_DEPS32)
 	cd $(dir $@) && \
 		STRIP=$(STRIP_QUOTED) \
-		CFLAGS=-I$(abspath $(TOOLS_DIR32))"/include -g $(COMMON_FLAGS)" \
+		CFLAGS="-I$(abspath $(TOOLS_DIR32))/include -I$(abspath $(SRCDIR))/contrib/include -g $(COMMON_FLAGS)" \
 		LDFLAGS=-L$(abspath $(TOOLS_DIR32))/lib \
 		PKG_CONFIG_PATH=$(abspath $(TOOLS_DIR32))/lib/pkgconfig \
 		CC=$(CC_QUOTED) \
@@ -806,7 +799,7 @@ vrclient32: $(VRCLIENT_CONFIGURE_FILES32) | $(WINE_BUILDTOOLS32) $(filter $(MAKE
 		cp -a ../$(VRCLIENT_OBJ32)/vrclient.dll.fake ../$(DST_DIR)/lib/wine/fakedlls/vrclient.dll
 
 ##
-## cmake -- necessary for openal, not part of steam runtime
+## cmake -- necessary for FAudio, not part of steam runtime
 ##
 
 # TODO Don't bother with this in native mode
@@ -878,22 +871,33 @@ DXVK_CONFIGURE_FILES32 := $(DXVK_OBJ32)/build.ninja
 DXVK_CONFIGURE_FILES64 := $(DXVK_OBJ64)/build.ninja
 
 # 64bit-configure.  Remove coredata file if already configured (due to e.g. makefile changing)
+#   the sed junk is to work around meson not supporting command line args for --cross-file builds
+#   we need to pass in wine's header files since the debian9 mingw-w64 is too old for dxvk.
 $(DXVK_CONFIGURE_FILES64): $(MAKEFILE_DEP) $(DXVK)/build-win64.txt | $(DXVK_OBJ64)
 	if [ -e "$(abspath $(DXVK_OBJ64))"/build.ninja ]; then \
 		rm -f "$(abspath $(DXVK_OBJ64))"/meson-private/coredata.dat; \
 	fi
+	mkdir -p "$(abspath $(DXVK_OBJ64))/new_includes" && \
+	cp $(abspath $(TOOLS_DIR64))/include/wine/windows/dxgi*.h "$(abspath $(DXVK_OBJ64))/new_includes" && \
 	cd "$(abspath $(DXVK))" && \
+	sed -e "s|@PROTON_C_ARGS@|'-I$(abspath $(DXVK_OBJ64))/new_includes'|" < build-win64.txt > proton-build-win64.txt && \
 	PATH="$(abspath $(SRCDIR))/glslang/bin/:$(PATH)" \
-		meson --prefix="$(abspath $(DXVK_OBJ64))" --cross-file build-win64.txt --strip --buildtype=release "$(abspath $(DXVK_OBJ64))"
+		meson --prefix="$(abspath $(DXVK_OBJ64))" --cross-file proton-build-win64.txt --strip --buildtype=release "$(abspath $(DXVK_OBJ64))"
 
 # 32-bit configure.  Remove coredata file if already configured (due to e.g. makefile changing)
+#   the sed junk is to work around meson not supporting command line args for --cross-file builds
+#   we need to pass in wine's header files since the debian9 mingw-w64 is too old for dxvk.
 $(DXVK_CONFIGURE_FILES32): $(MAKEFILE_DEP) $(DXVK)/build-win32.txt | $(DXVK_OBJ32)
 	if [ -e "$(abspath $(DXVK_OBJ32))"/build.ninja ]; then \
 		rm -f "$(abspath $(DXVK_OBJ32))"/meson-private/coredata.dat; \
 	fi
 	cd "$(abspath $(DXVK))" && \
+	mkdir -p "$(abspath $(DXVK_OBJ32))/new_includes" && \
+	cp $(abspath $(TOOLS_DIR32))/include/wine/windows/dxgi*.h "$(abspath $(DXVK_OBJ32))/new_includes" && \
+	cd "$(abspath $(DXVK))" && \
+	sed -e "s|@PROTON_C_ARGS@|'-I$(abspath $(DXVK_OBJ32))/new_includes'|" < build-win32.txt > proton-build-win32.txt && \
 	PATH="$(abspath $(SRCDIR))/glslang/bin/:$(PATH)" \
-		meson --prefix="$(abspath $(DXVK_OBJ32))" --cross-file build-win32.txt --strip --buildtype=release "$(abspath $(DXVK_OBJ32))"
+		meson --prefix="$(abspath $(DXVK_OBJ32))" --cross-file proton-build-win32.txt --strip --buildtype=release "$(abspath $(DXVK_OBJ32))"
 
 ## dxvk goals
 DXVK_TARGETS = dxvk dxvk_configure dxvk32 dxvk64 dxvk_configure32 dxvk_configure64
@@ -919,7 +923,7 @@ dxvk64: $(DXVK_CONFIGURE_FILES64)
 	cp "$(DXVK_OBJ64)"/bin/d3d10.dll "$(DST_DIR)"/lib64/wine/dxvk
 	cp "$(DXVK_OBJ64)"/bin/d3d10_1.dll "$(DST_DIR)"/lib64/wine/dxvk
 	cp "$(DXVK_OBJ64)"/bin/d3d10core.dll "$(DST_DIR)"/lib64/wine/dxvk
-	( cd $(SRCDIR) && git submodule status -- dxvk ) > "$(DST_DIR)"/lib64/wine/dxvk/version
+	if test -e $(SRCDIR)/.git; then ( cd $(SRCDIR) && git submodule status -- dxvk ) > "$(DST_DIR)"/lib64/wine/dxvk/version; fi
 
 
 dxvk32: $(DXVK_CONFIGURE_FILES32)
@@ -930,7 +934,7 @@ dxvk32: $(DXVK_CONFIGURE_FILES32)
 	cp "$(DXVK_OBJ32)"/bin/d3d10.dll "$(DST_DIR)"/lib/wine/dxvk/
 	cp "$(DXVK_OBJ32)"/bin/d3d10_1.dll "$(DST_DIR)"/lib/wine/dxvk/
 	cp "$(DXVK_OBJ32)"/bin/d3d10core.dll "$(DST_DIR)"/lib/wine/dxvk/
-	( cd $(SRCDIR) && git submodule status -- dxvk ) > "$(DST_DIR)"/lib/wine/dxvk/version
+	if test -e $(SRCDIR)/.git; then ( cd $(SRCDIR) && git submodule status -- dxvk ) > "$(DST_DIR)"/lib/wine/dxvk/version; fi
 
 endif # NO_DXVK
 

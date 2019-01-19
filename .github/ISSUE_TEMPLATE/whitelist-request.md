@@ -11,21 +11,19 @@ about: Games tested and found to have no issues.
 ## System Information
 - GPU: <!-- e.g. RX 580 or GTX 970 -->
 - Driver/LLVM version: <!-- e.g. Mesa 18.2/7.0.0 or nvidia 396.54 -->
-- Kernel version: <!-- e.g. 4.17 -->
+- Distro version: <!-- e.g. Ubuntu 18.04 -->
 - Link to full system information report as [Gist](https://gist.github.com/):
 - Proton version:
 
 ## I confirm:
 - [ ] that pressing the `Play` button in the Steam client is sufficient.
-- [ ] that [runtime config options](https://github.com/ValveSoftware/Proton#runtime-config-options)
-      are necessary to run the game.
-- [ ] that no workarounds other than the mentioned ones are necessary.
+- [ ] that [runtime config options](https://github.com/ValveSoftware/Proton#runtime-config-options) are necessary to run the game.
+- [ ] that no workarounds other than PROTON_* env variables are necessary.
 
 ## Issues
 - [ ] I haven't experienced any issues.
 - [ ] There are no issues left open for this game.
-- [ ] Although I consider the gaming experience equal to Windows there are
-      remaining issues:
+- [ ] Although I consider the gaming experience equal to Windows there are remaining issues:
 
 <!--
 1. You can find the Steam AppID in the URL of the shop page of the game.

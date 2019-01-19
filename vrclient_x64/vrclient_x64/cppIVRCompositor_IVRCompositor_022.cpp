@@ -1,6 +1,6 @@
 #include "vrclient_private.h"
 #include "vrclient_defs.h"
-#include "openvr_v1.0.17/ivrclientcore.h"
+#include "openvr_v1.1.3b/ivrclientcore.h"
 using namespace vr;
 extern "C" {
 #include "struct_converters.h"
@@ -222,6 +222,11 @@ void cppIVRCompositor_IVRCompositor_022_SetExplicitTimingMode(void *linux_side, 
 vr::EVRCompositorError cppIVRCompositor_IVRCompositor_022_SubmitExplicitTimingData(void *linux_side)
 {
     return ((IVRCompositor*)linux_side)->SubmitExplicitTimingData();
+}
+
+bool cppIVRCompositor_IVRCompositor_022_IsMotionSmoothingEnabled(void *linux_side)
+{
+    return ((IVRCompositor*)linux_side)->IsMotionSmoothingEnabled();
 }
 
 #ifdef __cplusplus

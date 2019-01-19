@@ -26,28 +26,28 @@ typedef struct __winIVRRenderModels_IVRRenderModels_006 {
 } winIVRRenderModels_IVRRenderModels_006;
 
 DEFINE_THISCALL_WRAPPER(winIVRRenderModels_IVRRenderModels_006_LoadRenderModel_Async, 20)
-EVRRenderModelError __thiscall winIVRRenderModels_IVRRenderModels_006_LoadRenderModel_Async(winIVRRenderModels_IVRRenderModels_006 *_this, const char * pchRenderModelName, winRenderModel_t_1017 ** ppRenderModel)
+EVRRenderModelError __thiscall winIVRRenderModels_IVRRenderModels_006_LoadRenderModel_Async(winIVRRenderModels_IVRRenderModels_006 *_this, const char * pchRenderModelName, winRenderModel_t_113b ** ppRenderModel)
 {
     TRACE("%p\n", _this);
     return cppIVRRenderModels_IVRRenderModels_006_LoadRenderModel_Async(_this->linux_side, pchRenderModelName, ppRenderModel);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRRenderModels_IVRRenderModels_006_FreeRenderModel, 12)
-void __thiscall winIVRRenderModels_IVRRenderModels_006_FreeRenderModel(winIVRRenderModels_IVRRenderModels_006 *_this, winRenderModel_t_1017 * pRenderModel)
+void __thiscall winIVRRenderModels_IVRRenderModels_006_FreeRenderModel(winIVRRenderModels_IVRRenderModels_006 *_this, winRenderModel_t_113b * pRenderModel)
 {
     TRACE("%p\n", _this);
     cppIVRRenderModels_IVRRenderModels_006_FreeRenderModel(_this->linux_side, pRenderModel);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRRenderModels_IVRRenderModels_006_LoadTexture_Async, 16)
-EVRRenderModelError __thiscall winIVRRenderModels_IVRRenderModels_006_LoadTexture_Async(winIVRRenderModels_IVRRenderModels_006 *_this, TextureID_t textureId, winRenderModel_TextureMap_t_1017 ** ppTexture)
+EVRRenderModelError __thiscall winIVRRenderModels_IVRRenderModels_006_LoadTexture_Async(winIVRRenderModels_IVRRenderModels_006 *_this, TextureID_t textureId, winRenderModel_TextureMap_t_113b ** ppTexture)
 {
     TRACE("%p\n", _this);
     return cppIVRRenderModels_IVRRenderModels_006_LoadTexture_Async(_this->linux_side, textureId, ppTexture);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRRenderModels_IVRRenderModels_006_FreeTexture, 12)
-void __thiscall winIVRRenderModels_IVRRenderModels_006_FreeTexture(winIVRRenderModels_IVRRenderModels_006 *_this, winRenderModel_TextureMap_t_1017 * pTexture)
+void __thiscall winIVRRenderModels_IVRRenderModels_006_FreeTexture(winIVRRenderModels_IVRRenderModels_006 *_this, winRenderModel_TextureMap_t_113b * pTexture)
 {
     TRACE("%p\n", _this);
     cppIVRRenderModels_IVRRenderModels_006_FreeTexture(_this->linux_side, pTexture);

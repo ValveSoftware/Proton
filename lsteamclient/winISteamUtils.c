@@ -156,8 +156,10 @@ bool __thiscall winISteamUtils_SteamUtils009_BOverlayNeedsPresent(winISteamUtils
 DEFINE_THISCALL_WRAPPER(winISteamUtils_SteamUtils009_CheckFileSignature, 8)
 SteamAPICall_t __thiscall winISteamUtils_SteamUtils009_CheckFileSignature(winISteamUtils_SteamUtils009 *_this, const char * szFileName)
 {
+    char lin_szFileName[PATH_MAX];
+    steamclient_dos_path_to_unix_path(szFileName, lin_szFileName);
     TRACE("%p\n", _this);
-    return cppISteamUtils_SteamUtils009_CheckFileSignature(_this->linux_side, szFileName);
+    return cppISteamUtils_SteamUtils009_CheckFileSignature(_this->linux_side, szFileName ? lin_szFileName : NULL);
 }
 
 DEFINE_THISCALL_WRAPPER(winISteamUtils_SteamUtils009_ShowGamepadTextInput, 24)
@@ -423,8 +425,10 @@ bool __thiscall winISteamUtils_SteamUtils008_BOverlayNeedsPresent(winISteamUtils
 DEFINE_THISCALL_WRAPPER(winISteamUtils_SteamUtils008_CheckFileSignature, 8)
 SteamAPICall_t __thiscall winISteamUtils_SteamUtils008_CheckFileSignature(winISteamUtils_SteamUtils008 *_this, const char * szFileName)
 {
+    char lin_szFileName[PATH_MAX];
+    steamclient_dos_path_to_unix_path(szFileName, lin_szFileName);
     TRACE("%p\n", _this);
-    return cppISteamUtils_SteamUtils008_CheckFileSignature(_this->linux_side, szFileName);
+    return cppISteamUtils_SteamUtils008_CheckFileSignature(_this->linux_side, szFileName ? lin_szFileName : NULL);
 }
 
 DEFINE_THISCALL_WRAPPER(winISteamUtils_SteamUtils008_ShowGamepadTextInput, 24)
@@ -674,8 +678,10 @@ bool __thiscall winISteamUtils_SteamUtils007_BOverlayNeedsPresent(winISteamUtils
 DEFINE_THISCALL_WRAPPER(winISteamUtils_SteamUtils007_CheckFileSignature, 8)
 SteamAPICall_t __thiscall winISteamUtils_SteamUtils007_CheckFileSignature(winISteamUtils_SteamUtils007 *_this, const char * szFileName)
 {
+    char lin_szFileName[PATH_MAX];
+    steamclient_dos_path_to_unix_path(szFileName, lin_szFileName);
     TRACE("%p\n", _this);
-    return cppISteamUtils_SteamUtils007_CheckFileSignature(_this->linux_side, szFileName);
+    return cppISteamUtils_SteamUtils007_CheckFileSignature(_this->linux_side, szFileName ? lin_szFileName : NULL);
 }
 
 DEFINE_THISCALL_WRAPPER(winISteamUtils_SteamUtils007_ShowGamepadTextInput, 24)
@@ -909,8 +915,10 @@ bool __thiscall winISteamUtils_SteamUtils006_BOverlayNeedsPresent(winISteamUtils
 DEFINE_THISCALL_WRAPPER(winISteamUtils_SteamUtils006_CheckFileSignature, 8)
 SteamAPICall_t __thiscall winISteamUtils_SteamUtils006_CheckFileSignature(winISteamUtils_SteamUtils006 *_this, const char * szFileName)
 {
+    char lin_szFileName[PATH_MAX];
+    steamclient_dos_path_to_unix_path(szFileName, lin_szFileName);
     TRACE("%p\n", _this);
-    return cppISteamUtils_SteamUtils006_CheckFileSignature(_this->linux_side, szFileName);
+    return cppISteamUtils_SteamUtils006_CheckFileSignature(_this->linux_side, szFileName ? lin_szFileName : NULL);
 }
 
 DEFINE_THISCALL_WRAPPER(winISteamUtils_SteamUtils006_ShowGamepadTextInput, 20)
@@ -1136,8 +1144,10 @@ bool __thiscall winISteamUtils_SteamUtils005_BOverlayNeedsPresent(winISteamUtils
 DEFINE_THISCALL_WRAPPER(winISteamUtils_SteamUtils005_CheckFileSignature, 8)
 SteamAPICall_t __thiscall winISteamUtils_SteamUtils005_CheckFileSignature(winISteamUtils_SteamUtils005 *_this, const char * szFileName)
 {
+    char lin_szFileName[PATH_MAX];
+    steamclient_dos_path_to_unix_path(szFileName, lin_szFileName);
     TRACE("%p\n", _this);
-    return cppISteamUtils_SteamUtils005_CheckFileSignature(_this->linux_side, szFileName);
+    return cppISteamUtils_SteamUtils005_CheckFileSignature(_this->linux_side, szFileName ? lin_szFileName : NULL);
 }
 
 DEFINE_THISCALL_WRAPPER(winISteamUtils_SteamUtils005_ShowGamepadTextInput, 20)

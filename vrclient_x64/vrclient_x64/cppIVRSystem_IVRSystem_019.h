@@ -31,12 +31,12 @@ extern HmdMatrix34_t cppIVRSystem_IVRSystem_019_GetMatrix34TrackedDeviceProperty
 extern uint32_t cppIVRSystem_IVRSystem_019_GetArrayTrackedDeviceProperty(void *, TrackedDeviceIndex_t, ETrackedDeviceProperty, PropertyTypeTag_t, void *, uint32_t, ETrackedPropertyError *);
 extern uint32_t cppIVRSystem_IVRSystem_019_GetStringTrackedDeviceProperty(void *, TrackedDeviceIndex_t, ETrackedDeviceProperty, char *, uint32_t, ETrackedPropertyError *);
 extern const char * cppIVRSystem_IVRSystem_019_GetPropErrorNameFromEnum(void *, ETrackedPropertyError);
-extern bool cppIVRSystem_IVRSystem_019_PollNextEvent(void *, winVREvent_t_1017 *, uint32_t);
-extern bool cppIVRSystem_IVRSystem_019_PollNextEventWithPose(void *, ETrackingUniverseOrigin, winVREvent_t_1017 *, uint32_t, TrackedDevicePose_t *);
+extern bool cppIVRSystem_IVRSystem_019_PollNextEvent(void *, winVREvent_t_113b *, uint32_t);
+extern bool cppIVRSystem_IVRSystem_019_PollNextEventWithPose(void *, ETrackingUniverseOrigin, winVREvent_t_113b *, uint32_t, TrackedDevicePose_t *);
 extern const char * cppIVRSystem_IVRSystem_019_GetEventTypeNameFromEnum(void *, EVREventType);
 extern HiddenAreaMesh_t cppIVRSystem_IVRSystem_019_GetHiddenAreaMesh(void *, EVREye, EHiddenAreaMeshType);
-extern bool cppIVRSystem_IVRSystem_019_GetControllerState(void *, TrackedDeviceIndex_t, winVRControllerState001_t_1017 *, uint32_t);
-extern bool cppIVRSystem_IVRSystem_019_GetControllerStateWithPose(void *, ETrackingUniverseOrigin, TrackedDeviceIndex_t, winVRControllerState001_t_1017 *, uint32_t, TrackedDevicePose_t *);
+extern bool cppIVRSystem_IVRSystem_019_GetControllerState(void *, TrackedDeviceIndex_t, winVRControllerState001_t_113b *, uint32_t);
+extern bool cppIVRSystem_IVRSystem_019_GetControllerStateWithPose(void *, ETrackingUniverseOrigin, TrackedDeviceIndex_t, winVRControllerState001_t_113b *, uint32_t, TrackedDevicePose_t *);
 extern void cppIVRSystem_IVRSystem_019_TriggerHapticPulse(void *, TrackedDeviceIndex_t, uint32_t, unsigned short);
 extern const char * cppIVRSystem_IVRSystem_019_GetButtonIdNameFromEnum(void *, EVRButtonId);
 extern const char * cppIVRSystem_IVRSystem_019_GetControllerAxisTypeNameFromEnum(void *, EVRControllerAxisType);

@@ -1,4 +1,5 @@
 #include <stdint.h>
+#include <linux/limits.h>
 typedef uint32_t EHTMLMouseButton, EHTMLKeyModifiers;
 
 #ifndef __cplusplus

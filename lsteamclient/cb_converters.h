@@ -72,6 +72,8 @@ extern void cb_GetAppDependenciesResult_t_152(void *l, void *w);
 
 extern void cb_DeleteItemResult_t_16(void *l, void *w);
 
+extern void cb_HTML_FileOpenDialog_t_12(void *l, void *w);
+
 extern void cb_SteamInventoryStartPurchaseResult_t_24(void *l, void *w);
 
 extern void cb_GSReputation_t_40(void *l, void *w);

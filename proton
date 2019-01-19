@@ -60,27 +60,39 @@ def upgrade_pfx(old_ver):
     if old_ver is None:
         return
 
-    old_proton_ver, old_prefix_ver = old_ver.split('-')
-    old_proton_maj, old_proton_min = old_proton_ver.split('.')
-    new_proton_ver, new_prefix_ver = CURRENT_PREFIX_VERSION.split('-')
-    new_proton_maj, new_proton_min = new_proton_ver.split('.')
-
-    if int(new_proton_maj) < int(old_proton_maj) or \
-            (int(new_proton_maj) == int(old_proton_maj) and \
-             int(new_proton_min) < int(old_proton_min)):
-        log("Removing newer prefix")
-        if old_proton_ver == "3.7" and not os.path.exists(os.environ["STEAM_COMPAT_DATA_PATH"] + "/tracked_files"):
-            #proton 3.7 did not generate tracked_files, so copy it into place first
-            shutil.copy(basedir + "/proton_3.7_tracked_files", os.environ["STEAM_COMPAT_DATA_PATH"] + "/tracked_files")
-        remove_tracked_files(os.environ["STEAM_COMPAT_DATA_PATH"])
+    if not '-' in old_ver:
+        #How can this happen??
+        log("Prefix has an invalid version?! You may want to back up user files and delete this prefix.")
+        #If it does, just let the Wine upgrade happen and hope it works...
         return
 
-    if old_proton_ver == "3.7" and old_prefix_ver == "1":
-        if not os.path.exists(prefix + "/drive_c/windows/syswow64/kernel32.dll"):
-            #shipped a busted 64-bit-only installation on 20180822. detect and wipe clean
-            log("Detected broken 64-bit-only installation, re-creating prefix.")
-            shutil.rmtree(prefix)
+    try:
+        old_proton_ver, old_prefix_ver = old_ver.split('-')
+        old_proton_maj, old_proton_min = old_proton_ver.split('.')
+        new_proton_ver, new_prefix_ver = CURRENT_PREFIX_VERSION.split('-')
+        new_proton_maj, new_proton_min = new_proton_ver.split('.')
+
+        if int(new_proton_maj) < int(old_proton_maj) or \
+                (int(new_proton_maj) == int(old_proton_maj) and \
+                 int(new_proton_min) < int(old_proton_min)):
+            log("Removing newer prefix")
+            if old_proton_ver == "3.7" and not os.path.exists(os.environ["STEAM_COMPAT_DATA_PATH"] + "/tracked_files"):
+                #proton 3.7 did not generate tracked_files, so copy it into place first
+                shutil.copy(basedir + "/proton_3.7_tracked_files", os.environ["STEAM_COMPAT_DATA_PATH"] + "/tracked_files")
+            remove_tracked_files(os.environ["STEAM_COMPAT_DATA_PATH"])
             return
+
+        if old_proton_ver == "3.7" and old_prefix_ver == "1":
+            if not os.path.exists(prefix + "/drive_c/windows/syswow64/kernel32.dll"):
+                #shipped a busted 64-bit-only installation on 20180822. detect and wipe clean
+                log("Detected broken 64-bit-only installation, re-creating prefix.")
+                shutil.rmtree(prefix)
+                return
+
+    except ValueError:
+        log("Prefix has an invalid version?! You may want to back up user files and delete this prefix.")
+        #Just let the Wine upgrade happen and hope it works...
+        return
 
 def run_wine(args):
     subprocess.call(args, env=env, stderr=lfile)
@@ -208,9 +220,16 @@ if not check_environment("PROTON_USE_WINED3D", "wined3d"):
     check_environment("PROTON_USE_WINED3D11", "wined3d")
 check_environment("PROTON_NO_D3D11", "nod3d11")
 check_environment("PROTON_NO_ESYNC", "noesync")
+check_environment("PROTON_FORCE_LARGE_ADDRESS_AWARE", "forcelgadd")
 
 if not "noesync" in config_opts:
     env["WINEESYNC"] = "1"
+
+if "forcelgadd" in config_opts:
+    #forcelgadd should be used just for testing whether a game is helped by
+    #setting LARGE_ADDRESS_AWARE. If it does, then add an AppDefault in the
+    #registry, so that it doesn't impact every executable in the prefix.
+    env["WINE_LARGE_ADDRESS_AWARE"] = "1"
 
 lfile = None
 if "SteamGameId" in env:
@@ -231,6 +250,7 @@ def create_fonts_symlinks(prefix_path):
     ]
 
     windowsfonts = prefix_path + "/drive_c/windows/Fonts"
+    makedirs(windowsfonts)
     for p in fontsmap:
         lname = os.path.join(windowsfonts, p[1])
         fname = os.path.join(fontsdir, p[0])
@@ -327,8 +347,8 @@ with prefix_lock:
 
             if vr_log is None:
                 vr_log = j["log"][0]
-        except (ValueError, OSError):
-            pass
+        except (TypeError, ValueError, OSError):
+            log("Missing or invalid openvrpaths.vrpath file! " + str(sys.exc_info()[1]))
 
     makedirs(prefix + "/drive_c/users/steamuser/Local Settings/Application Data/openvr")
 
@@ -453,6 +473,8 @@ def dump_dbg_env(f):
         f.write("\tWINEDLLOVERRIDES=\"" + env["WINEDLLOVERRIDES"] + "\" \\\n")
     if "STEAM_COMPAT_CLIENT_INSTALL_PATH" in env:
         f.write("\tSTEAM_COMPAT_CLIENT_INSTALL_PATH=\"" + env["STEAM_COMPAT_CLIENT_INSTALL_PATH"] + "\" \\\n")
+    if "WINE_LARGE_ADDRESS_AWARE" in env:
+        f.write("\tWINE_LARGE_ADDRESS_AWARE=\"" + env["WINE_LARGE_ADDRESS_AWARE"] + "\" \\\n")
 
 def dump_dbg_scripts():
     exe_name = os.path.basename(sys.argv[2])

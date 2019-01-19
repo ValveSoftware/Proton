@@ -47,7 +47,8 @@ int __thiscall winISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetAppInstallD
     uint32 path_result;
     TRACE("%p\n", _this);
     path_result = cppISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetAppInstallDir(_this->linux_side, nAppID, pchDirectory, cchNameMax);
-    return steamclient_unix_path_to_dos_path(path_result, pchDirectory, cchNameMax);
+    path_result = steamclient_unix_path_to_dos_path(path_result, pchDirectory, pchDirectory, cchNameMax);
+    return path_result;
 }
 
 DEFINE_THISCALL_WRAPPER(winISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetAppBuildId, 8)

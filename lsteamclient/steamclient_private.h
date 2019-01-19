@@ -1,4 +1,9 @@
 /* TODO these should be generated */
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef struct __winISteamClient winISteamClient;
 typedef struct __winISteamUser winISteamUser;
 typedef struct __winISteamGameServer winISteamGameServer;
@@ -29,14 +34,24 @@ typedef struct __winISteamParentalSettings winISteamParentalSettings;
 typedef struct __winX winX;
 
 void *create_win_interface(const char *name, void *linux_side);
-unsigned int steamclient_unix_path_to_dos_path(unsigned int api_result, char *inout, unsigned int inout_bytes);
+unsigned int steamclient_unix_path_to_dos_path(bool api_result, const char *src, char *dst, uint32 dst_bytes);
+bool steamclient_dos_path_to_unix_path(const char *src, char *dst);
+const char **steamclient_dos_to_unix_stringlist(const char **src);
+void steamclient_free_stringlist(const char **out);
+const char *steamclient_isteamcontroller_getglyph(int origin, const char *lin_path);
 void *create_LinuxISteamMatchmakingServerListResponse(void *win);
 void *create_LinuxISteamMatchmakingPingResponse(void *win);
 void *create_LinuxISteamMatchmakingPlayersResponse(void *win);
 void *create_LinuxISteamMatchmakingRulesResponse(void *win);
 
+extern char g_tmppath[PATH_MAX];
+
 typedef uint64 SteamAPICall_t; //for ancient SDKs
 bool do_cb_wrap(HSteamPipe pipe, void *linux_side, bool (*cpp_func)(void *, SteamAPICall_t, void *, int, int, bool *), SteamAPICall_t call, void *callback, int callback_len, int cb_expected, bool *failed);
+
+#ifdef __cplusplus
+}
+#endif
 
 #define TRACE WINE_TRACE
 #define ERR WINE_ERR

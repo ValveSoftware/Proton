@@ -35,6 +35,7 @@ case 0x00100d56: win_msg->m_cubParam = 24; win_msg->m_pubParam = HeapAlloc(GetPr
 case 0x00100d57: win_msg->m_cubParam = 24; win_msg->m_pubParam = HeapAlloc(GetProcessHeap(), 0, win_msg->m_cubParam); cb_RemoveAppDependencyResult_t_24(lin_msg.m_pubParam, win_msg->m_pubParam); break;
 case 0x00940d58: win_msg->m_cubParam = 152; win_msg->m_pubParam = HeapAlloc(GetProcessHeap(), 0, win_msg->m_cubParam); cb_GetAppDependenciesResult_t_152(lin_msg.m_pubParam, win_msg->m_pubParam); break;
 case 0x000c0d59: win_msg->m_cubParam = 16; win_msg->m_pubParam = HeapAlloc(GetProcessHeap(), 0, win_msg->m_cubParam); cb_DeleteItemResult_t_16(lin_msg.m_pubParam, win_msg->m_pubParam); break;
+case 0x000c11a4: win_msg->m_cubParam = 12; win_msg->m_pubParam = HeapAlloc(GetProcessHeap(), 0, win_msg->m_cubParam); cb_HTML_FileOpenDialog_t_12(lin_msg.m_pubParam, win_msg->m_pubParam); break;
 case 0x00141260: win_msg->m_cubParam = 24; win_msg->m_pubParam = HeapAlloc(GetProcessHeap(), 0, win_msg->m_cubParam); cb_SteamInventoryStartPurchaseResult_t_24(lin_msg.m_pubParam, win_msg->m_pubParam); break;
 case 0x002000d1: win_msg->m_cubParam = 40; win_msg->m_pubParam = HeapAlloc(GetProcessHeap(), 0, win_msg->m_cubParam); cb_GSReputation_t_40(lin_msg.m_pubParam, win_msg->m_pubParam); break;
 case 0x00140835: win_msg->m_cubParam = 24; win_msg->m_pubParam = HeapAlloc(GetProcessHeap(), 0, win_msg->m_cubParam); cb_HTTPRequestCompleted_t_24(lin_msg.m_pubParam, win_msg->m_pubParam); break;

@@ -12,6 +12,7 @@ import os
 import re
 
 sdk_versions = [
+    "v1.1.3b",
     "v1.0.17",
     "v1.0.16",
     "v1.0.15",
@@ -26,6 +27,7 @@ sdk_versions = [
     "v1.0.6",
     "v1.0.5",
     "v1.0.4",
+    "v1.0.3a", #non-public build used by The Lab, see Proton github PR#2075
     "v1.0.3",
     "v1.0.3a",
     "v1.0.2",
