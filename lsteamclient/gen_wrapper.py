@@ -106,6 +106,9 @@ files = [
     ("isteamparentalsettings.h", [
         "ISteamParentalSettings"
     ]),
+    ("isteamnetworkingsocketsserialized.h", [
+        "ISteamNetworkingSocketsSerialized"
+    ]),
 ]
 
 aliases = {

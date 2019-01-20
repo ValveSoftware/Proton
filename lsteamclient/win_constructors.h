@@ -26,10 +26,12 @@ extern void *create_winISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VE
 extern void *create_winISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001(void *);
 extern void *create_winISteamController_SteamController005(void *);
 extern void *create_winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003(void *);
+extern void *create_winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized003(void *);
 extern void *create_winISteamUtils_SteamUtils008(void *);
 extern void *create_winISteamUGC_STEAMUGC_INTERFACE_VERSION009(void *);
 extern void *create_winISteamInventory_STEAMINVENTORY_INTERFACE_V001(void *);
 extern void *create_winISteamVideo_STEAMVIDEO_INTERFACE_V001(void *);
+extern void *create_winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized002(void *);
 extern void *create_winISteamController_SteamController004(void *);
 extern void *create_winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013(void *);
 extern void *create_winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002(void *);
