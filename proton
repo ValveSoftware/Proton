@@ -8,6 +8,7 @@ import filecmp
 import json
 import os
 import shutil
+import errno
 import struct
 import subprocess
 import sys
@@ -78,7 +79,7 @@ def upgrade_pfx(old_ver):
             log("Removing newer prefix")
             if old_proton_ver == "3.7" and not os.path.exists(os.environ["STEAM_COMPAT_DATA_PATH"] + "/tracked_files"):
                 #proton 3.7 did not generate tracked_files, so copy it into place first
-                shutil.copy(basedir + "/proton_3.7_tracked_files", os.environ["STEAM_COMPAT_DATA_PATH"] + "/tracked_files")
+                try_copy(basedir + "/proton_3.7_tracked_files", os.environ["STEAM_COMPAT_DATA_PATH"] + "/tracked_files")
             remove_tracked_files(os.environ["STEAM_COMPAT_DATA_PATH"])
             return
 
@@ -104,11 +105,20 @@ def makedirs(path):
         #already exists
         pass
 
+def try_copy(src, dst):
+    try:
+        shutil.copy(src,dst)
+    except PermissionError as e:
+        if e.errno == errno.EPERM:
+            print('Notice! While copying ' + dst + ': ' + e.strerror)
+        else:
+            raise
+
 def real_copy(src, dst):
     if os.path.islink(src):
         os.symlink(os.readlink(src), dst)
     else:
-        shutil.copy(src,dst)
+        try_copy(src,dst)
 
 def mergedirs(src, dst, tracked_files):
     for src_dir, dirs, files in os.walk(src):
@@ -153,7 +163,7 @@ with dist_lock:
         tar = tarfile.open(basedir + "/proton_dist.tar.gz", mode="r:gz")
         tar.extractall(path=basedir + "/dist")
         tar.close()
-        shutil.copy(basedir + "/version", basedir + "/dist/")
+        try_copy(basedir + "/version", basedir + "/dist/")
 
 env = dict(os.environ)
 dlloverrides = {}
@@ -298,16 +308,16 @@ with prefix_lock:
             dstfile = dst + "Steam/" + f
             if os.path.isfile(dstfile):
                 os.remove(dstfile)
-            shutil.copy(steamdir + "/legacycompat/" + f, dstfile)
+            try_copy(steamdir + "/legacycompat/" + f, dstfile)
 
     #copy openvr files into place
     dst = prefix + "/drive_c/vrclient/bin/"
     makedirs(dst)
-    shutil.copy(basedir + "/dist/lib/wine/fakedlls/vrclient.dll", dst)
-    shutil.copy(basedir + "/dist/lib64/wine/fakedlls/vrclient_x64.dll", dst)
+    try_copy(basedir + "/dist/lib/wine/fakedlls/vrclient.dll", dst)
+    try_copy(basedir + "/dist/lib64/wine/fakedlls/vrclient_x64.dll", dst)
 
-    shutil.copy(basedir + "/dist/lib/wine/dxvk/openvr_api_dxvk.dll", prefix + "/drive_c/windows/syswow64/")
-    shutil.copy(basedir + "/dist/lib64/wine/dxvk/openvr_api_dxvk.dll", prefix + "/drive_c/windows/system32/")
+    try_copy(basedir + "/dist/lib/wine/dxvk/openvr_api_dxvk.dll", prefix + "/drive_c/windows/syswow64/")
+    try_copy(basedir + "/dist/lib64/wine/dxvk/openvr_api_dxvk.dll", prefix + "/drive_c/windows/system32/")
 
     #parse linux openvr config and present it in win32 format to the app.
     #logic from openvr's CVRPathRegistry_Public::GetPaths
