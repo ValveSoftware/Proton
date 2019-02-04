@@ -210,7 +210,7 @@ static void (*steamclient_ReleaseThreadLocalMemory)(int);
 
 static int load_steamclient(void)
 {
-    char path[PATH_MAX];
+    char path[PATH_MAX], resolved_path[PATH_MAX];
 
     if(steamclient_lib)
         return 1;
@@ -228,6 +228,10 @@ static int load_steamclient(void)
 #else
     snprintf(path, PATH_MAX, "%s/.steam/sdk32/steamclient.so", getenv("HOME"));
 #endif
+    if (realpath(path, resolved_path)){
+        strncpy(path, resolved_path, PATH_MAX);
+        path[PATH_MAX - 1] = 0;
+    }
 #endif
     steamclient_lib = wine_dlopen(path, RTLD_NOW, NULL, 0);
     if(!steamclient_lib){
