@@ -109,30 +109,9 @@ files = [
 ]
 
 aliases = {
-    #Some interface versions are not present in the public SDK
-    #headers, but are actually requested by games. It would be nice
-    #to verify that these interface versions are actually binary
-    #compatible. Lacking that, we hope the next highest version
-    #is compatible.
-    "SteamClient012":["SteamClient013"],
-    "SteamUtils004":["SteamUtils003"], # TimeShift uses SteamUtils003
-
-
-    #leaving these commented-out. let's see if they turn up in practice,
-    #and handle them correctly if so.
-
-#    "SteamFriends011":["SteamFriends010"],
-#    "SteamFriends013":["SteamFriends012"],
-#    "SteamGameServer008":["SteamGameServer007", "SteamGameServer006"],
-#    "SteamMatchMaking004":["SteamMatchMaking003"],
-#    "SteamMatchMaking006":["SteamMatchMaking005"],
-#    "STEAMREMOTESTORAGE_INTERFACE_VERSION004":["STEAMREMOTESTORAGE_INTERFACE_VERSION003"],
-#    "STEAMREMOTESTORAGE_INTERFACE_VERSION008":["STEAMREMOTESTORAGE_INTERFACE_VERSION007"],
-#    "STEAMREMOTESTORAGE_INTERFACE_VERSION010":["STEAMREMOTESTORAGE_INTERFACE_VERSION009"],
-#    "STEAMUGC_INTERFACE_VERSION005":["STEAMUGC_INTERFACE_VERSION004"],
-#    "STEAMUGC_INTERFACE_VERSION007":["STEAMUGC_INTERFACE_VERSION006"],
-#    "SteamUser016":["SteamUser015"],
-#    "STEAMUSERSTATS_INTERFACE_VERSION009":["STEAMUSERSTATS_INTERFACE_VERSION008"],
+    #these interfaces are undocumented and binary compatible
+    "SteamUtils004":["SteamUtils003"],
+    "SteamUtils002":["SteamUtils001"],
 }
 
 # these structs are manually confirmed to be equivalent
@@ -848,14 +827,14 @@ for sdkver in sdk_versions:
         if not os.path.isfile(input_name):
             continue
         index = clang.cindex.Index.create()
-        linux_build = index.parse(input_name, args=['-x', 'c++', '-m32', '-Isteamworks_sdk_%s/' % sdkver, '-I/usr/lib/clang/7.0.0/include/'])
+        linux_build = index.parse(input_name, args=['-x', 'c++', '-m32', '-Isteamworks_sdk_%s/' % sdkver, '-I/usr/lib/clang/7.0.1/include/'])
 
         diagnostics = list(linux_build.diagnostics)
         if len(diagnostics) > 0:
             print('There were parse errors')
             pprint.pprint(diagnostics)
         else:
-            windows_build = index.parse(input_name, args=['-x', 'c++', '-m32', '-Isteamworks_sdk_%s/' % sdkver, '-I/usr/lib/clang/7.0.0/include/', '-mms-bitfields', '-U__linux__', '-Wno-incompatible-ms-struct'])
+            windows_build = index.parse(input_name, args=['-x', 'c++', '-m32', '-Isteamworks_sdk_%s/' % sdkver, '-I/usr/lib/clang/7.0.1/include/', '-mms-bitfields', '-U__linux__', '-Wno-incompatible-ms-struct'])
             diagnostics = list(windows_build.diagnostics)
             if len(diagnostics) > 0:
                 print('There were parse errors (windows build)')

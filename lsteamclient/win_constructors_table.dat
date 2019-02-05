@@ -52,7 +52,6 @@
     {"STEAMUGC_INTERFACE_VERSION002", &create_winISteamUGC_STEAMUGC_INTERFACE_VERSION002},
     {"SteamClient014", &create_winISteamClient_SteamClient014},
     {"SteamClient012", &create_winISteamClient_SteamClient012},
-    {"SteamClient013", &create_winISteamClient_SteamClient012}, /* alias */
     {"SteamUtils006", &create_winISteamUtils_SteamUtils006},
     {"STEAMUGC_INTERFACE_VERSION001", &create_winISteamUGC_STEAMUGC_INTERFACE_VERSION001},
     {"SteamGameServer011", &create_winISteamGameServer_SteamGameServer011},
@@ -105,6 +104,7 @@
     {"SteamClient007", &create_winISteamClient_SteamClient007},
     {"SteamUser011", &create_winISteamUser_SteamUser011},
     {"SteamUtils002", &create_winISteamUtils_SteamUtils002},
+    {"SteamUtils001", &create_winISteamUtils_SteamUtils002}, /* alias */
     {"STEAMUSERSTATS_INTERFACE_VERSION004", &create_winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004},
     {"STEAMAPPS_INTERFACE_VERSION002", &create_winISteamApps_STEAMAPPS_INTERFACE_VERSION002},
     {"SteamFriends004", &create_winISteamFriends_SteamFriends004},
