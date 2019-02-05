@@ -54,6 +54,7 @@ extern void *create_winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001(
 extern void *create_winISteamClient_SteamClient015(void *);
 extern void *create_winISteamUGC_STEAMUGC_INTERFACE_VERSION002(void *);
 extern void *create_winISteamClient_SteamClient014(void *);
+extern void *create_winISteamClient_SteamClient013(void *);
 extern void *create_winISteamClient_SteamClient012(void *);
 extern void *create_winISteamUtils_SteamUtils006(void *);
 extern void *create_winISteamUGC_STEAMUGC_INTERFACE_VERSION001(void *);

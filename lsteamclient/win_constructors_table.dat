@@ -54,6 +54,7 @@
     {"SteamClient015", &create_winISteamClient_SteamClient015},
     {"STEAMUGC_INTERFACE_VERSION002", &create_winISteamUGC_STEAMUGC_INTERFACE_VERSION002},
     {"SteamClient014", &create_winISteamClient_SteamClient014},
+    {"SteamClient013", &create_winISteamClient_SteamClient013},
     {"SteamClient012", &create_winISteamClient_SteamClient012},
     {"SteamUtils006", &create_winISteamUtils_SteamUtils006},
     {"STEAMUGC_INTERFACE_VERSION001", &create_winISteamUGC_STEAMUGC_INTERFACE_VERSION001},
