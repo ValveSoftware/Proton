@@ -364,6 +364,17 @@ install: dist | $(filter-out dist deploy install,$(MAKECMDGOALS))
 	@echo "Installed Proton to "$(STEAM_DIR)/compatibilitytools.d/$(BUILD_NAME)
 	@echo "You may need to restart Steam to select this tool"
 
+.PHONY: module32 module64 module
+
+module32: SHELL = $(CONTAINER_SHELL32)
+module32:
+	cd $(WINE_OBJ32)/dlls/$(module) && make
+
+module64: SHELL = $(CONTAINER_SHELL64)
+module64:
+	cd $(WINE_OBJ64)/dlls/$(module) && make
+
+module: module32 module64
 
 ##
 ## ffmpeg
