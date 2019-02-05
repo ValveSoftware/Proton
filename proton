@@ -23,6 +23,9 @@ CURRENT_PREFIX_VERSION="3.16-1"
 PFX="Proton: "
 ld_path_var = "LD_LIBRARY_PATH"
 
+def nonzero(s):
+    return len(s) > 0 and s != "0"
+
 def log(msg):
     sys.stderr.write(PFX + msg + os.linesep)
     sys.stderr.flush()
@@ -193,7 +196,7 @@ with dist_lock:
 prefix = os.environ["STEAM_COMPAT_DATA_PATH"] + "/pfx/"
 env["WINEPREFIX"] = prefix
 
-if "PROTON_LOG" in env:
+if "PROTON_LOG" in env and nonzero(env["PROTON_LOG"]):
     env["WINEDEBUG"] = "+timestamp,+pid,+tid,+seh,+debugstr,+module"
 
 #load environment overrides
@@ -210,10 +213,10 @@ if os.path.exists(basedir + "/user_settings.py"):
 def check_environment(env_name, config_name):
     if not env_name in env:
         return False
-    if env[env_name] == "0" or len(env[env_name]) == 0:
-        config_opts.discard(config_name)
-    else:
+    if nonzero(env[env_name]):
         config_opts.add(config_name)
+    else:
+        config_opts.discard(config_name)
     return True
 
 if "STEAM_COMPAT_CONFIG" in os.environ:
@@ -588,7 +591,7 @@ def dump_dbg_scripts():
     os.chmod(tmpdir + "run", 0o755)
 
 def run():
-    if "PROTON_DUMP_DEBUG_COMMANDS" in env:
+    if "PROTON_DUMP_DEBUG_COMMANDS" in env and nonzero(env["PROTON_DUMP_DEBUG_COMMANDS"]):
         try:
             dump_dbg_scripts()
         except OSError:
