@@ -47,6 +47,50 @@ For example, if you wish make changes to Wine, you would apply those
 changes to the <tt>wine/</tt> directory.
 
 ---
+Easy build path
+---
+
+Building Proton is quite complicated. We now provide a top-level Makefile which
+will execute most of the build commands for you. This section describes how to
+use this Makefile for simple Proton builds.
+
+This Makefile uses a virtual machine to create a consistent build environment.
+The VM is managed with [Vagrant](https://www.vagrantup.com/), which you will
+need to install before invoking these commands. While Vagrant supports several
+VM software backends, Proton's build system has been tested only with its
+VirtualBox backend. You may run into problems with the shared folder
+(`vagrant_share`) and/or CPU and memory usage with other backends.
+
+If your build VM gets cluttered, or falls out of date, you can use `vagrant
+destroy` to wipe the VM clean, then invoke one of the below commands to start
+over.
+
+After checking out Proton and updating its submodules, you can use these
+targets to build Proton:
+
+`make install` - This will install Proton into your user's Steam directory.
+You may need to restart the Steam client to see it. It will be called
+`proton-localbuild`. Subsequent `make install` invocations will overwrite
+this installation.
+
+`make deploy` - This will create a deployment tarball and set of files which
+can be distributed as a Proton package. This is what we use to deploy Proton to
+Steam users. The package will be dropped into a new directory in
+`vagrant_share/`, named after the nearest Git tag (see `git describe`).
+
+We also provide targets useful for simple Wine development:
+
+`make proton` - This will build Proton without copying its files out of the VM.
+
+`make module=<module> module` - This will build both 32- and 64-bit versions of
+the specified module, and copy the result into the `vagrant_share` directory.
+This allows rapid iteration on one module. This target is only useful after
+building Proton.
+
+If you are doing significant Wine development or want to control the build with
+more fine detail, see the full documentation below.
+
+---
 Building
 ---
 At a high level, the build instructions are:
