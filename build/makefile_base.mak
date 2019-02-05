@@ -31,6 +31,7 @@ else # (Rest of the file is the else)
 #   STEAMRT64_IMAGE - Name of the image if mode is set
 #   STEAMRT32_MODE  - Same as above for 32-bit container (can be different type)
 #   STEAMRT32_IMAGE - Same as above for 32-bit container
+#   STEAMRT_PATH    - Path to built runtime which contains run.sh
 
 ifeq ($(SRCDIR),)
 	foo := $(error SRCDIR not set, do not include makefile_base directly, run ./configure.sh to generate Makefile)
@@ -71,6 +72,12 @@ ifeq ($(STEAMRT32_MODE),docker)
 	CONTAINER_SHELL32 := $(DOCKER_SHELL_BASE)
 else ifneq ($(STEAMRT32_MODE),)
 	foo := $(error Unrecognized STEAMRT32_MODE $(STEAMRT32_MODE))
+endif
+
+ifneq ($(STEAMRT_PATH),)
+	STEAM_RUNTIME_RUNSH := $(STEAMRT_PATH)/run.sh
+else
+	STEAM_RUNTIME_RUNSH :=
 endif
 
 SELECT_DOCKER_IMAGE :=
@@ -334,8 +341,8 @@ dist: $(DIST_TARGETS) wine vrclient lsteamclient dxvk | $(DST_DIR)
 	echo `date '+%s'` `GIT_DIR=$(abspath $(SRCDIR)/.git) git describe --tags` > $(DIST_VERSION)
 	cp $(DIST_VERSION) $(DST_BASE)/
 	rm -rf $(abspath $(DIST_PREFIX)) && \
-	WINEPREFIX=$(abspath $(DIST_PREFIX)) $(WINE_OUT_BIN) wineboot && \
-		WINEPREFIX=$(abspath $(DIST_PREFIX)) $(WINE_OUT_SERVER) -w && \
+	WINEPREFIX=$(abspath $(DIST_PREFIX)) $(STEAM_RUNTIME_RUNSH) $(WINE_OUT_BIN) wineboot && \
+		WINEPREFIX=$(abspath $(DIST_PREFIX)) $(STEAM_RUNTIME_RUNSH) $(WINE_OUT_SERVER) -w && \
 		ln -s $(FONTLINKPATH)/LiberationSans-Regular.ttf $(abspath $(DIST_PREFIX))/drive_c/windows/Fonts/arial.ttf && \
 		ln -s $(FONTLINKPATH)/LiberationSans-Bold.ttf $(abspath $(DIST_PREFIX))/drive_c/windows/Fonts/arialbd.ttf && \
 		ln -s $(FONTLINKPATH)/LiberationSerif-Regular.ttf $(abspath $(DIST_PREFIX))/drive_c/windows/Fonts/times.ttf && \

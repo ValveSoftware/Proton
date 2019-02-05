@@ -4,10 +4,11 @@
 git clone https://github.com/ValveSoftware/steam-runtime.git
 ./steam-runtime/setup_docker.sh --beta amd64 --extra-bootstrap=/home/vagrant/proton/steamrt-bootstrap.sh steam-proton-dev-beta
 ./steam-runtime/setup_docker.sh --beta i386 --extra-bootstrap=/home/vagrant/proton/steamrt-bootstrap.sh steam-proton-dev32-beta
+(cd steam-runtime && ./build-runtime.py --output=./runtime/)
 
 #configure proton build
 mkdir build
 cd build
-../proton/configure.sh --steam-runtime64=docker:steam-proton-dev-beta --steam-runtime32=docker:steam-proton-dev32-beta
+../proton/configure.sh --steam-runtime64=docker:steam-proton-dev-beta --steam-runtime32=docker:steam-proton-dev32-beta --steam-runtime="$HOME"/steam-runtime/runtime/
 #if building without the runtime, use:
 #../proton/configure.sh --no-steam-runtime

@@ -126,7 +126,7 @@ VM. If you are configuring manually, run these steps:
 
         mkdir proton/mybuild/
         cd proton/mybuild
-        ../configure.sh --steam-runtime64=docker:steam-proton-dev --steam-runtime32=docker:steam-proton-dev32
+        ../configure.sh --steam-runtime64=docker:steam-proton-dev --steam-runtime32=docker:steam-proton-dev32 --steam-runtime=$HOME/steam-runtime/runtime/
 
 If you are building without the Steam runtime, then instead use:
 
