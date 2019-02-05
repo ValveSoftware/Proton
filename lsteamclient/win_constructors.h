@@ -41,6 +41,7 @@ extern void *create_winISteamApps_STEAMAPPS_INTERFACE_VERSION007(void *);
 extern void *create_winISteamUGC_STEAMUGC_INTERFACE_VERSION007(void *);
 extern void *create_winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012(void *);
 extern void *create_winISteamController_STEAMCONTROLLER_INTERFACE_VERSION(void *);
+extern void *create_winISteamUGC_STEAMUGC_INTERFACE_VERSION006(void *);
 extern void *create_winISteamUGC_STEAMUGC_INTERFACE_VERSION005(void *);
 extern void *create_winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002(void *);
 extern void *create_winISteamUGC_STEAMUGC_INTERFACE_VERSION003(void *);
