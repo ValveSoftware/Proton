@@ -89,6 +89,8 @@
     {"SteamUser014", &create_winISteamUser_SteamUser014},
     {"SteamFriends008", &create_winISteamFriends_SteamFriends008},
     {"SteamNetworking004", &create_winISteamNetworking_SteamNetworking004},
+    {"STEAMREMOTESTORAGE_INTERFACE_VERSION003", &create_winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION003},
+    {"STEAMUSERSTATS_INTERFACE_VERSION008", &create_winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008},
     {"SteamClient009", &create_winISteamClient_SteamClient009},
     {"SteamFriends007", &create_winISteamFriends_SteamFriends007},
     {"STEAMUSERSTATS_INTERFACE_VERSION007", &create_winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION007},
