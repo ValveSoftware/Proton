@@ -85,6 +85,7 @@
     {"SteamMasterServerUpdater001", &create_winISteamMasterServerUpdater_SteamMasterServerUpdater001},
     {"SteamClient010", &create_winISteamClient_SteamClient010},
     {"STEAMUSERSTATS_INTERFACE_VERSION009", &create_winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009},
+    {"SteamUser015", &create_winISteamUser_SteamUser015},
     {"SteamUser014", &create_winISteamUser_SteamUser014},
     {"SteamFriends008", &create_winISteamFriends_SteamFriends008},
     {"SteamNetworking004", &create_winISteamNetworking_SteamNetworking004},

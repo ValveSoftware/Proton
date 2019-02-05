@@ -85,6 +85,7 @@ extern void *create_winISteamGameServer_SteamGameServer010(void *);
 extern void *create_winISteamMasterServerUpdater_SteamMasterServerUpdater001(void *);
 extern void *create_winISteamClient_SteamClient010(void *);
 extern void *create_winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION009(void *);
+extern void *create_winISteamUser_SteamUser015(void *);
 extern void *create_winISteamUser_SteamUser014(void *);
 extern void *create_winISteamFriends_SteamFriends008(void *);
 extern void *create_winISteamNetworking_SteamNetworking004(void *);

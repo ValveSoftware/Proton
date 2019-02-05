@@ -937,6 +937,213 @@ winISteamUser_SteamUser016 *create_winISteamUser_SteamUser016(void *linux_side)
     return r;
 }
 
+#include "cppISteamUser_SteamUser015.h"
+
+typedef struct __winISteamUser_SteamUser015 {
+    vtable_ptr *vtable;
+    void *linux_side;
+} winISteamUser_SteamUser015;
+
+DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser015_GetHSteamUser, 4)
+HSteamUser __thiscall winISteamUser_SteamUser015_GetHSteamUser(winISteamUser_SteamUser015 *_this)
+{
+    TRACE("%p\n", _this);
+    return cppISteamUser_SteamUser015_GetHSteamUser(_this->linux_side);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser015_BLoggedOn, 4)
+bool __thiscall winISteamUser_SteamUser015_BLoggedOn(winISteamUser_SteamUser015 *_this)
+{
+    TRACE("%p\n", _this);
+    return cppISteamUser_SteamUser015_BLoggedOn(_this->linux_side);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser015_GetSteamID, 8)
+CSteamID *__thiscall winISteamUser_SteamUser015_GetSteamID(winISteamUser_SteamUser015 *_this, CSteamID *_r)
+{
+    TRACE("%p\n", _this);
+    *_r = cppISteamUser_SteamUser015_GetSteamID(_this->linux_side);
+    return _r;
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser015_InitiateGameConnection, 27)
+int __thiscall winISteamUser_SteamUser015_InitiateGameConnection(winISteamUser_SteamUser015 *_this, void * pAuthBlob, int cbMaxAuthBlob, CSteamID steamIDGameServer, uint32 unIPServer, uint16 usPortServer, bool bSecure)
+{
+    TRACE("%p\n", _this);
+    return cppISteamUser_SteamUser015_InitiateGameConnection(_this->linux_side, pAuthBlob, cbMaxAuthBlob, steamIDGameServer, unIPServer, usPortServer, bSecure);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser015_TerminateGameConnection, 10)
+void __thiscall winISteamUser_SteamUser015_TerminateGameConnection(winISteamUser_SteamUser015 *_this, uint32 unIPServer, uint16 usPortServer)
+{
+    TRACE("%p\n", _this);
+    cppISteamUser_SteamUser015_TerminateGameConnection(_this->linux_side, unIPServer, usPortServer);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser015_TrackAppUsageEvent, 20)
+void __thiscall winISteamUser_SteamUser015_TrackAppUsageEvent(winISteamUser_SteamUser015 *_this, CGameID gameID, int eAppUsageEvent, const char * pchExtraInfo)
+{
+    TRACE("%p\n", _this);
+    cppISteamUser_SteamUser015_TrackAppUsageEvent(_this->linux_side, gameID, eAppUsageEvent, pchExtraInfo);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser015_GetUserDataFolder, 12)
+bool __thiscall winISteamUser_SteamUser015_GetUserDataFolder(winISteamUser_SteamUser015 *_this, char * pchBuffer, int cubBuffer)
+{
+    bool path_result;
+    TRACE("%p\n", _this);
+    path_result = cppISteamUser_SteamUser015_GetUserDataFolder(_this->linux_side, pchBuffer, cubBuffer);
+    steamclient_unix_path_to_dos_path(path_result, pchBuffer, pchBuffer, cubBuffer);
+    return path_result;
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser015_StartVoiceRecording, 4)
+void __thiscall winISteamUser_SteamUser015_StartVoiceRecording(winISteamUser_SteamUser015 *_this)
+{
+    TRACE("%p\n", _this);
+    cppISteamUser_SteamUser015_StartVoiceRecording(_this->linux_side);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser015_StopVoiceRecording, 4)
+void __thiscall winISteamUser_SteamUser015_StopVoiceRecording(winISteamUser_SteamUser015 *_this)
+{
+    TRACE("%p\n", _this);
+    cppISteamUser_SteamUser015_StopVoiceRecording(_this->linux_side);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser015_GetAvailableVoice, 12)
+EVoiceResult __thiscall winISteamUser_SteamUser015_GetAvailableVoice(winISteamUser_SteamUser015 *_this, uint32 * pcbCompressed, uint32 * pcbUncompressed)
+{
+    TRACE("%p\n", _this);
+    return cppISteamUser_SteamUser015_GetAvailableVoice(_this->linux_side, pcbCompressed, pcbUncompressed);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser015_GetVoice, 30)
+EVoiceResult __thiscall winISteamUser_SteamUser015_GetVoice(winISteamUser_SteamUser015 *_this, bool bWantCompressed, void * pDestBuffer, uint32 cbDestBufferSize, uint32 * nBytesWritten, bool bWantUncompressed, void * pUncompressedDestBuffer, uint32 cbUncompressedDestBufferSize, uint32 * nUncompressBytesWritten)
+{
+    TRACE("%p\n", _this);
+    return cppISteamUser_SteamUser015_GetVoice(_this->linux_side, bWantCompressed, pDestBuffer, cbDestBufferSize, nBytesWritten, bWantUncompressed, pUncompressedDestBuffer, cbUncompressedDestBufferSize, nUncompressBytesWritten);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser015_DecompressVoice, 28)
+EVoiceResult __thiscall winISteamUser_SteamUser015_DecompressVoice(winISteamUser_SteamUser015 *_this, const void * pCompressed, uint32 cbCompressed, void * pDestBuffer, uint32 cbDestBufferSize, uint32 * nBytesWritten, uint32 nDesiredSampleRate)
+{
+    TRACE("%p\n", _this);
+    return cppISteamUser_SteamUser015_DecompressVoice(_this->linux_side, pCompressed, cbCompressed, pDestBuffer, cbDestBufferSize, nBytesWritten, nDesiredSampleRate);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser015_GetVoiceOptimalSampleRate, 4)
+uint32 __thiscall winISteamUser_SteamUser015_GetVoiceOptimalSampleRate(winISteamUser_SteamUser015 *_this)
+{
+    TRACE("%p\n", _this);
+    return cppISteamUser_SteamUser015_GetVoiceOptimalSampleRate(_this->linux_side);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser015_GetAuthSessionTicket, 16)
+HAuthTicket __thiscall winISteamUser_SteamUser015_GetAuthSessionTicket(winISteamUser_SteamUser015 *_this, void * pTicket, int cbMaxTicket, uint32 * pcbTicket)
+{
+    TRACE("%p\n", _this);
+    return cppISteamUser_SteamUser015_GetAuthSessionTicket(_this->linux_side, pTicket, cbMaxTicket, pcbTicket);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser015_BeginAuthSession, 20)
+EBeginAuthSessionResult __thiscall winISteamUser_SteamUser015_BeginAuthSession(winISteamUser_SteamUser015 *_this, const void * pAuthTicket, int cbAuthTicket, CSteamID steamID)
+{
+    TRACE("%p\n", _this);
+    return cppISteamUser_SteamUser015_BeginAuthSession(_this->linux_side, pAuthTicket, cbAuthTicket, steamID);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser015_EndAuthSession, 12)
+void __thiscall winISteamUser_SteamUser015_EndAuthSession(winISteamUser_SteamUser015 *_this, CSteamID steamID)
+{
+    TRACE("%p\n", _this);
+    cppISteamUser_SteamUser015_EndAuthSession(_this->linux_side, steamID);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser015_CancelAuthTicket, 8)
+void __thiscall winISteamUser_SteamUser015_CancelAuthTicket(winISteamUser_SteamUser015 *_this, HAuthTicket hAuthTicket)
+{
+    TRACE("%p\n", _this);
+    cppISteamUser_SteamUser015_CancelAuthTicket(_this->linux_side, hAuthTicket);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser015_UserHasLicenseForApp, 16)
+EUserHasLicenseForAppResult __thiscall winISteamUser_SteamUser015_UserHasLicenseForApp(winISteamUser_SteamUser015 *_this, CSteamID steamID, AppId_t appID)
+{
+    TRACE("%p\n", _this);
+    return cppISteamUser_SteamUser015_UserHasLicenseForApp(_this->linux_side, steamID, appID);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser015_BIsBehindNAT, 4)
+bool __thiscall winISteamUser_SteamUser015_BIsBehindNAT(winISteamUser_SteamUser015 *_this)
+{
+    TRACE("%p\n", _this);
+    return cppISteamUser_SteamUser015_BIsBehindNAT(_this->linux_side);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser015_AdvertiseGame, 18)
+void __thiscall winISteamUser_SteamUser015_AdvertiseGame(winISteamUser_SteamUser015 *_this, CSteamID steamIDGameServer, uint32 unIPServer, uint16 usPortServer)
+{
+    TRACE("%p\n", _this);
+    cppISteamUser_SteamUser015_AdvertiseGame(_this->linux_side, steamIDGameServer, unIPServer, usPortServer);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser015_RequestEncryptedAppTicket, 12)
+SteamAPICall_t __thiscall winISteamUser_SteamUser015_RequestEncryptedAppTicket(winISteamUser_SteamUser015 *_this, void * pDataToInclude, int cbDataToInclude)
+{
+    TRACE("%p\n", _this);
+    return cppISteamUser_SteamUser015_RequestEncryptedAppTicket(_this->linux_side, pDataToInclude, cbDataToInclude);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser015_GetEncryptedAppTicket, 16)
+bool __thiscall winISteamUser_SteamUser015_GetEncryptedAppTicket(winISteamUser_SteamUser015 *_this, void * pTicket, int cbMaxTicket, uint32 * pcbTicket)
+{
+    TRACE("%p\n", _this);
+    return cppISteamUser_SteamUser015_GetEncryptedAppTicket(_this->linux_side, pTicket, cbMaxTicket, pcbTicket);
+}
+
+extern vtable_ptr winISteamUser_SteamUser015_vtable;
+
+#ifndef __GNUC__
+void __asm_dummy_vtables(void) {
+#endif
+    __ASM_VTABLE(winISteamUser_SteamUser015,
+        VTABLE_ADD_FUNC(winISteamUser_SteamUser015_GetHSteamUser)
+        VTABLE_ADD_FUNC(winISteamUser_SteamUser015_BLoggedOn)
+        VTABLE_ADD_FUNC(winISteamUser_SteamUser015_GetSteamID)
+        VTABLE_ADD_FUNC(winISteamUser_SteamUser015_InitiateGameConnection)
+        VTABLE_ADD_FUNC(winISteamUser_SteamUser015_TerminateGameConnection)
+        VTABLE_ADD_FUNC(winISteamUser_SteamUser015_TrackAppUsageEvent)
+        VTABLE_ADD_FUNC(winISteamUser_SteamUser015_GetUserDataFolder)
+        VTABLE_ADD_FUNC(winISteamUser_SteamUser015_StartVoiceRecording)
+        VTABLE_ADD_FUNC(winISteamUser_SteamUser015_StopVoiceRecording)
+        VTABLE_ADD_FUNC(winISteamUser_SteamUser015_GetAvailableVoice)
+        VTABLE_ADD_FUNC(winISteamUser_SteamUser015_GetVoice)
+        VTABLE_ADD_FUNC(winISteamUser_SteamUser015_DecompressVoice)
+        VTABLE_ADD_FUNC(winISteamUser_SteamUser015_GetVoiceOptimalSampleRate)
+        VTABLE_ADD_FUNC(winISteamUser_SteamUser015_GetAuthSessionTicket)
+        VTABLE_ADD_FUNC(winISteamUser_SteamUser015_BeginAuthSession)
+        VTABLE_ADD_FUNC(winISteamUser_SteamUser015_EndAuthSession)
+        VTABLE_ADD_FUNC(winISteamUser_SteamUser015_CancelAuthTicket)
+        VTABLE_ADD_FUNC(winISteamUser_SteamUser015_UserHasLicenseForApp)
+        VTABLE_ADD_FUNC(winISteamUser_SteamUser015_BIsBehindNAT)
+        VTABLE_ADD_FUNC(winISteamUser_SteamUser015_AdvertiseGame)
+        VTABLE_ADD_FUNC(winISteamUser_SteamUser015_RequestEncryptedAppTicket)
+        VTABLE_ADD_FUNC(winISteamUser_SteamUser015_GetEncryptedAppTicket)
+    );
+#ifndef __GNUC__
+}
+#endif
+
+winISteamUser_SteamUser015 *create_winISteamUser_SteamUser015(void *linux_side)
+{
+    winISteamUser_SteamUser015 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamUser_SteamUser015));
+    TRACE("-> %p\n", r);
+    r->vtable = &winISteamUser_SteamUser015_vtable;
+    r->linux_side = linux_side;
+    return r;
+}
+
 #include "cppISteamUser_SteamUser014.h"
 
 typedef struct __winISteamUser_SteamUser014 {
