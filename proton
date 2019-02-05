@@ -158,6 +158,14 @@ with dist_lock:
 env = dict(os.environ)
 dlloverrides = {}
 
+if "HOST_LC_ALL" in env and len(env["HOST_LC_ALL"]) > 0:
+    #steam sets LC_ALL=C to help some games, but Wine requires the real value
+    #in order to do path conversion between win32 and host. steam sets
+    #HOST_LC_ALL to allow us to use the real value.
+    env["LC_ALL"] = env["HOST_LC_ALL"]
+else:
+    env.pop("LC_ALL", "")
+
 #for performance, logging is disabled by default; override with user_settings.py
 env["DXVK_LOG_LEVEL"] = "none"
 env["WINEDEBUG"] = "-all"
