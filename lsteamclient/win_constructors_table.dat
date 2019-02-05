@@ -76,6 +76,7 @@
     {"STEAMUSERSTATS_INTERFACE_VERSION010", &create_winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010},
     {"STEAMREMOTESTORAGE_INTERFACE_VERSION005", &create_winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005},
     {"STEAMAPPS_INTERFACE_VERSION004", &create_winISteamApps_STEAMAPPS_INTERFACE_VERSION004},
+    {"SteamFriends010", &create_winISteamFriends_SteamFriends010},
     {"SteamClient011", &create_winISteamClient_SteamClient011},
     {"SteamFriends009", &create_winISteamFriends_SteamFriends009},
     {"SteamMatchMaking008", &create_winISteamMatchmaking_SteamMatchMaking008},
