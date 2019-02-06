@@ -63,7 +63,8 @@ typedef uint32_t EUserUGCList,
         ESteamControllerPad,
         EControllerActionOrigin,
         EMatchMakingType,
-        AudioPlayback_Status
+        AudioPlayback_Status,
+        ESteamUserStatType
 ;
 
 /* these are PODs, so just copy the data. hopefully the

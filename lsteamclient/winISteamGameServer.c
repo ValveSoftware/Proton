@@ -1616,3 +1616,167 @@ winISteamGameServer_SteamGameServer004 *create_winISteamGameServer_SteamGameServ
     return r;
 }
 
+#include "cppISteamGameServer_SteamGameServer003.h"
+
+typedef struct __winISteamGameServer_SteamGameServer003 {
+    vtable_ptr *vtable;
+    void *linux_side;
+} winISteamGameServer_SteamGameServer003;
+
+DEFINE_THISCALL_WRAPPER(winISteamGameServer_SteamGameServer003_LogOn, 4)
+void __thiscall winISteamGameServer_SteamGameServer003_LogOn(winISteamGameServer_SteamGameServer003 *_this)
+{
+    TRACE("%p\n", _this);
+    cppISteamGameServer_SteamGameServer003_LogOn(_this->linux_side);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamGameServer_SteamGameServer003_LogOff, 4)
+void __thiscall winISteamGameServer_SteamGameServer003_LogOff(winISteamGameServer_SteamGameServer003 *_this)
+{
+    TRACE("%p\n", _this);
+    cppISteamGameServer_SteamGameServer003_LogOff(_this->linux_side);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamGameServer_SteamGameServer003_BLoggedOn, 4)
+bool __thiscall winISteamGameServer_SteamGameServer003_BLoggedOn(winISteamGameServer_SteamGameServer003 *_this)
+{
+    TRACE("%p\n", _this);
+    return cppISteamGameServer_SteamGameServer003_BLoggedOn(_this->linux_side);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamGameServer_SteamGameServer003_BSecure, 4)
+bool __thiscall winISteamGameServer_SteamGameServer003_BSecure(winISteamGameServer_SteamGameServer003 *_this)
+{
+    TRACE("%p\n", _this);
+    return cppISteamGameServer_SteamGameServer003_BSecure(_this->linux_side);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamGameServer_SteamGameServer003_GetSteamID, 8)
+CSteamID *__thiscall winISteamGameServer_SteamGameServer003_GetSteamID(winISteamGameServer_SteamGameServer003 *_this, CSteamID *_r)
+{
+    TRACE("%p\n", _this);
+    *_r = cppISteamGameServer_SteamGameServer003_GetSteamID(_this->linux_side);
+    return _r;
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamGameServer_SteamGameServer003_GSGetSteam2GetEncryptionKeyToSendToNewClient, 16)
+bool __thiscall winISteamGameServer_SteamGameServer003_GSGetSteam2GetEncryptionKeyToSendToNewClient(winISteamGameServer_SteamGameServer003 *_this, void * pvEncryptionKey, uint32 * pcbEncryptionKey, uint32 cbMaxEncryptionKey)
+{
+    TRACE("%p\n", _this);
+    return cppISteamGameServer_SteamGameServer003_GSGetSteam2GetEncryptionKeyToSendToNewClient(_this->linux_side, pvEncryptionKey, pcbEncryptionKey, cbMaxEncryptionKey);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamGameServer_SteamGameServer003_GSSendUserConnect, 22)
+bool __thiscall winISteamGameServer_SteamGameServer003_GSSendUserConnect(winISteamGameServer_SteamGameServer003 *_this, uint32 unUserID, uint32 unIPPublic, uint16 usPort, const void * pvCookie, uint32 cubCookie)
+{
+    TRACE("%p\n", _this);
+    return cppISteamGameServer_SteamGameServer003_GSSendUserConnect(_this->linux_side, unUserID, unIPPublic, usPort, pvCookie, cubCookie);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamGameServer_SteamGameServer003_GSRemoveUserConnect, 8)
+bool __thiscall winISteamGameServer_SteamGameServer003_GSRemoveUserConnect(winISteamGameServer_SteamGameServer003 *_this, uint32 unUserID)
+{
+    TRACE("%p\n", _this);
+    return cppISteamGameServer_SteamGameServer003_GSRemoveUserConnect(_this->linux_side, unUserID);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamGameServer_SteamGameServer003_GSSendUserDisconnect, 16)
+bool __thiscall winISteamGameServer_SteamGameServer003_GSSendUserDisconnect(winISteamGameServer_SteamGameServer003 *_this, CSteamID steamID, uint32 unUserID)
+{
+    TRACE("%p\n", _this);
+    return cppISteamGameServer_SteamGameServer003_GSSendUserDisconnect(_this->linux_side, steamID, unUserID);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamGameServer_SteamGameServer003_GSSetSpawnCount, 8)
+void __thiscall winISteamGameServer_SteamGameServer003_GSSetSpawnCount(winISteamGameServer_SteamGameServer003 *_this, uint32 ucSpawn)
+{
+    TRACE("%p\n", _this);
+    cppISteamGameServer_SteamGameServer003_GSSetSpawnCount(_this->linux_side, ucSpawn);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamGameServer_SteamGameServer003_GSSetServerType, 31)
+bool __thiscall winISteamGameServer_SteamGameServer003_GSSetServerType(winISteamGameServer_SteamGameServer003 *_this, int32 nGameAppId, uint32 unServerFlags, uint32 unGameIP, uint16 unGamePort, uint16 unSpectatorPort, uint16 usQueryPort, const char * pchGameDir, const char * pchVersion, bool bLANMode)
+{
+    TRACE("%p\n", _this);
+    return cppISteamGameServer_SteamGameServer003_GSSetServerType(_this->linux_side, nGameAppId, unServerFlags, unGameIP, unGamePort, unSpectatorPort, usQueryPort, pchGameDir, pchVersion, bLANMode);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamGameServer_SteamGameServer003_GSUpdateStatus, 28)
+bool __thiscall winISteamGameServer_SteamGameServer003_GSUpdateStatus(winISteamGameServer_SteamGameServer003 *_this, int cPlayers, int cPlayersMax, int cBotPlayers, const char * pchServerName, const char * pSpectatorServerName, const char * pchMapName)
+{
+    TRACE("%p\n", _this);
+    return cppISteamGameServer_SteamGameServer003_GSUpdateStatus(_this->linux_side, cPlayers, cPlayersMax, cBotPlayers, pchServerName, pSpectatorServerName, pchMapName);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamGameServer_SteamGameServer003_GSCreateUnauthenticatedUser, 8)
+bool __thiscall winISteamGameServer_SteamGameServer003_GSCreateUnauthenticatedUser(winISteamGameServer_SteamGameServer003 *_this, CSteamID * pSteamID)
+{
+    TRACE("%p\n", _this);
+    return cppISteamGameServer_SteamGameServer003_GSCreateUnauthenticatedUser(_this->linux_side, pSteamID);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamGameServer_SteamGameServer003_GSSetUserData, 20)
+bool __thiscall winISteamGameServer_SteamGameServer003_GSSetUserData(winISteamGameServer_SteamGameServer003 *_this, CSteamID steamID, const char * pPlayerName, uint32 nFrags)
+{
+    TRACE("%p\n", _this);
+    return cppISteamGameServer_SteamGameServer003_GSSetUserData(_this->linux_side, steamID, pPlayerName, nFrags);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamGameServer_SteamGameServer003_GSUpdateSpectatorPort, 6)
+void __thiscall winISteamGameServer_SteamGameServer003_GSUpdateSpectatorPort(winISteamGameServer_SteamGameServer003 *_this, uint16 unSpectatorPort)
+{
+    TRACE("%p\n", _this);
+    cppISteamGameServer_SteamGameServer003_GSUpdateSpectatorPort(_this->linux_side, unSpectatorPort);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamGameServer_SteamGameServer003_GSSetGameType, 8)
+void __thiscall winISteamGameServer_SteamGameServer003_GSSetGameType(winISteamGameServer_SteamGameServer003 *_this, const char * pchType)
+{
+    TRACE("%p\n", _this);
+    cppISteamGameServer_SteamGameServer003_GSSetGameType(_this->linux_side, pchType);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamGameServer_SteamGameServer003_GSGetUserAchievementStatus, 16)
+bool __thiscall winISteamGameServer_SteamGameServer003_GSGetUserAchievementStatus(winISteamGameServer_SteamGameServer003 *_this, CSteamID steamID, const char * pchAchievementName)
+{
+    TRACE("%p\n", _this);
+    return cppISteamGameServer_SteamGameServer003_GSGetUserAchievementStatus(_this->linux_side, steamID, pchAchievementName);
+}
+
+extern vtable_ptr winISteamGameServer_SteamGameServer003_vtable;
+
+#ifndef __GNUC__
+void __asm_dummy_vtables(void) {
+#endif
+    __ASM_VTABLE(winISteamGameServer_SteamGameServer003,
+        VTABLE_ADD_FUNC(winISteamGameServer_SteamGameServer003_LogOn)
+        VTABLE_ADD_FUNC(winISteamGameServer_SteamGameServer003_LogOff)
+        VTABLE_ADD_FUNC(winISteamGameServer_SteamGameServer003_BLoggedOn)
+        VTABLE_ADD_FUNC(winISteamGameServer_SteamGameServer003_BSecure)
+        VTABLE_ADD_FUNC(winISteamGameServer_SteamGameServer003_GetSteamID)
+        VTABLE_ADD_FUNC(winISteamGameServer_SteamGameServer003_GSGetSteam2GetEncryptionKeyToSendToNewClient)
+        VTABLE_ADD_FUNC(winISteamGameServer_SteamGameServer003_GSSendUserConnect)
+        VTABLE_ADD_FUNC(winISteamGameServer_SteamGameServer003_GSRemoveUserConnect)
+        VTABLE_ADD_FUNC(winISteamGameServer_SteamGameServer003_GSSendUserDisconnect)
+        VTABLE_ADD_FUNC(winISteamGameServer_SteamGameServer003_GSSetSpawnCount)
+        VTABLE_ADD_FUNC(winISteamGameServer_SteamGameServer003_GSSetServerType)
+        VTABLE_ADD_FUNC(winISteamGameServer_SteamGameServer003_GSUpdateStatus)
+        VTABLE_ADD_FUNC(winISteamGameServer_SteamGameServer003_GSCreateUnauthenticatedUser)
+        VTABLE_ADD_FUNC(winISteamGameServer_SteamGameServer003_GSSetUserData)
+        VTABLE_ADD_FUNC(winISteamGameServer_SteamGameServer003_GSUpdateSpectatorPort)
+        VTABLE_ADD_FUNC(winISteamGameServer_SteamGameServer003_GSSetGameType)
+        VTABLE_ADD_FUNC(winISteamGameServer_SteamGameServer003_GSGetUserAchievementStatus)
+    );
+#ifndef __GNUC__
+}
+#endif
+
+winISteamGameServer_SteamGameServer003 *create_winISteamGameServer_SteamGameServer003(void *linux_side)
+{
+    winISteamGameServer_SteamGameServer003 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamGameServer_SteamGameServer003));
+    TRACE("-> %p\n", r);
+    r->vtable = &winISteamGameServer_SteamGameServer003_vtable;
+    r->linux_side = linux_side;
+    return r;
+}
+

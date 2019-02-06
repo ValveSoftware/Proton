@@ -2903,3 +2903,207 @@ winISteamClient_SteamClient007 *create_winISteamClient_SteamClient007(void *linu
     return r;
 }
 
+#include "cppISteamClient_SteamClient006.h"
+
+typedef struct __winISteamClient_SteamClient006 {
+    vtable_ptr *vtable;
+    void *linux_side;
+} winISteamClient_SteamClient006;
+
+DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient006_CreateSteamPipe, 4)
+HSteamPipe __thiscall winISteamClient_SteamClient006_CreateSteamPipe(winISteamClient_SteamClient006 *_this)
+{
+    TRACE("%p\n", _this);
+    return cppISteamClient_SteamClient006_CreateSteamPipe(_this->linux_side);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient006_BReleaseSteamPipe, 8)
+bool __thiscall winISteamClient_SteamClient006_BReleaseSteamPipe(winISteamClient_SteamClient006 *_this, HSteamPipe hSteamPipe)
+{
+    TRACE("%p\n", _this);
+    return cppISteamClient_SteamClient006_BReleaseSteamPipe(_this->linux_side, hSteamPipe);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient006_CreateGlobalUser, 8)
+HSteamUser __thiscall winISteamClient_SteamClient006_CreateGlobalUser(winISteamClient_SteamClient006 *_this, HSteamPipe * phSteamPipe)
+{
+    TRACE("%p\n", _this);
+    return cppISteamClient_SteamClient006_CreateGlobalUser(_this->linux_side, phSteamPipe);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient006_ConnectToGlobalUser, 8)
+HSteamUser __thiscall winISteamClient_SteamClient006_ConnectToGlobalUser(winISteamClient_SteamClient006 *_this, HSteamPipe hSteamPipe)
+{
+    TRACE("%p\n", _this);
+    return cppISteamClient_SteamClient006_ConnectToGlobalUser(_this->linux_side, hSteamPipe);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient006_CreateLocalUser, 8)
+HSteamUser __thiscall winISteamClient_SteamClient006_CreateLocalUser(winISteamClient_SteamClient006 *_this, HSteamPipe * phSteamPipe)
+{
+    TRACE("%p\n", _this);
+    return cppISteamClient_SteamClient006_CreateLocalUser(_this->linux_side, phSteamPipe);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient006_ReleaseUser, 12)
+void __thiscall winISteamClient_SteamClient006_ReleaseUser(winISteamClient_SteamClient006 *_this, HSteamPipe hSteamPipe, HSteamUser hUser)
+{
+    TRACE("%p\n", _this);
+    cppISteamClient_SteamClient006_ReleaseUser(_this->linux_side, hSteamPipe, hUser);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient006_GetISteamUser, 16)
+winISteamUser * __thiscall winISteamClient_SteamClient006_GetISteamUser(winISteamClient_SteamClient006 *_this, HSteamUser hSteamUser, HSteamPipe hSteamPipe, const char * pchVersion)
+{
+    TRACE("%p\n", _this);
+    return create_win_interface(pchVersion,
+        cppISteamClient_SteamClient006_GetISteamUser(_this->linux_side, hSteamUser, hSteamPipe, pchVersion));
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient006_GetIVAC, 8)
+void * __thiscall winISteamClient_SteamClient006_GetIVAC(winISteamClient_SteamClient006 *_this, HSteamUser hSteamUser)
+{
+    TRACE("%p\n", _this);
+    return cppISteamClient_SteamClient006_GetIVAC(_this->linux_side, hSteamUser);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient006_GetISteamGameServer, 16)
+winISteamGameServer * __thiscall winISteamClient_SteamClient006_GetISteamGameServer(winISteamClient_SteamClient006 *_this, HSteamUser hSteamUser, HSteamPipe hSteamPipe, const char * pchVersion)
+{
+    TRACE("%p\n", _this);
+    return create_win_interface(pchVersion,
+        cppISteamClient_SteamClient006_GetISteamGameServer(_this->linux_side, hSteamUser, hSteamPipe, pchVersion));
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient006_SetLocalIPBinding, 10)
+void __thiscall winISteamClient_SteamClient006_SetLocalIPBinding(winISteamClient_SteamClient006 *_this, uint32 unIP, uint16 usPort)
+{
+    TRACE("%p\n", _this);
+    cppISteamClient_SteamClient006_SetLocalIPBinding(_this->linux_side, unIP, usPort);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient006_GetUniverseName, 8)
+const char * __thiscall winISteamClient_SteamClient006_GetUniverseName(winISteamClient_SteamClient006 *_this, EUniverse eUniverse)
+{
+    TRACE("%p\n", _this);
+    return cppISteamClient_SteamClient006_GetUniverseName(_this->linux_side, eUniverse);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient006_GetISteamFriends, 16)
+winISteamFriends * __thiscall winISteamClient_SteamClient006_GetISteamFriends(winISteamClient_SteamClient006 *_this, HSteamUser hSteamUser, HSteamPipe hSteamPipe, const char * pchVersion)
+{
+    TRACE("%p\n", _this);
+    return create_win_interface(pchVersion,
+        cppISteamClient_SteamClient006_GetISteamFriends(_this->linux_side, hSteamUser, hSteamPipe, pchVersion));
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient006_GetISteamUtils, 12)
+winISteamUtils * __thiscall winISteamClient_SteamClient006_GetISteamUtils(winISteamClient_SteamClient006 *_this, HSteamPipe hSteamPipe, const char * pchVersion)
+{
+    TRACE("%p\n", _this);
+    return create_win_interface(pchVersion,
+        cppISteamClient_SteamClient006_GetISteamUtils(_this->linux_side, hSteamPipe, pchVersion));
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient006_GetISteamBilling, 16)
+void * __thiscall winISteamClient_SteamClient006_GetISteamBilling(winISteamClient_SteamClient006 *_this, HSteamUser hSteamUser, HSteamPipe hSteamPipe, const char * pchVersion)
+{
+    TRACE("%p\n", _this);
+    return cppISteamClient_SteamClient006_GetISteamBilling(_this->linux_side, hSteamUser, hSteamPipe, pchVersion);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient006_GetISteamMatchmaking, 16)
+winISteamMatchmaking * __thiscall winISteamClient_SteamClient006_GetISteamMatchmaking(winISteamClient_SteamClient006 *_this, HSteamUser hSteamUser, HSteamPipe hSteamPipe, const char * pchVersion)
+{
+    TRACE("%p\n", _this);
+    return create_win_interface(pchVersion,
+        cppISteamClient_SteamClient006_GetISteamMatchmaking(_this->linux_side, hSteamUser, hSteamPipe, pchVersion));
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient006_GetISteamApps, 16)
+winISteamApps * __thiscall winISteamClient_SteamClient006_GetISteamApps(winISteamClient_SteamClient006 *_this, HSteamUser hSteamUser, HSteamPipe hSteamPipe, const char * pchVersion)
+{
+    TRACE("%p\n", _this);
+    return create_win_interface(pchVersion,
+        cppISteamClient_SteamClient006_GetISteamApps(_this->linux_side, hSteamUser, hSteamPipe, pchVersion));
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient006_GetISteamContentServer, 16)
+winISteamContentServer * __thiscall winISteamClient_SteamClient006_GetISteamContentServer(winISteamClient_SteamClient006 *_this, HSteamUser hSteamUser, HSteamPipe hSteamPipe, const char * pchVersion)
+{
+    TRACE("%p\n", _this);
+    return create_win_interface(pchVersion,
+        cppISteamClient_SteamClient006_GetISteamContentServer(_this->linux_side, hSteamUser, hSteamPipe, pchVersion));
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient006_GetISteamMasterServerUpdater, 16)
+winISteamMasterServerUpdater * __thiscall winISteamClient_SteamClient006_GetISteamMasterServerUpdater(winISteamClient_SteamClient006 *_this, HSteamUser hSteamUser, HSteamPipe hSteamPipe, const char * pchVersion)
+{
+    TRACE("%p\n", _this);
+    return create_win_interface(pchVersion,
+        cppISteamClient_SteamClient006_GetISteamMasterServerUpdater(_this->linux_side, hSteamUser, hSteamPipe, pchVersion));
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient006_GetISteamMatchmakingServers, 16)
+winISteamMatchmakingServers * __thiscall winISteamClient_SteamClient006_GetISteamMatchmakingServers(winISteamClient_SteamClient006 *_this, HSteamUser hSteamUser, HSteamPipe hSteamPipe, const char * pchVersion)
+{
+    TRACE("%p\n", _this);
+    return create_win_interface(pchVersion,
+        cppISteamClient_SteamClient006_GetISteamMatchmakingServers(_this->linux_side, hSteamUser, hSteamPipe, pchVersion));
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient006_RunFrame, 4)
+void __thiscall winISteamClient_SteamClient006_RunFrame(winISteamClient_SteamClient006 *_this)
+{
+    TRACE("%p\n", _this);
+    cppISteamClient_SteamClient006_RunFrame(_this->linux_side);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamClient_SteamClient006_GetIPCCallCount, 4)
+uint32 __thiscall winISteamClient_SteamClient006_GetIPCCallCount(winISteamClient_SteamClient006 *_this)
+{
+    TRACE("%p\n", _this);
+    return cppISteamClient_SteamClient006_GetIPCCallCount(_this->linux_side);
+}
+
+extern vtable_ptr winISteamClient_SteamClient006_vtable;
+
+#ifndef __GNUC__
+void __asm_dummy_vtables(void) {
+#endif
+    __ASM_VTABLE(winISteamClient_SteamClient006,
+        VTABLE_ADD_FUNC(winISteamClient_SteamClient006_CreateSteamPipe)
+        VTABLE_ADD_FUNC(winISteamClient_SteamClient006_BReleaseSteamPipe)
+        VTABLE_ADD_FUNC(winISteamClient_SteamClient006_CreateGlobalUser)
+        VTABLE_ADD_FUNC(winISteamClient_SteamClient006_ConnectToGlobalUser)
+        VTABLE_ADD_FUNC(winISteamClient_SteamClient006_CreateLocalUser)
+        VTABLE_ADD_FUNC(winISteamClient_SteamClient006_ReleaseUser)
+        VTABLE_ADD_FUNC(winISteamClient_SteamClient006_GetISteamUser)
+        VTABLE_ADD_FUNC(winISteamClient_SteamClient006_GetIVAC)
+        VTABLE_ADD_FUNC(winISteamClient_SteamClient006_GetISteamGameServer)
+        VTABLE_ADD_FUNC(winISteamClient_SteamClient006_SetLocalIPBinding)
+        VTABLE_ADD_FUNC(winISteamClient_SteamClient006_GetUniverseName)
+        VTABLE_ADD_FUNC(winISteamClient_SteamClient006_GetISteamFriends)
+        VTABLE_ADD_FUNC(winISteamClient_SteamClient006_GetISteamUtils)
+        VTABLE_ADD_FUNC(winISteamClient_SteamClient006_GetISteamBilling)
+        VTABLE_ADD_FUNC(winISteamClient_SteamClient006_GetISteamMatchmaking)
+        VTABLE_ADD_FUNC(winISteamClient_SteamClient006_GetISteamApps)
+        VTABLE_ADD_FUNC(winISteamClient_SteamClient006_GetISteamContentServer)
+        VTABLE_ADD_FUNC(winISteamClient_SteamClient006_GetISteamMasterServerUpdater)
+        VTABLE_ADD_FUNC(winISteamClient_SteamClient006_GetISteamMatchmakingServers)
+        VTABLE_ADD_FUNC(winISteamClient_SteamClient006_RunFrame)
+        VTABLE_ADD_FUNC(winISteamClient_SteamClient006_GetIPCCallCount)
+    );
+#ifndef __GNUC__
+}
+#endif
+
+winISteamClient_SteamClient006 *create_winISteamClient_SteamClient006(void *linux_side)
+{
+    winISteamClient_SteamClient006 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamClient_SteamClient006));
+    TRACE("-> %p\n", r);
+    r->vtable = &winISteamClient_SteamClient006_vtable;
+    r->linux_side = linux_side;
+    return r;
+}
+
