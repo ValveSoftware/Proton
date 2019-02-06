@@ -50,6 +50,7 @@
     {"SteamUser017", &create_winISteamUser_SteamUser017},
     {"SteamFriends014", &create_winISteamFriends_SteamFriends014},
     {"STEAMAPPS_INTERFACE_VERSION006", &create_winISteamApps_STEAMAPPS_INTERFACE_VERSION006},
+    {"STEAMHTMLSURFACE_INTERFACE_VERSION_001", &create_winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001},
     {"SteamClient015", &create_winISteamClient_SteamClient015},
     {"STEAMUGC_INTERFACE_VERSION002", &create_winISteamUGC_STEAMUGC_INTERFACE_VERSION002},
     {"SteamClient014", &create_winISteamClient_SteamClient014},

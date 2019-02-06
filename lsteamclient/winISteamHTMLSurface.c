@@ -955,3 +955,293 @@ winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002 *create_winISteamHTM
     return r;
 }
 
+#include "cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001.h"
+
+typedef struct __winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001 {
+    vtable_ptr *vtable;
+    void *linux_side;
+} winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001;
+
+DEFINE_THISCALL_WRAPPER(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_destructor, 4)
+void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_destructor(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001 *_this)
+{/* never called */}
+
+DEFINE_THISCALL_WRAPPER(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_Init, 4)
+bool __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_Init(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001 *_this)
+{
+    TRACE("%p\n", _this);
+    return cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_Init(_this->linux_side);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_Shutdown, 4)
+bool __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_Shutdown(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001 *_this)
+{
+    TRACE("%p\n", _this);
+    return cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_Shutdown(_this->linux_side);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_CreateBrowser, 12)
+SteamAPICall_t __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_CreateBrowser(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001 *_this, const char * pchUserAgent, const char * pchUserCSS)
+{
+    TRACE("%p\n", _this);
+    return cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_CreateBrowser(_this->linux_side, pchUserAgent, pchUserCSS);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_RemoveBrowser, 8)
+void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_RemoveBrowser(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001 *_this, HHTMLBrowser unBrowserHandle)
+{
+    TRACE("%p\n", _this);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_RemoveBrowser(_this->linux_side, unBrowserHandle);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_LoadURL, 16)
+void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_LoadURL(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001 *_this, HHTMLBrowser unBrowserHandle, const char * pchURL, const char * pchPostData)
+{
+    TRACE("%p\n", _this);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_LoadURL(_this->linux_side, unBrowserHandle, pchURL, pchPostData);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_SetSize, 16)
+void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_SetSize(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001 *_this, HHTMLBrowser unBrowserHandle, uint32 unWidth, uint32 unHeight)
+{
+    TRACE("%p\n", _this);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_SetSize(_this->linux_side, unBrowserHandle, unWidth, unHeight);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_StopLoad, 8)
+void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_StopLoad(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001 *_this, HHTMLBrowser unBrowserHandle)
+{
+    TRACE("%p\n", _this);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_StopLoad(_this->linux_side, unBrowserHandle);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_Reload, 8)
+void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_Reload(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001 *_this, HHTMLBrowser unBrowserHandle)
+{
+    TRACE("%p\n", _this);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_Reload(_this->linux_side, unBrowserHandle);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_GoBack, 8)
+void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_GoBack(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001 *_this, HHTMLBrowser unBrowserHandle)
+{
+    TRACE("%p\n", _this);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_GoBack(_this->linux_side, unBrowserHandle);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_GoForward, 8)
+void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_GoForward(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001 *_this, HHTMLBrowser unBrowserHandle)
+{
+    TRACE("%p\n", _this);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_GoForward(_this->linux_side, unBrowserHandle);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_AddHeader, 16)
+void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_AddHeader(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001 *_this, HHTMLBrowser unBrowserHandle, const char * pchKey, const char * pchValue)
+{
+    TRACE("%p\n", _this);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_AddHeader(_this->linux_side, unBrowserHandle, pchKey, pchValue);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_ExecuteJavascript, 12)
+void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_ExecuteJavascript(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001 *_this, HHTMLBrowser unBrowserHandle, const char * pchScript)
+{
+    TRACE("%p\n", _this);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_ExecuteJavascript(_this->linux_side, unBrowserHandle, pchScript);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_MouseUp, 12)
+void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_MouseUp(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001 *_this, HHTMLBrowser unBrowserHandle, EHTMLMouseButton eMouseButton)
+{
+    TRACE("%p\n", _this);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_MouseUp(_this->linux_side, unBrowserHandle, eMouseButton);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_MouseDown, 12)
+void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_MouseDown(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001 *_this, HHTMLBrowser unBrowserHandle, EHTMLMouseButton eMouseButton)
+{
+    TRACE("%p\n", _this);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_MouseDown(_this->linux_side, unBrowserHandle, eMouseButton);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_MouseDoubleClick, 12)
+void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_MouseDoubleClick(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001 *_this, HHTMLBrowser unBrowserHandle, EHTMLMouseButton eMouseButton)
+{
+    TRACE("%p\n", _this);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_MouseDoubleClick(_this->linux_side, unBrowserHandle, eMouseButton);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_MouseMove, 16)
+void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_MouseMove(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001 *_this, HHTMLBrowser unBrowserHandle, int x, int y)
+{
+    TRACE("%p\n", _this);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_MouseMove(_this->linux_side, unBrowserHandle, x, y);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_MouseWheel, 12)
+void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_MouseWheel(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001 *_this, HHTMLBrowser unBrowserHandle, int32 nDelta)
+{
+    TRACE("%p\n", _this);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_MouseWheel(_this->linux_side, unBrowserHandle, nDelta);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_KeyDown, 16)
+void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_KeyDown(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001 *_this, HHTMLBrowser unBrowserHandle, uint32 nNativeKeyCode, EHTMLKeyModifiers eHTMLKeyModifiers)
+{
+    TRACE("%p\n", _this);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_KeyDown(_this->linux_side, unBrowserHandle, nNativeKeyCode, eHTMLKeyModifiers);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_KeyUp, 16)
+void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_KeyUp(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001 *_this, HHTMLBrowser unBrowserHandle, uint32 nNativeKeyCode, EHTMLKeyModifiers eHTMLKeyModifiers)
+{
+    TRACE("%p\n", _this);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_KeyUp(_this->linux_side, unBrowserHandle, nNativeKeyCode, eHTMLKeyModifiers);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_KeyChar, 16)
+void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_KeyChar(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001 *_this, HHTMLBrowser unBrowserHandle, uint32 cUnicodeChar, EHTMLKeyModifiers eHTMLKeyModifiers)
+{
+    TRACE("%p\n", _this);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_KeyChar(_this->linux_side, unBrowserHandle, cUnicodeChar, eHTMLKeyModifiers);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_SetHorizontalScroll, 12)
+void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_SetHorizontalScroll(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001 *_this, HHTMLBrowser unBrowserHandle, uint32 nAbsolutePixelScroll)
+{
+    TRACE("%p\n", _this);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_SetHorizontalScroll(_this->linux_side, unBrowserHandle, nAbsolutePixelScroll);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_SetVerticalScroll, 12)
+void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_SetVerticalScroll(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001 *_this, HHTMLBrowser unBrowserHandle, uint32 nAbsolutePixelScroll)
+{
+    TRACE("%p\n", _this);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_SetVerticalScroll(_this->linux_side, unBrowserHandle, nAbsolutePixelScroll);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_SetKeyFocus, 9)
+void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_SetKeyFocus(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001 *_this, HHTMLBrowser unBrowserHandle, bool bHasKeyFocus)
+{
+    TRACE("%p\n", _this);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_SetKeyFocus(_this->linux_side, unBrowserHandle, bHasKeyFocus);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_ViewSource, 8)
+void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_ViewSource(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001 *_this, HHTMLBrowser unBrowserHandle)
+{
+    TRACE("%p\n", _this);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_ViewSource(_this->linux_side, unBrowserHandle);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_CopyToClipboard, 8)
+void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_CopyToClipboard(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001 *_this, HHTMLBrowser unBrowserHandle)
+{
+    TRACE("%p\n", _this);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_CopyToClipboard(_this->linux_side, unBrowserHandle);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_PasteFromClipboard, 8)
+void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_PasteFromClipboard(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001 *_this, HHTMLBrowser unBrowserHandle)
+{
+    TRACE("%p\n", _this);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_PasteFromClipboard(_this->linux_side, unBrowserHandle);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_Find, 14)
+void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_Find(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001 *_this, HHTMLBrowser unBrowserHandle, const char * pchSearchStr, bool bCurrentlyInFind, bool bReverse)
+{
+    TRACE("%p\n", _this);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_Find(_this->linux_side, unBrowserHandle, pchSearchStr, bCurrentlyInFind, bReverse);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_StopFind, 8)
+void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_StopFind(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001 *_this, HHTMLBrowser unBrowserHandle)
+{
+    TRACE("%p\n", _this);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_StopFind(_this->linux_side, unBrowserHandle);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_GetLinkAtPosition, 16)
+void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_GetLinkAtPosition(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001 *_this, HHTMLBrowser unBrowserHandle, int x, int y)
+{
+    TRACE("%p\n", _this);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_GetLinkAtPosition(_this->linux_side, unBrowserHandle, x, y);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_AllowStartRequest, 9)
+void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_AllowStartRequest(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001 *_this, HHTMLBrowser unBrowserHandle, bool bAllowed)
+{
+    TRACE("%p\n", _this);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_AllowStartRequest(_this->linux_side, unBrowserHandle, bAllowed);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_JSDialogResponse, 9)
+void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_JSDialogResponse(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001 *_this, HHTMLBrowser unBrowserHandle, bool bResult)
+{
+    TRACE("%p\n", _this);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_JSDialogResponse(_this->linux_side, unBrowserHandle, bResult);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_FileLoadDialogResponse, 12)
+void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_FileLoadDialogResponse(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001 *_this, HHTMLBrowser unBrowserHandle, const char ** pchSelectedFiles)
+{
+    const char **lin_pchSelectedFiles = steamclient_dos_to_unix_stringlist(pchSelectedFiles);
+    TRACE("%p\n", _this);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_FileLoadDialogResponse(_this->linux_side, unBrowserHandle, pchSelectedFiles ? lin_pchSelectedFiles : NULL);
+    steamclient_free_stringlist(lin_pchSelectedFiles);
+}
+
+extern vtable_ptr winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_vtable;
+
+#ifndef __GNUC__
+void __asm_dummy_vtables(void) {
+#endif
+    __ASM_VTABLE(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001,
+        VTABLE_ADD_FUNC(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_destructor)
+        VTABLE_ADD_FUNC(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_Init)
+        VTABLE_ADD_FUNC(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_Shutdown)
+        VTABLE_ADD_FUNC(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_CreateBrowser)
+        VTABLE_ADD_FUNC(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_RemoveBrowser)
+        VTABLE_ADD_FUNC(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_LoadURL)
+        VTABLE_ADD_FUNC(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_SetSize)
+        VTABLE_ADD_FUNC(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_StopLoad)
+        VTABLE_ADD_FUNC(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_Reload)
+        VTABLE_ADD_FUNC(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_GoBack)
+        VTABLE_ADD_FUNC(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_GoForward)
+        VTABLE_ADD_FUNC(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_AddHeader)
+        VTABLE_ADD_FUNC(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_ExecuteJavascript)
+        VTABLE_ADD_FUNC(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_MouseUp)
+        VTABLE_ADD_FUNC(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_MouseDown)
+        VTABLE_ADD_FUNC(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_MouseDoubleClick)
+        VTABLE_ADD_FUNC(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_MouseMove)
+        VTABLE_ADD_FUNC(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_MouseWheel)
+        VTABLE_ADD_FUNC(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_KeyDown)
+        VTABLE_ADD_FUNC(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_KeyUp)
+        VTABLE_ADD_FUNC(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_KeyChar)
+        VTABLE_ADD_FUNC(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_SetHorizontalScroll)
+        VTABLE_ADD_FUNC(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_SetVerticalScroll)
+        VTABLE_ADD_FUNC(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_SetKeyFocus)
+        VTABLE_ADD_FUNC(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_ViewSource)
+        VTABLE_ADD_FUNC(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_CopyToClipboard)
+        VTABLE_ADD_FUNC(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_PasteFromClipboard)
+        VTABLE_ADD_FUNC(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_Find)
+        VTABLE_ADD_FUNC(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_StopFind)
+        VTABLE_ADD_FUNC(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_GetLinkAtPosition)
+        VTABLE_ADD_FUNC(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_AllowStartRequest)
+        VTABLE_ADD_FUNC(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_JSDialogResponse)
+        VTABLE_ADD_FUNC(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_FileLoadDialogResponse)
+    );
+#ifndef __GNUC__
+}
+#endif
+
+winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001 *create_winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001(void *linux_side)
+{
+    winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001));
+    TRACE("-> %p\n", r);
+    r->vtable = &winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_vtable;
+    r->linux_side = linux_side;
+    return r;
+}
+
