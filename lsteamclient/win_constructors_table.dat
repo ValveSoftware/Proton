@@ -125,6 +125,7 @@
     {"STEAMUSERSTATS_INTERFACE_VERSION003", &create_winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003},
     {"SteamNetworking001", &create_winISteamNetworking_SteamNetworking001},
     {"SteamGameServer005", &create_winISteamGameServer_SteamGameServer005},
+    {"SteamMatchMaking003", &create_winISteamMatchmaking_SteamMatchMaking003},
     {"SteamUser010", &create_winISteamUser_SteamUser010},
     {"SteamFriends003", &create_winISteamFriends_SteamFriends003},
     {"SteamMatchMaking002", &create_winISteamMatchmaking_SteamMatchMaking002},

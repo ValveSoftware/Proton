@@ -123,6 +123,7 @@ extern void *create_winISteamMatchmaking_SteamMatchMaking004(void *);
 extern void *create_winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003(void *);
 extern void *create_winISteamNetworking_SteamNetworking001(void *);
 extern void *create_winISteamGameServer_SteamGameServer005(void *);
+extern void *create_winISteamMatchmaking_SteamMatchMaking003(void *);
 extern void *create_winISteamUser_SteamUser010(void *);
 extern void *create_winISteamFriends_SteamFriends003(void *);
 extern void *create_winISteamMatchmaking_SteamMatchMaking002(void *);

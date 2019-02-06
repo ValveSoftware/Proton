@@ -1744,6 +1744,259 @@ winISteamMatchmaking_SteamMatchMaking004 *create_winISteamMatchmaking_SteamMatch
     return r;
 }
 
+#include "cppISteamMatchmaking_SteamMatchMaking003.h"
+
+typedef struct __winISteamMatchmaking_SteamMatchMaking003 {
+    vtable_ptr *vtable;
+    void *linux_side;
+} winISteamMatchmaking_SteamMatchMaking003;
+
+DEFINE_THISCALL_WRAPPER(winISteamMatchmaking_SteamMatchMaking003_GetFavoriteGameCount, 4)
+int __thiscall winISteamMatchmaking_SteamMatchMaking003_GetFavoriteGameCount(winISteamMatchmaking_SteamMatchMaking003 *_this)
+{
+    TRACE("%p\n", _this);
+    return cppISteamMatchmaking_SteamMatchMaking003_GetFavoriteGameCount(_this->linux_side);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamMatchmaking_SteamMatchMaking003_GetFavoriteGame, 32)
+bool __thiscall winISteamMatchmaking_SteamMatchMaking003_GetFavoriteGame(winISteamMatchmaking_SteamMatchMaking003 *_this, int iGame, AppId_t * pnAppID, uint32 * pnIP, uint16 * pnConnPort, uint16 * pnQueryPort, uint32 * punFlags, uint32 * pRTime32LastPlayedOnServer)
+{
+    TRACE("%p\n", _this);
+    return cppISteamMatchmaking_SteamMatchMaking003_GetFavoriteGame(_this->linux_side, iGame, pnAppID, pnIP, pnConnPort, pnQueryPort, punFlags, pRTime32LastPlayedOnServer);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamMatchmaking_SteamMatchMaking003_AddFavoriteGame, 24)
+int __thiscall winISteamMatchmaking_SteamMatchMaking003_AddFavoriteGame(winISteamMatchmaking_SteamMatchMaking003 *_this, AppId_t nAppID, uint32 nIP, uint16 nConnPort, uint16 nQueryPort, uint32 unFlags, uint32 rTime32LastPlayedOnServer)
+{
+    TRACE("%p\n", _this);
+    return cppISteamMatchmaking_SteamMatchMaking003_AddFavoriteGame(_this->linux_side, nAppID, nIP, nConnPort, nQueryPort, unFlags, rTime32LastPlayedOnServer);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamMatchmaking_SteamMatchMaking003_RemoveFavoriteGame, 20)
+bool __thiscall winISteamMatchmaking_SteamMatchMaking003_RemoveFavoriteGame(winISteamMatchmaking_SteamMatchMaking003 *_this, AppId_t nAppID, uint32 nIP, uint16 nConnPort, uint16 nQueryPort, uint32 unFlags)
+{
+    TRACE("%p\n", _this);
+    return cppISteamMatchmaking_SteamMatchMaking003_RemoveFavoriteGame(_this->linux_side, nAppID, nIP, nConnPort, nQueryPort, unFlags);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamMatchmaking_SteamMatchMaking003_RequestLobbyList, 4)
+void __thiscall winISteamMatchmaking_SteamMatchMaking003_RequestLobbyList(winISteamMatchmaking_SteamMatchMaking003 *_this)
+{
+    TRACE("%p\n", _this);
+    cppISteamMatchmaking_SteamMatchMaking003_RequestLobbyList(_this->linux_side);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamMatchmaking_SteamMatchMaking003_AddRequestLobbyListFilter, 12)
+void __thiscall winISteamMatchmaking_SteamMatchMaking003_AddRequestLobbyListFilter(winISteamMatchmaking_SteamMatchMaking003 *_this, const char * pchKeyToMatch, const char * pchValueToMatch)
+{
+    TRACE("%p\n", _this);
+    cppISteamMatchmaking_SteamMatchMaking003_AddRequestLobbyListFilter(_this->linux_side, pchKeyToMatch, pchValueToMatch);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamMatchmaking_SteamMatchMaking003_AddRequestLobbyListNumericalFilter, 16)
+void __thiscall winISteamMatchmaking_SteamMatchMaking003_AddRequestLobbyListNumericalFilter(winISteamMatchmaking_SteamMatchMaking003 *_this, const char * pchKeyToMatch, int nValueToMatch, int nComparisonType)
+{
+    TRACE("%p\n", _this);
+    cppISteamMatchmaking_SteamMatchMaking003_AddRequestLobbyListNumericalFilter(_this->linux_side, pchKeyToMatch, nValueToMatch, nComparisonType);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamMatchmaking_SteamMatchMaking003_AddRequestLobbyListSlotsAvailableFilter, 4)
+void __thiscall winISteamMatchmaking_SteamMatchMaking003_AddRequestLobbyListSlotsAvailableFilter(winISteamMatchmaking_SteamMatchMaking003 *_this)
+{
+    TRACE("%p\n", _this);
+    cppISteamMatchmaking_SteamMatchMaking003_AddRequestLobbyListSlotsAvailableFilter(_this->linux_side);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamMatchmaking_SteamMatchMaking003_GetLobbyByIndex, 12)
+CSteamID *__thiscall winISteamMatchmaking_SteamMatchMaking003_GetLobbyByIndex(winISteamMatchmaking_SteamMatchMaking003 *_this, CSteamID *_r, int iLobby)
+{
+    TRACE("%p\n", _this);
+    *_r = cppISteamMatchmaking_SteamMatchMaking003_GetLobbyByIndex(_this->linux_side, iLobby);
+    return _r;
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamMatchmaking_SteamMatchMaking003_CreateLobby, 5)
+void __thiscall winISteamMatchmaking_SteamMatchMaking003_CreateLobby(winISteamMatchmaking_SteamMatchMaking003 *_this, bool bPrivate)
+{
+    TRACE("%p\n", _this);
+    cppISteamMatchmaking_SteamMatchMaking003_CreateLobby(_this->linux_side, bPrivate);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamMatchmaking_SteamMatchMaking003_JoinLobby, 12)
+void __thiscall winISteamMatchmaking_SteamMatchMaking003_JoinLobby(winISteamMatchmaking_SteamMatchMaking003 *_this, CSteamID steamIDLobby)
+{
+    TRACE("%p\n", _this);
+    cppISteamMatchmaking_SteamMatchMaking003_JoinLobby(_this->linux_side, steamIDLobby);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamMatchmaking_SteamMatchMaking003_LeaveLobby, 12)
+void __thiscall winISteamMatchmaking_SteamMatchMaking003_LeaveLobby(winISteamMatchmaking_SteamMatchMaking003 *_this, CSteamID steamIDLobby)
+{
+    TRACE("%p\n", _this);
+    cppISteamMatchmaking_SteamMatchMaking003_LeaveLobby(_this->linux_side, steamIDLobby);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamMatchmaking_SteamMatchMaking003_InviteUserToLobby, 20)
+bool __thiscall winISteamMatchmaking_SteamMatchMaking003_InviteUserToLobby(winISteamMatchmaking_SteamMatchMaking003 *_this, CSteamID steamIDLobby, CSteamID steamIDInvitee)
+{
+    TRACE("%p\n", _this);
+    return cppISteamMatchmaking_SteamMatchMaking003_InviteUserToLobby(_this->linux_side, steamIDLobby, steamIDInvitee);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamMatchmaking_SteamMatchMaking003_GetNumLobbyMembers, 12)
+int __thiscall winISteamMatchmaking_SteamMatchMaking003_GetNumLobbyMembers(winISteamMatchmaking_SteamMatchMaking003 *_this, CSteamID steamIDLobby)
+{
+    TRACE("%p\n", _this);
+    return cppISteamMatchmaking_SteamMatchMaking003_GetNumLobbyMembers(_this->linux_side, steamIDLobby);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamMatchmaking_SteamMatchMaking003_GetLobbyMemberByIndex, 20)
+CSteamID *__thiscall winISteamMatchmaking_SteamMatchMaking003_GetLobbyMemberByIndex(winISteamMatchmaking_SteamMatchMaking003 *_this, CSteamID *_r, CSteamID steamIDLobby, int iMember)
+{
+    TRACE("%p\n", _this);
+    *_r = cppISteamMatchmaking_SteamMatchMaking003_GetLobbyMemberByIndex(_this->linux_side, steamIDLobby, iMember);
+    return _r;
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamMatchmaking_SteamMatchMaking003_GetLobbyData, 16)
+const char * __thiscall winISteamMatchmaking_SteamMatchMaking003_GetLobbyData(winISteamMatchmaking_SteamMatchMaking003 *_this, CSteamID steamIDLobby, const char * pchKey)
+{
+    TRACE("%p\n", _this);
+    return cppISteamMatchmaking_SteamMatchMaking003_GetLobbyData(_this->linux_side, steamIDLobby, pchKey);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamMatchmaking_SteamMatchMaking003_SetLobbyData, 20)
+bool __thiscall winISteamMatchmaking_SteamMatchMaking003_SetLobbyData(winISteamMatchmaking_SteamMatchMaking003 *_this, CSteamID steamIDLobby, const char * pchKey, const char * pchValue)
+{
+    TRACE("%p\n", _this);
+    return cppISteamMatchmaking_SteamMatchMaking003_SetLobbyData(_this->linux_side, steamIDLobby, pchKey, pchValue);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamMatchmaking_SteamMatchMaking003_GetLobbyMemberData, 24)
+const char * __thiscall winISteamMatchmaking_SteamMatchMaking003_GetLobbyMemberData(winISteamMatchmaking_SteamMatchMaking003 *_this, CSteamID steamIDLobby, CSteamID steamIDUser, const char * pchKey)
+{
+    TRACE("%p\n", _this);
+    return cppISteamMatchmaking_SteamMatchMaking003_GetLobbyMemberData(_this->linux_side, steamIDLobby, steamIDUser, pchKey);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamMatchmaking_SteamMatchMaking003_SetLobbyMemberData, 20)
+void __thiscall winISteamMatchmaking_SteamMatchMaking003_SetLobbyMemberData(winISteamMatchmaking_SteamMatchMaking003 *_this, CSteamID steamIDLobby, const char * pchKey, const char * pchValue)
+{
+    TRACE("%p\n", _this);
+    cppISteamMatchmaking_SteamMatchMaking003_SetLobbyMemberData(_this->linux_side, steamIDLobby, pchKey, pchValue);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamMatchmaking_SteamMatchMaking003_SendLobbyChatMsg, 20)
+bool __thiscall winISteamMatchmaking_SteamMatchMaking003_SendLobbyChatMsg(winISteamMatchmaking_SteamMatchMaking003 *_this, CSteamID steamIDLobby, const void * pvMsgBody, int cubMsgBody)
+{
+    TRACE("%p\n", _this);
+    return cppISteamMatchmaking_SteamMatchMaking003_SendLobbyChatMsg(_this->linux_side, steamIDLobby, pvMsgBody, cubMsgBody);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamMatchmaking_SteamMatchMaking003_GetLobbyChatEntry, 32)
+int __thiscall winISteamMatchmaking_SteamMatchMaking003_GetLobbyChatEntry(winISteamMatchmaking_SteamMatchMaking003 *_this, CSteamID steamIDLobby, int iChatID, CSteamID * pSteamIDUser, void * pvData, int cubData, EChatEntryType * peChatEntryType)
+{
+    TRACE("%p\n", _this);
+    return cppISteamMatchmaking_SteamMatchMaking003_GetLobbyChatEntry(_this->linux_side, steamIDLobby, iChatID, pSteamIDUser, pvData, cubData, peChatEntryType);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamMatchmaking_SteamMatchMaking003_RequestLobbyData, 12)
+bool __thiscall winISteamMatchmaking_SteamMatchMaking003_RequestLobbyData(winISteamMatchmaking_SteamMatchMaking003 *_this, CSteamID steamIDLobby)
+{
+    TRACE("%p\n", _this);
+    return cppISteamMatchmaking_SteamMatchMaking003_RequestLobbyData(_this->linux_side, steamIDLobby);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamMatchmaking_SteamMatchMaking003_SetLobbyGameServer, 26)
+void __thiscall winISteamMatchmaking_SteamMatchMaking003_SetLobbyGameServer(winISteamMatchmaking_SteamMatchMaking003 *_this, CSteamID steamIDLobby, uint32 unGameServerIP, uint16 unGameServerPort, CSteamID steamIDGameServer)
+{
+    TRACE("%p\n", _this);
+    cppISteamMatchmaking_SteamMatchMaking003_SetLobbyGameServer(_this->linux_side, steamIDLobby, unGameServerIP, unGameServerPort, steamIDGameServer);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamMatchmaking_SteamMatchMaking003_GetLobbyGameServer, 24)
+bool __thiscall winISteamMatchmaking_SteamMatchMaking003_GetLobbyGameServer(winISteamMatchmaking_SteamMatchMaking003 *_this, CSteamID steamIDLobby, uint32 * punGameServerIP, uint16 * punGameServerPort, CSteamID * psteamIDGameServer)
+{
+    TRACE("%p\n", _this);
+    return cppISteamMatchmaking_SteamMatchMaking003_GetLobbyGameServer(_this->linux_side, steamIDLobby, punGameServerIP, punGameServerPort, psteamIDGameServer);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamMatchmaking_SteamMatchMaking003_SetLobbyMemberLimit, 16)
+bool __thiscall winISteamMatchmaking_SteamMatchMaking003_SetLobbyMemberLimit(winISteamMatchmaking_SteamMatchMaking003 *_this, CSteamID steamIDLobby, int cMaxMembers)
+{
+    TRACE("%p\n", _this);
+    return cppISteamMatchmaking_SteamMatchMaking003_SetLobbyMemberLimit(_this->linux_side, steamIDLobby, cMaxMembers);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamMatchmaking_SteamMatchMaking003_GetLobbyMemberLimit, 12)
+int __thiscall winISteamMatchmaking_SteamMatchMaking003_GetLobbyMemberLimit(winISteamMatchmaking_SteamMatchMaking003 *_this, CSteamID steamIDLobby)
+{
+    TRACE("%p\n", _this);
+    return cppISteamMatchmaking_SteamMatchMaking003_GetLobbyMemberLimit(_this->linux_side, steamIDLobby);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamMatchmaking_SteamMatchMaking003_SetLobbyVoiceEnabled, 13)
+void __thiscall winISteamMatchmaking_SteamMatchMaking003_SetLobbyVoiceEnabled(winISteamMatchmaking_SteamMatchMaking003 *_this, CSteamID steamIDLobby, bool bVoiceEnabled)
+{
+    TRACE("%p\n", _this);
+    cppISteamMatchmaking_SteamMatchMaking003_SetLobbyVoiceEnabled(_this->linux_side, steamIDLobby, bVoiceEnabled);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamMatchmaking_SteamMatchMaking003_RequestFriendsLobbies, 4)
+bool __thiscall winISteamMatchmaking_SteamMatchMaking003_RequestFriendsLobbies(winISteamMatchmaking_SteamMatchMaking003 *_this)
+{
+    TRACE("%p\n", _this);
+    return cppISteamMatchmaking_SteamMatchMaking003_RequestFriendsLobbies(_this->linux_side);
+}
+
+extern vtable_ptr winISteamMatchmaking_SteamMatchMaking003_vtable;
+
+#ifndef __GNUC__
+void __asm_dummy_vtables(void) {
+#endif
+    __ASM_VTABLE(winISteamMatchmaking_SteamMatchMaking003,
+        VTABLE_ADD_FUNC(winISteamMatchmaking_SteamMatchMaking003_GetFavoriteGameCount)
+        VTABLE_ADD_FUNC(winISteamMatchmaking_SteamMatchMaking003_GetFavoriteGame)
+        VTABLE_ADD_FUNC(winISteamMatchmaking_SteamMatchMaking003_AddFavoriteGame)
+        VTABLE_ADD_FUNC(winISteamMatchmaking_SteamMatchMaking003_RemoveFavoriteGame)
+        VTABLE_ADD_FUNC(winISteamMatchmaking_SteamMatchMaking003_RequestLobbyList)
+        VTABLE_ADD_FUNC(winISteamMatchmaking_SteamMatchMaking003_AddRequestLobbyListFilter)
+        VTABLE_ADD_FUNC(winISteamMatchmaking_SteamMatchMaking003_AddRequestLobbyListNumericalFilter)
+        VTABLE_ADD_FUNC(winISteamMatchmaking_SteamMatchMaking003_AddRequestLobbyListSlotsAvailableFilter)
+        VTABLE_ADD_FUNC(winISteamMatchmaking_SteamMatchMaking003_GetLobbyByIndex)
+        VTABLE_ADD_FUNC(winISteamMatchmaking_SteamMatchMaking003_CreateLobby)
+        VTABLE_ADD_FUNC(winISteamMatchmaking_SteamMatchMaking003_JoinLobby)
+        VTABLE_ADD_FUNC(winISteamMatchmaking_SteamMatchMaking003_LeaveLobby)
+        VTABLE_ADD_FUNC(winISteamMatchmaking_SteamMatchMaking003_InviteUserToLobby)
+        VTABLE_ADD_FUNC(winISteamMatchmaking_SteamMatchMaking003_GetNumLobbyMembers)
+        VTABLE_ADD_FUNC(winISteamMatchmaking_SteamMatchMaking003_GetLobbyMemberByIndex)
+        VTABLE_ADD_FUNC(winISteamMatchmaking_SteamMatchMaking003_GetLobbyData)
+        VTABLE_ADD_FUNC(winISteamMatchmaking_SteamMatchMaking003_SetLobbyData)
+        VTABLE_ADD_FUNC(winISteamMatchmaking_SteamMatchMaking003_GetLobbyMemberData)
+        VTABLE_ADD_FUNC(winISteamMatchmaking_SteamMatchMaking003_SetLobbyMemberData)
+        VTABLE_ADD_FUNC(winISteamMatchmaking_SteamMatchMaking003_SendLobbyChatMsg)
+        VTABLE_ADD_FUNC(winISteamMatchmaking_SteamMatchMaking003_GetLobbyChatEntry)
+        VTABLE_ADD_FUNC(winISteamMatchmaking_SteamMatchMaking003_RequestLobbyData)
+        VTABLE_ADD_FUNC(winISteamMatchmaking_SteamMatchMaking003_SetLobbyGameServer)
+        VTABLE_ADD_FUNC(winISteamMatchmaking_SteamMatchMaking003_GetLobbyGameServer)
+        VTABLE_ADD_FUNC(winISteamMatchmaking_SteamMatchMaking003_SetLobbyMemberLimit)
+        VTABLE_ADD_FUNC(winISteamMatchmaking_SteamMatchMaking003_GetLobbyMemberLimit)
+        VTABLE_ADD_FUNC(winISteamMatchmaking_SteamMatchMaking003_SetLobbyVoiceEnabled)
+        VTABLE_ADD_FUNC(winISteamMatchmaking_SteamMatchMaking003_RequestFriendsLobbies)
+    );
+#ifndef __GNUC__
+}
+#endif
+
+winISteamMatchmaking_SteamMatchMaking003 *create_winISteamMatchmaking_SteamMatchMaking003(void *linux_side)
+{
+    winISteamMatchmaking_SteamMatchMaking003 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamMatchmaking_SteamMatchMaking003));
+    TRACE("-> %p\n", r);
+    r->vtable = &winISteamMatchmaking_SteamMatchMaking003_vtable;
+    r->linux_side = linux_side;
+    return r;
+}
+
 #include "cppISteamMatchmaking_SteamMatchMaking002.h"
 
 typedef struct __winISteamMatchmaking_SteamMatchMaking002 {
