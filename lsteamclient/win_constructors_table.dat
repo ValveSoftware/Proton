@@ -112,6 +112,8 @@
     {"STEAMUSERSTATS_INTERFACE_VERSION005", &create_winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION005},
     {"SteamNetworking002", &create_winISteamNetworking_SteamNetworking002},
     {"SteamGameServer008", &create_winISteamGameServer_SteamGameServer008},
+    {"SteamGameServer007", &create_winISteamGameServer_SteamGameServer008}, /* alias */
+    {"SteamGameServer006", &create_winISteamGameServer_SteamGameServer008}, /* alias */
     {"SteamClient007", &create_winISteamClient_SteamClient007},
     {"SteamUser011", &create_winISteamUser_SteamUser011},
     {"SteamUtils002", &create_winISteamUtils_SteamUtils002},

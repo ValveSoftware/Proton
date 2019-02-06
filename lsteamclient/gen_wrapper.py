@@ -125,6 +125,7 @@ aliases = {
     #these interfaces are undocumented and binary compatible
     "SteamUtils004":["SteamUtils003"],
     "SteamUtils002":["SteamUtils001"],
+    "SteamGameServer008":["SteamGameServer007","SteamGameServer006"],
 }
 
 # these structs are manually confirmed to be equivalent
