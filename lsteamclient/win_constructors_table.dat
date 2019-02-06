@@ -118,6 +118,8 @@
     {"SteamUtils001", &create_winISteamUtils_SteamUtils002}, /* alias */
     {"STEAMUSERSTATS_INTERFACE_VERSION004", &create_winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004},
     {"STEAMAPPS_INTERFACE_VERSION002", &create_winISteamApps_STEAMAPPS_INTERFACE_VERSION002},
+    {"SteamMatchMaking005", &create_winISteamMatchmaking_SteamMatchMaking005},
+    {"STEAMREMOTESTORAGE_INTERFACE_VERSION001", &create_winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001},
     {"SteamFriends004", &create_winISteamFriends_SteamFriends004},
     {"SteamMatchMaking004", &create_winISteamMatchmaking_SteamMatchMaking004},
     {"STEAMUSERSTATS_INTERFACE_VERSION003", &create_winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003},

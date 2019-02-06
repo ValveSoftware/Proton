@@ -4804,3 +4804,94 @@ winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION002 *create_winISteam
     return r;
 }
 
+#include "cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001.h"
+
+typedef struct __winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001 {
+    vtable_ptr *vtable;
+    void *linux_side;
+} winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001;
+
+DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_FileWrite, 16)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_FileWrite(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001 *_this, const char * pchFile, const void * pvData, int32 cubData)
+{
+    TRACE("%p\n", _this);
+    return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_FileWrite(_this->linux_side, pchFile, pvData, cubData);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_GetFileSize, 8)
+int32 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_GetFileSize(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001 *_this, const char * pchFile)
+{
+    TRACE("%p\n", _this);
+    return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_GetFileSize(_this->linux_side, pchFile);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_FileRead, 16)
+int32 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_FileRead(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001 *_this, const char * pchFile, void * pvData, int32 cubDataToRead)
+{
+    TRACE("%p\n", _this);
+    return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_FileRead(_this->linux_side, pchFile, pvData, cubDataToRead);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_FileExists, 8)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_FileExists(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001 *_this, const char * pchFile)
+{
+    TRACE("%p\n", _this);
+    return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_FileExists(_this->linux_side, pchFile);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_FileDelete, 8)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_FileDelete(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001 *_this, const char * pchFile)
+{
+    TRACE("%p\n", _this);
+    return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_FileDelete(_this->linux_side, pchFile);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_GetFileCount, 4)
+int32 __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_GetFileCount(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001 *_this)
+{
+    TRACE("%p\n", _this);
+    return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_GetFileCount(_this->linux_side);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_GetFileNameAndSize, 12)
+const char * __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_GetFileNameAndSize(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001 *_this, int iFile, int32 * pnFileSizeInBytes)
+{
+    TRACE("%p\n", _this);
+    return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_GetFileNameAndSize(_this->linux_side, iFile, pnFileSizeInBytes);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_GetQuota, 12)
+bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_GetQuota(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001 *_this, int32 * pnTotalBytes, int32 * puAvailableBytes)
+{
+    TRACE("%p\n", _this);
+    return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_GetQuota(_this->linux_side, pnTotalBytes, puAvailableBytes);
+}
+
+extern vtable_ptr winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_vtable;
+
+#ifndef __GNUC__
+void __asm_dummy_vtables(void) {
+#endif
+    __ASM_VTABLE(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001,
+        VTABLE_ADD_FUNC(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_FileWrite)
+        VTABLE_ADD_FUNC(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_GetFileSize)
+        VTABLE_ADD_FUNC(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_FileRead)
+        VTABLE_ADD_FUNC(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_FileExists)
+        VTABLE_ADD_FUNC(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_FileDelete)
+        VTABLE_ADD_FUNC(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_GetFileCount)
+        VTABLE_ADD_FUNC(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_GetFileNameAndSize)
+        VTABLE_ADD_FUNC(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_GetQuota)
+    );
+#ifndef __GNUC__
+}
+#endif
+
+winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001 *create_winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001(void *linux_side)
+{
+    winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001));
+    TRACE("-> %p\n", r);
+    r->vtable = &winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_vtable;
+    r->linux_side = linux_side;
+    return r;
+}
+

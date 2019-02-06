@@ -116,6 +116,8 @@ extern void *create_winISteamUser_SteamUser011(void *);
 extern void *create_winISteamUtils_SteamUtils002(void *);
 extern void *create_winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION004(void *);
 extern void *create_winISteamApps_STEAMAPPS_INTERFACE_VERSION002(void *);
+extern void *create_winISteamMatchmaking_SteamMatchMaking005(void *);
+extern void *create_winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001(void *);
 extern void *create_winISteamFriends_SteamFriends004(void *);
 extern void *create_winISteamMatchmaking_SteamMatchMaking004(void *);
 extern void *create_winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION003(void *);
