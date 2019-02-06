@@ -2523,3 +2523,206 @@ winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION002 *create_winISteamUserStat
     return r;
 }
 
+#include "cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001.h"
+
+typedef struct __winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001 {
+    vtable_ptr *vtable;
+    void *linux_side;
+} winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001;
+
+DEFINE_THISCALL_WRAPPER(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetNumStats, 12)
+uint32 __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetNumStats(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001 *_this, CGameID nGameID)
+{
+    TRACE("%p\n", _this);
+    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetNumStats(_this->linux_side, nGameID);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetStatName, 16)
+const char * __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetStatName(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001 *_this, CGameID nGameID, uint32 iStat)
+{
+    TRACE("%p\n", _this);
+    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetStatName(_this->linux_side, nGameID, iStat);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetStatType, 16)
+ESteamUserStatType __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetStatType(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001 *_this, CGameID nGameID, const char * pchName)
+{
+    TRACE("%p\n", _this);
+    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetStatType(_this->linux_side, nGameID, pchName);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetNumAchievements, 12)
+uint32 __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetNumAchievements(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001 *_this, CGameID nGameID)
+{
+    TRACE("%p\n", _this);
+    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetNumAchievements(_this->linux_side, nGameID);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetAchievementName, 16)
+const char * __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetAchievementName(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001 *_this, CGameID nGameID, uint32 iAchievement)
+{
+    TRACE("%p\n", _this);
+    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetAchievementName(_this->linux_side, nGameID, iAchievement);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetNumGroupAchievements, 12)
+uint32 __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetNumGroupAchievements(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001 *_this, CGameID nGameID)
+{
+    TRACE("%p\n", _this);
+    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetNumGroupAchievements(_this->linux_side, nGameID);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetGroupAchievementName, 16)
+const char * __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetGroupAchievementName(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001 *_this, CGameID nGameID, uint32 iAchievement)
+{
+    TRACE("%p\n", _this);
+    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetGroupAchievementName(_this->linux_side, nGameID, iAchievement);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_RequestCurrentStats, 12)
+bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_RequestCurrentStats(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001 *_this, CGameID nGameID)
+{
+    TRACE("%p\n", _this);
+    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_RequestCurrentStats(_this->linux_side, nGameID);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetStat, 20)
+bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetStat(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001 *_this, CGameID nGameID, const char * pchName, int32 * pData)
+{
+    TRACE("%p\n", _this);
+    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetStat(_this->linux_side, nGameID, pchName, pData);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetStat_2, 20)
+bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetStat_2(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001 *_this, CGameID nGameID, const char * pchName, float * pData)
+{
+    TRACE("%p\n", _this);
+    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetStat_2(_this->linux_side, nGameID, pchName, pData);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_SetStat, 20)
+bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_SetStat(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001 *_this, CGameID nGameID, const char * pchName, int32 nData)
+{
+    TRACE("%p\n", _this);
+    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_SetStat(_this->linux_side, nGameID, pchName, nData);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_SetStat_2, 20)
+bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_SetStat_2(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001 *_this, CGameID nGameID, const char * pchName, float fData)
+{
+    TRACE("%p\n", _this);
+    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_SetStat_2(_this->linux_side, nGameID, pchName, fData);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_UpdateAvgRateStat, 28)
+bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_UpdateAvgRateStat(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001 *_this, CGameID nGameID, const char * pchName, float flCountThisSession, double dSessionLength)
+{
+    TRACE("%p\n", _this);
+    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_UpdateAvgRateStat(_this->linux_side, nGameID, pchName, flCountThisSession, dSessionLength);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetAchievement, 20)
+bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetAchievement(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001 *_this, CGameID nGameID, const char * pchName, bool * pbAchieved)
+{
+    TRACE("%p\n", _this);
+    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetAchievement(_this->linux_side, nGameID, pchName, pbAchieved);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetGroupAchievement, 20)
+bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetGroupAchievement(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001 *_this, CGameID nGameID, const char * pchName, bool * pbAchieved)
+{
+    TRACE("%p\n", _this);
+    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetGroupAchievement(_this->linux_side, nGameID, pchName, pbAchieved);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_SetAchievement, 16)
+bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_SetAchievement(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001 *_this, CGameID nGameID, const char * pchName)
+{
+    TRACE("%p\n", _this);
+    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_SetAchievement(_this->linux_side, nGameID, pchName);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_SetGroupAchievement, 16)
+bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_SetGroupAchievement(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001 *_this, CGameID nGameID, const char * pchName)
+{
+    TRACE("%p\n", _this);
+    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_SetGroupAchievement(_this->linux_side, nGameID, pchName);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_StoreStats, 12)
+bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_StoreStats(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001 *_this, CGameID nGameID)
+{
+    TRACE("%p\n", _this);
+    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_StoreStats(_this->linux_side, nGameID);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_ClearAchievement, 16)
+bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_ClearAchievement(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001 *_this, CGameID nGameID, const char * pchName)
+{
+    TRACE("%p\n", _this);
+    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_ClearAchievement(_this->linux_side, nGameID, pchName);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_ClearGroupAchievement, 16)
+bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_ClearGroupAchievement(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001 *_this, CGameID nGameID, const char * pchName)
+{
+    TRACE("%p\n", _this);
+    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_ClearGroupAchievement(_this->linux_side, nGameID, pchName);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetAchievementIcon, 16)
+int __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetAchievementIcon(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001 *_this, CGameID nGameID, const char * pchName)
+{
+    TRACE("%p\n", _this);
+    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetAchievementIcon(_this->linux_side, nGameID, pchName);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetAchievementDisplayAttribute, 20)
+const char * __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetAchievementDisplayAttribute(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001 *_this, CGameID nGameID, const char * pchName, const char * pchKey)
+{
+    TRACE("%p\n", _this);
+    return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetAchievementDisplayAttribute(_this->linux_side, nGameID, pchName, pchKey);
+}
+
+extern vtable_ptr winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_vtable;
+
+#ifndef __GNUC__
+void __asm_dummy_vtables(void) {
+#endif
+    __ASM_VTABLE(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001,
+        VTABLE_ADD_FUNC(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetNumStats)
+        VTABLE_ADD_FUNC(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetStatName)
+        VTABLE_ADD_FUNC(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetStatType)
+        VTABLE_ADD_FUNC(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetNumAchievements)
+        VTABLE_ADD_FUNC(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetAchievementName)
+        VTABLE_ADD_FUNC(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetNumGroupAchievements)
+        VTABLE_ADD_FUNC(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetGroupAchievementName)
+        VTABLE_ADD_FUNC(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_RequestCurrentStats)
+        VTABLE_ADD_FUNC(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetStat_2)
+        VTABLE_ADD_FUNC(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetStat)
+        VTABLE_ADD_FUNC(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_SetStat_2)
+        VTABLE_ADD_FUNC(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_SetStat)
+        VTABLE_ADD_FUNC(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_UpdateAvgRateStat)
+        VTABLE_ADD_FUNC(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetAchievement)
+        VTABLE_ADD_FUNC(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetGroupAchievement)
+        VTABLE_ADD_FUNC(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_SetAchievement)
+        VTABLE_ADD_FUNC(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_SetGroupAchievement)
+        VTABLE_ADD_FUNC(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_StoreStats)
+        VTABLE_ADD_FUNC(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_ClearAchievement)
+        VTABLE_ADD_FUNC(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_ClearGroupAchievement)
+        VTABLE_ADD_FUNC(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetAchievementIcon)
+        VTABLE_ADD_FUNC(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetAchievementDisplayAttribute)
+    );
+#ifndef __GNUC__
+}
+#endif
+
+winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001 *create_winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001(void *linux_side)
+{
+    winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001));
+    TRACE("-> %p\n", r);
+    r->vtable = &winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_vtable;
+    r->linux_side = linux_side;
+    return r;
+}
+
