@@ -2288,3 +2288,343 @@ winISteamUser_SteamUser006 *create_winISteamUser_SteamUser006(void *linux_side)
     return r;
 }
 
+#include "cppISteamUser_SteamUser005.h"
+
+typedef struct __winISteamUser_SteamUser005 {
+    vtable_ptr *vtable;
+    void *linux_side;
+} winISteamUser_SteamUser005;
+
+DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser005_GetHSteamUser, 4)
+HSteamUser __thiscall winISteamUser_SteamUser005_GetHSteamUser(winISteamUser_SteamUser005 *_this)
+{
+    TRACE("%p\n", _this);
+    return cppISteamUser_SteamUser005_GetHSteamUser(_this->linux_side);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser005_LogOn, 12)
+void __thiscall winISteamUser_SteamUser005_LogOn(winISteamUser_SteamUser005 *_this, CSteamID steamID)
+{
+    TRACE("%p\n", _this);
+    cppISteamUser_SteamUser005_LogOn(_this->linux_side, steamID);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser005_LogOff, 4)
+void __thiscall winISteamUser_SteamUser005_LogOff(winISteamUser_SteamUser005 *_this)
+{
+    TRACE("%p\n", _this);
+    cppISteamUser_SteamUser005_LogOff(_this->linux_side);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser005_BLoggedOn, 4)
+bool __thiscall winISteamUser_SteamUser005_BLoggedOn(winISteamUser_SteamUser005 *_this)
+{
+    TRACE("%p\n", _this);
+    return cppISteamUser_SteamUser005_BLoggedOn(_this->linux_side);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser005_GetLogonState, 4)
+ELogonState __thiscall winISteamUser_SteamUser005_GetLogonState(winISteamUser_SteamUser005 *_this)
+{
+    TRACE("%p\n", _this);
+    return cppISteamUser_SteamUser005_GetLogonState(_this->linux_side);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser005_BConnected, 4)
+bool __thiscall winISteamUser_SteamUser005_BConnected(winISteamUser_SteamUser005 *_this)
+{
+    TRACE("%p\n", _this);
+    return cppISteamUser_SteamUser005_BConnected(_this->linux_side);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser005_GetSteamID, 8)
+CSteamID *__thiscall winISteamUser_SteamUser005_GetSteamID(winISteamUser_SteamUser005 *_this, CSteamID *_r)
+{
+    TRACE("%p\n", _this);
+    *_r = cppISteamUser_SteamUser005_GetSteamID(_this->linux_side);
+    return _r;
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser005_IsVACBanned, 8)
+bool __thiscall winISteamUser_SteamUser005_IsVACBanned(winISteamUser_SteamUser005 *_this, int nGameID)
+{
+    TRACE("%p\n", _this);
+    return cppISteamUser_SteamUser005_IsVACBanned(_this->linux_side, nGameID);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser005_RequireShowVACBannedMessage, 8)
+bool __thiscall winISteamUser_SteamUser005_RequireShowVACBannedMessage(winISteamUser_SteamUser005 *_this, int nAppID)
+{
+    TRACE("%p\n", _this);
+    return cppISteamUser_SteamUser005_RequireShowVACBannedMessage(_this->linux_side, nAppID);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser005_AcknowledgeVACBanning, 8)
+void __thiscall winISteamUser_SteamUser005_AcknowledgeVACBanning(winISteamUser_SteamUser005 *_this, int nAppID)
+{
+    TRACE("%p\n", _this);
+    cppISteamUser_SteamUser005_AcknowledgeVACBanning(_this->linux_side, nAppID);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser005_SetSteam2Ticket, 12)
+void __thiscall winISteamUser_SteamUser005_SetSteam2Ticket(winISteamUser_SteamUser005 *_this, uint8 * pubTicket, int cubTicket)
+{
+    TRACE("%p\n", _this);
+    cppISteamUser_SteamUser005_SetSteam2Ticket(_this->linux_side, pubTicket, cubTicket);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser005_AddServerNetAddress, 10)
+void __thiscall winISteamUser_SteamUser005_AddServerNetAddress(winISteamUser_SteamUser005 *_this, uint32 unIP, uint16 unPort)
+{
+    TRACE("%p\n", _this);
+    cppISteamUser_SteamUser005_AddServerNetAddress(_this->linux_side, unIP, unPort);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser005_SetEmail, 8)
+bool __thiscall winISteamUser_SteamUser005_SetEmail(winISteamUser_SteamUser005 *_this, const char * pchEmail)
+{
+    TRACE("%p\n", _this);
+    return cppISteamUser_SteamUser005_SetEmail(_this->linux_side, pchEmail);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser005_SetRegistryString, 16)
+bool __thiscall winISteamUser_SteamUser005_SetRegistryString(winISteamUser_SteamUser005 *_this, EConfigSubTree eRegistrySubTree, const char * pchKey, const char * pchValue)
+{
+    TRACE("%p\n", _this);
+    return cppISteamUser_SteamUser005_SetRegistryString(_this->linux_side, eRegistrySubTree, pchKey, pchValue);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser005_GetRegistryString, 20)
+bool __thiscall winISteamUser_SteamUser005_GetRegistryString(winISteamUser_SteamUser005 *_this, EConfigSubTree eRegistrySubTree, const char * pchKey, char * pchValue, int cbValue)
+{
+    TRACE("%p\n", _this);
+    return cppISteamUser_SteamUser005_GetRegistryString(_this->linux_side, eRegistrySubTree, pchKey, pchValue, cbValue);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser005_SetRegistryInt, 16)
+bool __thiscall winISteamUser_SteamUser005_SetRegistryInt(winISteamUser_SteamUser005 *_this, EConfigSubTree eRegistrySubTree, const char * pchKey, int iValue)
+{
+    TRACE("%p\n", _this);
+    return cppISteamUser_SteamUser005_SetRegistryInt(_this->linux_side, eRegistrySubTree, pchKey, iValue);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser005_GetRegistryInt, 16)
+bool __thiscall winISteamUser_SteamUser005_GetRegistryInt(winISteamUser_SteamUser005 *_this, EConfigSubTree eRegistrySubTree, const char * pchKey, int * piValue)
+{
+    TRACE("%p\n", _this);
+    return cppISteamUser_SteamUser005_GetRegistryInt(_this->linux_side, eRegistrySubTree, pchKey, piValue);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser005_InitiateGameConnection, 35)
+int __thiscall winISteamUser_SteamUser005_InitiateGameConnection(winISteamUser_SteamUser005 *_this, void * pBlob, int cbMaxBlob, CSteamID steamID, CGameID gameID, uint32 unIPServer, uint16 usPortServer, bool bSecure)
+{
+    TRACE("%p\n", _this);
+    return cppISteamUser_SteamUser005_InitiateGameConnection(_this->linux_side, pBlob, cbMaxBlob, steamID, gameID, unIPServer, usPortServer, bSecure);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser005_TerminateGameConnection, 10)
+void __thiscall winISteamUser_SteamUser005_TerminateGameConnection(winISteamUser_SteamUser005 *_this, uint32 unIPServer, uint16 usPortServer)
+{
+    TRACE("%p\n", _this);
+    cppISteamUser_SteamUser005_TerminateGameConnection(_this->linux_side, unIPServer, usPortServer);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser005_SetSelfAsPrimaryChatDestination, 4)
+void __thiscall winISteamUser_SteamUser005_SetSelfAsPrimaryChatDestination(winISteamUser_SteamUser005 *_this)
+{
+    TRACE("%p\n", _this);
+    cppISteamUser_SteamUser005_SetSelfAsPrimaryChatDestination(_this->linux_side);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser005_IsPrimaryChatDestination, 4)
+bool __thiscall winISteamUser_SteamUser005_IsPrimaryChatDestination(winISteamUser_SteamUser005 *_this)
+{
+    TRACE("%p\n", _this);
+    return cppISteamUser_SteamUser005_IsPrimaryChatDestination(_this->linux_side);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser005_RequestLegacyCDKey, 8)
+void __thiscall winISteamUser_SteamUser005_RequestLegacyCDKey(winISteamUser_SteamUser005 *_this, uint32 nAppID)
+{
+    TRACE("%p\n", _this);
+    cppISteamUser_SteamUser005_RequestLegacyCDKey(_this->linux_side, nAppID);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser005_SendGuestPassByEmail, 17)
+bool __thiscall winISteamUser_SteamUser005_SendGuestPassByEmail(winISteamUser_SteamUser005 *_this, const char * pchEmailAccount, GID_t gidGuestPassID, bool bResending)
+{
+    TRACE("%p\n", _this);
+    return cppISteamUser_SteamUser005_SendGuestPassByEmail(_this->linux_side, pchEmailAccount, gidGuestPassID, bResending);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser005_SendGuestPassByAccountID, 17)
+bool __thiscall winISteamUser_SteamUser005_SendGuestPassByAccountID(winISteamUser_SteamUser005 *_this, uint32 uAccountID, GID_t gidGuestPassID, bool bResending)
+{
+    TRACE("%p\n", _this);
+    return cppISteamUser_SteamUser005_SendGuestPassByAccountID(_this->linux_side, uAccountID, gidGuestPassID, bResending);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser005_AckGuestPass, 8)
+bool __thiscall winISteamUser_SteamUser005_AckGuestPass(winISteamUser_SteamUser005 *_this, const char * pchGuestPassCode)
+{
+    TRACE("%p\n", _this);
+    return cppISteamUser_SteamUser005_AckGuestPass(_this->linux_side, pchGuestPassCode);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser005_RedeemGuestPass, 8)
+bool __thiscall winISteamUser_SteamUser005_RedeemGuestPass(winISteamUser_SteamUser005 *_this, const char * pchGuestPassCode)
+{
+    TRACE("%p\n", _this);
+    return cppISteamUser_SteamUser005_RedeemGuestPass(_this->linux_side, pchGuestPassCode);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser005_GetGuestPassToGiveCount, 4)
+uint32 __thiscall winISteamUser_SteamUser005_GetGuestPassToGiveCount(winISteamUser_SteamUser005 *_this)
+{
+    TRACE("%p\n", _this);
+    return cppISteamUser_SteamUser005_GetGuestPassToGiveCount(_this->linux_side);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser005_GetGuestPassToRedeemCount, 4)
+uint32 __thiscall winISteamUser_SteamUser005_GetGuestPassToRedeemCount(winISteamUser_SteamUser005 *_this)
+{
+    TRACE("%p\n", _this);
+    return cppISteamUser_SteamUser005_GetGuestPassToRedeemCount(_this->linux_side);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser005_GetGuestPassLastUpdateTime, 4)
+RTime32 __thiscall winISteamUser_SteamUser005_GetGuestPassLastUpdateTime(winISteamUser_SteamUser005 *_this)
+{
+    TRACE("%p\n", _this);
+    return cppISteamUser_SteamUser005_GetGuestPassLastUpdateTime(_this->linux_side);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser005_GetGuestPassToGiveInfo, 40)
+bool __thiscall winISteamUser_SteamUser005_GetGuestPassToGiveInfo(winISteamUser_SteamUser005 *_this, uint32 nPassIndex, GID_t * pgidGuestPassID, PackageId_t * pnPackageID, RTime32 * pRTime32Created, RTime32 * pRTime32Expiration, RTime32 * pRTime32Sent, RTime32 * pRTime32Redeemed, char * pchRecipientAddress, int cRecipientAddressSize)
+{
+    TRACE("%p\n", _this);
+    return cppISteamUser_SteamUser005_GetGuestPassToGiveInfo(_this->linux_side, nPassIndex, pgidGuestPassID, pnPackageID, pRTime32Created, pRTime32Expiration, pRTime32Sent, pRTime32Redeemed, pchRecipientAddress, cRecipientAddressSize);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser005_GetGuestPassToRedeemInfo, 32)
+bool __thiscall winISteamUser_SteamUser005_GetGuestPassToRedeemInfo(winISteamUser_SteamUser005 *_this, uint32 nPassIndex, GID_t * pgidGuestPassID, PackageId_t * pnPackageID, RTime32 * pRTime32Created, RTime32 * pRTime32Expiration, RTime32 * pRTime32Sent, RTime32 * pRTime32Redeemed)
+{
+    TRACE("%p\n", _this);
+    return cppISteamUser_SteamUser005_GetGuestPassToRedeemInfo(_this->linux_side, nPassIndex, pgidGuestPassID, pnPackageID, pRTime32Created, pRTime32Expiration, pRTime32Sent, pRTime32Redeemed);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser005_GetGuestPassToRedeemSenderAddress, 16)
+bool __thiscall winISteamUser_SteamUser005_GetGuestPassToRedeemSenderAddress(winISteamUser_SteamUser005 *_this, uint32 nPassIndex, char * pchSenderAddress, int cSenderAddressSize)
+{
+    TRACE("%p\n", _this);
+    return cppISteamUser_SteamUser005_GetGuestPassToRedeemSenderAddress(_this->linux_side, nPassIndex, pchSenderAddress, cSenderAddressSize);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser005_GetGuestPassToRedeemSenderName, 16)
+bool __thiscall winISteamUser_SteamUser005_GetGuestPassToRedeemSenderName(winISteamUser_SteamUser005 *_this, uint32 nPassIndex, char * pchSenderName, int cSenderNameSize)
+{
+    TRACE("%p\n", _this);
+    return cppISteamUser_SteamUser005_GetGuestPassToRedeemSenderName(_this->linux_side, nPassIndex, pchSenderName, cSenderNameSize);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser005_AcknowledgeMessageByGID, 8)
+void __thiscall winISteamUser_SteamUser005_AcknowledgeMessageByGID(winISteamUser_SteamUser005 *_this, const char * pchMessageGID)
+{
+    TRACE("%p\n", _this);
+    cppISteamUser_SteamUser005_AcknowledgeMessageByGID(_this->linux_side, pchMessageGID);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser005_SetLanguage, 8)
+bool __thiscall winISteamUser_SteamUser005_SetLanguage(winISteamUser_SteamUser005 *_this, const char * pchLanguage)
+{
+    TRACE("%p\n", _this);
+    return cppISteamUser_SteamUser005_SetLanguage(_this->linux_side, pchLanguage);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser005_TrackAppUsageEvent, 20)
+void __thiscall winISteamUser_SteamUser005_TrackAppUsageEvent(winISteamUser_SteamUser005 *_this, CGameID gameID, int eAppUsageEvent, const char * pchExtraInfo)
+{
+    TRACE("%p\n", _this);
+    cppISteamUser_SteamUser005_TrackAppUsageEvent(_this->linux_side, gameID, eAppUsageEvent, pchExtraInfo);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser005_SetAccountName, 8)
+void __thiscall winISteamUser_SteamUser005_SetAccountName(winISteamUser_SteamUser005 *_this, const char * pchAccountName)
+{
+    TRACE("%p\n", _this);
+    cppISteamUser_SteamUser005_SetAccountName(_this->linux_side, pchAccountName);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser005_SetPassword, 8)
+void __thiscall winISteamUser_SteamUser005_SetPassword(winISteamUser_SteamUser005 *_this, const char * pchPassword)
+{
+    TRACE("%p\n", _this);
+    cppISteamUser_SteamUser005_SetPassword(_this->linux_side, pchPassword);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser005_SetAccountCreationTime, 8)
+void __thiscall winISteamUser_SteamUser005_SetAccountCreationTime(winISteamUser_SteamUser005 *_this, RTime32 rt)
+{
+    TRACE("%p\n", _this);
+    cppISteamUser_SteamUser005_SetAccountCreationTime(_this->linux_side, rt);
+}
+
+extern vtable_ptr winISteamUser_SteamUser005_vtable;
+
+#ifndef __GNUC__
+void __asm_dummy_vtables(void) {
+#endif
+    __ASM_VTABLE(winISteamUser_SteamUser005,
+        VTABLE_ADD_FUNC(winISteamUser_SteamUser005_GetHSteamUser)
+        VTABLE_ADD_FUNC(winISteamUser_SteamUser005_LogOn)
+        VTABLE_ADD_FUNC(winISteamUser_SteamUser005_LogOff)
+        VTABLE_ADD_FUNC(winISteamUser_SteamUser005_BLoggedOn)
+        VTABLE_ADD_FUNC(winISteamUser_SteamUser005_GetLogonState)
+        VTABLE_ADD_FUNC(winISteamUser_SteamUser005_BConnected)
+        VTABLE_ADD_FUNC(winISteamUser_SteamUser005_GetSteamID)
+        VTABLE_ADD_FUNC(winISteamUser_SteamUser005_IsVACBanned)
+        VTABLE_ADD_FUNC(winISteamUser_SteamUser005_RequireShowVACBannedMessage)
+        VTABLE_ADD_FUNC(winISteamUser_SteamUser005_AcknowledgeVACBanning)
+        VTABLE_ADD_FUNC(winISteamUser_SteamUser005_SetSteam2Ticket)
+        VTABLE_ADD_FUNC(winISteamUser_SteamUser005_AddServerNetAddress)
+        VTABLE_ADD_FUNC(winISteamUser_SteamUser005_SetEmail)
+        VTABLE_ADD_FUNC(winISteamUser_SteamUser005_SetRegistryString)
+        VTABLE_ADD_FUNC(winISteamUser_SteamUser005_GetRegistryString)
+        VTABLE_ADD_FUNC(winISteamUser_SteamUser005_SetRegistryInt)
+        VTABLE_ADD_FUNC(winISteamUser_SteamUser005_GetRegistryInt)
+        VTABLE_ADD_FUNC(winISteamUser_SteamUser005_InitiateGameConnection)
+        VTABLE_ADD_FUNC(winISteamUser_SteamUser005_TerminateGameConnection)
+        VTABLE_ADD_FUNC(winISteamUser_SteamUser005_SetSelfAsPrimaryChatDestination)
+        VTABLE_ADD_FUNC(winISteamUser_SteamUser005_IsPrimaryChatDestination)
+        VTABLE_ADD_FUNC(winISteamUser_SteamUser005_RequestLegacyCDKey)
+        VTABLE_ADD_FUNC(winISteamUser_SteamUser005_SendGuestPassByEmail)
+        VTABLE_ADD_FUNC(winISteamUser_SteamUser005_SendGuestPassByAccountID)
+        VTABLE_ADD_FUNC(winISteamUser_SteamUser005_AckGuestPass)
+        VTABLE_ADD_FUNC(winISteamUser_SteamUser005_RedeemGuestPass)
+        VTABLE_ADD_FUNC(winISteamUser_SteamUser005_GetGuestPassToGiveCount)
+        VTABLE_ADD_FUNC(winISteamUser_SteamUser005_GetGuestPassToRedeemCount)
+        VTABLE_ADD_FUNC(winISteamUser_SteamUser005_GetGuestPassLastUpdateTime)
+        VTABLE_ADD_FUNC(winISteamUser_SteamUser005_GetGuestPassToGiveInfo)
+        VTABLE_ADD_FUNC(winISteamUser_SteamUser005_GetGuestPassToRedeemInfo)
+        VTABLE_ADD_FUNC(winISteamUser_SteamUser005_GetGuestPassToRedeemSenderAddress)
+        VTABLE_ADD_FUNC(winISteamUser_SteamUser005_GetGuestPassToRedeemSenderName)
+        VTABLE_ADD_FUNC(winISteamUser_SteamUser005_AcknowledgeMessageByGID)
+        VTABLE_ADD_FUNC(winISteamUser_SteamUser005_SetLanguage)
+        VTABLE_ADD_FUNC(winISteamUser_SteamUser005_TrackAppUsageEvent)
+        VTABLE_ADD_FUNC(winISteamUser_SteamUser005_SetAccountName)
+        VTABLE_ADD_FUNC(winISteamUser_SteamUser005_SetPassword)
+        VTABLE_ADD_FUNC(winISteamUser_SteamUser005_SetAccountCreationTime)
+    );
+#ifndef __GNUC__
+}
+#endif
+
+winISteamUser_SteamUser005 *create_winISteamUser_SteamUser005(void *linux_side)
+{
+    winISteamUser_SteamUser005 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamUser_SteamUser005));
+    TRACE("-> %p\n", r);
+    r->vtable = &winISteamUser_SteamUser005_vtable;
+    r->linux_side = linux_side;
+    return r;
+}
+

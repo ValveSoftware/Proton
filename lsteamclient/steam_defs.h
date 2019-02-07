@@ -65,7 +65,8 @@ typedef uint32_t EUserUGCList,
         EMatchMakingType,
         AudioPlayback_Status,
         ESteamUserStatType,
-        EConfigSubTree
+        EConfigSubTree,
+        ELogonState
 ;
 
 /* these are PODs, so just copy the data. hopefully the
