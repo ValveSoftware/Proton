@@ -146,5 +146,6 @@
     {"SteamGameServer002", &create_winISteamGameServer_SteamGameServer002},
     {"SteamUser006", &create_winISteamUser_SteamUser006},
     {"SteamUser005", &create_winISteamUser_SteamUser005},
+    {"SteamUser004", &create_winISteamUser_SteamUser004},
     {"SteamNetworkingSocketsSerialized002", &create_winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized002},
     {"SteamNetworkingSocketsSerialized001", &create_winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized002}, /* alias */

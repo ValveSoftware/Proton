@@ -142,4 +142,5 @@ extern void *create_winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001(void 
 extern void *create_winISteamGameServer_SteamGameServer002(void *);
 extern void *create_winISteamUser_SteamUser006(void *);
 extern void *create_winISteamUser_SteamUser005(void *);
+extern void *create_winISteamUser_SteamUser004(void *);
 extern void *create_winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized002(void *);
