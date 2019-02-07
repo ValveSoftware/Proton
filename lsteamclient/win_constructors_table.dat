@@ -133,6 +133,7 @@
     {"SteamMatchMaking002", &create_winISteamMatchmaking_SteamMatchMaking002},
     {"SteamUser009", &create_winISteamUser_SteamUser009},
     {"STEAMAPPS_INTERFACE_VERSION001", &create_winISteamApps_STEAMAPPS_INTERFACE_VERSION001},
+    {"SteamApps001", &create_winISteamApps_STEAMAPPS_INTERFACE_VERSION001}, /* alias */
     {"SteamGameServer004", &create_winISteamGameServer_SteamGameServer004},
     {"SteamClient006", &create_winISteamClient_SteamClient006},
     {"SteamUser008", &create_winISteamUser_SteamUser008},

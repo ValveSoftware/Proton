@@ -134,6 +134,7 @@ aliases = {
     "SteamUtils002":["SteamUtils001"],
     "SteamGameServer008":["SteamGameServer007","SteamGameServer006"],
     "SteamNetworkingSocketsSerialized002":["SteamNetworkingSocketsSerialized001"],
+    "STEAMAPPS_INTERFACE_VERSION001":["SteamApps001"],
 }
 
 # these structs are manually confirmed to be equivalent
