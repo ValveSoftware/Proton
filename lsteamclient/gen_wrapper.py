@@ -543,7 +543,7 @@ def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, e
                 unnamed = chr(ord(unnamed) + 1)
             elif param.type.kind == clang.cindex.TypeKind.POINTER and \
                     param.type.get_pointee().spelling in wrapped_classes:
-                cfile.write(", create_Linux%s(%s)" % (param.type.get_pointee().spelling, param.spelling))
+                cfile.write(", create_Linux%s(%s, \"%s\")" % (param.type.get_pointee().spelling, param.spelling, winclassname))
                 cpp.write("(%s)%s" % (param.type.spelling, param.spelling))
             elif path_conv and param.spelling in path_conv["w2l_names"]:
                 cfile.write(", %s ? lin_%s : NULL" % (param.spelling, param.spelling))

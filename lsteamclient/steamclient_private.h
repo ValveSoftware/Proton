@@ -39,10 +39,10 @@ bool steamclient_dos_path_to_unix_path(const char *src, char *dst);
 const char **steamclient_dos_to_unix_stringlist(const char **src);
 void steamclient_free_stringlist(const char **out);
 const char *steamclient_isteamcontroller_getglyph(int origin, const char *lin_path);
-void *create_LinuxISteamMatchmakingServerListResponse(void *win);
-void *create_LinuxISteamMatchmakingPingResponse(void *win);
-void *create_LinuxISteamMatchmakingPlayersResponse(void *win);
-void *create_LinuxISteamMatchmakingRulesResponse(void *win);
+void *create_LinuxISteamMatchmakingServerListResponse(void *win, const char *version);
+void *create_LinuxISteamMatchmakingPingResponse(void *win, const char *version);
+void *create_LinuxISteamMatchmakingPlayersResponse(void *win, const char *version);
+void *create_LinuxISteamMatchmakingRulesResponse(void *win, const char *version);
 
 extern char g_tmppath[PATH_MAX];
 

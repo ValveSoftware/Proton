@@ -79,7 +79,37 @@ struct gccServerListResponseVtbl {
     gccServerListResponse_RefreshComplete
 };
 
-void *create_LinuxISteamMatchmakingServerListResponse(void *win)
+void gccServerListResponse001_ServerResponded(struct gccServerListResponse *_this, int iServer)
+{
+    TRACE("%p/%p\n", _this, _this->win_side);
+    CALL_VTBL_FUNC(_this->win_side, 0, void, (winServerListResponse *, int), (_this->win_side, iServer));
+}
+
+void gccServerListResponse001_ServerFailedToRespond(struct gccServerListResponse *_this, int iServer)
+{
+    TRACE("%p/%p\n", _this, _this->win_side);
+    CALL_VTBL_FUNC(_this->win_side, 4, void, (winServerListResponse *, int), (_this->win_side, iServer));
+}
+
+void gccServerListResponse001_RefreshComplete(struct gccServerListResponse *_this, EMatchMakingServerResponse response)
+{
+    TRACE("%p/%p\n", _this, _this->win_side);
+    CALL_VTBL_FUNC(_this->win_side, 8, void, (winServerListResponse *, EMatchMakingServerResponse), (_this->win_side, response));
+}
+
+struct gccServerListResponse001Vtbl {
+    void (*ServerResponded)(struct gccServerListResponse001 *, int);
+
+    void (*ServerFailedToRespond)(struct gccServerListResponse001 *, int);
+
+    void (*RefreshComplete)(struct gccServerListResponse001 *, EMatchMakingServerResponse);
+} gccServerListResponse001_vtbl = {
+    gccServerListResponse001_ServerResponded,
+    gccServerListResponse001_ServerFailedToRespond,
+    gccServerListResponse001_RefreshComplete
+};
+
+void *create_LinuxISteamMatchmakingServerListResponse(void *win, const char *version)
 {
     struct gccServerListResponse *ret;
 
@@ -88,7 +118,11 @@ void *create_LinuxISteamMatchmakingServerListResponse(void *win)
     if(!ret)
         return NULL;
 
-    ret->vtable = &gccServerListResponse_vtbl;
+    if(strcmp(version, "winISteamMatchmakingServers_SteamMatchMakingServers001") == 0){
+        ret->vtable = &gccServerListResponse001_vtbl;
+    }else{
+        ret->vtable = &gccServerListResponse_vtbl;
+    }
     ret->win_side = (struct winServerListResponse*)win;
 
     return ret;
@@ -125,7 +159,7 @@ struct gccPingResponseVtbl {
     gccPingResponse_ServerFailedToRespond
 };
 
-void *create_LinuxISteamMatchmakingPingResponse(void *win)
+void *create_LinuxISteamMatchmakingPingResponse(void *win, const char *version)
 {
     struct gccPingResponse *ret;
 
@@ -179,7 +213,7 @@ struct gccPlayersResponseVtbl {
     gccPlayersResponse_PlayersRefreshComplete
 };
 
-void *create_LinuxISteamMatchmakingPlayersResponse(void *win)
+void *create_LinuxISteamMatchmakingPlayersResponse(void *win, const char *version)
 {
     struct gccPlayersResponse *ret;
 
@@ -233,7 +267,7 @@ struct gccRulesResponseVtbl {
     gccRulesResponse_RulesRefreshComplete
 };
 
-void *create_LinuxISteamMatchmakingRulesResponse(void *win)
+void *create_LinuxISteamMatchmakingRulesResponse(void *win, const char *version)
 {
     struct gccRulesResponse *ret;
 
