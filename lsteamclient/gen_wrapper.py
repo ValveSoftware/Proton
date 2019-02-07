@@ -75,6 +75,7 @@ sdk_versions = [
     "100",
     "099y",
     "099x",
+    "next",
 ]
 
 files = [
@@ -119,6 +120,9 @@ files = [
     ("isteamparentalsettings.h", [
         "ISteamParentalSettings"
     ]),
+    ("isteamnetworkingsocketsserialized.h", [
+        "ISteamNetworkingSocketsSerialized"
+    ]),
 ]
 
 aliases = {
@@ -126,6 +130,7 @@ aliases = {
     "SteamUtils004":["SteamUtils003"],
     "SteamUtils002":["SteamUtils001"],
     "SteamGameServer008":["SteamGameServer007","SteamGameServer006"],
+    "SteamNetworkingSocketsSerialized002":["SteamNetworkingSocketsSerialized001"],
 }
 
 # these structs are manually confirmed to be equivalent

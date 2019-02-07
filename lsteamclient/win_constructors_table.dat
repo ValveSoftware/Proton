@@ -144,3 +144,5 @@
     {"SteamFriends001", &create_winISteamFriends_SteamFriends001},
     {"STEAMUSERSTATS_INTERFACE_VERSION001", &create_winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001},
     {"SteamGameServer002", &create_winISteamGameServer_SteamGameServer002},
+    {"SteamNetworkingSocketsSerialized002", &create_winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized002},
+    {"SteamNetworkingSocketsSerialized001", &create_winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized002}, /* alias */
