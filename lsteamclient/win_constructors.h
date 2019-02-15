@@ -76,6 +76,7 @@ extern void *create_winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION0
 extern void *create_winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION010(void *);
 extern void *create_winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005(void *);
 extern void *create_winISteamApps_STEAMAPPS_INTERFACE_VERSION004(void *);
+extern void *create_winISteamGameStats_SteamGameStats001(void *);
 extern void *create_winISteamFriends_SteamFriends010(void *);
 extern void *create_winISteamClient_SteamClient011(void *);
 extern void *create_winISteamFriends_SteamFriends009(void *);

@@ -10,6 +10,8 @@
 #pragma once
 #endif
 
+#include "isteamclient.h"
+
 //-----------------------------------------------------------------------------
 // Purpose: Functions for recording game play sessions and details thereof
 //-----------------------------------------------------------------------------

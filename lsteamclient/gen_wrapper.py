@@ -115,6 +115,9 @@ files = [
     ("isteamgameserverstats.h", [
         "ISteamGameServerStats"
     ]),
+    ("isteamgamestats.h", [
+        "ISteamGameStats"
+    ]),
     ("isteammasterserverupdater.h", [
         "ISteamMasterServerUpdater"
     ]),
