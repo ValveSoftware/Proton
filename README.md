@@ -50,7 +50,7 @@ changes to the <tt>wine/</tt> directory.
 Easy build path
 ---
 
-Building Proton is quite complicated. We now provide a top-level Makefile which
+Building Proton is quite complicated. We provide a top-level Makefile which
 will execute most of the build commands for you. This section describes how to
 use this Makefile for simple Proton builds.
 
@@ -170,7 +170,7 @@ VM. If you are configuring manually, run these steps:
 
         mkdir proton/mybuild/
         cd proton/mybuild
-        ../configure.sh --steam-runtime64=docker:steam-proton-dev-beta --steam-runtime32=docker:steam-proton-dev32-beta --steam-runtime=$HOME/steam-runtime/runtime/
+        ../configure.sh --steam-runtime64=docker:steam-proton-dev --steam-runtime32=docker:steam-proton-dev32 --steam-runtime=$HOME/steam-runtime/runtime/
 
 If you are building without the Steam runtime, then instead use:
 
