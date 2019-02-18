@@ -126,6 +126,7 @@ function configure() {
 
 arg_steamrt32=""
 arg_steamrt64=""
+arg_steamrt=""
 arg_no_steamrt=""
 arg_ffmpeg=""
 arg_build_name=""
