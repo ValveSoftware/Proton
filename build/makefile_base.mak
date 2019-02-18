@@ -664,7 +664,7 @@ $(WINE_CONFIGURE_FILES64): SHELL = $(CONTAINER_SHELL64)
 $(WINE_CONFIGURE_FILES64): $(MAKEFILE_DEP) | faudio64 $(WINE_OBJ64)
 	cd $(dir $@) && \
 		STRIP=$(STRIP_QUOTED) \
-		CFLAGS="-I$(abspath $(TOOLS_DIR64))/include -I$(abspath $(SRCDIR))/contrib/include -g $(COMMON_FLAGS)" \
+		CFLAGS=-I$(abspath $(TOOLS_DIR64))"/include -g $(COMMON_FLAGS)" \
 		LDFLAGS=-L$(abspath $(TOOLS_DIR64))/lib \
 		PKG_CONFIG_PATH=$(abspath $(TOOLS_DIR64))/lib/pkgconfig \
 		CC=$(CC_QUOTED) \
@@ -679,7 +679,7 @@ $(WINE_CONFIGURE_FILES32): SHELL = $(CONTAINER_SHELL32)
 $(WINE_CONFIGURE_FILES32): $(MAKEFILE_DEP) | faudio32 $(WINE_OBJ32)
 	cd $(dir $@) && \
 		STRIP=$(STRIP_QUOTED) \
-		CFLAGS="-I$(abspath $(TOOLS_DIR32))/include -I$(abspath $(SRCDIR))/contrib/include -g $(COMMON_FLAGS)" \
+		CFLAGS=-I$(abspath $(TOOLS_DIR32))"/include -g $(COMMON_FLAGS)" \
 		LDFLAGS=-L$(abspath $(TOOLS_DIR32))/lib \
 		PKG_CONFIG_PATH=$(abspath $(TOOLS_DIR32))/lib/pkgconfig \
 		CC=$(CC_QUOTED) \
