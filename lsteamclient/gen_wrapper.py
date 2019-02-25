@@ -79,6 +79,7 @@ sdk_versions = [
     "099w",
     "099v",
     "099u",
+    "next2",
     "next",
 ]
 
