@@ -93,6 +93,7 @@ files = [
         "ISteamFriends",
         "ISteamHTMLSurface",
         "ISteamHTTP",
+        "ISteamInput",
         "ISteamInventory",
         "ISteamMatchmaking",
         "ISteamMatchmakingServers",

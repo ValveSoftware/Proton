@@ -13,6 +13,7 @@ extern void *create_winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003(v
 extern void *create_winISteamMusic_STEAMMUSIC_INTERFACE_VERSION001(void *);
 extern void *create_winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001(void *);
 extern void *create_winISteamHTTP_STEAMHTTP_INTERFACE_VERSION003(void *);
+extern void *create_winISteamInput_SteamInput001(void *);
 extern void *create_winISteamController_SteamController007(void *);
 extern void *create_winISteamUGC_STEAMUGC_INTERFACE_VERSION012(void *);
 extern void *create_winISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001(void *);

@@ -72,7 +72,8 @@ typedef uint32_t EUserUGCList,
         EInputSourceMode,
         EActivateGameOverlayToWebPageMode,
         ESteamPartyBeaconLocationData,
-        ESteamPartyBeaconLocationType
+        ESteamPartyBeaconLocationType,
+        EInputActionOrigin
 ;
 
 /* these are PODs, so just copy the data. hopefully the
@@ -206,6 +207,10 @@ typedef int32 SteamInventoryResult_t, SteamItemDef_t;
 typedef uint64 SteamItemInstanceID_t;
 typedef uint64 SteamInventoryUpdateHandle_t;
 typedef uint64 PartyBeaconID_t;
+typedef uint64 InputHandle_t;
+typedef uint64 InputActionSetHandle_t;
+typedef uint64 InputDigitalActionHandle_t;
+typedef uint64 InputAnalogActionHandle_t;
 
 #pragma pack( push, 4 )
 typedef struct CallbackMsg_t
