@@ -10,7 +10,7 @@
 #pragma once
 #endif
 
-#include "isteamclient.h"
+#include "steam_api_common.h"
 
 
 // Steam API call failure results
@@ -133,7 +133,7 @@ public:
 	//   k_ECheckFileSignatureFileNotFound - The file does not exist on disk.
 	//   k_ECheckFileSignatureInvalidSignature - The file exists, and the signing tab has been set for this file, but the file is either not signed or the signature does not match.
 	//   k_ECheckFileSignatureValidSignature - The file is signed and the signature is valid.
-	CALL_RESULT( CheckFileSignature_t )
+	STEAM_CALL_RESULT( CheckFileSignature_t )
 	virtual SteamAPICall_t CheckFileSignature( const char *szFileName ) = 0;
 
 	// Activates the Big Picture text input dialog which only supports gamepad input
@@ -173,6 +173,13 @@ public:
 
 #define STEAMUTILS_INTERFACE_VERSION "SteamUtils009"
 
+// Global interface accessor
+inline ISteamUtils *SteamUtils();
+STEAM_DEFINE_INTERFACE_ACCESSOR( ISteamUtils *, SteamUtils, SteamInternal_FindOrCreateUserInterface( 0, STEAMUTILS_INTERFACE_VERSION ) );
+
+// Global accessor for the gameserver client
+inline ISteamUtils *SteamGameServerUtils();
+STEAM_DEFINE_INTERFACE_ACCESSOR( ISteamUtils *, SteamGameServerUtils, SteamInternal_FindOrCreateGameServerInterface( 0, STEAMUTILS_INTERFACE_VERSION ) );
 
 // callbacks
 #if defined( VALVE_CALLBACK_PACK_SMALL )
@@ -180,7 +187,7 @@ public:
 #elif defined( VALVE_CALLBACK_PACK_LARGE )
 #pragma pack( push, 8 )
 #else
-#error isteamclient.h must be included
+#error steam_api_common.h should define VALVE_CALLBACK_PACK_xxx
 #endif 
 
 //-----------------------------------------------------------------------------

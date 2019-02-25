@@ -10,9 +10,7 @@
 #pragma once
 #endif
 
-#include "isteamclient.h"
-#include "steamtypes.h"
-#include "steamclientpublic.h"
+#include "steam_api_common.h"
 
 
 // list of possible return values from the ISteamGameCoordinator API
@@ -55,7 +53,7 @@ public:
 #elif defined( VALVE_CALLBACK_PACK_LARGE )
 #pragma pack( push, 8 )
 #else
-#error isteamclient.h must be included
+#error steam_api_common.h should define VALVE_CALLBACK_PACK_xxx
 #endif 
 
 // callback notification - A new message is available for reading from the message queue

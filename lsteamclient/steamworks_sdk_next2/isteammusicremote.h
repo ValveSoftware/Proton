@@ -6,7 +6,7 @@
 #pragma once
 #endif
 
-#include "isteamclient.h"
+#include "steam_api_common.h"
 #include "isteammusic.h"
 
 #define k_SteamMusicNameMaxLength 255
@@ -64,63 +64,67 @@ public:
 
 #define STEAMMUSICREMOTE_INTERFACE_VERSION "STEAMMUSICREMOTE_INTERFACE_VERSION001"
 
+// Global interface accessor
+inline ISteamMusicRemote *SteamMusicRemote();
+STEAM_DEFINE_USER_INTERFACE_ACCESSOR( ISteamMusicRemote *, SteamMusicRemote, STEAMMUSICREMOTE_INTERFACE_VERSION );
+
 // callbacks
 #if defined( VALVE_CALLBACK_PACK_SMALL )
 #pragma pack( push, 4 )
 #elif defined( VALVE_CALLBACK_PACK_LARGE )
 #pragma pack( push, 8 )
 #else
-#error isteamclient.h must be included
+#error steam_api_common.h should define VALVE_CALLBACK_PACK_xxx
 #endif 
 
 
-DEFINE_CALLBACK( MusicPlayerRemoteWillActivate_t, k_iSteamMusicRemoteCallbacks + 1)
-END_DEFINE_CALLBACK_0()
+STEAM_CALLBACK_BEGIN( MusicPlayerRemoteWillActivate_t, k_iSteamMusicRemoteCallbacks + 1)
+STEAM_CALLBACK_END(0)
 
-DEFINE_CALLBACK( MusicPlayerRemoteWillDeactivate_t, k_iSteamMusicRemoteCallbacks + 2 )
-END_DEFINE_CALLBACK_0()
+STEAM_CALLBACK_BEGIN( MusicPlayerRemoteWillDeactivate_t, k_iSteamMusicRemoteCallbacks + 2 )
+STEAM_CALLBACK_END(0)
 
-DEFINE_CALLBACK( MusicPlayerRemoteToFront_t, k_iSteamMusicRemoteCallbacks + 3 )
-END_DEFINE_CALLBACK_0()
+STEAM_CALLBACK_BEGIN( MusicPlayerRemoteToFront_t, k_iSteamMusicRemoteCallbacks + 3 )
+STEAM_CALLBACK_END(0)
 
-DEFINE_CALLBACK( MusicPlayerWillQuit_t, k_iSteamMusicRemoteCallbacks + 4 )
-END_DEFINE_CALLBACK_0()
+STEAM_CALLBACK_BEGIN( MusicPlayerWillQuit_t, k_iSteamMusicRemoteCallbacks + 4 )
+STEAM_CALLBACK_END(0)
 
-DEFINE_CALLBACK( MusicPlayerWantsPlay_t, k_iSteamMusicRemoteCallbacks + 5 )
-END_DEFINE_CALLBACK_0()
+STEAM_CALLBACK_BEGIN( MusicPlayerWantsPlay_t, k_iSteamMusicRemoteCallbacks + 5 )
+STEAM_CALLBACK_END(0)
 
-DEFINE_CALLBACK( MusicPlayerWantsPause_t, k_iSteamMusicRemoteCallbacks + 6 )
-END_DEFINE_CALLBACK_0()
+STEAM_CALLBACK_BEGIN( MusicPlayerWantsPause_t, k_iSteamMusicRemoteCallbacks + 6 )
+STEAM_CALLBACK_END(0)
 
-DEFINE_CALLBACK( MusicPlayerWantsPlayPrevious_t, k_iSteamMusicRemoteCallbacks + 7 )
-END_DEFINE_CALLBACK_0()
+STEAM_CALLBACK_BEGIN( MusicPlayerWantsPlayPrevious_t, k_iSteamMusicRemoteCallbacks + 7 )
+STEAM_CALLBACK_END(0)
 
-DEFINE_CALLBACK( MusicPlayerWantsPlayNext_t, k_iSteamMusicRemoteCallbacks + 8 )
-END_DEFINE_CALLBACK_0()
+STEAM_CALLBACK_BEGIN( MusicPlayerWantsPlayNext_t, k_iSteamMusicRemoteCallbacks + 8 )
+STEAM_CALLBACK_END(0)
 
-DEFINE_CALLBACK( MusicPlayerWantsShuffled_t, k_iSteamMusicRemoteCallbacks + 9 )
-	CALLBACK_MEMBER( 0, bool, m_bShuffled )
-END_DEFINE_CALLBACK_1()
+STEAM_CALLBACK_BEGIN( MusicPlayerWantsShuffled_t, k_iSteamMusicRemoteCallbacks + 9 )
+	STEAM_CALLBACK_MEMBER( 0, bool, m_bShuffled )
+STEAM_CALLBACK_END(1)
 
-DEFINE_CALLBACK( MusicPlayerWantsLooped_t, k_iSteamMusicRemoteCallbacks + 10 )
-	CALLBACK_MEMBER(0, bool, m_bLooped )
-END_DEFINE_CALLBACK_1()
+STEAM_CALLBACK_BEGIN( MusicPlayerWantsLooped_t, k_iSteamMusicRemoteCallbacks + 10 )
+	STEAM_CALLBACK_MEMBER(0, bool, m_bLooped )
+STEAM_CALLBACK_END(1)
 
-DEFINE_CALLBACK( MusicPlayerWantsVolume_t, k_iSteamMusicCallbacks + 11 )
-	CALLBACK_MEMBER(0, float, m_flNewVolume)
-END_DEFINE_CALLBACK_1()
+STEAM_CALLBACK_BEGIN( MusicPlayerWantsVolume_t, k_iSteamMusicCallbacks + 11 )
+	STEAM_CALLBACK_MEMBER(0, float, m_flNewVolume)
+STEAM_CALLBACK_END(1)
 
-DEFINE_CALLBACK( MusicPlayerSelectsQueueEntry_t, k_iSteamMusicCallbacks + 12 )
-	CALLBACK_MEMBER(0, int, nID )
-END_DEFINE_CALLBACK_1()
+STEAM_CALLBACK_BEGIN( MusicPlayerSelectsQueueEntry_t, k_iSteamMusicCallbacks + 12 )
+	STEAM_CALLBACK_MEMBER(0, int, nID )
+STEAM_CALLBACK_END(1)
 
-DEFINE_CALLBACK( MusicPlayerSelectsPlaylistEntry_t, k_iSteamMusicCallbacks + 13 )
-	CALLBACK_MEMBER(0, int, nID )
-END_DEFINE_CALLBACK_1()
+STEAM_CALLBACK_BEGIN( MusicPlayerSelectsPlaylistEntry_t, k_iSteamMusicCallbacks + 13 )
+	STEAM_CALLBACK_MEMBER(0, int, nID )
+STEAM_CALLBACK_END(1)
 
-DEFINE_CALLBACK( MusicPlayerWantsPlayingRepeatStatus_t, k_iSteamMusicRemoteCallbacks + 14 )
-	CALLBACK_MEMBER(0, int, m_nPlayingRepeatStatus )
-END_DEFINE_CALLBACK_1()
+STEAM_CALLBACK_BEGIN( MusicPlayerWantsPlayingRepeatStatus_t, k_iSteamMusicRemoteCallbacks + 14 )
+	STEAM_CALLBACK_MEMBER(0, int, m_nPlayingRepeatStatus )
+STEAM_CALLBACK_END(1)
 
 #pragma pack( pop )
 

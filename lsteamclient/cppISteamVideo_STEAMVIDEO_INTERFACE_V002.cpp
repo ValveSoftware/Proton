@@ -1,11 +1,11 @@
 #include "steam_defs.h"
-#include "steamworks_sdk_142/steam_api.h"
+#include "steamworks_sdk_143/steam_api.h"
 #include "steamclient_private.h"
 #include "cppISteamVideo_STEAMVIDEO_INTERFACE_V002.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include "struct_converters_142.h"
+#include "struct_converters_143.h"
 void cppISteamVideo_STEAMVIDEO_INTERFACE_V002_GetVideoURL(void *linux_side, AppId_t unVideoAppID)
 {
     ((ISteamVideo*)linux_side)->GetVideoURL((AppId_t)unVideoAppID);

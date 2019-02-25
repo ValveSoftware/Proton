@@ -1,5 +1,12 @@
 case 0x00100098: win_msg->m_cubParam = 24; win_msg->m_pubParam = HeapAlloc(GetProcessHeap(), 0, win_msg->m_cubParam); cb_MicroTxnAuthorizationResponse_t_24(lin_msg.m_pubParam, win_msg->m_pubParam); break;
 case 0x000c0201: win_msg->m_cubParam = 16; win_msg->m_pubParam = HeapAlloc(GetProcessHeap(), 0, win_msg->m_cubParam); cb_LobbyCreated_t_16(lin_msg.m_pubParam, win_msg->m_pubParam); break;
+case 0x000c145b: win_msg->m_cubParam = 16; win_msg->m_pubParam = HeapAlloc(GetProcessHeap(), 0, win_msg->m_cubParam); cb_RequestPlayersForGameProgressCallback_t_16(lin_msg.m_pubParam, win_msg->m_pubParam); break;
+case 0x0038145c: win_msg->m_cubParam = 64; win_msg->m_pubParam = HeapAlloc(GetProcessHeap(), 0, win_msg->m_cubParam); cb_RequestPlayersForGameResultCallback_t_64(lin_msg.m_pubParam, win_msg->m_pubParam); break;
+case 0x0014145d: win_msg->m_cubParam = 24; win_msg->m_pubParam = HeapAlloc(GetProcessHeap(), 0, win_msg->m_cubParam); cb_RequestPlayersForGameFinalResultCallback_t_24(lin_msg.m_pubParam, win_msg->m_pubParam); break;
+case 0x0014145e: win_msg->m_cubParam = 24; win_msg->m_pubParam = HeapAlloc(GetProcessHeap(), 0, win_msg->m_cubParam); cb_SubmitPlayerResultResultCallback_t_24(lin_msg.m_pubParam, win_msg->m_pubParam); break;
+case 0x000c145f: win_msg->m_cubParam = 16; win_msg->m_pubParam = HeapAlloc(GetProcessHeap(), 0, win_msg->m_cubParam); cb_EndGameResultCallback_t_16(lin_msg.m_pubParam, win_msg->m_pubParam); break;
+case 0x011414b5: win_msg->m_cubParam = 280; win_msg->m_pubParam = HeapAlloc(GetProcessHeap(), 0, win_msg->m_cubParam); cb_JoinPartyCallback_t_280(lin_msg.m_pubParam, win_msg->m_pubParam); break;
+case 0x000c14b6: win_msg->m_cubParam = 16; win_msg->m_pubParam = HeapAlloc(GetProcessHeap(), 0, win_msg->m_cubParam); cb_CreateBeaconCallback_t_16(lin_msg.m_pubParam, win_msg->m_pubParam); break;
 case 0x01180517: win_msg->m_cubParam = 288; win_msg->m_pubParam = HeapAlloc(GetProcessHeap(), 0, win_msg->m_cubParam); cb_RemoteStorageAppSyncProgress_t_288(lin_msg.m_pubParam, win_msg->m_pubParam); break;
 case 0x0110051b: win_msg->m_cubParam = 280; win_msg->m_pubParam = HeapAlloc(GetProcessHeap(), 0, win_msg->m_cubParam); cb_RemoteStorageFileShareResult_t_280(lin_msg.m_pubParam, win_msg->m_pubParam); break;
 case 0x0010051d: win_msg->m_cubParam = 24; win_msg->m_pubParam = HeapAlloc(GetProcessHeap(), 0, win_msg->m_cubParam); cb_RemoteStoragePublishFileResult_t_24(lin_msg.m_pubParam, win_msg->m_pubParam); break;

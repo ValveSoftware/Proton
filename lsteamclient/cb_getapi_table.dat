@@ -148,6 +148,24 @@ case 1330:
     case 24: cb_RemoteStoragePublishedFileUpdated_t_24(lin_callback, callback); break;
     }
     break;
+case 5301:
+    switch(callback_len){
+    default:
+    case 280: cb_JoinPartyCallback_t_280(lin_callback, callback); break;
+    }
+    break;
+case 5302:
+    switch(callback_len){
+    default:
+    case 16: cb_CreateBeaconCallback_t_16(lin_callback, callback); break;
+    }
+    break;
+case 2103:
+    switch(callback_len){
+    default:
+    case 24: cb_HTTPRequestDataReceived_t_24(lin_callback, callback); break;
+    }
+    break;
 case 2101:
     switch(callback_len){
     default:
@@ -159,12 +177,6 @@ case 2102:
     switch(callback_len){
     default:
     case 16: cb_HTTPRequestHeadersReceived_t_16(lin_callback, callback); break;
-    }
-    break;
-case 2103:
-    switch(callback_len){
-    default:
-    case 24: cb_HTTPRequestDataReceived_t_24(lin_callback, callback); break;
     }
     break;
 case 3402:
@@ -239,6 +251,36 @@ case 3417:
     switch(callback_len){
     default:
     case 16: cb_DeleteItemResult_t_16(lin_callback, callback); break;
+    }
+    break;
+case 5211:
+    switch(callback_len){
+    default:
+    case 16: cb_RequestPlayersForGameProgressCallback_t_16(lin_callback, callback); break;
+    }
+    break;
+case 5212:
+    switch(callback_len){
+    default:
+    case 64: cb_RequestPlayersForGameResultCallback_t_64(lin_callback, callback); break;
+    }
+    break;
+case 5213:
+    switch(callback_len){
+    default:
+    case 24: cb_RequestPlayersForGameFinalResultCallback_t_24(lin_callback, callback); break;
+    }
+    break;
+case 5214:
+    switch(callback_len){
+    default:
+    case 24: cb_SubmitPlayerResultResultCallback_t_24(lin_callback, callback); break;
+    }
+    break;
+case 5215:
+    switch(callback_len){
+    default:
+    case 16: cb_EndGameResultCallback_t_16(lin_callback, callback); break;
     }
     break;
 case 4704:

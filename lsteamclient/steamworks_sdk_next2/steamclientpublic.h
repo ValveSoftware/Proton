@@ -137,6 +137,7 @@ enum EResult
 	k_EResultWGNetworkSendExceeded = 110,		// the WG couldn't send a response because we exceeded max network send size
 	k_EResultAccountNotFriends = 111,			// the user is not mutually friends
 	k_EResultLimitedUserAccount = 112,			// the user is limited
+	k_EResultCantRemoveItem = 113,				// item can't be removed
 };
 
 // Error codes for use with the voice functions
@@ -448,6 +449,16 @@ enum EBroadcastUploadResult
 	k_EBroadcastUploadResultMissingAudio = 11,	// client failed to send audio data
 	k_EBroadcastUploadResultTooFarBehind = 12,	// clients was too slow uploading
 	k_EBroadcastUploadResultTranscodeBehind = 13,	// server failed to keep up with transcode
+	k_EBroadcastUploadResultNotAllowedToPlay = 14, // Broadcast does not have permissions to play game
+	k_EBroadcastUploadResultBusy = 15, // RTMP host to busy to take new broadcast stream, choose another
+	k_EBroadcastUploadResultBanned = 16, // Account banned from community broadcast
+	k_EBroadcastUploadResultAlreadyActive = 17, // We already already have an stream running.
+	k_EBroadcastUploadResultForcedOff = 18, // We explicitly shutting down a broadcast
+	k_EBroadcastUploadResultAudioBehind = 19, // Audio stream was too far behind video 
+	k_EBroadcastUploadResultShutdown = 20,	// Broadcast Server was shut down
+	k_EBroadcastUploadResultDisconnect = 21,	// broadcast uploader TCP disconnected 
+	k_EBroadcastUploadResultVideoInitFailed = 22,	// invalid video settings 
+	k_EBroadcastUploadResultAudioInitFailed = 23,	// invalid audio settings 
 };
 
 
@@ -503,6 +514,7 @@ enum EVRHMDType
 	k_eEVRHMDType_HTC_Dev = 1,	// original HTC dev kits
 	k_eEVRHMDType_HTC_VivePre = 2,	// htc vive pre
 	k_eEVRHMDType_HTC_Vive = 3,	// htc vive consumer release
+	k_eEVRHMDType_HTC_VivePro = 4,	// htc vive pro release
 
 	k_eEVRHMDType_HTC_Unknown = 20, // unknown htc hmd
 
@@ -530,6 +542,12 @@ enum EVRHMDType
 	k_eEVRHMDType_Unannounced_Unknown = 100, // Unannounced unknown HMD
 	k_eEVRHMDType_Unannounced_WindowsMR = 101, // Unannounced Windows MR headset
 
+	k_eEVRHMDType_vridge = 110, // VRIDGE tool
+	
+	k_eEVRHMDType_Huawei_Unknown = 120, // Huawei unknown HMD
+	k_eEVRHMDType_Huawei_VR2 = 121, // Huawei VR2 3DOF headset
+	k_eEVRHMDType_Huawei_EndOfRange = 129, // end of Huawei HMD range
+
 };
 
 
@@ -552,12 +570,81 @@ static inline bool BIsWindowsMRHeadset( EVRHMDType eType )
 
 
 //-----------------------------------------------------------------------------
+// Purpose: true if this is from a Hauwei HMD
+//-----------------------------------------------------------------------------
+static inline bool BIsHuaweiHeadset( EVRHMDType eType )
+{
+	return eType >= k_eEVRHMDType_Huawei_Unknown && eType <= k_eEVRHMDType_Huawei_EndOfRange;
+}
+
+
+//-----------------------------------------------------------------------------
 // Purpose: true if this is from an Vive HMD
 //-----------------------------------------------------------------------------
 static inline bool BIsViveHMD( EVRHMDType eType )
 {
-	return eType == k_eEVRHMDType_HTC_Dev || eType == k_eEVRHMDType_HTC_VivePre || eType == k_eEVRHMDType_HTC_Vive || eType == k_eEVRHMDType_HTC_Unknown;
+	return eType == k_eEVRHMDType_HTC_Dev || eType == k_eEVRHMDType_HTC_VivePre || eType == k_eEVRHMDType_HTC_Vive || eType == k_eEVRHMDType_HTC_Unknown || eType == k_eEVRHMDType_HTC_VivePro;
 }
+
+
+//-----------------------------------------------------------------------------
+// Purpose: Reasons a user may not use the Community Market.
+//          Used in MarketEligibilityResponse_t.
+//-----------------------------------------------------------------------------
+enum EMarketNotAllowedReasonFlags
+{
+	k_EMarketNotAllowedReason_None = 0,
+
+	// A back-end call failed or something that might work again on retry
+	k_EMarketNotAllowedReason_TemporaryFailure = (1 << 0),
+
+	// Disabled account
+	k_EMarketNotAllowedReason_AccountDisabled = (1 << 1),
+
+	// Locked account
+	k_EMarketNotAllowedReason_AccountLockedDown = (1 << 2),
+
+	// Limited account (no purchases)
+	k_EMarketNotAllowedReason_AccountLimited = (1 << 3),
+
+	// The account is banned from trading items
+	k_EMarketNotAllowedReason_TradeBanned = (1 << 4),
+
+	// Wallet funds aren't tradable because the user has had no purchase
+	// activity in the last year or has had no purchases prior to last month
+	k_EMarketNotAllowedReason_AccountNotTrusted = (1 << 5),
+
+	// The user doesn't have Steam Guard enabled
+	k_EMarketNotAllowedReason_SteamGuardNotEnabled = (1 << 6),
+
+	// The user has Steam Guard, but it hasn't been enabled for the required
+	// number of days
+	k_EMarketNotAllowedReason_SteamGuardOnlyRecentlyEnabled = (1 << 7),
+
+	// The user has recently forgotten their password and reset it
+	k_EMarketNotAllowedReason_RecentPasswordReset = (1 << 8),
+
+	// The user has recently funded his or her wallet with a new payment method
+	k_EMarketNotAllowedReason_NewPaymentMethod = (1 << 9),
+
+	// An invalid cookie was sent by the user
+	k_EMarketNotAllowedReason_InvalidCookie = (1 << 10),
+
+	// The user has Steam Guard, but is using a new computer or web browser
+	k_EMarketNotAllowedReason_UsingNewDevice = (1 << 11),
+
+	// The user has recently refunded a store purchase by his or herself
+	k_EMarketNotAllowedReason_RecentSelfRefund = (1 << 12),
+
+	// The user has recently funded his or her wallet with a new payment method that cannot be verified
+	k_EMarketNotAllowedReason_NewPaymentMethodCannotBeVerified = (1 << 13),
+
+	// Not only is the account not trusted, but they have no recent purchases at all
+	k_EMarketNotAllowedReason_NoRecentPurchases = (1 << 14),
+
+	// User accepted a wallet gift that was recently purchased
+	k_EMarketNotAllowedReason_AcceptedWalletGift = (1 << 15),
+};
 
 
 #pragma pack( push, 1 )
@@ -1197,9 +1284,6 @@ public:
 			return m_gameID.m_nAppID == k_uAppIdInvalid && m_gameID.m_nModID & 0x80000000;
 
 		default:
-#if defined(Assert)
-			Assert(false);
-#endif
 			return false;
 		}
 
@@ -1266,5 +1350,68 @@ typedef void (*PFNPreMinidumpCallback)(void *context);
 //-----------------------------------------------------------------------------
 typedef void *BREAKPAD_HANDLE;
 #define BREAKPAD_INVALID_HANDLE (BREAKPAD_HANDLE)0 
+
+enum EGameSearchErrorCode_t
+{
+	k_EGameSearchErrorCode_OK = 1,
+	k_EGameSearchErrorCode_Failed_Search_Already_In_Progress = 2,
+	k_EGameSearchErrorCode_Failed_No_Search_In_Progress = 3,
+	k_EGameSearchErrorCode_Failed_Not_Lobby_Leader = 4, // if not the lobby leader can not call SearchForGameWithLobby
+	k_EGameSearchErrorCode_Failed_No_Host_Available = 5, // no host is available that matches those search params
+	k_EGameSearchErrorCode_Failed_Search_Params_Invalid = 6, // search params are invalid
+	k_EGameSearchErrorCode_Failed_Offline = 7, // offline, could not communicate with server
+	k_EGameSearchErrorCode_Failed_NotAuthorized = 8, // either the user or the application does not have priveledges to do this
+	k_EGameSearchErrorCode_Failed_Unknown_Error = 9, // unknown error
+};
+
+enum EPlayerResult_t
+{
+	k_EPlayerResultFailedToConnect = 1, // failed to connect after confirming
+	k_EPlayerResultAbandoned = 2,		// quit game without completing it
+	k_EPlayerResultKicked = 3,			// kicked by other players/moderator/server rules
+	k_EPlayerResultIncomplete = 4,		// player stayed to end but game did not conclude successfully ( nofault to player )
+	k_EPlayerResultCompleted = 5,		// player completed game
+};
+
+// Define compile time assert macros to let us validate the structure sizes.
+#define VALVE_COMPILE_TIME_ASSERT( pred ) typedef char compile_time_assert_type[(pred) ? 1 : -1];
+
+#if defined(__linux__) || defined(__APPLE__) 
+// The 32-bit version of gcc has the alignment requirement for uint64 and double set to
+// 4 meaning that even with #pragma pack(8) these types will only be four-byte aligned.
+// The 64-bit version of gcc has the alignment requirement for these types set to
+// 8 meaning that unless we use #pragma pack(4) our structures will get bigger.
+// The 64-bit structure packing has to match the 32-bit structure packing for each platform.
+#define VALVE_CALLBACK_PACK_SMALL
+#else
+#define VALVE_CALLBACK_PACK_LARGE
+#endif
+
+#if defined( VALVE_CALLBACK_PACK_SMALL )
+#pragma pack( push, 4 )
+#elif defined( VALVE_CALLBACK_PACK_LARGE )
+#pragma pack( push, 8 )
+#else
+#error ???
+#endif 
+
+typedef struct ValvePackingSentinel_t
+{
+    uint32 m_u32;
+    uint64 m_u64;
+    uint16 m_u16;
+    double m_d;
+} ValvePackingSentinel_t;
+
+#pragma pack( pop )
+
+
+#if defined(VALVE_CALLBACK_PACK_SMALL)
+VALVE_COMPILE_TIME_ASSERT( sizeof(ValvePackingSentinel_t) == 24 )
+#elif defined(VALVE_CALLBACK_PACK_LARGE)
+VALVE_COMPILE_TIME_ASSERT( sizeof(ValvePackingSentinel_t) == 32 )
+#else
+#error ???
+#endif
 
 #endif // STEAMCLIENTPUBLIC_H

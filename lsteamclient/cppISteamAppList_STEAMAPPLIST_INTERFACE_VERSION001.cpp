@@ -1,11 +1,11 @@
 #include "steam_defs.h"
-#include "steamworks_sdk_142/steam_api.h"
+#include "steamworks_sdk_143/steam_api.h"
 #include "steamclient_private.h"
 #include "cppISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include "struct_converters_142.h"
+#include "struct_converters_143.h"
 uint32 cppISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetNumInstalledApps(void *linux_side)
 {
     return ((ISteamAppList*)linux_side)->GetNumInstalledApps();

@@ -10,7 +10,7 @@
 #pragma once
 #endif
 
-#include "isteamclient.h"
+#include "steam_api_common.h"
 #include "isteamremotestorage.h"
 
 // size limit on stat or achievement name (UTF-8 encoded)
@@ -67,7 +67,7 @@ enum ELeaderboardUploadScoreMethod
 #elif defined( VALVE_CALLBACK_PACK_LARGE )
 #pragma pack( push, 8 )
 #else
-#error isteamclient.h must be included
+#error steam_api_common.h should define VALVE_CALLBACK_PACK_xxx
 #endif 
 
 struct LeaderboardEntry_t
@@ -89,7 +89,7 @@ class ISteamUserStats
 {
 public:
 	// Ask the server to send down this user's data and achievements for this game
-	CALL_BACK( UserStatsReceived_t )
+	STEAM_CALL_BACK( UserStatsReceived_t )
 	virtual bool RequestCurrentStats() = 0;
 
 	// Data accessors
@@ -149,7 +149,7 @@ public:
 	// returns a UserStatsReceived_t received when completed
 	// if the other user has no stats, UserStatsReceived_t.m_eResult will be set to k_EResultFail
 	// these stats won't be auto-updated; you'll need to call RequestUserStats() again to refresh any data
-	CALL_RESULT( UserStatsReceived_t )
+	STEAM_CALL_RESULT( UserStatsReceived_t )
 	virtual SteamAPICall_t RequestUserStats( CSteamID steamIDUser ) = 0;
 
 	// requests stat information for a user, usable after a successful call to RequestUserStats()
@@ -166,12 +166,12 @@ public:
 
 	// asks the Steam back-end for a leaderboard by name, and will create it if it's not yet
 	// This call is asynchronous, with the result returned in LeaderboardFindResult_t
-	CALL_RESULT(LeaderboardFindResult_t)
+	STEAM_CALL_RESULT(LeaderboardFindResult_t)
 	virtual SteamAPICall_t FindOrCreateLeaderboard( const char *pchLeaderboardName, ELeaderboardSortMethod eLeaderboardSortMethod, ELeaderboardDisplayType eLeaderboardDisplayType ) = 0;
 
 	// as above, but won't create the leaderboard if it's not found
 	// This call is asynchronous, with the result returned in LeaderboardFindResult_t
-	CALL_RESULT( LeaderboardFindResult_t )
+	STEAM_CALL_RESULT( LeaderboardFindResult_t )
 	virtual SteamAPICall_t FindLeaderboard( const char *pchLeaderboardName ) = 0;
 
 	// returns the name of a leaderboard
@@ -194,15 +194,15 @@ public:
 	// k_ELeaderboardDataRequestGlobalAroundUser requests rows around the current user, nRangeStart being negate
 	//   e.g. DownloadLeaderboardEntries( hLeaderboard, k_ELeaderboardDataRequestGlobalAroundUser, -3, 3 ) will return 7 rows, 3 before the user, 3 after
 	// k_ELeaderboardDataRequestFriends requests all the rows for friends of the current user 
-	CALL_RESULT( LeaderboardScoresDownloaded_t )
+	STEAM_CALL_RESULT( LeaderboardScoresDownloaded_t )
 	virtual SteamAPICall_t DownloadLeaderboardEntries( SteamLeaderboard_t hSteamLeaderboard, ELeaderboardDataRequest eLeaderboardDataRequest, int nRangeStart, int nRangeEnd ) = 0;
 	// as above, but downloads leaderboard entries for an arbitrary set of users - ELeaderboardDataRequest is k_ELeaderboardDataRequestUsers
 	// if a user doesn't have a leaderboard entry, they won't be included in the result
 	// a max of 100 users can be downloaded at a time, with only one outstanding call at a time
-	METHOD_DESC(Downloads leaderboard entries for an arbitrary set of users - ELeaderboardDataRequest is k_ELeaderboardDataRequestUsers)
-		CALL_RESULT( LeaderboardScoresDownloaded_t )
+	STEAM_METHOD_DESC(Downloads leaderboard entries for an arbitrary set of users - ELeaderboardDataRequest is k_ELeaderboardDataRequestUsers)
+		STEAM_CALL_RESULT( LeaderboardScoresDownloaded_t )
 	virtual SteamAPICall_t DownloadLeaderboardEntriesForUsers( SteamLeaderboard_t hSteamLeaderboard,
-															   ARRAY_COUNT_D(cUsers, Array of users to retrieve) CSteamID *prgUsers, int cUsers ) = 0;
+															   STEAM_ARRAY_COUNT_D(cUsers, Array of users to retrieve) CSteamID *prgUsers, int cUsers ) = 0;
 
 	// Returns data about a single leaderboard entry
 	// use a for loop from 0 to LeaderboardScoresDownloaded_t::m_cEntryCount to get all the downloaded entries
@@ -224,24 +224,24 @@ public:
 	// This call is asynchronous, with the result returned in LeaderboardScoreUploaded_t
 	// Details are extra game-defined information regarding how the user got that score
 	// pScoreDetails points to an array of int32's, cScoreDetailsCount is the number of int32's in the list
-	CALL_RESULT( LeaderboardScoreUploaded_t )
+	STEAM_CALL_RESULT( LeaderboardScoreUploaded_t )
 	virtual SteamAPICall_t UploadLeaderboardScore( SteamLeaderboard_t hSteamLeaderboard, ELeaderboardUploadScoreMethod eLeaderboardUploadScoreMethod, int32 nScore, const int32 *pScoreDetails, int cScoreDetailsCount ) = 0;
 
 	// Attaches a piece of user generated content the user's entry on a leaderboard.
 	// hContent is a handle to a piece of user generated content that was shared using ISteamUserRemoteStorage::FileShare().
 	// This call is asynchronous, with the result returned in LeaderboardUGCSet_t.
-	CALL_RESULT( LeaderboardUGCSet_t )
+	STEAM_CALL_RESULT( LeaderboardUGCSet_t )
 	virtual SteamAPICall_t AttachLeaderboardUGC( SteamLeaderboard_t hSteamLeaderboard, UGCHandle_t hUGC ) = 0;
 
 	// Retrieves the number of players currently playing your game (online + offline)
 	// This call is asynchronous, with the result returned in NumberOfCurrentPlayers_t
-	CALL_RESULT( NumberOfCurrentPlayers_t )
+	STEAM_CALL_RESULT( NumberOfCurrentPlayers_t )
 	virtual SteamAPICall_t GetNumberOfCurrentPlayers() = 0;
 
 	// Requests that Steam fetch data on the percentage of players who have received each achievement
 	// for the game globally.
 	// This call is asynchronous, with the result returned in GlobalAchievementPercentagesReady_t.
-	CALL_RESULT( GlobalAchievementPercentagesReady_t )
+	STEAM_CALL_RESULT( GlobalAchievementPercentagesReady_t )
 	virtual SteamAPICall_t RequestGlobalAchievementPercentages() = 0;
 
 	// Get the info on the most achieved achievement for the game, returns an iterator index you can use to fetch
@@ -261,7 +261,7 @@ public:
 	// This call is asynchronous, with the results returned in GlobalStatsReceived_t.
 	// nHistoryDays specifies how many days of day-by-day history to retrieve in addition
 	// to the overall totals. The limit is 60.
-	CALL_RESULT( GlobalStatsReceived_t )
+	STEAM_CALL_RESULT( GlobalStatsReceived_t )
 	virtual SteamAPICall_t RequestGlobalStats( int nHistoryDays ) = 0;
 
 	// Gets the lifetime totals for an aggregated stat
@@ -272,8 +272,8 @@ public:
 	// So when called, pData[0] will be today, pData[1] will be yesterday, and pData[2] will be two days ago, 
 	// etc. cubData is the size in bytes of the pubData buffer. Returns the number of 
 	// elements actually set.
-	virtual int32 GetGlobalStatHistory( const char *pchStatName, ARRAY_COUNT(cubData) int64 *pData, uint32 cubData ) = 0;
-	virtual int32 GetGlobalStatHistory( const char *pchStatName, ARRAY_COUNT(cubData) double *pData, uint32 cubData ) = 0;
+	virtual int32 GetGlobalStatHistory( const char *pchStatName, STEAM_ARRAY_COUNT(cubData) int64 *pData, uint32 cubData ) = 0;
+	virtual int32 GetGlobalStatHistory( const char *pchStatName, STEAM_ARRAY_COUNT(cubData) double *pData, uint32 cubData ) = 0;
 
 #ifdef _PS3
 	// Call to kick off installation of the PS3 trophies. This call is asynchronous, and the results will be returned in a PS3TrophiesInstalled_t
@@ -298,13 +298,17 @@ public:
 
 #define STEAMUSERSTATS_INTERFACE_VERSION "STEAMUSERSTATS_INTERFACE_VERSION011"
 
+// Global interface accessor
+inline ISteamUserStats *SteamUserStats();
+STEAM_DEFINE_USER_INTERFACE_ACCESSOR( ISteamUserStats *, SteamUserStats, STEAMUSERSTATS_INTERFACE_VERSION );
+
 // callbacks
 #if defined( VALVE_CALLBACK_PACK_SMALL )
 #pragma pack( push, 4 )
 #elif defined( VALVE_CALLBACK_PACK_LARGE )
 #pragma pack( push, 8 )
 #else
-#error isteamclient.h must be included
+#error steam_api_common.h should define VALVE_CALLBACK_PACK_xxx
 #endif 
 
 //-----------------------------------------------------------------------------

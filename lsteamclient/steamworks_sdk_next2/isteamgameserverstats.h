@@ -10,7 +10,7 @@
 #pragma once
 #endif
 
-#include "isteamclient.h"
+#include "steam_api_common.h"
 
 //-----------------------------------------------------------------------------
 // Purpose: Functions for authenticating users via Steam to play on a game server
@@ -23,7 +23,7 @@ public:
 	// if the user has no stats, GSStatsReceived_t.m_eResult will be set to k_EResultFail
 	// these stats will only be auto-updated for clients playing on the server. For other
 	// users you'll need to call RequestUserStats() again to refresh any data
-	CALL_RESULT( GSStatsReceived_t )
+	STEAM_CALL_RESULT( GSStatsReceived_t )
 	virtual SteamAPICall_t RequestUserStats( CSteamID steamIDUser ) = 0;
 
 	// requests stat information for a user, usable after a successful call to RequestUserStats()
@@ -48,11 +48,15 @@ public:
 	// uploaded has been rejected, either because they broke constraints
 	// or were out of date. In this case the server sends back updated values.
 	// The stats should be re-iterated to keep in sync.
-	CALL_RESULT( GSStatsStored_t )
+	STEAM_CALL_RESULT( GSStatsStored_t )
 	virtual SteamAPICall_t StoreUserStats( CSteamID steamIDUser ) = 0;
 };
-
 #define STEAMGAMESERVERSTATS_INTERFACE_VERSION "SteamGameServerStats001"
+
+// Global accessor
+inline ISteamGameServerStats *SteamGameServerStats();
+STEAM_DEFINE_GAMESERVER_INTERFACE_ACCESSOR( ISteamGameServerStats *, SteamGameServerStats, STEAMGAMESERVERSTATS_INTERFACE_VERSION );
+
 
 // callbacks
 #if defined( VALVE_CALLBACK_PACK_SMALL )
@@ -60,7 +64,7 @@ public:
 #elif defined( VALVE_CALLBACK_PACK_LARGE )
 #pragma pack( push, 8 )
 #else
-#error isteamclient.h must be included
+#error steam_api_common.h should define VALVE_CALLBACK_PACK_xxx
 #endif 
 
 //-----------------------------------------------------------------------------

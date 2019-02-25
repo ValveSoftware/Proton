@@ -1,11 +1,11 @@
 #include "steam_defs.h"
-#include "steamworks_sdk_142/steam_api.h"
+#include "steamworks_sdk_143/steam_api.h"
 #include "steamclient_private.h"
 #include "cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include "struct_converters_142.h"
+#include "struct_converters_143.h"
 bool cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_RequestCurrentStats(void *linux_side)
 {
     return ((ISteamUserStats*)linux_side)->RequestCurrentStats();
@@ -159,9 +159,9 @@ SteamAPICall_t cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_DownloadLe
 bool cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetDownloadedLeaderboardEntry(void *linux_side, SteamLeaderboardEntries_t hSteamLeaderboardEntries, int index, LeaderboardEntry_t * pLeaderboardEntry, int32 * pDetails, int cDetailsMax)
 {
     LeaderboardEntry_t lin_pLeaderboardEntry;
-    win_to_lin_struct_LeaderboardEntry_t_142(pLeaderboardEntry, &lin_pLeaderboardEntry);
+    win_to_lin_struct_LeaderboardEntry_t_143(pLeaderboardEntry, &lin_pLeaderboardEntry);
     bool retval = ((ISteamUserStats*)linux_side)->GetDownloadedLeaderboardEntry((SteamLeaderboardEntries_t)hSteamLeaderboardEntries, (int)index, &lin_pLeaderboardEntry, (int32 *)pDetails, (int)cDetailsMax);
-    lin_to_win_struct_LeaderboardEntry_t_142(&lin_pLeaderboardEntry, pLeaderboardEntry);
+    lin_to_win_struct_LeaderboardEntry_t_143(&lin_pLeaderboardEntry, pLeaderboardEntry);
     return retval;
 }
 

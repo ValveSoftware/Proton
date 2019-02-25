@@ -6,6 +6,28 @@
 #include "steamclient_private.h"
 extern "C" {
 #pragma pack( push, 8 )
+struct winSteamPartyBeaconLocation_t_next2 {
+    ESteamPartyBeaconLocationType m_eType;
+    uint64 m_ulLocationID;
+}  __attribute__ ((ms_struct));
+#pragma pack( pop )
+void win_to_lin_struct_SteamPartyBeaconLocation_t_next2(const void *w, void *l)
+{
+    SteamPartyBeaconLocation_t *lin = (SteamPartyBeaconLocation_t *)l;
+    struct winSteamPartyBeaconLocation_t_next2 *win = (struct winSteamPartyBeaconLocation_t_next2 *)w;
+    lin->m_eType = win->m_eType;
+    lin->m_ulLocationID = win->m_ulLocationID;
+}
+
+void lin_to_win_struct_SteamPartyBeaconLocation_t_next2(const void *l, void *w)
+{
+    SteamPartyBeaconLocation_t *lin = (SteamPartyBeaconLocation_t *)l;
+    struct winSteamPartyBeaconLocation_t_next2 *win = (struct winSteamPartyBeaconLocation_t_next2 *)w;
+    win->m_eType = lin->m_eType;
+    win->m_ulLocationID = lin->m_ulLocationID;
+}
+
+#pragma pack( push, 8 )
 struct winLeaderboardEntry_t_next2 {
     CSteamID m_steamIDUser;
     int32 m_nGlobalRank;

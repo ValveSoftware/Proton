@@ -31,6 +31,9 @@ typedef struct __winISteamVideo winISteamVideo;
 typedef struct __winISteamMasterServerUpdater winISteamMasterServerUpdater;
 typedef struct __winISteamContentServer winISteamContentServer;
 typedef struct __winISteamParentalSettings winISteamParentalSettings;
+typedef struct __winISteamGameSearch winISteamGameSearch;
+typedef struct __winISteamInput winISteamInput;
+typedef struct __winISteamParties winISteamParties;
 typedef struct __winX winX;
 
 void *create_win_interface(const char *name, void *linux_side);

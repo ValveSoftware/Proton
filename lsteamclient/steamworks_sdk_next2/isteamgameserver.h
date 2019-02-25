@@ -10,7 +10,7 @@
 #pragma once
 #endif
 
-#include "isteamclient.h"
+#include "steam_api_common.h"
 
 #define MASTERSERVERUPDATERPORT_USEGAMESOCKETSHARE	((uint16)-1)
 
@@ -193,7 +193,7 @@ public:
 	// these two functions s are deprecated, and will not return results
 	// they will be removed in a future version of the SDK
 	virtual void GetGameplayStats( ) = 0;
-	CALL_RESULT( GSReputation_t )
+	STEAM_CALL_RESULT( GSReputation_t )
 	virtual SteamAPICall_t GetServerReputation() = 0;
 
 	// Returns the public IP of the server according to Steam, useful when the server is 
@@ -241,16 +241,20 @@ public:
 	virtual void ForceHeartbeat() = 0;
 
 	// associate this game server with this clan for the purposes of computing player compat
-	CALL_RESULT( AssociateWithClanResult_t )
+	STEAM_CALL_RESULT( AssociateWithClanResult_t )
 	virtual SteamAPICall_t AssociateWithClan( CSteamID steamIDClan ) = 0;
 	
 	// ask if any of the current players dont want to play with this new player - or vice versa
-	CALL_RESULT( ComputeNewPlayerCompatibilityResult_t )
+	STEAM_CALL_RESULT( ComputeNewPlayerCompatibilityResult_t )
 	virtual SteamAPICall_t ComputeNewPlayerCompatibility( CSteamID steamIDNewPlayer ) = 0;
 
 };
 
 #define STEAMGAMESERVER_INTERFACE_VERSION "SteamGameServer012"
+
+// Global accessor
+inline ISteamGameServer *SteamGameServer();
+STEAM_DEFINE_GAMESERVER_INTERFACE_ACCESSOR( ISteamGameServer *, SteamGameServer, STEAMGAMESERVER_INTERFACE_VERSION );
 
 // game server flags
 const uint32 k_unServerFlagNone			= 0x00;
@@ -271,7 +275,7 @@ const uint32 k_unServerFlagPrivate		= 0x20;		// server shouldn't list on master 
 #elif defined( VALVE_CALLBACK_PACK_LARGE )
 #pragma pack( push, 8 )
 #else
-#error isteamclient.h must be included
+#error steam_api_common.h should define VALVE_CALLBACK_PACK_xxx
 #endif 
 
 

@@ -2,6 +2,20 @@ extern void cb_MicroTxnAuthorizationResponse_t_24(void *l, void *w);
 
 extern void cb_LobbyCreated_t_16(void *l, void *w);
 
+extern void cb_RequestPlayersForGameProgressCallback_t_16(void *l, void *w);
+
+extern void cb_RequestPlayersForGameResultCallback_t_64(void *l, void *w);
+
+extern void cb_RequestPlayersForGameFinalResultCallback_t_24(void *l, void *w);
+
+extern void cb_SubmitPlayerResultResultCallback_t_24(void *l, void *w);
+
+extern void cb_EndGameResultCallback_t_16(void *l, void *w);
+
+extern void cb_JoinPartyCallback_t_280(void *l, void *w);
+
+extern void cb_CreateBeaconCallback_t_16(void *l, void *w);
+
 extern void cb_RemoteStorageAppSyncProgress_t_288(void *l, void *w);
 
 extern void cb_RemoteStorageFileShareResult_t_280(void *l, void *w);

@@ -209,6 +209,20 @@ SteamAPICall_t __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetFileDe
     path_result = cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetFileDetails(_this->linux_side, pszFileName ? lin_pszFileName : NULL);
 }
 
+DEFINE_THISCALL_WRAPPER(winISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetLaunchCommandLine, 12)
+int __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetLaunchCommandLine(winISteamApps_STEAMAPPS_INTERFACE_VERSION008 *_this, char * pszCommandLine, int cubCommandLine)
+{
+    TRACE("%p\n", _this);
+    return cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetLaunchCommandLine(_this->linux_side, pszCommandLine, cubCommandLine);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsSubscribedFromFamilySharing, 4)
+bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsSubscribedFromFamilySharing(winISteamApps_STEAMAPPS_INTERFACE_VERSION008 *_this)
+{
+    TRACE("%p\n", _this);
+    return cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsSubscribedFromFamilySharing(_this->linux_side);
+}
+
 extern vtable_ptr winISteamApps_STEAMAPPS_INTERFACE_VERSION008_vtable;
 
 #ifndef __GNUC__
@@ -241,6 +255,8 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetAppBuildId)
         VTABLE_ADD_FUNC(winISteamApps_STEAMAPPS_INTERFACE_VERSION008_RequestAllProofOfPurchaseKeys)
         VTABLE_ADD_FUNC(winISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetFileDetails)
+        VTABLE_ADD_FUNC(winISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetLaunchCommandLine)
+        VTABLE_ADD_FUNC(winISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsSubscribedFromFamilySharing)
     );
 #ifndef __GNUC__
 }

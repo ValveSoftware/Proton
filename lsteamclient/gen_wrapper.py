@@ -13,6 +13,7 @@ import re
 import math
 
 sdk_versions = [
+    "143",
     "142",
     "141",
     "140",
