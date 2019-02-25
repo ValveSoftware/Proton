@@ -98,11 +98,11 @@ void gccServerListResponse001_RefreshComplete(struct gccServerListResponse *_thi
 }
 
 struct gccServerListResponse001Vtbl {
-    void (*ServerResponded)(struct gccServerListResponse001 *, int);
+    void (*ServerResponded)(struct gccServerListResponse *, int);
 
-    void (*ServerFailedToRespond)(struct gccServerListResponse001 *, int);
+    void (*ServerFailedToRespond)(struct gccServerListResponse *, int);
 
-    void (*RefreshComplete)(struct gccServerListResponse001 *, EMatchMakingServerResponse);
+    void (*RefreshComplete)(struct gccServerListResponse *, EMatchMakingServerResponse);
 } gccServerListResponse001_vtbl = {
     gccServerListResponse001_ServerResponded,
     gccServerListResponse001_ServerFailedToRespond,
