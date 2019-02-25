@@ -4,6 +4,7 @@ extern void *create_winISteamFriends_SteamFriends017(void *);
 extern void *create_winISteamUtils_SteamUtils009(void *);
 extern void *create_winISteamMatchmaking_SteamMatchMaking009(void *);
 extern void *create_winISteamMatchmakingServers_SteamMatchMakingServers002(void *);
+extern void *create_winISteamParties_SteamParties002(void *);
 extern void *create_winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014(void *);
 extern void *create_winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011(void *);
 extern void *create_winISteamApps_STEAMAPPS_INTERFACE_VERSION008(void *);

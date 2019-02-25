@@ -71,6 +71,7 @@ typedef uint32_t EUserUGCList,
         EXboxOrigin,
         EInputSourceMode,
         EActivateGameOverlayToWebPageMode,
+        ESteamPartyBeaconLocationData,
         ESteamPartyBeaconLocationType
 ;
 

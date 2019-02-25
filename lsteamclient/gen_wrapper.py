@@ -99,6 +99,7 @@ files = [
         "ISteamMusic",
         "ISteamMusicRemote",
         "ISteamNetworking",
+        "ISteamParties",
         "ISteamRemoteStorage",
         "ISteamScreenshots",
         "ISteamUGC",

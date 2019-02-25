@@ -4,6 +4,7 @@
     {"SteamUtils009", &create_winISteamUtils_SteamUtils009},
     {"SteamMatchMaking009", &create_winISteamMatchmaking_SteamMatchMaking009},
     {"SteamMatchMakingServers002", &create_winISteamMatchmakingServers_SteamMatchMakingServers002},
+    {"SteamParties002", &create_winISteamParties_SteamParties002},
     {"STEAMREMOTESTORAGE_INTERFACE_VERSION014", &create_winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014},
     {"STEAMUSERSTATS_INTERFACE_VERSION011", &create_winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011},
     {"STEAMAPPS_INTERFACE_VERSION008", &create_winISteamApps_STEAMAPPS_INTERFACE_VERSION008},
