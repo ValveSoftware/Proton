@@ -1,6 +1,3 @@
-#ifdef __cplusplus
-extern "C" {
-#endif
 extern uint32 cppISteamUtils_SteamUtils005_GetSecondsSinceAppActive(void *);
 extern uint32 cppISteamUtils_SteamUtils005_GetSecondsSinceComputerActive(void *);
 extern EUniverse cppISteamUtils_SteamUtils005_GetConnectedUniverse(void *);
@@ -24,6 +21,3 @@ extern SteamAPICall_t cppISteamUtils_SteamUtils005_CheckFileSignature(void *, co
 extern bool cppISteamUtils_SteamUtils005_ShowGamepadTextInput(void *, EGamepadTextInputMode, EGamepadTextInputLineMode, const char *, uint32);
 extern uint32 cppISteamUtils_SteamUtils005_GetEnteredGamepadTextLength(void *);
 extern bool cppISteamUtils_SteamUtils005_GetEnteredGamepadTextInput(void *, char *, uint32);
-#ifdef __cplusplus
-}
-#endif

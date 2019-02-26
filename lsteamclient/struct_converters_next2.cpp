@@ -5,41 +5,22 @@
 #include "steamworks_sdk_next2/isteamgamecoordinator.h"
 #include "steamclient_private.h"
 extern "C" {
-#pragma pack( push, 8 )
-struct winSteamPartyBeaconLocation_t_next2 {
-    ESteamPartyBeaconLocationType m_eType;
-    uint64 m_ulLocationID;
-}  __attribute__ ((ms_struct));
-#pragma pack( pop )
-void win_to_lin_struct_SteamPartyBeaconLocation_t_next2(const void *w, void *l)
+#define SDKVER_next2
+#include "struct_converters.h"
+void win_to_lin_struct_SteamPartyBeaconLocation_t_next2(const struct winSteamPartyBeaconLocation_t_next2 *win, struct SteamPartyBeaconLocation_t *lin)
 {
-    SteamPartyBeaconLocation_t *lin = (SteamPartyBeaconLocation_t *)l;
-    struct winSteamPartyBeaconLocation_t_next2 *win = (struct winSteamPartyBeaconLocation_t_next2 *)w;
     lin->m_eType = win->m_eType;
     lin->m_ulLocationID = win->m_ulLocationID;
 }
 
-void lin_to_win_struct_SteamPartyBeaconLocation_t_next2(const void *l, void *w)
+void lin_to_win_struct_SteamPartyBeaconLocation_t_next2(const struct SteamPartyBeaconLocation_t *lin, struct winSteamPartyBeaconLocation_t_next2 *win)
 {
-    SteamPartyBeaconLocation_t *lin = (SteamPartyBeaconLocation_t *)l;
-    struct winSteamPartyBeaconLocation_t_next2 *win = (struct winSteamPartyBeaconLocation_t_next2 *)w;
     win->m_eType = lin->m_eType;
     win->m_ulLocationID = lin->m_ulLocationID;
 }
 
-#pragma pack( push, 8 )
-struct winLeaderboardEntry_t_next2 {
-    CSteamID m_steamIDUser;
-    int32 m_nGlobalRank;
-    int32 m_nScore;
-    int32 m_cDetails;
-    UGCHandle_t m_hUGC;
-}  __attribute__ ((ms_struct));
-#pragma pack( pop )
-void win_to_lin_struct_LeaderboardEntry_t_next2(const void *w, void *l)
+void win_to_lin_struct_LeaderboardEntry_t_next2(const struct winLeaderboardEntry_t_next2 *win, struct LeaderboardEntry_t *lin)
 {
-    LeaderboardEntry_t *lin = (LeaderboardEntry_t *)l;
-    struct winLeaderboardEntry_t_next2 *win = (struct winLeaderboardEntry_t_next2 *)w;
     lin->m_steamIDUser = win->m_steamIDUser;
     lin->m_nGlobalRank = win->m_nGlobalRank;
     lin->m_nScore = win->m_nScore;
@@ -47,10 +28,8 @@ void win_to_lin_struct_LeaderboardEntry_t_next2(const void *w, void *l)
     lin->m_hUGC = win->m_hUGC;
 }
 
-void lin_to_win_struct_LeaderboardEntry_t_next2(const void *l, void *w)
+void lin_to_win_struct_LeaderboardEntry_t_next2(const struct LeaderboardEntry_t *lin, struct winLeaderboardEntry_t_next2 *win)
 {
-    LeaderboardEntry_t *lin = (LeaderboardEntry_t *)l;
-    struct winLeaderboardEntry_t_next2 *win = (struct winLeaderboardEntry_t_next2 *)w;
     win->m_steamIDUser = lin->m_steamIDUser;
     win->m_nGlobalRank = lin->m_nGlobalRank;
     win->m_nScore = lin->m_nScore;
@@ -58,40 +37,8 @@ void lin_to_win_struct_LeaderboardEntry_t_next2(const void *l, void *w)
     win->m_hUGC = lin->m_hUGC;
 }
 
-#pragma pack( push, 8 )
-struct winSteamUGCDetails_t_next2 {
-    PublishedFileId_t m_nPublishedFileId;
-    EResult m_eResult;
-    EWorkshopFileType m_eFileType;
-    AppId_t m_nCreatorAppID;
-    AppId_t m_nConsumerAppID;
-    char m_rgchTitle[129];
-    char m_rgchDescription[8000];
-    uint64 m_ulSteamIDOwner;
-    uint32 m_rtimeCreated;
-    uint32 m_rtimeUpdated;
-    uint32 m_rtimeAddedToUserList;
-    ERemoteStoragePublishedFileVisibility m_eVisibility;
-    bool m_bBanned;
-    bool m_bAcceptedForUse;
-    bool m_bTagsTruncated;
-    char m_rgchTags[1025];
-    UGCHandle_t m_hFile;
-    UGCHandle_t m_hPreviewFile;
-    char m_pchFileName[260];
-    int32 m_nFileSize;
-    int32 m_nPreviewFileSize;
-    char m_rgchURL[256];
-    uint32 m_unVotesUp;
-    uint32 m_unVotesDown;
-    float m_flScore;
-    uint32 m_unNumChildren;
-}  __attribute__ ((ms_struct));
-#pragma pack( pop )
-void win_to_lin_struct_SteamUGCDetails_t_next2(const void *w, void *l)
+void win_to_lin_struct_SteamUGCDetails_t_next2(const struct winSteamUGCDetails_t_next2 *win, struct SteamUGCDetails_t *lin)
 {
-    SteamUGCDetails_t *lin = (SteamUGCDetails_t *)l;
-    struct winSteamUGCDetails_t_next2 *win = (struct winSteamUGCDetails_t_next2 *)w;
     lin->m_nPublishedFileId = win->m_nPublishedFileId;
     lin->m_eResult = win->m_eResult;
     lin->m_eFileType = win->m_eFileType;
@@ -120,10 +67,8 @@ void win_to_lin_struct_SteamUGCDetails_t_next2(const void *w, void *l)
     lin->m_unNumChildren = win->m_unNumChildren;
 }
 
-void lin_to_win_struct_SteamUGCDetails_t_next2(const void *l, void *w)
+void lin_to_win_struct_SteamUGCDetails_t_next2(const struct SteamUGCDetails_t *lin, struct winSteamUGCDetails_t_next2 *win)
 {
-    SteamUGCDetails_t *lin = (SteamUGCDetails_t *)l;
-    struct winSteamUGCDetails_t_next2 *win = (struct winSteamUGCDetails_t_next2 *)w;
     win->m_nPublishedFileId = lin->m_nPublishedFileId;
     win->m_eResult = lin->m_eResult;
     win->m_eFileType = lin->m_eFileType;

@@ -2,11 +2,12 @@
 #include "steamworks_sdk_107/steam_api.h"
 #include "steamworks_sdk_107/isteamgameserver.h"
 #include "steamclient_private.h"
-#include "cppISteamGameServer_SteamGameServer009.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include "struct_converters_107.h"
+#define SDKVER_107
+#include "struct_converters.h"
+#include "cppISteamGameServer_SteamGameServer009.h"
 void cppISteamGameServer_SteamGameServer009_LogOn(void *linux_side)
 {
     ((ISteamGameServer*)linux_side)->LogOn();

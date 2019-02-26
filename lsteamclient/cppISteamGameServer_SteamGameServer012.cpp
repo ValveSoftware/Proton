@@ -2,11 +2,12 @@
 #include "steamworks_sdk_143/steam_api.h"
 #include "steamworks_sdk_143/isteamgameserver.h"
 #include "steamclient_private.h"
-#include "cppISteamGameServer_SteamGameServer012.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include "struct_converters_143.h"
+#define SDKVER_143
+#include "struct_converters.h"
+#include "cppISteamGameServer_SteamGameServer012.h"
 bool cppISteamGameServer_SteamGameServer012_InitGameServer(void *linux_side, uint32 unIP, uint16 usGamePort, uint16 usQueryPort, uint32 unFlags, AppId_t nGameAppId, const char * pchVersionString)
 {
     return ((ISteamGameServer*)linux_side)->InitGameServer((uint32)unIP, (uint16)usGamePort, (uint16)usQueryPort, (uint32)unFlags, (AppId_t)nGameAppId, (const char *)pchVersionString);

@@ -1,11 +1,12 @@
 #include "steam_defs.h"
 #include "steamworks_sdk_141/steam_api.h"
 #include "steamclient_private.h"
-#include "cppISteamController_SteamController005.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include "struct_converters_141.h"
+#define SDKVER_141
+#include "struct_converters.h"
+#include "cppISteamController_SteamController005.h"
 bool cppISteamController_SteamController005_Init(void *linux_side)
 {
     return ((ISteamController*)linux_side)->Init();

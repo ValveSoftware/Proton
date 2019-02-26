@@ -1,6 +1,3 @@
-#ifdef __cplusplus
-extern "C" {
-#endif
 extern EResult cppISteamInventory_STEAMINVENTORY_INTERFACE_V002_GetResultStatus(void *, SteamInventoryResult_t);
 extern bool cppISteamInventory_STEAMINVENTORY_INTERFACE_V002_GetResultItems(void *, SteamInventoryResult_t, SteamItemDetails_t *, uint32 *);
 extern bool cppISteamInventory_STEAMINVENTORY_INTERFACE_V002_GetResultItemProperty(void *, SteamInventoryResult_t, uint32, const char *, char *, uint32 *);
@@ -38,6 +35,3 @@ extern bool cppISteamInventory_STEAMINVENTORY_INTERFACE_V002_SetProperty_2(void 
 extern bool cppISteamInventory_STEAMINVENTORY_INTERFACE_V002_SetProperty_3(void *, SteamInventoryUpdateHandle_t, SteamItemInstanceID_t, const char *, int64);
 extern bool cppISteamInventory_STEAMINVENTORY_INTERFACE_V002_SetProperty_4(void *, SteamInventoryUpdateHandle_t, SteamItemInstanceID_t, const char *, float);
 extern bool cppISteamInventory_STEAMINVENTORY_INTERFACE_V002_SubmitUpdateProperties(void *, SteamInventoryUpdateHandle_t, SteamInventoryResult_t *);
-#ifdef __cplusplus
-}
-#endif

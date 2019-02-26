@@ -5,16 +5,16 @@
 #include "steamworks_sdk_124/isteamgamecoordinator.h"
 #include "steamclient_private.h"
 extern "C" {
+#define SDKVER_124
+#include "struct_converters.h"
 #pragma pack( push, 8 )
 struct winRemoteStoragePublishFileResult_t_16 {
     EResult m_eResult;
     PublishedFileId_t m_nPublishedFileId;
 }  __attribute__ ((ms_struct));
 #pragma pack( pop )
-void cb_RemoteStoragePublishFileResult_t_16(const void *l, void *w)
+void cb_RemoteStoragePublishFileResult_t_16(const struct RemoteStoragePublishFileResult_t *lin, struct winRemoteStoragePublishFileResult_t_16 *win)
 {
-    RemoteStoragePublishFileResult_t *lin = (RemoteStoragePublishFileResult_t *)l;
-    struct winRemoteStoragePublishFileResult_t_16 *win = (struct winRemoteStoragePublishFileResult_t_16 *)w;
     win->m_eResult = lin->m_eResult;
     win->m_nPublishedFileId = lin->m_nPublishedFileId;
 }
@@ -25,10 +25,8 @@ struct winRemoteStorageUpdatePublishedFileResult_t_16 {
     PublishedFileId_t m_nPublishedFileId;
 }  __attribute__ ((ms_struct));
 #pragma pack( pop )
-void cb_RemoteStorageUpdatePublishedFileResult_t_16(const void *l, void *w)
+void cb_RemoteStorageUpdatePublishedFileResult_t_16(const struct RemoteStorageUpdatePublishedFileResult_t *lin, struct winRemoteStorageUpdatePublishedFileResult_t_16 *win)
 {
-    RemoteStorageUpdatePublishedFileResult_t *lin = (RemoteStorageUpdatePublishedFileResult_t *)l;
-    struct winRemoteStorageUpdatePublishedFileResult_t_16 *win = (struct winRemoteStorageUpdatePublishedFileResult_t_16 *)w;
     win->m_eResult = lin->m_eResult;
     win->m_nPublishedFileId = lin->m_nPublishedFileId;
 }
@@ -42,10 +40,8 @@ struct winRemoteStorageEnumerateWorkshopFilesResult_t_616 {
     float m_rgScore[50];
 }  __attribute__ ((ms_struct));
 #pragma pack( pop )
-void cb_RemoteStorageEnumerateWorkshopFilesResult_t_616(const void *l, void *w)
+void cb_RemoteStorageEnumerateWorkshopFilesResult_t_616(const struct RemoteStorageEnumerateWorkshopFilesResult_t *lin, struct winRemoteStorageEnumerateWorkshopFilesResult_t_616 *win)
 {
-    RemoteStorageEnumerateWorkshopFilesResult_t *lin = (RemoteStorageEnumerateWorkshopFilesResult_t *)l;
-    struct winRemoteStorageEnumerateWorkshopFilesResult_t_616 *win = (struct winRemoteStorageEnumerateWorkshopFilesResult_t_616 *)w;
     win->m_eResult = lin->m_eResult;
     win->m_nResultsReturned = lin->m_nResultsReturned;
     win->m_nTotalResultCount = lin->m_nTotalResultCount;
@@ -53,19 +49,8 @@ void cb_RemoteStorageEnumerateWorkshopFilesResult_t_616(const void *l, void *w)
     memcpy(win->m_rgScore, lin->m_rgScore, sizeof(win->m_rgScore));
 }
 
-#pragma pack( push, 8 )
-struct winLeaderboardEntry_t_124 {
-    CSteamID m_steamIDUser;
-    int32 m_nGlobalRank;
-    int32 m_nScore;
-    int32 m_cDetails;
-    UGCHandle_t m_hUGC;
-}  __attribute__ ((ms_struct));
-#pragma pack( pop )
-void win_to_lin_struct_LeaderboardEntry_t_124(const void *w, void *l)
+void win_to_lin_struct_LeaderboardEntry_t_124(const struct winLeaderboardEntry_t_124 *win, struct LeaderboardEntry_t *lin)
 {
-    LeaderboardEntry_t *lin = (LeaderboardEntry_t *)l;
-    struct winLeaderboardEntry_t_124 *win = (struct winLeaderboardEntry_t_124 *)w;
     lin->m_steamIDUser = win->m_steamIDUser;
     lin->m_nGlobalRank = win->m_nGlobalRank;
     lin->m_nScore = win->m_nScore;
@@ -73,10 +58,8 @@ void win_to_lin_struct_LeaderboardEntry_t_124(const void *w, void *l)
     lin->m_hUGC = win->m_hUGC;
 }
 
-void lin_to_win_struct_LeaderboardEntry_t_124(const void *l, void *w)
+void lin_to_win_struct_LeaderboardEntry_t_124(const struct LeaderboardEntry_t *lin, struct winLeaderboardEntry_t_124 *win)
 {
-    LeaderboardEntry_t *lin = (LeaderboardEntry_t *)l;
-    struct winLeaderboardEntry_t_124 *win = (struct winLeaderboardEntry_t_124 *)w;
     win->m_steamIDUser = lin->m_steamIDUser;
     win->m_nGlobalRank = lin->m_nGlobalRank;
     win->m_nScore = lin->m_nScore;

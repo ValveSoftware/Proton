@@ -1,6 +1,3 @@
-#ifdef __cplusplus
-extern "C" {
-#endif
 extern const char * cppISteamFriends_SteamFriends006_GetPersonaName(void *);
 extern void cppISteamFriends_SteamFriends006_SetPersonaName(void *, const char *);
 extern EPersonaState cppISteamFriends_SteamFriends006_GetPersonaState(void *);
@@ -27,6 +24,3 @@ extern void cppISteamFriends_SteamFriends006_ActivateGameOverlayToWebPage(void *
 extern void cppISteamFriends_SteamFriends006_ActivateGameOverlayToStore(void *, AppId_t);
 extern void cppISteamFriends_SteamFriends006_SetPlayedWith(void *, CSteamID);
 extern void cppISteamFriends_SteamFriends006_ActivateGameOverlayInviteDialog(void *, CSteamID);
-#ifdef __cplusplus
-}
-#endif

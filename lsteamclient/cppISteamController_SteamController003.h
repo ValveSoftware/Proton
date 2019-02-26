@@ -1,6 +1,3 @@
-#ifdef __cplusplus
-extern "C" {
-#endif
 extern bool cppISteamController_SteamController003_Init(void *);
 extern bool cppISteamController_SteamController003_Shutdown(void *);
 extern void cppISteamController_SteamController003_RunFrame(void *);
@@ -18,6 +15,3 @@ extern int cppISteamController_SteamController003_GetAnalogActionOrigins(void *,
 extern void cppISteamController_SteamController003_StopAnalogActionMomentum(void *, ControllerHandle_t, ControllerAnalogActionHandle_t);
 extern void cppISteamController_SteamController003_TriggerHapticPulse(void *, ControllerHandle_t, ESteamControllerPad, unsigned short);
 extern void cppISteamController_SteamController003_TriggerRepeatedHapticPulse(void *, ControllerHandle_t, ESteamControllerPad, unsigned short, unsigned short, unsigned short, unsigned int);
-#ifdef __cplusplus
-}
-#endif

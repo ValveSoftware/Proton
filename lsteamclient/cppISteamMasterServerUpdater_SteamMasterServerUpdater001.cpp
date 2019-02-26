@@ -2,11 +2,12 @@
 #include "steamworks_sdk_116/steam_api.h"
 #include "steamworks_sdk_116/isteammasterserverupdater.h"
 #include "steamclient_private.h"
-#include "cppISteamMasterServerUpdater_SteamMasterServerUpdater001.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include "struct_converters_116.h"
+#define SDKVER_116
+#include "struct_converters.h"
+#include "cppISteamMasterServerUpdater_SteamMasterServerUpdater001.h"
 void cppISteamMasterServerUpdater_SteamMasterServerUpdater001_SetActive(void *linux_side, bool bActive)
 {
     ((ISteamMasterServerUpdater*)linux_side)->SetActive((bool)bActive);

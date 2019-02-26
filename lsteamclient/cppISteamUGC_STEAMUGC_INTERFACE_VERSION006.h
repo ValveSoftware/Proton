@@ -1,11 +1,8 @@
-#ifdef __cplusplus
-extern "C" {
-#endif
 extern UGCQueryHandle_t cppISteamUGC_STEAMUGC_INTERFACE_VERSION006_CreateQueryUserUGCRequest(void *, AccountID_t, EUserUGCList, EUGCMatchingUGCType, EUserUGCListSortOrder, AppId_t, AppId_t, uint32);
 extern UGCQueryHandle_t cppISteamUGC_STEAMUGC_INTERFACE_VERSION006_CreateQueryAllUGCRequest(void *, EUGCQuery, EUGCMatchingUGCType, AppId_t, AppId_t, uint32);
 extern UGCQueryHandle_t cppISteamUGC_STEAMUGC_INTERFACE_VERSION006_CreateQueryUGCDetailsRequest(void *, PublishedFileId_t *, uint32);
 extern SteamAPICall_t cppISteamUGC_STEAMUGC_INTERFACE_VERSION006_SendQueryUGCRequest(void *, UGCQueryHandle_t);
-extern bool cppISteamUGC_STEAMUGC_INTERFACE_VERSION006_GetQueryUGCResult(void *, UGCQueryHandle_t, uint32, SteamUGCDetails_t *);
+extern bool cppISteamUGC_STEAMUGC_INTERFACE_VERSION006_GetQueryUGCResult(void *, UGCQueryHandle_t, uint32, winSteamUGCDetails_t_133x *);
 extern bool cppISteamUGC_STEAMUGC_INTERFACE_VERSION006_GetQueryUGCPreviewURL(void *, UGCQueryHandle_t, uint32, char *, uint32);
 extern bool cppISteamUGC_STEAMUGC_INTERFACE_VERSION006_GetQueryUGCMetadata(void *, UGCQueryHandle_t, uint32, char *, uint32);
 extern bool cppISteamUGC_STEAMUGC_INTERFACE_VERSION006_GetQueryUGCChildren(void *, UGCQueryHandle_t, uint32, PublishedFileId_t *, uint32);
@@ -51,6 +48,3 @@ extern uint32 cppISteamUGC_STEAMUGC_INTERFACE_VERSION006_GetItemState(void *, Pu
 extern bool cppISteamUGC_STEAMUGC_INTERFACE_VERSION006_GetItemInstallInfo(void *, PublishedFileId_t, uint64 *, char *, uint32, uint32 *);
 extern bool cppISteamUGC_STEAMUGC_INTERFACE_VERSION006_GetItemDownloadInfo(void *, PublishedFileId_t, uint64 *, uint64 *);
 extern bool cppISteamUGC_STEAMUGC_INTERFACE_VERSION006_DownloadItem(void *, PublishedFileId_t, bool);
-#ifdef __cplusplus
-}
-#endif

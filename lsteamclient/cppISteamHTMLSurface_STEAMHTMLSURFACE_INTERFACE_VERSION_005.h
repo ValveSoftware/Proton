@@ -1,6 +1,3 @@
-#ifdef __cplusplus
-extern "C" {
-#endif
 extern bool cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_Init(void *);
 extern bool cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_Shutdown(void *);
 extern SteamAPICall_t cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_CreateBrowser(void *, const char *, const char *);
@@ -38,6 +35,3 @@ extern void cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_OpenDeve
 extern void cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_AllowStartRequest(void *, HHTMLBrowser, bool);
 extern void cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_JSDialogResponse(void *, HHTMLBrowser, bool);
 extern void cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_FileLoadDialogResponse(void *, HHTMLBrowser, const char **);
-#ifdef __cplusplus
-}
-#endif

@@ -1,6 +1,3 @@
-#ifdef __cplusplus
-extern "C" {
-#endif
 extern HSteamUser cppISteamUser_SteamUser020_GetHSteamUser(void *);
 extern bool cppISteamUser_SteamUser020_BLoggedOn(void *);
 extern CSteamID cppISteamUser_SteamUser020_GetSteamID(void *);
@@ -31,6 +28,3 @@ extern bool cppISteamUser_SteamUser020_BIsTwoFactorEnabled(void *);
 extern bool cppISteamUser_SteamUser020_BIsPhoneIdentifying(void *);
 extern bool cppISteamUser_SteamUser020_BIsPhoneRequiringVerification(void *);
 extern SteamAPICall_t cppISteamUser_SteamUser020_GetMarketEligibility(void *);
-#ifdef __cplusplus
-}
-#endif

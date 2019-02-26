@@ -1,6 +1,3 @@
-#ifdef __cplusplus
-extern "C" {
-#endif
 extern bool cppISteamGameServer_SteamGameServer011_InitGameServer(void *, uint32, uint16, uint16, uint32, AppId_t, const char *);
 extern void cppISteamGameServer_SteamGameServer011_SetProduct(void *, const char *);
 extern void cppISteamGameServer_SteamGameServer011_SetGameDescription(void *, const char *);
@@ -45,6 +42,3 @@ extern void cppISteamGameServer_SteamGameServer011_SetHeartbeatInterval(void *, 
 extern void cppISteamGameServer_SteamGameServer011_ForceHeartbeat(void *);
 extern SteamAPICall_t cppISteamGameServer_SteamGameServer011_AssociateWithClan(void *, CSteamID);
 extern SteamAPICall_t cppISteamGameServer_SteamGameServer011_ComputeNewPlayerCompatibility(void *, CSteamID);
-#ifdef __cplusplus
-}
-#endif

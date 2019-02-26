@@ -455,24 +455,26 @@ def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, e
             else:
                 typename = param.type.spelling.split("::")[-1];
 
-            #assume pointers are out-params and structs are in-params
             real_type = param.type;
             while real_type.kind == clang.cindex.TypeKind.POINTER:
                 real_type = real_type.get_pointee()
+            win_name = typename
             if real_type.kind == clang.cindex.TypeKind.RECORD and \
                     not real_type.spelling in wrapped_classes and \
                     struct_needs_conversion(real_type):
                 need_convert.append(param)
+                #preserve pointers
+                win_name = typename.replace(real_type.spelling, "win%s_%s" % (real_type.spelling, sdkver))
 
             if param.spelling == "":
-                cfile.write(", %s _%s" % (typename, unnamed))
-                cpp.write(", %s _%s" % (typename, unnamed))
-                cpp_h.write(", %s" % typename)
+                cfile.write(", %s _%s" % (win_name, unnamed))
+                cpp.write(", %s _%s" % (win_name, unnamed))
+                cpp_h.write(", %s" % win_name)
                 unnamed = chr(ord(unnamed) + 1)
             else:
-                cfile.write(", %s %s" % (typename, param.spelling))
-                cpp.write(", %s %s" % (typename, param.spelling))
-                cpp_h.write(", %s" % (typename))
+                cfile.write(", %s %s" % (win_name, param.spelling))
+                cpp.write(", %s %s" % (win_name, param.spelling))
+                cpp_h.write(", %s" % (win_name))
     cfile.write(")\n{\n")
     cpp.write(")\n{\n")
     cpp_h.write(");\n")
@@ -637,6 +639,8 @@ def handle_class(sdkver, classnode):
 
 #include "steamclient_private.h"
 
+#include "struct_converters.h"
+
 WINE_DEFAULT_DEBUG_CHANNEL(steamclient);
 
 """)
@@ -647,12 +651,12 @@ WINE_DEFAULT_DEBUG_CHANNEL(steamclient);
     if not fname == "steam_api.h":
         cpp.write("#include \"steamworks_sdk_%s/%s\"\n" % (sdkver, fname))
     cpp.write("#include \"steamclient_private.h\"\n")
-    cpp.write("#include \"%s.h\"\n" % cppname)
     cpp.write("#ifdef __cplusplus\nextern \"C\" {\n#endif\n")
-    cpp.write("#include \"struct_converters_%s.h\"\n" % sdkver)
+    cpp.write("#define SDKVER_%s\n" % sdkver)
+    cpp.write("#include \"struct_converters.h\"\n")
+    cpp.write("#include \"%s.h\"\n" % cppname)
 
     cpp_h = open("%s.h" % cppname, "w")
-    cpp_h.write("#ifdef __cplusplus\nextern \"C\" {\n#endif\n")
 
     winclassname = "win%s_%s" % (classnode.spelling, iface_version)
     cfile.write("#include \"%s.h\"\n\n" % cppname)
@@ -686,7 +690,6 @@ WINE_DEFAULT_DEBUG_CHANNEL(steamclient);
     cfile.write("    return r;\n}\n\n")
 
     cpp.write("#ifdef __cplusplus\n}\n#endif\n")
-    cpp_h.write("#ifdef __cplusplus\n}\n#endif\n")
 
     constructors = open("win_constructors.h", "a")
     constructors.write("extern void *create_%s(void *);\n" % winclassname)
@@ -722,9 +725,23 @@ def handle_struct(sdkver, struct):
     w2l_handler_name = None
     l2w_handler_name = None
 
+    def dump_win_struct(to_file):
+        to_file.write("#pragma pack( push, 8 )\n")
+        to_file.write("struct win%s {\n" % struct_name)
+        for m in struct.get_children():
+            if m.kind == clang.cindex.CursorKind.FIELD_DECL:
+                if m.type.kind == clang.cindex.TypeKind.CONSTANTARRAY:
+                    to_file.write("    %s %s[%u];\n" % (m.type.element_type.spelling, m.displayname, m.type.element_count))
+                elif m.type.kind == clang.cindex.TypeKind.RECORD and \
+                        struct_needs_conversion(m.type):
+                    to_file.write("    win%s_%s %s;\n" % (m.type.spelling, sdkver, m.displayname))
+                else:
+                    to_file.write("    %s %s;\n" % (m.type.spelling, m.displayname))
+        to_file.write("}  __attribute__ ((ms_struct));\n")
+        to_file.write("#pragma pack( pop )\n")
+
     if cb_num is None:
-        #open here so the .h is always created
-        hfile = open("struct_converters_%s.h" % sdkver, "a")
+        hfile = open("struct_converters.h", "a")
 
         if not has_fields:
             return
@@ -737,8 +754,14 @@ def handle_struct(sdkver, struct):
         w2l_handler_name = "win_to_lin_struct_%s" % struct_name;
         l2w_handler_name = "lin_to_win_struct_%s" % struct_name;
 
-        hfile.write("extern void %s(const void *w, void *l);\n" % w2l_handler_name)
-        hfile.write("extern void %s(const void *l, void *w);\n\n" % l2w_handler_name)
+        hfile.write("#if defined(SDKVER_%s) || !defined(__cplusplus)\n" % sdkver)
+        dump_win_struct(hfile)
+        hfile.write("typedef struct win%s win%s;\n" % (struct_name, struct_name))
+        hfile.write("struct %s;\n" % struct.displayname);
+
+        hfile.write("extern void %s(const struct win%s *w, struct %s *l);\n" % (w2l_handler_name, struct_name, struct.displayname))
+        hfile.write("extern void %s(const struct %s *l, struct win%s *w);\n" % (l2w_handler_name, struct.displayname, struct_name))
+        hfile.write("#endif\n\n")
 
     else:
         #for callbacks, we use the windows struct size in the cb dispatch switch
@@ -759,7 +782,7 @@ def handle_struct(sdkver, struct):
         generated_cb_ids.append(cb_id)
 
         datfile = open("cb_converters.dat", "a")
-        datfile.write("case 0x%08x: win_msg->m_cubParam = %s; win_msg->m_pubParam = HeapAlloc(GetProcessHeap(), 0, win_msg->m_cubParam); %s(lin_msg.m_pubParam, win_msg->m_pubParam); break;\n" % (cb_id, windows_struct.get_size(), l2w_handler_name))
+        datfile.write("case 0x%08x: win_msg->m_cubParam = %s; win_msg->m_pubParam = HeapAlloc(GetProcessHeap(), 0, win_msg->m_cubParam); %s((void*)lin_msg.m_pubParam, (void*)win_msg->m_pubParam); break;\n" % (cb_id, windows_struct.get_size(), l2w_handler_name))
 
         generated_cb_handlers.append(l2w_handler_name)
 
@@ -769,11 +792,11 @@ def handle_struct(sdkver, struct):
         cb_table[cb_num][1].append((windows_struct.get_size(), struct_name))
 
         hfile = open("cb_converters.h", "a")
-        hfile.write("extern void %s(void *l, void *w);\n\n" % l2w_handler_name)
+        hfile.write("struct %s;\n" % struct.displayname)
+        hfile.write("struct win%s;\n" % struct_name)
+        hfile.write("extern void %s(const struct %s *l, struct win%s *w);\n\n" % (l2w_handler_name, struct.displayname, struct_name))
 
-
-    filename_base = "struct_converters_%s" % sdkver
-    cppname = "%s.cpp" % filename_base
+    cppname = "struct_converters_%s.cpp" % sdkver
     file_exists = os.path.isfile(cppname)
     cppfile = open(cppname, "a")
     if not file_exists:
@@ -786,21 +809,9 @@ def handle_struct(sdkver, struct):
             cppfile.write("#include \"steamworks_sdk_%s/isteamgamecoordinator.h\"\n" % sdkver)
         cppfile.write("#include \"steamclient_private.h\"\n")
         cppfile.write("extern \"C\" {\n")
+        cppfile.write("#define SDKVER_%s\n" % sdkver)
+        cppfile.write("#include \"struct_converters.h\"\n")
         cpp_files_need_close_brace.append(cppname)
-
-    cppfile.write("#pragma pack( push, 8 )\n")
-    cppfile.write("struct win%s {\n" % struct_name)
-    for m in struct.get_children():
-        if m.kind == clang.cindex.CursorKind.FIELD_DECL:
-            if m.type.kind == clang.cindex.TypeKind.CONSTANTARRAY:
-                cppfile.write("    %s %s[%u];\n" % (m.type.element_type.spelling, m.displayname, m.type.element_count))
-            elif m.type.kind == clang.cindex.TypeKind.RECORD and \
-                    struct_needs_conversion(m.type):
-                cppfile.write("    win%s_%s %s;\n" % (m.type.spelling, sdkver, m.displayname))
-            else:
-                cppfile.write("    %s %s;\n" % (m.type.spelling, m.displayname))
-    cppfile.write("}  __attribute__ ((ms_struct));\n")
-    cppfile.write("#pragma pack( pop )\n")
 
     path_conv = get_path_converter(struct.type)
 
@@ -819,18 +830,17 @@ def handle_struct(sdkver, struct):
             else:
                 cppfile.write("    %s->%s = %s->%s;\n" % (dst, m.displayname, src, m.displayname))
 
+    if not cb_num is None:
+        dump_win_struct(cppfile)
+
     if w2l_handler_name:
-        cppfile.write("void %s(const void *w, void *l)\n{\n" % w2l_handler_name)
-        cppfile.write("    %s *lin = (%s *)l;\n" % (struct.displayname, struct.displayname))
-        cppfile.write("    struct win%s *win = (struct win%s *)w;\n" % (struct_name, struct_name))
+        cppfile.write("void %s(const struct win%s *win, struct %s *lin)\n{\n" % (w2l_handler_name, struct_name, struct.displayname))
         for m in struct.get_children():
             handle_field(m, "win", "lin")
         cppfile.write("}\n\n")
 
     if l2w_handler_name:
-        cppfile.write("void %s(const void *l, void *w)\n{\n" % l2w_handler_name)
-        cppfile.write("    %s *lin = (%s *)l;\n" % (struct.displayname, struct.displayname))
-        cppfile.write("    struct win%s *win = (struct win%s *)w;\n" % (struct_name, struct_name))
+        cppfile.write("void %s(const struct %s *lin, struct win%s *win)\n{\n" % (l2w_handler_name, struct.displayname, struct_name))
         for m in struct.get_children():
             handle_field(m, "lin", "win")
         cppfile.write("}\n\n")

@@ -70,7 +70,8 @@ typedef uint32_t EUserUGCList,
         ELogonState,
         EXboxOrigin,
         EInputSourceMode,
-        EActivateGameOverlayToWebPageMode
+        EActivateGameOverlayToWebPageMode,
+        ESteamPartyBeaconLocationType
 ;
 
 /* these are PODs, so just copy the data. hopefully the
@@ -140,6 +141,7 @@ typedef struct LeaderboardEntry_t LeaderboardEntry_t;
 typedef struct SteamUGCDetails_t SteamUGCDetails_t;
 typedef struct gameserveritem_t gameserveritem_t;
 typedef struct MatchMakingKeyValuePair_t MatchMakingKeyValuePair_t;
+typedef struct SteamPartyBeaconLocation_t SteamPartyBeaconLocation_t;
 
 /* FIXME: we don't care about fn pointer types, just pass 'em through */
 typedef void *SteamAPI_CheckCallbackRegistered_t;
@@ -202,6 +204,7 @@ typedef uint32 HHTMLBrowser;
 typedef int32 SteamInventoryResult_t, SteamItemDef_t;
 typedef uint64 SteamItemInstanceID_t;
 typedef uint64 SteamInventoryUpdateHandle_t;
+typedef uint64 PartyBeaconID_t;
 
 #pragma pack( push, 4 )
 typedef struct CallbackMsg_t

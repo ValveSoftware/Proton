@@ -1,11 +1,12 @@
 #include "steam_defs.h"
 #include "steamworks_sdk_111/steam_api.h"
 #include "steamclient_private.h"
-#include "cppISteamClient_SteamClient009.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include "struct_converters_111.h"
+#define SDKVER_111
+#include "struct_converters.h"
+#include "cppISteamClient_SteamClient009.h"
 HSteamPipe cppISteamClient_SteamClient009_CreateSteamPipe(void *linux_side)
 {
     return ((ISteamClient*)linux_side)->CreateSteamPipe();

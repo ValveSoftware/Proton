@@ -1,6 +1,3 @@
-#ifdef __cplusplus
-extern "C" {
-#endif
 extern const char * cppISteamFriends_SteamFriends014_GetPersonaName(void *);
 extern SteamAPICall_t cppISteamFriends_SteamFriends014_SetPersonaName(void *, const char *);
 extern EPersonaState cppISteamFriends_SteamFriends014_GetPersonaState(void *);
@@ -65,6 +62,3 @@ extern int cppISteamFriends_SteamFriends014_GetFriendMessage(void *, CSteamID, i
 extern SteamAPICall_t cppISteamFriends_SteamFriends014_GetFollowerCount(void *, CSteamID);
 extern SteamAPICall_t cppISteamFriends_SteamFriends014_IsFollowing(void *, CSteamID);
 extern SteamAPICall_t cppISteamFriends_SteamFriends014_EnumerateFollowingList(void *, uint32);
-#ifdef __cplusplus
-}
-#endif

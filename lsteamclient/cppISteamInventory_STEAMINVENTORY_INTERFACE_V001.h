@@ -1,6 +1,3 @@
-#ifdef __cplusplus
-extern "C" {
-#endif
 extern EResult cppISteamInventory_STEAMINVENTORY_INTERFACE_V001_GetResultStatus(void *, SteamInventoryResult_t);
 extern bool cppISteamInventory_STEAMINVENTORY_INTERFACE_V001_GetResultItems(void *, SteamInventoryResult_t, SteamItemDetails_t *, uint32 *);
 extern uint32 cppISteamInventory_STEAMINVENTORY_INTERFACE_V001_GetResultTimestamp(void *, SteamInventoryResult_t);
@@ -25,6 +22,3 @@ extern bool cppISteamInventory_STEAMINVENTORY_INTERFACE_V001_GetItemDefinitionID
 extern bool cppISteamInventory_STEAMINVENTORY_INTERFACE_V001_GetItemDefinitionProperty(void *, SteamItemDef_t, const char *, char *, uint32 *);
 extern SteamAPICall_t cppISteamInventory_STEAMINVENTORY_INTERFACE_V001_RequestEligiblePromoItemDefinitionsIDs(void *, CSteamID);
 extern bool cppISteamInventory_STEAMINVENTORY_INTERFACE_V001_GetEligiblePromoItemDefinitionIDs(void *, CSteamID, SteamItemDef_t *, uint32 *);
-#ifdef __cplusplus
-}
-#endif

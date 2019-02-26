@@ -1,6 +1,3 @@
-#ifdef __cplusplus
-extern "C" {
-#endif
 extern void cppISteamGameServer_SteamGameServer009_LogOn(void *);
 extern void cppISteamGameServer_SteamGameServer009_LogOff(void *);
 extern bool cppISteamGameServer_SteamGameServer009_BLoggedOn(void *);
@@ -20,6 +17,3 @@ extern bool cppISteamGameServer_SteamGameServer009_RequestUserGroupStatus(void *
 extern uint32 cppISteamGameServer_SteamGameServer009_GetPublicIP(void *);
 extern void cppISteamGameServer_SteamGameServer009_SetGameData(void *, const char *);
 extern EUserHasLicenseForAppResult cppISteamGameServer_SteamGameServer009_UserHasLicenseForApp(void *, CSteamID, AppId_t);
-#ifdef __cplusplus
-}
-#endif

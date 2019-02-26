@@ -1,6 +1,3 @@
-#ifdef __cplusplus
-extern "C" {
-#endif
 extern SteamAPICall_t cppISteamGameStats_SteamGameStats001_GetNewSession(void *, int8, uint64, int32, RTime32);
 extern SteamAPICall_t cppISteamGameStats_SteamGameStats001_EndSession(void *, uint64, RTime32, int);
 extern EResult cppISteamGameStats_SteamGameStats001_AddSessionAttributeInt(void *, uint64, const char *, int32);
@@ -14,6 +11,3 @@ extern EResult cppISteamGameStats_SteamGameStats001_AddRowAtributeString(void *,
 extern EResult cppISteamGameStats_SteamGameStats001_AddRowAttributeFloat(void *, uint64, const char *, float);
 extern EResult cppISteamGameStats_SteamGameStats001_AddSessionAttributeInt64(void *, uint64, const char *, int64);
 extern EResult cppISteamGameStats_SteamGameStats001_AddRowAttributeInt64(void *, uint64, const char *, int64);
-#ifdef __cplusplus
-}
-#endif

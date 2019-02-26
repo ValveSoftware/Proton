@@ -1,6 +1,3 @@
-#ifdef __cplusplus
-extern "C" {
-#endif
 extern bool cppISteamController_SteamController007_Init(void *);
 extern bool cppISteamController_SteamController007_Shutdown(void *);
 extern void cppISteamController_SteamController007_RunFrame(void *);
@@ -34,6 +31,3 @@ extern const char * cppISteamController_SteamController007_GetStringForXboxOrigi
 extern const char * cppISteamController_SteamController007_GetGlyphForXboxOrigin(void *, EXboxOrigin);
 extern EControllerActionOrigin cppISteamController_SteamController007_GetActionOriginFromXboxOrigin(void *, ControllerHandle_t, EXboxOrigin);
 extern EControllerActionOrigin cppISteamController_SteamController007_TranslateActionOrigin(void *, ESteamInputType, EControllerActionOrigin);
-#ifdef __cplusplus
-}
-#endif

@@ -1,11 +1,12 @@
 #include "steam_defs.h"
 #include "steamworks_sdk_107/steam_api.h"
 #include "steamclient_private.h"
-#include "cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include "struct_converters_107.h"
+#define SDKVER_107
+#include "struct_converters.h"
+#include "cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006.h"
 bool cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_RequestCurrentStats(void *linux_side)
 {
     return ((ISteamUserStats*)linux_side)->RequestCurrentStats();

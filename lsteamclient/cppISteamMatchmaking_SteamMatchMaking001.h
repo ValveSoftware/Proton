@@ -1,6 +1,3 @@
-#ifdef __cplusplus
-extern "C" {
-#endif
 extern int cppISteamMatchmaking_SteamMatchMaking001_GetFavoriteGameCount(void *);
 extern bool cppISteamMatchmaking_SteamMatchMaking001_GetFavoriteGame(void *, int, uint32 *, uint32 *, uint16 *, uint32 *, uint32 *);
 extern int cppISteamMatchmaking_SteamMatchMaking001_AddFavoriteGame(void *, uint32, uint32, uint16, uint32, uint32);
@@ -23,6 +20,3 @@ extern bool cppISteamMatchmaking_SteamMatchMaking001_SetLobbyMemberData(void *, 
 extern bool cppISteamMatchmaking_SteamMatchMaking001_SendLobbyChatMsg(void *, CSteamID, const void *, int);
 extern int cppISteamMatchmaking_SteamMatchMaking001_GetLobbyChatEntry(void *, CSteamID, int, CSteamID *, void *, int, EChatEntryType *);
 extern bool cppISteamMatchmaking_SteamMatchMaking001_RequestLobbyData(void *, CSteamID);
-#ifdef __cplusplus
-}
-#endif

@@ -1,6 +1,3 @@
-#ifdef __cplusplus
-extern "C" {
-#endif
 extern HSteamUser cppISteamUser_SteamUser005_GetHSteamUser(void *);
 extern void cppISteamUser_SteamUser005_LogOn(void *, CSteamID);
 extern void cppISteamUser_SteamUser005_LogOff(void *);
@@ -40,6 +37,3 @@ extern void cppISteamUser_SteamUser005_TrackAppUsageEvent(void *, CGameID, int, 
 extern void cppISteamUser_SteamUser005_SetAccountName(void *, const char *);
 extern void cppISteamUser_SteamUser005_SetPassword(void *, const char *);
 extern void cppISteamUser_SteamUser005_SetAccountCreationTime(void *, RTime32);
-#ifdef __cplusplus
-}
-#endif

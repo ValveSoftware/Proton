@@ -1,11 +1,12 @@
 #include "steam_defs.h"
 #include "steamworks_sdk_111/steam_api.h"
 #include "steamclient_private.h"
-#include "cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION002.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include "struct_converters_111.h"
+#define SDKVER_111
+#include "struct_converters.h"
+#include "cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION002.h"
 bool cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION002_FileWrite(void *linux_side, const char * pchFile, const void * pvData, int32 cubData)
 {
     return ((ISteamRemoteStorage*)linux_side)->FileWrite((const char *)pchFile, (const void *)pvData, (int32)cubData);

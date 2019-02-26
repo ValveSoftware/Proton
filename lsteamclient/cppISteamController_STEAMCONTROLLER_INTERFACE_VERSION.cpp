@@ -1,11 +1,12 @@
 #include "steam_defs.h"
 #include "steamworks_sdk_134/steam_api.h"
 #include "steamclient_private.h"
-#include "cppISteamController_STEAMCONTROLLER_INTERFACE_VERSION.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include "struct_converters_134.h"
+#define SDKVER_134
+#include "struct_converters.h"
+#include "cppISteamController_STEAMCONTROLLER_INTERFACE_VERSION.h"
 bool cppISteamController_STEAMCONTROLLER_INTERFACE_VERSION_Init(void *linux_side, const char * pchAbsolutePathToControllerConfigVDF)
 {
     return ((ISteamController*)linux_side)->Init((const char *)pchAbsolutePathToControllerConfigVDF);

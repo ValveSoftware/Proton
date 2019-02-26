@@ -5,6 +5,8 @@
 #include "steamworks_sdk_143/isteamgamecoordinator.h"
 #include "steamclient_private.h"
 extern "C" {
+#define SDKVER_143
+#include "struct_converters.h"
 #pragma pack( push, 8 )
 struct winMicroTxnAuthorizationResponse_t_24 {
     uint32 m_unAppID;
@@ -12,33 +14,21 @@ struct winMicroTxnAuthorizationResponse_t_24 {
     uint8 m_bAuthorized;
 }  __attribute__ ((ms_struct));
 #pragma pack( pop )
-void cb_MicroTxnAuthorizationResponse_t_24(const void *l, void *w)
+void cb_MicroTxnAuthorizationResponse_t_24(const struct MicroTxnAuthorizationResponse_t *lin, struct winMicroTxnAuthorizationResponse_t_24 *win)
 {
-    MicroTxnAuthorizationResponse_t *lin = (MicroTxnAuthorizationResponse_t *)l;
-    struct winMicroTxnAuthorizationResponse_t_24 *win = (struct winMicroTxnAuthorizationResponse_t_24 *)w;
     win->m_unAppID = lin->m_unAppID;
     win->m_ulOrderID = lin->m_ulOrderID;
     win->m_bAuthorized = lin->m_bAuthorized;
 }
 
-#pragma pack( push, 8 )
-struct winSteamPartyBeaconLocation_t_143 {
-    ESteamPartyBeaconLocationType m_eType;
-    uint64 m_ulLocationID;
-}  __attribute__ ((ms_struct));
-#pragma pack( pop )
-void win_to_lin_struct_SteamPartyBeaconLocation_t_143(const void *w, void *l)
+void win_to_lin_struct_SteamPartyBeaconLocation_t_143(const struct winSteamPartyBeaconLocation_t_143 *win, struct SteamPartyBeaconLocation_t *lin)
 {
-    SteamPartyBeaconLocation_t *lin = (SteamPartyBeaconLocation_t *)l;
-    struct winSteamPartyBeaconLocation_t_143 *win = (struct winSteamPartyBeaconLocation_t_143 *)w;
     lin->m_eType = win->m_eType;
     lin->m_ulLocationID = win->m_ulLocationID;
 }
 
-void lin_to_win_struct_SteamPartyBeaconLocation_t_143(const void *l, void *w)
+void lin_to_win_struct_SteamPartyBeaconLocation_t_143(const struct SteamPartyBeaconLocation_t *lin, struct winSteamPartyBeaconLocation_t_143 *win)
 {
-    SteamPartyBeaconLocation_t *lin = (SteamPartyBeaconLocation_t *)l;
-    struct winSteamPartyBeaconLocation_t_143 *win = (struct winSteamPartyBeaconLocation_t_143 *)w;
     win->m_eType = lin->m_eType;
     win->m_ulLocationID = lin->m_ulLocationID;
 }
@@ -49,10 +39,8 @@ struct winLobbyCreated_t_16 {
     uint64 m_ulSteamIDLobby;
 }  __attribute__ ((ms_struct));
 #pragma pack( pop )
-void cb_LobbyCreated_t_16(const void *l, void *w)
+void cb_LobbyCreated_t_16(const struct LobbyCreated_t *lin, struct winLobbyCreated_t_16 *win)
 {
-    LobbyCreated_t *lin = (LobbyCreated_t *)l;
-    struct winLobbyCreated_t_16 *win = (struct winLobbyCreated_t_16 *)w;
     win->m_eResult = lin->m_eResult;
     win->m_ulSteamIDLobby = lin->m_ulSteamIDLobby;
 }
@@ -63,10 +51,8 @@ struct winRequestPlayersForGameProgressCallback_t_16 {
     uint64 m_ullSearchID;
 }  __attribute__ ((ms_struct));
 #pragma pack( pop )
-void cb_RequestPlayersForGameProgressCallback_t_16(const void *l, void *w)
+void cb_RequestPlayersForGameProgressCallback_t_16(const struct RequestPlayersForGameProgressCallback_t *lin, struct winRequestPlayersForGameProgressCallback_t_16 *win)
 {
-    RequestPlayersForGameProgressCallback_t *lin = (RequestPlayersForGameProgressCallback_t *)l;
-    struct winRequestPlayersForGameProgressCallback_t_16 *win = (struct winRequestPlayersForGameProgressCallback_t_16 *)w;
     win->m_eResult = lin->m_eResult;
     win->m_ullSearchID = lin->m_ullSearchID;
 }
@@ -85,10 +71,8 @@ struct winRequestPlayersForGameResultCallback_t_64 {
     uint64 m_ullUniqueGameID;
 }  __attribute__ ((ms_struct));
 #pragma pack( pop )
-void cb_RequestPlayersForGameResultCallback_t_64(const void *l, void *w)
+void cb_RequestPlayersForGameResultCallback_t_64(const struct RequestPlayersForGameResultCallback_t *lin, struct winRequestPlayersForGameResultCallback_t_64 *win)
 {
-    RequestPlayersForGameResultCallback_t *lin = (RequestPlayersForGameResultCallback_t *)l;
-    struct winRequestPlayersForGameResultCallback_t_64 *win = (struct winRequestPlayersForGameResultCallback_t_64 *)w;
     win->m_eResult = lin->m_eResult;
     win->m_ullSearchID = lin->m_ullSearchID;
     win->m_SteamIDPlayerFound = lin->m_SteamIDPlayerFound;
@@ -108,10 +92,8 @@ struct winRequestPlayersForGameFinalResultCallback_t_24 {
     uint64 m_ullUniqueGameID;
 }  __attribute__ ((ms_struct));
 #pragma pack( pop )
-void cb_RequestPlayersForGameFinalResultCallback_t_24(const void *l, void *w)
+void cb_RequestPlayersForGameFinalResultCallback_t_24(const struct RequestPlayersForGameFinalResultCallback_t *lin, struct winRequestPlayersForGameFinalResultCallback_t_24 *win)
 {
-    RequestPlayersForGameFinalResultCallback_t *lin = (RequestPlayersForGameFinalResultCallback_t *)l;
-    struct winRequestPlayersForGameFinalResultCallback_t_24 *win = (struct winRequestPlayersForGameFinalResultCallback_t_24 *)w;
     win->m_eResult = lin->m_eResult;
     win->m_ullSearchID = lin->m_ullSearchID;
     win->m_ullUniqueGameID = lin->m_ullUniqueGameID;
@@ -124,10 +106,8 @@ struct winSubmitPlayerResultResultCallback_t_24 {
     CSteamID steamIDPlayer;
 }  __attribute__ ((ms_struct));
 #pragma pack( pop )
-void cb_SubmitPlayerResultResultCallback_t_24(const void *l, void *w)
+void cb_SubmitPlayerResultResultCallback_t_24(const struct SubmitPlayerResultResultCallback_t *lin, struct winSubmitPlayerResultResultCallback_t_24 *win)
 {
-    SubmitPlayerResultResultCallback_t *lin = (SubmitPlayerResultResultCallback_t *)l;
-    struct winSubmitPlayerResultResultCallback_t_24 *win = (struct winSubmitPlayerResultResultCallback_t_24 *)w;
     win->m_eResult = lin->m_eResult;
     win->ullUniqueGameID = lin->ullUniqueGameID;
     win->steamIDPlayer = lin->steamIDPlayer;
@@ -139,10 +119,8 @@ struct winEndGameResultCallback_t_16 {
     uint64 ullUniqueGameID;
 }  __attribute__ ((ms_struct));
 #pragma pack( pop )
-void cb_EndGameResultCallback_t_16(const void *l, void *w)
+void cb_EndGameResultCallback_t_16(const struct EndGameResultCallback_t *lin, struct winEndGameResultCallback_t_16 *win)
 {
-    EndGameResultCallback_t *lin = (EndGameResultCallback_t *)l;
-    struct winEndGameResultCallback_t_16 *win = (struct winEndGameResultCallback_t_16 *)w;
     win->m_eResult = lin->m_eResult;
     win->ullUniqueGameID = lin->ullUniqueGameID;
 }
@@ -155,10 +133,8 @@ struct winJoinPartyCallback_t_280 {
     char m_rgchConnectString[256];
 }  __attribute__ ((ms_struct));
 #pragma pack( pop )
-void cb_JoinPartyCallback_t_280(const void *l, void *w)
+void cb_JoinPartyCallback_t_280(const struct JoinPartyCallback_t *lin, struct winJoinPartyCallback_t_280 *win)
 {
-    JoinPartyCallback_t *lin = (JoinPartyCallback_t *)l;
-    struct winJoinPartyCallback_t_280 *win = (struct winJoinPartyCallback_t_280 *)w;
     win->m_eResult = lin->m_eResult;
     win->m_ulBeaconID = lin->m_ulBeaconID;
     win->m_SteamIDBeaconOwner = lin->m_SteamIDBeaconOwner;
@@ -171,10 +147,8 @@ struct winCreateBeaconCallback_t_16 {
     PartyBeaconID_t m_ulBeaconID;
 }  __attribute__ ((ms_struct));
 #pragma pack( pop )
-void cb_CreateBeaconCallback_t_16(const void *l, void *w)
+void cb_CreateBeaconCallback_t_16(const struct CreateBeaconCallback_t *lin, struct winCreateBeaconCallback_t_16 *win)
 {
-    CreateBeaconCallback_t *lin = (CreateBeaconCallback_t *)l;
-    struct winCreateBeaconCallback_t_16 *win = (struct winCreateBeaconCallback_t_16 *)w;
     win->m_eResult = lin->m_eResult;
     win->m_ulBeaconID = lin->m_ulBeaconID;
 }
@@ -188,10 +162,8 @@ struct winRemoteStorageAppSyncProgress_t_288 {
     bool m_bUploading;
 }  __attribute__ ((ms_struct));
 #pragma pack( pop )
-void cb_RemoteStorageAppSyncProgress_t_288(const void *l, void *w)
+void cb_RemoteStorageAppSyncProgress_t_288(const struct RemoteStorageAppSyncProgress_t *lin, struct winRemoteStorageAppSyncProgress_t_288 *win)
 {
-    RemoteStorageAppSyncProgress_t *lin = (RemoteStorageAppSyncProgress_t *)l;
-    struct winRemoteStorageAppSyncProgress_t_288 *win = (struct winRemoteStorageAppSyncProgress_t_288 *)w;
     memcpy(win->m_rgchCurrentFile, lin->m_rgchCurrentFile, sizeof(win->m_rgchCurrentFile));
     win->m_nAppID = lin->m_nAppID;
     win->m_uBytesTransferredThisChunk = lin->m_uBytesTransferredThisChunk;
@@ -206,10 +178,8 @@ struct winRemoteStorageFileShareResult_t_280 {
     char m_rgchFilename[260];
 }  __attribute__ ((ms_struct));
 #pragma pack( pop )
-void cb_RemoteStorageFileShareResult_t_280(const void *l, void *w)
+void cb_RemoteStorageFileShareResult_t_280(const struct RemoteStorageFileShareResult_t *lin, struct winRemoteStorageFileShareResult_t_280 *win)
 {
-    RemoteStorageFileShareResult_t *lin = (RemoteStorageFileShareResult_t *)l;
-    struct winRemoteStorageFileShareResult_t_280 *win = (struct winRemoteStorageFileShareResult_t_280 *)w;
     win->m_eResult = lin->m_eResult;
     win->m_hFile = lin->m_hFile;
     memcpy(win->m_rgchFilename, lin->m_rgchFilename, sizeof(win->m_rgchFilename));
@@ -222,10 +192,8 @@ struct winRemoteStoragePublishFileResult_t_24 {
     bool m_bUserNeedsToAcceptWorkshopLegalAgreement;
 }  __attribute__ ((ms_struct));
 #pragma pack( pop )
-void cb_RemoteStoragePublishFileResult_t_24(const void *l, void *w)
+void cb_RemoteStoragePublishFileResult_t_24(const struct RemoteStoragePublishFileResult_t *lin, struct winRemoteStoragePublishFileResult_t_24 *win)
 {
-    RemoteStoragePublishFileResult_t *lin = (RemoteStoragePublishFileResult_t *)l;
-    struct winRemoteStoragePublishFileResult_t_24 *win = (struct winRemoteStoragePublishFileResult_t_24 *)w;
     win->m_eResult = lin->m_eResult;
     win->m_nPublishedFileId = lin->m_nPublishedFileId;
     win->m_bUserNeedsToAcceptWorkshopLegalAgreement = lin->m_bUserNeedsToAcceptWorkshopLegalAgreement;
@@ -237,10 +205,8 @@ struct winRemoteStorageDeletePublishedFileResult_t_16 {
     PublishedFileId_t m_nPublishedFileId;
 }  __attribute__ ((ms_struct));
 #pragma pack( pop )
-void cb_RemoteStorageDeletePublishedFileResult_t_16(const void *l, void *w)
+void cb_RemoteStorageDeletePublishedFileResult_t_16(const struct RemoteStorageDeletePublishedFileResult_t *lin, struct winRemoteStorageDeletePublishedFileResult_t_16 *win)
 {
-    RemoteStorageDeletePublishedFileResult_t *lin = (RemoteStorageDeletePublishedFileResult_t *)l;
-    struct winRemoteStorageDeletePublishedFileResult_t_16 *win = (struct winRemoteStorageDeletePublishedFileResult_t_16 *)w;
     win->m_eResult = lin->m_eResult;
     win->m_nPublishedFileId = lin->m_nPublishedFileId;
 }
@@ -253,10 +219,8 @@ struct winRemoteStorageEnumerateUserPublishedFilesResult_t_416 {
     PublishedFileId_t m_rgPublishedFileId[50];
 }  __attribute__ ((ms_struct));
 #pragma pack( pop )
-void cb_RemoteStorageEnumerateUserPublishedFilesResult_t_416(const void *l, void *w)
+void cb_RemoteStorageEnumerateUserPublishedFilesResult_t_416(const struct RemoteStorageEnumerateUserPublishedFilesResult_t *lin, struct winRemoteStorageEnumerateUserPublishedFilesResult_t_416 *win)
 {
-    RemoteStorageEnumerateUserPublishedFilesResult_t *lin = (RemoteStorageEnumerateUserPublishedFilesResult_t *)l;
-    struct winRemoteStorageEnumerateUserPublishedFilesResult_t_416 *win = (struct winRemoteStorageEnumerateUserPublishedFilesResult_t_416 *)w;
     win->m_eResult = lin->m_eResult;
     win->m_nResultsReturned = lin->m_nResultsReturned;
     win->m_nTotalResultCount = lin->m_nTotalResultCount;
@@ -269,10 +233,8 @@ struct winRemoteStorageSubscribePublishedFileResult_t_16 {
     PublishedFileId_t m_nPublishedFileId;
 }  __attribute__ ((ms_struct));
 #pragma pack( pop )
-void cb_RemoteStorageSubscribePublishedFileResult_t_16(const void *l, void *w)
+void cb_RemoteStorageSubscribePublishedFileResult_t_16(const struct RemoteStorageSubscribePublishedFileResult_t *lin, struct winRemoteStorageSubscribePublishedFileResult_t_16 *win)
 {
-    RemoteStorageSubscribePublishedFileResult_t *lin = (RemoteStorageSubscribePublishedFileResult_t *)l;
-    struct winRemoteStorageSubscribePublishedFileResult_t_16 *win = (struct winRemoteStorageSubscribePublishedFileResult_t_16 *)w;
     win->m_eResult = lin->m_eResult;
     win->m_nPublishedFileId = lin->m_nPublishedFileId;
 }
@@ -286,10 +248,8 @@ struct winRemoteStorageEnumerateUserSubscribedFilesResult_t_616 {
     uint32 m_rgRTimeSubscribed[50];
 }  __attribute__ ((ms_struct));
 #pragma pack( pop )
-void cb_RemoteStorageEnumerateUserSubscribedFilesResult_t_616(const void *l, void *w)
+void cb_RemoteStorageEnumerateUserSubscribedFilesResult_t_616(const struct RemoteStorageEnumerateUserSubscribedFilesResult_t *lin, struct winRemoteStorageEnumerateUserSubscribedFilesResult_t_616 *win)
 {
-    RemoteStorageEnumerateUserSubscribedFilesResult_t *lin = (RemoteStorageEnumerateUserSubscribedFilesResult_t *)l;
-    struct winRemoteStorageEnumerateUserSubscribedFilesResult_t_616 *win = (struct winRemoteStorageEnumerateUserSubscribedFilesResult_t_616 *)w;
     win->m_eResult = lin->m_eResult;
     win->m_nResultsReturned = lin->m_nResultsReturned;
     win->m_nTotalResultCount = lin->m_nTotalResultCount;
@@ -303,10 +263,8 @@ struct winRemoteStorageUnsubscribePublishedFileResult_t_16 {
     PublishedFileId_t m_nPublishedFileId;
 }  __attribute__ ((ms_struct));
 #pragma pack( pop )
-void cb_RemoteStorageUnsubscribePublishedFileResult_t_16(const void *l, void *w)
+void cb_RemoteStorageUnsubscribePublishedFileResult_t_16(const struct RemoteStorageUnsubscribePublishedFileResult_t *lin, struct winRemoteStorageUnsubscribePublishedFileResult_t_16 *win)
 {
-    RemoteStorageUnsubscribePublishedFileResult_t *lin = (RemoteStorageUnsubscribePublishedFileResult_t *)l;
-    struct winRemoteStorageUnsubscribePublishedFileResult_t_16 *win = (struct winRemoteStorageUnsubscribePublishedFileResult_t_16 *)w;
     win->m_eResult = lin->m_eResult;
     win->m_nPublishedFileId = lin->m_nPublishedFileId;
 }
@@ -318,10 +276,8 @@ struct winRemoteStorageUpdatePublishedFileResult_t_24 {
     bool m_bUserNeedsToAcceptWorkshopLegalAgreement;
 }  __attribute__ ((ms_struct));
 #pragma pack( pop )
-void cb_RemoteStorageUpdatePublishedFileResult_t_24(const void *l, void *w)
+void cb_RemoteStorageUpdatePublishedFileResult_t_24(const struct RemoteStorageUpdatePublishedFileResult_t *lin, struct winRemoteStorageUpdatePublishedFileResult_t_24 *win)
 {
-    RemoteStorageUpdatePublishedFileResult_t *lin = (RemoteStorageUpdatePublishedFileResult_t *)l;
-    struct winRemoteStorageUpdatePublishedFileResult_t_24 *win = (struct winRemoteStorageUpdatePublishedFileResult_t_24 *)w;
     win->m_eResult = lin->m_eResult;
     win->m_nPublishedFileId = lin->m_nPublishedFileId;
     win->m_bUserNeedsToAcceptWorkshopLegalAgreement = lin->m_bUserNeedsToAcceptWorkshopLegalAgreement;
@@ -337,10 +293,8 @@ struct winRemoteStorageDownloadUGCResult_t_296 {
     uint64 m_ulSteamIDOwner;
 }  __attribute__ ((ms_struct));
 #pragma pack( pop )
-void cb_RemoteStorageDownloadUGCResult_t_296(const void *l, void *w)
+void cb_RemoteStorageDownloadUGCResult_t_296(const struct RemoteStorageDownloadUGCResult_t *lin, struct winRemoteStorageDownloadUGCResult_t_296 *win)
 {
-    RemoteStorageDownloadUGCResult_t *lin = (RemoteStorageDownloadUGCResult_t *)l;
-    struct winRemoteStorageDownloadUGCResult_t_296 *win = (struct winRemoteStorageDownloadUGCResult_t_296 *)w;
     win->m_eResult = lin->m_eResult;
     win->m_hFile = lin->m_hFile;
     win->m_nAppID = lin->m_nAppID;
@@ -374,10 +328,8 @@ struct winRemoteStorageGetPublishedFileDetailsResult_t_9760 {
     bool m_bAcceptedForUse;
 }  __attribute__ ((ms_struct));
 #pragma pack( pop )
-void cb_RemoteStorageGetPublishedFileDetailsResult_t_9760(const void *l, void *w)
+void cb_RemoteStorageGetPublishedFileDetailsResult_t_9760(const struct RemoteStorageGetPublishedFileDetailsResult_t *lin, struct winRemoteStorageGetPublishedFileDetailsResult_t_9760 *win)
 {
-    RemoteStorageGetPublishedFileDetailsResult_t *lin = (RemoteStorageGetPublishedFileDetailsResult_t *)l;
-    struct winRemoteStorageGetPublishedFileDetailsResult_t_9760 *win = (struct winRemoteStorageGetPublishedFileDetailsResult_t_9760 *)w;
     win->m_eResult = lin->m_eResult;
     win->m_nPublishedFileId = lin->m_nPublishedFileId;
     win->m_nCreatorAppID = lin->m_nCreatorAppID;
@@ -412,10 +364,8 @@ struct winRemoteStorageEnumerateWorkshopFilesResult_t_624 {
     uint32 m_unStartIndex;
 }  __attribute__ ((ms_struct));
 #pragma pack( pop )
-void cb_RemoteStorageEnumerateWorkshopFilesResult_t_624(const void *l, void *w)
+void cb_RemoteStorageEnumerateWorkshopFilesResult_t_624(const struct RemoteStorageEnumerateWorkshopFilesResult_t *lin, struct winRemoteStorageEnumerateWorkshopFilesResult_t_624 *win)
 {
-    RemoteStorageEnumerateWorkshopFilesResult_t *lin = (RemoteStorageEnumerateWorkshopFilesResult_t *)l;
-    struct winRemoteStorageEnumerateWorkshopFilesResult_t_624 *win = (struct winRemoteStorageEnumerateWorkshopFilesResult_t_624 *)w;
     win->m_eResult = lin->m_eResult;
     win->m_nResultsReturned = lin->m_nResultsReturned;
     win->m_nTotalResultCount = lin->m_nTotalResultCount;
@@ -435,10 +385,8 @@ struct winRemoteStorageGetPublishedItemVoteDetailsResult_t_32 {
     float m_fScore;
 }  __attribute__ ((ms_struct));
 #pragma pack( pop )
-void cb_RemoteStorageGetPublishedItemVoteDetailsResult_t_32(const void *l, void *w)
+void cb_RemoteStorageGetPublishedItemVoteDetailsResult_t_32(const struct RemoteStorageGetPublishedItemVoteDetailsResult_t *lin, struct winRemoteStorageGetPublishedItemVoteDetailsResult_t_32 *win)
 {
-    RemoteStorageGetPublishedItemVoteDetailsResult_t *lin = (RemoteStorageGetPublishedItemVoteDetailsResult_t *)l;
-    struct winRemoteStorageGetPublishedItemVoteDetailsResult_t_32 *win = (struct winRemoteStorageGetPublishedItemVoteDetailsResult_t_32 *)w;
     win->m_eResult = lin->m_eResult;
     win->m_unPublishedFileId = lin->m_unPublishedFileId;
     win->m_nVotesFor = lin->m_nVotesFor;
@@ -453,10 +401,8 @@ struct winRemoteStorageUpdateUserPublishedItemVoteResult_t_16 {
     PublishedFileId_t m_nPublishedFileId;
 }  __attribute__ ((ms_struct));
 #pragma pack( pop )
-void cb_RemoteStorageUpdateUserPublishedItemVoteResult_t_16(const void *l, void *w)
+void cb_RemoteStorageUpdateUserPublishedItemVoteResult_t_16(const struct RemoteStorageUpdateUserPublishedItemVoteResult_t *lin, struct winRemoteStorageUpdateUserPublishedItemVoteResult_t_16 *win)
 {
-    RemoteStorageUpdateUserPublishedItemVoteResult_t *lin = (RemoteStorageUpdateUserPublishedItemVoteResult_t *)l;
-    struct winRemoteStorageUpdateUserPublishedItemVoteResult_t_16 *win = (struct winRemoteStorageUpdateUserPublishedItemVoteResult_t_16 *)w;
     win->m_eResult = lin->m_eResult;
     win->m_nPublishedFileId = lin->m_nPublishedFileId;
 }
@@ -468,10 +414,8 @@ struct winRemoteStorageUserVoteDetails_t_24 {
     EWorkshopVote m_eVote;
 }  __attribute__ ((ms_struct));
 #pragma pack( pop )
-void cb_RemoteStorageUserVoteDetails_t_24(const void *l, void *w)
+void cb_RemoteStorageUserVoteDetails_t_24(const struct RemoteStorageUserVoteDetails_t *lin, struct winRemoteStorageUserVoteDetails_t_24 *win)
 {
-    RemoteStorageUserVoteDetails_t *lin = (RemoteStorageUserVoteDetails_t *)l;
-    struct winRemoteStorageUserVoteDetails_t_24 *win = (struct winRemoteStorageUserVoteDetails_t_24 *)w;
     win->m_eResult = lin->m_eResult;
     win->m_nPublishedFileId = lin->m_nPublishedFileId;
     win->m_eVote = lin->m_eVote;
@@ -485,10 +429,8 @@ struct winRemoteStorageEnumerateUserSharedWorkshopFilesResult_t_416 {
     PublishedFileId_t m_rgPublishedFileId[50];
 }  __attribute__ ((ms_struct));
 #pragma pack( pop )
-void cb_RemoteStorageEnumerateUserSharedWorkshopFilesResult_t_416(const void *l, void *w)
+void cb_RemoteStorageEnumerateUserSharedWorkshopFilesResult_t_416(const struct RemoteStorageEnumerateUserSharedWorkshopFilesResult_t *lin, struct winRemoteStorageEnumerateUserSharedWorkshopFilesResult_t_416 *win)
 {
-    RemoteStorageEnumerateUserSharedWorkshopFilesResult_t *lin = (RemoteStorageEnumerateUserSharedWorkshopFilesResult_t *)l;
-    struct winRemoteStorageEnumerateUserSharedWorkshopFilesResult_t_416 *win = (struct winRemoteStorageEnumerateUserSharedWorkshopFilesResult_t_416 *)w;
     win->m_eResult = lin->m_eResult;
     win->m_nResultsReturned = lin->m_nResultsReturned;
     win->m_nTotalResultCount = lin->m_nTotalResultCount;
@@ -502,10 +444,8 @@ struct winRemoteStorageSetUserPublishedFileActionResult_t_24 {
     EWorkshopFileAction m_eAction;
 }  __attribute__ ((ms_struct));
 #pragma pack( pop )
-void cb_RemoteStorageSetUserPublishedFileActionResult_t_24(const void *l, void *w)
+void cb_RemoteStorageSetUserPublishedFileActionResult_t_24(const struct RemoteStorageSetUserPublishedFileActionResult_t *lin, struct winRemoteStorageSetUserPublishedFileActionResult_t_24 *win)
 {
-    RemoteStorageSetUserPublishedFileActionResult_t *lin = (RemoteStorageSetUserPublishedFileActionResult_t *)l;
-    struct winRemoteStorageSetUserPublishedFileActionResult_t_24 *win = (struct winRemoteStorageSetUserPublishedFileActionResult_t_24 *)w;
     win->m_eResult = lin->m_eResult;
     win->m_nPublishedFileId = lin->m_nPublishedFileId;
     win->m_eAction = lin->m_eAction;
@@ -518,28 +458,15 @@ struct winRemoteStoragePublishedFileUpdated_t_24 {
     uint64 m_ulUnused;
 }  __attribute__ ((ms_struct));
 #pragma pack( pop )
-void cb_RemoteStoragePublishedFileUpdated_t_24(const void *l, void *w)
+void cb_RemoteStoragePublishedFileUpdated_t_24(const struct RemoteStoragePublishedFileUpdated_t *lin, struct winRemoteStoragePublishedFileUpdated_t_24 *win)
 {
-    RemoteStoragePublishedFileUpdated_t *lin = (RemoteStoragePublishedFileUpdated_t *)l;
-    struct winRemoteStoragePublishedFileUpdated_t_24 *win = (struct winRemoteStoragePublishedFileUpdated_t_24 *)w;
     win->m_nPublishedFileId = lin->m_nPublishedFileId;
     win->m_nAppID = lin->m_nAppID;
     win->m_ulUnused = lin->m_ulUnused;
 }
 
-#pragma pack( push, 8 )
-struct winLeaderboardEntry_t_143 {
-    CSteamID m_steamIDUser;
-    int32 m_nGlobalRank;
-    int32 m_nScore;
-    int32 m_cDetails;
-    UGCHandle_t m_hUGC;
-}  __attribute__ ((ms_struct));
-#pragma pack( pop )
-void win_to_lin_struct_LeaderboardEntry_t_143(const void *w, void *l)
+void win_to_lin_struct_LeaderboardEntry_t_143(const struct winLeaderboardEntry_t_143 *win, struct LeaderboardEntry_t *lin)
 {
-    LeaderboardEntry_t *lin = (LeaderboardEntry_t *)l;
-    struct winLeaderboardEntry_t_143 *win = (struct winLeaderboardEntry_t_143 *)w;
     lin->m_steamIDUser = win->m_steamIDUser;
     lin->m_nGlobalRank = win->m_nGlobalRank;
     lin->m_nScore = win->m_nScore;
@@ -547,10 +474,8 @@ void win_to_lin_struct_LeaderboardEntry_t_143(const void *w, void *l)
     lin->m_hUGC = win->m_hUGC;
 }
 
-void lin_to_win_struct_LeaderboardEntry_t_143(const void *l, void *w)
+void lin_to_win_struct_LeaderboardEntry_t_143(const struct LeaderboardEntry_t *lin, struct winLeaderboardEntry_t_143 *win)
 {
-    LeaderboardEntry_t *lin = (LeaderboardEntry_t *)l;
-    struct winLeaderboardEntry_t_143 *win = (struct winLeaderboardEntry_t_143 *)w;
     win->m_steamIDUser = lin->m_steamIDUser;
     win->m_nGlobalRank = lin->m_nGlobalRank;
     win->m_nScore = lin->m_nScore;
@@ -568,10 +493,8 @@ struct winLeaderboardScoreUploaded_t_32 {
     int m_nGlobalRankPrevious;
 }  __attribute__ ((ms_struct));
 #pragma pack( pop )
-void cb_LeaderboardScoreUploaded_t_32(const void *l, void *w)
+void cb_LeaderboardScoreUploaded_t_32(const struct LeaderboardScoreUploaded_t *lin, struct winLeaderboardScoreUploaded_t_32 *win)
 {
-    LeaderboardScoreUploaded_t *lin = (LeaderboardScoreUploaded_t *)l;
-    struct winLeaderboardScoreUploaded_t_32 *win = (struct winLeaderboardScoreUploaded_t_32 *)w;
     win->m_bSuccess = lin->m_bSuccess;
     win->m_hSteamLeaderboard = lin->m_hSteamLeaderboard;
     win->m_nScore = lin->m_nScore;
@@ -586,10 +509,8 @@ struct winLeaderboardUGCSet_t_16 {
     SteamLeaderboard_t m_hSteamLeaderboard;
 }  __attribute__ ((ms_struct));
 #pragma pack( pop )
-void cb_LeaderboardUGCSet_t_16(const void *l, void *w)
+void cb_LeaderboardUGCSet_t_16(const struct LeaderboardUGCSet_t *lin, struct winLeaderboardUGCSet_t_16 *win)
 {
-    LeaderboardUGCSet_t *lin = (LeaderboardUGCSet_t *)l;
-    struct winLeaderboardUGCSet_t_16 *win = (struct winLeaderboardUGCSet_t_16 *)w;
     win->m_eResult = lin->m_eResult;
     win->m_hSteamLeaderboard = lin->m_hSteamLeaderboard;
 }
@@ -601,10 +522,8 @@ struct winPS3TrophiesInstalled_t_24 {
     uint64 m_ulRequiredDiskSpace;
 }  __attribute__ ((ms_struct));
 #pragma pack( pop )
-void cb_PS3TrophiesInstalled_t_24(const void *l, void *w)
+void cb_PS3TrophiesInstalled_t_24(const struct PS3TrophiesInstalled_t *lin, struct winPS3TrophiesInstalled_t_24 *win)
 {
-    PS3TrophiesInstalled_t *lin = (PS3TrophiesInstalled_t *)l;
-    struct winPS3TrophiesInstalled_t_24 *win = (struct winPS3TrophiesInstalled_t_24 *)w;
     win->m_nGameID = lin->m_nGameID;
     win->m_eResult = lin->m_eResult;
     win->m_ulRequiredDiskSpace = lin->m_ulRequiredDiskSpace;
@@ -618,10 +537,8 @@ struct winFileDetailsResult_t_40 {
     uint32 m_unFlags;
 }  __attribute__ ((ms_struct));
 #pragma pack( pop )
-void cb_FileDetailsResult_t_40(const void *l, void *w)
+void cb_FileDetailsResult_t_40(const struct FileDetailsResult_t *lin, struct winFileDetailsResult_t_40 *win)
 {
-    FileDetailsResult_t *lin = (FileDetailsResult_t *)l;
-    struct winFileDetailsResult_t_40 *win = (struct winFileDetailsResult_t_40 *)w;
     win->m_eResult = lin->m_eResult;
     win->m_ulFileSize = lin->m_ulFileSize;
     memcpy(win->m_FileSHA, lin->m_FileSHA, sizeof(win->m_FileSHA));
@@ -637,10 +554,8 @@ struct winHTTPRequestCompleted_t_32 {
     uint32 m_unBodySize;
 }  __attribute__ ((ms_struct));
 #pragma pack( pop )
-void cb_HTTPRequestCompleted_t_32(const void *l, void *w)
+void cb_HTTPRequestCompleted_t_32(const struct HTTPRequestCompleted_t *lin, struct winHTTPRequestCompleted_t_32 *win)
 {
-    HTTPRequestCompleted_t *lin = (HTTPRequestCompleted_t *)l;
-    struct winHTTPRequestCompleted_t_32 *win = (struct winHTTPRequestCompleted_t_32 *)w;
     win->m_hRequest = lin->m_hRequest;
     win->m_ulContextValue = lin->m_ulContextValue;
     win->m_bRequestSuccessful = lin->m_bRequestSuccessful;
@@ -654,10 +569,8 @@ struct winHTTPRequestHeadersReceived_t_16 {
     uint64 m_ulContextValue;
 }  __attribute__ ((ms_struct));
 #pragma pack( pop )
-void cb_HTTPRequestHeadersReceived_t_16(const void *l, void *w)
+void cb_HTTPRequestHeadersReceived_t_16(const struct HTTPRequestHeadersReceived_t *lin, struct winHTTPRequestHeadersReceived_t_16 *win)
 {
-    HTTPRequestHeadersReceived_t *lin = (HTTPRequestHeadersReceived_t *)l;
-    struct winHTTPRequestHeadersReceived_t_16 *win = (struct winHTTPRequestHeadersReceived_t_16 *)w;
     win->m_hRequest = lin->m_hRequest;
     win->m_ulContextValue = lin->m_ulContextValue;
 }
@@ -670,50 +583,16 @@ struct winHTTPRequestDataReceived_t_24 {
     uint32 m_cBytesReceived;
 }  __attribute__ ((ms_struct));
 #pragma pack( pop )
-void cb_HTTPRequestDataReceived_t_24(const void *l, void *w)
+void cb_HTTPRequestDataReceived_t_24(const struct HTTPRequestDataReceived_t *lin, struct winHTTPRequestDataReceived_t_24 *win)
 {
-    HTTPRequestDataReceived_t *lin = (HTTPRequestDataReceived_t *)l;
-    struct winHTTPRequestDataReceived_t_24 *win = (struct winHTTPRequestDataReceived_t_24 *)w;
     win->m_hRequest = lin->m_hRequest;
     win->m_ulContextValue = lin->m_ulContextValue;
     win->m_cOffset = lin->m_cOffset;
     win->m_cBytesReceived = lin->m_cBytesReceived;
 }
 
-#pragma pack( push, 8 )
-struct winSteamUGCDetails_t_143 {
-    PublishedFileId_t m_nPublishedFileId;
-    EResult m_eResult;
-    EWorkshopFileType m_eFileType;
-    AppId_t m_nCreatorAppID;
-    AppId_t m_nConsumerAppID;
-    char m_rgchTitle[129];
-    char m_rgchDescription[8000];
-    uint64 m_ulSteamIDOwner;
-    uint32 m_rtimeCreated;
-    uint32 m_rtimeUpdated;
-    uint32 m_rtimeAddedToUserList;
-    ERemoteStoragePublishedFileVisibility m_eVisibility;
-    bool m_bBanned;
-    bool m_bAcceptedForUse;
-    bool m_bTagsTruncated;
-    char m_rgchTags[1025];
-    UGCHandle_t m_hFile;
-    UGCHandle_t m_hPreviewFile;
-    char m_pchFileName[260];
-    int32 m_nFileSize;
-    int32 m_nPreviewFileSize;
-    char m_rgchURL[256];
-    uint32 m_unVotesUp;
-    uint32 m_unVotesDown;
-    float m_flScore;
-    uint32 m_unNumChildren;
-}  __attribute__ ((ms_struct));
-#pragma pack( pop )
-void win_to_lin_struct_SteamUGCDetails_t_143(const void *w, void *l)
+void win_to_lin_struct_SteamUGCDetails_t_143(const struct winSteamUGCDetails_t_143 *win, struct SteamUGCDetails_t *lin)
 {
-    SteamUGCDetails_t *lin = (SteamUGCDetails_t *)l;
-    struct winSteamUGCDetails_t_143 *win = (struct winSteamUGCDetails_t_143 *)w;
     lin->m_nPublishedFileId = win->m_nPublishedFileId;
     lin->m_eResult = win->m_eResult;
     lin->m_eFileType = win->m_eFileType;
@@ -742,10 +621,8 @@ void win_to_lin_struct_SteamUGCDetails_t_143(const void *w, void *l)
     lin->m_unNumChildren = win->m_unNumChildren;
 }
 
-void lin_to_win_struct_SteamUGCDetails_t_143(const void *l, void *w)
+void lin_to_win_struct_SteamUGCDetails_t_143(const struct SteamUGCDetails_t *lin, struct winSteamUGCDetails_t_143 *win)
 {
-    SteamUGCDetails_t *lin = (SteamUGCDetails_t *)l;
-    struct winSteamUGCDetails_t_143 *win = (struct winSteamUGCDetails_t_143 *)w;
     win->m_nPublishedFileId = lin->m_nPublishedFileId;
     win->m_eResult = lin->m_eResult;
     win->m_eFileType = lin->m_eFileType;
@@ -780,10 +657,8 @@ struct winSteamUGCRequestUGCDetailsResult_t_9784 {
     bool m_bCachedData;
 }  __attribute__ ((ms_struct));
 #pragma pack( pop )
-void cb_SteamUGCRequestUGCDetailsResult_t_9784(const void *l, void *w)
+void cb_SteamUGCRequestUGCDetailsResult_t_9784(const struct SteamUGCRequestUGCDetailsResult_t *lin, struct winSteamUGCRequestUGCDetailsResult_t_9784 *win)
 {
-    SteamUGCRequestUGCDetailsResult_t *lin = (SteamUGCRequestUGCDetailsResult_t *)l;
-    struct winSteamUGCRequestUGCDetailsResult_t_9784 *win = (struct winSteamUGCRequestUGCDetailsResult_t_9784 *)w;
     lin_to_win_struct_SteamUGCDetails_t_143(&lin->m_details, &win->m_details);
     win->m_bCachedData = lin->m_bCachedData;
 }
@@ -795,10 +670,8 @@ struct winCreateItemResult_t_24 {
     bool m_bUserNeedsToAcceptWorkshopLegalAgreement;
 }  __attribute__ ((ms_struct));
 #pragma pack( pop )
-void cb_CreateItemResult_t_24(const void *l, void *w)
+void cb_CreateItemResult_t_24(const struct CreateItemResult_t *lin, struct winCreateItemResult_t_24 *win)
 {
-    CreateItemResult_t *lin = (CreateItemResult_t *)l;
-    struct winCreateItemResult_t_24 *win = (struct winCreateItemResult_t_24 *)w;
     win->m_eResult = lin->m_eResult;
     win->m_nPublishedFileId = lin->m_nPublishedFileId;
     win->m_bUserNeedsToAcceptWorkshopLegalAgreement = lin->m_bUserNeedsToAcceptWorkshopLegalAgreement;
@@ -810,10 +683,8 @@ struct winItemInstalled_t_16 {
     PublishedFileId_t m_nPublishedFileId;
 }  __attribute__ ((ms_struct));
 #pragma pack( pop )
-void cb_ItemInstalled_t_16(const void *l, void *w)
+void cb_ItemInstalled_t_16(const struct ItemInstalled_t *lin, struct winItemInstalled_t_16 *win)
 {
-    ItemInstalled_t *lin = (ItemInstalled_t *)l;
-    struct winItemInstalled_t_16 *win = (struct winItemInstalled_t_16 *)w;
     win->m_unAppID = lin->m_unAppID;
     win->m_nPublishedFileId = lin->m_nPublishedFileId;
 }
@@ -825,10 +696,8 @@ struct winDownloadItemResult_t_24 {
     EResult m_eResult;
 }  __attribute__ ((ms_struct));
 #pragma pack( pop )
-void cb_DownloadItemResult_t_24(const void *l, void *w)
+void cb_DownloadItemResult_t_24(const struct DownloadItemResult_t *lin, struct winDownloadItemResult_t_24 *win)
 {
-    DownloadItemResult_t *lin = (DownloadItemResult_t *)l;
-    struct winDownloadItemResult_t_24 *win = (struct winDownloadItemResult_t_24 *)w;
     win->m_unAppID = lin->m_unAppID;
     win->m_nPublishedFileId = lin->m_nPublishedFileId;
     win->m_eResult = lin->m_eResult;
@@ -841,10 +710,8 @@ struct winAddUGCDependencyResult_t_24 {
     PublishedFileId_t m_nChildPublishedFileId;
 }  __attribute__ ((ms_struct));
 #pragma pack( pop )
-void cb_AddUGCDependencyResult_t_24(const void *l, void *w)
+void cb_AddUGCDependencyResult_t_24(const struct AddUGCDependencyResult_t *lin, struct winAddUGCDependencyResult_t_24 *win)
 {
-    AddUGCDependencyResult_t *lin = (AddUGCDependencyResult_t *)l;
-    struct winAddUGCDependencyResult_t_24 *win = (struct winAddUGCDependencyResult_t_24 *)w;
     win->m_eResult = lin->m_eResult;
     win->m_nPublishedFileId = lin->m_nPublishedFileId;
     win->m_nChildPublishedFileId = lin->m_nChildPublishedFileId;
@@ -857,10 +724,8 @@ struct winRemoveUGCDependencyResult_t_24 {
     PublishedFileId_t m_nChildPublishedFileId;
 }  __attribute__ ((ms_struct));
 #pragma pack( pop )
-void cb_RemoveUGCDependencyResult_t_24(const void *l, void *w)
+void cb_RemoveUGCDependencyResult_t_24(const struct RemoveUGCDependencyResult_t *lin, struct winRemoveUGCDependencyResult_t_24 *win)
 {
-    RemoveUGCDependencyResult_t *lin = (RemoveUGCDependencyResult_t *)l;
-    struct winRemoveUGCDependencyResult_t_24 *win = (struct winRemoveUGCDependencyResult_t_24 *)w;
     win->m_eResult = lin->m_eResult;
     win->m_nPublishedFileId = lin->m_nPublishedFileId;
     win->m_nChildPublishedFileId = lin->m_nChildPublishedFileId;
@@ -873,10 +738,8 @@ struct winAddAppDependencyResult_t_24 {
     AppId_t m_nAppID;
 }  __attribute__ ((ms_struct));
 #pragma pack( pop )
-void cb_AddAppDependencyResult_t_24(const void *l, void *w)
+void cb_AddAppDependencyResult_t_24(const struct AddAppDependencyResult_t *lin, struct winAddAppDependencyResult_t_24 *win)
 {
-    AddAppDependencyResult_t *lin = (AddAppDependencyResult_t *)l;
-    struct winAddAppDependencyResult_t_24 *win = (struct winAddAppDependencyResult_t_24 *)w;
     win->m_eResult = lin->m_eResult;
     win->m_nPublishedFileId = lin->m_nPublishedFileId;
     win->m_nAppID = lin->m_nAppID;
@@ -889,10 +752,8 @@ struct winRemoveAppDependencyResult_t_24 {
     AppId_t m_nAppID;
 }  __attribute__ ((ms_struct));
 #pragma pack( pop )
-void cb_RemoveAppDependencyResult_t_24(const void *l, void *w)
+void cb_RemoveAppDependencyResult_t_24(const struct RemoveAppDependencyResult_t *lin, struct winRemoveAppDependencyResult_t_24 *win)
 {
-    RemoveAppDependencyResult_t *lin = (RemoveAppDependencyResult_t *)l;
-    struct winRemoveAppDependencyResult_t_24 *win = (struct winRemoveAppDependencyResult_t_24 *)w;
     win->m_eResult = lin->m_eResult;
     win->m_nPublishedFileId = lin->m_nPublishedFileId;
     win->m_nAppID = lin->m_nAppID;
@@ -907,10 +768,8 @@ struct winGetAppDependenciesResult_t_152 {
     uint32 m_nTotalNumAppDependencies;
 }  __attribute__ ((ms_struct));
 #pragma pack( pop )
-void cb_GetAppDependenciesResult_t_152(const void *l, void *w)
+void cb_GetAppDependenciesResult_t_152(const struct GetAppDependenciesResult_t *lin, struct winGetAppDependenciesResult_t_152 *win)
 {
-    GetAppDependenciesResult_t *lin = (GetAppDependenciesResult_t *)l;
-    struct winGetAppDependenciesResult_t_152 *win = (struct winGetAppDependenciesResult_t_152 *)w;
     win->m_eResult = lin->m_eResult;
     win->m_nPublishedFileId = lin->m_nPublishedFileId;
     memcpy(win->m_rgAppIDs, lin->m_rgAppIDs, sizeof(win->m_rgAppIDs));
@@ -924,10 +783,8 @@ struct winDeleteItemResult_t_16 {
     PublishedFileId_t m_nPublishedFileId;
 }  __attribute__ ((ms_struct));
 #pragma pack( pop )
-void cb_DeleteItemResult_t_16(const void *l, void *w)
+void cb_DeleteItemResult_t_16(const struct DeleteItemResult_t *lin, struct winDeleteItemResult_t_16 *win)
 {
-    DeleteItemResult_t *lin = (DeleteItemResult_t *)l;
-    struct winDeleteItemResult_t_16 *win = (struct winDeleteItemResult_t_16 *)w;
     win->m_eResult = lin->m_eResult;
     win->m_nPublishedFileId = lin->m_nPublishedFileId;
 }
@@ -939,10 +796,8 @@ struct winHTML_FileOpenDialog_t_12 {
     const char * pchInitialFile;
 }  __attribute__ ((ms_struct));
 #pragma pack( pop )
-void cb_HTML_FileOpenDialog_t_12(const void *l, void *w)
+void cb_HTML_FileOpenDialog_t_12(const struct HTML_FileOpenDialog_t *lin, struct winHTML_FileOpenDialog_t_12 *win)
 {
-    HTML_FileOpenDialog_t *lin = (HTML_FileOpenDialog_t *)l;
-    struct winHTML_FileOpenDialog_t_12 *win = (struct winHTML_FileOpenDialog_t_12 *)w;
     win->unBrowserHandle = lin->unBrowserHandle;
     win->pchTitle = lin->pchTitle;
     steamclient_unix_path_to_dos_path(1, lin->pchInitialFile, g_tmppath, sizeof(g_tmppath));
@@ -956,10 +811,8 @@ struct winSteamInventoryStartPurchaseResult_t_24 {
     uint64 m_ulTransID;
 }  __attribute__ ((ms_struct));
 #pragma pack( pop )
-void cb_SteamInventoryStartPurchaseResult_t_24(const void *l, void *w)
+void cb_SteamInventoryStartPurchaseResult_t_24(const struct SteamInventoryStartPurchaseResult_t *lin, struct winSteamInventoryStartPurchaseResult_t_24 *win)
 {
-    SteamInventoryStartPurchaseResult_t *lin = (SteamInventoryStartPurchaseResult_t *)l;
-    struct winSteamInventoryStartPurchaseResult_t_24 *win = (struct winSteamInventoryStartPurchaseResult_t_24 *)w;
     win->m_result = lin->m_result;
     win->m_ulOrderID = lin->m_ulOrderID;
     win->m_ulTransID = lin->m_ulTransID;
@@ -976,10 +829,8 @@ struct winGSReputation_t_40 {
     uint32 m_unBanExpires;
 }  __attribute__ ((ms_struct));
 #pragma pack( pop )
-void cb_GSReputation_t_40(const void *l, void *w)
+void cb_GSReputation_t_40(const struct GSReputation_t *lin, struct winGSReputation_t_40 *win)
 {
-    GSReputation_t *lin = (GSReputation_t *)l;
-    struct winGSReputation_t_40 *win = (struct winGSReputation_t_40 *)w;
     win->m_eResult = lin->m_eResult;
     win->m_unReputationScore = lin->m_unReputationScore;
     win->m_bBanned = lin->m_bBanned;

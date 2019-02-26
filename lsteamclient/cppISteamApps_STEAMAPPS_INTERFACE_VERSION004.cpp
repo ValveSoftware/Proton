@@ -1,11 +1,12 @@
 #include "steam_defs.h"
 #include "steamworks_sdk_117/steam_api.h"
 #include "steamclient_private.h"
-#include "cppISteamApps_STEAMAPPS_INTERFACE_VERSION004.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include "struct_converters_117.h"
+#define SDKVER_117
+#include "struct_converters.h"
+#include "cppISteamApps_STEAMAPPS_INTERFACE_VERSION004.h"
 bool cppISteamApps_STEAMAPPS_INTERFACE_VERSION004_BIsSubscribed(void *linux_side)
 {
     return ((ISteamApps*)linux_side)->BIsSubscribed();

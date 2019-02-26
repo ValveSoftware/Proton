@@ -1,6 +1,3 @@
-#ifdef __cplusplus
-extern "C" {
-#endif
 extern HSteamUser cppISteamUser_SteamUser013_GetHSteamUser(void *);
 extern bool cppISteamUser_SteamUser013_BLoggedOn(void *);
 extern CSteamID cppISteamUser_SteamUser013_GetSteamID(void *);
@@ -18,6 +15,3 @@ extern EBeginAuthSessionResult cppISteamUser_SteamUser013_BeginAuthSession(void 
 extern void cppISteamUser_SteamUser013_EndAuthSession(void *, CSteamID);
 extern void cppISteamUser_SteamUser013_CancelAuthTicket(void *, HAuthTicket);
 extern EUserHasLicenseForAppResult cppISteamUser_SteamUser013_UserHasLicenseForApp(void *, CSteamID, AppId_t);
-#ifdef __cplusplus
-}
-#endif

@@ -1,11 +1,12 @@
 #include "steam_defs.h"
 #include "steamworks_sdk_099x/steam_api.h"
 #include "steamclient_private.h"
-#include "cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include "struct_converters_099x.h"
+#define SDKVER_099x
+#include "struct_converters.h"
+#include "cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001.h"
 uint32 cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetNumStats(void *linux_side, CGameID nGameID)
 {
     return ((ISteamUserStats*)linux_side)->GetNumStats((CGameID)nGameID);

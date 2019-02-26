@@ -1,6 +1,3 @@
-#ifdef __cplusplus
-extern "C" {
-#endif
 extern bool cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_RequestCurrentStats(void *);
 extern bool cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetStat(void *, const char *, int32 *);
 extern bool cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetStat_2(void *, const char *, float *);
@@ -28,10 +25,7 @@ extern int cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetLeaderboard
 extern ELeaderboardSortMethod cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetLeaderboardSortMethod(void *, SteamLeaderboard_t);
 extern ELeaderboardDisplayType cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetLeaderboardDisplayType(void *, SteamLeaderboard_t);
 extern SteamAPICall_t cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_DownloadLeaderboardEntries(void *, SteamLeaderboard_t, ELeaderboardDataRequest, int, int);
-extern bool cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetDownloadedLeaderboardEntry(void *, SteamLeaderboardEntries_t, int, LeaderboardEntry_t *, int32 *, int);
+extern bool cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetDownloadedLeaderboardEntry(void *, SteamLeaderboardEntries_t, int, winLeaderboardEntry_t_111x *, int32 *, int);
 extern SteamAPICall_t cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_UploadLeaderboardScore(void *, SteamLeaderboard_t, ELeaderboardUploadScoreMethod, int32, const int32 *, int);
 extern SteamAPICall_t cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_AttachLeaderboardUGC(void *, SteamLeaderboard_t, UGCHandle_t);
 extern SteamAPICall_t cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION008_GetNumberOfCurrentPlayers(void *);
-#ifdef __cplusplus
-}
-#endif

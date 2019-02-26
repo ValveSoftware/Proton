@@ -1,10 +1,7 @@
-#ifdef __cplusplus
-extern "C" {
-#endif
 extern UGCQueryHandle_t cppISteamUGC_STEAMUGC_INTERFACE_VERSION003_CreateQueryUserUGCRequest(void *, AccountID_t, EUserUGCList, EUGCMatchingUGCType, EUserUGCListSortOrder, AppId_t, AppId_t, uint32);
 extern UGCQueryHandle_t cppISteamUGC_STEAMUGC_INTERFACE_VERSION003_CreateQueryAllUGCRequest(void *, EUGCQuery, EUGCMatchingUGCType, AppId_t, AppId_t, uint32);
 extern SteamAPICall_t cppISteamUGC_STEAMUGC_INTERFACE_VERSION003_SendQueryUGCRequest(void *, UGCQueryHandle_t);
-extern bool cppISteamUGC_STEAMUGC_INTERFACE_VERSION003_GetQueryUGCResult(void *, UGCQueryHandle_t, uint32, SteamUGCDetails_t *);
+extern bool cppISteamUGC_STEAMUGC_INTERFACE_VERSION003_GetQueryUGCResult(void *, UGCQueryHandle_t, uint32, winSteamUGCDetails_t_132 *);
 extern bool cppISteamUGC_STEAMUGC_INTERFACE_VERSION003_ReleaseQueryUGCRequest(void *, UGCQueryHandle_t);
 extern bool cppISteamUGC_STEAMUGC_INTERFACE_VERSION003_AddRequiredTag(void *, UGCQueryHandle_t, const char *);
 extern bool cppISteamUGC_STEAMUGC_INTERFACE_VERSION003_AddExcludedTag(void *, UGCQueryHandle_t, const char *);
@@ -32,6 +29,3 @@ extern uint32 cppISteamUGC_STEAMUGC_INTERFACE_VERSION003_GetNumSubscribedItems(v
 extern uint32 cppISteamUGC_STEAMUGC_INTERFACE_VERSION003_GetSubscribedItems(void *, PublishedFileId_t *, uint32);
 extern bool cppISteamUGC_STEAMUGC_INTERFACE_VERSION003_GetItemInstallInfo(void *, PublishedFileId_t, uint64 *, char *, uint32, bool *);
 extern bool cppISteamUGC_STEAMUGC_INTERFACE_VERSION003_GetItemUpdateInfo(void *, PublishedFileId_t, bool *, bool *, uint64 *, uint64 *);
-#ifdef __cplusplus
-}
-#endif

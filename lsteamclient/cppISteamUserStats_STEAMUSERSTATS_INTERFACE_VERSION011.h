@@ -1,6 +1,3 @@
-#ifdef __cplusplus
-extern "C" {
-#endif
 extern bool cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_RequestCurrentStats(void *);
 extern bool cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetStat(void *, const char *, int32 *);
 extern bool cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetStat_2(void *, const char *, float *);
@@ -31,7 +28,7 @@ extern ELeaderboardSortMethod cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSIO
 extern ELeaderboardDisplayType cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetLeaderboardDisplayType(void *, SteamLeaderboard_t);
 extern SteamAPICall_t cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_DownloadLeaderboardEntries(void *, SteamLeaderboard_t, ELeaderboardDataRequest, int, int);
 extern SteamAPICall_t cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_DownloadLeaderboardEntriesForUsers(void *, SteamLeaderboard_t, CSteamID *, int);
-extern bool cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetDownloadedLeaderboardEntry(void *, SteamLeaderboardEntries_t, int, LeaderboardEntry_t *, int32 *, int);
+extern bool cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetDownloadedLeaderboardEntry(void *, SteamLeaderboardEntries_t, int, winLeaderboardEntry_t_143 *, int32 *, int);
 extern SteamAPICall_t cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_UploadLeaderboardScore(void *, SteamLeaderboard_t, ELeaderboardUploadScoreMethod, int32, const int32 *, int);
 extern SteamAPICall_t cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_AttachLeaderboardUGC(void *, SteamLeaderboard_t, UGCHandle_t);
 extern SteamAPICall_t cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetNumberOfCurrentPlayers(void *);
@@ -44,6 +41,3 @@ extern bool cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetGlobalStat
 extern bool cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetGlobalStat_2(void *, const char *, double *);
 extern int32 cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetGlobalStatHistory(void *, const char *, int64 *, uint32);
 extern int32 cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetGlobalStatHistory_2(void *, const char *, double *, uint32);
-#ifdef __cplusplus
-}
-#endif

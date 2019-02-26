@@ -1,6 +1,3 @@
-#ifdef __cplusplus
-extern "C" {
-#endif
 extern void cppISteamGameServer_SteamGameServer003_LogOn(void *);
 extern void cppISteamGameServer_SteamGameServer003_LogOff(void *);
 extern bool cppISteamGameServer_SteamGameServer003_BLoggedOn(void *);
@@ -18,6 +15,3 @@ extern bool cppISteamGameServer_SteamGameServer003_GSSetUserData(void *, CSteamI
 extern void cppISteamGameServer_SteamGameServer003_GSUpdateSpectatorPort(void *, uint16);
 extern void cppISteamGameServer_SteamGameServer003_GSSetGameType(void *, const char *);
 extern bool cppISteamGameServer_SteamGameServer003_GSGetUserAchievementStatus(void *, CSteamID, const char *);
-#ifdef __cplusplus
-}
-#endif

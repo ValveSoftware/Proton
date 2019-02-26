@@ -1,6 +1,3 @@
-#ifdef __cplusplus
-extern "C" {
-#endif
 extern bool cppISteamApps_STEAMAPPS_INTERFACE_VERSION007_BIsSubscribed(void *);
 extern bool cppISteamApps_STEAMAPPS_INTERFACE_VERSION007_BIsLowViolence(void *);
 extern bool cppISteamApps_STEAMAPPS_INTERFACE_VERSION007_BIsCybercafe(void *);
@@ -25,6 +22,3 @@ extern CSteamID cppISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetAppOwner(void *)
 extern const char * cppISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetLaunchQueryParam(void *, const char *);
 extern bool cppISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetDlcDownloadProgress(void *, AppId_t, uint64 *, uint64 *);
 extern int cppISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetAppBuildId(void *);
-#ifdef __cplusplus
-}
-#endif

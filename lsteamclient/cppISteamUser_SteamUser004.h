@@ -1,6 +1,3 @@
-#ifdef __cplusplus
-extern "C" {
-#endif
 extern HSteamUser cppISteamUser_SteamUser004_GetHSteamUser(void *);
 extern void cppISteamUser_SteamUser004_LogOn(void *, CSteamID);
 extern void cppISteamUser_SteamUser004_LogOff(void *);
@@ -27,6 +24,3 @@ extern void cppISteamUser_SteamUser004_TerminateGameConnection(void *, uint32, u
 extern void cppISteamUser_SteamUser004_SetSelfAsPrimaryChatDestination(void *);
 extern bool cppISteamUser_SteamUser004_IsPrimaryChatDestination(void *);
 extern void cppISteamUser_SteamUser004_RequestLegacyCDKey(void *, uint32);
-#ifdef __cplusplus
-}
-#endif

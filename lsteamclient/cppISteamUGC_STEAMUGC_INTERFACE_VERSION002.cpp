@@ -1,11 +1,12 @@
 #include "steam_defs.h"
 #include "steamworks_sdk_130/steam_api.h"
 #include "steamclient_private.h"
-#include "cppISteamUGC_STEAMUGC_INTERFACE_VERSION002.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include "struct_converters_130.h"
+#define SDKVER_130
+#include "struct_converters.h"
+#include "cppISteamUGC_STEAMUGC_INTERFACE_VERSION002.h"
 UGCQueryHandle_t cppISteamUGC_STEAMUGC_INTERFACE_VERSION002_CreateQueryUserUGCRequest(void *linux_side, AccountID_t unAccountID, EUserUGCList eListType, EUGCMatchingUGCType eMatchingUGCType, EUserUGCListSortOrder eSortOrder, AppId_t nCreatorAppID, AppId_t nConsumerAppID, uint32 unPage)
 {
     return ((ISteamUGC*)linux_side)->CreateQueryUserUGCRequest((AccountID_t)unAccountID, (EUserUGCList)eListType, (EUGCMatchingUGCType)eMatchingUGCType, (EUserUGCListSortOrder)eSortOrder, (AppId_t)nCreatorAppID, (AppId_t)nConsumerAppID, (uint32)unPage);
@@ -21,7 +22,7 @@ SteamAPICall_t cppISteamUGC_STEAMUGC_INTERFACE_VERSION002_SendQueryUGCRequest(vo
     return ((ISteamUGC*)linux_side)->SendQueryUGCRequest((UGCQueryHandle_t)handle);
 }
 
-bool cppISteamUGC_STEAMUGC_INTERFACE_VERSION002_GetQueryUGCResult(void *linux_side, UGCQueryHandle_t handle, uint32 index, SteamUGCDetails_t * pDetails)
+bool cppISteamUGC_STEAMUGC_INTERFACE_VERSION002_GetQueryUGCResult(void *linux_side, UGCQueryHandle_t handle, uint32 index, winSteamUGCDetails_t_130 * pDetails)
 {
     SteamUGCDetails_t lin_pDetails;
     win_to_lin_struct_SteamUGCDetails_t_130(pDetails, &lin_pDetails);

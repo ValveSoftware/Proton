@@ -2,11 +2,12 @@
 #include "steamworks_sdk_next2/steam_api.h"
 #include "steamworks_sdk_next2/isteamnetworkingsocketsserialized.h"
 #include "steamclient_private.h"
-#include "cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized003.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include "struct_converters_next2.h"
+#define SDKVER_next2
+#include "struct_converters.h"
+#include "cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized003.h"
 void cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized003_SendP2PRendezvous(void *linux_side, CSteamID steamIDRemote, uint32 unConnectionIDSrc, const void * pMsgRendezvous, uint32 cbRendezvous)
 {
     ((ISteamNetworkingSocketsSerialized*)linux_side)->SendP2PRendezvous((CSteamID)steamIDRemote, (uint32)unConnectionIDSrc, (const void *)pMsgRendezvous, (uint32)cbRendezvous);

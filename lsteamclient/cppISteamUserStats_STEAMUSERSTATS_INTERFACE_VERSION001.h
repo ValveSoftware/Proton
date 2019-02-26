@@ -1,6 +1,3 @@
-#ifdef __cplusplus
-extern "C" {
-#endif
 extern uint32 cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetNumStats(void *, CGameID);
 extern const char * cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetStatName(void *, CGameID, uint32);
 extern ESteamUserStatType cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetStatType(void *, CGameID, const char *);
@@ -23,6 +20,3 @@ extern bool cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_ClearAchievem
 extern bool cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_ClearGroupAchievement(void *, CGameID, const char *);
 extern int cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetAchievementIcon(void *, CGameID, const char *);
 extern const char * cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION001_GetAchievementDisplayAttribute(void *, CGameID, const char *, const char *);
-#ifdef __cplusplus
-}
-#endif

@@ -1,6 +1,3 @@
-#ifdef __cplusplus
-extern "C" {
-#endif
 extern const char * cppISteamFriends_SteamFriends010_GetPersonaName(void *);
 extern void cppISteamFriends_SteamFriends010_SetPersonaName(void *, const char *);
 extern EPersonaState cppISteamFriends_SteamFriends010_GetPersonaState(void *);
@@ -60,6 +57,3 @@ extern bool cppISteamFriends_SteamFriends010_CloseClanChatWindowInSteam(void *, 
 extern bool cppISteamFriends_SteamFriends010_SetListenForFriendsMessages(void *, bool);
 extern bool cppISteamFriends_SteamFriends010_ReplyToFriendMessage(void *, CSteamID, const char *);
 extern int cppISteamFriends_SteamFriends010_GetFriendMessage(void *, CSteamID, int, void *, int, EChatEntryType *);
-#ifdef __cplusplus
-}
-#endif

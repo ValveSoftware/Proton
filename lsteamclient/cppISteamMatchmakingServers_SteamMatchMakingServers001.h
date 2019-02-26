@@ -1,6 +1,3 @@
-#ifdef __cplusplus
-extern "C" {
-#endif
 extern void cppISteamMatchmakingServers_SteamMatchMakingServers001_RequestInternetServerList(void *, AppId_t, MatchMakingKeyValuePair_t **, uint32, ISteamMatchmakingServerListResponse *);
 extern void cppISteamMatchmakingServers_SteamMatchMakingServers001_RequestLANServerList(void *, AppId_t, ISteamMatchmakingServerListResponse *);
 extern void cppISteamMatchmakingServers_SteamMatchMakingServers001_RequestFriendsServerList(void *, AppId_t, MatchMakingKeyValuePair_t **, uint32, ISteamMatchmakingServerListResponse *);
@@ -17,6 +14,3 @@ extern HServerQuery cppISteamMatchmakingServers_SteamMatchMakingServers001_PingS
 extern HServerQuery cppISteamMatchmakingServers_SteamMatchMakingServers001_PlayerDetails(void *, uint32, uint16, ISteamMatchmakingPlayersResponse *);
 extern HServerQuery cppISteamMatchmakingServers_SteamMatchMakingServers001_ServerRules(void *, uint32, uint16, ISteamMatchmakingRulesResponse *);
 extern void cppISteamMatchmakingServers_SteamMatchMakingServers001_CancelServerQuery(void *, HServerQuery);
-#ifdef __cplusplus
-}
-#endif

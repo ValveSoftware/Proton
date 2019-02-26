@@ -1,6 +1,3 @@
-#ifdef __cplusplus
-extern "C" {
-#endif
 extern HSteamPipe cppISteamClient_SteamClient006_CreateSteamPipe(void *);
 extern bool cppISteamClient_SteamClient006_BReleaseSteamPipe(void *, HSteamPipe);
 extern HSteamUser cppISteamClient_SteamClient006_CreateGlobalUser(void *, HSteamPipe *);
@@ -22,6 +19,3 @@ extern void *cppISteamClient_SteamClient006_GetISteamMasterServerUpdater(void *,
 extern void *cppISteamClient_SteamClient006_GetISteamMatchmakingServers(void *, HSteamUser, HSteamPipe, const char *);
 extern void cppISteamClient_SteamClient006_RunFrame(void *);
 extern uint32 cppISteamClient_SteamClient006_GetIPCCallCount(void *);
-#ifdef __cplusplus
-}
-#endif

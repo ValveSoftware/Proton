@@ -1,6 +1,3 @@
-#ifdef __cplusplus
-extern "C" {
-#endif
 extern SteamAPICall_t cppISteamGameServerStats_SteamGameServerStats001_RequestUserStats(void *, CSteamID);
 extern bool cppISteamGameServerStats_SteamGameServerStats001_GetUserStat(void *, CSteamID, const char *, int32 *);
 extern bool cppISteamGameServerStats_SteamGameServerStats001_GetUserStat_2(void *, CSteamID, const char *, float *);
@@ -11,6 +8,3 @@ extern bool cppISteamGameServerStats_SteamGameServerStats001_UpdateUserAvgRateSt
 extern bool cppISteamGameServerStats_SteamGameServerStats001_SetUserAchievement(void *, CSteamID, const char *);
 extern bool cppISteamGameServerStats_SteamGameServerStats001_ClearUserAchievement(void *, CSteamID, const char *);
 extern SteamAPICall_t cppISteamGameServerStats_SteamGameServerStats001_StoreUserStats(void *, CSteamID);
-#ifdef __cplusplus
-}
-#endif

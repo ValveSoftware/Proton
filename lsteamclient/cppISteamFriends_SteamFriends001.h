@@ -1,6 +1,3 @@
-#ifdef __cplusplus
-extern "C" {
-#endif
 extern const char * cppISteamFriends_SteamFriends001_GetPersonaName(void *);
 extern void cppISteamFriends_SteamFriends001_SetPersonaName(void *, const char *);
 extern EPersonaState cppISteamFriends_SteamFriends001_GetPersonaState(void *);
@@ -28,6 +25,3 @@ extern bool cppISteamFriends_SteamFriends001_InviteFriendByEmail(void *, const c
 extern int cppISteamFriends_SteamFriends001_GetBlockedFriendCount(void *);
 extern bool cppISteamFriends_SteamFriends001_GetFriendGamePlayed(void *, CSteamID, uint64 *, uint32 *, uint16 *);
 extern bool cppISteamFriends_SteamFriends001_GetFriendGamePlayed2(void *, CSteamID, uint64 *, uint32 *, uint16 *, uint16 *);
-#ifdef __cplusplus
-}
-#endif

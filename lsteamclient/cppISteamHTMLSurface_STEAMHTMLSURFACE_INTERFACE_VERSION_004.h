@@ -1,6 +1,3 @@
-#ifdef __cplusplus
-extern "C" {
-#endif
 extern bool cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_Init(void *);
 extern bool cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_Shutdown(void *);
 extern SteamAPICall_t cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_CreateBrowser(void *, const char *, const char *);
@@ -37,6 +34,3 @@ extern void cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_SetDPISc
 extern void cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_AllowStartRequest(void *, HHTMLBrowser, bool);
 extern void cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_JSDialogResponse(void *, HHTMLBrowser, bool);
 extern void cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_FileLoadDialogResponse(void *, HHTMLBrowser, const char **);
-#ifdef __cplusplus
-}
-#endif

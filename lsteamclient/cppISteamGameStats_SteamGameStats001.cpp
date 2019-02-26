@@ -2,11 +2,12 @@
 #include "steamworks_sdk_117/steam_api.h"
 #include "steamworks_sdk_117/isteamgamestats.h"
 #include "steamclient_private.h"
-#include "cppISteamGameStats_SteamGameStats001.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include "struct_converters_117.h"
+#define SDKVER_117
+#include "struct_converters.h"
+#include "cppISteamGameStats_SteamGameStats001.h"
 SteamAPICall_t cppISteamGameStats_SteamGameStats001_GetNewSession(void *linux_side, int8 nAccountType, uint64 ulAccountID, int32 nAppID, RTime32 rtTimeStarted)
 {
     return ((ISteamGameStats*)linux_side)->GetNewSession((int8)nAccountType, (uint64)ulAccountID, (int32)nAppID, (RTime32)rtTimeStarted);

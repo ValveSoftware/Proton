@@ -1,11 +1,12 @@
 #include "steam_defs.h"
 #include "steamworks_sdk_099x/steam_api.h"
 #include "steamclient_private.h"
-#include "cppISteamFriends_SteamFriends001.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include "struct_converters_099x.h"
+#define SDKVER_099x
+#include "struct_converters.h"
+#include "cppISteamFriends_SteamFriends001.h"
 const char * cppISteamFriends_SteamFriends001_GetPersonaName(void *linux_side)
 {
     return ((ISteamFriends*)linux_side)->GetPersonaName();

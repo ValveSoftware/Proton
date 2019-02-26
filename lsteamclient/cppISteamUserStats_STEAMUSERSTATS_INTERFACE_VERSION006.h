@@ -1,6 +1,3 @@
-#ifdef __cplusplus
-extern "C" {
-#endif
 extern bool cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_RequestCurrentStats(void *);
 extern bool cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetStat(void *, const char *, int32 *);
 extern bool cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetStat_2(void *, const char *, float *);
@@ -29,6 +26,3 @@ extern SteamAPICall_t cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_Dow
 extern bool cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetDownloadedLeaderboardEntry(void *, SteamLeaderboardEntries_t, int, LeaderboardEntry_t *, int32 *, int);
 extern SteamAPICall_t cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_UploadLeaderboardScore(void *, SteamLeaderboard_t, ELeaderboardUploadScoreMethod, int32, const int32 *, int);
 extern SteamAPICall_t cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION006_GetNumberOfCurrentPlayers(void *);
-#ifdef __cplusplus
-}
-#endif

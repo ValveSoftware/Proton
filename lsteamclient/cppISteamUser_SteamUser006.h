@@ -1,6 +1,3 @@
-#ifdef __cplusplus
-extern "C" {
-#endif
 extern HSteamUser cppISteamUser_SteamUser006_GetHSteamUser(void *);
 extern void cppISteamUser_SteamUser006_LogOn(void *, CSteamID);
 extern void cppISteamUser_SteamUser006_LogOff(void *);
@@ -13,6 +10,3 @@ extern bool cppISteamUser_SteamUser006_GetRegistryInt(void *, EConfigSubTree, co
 extern int cppISteamUser_SteamUser006_InitiateGameConnection(void *, void *, int, CSteamID, CGameID, uint32, uint16, bool);
 extern void cppISteamUser_SteamUser006_TerminateGameConnection(void *, uint32, uint16);
 extern void cppISteamUser_SteamUser006_TrackAppUsageEvent(void *, CGameID, int, const char *);
-#ifdef __cplusplus
-}
-#endif

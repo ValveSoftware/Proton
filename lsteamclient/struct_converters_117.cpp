@@ -5,6 +5,8 @@
 #include "steamworks_sdk_117/isteamgamecoordinator.h"
 #include "steamclient_private.h"
 extern "C" {
+#define SDKVER_117
+#include "struct_converters.h"
 #pragma pack( push, 8 )
 struct winRemoteStorageGetPublishedFileDetailsResult_t_1744 {
     EResult m_eResult;
@@ -25,10 +27,8 @@ struct winRemoteStorageGetPublishedFileDetailsResult_t_1744 {
     char m_pchFileName[260];
 }  __attribute__ ((ms_struct));
 #pragma pack( pop )
-void cb_RemoteStorageGetPublishedFileDetailsResult_t_1744(const void *l, void *w)
+void cb_RemoteStorageGetPublishedFileDetailsResult_t_1744(const struct RemoteStorageGetPublishedFileDetailsResult_t *lin, struct winRemoteStorageGetPublishedFileDetailsResult_t_1744 *win)
 {
-    RemoteStorageGetPublishedFileDetailsResult_t *lin = (RemoteStorageGetPublishedFileDetailsResult_t *)l;
-    struct winRemoteStorageGetPublishedFileDetailsResult_t_1744 *win = (struct winRemoteStorageGetPublishedFileDetailsResult_t_1744 *)w;
     win->m_eResult = lin->m_eResult;
     win->m_nPublishedFileId = lin->m_nPublishedFileId;
     win->m_nCreatorAppID = lin->m_nCreatorAppID;
@@ -47,19 +47,8 @@ void cb_RemoteStorageGetPublishedFileDetailsResult_t_1744(const void *l, void *w
     memcpy(win->m_pchFileName, lin->m_pchFileName, sizeof(win->m_pchFileName));
 }
 
-#pragma pack( push, 8 )
-struct winLeaderboardEntry_t_117 {
-    CSteamID m_steamIDUser;
-    int32 m_nGlobalRank;
-    int32 m_nScore;
-    int32 m_cDetails;
-    UGCHandle_t m_hUGC;
-}  __attribute__ ((ms_struct));
-#pragma pack( pop )
-void win_to_lin_struct_LeaderboardEntry_t_117(const void *w, void *l)
+void win_to_lin_struct_LeaderboardEntry_t_117(const struct winLeaderboardEntry_t_117 *win, struct LeaderboardEntry_t *lin)
 {
-    LeaderboardEntry_t *lin = (LeaderboardEntry_t *)l;
-    struct winLeaderboardEntry_t_117 *win = (struct winLeaderboardEntry_t_117 *)w;
     lin->m_steamIDUser = win->m_steamIDUser;
     lin->m_nGlobalRank = win->m_nGlobalRank;
     lin->m_nScore = win->m_nScore;
@@ -67,10 +56,8 @@ void win_to_lin_struct_LeaderboardEntry_t_117(const void *w, void *l)
     lin->m_hUGC = win->m_hUGC;
 }
 
-void lin_to_win_struct_LeaderboardEntry_t_117(const void *l, void *w)
+void lin_to_win_struct_LeaderboardEntry_t_117(const struct LeaderboardEntry_t *lin, struct winLeaderboardEntry_t_117 *win)
 {
-    LeaderboardEntry_t *lin = (LeaderboardEntry_t *)l;
-    struct winLeaderboardEntry_t_117 *win = (struct winLeaderboardEntry_t_117 *)w;
     win->m_steamIDUser = lin->m_steamIDUser;
     win->m_nGlobalRank = lin->m_nGlobalRank;
     win->m_nScore = lin->m_nScore;
