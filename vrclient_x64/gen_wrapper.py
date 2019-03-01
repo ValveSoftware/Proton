@@ -29,7 +29,6 @@ sdk_versions = [
     "v1.0.4",
     "v1.0.3a", #non-public build used by The Lab, see Proton github PR#2075
     "v1.0.3",
-    "v1.0.3a",
     "v1.0.2",
     "v1.0.1",
     "v1.0.0",
@@ -1026,7 +1025,7 @@ for sdkver in sdk_versions:
         if not os.path.isfile(input_name):
             continue
         index = clang.cindex.Index.create()
-        tu = index.parse(input_name, args=['-x', 'c++', '-std=c++11', '-DGNUC', '-Iopenvr_%s/' % sdkver, '-I/usr/lib/clang/8.0.0/include/'])
+        tu = index.parse(input_name, args=['-x', 'c++', '-std=c++11', '-DGNUC', '-Iopenvr_%s/' % sdkver, '-I/usr/lib/clang/7.0.0/include/'])
 
         diagnostics = list(tu.diagnostics)
         if len(diagnostics) > 0:
