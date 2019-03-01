@@ -28,8 +28,10 @@ typedef struct __winIVRInput_IVRInput_005 {
 DEFINE_THISCALL_WRAPPER(winIVRInput_IVRInput_005_SetActionManifestPath, 12)
 EVRInputError __thiscall winIVRInput_IVRInput_005_SetActionManifestPath(winIVRInput_IVRInput_005 *_this, const char * pchActionManifestPath)
 {
+    char lin_pchActionManifestPath[PATH_MAX];
+    steamclient_dos_path_to_unix_path(pchActionManifestPath, lin_pchActionManifestPath);
     TRACE("%p\n", _this);
-    return cppIVRInput_IVRInput_005_SetActionManifestPath(_this->linux_side, pchActionManifestPath);
+    return cppIVRInput_IVRInput_005_SetActionManifestPath(_this->linux_side, pchActionManifestPath ? lin_pchActionManifestPath : NULL);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRInput_IVRInput_005_GetActionSetHandle, 20)
@@ -301,8 +303,10 @@ typedef struct __winIVRInput_IVRInput_004 {
 DEFINE_THISCALL_WRAPPER(winIVRInput_IVRInput_004_SetActionManifestPath, 12)
 EVRInputError __thiscall winIVRInput_IVRInput_004_SetActionManifestPath(winIVRInput_IVRInput_004 *_this, const char * pchActionManifestPath)
 {
+    char lin_pchActionManifestPath[PATH_MAX];
+    steamclient_dos_path_to_unix_path(pchActionManifestPath, lin_pchActionManifestPath);
     TRACE("%p\n", _this);
-    return cppIVRInput_IVRInput_004_SetActionManifestPath(_this->linux_side, pchActionManifestPath);
+    return cppIVRInput_IVRInput_004_SetActionManifestPath(_this->linux_side, pchActionManifestPath ? lin_pchActionManifestPath : NULL);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRInput_IVRInput_004_GetActionSetHandle, 20)
@@ -520,8 +524,10 @@ typedef struct __winIVRInput_IVRInput_003 {
 DEFINE_THISCALL_WRAPPER(winIVRInput_IVRInput_003_SetActionManifestPath, 12)
 EVRInputError __thiscall winIVRInput_IVRInput_003_SetActionManifestPath(winIVRInput_IVRInput_003 *_this, const char * pchActionManifestPath)
 {
+    char lin_pchActionManifestPath[PATH_MAX];
+    steamclient_dos_path_to_unix_path(pchActionManifestPath, lin_pchActionManifestPath);
     TRACE("%p\n", _this);
-    return cppIVRInput_IVRInput_003_SetActionManifestPath(_this->linux_side, pchActionManifestPath);
+    return cppIVRInput_IVRInput_003_SetActionManifestPath(_this->linux_side, pchActionManifestPath ? lin_pchActionManifestPath : NULL);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRInput_IVRInput_003_GetActionSetHandle, 20)
