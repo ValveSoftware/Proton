@@ -52,6 +52,53 @@ BOOL WINAPI DllMain(HINSTANCE instance, DWORD reason, void *reserved)
     return TRUE;
 }
 
+#define IS_ABSOLUTE(x) (*x == '/' || *x == '\\' || (*x && *(x + 1) == ':'))
+
+/* returns non-zero on success, zero on failure */
+bool steamclient_dos_path_to_unix_path(const char *src, char *dst)
+{
+    *dst = 0;
+
+    if(!src || !*src)
+        return 0;
+
+    if(IS_ABSOLUTE(src)){
+        /* absolute path, use wine conversion */
+        WCHAR srcW[PATH_MAX];
+        char *unix_path;
+        uint32_t r;
+
+        r = MultiByteToWideChar(CP_UNIXCP, 0, src, -1, srcW, PATH_MAX);
+        if(r == 0)
+            return 0;
+
+        unix_path = wine_get_unix_file_name(srcW);
+        if(!unix_path){
+            WARN("Unable to convert DOS filename to unix: %s\n", src);
+            return 0;
+        }
+
+        strncpy(dst, unix_path, PATH_MAX);
+
+        HeapFree(GetProcessHeap(), 0, unix_path);
+    }else{
+        /* relative path, just fix up backslashes */
+        const char *s;
+        char *d;
+
+        for(s = src, d = dst; *src; ++s, ++d){
+            if(*s == '\\')
+                *d = '/';
+            else
+                *d = *s;
+        }
+
+        *d = 0;
+    }
+
+    return 1;
+}
+
 static BOOL array_reserve(void **elements, SIZE_T *capacity, SIZE_T count, SIZE_T size)
 {
     SIZE_T max_capacity, new_capacity;

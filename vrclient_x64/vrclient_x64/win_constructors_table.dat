@@ -78,8 +78,6 @@
     {"FnTable:IVRSystem_012", &create_winIVRSystem_IVRSystem_012_FnTable, &destroy_winIVRSystem_IVRSystem_012_FnTable},
     {"IVRCompositor_016", &create_winIVRCompositor_IVRCompositor_016, &destroy_winIVRCompositor_IVRCompositor_016},
     {"FnTable:IVRCompositor_016", &create_winIVRCompositor_IVRCompositor_016_FnTable, &destroy_winIVRCompositor_IVRCompositor_016_FnTable},
-    {"IVRCompositor_017", &create_winIVRCompositor_IVRCompositor_017, &destroy_winIVRCompositor_IVRCompositor_017},
-    {"FnTable:IVRCompositor_017", &create_winIVRCompositor_IVRCompositor_017_FnTable, &destroy_winIVRCompositor_IVRCompositor_017_FnTable},
     {"IVRSettings_001", &create_winIVRSettings_IVRSettings_001, &destroy_winIVRSettings_IVRSettings_001},
     {"FnTable:IVRSettings_001", &create_winIVRSettings_IVRSettings_001_FnTable, &destroy_winIVRSettings_IVRSettings_001_FnTable},
     {"IVRApplications_005", &create_winIVRApplications_IVRApplications_005, &destroy_winIVRApplications_IVRApplications_005},

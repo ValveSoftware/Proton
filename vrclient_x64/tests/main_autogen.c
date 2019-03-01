@@ -45,7 +45,6 @@ int main(void)
     test_capi_thunks_IVRCompositor_017();
     test_capi_thunks_IVRSystem_012();
     test_capi_thunks_IVRCompositor_016();
-    test_capi_thunks_IVRCompositor_017();
     test_capi_thunks_IVRSettings_001();
     test_capi_thunks_IVRApplications_005();
     test_capi_thunks_IVRCompositor_015();

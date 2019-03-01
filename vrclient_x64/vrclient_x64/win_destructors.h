@@ -78,8 +78,6 @@ extern void destroy_winIVRSystem_IVRSystem_012(void *);
 extern void destroy_winIVRSystem_IVRSystem_012_FnTable(void *);
 extern void destroy_winIVRCompositor_IVRCompositor_016(void *);
 extern void destroy_winIVRCompositor_IVRCompositor_016_FnTable(void *);
-extern void destroy_winIVRCompositor_IVRCompositor_017(void *);
-extern void destroy_winIVRCompositor_IVRCompositor_017_FnTable(void *);
 extern void destroy_winIVRSettings_IVRSettings_001(void *);
 extern void destroy_winIVRSettings_IVRSettings_001_FnTable(void *);
 extern void destroy_winIVRApplications_IVRApplications_005(void *);
