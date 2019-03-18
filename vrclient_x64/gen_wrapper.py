@@ -99,7 +99,83 @@ path_conversions = [
         "w2l_names": ["pchActionManifestPath"],
         "w2l_arrays": [False],
         "return_is_size": False
-    }
+    },
+    {
+        "parent_name": "SetOverlayFromFile",
+        "l2w_names":[],
+        "l2w_lens":[],
+        "w2l_names": ["pchFilePath"],
+        "w2l_arrays": [False],
+        "return_is_size": False
+    },
+    {
+        "parent_name": "AddApplicationManifest",
+        "l2w_names":[],
+        "l2w_lens":[],
+        "w2l_names": ["pchApplicationManifestFullPath"],
+        "w2l_arrays": [False],
+        "return_is_size": False
+    },
+    {
+        "parent_name": "RemoveApplicationManifest",
+        "l2w_names":[],
+        "l2w_lens":[],
+        "w2l_names": ["pchApplicationManifestFullPath"],
+        "w2l_arrays": [False],
+        "return_is_size": False
+    },
+    {
+        "parent_name": "RequestScreenshot",
+        "l2w_names":[],
+        "l2w_lens":[],
+        "w2l_names": ["pchPreviewFilename", "pchVRFilename"],
+        "w2l_arrays": [False, False],
+        "return_is_size": False
+    },
+    {
+        "parent_name": "TakeStereoScreenshot",
+        "l2w_names":[],
+        "l2w_lens":[],
+        "w2l_names": ["pchPreviewFilename", "pchVRFilename"],
+        "w2l_arrays": [False, False],
+        "return_is_size": False
+    },
+    {
+        "parent_name": "SubmitScreenshot",
+        "l2w_names":[],
+        "l2w_lens":[],
+        "w2l_names": ["pchSourcePreviewFilename", "pchSourceVRFilename"],
+        "w2l_arrays": [False, False],
+        "return_is_size": False
+    },
+    {
+        "parent_name": "GetScreenshotPropertyFilename",
+        "l2w_names":["pchFilename"],
+        "l2w_lens":["cchFilename"],
+        "w2l_names": [],
+        "w2l_arrays": [],
+        "return_is_size": True
+    },
+#    {#maybe?
+#        "parent_name": "GetRenderModelOriginalPath",
+#        "l2w_names":[pchOriginalPath],
+#        "l2w_lens":[unOriginalPathLen],
+#        "w2l_names": [],
+#        "w2l_arrays": [],
+#        "return_is_size": False
+#    },
+#    {#maybe?
+#        "parent_name": "GetResourceFullPath",
+#        "l2w_names":[pchPathBuffer],
+#        "l2w_lens":[unBufferLen],
+#        "w2l_names": [pchResourceTypeDirectory],
+#        "w2l_arrays": [False],
+#        "return_is_size": False
+#    },
+    #IVRInput::GetInputSourceHandle
+    #IVRIOBuffer::Open
+
+    #TODO: LaunchInternalProcess, need steam cooperation
 ]
 
 aliases = {
@@ -314,16 +390,16 @@ def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, e
     if path_conv:
         for i in range(len(path_conv["w2l_names"])):
             if path_conv["w2l_arrays"][i]:
-                cfile.write("    const char **lin_%s = steamclient_dos_to_unix_stringlist(%s);\n" % (path_conv["w2l_names"][i], path_conv["w2l_names"][i]))
+                cfile.write("    const char **lin_%s = vrclient_dos_to_unix_stringlist(%s);\n" % (path_conv["w2l_names"][i], path_conv["w2l_names"][i]))
                 # TODO
                 pass
             else:
                 cfile.write("    char lin_%s[PATH_MAX];\n" % path_conv["w2l_names"][i])
-                cfile.write("    steamclient_dos_path_to_unix_path(%s, lin_%s);\n" % (path_conv["w2l_names"][i], path_conv["w2l_names"][i]))
+                cfile.write("    vrclient_dos_path_to_unix_path(%s, lin_%s);\n" % (path_conv["w2l_names"][i], path_conv["w2l_names"][i]))
         if None in path_conv["l2w_names"]:
             cfile.write("    const char *path_result;\n")
         elif path_conv["return_is_size"]:
-            cfile.write("    uint32 path_result;\n")
+            cfile.write("    uint32_t path_result;\n")
         elif len(path_conv["l2w_names"]) > 0:
             cfile.write("    %s path_result;\n" % method.result_type.spelling)
 
@@ -430,12 +506,12 @@ def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, e
             cfile.write("    ")
             if path_conv["return_is_size"]:
                 cfile.write("path_result = ")
-            cfile.write("steamclient_unix_path_to_dos_path(path_result, %s, %s, %s);\n" % (path_conv["l2w_names"][i], path_conv["l2w_names"][i], path_conv["l2w_lens"][i]))
+            cfile.write("vrclient_unix_path_to_dos_path(path_result, %s, %s, %s);\n" % (path_conv["l2w_names"][i], path_conv["l2w_names"][i], path_conv["l2w_lens"][i]))
         cfile.write("    return path_result;\n")
     if path_conv:
         for i in range(len(path_conv["w2l_names"])):
             if path_conv["w2l_arrays"][i]:
-                cfile.write("    steamclient_free_stringlist(lin_%s);\n" % path_conv["w2l_names"][i])
+                cfile.write("    vrclient_free_stringlist(lin_%s);\n" % path_conv["w2l_names"][i])
     if do_lin_to_win:
         cpp.write("    struct_%s_%s_lin_to_win(&lin, %s);\n" % (strip_ns(do_lin_to_win[0]), display_sdkver(sdkver), do_lin_to_win[1]))
         cpp.write("    return _ret;\n")

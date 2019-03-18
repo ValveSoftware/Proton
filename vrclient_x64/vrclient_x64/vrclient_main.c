@@ -52,10 +52,40 @@ BOOL WINAPI DllMain(HINSTANCE instance, DWORD reason, void *reserved)
     return TRUE;
 }
 
+/* returns the number of bytes written to dst, not including the NUL terminator */
+unsigned int vrclient_unix_path_to_dos_path(bool api_result, const char *src, char *dst, uint32_t dst_bytes)
+{
+    WCHAR *dosW;
+    uint32_t r;
+
+    if(!dst || !dst_bytes)
+        return 0;
+
+    if(!src || !api_result){
+        *dst = 0;
+        return 0;
+    }
+
+    dosW = wine_get_dos_file_name(src);
+    *dst = 0;
+
+    if(!dosW){
+        WARN("Unable to convert unix filename to DOS: %s\n", src);
+        return 0;
+    }
+
+    r = WideCharToMultiByte(CP_ACP, 0, dosW, -1, dst, dst_bytes,
+            NULL, NULL);
+
+    HeapFree(GetProcessHeap(), 0, dosW);
+
+    return r == 0 ? 0 : r - 1;
+}
+
 #define IS_ABSOLUTE(x) (*x == '/' || *x == '\\' || (*x && *(x + 1) == ':'))
 
 /* returns non-zero on success, zero on failure */
-bool steamclient_dos_path_to_unix_path(const char *src, char *dst)
+bool vrclient_dos_path_to_unix_path(const char *src, char *dst)
 {
     *dst = 0;
 

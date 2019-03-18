@@ -455,8 +455,10 @@ EVROverlayError __thiscall winIVROverlay_IVROverlay_019_SetOverlayRaw(winIVROver
 DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_019_SetOverlayFromFile, 20)
 EVROverlayError __thiscall winIVROverlay_IVROverlay_019_SetOverlayFromFile(winIVROverlay_IVROverlay_019 *_this, VROverlayHandle_t ulOverlayHandle, const char * pchFilePath)
 {
+    char lin_pchFilePath[PATH_MAX];
+    vrclient_dos_path_to_unix_path(pchFilePath, lin_pchFilePath);
     TRACE("%p\n", _this);
-    return cppIVROverlay_IVROverlay_019_SetOverlayFromFile(_this->linux_side, ulOverlayHandle, pchFilePath);
+    return cppIVROverlay_IVROverlay_019_SetOverlayFromFile(_this->linux_side, ulOverlayHandle, pchFilePath ? lin_pchFilePath : NULL);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_019_GetOverlayTexture, 76)
@@ -1250,8 +1252,10 @@ EVROverlayError __thiscall winIVROverlay_IVROverlay_018_SetOverlayRaw(winIVROver
 DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_018_SetOverlayFromFile, 20)
 EVROverlayError __thiscall winIVROverlay_IVROverlay_018_SetOverlayFromFile(winIVROverlay_IVROverlay_018 *_this, VROverlayHandle_t ulOverlayHandle, const char * pchFilePath)
 {
+    char lin_pchFilePath[PATH_MAX];
+    vrclient_dos_path_to_unix_path(pchFilePath, lin_pchFilePath);
     TRACE("%p\n", _this);
-    return cppIVROverlay_IVROverlay_018_SetOverlayFromFile(_this->linux_side, ulOverlayHandle, pchFilePath);
+    return cppIVROverlay_IVROverlay_018_SetOverlayFromFile(_this->linux_side, ulOverlayHandle, pchFilePath ? lin_pchFilePath : NULL);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_018_GetOverlayTexture, 76)
@@ -2052,8 +2056,10 @@ EVROverlayError __thiscall winIVROverlay_IVROverlay_017_SetOverlayRaw(winIVROver
 DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_017_SetOverlayFromFile, 20)
 EVROverlayError __thiscall winIVROverlay_IVROverlay_017_SetOverlayFromFile(winIVROverlay_IVROverlay_017 *_this, VROverlayHandle_t ulOverlayHandle, const char * pchFilePath)
 {
+    char lin_pchFilePath[PATH_MAX];
+    vrclient_dos_path_to_unix_path(pchFilePath, lin_pchFilePath);
     TRACE("%p\n", _this);
-    return cppIVROverlay_IVROverlay_017_SetOverlayFromFile(_this->linux_side, ulOverlayHandle, pchFilePath);
+    return cppIVROverlay_IVROverlay_017_SetOverlayFromFile(_this->linux_side, ulOverlayHandle, pchFilePath ? lin_pchFilePath : NULL);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_017_GetOverlayTexture, 76)
@@ -2842,8 +2848,10 @@ EVROverlayError __thiscall winIVROverlay_IVROverlay_016_SetOverlayRaw(winIVROver
 DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_016_SetOverlayFromFile, 20)
 EVROverlayError __thiscall winIVROverlay_IVROverlay_016_SetOverlayFromFile(winIVROverlay_IVROverlay_016 *_this, VROverlayHandle_t ulOverlayHandle, const char * pchFilePath)
 {
+    char lin_pchFilePath[PATH_MAX];
+    vrclient_dos_path_to_unix_path(pchFilePath, lin_pchFilePath);
     TRACE("%p\n", _this);
-    return cppIVROverlay_IVROverlay_016_SetOverlayFromFile(_this->linux_side, ulOverlayHandle, pchFilePath);
+    return cppIVROverlay_IVROverlay_016_SetOverlayFromFile(_this->linux_side, ulOverlayHandle, pchFilePath ? lin_pchFilePath : NULL);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_016_GetOverlayTexture, 76)
@@ -3593,8 +3601,10 @@ EVROverlayError __thiscall winIVROverlay_IVROverlay_014_SetOverlayRaw(winIVROver
 DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_014_SetOverlayFromFile, 20)
 EVROverlayError __thiscall winIVROverlay_IVROverlay_014_SetOverlayFromFile(winIVROverlay_IVROverlay_014 *_this, VROverlayHandle_t ulOverlayHandle, const char * pchFilePath)
 {
+    char lin_pchFilePath[PATH_MAX];
+    vrclient_dos_path_to_unix_path(pchFilePath, lin_pchFilePath);
     TRACE("%p\n", _this);
-    return cppIVROverlay_IVROverlay_014_SetOverlayFromFile(_this->linux_side, ulOverlayHandle, pchFilePath);
+    return cppIVROverlay_IVROverlay_014_SetOverlayFromFile(_this->linux_side, ulOverlayHandle, pchFilePath ? lin_pchFilePath : NULL);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_014_GetOverlayTexture, 76)
@@ -4325,8 +4335,10 @@ EVROverlayError __thiscall winIVROverlay_IVROverlay_013_SetOverlayRaw(winIVROver
 DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_013_SetOverlayFromFile, 20)
 EVROverlayError __thiscall winIVROverlay_IVROverlay_013_SetOverlayFromFile(winIVROverlay_IVROverlay_013 *_this, VROverlayHandle_t ulOverlayHandle, const char * pchFilePath)
 {
+    char lin_pchFilePath[PATH_MAX];
+    vrclient_dos_path_to_unix_path(pchFilePath, lin_pchFilePath);
     TRACE("%p\n", _this);
-    return cppIVROverlay_IVROverlay_013_SetOverlayFromFile(_this->linux_side, ulOverlayHandle, pchFilePath);
+    return cppIVROverlay_IVROverlay_013_SetOverlayFromFile(_this->linux_side, ulOverlayHandle, pchFilePath ? lin_pchFilePath : NULL);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_013_GetOverlayTexture, 68)
@@ -5011,8 +5023,10 @@ EVROverlayError __thiscall winIVROverlay_IVROverlay_012_SetOverlayRaw(winIVROver
 DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_012_SetOverlayFromFile, 20)
 EVROverlayError __thiscall winIVROverlay_IVROverlay_012_SetOverlayFromFile(winIVROverlay_IVROverlay_012 *_this, VROverlayHandle_t ulOverlayHandle, const char * pchFilePath)
 {
+    char lin_pchFilePath[PATH_MAX];
+    vrclient_dos_path_to_unix_path(pchFilePath, lin_pchFilePath);
     TRACE("%p\n", _this);
-    return cppIVROverlay_IVROverlay_012_SetOverlayFromFile(_this->linux_side, ulOverlayHandle, pchFilePath);
+    return cppIVROverlay_IVROverlay_012_SetOverlayFromFile(_this->linux_side, ulOverlayHandle, pchFilePath ? lin_pchFilePath : NULL);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_012_GetOverlayTexture, 68)
@@ -5680,8 +5694,10 @@ EVROverlayError __thiscall winIVROverlay_IVROverlay_011_SetOverlayRaw(winIVROver
 DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_011_SetOverlayFromFile, 20)
 EVROverlayError __thiscall winIVROverlay_IVROverlay_011_SetOverlayFromFile(winIVROverlay_IVROverlay_011 *_this, VROverlayHandle_t ulOverlayHandle, const char * pchFilePath)
 {
+    char lin_pchFilePath[PATH_MAX];
+    vrclient_dos_path_to_unix_path(pchFilePath, lin_pchFilePath);
     TRACE("%p\n", _this);
-    return cppIVROverlay_IVROverlay_011_SetOverlayFromFile(_this->linux_side, ulOverlayHandle, pchFilePath);
+    return cppIVROverlay_IVROverlay_011_SetOverlayFromFile(_this->linux_side, ulOverlayHandle, pchFilePath ? lin_pchFilePath : NULL);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_011_GetOverlayTexture, 68)
@@ -6326,8 +6342,10 @@ EVROverlayError __thiscall winIVROverlay_IVROverlay_010_SetOverlayRaw(winIVROver
 DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_010_SetOverlayFromFile, 20)
 EVROverlayError __thiscall winIVROverlay_IVROverlay_010_SetOverlayFromFile(winIVROverlay_IVROverlay_010 *_this, VROverlayHandle_t ulOverlayHandle, const char * pchFilePath)
 {
+    char lin_pchFilePath[PATH_MAX];
+    vrclient_dos_path_to_unix_path(pchFilePath, lin_pchFilePath);
     TRACE("%p\n", _this);
-    return cppIVROverlay_IVROverlay_010_SetOverlayFromFile(_this->linux_side, ulOverlayHandle, pchFilePath);
+    return cppIVROverlay_IVROverlay_010_SetOverlayFromFile(_this->linux_side, ulOverlayHandle, pchFilePath ? lin_pchFilePath : NULL);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_010_CreateDashboardOverlay, 36)
@@ -6936,8 +6954,10 @@ EVROverlayError __thiscall winIVROverlay_IVROverlay_008_SetOverlayRaw(winIVROver
 DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_008_SetOverlayFromFile, 20)
 EVROverlayError __thiscall winIVROverlay_IVROverlay_008_SetOverlayFromFile(winIVROverlay_IVROverlay_008 *_this, VROverlayHandle_t ulOverlayHandle, const char * pchFilePath)
 {
+    char lin_pchFilePath[PATH_MAX];
+    vrclient_dos_path_to_unix_path(pchFilePath, lin_pchFilePath);
     TRACE("%p\n", _this);
-    return cppIVROverlay_IVROverlay_008_SetOverlayFromFile(_this->linux_side, ulOverlayHandle, pchFilePath);
+    return cppIVROverlay_IVROverlay_008_SetOverlayFromFile(_this->linux_side, ulOverlayHandle, pchFilePath ? lin_pchFilePath : NULL);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_008_CreateDashboardOverlay, 36)
@@ -7526,8 +7546,10 @@ EVROverlayError __thiscall winIVROverlay_IVROverlay_007_SetOverlayRaw(winIVROver
 DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_007_SetOverlayFromFile, 20)
 EVROverlayError __thiscall winIVROverlay_IVROverlay_007_SetOverlayFromFile(winIVROverlay_IVROverlay_007 *_this, VROverlayHandle_t ulOverlayHandle, const char * pchFilePath)
 {
+    char lin_pchFilePath[PATH_MAX];
+    vrclient_dos_path_to_unix_path(pchFilePath, lin_pchFilePath);
     TRACE("%p\n", _this);
-    return cppIVROverlay_IVROverlay_007_SetOverlayFromFile(_this->linux_side, ulOverlayHandle, pchFilePath);
+    return cppIVROverlay_IVROverlay_007_SetOverlayFromFile(_this->linux_side, ulOverlayHandle, pchFilePath ? lin_pchFilePath : NULL);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_007_CreateDashboardOverlay, 36)
@@ -8068,8 +8090,10 @@ VROverlayError __thiscall winIVROverlay_IVROverlay_005_SetOverlayRaw(winIVROverl
 DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_005_SetOverlayFromFile, 20)
 VROverlayError __thiscall winIVROverlay_IVROverlay_005_SetOverlayFromFile(winIVROverlay_IVROverlay_005 *_this, VROverlayHandle_t ulOverlayHandle, const char * pchFilePath)
 {
+    char lin_pchFilePath[PATH_MAX];
+    vrclient_dos_path_to_unix_path(pchFilePath, lin_pchFilePath);
     TRACE("%p\n", _this);
-    return cppIVROverlay_IVROverlay_005_SetOverlayFromFile(_this->linux_side, ulOverlayHandle, pchFilePath);
+    return cppIVROverlay_IVROverlay_005_SetOverlayFromFile(_this->linux_side, ulOverlayHandle, pchFilePath ? lin_pchFilePath : NULL);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_005_CreateDashboardOverlay, 36)
@@ -8586,8 +8610,10 @@ VROverlayError __thiscall winIVROverlay_IVROverlay_004_SetOverlayRaw(winIVROverl
 DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_004_SetOverlayFromFile, 20)
 VROverlayError __thiscall winIVROverlay_IVROverlay_004_SetOverlayFromFile(winIVROverlay_IVROverlay_004 *_this, VROverlayHandle_t ulOverlayHandle, const char * pchFilePath)
 {
+    char lin_pchFilePath[PATH_MAX];
+    vrclient_dos_path_to_unix_path(pchFilePath, lin_pchFilePath);
     TRACE("%p\n", _this);
-    return cppIVROverlay_IVROverlay_004_SetOverlayFromFile(_this->linux_side, ulOverlayHandle, pchFilePath);
+    return cppIVROverlay_IVROverlay_004_SetOverlayFromFile(_this->linux_side, ulOverlayHandle, pchFilePath ? lin_pchFilePath : NULL);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_004_CreateDashboardOverlay, 36)
@@ -9061,8 +9087,10 @@ VROverlayError __thiscall winIVROverlay_IVROverlay_003_SetOverlayRaw(winIVROverl
 DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_003_SetOverlayFromFile, 20)
 VROverlayError __thiscall winIVROverlay_IVROverlay_003_SetOverlayFromFile(winIVROverlay_IVROverlay_003 *_this, VROverlayHandle_t ulOverlayHandle, const char * pchFilePath)
 {
+    char lin_pchFilePath[PATH_MAX];
+    vrclient_dos_path_to_unix_path(pchFilePath, lin_pchFilePath);
     TRACE("%p\n", _this);
-    return cppIVROverlay_IVROverlay_003_SetOverlayFromFile(_this->linux_side, ulOverlayHandle, pchFilePath);
+    return cppIVROverlay_IVROverlay_003_SetOverlayFromFile(_this->linux_side, ulOverlayHandle, pchFilePath ? lin_pchFilePath : NULL);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_003_CreateDashboardOverlay, 36)
@@ -9511,8 +9539,10 @@ VROverlayError __thiscall winIVROverlay_IVROverlay_002_SetOverlayRaw(winIVROverl
 DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_002_SetOverlayFromFile, 20)
 VROverlayError __thiscall winIVROverlay_IVROverlay_002_SetOverlayFromFile(winIVROverlay_IVROverlay_002 *_this, VROverlayHandle_t ulOverlayHandle, const char * pchFilePath)
 {
+    char lin_pchFilePath[PATH_MAX];
+    vrclient_dos_path_to_unix_path(pchFilePath, lin_pchFilePath);
     TRACE("%p\n", _this);
-    return cppIVROverlay_IVROverlay_002_SetOverlayFromFile(_this->linux_side, ulOverlayHandle, pchFilePath);
+    return cppIVROverlay_IVROverlay_002_SetOverlayFromFile(_this->linux_side, ulOverlayHandle, pchFilePath ? lin_pchFilePath : NULL);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_002_CreateDashboardOverlay, 36)
@@ -9939,8 +9969,10 @@ VROverlayError __thiscall winIVROverlay_IVROverlay_001_SetOverlayRaw(winIVROverl
 DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_001_SetOverlayFromFile, 20)
 VROverlayError __thiscall winIVROverlay_IVROverlay_001_SetOverlayFromFile(winIVROverlay_IVROverlay_001 *_this, VROverlayHandle_t ulOverlayHandle, const char * pchFilePath)
 {
+    char lin_pchFilePath[PATH_MAX];
+    vrclient_dos_path_to_unix_path(pchFilePath, lin_pchFilePath);
     TRACE("%p\n", _this);
-    return cppIVROverlay_IVROverlay_001_SetOverlayFromFile(_this->linux_side, ulOverlayHandle, pchFilePath);
+    return cppIVROverlay_IVROverlay_001_SetOverlayFromFile(_this->linux_side, ulOverlayHandle, pchFilePath ? lin_pchFilePath : NULL);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_001_IsSystemOverlayVisible, 4)

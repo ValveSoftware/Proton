@@ -5952,8 +5952,10 @@ void __thiscall winIVRCompositor_IVRCompositor_005_SetOverlayRaw(winIVRComposito
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_005_SetOverlayFromFile, 20)
 void __thiscall winIVRCompositor_IVRCompositor_005_SetOverlayFromFile(winIVRCompositor_IVRCompositor_005 *_this, const char * pchFilePath, Compositor_OverlaySettings * pSettings)
 {
+    char lin_pchFilePath[PATH_MAX];
+    vrclient_dos_path_to_unix_path(pchFilePath, lin_pchFilePath);
     TRACE("%p\n", _this);
-    cppIVRCompositor_IVRCompositor_005_SetOverlayFromFile(_this->linux_side, pchFilePath, pSettings);
+    cppIVRCompositor_IVRCompositor_005_SetOverlayFromFile(_this->linux_side, pchFilePath ? lin_pchFilePath : NULL, pSettings);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_005_ClearOverlay, 4)

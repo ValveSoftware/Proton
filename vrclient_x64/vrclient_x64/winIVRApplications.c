@@ -28,15 +28,19 @@ typedef struct __winIVRApplications_IVRApplications_006 {
 DEFINE_THISCALL_WRAPPER(winIVRApplications_IVRApplications_006_AddApplicationManifest, 13)
 EVRApplicationError __thiscall winIVRApplications_IVRApplications_006_AddApplicationManifest(winIVRApplications_IVRApplications_006 *_this, const char * pchApplicationManifestFullPath, bool bTemporary)
 {
+    char lin_pchApplicationManifestFullPath[PATH_MAX];
+    vrclient_dos_path_to_unix_path(pchApplicationManifestFullPath, lin_pchApplicationManifestFullPath);
     TRACE("%p\n", _this);
-    return cppIVRApplications_IVRApplications_006_AddApplicationManifest(_this->linux_side, pchApplicationManifestFullPath, bTemporary);
+    return cppIVRApplications_IVRApplications_006_AddApplicationManifest(_this->linux_side, pchApplicationManifestFullPath ? lin_pchApplicationManifestFullPath : NULL, bTemporary);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRApplications_IVRApplications_006_RemoveApplicationManifest, 12)
 EVRApplicationError __thiscall winIVRApplications_IVRApplications_006_RemoveApplicationManifest(winIVRApplications_IVRApplications_006 *_this, const char * pchApplicationManifestFullPath)
 {
+    char lin_pchApplicationManifestFullPath[PATH_MAX];
+    vrclient_dos_path_to_unix_path(pchApplicationManifestFullPath, lin_pchApplicationManifestFullPath);
     TRACE("%p\n", _this);
-    return cppIVRApplications_IVRApplications_006_RemoveApplicationManifest(_this->linux_side, pchApplicationManifestFullPath);
+    return cppIVRApplications_IVRApplications_006_RemoveApplicationManifest(_this->linux_side, pchApplicationManifestFullPath ? lin_pchApplicationManifestFullPath : NULL);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRApplications_IVRApplications_006_IsApplicationInstalled, 12)
@@ -364,15 +368,19 @@ typedef struct __winIVRApplications_IVRApplications_005 {
 DEFINE_THISCALL_WRAPPER(winIVRApplications_IVRApplications_005_AddApplicationManifest, 13)
 EVRApplicationError __thiscall winIVRApplications_IVRApplications_005_AddApplicationManifest(winIVRApplications_IVRApplications_005 *_this, const char * pchApplicationManifestFullPath, bool bTemporary)
 {
+    char lin_pchApplicationManifestFullPath[PATH_MAX];
+    vrclient_dos_path_to_unix_path(pchApplicationManifestFullPath, lin_pchApplicationManifestFullPath);
     TRACE("%p\n", _this);
-    return cppIVRApplications_IVRApplications_005_AddApplicationManifest(_this->linux_side, pchApplicationManifestFullPath, bTemporary);
+    return cppIVRApplications_IVRApplications_005_AddApplicationManifest(_this->linux_side, pchApplicationManifestFullPath ? lin_pchApplicationManifestFullPath : NULL, bTemporary);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRApplications_IVRApplications_005_RemoveApplicationManifest, 12)
 EVRApplicationError __thiscall winIVRApplications_IVRApplications_005_RemoveApplicationManifest(winIVRApplications_IVRApplications_005 *_this, const char * pchApplicationManifestFullPath)
 {
+    char lin_pchApplicationManifestFullPath[PATH_MAX];
+    vrclient_dos_path_to_unix_path(pchApplicationManifestFullPath, lin_pchApplicationManifestFullPath);
     TRACE("%p\n", _this);
-    return cppIVRApplications_IVRApplications_005_RemoveApplicationManifest(_this->linux_side, pchApplicationManifestFullPath);
+    return cppIVRApplications_IVRApplications_005_RemoveApplicationManifest(_this->linux_side, pchApplicationManifestFullPath ? lin_pchApplicationManifestFullPath : NULL);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRApplications_IVRApplications_005_IsApplicationInstalled, 12)
@@ -637,15 +645,19 @@ typedef struct __winIVRApplications_IVRApplications_004 {
 DEFINE_THISCALL_WRAPPER(winIVRApplications_IVRApplications_004_AddApplicationManifest, 13)
 EVRApplicationError __thiscall winIVRApplications_IVRApplications_004_AddApplicationManifest(winIVRApplications_IVRApplications_004 *_this, const char * pchApplicationManifestFullPath, bool bTemporary)
 {
+    char lin_pchApplicationManifestFullPath[PATH_MAX];
+    vrclient_dos_path_to_unix_path(pchApplicationManifestFullPath, lin_pchApplicationManifestFullPath);
     TRACE("%p\n", _this);
-    return cppIVRApplications_IVRApplications_004_AddApplicationManifest(_this->linux_side, pchApplicationManifestFullPath, bTemporary);
+    return cppIVRApplications_IVRApplications_004_AddApplicationManifest(_this->linux_side, pchApplicationManifestFullPath ? lin_pchApplicationManifestFullPath : NULL, bTemporary);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRApplications_IVRApplications_004_RemoveApplicationManifest, 12)
 EVRApplicationError __thiscall winIVRApplications_IVRApplications_004_RemoveApplicationManifest(winIVRApplications_IVRApplications_004 *_this, const char * pchApplicationManifestFullPath)
 {
+    char lin_pchApplicationManifestFullPath[PATH_MAX];
+    vrclient_dos_path_to_unix_path(pchApplicationManifestFullPath, lin_pchApplicationManifestFullPath);
     TRACE("%p\n", _this);
-    return cppIVRApplications_IVRApplications_004_RemoveApplicationManifest(_this->linux_side, pchApplicationManifestFullPath);
+    return cppIVRApplications_IVRApplications_004_RemoveApplicationManifest(_this->linux_side, pchApplicationManifestFullPath ? lin_pchApplicationManifestFullPath : NULL);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRApplications_IVRApplications_004_IsApplicationInstalled, 12)
@@ -901,15 +913,19 @@ typedef struct __winIVRApplications_IVRApplications_003 {
 DEFINE_THISCALL_WRAPPER(winIVRApplications_IVRApplications_003_AddApplicationManifest, 13)
 EVRApplicationError __thiscall winIVRApplications_IVRApplications_003_AddApplicationManifest(winIVRApplications_IVRApplications_003 *_this, const char * pchApplicationManifestFullPath, bool bTemporary)
 {
+    char lin_pchApplicationManifestFullPath[PATH_MAX];
+    vrclient_dos_path_to_unix_path(pchApplicationManifestFullPath, lin_pchApplicationManifestFullPath);
     TRACE("%p\n", _this);
-    return cppIVRApplications_IVRApplications_003_AddApplicationManifest(_this->linux_side, pchApplicationManifestFullPath, bTemporary);
+    return cppIVRApplications_IVRApplications_003_AddApplicationManifest(_this->linux_side, pchApplicationManifestFullPath ? lin_pchApplicationManifestFullPath : NULL, bTemporary);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRApplications_IVRApplications_003_RemoveApplicationManifest, 12)
 EVRApplicationError __thiscall winIVRApplications_IVRApplications_003_RemoveApplicationManifest(winIVRApplications_IVRApplications_003 *_this, const char * pchApplicationManifestFullPath)
 {
+    char lin_pchApplicationManifestFullPath[PATH_MAX];
+    vrclient_dos_path_to_unix_path(pchApplicationManifestFullPath, lin_pchApplicationManifestFullPath);
     TRACE("%p\n", _this);
-    return cppIVRApplications_IVRApplications_003_RemoveApplicationManifest(_this->linux_side, pchApplicationManifestFullPath);
+    return cppIVRApplications_IVRApplications_003_RemoveApplicationManifest(_this->linux_side, pchApplicationManifestFullPath ? lin_pchApplicationManifestFullPath : NULL);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRApplications_IVRApplications_003_IsApplicationInstalled, 12)
@@ -1147,15 +1163,19 @@ typedef struct __winIVRApplications_IVRApplications_002 {
 DEFINE_THISCALL_WRAPPER(winIVRApplications_IVRApplications_002_AddApplicationManifest, 13)
 EVRApplicationError __thiscall winIVRApplications_IVRApplications_002_AddApplicationManifest(winIVRApplications_IVRApplications_002 *_this, const char * pchApplicationManifestFullPath, bool bTemporary)
 {
+    char lin_pchApplicationManifestFullPath[PATH_MAX];
+    vrclient_dos_path_to_unix_path(pchApplicationManifestFullPath, lin_pchApplicationManifestFullPath);
     TRACE("%p\n", _this);
-    return cppIVRApplications_IVRApplications_002_AddApplicationManifest(_this->linux_side, pchApplicationManifestFullPath, bTemporary);
+    return cppIVRApplications_IVRApplications_002_AddApplicationManifest(_this->linux_side, pchApplicationManifestFullPath ? lin_pchApplicationManifestFullPath : NULL, bTemporary);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRApplications_IVRApplications_002_RemoveApplicationManifest, 12)
 EVRApplicationError __thiscall winIVRApplications_IVRApplications_002_RemoveApplicationManifest(winIVRApplications_IVRApplications_002 *_this, const char * pchApplicationManifestFullPath)
 {
+    char lin_pchApplicationManifestFullPath[PATH_MAX];
+    vrclient_dos_path_to_unix_path(pchApplicationManifestFullPath, lin_pchApplicationManifestFullPath);
     TRACE("%p\n", _this);
-    return cppIVRApplications_IVRApplications_002_RemoveApplicationManifest(_this->linux_side, pchApplicationManifestFullPath);
+    return cppIVRApplications_IVRApplications_002_RemoveApplicationManifest(_this->linux_side, pchApplicationManifestFullPath ? lin_pchApplicationManifestFullPath : NULL);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRApplications_IVRApplications_002_IsApplicationInstalled, 12)
@@ -1384,15 +1404,19 @@ typedef struct __winIVRApplications_IVRApplications_001 {
 DEFINE_THISCALL_WRAPPER(winIVRApplications_IVRApplications_001_AddApplicationManifest, 13)
 EVRApplicationError __thiscall winIVRApplications_IVRApplications_001_AddApplicationManifest(winIVRApplications_IVRApplications_001 *_this, const char * pchApplicationManifestFullPath, bool bTemporary)
 {
+    char lin_pchApplicationManifestFullPath[PATH_MAX];
+    vrclient_dos_path_to_unix_path(pchApplicationManifestFullPath, lin_pchApplicationManifestFullPath);
     TRACE("%p\n", _this);
-    return cppIVRApplications_IVRApplications_001_AddApplicationManifest(_this->linux_side, pchApplicationManifestFullPath, bTemporary);
+    return cppIVRApplications_IVRApplications_001_AddApplicationManifest(_this->linux_side, pchApplicationManifestFullPath ? lin_pchApplicationManifestFullPath : NULL, bTemporary);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRApplications_IVRApplications_001_RemoveApplicationManifest, 12)
 EVRApplicationError __thiscall winIVRApplications_IVRApplications_001_RemoveApplicationManifest(winIVRApplications_IVRApplications_001 *_this, const char * pchApplicationManifestFullPath)
 {
+    char lin_pchApplicationManifestFullPath[PATH_MAX];
+    vrclient_dos_path_to_unix_path(pchApplicationManifestFullPath, lin_pchApplicationManifestFullPath);
     TRACE("%p\n", _this);
-    return cppIVRApplications_IVRApplications_001_RemoveApplicationManifest(_this->linux_side, pchApplicationManifestFullPath);
+    return cppIVRApplications_IVRApplications_001_RemoveApplicationManifest(_this->linux_side, pchApplicationManifestFullPath ? lin_pchApplicationManifestFullPath : NULL);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRApplications_IVRApplications_001_IsApplicationInstalled, 12)
