@@ -731,6 +731,7 @@ def handle_struct(sdkver, struct, which):
 
     hfile.write("typedef struct win%s win%s;\n" % (handler_name, handler_name))
 
+    cppfile.write("#pragma pack(push, 8)\n")
     cppfile.write("struct win%s {\n" % handler_name)
     for m in struct.get_children():
         if m.kind == clang.cindex.CursorKind.FIELD_DECL:
@@ -740,7 +741,8 @@ def handle_struct(sdkver, struct, which):
                 cppfile.write("    %s %s;\n" % (m.type.spelling, m.displayname))
     if which == WRAPPERS:
         cppfile.write("\n    %s *linux_side;\n" % struct.displayname)
-    cppfile.write("}  __attribute__ ((ms_struct));\n\n")
+    cppfile.write("}  __attribute__ ((ms_struct));\n")
+    cppfile.write("#pragma pack(pop)\n\n")
 
     if which == LIN_TO_WIN:
         hfile.write("extern void struct_%s_lin_to_win(void *l, void *w);\n" % handler_name)
