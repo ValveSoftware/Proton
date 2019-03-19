@@ -1031,11 +1031,13 @@ uint32_t ivrcompositor_get_vulkan_device_extensions_required(
     return cpp_func(linux_side, phys_dev, value, bufsize);
 }
 
+#pragma pack( push, 8 )
 struct winRenderModel_TextureMap_t_1015 {
     uint16_t unWidth;
     uint16_t unHeight;
     const uint8_t *rubTextureMapData;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 
 static EVRRenderModelError load_into_texture_d3d11(ID3D11Texture2D *texture,
         const struct winRenderModel_TextureMap_t_1015 *data)
@@ -1092,7 +1094,7 @@ EVRRenderModelError ivrrendermodels_load_into_texture_d3d11_async(
         error = cppIVRRenderModels_IVRRenderModels_005_LoadTexture_Async(linux_side, texture_id, &texture_map);
         break;
     case 6:
-        error = cppIVRRenderModels_IVRRenderModels_006_LoadTexture_Async(linux_side, texture_id, (struct winRenderModel_TextureMap_t_1017 **)&texture_map);
+        error = cppIVRRenderModels_IVRRenderModels_006_LoadTexture_Async(linux_side, texture_id, (struct winRenderModel_TextureMap_t_113b **)&texture_map);
         break;
     }
     if (error == VRRenderModelError_Loading)
@@ -1122,7 +1124,7 @@ EVRRenderModelError ivrrendermodels_load_into_texture_d3d11_async(
         cppIVRRenderModels_IVRRenderModels_005_FreeTexture(linux_side, texture_map);
         break;
     case 6:
-        cppIVRRenderModels_IVRRenderModels_006_FreeTexture(linux_side, (struct winRenderModel_TextureMap_t_1017 *)texture_map);
+        cppIVRRenderModels_IVRRenderModels_006_FreeTexture(linux_side, (struct winRenderModel_TextureMap_t_113b *)texture_map);
         break;
     }
     return error;
