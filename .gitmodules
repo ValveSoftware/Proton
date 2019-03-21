@@ -4,9 +4,6 @@
 [submodule "dxvk"]
 	path = dxvk
 	url = https://github.com/ValveSoftware/dxvk/
-[submodule "openal-soft"]
-	path = openal-soft
-	url = https://github.com/kcat/openal-soft.git
 [submodule "ffmpeg"]
 	path = ffmpeg
 	url = https://git.ffmpeg.org/ffmpeg.git
