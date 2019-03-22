@@ -124,9 +124,10 @@ with:
 
         vagrant ssh
 
-The Vagrantfile is set up to rsync the `proton` directory into the VM on boot,
-and it will create a `build` directory in `$HOME` that is ready for you to run
-`make`. On the host machine, you can use `vagrant rsync-auto` to have Vagrant
+At this point you will need to configure the build directory. See below.
+
+The Vagrantfile is set up to rsync the `proton` directory into the VM on boot.
+On the host machine, you can use `vagrant rsync-auto` to have Vagrant
 automatically sync changes on your host machine into the build machine. It is
 recommended that you make changes on your host machine, and then perform the
 build in the VM. Any changes you make in the `proton` directory on the VM may
@@ -164,17 +165,16 @@ runtime, as it takes a very long time to set up. To do this, edit the
 Configure the build
 ---
 After setting up the build system, it is time to run the configure script which
-will generate the Makefile to build your project. The Vagrantfile is set up to
-do this automatically for you in a directory called `$HOME/build` within the
-VM. If you are configuring manually, run these steps:
+will generate the Makefile to build your project. Run these steps. You may of
+course use whatever paths you like.
 
-        mkdir proton/mybuild/
-        cd proton/mybuild
-        ../configure.sh --steam-runtime64=docker:steam-proton-dev --steam-runtime32=docker:steam-proton-dev32 --steam-runtime=$HOME/steam-runtime/runtime/
+        mkdir build/
+        cd build
+        ../proton/configure.sh --steam-runtime64=docker:steam-proton-dev --steam-runtime32=docker:steam-proton-dev32 --steam-runtime=$HOME/steam-runtime/runtime/
 
 If you are building without the Steam runtime, then instead use:
 
-        ../configure.sh --no-steam-runtime
+        ../proton/configure.sh --no-steam-runtime
 
 **Tip**: If you are building without the Steam runtime, you should now run
 `make obj-wine64/Makefile obj-wine32/Makefile` and check the files

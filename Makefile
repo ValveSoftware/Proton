@@ -11,31 +11,38 @@
 
 STEAM_DIR := $(HOME)/.steam/root
 DEPLOY_DIR := $(shell git describe --tags --always)
+CONFIGURE_CMD := ../proton/configure.sh --steam-runtime64=docker:steam-proton-dev --steam-runtime32=docker:steam-proton-dev32 --steam-runtime="$$HOME"/steam-runtime/runtime/
 
 all: proton
 
-.PHONY: vagrant proton install proton_build deploy
+.PHONY: vagrant clean configure proton install deploy module
 
 vagrant:
 	vagrant up
 	vagrant rsync
 
-proton: vagrant
+clean: vagrant
+	vagrant ssh -c "rm -rf build/"
+
+configure: vagrant
+	vagrant ssh -c 'if [ ! -e build ]; then mkdir build; (cd build && $(CONFIGURE_CMD)); fi'
+
+proton: configure
 	vagrant ssh -c "make -C build/ dist"
 	echo "Proton built in VM. Use 'install' or 'deploy' targets to retrieve the build."
 
-install: vagrant
+install: configure
 	vagrant ssh -c "make -C build/ STEAM_DIR=/vagrant/ install"
 	cp -R vagrant_share/compatibilitytools.d/ $(STEAM_DIR)
 	echo "Proton installed to your local Steam installation"
 
-deploy: vagrant
+deploy: configure
 	vagrant ssh -c "make -C build/ deploy"
 	mkdir -p vagrant_share/$(DEPLOY_DIR)
 	vagrant ssh -c "cp -a build/deploy/* /vagrant/$(DEPLOY_DIR)"
 	echo "Proton deployed to vagrant_share/$(DEPLOY_DIR)"
 
-module: vagrant
+module: configure
 	vagrant ssh -c "make -C build/ module=$(module) module"
 	mkdir -p vagrant_share/$(module)/lib{,64}/wine/
 	vagrant ssh -c "cp -a build/obj-wine32/dlls/$(module)/$(module)*.so /vagrant/$(module)/lib/wine/"
