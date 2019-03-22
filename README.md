@@ -69,14 +69,18 @@ After checking out Proton and updating its submodules, you can use these
 targets to build Proton:
 
 `make install` - This will install Proton into your user's Steam directory.
-You may need to restart the Steam client to see it. It will be called
-`proton-localbuild`. Subsequent `make install` invocations will overwrite
-this installation.
+You may need to restart the Steam client to see it. The tool's name in the
+Steam client will be based on the currently checked out branch of Proton. You
+can override this name using the `build_name` variable.
 
 `make deploy` - This will create a deployment tarball and set of files which
 can be distributed as a Proton package. This is what we use to deploy Proton to
 Steam users. The package will be dropped into a new directory in
 `vagrant_share/`, named after the nearest Git tag (see `git describe`).
+
+`make clean` - This will completely erase the build tree.
+
+`make help` - View the Makefile documentation and examples.
 
 We also provide targets useful for simple Wine development:
 
