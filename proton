@@ -463,39 +463,6 @@ if "WINEDLLOVERRIDES" in os.environ:
 else:
     env["WINEDLLOVERRIDES"] = s
 
-ARCH_UNKNOWN=0
-ARCH_I386=1
-ARCH_X86_64=2
-def determine_architecture(path):
-    #algorithm from file's msdos magic file
-    try:
-        with open(path, "rb") as f:
-            magic = f.read(2)
-            if magic != b"MZ":
-                return ARCH_UNKNOWN
-            f.seek(0x18)
-            reloc = struct.unpack('<H', f.read(2))[0]
-            if reloc < 0x40:
-                #DOS
-                return ARCH_I386
-            f.seek(0x3c)
-            pe_offs = struct.unpack('<L', f.read(4))[0]
-            f.seek(pe_offs)
-            magic = f.read(4)
-            if magic != b"PE\0\0":
-                return ARCH_UNKNOWN
-            f.seek(pe_offs + 4)
-            arch = struct.unpack('<H', f.read(2))[0]
-            if arch == 0x8664:
-                return ARCH_X86_64
-            if arch == 0x014c:
-                return ARCH_I386
-            return ARCH_UNKNOWN
-    except OSError:
-        return ARCH_UNKNOWN
-
-game_arch = determine_architecture(sys.argv[2])
-
 def dump_dbg_env(f):
     f.write("PATH=\"" + env["PATH"] + "\" \\\n")
     f.write("\tTERM=\"xterm\" \\\n") #XXX
@@ -595,10 +562,7 @@ def dump_dbg_scripts():
                 f.write(" \"" + arg + "\"")
         f.write(")\n")
         dump_dbg_env(f)
-        if game_arch == ARCH_UNKNOWN:
-            f.write("\t\"" + wine_path + "\" start \"${@:-${DEF_CMD[@]}}\"\n")
-        else:
-            f.write("\t\"" + wine_path + "\" \"${@:-${DEF_CMD[@]}}\"\n")
+        f.write("\t\"" + wine_path + "\" \"${@:-${DEF_CMD[@]}}\"\n")
     os.chmod(tmpdir + "run", 0o755)
 
 def run():
@@ -607,11 +571,7 @@ def run():
             dump_dbg_scripts()
         except OSError:
             log("Unable to write debug scripts! " + str(sys.exc_info()[1]))
-    if game_arch == ARCH_UNKNOWN:
-        #probably a batch script or something, hopefully start.exe can handle it
-        run_wine([wine_path, "steam", "start", "/unix"] + sys.argv[2:])
-    else:
-        run_wine([wine_path, "steam"] + sys.argv[2:])
+    run_wine([wine_path, "steam"] + sys.argv[2:])
 
 if sys.version_info[0] == 2:
     binary_stdout = sys.stdout
