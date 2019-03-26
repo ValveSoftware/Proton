@@ -562,7 +562,7 @@ def dump_dbg_scripts():
                 f.write(" \"" + arg + "\"")
         f.write(")\n")
         dump_dbg_env(f)
-        f.write("\t\"" + wine_path + "\" \"${@:-${DEF_CMD[@]}}\"\n")
+        f.write("\t\"" + wine_path + "\" steam.exe \"${@:-${DEF_CMD[@]}}\"\n")
     os.chmod(tmpdir + "run", 0o755)
 
 def run():
