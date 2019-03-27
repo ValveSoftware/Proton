@@ -482,14 +482,14 @@ ffmpeg64: $(FFMPEG_CONFIGURE_FILES64)
 	+$(MAKE) -C $(FFMPEG_OBJ64)
 	+$(MAKE) -C $(FFMPEG_OBJ64) install
 	mkdir -pv $(DST_DIR)/lib64
-	cp -L $(TOOLS_DIR64)/lib/{libavcodec,libavutil}* $(DST_DIR)/lib64
+	cp -a $(TOOLS_DIR64)/lib/{libavcodec,libavutil}* $(DST_DIR)/lib64
 
 ffmpeg32: SHELL = $(CONTAINER_SHELL32)
 ffmpeg32: $(FFMPEG_CONFIGURE_FILES32)
 	+$(MAKE) -C $(FFMPEG_OBJ32)
 	+$(MAKE) -C $(FFMPEG_OBJ32) install
 	mkdir -pv $(DST_DIR)/lib
-	cp -L $(TOOLS_DIR32)/lib/{libavcodec,libavutil}* $(DST_DIR)/lib
+	cp -a $(TOOLS_DIR32)/lib/{libavcodec,libavutil}* $(DST_DIR)/lib
 
 endif # ifeq ($(WITH_FFMPEG),1)
 
@@ -534,7 +534,7 @@ faudio32: $(FAUDIO_CONFIGURE_FILES32)
 	+$(MAKE) -C $(FAUDIO_OBJ32) VERBOSE=1
 	+$(MAKE) -C $(FAUDIO_OBJ32) install VERBOSE=1
 	mkdir -p $(DST_DIR)/lib
-	cp -L $(TOOLS_DIR32)/lib/libFAudio* $(DST_DIR)/lib/
+	cp -a $(TOOLS_DIR32)/lib/libFAudio* $(DST_DIR)/lib/
 	[ x"$(STRIP)" = x ] || $(STRIP) $(DST_DIR)/lib/libFAudio.so
 
 faudio64: SHELL = $(CONTAINER_SHELL64)
@@ -542,7 +542,7 @@ faudio64: $(FAUDIO_CONFIGURE_FILES64)
 	+$(MAKE) -C $(FAUDIO_OBJ64) VERBOSE=1
 	+$(MAKE) -C $(FAUDIO_OBJ64) install VERBOSE=1
 	mkdir -p $(DST_DIR)/lib64
-	cp -L $(TOOLS_DIR64)/lib/libFAudio* $(DST_DIR)/lib64/
+	cp -a $(TOOLS_DIR64)/lib/libFAudio* $(DST_DIR)/lib64/
 	[ x"$(STRIP)" = x ] || $(STRIP) $(DST_DIR)/lib64/libFAudio.so
 
 ##
