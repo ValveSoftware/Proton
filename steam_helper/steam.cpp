@@ -139,6 +139,77 @@ static HANDLE run_process(void)
     }
     while (*cmdline == ' ') cmdline++;
 
+    /* convert absolute unix path to dos */
+    if (cmdline[0] == '/' ||
+            (cmdline[0] == '"' && cmdline[1] == '/'))
+    {
+        WCHAR *scratchW;
+        char *scratchA;
+        WCHAR *start, *end, *dos, *remainder, *new_cmdline;
+        size_t argv0_len;
+        int r;
+
+        static const WCHAR dquoteW[] = {'"',0};
+
+        WINE_TRACE("Converting unix command: %s\n", wine_dbgstr_w(cmdline));
+
+        if (cmdline[0] == '"')
+        {
+            start = cmdline + 1;
+            end = strchrW(start, '"');
+            if (!end)
+            {
+                WINE_ERR("Unmatched quote? %s\n", wine_dbgstr_w(cmdline));
+                goto run;
+            }
+            remainder = end + 1;
+        }
+        else
+        {
+            start = cmdline;
+            end = strchrW(start, ' ');
+            if (!end)
+                end = strchrW(start, '\0');
+            remainder = end;
+        }
+
+        argv0_len = end - start;
+
+        scratchW = (WCHAR *)HeapAlloc(GetProcessHeap(), 0, (argv0_len + 1) * sizeof(WCHAR));
+        memcpy(scratchW, start, argv0_len * sizeof(WCHAR));
+        scratchW[argv0_len] = '\0';
+
+        r = WideCharToMultiByte(CP_UNIXCP, 0, scratchW, -1,
+                NULL, 0, NULL, NULL);
+        if (!r)
+        {
+            WINE_ERR("Char conversion size failed?\n");
+            goto run;
+        }
+
+        scratchA = (char *)HeapAlloc(GetProcessHeap(), 0, r);
+
+        r = WideCharToMultiByte(CP_UNIXCP, 0, scratchW, -1,
+                scratchA, r, NULL, NULL);
+        if (!r)
+        {
+            WINE_ERR("Char conversion failed?\n");
+            goto run;
+        }
+
+        dos = wine_get_dos_file_name(scratchA);
+
+        new_cmdline = (WCHAR *)HeapAlloc(GetProcessHeap(), 0,
+                (strlenW(dos) + 3 + strlenW(remainder) + 1) * sizeof(WCHAR));
+        strcpyW(new_cmdline, dquoteW);
+        strcatW(new_cmdline, dos);
+        strcatW(new_cmdline, dquoteW);
+        strcatW(new_cmdline, remainder);
+
+        cmdline = new_cmdline;
+    }
+
+run:
     WINE_TRACE("Running command %s\n", wine_dbgstr_w(cmdline));
 
     if (!CreateProcessW(NULL, cmdline, NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi))
