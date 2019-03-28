@@ -116,6 +116,26 @@ static void setup_steam_registry(void)
     SteamAPI_Shutdown();
 }
 
+static WCHAR *find_quote(WCHAR *str)
+{
+    WCHAR *end = strchrW(str, '"'), *ch;
+    int odd;
+    while (end)
+    {
+        odd = 0;
+        ch = end - 1;
+        while (ch >= str && *ch == '\\')
+        {
+            odd = !odd;
+            --ch;
+        }
+        if (!odd)
+            return end;
+        end = strchrW(end + 1, '"');
+    }
+    return NULL;
+}
+
 static HANDLE run_process(void)
 {
     WCHAR *cmdline = GetCommandLineW();
@@ -125,7 +145,7 @@ static HANDLE run_process(void)
     /* skip argv[0] */
     if (*cmdline == '"')
     {
-        cmdline = strchrW(cmdline + 1, '"');
+        cmdline = find_quote(cmdline + 1);
         if (cmdline) cmdline++;
     }
     else
@@ -156,7 +176,7 @@ static HANDLE run_process(void)
         if (cmdline[0] == '"')
         {
             start = cmdline + 1;
-            end = strchrW(start, '"');
+            end = find_quote(start);
             if (!end)
             {
                 WINE_ERR("Unmatched quote? %s\n", wine_dbgstr_w(cmdline));
