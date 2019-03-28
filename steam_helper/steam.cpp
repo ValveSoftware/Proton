@@ -116,7 +116,7 @@ static void setup_steam_registry(void)
     SteamAPI_Shutdown();
 }
 
-static int run_process(void)
+static HANDLE run_process(void)
 {
     WCHAR *cmdline = GetCommandLineW();
     STARTUPINFOW si = { sizeof(si) };
@@ -135,7 +135,7 @@ static int run_process(void)
     if (!cmdline)
     {
         WINE_ERR("Invalid command\n");
-        return 1;
+        return INVALID_HANDLE_VALUE;
     }
     while (*cmdline == ' ') cmdline++;
 
@@ -144,29 +144,46 @@ static int run_process(void)
     if (!CreateProcessW(NULL, cmdline, NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi))
     {
         WINE_ERR("Failed to create process %s: %u\n", wine_dbgstr_w(cmdline), GetLastError());
-        return 1;
+        return INVALID_HANDLE_VALUE;
     }
 
-    CloseHandle(pi.hProcess);
     CloseHandle(pi.hThread);
-    return 0;
+    return pi.hProcess;
 }
 
 int main(int argc, char *argv[])
 {
+    HANDLE wait_handle = INVALID_HANDLE_VALUE;
+
     WINE_TRACE("\n");
 
-    CreateThread(NULL, 0, create_steam_window, NULL, 0, NULL);
+    if (getenv("SteamGameId"))
+    {
+        /* do setup only for game process */
+        CreateThread(NULL, 0, create_steam_window, NULL, 0, NULL);
 
-    set_active_process_pid();
-    setup_steam_registry();
+        set_active_process_pid();
+        setup_steam_registry();
+
+        wait_handle = __wine_make_process_system();
+    }
 
     if (argc > 1)
     {
-        int ret = run_process();
-        if (ret) return ret;
+        HANDLE child;
+
+        child = run_process();
+
+        if (child == INVALID_HANDLE_VALUE)
+            return 1;
+
+        if (wait_handle == INVALID_HANDLE_VALUE)
+            wait_handle = child;
+        else
+            CloseHandle(child);
     }
 
-    WaitForSingleObject(__wine_make_process_system(), INFINITE);
+    WaitForSingleObject(wait_handle, INFINITE);
+
     return 0;
 }
