@@ -9,6 +9,7 @@
 
     #WINE SYSTEM PERFORMANCE PATCHES
     cd wine
+
     #echo "fix for high core count systems"
     #only use for versions lower than 4.0, it has been patched upstream since 4.0
     #this allows games such as skyrim and fallout to load games without hanging at the loading screen
@@ -18,13 +19,14 @@
     echo "nvidia nvapi disable patch"
     patch -Np1 < ../game-patches-testing/nvidia-hate.patch
 
-    echo "nvidia nvapi disable patch"
+    echo "sdl joystick patch"
     patch -Np1 < ../game-patches-testing/proton-sdl-joy.patch
 
     echo "adding non-ms font replacements patch"
     patch -Np1 < ../game-patches-testing/gdi32-add-cjk-font-replacements.patch
 
-
+    echo "hide wine updating prefix prompt"
+    patch -Np1 < ../game-patches-testing/hide-prefix-update-window.patch
 
 
     #WINE STEAM GAME PATCHES
@@ -80,7 +82,7 @@
     patch -Np1 < ../game-patches-testing/d3d11-remove-unused-depth_tex-variable.patch
 
 
-    #patch -Np1 < ../game-patches-testing/FS_bypass_compositor.patch
+    patch -Np1 < ../game-patches-testing/FS_bypass_compositor.patch
     #patch -Np1 < ../game-patches-testing/valve-fullscreen-hack.patch
     #patch -Np1 < ../game-patches-testing/valve-fullscreen-hack-2.patch
     #patch -Np1 < ../game-patches-testing/valve-fullscreen-hack-3.patch

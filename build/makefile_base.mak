@@ -342,7 +342,7 @@ $(DIST_FONTS): fonts
 ALL_TARGETS += dist
 GOAL_TARGETS += dist
 
-dist: $(DIST_TARGETS) wine vrclient lsteamclient steam dxvk | $(DST_DIR)
+dist: $(DIST_TARGETS) ffmpeg wine vrclient lsteamclient steam dxvk | $(DST_DIR)
 	echo `date '+%s'` `GIT_DIR=$(abspath $(SRCDIR)/.git) git describe --tags` > $(DIST_VERSION)
 	cp $(DIST_VERSION) $(DST_BASE)/
 	rm -rf $(abspath $(DIST_PREFIX)) && \
@@ -497,7 +497,7 @@ endif # ifeq ($(WITH_FFMPEG),1)
 
 FAUDIO_CMAKE_FLAGS = -DCMAKE_BUILD_TYPE=Release -DFORCE_ENABLE_DEBUGCONFIGURATION=ON -DLOG_ASSERTIONS=ON -DCMAKE_INSTALL_LIBDIR="lib" -DXNASONG=OFF -DFFMPEG=ON
 
-FAUDIO_TARGETS = ffmpeg faudio faudio32 faudio64
+FAUDIO_TARGETS = faudio faudio32 faudio64
 
 ALL_TARGETS += $(FAUDIO_TARGETS)
 GOAL_TARGETS_LIBS += faudio
