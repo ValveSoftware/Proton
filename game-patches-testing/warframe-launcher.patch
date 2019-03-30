@@ -1,0 +1,76 @@
+dlls/kernel32/file.c       | 15 +++++++++++++--
+ dlls/kernel32/tests/file.c |  4 ++--
+ 2 files changed, 15 insertions(+), 4 deletions(-)
+
+diff --git a/dlls/kernel32/file.c b/dlls/kernel32/file.c
+index 081f0760a5..485cc8c96a 100644
+--- a/dlls/kernel32/file.c
++++ b/dlls/kernel32/file.c
+@@ -1764,7 +1764,7 @@ BOOL WINAPI ReplaceFileW(LPCWSTR lpReplacedFileName, LPCWSTR lpReplacementFileNa
+     attr.SecurityDescriptor = NULL;
+     attr.SecurityQualityOfService = NULL;
+
+-    /* Open the "replaced" file for reading and writing */
++    /* Open the "replaced" file for reading and writing to check for READ_ONLY attribute */
+     if (!(RtlDosPathNameToNtPathName_U(lpReplacedFileName, &nt_replaced_name, NULL, NULL)))
+     {
+         error = ERROR_PATH_NOT_FOUND;
+@@ -1776,6 +1776,12 @@ BOOL WINAPI ReplaceFileW(LPCWSTR lpReplacedFileName, LPCWSTR lpReplacementFileNa
+                         &attr, &io,
+                         FILE_SHARE_READ|FILE_SHARE_WRITE|FILE_SHARE_DELETE,
+                         FILE_SYNCHRONOUS_IO_NONALERT|FILE_NON_DIRECTORY_FILE);
++    /*If we didn't get ACCESS_DENIED, then open the file for reading and delete ready for the replacement*/
++    if (status == STATUS_SHARING_VIOLATION)
++       status = NtOpenFile(&hReplaced, GENERIC_READ|DELETE|SYNCHRONIZE,
++                       &attr, &io,
++                       FILE_SHARE_READ|FILE_SHARE_WRITE|FILE_SHARE_DELETE,
++                       FILE_SYNCHRONOUS_IO_NONALERT|FILE_NON_DIRECTORY_FILE);
+     if (status == STATUS_SUCCESS)
+         status = wine_nt_to_unix_file_name(&nt_replaced_name, &unix_replaced_name, replaced_flags, FALSE);
+     RtlFreeUnicodeString(&nt_replaced_name);
+@@ -1783,6 +1789,8 @@ BOOL WINAPI ReplaceFileW(LPCWSTR lpReplacedFileName, LPCWSTR lpReplacementFileNa
+     {
+         if (status == STATUS_OBJECT_NAME_NOT_FOUND)
+             error = ERROR_FILE_NOT_FOUND;
++       else if (status == STATUS_ACCESS_DENIED)
++            error = ERROR_ACCESS_DENIED;
+         else
+             error = ERROR_UNABLE_TO_REMOVE_REPLACED;
+         goto fail;
+@@ -1807,7 +1815,10 @@ BOOL WINAPI ReplaceFileW(LPCWSTR lpReplacedFileName, LPCWSTR lpReplacementFileNa
+     RtlFreeUnicodeString(&nt_replacement_name);
+     if (status != STATUS_SUCCESS)
+     {
+-        error = RtlNtStatusToDosError(status);
++       if (status == STATUS_ACCESS_DENIED)
++           error = ERROR_ACCESS_DENIED;
++       else
++           error = RtlNtStatusToDosError(status);
+         goto fail;
+     }
+
+diff --git a/dlls/kernel32/tests/file.c b/dlls/kernel32/tests/file.c
+index 33cae4b7c4..8e4a994142 100644
+--- a/dlls/kernel32/tests/file.c
++++ b/dlls/kernel32/tests/file.c
+@@ -3666,7 +3666,7 @@ static void test_ReplaceFileA(void)
+      */
+     SetLastError(0xdeadbeef);
+     ret = pReplaceFileA(replaced, replacement, backup, 0, 0, 0);
+-    todo_wine ok(ret == 0 && GetLastError() == ERROR_ACCESS_DENIED, "ReplaceFileA: unexpected error %d\n", GetLastError());
++    ok(ret == 0 && GetLastError() == ERROR_ACCESS_DENIED, "ReplaceFileA: unexpected error %d\n", GetLastError());
+     /* make sure that the replacement file still exists */
+     hReplacementFile = CreateFileA(replacement, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, 0, 0);
+     ok(hReplacementFile != INVALID_HANDLE_VALUE ||
+@@ -3698,7 +3698,7 @@ static void test_ReplaceFileA(void)
+        "unexpected error, replaced file should be able to be opened %d\n", GetLastError());
+     /*Calling ReplaceFileA on an exe should succeed*/
+     ret = pReplaceFileA(replaced, replacement, NULL, 0, 0, 0);
+-    todo_wine ok(ret, "ReplaceFileA: unexpected error %d\n", GetLastError());
++    ok(ret, "ReplaceFileA: unexpected error %d\n", GetLastError());
+     CloseHandle(hReplacedFile);
+
+     /* replacement file still exists, make pass w/o "replaced" */
+
+-- 
+2.19.0

@@ -1,0 +1,43 @@
+From c851ee988a76f56136bb48d322dd3013750a43b0 Mon Sep 17 00:00:00 2001
+From: Zebediah Figura <z.figura12@gmail.com>
+Date: Sun, 19 Aug 2018 12:54:33 -0500
+Subject: [PATCH 82/83] ntdll, server: Check the value of WINEESYNC instead of
+ just the presence.
+
+People keep getting tripped up by this.
+
+Signed-off-by: Zebediah Figura <z.figura12@gmail.com>
+---
+ dlls/ntdll/esync.c | 2 +-
+ server/esync.c     | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/dlls/ntdll/esync.c b/dlls/ntdll/esync.c
+index 490522eeb3..a7fee03669 100644
+--- a/dlls/ntdll/esync.c
++++ b/dlls/ntdll/esync.c
+@@ -57,7 +57,7 @@ int do_esync(void)
+     static int do_esync_cached = -1;
+ 
+     if (do_esync_cached == -1)
+-        do_esync_cached = (getenv("WINEESYNC") != NULL);
++        do_esync_cached = getenv("WINEESYNC") && atoi(getenv("WINEESYNC"));
+ 
+     return do_esync_cached;
+ #else
+diff --git a/server/esync.c b/server/esync.c
+index 35e7a8a1fe..c414163120 100644
+--- a/server/esync.c
++++ b/server/esync.c
+@@ -52,7 +52,7 @@ int do_esync(void)
+     static int do_esync_cached = -1;
+ 
+     if (do_esync_cached == -1)
+-        do_esync_cached = (getenv("WINEESYNC") != NULL);
++        do_esync_cached = getenv("WINEESYNC") && atoi(getenv("WINEESYNC"));
+ 
+     return do_esync_cached;
+ #else
+-- 
+2.19.1
+

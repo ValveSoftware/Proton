@@ -1,0 +1,127 @@
+From a2d73c76e838597535ed018cb5b55fb9f63c31a7 Mon Sep 17 00:00:00 2001
+From: Zebediah Figura <z.figura12@gmail.com>
+Date: Wed, 13 Jun 2018 23:32:04 -0500
+Subject: [PATCH 50/83] kernel32/tests: Add some mutex tests.
+
+Signed-off-by: Zebediah Figura <z.figura12@gmail.com>
+---
+ dlls/kernel32/tests/sync.c | 94 ++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 94 insertions(+)
+
+diff --git a/dlls/kernel32/tests/sync.c b/dlls/kernel32/tests/sync.c
+index e0c5354c2f..98c96cb703 100644
+--- a/dlls/kernel32/tests/sync.c
++++ b/dlls/kernel32/tests/sync.c
+@@ -177,8 +177,23 @@ static void test_signalandwait(void)
+     CloseHandle(file);
+ }
+ 
++static HANDLE mutex, mutex2, mutices[2];
++
++static DWORD WINAPI mutex_thread( void *param )
++{
++    DWORD expect = (DWORD)(DWORD_PTR)param;
++    DWORD ret;
++
++    ret = WaitForSingleObject( mutex, 0 );
++    ok(ret == expect, "expected %u, got %u\n", expect, ret);
++
++    if (!ret) ReleaseMutex( mutex );
++    return 0;
++}
++
+ static void test_mutex(void)
+ {
++    HANDLE thread;
+     DWORD wait_ret;
+     BOOL ret;
+     HANDLE hCreated;
+@@ -289,6 +304,85 @@ todo_wine_if(getenv("WINEESYNC"))   /* XFAIL: due to the above */
+     CloseHandle(hOpened);
+ 
+     CloseHandle(hCreated);
++
++    mutex = CreateMutexA( NULL, FALSE, NULL );
++    ok(!!mutex, "got error %u\n", GetLastError());
++
++    ret = ReleaseMutex( mutex );
++    ok(!ret, "got %d\n", ret);
++    ok(GetLastError() == ERROR_NOT_OWNER, "got error %u\n", GetLastError());
++
++    for (i = 0; i < 100; i++)
++    {
++        ret = WaitForSingleObject( mutex, 0 );
++        ok(ret == 0, "got %u\n", ret);
++    }
++
++    for (i = 0; i < 100; i++)
++    {
++        ret = ReleaseMutex( mutex );
++        ok(ret, "got error %u\n", GetLastError());
++    }
++
++    ret = ReleaseMutex( mutex );
++    ok(!ret, "got %d\n", ret);
++    ok(GetLastError() == ERROR_NOT_OWNER, "got error %u\n", GetLastError());
++
++    thread = CreateThread( NULL, 0, mutex_thread, (void *)0, 0, NULL );
++    ret = WaitForSingleObject( thread, 2000 );
++    ok(ret == 0, "wait failed: %u\n", ret);
++
++    WaitForSingleObject( mutex, 0 );
++
++    thread = CreateThread( NULL, 0, mutex_thread, (void *)WAIT_TIMEOUT, 0, NULL );
++    ret = WaitForSingleObject( thread, 2000 );
++    ok(ret == 0, "wait failed: %u\n", ret);
++
++    ret = ReleaseMutex( mutex );
++        ok(ret, "got error %u\n", GetLastError());
++
++    thread = CreateThread( NULL, 0, mutex_thread, (void *)0, 0, NULL );
++    ret = WaitForSingleObject( thread, 2000 );
++    ok(ret == 0, "wait failed: %u\n", ret);
++
++    mutex2 = CreateMutexA( NULL, TRUE, NULL );
++    ok(!!mutex2, "got error %u\n", GetLastError());
++
++    ret = ReleaseMutex( mutex2 );
++    ok(ret, "got error %u\n", GetLastError());
++
++    ret = ReleaseMutex( mutex2 );
++    ok(!ret, "got %d\n", ret);
++    ok(GetLastError() == ERROR_NOT_OWNER, "got error %u\n", GetLastError());
++
++    mutices[0] = mutex;
++    mutices[1] = mutex2;
++
++    ret = WaitForMultipleObjects( 2, mutices, FALSE, 0 );
++    ok(ret == 0, "got %u\n", ret);
++
++    ret = ReleaseMutex( mutex );
++    ok(ret, "got error %u\n", GetLastError());
++
++    ret = ReleaseMutex( mutex2 );
++    ok(!ret, "got %d\n", ret);
++    ok(GetLastError() == ERROR_NOT_OWNER, "got error %u\n", GetLastError());
++
++    ret = WaitForMultipleObjects( 2, mutices, TRUE, 0 );
++    ok(ret == 0, "got %u\n", ret);
++
++    ret = ReleaseMutex( mutex );
++    ok(ret, "got error %u\n", GetLastError());
++
++    ret = ReleaseMutex( mutex2 );
++    ok(ret, "got error %u\n", GetLastError());
++
++    ret = CloseHandle( mutex );
++    ok(ret, "got error %u\n", GetLastError());
++
++    ret = CloseHandle( mutex2 );
++    ok(ret, "got error %u\n", GetLastError());
++
+ }
+ 
+ static void test_slist(void)
+-- 
+2.19.1
+

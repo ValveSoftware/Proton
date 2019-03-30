@@ -1,0 +1,71 @@
+From 3051ac9829667c1a7491de1210dee7730e0974fc Mon Sep 17 00:00:00 2001
+From: Zebediah Figura <z.figura12@gmail.com>
+Date: Thu, 7 Jun 2018 21:02:14 -0500
+Subject: [PATCH 05/83] ntdll: Implement NtReleaseSemaphore().
+
+Signed-off-by: Zebediah Figura <z.figura12@gmail.com>
+---
+ dlls/ntdll/esync.c | 21 +++++++++++++++++++++
+ dlls/ntdll/esync.h |  1 +
+ dlls/ntdll/sync.c  |  4 ++++
+ 3 files changed, 26 insertions(+)
+
+diff --git a/dlls/ntdll/esync.c b/dlls/ntdll/esync.c
+index 2bb85d910b..e3149353eb 100644
+--- a/dlls/ntdll/esync.c
++++ b/dlls/ntdll/esync.c
+@@ -199,3 +199,24 @@ NTSTATUS esync_create_semaphore(HANDLE *handle, ACCESS_MASK access,
+ 
+     return ret;
+ }
++
++NTSTATUS esync_release_semaphore( HANDLE handle, ULONG count, ULONG *prev )
++{
++    struct semaphore *semaphore = esync_get_object( handle );
++    uint64_t count64 = count;
++
++    TRACE("%p, %d, %p.\n", handle, count, prev);
++
++    if (!semaphore) return STATUS_INVALID_HANDLE;
++
++    if (prev)
++    {
++        FIXME("Can't write previous value.\n");
++        *prev = 1;
++    }
++
++    if (write( semaphore->obj.fd, &count64, sizeof(count64) ) == -1)
++        return FILE_GetNtStatus();
++
++    return STATUS_SUCCESS;
++}
+diff --git a/dlls/ntdll/esync.h b/dlls/ntdll/esync.h
+index 1a88170cfc..fec0b68e8d 100644
+--- a/dlls/ntdll/esync.h
++++ b/dlls/ntdll/esync.h
+@@ -22,6 +22,7 @@ extern int do_esync(void) DECLSPEC_HIDDEN;
+ 
+ extern NTSTATUS esync_create_semaphore(HANDLE *handle, ACCESS_MASK access,
+     const OBJECT_ATTRIBUTES *attr, LONG initial, LONG max) DECLSPEC_HIDDEN;
++extern NTSTATUS esync_release_semaphore( HANDLE handle, ULONG count, ULONG *prev ) DECLSPEC_HIDDEN;
+ 
+ 
+ /* We have to synchronize on the fd cache CS so that our calls to receive_fd
+diff --git a/dlls/ntdll/sync.c b/dlls/ntdll/sync.c
+index 3d6db08668..2c8ef9bd6b 100644
+--- a/dlls/ntdll/sync.c
++++ b/dlls/ntdll/sync.c
+@@ -275,6 +275,10 @@ NTSTATUS WINAPI NtQuerySemaphore( HANDLE handle, SEMAPHORE_INFORMATION_CLASS cla
+ NTSTATUS WINAPI NtReleaseSemaphore( HANDLE handle, ULONG count, PULONG previous )
+ {
+     NTSTATUS ret;
++
++    if (do_esync())
++        return esync_release_semaphore( handle, count, previous );
++
+     SERVER_START_REQ( release_semaphore )
+     {
+         req->handle = wine_server_obj_handle( handle );
+-- 
+2.19.1
+

@@ -1,0 +1,124 @@
+From c6d6bb5499000e1cd9f80ec46f3280fdccfc78b3 Mon Sep 17 00:00:00 2001
+From: Zebediah Figura <z.figura12@gmail.com>
+Date: Thu, 7 Jun 2018 20:45:57 -0500
+Subject: [PATCH 04/83] ntdll: Store esync objects locally.
+
+Slight tweak for optimization: return UINT_PTR instead, and remove a useless
+cmpxchg.
+
+Signed-off-by: Zebediah Figura <z.figura12@gmail.com>
+---
+ dlls/ntdll/esync.c | 62 +++++++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 61 insertions(+), 1 deletion(-)
+
+diff --git a/dlls/ntdll/esync.c b/dlls/ntdll/esync.c
+index da35bdf854..2bb85d910b 100644
+--- a/dlls/ntdll/esync.c
++++ b/dlls/ntdll/esync.c
+@@ -19,6 +19,7 @@
+  */
+ 
+ #include "config.h"
++#include "wine/port.h"
+ 
+ #include <assert.h>
+ #include <stdarg.h>
+@@ -26,6 +27,9 @@
+ #ifdef HAVE_SYS_EVENTFD_H
+ # include <sys/eventfd.h>
+ #endif
++#ifdef HAVE_SYS_MMAN_H
++# include <sys/mman.h>
++#endif
+ 
+ #include "ntstatus.h"
+ #define WIN32_NO_STATUS
+@@ -34,6 +38,7 @@
+ #include "winternl.h"
+ #include "wine/server.h"
+ #include "wine/debug.h"
++#include "wine/library.h"
+ 
+ #include "ntdll_misc.h"
+ #include "esync.h"
+@@ -78,6 +83,59 @@ struct semaphore
+     int max;
+ };
+ 
++/* We'd like lookup to be fast. To that end, we use a static list indexed by handle.
++ * This is copied and adapted from the fd cache code. */
++
++#define ESYNC_LIST_BLOCK_SIZE  (65536 / sizeof(struct esync *))
++#define ESYNC_LIST_ENTRIES     128
++
++static struct esync * *esync_list[ESYNC_LIST_ENTRIES];
++static struct esync * esync_list_initial_block[ESYNC_LIST_BLOCK_SIZE];
++
++static inline UINT_PTR handle_to_index( HANDLE handle, UINT_PTR *entry )
++{
++    UINT_PTR idx = (((UINT_PTR)handle) >> 2) - 1;
++    *entry = idx / ESYNC_LIST_BLOCK_SIZE;
++    return idx % ESYNC_LIST_BLOCK_SIZE;
++}
++
++static BOOL add_to_list( HANDLE handle, struct esync *obj )
++{
++    UINT_PTR entry, idx = handle_to_index( handle, &entry );
++
++    if (entry >= ESYNC_LIST_ENTRIES)
++    {
++        FIXME( "too many allocated handles, not caching %p\n", handle );
++        return FALSE;
++    }
++
++    if (!esync_list[entry])  /* do we need to allocate a new block of entries? */
++    {
++        if (!entry) esync_list[0] = esync_list_initial_block;
++        else
++        {
++            void *ptr = wine_anon_mmap( NULL, ESYNC_LIST_BLOCK_SIZE * sizeof(struct esync *),
++                                        PROT_READ | PROT_WRITE, 0 );
++            if (ptr == MAP_FAILED) return FALSE;
++            esync_list[entry] = ptr;
++        }
++    }
++
++    obj = interlocked_xchg_ptr((void **)&esync_list[entry][idx], obj);
++    assert(!obj);
++    return TRUE;
++}
++
++static void *esync_get_object( HANDLE handle )
++{
++    UINT_PTR entry, idx = handle_to_index( handle, &entry );
++
++    if (entry >= ESYNC_LIST_ENTRIES || !esync_list[entry]) return NULL;
++
++    return esync_list[entry][idx];
++}
++
++
+ static NTSTATUS create_esync(int *fd, HANDLE *handle, ACCESS_MASK access,
+     const OBJECT_ATTRIBUTES *attr, int initval, int flags)
+ {
+@@ -115,7 +173,7 @@ static NTSTATUS create_esync(int *fd, HANDLE *handle, ACCESS_MASK access,
+     return ret;
+ }
+ 
+-extern NTSTATUS esync_create_semaphore(HANDLE *handle, ACCESS_MASK access,
++NTSTATUS esync_create_semaphore(HANDLE *handle, ACCESS_MASK access,
+     const OBJECT_ATTRIBUTES *attr, LONG initial, LONG max)
+ {
+     struct semaphore *semaphore;
+@@ -135,6 +193,8 @@ extern NTSTATUS esync_create_semaphore(HANDLE *handle, ACCESS_MASK access,
+         semaphore->obj.type = ESYNC_SEMAPHORE;
+         semaphore->obj.fd = fd;
+         semaphore->max = max;
++
++        add_to_list( *handle, &semaphore->obj );
+     }
+ 
+     return ret;
+-- 
+2.19.1
+

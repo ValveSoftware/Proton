@@ -1,0 +1,89 @@
+From b5594a0db06e9df8c72b831e62897efb444b8648 Mon Sep 17 00:00:00 2001
+From: Zebediah Figura <z.figura12@gmail.com>
+Date: Fri, 8 Jun 2018 22:04:29 -0500
+Subject: [PATCH 20/83] server: Create eventfd file descriptors for thread
+ objects.
+
+Signed-off-by: Zebediah Figura <z.figura12@gmail.com>
+---
+ server/thread.c | 16 +++++++++++++++-
+ server/thread.h |  1 +
+ 2 files changed, 16 insertions(+), 1 deletion(-)
+
+diff --git a/server/thread.c b/server/thread.c
+index f5ad0f066c..722c133847 100644
+--- a/server/thread.c
++++ b/server/thread.c
+@@ -131,6 +131,7 @@ static const struct object_ops thread_apc_ops =
+ 
+ static void dump_thread( struct object *obj, int verbose );
+ static int thread_signaled( struct object *obj, struct wait_queue_entry *entry );
++static int thread_get_esync_fd( struct object *obj );
+ static unsigned int thread_map_access( struct object *obj, unsigned int access );
+ static void thread_poll_event( struct fd *fd, int event );
+ static void destroy_thread( struct object *obj );
+@@ -143,7 +144,7 @@ static const struct object_ops thread_ops =
+     add_queue,                  /* add_queue */
+     remove_queue,               /* remove_queue */
+     thread_signaled,            /* signaled */
+-    NULL,                       /* get_esync_fd */
++    thread_get_esync_fd,        /* get_esync_fd */
+     no_satisfied,               /* satisfied */
+     no_signal,                  /* signal */
+     no_get_fd,                  /* get_fd */
+@@ -202,6 +203,7 @@ static inline void init_thread_structure( struct thread *thread )
+     thread->suspend         = 0;
+     thread->desktop_users   = 0;
+     thread->token           = NULL;
++    thread->esync_fd        = -1;
+ 
+     thread->creation_time = current_time;
+     thread->exit_time     = 0;
+@@ -286,6 +288,9 @@ struct thread *create_thread( int fd, struct process *process, const struct secu
+         return NULL;
+     }
+ 
++    if (do_esync())
++        thread->esync_fd = esync_create_fd( 0, 0 );
++
+     set_fd_events( thread->request_fd, POLLIN );  /* start listening to events */
+     add_process_thread( thread->process, thread );
+     return thread;
+@@ -352,6 +357,9 @@ static void destroy_thread( struct object *obj )
+     release_object( thread->process );
+     if (thread->id) free_ptid( thread->id );
+     if (thread->token) release_object( thread->token );
++
++    if (do_esync())
++        close( thread->esync_fd );
+ }
+ 
+ /* dump a thread on stdout for debugging purposes */
+@@ -370,6 +378,12 @@ static int thread_signaled( struct object *obj, struct wait_queue_entry *entry )
+     return (mythread->state == TERMINATED);
+ }
+ 
++static int thread_get_esync_fd( struct object *obj )
++{
++    struct thread *thread = (struct thread *)obj;
++    return thread->esync_fd;
++}
++
+ static unsigned int thread_map_access( struct object *obj, unsigned int access )
+ {
+     if (access & GENERIC_READ)    access |= STANDARD_RIGHTS_READ | THREAD_QUERY_INFORMATION | THREAD_GET_CONTEXT;
+diff --git a/server/thread.h b/server/thread.h
+index e4332df4ab..fc3ca4b701 100644
+--- a/server/thread.h
++++ b/server/thread.h
+@@ -89,6 +89,7 @@ struct thread
+     timeout_t              creation_time; /* Thread creation time */
+     timeout_t              exit_time;     /* Thread exit time */
+     struct token          *token;         /* security token associated with this thread */
++    int                    esync_fd;      /* esync file descriptor (signalled on exit) */
+ };
+ 
+ struct thread_snapshot
+-- 
+2.19.1
+

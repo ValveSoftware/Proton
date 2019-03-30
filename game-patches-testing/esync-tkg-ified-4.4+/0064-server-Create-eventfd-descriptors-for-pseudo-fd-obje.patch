@@ -1,0 +1,130 @@
+From 7780a652eeb65c24e047a7ad00d36f0b0b3e5b5c Mon Sep 17 00:00:00 2001
+From: Zebediah Figura <z.figura12@gmail.com>
+Date: Sat, 7 Jul 2018 12:57:47 +0200
+Subject: [PATCH 64/83] server: Create eventfd descriptors for pseudo-fd
+ objects and use them for named pipes.
+
+Signed-off-by: Zebediah Figura <z.figura12@gmail.com>
+---
+ server/fd.c         | 22 ++++++++++++++++++++++
+ server/file.h       |  1 +
+ server/named_pipe.c |  4 ++--
+ 3 files changed, 25 insertions(+), 2 deletions(-)
+
+diff --git a/server/fd.c b/server/fd.c
+index 0652532ae1..5fb79a7c94 100644
+--- a/server/fd.c
++++ b/server/fd.c
+@@ -101,6 +101,7 @@
+ #include "handle.h"
+ #include "process.h"
+ #include "request.h"
++#include "esync.h"
+ 
+ #include "winternl.h"
+ #include "winioctl.h"
+@@ -195,6 +196,7 @@ struct fd
+     struct completion   *completion;  /* completion object attached to this fd */
+     apc_param_t          comp_key;    /* completion key to set in completion events */
+     unsigned int         comp_flags;  /* completion flags */
++    int                  esync_fd;    /* esync file descriptor */
+ };
+ 
+ static void fd_dump( struct object *obj, int verbose );
+@@ -1496,6 +1498,9 @@ static void fd_destroy( struct object *obj )
+         if (fd->unix_fd != -1) close( fd->unix_fd );
+         free( fd->unix_name );
+     }
++
++    if (do_esync())
++        close( fd->esync_fd );
+ }
+ 
+ /* check if the desired access is possible without violating */
+@@ -1610,6 +1615,7 @@ static struct fd *alloc_fd_object(void)
+     fd->poll_index = -1;
+     fd->completion = NULL;
+     fd->comp_flags = 0;
++    fd->esync_fd   = -1;
+     init_async_queue( &fd->read_q );
+     init_async_queue( &fd->write_q );
+     init_async_queue( &fd->wait_q );
+@@ -1647,11 +1653,15 @@ struct fd *alloc_pseudo_fd( const struct fd_ops *fd_user_ops, struct object *use
+     fd->completion = NULL;
+     fd->comp_flags = 0;
+     fd->no_fd_status = STATUS_BAD_DEVICE_TYPE;
++    fd->esync_fd   = -1;
+     init_async_queue( &fd->read_q );
+     init_async_queue( &fd->write_q );
+     init_async_queue( &fd->wait_q );
+     list_init( &fd->inode_entry );
+     list_init( &fd->locks );
++
++    if (do_esync())
++        fd->esync_fd = esync_create_fd( 0, 0 );
+     return fd;
+ }
+ 
+@@ -1964,6 +1974,9 @@ void set_fd_signaled( struct fd *fd, int signaled )
+ {
+     fd->signaled = signaled;
+     if (signaled) wake_up( fd->user, 0 );
++
++    if (do_esync() && !signaled)
++        esync_clear( fd->esync_fd );
+ }
+ 
+ /* check if fd is signaled */
+@@ -2001,6 +2014,15 @@ int default_fd_signaled( struct object *obj, struct wait_queue_entry *entry )
+     return ret;
+ }
+ 
++int default_fd_get_esync_fd( struct object *obj, enum esync_type *type )
++{
++    struct fd *fd = get_obj_fd( obj );
++    int ret = fd->esync_fd;
++    *type = ESYNC_MANUAL_SERVER;
++    release_object( fd );
++    return ret;
++}
++
+ /* default map_access() routine for objects that behave like an fd */
+ unsigned int default_fd_map_access( struct object *obj, unsigned int access )
+ {
+diff --git a/server/file.h b/server/file.h
+index 84cbc29037..3c9e1ca249 100644
+--- a/server/file.h
++++ b/server/file.h
+@@ -102,6 +102,7 @@ extern int is_fd_signaled( struct fd *fd );
+ extern char *dup_fd_name( struct fd *root, const char *name );
+ 
+ extern int default_fd_signaled( struct object *obj, struct wait_queue_entry *entry );
++extern int default_fd_get_esync_fd( struct object *obj, enum esync_type *type );
+ extern unsigned int default_fd_map_access( struct object *obj, unsigned int access );
+ extern int default_fd_get_poll_events( struct fd *fd );
+ extern void default_poll_event( struct fd *fd, int event );
+diff --git a/server/named_pipe.c b/server/named_pipe.c
+index 3be5d7968e..925ae5ebed 100644
+--- a/server/named_pipe.c
++++ b/server/named_pipe.c
+@@ -167,7 +167,7 @@ static const struct object_ops pipe_server_ops =
+     add_queue,                    /* add_queue */
+     remove_queue,                 /* remove_queue */
+     default_fd_signaled,          /* signaled */
+-    NULL,                         /* get_esync_fd */
++    default_fd_get_esync_fd,      /* get_esync_fd */
+     no_satisfied,                 /* satisfied */
+     no_signal,                    /* signal */
+     pipe_end_get_fd,              /* get_fd */
+@@ -209,7 +209,7 @@ static const struct object_ops pipe_client_ops =
+     add_queue,                    /* add_queue */
+     remove_queue,                 /* remove_queue */
+     default_fd_signaled,          /* signaled */
+-    NULL,                         /* get_esync_fd */
++    default_fd_get_esync_fd,      /* get_esync_fd */
+     no_satisfied,                 /* satisfied */
+     no_signal,                    /* signal */
+     pipe_end_get_fd,              /* get_fd */
+-- 
+2.19.1
+

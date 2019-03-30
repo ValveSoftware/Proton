@@ -1,0 +1,129 @@
+From c8ede944adc73d8cf5b669f242a83bb9767d29aa Mon Sep 17 00:00:00 2001
+From: Zebediah Figura <z.figura12@gmail.com>
+Date: Wed, 13 Jun 2018 22:40:47 -0500
+Subject: [PATCH 48/83] kernel32/tests: Add some semaphore tests.
+
+Signed-off-by: Zebediah Figura <z.figura12@gmail.com>
+---
+ dlls/kernel32/tests/sync.c | 98 +++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 97 insertions(+), 1 deletion(-)
+
+diff --git a/dlls/kernel32/tests/sync.c b/dlls/kernel32/tests/sync.c
+index aebb25d659..354ccb89ad 100644
+--- a/dlls/kernel32/tests/sync.c
++++ b/dlls/kernel32/tests/sync.c
+@@ -577,7 +577,10 @@ static void test_event(void)
+ 
+ static void test_semaphore(void)
+ {
+-    HANDLE handle, handle2;
++    HANDLE handle, handle2, handles[2];
++    DWORD ret;
++    LONG prev;
++    int i;
+ 
+     /* test case sensitivity */
+ 
+@@ -619,6 +622,99 @@ static void test_semaphore(void)
+     ok( GetLastError() == ERROR_INVALID_PARAMETER, "wrong error %u\n", GetLastError());
+ 
+     CloseHandle( handle );
++
++    handle = CreateSemaphoreA( NULL, 0, 5, NULL );
++    ok(!!handle, "CreateSemaphore failed: %u\n", GetLastError());
++
++    ret = WaitForSingleObject( handle, 0 );
++    ok(ret == WAIT_TIMEOUT, "got %u\n", ret);
++
++    ret = ReleaseSemaphore( handle, 1, &prev );
++    ok(ret, "got error %u\n", GetLastError());
++    ok(prev == 0, "got prev %d\n", prev);
++
++    ret = ReleaseSemaphore( handle, 1, &prev );
++    ok(ret, "got error %u\n", GetLastError());
++    ok(prev == 1, "got prev %d\n", prev);
++
++    ret = ReleaseSemaphore( handle, 5, &prev );
++    ok(!ret, "got %d\n", ret);
++    ok(GetLastError() == ERROR_TOO_MANY_POSTS, "got error %u\n", GetLastError());
++    ok(prev == 1, "got prev %d\n", prev);
++
++    ret = ReleaseSemaphore( handle, 2, &prev );
++    ok(ret, "got error %u\n", GetLastError());
++    ok(prev == 2, "got prev %d\n", prev);
++
++    ret = ReleaseSemaphore( handle, 1, &prev );
++    ok(ret, "got error %u\n", GetLastError());
++    ok(prev == 4, "got prev %d\n", prev);
++
++    for (i = 0; i < 5; i++)
++    {
++        ret = WaitForSingleObject( handle, 0 );
++        ok(ret == 0, "got %u\n", ret);
++    }
++
++    ret = WaitForSingleObject( handle, 0 );
++    ok(ret == WAIT_TIMEOUT, "got %u\n", ret);
++
++    handle2 = CreateSemaphoreA( NULL, 3, 5, NULL );
++    ok(!!handle2, "CreateSemaphore failed: %u\n", GetLastError());
++
++    ret = ReleaseSemaphore( handle2, 1, &prev );
++    ok(ret, "got error %u\n", GetLastError());
++    ok(prev == 3, "got prev %d\n", prev);
++
++    for (i = 0; i < 4; i++)
++    {
++        ret = WaitForSingleObject( handle2, 0 );
++        ok(ret == 0, "got %u\n", ret);
++    }
++
++    ret = WaitForSingleObject( handle2, 0 );
++    ok(ret == WAIT_TIMEOUT, "got %u\n", ret);
++
++    handles[0] = handle;
++    handles[1] = handle2;
++
++    ret = WaitForMultipleObjects( 2, handles, FALSE, 0 );
++    ok(ret == WAIT_TIMEOUT, "got %u\n", ret);
++
++    ReleaseSemaphore( handle, 1, NULL );
++    ReleaseSemaphore( handle2, 1, NULL );
++
++    ret = WaitForMultipleObjects( 2, handles, FALSE, 0 );
++    ok(ret == 0, "got %u\n", ret);
++
++    ret = WaitForMultipleObjects( 2, handles, FALSE, 0 );
++    ok(ret == 1, "got %u\n", ret);
++
++    ret = WaitForMultipleObjects( 2, handles, FALSE, 0 );
++    ok(ret == WAIT_TIMEOUT, "got %u\n", ret);
++
++    ReleaseSemaphore( handle, 1, NULL );
++    ReleaseSemaphore( handle2, 1, NULL );
++
++    ret = WaitForMultipleObjects( 2, handles, TRUE, 0 );
++    ok(ret == 0, "got %u\n", ret);
++
++    ret = WaitForMultipleObjects( 2, handles, FALSE, 0 );
++    ok(ret == WAIT_TIMEOUT, "got %u\n", ret);
++
++    ReleaseSemaphore( handle, 1, NULL );
++
++    ret = WaitForMultipleObjects( 2, handles, TRUE, 0 );
++    ok(ret == WAIT_TIMEOUT, "got %u\n", ret);
++
++    ret = WaitForSingleObject( handle, 0 );
++    ok(ret == 0, "got %u\n", ret);
++
++    ret = CloseHandle( handle );
++    ok(ret, "got error %u\n", ret);
++
++    ret = CloseHandle( handle2 );
++    ok(ret, "got error %u\n", ret);
+ }
+ 
+ static void test_waitable_timer(void)
+-- 
+2.19.1
+

@@ -1,0 +1,257 @@
+From dffd7ff0476caccf024e980d3077a68efa589d01 Mon Sep 17 00:00:00 2001
+From: Zebediah Figura <z.figura12@gmail.com>
+Date: Sun, 10 Jun 2018 16:11:54 -0500
+Subject: [PATCH 32/83] server, ntdll: Also store the esync type in the server.
+
+And validate it there while we're at it.
+
+We need to do this because CreateEvent() ignores the passed-in parameter
+when opening an existing event.
+
+Signed-off-by: Zebediah Figura <z.figura12@gmail.com>
+---
+ dlls/ntdll/esync.c             | 23 +++++++++++++++--------
+ include/wine/server_protocol.h |  4 +++-
+ server/esync.c                 | 28 ++++++++++++++++++++++++----
+ server/protocol.def            |  2 ++
+ server/request.h               |  4 +++-
+ server/trace.c                 |  2 ++
+ 6 files changed, 49 insertions(+), 14 deletions(-)
+
+diff --git a/dlls/ntdll/esync.c b/dlls/ntdll/esync.c
+index 79d3c2df08..0b373e36ed 100644
+--- a/dlls/ntdll/esync.c
++++ b/dlls/ntdll/esync.c
+@@ -234,8 +234,10 @@ NTSTATUS esync_close( HANDLE handle )
+     return STATUS_INVALID_HANDLE;
+ }
+ 
+-static NTSTATUS create_esync(int *fd, HANDLE *handle, ACCESS_MASK access,
+-    const OBJECT_ATTRIBUTES *attr, int initval, int flags)
++/* type is an in-out parameter; if the object already existed it returns the
++ * actual type. */
++static NTSTATUS create_esync(enum esync_type *type, int *fd, HANDLE *handle,
++    ACCESS_MASK access, const OBJECT_ATTRIBUTES *attr, int initval, int flags)
+ {
+     NTSTATUS ret;
+     data_size_t len;
+@@ -253,11 +255,13 @@ static NTSTATUS create_esync(int *fd, HANDLE *handle, ACCESS_MASK access,
+         req->access  = access;
+         req->initval = initval;
+         req->flags   = flags;
++        req->type    = *type;
+         wine_server_add_data( req, objattr, len );
+         ret = wine_server_call( req );
+         if (!ret || ret == STATUS_OBJECT_NAME_EXISTS)
+         {
+             *handle = wine_server_ptr_handle( reply->handle );
++            *type = reply->type;
+             *fd = receive_fd( &fd_handle );
+             assert( wine_server_ptr_handle(fd_handle) == *handle );
+         }
+@@ -274,6 +278,7 @@ static NTSTATUS create_esync(int *fd, HANDLE *handle, ACCESS_MASK access,
+ NTSTATUS esync_create_semaphore(HANDLE *handle, ACCESS_MASK access,
+     const OBJECT_ATTRIBUTES *attr, LONG initial, LONG max)
+ {
++    enum esync_type type = ESYNC_SEMAPHORE;
+     struct semaphore *semaphore;
+     NTSTATUS ret;
+     int fd = -1;
+@@ -281,7 +286,7 @@ NTSTATUS esync_create_semaphore(HANDLE *handle, ACCESS_MASK access,
+     TRACE("name %s, initial %d, max %d.\n",
+         attr ? debugstr_us(attr->ObjectName) : "<no name>", initial, max);
+ 
+-    ret = create_esync( &fd, handle, access, attr, initial, EFD_SEMAPHORE );
++    ret = create_esync( &type, &fd, handle, access, attr, initial, EFD_SEMAPHORE );
+     if (!ret || ret == STATUS_OBJECT_NAME_EXISTS)
+     {
+         semaphore = RtlAllocateHeap( GetProcessHeap(), 0, sizeof(*semaphore) );
+@@ -320,24 +325,25 @@ NTSTATUS esync_release_semaphore( HANDLE handle, ULONG count, ULONG *prev )
+ }
+ 
+ NTSTATUS esync_create_event( HANDLE *handle, ACCESS_MASK access,
+-    const OBJECT_ATTRIBUTES *attr, EVENT_TYPE type, BOOLEAN initial )
++    const OBJECT_ATTRIBUTES *attr, EVENT_TYPE event_type, BOOLEAN initial )
+ {
++    enum esync_type type = (event_type == SynchronizationEvent ? ESYNC_AUTO_EVENT : ESYNC_MANUAL_EVENT);
+     struct event *event;
+     NTSTATUS ret;
+     int fd;
+ 
+     TRACE("name %s, %s-reset, initial %d.\n",
+         attr ? debugstr_us(attr->ObjectName) : "<no name>",
+-        type == NotificationEvent ? "manual" : "auto", initial);
++        event_type == NotificationEvent ? "manual" : "auto", initial);
+ 
+-    ret = create_esync( &fd, handle, access, attr, initial, 0 );
++    ret = create_esync( &type, &fd, handle, access, attr, initial, 0 );
+     if (!ret || ret == STATUS_OBJECT_NAME_EXISTS)
+     {
+         event = RtlAllocateHeap( GetProcessHeap(), 0, sizeof(*event) );
+         if (!event)
+             return STATUS_NO_MEMORY;
+ 
+-        event->obj.type = (type == NotificationEvent ? ESYNC_MANUAL_EVENT : ESYNC_AUTO_EVENT);
++        event->obj.type = type; /* note that the server might give us the real type */
+         event->obj.fd = fd;
+ 
+         add_to_list( *handle, &event->obj);
+@@ -398,6 +404,7 @@ NTSTATUS esync_pulse_event( HANDLE handle )
+ NTSTATUS esync_create_mutex( HANDLE *handle, ACCESS_MASK access,
+     const OBJECT_ATTRIBUTES *attr, BOOLEAN initial )
+ {
++    enum esync_type type = ESYNC_MUTEX;
+     struct mutex *mutex;
+     NTSTATUS ret;
+     int fd;
+@@ -405,7 +412,7 @@ NTSTATUS esync_create_mutex( HANDLE *handle, ACCESS_MASK access,
+     TRACE("name %s, initial %d.\n",
+         attr ? debugstr_us(attr->ObjectName) : "<no name>", initial);
+ 
+-    ret = create_esync( &fd, handle, access, attr, initial ? 0 : 1, 0 );
++    ret = create_esync( &type, &fd, handle, access, attr, initial ? 0 : 1, 0 );
+     if (!ret || ret == STATUS_OBJECT_NAME_EXISTS)
+     {
+         mutex = RtlAllocateHeap( GetProcessHeap(), 0, sizeof(*mutex) );
+diff --git a/include/wine/server_protocol.h b/include/wine/server_protocol.h
+index cbfa802689..317fb9dc58 100644
+--- a/include/wine/server_protocol.h
++++ b/include/wine/server_protocol.h
+@@ -5663,13 +5663,15 @@ struct create_esync_request
+     unsigned int access;
+     int          initval;
+     int          flags;
++    int          type;
+     /* VARARG(objattr,object_attributes); */
++    char __pad_28[4];
+ };
+ struct create_esync_reply
+ {
+     struct reply_header __header;
+     obj_handle_t handle;
+-    char __pad_12[4];
++    int          type;
+ };
+ 
+ 
+diff --git a/server/esync.c b/server/esync.c
+index ef02170021..6cc212e2b9 100644
+--- a/server/esync.c
++++ b/server/esync.c
+@@ -55,6 +55,7 @@ struct esync
+ {
+     struct object   obj;    /* object header */
+     int             fd;     /* eventfd file descriptor */
++    enum esync_type type;
+ };
+ 
+ static void esync_dump( struct object *obj, int verbose );
+@@ -96,9 +97,16 @@ static void esync_destroy( struct object *obj )
+     close( esync->fd );
+ }
+ 
+-struct esync *create_esync( struct object *root, const struct unicode_str *name,
+-                            unsigned int attr, int initval, int flags,
+-                            const struct security_descriptor *sd )
++static int type_matches( enum esync_type type1, enum esync_type type2 )
++{
++    return (type1 == type2) ||
++           ((type1 == ESYNC_AUTO_EVENT || type1 == ESYNC_MANUAL_EVENT) &&
++            (type2 == ESYNC_AUTO_EVENT || type2 == ESYNC_MANUAL_EVENT));
++}
++
++static struct esync *create_esync( struct object *root, const struct unicode_str *name,
++    unsigned int attr, int initval, int flags, enum esync_type type,
++    const struct security_descriptor *sd )
+ {
+ #ifdef HAVE_SYS_EVENTFD_H
+     struct esync *esync;
+@@ -116,6 +124,17 @@ struct esync *create_esync( struct object *root, const struct unicode_str *name,
+                 release_object( esync );
+                 return NULL;
+             }
++            esync->type = type;
++        }
++        else
++        {
++            /* validate the type */
++            if (!type_matches( type, esync->type ))
++            {
++                release_object( &esync->obj );
++                set_error( STATUS_OBJECT_TYPE_MISMATCH );
++                return NULL;
++            }
+         }
+     }
+     return esync;
+@@ -198,7 +217,7 @@ DECL_HANDLER(create_esync)
+ 
+     if (!objattr) return;
+ 
+-    if ((esync = create_esync( root, &name, objattr->attributes, req->initval, req->flags, sd )))
++    if ((esync = create_esync( root, &name, objattr->attributes, req->initval, req->flags, req->type, sd )))
+     {
+         if (get_error() == STATUS_OBJECT_NAME_EXISTS)
+             reply->handle = alloc_handle( current->process, esync, req->access, objattr->attributes );
+@@ -206,6 +225,7 @@ DECL_HANDLER(create_esync)
+             reply->handle = alloc_handle_no_access_check( current->process, esync,
+                                                           req->access, objattr->attributes );
+ 
++        reply->type = esync->type;
+         send_client_fd( current->process, esync->fd, reply->handle );
+         release_object( esync );
+     }
+diff --git a/server/protocol.def b/server/protocol.def
+index 5880fa1f64..81035875fb 100644
+--- a/server/protocol.def
++++ b/server/protocol.def
+@@ -3861,9 +3861,11 @@ struct handle_info
+     unsigned int access;        /* wanted access rights */
+     int          initval;       /* initial value */
+     int          flags;         /* flags (EFD_SEMAPHORE or 0) */
++    int          type;          /* type of esync object (see below) */
+     VARARG(objattr,object_attributes); /* object attributes */
+ @REPLY
+     obj_handle_t handle;        /* handle to the object */
++    int          type;          /* type of esync object (see below) */
+ @END
+ 
+ /* Retrieve the esync fd for an object. */
+diff --git a/server/request.h b/server/request.h
+index ca9a83632e..1295fb8304 100644
+--- a/server/request.h
++++ b/server/request.h
+@@ -2413,8 +2413,10 @@ C_ASSERT( sizeof(struct terminate_job_request) == 24 );
+ C_ASSERT( FIELD_OFFSET(struct create_esync_request, access) == 12 );
+ C_ASSERT( FIELD_OFFSET(struct create_esync_request, initval) == 16 );
+ C_ASSERT( FIELD_OFFSET(struct create_esync_request, flags) == 20 );
+-C_ASSERT( sizeof(struct create_esync_request) == 24 );
++C_ASSERT( FIELD_OFFSET(struct create_esync_request, type) == 24 );
++C_ASSERT( sizeof(struct create_esync_request) == 32 );
+ C_ASSERT( FIELD_OFFSET(struct create_esync_reply, handle) == 8 );
++C_ASSERT( FIELD_OFFSET(struct create_esync_reply, type) == 12 );
+ C_ASSERT( sizeof(struct create_esync_reply) == 16 );
+ C_ASSERT( FIELD_OFFSET(struct get_esync_fd_request, handle) == 12 );
+ C_ASSERT( sizeof(struct get_esync_fd_request) == 16 );
+diff --git a/server/trace.c b/server/trace.c
+index 876ca62938..0a9c8c29d5 100644
+--- a/server/trace.c
++++ b/server/trace.c
+@@ -4546,12 +4546,14 @@ static void dump_create_esync_request( const struct create_esync_request *req )
+     fprintf( stderr, " access=%08x", req->access );
+     fprintf( stderr, ", initval=%d", req->initval );
+     fprintf( stderr, ", flags=%d", req->flags );
++    fprintf( stderr, ", type=%d", req->type );
+     dump_varargs_object_attributes( ", objattr=", cur_size );
+ }
+ 
+ static void dump_create_esync_reply( const struct create_esync_reply *req )
+ {
+     fprintf( stderr, " handle=%04x", req->handle );
++    fprintf( stderr, ", type=%d", req->type );
+ }
+ 
+ static void dump_get_esync_fd_request( const struct get_esync_fd_request *req )
+-- 
+2.19.1
+

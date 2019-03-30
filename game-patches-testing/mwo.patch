@@ -1,0 +1,23 @@
+From c696c86076efe51e8fe06b0fb5f1c9f299099aae Mon Sep 17 00:00:00 2001
+From: Tk-Glitch <ti3nou@gmail.com>
+Date: Fri, 25 Jan 2019 02:27:36 +0100
+Subject: mechwarrior online fix -
+ https://mwomercs.com/forums/topic/268847-running-the-game-on-ubuntu-steam-play/page__st__20__p__6195387#entry6195387
+
+
+diff --git a/dlls/ntdll/path.c b/dlls/ntdll/path.c
+index 11483fabba..a5439542ae 100644
+--- a/dlls/ntdll/path.c
++++ b/dlls/ntdll/path.c
+@@ -648,10 +648,7 @@ static ULONG get_full_path_helper(LPCWSTR name, LPWSTR buffer, ULONG size)
+ 
+     RtlAcquirePebLock();
+ 
+-    if (NtCurrentTeb()->Tib.SubSystemTib)  /* FIXME: hack */
+-        cd = &((WIN16_SUBSYSTEM_TIB *)NtCurrentTeb()->Tib.SubSystemTib)->curdir.DosPath;
+-    else
+-        cd = &NtCurrentTeb()->Peb->ProcessParameters->CurrentDirectory.DosPath;
++    cd = &NtCurrentTeb()->Peb->ProcessParameters->CurrentDirectory.DosPath;
+ 
+     switch (RtlDetermineDosPathNameType_U(name))
+     {

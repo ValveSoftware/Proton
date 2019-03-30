@@ -1,0 +1,184 @@
+From 04479b5b321cdceda7597fcae7bb8640c0576656 Mon Sep 17 00:00:00 2001
+From: Zebediah Figura <z.figura12@gmail.com>
+Date: Fri, 8 Jun 2018 18:55:49 -0500
+Subject: [PATCH 14/83] server: Add a request to get the eventfd file
+ descriptor associated with a waitable handle.
+
+Signed-off-by: Zebediah Figura <z.figura12@gmail.com>
+---
+ include/wine/server_protocol.h | 14 ++++++++++++++
+ server/esync.c                 | 28 ++++++++++++++++++++++++++++
+ server/protocol.def            |  6 ++++++
+ server/request.h               |  5 +++++
+ server/trace.c                 |  8 ++++++++
+ 5 files changed, 61 insertions(+)
+
+diff --git a/include/wine/server_protocol.h b/include/wine/server_protocol.h
+index 98470eca3c..554fa10835 100644
+--- a/include/wine/server_protocol.h
++++ b/include/wine/server_protocol.h
+@@ -5673,6 +5673,17 @@ struct create_esync_reply
+ };
+ 
+ 
++struct get_esync_fd_request
++{
++    struct request_header __header;
++    obj_handle_t handle;
++};
++struct get_esync_fd_reply
++{
++    struct reply_header __header;
++};
++
++
+ enum request
+ {
+     REQ_new_process,
+@@ -5967,6 +5978,7 @@ enum request
+     REQ_set_job_completion_port,
+     REQ_terminate_job,
+     REQ_create_esync,
++    REQ_get_esync_fd,
+     REQ_NB_REQUESTS
+ };
+ 
+@@ -6266,6 +6278,7 @@ union generic_request
+     struct set_job_completion_port_request set_job_completion_port_request;
+     struct terminate_job_request terminate_job_request;
+     struct create_esync_request create_esync_request;
++    struct get_esync_fd_request get_esync_fd_request;
+ };
+ union generic_reply
+ {
+@@ -6563,6 +6576,7 @@ union generic_reply
+     struct set_job_completion_port_reply set_job_completion_port_reply;
+     struct terminate_job_reply terminate_job_reply;
+     struct create_esync_reply create_esync_reply;
++    struct get_esync_fd_reply get_esync_fd_reply;
+ };
+ 
+ #define SERVER_PROTOCOL_VERSION 570
+diff --git a/server/esync.c b/server/esync.c
+index e761475678..e775b3bd28 100644
+--- a/server/esync.c
++++ b/server/esync.c
+@@ -135,3 +135,31 @@ DECL_HANDLER(create_esync)
+ 
+     if (root) release_object( root );
+ }
++
++/* Retrieve a file descriptor for an esync object which will be signaled by the
++ * server. The client should only read from (i.e. wait on) this object. */
++DECL_HANDLER(get_esync_fd)
++{
++    struct object *obj;
++    int fd;
++
++    if (!(obj = get_handle_obj( current->process, req->handle, SYNCHRONIZE, NULL )))
++        return;
++
++    if (obj->ops->get_esync_fd)
++    {
++        fd = obj->ops->get_esync_fd( obj );
++        send_client_fd( current->process, fd, req->handle );
++    }
++    else
++    {
++        if (debug_level)
++        {
++            fprintf( stderr, "%04x: esync: can't wait on object: ", current->id );
++            obj->ops->dump( obj, 0 );
++        }
++        set_error( STATUS_NOT_IMPLEMENTED );
++    }
++
++    release_object( obj );
++}
+diff --git a/server/protocol.def b/server/protocol.def
+index b743674ebd..250590573e 100644
+--- a/server/protocol.def
++++ b/server/protocol.def
+@@ -3865,3 +3865,9 @@ struct handle_info
+ @REPLY
+     obj_handle_t handle;        /* handle to the object */
+ @END
++
++/* Retrieve the esync fd for an object. */
++@REQ(get_esync_fd)
++    obj_handle_t handle;        /* handle to the object */
++@REPLY
++@END
+diff --git a/server/request.h b/server/request.h
+index 242143d2c3..272f79dc04 100644
+--- a/server/request.h
++++ b/server/request.h
+@@ -404,6 +404,7 @@ DECL_HANDLER(set_job_limits);
+ DECL_HANDLER(set_job_completion_port);
+ DECL_HANDLER(terminate_job);
+ DECL_HANDLER(create_esync);
++DECL_HANDLER(get_esync_fd);
+ 
+ #ifdef WANT_REQUEST_HANDLERS
+ 
+@@ -702,6 +703,7 @@ static const req_handler req_handlers[REQ_NB_REQUESTS] =
+     (req_handler)req_set_job_completion_port,
+     (req_handler)req_terminate_job,
+     (req_handler)req_create_esync,
++    (req_handler)req_get_esync_fd,
+ };
+ 
+ C_ASSERT( sizeof(affinity_t) == 8 );
+@@ -2414,6 +2416,9 @@ C_ASSERT( FIELD_OFFSET(struct create_esync_request, flags) == 20 );
+ C_ASSERT( sizeof(struct create_esync_request) == 24 );
+ C_ASSERT( FIELD_OFFSET(struct create_esync_reply, handle) == 8 );
+ C_ASSERT( sizeof(struct create_esync_reply) == 16 );
++C_ASSERT( FIELD_OFFSET(struct get_esync_fd_request, handle) == 12 );
++C_ASSERT( sizeof(struct get_esync_fd_request) == 16 );
++C_ASSERT( sizeof(struct get_esync_fd_reply) == 8 );
+ 
+ #endif  /* WANT_REQUEST_HANDLERS */
+ 
+diff --git a/server/trace.c b/server/trace.c
+index d29c16b495..1806caf82f 100644
+--- a/server/trace.c
++++ b/server/trace.c
+@@ -4554,6 +4554,11 @@ static void dump_create_esync_reply( const struct create_esync_reply *req )
+     fprintf( stderr, " handle=%04x", req->handle );
+ }
+ 
++static void dump_get_esync_fd_request( const struct get_esync_fd_request *req )
++{
++    fprintf( stderr, " handle=%04x", req->handle );
++}
++
+ static const dump_func req_dumpers[REQ_NB_REQUESTS] = {
+     (dump_func)dump_new_process_request,
+     (dump_func)dump_exec_process_request,
+@@ -4847,6 +4852,7 @@ static const dump_func req_dumpers[REQ_NB_REQUESTS] = {
+     (dump_func)dump_set_job_completion_port_request,
+     (dump_func)dump_terminate_job_request,
+     (dump_func)dump_create_esync_request,
++    (dump_func)dump_get_esync_fd_request,
+ };
+ 
+ static const dump_func reply_dumpers[REQ_NB_REQUESTS] = {
+@@ -5142,6 +5148,7 @@ static const dump_func reply_dumpers[REQ_NB_REQUESTS] = {
+     NULL,
+     NULL,
+     (dump_func)dump_create_esync_reply,
++    NULL,
+ };
+ 
+ static const char * const req_names[REQ_NB_REQUESTS] = {
+@@ -5437,6 +5444,7 @@ static const char * const req_names[REQ_NB_REQUESTS] = {
+     "set_job_completion_port",
+     "terminate_job",
+     "create_esync",
++    "get_esync_fd",
+ };
+ 
+ static const struct
+-- 
+2.19.1
+

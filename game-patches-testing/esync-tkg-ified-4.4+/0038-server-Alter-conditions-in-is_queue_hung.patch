@@ -1,0 +1,40 @@
+From 06c0bddfde5bd2ccdd4a16b2efcc8d8dc19b7b79 Mon Sep 17 00:00:00 2001
+From: Zebediah Figura <z.figura12@gmail.com>
+Date: Mon, 11 Jun 2018 16:43:24 -0500
+Subject: [PATCH 38/83] server: Alter conditions in is_queue_hung().
+
+Unusually, I've elected not to guard this with do_esync(). I think this is a better way of checking for a hung queue in general, both because it's simpler and because it makes more sense: a queue is hung if it has messages it hasn't processed, not necessarily if it isn't actively waiting for messages. For example, a queue could be not associated with a window, and only waiting for messages when it makes sense to do so (due to some internal program logic). Or a thread could elect to poll its message queue with, say, GetQueueStatus(), and only get messages when there are messages to process.
+
+And, of course, this stops esync threads from being considered hung, since obviously the server has no idea that they are indeed waiting on their own queue. Normally nobody cares about this, but as of f6b0ce3c the server refuses to deliver hooks to a hung queue, and so we need to avoid a queue being wrongly considered hung.
+
+Signed-off-by: Zebediah Figura <z.figura12@gmail.com>
+---
+ server/queue.c | 12 +-----------
+ 1 file changed, 1 insertion(+), 11 deletions(-)
+
+diff --git a/server/queue.c b/server/queue.c
+index b9aa4bc530..fa3f90bbc7 100644
+--- a/server/queue.c
++++ b/server/queue.c
+@@ -899,17 +899,7 @@ static void cleanup_results( struct msg_queue *queue )
+ /* check if the thread owning the queue is hung (not checking for messages) */
+ static int is_queue_hung( struct msg_queue *queue )
+ {
+-    struct wait_queue_entry *entry;
+-
+-    if (current_time - queue->last_get_msg <= 5 * TICKS_PER_SEC)
+-        return 0;  /* less than 5 seconds since last get message -> not hung */
+-
+-    LIST_FOR_EACH_ENTRY( entry, &queue->obj.wait_queue, struct wait_queue_entry, entry )
+-    {
+-        if (get_wait_queue_thread(entry)->queue == queue)
+-            return 0;  /* thread is waiting on queue -> not hung */
+-    }
+-    return 1;
++    return is_signaled( queue ) && (current_time - queue->last_get_msg > 5 * TICKS_PER_SEC);
+ }
+ 
+ static int msg_queue_add_queue( struct object *obj, struct wait_queue_entry *entry )
+-- 
+2.19.1
+

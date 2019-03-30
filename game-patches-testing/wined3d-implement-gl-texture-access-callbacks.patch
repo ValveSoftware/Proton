@@ -1,0 +1,155 @@
+From a69e0511cc24ac19ebed9ffe961e73767928b938 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?J=C3=B3zef=20Kucia?= <joseph.kucia@gmail.com>
+Date: Wed, 4 Apr 2018 17:05:37 +0200
+Subject: [PATCH] wined3d: Implement GL texture access callbacks.
+
+---
+ dlls/wined3d/cs.c              | 52 ++++++++++++++++++++++++++++++++++
+ dlls/wined3d/texture.c         | 10 +++++++
+ dlls/wined3d/wined3d.spec      |  2 ++
+ dlls/wined3d/wined3d_private.h |  3 ++
+ include/wine/wined3d.h         |  5 ++++
+ 5 files changed, 72 insertions(+)
+
+diff --git a/dlls/wined3d/cs.c b/dlls/wined3d/cs.c
+index 7e1c4ef0ecc..23a871cd815 100644
+--- a/dlls/wined3d/cs.c
++++ b/dlls/wined3d/cs.c
+@@ -73,6 +73,7 @@ enum wined3d_cs_op
+     WINED3D_CS_OP_CLEAR_UNORDERED_ACCESS_VIEW,
+     WINED3D_CS_OP_COPY_UAV_COUNTER,
+     WINED3D_CS_OP_GENERATE_MIPMAPS,
++    WINED3D_CS_OP_GL_TEXTURE_CALLBACK,
+     WINED3D_CS_OP_STOP,
+ };
+ 
+@@ -439,6 +440,15 @@ struct wined3d_cs_generate_mipmaps
+     struct wined3d_shader_resource_view *view;
+ };
+ 
++struct wined3d_cs_gl_texture_callback
++{
++    enum wined3d_cs_op opcode;
++    struct wined3d_texture *texture;
++    wined3d_gl_texture_callback callback;
++    unsigned int data_size;
++    BYTE data[1];
++};
++
+ struct wined3d_cs_stop
+ {
+     enum wined3d_cs_op opcode;
+@@ -2496,6 +2506,47 @@ void wined3d_cs_emit_generate_mipmaps(struct wined3d_cs *cs, struct wined3d_shad
+     wined3d_cs_submit(cs, WINED3D_CS_QUEUE_DEFAULT);
+ }
+ 
++static void wined3d_cs_exec_gl_texture_callback(struct wined3d_cs *cs, const void *data)
++{
++    const struct wined3d_cs_gl_texture_callback *op = data;
++    struct wined3d_texture_gl *texture = wined3d_texture_gl(op->texture);
++    const struct wined3d_gl_info *gl_info;
++    struct wined3d_context *context;
++
++    context = context_acquire(cs->device, NULL, 0);
++    gl_info = context->gl_info;
++
++    wined3d_texture_load_location(&texture->t, 0, context, WINED3D_LOCATION_TEXTURE_RGB);
++
++    op->callback(texture->texture_rgb.name, op->data, op->data_size);
++
++    context_invalidate_compute_state(context, STATE_COMPUTE_SHADER_RESOURCE_BINDING);
++    context_invalidate_state(context, STATE_GRAPHICS_SHADER_RESOURCE_BINDING);
++
++    checkGLcall("texture callback\n");
++
++    context_release(context);
++
++    wined3d_resource_release(&texture->t.resource);
++}
++
++void wined3d_cs_emit_gl_texture_callback(struct wined3d_cs *cs, struct wined3d_texture *texture,
++        wined3d_gl_texture_callback callback, const void *data, unsigned int size)
++{
++    struct wined3d_cs_gl_texture_callback *op;
++
++    op = cs->ops->require_space(cs, sizeof(*op) + size, WINED3D_CS_QUEUE_DEFAULT);
++    op->opcode = WINED3D_CS_OP_GL_TEXTURE_CALLBACK;
++    op->texture = texture;
++    op->callback = callback;
++    op->data_size = size;
++    memcpy(op->data, data, size);
++
++    wined3d_resource_acquire(&texture->resource);
++
++    cs->ops->submit(cs, WINED3D_CS_QUEUE_DEFAULT);
++}
++
+ static void wined3d_cs_emit_stop(struct wined3d_cs *cs)
+ {
+     struct wined3d_cs_stop *op;
+@@ -2556,6 +2607,7 @@ static void (* const wined3d_cs_op_handlers[])(struct wined3d_cs *cs, const void
+     /* WINED3D_CS_OP_CLEAR_UNORDERED_ACCESS_VIEW */ wined3d_cs_exec_clear_unordered_access_view,
+     /* WINED3D_CS_OP_COPY_UAV_COUNTER            */ wined3d_cs_exec_copy_uav_counter,
+     /* WINED3D_CS_OP_GENERATE_MIPMAPS            */ wined3d_cs_exec_generate_mipmaps,
++    /* WINED3D_CS_OP_GL_TEXTURE_CALLBACK         */ wined3d_cs_exec_gl_texture_callback,
+ };
+ 
+ static void *wined3d_cs_st_require_space(struct wined3d_cs *cs, size_t size, enum wined3d_cs_queue_id queue_id)
+diff --git a/dlls/wined3d/texture.c b/dlls/wined3d/texture.c
+index cb9ac2aa4ff..a881134f31a 100644
+--- a/dlls/wined3d/texture.c
++++ b/dlls/wined3d/texture.c
+@@ -3864,3 +3864,13 @@ void wined3d_texture_download_from_texture(struct wined3d_texture *dst_texture,
+     wined3d_texture_validate_location(dst_texture, dst_sub_resource_idx, dst_location);
+     wined3d_texture_invalidate_location(dst_texture, dst_sub_resource_idx, ~dst_location);
+ }
++
++void CDECL wined3d_access_gl_texture(struct wined3d_texture *texture,
++        wined3d_gl_texture_callback callback, const void *data, unsigned int size)
++{
++    struct wined3d_device *device = texture->resource.device;
++
++    TRACE("texture %p, callback %p, data %p, size %u.\n", texture, callback, data, size);
++
++    wined3d_cs_emit_gl_texture_callback(device->cs, texture, callback, data, size);
++}
+diff --git a/dlls/wined3d/wined3d.spec b/dlls/wined3d/wined3d.spec
+index 75b9fe12c60..f794cb0f922 100644
+--- a/dlls/wined3d/wined3d.spec
++++ b/dlls/wined3d/wined3d.spec
+@@ -317,3 +317,5 @@
+ @ cdecl wined3d_vertex_declaration_incref(ptr)
+ 
+ @ cdecl wined3d_extract_shader_input_signature_from_dxbc(ptr ptr long)
++
++@ cdecl wined3d_access_gl_texture(ptr ptr ptr long)
+diff --git a/dlls/wined3d/wined3d_private.h b/dlls/wined3d/wined3d_private.h
+index 57df9f1eb24..d0872cd6cb5 100644
+--- a/dlls/wined3d/wined3d_private.h
++++ b/dlls/wined3d/wined3d_private.h
+@@ -3803,6 +3803,9 @@ static inline void wined3d_cs_finish(struct wined3d_cs *cs, enum wined3d_cs_queu
+     cs->ops->finish(cs, queue_id);
+ }
+ 
++void wined3d_cs_emit_gl_texture_callback(struct wined3d_cs *cs, struct wined3d_texture *texture,
++        wined3d_gl_texture_callback callback, const void *data, unsigned int size) DECLSPEC_HIDDEN;
++
+ static inline void wined3d_cs_push_constants(struct wined3d_cs *cs, enum wined3d_push_constants p,
+         unsigned int start_idx, unsigned int count, const void *constants)
+ {
+diff --git a/include/wine/wined3d.h b/include/wine/wined3d.h
+index 07329024fef..17c19639ae1 100644
+--- a/include/wine/wined3d.h
++++ b/include/wine/wined3d.h
+@@ -2753,6 +2753,11 @@ ULONG __cdecl wined3d_vertex_declaration_incref(struct wined3d_vertex_declaratio
+ HRESULT __cdecl wined3d_extract_shader_input_signature_from_dxbc(struct wined3d_shader_signature *signature,
+         const void *byte_code, SIZE_T byte_code_size);
+ 
++typedef void (__cdecl *wined3d_gl_texture_callback)(unsigned int gl_texture, const void *data, unsigned int size);
++
++void __cdecl wined3d_access_gl_texture(struct wined3d_texture *texture,
++        wined3d_gl_texture_callback callback, const void *data, unsigned int size);
++
+ /* Return the integer base-2 logarithm of x. Undefined for x == 0. */
+ static inline unsigned int wined3d_log2i(unsigned int x)
+ {

@@ -1,0 +1,58 @@
+From 90bc4ef6a6c44b89e1a7df7519359b70ea837080 Mon Sep 17 00:00:00 2001
+From: Zebediah Figura <z.figura12@gmail.com>
+Date: Wed, 20 Jun 2018 15:07:28 -0500
+Subject: [PATCH 57/83] user32: Remove hooks that time out.
+
+In accordance with Win7+ behaviour.
+
+Signed-off-by: Zebediah Figura <z.figura12@gmail.com>
+---
+ dlls/user32/hook.c | 17 +++++++++++------
+ 1 file changed, 11 insertions(+), 6 deletions(-)
+
+diff --git a/dlls/user32/hook.c b/dlls/user32/hook.c
+index 3aa7b33a8c..79171fac04 100644
+--- a/dlls/user32/hook.c
++++ b/dlls/user32/hook.c
+@@ -381,6 +381,7 @@ void *get_hook_proc( void *proc, const WCHAR *module, HMODULE *free_module )
+ static LRESULT call_hook( struct hook_info *info, INT code, WPARAM wparam, LPARAM lparam )
+ {
+     DWORD_PTR ret = 0;
++    LRESULT lres;
+ 
+     if (info->tid)
+     {
+@@ -394,20 +395,24 @@ static LRESULT call_hook( struct hook_info *info, INT code, WPARAM wparam, LPARA
+         switch(info->id)
+         {
+         case WH_KEYBOARD_LL:
+-            MSG_SendInternalMessageTimeout( info->pid, info->tid, WM_WINE_KEYBOARD_LL_HOOK,
+-                                            wparam, (LPARAM)&h_extra, SMTO_ABORTIFHUNG,
+-                                            get_ll_hook_timeout(), &ret );
++            lres = MSG_SendInternalMessageTimeout( info->pid, info->tid, WM_WINE_KEYBOARD_LL_HOOK,
++                wparam, (LPARAM)&h_extra, SMTO_ABORTIFHUNG, get_ll_hook_timeout(), &ret );
+             break;
+         case WH_MOUSE_LL:
+-            MSG_SendInternalMessageTimeout( info->pid, info->tid, WM_WINE_MOUSE_LL_HOOK,
+-                                            wparam, (LPARAM)&h_extra, SMTO_ABORTIFHUNG,
+-                                            get_ll_hook_timeout(), &ret );
++            lres = MSG_SendInternalMessageTimeout( info->pid, info->tid, WM_WINE_MOUSE_LL_HOOK,
++                wparam, (LPARAM)&h_extra, SMTO_ABORTIFHUNG, get_ll_hook_timeout(), &ret );
+             break;
+         default:
+             ERR("Unknown hook id %d\n", info->id);
+             assert(0);
+             break;
+         }
++
++        if (!lres && GetLastError() == ERROR_TIMEOUT)
++        {
++            TRACE("Hook %p timed out; removing it.\n", info->handle);
++            UnhookWindowsHookEx( info->handle );
++        }
+     }
+     else if (info->proc)
+     {
+-- 
+2.19.1
+

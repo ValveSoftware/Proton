@@ -1,0 +1,63 @@
+From dd60e9524d6bf611154c451e50ac7e168caf623f Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?J=C3=B3zef=20Kucia?= <joseph.kucia@gmail.com>
+Date: Fri, 21 Sep 2018 12:17:15 +0200
+Subject: [PATCH] d3d11: Pass IWineD3D11Texture2D to access_gl_texture().
+
+---
+ dlls/d3d11/texture.c             | 21 +++++++--------------
+ include/wine/wined3d-interop.idl |  3 ++-
+ 2 files changed, 9 insertions(+), 15 deletions(-)
+
+diff --git a/dlls/d3d11/texture.c b/dlls/d3d11/texture.c
+index 95328043789..8fc75fd6f92 100644
+--- a/dlls/d3d11/texture.c
++++ b/dlls/d3d11/texture.c
+@@ -719,27 +719,20 @@ static void STDMETHODCALLTYPE d3d11_texture2d_GetDesc(IWineD3D11Texture2D *iface
+ }
+ 
+ static void STDMETHODCALLTYPE d3d11_texture2d_access_gl_texture(IWineD3D11Texture2D *iface,
+-        gl_texture_callback callback, IUnknown *depth_unk, const void *data, unsigned int size)
++        gl_texture_callback callback, IWineD3D11Texture2D *depth_texture, const void *data, unsigned int size)
+ {
+     struct d3d_texture2d *texture = impl_from_IWineD3D11Texture2D(iface), *depth_tex = NULL;
+-    IWineD3D11Texture2D *depth_d3d11 = NULL;
++    struct wined3d_texture *wined3d_depth_texture = NULL;
+ 
+-    TRACE("iface %p, callback %p, data %p, size %u.\n", iface, callback, data, size);
++    TRACE("iface %p, callback %p, depth_texture %p, data %p, size %u.\n",
++            iface, callback, depth_texture, data, size);
+ 
+     wined3d_mutex_lock();
+ 
+-    if (depth_unk)
+-    {
+-        HRESULT hr;
+-        hr = IUnknown_QueryInterface(depth_unk, &IID_IWineD3D11Texture2D, (void**)&depth_d3d11);
+-        if(hr == S_OK)
+-            depth_tex = impl_from_IWineD3D11Texture2D(depth_d3d11);
+-    }
+-
+-    wined3d_access_gl_texture(texture->wined3d_texture, callback, depth_tex ? depth_tex->wined3d_texture : NULL, data, size);
++    if (depth_texture)
++        wined3d_depth_texture = impl_from_IWineD3D11Texture2D(depth_texture)->wined3d_texture;
+ 
+-    if (depth_d3d11)
+-        IWineD3D11Texture2D_Release(depth_d3d11);
++    wined3d_access_gl_texture(texture->wined3d_texture, callback, wined3d_depth_texture, data, size);
+ 
+     wined3d_mutex_unlock();
+ }
+diff --git a/include/wine/wined3d-interop.idl b/include/wine/wined3d-interop.idl
+index b1bda8ada76..f960e2f6d9d 100644
+--- a/include/wine/wined3d-interop.idl
++++ b/include/wine/wined3d-interop.idl
+@@ -27,7 +27,8 @@ import "d3d11.idl";
+ ]
+ interface IWineD3D11Texture2D : ID3D11Texture2D
+ {
+-    void access_gl_texture(gl_texture_callback callback, IUnknown *depth_texture, const void *data, unsigned int data_size);
++    void access_gl_texture(gl_texture_callback callback,
++            IWineD3D11Texture2D *depth_texture, const void *data, unsigned int data_size);
+ 
+     unsigned int get_gl_texture();
+ }

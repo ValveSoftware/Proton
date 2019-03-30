@@ -1,0 +1,59 @@
+From d7508eeecb75b838f4b5b1a10ae91d20dadb7895 Mon Sep 17 00:00:00 2001
+From: Zhiyi Zhang <zzhang@codeweavers.com>
+Date: Mon, 21 Jan 2019 19:59:44 +0800
+Subject: [PATCH] winex11.drv: Support child window rendering for vulkan.
+To: wine-devel <wine-devel@winehq.org>
+
+Signed-off-by: Zhiyi Zhang <zzhang@codeweavers.com>
+---
+ dlls/winex11.drv/vulkan.c | 21 ++++++++++++++-------
+ 1 file changed, 14 insertions(+), 7 deletions(-)
+
+diff --git a/dlls/winex11.drv/vulkan.c b/dlls/winex11.drv/vulkan.c
+index 28ae1a9e0e..9060d4c271 100644
+--- a/dlls/winex11.drv/vulkan.c
++++ b/dlls/winex11.drv/vulkan.c
+@@ -271,19 +271,14 @@ static VkResult X11DRV_vkCreateWin32SurfaceKHR(VkInstance instance,
+     VkResult res;
+     VkXlibSurfaceCreateInfoKHR create_info_host;
+     struct wine_vk_surface *x11_surface, *prev;
++    struct x11drv_win_data *parent_data, *child_data;
++    HWND parent;
+ 
+     TRACE("%p %p %p %p\n", instance, create_info, allocator, surface);
+ 
+     if (allocator)
+         FIXME("Support for allocation callbacks not implemented yet\n");
+ 
+-    /* TODO: support child window rendering. */
+-    if (GetAncestor(create_info->hwnd, GA_PARENT) != GetDesktopWindow())
+-    {
+-        FIXME("Application requires child window rendering, which is not implemented yet!\n");
+-        return VK_ERROR_INCOMPATIBLE_DRIVER;
+-    }
+-
+     x11_surface = heap_alloc_zero(sizeof(*x11_surface));
+     if (!x11_surface)
+         return VK_ERROR_OUT_OF_HOST_MEMORY;
+@@ -300,6 +295,18 @@ static VkResult X11DRV_vkCreateWin32SurfaceKHR(VkInstance instance,
+         goto err;
+     }
+ 
++    parent = GetAncestor(create_info->hwnd, GA_PARENT);
++    /* child window rendering */
++    if (parent != GetDesktopWindow())
++    {
++        parent_data = get_win_data(parent);
++        child_data = get_win_data(create_info->hwnd);
++        if (parent_data->client_window)
++            XReparentWindow(gdi_display, child_data->client_window, parent_data->client_window, 0, 0);
++        else
++            XReparentWindow(gdi_display, child_data->client_window, parent_data->whole_window, 0, 0);
++    }
++
+     create_info_host.sType = VK_STRUCTURE_TYPE_XLIB_SURFACE_CREATE_INFO_KHR;
+     create_info_host.pNext = NULL;
+     create_info_host.flags = 0; /* reserved */
+-- 
+2.19.2
+

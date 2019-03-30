@@ -1,0 +1,324 @@
+From c8889cf5aaa5dd9ffe7b4b49b68f98f3c775dc7c Mon Sep 17 00:00:00 2001
+From: Zebediah Figura <z.figura12@gmail.com>
+Date: Thu, 7 Jun 2018 20:09:59 -0500
+Subject: [PATCH 02/83] server: Create server objects for eventfd-based
+ synchronization objects.
+
+Signed-off-by: Zebediah Figura <z.figura12@gmail.com>
+---
+ include/wine/server_protocol.h |  19 +++++
+ server/Makefile.in             |   1 +
+ server/esync.c                 | 136 +++++++++++++++++++++++++++++++++
+ server/protocol.def            |  10 +++
+ server/request.h               |   8 ++
+ server/trace.c                 |  16 ++++
+ 6 files changed, 190 insertions(+)
+ create mode 100644 server/esync.c
+
+diff --git a/include/wine/server_protocol.h b/include/wine/server_protocol.h
+index 0e85d1a082..98470eca3c 100644
+--- a/include/wine/server_protocol.h
++++ b/include/wine/server_protocol.h
+@@ -5657,6 +5657,22 @@ struct terminate_job_reply
+ };
+ 
+ 
++struct create_esync_request
++{
++    struct request_header __header;
++    unsigned int access;
++    int          initval;
++    int          flags;
++    /* VARARG(objattr,object_attributes); */
++};
++struct create_esync_reply
++{
++    struct reply_header __header;
++    obj_handle_t handle;
++    char __pad_12[4];
++};
++
++
+ enum request
+ {
+     REQ_new_process,
+@@ -5950,6 +5966,7 @@ enum request
+     REQ_set_job_limits,
+     REQ_set_job_completion_port,
+     REQ_terminate_job,
++    REQ_create_esync,
+     REQ_NB_REQUESTS
+ };
+ 
+@@ -6248,6 +6265,7 @@ union generic_request
+     struct set_job_limits_request set_job_limits_request;
+     struct set_job_completion_port_request set_job_completion_port_request;
+     struct terminate_job_request terminate_job_request;
++    struct create_esync_request create_esync_request;
+ };
+ union generic_reply
+ {
+@@ -6544,6 +6562,7 @@ union generic_reply
+     struct set_job_limits_reply set_job_limits_reply;
+     struct set_job_completion_port_reply set_job_completion_port_reply;
+     struct terminate_job_reply terminate_job_reply;
++    struct create_esync_reply create_esync_reply;
+ };
+ 
+ #define SERVER_PROTOCOL_VERSION 570
+diff --git a/server/Makefile.in b/server/Makefile.in
+index aaaa8d34d5..5d96d22774 100644
+--- a/server/Makefile.in
++++ b/server/Makefile.in
+@@ -11,6 +11,7 @@ C_SRCS = \
+ 	debugger.c \
+ 	device.c \
+ 	directory.c \
++	esync.c \
+ 	event.c \
+ 	fd.c \
+ 	file.c \
+diff --git a/server/esync.c b/server/esync.c
+new file mode 100644
+index 0000000000..66cae244f6
+--- /dev/null
++++ b/server/esync.c
+@@ -0,0 +1,136 @@
++/*
++ * eventfd-based synchronization objects
++ *
++ * Copyright (C) 2018 Zebediah Figura
++ *
++ * This library is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU Lesser General Public
++ * License as published by the Free Software Foundation; either
++ * version 2.1 of the License, or (at your option) any later version.
++ *
++ * This library is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++ * Lesser General Public License for more details.
++ *
++ * You should have received a copy of the GNU Lesser General Public
++ * License along with this library; if not, write to the Free Software
++ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
++ */
++
++#include "config.h"
++#include "wine/port.h"
++
++#include <stdio.h>
++#include <stdarg.h>
++#ifdef HAVE_SYS_EVENTFD_H
++# include <sys/eventfd.h>
++#endif
++
++#include "ntstatus.h"
++#define WIN32_NO_STATUS
++#include "windef.h"
++#include "winternl.h"
++
++#include "handle.h"
++#include "request.h"
++#include "file.h"
++
++struct esync
++{
++    struct object   obj;    /* object header */
++    int             fd;     /* eventfd file descriptor */
++};
++
++static void esync_dump( struct object *obj, int verbose );
++static void esync_destroy( struct object *obj );
++
++static const struct object_ops esync_ops =
++{
++    sizeof(struct esync),      /* size */
++    esync_dump,                /* dump */
++    no_get_type,               /* get_type */
++    no_add_queue,              /* add_queue */
++    NULL,                      /* remove_queue */
++    NULL,                      /* signaled */
++    NULL,                      /* satisfied */
++    no_signal,                 /* signal */
++    no_get_fd,                 /* get_fd */
++    no_map_access,             /* map_access */
++    default_get_sd,            /* get_sd */
++    default_set_sd,            /* set_sd */
++    no_lookup_name,            /* lookup_name */
++    directory_link_name,       /* link_name */
++    default_unlink_name,       /* unlink_name */
++    no_open_file,              /* open_file */
++    no_close_handle,           /* close_handle */
++    esync_destroy              /* destroy */
++};
++
++static void esync_dump( struct object *obj, int verbose )
++{
++    struct esync *esync = (struct esync *)obj;
++    assert( obj->ops == &esync_ops );
++    fprintf( stderr, "esync fd=%d\n", esync->fd );
++}
++
++static void esync_destroy( struct object *obj )
++{
++    struct esync *esync = (struct esync *)obj;
++    close( esync->fd );
++}
++
++struct esync *create_esync( struct object *root, const struct unicode_str *name,
++                            unsigned int attr, int initval, int flags,
++                            const struct security_descriptor *sd )
++{
++#ifdef HAVE_SYS_EVENTFD_H
++    struct esync *esync;
++
++    if ((esync = create_named_object( root, &esync_ops, name, attr, sd )))
++    {
++        if (get_error() != STATUS_OBJECT_NAME_EXISTS)
++        {
++            /* initialize it if it didn't already exist */
++            esync->fd = eventfd( initval, flags | EFD_CLOEXEC | EFD_NONBLOCK );
++            if (esync->fd == -1)
++            {
++                perror( "eventfd" );
++                file_set_error();
++                release_object( esync );
++                return NULL;
++            }
++        }
++    }
++    return esync;
++#else
++    /* FIXME: Provide a fallback implementation using pipe(). */
++    set_error( STATUS_NOT_IMPLEMENTED );
++    return NULL;
++#endif
++}
++
++DECL_HANDLER(create_esync)
++{
++    struct esync *esync;
++    struct unicode_str name;
++    struct object *root;
++    const struct security_descriptor *sd;
++    const struct object_attributes *objattr = get_req_object_attributes( &sd, &name, &root );
++
++    if (!objattr) return;
++
++    if ((esync = create_esync( root, &name, objattr->attributes, req->initval, req->flags, sd )))
++    {
++        if (get_error() == STATUS_OBJECT_NAME_EXISTS)
++            reply->handle = alloc_handle( current->process, esync, req->access, objattr->attributes );
++        else
++            reply->handle = alloc_handle_no_access_check( current->process, esync,
++                                                          req->access, objattr->attributes );
++
++        send_client_fd( current->process, esync->fd, reply->handle );
++        release_object( esync );
++    }
++
++    if (root) release_object( root );
++}
+diff --git a/server/protocol.def b/server/protocol.def
+index 6e02fbc501..b743674ebd 100644
+--- a/server/protocol.def
++++ b/server/protocol.def
+@@ -3855,3 +3855,13 @@ struct handle_info
+     obj_handle_t handle;          /* handle to the job */
+     int          status;          /* process exit code */
+ @END
++
++/* Create a new eventfd-based synchronization object */
++@REQ(create_esync)
++    unsigned int access;        /* wanted access rights */
++    int          initval;       /* initial value */
++    int          flags;         /* flags (EFD_SEMAPHORE or 0) */
++    VARARG(objattr,object_attributes); /* object attributes */
++@REPLY
++    obj_handle_t handle;        /* handle to the object */
++@END
+diff --git a/server/request.h b/server/request.h
+index 4610ca6868..242143d2c3 100644
+--- a/server/request.h
++++ b/server/request.h
+@@ -403,6 +403,7 @@ DECL_HANDLER(process_in_job);
+ DECL_HANDLER(set_job_limits);
+ DECL_HANDLER(set_job_completion_port);
+ DECL_HANDLER(terminate_job);
++DECL_HANDLER(create_esync);
+ 
+ #ifdef WANT_REQUEST_HANDLERS
+ 
+@@ -700,6 +701,7 @@ static const req_handler req_handlers[REQ_NB_REQUESTS] =
+     (req_handler)req_set_job_limits,
+     (req_handler)req_set_job_completion_port,
+     (req_handler)req_terminate_job,
++    (req_handler)req_create_esync,
+ };
+ 
+ C_ASSERT( sizeof(affinity_t) == 8 );
+@@ -2406,6 +2408,12 @@ C_ASSERT( sizeof(struct set_job_completion_port_request) == 32 );
+ C_ASSERT( FIELD_OFFSET(struct terminate_job_request, handle) == 12 );
+ C_ASSERT( FIELD_OFFSET(struct terminate_job_request, status) == 16 );
+ C_ASSERT( sizeof(struct terminate_job_request) == 24 );
++C_ASSERT( FIELD_OFFSET(struct create_esync_request, access) == 12 );
++C_ASSERT( FIELD_OFFSET(struct create_esync_request, initval) == 16 );
++C_ASSERT( FIELD_OFFSET(struct create_esync_request, flags) == 20 );
++C_ASSERT( sizeof(struct create_esync_request) == 24 );
++C_ASSERT( FIELD_OFFSET(struct create_esync_reply, handle) == 8 );
++C_ASSERT( sizeof(struct create_esync_reply) == 16 );
+ 
+ #endif  /* WANT_REQUEST_HANDLERS */
+ 
+diff --git a/server/trace.c b/server/trace.c
+index 9a84067662..d29c16b495 100644
+--- a/server/trace.c
++++ b/server/trace.c
+@@ -4541,6 +4541,19 @@ static void dump_terminate_job_request( const struct terminate_job_request *req
+     fprintf( stderr, ", status=%d", req->status );
+ }
+ 
++static void dump_create_esync_request( const struct create_esync_request *req )
++{
++    fprintf( stderr, " access=%08x", req->access );
++    fprintf( stderr, ", initval=%d", req->initval );
++    fprintf( stderr, ", flags=%d", req->flags );
++    dump_varargs_object_attributes( ", objattr=", cur_size );
++}
++
++static void dump_create_esync_reply( const struct create_esync_reply *req )
++{
++    fprintf( stderr, " handle=%04x", req->handle );
++}
++
+ static const dump_func req_dumpers[REQ_NB_REQUESTS] = {
+     (dump_func)dump_new_process_request,
+     (dump_func)dump_exec_process_request,
+@@ -4833,6 +4846,7 @@ static const dump_func req_dumpers[REQ_NB_REQUESTS] = {
+     (dump_func)dump_set_job_limits_request,
+     (dump_func)dump_set_job_completion_port_request,
+     (dump_func)dump_terminate_job_request,
++    (dump_func)dump_create_esync_request,
+ };
+ 
+ static const dump_func reply_dumpers[REQ_NB_REQUESTS] = {
+@@ -5127,6 +5141,7 @@ static const dump_func reply_dumpers[REQ_NB_REQUESTS] = {
+     NULL,
+     NULL,
+     NULL,
++    (dump_func)dump_create_esync_reply,
+ };
+ 
+ static const char * const req_names[REQ_NB_REQUESTS] = {
+@@ -5421,6 +5436,7 @@ static const char * const req_names[REQ_NB_REQUESTS] = {
+     "set_job_limits",
+     "set_job_completion_port",
+     "terminate_job",
++    "create_esync",
+ };
+ 
+ static const struct
+-- 
+2.19.1
+

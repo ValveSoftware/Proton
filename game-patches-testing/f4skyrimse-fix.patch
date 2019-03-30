@@ -1,0 +1,37 @@
+These are patches to get Fallout 4 Script Extender working in wine. f4se allocates memory for trampolines in the spaces before the Fallout4 exe image and the f4se dll image. These patches:
+
+    Fix VirtualQuery rejecting any blocks before the image as already allocated (it looks like get_free_mem_state_callback sees blocks before the exe base address as overlapping the exe base from calculating the block end address as block start address + size, ie a 256 byte block starting at 0x100 would "end" at 0x200).
+
+    Switches dlls not loaded at their preferred address to be loaded at high addresses rather than low ones to work around code in f4se that gives up allocating the trampolines (it compares the address being queried to a lowest acceptable address computed by subtracting 0x78000000 from the module address, which will wrap around and fail with lower addresses even if there's free space).
+
+Apparently these patches also get SkyrimSE script extender working, but I don't own that so I can't test that.
+
+https://github.com/hdmap/wine-hackery
+
+
+--- a/dlls/ntdll/virtual.c	2018-05-15 12:07:53.839882299 -0400
++++ a/dlls/ntdll/virtual.c	2018-05-15 14:51:22.632513314 -0400
+@@ -2750,7 +2753,7 @@ static int get_free_mem_state_callback(
+     MEMORY_BASIC_INFORMATION *info = arg;
+     void *end = (char *)start + size;
+ 
+-    if ((char *)info->BaseAddress + info->RegionSize < (char *)start) return 0;
++    if ((char *)info->BaseAddress + info->RegionSize <= (char *)start) return 0;
+ 
+     if (info->BaseAddress >= end)
+     {
+
+--- a/dlls/ntdll/virtual.c	2018-05-15 12:07:53.839882299 -0400
++++ a/dlls/ntdll/virtual.c	2018-05-16 16:29:00.753042766 -0400
+@@ -1387,11 +1387,11 @@ static NTSTATUS map_image( HANDLE hmappi
+     server_enter_uninterrupted_section( &csVirtual, &sigset );
+ 
+     if (base >= (char *)address_space_start)  /* make sure the DOS area remains free */
+-        status = map_view( &view, base, total_size, mask, FALSE, SEC_IMAGE | SEC_FILE |
++        status = map_view( &view, base, total_size, mask, TRUE, SEC_IMAGE | SEC_FILE |
+                            VPROT_COMMITTED | VPROT_READ | VPROT_EXEC | VPROT_WRITECOPY );
+ 
+     if (status != STATUS_SUCCESS)
+-        status = map_view( &view, NULL, total_size, mask, FALSE, SEC_IMAGE | SEC_FILE |
++        status = map_view( &view, NULL, total_size, mask, TRUE, SEC_IMAGE | SEC_FILE |
+                            VPROT_COMMITTED | VPROT_READ | VPROT_EXEC | VPROT_WRITECOPY );

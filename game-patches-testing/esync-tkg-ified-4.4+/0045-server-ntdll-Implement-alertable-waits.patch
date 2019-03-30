@@ -1,0 +1,482 @@
+From 98e772cf687c06403cdeb0e8044aed9fc3244650 Mon Sep 17 00:00:00 2001
+From: Zebediah Figura <z.figura12@gmail.com>
+Date: Fri, 15 Jun 2018 14:12:22 -0500
+Subject: [PATCH 45/83] server, ntdll: Implement alertable waits.
+
+We do this quite simply by waiting on an extra eventfd descriptor, which the server signals when a user APC is queued.
+
+Signed-off-by: Zebediah Figura <z.figura12@gmail.com>
+---
+ dlls/ntdll/esync.c             | 94 +++++++++++++++++++++++++++++-----
+ dlls/ntdll/ntdll_misc.h        |  1 +
+ dlls/ntdll/thread.c            |  2 +
+ include/wine/server_protocol.h | 16 +++++-
+ server/esync.c                 | 20 ++++++--
+ server/esync.h                 |  1 +
+ server/protocol.def            |  5 ++
+ server/request.h               |  4 ++
+ server/thread.c                | 13 +++++
+ server/thread.h                |  1 +
+ server/trace.c                 |  7 +++
+ 11 files changed, 146 insertions(+), 18 deletions(-)
+
+diff --git a/dlls/ntdll/esync.c b/dlls/ntdll/esync.c
+index 360a980db2..395c8d3366 100644
+--- a/dlls/ntdll/esync.c
++++ b/dlls/ntdll/esync.c
+@@ -665,19 +665,43 @@ static int do_poll( struct pollfd *fds, nfds_t nfds, ULONGLONG *end )
+ NTSTATUS esync_wait_objects( DWORD count, const HANDLE *handles, BOOLEAN wait_any,
+                              BOOLEAN alertable, const LARGE_INTEGER *timeout )
+ {
++    static const LARGE_INTEGER zero = {0};
++
+     struct esync *objs[MAXIMUM_WAIT_OBJECTS];
+-    struct pollfd fds[MAXIMUM_WAIT_OBJECTS + 1];
++    struct pollfd fds[MAXIMUM_WAIT_OBJECTS + 2];
+     int has_esync = 0, has_server = 0;
+-    DWORD pollcount = count;
+     BOOL msgwait = FALSE;
+     LONGLONG timeleft;
+     LARGE_INTEGER now;
++    DWORD pollcount;
+     ULONGLONG end;
+     int64_t value;
+     ssize_t size;
+     int i, j;
+     int ret;
+ 
++    /* Grab the APC fd if we don't already have it. */
++    if (alertable && ntdll_get_thread_data()->esync_apc_fd == -1)
++    {
++        obj_handle_t fd_handle;
++        sigset_t sigset;
++        int fd = -1;
++
++        server_enter_uninterrupted_section( &fd_cache_section, &sigset );
++        SERVER_START_REQ( get_esync_apc_fd )
++        {
++            if (!(ret = wine_server_call( req )))
++            {
++                fd = receive_fd( &fd_handle );
++                assert( fd_handle == GetCurrentThreadId() );
++            }
++        }
++        SERVER_END_REQ;
++        server_leave_uninterrupted_section( &fd_cache_section, &sigset );
++
++        ntdll_get_thread_data()->esync_apc_fd = fd;
++    }
++
+     NtQuerySystemTime( &now );
+     if (timeout)
+     {
+@@ -728,6 +752,8 @@ NTSTATUS esync_wait_objects( DWORD count, const HANDLE *handles, BOOLEAN wait_an
+ 
+         if (msgwait)
+             DPRINTF(" or driver events (fd %d)", ntdll_get_thread_data()->esync_queue_fd);
++        if (alertable)
++            DPRINTF(", alertable");
+ 
+         if (!timeout)
+             DPRINTF(", timeout = INFINITE.\n");
+@@ -766,10 +792,17 @@ NTSTATUS esync_wait_objects( DWORD count, const HANDLE *handles, BOOLEAN wait_an
+         }
+         if (msgwait)
+         {
+-            fds[count].fd = ntdll_get_thread_data()->esync_queue_fd;
+-            fds[count].events = POLLIN;
+-            pollcount++;
++            fds[i].fd = ntdll_get_thread_data()->esync_queue_fd;
++            fds[i].events = POLLIN;
++            i++;
++        }
++        if (alertable)
++        {
++            fds[i].fd = ntdll_get_thread_data()->esync_apc_fd;
++            fds[i].events = POLLIN;
++            i++;
+         }
++        pollcount = i;
+ 
+         while (1)
+         {
+@@ -829,10 +862,18 @@ NTSTATUS esync_wait_objects( DWORD count, const HANDLE *handles, BOOLEAN wait_an
+                     }
+                 }
+ 
+-                if (msgwait && (fds[count].revents & POLLIN))
++                if (msgwait)
++                {
++                    if (fds[i++].revents & POLLIN)
++                    {
++                        TRACE("Woken up by driver events.\n");
++                        return count - 1;
++                    }
++                }
++                if (alertable)
+                 {
+-                    TRACE("Woken up by driver events.\n");
+-                    return count - 1;
++                    if (fds[i++].revents & POLLIN)
++                        goto userapc;
+                 }
+ 
+                 /* If we got here, someone else stole (or reset, etc.) whatever
+@@ -871,6 +912,14 @@ NTSTATUS esync_wait_objects( DWORD count, const HANDLE *handles, BOOLEAN wait_an
+ tryagain:
+             /* First step: try to poll on each object in sequence. */
+             fds[0].events = POLLIN;
++            pollcount = 1;
++            if (alertable)
++            {
++                /* We also need to wait on APCs. */
++                fds[1].fd = ntdll_get_thread_data()->esync_apc_fd;
++                fds[1].events = POLLIN;
++                pollcount++;
++            }
+             for (i = 0; i < count; i++)
+             {
+                 struct esync *obj = objs[i];
+@@ -886,9 +935,11 @@ tryagain:
+                         continue;
+                 }
+ 
+-                ret = do_poll( fds, 1, timeout ? &end : NULL );
++                ret = do_poll( fds, pollcount, timeout ? &end : NULL );
+                 if (ret <= 0)
+                     goto err;
++                else if (alertable && (fds[1].revents & POLLIN))
++                    goto userapc;
+ 
+                 if (fds[0].revents & (POLLHUP | POLLERR | POLLNVAL))
+                 {
+@@ -901,9 +952,11 @@ tryagain:
+             if (msgwait)
+             {
+                 fds[0].fd = ntdll_get_thread_data()->esync_queue_fd;
+-                ret = do_poll( fds, 1, timeout ? &end : NULL );
++                ret = do_poll( fds, pollcount, timeout ? &end : NULL );
+                 if (ret <= 0)
+                     goto err;
++                else if (alertable && (fds[1].revents & POLLIN))
++                    goto userapc;
+             }
+ 
+             /* If we got here and we haven't timed out, that means all of the
+@@ -915,10 +968,12 @@ tryagain:
+             }
+             if (msgwait)
+             {
+-                fds[count].fd = ntdll_get_thread_data()->esync_queue_fd;
+-                fds[count].events = POLLIN;
+-                pollcount++;
++                fds[i].fd = ntdll_get_thread_data()->esync_queue_fd;
++                fds[i].events = POLLIN;
++                i++;
+             }
++            /* There's no reason to check for APCs here. */
++            pollcount = i;
+ 
+             /* Poll everything to see if they're still signaled. */
+             ret = poll( fds, pollcount, 0 );
+@@ -999,6 +1054,19 @@ err:
+         ERR("ppoll failed: %s\n", strerror(errno));
+         return FILE_GetNtStatus();
+     }
++
++userapc:
++    TRACE("Woken up by user APC.\n");
++
++    /* We have to make a server call anyway to get the APC to execute, so just
++     * delegate down to server_select(). */
++    ret = server_select( NULL, 0, SELECT_INTERRUPTIBLE | SELECT_ALERTABLE, &zero );
++
++    /* This can happen if we received a system APC, and the APC fd was woken up
++     * before we got SIGUSR1. poll() doesn't return EINTR in that case. The
++     * right thing to do seems to be to return STATUS_USER_APC anyway. */
++    if (ret == STATUS_TIMEOUT) ret = STATUS_USER_APC;
++    return ret;
+ }
+ 
+ NTSTATUS esync_signal_and_wait( HANDLE signal, HANDLE wait, BOOLEAN alertable,
+diff --git a/dlls/ntdll/ntdll_misc.h b/dlls/ntdll/ntdll_misc.h
+index 0ce1f32b70..ca82a794bd 100644
+--- a/dlls/ntdll/ntdll_misc.h
++++ b/dlls/ntdll/ntdll_misc.h
+@@ -236,6 +236,7 @@ struct ntdll_thread_data
+     BOOL               wow64_redir;   /* Wow64 filesystem redirection flag */
+     pthread_t          pthread_id;    /* pthread thread id */
+     int                esync_queue_fd;/* fd to wait on for driver events */
++    int                esync_apc_fd;  /* fd to wait on for user APCs */
+ };
+ 
+ C_ASSERT( sizeof(struct ntdll_thread_data) <= sizeof(((TEB *)0)->GdiTebBatch) );
+diff --git a/dlls/ntdll/thread.c b/dlls/ntdll/thread.c
+index 3fd50e5065..cd94e56b1d 100644
+--- a/dlls/ntdll/thread.c
++++ b/dlls/ntdll/thread.c
+@@ -355,6 +355,7 @@ void thread_init(void)
+     thread_data->wait_fd[1] = -1;
+     thread_data->debug_info = &debug_info;
+     thread_data->esync_queue_fd = -1;
++    thread_data->esync_apc_fd = -1;
+ 
+     signal_init_thread( teb );
+     virtual_init_threading();
+@@ -664,6 +665,7 @@ NTSTATUS WINAPI RtlCreateUserThread( HANDLE process, SECURITY_DESCRIPTOR *descr,
+     thread_data->wait_fd[1]  = -1;
+     thread_data->start_stack = (char *)teb->Tib.StackBase;
+     thread_data->esync_queue_fd = -1;
++    thread_data->esync_apc_fd = -1;
+ 
+     pthread_attr_init( &attr );
+     pthread_attr_setstack( &attr, teb->DeallocationStack,
+diff --git a/include/wine/server_protocol.h b/include/wine/server_protocol.h
+index d05441b1d3..25e2b897df 100644
+--- a/include/wine/server_protocol.h
++++ b/include/wine/server_protocol.h
+@@ -5709,6 +5709,17 @@ struct get_esync_fd_reply
+     unsigned int shm_idx;
+ };
+ 
++
++struct get_esync_apc_fd_request
++{
++    struct request_header __header;
++    char __pad_12[4];
++};
++struct get_esync_apc_fd_reply
++{
++    struct reply_header __header;
++};
++
+ enum esync_type
+ {
+     ESYNC_SEMAPHORE = 1,
+@@ -6017,6 +6028,7 @@ enum request
+     REQ_create_esync,
+     REQ_open_esync,
+     REQ_get_esync_fd,
++    REQ_get_esync_apc_fd,
+     REQ_NB_REQUESTS
+ };
+ 
+@@ -6318,6 +6330,7 @@ union generic_request
+     struct create_esync_request create_esync_request;
+     struct open_esync_request open_esync_request;
+     struct get_esync_fd_request get_esync_fd_request;
++    struct get_esync_apc_fd_request get_esync_apc_fd_request;
+ };
+ union generic_reply
+ {
+@@ -6624,6 +6624,7 @@ union generic_reply
+     struct create_esync_reply create_esync_reply;
+     struct open_esync_reply open_esync_reply;
+     struct get_esync_fd_reply get_esync_fd_reply;
++    struct get_esync_apc_fd_reply get_esync_apc_fd_reply;
+ };
+ 
+ #define SERVER_PROTOCOL_VERSION 571
+diff --git a/server/esync.c b/server/esync.c
+index 6adf996872..8bf6e441f1 100644
+--- a/server/esync.c
++++ b/server/esync.c
+@@ -245,19 +245,25 @@ int esync_create_fd( int initval, int flags )
+ #endif
+ }
+ 
++/* Wake up a specific fd. */
++void esync_wake_fd( int fd )
++{
++    static const uint64_t value = 1;
++
++    if (write( fd, &value, sizeof(value) ) == -1)
++        perror( "esync: write" );
++}
++
+ /* Wake up a server-side esync object. */
+ void esync_wake_up( struct object *obj )
+ {
+-    static const uint64_t value = 1;
+     enum esync_type dummy;
+     int fd;
+ 
+     if (obj->ops->get_esync_fd)
+     {
+         fd = obj->ops->get_esync_fd( obj, &dummy );
+-
+-        if (write( fd, &value, sizeof(value) ) == -1)
+-            perror( "esync: write" );
++        esync_wake_fd( fd );
+     }
+ }
+ 
+@@ -383,3 +389,9 @@ DECL_HANDLER(get_esync_fd)
+ 
+     release_object( obj );
+ }
++
++/* Return the fd used for waiting on user APCs. */
++DECL_HANDLER(get_esync_apc_fd)
++{
++    send_client_fd( current->process, current->esync_apc_fd, current->id );
++}
+diff --git a/server/esync.h b/server/esync.h
+index aeb58c5469..cea025d930 100644
+--- a/server/esync.h
++++ b/server/esync.h
+@@ -21,6 +21,7 @@
+ extern int do_esync(void);
+ void esync_init(void);
+ int esync_create_fd( int initval, int flags );
++void esync_wake_fd( int fd );
+ void esync_wake_up( struct object *obj );
+ void esync_clear( int fd );
+ 
+diff --git a/server/protocol.def b/server/protocol.def
+index 2705dce5a1..c13c945de7 100644
+--- a/server/protocol.def
++++ b/server/protocol.def
+@@ -3890,6 +3890,11 @@ struct handle_info
+     unsigned int shm_idx;       /* this object's index into the shm section */
+ @END
+ 
++/* Retrieve the fd to wait on for user APCs. */
++@REQ(get_esync_apc_fd)
++@REPLY
++@END
++
+ enum esync_type
+ {
+     ESYNC_SEMAPHORE = 1,
+diff --git a/server/request.h b/server/request.h
+index 4d398584e9..b3c31367d2 100644
+--- a/server/request.h
++++ b/server/request.h
+@@ -406,6 +406,7 @@ DECL_HANDLER(terminate_job);
+ DECL_HANDLER(create_esync);
+ DECL_HANDLER(open_esync);
+ DECL_HANDLER(get_esync_fd);
++DECL_HANDLER(get_esync_apc_fd);
+ 
+ #ifdef WANT_REQUEST_HANDLERS
+ 
+@@ -706,6 +707,7 @@ static const req_handler req_handlers[REQ_NB_REQUESTS] =
+     (req_handler)req_create_esync,
+     (req_handler)req_open_esync,
+     (req_handler)req_get_esync_fd,
++    (req_handler)req_get_esync_apc_fd,
+ };
+ 
+ C_ASSERT( sizeof(affinity_t) == 8 );
+@@ -2435,6 +2437,8 @@ C_ASSERT( sizeof(struct get_esync_fd_request) == 16 );
+ C_ASSERT( FIELD_OFFSET(struct get_esync_fd_reply, type) == 8 );
+ C_ASSERT( FIELD_OFFSET(struct get_esync_fd_reply, shm_idx) == 12 );
+ C_ASSERT( sizeof(struct get_esync_fd_reply) == 16 );
++C_ASSERT( sizeof(struct get_esync_apc_fd_request) == 16 );
++C_ASSERT( sizeof(struct get_esync_apc_fd_reply) == 8 );
+ 
+ #endif  /* WANT_REQUEST_HANDLERS */
+ 
+diff --git a/server/thread.c b/server/thread.c
+index 56bef76c5f..f04fb3e772 100644
+--- a/server/thread.c
++++ b/server/thread.c
+@@ -204,6 +204,7 @@ static inline void init_thread_structure( struct thread *thread )
+     thread->desktop_users   = 0;
+     thread->token           = NULL;
+     thread->esync_fd        = -1;
++    thread->esync_apc_fd    = -1;
+ 
+     thread->creation_time = current_time;
+     thread->exit_time     = 0;
+@@ -289,7 +290,10 @@ struct thread *create_thread( int fd, struct process *process, const struct secu
+     }
+ 
+     if (do_esync())
++    {
+         thread->esync_fd = esync_create_fd( 0, 0 );
++        thread->esync_apc_fd = esync_create_fd( 0, 0 );
++    }
+ 
+     set_fd_events( thread->request_fd, POLLIN );  /* start listening to events */
+     add_process_thread( thread->process, thread );
+@@ -1022,8 +1026,13 @@ static int queue_apc( struct process *process, struct thread *thread, struct thr
+     grab_object( apc );
+     list_add_tail( queue, &apc->entry );
+     if (!list_prev( queue, &apc->entry ))  /* first one */
++    {
+         wake_thread( thread );
+ 
++        if (do_esync())
++            esync_wake_fd( thread->esync_apc_fd );
++    }
++
+     return 1;
+ }
+ 
+@@ -1070,6 +1079,10 @@ static struct thread_apc *thread_dequeue_apc( struct thread *thread, int system_
+         apc = LIST_ENTRY( ptr, struct thread_apc, entry );
+         list_remove( ptr );
+     }
++
++    if (do_esync() && list_empty( &thread->system_apc ) && list_empty( &thread->user_apc ))
++        esync_clear( thread->esync_apc_fd );
++
+     return apc;
+ }
+ 
+diff --git a/server/thread.h b/server/thread.h
+index fc3ca4b701..773d67c714 100644
+--- a/server/thread.h
++++ b/server/thread.h
+@@ -90,6 +90,7 @@ struct thread
+     timeout_t              exit_time;     /* Thread exit time */
+     struct token          *token;         /* security token associated with this thread */
+     int                    esync_fd;      /* esync file descriptor (signalled on exit) */
++    int                    esync_apc_fd;  /* esync apc fd (signalled when APCs are present) */
+ };
+ 
+ struct thread_snapshot
+diff --git a/server/trace.c b/server/trace.c
+index 03c537d8ab..89c4743d3d 100644
+--- a/server/trace.c
++++ b/server/trace.c
+@@ -4584,6 +4584,10 @@ static void dump_get_esync_fd_reply( const struct get_esync_fd_reply *req )
+     fprintf( stderr, ", shm_idx=%08x", req->shm_idx );
+ }
+ 
++static void dump_get_esync_apc_fd_request( const struct get_esync_apc_fd_request *req )
++{
++}
++
+ static const dump_func req_dumpers[REQ_NB_REQUESTS] = {
+     (dump_func)dump_new_process_request,
+     (dump_func)dump_exec_process_request,
+@@ -4879,6 +4883,7 @@ static const dump_func req_dumpers[REQ_NB_REQUESTS] = {
+     (dump_func)dump_create_esync_request,
+     (dump_func)dump_open_esync_request,
+     (dump_func)dump_get_esync_fd_request,
++    (dump_func)dump_get_esync_apc_fd_request,
+ };
+ 
+ static const dump_func reply_dumpers[REQ_NB_REQUESTS] = {
+@@ -5176,6 +5181,7 @@ static const dump_func reply_dumpers[REQ_NB_REQUESTS] = {
+     (dump_func)dump_create_esync_reply,
+     (dump_func)dump_open_esync_reply,
+     (dump_func)dump_get_esync_fd_reply,
++    NULL,
+ };
+ 
+ static const char * const req_names[REQ_NB_REQUESTS] = {
+@@ -5473,6 +5479,7 @@ static const char * const req_names[REQ_NB_REQUESTS] = {
+     "create_esync",
+     "open_esync",
+     "get_esync_fd",
++    "get_esync_apc_fd",
+ };
+ 
+ static const struct
+-- 
+2.19.1
+

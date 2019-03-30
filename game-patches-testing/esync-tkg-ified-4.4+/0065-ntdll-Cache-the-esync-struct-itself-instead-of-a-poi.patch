@@ -1,0 +1,177 @@
+From c3af148ea6b5cb03679fd777fbf2da1a0919874c Mon Sep 17 00:00:00 2001
+From: Zebediah Figura <z.figura12@gmail.com>
+Date: Sat, 7 Jul 2018 15:10:53 +0200
+Subject: [PATCH 65/83] ntdll: Cache the esync struct itself instead of a
+ pointer to it.
+
+Now that the esync object has a constant size, we can perform this
+optimization.
+
+Signed-off-by: Zebediah Figura <z.figura12@gmail.com>
+---
+ dlls/ntdll/esync.c | 70 ++++++++++++++++------------------------------
+ 1 file changed, 24 insertions(+), 46 deletions(-)
+
+diff --git a/dlls/ntdll/esync.c b/dlls/ntdll/esync.c
+index e10f0ea4bf..b856de231e 100644
+--- a/dlls/ntdll/esync.c
++++ b/dlls/ntdll/esync.c
+@@ -156,11 +156,11 @@ static void *get_shm( unsigned int idx )
+ /* We'd like lookup to be fast. To that end, we use a static list indexed by handle.
+  * This is copied and adapted from the fd cache code. */
+ 
+-#define ESYNC_LIST_BLOCK_SIZE  (65536 / sizeof(struct esync *))
+-#define ESYNC_LIST_ENTRIES     128
++#define ESYNC_LIST_BLOCK_SIZE  (65536 / sizeof(struct esync))
++#define ESYNC_LIST_ENTRIES     256
+ 
+-static struct esync * *esync_list[ESYNC_LIST_ENTRIES];
+-static struct esync * esync_list_initial_block[ESYNC_LIST_BLOCK_SIZE];
++static struct esync *esync_list[ESYNC_LIST_ENTRIES];
++static struct esync esync_list_initial_block[ESYNC_LIST_BLOCK_SIZE];
+ 
+ static inline UINT_PTR handle_to_index( HANDLE handle, UINT_PTR *entry )
+ {
+@@ -169,7 +169,7 @@ static inline UINT_PTR handle_to_index( HANDLE handle, UINT_PTR *entry )
+     return idx % ESYNC_LIST_BLOCK_SIZE;
+ }
+ 
+-static BOOL add_to_list( HANDLE handle, struct esync *obj )
++static struct esync *add_to_list( HANDLE handle, enum esync_type type, int fd, void *shm )
+ {
+     UINT_PTR entry, idx = handle_to_index( handle, &entry );
+ 
+@@ -191,9 +191,12 @@ static BOOL add_to_list( HANDLE handle, struct esync *obj )
+         }
+     }
+ 
+-    obj = interlocked_xchg_ptr((void **)&esync_list[entry][idx], obj);
+-    assert(!obj);
+-    return TRUE;
++    if (!interlocked_cmpxchg((int *)&esync_list[entry][idx].type, type, 0))
++    {
++        esync_list[entry][idx].fd = fd;
++        esync_list[entry][idx].shm = shm;
++    }
++    return &esync_list[entry][idx];
+ }
+ 
+ static struct esync *get_cached_object( HANDLE handle )
+@@ -201,8 +204,9 @@ static struct esync *get_cached_object( HANDLE handle )
+     UINT_PTR entry, idx = handle_to_index( handle, &entry );
+ 
+     if (entry >= ESYNC_LIST_ENTRIES || !esync_list[entry]) return NULL;
++    if (!esync_list[entry][idx].type) return NULL;
+ 
+-    return esync_list[entry][idx];
++    return &esync_list[entry][idx];
+ }
+ 
+ /* Gets an object. This is either a proper esync object (i.e. an event,
+@@ -214,19 +218,18 @@ static struct esync *get_cached_object( HANDLE handle )
+  * since we might be passed a duplicated or inherited handle. */
+ static NTSTATUS get_object( HANDLE handle, struct esync **obj )
+ {
++    NTSTATUS ret = STATUS_SUCCESS;
++    enum esync_type type = 0;
++    unsigned int shm_idx = 0;
+     obj_handle_t fd_handle;
+-    enum esync_type type;
+-    unsigned int shm_idx;
+-    struct esync *esync;
+     sigset_t sigset;
+-    NTSTATUS ret;
+-    int fd;
++    int fd = -1;
+ 
+     if ((*obj = get_cached_object( handle ))) return STATUS_SUCCESS;
+ 
+     /* We need to try grabbing it from the server. */
+     server_enter_uninterrupted_section( &fd_cache_section, &sigset );
+-    if (!(esync = get_cached_object( handle )))
++    if (!(*obj = get_cached_object( handle )))
+     {
+         SERVER_START_REQ( get_esync_fd )
+         {
+@@ -243,10 +246,9 @@ static NTSTATUS get_object( HANDLE handle, struct esync **obj )
+     }
+     server_leave_uninterrupted_section( &fd_cache_section, &sigset );
+ 
+-    if (esync)
++    if (*obj)
+     {
+         /* We managed to grab it while in the CS; return it. */
+-        *obj = esync;
+         return STATUS_SUCCESS;
+     }
+ 
+@@ -259,31 +261,21 @@ static NTSTATUS get_object( HANDLE handle, struct esync **obj )
+ 
+     TRACE("Got fd %d for handle %p.\n", fd, handle);
+ 
+-    esync = RtlAllocateHeap( GetProcessHeap(), 0, sizeof(*esync) );
+-    esync->fd = fd;
+-    esync->type = type;
+-
+-    esync->shm = shm_idx ? get_shm( shm_idx ) : 0;
+-
+-    add_to_list( handle, esync );
+-
+-    *obj = esync;
++    *obj = add_to_list( handle, type, fd, shm_idx ? get_shm( shm_idx ) : 0 );
+     return ret;
+ }
+ 
+ NTSTATUS esync_close( HANDLE handle )
+ {
+     UINT_PTR entry, idx = handle_to_index( handle, &entry );
+-    struct esync *obj;
+ 
+     TRACE("%p.\n", handle);
+ 
+     if (entry < ESYNC_LIST_ENTRIES && esync_list[entry])
+     {
+-        if ((obj = interlocked_xchg_ptr( (void **)&esync_list[entry][idx], 0 )))
++        if (interlocked_xchg((int *)&esync_list[entry][idx].type, 0))
+         {
+-            close( obj->fd );
+-            RtlFreeHeap( GetProcessHeap(), 0, obj );
++            close( esync_list[entry][idx].fd );
+             return STATUS_SUCCESS;
+         }
+     }
+@@ -329,14 +321,7 @@ static NTSTATUS create_esync( enum esync_type type, HANDLE *handle,
+ 
+     if (!ret || ret == STATUS_OBJECT_NAME_EXISTS)
+     {
+-        struct esync *obj = RtlAllocateHeap( GetProcessHeap(), 0, sizeof(*obj) );
+-        if (!obj) return STATUS_NO_MEMORY;
+-
+-        obj->type = type;
+-        obj->fd = fd;
+-        obj->shm = shm_idx ? get_shm( shm_idx ) : 0;
+-
+-        add_to_list( *handle, obj );
++        add_to_list( *handle, type, fd, shm_idx ? get_shm( shm_idx ) : 0 );
+ 
+         TRACE("-> handle %p, fd %d, shm index %d.\n", *handle, fd, shm_idx);
+     }
+@@ -377,14 +362,7 @@ static NTSTATUS open_esync( enum esync_type type, HANDLE *handle,
+ 
+     if (!ret)
+     {
+-        struct esync *obj = RtlAllocateHeap( GetProcessHeap(), 0, sizeof(*obj) );
+-        if (!obj) return STATUS_NO_MEMORY;
+-
+-        obj->type = type;
+-        obj->fd = fd;
+-        obj->shm = shm_idx ? get_shm( shm_idx ) : 0;
+-
+-        add_to_list( *handle, obj );
++        add_to_list( *handle, type, fd, shm_idx ? get_shm( shm_idx ) : 0 );
+ 
+         TRACE("-> handle %p, fd %d.\n", *handle, fd);
+     }
+-- 
+2.19.1
+

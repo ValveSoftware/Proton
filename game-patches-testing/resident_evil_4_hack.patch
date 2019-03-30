@@ -1,0 +1,15 @@
+diff --git a/dlls/wined3d/glsl_shader.c b/dlls/wined3d/glsl_shader.c
+index d356827fd9..4adbfda3f8 100644
+--- a/dlls/wined3d/glsl_shader.c
++++ b/dlls/wined3d/glsl_shader.c
+@@ -4576,8 +4576,8 @@ static void shader_glsl_scalar_op(const struct wined3d_shader_instruction *ins)
+             break;
+ 
+         case WINED3DSIH_RCP:
+-            prefix = "1.0 / ";
+-            suffix = "";
++            prefix = "max(min(1.0 / ";
++            suffix = ", 1e10), -1e10)";
+             break;
+ 
+         case WINED3DSIH_RSQ:

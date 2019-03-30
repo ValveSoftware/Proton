@@ -1,0 +1,14 @@
+diff --git a/dlls/wined3d/glsl_shader.c b/dlls/wined3d/glsl_shader.c
+index f8c4a99..43fe030 100644
+--- a/dlls/wined3d/glsl_shader.c
++++ b/dlls/wined3d/glsl_shader.c
+@@ -3437,6 +3437,9 @@ static void shader_glsl_scalar_op(const struct wined3d_shader_instruction *ins)
+ 
+     if (dst_size > 1 && shader_version < WINED3D_SHADER_VERSION(4, 0))
+         shader_addline(buffer, "vec%u(%s%s%s));\n", dst_size, prefix, src0_param.param_str, suffix);
++    else if (ins->handler_idx == WINED3DSIH_RCP)
++        shader_addline(buffer, "%s == 0.0f ? 0.0f : %s%s%s);\n",
++                src0_param.param_str, prefix, src0_param.param_str, suffix);
+     else
+         shader_addline(buffer, "%s%s%s);\n", prefix, src0_param.param_str, suffix);
+ }

@@ -403,7 +403,6 @@ $(FFMPEG_CONFIGURE_FILES64): $(FFMPEG)/configure $(MAKEFILE_DEP) | $(FFMPEG_OBJ6
 			--disable-doc \
 			--disable-avdevice \
 			--disable-avformat \
-			--disable-swresample \
 			--disable-swscale \
 			--disable-postproc \
 			--disable-avfilter \
@@ -439,7 +438,6 @@ $(FFMPEG_CONFIGURE_FILES32): $(FFMPEG)/configure $(MAKEFILE_DEP) | $(FFMPEG_OBJ3
 			--disable-doc \
 			--disable-avdevice \
 			--disable-avformat \
-			--disable-swresample \
 			--disable-swscale \
 			--disable-postproc \
 			--disable-avfilter \
@@ -482,14 +480,14 @@ ffmpeg64: $(FFMPEG_CONFIGURE_FILES64)
 	+$(MAKE) -C $(FFMPEG_OBJ64)
 	+$(MAKE) -C $(FFMPEG_OBJ64) install
 	mkdir -pv $(DST_DIR)/lib64
-	cp -L $(TOOLS_DIR64)/lib/{libavcodec,libavutil}* $(DST_DIR)/lib64
+	cp -L $(TOOLS_DIR64)/lib/{libavcodec,libavutil,libswresample}* $(DST_DIR)/lib64
 
 ffmpeg32: SHELL = $(CONTAINER_SHELL32)
 ffmpeg32: $(FFMPEG_CONFIGURE_FILES32)
 	+$(MAKE) -C $(FFMPEG_OBJ32)
 	+$(MAKE) -C $(FFMPEG_OBJ32) install
 	mkdir -pv $(DST_DIR)/lib
-	cp -L $(TOOLS_DIR32)/lib/{libavcodec,libavutil}* $(DST_DIR)/lib
+	cp -L $(TOOLS_DIR32)/lib/{libavcodec,libavutil,libswresample}* $(DST_DIR)/lib
 
 endif # ifeq ($(WITH_FFMPEG),1)
 
@@ -497,12 +495,9 @@ endif # ifeq ($(WITH_FFMPEG),1)
 ## FAudio
 ##
 
-FAUDIO_CMAKE_FLAGS = -DCMAKE_BUILD_TYPE=Release -DFORCE_ENABLE_DEBUGCONFIGURATION=ON -DLOG_ASSERTIONS=ON -DCMAKE_INSTALL_LIBDIR="lib" -DXNASONG=OFF
-ifeq ($(WITH_FFMPEG),1)
-FAUDIO_CMAKE_FLAGS += -DFFMPEG=ON
-endif # ifeq ($(WITH_FFMPEG),1)
+FAUDIO_CMAKE_FLAGS = -DCMAKE_BUILD_TYPE=Release -DFORCE_ENABLE_DEBUGCONFIGURATION=ON -DLOG_ASSERTIONS=ON -DCMAKE_INSTALL_LIBDIR="lib" -DXNASONG=OFF -DFFMPEG=ON
 
-FAUDIO_TARGETS = faudio faudio32 faudio64
+FAUDIO_TARGETS = ffmpeg faudio faudio32 faudio64
 
 ALL_TARGETS += $(FAUDIO_TARGETS)
 GOAL_TARGETS_LIBS += faudio
@@ -520,6 +515,7 @@ $(FAUDIO_CONFIGURE_FILES32): $(FAUDIO)/CMakeLists.txt $(MAKEFILE_DEP) $(CMAKE_BI
 		../$(CMAKE_BIN32) $(abspath $(FAUDIO)) \
 			-DCMAKE_INSTALL_PREFIX="$(abspath $(TOOLS_DIR32))" \
 			$(FAUDIO_CMAKE_FLAGS) \
+			-DFFmpeg_INCLUDE_DIR="$(abspath $(TOOLS_DIR32))/include" \
 			-DCMAKE_C_FLAGS="-m32" -DCMAKE_CXX_FLAGS="-m32"
 
 $(FAUDIO_CONFIGURE_FILES64): SHELL = $(CONTAINER_SHELL64)
@@ -527,7 +523,8 @@ $(FAUDIO_CONFIGURE_FILES64): $(FAUDIO)/CMakeLists.txt $(MAKEFILE_DEP) $(CMAKE_BI
 	cd $(dir $@) && \
 		../$(CMAKE_BIN64) $(abspath $(FAUDIO)) \
 			-DCMAKE_INSTALL_PREFIX="$(abspath $(TOOLS_DIR64))" \
-			$(FAUDIO_CMAKE_FLAGS)
+			$(FAUDIO_CMAKE_FLAGS) \
+			-DFFmpeg_INCLUDE_DIR="$(abspath $(TOOLS_DIR64))/include"
 
 faudio32: SHELL = $(CONTAINER_SHELL32)
 faudio32: $(FAUDIO_CONFIGURE_FILES32)
@@ -544,6 +541,8 @@ faudio64: $(FAUDIO_CONFIGURE_FILES64)
 	mkdir -p $(DST_DIR)/lib64
 	cp -L $(TOOLS_DIR64)/lib/libFAudio* $(DST_DIR)/lib64/
 	[ x"$(STRIP)" = x ] || $(STRIP) $(DST_DIR)/lib64/libFAudio.so
+
+
 
 ##
 ## lsteamclient
@@ -720,7 +719,7 @@ $(WINE_CONFIGURE_FILES64): $(MAKEFILE_DEP) | faudio64 $(WINE_OBJ64)
 	cd $(dir $@) && \
 		STRIP=$(STRIP_QUOTED) \
 		CFLAGS=-I$(abspath $(TOOLS_DIR64))"/include -g $(COMMON_FLAGS)" \
-		LDFLAGS=-L$(abspath $(TOOLS_DIR64))/lib \
+		LDFLAGS="-L$(abspath $(TOOLS_DIR64))/lib -Wl,-rpath-link,$(abspath $(TOOLS_DIR64))/lib" \
 		PKG_CONFIG_PATH=$(abspath $(TOOLS_DIR64))/lib/pkgconfig \
 		CC=$(CC_QUOTED) \
 		CXX=$(CXX_QUOTED) \
@@ -735,7 +734,7 @@ $(WINE_CONFIGURE_FILES32): $(MAKEFILE_DEP) | faudio32 $(WINE_OBJ32)
 	cd $(dir $@) && \
 		STRIP=$(STRIP_QUOTED) \
 		CFLAGS=-I$(abspath $(TOOLS_DIR32))"/include -g $(COMMON_FLAGS)" \
-		LDFLAGS=-L$(abspath $(TOOLS_DIR32))/lib \
+		LDFLAGS="-L$(abspath $(TOOLS_DIR32))/lib -Wl,-rpath-link,$(abspath $(TOOLS_DIR32))/lib" \
 		PKG_CONFIG_PATH=$(abspath $(TOOLS_DIR32))/lib/pkgconfig \
 		CC=$(CC_QUOTED) \
 		CXX=$(CXX_QUOTED) \

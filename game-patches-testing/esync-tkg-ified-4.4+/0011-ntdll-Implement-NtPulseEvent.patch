@@ -1,0 +1,72 @@
+From 592c7232276d293ed748f036627a48b22fadb160 Mon Sep 17 00:00:00 2001
+From: Zebediah Figura <z.figura12@gmail.com>
+Date: Fri, 8 Jun 2018 15:47:16 -0500
+Subject: [PATCH 11/83] ntdll: Implement NtPulseEvent().
+
+Signed-off-by: Zebediah Figura <z.figura12@gmail.com>
+---
+ dlls/ntdll/esync.c | 19 +++++++++++++++++++
+ dlls/ntdll/esync.h |  1 +
+ dlls/ntdll/sync.c  |  3 +++
+ 3 files changed, 23 insertions(+)
+
+diff --git a/dlls/ntdll/esync.c b/dlls/ntdll/esync.c
+index 85e0dbc7ff..667f872400 100644
+--- a/dlls/ntdll/esync.c
++++ b/dlls/ntdll/esync.c
+@@ -311,6 +311,25 @@ NTSTATUS esync_reset_event( HANDLE handle )
+     return STATUS_SUCCESS;
+ }
+ 
++NTSTATUS esync_pulse_event( HANDLE handle )
++{
++    struct event *event = esync_get_object( handle );
++    static uint64_t value = 1;
++
++    TRACE("%p.\n", handle);
++
++    if (!event) return STATUS_INVALID_HANDLE;
++
++    /* This isn't really correct; an application could miss the write.
++     * Unfortunately we can't really do much better. Fortunately this is rarely
++     * used (and publicly deprecated). */
++    if (write( event->obj.fd, &value, sizeof(value) ) == -1)
++        return FILE_GetNtStatus();
++    read( event->obj.fd, &value, sizeof(value) );
++
++    return STATUS_SUCCESS;
++}
++
+ #define TICKSPERSEC        10000000
+ #define TICKSPERMSEC       10000
+ 
+diff --git a/dlls/ntdll/esync.h b/dlls/ntdll/esync.h
+index c778b316a2..062781fc00 100644
+--- a/dlls/ntdll/esync.h
++++ b/dlls/ntdll/esync.h
+@@ -28,6 +28,7 @@ extern NTSTATUS esync_create_event( HANDLE *handle, ACCESS_MASK access,
+     const OBJECT_ATTRIBUTES *attr, EVENT_TYPE type, BOOLEAN initial ) DECLSPEC_HIDDEN;
+ extern NTSTATUS esync_set_event( HANDLE handle ) DECLSPEC_HIDDEN;
+ extern NTSTATUS esync_reset_event( HANDLE handle ) DECLSPEC_HIDDEN;
++extern NTSTATUS esync_pulse_event( HANDLE handle ) DECLSPEC_HIDDEN;
+ 
+ extern NTSTATUS esync_wait_objects( DWORD count, const HANDLE *handles, BOOLEAN wait_any,
+                                     BOOLEAN alertable, const LARGE_INTEGER *timeout ) DECLSPEC_HIDDEN;
+diff --git a/dlls/ntdll/sync.c b/dlls/ntdll/sync.c
+index 2e9142290d..754e9e0d57 100644
+--- a/dlls/ntdll/sync.c
++++ b/dlls/ntdll/sync.c
+@@ -419,6 +419,9 @@ NTSTATUS WINAPI NtPulseEvent( HANDLE handle, LONG *prev_state )
+ {
+     NTSTATUS ret;
+ 
++    if (do_esync())
++        return esync_pulse_event( handle );
++
+     SERVER_START_REQ( event_op )
+     {
+         req->handle = wine_server_obj_handle( handle );
+ 
+-- 
+2.19.1
+

@@ -1,0 +1,119 @@
+From c92ff333203ff12058f354b00c3ed266e7c7795c Mon Sep 17 00:00:00 2001
+From: Zebediah Figura <z.figura12@gmail.com>
+Date: Wed, 13 Jun 2018 15:08:26 -0500
+Subject: [PATCH 44/83] server, ntdll: Pass the shared memory index back from
+ get_esync_fd.
+
+This should let DuplicateHandle() work completely correctly for semaphores and mutexes.
+
+Signed-off-by: Zebediah Figura <z.figura12@gmail.com>
+---
+ dlls/ntdll/esync.c             | 6 +++---
+ include/wine/server_protocol.h | 4 ++--
+ server/esync.c                 | 7 +++++++
+ server/protocol.def            | 1 +
+ server/request.h               | 1 +
+ server/trace.c                 | 1 +
+ 6 files changed, 15 insertions(+), 5 deletions(-)
+
+diff --git a/dlls/ntdll/esync.c b/dlls/ntdll/esync.c
+index 69f0eb592d..360a980db2 100644
+--- a/dlls/ntdll/esync.c
++++ b/dlls/ntdll/esync.c
+@@ -213,6 +213,7 @@ static NTSTATUS get_waitable_object( HANDLE handle, struct esync **obj )
+ {
+     obj_handle_t fd_handle;
+     enum esync_type type;
++    unsigned int shm_idx;
+     struct esync *esync;
+     sigset_t sigset;
+     NTSTATUS ret;
+@@ -230,6 +231,7 @@ static NTSTATUS get_waitable_object( HANDLE handle, struct esync **obj )
+             if (!(ret = wine_server_call( req )))
+             {
+                 type = reply->type;
++                shm_idx = reply->shm_idx;
+                 fd = receive_fd( &fd_handle );
+                 assert( wine_server_ptr_handle(fd_handle) == handle );
+             }
+@@ -258,9 +260,7 @@ static NTSTATUS get_waitable_object( HANDLE handle, struct esync **obj )
+     esync->fd = fd;
+     esync->type = type;
+ 
+-    if (type == ESYNC_SEMAPHORE || type == ESYNC_MUTEX)
+-        FIXME("Attempt to duplicate a semaphore or mutex; this will not work.\n");
+-    esync->shm = NULL;
++    esync->shm = shm_idx ? get_shm( shm_idx ) : 0;
+ 
+     add_to_list( handle, esync );
+ 
+diff --git a/include/wine/server_protocol.h b/include/wine/server_protocol.h
+index 1ead5f7ad1..d05441b1d3 100644
+--- a/include/wine/server_protocol.h
++++ b/include/wine/server_protocol.h
+@@ -5706,7 +5706,7 @@ struct get_esync_fd_reply
+ {
+     struct reply_header __header;
+     int          type;
+-    char __pad_12[4];
++    unsigned int shm_idx;
+ };
+ 
+ enum esync_type
+diff --git a/server/esync.c b/server/esync.c
+index f1a46afc23..6adf996872 100644
+--- a/server/esync.c
++++ b/server/esync.c
+@@ -362,6 +362,13 @@ DECL_HANDLER(get_esync_fd)
+     {
+         fd = obj->ops->get_esync_fd( obj, &type );
+         reply->type = type;
++        if (obj->ops == &esync_ops)
++        {
++            struct esync *esync = (struct esync *)obj;
++            reply->shm_idx = esync->shm_idx;
++        }
++        else
++            reply->shm_idx = 0;
+         send_client_fd( current->process, fd, req->handle );
+     }
+     else
+diff --git a/server/protocol.def b/server/protocol.def
+index 8b36b58a3f..2705dce5a1 100644
+--- a/server/protocol.def
++++ b/server/protocol.def
+@@ -3887,6 +3887,7 @@ struct handle_info
+     obj_handle_t handle;        /* handle to the object */
+ @REPLY
+     int          type;          /* esync type (defined below) */
++    unsigned int shm_idx;       /* this object's index into the shm section */
+ @END
+ 
+ enum esync_type
+diff --git a/server/request.h b/server/request.h
+index 271d092fcf..4d398584e9 100644
+--- a/server/request.h
++++ b/server/request.h
+@@ -2433,6 +2433,7 @@ C_ASSERT( sizeof(struct open_esync_reply) == 24 );
+ C_ASSERT( FIELD_OFFSET(struct get_esync_fd_request, handle) == 12 );
+ C_ASSERT( sizeof(struct get_esync_fd_request) == 16 );
+ C_ASSERT( FIELD_OFFSET(struct get_esync_fd_reply, type) == 8 );
++C_ASSERT( FIELD_OFFSET(struct get_esync_fd_reply, shm_idx) == 12 );
+ C_ASSERT( sizeof(struct get_esync_fd_reply) == 16 );
+ 
+ #endif  /* WANT_REQUEST_HANDLERS */
+diff --git a/server/trace.c b/server/trace.c
+index f2197ba004..03c537d8ab 100644
+--- a/server/trace.c
++++ b/server/trace.c
+@@ -4581,6 +4581,7 @@ static void dump_get_esync_fd_request( const struct get_esync_fd_request *req )
+ static void dump_get_esync_fd_reply( const struct get_esync_fd_reply *req )
+ {
+     fprintf( stderr, " type=%d", req->type );
++    fprintf( stderr, ", shm_idx=%08x", req->shm_idx );
+ }
+ 
+ static const dump_func req_dumpers[REQ_NB_REQUESTS] = {
+-- 
+2.19.1
+

@@ -1,0 +1,103 @@
+From 7b617b003abd29e7869178cb8ca108802691159f Mon Sep 17 00:00:00 2001
+From: Zebediah Figura <z.figura12@gmail.com>
+Date: Sat, 4 Aug 2018 15:15:12 -0500
+Subject: [PATCH 74/83] ntdll, server: Abort if esync is enabled for the server
+ but not the client, and vice versa.
+
+Signed-off-by: Zebediah Figura <z.figura12@gmail.com>
+---
+ dlls/ntdll/esync.c  | 28 +++++++++++++++++++++++++++-
+ dlls/ntdll/thread.c |  3 +--
+ server/esync.c      | 12 ++++++++++++
+ 3 files changed, 40 insertions(+), 3 deletions(-)
+
+diff --git a/dlls/ntdll/esync.c b/dlls/ntdll/esync.c
+index 32cb68ad9b..4d3e29490d 100644
+--- a/dlls/ntdll/esync.c
++++ b/dlls/ntdll/esync.c
+@@ -114,10 +114,29 @@ static void **shm_addrs;
+ static int shm_addrs_size;  /* length of the allocated shm_addrs array */
+ static long pagesize;
+ 
++static NTSTATUS create_esync( enum esync_type type, HANDLE *handle,
++    ACCESS_MASK access, const OBJECT_ATTRIBUTES *attr, int initval, int flags );
++
+ void esync_init(void)
+ {
+     struct stat st;
+ 
++    if (!do_esync())
++    {
++        /* make sure the server isn't running with WINEESYNC */
++        HANDLE handle;
++        NTSTATUS ret;
++
++        ret = create_esync( 0, &handle, 0, NULL, 0, 0 );
++        if (ret != STATUS_NOT_IMPLEMENTED)
++        {
++            ERR("Server is running with WINEESYNC but this process is not, please enable WINEESYNC or restart wineserver.\n");
++            exit(1);
++        }
++
++        return;
++    }
++
+     if (stat( wine_get_config_dir(), &st ) == -1)
+         ERR("Cannot stat %s\n", wine_get_config_dir());
+ 
+@@ -127,7 +146,14 @@ void esync_init(void)
+         sprintf( shm_name, "/wine-%lx-esync", (unsigned long)st.st_ino );
+ 
+     if ((shm_fd = shm_open( shm_name, O_RDWR, 0644 )) == -1)
+-        ERR("Failed to initialize shared memory: %s\n", strerror( errno ));
++    {
++        /* probably the server isn't running with WINEESYNC, tell the user and bail */
++        if (errno == ENOENT)
++            ERR("Failed to open esync shared memory file; make sure no stale wineserver instances are running without WINEESYNC.\n");
++        else
++            ERR("Failed to initialize shared memory: %s\n", strerror( errno ));
++        exit(1);
++    }
+ 
+     pagesize = sysconf( _SC_PAGESIZE );
+ 
+diff --git a/dlls/ntdll/thread.c b/dlls/ntdll/thread.c
+index cd94e56b1d..99aaf29a5d 100644
+--- a/dlls/ntdll/thread.c
++++ b/dlls/ntdll/thread.c
+@@ -403,8 +403,7 @@ void thread_init(void)
+ 
+     fill_cpu_info();
+ 
+-    if (do_esync())
+-        esync_init();
++    esync_init();
+ 
+     NtCreateKeyedEvent( &keyed_event, GENERIC_READ | GENERIC_WRITE, NULL, 0 );
+ }
+diff --git a/server/esync.c b/server/esync.c
+index a0745a2306..10001a243b 100644
+--- a/server/esync.c
++++ b/server/esync.c
+@@ -393,6 +393,18 @@ DECL_HANDLER(create_esync)
+     const struct security_descriptor *sd;
+     const struct object_attributes *objattr = get_req_object_attributes( &sd, &name, &root );
+ 
++    if (!do_esync())
++    {
++        set_error( STATUS_NOT_IMPLEMENTED );
++        return;
++    }
++
++    if (!req->type)
++    {
++        set_error( STATUS_INVALID_PARAMETER_4 );
++        return;
++    }
++
+     if (!objattr) return;
+ 
+     if ((esync = create_esync( root, &name, objattr->attributes, req->initval, req->flags, req->type, sd )))
+-- 
+2.19.1
+

@@ -1,0 +1,13 @@
+diff --git a/configure b/configure
+index 818d31d270..bb3c4b5fbd 100755
+--- a/configure
++++ b/configure
+@@ -13895,7 +13895,7 @@ if ${FAUDIO_LIBS:+false} :; then :
+ fi
+ fi
+ 
+-FAUDIO_LIBS=${FAUDIO_LIBS:-"-lFAudio"}
++FAUDIO_LIBS=${FAUDIO_LIBS:-"-lFAudio -lavcodec -lavutil -lswresample"}
+ $as_echo "$as_me:${as_lineno-$LINENO}: faudio cflags: $FAUDIO_CFLAGS" >&5
+ $as_echo "$as_me:${as_lineno-$LINENO}: faudio libs: $FAUDIO_LIBS" >&5
+ ac_save_CPPFLAGS=$CPPFLAGS
