@@ -1,5 +1,12 @@
 #!/bin/bash
 
+    #ESYNC UPDATE
+    cd esync
+    patch -Np1 < ../game-patches-testing/esync-compat-fixes-r3.patch
+    patch -Np1 < ../game-patches-testing/esync-compat-fixes-r3.1.patch
+    patch -Np1 < ../game-patches-testing/esync-compat-fixes-r3.2.patch
+    cd ..
+
     #DXVK ASYNC PATCH
     cd dxvk
     echo "applying async patch to dxvk and enabling it for warframe by default"
@@ -27,6 +34,9 @@
 
     echo "hide wine updating prefix prompt"
     patch -Np1 < ../game-patches-testing/hide-prefix-update-window.patch
+
+    echo "system tray fix for kde plasma"
+    patch -Np1 < ../game-patches-testing/plasma_systray_fix.patch
 
 
     #WINE STEAM GAME PATCHES
@@ -88,8 +98,7 @@
     #patch -Np1 < ../game-patches-testing/valve-fullscreen-hack-3.patch
 
     # apply esync patches
-    for _f in "../game-patches-testing/esync-tkg-ified-4.4+/"*.patch; do
-        msg2 "Applying ${_f}"
+    for _f in "../esync/"*.patch; do
         git apply -C1 --verbose < "${_f}"
     done
 

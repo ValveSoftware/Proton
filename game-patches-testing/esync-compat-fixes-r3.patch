@@ -1,0 +1,148 @@
+From: Tk-Glitch <ti3nou@gmail.com>
+Date: Tue, 6 Nov 2018 15:39:12 +0100
+Subject: esync fixup for wine 3.20+
+
+
+diff --git a/0040-server-Create-eventfd-descriptors-for-timers.patch b/0040-server-Create-eventfd-descriptors-for-timers.patch
+index cc4806aba1..362d69d06f 100644
+--- a/0040-server-Create-eventfd-descriptors-for-timers.patch
++++ b/0040-server-Create-eventfd-descriptors-for-timers.patch
+@@ -34,14 +34,6 @@ index ed51d0b..016618a 100644
+      ESYNC_MANUAL_SERVER,
+      ESYNC_QUEUE,
+  };
+-@@ -6614,6 +6615,6 @@ union generic_reply
+-     struct get_esync_fd_reply get_esync_fd_reply;
+- };
+- 
+--#define SERVER_PROTOCOL_VERSION 570
+-+#define SERVER_PROTOCOL_VERSION 571
+- 
+- #endif /* __WINE_WINE_SERVER_PROTOCOL_H */
+ diff --git a/server/protocol.def b/server/protocol.def
+ index ad0bc96..7dcfcf2 100644
+ --- a/server/protocol.def
+diff --git a/0041-server-Allocate-shared-memory-segments-for-semaphore.patch b/0041-server-Allocate-shared-memory-segments-for-semaphore.patch
+index 06f9f6083..e03245ca8 100644
+--- a/0041-server-Allocate-shared-memory-segments-for-semaphore.patch
++++ b/0041-server-Allocate-shared-memory-segments-for-semaphore.patch
+@@ -49,14 +49,6 @@ index 31619b9a48..1ead5f7ad1 100644
+  };
+  
+  
+-@@ -6615,6 +6619,6 @@ union generic_reply
+-     struct get_esync_fd_reply get_esync_fd_reply;
+- };
+- 
+--#define SERVER_PROTOCOL_VERSION 571
+-+#define SERVER_PROTOCOL_VERSION 572
+- 
+- #endif /* __WINE_WINE_SERVER_PROTOCOL_H */
+ diff --git a/server/esync.c b/server/esync.c
+ index 399011ff0b..f1a46afc23 100644
+ --- a/server/esync.c
+diff --git a/0044-server-ntdll-Pass-the-shared-memory-index-back-from-.patch b/0044-server-ntdll-Pass-the-shared-memory-index-back-from-.patch
+index a919bbdce..a1e05f891 100644
+--- a/0044-server-ntdll-Pass-the-shared-memory-index-back-from-.patch
++++ b/0044-server-ntdll-Pass-the-shared-memory-index-back-from-.patch
+@@ -60,14 +60,6 @@ index 1ead5f7ad1..d05441b1d3 100644
+  };
+  
+  enum esync_type
+-@@ -6619,6 +6619,6 @@ union generic_reply
+-     struct get_esync_fd_reply get_esync_fd_reply;
+- };
+- 
+--#define SERVER_PROTOCOL_VERSION 572
+-+#define SERVER_PROTOCOL_VERSION 573
+- 
+- #endif /* __WINE_WINE_SERVER_PROTOCOL_H */
+ diff --git a/server/esync.c b/server/esync.c
+ index f1a46afc23..6adf996872 100644
+ --- a/server/esync.c
+diff --git a/0045-server-ntdll-Implement-alertable-waits.patch b/0045-server-ntdll-Implement-alertable-waits.patch
+index 4777f3352..17e618782 100644
+--- a/0045-server-ntdll-Implement-alertable-waits.patch
++++ b/0045-server-ntdll-Implement-alertable-waits.patch
+@@ -269,17 +269,14 @@ index d05441b1d3..25e2b897df 100644
+  };
+  union generic_reply
+  {
+-@@ -6617,8 +6630,9 @@ union generic_reply
++@@ -6624,6 +6624,7 @@ union generic_reply
+      struct create_esync_reply create_esync_reply;
+      struct open_esync_reply open_esync_reply;
+      struct get_esync_fd_reply get_esync_fd_reply;
+ +    struct get_esync_apc_fd_reply get_esync_apc_fd_reply;
+  };
+  
+--#define SERVER_PROTOCOL_VERSION 573
+-+#define SERVER_PROTOCOL_VERSION 574
+- 
+- #endif /* __WINE_WINE_SERVER_PROTOCOL_H */
++ #define SERVER_PROTOCOL_VERSION 571
+ diff --git a/server/esync.c b/server/esync.c
+ index 6adf996872..8bf6e441f1 100644
+ --- a/server/esync.c
+diff --git a/0077-ntdll-server-Specify-EFD_SEMAPHORE-on-the-server-sid.patch b/0077-ntdll-server-Specify-EFD_SEMAPHORE-on-the-server-sid.patch
+index 459827a58..682ea7941 100644
+--- a/0077-ntdll-server-Specify-EFD_SEMAPHORE-on-the-server-sid.patch
++++ b/0077-ntdll-server-Specify-EFD_SEMAPHORE-on-the-server-sid.patch
+@@ -122,14 +122,6 @@ index 25e2b897df..dff6c7c960 100644
+  };
+  struct create_esync_reply
+  {
+-@@ -6633,6 +6631,6 @@ union generic_reply
+-     struct get_esync_apc_fd_reply get_esync_apc_fd_reply;
+- };
+- 
+--#define SERVER_PROTOCOL_VERSION 574
+-+#define SERVER_PROTOCOL_VERSION 575
+- 
+- #endif /* __WINE_WINE_SERVER_PROTOCOL_H */
+ diff --git a/server/esync.c b/server/esync.c
+ index 10001a243b..3e78387e88 100644
+ --- a/server/esync.c
+diff --git a/0078-ntdll-server-Initialize-the-shared-memory-portion-on.patch b/0078-ntdll-server-Initialize-the-shared-memory-portion-on.patch
+index 608e9de0a..c2d0ee03b 100644
+--- a/0078-ntdll-server-Initialize-the-shared-memory-portion-on.patch
++++ b/0078-ntdll-server-Initialize-the-shared-memory-portion-on.patch
+@@ -218,14 +218,6 @@ index dff6c7c960..9eac19ac33 100644
+  };
+  struct create_esync_reply
+  {
+-@@ -6631,6 +6633,6 @@ union generic_reply
+-     struct get_esync_apc_fd_reply get_esync_apc_fd_reply;
+- };
+- 
+--#define SERVER_PROTOCOL_VERSION 575
+-+#define SERVER_PROTOCOL_VERSION 576
+- 
+- #endif /* __WINE_WINE_SERVER_PROTOCOL_H */
+ diff --git a/server/esync.c b/server/esync.c
+ index 3e78387e88..35e7a8a1fe 100644
+ --- a/server/esync.c
+diff --git a/0079-ntdll-server-Revert-to-old-implementation-of-hung-qu.patch b/0079-ntdll-server-Revert-to-old-implementation-of-hung-qu.patch
+index 4b5b7afb0..4df43bae1 100644
+--- a/0079-ntdll-server-Revert-to-old-implementation-of-hung-qu.patch
++++ b/0079-ntdll-server-Revert-to-old-implementation-of-hung-qu.patch
+@@ -147,17 +147,14 @@ index 9eac19ac33..69501ab07b 100644
+  };
+  union generic_reply
+  {
+-@@ -6631,8 +6644,9 @@ union generic_reply
++@@ -6625,6 +6625,7 @@ union generic_reply
+      struct open_esync_reply open_esync_reply;
+      struct get_esync_fd_reply get_esync_fd_reply;
+      struct get_esync_apc_fd_reply get_esync_apc_fd_reply;
+ +    struct esync_msgwait_reply esync_msgwait_reply;
+  };
+  
+--#define SERVER_PROTOCOL_VERSION 576
+-+#define SERVER_PROTOCOL_VERSION 577
+- 
+- #endif /* __WINE_WINE_SERVER_PROTOCOL_H */
++ #define SERVER_PROTOCOL_VERSION 571
+ diff --git a/server/protocol.def b/server/protocol.def
+ index e79c5fe8fd..4caece2185 100644
+ --- a/server/protocol.def

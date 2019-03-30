@@ -1,0 +1,93 @@
+From 234f3979c38ada425d798aca29b6de92af10bb0e Mon Sep 17 00:00:00 2001
+From: Tk-Glitch <ti3nou@gmail.com>
+Date: Tue, 26 Mar 2019 23:35:17 +0100
+Subject: esync fixup for wine 4.5+
+
+
+diff --git a/0017-server-Create-eventfd-file-descriptors-for-event-obj.patch b/0017-server-Create-eventfd-file-descriptors-for-event-obj.patch
+index 64eb5b9e8..197748822 100644
+--- a/0017-server-Create-eventfd-file-descriptors-for-event-obj.patch
++++ b/0017-server-Create-eventfd-file-descriptors-for-event-obj.patch
+@@ -44,10 +44,10 @@ index bbfe0aef8f..054a771901 100644
+  void esync_wake_up( struct object *obj );
+ +void esync_clear( int fd );
+ diff --git a/server/event.c b/server/event.c
+-index a85be8de3d..41b4d6e054 100644
++index 84354bacb..e18c38658 100644
+ --- a/server/event.c
+ +++ b/server/event.c
+-@@ -35,20 +35,24 @@
++@@ -35,6 +35,7 @@
+  #include "thread.h"
+  #include "request.h"
+  #include "security.h"
+@@ -55,7 +55,8 @@ index a85be8de3d..41b4d6e054 100644
+  
+  struct event
+  {
+-     struct object  obj;             /* object header */
++@@ -42,15 +43,18 @@ struct event
++     struct list    kernel_object;   /* list of kernel object pointers */
+      int            manual_reset;    /* is it a manual reset event? */
+      int            signaled;        /* event has been signaled */
+ +    int            esync_fd;        /* esync file descriptor */
+@@ -68,6 +69,7 @@ index a85be8de3d..41b4d6e054 100644
+  static void event_satisfied( struct object *obj, struct wait_queue_entry *entry );
+  static unsigned int event_map_access( struct object *obj, unsigned int access );
+  static int event_signal( struct object *obj, unsigned int access);
++ static struct list *event_get_kernel_obj_list( struct object *obj );
+ +static void event_destroy( struct object *obj );
+  
+  static const struct object_ops event_ops =
+  
+diff --git a/0025-server-Create-eventfd-descriptors-for-device-manager.patch b/0025-server-Create-eventfd-descriptors-for-device-manager.patch
+index a17fd7d50..c043e3ec8 100644
+--- a/0025-server-Create-eventfd-descriptors-for-device-manager.patch
++++ b/0025-server-Create-eventfd-descriptors-for-device-manager.patch
+@@ -28,10 +28,10 @@ index 94309ba112..5c13a839ab 100644
+  
+  /* IRP object */
+  
+-@@ -88,10 +89,12 @@ struct device_manager
+-     struct object          obj;           /* object header */
+-     struct list            devices;       /* list of devices */
+-     struct list            requests;      /* list of pending irps across all devices */
++@@ -91,10 +91,12 @@ struct device_manager
++     struct list            devices;        /* list of devices */
++     struct list            requests;       /* list of pending irps across all devices */
++     struct wine_rb_tree    kernel_objects; /* map of objects that have client side pointer associated */
+ +    int                    esync_fd;      /* esync file descriptor */
+  };
+  
+diff --git a/0025-server-Create-eventfd-descriptors-for-device-manager.patch b/0025-server-Create-eventfd-descriptors-for-device-manager.patch
+index c043e3ec8..203462ba2 100644
+--- a/0025-server-Create-eventfd-descriptors-for-device-manager.patch
++++ b/0025-server-Create-eventfd-descriptors-for-device-manager.patch
+@@ -85,9 +85,9 @@ index 94309ba112..5c13a839ab 100644
+  }
+  
+ @@ -629,6 +645,9 @@ static struct device_manager *create_device_manager(void)
+-     {
+          list_init( &manager->devices );
+          list_init( &manager->requests );
++         wine_rb_init( &manager->kernel_objects, compare_kernel_object );
+ +
+ +        if (do_esync())
+ +            manager->esync_fd = esync_create_fd( 0, 0 );
+
+diff --git a/0025-server-Create-eventfd-descriptors-for-device-manager.patch b/0025-server-Create-eventfd-descriptors-for-device-manager.patch
+index 203462ba2..999065e9b 100644
+--- a/0025-server-Create-eventfd-descriptors-for-device-manager.patch
++++ b/0025-server-Create-eventfd-descriptors-for-device-manager.patch
+@@ -95,9 +95,9 @@ index 94309ba112..5c13a839ab 100644
+      return manager;
+  }
+ @@ -735,6 +754,9 @@ DECL_HANDLER(get_next_device_request)
+-             iosb->in_size = 0;
+              list_remove( &irp->mgr_entry );
+              list_init( &irp->mgr_entry );
++             if (!irp->file) release_object( irp ); /* no longer on manager queue */
+ +
+ +            if (do_esync() && list_empty( &manager->requests ))
+ +                esync_clear( manager->esync_fd );
+
