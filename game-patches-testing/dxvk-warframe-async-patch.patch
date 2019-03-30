@@ -646,15 +646,35 @@ index 8ada5c00..d1c5326f 100644
    'dxvk_pipemanager.cpp',
    'dxvk_queue.cpp',
 diff --git a/src/util/config/config.cpp b/src/util/config/config.cpp
-index 6fe6aca1..b53eded9 100644
+index dd34acc..b2c195a 100644
 --- a/src/util/config/config.cpp
 +++ b/src/util/config/config.cpp
-@@ -118,6 +118,10 @@ namespace dxvk {
+@@ -122,6 +122,30 @@ namespace dxvk {
      { "starwarsbattlefronttrial.exe", {{
        { "dxgi.nvapiHack",                   "False" },
      }} },
 +    /* Warframe         */
 +    { "Warframe.x64.exe", {{
++      { "dxvk.useAsync",                   "True" },
++    }} },
++    /* Warframe         */
++    { "Warframe.exe", {{
++      { "dxvk.useAsync",                   "True" },
++    }} },
++    /* Path of Exile         */
++    { "PathOfExile_x64Steam.exe", {{
++      { "dxvk.useAsync",                   "True" },
++    }} },
++    /* Path of Exile         */
++    { "PathOfExileSteam.exe", {{
++      { "dxvk.useAsync",                   "True" },
++    }} },
++    /* Path of Exile         */
++    { "PathOfExile.exe", {{
++      { "dxvk.useAsync",                   "True" },
++    }} },
++    /* Path of Exile         */
++    { "PathOfExile_x64.exe", {{
 +      { "dxvk.useAsync",                   "True" },
 +    }} },
    }};

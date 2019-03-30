@@ -102,6 +102,9 @@
         git apply -C1 --verbose < "${_f}"
     done
 
+    # this is needed for wine 4.5+
+    patch -Np1 < ../game-patches-testing/esync-no_kernel_obj_list.patch
+
     # large address awareness
     patch -Np1 < ../game-patches-testing/LAA.patch
 
