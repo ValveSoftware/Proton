@@ -2,6 +2,9 @@
 
     #ESYNC UPDATE
     cd esync
+    git reset --hard HEAD
+    git clean -xdf
+
     patch -Np1 < ../game-patches-testing/esync-compat-fixes-r3.patch
     patch -Np1 < ../game-patches-testing/esync-compat-fixes-r3.1.patch
     patch -Np1 < ../game-patches-testing/esync-compat-fixes-r3.2.patch
@@ -9,6 +12,9 @@
 
     #DXVK ASYNC PATCH
     cd dxvk
+    git reset --hard HEAD
+    git clean -xdf
+
     echo "applying async patch to dxvk and enabling it for warframe by default"
     patch -Np1 < ../game-patches-testing/dxvk-warframe-async-patch.patch
     patch -Np1 < ../game-patches-testing/dxvk-dark-souls-grim-dawn.patch
@@ -16,6 +22,8 @@
 
     #WINE SYSTEM PERFORMANCE PATCHES
     cd wine
+    git reset --hard HEAD
+    git clean -xdf
 
     #echo "fix for high core count systems"
     #only use for versions lower than 4.0, it has been patched upstream since 4.0
@@ -79,17 +87,17 @@
     patch -Np1 < ../game-patches-testing/proton-tkg.patch
 
 
-    patch -Np1 < ../game-patches-testing/wined3d-implement-gl-texture-access-callbacks.patch
-    patch -Np1 < ../game-patches-testing/wined3d-implement-command-stream-callbacks.patch
-    patch -Np1 < ../game-patches-testing/d3d11-add-wined3d-texture2d-interface.patch
-    patch -Np1 < ../game-patches-testing/d3d11-add-wined3d11-device-interface.patch
-    patch -Np1 < ../game-patches-testing/wined3d-implement-device-wait-idle.patch
-    patch -Np1 < ../game-patches-testing/wined3d-support-retrieving-depth-texture-in-gl-texture-callback.patch
-    patch -Np1 < ../game-patches-testing/wined3d-get-rid-of-wined3d_cs_emit_wait_idle.patch
-    patch -Np1 < ../game-patches-testing/wined3d-implement-synchronous-texture-access.patch
-    patch -Np1 < ../game-patches-testing/wined3d-load-texture-rgb-location-for-synchronous-texture-access.patch
-    patch -Np1 < ../game-patches-testing/d3d11-pass-wined3d-texture2d-to-access_gl_texture.patch
-    patch -Np1 < ../game-patches-testing/d3d11-remove-unused-depth_tex-variable.patch
+    #patch -Np1 < ../game-patches-testing/wined3d-implement-gl-texture-access-callbacks.patch
+    #patch -Np1 < ../game-patches-testing/wined3d-implement-command-stream-callbacks.patch
+    #patch -Np1 < ../game-patches-testing/d3d11-add-wined3d-texture2d-interface.patch
+    #patch -Np1 < ../game-patches-testing/d3d11-add-wined3d11-device-interface.patch
+    #patch -Np1 < ../game-patches-testing/wined3d-implement-device-wait-idle.patch
+    #patch -Np1 < ../game-patches-testing/wined3d-support-retrieving-depth-texture-in-gl-texture-callback.patch
+    #patch -Np1 < ../game-patches-testing/wined3d-get-rid-of-wined3d_cs_emit_wait_idle.patch
+    #patch -Np1 < ../game-patches-testing/wined3d-implement-synchronous-texture-access.patch
+    #patch -Np1 < ../game-patches-testing/wined3d-load-texture-rgb-location-for-synchronous-texture-access.patch
+    #patch -Np1 < ../game-patches-testing/d3d11-pass-wined3d-texture2d-to-access_gl_texture.patch
+    #patch -Np1 < ../game-patches-testing/d3d11-remove-unused-depth_tex-variable.patch
 
 
     patch -Np1 < ../game-patches-testing/FS_bypass_compositor.patch
