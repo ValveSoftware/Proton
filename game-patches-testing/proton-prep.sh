@@ -15,8 +15,16 @@
     #this also fixes some game launchers and games themselves such as neverwinter and killing floor 2
     #patch -Np1 < ../game-patches-testing/high-core-count-fix.patch
 
+    echo "nvidia nvapi disable patch"
+    patch -Np1 < ../game-patches-testing/nvidia-hate.patch
+
+    echo "nvidia nvapi disable patch"
+    patch -Np1 < ../game-patches-testing/proton-sdl-joy.patch
+
     echo "adding non-ms font replacements patch"
     patch -Np1 < ../game-patches-testing/gdi32-add-cjk-font-replacements.patch
+
+
 
 
     #WINE STEAM GAME PATCHES
@@ -52,9 +60,6 @@
     patch -Np1 < ../game-patches-testing/faudio-proton-xact-support-2.patch
     patch -Np1 < ../game-patches-testing/faudio-proton-fix-ed05940.patch
     patch -Np1 < ../game-patches-testing/faudio-proton-fix-837f11c.patch
-
-    echo "nvidia nvapi disable patch"
-    patch -Np1 < ../game-patches-testing/nvidia-hate.patch
 
 
     #WINE PROTONIFY
