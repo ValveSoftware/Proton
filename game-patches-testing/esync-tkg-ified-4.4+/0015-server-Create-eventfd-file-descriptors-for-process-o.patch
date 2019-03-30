@@ -1,0 +1,179 @@
+From 75055f2ac27251c73810e2219b132ff79e7e529d Mon Sep 17 00:00:00 2001
+From: Zebediah Figura <z.figura12@gmail.com>
+Date: Fri, 8 Jun 2018 18:57:12 -0500
+Subject: [PATCH 15/83] server: Create eventfd file descriptors for process
+ objects.
+
+Signed-off-by: Zebediah Figura <z.figura12@gmail.com>
+---
+ server/esync.c   | 33 +++++++++++++++++++++++++++++++++
+ server/esync.h   | 22 ++++++++++++++++++++++
+ server/process.c | 17 ++++++++++++++++-
+ server/process.h |  1 +
+ 4 files changed, 72 insertions(+), 1 deletion(-)
+ create mode 100644 server/esync.h
+
+diff --git a/server/esync.c b/server/esync.c
+index e775b3bd28..f50366a434 100644
+--- a/server/esync.c
++++ b/server/esync.c
+@@ -35,6 +35,21 @@
+ #include "handle.h"
+ #include "request.h"
+ #include "file.h"
++#include "esync.h"
++
++int do_esync(void)
++{
++#ifdef HAVE_SYS_EVENTFD_H
++    static int do_esync_cached = -1;
++
++    if (do_esync_cached == -1)
++        do_esync_cached = (getenv("WINEESYNC") != NULL);
++
++    return do_esync_cached;
++#else
++    return 0;
++#endif
++}
+ 
+ struct esync
+ {
+@@ -111,6 +126,24 @@ struct esync *create_esync( struct object *root, const struct unicode_str *name,
+ #endif
+ }
+ 
++/* Create a file descriptor for an existing handle.
++ * Caller must close the handle when it's done; it's not linked to an esync
++ * server object in any way. */
++int esync_create_fd( int initval, int flags )
++{
++#ifdef HAVE_SYS_EVENTFD_H
++    int fd;
++
++    fd = eventfd( initval, flags | EFD_CLOEXEC | EFD_NONBLOCK );
++    if (fd == -1)
++        perror( "eventfd" );
++
++    return fd;
++#else
++    return -1;
++#endif
++}
++
+ DECL_HANDLER(create_esync)
+ {
+     struct esync *esync;
+diff --git a/server/esync.h b/server/esync.h
+new file mode 100644
+index 0000000000..f93535b7b4
+--- /dev/null
++++ b/server/esync.h
+@@ -0,0 +1,22 @@
++/*
++ * eventfd-based synchronization objects
++ *
++ * Copyright (C) 2018 Zebediah Figura
++ *
++ * This library is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU Lesser General Public
++ * License as published by the Free Software Foundation; either
++ * version 2.1 of the License, or (at your option) any later version.
++ *
++ * This library is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++ * Lesser General Public License for more details.
++ *
++ * You should have received a copy of the GNU Lesser General Public
++ * License along with this library; if not, write to the Free Software
++ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
++ */
++
++extern int do_esync(void);
++int esync_create_fd( int initval, int flags );
+diff --git a/server/process.c b/server/process.c
+index deb5b4643c..6a40da5527 100644
+--- a/server/process.c
++++ b/server/process.c
+@@ -48,6 +48,7 @@
+ #include "request.h"
+ #include "user.h"
+ #include "security.h"
++#include "esync.h"
+ 
+ /* process structure */
+ 
+@@ -64,6 +65,7 @@ static int process_signaled( struct object *obj, struct wait_queue_entry *entry
+ static unsigned int process_map_access( struct object *obj, unsigned int access );
+ static void process_poll_event( struct fd *fd, int event );
+ static void process_destroy( struct object *obj );
++static int process_get_esync_fd( struct object *obj );
+ static void terminate_process( struct process *process, struct thread *skip, int exit_code );
+ 
+ static const struct object_ops process_ops =
+@@ -74,7 +76,7 @@ static const struct object_ops process_ops =
+     add_queue,                   /* add_queue */
+     remove_queue,                /* remove_queue */
+     process_signaled,            /* signaled */
+-    NULL,                        /* get_esync_fd */
++    process_get_esync_fd,        /* get_esync_fd */
+     no_satisfied,                /* satisfied */
+     no_signal,                   /* signal */
+     no_get_fd,                   /* get_fd */
+@@ -525,6 +527,7 @@ struct process *create_process( int fd, struct process *parent, int inherit_all,
+     process->trace_data      = 0;
+     process->rawinput_mouse  = NULL;
+     process->rawinput_kbd    = NULL;
++    process->esync_fd        = -1;
+     list_init( &process->thread_list );
+     list_init( &process->locks );
+     list_init( &process->asyncs );
+@@ -574,6 +577,9 @@ struct process *create_process( int fd, struct process *parent, int inherit_all,
+     if (!token_assign_label( process->token, security_high_label_sid ))
+         goto error;
+ 
++    if (do_esync())
++        process->esync_fd = esync_create_fd( 0, 0 );
++
+     set_fd_events( process->msg_fd, POLLIN );  /* start listening to events */
+     return process;
+ 
+@@ -623,6 +629,9 @@ static void process_destroy( struct object *obj )
+     if (process->id) free_ptid( process->id );
+     if (process->token) release_object( process->token );
+     free( process->dir_cache );
++
++    if (do_esync())
++        close( process->esync_fd );
+ }
+ 
+ /* dump a process on stdout for debugging purposes */
+@@ -640,6 +649,12 @@ static int process_signaled( struct object *obj, struct wait_queue_entry *entry
+     return !process->running_threads;
+ }
+ 
++static int process_get_esync_fd( struct object *obj )
++{
++    struct process *process = (struct process *)obj;
++    return process->esync_fd;
++}
++
+ static unsigned int process_map_access( struct object *obj, unsigned int access )
+ {
+     if (access & GENERIC_READ)    access |= STANDARD_RIGHTS_READ | PROCESS_QUERY_INFORMATION | PROCESS_VM_READ;
+diff --git a/server/process.h b/server/process.h
+index 4566a04b48..1d5299a08b 100644
+--- a/server/process.h
++++ b/server/process.h
+@@ -96,6 +96,7 @@ struct process
+     struct list          rawinput_devices;/* list of registered rawinput devices */
+     const struct rawinput_device *rawinput_mouse; /* rawinput mouse device, if any */
+     const struct rawinput_device *rawinput_kbd;   /* rawinput keyboard device, if any */
++    int                  esync_fd;        /* esync file descriptor (signaled on exit) */
+ };
+ 
+ struct process_snapshot
+-- 
+2.19.1
+

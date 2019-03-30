@@ -1,0 +1,42 @@
+From 0ad880b9524b7e1a36e8fb4e26ff9f7e780f02c6 Mon Sep 17 00:00:00 2001
+From: Mathieu Comandon <strycore@gmail.com>
+Date: Sat, 21 Jul 2018 12:56:50 -0700
+Subject: [PATCH 67/83] esync: Add note about file limits not being raised when
+ using systemd.
+
+Signed-off-by: Zebediah Figura <z.figura12@gmail.com>
+---
+ README.esync | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
+
+diff --git a/README.esync b/README.esync
+index 30e241755a..7706f395eb 100644
+--- a/README.esync
++++ b/README.esync
+@@ -20,6 +20,16 @@ have a reasonable limit.) To raise the limit you'll want to edit
+ 
+ then restart your session.
+ 
++On distributions using systemd, the settings in `/etc/security/limits.conf` will
++be overridden by systemd's own settings. If you run `ulimit -Hn` and it returns
++a lower number than the one you've previously set then you can set
++
++DefaultLimitNOFILE=100000
++
++in both `/etc/systemd/system.conf` and `/etc/systemd/user.conf`. You can then
++execute `sudo systemctl daemon-reexec` and restart your session. Check again
++with `ulimit -Hn` that the limit is correct.
++
+ Also note that if the wineserver has esync active, all clients also must, and
+ vice versa. Otherwise things will probably crash quite badly.
+ 
+@@ -188,4 +198,4 @@ done by the kernel.
+ 
+ Anyway, yeah, this is esync. Use it if you like.
+ 
+---Zebediah Figura
+\ No newline at end of file
++--Zebediah Figura
+-- 
+2.19.1
+

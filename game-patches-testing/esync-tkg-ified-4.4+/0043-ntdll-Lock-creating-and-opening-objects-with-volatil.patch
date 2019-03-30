@@ -1,0 +1,110 @@
+From 05ca60a817b7840952eb25ce59fca41a47bccf82 Mon Sep 17 00:00:00 2001
+From: Zebediah Figura <z.figura12@gmail.com>
+Date: Fri, 15 Jun 2018 17:56:40 -0500
+Subject: [PATCH 43/83] ntdll: Lock creating and opening objects with volatile
+ state.
+
+Note that this also obviates using lock cmpxchg in get_shm(), but I think
+it's best to leave that there; we don't really lose anything by it.
+
+Signed-off-by: Zebediah Figura <z.figura12@gmail.com>
+---
+ dlls/ntdll/esync.c | 38 ++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 36 insertions(+), 2 deletions(-)
+
+diff --git a/dlls/ntdll/esync.c b/dlls/ntdll/esync.c
+index 6a54405488..69f0eb592d 100644
+--- a/dlls/ntdll/esync.c
++++ b/dlls/ntdll/esync.c
+@@ -388,6 +388,15 @@ static NTSTATUS open_esync( enum esync_type type, HANDLE *handle,
+     return ret;
+ }
+ 
++RTL_CRITICAL_SECTION shm_init_section;
++static RTL_CRITICAL_SECTION_DEBUG critsect_debug =
++{
++    0, 0, &shm_init_section,
++    { &critsect_debug.ProcessLocksList, &critsect_debug.ProcessLocksList },
++      0, 0, { (DWORD_PTR)(__FILE__ ": shm_init_section") }
++};
++RTL_CRITICAL_SECTION shm_init_section = { &critsect_debug, -1, 0, 0, 0, 0 };
++
+ NTSTATUS esync_create_semaphore(HANDLE *handle, ACCESS_MASK access,
+     const OBJECT_ATTRIBUTES *attr, LONG initial, LONG max)
+ {
+@@ -396,6 +405,15 @@ NTSTATUS esync_create_semaphore(HANDLE *handle, ACCESS_MASK access,
+     TRACE("name %s, initial %d, max %d.\n",
+         attr ? debugstr_us(attr->ObjectName) : "<no name>", initial, max);
+ 
++    /* We need this lock to protect against a potential (though unlikely) race:
++     * if a different process tries to open a named object and manages to use
++     * it between the time we get back from the server and the time we
++     * initialize the shared memory, it'll have uninitialize values for the
++     * object's state. That requires us to be REALLY slow, but we're not taking
++     * any chances. Synchronize on the CS here so that we're sure to be ready
++     * before anyone else can open the object. */
++    RtlEnterCriticalSection( &shm_init_section );
++
+     ret = create_esync( ESYNC_SEMAPHORE, handle, access, attr, initial, EFD_SEMAPHORE );
+     if (!ret)
+     {
+@@ -408,15 +426,22 @@ NTSTATUS esync_create_semaphore(HANDLE *handle, ACCESS_MASK access,
+         semaphore->count = initial;
+     }
+ 
++    RtlLeaveCriticalSection( &shm_init_section );
++
+     return ret;
+ }
+ 
+ NTSTATUS esync_open_semaphore( HANDLE *handle, ACCESS_MASK access,
+     const OBJECT_ATTRIBUTES *attr )
+ {
++    NTSTATUS ret;
++
+     TRACE("name %s.\n", debugstr_us(attr->ObjectName));
+ 
+-    return open_esync( ESYNC_SEMAPHORE, handle, access, attr );
++    RtlEnterCriticalSection( &shm_init_section );
++    ret = open_esync( ESYNC_SEMAPHORE, handle, access, attr );
++    RtlLeaveCriticalSection( &shm_init_section );
++    return ret;
+ }
+ 
+ NTSTATUS esync_release_semaphore( HANDLE handle, ULONG count, ULONG *prev )
+@@ -528,6 +553,8 @@ NTSTATUS esync_create_mutex( HANDLE *handle, ACCESS_MASK access,
+     TRACE("name %s, initial %d.\n",
+         attr ? debugstr_us(attr->ObjectName) : "<no name>", initial);
+ 
++    RtlEnterCriticalSection( &shm_init_section );
++
+     ret = create_esync( ESYNC_MUTEX, handle, access, attr, initial ? 0 : 1, 0 );
+     if (!ret)
+     {
+@@ -538,15 +565,22 @@ NTSTATUS esync_create_mutex( HANDLE *handle, ACCESS_MASK access,
+         mutex->count = initial ? 1 : 0;
+     }
+ 
++    RtlLeaveCriticalSection( &shm_init_section );
++
+     return ret;
+ }
+ 
+ NTSTATUS esync_open_mutex( HANDLE *handle, ACCESS_MASK access,
+     const OBJECT_ATTRIBUTES *attr )
+ {
++    NTSTATUS ret;
++
+     TRACE("name %s.\n", debugstr_us(attr->ObjectName));
+ 
+-    return open_esync( ESYNC_MUTEX, handle, access, attr );
++    RtlEnterCriticalSection( &shm_init_section );
++    ret = open_esync( ESYNC_MUTEX, handle, access, attr );
++    RtlLeaveCriticalSection( &shm_init_section );
++    return ret;
+ }
+ 
+ NTSTATUS esync_release_mutex( HANDLE *handle, LONG *prev )
+-- 
+2.19.1
+

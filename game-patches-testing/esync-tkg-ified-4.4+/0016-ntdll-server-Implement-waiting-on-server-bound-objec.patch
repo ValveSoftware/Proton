@@ -1,0 +1,186 @@
+From 5859768a8758afadbbe9054c3c34016b4ae67aba Mon Sep 17 00:00:00 2001
+From: Zebediah Figura <z.figura12@gmail.com>
+Date: Fri, 8 Jun 2018 19:25:05 -0500
+Subject: [PATCH 16/83] ntdll, server: Implement waiting on server-bound
+ objects.
+
+The code here is sort of self-explanatory, but since I split it up over
+several patches I'll provide a quick explanation. The basic principle is
+that we can create an eventfd descriptor for any synchronizable handle, and
+signal it on the server side whenever a wakeup would be triggered. This means
+not only that we can wait simultaneously on esync primitives and on other
+primitives, but that we can do it all in "user-mode", i.e. without having to
+make a server call.
+
+With this patch we break waiting on svcctl.exe.
+
+Signed-off-by: Zebediah Figura <z.figura12@gmail.com>
+---
+ dlls/ntdll/esync.c | 68 +++++++++++++++++++++++++++++++++++++++++++---
+ server/esync.c     | 15 ++++++++++
+ server/esync.h     |  1 +
+ server/thread.c    |  4 +++
+ 4 files changed, 84 insertions(+), 4 deletions(-)
+
+diff --git a/dlls/ntdll/esync.c b/dlls/ntdll/esync.c
+index e8c34bda3a..870e42840b 100644
+--- a/dlls/ntdll/esync.c
++++ b/dlls/ntdll/esync.c
+@@ -78,6 +78,7 @@ enum esync_type
+     ESYNC_SEMAPHORE = 1,
+     ESYNC_AUTO_EVENT,
+     ESYNC_MANUAL_EVENT,
++    ESYNC_MANUAL_SERVER,
+ };
+ 
+ struct esync
+@@ -149,6 +150,63 @@ static void *esync_get_object( HANDLE handle )
+     return esync_list[entry][idx];
+ }
+ 
++/* Gets a waitable object. This is either a proper esync object (i.e. an event,
++ * semaphore, etc. created using create_esync) or a generic synchronizable
++ * server-side object which the server will signal (e.g. a process, thread,
++ * message queue, etc.) */
++static NTSTATUS get_waitable_object( HANDLE handle, struct esync **obj )
++{
++    obj_handle_t fd_handle;
++    struct esync *esync;
++    sigset_t sigset;
++    NTSTATUS ret;
++    int fd;
++
++    if ((*obj = esync_get_object( handle ))) return STATUS_SUCCESS;
++
++    /* We need to try grabbing it from the server. */
++    server_enter_uninterrupted_section( &fd_cache_section, &sigset );
++    if (!(esync = esync_get_object( handle )))
++    {
++        SERVER_START_REQ( get_esync_fd )
++        {
++            req->handle = wine_server_obj_handle( handle );
++            if (!(ret = wine_server_call( req )))
++            {
++                fd = receive_fd( &fd_handle );
++                assert( wine_server_ptr_handle(fd_handle) == handle );
++            }
++        }
++        SERVER_END_REQ;
++    }
++    server_leave_uninterrupted_section( &fd_cache_section, &sigset );
++
++    if (esync)
++    {
++        /* We managed to grab it while in the CS; return it. */
++        *obj = esync;
++        return STATUS_SUCCESS;
++    }
++
++    if (ret)
++    {
++        WARN("Failed to retrieve fd for handle %p, status %#x.\n", handle, ret);
++        *obj = NULL;
++        return ret;
++    }
++
++    TRACE("Got fd %d for handle %p.\n", fd, handle);
++
++    esync = RtlAllocateHeap( GetProcessHeap(), 0, sizeof(*esync) );
++    esync->fd = fd;
++    esync->type = ESYNC_MANUAL_SERVER;
++
++    add_to_list( handle, esync );
++
++    *obj = esync;
++    return ret;
++}
++
+ NTSTATUS esync_close( HANDLE handle )
+ {
+     UINT_PTR entry, idx = handle_to_index( handle, &entry );
+@@ -391,11 +449,13 @@ NTSTATUS esync_wait_objects( DWORD count, const HANDLE *handles, BOOLEAN wait_an
+ 
+     for (i = 0; i < count; i++)
+     {
+-        objs[i] = esync_get_object( handles[i] );
+-        if (objs[i])
++        ret = get_waitable_object( handles[i], &objs[i] );
++        if (ret == STATUS_SUCCESS)
+             has_esync = 1;
+-        else
++        else if (ret == STATUS_NOT_IMPLEMENTED)
+             has_server = 1;
++        else
++            return ret;
+     }
+ 
+     if (has_esync && has_server)
+@@ -452,7 +512,7 @@ NTSTATUS esync_wait_objects( DWORD count, const HANDLE *handles, BOOLEAN wait_an
+                         int64_t value;
+                         ssize_t size;
+ 
+-                        if (objs[i]->type == ESYNC_MANUAL_EVENT)
++                        if (objs[i]->type == ESYNC_MANUAL_EVENT || objs[i]->type == ESYNC_MANUAL_SERVER)
+                         {
+                             /* Don't grab the object, just check if it's signaled. */
+                             if (fds[i].revents & POLLIN)
+diff --git a/server/esync.c b/server/esync.c
+index f50366a434..2e93493af1 100644
+--- a/server/esync.c
++++ b/server/esync.c
+@@ -144,6 +144,21 @@ int esync_create_fd( int initval, int flags )
+ #endif
+ }
+ 
++/* Wake up a server-side esync object. */
++void esync_wake_up( struct object *obj )
++{
++    static const uint64_t value = 1;
++    int fd;
++
++    if (obj->ops->get_esync_fd)
++    {
++        fd = obj->ops->get_esync_fd( obj );
++
++        if (write( fd, &value, sizeof(value) ) == -1)
++            perror( "esync: write" );
++    }
++}
++
+ DECL_HANDLER(create_esync)
+ {
+     struct esync *esync;
+diff --git a/server/esync.h b/server/esync.h
+index f93535b7b4..bbfe0aef8f 100644
+--- a/server/esync.h
++++ b/server/esync.h
+@@ -20,3 +20,4 @@
+ 
+ extern int do_esync(void);
+ int esync_create_fd( int initval, int flags );
++void esync_wake_up( struct object *obj );
+diff --git a/server/thread.c b/server/thread.c
+index e671ad8da2..f5ad0f066c 100644
+--- a/server/thread.c
++++ b/server/thread.c
+@@ -51,6 +51,7 @@
+ #include "request.h"
+ #include "user.h"
+ #include "security.h"
++#include "esync.h"
+ 
+ 
+ #ifdef __i386__
+@@ -919,6 +920,9 @@ void wake_up( struct object *obj, int max )
+     struct list *ptr;
+     int ret;
+ 
++    if (do_esync())
++        esync_wake_up( obj );
++
+     LIST_FOR_EACH( ptr, &obj->wait_queue )
+     {
+         struct wait_queue_entry *entry = LIST_ENTRY( ptr, struct wait_queue_entry, entry );
+-- 
+2.19.1
+

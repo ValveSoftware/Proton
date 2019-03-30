@@ -1,0 +1,54 @@
+From c801a004509e22de539059ee82ca4d00e898d3d7 Mon Sep 17 00:00:00 2001
+From: Zebediah Figura <z.figura12@gmail.com>
+Date: Wed, 20 Jun 2018 13:30:45 -0500
+Subject: [PATCH 54/83] server: Alter conditions in is_queue_hung(), again.
+
+Complications with SMTO_ABORTIFHUNG lead to implementing this function
+exactly correctly.
+
+On Windows, a queue is not hung if you somehow process messages (doesn't
+matter how), or if you call MsgWaitForMultipleObjects().
+
+In a sense, Wine had this correct, except not exactly. Firstly, you can call
+MsgWait(0, NULL, FALSE, 0, 0); Sleep(1000); in a loop and not be considered
+hung; i.e. you don't have to be actively waiting on the queue, but can just
+poll it. You also don't have to have a mask that lets in any events--but
+just calling WaitForMultipleObjects() isn't enough. On the other hand,
+calling MsgWait(0, NULL, FALSE, INFINITE, 0) will result in a hung queue.
+
+last_get_msg should probably be renamed, but nothing better comes to mind.
+
+Signed-off-by: Zebediah Figura <z.figura12@gmail.com>
+---
+ server/queue.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/server/queue.c b/server/queue.c
+index fa3f90bbc7..825dc8cb50 100644
+--- a/server/queue.c
++++ b/server/queue.c
+@@ -899,7 +899,7 @@ static void cleanup_results( struct msg_queue *queue )
+ /* check if the thread owning the queue is hung (not checking for messages) */
+ static int is_queue_hung( struct msg_queue *queue )
+ {
+-    return is_signaled( queue ) && (current_time - queue->last_get_msg > 5 * TICKS_PER_SEC);
++    return (current_time - queue->last_get_msg > 5 * TICKS_PER_SEC);
+ }
+ 
+ static int msg_queue_add_queue( struct object *obj, struct wait_queue_entry *entry )
+@@ -915,6 +915,12 @@ static int msg_queue_add_queue( struct object *obj, struct wait_queue_entry *ent
+     }
+     if (process->idle_event && !(queue->wake_mask & QS_SMRESULT)) set_event( process->idle_event );
+ 
++    /* On Windows, we are considered hung iff we have not somehow processed
++     * messages OR done a MsgWait call in the last 5 seconds. Note that in the
++     * latter case repeatedly waiting for 0 seconds is not hung, but waiting
++     * forever is hung, so this is correct. */
++    queue->last_get_msg = current_time;
++
+     if (queue->fd && list_empty( &obj->wait_queue ))  /* first on the queue */
+         set_fd_events( queue->fd, POLLIN );
+     add_queue( obj, entry );
+-- 
+2.19.1
+

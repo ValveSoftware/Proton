@@ -1,0 +1,30 @@
+From b8c352449c75ab278eb00728b98c23087c889298 Mon Sep 17 00:00:00 2001
+From: Zebediah Figura <z.figura12@gmail.com>
+Date: Sat, 11 Aug 2018 10:45:43 -0500
+Subject: [PATCH 76/83] ntdll: Correctly allocate the esync handle cache.
+
+Fixes a regression introduced by 7b583a367ca05f961c1183a9647245ecd9f2160f.
+
+Should hopefully fix #7.
+
+Signed-off-by: Zebediah Figura <z.figura12@gmail.com>
+---
+ dlls/ntdll/esync.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/dlls/ntdll/esync.c b/dlls/ntdll/esync.c
+index 4d3e29490d..0bced88235 100644
+--- a/dlls/ntdll/esync.c
++++ b/dlls/ntdll/esync.c
+@@ -220,7 +220,7 @@ static struct esync *add_to_list( HANDLE handle, enum esync_type type, int fd, v
+         if (!entry) esync_list[0] = esync_list_initial_block;
+         else
+         {
+-            void *ptr = wine_anon_mmap( NULL, ESYNC_LIST_BLOCK_SIZE * sizeof(struct esync *),
++            void *ptr = wine_anon_mmap( NULL, ESYNC_LIST_BLOCK_SIZE * sizeof(struct esync),
+                                         PROT_READ | PROT_WRITE, 0 );
+             if (ptr == MAP_FAILED) return FALSE;
+             esync_list[entry] = ptr;
+-- 
+2.19.1
+

@@ -1,0 +1,53 @@
+From 75708a8805f5dc9536eb355c8f82a6283c8b8f1c Mon Sep 17 00:00:00 2001
+From: Zebediah Figura <z.figura12@gmail.com>
+Date: Sat, 4 Aug 2018 15:18:24 -0500
+Subject: [PATCH 75/83] esync: Update README.
+
+Signed-off-by: Zebediah Figura <z.figura12@gmail.com>
+---
+ README.esync | 14 +++++---------
+ 1 file changed, 5 insertions(+), 9 deletions(-)
+
+diff --git a/README.esync b/README.esync
+index 7706f395eb..b64bfefc1a 100644
+--- a/README.esync
++++ b/README.esync
+@@ -5,7 +5,7 @@ with +esync.
+ == BUGS AND LIMITATIONS ==
+ 
+ Please let me know if you find any bugs. If you can, also attach a log with
+-+seh,+pid,+esync,+server.
+++seh,+pid,+esync,+server,+timestamp.
+ 
+ If you get something like "eventfd: Too many open files" and then things start
+ crashing, you've probably run out of file descriptors. esync creates one
+@@ -20,11 +20,11 @@ have a reasonable limit.) To raise the limit you'll want to edit
+ 
+ then restart your session.
+ 
+-On distributions using systemd, the settings in `/etc/security/limits.conf` will
+-be overridden by systemd's own settings. If you run `ulimit -Hn` and it returns
+-a lower number than the one you've previously set then you can set
++On distributions using systemd, the settings in `/etc/security/limits.conf`
++will be overridden by systemd's own settings. If you run `ulimit -Hn` and it
++returns a lower number than the one you've previously set, then you can set
+ 
+-DefaultLimitNOFILE=100000
++DefaultLimitNOFILE=1048576
+ 
+ in both `/etc/systemd/system.conf` and `/etc/systemd/user.conf`. You can then
+ execute `sudo systemctl daemon-reexec` and restart your session. Check again
+@@ -157,10 +157,6 @@ surprisingly there aren't that many. In particular:
+   can probably be something reasonable.) It's also possible, although I
+   haven't yet looked, to use some different kind of synchronization
+   primitives, but pipes would be easiest to tack onto this framework.
+-* We might hit the maximum number of open fd's. On my system the soft limit is
+-  1024 and the hard limit is 1048576. I'm inclined to hope this won't be an
+-  issue, since a hypothetical Linux port of any application might just as well
+-  use the same number of eventfds.
+ * PulseEvent() can't work the way it's supposed to work. Fortunately it's rare
+   and deprecated. It's also explicitly mentioned on MSDN that a thread can
+   miss the notification for a kernel APC, so in a sense we're not necessarily
+-- 
+2.19.1
+

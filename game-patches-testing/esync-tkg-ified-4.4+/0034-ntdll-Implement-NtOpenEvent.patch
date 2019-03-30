@@ -1,0 +1,79 @@
+From 782c968db754291c66acde0c473c581ee511f37b Mon Sep 17 00:00:00 2001
+From: Zebediah Figura <z.figura12@gmail.com>
+Date: Sun, 10 Jun 2018 00:42:15 -0500
+Subject: [PATCH 34/83] ntdll: Implement NtOpenEvent().
+
+Signed-off-by: Zebediah Figura <z.figura12@gmail.com>
+---
+ dlls/ntdll/esync.c | 26 ++++++++++++++++++++++++++
+ dlls/ntdll/esync.h |  2 ++
+ dlls/ntdll/sync.c  |  3 +++
+ 3 files changed, 31 insertions(+)
+
+diff --git a/dlls/ntdll/esync.c b/dlls/ntdll/esync.c
+index f840b57171..cc6b50816f 100644
+--- a/dlls/ntdll/esync.c
++++ b/dlls/ntdll/esync.c
+@@ -412,6 +412,32 @@ NTSTATUS esync_create_event( HANDLE *handle, ACCESS_MASK access,
+     return ret;
+ }
+ 
++NTSTATUS esync_open_event( HANDLE *handle, ACCESS_MASK access,
++    const OBJECT_ATTRIBUTES *attr )
++{
++    enum esync_type type = ESYNC_AUTO_EVENT;
++    struct event *event;
++    NTSTATUS ret;
++    int fd;
++
++    TRACE("name %s.\n", debugstr_us(attr->ObjectName));
++
++    ret = open_esync( &type, &fd, handle, access, attr );
++    if (!ret)
++    {
++        event = RtlAllocateHeap( GetProcessHeap(), 0, sizeof(*event) );
++        if (!event)
++            return STATUS_NO_MEMORY;
++
++        event->obj.type = type;
++        event->obj.fd = fd;
++
++        add_to_list( *handle, &event->obj );
++    }
++
++    return ret;
++}
++
+ NTSTATUS esync_set_event( HANDLE handle )
+ {
+     struct event *event = esync_get_object( handle );
+diff --git a/dlls/ntdll/esync.h b/dlls/ntdll/esync.h
+index 73bb3c1cfc..f2134fc9af 100644
+--- a/dlls/ntdll/esync.h
++++ b/dlls/ntdll/esync.h
+@@ -34,6 +34,8 @@ extern NTSTATUS esync_create_mutex( HANDLE *handle, ACCESS_MASK access,
+ extern NTSTATUS esync_release_mutex( HANDLE *handle, LONG *prev ) DECLSPEC_HIDDEN;
+ extern NTSTATUS esync_open_semaphore( HANDLE *handle, ACCESS_MASK access,
+     const OBJECT_ATTRIBUTES *attr ) DECLSPEC_HIDDEN;
++extern NTSTATUS esync_open_event( HANDLE *handle, ACCESS_MASK access,
++    const OBJECT_ATTRIBUTES *attr ) DECLSPEC_HIDDEN;
+ 
+ extern NTSTATUS esync_wait_objects( DWORD count, const HANDLE *handles, BOOLEAN wait_any,
+                                     BOOLEAN alertable, const LARGE_INTEGER *timeout ) DECLSPEC_HIDDEN;
+diff --git a/dlls/ntdll/sync.c b/dlls/ntdll/sync.c
+index 5e86605862..e6951c8ea5 100644
+--- a/dlls/ntdll/sync.c
++++ b/dlls/ntdll/sync.c
+@@ -340,6 +340,9 @@ NTSTATUS WINAPI NtOpenEvent( HANDLE *handle, ACCESS_MASK access, const OBJECT_AT
+ 
+     if ((ret = validate_open_object_attributes( attr ))) return ret;
+ 
++    if (do_esync())
++        return esync_open_event( handle, access, attr );
++
+     SERVER_START_REQ( open_event )
+     {
+         req->access     = access;
+-- 
+2.19.1
+

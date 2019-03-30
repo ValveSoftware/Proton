@@ -1,0 +1,31 @@
+From 7d21da16c8ce04373c4821028f35411cdd63d2d9 Mon Sep 17 00:00:00 2001
+From: Zebediah Figura <z.figura12@gmail.com>
+Date: Sun, 19 Aug 2018 12:50:57 -0500
+Subject: [PATCH 81/83] ntdll: Yield during PulseEvent().
+
+May help with #10, although the real fix there is just not to use esync.
+
+Signed-off-by: Zebediah Figura <z.figura12@gmail.com>
+---
+ dlls/ntdll/esync.c | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/dlls/ntdll/esync.c b/dlls/ntdll/esync.c
+index 304e4981f0..490522eeb3 100644
+--- a/dlls/ntdll/esync.c
++++ b/dlls/ntdll/esync.c
+@@ -627,6 +627,11 @@ NTSTATUS esync_pulse_event( HANDLE handle )
+      * used (and publicly deprecated). */
+     if (write( obj->fd, &value, sizeof(value) ) == -1)
+         return FILE_GetNtStatus();
++
++    /* Try to give other threads a chance to wake up. Hopefully erring on this
++     * side is the better thing to do... */
++    NtYieldExecution();
++
+     read( obj->fd, &value, sizeof(value) );
+ 
+     return STATUS_SUCCESS;
+-- 
+2.19.1
+

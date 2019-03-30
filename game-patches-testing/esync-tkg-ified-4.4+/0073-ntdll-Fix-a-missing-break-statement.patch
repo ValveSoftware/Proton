@@ -1,0 +1,27 @@
+From 7b45c596ea5a298e27929bd3064b451db8acf52b Mon Sep 17 00:00:00 2001
+From: Zebediah Figura <z.figura12@gmail.com>
+Date: Tue, 31 Jul 2018 11:54:39 -0500
+Subject: [PATCH 73/83] ntdll: Fix a missing break statement.
+
+Should fix #2, #3, #6.
+
+Signed-off-by: Zebediah Figura <z.figura12@gmail.com>
+---
+ dlls/ntdll/esync.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/dlls/ntdll/esync.c b/dlls/ntdll/esync.c
+index 882031c6ef..32cb68ad9b 100644
+--- a/dlls/ntdll/esync.c
++++ b/dlls/ntdll/esync.c
+@@ -1048,6 +1048,7 @@ NTSTATUS esync_wait_objects( DWORD count, const HANDLE *handles, BOOLEAN wait_an
+                             return i;
+                         }
+                     }
++                    break;
+                 }
+                 case ESYNC_MANUAL_EVENT:
+                 {
+-- 
+2.19.1
+

@@ -1,0 +1,50 @@
+From 5e4a00a6527235072cf9599443a634736080a14c Mon Sep 17 00:00:00 2001
+From: Zebediah Figura <z.figura12@gmail.com>
+Date: Fri, 8 Jun 2018 23:30:17 -0500
+Subject: [PATCH 21/83] rpcrt4: Avoid closing the server thread handle while it
+ is being waited on.
+
+This, or something like this, should go upstream. This is invalid behaviour.
+
+Signed-off-by: Zebediah Figura <z.figura12@gmail.com>
+---
+ dlls/rpcrt4/rpc_server.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/dlls/rpcrt4/rpc_server.c b/dlls/rpcrt4/rpc_server.c
+index 91de3b95fa..af79dc56cf 100644
+--- a/dlls/rpcrt4/rpc_server.c
++++ b/dlls/rpcrt4/rpc_server.c
+@@ -702,10 +702,6 @@ static DWORD CALLBACK RPCRT4_server_thread(LPVOID the_arg)
+   }
+   LeaveCriticalSection(&cps->cs);
+ 
+-  EnterCriticalSection(&listen_cs);
+-  CloseHandle(cps->server_thread);
+-  cps->server_thread = NULL;
+-  LeaveCriticalSection(&listen_cs);
+   TRACE("done\n");
+   return 0;
+ }
+@@ -1573,7 +1569,10 @@ RPC_STATUS WINAPI RpcMgmtWaitServerListen( void )
+       LIST_FOR_EACH_ENTRY(protseq, &protseqs, RpcServerProtseq, entry)
+       {
+           if ((wait_thread = protseq->server_thread))
++          {
++              protseq->server_thread = NULL;
+               break;
++          }
+       }
+       LeaveCriticalSection(&server_cs);
+       if (!wait_thread)
+@@ -1582,6 +1581,7 @@ RPC_STATUS WINAPI RpcMgmtWaitServerListen( void )
+       TRACE("waiting for thread %u\n", GetThreadId(wait_thread));
+       LeaveCriticalSection(&listen_cs);
+       WaitForSingleObject(wait_thread, INFINITE);
++      CloseHandle(wait_thread);
+       EnterCriticalSection(&listen_cs);
+   }
+   if (listen_done_event == event)
+-- 
+2.19.1
+

@@ -1,0 +1,378 @@
+From 9c4b1eba1659f0ffe4ff2848bde9f44b2b9c52e6 Mon Sep 17 00:00:00 2001
+From: Zebediah Figura <z.figura12@gmail.com>
+Date: Sat, 9 Jun 2018 14:44:54 -0500
+Subject: [PATCH 24/83] server, ntdll: Also wait on the queue fd when waiting
+ for driver events.
+
+Normally the server handles this, by polling on the fd during its main loop.
+The problem there is that the server only polls when the thread is waiting
+for messages. We want to replicate that behaviour, otherwise wineserver spins
+forever trying to wake up a thread that just doesn't care.
+
+With this patch, I'm finally able to interact with winecfg. Next step is to
+fix the 'drives' tab.
+
+Signed-off-by: Zebediah Figura <z.figura12@gmail.com>
+---
+ dlls/ntdll/esync.c             | 44 ++++++++++++++++++++++++----------
+ include/wine/server_protocol.h | 11 +++++++++
+ server/esync.c                 |  7 ++++--
+ server/event.c                 |  5 ++--
+ server/object.h                |  2 +-
+ server/process.c               |  5 ++--
+ server/protocol.def            | 10 ++++++++
+ server/queue.c                 |  5 ++--
+ server/request.h               |  3 ++-
+ server/thread.c                |  5 ++--
+ server/trace.c                 |  7 +++++-
+ 11 files changed, 79 insertions(+), 25 deletions(-)
+
+diff --git a/dlls/ntdll/esync.c b/dlls/ntdll/esync.c
+index c4faf69a13..cb206bc0f5 100644
+--- a/dlls/ntdll/esync.c
++++ b/dlls/ntdll/esync.c
+@@ -79,17 +79,9 @@ void __wine_esync_set_queue_fd( int fd )
+     ntdll_get_thread_data()->esync_queue_fd = fd;
+ }
+ 
+-enum esync_type
+-{
+-    ESYNC_SEMAPHORE = 1,
+-    ESYNC_AUTO_EVENT,
+-    ESYNC_MANUAL_EVENT,
+-    ESYNC_MANUAL_SERVER,
+-};
+-
+ struct esync
+ {
+-    enum esync_type type;
++    enum esync_type type;   /* defined in protocol.def */
+     int fd;
+ };
+ 
+@@ -163,6 +155,7 @@ static void *esync_get_object( HANDLE handle )
+ static NTSTATUS get_waitable_object( HANDLE handle, struct esync **obj )
+ {
+     obj_handle_t fd_handle;
++    enum esync_type type;
+     struct esync *esync;
+     sigset_t sigset;
+     NTSTATUS ret;
+@@ -179,6 +172,7 @@ static NTSTATUS get_waitable_object( HANDLE handle, struct esync **obj )
+             req->handle = wine_server_obj_handle( handle );
+             if (!(ret = wine_server_call( req )))
+             {
++                type = reply->type;
+                 fd = receive_fd( &fd_handle );
+                 assert( wine_server_ptr_handle(fd_handle) == handle );
+             }
+@@ -205,7 +199,7 @@ static NTSTATUS get_waitable_object( HANDLE handle, struct esync **obj )
+ 
+     esync = RtlAllocateHeap( GetProcessHeap(), 0, sizeof(*esync) );
+     esync->fd = fd;
+-    esync->type = ESYNC_MANUAL_SERVER;
++    esync->type = type;
+ 
+     add_to_list( handle, esync );
+ 
+@@ -444,8 +438,10 @@ NTSTATUS esync_wait_objects( DWORD count, const HANDLE *handles, BOOLEAN wait_an
+                              BOOLEAN alertable, const LARGE_INTEGER *timeout )
+ {
+     struct esync *objs[MAXIMUM_WAIT_OBJECTS];
+-    struct pollfd fds[MAXIMUM_WAIT_OBJECTS];
++    struct pollfd fds[MAXIMUM_WAIT_OBJECTS + 1];
+     int has_esync = 0, has_server = 0;
++    DWORD pollcount = count;
++    BOOL msgwait = FALSE;
+     LONGLONG timeleft;
+     LARGE_INTEGER now;
+     ULONGLONG end;
+@@ -474,6 +470,15 @@ NTSTATUS esync_wait_objects( DWORD count, const HANDLE *handles, BOOLEAN wait_an
+             return ret;
+     }
+ 
++    if (objs[count - 1] && objs[count - 1]->type == ESYNC_QUEUE)
++    {
++        /* Last object in the list is a queue, which means someone is using
++         * MsgWaitForMultipleObjects(). We have to wait not only for the server
++         * fd (signaled on send_message, etc.) but also the USER driver's fd
++         * (signaled on e.g. X11 events.) */
++        msgwait = TRUE;
++    }
++
+     if (has_esync && has_server)
+     {
+         FIXME("Can't wait on esync and server objects at the same time!\n");
+@@ -491,6 +496,9 @@ NTSTATUS esync_wait_objects( DWORD count, const HANDLE *handles, BOOLEAN wait_an
+         for (i = 0; i < count; i++)
+             DPRINTF(" %p", handles[i]);
+ 
++        if (msgwait)
++            DPRINTF(" or driver events (fd %d)", ntdll_get_thread_data()->esync_queue_fd);
++
+         if (!timeout)
+             DPRINTF(", timeout = INFINITE.\n");
+         else
+@@ -508,10 +516,16 @@ NTSTATUS esync_wait_objects( DWORD count, const HANDLE *handles, BOOLEAN wait_an
+             fds[i].fd = objs[i] ? objs[i]->fd : -1;
+             fds[i].events = POLLIN;
+         }
++        if (msgwait)
++        {
++            fds[count].fd = ntdll_get_thread_data()->esync_queue_fd;
++            fds[count].events = POLLIN;
++            pollcount++;
++        }
+ 
+         while (1)
+         {
+-            ret = do_poll( fds, count, timeout ? &end : NULL );
++            ret = do_poll( fds, pollcount, timeout ? &end : NULL );
+             if (ret > 0)
+             {
+                 /* Find out which object triggered the wait. */
+@@ -549,6 +563,12 @@ NTSTATUS esync_wait_objects( DWORD count, const HANDLE *handles, BOOLEAN wait_an
+                     }
+                 }
+ 
++                if (msgwait && (fds[count].revents & POLLIN))
++                {
++                    TRACE("Woken up by driver events.\n");
++                    return count - 1;
++                }
++
+                 /* If we got here, someone else stole (or reset, etc.) whatever
+                  * we were waiting for. So keep waiting. */
+                 NtQuerySystemTime( &now );
+diff --git a/include/wine/server_protocol.h b/include/wine/server_protocol.h
+index 554fa10835..dc9705424f 100644
+--- a/include/wine/server_protocol.h
++++ b/include/wine/server_protocol.h
+@@ -5681,6 +5681,17 @@ struct get_esync_fd_request
+ struct get_esync_fd_reply
+ {
+     struct reply_header __header;
++    int          type;
++    char __pad_12[4];
++};
++
++enum esync_type
++{
++    ESYNC_SEMAPHORE = 1,
++    ESYNC_AUTO_EVENT,
++    ESYNC_MANUAL_EVENT,
++    ESYNC_MANUAL_SERVER,
++    ESYNC_QUEUE,
+ };
+ 
+ 
+diff --git a/server/esync.c b/server/esync.c
+index 4682163687..ef02170021 100644
+--- a/server/esync.c
++++ b/server/esync.c
+@@ -148,11 +148,12 @@ int esync_create_fd( int initval, int flags )
+ void esync_wake_up( struct object *obj )
+ {
+     static const uint64_t value = 1;
++    enum esync_type dummy;
+     int fd;
+ 
+     if (obj->ops->get_esync_fd)
+     {
+-        fd = obj->ops->get_esync_fd( obj );
++        fd = obj->ops->get_esync_fd( obj, &dummy );
+ 
+         if (write( fd, &value, sizeof(value) ) == -1)
+             perror( "esync: write" );
+@@ -217,6 +218,7 @@ DECL_HANDLER(create_esync)
+ DECL_HANDLER(get_esync_fd)
+ {
+     struct object *obj;
++    enum esync_type type;
+     int fd;
+ 
+     if (!(obj = get_handle_obj( current->process, req->handle, SYNCHRONIZE, NULL )))
+@@ -224,7 +226,8 @@ DECL_HANDLER(get_esync_fd)
+ 
+     if (obj->ops->get_esync_fd)
+     {
+-        fd = obj->ops->get_esync_fd( obj );
++        fd = obj->ops->get_esync_fd( obj, &type );
++        reply->type = type;
+         send_client_fd( current->process, fd, req->handle );
+     }
+     else
+diff --git a/server/event.c b/server/event.c
+index 0ae35de81c..153578a67b 100644
+--- a/server/event.c
++++ b/server/event.c
+@@ -48,7 +48,7 @@ struct event
+ static void event_dump( struct object *obj, int verbose );
+ static struct object_type *event_get_type( struct object *obj );
+ static int event_signaled( struct object *obj, struct wait_queue_entry *entry );
+-static int event_get_esync_fd( struct object *obj );
++static int event_get_esync_fd( struct object *obj, enum esync_type *type );
+ static void event_satisfied( struct object *obj, struct wait_queue_entry *entry );
+ static unsigned int event_map_access( struct object *obj, unsigned int access );
+ static int event_signal( struct object *obj, unsigned int access);
+@@ -198,9 +198,10 @@ static int event_signaled( struct object *obj, struct wait_queue_entry *entry )
+     return event->signaled;
+ }
+ 
+-static int event_get_esync_fd( struct object *obj )
++static int event_get_esync_fd( struct object *obj, enum esync_type *type )
+ {
+     struct event *event = (struct event *)obj;
++    *type = ESYNC_MANUAL_SERVER;    /* all server-created events are manual-reset */
+     return event->esync_fd;
+ }
+ 
+diff --git a/server/object.h b/server/object.h
+index b3d4e33344..70da9aebae 100644
+--- a/server/object.h
++++ b/server/object.h
+@@ -69,7 +69,7 @@ struct object_ops
+     /* is object signaled? */
+     int  (*signaled)(struct object *,struct wait_queue_entry *);
+     /* return the esync fd for this object */
+-    int (*get_esync_fd)(struct object *);
++    int (*get_esync_fd)(struct object *, enum esync_type *type);
+     /* wait satisfied */
+     void (*satisfied)(struct object *,struct wait_queue_entry *);
+     /* signal an object */
+diff --git a/server/process.c b/server/process.c
+index 6a40da5527..37238693b9 100644
+--- a/server/process.c
++++ b/server/process.c
+@@ -65,7 +65,7 @@ static int process_signaled( struct object *obj, struct wait_queue_entry *entry
+ static unsigned int process_map_access( struct object *obj, unsigned int access );
+ static void process_poll_event( struct fd *fd, int event );
+ static void process_destroy( struct object *obj );
+-static int process_get_esync_fd( struct object *obj );
++static int process_get_esync_fd( struct object *obj, enum esync_type *type );
+ static void terminate_process( struct process *process, struct thread *skip, int exit_code );
+ 
+ static const struct object_ops process_ops =
+@@ -649,9 +649,10 @@ static int process_signaled( struct object *obj, struct wait_queue_entry *entry
+     return !process->running_threads;
+ }
+ 
+-static int process_get_esync_fd( struct object *obj )
++static int process_get_esync_fd( struct object *obj, enum esync_type *type )
+ {
+     struct process *process = (struct process *)obj;
++    *type = ESYNC_MANUAL_SERVER;
+     return process->esync_fd;
+ }
+ 
+diff --git a/server/protocol.def b/server/protocol.def
+index 250590573e..6ef953303b 100644
+--- a/server/protocol.def
++++ b/server/protocol.def
+@@ -3870,4 +3870,14 @@ struct handle_info
+ @REQ(get_esync_fd)
+     obj_handle_t handle;        /* handle to the object */
+ @REPLY
++    int          type;          /* esync type (defined below) */
+ @END
++
++enum esync_type
++{
++    ESYNC_SEMAPHORE = 1,
++    ESYNC_AUTO_EVENT,
++    ESYNC_MANUAL_EVENT,
++    ESYNC_MANUAL_SERVER,
++    ESYNC_QUEUE,
++};
+diff --git a/server/queue.c b/server/queue.c
+index 1a5bbc7e8c..b9aa4bc530 100644
+--- a/server/queue.c
++++ b/server/queue.c
+@@ -158,7 +158,7 @@ static void msg_queue_dump( struct object *obj, int verbose );
+ static int msg_queue_add_queue( struct object *obj, struct wait_queue_entry *entry );
+ static void msg_queue_remove_queue( struct object *obj, struct wait_queue_entry *entry );
+ static int msg_queue_signaled( struct object *obj, struct wait_queue_entry *entry );
+-static int msg_queue_get_esync_fd( struct object *obj );
++static int msg_queue_get_esync_fd( struct object *obj, enum esync_type *type );
+ static void msg_queue_satisfied( struct object *obj, struct wait_queue_entry *entry );
+ static void msg_queue_destroy( struct object *obj );
+ static void msg_queue_poll_event( struct fd *fd, int event );
+@@ -964,9 +964,10 @@ static int msg_queue_signaled( struct object *obj, struct wait_queue_entry *entr
+     return ret || is_signaled( queue );
+ }
+ 
+-static int msg_queue_get_esync_fd( struct object *obj )
++static int msg_queue_get_esync_fd( struct object *obj, enum esync_type *type )
+ {
+     struct msg_queue *queue = (struct msg_queue *)obj;
++    *type = ESYNC_QUEUE;
+     return queue->esync_fd;
+ }
+ 
+diff --git a/server/request.h b/server/request.h
+index 272f79dc04..ca9a83632e 100644
+--- a/server/request.h
++++ b/server/request.h
+@@ -2418,7 +2418,8 @@ C_ASSERT( FIELD_OFFSET(struct create_esync_reply, handle) == 8 );
+ C_ASSERT( sizeof(struct create_esync_reply) == 16 );
+ C_ASSERT( FIELD_OFFSET(struct get_esync_fd_request, handle) == 12 );
+ C_ASSERT( sizeof(struct get_esync_fd_request) == 16 );
+-C_ASSERT( sizeof(struct get_esync_fd_reply) == 8 );
++C_ASSERT( FIELD_OFFSET(struct get_esync_fd_reply, type) == 8 );
++C_ASSERT( sizeof(struct get_esync_fd_reply) == 16 );
+ 
+ #endif  /* WANT_REQUEST_HANDLERS */
+ 
+diff --git a/server/thread.c b/server/thread.c
+index 722c133847..56bef76c5f 100644
+--- a/server/thread.c
++++ b/server/thread.c
+@@ -131,7 +131,7 @@ static const struct object_ops thread_apc_ops =
+ 
+ static void dump_thread( struct object *obj, int verbose );
+ static int thread_signaled( struct object *obj, struct wait_queue_entry *entry );
+-static int thread_get_esync_fd( struct object *obj );
++static int thread_get_esync_fd( struct object *obj, enum esync_type *type );
+ static unsigned int thread_map_access( struct object *obj, unsigned int access );
+ static void thread_poll_event( struct fd *fd, int event );
+ static void destroy_thread( struct object *obj );
+@@ -378,9 +378,10 @@ static int thread_signaled( struct object *obj, struct wait_queue_entry *entry )
+     return (mythread->state == TERMINATED);
+ }
+ 
+-static int thread_get_esync_fd( struct object *obj )
++static int thread_get_esync_fd( struct object *obj, enum esync_type *type )
+ {
+     struct thread *thread = (struct thread *)obj;
++    *type = ESYNC_MANUAL_SERVER;
+     return thread->esync_fd;
+ }
+ 
+diff --git a/server/trace.c b/server/trace.c
+index 1806caf82f..876ca62938 100644
+--- a/server/trace.c
++++ b/server/trace.c
+@@ -4559,6 +4559,11 @@ static void dump_get_esync_fd_request( const struct get_esync_fd_request *req )
+     fprintf( stderr, " handle=%04x", req->handle );
+ }
+ 
++static void dump_get_esync_fd_reply( const struct get_esync_fd_reply *req )
++{
++    fprintf( stderr, " type=%d", req->type );
++}
++
+ static const dump_func req_dumpers[REQ_NB_REQUESTS] = {
+     (dump_func)dump_new_process_request,
+     (dump_func)dump_exec_process_request,
+@@ -5148,7 +5153,7 @@ static const dump_func reply_dumpers[REQ_NB_REQUESTS] = {
+     NULL,
+     NULL,
+     (dump_func)dump_create_esync_reply,
+-    NULL,
++    (dump_func)dump_get_esync_fd_reply,
+ };
+ 
+ static const char * const req_names[REQ_NB_REQUESTS] = {
+-- 
+2.19.1
+

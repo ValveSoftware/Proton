@@ -1,0 +1,47 @@
+From 0744f29c26d7613aa10cbe016d9d94252d2e6b51 Mon Sep 17 00:00:00 2001
+From: Zebediah Figura <z.figura12@gmail.com>
+Date: Fri, 8 Jun 2018 15:55:39 -0500
+Subject: [PATCH 12/83] ntdll: Implement waiting on events.
+
+More specifically, implement waiting on manual-reset events. Auto-reset events already worked.
+
+Signed-off-by: Zebediah Figura <z.figura12@gmail.com>
+---
+ dlls/ntdll/esync.c | 20 ++++++++++++++++----
+ 1 file changed, 16 insertions(+), 4 deletions(-)
+
+diff --git a/dlls/ntdll/esync.c b/dlls/ntdll/esync.c
+index 667f872400..e8c34bda3a 100644
+--- a/dlls/ntdll/esync.c
++++ b/dlls/ntdll/esync.c
+@@ -452,11 +452,23 @@ NTSTATUS esync_wait_objects( DWORD count, const HANDLE *handles, BOOLEAN wait_an
+                         int64_t value;
+                         ssize_t size;
+ 
+-                        if ((size = read( fds[i].fd, &value, sizeof(value) )) == sizeof(value))
++                        if (objs[i]->type == ESYNC_MANUAL_EVENT)
+                         {
+-                            /* We found our object. */
+-                            TRACE("Woken up by handle %p [%d].\n", handles[i], i);
+-                            return i;
++                            /* Don't grab the object, just check if it's signaled. */
++                            if (fds[i].revents & POLLIN)
++                            {
++                                TRACE("Woken up by handle %p [%d].\n", handles[i], i);
++                                return i;
++                            }
++                        }
++                        else
++                        {
++                            if ((size = read( fds[i].fd, &value, sizeof(value) )) == sizeof(value))
++                            {
++                                /* We found our object. */
++                                TRACE("Woken up by handle %p [%d].\n", handles[i], i);
++                                return i;
++                            }
+                         }
+                     }
+                 }
+-- 
+2.19.1
+

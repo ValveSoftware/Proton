@@ -1,0 +1,83 @@
+From 87c49b186e43020a1ead629e9b881bc5b5c2f193 Mon Sep 17 00:00:00 2001
+From: Zebediah Figura <z.figura12@gmail.com>
+Date: Sat, 9 Jun 2018 15:57:48 -0500
+Subject: [PATCH 27/83] ntdll: Implement NtReleaseMutant().
+
+Signed-off-by: Zebediah Figura <z.figura12@gmail.com>
+---
+ dlls/ntdll/esync.c | 31 +++++++++++++++++++++++++++++++
+ dlls/ntdll/esync.h |  1 +
+ dlls/ntdll/sync.c  |  3 +++
+ 3 files changed, 35 insertions(+)
+
+diff --git a/dlls/ntdll/esync.c b/dlls/ntdll/esync.c
+index 64947c22e3..f228d2150c 100644
+--- a/dlls/ntdll/esync.c
++++ b/dlls/ntdll/esync.c
+@@ -427,6 +427,37 @@ NTSTATUS esync_create_mutex( HANDLE *handle, ACCESS_MASK access,
+     return ret;
+ }
+ 
++NTSTATUS esync_release_mutex( HANDLE *handle, LONG *prev )
++{
++    struct mutex *mutex = esync_get_object( handle );
++    static const uint64_t value = 1;
++
++    TRACE("%p, %p.\n", handle, prev);
++
++    if (!mutex) return STATUS_INVALID_HANDLE;
++
++    /* This is thread-safe, because the only thread that can change the tid to
++     * or from our tid is ours. */
++    if (mutex->tid != GetCurrentThreadId()) return STATUS_MUTANT_NOT_OWNED;
++
++    if (prev) *prev = mutex->count;
++
++    mutex->count--;
++
++    if (!mutex->count)
++    {
++        /* This is also thread-safe, as long as signaling the file is the last
++         * thing we do. Other threads don't care about the tid if it isn't
++         * theirs. */
++        mutex->tid = 0;
++
++        if (write( mutex->obj.fd, &value, sizeof(value) ) == -1)
++            return FILE_GetNtStatus();
++    }
++
++    return STATUS_SUCCESS;
++}
++
+ #define TICKSPERSEC        10000000
+ #define TICKSPERMSEC       10000
+ 
+diff --git a/dlls/ntdll/esync.h b/dlls/ntdll/esync.h
+index ee81852ef9..37fbfb234c 100644
+--- a/dlls/ntdll/esync.h
++++ b/dlls/ntdll/esync.h
+@@ -31,6 +31,7 @@ extern NTSTATUS esync_reset_event( HANDLE handle ) DECLSPEC_HIDDEN;
+ extern NTSTATUS esync_pulse_event( HANDLE handle ) DECLSPEC_HIDDEN;
+ extern NTSTATUS esync_create_mutex( HANDLE *handle, ACCESS_MASK access,
+     const OBJECT_ATTRIBUTES *attr, BOOLEAN initial ) DECLSPEC_HIDDEN;
++extern NTSTATUS esync_release_mutex( HANDLE *handle, LONG *prev ) DECLSPEC_HIDDEN;
+ 
+ extern NTSTATUS esync_wait_objects( DWORD count, const HANDLE *handles, BOOLEAN wait_any,
+                                     BOOLEAN alertable, const LARGE_INTEGER *timeout ) DECLSPEC_HIDDEN;
+diff --git a/dlls/ntdll/sync.c b/dlls/ntdll/sync.c
+index 76004d613c..0040da4ffa 100644
+--- a/dlls/ntdll/sync.c
++++ b/dlls/ntdll/sync.c
+@@ -538,6 +538,9 @@ NTSTATUS WINAPI NtReleaseMutant( IN HANDLE handle, OUT PLONG prev_count OPTIONAL
+ {
+     NTSTATUS    status;
+ 
++    if (do_esync())
++        return esync_release_mutex( handle, prev_count );
++
+     SERVER_START_REQ( release_mutex )
+     {
+         req->handle = wine_server_obj_handle( handle );
+-- 
+2.19.1
+

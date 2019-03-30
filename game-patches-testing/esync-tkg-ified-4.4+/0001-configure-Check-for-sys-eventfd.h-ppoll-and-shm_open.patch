@@ -1,0 +1,184 @@
+From cd828e1fd80c74b0cebeb20ab0267b9ff8245f52 Mon Sep 17 00:00:00 2001
+From: Zebediah Figura <z.figura12@gmail.com>
+Date: Wed, 13 Jun 2018 10:44:49 -0500
+Subject: [PATCH 01/83] configure: Check for sys/eventfd.h, ppoll(), and
+ shm_open().
+
+We use ppoll() instead of poll() for the better time granularity.
+
+Although perhaps we shouldn't since the server doesn't do this.
+
+Signed-off-by: Zebediah Figura <z.figura12@gmail.com>
+---
+ configure           | 68 +++++++++++++++++++++++++++++++++++++++++++++
+ configure.ac        | 12 ++++++++
+ include/config.h.in |  9 ++++++
+ 3 files changed, 89 insertions(+)
+
+diff --git a/configure b/configure
+index 51e3d7fc14..eb0a11ca86 100755
+--- a/configure
++++ b/configure
+@@ -7352,6 +7352,7 @@ for ac_header in \
+ 	sys/elf32.h \
+ 	sys/epoll.h \
+ 	sys/event.h \
++	sys/eventfd.h \
+ 	sys/exec_elf.h \
+ 	sys/filio.h \
+ 	sys/inotify.h \
+@@ -16552,6 +16553,7 @@ for ac_func in \
+ 	poll \
+ 	popen \
+ 	port_create \
++	ppoll \
+ 	prctl \
+ 	pread \
+ 	proc_pidinfo \
+@@ -16964,6 +16966,72 @@ fi
+ 
+ LIBS=$ac_save_LIBS
+ 
++if test "$ac_cv_header_sys_mman_h" = "yes" -a "x$RT_LIBS" = "x"
++then
++    ac_save_LIBS=$LIBS
++    { $as_echo "$as_me:${as_lineno-$LINENO}: checking for library containing shm_open" >&5
++$as_echo_n "checking for library containing shm_open... " >&6; }
++if ${ac_cv_search_shm_open+:} false; then :
++  $as_echo_n "(cached) " >&6
++else
++  ac_func_search_save_LIBS=$LIBS
++cat confdefs.h - <<_ACEOF >conftest.$ac_ext
++/* end confdefs.h.  */
++
++/* Override any GCC internal prototype to avoid an error.
++   Use char because int might match the return type of a GCC
++   builtin and then its argument prototype would still apply.  */
++#ifdef __cplusplus
++extern "C"
++#endif
++char shm_open ();
++int
++main ()
++{
++return shm_open ();
++  ;
++  return 0;
++}
++_ACEOF
++for ac_lib in '' rt; do
++  if test -z "$ac_lib"; then
++    ac_res="none required"
++  else
++    ac_res=-l$ac_lib
++    LIBS="-l$ac_lib  $ac_func_search_save_LIBS"
++  fi
++  if ac_fn_c_try_link "$LINENO"; then :
++  ac_cv_search_shm_open=$ac_res
++fi
++rm -f core conftest.err conftest.$ac_objext \
++    conftest$ac_exeext
++  if ${ac_cv_search_shm_open+:} false; then :
++  break
++fi
++done
++if ${ac_cv_search_shm_open+:} false; then :
++
++else
++  ac_cv_search_shm_open=no
++fi
++rm conftest.$ac_ext
++LIBS=$ac_func_search_save_LIBS
++fi
++{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_search_shm_open" >&5
++$as_echo "$ac_cv_search_shm_open" >&6; }
++ac_res=$ac_cv_search_shm_open
++if test "$ac_res" != no; then :
++  test "$ac_res" = "none required" || LIBS="$ac_res $LIBS"
++
++$as_echo "#define HAVE_SHM_OPEN 1" >>confdefs.h
++
++                    test "$ac_res" = "none required" || RT_LIBS="$ac_res"
++
++fi
++
++fi
++LIBS=$ac_save_LIBS
++
+ if test "x$with_ldap" != "xno"
+ then
+         if ${LDAP_CFLAGS:+false} :; then :
+diff --git a/configure.ac b/configure.ac
+index b64d99e9d1..fae1a1a228 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -513,6 +513,7 @@ AC_CHECK_HEADERS(\
+ 	sys/elf32.h \
+ 	sys/epoll.h \
+ 	sys/event.h \
++	sys/eventfd.h \
+ 	sys/exec_elf.h \
+ 	sys/filio.h \
+ 	sys/inotify.h \
+@@ -2176,6 +2177,7 @@ AC_CHECK_FUNCS(\
+ 	poll \
+ 	popen \
+ 	port_create \
++	ppoll \
+ 	prctl \
+ 	pread \
+ 	proc_pidinfo \
+@@ -2256,6 +2258,16 @@ AC_SEARCH_LIBS(clock_gettime, rt,
+                 test "$ac_res" = "none required" || AC_SUBST(RT_LIBS,"$ac_res")])
+ LIBS=$ac_save_LIBS
+ 
++dnl Check for shm_open which may be in -lrt
++if test "$ac_cv_header_sys_mman_h" = "yes" -a "x$RT_LIBS" = "x"
++then
++    ac_save_LIBS=$LIBS
++    AC_SEARCH_LIBS(shm_open, rt,
++                   [AC_DEFINE(HAVE_SHM_OPEN, 1, [Define to 1 if you have the `shm_open' function.])
++                    test "$ac_res" = "none required" || AC_SUBST(RT_LIBS,"$ac_res")])
++fi
++LIBS=$ac_save_LIBS
++
+ dnl **** Check for OpenLDAP ***
+ if test "x$with_ldap" != "xno"
+ then
+diff --git a/include/config.h.in b/include/config.h.in
+index c5a3cb4807..1ba9efb29e 100644
+--- a/include/config.h.in
++++ b/include/config.h.in
+@@ -750,6 +750,9 @@
+ /* Define if we can use ppdev.h for parallel port access */
+ #undef HAVE_PPDEV
+ 
++/* Define to 1 if you have the `ppoll' function. */
++#undef HAVE_PPOLL
++
+ /* Define to 1 if you have the `prctl' function. */
+ #undef HAVE_PRCTL
+ 
+@@ -876,6 +879,9 @@
+ /* Define to 1 if `interface_id' is a member of `sg_io_hdr_t'. */
+ #undef HAVE_SG_IO_HDR_T_INTERFACE_ID
+ 
++/* Define to 1 if you have the `shm_open' function. */
++#undef HAVE_SHM_OPEN
++
+ /* Define if sigaddset is supported */
+ #undef HAVE_SIGADDSET
+ 
+@@ -1107,6 +1113,9 @@
+ /* Define to 1 if you have the <sys/epoll.h> header file. */
+ #undef HAVE_SYS_EPOLL_H
+ 
++/* Define to 1 if you have the <sys/eventfd.h> header file. */
++#undef HAVE_SYS_EVENTFD_H
++
+ /* Define to 1 if you have the <sys/event.h> header file. */
+ #undef HAVE_SYS_EVENT_H
+ 
+-- 
+2.19.1
+

@@ -1,0 +1,41 @@
+From 44385825444af90ef6fa1cb7504035c667e4535f Mon Sep 17 00:00:00 2001
+From: Zebediah Figura <z.figura12@gmail.com>
+Date: Wed, 20 Jun 2018 13:41:12 -0500
+Subject: [PATCH 55/83] ntdll: Let the server know when we are doing a message
+ wait.
+
+Signed-off-by: Zebediah Figura <z.figura12@gmail.com>
+---
+ dlls/ntdll/esync.c | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
+
+diff --git a/dlls/ntdll/esync.c b/dlls/ntdll/esync.c
+index 59704bd90a..e5106a5bdd 100644
+--- a/dlls/ntdll/esync.c
++++ b/dlls/ntdll/esync.c
+@@ -734,11 +734,22 @@ NTSTATUS esync_wait_objects( DWORD count, const HANDLE *handles, BOOLEAN wait_an
+ 
+     if (objs[count - 1] && objs[count - 1]->type == ESYNC_QUEUE)
+     {
++        select_op_t select_op;
++
+         /* Last object in the list is a queue, which means someone is using
+          * MsgWaitForMultipleObjects(). We have to wait not only for the server
+          * fd (signaled on send_message, etc.) but also the USER driver's fd
+          * (signaled on e.g. X11 events.) */
+         msgwait = TRUE;
++
++        /* We need to let the server know we are doing a message wait, for two
++         * reasons. First one is WaitForInputIdle(). Second one is checking for
++         * hung queues. Do it like this. */
++        select_op.wait.op = SELECT_WAIT;
++        select_op.wait.handles[0] = wine_server_obj_handle( handles[count - 1] );
++        ret = server_select( &select_op, offsetof( select_op_t, wait.handles[1] ), 0, &zero );
++        if (ret != STATUS_WAIT_0 && ret != STATUS_TIMEOUT)
++            ERR("Unexpected ret %#x\n", ret);
+     }
+ 
+     if (has_esync && has_server)
+-- 
+2.19.1
+

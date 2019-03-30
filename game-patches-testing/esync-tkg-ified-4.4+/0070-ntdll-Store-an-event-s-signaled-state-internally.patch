@@ -1,0 +1,365 @@
+From c4b07bbdde6a3e54c2a272c2d98dad4928877565 Mon Sep 17 00:00:00 2001
+From: Zebediah Figura <z.figura12@gmail.com>
+Date: Thu, 26 Jul 2018 11:20:44 -0600
+Subject: [PATCH 70/83] ntdll: Store an event's signaled state internally.
+
+This was way harder than I thought it would be...
+
+Signed-off-by: Zebediah Figura <z.figura12@gmail.com>
+---
+ dlls/ntdll/esync.c | 210 ++++++++++++++++++++++++++++++++++++---------
+ server/esync.c     |  26 +++---
+ 2 files changed, 181 insertions(+), 55 deletions(-)
+
+diff --git a/dlls/ntdll/esync.c b/dlls/ntdll/esync.c
+index 90531279eb..8883b46bc9 100644
+--- a/dlls/ntdll/esync.c
++++ b/dlls/ntdll/esync.c
+@@ -92,12 +92,21 @@ struct semaphore
+     int max;
+     int count;
+ };
++C_ASSERT(sizeof(struct semaphore) == 8);
+ 
+ struct mutex
+ {
+     DWORD tid;
+     int count;    /* recursion count */
+ };
++C_ASSERT(sizeof(struct mutex) == 8);
++
++struct event
++{
++    int signaled;
++    int locked;
++};
++C_ASSERT(sizeof(struct event) == 8);
+ 
+ static char shm_name[29];
+ static int shm_fd;
+@@ -395,7 +404,7 @@ NTSTATUS esync_create_semaphore(HANDLE *handle, ACCESS_MASK access,
+     /* We need this lock to protect against a potential (though unlikely) race:
+      * if a different process tries to open a named object and manages to use
+      * it between the time we get back from the server and the time we
+-     * initialize the shared memory, it'll have uninitialize values for the
++     * initialize the shared memory, it'll have uninitialized values for the
+      * object's state. That requires us to be REALLY slow, but we're not taking
+      * any chances. Synchronize on the CS here so that we're sure to be ready
+      * before anyone else can open the object. */
+@@ -494,34 +503,121 @@ NTSTATUS esync_create_event( HANDLE *handle, ACCESS_MASK access,
+     const OBJECT_ATTRIBUTES *attr, EVENT_TYPE event_type, BOOLEAN initial )
+ {
+     enum esync_type type = (event_type == SynchronizationEvent ? ESYNC_AUTO_EVENT : ESYNC_MANUAL_EVENT);
++    NTSTATUS ret;
+ 
+     TRACE("name %s, %s-reset, initial %d.\n",
+         attr ? debugstr_us(attr->ObjectName) : "<no name>",
+         event_type == NotificationEvent ? "manual" : "auto", initial);
+ 
+-    return create_esync( type, handle, access, attr, initial, 0 );
++    RtlEnterCriticalSection( &shm_init_section );
++
++    ret = create_esync( type, handle, access, attr, initial, 0 );
++
++    if (!ret)
++    {
++        /* Initialize the shared memory portion. */
++        struct esync *obj = get_cached_object( *handle );
++        struct event *event = obj->shm;
++        event->signaled = initial;
++        event->locked = 0;
++    }
++
++    RtlLeaveCriticalSection( &shm_init_section );
++
++    return ret;
+ }
+ 
+ NTSTATUS esync_open_event( HANDLE *handle, ACCESS_MASK access,
+     const OBJECT_ATTRIBUTES *attr )
+ {
++    NTSTATUS ret;
++
+     TRACE("name %s.\n", debugstr_us(attr->ObjectName));
+ 
+-    return open_esync( ESYNC_AUTO_EVENT, handle, access, attr ); /* doesn't matter which */
++    RtlEnterCriticalSection( &shm_init_section );
++    ret = open_esync( ESYNC_AUTO_EVENT, handle, access, attr ); /* doesn't matter which */
++    RtlLeaveCriticalSection( &shm_init_section );
++    return ret;
++}
++
++static inline void small_pause(void)
++{
++#ifdef __i386__
++    __asm__ __volatile__( "rep;nop" : : : "memory" );
++#else
++    __asm__ __volatile__( "" : : : "memory" );
++#endif
+ }
+ 
++/* Manual-reset events are actually racier than other objects in terms of shm
++ * state. With other objects, races don't matter, because we only treat the shm
++ * state as a hint that lets us skip poll()—we still have to read(). But with
++ * manual-reset events we don't, which means that the shm state can be out of
++ * sync with the actual state.
++ *
++ * In general we shouldn't have to worry about races between modifying the
++ * event and waiting on it. If the state changes while we're waiting, it's
++ * equally plausible that we caught it before or after the state changed.
++ * However, we can have races between SetEvent() and ResetEvent(), so that the
++ * event has inconsistent internal state.
++ *
++ * To solve this we have to use the other field to lock the event. Currently
++ * this is implemented as a spinlock, but I'm not sure if a futex might be
++ * better. I'm also not sure if it's possible to obviate locking by arranging
++ * writes and reads in a certain way.
++ *
++ * Note that we don't have to worry about locking in esync_wait_objects().
++ * There's only two general patterns:
++ *
++ * WaitFor()    SetEvent()
++ * -------------------------
++ * read()
++ * signaled = 0
++ *              signaled = 1
++ *              write()
++ * -------------------------
++ * read()
++ *              signaled = 1
++ * signaled = 0
++ *              <no write(), because it was already signaled>
++ * -------------------------
++ *
++ * That is, if SetEvent() tries to signal the event before WaitFor() resets its
++ * signaled state, it won't bother trying to write(), and then the signaled
++ * state will be reset, so the result is a consistent non-signaled event.
++ * There's several variations to this pattern but all of them are protected in
++ * the same way. Note however this is why we have to use interlocked_xchg()
++ * event inside of the lock.
++ *
++ * And of course if SetEvent() follows WaitFor() entirely, well, there's no
++ * problem at all.
++ */
++
+ NTSTATUS esync_set_event( HANDLE handle )
+ {
+     static const uint64_t value = 1;
+     struct esync *obj;
++    struct event *event;
+     NTSTATUS ret;
+ 
+     TRACE("%p.\n", handle);
+ 
+     if ((ret = get_object( handle, &obj ))) return ret;
++    event = obj->shm;
+ 
+-    if (write( obj->fd, &value, sizeof(value) ) == -1)
+-        return FILE_GetNtStatus();
++    /* Acquire the spinlock. */
++    while (interlocked_cmpxchg( &event->locked, 1, 0 ))
++        small_pause();
++
++    /* Only bother signaling the fd if we weren't already signaled. */
++    if (!interlocked_xchg( &event->signaled, 1 ))
++    {
++        if (write( obj->fd, &value, sizeof(value) ) == -1)
++            return FILE_GetNtStatus();
++    }
++
++    /* Release the spinlock. */
++    event->locked = 0;
+ 
+     return STATUS_SUCCESS;
+ }
+@@ -530,14 +626,27 @@ NTSTATUS esync_reset_event( HANDLE handle )
+ {
+     static uint64_t value;
+     struct esync *obj;
++    struct event *event;
+     NTSTATUS ret;
+ 
+     TRACE("%p.\n", handle);
+ 
+     if ((ret = get_object( handle, &obj ))) return ret;
++    event = obj->shm;
+ 
+-    /* we don't care about the return value */
+-    read( obj->fd, &value, sizeof(value) );
++    /* Acquire the spinlock. */
++    while (interlocked_cmpxchg( &event->locked, 1, 0 ))
++        small_pause();
++
++    /* Only bother signaling the fd if we weren't already signaled. */
++    if (interlocked_xchg( &event->signaled, 0 ))
++    {
++        /* we don't care about the return value */
++        read( obj->fd, &value, sizeof(value) );
++    }
++
++    /* Release the spinlock. */
++    event->locked = 0;
+ 
+     return STATUS_SUCCESS;
+ }
+@@ -732,6 +841,35 @@ static int do_poll( struct pollfd *fds, nfds_t nfds, ULONGLONG *end )
+     return ret;
+ }
+ 
++static void update_grabbed_object( struct esync *obj )
++{
++    if (obj->type == ESYNC_MUTEX)
++    {
++        struct mutex *mutex = obj->shm;
++        /* We don't have to worry about a race between this and read(); the
++         * fact that we grabbed it means the count is now zero, so nobody else
++         * can (and the only thread that can release it is us). */
++        mutex->tid = GetCurrentThreadId();
++        mutex->count++;
++    }
++    else if (obj->type == ESYNC_SEMAPHORE)
++    {
++        struct semaphore *semaphore = obj->shm;
++        /* We don't have to worry about a race between this and read(); the
++         * fact that we were able to grab it at all means the count is nonzero,
++         * and if someone else grabbed it then the count must have been >= 2,
++         * etc. */
++        interlocked_xchg_add( &semaphore->count, -1 );
++    }
++    else if (obj->type == ESYNC_AUTO_EVENT)
++    {
++        struct event *event = obj->shm;
++        /* We don't have to worry about a race between this and read(), for
++         * reasons described near esync_set_event(). */
++        event->signaled = 0;
++    }
++}
++
+ /* A value of STATUS_NOT_IMPLEMENTED returned from this function means that we
+  * need to delegate to server_select(). */
+ NTSTATUS esync_wait_objects( DWORD count, const HANDLE *handles, BOOLEAN wait_any,
+@@ -897,9 +1035,30 @@ NTSTATUS esync_wait_objects( DWORD count, const HANDLE *handles, BOOLEAN wait_an
+                     break;
+                 }
+                 case ESYNC_AUTO_EVENT:
++                {
++                    struct event *event = obj->shm;
++
++                    if (event->signaled)
++                    {
++                        if ((size = read( obj->fd, &value, sizeof(value) )) == sizeof(value))
++                        {
++                            TRACE("Woken up by handle %p [%d].\n", handles[i], i);
++                            event->signaled = 0;
++                            return i;
++                        }
++                    }
++                }
+                 case ESYNC_MANUAL_EVENT:
+-                    /* TODO */
++                {
++                    struct event *event = obj->shm;
++
++                    if (event->signaled)
++                    {
++                        TRACE("Woken up by handle %p [%d].\n", handles[i], i);
++                        return i;
++                    }
+                     break;
++                }
+                 case ESYNC_AUTO_SERVER:
+                 case ESYNC_MANUAL_SERVER:
+                 case ESYNC_QUEUE:
+@@ -960,25 +1119,7 @@ NTSTATUS esync_wait_objects( DWORD count, const HANDLE *handles, BOOLEAN wait_an
+                             {
+                                 /* We found our object. */
+                                 TRACE("Woken up by handle %p [%d].\n", handles[i], i);
+-                                if (obj->type == ESYNC_MUTEX)
+-                                {
+-                                    struct mutex *mutex = obj->shm;
+-                                    /* We don't have to worry about a race between this and read();
+-                                     * the fact that we grabbed it means the count is now zero,
+-                                     * so nobody else can (and the only thread that can release
+-                                     * it is us). */
+-                                    mutex->tid = GetCurrentThreadId();
+-                                    mutex->count = 1;
+-                                }
+-                                else if (obj->type == ESYNC_SEMAPHORE)
+-                                {
+-                                    struct semaphore *semaphore = obj->shm;
+-                                    /* We don't have to worry about a race between this and read();
+-                                     * the fact that we were able to grab it at all means the count
+-                                     * is nonzero, and if someone else grabbed it then the count
+-                                     * must have been >= 2, etc. */
+-                                    interlocked_xchg_add( &semaphore->count, -1 );
+-                                }
++                                update_grabbed_object( obj );
+                                 return i;
+                             }
+                         }
+@@ -1142,19 +1283,8 @@ tryagain:
+                 /* Make sure to let ourselves know that we grabbed the mutexes
+                  * and semaphores. */
+                 for (i = 0; i < count; i++)
+-                {
+-                    if (objs[i]->type == ESYNC_MUTEX)
+-                    {
+-                        struct mutex *mutex = objs[i]->shm;
+-                        mutex->tid = GetCurrentThreadId();
+-                        mutex->count++;
+-                    }
+-                    else if (objs[i]->type == ESYNC_SEMAPHORE)
+-                    {
+-                        struct semaphore *semaphore = objs[i]->shm;
+-                        interlocked_xchg_add( &semaphore->count, -1 );
+-                    }
+-                }
++                    update_grabbed_object( objs[i] );
++
+                 TRACE("Wait successful.\n");
+                 return STATUS_SUCCESS;
+             }
+diff --git a/server/esync.c b/server/esync.c
+index 5cf4bddbb0..f1fa923cca 100644
+--- a/server/esync.c
++++ b/server/esync.c
+@@ -190,25 +190,21 @@ static struct esync *create_esync( struct object *root, const struct unicode_str
+                 return NULL;
+             }
+             esync->type = type;
+-            if (type == ESYNC_SEMAPHORE || type == ESYNC_MUTEX)
++
++            /* Use the fd as index, since that'll be unique across all
++             * processes, but should hopefully end up also allowing reuse. */
++            esync->shm_idx = esync->fd + 1; /* we keep index 0 reserved */
++            while (esync->shm_idx * 8 >= shm_size)
+             {
+-                /* Use the fd as index, since that'll be unique across all
+-                 * processes, but should hopefully end up also allowing reuse. */
+-                esync->shm_idx = esync->fd + 1; /* we keep index 0 reserved */
+-                while (esync->shm_idx * 8 >= shm_size)
++                /* Better expand the shm section. */
++                shm_size += sysconf( _SC_PAGESIZE );
++                if (ftruncate( shm_fd, shm_size ) == -1)
+                 {
+-                    /* Better expand the shm section. */
+-                    shm_size += sysconf( _SC_PAGESIZE );
+-                    if (ftruncate( shm_fd, shm_size ) == -1)
+-                    {
+-                        fprintf( stderr, "esync: couldn't expand %s to size %ld: ",
+-                            shm_name, shm_size );
+-                        perror( "ftruncate" );
+-                    }
++                    fprintf( stderr, "esync: couldn't expand %s to size %ld: ",
++                        shm_name, shm_size );
++                    perror( "ftruncate" );
+                 }
+             }
+-            else
+-                esync->shm_idx = 0;
+         }
+         else
+         {
+-- 
+2.19.1
+

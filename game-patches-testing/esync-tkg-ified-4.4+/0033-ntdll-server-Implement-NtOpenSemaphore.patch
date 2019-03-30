@@ -1,0 +1,327 @@
+From 2af5a07c4db0ac91cf318820cbc69088d6ece43c Mon Sep 17 00:00:00 2001
+From: Zebediah Figura <z.figura12@gmail.com>
+Date: Sun, 10 Jun 2018 00:29:27 -0500
+Subject: [PATCH 33/83] ntdll, server: Implement NtOpenSemaphore().
+
+Signed-off-by: Zebediah Figura <z.figura12@gmail.com>
+---
+ dlls/ntdll/esync.c             | 60 ++++++++++++++++++++++++++++++++++
+ dlls/ntdll/esync.h             |  2 ++
+ dlls/ntdll/sync.c              |  3 ++
+ include/wine/server_protocol.h | 21 ++++++++++++
+ server/esync.c                 | 30 +++++++++++++++++
+ server/protocol.def            | 12 +++++++
+ server/request.h               | 10 ++++++
+ server/trace.c                 | 18 ++++++++++
+ 8 files changed, 156 insertions(+)
+
+diff --git a/dlls/ntdll/esync.c b/dlls/ntdll/esync.c
+index 0b373e36ed..f840b57171 100644
+--- a/dlls/ntdll/esync.c
++++ b/dlls/ntdll/esync.c
+@@ -275,6 +275,37 @@ static NTSTATUS create_esync(enum esync_type *type, int *fd, HANDLE *handle,
+     return ret;
+ }
+ 
++static NTSTATUS open_esync( enum esync_type *type, int *fd, HANDLE *handle,
++    ACCESS_MASK access, const OBJECT_ATTRIBUTES *attr )
++{
++    NTSTATUS ret;
++    obj_handle_t fd_handle;
++    sigset_t sigset;
++
++    server_enter_uninterrupted_section( &fd_cache_section, &sigset );
++    SERVER_START_REQ( open_esync )
++    {
++        req->access     = access;
++        req->attributes = attr->Attributes;
++        req->rootdir    = wine_server_obj_handle( attr->RootDirectory );
++        req->type       = *type;
++        if (attr->ObjectName)
++            wine_server_add_data( req, attr->ObjectName->Buffer, attr->ObjectName->Length );
++        if (!(ret = wine_server_call( req )))
++        {
++            *handle = wine_server_ptr_handle( reply->handle );
++            *type = reply->type;
++            *fd = receive_fd( &fd_handle );
++            assert( wine_server_ptr_handle(fd_handle) == *handle );
++        }
++    }
++    SERVER_END_REQ;
++    server_leave_uninterrupted_section( &fd_cache_section, &sigset );
++
++    TRACE("-> handle %p, fd %d.\n", *handle, *fd);
++    return ret;
++}
++
+ NTSTATUS esync_create_semaphore(HANDLE *handle, ACCESS_MASK access,
+     const OBJECT_ATTRIBUTES *attr, LONG initial, LONG max)
+ {
+@@ -303,6 +334,35 @@ NTSTATUS esync_create_semaphore(HANDLE *handle, ACCESS_MASK access,
+     return ret;
+ }
+ 
++NTSTATUS esync_open_semaphore( HANDLE *handle, ACCESS_MASK access,
++    const OBJECT_ATTRIBUTES *attr )
++{
++    enum esync_type type = ESYNC_SEMAPHORE;
++    struct semaphore *semaphore;
++    NTSTATUS ret;
++    int fd = -1;
++
++    TRACE("name %s.\n", debugstr_us(attr->ObjectName));
++
++    ret = open_esync( &type, &fd, handle, access, attr );
++    if (!ret)
++    {
++        semaphore = RtlAllocateHeap( GetProcessHeap(), 0, sizeof(*semaphore) );
++        if (!semaphore)
++            return STATUS_NO_MEMORY;
++
++        semaphore->obj.type = ESYNC_SEMAPHORE;
++        semaphore->obj.fd = fd;
++
++        FIXME("Attempt to open a semaphore, this will not work.\n");
++        semaphore->max = 0xdeadbeef;
++
++        add_to_list( *handle, &semaphore->obj );
++    }
++
++    return ret;
++}
++
+ NTSTATUS esync_release_semaphore( HANDLE handle, ULONG count, ULONG *prev )
+ {
+     struct semaphore *semaphore = esync_get_object( handle );
+diff --git a/dlls/ntdll/esync.h b/dlls/ntdll/esync.h
+index 979c3d81e2..73bb3c1cfc 100644
+--- a/dlls/ntdll/esync.h
++++ b/dlls/ntdll/esync.h
+@@ -32,6 +32,8 @@ extern NTSTATUS esync_pulse_event( HANDLE handle ) DECLSPEC_HIDDEN;
+ extern NTSTATUS esync_create_mutex( HANDLE *handle, ACCESS_MASK access,
+     const OBJECT_ATTRIBUTES *attr, BOOLEAN initial ) DECLSPEC_HIDDEN;
+ extern NTSTATUS esync_release_mutex( HANDLE *handle, LONG *prev ) DECLSPEC_HIDDEN;
++extern NTSTATUS esync_open_semaphore( HANDLE *handle, ACCESS_MASK access,
++    const OBJECT_ATTRIBUTES *attr ) DECLSPEC_HIDDEN;
+ 
+ extern NTSTATUS esync_wait_objects( DWORD count, const HANDLE *handles, BOOLEAN wait_any,
+                                     BOOLEAN alertable, const LARGE_INTEGER *timeout ) DECLSPEC_HIDDEN;
+diff --git a/dlls/ntdll/sync.c b/dlls/ntdll/sync.c
+index 132b8688ea..5e86605862 100644
+--- a/dlls/ntdll/sync.c
++++ b/dlls/ntdll/sync.c
+@@ -221,6 +221,9 @@ NTSTATUS WINAPI NtOpenSemaphore( HANDLE *handle, ACCESS_MASK access, const OBJEC
+ 
+     if ((ret = validate_open_object_attributes( attr ))) return ret;
+ 
++    if (do_esync())
++        return esync_open_semaphore( handle, access, attr );
++
+     SERVER_START_REQ( open_semaphore )
+     {
+         req->access     = access;
+diff --git a/include/wine/server_protocol.h b/include/wine/server_protocol.h
+index 317fb9dc58..564c4ef476 100644
+--- a/include/wine/server_protocol.h
++++ b/include/wine/server_protocol.h
+@@ -5675,6 +5675,24 @@ struct create_esync_reply
+ };
+ 
+ 
++struct open_esync_request
++{
++    struct request_header __header;
++    unsigned int access;
++    unsigned int attributes;
++    obj_handle_t rootdir;
++    int          type;
++    /* VARARG(name,unicode_str); */
++    char __pad_28[4];
++};
++struct open_esync_reply
++{
++    struct reply_header __header;
++    obj_handle_t handle;
++    int          type;
++};
++
++
+ struct get_esync_fd_request
+ {
+     struct request_header __header;
+@@ -5992,6 +6010,7 @@ enum request
+     REQ_set_job_completion_port,
+     REQ_terminate_job,
+     REQ_create_esync,
++    REQ_open_esync,
+     REQ_get_esync_fd,
+     REQ_NB_REQUESTS
+ };
+@@ -6292,6 +6311,7 @@ union generic_request
+     struct set_job_completion_port_request set_job_completion_port_request;
+     struct terminate_job_request terminate_job_request;
+     struct create_esync_request create_esync_request;
++    struct open_esync_request open_esync_request;
+     struct get_esync_fd_request get_esync_fd_request;
+ };
+ union generic_reply
+@@ -6590,6 +6610,7 @@ union generic_reply
+     struct set_job_completion_port_reply set_job_completion_port_reply;
+     struct terminate_job_reply terminate_job_reply;
+     struct create_esync_reply create_esync_reply;
++    struct open_esync_reply open_esync_reply;
+     struct get_esync_fd_reply get_esync_fd_reply;
+ };
+ 
+diff --git a/server/esync.c b/server/esync.c
+index 6cc212e2b9..2c89152f15 100644
+--- a/server/esync.c
++++ b/server/esync.c
+@@ -233,6 +233,36 @@ DECL_HANDLER(create_esync)
+     if (root) release_object( root );
+ }
+ 
++DECL_HANDLER(open_esync)
++{
++    struct unicode_str name = get_req_unicode_str();
++
++    reply->handle = open_object( current->process, req->rootdir, req->access,
++                                 &esync_ops, &name, req->attributes );
++
++    /* send over the fd */
++    if (reply->handle)
++    {
++        struct esync *esync;
++
++        if (!(esync = (struct esync *)get_handle_obj( current->process, reply->handle,
++                                                      0, &esync_ops )))
++            return;
++
++        if (!type_matches( req->type, esync->type ))
++        {
++            set_error( STATUS_OBJECT_TYPE_MISMATCH );
++            release_object( esync );
++            return;
++        }
++
++        reply->type = esync->type;
++
++        send_client_fd( current->process, esync->fd, reply->handle );
++        release_object( esync );
++    }
++}
++
+ /* Retrieve a file descriptor for an esync object which will be signaled by the
+  * server. The client should only read from (i.e. wait on) this object. */
+ DECL_HANDLER(get_esync_fd)
+diff --git a/server/protocol.def b/server/protocol.def
+index 81035875fb..bce1fcc003 100644
+--- a/server/protocol.def
++++ b/server/protocol.def
+@@ -3868,6 +3868,18 @@ struct handle_info
+     int          type;          /* type of esync object (see below) */
+ @END
+ 
++/* Open an esync object */
++@REQ(open_esync)
++    unsigned int access;        /* wanted access rights */
++    unsigned int attributes;    /* object attributes */
++    obj_handle_t rootdir;       /* root directory */
++    int          type;          /* type of esync object (above) */
++    VARARG(name,unicode_str);   /* object name */
++@REPLY
++    obj_handle_t handle;        /* handle to the event */
++    int          type;          /* type of esync object (above) */
++@END
++
+ /* Retrieve the esync fd for an object. */
+ @REQ(get_esync_fd)
+     obj_handle_t handle;        /* handle to the object */
+diff --git a/server/request.h b/server/request.h
+index 1295fb8304..326c196d67 100644
+--- a/server/request.h
++++ b/server/request.h
+@@ -404,6 +404,7 @@ DECL_HANDLER(set_job_limits);
+ DECL_HANDLER(set_job_completion_port);
+ DECL_HANDLER(terminate_job);
+ DECL_HANDLER(create_esync);
++DECL_HANDLER(open_esync);
+ DECL_HANDLER(get_esync_fd);
+ 
+ #ifdef WANT_REQUEST_HANDLERS
+@@ -703,6 +704,7 @@ static const req_handler req_handlers[REQ_NB_REQUESTS] =
+     (req_handler)req_set_job_completion_port,
+     (req_handler)req_terminate_job,
+     (req_handler)req_create_esync,
++    (req_handler)req_open_esync,
+     (req_handler)req_get_esync_fd,
+ };
+ 
+@@ -2418,6 +2420,14 @@ C_ASSERT( sizeof(struct create_esync_request) == 32 );
+ C_ASSERT( FIELD_OFFSET(struct create_esync_reply, handle) == 8 );
+ C_ASSERT( FIELD_OFFSET(struct create_esync_reply, type) == 12 );
+ C_ASSERT( sizeof(struct create_esync_reply) == 16 );
++C_ASSERT( FIELD_OFFSET(struct open_esync_request, access) == 12 );
++C_ASSERT( FIELD_OFFSET(struct open_esync_request, attributes) == 16 );
++C_ASSERT( FIELD_OFFSET(struct open_esync_request, rootdir) == 20 );
++C_ASSERT( FIELD_OFFSET(struct open_esync_request, type) == 24 );
++C_ASSERT( sizeof(struct open_esync_request) == 32 );
++C_ASSERT( FIELD_OFFSET(struct open_esync_reply, handle) == 8 );
++C_ASSERT( FIELD_OFFSET(struct open_esync_reply, type) == 12 );
++C_ASSERT( sizeof(struct open_esync_reply) == 16 );
+ C_ASSERT( FIELD_OFFSET(struct get_esync_fd_request, handle) == 12 );
+ C_ASSERT( sizeof(struct get_esync_fd_request) == 16 );
+ C_ASSERT( FIELD_OFFSET(struct get_esync_fd_reply, type) == 8 );
+diff --git a/server/trace.c b/server/trace.c
+index 0a9c8c29d5..1bdb1da735 100644
+--- a/server/trace.c
++++ b/server/trace.c
+@@ -4556,6 +4556,21 @@ static void dump_create_esync_reply( const struct create_esync_reply *req )
+     fprintf( stderr, ", type=%d", req->type );
+ }
+ 
++static void dump_open_esync_request( const struct open_esync_request *req )
++{
++    fprintf( stderr, " access=%08x", req->access );
++    fprintf( stderr, ", attributes=%08x", req->attributes );
++    fprintf( stderr, ", rootdir=%04x", req->rootdir );
++    fprintf( stderr, ", type=%d", req->type );
++    dump_varargs_unicode_str( ", name=", cur_size );
++}
++
++static void dump_open_esync_reply( const struct open_esync_reply *req )
++{
++    fprintf( stderr, " handle=%04x", req->handle );
++    fprintf( stderr, ", type=%d", req->type );
++}
++
+ static void dump_get_esync_fd_request( const struct get_esync_fd_request *req )
+ {
+     fprintf( stderr, " handle=%04x", req->handle );
+@@ -4859,6 +4874,7 @@ static const dump_func req_dumpers[REQ_NB_REQUESTS] = {
+     (dump_func)dump_set_job_completion_port_request,
+     (dump_func)dump_terminate_job_request,
+     (dump_func)dump_create_esync_request,
++    (dump_func)dump_open_esync_request,
+     (dump_func)dump_get_esync_fd_request,
+ };
+ 
+@@ -5155,6 +5171,7 @@ static const dump_func reply_dumpers[REQ_NB_REQUESTS] = {
+     NULL,
+     NULL,
+     (dump_func)dump_create_esync_reply,
++    (dump_func)dump_open_esync_reply,
+     (dump_func)dump_get_esync_fd_reply,
+ };
+ 
+@@ -5451,6 +5468,7 @@ static const char * const req_names[REQ_NB_REQUESTS] = {
+     "set_job_completion_port",
+     "terminate_job",
+     "create_esync",
++    "open_esync",
+     "get_esync_fd",
+ };
+ 
+-- 
+2.19.1
+

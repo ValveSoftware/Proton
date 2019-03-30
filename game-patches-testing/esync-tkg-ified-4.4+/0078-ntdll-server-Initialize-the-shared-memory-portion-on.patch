@@ -1,0 +1,429 @@
+From 2f794bce32133a08d35e0552c0b67b2902c5dfa9 Mon Sep 17 00:00:00 2001
+From: Zebediah Figura <z.figura12@gmail.com>
+Date: Sun, 29 Jul 2018 16:50:08 -0500
+Subject: [PATCH 78/83] ntdll, server: Initialize the shared memory portion on
+ the server side.
+
+Simply using a CS only prevents this race within one process.
+
+Signed-off-by: Zebediah Figura <z.figura12@gmail.com>
+---
+ dlls/ntdll/esync.c             | 100 +++---------------------
+ include/wine/server_protocol.h |   4 +-
+ server/esync.c                 | 135 ++++++++++++++++++++++-----------
+ server/protocol.def            |   1 +
+ server/request.h               |   3 +-
+ server/trace.c                 |   1 +
+ 6 files changed, 107 insertions(+), 137 deletions(-)
+
+diff --git a/dlls/ntdll/esync.c b/dlls/ntdll/esync.c
+index e3434e78f2..f678ae8483 100644
+--- a/dlls/ntdll/esync.c
++++ b/dlls/ntdll/esync.c
+@@ -109,7 +109,7 @@ static int shm_addrs_size;  /* length of the allocated shm_addrs array */
+ static long pagesize;
+ 
+ static NTSTATUS create_esync( enum esync_type type, HANDLE *handle,
+-    ACCESS_MASK access, const OBJECT_ATTRIBUTES *attr, int initval );
++    ACCESS_MASK access, const OBJECT_ATTRIBUTES *attr, int initval, int max );
+ 
+ void esync_init(void)
+ {
+@@ -121,7 +121,7 @@ void esync_init(void)
+         HANDLE handle;
+         NTSTATUS ret;
+ 
+-        ret = create_esync( 0, &handle, 0, NULL, 0 );
++        ret = create_esync( 0, &handle, 0, NULL, 0, 0 );
+         if (ret != STATUS_NOT_IMPLEMENTED)
+         {
+             ERR("Server is running with WINEESYNC but this process is not, please enable WINEESYNC or restart wineserver.\n");
+@@ -320,7 +320,7 @@ NTSTATUS esync_close( HANDLE handle )
+ }
+ 
+ static NTSTATUS create_esync( enum esync_type type, HANDLE *handle,
+-    ACCESS_MASK access, const OBJECT_ATTRIBUTES *attr, int initval )
++    ACCESS_MASK access, const OBJECT_ATTRIBUTES *attr, int initval, int max )
+ {
+     NTSTATUS ret;
+     data_size_t len;
+@@ -340,6 +340,7 @@ static NTSTATUS create_esync( enum esync_type type, HANDLE *handle,
+         req->access  = access;
+         req->initval = initval;
+         req->type    = type;
++        req->max     = max;
+         wine_server_add_data( req, objattr, len );
+         ret = wine_server_call( req );
+         if (!ret || ret == STATUS_OBJECT_NAME_EXISTS)
+@@ -404,60 +405,21 @@ static NTSTATUS open_esync( enum esync_type type, HANDLE *handle,
+     return ret;
+ }
+ 
+-RTL_CRITICAL_SECTION shm_init_section;
+-static RTL_CRITICAL_SECTION_DEBUG critsect_debug =
+-{
+-    0, 0, &shm_init_section,
+-    { &critsect_debug.ProcessLocksList, &critsect_debug.ProcessLocksList },
+-      0, 0, { (DWORD_PTR)(__FILE__ ": shm_init_section") }
+-};
+-RTL_CRITICAL_SECTION shm_init_section = { &critsect_debug, -1, 0, 0, 0, 0 };
+-
+ NTSTATUS esync_create_semaphore(HANDLE *handle, ACCESS_MASK access,
+     const OBJECT_ATTRIBUTES *attr, LONG initial, LONG max)
+ {
+-    NTSTATUS ret;
+-
+     TRACE("name %s, initial %d, max %d.\n",
+         attr ? debugstr_us(attr->ObjectName) : "<no name>", initial, max);
+ 
+-    /* We need this lock to protect against a potential (though unlikely) race:
+-     * if a different process tries to open a named object and manages to use
+-     * it between the time we get back from the server and the time we
+-     * initialize the shared memory, it'll have uninitialized values for the
+-     * object's state. That requires us to be REALLY slow, but we're not taking
+-     * any chances. Synchronize on the CS here so that we're sure to be ready
+-     * before anyone else can open the object. */
+-    RtlEnterCriticalSection( &shm_init_section );
+-
+-    ret = create_esync( ESYNC_SEMAPHORE, handle, access, attr, initial );
+-    if (!ret)
+-    {
+-        /* Initialize the shared memory portion.
+-         * Note we store max here (even though we don't need to) just to keep
+-         * it the same size as the mutex's shm portion. */
+-        struct esync *obj = get_cached_object( *handle );
+-        struct semaphore *semaphore = obj->shm;
+-        semaphore->max = max;
+-        semaphore->count = initial;
+-    }
+-
+-    RtlLeaveCriticalSection( &shm_init_section );
+-
+-    return ret;
++    return create_esync( ESYNC_SEMAPHORE, handle, access, attr, initial, max );
+ }
+ 
+ NTSTATUS esync_open_semaphore( HANDLE *handle, ACCESS_MASK access,
+     const OBJECT_ATTRIBUTES *attr )
+ {
+-    NTSTATUS ret;
+-
+     TRACE("name %s.\n", debugstr_us(attr->ObjectName));
+ 
+-    RtlEnterCriticalSection( &shm_init_section );
+-    ret = open_esync( ESYNC_SEMAPHORE, handle, access, attr );
+-    RtlLeaveCriticalSection( &shm_init_section );
+-    return ret;
++    return open_esync( ESYNC_SEMAPHORE, handle, access, attr );
+ }
+ 
+ NTSTATUS esync_release_semaphore( HANDLE handle, ULONG count, ULONG *prev )
+@@ -523,41 +485,20 @@ NTSTATUS esync_create_event( HANDLE *handle, ACCESS_MASK access,
+     const OBJECT_ATTRIBUTES *attr, EVENT_TYPE event_type, BOOLEAN initial )
+ {
+     enum esync_type type = (event_type == SynchronizationEvent ? ESYNC_AUTO_EVENT : ESYNC_MANUAL_EVENT);
+-    NTSTATUS ret;
+ 
+     TRACE("name %s, %s-reset, initial %d.\n",
+         attr ? debugstr_us(attr->ObjectName) : "<no name>",
+         event_type == NotificationEvent ? "manual" : "auto", initial);
+ 
+-    RtlEnterCriticalSection( &shm_init_section );
+-
+-    ret = create_esync( type, handle, access, attr, initial );
+-
+-    if (!ret)
+-    {
+-        /* Initialize the shared memory portion. */
+-        struct esync *obj = get_cached_object( *handle );
+-        struct event *event = obj->shm;
+-        event->signaled = initial;
+-        event->locked = 0;
+-    }
+-
+-    RtlLeaveCriticalSection( &shm_init_section );
+-
+-    return ret;
++    return create_esync( type, handle, access, attr, initial, 0 );
+ }
+ 
+ NTSTATUS esync_open_event( HANDLE *handle, ACCESS_MASK access,
+     const OBJECT_ATTRIBUTES *attr )
+ {
+-    NTSTATUS ret;
+-
+     TRACE("name %s.\n", debugstr_us(attr->ObjectName));
+ 
+-    RtlEnterCriticalSection( &shm_init_section );
+-    ret = open_esync( ESYNC_AUTO_EVENT, handle, access, attr ); /* doesn't matter which */
+-    RtlLeaveCriticalSection( &shm_init_section );
+-    return ret;
++    return open_esync( ESYNC_AUTO_EVENT, handle, access, attr ); /* doesn't matter which */
+ }
+ 
+ static inline void small_pause(void)
+@@ -721,39 +662,18 @@ NTSTATUS esync_query_event( HANDLE handle, EVENT_INFORMATION_CLASS class,
+ NTSTATUS esync_create_mutex( HANDLE *handle, ACCESS_MASK access,
+     const OBJECT_ATTRIBUTES *attr, BOOLEAN initial )
+ {
+-    NTSTATUS ret;
+-
+     TRACE("name %s, initial %d.\n",
+         attr ? debugstr_us(attr->ObjectName) : "<no name>", initial);
+ 
+-    RtlEnterCriticalSection( &shm_init_section );
+-
+-    ret = create_esync( ESYNC_MUTEX, handle, access, attr, initial ? 0 : 1 );
+-    if (!ret)
+-    {
+-        /* Initialize the shared memory portion. */
+-        struct esync *obj = get_cached_object( *handle );
+-        struct mutex *mutex = obj->shm;
+-        mutex->tid = initial ? GetCurrentThreadId() : 0;
+-        mutex->count = initial ? 1 : 0;
+-    }
+-
+-    RtlLeaveCriticalSection( &shm_init_section );
+-
+-    return ret;
++    return create_esync( ESYNC_MUTEX, handle, access, attr, initial ? 0 : 1, 0 );
+ }
+ 
+ NTSTATUS esync_open_mutex( HANDLE *handle, ACCESS_MASK access,
+     const OBJECT_ATTRIBUTES *attr )
+ {
+-    NTSTATUS ret;
+-
+     TRACE("name %s.\n", debugstr_us(attr->ObjectName));
+ 
+-    RtlEnterCriticalSection( &shm_init_section );
+-    ret = open_esync( ESYNC_MUTEX, handle, access, attr );
+-    RtlLeaveCriticalSection( &shm_init_section );
+-    return ret;
++    return open_esync( ESYNC_MUTEX, handle, access, attr );
+ }
+ 
+ NTSTATUS esync_release_mutex( HANDLE *handle, LONG *prev )
+diff --git a/include/wine/server_protocol.h b/include/wine/server_protocol.h
+index dff6c7c960..9eac19ac33 100644
+--- a/include/wine/server_protocol.h
++++ b/include/wine/server_protocol.h
+@@ -5663,7 +5663,9 @@ struct create_esync_request
+     unsigned int access;
+     int          initval;
+     int          type;
++    int          max;
+     /* VARARG(objattr,object_attributes); */
++    char __pad_28[4];
+ };
+ struct create_esync_reply
+ {
+diff --git a/server/esync.c b/server/esync.c
+index 3e78387e88..35e7a8a1fe 100644
+--- a/server/esync.c
++++ b/server/esync.c
+@@ -177,8 +177,63 @@ static int type_matches( enum esync_type type1, enum esync_type type2 )
+             (type2 == ESYNC_AUTO_EVENT || type2 == ESYNC_MANUAL_EVENT));
+ }
+ 
++static void *get_shm( unsigned int idx )
++{
++    int entry  = (idx * 8) / pagesize;
++    int offset = (idx * 8) % pagesize;
++
++    if (entry >= shm_addrs_size)
++    {
++        if (!(shm_addrs = realloc( shm_addrs, (entry + 1) * sizeof(shm_addrs[0]) )))
++            fprintf( stderr, "esync: couldn't expand shm_addrs array to size %d\n", entry + 1 );
++
++        memset( &shm_addrs[shm_addrs_size], 0, (entry + 1 - shm_addrs_size) * sizeof(shm_addrs[0]) );
++
++        shm_addrs_size = entry + 1;
++    }
++
++    if (!shm_addrs[entry])
++    {
++        void *addr = mmap( NULL, pagesize, PROT_READ | PROT_WRITE, MAP_SHARED, shm_fd, entry * pagesize );
++        if (addr == (void *)-1)
++        {
++            fprintf( stderr, "esync: failed to map page %d (offset %#lx): ", entry, entry * pagesize );
++            perror( "mmap" );
++        }
++
++        if (debug_level)
++            fprintf( stderr, "esync: Mapping page %d at %p.\n", entry, addr );
++
++        if (interlocked_cmpxchg_ptr( &shm_addrs[entry], addr, 0 ))
++            munmap( addr, pagesize ); /* someone beat us to it */
++    }
++
++    return (void *)((unsigned long)shm_addrs[entry] + offset);
++}
++
++struct semaphore
++{
++    int max;
++    int count;
++};
++C_ASSERT(sizeof(struct semaphore) == 8);
++
++struct mutex
++{
++    DWORD tid;
++    int count;    /* recursion count */
++};
++C_ASSERT(sizeof(struct mutex) == 8);
++
++struct event
++{
++    int signaled;
++    int locked;
++};
++C_ASSERT(sizeof(struct event) == 8);
++
+ static struct esync *create_esync( struct object *root, const struct unicode_str *name,
+-    unsigned int attr, int initval, enum esync_type type,
++    unsigned int attr, int initval, int max, enum esync_type type,
+     const struct security_descriptor *sd )
+ {
+ #ifdef HAVE_SYS_EVENTFD_H
+@@ -218,6 +273,38 @@ static struct esync *create_esync( struct object *root, const struct unicode_str
+                     perror( "ftruncate" );
+                 }
+             }
++
++            /* Initialize the shared memory portion. We want to do this on the
++             * server side to avoid a potential though unlikely race whereby
++             * the same object is opened and used between the time it's created
++             * and the time its shared memory portion is initialized. */
++            switch (type)
++            {
++            case ESYNC_SEMAPHORE:
++            {
++                struct semaphore *semaphore = get_shm( esync->shm_idx );
++                semaphore->max = max;
++                semaphore->count = initval;
++                break;
++            }
++            case ESYNC_AUTO_EVENT:
++            case ESYNC_MANUAL_EVENT:
++            {
++                struct event *event = get_shm( esync->shm_idx );
++                event->signaled = initval ? 1 : 0;
++                event->locked = 0;
++                break;
++            }
++            case ESYNC_MUTEX:
++            {
++                struct mutex *mutex = get_shm( esync->shm_idx );
++                mutex->tid = initval ? 0 : current->id;
++                mutex->count = initval ? 0 : 1;
++                break;
++            }
++            default:
++                assert( 0 );
++            }
+         }
+         else
+         {
+@@ -286,49 +373,6 @@ void esync_clear( int fd )
+     read( fd, &value, sizeof(value) );
+ }
+ 
+-/* Sadly, we need all of this infrastructure to keep the shm state in sync. */
+-
+-static void *get_shm( unsigned int idx )
+-{
+-    int entry  = (idx * 8) / pagesize;
+-    int offset = (idx * 8) % pagesize;
+-
+-    if (entry >= shm_addrs_size)
+-    {
+-        if (!(shm_addrs = realloc( shm_addrs, (entry + 1) * sizeof(shm_addrs[0]) )))
+-            fprintf( stderr, "esync: couldn't expand shm_addrs array to size %d\n", entry + 1 );
+-
+-        memset( &shm_addrs[shm_addrs_size], 0, (entry + 1 - shm_addrs_size) * sizeof(shm_addrs[0]) );
+-
+-        shm_addrs_size = entry + 1;
+-    }
+-
+-    if (!shm_addrs[entry])
+-    {
+-        void *addr = mmap( NULL, pagesize, PROT_READ | PROT_WRITE, MAP_SHARED, shm_fd, entry * pagesize );
+-        if (addr == (void *)-1)
+-        {
+-            fprintf( stderr, "esync: failed to map page %d (offset %#lx): ", entry, entry * pagesize );
+-            perror( "mmap" );
+-        }
+-
+-        if (debug_level)
+-            fprintf( stderr, "esync: Mapping page %d at %p.\n", entry, addr );
+-
+-        if (interlocked_cmpxchg_ptr( &shm_addrs[entry], addr, 0 ))
+-            munmap( addr, pagesize ); /* someone beat us to it */
+-    }
+-
+-    return (void *)((unsigned long)shm_addrs[entry] + offset);
+-}
+-
+-struct event
+-{
+-    int signaled;
+-    int locked;
+-};
+-C_ASSERT(sizeof(struct event) == 8);
+-
+ static inline void small_pause(void)
+ {
+ #ifdef __i386__
+@@ -412,7 +456,8 @@ DECL_HANDLER(create_esync)
+ 
+     if (!objattr) return;
+ 
+-    if ((esync = create_esync( root, &name, objattr->attributes, req->initval, req->type, sd )))
++    if ((esync = create_esync( root, &name, objattr->attributes, req->initval,
++        req->max, req->type, sd )))
+     {
+         if (get_error() == STATUS_OBJECT_NAME_EXISTS)
+             reply->handle = alloc_handle( current->process, esync, req->access, objattr->attributes );
+diff --git a/server/protocol.def b/server/protocol.def
+index 6be50e0186..e79c5fe8fd 100644
+--- a/server/protocol.def
++++ b/server/protocol.def
+@@ -3861,6 +3861,7 @@ struct handle_info
+     unsigned int access;        /* wanted access rights */
+     int          initval;       /* initial value */
+     int          type;          /* type of esync object (see below) */
++    int          max;           /* maximum count on a semaphore */
+     VARARG(objattr,object_attributes); /* object attributes */
+ @REPLY
+     obj_handle_t handle;        /* handle to the object */
+diff --git a/server/request.h b/server/request.h
+index 13b5b5f380..e470ccbb4a 100644
+--- a/server/request.h
++++ b/server/request.h
+@@ -2417,7 +2417,8 @@ C_ASSERT( sizeof(struct terminate_job_request) == 24 );
+ C_ASSERT( FIELD_OFFSET(struct create_esync_request, access) == 12 );
+ C_ASSERT( FIELD_OFFSET(struct create_esync_request, initval) == 16 );
+ C_ASSERT( FIELD_OFFSET(struct create_esync_request, type) == 20 );
+-C_ASSERT( sizeof(struct create_esync_request) == 24 );
++C_ASSERT( FIELD_OFFSET(struct create_esync_request, max) == 24 );
++C_ASSERT( sizeof(struct create_esync_request) == 32 );
+ C_ASSERT( FIELD_OFFSET(struct create_esync_reply, handle) == 8 );
+ C_ASSERT( FIELD_OFFSET(struct create_esync_reply, type) == 12 );
+ C_ASSERT( FIELD_OFFSET(struct create_esync_reply, shm_idx) == 16 );
+diff --git a/server/trace.c b/server/trace.c
+index f8acbb93d6..0a087666d3 100644
+--- a/server/trace.c
++++ b/server/trace.c
+@@ -4546,6 +4546,7 @@ static void dump_create_esync_request( const struct create_esync_request *req )
+     fprintf( stderr, " access=%08x", req->access );
+     fprintf( stderr, ", initval=%d", req->initval );
+     fprintf( stderr, ", type=%d", req->type );
++    fprintf( stderr, ", max=%d", req->max );
+     dump_varargs_object_attributes( ", objattr=", cur_size );
+ }
+ 
+-- 
+2.19.1
+

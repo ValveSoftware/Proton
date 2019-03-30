@@ -1,0 +1,146 @@
+From 8ccfe2dedfc7822cdc0f9d0b64493f3693ea7821 Mon Sep 17 00:00:00 2001
+From: Zebediah Figura <z.figura12@gmail.com>
+Date: Tue, 12 Jun 2018 10:01:08 -0500
+Subject: [PATCH 23/83] ntdll, wineandroid.drv, winemac.drv, winex11.drv: Store
+ the thread's queue fd in ntdll.
+
+I originally had esync grab it from the server in order to avoid touching the USER drivers, but this doesn't really work since we might perform a MsgWait before ever doing any operations which might initialize the USER driver's thread data. Doing it this way also has the advantage that we won't use extra file descriptors.
+
+In any case I haven't bothered to guard this code with do_esync(); it'd require adding that function to each USER driver and it's pretty obvious it's not going to affect anything if esync is disabled.
+
+Signed-off-by: Zebediah Figura <z.figura12@gmail.com>
+---
+ dlls/ntdll/esync.c             | 6 ++++++
+ dlls/ntdll/ntdll.spec          | 2 ++
+ dlls/ntdll/ntdll_misc.h        | 1 +
+ dlls/ntdll/thread.c            | 2 ++
+ dlls/wineandroid.drv/window.c  | 3 +++
+ dlls/winemac.drv/macdrv_main.c | 3 +++
+ dlls/winex11.drv/x11drv_main.c | 3 +++
+ 7 files changed, 20 insertions(+)
+
+diff --git a/dlls/ntdll/esync.c b/dlls/ntdll/esync.c
+index f77c84a18f..c4faf69a13 100644
+--- a/dlls/ntdll/esync.c
++++ b/dlls/ntdll/esync.c
+@@ -73,6 +73,12 @@ int do_esync(void)
+ #endif
+ }
+ 
++/* Entry point for drivers to set queue fd. */
++void __wine_esync_set_queue_fd( int fd )
++{
++    ntdll_get_thread_data()->esync_queue_fd = fd;
++}
++
+ enum esync_type
+ {
+     ESYNC_SEMAPHORE = 1,
+diff --git a/dlls/ntdll/ntdll.spec b/dlls/ntdll/ntdll.spec
+index 87b5d7078f..2c2445a58a 100644
+--- a/dlls/ntdll/ntdll.spec
++++ b/dlls/ntdll/ntdll.spec
+@@ -1516,3 +1516,5 @@
+ # Filesystem
+ @ cdecl wine_nt_to_unix_file_name(ptr ptr long long)
+ @ cdecl wine_unix_to_nt_file_name(ptr ptr)
++
++@ cdecl __wine_esync_set_queue_fd(long)
+diff --git a/dlls/ntdll/ntdll_misc.h b/dlls/ntdll/ntdll_misc.h
+index eea1387863..0ce1f32b70 100644
+--- a/dlls/ntdll/ntdll_misc.h
++++ b/dlls/ntdll/ntdll_misc.h
+@@ -235,6 +235,7 @@ struct ntdll_thread_data
+     int                wait_fd[2];    /* fd for sleeping server requests */
+     BOOL               wow64_redir;   /* Wow64 filesystem redirection flag */
+     pthread_t          pthread_id;    /* pthread thread id */
++    int                esync_queue_fd;/* fd to wait on for driver events */
+ };
+ 
+ C_ASSERT( sizeof(struct ntdll_thread_data) <= sizeof(((TEB *)0)->GdiTebBatch) );
+diff --git a/dlls/ntdll/thread.c b/dlls/ntdll/thread.c
+index c4e02dacb1..12124a054c 100644
+--- a/dlls/ntdll/thread.c
++++ b/dlls/ntdll/thread.c
+@@ -353,6 +353,7 @@ void thread_init(void)
+     thread_data->wait_fd[0] = -1;
+     thread_data->wait_fd[1] = -1;
+     thread_data->debug_info = &debug_info;
++    thread_data->esync_queue_fd = -1;
+ 
+     signal_init_thread( teb );
+     virtual_init_threading();
+@@ -658,6 +659,7 @@ NTSTATUS WINAPI RtlCreateUserThread( HANDLE process, SECURITY_DESCRIPTOR *descr,
+     thread_data->wait_fd[0]  = -1;
+     thread_data->wait_fd[1]  = -1;
+     thread_data->start_stack = (char *)teb->Tib.StackBase;
++    thread_data->esync_queue_fd = -1;
+ 
+     pthread_attr_init( &attr );
+     pthread_attr_setstack( &attr, teb->DeallocationStack,
+diff --git a/dlls/wineandroid.drv/window.c b/dlls/wineandroid.drv/window.c
+index aebe4c57b3..3bc3703eda 100644
+--- a/dlls/wineandroid.drv/window.c
++++ b/dlls/wineandroid.drv/window.c
+@@ -363,6 +363,8 @@ jboolean motion_event( JNIEnv *env, jobject obj, jint win, jint action, jint x,
+ }
+ 
+ 
++extern void __wine_esync_set_queue_fd( int fd );
++
+ /***********************************************************************
+  *           init_event_queue
+  */
+@@ -376,6 +378,7 @@ static void init_event_queue(void)
+         ERR( "could not create data\n" );
+         ExitProcess(1);
+     }
++    __wine_esync_set_queue_fd( event_pipe[0] );
+     if (wine_server_fd_to_handle( event_pipe[0], GENERIC_READ | SYNCHRONIZE, 0, &handle ))
+     {
+         ERR( "Can't allocate handle for event fd\n" );
+diff --git a/dlls/winemac.drv/macdrv_main.c b/dlls/winemac.drv/macdrv_main.c
+index 544d448f9f..5dfa54966d 100644
+--- a/dlls/winemac.drv/macdrv_main.c
++++ b/dlls/winemac.drv/macdrv_main.c
+@@ -321,6 +321,7 @@ void CDECL macdrv_ThreadDetach(void)
+     }
+ }
+ 
++extern void __wine_esync_set_queue_fd( int fd );
+ 
+ /***********************************************************************
+  *              set_queue_display_fd
+@@ -332,6 +333,8 @@ static void set_queue_display_fd(int fd)
+     HANDLE handle;
+     int ret;
+ 
++    __wine_esync_set_queue_fd(fd);
++
+     if (wine_server_fd_to_handle(fd, GENERIC_READ | SYNCHRONIZE, 0, &handle))
+     {
+         MESSAGE("macdrv: Can't allocate handle for event queue fd\n");
+diff --git a/dlls/winex11.drv/x11drv_main.c b/dlls/winex11.drv/x11drv_main.c
+index e67a3c05a9..b441834106 100644
+--- a/dlls/winex11.drv/x11drv_main.c
++++ b/dlls/winex11.drv/x11drv_main.c
+@@ -619,6 +619,7 @@ void CDECL X11DRV_ThreadDetach(void)
+     }
+ }
+ 
++extern void __wine_esync_set_queue_fd( int fd );
+ 
+ /* store the display fd into the message queue */
+ static void set_queue_display_fd( Display *display )
+@@ -626,6 +627,8 @@ static void set_queue_display_fd( Display *display )
+     HANDLE handle;
+     int ret;
+ 
++    __wine_esync_set_queue_fd( ConnectionNumber(display) );
++
+     if (wine_server_fd_to_handle( ConnectionNumber(display), GENERIC_READ | SYNCHRONIZE, 0, &handle ))
+     {
+         MESSAGE( "x11drv: Can't allocate handle for display fd\n" );
+-- 
+2.19.1
+

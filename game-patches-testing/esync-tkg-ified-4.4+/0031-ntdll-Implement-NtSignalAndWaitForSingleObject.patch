@@ -1,0 +1,78 @@
+From 8b168387ec4cb74303f62ea55e3df47250ecf668 Mon Sep 17 00:00:00 2001
+From: Zebediah Figura <z.figura12@gmail.com>
+Date: Sat, 9 Jun 2018 23:34:27 -0500
+Subject: [PATCH 31/83] ntdll: Implement NtSignalAndWaitForSingleObject().
+
+Signed-off-by: Zebediah Figura <z.figura12@gmail.com>
+---
+ dlls/ntdll/esync.c | 28 ++++++++++++++++++++++++++++
+ dlls/ntdll/esync.h |  2 ++
+ dlls/ntdll/sync.c  |  3 +++
+ 3 files changed, 33 insertions(+)
+
+diff --git a/dlls/ntdll/esync.c b/dlls/ntdll/esync.c
+index 7859b19743..79d3c2df08 100644
+--- a/dlls/ntdll/esync.c
++++ b/dlls/ntdll/esync.c
+@@ -823,3 +823,31 @@ err:
+         return FILE_GetNtStatus();
+     }
+ }
++
++NTSTATUS esync_signal_and_wait( HANDLE signal, HANDLE wait, BOOLEAN alertable,
++    const LARGE_INTEGER *timeout )
++{
++    struct esync *obj = esync_get_object( signal );
++    NTSTATUS ret;
++
++    if (!obj) return STATUS_INVALID_HANDLE;
++
++    switch (obj->type)
++    {
++    case ESYNC_SEMAPHORE:
++        ret = esync_release_semaphore( signal, 1, NULL );
++        break;
++    case ESYNC_AUTO_EVENT:
++    case ESYNC_MANUAL_EVENT:
++        ret = esync_set_event( signal );
++        break;
++    case ESYNC_MUTEX:
++        ret = esync_release_mutex( signal, NULL );
++        break;
++    default:
++        return STATUS_OBJECT_TYPE_MISMATCH;
++    }
++    if (ret) return ret;
++
++    return esync_wait_objects( 1, &wait, TRUE, alertable, timeout );
++}
+diff --git a/dlls/ntdll/esync.h b/dlls/ntdll/esync.h
+index 37fbfb234c..979c3d81e2 100644
+--- a/dlls/ntdll/esync.h
++++ b/dlls/ntdll/esync.h
+@@ -35,6 +35,8 @@ extern NTSTATUS esync_release_mutex( HANDLE *handle, LONG *prev ) DECLSPEC_HIDDE
+ 
+ extern NTSTATUS esync_wait_objects( DWORD count, const HANDLE *handles, BOOLEAN wait_any,
+                                     BOOLEAN alertable, const LARGE_INTEGER *timeout ) DECLSPEC_HIDDEN;
++extern NTSTATUS esync_signal_and_wait( HANDLE signal, HANDLE wait,
++    BOOLEAN alertable, const LARGE_INTEGER *timeout ) DECLSPEC_HIDDEN;
+ 
+ 
+ /* We have to synchronize on the fd cache CS so that our calls to receive_fd
+diff --git a/dlls/ntdll/sync.c b/dlls/ntdll/sync.c
+index 0040da4ffa..132b8688ea 100644
+--- a/dlls/ntdll/sync.c
++++ b/dlls/ntdll/sync.c
+@@ -1099,6 +1099,9 @@ NTSTATUS WINAPI NtSignalAndWaitForSingleObject( HANDLE hSignalObject, HANDLE hWa
+     select_op_t select_op;
+     UINT flags = SELECT_INTERRUPTIBLE;
+ 
++    if (do_esync())
++        return esync_signal_and_wait( hSignalObject, hWaitObject, alertable, timeout );
++
+     if (!hSignalObject) return STATUS_INVALID_HANDLE;
+ 
+     if (alertable) flags |= SELECT_ALERTABLE;
+-- 
+2.19.1
+

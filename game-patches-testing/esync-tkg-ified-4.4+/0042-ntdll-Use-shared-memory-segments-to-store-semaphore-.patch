@@ -1,0 +1,684 @@
+From 56864692e4ed8f588a5dcee931e70fe6da0a1920 Mon Sep 17 00:00:00 2001
+From: Zebediah Figura <z.figura12@gmail.com>
+Date: Mon, 11 Jun 2018 13:10:36 -0500
+Subject: [PATCH 42/83] ntdll: Use shared memory segments to store semaphore
+ and mutex state.
+
+This patch is pretty big, because it restructures the underlying esync
+objects. Instead of wrapping a struct esync, the semaphore and mutex structs
+are now contained within it, as a pointer to shared memory. This also means
+that we can move a lot of common code to create_esync() and open_esync()
+since now we don't have to allocate separate structures.
+
+Signed-off-by: Zebediah Figura <z.figura12@gmail.com>
+---
+ dlls/ntdll/esync.c  | 349 +++++++++++++++++++-------------------------
+ dlls/ntdll/esync.h  |   1 +
+ dlls/ntdll/thread.c |   4 +
+ 3 files changed, 155 insertions(+), 199 deletions(-)
+
+diff --git a/dlls/ntdll/esync.c b/dlls/ntdll/esync.c
+index 6409678e55..6a54405488 100644
+--- a/dlls/ntdll/esync.c
++++ b/dlls/ntdll/esync.c
+@@ -31,6 +31,7 @@
+ #endif
+ #include <stdarg.h>
+ #include <stdlib.h>
++#include <stdio.h>
+ #ifdef HAVE_SYS_EVENTFD_H
+ # include <sys/eventfd.h>
+ #endif
+@@ -83,27 +84,75 @@ struct esync
+ {
+     enum esync_type type;   /* defined in protocol.def */
+     int fd;
++    void *shm;              /* pointer to shm section */
+ };
+ 
+ struct semaphore
+ {
+-    struct esync obj;
+     int max;
+     int count;
+ };
+ 
+-struct event
+-{
+-    struct esync obj;
+-};
+-
+ struct mutex
+ {
+-    struct esync obj;
+     DWORD tid;
+     int count;    /* recursion count */
+ };
+ 
++static char shm_name[29];
++static int shm_fd;
++static void **shm_addrs;
++static int shm_addrs_size;  /* length of the allocated shm_addrs array */
++static long pagesize;
++
++void esync_init(void)
++{
++    struct stat st;
++
++    if (stat( wine_get_config_dir(), &st ) == -1)
++        ERR("Cannot stat %s\n", wine_get_config_dir());
++
++    if (st.st_ino != (unsigned long)st.st_ino)
++        sprintf( shm_name, "/wine-%lx%08lx-esync", (unsigned long)((unsigned long long)st.st_ino >> 32), (unsigned long)st.st_ino );
++    else
++        sprintf( shm_name, "/wine-%lx-esync", (unsigned long)st.st_ino );
++
++    if ((shm_fd = shm_open( shm_name, O_RDWR, 0644 )) == -1)
++        ERR("Failed to initialize shared memory: %s\n", strerror( errno ));
++
++    pagesize = sysconf( _SC_PAGESIZE );
++
++    shm_addrs = RtlAllocateHeap( GetProcessHeap(), HEAP_ZERO_MEMORY, 128 * sizeof(shm_addrs[0]) );
++    shm_addrs_size = 128;
++}
++
++static void *get_shm( unsigned int idx )
++{
++    int entry  = (idx * 8) / pagesize;
++    int offset = (idx * 8) % pagesize;
++
++    if (entry >= shm_addrs_size)
++    {
++        shm_addrs_size *= 2;
++        if (!(shm_addrs = RtlReAllocateHeap( GetProcessHeap(), HEAP_ZERO_MEMORY, shm_addrs, shm_addrs_size )))
++            ERR("Failed to grow shm_addrs array to size %d.\n", shm_addrs_size);
++    }
++
++    if (!shm_addrs[entry])
++    {
++        void *addr = mmap( NULL, pagesize, PROT_READ | PROT_WRITE, MAP_SHARED, shm_fd, entry * pagesize );
++        if (addr == (void *)-1)
++            ERR("Failed to map page %d (offset %#lx).\n", entry, entry * pagesize);
++
++        TRACE("Mapping page %d at %p.\n", entry, addr);
++
++        if (interlocked_cmpxchg_ptr( &shm_addrs[entry], addr, 0 ))
++            munmap( addr, pagesize ); /* someone beat us to it */
++    }
++
++    return (void *)((unsigned long)shm_addrs[entry] + offset);
++}
++
+ /* We'd like lookup to be fast. To that end, we use a static list indexed by handle.
+  * This is copied and adapted from the fd cache code. */
+ 
+@@ -205,49 +254,13 @@ static NTSTATUS get_waitable_object( HANDLE handle, struct esync **obj )
+ 
+     TRACE("Got fd %d for handle %p.\n", fd, handle);
+ 
+-    switch (type)
+-    {
+-    case ESYNC_SEMAPHORE:
+-    {
+-        struct semaphore *semaphore = RtlAllocateHeap( GetProcessHeap(), 0, sizeof(*semaphore) );
+-        semaphore->obj.type = ESYNC_SEMAPHORE;
+-        semaphore->obj.fd = fd;
+-
+-        FIXME("Attempt to duplicate a semaphore; this will not work.\n");
+-        semaphore->max = 0xdeadbeef;
+-        semaphore->count = 0;
+-        esync = &semaphore->obj;
+-        break;
+-    }
+-    case ESYNC_AUTO_EVENT:
+-    case ESYNC_MANUAL_EVENT:
+-    {
+-        struct event *event = RtlAllocateHeap( GetProcessHeap(), 0, sizeof(*event) );
+-        event->obj.type = type;
+-        event->obj.fd = fd;
+-        esync = &event->obj;
+-        break;
+-    }
+-    case ESYNC_MUTEX:
+-    {
+-        struct mutex *mutex = RtlAllocateHeap( GetProcessHeap(), 0, sizeof(*mutex) );
+-        mutex->obj.type = type;
+-        mutex->obj.fd = fd;
++    esync = RtlAllocateHeap( GetProcessHeap(), 0, sizeof(*esync) );
++    esync->fd = fd;
++    esync->type = type;
+ 
+-        FIXME("Attempt to duplicate a mutex; this will not work.\n");
+-        mutex->tid = 0;
+-        mutex->count = 0;
+-        esync = &mutex->obj;
+-        break;
+-    }
+-    case ESYNC_AUTO_SERVER:
+-    case ESYNC_MANUAL_SERVER:
+-    case ESYNC_QUEUE:
+-        esync = RtlAllocateHeap( GetProcessHeap(), 0, sizeof(*esync) );
+-        esync->fd = fd;
+-        esync->type = type;
+-        break;
+-    }
++    if (type == ESYNC_SEMAPHORE || type == ESYNC_MUTEX)
++        FIXME("Attempt to duplicate a semaphore or mutex; this will not work.\n");
++    esync->shm = NULL;
+ 
+     add_to_list( handle, esync );
+ 
+@@ -275,16 +288,16 @@ NTSTATUS esync_close( HANDLE handle )
+     return STATUS_INVALID_HANDLE;
+ }
+ 
+-/* type is an in-out parameter; if the object already existed it returns the
+- * actual type. */
+-static NTSTATUS create_esync(enum esync_type *type, int *fd, HANDLE *handle,
+-    ACCESS_MASK access, const OBJECT_ATTRIBUTES *attr, int initval, int flags)
++static NTSTATUS create_esync( enum esync_type type, HANDLE *handle,
++    ACCESS_MASK access, const OBJECT_ATTRIBUTES *attr, int initval, int flags )
+ {
+     NTSTATUS ret;
+     data_size_t len;
+     struct object_attributes *objattr;
+     obj_handle_t fd_handle;
++    unsigned int shm_idx;
+     sigset_t sigset;
++    int fd;
+ 
+     if ((ret = alloc_object_attributes( attr, &objattr, &len ))) return ret;
+ 
+@@ -296,32 +309,47 @@ static NTSTATUS create_esync(enum esync_type *type, int *fd, HANDLE *handle,
+         req->access  = access;
+         req->initval = initval;
+         req->flags   = flags;
+-        req->type    = *type;
++        req->type    = type;
+         wine_server_add_data( req, objattr, len );
+         ret = wine_server_call( req );
+         if (!ret || ret == STATUS_OBJECT_NAME_EXISTS)
+         {
+             *handle = wine_server_ptr_handle( reply->handle );
+-            *type = reply->type;
+-            *fd = receive_fd( &fd_handle );
++            type = reply->type;
++            shm_idx = reply->shm_idx;
++            fd = receive_fd( &fd_handle );
+             assert( wine_server_ptr_handle(fd_handle) == *handle );
+         }
+     }
+     SERVER_END_REQ;
+     server_leave_uninterrupted_section( &fd_cache_section, &sigset );
+ 
+-    TRACE("-> handle %p, fd %d.\n", *handle, *fd);
++    if (!ret || ret == STATUS_OBJECT_NAME_EXISTS)
++    {
++        struct esync *obj = RtlAllocateHeap( GetProcessHeap(), 0, sizeof(*obj) );
++        if (!obj) return STATUS_NO_MEMORY;
++
++        obj->type = type;
++        obj->fd = fd;
++        obj->shm = shm_idx ? get_shm( shm_idx ) : 0;
++
++        add_to_list( *handle, obj );
++
++        TRACE("-> handle %p, fd %d, shm index %d.\n", *handle, fd, shm_idx);
++    }
+ 
+     RtlFreeHeap( GetProcessHeap(), 0, objattr );
+     return ret;
+ }
+ 
+-static NTSTATUS open_esync( enum esync_type *type, int *fd, HANDLE *handle,
++static NTSTATUS open_esync( enum esync_type type, HANDLE *handle,
+     ACCESS_MASK access, const OBJECT_ATTRIBUTES *attr )
+ {
+     NTSTATUS ret;
+     obj_handle_t fd_handle;
++    unsigned int shm_idx;
+     sigset_t sigset;
++    int fd;
+ 
+     server_enter_uninterrupted_section( &fd_cache_section, &sigset );
+     SERVER_START_REQ( open_esync )
+@@ -329,48 +357,55 @@ static NTSTATUS open_esync( enum esync_type *type, int *fd, HANDLE *handle,
+         req->access     = access;
+         req->attributes = attr->Attributes;
+         req->rootdir    = wine_server_obj_handle( attr->RootDirectory );
+-        req->type       = *type;
++        req->type       = type;
+         if (attr->ObjectName)
+             wine_server_add_data( req, attr->ObjectName->Buffer, attr->ObjectName->Length );
+         if (!(ret = wine_server_call( req )))
+         {
+             *handle = wine_server_ptr_handle( reply->handle );
+-            *type = reply->type;
+-            *fd = receive_fd( &fd_handle );
++            type = reply->type;
++            shm_idx = reply->shm_idx;
++            fd = receive_fd( &fd_handle );
+             assert( wine_server_ptr_handle(fd_handle) == *handle );
+         }
+     }
+     SERVER_END_REQ;
+     server_leave_uninterrupted_section( &fd_cache_section, &sigset );
+ 
+-    TRACE("-> handle %p, fd %d.\n", *handle, *fd);
++    if (!ret)
++    {
++        struct esync *obj = RtlAllocateHeap( GetProcessHeap(), 0, sizeof(*obj) );
++        if (!obj) return STATUS_NO_MEMORY;
++
++        obj->type = type;
++        obj->fd = fd;
++        obj->shm = shm_idx ? get_shm( shm_idx ) : 0;
++
++        add_to_list( *handle, obj );
++
++        TRACE("-> handle %p, fd %d.\n", *handle, fd);
++    }
+     return ret;
+ }
+ 
+ NTSTATUS esync_create_semaphore(HANDLE *handle, ACCESS_MASK access,
+     const OBJECT_ATTRIBUTES *attr, LONG initial, LONG max)
+ {
+-    enum esync_type type = ESYNC_SEMAPHORE;
+-    struct semaphore *semaphore;
+     NTSTATUS ret;
+-    int fd = -1;
+ 
+     TRACE("name %s, initial %d, max %d.\n",
+         attr ? debugstr_us(attr->ObjectName) : "<no name>", initial, max);
+ 
+-    ret = create_esync( &type, &fd, handle, access, attr, initial, EFD_SEMAPHORE );
+-    if (!ret || ret == STATUS_OBJECT_NAME_EXISTS)
++    ret = create_esync( ESYNC_SEMAPHORE, handle, access, attr, initial, EFD_SEMAPHORE );
++    if (!ret)
+     {
+-        semaphore = RtlAllocateHeap( GetProcessHeap(), 0, sizeof(*semaphore) );
+-        if (!semaphore)
+-            return STATUS_NO_MEMORY;
+-
+-        semaphore->obj.type = ESYNC_SEMAPHORE;
+-        semaphore->obj.fd = fd;
++        /* Initialize the shared memory portion.
++         * Note we store max here (even though we don't need to) just to keep
++         * it the same size as the mutex's shm portion. */
++        struct esync *obj = esync_get_object( *handle );
++        struct semaphore *semaphore = obj->shm;
+         semaphore->max = max;
+         semaphore->count = initial;
+-
+-        add_to_list( *handle, &semaphore->obj );
+     }
+ 
+     return ret;
+@@ -379,45 +414,23 @@ NTSTATUS esync_create_semaphore(HANDLE *handle, ACCESS_MASK access,
+ NTSTATUS esync_open_semaphore( HANDLE *handle, ACCESS_MASK access,
+     const OBJECT_ATTRIBUTES *attr )
+ {
+-    enum esync_type type = ESYNC_SEMAPHORE;
+-    struct semaphore *semaphore;
+-    NTSTATUS ret;
+-    int fd = -1;
+-
+     TRACE("name %s.\n", debugstr_us(attr->ObjectName));
+ 
+-    ret = open_esync( &type, &fd, handle, access, attr );
+-    if (!ret)
+-    {
+-        semaphore = RtlAllocateHeap( GetProcessHeap(), 0, sizeof(*semaphore) );
+-        if (!semaphore)
+-            return STATUS_NO_MEMORY;
+-
+-        semaphore->obj.type = ESYNC_SEMAPHORE;
+-        semaphore->obj.fd = fd;
+-
+-        FIXME("Attempt to open a semaphore, this will not work.\n");
+-        semaphore->count = 0;
+-        semaphore->max = 0xdeadbeef;
+-
+-        add_to_list( *handle, &semaphore->obj );
+-    }
+-
+-    return ret;
++    return open_esync( ESYNC_SEMAPHORE, handle, access, attr );
+ }
+ 
+ NTSTATUS esync_release_semaphore( HANDLE handle, ULONG count, ULONG *prev )
+ {
+-    struct semaphore *semaphore = esync_get_object( handle );
++    struct esync *obj = esync_get_object( handle );
++    struct semaphore *semaphore;
+     uint64_t count64 = count;
+     ULONG current;
+ 
+     TRACE("%p, %d, %p.\n", handle, count, prev);
+ 
+-    if (!semaphore) return STATUS_INVALID_HANDLE;
++    if (!obj) return STATUS_INVALID_HANDLE;
++    semaphore = obj->shm;
+ 
+-    /* FIXME: This won't work across processes. In that case it may be best to
+-     * use shared memory. */
+     do
+     {
+         current = semaphore->count;
+@@ -432,7 +445,7 @@ NTSTATUS esync_release_semaphore( HANDLE handle, ULONG count, ULONG *prev )
+      * write(). The fact that we were able to increase the count means that we
+      * have permission to actually write that many releases to the semaphore. */
+ 
+-    if (write( semaphore->obj.fd, &count64, sizeof(count64) ) == -1)
++    if (write( obj->fd, &count64, sizeof(count64) ) == -1)
+         return FILE_GetNtStatus();
+ 
+     return STATUS_SUCCESS;
+@@ -442,66 +455,32 @@ NTSTATUS esync_create_event( HANDLE *handle, ACCESS_MASK access,
+     const OBJECT_ATTRIBUTES *attr, EVENT_TYPE event_type, BOOLEAN initial )
+ {
+     enum esync_type type = (event_type == SynchronizationEvent ? ESYNC_AUTO_EVENT : ESYNC_MANUAL_EVENT);
+-    struct event *event;
+-    NTSTATUS ret;
+-    int fd;
+ 
+     TRACE("name %s, %s-reset, initial %d.\n",
+         attr ? debugstr_us(attr->ObjectName) : "<no name>",
+         event_type == NotificationEvent ? "manual" : "auto", initial);
+ 
+-    ret = create_esync( &type, &fd, handle, access, attr, initial, 0 );
+-    if (!ret || ret == STATUS_OBJECT_NAME_EXISTS)
+-    {
+-        event = RtlAllocateHeap( GetProcessHeap(), 0, sizeof(*event) );
+-        if (!event)
+-            return STATUS_NO_MEMORY;
+-
+-        event->obj.type = type; /* note that the server might give us the real type */
+-        event->obj.fd = fd;
+-
+-        add_to_list( *handle, &event->obj);
+-    }
+-
+-    return ret;
++    return create_esync( type, handle, access, attr, initial, 0 );
+ }
+ 
+ NTSTATUS esync_open_event( HANDLE *handle, ACCESS_MASK access,
+     const OBJECT_ATTRIBUTES *attr )
+ {
+-    enum esync_type type = ESYNC_AUTO_EVENT;
+-    struct event *event;
+-    NTSTATUS ret;
+-    int fd;
+-
+     TRACE("name %s.\n", debugstr_us(attr->ObjectName));
+ 
+-    ret = open_esync( &type, &fd, handle, access, attr );
+-    if (!ret)
+-    {
+-        event = RtlAllocateHeap( GetProcessHeap(), 0, sizeof(*event) );
+-        if (!event)
+-            return STATUS_NO_MEMORY;
+-
+-        event->obj.type = type;
+-        event->obj.fd = fd;
+-
+-        add_to_list( *handle, &event->obj );
+-    }
+-
+-    return ret;
++    return open_esync( ESYNC_AUTO_EVENT, handle, access, attr ); /* doesn't matter which */
+ }
+ 
+ NTSTATUS esync_set_event( HANDLE handle )
+ {
+-    struct event *event = esync_get_object( handle );
++    struct esync *obj = esync_get_object( handle );
+     static const uint64_t value = 1;
+ 
+     TRACE("%p.\n", handle);
+ 
+-    if (!event) return STATUS_INVALID_HANDLE;
++    if (!obj) return STATUS_INVALID_HANDLE;
+ 
+-    if (write( event->obj.fd, &value, sizeof(value) ) == -1)
++    if (write( obj->fd, &value, sizeof(value) ) == -1)
+         return FILE_GetNtStatus();
+ 
+     return STATUS_SUCCESS;
+@@ -509,34 +488,34 @@ NTSTATUS esync_set_event( HANDLE handle )
+ 
+ NTSTATUS esync_reset_event( HANDLE handle )
+ {
+-    struct event *event = esync_get_object( handle );
++    struct esync *obj = esync_get_object( handle );
+     static uint64_t value;
+ 
+     TRACE("%p.\n", handle);
+ 
+-    if (!event) return STATUS_INVALID_HANDLE;
++    if (!obj) return STATUS_INVALID_HANDLE;
+ 
+     /* we don't care about the return value */
+-    read( event->obj.fd, &value, sizeof(value) );
++    read( obj->fd, &value, sizeof(value) );
+ 
+     return STATUS_SUCCESS;
+ }
+ 
+ NTSTATUS esync_pulse_event( HANDLE handle )
+ {
+-    struct event *event = esync_get_object( handle );
++    struct esync *obj = esync_get_object( handle );
+     static uint64_t value = 1;
+ 
+     TRACE("%p.\n", handle);
+ 
+-    if (!event) return STATUS_INVALID_HANDLE;
++    if (!obj) return STATUS_INVALID_HANDLE;
+ 
+     /* This isn't really correct; an application could miss the write.
+      * Unfortunately we can't really do much better. Fortunately this is rarely
+      * used (and publicly deprecated). */
+-    if (write( event->obj.fd, &value, sizeof(value) ) == -1)
++    if (write( obj->fd, &value, sizeof(value) ) == -1)
+         return FILE_GetNtStatus();
+-    read( event->obj.fd, &value, sizeof(value) );
++    read( obj->fd, &value, sizeof(value) );
+ 
+     return STATUS_SUCCESS;
+ }
+@@ -544,31 +523,19 @@ NTSTATUS esync_pulse_event( HANDLE handle )
+ NTSTATUS esync_create_mutex( HANDLE *handle, ACCESS_MASK access,
+     const OBJECT_ATTRIBUTES *attr, BOOLEAN initial )
+ {
+-    enum esync_type type = ESYNC_MUTEX;
+-    struct mutex *mutex;
+     NTSTATUS ret;
+-    int fd;
+ 
+     TRACE("name %s, initial %d.\n",
+         attr ? debugstr_us(attr->ObjectName) : "<no name>", initial);
+ 
+-    ret = create_esync( &type, &fd, handle, access, attr, initial ? 0 : 1, 0 );
+-    if (!ret || ret == STATUS_OBJECT_NAME_EXISTS)
++    ret = create_esync( ESYNC_MUTEX, handle, access, attr, initial ? 0 : 1, 0 );
++    if (!ret)
+     {
+-        mutex = RtlAllocateHeap( GetProcessHeap(), 0, sizeof(*mutex) );
+-        if (!mutex)
+-            return STATUS_NO_MEMORY;
+-
+-        /* can't take ownership of the mutex if we didn't create it */
+-        if (ret == STATUS_OBJECT_NAME_EXISTS)
+-            initial = FALSE;
+-
+-        mutex->obj.type = ESYNC_MUTEX;
+-        mutex->obj.fd = fd;
++        /* Initialize the shared memory portion. */
++        struct esync *obj = esync_get_object( *handle );
++        struct mutex *mutex = obj->shm;
+         mutex->tid = initial ? GetCurrentThreadId() : 0;
+         mutex->count = initial ? 1 : 0;
+-
+-        add_to_list( *handle, &mutex->obj);
+     }
+ 
+     return ret;
+@@ -577,41 +544,21 @@ NTSTATUS esync_create_mutex( HANDLE *handle, ACCESS_MASK access,
+ NTSTATUS esync_open_mutex( HANDLE *handle, ACCESS_MASK access,
+     const OBJECT_ATTRIBUTES *attr )
+ {
+-    enum esync_type type = ESYNC_MUTEX;
+-    struct mutex *mutex;
+-    NTSTATUS ret;
+-    int fd;
+-
+     TRACE("name %s.\n", debugstr_us(attr->ObjectName));
+ 
+-    ret = open_esync( &type, &fd, handle, access, attr );
+-    if (!ret)
+-    {
+-        mutex = RtlAllocateHeap( GetProcessHeap(), 0, sizeof(*mutex) );
+-        if (!mutex)
+-            return STATUS_NO_MEMORY;
+-
+-        mutex->obj.type = ESYNC_MUTEX;
+-        mutex->obj.fd = fd;
+-
+-        FIXME("Attempt to open a mutex; this will not work.\n");
+-        mutex->tid = 0;
+-        mutex->count = 0;
+-
+-        add_to_list( *handle, &mutex->obj );
+-    }
+-
+-    return ret;
++    return open_esync( ESYNC_MUTEX, handle, access, attr );
+ }
+ 
+ NTSTATUS esync_release_mutex( HANDLE *handle, LONG *prev )
+ {
+-    struct mutex *mutex = esync_get_object( handle );
++    struct esync *obj = esync_get_object( handle );
++    struct mutex *mutex;
+     static const uint64_t value = 1;
+ 
+     TRACE("%p, %p.\n", handle, prev);
+ 
+-    if (!mutex) return STATUS_INVALID_HANDLE;
++    if (!obj) return STATUS_INVALID_HANDLE;
++    mutex = obj->shm;
+ 
+     /* This is thread-safe, because the only thread that can change the tid to
+      * or from our tid is ours. */
+@@ -628,7 +575,7 @@ NTSTATUS esync_release_mutex( HANDLE *handle, LONG *prev )
+          * theirs. */
+         mutex->tid = 0;
+ 
+-        if (write( mutex->obj.fd, &value, sizeof(value) ) == -1)
++        if (write( obj->fd, &value, sizeof(value) ) == -1)
+             return FILE_GetNtStatus();
+     }
+ 
+@@ -770,7 +717,7 @@ NTSTATUS esync_wait_objects( DWORD count, const HANDLE *handles, BOOLEAN wait_an
+                 /* Note: This violates the assumption that the *first* object
+                  * to be signaled will be returned. If that becomes a problem,
+                  * we can always check the state of each object before waiting. */
+-                struct mutex *mutex = (struct mutex *)obj;
++                struct mutex *mutex = obj->shm;
+ 
+                 if (mutex->tid == GetCurrentThreadId())
+                 {
+@@ -825,13 +772,17 @@ NTSTATUS esync_wait_objects( DWORD count, const HANDLE *handles, BOOLEAN wait_an
+                                 TRACE("Woken up by handle %p [%d].\n", handles[i], i);
+                                 if (obj->type == ESYNC_MUTEX)
+                                 {
+-                                    struct mutex *mutex = (struct mutex *)obj;
++                                    struct mutex *mutex = obj->shm;
++                                    /* We don't have to worry about a race between this and read();
++                                     * the fact that we grabbed it means the count is now zero,
++                                     * so nobody else can (and the only thread that can release
++                                     * it is us). */
+                                     mutex->tid = GetCurrentThreadId();
+                                     mutex->count = 1;
+                                 }
+                                 else if (obj->type == ESYNC_SEMAPHORE)
+                                 {
+-                                    struct semaphore *semaphore = (struct semaphore *)obj;
++                                    struct semaphore *semaphore = obj->shm;
+                                     /* We don't have to worry about a race between this and read();
+                                      * the fact that we were able to grab it at all means the count
+                                      * is nonzero, and if someone else grabbed it then the count
+@@ -895,7 +846,7 @@ tryagain:
+                 if (obj && obj->type == ESYNC_MUTEX)
+                 {
+                     /* It might be ours. */
+-                    struct mutex *mutex = (struct mutex *)obj;
++                    struct mutex *mutex = obj->shm;
+ 
+                     if (mutex->tid == GetCurrentThreadId())
+                         continue;
+@@ -948,7 +899,7 @@ tryagain:
+                     {
+                     case ESYNC_MUTEX:
+                     {
+-                        struct mutex *mutex = (struct mutex *)obj;
++                        struct mutex *mutex = obj->shm;
+                         if (mutex->tid == GetCurrentThreadId())
+                             break;
+                         /* otherwise fall through */
+@@ -982,13 +933,13 @@ tryagain:
+                 {
+                     if (objs[i]->type == ESYNC_MUTEX)
+                     {
+-                        struct mutex *mutex = (struct mutex *)objs[i];
++                        struct mutex *mutex = objs[i]->shm;
+                         mutex->tid = GetCurrentThreadId();
+                         mutex->count++;
+                     }
+                     else if (objs[i]->type == ESYNC_SEMAPHORE)
+                     {
+-                        struct semaphore *semaphore = (struct semaphore *)objs[i];
++                        struct semaphore *semaphore = objs[i]->shm;
+                         interlocked_xchg_add( &semaphore->count, -1 );
+                     }
+                 }
+diff --git a/dlls/ntdll/esync.h b/dlls/ntdll/esync.h
+index ba9e9ec4ac..0a784b0e79 100644
+--- a/dlls/ntdll/esync.h
++++ b/dlls/ntdll/esync.h
+@@ -19,6 +19,7 @@
+  */
+ 
+ extern int do_esync(void) DECLSPEC_HIDDEN;
++extern void esync_init(void) DECLSPEC_HIDDEN;
+ extern NTSTATUS esync_close( HANDLE handle ) DECLSPEC_HIDDEN;
+ 
+ extern NTSTATUS esync_create_semaphore(HANDLE *handle, ACCESS_MASK access,
+diff --git a/dlls/ntdll/thread.c b/dlls/ntdll/thread.c
+index 12124a054c..3fd50e5065 100644
+--- a/dlls/ntdll/thread.c
++++ b/dlls/ntdll/thread.c
+@@ -45,6 +45,7 @@
+ #include "ntdll_misc.h"
+ #include "ddk/wdm.h"
+ #include "wine/exception.h"
++#include "esync.h"
+ 
+ WINE_DEFAULT_DEBUG_CHANNEL(thread);
+ 
+@@ -401,6 +402,9 @@ void thread_init(void)
+ 
+     fill_cpu_info();
+ 
++    if (do_esync())
++        esync_init();
++
+     NtCreateKeyedEvent( &keyed_event, GENERIC_READ | GENERIC_WRITE, NULL, 0 );
+ }
+ 
+-- 
+2.19.1
+

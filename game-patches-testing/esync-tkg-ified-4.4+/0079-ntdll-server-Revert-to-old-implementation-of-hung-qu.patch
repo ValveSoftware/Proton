@@ -1,0 +1,318 @@
+From 1a490228fab2168251f90f5884ac98083d959299 Mon Sep 17 00:00:00 2001
+From: Zebediah Figura <z.figura12@gmail.com>
+Date: Mon, 13 Aug 2018 21:35:06 -0500
+Subject: [PATCH 79/83] ntdll, server: Revert to old implementation of hung
+ queue detection.
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+By manually notifying the server every time we enter and exit a message wait.
+
+The hung queue logic keeps breaking. In the case of bug #9 it was breaking
+because we were waiting for more than 5 seconds on our queue and then someone
+sent us a message with SMTO_ABORTIFHUNG. Just stop fighting against the
+server and try to coöperate with it instead. It takes two extra server calls,
+but ideally the GUI thread isn't going to be in the same sort of performance-
+critical code that this patchset was written for.
+
+Signed-off-by: Zebediah Figura <z.figura12@gmail.com>
+---
+ dlls/ntdll/esync.c             | 53 +++++++++++++++++++++++++---------
+ include/wine/server_protocol.h | 16 +++++++++-
+ server/protocol.def            |  6 +++-
+ server/queue.c                 | 35 +++++++++++++++++-----
+ server/request.h               |  5 +++-
+ server/trace.c                 |  8 +++++
+ 6 files changed, 100 insertions(+), 23 deletions(-)
+
+diff --git a/dlls/ntdll/esync.c b/dlls/ntdll/esync.c
+index f678ae8483..0ca8896202 100644
+--- a/dlls/ntdll/esync.c
++++ b/dlls/ntdll/esync.c
+@@ -812,8 +812,8 @@ static void update_grabbed_object( struct esync *obj )
+ 
+ /* A value of STATUS_NOT_IMPLEMENTED returned from this function means that we
+  * need to delegate to server_select(). */
+-NTSTATUS esync_wait_objects( DWORD count, const HANDLE *handles, BOOLEAN wait_any,
+-                             BOOLEAN alertable, const LARGE_INTEGER *timeout )
++static NTSTATUS __esync_wait_objects( DWORD count, const HANDLE *handles,
++    BOOLEAN wait_any, BOOLEAN alertable, const LARGE_INTEGER *timeout )
+ {
+     static const LARGE_INTEGER zero = {0};
+ 
+@@ -876,22 +876,11 @@ NTSTATUS esync_wait_objects( DWORD count, const HANDLE *handles, BOOLEAN wait_an
+ 
+     if (objs[count - 1] && objs[count - 1]->type == ESYNC_QUEUE)
+     {
+-        select_op_t select_op;
+-
+         /* Last object in the list is a queue, which means someone is using
+          * MsgWaitForMultipleObjects(). We have to wait not only for the server
+          * fd (signaled on send_message, etc.) but also the USER driver's fd
+          * (signaled on e.g. X11 events.) */
+         msgwait = TRUE;
+-
+-        /* We need to let the server know we are doing a message wait, for two
+-         * reasons. First one is WaitForInputIdle(). Second one is checking for
+-         * hung queues. Do it like this. */
+-        select_op.wait.op = SELECT_WAIT;
+-        select_op.wait.handles[0] = wine_server_obj_handle( handles[count - 1] );
+-        ret = server_select( &select_op, offsetof( select_op_t, wait.handles[1] ), 0, &zero );
+-        if (ret != STATUS_WAIT_0 && ret != STATUS_TIMEOUT)
+-            ERR("Unexpected ret %#x\n", ret);
+     }
+ 
+     if (has_esync && has_server)
+@@ -1263,6 +1252,44 @@ userapc:
+     return ret;
+ }
+ 
++/* We need to let the server know when we are doing a message wait, and when we
++ * are done with one, so that all of the code surrounding hung queues works.
++ * We also need this for WaitForInputIdle(). */
++static void server_set_msgwait( int in_msgwait )
++{
++    SERVER_START_REQ( esync_msgwait )
++    {
++        req->in_msgwait = in_msgwait;
++        wine_server_call( req );
++    }
++    SERVER_END_REQ;
++}
++
++/* This is a very thin wrapper around the proper implementation above. The
++ * purpose is to make sure the server knows when we are doing a message wait.
++ * This is separated into a wrapper function since there are at least a dozen
++ * exit paths from esync_wait_objects(). */
++NTSTATUS esync_wait_objects( DWORD count, const HANDLE *handles, BOOLEAN wait_any,
++                             BOOLEAN alertable, const LARGE_INTEGER *timeout )
++{
++    BOOL msgwait = FALSE;
++    struct esync *obj;
++    NTSTATUS ret;
++
++    if (!get_object( handles[count - 1], &obj ) && obj->type == ESYNC_QUEUE)
++    {
++        msgwait = TRUE;
++        server_set_msgwait( 1 );
++    }
++
++    ret = __esync_wait_objects( count, handles, wait_any, alertable, timeout );
++
++    if (msgwait)
++        server_set_msgwait( 0 );
++
++    return ret;
++}
++
+ NTSTATUS esync_signal_and_wait( HANDLE signal, HANDLE wait, BOOLEAN alertable,
+     const LARGE_INTEGER *timeout )
+ {
+diff --git a/include/wine/server_protocol.h b/include/wine/server_protocol.h
+index 9eac19ac33..69501ab07b 100644
+--- a/include/wine/server_protocol.h
++++ b/include/wine/server_protocol.h
+@@ -5720,6 +5720,17 @@ struct get_esync_apc_fd_reply
+     struct reply_header __header;
+ };
+ 
++
++struct esync_msgwait_request
++{
++    struct request_header __header;
++    int          in_msgwait;
++};
++struct esync_msgwait_reply
++{
++    struct reply_header __header;
++};
++
+ enum esync_type
+ {
+     ESYNC_SEMAPHORE = 1,
+@@ -6029,6 +6040,7 @@ enum request
+     REQ_open_esync,
+     REQ_get_esync_fd,
+     REQ_get_esync_apc_fd,
++    REQ_esync_msgwait,
+     REQ_NB_REQUESTS
+ };
+ 
+@@ -6331,6 +6343,7 @@ union generic_request
+     struct open_esync_request open_esync_request;
+     struct get_esync_fd_request get_esync_fd_request;
+     struct get_esync_apc_fd_request get_esync_apc_fd_request;
++    struct esync_msgwait_request esync_msgwait_request;
+ };
+ union generic_reply
+ {
+@@ -6625,6 +6625,7 @@ union generic_reply
+     struct open_esync_reply open_esync_reply;
+     struct get_esync_fd_reply get_esync_fd_reply;
+     struct get_esync_apc_fd_reply get_esync_apc_fd_reply;
++    struct esync_msgwait_reply esync_msgwait_reply;
+ };
+ 
+ #define SERVER_PROTOCOL_VERSION 571
+diff --git a/server/protocol.def b/server/protocol.def
+index e79c5fe8fd..4caece2185 100644
+--- a/server/protocol.def
++++ b/server/protocol.def
+@@ -3892,7 +3892,11 @@ struct handle_info
+ 
+ /* Retrieve the fd to wait on for user APCs. */
+ @REQ(get_esync_apc_fd)
+-@REPLY
++@END
++
++/* Notify the server that we are doing a message wait (or done with one). */
++@REQ(esync_msgwait)
++    int          in_msgwait;    /* are we in a message wait? */
+ @END
+ 
+ enum esync_type
+diff --git a/server/queue.c b/server/queue.c
+index e76203cc73..66c1a642e0 100644
+--- a/server/queue.c
++++ b/server/queue.c
+@@ -142,6 +142,7 @@ struct msg_queue
+     struct hook_table     *hooks;           /* hook table */
+     timeout_t              last_get_msg;    /* time of last get message call */
+     int                    esync_fd;        /* esync file descriptor (signalled on message) */
++    int                    esync_in_msgwait; /* our thread is currently waiting on us */
+ };
+ 
+ struct hotkey
+@@ -899,7 +900,21 @@ static void cleanup_results( struct msg_queue *queue )
+ /* check if the thread owning the queue is hung (not checking for messages) */
+ static int is_queue_hung( struct msg_queue *queue )
+ {
+-    return (current_time - queue->last_get_msg > 5 * TICKS_PER_SEC);
++    struct wait_queue_entry *entry;
++
++    if (current_time - queue->last_get_msg <= 5 * TICKS_PER_SEC)
++        return 0;  /* less than 5 seconds since last get message -> not hung */
++
++    LIST_FOR_EACH_ENTRY( entry, &queue->obj.wait_queue, struct wait_queue_entry, entry )
++    {
++        if (get_wait_queue_thread(entry)->queue == queue)
++            return 0;  /* thread is waiting on queue -> not hung */
++    }
++
++    if (do_esync() && queue->esync_in_msgwait)
++        return 0;   /* thread is waiting on queue in absentia -> not hung */
++
++    return 1;
+ }
+ 
+ static int msg_queue_add_queue( struct object *obj, struct wait_queue_entry *entry )
+@@ -915,12 +930,6 @@ static int msg_queue_add_queue( struct object *obj, struct wait_queue_entry *ent
+     }
+     if (process->idle_event && !(queue->wake_mask & QS_SMRESULT)) set_event( process->idle_event );
+ 
+-    /* On Windows, we are considered hung iff we have not somehow processed
+-     * messages OR done a MsgWait call in the last 5 seconds. Note that in the
+-     * latter case repeatedly waiting for 0 seconds is not hung, but waiting
+-     * forever is hung, so this is correct. */
+-    queue->last_get_msg = current_time;
+-
+     if (queue->fd && list_empty( &obj->wait_queue ))  /* first on the queue */
+         set_fd_events( queue->fd, POLLIN );
+     add_queue( obj, entry );
+@@ -1566,6 +1575,7 @@ static int send_hook_ll_message( struct desktop *desktop, struct message *hardwa
+ 
+     if (!(hook_thread = get_first_global_hook( id ))) return 0;
+     if (!(queue = hook_thread->queue)) return 0;
++    if (is_queue_hung( queue )) return 0;
+ 
+     if (!(msg = mem_alloc( sizeof(*msg) ))) return 0;
+ 
+@@ -3181,3 +3191,14 @@ DECL_HANDLER(update_rawinput_devices)
+     e = find_rawinput_device( 1, 6 );
+     current->process->rawinput_kbd   = e ? &e->device : NULL;
+ }
++
++DECL_HANDLER(esync_msgwait)
++{
++    struct msg_queue *queue = get_current_queue();
++
++    if (!queue) return;
++    queue->esync_in_msgwait = req->in_msgwait;
++
++    if (current->process->idle_event && !(queue->wake_mask & QS_SMRESULT))
++        set_event( current->process->idle_event );
++}
+diff --git a/server/request.h b/server/request.h
+index e470ccbb4a..1da634bad9 100644
+--- a/server/request.h
++++ b/server/request.h
+@@ -407,6 +407,7 @@ DECL_HANDLER(create_esync);
+ DECL_HANDLER(open_esync);
+ DECL_HANDLER(get_esync_fd);
+ DECL_HANDLER(get_esync_apc_fd);
++DECL_HANDLER(esync_msgwait);
+ 
+ #ifdef WANT_REQUEST_HANDLERS
+ 
+@@ -708,6 +709,7 @@ static const req_handler req_handlers[REQ_NB_REQUESTS] =
+     (req_handler)req_open_esync,
+     (req_handler)req_get_esync_fd,
+     (req_handler)req_get_esync_apc_fd,
++    (req_handler)req_esync_msgwait,
+ };
+ 
+ C_ASSERT( sizeof(affinity_t) == 8 );
+@@ -2438,7 +2440,8 @@ C_ASSERT( FIELD_OFFSET(struct get_esync_fd_reply, type) == 8 );
+ C_ASSERT( FIELD_OFFSET(struct get_esync_fd_reply, shm_idx) == 12 );
+ C_ASSERT( sizeof(struct get_esync_fd_reply) == 16 );
+ C_ASSERT( sizeof(struct get_esync_apc_fd_request) == 16 );
+-C_ASSERT( sizeof(struct get_esync_apc_fd_reply) == 8 );
++C_ASSERT( FIELD_OFFSET(struct esync_msgwait_request, in_msgwait) == 12 );
++C_ASSERT( sizeof(struct esync_msgwait_request) == 16 );
+ 
+ #endif  /* WANT_REQUEST_HANDLERS */
+ 
+diff --git a/server/trace.c b/server/trace.c
+index 0a087666d3..4fd16817a4 100644
+--- a/server/trace.c
++++ b/server/trace.c
+@@ -4588,6 +4588,11 @@ static void dump_get_esync_apc_fd_request( const struct get_esync_apc_fd_request
+ {
+ }
+ 
++static void dump_esync_msgwait_request( const struct esync_msgwait_request *req )
++{
++    fprintf( stderr, " in_msgwait=%d", req->in_msgwait );
++}
++
+ static const dump_func req_dumpers[REQ_NB_REQUESTS] = {
+     (dump_func)dump_new_process_request,
+     (dump_func)dump_exec_process_request,
+@@ -4884,6 +4889,7 @@ static const dump_func req_dumpers[REQ_NB_REQUESTS] = {
+     (dump_func)dump_open_esync_request,
+     (dump_func)dump_get_esync_fd_request,
+     (dump_func)dump_get_esync_apc_fd_request,
++    (dump_func)dump_esync_msgwait_request,
+ };
+ 
+ static const dump_func reply_dumpers[REQ_NB_REQUESTS] = {
+@@ -5182,6 +5188,7 @@ static const dump_func reply_dumpers[REQ_NB_REQUESTS] = {
+     (dump_func)dump_open_esync_reply,
+     (dump_func)dump_get_esync_fd_reply,
+     NULL,
++    NULL,
+ };
+ 
+ static const char * const req_names[REQ_NB_REQUESTS] = {
+@@ -5480,6 +5487,7 @@ static const char * const req_names[REQ_NB_REQUESTS] = {
+     "open_esync",
+     "get_esync_fd",
+     "get_esync_apc_fd",
++    "esync_msgwait",
+ };
+ 
+ static const struct
+-- 
+2.19.1
+
