@@ -86,24 +86,12 @@
     echo "converting normal wine build into proton build"
     patch -Np1 < ../game-patches-testing/proton-tkg.patch
 
-
-    #patch -Np1 < ../game-patches-testing/wined3d-implement-gl-texture-access-callbacks.patch
-    #patch -Np1 < ../game-patches-testing/wined3d-implement-command-stream-callbacks.patch
-    #patch -Np1 < ../game-patches-testing/d3d11-add-wined3d-texture2d-interface.patch
-    #patch -Np1 < ../game-patches-testing/d3d11-add-wined3d11-device-interface.patch
-    #patch -Np1 < ../game-patches-testing/wined3d-implement-device-wait-idle.patch
-    #patch -Np1 < ../game-patches-testing/wined3d-support-retrieving-depth-texture-in-gl-texture-callback.patch
-    #patch -Np1 < ../game-patches-testing/wined3d-get-rid-of-wined3d_cs_emit_wait_idle.patch
-    #patch -Np1 < ../game-patches-testing/wined3d-implement-synchronous-texture-access.patch
-    #patch -Np1 < ../game-patches-testing/wined3d-load-texture-rgb-location-for-synchronous-texture-access.patch
-    #patch -Np1 < ../game-patches-testing/d3d11-pass-wined3d-texture2d-to-access_gl_texture.patch
-    #patch -Np1 < ../game-patches-testing/d3d11-remove-unused-depth_tex-variable.patch
-
+    patch -Np1 < ../game-patches-testing/valve-wined3d-patches.patch
+    patch -Np1 < ../game-patches-testing/valve-d3d11.patch
 
     patch -Np1 < ../game-patches-testing/FS_bypass_compositor.patch
-    #patch -Np1 < ../game-patches-testing/valve-fullscreen-hack.patch
-    #patch -Np1 < ../game-patches-testing/valve-fullscreen-hack-2.patch
-    #patch -Np1 < ../game-patches-testing/valve-fullscreen-hack-3.patch
+    patch -Np1 < ../game-patches-testing/valve-winedx11-fullscreen-hack.patch
+
 
     # apply esync patches
     for _f in "../esync/"*.patch; do
