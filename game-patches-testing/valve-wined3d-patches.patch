@@ -64,146 +64,6 @@ index eaf31149de2..d2c5a28acbb 100644
  	wine/winedxgi.idl \
  	winerror.h \
  	winevt.h \
-diff --git a/dlls/wined3d/device.c b/dlls/wined3d/device.c
-index 6831c63d3e7..d9d6cf26767 100644
---- a/dlls/wined3d/device.c
-+++ b/dlls/wined3d/device.c
-@@ -2055,13 +2055,13 @@ void CDECL wined3d_device_set_rasterizer_state(struct wined3d_device *device,
- 
-     TRACE("device %p, rasterizer_state %p.\n", device, rasterizer_state);
- 
--    prev = device->update_state->rasterizer_state;
-+    prev = device->state.rasterizer_state;
-     if (prev == rasterizer_state)
-         return;
- 
-     if (rasterizer_state)
-         wined3d_rasterizer_state_incref(rasterizer_state);
--    device->update_state->rasterizer_state = rasterizer_state;
-+    device->state.rasterizer_state = rasterizer_state;
-     wined3d_cs_emit_set_rasterizer_state(device->cs, rasterizer_state);
-     if (prev)
-         wined3d_rasterizer_state_decref(prev);
-@@ -2802,12 +2802,12 @@ void CDECL wined3d_device_set_hull_shader(struct wined3d_device *device, struct
- 
-     TRACE("device %p, shader %p.\n", device, shader);
- 
--    prev = device->update_state->shader[WINED3D_SHADER_TYPE_HULL];
-+    prev = device->state.shader[WINED3D_SHADER_TYPE_HULL];
-     if (shader == prev)
-         return;
-     if (shader)
-         wined3d_shader_incref(shader);
--    device->update_state->shader[WINED3D_SHADER_TYPE_HULL] = shader;
-+    device->state.shader[WINED3D_SHADER_TYPE_HULL] = shader;
-     wined3d_cs_emit_set_shader(device->cs, WINED3D_SHADER_TYPE_HULL, shader);
-     if (prev)
-         wined3d_shader_decref(prev);
-@@ -2857,12 +2857,12 @@ void CDECL wined3d_device_set_domain_shader(struct wined3d_device *device, struc
- 
-     TRACE("device %p, shader %p.\n", device, shader);
- 
--    prev = device->update_state->shader[WINED3D_SHADER_TYPE_DOMAIN];
-+    prev = device->state.shader[WINED3D_SHADER_TYPE_DOMAIN];
-     if (shader == prev)
-         return;
-     if (shader)
-         wined3d_shader_incref(shader);
--    device->update_state->shader[WINED3D_SHADER_TYPE_DOMAIN] = shader;
-+    device->state.shader[WINED3D_SHADER_TYPE_DOMAIN] = shader;
-     wined3d_cs_emit_set_shader(device->cs, WINED3D_SHADER_TYPE_DOMAIN, shader);
-     if (prev)
-         wined3d_shader_decref(prev);
-@@ -3636,7 +3636,6 @@ HRESULT CDECL wined3d_device_begin_stateblock(struct wined3d_device *device)
-         return hr;
- 
-     device->recording = stateblock;
--    device->update_state = &stateblock->state;
-     device->update_stateblock_state = &stateblock->stateblock_state;
- 
-     TRACE("Recording stateblock %p.\n", stateblock);
-@@ -3662,7 +3661,6 @@ HRESULT CDECL wined3d_device_end_stateblock(struct wined3d_device *device,
- 
-     *stateblock = object;
-     device->recording = NULL;
--    device->update_state = &device->state;
-     device->update_stateblock_state = &device->stateblock_state;
- 
-     TRACE("Returning stateblock %p.\n", *stateblock);
-@@ -5094,7 +5092,6 @@ HRESULT CDECL wined3d_device_reset(struct wined3d_device *device,
- 
-         memset(&device->state, 0, sizeof(device->state));
-         state_init(&device->state, &device->fb, &device->adapter->d3d_info, WINED3D_STATE_INIT_DEFAULT);
--        device->update_state = &device->state;
-         memset(&device->stateblock_state, 0, sizeof(device->stateblock_state));
-         wined3d_stateblock_state_init(&device->stateblock_state, device, WINED3D_STATE_INIT_DEFAULT);
-         device->update_stateblock_state = &device->stateblock_state;
-@@ -5371,7 +5368,6 @@ HRESULT device_init(struct wined3d_device *device, struct wined3d *wined3d,
-     }
- 
-     state_init(&device->state, &device->fb, &adapter->d3d_info, WINED3D_STATE_INIT_DEFAULT);
--    device->update_state = &device->state;
-     wined3d_stateblock_state_init(&device->stateblock_state, device, WINED3D_STATE_INIT_DEFAULT);
-     device->update_stateblock_state = &device->stateblock_state;
- 
-diff --git a/dlls/wined3d/wined3d_private.h b/dlls/wined3d/wined3d_private.h
-index eaca69b3054..fbde36c9235 100644
---- a/dlls/wined3d/wined3d_private.h
-+++ b/dlls/wined3d/wined3d_private.h
-@@ -3047,7 +3047,6 @@ struct wined3d_device
-     enum wined3d_feature_level feature_level;
- 
-     struct wined3d_state state;
--    struct wined3d_state *update_state;
-     struct wined3d_stateblock *recording;
-     struct wined3d_stateblock_state stateblock_state;
-     struct wined3d_stateblock_state *update_stateblock_state;
-From c19a798003e5585407f6aba77e325001d62202c5 Mon Sep 17 00:00:00 2001
-From: Zebediah Figura <z.figura12@gmail.com>
-Date: Fri, 15 Feb 2019 00:38:13 -0600
-Subject: [PATCH] wined3d: Get rid of the "state" field from struct
- wined3d_stateblock.
-
-Signed-off-by: Zebediah Figura <z.figura12@gmail.com>
-Signed-off-by: Henri Verbeet <hverbeet@codeweavers.com>
-Signed-off-by: Alexandre Julliard <julliard@winehq.org>
----
- dlls/wined3d/stateblock.c      | 2 --
- dlls/wined3d/wined3d_private.h | 1 -
- 2 files changed, 3 deletions(-)
-
-diff --git a/dlls/wined3d/stateblock.c b/dlls/wined3d/stateblock.c
-index cd57e6cc9a5..cd722093912 100644
---- a/dlls/wined3d/stateblock.c
-+++ b/dlls/wined3d/stateblock.c
-@@ -604,7 +604,6 @@ ULONG CDECL wined3d_stateblock_decref(struct wined3d_stateblock *stateblock)
- 
-     if (!refcount)
-     {
--        state_cleanup(&stateblock->state);
-         wined3d_stateblock_state_cleanup(&stateblock->stateblock_state);
-         heap_free(stateblock);
-     }
-@@ -1557,7 +1556,6 @@ static HRESULT stateblock_init(struct wined3d_stateblock *stateblock,
- 
-     stateblock->ref = 1;
-     stateblock->device = device;
--    state_init(&stateblock->state, NULL, d3d_info, 0);
-     wined3d_stateblock_state_init(&stateblock->stateblock_state, device, 0);
- 
-     if (type == WINED3D_SBT_RECORDED)
-diff --git a/dlls/wined3d/wined3d_private.h b/dlls/wined3d/wined3d_private.h
-index fbde36c9235..57df9f1eb24 100644
---- a/dlls/wined3d/wined3d_private.h
-+++ b/dlls/wined3d/wined3d_private.h
-@@ -3604,7 +3604,6 @@ struct wined3d_stateblock
- 
-     /* Array indicating whether things have been set or changed */
-     struct wined3d_saved_states changed;
--    struct wined3d_state state;
-     struct wined3d_stateblock_state stateblock_state;
- 
-     /* Contained state management */
 From a69e0511cc24ac19ebed9ffe961e73767928b938 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?J=C3=B3zef=20Kucia?= <joseph.kucia@gmail.com>
 Date: Wed, 4 Apr 2018 17:05:37 +0200
@@ -1065,7 +925,7 @@ index 4754901265f..9bafa8b0f46 100644
  typedef void (__cdecl *wined3d_cs_callback)(const void *data, unsigned int size);
  
  void __cdecl wined3d_device_run_cs_callback(struct wined3d_device *device,
-From edb56564cb2db75b3e8b9cf9238851677f31f978 Mon Sep 17 00:00:00 2001
+From 315bed86ed974208c0be4e85a3b52360dbe02761 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?J=C3=B3zef=20Kucia?= <joseph.kucia@gmail.com>
 Date: Fri, 21 Sep 2018 12:04:07 +0200
 Subject: [PATCH] wined3d: Load TEXTURE_RGB location for synchronous texture
@@ -1078,10 +938,10 @@ Subject: [PATCH] wined3d: Load TEXTURE_RGB location for synchronous texture
  3 files changed, 9 insertions(+), 5 deletions(-)
 
 diff --git a/dlls/wined3d/cs.c b/dlls/wined3d/cs.c
-index a9227f46ecf..84c3894c2f0 100644
+index 1f1883cafea..85cbc4cdbbc 100644
 --- a/dlls/wined3d/cs.c
 +++ b/dlls/wined3d/cs.c
-@@ -467,6 +467,7 @@ struct wined3d_cs_wait_idle
+@@ -468,6 +468,7 @@ struct wined3d_cs_wait_idle
  struct wined3d_cs_fence
  {
      enum wined3d_cs_op opcode;
@@ -1089,7 +949,7 @@ index a9227f46ecf..84c3894c2f0 100644
      GLsync *fence;
  };
  
-@@ -2578,6 +2579,8 @@ static void wined3d_cs_exec_fence(struct wined3d_cs *cs, const void *data)
+@@ -2618,6 +2619,8 @@ static void wined3d_cs_exec_fence(struct wined3d_cs *cs, const void *data)
      context = context_acquire(cs->device, NULL, 0);
      gl_info = context->gl_info;
  
@@ -1098,7 +958,7 @@ index a9227f46ecf..84c3894c2f0 100644
      fence = GL_EXTCALL(glFenceSync(GL_SYNC_GPU_COMMANDS_COMPLETE, 0));
      context->gl_info->gl_ops.gl.p_glFlush();
  
-@@ -2588,13 +2591,14 @@ static void wined3d_cs_exec_fence(struct wined3d_cs *cs, const void *data)
+@@ -2628,13 +2631,14 @@ static void wined3d_cs_exec_fence(struct wined3d_cs *cs, const void *data)
      context_release(context);
  }
  
@@ -1114,7 +974,7 @@ index a9227f46ecf..84c3894c2f0 100644
      op->fence = &fence;
  
      cs->ops->submit(cs, WINED3D_CS_QUEUE_DEFAULT);
-@@ -2603,9 +2607,9 @@ static GLsync wined3d_cs_emit_fence(struct wined3d_cs *cs)
+@@ -2643,9 +2647,9 @@ static GLsync wined3d_cs_emit_fence(struct wined3d_cs *cs)
      return fence;
  }
  
@@ -1127,10 +987,10 @@ index a9227f46ecf..84c3894c2f0 100644
  
  static void wined3d_cs_emit_stop(struct wined3d_cs *cs)
 diff --git a/dlls/wined3d/texture.c b/dlls/wined3d/texture.c
-index 8b68158e130..04f0077465f 100644
+index bb2a557c972..5d64e3895d2 100644
 --- a/dlls/wined3d/texture.c
 +++ b/dlls/wined3d/texture.c
-@@ -3691,7 +3691,7 @@ unsigned int CDECL wined3d_get_gl_texture(struct wined3d_texture *texture)
+@@ -3989,7 +3989,7 @@ unsigned int CDECL wined3d_get_gl_texture(struct wined3d_texture *texture)
      if (!(gl_info = wined3d_prepare_vr_gl_context(device)))
          return 0;
  
@@ -1140,10 +1000,10 @@ index 8b68158e130..04f0077465f 100644
      GL_EXTCALL(glDeleteSync(fence));
  
 diff --git a/dlls/wined3d/wined3d_private.h b/dlls/wined3d/wined3d_private.h
-index 77448638438..684c1066de7 100644
+index 7ded39f9db8..ec1db8e3edc 100644
 --- a/dlls/wined3d/wined3d_private.h
 +++ b/dlls/wined3d/wined3d_private.h
-@@ -3695,7 +3695,7 @@ void wined3d_cs_emit_gl_texture_callback(struct wined3d_cs *cs, struct wined3d_t
+@@ -3819,7 +3819,7 @@ void wined3d_cs_emit_gl_texture_callback(struct wined3d_cs *cs, struct wined3d_t
  void wined3d_cs_emit_user_callback(struct wined3d_cs *cs,
          wined3d_cs_callback callback, const void *data, unsigned int size) DECLSPEC_HIDDEN;
  
