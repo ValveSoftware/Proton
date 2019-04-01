@@ -1,0 +1,24 @@
+diff --git a/dlls/user32/tests/input.c b/dlls/user32/tests/input.c
+index ffdd4b71372..835dfb108d1 100644
+--- a/dlls/user32/tests/input.c
++++ b/dlls/user32/tests/input.c
+@@ -1269,6 +1269,19 @@ static LRESULT CALLBACK hook_proc2( int code, WPARAM wparam, LPARAM lparam )
+     return CallNextHookEx( 0, code, wparam, lparam );
+ }
+ 
++static LRESULT CALLBACK hook_proc3( int code, WPARAM wparam, LPARAM lparam )
++{
++    POINT pt;
++
++    if (code == HC_ACTION)
++    {
++        /* MSLLHOOKSTRUCT does not seem to be reliable and contains different data on each run. */
++        GetCursorPos(&pt);
++        ok(pt.x == pt_old.x && pt.y == pt_old.y, "GetCursorPos: (%d,%d)\n", pt.x, pt.y);
++    }
++    return CallNextHookEx( 0, code, wparam, lparam );
++}
++
+ static void test_mouse_ll_hook(void)
+ {
+     HWND hwnd;

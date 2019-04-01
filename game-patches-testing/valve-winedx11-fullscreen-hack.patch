@@ -874,19 +874,6 @@ index d54fedbb6f5..4c615b41f26 100644
  extern BOOL fs_hack_enabled(void) DECLSPEC_HIDDEN;
  extern BOOL fs_hack_matches_current_mode(int w, int h) DECLSPEC_HIDDEN;
  extern BOOL fs_hack_matches_real_mode(int w, int h) DECLSPEC_HIDDEN;
-diff --git a/dlls/winex11.drv/x11drv_main.c b/dlls/winex11.drv/x11drv_main.c
-index 1a4f8047583..4cbd2dbe714 100644
---- a/dlls/winex11.drv/x11drv_main.c
-+++ b/dlls/winex11.drv/x11drv_main.c
-@@ -93,7 +93,7 @@ static void *err_callback_arg;               /* error callback argument */
- static int err_callback_result;              /* error callback result */
- static unsigned long err_serial;             /* serial number of first request */
- static int (*old_error_handler)( Display *, XErrorEvent * );
--static BOOL use_xim = TRUE;
-+static BOOL use_xim = FALSE;
- static char input_style[20];
- 
- #define IS_OPTION_TRUE(ch) \
 From b93a9c0c10a1d712f6d251946e5d47772cac6c67 Mon Sep 17 00:00:00 2001
 From: Andrew Eikum <aeikum@codeweavers.com>
 Date: Tue, 12 Jun 2018 15:12:13 -0500
@@ -1531,82 +1518,6 @@ index a95b48bc3f1..ccdb6c6efa2 100644
  };
  
  struct x11drv_thread_data
-From de2253f05bc5ef31d9c1ae3b5b1cb685d84c38ca Mon Sep 17 00:00:00 2001
-From: Kai Krakow <kai@kaishome.de>
-Date: Thu, 4 Oct 2018 05:51:20 +0200
-Subject: [PATCH] winex11.drv: Bypass compositor in fullscreen mode
-
-Bypass the compositor in fullscreen mode. This reduces stutter
-introduced by window updates in the background and also allows for maybe
-a few more FPS. To not change the visual appearance of the desktop for
-windowed games, this hack only enables itself when the game was switched
-to fullscreen mode, and returns to default WM setting when the game
-leaves fullscreen mode.
-
-Compositors tend to cause severe stutter if the game is GPU-bound.
----
- dlls/winex11.drv/window.c      | 7 +++++++
- dlls/winex11.drv/x11drv.h      | 1 +
- dlls/winex11.drv/x11drv_main.c | 1 +
- 3 files changed, 9 insertions(+)
-
-diff --git a/dlls/winex11.drv/window.c b/dlls/winex11.drv/window.c
-index b7adada3bdd..c690306a717 100644
---- a/dlls/winex11.drv/window.c
-+++ b/dlls/winex11.drv/window.c
-@@ -985,6 +985,7 @@ void update_user_time( Time time )
- void update_net_wm_states( struct x11drv_win_data *data )
- {
-     DWORD i, style, ex_style, new_state = 0;
-+    unsigned long net_wm_bypass_compositor = 0;
- 
-     if (!data->managed) return;
-     if (data->whole_window == root_window) return;
-@@ -997,7 +998,10 @@ void update_net_wm_states( struct x11drv_win_data *data )
-         if ((style & WS_MAXIMIZE) && (style & WS_CAPTION) == WS_CAPTION)
-             new_state |= (1 << NET_WM_STATE_MAXIMIZED);
-         else if (!(style & WS_MINIMIZE))
-+	{
-+            net_wm_bypass_compositor = 1;
-             new_state |= (1 << NET_WM_STATE_FULLSCREEN);
-+	}
-     }
-     else if (style & WS_MAXIMIZE)
-         new_state |= (1 << NET_WM_STATE_MAXIMIZED);
-@@ -1064,6 +1068,9 @@ void update_net_wm_states( struct x11drv_win_data *data )
-     }
-     data->net_wm_state = new_state;
- 
-+    XChangeProperty( data->display, data->whole_window, x11drv_atom(_NET_WM_BYPASS_COMPOSITOR), XA_CARDINAL,
-+                     32, PropModeReplace, (unsigned char *)&net_wm_bypass_compositor, 1 );
-+
-     if(new_state & (1 << NET_WM_STATE_FULLSCREEN))
-         XSetInputFocus( data->display, data->whole_window, RevertToParent, CurrentTime );
- }
-diff --git a/dlls/winex11.drv/x11drv.h b/dlls/winex11.drv/x11drv.h
-index ccdb6c6efa2..9aa41a80b74 100644
---- a/dlls/winex11.drv/x11drv.h
-+++ b/dlls/winex11.drv/x11drv.h
-@@ -444,6 +444,7 @@ enum x11drv_atoms
-     XATOM__NET_SYSTEM_TRAY_OPCODE,
-     XATOM__NET_SYSTEM_TRAY_S0,
-     XATOM__NET_SYSTEM_TRAY_VISUAL,
-+    XATOM__NET_WM_BYPASS_COMPOSITOR,
-     XATOM__NET_WM_ICON,
-     XATOM__NET_WM_MOVERESIZE,
-     XATOM__NET_WM_NAME,
-diff --git a/dlls/winex11.drv/x11drv_main.c b/dlls/winex11.drv/x11drv_main.c
-index 7a7ce335c7a..2b11bba2291 100644
---- a/dlls/winex11.drv/x11drv_main.c
-+++ b/dlls/winex11.drv/x11drv_main.c
-@@ -135,6 +135,7 @@ static const char * const atom_names[NB_XATOMS - FIRST_XATOM] =
-     "_NET_SYSTEM_TRAY_OPCODE",
-     "_NET_SYSTEM_TRAY_S0",
-     "_NET_SYSTEM_TRAY_VISUAL",
-+    "_NET_WM_BYPASS_COMPOSITOR",
-     "_NET_WM_ICON",
-     "_NET_WM_MOVERESIZE",
-     "_NET_WM_NAME",
 From 200ab34e5bd329f773c362e23a556a9a6a3fc516 Mon Sep 17 00:00:00 2001
 From: Alexey Prokhin <alexey@prokhin.ru>
 Date: Wed, 17 Oct 2018 19:55:27 +0300
@@ -1893,85 +1804,6 @@ index e6e92aa0a23..b92a9e80f55 100644
                      return TRUE;
              }
          }
-From 0cd9d89f3223f884abb4c5e9e4d6aa06fd5beb97 Mon Sep 17 00:00:00 2001
-From: Sebastian Lackner <sebastian@fds-team.de>
-Date: Mon, 18 Mar 2019 13:39:57 +0100
-Subject: [PATCH] winex11: Forward all clipping requests to the right thread.
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-
-Wine-Bug: https://bugs.winehq.org/show_bug.cgi?id=38087
-Signed-off-by: Józef Kucia <jkucia@codeweavers.com>
-Signed-off-by: Alexandre Julliard <julliard@winehq.org>
-(cherry picked from commit e2389c015c69a036aab183eaf16a2dd1e7341330)
----
- dlls/winex11.drv/mouse.c | 30 +++++++++++++++---------------
- 1 file changed, 15 insertions(+), 15 deletions(-)
-
-diff --git a/dlls/winex11.drv/mouse.c b/dlls/winex11.drv/mouse.c
-index b92a9e80f55..17c1e1ef0c0 100644
---- a/dlls/winex11.drv/mouse.c
-+++ b/dlls/winex11.drv/mouse.c
-@@ -489,6 +489,8 @@ void reset_clipping_window(void)
-     ClipCursor( NULL );  /* make sure the clip rectangle is reset too */
- }
- 
-+BOOL CDECL X11DRV_ClipCursor( const RECT *clip );
-+
- /***********************************************************************
-  *             clip_cursor_notify
-  *
-@@ -517,12 +519,10 @@ LRESULT clip_cursor_notify( HWND hwnd, HWND new_clip_hwnd )
-     }
-     else if (hwnd == GetForegroundWindow())  /* request to clip */
-     {
--        RECT clip, virtual_rect = get_virtual_screen_rect();
-+        RECT clip;
- 
-         GetClipCursor( &clip );
--        if (clip.left > virtual_rect.left || clip.right < virtual_rect.right ||
--            clip.top > virtual_rect.top   || clip.bottom < virtual_rect.bottom)
--            return grab_clipping_window( &clip );
-+        X11DRV_ClipCursor( &clip );
-     }
-     return 0;
- }
-@@ -1521,23 +1521,23 @@ BOOL CDECL X11DRV_ClipCursor( LPCRECT clip )
-     if (grab_pointer)
-     {
-         HWND foreground = GetForegroundWindow();
-+        DWORD tid, pid;
-+
-+        /* forward request to the foreground window if it's in a different thread */
-+        tid = GetWindowThreadProcessId( foreground, &pid );
-+        if (tid && tid != GetCurrentThreadId() && pid == GetCurrentProcessId())
-+        {
-+            TRACE( "forwarding clip request to %p\n", foreground );
-+            SendNotifyMessageW( foreground, WM_X11DRV_CLIP_CURSOR, 0, 0 );
-+            return TRUE;
-+        }
- 
-         /* we are clipping if the clip rectangle is smaller than the screen */
-         if (!(!fs_hack_enabled() && clip->left == 0 && clip->top == 0 && fs_hack_matches_last_mode(clip->right, clip->bottom)) && /* fix games trying to reset clip to full screen */
-                 (clip->left > virtual_rect.left || clip->right < virtual_rect.right ||
-                  clip->top > virtual_rect.top || clip->bottom < virtual_rect.bottom))
-         {
--            DWORD tid, pid;
--
--            /* forward request to the foreground window if it's in a different thread */
--            tid = GetWindowThreadProcessId( foreground, &pid );
--            if (tid && tid != GetCurrentThreadId() && pid == GetCurrentProcessId())
--            {
--                TRACE( "forwarding clip request to %p\n", foreground );
--                SendNotifyMessageW( foreground, WM_X11DRV_CLIP_CURSOR, 0, 0 );
--                return TRUE;
--            }
--            else if (grab_clipping_window( clip )) return TRUE;
-+            if (grab_clipping_window( clip )) return TRUE;
-         }
-         else /* check if we should switch to fullscreen clipping */
-         {
 From 27a329cfc69f3df40f346a6ea6388bc9e43f41fc Mon Sep 17 00:00:00 2001
 From: Zebediah Figura <zfigura@codeweavers.com>
 Date: Mon, 13 Aug 2018 15:04:04 -0500

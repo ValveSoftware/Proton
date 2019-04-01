@@ -1,0 +1,777 @@
+From e6f8be1d4109e2815c43b34d9adb23cee77f8016 Mon Sep 17 00:00:00 2001
+From: Ken Thomases <ken@codeweavers.com>
+Date: Sat, 18 Oct 2014 23:39:48 +0200
+Subject: [PATCH] user32: Implement EnumDisplayDevicesW() based on
+ EnumDisplayMonitors() and GetMonitorInfoW().
+
+---
+ dlls/user32/misc.c | 96 ++++++++++++++++++++++++++++++++++++++++------
+ 1 file changed, 84 insertions(+), 12 deletions(-)
+
+diff --git a/dlls/user32/misc.c b/dlls/user32/misc.c
+index d28cd9fd055..a6b7644020f 100644
+--- a/dlls/user32/misc.c
++++ b/dlls/user32/misc.c
+@@ -243,11 +243,74 @@ DWORD WINAPI SetLogonNotifyWindow(HWINSTA hwinsta,HWND hwnd)
+     return 1;
+ }
+ 
+-static const WCHAR primary_device_name[] = {'\\','\\','.','\\','D','I','S','P','L','A','Y','1',0};
+-static const WCHAR primary_device_string[] = {'X','1','1',' ','W','i','n','d','o','w','i','n','g',' ',
+-                                              'S','y','s','t','e','m',0};
+-static const WCHAR primary_device_deviceid[] = {'P','C','I','\\','V','E','N','_','0','0','0','0','&',
++static const WCHAR adapter_device_string[] = {'W','i','n','e',' ','D','i','s','p','l','a','y',' ',
++                                              'A','d','a','p','t','e','r',0};
++static const WCHAR adapter_device_deviceid[] = {'P','C','I','\\','V','E','N','_','0','0','0','0','&',
+                                                 'D','E','V','_','0','0','0','0',0};
++static const WCHAR display_device_name[] = {'%','s','\\','M','o','n','i','t','o','r','0',0};
++static const WCHAR display_device_string[] = {'W','i','n','e',' ','D','i','s','p','l','a','y',0};
++static const WCHAR display_device_deviceid[] = {'M','O','N','I','T','O','R','\\','W','I','N','E','%','0','4','d',0};
++
++struct display_devices_enum_info
++{
++    LPCWSTR adapter;
++    DWORD target;
++    DWORD non_primary_seen;
++    LPDISPLAY_DEVICEW device;
++};
++
++/***********************************************************************
++ *		display_devices_enum
++ *
++ * Helper callback for EnumDisplayDevicesW()
++ */
++static BOOL CALLBACK display_devices_enum( HMONITOR monitor, HDC hdc, LPRECT rect, LPARAM lp )
++{
++    struct display_devices_enum_info *info = (struct display_devices_enum_info *)lp;
++    MONITORINFOEXW mon_info;
++    BOOL match;
++
++    mon_info.cbSize = sizeof(mon_info);
++    GetMonitorInfoW( monitor, (MONITORINFO*)&mon_info );
++
++    if (!(mon_info.dwFlags & MONITORINFOF_PRIMARY))
++        info->non_primary_seen++;
++
++    if (info->adapter)
++    {
++        match = !strcmpiW( info->adapter, mon_info.szDevice );
++        if (match)
++        {
++            snprintfW( info->device->DeviceName, sizeof(info->device->DeviceName) / sizeof(WCHAR),
++                       display_device_name, mon_info.szDevice );
++            lstrcpynW( info->device->DeviceString, display_device_string, sizeof(info->device->DeviceString) / sizeof(WCHAR) );
++
++            if (info->device->cb >= offsetof(DISPLAY_DEVICEW, DeviceID) + sizeof(info->device->DeviceID))
++            {
++                snprintfW( info->device->DeviceID, sizeof(info->device->DeviceID) / sizeof(WCHAR),
++                           display_device_deviceid, (mon_info.dwFlags & MONITORINFOF_PRIMARY) ? 0 : info->non_primary_seen );
++            }
++        }
++    }
++    else
++    {
++        if (mon_info.dwFlags & MONITORINFOF_PRIMARY)
++            match = (info->target == 0);
++        else
++            match = (info->target == info->non_primary_seen);
++
++        if (match)
++        {
++            lstrcpynW( info->device->DeviceName, mon_info.szDevice, sizeof(info->device->DeviceName) / sizeof(WCHAR) );
++            lstrcpynW( info->device->DeviceString, adapter_device_string, sizeof(info->device->DeviceString) / sizeof(WCHAR) );
++
++            if (info->device->cb >= offsetof(DISPLAY_DEVICEW, DeviceID) + sizeof(info->device->DeviceID))
++                lstrcpynW( info->device->DeviceID, adapter_device_deviceid, sizeof(info->device->DeviceID) / sizeof(WCHAR) );
++        }
++    }
++
++    return !match;
++}
+ 
+ /***********************************************************************
+  *		EnumDisplayDevicesA (USER32.@)
+@@ -288,24 +351,33 @@ BOOL WINAPI EnumDisplayDevicesA( LPCSTR lpDevice, DWORD i, LPDISPLAY_DEVICEA lpD
+ BOOL WINAPI EnumDisplayDevicesW( LPCWSTR lpDevice, DWORD i, LPDISPLAY_DEVICEW lpDisplayDevice,
+                                  DWORD dwFlags )
+ {
+-    FIXME("(%s,%d,%p,0x%08x), stub!\n",debugstr_w(lpDevice),i,lpDisplayDevice,dwFlags);
++    struct display_devices_enum_info info;
+ 
+-    if (i)
++    TRACE("(%s,%d,%p,0x%08x)\n",debugstr_w(lpDevice),i,lpDisplayDevice,dwFlags);
++
++    if (lpDevice && i)
+         return FALSE;
+ 
+-    memcpy(lpDisplayDevice->DeviceName, primary_device_name, sizeof(primary_device_name));
+-    memcpy(lpDisplayDevice->DeviceString, primary_device_string, sizeof(primary_device_string));
+-  
+     lpDisplayDevice->StateFlags =
+         DISPLAY_DEVICE_ATTACHED_TO_DESKTOP |
+-        DISPLAY_DEVICE_PRIMARY_DEVICE |
+         DISPLAY_DEVICE_VGA_COMPATIBLE;
+ 
+-    if(lpDisplayDevice->cb >= offsetof(DISPLAY_DEVICEW, DeviceID) + sizeof(lpDisplayDevice->DeviceID))
+-        memcpy(lpDisplayDevice->DeviceID, primary_device_deviceid, sizeof(primary_device_deviceid));
++    if (!lpDevice && i == 0)
++        lpDisplayDevice->StateFlags |= DISPLAY_DEVICE_PRIMARY_DEVICE;
++
++    info.adapter = lpDevice;
++    info.target = i;
++    info.non_primary_seen = 0;
++    info.device = lpDisplayDevice;
++    if (EnumDisplayMonitors( 0, NULL, display_devices_enum, (LPARAM)&info ))
++        return FALSE;
++
+     if(lpDisplayDevice->cb >= offsetof(DISPLAY_DEVICEW, DeviceKey) + sizeof(lpDisplayDevice->DeviceKey))
+         lpDisplayDevice->DeviceKey[0] = 0;
+ 
++    TRACE("DeviceName %s DeviceString %s DeviceID %s DeviceKey %s\n", debugstr_w(lpDisplayDevice->DeviceName),
++          debugstr_w(lpDisplayDevice->DeviceString), debugstr_w(lpDisplayDevice->DeviceID), debugstr_w(lpDisplayDevice->DeviceKey));
++
+     return TRUE;
+ }
+ 
+From bbbaa09446b434346fe190f5ba05549391c473f8 Mon Sep 17 00:00:00 2001
+From: Sebastian Lackner <sebastian@fds-team.de>
+Date: Sat, 27 May 2017 04:15:55 +0200
+Subject: [PATCH] user32: Return a more reasonable display DeviceID.
+
+---
+ dlls/user32/misc.c          |  7 ++++++-
+ dlls/user32/tests/monitor.c | 16 +++++++++++++---
+ 2 files changed, 19 insertions(+), 4 deletions(-)
+
+diff --git a/dlls/user32/misc.c b/dlls/user32/misc.c
+index a6b7644020f..c1c812dbd51 100644
+--- a/dlls/user32/misc.c
++++ b/dlls/user32/misc.c
+@@ -249,7 +249,12 @@ static const WCHAR adapter_device_deviceid[] = {'P','C','I','\\','V','E','N','_'
+                                                 'D','E','V','_','0','0','0','0',0};
+ static const WCHAR display_device_name[] = {'%','s','\\','M','o','n','i','t','o','r','0',0};
+ static const WCHAR display_device_string[] = {'W','i','n','e',' ','D','i','s','p','l','a','y',0};
+-static const WCHAR display_device_deviceid[] = {'M','O','N','I','T','O','R','\\','W','I','N','E','%','0','4','d',0};
++static const WCHAR display_device_deviceid[] = {'M','O','N','I','T','O','R','\\',
++                                                'D','e','f','a','u','l','t','_','M','o','n','i','t','o','r','\\',
++                                                '{','4','D','3','6','E','9','6','E','-','E','3','2','5','-',
++                                                '1','1','C','E','-','B','F','C','1','-',
++                                                '0','8','0','0','2','B','E','1','0','3','1','8','}','\\',
++                                                '%','0','4','d',0};
+ 
+ struct display_devices_enum_info
+ {
+diff --git a/dlls/user32/misc.c b/dlls/user32/misc.c
+index c1c812dbd51..c26c02a3537 100644
+--- a/dlls/user32/misc.c
++++ b/dlls/user32/misc.c
+@@ -363,12 +363,22 @@ BOOL WINAPI EnumDisplayDevicesW( LPCWSTR lpDevice, DWORD i, LPDISPLAY_DEVICEW lp
+     if (lpDevice && i)
+         return FALSE;
+ 
+-    lpDisplayDevice->StateFlags =
+-        DISPLAY_DEVICE_ATTACHED_TO_DESKTOP |
+-        DISPLAY_DEVICE_VGA_COMPATIBLE;
+-
+-    if (!lpDevice && i == 0)
+-        lpDisplayDevice->StateFlags |= DISPLAY_DEVICE_PRIMARY_DEVICE;
++    if (lpDevice)
++    {
++        /* monitor flags */
++        lpDisplayDevice->StateFlags =
++            DISPLAY_DEVICE_ACTIVE |
++            DISPLAY_DEVICE_ATTACHED;
++    }
++    else
++    {
++        /* adapter flags */
++        lpDisplayDevice->StateFlags =
++            DISPLAY_DEVICE_ATTACHED_TO_DESKTOP |
++            DISPLAY_DEVICE_VGA_COMPATIBLE;
++        if(i == 0)
++            lpDisplayDevice->StateFlags |= DISPLAY_DEVICE_PRIMARY_DEVICE;
++    }
+ 
+     info.adapter = lpDevice;
+     info.target = i;
+From 204ecf07e80b3ee98aee74f86ca9e8e0afc7e369 Mon Sep 17 00:00:00 2001
+From: Andrew Eikum <aeikum@codeweavers.com>
+Date: Wed, 6 Mar 2019 08:21:32 -0600
+Subject: [PATCH] user32: GetRawInputDeviceInfo uses characters for
+ RIDI_DEVICENAME size.
+
+Signed-off-by: Andrew Eikum <aeikum@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+(cherry picked from commit d1b19a2d0acad40ab8786f5d75c0cebd52ae6cf2)
+---
+ dlls/user32/rawinput.c    | 41 ++++++++++++++++++++++--------
+ dlls/user32/tests/input.c | 53 ++++++++++++++++++++++++++++++++++++++-
+ 2 files changed, 83 insertions(+), 11 deletions(-)
+
+diff --git a/dlls/user32/rawinput.c b/dlls/user32/rawinput.c
+index b247c157dcc..2085fd3f9f1 100644
+--- a/dlls/user32/rawinput.c
++++ b/dlls/user32/rawinput.c
+@@ -329,16 +329,37 @@ UINT WINAPI DECLSPEC_HOTPATCH GetRawInputBuffer(RAWINPUT *data, UINT *data_size,
+  */
+ UINT WINAPI GetRawInputDeviceInfoA(HANDLE device, UINT command, void *data, UINT *data_size)
+ {
+-    UINT ret;
+-
+     TRACE("device %p, command %#x, data %p, data_size %p.\n",
+             device, command, data, data_size);
+ 
+-    ret = GetRawInputDeviceInfoW(device, command, data, data_size);
+-    if (command == RIDI_DEVICENAME && ret && ret != ~0U)
+-        ret = WideCharToMultiByte(CP_ACP, 0, data, -1, data, *data_size, NULL, NULL);
++    /* RIDI_DEVICENAME data_size is in chars, not bytes */
++    if (command == RIDI_DEVICENAME)
++    {
++        WCHAR *nameW;
++        UINT ret, nameW_sz;
+ 
+-    return ret;
++        if (!data_size) return ~0U;
++
++        nameW_sz = *data_size;
++
++        if (data && nameW_sz > 0)
++            nameW = HeapAlloc(GetProcessHeap(), 0, sizeof(WCHAR) * nameW_sz);
++        else
++            nameW = NULL;
++
++        ret = GetRawInputDeviceInfoW(device, command, nameW, &nameW_sz);
++
++        if (ret && ret != ~0U)
++            WideCharToMultiByte(CP_ACP, 0, nameW, -1, data, *data_size, NULL, NULL);
++
++        *data_size = nameW_sz;
++
++        HeapFree(GetProcessHeap(), 0, nameW);
++
++        return ret;
++    }
++
++    return GetRawInputDeviceInfoW(device, command, data, data_size);
+ }
+ 
+ /***********************************************************************
+@@ -366,18 +387,18 @@ UINT WINAPI GetRawInputDeviceInfoW(HANDLE device, UINT command, void *data, UINT
+     case RIDI_DEVICENAME:
+         if (device == WINE_MOUSE_HANDLE)
+         {
+-            s = sizeof(mouse_name);
++            s = ARRAY_SIZE(mouse_name);
+             name = mouse_name;
+         }
+         else if (device == WINE_KEYBOARD_HANDLE)
+         {
+-            s = sizeof(keyboard_name);
++            s = ARRAY_SIZE(keyboard_name);
+             name = keyboard_name;
+         }
+         else
+         {
+             hid_device = device;
+-            s = (strlenW(hid_device->path) + 1) * sizeof(WCHAR);
++            s = strlenW(hid_device->path) + 1;
+             name = hid_device->path;
+         }
+         break;
+@@ -402,7 +423,7 @@ UINT WINAPI GetRawInputDeviceInfoW(HANDLE device, UINT command, void *data, UINT
+ 
+     if (command == RIDI_DEVICENAME)
+     {
+-        memcpy(data, name, s);
++        memcpy(data, name, s * sizeof(WCHAR));
+         return s;
+     }
+ 
+diff --git a/dlls/user32/tests/input.c b/dlls/user32/tests/input.c
+index 835dfb108d1..625de3d7688 100644
+--- a/dlls/user32/tests/input.c
++++ b/dlls/user32/tests/input.c
+@@ -80,6 +80,8 @@ static UINT (WINAPI *pSendInput) (UINT, INPUT*, size_t);
+ static BOOL (WINAPI *pGetCurrentInputMessageSource)( INPUT_MESSAGE_SOURCE *source );
+ static int (WINAPI *pGetMouseMovePointsEx) (UINT, LPMOUSEMOVEPOINT, LPMOUSEMOVEPOINT, int, DWORD);
+ static UINT (WINAPI *pGetRawInputDeviceList) (PRAWINPUTDEVICELIST, PUINT, UINT);
++static UINT (WINAPI *pGetRawInputDeviceInfoW) (HANDLE, UINT, void *, UINT *);
++static UINT (WINAPI *pGetRawInputDeviceInfoA) (HANDLE, UINT, void *, UINT *);
+ 
+ #define MAXKEYEVENTS 12
+ #define MAXKEYMESSAGES MAXKEYEVENTS /* assuming a key event generates one
+@@ -164,6 +166,8 @@ static void init_function_pointers(void)
+     GET_PROC(GetCurrentInputMessageSource);
+     GET_PROC(GetMouseMovePointsEx);
+     GET_PROC(GetRawInputDeviceList);
++    GET_PROC(GetRawInputDeviceInfoW);
++    GET_PROC(GetRawInputDeviceInfoA);
+ #undef GET_PROC
+ }
+ 
+@@ -1555,7 +1559,7 @@ static void test_GetMouseMovePointsEx(void)
+ static void test_GetRawInputDeviceList(void)
+ {
+     RAWINPUTDEVICELIST devices[32];
+-    UINT ret, oret, devcount, odevcount;
++    UINT ret, oret, devcount, odevcount, i;
+     DWORD err;
+ 
+     SetLastError(0xdeadbeef);
+@@ -1587,6 +1591,53 @@ static void test_GetRawInputDeviceList(void)
+     ret = pGetRawInputDeviceList(devices, &devcount, sizeof(devices[0]));
+     ok(ret > 0, "expected non-zero\n");
+ 
++    for(i = 0; i < devcount; ++i)
++    {
++        WCHAR name[128];
++        char nameA[128];
++        UINT sz, len;
++        RID_DEVICE_INFO info;
++
++        /* get required buffer size */
++        name[0] = '\0';
++        sz = 5;
++        ret = pGetRawInputDeviceInfoW(devices[i].hDevice, RIDI_DEVICENAME, name, &sz);
++        ok(ret == -1, "GetRawInputDeviceInfo gave wrong failure: %d\n", err);
++        ok(sz > 5 && sz < ARRAY_SIZE(name), "Size should have been set and not too large (got: %u)\n", sz);
++
++        /* buffer size for RIDI_DEVICENAME is in CHARs, not BYTEs */
++        ret = pGetRawInputDeviceInfoW(devices[i].hDevice, RIDI_DEVICENAME, name, &sz);
++        ok(ret == sz, "GetRawInputDeviceInfo gave wrong return: %d\n", err);
++        len = lstrlenW(name);
++        ok(len + 1 == ret, "GetRawInputDeviceInfo returned wrong length (name: %u, ret: %u)\n", len + 1, ret);
++
++        /* test A variant with same size */
++        ret = pGetRawInputDeviceInfoA(devices[i].hDevice, RIDI_DEVICENAME, nameA, &sz);
++        ok(ret == sz, "GetRawInputDeviceInfoA gave wrong return: %d\n", err);
++        len = strlen(nameA);
++        ok(len + 1 == ret, "GetRawInputDeviceInfoA returned wrong length (name: %u, ret: %u)\n", len + 1, ret);
++
++        /* buffer size for RIDI_DEVICEINFO is in BYTEs */
++        memset(&info, 0, sizeof(info));
++        info.cbSize = sizeof(info);
++        sz = sizeof(info) - 1;
++        ret = pGetRawInputDeviceInfoW(devices[i].hDevice, RIDI_DEVICEINFO, &info, &sz);
++        ok(ret == -1, "GetRawInputDeviceInfo gave wrong failure: %d\n", err);
++        ok(sz == sizeof(info), "GetRawInputDeviceInfo set wrong size\n");
++
++        ret = pGetRawInputDeviceInfoW(devices[i].hDevice, RIDI_DEVICEINFO, &info, &sz);
++        ok(ret == sizeof(info), "GetRawInputDeviceInfo gave wrong return: %d\n", err);
++        ok(sz == sizeof(info), "GetRawInputDeviceInfo set wrong size\n");
++        ok(info.dwType == devices[i].dwType, "GetRawInputDeviceInfo set wrong type: 0x%x\n", info.dwType);
++
++        memset(&info, 0, sizeof(info));
++        info.cbSize = sizeof(info);
++        ret = pGetRawInputDeviceInfoA(devices[i].hDevice, RIDI_DEVICEINFO, &info, &sz);
++        ok(ret == sizeof(info), "GetRawInputDeviceInfo gave wrong return: %d\n", err);
++        ok(sz == sizeof(info), "GetRawInputDeviceInfo set wrong size\n");
++        ok(info.dwType == devices[i].dwType, "GetRawInputDeviceInfo set wrong type: 0x%x\n", info.dwType);
++    }
++
+     /* check if variable changes from larger to smaller value */
+     devcount = odevcount = ARRAY_SIZE(devices);
+     oret = ret = pGetRawInputDeviceList(devices, &odevcount, sizeof(devices[0]));
+From df06b30b902d0c61500c68b0557b471b17add24c Mon Sep 17 00:00:00 2001
+From: Nikolay Sivov <nsivov@codeweavers.com>
+Date: Fri, 1 Mar 2019 00:53:42 +0300
+Subject: [PATCH] user32: Do not touch some of the values on 64-bit with
+ SetWindowLong().
+
+Signed-off-by: Nikolay Sivov <nsivov@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+(cherry picked from commit d00ed8e7b94390f831873278b399b6862f3cc484)
+---
+ dlls/user32/tests/win.c | 230 ++++++++++++++++++++++++++++++++++++++++
+ dlls/user32/win.c       |  31 +++++-
+ 2 files changed, 258 insertions(+), 3 deletions(-)
+
+diff --git a/dlls/user32/tests/win.c b/dlls/user32/tests/win.c
+index 385432575eb..8c6be7bce33 100644
+--- a/dlls/user32/tests/win.c
++++ b/dlls/user32/tests/win.c
+@@ -6330,6 +6330,233 @@ static int check_error(DWORD actual, DWORD expected)
+     return (!sets_last_error && (actual == 0xdeadbeef)) || (actual == expected);
+ }
+ 
++static void test_set_window_long_size(void)
++{
++#ifdef _WIN64
++    WNDPROC wnd_proc, wnd_proc_2;
++    LONG_PTR retval;
++    HWND hwnd;
++    LONG ret;
++
++    /* It's not allowed to set or get 64-bit pointer values using 32-bit functions. */
++    hwnd = CreateWindowExA(0, "MainWindowClass", "Child window", WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX | WS_CHILD |
++            WS_MAXIMIZEBOX | WS_VISIBLE, 100, 100, 200, 200, hwndMain, 0, GetModuleHandleA(NULL), NULL);
++    ok(hwnd != NULL, "Failed to create test window.\n");
++
++    /* GWLP_WNDPROC */
++    SetLastError(0xdeadbeef);
++    wnd_proc = (WNDPROC)(LONG_PTR)GetWindowLongA(hwnd, GWLP_WNDPROC);
++todo_wine
++    ok(!wnd_proc && GetLastError() == ERROR_INVALID_INDEX, "Unexpected window proc.\n");
++
++    wnd_proc = (WNDPROC)GetWindowLongPtrA(hwnd, GWLP_WNDPROC);
++    ok(!!wnd_proc, "Unexpected window proc.\n");
++
++    SetLastError(0xdeadbeef);
++    wnd_proc_2 = (WNDPROC)(LONG_PTR)SetWindowLongA(hwnd, GWLP_WNDPROC, 0xdeadbeef);
++    ok(!wnd_proc_2 && GetLastError() == ERROR_INVALID_INDEX, "Unexpected window proc.\n");
++
++    wnd_proc_2 = (WNDPROC)GetWindowLongPtrA(hwnd, GWLP_WNDPROC);
++    ok(wnd_proc_2 == wnd_proc, "Unexpected window proc.\n");
++
++    SetLastError(0xdeadbeef);
++    ret = GetWindowWord(hwnd, GWLP_WNDPROC);
++    ok(!ret && GetLastError() == ERROR_INVALID_INDEX, "Unexpected return value.\n");
++
++    /* GWLP_USERDATA */
++    SetWindowLongPtrA(hwnd, GWLP_USERDATA, ((LONG_PTR)1 << 32) | 123);
++    ret = GetWindowLongA(hwnd, GWLP_USERDATA);
++    ok(ret == 123, "Unexpected user data %#x.\n", ret);
++    retval = GetWindowLongPtrA(hwnd, GWLP_USERDATA);
++    ok(retval > 123, "Unexpected user data.\n");
++    ret = GetWindowWord(hwnd, GWLP_USERDATA);
++todo_wine
++    ok(ret == 123, "Unexpected user data %#x.\n", ret);
++    ret = SetWindowWord(hwnd, GWLP_USERDATA, 124);
++todo_wine
++    ok(ret == 123, "Unexpected user data %#x.\n", ret);
++    ret = GetWindowLongA(hwnd, GWLP_USERDATA);
++todo_wine
++    ok(ret == 124, "Unexpected user data %#x.\n", ret);
++    retval = GetWindowLongPtrA(hwnd, GWLP_USERDATA);
++todo_wine
++    ok(retval == 124, "Unexpected user data.\n");
++
++    SetWindowLongA(hwnd, GWLP_USERDATA, (1 << 16) | 123);
++    ret = GetWindowLongA(hwnd, GWLP_USERDATA);
++    ok(ret == ((1 << 16) | 123), "Unexpected user data %#x.\n", ret);
++    ret = GetWindowWord(hwnd, GWLP_USERDATA);
++todo_wine
++    ok(ret == 123, "Unexpected user data %#x.\n", ret);
++
++    ret = SetWindowWord(hwnd, GWLP_USERDATA, 124);
++todo_wine
++    ok(ret == 123, "Unexpected user data %#x.\n", ret);
++    ret = GetWindowLongA(hwnd, GWLP_USERDATA);
++todo_wine
++    ok(ret == ((1 << 16) | 124), "Unexpected user data %#x.\n", ret);
++    ret = GetWindowWord(hwnd, GWLP_USERDATA);
++todo_wine
++    ok(ret == 124, "Unexpected user data %#x.\n", ret);
++
++    /* GWLP_ID */
++    ret = SetWindowLongA(hwnd, GWLP_ID, 1);
++    ok(!ret, "Unexpected id %#x.\n", ret);
++
++    ret = GetWindowLongA(hwnd, GWLP_ID);
++    ok(ret == 1, "Unexpected id %#x.\n", ret);
++
++    ret = GetWindowLongW(hwnd, GWLP_ID);
++    ok(ret == 1, "Unexpected id %#x.\n", ret);
++
++    SetWindowLongPtrA(hwnd, GWLP_ID, ((LONG_PTR)1 << 32) | 123);
++    ret = GetWindowLongA(hwnd, GWLP_ID);
++    ok(ret == 123, "Unexpected id %#x.\n", ret);
++    ret = GetWindowLongW(hwnd, GWLP_ID);
++    ok(ret == 123, "Unexpected id %#x.\n", ret);
++    retval = GetWindowLongPtrA(hwnd, GWLP_ID);
++    ok(retval > 123, "Unexpected id.\n");
++    SetLastError(0xdeadbeef);
++    ret = GetWindowWord(hwnd, GWLP_ID);
++todo_wine
++    ok(!ret && GetLastError() == ERROR_INVALID_INDEX, "Unexpected id %#x.\n", ret);
++
++    /* GWLP_HINSTANCE */
++    retval = GetWindowLongPtrA(hwnd, GWLP_HINSTANCE);
++    ok(retval == (LONG_PTR)GetModuleHandleA(NULL), "Unexpected instance %#lx.\n", retval);
++
++    SetLastError(0xdeadbeef);
++    ret = GetWindowLongA(hwnd, GWLP_HINSTANCE);
++todo_wine
++    ok(!ret && GetLastError() == ERROR_INVALID_INDEX, "Unexpected instance %#x.\n", ret);
++
++    SetLastError(0xdeadbeef);
++    ret = GetWindowLongW(hwnd, GWLP_HINSTANCE);
++todo_wine
++    ok(!ret && GetLastError() == ERROR_INVALID_INDEX, "Unexpected instance %#x.\n", ret);
++
++    SetLastError(0xdeadbeef);
++    ret = GetWindowWord(hwnd, GWLP_HINSTANCE);
++todo_wine
++    ok(!ret && GetLastError() == ERROR_INVALID_INDEX, "Unexpected instance %#x.\n", ret);
++
++    SetLastError(0xdeadbeef);
++    ret = SetWindowLongA(hwnd, GWLP_HINSTANCE, 1);
++    ok(!ret && GetLastError() == ERROR_INVALID_INDEX, "Unexpected instance %#x.\n", ret);
++
++    SetLastError(0xdeadbeef);
++    ret = SetWindowLongW(hwnd, GWLP_HINSTANCE, 1);
++    ok(!ret && GetLastError() == ERROR_INVALID_INDEX, "Unexpected instance %#x.\n", ret);
++
++    /* GWLP_HWNDPARENT */
++    SetLastError(0xdeadbeef);
++    ret = GetWindowLongA(hwnd, GWLP_HWNDPARENT);
++todo_wine
++    ok(!ret && GetLastError() == ERROR_INVALID_INDEX, "Unexpected parent window %#x.\n", ret);
++
++    SetLastError(0xdeadbeef);
++    ret = SetWindowLongA(hwnd, GWLP_HWNDPARENT, 0);
++    ok(!ret && GetLastError() == ERROR_INVALID_INDEX, "Unexpected parent window %#x.\n", ret);
++
++    SetLastError(0xdeadbeef);
++    ret = SetWindowLongW(hwnd, GWLP_HWNDPARENT, 0);
++    ok(!ret && GetLastError() == ERROR_INVALID_INDEX, "Unexpected parent window %#x.\n", ret);
++
++    SetLastError(0xdeadbeef);
++    ret = GetWindowWord(hwnd, GWLP_HWNDPARENT);
++todo_wine
++    ok(!ret && GetLastError() == ERROR_INVALID_INDEX, "Unexpected parent window %#x.\n", ret);
++
++    DestroyWindow(hwnd);
++#endif
++}
++
++static void test_set_window_word_size(void)
++{
++    WNDPROC wnd_proc, wnd_proc_2;
++    LONG_PTR retval;
++    HWND hwnd;
++    LONG ret;
++
++    /* It's not allowed to set or get 64-bit pointer values using 32-bit functions. */
++    hwnd = CreateWindowExA(0, "MainWindowClass", "Child window", WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX | WS_CHILD |
++            WS_MAXIMIZEBOX | WS_VISIBLE, 100, 100, 200, 200, hwndMain, 0, GetModuleHandleA(NULL), NULL);
++    ok(hwnd != NULL, "Failed to create test window.\n");
++
++    /* GWLP_WNDPROC */
++    wnd_proc = (WNDPROC)GetWindowLongPtrA(hwnd, GWLP_WNDPROC);
++    ok(!!wnd_proc, "Unexpected window proc.\n");
++
++    SetLastError(0xdeadbeef);
++    ret = GetWindowWord(hwnd, GWLP_WNDPROC);
++    ok(!ret && GetLastError() == ERROR_INVALID_INDEX, "Unexpected window proc.\n");
++
++    SetLastError(0xdeadbeef);
++    ret = SetWindowWord(hwnd, GWLP_WNDPROC, 0xbeef);
++    ok(!ret && GetLastError() == ERROR_INVALID_INDEX, "Unexpected window proc.\n");
++
++    wnd_proc_2 = (WNDPROC)GetWindowLongPtrA(hwnd, GWLP_WNDPROC);
++    ok(wnd_proc_2 == wnd_proc, "Unexpected window proc.\n");
++
++    /* GWLP_USERDATA */
++    ret = SetWindowLongA(hwnd, GWLP_USERDATA, (1 << 16) | 123);
++    ok(!ret, "Unexpected user data %#x.\n", ret);
++    ret = GetWindowLongA(hwnd, GWLP_USERDATA);
++    ok(ret > 123, "Unexpected user data %#x.\n", ret);
++    ret = GetWindowWord(hwnd, GWLP_USERDATA);
++todo_wine
++    ok(ret == 123, "Unexpected user data %#x.\n", ret);
++    ret = SetWindowWord(hwnd, GWLP_USERDATA, 124);
++todo_wine
++    ok(ret == 123, "Unexpected user data %#x.\n", ret);
++    ret = GetWindowWord(hwnd, GWLP_USERDATA);
++todo_wine
++    ok(ret == 124, "Unexpected user data %#x.\n", ret);
++    ret = GetWindowLongA(hwnd, GWLP_USERDATA);
++todo_wine
++    ok(ret == ((1 << 16) | 124), "Unexpected user data %#x.\n", ret);
++
++    /* GWLP_ID */
++    ret = SetWindowLongA(hwnd, GWLP_ID, 1);
++    ok(!ret, "Unexpected id %#x.\n", ret);
++    ret = GetWindowLongA(hwnd, GWLP_ID);
++    ok(ret == 1, "Unexpected id %#x.\n", ret);
++
++    SetLastError(0xdeadbeef);
++    ret = GetWindowWord(hwnd, GWLP_ID);
++todo_wine
++    ok(!ret && GetLastError() == ERROR_INVALID_INDEX, "Unexpected id %#x.\n", ret);
++    SetLastError(0xdeadbeef);
++    ret = SetWindowWord(hwnd, GWLP_ID, 2);
++todo_wine
++    ok(!ret && GetLastError() == ERROR_INVALID_INDEX, "Unexpected id %#x.\n", ret);
++
++    /* GWLP_HINSTANCE */
++    retval = GetWindowLongPtrA(hwnd, GWLP_HINSTANCE);
++    ok(retval == (LONG_PTR)GetModuleHandleA(NULL), "Unexpected instance %#lx.\n", retval);
++
++    SetLastError(0xdeadbeef);
++    ret = GetWindowWord(hwnd, GWLP_HINSTANCE);
++todo_wine
++    ok(!ret && GetLastError() == ERROR_INVALID_INDEX, "Unexpected instance %#x.\n", ret);
++
++    SetLastError(0xdeadbeef);
++    ret = SetWindowWord(hwnd, GWLP_HINSTANCE, 0xdead);
++todo_wine
++    ok(!ret && GetLastError() == ERROR_INVALID_INDEX, "Unexpected instance %#x.\n", ret);
++
++    /* GWLP_HWNDPARENT */
++    retval = GetWindowLongPtrA(hwnd, GWLP_HWNDPARENT);
++    ok(!!retval, "Unexpected parent window %#x.\n", ret);
++
++    SetLastError(0xdeadbeef);
++    ret = GetWindowWord(hwnd, GWLP_HWNDPARENT);
++todo_wine
++    ok(!ret && GetLastError() == ERROR_INVALID_INDEX, "Unexpected parent window %#x.\n", ret);
++
++    DestroyWindow(hwnd);
++}
++
+ static void test_SetWindowLong(void)
+ {
+     LONG_PTR retval;
+@@ -6371,6 +6598,9 @@ static void test_SetWindowLong(void)
+         /* set it back to ANSI */
+         SetWindowLongPtrA(hwndMain, GWLP_WNDPROC, 0);
+     }
++
++    test_set_window_long_size();
++    test_set_window_word_size();
+ }
+ 
+ static LRESULT WINAPI check_style_wnd_proc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
+diff --git a/dlls/user32/win.c b/dlls/user32/win.c
+index dd6142d16c0..d08b1809e59 100644
+--- a/dlls/user32/win.c
++++ b/dlls/user32/win.c
+@@ -2737,7 +2737,19 @@ WORD WINAPI SetWindowWord( HWND hwnd, INT offset, WORD newval )
+  */
+ LONG WINAPI DECLSPEC_HOTPATCH SetWindowLongA( HWND hwnd, INT offset, LONG newval )
+ {
+-    return WIN_SetWindowLong( hwnd, offset, sizeof(LONG), newval, FALSE );
++    switch (offset)
++    {
++#ifdef _WIN64
++    case GWLP_WNDPROC:
++    case GWLP_HINSTANCE:
++    case GWLP_HWNDPARENT:
++        WARN( "Invalid offset %d\n", offset );
++        SetLastError( ERROR_INVALID_INDEX );
++        return 0;
++#endif
++    default:
++        return WIN_SetWindowLong( hwnd, offset, sizeof(LONG), newval, FALSE );
++    }
+ }
+ 
+ 
+@@ -2811,8 +2823,21 @@ LONG WINAPI DECLSPEC_HOTPATCH SetWindowLongW(
+     HWND hwnd,  /* [in] window to alter */
+     INT offset, /* [in] offset, in bytes, of location to alter */
+     LONG newval /* [in] new value of location */
+-) {
+-    return WIN_SetWindowLong( hwnd, offset, sizeof(LONG), newval, TRUE );
++)
++{
++    switch (offset)
++    {
++#ifdef _WIN64
++    case GWLP_WNDPROC:
++    case GWLP_HINSTANCE:
++    case GWLP_HWNDPARENT:
++        WARN("Invalid offset %d\n", offset );
++        SetLastError( ERROR_INVALID_INDEX );
++        return 0;
++#endif
++    default:
++        return WIN_SetWindowLong( hwnd, offset, sizeof(LONG), newval, TRUE );
++    }
+ }
+ 
+ 
+From 47ca65d02266ed8c2520635219434b10638b9783 Mon Sep 17 00:00:00 2001
+From: Nikolay Sivov <nsivov@codeweavers.com>
+Date: Fri, 1 Mar 2019 00:53:43 +0300
+Subject: [PATCH] user32: Make GetWindowLong() fail for some values on 64-bit.
+
+Signed-off-by: Nikolay Sivov <nsivov@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+(cherry picked from commit c2f4e2b338906918c77634631ff82f106570e02e)
+---
+ dlls/user32/tests/win.c |  4 ----
+ dlls/user32/win.c       | 28 ++++++++++++++++++++++++++--
+ 2 files changed, 26 insertions(+), 6 deletions(-)
+
+diff --git a/dlls/user32/tests/win.c b/dlls/user32/tests/win.c
+index 8c6be7bce33..358042ea0c6 100644
+--- a/dlls/user32/tests/win.c
++++ b/dlls/user32/tests/win.c
+@@ -6346,7 +6346,6 @@ static void test_set_window_long_size(void)
+     /* GWLP_WNDPROC */
+     SetLastError(0xdeadbeef);
+     wnd_proc = (WNDPROC)(LONG_PTR)GetWindowLongA(hwnd, GWLP_WNDPROC);
+-todo_wine
+     ok(!wnd_proc && GetLastError() == ERROR_INVALID_INDEX, "Unexpected window proc.\n");
+ 
+     wnd_proc = (WNDPROC)GetWindowLongPtrA(hwnd, GWLP_WNDPROC);
+@@ -6427,12 +6426,10 @@ todo_wine
+ 
+     SetLastError(0xdeadbeef);
+     ret = GetWindowLongA(hwnd, GWLP_HINSTANCE);
+-todo_wine
+     ok(!ret && GetLastError() == ERROR_INVALID_INDEX, "Unexpected instance %#x.\n", ret);
+ 
+     SetLastError(0xdeadbeef);
+     ret = GetWindowLongW(hwnd, GWLP_HINSTANCE);
+-todo_wine
+     ok(!ret && GetLastError() == ERROR_INVALID_INDEX, "Unexpected instance %#x.\n", ret);
+ 
+     SetLastError(0xdeadbeef);
+@@ -6451,7 +6448,6 @@ todo_wine
+     /* GWLP_HWNDPARENT */
+     SetLastError(0xdeadbeef);
+     ret = GetWindowLongA(hwnd, GWLP_HWNDPARENT);
+-todo_wine
+     ok(!ret && GetLastError() == ERROR_INVALID_INDEX, "Unexpected parent window %#x.\n", ret);
+ 
+     SetLastError(0xdeadbeef);
+diff --git a/dlls/user32/win.c b/dlls/user32/win.c
+index d08b1809e59..eb012426d22 100644
+--- a/dlls/user32/win.c
++++ b/dlls/user32/win.c
+@@ -2693,7 +2693,19 @@ WORD WINAPI GetWindowWord( HWND hwnd, INT offset )
+  */
+ LONG WINAPI GetWindowLongA( HWND hwnd, INT offset )
+ {
+-    return WIN_GetWindowLong( hwnd, offset, sizeof(LONG), FALSE );
++    switch (offset)
++    {
++#ifdef _WIN64
++    case GWLP_WNDPROC:
++    case GWLP_HINSTANCE:
++    case GWLP_HWNDPARENT:
++        WARN( "Invalid offset %d\n", offset );
++        SetLastError( ERROR_INVALID_INDEX );
++        return 0;
++#endif
++    default:
++        return WIN_GetWindowLong( hwnd, offset, sizeof(LONG), FALSE );
++    }
+ }
+ 
+ 
+@@ -2702,7 +2714,19 @@ LONG WINAPI GetWindowLongA( HWND hwnd, INT offset )
+  */
+ LONG WINAPI GetWindowLongW( HWND hwnd, INT offset )
+ {
+-    return WIN_GetWindowLong( hwnd, offset, sizeof(LONG), TRUE );
++    switch (offset)
++    {
++#ifdef _WIN64
++    case GWLP_WNDPROC:
++    case GWLP_HINSTANCE:
++    case GWLP_HWNDPARENT:
++        WARN( "Invalid offset %d\n", offset );
++        SetLastError( ERROR_INVALID_INDEX );
++        return 0;
++#endif
++    default:
++        return WIN_GetWindowLong( hwnd, offset, sizeof(LONG), TRUE );
++    }
+ }
+ 
+ 

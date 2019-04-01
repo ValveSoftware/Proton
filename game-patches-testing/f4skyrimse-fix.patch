@@ -10,18 +10,6 @@ https://github.com/hdmap/wine-hackery
 
 
 --- a/dlls/ntdll/virtual.c	2018-05-15 12:07:53.839882299 -0400
-+++ a/dlls/ntdll/virtual.c	2018-05-15 14:51:22.632513314 -0400
-@@ -2750,7 +2753,7 @@ static int get_free_mem_state_callback(
-     MEMORY_BASIC_INFORMATION *info = arg;
-     void *end = (char *)start + size;
- 
--    if ((char *)info->BaseAddress + info->RegionSize < (char *)start) return 0;
-+    if ((char *)info->BaseAddress + info->RegionSize <= (char *)start) return 0;
- 
-     if (info->BaseAddress >= end)
-     {
-
---- a/dlls/ntdll/virtual.c	2018-05-15 12:07:53.839882299 -0400
 +++ a/dlls/ntdll/virtual.c	2018-05-16 16:29:00.753042766 -0400
 @@ -1387,11 +1387,11 @@ static NTSTATUS map_image( HANDLE hmappi
      server_enter_uninterrupted_section( &csVirtual, &sigset );

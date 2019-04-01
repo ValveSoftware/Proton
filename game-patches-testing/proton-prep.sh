@@ -31,18 +31,6 @@
     #this also fixes some game launchers and games themselves such as neverwinter and killing floor 2
     #patch -Np1 < ../game-patches-testing/high-core-count-fix.patch
 
-    echo "nvidia nvapi disable patch"
-    patch -Np1 < ../game-patches-testing/nvidia-hate.patch
-
-    echo "sdl joystick patch"
-    patch -Np1 < ../game-patches-testing/proton-sdl-joy.patch
-
-    echo "adding non-ms font replacements patch"
-    patch -Np1 < ../game-patches-testing/gdi32-add-cjk-font-replacements.patch
-
-    echo "hide wine updating prefix prompt"
-    patch -Np1 < ../game-patches-testing/hide-prefix-update-window.patch
-
     echo "system tray fix for kde plasma"
     patch -Np1 < ../game-patches-testing/plasma_systray_fix.patch
 
@@ -83,15 +71,15 @@
 
 
     #WINE PROTONIFY
+    echo "sdl joystick patch"
+    patch -Np1 < ../game-patches-testing/proton-sdl-joy.patch
+
+    echo "hide wine updating prefix prompt"
+    patch -Np1 < ../game-patches-testing/hide-prefix-update-window.patch
+
+
     echo "converting normal wine build into proton build"
     patch -Np1 < ../game-patches-testing/proton-tkg.patch
-
-    patch -Np1 < ../game-patches-testing/valve-wined3d-patches.patch
-    patch -Np1 < ../game-patches-testing/valve-d3d11.patch
-
-    patch -Np1 < ../game-patches-testing/FS_bypass_compositor.patch
-    patch -Np1 < ../game-patches-testing/valve-winedx11-fullscreen-hack.patch
-
 
     # apply esync patches
     for _f in "../esync/"*.patch; do
@@ -100,6 +88,30 @@
 
     # this is needed for wine 4.5+
     patch -Np1 < ../game-patches-testing/esync-no_kernel_obj_list.patch
+
+    patch -Np1 < ../game-patches-testing/valve-wined3d-d3d11.patch
+    patch -Np1 < ../game-patches-testing/valve-gdi32.patch
+    patch -Np1 < ../game-patches-testing/FS_bypass_compositor.patch
+    patch -Np1 < ../game-patches-testing/valve-winedx11-fullscreen-hack.patch
+    patch -Np1 < ../game-patches-testing/amd-ags.patch
+    patch -Np1 < ../game-patches-testing/unity-mouse-pointer-drift.patch
+    
+    #unfinished
+    #patch -Np1 < ../game-patches-testing/valve-winevulkan.patch
+    #patch -Np1 < ../game-patches-testing/valve-dinput.patch
+    #patch -Np1 < ../game-patches-testing/valve-winepulse.patch
+
+
+    patch -Np1 < ../game-patches-testing/valve-ntdll.patch
+    patch -Np1 < ../game-patches-testing/valve-user32.patch
+    patch -Np1 < ../game-patches-testing/valve-windowscodecs.patch
+    patch -Np1 < ../game-patches-testing/valve-winhttp.patch
+    patch -Np1 < ../game-patches-testing/valve-imm32.patch
+    patch -Np1 < ../game-patches-testing/valve-winebus.patch
+    patch -Np1 < ../game-patches-testing/valve-secur32.patch
+    patch -Np1 < ../game-patches-testing/valve-server.patch
+    patch -Np1 < ../game-patches-testing/valve-winemac.patch
+    patch -Np1 < ../game-patches-testing/valve-ws2_32.patch
 
     # large address awareness
     patch -Np1 < ../game-patches-testing/LAA.patch

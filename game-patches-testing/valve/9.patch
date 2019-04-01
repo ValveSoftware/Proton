@@ -1,0 +1,87 @@
+From 315bed86ed974208c0be4e85a3b52360dbe02761 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?J=C3=B3zef=20Kucia?= <joseph.kucia@gmail.com>
+Date: Fri, 21 Sep 2018 12:04:07 +0200
+Subject: [PATCH] wined3d: Load TEXTURE_RGB location for synchronous texture
+ access.
+
+---
+ dlls/wined3d/cs.c              | 10 +++++++---
+ dlls/wined3d/texture.c         |  2 +-
+ dlls/wined3d/wined3d_private.h |  2 +-
+ 3 files changed, 9 insertions(+), 5 deletions(-)
+
+diff --git a/dlls/wined3d/cs.c b/dlls/wined3d/cs.c
+index 1f1883cafea..85cbc4cdbbc 100644
+--- a/dlls/wined3d/cs.c
++++ b/dlls/wined3d/cs.c
+@@ -468,6 +468,7 @@ struct wined3d_cs_wait_idle
+ struct wined3d_cs_fence
+ {
+     enum wined3d_cs_op opcode;
++    struct wined3d_texture *texture;
+     GLsync *fence;
+ };
+ 
+@@ -2618,6 +2619,8 @@ static void wined3d_cs_exec_fence(struct wined3d_cs *cs, const void *data)
+     context = context_acquire(cs->device, NULL, 0);
+     gl_info = context->gl_info;
+ 
++    wined3d_texture_load_location(op->texture, 0, context, WINED3D_LOCATION_TEXTURE_RGB);
++
+     fence = GL_EXTCALL(glFenceSync(GL_SYNC_GPU_COMMANDS_COMPLETE, 0));
+     context->gl_info->gl_ops.gl.p_glFlush();
+ 
+@@ -2628,13 +2631,14 @@ static void wined3d_cs_exec_fence(struct wined3d_cs *cs, const void *data)
+     context_release(context);
+ }
+ 
+-static GLsync wined3d_cs_emit_fence(struct wined3d_cs *cs)
++static GLsync wined3d_cs_emit_fence(struct wined3d_cs *cs, struct wined3d_texture *texture)
+ {
+     struct wined3d_cs_fence *op;
+     GLsync fence;
+ 
+     op = cs->ops->require_space(cs, sizeof(*op), WINED3D_CS_QUEUE_DEFAULT);
+     op->opcode = WINED3D_CS_OP_FENCE;
++    op->texture = texture;
+     op->fence = &fence;
+ 
+     cs->ops->submit(cs, WINED3D_CS_QUEUE_DEFAULT);
+@@ -2643,9 +2647,9 @@ static GLsync wined3d_cs_emit_fence(struct wined3d_cs *cs)
+     return fence;
+ }
+ 
+-GLsync wined3d_cs_synchronize(struct wined3d_cs *cs)
++GLsync wined3d_cs_synchronize(struct wined3d_cs *cs, struct wined3d_texture *texture)
+ {
+-    return wined3d_cs_emit_fence(cs);
++    return wined3d_cs_emit_fence(cs, texture);
+ }
+ 
+ static void wined3d_cs_emit_stop(struct wined3d_cs *cs)
+diff --git a/dlls/wined3d/texture.c b/dlls/wined3d/texture.c
+index bb2a557c972..5d64e3895d2 100644
+--- a/dlls/wined3d/texture.c
++++ b/dlls/wined3d/texture.c
+@@ -3989,7 +3989,7 @@ unsigned int CDECL wined3d_get_gl_texture(struct wined3d_texture *texture)
+     if (!(gl_info = wined3d_prepare_vr_gl_context(device)))
+         return 0;
+ 
+-    fence = wined3d_cs_synchronize(device->cs);
++    fence = wined3d_cs_synchronize(device->cs, texture);
+     GL_EXTCALL(glWaitSync(fence, 0, GL_TIMEOUT_IGNORED));
+     GL_EXTCALL(glDeleteSync(fence));
+ 
+diff --git a/dlls/wined3d/wined3d_private.h b/dlls/wined3d/wined3d_private.h
+index 7ded39f9db8..ec1db8e3edc 100644
+--- a/dlls/wined3d/wined3d_private.h
++++ b/dlls/wined3d/wined3d_private.h
+@@ -3819,7 +3819,7 @@ void wined3d_cs_emit_gl_texture_callback(struct wined3d_cs *cs, struct wined3d_t
+ void wined3d_cs_emit_user_callback(struct wined3d_cs *cs,
+         wined3d_cs_callback callback, const void *data, unsigned int size) DECLSPEC_HIDDEN;
+ 
+-GLsync wined3d_cs_synchronize(struct wined3d_cs *cs) DECLSPEC_HIDDEN;
++GLsync wined3d_cs_synchronize(struct wined3d_cs *cs, struct wined3d_texture *texture) DECLSPEC_HIDDEN;
+ 
+ void wined3d_destroy_gl_vr_context(struct wined3d_vr_gl_context *ctx) DECLSPEC_HIDDEN;
+ 

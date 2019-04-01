@@ -1,0 +1,22 @@
+From ba0f40e82ab9ed82760aed91476842d844cd55bf Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?J=C3=B3zef=20Kucia?= <joseph.kucia@gmail.com>
+Date: Thu, 11 Oct 2018 11:31:43 +0200
+Subject: [PATCH] d3d11: Remove unused 'depth_tex' variable.
+
+---
+ dlls/d3d11/texture.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/dlls/d3d11/texture.c b/dlls/d3d11/texture.c
+index 8fc75fd6f92..8001d62e2c1 100644
+--- a/dlls/d3d11/texture.c
++++ b/dlls/d3d11/texture.c
+@@ -721,7 +721,7 @@ static void STDMETHODCALLTYPE d3d11_texture2d_GetDesc(IWineD3D11Texture2D *iface
+ static void STDMETHODCALLTYPE d3d11_texture2d_access_gl_texture(IWineD3D11Texture2D *iface,
+         gl_texture_callback callback, IWineD3D11Texture2D *depth_texture, const void *data, unsigned int size)
+ {
+-    struct d3d_texture2d *texture = impl_from_IWineD3D11Texture2D(iface), *depth_tex = NULL;
++    struct d3d_texture2d *texture = impl_from_IWineD3D11Texture2D(iface);
+     struct wined3d_texture *wined3d_depth_texture = NULL;
+ 
+     TRACE("iface %p, callback %p, depth_texture %p, data %p, size %u.\n",

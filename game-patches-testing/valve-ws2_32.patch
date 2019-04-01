@@ -1,0 +1,28 @@
+From de0c69f3c0856608e7a29c2f1619428290bede25 Mon Sep 17 00:00:00 2001
+From: Andrew Eikum <aeikum@codeweavers.com>
+Date: Thu, 11 May 2017 10:01:16 -0500
+Subject: [PATCH] HACK: ws2_32: Fake success when trying to bind to an IPX
+ address
+
+---
+ dlls/ws2_32/socket.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/dlls/ws2_32/socket.c b/dlls/ws2_32/socket.c
+index 542dc9a7a84..34c9f3684aa 100644
+--- a/dlls/ws2_32/socket.c
++++ b/dlls/ws2_32/socket.c
+@@ -3367,6 +3367,13 @@ int WINAPI WS_bind(SOCKET s, const struct WS_sockaddr* name, int namelen)
+                     else if (interface_bind(s, fd, &uaddr.addr))
+                         in4->sin_addr.s_addr = htonl(INADDR_ANY);
+                 }
++
++                if(name->sa_family ==  WS_AF_IPX){
++                    /* Quake (and similar family) fails if we can't bind to an IPX address. This often
++                     * doesn't work on Linux, so just fake success. */
++                    return 0;
++                }
++
+                 if (bind(fd, &uaddr.addr, uaddrlen) < 0)
+                 {
+                     int loc_errno = errno;

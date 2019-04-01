@@ -1,0 +1,49 @@
+From a7128889eb4218982629337e6661f4738cdcc11b Mon Sep 17 00:00:00 2001
+From: Andrew Eikum <aeikum@codeweavers.com>
+Date: Mon, 20 Aug 2018 10:58:09 -0500
+Subject: [PATCH] secur32: Return real Unix username from
+ GetUserNameEx(NameDisplay)
+
+---
+ dlls/secur32/secur32.c | 19 ++++++++++++++++++-
+ 1 file changed, 18 insertions(+), 1 deletion(-)
+
+diff --git a/dlls/secur32/secur32.c b/dlls/secur32/secur32.c
+index b3ab80a850b..88aaba51304 100644
+--- a/dlls/secur32/secur32.c
++++ b/dlls/secur32/secur32.c
+@@ -34,6 +34,7 @@
+ #include "thunks.h"
+ #include "lmcons.h"
+ 
++#include "wine/library.h"
+ #include "wine/list.h"
+ #include "wine/debug.h"
+ #include "wine/unicode.h"
+@@ -1201,9 +1202,25 @@ BOOLEAN WINAPI GetUserNameExW(
+             return FALSE;
+         }
+ 
++    case NameDisplay:
++        {
++            const char *name = wine_get_user_name();
++            DWORD len = MultiByteToWideChar( CP_UNIXCP, 0, name, -1, NULL, 0 );
++
++            if (len > *nSize)
++            {
++                SetLastError( ERROR_MORE_DATA );
++                *nSize = len;
++                return FALSE;
++            }
++
++            *nSize = len - 1;
++            MultiByteToWideChar( CP_UNIXCP, 0, name, -1, lpNameBuffer, len );
++            return TRUE;
++        }
++
+     case NameUnknown:
+     case NameFullyQualifiedDN:
+-    case NameDisplay:
+     case NameUniqueId:
+     case NameCanonical:
+     case NameUserPrincipal:

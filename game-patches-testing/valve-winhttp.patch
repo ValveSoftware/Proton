@@ -1,0 +1,86 @@
+From 0cdaad191ac24212ea7ce5f310389716a71e4393 Mon Sep 17 00:00:00 2001
+From: Hans Leidekker <hans@codeweavers.com>
+Date: Wed, 20 Feb 2019 09:58:19 +0100
+Subject: [PATCH] winhttp: Include URL extra info in the path unless the caller
+ asks for it separately.
+
+Signed-off-by: Hans Leidekker <hans@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+(cherry picked from commit 18e17e8d3631bfde8a17d20c10b558789eabd44d)
+---
+ dlls/winhttp/tests/url.c | 19 ++++++++++++++++++-
+ dlls/winhttp/url.c       | 10 +++++++---
+ 2 files changed, 25 insertions(+), 4 deletions(-)
+
+diff --git a/dlls/winhttp/tests/url.c b/dlls/winhttp/tests/url.c
+index 0a31e181c2d..37a6e4a10b4 100644
+--- a/dlls/winhttp/tests/url.c
++++ b/dlls/winhttp/tests/url.c
+@@ -81,6 +81,10 @@ static const WCHAR url19[] =
+     {'h','t','t','p',':','/','/','?','t','e','x','t','=',0xfb00,0};
+ static const WCHAR url20[] =
+     {'h','t','t','p',':','/','/','/','t','e','x','t','=',0xfb00,0};
++static const WCHAR url21[] =
++    {'h','t','t','p','s',':','/','/','n','b','a','2','k','1','9','-','w','s','.','2','k','s','p','o','r','t','s','.','c','o','m',':','1','9','1','3','3',
++     '/','n','b','a','/','v','4','/','A','c','c','o','u','n','t','s','/','g','e','t','_','a','c','c','o','u','n','t','?','x','=','3','7','8','9','5','2',
++     '6','7','7','5','2','6','5','6','6','3','8','7','6',0};
+ 
+ static const WCHAR url_k1[]  =
+     {'h','t','t','p',':','/','/','u','s','e','r','n','a','m','e',':','p','a','s','s','w','o','r','d',
+@@ -428,7 +432,7 @@ static void WinHttpCrackUrl_test( void )
+     static const WCHAR pathW[] =
+         {'/','p','a','t','h','%','2','0','w','i','t','h','%','2','0','s','p','a','c','e','s',0};
+     URL_COMPONENTSW uc;
+-    WCHAR scheme[20], user[20], pass[20], host[20], path[80], extra[40];
++    WCHAR scheme[20], user[20], pass[20], host[40], path[80], extra[40];
+     DWORD error;
+     BOOL ret;
+ 
+@@ -843,6 +847,19 @@ static void WinHttpCrackUrl_test( void )
+     ret = WinHttpCrackUrl( url17, 0, 0, &uc );
+     ok( ret, "got %u\n", GetLastError() );
+     todo_wine ok( uc.nPort == 80, "got %u\n", uc.nPort );
++
++    memset( &uc, 0, sizeof(uc) );
++    uc.dwStructSize      = sizeof(uc);
++    uc.lpszScheme        = scheme;
++    uc.dwSchemeLength    = ARRAY_SIZE(scheme);
++    uc.lpszHostName      = host;
++    uc.dwHostNameLength  = ARRAY_SIZE(host);
++    uc.lpszUrlPath       = path;
++    uc.dwUrlPathLength   = ARRAY_SIZE(path);
++    ret = WinHttpCrackUrl( url21, 0, 0, &uc );
++    ok( ret, "got %u\n", GetLastError() );
++    ok( !lstrcmpW( uc.lpszUrlPath, url21 + 37 ), "unexpected path %s\n", wine_dbgstr_w(uc.lpszUrlPath) );
++    ok( uc.dwUrlPathLength == 50, "unexpected length %u\n", uc.dwUrlPathLength );
+ }
+ 
+ START_TEST(url)
+diff --git a/dlls/winhttp/url.c b/dlls/winhttp/url.c
+index e6aeac3df2f..786378d3b65 100644
+--- a/dlls/winhttp/url.c
++++ b/dlls/winhttp/url.c
+@@ -179,7 +179,7 @@ BOOL WINAPI WinHttpCrackUrl( LPCWSTR url, DWORD len, DWORD flags, LPURL_COMPONEN
+ 
+     TRACE("%s, %d, %x, %p\n", debugstr_wn(url, len), len, flags, uc);
+ 
+-    if (!url || !uc || uc->dwStructSize != sizeof(URL_COMPONENTS))
++    if (!url || !uc || uc->dwStructSize != sizeof(*uc))
+     {
+         SetLastError( ERROR_INVALID_PARAMETER );
+         return FALSE;
+@@ -268,8 +268,12 @@ BOOL WINAPI WinHttpCrackUrl( LPCWSTR url, DWORD len, DWORD flags, LPURL_COMPONEN
+ 
+         if ((r = memchrW( q, '?', len - (q - url) )))
+         {
+-            if ((err = set_component( &uc->lpszUrlPath, &uc->dwUrlPathLength, q, r - q, flags, &overflow ))) goto exit;
+-            if ((err = set_component( &uc->lpszExtraInfo, &uc->dwExtraInfoLength, r, len - (r - url), flags, &overflow ))) goto exit;
++            if (uc->dwExtraInfoLength)
++            {
++                if ((err = set_component( &uc->lpszUrlPath, &uc->dwUrlPathLength, q, r - q, flags, &overflow ))) goto exit;
++                if ((err = set_component( &uc->lpszExtraInfo, &uc->dwExtraInfoLength, r, len - (r - url), flags, &overflow ))) goto exit;
++            }
++            else if ((err = set_component( &uc->lpszUrlPath, &uc->dwUrlPathLength, q, len - (q - url), flags, &overflow ))) goto exit;
+         }
+         else
+         {
