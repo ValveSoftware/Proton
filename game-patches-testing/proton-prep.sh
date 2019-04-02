@@ -49,9 +49,6 @@
     echo "world of final fantasy patch"
     patch -Np1 < ../game-patches-testing/woff-hack.patch
 
-    echo "fix for SpinTires wrong dirt rendering in wined3d"
-    patch -Np1 < ../game-patches-testing/spintires-fix.patch
-
     echo "fix for Skyrim Script Extender not working"
     patch -Np1 < ../game-patches-testing/f4skyrimse-fix.patch
 
