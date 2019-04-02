@@ -17,7 +17,7 @@
 
     echo "applying async patch to dxvk and enabling it for warframe by default"
     patch -Np1 < ../game-patches-testing/dxvk-warframe-async-patch.patch
-    patch -Np1 < ../game-patches-testing/dxvk-dark-souls-grim-dawn.patch
+    #patch -Np1 < ../game-patches-testing/dxvk-dark-souls-grim-dawn.patch
     cd ..
 
     #WINE SYSTEM PERFORMANCE PATCHES
@@ -89,7 +89,7 @@
     patch -Np1 < ../game-patches-testing/valve-wined3d-d3d11.patch
     patch -Np1 < ../game-patches-testing/valve-gdi32.patch
     patch -Np1 < ../game-patches-testing/FS_bypass_compositor.patch
-    patch -Np1 < ../game-patches-testing/valve-winedx11-fullscreen-hack.patch
+    patch -Np1 < ../game-patches-testing/valve-winex11-fullscreen-hack.patch
     patch -Np1 < ../game-patches-testing/amd-ags.patch
     patch -Np1 < ../game-patches-testing/unity-mouse-pointer-drift.patch
     
