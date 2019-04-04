@@ -1,12 +1,13 @@
 #include "steam_defs.h"
-#include "steamworks_sdk_142/steam_api.h"
-#include "steamworks_sdk_142/isteamparentalsettings.h"
+#include "steamworks_sdk_143/steam_api.h"
+#include "steamworks_sdk_143/isteamparentalsettings.h"
 #include "steamclient_private.h"
-#include "cppISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include "struct_converters_142.h"
+#define SDKVER_143
+#include "struct_converters.h"
+#include "cppISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001.h"
 bool cppISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsParentalLockEnabled(void *linux_side)
 {
     return ((ISteamParentalSettings*)linux_side)->BIsParentalLockEnabled();

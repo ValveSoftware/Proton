@@ -11,6 +11,8 @@
 
 #include "steamclient_private.h"
 
+#include "struct_converters.h"
+
 WINE_DEFAULT_DEBUG_CHANNEL(steamclient);
 
 #include "cppISteamMasterServerUpdater_SteamMasterServerUpdater001.h"
@@ -20,7 +22,7 @@ typedef struct __winISteamMasterServerUpdater_SteamMasterServerUpdater001 {
     void *linux_side;
 } winISteamMasterServerUpdater_SteamMasterServerUpdater001;
 
-DEFINE_THISCALL_WRAPPER(winISteamMasterServerUpdater_SteamMasterServerUpdater001_SetActive, 5)
+DEFINE_THISCALL_WRAPPER(winISteamMasterServerUpdater_SteamMasterServerUpdater001_SetActive, 8)
 void __thiscall winISteamMasterServerUpdater_SteamMasterServerUpdater001_SetActive(winISteamMasterServerUpdater_SteamMasterServerUpdater001 *_this, bool bActive)
 {
     TRACE("%p\n", _this);
@@ -34,7 +36,7 @@ void __thiscall winISteamMasterServerUpdater_SteamMasterServerUpdater001_SetHear
     cppISteamMasterServerUpdater_SteamMasterServerUpdater001_SetHeartbeatInterval(_this->linux_side, iHeartbeatInterval);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamMasterServerUpdater_SteamMasterServerUpdater001_HandleIncomingPacket, 18)
+DEFINE_THISCALL_WRAPPER(winISteamMasterServerUpdater_SteamMasterServerUpdater001_HandleIncomingPacket, 20)
 bool __thiscall winISteamMasterServerUpdater_SteamMasterServerUpdater001_HandleIncomingPacket(winISteamMasterServerUpdater_SteamMasterServerUpdater001 *_this, const void * pData, int cbData, uint32 srcIP, uint16 srcPort)
 {
     TRACE("%p\n", _this);
@@ -48,7 +50,7 @@ int __thiscall winISteamMasterServerUpdater_SteamMasterServerUpdater001_GetNextO
     return cppISteamMasterServerUpdater_SteamMasterServerUpdater001_GetNextOutgoingPacket(_this->linux_side, pOut, cbMaxOut, pNetAdr, pPort);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamMasterServerUpdater_SteamMasterServerUpdater001_SetBasicServerData, 22)
+DEFINE_THISCALL_WRAPPER(winISteamMasterServerUpdater_SteamMasterServerUpdater001_SetBasicServerData, 32)
 void __thiscall winISteamMasterServerUpdater_SteamMasterServerUpdater001_SetBasicServerData(winISteamMasterServerUpdater_SteamMasterServerUpdater001 *_this, unsigned short nProtocolVersion, bool bDedicatedServer, const char * pRegionName, const char * pProductName, unsigned short nMaxReportedClients, bool bPasswordProtected, const char * pGameDescription)
 {
     TRACE("%p\n", _this);

@@ -47,6 +47,54 @@ For example, if you wish make changes to Wine, you would apply those
 changes to the <tt>wine/</tt> directory.
 
 ---
+Easy build path
+---
+
+Building Proton is quite complicated. We provide a top-level Makefile which
+will execute most of the build commands for you. This section describes how to
+use this Makefile for simple Proton builds.
+
+This Makefile uses a virtual machine to create a consistent build environment.
+The VM is managed with [Vagrant](https://www.vagrantup.com/), which you will
+need to install before invoking these commands. While Vagrant supports several
+VM software backends, Proton's build system has been tested only with its
+VirtualBox backend. You may run into problems with the shared folder
+(`vagrant_share`) and/or CPU and memory usage with other backends.
+
+If your build VM gets cluttered, or falls out of date, you can use `vagrant
+destroy` to wipe the VM clean, then invoke one of the below commands to start
+over.
+
+After checking out Proton and updating its submodules, you can use these
+targets to build Proton:
+
+`make install` - This will install Proton into your user's Steam directory.
+You may need to restart the Steam client to see it. The tool's name in the
+Steam client will be based on the currently checked out branch of Proton. You
+can override this name using the `build_name` variable.
+
+`make deploy` - This will create a deployment tarball and set of files which
+can be distributed as a Proton package. This is what we use to deploy Proton to
+Steam users. The package will be dropped into a new directory in
+`vagrant_share/`, named after the nearest Git tag (see `git describe`).
+
+`make clean` - This will completely erase the build tree.
+
+`make help` - View the Makefile documentation and examples.
+
+We also provide targets useful for simple Wine development:
+
+`make proton` - This will build Proton without copying its files out of the VM.
+
+`make module=<module> module` - This will build both 32- and 64-bit versions of
+the specified module, and copy the result into the `vagrant_share` directory.
+This allows rapid iteration on one module. This target is only useful after
+building Proton.
+
+If you are doing significant Wine development or want to control the build with
+more fine detail, see the full documentation below.
+
+---
 Building
 ---
 At a high level, the build instructions are:
@@ -80,9 +128,10 @@ with:
 
         vagrant ssh
 
-The Vagrantfile is set up to rsync the `proton` directory into the VM on boot,
-and it will create a `build` directory in `$HOME` that is ready for you to run
-`make`. On the host machine, you can use `vagrant rsync-auto` to have Vagrant
+At this point you will need to configure the build directory. See below.
+
+The Vagrantfile is set up to rsync the `proton` directory into the VM on boot.
+On the host machine, you can use `vagrant rsync-auto` to have Vagrant
 automatically sync changes on your host machine into the build machine. It is
 recommended that you make changes on your host machine, and then perform the
 build in the VM. Any changes you make in the `proton` directory on the VM may
@@ -120,17 +169,16 @@ runtime, as it takes a very long time to set up. To do this, edit the
 Configure the build
 ---
 After setting up the build system, it is time to run the configure script which
-will generate the Makefile to build your project. The Vagrantfile is set up to
-do this automatically for you in a directory called `$HOME/build` within the
-VM. If you are configuring manually, run these steps:
+will generate the Makefile to build your project. Run these steps. You may of
+course use whatever paths you like.
 
-        mkdir proton/mybuild/
-        cd proton/mybuild
-        ../configure.sh --steam-runtime64=docker:steam-proton-dev --steam-runtime32=docker:steam-proton-dev32 --with-ffmpeg
+        mkdir build/
+        cd build
+        ../proton/configure.sh --steam-runtime64=docker:steam-proton-dev --steam-runtime32=docker:steam-proton-dev32 --steam-runtime=$HOME/steam-runtime/runtime/ --with-ffmpeg
 
 If you are building without the Steam runtime, then instead use:
 
-        ../configure.sh --no-steam-runtime --with-ffmpeg
+        ../proton/configure.sh --no-steam-runtime --with-ffmpeg
 
 **Tip**: If you are building without the Steam runtime, you should now run
 `make obj-wine64/Makefile obj-wine32/Makefile` and check the files
@@ -159,7 +207,7 @@ running games with local builds of Proton, which you can install on your
 machine. The `install` target will perform the below steps for you.
 
 To install a local build of Proton into Steam, make a new directory in
-`~/.steam/steam/compatibilitytools.d/` with a tool name of your choosing and
+`~/.steam/root/compatibilitytools.d/` with a tool name of your choosing and
 place the contents of `dist` into that folder. The `make install` target will
 perform this task for you, installing the Proton build into the Steam folder
 for the current user. You will have to restart the Steam client for it to pick
@@ -176,6 +224,10 @@ A correct local tool installation should look like this:
         ├── toolmanifest.vdf
         ├── user_settings.sample.py
         └── version
+
+To enable your local build in Steam, go to the Steam Play section of the
+Settings window. If the build was correctly installed, you should see
+"proton-localbuild" in the drop-down list of compatibility tools.
 
 Each component of this software is used under the terms of their licenses.  See
 the <tt>LICENSE</tt> files here, as well as the <tt>LICENSE</tt>,
@@ -206,9 +258,12 @@ the Wine prefix. Removing the option will revert to the previous behavior.
 | :-------------------- | :----------------------------- | :----------- |
 |                       | <tt>PROTON_LOG</tt>            | Convenience method for dumping a useful debug log to `$HOME/steam-$APPID.log`. For more thorough logging, use `user_settings.py`. |
 |                       | <tt>PROTON_DUMP_DEBUG_COMMANDS</tt> | When running a game, Proton will write some useful debug scripts for that game into `$PROTON_DEBUG_DIR/proton_$USER/`. |
-|                       | <tt>PROTON_DEBUG_DIR<tt>       | Root directory for the Proton debug scripts, `/tmp` by default. |
+|                       | <tt>PROTON_DEBUG_DIR</tt>      | Root directory for the Proton debug scripts, `/tmp` by default. |
 | <tt>wined3d</tt>      | <tt>PROTON_USE_WINED3D</tt>    | Use OpenGL-based wined3d instead of Vulkan-based DXVK for d3d11 and d3d10. This used to be called `PROTON_USE_WINED3D11`, which is now an alias for this same option. |
-| <tt>nod3d11</tt>      | <tt>PROTON_NO_D3D11</tt>       | Disable <tt>d3d11.dll</tt>, for games which can fall back to and run better with d3d9. |
+| <tt>nod3d11</tt>      | <tt>PROTON_NO_D3D11</tt>       | Disable <tt>d3d11.dll</tt>, for d3d11 games which can fall back to and run better with d3d9. |
+| <tt>nod3d10</tt>      | <tt>PROTON_NO_D3D10</tt>       | Disable <tt>d3d10.dll</tt> and <tt>dxgi.dll</tt>, for d3d10 games which can fall back to and run better with d3d9. |
 | <tt>noesync</tt>      | <tt>PROTON_NO_ESYNC</tt>       | Do not use eventfd-based in-process synchronization primitives. |
+| <tt>forcelgadd</tt>   | <tt>PROTON_FORCE_LARGE_ADDRESS_AWARE</tt> | Force Wine to enable the LARGE_ADDRESS_AWARE flag for all executables. |
+| <tt>oldglstr</tt>     | <tt>PROTON_OLD_GL_STRING</tt>  | Set some driver overrides to limit the length of the GL extension string, for old games that crash on very long extension strings. |
 
 <!-- Target:  GitHub Flavor Markdown.  To test locally:  pandoc -f markdown_github -t html README.md  -->

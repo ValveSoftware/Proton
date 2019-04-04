@@ -11,6 +11,8 @@
 
 #include "steamclient_private.h"
 
+#include "struct_converters.h"
+
 WINE_DEFAULT_DEBUG_CHANNEL(steamclient);
 
 #include "cppISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001.h"

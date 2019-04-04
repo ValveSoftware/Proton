@@ -5,19 +5,10 @@
 #include "steamworks_sdk_119/isteamgamecoordinator.h"
 #include "steamclient_private.h"
 extern "C" {
-#pragma pack( push, 8 )
-struct winLeaderboardEntry_t_119 {
-    CSteamID m_steamIDUser;
-    int32 m_nGlobalRank;
-    int32 m_nScore;
-    int32 m_cDetails;
-    UGCHandle_t m_hUGC;
-}  __attribute__ ((ms_struct));
-#pragma pack( pop )
-void win_to_lin_struct_LeaderboardEntry_t_119(const void *w, void *l)
+#define SDKVER_119
+#include "struct_converters.h"
+void win_to_lin_struct_LeaderboardEntry_t_119(const struct winLeaderboardEntry_t_119 *win, struct LeaderboardEntry_t *lin)
 {
-    LeaderboardEntry_t *lin = (LeaderboardEntry_t *)l;
-    struct winLeaderboardEntry_t_119 *win = (struct winLeaderboardEntry_t_119 *)w;
     lin->m_steamIDUser = win->m_steamIDUser;
     lin->m_nGlobalRank = win->m_nGlobalRank;
     lin->m_nScore = win->m_nScore;
@@ -25,10 +16,8 @@ void win_to_lin_struct_LeaderboardEntry_t_119(const void *w, void *l)
     lin->m_hUGC = win->m_hUGC;
 }
 
-void lin_to_win_struct_LeaderboardEntry_t_119(const void *l, void *w)
+void lin_to_win_struct_LeaderboardEntry_t_119(const struct LeaderboardEntry_t *lin, struct winLeaderboardEntry_t_119 *win)
 {
-    LeaderboardEntry_t *lin = (LeaderboardEntry_t *)l;
-    struct winLeaderboardEntry_t_119 *win = (struct winLeaderboardEntry_t_119 *)w;
     win->m_steamIDUser = lin->m_steamIDUser;
     win->m_nGlobalRank = lin->m_nGlobalRank;
     win->m_nScore = lin->m_nScore;

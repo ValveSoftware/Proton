@@ -1,6 +1,3 @@
-#ifdef __cplusplus
-extern "C" {
-#endif
 extern bool cppISteamController_SteamController004_Init(void *);
 extern bool cppISteamController_SteamController004_Shutdown(void *);
 extern void cppISteamController_SteamController004_RunFrame(void *);
@@ -23,6 +20,3 @@ extern ControllerHandle_t cppISteamController_SteamController004_GetControllerFo
 extern ControllerMotionData_t cppISteamController_SteamController004_GetMotionData(void *, ControllerHandle_t);
 extern bool cppISteamController_SteamController004_ShowDigitalActionOrigins(void *, ControllerHandle_t, ControllerDigitalActionHandle_t, float, float, float);
 extern bool cppISteamController_SteamController004_ShowAnalogActionOrigins(void *, ControllerHandle_t, ControllerAnalogActionHandle_t, float, float, float);
-#ifdef __cplusplus
-}
-#endif

@@ -11,7 +11,627 @@
 
 #include "steamclient_private.h"
 
+#include "struct_converters.h"
+
 WINE_DEFAULT_DEBUG_CHANNEL(steamclient);
+
+#include "cppISteamFriends_SteamFriends017.h"
+
+typedef struct __winISteamFriends_SteamFriends017 {
+    vtable_ptr *vtable;
+    void *linux_side;
+} winISteamFriends_SteamFriends017;
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends017_GetPersonaName, 4)
+const char * __thiscall winISteamFriends_SteamFriends017_GetPersonaName(winISteamFriends_SteamFriends017 *_this)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends017_GetPersonaName(_this->linux_side);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends017_SetPersonaName, 8)
+SteamAPICall_t __thiscall winISteamFriends_SteamFriends017_SetPersonaName(winISteamFriends_SteamFriends017 *_this, const char * pchPersonaName)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends017_SetPersonaName(_this->linux_side, pchPersonaName);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends017_GetPersonaState, 4)
+EPersonaState __thiscall winISteamFriends_SteamFriends017_GetPersonaState(winISteamFriends_SteamFriends017 *_this)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends017_GetPersonaState(_this->linux_side);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends017_GetFriendCount, 8)
+int __thiscall winISteamFriends_SteamFriends017_GetFriendCount(winISteamFriends_SteamFriends017 *_this, int iFriendFlags)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends017_GetFriendCount(_this->linux_side, iFriendFlags);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends017_GetFriendByIndex, 16)
+CSteamID *__thiscall winISteamFriends_SteamFriends017_GetFriendByIndex(winISteamFriends_SteamFriends017 *_this, CSteamID *_r, int iFriend, int iFriendFlags)
+{
+    TRACE("%p\n", _this);
+    *_r = cppISteamFriends_SteamFriends017_GetFriendByIndex(_this->linux_side, iFriend, iFriendFlags);
+    return _r;
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends017_GetFriendRelationship, 12)
+EFriendRelationship __thiscall winISteamFriends_SteamFriends017_GetFriendRelationship(winISteamFriends_SteamFriends017 *_this, CSteamID steamIDFriend)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends017_GetFriendRelationship(_this->linux_side, steamIDFriend);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends017_GetFriendPersonaState, 12)
+EPersonaState __thiscall winISteamFriends_SteamFriends017_GetFriendPersonaState(winISteamFriends_SteamFriends017 *_this, CSteamID steamIDFriend)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends017_GetFriendPersonaState(_this->linux_side, steamIDFriend);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends017_GetFriendPersonaName, 12)
+const char * __thiscall winISteamFriends_SteamFriends017_GetFriendPersonaName(winISteamFriends_SteamFriends017 *_this, CSteamID steamIDFriend)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends017_GetFriendPersonaName(_this->linux_side, steamIDFriend);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends017_GetFriendGamePlayed, 16)
+bool __thiscall winISteamFriends_SteamFriends017_GetFriendGamePlayed(winISteamFriends_SteamFriends017 *_this, CSteamID steamIDFriend, FriendGameInfo_t * pFriendGameInfo)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends017_GetFriendGamePlayed(_this->linux_side, steamIDFriend, pFriendGameInfo);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends017_GetFriendPersonaNameHistory, 16)
+const char * __thiscall winISteamFriends_SteamFriends017_GetFriendPersonaNameHistory(winISteamFriends_SteamFriends017 *_this, CSteamID steamIDFriend, int iPersonaName)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends017_GetFriendPersonaNameHistory(_this->linux_side, steamIDFriend, iPersonaName);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends017_GetFriendSteamLevel, 12)
+int __thiscall winISteamFriends_SteamFriends017_GetFriendSteamLevel(winISteamFriends_SteamFriends017 *_this, CSteamID steamIDFriend)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends017_GetFriendSteamLevel(_this->linux_side, steamIDFriend);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends017_GetPlayerNickname, 12)
+const char * __thiscall winISteamFriends_SteamFriends017_GetPlayerNickname(winISteamFriends_SteamFriends017 *_this, CSteamID steamIDPlayer)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends017_GetPlayerNickname(_this->linux_side, steamIDPlayer);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends017_GetFriendsGroupCount, 4)
+int __thiscall winISteamFriends_SteamFriends017_GetFriendsGroupCount(winISteamFriends_SteamFriends017 *_this)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends017_GetFriendsGroupCount(_this->linux_side);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends017_GetFriendsGroupIDByIndex, 8)
+FriendsGroupID_t __thiscall winISteamFriends_SteamFriends017_GetFriendsGroupIDByIndex(winISteamFriends_SteamFriends017 *_this, int iFG)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends017_GetFriendsGroupIDByIndex(_this->linux_side, iFG);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends017_GetFriendsGroupName, 8)
+const char * __thiscall winISteamFriends_SteamFriends017_GetFriendsGroupName(winISteamFriends_SteamFriends017 *_this, FriendsGroupID_t friendsGroupID)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends017_GetFriendsGroupName(_this->linux_side, friendsGroupID);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends017_GetFriendsGroupMembersCount, 8)
+int __thiscall winISteamFriends_SteamFriends017_GetFriendsGroupMembersCount(winISteamFriends_SteamFriends017 *_this, FriendsGroupID_t friendsGroupID)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends017_GetFriendsGroupMembersCount(_this->linux_side, friendsGroupID);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends017_GetFriendsGroupMembersList, 16)
+void __thiscall winISteamFriends_SteamFriends017_GetFriendsGroupMembersList(winISteamFriends_SteamFriends017 *_this, FriendsGroupID_t friendsGroupID, CSteamID * pOutSteamIDMembers, int nMembersCount)
+{
+    TRACE("%p\n", _this);
+    cppISteamFriends_SteamFriends017_GetFriendsGroupMembersList(_this->linux_side, friendsGroupID, pOutSteamIDMembers, nMembersCount);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends017_HasFriend, 16)
+bool __thiscall winISteamFriends_SteamFriends017_HasFriend(winISteamFriends_SteamFriends017 *_this, CSteamID steamIDFriend, int iFriendFlags)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends017_HasFriend(_this->linux_side, steamIDFriend, iFriendFlags);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends017_GetClanCount, 4)
+int __thiscall winISteamFriends_SteamFriends017_GetClanCount(winISteamFriends_SteamFriends017 *_this)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends017_GetClanCount(_this->linux_side);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends017_GetClanByIndex, 12)
+CSteamID *__thiscall winISteamFriends_SteamFriends017_GetClanByIndex(winISteamFriends_SteamFriends017 *_this, CSteamID *_r, int iClan)
+{
+    TRACE("%p\n", _this);
+    *_r = cppISteamFriends_SteamFriends017_GetClanByIndex(_this->linux_side, iClan);
+    return _r;
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends017_GetClanName, 12)
+const char * __thiscall winISteamFriends_SteamFriends017_GetClanName(winISteamFriends_SteamFriends017 *_this, CSteamID steamIDClan)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends017_GetClanName(_this->linux_side, steamIDClan);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends017_GetClanTag, 12)
+const char * __thiscall winISteamFriends_SteamFriends017_GetClanTag(winISteamFriends_SteamFriends017 *_this, CSteamID steamIDClan)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends017_GetClanTag(_this->linux_side, steamIDClan);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends017_GetClanActivityCounts, 24)
+bool __thiscall winISteamFriends_SteamFriends017_GetClanActivityCounts(winISteamFriends_SteamFriends017 *_this, CSteamID steamIDClan, int * pnOnline, int * pnInGame, int * pnChatting)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends017_GetClanActivityCounts(_this->linux_side, steamIDClan, pnOnline, pnInGame, pnChatting);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends017_DownloadClanActivityCounts, 12)
+SteamAPICall_t __thiscall winISteamFriends_SteamFriends017_DownloadClanActivityCounts(winISteamFriends_SteamFriends017 *_this, CSteamID * psteamIDClans, int cClansToRequest)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends017_DownloadClanActivityCounts(_this->linux_side, psteamIDClans, cClansToRequest);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends017_GetFriendCountFromSource, 12)
+int __thiscall winISteamFriends_SteamFriends017_GetFriendCountFromSource(winISteamFriends_SteamFriends017 *_this, CSteamID steamIDSource)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends017_GetFriendCountFromSource(_this->linux_side, steamIDSource);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends017_GetFriendFromSourceByIndex, 20)
+CSteamID *__thiscall winISteamFriends_SteamFriends017_GetFriendFromSourceByIndex(winISteamFriends_SteamFriends017 *_this, CSteamID *_r, CSteamID steamIDSource, int iFriend)
+{
+    TRACE("%p\n", _this);
+    *_r = cppISteamFriends_SteamFriends017_GetFriendFromSourceByIndex(_this->linux_side, steamIDSource, iFriend);
+    return _r;
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends017_IsUserInSource, 20)
+bool __thiscall winISteamFriends_SteamFriends017_IsUserInSource(winISteamFriends_SteamFriends017 *_this, CSteamID steamIDUser, CSteamID steamIDSource)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends017_IsUserInSource(_this->linux_side, steamIDUser, steamIDSource);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends017_SetInGameVoiceSpeaking, 16)
+void __thiscall winISteamFriends_SteamFriends017_SetInGameVoiceSpeaking(winISteamFriends_SteamFriends017 *_this, CSteamID steamIDUser, bool bSpeaking)
+{
+    TRACE("%p\n", _this);
+    cppISteamFriends_SteamFriends017_SetInGameVoiceSpeaking(_this->linux_side, steamIDUser, bSpeaking);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends017_ActivateGameOverlay, 8)
+void __thiscall winISteamFriends_SteamFriends017_ActivateGameOverlay(winISteamFriends_SteamFriends017 *_this, const char * pchDialog)
+{
+    TRACE("%p\n", _this);
+    cppISteamFriends_SteamFriends017_ActivateGameOverlay(_this->linux_side, pchDialog);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends017_ActivateGameOverlayToUser, 16)
+void __thiscall winISteamFriends_SteamFriends017_ActivateGameOverlayToUser(winISteamFriends_SteamFriends017 *_this, const char * pchDialog, CSteamID steamID)
+{
+    TRACE("%p\n", _this);
+    cppISteamFriends_SteamFriends017_ActivateGameOverlayToUser(_this->linux_side, pchDialog, steamID);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends017_ActivateGameOverlayToWebPage, 12)
+void __thiscall winISteamFriends_SteamFriends017_ActivateGameOverlayToWebPage(winISteamFriends_SteamFriends017 *_this, const char * pchURL, EActivateGameOverlayToWebPageMode eMode)
+{
+    TRACE("%p\n", _this);
+    cppISteamFriends_SteamFriends017_ActivateGameOverlayToWebPage(_this->linux_side, pchURL, eMode);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends017_ActivateGameOverlayToStore, 12)
+void __thiscall winISteamFriends_SteamFriends017_ActivateGameOverlayToStore(winISteamFriends_SteamFriends017 *_this, AppId_t nAppID, EOverlayToStoreFlag eFlag)
+{
+    TRACE("%p\n", _this);
+    cppISteamFriends_SteamFriends017_ActivateGameOverlayToStore(_this->linux_side, nAppID, eFlag);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends017_SetPlayedWith, 12)
+void __thiscall winISteamFriends_SteamFriends017_SetPlayedWith(winISteamFriends_SteamFriends017 *_this, CSteamID steamIDUserPlayedWith)
+{
+    TRACE("%p\n", _this);
+    cppISteamFriends_SteamFriends017_SetPlayedWith(_this->linux_side, steamIDUserPlayedWith);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends017_ActivateGameOverlayInviteDialog, 12)
+void __thiscall winISteamFriends_SteamFriends017_ActivateGameOverlayInviteDialog(winISteamFriends_SteamFriends017 *_this, CSteamID steamIDLobby)
+{
+    TRACE("%p\n", _this);
+    cppISteamFriends_SteamFriends017_ActivateGameOverlayInviteDialog(_this->linux_side, steamIDLobby);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends017_GetSmallFriendAvatar, 12)
+int __thiscall winISteamFriends_SteamFriends017_GetSmallFriendAvatar(winISteamFriends_SteamFriends017 *_this, CSteamID steamIDFriend)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends017_GetSmallFriendAvatar(_this->linux_side, steamIDFriend);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends017_GetMediumFriendAvatar, 12)
+int __thiscall winISteamFriends_SteamFriends017_GetMediumFriendAvatar(winISteamFriends_SteamFriends017 *_this, CSteamID steamIDFriend)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends017_GetMediumFriendAvatar(_this->linux_side, steamIDFriend);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends017_GetLargeFriendAvatar, 12)
+int __thiscall winISteamFriends_SteamFriends017_GetLargeFriendAvatar(winISteamFriends_SteamFriends017 *_this, CSteamID steamIDFriend)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends017_GetLargeFriendAvatar(_this->linux_side, steamIDFriend);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends017_RequestUserInformation, 16)
+bool __thiscall winISteamFriends_SteamFriends017_RequestUserInformation(winISteamFriends_SteamFriends017 *_this, CSteamID steamIDUser, bool bRequireNameOnly)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends017_RequestUserInformation(_this->linux_side, steamIDUser, bRequireNameOnly);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends017_RequestClanOfficerList, 12)
+SteamAPICall_t __thiscall winISteamFriends_SteamFriends017_RequestClanOfficerList(winISteamFriends_SteamFriends017 *_this, CSteamID steamIDClan)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends017_RequestClanOfficerList(_this->linux_side, steamIDClan);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends017_GetClanOwner, 16)
+CSteamID *__thiscall winISteamFriends_SteamFriends017_GetClanOwner(winISteamFriends_SteamFriends017 *_this, CSteamID *_r, CSteamID steamIDClan)
+{
+    TRACE("%p\n", _this);
+    *_r = cppISteamFriends_SteamFriends017_GetClanOwner(_this->linux_side, steamIDClan);
+    return _r;
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends017_GetClanOfficerCount, 12)
+int __thiscall winISteamFriends_SteamFriends017_GetClanOfficerCount(winISteamFriends_SteamFriends017 *_this, CSteamID steamIDClan)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends017_GetClanOfficerCount(_this->linux_side, steamIDClan);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends017_GetClanOfficerByIndex, 20)
+CSteamID *__thiscall winISteamFriends_SteamFriends017_GetClanOfficerByIndex(winISteamFriends_SteamFriends017 *_this, CSteamID *_r, CSteamID steamIDClan, int iOfficer)
+{
+    TRACE("%p\n", _this);
+    *_r = cppISteamFriends_SteamFriends017_GetClanOfficerByIndex(_this->linux_side, steamIDClan, iOfficer);
+    return _r;
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends017_GetUserRestrictions, 4)
+uint32 __thiscall winISteamFriends_SteamFriends017_GetUserRestrictions(winISteamFriends_SteamFriends017 *_this)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends017_GetUserRestrictions(_this->linux_side);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends017_SetRichPresence, 12)
+bool __thiscall winISteamFriends_SteamFriends017_SetRichPresence(winISteamFriends_SteamFriends017 *_this, const char * pchKey, const char * pchValue)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends017_SetRichPresence(_this->linux_side, pchKey, pchValue);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends017_ClearRichPresence, 4)
+void __thiscall winISteamFriends_SteamFriends017_ClearRichPresence(winISteamFriends_SteamFriends017 *_this)
+{
+    TRACE("%p\n", _this);
+    cppISteamFriends_SteamFriends017_ClearRichPresence(_this->linux_side);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends017_GetFriendRichPresence, 16)
+const char * __thiscall winISteamFriends_SteamFriends017_GetFriendRichPresence(winISteamFriends_SteamFriends017 *_this, CSteamID steamIDFriend, const char * pchKey)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends017_GetFriendRichPresence(_this->linux_side, steamIDFriend, pchKey);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends017_GetFriendRichPresenceKeyCount, 12)
+int __thiscall winISteamFriends_SteamFriends017_GetFriendRichPresenceKeyCount(winISteamFriends_SteamFriends017 *_this, CSteamID steamIDFriend)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends017_GetFriendRichPresenceKeyCount(_this->linux_side, steamIDFriend);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends017_GetFriendRichPresenceKeyByIndex, 16)
+const char * __thiscall winISteamFriends_SteamFriends017_GetFriendRichPresenceKeyByIndex(winISteamFriends_SteamFriends017 *_this, CSteamID steamIDFriend, int iKey)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends017_GetFriendRichPresenceKeyByIndex(_this->linux_side, steamIDFriend, iKey);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends017_RequestFriendRichPresence, 12)
+void __thiscall winISteamFriends_SteamFriends017_RequestFriendRichPresence(winISteamFriends_SteamFriends017 *_this, CSteamID steamIDFriend)
+{
+    TRACE("%p\n", _this);
+    cppISteamFriends_SteamFriends017_RequestFriendRichPresence(_this->linux_side, steamIDFriend);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends017_InviteUserToGame, 16)
+bool __thiscall winISteamFriends_SteamFriends017_InviteUserToGame(winISteamFriends_SteamFriends017 *_this, CSteamID steamIDFriend, const char * pchConnectString)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends017_InviteUserToGame(_this->linux_side, steamIDFriend, pchConnectString);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends017_GetCoplayFriendCount, 4)
+int __thiscall winISteamFriends_SteamFriends017_GetCoplayFriendCount(winISteamFriends_SteamFriends017 *_this)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends017_GetCoplayFriendCount(_this->linux_side);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends017_GetCoplayFriend, 12)
+CSteamID *__thiscall winISteamFriends_SteamFriends017_GetCoplayFriend(winISteamFriends_SteamFriends017 *_this, CSteamID *_r, int iCoplayFriend)
+{
+    TRACE("%p\n", _this);
+    *_r = cppISteamFriends_SteamFriends017_GetCoplayFriend(_this->linux_side, iCoplayFriend);
+    return _r;
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends017_GetFriendCoplayTime, 12)
+int __thiscall winISteamFriends_SteamFriends017_GetFriendCoplayTime(winISteamFriends_SteamFriends017 *_this, CSteamID steamIDFriend)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends017_GetFriendCoplayTime(_this->linux_side, steamIDFriend);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends017_GetFriendCoplayGame, 12)
+AppId_t __thiscall winISteamFriends_SteamFriends017_GetFriendCoplayGame(winISteamFriends_SteamFriends017 *_this, CSteamID steamIDFriend)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends017_GetFriendCoplayGame(_this->linux_side, steamIDFriend);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends017_JoinClanChatRoom, 12)
+SteamAPICall_t __thiscall winISteamFriends_SteamFriends017_JoinClanChatRoom(winISteamFriends_SteamFriends017 *_this, CSteamID steamIDClan)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends017_JoinClanChatRoom(_this->linux_side, steamIDClan);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends017_LeaveClanChatRoom, 12)
+bool __thiscall winISteamFriends_SteamFriends017_LeaveClanChatRoom(winISteamFriends_SteamFriends017 *_this, CSteamID steamIDClan)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends017_LeaveClanChatRoom(_this->linux_side, steamIDClan);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends017_GetClanChatMemberCount, 12)
+int __thiscall winISteamFriends_SteamFriends017_GetClanChatMemberCount(winISteamFriends_SteamFriends017 *_this, CSteamID steamIDClan)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends017_GetClanChatMemberCount(_this->linux_side, steamIDClan);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends017_GetChatMemberByIndex, 20)
+CSteamID *__thiscall winISteamFriends_SteamFriends017_GetChatMemberByIndex(winISteamFriends_SteamFriends017 *_this, CSteamID *_r, CSteamID steamIDClan, int iUser)
+{
+    TRACE("%p\n", _this);
+    *_r = cppISteamFriends_SteamFriends017_GetChatMemberByIndex(_this->linux_side, steamIDClan, iUser);
+    return _r;
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends017_SendClanChatMessage, 16)
+bool __thiscall winISteamFriends_SteamFriends017_SendClanChatMessage(winISteamFriends_SteamFriends017 *_this, CSteamID steamIDClanChat, const char * pchText)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends017_SendClanChatMessage(_this->linux_side, steamIDClanChat, pchText);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends017_GetClanChatMessage, 32)
+int __thiscall winISteamFriends_SteamFriends017_GetClanChatMessage(winISteamFriends_SteamFriends017 *_this, CSteamID steamIDClanChat, int iMessage, void * prgchText, int cchTextMax, EChatEntryType * peChatEntryType, CSteamID * psteamidChatter)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends017_GetClanChatMessage(_this->linux_side, steamIDClanChat, iMessage, prgchText, cchTextMax, peChatEntryType, psteamidChatter);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends017_IsClanChatAdmin, 20)
+bool __thiscall winISteamFriends_SteamFriends017_IsClanChatAdmin(winISteamFriends_SteamFriends017 *_this, CSteamID steamIDClanChat, CSteamID steamIDUser)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends017_IsClanChatAdmin(_this->linux_side, steamIDClanChat, steamIDUser);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends017_IsClanChatWindowOpenInSteam, 12)
+bool __thiscall winISteamFriends_SteamFriends017_IsClanChatWindowOpenInSteam(winISteamFriends_SteamFriends017 *_this, CSteamID steamIDClanChat)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends017_IsClanChatWindowOpenInSteam(_this->linux_side, steamIDClanChat);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends017_OpenClanChatWindowInSteam, 12)
+bool __thiscall winISteamFriends_SteamFriends017_OpenClanChatWindowInSteam(winISteamFriends_SteamFriends017 *_this, CSteamID steamIDClanChat)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends017_OpenClanChatWindowInSteam(_this->linux_side, steamIDClanChat);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends017_CloseClanChatWindowInSteam, 12)
+bool __thiscall winISteamFriends_SteamFriends017_CloseClanChatWindowInSteam(winISteamFriends_SteamFriends017 *_this, CSteamID steamIDClanChat)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends017_CloseClanChatWindowInSteam(_this->linux_side, steamIDClanChat);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends017_SetListenForFriendsMessages, 8)
+bool __thiscall winISteamFriends_SteamFriends017_SetListenForFriendsMessages(winISteamFriends_SteamFriends017 *_this, bool bInterceptEnabled)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends017_SetListenForFriendsMessages(_this->linux_side, bInterceptEnabled);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends017_ReplyToFriendMessage, 16)
+bool __thiscall winISteamFriends_SteamFriends017_ReplyToFriendMessage(winISteamFriends_SteamFriends017 *_this, CSteamID steamIDFriend, const char * pchMsgToSend)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends017_ReplyToFriendMessage(_this->linux_side, steamIDFriend, pchMsgToSend);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends017_GetFriendMessage, 28)
+int __thiscall winISteamFriends_SteamFriends017_GetFriendMessage(winISteamFriends_SteamFriends017 *_this, CSteamID steamIDFriend, int iMessageID, void * pvData, int cubData, EChatEntryType * peChatEntryType)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends017_GetFriendMessage(_this->linux_side, steamIDFriend, iMessageID, pvData, cubData, peChatEntryType);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends017_GetFollowerCount, 12)
+SteamAPICall_t __thiscall winISteamFriends_SteamFriends017_GetFollowerCount(winISteamFriends_SteamFriends017 *_this, CSteamID steamID)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends017_GetFollowerCount(_this->linux_side, steamID);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends017_IsFollowing, 12)
+SteamAPICall_t __thiscall winISteamFriends_SteamFriends017_IsFollowing(winISteamFriends_SteamFriends017 *_this, CSteamID steamID)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends017_IsFollowing(_this->linux_side, steamID);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends017_EnumerateFollowingList, 8)
+SteamAPICall_t __thiscall winISteamFriends_SteamFriends017_EnumerateFollowingList(winISteamFriends_SteamFriends017 *_this, uint32 unStartIndex)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends017_EnumerateFollowingList(_this->linux_side, unStartIndex);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends017_IsClanPublic, 12)
+bool __thiscall winISteamFriends_SteamFriends017_IsClanPublic(winISteamFriends_SteamFriends017 *_this, CSteamID steamIDClan)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends017_IsClanPublic(_this->linux_side, steamIDClan);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends017_IsClanOfficialGameGroup, 12)
+bool __thiscall winISteamFriends_SteamFriends017_IsClanOfficialGameGroup(winISteamFriends_SteamFriends017 *_this, CSteamID steamIDClan)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends017_IsClanOfficialGameGroup(_this->linux_side, steamIDClan);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends017_GetNumChatsWithUnreadPriorityMessages, 4)
+int __thiscall winISteamFriends_SteamFriends017_GetNumChatsWithUnreadPriorityMessages(winISteamFriends_SteamFriends017 *_this)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends017_GetNumChatsWithUnreadPriorityMessages(_this->linux_side);
+}
+
+extern vtable_ptr winISteamFriends_SteamFriends017_vtable;
+
+#ifndef __GNUC__
+void __asm_dummy_vtables(void) {
+#endif
+    __ASM_VTABLE(winISteamFriends_SteamFriends017,
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends017_GetPersonaName)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends017_SetPersonaName)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends017_GetPersonaState)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends017_GetFriendCount)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends017_GetFriendByIndex)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends017_GetFriendRelationship)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends017_GetFriendPersonaState)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends017_GetFriendPersonaName)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends017_GetFriendGamePlayed)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends017_GetFriendPersonaNameHistory)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends017_GetFriendSteamLevel)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends017_GetPlayerNickname)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends017_GetFriendsGroupCount)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends017_GetFriendsGroupIDByIndex)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends017_GetFriendsGroupName)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends017_GetFriendsGroupMembersCount)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends017_GetFriendsGroupMembersList)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends017_HasFriend)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends017_GetClanCount)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends017_GetClanByIndex)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends017_GetClanName)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends017_GetClanTag)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends017_GetClanActivityCounts)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends017_DownloadClanActivityCounts)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends017_GetFriendCountFromSource)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends017_GetFriendFromSourceByIndex)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends017_IsUserInSource)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends017_SetInGameVoiceSpeaking)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends017_ActivateGameOverlay)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends017_ActivateGameOverlayToUser)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends017_ActivateGameOverlayToWebPage)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends017_ActivateGameOverlayToStore)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends017_SetPlayedWith)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends017_ActivateGameOverlayInviteDialog)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends017_GetSmallFriendAvatar)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends017_GetMediumFriendAvatar)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends017_GetLargeFriendAvatar)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends017_RequestUserInformation)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends017_RequestClanOfficerList)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends017_GetClanOwner)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends017_GetClanOfficerCount)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends017_GetClanOfficerByIndex)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends017_GetUserRestrictions)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends017_SetRichPresence)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends017_ClearRichPresence)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends017_GetFriendRichPresence)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends017_GetFriendRichPresenceKeyCount)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends017_GetFriendRichPresenceKeyByIndex)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends017_RequestFriendRichPresence)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends017_InviteUserToGame)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends017_GetCoplayFriendCount)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends017_GetCoplayFriend)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends017_GetFriendCoplayTime)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends017_GetFriendCoplayGame)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends017_JoinClanChatRoom)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends017_LeaveClanChatRoom)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends017_GetClanChatMemberCount)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends017_GetChatMemberByIndex)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends017_SendClanChatMessage)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends017_GetClanChatMessage)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends017_IsClanChatAdmin)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends017_IsClanChatWindowOpenInSteam)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends017_OpenClanChatWindowInSteam)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends017_CloseClanChatWindowInSteam)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends017_SetListenForFriendsMessages)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends017_ReplyToFriendMessage)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends017_GetFriendMessage)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends017_GetFollowerCount)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends017_IsFollowing)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends017_EnumerateFollowingList)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends017_IsClanPublic)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends017_IsClanOfficialGameGroup)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends017_GetNumChatsWithUnreadPriorityMessages)
+    );
+#ifndef __GNUC__
+}
+#endif
+
+winISteamFriends_SteamFriends017 *create_winISteamFriends_SteamFriends017(void *linux_side)
+{
+    winISteamFriends_SteamFriends017 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamFriends_SteamFriends017));
+    TRACE("-> %p\n", r);
+    r->vtable = &winISteamFriends_SteamFriends017_vtable;
+    r->linux_side = linux_side;
+    return r;
+}
 
 #include "cppISteamFriends_SteamFriends015.h"
 
@@ -119,21 +739,21 @@ FriendsGroupID_t __thiscall winISteamFriends_SteamFriends015_GetFriendsGroupIDBy
     return cppISteamFriends_SteamFriends015_GetFriendsGroupIDByIndex(_this->linux_side, iFG);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends015_GetFriendsGroupName, 6)
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends015_GetFriendsGroupName, 8)
 const char * __thiscall winISteamFriends_SteamFriends015_GetFriendsGroupName(winISteamFriends_SteamFriends015 *_this, FriendsGroupID_t friendsGroupID)
 {
     TRACE("%p\n", _this);
     return cppISteamFriends_SteamFriends015_GetFriendsGroupName(_this->linux_side, friendsGroupID);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends015_GetFriendsGroupMembersCount, 6)
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends015_GetFriendsGroupMembersCount, 8)
 int __thiscall winISteamFriends_SteamFriends015_GetFriendsGroupMembersCount(winISteamFriends_SteamFriends015 *_this, FriendsGroupID_t friendsGroupID)
 {
     TRACE("%p\n", _this);
     return cppISteamFriends_SteamFriends015_GetFriendsGroupMembersCount(_this->linux_side, friendsGroupID);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends015_GetFriendsGroupMembersList, 14)
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends015_GetFriendsGroupMembersList, 16)
 void __thiscall winISteamFriends_SteamFriends015_GetFriendsGroupMembersList(winISteamFriends_SteamFriends015 *_this, FriendsGroupID_t friendsGroupID, CSteamID * pOutSteamIDMembers, int nMembersCount)
 {
     TRACE("%p\n", _this);
@@ -212,7 +832,7 @@ bool __thiscall winISteamFriends_SteamFriends015_IsUserInSource(winISteamFriends
     return cppISteamFriends_SteamFriends015_IsUserInSource(_this->linux_side, steamIDUser, steamIDSource);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends015_SetInGameVoiceSpeaking, 13)
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends015_SetInGameVoiceSpeaking, 16)
 void __thiscall winISteamFriends_SteamFriends015_SetInGameVoiceSpeaking(winISteamFriends_SteamFriends015 *_this, CSteamID steamIDUser, bool bSpeaking)
 {
     TRACE("%p\n", _this);
@@ -282,7 +902,7 @@ int __thiscall winISteamFriends_SteamFriends015_GetLargeFriendAvatar(winISteamFr
     return cppISteamFriends_SteamFriends015_GetLargeFriendAvatar(_this->linux_side, steamIDFriend);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends015_RequestUserInformation, 13)
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends015_RequestUserInformation, 16)
 bool __thiscall winISteamFriends_SteamFriends015_RequestUserInformation(winISteamFriends_SteamFriends015 *_this, CSteamID steamIDUser, bool bRequireNameOnly)
 {
     TRACE("%p\n", _this);
@@ -475,7 +1095,7 @@ bool __thiscall winISteamFriends_SteamFriends015_CloseClanChatWindowInSteam(winI
     return cppISteamFriends_SteamFriends015_CloseClanChatWindowInSteam(_this->linux_side, steamIDClanChat);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends015_SetListenForFriendsMessages, 5)
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends015_SetListenForFriendsMessages, 8)
 bool __thiscall winISteamFriends_SteamFriends015_SetListenForFriendsMessages(winISteamFriends_SteamFriends015 *_this, bool bInterceptEnabled)
 {
     TRACE("%p\n", _this);
@@ -780,7 +1400,7 @@ bool __thiscall winISteamFriends_SteamFriends014_IsUserInSource(winISteamFriends
     return cppISteamFriends_SteamFriends014_IsUserInSource(_this->linux_side, steamIDUser, steamIDSource);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends014_SetInGameVoiceSpeaking, 13)
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends014_SetInGameVoiceSpeaking, 16)
 void __thiscall winISteamFriends_SteamFriends014_SetInGameVoiceSpeaking(winISteamFriends_SteamFriends014 *_this, CSteamID steamIDUser, bool bSpeaking)
 {
     TRACE("%p\n", _this);
@@ -850,7 +1470,7 @@ int __thiscall winISteamFriends_SteamFriends014_GetLargeFriendAvatar(winISteamFr
     return cppISteamFriends_SteamFriends014_GetLargeFriendAvatar(_this->linux_side, steamIDFriend);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends014_RequestUserInformation, 13)
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends014_RequestUserInformation, 16)
 bool __thiscall winISteamFriends_SteamFriends014_RequestUserInformation(winISteamFriends_SteamFriends014 *_this, CSteamID steamIDUser, bool bRequireNameOnly)
 {
     TRACE("%p\n", _this);
@@ -1043,7 +1663,7 @@ bool __thiscall winISteamFriends_SteamFriends014_CloseClanChatWindowInSteam(winI
     return cppISteamFriends_SteamFriends014_CloseClanChatWindowInSteam(_this->linux_side, steamIDClanChat);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends014_SetListenForFriendsMessages, 5)
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends014_SetListenForFriendsMessages, 8)
 bool __thiscall winISteamFriends_SteamFriends014_SetListenForFriendsMessages(winISteamFriends_SteamFriends014 *_this, bool bInterceptEnabled)
 {
     TRACE("%p\n", _this);
@@ -1319,7 +1939,7 @@ bool __thiscall winISteamFriends_SteamFriends013_IsUserInSource(winISteamFriends
     return cppISteamFriends_SteamFriends013_IsUserInSource(_this->linux_side, steamIDUser, steamIDSource);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends013_SetInGameVoiceSpeaking, 13)
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends013_SetInGameVoiceSpeaking, 16)
 void __thiscall winISteamFriends_SteamFriends013_SetInGameVoiceSpeaking(winISteamFriends_SteamFriends013 *_this, CSteamID steamIDUser, bool bSpeaking)
 {
     TRACE("%p\n", _this);
@@ -1389,7 +2009,7 @@ int __thiscall winISteamFriends_SteamFriends013_GetLargeFriendAvatar(winISteamFr
     return cppISteamFriends_SteamFriends013_GetLargeFriendAvatar(_this->linux_side, steamIDFriend);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends013_RequestUserInformation, 13)
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends013_RequestUserInformation, 16)
 bool __thiscall winISteamFriends_SteamFriends013_RequestUserInformation(winISteamFriends_SteamFriends013 *_this, CSteamID steamIDUser, bool bRequireNameOnly)
 {
     TRACE("%p\n", _this);
@@ -1582,7 +2202,7 @@ bool __thiscall winISteamFriends_SteamFriends013_CloseClanChatWindowInSteam(winI
     return cppISteamFriends_SteamFriends013_CloseClanChatWindowInSteam(_this->linux_side, steamIDClanChat);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends013_SetListenForFriendsMessages, 5)
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends013_SetListenForFriendsMessages, 8)
 bool __thiscall winISteamFriends_SteamFriends013_SetListenForFriendsMessages(winISteamFriends_SteamFriends013 *_this, bool bInterceptEnabled)
 {
     TRACE("%p\n", _this);
@@ -1703,6 +2323,544 @@ winISteamFriends_SteamFriends013 *create_winISteamFriends_SteamFriends013(void *
     winISteamFriends_SteamFriends013 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamFriends_SteamFriends013));
     TRACE("-> %p\n", r);
     r->vtable = &winISteamFriends_SteamFriends013_vtable;
+    r->linux_side = linux_side;
+    return r;
+}
+
+#include "cppISteamFriends_SteamFriends012.h"
+
+typedef struct __winISteamFriends_SteamFriends012 {
+    vtable_ptr *vtable;
+    void *linux_side;
+} winISteamFriends_SteamFriends012;
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends012_GetPersonaName, 4)
+const char * __thiscall winISteamFriends_SteamFriends012_GetPersonaName(winISteamFriends_SteamFriends012 *_this)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends012_GetPersonaName(_this->linux_side);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends012_SetPersonaName, 8)
+SteamAPICall_t __thiscall winISteamFriends_SteamFriends012_SetPersonaName(winISteamFriends_SteamFriends012 *_this, const char * pchPersonaName)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends012_SetPersonaName(_this->linux_side, pchPersonaName);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends012_GetPersonaState, 4)
+EPersonaState __thiscall winISteamFriends_SteamFriends012_GetPersonaState(winISteamFriends_SteamFriends012 *_this)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends012_GetPersonaState(_this->linux_side);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends012_GetFriendCount, 8)
+int __thiscall winISteamFriends_SteamFriends012_GetFriendCount(winISteamFriends_SteamFriends012 *_this, int iFriendFlags)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends012_GetFriendCount(_this->linux_side, iFriendFlags);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends012_GetFriendByIndex, 16)
+CSteamID *__thiscall winISteamFriends_SteamFriends012_GetFriendByIndex(winISteamFriends_SteamFriends012 *_this, CSteamID *_r, int iFriend, int iFriendFlags)
+{
+    TRACE("%p\n", _this);
+    *_r = cppISteamFriends_SteamFriends012_GetFriendByIndex(_this->linux_side, iFriend, iFriendFlags);
+    return _r;
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends012_GetFriendRelationship, 12)
+EFriendRelationship __thiscall winISteamFriends_SteamFriends012_GetFriendRelationship(winISteamFriends_SteamFriends012 *_this, CSteamID steamIDFriend)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends012_GetFriendRelationship(_this->linux_side, steamIDFriend);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends012_GetFriendPersonaState, 12)
+EPersonaState __thiscall winISteamFriends_SteamFriends012_GetFriendPersonaState(winISteamFriends_SteamFriends012 *_this, CSteamID steamIDFriend)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends012_GetFriendPersonaState(_this->linux_side, steamIDFriend);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends012_GetFriendPersonaName, 12)
+const char * __thiscall winISteamFriends_SteamFriends012_GetFriendPersonaName(winISteamFriends_SteamFriends012 *_this, CSteamID steamIDFriend)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends012_GetFriendPersonaName(_this->linux_side, steamIDFriend);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends012_GetFriendGamePlayed, 16)
+bool __thiscall winISteamFriends_SteamFriends012_GetFriendGamePlayed(winISteamFriends_SteamFriends012 *_this, CSteamID steamIDFriend, FriendGameInfo_t * pFriendGameInfo)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends012_GetFriendGamePlayed(_this->linux_side, steamIDFriend, pFriendGameInfo);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends012_GetFriendPersonaNameHistory, 16)
+const char * __thiscall winISteamFriends_SteamFriends012_GetFriendPersonaNameHistory(winISteamFriends_SteamFriends012 *_this, CSteamID steamIDFriend, int iPersonaName)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends012_GetFriendPersonaNameHistory(_this->linux_side, steamIDFriend, iPersonaName);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends012_HasFriend, 16)
+bool __thiscall winISteamFriends_SteamFriends012_HasFriend(winISteamFriends_SteamFriends012 *_this, CSteamID steamIDFriend, int iFriendFlags)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends012_HasFriend(_this->linux_side, steamIDFriend, iFriendFlags);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends012_GetClanCount, 4)
+int __thiscall winISteamFriends_SteamFriends012_GetClanCount(winISteamFriends_SteamFriends012 *_this)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends012_GetClanCount(_this->linux_side);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends012_GetClanByIndex, 12)
+CSteamID *__thiscall winISteamFriends_SteamFriends012_GetClanByIndex(winISteamFriends_SteamFriends012 *_this, CSteamID *_r, int iClan)
+{
+    TRACE("%p\n", _this);
+    *_r = cppISteamFriends_SteamFriends012_GetClanByIndex(_this->linux_side, iClan);
+    return _r;
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends012_GetClanName, 12)
+const char * __thiscall winISteamFriends_SteamFriends012_GetClanName(winISteamFriends_SteamFriends012 *_this, CSteamID steamIDClan)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends012_GetClanName(_this->linux_side, steamIDClan);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends012_GetClanTag, 12)
+const char * __thiscall winISteamFriends_SteamFriends012_GetClanTag(winISteamFriends_SteamFriends012 *_this, CSteamID steamIDClan)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends012_GetClanTag(_this->linux_side, steamIDClan);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends012_GetClanActivityCounts, 24)
+bool __thiscall winISteamFriends_SteamFriends012_GetClanActivityCounts(winISteamFriends_SteamFriends012 *_this, CSteamID steamIDClan, int * pnOnline, int * pnInGame, int * pnChatting)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends012_GetClanActivityCounts(_this->linux_side, steamIDClan, pnOnline, pnInGame, pnChatting);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends012_DownloadClanActivityCounts, 12)
+SteamAPICall_t __thiscall winISteamFriends_SteamFriends012_DownloadClanActivityCounts(winISteamFriends_SteamFriends012 *_this, CSteamID * psteamIDClans, int cClansToRequest)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends012_DownloadClanActivityCounts(_this->linux_side, psteamIDClans, cClansToRequest);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends012_GetFriendCountFromSource, 12)
+int __thiscall winISteamFriends_SteamFriends012_GetFriendCountFromSource(winISteamFriends_SteamFriends012 *_this, CSteamID steamIDSource)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends012_GetFriendCountFromSource(_this->linux_side, steamIDSource);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends012_GetFriendFromSourceByIndex, 20)
+CSteamID *__thiscall winISteamFriends_SteamFriends012_GetFriendFromSourceByIndex(winISteamFriends_SteamFriends012 *_this, CSteamID *_r, CSteamID steamIDSource, int iFriend)
+{
+    TRACE("%p\n", _this);
+    *_r = cppISteamFriends_SteamFriends012_GetFriendFromSourceByIndex(_this->linux_side, steamIDSource, iFriend);
+    return _r;
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends012_IsUserInSource, 20)
+bool __thiscall winISteamFriends_SteamFriends012_IsUserInSource(winISteamFriends_SteamFriends012 *_this, CSteamID steamIDUser, CSteamID steamIDSource)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends012_IsUserInSource(_this->linux_side, steamIDUser, steamIDSource);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends012_SetInGameVoiceSpeaking, 16)
+void __thiscall winISteamFriends_SteamFriends012_SetInGameVoiceSpeaking(winISteamFriends_SteamFriends012 *_this, CSteamID steamIDUser, bool bSpeaking)
+{
+    TRACE("%p\n", _this);
+    cppISteamFriends_SteamFriends012_SetInGameVoiceSpeaking(_this->linux_side, steamIDUser, bSpeaking);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends012_ActivateGameOverlay, 8)
+void __thiscall winISteamFriends_SteamFriends012_ActivateGameOverlay(winISteamFriends_SteamFriends012 *_this, const char * pchDialog)
+{
+    TRACE("%p\n", _this);
+    cppISteamFriends_SteamFriends012_ActivateGameOverlay(_this->linux_side, pchDialog);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends012_ActivateGameOverlayToUser, 16)
+void __thiscall winISteamFriends_SteamFriends012_ActivateGameOverlayToUser(winISteamFriends_SteamFriends012 *_this, const char * pchDialog, CSteamID steamID)
+{
+    TRACE("%p\n", _this);
+    cppISteamFriends_SteamFriends012_ActivateGameOverlayToUser(_this->linux_side, pchDialog, steamID);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends012_ActivateGameOverlayToWebPage, 8)
+void __thiscall winISteamFriends_SteamFriends012_ActivateGameOverlayToWebPage(winISteamFriends_SteamFriends012 *_this, const char * pchURL)
+{
+    TRACE("%p\n", _this);
+    cppISteamFriends_SteamFriends012_ActivateGameOverlayToWebPage(_this->linux_side, pchURL);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends012_ActivateGameOverlayToStore, 8)
+void __thiscall winISteamFriends_SteamFriends012_ActivateGameOverlayToStore(winISteamFriends_SteamFriends012 *_this, AppId_t nAppID)
+{
+    TRACE("%p\n", _this);
+    cppISteamFriends_SteamFriends012_ActivateGameOverlayToStore(_this->linux_side, nAppID);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends012_SetPlayedWith, 12)
+void __thiscall winISteamFriends_SteamFriends012_SetPlayedWith(winISteamFriends_SteamFriends012 *_this, CSteamID steamIDUserPlayedWith)
+{
+    TRACE("%p\n", _this);
+    cppISteamFriends_SteamFriends012_SetPlayedWith(_this->linux_side, steamIDUserPlayedWith);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends012_ActivateGameOverlayInviteDialog, 12)
+void __thiscall winISteamFriends_SteamFriends012_ActivateGameOverlayInviteDialog(winISteamFriends_SteamFriends012 *_this, CSteamID steamIDLobby)
+{
+    TRACE("%p\n", _this);
+    cppISteamFriends_SteamFriends012_ActivateGameOverlayInviteDialog(_this->linux_side, steamIDLobby);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends012_GetSmallFriendAvatar, 12)
+int __thiscall winISteamFriends_SteamFriends012_GetSmallFriendAvatar(winISteamFriends_SteamFriends012 *_this, CSteamID steamIDFriend)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends012_GetSmallFriendAvatar(_this->linux_side, steamIDFriend);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends012_GetMediumFriendAvatar, 12)
+int __thiscall winISteamFriends_SteamFriends012_GetMediumFriendAvatar(winISteamFriends_SteamFriends012 *_this, CSteamID steamIDFriend)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends012_GetMediumFriendAvatar(_this->linux_side, steamIDFriend);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends012_GetLargeFriendAvatar, 12)
+int __thiscall winISteamFriends_SteamFriends012_GetLargeFriendAvatar(winISteamFriends_SteamFriends012 *_this, CSteamID steamIDFriend)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends012_GetLargeFriendAvatar(_this->linux_side, steamIDFriend);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends012_RequestUserInformation, 16)
+bool __thiscall winISteamFriends_SteamFriends012_RequestUserInformation(winISteamFriends_SteamFriends012 *_this, CSteamID steamIDUser, bool bRequireNameOnly)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends012_RequestUserInformation(_this->linux_side, steamIDUser, bRequireNameOnly);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends012_RequestClanOfficerList, 12)
+SteamAPICall_t __thiscall winISteamFriends_SteamFriends012_RequestClanOfficerList(winISteamFriends_SteamFriends012 *_this, CSteamID steamIDClan)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends012_RequestClanOfficerList(_this->linux_side, steamIDClan);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends012_GetClanOwner, 16)
+CSteamID *__thiscall winISteamFriends_SteamFriends012_GetClanOwner(winISteamFriends_SteamFriends012 *_this, CSteamID *_r, CSteamID steamIDClan)
+{
+    TRACE("%p\n", _this);
+    *_r = cppISteamFriends_SteamFriends012_GetClanOwner(_this->linux_side, steamIDClan);
+    return _r;
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends012_GetClanOfficerCount, 12)
+int __thiscall winISteamFriends_SteamFriends012_GetClanOfficerCount(winISteamFriends_SteamFriends012 *_this, CSteamID steamIDClan)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends012_GetClanOfficerCount(_this->linux_side, steamIDClan);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends012_GetClanOfficerByIndex, 20)
+CSteamID *__thiscall winISteamFriends_SteamFriends012_GetClanOfficerByIndex(winISteamFriends_SteamFriends012 *_this, CSteamID *_r, CSteamID steamIDClan, int iOfficer)
+{
+    TRACE("%p\n", _this);
+    *_r = cppISteamFriends_SteamFriends012_GetClanOfficerByIndex(_this->linux_side, steamIDClan, iOfficer);
+    return _r;
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends012_GetUserRestrictions, 4)
+uint32 __thiscall winISteamFriends_SteamFriends012_GetUserRestrictions(winISteamFriends_SteamFriends012 *_this)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends012_GetUserRestrictions(_this->linux_side);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends012_SetRichPresence, 12)
+bool __thiscall winISteamFriends_SteamFriends012_SetRichPresence(winISteamFriends_SteamFriends012 *_this, const char * pchKey, const char * pchValue)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends012_SetRichPresence(_this->linux_side, pchKey, pchValue);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends012_ClearRichPresence, 4)
+void __thiscall winISteamFriends_SteamFriends012_ClearRichPresence(winISteamFriends_SteamFriends012 *_this)
+{
+    TRACE("%p\n", _this);
+    cppISteamFriends_SteamFriends012_ClearRichPresence(_this->linux_side);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends012_GetFriendRichPresence, 16)
+const char * __thiscall winISteamFriends_SteamFriends012_GetFriendRichPresence(winISteamFriends_SteamFriends012 *_this, CSteamID steamIDFriend, const char * pchKey)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends012_GetFriendRichPresence(_this->linux_side, steamIDFriend, pchKey);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends012_GetFriendRichPresenceKeyCount, 12)
+int __thiscall winISteamFriends_SteamFriends012_GetFriendRichPresenceKeyCount(winISteamFriends_SteamFriends012 *_this, CSteamID steamIDFriend)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends012_GetFriendRichPresenceKeyCount(_this->linux_side, steamIDFriend);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends012_GetFriendRichPresenceKeyByIndex, 16)
+const char * __thiscall winISteamFriends_SteamFriends012_GetFriendRichPresenceKeyByIndex(winISteamFriends_SteamFriends012 *_this, CSteamID steamIDFriend, int iKey)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends012_GetFriendRichPresenceKeyByIndex(_this->linux_side, steamIDFriend, iKey);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends012_RequestFriendRichPresence, 12)
+void __thiscall winISteamFriends_SteamFriends012_RequestFriendRichPresence(winISteamFriends_SteamFriends012 *_this, CSteamID steamIDFriend)
+{
+    TRACE("%p\n", _this);
+    cppISteamFriends_SteamFriends012_RequestFriendRichPresence(_this->linux_side, steamIDFriend);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends012_InviteUserToGame, 16)
+bool __thiscall winISteamFriends_SteamFriends012_InviteUserToGame(winISteamFriends_SteamFriends012 *_this, CSteamID steamIDFriend, const char * pchConnectString)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends012_InviteUserToGame(_this->linux_side, steamIDFriend, pchConnectString);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends012_GetCoplayFriendCount, 4)
+int __thiscall winISteamFriends_SteamFriends012_GetCoplayFriendCount(winISteamFriends_SteamFriends012 *_this)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends012_GetCoplayFriendCount(_this->linux_side);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends012_GetCoplayFriend, 12)
+CSteamID *__thiscall winISteamFriends_SteamFriends012_GetCoplayFriend(winISteamFriends_SteamFriends012 *_this, CSteamID *_r, int iCoplayFriend)
+{
+    TRACE("%p\n", _this);
+    *_r = cppISteamFriends_SteamFriends012_GetCoplayFriend(_this->linux_side, iCoplayFriend);
+    return _r;
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends012_GetFriendCoplayTime, 12)
+int __thiscall winISteamFriends_SteamFriends012_GetFriendCoplayTime(winISteamFriends_SteamFriends012 *_this, CSteamID steamIDFriend)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends012_GetFriendCoplayTime(_this->linux_side, steamIDFriend);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends012_GetFriendCoplayGame, 12)
+AppId_t __thiscall winISteamFriends_SteamFriends012_GetFriendCoplayGame(winISteamFriends_SteamFriends012 *_this, CSteamID steamIDFriend)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends012_GetFriendCoplayGame(_this->linux_side, steamIDFriend);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends012_JoinClanChatRoom, 12)
+SteamAPICall_t __thiscall winISteamFriends_SteamFriends012_JoinClanChatRoom(winISteamFriends_SteamFriends012 *_this, CSteamID steamIDClan)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends012_JoinClanChatRoom(_this->linux_side, steamIDClan);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends012_LeaveClanChatRoom, 12)
+bool __thiscall winISteamFriends_SteamFriends012_LeaveClanChatRoom(winISteamFriends_SteamFriends012 *_this, CSteamID steamIDClan)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends012_LeaveClanChatRoom(_this->linux_side, steamIDClan);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends012_GetClanChatMemberCount, 12)
+int __thiscall winISteamFriends_SteamFriends012_GetClanChatMemberCount(winISteamFriends_SteamFriends012 *_this, CSteamID steamIDClan)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends012_GetClanChatMemberCount(_this->linux_side, steamIDClan);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends012_GetChatMemberByIndex, 20)
+CSteamID *__thiscall winISteamFriends_SteamFriends012_GetChatMemberByIndex(winISteamFriends_SteamFriends012 *_this, CSteamID *_r, CSteamID steamIDClan, int iUser)
+{
+    TRACE("%p\n", _this);
+    *_r = cppISteamFriends_SteamFriends012_GetChatMemberByIndex(_this->linux_side, steamIDClan, iUser);
+    return _r;
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends012_SendClanChatMessage, 16)
+bool __thiscall winISteamFriends_SteamFriends012_SendClanChatMessage(winISteamFriends_SteamFriends012 *_this, CSteamID steamIDClanChat, const char * pchText)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends012_SendClanChatMessage(_this->linux_side, steamIDClanChat, pchText);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends012_GetClanChatMessage, 32)
+int __thiscall winISteamFriends_SteamFriends012_GetClanChatMessage(winISteamFriends_SteamFriends012 *_this, CSteamID steamIDClanChat, int iMessage, void * prgchText, int cchTextMax, EChatEntryType * _a, CSteamID * _b)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends012_GetClanChatMessage(_this->linux_side, steamIDClanChat, iMessage, prgchText, cchTextMax, _a, _b);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends012_IsClanChatAdmin, 20)
+bool __thiscall winISteamFriends_SteamFriends012_IsClanChatAdmin(winISteamFriends_SteamFriends012 *_this, CSteamID steamIDClanChat, CSteamID steamIDUser)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends012_IsClanChatAdmin(_this->linux_side, steamIDClanChat, steamIDUser);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends012_IsClanChatWindowOpenInSteam, 12)
+bool __thiscall winISteamFriends_SteamFriends012_IsClanChatWindowOpenInSteam(winISteamFriends_SteamFriends012 *_this, CSteamID steamIDClanChat)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends012_IsClanChatWindowOpenInSteam(_this->linux_side, steamIDClanChat);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends012_OpenClanChatWindowInSteam, 12)
+bool __thiscall winISteamFriends_SteamFriends012_OpenClanChatWindowInSteam(winISteamFriends_SteamFriends012 *_this, CSteamID steamIDClanChat)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends012_OpenClanChatWindowInSteam(_this->linux_side, steamIDClanChat);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends012_CloseClanChatWindowInSteam, 12)
+bool __thiscall winISteamFriends_SteamFriends012_CloseClanChatWindowInSteam(winISteamFriends_SteamFriends012 *_this, CSteamID steamIDClanChat)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends012_CloseClanChatWindowInSteam(_this->linux_side, steamIDClanChat);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends012_SetListenForFriendsMessages, 8)
+bool __thiscall winISteamFriends_SteamFriends012_SetListenForFriendsMessages(winISteamFriends_SteamFriends012 *_this, bool bInterceptEnabled)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends012_SetListenForFriendsMessages(_this->linux_side, bInterceptEnabled);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends012_ReplyToFriendMessage, 16)
+bool __thiscall winISteamFriends_SteamFriends012_ReplyToFriendMessage(winISteamFriends_SteamFriends012 *_this, CSteamID steamIDFriend, const char * pchMsgToSend)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends012_ReplyToFriendMessage(_this->linux_side, steamIDFriend, pchMsgToSend);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends012_GetFriendMessage, 28)
+int __thiscall winISteamFriends_SteamFriends012_GetFriendMessage(winISteamFriends_SteamFriends012 *_this, CSteamID steamIDFriend, int iMessageID, void * pvData, int cubData, EChatEntryType * peChatEntryType)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends012_GetFriendMessage(_this->linux_side, steamIDFriend, iMessageID, pvData, cubData, peChatEntryType);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends012_GetFollowerCount, 12)
+SteamAPICall_t __thiscall winISteamFriends_SteamFriends012_GetFollowerCount(winISteamFriends_SteamFriends012 *_this, CSteamID steamID)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends012_GetFollowerCount(_this->linux_side, steamID);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends012_IsFollowing, 12)
+SteamAPICall_t __thiscall winISteamFriends_SteamFriends012_IsFollowing(winISteamFriends_SteamFriends012 *_this, CSteamID steamID)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends012_IsFollowing(_this->linux_side, steamID);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends012_EnumerateFollowingList, 8)
+SteamAPICall_t __thiscall winISteamFriends_SteamFriends012_EnumerateFollowingList(winISteamFriends_SteamFriends012 *_this, uint32 unStartIndex)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends012_EnumerateFollowingList(_this->linux_side, unStartIndex);
+}
+
+extern vtable_ptr winISteamFriends_SteamFriends012_vtable;
+
+#ifndef __GNUC__
+void __asm_dummy_vtables(void) {
+#endif
+    __ASM_VTABLE(winISteamFriends_SteamFriends012,
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends012_GetPersonaName)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends012_SetPersonaName)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends012_GetPersonaState)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends012_GetFriendCount)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends012_GetFriendByIndex)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends012_GetFriendRelationship)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends012_GetFriendPersonaState)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends012_GetFriendPersonaName)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends012_GetFriendGamePlayed)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends012_GetFriendPersonaNameHistory)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends012_HasFriend)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends012_GetClanCount)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends012_GetClanByIndex)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends012_GetClanName)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends012_GetClanTag)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends012_GetClanActivityCounts)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends012_DownloadClanActivityCounts)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends012_GetFriendCountFromSource)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends012_GetFriendFromSourceByIndex)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends012_IsUserInSource)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends012_SetInGameVoiceSpeaking)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends012_ActivateGameOverlay)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends012_ActivateGameOverlayToUser)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends012_ActivateGameOverlayToWebPage)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends012_ActivateGameOverlayToStore)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends012_SetPlayedWith)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends012_ActivateGameOverlayInviteDialog)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends012_GetSmallFriendAvatar)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends012_GetMediumFriendAvatar)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends012_GetLargeFriendAvatar)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends012_RequestUserInformation)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends012_RequestClanOfficerList)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends012_GetClanOwner)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends012_GetClanOfficerCount)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends012_GetClanOfficerByIndex)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends012_GetUserRestrictions)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends012_SetRichPresence)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends012_ClearRichPresence)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends012_GetFriendRichPresence)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends012_GetFriendRichPresenceKeyCount)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends012_GetFriendRichPresenceKeyByIndex)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends012_RequestFriendRichPresence)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends012_InviteUserToGame)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends012_GetCoplayFriendCount)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends012_GetCoplayFriend)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends012_GetFriendCoplayTime)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends012_GetFriendCoplayGame)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends012_JoinClanChatRoom)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends012_LeaveClanChatRoom)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends012_GetClanChatMemberCount)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends012_GetChatMemberByIndex)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends012_SendClanChatMessage)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends012_GetClanChatMessage)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends012_IsClanChatAdmin)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends012_IsClanChatWindowOpenInSteam)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends012_OpenClanChatWindowInSteam)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends012_CloseClanChatWindowInSteam)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends012_SetListenForFriendsMessages)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends012_ReplyToFriendMessage)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends012_GetFriendMessage)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends012_GetFollowerCount)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends012_IsFollowing)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends012_EnumerateFollowingList)
+    );
+#ifndef __GNUC__
+}
+#endif
+
+winISteamFriends_SteamFriends012 *create_winISteamFriends_SteamFriends012(void *linux_side)
+{
+    winISteamFriends_SteamFriends012 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamFriends_SteamFriends012));
+    TRACE("-> %p\n", r);
+    r->vtable = &winISteamFriends_SteamFriends012_vtable;
     r->linux_side = linux_side;
     return r;
 }
@@ -1857,7 +3015,7 @@ bool __thiscall winISteamFriends_SteamFriends011_IsUserInSource(winISteamFriends
     return cppISteamFriends_SteamFriends011_IsUserInSource(_this->linux_side, steamIDUser, steamIDSource);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends011_SetInGameVoiceSpeaking, 13)
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends011_SetInGameVoiceSpeaking, 16)
 void __thiscall winISteamFriends_SteamFriends011_SetInGameVoiceSpeaking(winISteamFriends_SteamFriends011 *_this, CSteamID steamIDUser, bool bSpeaking)
 {
     TRACE("%p\n", _this);
@@ -1927,7 +3085,7 @@ int __thiscall winISteamFriends_SteamFriends011_GetLargeFriendAvatar(winISteamFr
     return cppISteamFriends_SteamFriends011_GetLargeFriendAvatar(_this->linux_side, steamIDFriend);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends011_RequestUserInformation, 13)
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends011_RequestUserInformation, 16)
 bool __thiscall winISteamFriends_SteamFriends011_RequestUserInformation(winISteamFriends_SteamFriends011 *_this, CSteamID steamIDUser, bool bRequireNameOnly)
 {
     TRACE("%p\n", _this);
@@ -2120,7 +3278,7 @@ bool __thiscall winISteamFriends_SteamFriends011_CloseClanChatWindowInSteam(winI
     return cppISteamFriends_SteamFriends011_CloseClanChatWindowInSteam(_this->linux_side, steamIDClanChat);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends011_SetListenForFriendsMessages, 5)
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends011_SetListenForFriendsMessages, 8)
 bool __thiscall winISteamFriends_SteamFriends011_SetListenForFriendsMessages(winISteamFriends_SteamFriends011 *_this, bool bInterceptEnabled)
 {
     TRACE("%p\n", _this);
@@ -2241,6 +3399,512 @@ winISteamFriends_SteamFriends011 *create_winISteamFriends_SteamFriends011(void *
     winISteamFriends_SteamFriends011 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamFriends_SteamFriends011));
     TRACE("-> %p\n", r);
     r->vtable = &winISteamFriends_SteamFriends011_vtable;
+    r->linux_side = linux_side;
+    return r;
+}
+
+#include "cppISteamFriends_SteamFriends010.h"
+
+typedef struct __winISteamFriends_SteamFriends010 {
+    vtable_ptr *vtable;
+    void *linux_side;
+} winISteamFriends_SteamFriends010;
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends010_GetPersonaName, 4)
+const char * __thiscall winISteamFriends_SteamFriends010_GetPersonaName(winISteamFriends_SteamFriends010 *_this)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends010_GetPersonaName(_this->linux_side);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends010_SetPersonaName, 8)
+void __thiscall winISteamFriends_SteamFriends010_SetPersonaName(winISteamFriends_SteamFriends010 *_this, const char * pchPersonaName)
+{
+    TRACE("%p\n", _this);
+    cppISteamFriends_SteamFriends010_SetPersonaName(_this->linux_side, pchPersonaName);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends010_GetPersonaState, 4)
+EPersonaState __thiscall winISteamFriends_SteamFriends010_GetPersonaState(winISteamFriends_SteamFriends010 *_this)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends010_GetPersonaState(_this->linux_side);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends010_GetFriendCount, 8)
+int __thiscall winISteamFriends_SteamFriends010_GetFriendCount(winISteamFriends_SteamFriends010 *_this, int iFriendFlags)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends010_GetFriendCount(_this->linux_side, iFriendFlags);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends010_GetFriendByIndex, 16)
+CSteamID *__thiscall winISteamFriends_SteamFriends010_GetFriendByIndex(winISteamFriends_SteamFriends010 *_this, CSteamID *_r, int iFriend, int iFriendFlags)
+{
+    TRACE("%p\n", _this);
+    *_r = cppISteamFriends_SteamFriends010_GetFriendByIndex(_this->linux_side, iFriend, iFriendFlags);
+    return _r;
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends010_GetFriendRelationship, 12)
+EFriendRelationship __thiscall winISteamFriends_SteamFriends010_GetFriendRelationship(winISteamFriends_SteamFriends010 *_this, CSteamID steamIDFriend)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends010_GetFriendRelationship(_this->linux_side, steamIDFriend);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends010_GetFriendPersonaState, 12)
+EPersonaState __thiscall winISteamFriends_SteamFriends010_GetFriendPersonaState(winISteamFriends_SteamFriends010 *_this, CSteamID steamIDFriend)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends010_GetFriendPersonaState(_this->linux_side, steamIDFriend);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends010_GetFriendPersonaName, 12)
+const char * __thiscall winISteamFriends_SteamFriends010_GetFriendPersonaName(winISteamFriends_SteamFriends010 *_this, CSteamID steamIDFriend)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends010_GetFriendPersonaName(_this->linux_side, steamIDFriend);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends010_GetFriendGamePlayed, 16)
+bool __thiscall winISteamFriends_SteamFriends010_GetFriendGamePlayed(winISteamFriends_SteamFriends010 *_this, CSteamID steamIDFriend, FriendGameInfo_t * pFriendGameInfo)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends010_GetFriendGamePlayed(_this->linux_side, steamIDFriend, pFriendGameInfo);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends010_GetFriendPersonaNameHistory, 16)
+const char * __thiscall winISteamFriends_SteamFriends010_GetFriendPersonaNameHistory(winISteamFriends_SteamFriends010 *_this, CSteamID steamIDFriend, int iPersonaName)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends010_GetFriendPersonaNameHistory(_this->linux_side, steamIDFriend, iPersonaName);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends010_HasFriend, 16)
+bool __thiscall winISteamFriends_SteamFriends010_HasFriend(winISteamFriends_SteamFriends010 *_this, CSteamID steamIDFriend, int iFriendFlags)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends010_HasFriend(_this->linux_side, steamIDFriend, iFriendFlags);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends010_GetClanCount, 4)
+int __thiscall winISteamFriends_SteamFriends010_GetClanCount(winISteamFriends_SteamFriends010 *_this)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends010_GetClanCount(_this->linux_side);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends010_GetClanByIndex, 12)
+CSteamID *__thiscall winISteamFriends_SteamFriends010_GetClanByIndex(winISteamFriends_SteamFriends010 *_this, CSteamID *_r, int iClan)
+{
+    TRACE("%p\n", _this);
+    *_r = cppISteamFriends_SteamFriends010_GetClanByIndex(_this->linux_side, iClan);
+    return _r;
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends010_GetClanName, 12)
+const char * __thiscall winISteamFriends_SteamFriends010_GetClanName(winISteamFriends_SteamFriends010 *_this, CSteamID steamIDClan)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends010_GetClanName(_this->linux_side, steamIDClan);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends010_GetClanTag, 12)
+const char * __thiscall winISteamFriends_SteamFriends010_GetClanTag(winISteamFriends_SteamFriends010 *_this, CSteamID steamIDClan)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends010_GetClanTag(_this->linux_side, steamIDClan);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends010_GetClanActivityCounts, 24)
+bool __thiscall winISteamFriends_SteamFriends010_GetClanActivityCounts(winISteamFriends_SteamFriends010 *_this, CSteamID steamIDClan, int * pnOnline, int * pnInGame, int * pnChatting)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends010_GetClanActivityCounts(_this->linux_side, steamIDClan, pnOnline, pnInGame, pnChatting);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends010_DownloadClanActivityCounts, 12)
+SteamAPICall_t __thiscall winISteamFriends_SteamFriends010_DownloadClanActivityCounts(winISteamFriends_SteamFriends010 *_this, CSteamID * psteamIDClans, int cClansToRequest)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends010_DownloadClanActivityCounts(_this->linux_side, psteamIDClans, cClansToRequest);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends010_GetFriendCountFromSource, 12)
+int __thiscall winISteamFriends_SteamFriends010_GetFriendCountFromSource(winISteamFriends_SteamFriends010 *_this, CSteamID steamIDSource)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends010_GetFriendCountFromSource(_this->linux_side, steamIDSource);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends010_GetFriendFromSourceByIndex, 20)
+CSteamID *__thiscall winISteamFriends_SteamFriends010_GetFriendFromSourceByIndex(winISteamFriends_SteamFriends010 *_this, CSteamID *_r, CSteamID steamIDSource, int iFriend)
+{
+    TRACE("%p\n", _this);
+    *_r = cppISteamFriends_SteamFriends010_GetFriendFromSourceByIndex(_this->linux_side, steamIDSource, iFriend);
+    return _r;
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends010_IsUserInSource, 20)
+bool __thiscall winISteamFriends_SteamFriends010_IsUserInSource(winISteamFriends_SteamFriends010 *_this, CSteamID steamIDUser, CSteamID steamIDSource)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends010_IsUserInSource(_this->linux_side, steamIDUser, steamIDSource);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends010_SetInGameVoiceSpeaking, 16)
+void __thiscall winISteamFriends_SteamFriends010_SetInGameVoiceSpeaking(winISteamFriends_SteamFriends010 *_this, CSteamID steamIDUser, bool bSpeaking)
+{
+    TRACE("%p\n", _this);
+    cppISteamFriends_SteamFriends010_SetInGameVoiceSpeaking(_this->linux_side, steamIDUser, bSpeaking);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends010_ActivateGameOverlay, 8)
+void __thiscall winISteamFriends_SteamFriends010_ActivateGameOverlay(winISteamFriends_SteamFriends010 *_this, const char * pchDialog)
+{
+    TRACE("%p\n", _this);
+    cppISteamFriends_SteamFriends010_ActivateGameOverlay(_this->linux_side, pchDialog);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends010_ActivateGameOverlayToUser, 16)
+void __thiscall winISteamFriends_SteamFriends010_ActivateGameOverlayToUser(winISteamFriends_SteamFriends010 *_this, const char * pchDialog, CSteamID steamID)
+{
+    TRACE("%p\n", _this);
+    cppISteamFriends_SteamFriends010_ActivateGameOverlayToUser(_this->linux_side, pchDialog, steamID);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends010_ActivateGameOverlayToWebPage, 8)
+void __thiscall winISteamFriends_SteamFriends010_ActivateGameOverlayToWebPage(winISteamFriends_SteamFriends010 *_this, const char * pchURL)
+{
+    TRACE("%p\n", _this);
+    cppISteamFriends_SteamFriends010_ActivateGameOverlayToWebPage(_this->linux_side, pchURL);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends010_ActivateGameOverlayToStore, 8)
+void __thiscall winISteamFriends_SteamFriends010_ActivateGameOverlayToStore(winISteamFriends_SteamFriends010 *_this, AppId_t nAppID)
+{
+    TRACE("%p\n", _this);
+    cppISteamFriends_SteamFriends010_ActivateGameOverlayToStore(_this->linux_side, nAppID);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends010_SetPlayedWith, 12)
+void __thiscall winISteamFriends_SteamFriends010_SetPlayedWith(winISteamFriends_SteamFriends010 *_this, CSteamID steamIDUserPlayedWith)
+{
+    TRACE("%p\n", _this);
+    cppISteamFriends_SteamFriends010_SetPlayedWith(_this->linux_side, steamIDUserPlayedWith);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends010_ActivateGameOverlayInviteDialog, 12)
+void __thiscall winISteamFriends_SteamFriends010_ActivateGameOverlayInviteDialog(winISteamFriends_SteamFriends010 *_this, CSteamID steamIDLobby)
+{
+    TRACE("%p\n", _this);
+    cppISteamFriends_SteamFriends010_ActivateGameOverlayInviteDialog(_this->linux_side, steamIDLobby);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends010_GetSmallFriendAvatar, 12)
+int __thiscall winISteamFriends_SteamFriends010_GetSmallFriendAvatar(winISteamFriends_SteamFriends010 *_this, CSteamID steamIDFriend)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends010_GetSmallFriendAvatar(_this->linux_side, steamIDFriend);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends010_GetMediumFriendAvatar, 12)
+int __thiscall winISteamFriends_SteamFriends010_GetMediumFriendAvatar(winISteamFriends_SteamFriends010 *_this, CSteamID steamIDFriend)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends010_GetMediumFriendAvatar(_this->linux_side, steamIDFriend);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends010_GetLargeFriendAvatar, 12)
+int __thiscall winISteamFriends_SteamFriends010_GetLargeFriendAvatar(winISteamFriends_SteamFriends010 *_this, CSteamID steamIDFriend)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends010_GetLargeFriendAvatar(_this->linux_side, steamIDFriend);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends010_RequestUserInformation, 16)
+bool __thiscall winISteamFriends_SteamFriends010_RequestUserInformation(winISteamFriends_SteamFriends010 *_this, CSteamID steamIDUser, bool bRequireNameOnly)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends010_RequestUserInformation(_this->linux_side, steamIDUser, bRequireNameOnly);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends010_RequestClanOfficerList, 12)
+SteamAPICall_t __thiscall winISteamFriends_SteamFriends010_RequestClanOfficerList(winISteamFriends_SteamFriends010 *_this, CSteamID steamIDClan)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends010_RequestClanOfficerList(_this->linux_side, steamIDClan);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends010_GetClanOwner, 16)
+CSteamID *__thiscall winISteamFriends_SteamFriends010_GetClanOwner(winISteamFriends_SteamFriends010 *_this, CSteamID *_r, CSteamID steamIDClan)
+{
+    TRACE("%p\n", _this);
+    *_r = cppISteamFriends_SteamFriends010_GetClanOwner(_this->linux_side, steamIDClan);
+    return _r;
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends010_GetClanOfficerCount, 12)
+int __thiscall winISteamFriends_SteamFriends010_GetClanOfficerCount(winISteamFriends_SteamFriends010 *_this, CSteamID steamIDClan)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends010_GetClanOfficerCount(_this->linux_side, steamIDClan);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends010_GetClanOfficerByIndex, 20)
+CSteamID *__thiscall winISteamFriends_SteamFriends010_GetClanOfficerByIndex(winISteamFriends_SteamFriends010 *_this, CSteamID *_r, CSteamID steamIDClan, int iOfficer)
+{
+    TRACE("%p\n", _this);
+    *_r = cppISteamFriends_SteamFriends010_GetClanOfficerByIndex(_this->linux_side, steamIDClan, iOfficer);
+    return _r;
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends010_GetUserRestrictions, 4)
+uint32 __thiscall winISteamFriends_SteamFriends010_GetUserRestrictions(winISteamFriends_SteamFriends010 *_this)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends010_GetUserRestrictions(_this->linux_side);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends010_SetRichPresence, 12)
+bool __thiscall winISteamFriends_SteamFriends010_SetRichPresence(winISteamFriends_SteamFriends010 *_this, const char * pchKey, const char * pchValue)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends010_SetRichPresence(_this->linux_side, pchKey, pchValue);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends010_ClearRichPresence, 4)
+void __thiscall winISteamFriends_SteamFriends010_ClearRichPresence(winISteamFriends_SteamFriends010 *_this)
+{
+    TRACE("%p\n", _this);
+    cppISteamFriends_SteamFriends010_ClearRichPresence(_this->linux_side);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends010_GetFriendRichPresence, 16)
+const char * __thiscall winISteamFriends_SteamFriends010_GetFriendRichPresence(winISteamFriends_SteamFriends010 *_this, CSteamID steamIDFriend, const char * pchKey)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends010_GetFriendRichPresence(_this->linux_side, steamIDFriend, pchKey);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends010_GetFriendRichPresenceKeyCount, 12)
+int __thiscall winISteamFriends_SteamFriends010_GetFriendRichPresenceKeyCount(winISteamFriends_SteamFriends010 *_this, CSteamID steamIDFriend)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends010_GetFriendRichPresenceKeyCount(_this->linux_side, steamIDFriend);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends010_GetFriendRichPresenceKeyByIndex, 16)
+const char * __thiscall winISteamFriends_SteamFriends010_GetFriendRichPresenceKeyByIndex(winISteamFriends_SteamFriends010 *_this, CSteamID steamIDFriend, int iKey)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends010_GetFriendRichPresenceKeyByIndex(_this->linux_side, steamIDFriend, iKey);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends010_InviteUserToGame, 16)
+bool __thiscall winISteamFriends_SteamFriends010_InviteUserToGame(winISteamFriends_SteamFriends010 *_this, CSteamID steamIDFriend, const char * pchConnectString)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends010_InviteUserToGame(_this->linux_side, steamIDFriend, pchConnectString);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends010_GetCoplayFriendCount, 4)
+int __thiscall winISteamFriends_SteamFriends010_GetCoplayFriendCount(winISteamFriends_SteamFriends010 *_this)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends010_GetCoplayFriendCount(_this->linux_side);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends010_GetCoplayFriend, 12)
+CSteamID *__thiscall winISteamFriends_SteamFriends010_GetCoplayFriend(winISteamFriends_SteamFriends010 *_this, CSteamID *_r, int iCoplayFriend)
+{
+    TRACE("%p\n", _this);
+    *_r = cppISteamFriends_SteamFriends010_GetCoplayFriend(_this->linux_side, iCoplayFriend);
+    return _r;
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends010_GetFriendCoplayTime, 12)
+int __thiscall winISteamFriends_SteamFriends010_GetFriendCoplayTime(winISteamFriends_SteamFriends010 *_this, CSteamID steamIDFriend)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends010_GetFriendCoplayTime(_this->linux_side, steamIDFriend);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends010_GetFriendCoplayGame, 12)
+AppId_t __thiscall winISteamFriends_SteamFriends010_GetFriendCoplayGame(winISteamFriends_SteamFriends010 *_this, CSteamID steamIDFriend)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends010_GetFriendCoplayGame(_this->linux_side, steamIDFriend);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends010_JoinClanChatRoom, 12)
+SteamAPICall_t __thiscall winISteamFriends_SteamFriends010_JoinClanChatRoom(winISteamFriends_SteamFriends010 *_this, CSteamID steamIDClan)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends010_JoinClanChatRoom(_this->linux_side, steamIDClan);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends010_LeaveClanChatRoom, 12)
+bool __thiscall winISteamFriends_SteamFriends010_LeaveClanChatRoom(winISteamFriends_SteamFriends010 *_this, CSteamID steamIDClan)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends010_LeaveClanChatRoom(_this->linux_side, steamIDClan);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends010_GetClanChatMemberCount, 12)
+int __thiscall winISteamFriends_SteamFriends010_GetClanChatMemberCount(winISteamFriends_SteamFriends010 *_this, CSteamID steamIDClan)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends010_GetClanChatMemberCount(_this->linux_side, steamIDClan);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends010_GetChatMemberByIndex, 20)
+CSteamID *__thiscall winISteamFriends_SteamFriends010_GetChatMemberByIndex(winISteamFriends_SteamFriends010 *_this, CSteamID *_r, CSteamID steamIDClan, int iUser)
+{
+    TRACE("%p\n", _this);
+    *_r = cppISteamFriends_SteamFriends010_GetChatMemberByIndex(_this->linux_side, steamIDClan, iUser);
+    return _r;
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends010_SendClanChatMessage, 16)
+bool __thiscall winISteamFriends_SteamFriends010_SendClanChatMessage(winISteamFriends_SteamFriends010 *_this, CSteamID steamIDClanChat, const char * pchText)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends010_SendClanChatMessage(_this->linux_side, steamIDClanChat, pchText);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends010_GetClanChatMessage, 32)
+int __thiscall winISteamFriends_SteamFriends010_GetClanChatMessage(winISteamFriends_SteamFriends010 *_this, CSteamID steamIDClanChat, int iMessage, void * prgchText, int cchTextMax, EChatEntryType * _a, CSteamID * _b)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends010_GetClanChatMessage(_this->linux_side, steamIDClanChat, iMessage, prgchText, cchTextMax, _a, _b);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends010_IsClanChatAdmin, 20)
+bool __thiscall winISteamFriends_SteamFriends010_IsClanChatAdmin(winISteamFriends_SteamFriends010 *_this, CSteamID steamIDClanChat, CSteamID steamIDUser)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends010_IsClanChatAdmin(_this->linux_side, steamIDClanChat, steamIDUser);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends010_IsClanChatWindowOpenInSteam, 12)
+bool __thiscall winISteamFriends_SteamFriends010_IsClanChatWindowOpenInSteam(winISteamFriends_SteamFriends010 *_this, CSteamID steamIDClanChat)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends010_IsClanChatWindowOpenInSteam(_this->linux_side, steamIDClanChat);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends010_OpenClanChatWindowInSteam, 12)
+bool __thiscall winISteamFriends_SteamFriends010_OpenClanChatWindowInSteam(winISteamFriends_SteamFriends010 *_this, CSteamID steamIDClanChat)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends010_OpenClanChatWindowInSteam(_this->linux_side, steamIDClanChat);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends010_CloseClanChatWindowInSteam, 12)
+bool __thiscall winISteamFriends_SteamFriends010_CloseClanChatWindowInSteam(winISteamFriends_SteamFriends010 *_this, CSteamID steamIDClanChat)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends010_CloseClanChatWindowInSteam(_this->linux_side, steamIDClanChat);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends010_SetListenForFriendsMessages, 8)
+bool __thiscall winISteamFriends_SteamFriends010_SetListenForFriendsMessages(winISteamFriends_SteamFriends010 *_this, bool bInterceptEnabled)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends010_SetListenForFriendsMessages(_this->linux_side, bInterceptEnabled);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends010_ReplyToFriendMessage, 16)
+bool __thiscall winISteamFriends_SteamFriends010_ReplyToFriendMessage(winISteamFriends_SteamFriends010 *_this, CSteamID steamIDFriend, const char * pchMsgToSend)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends010_ReplyToFriendMessage(_this->linux_side, steamIDFriend, pchMsgToSend);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends010_GetFriendMessage, 28)
+int __thiscall winISteamFriends_SteamFriends010_GetFriendMessage(winISteamFriends_SteamFriends010 *_this, CSteamID steamIDFriend, int iMessageID, void * pvData, int cubData, EChatEntryType * peChatEntryType)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends010_GetFriendMessage(_this->linux_side, steamIDFriend, iMessageID, pvData, cubData, peChatEntryType);
+}
+
+extern vtable_ptr winISteamFriends_SteamFriends010_vtable;
+
+#ifndef __GNUC__
+void __asm_dummy_vtables(void) {
+#endif
+    __ASM_VTABLE(winISteamFriends_SteamFriends010,
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends010_GetPersonaName)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends010_SetPersonaName)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends010_GetPersonaState)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends010_GetFriendCount)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends010_GetFriendByIndex)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends010_GetFriendRelationship)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends010_GetFriendPersonaState)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends010_GetFriendPersonaName)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends010_GetFriendGamePlayed)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends010_GetFriendPersonaNameHistory)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends010_HasFriend)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends010_GetClanCount)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends010_GetClanByIndex)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends010_GetClanName)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends010_GetClanTag)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends010_GetClanActivityCounts)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends010_DownloadClanActivityCounts)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends010_GetFriendCountFromSource)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends010_GetFriendFromSourceByIndex)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends010_IsUserInSource)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends010_SetInGameVoiceSpeaking)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends010_ActivateGameOverlay)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends010_ActivateGameOverlayToUser)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends010_ActivateGameOverlayToWebPage)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends010_ActivateGameOverlayToStore)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends010_SetPlayedWith)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends010_ActivateGameOverlayInviteDialog)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends010_GetSmallFriendAvatar)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends010_GetMediumFriendAvatar)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends010_GetLargeFriendAvatar)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends010_RequestUserInformation)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends010_RequestClanOfficerList)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends010_GetClanOwner)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends010_GetClanOfficerCount)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends010_GetClanOfficerByIndex)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends010_GetUserRestrictions)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends010_SetRichPresence)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends010_ClearRichPresence)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends010_GetFriendRichPresence)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends010_GetFriendRichPresenceKeyCount)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends010_GetFriendRichPresenceKeyByIndex)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends010_InviteUserToGame)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends010_GetCoplayFriendCount)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends010_GetCoplayFriend)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends010_GetFriendCoplayTime)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends010_GetFriendCoplayGame)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends010_JoinClanChatRoom)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends010_LeaveClanChatRoom)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends010_GetClanChatMemberCount)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends010_GetChatMemberByIndex)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends010_SendClanChatMessage)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends010_GetClanChatMessage)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends010_IsClanChatAdmin)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends010_IsClanChatWindowOpenInSteam)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends010_OpenClanChatWindowInSteam)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends010_CloseClanChatWindowInSteam)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends010_SetListenForFriendsMessages)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends010_ReplyToFriendMessage)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends010_GetFriendMessage)
+    );
+#ifndef __GNUC__
+}
+#endif
+
+winISteamFriends_SteamFriends010 *create_winISteamFriends_SteamFriends010(void *linux_side)
+{
+    winISteamFriends_SteamFriends010 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamFriends_SteamFriends010));
+    TRACE("-> %p\n", r);
+    r->vtable = &winISteamFriends_SteamFriends010_vtable;
     r->linux_side = linux_side;
     return r;
 }
@@ -2381,7 +4045,7 @@ bool __thiscall winISteamFriends_SteamFriends009_IsUserInSource(winISteamFriends
     return cppISteamFriends_SteamFriends009_IsUserInSource(_this->linux_side, steamIDUser, steamIDSource);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends009_SetInGameVoiceSpeaking, 13)
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends009_SetInGameVoiceSpeaking, 16)
 void __thiscall winISteamFriends_SteamFriends009_SetInGameVoiceSpeaking(winISteamFriends_SteamFriends009 *_this, CSteamID steamIDUser, bool bSpeaking)
 {
     TRACE("%p\n", _this);
@@ -2451,7 +4115,7 @@ int __thiscall winISteamFriends_SteamFriends009_GetLargeFriendAvatar(winISteamFr
     return cppISteamFriends_SteamFriends009_GetLargeFriendAvatar(_this->linux_side, steamIDFriend);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends009_RequestUserInformation, 13)
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends009_RequestUserInformation, 16)
 bool __thiscall winISteamFriends_SteamFriends009_RequestUserInformation(winISteamFriends_SteamFriends009 *_this, CSteamID steamIDUser, bool bRequireNameOnly)
 {
     TRACE("%p\n", _this);
@@ -2766,7 +4430,7 @@ bool __thiscall winISteamFriends_SteamFriends008_IsUserInSource(winISteamFriends
     return cppISteamFriends_SteamFriends008_IsUserInSource(_this->linux_side, steamIDUser, steamIDSource);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends008_SetInGameVoiceSpeaking, 13)
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends008_SetInGameVoiceSpeaking, 16)
 void __thiscall winISteamFriends_SteamFriends008_SetInGameVoiceSpeaking(winISteamFriends_SteamFriends008 *_this, CSteamID steamIDUser, bool bSpeaking)
 {
     TRACE("%p\n", _this);
@@ -2836,7 +4500,7 @@ int __thiscall winISteamFriends_SteamFriends008_GetLargeFriendAvatar(winISteamFr
     return cppISteamFriends_SteamFriends008_GetLargeFriendAvatar(_this->linux_side, steamIDFriend);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends008_RequestUserInformation, 13)
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends008_RequestUserInformation, 16)
 bool __thiscall winISteamFriends_SteamFriends008_RequestUserInformation(winISteamFriends_SteamFriends008 *_this, CSteamID steamIDUser, bool bRequireNameOnly)
 {
     TRACE("%p\n", _this);
@@ -3070,7 +4734,7 @@ bool __thiscall winISteamFriends_SteamFriends007_IsUserInSource(winISteamFriends
     return cppISteamFriends_SteamFriends007_IsUserInSource(_this->linux_side, steamIDUser, steamIDSource);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends007_SetInGameVoiceSpeaking, 13)
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends007_SetInGameVoiceSpeaking, 16)
 void __thiscall winISteamFriends_SteamFriends007_SetInGameVoiceSpeaking(winISteamFriends_SteamFriends007 *_this, CSteamID steamIDUser, bool bSpeaking)
 {
     TRACE("%p\n", _this);
@@ -3331,7 +4995,7 @@ bool __thiscall winISteamFriends_SteamFriends006_IsUserInSource(winISteamFriends
     return cppISteamFriends_SteamFriends006_IsUserInSource(_this->linux_side, steamIDUser, steamIDSource);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends006_SetInGameVoiceSpeaking, 13)
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends006_SetInGameVoiceSpeaking, 16)
 void __thiscall winISteamFriends_SteamFriends006_SetInGameVoiceSpeaking(winISteamFriends_SteamFriends006 *_this, CSteamID steamIDUser, bool bSpeaking)
 {
     TRACE("%p\n", _this);
@@ -3562,7 +5226,7 @@ bool __thiscall winISteamFriends_SteamFriends005_IsUserInSource(winISteamFriends
     return cppISteamFriends_SteamFriends005_IsUserInSource(_this->linux_side, steamIDUser, steamIDSource);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends005_SetInGameVoiceSpeaking, 13)
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends005_SetInGameVoiceSpeaking, 16)
 void __thiscall winISteamFriends_SteamFriends005_SetInGameVoiceSpeaking(winISteamFriends_SteamFriends005 *_this, CSteamID steamIDUser, bool bSpeaking)
 {
     TRACE("%p\n", _this);
@@ -3784,7 +5448,7 @@ bool __thiscall winISteamFriends_SteamFriends004_IsUserInSource(winISteamFriends
     return cppISteamFriends_SteamFriends004_IsUserInSource(_this->linux_side, steamIDUser, steamIDSource);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends004_SetInGameVoiceSpeaking, 13)
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends004_SetInGameVoiceSpeaking, 16)
 void __thiscall winISteamFriends_SteamFriends004_SetInGameVoiceSpeaking(winISteamFriends_SteamFriends004 *_this, CSteamID steamIDUser, bool bSpeaking)
 {
     TRACE("%p\n", _this);
@@ -3974,7 +5638,7 @@ bool __thiscall winISteamFriends_SteamFriends003_IsUserInSource(winISteamFriends
     return cppISteamFriends_SteamFriends003_IsUserInSource(_this->linux_side, steamIDUser, steamIDSource);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends003_SetInGameVoiceSpeaking, 13)
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends003_SetInGameVoiceSpeaking, 16)
 void __thiscall winISteamFriends_SteamFriends003_SetInGameVoiceSpeaking(winISteamFriends_SteamFriends003 *_this, CSteamID steamIDUser, bool bSpeaking)
 {
     TRACE("%p\n", _this);
@@ -4024,6 +5688,520 @@ winISteamFriends_SteamFriends003 *create_winISteamFriends_SteamFriends003(void *
     winISteamFriends_SteamFriends003 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamFriends_SteamFriends003));
     TRACE("-> %p\n", r);
     r->vtable = &winISteamFriends_SteamFriends003_vtable;
+    r->linux_side = linux_side;
+    return r;
+}
+
+#include "cppISteamFriends_SteamFriends002.h"
+
+typedef struct __winISteamFriends_SteamFriends002 {
+    vtable_ptr *vtable;
+    void *linux_side;
+} winISteamFriends_SteamFriends002;
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends002_GetPersonaName, 4)
+const char * __thiscall winISteamFriends_SteamFriends002_GetPersonaName(winISteamFriends_SteamFriends002 *_this)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends002_GetPersonaName(_this->linux_side);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends002_SetPersonaName, 8)
+void __thiscall winISteamFriends_SteamFriends002_SetPersonaName(winISteamFriends_SteamFriends002 *_this, const char * pchPersonaName)
+{
+    TRACE("%p\n", _this);
+    cppISteamFriends_SteamFriends002_SetPersonaName(_this->linux_side, pchPersonaName);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends002_GetPersonaState, 4)
+EPersonaState __thiscall winISteamFriends_SteamFriends002_GetPersonaState(winISteamFriends_SteamFriends002 *_this)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends002_GetPersonaState(_this->linux_side);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends002_SetPersonaState, 8)
+void __thiscall winISteamFriends_SteamFriends002_SetPersonaState(winISteamFriends_SteamFriends002 *_this, EPersonaState ePersonaState)
+{
+    TRACE("%p\n", _this);
+    cppISteamFriends_SteamFriends002_SetPersonaState(_this->linux_side, ePersonaState);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends002_GetFriendCount, 8)
+int __thiscall winISteamFriends_SteamFriends002_GetFriendCount(winISteamFriends_SteamFriends002 *_this, int iFriendFlags)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends002_GetFriendCount(_this->linux_side, iFriendFlags);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends002_GetFriendByIndex, 16)
+CSteamID *__thiscall winISteamFriends_SteamFriends002_GetFriendByIndex(winISteamFriends_SteamFriends002 *_this, CSteamID *_r, int iFriend, int iFriendFlags)
+{
+    TRACE("%p\n", _this);
+    *_r = cppISteamFriends_SteamFriends002_GetFriendByIndex(_this->linux_side, iFriend, iFriendFlags);
+    return _r;
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends002_GetFriendRelationship, 12)
+EFriendRelationship __thiscall winISteamFriends_SteamFriends002_GetFriendRelationship(winISteamFriends_SteamFriends002 *_this, CSteamID steamIDFriend)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends002_GetFriendRelationship(_this->linux_side, steamIDFriend);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends002_GetFriendPersonaState, 12)
+EPersonaState __thiscall winISteamFriends_SteamFriends002_GetFriendPersonaState(winISteamFriends_SteamFriends002 *_this, CSteamID steamIDFriend)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends002_GetFriendPersonaState(_this->linux_side, steamIDFriend);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends002_GetFriendPersonaName, 12)
+const char * __thiscall winISteamFriends_SteamFriends002_GetFriendPersonaName(winISteamFriends_SteamFriends002 *_this, CSteamID steamIDFriend)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends002_GetFriendPersonaName(_this->linux_side, steamIDFriend);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends002_SetFriendRegValue, 20)
+void __thiscall winISteamFriends_SteamFriends002_SetFriendRegValue(winISteamFriends_SteamFriends002 *_this, CSteamID steamIDFriend, const char * pchKey, const char * pchValue)
+{
+    TRACE("%p\n", _this);
+    cppISteamFriends_SteamFriends002_SetFriendRegValue(_this->linux_side, steamIDFriend, pchKey, pchValue);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends002_GetFriendRegValue, 16)
+const char * __thiscall winISteamFriends_SteamFriends002_GetFriendRegValue(winISteamFriends_SteamFriends002 *_this, CSteamID steamIDFriend, const char * pchKey)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends002_GetFriendRegValue(_this->linux_side, steamIDFriend, pchKey);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends002_GetFriendGamePlayed, 28)
+bool __thiscall winISteamFriends_SteamFriends002_GetFriendGamePlayed(winISteamFriends_SteamFriends002 *_this, CSteamID steamIDFriend, uint64 * pulGameID, uint32 * punGameIP, uint16 * pusGamePort, uint16 * pusQueryPort)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends002_GetFriendGamePlayed(_this->linux_side, steamIDFriend, pulGameID, punGameIP, pusGamePort, pusQueryPort);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends002_GetFriendPersonaNameHistory, 16)
+const char * __thiscall winISteamFriends_SteamFriends002_GetFriendPersonaNameHistory(winISteamFriends_SteamFriends002 *_this, CSteamID steamIDFriend, int iPersonaName)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends002_GetFriendPersonaNameHistory(_this->linux_side, steamIDFriend, iPersonaName);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends002_AddFriend, 12)
+bool __thiscall winISteamFriends_SteamFriends002_AddFriend(winISteamFriends_SteamFriends002 *_this, CSteamID steamIDFriend)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends002_AddFriend(_this->linux_side, steamIDFriend);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends002_RemoveFriend, 12)
+bool __thiscall winISteamFriends_SteamFriends002_RemoveFriend(winISteamFriends_SteamFriends002 *_this, CSteamID steamIDFriend)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends002_RemoveFriend(_this->linux_side, steamIDFriend);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends002_HasFriend, 16)
+bool __thiscall winISteamFriends_SteamFriends002_HasFriend(winISteamFriends_SteamFriends002 *_this, CSteamID steamIDFriend, int iFriendFlags)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends002_HasFriend(_this->linux_side, steamIDFriend, iFriendFlags);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends002_AddFriendByName, 8)
+int32 __thiscall winISteamFriends_SteamFriends002_AddFriendByName(winISteamFriends_SteamFriends002 *_this, const char * pchEmailOrAccountName)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends002_AddFriendByName(_this->linux_side, pchEmailOrAccountName);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends002_InviteFriendByEmail, 8)
+bool __thiscall winISteamFriends_SteamFriends002_InviteFriendByEmail(winISteamFriends_SteamFriends002 *_this, const char * pchEmailAccount)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends002_InviteFriendByEmail(_this->linux_side, pchEmailAccount);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends002_GetChatMessage, 28)
+int __thiscall winISteamFriends_SteamFriends002_GetChatMessage(winISteamFriends_SteamFriends002 *_this, CSteamID steamIDFriend, int iChatID, void * pvData, int cubData, EChatEntryType * peChatEntryType)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends002_GetChatMessage(_this->linux_side, steamIDFriend, iChatID, pvData, cubData, peChatEntryType);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends002_SendMsgToFriend, 24)
+bool __thiscall winISteamFriends_SteamFriends002_SendMsgToFriend(winISteamFriends_SteamFriends002 *_this, CSteamID steamIDFriend, EChatEntryType eChatEntryType, const void * pvMsgBody, int cubMsgBody)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends002_SendMsgToFriend(_this->linux_side, steamIDFriend, eChatEntryType, pvMsgBody, cubMsgBody);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends002_GetChatIDOfChatHistoryStart, 12)
+int __thiscall winISteamFriends_SteamFriends002_GetChatIDOfChatHistoryStart(winISteamFriends_SteamFriends002 *_this, CSteamID steamIDFriend)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends002_GetChatIDOfChatHistoryStart(_this->linux_side, steamIDFriend);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends002_SetChatHistoryStart, 16)
+void __thiscall winISteamFriends_SteamFriends002_SetChatHistoryStart(winISteamFriends_SteamFriends002 *_this, CSteamID steamIDFriend, int iChatID)
+{
+    TRACE("%p\n", _this);
+    cppISteamFriends_SteamFriends002_SetChatHistoryStart(_this->linux_side, steamIDFriend, iChatID);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends002_ClearChatHistory, 12)
+void __thiscall winISteamFriends_SteamFriends002_ClearChatHistory(winISteamFriends_SteamFriends002 *_this, CSteamID steamIDFriend)
+{
+    TRACE("%p\n", _this);
+    cppISteamFriends_SteamFriends002_ClearChatHistory(_this->linux_side, steamIDFriend);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends002_GetClanCount, 4)
+int __thiscall winISteamFriends_SteamFriends002_GetClanCount(winISteamFriends_SteamFriends002 *_this)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends002_GetClanCount(_this->linux_side);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends002_GetClanByIndex, 12)
+CSteamID *__thiscall winISteamFriends_SteamFriends002_GetClanByIndex(winISteamFriends_SteamFriends002 *_this, CSteamID *_r, int iClan)
+{
+    TRACE("%p\n", _this);
+    *_r = cppISteamFriends_SteamFriends002_GetClanByIndex(_this->linux_side, iClan);
+    return _r;
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends002_GetClanName, 12)
+const char * __thiscall winISteamFriends_SteamFriends002_GetClanName(winISteamFriends_SteamFriends002 *_this, CSteamID steamIDClan)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends002_GetClanName(_this->linux_side, steamIDClan);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends002_InviteFriendToClan, 20)
+bool __thiscall winISteamFriends_SteamFriends002_InviteFriendToClan(winISteamFriends_SteamFriends002 *_this, CSteamID steamIDFriend, CSteamID steamIDClan)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends002_InviteFriendToClan(_this->linux_side, steamIDFriend, steamIDClan);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends002_AcknowledgeInviteToClan, 16)
+bool __thiscall winISteamFriends_SteamFriends002_AcknowledgeInviteToClan(winISteamFriends_SteamFriends002 *_this, CSteamID steamIDClan, bool bAcceptOrDenyClanInvite)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends002_AcknowledgeInviteToClan(_this->linux_side, steamIDClan, bAcceptOrDenyClanInvite);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends002_GetFriendCountFromSource, 12)
+int __thiscall winISteamFriends_SteamFriends002_GetFriendCountFromSource(winISteamFriends_SteamFriends002 *_this, CSteamID steamIDSource)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends002_GetFriendCountFromSource(_this->linux_side, steamIDSource);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends002_GetFriendFromSourceByIndex, 20)
+CSteamID *__thiscall winISteamFriends_SteamFriends002_GetFriendFromSourceByIndex(winISteamFriends_SteamFriends002 *_this, CSteamID *_r, CSteamID steamIDSource, int iFriend)
+{
+    TRACE("%p\n", _this);
+    *_r = cppISteamFriends_SteamFriends002_GetFriendFromSourceByIndex(_this->linux_side, steamIDSource, iFriend);
+    return _r;
+}
+
+extern vtable_ptr winISteamFriends_SteamFriends002_vtable;
+
+#ifndef __GNUC__
+void __asm_dummy_vtables(void) {
+#endif
+    __ASM_VTABLE(winISteamFriends_SteamFriends002,
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends002_GetPersonaName)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends002_SetPersonaName)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends002_GetPersonaState)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends002_SetPersonaState)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends002_GetFriendCount)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends002_GetFriendByIndex)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends002_GetFriendRelationship)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends002_GetFriendPersonaState)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends002_GetFriendPersonaName)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends002_SetFriendRegValue)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends002_GetFriendRegValue)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends002_GetFriendGamePlayed)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends002_GetFriendPersonaNameHistory)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends002_AddFriend)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends002_RemoveFriend)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends002_HasFriend)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends002_AddFriendByName)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends002_InviteFriendByEmail)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends002_GetChatMessage)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends002_SendMsgToFriend)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends002_GetChatIDOfChatHistoryStart)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends002_SetChatHistoryStart)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends002_ClearChatHistory)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends002_GetClanCount)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends002_GetClanByIndex)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends002_GetClanName)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends002_InviteFriendToClan)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends002_AcknowledgeInviteToClan)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends002_GetFriendCountFromSource)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends002_GetFriendFromSourceByIndex)
+    );
+#ifndef __GNUC__
+}
+#endif
+
+winISteamFriends_SteamFriends002 *create_winISteamFriends_SteamFriends002(void *linux_side)
+{
+    winISteamFriends_SteamFriends002 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamFriends_SteamFriends002));
+    TRACE("-> %p\n", r);
+    r->vtable = &winISteamFriends_SteamFriends002_vtable;
+    r->linux_side = linux_side;
+    return r;
+}
+
+#include "cppISteamFriends_SteamFriends001.h"
+
+typedef struct __winISteamFriends_SteamFriends001 {
+    vtable_ptr *vtable;
+    void *linux_side;
+} winISteamFriends_SteamFriends001;
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends001_GetPersonaName, 4)
+const char * __thiscall winISteamFriends_SteamFriends001_GetPersonaName(winISteamFriends_SteamFriends001 *_this)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends001_GetPersonaName(_this->linux_side);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends001_SetPersonaName, 8)
+void __thiscall winISteamFriends_SteamFriends001_SetPersonaName(winISteamFriends_SteamFriends001 *_this, const char * pchPersonaName)
+{
+    TRACE("%p\n", _this);
+    cppISteamFriends_SteamFriends001_SetPersonaName(_this->linux_side, pchPersonaName);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends001_GetPersonaState, 4)
+EPersonaState __thiscall winISteamFriends_SteamFriends001_GetPersonaState(winISteamFriends_SteamFriends001 *_this)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends001_GetPersonaState(_this->linux_side);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends001_SetPersonaState, 8)
+void __thiscall winISteamFriends_SteamFriends001_SetPersonaState(winISteamFriends_SteamFriends001 *_this, EPersonaState ePersonaState)
+{
+    TRACE("%p\n", _this);
+    cppISteamFriends_SteamFriends001_SetPersonaState(_this->linux_side, ePersonaState);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends001_AddFriend, 12)
+bool __thiscall winISteamFriends_SteamFriends001_AddFriend(winISteamFriends_SteamFriends001 *_this, CSteamID steamIDFriend)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends001_AddFriend(_this->linux_side, steamIDFriend);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends001_RemoveFriend, 12)
+bool __thiscall winISteamFriends_SteamFriends001_RemoveFriend(winISteamFriends_SteamFriends001 *_this, CSteamID steamIDFriend)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends001_RemoveFriend(_this->linux_side, steamIDFriend);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends001_HasFriend, 12)
+bool __thiscall winISteamFriends_SteamFriends001_HasFriend(winISteamFriends_SteamFriends001 *_this, CSteamID steamIDFriend)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends001_HasFriend(_this->linux_side, steamIDFriend);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends001_GetFriendRelationship, 12)
+EFriendRelationship __thiscall winISteamFriends_SteamFriends001_GetFriendRelationship(winISteamFriends_SteamFriends001 *_this, CSteamID steamIDFriend)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends001_GetFriendRelationship(_this->linux_side, steamIDFriend);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends001_GetFriendPersonaState, 12)
+EPersonaState __thiscall winISteamFriends_SteamFriends001_GetFriendPersonaState(winISteamFriends_SteamFriends001 *_this, CSteamID steamIDFriend)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends001_GetFriendPersonaState(_this->linux_side, steamIDFriend);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends001_Deprecated_GetFriendGamePlayed, 24)
+bool __thiscall winISteamFriends_SteamFriends001_Deprecated_GetFriendGamePlayed(winISteamFriends_SteamFriends001 *_this, CSteamID steamIDFriend, int32 * pnGameID, uint32 * punGameIP, uint16 * pusGamePort)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends001_Deprecated_GetFriendGamePlayed(_this->linux_side, steamIDFriend, pnGameID, punGameIP, pusGamePort);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends001_GetFriendPersonaName, 12)
+const char * __thiscall winISteamFriends_SteamFriends001_GetFriendPersonaName(winISteamFriends_SteamFriends001 *_this, CSteamID steamIDFriend)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends001_GetFriendPersonaName(_this->linux_side, steamIDFriend);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends001_AddFriendByName, 8)
+int32 __thiscall winISteamFriends_SteamFriends001_AddFriendByName(winISteamFriends_SteamFriends001 *_this, const char * pchEmailOrAccountName)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends001_AddFriendByName(_this->linux_side, pchEmailOrAccountName);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends001_GetFriendCount, 4)
+int __thiscall winISteamFriends_SteamFriends001_GetFriendCount(winISteamFriends_SteamFriends001 *_this)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends001_GetFriendCount(_this->linux_side);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends001_GetFriendByIndex, 12)
+CSteamID *__thiscall winISteamFriends_SteamFriends001_GetFriendByIndex(winISteamFriends_SteamFriends001 *_this, CSteamID *_r, int iFriend)
+{
+    TRACE("%p\n", _this);
+    *_r = cppISteamFriends_SteamFriends001_GetFriendByIndex(_this->linux_side, iFriend);
+    return _r;
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends001_SendMsgToFriend, 20)
+void __thiscall winISteamFriends_SteamFriends001_SendMsgToFriend(winISteamFriends_SteamFriends001 *_this, CSteamID steamIDFriend, EChatEntryType eChatEntryType, const char * pchMsgBody)
+{
+    TRACE("%p\n", _this);
+    cppISteamFriends_SteamFriends001_SendMsgToFriend(_this->linux_side, steamIDFriend, eChatEntryType, pchMsgBody);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends001_SetFriendRegValue, 20)
+void __thiscall winISteamFriends_SteamFriends001_SetFriendRegValue(winISteamFriends_SteamFriends001 *_this, CSteamID steamIDFriend, const char * pchKey, const char * pchValue)
+{
+    TRACE("%p\n", _this);
+    cppISteamFriends_SteamFriends001_SetFriendRegValue(_this->linux_side, steamIDFriend, pchKey, pchValue);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends001_GetFriendRegValue, 16)
+const char * __thiscall winISteamFriends_SteamFriends001_GetFriendRegValue(winISteamFriends_SteamFriends001 *_this, CSteamID steamIDFriend, const char * pchKey)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends001_GetFriendRegValue(_this->linux_side, steamIDFriend, pchKey);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends001_GetFriendPersonaNameHistory, 16)
+const char * __thiscall winISteamFriends_SteamFriends001_GetFriendPersonaNameHistory(winISteamFriends_SteamFriends001 *_this, CSteamID steamIDFriend, int iPersonaName)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends001_GetFriendPersonaNameHistory(_this->linux_side, steamIDFriend, iPersonaName);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends001_GetChatMessage, 28)
+int __thiscall winISteamFriends_SteamFriends001_GetChatMessage(winISteamFriends_SteamFriends001 *_this, CSteamID steamIDFriend, int iChatID, void * pvData, int cubData, EChatEntryType * peChatEntryType)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends001_GetChatMessage(_this->linux_side, steamIDFriend, iChatID, pvData, cubData, peChatEntryType);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends001_SendMsgToFriend_2, 24)
+bool __thiscall winISteamFriends_SteamFriends001_SendMsgToFriend_2(winISteamFriends_SteamFriends001 *_this, CSteamID steamIDFriend, EChatEntryType eChatEntryType, const void * pvMsgBody, int cubMsgBody)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends001_SendMsgToFriend_2(_this->linux_side, steamIDFriend, eChatEntryType, pvMsgBody, cubMsgBody);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends001_GetChatIDOfChatHistoryStart, 12)
+int __thiscall winISteamFriends_SteamFriends001_GetChatIDOfChatHistoryStart(winISteamFriends_SteamFriends001 *_this, CSteamID steamIDFriend)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends001_GetChatIDOfChatHistoryStart(_this->linux_side, steamIDFriend);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends001_SetChatHistoryStart, 16)
+void __thiscall winISteamFriends_SteamFriends001_SetChatHistoryStart(winISteamFriends_SteamFriends001 *_this, CSteamID steamIDFriend, int iChatID)
+{
+    TRACE("%p\n", _this);
+    cppISteamFriends_SteamFriends001_SetChatHistoryStart(_this->linux_side, steamIDFriend, iChatID);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends001_ClearChatHistory, 12)
+void __thiscall winISteamFriends_SteamFriends001_ClearChatHistory(winISteamFriends_SteamFriends001 *_this, CSteamID steamIDFriend)
+{
+    TRACE("%p\n", _this);
+    cppISteamFriends_SteamFriends001_ClearChatHistory(_this->linux_side, steamIDFriend);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends001_InviteFriendByEmail, 8)
+bool __thiscall winISteamFriends_SteamFriends001_InviteFriendByEmail(winISteamFriends_SteamFriends001 *_this, const char * pchEmailAccount)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends001_InviteFriendByEmail(_this->linux_side, pchEmailAccount);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends001_GetBlockedFriendCount, 4)
+int __thiscall winISteamFriends_SteamFriends001_GetBlockedFriendCount(winISteamFriends_SteamFriends001 *_this)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends001_GetBlockedFriendCount(_this->linux_side);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends001_GetFriendGamePlayed, 24)
+bool __thiscall winISteamFriends_SteamFriends001_GetFriendGamePlayed(winISteamFriends_SteamFriends001 *_this, CSteamID steamIDFriend, uint64 * pulGameID, uint32 * punGameIP, uint16 * pusGamePort)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends001_GetFriendGamePlayed(_this->linux_side, steamIDFriend, pulGameID, punGameIP, pusGamePort);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamFriends_SteamFriends001_GetFriendGamePlayed2, 28)
+bool __thiscall winISteamFriends_SteamFriends001_GetFriendGamePlayed2(winISteamFriends_SteamFriends001 *_this, CSteamID steamIDFriend, uint64 * pulGameID, uint32 * punGameIP, uint16 * pusGamePort, uint16 * pusQueryPort)
+{
+    TRACE("%p\n", _this);
+    return cppISteamFriends_SteamFriends001_GetFriendGamePlayed2(_this->linux_side, steamIDFriend, pulGameID, punGameIP, pusGamePort, pusQueryPort);
+}
+
+extern vtable_ptr winISteamFriends_SteamFriends001_vtable;
+
+#ifndef __GNUC__
+void __asm_dummy_vtables(void) {
+#endif
+    __ASM_VTABLE(winISteamFriends_SteamFriends001,
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends001_GetPersonaName)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends001_SetPersonaName)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends001_GetPersonaState)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends001_SetPersonaState)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends001_AddFriend)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends001_RemoveFriend)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends001_HasFriend)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends001_GetFriendRelationship)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends001_GetFriendPersonaState)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends001_Deprecated_GetFriendGamePlayed)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends001_GetFriendPersonaName)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends001_AddFriendByName)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends001_GetFriendCount)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends001_GetFriendByIndex)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends001_SendMsgToFriend_2)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends001_SendMsgToFriend)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends001_SetFriendRegValue)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends001_GetFriendRegValue)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends001_GetFriendPersonaNameHistory)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends001_GetChatMessage)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends001_GetChatIDOfChatHistoryStart)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends001_SetChatHistoryStart)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends001_ClearChatHistory)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends001_InviteFriendByEmail)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends001_GetBlockedFriendCount)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends001_GetFriendGamePlayed)
+        VTABLE_ADD_FUNC(winISteamFriends_SteamFriends001_GetFriendGamePlayed2)
+    );
+#ifndef __GNUC__
+}
+#endif
+
+winISteamFriends_SteamFriends001 *create_winISteamFriends_SteamFriends001(void *linux_side)
+{
+    winISteamFriends_SteamFriends001 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamFriends_SteamFriends001));
+    TRACE("-> %p\n", r);
+    r->vtable = &winISteamFriends_SteamFriends001_vtable;
     r->linux_side = linux_side;
     return r;
 }

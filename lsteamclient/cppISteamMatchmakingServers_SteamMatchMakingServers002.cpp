@@ -1,11 +1,12 @@
 #include "steam_defs.h"
-#include "steamworks_sdk_142/steam_api.h"
+#include "steamworks_sdk_143/steam_api.h"
 #include "steamclient_private.h"
-#include "cppISteamMatchmakingServers_SteamMatchMakingServers002.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include "struct_converters_142.h"
+#define SDKVER_143
+#include "struct_converters.h"
+#include "cppISteamMatchmakingServers_SteamMatchMakingServers002.h"
 HServerListRequest cppISteamMatchmakingServers_SteamMatchMakingServers002_RequestInternetServerList(void *linux_side, AppId_t iApp, MatchMakingKeyValuePair_t ** ppchFilters, uint32 nFilters, ISteamMatchmakingServerListResponse * pRequestServersResponse)
 {
     return ((ISteamMatchmakingServers*)linux_side)->RequestInternetServerList((AppId_t)iApp, (MatchMakingKeyValuePair_t **)ppchFilters, (uint32)nFilters, (ISteamMatchmakingServerListResponse *)pRequestServersResponse);

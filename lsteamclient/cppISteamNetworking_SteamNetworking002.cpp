@@ -1,11 +1,12 @@
 #include "steam_defs.h"
 #include "steamworks_sdk_104/steam_api.h"
 #include "steamclient_private.h"
-#include "cppISteamNetworking_SteamNetworking002.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include "struct_converters_104.h"
+#define SDKVER_104
+#include "struct_converters.h"
+#include "cppISteamNetworking_SteamNetworking002.h"
 SNetListenSocket_t cppISteamNetworking_SteamNetworking002_CreateListenSocket(void *linux_side, int nVirtualP2PPort, uint32 nIP, uint16 nPort, bool bAllowUseOfPacketRelay)
 {
     return ((ISteamNetworking*)linux_side)->CreateListenSocket((int)nVirtualP2PPort, (uint32)nIP, (uint16)nPort, (bool)bAllowUseOfPacketRelay);

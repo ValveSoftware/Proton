@@ -1,6 +1,3 @@
-#ifdef __cplusplus
-extern "C" {
-#endif
 extern uint32 cppISteamUtils_SteamUtils006_GetSecondsSinceAppActive(void *);
 extern uint32 cppISteamUtils_SteamUtils006_GetSecondsSinceComputerActive(void *);
 extern EUniverse cppISteamUtils_SteamUtils006_GetConnectedUniverse(void *);
@@ -26,6 +23,3 @@ extern uint32 cppISteamUtils_SteamUtils006_GetEnteredGamepadTextLength(void *);
 extern bool cppISteamUtils_SteamUtils006_GetEnteredGamepadTextInput(void *, char *, uint32);
 extern const char * cppISteamUtils_SteamUtils006_GetSteamUILanguage(void *);
 extern bool cppISteamUtils_SteamUtils006_IsSteamRunningInVR(void *);
-#ifdef __cplusplus
-}
-#endif

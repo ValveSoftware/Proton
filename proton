@@ -8,6 +8,7 @@ import filecmp
 import json
 import os
 import shutil
+import errno
 import struct
 import subprocess
 import sys
@@ -18,10 +19,13 @@ from filelock import FileLock
 #To enable debug logging, copy "user_settings.sample.py" to "user_settings.py"
 #and edit it if needed.
 
-CURRENT_PREFIX_VERSION="3.16-1"
+CURRENT_PREFIX_VERSION="4.2-1"
 
 PFX="Proton: "
 ld_path_var = "LD_LIBRARY_PATH"
+
+def nonzero(s):
+    return len(s) > 0 and s != "0"
 
 def log(msg):
     sys.stderr.write(PFX + msg + os.linesep)
@@ -78,7 +82,7 @@ def upgrade_pfx(old_ver):
             log("Removing newer prefix")
             if old_proton_ver == "3.7" and not os.path.exists(os.environ["STEAM_COMPAT_DATA_PATH"] + "/tracked_files"):
                 #proton 3.7 did not generate tracked_files, so copy it into place first
-                shutil.copy(basedir + "/proton_3.7_tracked_files", os.environ["STEAM_COMPAT_DATA_PATH"] + "/tracked_files")
+                try_copy(basedir + "/proton_3.7_tracked_files", os.environ["STEAM_COMPAT_DATA_PATH"] + "/tracked_files")
             remove_tracked_files(os.environ["STEAM_COMPAT_DATA_PATH"])
             return
 
@@ -104,11 +108,21 @@ def makedirs(path):
         #already exists
         pass
 
+def try_copy(src, dst):
+    try:
+        shutil.copy(src, dst)
+    except PermissionError as e:
+        if e.errno == errno.EPERM:
+            #be forgiving about permissions errors; if it's a real problem, things will explode later anyway
+            log('Error while copying to \"' + dst + '\": ' + e.strerror)
+        else:
+            raise
+
 def real_copy(src, dst):
     if os.path.islink(src):
         os.symlink(os.readlink(src), dst)
     else:
-        shutil.copy(src,dst)
+        try_copy(src, dst)
 
 def mergedirs(src, dst, tracked_files):
     for src_dir, dirs, files in os.walk(src):
@@ -153,10 +167,18 @@ with dist_lock:
         tar = tarfile.open(basedir + "/proton_dist.tar.gz", mode="r:gz")
         tar.extractall(path=basedir + "/dist")
         tar.close()
-        shutil.copy(basedir + "/version", basedir + "/dist/")
+        try_copy(basedir + "/version", basedir + "/dist/")
 
 env = dict(os.environ)
-dlloverrides = {}
+dlloverrides = {"steam.exe": "b"} #always use our special built-in steam.exe
+
+if "HOST_LC_ALL" in env and len(env["HOST_LC_ALL"]) > 0:
+    #steam sets LC_ALL=C to help some games, but Wine requires the real value
+    #in order to do path conversion between win32 and host. steam sets
+    #HOST_LC_ALL to allow us to use the real value.
+    env["LC_ALL"] = env["HOST_LC_ALL"]
+else:
+    env.pop("LC_ALL", "")
 
 #for performance, logging is disabled by default; override with user_settings.py
 env["DXVK_LOG_LEVEL"] = "none"
@@ -185,7 +207,7 @@ with dist_lock:
 prefix = os.environ["STEAM_COMPAT_DATA_PATH"] + "/pfx/"
 env["WINEPREFIX"] = prefix
 
-if "PROTON_LOG" in env:
+if "PROTON_LOG" in env and nonzero(env["PROTON_LOG"]):
     env["WINEDEBUG"] = "+timestamp,+pid,+tid,+seh,+debugstr,+module"
 
 #load environment overrides
@@ -202,10 +224,10 @@ if os.path.exists(basedir + "/user_settings.py"):
 def check_environment(env_name, config_name):
     if not env_name in env:
         return False
-    if env[env_name] == "0" or len(env[env_name]) == 0:
-        config_opts.discard(config_name)
-    else:
+    if nonzero(env[env_name]):
         config_opts.add(config_name)
+    else:
+        config_opts.discard(config_name)
     return True
 
 if "STEAM_COMPAT_CONFIG" in os.environ:
@@ -219,10 +241,25 @@ if "wined3d11" in config_opts:
 if not check_environment("PROTON_USE_WINED3D", "wined3d"):
     check_environment("PROTON_USE_WINED3D11", "wined3d")
 check_environment("PROTON_NO_D3D11", "nod3d11")
+check_environment("PROTON_NO_D3D10", "nod3d10")
 check_environment("PROTON_NO_ESYNC", "noesync")
+check_environment("PROTON_FORCE_LARGE_ADDRESS_AWARE", "forcelgadd")
+check_environment("PROTON_OLD_GL_STRING", "oldglstr")
 
 if not "noesync" in config_opts:
     env["WINEESYNC"] = "1"
+
+if "oldglstr" in config_opts:
+    #mesa override
+    env["MESA_EXTENSION_MAX_YEAR"] = "2003"
+    #nvidia override
+    env["__GL_ExtensionStringVersion"] = "17700"
+
+if "forcelgadd" in config_opts:
+    #forcelgadd should be used just for testing whether a game is helped by
+    #setting LARGE_ADDRESS_AWARE. If it does, then add an AppDefault in the
+    #registry, so that it doesn't impact every executable in the prefix.
+    env["WINE_LARGE_ADDRESS_AWARE"] = "1"
 
 lfile = None
 if "SteamGameId" in env:
@@ -231,6 +268,13 @@ if "SteamGameId" in env:
         if os.path.exists(lfile_path):
             os.remove(lfile_path)
         lfile = open(lfile_path, "w+")
+        lfile.write("======================\n")
+        with open(basedir + "/version", "r") as f:
+            lfile.write("Proton: " + f.readline().strip() + "\n")
+        lfile.write("SteamGameId: " + env["SteamGameId"] + "\n")
+        lfile.write("Command: " + str(sys.argv[2:]) + "\n")
+        lfile.write("======================\n")
+        lfile.flush()
 else:
     env["WINEDEBUG"] = "-all"
 
@@ -291,16 +335,16 @@ with prefix_lock:
             dstfile = dst + "Steam/" + f
             if os.path.isfile(dstfile):
                 os.remove(dstfile)
-            shutil.copy(steamdir + "/legacycompat/" + f, dstfile)
+            try_copy(steamdir + "/legacycompat/" + f, dstfile)
 
     #copy openvr files into place
     dst = prefix + "/drive_c/vrclient/bin/"
     makedirs(dst)
-    shutil.copy(basedir + "/dist/lib/wine/fakedlls/vrclient.dll", dst)
-    shutil.copy(basedir + "/dist/lib64/wine/fakedlls/vrclient_x64.dll", dst)
+    try_copy(basedir + "/dist/lib/wine/fakedlls/vrclient.dll", dst)
+    try_copy(basedir + "/dist/lib64/wine/fakedlls/vrclient_x64.dll", dst)
 
-    shutil.copy(basedir + "/dist/lib/wine/dxvk/openvr_api_dxvk.dll", prefix + "/drive_c/windows/syswow64/")
-    shutil.copy(basedir + "/dist/lib64/wine/dxvk/openvr_api_dxvk.dll", prefix + "/drive_c/windows/system32/")
+    try_copy(basedir + "/dist/lib/wine/dxvk/openvr_api_dxvk.dll", prefix + "/drive_c/windows/syswow64/")
+    try_copy(basedir + "/dist/lib64/wine/dxvk/openvr_api_dxvk.dll", prefix + "/drive_c/windows/system32/")
 
     #parse linux openvr config and present it in win32 format to the app.
     #logic from openvr's CVRPathRegistry_Public::GetPaths
@@ -340,8 +384,8 @@ with prefix_lock:
 
             if vr_log is None:
                 vr_log = j["log"][0]
-        except (ValueError, OSError):
-            pass
+        except (TypeError, ValueError, OSError):
+            log("Missing or invalid openvrpaths.vrpath file! " + str(sys.exc_info()[1]))
 
     makedirs(prefix + "/drive_c/users/steamuser/Local Settings/Application Data/openvr")
 
@@ -402,6 +446,11 @@ if "nod3d11" in config_opts:
     if "dxgi" in dlloverrides:
         del dlloverrides["dxgi"]
 
+if "nod3d10" in config_opts:
+    dlloverrides["d3d10_1"] = ""
+    dlloverrides["d3d10"] = ""
+    dlloverrides["dxgi"] = ""
+
 s = ""
 for dll in dlloverrides:
     setting = dlloverrides[dll]
@@ -413,39 +462,6 @@ if "WINEDLLOVERRIDES" in os.environ:
     env["WINEDLLOVERRIDES"] = os.environ["WINEDLLOVERRIDES"] + ";" + s
 else:
     env["WINEDLLOVERRIDES"] = s
-
-ARCH_UNKNOWN=0
-ARCH_I386=1
-ARCH_X86_64=2
-def determine_architecture(path):
-    #algorithm from file's msdos magic file
-    try:
-        with open(path, "rb") as f:
-            magic = f.read(2)
-            if magic != b"MZ":
-                return ARCH_UNKNOWN
-            f.seek(0x18)
-            reloc = struct.unpack('<H', f.read(2))[0]
-            if reloc < 0x40:
-                #DOS
-                return ARCH_I386
-            f.seek(0x3c)
-            pe_offs = struct.unpack('<L', f.read(4))[0]
-            f.seek(pe_offs)
-            magic = f.read(4)
-            if magic != b"PE\0\0":
-                return ARCH_UNKNOWN
-            f.seek(pe_offs + 4)
-            arch = struct.unpack('<H', f.read(2))[0]
-            if arch == 0x8664:
-                return ARCH_X86_64
-            if arch == 0x014c:
-                return ARCH_I386
-            return ARCH_UNKNOWN
-    except OSError:
-        return ARCH_UNKNOWN
-
-game_arch = determine_architecture(sys.argv[2])
 
 def dump_dbg_env(f):
     f.write("PATH=\"" + env["PATH"] + "\" \\\n")
@@ -466,6 +482,8 @@ def dump_dbg_env(f):
         f.write("\tWINEDLLOVERRIDES=\"" + env["WINEDLLOVERRIDES"] + "\" \\\n")
     if "STEAM_COMPAT_CLIENT_INSTALL_PATH" in env:
         f.write("\tSTEAM_COMPAT_CLIENT_INSTALL_PATH=\"" + env["STEAM_COMPAT_CLIENT_INSTALL_PATH"] + "\" \\\n")
+    if "WINE_LARGE_ADDRESS_AWARE" in env:
+        f.write("\tWINE_LARGE_ADDRESS_AWARE=\"" + env["WINE_LARGE_ADDRESS_AWARE"] + "\" \\\n")
 
 def dump_dbg_scripts():
     exe_name = os.path.basename(sys.argv[2])
@@ -544,23 +562,16 @@ def dump_dbg_scripts():
                 f.write(" \"" + arg + "\"")
         f.write(")\n")
         dump_dbg_env(f)
-        if game_arch == ARCH_UNKNOWN:
-            f.write("\t\"" + wine_path + "\" start \"${@:-${DEF_CMD[@]}}\"\n")
-        else:
-            f.write("\t\"" + wine_path + "\" \"${@:-${DEF_CMD[@]}}\"\n")
+        f.write("\t\"" + wine_path + "\" steam.exe \"${@:-${DEF_CMD[@]}}\"\n")
     os.chmod(tmpdir + "run", 0o755)
 
 def run():
-    if "PROTON_DUMP_DEBUG_COMMANDS" in env:
+    if "PROTON_DUMP_DEBUG_COMMANDS" in env and nonzero(env["PROTON_DUMP_DEBUG_COMMANDS"]):
         try:
             dump_dbg_scripts()
         except OSError:
             log("Unable to write debug scripts! " + str(sys.exc_info()[1]))
-    if game_arch == ARCH_UNKNOWN:
-        #probably a batch script or something, hopefully start.exe can handle it
-        run_wine([wine_path, "start", "/unix"] + sys.argv[2:])
-    else:
-        run_wine([wine_path] + sys.argv[2:])
+    run_wine([wine_path, "steam"] + sys.argv[2:])
 
 if sys.version_info[0] == 2:
     binary_stdout = sys.stdout

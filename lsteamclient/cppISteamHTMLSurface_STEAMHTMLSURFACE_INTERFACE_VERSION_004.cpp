@@ -1,11 +1,12 @@
 #include "steam_defs.h"
 #include "steamworks_sdk_142/steam_api.h"
 #include "steamclient_private.h"
-#include "cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include "struct_converters_142.h"
+#define SDKVER_142
+#include "struct_converters.h"
+#include "cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004.h"
 bool cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_Init(void *linux_side)
 {
     return ((ISteamHTMLSurface*)linux_side)->Init();

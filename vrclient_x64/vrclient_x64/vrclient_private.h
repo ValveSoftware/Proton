@@ -1,4 +1,5 @@
 #include <stdint.h>
+#include <linux/limits.h>
 
 /* 32-bit Mac doesn't support Vulkan and thus DXVK */
 #if !defined(__APPLE__) || defined(__x86_64__)
@@ -36,7 +37,8 @@ typedef struct __winX winX;
 typedef struct __winX winX;
 
 void *create_win_interface(const char *name, void *linux_side);
-unsigned int steamclient_unix_path_to_dos_path(unsigned int api_result, char *inout, unsigned int inout_bytes);
+unsigned int vrclient_unix_path_to_dos_path(bool api_result, const char *src, char *dst, uint32_t dst_bytes);
+bool vrclient_dos_path_to_unix_path(const char *src, char *dst);
 void *create_LinuxMatchmakingServerListResponse(void *win);
 
 #ifndef __cplusplus

@@ -771,19 +771,19 @@ void __thiscall IVRChaperone_003_ForceBoundsVisible(void *_this, bool bForce)
     push_bool_parameter(bForce);
 }
 
-bool __thiscall IVRChaperoneSetup_005_CommitWorkingCopy(void *_this, EChaperoneConfigFile configFile)
+bool __thiscall IVRChaperoneSetup_006_CommitWorkingCopy(void *_this, EChaperoneConfigFile configFile)
 {
     push_ptr_parameter(_this);
     push_uint32_parameter(configFile);
     return 0;
 }
 
-void __thiscall IVRChaperoneSetup_005_RevertWorkingCopy(void *_this)
+void __thiscall IVRChaperoneSetup_006_RevertWorkingCopy(void *_this)
 {
     push_ptr_parameter(_this);
 }
 
-bool __thiscall IVRChaperoneSetup_005_GetWorkingPlayAreaSize(void *_this, float * pSizeX, float * pSizeZ)
+bool __thiscall IVRChaperoneSetup_006_GetWorkingPlayAreaSize(void *_this, float * pSizeX, float * pSizeZ)
 {
     push_ptr_parameter(_this);
     push_ptr_parameter(pSizeX);
@@ -791,14 +791,14 @@ bool __thiscall IVRChaperoneSetup_005_GetWorkingPlayAreaSize(void *_this, float 
     return 0;
 }
 
-bool __thiscall IVRChaperoneSetup_005_GetWorkingPlayAreaRect(void *_this, HmdQuad_t * rect)
+bool __thiscall IVRChaperoneSetup_006_GetWorkingPlayAreaRect(void *_this, HmdQuad_t * rect)
 {
     push_ptr_parameter(_this);
     push_ptr_parameter(rect);
     return 0;
 }
 
-bool __thiscall IVRChaperoneSetup_005_GetWorkingCollisionBoundsInfo(void *_this, HmdQuad_t * pQuadsBuffer, uint32_t * punQuadsCount)
+bool __thiscall IVRChaperoneSetup_006_GetWorkingCollisionBoundsInfo(void *_this, HmdQuad_t * pQuadsBuffer, uint32_t * punQuadsCount)
 {
     push_ptr_parameter(_this);
     push_ptr_parameter(pQuadsBuffer);
@@ -806,7 +806,7 @@ bool __thiscall IVRChaperoneSetup_005_GetWorkingCollisionBoundsInfo(void *_this,
     return 0;
 }
 
-bool __thiscall IVRChaperoneSetup_005_GetLiveCollisionBoundsInfo(void *_this, HmdQuad_t * pQuadsBuffer, uint32_t * punQuadsCount)
+bool __thiscall IVRChaperoneSetup_006_GetLiveCollisionBoundsInfo(void *_this, HmdQuad_t * pQuadsBuffer, uint32_t * punQuadsCount)
 {
     push_ptr_parameter(_this);
     push_ptr_parameter(pQuadsBuffer);
@@ -814,91 +814,67 @@ bool __thiscall IVRChaperoneSetup_005_GetLiveCollisionBoundsInfo(void *_this, Hm
     return 0;
 }
 
-bool __thiscall IVRChaperoneSetup_005_GetWorkingSeatedZeroPoseToRawTrackingPose(void *_this, HmdMatrix34_t * pmatSeatedZeroPoseToRawTrackingPose)
+bool __thiscall IVRChaperoneSetup_006_GetWorkingSeatedZeroPoseToRawTrackingPose(void *_this, HmdMatrix34_t * pmatSeatedZeroPoseToRawTrackingPose)
 {
     push_ptr_parameter(_this);
     push_ptr_parameter(pmatSeatedZeroPoseToRawTrackingPose);
     return 0;
 }
 
-bool __thiscall IVRChaperoneSetup_005_GetWorkingStandingZeroPoseToRawTrackingPose(void *_this, HmdMatrix34_t * pmatStandingZeroPoseToRawTrackingPose)
+bool __thiscall IVRChaperoneSetup_006_GetWorkingStandingZeroPoseToRawTrackingPose(void *_this, HmdMatrix34_t * pmatStandingZeroPoseToRawTrackingPose)
 {
     push_ptr_parameter(_this);
     push_ptr_parameter(pmatStandingZeroPoseToRawTrackingPose);
     return 0;
 }
 
-void __thiscall IVRChaperoneSetup_005_SetWorkingPlayAreaSize(void *_this, float sizeX, float sizeZ)
+void __thiscall IVRChaperoneSetup_006_SetWorkingPlayAreaSize(void *_this, float sizeX, float sizeZ)
 {
     push_ptr_parameter(_this);
     push_float_parameter(sizeX);
     push_float_parameter(sizeZ);
 }
 
-void __thiscall IVRChaperoneSetup_005_SetWorkingCollisionBoundsInfo(void *_this, HmdQuad_t * pQuadsBuffer, uint32_t unQuadsCount)
+void __thiscall IVRChaperoneSetup_006_SetWorkingCollisionBoundsInfo(void *_this, HmdQuad_t * pQuadsBuffer, uint32_t unQuadsCount)
 {
     push_ptr_parameter(_this);
     push_ptr_parameter(pQuadsBuffer);
     push_uint32_parameter(unQuadsCount);
 }
 
-void __thiscall IVRChaperoneSetup_005_SetWorkingSeatedZeroPoseToRawTrackingPose(void *_this, HmdMatrix34_t * pMatSeatedZeroPoseToRawTrackingPose)
+void __thiscall IVRChaperoneSetup_006_SetWorkingPerimeter(void *_this, HmdVector2_t * pPointBuffer, uint32_t unPointCount)
+{
+    push_ptr_parameter(_this);
+    push_ptr_parameter(pPointBuffer);
+    push_uint32_parameter(unPointCount);
+}
+
+void __thiscall IVRChaperoneSetup_006_SetWorkingSeatedZeroPoseToRawTrackingPose(void *_this, HmdMatrix34_t * pMatSeatedZeroPoseToRawTrackingPose)
 {
     push_ptr_parameter(_this);
     push_ptr_parameter(pMatSeatedZeroPoseToRawTrackingPose);
 }
 
-void __thiscall IVRChaperoneSetup_005_SetWorkingStandingZeroPoseToRawTrackingPose(void *_this, HmdMatrix34_t * pMatStandingZeroPoseToRawTrackingPose)
+void __thiscall IVRChaperoneSetup_006_SetWorkingStandingZeroPoseToRawTrackingPose(void *_this, HmdMatrix34_t * pMatStandingZeroPoseToRawTrackingPose)
 {
     push_ptr_parameter(_this);
     push_ptr_parameter(pMatStandingZeroPoseToRawTrackingPose);
 }
 
-void __thiscall IVRChaperoneSetup_005_ReloadFromDisk(void *_this, EChaperoneConfigFile configFile)
+void __thiscall IVRChaperoneSetup_006_ReloadFromDisk(void *_this, EChaperoneConfigFile configFile)
 {
     push_ptr_parameter(_this);
     push_uint32_parameter(configFile);
 }
 
-bool __thiscall IVRChaperoneSetup_005_GetLiveSeatedZeroPoseToRawTrackingPose(void *_this, HmdMatrix34_t * pmatSeatedZeroPoseToRawTrackingPose)
+bool __thiscall IVRChaperoneSetup_006_GetLiveSeatedZeroPoseToRawTrackingPose(void *_this, HmdMatrix34_t * pmatSeatedZeroPoseToRawTrackingPose)
 {
     push_ptr_parameter(_this);
     push_ptr_parameter(pmatSeatedZeroPoseToRawTrackingPose);
     return 0;
 }
 
-void __thiscall IVRChaperoneSetup_005_SetWorkingCollisionBoundsTagsInfo(void *_this, uint8_t * pTagsBuffer, uint32_t unTagCount)
-{
-    push_ptr_parameter(_this);
-    push_ptr_parameter(pTagsBuffer);
-    push_uint32_parameter(unTagCount);
-}
-
-bool __thiscall IVRChaperoneSetup_005_GetLiveCollisionBoundsTagsInfo(void *_this, uint8_t * pTagsBuffer, uint32_t * punTagCount)
-{
-    push_ptr_parameter(_this);
-    push_ptr_parameter(pTagsBuffer);
-    push_ptr_parameter(punTagCount);
-    return 0;
-}
-
-bool __thiscall IVRChaperoneSetup_005_SetWorkingPhysicalBoundsInfo(void *_this, HmdQuad_t * pQuadsBuffer, uint32_t unQuadsCount)
-{
-    push_ptr_parameter(_this);
-    push_ptr_parameter(pQuadsBuffer);
-    push_uint32_parameter(unQuadsCount);
-    return 0;
-}
-
-bool __thiscall IVRChaperoneSetup_005_GetLivePhysicalBoundsInfo(void *_this, HmdQuad_t * pQuadsBuffer, uint32_t * punQuadsCount)
-{
-    push_ptr_parameter(_this);
-    push_ptr_parameter(pQuadsBuffer);
-    push_ptr_parameter(punQuadsCount);
-    return 0;
-}
-
-bool __thiscall IVRChaperoneSetup_005_ExportLiveToBuffer(void *_this, char * pBuffer, uint32_t * pnBufferLength)
+bool __thiscall IVRChaperoneSetup_006_ExportLiveToBuffer(void *_this, char * pBuffer, uint32_t * pnBufferLength)
 {
     push_ptr_parameter(_this);
     push_ptr_parameter(pBuffer);
@@ -906,12 +882,22 @@ bool __thiscall IVRChaperoneSetup_005_ExportLiveToBuffer(void *_this, char * pBu
     return 0;
 }
 
-bool __thiscall IVRChaperoneSetup_005_ImportFromBufferToWorking(void *_this, const char * pBuffer, uint32_t nImportFlags)
+bool __thiscall IVRChaperoneSetup_006_ImportFromBufferToWorking(void *_this, const char * pBuffer, uint32_t nImportFlags)
 {
     push_ptr_parameter(_this);
     push_ptr_parameter(pBuffer);
     push_uint32_parameter(nImportFlags);
     return 0;
+}
+
+void __thiscall IVRChaperoneSetup_006_ShowWorkingSetPreview(void *_this)
+{
+    push_ptr_parameter(_this);
+}
+
+void __thiscall IVRChaperoneSetup_006_HideWorkingSetPreview(void *_this)
+{
+    push_ptr_parameter(_this);
 }
 
 void __thiscall IVRCompositor_022_SetTrackingSpace(void *_this, ETrackingUniverseOrigin eOrigin)
@@ -1205,6 +1191,12 @@ EVRCompositorError __thiscall IVRCompositor_022_SubmitExplicitTimingData(void *_
     return 0;
 }
 
+bool __thiscall IVRCompositor_022_IsMotionSmoothingEnabled(void *_this)
+{
+    push_ptr_parameter(_this);
+    return 0;
+}
+
 EVRNotificationError __thiscall IVRNotifications_002_CreateNotification(void *_this, VROverlayHandle_t ulOverlayHandle, uint64_t ulUserValue, EVRNotificationType type, const char * pchText, EVRNotificationStyle style, NotificationBitmap_t * pImage, VRNotificationId * pNotificationId)
 {
     push_ptr_parameter(_this);
@@ -1222,6 +1214,1570 @@ EVRNotificationError __thiscall IVRNotifications_002_RemoveNotification(void *_t
 {
     push_ptr_parameter(_this);
     push_uint32_parameter(notificationId);
+    return 0;
+}
+
+EVROverlayError __thiscall IVROverlay_019_FindOverlay(void *_this, const char * pchOverlayKey, VROverlayHandle_t * pOverlayHandle)
+{
+    push_ptr_parameter(_this);
+    push_ptr_parameter(pchOverlayKey);
+    push_ptr_parameter(pOverlayHandle);
+    return 0;
+}
+
+EVROverlayError __thiscall IVROverlay_019_CreateOverlay(void *_this, const char * pchOverlayKey, const char * pchOverlayName, VROverlayHandle_t * pOverlayHandle)
+{
+    push_ptr_parameter(_this);
+    push_ptr_parameter(pchOverlayKey);
+    push_ptr_parameter(pchOverlayName);
+    push_ptr_parameter(pOverlayHandle);
+    return 0;
+}
+
+EVROverlayError __thiscall IVROverlay_019_DestroyOverlay(void *_this, VROverlayHandle_t ulOverlayHandle)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(ulOverlayHandle);
+    return 0;
+}
+
+EVROverlayError __thiscall IVROverlay_019_SetHighQualityOverlay(void *_this, VROverlayHandle_t ulOverlayHandle)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(ulOverlayHandle);
+    return 0;
+}
+
+VROverlayHandle_t __thiscall IVROverlay_019_GetHighQualityOverlay(void *_this)
+{
+    push_ptr_parameter(_this);
+    return 0;
+}
+
+uint32_t __thiscall IVROverlay_019_GetOverlayKey(void *_this, VROverlayHandle_t ulOverlayHandle, char * pchValue, uint32_t unBufferSize, EVROverlayError * pError)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(ulOverlayHandle);
+    push_ptr_parameter(pchValue);
+    push_uint32_parameter(unBufferSize);
+    push_ptr_parameter(pError);
+    return 0;
+}
+
+uint32_t __thiscall IVROverlay_019_GetOverlayName(void *_this, VROverlayHandle_t ulOverlayHandle, char * pchValue, uint32_t unBufferSize, EVROverlayError * pError)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(ulOverlayHandle);
+    push_ptr_parameter(pchValue);
+    push_uint32_parameter(unBufferSize);
+    push_ptr_parameter(pError);
+    return 0;
+}
+
+EVROverlayError __thiscall IVROverlay_019_SetOverlayName(void *_this, VROverlayHandle_t ulOverlayHandle, const char * pchName)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(ulOverlayHandle);
+    push_ptr_parameter(pchName);
+    return 0;
+}
+
+EVROverlayError __thiscall IVROverlay_019_GetOverlayImageData(void *_this, VROverlayHandle_t ulOverlayHandle, void * pvBuffer, uint32_t unBufferSize, uint32_t * punWidth, uint32_t * punHeight)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(ulOverlayHandle);
+    push_ptr_parameter(pvBuffer);
+    push_uint32_parameter(unBufferSize);
+    push_ptr_parameter(punWidth);
+    push_ptr_parameter(punHeight);
+    return 0;
+}
+
+const char * __thiscall IVROverlay_019_GetOverlayErrorNameFromEnum(void *_this, EVROverlayError error)
+{
+    push_ptr_parameter(_this);
+    push_uint32_parameter(error);
+    return 0;
+}
+
+EVROverlayError __thiscall IVROverlay_019_SetOverlayRenderingPid(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unPID)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(ulOverlayHandle);
+    push_uint32_parameter(unPID);
+    return 0;
+}
+
+uint32_t __thiscall IVROverlay_019_GetOverlayRenderingPid(void *_this, VROverlayHandle_t ulOverlayHandle)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(ulOverlayHandle);
+    return 0;
+}
+
+EVROverlayError __thiscall IVROverlay_019_SetOverlayFlag(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayFlags eOverlayFlag, bool bEnabled)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(ulOverlayHandle);
+    push_uint32_parameter(eOverlayFlag);
+    push_bool_parameter(bEnabled);
+    return 0;
+}
+
+EVROverlayError __thiscall IVROverlay_019_GetOverlayFlag(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayFlags eOverlayFlag, bool * pbEnabled)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(ulOverlayHandle);
+    push_uint32_parameter(eOverlayFlag);
+    push_ptr_parameter(pbEnabled);
+    return 0;
+}
+
+EVROverlayError __thiscall IVROverlay_019_SetOverlayColor(void *_this, VROverlayHandle_t ulOverlayHandle, float fRed, float fGreen, float fBlue)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(ulOverlayHandle);
+    push_float_parameter(fRed);
+    push_float_parameter(fGreen);
+    push_float_parameter(fBlue);
+    return 0;
+}
+
+EVROverlayError __thiscall IVROverlay_019_GetOverlayColor(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfRed, float * pfGreen, float * pfBlue)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(ulOverlayHandle);
+    push_ptr_parameter(pfRed);
+    push_ptr_parameter(pfGreen);
+    push_ptr_parameter(pfBlue);
+    return 0;
+}
+
+EVROverlayError __thiscall IVROverlay_019_SetOverlayAlpha(void *_this, VROverlayHandle_t ulOverlayHandle, float fAlpha)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(ulOverlayHandle);
+    push_float_parameter(fAlpha);
+    return 0;
+}
+
+EVROverlayError __thiscall IVROverlay_019_GetOverlayAlpha(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfAlpha)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(ulOverlayHandle);
+    push_ptr_parameter(pfAlpha);
+    return 0;
+}
+
+EVROverlayError __thiscall IVROverlay_019_SetOverlayTexelAspect(void *_this, VROverlayHandle_t ulOverlayHandle, float fTexelAspect)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(ulOverlayHandle);
+    push_float_parameter(fTexelAspect);
+    return 0;
+}
+
+EVROverlayError __thiscall IVROverlay_019_GetOverlayTexelAspect(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfTexelAspect)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(ulOverlayHandle);
+    push_ptr_parameter(pfTexelAspect);
+    return 0;
+}
+
+EVROverlayError __thiscall IVROverlay_019_SetOverlaySortOrder(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unSortOrder)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(ulOverlayHandle);
+    push_uint32_parameter(unSortOrder);
+    return 0;
+}
+
+EVROverlayError __thiscall IVROverlay_019_GetOverlaySortOrder(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * punSortOrder)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(ulOverlayHandle);
+    push_ptr_parameter(punSortOrder);
+    return 0;
+}
+
+EVROverlayError __thiscall IVROverlay_019_SetOverlayWidthInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float fWidthInMeters)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(ulOverlayHandle);
+    push_float_parameter(fWidthInMeters);
+    return 0;
+}
+
+EVROverlayError __thiscall IVROverlay_019_GetOverlayWidthInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfWidthInMeters)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(ulOverlayHandle);
+    push_ptr_parameter(pfWidthInMeters);
+    return 0;
+}
+
+EVROverlayError __thiscall IVROverlay_019_SetOverlayAutoCurveDistanceRangeInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float fMinDistanceInMeters, float fMaxDistanceInMeters)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(ulOverlayHandle);
+    push_float_parameter(fMinDistanceInMeters);
+    push_float_parameter(fMaxDistanceInMeters);
+    return 0;
+}
+
+EVROverlayError __thiscall IVROverlay_019_GetOverlayAutoCurveDistanceRangeInMeters(void *_this, VROverlayHandle_t ulOverlayHandle, float * pfMinDistanceInMeters, float * pfMaxDistanceInMeters)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(ulOverlayHandle);
+    push_ptr_parameter(pfMinDistanceInMeters);
+    push_ptr_parameter(pfMaxDistanceInMeters);
+    return 0;
+}
+
+EVROverlayError __thiscall IVROverlay_019_SetOverlayTextureColorSpace(void *_this, VROverlayHandle_t ulOverlayHandle, EColorSpace eTextureColorSpace)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(ulOverlayHandle);
+    push_uint32_parameter(eTextureColorSpace);
+    return 0;
+}
+
+EVROverlayError __thiscall IVROverlay_019_GetOverlayTextureColorSpace(void *_this, VROverlayHandle_t ulOverlayHandle, EColorSpace * peTextureColorSpace)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(ulOverlayHandle);
+    push_ptr_parameter(peTextureColorSpace);
+    return 0;
+}
+
+EVROverlayError __thiscall IVROverlay_019_SetOverlayTextureBounds(void *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t * pOverlayTextureBounds)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(ulOverlayHandle);
+    push_ptr_parameter(pOverlayTextureBounds);
+    return 0;
+}
+
+EVROverlayError __thiscall IVROverlay_019_GetOverlayTextureBounds(void *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t * pOverlayTextureBounds)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(ulOverlayHandle);
+    push_ptr_parameter(pOverlayTextureBounds);
+    return 0;
+}
+
+uint32_t __thiscall IVROverlay_019_GetOverlayRenderModel(void *_this, VROverlayHandle_t ulOverlayHandle, char * pchValue, uint32_t unBufferSize, HmdColor_t * pColor, EVROverlayError * pError)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(ulOverlayHandle);
+    push_ptr_parameter(pchValue);
+    push_uint32_parameter(unBufferSize);
+    push_ptr_parameter(pColor);
+    push_ptr_parameter(pError);
+    return 0;
+}
+
+EVROverlayError __thiscall IVROverlay_019_SetOverlayRenderModel(void *_this, VROverlayHandle_t ulOverlayHandle, const char * pchRenderModel, HmdColor_t * pColor)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(ulOverlayHandle);
+    push_ptr_parameter(pchRenderModel);
+    push_ptr_parameter(pColor);
+    return 0;
+}
+
+EVROverlayError __thiscall IVROverlay_019_GetOverlayTransformType(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayTransformType * peTransformType)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(ulOverlayHandle);
+    push_ptr_parameter(peTransformType);
+    return 0;
+}
+
+EVROverlayError __thiscall IVROverlay_019_SetOverlayTransformAbsolute(void *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin eTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToOverlayTransform)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(ulOverlayHandle);
+    push_uint32_parameter(eTrackingOrigin);
+    push_ptr_parameter(pmatTrackingOriginToOverlayTransform);
+    return 0;
+}
+
+EVROverlayError __thiscall IVROverlay_019_GetOverlayTransformAbsolute(void *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin * peTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToOverlayTransform)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(ulOverlayHandle);
+    push_ptr_parameter(peTrackingOrigin);
+    push_ptr_parameter(pmatTrackingOriginToOverlayTransform);
+    return 0;
+}
+
+EVROverlayError __thiscall IVROverlay_019_SetOverlayTransformTrackedDeviceRelative(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unTrackedDevice, HmdMatrix34_t * pmatTrackedDeviceToOverlayTransform)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(ulOverlayHandle);
+    push_uint32_parameter(unTrackedDevice);
+    push_ptr_parameter(pmatTrackedDeviceToOverlayTransform);
+    return 0;
+}
+
+EVROverlayError __thiscall IVROverlay_019_GetOverlayTransformTrackedDeviceRelative(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t * punTrackedDevice, HmdMatrix34_t * pmatTrackedDeviceToOverlayTransform)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(ulOverlayHandle);
+    push_ptr_parameter(punTrackedDevice);
+    push_ptr_parameter(pmatTrackedDeviceToOverlayTransform);
+    return 0;
+}
+
+EVROverlayError __thiscall IVROverlay_019_SetOverlayTransformTrackedDeviceComponent(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unDeviceIndex, const char * pchComponentName)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(ulOverlayHandle);
+    push_uint32_parameter(unDeviceIndex);
+    push_ptr_parameter(pchComponentName);
+    return 0;
+}
+
+EVROverlayError __thiscall IVROverlay_019_GetOverlayTransformTrackedDeviceComponent(void *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t * punDeviceIndex, char * pchComponentName, uint32_t unComponentNameSize)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(ulOverlayHandle);
+    push_ptr_parameter(punDeviceIndex);
+    push_ptr_parameter(pchComponentName);
+    push_uint32_parameter(unComponentNameSize);
+    return 0;
+}
+
+EVROverlayError __thiscall IVROverlay_019_GetOverlayTransformOverlayRelative(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayHandle_t * ulOverlayHandleParent, HmdMatrix34_t * pmatParentOverlayToOverlayTransform)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(ulOverlayHandle);
+    push_ptr_parameter(ulOverlayHandleParent);
+    push_ptr_parameter(pmatParentOverlayToOverlayTransform);
+    return 0;
+}
+
+EVROverlayError __thiscall IVROverlay_019_SetOverlayTransformOverlayRelative(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayHandle_t ulOverlayHandleParent, HmdMatrix34_t * pmatParentOverlayToOverlayTransform)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(ulOverlayHandle);
+    push_uint64_parameter(ulOverlayHandleParent);
+    push_ptr_parameter(pmatParentOverlayToOverlayTransform);
+    return 0;
+}
+
+EVROverlayError __thiscall IVROverlay_019_ShowOverlay(void *_this, VROverlayHandle_t ulOverlayHandle)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(ulOverlayHandle);
+    return 0;
+}
+
+EVROverlayError __thiscall IVROverlay_019_HideOverlay(void *_this, VROverlayHandle_t ulOverlayHandle)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(ulOverlayHandle);
+    return 0;
+}
+
+bool __thiscall IVROverlay_019_IsOverlayVisible(void *_this, VROverlayHandle_t ulOverlayHandle)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(ulOverlayHandle);
+    return 0;
+}
+
+EVROverlayError __thiscall IVROverlay_019_GetTransformForOverlayCoordinates(void *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin eTrackingOrigin, HmdVector2_t coordinatesInOverlay, HmdMatrix34_t * pmatTransform)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(ulOverlayHandle);
+    push_uint32_parameter(eTrackingOrigin);
+    push_HmdVector2_parameter(coordinatesInOverlay);
+    push_ptr_parameter(pmatTransform);
+    return 0;
+}
+
+bool __thiscall IVROverlay_019_PollNextOverlayEvent(void *_this, VROverlayHandle_t ulOverlayHandle, VREvent_t * pEvent, uint32_t uncbVREvent)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(ulOverlayHandle);
+    push_ptr_parameter(pEvent);
+    push_uint32_parameter(uncbVREvent);
+    return 0;
+}
+
+EVROverlayError __thiscall IVROverlay_019_GetOverlayInputMethod(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayInputMethod * peInputMethod)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(ulOverlayHandle);
+    push_ptr_parameter(peInputMethod);
+    return 0;
+}
+
+EVROverlayError __thiscall IVROverlay_019_SetOverlayInputMethod(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayInputMethod eInputMethod)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(ulOverlayHandle);
+    push_uint32_parameter(eInputMethod);
+    return 0;
+}
+
+EVROverlayError __thiscall IVROverlay_019_GetOverlayMouseScale(void *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvecMouseScale)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(ulOverlayHandle);
+    push_ptr_parameter(pvecMouseScale);
+    return 0;
+}
+
+EVROverlayError __thiscall IVROverlay_019_SetOverlayMouseScale(void *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvecMouseScale)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(ulOverlayHandle);
+    push_ptr_parameter(pvecMouseScale);
+    return 0;
+}
+
+bool __thiscall IVROverlay_019_ComputeOverlayIntersection(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayIntersectionParams_t * pParams, VROverlayIntersectionResults_t * pResults)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(ulOverlayHandle);
+    push_ptr_parameter(pParams);
+    push_ptr_parameter(pResults);
+    return 0;
+}
+
+bool __thiscall IVROverlay_019_IsHoverTargetOverlay(void *_this, VROverlayHandle_t ulOverlayHandle)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(ulOverlayHandle);
+    return 0;
+}
+
+VROverlayHandle_t __thiscall IVROverlay_019_GetGamepadFocusOverlay(void *_this)
+{
+    push_ptr_parameter(_this);
+    return 0;
+}
+
+EVROverlayError __thiscall IVROverlay_019_SetGamepadFocusOverlay(void *_this, VROverlayHandle_t ulNewFocusOverlay)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(ulNewFocusOverlay);
+    return 0;
+}
+
+EVROverlayError __thiscall IVROverlay_019_SetOverlayNeighbor(void *_this, EOverlayDirection eDirection, VROverlayHandle_t ulFrom, VROverlayHandle_t ulTo)
+{
+    push_ptr_parameter(_this);
+    push_uint32_parameter(eDirection);
+    push_uint64_parameter(ulFrom);
+    push_uint64_parameter(ulTo);
+    return 0;
+}
+
+EVROverlayError __thiscall IVROverlay_019_MoveGamepadFocusToNeighbor(void *_this, EOverlayDirection eDirection, VROverlayHandle_t ulFrom)
+{
+    push_ptr_parameter(_this);
+    push_uint32_parameter(eDirection);
+    push_uint64_parameter(ulFrom);
+    return 0;
+}
+
+EVROverlayError __thiscall IVROverlay_019_SetOverlayDualAnalogTransform(void *_this, VROverlayHandle_t ulOverlay, EDualAnalogWhich eWhich, HmdVector2_t * pvCenter, float fRadius)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(ulOverlay);
+    push_uint32_parameter(eWhich);
+    push_ptr_parameter(pvCenter);
+    push_float_parameter(fRadius);
+    return 0;
+}
+
+EVROverlayError __thiscall IVROverlay_019_GetOverlayDualAnalogTransform(void *_this, VROverlayHandle_t ulOverlay, EDualAnalogWhich eWhich, HmdVector2_t * pvCenter, float * pfRadius)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(ulOverlay);
+    push_uint32_parameter(eWhich);
+    push_ptr_parameter(pvCenter);
+    push_ptr_parameter(pfRadius);
+    return 0;
+}
+
+EVROverlayError __thiscall IVROverlay_019_SetOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle, Texture_t * pTexture)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(ulOverlayHandle);
+    push_ptr_parameter(pTexture);
+    return 0;
+}
+
+EVROverlayError __thiscall IVROverlay_019_ClearOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(ulOverlayHandle);
+    return 0;
+}
+
+EVROverlayError __thiscall IVROverlay_019_SetOverlayRaw(void *_this, VROverlayHandle_t ulOverlayHandle, void * pvBuffer, uint32_t unWidth, uint32_t unHeight, uint32_t unDepth)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(ulOverlayHandle);
+    push_ptr_parameter(pvBuffer);
+    push_uint32_parameter(unWidth);
+    push_uint32_parameter(unHeight);
+    push_uint32_parameter(unDepth);
+    return 0;
+}
+
+EVROverlayError __thiscall IVROverlay_019_SetOverlayFromFile(void *_this, VROverlayHandle_t ulOverlayHandle, const char * pchFilePath)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(ulOverlayHandle);
+    push_ptr_parameter(pchFilePath);
+    return 0;
+}
+
+EVROverlayError __thiscall IVROverlay_019_GetOverlayTexture(void *_this, VROverlayHandle_t ulOverlayHandle, void ** pNativeTextureHandle, void * pNativeTextureRef, uint32_t * pWidth, uint32_t * pHeight, uint32_t * pNativeFormat, ETextureType * pAPIType, EColorSpace * pColorSpace, VRTextureBounds_t * pTextureBounds)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(ulOverlayHandle);
+    push_ptr_parameter(pNativeTextureHandle);
+    push_ptr_parameter(pNativeTextureRef);
+    push_ptr_parameter(pWidth);
+    push_ptr_parameter(pHeight);
+    push_ptr_parameter(pNativeFormat);
+    push_ptr_parameter(pAPIType);
+    push_ptr_parameter(pColorSpace);
+    push_ptr_parameter(pTextureBounds);
+    return 0;
+}
+
+EVROverlayError __thiscall IVROverlay_019_ReleaseNativeOverlayHandle(void *_this, VROverlayHandle_t ulOverlayHandle, void * pNativeTextureHandle)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(ulOverlayHandle);
+    push_ptr_parameter(pNativeTextureHandle);
+    return 0;
+}
+
+EVROverlayError __thiscall IVROverlay_019_GetOverlayTextureSize(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * pWidth, uint32_t * pHeight)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(ulOverlayHandle);
+    push_ptr_parameter(pWidth);
+    push_ptr_parameter(pHeight);
+    return 0;
+}
+
+EVROverlayError __thiscall IVROverlay_019_CreateDashboardOverlay(void *_this, const char * pchOverlayKey, const char * pchOverlayFriendlyName, VROverlayHandle_t * pMainHandle, VROverlayHandle_t * pThumbnailHandle)
+{
+    push_ptr_parameter(_this);
+    push_ptr_parameter(pchOverlayKey);
+    push_ptr_parameter(pchOverlayFriendlyName);
+    push_ptr_parameter(pMainHandle);
+    push_ptr_parameter(pThumbnailHandle);
+    return 0;
+}
+
+bool __thiscall IVROverlay_019_IsDashboardVisible(void *_this)
+{
+    push_ptr_parameter(_this);
+    return 0;
+}
+
+bool __thiscall IVROverlay_019_IsActiveDashboardOverlay(void *_this, VROverlayHandle_t ulOverlayHandle)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(ulOverlayHandle);
+    return 0;
+}
+
+EVROverlayError __thiscall IVROverlay_019_SetDashboardOverlaySceneProcess(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unProcessId)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(ulOverlayHandle);
+    push_uint32_parameter(unProcessId);
+    return 0;
+}
+
+EVROverlayError __thiscall IVROverlay_019_GetDashboardOverlaySceneProcess(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * punProcessId)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(ulOverlayHandle);
+    push_ptr_parameter(punProcessId);
+    return 0;
+}
+
+void __thiscall IVROverlay_019_ShowDashboard(void *_this, const char * pchOverlayToShow)
+{
+    push_ptr_parameter(_this);
+    push_ptr_parameter(pchOverlayToShow);
+}
+
+TrackedDeviceIndex_t __thiscall IVROverlay_019_GetPrimaryDashboardDevice(void *_this)
+{
+    push_ptr_parameter(_this);
+    return 0;
+}
+
+EVROverlayError __thiscall IVROverlay_019_ShowKeyboard(void *_this, EGamepadTextInputMode eInputMode, EGamepadTextInputLineMode eLineInputMode, const char * pchDescription, uint32_t unCharMax, const char * pchExistingText, bool bUseMinimalMode, uint64_t uUserValue)
+{
+    push_ptr_parameter(_this);
+    push_uint32_parameter(eInputMode);
+    push_uint32_parameter(eLineInputMode);
+    push_ptr_parameter(pchDescription);
+    push_uint32_parameter(unCharMax);
+    push_ptr_parameter(pchExistingText);
+    push_bool_parameter(bUseMinimalMode);
+    push_uint64_parameter(uUserValue);
+    return 0;
+}
+
+EVROverlayError __thiscall IVROverlay_019_ShowKeyboardForOverlay(void *_this, VROverlayHandle_t ulOverlayHandle, EGamepadTextInputMode eInputMode, EGamepadTextInputLineMode eLineInputMode, const char * pchDescription, uint32_t unCharMax, const char * pchExistingText, bool bUseMinimalMode, uint64_t uUserValue)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(ulOverlayHandle);
+    push_uint32_parameter(eInputMode);
+    push_uint32_parameter(eLineInputMode);
+    push_ptr_parameter(pchDescription);
+    push_uint32_parameter(unCharMax);
+    push_ptr_parameter(pchExistingText);
+    push_bool_parameter(bUseMinimalMode);
+    push_uint64_parameter(uUserValue);
+    return 0;
+}
+
+uint32_t __thiscall IVROverlay_019_GetKeyboardText(void *_this, char * pchText, uint32_t cchText)
+{
+    push_ptr_parameter(_this);
+    push_ptr_parameter(pchText);
+    push_uint32_parameter(cchText);
+    return 0;
+}
+
+void __thiscall IVROverlay_019_HideKeyboard(void *_this)
+{
+    push_ptr_parameter(_this);
+}
+
+void __thiscall IVROverlay_019_SetKeyboardTransformAbsolute(void *_this, ETrackingUniverseOrigin eTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToKeyboardTransform)
+{
+    push_ptr_parameter(_this);
+    push_uint32_parameter(eTrackingOrigin);
+    push_ptr_parameter(pmatTrackingOriginToKeyboardTransform);
+}
+
+void __thiscall IVROverlay_019_SetKeyboardPositionForOverlay(void *_this, VROverlayHandle_t ulOverlayHandle, HmdRect2_t avoidRect)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(ulOverlayHandle);
+    push_HmdRect2_parameter(avoidRect);
+}
+
+EVROverlayError __thiscall IVROverlay_019_SetOverlayIntersectionMask(void *_this, VROverlayHandle_t ulOverlayHandle, VROverlayIntersectionMaskPrimitive_t * pMaskPrimitives, uint32_t unNumMaskPrimitives, uint32_t unPrimitiveSize)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(ulOverlayHandle);
+    push_ptr_parameter(pMaskPrimitives);
+    push_uint32_parameter(unNumMaskPrimitives);
+    push_uint32_parameter(unPrimitiveSize);
+    return 0;
+}
+
+EVROverlayError __thiscall IVROverlay_019_GetOverlayFlags(void *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * pFlags)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(ulOverlayHandle);
+    push_ptr_parameter(pFlags);
+    return 0;
+}
+
+VRMessageOverlayResponse __thiscall IVROverlay_019_ShowMessageOverlay(void *_this, const char * pchText, const char * pchCaption, const char * pchButton0Text, const char * pchButton1Text, const char * pchButton2Text, const char * pchButton3Text)
+{
+    push_ptr_parameter(_this);
+    push_ptr_parameter(pchText);
+    push_ptr_parameter(pchCaption);
+    push_ptr_parameter(pchButton0Text);
+    push_ptr_parameter(pchButton1Text);
+    push_ptr_parameter(pchButton2Text);
+    push_ptr_parameter(pchButton3Text);
+    return 0;
+}
+
+void __thiscall IVROverlay_019_CloseMessageOverlay(void *_this)
+{
+    push_ptr_parameter(_this);
+}
+
+EVRRenderModelError __thiscall IVRRenderModels_006_LoadRenderModel_Async(void *_this, const char * pchRenderModelName, RenderModel_t ** ppRenderModel)
+{
+    push_ptr_parameter(_this);
+    push_ptr_parameter(pchRenderModelName);
+    push_ptr_parameter(ppRenderModel);
+    return 0;
+}
+
+void __thiscall IVRRenderModels_006_FreeRenderModel(void *_this, RenderModel_t * pRenderModel)
+{
+    push_ptr_parameter(_this);
+    push_ptr_parameter(pRenderModel);
+}
+
+EVRRenderModelError __thiscall IVRRenderModels_006_LoadTexture_Async(void *_this, TextureID_t textureId, RenderModel_TextureMap_t ** ppTexture)
+{
+    push_ptr_parameter(_this);
+    push_uint32_parameter(textureId);
+    push_ptr_parameter(ppTexture);
+    return 0;
+}
+
+void __thiscall IVRRenderModels_006_FreeTexture(void *_this, RenderModel_TextureMap_t * pTexture)
+{
+    push_ptr_parameter(_this);
+    push_ptr_parameter(pTexture);
+}
+
+EVRRenderModelError __thiscall IVRRenderModels_006_LoadTextureD3D11_Async(void *_this, TextureID_t textureId, void * pD3D11Device, void ** ppD3D11Texture2D)
+{
+    push_ptr_parameter(_this);
+    push_uint32_parameter(textureId);
+    push_ptr_parameter(pD3D11Device);
+    push_ptr_parameter(ppD3D11Texture2D);
+    return 0;
+}
+
+EVRRenderModelError __thiscall IVRRenderModels_006_LoadIntoTextureD3D11_Async(void *_this, TextureID_t textureId, void * pDstTexture)
+{
+    push_ptr_parameter(_this);
+    push_uint32_parameter(textureId);
+    push_ptr_parameter(pDstTexture);
+    return 0;
+}
+
+void __thiscall IVRRenderModels_006_FreeTextureD3D11(void *_this, void * pD3D11Texture2D)
+{
+    push_ptr_parameter(_this);
+    push_ptr_parameter(pD3D11Texture2D);
+}
+
+uint32_t __thiscall IVRRenderModels_006_GetRenderModelName(void *_this, uint32_t unRenderModelIndex, char * pchRenderModelName, uint32_t unRenderModelNameLen)
+{
+    push_ptr_parameter(_this);
+    push_uint32_parameter(unRenderModelIndex);
+    push_ptr_parameter(pchRenderModelName);
+    push_uint32_parameter(unRenderModelNameLen);
+    return 0;
+}
+
+uint32_t __thiscall IVRRenderModels_006_GetRenderModelCount(void *_this)
+{
+    push_ptr_parameter(_this);
+    return 0;
+}
+
+uint32_t __thiscall IVRRenderModels_006_GetComponentCount(void *_this, const char * pchRenderModelName)
+{
+    push_ptr_parameter(_this);
+    push_ptr_parameter(pchRenderModelName);
+    return 0;
+}
+
+uint32_t __thiscall IVRRenderModels_006_GetComponentName(void *_this, const char * pchRenderModelName, uint32_t unComponentIndex, char * pchComponentName, uint32_t unComponentNameLen)
+{
+    push_ptr_parameter(_this);
+    push_ptr_parameter(pchRenderModelName);
+    push_uint32_parameter(unComponentIndex);
+    push_ptr_parameter(pchComponentName);
+    push_uint32_parameter(unComponentNameLen);
+    return 0;
+}
+
+uint64_t __thiscall IVRRenderModels_006_GetComponentButtonMask(void *_this, const char * pchRenderModelName, const char * pchComponentName)
+{
+    push_ptr_parameter(_this);
+    push_ptr_parameter(pchRenderModelName);
+    push_ptr_parameter(pchComponentName);
+    return 0;
+}
+
+uint32_t __thiscall IVRRenderModels_006_GetComponentRenderModelName(void *_this, const char * pchRenderModelName, const char * pchComponentName, char * pchComponentRenderModelName, uint32_t unComponentRenderModelNameLen)
+{
+    push_ptr_parameter(_this);
+    push_ptr_parameter(pchRenderModelName);
+    push_ptr_parameter(pchComponentName);
+    push_ptr_parameter(pchComponentRenderModelName);
+    push_uint32_parameter(unComponentRenderModelNameLen);
+    return 0;
+}
+
+bool __thiscall IVRRenderModels_006_GetComponentStateForDevicePath(void *_this, const char * pchRenderModelName, const char * pchComponentName, VRInputValueHandle_t devicePath, RenderModel_ControllerMode_State_t * pState, RenderModel_ComponentState_t * pComponentState)
+{
+    push_ptr_parameter(_this);
+    push_ptr_parameter(pchRenderModelName);
+    push_ptr_parameter(pchComponentName);
+    push_uint64_parameter(devicePath);
+    push_ptr_parameter(pState);
+    push_ptr_parameter(pComponentState);
+    return 0;
+}
+
+bool __thiscall IVRRenderModels_006_GetComponentState(void *_this, const char * pchRenderModelName, const char * pchComponentName, VRControllerState_t * pControllerState, RenderModel_ControllerMode_State_t * pState, RenderModel_ComponentState_t * pComponentState)
+{
+    push_ptr_parameter(_this);
+    push_ptr_parameter(pchRenderModelName);
+    push_ptr_parameter(pchComponentName);
+    push_ptr_parameter(pControllerState);
+    push_ptr_parameter(pState);
+    push_ptr_parameter(pComponentState);
+    return 0;
+}
+
+bool __thiscall IVRRenderModels_006_RenderModelHasComponent(void *_this, const char * pchRenderModelName, const char * pchComponentName)
+{
+    push_ptr_parameter(_this);
+    push_ptr_parameter(pchRenderModelName);
+    push_ptr_parameter(pchComponentName);
+    return 0;
+}
+
+uint32_t __thiscall IVRRenderModels_006_GetRenderModelThumbnailURL(void *_this, const char * pchRenderModelName, char * pchThumbnailURL, uint32_t unThumbnailURLLen, EVRRenderModelError * peError)
+{
+    push_ptr_parameter(_this);
+    push_ptr_parameter(pchRenderModelName);
+    push_ptr_parameter(pchThumbnailURL);
+    push_uint32_parameter(unThumbnailURLLen);
+    push_ptr_parameter(peError);
+    return 0;
+}
+
+uint32_t __thiscall IVRRenderModels_006_GetRenderModelOriginalPath(void *_this, const char * pchRenderModelName, char * pchOriginalPath, uint32_t unOriginalPathLen, EVRRenderModelError * peError)
+{
+    push_ptr_parameter(_this);
+    push_ptr_parameter(pchRenderModelName);
+    push_ptr_parameter(pchOriginalPath);
+    push_uint32_parameter(unOriginalPathLen);
+    push_ptr_parameter(peError);
+    return 0;
+}
+
+const char * __thiscall IVRRenderModels_006_GetRenderModelErrorNameFromEnum(void *_this, EVRRenderModelError error)
+{
+    push_ptr_parameter(_this);
+    push_uint32_parameter(error);
+    return 0;
+}
+
+void __thiscall IVRExtendedDisplay_001_GetWindowBounds(void *_this, int32_t * pnX, int32_t * pnY, uint32_t * pnWidth, uint32_t * pnHeight)
+{
+    push_ptr_parameter(_this);
+    push_ptr_parameter(pnX);
+    push_ptr_parameter(pnY);
+    push_ptr_parameter(pnWidth);
+    push_ptr_parameter(pnHeight);
+}
+
+void __thiscall IVRExtendedDisplay_001_GetEyeOutputViewport(void *_this, EVREye eEye, uint32_t * pnX, uint32_t * pnY, uint32_t * pnWidth, uint32_t * pnHeight)
+{
+    push_ptr_parameter(_this);
+    push_uint32_parameter(eEye);
+    push_ptr_parameter(pnX);
+    push_ptr_parameter(pnY);
+    push_ptr_parameter(pnWidth);
+    push_ptr_parameter(pnHeight);
+}
+
+void __thiscall IVRExtendedDisplay_001_GetDXGIOutputInfo(void *_this, int32_t * pnAdapterIndex, int32_t * pnAdapterOutputIndex)
+{
+    push_ptr_parameter(_this);
+    push_ptr_parameter(pnAdapterIndex);
+    push_ptr_parameter(pnAdapterOutputIndex);
+}
+
+const char * __thiscall IVRTrackedCamera_005_GetCameraErrorNameFromEnum(void *_this, EVRTrackedCameraError eCameraError)
+{
+    push_ptr_parameter(_this);
+    push_uint32_parameter(eCameraError);
+    return 0;
+}
+
+EVRTrackedCameraError __thiscall IVRTrackedCamera_005_HasCamera(void *_this, TrackedDeviceIndex_t nDeviceIndex, bool * pHasCamera)
+{
+    push_ptr_parameter(_this);
+    push_uint32_parameter(nDeviceIndex);
+    push_ptr_parameter(pHasCamera);
+    return 0;
+}
+
+EVRTrackedCameraError __thiscall IVRTrackedCamera_005_GetCameraFrameSize(void *_this, TrackedDeviceIndex_t nDeviceIndex, EVRTrackedCameraFrameType eFrameType, uint32_t * pnWidth, uint32_t * pnHeight, uint32_t * pnFrameBufferSize)
+{
+    push_ptr_parameter(_this);
+    push_uint32_parameter(nDeviceIndex);
+    push_uint32_parameter(eFrameType);
+    push_ptr_parameter(pnWidth);
+    push_ptr_parameter(pnHeight);
+    push_ptr_parameter(pnFrameBufferSize);
+    return 0;
+}
+
+EVRTrackedCameraError __thiscall IVRTrackedCamera_005_GetCameraIntrinsics(void *_this, TrackedDeviceIndex_t nDeviceIndex, uint32_t nCameraIndex, EVRTrackedCameraFrameType eFrameType, HmdVector2_t * pFocalLength, HmdVector2_t * pCenter)
+{
+    push_ptr_parameter(_this);
+    push_uint32_parameter(nDeviceIndex);
+    push_uint32_parameter(nCameraIndex);
+    push_uint32_parameter(eFrameType);
+    push_ptr_parameter(pFocalLength);
+    push_ptr_parameter(pCenter);
+    return 0;
+}
+
+EVRTrackedCameraError __thiscall IVRTrackedCamera_005_GetCameraProjection(void *_this, TrackedDeviceIndex_t nDeviceIndex, uint32_t nCameraIndex, EVRTrackedCameraFrameType eFrameType, float flZNear, float flZFar, HmdMatrix44_t * pProjection)
+{
+    push_ptr_parameter(_this);
+    push_uint32_parameter(nDeviceIndex);
+    push_uint32_parameter(nCameraIndex);
+    push_uint32_parameter(eFrameType);
+    push_float_parameter(flZNear);
+    push_float_parameter(flZFar);
+    push_ptr_parameter(pProjection);
+    return 0;
+}
+
+EVRTrackedCameraError __thiscall IVRTrackedCamera_005_AcquireVideoStreamingService(void *_this, TrackedDeviceIndex_t nDeviceIndex, TrackedCameraHandle_t * pHandle)
+{
+    push_ptr_parameter(_this);
+    push_uint32_parameter(nDeviceIndex);
+    push_ptr_parameter(pHandle);
+    return 0;
+}
+
+EVRTrackedCameraError __thiscall IVRTrackedCamera_005_ReleaseVideoStreamingService(void *_this, TrackedCameraHandle_t hTrackedCamera)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(hTrackedCamera);
+    return 0;
+}
+
+EVRTrackedCameraError __thiscall IVRTrackedCamera_005_GetVideoStreamFrameBuffer(void *_this, TrackedCameraHandle_t hTrackedCamera, EVRTrackedCameraFrameType eFrameType, void * pFrameBuffer, uint32_t nFrameBufferSize, CameraVideoStreamFrameHeader_t * pFrameHeader, uint32_t nFrameHeaderSize)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(hTrackedCamera);
+    push_uint32_parameter(eFrameType);
+    push_ptr_parameter(pFrameBuffer);
+    push_uint32_parameter(nFrameBufferSize);
+    push_ptr_parameter(pFrameHeader);
+    push_uint32_parameter(nFrameHeaderSize);
+    return 0;
+}
+
+EVRTrackedCameraError __thiscall IVRTrackedCamera_005_GetVideoStreamTextureSize(void *_this, TrackedDeviceIndex_t nDeviceIndex, EVRTrackedCameraFrameType eFrameType, VRTextureBounds_t * pTextureBounds, uint32_t * pnWidth, uint32_t * pnHeight)
+{
+    push_ptr_parameter(_this);
+    push_uint32_parameter(nDeviceIndex);
+    push_uint32_parameter(eFrameType);
+    push_ptr_parameter(pTextureBounds);
+    push_ptr_parameter(pnWidth);
+    push_ptr_parameter(pnHeight);
+    return 0;
+}
+
+EVRTrackedCameraError __thiscall IVRTrackedCamera_005_GetVideoStreamTextureD3D11(void *_this, TrackedCameraHandle_t hTrackedCamera, EVRTrackedCameraFrameType eFrameType, void * pD3D11DeviceOrResource, void ** ppD3D11ShaderResourceView, CameraVideoStreamFrameHeader_t * pFrameHeader, uint32_t nFrameHeaderSize)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(hTrackedCamera);
+    push_uint32_parameter(eFrameType);
+    push_ptr_parameter(pD3D11DeviceOrResource);
+    push_ptr_parameter(ppD3D11ShaderResourceView);
+    push_ptr_parameter(pFrameHeader);
+    push_uint32_parameter(nFrameHeaderSize);
+    return 0;
+}
+
+EVRTrackedCameraError __thiscall IVRTrackedCamera_005_GetVideoStreamTextureGL(void *_this, TrackedCameraHandle_t hTrackedCamera, EVRTrackedCameraFrameType eFrameType, glUInt_t * pglTextureId, CameraVideoStreamFrameHeader_t * pFrameHeader, uint32_t nFrameHeaderSize)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(hTrackedCamera);
+    push_uint32_parameter(eFrameType);
+    push_ptr_parameter(pglTextureId);
+    push_ptr_parameter(pFrameHeader);
+    push_uint32_parameter(nFrameHeaderSize);
+    return 0;
+}
+
+EVRTrackedCameraError __thiscall IVRTrackedCamera_005_ReleaseVideoStreamTextureGL(void *_this, TrackedCameraHandle_t hTrackedCamera, glUInt_t glTextureId)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(hTrackedCamera);
+    push_uint32_parameter(glTextureId);
+    return 0;
+}
+
+EVRScreenshotError __thiscall IVRScreenshots_001_RequestScreenshot(void *_this, ScreenshotHandle_t * pOutScreenshotHandle, EVRScreenshotType type, const char * pchPreviewFilename, const char * pchVRFilename)
+{
+    push_ptr_parameter(_this);
+    push_ptr_parameter(pOutScreenshotHandle);
+    push_uint32_parameter(type);
+    push_ptr_parameter(pchPreviewFilename);
+    push_ptr_parameter(pchVRFilename);
+    return 0;
+}
+
+EVRScreenshotError __thiscall IVRScreenshots_001_HookScreenshot(void *_this, EVRScreenshotType * pSupportedTypes, int numTypes)
+{
+    push_ptr_parameter(_this);
+    push_ptr_parameter(pSupportedTypes);
+    push_uint32_parameter(numTypes);
+    return 0;
+}
+
+EVRScreenshotType __thiscall IVRScreenshots_001_GetScreenshotPropertyType(void *_this, ScreenshotHandle_t screenshotHandle, EVRScreenshotError * pError)
+{
+    push_ptr_parameter(_this);
+    push_uint32_parameter(screenshotHandle);
+    push_ptr_parameter(pError);
+    return 0;
+}
+
+uint32_t __thiscall IVRScreenshots_001_GetScreenshotPropertyFilename(void *_this, ScreenshotHandle_t screenshotHandle, EVRScreenshotPropertyFilenames filenameType, char * pchFilename, uint32_t cchFilename, EVRScreenshotError * pError)
+{
+    push_ptr_parameter(_this);
+    push_uint32_parameter(screenshotHandle);
+    push_uint32_parameter(filenameType);
+    push_ptr_parameter(pchFilename);
+    push_uint32_parameter(cchFilename);
+    push_ptr_parameter(pError);
+    return 0;
+}
+
+EVRScreenshotError __thiscall IVRScreenshots_001_UpdateScreenshotProgress(void *_this, ScreenshotHandle_t screenshotHandle, float flProgress)
+{
+    push_ptr_parameter(_this);
+    push_uint32_parameter(screenshotHandle);
+    push_float_parameter(flProgress);
+    return 0;
+}
+
+EVRScreenshotError __thiscall IVRScreenshots_001_TakeStereoScreenshot(void *_this, ScreenshotHandle_t * pOutScreenshotHandle, const char * pchPreviewFilename, const char * pchVRFilename)
+{
+    push_ptr_parameter(_this);
+    push_ptr_parameter(pOutScreenshotHandle);
+    push_ptr_parameter(pchPreviewFilename);
+    push_ptr_parameter(pchVRFilename);
+    return 0;
+}
+
+EVRScreenshotError __thiscall IVRScreenshots_001_SubmitScreenshot(void *_this, ScreenshotHandle_t screenshotHandle, EVRScreenshotType type, const char * pchSourcePreviewFilename, const char * pchSourceVRFilename)
+{
+    push_ptr_parameter(_this);
+    push_uint32_parameter(screenshotHandle);
+    push_uint32_parameter(type);
+    push_ptr_parameter(pchSourcePreviewFilename);
+    push_ptr_parameter(pchSourceVRFilename);
+    return 0;
+}
+
+uint32_t __thiscall IVRResources_001_LoadSharedResource(void *_this, const char * pchResourceName, char * pchBuffer, uint32_t unBufferLen)
+{
+    push_ptr_parameter(_this);
+    push_ptr_parameter(pchResourceName);
+    push_ptr_parameter(pchBuffer);
+    push_uint32_parameter(unBufferLen);
+    return 0;
+}
+
+uint32_t __thiscall IVRResources_001_GetResourceFullPath(void *_this, const char * pchResourceName, const char * pchResourceTypeDirectory, char * pchPathBuffer, uint32_t unBufferLen)
+{
+    push_ptr_parameter(_this);
+    push_ptr_parameter(pchResourceName);
+    push_ptr_parameter(pchResourceTypeDirectory);
+    push_ptr_parameter(pchPathBuffer);
+    push_uint32_parameter(unBufferLen);
+    return 0;
+}
+
+uint32_t __thiscall IVRDriverManager_001_GetDriverCount(void *_this)
+{
+    push_ptr_parameter(_this);
+    return 0;
+}
+
+uint32_t __thiscall IVRDriverManager_001_GetDriverName(void *_this, DriverId_t nDriver, char * pchValue, uint32_t unBufferSize)
+{
+    push_ptr_parameter(_this);
+    push_uint32_parameter(nDriver);
+    push_ptr_parameter(pchValue);
+    push_uint32_parameter(unBufferSize);
+    return 0;
+}
+
+DriverHandle_t __thiscall IVRDriverManager_001_GetDriverHandle(void *_this, const char * pchDriverName)
+{
+    push_ptr_parameter(_this);
+    push_ptr_parameter(pchDriverName);
+    return 0;
+}
+
+EVRInputError __thiscall IVRInput_005_SetActionManifestPath(void *_this, const char * pchActionManifestPath)
+{
+    push_ptr_parameter(_this);
+    push_ptr_parameter(pchActionManifestPath);
+    return 0;
+}
+
+EVRInputError __thiscall IVRInput_005_GetActionSetHandle(void *_this, const char * pchActionSetName, VRActionSetHandle_t * pHandle)
+{
+    push_ptr_parameter(_this);
+    push_ptr_parameter(pchActionSetName);
+    push_ptr_parameter(pHandle);
+    return 0;
+}
+
+EVRInputError __thiscall IVRInput_005_GetActionHandle(void *_this, const char * pchActionName, VRActionHandle_t * pHandle)
+{
+    push_ptr_parameter(_this);
+    push_ptr_parameter(pchActionName);
+    push_ptr_parameter(pHandle);
+    return 0;
+}
+
+EVRInputError __thiscall IVRInput_005_GetInputSourceHandle(void *_this, const char * pchInputSourcePath, VRInputValueHandle_t * pHandle)
+{
+    push_ptr_parameter(_this);
+    push_ptr_parameter(pchInputSourcePath);
+    push_ptr_parameter(pHandle);
+    return 0;
+}
+
+EVRInputError __thiscall IVRInput_005_UpdateActionState(void *_this, VRActiveActionSet_t * pSets, uint32_t unSizeOfVRSelectedActionSet_t, uint32_t unSetCount)
+{
+    push_ptr_parameter(_this);
+    push_ptr_parameter(pSets);
+    push_uint32_parameter(unSizeOfVRSelectedActionSet_t);
+    push_uint32_parameter(unSetCount);
+    return 0;
+}
+
+EVRInputError __thiscall IVRInput_005_GetDigitalActionData(void *_this, VRActionHandle_t action, InputDigitalActionData_t * pActionData, uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(action);
+    push_ptr_parameter(pActionData);
+    push_uint32_parameter(unActionDataSize);
+    push_uint64_parameter(ulRestrictToDevice);
+    return 0;
+}
+
+EVRInputError __thiscall IVRInput_005_GetAnalogActionData(void *_this, VRActionHandle_t action, InputAnalogActionData_t * pActionData, uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(action);
+    push_ptr_parameter(pActionData);
+    push_uint32_parameter(unActionDataSize);
+    push_uint64_parameter(ulRestrictToDevice);
+    return 0;
+}
+
+EVRInputError __thiscall IVRInput_005_GetPoseActionData(void *_this, VRActionHandle_t action, ETrackingUniverseOrigin eOrigin, float fPredictedSecondsFromNow, InputPoseActionData_t * pActionData, uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(action);
+    push_uint32_parameter(eOrigin);
+    push_float_parameter(fPredictedSecondsFromNow);
+    push_ptr_parameter(pActionData);
+    push_uint32_parameter(unActionDataSize);
+    push_uint64_parameter(ulRestrictToDevice);
+    return 0;
+}
+
+EVRInputError __thiscall IVRInput_005_GetSkeletalActionData(void *_this, VRActionHandle_t action, InputSkeletalActionData_t * pActionData, uint32_t unActionDataSize)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(action);
+    push_ptr_parameter(pActionData);
+    push_uint32_parameter(unActionDataSize);
+    return 0;
+}
+
+EVRInputError __thiscall IVRInput_005_GetBoneCount(void *_this, VRActionHandle_t action, uint32_t * pBoneCount)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(action);
+    push_ptr_parameter(pBoneCount);
+    return 0;
+}
+
+EVRInputError __thiscall IVRInput_005_GetBoneHierarchy(void *_this, VRActionHandle_t action, BoneIndex_t * pParentIndices, uint32_t unIndexArayCount)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(action);
+    push_ptr_parameter(pParentIndices);
+    push_uint32_parameter(unIndexArayCount);
+    return 0;
+}
+
+EVRInputError __thiscall IVRInput_005_GetBoneName(void *_this, VRActionHandle_t action, BoneIndex_t nBoneIndex, char * pchBoneName, uint32_t unNameBufferSize)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(action);
+    push_uint32_parameter(nBoneIndex);
+    push_ptr_parameter(pchBoneName);
+    push_uint32_parameter(unNameBufferSize);
+    return 0;
+}
+
+EVRInputError __thiscall IVRInput_005_GetSkeletalReferenceTransforms(void *_this, VRActionHandle_t action, EVRSkeletalTransformSpace eTransformSpace, EVRSkeletalReferencePose eReferencePose, VRBoneTransform_t * pTransformArray, uint32_t unTransformArrayCount)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(action);
+    push_uint32_parameter(eTransformSpace);
+    push_uint32_parameter(eReferencePose);
+    push_ptr_parameter(pTransformArray);
+    push_uint32_parameter(unTransformArrayCount);
+    return 0;
+}
+
+EVRInputError __thiscall IVRInput_005_GetSkeletalTrackingLevel(void *_this, VRActionHandle_t action, EVRSkeletalTrackingLevel * pSkeletalTrackingLevel)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(action);
+    push_ptr_parameter(pSkeletalTrackingLevel);
+    return 0;
+}
+
+EVRInputError __thiscall IVRInput_005_GetSkeletalBoneData(void *_this, VRActionHandle_t action, EVRSkeletalTransformSpace eTransformSpace, EVRSkeletalMotionRange eMotionRange, VRBoneTransform_t * pTransformArray, uint32_t unTransformArrayCount)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(action);
+    push_uint32_parameter(eTransformSpace);
+    push_uint32_parameter(eMotionRange);
+    push_ptr_parameter(pTransformArray);
+    push_uint32_parameter(unTransformArrayCount);
+    return 0;
+}
+
+EVRInputError __thiscall IVRInput_005_GetSkeletalSummaryData(void *_this, VRActionHandle_t action, VRSkeletalSummaryData_t * pSkeletalSummaryData)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(action);
+    push_ptr_parameter(pSkeletalSummaryData);
+    return 0;
+}
+
+EVRInputError __thiscall IVRInput_005_GetSkeletalBoneDataCompressed(void *_this, VRActionHandle_t action, EVRSkeletalMotionRange eMotionRange, void * pvCompressedData, uint32_t unCompressedSize, uint32_t * punRequiredCompressedSize)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(action);
+    push_uint32_parameter(eMotionRange);
+    push_ptr_parameter(pvCompressedData);
+    push_uint32_parameter(unCompressedSize);
+    push_ptr_parameter(punRequiredCompressedSize);
+    return 0;
+}
+
+EVRInputError __thiscall IVRInput_005_DecompressSkeletalBoneData(void *_this, const void * pvCompressedBuffer, uint32_t unCompressedBufferSize, EVRSkeletalTransformSpace eTransformSpace, VRBoneTransform_t * pTransformArray, uint32_t unTransformArrayCount)
+{
+    push_ptr_parameter(_this);
+    push_ptr_parameter(pvCompressedBuffer);
+    push_uint32_parameter(unCompressedBufferSize);
+    push_uint32_parameter(eTransformSpace);
+    push_ptr_parameter(pTransformArray);
+    push_uint32_parameter(unTransformArrayCount);
+    return 0;
+}
+
+EVRInputError __thiscall IVRInput_005_TriggerHapticVibrationAction(void *_this, VRActionHandle_t action, float fStartSecondsFromNow, float fDurationSeconds, float fFrequency, float fAmplitude, VRInputValueHandle_t ulRestrictToDevice)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(action);
+    push_float_parameter(fStartSecondsFromNow);
+    push_float_parameter(fDurationSeconds);
+    push_float_parameter(fFrequency);
+    push_float_parameter(fAmplitude);
+    push_uint64_parameter(ulRestrictToDevice);
+    return 0;
+}
+
+EVRInputError __thiscall IVRInput_005_GetActionOrigins(void *_this, VRActionSetHandle_t actionSetHandle, VRActionHandle_t digitalActionHandle, VRInputValueHandle_t * originsOut, uint32_t originOutCount)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(actionSetHandle);
+    push_uint64_parameter(digitalActionHandle);
+    push_ptr_parameter(originsOut);
+    push_uint32_parameter(originOutCount);
+    return 0;
+}
+
+EVRInputError __thiscall IVRInput_005_GetOriginLocalizedName(void *_this, VRInputValueHandle_t origin, char * pchNameArray, uint32_t unNameArraySize, int32_t unStringSectionsToInclude)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(origin);
+    push_ptr_parameter(pchNameArray);
+    push_uint32_parameter(unNameArraySize);
+    push_uint32_parameter(unStringSectionsToInclude);
+    return 0;
+}
+
+EVRInputError __thiscall IVRInput_005_GetOriginTrackedDeviceInfo(void *_this, VRInputValueHandle_t origin, InputOriginInfo_t * pOriginInfo, uint32_t unOriginInfoSize)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(origin);
+    push_ptr_parameter(pOriginInfo);
+    push_uint32_parameter(unOriginInfoSize);
+    return 0;
+}
+
+EVRInputError __thiscall IVRInput_005_ShowActionOrigins(void *_this, VRActionSetHandle_t actionSetHandle, VRActionHandle_t ulActionHandle)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(actionSetHandle);
+    push_uint64_parameter(ulActionHandle);
+    return 0;
+}
+
+EVRInputError __thiscall IVRInput_005_ShowBindingsForActionSet(void *_this, VRActiveActionSet_t * pSets, uint32_t unSizeOfVRSelectedActionSet_t, uint32_t unSetCount, VRInputValueHandle_t originToHighlight)
+{
+    push_ptr_parameter(_this);
+    push_ptr_parameter(pSets);
+    push_uint32_parameter(unSizeOfVRSelectedActionSet_t);
+    push_uint32_parameter(unSetCount);
+    push_uint64_parameter(originToHighlight);
+    return 0;
+}
+
+EIOBufferError __thiscall IVRIOBuffer_001_Open(void *_this, const char * pchPath, EIOBufferMode mode, uint32_t unElementSize, uint32_t unElements, IOBufferHandle_t * pulBuffer)
+{
+    push_ptr_parameter(_this);
+    push_ptr_parameter(pchPath);
+    push_uint32_parameter(mode);
+    push_uint32_parameter(unElementSize);
+    push_uint32_parameter(unElements);
+    push_ptr_parameter(pulBuffer);
+    return 0;
+}
+
+EIOBufferError __thiscall IVRIOBuffer_001_Close(void *_this, IOBufferHandle_t ulBuffer)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(ulBuffer);
+    return 0;
+}
+
+EIOBufferError __thiscall IVRIOBuffer_001_Read(void *_this, IOBufferHandle_t ulBuffer, void * pDst, uint32_t unBytes, uint32_t * punRead)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(ulBuffer);
+    push_ptr_parameter(pDst);
+    push_uint32_parameter(unBytes);
+    push_ptr_parameter(punRead);
+    return 0;
+}
+
+EIOBufferError __thiscall IVRIOBuffer_001_Write(void *_this, IOBufferHandle_t ulBuffer, void * pSrc, uint32_t unBytes)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(ulBuffer);
+    push_ptr_parameter(pSrc);
+    push_uint32_parameter(unBytes);
+    return 0;
+}
+
+PropertyContainerHandle_t __thiscall IVRIOBuffer_001_PropertyContainer(void *_this, IOBufferHandle_t ulBuffer)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(ulBuffer);
+    return 0;
+}
+
+EVRInitError __thiscall IVRClientCore_003_Init(void *_this, EVRApplicationType eApplicationType, const char * pStartupInfo)
+{
+    push_ptr_parameter(_this);
+    push_uint32_parameter(eApplicationType);
+    push_ptr_parameter(pStartupInfo);
+    return 0;
+}
+
+void __thiscall IVRClientCore_003_Cleanup(void *_this)
+{
+    push_ptr_parameter(_this);
+}
+
+EVRInitError __thiscall IVRClientCore_003_IsInterfaceVersionValid(void *_this, const char * pchInterfaceVersion)
+{
+    push_ptr_parameter(_this);
+    push_ptr_parameter(pchInterfaceVersion);
+    return 0;
+}
+
+void * __thiscall IVRClientCore_003_GetGenericInterface(void *_this, const char * pchNameAndVersion, EVRInitError * peError)
+{
+    push_ptr_parameter(_this);
+    push_ptr_parameter(pchNameAndVersion);
+    push_ptr_parameter(peError);
+    return 0;
+}
+
+bool __thiscall IVRClientCore_003_BIsHmdPresent(void *_this)
+{
+    push_ptr_parameter(_this);
+    return 0;
+}
+
+const char * __thiscall IVRClientCore_003_GetEnglishStringForHmdError(void *_this, EVRInitError eError)
+{
+    push_ptr_parameter(_this);
+    push_uint32_parameter(eError);
+    return 0;
+}
+
+const char * __thiscall IVRClientCore_003_GetIDForVRInitError(void *_this, EVRInitError eError)
+{
+    push_ptr_parameter(_this);
+    push_uint32_parameter(eError);
+    return 0;
+}
+
+bool __thiscall IVRChaperoneSetup_005_CommitWorkingCopy(void *_this, EChaperoneConfigFile configFile)
+{
+    push_ptr_parameter(_this);
+    push_uint32_parameter(configFile);
+    return 0;
+}
+
+void __thiscall IVRChaperoneSetup_005_RevertWorkingCopy(void *_this)
+{
+    push_ptr_parameter(_this);
+}
+
+bool __thiscall IVRChaperoneSetup_005_GetWorkingPlayAreaSize(void *_this, float * pSizeX, float * pSizeZ)
+{
+    push_ptr_parameter(_this);
+    push_ptr_parameter(pSizeX);
+    push_ptr_parameter(pSizeZ);
+    return 0;
+}
+
+bool __thiscall IVRChaperoneSetup_005_GetWorkingPlayAreaRect(void *_this, HmdQuad_t * rect)
+{
+    push_ptr_parameter(_this);
+    push_ptr_parameter(rect);
+    return 0;
+}
+
+bool __thiscall IVRChaperoneSetup_005_GetWorkingCollisionBoundsInfo(void *_this, HmdQuad_t * pQuadsBuffer, uint32_t * punQuadsCount)
+{
+    push_ptr_parameter(_this);
+    push_ptr_parameter(pQuadsBuffer);
+    push_ptr_parameter(punQuadsCount);
+    return 0;
+}
+
+bool __thiscall IVRChaperoneSetup_005_GetLiveCollisionBoundsInfo(void *_this, HmdQuad_t * pQuadsBuffer, uint32_t * punQuadsCount)
+{
+    push_ptr_parameter(_this);
+    push_ptr_parameter(pQuadsBuffer);
+    push_ptr_parameter(punQuadsCount);
+    return 0;
+}
+
+bool __thiscall IVRChaperoneSetup_005_GetWorkingSeatedZeroPoseToRawTrackingPose(void *_this, HmdMatrix34_t * pmatSeatedZeroPoseToRawTrackingPose)
+{
+    push_ptr_parameter(_this);
+    push_ptr_parameter(pmatSeatedZeroPoseToRawTrackingPose);
+    return 0;
+}
+
+bool __thiscall IVRChaperoneSetup_005_GetWorkingStandingZeroPoseToRawTrackingPose(void *_this, HmdMatrix34_t * pmatStandingZeroPoseToRawTrackingPose)
+{
+    push_ptr_parameter(_this);
+    push_ptr_parameter(pmatStandingZeroPoseToRawTrackingPose);
+    return 0;
+}
+
+void __thiscall IVRChaperoneSetup_005_SetWorkingPlayAreaSize(void *_this, float sizeX, float sizeZ)
+{
+    push_ptr_parameter(_this);
+    push_float_parameter(sizeX);
+    push_float_parameter(sizeZ);
+}
+
+void __thiscall IVRChaperoneSetup_005_SetWorkingCollisionBoundsInfo(void *_this, HmdQuad_t * pQuadsBuffer, uint32_t unQuadsCount)
+{
+    push_ptr_parameter(_this);
+    push_ptr_parameter(pQuadsBuffer);
+    push_uint32_parameter(unQuadsCount);
+}
+
+void __thiscall IVRChaperoneSetup_005_SetWorkingSeatedZeroPoseToRawTrackingPose(void *_this, HmdMatrix34_t * pMatSeatedZeroPoseToRawTrackingPose)
+{
+    push_ptr_parameter(_this);
+    push_ptr_parameter(pMatSeatedZeroPoseToRawTrackingPose);
+}
+
+void __thiscall IVRChaperoneSetup_005_SetWorkingStandingZeroPoseToRawTrackingPose(void *_this, HmdMatrix34_t * pMatStandingZeroPoseToRawTrackingPose)
+{
+    push_ptr_parameter(_this);
+    push_ptr_parameter(pMatStandingZeroPoseToRawTrackingPose);
+}
+
+void __thiscall IVRChaperoneSetup_005_ReloadFromDisk(void *_this, EChaperoneConfigFile configFile)
+{
+    push_ptr_parameter(_this);
+    push_uint32_parameter(configFile);
+}
+
+bool __thiscall IVRChaperoneSetup_005_GetLiveSeatedZeroPoseToRawTrackingPose(void *_this, HmdMatrix34_t * pmatSeatedZeroPoseToRawTrackingPose)
+{
+    push_ptr_parameter(_this);
+    push_ptr_parameter(pmatSeatedZeroPoseToRawTrackingPose);
+    return 0;
+}
+
+void __thiscall IVRChaperoneSetup_005_SetWorkingCollisionBoundsTagsInfo(void *_this, uint8_t * pTagsBuffer, uint32_t unTagCount)
+{
+    push_ptr_parameter(_this);
+    push_ptr_parameter(pTagsBuffer);
+    push_uint32_parameter(unTagCount);
+}
+
+bool __thiscall IVRChaperoneSetup_005_GetLiveCollisionBoundsTagsInfo(void *_this, uint8_t * pTagsBuffer, uint32_t * punTagCount)
+{
+    push_ptr_parameter(_this);
+    push_ptr_parameter(pTagsBuffer);
+    push_ptr_parameter(punTagCount);
+    return 0;
+}
+
+bool __thiscall IVRChaperoneSetup_005_SetWorkingPhysicalBoundsInfo(void *_this, HmdQuad_t * pQuadsBuffer, uint32_t unQuadsCount)
+{
+    push_ptr_parameter(_this);
+    push_ptr_parameter(pQuadsBuffer);
+    push_uint32_parameter(unQuadsCount);
+    return 0;
+}
+
+bool __thiscall IVRChaperoneSetup_005_GetLivePhysicalBoundsInfo(void *_this, HmdQuad_t * pQuadsBuffer, uint32_t * punQuadsCount)
+{
+    push_ptr_parameter(_this);
+    push_ptr_parameter(pQuadsBuffer);
+    push_ptr_parameter(punQuadsCount);
+    return 0;
+}
+
+bool __thiscall IVRChaperoneSetup_005_ExportLiveToBuffer(void *_this, char * pBuffer, uint32_t * pnBufferLength)
+{
+    push_ptr_parameter(_this);
+    push_ptr_parameter(pBuffer);
+    push_ptr_parameter(pnBufferLength);
+    return 0;
+}
+
+bool __thiscall IVRChaperoneSetup_005_ImportFromBufferToWorking(void *_this, const char * pBuffer, uint32_t nImportFlags)
+{
+    push_ptr_parameter(_this);
+    push_ptr_parameter(pBuffer);
+    push_uint32_parameter(nImportFlags);
     return 0;
 }
 
@@ -1920,190 +3476,6 @@ void __thiscall IVROverlay_018_CloseMessageOverlay(void *_this)
     push_ptr_parameter(_this);
 }
 
-EVRRenderModelError __thiscall IVRRenderModels_006_LoadRenderModel_Async(void *_this, const char * pchRenderModelName, RenderModel_t ** ppRenderModel)
-{
-    push_ptr_parameter(_this);
-    push_ptr_parameter(pchRenderModelName);
-    push_ptr_parameter(ppRenderModel);
-    return 0;
-}
-
-void __thiscall IVRRenderModels_006_FreeRenderModel(void *_this, RenderModel_t * pRenderModel)
-{
-    push_ptr_parameter(_this);
-    push_ptr_parameter(pRenderModel);
-}
-
-EVRRenderModelError __thiscall IVRRenderModels_006_LoadTexture_Async(void *_this, TextureID_t textureId, RenderModel_TextureMap_t ** ppTexture)
-{
-    push_ptr_parameter(_this);
-    push_uint32_parameter(textureId);
-    push_ptr_parameter(ppTexture);
-    return 0;
-}
-
-void __thiscall IVRRenderModels_006_FreeTexture(void *_this, RenderModel_TextureMap_t * pTexture)
-{
-    push_ptr_parameter(_this);
-    push_ptr_parameter(pTexture);
-}
-
-EVRRenderModelError __thiscall IVRRenderModels_006_LoadTextureD3D11_Async(void *_this, TextureID_t textureId, void * pD3D11Device, void ** ppD3D11Texture2D)
-{
-    push_ptr_parameter(_this);
-    push_uint32_parameter(textureId);
-    push_ptr_parameter(pD3D11Device);
-    push_ptr_parameter(ppD3D11Texture2D);
-    return 0;
-}
-
-EVRRenderModelError __thiscall IVRRenderModels_006_LoadIntoTextureD3D11_Async(void *_this, TextureID_t textureId, void * pDstTexture)
-{
-    push_ptr_parameter(_this);
-    push_uint32_parameter(textureId);
-    push_ptr_parameter(pDstTexture);
-    return 0;
-}
-
-void __thiscall IVRRenderModels_006_FreeTextureD3D11(void *_this, void * pD3D11Texture2D)
-{
-    push_ptr_parameter(_this);
-    push_ptr_parameter(pD3D11Texture2D);
-}
-
-uint32_t __thiscall IVRRenderModels_006_GetRenderModelName(void *_this, uint32_t unRenderModelIndex, char * pchRenderModelName, uint32_t unRenderModelNameLen)
-{
-    push_ptr_parameter(_this);
-    push_uint32_parameter(unRenderModelIndex);
-    push_ptr_parameter(pchRenderModelName);
-    push_uint32_parameter(unRenderModelNameLen);
-    return 0;
-}
-
-uint32_t __thiscall IVRRenderModels_006_GetRenderModelCount(void *_this)
-{
-    push_ptr_parameter(_this);
-    return 0;
-}
-
-uint32_t __thiscall IVRRenderModels_006_GetComponentCount(void *_this, const char * pchRenderModelName)
-{
-    push_ptr_parameter(_this);
-    push_ptr_parameter(pchRenderModelName);
-    return 0;
-}
-
-uint32_t __thiscall IVRRenderModels_006_GetComponentName(void *_this, const char * pchRenderModelName, uint32_t unComponentIndex, char * pchComponentName, uint32_t unComponentNameLen)
-{
-    push_ptr_parameter(_this);
-    push_ptr_parameter(pchRenderModelName);
-    push_uint32_parameter(unComponentIndex);
-    push_ptr_parameter(pchComponentName);
-    push_uint32_parameter(unComponentNameLen);
-    return 0;
-}
-
-uint64_t __thiscall IVRRenderModels_006_GetComponentButtonMask(void *_this, const char * pchRenderModelName, const char * pchComponentName)
-{
-    push_ptr_parameter(_this);
-    push_ptr_parameter(pchRenderModelName);
-    push_ptr_parameter(pchComponentName);
-    return 0;
-}
-
-uint32_t __thiscall IVRRenderModels_006_GetComponentRenderModelName(void *_this, const char * pchRenderModelName, const char * pchComponentName, char * pchComponentRenderModelName, uint32_t unComponentRenderModelNameLen)
-{
-    push_ptr_parameter(_this);
-    push_ptr_parameter(pchRenderModelName);
-    push_ptr_parameter(pchComponentName);
-    push_ptr_parameter(pchComponentRenderModelName);
-    push_uint32_parameter(unComponentRenderModelNameLen);
-    return 0;
-}
-
-bool __thiscall IVRRenderModels_006_GetComponentStateForDevicePath(void *_this, const char * pchRenderModelName, const char * pchComponentName, VRInputValueHandle_t devicePath, RenderModel_ControllerMode_State_t * pState, RenderModel_ComponentState_t * pComponentState)
-{
-    push_ptr_parameter(_this);
-    push_ptr_parameter(pchRenderModelName);
-    push_ptr_parameter(pchComponentName);
-    push_uint64_parameter(devicePath);
-    push_ptr_parameter(pState);
-    push_ptr_parameter(pComponentState);
-    return 0;
-}
-
-bool __thiscall IVRRenderModels_006_GetComponentState(void *_this, const char * pchRenderModelName, const char * pchComponentName, VRControllerState_t * pControllerState, RenderModel_ControllerMode_State_t * pState, RenderModel_ComponentState_t * pComponentState)
-{
-    push_ptr_parameter(_this);
-    push_ptr_parameter(pchRenderModelName);
-    push_ptr_parameter(pchComponentName);
-    push_ptr_parameter(pControllerState);
-    push_ptr_parameter(pState);
-    push_ptr_parameter(pComponentState);
-    return 0;
-}
-
-bool __thiscall IVRRenderModels_006_RenderModelHasComponent(void *_this, const char * pchRenderModelName, const char * pchComponentName)
-{
-    push_ptr_parameter(_this);
-    push_ptr_parameter(pchRenderModelName);
-    push_ptr_parameter(pchComponentName);
-    return 0;
-}
-
-uint32_t __thiscall IVRRenderModels_006_GetRenderModelThumbnailURL(void *_this, const char * pchRenderModelName, char * pchThumbnailURL, uint32_t unThumbnailURLLen, EVRRenderModelError * peError)
-{
-    push_ptr_parameter(_this);
-    push_ptr_parameter(pchRenderModelName);
-    push_ptr_parameter(pchThumbnailURL);
-    push_uint32_parameter(unThumbnailURLLen);
-    push_ptr_parameter(peError);
-    return 0;
-}
-
-uint32_t __thiscall IVRRenderModels_006_GetRenderModelOriginalPath(void *_this, const char * pchRenderModelName, char * pchOriginalPath, uint32_t unOriginalPathLen, EVRRenderModelError * peError)
-{
-    push_ptr_parameter(_this);
-    push_ptr_parameter(pchRenderModelName);
-    push_ptr_parameter(pchOriginalPath);
-    push_uint32_parameter(unOriginalPathLen);
-    push_ptr_parameter(peError);
-    return 0;
-}
-
-const char * __thiscall IVRRenderModels_006_GetRenderModelErrorNameFromEnum(void *_this, EVRRenderModelError error)
-{
-    push_ptr_parameter(_this);
-    push_uint32_parameter(error);
-    return 0;
-}
-
-void __thiscall IVRExtendedDisplay_001_GetWindowBounds(void *_this, int32_t * pnX, int32_t * pnY, uint32_t * pnWidth, uint32_t * pnHeight)
-{
-    push_ptr_parameter(_this);
-    push_ptr_parameter(pnX);
-    push_ptr_parameter(pnY);
-    push_ptr_parameter(pnWidth);
-    push_ptr_parameter(pnHeight);
-}
-
-void __thiscall IVRExtendedDisplay_001_GetEyeOutputViewport(void *_this, EVREye eEye, uint32_t * pnX, uint32_t * pnY, uint32_t * pnWidth, uint32_t * pnHeight)
-{
-    push_ptr_parameter(_this);
-    push_uint32_parameter(eEye);
-    push_ptr_parameter(pnX);
-    push_ptr_parameter(pnY);
-    push_ptr_parameter(pnWidth);
-    push_ptr_parameter(pnHeight);
-}
-
-void __thiscall IVRExtendedDisplay_001_GetDXGIOutputInfo(void *_this, int32_t * pnAdapterIndex, int32_t * pnAdapterOutputIndex)
-{
-    push_ptr_parameter(_this);
-    push_ptr_parameter(pnAdapterIndex);
-    push_ptr_parameter(pnAdapterOutputIndex);
-}
-
 const char * __thiscall IVRTrackedCamera_004_GetCameraErrorNameFromEnum(void *_this, EVRTrackedCameraError eCameraError)
 {
     push_ptr_parameter(_this);
@@ -2217,111 +3589,6 @@ EVRTrackedCameraError __thiscall IVRTrackedCamera_004_ReleaseVideoStreamTextureG
     push_ptr_parameter(_this);
     push_uint64_parameter(hTrackedCamera);
     push_uint32_parameter(glTextureId);
-    return 0;
-}
-
-EVRScreenshotError __thiscall IVRScreenshots_001_RequestScreenshot(void *_this, ScreenshotHandle_t * pOutScreenshotHandle, EVRScreenshotType type, const char * pchPreviewFilename, const char * pchVRFilename)
-{
-    push_ptr_parameter(_this);
-    push_ptr_parameter(pOutScreenshotHandle);
-    push_uint32_parameter(type);
-    push_ptr_parameter(pchPreviewFilename);
-    push_ptr_parameter(pchVRFilename);
-    return 0;
-}
-
-EVRScreenshotError __thiscall IVRScreenshots_001_HookScreenshot(void *_this, EVRScreenshotType * pSupportedTypes, int numTypes)
-{
-    push_ptr_parameter(_this);
-    push_ptr_parameter(pSupportedTypes);
-    push_uint32_parameter(numTypes);
-    return 0;
-}
-
-EVRScreenshotType __thiscall IVRScreenshots_001_GetScreenshotPropertyType(void *_this, ScreenshotHandle_t screenshotHandle, EVRScreenshotError * pError)
-{
-    push_ptr_parameter(_this);
-    push_uint32_parameter(screenshotHandle);
-    push_ptr_parameter(pError);
-    return 0;
-}
-
-uint32_t __thiscall IVRScreenshots_001_GetScreenshotPropertyFilename(void *_this, ScreenshotHandle_t screenshotHandle, EVRScreenshotPropertyFilenames filenameType, char * pchFilename, uint32_t cchFilename, EVRScreenshotError * pError)
-{
-    push_ptr_parameter(_this);
-    push_uint32_parameter(screenshotHandle);
-    push_uint32_parameter(filenameType);
-    push_ptr_parameter(pchFilename);
-    push_uint32_parameter(cchFilename);
-    push_ptr_parameter(pError);
-    return 0;
-}
-
-EVRScreenshotError __thiscall IVRScreenshots_001_UpdateScreenshotProgress(void *_this, ScreenshotHandle_t screenshotHandle, float flProgress)
-{
-    push_ptr_parameter(_this);
-    push_uint32_parameter(screenshotHandle);
-    push_float_parameter(flProgress);
-    return 0;
-}
-
-EVRScreenshotError __thiscall IVRScreenshots_001_TakeStereoScreenshot(void *_this, ScreenshotHandle_t * pOutScreenshotHandle, const char * pchPreviewFilename, const char * pchVRFilename)
-{
-    push_ptr_parameter(_this);
-    push_ptr_parameter(pOutScreenshotHandle);
-    push_ptr_parameter(pchPreviewFilename);
-    push_ptr_parameter(pchVRFilename);
-    return 0;
-}
-
-EVRScreenshotError __thiscall IVRScreenshots_001_SubmitScreenshot(void *_this, ScreenshotHandle_t screenshotHandle, EVRScreenshotType type, const char * pchSourcePreviewFilename, const char * pchSourceVRFilename)
-{
-    push_ptr_parameter(_this);
-    push_uint32_parameter(screenshotHandle);
-    push_uint32_parameter(type);
-    push_ptr_parameter(pchSourcePreviewFilename);
-    push_ptr_parameter(pchSourceVRFilename);
-    return 0;
-}
-
-uint32_t __thiscall IVRResources_001_LoadSharedResource(void *_this, const char * pchResourceName, char * pchBuffer, uint32_t unBufferLen)
-{
-    push_ptr_parameter(_this);
-    push_ptr_parameter(pchResourceName);
-    push_ptr_parameter(pchBuffer);
-    push_uint32_parameter(unBufferLen);
-    return 0;
-}
-
-uint32_t __thiscall IVRResources_001_GetResourceFullPath(void *_this, const char * pchResourceName, const char * pchResourceTypeDirectory, char * pchPathBuffer, uint32_t unBufferLen)
-{
-    push_ptr_parameter(_this);
-    push_ptr_parameter(pchResourceName);
-    push_ptr_parameter(pchResourceTypeDirectory);
-    push_ptr_parameter(pchPathBuffer);
-    push_uint32_parameter(unBufferLen);
-    return 0;
-}
-
-uint32_t __thiscall IVRDriverManager_001_GetDriverCount(void *_this)
-{
-    push_ptr_parameter(_this);
-    return 0;
-}
-
-uint32_t __thiscall IVRDriverManager_001_GetDriverName(void *_this, DriverId_t nDriver, char * pchValue, uint32_t unBufferSize)
-{
-    push_ptr_parameter(_this);
-    push_uint32_parameter(nDriver);
-    push_ptr_parameter(pchValue);
-    push_uint32_parameter(unBufferSize);
-    return 0;
-}
-
-DriverHandle_t __thiscall IVRDriverManager_001_GetDriverHandle(void *_this, const char * pchDriverName)
-{
-    push_ptr_parameter(_this);
-    push_ptr_parameter(pchDriverName);
     return 0;
 }
 
@@ -2498,98 +3765,6 @@ EVRInputError __thiscall IVRInput_004_ShowBindingsForActionSet(void *_this, VRAc
     push_uint32_parameter(unSizeOfVRSelectedActionSet_t);
     push_uint32_parameter(unSetCount);
     push_uint64_parameter(originToHighlight);
-    return 0;
-}
-
-EIOBufferError __thiscall IVRIOBuffer_001_Open(void *_this, const char * pchPath, EIOBufferMode mode, uint32_t unElementSize, uint32_t unElements, IOBufferHandle_t * pulBuffer)
-{
-    push_ptr_parameter(_this);
-    push_ptr_parameter(pchPath);
-    push_uint32_parameter(mode);
-    push_uint32_parameter(unElementSize);
-    push_uint32_parameter(unElements);
-    push_ptr_parameter(pulBuffer);
-    return 0;
-}
-
-EIOBufferError __thiscall IVRIOBuffer_001_Close(void *_this, IOBufferHandle_t ulBuffer)
-{
-    push_ptr_parameter(_this);
-    push_uint64_parameter(ulBuffer);
-    return 0;
-}
-
-EIOBufferError __thiscall IVRIOBuffer_001_Read(void *_this, IOBufferHandle_t ulBuffer, void * pDst, uint32_t unBytes, uint32_t * punRead)
-{
-    push_ptr_parameter(_this);
-    push_uint64_parameter(ulBuffer);
-    push_ptr_parameter(pDst);
-    push_uint32_parameter(unBytes);
-    push_ptr_parameter(punRead);
-    return 0;
-}
-
-EIOBufferError __thiscall IVRIOBuffer_001_Write(void *_this, IOBufferHandle_t ulBuffer, void * pSrc, uint32_t unBytes)
-{
-    push_ptr_parameter(_this);
-    push_uint64_parameter(ulBuffer);
-    push_ptr_parameter(pSrc);
-    push_uint32_parameter(unBytes);
-    return 0;
-}
-
-PropertyContainerHandle_t __thiscall IVRIOBuffer_001_PropertyContainer(void *_this, IOBufferHandle_t ulBuffer)
-{
-    push_ptr_parameter(_this);
-    push_uint64_parameter(ulBuffer);
-    return 0;
-}
-
-EVRInitError __thiscall IVRClientCore_003_Init(void *_this, EVRApplicationType eApplicationType, const char * pStartupInfo)
-{
-    push_ptr_parameter(_this);
-    push_uint32_parameter(eApplicationType);
-    push_ptr_parameter(pStartupInfo);
-    return 0;
-}
-
-void __thiscall IVRClientCore_003_Cleanup(void *_this)
-{
-    push_ptr_parameter(_this);
-}
-
-EVRInitError __thiscall IVRClientCore_003_IsInterfaceVersionValid(void *_this, const char * pchInterfaceVersion)
-{
-    push_ptr_parameter(_this);
-    push_ptr_parameter(pchInterfaceVersion);
-    return 0;
-}
-
-void * __thiscall IVRClientCore_003_GetGenericInterface(void *_this, const char * pchNameAndVersion, EVRInitError * peError)
-{
-    push_ptr_parameter(_this);
-    push_ptr_parameter(pchNameAndVersion);
-    push_ptr_parameter(peError);
-    return 0;
-}
-
-bool __thiscall IVRClientCore_003_BIsHmdPresent(void *_this)
-{
-    push_ptr_parameter(_this);
-    return 0;
-}
-
-const char * __thiscall IVRClientCore_003_GetEnglishStringForHmdError(void *_this, EVRInitError eError)
-{
-    push_ptr_parameter(_this);
-    push_uint32_parameter(eError);
-    return 0;
-}
-
-const char * __thiscall IVRClientCore_003_GetIDForVRInitError(void *_this, EVRInitError eError)
-{
-    push_ptr_parameter(_this);
-    push_uint32_parameter(eError);
     return 0;
 }
 
@@ -8179,6 +9354,248 @@ EVROverlayError __thiscall IVROverlay_013_SetOverlayIntersectionMask(void *_this
     push_uint32_parameter(unNumMaskPrimitives);
     push_uint32_parameter(unPrimitiveSize);
     return 0;
+}
+
+void __thiscall IVRCompositor_017_SetTrackingSpace(void *_this, ETrackingUniverseOrigin eOrigin)
+{
+    push_ptr_parameter(_this);
+    push_uint32_parameter(eOrigin);
+}
+
+ETrackingUniverseOrigin __thiscall IVRCompositor_017_GetTrackingSpace(void *_this)
+{
+    push_ptr_parameter(_this);
+    return 0;
+}
+
+EVRCompositorError __thiscall IVRCompositor_017_WaitGetPoses(void *_this, TrackedDevicePose_t * pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t * pGamePoseArray, uint32_t unGamePoseArrayCount)
+{
+    push_ptr_parameter(_this);
+    push_ptr_parameter(pRenderPoseArray);
+    push_uint32_parameter(unRenderPoseArrayCount);
+    push_ptr_parameter(pGamePoseArray);
+    push_uint32_parameter(unGamePoseArrayCount);
+    return 0;
+}
+
+EVRCompositorError __thiscall IVRCompositor_017_GetLastPoses(void *_this, TrackedDevicePose_t * pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t * pGamePoseArray, uint32_t unGamePoseArrayCount)
+{
+    push_ptr_parameter(_this);
+    push_ptr_parameter(pRenderPoseArray);
+    push_uint32_parameter(unRenderPoseArrayCount);
+    push_ptr_parameter(pGamePoseArray);
+    push_uint32_parameter(unGamePoseArrayCount);
+    return 0;
+}
+
+EVRCompositorError __thiscall IVRCompositor_017_GetLastPoseForTrackedDeviceIndex(void *_this, TrackedDeviceIndex_t unDeviceIndex, TrackedDevicePose_t * pOutputPose, TrackedDevicePose_t * pOutputGamePose)
+{
+    push_ptr_parameter(_this);
+    push_uint32_parameter(unDeviceIndex);
+    push_ptr_parameter(pOutputPose);
+    push_ptr_parameter(pOutputGamePose);
+    return 0;
+}
+
+EVRCompositorError __thiscall IVRCompositor_017_Submit(void *_this, EVREye eEye, Texture_t * pTexture, VRTextureBounds_t * pBounds, EVRSubmitFlags nSubmitFlags)
+{
+    push_ptr_parameter(_this);
+    push_uint32_parameter(eEye);
+    push_ptr_parameter(pTexture);
+    push_ptr_parameter(pBounds);
+    push_uint32_parameter(nSubmitFlags);
+    return 0;
+}
+
+void __thiscall IVRCompositor_017_ClearLastSubmittedFrame(void *_this)
+{
+    push_ptr_parameter(_this);
+}
+
+void __thiscall IVRCompositor_017_PostPresentHandoff(void *_this)
+{
+    push_ptr_parameter(_this);
+}
+
+bool __thiscall IVRCompositor_017_GetFrameTiming(void *_this, Compositor_FrameTiming * pTiming, uint32_t unFramesAgo)
+{
+    push_ptr_parameter(_this);
+    push_ptr_parameter(pTiming);
+    push_uint32_parameter(unFramesAgo);
+    return 0;
+}
+
+uint32_t __thiscall IVRCompositor_017_GetFrameTimings(void *_this, Compositor_FrameTiming * pTiming, uint32_t nFrames)
+{
+    push_ptr_parameter(_this);
+    push_ptr_parameter(pTiming);
+    push_uint32_parameter(nFrames);
+    return 0;
+}
+
+float __thiscall IVRCompositor_017_GetFrameTimeRemaining(void *_this)
+{
+    push_ptr_parameter(_this);
+    return 0;
+}
+
+void __thiscall IVRCompositor_017_GetCumulativeStats(void *_this, Compositor_CumulativeStats * pStats, uint32_t nStatsSizeInBytes)
+{
+    push_ptr_parameter(_this);
+    push_ptr_parameter(pStats);
+    push_uint32_parameter(nStatsSizeInBytes);
+}
+
+void __thiscall IVRCompositor_017_FadeToColor(void *_this, float fSeconds, float fRed, float fGreen, float fBlue, float fAlpha, bool bBackground)
+{
+    push_ptr_parameter(_this);
+    push_float_parameter(fSeconds);
+    push_float_parameter(fRed);
+    push_float_parameter(fGreen);
+    push_float_parameter(fBlue);
+    push_float_parameter(fAlpha);
+    push_bool_parameter(bBackground);
+}
+
+void __thiscall IVRCompositor_017_FadeGrid(void *_this, float fSeconds, bool bFadeIn)
+{
+    push_ptr_parameter(_this);
+    push_float_parameter(fSeconds);
+    push_bool_parameter(bFadeIn);
+}
+
+EVRCompositorError __thiscall IVRCompositor_017_SetSkyboxOverride(void *_this, Texture_t * pTextures, uint32_t unTextureCount)
+{
+    push_ptr_parameter(_this);
+    push_ptr_parameter(pTextures);
+    push_uint32_parameter(unTextureCount);
+    return 0;
+}
+
+void __thiscall IVRCompositor_017_ClearSkyboxOverride(void *_this)
+{
+    push_ptr_parameter(_this);
+}
+
+void __thiscall IVRCompositor_017_CompositorBringToFront(void *_this)
+{
+    push_ptr_parameter(_this);
+}
+
+void __thiscall IVRCompositor_017_CompositorGoToBack(void *_this)
+{
+    push_ptr_parameter(_this);
+}
+
+void __thiscall IVRCompositor_017_CompositorQuit(void *_this)
+{
+    push_ptr_parameter(_this);
+}
+
+bool __thiscall IVRCompositor_017_IsFullscreen(void *_this)
+{
+    push_ptr_parameter(_this);
+    return 0;
+}
+
+uint32_t __thiscall IVRCompositor_017_GetCurrentSceneFocusProcess(void *_this)
+{
+    push_ptr_parameter(_this);
+    return 0;
+}
+
+uint32_t __thiscall IVRCompositor_017_GetLastFrameRenderer(void *_this)
+{
+    push_ptr_parameter(_this);
+    return 0;
+}
+
+bool __thiscall IVRCompositor_017_CanRenderScene(void *_this)
+{
+    push_ptr_parameter(_this);
+    return 0;
+}
+
+void __thiscall IVRCompositor_017_ShowMirrorWindow(void *_this)
+{
+    push_ptr_parameter(_this);
+}
+
+void __thiscall IVRCompositor_017_HideMirrorWindow(void *_this)
+{
+    push_ptr_parameter(_this);
+}
+
+bool __thiscall IVRCompositor_017_IsMirrorWindowVisible(void *_this)
+{
+    push_ptr_parameter(_this);
+    return 0;
+}
+
+void __thiscall IVRCompositor_017_CompositorDumpImages(void *_this)
+{
+    push_ptr_parameter(_this);
+}
+
+bool __thiscall IVRCompositor_017_ShouldAppRenderWithLowResources(void *_this)
+{
+    push_ptr_parameter(_this);
+    return 0;
+}
+
+void __thiscall IVRCompositor_017_ForceInterleavedReprojectionOn(void *_this, bool bOverride)
+{
+    push_ptr_parameter(_this);
+    push_bool_parameter(bOverride);
+}
+
+void __thiscall IVRCompositor_017_ForceReconnectProcess(void *_this)
+{
+    push_ptr_parameter(_this);
+}
+
+void __thiscall IVRCompositor_017_SuspendRendering(void *_this, bool bSuspend)
+{
+    push_ptr_parameter(_this);
+    push_bool_parameter(bSuspend);
+}
+
+EVRCompositorError __thiscall IVRCompositor_017_GetMirrorTextureD3D11(void *_this, EVREye eEye, void * pD3D11DeviceOrResource, void ** ppD3D11ShaderResourceView)
+{
+    push_ptr_parameter(_this);
+    push_uint32_parameter(eEye);
+    push_ptr_parameter(pD3D11DeviceOrResource);
+    push_ptr_parameter(ppD3D11ShaderResourceView);
+    return 0;
+}
+
+EVRCompositorError __thiscall IVRCompositor_017_GetMirrorTextureGL(void *_this, EVREye eEye, glUInt_t * pglTextureId, glSharedTextureHandle_t * pglSharedTextureHandle)
+{
+    push_ptr_parameter(_this);
+    push_uint32_parameter(eEye);
+    push_ptr_parameter(pglTextureId);
+    push_ptr_parameter(pglSharedTextureHandle);
+    return 0;
+}
+
+bool __thiscall IVRCompositor_017_ReleaseSharedGLTexture(void *_this, glUInt_t glTextureId, glSharedTextureHandle_t glSharedTextureHandle)
+{
+    push_ptr_parameter(_this);
+    push_uint32_parameter(glTextureId);
+    push_ptr_parameter(glSharedTextureHandle);
+    return 0;
+}
+
+void __thiscall IVRCompositor_017_LockGLSharedTextureForAccess(void *_this, glSharedTextureHandle_t glSharedTextureHandle)
+{
+    push_ptr_parameter(_this);
+    push_ptr_parameter(glSharedTextureHandle);
+}
+
+void __thiscall IVRCompositor_017_UnlockGLSharedTextureForAccess(void *_this, glSharedTextureHandle_t glSharedTextureHandle)
+{
+    push_ptr_parameter(_this);
+    push_ptr_parameter(glSharedTextureHandle);
 }
 
 void __thiscall IVRSystem_012_GetRecommendedRenderTargetSize(void *_this, uint32_t * pnWidth, uint32_t * pnHeight)

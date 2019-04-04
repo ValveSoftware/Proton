@@ -5,6 +5,8 @@
 #include "steamworks_sdk_116/isteamgamecoordinator.h"
 #include "steamclient_private.h"
 extern "C" {
+#define SDKVER_116
+#include "struct_converters.h"
 #pragma pack( push, 8 )
 struct winRemoteStorageDownloadUGCResult_t_40 {
     EResult m_eResult;
@@ -15,10 +17,8 @@ struct winRemoteStorageDownloadUGCResult_t_40 {
     uint64 m_ulSteamIDOwner;
 }  __attribute__ ((ms_struct));
 #pragma pack( pop )
-void cb_RemoteStorageDownloadUGCResult_t_40(const void *l, void *w)
+void cb_RemoteStorageDownloadUGCResult_t_40(const struct RemoteStorageDownloadUGCResult_t *lin, struct winRemoteStorageDownloadUGCResult_t_40 *win)
 {
-    RemoteStorageDownloadUGCResult_t *lin = (RemoteStorageDownloadUGCResult_t *)l;
-    struct winRemoteStorageDownloadUGCResult_t_40 *win = (struct winRemoteStorageDownloadUGCResult_t_40 *)w;
     win->m_eResult = lin->m_eResult;
     win->m_hFile = lin->m_hFile;
     win->m_nAppID = lin->m_nAppID;
@@ -27,19 +27,8 @@ void cb_RemoteStorageDownloadUGCResult_t_40(const void *l, void *w)
     win->m_ulSteamIDOwner = lin->m_ulSteamIDOwner;
 }
 
-#pragma pack( push, 8 )
-struct winLeaderboardEntry_t_116 {
-    CSteamID m_steamIDUser;
-    int32 m_nGlobalRank;
-    int32 m_nScore;
-    int32 m_cDetails;
-    UGCHandle_t m_hUGC;
-}  __attribute__ ((ms_struct));
-#pragma pack( pop )
-void win_to_lin_struct_LeaderboardEntry_t_116(const void *w, void *l)
+void win_to_lin_struct_LeaderboardEntry_t_116(const struct winLeaderboardEntry_t_116 *win, struct LeaderboardEntry_t *lin)
 {
-    LeaderboardEntry_t *lin = (LeaderboardEntry_t *)l;
-    struct winLeaderboardEntry_t_116 *win = (struct winLeaderboardEntry_t_116 *)w;
     lin->m_steamIDUser = win->m_steamIDUser;
     lin->m_nGlobalRank = win->m_nGlobalRank;
     lin->m_nScore = win->m_nScore;
@@ -47,10 +36,8 @@ void win_to_lin_struct_LeaderboardEntry_t_116(const void *w, void *l)
     lin->m_hUGC = win->m_hUGC;
 }
 
-void lin_to_win_struct_LeaderboardEntry_t_116(const void *l, void *w)
+void lin_to_win_struct_LeaderboardEntry_t_116(const struct LeaderboardEntry_t *lin, struct winLeaderboardEntry_t_116 *win)
 {
-    LeaderboardEntry_t *lin = (LeaderboardEntry_t *)l;
-    struct winLeaderboardEntry_t_116 *win = (struct winLeaderboardEntry_t_116 *)w;
     win->m_steamIDUser = lin->m_steamIDUser;
     win->m_nGlobalRank = lin->m_nGlobalRank;
     win->m_nScore = lin->m_nScore;

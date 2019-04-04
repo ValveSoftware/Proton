@@ -40,6 +40,9 @@ unsigned int steamclient_unix_path_to_dos_path(bool api_result, const char *src,
     WCHAR *dosW;
     uint32 r;
 
+    if(!dst || !dst_bytes)
+        return 0;
+
     if(!src || !api_result){
         *dst = 0;
         return 0;
@@ -132,7 +135,7 @@ const char **steamclient_dos_to_unix_stringlist(const char **src)
             const char *r;
             char *l;
             *o = HeapAlloc(GetProcessHeap(), 0, strlen(*s) + 1);
-            for(l = *s, r = *o; *l; ++l, ++r){
+            for(r = *s, l = *o; *r; ++l, ++r){
                 if(*r == '\\')
                     *l = '/';
                 else
@@ -207,7 +210,7 @@ static void (*steamclient_ReleaseThreadLocalMemory)(int);
 
 static int load_steamclient(void)
 {
-    char path[PATH_MAX];
+    char path[PATH_MAX], resolved_path[PATH_MAX];
 
     if(steamclient_lib)
         return 1;
@@ -225,6 +228,10 @@ static int load_steamclient(void)
 #else
     snprintf(path, PATH_MAX, "%s/.steam/sdk32/steamclient.so", getenv("HOME"));
 #endif
+    if (realpath(path, resolved_path)){
+        strncpy(path, resolved_path, PATH_MAX);
+        path[PATH_MAX - 1] = 0;
+    }
 #endif
     steamclient_lib = wine_dlopen(path, RTLD_NOW, NULL, 0);
     if(!steamclient_lib){

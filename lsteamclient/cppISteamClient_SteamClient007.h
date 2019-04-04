@@ -1,6 +1,3 @@
-#ifdef __cplusplus
-extern "C" {
-#endif
 extern HSteamPipe cppISteamClient_SteamClient007_CreateSteamPipe(void *);
 extern bool cppISteamClient_SteamClient007_BReleaseSteamPipe(void *, HSteamPipe);
 extern HSteamUser cppISteamClient_SteamClient007_ConnectToGlobalUser(void *, HSteamPipe);
@@ -23,6 +20,3 @@ extern void *cppISteamClient_SteamClient007_GetISteamApps(void *, HSteamUser, HS
 extern void *cppISteamClient_SteamClient007_GetISteamNetworking(void *, HSteamUser, HSteamPipe, const char *);
 extern void cppISteamClient_SteamClient007_SetWarningMessageHook(void *, SteamAPIWarningMessageHook_t);
 extern void *cppISteamClient_SteamClient007_GetISteamRemoteStorage(void *, HSteamUser, HSteamPipe, const char *);
-#ifdef __cplusplus
-}
-#endif

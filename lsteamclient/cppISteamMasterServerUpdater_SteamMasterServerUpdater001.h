@@ -1,6 +1,3 @@
-#ifdef __cplusplus
-extern "C" {
-#endif
 extern void cppISteamMasterServerUpdater_SteamMasterServerUpdater001_SetActive(void *, bool);
 extern void cppISteamMasterServerUpdater_SteamMasterServerUpdater001_SetHeartbeatInterval(void *, int);
 extern bool cppISteamMasterServerUpdater_SteamMasterServerUpdater001_HandleIncomingPacket(void *, const void *, int, uint32, uint16);
@@ -15,6 +12,3 @@ extern bool cppISteamMasterServerUpdater_SteamMasterServerUpdater001_AddMasterSe
 extern bool cppISteamMasterServerUpdater_SteamMasterServerUpdater001_RemoveMasterServer(void *, const char *);
 extern int cppISteamMasterServerUpdater_SteamMasterServerUpdater001_GetNumMasterServers(void *);
 extern int cppISteamMasterServerUpdater_SteamMasterServerUpdater001_GetMasterServerAddress(void *, int, char *, int);
-#ifdef __cplusplus
-}
-#endif

@@ -12,6 +12,7 @@ import os
 import re
 
 sdk_versions = [
+    "v1.1.3b",
     "v1.0.17",
     "v1.0.16",
     "v1.0.15",
@@ -26,6 +27,7 @@ sdk_versions = [
     "v1.0.6",
     "v1.0.5",
     "v1.0.4",
+    "v1.0.3a", #non-public build used by The Lab, see Proton github PR#2075
     "v1.0.3",
     "v1.0.2",
     "v1.0.1",
@@ -87,6 +89,93 @@ files = [
         ], [ #vrclient-allocated structs
         ]
     ),
+]
+
+path_conversions = [
+    {
+        "parent_name": "SetActionManifestPath",
+        "l2w_names":[],
+        "l2w_lens":[],
+        "w2l_names": ["pchActionManifestPath"],
+        "w2l_arrays": [False],
+        "return_is_size": False
+    },
+    {
+        "parent_name": "SetOverlayFromFile",
+        "l2w_names":[],
+        "l2w_lens":[],
+        "w2l_names": ["pchFilePath"],
+        "w2l_arrays": [False],
+        "return_is_size": False
+    },
+    {
+        "parent_name": "AddApplicationManifest",
+        "l2w_names":[],
+        "l2w_lens":[],
+        "w2l_names": ["pchApplicationManifestFullPath"],
+        "w2l_arrays": [False],
+        "return_is_size": False
+    },
+    {
+        "parent_name": "RemoveApplicationManifest",
+        "l2w_names":[],
+        "l2w_lens":[],
+        "w2l_names": ["pchApplicationManifestFullPath"],
+        "w2l_arrays": [False],
+        "return_is_size": False
+    },
+    {
+        "parent_name": "RequestScreenshot",
+        "l2w_names":[],
+        "l2w_lens":[],
+        "w2l_names": ["pchPreviewFilename", "pchVRFilename"],
+        "w2l_arrays": [False, False],
+        "return_is_size": False
+    },
+    {
+        "parent_name": "TakeStereoScreenshot",
+        "l2w_names":[],
+        "l2w_lens":[],
+        "w2l_names": ["pchPreviewFilename", "pchVRFilename"],
+        "w2l_arrays": [False, False],
+        "return_is_size": False
+    },
+    {
+        "parent_name": "SubmitScreenshot",
+        "l2w_names":[],
+        "l2w_lens":[],
+        "w2l_names": ["pchSourcePreviewFilename", "pchSourceVRFilename"],
+        "w2l_arrays": [False, False],
+        "return_is_size": False
+    },
+    {
+        "parent_name": "GetScreenshotPropertyFilename",
+        "l2w_names":["pchFilename"],
+        "l2w_lens":["cchFilename"],
+        "w2l_names": [],
+        "w2l_arrays": [],
+        "return_is_size": True
+    },
+#    {#maybe?
+#        "parent_name": "GetRenderModelOriginalPath",
+#        "l2w_names":[pchOriginalPath],
+#        "l2w_lens":[unOriginalPathLen],
+#        "w2l_names": [],
+#        "w2l_arrays": [],
+#        "return_is_size": False
+#    },
+#    {#maybe?
+#        "parent_name": "GetResourceFullPath",
+#        "l2w_names":[pchPathBuffer],
+#        "l2w_lens":[unBufferLen],
+#        "w2l_names": [pchResourceTypeDirectory],
+#        "w2l_arrays": [False],
+#        "return_is_size": False
+#    },
+    #IVRInput::GetInputSourceHandle
+    #IVRIOBuffer::Open
+
+    #TODO: LaunchInternalProcess, need steam cooperation
 ]
 
 aliases = {
@@ -171,7 +260,7 @@ def ivrcompositor_post_present_handoff(cppname, method):
     return "ivrcompositor_post_present_handoff"
 
 def ivrcompositor_wait_get_poses(cppname, method):
-    for version in ["016", "018", "019", "020", "021", "022"]:
+    for version in ["016", "017", "018", "019", "020", "021", "022"]:
         if version in cppname:
             return "ivrcompositor_wait_get_poses"
     return None
@@ -208,6 +297,21 @@ def display_sdkver(s):
 
 def strip_ns(name):
     return name.replace("vr::","")
+
+def get_path_converter(parent):
+    for conv in path_conversions:
+        if conv["parent_name"] in parent.spelling:
+            if None in conv["l2w_names"]:
+                return conv
+            if type(parent) == clang.cindex.Type:
+                children = list(parent.get_fields())
+            else:
+                children = list(parent.get_children())
+            for child in children:
+                if child.spelling in conv["w2l_names"] or \
+                        child.spelling in conv["l2w_names"]:
+                    return conv
+    return None
 
 def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, existing_methods, iface_version):
     used_name = method.spelling
@@ -281,13 +385,23 @@ def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, e
     cpp.write(")\n{\n")
     cpp_h.write(");\n")
 
-    char_param_is_unix_path = "GetAppInstallDir" in used_name or \
-            "GetItemInstallInfo" in used_name
-    path_param_name = None
-    path_size_param_name = None
+    path_conv = get_path_converter(method)
 
-    if char_param_is_unix_path:
-        cfile.write("    uint32 path_result;\n")
+    if path_conv:
+        for i in range(len(path_conv["w2l_names"])):
+            if path_conv["w2l_arrays"][i]:
+                cfile.write("    const char **lin_%s = vrclient_dos_to_unix_stringlist(%s);\n" % (path_conv["w2l_names"][i], path_conv["w2l_names"][i]))
+                # TODO
+                pass
+            else:
+                cfile.write("    char lin_%s[PATH_MAX];\n" % path_conv["w2l_names"][i])
+                cfile.write("    vrclient_dos_path_to_unix_path(%s, lin_%s);\n" % (path_conv["w2l_names"][i], path_conv["w2l_names"][i]))
+        if None in path_conv["l2w_names"]:
+            cfile.write("    const char *path_result;\n")
+        elif path_conv["return_is_size"]:
+            cfile.write("    uint32_t path_result;\n")
+        elif len(path_conv["l2w_names"]) > 0:
+            cfile.write("    %s path_result;\n" % method.result_type.spelling)
 
     if do_lin_to_win:
         cpp.write("    %s lin;\n" % do_lin_to_win[0])
@@ -302,7 +416,7 @@ def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, e
     if method.result_type.kind == clang.cindex.TypeKind.VOID:
         cfile.write("    ")
         cpp.write("    ")
-    elif char_param_is_unix_path:
+    elif path_conv and (len(path_conv["l2w_names"]) > 0 or path_conv["return_is_size"]):
         cfile.write("    path_result = ")
         cpp.write("    return ")
     elif returns_record:
@@ -342,37 +456,37 @@ def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, e
             cpp.write(", ")
         else:
             first = False
-        if char_param_is_unix_path:
-            if param.type.spelling == "char *":
-                path_param_name = param.spelling
-            elif not path_param_name is None and \
-                    (param.type.spelling == "uint32" or
-                            param.type.spelling == "int"):
-                path_size_param_name = param.spelling
         if param.spelling == "":
             cfile.write(", _%s" % unnamed)
             cpp.write("(%s)_%s" % (param.type.spelling, unnamed))
             unnamed = chr(ord(unnamed) + 1)
         else:
-            cfile.write(", %s" % param.spelling)
             if do_lin_to_win and do_lin_to_win[1] == param.spelling or \
                     do_wrap and do_wrap[1] == param.spelling:
+                cfile.write(", %s" % param.spelling)
                 cpp.write("&lin")
                 if do_lin_to_win and \
                         (do_lin_to_win[0] == "VREvent_t" or \
                          do_lin_to_win[0] == "VRControllerState001_t"):
                     next_is_size = True
             elif do_unwrap and do_unwrap[1] == param.spelling:
+                cfile.write(", %s" % param.spelling)
                 cpp.write("struct_%s_%s_unwrap(%s)" % (strip_ns(do_unwrap[0]), display_sdkver(sdkver), do_unwrap[1]))
+            elif path_conv and param.spelling in path_conv["w2l_names"]:
+                cfile.write(", %s ? lin_%s : NULL" % (param.spelling, param.spelling))
+                cpp.write("(%s)%s" % (param.type.spelling, param.spelling))
             elif next_is_size:
+                cfile.write(", %s" % param.spelling)
                 next_is_size = False
                 if param.type.spelling == "uint32_t":
                     cpp.write("sizeof(lin)")
                 else:
                     cpp.write("(%s)%s" % (param.type.spelling, param.spelling))
             elif "&" in param.type.spelling:
+                cfile.write(", %s" % param.spelling)
                 cpp.write("*%s" % param.spelling)
             else:
+                cfile.write(", %s" % param.spelling)
                 cpp.write("(%s)%s" % (param.type.spelling, param.spelling))
     if should_gen_wrapper:
         cfile.write(")")
@@ -386,8 +500,18 @@ def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, e
     cpp.write(");\n")
     if returns_record:
         cfile.write("    return _r;\n")
-    if char_param_is_unix_path and not path_param_name is None and not path_size_param_name is None:
-        cfile.write("    return steamclient_unix_path_to_dos_path(path_result, %s, %s);\n" % (path_param_name, path_size_param_name))
+    if path_conv and len(path_conv["l2w_names"]) > 0:
+        for i in range(len(path_conv["l2w_names"])):
+            assert(path_conv["l2w_names"][i]) #otherwise, no name means string is in return value. needs special handling.
+            cfile.write("    ")
+            if path_conv["return_is_size"]:
+                cfile.write("path_result = ")
+            cfile.write("vrclient_unix_path_to_dos_path(path_result, %s, %s, %s);\n" % (path_conv["l2w_names"][i], path_conv["l2w_names"][i], path_conv["l2w_lens"][i]))
+        cfile.write("    return path_result;\n")
+    if path_conv:
+        for i in range(len(path_conv["w2l_names"])):
+            if path_conv["w2l_arrays"][i]:
+                cfile.write("    vrclient_free_stringlist(lin_%s);\n" % path_conv["w2l_names"][i])
     if do_lin_to_win:
         cpp.write("    struct_%s_%s_lin_to_win(&lin, %s);\n" % (strip_ns(do_lin_to_win[0]), display_sdkver(sdkver), do_lin_to_win[1]))
         cpp.write("    return _ret;\n")
@@ -564,7 +688,8 @@ WINE_DEFAULT_DEBUG_CHANNEL(vrclient);
     constructors.write("    {\"FnTable:%s\", &create_%s_FnTable, &destroy_%s_FnTable},\n" % (iface_version, winclassname, winclassname))
     if iface_version in aliases.keys():
         for alias in aliases[iface_version]:
-            constructors.write("    {\"%s\", &create_%s}, /* alias */\n" % (alias, winclassname))
+            constructors.write("    {\"%s\", &create_%s, &destroy_%s}, /* alias */\n" % (alias, winclassname, winclassname))
+            constructors.write("    {\"FnTable:%s\", &create_%s_FnTable, &destroy_%s_FnTable},\n" % (alias, winclassname, winclassname))
 
     generate_c_api_thunk_tests(winclassname, methods, method_names)
 
@@ -606,6 +731,7 @@ def handle_struct(sdkver, struct, which):
 
     hfile.write("typedef struct win%s win%s;\n" % (handler_name, handler_name))
 
+    cppfile.write("#pragma pack(push, 8)\n")
     cppfile.write("struct win%s {\n" % handler_name)
     for m in struct.get_children():
         if m.kind == clang.cindex.CursorKind.FIELD_DECL:
@@ -615,7 +741,8 @@ def handle_struct(sdkver, struct, which):
                 cppfile.write("    %s %s;\n" % (m.type.spelling, m.displayname))
     if which == WRAPPERS:
         cppfile.write("\n    %s *linux_side;\n" % struct.displayname)
-    cppfile.write("}  __attribute__ ((ms_struct));\n\n")
+    cppfile.write("}  __attribute__ ((ms_struct));\n")
+    cppfile.write("#pragma pack(pop)\n\n")
 
     if which == LIN_TO_WIN:
         hfile.write("extern void struct_%s_lin_to_win(void *l, void *w);\n" % handler_name)
@@ -972,7 +1099,7 @@ for sdkver in sdk_versions:
         if not os.path.isfile(input_name):
             continue
         index = clang.cindex.Index.create()
-        tu = index.parse(input_name, args=['-x', 'c++', '-std=c++11', '-DGNUC', '-Iopenvr_%s/' % sdkver, '-I/usr/lib/clang/7.0.0/include/'])
+        tu = index.parse(input_name, args=['-x', 'c++', '-std=c++11', '-DGNUC', '-Iopenvr_%s/' % sdkver, '-I/usr/lib/clang/7.0.1/include/'])
 
         diagnostics = list(tu.diagnostics)
         if len(diagnostics) > 0:

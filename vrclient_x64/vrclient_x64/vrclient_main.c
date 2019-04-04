@@ -32,8 +32,8 @@ typedef struct winRenderModel_t_1015 winRenderModel_t_1015;
 typedef struct winRenderModel_TextureMap_t_1015 winRenderModel_TextureMap_t_1015;
 #include "cppIVRRenderModels_IVRRenderModels_005.h"
 
-typedef struct winRenderModel_t_1017 winRenderModel_t_1017;
-typedef struct winRenderModel_TextureMap_t_1017 winRenderModel_TextureMap_t_1017;
+typedef struct winRenderModel_t_113b winRenderModel_t_113b;
+typedef struct winRenderModel_TextureMap_t_113b winRenderModel_TextureMap_t_113b;
 #include "cppIVRRenderModels_IVRRenderModels_006.h"
 
 WINE_DEFAULT_DEBUG_CHANNEL(vrclient);
@@ -50,6 +50,83 @@ BOOL WINAPI DllMain(HINSTANCE instance, DWORD reason, void *reserved)
     }
 
     return TRUE;
+}
+
+/* returns the number of bytes written to dst, not including the NUL terminator */
+unsigned int vrclient_unix_path_to_dos_path(bool api_result, const char *src, char *dst, uint32_t dst_bytes)
+{
+    WCHAR *dosW;
+    uint32_t r;
+
+    if(!dst || !dst_bytes)
+        return 0;
+
+    if(!src || !api_result){
+        *dst = 0;
+        return 0;
+    }
+
+    dosW = wine_get_dos_file_name(src);
+    *dst = 0;
+
+    if(!dosW){
+        WARN("Unable to convert unix filename to DOS: %s\n", src);
+        return 0;
+    }
+
+    r = WideCharToMultiByte(CP_ACP, 0, dosW, -1, dst, dst_bytes,
+            NULL, NULL);
+
+    HeapFree(GetProcessHeap(), 0, dosW);
+
+    return r == 0 ? 0 : r - 1;
+}
+
+#define IS_ABSOLUTE(x) (*x == '/' || *x == '\\' || (*x && *(x + 1) == ':'))
+
+/* returns non-zero on success, zero on failure */
+bool vrclient_dos_path_to_unix_path(const char *src, char *dst)
+{
+    *dst = 0;
+
+    if(!src || !*src)
+        return 0;
+
+    if(IS_ABSOLUTE(src)){
+        /* absolute path, use wine conversion */
+        WCHAR srcW[PATH_MAX];
+        char *unix_path;
+        uint32_t r;
+
+        r = MultiByteToWideChar(CP_UNIXCP, 0, src, -1, srcW, PATH_MAX);
+        if(r == 0)
+            return 0;
+
+        unix_path = wine_get_unix_file_name(srcW);
+        if(!unix_path){
+            WARN("Unable to convert DOS filename to unix: %s\n", src);
+            return 0;
+        }
+
+        strncpy(dst, unix_path, PATH_MAX);
+
+        HeapFree(GetProcessHeap(), 0, unix_path);
+    }else{
+        /* relative path, just fix up backslashes */
+        const char *s;
+        char *d;
+
+        for(s = src, d = dst; *src; ++s, ++d){
+            if(*s == '\\')
+                *d = '/';
+            else
+                *d = *s;
+        }
+
+        *d = 0;
+    }
+
+    return 1;
 }
 
 static BOOL array_reserve(void **elements, SIZE_T *capacity, SIZE_T count, SIZE_T size)
@@ -954,11 +1031,13 @@ uint32_t ivrcompositor_get_vulkan_device_extensions_required(
     return cpp_func(linux_side, phys_dev, value, bufsize);
 }
 
+#pragma pack( push, 8 )
 struct winRenderModel_TextureMap_t_1015 {
     uint16_t unWidth;
     uint16_t unHeight;
     const uint8_t *rubTextureMapData;
 }  __attribute__ ((ms_struct));
+#pragma pack( pop )
 
 static EVRRenderModelError load_into_texture_d3d11(ID3D11Texture2D *texture,
         const struct winRenderModel_TextureMap_t_1015 *data)
@@ -1015,7 +1094,7 @@ EVRRenderModelError ivrrendermodels_load_into_texture_d3d11_async(
         error = cppIVRRenderModels_IVRRenderModels_005_LoadTexture_Async(linux_side, texture_id, &texture_map);
         break;
     case 6:
-        error = cppIVRRenderModels_IVRRenderModels_006_LoadTexture_Async(linux_side, texture_id, (struct winRenderModel_TextureMap_t_1017 **)&texture_map);
+        error = cppIVRRenderModels_IVRRenderModels_006_LoadTexture_Async(linux_side, texture_id, (struct winRenderModel_TextureMap_t_113b **)&texture_map);
         break;
     }
     if (error == VRRenderModelError_Loading)
@@ -1045,7 +1124,7 @@ EVRRenderModelError ivrrendermodels_load_into_texture_d3d11_async(
         cppIVRRenderModels_IVRRenderModels_005_FreeTexture(linux_side, texture_map);
         break;
     case 6:
-        cppIVRRenderModels_IVRRenderModels_006_FreeTexture(linux_side, (struct winRenderModel_TextureMap_t_1017 *)texture_map);
+        cppIVRRenderModels_IVRRenderModels_006_FreeTexture(linux_side, (struct winRenderModel_TextureMap_t_113b *)texture_map);
         break;
     }
     return error;

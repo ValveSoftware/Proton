@@ -1,6 +1,3 @@
-#ifdef __cplusplus
-extern "C" {
-#endif
 extern ScreenshotHandle cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_WriteScreenshot(void *, void *, uint32, int, int);
 extern ScreenshotHandle cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_AddScreenshotToLibrary(void *, const char *, const char *, int, int);
 extern void cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_TriggerScreenshot(void *);
@@ -10,6 +7,3 @@ extern bool cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_TagUser(v
 extern bool cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_TagPublishedFile(void *, ScreenshotHandle, PublishedFileId_t);
 extern bool cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_IsScreenshotsHooked(void *);
 extern ScreenshotHandle cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_AddVRScreenshotToLibrary(void *, EVRScreenshotType, const char *, const char *);
-#ifdef __cplusplus
-}
-#endif

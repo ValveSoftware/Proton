@@ -1,6 +1,3 @@
-#ifdef __cplusplus
-extern "C" {
-#endif
 extern uint32 cppISteamUtils_SteamUtils009_GetSecondsSinceAppActive(void *);
 extern uint32 cppISteamUtils_SteamUtils009_GetSecondsSinceComputerActive(void *);
 extern EUniverse cppISteamUtils_SteamUtils009_GetConnectedUniverse(void *);
@@ -31,6 +28,3 @@ extern bool cppISteamUtils_SteamUtils009_IsSteamInBigPictureMode(void *);
 extern void cppISteamUtils_SteamUtils009_StartVRDashboard(void *);
 extern bool cppISteamUtils_SteamUtils009_IsVRHeadsetStreamingEnabled(void *);
 extern void cppISteamUtils_SteamUtils009_SetVRHeadsetStreamingEnabled(void *, bool);
-#ifdef __cplusplus
-}
-#endif

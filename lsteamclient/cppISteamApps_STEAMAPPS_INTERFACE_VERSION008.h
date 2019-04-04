@@ -1,6 +1,3 @@
-#ifdef __cplusplus
-extern "C" {
-#endif
 extern bool cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsSubscribed(void *);
 extern bool cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsLowViolence(void *);
 extern bool cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsCybercafe(void *);
@@ -27,6 +24,5 @@ extern bool cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetDlcDownloadProgress(
 extern int cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetAppBuildId(void *);
 extern void cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_RequestAllProofOfPurchaseKeys(void *);
 extern SteamAPICall_t cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetFileDetails(void *, const char *);
-#ifdef __cplusplus
-}
-#endif
+extern int cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetLaunchCommandLine(void *, char *, int);
+extern bool cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsSubscribedFromFamilySharing(void *);

@@ -1,102 +1,232 @@
-extern void cb_MicroTxnAuthorizationResponse_t_24(void *l, void *w);
+struct MicroTxnAuthorizationResponse_t;
+struct winMicroTxnAuthorizationResponse_t_24;
+extern void cb_MicroTxnAuthorizationResponse_t_24(const struct MicroTxnAuthorizationResponse_t *l, struct winMicroTxnAuthorizationResponse_t_24 *w);
 
-extern void cb_LobbyCreated_t_16(void *l, void *w);
+struct LobbyCreated_t;
+struct winLobbyCreated_t_16;
+extern void cb_LobbyCreated_t_16(const struct LobbyCreated_t *l, struct winLobbyCreated_t_16 *w);
 
-extern void cb_RemoteStorageAppSyncProgress_t_288(void *l, void *w);
+struct RequestPlayersForGameProgressCallback_t;
+struct winRequestPlayersForGameProgressCallback_t_16;
+extern void cb_RequestPlayersForGameProgressCallback_t_16(const struct RequestPlayersForGameProgressCallback_t *l, struct winRequestPlayersForGameProgressCallback_t_16 *w);
 
-extern void cb_RemoteStorageFileShareResult_t_280(void *l, void *w);
+struct RequestPlayersForGameResultCallback_t;
+struct winRequestPlayersForGameResultCallback_t_64;
+extern void cb_RequestPlayersForGameResultCallback_t_64(const struct RequestPlayersForGameResultCallback_t *l, struct winRequestPlayersForGameResultCallback_t_64 *w);
 
-extern void cb_RemoteStoragePublishFileResult_t_24(void *l, void *w);
+struct RequestPlayersForGameFinalResultCallback_t;
+struct winRequestPlayersForGameFinalResultCallback_t_24;
+extern void cb_RequestPlayersForGameFinalResultCallback_t_24(const struct RequestPlayersForGameFinalResultCallback_t *l, struct winRequestPlayersForGameFinalResultCallback_t_24 *w);
 
-extern void cb_RemoteStorageDeletePublishedFileResult_t_16(void *l, void *w);
+struct SubmitPlayerResultResultCallback_t;
+struct winSubmitPlayerResultResultCallback_t_24;
+extern void cb_SubmitPlayerResultResultCallback_t_24(const struct SubmitPlayerResultResultCallback_t *l, struct winSubmitPlayerResultResultCallback_t_24 *w);
 
-extern void cb_RemoteStorageEnumerateUserPublishedFilesResult_t_416(void *l, void *w);
+struct EndGameResultCallback_t;
+struct winEndGameResultCallback_t_16;
+extern void cb_EndGameResultCallback_t_16(const struct EndGameResultCallback_t *l, struct winEndGameResultCallback_t_16 *w);
 
-extern void cb_RemoteStorageSubscribePublishedFileResult_t_16(void *l, void *w);
+struct JoinPartyCallback_t;
+struct winJoinPartyCallback_t_280;
+extern void cb_JoinPartyCallback_t_280(const struct JoinPartyCallback_t *l, struct winJoinPartyCallback_t_280 *w);
 
-extern void cb_RemoteStorageEnumerateUserSubscribedFilesResult_t_616(void *l, void *w);
+struct CreateBeaconCallback_t;
+struct winCreateBeaconCallback_t_16;
+extern void cb_CreateBeaconCallback_t_16(const struct CreateBeaconCallback_t *l, struct winCreateBeaconCallback_t_16 *w);
 
-extern void cb_RemoteStorageUnsubscribePublishedFileResult_t_16(void *l, void *w);
+struct RemoteStorageAppSyncProgress_t;
+struct winRemoteStorageAppSyncProgress_t_288;
+extern void cb_RemoteStorageAppSyncProgress_t_288(const struct RemoteStorageAppSyncProgress_t *l, struct winRemoteStorageAppSyncProgress_t_288 *w);
 
-extern void cb_RemoteStorageUpdatePublishedFileResult_t_24(void *l, void *w);
+struct RemoteStorageFileShareResult_t;
+struct winRemoteStorageFileShareResult_t_280;
+extern void cb_RemoteStorageFileShareResult_t_280(const struct RemoteStorageFileShareResult_t *l, struct winRemoteStorageFileShareResult_t_280 *w);
 
-extern void cb_RemoteStorageDownloadUGCResult_t_296(void *l, void *w);
+struct RemoteStoragePublishFileResult_t;
+struct winRemoteStoragePublishFileResult_t_24;
+extern void cb_RemoteStoragePublishFileResult_t_24(const struct RemoteStoragePublishFileResult_t *l, struct winRemoteStoragePublishFileResult_t_24 *w);
 
-extern void cb_RemoteStorageGetPublishedFileDetailsResult_t_9760(void *l, void *w);
+struct RemoteStorageDeletePublishedFileResult_t;
+struct winRemoteStorageDeletePublishedFileResult_t_16;
+extern void cb_RemoteStorageDeletePublishedFileResult_t_16(const struct RemoteStorageDeletePublishedFileResult_t *l, struct winRemoteStorageDeletePublishedFileResult_t_16 *w);
 
-extern void cb_RemoteStorageEnumerateWorkshopFilesResult_t_624(void *l, void *w);
+struct RemoteStorageEnumerateUserPublishedFilesResult_t;
+struct winRemoteStorageEnumerateUserPublishedFilesResult_t_416;
+extern void cb_RemoteStorageEnumerateUserPublishedFilesResult_t_416(const struct RemoteStorageEnumerateUserPublishedFilesResult_t *l, struct winRemoteStorageEnumerateUserPublishedFilesResult_t_416 *w);
 
-extern void cb_RemoteStorageGetPublishedItemVoteDetailsResult_t_32(void *l, void *w);
+struct RemoteStorageSubscribePublishedFileResult_t;
+struct winRemoteStorageSubscribePublishedFileResult_t_16;
+extern void cb_RemoteStorageSubscribePublishedFileResult_t_16(const struct RemoteStorageSubscribePublishedFileResult_t *l, struct winRemoteStorageSubscribePublishedFileResult_t_16 *w);
 
-extern void cb_RemoteStorageUpdateUserPublishedItemVoteResult_t_16(void *l, void *w);
+struct RemoteStorageEnumerateUserSubscribedFilesResult_t;
+struct winRemoteStorageEnumerateUserSubscribedFilesResult_t_616;
+extern void cb_RemoteStorageEnumerateUserSubscribedFilesResult_t_616(const struct RemoteStorageEnumerateUserSubscribedFilesResult_t *l, struct winRemoteStorageEnumerateUserSubscribedFilesResult_t_616 *w);
 
-extern void cb_RemoteStorageUserVoteDetails_t_24(void *l, void *w);
+struct RemoteStorageUnsubscribePublishedFileResult_t;
+struct winRemoteStorageUnsubscribePublishedFileResult_t_16;
+extern void cb_RemoteStorageUnsubscribePublishedFileResult_t_16(const struct RemoteStorageUnsubscribePublishedFileResult_t *l, struct winRemoteStorageUnsubscribePublishedFileResult_t_16 *w);
 
-extern void cb_RemoteStorageEnumerateUserSharedWorkshopFilesResult_t_416(void *l, void *w);
+struct RemoteStorageUpdatePublishedFileResult_t;
+struct winRemoteStorageUpdatePublishedFileResult_t_24;
+extern void cb_RemoteStorageUpdatePublishedFileResult_t_24(const struct RemoteStorageUpdatePublishedFileResult_t *l, struct winRemoteStorageUpdatePublishedFileResult_t_24 *w);
 
-extern void cb_RemoteStorageSetUserPublishedFileActionResult_t_24(void *l, void *w);
+struct RemoteStorageDownloadUGCResult_t;
+struct winRemoteStorageDownloadUGCResult_t_296;
+extern void cb_RemoteStorageDownloadUGCResult_t_296(const struct RemoteStorageDownloadUGCResult_t *l, struct winRemoteStorageDownloadUGCResult_t_296 *w);
 
-extern void cb_RemoteStoragePublishedFileUpdated_t_24(void *l, void *w);
+struct RemoteStorageGetPublishedFileDetailsResult_t;
+struct winRemoteStorageGetPublishedFileDetailsResult_t_9760;
+extern void cb_RemoteStorageGetPublishedFileDetailsResult_t_9760(const struct RemoteStorageGetPublishedFileDetailsResult_t *l, struct winRemoteStorageGetPublishedFileDetailsResult_t_9760 *w);
 
-extern void cb_LeaderboardScoreUploaded_t_32(void *l, void *w);
+struct RemoteStorageEnumerateWorkshopFilesResult_t;
+struct winRemoteStorageEnumerateWorkshopFilesResult_t_624;
+extern void cb_RemoteStorageEnumerateWorkshopFilesResult_t_624(const struct RemoteStorageEnumerateWorkshopFilesResult_t *l, struct winRemoteStorageEnumerateWorkshopFilesResult_t_624 *w);
 
-extern void cb_LeaderboardUGCSet_t_16(void *l, void *w);
+struct RemoteStorageGetPublishedItemVoteDetailsResult_t;
+struct winRemoteStorageGetPublishedItemVoteDetailsResult_t_32;
+extern void cb_RemoteStorageGetPublishedItemVoteDetailsResult_t_32(const struct RemoteStorageGetPublishedItemVoteDetailsResult_t *l, struct winRemoteStorageGetPublishedItemVoteDetailsResult_t_32 *w);
 
-extern void cb_PS3TrophiesInstalled_t_24(void *l, void *w);
+struct RemoteStorageUpdateUserPublishedItemVoteResult_t;
+struct winRemoteStorageUpdateUserPublishedItemVoteResult_t_16;
+extern void cb_RemoteStorageUpdateUserPublishedItemVoteResult_t_16(const struct RemoteStorageUpdateUserPublishedItemVoteResult_t *l, struct winRemoteStorageUpdateUserPublishedItemVoteResult_t_16 *w);
 
-extern void cb_FileDetailsResult_t_40(void *l, void *w);
+struct RemoteStorageUserVoteDetails_t;
+struct winRemoteStorageUserVoteDetails_t_24;
+extern void cb_RemoteStorageUserVoteDetails_t_24(const struct RemoteStorageUserVoteDetails_t *l, struct winRemoteStorageUserVoteDetails_t_24 *w);
 
-extern void cb_HTTPRequestCompleted_t_32(void *l, void *w);
+struct RemoteStorageEnumerateUserSharedWorkshopFilesResult_t;
+struct winRemoteStorageEnumerateUserSharedWorkshopFilesResult_t_416;
+extern void cb_RemoteStorageEnumerateUserSharedWorkshopFilesResult_t_416(const struct RemoteStorageEnumerateUserSharedWorkshopFilesResult_t *l, struct winRemoteStorageEnumerateUserSharedWorkshopFilesResult_t_416 *w);
 
-extern void cb_HTTPRequestHeadersReceived_t_16(void *l, void *w);
+struct RemoteStorageSetUserPublishedFileActionResult_t;
+struct winRemoteStorageSetUserPublishedFileActionResult_t_24;
+extern void cb_RemoteStorageSetUserPublishedFileActionResult_t_24(const struct RemoteStorageSetUserPublishedFileActionResult_t *l, struct winRemoteStorageSetUserPublishedFileActionResult_t_24 *w);
 
-extern void cb_HTTPRequestDataReceived_t_24(void *l, void *w);
+struct RemoteStoragePublishedFileUpdated_t;
+struct winRemoteStoragePublishedFileUpdated_t_24;
+extern void cb_RemoteStoragePublishedFileUpdated_t_24(const struct RemoteStoragePublishedFileUpdated_t *l, struct winRemoteStoragePublishedFileUpdated_t_24 *w);
 
-extern void cb_SteamUGCRequestUGCDetailsResult_t_9784(void *l, void *w);
+struct LeaderboardScoreUploaded_t;
+struct winLeaderboardScoreUploaded_t_32;
+extern void cb_LeaderboardScoreUploaded_t_32(const struct LeaderboardScoreUploaded_t *l, struct winLeaderboardScoreUploaded_t_32 *w);
 
-extern void cb_CreateItemResult_t_24(void *l, void *w);
+struct LeaderboardUGCSet_t;
+struct winLeaderboardUGCSet_t_16;
+extern void cb_LeaderboardUGCSet_t_16(const struct LeaderboardUGCSet_t *l, struct winLeaderboardUGCSet_t_16 *w);
 
-extern void cb_ItemInstalled_t_16(void *l, void *w);
+struct PS3TrophiesInstalled_t;
+struct winPS3TrophiesInstalled_t_24;
+extern void cb_PS3TrophiesInstalled_t_24(const struct PS3TrophiesInstalled_t *l, struct winPS3TrophiesInstalled_t_24 *w);
 
-extern void cb_DownloadItemResult_t_24(void *l, void *w);
+struct FileDetailsResult_t;
+struct winFileDetailsResult_t_40;
+extern void cb_FileDetailsResult_t_40(const struct FileDetailsResult_t *l, struct winFileDetailsResult_t_40 *w);
 
-extern void cb_AddUGCDependencyResult_t_24(void *l, void *w);
+struct HTTPRequestCompleted_t;
+struct winHTTPRequestCompleted_t_32;
+extern void cb_HTTPRequestCompleted_t_32(const struct HTTPRequestCompleted_t *l, struct winHTTPRequestCompleted_t_32 *w);
 
-extern void cb_RemoveUGCDependencyResult_t_24(void *l, void *w);
+struct HTTPRequestHeadersReceived_t;
+struct winHTTPRequestHeadersReceived_t_16;
+extern void cb_HTTPRequestHeadersReceived_t_16(const struct HTTPRequestHeadersReceived_t *l, struct winHTTPRequestHeadersReceived_t_16 *w);
 
-extern void cb_AddAppDependencyResult_t_24(void *l, void *w);
+struct HTTPRequestDataReceived_t;
+struct winHTTPRequestDataReceived_t_24;
+extern void cb_HTTPRequestDataReceived_t_24(const struct HTTPRequestDataReceived_t *l, struct winHTTPRequestDataReceived_t_24 *w);
 
-extern void cb_RemoveAppDependencyResult_t_24(void *l, void *w);
+struct SteamUGCRequestUGCDetailsResult_t;
+struct winSteamUGCRequestUGCDetailsResult_t_9784;
+extern void cb_SteamUGCRequestUGCDetailsResult_t_9784(const struct SteamUGCRequestUGCDetailsResult_t *l, struct winSteamUGCRequestUGCDetailsResult_t_9784 *w);
 
-extern void cb_GetAppDependenciesResult_t_152(void *l, void *w);
+struct CreateItemResult_t;
+struct winCreateItemResult_t_24;
+extern void cb_CreateItemResult_t_24(const struct CreateItemResult_t *l, struct winCreateItemResult_t_24 *w);
 
-extern void cb_DeleteItemResult_t_16(void *l, void *w);
+struct ItemInstalled_t;
+struct winItemInstalled_t_16;
+extern void cb_ItemInstalled_t_16(const struct ItemInstalled_t *l, struct winItemInstalled_t_16 *w);
 
-extern void cb_HTML_FileOpenDialog_t_12(void *l, void *w);
+struct DownloadItemResult_t;
+struct winDownloadItemResult_t_24;
+extern void cb_DownloadItemResult_t_24(const struct DownloadItemResult_t *l, struct winDownloadItemResult_t_24 *w);
 
-extern void cb_SteamInventoryStartPurchaseResult_t_24(void *l, void *w);
+struct AddUGCDependencyResult_t;
+struct winAddUGCDependencyResult_t_24;
+extern void cb_AddUGCDependencyResult_t_24(const struct AddUGCDependencyResult_t *l, struct winAddUGCDependencyResult_t_24 *w);
 
-extern void cb_GSReputation_t_40(void *l, void *w);
+struct RemoveUGCDependencyResult_t;
+struct winRemoveUGCDependencyResult_t_24;
+extern void cb_RemoveUGCDependencyResult_t_24(const struct RemoveUGCDependencyResult_t *l, struct winRemoveUGCDependencyResult_t_24 *w);
 
-extern void cb_HTTPRequestCompleted_t_24(void *l, void *w);
+struct AddAppDependencyResult_t;
+struct winAddAppDependencyResult_t_24;
+extern void cb_AddAppDependencyResult_t_24(const struct AddAppDependencyResult_t *l, struct winAddAppDependencyResult_t_24 *w);
 
-extern void cb_SteamUGCRequestUGCDetailsResult_t_9776(void *l, void *w);
+struct RemoveAppDependencyResult_t;
+struct winRemoveAppDependencyResult_t_24;
+extern void cb_RemoveAppDependencyResult_t_24(const struct RemoveAppDependencyResult_t *l, struct winRemoveAppDependencyResult_t_24 *w);
 
-extern void cb_RemoteStorageFileShareResult_t_16(void *l, void *w);
+struct GetAppDependenciesResult_t;
+struct winGetAppDependenciesResult_t_152;
+extern void cb_GetAppDependenciesResult_t_152(const struct GetAppDependenciesResult_t *l, struct winGetAppDependenciesResult_t_152 *w);
 
-extern void cb_SteamUGCRequestUGCDetailsResult_t_9768(void *l, void *w);
+struct DeleteItemResult_t;
+struct winDeleteItemResult_t_16;
+extern void cb_DeleteItemResult_t_16(const struct DeleteItemResult_t *l, struct winDeleteItemResult_t_16 *w);
 
-extern void cb_RemoteStorageGetPublishedFileDetailsResult_t_9752(void *l, void *w);
+struct HTML_FileOpenDialog_t;
+struct winHTML_FileOpenDialog_t_12;
+extern void cb_HTML_FileOpenDialog_t_12(const struct HTML_FileOpenDialog_t *l, struct winHTML_FileOpenDialog_t_12 *w);
 
-extern void cb_RemoteStoragePublishFileResult_t_16(void *l, void *w);
+struct SteamInventoryStartPurchaseResult_t;
+struct winSteamInventoryStartPurchaseResult_t_24;
+extern void cb_SteamInventoryStartPurchaseResult_t_24(const struct SteamInventoryStartPurchaseResult_t *l, struct winSteamInventoryStartPurchaseResult_t_24 *w);
 
-extern void cb_RemoteStorageUpdatePublishedFileResult_t_16(void *l, void *w);
+struct GSReputation_t;
+struct winGSReputation_t_40;
+extern void cb_GSReputation_t_40(const struct GSReputation_t *l, struct winGSReputation_t_40 *w);
 
-extern void cb_RemoteStorageEnumerateWorkshopFilesResult_t_616(void *l, void *w);
+struct HTTPRequestCompleted_t;
+struct winHTTPRequestCompleted_t_24;
+extern void cb_HTTPRequestCompleted_t_24(const struct HTTPRequestCompleted_t *l, struct winHTTPRequestCompleted_t_24 *w);
 
-extern void cb_RemoteStorageGetPublishedFileDetailsResult_t_9496(void *l, void *w);
+struct SteamUGCRequestUGCDetailsResult_t;
+struct winSteamUGCRequestUGCDetailsResult_t_9776;
+extern void cb_SteamUGCRequestUGCDetailsResult_t_9776(const struct SteamUGCRequestUGCDetailsResult_t *l, struct winSteamUGCRequestUGCDetailsResult_t_9776 *w);
 
-extern void cb_RemoteStorageGetPublishedFileDetailsResult_t_1744(void *l, void *w);
+struct RemoteStorageFileShareResult_t;
+struct winRemoteStorageFileShareResult_t_16;
+extern void cb_RemoteStorageFileShareResult_t_16(const struct RemoteStorageFileShareResult_t *l, struct winRemoteStorageFileShareResult_t_16 *w);
 
-extern void cb_RemoteStorageDownloadUGCResult_t_40(void *l, void *w);
+struct SteamUGCRequestUGCDetailsResult_t;
+struct winSteamUGCRequestUGCDetailsResult_t_9768;
+extern void cb_SteamUGCRequestUGCDetailsResult_t_9768(const struct SteamUGCRequestUGCDetailsResult_t *l, struct winSteamUGCRequestUGCDetailsResult_t_9768 *w);
+
+struct RemoteStorageGetPublishedFileDetailsResult_t;
+struct winRemoteStorageGetPublishedFileDetailsResult_t_9752;
+extern void cb_RemoteStorageGetPublishedFileDetailsResult_t_9752(const struct RemoteStorageGetPublishedFileDetailsResult_t *l, struct winRemoteStorageGetPublishedFileDetailsResult_t_9752 *w);
+
+struct RemoteStoragePublishFileResult_t;
+struct winRemoteStoragePublishFileResult_t_16;
+extern void cb_RemoteStoragePublishFileResult_t_16(const struct RemoteStoragePublishFileResult_t *l, struct winRemoteStoragePublishFileResult_t_16 *w);
+
+struct RemoteStorageUpdatePublishedFileResult_t;
+struct winRemoteStorageUpdatePublishedFileResult_t_16;
+extern void cb_RemoteStorageUpdatePublishedFileResult_t_16(const struct RemoteStorageUpdatePublishedFileResult_t *l, struct winRemoteStorageUpdatePublishedFileResult_t_16 *w);
+
+struct RemoteStorageEnumerateWorkshopFilesResult_t;
+struct winRemoteStorageEnumerateWorkshopFilesResult_t_616;
+extern void cb_RemoteStorageEnumerateWorkshopFilesResult_t_616(const struct RemoteStorageEnumerateWorkshopFilesResult_t *l, struct winRemoteStorageEnumerateWorkshopFilesResult_t_616 *w);
+
+struct RemoteStorageGetPublishedFileDetailsResult_t;
+struct winRemoteStorageGetPublishedFileDetailsResult_t_9496;
+extern void cb_RemoteStorageGetPublishedFileDetailsResult_t_9496(const struct RemoteStorageGetPublishedFileDetailsResult_t *l, struct winRemoteStorageGetPublishedFileDetailsResult_t_9496 *w);
+
+struct RemoteStorageGetPublishedFileDetailsResult_t;
+struct winRemoteStorageGetPublishedFileDetailsResult_t_1744;
+extern void cb_RemoteStorageGetPublishedFileDetailsResult_t_1744(const struct RemoteStorageGetPublishedFileDetailsResult_t *l, struct winRemoteStorageGetPublishedFileDetailsResult_t_1744 *w);
+
+struct RemoteStorageDownloadUGCResult_t;
+struct winRemoteStorageDownloadUGCResult_t_40;
+extern void cb_RemoteStorageDownloadUGCResult_t_40(const struct RemoteStorageDownloadUGCResult_t *l, struct winRemoteStorageDownloadUGCResult_t_40 *w);
 

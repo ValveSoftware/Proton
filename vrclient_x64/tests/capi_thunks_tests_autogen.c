@@ -914,179 +914,166 @@ void test_capi_thunks_IVRChaperone_003(void)
     VirtualFree(t, 0, MEM_RELEASE);
 }
 
-void test_capi_thunks_IVRChaperoneSetup_005(void)
+void test_capi_thunks_IVRChaperoneSetup_006(void)
 {
     struct thunk *t = alloc_thunks(1);
 
-    init_thunk(t, this_ptr_value, IVRChaperoneSetup_005_CommitWorkingCopy, 1, FALSE, FALSE);
-    bool (__stdcall *capi_IVRChaperoneSetup_005_CommitWorkingCopy)(EChaperoneConfigFile configFile) = (void *)t;
+    init_thunk(t, this_ptr_value, IVRChaperoneSetup_006_CommitWorkingCopy, 1, FALSE, FALSE);
+    bool (__stdcall *capi_IVRChaperoneSetup_006_CommitWorkingCopy)(EChaperoneConfigFile configFile) = (void *)t;
 
     clear_parameters();
-    capi_IVRChaperoneSetup_005_CommitWorkingCopy(1);
-    check_ptr_parameter("IVRChaperoneSetup_005_CommitWorkingCopy", this_ptr_value);
-    check_uint32_parameter("IVRChaperoneSetup_005_CommitWorkingCopy", 1);
+    capi_IVRChaperoneSetup_006_CommitWorkingCopy(1);
+    check_ptr_parameter("IVRChaperoneSetup_006_CommitWorkingCopy", this_ptr_value);
+    check_uint32_parameter("IVRChaperoneSetup_006_CommitWorkingCopy", 1);
 
-    init_thunk(t, this_ptr_value, IVRChaperoneSetup_005_RevertWorkingCopy, 0, FALSE, FALSE);
-    void (__stdcall *capi_IVRChaperoneSetup_005_RevertWorkingCopy)() = (void *)t;
-
-    clear_parameters();
-    capi_IVRChaperoneSetup_005_RevertWorkingCopy();
-    check_ptr_parameter("IVRChaperoneSetup_005_RevertWorkingCopy", this_ptr_value);
-
-    init_thunk(t, this_ptr_value, IVRChaperoneSetup_005_GetWorkingPlayAreaSize, 2, FALSE, FALSE);
-    bool (__stdcall *capi_IVRChaperoneSetup_005_GetWorkingPlayAreaSize)(float * pSizeX, float * pSizeZ) = (void *)t;
+    init_thunk(t, this_ptr_value, IVRChaperoneSetup_006_RevertWorkingCopy, 0, FALSE, FALSE);
+    void (__stdcall *capi_IVRChaperoneSetup_006_RevertWorkingCopy)() = (void *)t;
 
     clear_parameters();
-    capi_IVRChaperoneSetup_005_GetWorkingPlayAreaSize((void *)1, (void *)2);
-    check_ptr_parameter("IVRChaperoneSetup_005_GetWorkingPlayAreaSize", this_ptr_value);
-    check_ptr_parameter("IVRChaperoneSetup_005_GetWorkingPlayAreaSize", (void *)1);
-    check_ptr_parameter("IVRChaperoneSetup_005_GetWorkingPlayAreaSize", (void *)2);
+    capi_IVRChaperoneSetup_006_RevertWorkingCopy();
+    check_ptr_parameter("IVRChaperoneSetup_006_RevertWorkingCopy", this_ptr_value);
 
-    init_thunk(t, this_ptr_value, IVRChaperoneSetup_005_GetWorkingPlayAreaRect, 1, FALSE, FALSE);
-    bool (__stdcall *capi_IVRChaperoneSetup_005_GetWorkingPlayAreaRect)(HmdQuad_t * rect) = (void *)t;
+    init_thunk(t, this_ptr_value, IVRChaperoneSetup_006_GetWorkingPlayAreaSize, 2, FALSE, FALSE);
+    bool (__stdcall *capi_IVRChaperoneSetup_006_GetWorkingPlayAreaSize)(float * pSizeX, float * pSizeZ) = (void *)t;
 
     clear_parameters();
-    capi_IVRChaperoneSetup_005_GetWorkingPlayAreaRect((void *)1);
-    check_ptr_parameter("IVRChaperoneSetup_005_GetWorkingPlayAreaRect", this_ptr_value);
-    check_ptr_parameter("IVRChaperoneSetup_005_GetWorkingPlayAreaRect", (void *)1);
+    capi_IVRChaperoneSetup_006_GetWorkingPlayAreaSize((void *)1, (void *)2);
+    check_ptr_parameter("IVRChaperoneSetup_006_GetWorkingPlayAreaSize", this_ptr_value);
+    check_ptr_parameter("IVRChaperoneSetup_006_GetWorkingPlayAreaSize", (void *)1);
+    check_ptr_parameter("IVRChaperoneSetup_006_GetWorkingPlayAreaSize", (void *)2);
 
-    init_thunk(t, this_ptr_value, IVRChaperoneSetup_005_GetWorkingCollisionBoundsInfo, 2, FALSE, FALSE);
-    bool (__stdcall *capi_IVRChaperoneSetup_005_GetWorkingCollisionBoundsInfo)(HmdQuad_t * pQuadsBuffer, uint32_t * punQuadsCount) = (void *)t;
-
-    clear_parameters();
-    capi_IVRChaperoneSetup_005_GetWorkingCollisionBoundsInfo((void *)1, (void *)2);
-    check_ptr_parameter("IVRChaperoneSetup_005_GetWorkingCollisionBoundsInfo", this_ptr_value);
-    check_ptr_parameter("IVRChaperoneSetup_005_GetWorkingCollisionBoundsInfo", (void *)1);
-    check_ptr_parameter("IVRChaperoneSetup_005_GetWorkingCollisionBoundsInfo", (void *)2);
-
-    init_thunk(t, this_ptr_value, IVRChaperoneSetup_005_GetLiveCollisionBoundsInfo, 2, FALSE, FALSE);
-    bool (__stdcall *capi_IVRChaperoneSetup_005_GetLiveCollisionBoundsInfo)(HmdQuad_t * pQuadsBuffer, uint32_t * punQuadsCount) = (void *)t;
+    init_thunk(t, this_ptr_value, IVRChaperoneSetup_006_GetWorkingPlayAreaRect, 1, FALSE, FALSE);
+    bool (__stdcall *capi_IVRChaperoneSetup_006_GetWorkingPlayAreaRect)(HmdQuad_t * rect) = (void *)t;
 
     clear_parameters();
-    capi_IVRChaperoneSetup_005_GetLiveCollisionBoundsInfo((void *)1, (void *)2);
-    check_ptr_parameter("IVRChaperoneSetup_005_GetLiveCollisionBoundsInfo", this_ptr_value);
-    check_ptr_parameter("IVRChaperoneSetup_005_GetLiveCollisionBoundsInfo", (void *)1);
-    check_ptr_parameter("IVRChaperoneSetup_005_GetLiveCollisionBoundsInfo", (void *)2);
+    capi_IVRChaperoneSetup_006_GetWorkingPlayAreaRect((void *)1);
+    check_ptr_parameter("IVRChaperoneSetup_006_GetWorkingPlayAreaRect", this_ptr_value);
+    check_ptr_parameter("IVRChaperoneSetup_006_GetWorkingPlayAreaRect", (void *)1);
 
-    init_thunk(t, this_ptr_value, IVRChaperoneSetup_005_GetWorkingSeatedZeroPoseToRawTrackingPose, 1, FALSE, FALSE);
-    bool (__stdcall *capi_IVRChaperoneSetup_005_GetWorkingSeatedZeroPoseToRawTrackingPose)(HmdMatrix34_t * pmatSeatedZeroPoseToRawTrackingPose) = (void *)t;
-
-    clear_parameters();
-    capi_IVRChaperoneSetup_005_GetWorkingSeatedZeroPoseToRawTrackingPose((void *)1);
-    check_ptr_parameter("IVRChaperoneSetup_005_GetWorkingSeatedZeroPoseToRawTrackingPose", this_ptr_value);
-    check_ptr_parameter("IVRChaperoneSetup_005_GetWorkingSeatedZeroPoseToRawTrackingPose", (void *)1);
-
-    init_thunk(t, this_ptr_value, IVRChaperoneSetup_005_GetWorkingStandingZeroPoseToRawTrackingPose, 1, FALSE, FALSE);
-    bool (__stdcall *capi_IVRChaperoneSetup_005_GetWorkingStandingZeroPoseToRawTrackingPose)(HmdMatrix34_t * pmatStandingZeroPoseToRawTrackingPose) = (void *)t;
+    init_thunk(t, this_ptr_value, IVRChaperoneSetup_006_GetWorkingCollisionBoundsInfo, 2, FALSE, FALSE);
+    bool (__stdcall *capi_IVRChaperoneSetup_006_GetWorkingCollisionBoundsInfo)(HmdQuad_t * pQuadsBuffer, uint32_t * punQuadsCount) = (void *)t;
 
     clear_parameters();
-    capi_IVRChaperoneSetup_005_GetWorkingStandingZeroPoseToRawTrackingPose((void *)1);
-    check_ptr_parameter("IVRChaperoneSetup_005_GetWorkingStandingZeroPoseToRawTrackingPose", this_ptr_value);
-    check_ptr_parameter("IVRChaperoneSetup_005_GetWorkingStandingZeroPoseToRawTrackingPose", (void *)1);
+    capi_IVRChaperoneSetup_006_GetWorkingCollisionBoundsInfo((void *)1, (void *)2);
+    check_ptr_parameter("IVRChaperoneSetup_006_GetWorkingCollisionBoundsInfo", this_ptr_value);
+    check_ptr_parameter("IVRChaperoneSetup_006_GetWorkingCollisionBoundsInfo", (void *)1);
+    check_ptr_parameter("IVRChaperoneSetup_006_GetWorkingCollisionBoundsInfo", (void *)2);
 
-    init_thunk(t, this_ptr_value, IVRChaperoneSetup_005_SetWorkingPlayAreaSize, 2, TRUE, FALSE);
-    void (__stdcall *capi_IVRChaperoneSetup_005_SetWorkingPlayAreaSize)(float sizeX, float sizeZ) = (void *)t;
-
-    clear_parameters();
-    capi_IVRChaperoneSetup_005_SetWorkingPlayAreaSize(1.0f, 2.0f);
-    check_ptr_parameter("IVRChaperoneSetup_005_SetWorkingPlayAreaSize", this_ptr_value);
-    check_float_parameter("IVRChaperoneSetup_005_SetWorkingPlayAreaSize", 1.0f);
-    check_float_parameter("IVRChaperoneSetup_005_SetWorkingPlayAreaSize", 2.0f);
-
-    init_thunk(t, this_ptr_value, IVRChaperoneSetup_005_SetWorkingCollisionBoundsInfo, 2, FALSE, FALSE);
-    void (__stdcall *capi_IVRChaperoneSetup_005_SetWorkingCollisionBoundsInfo)(HmdQuad_t * pQuadsBuffer, uint32_t unQuadsCount) = (void *)t;
+    init_thunk(t, this_ptr_value, IVRChaperoneSetup_006_GetLiveCollisionBoundsInfo, 2, FALSE, FALSE);
+    bool (__stdcall *capi_IVRChaperoneSetup_006_GetLiveCollisionBoundsInfo)(HmdQuad_t * pQuadsBuffer, uint32_t * punQuadsCount) = (void *)t;
 
     clear_parameters();
-    capi_IVRChaperoneSetup_005_SetWorkingCollisionBoundsInfo((void *)1, 2);
-    check_ptr_parameter("IVRChaperoneSetup_005_SetWorkingCollisionBoundsInfo", this_ptr_value);
-    check_ptr_parameter("IVRChaperoneSetup_005_SetWorkingCollisionBoundsInfo", (void *)1);
-    check_uint32_parameter("IVRChaperoneSetup_005_SetWorkingCollisionBoundsInfo", 2);
+    capi_IVRChaperoneSetup_006_GetLiveCollisionBoundsInfo((void *)1, (void *)2);
+    check_ptr_parameter("IVRChaperoneSetup_006_GetLiveCollisionBoundsInfo", this_ptr_value);
+    check_ptr_parameter("IVRChaperoneSetup_006_GetLiveCollisionBoundsInfo", (void *)1);
+    check_ptr_parameter("IVRChaperoneSetup_006_GetLiveCollisionBoundsInfo", (void *)2);
 
-    init_thunk(t, this_ptr_value, IVRChaperoneSetup_005_SetWorkingSeatedZeroPoseToRawTrackingPose, 1, FALSE, FALSE);
-    void (__stdcall *capi_IVRChaperoneSetup_005_SetWorkingSeatedZeroPoseToRawTrackingPose)(HmdMatrix34_t * pMatSeatedZeroPoseToRawTrackingPose) = (void *)t;
-
-    clear_parameters();
-    capi_IVRChaperoneSetup_005_SetWorkingSeatedZeroPoseToRawTrackingPose((void *)1);
-    check_ptr_parameter("IVRChaperoneSetup_005_SetWorkingSeatedZeroPoseToRawTrackingPose", this_ptr_value);
-    check_ptr_parameter("IVRChaperoneSetup_005_SetWorkingSeatedZeroPoseToRawTrackingPose", (void *)1);
-
-    init_thunk(t, this_ptr_value, IVRChaperoneSetup_005_SetWorkingStandingZeroPoseToRawTrackingPose, 1, FALSE, FALSE);
-    void (__stdcall *capi_IVRChaperoneSetup_005_SetWorkingStandingZeroPoseToRawTrackingPose)(HmdMatrix34_t * pMatStandingZeroPoseToRawTrackingPose) = (void *)t;
+    init_thunk(t, this_ptr_value, IVRChaperoneSetup_006_GetWorkingSeatedZeroPoseToRawTrackingPose, 1, FALSE, FALSE);
+    bool (__stdcall *capi_IVRChaperoneSetup_006_GetWorkingSeatedZeroPoseToRawTrackingPose)(HmdMatrix34_t * pmatSeatedZeroPoseToRawTrackingPose) = (void *)t;
 
     clear_parameters();
-    capi_IVRChaperoneSetup_005_SetWorkingStandingZeroPoseToRawTrackingPose((void *)1);
-    check_ptr_parameter("IVRChaperoneSetup_005_SetWorkingStandingZeroPoseToRawTrackingPose", this_ptr_value);
-    check_ptr_parameter("IVRChaperoneSetup_005_SetWorkingStandingZeroPoseToRawTrackingPose", (void *)1);
+    capi_IVRChaperoneSetup_006_GetWorkingSeatedZeroPoseToRawTrackingPose((void *)1);
+    check_ptr_parameter("IVRChaperoneSetup_006_GetWorkingSeatedZeroPoseToRawTrackingPose", this_ptr_value);
+    check_ptr_parameter("IVRChaperoneSetup_006_GetWorkingSeatedZeroPoseToRawTrackingPose", (void *)1);
 
-    init_thunk(t, this_ptr_value, IVRChaperoneSetup_005_ReloadFromDisk, 1, FALSE, FALSE);
-    void (__stdcall *capi_IVRChaperoneSetup_005_ReloadFromDisk)(EChaperoneConfigFile configFile) = (void *)t;
-
-    clear_parameters();
-    capi_IVRChaperoneSetup_005_ReloadFromDisk(1);
-    check_ptr_parameter("IVRChaperoneSetup_005_ReloadFromDisk", this_ptr_value);
-    check_uint32_parameter("IVRChaperoneSetup_005_ReloadFromDisk", 1);
-
-    init_thunk(t, this_ptr_value, IVRChaperoneSetup_005_GetLiveSeatedZeroPoseToRawTrackingPose, 1, FALSE, FALSE);
-    bool (__stdcall *capi_IVRChaperoneSetup_005_GetLiveSeatedZeroPoseToRawTrackingPose)(HmdMatrix34_t * pmatSeatedZeroPoseToRawTrackingPose) = (void *)t;
+    init_thunk(t, this_ptr_value, IVRChaperoneSetup_006_GetWorkingStandingZeroPoseToRawTrackingPose, 1, FALSE, FALSE);
+    bool (__stdcall *capi_IVRChaperoneSetup_006_GetWorkingStandingZeroPoseToRawTrackingPose)(HmdMatrix34_t * pmatStandingZeroPoseToRawTrackingPose) = (void *)t;
 
     clear_parameters();
-    capi_IVRChaperoneSetup_005_GetLiveSeatedZeroPoseToRawTrackingPose((void *)1);
-    check_ptr_parameter("IVRChaperoneSetup_005_GetLiveSeatedZeroPoseToRawTrackingPose", this_ptr_value);
-    check_ptr_parameter("IVRChaperoneSetup_005_GetLiveSeatedZeroPoseToRawTrackingPose", (void *)1);
+    capi_IVRChaperoneSetup_006_GetWorkingStandingZeroPoseToRawTrackingPose((void *)1);
+    check_ptr_parameter("IVRChaperoneSetup_006_GetWorkingStandingZeroPoseToRawTrackingPose", this_ptr_value);
+    check_ptr_parameter("IVRChaperoneSetup_006_GetWorkingStandingZeroPoseToRawTrackingPose", (void *)1);
 
-    init_thunk(t, this_ptr_value, IVRChaperoneSetup_005_SetWorkingCollisionBoundsTagsInfo, 2, FALSE, FALSE);
-    void (__stdcall *capi_IVRChaperoneSetup_005_SetWorkingCollisionBoundsTagsInfo)(uint8_t * pTagsBuffer, uint32_t unTagCount) = (void *)t;
-
-    clear_parameters();
-    capi_IVRChaperoneSetup_005_SetWorkingCollisionBoundsTagsInfo((void *)1, 2);
-    check_ptr_parameter("IVRChaperoneSetup_005_SetWorkingCollisionBoundsTagsInfo", this_ptr_value);
-    check_ptr_parameter("IVRChaperoneSetup_005_SetWorkingCollisionBoundsTagsInfo", (void *)1);
-    check_uint32_parameter("IVRChaperoneSetup_005_SetWorkingCollisionBoundsTagsInfo", 2);
-
-    init_thunk(t, this_ptr_value, IVRChaperoneSetup_005_GetLiveCollisionBoundsTagsInfo, 2, FALSE, FALSE);
-    bool (__stdcall *capi_IVRChaperoneSetup_005_GetLiveCollisionBoundsTagsInfo)(uint8_t * pTagsBuffer, uint32_t * punTagCount) = (void *)t;
+    init_thunk(t, this_ptr_value, IVRChaperoneSetup_006_SetWorkingPlayAreaSize, 2, TRUE, FALSE);
+    void (__stdcall *capi_IVRChaperoneSetup_006_SetWorkingPlayAreaSize)(float sizeX, float sizeZ) = (void *)t;
 
     clear_parameters();
-    capi_IVRChaperoneSetup_005_GetLiveCollisionBoundsTagsInfo((void *)1, (void *)2);
-    check_ptr_parameter("IVRChaperoneSetup_005_GetLiveCollisionBoundsTagsInfo", this_ptr_value);
-    check_ptr_parameter("IVRChaperoneSetup_005_GetLiveCollisionBoundsTagsInfo", (void *)1);
-    check_ptr_parameter("IVRChaperoneSetup_005_GetLiveCollisionBoundsTagsInfo", (void *)2);
+    capi_IVRChaperoneSetup_006_SetWorkingPlayAreaSize(1.0f, 2.0f);
+    check_ptr_parameter("IVRChaperoneSetup_006_SetWorkingPlayAreaSize", this_ptr_value);
+    check_float_parameter("IVRChaperoneSetup_006_SetWorkingPlayAreaSize", 1.0f);
+    check_float_parameter("IVRChaperoneSetup_006_SetWorkingPlayAreaSize", 2.0f);
 
-    init_thunk(t, this_ptr_value, IVRChaperoneSetup_005_SetWorkingPhysicalBoundsInfo, 2, FALSE, FALSE);
-    bool (__stdcall *capi_IVRChaperoneSetup_005_SetWorkingPhysicalBoundsInfo)(HmdQuad_t * pQuadsBuffer, uint32_t unQuadsCount) = (void *)t;
-
-    clear_parameters();
-    capi_IVRChaperoneSetup_005_SetWorkingPhysicalBoundsInfo((void *)1, 2);
-    check_ptr_parameter("IVRChaperoneSetup_005_SetWorkingPhysicalBoundsInfo", this_ptr_value);
-    check_ptr_parameter("IVRChaperoneSetup_005_SetWorkingPhysicalBoundsInfo", (void *)1);
-    check_uint32_parameter("IVRChaperoneSetup_005_SetWorkingPhysicalBoundsInfo", 2);
-
-    init_thunk(t, this_ptr_value, IVRChaperoneSetup_005_GetLivePhysicalBoundsInfo, 2, FALSE, FALSE);
-    bool (__stdcall *capi_IVRChaperoneSetup_005_GetLivePhysicalBoundsInfo)(HmdQuad_t * pQuadsBuffer, uint32_t * punQuadsCount) = (void *)t;
+    init_thunk(t, this_ptr_value, IVRChaperoneSetup_006_SetWorkingCollisionBoundsInfo, 2, FALSE, FALSE);
+    void (__stdcall *capi_IVRChaperoneSetup_006_SetWorkingCollisionBoundsInfo)(HmdQuad_t * pQuadsBuffer, uint32_t unQuadsCount) = (void *)t;
 
     clear_parameters();
-    capi_IVRChaperoneSetup_005_GetLivePhysicalBoundsInfo((void *)1, (void *)2);
-    check_ptr_parameter("IVRChaperoneSetup_005_GetLivePhysicalBoundsInfo", this_ptr_value);
-    check_ptr_parameter("IVRChaperoneSetup_005_GetLivePhysicalBoundsInfo", (void *)1);
-    check_ptr_parameter("IVRChaperoneSetup_005_GetLivePhysicalBoundsInfo", (void *)2);
+    capi_IVRChaperoneSetup_006_SetWorkingCollisionBoundsInfo((void *)1, 2);
+    check_ptr_parameter("IVRChaperoneSetup_006_SetWorkingCollisionBoundsInfo", this_ptr_value);
+    check_ptr_parameter("IVRChaperoneSetup_006_SetWorkingCollisionBoundsInfo", (void *)1);
+    check_uint32_parameter("IVRChaperoneSetup_006_SetWorkingCollisionBoundsInfo", 2);
 
-    init_thunk(t, this_ptr_value, IVRChaperoneSetup_005_ExportLiveToBuffer, 2, FALSE, FALSE);
-    bool (__stdcall *capi_IVRChaperoneSetup_005_ExportLiveToBuffer)(char * pBuffer, uint32_t * pnBufferLength) = (void *)t;
-
-    clear_parameters();
-    capi_IVRChaperoneSetup_005_ExportLiveToBuffer((void *)1, (void *)2);
-    check_ptr_parameter("IVRChaperoneSetup_005_ExportLiveToBuffer", this_ptr_value);
-    check_ptr_parameter("IVRChaperoneSetup_005_ExportLiveToBuffer", (void *)1);
-    check_ptr_parameter("IVRChaperoneSetup_005_ExportLiveToBuffer", (void *)2);
-
-    init_thunk(t, this_ptr_value, IVRChaperoneSetup_005_ImportFromBufferToWorking, 2, FALSE, FALSE);
-    bool (__stdcall *capi_IVRChaperoneSetup_005_ImportFromBufferToWorking)(const char * pBuffer, uint32_t nImportFlags) = (void *)t;
+    init_thunk(t, this_ptr_value, IVRChaperoneSetup_006_SetWorkingPerimeter, 2, FALSE, FALSE);
+    void (__stdcall *capi_IVRChaperoneSetup_006_SetWorkingPerimeter)(HmdVector2_t * pPointBuffer, uint32_t unPointCount) = (void *)t;
 
     clear_parameters();
-    capi_IVRChaperoneSetup_005_ImportFromBufferToWorking((void *)1, 2);
-    check_ptr_parameter("IVRChaperoneSetup_005_ImportFromBufferToWorking", this_ptr_value);
-    check_ptr_parameter("IVRChaperoneSetup_005_ImportFromBufferToWorking", (void *)1);
-    check_uint32_parameter("IVRChaperoneSetup_005_ImportFromBufferToWorking", 2);
+    capi_IVRChaperoneSetup_006_SetWorkingPerimeter((void *)1, 2);
+    check_ptr_parameter("IVRChaperoneSetup_006_SetWorkingPerimeter", this_ptr_value);
+    check_ptr_parameter("IVRChaperoneSetup_006_SetWorkingPerimeter", (void *)1);
+    check_uint32_parameter("IVRChaperoneSetup_006_SetWorkingPerimeter", 2);
+
+    init_thunk(t, this_ptr_value, IVRChaperoneSetup_006_SetWorkingSeatedZeroPoseToRawTrackingPose, 1, FALSE, FALSE);
+    void (__stdcall *capi_IVRChaperoneSetup_006_SetWorkingSeatedZeroPoseToRawTrackingPose)(HmdMatrix34_t * pMatSeatedZeroPoseToRawTrackingPose) = (void *)t;
+
+    clear_parameters();
+    capi_IVRChaperoneSetup_006_SetWorkingSeatedZeroPoseToRawTrackingPose((void *)1);
+    check_ptr_parameter("IVRChaperoneSetup_006_SetWorkingSeatedZeroPoseToRawTrackingPose", this_ptr_value);
+    check_ptr_parameter("IVRChaperoneSetup_006_SetWorkingSeatedZeroPoseToRawTrackingPose", (void *)1);
+
+    init_thunk(t, this_ptr_value, IVRChaperoneSetup_006_SetWorkingStandingZeroPoseToRawTrackingPose, 1, FALSE, FALSE);
+    void (__stdcall *capi_IVRChaperoneSetup_006_SetWorkingStandingZeroPoseToRawTrackingPose)(HmdMatrix34_t * pMatStandingZeroPoseToRawTrackingPose) = (void *)t;
+
+    clear_parameters();
+    capi_IVRChaperoneSetup_006_SetWorkingStandingZeroPoseToRawTrackingPose((void *)1);
+    check_ptr_parameter("IVRChaperoneSetup_006_SetWorkingStandingZeroPoseToRawTrackingPose", this_ptr_value);
+    check_ptr_parameter("IVRChaperoneSetup_006_SetWorkingStandingZeroPoseToRawTrackingPose", (void *)1);
+
+    init_thunk(t, this_ptr_value, IVRChaperoneSetup_006_ReloadFromDisk, 1, FALSE, FALSE);
+    void (__stdcall *capi_IVRChaperoneSetup_006_ReloadFromDisk)(EChaperoneConfigFile configFile) = (void *)t;
+
+    clear_parameters();
+    capi_IVRChaperoneSetup_006_ReloadFromDisk(1);
+    check_ptr_parameter("IVRChaperoneSetup_006_ReloadFromDisk", this_ptr_value);
+    check_uint32_parameter("IVRChaperoneSetup_006_ReloadFromDisk", 1);
+
+    init_thunk(t, this_ptr_value, IVRChaperoneSetup_006_GetLiveSeatedZeroPoseToRawTrackingPose, 1, FALSE, FALSE);
+    bool (__stdcall *capi_IVRChaperoneSetup_006_GetLiveSeatedZeroPoseToRawTrackingPose)(HmdMatrix34_t * pmatSeatedZeroPoseToRawTrackingPose) = (void *)t;
+
+    clear_parameters();
+    capi_IVRChaperoneSetup_006_GetLiveSeatedZeroPoseToRawTrackingPose((void *)1);
+    check_ptr_parameter("IVRChaperoneSetup_006_GetLiveSeatedZeroPoseToRawTrackingPose", this_ptr_value);
+    check_ptr_parameter("IVRChaperoneSetup_006_GetLiveSeatedZeroPoseToRawTrackingPose", (void *)1);
+
+    init_thunk(t, this_ptr_value, IVRChaperoneSetup_006_ExportLiveToBuffer, 2, FALSE, FALSE);
+    bool (__stdcall *capi_IVRChaperoneSetup_006_ExportLiveToBuffer)(char * pBuffer, uint32_t * pnBufferLength) = (void *)t;
+
+    clear_parameters();
+    capi_IVRChaperoneSetup_006_ExportLiveToBuffer((void *)1, (void *)2);
+    check_ptr_parameter("IVRChaperoneSetup_006_ExportLiveToBuffer", this_ptr_value);
+    check_ptr_parameter("IVRChaperoneSetup_006_ExportLiveToBuffer", (void *)1);
+    check_ptr_parameter("IVRChaperoneSetup_006_ExportLiveToBuffer", (void *)2);
+
+    init_thunk(t, this_ptr_value, IVRChaperoneSetup_006_ImportFromBufferToWorking, 2, FALSE, FALSE);
+    bool (__stdcall *capi_IVRChaperoneSetup_006_ImportFromBufferToWorking)(const char * pBuffer, uint32_t nImportFlags) = (void *)t;
+
+    clear_parameters();
+    capi_IVRChaperoneSetup_006_ImportFromBufferToWorking((void *)1, 2);
+    check_ptr_parameter("IVRChaperoneSetup_006_ImportFromBufferToWorking", this_ptr_value);
+    check_ptr_parameter("IVRChaperoneSetup_006_ImportFromBufferToWorking", (void *)1);
+    check_uint32_parameter("IVRChaperoneSetup_006_ImportFromBufferToWorking", 2);
+
+    init_thunk(t, this_ptr_value, IVRChaperoneSetup_006_ShowWorkingSetPreview, 0, FALSE, FALSE);
+    void (__stdcall *capi_IVRChaperoneSetup_006_ShowWorkingSetPreview)() = (void *)t;
+
+    clear_parameters();
+    capi_IVRChaperoneSetup_006_ShowWorkingSetPreview();
+    check_ptr_parameter("IVRChaperoneSetup_006_ShowWorkingSetPreview", this_ptr_value);
+
+    init_thunk(t, this_ptr_value, IVRChaperoneSetup_006_HideWorkingSetPreview, 0, FALSE, FALSE);
+    void (__stdcall *capi_IVRChaperoneSetup_006_HideWorkingSetPreview)() = (void *)t;
+
+    clear_parameters();
+    capi_IVRChaperoneSetup_006_HideWorkingSetPreview();
+    check_ptr_parameter("IVRChaperoneSetup_006_HideWorkingSetPreview", this_ptr_value);
     VirtualFree(t, 0, MEM_RELEASE);
 }
 
@@ -1447,6 +1434,13 @@ void test_capi_thunks_IVRCompositor_022(void)
     clear_parameters();
     capi_IVRCompositor_022_SubmitExplicitTimingData();
     check_ptr_parameter("IVRCompositor_022_SubmitExplicitTimingData", this_ptr_value);
+
+    init_thunk(t, this_ptr_value, IVRCompositor_022_IsMotionSmoothingEnabled, 0, FALSE, FALSE);
+    bool (__stdcall *capi_IVRCompositor_022_IsMotionSmoothingEnabled)() = (void *)t;
+
+    clear_parameters();
+    capi_IVRCompositor_022_IsMotionSmoothingEnabled();
+    check_ptr_parameter("IVRCompositor_022_IsMotionSmoothingEnabled", this_ptr_value);
     VirtualFree(t, 0, MEM_RELEASE);
 }
 
@@ -1475,6 +1469,1839 @@ void test_capi_thunks_IVRNotifications_002(void)
     capi_IVRNotifications_002_RemoveNotification(1);
     check_ptr_parameter("IVRNotifications_002_RemoveNotification", this_ptr_value);
     check_uint32_parameter("IVRNotifications_002_RemoveNotification", 1);
+    VirtualFree(t, 0, MEM_RELEASE);
+}
+
+void test_capi_thunks_IVROverlay_019(void)
+{
+    struct thunk *t = alloc_thunks(1);
+
+    init_thunk(t, this_ptr_value, IVROverlay_019_FindOverlay, 2, FALSE, FALSE);
+    EVROverlayError (__stdcall *capi_IVROverlay_019_FindOverlay)(const char * pchOverlayKey, VROverlayHandle_t * pOverlayHandle) = (void *)t;
+
+    clear_parameters();
+    capi_IVROverlay_019_FindOverlay((void *)1, (void *)2);
+    check_ptr_parameter("IVROverlay_019_FindOverlay", this_ptr_value);
+    check_ptr_parameter("IVROverlay_019_FindOverlay", (void *)1);
+    check_ptr_parameter("IVROverlay_019_FindOverlay", (void *)2);
+
+    init_thunk(t, this_ptr_value, IVROverlay_019_CreateOverlay, 3, FALSE, FALSE);
+    EVROverlayError (__stdcall *capi_IVROverlay_019_CreateOverlay)(const char * pchOverlayKey, const char * pchOverlayName, VROverlayHandle_t * pOverlayHandle) = (void *)t;
+
+    clear_parameters();
+    capi_IVROverlay_019_CreateOverlay((void *)1, (void *)2, (void *)3);
+    check_ptr_parameter("IVROverlay_019_CreateOverlay", this_ptr_value);
+    check_ptr_parameter("IVROverlay_019_CreateOverlay", (void *)1);
+    check_ptr_parameter("IVROverlay_019_CreateOverlay", (void *)2);
+    check_ptr_parameter("IVROverlay_019_CreateOverlay", (void *)3);
+
+    init_thunk(t, this_ptr_value, IVROverlay_019_DestroyOverlay, 1, FALSE, FALSE);
+    EVROverlayError (__stdcall *capi_IVROverlay_019_DestroyOverlay)(VROverlayHandle_t ulOverlayHandle) = (void *)t;
+
+    clear_parameters();
+    capi_IVROverlay_019_DestroyOverlay(1);
+    check_ptr_parameter("IVROverlay_019_DestroyOverlay", this_ptr_value);
+    check_uint64_parameter("IVROverlay_019_DestroyOverlay", 1);
+
+    init_thunk(t, this_ptr_value, IVROverlay_019_SetHighQualityOverlay, 1, FALSE, FALSE);
+    EVROverlayError (__stdcall *capi_IVROverlay_019_SetHighQualityOverlay)(VROverlayHandle_t ulOverlayHandle) = (void *)t;
+
+    clear_parameters();
+    capi_IVROverlay_019_SetHighQualityOverlay(1);
+    check_ptr_parameter("IVROverlay_019_SetHighQualityOverlay", this_ptr_value);
+    check_uint64_parameter("IVROverlay_019_SetHighQualityOverlay", 1);
+
+    init_thunk(t, this_ptr_value, IVROverlay_019_GetHighQualityOverlay, 0, FALSE, FALSE);
+    VROverlayHandle_t (__stdcall *capi_IVROverlay_019_GetHighQualityOverlay)() = (void *)t;
+
+    clear_parameters();
+    capi_IVROverlay_019_GetHighQualityOverlay();
+    check_ptr_parameter("IVROverlay_019_GetHighQualityOverlay", this_ptr_value);
+
+    init_thunk(t, this_ptr_value, IVROverlay_019_GetOverlayKey, 4, FALSE, FALSE);
+    uint32_t (__stdcall *capi_IVROverlay_019_GetOverlayKey)(VROverlayHandle_t ulOverlayHandle, char * pchValue, uint32_t unBufferSize, EVROverlayError * pError) = (void *)t;
+
+    clear_parameters();
+    capi_IVROverlay_019_GetOverlayKey(1, (void *)2, 3, (void *)4);
+    check_ptr_parameter("IVROverlay_019_GetOverlayKey", this_ptr_value);
+    check_uint64_parameter("IVROverlay_019_GetOverlayKey", 1);
+    check_ptr_parameter("IVROverlay_019_GetOverlayKey", (void *)2);
+    check_uint32_parameter("IVROverlay_019_GetOverlayKey", 3);
+    check_ptr_parameter("IVROverlay_019_GetOverlayKey", (void *)4);
+
+    init_thunk(t, this_ptr_value, IVROverlay_019_GetOverlayName, 4, FALSE, FALSE);
+    uint32_t (__stdcall *capi_IVROverlay_019_GetOverlayName)(VROverlayHandle_t ulOverlayHandle, char * pchValue, uint32_t unBufferSize, EVROverlayError * pError) = (void *)t;
+
+    clear_parameters();
+    capi_IVROverlay_019_GetOverlayName(1, (void *)2, 3, (void *)4);
+    check_ptr_parameter("IVROverlay_019_GetOverlayName", this_ptr_value);
+    check_uint64_parameter("IVROverlay_019_GetOverlayName", 1);
+    check_ptr_parameter("IVROverlay_019_GetOverlayName", (void *)2);
+    check_uint32_parameter("IVROverlay_019_GetOverlayName", 3);
+    check_ptr_parameter("IVROverlay_019_GetOverlayName", (void *)4);
+
+    init_thunk(t, this_ptr_value, IVROverlay_019_SetOverlayName, 2, FALSE, FALSE);
+    EVROverlayError (__stdcall *capi_IVROverlay_019_SetOverlayName)(VROverlayHandle_t ulOverlayHandle, const char * pchName) = (void *)t;
+
+    clear_parameters();
+    capi_IVROverlay_019_SetOverlayName(1, (void *)2);
+    check_ptr_parameter("IVROverlay_019_SetOverlayName", this_ptr_value);
+    check_uint64_parameter("IVROverlay_019_SetOverlayName", 1);
+    check_ptr_parameter("IVROverlay_019_SetOverlayName", (void *)2);
+
+    init_thunk(t, this_ptr_value, IVROverlay_019_GetOverlayImageData, 5, FALSE, FALSE);
+    EVROverlayError (__stdcall *capi_IVROverlay_019_GetOverlayImageData)(VROverlayHandle_t ulOverlayHandle, void * pvBuffer, uint32_t unBufferSize, uint32_t * punWidth, uint32_t * punHeight) = (void *)t;
+
+    clear_parameters();
+    capi_IVROverlay_019_GetOverlayImageData(1, (void *)2, 3, (void *)4, (void *)5);
+    check_ptr_parameter("IVROverlay_019_GetOverlayImageData", this_ptr_value);
+    check_uint64_parameter("IVROverlay_019_GetOverlayImageData", 1);
+    check_ptr_parameter("IVROverlay_019_GetOverlayImageData", (void *)2);
+    check_uint32_parameter("IVROverlay_019_GetOverlayImageData", 3);
+    check_ptr_parameter("IVROverlay_019_GetOverlayImageData", (void *)4);
+    check_ptr_parameter("IVROverlay_019_GetOverlayImageData", (void *)5);
+
+    init_thunk(t, this_ptr_value, IVROverlay_019_GetOverlayErrorNameFromEnum, 1, FALSE, FALSE);
+    const char * (__stdcall *capi_IVROverlay_019_GetOverlayErrorNameFromEnum)(EVROverlayError error) = (void *)t;
+
+    clear_parameters();
+    capi_IVROverlay_019_GetOverlayErrorNameFromEnum(1);
+    check_ptr_parameter("IVROverlay_019_GetOverlayErrorNameFromEnum", this_ptr_value);
+    check_uint32_parameter("IVROverlay_019_GetOverlayErrorNameFromEnum", 1);
+
+    init_thunk(t, this_ptr_value, IVROverlay_019_SetOverlayRenderingPid, 2, FALSE, FALSE);
+    EVROverlayError (__stdcall *capi_IVROverlay_019_SetOverlayRenderingPid)(VROverlayHandle_t ulOverlayHandle, uint32_t unPID) = (void *)t;
+
+    clear_parameters();
+    capi_IVROverlay_019_SetOverlayRenderingPid(1, 2);
+    check_ptr_parameter("IVROverlay_019_SetOverlayRenderingPid", this_ptr_value);
+    check_uint64_parameter("IVROverlay_019_SetOverlayRenderingPid", 1);
+    check_uint32_parameter("IVROverlay_019_SetOverlayRenderingPid", 2);
+
+    init_thunk(t, this_ptr_value, IVROverlay_019_GetOverlayRenderingPid, 1, FALSE, FALSE);
+    uint32_t (__stdcall *capi_IVROverlay_019_GetOverlayRenderingPid)(VROverlayHandle_t ulOverlayHandle) = (void *)t;
+
+    clear_parameters();
+    capi_IVROverlay_019_GetOverlayRenderingPid(1);
+    check_ptr_parameter("IVROverlay_019_GetOverlayRenderingPid", this_ptr_value);
+    check_uint64_parameter("IVROverlay_019_GetOverlayRenderingPid", 1);
+
+    init_thunk(t, this_ptr_value, IVROverlay_019_SetOverlayFlag, 3, FALSE, FALSE);
+    EVROverlayError (__stdcall *capi_IVROverlay_019_SetOverlayFlag)(VROverlayHandle_t ulOverlayHandle, VROverlayFlags eOverlayFlag, bool bEnabled) = (void *)t;
+
+    clear_parameters();
+    capi_IVROverlay_019_SetOverlayFlag(1, 2, 1);
+    check_ptr_parameter("IVROverlay_019_SetOverlayFlag", this_ptr_value);
+    check_uint64_parameter("IVROverlay_019_SetOverlayFlag", 1);
+    check_uint32_parameter("IVROverlay_019_SetOverlayFlag", 2);
+    check_bool_parameter("IVROverlay_019_SetOverlayFlag", 1);
+
+    init_thunk(t, this_ptr_value, IVROverlay_019_GetOverlayFlag, 3, FALSE, FALSE);
+    EVROverlayError (__stdcall *capi_IVROverlay_019_GetOverlayFlag)(VROverlayHandle_t ulOverlayHandle, VROverlayFlags eOverlayFlag, bool * pbEnabled) = (void *)t;
+
+    clear_parameters();
+    capi_IVROverlay_019_GetOverlayFlag(1, 2, (void *)3);
+    check_ptr_parameter("IVROverlay_019_GetOverlayFlag", this_ptr_value);
+    check_uint64_parameter("IVROverlay_019_GetOverlayFlag", 1);
+    check_uint32_parameter("IVROverlay_019_GetOverlayFlag", 2);
+    check_ptr_parameter("IVROverlay_019_GetOverlayFlag", (void *)3);
+
+    init_thunk(t, this_ptr_value, IVROverlay_019_SetOverlayColor, 4, TRUE, TRUE);
+    EVROverlayError (__stdcall *capi_IVROverlay_019_SetOverlayColor)(VROverlayHandle_t ulOverlayHandle, float fRed, float fGreen, float fBlue) = (void *)t;
+
+    clear_parameters();
+    capi_IVROverlay_019_SetOverlayColor(1, 2.0f, 3.0f, 4.0f);
+    check_ptr_parameter("IVROverlay_019_SetOverlayColor", this_ptr_value);
+    check_uint64_parameter("IVROverlay_019_SetOverlayColor", 1);
+    check_float_parameter("IVROverlay_019_SetOverlayColor", 2.0f);
+    check_float_parameter("IVROverlay_019_SetOverlayColor", 3.0f);
+    check_float_parameter("IVROverlay_019_SetOverlayColor", 4.0f);
+
+    init_thunk(t, this_ptr_value, IVROverlay_019_GetOverlayColor, 4, FALSE, FALSE);
+    EVROverlayError (__stdcall *capi_IVROverlay_019_GetOverlayColor)(VROverlayHandle_t ulOverlayHandle, float * pfRed, float * pfGreen, float * pfBlue) = (void *)t;
+
+    clear_parameters();
+    capi_IVROverlay_019_GetOverlayColor(1, (void *)2, (void *)3, (void *)4);
+    check_ptr_parameter("IVROverlay_019_GetOverlayColor", this_ptr_value);
+    check_uint64_parameter("IVROverlay_019_GetOverlayColor", 1);
+    check_ptr_parameter("IVROverlay_019_GetOverlayColor", (void *)2);
+    check_ptr_parameter("IVROverlay_019_GetOverlayColor", (void *)3);
+    check_ptr_parameter("IVROverlay_019_GetOverlayColor", (void *)4);
+
+    init_thunk(t, this_ptr_value, IVROverlay_019_SetOverlayAlpha, 2, TRUE, FALSE);
+    EVROverlayError (__stdcall *capi_IVROverlay_019_SetOverlayAlpha)(VROverlayHandle_t ulOverlayHandle, float fAlpha) = (void *)t;
+
+    clear_parameters();
+    capi_IVROverlay_019_SetOverlayAlpha(1, 2.0f);
+    check_ptr_parameter("IVROverlay_019_SetOverlayAlpha", this_ptr_value);
+    check_uint64_parameter("IVROverlay_019_SetOverlayAlpha", 1);
+    check_float_parameter("IVROverlay_019_SetOverlayAlpha", 2.0f);
+
+    init_thunk(t, this_ptr_value, IVROverlay_019_GetOverlayAlpha, 2, FALSE, FALSE);
+    EVROverlayError (__stdcall *capi_IVROverlay_019_GetOverlayAlpha)(VROverlayHandle_t ulOverlayHandle, float * pfAlpha) = (void *)t;
+
+    clear_parameters();
+    capi_IVROverlay_019_GetOverlayAlpha(1, (void *)2);
+    check_ptr_parameter("IVROverlay_019_GetOverlayAlpha", this_ptr_value);
+    check_uint64_parameter("IVROverlay_019_GetOverlayAlpha", 1);
+    check_ptr_parameter("IVROverlay_019_GetOverlayAlpha", (void *)2);
+
+    init_thunk(t, this_ptr_value, IVROverlay_019_SetOverlayTexelAspect, 2, TRUE, FALSE);
+    EVROverlayError (__stdcall *capi_IVROverlay_019_SetOverlayTexelAspect)(VROverlayHandle_t ulOverlayHandle, float fTexelAspect) = (void *)t;
+
+    clear_parameters();
+    capi_IVROverlay_019_SetOverlayTexelAspect(1, 2.0f);
+    check_ptr_parameter("IVROverlay_019_SetOverlayTexelAspect", this_ptr_value);
+    check_uint64_parameter("IVROverlay_019_SetOverlayTexelAspect", 1);
+    check_float_parameter("IVROverlay_019_SetOverlayTexelAspect", 2.0f);
+
+    init_thunk(t, this_ptr_value, IVROverlay_019_GetOverlayTexelAspect, 2, FALSE, FALSE);
+    EVROverlayError (__stdcall *capi_IVROverlay_019_GetOverlayTexelAspect)(VROverlayHandle_t ulOverlayHandle, float * pfTexelAspect) = (void *)t;
+
+    clear_parameters();
+    capi_IVROverlay_019_GetOverlayTexelAspect(1, (void *)2);
+    check_ptr_parameter("IVROverlay_019_GetOverlayTexelAspect", this_ptr_value);
+    check_uint64_parameter("IVROverlay_019_GetOverlayTexelAspect", 1);
+    check_ptr_parameter("IVROverlay_019_GetOverlayTexelAspect", (void *)2);
+
+    init_thunk(t, this_ptr_value, IVROverlay_019_SetOverlaySortOrder, 2, FALSE, FALSE);
+    EVROverlayError (__stdcall *capi_IVROverlay_019_SetOverlaySortOrder)(VROverlayHandle_t ulOverlayHandle, uint32_t unSortOrder) = (void *)t;
+
+    clear_parameters();
+    capi_IVROverlay_019_SetOverlaySortOrder(1, 2);
+    check_ptr_parameter("IVROverlay_019_SetOverlaySortOrder", this_ptr_value);
+    check_uint64_parameter("IVROverlay_019_SetOverlaySortOrder", 1);
+    check_uint32_parameter("IVROverlay_019_SetOverlaySortOrder", 2);
+
+    init_thunk(t, this_ptr_value, IVROverlay_019_GetOverlaySortOrder, 2, FALSE, FALSE);
+    EVROverlayError (__stdcall *capi_IVROverlay_019_GetOverlaySortOrder)(VROverlayHandle_t ulOverlayHandle, uint32_t * punSortOrder) = (void *)t;
+
+    clear_parameters();
+    capi_IVROverlay_019_GetOverlaySortOrder(1, (void *)2);
+    check_ptr_parameter("IVROverlay_019_GetOverlaySortOrder", this_ptr_value);
+    check_uint64_parameter("IVROverlay_019_GetOverlaySortOrder", 1);
+    check_ptr_parameter("IVROverlay_019_GetOverlaySortOrder", (void *)2);
+
+    init_thunk(t, this_ptr_value, IVROverlay_019_SetOverlayWidthInMeters, 2, TRUE, FALSE);
+    EVROverlayError (__stdcall *capi_IVROverlay_019_SetOverlayWidthInMeters)(VROverlayHandle_t ulOverlayHandle, float fWidthInMeters) = (void *)t;
+
+    clear_parameters();
+    capi_IVROverlay_019_SetOverlayWidthInMeters(1, 2.0f);
+    check_ptr_parameter("IVROverlay_019_SetOverlayWidthInMeters", this_ptr_value);
+    check_uint64_parameter("IVROverlay_019_SetOverlayWidthInMeters", 1);
+    check_float_parameter("IVROverlay_019_SetOverlayWidthInMeters", 2.0f);
+
+    init_thunk(t, this_ptr_value, IVROverlay_019_GetOverlayWidthInMeters, 2, FALSE, FALSE);
+    EVROverlayError (__stdcall *capi_IVROverlay_019_GetOverlayWidthInMeters)(VROverlayHandle_t ulOverlayHandle, float * pfWidthInMeters) = (void *)t;
+
+    clear_parameters();
+    capi_IVROverlay_019_GetOverlayWidthInMeters(1, (void *)2);
+    check_ptr_parameter("IVROverlay_019_GetOverlayWidthInMeters", this_ptr_value);
+    check_uint64_parameter("IVROverlay_019_GetOverlayWidthInMeters", 1);
+    check_ptr_parameter("IVROverlay_019_GetOverlayWidthInMeters", (void *)2);
+
+    init_thunk(t, this_ptr_value, IVROverlay_019_SetOverlayAutoCurveDistanceRangeInMeters, 3, TRUE, FALSE);
+    EVROverlayError (__stdcall *capi_IVROverlay_019_SetOverlayAutoCurveDistanceRangeInMeters)(VROverlayHandle_t ulOverlayHandle, float fMinDistanceInMeters, float fMaxDistanceInMeters) = (void *)t;
+
+    clear_parameters();
+    capi_IVROverlay_019_SetOverlayAutoCurveDistanceRangeInMeters(1, 2.0f, 3.0f);
+    check_ptr_parameter("IVROverlay_019_SetOverlayAutoCurveDistanceRangeInMeters", this_ptr_value);
+    check_uint64_parameter("IVROverlay_019_SetOverlayAutoCurveDistanceRangeInMeters", 1);
+    check_float_parameter("IVROverlay_019_SetOverlayAutoCurveDistanceRangeInMeters", 2.0f);
+    check_float_parameter("IVROverlay_019_SetOverlayAutoCurveDistanceRangeInMeters", 3.0f);
+
+    init_thunk(t, this_ptr_value, IVROverlay_019_GetOverlayAutoCurveDistanceRangeInMeters, 3, FALSE, FALSE);
+    EVROverlayError (__stdcall *capi_IVROverlay_019_GetOverlayAutoCurveDistanceRangeInMeters)(VROverlayHandle_t ulOverlayHandle, float * pfMinDistanceInMeters, float * pfMaxDistanceInMeters) = (void *)t;
+
+    clear_parameters();
+    capi_IVROverlay_019_GetOverlayAutoCurveDistanceRangeInMeters(1, (void *)2, (void *)3);
+    check_ptr_parameter("IVROverlay_019_GetOverlayAutoCurveDistanceRangeInMeters", this_ptr_value);
+    check_uint64_parameter("IVROverlay_019_GetOverlayAutoCurveDistanceRangeInMeters", 1);
+    check_ptr_parameter("IVROverlay_019_GetOverlayAutoCurveDistanceRangeInMeters", (void *)2);
+    check_ptr_parameter("IVROverlay_019_GetOverlayAutoCurveDistanceRangeInMeters", (void *)3);
+
+    init_thunk(t, this_ptr_value, IVROverlay_019_SetOverlayTextureColorSpace, 2, FALSE, FALSE);
+    EVROverlayError (__stdcall *capi_IVROverlay_019_SetOverlayTextureColorSpace)(VROverlayHandle_t ulOverlayHandle, EColorSpace eTextureColorSpace) = (void *)t;
+
+    clear_parameters();
+    capi_IVROverlay_019_SetOverlayTextureColorSpace(1, 2);
+    check_ptr_parameter("IVROverlay_019_SetOverlayTextureColorSpace", this_ptr_value);
+    check_uint64_parameter("IVROverlay_019_SetOverlayTextureColorSpace", 1);
+    check_uint32_parameter("IVROverlay_019_SetOverlayTextureColorSpace", 2);
+
+    init_thunk(t, this_ptr_value, IVROverlay_019_GetOverlayTextureColorSpace, 2, FALSE, FALSE);
+    EVROverlayError (__stdcall *capi_IVROverlay_019_GetOverlayTextureColorSpace)(VROverlayHandle_t ulOverlayHandle, EColorSpace * peTextureColorSpace) = (void *)t;
+
+    clear_parameters();
+    capi_IVROverlay_019_GetOverlayTextureColorSpace(1, (void *)2);
+    check_ptr_parameter("IVROverlay_019_GetOverlayTextureColorSpace", this_ptr_value);
+    check_uint64_parameter("IVROverlay_019_GetOverlayTextureColorSpace", 1);
+    check_ptr_parameter("IVROverlay_019_GetOverlayTextureColorSpace", (void *)2);
+
+    init_thunk(t, this_ptr_value, IVROverlay_019_SetOverlayTextureBounds, 2, FALSE, FALSE);
+    EVROverlayError (__stdcall *capi_IVROverlay_019_SetOverlayTextureBounds)(VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t * pOverlayTextureBounds) = (void *)t;
+
+    clear_parameters();
+    capi_IVROverlay_019_SetOverlayTextureBounds(1, (void *)2);
+    check_ptr_parameter("IVROverlay_019_SetOverlayTextureBounds", this_ptr_value);
+    check_uint64_parameter("IVROverlay_019_SetOverlayTextureBounds", 1);
+    check_ptr_parameter("IVROverlay_019_SetOverlayTextureBounds", (void *)2);
+
+    init_thunk(t, this_ptr_value, IVROverlay_019_GetOverlayTextureBounds, 2, FALSE, FALSE);
+    EVROverlayError (__stdcall *capi_IVROverlay_019_GetOverlayTextureBounds)(VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t * pOverlayTextureBounds) = (void *)t;
+
+    clear_parameters();
+    capi_IVROverlay_019_GetOverlayTextureBounds(1, (void *)2);
+    check_ptr_parameter("IVROverlay_019_GetOverlayTextureBounds", this_ptr_value);
+    check_uint64_parameter("IVROverlay_019_GetOverlayTextureBounds", 1);
+    check_ptr_parameter("IVROverlay_019_GetOverlayTextureBounds", (void *)2);
+
+    init_thunk(t, this_ptr_value, IVROverlay_019_GetOverlayRenderModel, 5, FALSE, FALSE);
+    uint32_t (__stdcall *capi_IVROverlay_019_GetOverlayRenderModel)(VROverlayHandle_t ulOverlayHandle, char * pchValue, uint32_t unBufferSize, HmdColor_t * pColor, EVROverlayError * pError) = (void *)t;
+
+    clear_parameters();
+    capi_IVROverlay_019_GetOverlayRenderModel(1, (void *)2, 3, (void *)4, (void *)5);
+    check_ptr_parameter("IVROverlay_019_GetOverlayRenderModel", this_ptr_value);
+    check_uint64_parameter("IVROverlay_019_GetOverlayRenderModel", 1);
+    check_ptr_parameter("IVROverlay_019_GetOverlayRenderModel", (void *)2);
+    check_uint32_parameter("IVROverlay_019_GetOverlayRenderModel", 3);
+    check_ptr_parameter("IVROverlay_019_GetOverlayRenderModel", (void *)4);
+    check_ptr_parameter("IVROverlay_019_GetOverlayRenderModel", (void *)5);
+
+    init_thunk(t, this_ptr_value, IVROverlay_019_SetOverlayRenderModel, 3, FALSE, FALSE);
+    EVROverlayError (__stdcall *capi_IVROverlay_019_SetOverlayRenderModel)(VROverlayHandle_t ulOverlayHandle, const char * pchRenderModel, HmdColor_t * pColor) = (void *)t;
+
+    clear_parameters();
+    capi_IVROverlay_019_SetOverlayRenderModel(1, (void *)2, (void *)3);
+    check_ptr_parameter("IVROverlay_019_SetOverlayRenderModel", this_ptr_value);
+    check_uint64_parameter("IVROverlay_019_SetOverlayRenderModel", 1);
+    check_ptr_parameter("IVROverlay_019_SetOverlayRenderModel", (void *)2);
+    check_ptr_parameter("IVROverlay_019_SetOverlayRenderModel", (void *)3);
+
+    init_thunk(t, this_ptr_value, IVROverlay_019_GetOverlayTransformType, 2, FALSE, FALSE);
+    EVROverlayError (__stdcall *capi_IVROverlay_019_GetOverlayTransformType)(VROverlayHandle_t ulOverlayHandle, VROverlayTransformType * peTransformType) = (void *)t;
+
+    clear_parameters();
+    capi_IVROverlay_019_GetOverlayTransformType(1, (void *)2);
+    check_ptr_parameter("IVROverlay_019_GetOverlayTransformType", this_ptr_value);
+    check_uint64_parameter("IVROverlay_019_GetOverlayTransformType", 1);
+    check_ptr_parameter("IVROverlay_019_GetOverlayTransformType", (void *)2);
+
+    init_thunk(t, this_ptr_value, IVROverlay_019_SetOverlayTransformAbsolute, 3, FALSE, FALSE);
+    EVROverlayError (__stdcall *capi_IVROverlay_019_SetOverlayTransformAbsolute)(VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin eTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToOverlayTransform) = (void *)t;
+
+    clear_parameters();
+    capi_IVROverlay_019_SetOverlayTransformAbsolute(1, 2, (void *)3);
+    check_ptr_parameter("IVROverlay_019_SetOverlayTransformAbsolute", this_ptr_value);
+    check_uint64_parameter("IVROverlay_019_SetOverlayTransformAbsolute", 1);
+    check_uint32_parameter("IVROverlay_019_SetOverlayTransformAbsolute", 2);
+    check_ptr_parameter("IVROverlay_019_SetOverlayTransformAbsolute", (void *)3);
+
+    init_thunk(t, this_ptr_value, IVROverlay_019_GetOverlayTransformAbsolute, 3, FALSE, FALSE);
+    EVROverlayError (__stdcall *capi_IVROverlay_019_GetOverlayTransformAbsolute)(VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin * peTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToOverlayTransform) = (void *)t;
+
+    clear_parameters();
+    capi_IVROverlay_019_GetOverlayTransformAbsolute(1, (void *)2, (void *)3);
+    check_ptr_parameter("IVROverlay_019_GetOverlayTransformAbsolute", this_ptr_value);
+    check_uint64_parameter("IVROverlay_019_GetOverlayTransformAbsolute", 1);
+    check_ptr_parameter("IVROverlay_019_GetOverlayTransformAbsolute", (void *)2);
+    check_ptr_parameter("IVROverlay_019_GetOverlayTransformAbsolute", (void *)3);
+
+    init_thunk(t, this_ptr_value, IVROverlay_019_SetOverlayTransformTrackedDeviceRelative, 3, FALSE, FALSE);
+    EVROverlayError (__stdcall *capi_IVROverlay_019_SetOverlayTransformTrackedDeviceRelative)(VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unTrackedDevice, HmdMatrix34_t * pmatTrackedDeviceToOverlayTransform) = (void *)t;
+
+    clear_parameters();
+    capi_IVROverlay_019_SetOverlayTransformTrackedDeviceRelative(1, 2, (void *)3);
+    check_ptr_parameter("IVROverlay_019_SetOverlayTransformTrackedDeviceRelative", this_ptr_value);
+    check_uint64_parameter("IVROverlay_019_SetOverlayTransformTrackedDeviceRelative", 1);
+    check_uint32_parameter("IVROverlay_019_SetOverlayTransformTrackedDeviceRelative", 2);
+    check_ptr_parameter("IVROverlay_019_SetOverlayTransformTrackedDeviceRelative", (void *)3);
+
+    init_thunk(t, this_ptr_value, IVROverlay_019_GetOverlayTransformTrackedDeviceRelative, 3, FALSE, FALSE);
+    EVROverlayError (__stdcall *capi_IVROverlay_019_GetOverlayTransformTrackedDeviceRelative)(VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t * punTrackedDevice, HmdMatrix34_t * pmatTrackedDeviceToOverlayTransform) = (void *)t;
+
+    clear_parameters();
+    capi_IVROverlay_019_GetOverlayTransformTrackedDeviceRelative(1, (void *)2, (void *)3);
+    check_ptr_parameter("IVROverlay_019_GetOverlayTransformTrackedDeviceRelative", this_ptr_value);
+    check_uint64_parameter("IVROverlay_019_GetOverlayTransformTrackedDeviceRelative", 1);
+    check_ptr_parameter("IVROverlay_019_GetOverlayTransformTrackedDeviceRelative", (void *)2);
+    check_ptr_parameter("IVROverlay_019_GetOverlayTransformTrackedDeviceRelative", (void *)3);
+
+    init_thunk(t, this_ptr_value, IVROverlay_019_SetOverlayTransformTrackedDeviceComponent, 3, FALSE, FALSE);
+    EVROverlayError (__stdcall *capi_IVROverlay_019_SetOverlayTransformTrackedDeviceComponent)(VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unDeviceIndex, const char * pchComponentName) = (void *)t;
+
+    clear_parameters();
+    capi_IVROverlay_019_SetOverlayTransformTrackedDeviceComponent(1, 2, (void *)3);
+    check_ptr_parameter("IVROverlay_019_SetOverlayTransformTrackedDeviceComponent", this_ptr_value);
+    check_uint64_parameter("IVROverlay_019_SetOverlayTransformTrackedDeviceComponent", 1);
+    check_uint32_parameter("IVROverlay_019_SetOverlayTransformTrackedDeviceComponent", 2);
+    check_ptr_parameter("IVROverlay_019_SetOverlayTransformTrackedDeviceComponent", (void *)3);
+
+    init_thunk(t, this_ptr_value, IVROverlay_019_GetOverlayTransformTrackedDeviceComponent, 4, FALSE, FALSE);
+    EVROverlayError (__stdcall *capi_IVROverlay_019_GetOverlayTransformTrackedDeviceComponent)(VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t * punDeviceIndex, char * pchComponentName, uint32_t unComponentNameSize) = (void *)t;
+
+    clear_parameters();
+    capi_IVROverlay_019_GetOverlayTransformTrackedDeviceComponent(1, (void *)2, (void *)3, 4);
+    check_ptr_parameter("IVROverlay_019_GetOverlayTransformTrackedDeviceComponent", this_ptr_value);
+    check_uint64_parameter("IVROverlay_019_GetOverlayTransformTrackedDeviceComponent", 1);
+    check_ptr_parameter("IVROverlay_019_GetOverlayTransformTrackedDeviceComponent", (void *)2);
+    check_ptr_parameter("IVROverlay_019_GetOverlayTransformTrackedDeviceComponent", (void *)3);
+    check_uint32_parameter("IVROverlay_019_GetOverlayTransformTrackedDeviceComponent", 4);
+
+    init_thunk(t, this_ptr_value, IVROverlay_019_GetOverlayTransformOverlayRelative, 3, FALSE, FALSE);
+    EVROverlayError (__stdcall *capi_IVROverlay_019_GetOverlayTransformOverlayRelative)(VROverlayHandle_t ulOverlayHandle, VROverlayHandle_t * ulOverlayHandleParent, HmdMatrix34_t * pmatParentOverlayToOverlayTransform) = (void *)t;
+
+    clear_parameters();
+    capi_IVROverlay_019_GetOverlayTransformOverlayRelative(1, (void *)2, (void *)3);
+    check_ptr_parameter("IVROverlay_019_GetOverlayTransformOverlayRelative", this_ptr_value);
+    check_uint64_parameter("IVROverlay_019_GetOverlayTransformOverlayRelative", 1);
+    check_ptr_parameter("IVROverlay_019_GetOverlayTransformOverlayRelative", (void *)2);
+    check_ptr_parameter("IVROverlay_019_GetOverlayTransformOverlayRelative", (void *)3);
+
+    init_thunk(t, this_ptr_value, IVROverlay_019_SetOverlayTransformOverlayRelative, 3, FALSE, FALSE);
+    EVROverlayError (__stdcall *capi_IVROverlay_019_SetOverlayTransformOverlayRelative)(VROverlayHandle_t ulOverlayHandle, VROverlayHandle_t ulOverlayHandleParent, HmdMatrix34_t * pmatParentOverlayToOverlayTransform) = (void *)t;
+
+    clear_parameters();
+    capi_IVROverlay_019_SetOverlayTransformOverlayRelative(1, 2, (void *)3);
+    check_ptr_parameter("IVROverlay_019_SetOverlayTransformOverlayRelative", this_ptr_value);
+    check_uint64_parameter("IVROverlay_019_SetOverlayTransformOverlayRelative", 1);
+    check_uint64_parameter("IVROverlay_019_SetOverlayTransformOverlayRelative", 2);
+    check_ptr_parameter("IVROverlay_019_SetOverlayTransformOverlayRelative", (void *)3);
+
+    init_thunk(t, this_ptr_value, IVROverlay_019_ShowOverlay, 1, FALSE, FALSE);
+    EVROverlayError (__stdcall *capi_IVROverlay_019_ShowOverlay)(VROverlayHandle_t ulOverlayHandle) = (void *)t;
+
+    clear_parameters();
+    capi_IVROverlay_019_ShowOverlay(1);
+    check_ptr_parameter("IVROverlay_019_ShowOverlay", this_ptr_value);
+    check_uint64_parameter("IVROverlay_019_ShowOverlay", 1);
+
+    init_thunk(t, this_ptr_value, IVROverlay_019_HideOverlay, 1, FALSE, FALSE);
+    EVROverlayError (__stdcall *capi_IVROverlay_019_HideOverlay)(VROverlayHandle_t ulOverlayHandle) = (void *)t;
+
+    clear_parameters();
+    capi_IVROverlay_019_HideOverlay(1);
+    check_ptr_parameter("IVROverlay_019_HideOverlay", this_ptr_value);
+    check_uint64_parameter("IVROverlay_019_HideOverlay", 1);
+
+    init_thunk(t, this_ptr_value, IVROverlay_019_IsOverlayVisible, 1, FALSE, FALSE);
+    bool (__stdcall *capi_IVROverlay_019_IsOverlayVisible)(VROverlayHandle_t ulOverlayHandle) = (void *)t;
+
+    clear_parameters();
+    capi_IVROverlay_019_IsOverlayVisible(1);
+    check_ptr_parameter("IVROverlay_019_IsOverlayVisible", this_ptr_value);
+    check_uint64_parameter("IVROverlay_019_IsOverlayVisible", 1);
+
+    init_thunk(t, this_ptr_value, IVROverlay_019_GetTransformForOverlayCoordinates, 4, FALSE, FALSE);
+    EVROverlayError (__stdcall *capi_IVROverlay_019_GetTransformForOverlayCoordinates)(VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin eTrackingOrigin, HmdVector2_t coordinatesInOverlay, HmdMatrix34_t * pmatTransform) = (void *)t;
+
+    clear_parameters();
+    capi_IVROverlay_019_GetTransformForOverlayCoordinates(1, 2, DEFAULT_VECTOR2, (void *)4);
+    check_ptr_parameter("IVROverlay_019_GetTransformForOverlayCoordinates", this_ptr_value);
+    check_uint64_parameter("IVROverlay_019_GetTransformForOverlayCoordinates", 1);
+    check_uint32_parameter("IVROverlay_019_GetTransformForOverlayCoordinates", 2);
+    check_HmdVector2_parameter("IVROverlay_019_GetTransformForOverlayCoordinates", DEFAULT_VECTOR2);
+    check_ptr_parameter("IVROverlay_019_GetTransformForOverlayCoordinates", (void *)4);
+
+    init_thunk(t, this_ptr_value, IVROverlay_019_PollNextOverlayEvent, 3, FALSE, FALSE);
+    bool (__stdcall *capi_IVROverlay_019_PollNextOverlayEvent)(VROverlayHandle_t ulOverlayHandle, VREvent_t * pEvent, uint32_t uncbVREvent) = (void *)t;
+
+    clear_parameters();
+    capi_IVROverlay_019_PollNextOverlayEvent(1, (void *)2, 3);
+    check_ptr_parameter("IVROverlay_019_PollNextOverlayEvent", this_ptr_value);
+    check_uint64_parameter("IVROverlay_019_PollNextOverlayEvent", 1);
+    check_ptr_parameter("IVROverlay_019_PollNextOverlayEvent", (void *)2);
+    check_uint32_parameter("IVROverlay_019_PollNextOverlayEvent", 3);
+
+    init_thunk(t, this_ptr_value, IVROverlay_019_GetOverlayInputMethod, 2, FALSE, FALSE);
+    EVROverlayError (__stdcall *capi_IVROverlay_019_GetOverlayInputMethod)(VROverlayHandle_t ulOverlayHandle, VROverlayInputMethod * peInputMethod) = (void *)t;
+
+    clear_parameters();
+    capi_IVROverlay_019_GetOverlayInputMethod(1, (void *)2);
+    check_ptr_parameter("IVROverlay_019_GetOverlayInputMethod", this_ptr_value);
+    check_uint64_parameter("IVROverlay_019_GetOverlayInputMethod", 1);
+    check_ptr_parameter("IVROverlay_019_GetOverlayInputMethod", (void *)2);
+
+    init_thunk(t, this_ptr_value, IVROverlay_019_SetOverlayInputMethod, 2, FALSE, FALSE);
+    EVROverlayError (__stdcall *capi_IVROverlay_019_SetOverlayInputMethod)(VROverlayHandle_t ulOverlayHandle, VROverlayInputMethod eInputMethod) = (void *)t;
+
+    clear_parameters();
+    capi_IVROverlay_019_SetOverlayInputMethod(1, 2);
+    check_ptr_parameter("IVROverlay_019_SetOverlayInputMethod", this_ptr_value);
+    check_uint64_parameter("IVROverlay_019_SetOverlayInputMethod", 1);
+    check_uint32_parameter("IVROverlay_019_SetOverlayInputMethod", 2);
+
+    init_thunk(t, this_ptr_value, IVROverlay_019_GetOverlayMouseScale, 2, FALSE, FALSE);
+    EVROverlayError (__stdcall *capi_IVROverlay_019_GetOverlayMouseScale)(VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvecMouseScale) = (void *)t;
+
+    clear_parameters();
+    capi_IVROverlay_019_GetOverlayMouseScale(1, (void *)2);
+    check_ptr_parameter("IVROverlay_019_GetOverlayMouseScale", this_ptr_value);
+    check_uint64_parameter("IVROverlay_019_GetOverlayMouseScale", 1);
+    check_ptr_parameter("IVROverlay_019_GetOverlayMouseScale", (void *)2);
+
+    init_thunk(t, this_ptr_value, IVROverlay_019_SetOverlayMouseScale, 2, FALSE, FALSE);
+    EVROverlayError (__stdcall *capi_IVROverlay_019_SetOverlayMouseScale)(VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvecMouseScale) = (void *)t;
+
+    clear_parameters();
+    capi_IVROverlay_019_SetOverlayMouseScale(1, (void *)2);
+    check_ptr_parameter("IVROverlay_019_SetOverlayMouseScale", this_ptr_value);
+    check_uint64_parameter("IVROverlay_019_SetOverlayMouseScale", 1);
+    check_ptr_parameter("IVROverlay_019_SetOverlayMouseScale", (void *)2);
+
+    init_thunk(t, this_ptr_value, IVROverlay_019_ComputeOverlayIntersection, 3, FALSE, FALSE);
+    bool (__stdcall *capi_IVROverlay_019_ComputeOverlayIntersection)(VROverlayHandle_t ulOverlayHandle, VROverlayIntersectionParams_t * pParams, VROverlayIntersectionResults_t * pResults) = (void *)t;
+
+    clear_parameters();
+    capi_IVROverlay_019_ComputeOverlayIntersection(1, (void *)2, (void *)3);
+    check_ptr_parameter("IVROverlay_019_ComputeOverlayIntersection", this_ptr_value);
+    check_uint64_parameter("IVROverlay_019_ComputeOverlayIntersection", 1);
+    check_ptr_parameter("IVROverlay_019_ComputeOverlayIntersection", (void *)2);
+    check_ptr_parameter("IVROverlay_019_ComputeOverlayIntersection", (void *)3);
+
+    init_thunk(t, this_ptr_value, IVROverlay_019_IsHoverTargetOverlay, 1, FALSE, FALSE);
+    bool (__stdcall *capi_IVROverlay_019_IsHoverTargetOverlay)(VROverlayHandle_t ulOverlayHandle) = (void *)t;
+
+    clear_parameters();
+    capi_IVROverlay_019_IsHoverTargetOverlay(1);
+    check_ptr_parameter("IVROverlay_019_IsHoverTargetOverlay", this_ptr_value);
+    check_uint64_parameter("IVROverlay_019_IsHoverTargetOverlay", 1);
+
+    init_thunk(t, this_ptr_value, IVROverlay_019_GetGamepadFocusOverlay, 0, FALSE, FALSE);
+    VROverlayHandle_t (__stdcall *capi_IVROverlay_019_GetGamepadFocusOverlay)() = (void *)t;
+
+    clear_parameters();
+    capi_IVROverlay_019_GetGamepadFocusOverlay();
+    check_ptr_parameter("IVROverlay_019_GetGamepadFocusOverlay", this_ptr_value);
+
+    init_thunk(t, this_ptr_value, IVROverlay_019_SetGamepadFocusOverlay, 1, FALSE, FALSE);
+    EVROverlayError (__stdcall *capi_IVROverlay_019_SetGamepadFocusOverlay)(VROverlayHandle_t ulNewFocusOverlay) = (void *)t;
+
+    clear_parameters();
+    capi_IVROverlay_019_SetGamepadFocusOverlay(1);
+    check_ptr_parameter("IVROverlay_019_SetGamepadFocusOverlay", this_ptr_value);
+    check_uint64_parameter("IVROverlay_019_SetGamepadFocusOverlay", 1);
+
+    init_thunk(t, this_ptr_value, IVROverlay_019_SetOverlayNeighbor, 3, FALSE, FALSE);
+    EVROverlayError (__stdcall *capi_IVROverlay_019_SetOverlayNeighbor)(EOverlayDirection eDirection, VROverlayHandle_t ulFrom, VROverlayHandle_t ulTo) = (void *)t;
+
+    clear_parameters();
+    capi_IVROverlay_019_SetOverlayNeighbor(1, 2, 3);
+    check_ptr_parameter("IVROverlay_019_SetOverlayNeighbor", this_ptr_value);
+    check_uint32_parameter("IVROverlay_019_SetOverlayNeighbor", 1);
+    check_uint64_parameter("IVROverlay_019_SetOverlayNeighbor", 2);
+    check_uint64_parameter("IVROverlay_019_SetOverlayNeighbor", 3);
+
+    init_thunk(t, this_ptr_value, IVROverlay_019_MoveGamepadFocusToNeighbor, 2, FALSE, FALSE);
+    EVROverlayError (__stdcall *capi_IVROverlay_019_MoveGamepadFocusToNeighbor)(EOverlayDirection eDirection, VROverlayHandle_t ulFrom) = (void *)t;
+
+    clear_parameters();
+    capi_IVROverlay_019_MoveGamepadFocusToNeighbor(1, 2);
+    check_ptr_parameter("IVROverlay_019_MoveGamepadFocusToNeighbor", this_ptr_value);
+    check_uint32_parameter("IVROverlay_019_MoveGamepadFocusToNeighbor", 1);
+    check_uint64_parameter("IVROverlay_019_MoveGamepadFocusToNeighbor", 2);
+
+    init_thunk(t, this_ptr_value, IVROverlay_019_SetOverlayDualAnalogTransform, 4, TRUE, TRUE);
+    EVROverlayError (__stdcall *capi_IVROverlay_019_SetOverlayDualAnalogTransform)(VROverlayHandle_t ulOverlay, EDualAnalogWhich eWhich, HmdVector2_t * pvCenter, float fRadius) = (void *)t;
+
+    clear_parameters();
+    capi_IVROverlay_019_SetOverlayDualAnalogTransform(1, 2, (void *)3, 4.0f);
+    check_ptr_parameter("IVROverlay_019_SetOverlayDualAnalogTransform", this_ptr_value);
+    check_uint64_parameter("IVROverlay_019_SetOverlayDualAnalogTransform", 1);
+    check_uint32_parameter("IVROverlay_019_SetOverlayDualAnalogTransform", 2);
+    check_ptr_parameter("IVROverlay_019_SetOverlayDualAnalogTransform", (void *)3);
+    check_float_parameter("IVROverlay_019_SetOverlayDualAnalogTransform", 4.0f);
+
+    init_thunk(t, this_ptr_value, IVROverlay_019_GetOverlayDualAnalogTransform, 4, FALSE, FALSE);
+    EVROverlayError (__stdcall *capi_IVROverlay_019_GetOverlayDualAnalogTransform)(VROverlayHandle_t ulOverlay, EDualAnalogWhich eWhich, HmdVector2_t * pvCenter, float * pfRadius) = (void *)t;
+
+    clear_parameters();
+    capi_IVROverlay_019_GetOverlayDualAnalogTransform(1, 2, (void *)3, (void *)4);
+    check_ptr_parameter("IVROverlay_019_GetOverlayDualAnalogTransform", this_ptr_value);
+    check_uint64_parameter("IVROverlay_019_GetOverlayDualAnalogTransform", 1);
+    check_uint32_parameter("IVROverlay_019_GetOverlayDualAnalogTransform", 2);
+    check_ptr_parameter("IVROverlay_019_GetOverlayDualAnalogTransform", (void *)3);
+    check_ptr_parameter("IVROverlay_019_GetOverlayDualAnalogTransform", (void *)4);
+
+    init_thunk(t, this_ptr_value, IVROverlay_019_SetOverlayTexture, 2, FALSE, FALSE);
+    EVROverlayError (__stdcall *capi_IVROverlay_019_SetOverlayTexture)(VROverlayHandle_t ulOverlayHandle, Texture_t * pTexture) = (void *)t;
+
+    clear_parameters();
+    capi_IVROverlay_019_SetOverlayTexture(1, (void *)2);
+    check_ptr_parameter("IVROverlay_019_SetOverlayTexture", this_ptr_value);
+    check_uint64_parameter("IVROverlay_019_SetOverlayTexture", 1);
+    check_ptr_parameter("IVROverlay_019_SetOverlayTexture", (void *)2);
+
+    init_thunk(t, this_ptr_value, IVROverlay_019_ClearOverlayTexture, 1, FALSE, FALSE);
+    EVROverlayError (__stdcall *capi_IVROverlay_019_ClearOverlayTexture)(VROverlayHandle_t ulOverlayHandle) = (void *)t;
+
+    clear_parameters();
+    capi_IVROverlay_019_ClearOverlayTexture(1);
+    check_ptr_parameter("IVROverlay_019_ClearOverlayTexture", this_ptr_value);
+    check_uint64_parameter("IVROverlay_019_ClearOverlayTexture", 1);
+
+    init_thunk(t, this_ptr_value, IVROverlay_019_SetOverlayRaw, 5, FALSE, FALSE);
+    EVROverlayError (__stdcall *capi_IVROverlay_019_SetOverlayRaw)(VROverlayHandle_t ulOverlayHandle, void * pvBuffer, uint32_t unWidth, uint32_t unHeight, uint32_t unDepth) = (void *)t;
+
+    clear_parameters();
+    capi_IVROverlay_019_SetOverlayRaw(1, (void *)2, 3, 4, 5);
+    check_ptr_parameter("IVROverlay_019_SetOverlayRaw", this_ptr_value);
+    check_uint64_parameter("IVROverlay_019_SetOverlayRaw", 1);
+    check_ptr_parameter("IVROverlay_019_SetOverlayRaw", (void *)2);
+    check_uint32_parameter("IVROverlay_019_SetOverlayRaw", 3);
+    check_uint32_parameter("IVROverlay_019_SetOverlayRaw", 4);
+    check_uint32_parameter("IVROverlay_019_SetOverlayRaw", 5);
+
+    init_thunk(t, this_ptr_value, IVROverlay_019_SetOverlayFromFile, 2, FALSE, FALSE);
+    EVROverlayError (__stdcall *capi_IVROverlay_019_SetOverlayFromFile)(VROverlayHandle_t ulOverlayHandle, const char * pchFilePath) = (void *)t;
+
+    clear_parameters();
+    capi_IVROverlay_019_SetOverlayFromFile(1, (void *)2);
+    check_ptr_parameter("IVROverlay_019_SetOverlayFromFile", this_ptr_value);
+    check_uint64_parameter("IVROverlay_019_SetOverlayFromFile", 1);
+    check_ptr_parameter("IVROverlay_019_SetOverlayFromFile", (void *)2);
+
+    init_thunk(t, this_ptr_value, IVROverlay_019_GetOverlayTexture, 9, FALSE, FALSE);
+    EVROverlayError (__stdcall *capi_IVROverlay_019_GetOverlayTexture)(VROverlayHandle_t ulOverlayHandle, void ** pNativeTextureHandle, void * pNativeTextureRef, uint32_t * pWidth, uint32_t * pHeight, uint32_t * pNativeFormat, ETextureType * pAPIType, EColorSpace * pColorSpace, VRTextureBounds_t * pTextureBounds) = (void *)t;
+
+    clear_parameters();
+    capi_IVROverlay_019_GetOverlayTexture(1, (void *)2, (void *)3, (void *)4, (void *)5, (void *)6, (void *)7, (void *)8, (void *)9);
+    check_ptr_parameter("IVROverlay_019_GetOverlayTexture", this_ptr_value);
+    check_uint64_parameter("IVROverlay_019_GetOverlayTexture", 1);
+    check_ptr_parameter("IVROverlay_019_GetOverlayTexture", (void *)2);
+    check_ptr_parameter("IVROverlay_019_GetOverlayTexture", (void *)3);
+    check_ptr_parameter("IVROverlay_019_GetOverlayTexture", (void *)4);
+    check_ptr_parameter("IVROverlay_019_GetOverlayTexture", (void *)5);
+    check_ptr_parameter("IVROverlay_019_GetOverlayTexture", (void *)6);
+    check_ptr_parameter("IVROverlay_019_GetOverlayTexture", (void *)7);
+    check_ptr_parameter("IVROverlay_019_GetOverlayTexture", (void *)8);
+    check_ptr_parameter("IVROverlay_019_GetOverlayTexture", (void *)9);
+
+    init_thunk(t, this_ptr_value, IVROverlay_019_ReleaseNativeOverlayHandle, 2, FALSE, FALSE);
+    EVROverlayError (__stdcall *capi_IVROverlay_019_ReleaseNativeOverlayHandle)(VROverlayHandle_t ulOverlayHandle, void * pNativeTextureHandle) = (void *)t;
+
+    clear_parameters();
+    capi_IVROverlay_019_ReleaseNativeOverlayHandle(1, (void *)2);
+    check_ptr_parameter("IVROverlay_019_ReleaseNativeOverlayHandle", this_ptr_value);
+    check_uint64_parameter("IVROverlay_019_ReleaseNativeOverlayHandle", 1);
+    check_ptr_parameter("IVROverlay_019_ReleaseNativeOverlayHandle", (void *)2);
+
+    init_thunk(t, this_ptr_value, IVROverlay_019_GetOverlayTextureSize, 3, FALSE, FALSE);
+    EVROverlayError (__stdcall *capi_IVROverlay_019_GetOverlayTextureSize)(VROverlayHandle_t ulOverlayHandle, uint32_t * pWidth, uint32_t * pHeight) = (void *)t;
+
+    clear_parameters();
+    capi_IVROverlay_019_GetOverlayTextureSize(1, (void *)2, (void *)3);
+    check_ptr_parameter("IVROverlay_019_GetOverlayTextureSize", this_ptr_value);
+    check_uint64_parameter("IVROverlay_019_GetOverlayTextureSize", 1);
+    check_ptr_parameter("IVROverlay_019_GetOverlayTextureSize", (void *)2);
+    check_ptr_parameter("IVROverlay_019_GetOverlayTextureSize", (void *)3);
+
+    init_thunk(t, this_ptr_value, IVROverlay_019_CreateDashboardOverlay, 4, FALSE, FALSE);
+    EVROverlayError (__stdcall *capi_IVROverlay_019_CreateDashboardOverlay)(const char * pchOverlayKey, const char * pchOverlayFriendlyName, VROverlayHandle_t * pMainHandle, VROverlayHandle_t * pThumbnailHandle) = (void *)t;
+
+    clear_parameters();
+    capi_IVROverlay_019_CreateDashboardOverlay((void *)1, (void *)2, (void *)3, (void *)4);
+    check_ptr_parameter("IVROverlay_019_CreateDashboardOverlay", this_ptr_value);
+    check_ptr_parameter("IVROverlay_019_CreateDashboardOverlay", (void *)1);
+    check_ptr_parameter("IVROverlay_019_CreateDashboardOverlay", (void *)2);
+    check_ptr_parameter("IVROverlay_019_CreateDashboardOverlay", (void *)3);
+    check_ptr_parameter("IVROverlay_019_CreateDashboardOverlay", (void *)4);
+
+    init_thunk(t, this_ptr_value, IVROverlay_019_IsDashboardVisible, 0, FALSE, FALSE);
+    bool (__stdcall *capi_IVROverlay_019_IsDashboardVisible)() = (void *)t;
+
+    clear_parameters();
+    capi_IVROverlay_019_IsDashboardVisible();
+    check_ptr_parameter("IVROverlay_019_IsDashboardVisible", this_ptr_value);
+
+    init_thunk(t, this_ptr_value, IVROverlay_019_IsActiveDashboardOverlay, 1, FALSE, FALSE);
+    bool (__stdcall *capi_IVROverlay_019_IsActiveDashboardOverlay)(VROverlayHandle_t ulOverlayHandle) = (void *)t;
+
+    clear_parameters();
+    capi_IVROverlay_019_IsActiveDashboardOverlay(1);
+    check_ptr_parameter("IVROverlay_019_IsActiveDashboardOverlay", this_ptr_value);
+    check_uint64_parameter("IVROverlay_019_IsActiveDashboardOverlay", 1);
+
+    init_thunk(t, this_ptr_value, IVROverlay_019_SetDashboardOverlaySceneProcess, 2, FALSE, FALSE);
+    EVROverlayError (__stdcall *capi_IVROverlay_019_SetDashboardOverlaySceneProcess)(VROverlayHandle_t ulOverlayHandle, uint32_t unProcessId) = (void *)t;
+
+    clear_parameters();
+    capi_IVROverlay_019_SetDashboardOverlaySceneProcess(1, 2);
+    check_ptr_parameter("IVROverlay_019_SetDashboardOverlaySceneProcess", this_ptr_value);
+    check_uint64_parameter("IVROverlay_019_SetDashboardOverlaySceneProcess", 1);
+    check_uint32_parameter("IVROverlay_019_SetDashboardOverlaySceneProcess", 2);
+
+    init_thunk(t, this_ptr_value, IVROverlay_019_GetDashboardOverlaySceneProcess, 2, FALSE, FALSE);
+    EVROverlayError (__stdcall *capi_IVROverlay_019_GetDashboardOverlaySceneProcess)(VROverlayHandle_t ulOverlayHandle, uint32_t * punProcessId) = (void *)t;
+
+    clear_parameters();
+    capi_IVROverlay_019_GetDashboardOverlaySceneProcess(1, (void *)2);
+    check_ptr_parameter("IVROverlay_019_GetDashboardOverlaySceneProcess", this_ptr_value);
+    check_uint64_parameter("IVROverlay_019_GetDashboardOverlaySceneProcess", 1);
+    check_ptr_parameter("IVROverlay_019_GetDashboardOverlaySceneProcess", (void *)2);
+
+    init_thunk(t, this_ptr_value, IVROverlay_019_ShowDashboard, 1, FALSE, FALSE);
+    void (__stdcall *capi_IVROverlay_019_ShowDashboard)(const char * pchOverlayToShow) = (void *)t;
+
+    clear_parameters();
+    capi_IVROverlay_019_ShowDashboard((void *)1);
+    check_ptr_parameter("IVROverlay_019_ShowDashboard", this_ptr_value);
+    check_ptr_parameter("IVROverlay_019_ShowDashboard", (void *)1);
+
+    init_thunk(t, this_ptr_value, IVROverlay_019_GetPrimaryDashboardDevice, 0, FALSE, FALSE);
+    TrackedDeviceIndex_t (__stdcall *capi_IVROverlay_019_GetPrimaryDashboardDevice)() = (void *)t;
+
+    clear_parameters();
+    capi_IVROverlay_019_GetPrimaryDashboardDevice();
+    check_ptr_parameter("IVROverlay_019_GetPrimaryDashboardDevice", this_ptr_value);
+
+    init_thunk(t, this_ptr_value, IVROverlay_019_ShowKeyboard, 7, FALSE, FALSE);
+    EVROverlayError (__stdcall *capi_IVROverlay_019_ShowKeyboard)(EGamepadTextInputMode eInputMode, EGamepadTextInputLineMode eLineInputMode, const char * pchDescription, uint32_t unCharMax, const char * pchExistingText, bool bUseMinimalMode, uint64_t uUserValue) = (void *)t;
+
+    clear_parameters();
+    capi_IVROverlay_019_ShowKeyboard(1, 2, (void *)3, 4, (void *)5, 1, 7);
+    check_ptr_parameter("IVROverlay_019_ShowKeyboard", this_ptr_value);
+    check_uint32_parameter("IVROverlay_019_ShowKeyboard", 1);
+    check_uint32_parameter("IVROverlay_019_ShowKeyboard", 2);
+    check_ptr_parameter("IVROverlay_019_ShowKeyboard", (void *)3);
+    check_uint32_parameter("IVROverlay_019_ShowKeyboard", 4);
+    check_ptr_parameter("IVROverlay_019_ShowKeyboard", (void *)5);
+    check_bool_parameter("IVROverlay_019_ShowKeyboard", 1);
+    check_uint64_parameter("IVROverlay_019_ShowKeyboard", 7);
+
+    init_thunk(t, this_ptr_value, IVROverlay_019_ShowKeyboardForOverlay, 8, FALSE, FALSE);
+    EVROverlayError (__stdcall *capi_IVROverlay_019_ShowKeyboardForOverlay)(VROverlayHandle_t ulOverlayHandle, EGamepadTextInputMode eInputMode, EGamepadTextInputLineMode eLineInputMode, const char * pchDescription, uint32_t unCharMax, const char * pchExistingText, bool bUseMinimalMode, uint64_t uUserValue) = (void *)t;
+
+    clear_parameters();
+    capi_IVROverlay_019_ShowKeyboardForOverlay(1, 2, 3, (void *)4, 5, (void *)6, 1, 8);
+    check_ptr_parameter("IVROverlay_019_ShowKeyboardForOverlay", this_ptr_value);
+    check_uint64_parameter("IVROverlay_019_ShowKeyboardForOverlay", 1);
+    check_uint32_parameter("IVROverlay_019_ShowKeyboardForOverlay", 2);
+    check_uint32_parameter("IVROverlay_019_ShowKeyboardForOverlay", 3);
+    check_ptr_parameter("IVROverlay_019_ShowKeyboardForOverlay", (void *)4);
+    check_uint32_parameter("IVROverlay_019_ShowKeyboardForOverlay", 5);
+    check_ptr_parameter("IVROverlay_019_ShowKeyboardForOverlay", (void *)6);
+    check_bool_parameter("IVROverlay_019_ShowKeyboardForOverlay", 1);
+    check_uint64_parameter("IVROverlay_019_ShowKeyboardForOverlay", 8);
+
+    init_thunk(t, this_ptr_value, IVROverlay_019_GetKeyboardText, 2, FALSE, FALSE);
+    uint32_t (__stdcall *capi_IVROverlay_019_GetKeyboardText)(char * pchText, uint32_t cchText) = (void *)t;
+
+    clear_parameters();
+    capi_IVROverlay_019_GetKeyboardText((void *)1, 2);
+    check_ptr_parameter("IVROverlay_019_GetKeyboardText", this_ptr_value);
+    check_ptr_parameter("IVROverlay_019_GetKeyboardText", (void *)1);
+    check_uint32_parameter("IVROverlay_019_GetKeyboardText", 2);
+
+    init_thunk(t, this_ptr_value, IVROverlay_019_HideKeyboard, 0, FALSE, FALSE);
+    void (__stdcall *capi_IVROverlay_019_HideKeyboard)() = (void *)t;
+
+    clear_parameters();
+    capi_IVROverlay_019_HideKeyboard();
+    check_ptr_parameter("IVROverlay_019_HideKeyboard", this_ptr_value);
+
+    init_thunk(t, this_ptr_value, IVROverlay_019_SetKeyboardTransformAbsolute, 2, FALSE, FALSE);
+    void (__stdcall *capi_IVROverlay_019_SetKeyboardTransformAbsolute)(ETrackingUniverseOrigin eTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToKeyboardTransform) = (void *)t;
+
+    clear_parameters();
+    capi_IVROverlay_019_SetKeyboardTransformAbsolute(1, (void *)2);
+    check_ptr_parameter("IVROverlay_019_SetKeyboardTransformAbsolute", this_ptr_value);
+    check_uint32_parameter("IVROverlay_019_SetKeyboardTransformAbsolute", 1);
+    check_ptr_parameter("IVROverlay_019_SetKeyboardTransformAbsolute", (void *)2);
+
+    init_thunk(t, this_ptr_value, IVROverlay_019_SetKeyboardPositionForOverlay, 2, FALSE, FALSE);
+    void (__stdcall *capi_IVROverlay_019_SetKeyboardPositionForOverlay)(VROverlayHandle_t ulOverlayHandle, HmdRect2_t avoidRect) = (void *)t;
+
+    clear_parameters();
+    capi_IVROverlay_019_SetKeyboardPositionForOverlay(1, DEFAULT_RECT);
+    check_ptr_parameter("IVROverlay_019_SetKeyboardPositionForOverlay", this_ptr_value);
+    check_uint64_parameter("IVROverlay_019_SetKeyboardPositionForOverlay", 1);
+    check_HmdRect2_parameter("IVROverlay_019_SetKeyboardPositionForOverlay", DEFAULT_RECT);
+
+    init_thunk(t, this_ptr_value, IVROverlay_019_SetOverlayIntersectionMask, 4, FALSE, FALSE);
+    EVROverlayError (__stdcall *capi_IVROverlay_019_SetOverlayIntersectionMask)(VROverlayHandle_t ulOverlayHandle, VROverlayIntersectionMaskPrimitive_t * pMaskPrimitives, uint32_t unNumMaskPrimitives, uint32_t unPrimitiveSize) = (void *)t;
+
+    clear_parameters();
+    capi_IVROverlay_019_SetOverlayIntersectionMask(1, (void *)2, 3, 4);
+    check_ptr_parameter("IVROverlay_019_SetOverlayIntersectionMask", this_ptr_value);
+    check_uint64_parameter("IVROverlay_019_SetOverlayIntersectionMask", 1);
+    check_ptr_parameter("IVROverlay_019_SetOverlayIntersectionMask", (void *)2);
+    check_uint32_parameter("IVROverlay_019_SetOverlayIntersectionMask", 3);
+    check_uint32_parameter("IVROverlay_019_SetOverlayIntersectionMask", 4);
+
+    init_thunk(t, this_ptr_value, IVROverlay_019_GetOverlayFlags, 2, FALSE, FALSE);
+    EVROverlayError (__stdcall *capi_IVROverlay_019_GetOverlayFlags)(VROverlayHandle_t ulOverlayHandle, uint32_t * pFlags) = (void *)t;
+
+    clear_parameters();
+    capi_IVROverlay_019_GetOverlayFlags(1, (void *)2);
+    check_ptr_parameter("IVROverlay_019_GetOverlayFlags", this_ptr_value);
+    check_uint64_parameter("IVROverlay_019_GetOverlayFlags", 1);
+    check_ptr_parameter("IVROverlay_019_GetOverlayFlags", (void *)2);
+
+    init_thunk(t, this_ptr_value, IVROverlay_019_ShowMessageOverlay, 6, FALSE, FALSE);
+    VRMessageOverlayResponse (__stdcall *capi_IVROverlay_019_ShowMessageOverlay)(const char * pchText, const char * pchCaption, const char * pchButton0Text, const char * pchButton1Text, const char * pchButton2Text, const char * pchButton3Text) = (void *)t;
+
+    clear_parameters();
+    capi_IVROverlay_019_ShowMessageOverlay((void *)1, (void *)2, (void *)3, (void *)4, (void *)5, (void *)6);
+    check_ptr_parameter("IVROverlay_019_ShowMessageOverlay", this_ptr_value);
+    check_ptr_parameter("IVROverlay_019_ShowMessageOverlay", (void *)1);
+    check_ptr_parameter("IVROverlay_019_ShowMessageOverlay", (void *)2);
+    check_ptr_parameter("IVROverlay_019_ShowMessageOverlay", (void *)3);
+    check_ptr_parameter("IVROverlay_019_ShowMessageOverlay", (void *)4);
+    check_ptr_parameter("IVROverlay_019_ShowMessageOverlay", (void *)5);
+    check_ptr_parameter("IVROverlay_019_ShowMessageOverlay", (void *)6);
+
+    init_thunk(t, this_ptr_value, IVROverlay_019_CloseMessageOverlay, 0, FALSE, FALSE);
+    void (__stdcall *capi_IVROverlay_019_CloseMessageOverlay)() = (void *)t;
+
+    clear_parameters();
+    capi_IVROverlay_019_CloseMessageOverlay();
+    check_ptr_parameter("IVROverlay_019_CloseMessageOverlay", this_ptr_value);
+    VirtualFree(t, 0, MEM_RELEASE);
+}
+
+void test_capi_thunks_IVRRenderModels_006(void)
+{
+    struct thunk *t = alloc_thunks(1);
+
+    init_thunk(t, this_ptr_value, IVRRenderModels_006_LoadRenderModel_Async, 2, FALSE, FALSE);
+    EVRRenderModelError (__stdcall *capi_IVRRenderModels_006_LoadRenderModel_Async)(const char * pchRenderModelName, RenderModel_t ** ppRenderModel) = (void *)t;
+
+    clear_parameters();
+    capi_IVRRenderModels_006_LoadRenderModel_Async((void *)1, (void *)2);
+    check_ptr_parameter("IVRRenderModels_006_LoadRenderModel_Async", this_ptr_value);
+    check_ptr_parameter("IVRRenderModels_006_LoadRenderModel_Async", (void *)1);
+    check_ptr_parameter("IVRRenderModels_006_LoadRenderModel_Async", (void *)2);
+
+    init_thunk(t, this_ptr_value, IVRRenderModels_006_FreeRenderModel, 1, FALSE, FALSE);
+    void (__stdcall *capi_IVRRenderModels_006_FreeRenderModel)(RenderModel_t * pRenderModel) = (void *)t;
+
+    clear_parameters();
+    capi_IVRRenderModels_006_FreeRenderModel((void *)1);
+    check_ptr_parameter("IVRRenderModels_006_FreeRenderModel", this_ptr_value);
+    check_ptr_parameter("IVRRenderModels_006_FreeRenderModel", (void *)1);
+
+    init_thunk(t, this_ptr_value, IVRRenderModels_006_LoadTexture_Async, 2, FALSE, FALSE);
+    EVRRenderModelError (__stdcall *capi_IVRRenderModels_006_LoadTexture_Async)(TextureID_t textureId, RenderModel_TextureMap_t ** ppTexture) = (void *)t;
+
+    clear_parameters();
+    capi_IVRRenderModels_006_LoadTexture_Async(1, (void *)2);
+    check_ptr_parameter("IVRRenderModels_006_LoadTexture_Async", this_ptr_value);
+    check_uint32_parameter("IVRRenderModels_006_LoadTexture_Async", 1);
+    check_ptr_parameter("IVRRenderModels_006_LoadTexture_Async", (void *)2);
+
+    init_thunk(t, this_ptr_value, IVRRenderModels_006_FreeTexture, 1, FALSE, FALSE);
+    void (__stdcall *capi_IVRRenderModels_006_FreeTexture)(RenderModel_TextureMap_t * pTexture) = (void *)t;
+
+    clear_parameters();
+    capi_IVRRenderModels_006_FreeTexture((void *)1);
+    check_ptr_parameter("IVRRenderModels_006_FreeTexture", this_ptr_value);
+    check_ptr_parameter("IVRRenderModels_006_FreeTexture", (void *)1);
+
+    init_thunk(t, this_ptr_value, IVRRenderModels_006_LoadTextureD3D11_Async, 3, FALSE, FALSE);
+    EVRRenderModelError (__stdcall *capi_IVRRenderModels_006_LoadTextureD3D11_Async)(TextureID_t textureId, void * pD3D11Device, void ** ppD3D11Texture2D) = (void *)t;
+
+    clear_parameters();
+    capi_IVRRenderModels_006_LoadTextureD3D11_Async(1, (void *)2, (void *)3);
+    check_ptr_parameter("IVRRenderModels_006_LoadTextureD3D11_Async", this_ptr_value);
+    check_uint32_parameter("IVRRenderModels_006_LoadTextureD3D11_Async", 1);
+    check_ptr_parameter("IVRRenderModels_006_LoadTextureD3D11_Async", (void *)2);
+    check_ptr_parameter("IVRRenderModels_006_LoadTextureD3D11_Async", (void *)3);
+
+    init_thunk(t, this_ptr_value, IVRRenderModels_006_LoadIntoTextureD3D11_Async, 2, FALSE, FALSE);
+    EVRRenderModelError (__stdcall *capi_IVRRenderModels_006_LoadIntoTextureD3D11_Async)(TextureID_t textureId, void * pDstTexture) = (void *)t;
+
+    clear_parameters();
+    capi_IVRRenderModels_006_LoadIntoTextureD3D11_Async(1, (void *)2);
+    check_ptr_parameter("IVRRenderModels_006_LoadIntoTextureD3D11_Async", this_ptr_value);
+    check_uint32_parameter("IVRRenderModels_006_LoadIntoTextureD3D11_Async", 1);
+    check_ptr_parameter("IVRRenderModels_006_LoadIntoTextureD3D11_Async", (void *)2);
+
+    init_thunk(t, this_ptr_value, IVRRenderModels_006_FreeTextureD3D11, 1, FALSE, FALSE);
+    void (__stdcall *capi_IVRRenderModels_006_FreeTextureD3D11)(void * pD3D11Texture2D) = (void *)t;
+
+    clear_parameters();
+    capi_IVRRenderModels_006_FreeTextureD3D11((void *)1);
+    check_ptr_parameter("IVRRenderModels_006_FreeTextureD3D11", this_ptr_value);
+    check_ptr_parameter("IVRRenderModels_006_FreeTextureD3D11", (void *)1);
+
+    init_thunk(t, this_ptr_value, IVRRenderModels_006_GetRenderModelName, 3, FALSE, FALSE);
+    uint32_t (__stdcall *capi_IVRRenderModels_006_GetRenderModelName)(uint32_t unRenderModelIndex, char * pchRenderModelName, uint32_t unRenderModelNameLen) = (void *)t;
+
+    clear_parameters();
+    capi_IVRRenderModels_006_GetRenderModelName(1, (void *)2, 3);
+    check_ptr_parameter("IVRRenderModels_006_GetRenderModelName", this_ptr_value);
+    check_uint32_parameter("IVRRenderModels_006_GetRenderModelName", 1);
+    check_ptr_parameter("IVRRenderModels_006_GetRenderModelName", (void *)2);
+    check_uint32_parameter("IVRRenderModels_006_GetRenderModelName", 3);
+
+    init_thunk(t, this_ptr_value, IVRRenderModels_006_GetRenderModelCount, 0, FALSE, FALSE);
+    uint32_t (__stdcall *capi_IVRRenderModels_006_GetRenderModelCount)() = (void *)t;
+
+    clear_parameters();
+    capi_IVRRenderModels_006_GetRenderModelCount();
+    check_ptr_parameter("IVRRenderModels_006_GetRenderModelCount", this_ptr_value);
+
+    init_thunk(t, this_ptr_value, IVRRenderModels_006_GetComponentCount, 1, FALSE, FALSE);
+    uint32_t (__stdcall *capi_IVRRenderModels_006_GetComponentCount)(const char * pchRenderModelName) = (void *)t;
+
+    clear_parameters();
+    capi_IVRRenderModels_006_GetComponentCount((void *)1);
+    check_ptr_parameter("IVRRenderModels_006_GetComponentCount", this_ptr_value);
+    check_ptr_parameter("IVRRenderModels_006_GetComponentCount", (void *)1);
+
+    init_thunk(t, this_ptr_value, IVRRenderModels_006_GetComponentName, 4, FALSE, FALSE);
+    uint32_t (__stdcall *capi_IVRRenderModels_006_GetComponentName)(const char * pchRenderModelName, uint32_t unComponentIndex, char * pchComponentName, uint32_t unComponentNameLen) = (void *)t;
+
+    clear_parameters();
+    capi_IVRRenderModels_006_GetComponentName((void *)1, 2, (void *)3, 4);
+    check_ptr_parameter("IVRRenderModels_006_GetComponentName", this_ptr_value);
+    check_ptr_parameter("IVRRenderModels_006_GetComponentName", (void *)1);
+    check_uint32_parameter("IVRRenderModels_006_GetComponentName", 2);
+    check_ptr_parameter("IVRRenderModels_006_GetComponentName", (void *)3);
+    check_uint32_parameter("IVRRenderModels_006_GetComponentName", 4);
+
+    init_thunk(t, this_ptr_value, IVRRenderModels_006_GetComponentButtonMask, 2, FALSE, FALSE);
+    uint64_t (__stdcall *capi_IVRRenderModels_006_GetComponentButtonMask)(const char * pchRenderModelName, const char * pchComponentName) = (void *)t;
+
+    clear_parameters();
+    capi_IVRRenderModels_006_GetComponentButtonMask((void *)1, (void *)2);
+    check_ptr_parameter("IVRRenderModels_006_GetComponentButtonMask", this_ptr_value);
+    check_ptr_parameter("IVRRenderModels_006_GetComponentButtonMask", (void *)1);
+    check_ptr_parameter("IVRRenderModels_006_GetComponentButtonMask", (void *)2);
+
+    init_thunk(t, this_ptr_value, IVRRenderModels_006_GetComponentRenderModelName, 4, FALSE, FALSE);
+    uint32_t (__stdcall *capi_IVRRenderModels_006_GetComponentRenderModelName)(const char * pchRenderModelName, const char * pchComponentName, char * pchComponentRenderModelName, uint32_t unComponentRenderModelNameLen) = (void *)t;
+
+    clear_parameters();
+    capi_IVRRenderModels_006_GetComponentRenderModelName((void *)1, (void *)2, (void *)3, 4);
+    check_ptr_parameter("IVRRenderModels_006_GetComponentRenderModelName", this_ptr_value);
+    check_ptr_parameter("IVRRenderModels_006_GetComponentRenderModelName", (void *)1);
+    check_ptr_parameter("IVRRenderModels_006_GetComponentRenderModelName", (void *)2);
+    check_ptr_parameter("IVRRenderModels_006_GetComponentRenderModelName", (void *)3);
+    check_uint32_parameter("IVRRenderModels_006_GetComponentRenderModelName", 4);
+
+    init_thunk(t, this_ptr_value, IVRRenderModels_006_GetComponentStateForDevicePath, 5, FALSE, FALSE);
+    bool (__stdcall *capi_IVRRenderModels_006_GetComponentStateForDevicePath)(const char * pchRenderModelName, const char * pchComponentName, VRInputValueHandle_t devicePath, RenderModel_ControllerMode_State_t * pState, RenderModel_ComponentState_t * pComponentState) = (void *)t;
+
+    clear_parameters();
+    capi_IVRRenderModels_006_GetComponentStateForDevicePath((void *)1, (void *)2, 3, (void *)4, (void *)5);
+    check_ptr_parameter("IVRRenderModels_006_GetComponentStateForDevicePath", this_ptr_value);
+    check_ptr_parameter("IVRRenderModels_006_GetComponentStateForDevicePath", (void *)1);
+    check_ptr_parameter("IVRRenderModels_006_GetComponentStateForDevicePath", (void *)2);
+    check_uint64_parameter("IVRRenderModels_006_GetComponentStateForDevicePath", 3);
+    check_ptr_parameter("IVRRenderModels_006_GetComponentStateForDevicePath", (void *)4);
+    check_ptr_parameter("IVRRenderModels_006_GetComponentStateForDevicePath", (void *)5);
+
+    init_thunk(t, this_ptr_value, IVRRenderModels_006_GetComponentState, 5, FALSE, FALSE);
+    bool (__stdcall *capi_IVRRenderModels_006_GetComponentState)(const char * pchRenderModelName, const char * pchComponentName, VRControllerState_t * pControllerState, RenderModel_ControllerMode_State_t * pState, RenderModel_ComponentState_t * pComponentState) = (void *)t;
+
+    clear_parameters();
+    capi_IVRRenderModels_006_GetComponentState((void *)1, (void *)2, (void *)3, (void *)4, (void *)5);
+    check_ptr_parameter("IVRRenderModels_006_GetComponentState", this_ptr_value);
+    check_ptr_parameter("IVRRenderModels_006_GetComponentState", (void *)1);
+    check_ptr_parameter("IVRRenderModels_006_GetComponentState", (void *)2);
+    check_ptr_parameter("IVRRenderModels_006_GetComponentState", (void *)3);
+    check_ptr_parameter("IVRRenderModels_006_GetComponentState", (void *)4);
+    check_ptr_parameter("IVRRenderModels_006_GetComponentState", (void *)5);
+
+    init_thunk(t, this_ptr_value, IVRRenderModels_006_RenderModelHasComponent, 2, FALSE, FALSE);
+    bool (__stdcall *capi_IVRRenderModels_006_RenderModelHasComponent)(const char * pchRenderModelName, const char * pchComponentName) = (void *)t;
+
+    clear_parameters();
+    capi_IVRRenderModels_006_RenderModelHasComponent((void *)1, (void *)2);
+    check_ptr_parameter("IVRRenderModels_006_RenderModelHasComponent", this_ptr_value);
+    check_ptr_parameter("IVRRenderModels_006_RenderModelHasComponent", (void *)1);
+    check_ptr_parameter("IVRRenderModels_006_RenderModelHasComponent", (void *)2);
+
+    init_thunk(t, this_ptr_value, IVRRenderModels_006_GetRenderModelThumbnailURL, 4, FALSE, FALSE);
+    uint32_t (__stdcall *capi_IVRRenderModels_006_GetRenderModelThumbnailURL)(const char * pchRenderModelName, char * pchThumbnailURL, uint32_t unThumbnailURLLen, EVRRenderModelError * peError) = (void *)t;
+
+    clear_parameters();
+    capi_IVRRenderModels_006_GetRenderModelThumbnailURL((void *)1, (void *)2, 3, (void *)4);
+    check_ptr_parameter("IVRRenderModels_006_GetRenderModelThumbnailURL", this_ptr_value);
+    check_ptr_parameter("IVRRenderModels_006_GetRenderModelThumbnailURL", (void *)1);
+    check_ptr_parameter("IVRRenderModels_006_GetRenderModelThumbnailURL", (void *)2);
+    check_uint32_parameter("IVRRenderModels_006_GetRenderModelThumbnailURL", 3);
+    check_ptr_parameter("IVRRenderModels_006_GetRenderModelThumbnailURL", (void *)4);
+
+    init_thunk(t, this_ptr_value, IVRRenderModels_006_GetRenderModelOriginalPath, 4, FALSE, FALSE);
+    uint32_t (__stdcall *capi_IVRRenderModels_006_GetRenderModelOriginalPath)(const char * pchRenderModelName, char * pchOriginalPath, uint32_t unOriginalPathLen, EVRRenderModelError * peError) = (void *)t;
+
+    clear_parameters();
+    capi_IVRRenderModels_006_GetRenderModelOriginalPath((void *)1, (void *)2, 3, (void *)4);
+    check_ptr_parameter("IVRRenderModels_006_GetRenderModelOriginalPath", this_ptr_value);
+    check_ptr_parameter("IVRRenderModels_006_GetRenderModelOriginalPath", (void *)1);
+    check_ptr_parameter("IVRRenderModels_006_GetRenderModelOriginalPath", (void *)2);
+    check_uint32_parameter("IVRRenderModels_006_GetRenderModelOriginalPath", 3);
+    check_ptr_parameter("IVRRenderModels_006_GetRenderModelOriginalPath", (void *)4);
+
+    init_thunk(t, this_ptr_value, IVRRenderModels_006_GetRenderModelErrorNameFromEnum, 1, FALSE, FALSE);
+    const char * (__stdcall *capi_IVRRenderModels_006_GetRenderModelErrorNameFromEnum)(EVRRenderModelError error) = (void *)t;
+
+    clear_parameters();
+    capi_IVRRenderModels_006_GetRenderModelErrorNameFromEnum(1);
+    check_ptr_parameter("IVRRenderModels_006_GetRenderModelErrorNameFromEnum", this_ptr_value);
+    check_uint32_parameter("IVRRenderModels_006_GetRenderModelErrorNameFromEnum", 1);
+    VirtualFree(t, 0, MEM_RELEASE);
+}
+
+void test_capi_thunks_IVRExtendedDisplay_001(void)
+{
+    struct thunk *t = alloc_thunks(1);
+
+    init_thunk(t, this_ptr_value, IVRExtendedDisplay_001_GetWindowBounds, 4, FALSE, FALSE);
+    void (__stdcall *capi_IVRExtendedDisplay_001_GetWindowBounds)(int32_t * pnX, int32_t * pnY, uint32_t * pnWidth, uint32_t * pnHeight) = (void *)t;
+
+    clear_parameters();
+    capi_IVRExtendedDisplay_001_GetWindowBounds((void *)1, (void *)2, (void *)3, (void *)4);
+    check_ptr_parameter("IVRExtendedDisplay_001_GetWindowBounds", this_ptr_value);
+    check_ptr_parameter("IVRExtendedDisplay_001_GetWindowBounds", (void *)1);
+    check_ptr_parameter("IVRExtendedDisplay_001_GetWindowBounds", (void *)2);
+    check_ptr_parameter("IVRExtendedDisplay_001_GetWindowBounds", (void *)3);
+    check_ptr_parameter("IVRExtendedDisplay_001_GetWindowBounds", (void *)4);
+
+    init_thunk(t, this_ptr_value, IVRExtendedDisplay_001_GetEyeOutputViewport, 5, FALSE, FALSE);
+    void (__stdcall *capi_IVRExtendedDisplay_001_GetEyeOutputViewport)(EVREye eEye, uint32_t * pnX, uint32_t * pnY, uint32_t * pnWidth, uint32_t * pnHeight) = (void *)t;
+
+    clear_parameters();
+    capi_IVRExtendedDisplay_001_GetEyeOutputViewport(1, (void *)2, (void *)3, (void *)4, (void *)5);
+    check_ptr_parameter("IVRExtendedDisplay_001_GetEyeOutputViewport", this_ptr_value);
+    check_uint32_parameter("IVRExtendedDisplay_001_GetEyeOutputViewport", 1);
+    check_ptr_parameter("IVRExtendedDisplay_001_GetEyeOutputViewport", (void *)2);
+    check_ptr_parameter("IVRExtendedDisplay_001_GetEyeOutputViewport", (void *)3);
+    check_ptr_parameter("IVRExtendedDisplay_001_GetEyeOutputViewport", (void *)4);
+    check_ptr_parameter("IVRExtendedDisplay_001_GetEyeOutputViewport", (void *)5);
+
+    init_thunk(t, this_ptr_value, IVRExtendedDisplay_001_GetDXGIOutputInfo, 2, FALSE, FALSE);
+    void (__stdcall *capi_IVRExtendedDisplay_001_GetDXGIOutputInfo)(int32_t * pnAdapterIndex, int32_t * pnAdapterOutputIndex) = (void *)t;
+
+    clear_parameters();
+    capi_IVRExtendedDisplay_001_GetDXGIOutputInfo((void *)1, (void *)2);
+    check_ptr_parameter("IVRExtendedDisplay_001_GetDXGIOutputInfo", this_ptr_value);
+    check_ptr_parameter("IVRExtendedDisplay_001_GetDXGIOutputInfo", (void *)1);
+    check_ptr_parameter("IVRExtendedDisplay_001_GetDXGIOutputInfo", (void *)2);
+    VirtualFree(t, 0, MEM_RELEASE);
+}
+
+void test_capi_thunks_IVRTrackedCamera_005(void)
+{
+    struct thunk *t = alloc_thunks(1);
+
+    init_thunk(t, this_ptr_value, IVRTrackedCamera_005_GetCameraErrorNameFromEnum, 1, FALSE, FALSE);
+    const char * (__stdcall *capi_IVRTrackedCamera_005_GetCameraErrorNameFromEnum)(EVRTrackedCameraError eCameraError) = (void *)t;
+
+    clear_parameters();
+    capi_IVRTrackedCamera_005_GetCameraErrorNameFromEnum(1);
+    check_ptr_parameter("IVRTrackedCamera_005_GetCameraErrorNameFromEnum", this_ptr_value);
+    check_uint32_parameter("IVRTrackedCamera_005_GetCameraErrorNameFromEnum", 1);
+
+    init_thunk(t, this_ptr_value, IVRTrackedCamera_005_HasCamera, 2, FALSE, FALSE);
+    EVRTrackedCameraError (__stdcall *capi_IVRTrackedCamera_005_HasCamera)(TrackedDeviceIndex_t nDeviceIndex, bool * pHasCamera) = (void *)t;
+
+    clear_parameters();
+    capi_IVRTrackedCamera_005_HasCamera(1, (void *)2);
+    check_ptr_parameter("IVRTrackedCamera_005_HasCamera", this_ptr_value);
+    check_uint32_parameter("IVRTrackedCamera_005_HasCamera", 1);
+    check_ptr_parameter("IVRTrackedCamera_005_HasCamera", (void *)2);
+
+    init_thunk(t, this_ptr_value, IVRTrackedCamera_005_GetCameraFrameSize, 5, FALSE, FALSE);
+    EVRTrackedCameraError (__stdcall *capi_IVRTrackedCamera_005_GetCameraFrameSize)(TrackedDeviceIndex_t nDeviceIndex, EVRTrackedCameraFrameType eFrameType, uint32_t * pnWidth, uint32_t * pnHeight, uint32_t * pnFrameBufferSize) = (void *)t;
+
+    clear_parameters();
+    capi_IVRTrackedCamera_005_GetCameraFrameSize(1, 2, (void *)3, (void *)4, (void *)5);
+    check_ptr_parameter("IVRTrackedCamera_005_GetCameraFrameSize", this_ptr_value);
+    check_uint32_parameter("IVRTrackedCamera_005_GetCameraFrameSize", 1);
+    check_uint32_parameter("IVRTrackedCamera_005_GetCameraFrameSize", 2);
+    check_ptr_parameter("IVRTrackedCamera_005_GetCameraFrameSize", (void *)3);
+    check_ptr_parameter("IVRTrackedCamera_005_GetCameraFrameSize", (void *)4);
+    check_ptr_parameter("IVRTrackedCamera_005_GetCameraFrameSize", (void *)5);
+
+    init_thunk(t, this_ptr_value, IVRTrackedCamera_005_GetCameraIntrinsics, 5, FALSE, FALSE);
+    EVRTrackedCameraError (__stdcall *capi_IVRTrackedCamera_005_GetCameraIntrinsics)(TrackedDeviceIndex_t nDeviceIndex, uint32_t nCameraIndex, EVRTrackedCameraFrameType eFrameType, HmdVector2_t * pFocalLength, HmdVector2_t * pCenter) = (void *)t;
+
+    clear_parameters();
+    capi_IVRTrackedCamera_005_GetCameraIntrinsics(1, 2, 3, (void *)4, (void *)5);
+    check_ptr_parameter("IVRTrackedCamera_005_GetCameraIntrinsics", this_ptr_value);
+    check_uint32_parameter("IVRTrackedCamera_005_GetCameraIntrinsics", 1);
+    check_uint32_parameter("IVRTrackedCamera_005_GetCameraIntrinsics", 2);
+    check_uint32_parameter("IVRTrackedCamera_005_GetCameraIntrinsics", 3);
+    check_ptr_parameter("IVRTrackedCamera_005_GetCameraIntrinsics", (void *)4);
+    check_ptr_parameter("IVRTrackedCamera_005_GetCameraIntrinsics", (void *)5);
+
+    init_thunk(t, this_ptr_value, IVRTrackedCamera_005_GetCameraProjection, 6, TRUE, TRUE);
+    EVRTrackedCameraError (__stdcall *capi_IVRTrackedCamera_005_GetCameraProjection)(TrackedDeviceIndex_t nDeviceIndex, uint32_t nCameraIndex, EVRTrackedCameraFrameType eFrameType, float flZNear, float flZFar, HmdMatrix44_t * pProjection) = (void *)t;
+
+    clear_parameters();
+    capi_IVRTrackedCamera_005_GetCameraProjection(1, 2, 3, 4.0f, 5.0f, (void *)6);
+    check_ptr_parameter("IVRTrackedCamera_005_GetCameraProjection", this_ptr_value);
+    check_uint32_parameter("IVRTrackedCamera_005_GetCameraProjection", 1);
+    check_uint32_parameter("IVRTrackedCamera_005_GetCameraProjection", 2);
+    check_uint32_parameter("IVRTrackedCamera_005_GetCameraProjection", 3);
+    check_float_parameter("IVRTrackedCamera_005_GetCameraProjection", 4.0f);
+    check_float_parameter("IVRTrackedCamera_005_GetCameraProjection", 5.0f);
+    check_ptr_parameter("IVRTrackedCamera_005_GetCameraProjection", (void *)6);
+
+    init_thunk(t, this_ptr_value, IVRTrackedCamera_005_AcquireVideoStreamingService, 2, FALSE, FALSE);
+    EVRTrackedCameraError (__stdcall *capi_IVRTrackedCamera_005_AcquireVideoStreamingService)(TrackedDeviceIndex_t nDeviceIndex, TrackedCameraHandle_t * pHandle) = (void *)t;
+
+    clear_parameters();
+    capi_IVRTrackedCamera_005_AcquireVideoStreamingService(1, (void *)2);
+    check_ptr_parameter("IVRTrackedCamera_005_AcquireVideoStreamingService", this_ptr_value);
+    check_uint32_parameter("IVRTrackedCamera_005_AcquireVideoStreamingService", 1);
+    check_ptr_parameter("IVRTrackedCamera_005_AcquireVideoStreamingService", (void *)2);
+
+    init_thunk(t, this_ptr_value, IVRTrackedCamera_005_ReleaseVideoStreamingService, 1, FALSE, FALSE);
+    EVRTrackedCameraError (__stdcall *capi_IVRTrackedCamera_005_ReleaseVideoStreamingService)(TrackedCameraHandle_t hTrackedCamera) = (void *)t;
+
+    clear_parameters();
+    capi_IVRTrackedCamera_005_ReleaseVideoStreamingService(1);
+    check_ptr_parameter("IVRTrackedCamera_005_ReleaseVideoStreamingService", this_ptr_value);
+    check_uint64_parameter("IVRTrackedCamera_005_ReleaseVideoStreamingService", 1);
+
+    init_thunk(t, this_ptr_value, IVRTrackedCamera_005_GetVideoStreamFrameBuffer, 6, FALSE, FALSE);
+    EVRTrackedCameraError (__stdcall *capi_IVRTrackedCamera_005_GetVideoStreamFrameBuffer)(TrackedCameraHandle_t hTrackedCamera, EVRTrackedCameraFrameType eFrameType, void * pFrameBuffer, uint32_t nFrameBufferSize, CameraVideoStreamFrameHeader_t * pFrameHeader, uint32_t nFrameHeaderSize) = (void *)t;
+
+    clear_parameters();
+    capi_IVRTrackedCamera_005_GetVideoStreamFrameBuffer(1, 2, (void *)3, 4, (void *)5, 6);
+    check_ptr_parameter("IVRTrackedCamera_005_GetVideoStreamFrameBuffer", this_ptr_value);
+    check_uint64_parameter("IVRTrackedCamera_005_GetVideoStreamFrameBuffer", 1);
+    check_uint32_parameter("IVRTrackedCamera_005_GetVideoStreamFrameBuffer", 2);
+    check_ptr_parameter("IVRTrackedCamera_005_GetVideoStreamFrameBuffer", (void *)3);
+    check_uint32_parameter("IVRTrackedCamera_005_GetVideoStreamFrameBuffer", 4);
+    check_ptr_parameter("IVRTrackedCamera_005_GetVideoStreamFrameBuffer", (void *)5);
+    check_uint32_parameter("IVRTrackedCamera_005_GetVideoStreamFrameBuffer", 6);
+
+    init_thunk(t, this_ptr_value, IVRTrackedCamera_005_GetVideoStreamTextureSize, 5, FALSE, FALSE);
+    EVRTrackedCameraError (__stdcall *capi_IVRTrackedCamera_005_GetVideoStreamTextureSize)(TrackedDeviceIndex_t nDeviceIndex, EVRTrackedCameraFrameType eFrameType, VRTextureBounds_t * pTextureBounds, uint32_t * pnWidth, uint32_t * pnHeight) = (void *)t;
+
+    clear_parameters();
+    capi_IVRTrackedCamera_005_GetVideoStreamTextureSize(1, 2, (void *)3, (void *)4, (void *)5);
+    check_ptr_parameter("IVRTrackedCamera_005_GetVideoStreamTextureSize", this_ptr_value);
+    check_uint32_parameter("IVRTrackedCamera_005_GetVideoStreamTextureSize", 1);
+    check_uint32_parameter("IVRTrackedCamera_005_GetVideoStreamTextureSize", 2);
+    check_ptr_parameter("IVRTrackedCamera_005_GetVideoStreamTextureSize", (void *)3);
+    check_ptr_parameter("IVRTrackedCamera_005_GetVideoStreamTextureSize", (void *)4);
+    check_ptr_parameter("IVRTrackedCamera_005_GetVideoStreamTextureSize", (void *)5);
+
+    init_thunk(t, this_ptr_value, IVRTrackedCamera_005_GetVideoStreamTextureD3D11, 6, FALSE, FALSE);
+    EVRTrackedCameraError (__stdcall *capi_IVRTrackedCamera_005_GetVideoStreamTextureD3D11)(TrackedCameraHandle_t hTrackedCamera, EVRTrackedCameraFrameType eFrameType, void * pD3D11DeviceOrResource, void ** ppD3D11ShaderResourceView, CameraVideoStreamFrameHeader_t * pFrameHeader, uint32_t nFrameHeaderSize) = (void *)t;
+
+    clear_parameters();
+    capi_IVRTrackedCamera_005_GetVideoStreamTextureD3D11(1, 2, (void *)3, (void *)4, (void *)5, 6);
+    check_ptr_parameter("IVRTrackedCamera_005_GetVideoStreamTextureD3D11", this_ptr_value);
+    check_uint64_parameter("IVRTrackedCamera_005_GetVideoStreamTextureD3D11", 1);
+    check_uint32_parameter("IVRTrackedCamera_005_GetVideoStreamTextureD3D11", 2);
+    check_ptr_parameter("IVRTrackedCamera_005_GetVideoStreamTextureD3D11", (void *)3);
+    check_ptr_parameter("IVRTrackedCamera_005_GetVideoStreamTextureD3D11", (void *)4);
+    check_ptr_parameter("IVRTrackedCamera_005_GetVideoStreamTextureD3D11", (void *)5);
+    check_uint32_parameter("IVRTrackedCamera_005_GetVideoStreamTextureD3D11", 6);
+
+    init_thunk(t, this_ptr_value, IVRTrackedCamera_005_GetVideoStreamTextureGL, 5, FALSE, FALSE);
+    EVRTrackedCameraError (__stdcall *capi_IVRTrackedCamera_005_GetVideoStreamTextureGL)(TrackedCameraHandle_t hTrackedCamera, EVRTrackedCameraFrameType eFrameType, glUInt_t * pglTextureId, CameraVideoStreamFrameHeader_t * pFrameHeader, uint32_t nFrameHeaderSize) = (void *)t;
+
+    clear_parameters();
+    capi_IVRTrackedCamera_005_GetVideoStreamTextureGL(1, 2, (void *)3, (void *)4, 5);
+    check_ptr_parameter("IVRTrackedCamera_005_GetVideoStreamTextureGL", this_ptr_value);
+    check_uint64_parameter("IVRTrackedCamera_005_GetVideoStreamTextureGL", 1);
+    check_uint32_parameter("IVRTrackedCamera_005_GetVideoStreamTextureGL", 2);
+    check_ptr_parameter("IVRTrackedCamera_005_GetVideoStreamTextureGL", (void *)3);
+    check_ptr_parameter("IVRTrackedCamera_005_GetVideoStreamTextureGL", (void *)4);
+    check_uint32_parameter("IVRTrackedCamera_005_GetVideoStreamTextureGL", 5);
+
+    init_thunk(t, this_ptr_value, IVRTrackedCamera_005_ReleaseVideoStreamTextureGL, 2, FALSE, FALSE);
+    EVRTrackedCameraError (__stdcall *capi_IVRTrackedCamera_005_ReleaseVideoStreamTextureGL)(TrackedCameraHandle_t hTrackedCamera, glUInt_t glTextureId) = (void *)t;
+
+    clear_parameters();
+    capi_IVRTrackedCamera_005_ReleaseVideoStreamTextureGL(1, 2);
+    check_ptr_parameter("IVRTrackedCamera_005_ReleaseVideoStreamTextureGL", this_ptr_value);
+    check_uint64_parameter("IVRTrackedCamera_005_ReleaseVideoStreamTextureGL", 1);
+    check_uint32_parameter("IVRTrackedCamera_005_ReleaseVideoStreamTextureGL", 2);
+    VirtualFree(t, 0, MEM_RELEASE);
+}
+
+void test_capi_thunks_IVRScreenshots_001(void)
+{
+    struct thunk *t = alloc_thunks(1);
+
+    init_thunk(t, this_ptr_value, IVRScreenshots_001_RequestScreenshot, 4, FALSE, FALSE);
+    EVRScreenshotError (__stdcall *capi_IVRScreenshots_001_RequestScreenshot)(ScreenshotHandle_t * pOutScreenshotHandle, EVRScreenshotType type, const char * pchPreviewFilename, const char * pchVRFilename) = (void *)t;
+
+    clear_parameters();
+    capi_IVRScreenshots_001_RequestScreenshot((void *)1, 2, (void *)3, (void *)4);
+    check_ptr_parameter("IVRScreenshots_001_RequestScreenshot", this_ptr_value);
+    check_ptr_parameter("IVRScreenshots_001_RequestScreenshot", (void *)1);
+    check_uint32_parameter("IVRScreenshots_001_RequestScreenshot", 2);
+    check_ptr_parameter("IVRScreenshots_001_RequestScreenshot", (void *)3);
+    check_ptr_parameter("IVRScreenshots_001_RequestScreenshot", (void *)4);
+
+    init_thunk(t, this_ptr_value, IVRScreenshots_001_HookScreenshot, 2, FALSE, FALSE);
+    EVRScreenshotError (__stdcall *capi_IVRScreenshots_001_HookScreenshot)(EVRScreenshotType * pSupportedTypes, int numTypes) = (void *)t;
+
+    clear_parameters();
+    capi_IVRScreenshots_001_HookScreenshot((void *)1, 2);
+    check_ptr_parameter("IVRScreenshots_001_HookScreenshot", this_ptr_value);
+    check_ptr_parameter("IVRScreenshots_001_HookScreenshot", (void *)1);
+    check_uint32_parameter("IVRScreenshots_001_HookScreenshot", 2);
+
+    init_thunk(t, this_ptr_value, IVRScreenshots_001_GetScreenshotPropertyType, 2, FALSE, FALSE);
+    EVRScreenshotType (__stdcall *capi_IVRScreenshots_001_GetScreenshotPropertyType)(ScreenshotHandle_t screenshotHandle, EVRScreenshotError * pError) = (void *)t;
+
+    clear_parameters();
+    capi_IVRScreenshots_001_GetScreenshotPropertyType(1, (void *)2);
+    check_ptr_parameter("IVRScreenshots_001_GetScreenshotPropertyType", this_ptr_value);
+    check_uint32_parameter("IVRScreenshots_001_GetScreenshotPropertyType", 1);
+    check_ptr_parameter("IVRScreenshots_001_GetScreenshotPropertyType", (void *)2);
+
+    init_thunk(t, this_ptr_value, IVRScreenshots_001_GetScreenshotPropertyFilename, 5, FALSE, FALSE);
+    uint32_t (__stdcall *capi_IVRScreenshots_001_GetScreenshotPropertyFilename)(ScreenshotHandle_t screenshotHandle, EVRScreenshotPropertyFilenames filenameType, char * pchFilename, uint32_t cchFilename, EVRScreenshotError * pError) = (void *)t;
+
+    clear_parameters();
+    capi_IVRScreenshots_001_GetScreenshotPropertyFilename(1, 2, (void *)3, 4, (void *)5);
+    check_ptr_parameter("IVRScreenshots_001_GetScreenshotPropertyFilename", this_ptr_value);
+    check_uint32_parameter("IVRScreenshots_001_GetScreenshotPropertyFilename", 1);
+    check_uint32_parameter("IVRScreenshots_001_GetScreenshotPropertyFilename", 2);
+    check_ptr_parameter("IVRScreenshots_001_GetScreenshotPropertyFilename", (void *)3);
+    check_uint32_parameter("IVRScreenshots_001_GetScreenshotPropertyFilename", 4);
+    check_ptr_parameter("IVRScreenshots_001_GetScreenshotPropertyFilename", (void *)5);
+
+    init_thunk(t, this_ptr_value, IVRScreenshots_001_UpdateScreenshotProgress, 2, TRUE, FALSE);
+    EVRScreenshotError (__stdcall *capi_IVRScreenshots_001_UpdateScreenshotProgress)(ScreenshotHandle_t screenshotHandle, float flProgress) = (void *)t;
+
+    clear_parameters();
+    capi_IVRScreenshots_001_UpdateScreenshotProgress(1, 2.0f);
+    check_ptr_parameter("IVRScreenshots_001_UpdateScreenshotProgress", this_ptr_value);
+    check_uint32_parameter("IVRScreenshots_001_UpdateScreenshotProgress", 1);
+    check_float_parameter("IVRScreenshots_001_UpdateScreenshotProgress", 2.0f);
+
+    init_thunk(t, this_ptr_value, IVRScreenshots_001_TakeStereoScreenshot, 3, FALSE, FALSE);
+    EVRScreenshotError (__stdcall *capi_IVRScreenshots_001_TakeStereoScreenshot)(ScreenshotHandle_t * pOutScreenshotHandle, const char * pchPreviewFilename, const char * pchVRFilename) = (void *)t;
+
+    clear_parameters();
+    capi_IVRScreenshots_001_TakeStereoScreenshot((void *)1, (void *)2, (void *)3);
+    check_ptr_parameter("IVRScreenshots_001_TakeStereoScreenshot", this_ptr_value);
+    check_ptr_parameter("IVRScreenshots_001_TakeStereoScreenshot", (void *)1);
+    check_ptr_parameter("IVRScreenshots_001_TakeStereoScreenshot", (void *)2);
+    check_ptr_parameter("IVRScreenshots_001_TakeStereoScreenshot", (void *)3);
+
+    init_thunk(t, this_ptr_value, IVRScreenshots_001_SubmitScreenshot, 4, FALSE, FALSE);
+    EVRScreenshotError (__stdcall *capi_IVRScreenshots_001_SubmitScreenshot)(ScreenshotHandle_t screenshotHandle, EVRScreenshotType type, const char * pchSourcePreviewFilename, const char * pchSourceVRFilename) = (void *)t;
+
+    clear_parameters();
+    capi_IVRScreenshots_001_SubmitScreenshot(1, 2, (void *)3, (void *)4);
+    check_ptr_parameter("IVRScreenshots_001_SubmitScreenshot", this_ptr_value);
+    check_uint32_parameter("IVRScreenshots_001_SubmitScreenshot", 1);
+    check_uint32_parameter("IVRScreenshots_001_SubmitScreenshot", 2);
+    check_ptr_parameter("IVRScreenshots_001_SubmitScreenshot", (void *)3);
+    check_ptr_parameter("IVRScreenshots_001_SubmitScreenshot", (void *)4);
+    VirtualFree(t, 0, MEM_RELEASE);
+}
+
+void test_capi_thunks_IVRResources_001(void)
+{
+    struct thunk *t = alloc_thunks(1);
+
+    init_thunk(t, this_ptr_value, IVRResources_001_LoadSharedResource, 3, FALSE, FALSE);
+    uint32_t (__stdcall *capi_IVRResources_001_LoadSharedResource)(const char * pchResourceName, char * pchBuffer, uint32_t unBufferLen) = (void *)t;
+
+    clear_parameters();
+    capi_IVRResources_001_LoadSharedResource((void *)1, (void *)2, 3);
+    check_ptr_parameter("IVRResources_001_LoadSharedResource", this_ptr_value);
+    check_ptr_parameter("IVRResources_001_LoadSharedResource", (void *)1);
+    check_ptr_parameter("IVRResources_001_LoadSharedResource", (void *)2);
+    check_uint32_parameter("IVRResources_001_LoadSharedResource", 3);
+
+    init_thunk(t, this_ptr_value, IVRResources_001_GetResourceFullPath, 4, FALSE, FALSE);
+    uint32_t (__stdcall *capi_IVRResources_001_GetResourceFullPath)(const char * pchResourceName, const char * pchResourceTypeDirectory, char * pchPathBuffer, uint32_t unBufferLen) = (void *)t;
+
+    clear_parameters();
+    capi_IVRResources_001_GetResourceFullPath((void *)1, (void *)2, (void *)3, 4);
+    check_ptr_parameter("IVRResources_001_GetResourceFullPath", this_ptr_value);
+    check_ptr_parameter("IVRResources_001_GetResourceFullPath", (void *)1);
+    check_ptr_parameter("IVRResources_001_GetResourceFullPath", (void *)2);
+    check_ptr_parameter("IVRResources_001_GetResourceFullPath", (void *)3);
+    check_uint32_parameter("IVRResources_001_GetResourceFullPath", 4);
+    VirtualFree(t, 0, MEM_RELEASE);
+}
+
+void test_capi_thunks_IVRDriverManager_001(void)
+{
+    struct thunk *t = alloc_thunks(1);
+
+    init_thunk(t, this_ptr_value, IVRDriverManager_001_GetDriverCount, 0, FALSE, FALSE);
+    uint32_t (__stdcall *capi_IVRDriverManager_001_GetDriverCount)() = (void *)t;
+
+    clear_parameters();
+    capi_IVRDriverManager_001_GetDriverCount();
+    check_ptr_parameter("IVRDriverManager_001_GetDriverCount", this_ptr_value);
+
+    init_thunk(t, this_ptr_value, IVRDriverManager_001_GetDriverName, 3, FALSE, FALSE);
+    uint32_t (__stdcall *capi_IVRDriverManager_001_GetDriverName)(DriverId_t nDriver, char * pchValue, uint32_t unBufferSize) = (void *)t;
+
+    clear_parameters();
+    capi_IVRDriverManager_001_GetDriverName(1, (void *)2, 3);
+    check_ptr_parameter("IVRDriverManager_001_GetDriverName", this_ptr_value);
+    check_uint32_parameter("IVRDriverManager_001_GetDriverName", 1);
+    check_ptr_parameter("IVRDriverManager_001_GetDriverName", (void *)2);
+    check_uint32_parameter("IVRDriverManager_001_GetDriverName", 3);
+
+    init_thunk(t, this_ptr_value, IVRDriverManager_001_GetDriverHandle, 1, FALSE, FALSE);
+    DriverHandle_t (__stdcall *capi_IVRDriverManager_001_GetDriverHandle)(const char * pchDriverName) = (void *)t;
+
+    clear_parameters();
+    capi_IVRDriverManager_001_GetDriverHandle((void *)1);
+    check_ptr_parameter("IVRDriverManager_001_GetDriverHandle", this_ptr_value);
+    check_ptr_parameter("IVRDriverManager_001_GetDriverHandle", (void *)1);
+    VirtualFree(t, 0, MEM_RELEASE);
+}
+
+void test_capi_thunks_IVRInput_005(void)
+{
+    struct thunk *t = alloc_thunks(1);
+
+    init_thunk(t, this_ptr_value, IVRInput_005_SetActionManifestPath, 1, FALSE, FALSE);
+    EVRInputError (__stdcall *capi_IVRInput_005_SetActionManifestPath)(const char * pchActionManifestPath) = (void *)t;
+
+    clear_parameters();
+    capi_IVRInput_005_SetActionManifestPath((void *)1);
+    check_ptr_parameter("IVRInput_005_SetActionManifestPath", this_ptr_value);
+    check_ptr_parameter("IVRInput_005_SetActionManifestPath", (void *)1);
+
+    init_thunk(t, this_ptr_value, IVRInput_005_GetActionSetHandle, 2, FALSE, FALSE);
+    EVRInputError (__stdcall *capi_IVRInput_005_GetActionSetHandle)(const char * pchActionSetName, VRActionSetHandle_t * pHandle) = (void *)t;
+
+    clear_parameters();
+    capi_IVRInput_005_GetActionSetHandle((void *)1, (void *)2);
+    check_ptr_parameter("IVRInput_005_GetActionSetHandle", this_ptr_value);
+    check_ptr_parameter("IVRInput_005_GetActionSetHandle", (void *)1);
+    check_ptr_parameter("IVRInput_005_GetActionSetHandle", (void *)2);
+
+    init_thunk(t, this_ptr_value, IVRInput_005_GetActionHandle, 2, FALSE, FALSE);
+    EVRInputError (__stdcall *capi_IVRInput_005_GetActionHandle)(const char * pchActionName, VRActionHandle_t * pHandle) = (void *)t;
+
+    clear_parameters();
+    capi_IVRInput_005_GetActionHandle((void *)1, (void *)2);
+    check_ptr_parameter("IVRInput_005_GetActionHandle", this_ptr_value);
+    check_ptr_parameter("IVRInput_005_GetActionHandle", (void *)1);
+    check_ptr_parameter("IVRInput_005_GetActionHandle", (void *)2);
+
+    init_thunk(t, this_ptr_value, IVRInput_005_GetInputSourceHandle, 2, FALSE, FALSE);
+    EVRInputError (__stdcall *capi_IVRInput_005_GetInputSourceHandle)(const char * pchInputSourcePath, VRInputValueHandle_t * pHandle) = (void *)t;
+
+    clear_parameters();
+    capi_IVRInput_005_GetInputSourceHandle((void *)1, (void *)2);
+    check_ptr_parameter("IVRInput_005_GetInputSourceHandle", this_ptr_value);
+    check_ptr_parameter("IVRInput_005_GetInputSourceHandle", (void *)1);
+    check_ptr_parameter("IVRInput_005_GetInputSourceHandle", (void *)2);
+
+    init_thunk(t, this_ptr_value, IVRInput_005_UpdateActionState, 3, FALSE, FALSE);
+    EVRInputError (__stdcall *capi_IVRInput_005_UpdateActionState)(VRActiveActionSet_t * pSets, uint32_t unSizeOfVRSelectedActionSet_t, uint32_t unSetCount) = (void *)t;
+
+    clear_parameters();
+    capi_IVRInput_005_UpdateActionState((void *)1, 2, 3);
+    check_ptr_parameter("IVRInput_005_UpdateActionState", this_ptr_value);
+    check_ptr_parameter("IVRInput_005_UpdateActionState", (void *)1);
+    check_uint32_parameter("IVRInput_005_UpdateActionState", 2);
+    check_uint32_parameter("IVRInput_005_UpdateActionState", 3);
+
+    init_thunk(t, this_ptr_value, IVRInput_005_GetDigitalActionData, 4, FALSE, FALSE);
+    EVRInputError (__stdcall *capi_IVRInput_005_GetDigitalActionData)(VRActionHandle_t action, InputDigitalActionData_t * pActionData, uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice) = (void *)t;
+
+    clear_parameters();
+    capi_IVRInput_005_GetDigitalActionData(1, (void *)2, 3, 4);
+    check_ptr_parameter("IVRInput_005_GetDigitalActionData", this_ptr_value);
+    check_uint64_parameter("IVRInput_005_GetDigitalActionData", 1);
+    check_ptr_parameter("IVRInput_005_GetDigitalActionData", (void *)2);
+    check_uint32_parameter("IVRInput_005_GetDigitalActionData", 3);
+    check_uint64_parameter("IVRInput_005_GetDigitalActionData", 4);
+
+    init_thunk(t, this_ptr_value, IVRInput_005_GetAnalogActionData, 4, FALSE, FALSE);
+    EVRInputError (__stdcall *capi_IVRInput_005_GetAnalogActionData)(VRActionHandle_t action, InputAnalogActionData_t * pActionData, uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice) = (void *)t;
+
+    clear_parameters();
+    capi_IVRInput_005_GetAnalogActionData(1, (void *)2, 3, 4);
+    check_ptr_parameter("IVRInput_005_GetAnalogActionData", this_ptr_value);
+    check_uint64_parameter("IVRInput_005_GetAnalogActionData", 1);
+    check_ptr_parameter("IVRInput_005_GetAnalogActionData", (void *)2);
+    check_uint32_parameter("IVRInput_005_GetAnalogActionData", 3);
+    check_uint64_parameter("IVRInput_005_GetAnalogActionData", 4);
+
+    init_thunk(t, this_ptr_value, IVRInput_005_GetPoseActionData, 6, TRUE, FALSE);
+    EVRInputError (__stdcall *capi_IVRInput_005_GetPoseActionData)(VRActionHandle_t action, ETrackingUniverseOrigin eOrigin, float fPredictedSecondsFromNow, InputPoseActionData_t * pActionData, uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice) = (void *)t;
+
+    clear_parameters();
+    capi_IVRInput_005_GetPoseActionData(1, 2, 3.0f, (void *)4, 5, 6);
+    check_ptr_parameter("IVRInput_005_GetPoseActionData", this_ptr_value);
+    check_uint64_parameter("IVRInput_005_GetPoseActionData", 1);
+    check_uint32_parameter("IVRInput_005_GetPoseActionData", 2);
+    check_float_parameter("IVRInput_005_GetPoseActionData", 3.0f);
+    check_ptr_parameter("IVRInput_005_GetPoseActionData", (void *)4);
+    check_uint32_parameter("IVRInput_005_GetPoseActionData", 5);
+    check_uint64_parameter("IVRInput_005_GetPoseActionData", 6);
+
+    init_thunk(t, this_ptr_value, IVRInput_005_GetSkeletalActionData, 3, FALSE, FALSE);
+    EVRInputError (__stdcall *capi_IVRInput_005_GetSkeletalActionData)(VRActionHandle_t action, InputSkeletalActionData_t * pActionData, uint32_t unActionDataSize) = (void *)t;
+
+    clear_parameters();
+    capi_IVRInput_005_GetSkeletalActionData(1, (void *)2, 3);
+    check_ptr_parameter("IVRInput_005_GetSkeletalActionData", this_ptr_value);
+    check_uint64_parameter("IVRInput_005_GetSkeletalActionData", 1);
+    check_ptr_parameter("IVRInput_005_GetSkeletalActionData", (void *)2);
+    check_uint32_parameter("IVRInput_005_GetSkeletalActionData", 3);
+
+    init_thunk(t, this_ptr_value, IVRInput_005_GetBoneCount, 2, FALSE, FALSE);
+    EVRInputError (__stdcall *capi_IVRInput_005_GetBoneCount)(VRActionHandle_t action, uint32_t * pBoneCount) = (void *)t;
+
+    clear_parameters();
+    capi_IVRInput_005_GetBoneCount(1, (void *)2);
+    check_ptr_parameter("IVRInput_005_GetBoneCount", this_ptr_value);
+    check_uint64_parameter("IVRInput_005_GetBoneCount", 1);
+    check_ptr_parameter("IVRInput_005_GetBoneCount", (void *)2);
+
+    init_thunk(t, this_ptr_value, IVRInput_005_GetBoneHierarchy, 3, FALSE, FALSE);
+    EVRInputError (__stdcall *capi_IVRInput_005_GetBoneHierarchy)(VRActionHandle_t action, BoneIndex_t * pParentIndices, uint32_t unIndexArayCount) = (void *)t;
+
+    clear_parameters();
+    capi_IVRInput_005_GetBoneHierarchy(1, (void *)2, 3);
+    check_ptr_parameter("IVRInput_005_GetBoneHierarchy", this_ptr_value);
+    check_uint64_parameter("IVRInput_005_GetBoneHierarchy", 1);
+    check_ptr_parameter("IVRInput_005_GetBoneHierarchy", (void *)2);
+    check_uint32_parameter("IVRInput_005_GetBoneHierarchy", 3);
+
+    init_thunk(t, this_ptr_value, IVRInput_005_GetBoneName, 4, FALSE, FALSE);
+    EVRInputError (__stdcall *capi_IVRInput_005_GetBoneName)(VRActionHandle_t action, BoneIndex_t nBoneIndex, char * pchBoneName, uint32_t unNameBufferSize) = (void *)t;
+
+    clear_parameters();
+    capi_IVRInput_005_GetBoneName(1, 2, (void *)3, 4);
+    check_ptr_parameter("IVRInput_005_GetBoneName", this_ptr_value);
+    check_uint64_parameter("IVRInput_005_GetBoneName", 1);
+    check_uint32_parameter("IVRInput_005_GetBoneName", 2);
+    check_ptr_parameter("IVRInput_005_GetBoneName", (void *)3);
+    check_uint32_parameter("IVRInput_005_GetBoneName", 4);
+
+    init_thunk(t, this_ptr_value, IVRInput_005_GetSkeletalReferenceTransforms, 5, FALSE, FALSE);
+    EVRInputError (__stdcall *capi_IVRInput_005_GetSkeletalReferenceTransforms)(VRActionHandle_t action, EVRSkeletalTransformSpace eTransformSpace, EVRSkeletalReferencePose eReferencePose, VRBoneTransform_t * pTransformArray, uint32_t unTransformArrayCount) = (void *)t;
+
+    clear_parameters();
+    capi_IVRInput_005_GetSkeletalReferenceTransforms(1, 2, 3, (void *)4, 5);
+    check_ptr_parameter("IVRInput_005_GetSkeletalReferenceTransforms", this_ptr_value);
+    check_uint64_parameter("IVRInput_005_GetSkeletalReferenceTransforms", 1);
+    check_uint32_parameter("IVRInput_005_GetSkeletalReferenceTransforms", 2);
+    check_uint32_parameter("IVRInput_005_GetSkeletalReferenceTransforms", 3);
+    check_ptr_parameter("IVRInput_005_GetSkeletalReferenceTransforms", (void *)4);
+    check_uint32_parameter("IVRInput_005_GetSkeletalReferenceTransforms", 5);
+
+    init_thunk(t, this_ptr_value, IVRInput_005_GetSkeletalTrackingLevel, 2, FALSE, FALSE);
+    EVRInputError (__stdcall *capi_IVRInput_005_GetSkeletalTrackingLevel)(VRActionHandle_t action, EVRSkeletalTrackingLevel * pSkeletalTrackingLevel) = (void *)t;
+
+    clear_parameters();
+    capi_IVRInput_005_GetSkeletalTrackingLevel(1, (void *)2);
+    check_ptr_parameter("IVRInput_005_GetSkeletalTrackingLevel", this_ptr_value);
+    check_uint64_parameter("IVRInput_005_GetSkeletalTrackingLevel", 1);
+    check_ptr_parameter("IVRInput_005_GetSkeletalTrackingLevel", (void *)2);
+
+    init_thunk(t, this_ptr_value, IVRInput_005_GetSkeletalBoneData, 5, FALSE, FALSE);
+    EVRInputError (__stdcall *capi_IVRInput_005_GetSkeletalBoneData)(VRActionHandle_t action, EVRSkeletalTransformSpace eTransformSpace, EVRSkeletalMotionRange eMotionRange, VRBoneTransform_t * pTransformArray, uint32_t unTransformArrayCount) = (void *)t;
+
+    clear_parameters();
+    capi_IVRInput_005_GetSkeletalBoneData(1, 2, 3, (void *)4, 5);
+    check_ptr_parameter("IVRInput_005_GetSkeletalBoneData", this_ptr_value);
+    check_uint64_parameter("IVRInput_005_GetSkeletalBoneData", 1);
+    check_uint32_parameter("IVRInput_005_GetSkeletalBoneData", 2);
+    check_uint32_parameter("IVRInput_005_GetSkeletalBoneData", 3);
+    check_ptr_parameter("IVRInput_005_GetSkeletalBoneData", (void *)4);
+    check_uint32_parameter("IVRInput_005_GetSkeletalBoneData", 5);
+
+    init_thunk(t, this_ptr_value, IVRInput_005_GetSkeletalSummaryData, 2, FALSE, FALSE);
+    EVRInputError (__stdcall *capi_IVRInput_005_GetSkeletalSummaryData)(VRActionHandle_t action, VRSkeletalSummaryData_t * pSkeletalSummaryData) = (void *)t;
+
+    clear_parameters();
+    capi_IVRInput_005_GetSkeletalSummaryData(1, (void *)2);
+    check_ptr_parameter("IVRInput_005_GetSkeletalSummaryData", this_ptr_value);
+    check_uint64_parameter("IVRInput_005_GetSkeletalSummaryData", 1);
+    check_ptr_parameter("IVRInput_005_GetSkeletalSummaryData", (void *)2);
+
+    init_thunk(t, this_ptr_value, IVRInput_005_GetSkeletalBoneDataCompressed, 5, FALSE, FALSE);
+    EVRInputError (__stdcall *capi_IVRInput_005_GetSkeletalBoneDataCompressed)(VRActionHandle_t action, EVRSkeletalMotionRange eMotionRange, void * pvCompressedData, uint32_t unCompressedSize, uint32_t * punRequiredCompressedSize) = (void *)t;
+
+    clear_parameters();
+    capi_IVRInput_005_GetSkeletalBoneDataCompressed(1, 2, (void *)3, 4, (void *)5);
+    check_ptr_parameter("IVRInput_005_GetSkeletalBoneDataCompressed", this_ptr_value);
+    check_uint64_parameter("IVRInput_005_GetSkeletalBoneDataCompressed", 1);
+    check_uint32_parameter("IVRInput_005_GetSkeletalBoneDataCompressed", 2);
+    check_ptr_parameter("IVRInput_005_GetSkeletalBoneDataCompressed", (void *)3);
+    check_uint32_parameter("IVRInput_005_GetSkeletalBoneDataCompressed", 4);
+    check_ptr_parameter("IVRInput_005_GetSkeletalBoneDataCompressed", (void *)5);
+
+    init_thunk(t, this_ptr_value, IVRInput_005_DecompressSkeletalBoneData, 5, FALSE, FALSE);
+    EVRInputError (__stdcall *capi_IVRInput_005_DecompressSkeletalBoneData)(const void * pvCompressedBuffer, uint32_t unCompressedBufferSize, EVRSkeletalTransformSpace eTransformSpace, VRBoneTransform_t * pTransformArray, uint32_t unTransformArrayCount) = (void *)t;
+
+    clear_parameters();
+    capi_IVRInput_005_DecompressSkeletalBoneData((void *)1, 2, 3, (void *)4, 5);
+    check_ptr_parameter("IVRInput_005_DecompressSkeletalBoneData", this_ptr_value);
+    check_ptr_parameter("IVRInput_005_DecompressSkeletalBoneData", (void *)1);
+    check_uint32_parameter("IVRInput_005_DecompressSkeletalBoneData", 2);
+    check_uint32_parameter("IVRInput_005_DecompressSkeletalBoneData", 3);
+    check_ptr_parameter("IVRInput_005_DecompressSkeletalBoneData", (void *)4);
+    check_uint32_parameter("IVRInput_005_DecompressSkeletalBoneData", 5);
+
+    init_thunk(t, this_ptr_value, IVRInput_005_TriggerHapticVibrationAction, 6, TRUE, TRUE);
+    EVRInputError (__stdcall *capi_IVRInput_005_TriggerHapticVibrationAction)(VRActionHandle_t action, float fStartSecondsFromNow, float fDurationSeconds, float fFrequency, float fAmplitude, VRInputValueHandle_t ulRestrictToDevice) = (void *)t;
+
+    clear_parameters();
+    capi_IVRInput_005_TriggerHapticVibrationAction(1, 2.0f, 3.0f, 4.0f, 5.0f, 6);
+    check_ptr_parameter("IVRInput_005_TriggerHapticVibrationAction", this_ptr_value);
+    check_uint64_parameter("IVRInput_005_TriggerHapticVibrationAction", 1);
+    check_float_parameter("IVRInput_005_TriggerHapticVibrationAction", 2.0f);
+    check_float_parameter("IVRInput_005_TriggerHapticVibrationAction", 3.0f);
+    check_float_parameter("IVRInput_005_TriggerHapticVibrationAction", 4.0f);
+    check_float_parameter("IVRInput_005_TriggerHapticVibrationAction", 5.0f);
+    check_uint64_parameter("IVRInput_005_TriggerHapticVibrationAction", 6);
+
+    init_thunk(t, this_ptr_value, IVRInput_005_GetActionOrigins, 4, FALSE, FALSE);
+    EVRInputError (__stdcall *capi_IVRInput_005_GetActionOrigins)(VRActionSetHandle_t actionSetHandle, VRActionHandle_t digitalActionHandle, VRInputValueHandle_t * originsOut, uint32_t originOutCount) = (void *)t;
+
+    clear_parameters();
+    capi_IVRInput_005_GetActionOrigins(1, 2, (void *)3, 4);
+    check_ptr_parameter("IVRInput_005_GetActionOrigins", this_ptr_value);
+    check_uint64_parameter("IVRInput_005_GetActionOrigins", 1);
+    check_uint64_parameter("IVRInput_005_GetActionOrigins", 2);
+    check_ptr_parameter("IVRInput_005_GetActionOrigins", (void *)3);
+    check_uint32_parameter("IVRInput_005_GetActionOrigins", 4);
+
+    init_thunk(t, this_ptr_value, IVRInput_005_GetOriginLocalizedName, 4, FALSE, FALSE);
+    EVRInputError (__stdcall *capi_IVRInput_005_GetOriginLocalizedName)(VRInputValueHandle_t origin, char * pchNameArray, uint32_t unNameArraySize, int32_t unStringSectionsToInclude) = (void *)t;
+
+    clear_parameters();
+    capi_IVRInput_005_GetOriginLocalizedName(1, (void *)2, 3, 4);
+    check_ptr_parameter("IVRInput_005_GetOriginLocalizedName", this_ptr_value);
+    check_uint64_parameter("IVRInput_005_GetOriginLocalizedName", 1);
+    check_ptr_parameter("IVRInput_005_GetOriginLocalizedName", (void *)2);
+    check_uint32_parameter("IVRInput_005_GetOriginLocalizedName", 3);
+    check_uint32_parameter("IVRInput_005_GetOriginLocalizedName", 4);
+
+    init_thunk(t, this_ptr_value, IVRInput_005_GetOriginTrackedDeviceInfo, 3, FALSE, FALSE);
+    EVRInputError (__stdcall *capi_IVRInput_005_GetOriginTrackedDeviceInfo)(VRInputValueHandle_t origin, InputOriginInfo_t * pOriginInfo, uint32_t unOriginInfoSize) = (void *)t;
+
+    clear_parameters();
+    capi_IVRInput_005_GetOriginTrackedDeviceInfo(1, (void *)2, 3);
+    check_ptr_parameter("IVRInput_005_GetOriginTrackedDeviceInfo", this_ptr_value);
+    check_uint64_parameter("IVRInput_005_GetOriginTrackedDeviceInfo", 1);
+    check_ptr_parameter("IVRInput_005_GetOriginTrackedDeviceInfo", (void *)2);
+    check_uint32_parameter("IVRInput_005_GetOriginTrackedDeviceInfo", 3);
+
+    init_thunk(t, this_ptr_value, IVRInput_005_ShowActionOrigins, 2, FALSE, FALSE);
+    EVRInputError (__stdcall *capi_IVRInput_005_ShowActionOrigins)(VRActionSetHandle_t actionSetHandle, VRActionHandle_t ulActionHandle) = (void *)t;
+
+    clear_parameters();
+    capi_IVRInput_005_ShowActionOrigins(1, 2);
+    check_ptr_parameter("IVRInput_005_ShowActionOrigins", this_ptr_value);
+    check_uint64_parameter("IVRInput_005_ShowActionOrigins", 1);
+    check_uint64_parameter("IVRInput_005_ShowActionOrigins", 2);
+
+    init_thunk(t, this_ptr_value, IVRInput_005_ShowBindingsForActionSet, 4, FALSE, FALSE);
+    EVRInputError (__stdcall *capi_IVRInput_005_ShowBindingsForActionSet)(VRActiveActionSet_t * pSets, uint32_t unSizeOfVRSelectedActionSet_t, uint32_t unSetCount, VRInputValueHandle_t originToHighlight) = (void *)t;
+
+    clear_parameters();
+    capi_IVRInput_005_ShowBindingsForActionSet((void *)1, 2, 3, 4);
+    check_ptr_parameter("IVRInput_005_ShowBindingsForActionSet", this_ptr_value);
+    check_ptr_parameter("IVRInput_005_ShowBindingsForActionSet", (void *)1);
+    check_uint32_parameter("IVRInput_005_ShowBindingsForActionSet", 2);
+    check_uint32_parameter("IVRInput_005_ShowBindingsForActionSet", 3);
+    check_uint64_parameter("IVRInput_005_ShowBindingsForActionSet", 4);
+    VirtualFree(t, 0, MEM_RELEASE);
+}
+
+void test_capi_thunks_IVRIOBuffer_001(void)
+{
+    struct thunk *t = alloc_thunks(1);
+
+    init_thunk(t, this_ptr_value, IVRIOBuffer_001_Open, 5, FALSE, FALSE);
+    EIOBufferError (__stdcall *capi_IVRIOBuffer_001_Open)(const char * pchPath, EIOBufferMode mode, uint32_t unElementSize, uint32_t unElements, IOBufferHandle_t * pulBuffer) = (void *)t;
+
+    clear_parameters();
+    capi_IVRIOBuffer_001_Open((void *)1, 2, 3, 4, (void *)5);
+    check_ptr_parameter("IVRIOBuffer_001_Open", this_ptr_value);
+    check_ptr_parameter("IVRIOBuffer_001_Open", (void *)1);
+    check_uint32_parameter("IVRIOBuffer_001_Open", 2);
+    check_uint32_parameter("IVRIOBuffer_001_Open", 3);
+    check_uint32_parameter("IVRIOBuffer_001_Open", 4);
+    check_ptr_parameter("IVRIOBuffer_001_Open", (void *)5);
+
+    init_thunk(t, this_ptr_value, IVRIOBuffer_001_Close, 1, FALSE, FALSE);
+    EIOBufferError (__stdcall *capi_IVRIOBuffer_001_Close)(IOBufferHandle_t ulBuffer) = (void *)t;
+
+    clear_parameters();
+    capi_IVRIOBuffer_001_Close(1);
+    check_ptr_parameter("IVRIOBuffer_001_Close", this_ptr_value);
+    check_uint64_parameter("IVRIOBuffer_001_Close", 1);
+
+    init_thunk(t, this_ptr_value, IVRIOBuffer_001_Read, 4, FALSE, FALSE);
+    EIOBufferError (__stdcall *capi_IVRIOBuffer_001_Read)(IOBufferHandle_t ulBuffer, void * pDst, uint32_t unBytes, uint32_t * punRead) = (void *)t;
+
+    clear_parameters();
+    capi_IVRIOBuffer_001_Read(1, (void *)2, 3, (void *)4);
+    check_ptr_parameter("IVRIOBuffer_001_Read", this_ptr_value);
+    check_uint64_parameter("IVRIOBuffer_001_Read", 1);
+    check_ptr_parameter("IVRIOBuffer_001_Read", (void *)2);
+    check_uint32_parameter("IVRIOBuffer_001_Read", 3);
+    check_ptr_parameter("IVRIOBuffer_001_Read", (void *)4);
+
+    init_thunk(t, this_ptr_value, IVRIOBuffer_001_Write, 3, FALSE, FALSE);
+    EIOBufferError (__stdcall *capi_IVRIOBuffer_001_Write)(IOBufferHandle_t ulBuffer, void * pSrc, uint32_t unBytes) = (void *)t;
+
+    clear_parameters();
+    capi_IVRIOBuffer_001_Write(1, (void *)2, 3);
+    check_ptr_parameter("IVRIOBuffer_001_Write", this_ptr_value);
+    check_uint64_parameter("IVRIOBuffer_001_Write", 1);
+    check_ptr_parameter("IVRIOBuffer_001_Write", (void *)2);
+    check_uint32_parameter("IVRIOBuffer_001_Write", 3);
+
+    init_thunk(t, this_ptr_value, IVRIOBuffer_001_PropertyContainer, 1, FALSE, FALSE);
+    PropertyContainerHandle_t (__stdcall *capi_IVRIOBuffer_001_PropertyContainer)(IOBufferHandle_t ulBuffer) = (void *)t;
+
+    clear_parameters();
+    capi_IVRIOBuffer_001_PropertyContainer(1);
+    check_ptr_parameter("IVRIOBuffer_001_PropertyContainer", this_ptr_value);
+    check_uint64_parameter("IVRIOBuffer_001_PropertyContainer", 1);
+    VirtualFree(t, 0, MEM_RELEASE);
+}
+
+void test_capi_thunks_IVRClientCore_003(void)
+{
+    struct thunk *t = alloc_thunks(1);
+
+    init_thunk(t, this_ptr_value, IVRClientCore_003_Init, 2, FALSE, FALSE);
+    EVRInitError (__stdcall *capi_IVRClientCore_003_Init)(EVRApplicationType eApplicationType, const char * pStartupInfo) = (void *)t;
+
+    clear_parameters();
+    capi_IVRClientCore_003_Init(1, (void *)2);
+    check_ptr_parameter("IVRClientCore_003_Init", this_ptr_value);
+    check_uint32_parameter("IVRClientCore_003_Init", 1);
+    check_ptr_parameter("IVRClientCore_003_Init", (void *)2);
+
+    init_thunk(t, this_ptr_value, IVRClientCore_003_Cleanup, 0, FALSE, FALSE);
+    void (__stdcall *capi_IVRClientCore_003_Cleanup)() = (void *)t;
+
+    clear_parameters();
+    capi_IVRClientCore_003_Cleanup();
+    check_ptr_parameter("IVRClientCore_003_Cleanup", this_ptr_value);
+
+    init_thunk(t, this_ptr_value, IVRClientCore_003_IsInterfaceVersionValid, 1, FALSE, FALSE);
+    EVRInitError (__stdcall *capi_IVRClientCore_003_IsInterfaceVersionValid)(const char * pchInterfaceVersion) = (void *)t;
+
+    clear_parameters();
+    capi_IVRClientCore_003_IsInterfaceVersionValid((void *)1);
+    check_ptr_parameter("IVRClientCore_003_IsInterfaceVersionValid", this_ptr_value);
+    check_ptr_parameter("IVRClientCore_003_IsInterfaceVersionValid", (void *)1);
+
+    init_thunk(t, this_ptr_value, IVRClientCore_003_GetGenericInterface, 2, FALSE, FALSE);
+    void * (__stdcall *capi_IVRClientCore_003_GetGenericInterface)(const char * pchNameAndVersion, EVRInitError * peError) = (void *)t;
+
+    clear_parameters();
+    capi_IVRClientCore_003_GetGenericInterface((void *)1, (void *)2);
+    check_ptr_parameter("IVRClientCore_003_GetGenericInterface", this_ptr_value);
+    check_ptr_parameter("IVRClientCore_003_GetGenericInterface", (void *)1);
+    check_ptr_parameter("IVRClientCore_003_GetGenericInterface", (void *)2);
+
+    init_thunk(t, this_ptr_value, IVRClientCore_003_BIsHmdPresent, 0, FALSE, FALSE);
+    bool (__stdcall *capi_IVRClientCore_003_BIsHmdPresent)() = (void *)t;
+
+    clear_parameters();
+    capi_IVRClientCore_003_BIsHmdPresent();
+    check_ptr_parameter("IVRClientCore_003_BIsHmdPresent", this_ptr_value);
+
+    init_thunk(t, this_ptr_value, IVRClientCore_003_GetEnglishStringForHmdError, 1, FALSE, FALSE);
+    const char * (__stdcall *capi_IVRClientCore_003_GetEnglishStringForHmdError)(EVRInitError eError) = (void *)t;
+
+    clear_parameters();
+    capi_IVRClientCore_003_GetEnglishStringForHmdError(1);
+    check_ptr_parameter("IVRClientCore_003_GetEnglishStringForHmdError", this_ptr_value);
+    check_uint32_parameter("IVRClientCore_003_GetEnglishStringForHmdError", 1);
+
+    init_thunk(t, this_ptr_value, IVRClientCore_003_GetIDForVRInitError, 1, FALSE, FALSE);
+    const char * (__stdcall *capi_IVRClientCore_003_GetIDForVRInitError)(EVRInitError eError) = (void *)t;
+
+    clear_parameters();
+    capi_IVRClientCore_003_GetIDForVRInitError(1);
+    check_ptr_parameter("IVRClientCore_003_GetIDForVRInitError", this_ptr_value);
+    check_uint32_parameter("IVRClientCore_003_GetIDForVRInitError", 1);
+    VirtualFree(t, 0, MEM_RELEASE);
+}
+
+void test_capi_thunks_IVRChaperoneSetup_005(void)
+{
+    struct thunk *t = alloc_thunks(1);
+
+    init_thunk(t, this_ptr_value, IVRChaperoneSetup_005_CommitWorkingCopy, 1, FALSE, FALSE);
+    bool (__stdcall *capi_IVRChaperoneSetup_005_CommitWorkingCopy)(EChaperoneConfigFile configFile) = (void *)t;
+
+    clear_parameters();
+    capi_IVRChaperoneSetup_005_CommitWorkingCopy(1);
+    check_ptr_parameter("IVRChaperoneSetup_005_CommitWorkingCopy", this_ptr_value);
+    check_uint32_parameter("IVRChaperoneSetup_005_CommitWorkingCopy", 1);
+
+    init_thunk(t, this_ptr_value, IVRChaperoneSetup_005_RevertWorkingCopy, 0, FALSE, FALSE);
+    void (__stdcall *capi_IVRChaperoneSetup_005_RevertWorkingCopy)() = (void *)t;
+
+    clear_parameters();
+    capi_IVRChaperoneSetup_005_RevertWorkingCopy();
+    check_ptr_parameter("IVRChaperoneSetup_005_RevertWorkingCopy", this_ptr_value);
+
+    init_thunk(t, this_ptr_value, IVRChaperoneSetup_005_GetWorkingPlayAreaSize, 2, FALSE, FALSE);
+    bool (__stdcall *capi_IVRChaperoneSetup_005_GetWorkingPlayAreaSize)(float * pSizeX, float * pSizeZ) = (void *)t;
+
+    clear_parameters();
+    capi_IVRChaperoneSetup_005_GetWorkingPlayAreaSize((void *)1, (void *)2);
+    check_ptr_parameter("IVRChaperoneSetup_005_GetWorkingPlayAreaSize", this_ptr_value);
+    check_ptr_parameter("IVRChaperoneSetup_005_GetWorkingPlayAreaSize", (void *)1);
+    check_ptr_parameter("IVRChaperoneSetup_005_GetWorkingPlayAreaSize", (void *)2);
+
+    init_thunk(t, this_ptr_value, IVRChaperoneSetup_005_GetWorkingPlayAreaRect, 1, FALSE, FALSE);
+    bool (__stdcall *capi_IVRChaperoneSetup_005_GetWorkingPlayAreaRect)(HmdQuad_t * rect) = (void *)t;
+
+    clear_parameters();
+    capi_IVRChaperoneSetup_005_GetWorkingPlayAreaRect((void *)1);
+    check_ptr_parameter("IVRChaperoneSetup_005_GetWorkingPlayAreaRect", this_ptr_value);
+    check_ptr_parameter("IVRChaperoneSetup_005_GetWorkingPlayAreaRect", (void *)1);
+
+    init_thunk(t, this_ptr_value, IVRChaperoneSetup_005_GetWorkingCollisionBoundsInfo, 2, FALSE, FALSE);
+    bool (__stdcall *capi_IVRChaperoneSetup_005_GetWorkingCollisionBoundsInfo)(HmdQuad_t * pQuadsBuffer, uint32_t * punQuadsCount) = (void *)t;
+
+    clear_parameters();
+    capi_IVRChaperoneSetup_005_GetWorkingCollisionBoundsInfo((void *)1, (void *)2);
+    check_ptr_parameter("IVRChaperoneSetup_005_GetWorkingCollisionBoundsInfo", this_ptr_value);
+    check_ptr_parameter("IVRChaperoneSetup_005_GetWorkingCollisionBoundsInfo", (void *)1);
+    check_ptr_parameter("IVRChaperoneSetup_005_GetWorkingCollisionBoundsInfo", (void *)2);
+
+    init_thunk(t, this_ptr_value, IVRChaperoneSetup_005_GetLiveCollisionBoundsInfo, 2, FALSE, FALSE);
+    bool (__stdcall *capi_IVRChaperoneSetup_005_GetLiveCollisionBoundsInfo)(HmdQuad_t * pQuadsBuffer, uint32_t * punQuadsCount) = (void *)t;
+
+    clear_parameters();
+    capi_IVRChaperoneSetup_005_GetLiveCollisionBoundsInfo((void *)1, (void *)2);
+    check_ptr_parameter("IVRChaperoneSetup_005_GetLiveCollisionBoundsInfo", this_ptr_value);
+    check_ptr_parameter("IVRChaperoneSetup_005_GetLiveCollisionBoundsInfo", (void *)1);
+    check_ptr_parameter("IVRChaperoneSetup_005_GetLiveCollisionBoundsInfo", (void *)2);
+
+    init_thunk(t, this_ptr_value, IVRChaperoneSetup_005_GetWorkingSeatedZeroPoseToRawTrackingPose, 1, FALSE, FALSE);
+    bool (__stdcall *capi_IVRChaperoneSetup_005_GetWorkingSeatedZeroPoseToRawTrackingPose)(HmdMatrix34_t * pmatSeatedZeroPoseToRawTrackingPose) = (void *)t;
+
+    clear_parameters();
+    capi_IVRChaperoneSetup_005_GetWorkingSeatedZeroPoseToRawTrackingPose((void *)1);
+    check_ptr_parameter("IVRChaperoneSetup_005_GetWorkingSeatedZeroPoseToRawTrackingPose", this_ptr_value);
+    check_ptr_parameter("IVRChaperoneSetup_005_GetWorkingSeatedZeroPoseToRawTrackingPose", (void *)1);
+
+    init_thunk(t, this_ptr_value, IVRChaperoneSetup_005_GetWorkingStandingZeroPoseToRawTrackingPose, 1, FALSE, FALSE);
+    bool (__stdcall *capi_IVRChaperoneSetup_005_GetWorkingStandingZeroPoseToRawTrackingPose)(HmdMatrix34_t * pmatStandingZeroPoseToRawTrackingPose) = (void *)t;
+
+    clear_parameters();
+    capi_IVRChaperoneSetup_005_GetWorkingStandingZeroPoseToRawTrackingPose((void *)1);
+    check_ptr_parameter("IVRChaperoneSetup_005_GetWorkingStandingZeroPoseToRawTrackingPose", this_ptr_value);
+    check_ptr_parameter("IVRChaperoneSetup_005_GetWorkingStandingZeroPoseToRawTrackingPose", (void *)1);
+
+    init_thunk(t, this_ptr_value, IVRChaperoneSetup_005_SetWorkingPlayAreaSize, 2, TRUE, FALSE);
+    void (__stdcall *capi_IVRChaperoneSetup_005_SetWorkingPlayAreaSize)(float sizeX, float sizeZ) = (void *)t;
+
+    clear_parameters();
+    capi_IVRChaperoneSetup_005_SetWorkingPlayAreaSize(1.0f, 2.0f);
+    check_ptr_parameter("IVRChaperoneSetup_005_SetWorkingPlayAreaSize", this_ptr_value);
+    check_float_parameter("IVRChaperoneSetup_005_SetWorkingPlayAreaSize", 1.0f);
+    check_float_parameter("IVRChaperoneSetup_005_SetWorkingPlayAreaSize", 2.0f);
+
+    init_thunk(t, this_ptr_value, IVRChaperoneSetup_005_SetWorkingCollisionBoundsInfo, 2, FALSE, FALSE);
+    void (__stdcall *capi_IVRChaperoneSetup_005_SetWorkingCollisionBoundsInfo)(HmdQuad_t * pQuadsBuffer, uint32_t unQuadsCount) = (void *)t;
+
+    clear_parameters();
+    capi_IVRChaperoneSetup_005_SetWorkingCollisionBoundsInfo((void *)1, 2);
+    check_ptr_parameter("IVRChaperoneSetup_005_SetWorkingCollisionBoundsInfo", this_ptr_value);
+    check_ptr_parameter("IVRChaperoneSetup_005_SetWorkingCollisionBoundsInfo", (void *)1);
+    check_uint32_parameter("IVRChaperoneSetup_005_SetWorkingCollisionBoundsInfo", 2);
+
+    init_thunk(t, this_ptr_value, IVRChaperoneSetup_005_SetWorkingSeatedZeroPoseToRawTrackingPose, 1, FALSE, FALSE);
+    void (__stdcall *capi_IVRChaperoneSetup_005_SetWorkingSeatedZeroPoseToRawTrackingPose)(HmdMatrix34_t * pMatSeatedZeroPoseToRawTrackingPose) = (void *)t;
+
+    clear_parameters();
+    capi_IVRChaperoneSetup_005_SetWorkingSeatedZeroPoseToRawTrackingPose((void *)1);
+    check_ptr_parameter("IVRChaperoneSetup_005_SetWorkingSeatedZeroPoseToRawTrackingPose", this_ptr_value);
+    check_ptr_parameter("IVRChaperoneSetup_005_SetWorkingSeatedZeroPoseToRawTrackingPose", (void *)1);
+
+    init_thunk(t, this_ptr_value, IVRChaperoneSetup_005_SetWorkingStandingZeroPoseToRawTrackingPose, 1, FALSE, FALSE);
+    void (__stdcall *capi_IVRChaperoneSetup_005_SetWorkingStandingZeroPoseToRawTrackingPose)(HmdMatrix34_t * pMatStandingZeroPoseToRawTrackingPose) = (void *)t;
+
+    clear_parameters();
+    capi_IVRChaperoneSetup_005_SetWorkingStandingZeroPoseToRawTrackingPose((void *)1);
+    check_ptr_parameter("IVRChaperoneSetup_005_SetWorkingStandingZeroPoseToRawTrackingPose", this_ptr_value);
+    check_ptr_parameter("IVRChaperoneSetup_005_SetWorkingStandingZeroPoseToRawTrackingPose", (void *)1);
+
+    init_thunk(t, this_ptr_value, IVRChaperoneSetup_005_ReloadFromDisk, 1, FALSE, FALSE);
+    void (__stdcall *capi_IVRChaperoneSetup_005_ReloadFromDisk)(EChaperoneConfigFile configFile) = (void *)t;
+
+    clear_parameters();
+    capi_IVRChaperoneSetup_005_ReloadFromDisk(1);
+    check_ptr_parameter("IVRChaperoneSetup_005_ReloadFromDisk", this_ptr_value);
+    check_uint32_parameter("IVRChaperoneSetup_005_ReloadFromDisk", 1);
+
+    init_thunk(t, this_ptr_value, IVRChaperoneSetup_005_GetLiveSeatedZeroPoseToRawTrackingPose, 1, FALSE, FALSE);
+    bool (__stdcall *capi_IVRChaperoneSetup_005_GetLiveSeatedZeroPoseToRawTrackingPose)(HmdMatrix34_t * pmatSeatedZeroPoseToRawTrackingPose) = (void *)t;
+
+    clear_parameters();
+    capi_IVRChaperoneSetup_005_GetLiveSeatedZeroPoseToRawTrackingPose((void *)1);
+    check_ptr_parameter("IVRChaperoneSetup_005_GetLiveSeatedZeroPoseToRawTrackingPose", this_ptr_value);
+    check_ptr_parameter("IVRChaperoneSetup_005_GetLiveSeatedZeroPoseToRawTrackingPose", (void *)1);
+
+    init_thunk(t, this_ptr_value, IVRChaperoneSetup_005_SetWorkingCollisionBoundsTagsInfo, 2, FALSE, FALSE);
+    void (__stdcall *capi_IVRChaperoneSetup_005_SetWorkingCollisionBoundsTagsInfo)(uint8_t * pTagsBuffer, uint32_t unTagCount) = (void *)t;
+
+    clear_parameters();
+    capi_IVRChaperoneSetup_005_SetWorkingCollisionBoundsTagsInfo((void *)1, 2);
+    check_ptr_parameter("IVRChaperoneSetup_005_SetWorkingCollisionBoundsTagsInfo", this_ptr_value);
+    check_ptr_parameter("IVRChaperoneSetup_005_SetWorkingCollisionBoundsTagsInfo", (void *)1);
+    check_uint32_parameter("IVRChaperoneSetup_005_SetWorkingCollisionBoundsTagsInfo", 2);
+
+    init_thunk(t, this_ptr_value, IVRChaperoneSetup_005_GetLiveCollisionBoundsTagsInfo, 2, FALSE, FALSE);
+    bool (__stdcall *capi_IVRChaperoneSetup_005_GetLiveCollisionBoundsTagsInfo)(uint8_t * pTagsBuffer, uint32_t * punTagCount) = (void *)t;
+
+    clear_parameters();
+    capi_IVRChaperoneSetup_005_GetLiveCollisionBoundsTagsInfo((void *)1, (void *)2);
+    check_ptr_parameter("IVRChaperoneSetup_005_GetLiveCollisionBoundsTagsInfo", this_ptr_value);
+    check_ptr_parameter("IVRChaperoneSetup_005_GetLiveCollisionBoundsTagsInfo", (void *)1);
+    check_ptr_parameter("IVRChaperoneSetup_005_GetLiveCollisionBoundsTagsInfo", (void *)2);
+
+    init_thunk(t, this_ptr_value, IVRChaperoneSetup_005_SetWorkingPhysicalBoundsInfo, 2, FALSE, FALSE);
+    bool (__stdcall *capi_IVRChaperoneSetup_005_SetWorkingPhysicalBoundsInfo)(HmdQuad_t * pQuadsBuffer, uint32_t unQuadsCount) = (void *)t;
+
+    clear_parameters();
+    capi_IVRChaperoneSetup_005_SetWorkingPhysicalBoundsInfo((void *)1, 2);
+    check_ptr_parameter("IVRChaperoneSetup_005_SetWorkingPhysicalBoundsInfo", this_ptr_value);
+    check_ptr_parameter("IVRChaperoneSetup_005_SetWorkingPhysicalBoundsInfo", (void *)1);
+    check_uint32_parameter("IVRChaperoneSetup_005_SetWorkingPhysicalBoundsInfo", 2);
+
+    init_thunk(t, this_ptr_value, IVRChaperoneSetup_005_GetLivePhysicalBoundsInfo, 2, FALSE, FALSE);
+    bool (__stdcall *capi_IVRChaperoneSetup_005_GetLivePhysicalBoundsInfo)(HmdQuad_t * pQuadsBuffer, uint32_t * punQuadsCount) = (void *)t;
+
+    clear_parameters();
+    capi_IVRChaperoneSetup_005_GetLivePhysicalBoundsInfo((void *)1, (void *)2);
+    check_ptr_parameter("IVRChaperoneSetup_005_GetLivePhysicalBoundsInfo", this_ptr_value);
+    check_ptr_parameter("IVRChaperoneSetup_005_GetLivePhysicalBoundsInfo", (void *)1);
+    check_ptr_parameter("IVRChaperoneSetup_005_GetLivePhysicalBoundsInfo", (void *)2);
+
+    init_thunk(t, this_ptr_value, IVRChaperoneSetup_005_ExportLiveToBuffer, 2, FALSE, FALSE);
+    bool (__stdcall *capi_IVRChaperoneSetup_005_ExportLiveToBuffer)(char * pBuffer, uint32_t * pnBufferLength) = (void *)t;
+
+    clear_parameters();
+    capi_IVRChaperoneSetup_005_ExportLiveToBuffer((void *)1, (void *)2);
+    check_ptr_parameter("IVRChaperoneSetup_005_ExportLiveToBuffer", this_ptr_value);
+    check_ptr_parameter("IVRChaperoneSetup_005_ExportLiveToBuffer", (void *)1);
+    check_ptr_parameter("IVRChaperoneSetup_005_ExportLiveToBuffer", (void *)2);
+
+    init_thunk(t, this_ptr_value, IVRChaperoneSetup_005_ImportFromBufferToWorking, 2, FALSE, FALSE);
+    bool (__stdcall *capi_IVRChaperoneSetup_005_ImportFromBufferToWorking)(const char * pBuffer, uint32_t nImportFlags) = (void *)t;
+
+    clear_parameters();
+    capi_IVRChaperoneSetup_005_ImportFromBufferToWorking((void *)1, 2);
+    check_ptr_parameter("IVRChaperoneSetup_005_ImportFromBufferToWorking", this_ptr_value);
+    check_ptr_parameter("IVRChaperoneSetup_005_ImportFromBufferToWorking", (void *)1);
+    check_uint32_parameter("IVRChaperoneSetup_005_ImportFromBufferToWorking", 2);
     VirtualFree(t, 0, MEM_RELEASE);
 }
 
@@ -2266,230 +4093,6 @@ void test_capi_thunks_IVROverlay_018(void)
     VirtualFree(t, 0, MEM_RELEASE);
 }
 
-void test_capi_thunks_IVRRenderModels_006(void)
-{
-    struct thunk *t = alloc_thunks(1);
-
-    init_thunk(t, this_ptr_value, IVRRenderModels_006_LoadRenderModel_Async, 2, FALSE, FALSE);
-    EVRRenderModelError (__stdcall *capi_IVRRenderModels_006_LoadRenderModel_Async)(const char * pchRenderModelName, RenderModel_t ** ppRenderModel) = (void *)t;
-
-    clear_parameters();
-    capi_IVRRenderModels_006_LoadRenderModel_Async((void *)1, (void *)2);
-    check_ptr_parameter("IVRRenderModels_006_LoadRenderModel_Async", this_ptr_value);
-    check_ptr_parameter("IVRRenderModels_006_LoadRenderModel_Async", (void *)1);
-    check_ptr_parameter("IVRRenderModels_006_LoadRenderModel_Async", (void *)2);
-
-    init_thunk(t, this_ptr_value, IVRRenderModels_006_FreeRenderModel, 1, FALSE, FALSE);
-    void (__stdcall *capi_IVRRenderModels_006_FreeRenderModel)(RenderModel_t * pRenderModel) = (void *)t;
-
-    clear_parameters();
-    capi_IVRRenderModels_006_FreeRenderModel((void *)1);
-    check_ptr_parameter("IVRRenderModels_006_FreeRenderModel", this_ptr_value);
-    check_ptr_parameter("IVRRenderModels_006_FreeRenderModel", (void *)1);
-
-    init_thunk(t, this_ptr_value, IVRRenderModels_006_LoadTexture_Async, 2, FALSE, FALSE);
-    EVRRenderModelError (__stdcall *capi_IVRRenderModels_006_LoadTexture_Async)(TextureID_t textureId, RenderModel_TextureMap_t ** ppTexture) = (void *)t;
-
-    clear_parameters();
-    capi_IVRRenderModels_006_LoadTexture_Async(1, (void *)2);
-    check_ptr_parameter("IVRRenderModels_006_LoadTexture_Async", this_ptr_value);
-    check_uint32_parameter("IVRRenderModels_006_LoadTexture_Async", 1);
-    check_ptr_parameter("IVRRenderModels_006_LoadTexture_Async", (void *)2);
-
-    init_thunk(t, this_ptr_value, IVRRenderModels_006_FreeTexture, 1, FALSE, FALSE);
-    void (__stdcall *capi_IVRRenderModels_006_FreeTexture)(RenderModel_TextureMap_t * pTexture) = (void *)t;
-
-    clear_parameters();
-    capi_IVRRenderModels_006_FreeTexture((void *)1);
-    check_ptr_parameter("IVRRenderModels_006_FreeTexture", this_ptr_value);
-    check_ptr_parameter("IVRRenderModels_006_FreeTexture", (void *)1);
-
-    init_thunk(t, this_ptr_value, IVRRenderModels_006_LoadTextureD3D11_Async, 3, FALSE, FALSE);
-    EVRRenderModelError (__stdcall *capi_IVRRenderModels_006_LoadTextureD3D11_Async)(TextureID_t textureId, void * pD3D11Device, void ** ppD3D11Texture2D) = (void *)t;
-
-    clear_parameters();
-    capi_IVRRenderModels_006_LoadTextureD3D11_Async(1, (void *)2, (void *)3);
-    check_ptr_parameter("IVRRenderModels_006_LoadTextureD3D11_Async", this_ptr_value);
-    check_uint32_parameter("IVRRenderModels_006_LoadTextureD3D11_Async", 1);
-    check_ptr_parameter("IVRRenderModels_006_LoadTextureD3D11_Async", (void *)2);
-    check_ptr_parameter("IVRRenderModels_006_LoadTextureD3D11_Async", (void *)3);
-
-    init_thunk(t, this_ptr_value, IVRRenderModels_006_LoadIntoTextureD3D11_Async, 2, FALSE, FALSE);
-    EVRRenderModelError (__stdcall *capi_IVRRenderModels_006_LoadIntoTextureD3D11_Async)(TextureID_t textureId, void * pDstTexture) = (void *)t;
-
-    clear_parameters();
-    capi_IVRRenderModels_006_LoadIntoTextureD3D11_Async(1, (void *)2);
-    check_ptr_parameter("IVRRenderModels_006_LoadIntoTextureD3D11_Async", this_ptr_value);
-    check_uint32_parameter("IVRRenderModels_006_LoadIntoTextureD3D11_Async", 1);
-    check_ptr_parameter("IVRRenderModels_006_LoadIntoTextureD3D11_Async", (void *)2);
-
-    init_thunk(t, this_ptr_value, IVRRenderModels_006_FreeTextureD3D11, 1, FALSE, FALSE);
-    void (__stdcall *capi_IVRRenderModels_006_FreeTextureD3D11)(void * pD3D11Texture2D) = (void *)t;
-
-    clear_parameters();
-    capi_IVRRenderModels_006_FreeTextureD3D11((void *)1);
-    check_ptr_parameter("IVRRenderModels_006_FreeTextureD3D11", this_ptr_value);
-    check_ptr_parameter("IVRRenderModels_006_FreeTextureD3D11", (void *)1);
-
-    init_thunk(t, this_ptr_value, IVRRenderModels_006_GetRenderModelName, 3, FALSE, FALSE);
-    uint32_t (__stdcall *capi_IVRRenderModels_006_GetRenderModelName)(uint32_t unRenderModelIndex, char * pchRenderModelName, uint32_t unRenderModelNameLen) = (void *)t;
-
-    clear_parameters();
-    capi_IVRRenderModels_006_GetRenderModelName(1, (void *)2, 3);
-    check_ptr_parameter("IVRRenderModels_006_GetRenderModelName", this_ptr_value);
-    check_uint32_parameter("IVRRenderModels_006_GetRenderModelName", 1);
-    check_ptr_parameter("IVRRenderModels_006_GetRenderModelName", (void *)2);
-    check_uint32_parameter("IVRRenderModels_006_GetRenderModelName", 3);
-
-    init_thunk(t, this_ptr_value, IVRRenderModels_006_GetRenderModelCount, 0, FALSE, FALSE);
-    uint32_t (__stdcall *capi_IVRRenderModels_006_GetRenderModelCount)() = (void *)t;
-
-    clear_parameters();
-    capi_IVRRenderModels_006_GetRenderModelCount();
-    check_ptr_parameter("IVRRenderModels_006_GetRenderModelCount", this_ptr_value);
-
-    init_thunk(t, this_ptr_value, IVRRenderModels_006_GetComponentCount, 1, FALSE, FALSE);
-    uint32_t (__stdcall *capi_IVRRenderModels_006_GetComponentCount)(const char * pchRenderModelName) = (void *)t;
-
-    clear_parameters();
-    capi_IVRRenderModels_006_GetComponentCount((void *)1);
-    check_ptr_parameter("IVRRenderModels_006_GetComponentCount", this_ptr_value);
-    check_ptr_parameter("IVRRenderModels_006_GetComponentCount", (void *)1);
-
-    init_thunk(t, this_ptr_value, IVRRenderModels_006_GetComponentName, 4, FALSE, FALSE);
-    uint32_t (__stdcall *capi_IVRRenderModels_006_GetComponentName)(const char * pchRenderModelName, uint32_t unComponentIndex, char * pchComponentName, uint32_t unComponentNameLen) = (void *)t;
-
-    clear_parameters();
-    capi_IVRRenderModels_006_GetComponentName((void *)1, 2, (void *)3, 4);
-    check_ptr_parameter("IVRRenderModels_006_GetComponentName", this_ptr_value);
-    check_ptr_parameter("IVRRenderModels_006_GetComponentName", (void *)1);
-    check_uint32_parameter("IVRRenderModels_006_GetComponentName", 2);
-    check_ptr_parameter("IVRRenderModels_006_GetComponentName", (void *)3);
-    check_uint32_parameter("IVRRenderModels_006_GetComponentName", 4);
-
-    init_thunk(t, this_ptr_value, IVRRenderModels_006_GetComponentButtonMask, 2, FALSE, FALSE);
-    uint64_t (__stdcall *capi_IVRRenderModels_006_GetComponentButtonMask)(const char * pchRenderModelName, const char * pchComponentName) = (void *)t;
-
-    clear_parameters();
-    capi_IVRRenderModels_006_GetComponentButtonMask((void *)1, (void *)2);
-    check_ptr_parameter("IVRRenderModels_006_GetComponentButtonMask", this_ptr_value);
-    check_ptr_parameter("IVRRenderModels_006_GetComponentButtonMask", (void *)1);
-    check_ptr_parameter("IVRRenderModels_006_GetComponentButtonMask", (void *)2);
-
-    init_thunk(t, this_ptr_value, IVRRenderModels_006_GetComponentRenderModelName, 4, FALSE, FALSE);
-    uint32_t (__stdcall *capi_IVRRenderModels_006_GetComponentRenderModelName)(const char * pchRenderModelName, const char * pchComponentName, char * pchComponentRenderModelName, uint32_t unComponentRenderModelNameLen) = (void *)t;
-
-    clear_parameters();
-    capi_IVRRenderModels_006_GetComponentRenderModelName((void *)1, (void *)2, (void *)3, 4);
-    check_ptr_parameter("IVRRenderModels_006_GetComponentRenderModelName", this_ptr_value);
-    check_ptr_parameter("IVRRenderModels_006_GetComponentRenderModelName", (void *)1);
-    check_ptr_parameter("IVRRenderModels_006_GetComponentRenderModelName", (void *)2);
-    check_ptr_parameter("IVRRenderModels_006_GetComponentRenderModelName", (void *)3);
-    check_uint32_parameter("IVRRenderModels_006_GetComponentRenderModelName", 4);
-
-    init_thunk(t, this_ptr_value, IVRRenderModels_006_GetComponentStateForDevicePath, 5, FALSE, FALSE);
-    bool (__stdcall *capi_IVRRenderModels_006_GetComponentStateForDevicePath)(const char * pchRenderModelName, const char * pchComponentName, VRInputValueHandle_t devicePath, RenderModel_ControllerMode_State_t * pState, RenderModel_ComponentState_t * pComponentState) = (void *)t;
-
-    clear_parameters();
-    capi_IVRRenderModels_006_GetComponentStateForDevicePath((void *)1, (void *)2, 3, (void *)4, (void *)5);
-    check_ptr_parameter("IVRRenderModels_006_GetComponentStateForDevicePath", this_ptr_value);
-    check_ptr_parameter("IVRRenderModels_006_GetComponentStateForDevicePath", (void *)1);
-    check_ptr_parameter("IVRRenderModels_006_GetComponentStateForDevicePath", (void *)2);
-    check_uint64_parameter("IVRRenderModels_006_GetComponentStateForDevicePath", 3);
-    check_ptr_parameter("IVRRenderModels_006_GetComponentStateForDevicePath", (void *)4);
-    check_ptr_parameter("IVRRenderModels_006_GetComponentStateForDevicePath", (void *)5);
-
-    init_thunk(t, this_ptr_value, IVRRenderModels_006_GetComponentState, 5, FALSE, FALSE);
-    bool (__stdcall *capi_IVRRenderModels_006_GetComponentState)(const char * pchRenderModelName, const char * pchComponentName, VRControllerState_t * pControllerState, RenderModel_ControllerMode_State_t * pState, RenderModel_ComponentState_t * pComponentState) = (void *)t;
-
-    clear_parameters();
-    capi_IVRRenderModels_006_GetComponentState((void *)1, (void *)2, (void *)3, (void *)4, (void *)5);
-    check_ptr_parameter("IVRRenderModels_006_GetComponentState", this_ptr_value);
-    check_ptr_parameter("IVRRenderModels_006_GetComponentState", (void *)1);
-    check_ptr_parameter("IVRRenderModels_006_GetComponentState", (void *)2);
-    check_ptr_parameter("IVRRenderModels_006_GetComponentState", (void *)3);
-    check_ptr_parameter("IVRRenderModels_006_GetComponentState", (void *)4);
-    check_ptr_parameter("IVRRenderModels_006_GetComponentState", (void *)5);
-
-    init_thunk(t, this_ptr_value, IVRRenderModels_006_RenderModelHasComponent, 2, FALSE, FALSE);
-    bool (__stdcall *capi_IVRRenderModels_006_RenderModelHasComponent)(const char * pchRenderModelName, const char * pchComponentName) = (void *)t;
-
-    clear_parameters();
-    capi_IVRRenderModels_006_RenderModelHasComponent((void *)1, (void *)2);
-    check_ptr_parameter("IVRRenderModels_006_RenderModelHasComponent", this_ptr_value);
-    check_ptr_parameter("IVRRenderModels_006_RenderModelHasComponent", (void *)1);
-    check_ptr_parameter("IVRRenderModels_006_RenderModelHasComponent", (void *)2);
-
-    init_thunk(t, this_ptr_value, IVRRenderModels_006_GetRenderModelThumbnailURL, 4, FALSE, FALSE);
-    uint32_t (__stdcall *capi_IVRRenderModels_006_GetRenderModelThumbnailURL)(const char * pchRenderModelName, char * pchThumbnailURL, uint32_t unThumbnailURLLen, EVRRenderModelError * peError) = (void *)t;
-
-    clear_parameters();
-    capi_IVRRenderModels_006_GetRenderModelThumbnailURL((void *)1, (void *)2, 3, (void *)4);
-    check_ptr_parameter("IVRRenderModels_006_GetRenderModelThumbnailURL", this_ptr_value);
-    check_ptr_parameter("IVRRenderModels_006_GetRenderModelThumbnailURL", (void *)1);
-    check_ptr_parameter("IVRRenderModels_006_GetRenderModelThumbnailURL", (void *)2);
-    check_uint32_parameter("IVRRenderModels_006_GetRenderModelThumbnailURL", 3);
-    check_ptr_parameter("IVRRenderModels_006_GetRenderModelThumbnailURL", (void *)4);
-
-    init_thunk(t, this_ptr_value, IVRRenderModels_006_GetRenderModelOriginalPath, 4, FALSE, FALSE);
-    uint32_t (__stdcall *capi_IVRRenderModels_006_GetRenderModelOriginalPath)(const char * pchRenderModelName, char * pchOriginalPath, uint32_t unOriginalPathLen, EVRRenderModelError * peError) = (void *)t;
-
-    clear_parameters();
-    capi_IVRRenderModels_006_GetRenderModelOriginalPath((void *)1, (void *)2, 3, (void *)4);
-    check_ptr_parameter("IVRRenderModels_006_GetRenderModelOriginalPath", this_ptr_value);
-    check_ptr_parameter("IVRRenderModels_006_GetRenderModelOriginalPath", (void *)1);
-    check_ptr_parameter("IVRRenderModels_006_GetRenderModelOriginalPath", (void *)2);
-    check_uint32_parameter("IVRRenderModels_006_GetRenderModelOriginalPath", 3);
-    check_ptr_parameter("IVRRenderModels_006_GetRenderModelOriginalPath", (void *)4);
-
-    init_thunk(t, this_ptr_value, IVRRenderModels_006_GetRenderModelErrorNameFromEnum, 1, FALSE, FALSE);
-    const char * (__stdcall *capi_IVRRenderModels_006_GetRenderModelErrorNameFromEnum)(EVRRenderModelError error) = (void *)t;
-
-    clear_parameters();
-    capi_IVRRenderModels_006_GetRenderModelErrorNameFromEnum(1);
-    check_ptr_parameter("IVRRenderModels_006_GetRenderModelErrorNameFromEnum", this_ptr_value);
-    check_uint32_parameter("IVRRenderModels_006_GetRenderModelErrorNameFromEnum", 1);
-    VirtualFree(t, 0, MEM_RELEASE);
-}
-
-void test_capi_thunks_IVRExtendedDisplay_001(void)
-{
-    struct thunk *t = alloc_thunks(1);
-
-    init_thunk(t, this_ptr_value, IVRExtendedDisplay_001_GetWindowBounds, 4, FALSE, FALSE);
-    void (__stdcall *capi_IVRExtendedDisplay_001_GetWindowBounds)(int32_t * pnX, int32_t * pnY, uint32_t * pnWidth, uint32_t * pnHeight) = (void *)t;
-
-    clear_parameters();
-    capi_IVRExtendedDisplay_001_GetWindowBounds((void *)1, (void *)2, (void *)3, (void *)4);
-    check_ptr_parameter("IVRExtendedDisplay_001_GetWindowBounds", this_ptr_value);
-    check_ptr_parameter("IVRExtendedDisplay_001_GetWindowBounds", (void *)1);
-    check_ptr_parameter("IVRExtendedDisplay_001_GetWindowBounds", (void *)2);
-    check_ptr_parameter("IVRExtendedDisplay_001_GetWindowBounds", (void *)3);
-    check_ptr_parameter("IVRExtendedDisplay_001_GetWindowBounds", (void *)4);
-
-    init_thunk(t, this_ptr_value, IVRExtendedDisplay_001_GetEyeOutputViewport, 5, FALSE, FALSE);
-    void (__stdcall *capi_IVRExtendedDisplay_001_GetEyeOutputViewport)(EVREye eEye, uint32_t * pnX, uint32_t * pnY, uint32_t * pnWidth, uint32_t * pnHeight) = (void *)t;
-
-    clear_parameters();
-    capi_IVRExtendedDisplay_001_GetEyeOutputViewport(1, (void *)2, (void *)3, (void *)4, (void *)5);
-    check_ptr_parameter("IVRExtendedDisplay_001_GetEyeOutputViewport", this_ptr_value);
-    check_uint32_parameter("IVRExtendedDisplay_001_GetEyeOutputViewport", 1);
-    check_ptr_parameter("IVRExtendedDisplay_001_GetEyeOutputViewport", (void *)2);
-    check_ptr_parameter("IVRExtendedDisplay_001_GetEyeOutputViewport", (void *)3);
-    check_ptr_parameter("IVRExtendedDisplay_001_GetEyeOutputViewport", (void *)4);
-    check_ptr_parameter("IVRExtendedDisplay_001_GetEyeOutputViewport", (void *)5);
-
-    init_thunk(t, this_ptr_value, IVRExtendedDisplay_001_GetDXGIOutputInfo, 2, FALSE, FALSE);
-    void (__stdcall *capi_IVRExtendedDisplay_001_GetDXGIOutputInfo)(int32_t * pnAdapterIndex, int32_t * pnAdapterOutputIndex) = (void *)t;
-
-    clear_parameters();
-    capi_IVRExtendedDisplay_001_GetDXGIOutputInfo((void *)1, (void *)2);
-    check_ptr_parameter("IVRExtendedDisplay_001_GetDXGIOutputInfo", this_ptr_value);
-    check_ptr_parameter("IVRExtendedDisplay_001_GetDXGIOutputInfo", (void *)1);
-    check_ptr_parameter("IVRExtendedDisplay_001_GetDXGIOutputInfo", (void *)2);
-    VirtualFree(t, 0, MEM_RELEASE);
-}
-
 void test_capi_thunks_IVRTrackedCamera_004(void)
 {
     struct thunk *t = alloc_thunks(1);
@@ -2621,141 +4224,6 @@ void test_capi_thunks_IVRTrackedCamera_004(void)
     check_ptr_parameter("IVRTrackedCamera_004_ReleaseVideoStreamTextureGL", this_ptr_value);
     check_uint64_parameter("IVRTrackedCamera_004_ReleaseVideoStreamTextureGL", 1);
     check_uint32_parameter("IVRTrackedCamera_004_ReleaseVideoStreamTextureGL", 2);
-    VirtualFree(t, 0, MEM_RELEASE);
-}
-
-void test_capi_thunks_IVRScreenshots_001(void)
-{
-    struct thunk *t = alloc_thunks(1);
-
-    init_thunk(t, this_ptr_value, IVRScreenshots_001_RequestScreenshot, 4, FALSE, FALSE);
-    EVRScreenshotError (__stdcall *capi_IVRScreenshots_001_RequestScreenshot)(ScreenshotHandle_t * pOutScreenshotHandle, EVRScreenshotType type, const char * pchPreviewFilename, const char * pchVRFilename) = (void *)t;
-
-    clear_parameters();
-    capi_IVRScreenshots_001_RequestScreenshot((void *)1, 2, (void *)3, (void *)4);
-    check_ptr_parameter("IVRScreenshots_001_RequestScreenshot", this_ptr_value);
-    check_ptr_parameter("IVRScreenshots_001_RequestScreenshot", (void *)1);
-    check_uint32_parameter("IVRScreenshots_001_RequestScreenshot", 2);
-    check_ptr_parameter("IVRScreenshots_001_RequestScreenshot", (void *)3);
-    check_ptr_parameter("IVRScreenshots_001_RequestScreenshot", (void *)4);
-
-    init_thunk(t, this_ptr_value, IVRScreenshots_001_HookScreenshot, 2, FALSE, FALSE);
-    EVRScreenshotError (__stdcall *capi_IVRScreenshots_001_HookScreenshot)(EVRScreenshotType * pSupportedTypes, int numTypes) = (void *)t;
-
-    clear_parameters();
-    capi_IVRScreenshots_001_HookScreenshot((void *)1, 2);
-    check_ptr_parameter("IVRScreenshots_001_HookScreenshot", this_ptr_value);
-    check_ptr_parameter("IVRScreenshots_001_HookScreenshot", (void *)1);
-    check_uint32_parameter("IVRScreenshots_001_HookScreenshot", 2);
-
-    init_thunk(t, this_ptr_value, IVRScreenshots_001_GetScreenshotPropertyType, 2, FALSE, FALSE);
-    EVRScreenshotType (__stdcall *capi_IVRScreenshots_001_GetScreenshotPropertyType)(ScreenshotHandle_t screenshotHandle, EVRScreenshotError * pError) = (void *)t;
-
-    clear_parameters();
-    capi_IVRScreenshots_001_GetScreenshotPropertyType(1, (void *)2);
-    check_ptr_parameter("IVRScreenshots_001_GetScreenshotPropertyType", this_ptr_value);
-    check_uint32_parameter("IVRScreenshots_001_GetScreenshotPropertyType", 1);
-    check_ptr_parameter("IVRScreenshots_001_GetScreenshotPropertyType", (void *)2);
-
-    init_thunk(t, this_ptr_value, IVRScreenshots_001_GetScreenshotPropertyFilename, 5, FALSE, FALSE);
-    uint32_t (__stdcall *capi_IVRScreenshots_001_GetScreenshotPropertyFilename)(ScreenshotHandle_t screenshotHandle, EVRScreenshotPropertyFilenames filenameType, char * pchFilename, uint32_t cchFilename, EVRScreenshotError * pError) = (void *)t;
-
-    clear_parameters();
-    capi_IVRScreenshots_001_GetScreenshotPropertyFilename(1, 2, (void *)3, 4, (void *)5);
-    check_ptr_parameter("IVRScreenshots_001_GetScreenshotPropertyFilename", this_ptr_value);
-    check_uint32_parameter("IVRScreenshots_001_GetScreenshotPropertyFilename", 1);
-    check_uint32_parameter("IVRScreenshots_001_GetScreenshotPropertyFilename", 2);
-    check_ptr_parameter("IVRScreenshots_001_GetScreenshotPropertyFilename", (void *)3);
-    check_uint32_parameter("IVRScreenshots_001_GetScreenshotPropertyFilename", 4);
-    check_ptr_parameter("IVRScreenshots_001_GetScreenshotPropertyFilename", (void *)5);
-
-    init_thunk(t, this_ptr_value, IVRScreenshots_001_UpdateScreenshotProgress, 2, TRUE, FALSE);
-    EVRScreenshotError (__stdcall *capi_IVRScreenshots_001_UpdateScreenshotProgress)(ScreenshotHandle_t screenshotHandle, float flProgress) = (void *)t;
-
-    clear_parameters();
-    capi_IVRScreenshots_001_UpdateScreenshotProgress(1, 2.0f);
-    check_ptr_parameter("IVRScreenshots_001_UpdateScreenshotProgress", this_ptr_value);
-    check_uint32_parameter("IVRScreenshots_001_UpdateScreenshotProgress", 1);
-    check_float_parameter("IVRScreenshots_001_UpdateScreenshotProgress", 2.0f);
-
-    init_thunk(t, this_ptr_value, IVRScreenshots_001_TakeStereoScreenshot, 3, FALSE, FALSE);
-    EVRScreenshotError (__stdcall *capi_IVRScreenshots_001_TakeStereoScreenshot)(ScreenshotHandle_t * pOutScreenshotHandle, const char * pchPreviewFilename, const char * pchVRFilename) = (void *)t;
-
-    clear_parameters();
-    capi_IVRScreenshots_001_TakeStereoScreenshot((void *)1, (void *)2, (void *)3);
-    check_ptr_parameter("IVRScreenshots_001_TakeStereoScreenshot", this_ptr_value);
-    check_ptr_parameter("IVRScreenshots_001_TakeStereoScreenshot", (void *)1);
-    check_ptr_parameter("IVRScreenshots_001_TakeStereoScreenshot", (void *)2);
-    check_ptr_parameter("IVRScreenshots_001_TakeStereoScreenshot", (void *)3);
-
-    init_thunk(t, this_ptr_value, IVRScreenshots_001_SubmitScreenshot, 4, FALSE, FALSE);
-    EVRScreenshotError (__stdcall *capi_IVRScreenshots_001_SubmitScreenshot)(ScreenshotHandle_t screenshotHandle, EVRScreenshotType type, const char * pchSourcePreviewFilename, const char * pchSourceVRFilename) = (void *)t;
-
-    clear_parameters();
-    capi_IVRScreenshots_001_SubmitScreenshot(1, 2, (void *)3, (void *)4);
-    check_ptr_parameter("IVRScreenshots_001_SubmitScreenshot", this_ptr_value);
-    check_uint32_parameter("IVRScreenshots_001_SubmitScreenshot", 1);
-    check_uint32_parameter("IVRScreenshots_001_SubmitScreenshot", 2);
-    check_ptr_parameter("IVRScreenshots_001_SubmitScreenshot", (void *)3);
-    check_ptr_parameter("IVRScreenshots_001_SubmitScreenshot", (void *)4);
-    VirtualFree(t, 0, MEM_RELEASE);
-}
-
-void test_capi_thunks_IVRResources_001(void)
-{
-    struct thunk *t = alloc_thunks(1);
-
-    init_thunk(t, this_ptr_value, IVRResources_001_LoadSharedResource, 3, FALSE, FALSE);
-    uint32_t (__stdcall *capi_IVRResources_001_LoadSharedResource)(const char * pchResourceName, char * pchBuffer, uint32_t unBufferLen) = (void *)t;
-
-    clear_parameters();
-    capi_IVRResources_001_LoadSharedResource((void *)1, (void *)2, 3);
-    check_ptr_parameter("IVRResources_001_LoadSharedResource", this_ptr_value);
-    check_ptr_parameter("IVRResources_001_LoadSharedResource", (void *)1);
-    check_ptr_parameter("IVRResources_001_LoadSharedResource", (void *)2);
-    check_uint32_parameter("IVRResources_001_LoadSharedResource", 3);
-
-    init_thunk(t, this_ptr_value, IVRResources_001_GetResourceFullPath, 4, FALSE, FALSE);
-    uint32_t (__stdcall *capi_IVRResources_001_GetResourceFullPath)(const char * pchResourceName, const char * pchResourceTypeDirectory, char * pchPathBuffer, uint32_t unBufferLen) = (void *)t;
-
-    clear_parameters();
-    capi_IVRResources_001_GetResourceFullPath((void *)1, (void *)2, (void *)3, 4);
-    check_ptr_parameter("IVRResources_001_GetResourceFullPath", this_ptr_value);
-    check_ptr_parameter("IVRResources_001_GetResourceFullPath", (void *)1);
-    check_ptr_parameter("IVRResources_001_GetResourceFullPath", (void *)2);
-    check_ptr_parameter("IVRResources_001_GetResourceFullPath", (void *)3);
-    check_uint32_parameter("IVRResources_001_GetResourceFullPath", 4);
-    VirtualFree(t, 0, MEM_RELEASE);
-}
-
-void test_capi_thunks_IVRDriverManager_001(void)
-{
-    struct thunk *t = alloc_thunks(1);
-
-    init_thunk(t, this_ptr_value, IVRDriverManager_001_GetDriverCount, 0, FALSE, FALSE);
-    uint32_t (__stdcall *capi_IVRDriverManager_001_GetDriverCount)() = (void *)t;
-
-    clear_parameters();
-    capi_IVRDriverManager_001_GetDriverCount();
-    check_ptr_parameter("IVRDriverManager_001_GetDriverCount", this_ptr_value);
-
-    init_thunk(t, this_ptr_value, IVRDriverManager_001_GetDriverName, 3, FALSE, FALSE);
-    uint32_t (__stdcall *capi_IVRDriverManager_001_GetDriverName)(DriverId_t nDriver, char * pchValue, uint32_t unBufferSize) = (void *)t;
-
-    clear_parameters();
-    capi_IVRDriverManager_001_GetDriverName(1, (void *)2, 3);
-    check_ptr_parameter("IVRDriverManager_001_GetDriverName", this_ptr_value);
-    check_uint32_parameter("IVRDriverManager_001_GetDriverName", 1);
-    check_ptr_parameter("IVRDriverManager_001_GetDriverName", (void *)2);
-    check_uint32_parameter("IVRDriverManager_001_GetDriverName", 3);
-
-    init_thunk(t, this_ptr_value, IVRDriverManager_001_GetDriverHandle, 1, FALSE, FALSE);
-    DriverHandle_t (__stdcall *capi_IVRDriverManager_001_GetDriverHandle)(const char * pchDriverName) = (void *)t;
-
-    clear_parameters();
-    capi_IVRDriverManager_001_GetDriverHandle((void *)1);
-    check_ptr_parameter("IVRDriverManager_001_GetDriverHandle", this_ptr_value);
-    check_ptr_parameter("IVRDriverManager_001_GetDriverHandle", (void *)1);
     VirtualFree(t, 0, MEM_RELEASE);
 }
 
@@ -2956,123 +4424,6 @@ void test_capi_thunks_IVRInput_004(void)
     check_uint32_parameter("IVRInput_004_ShowBindingsForActionSet", 2);
     check_uint32_parameter("IVRInput_004_ShowBindingsForActionSet", 3);
     check_uint64_parameter("IVRInput_004_ShowBindingsForActionSet", 4);
-    VirtualFree(t, 0, MEM_RELEASE);
-}
-
-void test_capi_thunks_IVRIOBuffer_001(void)
-{
-    struct thunk *t = alloc_thunks(1);
-
-    init_thunk(t, this_ptr_value, IVRIOBuffer_001_Open, 5, FALSE, FALSE);
-    EIOBufferError (__stdcall *capi_IVRIOBuffer_001_Open)(const char * pchPath, EIOBufferMode mode, uint32_t unElementSize, uint32_t unElements, IOBufferHandle_t * pulBuffer) = (void *)t;
-
-    clear_parameters();
-    capi_IVRIOBuffer_001_Open((void *)1, 2, 3, 4, (void *)5);
-    check_ptr_parameter("IVRIOBuffer_001_Open", this_ptr_value);
-    check_ptr_parameter("IVRIOBuffer_001_Open", (void *)1);
-    check_uint32_parameter("IVRIOBuffer_001_Open", 2);
-    check_uint32_parameter("IVRIOBuffer_001_Open", 3);
-    check_uint32_parameter("IVRIOBuffer_001_Open", 4);
-    check_ptr_parameter("IVRIOBuffer_001_Open", (void *)5);
-
-    init_thunk(t, this_ptr_value, IVRIOBuffer_001_Close, 1, FALSE, FALSE);
-    EIOBufferError (__stdcall *capi_IVRIOBuffer_001_Close)(IOBufferHandle_t ulBuffer) = (void *)t;
-
-    clear_parameters();
-    capi_IVRIOBuffer_001_Close(1);
-    check_ptr_parameter("IVRIOBuffer_001_Close", this_ptr_value);
-    check_uint64_parameter("IVRIOBuffer_001_Close", 1);
-
-    init_thunk(t, this_ptr_value, IVRIOBuffer_001_Read, 4, FALSE, FALSE);
-    EIOBufferError (__stdcall *capi_IVRIOBuffer_001_Read)(IOBufferHandle_t ulBuffer, void * pDst, uint32_t unBytes, uint32_t * punRead) = (void *)t;
-
-    clear_parameters();
-    capi_IVRIOBuffer_001_Read(1, (void *)2, 3, (void *)4);
-    check_ptr_parameter("IVRIOBuffer_001_Read", this_ptr_value);
-    check_uint64_parameter("IVRIOBuffer_001_Read", 1);
-    check_ptr_parameter("IVRIOBuffer_001_Read", (void *)2);
-    check_uint32_parameter("IVRIOBuffer_001_Read", 3);
-    check_ptr_parameter("IVRIOBuffer_001_Read", (void *)4);
-
-    init_thunk(t, this_ptr_value, IVRIOBuffer_001_Write, 3, FALSE, FALSE);
-    EIOBufferError (__stdcall *capi_IVRIOBuffer_001_Write)(IOBufferHandle_t ulBuffer, void * pSrc, uint32_t unBytes) = (void *)t;
-
-    clear_parameters();
-    capi_IVRIOBuffer_001_Write(1, (void *)2, 3);
-    check_ptr_parameter("IVRIOBuffer_001_Write", this_ptr_value);
-    check_uint64_parameter("IVRIOBuffer_001_Write", 1);
-    check_ptr_parameter("IVRIOBuffer_001_Write", (void *)2);
-    check_uint32_parameter("IVRIOBuffer_001_Write", 3);
-
-    init_thunk(t, this_ptr_value, IVRIOBuffer_001_PropertyContainer, 1, FALSE, FALSE);
-    PropertyContainerHandle_t (__stdcall *capi_IVRIOBuffer_001_PropertyContainer)(IOBufferHandle_t ulBuffer) = (void *)t;
-
-    clear_parameters();
-    capi_IVRIOBuffer_001_PropertyContainer(1);
-    check_ptr_parameter("IVRIOBuffer_001_PropertyContainer", this_ptr_value);
-    check_uint64_parameter("IVRIOBuffer_001_PropertyContainer", 1);
-    VirtualFree(t, 0, MEM_RELEASE);
-}
-
-void test_capi_thunks_IVRClientCore_003(void)
-{
-    struct thunk *t = alloc_thunks(1);
-
-    init_thunk(t, this_ptr_value, IVRClientCore_003_Init, 2, FALSE, FALSE);
-    EVRInitError (__stdcall *capi_IVRClientCore_003_Init)(EVRApplicationType eApplicationType, const char * pStartupInfo) = (void *)t;
-
-    clear_parameters();
-    capi_IVRClientCore_003_Init(1, (void *)2);
-    check_ptr_parameter("IVRClientCore_003_Init", this_ptr_value);
-    check_uint32_parameter("IVRClientCore_003_Init", 1);
-    check_ptr_parameter("IVRClientCore_003_Init", (void *)2);
-
-    init_thunk(t, this_ptr_value, IVRClientCore_003_Cleanup, 0, FALSE, FALSE);
-    void (__stdcall *capi_IVRClientCore_003_Cleanup)() = (void *)t;
-
-    clear_parameters();
-    capi_IVRClientCore_003_Cleanup();
-    check_ptr_parameter("IVRClientCore_003_Cleanup", this_ptr_value);
-
-    init_thunk(t, this_ptr_value, IVRClientCore_003_IsInterfaceVersionValid, 1, FALSE, FALSE);
-    EVRInitError (__stdcall *capi_IVRClientCore_003_IsInterfaceVersionValid)(const char * pchInterfaceVersion) = (void *)t;
-
-    clear_parameters();
-    capi_IVRClientCore_003_IsInterfaceVersionValid((void *)1);
-    check_ptr_parameter("IVRClientCore_003_IsInterfaceVersionValid", this_ptr_value);
-    check_ptr_parameter("IVRClientCore_003_IsInterfaceVersionValid", (void *)1);
-
-    init_thunk(t, this_ptr_value, IVRClientCore_003_GetGenericInterface, 2, FALSE, FALSE);
-    void * (__stdcall *capi_IVRClientCore_003_GetGenericInterface)(const char * pchNameAndVersion, EVRInitError * peError) = (void *)t;
-
-    clear_parameters();
-    capi_IVRClientCore_003_GetGenericInterface((void *)1, (void *)2);
-    check_ptr_parameter("IVRClientCore_003_GetGenericInterface", this_ptr_value);
-    check_ptr_parameter("IVRClientCore_003_GetGenericInterface", (void *)1);
-    check_ptr_parameter("IVRClientCore_003_GetGenericInterface", (void *)2);
-
-    init_thunk(t, this_ptr_value, IVRClientCore_003_BIsHmdPresent, 0, FALSE, FALSE);
-    bool (__stdcall *capi_IVRClientCore_003_BIsHmdPresent)() = (void *)t;
-
-    clear_parameters();
-    capi_IVRClientCore_003_BIsHmdPresent();
-    check_ptr_parameter("IVRClientCore_003_BIsHmdPresent", this_ptr_value);
-
-    init_thunk(t, this_ptr_value, IVRClientCore_003_GetEnglishStringForHmdError, 1, FALSE, FALSE);
-    const char * (__stdcall *capi_IVRClientCore_003_GetEnglishStringForHmdError)(EVRInitError eError) = (void *)t;
-
-    clear_parameters();
-    capi_IVRClientCore_003_GetEnglishStringForHmdError(1);
-    check_ptr_parameter("IVRClientCore_003_GetEnglishStringForHmdError", this_ptr_value);
-    check_uint32_parameter("IVRClientCore_003_GetEnglishStringForHmdError", 1);
-
-    init_thunk(t, this_ptr_value, IVRClientCore_003_GetIDForVRInitError, 1, FALSE, FALSE);
-    const char * (__stdcall *capi_IVRClientCore_003_GetIDForVRInitError)(EVRInitError eError) = (void *)t;
-
-    clear_parameters();
-    capi_IVRClientCore_003_GetIDForVRInitError(1);
-    check_ptr_parameter("IVRClientCore_003_GetIDForVRInitError", this_ptr_value);
-    check_uint32_parameter("IVRClientCore_003_GetIDForVRInitError", 1);
     VirtualFree(t, 0, MEM_RELEASE);
 }
 
@@ -9602,6 +10953,308 @@ void test_capi_thunks_IVROverlay_013(void)
     check_ptr_parameter("IVROverlay_013_SetOverlayIntersectionMask", (void *)2);
     check_uint32_parameter("IVROverlay_013_SetOverlayIntersectionMask", 3);
     check_uint32_parameter("IVROverlay_013_SetOverlayIntersectionMask", 4);
+    VirtualFree(t, 0, MEM_RELEASE);
+}
+
+void test_capi_thunks_IVRCompositor_017(void)
+{
+    struct thunk *t = alloc_thunks(1);
+
+    init_thunk(t, this_ptr_value, IVRCompositor_017_SetTrackingSpace, 1, FALSE, FALSE);
+    void (__stdcall *capi_IVRCompositor_017_SetTrackingSpace)(ETrackingUniverseOrigin eOrigin) = (void *)t;
+
+    clear_parameters();
+    capi_IVRCompositor_017_SetTrackingSpace(1);
+    check_ptr_parameter("IVRCompositor_017_SetTrackingSpace", this_ptr_value);
+    check_uint32_parameter("IVRCompositor_017_SetTrackingSpace", 1);
+
+    init_thunk(t, this_ptr_value, IVRCompositor_017_GetTrackingSpace, 0, FALSE, FALSE);
+    ETrackingUniverseOrigin (__stdcall *capi_IVRCompositor_017_GetTrackingSpace)() = (void *)t;
+
+    clear_parameters();
+    capi_IVRCompositor_017_GetTrackingSpace();
+    check_ptr_parameter("IVRCompositor_017_GetTrackingSpace", this_ptr_value);
+
+    init_thunk(t, this_ptr_value, IVRCompositor_017_WaitGetPoses, 4, FALSE, FALSE);
+    EVRCompositorError (__stdcall *capi_IVRCompositor_017_WaitGetPoses)(TrackedDevicePose_t * pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t * pGamePoseArray, uint32_t unGamePoseArrayCount) = (void *)t;
+
+    clear_parameters();
+    capi_IVRCompositor_017_WaitGetPoses((void *)1, 2, (void *)3, 4);
+    check_ptr_parameter("IVRCompositor_017_WaitGetPoses", this_ptr_value);
+    check_ptr_parameter("IVRCompositor_017_WaitGetPoses", (void *)1);
+    check_uint32_parameter("IVRCompositor_017_WaitGetPoses", 2);
+    check_ptr_parameter("IVRCompositor_017_WaitGetPoses", (void *)3);
+    check_uint32_parameter("IVRCompositor_017_WaitGetPoses", 4);
+
+    init_thunk(t, this_ptr_value, IVRCompositor_017_GetLastPoses, 4, FALSE, FALSE);
+    EVRCompositorError (__stdcall *capi_IVRCompositor_017_GetLastPoses)(TrackedDevicePose_t * pRenderPoseArray, uint32_t unRenderPoseArrayCount, TrackedDevicePose_t * pGamePoseArray, uint32_t unGamePoseArrayCount) = (void *)t;
+
+    clear_parameters();
+    capi_IVRCompositor_017_GetLastPoses((void *)1, 2, (void *)3, 4);
+    check_ptr_parameter("IVRCompositor_017_GetLastPoses", this_ptr_value);
+    check_ptr_parameter("IVRCompositor_017_GetLastPoses", (void *)1);
+    check_uint32_parameter("IVRCompositor_017_GetLastPoses", 2);
+    check_ptr_parameter("IVRCompositor_017_GetLastPoses", (void *)3);
+    check_uint32_parameter("IVRCompositor_017_GetLastPoses", 4);
+
+    init_thunk(t, this_ptr_value, IVRCompositor_017_GetLastPoseForTrackedDeviceIndex, 3, FALSE, FALSE);
+    EVRCompositorError (__stdcall *capi_IVRCompositor_017_GetLastPoseForTrackedDeviceIndex)(TrackedDeviceIndex_t unDeviceIndex, TrackedDevicePose_t * pOutputPose, TrackedDevicePose_t * pOutputGamePose) = (void *)t;
+
+    clear_parameters();
+    capi_IVRCompositor_017_GetLastPoseForTrackedDeviceIndex(1, (void *)2, (void *)3);
+    check_ptr_parameter("IVRCompositor_017_GetLastPoseForTrackedDeviceIndex", this_ptr_value);
+    check_uint32_parameter("IVRCompositor_017_GetLastPoseForTrackedDeviceIndex", 1);
+    check_ptr_parameter("IVRCompositor_017_GetLastPoseForTrackedDeviceIndex", (void *)2);
+    check_ptr_parameter("IVRCompositor_017_GetLastPoseForTrackedDeviceIndex", (void *)3);
+
+    init_thunk(t, this_ptr_value, IVRCompositor_017_Submit, 4, FALSE, FALSE);
+    EVRCompositorError (__stdcall *capi_IVRCompositor_017_Submit)(EVREye eEye, Texture_t * pTexture, VRTextureBounds_t * pBounds, EVRSubmitFlags nSubmitFlags) = (void *)t;
+
+    clear_parameters();
+    capi_IVRCompositor_017_Submit(1, (void *)2, (void *)3, 4);
+    check_ptr_parameter("IVRCompositor_017_Submit", this_ptr_value);
+    check_uint32_parameter("IVRCompositor_017_Submit", 1);
+    check_ptr_parameter("IVRCompositor_017_Submit", (void *)2);
+    check_ptr_parameter("IVRCompositor_017_Submit", (void *)3);
+    check_uint32_parameter("IVRCompositor_017_Submit", 4);
+
+    init_thunk(t, this_ptr_value, IVRCompositor_017_ClearLastSubmittedFrame, 0, FALSE, FALSE);
+    void (__stdcall *capi_IVRCompositor_017_ClearLastSubmittedFrame)() = (void *)t;
+
+    clear_parameters();
+    capi_IVRCompositor_017_ClearLastSubmittedFrame();
+    check_ptr_parameter("IVRCompositor_017_ClearLastSubmittedFrame", this_ptr_value);
+
+    init_thunk(t, this_ptr_value, IVRCompositor_017_PostPresentHandoff, 0, FALSE, FALSE);
+    void (__stdcall *capi_IVRCompositor_017_PostPresentHandoff)() = (void *)t;
+
+    clear_parameters();
+    capi_IVRCompositor_017_PostPresentHandoff();
+    check_ptr_parameter("IVRCompositor_017_PostPresentHandoff", this_ptr_value);
+
+    init_thunk(t, this_ptr_value, IVRCompositor_017_GetFrameTiming, 2, FALSE, FALSE);
+    bool (__stdcall *capi_IVRCompositor_017_GetFrameTiming)(Compositor_FrameTiming * pTiming, uint32_t unFramesAgo) = (void *)t;
+
+    clear_parameters();
+    capi_IVRCompositor_017_GetFrameTiming((void *)1, 2);
+    check_ptr_parameter("IVRCompositor_017_GetFrameTiming", this_ptr_value);
+    check_ptr_parameter("IVRCompositor_017_GetFrameTiming", (void *)1);
+    check_uint32_parameter("IVRCompositor_017_GetFrameTiming", 2);
+
+    init_thunk(t, this_ptr_value, IVRCompositor_017_GetFrameTimings, 2, FALSE, FALSE);
+    uint32_t (__stdcall *capi_IVRCompositor_017_GetFrameTimings)(Compositor_FrameTiming * pTiming, uint32_t nFrames) = (void *)t;
+
+    clear_parameters();
+    capi_IVRCompositor_017_GetFrameTimings((void *)1, 2);
+    check_ptr_parameter("IVRCompositor_017_GetFrameTimings", this_ptr_value);
+    check_ptr_parameter("IVRCompositor_017_GetFrameTimings", (void *)1);
+    check_uint32_parameter("IVRCompositor_017_GetFrameTimings", 2);
+
+    init_thunk(t, this_ptr_value, IVRCompositor_017_GetFrameTimeRemaining, 0, FALSE, FALSE);
+    float (__stdcall *capi_IVRCompositor_017_GetFrameTimeRemaining)() = (void *)t;
+
+    clear_parameters();
+    capi_IVRCompositor_017_GetFrameTimeRemaining();
+    check_ptr_parameter("IVRCompositor_017_GetFrameTimeRemaining", this_ptr_value);
+
+    init_thunk(t, this_ptr_value, IVRCompositor_017_GetCumulativeStats, 2, FALSE, FALSE);
+    void (__stdcall *capi_IVRCompositor_017_GetCumulativeStats)(Compositor_CumulativeStats * pStats, uint32_t nStatsSizeInBytes) = (void *)t;
+
+    clear_parameters();
+    capi_IVRCompositor_017_GetCumulativeStats((void *)1, 2);
+    check_ptr_parameter("IVRCompositor_017_GetCumulativeStats", this_ptr_value);
+    check_ptr_parameter("IVRCompositor_017_GetCumulativeStats", (void *)1);
+    check_uint32_parameter("IVRCompositor_017_GetCumulativeStats", 2);
+
+    init_thunk(t, this_ptr_value, IVRCompositor_017_FadeToColor, 6, TRUE, TRUE);
+    void (__stdcall *capi_IVRCompositor_017_FadeToColor)(float fSeconds, float fRed, float fGreen, float fBlue, float fAlpha, bool bBackground) = (void *)t;
+
+    clear_parameters();
+    capi_IVRCompositor_017_FadeToColor(1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 1);
+    check_ptr_parameter("IVRCompositor_017_FadeToColor", this_ptr_value);
+    check_float_parameter("IVRCompositor_017_FadeToColor", 1.0f);
+    check_float_parameter("IVRCompositor_017_FadeToColor", 2.0f);
+    check_float_parameter("IVRCompositor_017_FadeToColor", 3.0f);
+    check_float_parameter("IVRCompositor_017_FadeToColor", 4.0f);
+    check_float_parameter("IVRCompositor_017_FadeToColor", 5.0f);
+    check_bool_parameter("IVRCompositor_017_FadeToColor", 1);
+
+    init_thunk(t, this_ptr_value, IVRCompositor_017_FadeGrid, 2, TRUE, FALSE);
+    void (__stdcall *capi_IVRCompositor_017_FadeGrid)(float fSeconds, bool bFadeIn) = (void *)t;
+
+    clear_parameters();
+    capi_IVRCompositor_017_FadeGrid(1.0f, 1);
+    check_ptr_parameter("IVRCompositor_017_FadeGrid", this_ptr_value);
+    check_float_parameter("IVRCompositor_017_FadeGrid", 1.0f);
+    check_bool_parameter("IVRCompositor_017_FadeGrid", 1);
+
+    init_thunk(t, this_ptr_value, IVRCompositor_017_SetSkyboxOverride, 2, FALSE, FALSE);
+    EVRCompositorError (__stdcall *capi_IVRCompositor_017_SetSkyboxOverride)(Texture_t * pTextures, uint32_t unTextureCount) = (void *)t;
+
+    clear_parameters();
+    capi_IVRCompositor_017_SetSkyboxOverride((void *)1, 2);
+    check_ptr_parameter("IVRCompositor_017_SetSkyboxOverride", this_ptr_value);
+    check_ptr_parameter("IVRCompositor_017_SetSkyboxOverride", (void *)1);
+    check_uint32_parameter("IVRCompositor_017_SetSkyboxOverride", 2);
+
+    init_thunk(t, this_ptr_value, IVRCompositor_017_ClearSkyboxOverride, 0, FALSE, FALSE);
+    void (__stdcall *capi_IVRCompositor_017_ClearSkyboxOverride)() = (void *)t;
+
+    clear_parameters();
+    capi_IVRCompositor_017_ClearSkyboxOverride();
+    check_ptr_parameter("IVRCompositor_017_ClearSkyboxOverride", this_ptr_value);
+
+    init_thunk(t, this_ptr_value, IVRCompositor_017_CompositorBringToFront, 0, FALSE, FALSE);
+    void (__stdcall *capi_IVRCompositor_017_CompositorBringToFront)() = (void *)t;
+
+    clear_parameters();
+    capi_IVRCompositor_017_CompositorBringToFront();
+    check_ptr_parameter("IVRCompositor_017_CompositorBringToFront", this_ptr_value);
+
+    init_thunk(t, this_ptr_value, IVRCompositor_017_CompositorGoToBack, 0, FALSE, FALSE);
+    void (__stdcall *capi_IVRCompositor_017_CompositorGoToBack)() = (void *)t;
+
+    clear_parameters();
+    capi_IVRCompositor_017_CompositorGoToBack();
+    check_ptr_parameter("IVRCompositor_017_CompositorGoToBack", this_ptr_value);
+
+    init_thunk(t, this_ptr_value, IVRCompositor_017_CompositorQuit, 0, FALSE, FALSE);
+    void (__stdcall *capi_IVRCompositor_017_CompositorQuit)() = (void *)t;
+
+    clear_parameters();
+    capi_IVRCompositor_017_CompositorQuit();
+    check_ptr_parameter("IVRCompositor_017_CompositorQuit", this_ptr_value);
+
+    init_thunk(t, this_ptr_value, IVRCompositor_017_IsFullscreen, 0, FALSE, FALSE);
+    bool (__stdcall *capi_IVRCompositor_017_IsFullscreen)() = (void *)t;
+
+    clear_parameters();
+    capi_IVRCompositor_017_IsFullscreen();
+    check_ptr_parameter("IVRCompositor_017_IsFullscreen", this_ptr_value);
+
+    init_thunk(t, this_ptr_value, IVRCompositor_017_GetCurrentSceneFocusProcess, 0, FALSE, FALSE);
+    uint32_t (__stdcall *capi_IVRCompositor_017_GetCurrentSceneFocusProcess)() = (void *)t;
+
+    clear_parameters();
+    capi_IVRCompositor_017_GetCurrentSceneFocusProcess();
+    check_ptr_parameter("IVRCompositor_017_GetCurrentSceneFocusProcess", this_ptr_value);
+
+    init_thunk(t, this_ptr_value, IVRCompositor_017_GetLastFrameRenderer, 0, FALSE, FALSE);
+    uint32_t (__stdcall *capi_IVRCompositor_017_GetLastFrameRenderer)() = (void *)t;
+
+    clear_parameters();
+    capi_IVRCompositor_017_GetLastFrameRenderer();
+    check_ptr_parameter("IVRCompositor_017_GetLastFrameRenderer", this_ptr_value);
+
+    init_thunk(t, this_ptr_value, IVRCompositor_017_CanRenderScene, 0, FALSE, FALSE);
+    bool (__stdcall *capi_IVRCompositor_017_CanRenderScene)() = (void *)t;
+
+    clear_parameters();
+    capi_IVRCompositor_017_CanRenderScene();
+    check_ptr_parameter("IVRCompositor_017_CanRenderScene", this_ptr_value);
+
+    init_thunk(t, this_ptr_value, IVRCompositor_017_ShowMirrorWindow, 0, FALSE, FALSE);
+    void (__stdcall *capi_IVRCompositor_017_ShowMirrorWindow)() = (void *)t;
+
+    clear_parameters();
+    capi_IVRCompositor_017_ShowMirrorWindow();
+    check_ptr_parameter("IVRCompositor_017_ShowMirrorWindow", this_ptr_value);
+
+    init_thunk(t, this_ptr_value, IVRCompositor_017_HideMirrorWindow, 0, FALSE, FALSE);
+    void (__stdcall *capi_IVRCompositor_017_HideMirrorWindow)() = (void *)t;
+
+    clear_parameters();
+    capi_IVRCompositor_017_HideMirrorWindow();
+    check_ptr_parameter("IVRCompositor_017_HideMirrorWindow", this_ptr_value);
+
+    init_thunk(t, this_ptr_value, IVRCompositor_017_IsMirrorWindowVisible, 0, FALSE, FALSE);
+    bool (__stdcall *capi_IVRCompositor_017_IsMirrorWindowVisible)() = (void *)t;
+
+    clear_parameters();
+    capi_IVRCompositor_017_IsMirrorWindowVisible();
+    check_ptr_parameter("IVRCompositor_017_IsMirrorWindowVisible", this_ptr_value);
+
+    init_thunk(t, this_ptr_value, IVRCompositor_017_CompositorDumpImages, 0, FALSE, FALSE);
+    void (__stdcall *capi_IVRCompositor_017_CompositorDumpImages)() = (void *)t;
+
+    clear_parameters();
+    capi_IVRCompositor_017_CompositorDumpImages();
+    check_ptr_parameter("IVRCompositor_017_CompositorDumpImages", this_ptr_value);
+
+    init_thunk(t, this_ptr_value, IVRCompositor_017_ShouldAppRenderWithLowResources, 0, FALSE, FALSE);
+    bool (__stdcall *capi_IVRCompositor_017_ShouldAppRenderWithLowResources)() = (void *)t;
+
+    clear_parameters();
+    capi_IVRCompositor_017_ShouldAppRenderWithLowResources();
+    check_ptr_parameter("IVRCompositor_017_ShouldAppRenderWithLowResources", this_ptr_value);
+
+    init_thunk(t, this_ptr_value, IVRCompositor_017_ForceInterleavedReprojectionOn, 1, FALSE, FALSE);
+    void (__stdcall *capi_IVRCompositor_017_ForceInterleavedReprojectionOn)(bool bOverride) = (void *)t;
+
+    clear_parameters();
+    capi_IVRCompositor_017_ForceInterleavedReprojectionOn(1);
+    check_ptr_parameter("IVRCompositor_017_ForceInterleavedReprojectionOn", this_ptr_value);
+    check_bool_parameter("IVRCompositor_017_ForceInterleavedReprojectionOn", 1);
+
+    init_thunk(t, this_ptr_value, IVRCompositor_017_ForceReconnectProcess, 0, FALSE, FALSE);
+    void (__stdcall *capi_IVRCompositor_017_ForceReconnectProcess)() = (void *)t;
+
+    clear_parameters();
+    capi_IVRCompositor_017_ForceReconnectProcess();
+    check_ptr_parameter("IVRCompositor_017_ForceReconnectProcess", this_ptr_value);
+
+    init_thunk(t, this_ptr_value, IVRCompositor_017_SuspendRendering, 1, FALSE, FALSE);
+    void (__stdcall *capi_IVRCompositor_017_SuspendRendering)(bool bSuspend) = (void *)t;
+
+    clear_parameters();
+    capi_IVRCompositor_017_SuspendRendering(1);
+    check_ptr_parameter("IVRCompositor_017_SuspendRendering", this_ptr_value);
+    check_bool_parameter("IVRCompositor_017_SuspendRendering", 1);
+
+    init_thunk(t, this_ptr_value, IVRCompositor_017_GetMirrorTextureD3D11, 3, FALSE, FALSE);
+    EVRCompositorError (__stdcall *capi_IVRCompositor_017_GetMirrorTextureD3D11)(EVREye eEye, void * pD3D11DeviceOrResource, void ** ppD3D11ShaderResourceView) = (void *)t;
+
+    clear_parameters();
+    capi_IVRCompositor_017_GetMirrorTextureD3D11(1, (void *)2, (void *)3);
+    check_ptr_parameter("IVRCompositor_017_GetMirrorTextureD3D11", this_ptr_value);
+    check_uint32_parameter("IVRCompositor_017_GetMirrorTextureD3D11", 1);
+    check_ptr_parameter("IVRCompositor_017_GetMirrorTextureD3D11", (void *)2);
+    check_ptr_parameter("IVRCompositor_017_GetMirrorTextureD3D11", (void *)3);
+
+    init_thunk(t, this_ptr_value, IVRCompositor_017_GetMirrorTextureGL, 3, FALSE, FALSE);
+    EVRCompositorError (__stdcall *capi_IVRCompositor_017_GetMirrorTextureGL)(EVREye eEye, glUInt_t * pglTextureId, glSharedTextureHandle_t * pglSharedTextureHandle) = (void *)t;
+
+    clear_parameters();
+    capi_IVRCompositor_017_GetMirrorTextureGL(1, (void *)2, (void *)3);
+    check_ptr_parameter("IVRCompositor_017_GetMirrorTextureGL", this_ptr_value);
+    check_uint32_parameter("IVRCompositor_017_GetMirrorTextureGL", 1);
+    check_ptr_parameter("IVRCompositor_017_GetMirrorTextureGL", (void *)2);
+    check_ptr_parameter("IVRCompositor_017_GetMirrorTextureGL", (void *)3);
+
+    init_thunk(t, this_ptr_value, IVRCompositor_017_ReleaseSharedGLTexture, 2, FALSE, FALSE);
+    bool (__stdcall *capi_IVRCompositor_017_ReleaseSharedGLTexture)(glUInt_t glTextureId, glSharedTextureHandle_t glSharedTextureHandle) = (void *)t;
+
+    clear_parameters();
+    capi_IVRCompositor_017_ReleaseSharedGLTexture(1, (void *)2);
+    check_ptr_parameter("IVRCompositor_017_ReleaseSharedGLTexture", this_ptr_value);
+    check_uint32_parameter("IVRCompositor_017_ReleaseSharedGLTexture", 1);
+    check_ptr_parameter("IVRCompositor_017_ReleaseSharedGLTexture", (void *)2);
+
+    init_thunk(t, this_ptr_value, IVRCompositor_017_LockGLSharedTextureForAccess, 1, FALSE, FALSE);
+    void (__stdcall *capi_IVRCompositor_017_LockGLSharedTextureForAccess)(glSharedTextureHandle_t glSharedTextureHandle) = (void *)t;
+
+    clear_parameters();
+    capi_IVRCompositor_017_LockGLSharedTextureForAccess((void *)1);
+    check_ptr_parameter("IVRCompositor_017_LockGLSharedTextureForAccess", this_ptr_value);
+    check_ptr_parameter("IVRCompositor_017_LockGLSharedTextureForAccess", (void *)1);
+
+    init_thunk(t, this_ptr_value, IVRCompositor_017_UnlockGLSharedTextureForAccess, 1, FALSE, FALSE);
+    void (__stdcall *capi_IVRCompositor_017_UnlockGLSharedTextureForAccess)(glSharedTextureHandle_t glSharedTextureHandle) = (void *)t;
+
+    clear_parameters();
+    capi_IVRCompositor_017_UnlockGLSharedTextureForAccess((void *)1);
+    check_ptr_parameter("IVRCompositor_017_UnlockGLSharedTextureForAccess", this_ptr_value);
+    check_ptr_parameter("IVRCompositor_017_UnlockGLSharedTextureForAccess", (void *)1);
     VirtualFree(t, 0, MEM_RELEASE);
 }
 

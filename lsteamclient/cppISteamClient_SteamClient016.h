@@ -1,6 +1,3 @@
-#ifdef __cplusplus
-extern "C" {
-#endif
 extern HSteamPipe cppISteamClient_SteamClient016_CreateSteamPipe(void *);
 extern bool cppISteamClient_SteamClient016_BReleaseSteamPipe(void *, HSteamPipe);
 extern HSteamUser cppISteamClient_SteamClient016_ConnectToGlobalUser(void *, HSteamPipe);
@@ -35,6 +32,3 @@ extern void *cppISteamClient_SteamClient016_GetISteamHTMLSurface(void *, HSteamU
 extern void cppISteamClient_SteamClient016_Set_SteamAPI_CPostAPIResultInProcess(void *, SteamAPI_PostAPIResultInProcess_t);
 extern void cppISteamClient_SteamClient016_Remove_SteamAPI_CPostAPIResultInProcess(void *, SteamAPI_PostAPIResultInProcess_t);
 extern void cppISteamClient_SteamClient016_Set_SteamAPI_CCheckCallbackRegisteredInProcess(void *, SteamAPI_CheckCallbackRegistered_t);
-#ifdef __cplusplus
-}
-#endif

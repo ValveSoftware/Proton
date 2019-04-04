@@ -1,6 +1,3 @@
-#ifdef __cplusplus
-extern "C" {
-#endif
 extern HSteamUser cppISteamUser_SteamUser017_GetHSteamUser(void *);
 extern bool cppISteamUser_SteamUser017_BLoggedOn(void *);
 extern CSteamID cppISteamUser_SteamUser017_GetSteamID(void *);
@@ -25,6 +22,3 @@ extern SteamAPICall_t cppISteamUser_SteamUser017_RequestEncryptedAppTicket(void 
 extern bool cppISteamUser_SteamUser017_GetEncryptedAppTicket(void *, void *, int, uint32 *);
 extern int cppISteamUser_SteamUser017_GetGameBadgeLevel(void *, int, bool);
 extern int cppISteamUser_SteamUser017_GetPlayerSteamLevel(void *);
-#ifdef __cplusplus
-}
-#endif

@@ -1,6 +1,3 @@
-#ifdef __cplusplus
-extern "C" {
-#endif
 extern bool cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_FileWrite(void *, const char *, const void *, int32);
 extern int32 cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_FileRead(void *, const char *, void *, int32);
 extern bool cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_FileForget(void *, const char *);
@@ -23,6 +20,3 @@ extern bool cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_GetUG
 extern int32 cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_UGCRead(void *, UGCHandle_t, void *, int32);
 extern int32 cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_GetCachedUGCCount(void *);
 extern UGCHandle_t cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION004_GetCachedUGCHandle(void *, int32);
-#ifdef __cplusplus
-}
-#endif

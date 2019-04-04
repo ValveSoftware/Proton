@@ -46,12 +46,16 @@ case 1327: /* RemoteStorageSetUserPublishedFileActionResult_t_24 */
     return 16;
 case 1330: /* RemoteStoragePublishedFileUpdated_t_24 */
     return 20;
+case 5301: /* JoinPartyCallback_t_280 */
+    return 276;
+case 5302: /* CreateBeaconCallback_t_16 */
+    return 12;
+case 2103: /* HTTPRequestDataReceived_t_24 */
+    return 20;
 case 2101: /* HTTPRequestCompleted_t_32 */
     return 24;
 case 2102: /* HTTPRequestHeadersReceived_t_16 */
     return 12;
-case 2103: /* HTTPRequestDataReceived_t_24 */
-    return 20;
 case 3402: /* SteamUGCRequestUGCDetailsResult_t_9784 */
     return 9768;
 case 3403: /* CreateItemResult_t_24 */
@@ -75,6 +79,16 @@ case 1111: /* LeaderboardUGCSet_t_16 */
 case 1112: /* PS3TrophiesInstalled_t_24 */
     return 20;
 case 3417: /* DeleteItemResult_t_16 */
+    return 12;
+case 5211: /* RequestPlayersForGameProgressCallback_t_16 */
+    return 12;
+case 5212: /* RequestPlayersForGameResultCallback_t_64 */
+    return 56;
+case 5213: /* RequestPlayersForGameFinalResultCallback_t_24 */
+    return 20;
+case 5214: /* SubmitPlayerResultResultCallback_t_24 */
+    return 20;
+case 5215: /* EndGameResultCallback_t_16 */
     return 12;
 case 4704: /* SteamInventoryStartPurchaseResult_t_24 */
     return 20;

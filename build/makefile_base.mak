@@ -31,6 +31,7 @@ else # (Rest of the file is the else)
 #   STEAMRT64_IMAGE - Name of the image if mode is set
 #   STEAMRT32_MODE  - Same as above for 32-bit container (can be different type)
 #   STEAMRT32_IMAGE - Same as above for 32-bit container
+#   STEAMRT_PATH    - Path to built runtime which contains run.sh
 
 ifeq ($(SRCDIR),)
 	foo := $(error SRCDIR not set, do not include makefile_base directly, run ./configure.sh to generate Makefile)
@@ -71,6 +72,12 @@ ifeq ($(STEAMRT32_MODE),docker)
 	CONTAINER_SHELL32 := $(DOCKER_SHELL_BASE)
 else ifneq ($(STEAMRT32_MODE),)
 	foo := $(error Unrecognized STEAMRT32_MODE $(STEAMRT32_MODE))
+endif
+
+ifneq ($(STEAMRT_PATH),)
+	STEAM_RUNTIME_RUNSH := $(STEAMRT_PATH)/run.sh
+else
+	STEAM_RUNTIME_RUNSH :=
 endif
 
 SELECT_DOCKER_IMAGE :=
@@ -168,10 +175,6 @@ GECKO_VER := 2.47
 GECKO32_MSI := wine_gecko-$(GECKO_VER)-x86.msi
 GECKO64_MSI := wine_gecko-$(GECKO_VER)-x86_64.msi
 
-OPENAL := $(SRCDIR)/openal-soft
-OPENAL_OBJ32 := ./obj-openal32
-OPENAL_OBJ64 := ./obj-openal64
-
 FFMPEG := $(SRCDIR)/ffmpeg
 FFMPEG_OBJ32 := ./obj-ffmpeg32
 FFMPEG_OBJ64 := ./obj-ffmpeg64
@@ -187,6 +190,10 @@ LSTEAMCLIENT32 := ./syn-lsteamclient32/lsteamclient
 LSTEAMCLIENT64 := ./syn-lsteamclient64/lsteamclient
 LSTEAMCLIENT_OBJ32 := ./obj-lsteamclient32
 LSTEAMCLIENT_OBJ64 := ./obj-lsteamclient64
+
+STEAMEXE_SRC := $(SRCDIR)/steam_helper
+STEAMEXE_OBJ := ./obj-steam
+STEAMEXE_SYN := ./syn-steam/steam
 
 WINE := $(SRCDIR)/wine
 WINE_DST32 := ./dist-wine32
@@ -226,10 +233,10 @@ FONTS_OBJ := ./obj-fonts
 
 ## Object directories
 OBJ_DIRS := $(TOOLS_DIR32)        $(TOOLS_DIR64)        \
-            $(OPENAL_OBJ32)       $(OPENAL_OBJ64)       \
             $(FFMPEG_OBJ32)       $(FFMPEG_OBJ64)       \
             $(FAUDIO_OBJ32)       $(FAUDIO_OBJ64)       \
             $(LSTEAMCLIENT_OBJ32) $(LSTEAMCLIENT_OBJ64) \
+            $(STEAMEXE_OBJ)                             \
             $(WINE_OBJ32)         $(WINE_OBJ64)         \
             $(VRCLIENT_OBJ32)     $(VRCLIENT_OBJ64)     \
             $(DXVK_OBJ32)         $(DXVK_OBJ64)         \
@@ -247,8 +254,24 @@ $(DST_DIR):
 
 STEAM_DIR := $(HOME)/.steam/root
 
-DIST_COPY_FILES := toolmanifest.vdf filelock.py proton proton_3.7_tracked_files user_settings.sample.py
-DIST_COPY_TARGETS := $(addprefix $(DST_BASE)/,$(DIST_COPY_FILES))
+TOOLMANIFEST_TARGET := $(addprefix $(DST_BASE)/,toolmanifest.vdf)
+$(TOOLMANIFEST_TARGET): $(addprefix $(SRCDIR)/,toolmanifest.vdf)
+
+FILELOCK_TARGET := $(addprefix $(DST_BASE)/,filelock.py)
+$(FILELOCK_TARGET): $(addprefix $(SRCDIR)/,filelock.py)
+
+PROTON_PY_TARGET := $(addprefix $(DST_BASE)/,proton)
+$(PROTON_PY_TARGET): $(addprefix $(SRCDIR)/,proton)
+
+PROTON37_TRACKED_FILES_TARGET := $(addprefix $(DST_BASE)/,proton_3.7_tracked_files)
+$(PROTON37_TRACKED_FILES_TARGET): $(addprefix $(SRCDIR)/,proton_3.7_tracked_files)
+
+USER_SETTINGS_PY_TARGET := $(addprefix $(DST_BASE)/,user_settings.sample.py)
+$(USER_SETTINGS_PY_TARGET): $(addprefix $(SRCDIR)/,user_settings.sample.py)
+
+DIST_COPY_TARGETS := $(TOOLMANIFEST_TARGET) $(FILELOCK_TARGET) $(PROTON_PY_TARGET) \
+                     $(PROTON37_TRACKED_FILES_TARGET) $(USER_SETTINGS_PY_TARGET)
+
 DIST_VERSION := $(DST_DIR)/version
 DIST_OVR32 := $(DST_DIR)/lib/wine/dxvk/openvr_api_dxvk.dll
 DIST_OVR64 := $(DST_DIR)/lib64/wine/dxvk/openvr_api_dxvk.dll
@@ -260,7 +283,7 @@ DIST_GECKO32 := $(DIST_GECKO_DIR)/$(GECKO32_MSI)
 DIST_GECKO64 := $(DIST_GECKO_DIR)/$(GECKO64_MSI)
 DIST_FONTS := $(DST_DIR)/share/fonts
 
-DIST_TARGETS := $(DIST_COPY_TARGETS) $(DIST_VERSION) $(DIST_OVR32) $(DIST_OVR64) \
+DIST_TARGETS := $(DIST_COPY_TARGETS) $(DIST_OVR32) $(DIST_OVR64) \
                 $(DIST_GECKO32) $(DIST_GECKO64) $(DIST_COMPAT_MANIFEST) $(DIST_LICENSE) \
                 $(DIST_FONTS)
 
@@ -279,10 +302,6 @@ $(DIST_OVR64): $(SRCDIR)/openvr/bin/win64/openvr_api.dll | $(DST_DIR)
 
 $(DIST_COPY_TARGETS): | $(DST_DIR)
 	cp -a $(SRCDIR)/$(notdir $@) $@
-
-$(DIST_VERSION): | $(DST_DIR)
-	date '+%s' > $@
-	cp $(DIST_VERSION) $(DST_BASE)/
 
 $(DIST_COMPAT_MANIFEST): $(COMPAT_MANIFEST_TEMPLATE) $(MAKEFILE_DEP) | $(DST_DIR)
 	sed -r 's|##BUILD_NAME##|$(BUILD_NAME)|' $< > $@
@@ -323,12 +342,12 @@ $(DIST_FONTS): fonts
 ALL_TARGETS += dist
 GOAL_TARGETS += dist
 
-# Only drag in WINE_OUT if they need to be built at all, otherwise this doesn't imply a rebuild of wine.  If wine is in
-# the explicit targets, specify that this should occur after.
-dist: $(DIST_TARGETS) | $(WINE_OUT) $(filter $(MAKECMDGOALS),wine64 wine32 wine) $(DST_DIR)
+dist: $(DIST_TARGETS) ffmpeg wine vrclient lsteamclient steam dxvk | $(DST_DIR)
+	echo `date '+%s'` `GIT_DIR=$(abspath $(SRCDIR)/.git) git describe --tags` > $(DIST_VERSION)
+	cp $(DIST_VERSION) $(DST_BASE)/
 	rm -rf $(abspath $(DIST_PREFIX)) && \
-	WINEPREFIX=$(abspath $(DIST_PREFIX)) $(WINE_OUT_BIN) wineboot && \
-		WINEPREFIX=$(abspath $(DIST_PREFIX)) $(WINE_OUT_SERVER) -w && \
+	WINEPREFIX=$(abspath $(DIST_PREFIX)) $(STEAM_RUNTIME_RUNSH) $(WINE_OUT_BIN) wineboot && \
+		WINEPREFIX=$(abspath $(DIST_PREFIX)) $(STEAM_RUNTIME_RUNSH) $(WINE_OUT_SERVER) -w && \
 		ln -s $(FONTLINKPATH)/LiberationSans-Regular.ttf $(abspath $(DIST_PREFIX))/drive_c/windows/Fonts/arial.ttf && \
 		ln -s $(FONTLINKPATH)/LiberationSans-Bold.ttf $(abspath $(DIST_PREFIX))/drive_c/windows/Fonts/arialbd.ttf && \
 		ln -s $(FONTLINKPATH)/LiberationSerif-Regular.ttf $(abspath $(DIST_PREFIX))/drive_c/windows/Fonts/times.ttf && \
@@ -350,67 +369,17 @@ install: dist | $(filter-out dist deploy install,$(MAKECMDGOALS))
 	@echo "Installed Proton to "$(STEAM_DIR)/compatibilitytools.d/$(BUILD_NAME)
 	@echo "You may need to restart Steam to select this tool"
 
+.PHONY: module32 module64 module
 
-##
-## OpenAL
-##
+module32: SHELL = $(CONTAINER_SHELL32)
+module32:
+	cd $(WINE_OBJ32)/dlls/$(module) && make
 
-## Create & configure object directory for openal
+module64: SHELL = $(CONTAINER_SHELL64)
+module64:
+	cd $(WINE_OBJ64)/dlls/$(module) && make
 
-OPENAL_CONFIGURE_FILES32 := $(OPENAL_OBJ32)/Makefile
-OPENAL_CONFIGURE_FILES64 := $(OPENAL_OBJ64)/Makefile
-
-# 64bit-configure
-$(OPENAL_CONFIGURE_FILES64): SHELL = $(CONTAINER_SHELL64)
-$(OPENAL_CONFIGURE_FILES64): $(OPENAL)/CMakeLists.txt $(MAKEFILE_DEP) $(CMAKE_BIN64) | $(OPENAL_OBJ64)
-	cd $(dir $@) && \
-		../$(CMAKE_BIN64) $(abspath $(OPENAL)) -DCMAKE_INSTALL_PREFIX="$(abspath $(TOOLS_DIR64))" \
-			-DALSOFT_EXAMPLES=Off -DALSOFT_UTILS=Off -DALSOFT_TESTS=Off \
-			-DCMAKE_INSTALL_LIBDIR="lib"
-
-# 32-bit configure
-$(OPENAL_CONFIGURE_FILES32): SHELL = $(CONTAINER_SHELL32)
-$(OPENAL_CONFIGURE_FILES32): $(OPENAL)/CMakeLists.txt $(MAKEFILE_DEP) $(CMAKE_BIN32) | $(OPENAL_OBJ32)
-	cd $(dir $@) && \
-		../$(CMAKE_BIN32) $(abspath $(OPENAL)) \
-			-DCMAKE_INSTALL_PREFIX="$(abspath $(TOOLS_DIR32))" \
-			-DALSOFT_EXAMPLES=Off -DALSOFT_UTILS=Off -DALSOFT_TESTS=Off \
-			-DCMAKE_INSTALL_LIBDIR="lib" \
-			-DCMAKE_C_FLAGS="-m32" -DCMAKE_CXX_FLAGS="-m32"
-
-## OpenAL goals
-OPENAL_TARGETS = openal openal_configure openal32 openal64 openal_configure32 openal_configure64
-
-ALL_TARGETS += $(OPENAL_TARGETS)
-GOAL_TARGETS_LIBS += openal
-
-.PHONY: $(OPENAL_TARGETS)
-
-openal_configure: $(OPENAL_CONFIGURE_FILES32) $(OPENAL_CONFIGURE_FILES64)
-
-openal_configure64: $(OPENAL_CONFIGURE_FILES64)
-
-openal_configure32: $(OPENAL_CONFIGURE_FILES32)
-
-openal: openal32 openal64
-
-openal64: SHELL = $(CONTAINER_SHELL64)
-openal64: $(OPENAL_CONFIGURE_FILES64)
-	+$(MAKE) -C $(OPENAL_OBJ64) VERBOSE=1
-	+$(MAKE) -C $(OPENAL_OBJ64) install VERBOSE=1
-	mkdir -p $(DST_DIR)/lib64
-	cp -L $(TOOLS_DIR64)/lib/libopenal* $(DST_DIR)/lib64/
-	[ x"$(STRIP)" = x ] || $(STRIP) $(DST_DIR)/lib64/libopenal.so
-
-
-openal32: SHELL = $(CONTAINER_SHELL32)
-openal32: $(OPENAL_CONFIGURE_FILES32)
-	+$(MAKE) -C $(OPENAL_OBJ32) VERBOSE=1
-	+$(MAKE) -C $(OPENAL_OBJ32) install VERBOSE=1
-	mkdir -p $(DST_DIR)/lib
-	cp -L $(TOOLS_DIR32)/lib/libopenal* $(DST_DIR)/lib/
-	[ x"$(STRIP)" = x ] || $(STRIP) $(DST_DIR)/lib/libopenal.so
-
+module: module32 module64
 
 ##
 ## ffmpeg
@@ -511,14 +480,14 @@ ffmpeg64: $(FFMPEG_CONFIGURE_FILES64)
 	+$(MAKE) -C $(FFMPEG_OBJ64)
 	+$(MAKE) -C $(FFMPEG_OBJ64) install
 	mkdir -pv $(DST_DIR)/lib64
-	cp -L $(TOOLS_DIR64)/lib/{libavcodec,libavutil,libswresample}* $(DST_DIR)/lib64
+	cp -a $(TOOLS_DIR64)/lib/{libavcodec,libavutil,libswresample}* $(DST_DIR)/lib64
 
 ffmpeg32: SHELL = $(CONTAINER_SHELL32)
 ffmpeg32: $(FFMPEG_CONFIGURE_FILES32)
 	+$(MAKE) -C $(FFMPEG_OBJ32)
 	+$(MAKE) -C $(FFMPEG_OBJ32) install
 	mkdir -pv $(DST_DIR)/lib
-	cp -L $(TOOLS_DIR32)/lib/{libavcodec,libavutil,libswresample}* $(DST_DIR)/lib
+	cp -a $(TOOLS_DIR32)/lib/{libavcodec,libavutil,libswresample}* $(DST_DIR)/lib
 
 endif # ifeq ($(WITH_FFMPEG),1)
 
@@ -568,7 +537,7 @@ faudio32: $(FAUDIO_CONFIGURE_FILES32)
 	+$(MAKE) -C $(FAUDIO_OBJ32) VERBOSE=1
 	+$(MAKE) -C $(FAUDIO_OBJ32) install VERBOSE=1
 	mkdir -p $(DST_DIR)/lib
-	cp -L $(TOOLS_DIR32)/lib/libFAudio* $(DST_DIR)/lib/
+	cp -a $(TOOLS_DIR32)/lib/libFAudio* $(DST_DIR)/lib/
 	[ x"$(STRIP)" = x ] || $(STRIP) $(DST_DIR)/lib/libFAudio.so
 
 faudio64: SHELL = $(CONTAINER_SHELL64)
@@ -576,7 +545,7 @@ faudio64: $(FAUDIO_CONFIGURE_FILES64)
 	+$(MAKE) -C $(FAUDIO_OBJ64) VERBOSE=1
 	+$(MAKE) -C $(FAUDIO_OBJ64) install VERBOSE=1
 	mkdir -p $(DST_DIR)/lib64
-	cp -L $(TOOLS_DIR64)/lib/libFAudio* $(DST_DIR)/lib64/
+	cp -a $(TOOLS_DIR64)/lib/libFAudio* $(DST_DIR)/lib64/
 	[ x"$(STRIP)" = x ] || $(STRIP) $(DST_DIR)/lib64/libFAudio.so
 
 ##
@@ -673,6 +642,56 @@ lsteamclient32: $(LSTEAMCLIENT_CONFIGURE_FILES32) | $(WINE_BUILDTOOLS32) $(filte
 	mkdir -pv $(DST_DIR)/lib/wine/
 	cp -a $(LSTEAMCLIENT_OBJ32)/lsteamclient.dll.so $(DST_DIR)/lib/wine/
 
+## steam.exe
+
+$(STEAMEXE_SYN)/.created: $(STEAMEXE_SRC) $(MAKEFILE_DEP)
+	rm -rf $(STEAMEXE_SYN)
+	mkdir -p $(STEAMEXE_SYN)/
+	cd $(STEAMEXE_SYN)/ && ln -sfv ../../$(STEAMEXE_SRC)/* .
+	touch $@
+
+$(STEAMEXE_SYN): $(STEAMEXE_SYN)/.created
+
+STEAMEXE_CONFIGURE_FILES := $(STEAMEXE_OBJ)/Makefile
+
+# 32-bit configure
+$(STEAMEXE_CONFIGURE_FILES): SHELL = $(CONTAINER_SHELL32)
+$(STEAMEXE_CONFIGURE_FILES): $(STEAMEXE_SYN) $(MAKEFILE_DEP) | $(STEAMEXE_OBJ) $(WINEMAKER)
+	cd $(dir $@) && \
+		$(WINEMAKER) --nosource-fix --nolower-include --nodlls --nomsvcrt --wine32 \
+			-I"../$(TOOLS_DIR32)"/include/ \
+			-I"../$(TOOLS_DIR32)"/include/wine/ \
+			-I"../$(TOOLS_DIR32)"/include/wine/windows/ \
+			-I"../$(SRCDIR)"/lsteamclient/steamworks_sdk_142/ \
+			-L"../$(TOOLS_DIR32)"/lib/ \
+			-L"../$(TOOLS_DIR32)"/lib/wine/ \
+			-L"../$(SRCDIR)"/steam_helper/ \
+			--guiexe ../$(STEAMEXE_SYN) && \
+		cp ../$(STEAMEXE_SYN)/Makefile . && \
+		echo >> ./Makefile 'SRCDIR := ../$(STEAMEXE_SYN)' && \
+		echo >> ./Makefile 'vpath % $$(SRCDIR)' && \
+		echo >> ./Makefile 'steam_exe_LDFLAGS := -m32 -lsteam_api $$(steam_exe_LDFLAGS)'
+
+## steam goals
+STEAMEXE_TARGETS = steam steam_configure
+
+ALL_TARGETS += $(STEAMEXE_TARGETS)
+GOAL_TARGETS_LIBS += steam
+
+.PHONY: $(STEAMEXE_TARGETS)
+
+steam_configure: $(STEAMEXE_CONFIGURE_FILES)
+
+steam: SHELL = $(CONTAINER_SHELL32)
+steam: $(STEAMEXE_CONFIGURE_FILES) | $(WINE_BUILDTOOLS32) $(filter $(MAKECMDGOALS),wine64 wine32 wine)
+	+env PATH="$(abspath $(TOOLS_DIR32))/bin:$(PATH)" LDFLAGS="-m32" CXXFLAGS="-m32 -Wno-attributes $(COMMON_FLAGS) -g" CFLAGS="-m32 $(COMMON_FLAGS) -g" \
+		$(MAKE) -C $(STEAMEXE_OBJ)
+	[ x"$(STRIP)" = x ] || $(STRIP) $(STEAMEXE_OBJ)/steam.exe.so
+	mkdir -pv $(DST_DIR)/lib/wine/
+	cp -a $(STEAMEXE_OBJ)/steam.exe.so $(DST_DIR)/lib/wine/
+	cp $(STEAMEXE_SRC)/libsteam_api.so $(DST_DIR)/lib/
+
+
 ##
 ## wine
 ##
@@ -700,7 +719,7 @@ WINE32_MAKE_ARGS := \
 
 # 64bit-configure
 $(WINE_CONFIGURE_FILES64): SHELL = $(CONTAINER_SHELL64)
-$(WINE_CONFIGURE_FILES64): $(MAKEFILE_DEP) | $(WINE_OBJ64)
+$(WINE_CONFIGURE_FILES64): $(MAKEFILE_DEP) | faudio64 $(WINE_OBJ64)
 	cd $(dir $@) && \
 		STRIP=$(STRIP_QUOTED) \
 		CFLAGS=-I$(abspath $(TOOLS_DIR64))"/include -g $(COMMON_FLAGS)" \
@@ -715,7 +734,7 @@ $(WINE_CONFIGURE_FILES64): $(MAKEFILE_DEP) | $(WINE_OBJ64)
 
 # 32-bit configure
 $(WINE_CONFIGURE_FILES32): SHELL = $(CONTAINER_SHELL32)
-$(WINE_CONFIGURE_FILES32): $(MAKEFILE_DEP) | $(WINE_OBJ32) $(WINE_ORDER_DEPS32)
+$(WINE_CONFIGURE_FILES32): $(MAKEFILE_DEP) | faudio32 $(WINE_OBJ32)
 	cd $(dir $@) && \
 		STRIP=$(STRIP_QUOTED) \
 		CFLAGS=-I$(abspath $(TOOLS_DIR32))"/include -g $(COMMON_FLAGS)" \
@@ -868,7 +887,7 @@ vrclient32: $(VRCLIENT_CONFIGURE_FILES32) | $(WINE_BUILDTOOLS32) $(filter $(MAKE
 		cp -a ../$(VRCLIENT_OBJ32)/vrclient.dll.fake ../$(DST_DIR)/lib/wine/fakedlls/vrclient.dll
 
 ##
-## cmake -- necessary for openal, not part of steam runtime
+## cmake -- necessary for FAudio, not part of steam runtime
 ##
 
 # TODO Don't bother with this in native mode

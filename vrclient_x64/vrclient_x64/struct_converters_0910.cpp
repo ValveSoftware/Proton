@@ -6,6 +6,7 @@
 using namespace vr;
 extern "C" {
 #include "struct_converters.h"
+#pragma pack(push, 8)
 struct winRenderModel_TextureMap_t_0910 {
     uint16_t unWidth;
     uint16_t unHeight;
@@ -13,6 +14,7 @@ struct winRenderModel_TextureMap_t_0910 {
 
     RenderModel_TextureMap_t *linux_side;
 }  __attribute__ ((ms_struct));
+#pragma pack(pop)
 
 struct winRenderModel_TextureMap_t_0910 *struct_RenderModel_TextureMap_t_0910_wrap(void *l)
 {
@@ -32,6 +34,7 @@ struct RenderModel_TextureMap_t *struct_RenderModel_TextureMap_t_0910_unwrap(win
     return ret;
 }
 
+#pragma pack(push, 8)
 struct winRenderModel_t_0910 {
     uint64_t ulInternalHandle;
     const vr::RenderModel_Vertex_t * rVertexData;
@@ -42,6 +45,7 @@ struct winRenderModel_t_0910 {
 
     RenderModel_t *linux_side;
 }  __attribute__ ((ms_struct));
+#pragma pack(pop)
 
 struct winRenderModel_t_0910 *struct_RenderModel_t_0910_wrap(void *l)
 {
@@ -64,12 +68,14 @@ struct RenderModel_t *struct_RenderModel_t_0910_unwrap(winRenderModel_t_0910 *w)
     return ret;
 }
 
+#pragma pack(push, 8)
 struct winVREvent_t_0910 {
     vr::EVREventType eventType;
     vr::TrackedDeviceIndex_t trackedDeviceIndex;
     vr::VREvent_Data_t data;
     float eventAgeSeconds;
 }  __attribute__ ((ms_struct));
+#pragma pack(pop)
 
 void struct_VREvent_t_0910_lin_to_win(void *l, void *w)
 {
@@ -81,12 +87,14 @@ void struct_VREvent_t_0910_lin_to_win(void *l, void *w)
     win->eventAgeSeconds = lin->eventAgeSeconds;
 }
 
+#pragma pack(push, 8)
 struct winVRControllerState001_t_0910 {
     uint32_t unPacketNum;
     uint64_t ulButtonPressed;
     uint64_t ulButtonTouched;
     vr::VRControllerAxis_t rAxis[5];
 }  __attribute__ ((ms_struct));
+#pragma pack(pop)
 
 void struct_VRControllerState001_t_0910_lin_to_win(void *l, void *w)
 {

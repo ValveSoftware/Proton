@@ -1,6 +1,3 @@
-#ifdef __cplusplus
-extern "C" {
-#endif
 extern void cppISteamGameServer_SteamGameServer008_LogOn(void *);
 extern void cppISteamGameServer_SteamGameServer008_LogOff(void *);
 extern bool cppISteamGameServer_SteamGameServer008_BLoggedOn(void *);
@@ -18,6 +15,3 @@ extern bool cppISteamGameServer_SteamGameServer008_BGetUserAchievementStatus(voi
 extern void cppISteamGameServer_SteamGameServer008_GetGameplayStats(void *);
 extern bool cppISteamGameServer_SteamGameServer008_RequestUserGroupStatus(void *, CSteamID, CSteamID);
 extern uint32 cppISteamGameServer_SteamGameServer008_GetPublicIP(void *);
-#ifdef __cplusplus
-}
-#endif

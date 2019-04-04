@@ -1,6 +1,3 @@
-#ifdef __cplusplus
-extern "C" {
-#endif
 extern bool cppISteamApps_STEAMAPPS_INTERFACE_VERSION004_BIsSubscribed(void *);
 extern bool cppISteamApps_STEAMAPPS_INTERFACE_VERSION004_BIsLowViolence(void *);
 extern bool cppISteamApps_STEAMAPPS_INTERFACE_VERSION004_BIsCybercafe(void *);
@@ -15,6 +12,3 @@ extern int cppISteamApps_STEAMAPPS_INTERFACE_VERSION004_GetDLCCount(void *);
 extern bool cppISteamApps_STEAMAPPS_INTERFACE_VERSION004_BGetDLCDataByIndex(void *, int, AppId_t *, bool *, char *, int);
 extern void cppISteamApps_STEAMAPPS_INTERFACE_VERSION004_InstallDLC(void *, AppId_t);
 extern void cppISteamApps_STEAMAPPS_INTERFACE_VERSION004_UninstallDLC(void *, AppId_t);
-#ifdef __cplusplus
-}
-#endif

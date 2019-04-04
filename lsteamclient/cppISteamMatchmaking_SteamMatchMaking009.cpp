@@ -1,11 +1,12 @@
 #include "steam_defs.h"
-#include "steamworks_sdk_142/steam_api.h"
+#include "steamworks_sdk_143/steam_api.h"
 #include "steamclient_private.h"
-#include "cppISteamMatchmaking_SteamMatchMaking009.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include "struct_converters_142.h"
+#define SDKVER_143
+#include "struct_converters.h"
+#include "cppISteamMatchmaking_SteamMatchMaking009.h"
 int cppISteamMatchmaking_SteamMatchMaking009_GetFavoriteGameCount(void *linux_side)
 {
     return ((ISteamMatchmaking*)linux_side)->GetFavoriteGameCount();

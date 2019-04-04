@@ -24,7 +24,7 @@ Vagrant.configure(2) do |config|
     apt-get install -y apt-transport-https ca-certificates curl gnupg2 software-properties-common
 
     #add winehq repo
-    curl -fsSL https://dl.winehq.org/wine-builds/Release.key | apt-key add -
+    curl -fsSL https://dl.winehq.org/wine-builds/winehq.key | apt-key add -
     echo 'deb http://dl.winehq.org/wine-builds/debian stretch main' > /etc/apt/sources.list.d/winehq.list
 
     #add docker repo
@@ -36,7 +36,7 @@ Vagrant.configure(2) do |config|
 
     #install host build-time dependencies
     apt-get update
-    apt-get install -y gpgv2 gnupg2 g++ g++-6-multilib mingw-w64 git docker-ce fontforge-nox
+    apt-get install -y gpgv2 gnupg2 g++ g++-6-multilib mingw-w64 git docker-ce fontforge-nox python-debian
     apt-get -y -t stretch-backports install meson
 
     #winehq-devel is installed to pull in dependencies to run Wine

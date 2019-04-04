@@ -1,6 +1,3 @@
-#ifdef __cplusplus
-extern "C" {
-#endif
 extern uint32 cppISteamUtils_SteamUtils004_GetSecondsSinceAppActive(void *);
 extern uint32 cppISteamUtils_SteamUtils004_GetSecondsSinceComputerActive(void *);
 extern EUniverse cppISteamUtils_SteamUtils004_GetConnectedUniverse(void *);
@@ -19,6 +16,3 @@ extern void cppISteamUtils_SteamUtils004_RunFrame(void *);
 extern uint32 cppISteamUtils_SteamUtils004_GetIPCCallCount(void *);
 extern void cppISteamUtils_SteamUtils004_SetWarningMessageHook(void *, SteamAPIWarningMessageHook_t);
 extern bool cppISteamUtils_SteamUtils004_IsOverlayEnabled(void *);
-#ifdef __cplusplus
-}
-#endif

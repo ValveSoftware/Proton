@@ -11,6 +11,8 @@
 
 #include "steamclient_private.h"
 
+#include "struct_converters.h"
+
 WINE_DEFAULT_DEBUG_CHANNEL(steamclient);
 
 #include "cppISteamUtils_SteamUtils009.h"
@@ -225,7 +227,7 @@ bool __thiscall winISteamUtils_SteamUtils009_IsVRHeadsetStreamingEnabled(winISte
     return cppISteamUtils_SteamUtils009_IsVRHeadsetStreamingEnabled(_this->linux_side);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamUtils_SteamUtils009_SetVRHeadsetStreamingEnabled, 5)
+DEFINE_THISCALL_WRAPPER(winISteamUtils_SteamUtils009_SetVRHeadsetStreamingEnabled, 8)
 void __thiscall winISteamUtils_SteamUtils009_SetVRHeadsetStreamingEnabled(winISteamUtils_SteamUtils009 *_this, bool bEnabled)
 {
     TRACE("%p\n", _this);

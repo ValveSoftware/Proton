@@ -1,11 +1,12 @@
 #include "steam_defs.h"
-#include "steamworks_sdk_142/steam_api.h"
+#include "steamworks_sdk_143/steam_api.h"
 #include "steamclient_private.h"
-#include "cppISteamApps_STEAMAPPS_INTERFACE_VERSION008.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include "struct_converters_142.h"
+#define SDKVER_143
+#include "struct_converters.h"
+#include "cppISteamApps_STEAMAPPS_INTERFACE_VERSION008.h"
 bool cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsSubscribed(void *linux_side)
 {
     return ((ISteamApps*)linux_side)->BIsSubscribed();
@@ -134,6 +135,16 @@ void cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_RequestAllProofOfPurchaseKeys(
 SteamAPICall_t cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetFileDetails(void *linux_side, const char * pszFileName)
 {
     return ((ISteamApps*)linux_side)->GetFileDetails((const char *)pszFileName);
+}
+
+int cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetLaunchCommandLine(void *linux_side, char * pszCommandLine, int cubCommandLine)
+{
+    return ((ISteamApps*)linux_side)->GetLaunchCommandLine((char *)pszCommandLine, (int)cubCommandLine);
+}
+
+bool cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsSubscribedFromFamilySharing(void *linux_side)
+{
+    return ((ISteamApps*)linux_side)->BIsSubscribedFromFamilySharing();
 }
 
 #ifdef __cplusplus

@@ -11,6 +11,8 @@
 
 #include "steamclient_private.h"
 
+#include "struct_converters.h"
+
 WINE_DEFAULT_DEBUG_CHANNEL(steamclient);
 
 #include "cppISteamApps_STEAMAPPS_INTERFACE_VERSION008.h"
@@ -132,7 +134,7 @@ bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetCurrentBetaName(
     return cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetCurrentBetaName(_this->linux_side, pchName, cchNameBufferSize);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamApps_STEAMAPPS_INTERFACE_VERSION008_MarkContentCorrupt, 5)
+DEFINE_THISCALL_WRAPPER(winISteamApps_STEAMAPPS_INTERFACE_VERSION008_MarkContentCorrupt, 8)
 bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_MarkContentCorrupt(winISteamApps_STEAMAPPS_INTERFACE_VERSION008 *_this, bool bMissingFilesOnly)
 {
     TRACE("%p\n", _this);
@@ -209,6 +211,20 @@ SteamAPICall_t __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetFileDe
     path_result = cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetFileDetails(_this->linux_side, pszFileName ? lin_pszFileName : NULL);
 }
 
+DEFINE_THISCALL_WRAPPER(winISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetLaunchCommandLine, 12)
+int __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetLaunchCommandLine(winISteamApps_STEAMAPPS_INTERFACE_VERSION008 *_this, char * pszCommandLine, int cubCommandLine)
+{
+    TRACE("%p\n", _this);
+    return cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetLaunchCommandLine(_this->linux_side, pszCommandLine, cubCommandLine);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsSubscribedFromFamilySharing, 4)
+bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsSubscribedFromFamilySharing(winISteamApps_STEAMAPPS_INTERFACE_VERSION008 *_this)
+{
+    TRACE("%p\n", _this);
+    return cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsSubscribedFromFamilySharing(_this->linux_side);
+}
+
 extern vtable_ptr winISteamApps_STEAMAPPS_INTERFACE_VERSION008_vtable;
 
 #ifndef __GNUC__
@@ -241,6 +257,8 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetAppBuildId)
         VTABLE_ADD_FUNC(winISteamApps_STEAMAPPS_INTERFACE_VERSION008_RequestAllProofOfPurchaseKeys)
         VTABLE_ADD_FUNC(winISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetFileDetails)
+        VTABLE_ADD_FUNC(winISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetLaunchCommandLine)
+        VTABLE_ADD_FUNC(winISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsSubscribedFromFamilySharing)
     );
 #ifndef __GNUC__
 }
@@ -374,7 +392,7 @@ bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetCurrentBetaName(
     return cppISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetCurrentBetaName(_this->linux_side, pchName, cchNameBufferSize);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamApps_STEAMAPPS_INTERFACE_VERSION007_MarkContentCorrupt, 5)
+DEFINE_THISCALL_WRAPPER(winISteamApps_STEAMAPPS_INTERFACE_VERSION007_MarkContentCorrupt, 8)
 bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION007_MarkContentCorrupt(winISteamApps_STEAMAPPS_INTERFACE_VERSION007 *_this, bool bMissingFilesOnly)
 {
     TRACE("%p\n", _this);
@@ -597,7 +615,7 @@ bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION006_GetCurrentBetaName(
     return cppISteamApps_STEAMAPPS_INTERFACE_VERSION006_GetCurrentBetaName(_this->linux_side, pchName, cchNameBufferSize);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamApps_STEAMAPPS_INTERFACE_VERSION006_MarkContentCorrupt, 5)
+DEFINE_THISCALL_WRAPPER(winISteamApps_STEAMAPPS_INTERFACE_VERSION006_MarkContentCorrupt, 8)
 bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION006_MarkContentCorrupt(winISteamApps_STEAMAPPS_INTERFACE_VERSION006 *_this, bool bMissingFilesOnly)
 {
     TRACE("%p\n", _this);
@@ -804,7 +822,7 @@ bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION005_GetCurrentBetaName(
     return cppISteamApps_STEAMAPPS_INTERFACE_VERSION005_GetCurrentBetaName(_this->linux_side, pchName, cchNameBufferSize);
 }
 
-DEFINE_THISCALL_WRAPPER(winISteamApps_STEAMAPPS_INTERFACE_VERSION005_MarkContentCorrupt, 5)
+DEFINE_THISCALL_WRAPPER(winISteamApps_STEAMAPPS_INTERFACE_VERSION005_MarkContentCorrupt, 8)
 bool __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION005_MarkContentCorrupt(winISteamApps_STEAMAPPS_INTERFACE_VERSION005 *_this, bool bMissingFilesOnly)
 {
     TRACE("%p\n", _this);

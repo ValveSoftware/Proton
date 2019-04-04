@@ -1,6 +1,3 @@
-#ifdef __cplusplus
-extern "C" {
-#endif
 extern bool cppISteamNetworking_SteamNetworking003_SendP2PPacket(void *, CSteamID, const void *, uint32, EP2PSend);
 extern bool cppISteamNetworking_SteamNetworking003_IsP2PPacketAvailable(void *, uint32 *);
 extern bool cppISteamNetworking_SteamNetworking003_ReadP2PPacket(void *, void *, uint32, uint32 *, CSteamID *);
@@ -21,6 +18,3 @@ extern bool cppISteamNetworking_SteamNetworking003_GetSocketInfo(void *, SNetSoc
 extern bool cppISteamNetworking_SteamNetworking003_GetListenSocketInfo(void *, SNetListenSocket_t, uint32 *, uint16 *);
 extern ESNetSocketConnectionType cppISteamNetworking_SteamNetworking003_GetSocketConnectionType(void *, SNetSocket_t);
 extern int cppISteamNetworking_SteamNetworking003_GetMaxPacketSize(void *, SNetSocket_t);
-#ifdef __cplusplus
-}
-#endif

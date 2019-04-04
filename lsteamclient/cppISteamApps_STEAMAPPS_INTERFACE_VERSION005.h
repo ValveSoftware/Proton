@@ -1,6 +1,3 @@
-#ifdef __cplusplus
-extern "C" {
-#endif
 extern bool cppISteamApps_STEAMAPPS_INTERFACE_VERSION005_BIsSubscribed(void *);
 extern bool cppISteamApps_STEAMAPPS_INTERFACE_VERSION005_BIsLowViolence(void *);
 extern bool cppISteamApps_STEAMAPPS_INTERFACE_VERSION005_BIsCybercafe(void *);
@@ -21,6 +18,3 @@ extern bool cppISteamApps_STEAMAPPS_INTERFACE_VERSION005_MarkContentCorrupt(void
 extern uint32 cppISteamApps_STEAMAPPS_INTERFACE_VERSION005_GetInstalledDepots(void *, DepotId_t *, uint32);
 extern uint32 cppISteamApps_STEAMAPPS_INTERFACE_VERSION005_GetAppInstallDir(void *, AppId_t, char *, uint32);
 extern bool cppISteamApps_STEAMAPPS_INTERFACE_VERSION005_BIsAppInstalled(void *, AppId_t);
-#ifdef __cplusplus
-}
-#endif

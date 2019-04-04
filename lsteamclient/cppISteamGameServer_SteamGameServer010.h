@@ -1,6 +1,3 @@
-#ifdef __cplusplus
-extern "C" {
-#endif
 extern void cppISteamGameServer_SteamGameServer010_LogOn(void *);
 extern void cppISteamGameServer_SteamGameServer010_LogOff(void *);
 extern bool cppISteamGameServer_SteamGameServer010_BLoggedOn(void *);
@@ -24,6 +21,3 @@ extern HAuthTicket cppISteamGameServer_SteamGameServer010_GetAuthSessionTicket(v
 extern EBeginAuthSessionResult cppISteamGameServer_SteamGameServer010_BeginAuthSession(void *, const void *, int, CSteamID);
 extern void cppISteamGameServer_SteamGameServer010_EndAuthSession(void *, CSteamID);
 extern void cppISteamGameServer_SteamGameServer010_CancelAuthTicket(void *, HAuthTicket);
-#ifdef __cplusplus
-}
-#endif

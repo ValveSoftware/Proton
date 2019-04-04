@@ -1,6 +1,7 @@
 #include <stdint.h>
 #include <linux/limits.h>
 typedef uint32_t EHTMLMouseButton, EHTMLKeyModifiers;
+#define nullptr (void*)0
 
 #ifndef __cplusplus
 #ifndef bool
@@ -63,7 +64,16 @@ typedef uint32_t EUserUGCList,
         ESteamControllerPad,
         EControllerActionOrigin,
         EMatchMakingType,
-        AudioPlayback_Status
+        AudioPlayback_Status,
+        ESteamUserStatType,
+        EConfigSubTree,
+        ELogonState,
+        EXboxOrigin,
+        EInputSourceMode,
+        EActivateGameOverlayToWebPageMode,
+        ESteamPartyBeaconLocationData,
+        ESteamPartyBeaconLocationType,
+        EInputActionOrigin
 ;
 
 /* these are PODs, so just copy the data. hopefully the
@@ -74,6 +84,50 @@ typedef struct RemoteStorageUpdatePublishedFileRequest_t { unsigned char a[40]; 
 typedef struct ControllerAnalogActionData_t { unsigned char a[13]; } ControllerAnalogActionData_t;
 typedef struct ControllerDigitalActionData_t { unsigned char a[2]; } ControllerDigitalActionData_t;
 typedef struct ControllerMotionData_t { unsigned char a[40]; } ControllerMotionData_t;
+
+#pragma pack( push, 1 )
+
+typedef struct InputAnalogActionData_t
+{
+	// Type of data coming from this action, this will match what got specified in the action set
+	EInputSourceMode eMode;
+	
+	// The current state of this action; will be delta updates for mouse actions
+	float x, y;
+	
+	// Whether or not this action is currently available to be bound in the active action set
+	bool bActive;
+} InputAnalogActionData_t;
+
+typedef struct InputDigitalActionData_t
+{
+	// The current state of this action; will be true if currently pressed
+	bool bState;
+	
+	// Whether or not this action is currently available to be bound in the active action set
+	bool bActive;
+} InputDigitalActionData_t;
+
+typedef struct InputMotionData_t
+{
+	// Sensor-fused absolute rotation; will drift in heading
+	float rotQuatX;
+	float rotQuatY;
+	float rotQuatZ;
+	float rotQuatW;
+	
+	// Positional acceleration
+	float posAccelX;
+	float posAccelY;
+	float posAccelZ;
+
+	// Angular velocity
+	float rotVelX;
+	float rotVelY;
+	float rotVelZ;
+} InputMotionData_t;
+
+#pragma pack( pop )
 
 /* never dereferenced */
 typedef struct FriendGameInfo_t FriendGameInfo_t;
@@ -89,6 +143,7 @@ typedef struct LeaderboardEntry_t LeaderboardEntry_t;
 typedef struct SteamUGCDetails_t SteamUGCDetails_t;
 typedef struct gameserveritem_t gameserveritem_t;
 typedef struct MatchMakingKeyValuePair_t MatchMakingKeyValuePair_t;
+typedef struct SteamPartyBeaconLocation_t SteamPartyBeaconLocation_t;
 
 /* FIXME: we don't care about fn pointer types, just pass 'em through */
 typedef void *SteamAPI_CheckCallbackRegistered_t;
@@ -151,6 +206,11 @@ typedef uint32 HHTMLBrowser;
 typedef int32 SteamInventoryResult_t, SteamItemDef_t;
 typedef uint64 SteamItemInstanceID_t;
 typedef uint64 SteamInventoryUpdateHandle_t;
+typedef uint64 PartyBeaconID_t;
+typedef uint64 InputHandle_t;
+typedef uint64 InputActionSetHandle_t;
+typedef uint64 InputDigitalActionHandle_t;
+typedef uint64 InputAnalogActionHandle_t;
 
 #pragma pack( push, 4 )
 typedef struct CallbackMsg_t

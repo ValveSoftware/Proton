@@ -1,6 +1,3 @@
-#ifdef __cplusplus
-extern "C" {
-#endif
 extern HTTPRequestHandle cppISteamHTTP_STEAMHTTP_INTERFACE_VERSION001_CreateHTTPRequest(void *, EHTTPMethod, const char *);
 extern bool cppISteamHTTP_STEAMHTTP_INTERFACE_VERSION001_SetHTTPRequestContextValue(void *, HTTPRequestHandle, uint64);
 extern bool cppISteamHTTP_STEAMHTTP_INTERFACE_VERSION001_SetHTTPRequestNetworkActivityTimeout(void *, HTTPRequestHandle, uint32);
@@ -16,6 +13,3 @@ extern bool cppISteamHTTP_STEAMHTTP_INTERFACE_VERSION001_GetHTTPResponseBodyData
 extern bool cppISteamHTTP_STEAMHTTP_INTERFACE_VERSION001_ReleaseHTTPRequest(void *, HTTPRequestHandle);
 extern bool cppISteamHTTP_STEAMHTTP_INTERFACE_VERSION001_GetHTTPDownloadProgressPct(void *, HTTPRequestHandle, float *);
 extern bool cppISteamHTTP_STEAMHTTP_INTERFACE_VERSION001_SetHTTPRequestRawPostBody(void *, HTTPRequestHandle, const char *, uint8 *, uint32);
-#ifdef __cplusplus
-}
-#endif
