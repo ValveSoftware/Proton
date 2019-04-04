@@ -116,7 +116,27 @@ static void setup_steam_registry(void)
     SteamAPI_Shutdown();
 }
 
-static int run_process(void)
+static WCHAR *find_quote(WCHAR *str)
+{
+    WCHAR *end = strchrW(str, '"'), *ch;
+    int odd;
+    while (end)
+    {
+        odd = 0;
+        ch = end - 1;
+        while (ch >= str && *ch == '\\')
+        {
+            odd = !odd;
+            --ch;
+        }
+        if (!odd)
+            return end;
+        end = strchrW(end + 1, '"');
+    }
+    return NULL;
+}
+
+static HANDLE run_process(void)
 {
     WCHAR *cmdline = GetCommandLineW();
     STARTUPINFOW si = { sizeof(si) };
@@ -125,7 +145,7 @@ static int run_process(void)
     /* skip argv[0] */
     if (*cmdline == '"')
     {
-        cmdline = strchrW(cmdline + 1, '"');
+        cmdline = find_quote(cmdline + 1);
         if (cmdline) cmdline++;
     }
     else
@@ -135,38 +155,126 @@ static int run_process(void)
     if (!cmdline)
     {
         WINE_ERR("Invalid command\n");
-        return 1;
+        return INVALID_HANDLE_VALUE;
     }
     while (*cmdline == ' ') cmdline++;
 
+    /* convert absolute unix path to dos */
+    if (cmdline[0] == '/' ||
+            (cmdline[0] == '"' && cmdline[1] == '/'))
+    {
+        WCHAR *scratchW;
+        char *scratchA;
+        WCHAR *start, *end, *dos, *remainder, *new_cmdline;
+        size_t argv0_len;
+        int r;
+
+        static const WCHAR dquoteW[] = {'"',0};
+
+        WINE_TRACE("Converting unix command: %s\n", wine_dbgstr_w(cmdline));
+
+        if (cmdline[0] == '"')
+        {
+            start = cmdline + 1;
+            end = find_quote(start);
+            if (!end)
+            {
+                WINE_ERR("Unmatched quote? %s\n", wine_dbgstr_w(cmdline));
+                goto run;
+            }
+            remainder = end + 1;
+        }
+        else
+        {
+            start = cmdline;
+            end = strchrW(start, ' ');
+            if (!end)
+                end = strchrW(start, '\0');
+            remainder = end;
+        }
+
+        argv0_len = end - start;
+
+        scratchW = (WCHAR *)HeapAlloc(GetProcessHeap(), 0, (argv0_len + 1) * sizeof(WCHAR));
+        memcpy(scratchW, start, argv0_len * sizeof(WCHAR));
+        scratchW[argv0_len] = '\0';
+
+        r = WideCharToMultiByte(CP_UNIXCP, 0, scratchW, -1,
+                NULL, 0, NULL, NULL);
+        if (!r)
+        {
+            WINE_ERR("Char conversion size failed?\n");
+            goto run;
+        }
+
+        scratchA = (char *)HeapAlloc(GetProcessHeap(), 0, r);
+
+        r = WideCharToMultiByte(CP_UNIXCP, 0, scratchW, -1,
+                scratchA, r, NULL, NULL);
+        if (!r)
+        {
+            WINE_ERR("Char conversion failed?\n");
+            goto run;
+        }
+
+        dos = wine_get_dos_file_name(scratchA);
+
+        new_cmdline = (WCHAR *)HeapAlloc(GetProcessHeap(), 0,
+                (strlenW(dos) + 3 + strlenW(remainder) + 1) * sizeof(WCHAR));
+        strcpyW(new_cmdline, dquoteW);
+        strcatW(new_cmdline, dos);
+        strcatW(new_cmdline, dquoteW);
+        strcatW(new_cmdline, remainder);
+
+        cmdline = new_cmdline;
+    }
+
+run:
     WINE_TRACE("Running command %s\n", wine_dbgstr_w(cmdline));
 
     if (!CreateProcessW(NULL, cmdline, NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi))
     {
         WINE_ERR("Failed to create process %s: %u\n", wine_dbgstr_w(cmdline), GetLastError());
-        return 1;
+        return INVALID_HANDLE_VALUE;
     }
 
-    CloseHandle(pi.hProcess);
     CloseHandle(pi.hThread);
-    return 0;
+    return pi.hProcess;
 }
 
 int main(int argc, char *argv[])
 {
+    HANDLE wait_handle = INVALID_HANDLE_VALUE;
+
     WINE_TRACE("\n");
 
-    CreateThread(NULL, 0, create_steam_window, NULL, 0, NULL);
+    if (getenv("SteamGameId"))
+    {
+        /* do setup only for game process */
+        CreateThread(NULL, 0, create_steam_window, NULL, 0, NULL);
 
-    set_active_process_pid();
-    setup_steam_registry();
+        set_active_process_pid();
+        setup_steam_registry();
+
+        wait_handle = __wine_make_process_system();
+    }
 
     if (argc > 1)
     {
-        int ret = run_process();
-        if (ret) return ret;
+        HANDLE child;
+
+        child = run_process();
+
+        if (child == INVALID_HANDLE_VALUE)
+            return 1;
+
+        if (wait_handle == INVALID_HANDLE_VALUE)
+            wait_handle = child;
+        else
+            CloseHandle(child);
     }
 
-    WaitForSingleObject(__wine_make_process_system(), INFINITE);
+    WaitForSingleObject(wait_handle, INFINITE);
+
     return 0;
 }
