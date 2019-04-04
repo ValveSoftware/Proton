@@ -135,7 +135,7 @@ index af3b0f64..87a31ed5 100644
              VkPipelineStageFlags      srcStages,
              VkAccessFlags             srcAccess,
 diff --git a/src/dxvk/dxvk_graphics.cpp b/src/dxvk/dxvk_graphics.cpp
-index b37c9b38..34e98d3e 100644
+index ed45b63..6490fc5 100644
 --- a/src/dxvk/dxvk_graphics.cpp
 +++ b/src/dxvk/dxvk_graphics.cpp
 @@ -4,6 +4,7 @@
@@ -146,7 +146,7 @@ index b37c9b38..34e98d3e 100644
  #include "dxvk_spec_const.h"
  #include "dxvk_state_cache.h"
  
-@@ -94,8 +95,6 @@ namespace dxvk {
+@@ -81,8 +82,6 @@ namespace dxvk {
    
    
    DxvkGraphicsPipeline::~DxvkGraphicsPipeline() {
@@ -155,7 +155,7 @@ index b37c9b38..34e98d3e 100644
    }
    
    
-@@ -120,7 +119,8 @@ namespace dxvk {
+@@ -102,7 +101,8 @@ namespace dxvk {
  
    VkPipeline DxvkGraphicsPipeline::getPipelineHandle(
      const DxvkGraphicsPipelineStateInfo& state,
@@ -165,7 +165,7 @@ index b37c9b38..34e98d3e 100644
      VkRenderPass renderPassHandle = renderPass.getDefaultHandle();
      
      VkPipeline newPipelineHandle = VK_NULL_HANDLE;
-@@ -139,29 +139,49 @@ namespace dxvk {
+@@ -121,29 +121,49 @@ namespace dxvk {
        
        // If no pipeline instance exists with the given state
        // vector, create a new one and add it to the list.
@@ -225,23 +225,23 @@ index b37c9b38..34e98d3e 100644
      }
      
      return nullptr;
-@@ -434,11 +454,6 @@ namespace dxvk {
+@@ -421,11 +441,6 @@ namespace dxvk {
+     Logger::debug(str::format("DxvkGraphicsPipeline: Finished in ", td.count(), " ms"));
+     return pipeline;
    }
-   
-   
+-  
+-  
 -  void DxvkGraphicsPipeline::destroyPipeline(VkPipeline pipeline) const {
 -    m_vkd->vkDestroyPipeline(m_vkd->device(), pipeline, nullptr);
 -  }
--
--
-   bool DxvkGraphicsPipeline::validatePipelineState(
-     const DxvkGraphicsPipelineStateInfo& state) const {
-     // Validate vertex input - each input slot consumed by the
+ 
+ 
+   DxvkShaderModule DxvkGraphicsPipeline::createShaderModule(
 diff --git a/src/dxvk/dxvk_graphics.h b/src/dxvk/dxvk_graphics.h
-index f30683b5..2c9309d6 100644
+index aaf64e4..1560842 100644
 --- a/src/dxvk/dxvk_graphics.h
 +++ b/src/dxvk/dxvk_graphics.h
-@@ -126,19 +126,25 @@ namespace dxvk {
+@@ -127,19 +127,25 @@ namespace dxvk {
     * Stores a state vector and the
     * corresponding pipeline handle.
     */
@@ -270,7 +270,7 @@ index f30683b5..2c9309d6 100644
      /**
       * \brief Checks for matching pipeline state
       * 
-@@ -153,23 +159,38 @@ namespace dxvk {
+@@ -154,23 +160,38 @@ namespace dxvk {
            && m_renderPass  == rp;
      }
  
@@ -311,7 +311,7 @@ index f30683b5..2c9309d6 100644
    /**
     * \brief Graphics pipeline
     * 
-@@ -228,19 +249,19 @@ namespace dxvk {
+@@ -229,19 +250,19 @@ namespace dxvk {
       * state. If necessary, a new pipeline will be created.
       * \param [in] state Pipeline state vector
       * \param [in] renderPass The render pass
@@ -336,9 +336,9 @@ index f30683b5..2c9309d6 100644
 -    };
 +  private:
      
-     Rc<vk::DeviceFn>        m_vkd;
-     DxvkPipelineManager*    m_pipeMgr;
-@@ -260,13 +281,13 @@ namespace dxvk {
+     Rc<vk::DeviceFn>          m_vkd;
+     DxvkPipelineManager*      m_pipeMgr;
+@@ -262,13 +283,13 @@ namespace dxvk {
      DxvkGraphicsCommonPipelineStateInfo m_common;
      
      // List of pipeline instances, shared between threads
@@ -355,16 +355,23 @@ index f30683b5..2c9309d6 100644
        const DxvkGraphicsPipelineStateInfo& state,
              VkRenderPass                   renderPass) const;
      
-@@ -275,9 +296,6 @@ namespace dxvk {
+@@ -277,9 +298,6 @@ namespace dxvk {
              VkRenderPass                   renderPass,
              VkPipeline                     baseHandle) const;
      
 -    void destroyPipeline(
 -            VkPipeline                     pipeline) const;
 -    
-     bool validatePipelineState(
-       const DxvkGraphicsPipelineStateInfo& state) const;
+     DxvkShaderModule createShaderModule(
+       const Rc<DxvkShader>&                shader,
+       const DxvkShaderModuleCreateInfo&    info) const;
+@@ -297,4 +315,4 @@ namespace dxvk {
      
+   };
+   
+-}
+\ No newline at end of file
++}
 diff --git a/src/dxvk/dxvk_image.h b/src/dxvk/dxvk_image.h
 index 20054868..bd383e76 100644
 --- a/src/dxvk/dxvk_image.h

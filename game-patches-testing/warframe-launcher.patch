@@ -1,4 +1,11 @@
-dlls/kernel32/file.c       | 15 +++++++++++++--
+This patch will fix the following bug once it is
+merged into Wine-Staging as the WarFrame launcher
+requires patches from Wine-Staging to work.
+Wine-Bug:https://bugs.winehq.org/show_bug.cgi?id=33845
+
+Signed-off-by: Brock York <twunknown at gmail.com>
+---
+ dlls/kernel32/file.c       | 15 +++++++++++++--
  dlls/kernel32/tests/file.c |  4 ++--
  2 files changed, 15 insertions(+), 4 deletions(-)
 

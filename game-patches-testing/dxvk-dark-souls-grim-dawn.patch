@@ -256,10 +256,10 @@ index 4fc86179..b69ed42e 100644
        result.id = m_module.opSelect(
          getVectorTypeId(result.type), inBounds.id, result.id,
 diff --git a/src/dxbc/dxbc_options.cpp b/src/dxbc/dxbc_options.cpp
-index cce13915..917dedc8 100644
+index cce1391..5bb08aa 100644
 --- a/src/dxbc/dxbc_options.cpp
 +++ b/src/dxbc/dxbc_options.cpp
-@@ -27,10 +27,11 @@ namespace dxvk {
+@@ -27,10 +27,12 @@ namespace dxvk {
        = (devInfo.core.properties.limits.minStorageBufferOffsetAlignment <= sizeof(uint32_t));
      useSdivForBufferIndex
        = adapter->matchesDriver(DxvkGpuVendor::Nvidia, VK_DRIVER_ID_NVIDIA_PROPRIETARY_KHR, 0, 0);
@@ -268,7 +268,8 @@ index cce13915..917dedc8 100644
      strictDivision          = options.strictDivision;
      zeroInitWorkgroupMemory = options.zeroInitWorkgroupMemory;
 -    
-+    checkConstantBufferBounds = options.checkConstantBufferBounds;
++    if (adapter->matchesDriver(DxvkGpuVendor::Nvidia, VK_DRIVER_ID_NVIDIA_PROPRIETARY_KHR, 0, 0))
++      checkConstantBufferBounds = options.checkConstantBufferBounds;
 +
      // Disable early discard on RADV due to GPU hangs
      // Disable early discard on Nvidia because it may hurt performance
