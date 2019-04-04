@@ -10,7 +10,7 @@ override build_name := $(shell echo $(build_name) | tr -dc '[:alnum:] ._-')
 
 STEAM_DIR := $(HOME)/.steam/root
 DEPLOY_DIR := $(shell git describe --tags --always)
-CONFIGURE_CMD := ../proton/configure.sh --steam-runtime64=docker:steam-proton-dev --steam-runtime32=docker:steam-proton-dev32 --steam-runtime="$$HOME"/steam-runtime/runtime/ --build-name="$(build_name)"
+CONFIGURE_CMD := ../proton/configure.sh --steam-runtime64=docker:steam-proton-dev --steam-runtime32=docker:steam-proton-dev32 --steam-runtime="$$HOME"/steam-runtime/runtime/ --build-name="$(build_name)" --with-ffmpeg
 
 # make doesn't handle spaces well... replace them with underscores in paths
 BUILD_DIR := "build-$(shell echo $(build_name) | sed -e 's/ /_/g')"

@@ -174,11 +174,11 @@ course use whatever paths you like.
 
         mkdir build/
         cd build
-        ../proton/configure.sh --steam-runtime64=docker:steam-proton-dev --steam-runtime32=docker:steam-proton-dev32 --steam-runtime=$HOME/steam-runtime/runtime/ --with-ffmpeg
+        ../proton/configure.sh --steam-runtime64=docker:steam-proton-dev --steam-runtime32=docker:steam-proton-dev32 --steam-runtime=$HOME/steam-runtime/runtime/
 
 If you are building without the Steam runtime, then instead use:
 
-        ../proton/configure.sh --no-steam-runtime --with-ffmpeg
+        ../proton/configure.sh --no-steam-runtime
 
 **Tip**: If you are building without the Steam runtime, you should now run
 `make obj-wine64/Makefile obj-wine32/Makefile` and check the files
