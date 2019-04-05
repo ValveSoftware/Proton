@@ -99,7 +99,7 @@ def upgrade_pfx(old_ver):
         return
 
 def run_wine(args):
-    subprocess.call(args, env=env, stderr=lfile)
+    subprocess.call(args, env=env, stderr=lfile, stdout=lfile)
 
 def makedirs(path):
     try:
