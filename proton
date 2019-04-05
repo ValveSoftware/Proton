@@ -210,6 +210,9 @@ env["WINEPREFIX"] = prefix
 if "PROTON_LOG" in env and nonzero(env["PROTON_LOG"]):
     env["WINEDEBUG"] = "+timestamp,+pid,+tid,+seh,+debugstr,+module"
 
+#default wine-mono override for FNA games
+env["WINE_MONO_OVERRIDES"] = "Microsoft.Xna.Framework.*,Gac=n"
+
 #load environment overrides
 if os.path.exists(basedir + "/user_settings.py"):
     try:
