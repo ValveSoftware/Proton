@@ -17,7 +17,6 @@
 
     echo "applying async patch to dxvk and enabling it for warframe by default"
     patch -Np1 < ../game-patches-testing/dxvk-warframe-async-patch.patch
-    #patch -Np1 < ../game-patches-testing/dxvk-dark-souls-grim-dawn.patch
     cd ..
 
     #WINE SYSTEM PERFORMANCE PATCHES
@@ -115,8 +114,6 @@
 
     #WINE CUSTOM PATCHES
     #add your own custom patch lines below
-
-
 
     #end
     cd ..
