@@ -89,7 +89,6 @@
     patch -Np1 < ../game-patches-testing/valve-server.patch
     patch -Np1 < ../game-patches-testing/valve-winemac.patch
     patch -Np1 < ../game-patches-testing/valve-ws2_32.patch
-    patch -Np1 < ../game-patches-testing/valve-winevulkan-patchset.patch
 
     # large address awareness
     patch -Np1 < ../game-patches-testing/valve-LAA.patch
