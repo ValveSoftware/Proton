@@ -19,7 +19,7 @@ from filelock import FileLock
 #To enable debug logging, copy "user_settings.sample.py" to "user_settings.py"
 #and edit it if needed.
 
-CURRENT_PREFIX_VERSION="4.2-1"
+CURRENT_PREFIX_VERSION="4.2-2"
 
 PFX="Proton: "
 ld_path_var = "LD_LIBRARY_PATH"
@@ -54,6 +54,17 @@ def remove_tracked_files(prefix):
 
     os.remove(prefix + "/tracked_files")
     os.remove(prefix + "/version")
+
+def file_is_wine_fake_dll(path):
+    if not os.path.exists(path):
+        return False
+    try:
+        sfile = open(path, "rb")
+        sfile.seek(0x40)
+        tag = sfile.read(20)
+        return tag == b"Wine placeholder DLL"
+    except IOError:
+        return False
 
 def upgrade_pfx(old_ver):
     if old_ver == CURRENT_PREFIX_VERSION:
@@ -92,6 +103,13 @@ def upgrade_pfx(old_ver):
                 log("Detected broken 64-bit-only installation, re-creating prefix.")
                 shutil.rmtree(prefix)
                 return
+
+        #replace broken .NET installations with wine-mono support
+        if os.path.exists(prefix + "/drive_c/windows/Microsoft.NET/NETFXRepair.exe") and \
+                file_is_wine_fake_dll(prefix + "/drive_c/windows/system32/mscoree.dll"):
+            log("Broken .NET installation detected, switching to wine-mono.")
+            #deleting this directory allows wine-mono to work
+            shutil.rmtree(prefix + "/drive_c/windows/Microsoft.NET")
 
     except ValueError:
         log("Prefix has an invalid version?! You may want to back up user files and delete this prefix.")
