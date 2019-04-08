@@ -24,17 +24,11 @@
     git reset --hard HEAD
     git clean -xdf
 
-    #echo "fix for high core count systems"
-    #only use for versions lower than 4.0, it has been patched upstream since 4.0
-    #this allows games such as skyrim and fallout to load games without hanging at the loading screen
-    #this also fixes some game launchers and games themselves such as neverwinter and killing floor 2
-    #patch -Np1 < ../game-patches-testing/high-core-count-fix.patch
-
     echo "system tray fix for kde plasma"
     patch -Np1 < ../game-patches-testing/plasma_systray_fix.patch
 
 
-    #WINE STEAM GAME PATCHES
+    #WINE GAME SPECIFIC PATCHES
 
     echo "fix warframe launcher loop"
     patch -Np1 < ../game-patches-testing/warframe-launcher.patch
@@ -51,9 +45,6 @@
     echo "fix for Skyrim Script Extender not working"
     patch -Np1 < ../game-patches-testing/f4skyrimse-fix.patch
 
-    echo "fix for Sword Art Online gnutls"
-    patch -Np1 < ../game-patches-testing/sword-art-online-gnutls.patch
-
     #WINE FAUDIO PATCHES
 
     echo "allow wine to use faudio with ffmpeg"
@@ -67,17 +58,9 @@
 
 
     #WINE PROTONIFY
-    echo "sdl joystick patch"
-    patch -Np1 < ../game-patches-testing/proton-sdl-joy.patch
-
-    echo "hide wine updating prefix prompt"
-    patch -Np1 < ../game-patches-testing/hide-prefix-update-window.patch
-
-
     echo "converting normal wine build into proton build"
     patch -Np1 < ../game-patches-testing/proton-tkg.patch
 
-    # apply esync patches
     for _f in "../esync/"*.patch; do
         git apply -C1 --verbose < "${_f}"
     done
@@ -85,19 +68,17 @@
     # this is needed for wine 4.5+
     patch -Np1 < ../game-patches-testing/esync-no_kernel_obj_list.patch
 
+    patch -Np1 < ../game-patches-testing/valve-gnutls.patch
+    patch -Np1 < ../game-patches-testing/valve-proton-sdl-joy.patch
+    patch -Np1 < ../game-patches-testing/valve-hide-prefix-update-window.patch
     patch -Np1 < ../game-patches-testing/valve-wined3d-d3d11.patch
     patch -Np1 < ../game-patches-testing/valve-gdi32.patch
-    patch -Np1 < ../game-patches-testing/FS_bypass_compositor.patch
+    patch -Np1 < ../game-patches-testing/valve-FS_bypass_compositor.patch
     patch -Np1 < ../game-patches-testing/valve-winex11-fullscreen-hack.patch
-    patch -Np1 < ../game-patches-testing/amd-ags.patch
-    patch -Np1 < ../game-patches-testing/unity-mouse-pointer-drift.patch
-    
-    #unfinished
-    #patch -Np1 < ../game-patches-testing/valve-winevulkan.patch
-    #patch -Np1 < ../game-patches-testing/valve-dinput.patch
-    #patch -Np1 < ../game-patches-testing/valve-winepulse.patch
-
-
+    patch -Np1 < ../game-patches-testing/valve-amd-ags.patch
+    patch -Np1 < ../game-patches-testing/valve-unity-mouse-pointer-drift.patch
+    patch -Np1 < ../game-patches-testing/valve-pulseaudio-patchset.patch
+    patch -Np1 < ../game-patches-testing/valve-winevulkan-patchset.patch
     patch -Np1 < ../game-patches-testing/valve-ntdll.patch
     patch -Np1 < ../game-patches-testing/valve-user32.patch
     patch -Np1 < ../game-patches-testing/valve-windowscodecs.patch
@@ -108,9 +89,10 @@
     patch -Np1 < ../game-patches-testing/valve-server.patch
     patch -Np1 < ../game-patches-testing/valve-winemac.patch
     patch -Np1 < ../game-patches-testing/valve-ws2_32.patch
+    patch -Np1 < ../game-patches-testing/valve-winevulkan-patchset.patch
 
     # large address awareness
-    patch -Np1 < ../game-patches-testing/LAA.patch
+    patch -Np1 < ../game-patches-testing/valve-LAA.patch
 
     #WINE CUSTOM PATCHES
     #add your own custom patch lines below
