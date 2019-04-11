@@ -206,8 +206,6 @@ with dist_lock:
 
 prefix = os.environ["STEAM_COMPAT_DATA_PATH"] + "/pfx/"
 env["WINEPREFIX"] = prefix
-run_wine([wine_path, "wineboot"])
-run_wine([bindir + "/wineserver", "-w"])
 
 if "PROTON_LOG" in env and nonzero(env["PROTON_LOG"]):
     env["WINEDEBUG"] = "+timestamp,+pid,+tid,+seh,+debugstr,+module"
