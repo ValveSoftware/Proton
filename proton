@@ -278,6 +278,9 @@ if "SteamGameId" in env:
 else:
     env["WINEDEBUG"] = "-all"
 
+if env["DXVK_LOG_LEVEL"] != "none":
+    env["DXVK_LOG_PATH"] = os.environ["HOME"]
+
 def create_fonts_symlinks(prefix_path):
     fontsmap = [
         ( "LiberationSans-Regular.ttf", "arial.ttf" ),
