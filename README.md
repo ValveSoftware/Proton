@@ -34,13 +34,8 @@ The most current source for Proton is here:
 
 Which you can clone to your system with this command:
 
-        git clone https://github.com/ValveSoftware/Proton.git proton
-
-After cloning the Proton git repository, the next step will be to
-obtain the various submodules that go into building Proton:
-
+        git clone --recurse-submodules https://github.com/ValveSoftware/Proton.git proton
         cd proton
-        git submodule update --init
 
 If you wish to change any subcomponent, now is the time to do so.
 For example, if you wish make changes to Wine, you would apply those
