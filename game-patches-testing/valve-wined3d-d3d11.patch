@@ -530,11 +530,11 @@ diff --git a/include/Makefile.in b/include/Makefile.in
 index eaf31149de2..d2c5a28acbb 100644
 --- a/include/Makefile.in
 +++ b/include/Makefile.in
-@@ -681,6 +681,7 @@ SOURCES = \
+@@ -683,6 +683,7 @@ SOURCES = \
+ 	wine/itss.idl \
  	wine/library.h \
  	wine/svcctl.idl \
- 	wine/unicode.h \
-+	wine/wined3d-interop.idl \
++        wine/wined3d-interop.idl \
  	wine/winedxgi.idl \
  	winerror.h \
  	winevt.h \

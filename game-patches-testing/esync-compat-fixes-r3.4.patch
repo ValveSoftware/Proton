@@ -1,0 +1,94 @@
+From: Tk-Glitch <ti3nou@gmail.com>
+Date: Thu, 4 Apr 2019 02:05:31 +0100
+Subject: esync fixup for wine 4.6+
+
+diff --git a/0007-ntdll-Implement-waiting-on-esync-objects.patch b/0007-ntdll-Implement-waiting-on-esync-objects.patch
+index 4485e6c30..bf7ca6c87 100644
+--- a/0007-ntdll-Implement-waiting-on-esync-objects.patch
++++ b/0007-ntdll-Implement-waiting-on-esync-objects.patch
+@@ -118,14 +117,14 @@ index f7a427425..0950d8b5a 100644
+ +    {
+ +        TRACE("Waiting for %s of %d handles:", wait_any ? "any" : "all", count);
+ +        for (i = 0; i < count; i++)
+-+            DPRINTF(" %p", handles[i]);
+++            TRACE(" %p", handles[i]);
+ +
+ +        if (!timeout)
+-+            DPRINTF(", timeout = INFINITE.\n");
+++            TRACE(", timeout = INFINITE.\n");
+ +        else
+ +        {
+ +            timeleft = update_timeout( end );
+-+            DPRINTF(", timeout = %ld.%07ld sec.\n",
+++            TRACE(", timeout = %ld.%07ld sec.\n",
+ +                (long) timeleft / TICKSPERSEC, (long) timeleft % TICKSPERSEC);
+ +        }
+ +    }
+
+diff --git a/0020-server-Create-eventfd-file-descriptors-for-thread-ob.patch b/0020-server-Create-eventfd-file-descriptors-for-thread-ob.patch
+index dc9fb913a..4c5a535f0 100644
+--- a/0020-server-Create-eventfd-file-descriptors-for-thread-ob.patch
++++ b/0020-server-Create-eventfd-file-descriptors-for-thread-ob.patch
+@@ -77,9 +77,9 @@ index e4332df4ab..fc3ca4b701 100644
+ --- a/server/thread.h
+ +++ b/server/thread.h
+ @@ -89,6 +89,7 @@ struct thread
+-     timeout_t              creation_time; /* Thread creation time */
+      timeout_t              exit_time;     /* Thread exit time */
+      struct token          *token;         /* security token associated with this thread */
++     struct list            kernel_object; /* list of kernel object pointers */
+ +    int                    esync_fd;      /* esync file descriptor (signalled on exit) */
+  };
+  
+
+diff --git a/0024-server-ntdll-Also-wait-on-the-queue-fd-when-waiting-.patch b/0024-server-ntdll-Also-wait-on-the-queue-fd-when-waiting-.patch
+index 532b01c50..422a4c04e 100644
+--- a/0024-server-ntdll-Also-wait-on-the-queue-fd-when-waiting-.patch
++++ b/0024-server-ntdll-Also-wait-on-the-queue-fd-when-waiting-.patch
+@@ -100,13 +100,13 @@ index 210556fc2..4d708c6df 100644
+          FIXME("Can't wait on esync and server objects at the same time!\n");
+ @@ -510,6 +515,9 @@ NTSTATUS esync_wait_objects( DWORD count, const HANDLE *handles, BOOLEAN wait_an
+          for (i = 0; i < count; i++)
+-             DPRINTF(" %p", handles[i]);
++             TRACE(" %p", handles[i]);
+  
+ +        if (msgwait)
+-+            DPRINTF(" or driver events (fd %d)", ntdll_get_thread_data()->esync_queue_fd);
+++            TRACE(" or driver events (fd %d)", ntdll_get_thread_data()->esync_queue_fd);
+ +
+          if (!timeout)
+-             DPRINTF(", timeout = INFINITE.\n");
++             TRACE(", timeout = INFINITE.\n");
+          else
+ @@ -527,10 +535,16 @@ NTSTATUS esync_wait_objects( DWORD count, const HANDLE *handles, BOOLEAN wait_an
+              fds[i].fd = objs[i] ? objs[i]->fd : -1;
+
+diff --git a/0045-server-ntdll-Implement-alertable-waits.patch b/0045-server-ntdll-Implement-alertable-waits.patch
+index 60aa5582f..68d764527 100644
+--- a/0045-server-ntdll-Implement-alertable-waits.patch
++++ b/0045-server-ntdll-Implement-alertable-waits.patch
+@@ -65,16 +65,17 @@ index 227dd3df0..583174499 100644
+      NtQuerySystemTime( &now );
+      if (timeout)
+      {
+-@@ -728,6 +752,8 @@ NTSTATUS esync_wait_objects( DWORD count, const HANDLE *handles, BOOLEAN wait_an
+- 
++@@ -748,6 +772,9 @@ NTSTATUS esync_wait_objects( DWORD count, const HANDLE *handles, BOOLEAN wait_an
+          if (msgwait)
+-             DPRINTF(" or driver events (fd %d)", ntdll_get_thread_data()->esync_queue_fd);
+-+        if (alertable)
+-+            DPRINTF(", alertable");
++             TRACE(" or driver events (fd %d)", ntdll_get_thread_data()->esync_queue_fd);
+  
+++        if (alertable)
+++            TRACE(", alertable");
+++
+          if (!timeout)
+-             DPRINTF(", timeout = INFINITE.\n");
+-@@ -766,10 +792,17 @@ NTSTATUS esync_wait_objects( DWORD count, const HANDLE *handles, BOOLEAN wait_an
++             TRACE(", timeout = INFINITE.\n");
++         else
++@@ -785,10 +812,17 @@ NTSTATUS esync_wait_objects( DWORD count, const HANDLE *handles, BOOLEAN wait_an
+          }
+          if (msgwait)
+          {

@@ -386,13 +386,13 @@ index 75d093f4f06..a48b45ac656 100644
  static inline ULONG get_protection_type( DWORD flags )
  {
 @@ -344,13 +361,31 @@ static void HEAP_Dump( HEAP *heap )
-     DPRINTF( "Next: %p  Sub-heaps:", LIST_ENTRY( heap->entry.next, HEAP, entry ) );
-     LIST_FOR_EACH_ENTRY( subheap, &heap->subheap_list, SUBHEAP, entry ) DPRINTF( " %p", subheap );
+     TRACE( "Next: %p  Sub-heaps:", LIST_ENTRY( heap->entry.next, HEAP, entry ) );
+     LIST_FOR_EACH_ENTRY( subheap, &heap->subheap_list, SUBHEAP, entry ) TRACE( " %p", subheap );
  
--    DPRINTF( "\nFree lists:\n Block   Stat   Size    Id\n" );
-+    DPRINTF( "\nFree lists:\n" );
+-    TRACE( "\nFree lists:\n Block   Stat   Size    Id\n" );
++    TRACE( "\nFree lists:\n" );
      for (i = 0; i < HEAP_NB_FREE_LISTS; i++)
--        DPRINTF( "%p free %08lx prev=%p next=%p\n",
+-        TRACE( "%p free %08lx prev=%p next=%p\n",
 -                 &heap->freeList[i].arena, i < HEAP_NB_SMALL_FREE_LISTS ?
 -                 HEAP_MIN_ARENA_SIZE + i * ALIGNMENT : HEAP_freeListSizes[i - HEAP_NB_SMALL_FREE_LISTS],
 -                 LIST_ENTRY( heap->freeList[i].arena.entry.prev, ARENA_FREE, entry ),
@@ -400,24 +400,24 @@ index 75d093f4f06..a48b45ac656 100644
 +    {
 +        BOOL empty = !(heap->freeMask[ HEAP_FREEMASK_INDEX( i ) ] & HEAP_FREEMASK_BIT( i ));
 +
-+        DPRINTF( "free %08x: ", HEAP_FREELIST_SIZE( i ) );
++        TRACE( "free %08x: ", HEAP_FREELIST_SIZE( i ) );
 +        if (!empty && !list_empty( &heap->freeList[i] ))
 +        {
-+            DPRINTF( "head=%p tail=%p\n",
++            TRACE( "head=%p tail=%p\n",
 +                     LIST_ENTRY( heap->freeList[i].next, ARENA_FREE, entry.list ),
 +                     LIST_ENTRY( heap->freeList[i].prev, ARENA_FREE, entry.list ));
 +        }
 +        else if (empty && list_empty( &heap->freeList[i] ))
 +        {
-+            DPRINTF( "(empty)\n" );
++            TRACE( "(empty)\n" );
 +        }
 +        else
 +        {
-+            DPRINTF( "(corrupted)\n" );
++            TRACE( "(corrupted)\n" );
 +        }
 +    }
 +
-+    DPRINTF( "free %08x: root=%p\n",
++    TRACE( "free %08x: root=%p\n",
 +             HEAP_FREELIST_SIZE( HEAP_NB_FREE_LISTS ),
 +             heap->freeTree.root ? LIST_ENTRY( heap->freeTree.root, ARENA_FREE, entry.tree ) : NULL);
  
@@ -427,14 +427,14 @@ index 75d093f4f06..a48b45ac656 100644
              if (*(DWORD *)ptr & ARENA_FLAG_FREE)
              {
                  ARENA_FREE *pArena = (ARENA_FREE *)ptr;
--                DPRINTF( "%p %08x free %08x prev=%p next=%p\n",
+-                TRACE( "%p %08x free %08x prev=%p next=%p\n",
 -                         pArena, pArena->magic,
 -                         pArena->size & ARENA_SIZE_MASK,
 -                         LIST_ENTRY( pArena->entry.prev, ARENA_FREE, entry ),
 -                         LIST_ENTRY( pArena->entry.next, ARENA_FREE, entry ) );
 +                if ((pArena->size & ARENA_FLAG_FREE) == ARENA_FLAG_FREE_LIST)
 +                {
-+                    DPRINTF( "%p %08x free %08x prev=%p next=%p\n",
++                    TRACE( "%p %08x free %08x prev=%p next=%p\n",
 +                              pArena, pArena->magic, pArena->size & ARENA_SIZE_MASK,
 +                              LIST_ENTRY( pArena->entry.list.prev, ARENA_FREE, entry.list ),
 +                              LIST_ENTRY( pArena->entry.list.next, ARENA_FREE, entry.list ) );
@@ -450,12 +450,12 @@ index 75d093f4f06..a48b45ac656 100644
 +                    if (pArena->entry.tree.right)
 +                        right = WINE_RB_ENTRY_VALUE( pArena->entry.tree.right, ARENA_FREE, entry.tree );
 +
-+                    DPRINTF( "%p %08x free %08x parent=%p left=%p right=%p\n",
++                    TRACE( "%p %08x free %08x parent=%p left=%p right=%p\n",
 +                             pArena, pArena->magic, pArena->size & ARENA_SIZE_MASK, parent, left, right );
 +                }
 +                else
 +                {
-+                    DPRINTF( "%p %08x free %08x corrupted\n",
++                    TRACE( "%p %08x free %08x corrupted\n",
 +                             pArena, pArena->magic, pArena->size & ARENA_SIZE_MASK );
 +                }
                  ptr += sizeof(*pArena) + (pArena->size & ARENA_SIZE_MASK);

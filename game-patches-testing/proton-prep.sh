@@ -8,6 +8,8 @@
     patch -Np1 < ../game-patches-testing/esync-compat-fixes-r3.patch
     patch -Np1 < ../game-patches-testing/esync-compat-fixes-r3.1.patch
     patch -Np1 < ../game-patches-testing/esync-compat-fixes-r3.2.patch
+    patch -Np1 < ../game-patches-testing/esync-compat-fixes-r3.3.patch
+    patch -Np1 < ../game-patches-testing/esync-compat-fixes-r3.4.patch
     cd ..
 
     #DXVK ASYNC PATCH
@@ -30,8 +32,8 @@
 
     #WINE GAME SPECIFIC PATCHES
 
-    echo "fix warframe launcher loop"
-    patch -Np1 < ../game-patches-testing/warframe-launcher.patch
+    #echo "fix warframe launcher loop"
+    #patch -Np1 < ../game-patches-testing/warframe-launcher.patch
 
     echo "mech warrior online patch"
     patch -Np1 < ../game-patches-testing/mwo.patch
