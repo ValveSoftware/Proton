@@ -666,7 +666,7 @@ $(STEAMEXE_CONFIGURE_FILES): $(STEAMEXE_SYN) $(MAKEFILE_DEP) | $(STEAMEXE_OBJ) $
 		cp ../$(STEAMEXE_SYN)/Makefile . && \
 		echo >> ./Makefile 'SRCDIR := ../$(STEAMEXE_SYN)' && \
 		echo >> ./Makefile 'vpath % $$(SRCDIR)' && \
-		echo >> ./Makefile 'steam_exe_LDFLAGS := -m32 -lsteam_api $$(steam_exe_LDFLAGS)'
+		echo >> ./Makefile 'steam_exe_LDFLAGS := -m32 -fpermissive -lsteam_api $$(steam_exe_LDFLAGS)'
 
 ## steam goals
 STEAMEXE_TARGETS = steam steam_configure
@@ -680,7 +680,7 @@ steam_configure: $(STEAMEXE_CONFIGURE_FILES)
 
 steam: SHELL = $(CONTAINER_SHELL32)
 steam: $(STEAMEXE_CONFIGURE_FILES) | $(WINE_BUILDTOOLS32) $(filter $(MAKECMDGOALS),wine64 wine32 wine)
-	+env PATH="$(abspath $(TOOLS_DIR32))/bin:$(PATH)" LDFLAGS="-m32" CXXFLAGS="-m32 -Wno-attributes $(COMMON_FLAGS) -g" CFLAGS="-m32 $(COMMON_FLAGS) -g" \
+	+env PATH="$(abspath $(TOOLS_DIR32))/bin:$(PATH)" LDFLAGS="-m32 -fpermissive" CXXFLAGS="-m32 -fpermissive -Wno-attributes $(COMMON_FLAGS) -g" CFLAGS="-m32 -fpermissive $(COMMON_FLAGS) -g" \
 		$(MAKE) -C $(STEAMEXE_OBJ)
 	[ x"$(STRIP)" = x ] || $(STRIP) $(STEAMEXE_OBJ)/steam.exe.so
 	mkdir -pv $(DST_DIR)/lib/wine/

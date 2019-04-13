@@ -26,9 +26,6 @@
     git reset --hard HEAD
     git clean -xdf
 
-    #revert 0ffb1535517301d28c7c004eac639a9a0cc26c00 because steam needs it
-    git revert --no-commit 0ffb1535517301d28c7c004eac639a9a0cc26c00
-
     echo "system tray fix for kde plasma"
     patch -Np1 < ../game-patches-testing/plasma_systray_fix.patch
 
@@ -72,7 +69,7 @@
 
     # this is needed for wine 4.5+
     patch -Np1 < ../game-patches-testing/esync-no_kernel_obj_list.patch
-
+    patch -Np1 < ../game-patches-testing/proton-restore-unicode.patch
     patch -Np1 < ../game-patches-testing/valve-gnutls.patch
     patch -Np1 < ../game-patches-testing/valve-proton-sdl-joy.patch
     patch -Np1 < ../game-patches-testing/valve-hide-prefix-update-window.patch
