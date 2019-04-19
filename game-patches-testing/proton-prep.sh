@@ -31,7 +31,7 @@
     patch -Np1 < ../game-patches-testing/plasma_systray_fix.patch
 
     echo "wine key translation fix from staging"
-    patch -Np1 < ../game-patches-testing/wine-key-translation-fix.patch
+    patch -Np1 < ../game-patches-testing/wine-staging-key-translation-fix.patch
 
     #WINE GAME SPECIFIC PATCHES
 
