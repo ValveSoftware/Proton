@@ -9,6 +9,6 @@ git clone https://github.com/ValveSoftware/steam-runtime.git
 #configure proton build
 mkdir build
 cd build
-../proton/configure.sh --steam-runtime64=docker:steam-proton-dev --steam-runtime32=docker:steam-proton-dev32 --steam-runtime="$HOME"/steam-runtime/runtime/ --with-ffmpeg --build-name=Proton-4.5-GE-Beta-4
+../proton/configure.sh --steam-runtime64=docker:steam-proton-dev --steam-runtime32=docker:steam-proton-dev32 --steam-runtime="$HOME"/steam-runtime/runtime/ --with-ffmpeg --build-name=Proton-4.6-GE-2
 #if building without the runtime, use:
 #../proton/configure.sh --no-steam-runtime
