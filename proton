@@ -264,7 +264,7 @@ if "forcelgadd" in config_opts:
 lfile = None
 if "SteamGameId" in env:
     if env["WINEDEBUG"] != "-all":
-        lfile_path = os.environ["HOME"] + "/steam-" + os.environ["SteamGameId"] + ".log"
+        lfile_path = os.environ["HOME"] + "/steam-proton-" + os.environ["SteamGameId"] + ".log"
         if os.path.exists(lfile_path):
             os.remove(lfile_path)
         lfile = open(lfile_path, "w+")
@@ -276,7 +276,11 @@ if "SteamGameId" in env:
         lfile.write("======================\n")
         lfile.flush()
 else:
-    env["WINEDEBUG"] = "-all"
+    if env["WINEDEBUG"] != "-all":
+        lfile_path = os.environ["HOME"] + "/steam-proton-unknown" + ".log"
+        if os.path.exists(lfile_path):
+            os.remove(lfile_path)
+        lfile = open(lfile_path, "w+")
 
 def create_fonts_symlinks(prefix_path):
     fontsmap = [
