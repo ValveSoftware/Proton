@@ -355,16 +355,16 @@ index aaf64e4..1560842 100644
        const DxvkGraphicsPipelineStateInfo& state,
              VkRenderPass                   renderPass) const;
      
-@@ -277,9 +298,6 @@ namespace dxvk {
+@@ -275,9 +296,6 @@ namespace dxvk {
              VkRenderPass                   renderPass,
              VkPipeline                     baseHandle) const;
      
 -    void destroyPipeline(
 -            VkPipeline                     pipeline) const;
 -    
-     DxvkShaderModule createShaderModule(
-       const Rc<DxvkShader>&                shader,
-       const DxvkShaderModuleCreateInfo&    info) const;
+     bool validatePipelineState(
+       const DxvkGraphicsPipelineStateInfo& state) const;
+     
 @@ -297,4 +315,4 @@ namespace dxvk {
      
    };

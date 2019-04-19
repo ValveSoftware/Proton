@@ -30,6 +30,8 @@
     echo "system tray fix for kde plasma"
     patch -Np1 < ../game-patches-testing/plasma_systray_fix.patch
 
+    echo "wine key translation fix from staging"
+    patch -Np1 < ../game-patches-testing/wine-key-translation-fix.patch
 
     #WINE GAME SPECIFIC PATCHES
 
@@ -45,6 +47,10 @@
 
     echo "world of final fantasy patch"
     patch -Np1 < ../game-patches-testing/woff-hack.patch
+
+    echo "warframe F6 screenshot button fix"
+    patch -Np1 < ../game-patches-testing/warframe-f6-screenshot-fix.patch
+
 
     #WINE FAUDIO PATCHES
 
@@ -83,6 +89,8 @@
     patch -Np1 < ../game-patches-testing/valve-ntdll.patch
     patch -Np1 < ../game-patches-testing/valve-user32.patch
     patch -Np1 < ../game-patches-testing/valve-winemac.patch
+    patch -Np1 < ../game-patches-testing/valve-windowscodecs.patch
+    patch -Np1 < ../game-patches-testing/valve-wine-mono.patch
 
     # large address awareness
     patch -Np1 < ../game-patches-testing/valve-LAA.patch

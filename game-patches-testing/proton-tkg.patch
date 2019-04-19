@@ -407,6 +407,26 @@ index 75d5f4a7216..7fe2f49dcd9 100644
 +HKCU,Software\Valve\Steam\ActiveProcess,"SteamClientDll64",,"%16426%\Steam\steamclient64.dll"
  HKCU,Software\Valve\Steam\ActiveProcess,"SteamPath",,"%16426%\Steam"
 
+From bf02d103fde2c2e54a074b03021f47e4672d4b01 Mon Sep 17 00:00:00 2001
+From: Nikolay Sivov <nsivov@codeweavers.com>
+Date: Mon, 5 Nov 2018 18:45:57 +0300
+Subject: [PATCH] Add missing InstallPath registry value.
+
+So UPlay won't try to install Steam.
+---
+ loader/wine.inf.in | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/loader/wine.inf.in b/loader/wine.inf.in
+index 5610c701d..3d71722ac 100644
+--- a/loader/wine.inf.in
++++ b/loader/wine.inf.in
+@@ -3784,3 +3784,4 @@ HKCU,Software\Valve\Steam\ActiveProcess,"PID",0x10001,0x0000fffe
+ HKCU,Software\Valve\Steam\ActiveProcess,"SteamClientDll",,"%16426%\Steam\steamclient.dll"
+ HKCU,Software\Valve\Steam\ActiveProcess,"SteamClientDll64",,"%16426%\Steam\steamclient64.dll"
+ HKCU,Software\Valve\Steam\ActiveProcess,"SteamPath",,"%16426%\Steam"
++HKLM,Software\Wow6432Node\Valve\Steam,"InstallPath",,"%16422%\Steam"
+
 From bac899cd4531229baa7633d67578b74a2a98468f Mon Sep 17 00:00:00 2001
 From: Andrew Eikum <aeikum@codeweavers.com>
 Date: Mon, 19 Mar 2018 11:34:35 -0500
@@ -803,29 +823,6 @@ index 20d3c48c4d9..aca8738c4c0 100644
  const char *server_argv0;
  
  /* parse-line args */
-
-From 7f3acf21721b44b106ec8c6b61f0bf81aeb7f16a Mon Sep 17 00:00:00 2001
-From: Andrew Eikum <aeikum@codeweavers.com>
-Date: Fri, 13 Jul 2018 10:40:01 -0500
-Subject: [PATCH] HACK: mscoree: Don't install wine-mono on prefix creation
-
----
- dlls/mscoree/mscoree_main.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/dlls/mscoree/mscoree_main.c b/dlls/mscoree/mscoree_main.c
-index 5612ff6b89a..a0320dafc39 100644
---- a/dlls/mscoree/mscoree_main.c
-+++ b/dlls/mscoree/mscoree_main.c
-@@ -778,7 +778,7 @@ static BOOL install_wine_mono(void)
- 
- HRESULT WINAPI DllRegisterServer(void)
- {
--    install_wine_mono();
-+    /*install_wine_mono();*/
- 
-     return __wine_register_resources( MSCOREE_hInstance );
- }
 
 From 059a15a1d521a6ba79273b2ade923822b1532205 Mon Sep 17 00:00:00 2001
 From: Andrew Eikum <aeikum@codeweavers.com>
@@ -1794,153 +1791,3 @@ index 2b049eb91f8..e6948a73427 100644
  HKLM,"System\CurrentControlSet\Services\Eventlog\Application",,16
  HKLM,"System\CurrentControlSet\Services\Eventlog\System","Sources",0x10000,""
  HKLM,"System\CurrentControlSet\Services\Tcpip\Parameters","DataBasePath",2,"%11%\drivers"
-From c40379145985c36a8d2c3a0f9291560ce369f3ec Mon Sep 17 00:00:00 2001
-From: Andrew Eikum <aeikum@codeweavers.com>
-Date: Thu, 29 Mar 2018 11:09:53 -0500
-Subject: [PATCH] HACK: wine.inf: Add native,builtin overrides for msvcrt DLLs
-
----
- loader/wine.inf.in | 54 ++++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 54 insertions(+)
-
-diff --git a/loader/wine.inf.in b/loader/wine.inf.in
-index e6948a73427..3f28952102e 100644
---- a/loader/wine.inf.in
-+++ b/loader/wine.inf.in
-@@ -3707,9 +3707,63 @@ HKLM,Software\Wine\LicenseInformation,"Shell-PremiumInBoxGames-Chess-EnableGame"
- HKCU,Software\Valve\Steam\ActiveProcess,"PID",0x10001,0x0000fffe
- HKCU,Software\Valve\Steam\ActiveProcess,"SteamClientDll",,"%16422%\Steam\steamclient.dll"
- HKCU,Software\Valve\Steam\ActiveProcess,"SteamPath",,"%16422%\Steam"
-+;;Likely want *80 and *90 too, but those require removing Wine's manifest files.
-+HKCU,Software\Wine\DllOverrides,"atl100",0x2,"native,builtin"
-+HKCU,Software\Wine\DllOverrides,"msvcp100",0x2,"native,builtin"
-+HKCU,Software\Wine\DllOverrides,"msvcr100",0x2,"native,builtin"
-+HKCU,Software\Wine\DllOverrides,"vcomp100",0x2,"native,builtin"
-+HKCU,Software\Wine\DllOverrides,"atl110",0x2,"native,builtin"
-+HKCU,Software\Wine\DllOverrides,"msvcp110",0x2,"native,builtin"
-+HKCU,Software\Wine\DllOverrides,"msvcr110",0x2,"native,builtin"
-+HKCU,Software\Wine\DllOverrides,"vcomp110",0x2,"native,builtin"
-+HKCU,Software\Wine\DllOverrides,"atl120",0x2,"native,builtin"
-+HKCU,Software\Wine\DllOverrides,"msvcp120",0x2,"native,builtin"
-+HKCU,Software\Wine\DllOverrides,"msvcr120",0x2,"native,builtin"
-+HKCU,Software\Wine\DllOverrides,"vcomp120",0x2,"native,builtin"
-+HKCU,Software\Wine\DllOverrides,"api-ms-win-crt-conio-l1-1-0",0x2,"native,builtin"
-+HKCU,Software\Wine\DllOverrides,"api-ms-win-crt-heap-l1-1-0",0x2,"native,builtin"
-+HKCU,Software\Wine\DllOverrides,"api-ms-win-crt-locale-l1-1-0",0x2,"native,builtin"
-+HKCU,Software\Wine\DllOverrides,"api-ms-win-crt-math-l1-1-0",0x2,"native,builtin"
-+HKCU,Software\Wine\DllOverrides,"api-ms-win-crt-runtime-l1-1-0",0x2,"native,builtin"
-+HKCU,Software\Wine\DllOverrides,"api-ms-win-crt-stdio-l1-1-0",0x2,"native,builtin"
-+HKCU,Software\Wine\DllOverrides,"api-ms-win-crt-time-l1-1-0",0x2,"native,builtin"
-+HKCU,Software\Wine\DllOverrides,"atl140",0x2,"native,builtin"
-+HKCU,Software\Wine\DllOverrides,"concrt140",0x2,"native,builtin"
-+HKCU,Software\Wine\DllOverrides,"msvcp140",0x2,"native,builtin"
-+HKCU,Software\Wine\DllOverrides,"msvcr140",0x2,"native,builtin"
-+HKCU,Software\Wine\DllOverrides,"ucrtbase",0x2,"native,builtin"
-+HKCU,Software\Wine\DllOverrides,"vcomp140",0x2,"native,builtin"
-+HKCU,Software\Wine\DllOverrides,"vcruntime140",0x2,"native,builtin"
- 
- [SteamClient.ntamd64]
- HKCU,Software\Valve\Steam\ActiveProcess,"PID",0x10001,0x0000fffe
- HKCU,Software\Valve\Steam\ActiveProcess,"SteamClientDll",,"%16426%\Steam\steamclient.dll"
- HKCU,Software\Valve\Steam\ActiveProcess,"SteamClientDll64",,"%16426%\Steam\steamclient64.dll"
- HKCU,Software\Valve\Steam\ActiveProcess,"SteamPath",,"%16426%\Steam"
-+;;Likely want *80 and *90 too, but those require removing Wine's manifest files.
-+HKCU,Software\Wine\DllOverrides,"atl100",0x2,"native,builtin"
-+HKCU,Software\Wine\DllOverrides,"msvcp100",0x2,"native,builtin"
-+HKCU,Software\Wine\DllOverrides,"msvcr100",0x2,"native,builtin"
-+HKCU,Software\Wine\DllOverrides,"vcomp100",0x2,"native,builtin"
-+HKCU,Software\Wine\DllOverrides,"atl110",0x2,"native,builtin"
-+HKCU,Software\Wine\DllOverrides,"msvcp110",0x2,"native,builtin"
-+HKCU,Software\Wine\DllOverrides,"msvcr110",0x2,"native,builtin"
-+HKCU,Software\Wine\DllOverrides,"vcomp110",0x2,"native,builtin"
-+HKCU,Software\Wine\DllOverrides,"atl120",0x2,"native,builtin"
-+HKCU,Software\Wine\DllOverrides,"msvcp120",0x2,"native,builtin"
-+HKCU,Software\Wine\DllOverrides,"msvcr120",0x2,"native,builtin"
-+HKCU,Software\Wine\DllOverrides,"vcomp120",0x2,"native,builtin"
-+HKCU,Software\Wine\DllOverrides,"api-ms-win-crt-conio-l1-1-0",0x2,"native,builtin"
-+HKCU,Software\Wine\DllOverrides,"api-ms-win-crt-heap-l1-1-0",0x2,"native,builtin"
-+HKCU,Software\Wine\DllOverrides,"api-ms-win-crt-locale-l1-1-0",0x2,"native,builtin"
-+HKCU,Software\Wine\DllOverrides,"api-ms-win-crt-math-l1-1-0",0x2,"native,builtin"
-+HKCU,Software\Wine\DllOverrides,"api-ms-win-crt-runtime-l1-1-0",0x2,"native,builtin"
-+HKCU,Software\Wine\DllOverrides,"api-ms-win-crt-stdio-l1-1-0",0x2,"native,builtin"
-+HKCU,Software\Wine\DllOverrides,"api-ms-win-crt-time-l1-1-0",0x2,"native,builtin"
-+HKCU,Software\Wine\DllOverrides,"atl140",0x2,"native,builtin"
-+HKCU,Software\Wine\DllOverrides,"concrt140",0x2,"native,builtin"
-+HKCU,Software\Wine\DllOverrides,"msvcp140",0x2,"native,builtin"
-+HKCU,Software\Wine\DllOverrides,"msvcr140",0x2,"native,builtin"
-+HKCU,Software\Wine\DllOverrides,"ucrtbase",0x2,"native,builtin"
-+HKCU,Software\Wine\DllOverrides,"vcomp140",0x2,"native,builtin"
-+HKCU,Software\Wine\DllOverrides,"vcruntime140",0x2,"native,builtin"
-From 6ed24509d1ea36e3ce957fbc7b9044acae3fca0c Mon Sep 17 00:00:00 2001
-From: Andrew Eikum <aeikum@codeweavers.com>
-Date: Tue, 24 Jul 2018 13:33:15 -0500
-Subject: [PATCH] wine.inf: Set amd_ags_x64 to built-in for Wolfenstein 2
-
----
- loader/wine.inf.in | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/loader/wine.inf.in b/loader/wine.inf.in
-index 3f28952102e..9fff93ab828 100644
---- a/loader/wine.inf.in
-+++ b/loader/wine.inf.in
-@@ -3740,6 +3740,7 @@ HKCU,Software\Valve\Steam\ActiveProcess,"PID",0x10001,0x0000fffe
- HKCU,Software\Valve\Steam\ActiveProcess,"SteamClientDll",,"%16426%\Steam\steamclient.dll"
- HKCU,Software\Valve\Steam\ActiveProcess,"SteamClientDll64",,"%16426%\Steam\steamclient64.dll"
- HKCU,Software\Valve\Steam\ActiveProcess,"SteamPath",,"%16426%\Steam"
-+HKCU,Software\Wine\AppDefaults\NewColossus_x64vk.exe\DllOverrides,"amd_ags_x64",0x2,"builtin,native"
- ;;Likely want *80 and *90 too, but those require removing Wine's manifest files.
- HKCU,Software\Wine\DllOverrides,"atl100",0x2,"native,builtin"
- HKCU,Software\Wine\DllOverrides,"msvcp100",0x2,"native,builtin"
-From e6a4c146ef6a3637d6aadbadd2bc319347d682d6 Mon Sep 17 00:00:00 2001
-From: Nikolay Sivov <nsivov@codeweavers.com>
-Date: Mon, 5 Nov 2018 18:45:57 +0300
-Subject: [PATCH] wine.inf: Add missing InstallPath registry value.
-
-So UPlay won't try to install Steam.
----
- loader/wine.inf.in | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/loader/wine.inf.in b/loader/wine.inf.in
-index c3b79bce20d..977c8ffbc64 100644
---- a/loader/wine.inf.in
-+++ b/loader/wine.inf.in
-@@ -3746,6 +3746,7 @@ HKCU,Software\Valve\Steam\ActiveProcess,"PID",0x10001,0x0000fffe
- HKCU,Software\Valve\Steam\ActiveProcess,"SteamClientDll",,"%16426%\Steam\steamclient.dll"
- HKCU,Software\Valve\Steam\ActiveProcess,"SteamClientDll64",,"%16426%\Steam\steamclient64.dll"
- HKCU,Software\Valve\Steam\ActiveProcess,"SteamPath",,"%16426%\Steam"
-+HKLM,Software\Wow6432Node\Valve\Steam,"InstallPath",,"%16422%\Steam"
- HKCU,Software\Wine\AppDefaults\NewColossus_x64vk.exe\DllOverrides,"amd_ags_x64",0x2,"builtin,native"
- ;;Likely want *80 and *90 too, but those require removing Wine's manifest files.
- HKCU,Software\Wine\DllOverrides,"atl100",0x2,"native,builtin"
-From d7ff3995662debb178e853626d292a103a42b7d6 Mon Sep 17 00:00:00 2001
-From: Steven Noonan <steven@valvesoftware.com>
-Date: Tue, 23 Oct 2018 15:30:57 -0700
-Subject: [PATCH] wine.inf: apply LargeAddressAware fix for Bayonetta
-
-Signed-off-by: Steven Noonan <steven@valvesoftware.com>
----
- loader/wine.inf.in | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/loader/wine.inf.in b/loader/wine.inf.in
-index 977c8ffbc64..08e4197c55c 100644
---- a/loader/wine.inf.in
-+++ b/loader/wine.inf.in
-@@ -3713,6 +3713,7 @@ HKLM,Software\Wine\LicenseInformation,"Shell-PremiumInBoxGames-Chess-EnableGame"
- HKCU,Software\Valve\Steam\ActiveProcess,"PID",0x10001,0x0000fffe
- HKCU,Software\Valve\Steam\ActiveProcess,"SteamClientDll",,"%16422%\Steam\steamclient.dll"
- HKCU,Software\Valve\Steam\ActiveProcess,"SteamPath",,"%16422%\Steam"
-+HKCU,Software\Wine\AppDefaults\Bayonetta.exe,"LargeAddressAware",0x10003,1
- ;;Likely want *80 and *90 too, but those require removing Wine's manifest files.
- HKCU,Software\Wine\DllOverrides,"atl100",0x2,"native,builtin"
- HKCU,Software\Wine\DllOverrides,"msvcp100",0x2,"native,builtin"
-@@ -3747,6 +3748,7 @@ HKCU,Software\Valve\Steam\ActiveProcess,"SteamClientDll",,"%16426%\Steam\steamcl
- HKCU,Software\Valve\Steam\ActiveProcess,"SteamClientDll64",,"%16426%\Steam\steamclient64.dll"
- HKCU,Software\Valve\Steam\ActiveProcess,"SteamPath",,"%16426%\Steam"
- HKLM,Software\Wow6432Node\Valve\Steam,"InstallPath",,"%16422%\Steam"
-+HKCU,Software\Wine\AppDefaults\Bayonetta.exe,"LargeAddressAware",0x10003,1
- HKCU,Software\Wine\AppDefaults\NewColossus_x64vk.exe\DllOverrides,"amd_ags_x64",0x2,"builtin,native"
- ;;Likely want *80 and *90 too, but those require removing Wine's manifest files.
- HKCU,Software\Wine\DllOverrides,"atl100",0x2,"native,builtin"
