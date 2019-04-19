@@ -175,7 +175,7 @@ GECKO_VER := 2.47
 GECKO32_MSI := wine_gecko-$(GECKO_VER)-x86.msi
 GECKO64_MSI := wine_gecko-$(GECKO_VER)-x86_64.msi
 
-WINEMONO_VER := 4.8.1
+WINEMONO_VER := 4.8.2
 WINEMONO_TARBALL := wine-mono-bin-$(WINEMONO_VER).tar.gz
 
 FFMPEG := $(SRCDIR)/ffmpeg
@@ -348,7 +348,7 @@ $(DIST_WINEMONO): | $(DIST_WINEMONO_DIR)
 		mkdir -p $(SRCDIR)/contrib/; \
 		if [ ! -e "$(SRCDIR)/contrib/$(WINEMONO_TARBALL)" ]; then \
 			echo ">>>> Downloading wine-mono. To avoid this in future, put it here: $(SRCDIR)/../mono/$(WINEMONO_TARBALL)"; \
-			wget -O "$(SRCDIR)/contrib/$(WINEMONO_TARBALL)" "https://dl.winehq.org/wine/wine-mono/$(WINEMONO_VER)/$(WINEMONO_TARBALL)"; \
+			wget -O "$(SRCDIR)/contrib/$(WINEMONO_TARBALL)" "https://github.com/madewokherd/wine-mono/releases/download/wine-mono-$(WINEMONO_VER)/$(WINEMONO_TARBALL)"; \
 		fi; \
 		tar -xf "$(SRCDIR)/contrib/$(WINEMONO_TARBALL)" -C "$(dir $@)"; \
 	fi
