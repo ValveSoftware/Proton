@@ -16,7 +16,7 @@ Building Proton in a nutshell:
 1. Install virtualbox and its kernel modules, make sure they are enabled at boot  
 2. Install vagrant  
 3. Clone this repo:  
-`git clone http://github.com/gloriouseggroll/proton-ge-custom`  
+`git --recurse-submodules clone http://github.com/gloriouseggroll/proton-ge-custom`  
 4. Initiate the submodules in the cloned repo:  
 ```
 cd proton-ge-custom
