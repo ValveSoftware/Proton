@@ -1,5 +1,14 @@
 #!/bin/bash
 
+    #DXVK ASYNC PATCH
+    cd dxvk
+    git reset --hard HEAD
+    git clean -xdf
+
+    echo "applying async patch to dxvk and enabling it for warframe by default"
+    patch -Np1 < ../game-patches-testing/dxvk-warframe-async-patch.patch
+    cd ..
+
     #ESYNC UPDATE
     cd esync
     git reset --hard HEAD
@@ -12,14 +21,6 @@
     patch -Np1 < ../game-patches-testing/esync-compat-fixes-r3.4.patch
     cd ..
 
-    #DXVK ASYNC PATCH
-    cd dxvk
-    git reset --hard HEAD
-    git clean -xdf
-
-    echo "applying async patch to dxvk and enabling it for warframe by default"
-    patch -Np1 < ../game-patches-testing/dxvk-warframe-async-patch.patch
-    cd ..
 
     #WINE SYSTEM PERFORMANCE PATCHES
     cd wine
@@ -32,8 +33,9 @@
 
     #WINE GAME SPECIFIC PATCHES
 
-    #echo "fix warframe launcher loop"
-    #patch -Np1 < ../game-patches-testing/warframe-launcher.patch
+
+    echo "fix for Skyrim Script Extender not working"
+    patch -Np1 < ../game-patches-testing/f4skyrimse-fix.patch
 
     echo "mech warrior online patch"
     patch -Np1 < ../game-patches-testing/mwo.patch
@@ -43,9 +45,6 @@
 
     echo "world of final fantasy patch"
     patch -Np1 < ../game-patches-testing/woff-hack.patch
-
-    echo "fix for Skyrim Script Extender not working"
-    patch -Np1 < ../game-patches-testing/f4skyrimse-fix.patch
 
     #WINE FAUDIO PATCHES
 
@@ -83,14 +82,7 @@
     patch -Np1 < ../game-patches-testing/valve-winevulkan-patchset.patch
     patch -Np1 < ../game-patches-testing/valve-ntdll.patch
     patch -Np1 < ../game-patches-testing/valve-user32.patch
-    patch -Np1 < ../game-patches-testing/valve-windowscodecs.patch
-    patch -Np1 < ../game-patches-testing/valve-winhttp.patch
-    patch -Np1 < ../game-patches-testing/valve-imm32.patch
-    patch -Np1 < ../game-patches-testing/valve-winebus.patch
-    patch -Np1 < ../game-patches-testing/valve-secur32.patch
-    patch -Np1 < ../game-patches-testing/valve-server.patch
     patch -Np1 < ../game-patches-testing/valve-winemac.patch
-    patch -Np1 < ../game-patches-testing/valve-ws2_32.patch
 
     # large address awareness
     patch -Np1 < ../game-patches-testing/valve-LAA.patch
