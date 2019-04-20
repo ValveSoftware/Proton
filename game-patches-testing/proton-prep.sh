@@ -51,6 +51,9 @@
     echo "warframe F6 screenshot button fix"
     patch -Np1 < ../game-patches-testing/warframe-f6-screenshot-fix.patch
 
+    echo "uplay api loadstring patch"
+    patch -Np1 < ../game-patches-testing/uplay-api-loadstring-fix.patch
+
 
     #WINE FAUDIO PATCHES
 
