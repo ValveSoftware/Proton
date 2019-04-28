@@ -295,7 +295,8 @@ if "SteamGameId" in env:
         with open(basedir + "/version", "r") as f:
             lfile.write("Proton: " + f.readline().strip() + "\n")
         lfile.write("SteamGameId: " + env["SteamGameId"] + "\n")
-        lfile.write("Command: " + str(sys.argv[2:]) + "\n")
+        command = env.get("PROTON_CMD") or ''.join(sys.argv[2:])
+        lfile.write("Command: " + command + "\n")
         lfile.write("======================\n")
         lfile.flush()
 else:
@@ -594,7 +595,10 @@ def run():
             dump_dbg_scripts()
         except OSError:
             log("Unable to write debug scripts! " + str(sys.exc_info()[1]))
-    run_wine([wine_path, "steam"] + sys.argv[2:])
+    if "PROTON_CMD" in env:
+        run_wine([wine_path, "steam", "cmd", "/c", env["PROTON_CMD"]])
+    else:
+        run_wine([wine_path, "steam"] + sys.argv[2:])
 
 if sys.version_info[0] == 2:
     binary_stdout = sys.stdout
