@@ -1,19 +1,32 @@
 #See help target below for documentation
 
-build_name := $(shell git symbolic-ref --short HEAD 2>/dev/null)-local
 ifeq ($(build_name),)
+    _build_name := $(shell git symbolic-ref --short HEAD 2>/dev/null)-local
+else
+    _build_name := $(build_name)
+endif
+
+ifeq ($(_build_name),)
     $(error ERROR: Unable to auto-detect build name. Check out a branch or specify with "build_name=...")
 endif
 
 # remove special chars
-override build_name := $(shell echo $(build_name) | tr -dc '[:alnum:] ._-')
+override _build_name := $(shell echo $(_build_name) | tr -dc '[:alnum:] ._-')
 
 STEAM_DIR := $(HOME)/.steam/root
-DEPLOY_DIR := $(shell git describe --tags --always)
-CONFIGURE_CMD := ../proton/configure.sh --steam-runtime64=docker:steam-proton-dev --steam-runtime32=docker:steam-proton-dev32 --steam-runtime="$$HOME"/steam-runtime/runtime/ --build-name="$(build_name)"
+BUILD_DIR := $(_build_name)
+
+ifeq ($(build_name),)
+    DEPLOY_DIR := $(shell git describe --tags --always)
+else
+    DEPLOY_DIR := $(_build_name)
+endif
+
+
+CONFIGURE_CMD := ../proton/configure.sh --steam-runtime64=docker:steam-proton-dev --steam-runtime32=docker:steam-proton-dev32 --steam-runtime="$$HOME"/steam-runtime/runtime/ --build-name="$(_build_name)"
 
 # make doesn't handle spaces well... replace them with underscores in paths
-BUILD_DIR := "build-$(shell echo $(build_name) | sed -e 's/ /_/g')"
+BUILD_DIR := "build-$(shell echo $(_build_name) | sed -e 's/ /_/g')"
 
 all: help
 
@@ -33,7 +46,7 @@ help:
 	@echo "               current proton.git branch name if available. A new build dir"
 	@echo "               will be created for each build_name, so if you override this,"
 	@echo "               remember to always set it!"
-	@echo "               Current build name: $(build_name)"
+	@echo "               Current build name: $(_build_name)"
 	@echo ""
 	@echo "Development targets:"
 	@echo "  vagrant - Start Vagrant VM"
@@ -74,7 +87,7 @@ proton: configure
 install: configure
 	vagrant ssh -c 'make -C $(BUILD_DIR)/ STEAM_DIR=/vagrant/ install'
 	mkdir -p $(STEAM_DIR)/compatibilitytools.d/
-	cp -R vagrant_share/compatibilitytools.d/$(build_name) $(STEAM_DIR)/compatibilitytools.d/
+	cp -R vagrant_share/compatibilitytools.d/$(BUILD_DIR) $(STEAM_DIR)/compatibilitytools.d/
 	echo "Proton installed to your local Steam installation"
 
 deploy: configure
