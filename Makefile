@@ -87,7 +87,7 @@ proton: configure
 install: configure
 	vagrant ssh -c 'make -C $(BUILD_DIR)/ STEAM_DIR=/vagrant/ install'
 	mkdir -p $(STEAM_DIR)/compatibilitytools.d/
-	cp -R vagrant_share/compatibilitytools.d/$(BUILD_DIR) $(STEAM_DIR)/compatibilitytools.d/
+	cp -R vagrant_share/compatibilitytools.d/$(_build_name) $(STEAM_DIR)/compatibilitytools.d/
 	echo "Proton installed to your local Steam installation"
 
 deploy: configure
