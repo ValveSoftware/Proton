@@ -77,23 +77,36 @@ class VkInstanceCreateInfo(Structure):
         self.pApplicationInfo = pointer(app_info)
 
 
-def is_vulkan_supported():
-    """
-    Returns True iff vulkan library can be loaded, initialized,
-    and reports at least one physical device available.
-    """
-    vulkan = None
-    try:
-        vulkan = CDLL('libvulkan.so.1')
-    except OSError:
-        return False
-    app_info = VkApplicationInfo('vkinfo', version=(0, 1, 0))
-    create_info = VkInstanceCreateInfo(app_info)
-    instance = VkInstance()
-    result = vulkan.vkCreateInstance(byref(create_info), 0, byref(instance))
-    if result != VK_SUCCESS:
-        return False
-    dev_count = c_uint32(0)
-    result = vulkan.vkEnumeratePhysicalDevices(instance, byref(dev_count), 0)
-    vulkan.vkDestroyInstance(instance, 0)
-    return result == VK_SUCCESS and dev_count.value > 0
+class VkQuery():
+    """Storage for queried Vulkan information"""
+
+    def __init__(self):
+        try:
+            self.lib = CDLL('libvulkan.so.1')
+        except OSError:
+            self.lib = None
+            self.dev_count = 0
+
+        self.dev_count = self.__enumerate_devices__()
+
+    def lib_found(self):
+        """Returns true iff Vulkan library was loaded."""
+        return self.lib is not None
+
+    def device_available(self):
+        """Returns number of physical devices supporting Vulkan API."""
+        return self.dev_count > 0
+
+    def __enumerate_devices__(self):
+        app_info = VkApplicationInfo('vkinfo', version=(0, 1, 0))
+        create_info = VkInstanceCreateInfo(app_info)
+        instance = VkInstance()
+        result = self.lib.vkCreateInstance(byref(create_info), 0, byref(instance))
+        if result != VK_SUCCESS:
+            return 0
+        dev_count = c_uint32(0)
+        result = self.lib.vkEnumeratePhysicalDevices(instance, byref(dev_count), 0)
+        self.lib.vkDestroyInstance(instance, 0)
+        if result != VK_SUCCESS:
+            return 0
+        return dev_count

@@ -15,7 +15,7 @@ import sys
 import tarfile
 
 from filelock import FileLock
-from vkquery import is_vulkan_supported
+from vkquery import VkQuery
 
 #To enable debug logging, copy "user_settings.sample.py" to "user_settings.py"
 #and edit it if needed.
@@ -265,7 +265,8 @@ if "wined3d11" in config_opts:
 if not check_environment("PROTON_USE_WINED3D", "wined3d"):
     check_environment("PROTON_USE_WINED3D11", "wined3d")
 
-if not 'PROTON_USE_WINED3D' in env and not is_vulkan_supported():
+vk = VkQuery()
+if not 'PROTON_USE_WINED3D' in env and vk.lib_found() and not vk.device_available():
     log('No Vulkan support detected, falling back to wined3d')
     config_opts.add('wined3d')
 
@@ -302,6 +303,8 @@ if "SteamGameId" in env:
             lfile.write("Proton: " + f.readline().strip() + "\n")
         lfile.write("SteamGameId: " + env["SteamGameId"] + "\n")
         lfile.write("Command: " + str(sys.argv[2:]) + "\n")
+        lfile.write("Vulkan library found: " + str(vk.lib_found()) + "\n")
+        lfile.write("Vulkan hardware support: " + str(vk.device_available()) + "\n")
         lfile.write("======================\n")
         lfile.flush()
 else:
