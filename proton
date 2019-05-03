@@ -15,6 +15,7 @@ import sys
 import tarfile
 
 from filelock import FileLock
+from vkquery import is_vulkan_supported
 
 #To enable debug logging, copy "user_settings.sample.py" to "user_settings.py"
 #and edit it if needed.
@@ -263,6 +264,11 @@ if "wined3d11" in config_opts:
 
 if not check_environment("PROTON_USE_WINED3D", "wined3d"):
     check_environment("PROTON_USE_WINED3D11", "wined3d")
+
+if not 'PROTON_USE_WINED3D' in env and not is_vulkan_supported():
+    log('No Vulkan support detected, falling back to wined3d')
+    config_opts.add('wined3d')
+
 check_environment("PROTON_NO_D3D11", "nod3d11")
 check_environment("PROTON_NO_D3D10", "nod3d10")
 check_environment("PROTON_NO_ESYNC", "noesync")
