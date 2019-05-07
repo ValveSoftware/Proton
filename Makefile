@@ -93,11 +93,11 @@ install: configure
 deploy: configure
 	vagrant ssh -c 'make -C $(BUILD_DIR)/ deploy'
 	mkdir -p vagrant_share/$(DEPLOY_DIR)
-	vagrant ssh -c 'cp -a $(BUILD_DIR)/deploy/* /vagrant/$(DEPLOY_DIR)'
+	vagrant ssh -c 'cp $(BUILD_DIR)/deploy/* /vagrant/$(DEPLOY_DIR)'
 	echo "Proton deployed to vagrant_share/$(DEPLOY_DIR)"
 
 module: configure
 	vagrant ssh -c 'make -C $(BUILD_DIR)/ module=$(module) module'
 	mkdir -p vagrant_share/$(module)/lib{,64}/wine/
-	vagrant ssh -c 'cp -a $(BUILD_DIR)/obj-wine32/dlls/$(module)/$(module)*.so /vagrant/$(module)/lib/wine/'
-	vagrant ssh -c 'cp -a $(BUILD_DIR)/obj-wine64/dlls/$(module)/$(module)*.so /vagrant/$(module)/lib64/wine/'
+	vagrant ssh -c 'cp $(BUILD_DIR)/obj-wine32/dlls/$(module)/$(module)*.so /vagrant/$(module)/lib/wine/'
+	vagrant ssh -c 'cp $(BUILD_DIR)/obj-wine64/dlls/$(module)/$(module)*.so /vagrant/$(module)/lib64/wine/'
