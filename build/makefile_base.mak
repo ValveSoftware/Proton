@@ -85,7 +85,7 @@ SELECT_DOCKER_IMAGE :=
 # If we're using containers to sub-invoke the various builds, jobserver won't work, have some silly auto-jobs
 # controllable by SUBMAKE_JOBS.  Not ideal.
 ifneq ($(CONTAINER_SHELL32)$(CONTAINER_SHELL64),)
-	SUBMAKE_JOBS ?= 24
+	SUBMAKE_JOBS ?= 36
 	MAKE := make -j$(SUBMAKE_JOBS)
 endif
 
