@@ -37,4 +37,6 @@ about: Games tested and found to have no issues.
    this issue to prevent chaos by too much info in one place.
 5. Please search for open issues and pull requests by the name of the game and
    find out whether they are relevant and should be referenced above.
+6. Please add `PROTON_LOG=1 %command%` to the game's launch options and drag
+   and drop the generated `$HOME/steam-$APPID.log` into this issue report
 -->
