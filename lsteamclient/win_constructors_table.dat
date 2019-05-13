@@ -25,6 +25,9 @@
     {"SteamGameServerStats001", &create_winISteamGameServerStats_SteamGameServerStats001},
     {"SteamGameCoordinator001", &create_winISteamGameCoordinator_SteamGameCoordinator001},
     {"STEAMPARENTALSETTINGS_INTERFACE_VERSION001", &create_winISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001},
+    {"SteamNetworkingSocketsSerialized003", &create_winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized003},
+    {"SteamNetworkingSocketsSerialized002", &create_winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized002},
+    {"SteamNetworkingSocketsSerialized001", &create_winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized002}, /* alias */
     {"SteamClient017", &create_winISteamClient_SteamClient017},
     {"SteamUser019", &create_winISteamUser_SteamUser019},
     {"SteamFriends015", &create_winISteamFriends_SteamFriends015},
@@ -159,6 +162,3 @@
     {"SteamUser006", &create_winISteamUser_SteamUser006},
     {"SteamUser005", &create_winISteamUser_SteamUser005},
     {"SteamUser004", &create_winISteamUser_SteamUser004},
-    {"SteamNetworkingSocketsSerialized003", &create_winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized003},
-    {"SteamNetworkingSocketsSerialized002", &create_winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized002},
-    {"SteamNetworkingSocketsSerialized001", &create_winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized002}, /* alias */

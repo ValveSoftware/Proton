@@ -28,7 +28,7 @@ extern ELeaderboardSortMethod cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSIO
 extern ELeaderboardDisplayType cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetLeaderboardDisplayType(void *, SteamLeaderboard_t);
 extern SteamAPICall_t cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_DownloadLeaderboardEntries(void *, SteamLeaderboard_t, ELeaderboardDataRequest, int, int);
 extern SteamAPICall_t cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_DownloadLeaderboardEntriesForUsers(void *, SteamLeaderboard_t, CSteamID *, int);
-extern bool cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetDownloadedLeaderboardEntry(void *, SteamLeaderboardEntries_t, int, winLeaderboardEntry_t_143 *, int32 *, int);
+extern bool cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetDownloadedLeaderboardEntry(void *, SteamLeaderboardEntries_t, int, winLeaderboardEntry_t_144 *, int32 *, int);
 extern SteamAPICall_t cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_UploadLeaderboardScore(void *, SteamLeaderboard_t, ELeaderboardUploadScoreMethod, int32, const int32 *, int);
 extern SteamAPICall_t cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_AttachLeaderboardUGC(void *, SteamLeaderboard_t, UGCHandle_t);
 extern SteamAPICall_t cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetNumberOfCurrentPlayers(void *);

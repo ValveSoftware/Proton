@@ -5,6 +5,8 @@
 
 from __future__ import print_function
 
+CLANG_PATH='/usr/lib/clang/8.0.0'
+
 import pprint
 import sys
 import clang.cindex
@@ -13,6 +15,9 @@ import re
 import math
 
 sdk_versions = [
+    "144",
+    "143y",
+    "143x",
     "143",
     "142",
     "141",
@@ -80,8 +85,6 @@ sdk_versions = [
     "099w",
     "099v",
     "099u",
-    "next2",
-    "next",
 ]
 
 files = [
@@ -868,14 +871,14 @@ for sdkver in sdk_versions:
         if not os.path.isfile(input_name):
             continue
         index = clang.cindex.Index.create()
-        linux_build = index.parse(input_name, args=['-x', 'c++', '-m32', '-Isteamworks_sdk_%s/' % sdkver, '-I/usr/lib/clang/7.0.1/include/'])
+        linux_build = index.parse(input_name, args=['-x', 'c++', '-m32', '-Isteamworks_sdk_%s/' % sdkver, '-I' + CLANG_PATH + '/include/'])
 
         diagnostics = list(linux_build.diagnostics)
         if len(diagnostics) > 0:
             print('There were parse errors')
             pprint.pprint(diagnostics)
         else:
-            windows_build = index.parse(input_name, args=['-x', 'c++', '-m32', '-Isteamworks_sdk_%s/' % sdkver, '-I/usr/lib/clang/7.0.1/include/', '-mms-bitfields', '-U__linux__', '-Wno-incompatible-ms-struct'])
+            windows_build = index.parse(input_name, args=['-x', 'c++', '-m32', '-Isteamworks_sdk_%s/' % sdkver, '-I' + CLANG_PATH + '/include/', '-mms-bitfields', '-U__linux__', '-Wno-incompatible-ms-struct'])
             diagnostics = list(windows_build.diagnostics)
             if len(diagnostics) > 0:
                 print('There were parse errors (windows build)')
