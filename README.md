@@ -51,10 +51,10 @@ use this Makefile for simple Proton builds.
 
 This Makefile uses a virtual machine to create a consistent build environment.
 The VM is managed with [Vagrant](https://www.vagrantup.com/), which you will
-need to install before invoking these commands. While Vagrant supports several
-VM software backends, Proton's build system has been tested only with its
-VirtualBox backend. You may run into problems with the shared folder
-(`vagrant_share`) and/or CPU and memory usage with other backends.
+need to install before invoking these commands. Proton's build system is most
+well tested with Vagrant's VirtualBox and libvirt/qemu backends. It also
+requires the vagrant-sshfs plugin. You may run into problems with the shared
+folder (`vagrant_share`) and/or CPU and memory usage with other backends.
 
 If your build VM gets cluttered, or falls out of date, you can use `vagrant
 destroy` to wipe the VM clean, then invoke one of the below commands to start
