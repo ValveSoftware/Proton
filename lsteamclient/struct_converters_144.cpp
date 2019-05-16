@@ -3,6 +3,7 @@
 #include "steamworks_sdk_144/isteamgameserver.h"
 #include "steamworks_sdk_144/isteamgameserverstats.h"
 #include "steamworks_sdk_144/isteamgamecoordinator.h"
+#include "steamworks_sdk_144/steamnetworkingtypes.h"
 #include "steamclient_private.h"
 extern "C" {
 #define SDKVER_144

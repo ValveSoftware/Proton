@@ -8,6 +8,17 @@ typedef uint32_t EHTMLMouseButton, EHTMLKeyModifiers;
 typedef char bool; /* 1 byte on modern visual studio c++ */
 #endif
 
+typedef uint8_t uint8;
+typedef int8_t int8;
+typedef int16_t int16;
+typedef uint16_t uint16;
+typedef int32_t int32;
+typedef uint32_t uint32;
+typedef int64_t int64;
+typedef uint64_t uint64;
+typedef int64 lint64;
+typedef uint64 ulint64;
+
 typedef uint32_t EUserUGCList,
         EUGCMatchingUGCType,
         EUserUGCListSortOrder,
@@ -73,11 +84,12 @@ typedef uint32_t EUserUGCList,
         EActivateGameOverlayToWebPageMode,
         ESteamPartyBeaconLocationData,
         ESteamPartyBeaconLocationType,
-        EInputActionOrigin
+        EInputActionOrigin,
+        ESteamNetworkingIdentityType
 ;
 
-/* these are PODs, so just copy the data. hopefully the
- * packing and alignment are the same... */
+/* structs below are PODs with identical size & layout across platforms */
+
 typedef struct CSteamID { unsigned char a[8]; } CSteamID;
 typedef struct CGameID { unsigned char a[8]; } CGameID;
 typedef struct RemoteStorageUpdatePublishedFileRequest_t { unsigned char a[40]; } RemoteStorageUpdatePublishedFileRequest_t;
@@ -127,6 +139,42 @@ typedef struct InputMotionData_t
 	float rotVelZ;
 } InputMotionData_t;
 
+typedef struct SteamNetworkingIPAddr
+{
+	union
+	{
+		uint8 m_ipv6[ 16 ];
+		struct
+		{
+			uint64 m_8zeros;
+			uint16 m_0000;
+			uint16 m_ffff;
+			uint8 m_ip[ 4 ];
+		} m_ipv4;
+	} ip;
+	uint16 m_port;
+} SteamNetworkingIPAddr;
+
+#define k_cchMaxGenericString 32
+#define k_cchMaxXboxPairwiseID 32
+#define k_cbMaxGenericBytes 32
+
+typedef struct SteamNetworkingIdentity
+{
+	ESteamNetworkingIdentityType m_eType;
+
+	int m_cbSize;
+
+	union {
+		uint64 m_steamID64;
+		char m_szGenericString[ k_cchMaxGenericString ];
+		char m_szXboxPairwiseID[ k_cchMaxXboxPairwiseID ];
+		uint8 m_genericBytes[ k_cbMaxGenericBytes ];
+		SteamNetworkingIPAddr m_ip;
+		uint32 m_reserved[ 32 ];
+	} data;
+} SteamNetworkingIdentity;
+
 #pragma pack( pop )
 
 /* never dereferenced */
@@ -144,22 +192,16 @@ typedef struct SteamUGCDetails_t SteamUGCDetails_t;
 typedef struct gameserveritem_t gameserveritem_t;
 typedef struct MatchMakingKeyValuePair_t MatchMakingKeyValuePair_t;
 typedef struct SteamPartyBeaconLocation_t SteamPartyBeaconLocation_t;
+typedef struct SteamNetConnectionInfo_t SteamNetConnectionInfo_t;
+typedef struct SteamNetworkingQuickConnectionStatus SteamNetworkingQuickConnectionStatus;
+typedef struct SteamDatagramRelayAuthTicket SteamDatagramRelayAuthTicket;
+typedef struct SteamDatagramHostedAddress SteamDatagramHostedAddress;
 
 /* FIXME: we don't care about fn pointer types, just pass 'em through */
 typedef void *SteamAPI_CheckCallbackRegistered_t;
 typedef void *SteamAPIWarningMessageHook_t;
 typedef void *SteamAPI_PostAPIResultInProcess_t;
 
-typedef uint8_t uint8;
-typedef int8_t int8;
-typedef int16_t int16;
-typedef uint16_t uint16;
-typedef int32_t int32;
-typedef uint32_t uint32;
-typedef int64_t int64;
-typedef uint64_t uint64;
-typedef int64 lint64;
-typedef uint64 ulint64;
 typedef uint8 Salt_t[8];
 typedef uint64 GID_t;
 typedef uint64 JobID_t;
@@ -211,6 +253,10 @@ typedef uint64 InputHandle_t;
 typedef uint64 InputActionSetHandle_t;
 typedef uint64 InputDigitalActionHandle_t;
 typedef uint64 InputAnalogActionHandle_t;
+typedef uint32 HSteamNetConnection;
+typedef int64 SteamNetworkingMicroseconds;
+typedef uint32 HSteamListenSocket;
+typedef uint32 SteamNetworkingPOPID;
 
 #pragma pack( push, 4 )
 typedef struct CallbackMsg_t

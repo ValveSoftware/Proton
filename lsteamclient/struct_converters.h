@@ -64,6 +64,28 @@ extern void win_to_lin_struct_SteamUGCDetails_t_144(const struct winSteamUGCDeta
 extern void lin_to_win_struct_SteamUGCDetails_t_144(const struct SteamUGCDetails_t *l, struct winSteamUGCDetails_t_144 *w);
 #endif
 
+#if defined(SDKVER_144) || !defined(__cplusplus)
+#pragma pack( push, 8 )
+struct winSteamNetworkingMessage_t_144 {
+    void * m_pData;
+    uint32 m_cbSize;
+    HSteamNetConnection m_conn;
+    SteamNetworkingIdentity m_sender;
+    int64 m_nConnUserData;
+    SteamNetworkingMicroseconds m_usecTimeReceived;
+    int64 m_nMessageNumber;
+    void *m_pfnFreeData; /*fn pointer*/
+    void *m_pfnRelease; /*fn pointer*/
+    int m_nChannel;
+    int m___nPadDummy;
+}  __attribute__ ((ms_struct));
+#pragma pack( pop )
+typedef struct winSteamNetworkingMessage_t_144 winSteamNetworkingMessage_t_144;
+struct SteamNetworkingMessage_t;
+extern void win_to_lin_struct_SteamNetworkingMessage_t_144(struct winSteamNetworkingMessage_t_144 **w, struct SteamNetworkingMessage_t **l);
+extern void lin_to_win_struct_SteamNetworkingMessage_t_144(int retval, struct SteamNetworkingMessage_t **l, struct winSteamNetworkingMessage_t_144 **w);
+#endif
+
 #if defined(SDKVER_143y) || !defined(__cplusplus)
 #pragma pack( push, 8 )
 struct winSteamPartyBeaconLocation_t_143y {

@@ -1,5 +1,6 @@
 #include "steam_defs.h"
 #include "steamworks_sdk_144/steam_api.h"
+#include "steamworks_sdk_144/steamnetworkingtypes.h"
 #include "steamworks_sdk_144/isteamgamecoordinator.h"
 #include "steamclient_private.h"
 #ifdef __cplusplus
