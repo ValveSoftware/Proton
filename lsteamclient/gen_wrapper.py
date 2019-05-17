@@ -169,6 +169,11 @@ manually_handled_structs = [
         "SteamNetworkingMessage_t"
 ]
 
+# manual converters for simple types (function pointers)
+manual_type_converters = [
+        "FSteamNetworkingSocketsDebugOutput"
+]
+
 #struct_conversion_cache = {
 #    '142': {
 #                'SteamUGCDetails_t': True,
@@ -467,6 +472,7 @@ def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, e
         cfile.write(", %s *_r" % method.result_type.spelling)
     unnamed = 'a'
     need_convert = []
+    manual_convert = []
     for param in list(method.get_children()):
         if param.kind == clang.cindex.CursorKind.PARM_DECL:
             if param.type.kind == clang.cindex.TypeKind.POINTER and \
@@ -486,6 +492,8 @@ def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, e
                 need_convert.append(param)
                 #preserve pointers
                 win_name = typename.replace(real_type.spelling, "win%s_%s" % (real_type.spelling, sdkver))
+            elif real_type.spelling in manual_type_converters:
+                manual_convert.append(param)
 
             if param.spelling == "":
                 cfile.write(", %s _%s" % (win_name, unnamed))
@@ -532,6 +540,8 @@ def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, e
             #raw structs
             cpp.write("    %s lin_%s;\n" % (param.type.spelling, param.spelling))
             cpp.write("    win_to_lin_struct_%s_%s(&%s, &lin_%s);\n" % (param.type.spelling, sdkver, param.spelling, param.spelling))
+    for param in manual_convert:
+        cpp.write("    %s = (%s)manual_convert_%s((void*)%s);\n" % (param.spelling, param.type.spelling, param.type.spelling, param.spelling))
 
     cfile.write("    TRACE(\"%p\\n\", _this);\n")
 

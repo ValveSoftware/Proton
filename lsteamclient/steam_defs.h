@@ -209,7 +209,8 @@ typedef struct SteamDatagramHostedAddress SteamDatagramHostedAddress;
 typedef void *SteamAPI_CheckCallbackRegistered_t;
 typedef void *SteamAPIWarningMessageHook_t;
 typedef void *SteamAPI_PostAPIResultInProcess_t;
-typedef void *FSteamNetworkingSocketsDebugOutput; /* XXX */
+
+typedef void (*FSteamNetworkingSocketsDebugOutput)(ESteamNetworkingSocketsDebugOutputType nType, const char *pszMsg);
 
 typedef uint8 Salt_t[8];
 typedef uint64 GID_t;

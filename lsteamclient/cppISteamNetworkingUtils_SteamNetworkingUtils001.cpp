@@ -71,6 +71,7 @@ SteamNetworkingMicroseconds cppISteamNetworkingUtils_SteamNetworkingUtils001_Get
 
 void cppISteamNetworkingUtils_SteamNetworkingUtils001_SetDebugOutputFunction(void *linux_side, ESteamNetworkingSocketsDebugOutputType eDetailLevel, FSteamNetworkingSocketsDebugOutput pfnFunc)
 {
+    pfnFunc = (FSteamNetworkingSocketsDebugOutput)manual_convert_FSteamNetworkingSocketsDebugOutput((void*)pfnFunc);
     ((ISteamNetworkingUtils*)linux_side)->SetDebugOutputFunction((ESteamNetworkingSocketsDebugOutputType)eDetailLevel, (FSteamNetworkingSocketsDebugOutput)pfnFunc);
 }
 
