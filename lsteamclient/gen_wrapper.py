@@ -93,6 +93,7 @@ files = [
         "ISteamAppList",
         "ISteamClient",
         "ISteamController",
+        "ISteamGameSearch",
         "ISteamFriends",
         "ISteamHTMLSurface",
         "ISteamHTTP",

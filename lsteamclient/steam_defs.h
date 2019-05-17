@@ -90,7 +90,9 @@ typedef uint32_t EUserUGCList,
         ESteamNetworkingConfigValue,
         ESteamNetworkingConfigDataType,
         ESteamNetworkingSocketsDebugOutputType,
-        ESteamNetworkingGetConfigValueResult
+        ESteamNetworkingGetConfigValueResult,
+        EGameSearchErrorCode_t,
+        EPlayerResult_t
 ;
 
 /* structs below are PODs with identical size & layout across platforms */
