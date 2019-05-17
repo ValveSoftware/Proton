@@ -140,6 +140,9 @@ files = [
     ("isteamnetworkingsocketsserialized.h", [
         "ISteamNetworkingSocketsSerialized"
     ]),
+    ("isteamnetworkingutils.h", [
+        "ISteamNetworkingUtils"
+    ]),
 ]
 
 aliases = {
@@ -172,6 +175,8 @@ manually_handled_structs = [
 #           }
 #}
 struct_conversion_cache = {}
+
+converted_structs = []
 
 # callback classes for which we have a linux wrapper
 wrapped_classes = [
@@ -694,7 +699,8 @@ WINE_DEFAULT_DEBUG_CHANNEL(steamclient);
     cfile.write("} %s;\n\n" % winclassname)
     methods = []
     for child in children:
-        if child.kind == clang.cindex.CursorKind.CXX_METHOD:
+        if child.kind == clang.cindex.CursorKind.CXX_METHOD and \
+                child.is_virtual_method():
             handle_method(cfile, classnode.spelling, winclassname, cppname, child, cpp, cpp_h, methods)
         elif child.kind == clang.cindex.CursorKind.DESTRUCTOR:
             methods.append(handle_destructor(cfile, classnode.spelling, winclassname, child))
@@ -783,6 +789,11 @@ def handle_struct(sdkver, struct):
             return
 
         struct_name = "%s_%s" % (struct.displayname, sdkver)
+
+        if struct_name in converted_structs:
+            return
+        converted_structs.append(struct_name)
+
         w2l_handler_name = "win_to_lin_struct_%s" % struct_name;
         l2w_handler_name = "lin_to_win_struct_%s" % struct_name;
 

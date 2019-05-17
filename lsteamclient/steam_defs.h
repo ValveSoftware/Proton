@@ -85,7 +85,12 @@ typedef uint32_t EUserUGCList,
         ESteamPartyBeaconLocationData,
         ESteamPartyBeaconLocationType,
         EInputActionOrigin,
-        ESteamNetworkingIdentityType
+        ESteamNetworkingIdentityType,
+        ESteamNetworkingConfigScope,
+        ESteamNetworkingConfigValue,
+        ESteamNetworkingConfigDataType,
+        ESteamNetworkingSocketsDebugOutputType,
+        ESteamNetworkingGetConfigValueResult
 ;
 
 /* structs below are PODs with identical size & layout across platforms */
@@ -96,6 +101,7 @@ typedef struct RemoteStorageUpdatePublishedFileRequest_t { unsigned char a[40]; 
 typedef struct ControllerAnalogActionData_t { unsigned char a[13]; } ControllerAnalogActionData_t;
 typedef struct ControllerDigitalActionData_t { unsigned char a[2]; } ControllerDigitalActionData_t;
 typedef struct ControllerMotionData_t { unsigned char a[40]; } ControllerMotionData_t;
+typedef struct SteamNetworkPingLocation_t { uint8 m_data[ 512 ]; } SteamNetworkPingLocation_t;
 
 #pragma pack( push, 1 )
 
@@ -201,6 +207,7 @@ typedef struct SteamDatagramHostedAddress SteamDatagramHostedAddress;
 typedef void *SteamAPI_CheckCallbackRegistered_t;
 typedef void *SteamAPIWarningMessageHook_t;
 typedef void *SteamAPI_PostAPIResultInProcess_t;
+typedef void *FSteamNetworkingSocketsDebugOutput; /* XXX */
 
 typedef uint8 Salt_t[8];
 typedef uint64 GID_t;
