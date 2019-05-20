@@ -1,7 +1,39 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
+module OS
+  def OS.windows?
+    (/cygwin|mswin|mingw|bccwin|wince|emx/ =~ RUBY_PLATFORM) != nil
+  end
+
+  def OS.mac?
+    (/darwin/ =~ RUBY_PLATFORM) != nil
+  end
+
+  def OS.unix?
+    !OS.windows?
+  end
+
+  def OS.linux?
+    OS.unix? and not OS.mac?
+  end
+end
+
 # Vagrant file for setting up a build environment for Proton.
+if OS.linux?
+  cpus = `nproc`.to_i
+  # meminfo shows KB and we need to convert to MB
+  memory = `grep 'MemTotal' /proc/meminfo | sed -e 's/MemTotal://' -e 's/ kB//'`.to_i / 1024 / 2
+elsif OS.mac?
+  cpus = `sysctl -n hw.physicalcpu`.to_i
+  # sysctl shows bytes and we need to convert to MB
+  memory = `sysctl hw.memsize | sed -e 's/hw.memsize: //'`.to_i / 1024 / 1024 / 2
+else
+  cpus = 1
+  memory = 1024
+  puts "Vagrant launched from unsupported platform."
+end
+puts "Platform: " + cpus.to_s + " CPUs, " + memory.to_s + " MB memory"
 
 Vagrant.configure(2) do |config|
   #libvirt doesn't have a decent synced folder, so we have to use vagrant-sshfs.
@@ -12,15 +44,13 @@ Vagrant.configure(2) do |config|
   config.vm.box = "generic/debian9"
 
   config.vm.provider "virtualbox" do |v|
-    v.cpus = `nproc`.to_i
-    # meminfo shows KB and we need to convert to MB
-    v.memory = `grep 'MemTotal' /proc/meminfo | sed -e 's/MemTotal://' -e 's/ kB//'`.to_i / 1024 / 2
+    v.cpus = cpus
+    v.memory = memory
   end
 
   config.vm.provider "libvirt" do |v|
-    v.cpus = `nproc`.to_i
-    # meminfo shows KB and we need to convert to MB
-    v.memory = `grep 'MemTotal' /proc/meminfo | sed -e 's/MemTotal://' -e 's/ kB//'`.to_i / 1024 / 2
+    v.cpus = cpus
+    v.memory = memory
     v.random_hostname = true
     v.default_prefix = ENV['USER'].to_s.dup.concat('_').concat(File.basename(Dir.pwd))
   end
