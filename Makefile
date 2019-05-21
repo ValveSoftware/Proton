@@ -98,6 +98,7 @@ deploy: configure
 
 module: configure
 	vagrant ssh -c 'make -C $(BUILD_DIR)/ module=$(module) module'
-	mkdir -p vagrant_share/$(module)/lib{,64}/wine/
+	mkdir -p vagrant_share/$(module)/lib/wine/
 	vagrant ssh -c 'cp $(BUILD_DIR)/obj-wine32/dlls/$(module)/$(module)*.so /vagrant/$(module)/lib/wine/'
+	mkdir -p vagrant_share/$(module)/lib64/wine/
 	vagrant ssh -c 'cp $(BUILD_DIR)/obj-wine64/dlls/$(module)/$(module)*.so /vagrant/$(module)/lib64/wine/'
