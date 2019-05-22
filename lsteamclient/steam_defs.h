@@ -1,5 +1,5 @@
 #include <stdint.h>
-#include <linux/limits.h>
+#include <limits.h>
 typedef uint32_t EHTMLMouseButton, EHTMLKeyModifiers;
 #define nullptr (void*)0
 
