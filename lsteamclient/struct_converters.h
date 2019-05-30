@@ -14,7 +14,7 @@ extern void lin_to_win_struct_SteamPartyBeaconLocation_t_144(const struct SteamP
 #if defined(SDKVER_144) || !defined(__cplusplus)
 #pragma pack( push, 8 )
 struct winLeaderboardEntry_t_144 {
-    CSteamID m_steamIDUser;
+    CSteamID m_steamIDUser __attribute__((aligned(1)));
     int32 m_nGlobalRank;
     int32 m_nScore;
     int32 m_cDetails;
@@ -70,7 +70,7 @@ struct winSteamNetworkingMessage_t_144 {
     void * m_pData;
     uint32 m_cbSize;
     HSteamNetConnection m_conn;
-    SteamNetworkingIdentity m_sender;
+    SteamNetworkingIdentity m_sender __attribute__((aligned(1)));
     int64 m_nConnUserData;
     SteamNetworkingMicroseconds m_usecTimeReceived;
     int64 m_nMessageNumber;
@@ -100,7 +100,7 @@ extern void lin_to_win_struct_SteamPartyBeaconLocation_t_143y(const struct Steam
 #if defined(SDKVER_143y) || !defined(__cplusplus)
 #pragma pack( push, 8 )
 struct winLeaderboardEntry_t_143y {
-    CSteamID m_steamIDUser;
+    CSteamID m_steamIDUser __attribute__((aligned(1)));
     int32 m_nGlobalRank;
     int32 m_nScore;
     int32 m_cDetails;
@@ -166,7 +166,7 @@ extern void lin_to_win_struct_SteamPartyBeaconLocation_t_143x(const struct Steam
 #if defined(SDKVER_143x) || !defined(__cplusplus)
 #pragma pack( push, 8 )
 struct winLeaderboardEntry_t_143x {
-    CSteamID m_steamIDUser;
+    CSteamID m_steamIDUser __attribute__((aligned(1)));
     int32 m_nGlobalRank;
     int32 m_nScore;
     int32 m_cDetails;
@@ -232,7 +232,7 @@ extern void lin_to_win_struct_SteamPartyBeaconLocation_t_143(const struct SteamP
 #if defined(SDKVER_143) || !defined(__cplusplus)
 #pragma pack( push, 8 )
 struct winLeaderboardEntry_t_143 {
-    CSteamID m_steamIDUser;
+    CSteamID m_steamIDUser __attribute__((aligned(1)));
     int32 m_nGlobalRank;
     int32 m_nScore;
     int32 m_cDetails;
@@ -285,7 +285,7 @@ extern void lin_to_win_struct_SteamUGCDetails_t_143(const struct SteamUGCDetails
 #if defined(SDKVER_142) || !defined(__cplusplus)
 #pragma pack( push, 8 )
 struct winLeaderboardEntry_t_142 {
-    CSteamID m_steamIDUser;
+    CSteamID m_steamIDUser __attribute__((aligned(1)));
     int32 m_nGlobalRank;
     int32 m_nScore;
     int32 m_cDetails;
@@ -338,7 +338,7 @@ extern void lin_to_win_struct_SteamUGCDetails_t_142(const struct SteamUGCDetails
 #if defined(SDKVER_141) || !defined(__cplusplus)
 #pragma pack( push, 8 )
 struct winLeaderboardEntry_t_141 {
-    CSteamID m_steamIDUser;
+    CSteamID m_steamIDUser __attribute__((aligned(1)));
     int32 m_nGlobalRank;
     int32 m_nScore;
     int32 m_cDetails;
@@ -391,7 +391,7 @@ extern void lin_to_win_struct_SteamUGCDetails_t_141(const struct SteamUGCDetails
 #if defined(SDKVER_140) || !defined(__cplusplus)
 #pragma pack( push, 8 )
 struct winLeaderboardEntry_t_140 {
-    CSteamID m_steamIDUser;
+    CSteamID m_steamIDUser __attribute__((aligned(1)));
     int32 m_nGlobalRank;
     int32 m_nScore;
     int32 m_cDetails;
@@ -444,7 +444,7 @@ extern void lin_to_win_struct_SteamUGCDetails_t_140(const struct SteamUGCDetails
 #if defined(SDKVER_139) || !defined(__cplusplus)
 #pragma pack( push, 8 )
 struct winLeaderboardEntry_t_139 {
-    CSteamID m_steamIDUser;
+    CSteamID m_steamIDUser __attribute__((aligned(1)));
     int32 m_nGlobalRank;
     int32 m_nScore;
     int32 m_cDetails;
@@ -497,7 +497,7 @@ extern void lin_to_win_struct_SteamUGCDetails_t_139(const struct SteamUGCDetails
 #if defined(SDKVER_138a) || !defined(__cplusplus)
 #pragma pack( push, 8 )
 struct winLeaderboardEntry_t_138a {
-    CSteamID m_steamIDUser;
+    CSteamID m_steamIDUser __attribute__((aligned(1)));
     int32 m_nGlobalRank;
     int32 m_nScore;
     int32 m_cDetails;
@@ -550,7 +550,7 @@ extern void lin_to_win_struct_SteamUGCDetails_t_138a(const struct SteamUGCDetail
 #if defined(SDKVER_138) || !defined(__cplusplus)
 #pragma pack( push, 8 )
 struct winLeaderboardEntry_t_138 {
-    CSteamID m_steamIDUser;
+    CSteamID m_steamIDUser __attribute__((aligned(1)));
     int32 m_nGlobalRank;
     int32 m_nScore;
     int32 m_cDetails;
@@ -603,7 +603,7 @@ extern void lin_to_win_struct_SteamUGCDetails_t_138(const struct SteamUGCDetails
 #if defined(SDKVER_137) || !defined(__cplusplus)
 #pragma pack( push, 8 )
 struct winLeaderboardEntry_t_137 {
-    CSteamID m_steamIDUser;
+    CSteamID m_steamIDUser __attribute__((aligned(1)));
     int32 m_nGlobalRank;
     int32 m_nScore;
     int32 m_cDetails;
@@ -656,7 +656,7 @@ extern void lin_to_win_struct_SteamUGCDetails_t_137(const struct SteamUGCDetails
 #if defined(SDKVER_136) || !defined(__cplusplus)
 #pragma pack( push, 8 )
 struct winLeaderboardEntry_t_136 {
-    CSteamID m_steamIDUser;
+    CSteamID m_steamIDUser __attribute__((aligned(1)));
     int32 m_nGlobalRank;
     int32 m_nScore;
     int32 m_cDetails;
@@ -709,7 +709,7 @@ extern void lin_to_win_struct_SteamUGCDetails_t_136(const struct SteamUGCDetails
 #if defined(SDKVER_135a) || !defined(__cplusplus)
 #pragma pack( push, 8 )
 struct winLeaderboardEntry_t_135a {
-    CSteamID m_steamIDUser;
+    CSteamID m_steamIDUser __attribute__((aligned(1)));
     int32 m_nGlobalRank;
     int32 m_nScore;
     int32 m_cDetails;
@@ -762,7 +762,7 @@ extern void lin_to_win_struct_SteamUGCDetails_t_135a(const struct SteamUGCDetail
 #if defined(SDKVER_135) || !defined(__cplusplus)
 #pragma pack( push, 8 )
 struct winLeaderboardEntry_t_135 {
-    CSteamID m_steamIDUser;
+    CSteamID m_steamIDUser __attribute__((aligned(1)));
     int32 m_nGlobalRank;
     int32 m_nScore;
     int32 m_cDetails;
@@ -815,7 +815,7 @@ extern void lin_to_win_struct_SteamUGCDetails_t_135(const struct SteamUGCDetails
 #if defined(SDKVER_134) || !defined(__cplusplus)
 #pragma pack( push, 8 )
 struct winLeaderboardEntry_t_134 {
-    CSteamID m_steamIDUser;
+    CSteamID m_steamIDUser __attribute__((aligned(1)));
     int32 m_nGlobalRank;
     int32 m_nScore;
     int32 m_cDetails;
@@ -868,7 +868,7 @@ extern void lin_to_win_struct_SteamUGCDetails_t_134(const struct SteamUGCDetails
 #if defined(SDKVER_133x) || !defined(__cplusplus)
 #pragma pack( push, 8 )
 struct winLeaderboardEntry_t_133x {
-    CSteamID m_steamIDUser;
+    CSteamID m_steamIDUser __attribute__((aligned(1)));
     int32 m_nGlobalRank;
     int32 m_nScore;
     int32 m_cDetails;
@@ -921,7 +921,7 @@ extern void lin_to_win_struct_SteamUGCDetails_t_133x(const struct SteamUGCDetail
 #if defined(SDKVER_133b) || !defined(__cplusplus)
 #pragma pack( push, 8 )
 struct winLeaderboardEntry_t_133b {
-    CSteamID m_steamIDUser;
+    CSteamID m_steamIDUser __attribute__((aligned(1)));
     int32 m_nGlobalRank;
     int32 m_nScore;
     int32 m_cDetails;
@@ -974,7 +974,7 @@ extern void lin_to_win_struct_SteamUGCDetails_t_133b(const struct SteamUGCDetail
 #if defined(SDKVER_133a) || !defined(__cplusplus)
 #pragma pack( push, 8 )
 struct winLeaderboardEntry_t_133a {
-    CSteamID m_steamIDUser;
+    CSteamID m_steamIDUser __attribute__((aligned(1)));
     int32 m_nGlobalRank;
     int32 m_nScore;
     int32 m_cDetails;
@@ -1027,7 +1027,7 @@ extern void lin_to_win_struct_SteamUGCDetails_t_133a(const struct SteamUGCDetail
 #if defined(SDKVER_133) || !defined(__cplusplus)
 #pragma pack( push, 8 )
 struct winLeaderboardEntry_t_133 {
-    CSteamID m_steamIDUser;
+    CSteamID m_steamIDUser __attribute__((aligned(1)));
     int32 m_nGlobalRank;
     int32 m_nScore;
     int32 m_cDetails;
@@ -1080,7 +1080,7 @@ extern void lin_to_win_struct_SteamUGCDetails_t_133(const struct SteamUGCDetails
 #if defined(SDKVER_132x) || !defined(__cplusplus)
 #pragma pack( push, 8 )
 struct winLeaderboardEntry_t_132x {
-    CSteamID m_steamIDUser;
+    CSteamID m_steamIDUser __attribute__((aligned(1)));
     int32 m_nGlobalRank;
     int32 m_nScore;
     int32 m_cDetails;
@@ -1133,7 +1133,7 @@ extern void lin_to_win_struct_SteamUGCDetails_t_132x(const struct SteamUGCDetail
 #if defined(SDKVER_132) || !defined(__cplusplus)
 #pragma pack( push, 8 )
 struct winLeaderboardEntry_t_132 {
-    CSteamID m_steamIDUser;
+    CSteamID m_steamIDUser __attribute__((aligned(1)));
     int32 m_nGlobalRank;
     int32 m_nScore;
     int32 m_cDetails;
@@ -1186,7 +1186,7 @@ extern void lin_to_win_struct_SteamUGCDetails_t_132(const struct SteamUGCDetails
 #if defined(SDKVER_131) || !defined(__cplusplus)
 #pragma pack( push, 8 )
 struct winLeaderboardEntry_t_131 {
-    CSteamID m_steamIDUser;
+    CSteamID m_steamIDUser __attribute__((aligned(1)));
     int32 m_nGlobalRank;
     int32 m_nScore;
     int32 m_cDetails;
@@ -1239,7 +1239,7 @@ extern void lin_to_win_struct_SteamUGCDetails_t_131(const struct SteamUGCDetails
 #if defined(SDKVER_130x) || !defined(__cplusplus)
 #pragma pack( push, 8 )
 struct winLeaderboardEntry_t_130x {
-    CSteamID m_steamIDUser;
+    CSteamID m_steamIDUser __attribute__((aligned(1)));
     int32 m_nGlobalRank;
     int32 m_nScore;
     int32 m_cDetails;
@@ -1292,7 +1292,7 @@ extern void lin_to_win_struct_SteamUGCDetails_t_130x(const struct SteamUGCDetail
 #if defined(SDKVER_130) || !defined(__cplusplus)
 #pragma pack( push, 8 )
 struct winLeaderboardEntry_t_130 {
-    CSteamID m_steamIDUser;
+    CSteamID m_steamIDUser __attribute__((aligned(1)));
     int32 m_nGlobalRank;
     int32 m_nScore;
     int32 m_cDetails;
@@ -1345,7 +1345,7 @@ extern void lin_to_win_struct_SteamUGCDetails_t_130(const struct SteamUGCDetails
 #if defined(SDKVER_129a) || !defined(__cplusplus)
 #pragma pack( push, 8 )
 struct winLeaderboardEntry_t_129a {
-    CSteamID m_steamIDUser;
+    CSteamID m_steamIDUser __attribute__((aligned(1)));
     int32 m_nGlobalRank;
     int32 m_nScore;
     int32 m_cDetails;
@@ -1398,7 +1398,7 @@ extern void lin_to_win_struct_SteamUGCDetails_t_129a(const struct SteamUGCDetail
 #if defined(SDKVER_129) || !defined(__cplusplus)
 #pragma pack( push, 8 )
 struct winLeaderboardEntry_t_129 {
-    CSteamID m_steamIDUser;
+    CSteamID m_steamIDUser __attribute__((aligned(1)));
     int32 m_nGlobalRank;
     int32 m_nScore;
     int32 m_cDetails;
@@ -1450,7 +1450,7 @@ extern void lin_to_win_struct_SteamUGCDetails_t_129(const struct SteamUGCDetails
 #if defined(SDKVER_128x) || !defined(__cplusplus)
 #pragma pack( push, 8 )
 struct winLeaderboardEntry_t_128x {
-    CSteamID m_steamIDUser;
+    CSteamID m_steamIDUser __attribute__((aligned(1)));
     int32 m_nGlobalRank;
     int32 m_nScore;
     int32 m_cDetails;
@@ -1503,7 +1503,7 @@ extern void lin_to_win_struct_SteamUGCDetails_t_128x(const struct SteamUGCDetail
 #if defined(SDKVER_128) || !defined(__cplusplus)
 #pragma pack( push, 8 )
 struct winLeaderboardEntry_t_128 {
-    CSteamID m_steamIDUser;
+    CSteamID m_steamIDUser __attribute__((aligned(1)));
     int32 m_nGlobalRank;
     int32 m_nScore;
     int32 m_cDetails;
@@ -1555,7 +1555,7 @@ extern void lin_to_win_struct_SteamUGCDetails_t_128(const struct SteamUGCDetails
 #if defined(SDKVER_127) || !defined(__cplusplus)
 #pragma pack( push, 8 )
 struct winLeaderboardEntry_t_127 {
-    CSteamID m_steamIDUser;
+    CSteamID m_steamIDUser __attribute__((aligned(1)));
     int32 m_nGlobalRank;
     int32 m_nScore;
     int32 m_cDetails;
@@ -1607,7 +1607,7 @@ extern void lin_to_win_struct_SteamUGCDetails_t_127(const struct SteamUGCDetails
 #if defined(SDKVER_126a) || !defined(__cplusplus)
 #pragma pack( push, 8 )
 struct winLeaderboardEntry_t_126a {
-    CSteamID m_steamIDUser;
+    CSteamID m_steamIDUser __attribute__((aligned(1)));
     int32 m_nGlobalRank;
     int32 m_nScore;
     int32 m_cDetails;
@@ -1659,7 +1659,7 @@ extern void lin_to_win_struct_SteamUGCDetails_t_126a(const struct SteamUGCDetail
 #if defined(SDKVER_126) || !defined(__cplusplus)
 #pragma pack( push, 8 )
 struct winLeaderboardEntry_t_126 {
-    CSteamID m_steamIDUser;
+    CSteamID m_steamIDUser __attribute__((aligned(1)));
     int32 m_nGlobalRank;
     int32 m_nScore;
     int32 m_cDetails;
@@ -1711,7 +1711,7 @@ extern void lin_to_win_struct_SteamUGCDetails_t_126(const struct SteamUGCDetails
 #if defined(SDKVER_125) || !defined(__cplusplus)
 #pragma pack( push, 8 )
 struct winLeaderboardEntry_t_125 {
-    CSteamID m_steamIDUser;
+    CSteamID m_steamIDUser __attribute__((aligned(1)));
     int32 m_nGlobalRank;
     int32 m_nScore;
     int32 m_cDetails;
@@ -1727,7 +1727,7 @@ extern void lin_to_win_struct_LeaderboardEntry_t_125(const struct LeaderboardEnt
 #if defined(SDKVER_124) || !defined(__cplusplus)
 #pragma pack( push, 8 )
 struct winLeaderboardEntry_t_124 {
-    CSteamID m_steamIDUser;
+    CSteamID m_steamIDUser __attribute__((aligned(1)));
     int32 m_nGlobalRank;
     int32 m_nScore;
     int32 m_cDetails;
@@ -1743,7 +1743,7 @@ extern void lin_to_win_struct_LeaderboardEntry_t_124(const struct LeaderboardEnt
 #if defined(SDKVER_123a) || !defined(__cplusplus)
 #pragma pack( push, 8 )
 struct winLeaderboardEntry_t_123a {
-    CSteamID m_steamIDUser;
+    CSteamID m_steamIDUser __attribute__((aligned(1)));
     int32 m_nGlobalRank;
     int32 m_nScore;
     int32 m_cDetails;
@@ -1759,7 +1759,7 @@ extern void lin_to_win_struct_LeaderboardEntry_t_123a(const struct LeaderboardEn
 #if defined(SDKVER_123) || !defined(__cplusplus)
 #pragma pack( push, 8 )
 struct winLeaderboardEntry_t_123 {
-    CSteamID m_steamIDUser;
+    CSteamID m_steamIDUser __attribute__((aligned(1)));
     int32 m_nGlobalRank;
     int32 m_nScore;
     int32 m_cDetails;
@@ -1775,7 +1775,7 @@ extern void lin_to_win_struct_LeaderboardEntry_t_123(const struct LeaderboardEnt
 #if defined(SDKVER_122) || !defined(__cplusplus)
 #pragma pack( push, 8 )
 struct winLeaderboardEntry_t_122 {
-    CSteamID m_steamIDUser;
+    CSteamID m_steamIDUser __attribute__((aligned(1)));
     int32 m_nGlobalRank;
     int32 m_nScore;
     int32 m_cDetails;
@@ -1791,7 +1791,7 @@ extern void lin_to_win_struct_LeaderboardEntry_t_122(const struct LeaderboardEnt
 #if defined(SDKVER_121x) || !defined(__cplusplus)
 #pragma pack( push, 8 )
 struct winLeaderboardEntry_t_121x {
-    CSteamID m_steamIDUser;
+    CSteamID m_steamIDUser __attribute__((aligned(1)));
     int32 m_nGlobalRank;
     int32 m_nScore;
     int32 m_cDetails;
@@ -1807,7 +1807,7 @@ extern void lin_to_win_struct_LeaderboardEntry_t_121x(const struct LeaderboardEn
 #if defined(SDKVER_121) || !defined(__cplusplus)
 #pragma pack( push, 8 )
 struct winLeaderboardEntry_t_121 {
-    CSteamID m_steamIDUser;
+    CSteamID m_steamIDUser __attribute__((aligned(1)));
     int32 m_nGlobalRank;
     int32 m_nScore;
     int32 m_cDetails;
@@ -1823,7 +1823,7 @@ extern void lin_to_win_struct_LeaderboardEntry_t_121(const struct LeaderboardEnt
 #if defined(SDKVER_120) || !defined(__cplusplus)
 #pragma pack( push, 8 )
 struct winLeaderboardEntry_t_120 {
-    CSteamID m_steamIDUser;
+    CSteamID m_steamIDUser __attribute__((aligned(1)));
     int32 m_nGlobalRank;
     int32 m_nScore;
     int32 m_cDetails;
@@ -1839,7 +1839,7 @@ extern void lin_to_win_struct_LeaderboardEntry_t_120(const struct LeaderboardEnt
 #if defined(SDKVER_119x) || !defined(__cplusplus)
 #pragma pack( push, 8 )
 struct winLeaderboardEntry_t_119x {
-    CSteamID m_steamIDUser;
+    CSteamID m_steamIDUser __attribute__((aligned(1)));
     int32 m_nGlobalRank;
     int32 m_nScore;
     int32 m_cDetails;
@@ -1855,7 +1855,7 @@ extern void lin_to_win_struct_LeaderboardEntry_t_119x(const struct LeaderboardEn
 #if defined(SDKVER_119) || !defined(__cplusplus)
 #pragma pack( push, 8 )
 struct winLeaderboardEntry_t_119 {
-    CSteamID m_steamIDUser;
+    CSteamID m_steamIDUser __attribute__((aligned(1)));
     int32 m_nGlobalRank;
     int32 m_nScore;
     int32 m_cDetails;
@@ -1871,7 +1871,7 @@ extern void lin_to_win_struct_LeaderboardEntry_t_119(const struct LeaderboardEnt
 #if defined(SDKVER_118) || !defined(__cplusplus)
 #pragma pack( push, 8 )
 struct winLeaderboardEntry_t_118 {
-    CSteamID m_steamIDUser;
+    CSteamID m_steamIDUser __attribute__((aligned(1)));
     int32 m_nGlobalRank;
     int32 m_nScore;
     int32 m_cDetails;
@@ -1887,7 +1887,7 @@ extern void lin_to_win_struct_LeaderboardEntry_t_118(const struct LeaderboardEnt
 #if defined(SDKVER_117) || !defined(__cplusplus)
 #pragma pack( push, 8 )
 struct winLeaderboardEntry_t_117 {
-    CSteamID m_steamIDUser;
+    CSteamID m_steamIDUser __attribute__((aligned(1)));
     int32 m_nGlobalRank;
     int32 m_nScore;
     int32 m_cDetails;
@@ -1903,7 +1903,7 @@ extern void lin_to_win_struct_LeaderboardEntry_t_117(const struct LeaderboardEnt
 #if defined(SDKVER_116x) || !defined(__cplusplus)
 #pragma pack( push, 8 )
 struct winLeaderboardEntry_t_116x {
-    CSteamID m_steamIDUser;
+    CSteamID m_steamIDUser __attribute__((aligned(1)));
     int32 m_nGlobalRank;
     int32 m_nScore;
     int32 m_cDetails;
@@ -1919,7 +1919,7 @@ extern void lin_to_win_struct_LeaderboardEntry_t_116x(const struct LeaderboardEn
 #if defined(SDKVER_116) || !defined(__cplusplus)
 #pragma pack( push, 8 )
 struct winLeaderboardEntry_t_116 {
-    CSteamID m_steamIDUser;
+    CSteamID m_steamIDUser __attribute__((aligned(1)));
     int32 m_nGlobalRank;
     int32 m_nScore;
     int32 m_cDetails;
@@ -1935,7 +1935,7 @@ extern void lin_to_win_struct_LeaderboardEntry_t_116(const struct LeaderboardEnt
 #if defined(SDKVER_115) || !defined(__cplusplus)
 #pragma pack( push, 8 )
 struct winLeaderboardEntry_t_115 {
-    CSteamID m_steamIDUser;
+    CSteamID m_steamIDUser __attribute__((aligned(1)));
     int32 m_nGlobalRank;
     int32 m_nScore;
     int32 m_cDetails;
@@ -1951,7 +1951,7 @@ extern void lin_to_win_struct_LeaderboardEntry_t_115(const struct LeaderboardEnt
 #if defined(SDKVER_114) || !defined(__cplusplus)
 #pragma pack( push, 8 )
 struct winLeaderboardEntry_t_114 {
-    CSteamID m_steamIDUser;
+    CSteamID m_steamIDUser __attribute__((aligned(1)));
     int32 m_nGlobalRank;
     int32 m_nScore;
     int32 m_cDetails;
@@ -1967,7 +1967,7 @@ extern void lin_to_win_struct_LeaderboardEntry_t_114(const struct LeaderboardEnt
 #if defined(SDKVER_113) || !defined(__cplusplus)
 #pragma pack( push, 8 )
 struct winLeaderboardEntry_t_113 {
-    CSteamID m_steamIDUser;
+    CSteamID m_steamIDUser __attribute__((aligned(1)));
     int32 m_nGlobalRank;
     int32 m_nScore;
     int32 m_cDetails;
@@ -1983,7 +1983,7 @@ extern void lin_to_win_struct_LeaderboardEntry_t_113(const struct LeaderboardEnt
 #if defined(SDKVER_112x) || !defined(__cplusplus)
 #pragma pack( push, 8 )
 struct winLeaderboardEntry_t_112x {
-    CSteamID m_steamIDUser;
+    CSteamID m_steamIDUser __attribute__((aligned(1)));
     int32 m_nGlobalRank;
     int32 m_nScore;
     int32 m_cDetails;
@@ -1999,7 +1999,7 @@ extern void lin_to_win_struct_LeaderboardEntry_t_112x(const struct LeaderboardEn
 #if defined(SDKVER_112) || !defined(__cplusplus)
 #pragma pack( push, 8 )
 struct winLeaderboardEntry_t_112 {
-    CSteamID m_steamIDUser;
+    CSteamID m_steamIDUser __attribute__((aligned(1)));
     int32 m_nGlobalRank;
     int32 m_nScore;
     int32 m_cDetails;
@@ -2015,7 +2015,7 @@ extern void lin_to_win_struct_LeaderboardEntry_t_112(const struct LeaderboardEnt
 #if defined(SDKVER_111x) || !defined(__cplusplus)
 #pragma pack( push, 8 )
 struct winLeaderboardEntry_t_111x {
-    CSteamID m_steamIDUser;
+    CSteamID m_steamIDUser __attribute__((aligned(1)));
     int32 m_nGlobalRank;
     int32 m_nScore;
     int32 m_cDetails;

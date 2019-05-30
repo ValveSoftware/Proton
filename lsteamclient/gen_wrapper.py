@@ -765,6 +765,16 @@ generated_cb_ids = []
 cpp_files_need_close_brace = []
 cb_table = {}
 
+def get_field_attribute_str(field):
+    if field.type.kind != clang.cindex.TypeKind.RECORD:
+        return ""
+    win_struct = find_windows_struct(field.type)
+    if win_struct is None:
+        align = field.type.get_align()
+    else:
+        align = win_struct.get_align()
+    return " __attribute__((aligned(" + str(align) + ")))"
+
 #because of struct packing differences between win32 and linux, we
 #need to convert these structs from their linux layout to the win32
 #layout.
@@ -799,7 +809,7 @@ def handle_struct(sdkver, struct):
                             m.type.get_pointee().kind == clang.cindex.TypeKind.FUNCTIONPROTO:
                         to_file.write("    void *%s; /*fn pointer*/\n" % m.displayname)
                     else:
-                        to_file.write("    %s %s;\n" % (m.type.spelling, m.displayname))
+                        to_file.write("    %s %s%s;\n" % (m.type.spelling, m.displayname, get_field_attribute_str(m)))
         to_file.write("}  __attribute__ ((ms_struct));\n")
         to_file.write("#pragma pack( pop )\n")
 
