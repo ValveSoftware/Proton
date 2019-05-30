@@ -283,7 +283,7 @@ void *create_LinuxISteamMatchmakingRulesResponse(void *win, const char *version)
 
 
 /***** FSteamNetworkingSocketsDebugOutput *****/
-static void (CDECL *stored_FSteamNetworkingSocketsDebugOutput)(ESteamNetworkingSocketsDebugOutputType nType, const char *pszMsg);
+static void (__attribute__((ms_abi)) *stored_FSteamNetworkingSocketsDebugOutput)(ESteamNetworkingSocketsDebugOutputType nType, const char *pszMsg);
 
 static void lin_FSteamNetworkingSocketsDebugOutput(ESteamNetworkingSocketsDebugOutputType nType, const char *pszMsg)
 {
