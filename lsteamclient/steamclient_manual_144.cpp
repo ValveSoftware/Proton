@@ -1,5 +1,6 @@
 #include "steam_defs.h"
 #include "steamworks_sdk_144/steam_api.h"
+#include "steamworks_sdk_144/isteamnetworkingsockets.h"
 #include "steamworks_sdk_144/steamnetworkingtypes.h"
 #include "steamclient_private.h"
 extern "C" {
@@ -58,13 +59,7 @@ void lin_FreeData(struct SteamNetworkingMessage_t *lin_msg)
         ((void (__attribute__((ms_abi))*)(struct winSteamNetworkingMessage_t_144 *))msg->win_msg.m_pfnFreeData)(&msg->win_msg);
 }
 
-void win_to_lin_struct_SteamNetworkingMessage_t_144(struct winSteamNetworkingMessage_t_144 **w, struct SteamNetworkingMessage_t **l)
-{
-    TRACE("\n");
-    /* it's an output param, do nothing. */
-}
-
-void lin_to_win_struct_SteamNetworkingMessage_t_144(int n_messages, struct SteamNetworkingMessage_t **l, struct winSteamNetworkingMessage_t_144 **w)
+void lin_to_win_struct_SteamNetworkingMessage_t_144(int n_messages, struct SteamNetworkingMessage_t **l, struct winSteamNetworkingMessage_t_144 **w, int max_messages)
 {
     int i;
 
@@ -114,6 +109,29 @@ void lin_to_win_struct_SteamNetworkingMessage_t_144(int n_messages, struct Steam
         w[i] = &msg->win_msg;
         TRACE("done with %u, returned wrapper %p\n", i, msg);
     }
+
+    for(; i < max_messages; ++i)
+        w[i] = NULL;
+}
+
+int cppISteamNetworkingSockets_SteamNetworkingSockets002_ReceiveMessagesOnConnection(
+        void *linux_side, HSteamNetConnection hConn,
+        winSteamNetworkingMessage_t_144 **ppOutMessages, int nMaxMessages)
+{
+    SteamNetworkingMessage_t *lin_ppOutMessages[nMaxMessages];
+    int retval = ((ISteamNetworkingSockets*)linux_side)->ReceiveMessagesOnConnection(hConn, lin_ppOutMessages, nMaxMessages);
+    lin_to_win_struct_SteamNetworkingMessage_t_144(retval, lin_ppOutMessages, ppOutMessages, nMaxMessages);
+    return retval;
+}
+
+int cppISteamNetworkingSockets_SteamNetworkingSockets002_ReceiveMessagesOnListenSocket(
+        void *linux_side, HSteamListenSocket hSocket,
+        winSteamNetworkingMessage_t_144 **ppOutMessages, int nMaxMessages)
+{
+    SteamNetworkingMessage_t *lin_ppOutMessages[nMaxMessages];
+    int retval = ((ISteamNetworkingSockets*)linux_side)->ReceiveMessagesOnListenSocket(hSocket, lin_ppOutMessages, nMaxMessages);
+    lin_to_win_struct_SteamNetworkingMessage_t_144(retval, lin_ppOutMessages, ppOutMessages, nMaxMessages);
+    return retval;
 }
 
 }

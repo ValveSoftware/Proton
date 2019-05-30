@@ -82,8 +82,6 @@ struct winSteamNetworkingMessage_t_144 {
 #pragma pack( pop )
 typedef struct winSteamNetworkingMessage_t_144 winSteamNetworkingMessage_t_144;
 struct SteamNetworkingMessage_t;
-extern void win_to_lin_struct_SteamNetworkingMessage_t_144(struct winSteamNetworkingMessage_t_144 **w, struct SteamNetworkingMessage_t **l);
-extern void lin_to_win_struct_SteamNetworkingMessage_t_144(int retval, struct SteamNetworkingMessage_t **l, struct winSteamNetworkingMessage_t_144 **w);
 #endif
 
 #if defined(SDKVER_143y) || !defined(__cplusplus)

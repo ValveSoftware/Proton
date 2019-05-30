@@ -169,6 +169,13 @@ manually_handled_structs = [
         "SteamNetworkingMessage_t"
 ]
 
+manually_handled_methods = {
+        "cppISteamNetworkingSockets_SteamNetworkingSockets002": [
+            "ReceiveMessagesOnConnection",
+            "ReceiveMessagesOnListenSocket"
+        ]
+}
+
 # manual converters for simple types (function pointers)
 manual_type_converters = [
         "FSteamNetworkingSocketsDebugOutput"
@@ -432,6 +439,13 @@ def get_path_converter(parent):
                     return conv
     return None
 
+class DummyWriter(object):
+    def write(self, s):
+        #noop
+        pass
+
+dummy_writer = DummyWriter()
+
 def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, existing_methods):
     used_name = method.spelling
     if used_name in existing_methods:
@@ -451,6 +465,10 @@ def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, e
     for param in list(method.get_children()):
         if param.kind == clang.cindex.CursorKind.PARM_DECL:
             parambytes += int(math.ceil(param.type.get_size()/4.0) * 4)
+    if cppname in manually_handled_methods and \
+            used_name in manually_handled_methods[cppname]:
+        #just don't write the cpp function
+        cpp = dummy_writer
     cfile.write("DEFINE_THISCALL_WRAPPER(%s_%s, %s)\n" % (winclassname, used_name, parambytes))
     cpp_h.write("extern ")
     if method.result_type.spelling.startswith("ISteam"):
@@ -629,11 +647,7 @@ def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, e
                 real_type = param.type;
                 while real_type.kind == clang.cindex.TypeKind.POINTER:
                     real_type = real_type.get_pointee()
-                if strip_const(real_type.spelling) in manually_handled_structs:
-                    #this is clumsy
-                    cpp.write("    lin_to_win_struct_%s_%s(retval, &lin_%s, %s);\n" % (real_type.spelling, sdkver, param.spelling, param.spelling))
-                else:
-                    cpp.write("    lin_to_win_struct_%s_%s(&lin_%s, %s);\n" % (real_type.spelling, sdkver, param.spelling, param.spelling))
+                cpp.write("    lin_to_win_struct_%s_%s(&lin_%s, %s);\n" % (real_type.spelling, sdkver, param.spelling, param.spelling))
         else:
             cpp.write("    lin_to_win_struct_%s_%s(&lin_%s, &%s);\n" % (param.type.spelling, sdkver, param.spelling, param.spelling))
     if method.result_type.kind != clang.cindex.TypeKind.VOID and \
@@ -814,9 +828,6 @@ def handle_struct(sdkver, struct):
         hfile.write("struct %s;\n" % struct.displayname);
 
         if strip_const(struct.spelling) in manually_handled_structs:
-            #this is clumsy
-            hfile.write("extern void %s(struct win%s **w, struct %s **l);\n" % (w2l_handler_name, struct_name, struct.displayname))
-            hfile.write("extern void %s(int retval, struct %s **l, struct win%s **w);\n" % (l2w_handler_name, struct.displayname, struct_name))
             hfile.write("#endif\n\n")
             return
 
