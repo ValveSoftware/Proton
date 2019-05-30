@@ -874,6 +874,8 @@ def handle_struct(sdkver, struct):
         cppfile.write("#include \"steam_defs.h\"\n")
         cppfile.write("#include \"steamworks_sdk_%s/steam_api.h\"\n" % sdkver)
         cppfile.write("#include \"steamworks_sdk_%s/isteamgameserver.h\"\n" % (sdkver))
+        if os.path.isfile("steamworks_sdk_%s/isteamnetworkingsockets.h" % sdkver):
+            cppfile.write("#include \"steamworks_sdk_%s/isteamnetworkingsockets.h\"\n" % (sdkver))
         if os.path.isfile("steamworks_sdk_%s/isteamgameserverstats.h" % sdkver):
             cppfile.write("#include \"steamworks_sdk_%s/isteamgameserverstats.h\"\n" % (sdkver))
         if os.path.isfile("steamworks_sdk_%s/isteamgamecoordinator.h" % sdkver):

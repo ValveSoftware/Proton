@@ -1,6 +1,7 @@
 #include "steam_defs.h"
 #include "steamworks_sdk_144/steam_api.h"
 #include "steamworks_sdk_144/isteamgameserver.h"
+#include "steamworks_sdk_144/isteamnetworkingsockets.h"
 #include "steamworks_sdk_144/isteamgameserverstats.h"
 #include "steamworks_sdk_144/isteamgamecoordinator.h"
 #include "steamworks_sdk_144/steamnetworkingtypes.h"
@@ -839,6 +840,20 @@ void cb_GSReputation_t_40(const struct GSReputation_t *lin, struct winGSReputati
     win->m_usBannedPort = lin->m_usBannedPort;
     win->m_ulBannedGameID = lin->m_ulBannedGameID;
     win->m_unBanExpires = lin->m_unBanExpires;
+}
+
+#pragma pack( push, 8 )
+struct winSteamNetConnectionStatusChangedCallback_t_712 {
+    HSteamNetConnection m_hConn;
+    SteamNetConnectionInfo_t m_info;
+    ESteamNetworkingConnectionState m_eOldState;
+}  __attribute__ ((ms_struct));
+#pragma pack( pop )
+void cb_SteamNetConnectionStatusChangedCallback_t_712(const struct SteamNetConnectionStatusChangedCallback_t *lin, struct winSteamNetConnectionStatusChangedCallback_t_712 *win)
+{
+    win->m_hConn = lin->m_hConn;
+    win->m_info = lin->m_info;
+    win->m_eOldState = lin->m_eOldState;
 }
 
 

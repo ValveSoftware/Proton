@@ -173,6 +173,12 @@ case 2101:
     case 24: cb_HTTPRequestCompleted_t_24(lin_callback, callback); break;
     }
     break;
+case 1221:
+    switch(callback_len){
+    default:
+    case 712: cb_SteamNetConnectionStatusChangedCallback_t_712(lin_callback, callback); break;
+    }
+    break;
 case 2102:
     switch(callback_len){
     default:

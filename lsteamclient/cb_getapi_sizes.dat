@@ -54,6 +54,8 @@ case 2103: /* HTTPRequestDataReceived_t_24 */
     return 20;
 case 2101: /* HTTPRequestCompleted_t_32 */
     return 24;
+case 1221: /* SteamNetConnectionStatusChangedCallback_t_712 */
+    return 704;
 case 2102: /* HTTPRequestHeadersReceived_t_16 */
     return 12;
 case 3402: /* SteamUGCRequestUGCDetailsResult_t_9784 */
