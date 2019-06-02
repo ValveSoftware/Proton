@@ -1,0 +1,1421 @@
+# Polish translations for GNU Bison package.
+# Copyright (C) 2004, 2005, 2006, 2008, 2010, 2011, 2012, 2013 Free Software Foundation, Inc.
+# This file is distributed under the same license as the bison package.
+# Wojciech Polak <polak@gnu.org>, 2004, 2005, 2006, 2008, 2010, 2011, 2012, 2013.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: bison 2.7.90\n"
+"Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
+"POT-Creation-Date: 2015-01-23 13:55+0100\n"
+"PO-Revision-Date: 2013-06-17 21:11+0200\n"
+"Last-Translator: Wojciech Polak <polak@gnu.org>\n"
+"Language-Team: Polish <translation-team-pl@lists.sourceforge.net>\n"
+"Language: pl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
+"|| n%100>=20) ? 1 : 2);\n"
+
+#: src/complain.c:322
+msgid "fatal error"
+msgstr "fatalny błąd"
+
+#: src/complain.c:323
+msgid "error"
+msgstr "błąd"
+
+#: src/complain.c:324
+msgid "warning"
+msgstr "ostrzeżenie"
+
+#: src/complain.c:387
+#, c-format
+msgid "deprecated directive, use %s"
+msgstr "przestarzała dyrektywa, użyj %s"
+
+#: src/complain.c:391
+#, c-format
+msgid "deprecated directive: %s, use %s"
+msgstr "przestarzała dyrektywa: %s, użyj %s"
+
+#: src/complain.c:400
+#, c-format
+msgid "only one %s allowed per rule"
+msgstr "tylko jedno %s dozwolone na jedną regułę"
+
+#: src/complain.c:402 src/reader.c:140 src/symtab.c:253 src/symtab.c:266
+#, c-format
+msgid "previous declaration"
+msgstr "poprzednia deklaracja"
+
+#: src/conflicts.c:77
+#, c-format
+msgid "    Conflict between rule %d and token %s resolved as shift"
+msgstr ""
+"    Konflikt pomiędzy regułą %d i symbolem leksykalnym %s rozwiązany jako "
+"przesunięcie"
+
+#: src/conflicts.c:86
+#, c-format
+msgid "    Conflict between rule %d and token %s resolved as reduce"
+msgstr ""
+"    Konflikt pomiędzy regułą %d i symbolem leksykalnym %s rozwiązany jako "
+"redukcja"
+
+#: src/conflicts.c:94
+#, c-format
+msgid "    Conflict between rule %d and token %s resolved as an error"
+msgstr ""
+"    Konflikt pomiędzy regułą %d i symbolem leksykalnym %s rozwiązany jako "
+"błąd"
+
+#: src/conflicts.c:530
+#, c-format
+msgid "State %d "
+msgstr "Stan %d "
+
+#: src/conflicts.c:533
+#, c-format
+msgid "conflicts: %d shift/reduce, %d reduce/reduce\n"
+msgstr "konflikty: %d przesunięcie/redukcja, %d redukcja/redukcja\n"
+
+#: src/conflicts.c:536
+#, c-format
+msgid "conflicts: %d shift/reduce\n"
+msgstr "konflikty: %d przesunięcie/redukcja\n"
+
+#: src/conflicts.c:538
+#, c-format
+msgid "conflicts: %d reduce/reduce\n"
+msgstr "konflikty: %d redukcja/redukcja\n"
+
+#: src/conflicts.c:569
+#, c-format
+msgid "%%expect-rr applies only to GLR parsers"
+msgstr "%%expect-rr odnosi się tylko do analizatorów składni GLR"
+
+#: src/conflicts.c:586
+#, c-format
+msgid "shift/reduce conflicts: %d found, %d expected"
+msgstr "konflikty przesunięcie/redukcja: znaleziono %d, spodziewano się %d"
+
+#: src/conflicts.c:591
+#, c-format
+msgid "%d shift/reduce conflict"
+msgid_plural "%d shift/reduce conflicts"
+msgstr[0] "%d konflikt przesunięcie/redukcja"
+msgstr[1] "%d konflikty przesunięcie/redukcja"
+msgstr[2] "%d konfliktów przesunięcie/redukcja"
+
+#: src/conflicts.c:608
+#, c-format
+msgid "reduce/reduce conflicts: %d found, %d expected"
+msgstr "konflikty redukcja/redukcja: znaleziono %d, spodziewano się %d"
+
+#: src/conflicts.c:613
+#, c-format
+msgid "%d reduce/reduce conflict"
+msgid_plural "%d reduce/reduce conflicts"
+msgstr[0] "%d konflikt redukcja/redukcja"
+msgstr[1] "%d konflikty redukcja/redukcja"
+msgstr[2] "%d konfliktów redukcja/redukcja"
+
+#: src/files.c:123
+#, c-format
+msgid "%s: cannot open"
+msgstr "%s: nie można otworzyć"
+
+#: src/files.c:139
+#, c-format
+msgid "input/output error"
+msgstr "błąd wejścia/wyjścia"
+
+#: src/files.c:142
+#, c-format
+msgid "cannot close file"
+msgstr "nie można zamknąć pliku"
+
+#: src/files.c:372
+#, c-format
+msgid "refusing to overwrite the input file %s"
+msgstr "odmowa nadpisania pliku wejściowego %s"
+
+#: src/files.c:382
+#, c-format
+msgid "conflicting outputs to file %s"
+msgstr "konflikt wyjść do pliku %s"
+
+#: src/getargs.c:252
+#, c-format
+msgid "Try '%s --help' for more information.\n"
+msgstr "Spróbuj '%s --help' aby uzyskać więcej informacji.\n"
+
+#: src/getargs.c:261
+#, c-format
+msgid "Usage: %s [OPTION]... FILE\n"
+msgstr "Użycie: %s [OPCJA]... PLIK\n"
+
+#: src/getargs.c:262
+msgid ""
+"Generate a deterministic LR or generalized LR (GLR) parser employing\n"
+"LALR(1), IELR(1), or canonical LR(1) parser tables.  IELR(1) and\n"
+"canonical LR(1) support is experimental.\n"
+"\n"
+msgstr ""
+"Tworzy deterministyczny analizator składni LR lub uogólniony LR (GLR)\n"
+"używając tablic LALR(1), IELR(1) lub kanonicznej LR(1).\n"
+"Wsparcie dla IELR(1) i kanonicznego LR(1) jest eksperymentalne.\n"
+"\n"
+
+#: src/getargs.c:269
+msgid ""
+"Mandatory arguments to long options are mandatory for short options too.\n"
+msgstr ""
+"Obowiązkowe argumenty dla długich opcji są obowiązkowe również dla krótkich "
+"opcji.\n"
+
+#: src/getargs.c:272
+msgid "The same is true for optional arguments.\n"
+msgstr "To samo dotyczy argumentów opcjonalnych.\n"
+
+#: src/getargs.c:276
+msgid ""
+"\n"
+"Operation modes:\n"
+"  -h, --help                 display this help and exit\n"
+"  -V, --version              output version information and exit\n"
+"      --print-localedir      output directory containing locale-dependent "
+"data\n"
+"      --print-datadir        output directory containing skeletons and XSLT\n"
+"  -y, --yacc                 emulate POSIX Yacc\n"
+"  -W, --warnings[=CATEGORY]  report the warnings falling in CATEGORY\n"
+"  -f, --feature[=FEATURE]    activate miscellaneous features\n"
+"\n"
+msgstr ""
+"\n"
+"Tryby działania:\n"
+"  -h, --help                 wyświetla pomoc i kończy pracę\n"
+"  -V, --version              wyświetla informacje o wersji i kończy pracę\n"
+"      --print-localedir      wyświetla katalog z danymi dotyczącymi "
+"lokalizacji\n"
+"      --print-datadir        wyświetla katalog zawierający szkielety i XSLT\n"
+"  -y, --yacc                 emuluje POSIX Yacc\n"
+"  -W, --warnings[=KATEGORIA] zgłasza ostrzeżenia dotyczące danej kategorii\n"
+"  -f, --feature[=FUNKCJA]    aktywuje różne funkcje programu\n"
+"\n"
+
+#: src/getargs.c:289
+#, c-format
+msgid ""
+"Parser:\n"
+"  -L, --language=LANGUAGE          specify the output programming language\n"
+"  -S, --skeleton=FILE              specify the skeleton to use\n"
+"  -t, --debug                      instrument the parser for tracing\n"
+"                                   same as '-Dparse.trace'\n"
+"      --locations                  enable location support\n"
+"  -D, --define=NAME[=VALUE]        similar to '%define NAME \"VALUE\"'\n"
+"  -F, --force-define=NAME[=VALUE]  override '%define NAME \"VALUE\"'\n"
+"  -p, --name-prefix=PREFIX         prepend PREFIX to the external symbols\n"
+"                                   deprecated by '-Dapi.prefix=PREFIX'\n"
+"  -l, --no-lines                   don't generate '#line' directives\n"
+"  -k, --token-table                include a table of token names\n"
+msgstr ""
+"Analizator składni:\n"
+"  -L, --language=JĘZYK       używa wyjściowy język programowania\n"
+"  -S, --skeleton=PLIK        używa podanego szkieletu\n"
+"  -t, --debug                produkuje analizator zdolny do odpluskwiania\n"
+"      --locations            włącza obliczanie lokacji\n"
+"  -D, --define=NAZWA[=WARTOŚĆ] podobnie jak '%define NAZWA \"WARTOŚĆ\"'\n"
+"  -F, --force-define=NAZWA[=WARTOŚC] nadpisuje '%define NAZWA \"WARTOŚĆ\"'\n"
+"  -p, --name-prefix=PREFIKS  dopisuje początkowy PREFIKS do zewnętrznych "
+"symboli\n"
+"                             zastąpione przez '-Dapi.prefix=PREFIKS'\n"
+"  -l, --no-lines             zabrania tworzenia dyrektyw '#line'\n"
+"  -k, --token-table          dołącza tablicę nazw symboli leksykalnych\n"
+
+#: src/getargs.c:307
+msgid ""
+"Output:\n"
+"      --defines[=FILE]       also produce a header file\n"
+"  -d                         likewise but cannot specify FILE (for POSIX "
+"Yacc)\n"
+"  -r, --report=THINGS        also produce details on the automaton\n"
+"      --report-file=FILE     write report to FILE\n"
+"  -v, --verbose              same as '--report=state'\n"
+"  -b, --file-prefix=PREFIX   specify a PREFIX for output files\n"
+"  -o, --output=FILE          leave output to FILE\n"
+"  -g, --graph[=FILE]         also output a graph of the automaton\n"
+"  -x, --xml[=FILE]           also output an XML report of the automaton\n"
+"                             (the XML schema is experimental)\n"
+msgstr ""
+"Wyjście:\n"
+"      --defines[=PLIK]       produkuje także plik nagłówkowy\n"
+"  -d                         podobnie, ale bez podania PLIKU (dla POSIX "
+"Yacc)\n"
+"  -r, --report=LISTA         produkuje także szczegóły na temat automatu\n"
+"      --report-file=PLIK     zapisuje raport do PLIKU\n"
+"  -v, --verbose              to samo co '--report=state'\n"
+"  -b, --file-prefix=PREFIKS  ustaw PREFIKS dla plików wyjściowych\n"
+"  -o, --output=PLIK          przekierowuje wyjście do PLIKU\n"
+"  -g, --graph[=PLIK]         produkuje także graf automatu\n"
+"  -x, --xml[=PLIK]           produkuje także raport XML na temat automatu\n"
+"                             (schemat XML jest eksperymentalny)\n"
+
+#: src/getargs.c:322
+#, c-format
+msgid ""
+"Warning categories include:\n"
+"  'midrule-values'    unset or unused midrule values\n"
+"  'yacc'              incompatibilities with POSIX Yacc\n"
+"  'conflicts-sr'      S/R conflicts (enabled by default)\n"
+"  'conflicts-rr'      R/R conflicts (enabled by default)\n"
+"  'deprecated'        obsolete constructs\n"
+"  'empty-rule'        empty rules without %empty\n"
+"  'precedence'        useless precedence and associativity\n"
+"  'other'             all other warnings (enabled by default)\n"
+"  'all'               all the warnings except 'yacc'\n"
+"  'no-CATEGORY'       turn off warnings in CATEGORY\n"
+"  'none'              turn off all the warnings\n"
+"  'error[=CATEGORY]'  treat warnings as errors\n"
+msgstr ""
+"Kategorie ostrzeżeń:\n"
+"  'midrule-values'    nieustawione lub nieużywane wartości reguł\n"
+"  'yacc'              niekompatybilności z POSIX Yacc\n"
+"  'conflicts-sr'      konflikty przesunięcie/redukcja (domyślnie włączone)\n"
+"  'conflicts-rr'      konflikty redukcja/redukcja (domyślnie włączone)\n"
+"  'deprecated'        przestrzałe konstrukcje\n"
+"  'empty-rule'        puste reguły bez %empty\n"
+"  'precedence'        bezużyteczne pierwszeństwo i asocjacja\n"
+"  'other'             wszystkie inne ostrzeżenia (domyślnie włączone)\n"
+"  'all'               wszystkie ostrzeżenia\n"
+"  'no-KATEGORIA'      wyłącza ostrzeżenia w KATEGORII\n"
+"  'none'              wyłącza wszystkie ostrzeżenia\n"
+"  'error[=KATEGORIA]' traktuje ostrzeżenia jako błędy\n"
+
+#: src/getargs.c:339
+msgid ""
+"THINGS is a list of comma separated words that can include:\n"
+"  'state'        describe the states\n"
+"  'itemset'      complete the core item sets with their closure\n"
+"  'lookahead'    explicitly associate lookahead tokens to items\n"
+"  'solved'       describe shift/reduce conflicts solving\n"
+"  'all'          include all the above information\n"
+"  'none'         disable the report\n"
+msgstr ""
+"LISTA stanowi słowa przedzielone przecinkami. Dopuszczalne są następujące "
+"słowa:\n"
+"  'state'        opisuje stany\n"
+"  'itemset'      dodaje symbole pochodne do listy symboli podstawowych\n"
+"  'look-ahead'   drukuje listę możliwych w każdej pozycji symboli-następców\n"
+"  'solved'       opisuje rozwiązanie konfliktów przesunięcie/redukcja\n"
+"  'all'          dołącza wszystkie powyższe informacje\n"
+"  'none'         wyłącza raport\n"
+
+#: src/getargs.c:350
+msgid ""
+"FEATURE is a list of comma separated words that can include:\n"
+"  'caret'        show errors with carets\n"
+"  'all'          all of the above\n"
+"  'none'         disable all of the above\n"
+"  "
+msgstr ""
+"FUNKCJA stanowi słowa przedzielone przecinkami. Dopuszczalne są następujące "
+"słowa:\n"
+"  'caret'        pokazuje błędy przy użyciu karety (symbol ^)\n"
+"  'all'          wszystkie powyższe\n"
+"  'none'         żadne z powyższych\n"
+"  "
+
+#: src/getargs.c:358
+#, c-format
+msgid "Report bugs to <%s>.\n"
+msgstr "O błędach programu poinformuj <%s>.\n"
+
+#: src/getargs.c:359
+#, c-format
+msgid "%s home page: <%s>.\n"
+msgstr "strona domowa %s: <%s>.\n"
+
+#: src/getargs.c:360
+msgid "General help using GNU software: <http://www.gnu.org/gethelp/>.\n"
+msgstr "Pomoc w używaniu oprogramowania GNU: <http://www.gnu.org/gethelp/>.\n"
+
+#. TRANSLATORS: Replace LANG_CODE in this URL with your language
+#. code <http://translationproject.org/team/LANG_CODE.html> to
+#. form one of the URLs at http://translationproject.org/team/.
+#. Otherwise, replace the entire URL with your translation team's
+#. email address.
+#: src/getargs.c:373
+msgid "Report translation bugs to <http://translationproject.org/team/>.\n"
+msgstr ""
+"O błędach tłumaczenia poinformuj <translation-team-pl@lists.sourceforge."
+"net>.\n"
+
+#: src/getargs.c:375
+msgid "For complete documentation, run: info bison.\n"
+msgstr "Dla pełnej dokumentacji, uruchom: info bison\n"
+
+#: src/getargs.c:391
+#, c-format
+msgid "bison (GNU Bison) %s"
+msgstr "bison (GNU Bison) %s"
+
+#: src/getargs.c:393
+msgid "Written by Robert Corbett and Richard Stallman.\n"
+msgstr "Napisany przez Roberta Corbetta i Richarda Stallmana.\n"
+
+#: src/getargs.c:397
+#, c-format
+msgid "Copyright (C) %d Free Software Foundation, Inc.\n"
+msgstr "Copyright (C) %d Free Software Foundation, Inc.\n"
+
+#: src/getargs.c:400
+msgid ""
+"This is free software; see the source for copying conditions.  There is NO\n"
+"warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n"
+msgstr ""
+"Niniejszy program jest wolnym oprogramowaniem; warunki kopiowania są "
+"opisane\n"
+"w źródłach. Autorzy nie dają ŻADNYCH gwarancji, w tym również gwarancji\n"
+"PRZYDATNOŚCI DO SPRZEDAŻY LUB DO KONKRETNYCH CELÓW.\n"
+
+#: src/getargs.c:422
+#, c-format
+msgid "multiple skeleton declarations are invalid"
+msgstr "wielokrotne deklaracje szkieletu są nieprawidłowe"
+
+#: src/getargs.c:440
+#, c-format
+msgid "%s: invalid language"
+msgstr "%s: nieprawidłowy język"
+
+#: src/getargs.c:443
+msgid "multiple language declarations are invalid"
+msgstr "wielokrotne deklaracje językowe są nieprawidłowe"
+
+#: src/getargs.c:724
+#, c-format
+msgid "%s: missing operand"
+msgstr "%s: brakujący argument"
+
+#: src/getargs.c:726
+#, c-format
+msgid "extra operand %s"
+msgstr "dodatkowy argument %s"
+
+#: src/gram.c:185
+msgid "Grammar"
+msgstr "Gramatyka"
+
+#: src/graphviz.c:45
+#, c-format
+msgid ""
+"// Generated by %s.\n"
+"// Report bugs to <%s>.\n"
+"// Home page: <%s>.\n"
+"\n"
+msgstr ""
+"// Utworzone przez %s.\n"
+"// Błędy proszę zgłaszać na adres <%s>.\n"
+"// Strona domowa: <%s>.\n"
+"\n"
+
+#: src/location.c:93 src/scan-gram.l:932
+#, c-format
+msgid "line number overflow"
+msgstr "przepełnienie numeru linii"
+
+#: src/location.c:95
+#, c-format
+msgid "column number overflow"
+msgstr "przepełnienie numeru kolumny"
+
+#: src/main.c:146
+msgid "rule useless in parser due to conflicts"
+msgstr "bezużyteczna reguła w analizatorze z powodu konfliktów"
+
+#: src/muscle-tab.c:514
+#, c-format
+msgid "%%define variable %s redefined"
+msgstr "zredefiniowana zmienna %%define %s"
+
+#: src/muscle-tab.c:518
+#, c-format
+msgid "previous definition"
+msgstr "poprzednia definicja"
+
+#: src/muscle-tab.c:568 src/muscle-tab.c:669 src/muscle-tab.c:732
+#, c-format
+msgid "%s: undefined %%define variable %s"
+msgstr "%s: niezdefiniowana zmienna %%define %s"
+
+#: src/muscle-tab.c:663
+#, c-format
+msgid "invalid value for %%define Boolean variable %s"
+msgstr "nieprawidłowa wartość dla boole'owskiej zmiennej %%define %s"
+
+#: src/muscle-tab.c:717
+#, c-format
+msgid "invalid value for %%define variable %s: %s"
+msgstr "nieprawidłowa wartość dla zmiennej %%define %s: %s"
+
+#: src/muscle-tab.c:722
+#, c-format
+msgid "accepted value: %s"
+msgstr "zaakceptowana wartość: %s"
+
+#: src/parse-gram.y:811
+#, c-format
+msgid "missing identifier in parameter declaration"
+msgstr "brakujący identyfikator w deklaracji parametrów"
+
+#: src/print.c:47
+#, c-format
+msgid " type %d is %s\n"
+msgstr " typ %d jest %s\n"
+
+#: src/print.c:167
+#, c-format
+msgid "shift, and go to state %d\n"
+msgstr "przesunięcie, i przejście do stanu %d\n"
+
+#: src/print.c:169
+#, c-format
+msgid "go to state %d\n"
+msgstr "przejście do stanu %d\n"
+
+#: src/print.c:206
+msgid "error (nonassociative)\n"
+msgstr "błąd (symbol niełączący się)\n"
+
+#: src/print.c:229
+#, c-format
+msgid "reduce using rule %d (%s)"
+msgstr "redukcja przy użyciu reguły %d (%s)"
+
+#: src/print.c:231
+#, c-format
+msgid "accept"
+msgstr "akceptowanie"
+
+#: src/print.c:267 src/print.c:341
+msgid "$default"
+msgstr "$domyślnie"
+
+#: src/print.c:377 src/print_graph.c:61
+#, c-format
+msgid "State %d"
+msgstr "Stan %d"
+
+#: src/print.c:413
+msgid "Terminals, with rules where they appear"
+msgstr "Symbole terminalne i reguły, w których występują"
+
+#: src/print.c:440
+msgid "Nonterminals, with rules where they appear"
+msgstr "Symbole nieterminalne i reguły, w których występują"
+
+#: src/print.c:469
+#, c-format
+msgid " on left:"
+msgstr " po lewej:"
+
+#: src/print.c:486
+#, c-format
+msgid " on right:"
+msgstr " po prawej:"
+
+#: src/print.c:514
+msgid "Rules useless in parser due to conflicts"
+msgstr "Bezużyteczne reguły w analizatorze z powodu konfliktów"
+
+#: src/reader.c:62
+#, c-format
+msgid "multiple %s declarations"
+msgstr "wielokrotne deklaracje %s"
+
+#: src/reader.c:133
+#, c-format
+msgid "result type clash on merge function %s: <%s> != <%s>"
+msgstr "niezgodność typów powrotu przy połączeniu funkcji %s: <%s> != <%s>"
+
+#: src/reader.c:206
+#, c-format
+msgid "duplicated symbol name for %s ignored"
+msgstr "zignorowano powtórzoną nazwę symbolu dla %s"
+
+#: src/reader.c:250
+#, c-format
+msgid "rule given for %s, which is a token"
+msgstr "reguła dana dla symbolu leksykalnego %s"
+
+#: src/reader.c:306
+#, c-format
+msgid "type clash on default action: <%s> != <%s>"
+msgstr "konflikt typu w domyślnej akcji: <%s> != <%s>"
+
+#: src/reader.c:312
+#, c-format
+msgid "empty rule for typed nonterminal, and no action"
+msgstr ""
+"pusta reguła i brak akcji dla symbolu nieterminalnego z określeniem typu"
+
+#: src/reader.c:329
+#, c-format
+msgid "unused value: $%d"
+msgstr "nieużywana wartość: $%d"
+
+#: src/reader.c:331
+#, c-format
+msgid "unset value: $$"
+msgstr "nieustawiona wartość: $$"
+
+#: src/reader.c:340
+#, c-format
+msgid "%%empty on non-empty rule"
+msgstr "%%empty w niepustej regule"
+
+#: src/reader.c:346
+#, c-format
+msgid "empty rule without %%empty"
+msgstr "pusta reguła bez %%empty"
+
+#: src/reader.c:355
+#, c-format
+msgid "token for %%prec is not defined: %s"
+msgstr "symbol leksykalny dla %%prec nie jest zdefiniowany: %s"
+
+#: src/reader.c:473 src/reader.c:495
+#, c-format
+msgid "%s affects only GLR parsers"
+msgstr "%s wpływa tylko na analizatory składni GLR"
+
+#: src/reader.c:476
+#, c-format
+msgid "%s must be followed by positive number"
+msgstr "za %s musi być umieszczona liczba dodatnia"
+
+#: src/reader.c:602
+#, c-format
+msgid "rule is too long"
+msgstr "zbyt długa reguła"
+
+#: src/reader.c:718
+#, c-format
+msgid "no rules in the input grammar"
+msgstr "brak reguł w gramatyce wejściowej"
+
+#: src/reduce.c:241
+msgid "rule useless in grammar"
+msgstr "reguła bezużyteczna w gramatyce"
+
+#: src/reduce.c:303
+#, c-format
+msgid "nonterminal useless in grammar: %s"
+msgstr "Symbol nieterminalny bezużyteczny w gramatyce: %s"
+
+#: src/reduce.c:351
+msgid "Nonterminals useless in grammar"
+msgstr "Symbole nieterminalne bezużyteczne w gramatyce"
+
+#: src/reduce.c:364
+msgid "Terminals unused in grammar"
+msgstr "Nieużywane symbole terminalne w gramatyce"
+
+#: src/reduce.c:373
+msgid "Rules useless in grammar"
+msgstr "Bezużyteczne reguły w gramatyce"
+
+#: src/reduce.c:386
+#, c-format
+msgid "%d nonterminal useless in grammar"
+msgid_plural "%d nonterminals useless in grammar"
+msgstr[0] "%d bezużyteczny symbol nieterminalny w gramatyce"
+msgstr[1] "%d bezużyteczne symbole nieterminalne w gramatyce"
+msgstr[2] "%d bezużytecznych symboli nieterminalnych w gramatyce"
+
+#: src/reduce.c:391
+#, c-format
+msgid "%d rule useless in grammar"
+msgid_plural "%d rules useless in grammar"
+msgstr[0] "%d bezużyteczna reguła w gramatyce"
+msgstr[1] "%d bezużyteczne reguły w gramatyce"
+msgstr[2] "%d bezużytecznych reguł w gramatyce"
+
+#: src/reduce.c:420
+#, c-format
+msgid "start symbol %s does not derive any sentence"
+msgstr "początkowy symbol %s nie dziedziczy żadnego zdania"
+
+#: src/scan-code.l:157
+#, c-format
+msgid "stray '%s'"
+msgstr "zabłąkany '%s'"
+
+#: src/scan-code.l:339
+#, c-format
+msgid "refers to: %c%s at %s"
+msgstr "odnosi się do: %c%s w %s"
+
+#: src/scan-code.l:362
+#, c-format
+msgid "possibly meant: %c"
+msgstr "może chodziło o: %c"
+
+#: src/scan-code.l:371
+#, c-format
+msgid ", hiding %c"
+msgstr ", ukrywanie %c"
+
+#: src/scan-code.l:379
+#, c-format
+msgid " at %s"
+msgstr " w %s"
+
+#: src/scan-code.l:383
+#, c-format
+msgid ", cannot be accessed from mid-rule action at $%d"
+msgstr ", nie jest dostępne z akcji mid-rule w $%d"
+
+#: src/scan-code.l:440 src/scan-gram.l:855
+#, c-format
+msgid "integer out of range: %s"
+msgstr "liczba całkowita poza zakresem: %s"
+
+#: src/scan-code.l:530
+#, c-format
+msgid "invalid reference: %s"
+msgstr "nieprawidłowe odwołanie: %s"
+
+#: src/scan-code.l:538
+#, c-format
+msgid "syntax error after '%c', expecting integer, letter, '_', '[', or '$'"
+msgstr ""
+"błąd składni za znakiem '%c', spodziewano się liczby, litery, '_', '[', lub "
+"'$'"
+
+#: src/scan-code.l:544
+#, c-format
+msgid "symbol not found in production before $%d: %.*s"
+msgstr "nie znaleziono symbolu w produkcji przed $%d: %.*s"
+
+#: src/scan-code.l:549
+#, c-format
+msgid "symbol not found in production: %.*s"
+msgstr "nie znaleziono symbolu w produkcji: %.*s"
+
+#: src/scan-code.l:564
+#, c-format
+msgid "misleading reference: %s"
+msgstr "mylące odniesienie: %s"
+
+#: src/scan-code.l:580
+#, c-format
+msgid "ambiguous reference: %s"
+msgstr "niejednoznaczne odniesienie: %s"
+
+#: src/scan-code.l:616
+#, c-format
+msgid "explicit type given in untyped grammar"
+msgstr "jawny typ w gramatyce beztypowej"
+
+#: src/scan-code.l:675
+#, c-format
+msgid "$$ for the midrule at $%d of %s has no declared type"
+msgstr ""
+"$$ w pozycji $%d należący do pośredniej reguły %s nie posiada "
+"zadeklarowanego typu"
+
+#: src/scan-code.l:681
+#, c-format
+msgid "$$ of %s has no declared type"
+msgstr "$$ należący do %s nie posiada zadeklarowanego typu"
+
+#: src/scan-code.l:703
+#, c-format
+msgid "$%s of %s has no declared type"
+msgstr "$%s należący do %s nie posiada zadeklarowanego typu"
+
+#: src/scan-gram.l:186
+#, c-format
+msgid "stray ',' treated as white space"
+msgstr "zabłąkany znak ',' potraktowany jako biały znak"
+
+#: src/scan-gram.l:276
+#, c-format
+msgid "invalid directive: %s"
+msgstr "nieprawidłowa dyrektywa: %s"
+
+#: src/scan-gram.l:302
+#, c-format
+msgid "invalid identifier: %s"
+msgstr "nieprawidłowy identyfikator: %s"
+
+#: src/scan-gram.l:354
+msgid "invalid character"
+msgid_plural "invalid characters"
+msgstr[0] "nieprawidłowy znak"
+msgstr[1] "nieprawidłowe znaki"
+msgstr[2] "nieprawidłowych znaków"
+
+#: src/scan-gram.l:372
+#, c-format
+msgid "invalid null character"
+msgstr "nieprawidłowy pusty znak"
+
+#: src/scan-gram.l:425
+#, c-format
+msgid "unexpected identifier in bracketed name: %s"
+msgstr "niespodziewany identyfikator w nazwie: %s"
+
+#: src/scan-gram.l:447
+#, c-format
+msgid "an identifier expected"
+msgstr "oczekiwano identyfikatora"
+
+#: src/scan-gram.l:452
+msgid "invalid character in bracketed name"
+msgid_plural "invalid characters in bracketed name"
+msgstr[0] "nieprawidłowy znak w nazwie"
+msgstr[1] "nieprawidłowe znaki w nazwie"
+msgstr[2] "nieprawidłowych znaków w nazwie"
+
+#: src/scan-gram.l:544
+#, c-format
+msgid "empty character literal"
+msgstr "pusty literalny znak"
+
+#: src/scan-gram.l:550
+#, c-format
+msgid "extra characters in character literal"
+msgstr "dodatkowe znaki w literalnym znaku"
+
+#: src/scan-gram.l:596 src/scan-gram.l:606 src/scan-gram.l:626
+#, c-format
+msgid "invalid number after \\-escape: %s"
+msgstr "nieprawidłowa liczba po \\-escape: %s"
+
+#: src/scan-gram.l:638
+#, c-format
+msgid "invalid character after \\-escape: %s"
+msgstr "nieprawidłowy znak po \\-escape: %s"
+
+#: src/scan-gram.l:984
+#, c-format
+msgid "missing %s at end of file"
+msgstr "brakujący %s na końcu pliku"
+
+#: src/scan-gram.l:995
+#, c-format
+msgid "missing %s at end of line"
+msgstr "brakujący %s na końcu linii"
+
+#: src/scan-skel.l:139
+#, c-format
+msgid "unclosed %s directive in skeleton"
+msgstr "niedomknięta dyrektywa %s w szkielecie"
+
+#: src/scan-skel.l:256
+#, c-format
+msgid "too few arguments for %s directive in skeleton"
+msgstr "za mało argumentów dla dyrektywy %s w szkielecie"
+
+#: src/scan-skel.l:263
+#, c-format
+msgid "too many arguments for %s directive in skeleton"
+msgstr "za dużo argumentów dla dyrektywy %s w szkielecie"
+
+#: src/symtab.c:75
+#, c-format
+msgid "POSIX Yacc forbids dashes in symbol names: %s"
+msgstr "POSIX Yacc zabrania myślników w nazwach symboli: %s"
+
+#: src/symtab.c:97
+#, c-format
+msgid "too many symbols in input grammar (limit is %d)"
+msgstr "zbyt dużo symboli w gramatyce wejściowej (limit wynosi %d)"
+
+#: src/symtab.c:250
+#, c-format
+msgid "%s redeclaration for %s"
+msgstr "%s redeklaracja dla %s"
+
+#: src/symtab.c:263
+#, c-format
+msgid "%s redeclaration for <%s>"
+msgstr "%s redeklaracja dla <%s>"
+
+#: src/symtab.c:392
+#, c-format
+msgid "symbol %s redefined"
+msgstr "zredefiniowany symbol %s"
+
+#: src/symtab.c:407
+#, c-format
+msgid "symbol %s redeclared"
+msgstr "zredefiniowany symbol %s"
+
+#: src/symtab.c:429
+#, c-format
+msgid "redefining user token number of %s"
+msgstr "przedefiniowanie numeru symbolu leksykalnego %s"
+
+#: src/symtab.c:459
+#, c-format
+msgid "symbol %s is used, but is not defined as a token and has no rules"
+msgstr ""
+"użyty symbol %s nie jest zdefiniowany jako symbol leksykalny i nie posiada "
+"reguł"
+
+#: src/symtab.c:497
+#, c-format
+msgid "useless %s for type <%s>"
+msgstr "bezużyteczny %s dla typu <%s>"
+
+#: src/symtab.c:502
+#, c-format
+msgid "type <%s> is used, but is not associated to any symbol"
+msgstr "użyty typ <%s> nie jest powiązany z żadnym symbolem"
+
+#: src/symtab.c:527
+#, c-format
+msgid "symbol %s used more than once as a literal string"
+msgstr "symbol %s użyty więcej niż jeden raz jako łańcuch literalny"
+
+#: src/symtab.c:530
+#, c-format
+msgid "symbol %s given more than one literal string"
+msgstr "symbol %s podany więcej niż jeden łańcuch literalny"
+
+#: src/symtab.c:629
+#, c-format
+msgid "user token number %d redeclaration for %s"
+msgstr "redeklaracja numeru symbolu leksykalnego %d dla %s"
+
+#: src/symtab.c:633
+#, c-format
+msgid "previous declaration for %s"
+msgstr "poprzednia deklaracja dla %s"
+
+#: src/symtab.c:1014
+#, c-format
+msgid "the start symbol %s is undefined"
+msgstr "symbol początkowy %s jest niezdefiniowany"
+
+#: src/symtab.c:1018
+#, c-format
+msgid "the start symbol %s is a token"
+msgstr "symbol początkowy %s jest symbolem leksykalnym"
+
+#: src/symtab.c:1193
+#, c-format
+msgid "useless precedence and associativity for %s"
+msgstr "bezużyteczne pierwszeństwo i asocjacja dla %s"
+
+#: src/symtab.c:1196
+#, c-format
+msgid "useless precedence for %s"
+msgstr "bezużyteczne pierwszeństwo dla %s"
+
+#: src/symtab.c:1200
+#, c-format
+msgid "useless associativity for %s, use %%precedence"
+msgstr "bezużyteczna asocjacja dla %s, użyj %%precedence"
+
+#: djgpp/subpipe.c:63 djgpp/subpipe.c:286 djgpp/subpipe.c:288
+#, c-format
+msgid "removing of '%s' failed"
+msgstr "usuwanie '%s' nie powiodło się"
+
+#: djgpp/subpipe.c:85 djgpp/subpipe.c:92
+#, c-format
+msgid "creation of a temporary file failed"
+msgstr "utworzenie tymczasowego pliku nie powiodło się"
+
+#: djgpp/subpipe.c:127
+#, c-format
+msgid "saving stdin failed"
+msgstr "zapisanie standardowego wejścia nie powiodło się"
+
+#: djgpp/subpipe.c:131
+#, c-format
+msgid "saving stdout failed"
+msgstr "zapisanie standardowego wyjścia nie powiodło się"
+
+#: djgpp/subpipe.c:153 djgpp/subpipe.c:197 djgpp/subpipe.c:258
+#, c-format
+msgid "opening of tmpfile failed"
+msgstr "otwarcie tmpfile nie powiodło się"
+
+#: djgpp/subpipe.c:157
+#, c-format
+msgid "redirecting bison's stdout to the temporary file failed"
+msgstr "nie powiodło się przekierowanie stdout bisona do tymczasowego pliku"
+
+#: djgpp/subpipe.c:201
+#, c-format
+msgid "redirecting m4's stdin from the temporary file failed"
+msgstr "nie powiodło się przekierowanie stdin m4 z tymczasowego pliku"
+
+#: djgpp/subpipe.c:212
+#, c-format
+msgid "opening of a temporary file failed"
+msgstr "otwarcie tymczasowego pliku nie powiodło się"
+
+#: djgpp/subpipe.c:218
+#, c-format
+msgid "redirecting m4's stdout to a temporary file failed"
+msgstr "nie powiodło się przekierowanie stdout m4 do tymczasowego pliku"
+
+#: djgpp/subpipe.c:234
+#, c-format
+msgid "subsidiary program '%s' interrupted"
+msgstr "dodatkowy program '%s' przerwany"
+
+#: djgpp/subpipe.c:241
+#, c-format
+msgid "subsidiary program '%s' not found"
+msgstr "dodatkowy program '%s' nie znaleziony"
+
+#: djgpp/subpipe.c:265
+#, c-format
+msgid "redirecting bison's stdin from the temporary file failed"
+msgstr "nie powiodło się przekierowanie stdin bisona z tymczasowego pliku"
+
+#: lib/argmatch.c:133
+#, c-format
+msgid "invalid argument %s for %s"
+msgstr "nieprawidłowy argument %s dla %s"
+
+#: lib/argmatch.c:134
+#, c-format
+msgid "ambiguous argument %s for %s"
+msgstr "niejednoznaczny argument %s dla %s"
+
+#: lib/argmatch.c:153
+msgid "Valid arguments are:"
+msgstr "Prawidłowe argumenty to:"
+
+#: lib/bitset_stats.c:177
+#, c-format
+msgid "%u bitset_allocs, %u freed (%.2f%%).\n"
+msgstr "%u bitset_allocs, %u zwolnione (%.2f%%).\n"
+
+#: lib/bitset_stats.c:180
+#, c-format
+msgid "%u bitset_sets, %u cached (%.2f%%)\n"
+msgstr "%u bitset_sets, %u zapamiętane (%.2f%%)\n"
+
+#: lib/bitset_stats.c:183
+#, c-format
+msgid "%u bitset_resets, %u cached (%.2f%%)\n"
+msgstr "%u bitset_resets, %u zapamiętane (%.2f%%)\n"
+
+#: lib/bitset_stats.c:186
+#, c-format
+msgid "%u bitset_tests, %u cached (%.2f%%)\n"
+msgstr "%u bitset_tests, %u zapamiętane (%.2f%%)\n"
+
+#: lib/bitset_stats.c:190
+#, c-format
+msgid "%u bitset_lists\n"
+msgstr "%u bitset_lists\n"
+
+#: lib/bitset_stats.c:192
+msgid "count log histogram\n"
+msgstr "histogram rejestru zliczeń\n"
+
+#: lib/bitset_stats.c:195
+msgid "size log histogram\n"
+msgstr "histogram rejestru wielkości\n"
+
+#: lib/bitset_stats.c:198
+msgid "density histogram\n"
+msgstr "histogram gęstości\n"
+
+#: lib/bitset_stats.c:212
+#, c-format
+msgid ""
+"Bitset statistics:\n"
+"\n"
+msgstr ""
+"Statystyki bitset:\n"
+"\n"
+
+#: lib/bitset_stats.c:215
+#, c-format
+msgid "Accumulated runs = %u\n"
+msgstr "Zakumulowane przebiegi = %u\n"
+
+#: lib/bitset_stats.c:259 lib/bitset_stats.c:264
+msgid "cannot read stats file"
+msgstr "nie można odczytać pliku statystyk"
+
+#: lib/bitset_stats.c:261
+#, c-format
+msgid "bad stats file size\n"
+msgstr "zły rozmiar pliku statystyk\n"
+
+#: lib/bitset_stats.c:287 lib/bitset_stats.c:289
+msgid "cannot write stats file"
+msgstr "nie można zapisać pliku statystyk"
+
+#: lib/bitset_stats.c:292
+msgid "cannot open stats file for writing"
+msgstr "nie można otworzyć pliku statystyk do zapisu"
+
+#: lib/closeout.c:112
+msgid "write error"
+msgstr "błąd zapisu"
+
+#: lib/error.c:191
+msgid "Unknown system error"
+msgstr "Nieznany błąd systemu"
+
+#: lib/getopt.c:547 lib/getopt.c:576
+#, c-format
+msgid "%s: option '%s' is ambiguous; possibilities:"
+msgstr "%s: opcja '%s' jest niejednoznaczna; możliwości:"
+
+#: lib/getopt.c:624 lib/getopt.c:628
+#, c-format
+msgid "%s: option '--%s' doesn't allow an argument\n"
+msgstr "%s: opcja '--%s' nie może mieć argumentów\n"
+
+#: lib/getopt.c:637 lib/getopt.c:642
+#, c-format
+msgid "%s: option '%c%s' doesn't allow an argument\n"
+msgstr "%s: opcja '%c%s' nie może mieć argumentów\n"
+
+#: lib/getopt.c:685 lib/getopt.c:704
+#, c-format
+msgid "%s: option '--%s' requires an argument\n"
+msgstr "%s: opcja '--%s' wymaga argumentu\n"
+
+#: lib/getopt.c:742 lib/getopt.c:745
+#, c-format
+msgid "%s: unrecognized option '--%s'\n"
+msgstr "%s: nieznana opcja '--%s'\n"
+
+#: lib/getopt.c:753 lib/getopt.c:756
+#, c-format
+msgid "%s: unrecognized option '%c%s'\n"
+msgstr "%s: nieznana opcja '%c%s'\n"
+
+#: lib/getopt.c:805 lib/getopt.c:808
+#, c-format
+msgid "%s: invalid option -- '%c'\n"
+msgstr "%s: błędna opcja -- '%c'\n"
+
+#: lib/getopt.c:861 lib/getopt.c:878 lib/getopt.c:1088 lib/getopt.c:1106
+#, c-format
+msgid "%s: option requires an argument -- '%c'\n"
+msgstr "%s: opcja wymaga argumentu -- '%c'\n"
+
+#: lib/getopt.c:934 lib/getopt.c:950
+#, c-format
+msgid "%s: option '-W %s' is ambiguous\n"
+msgstr "%s: opcja '-W %s' jest niejednoznaczna\n"
+
+#: lib/getopt.c:974 lib/getopt.c:992
+#, c-format
+msgid "%s: option '-W %s' doesn't allow an argument\n"
+msgstr "%s: opcja '-W %s' nie może mieć argumentów\n"
+
+#: lib/getopt.c:1013 lib/getopt.c:1031
+#, c-format
+msgid "%s: option '-W %s' requires an argument\n"
+msgstr "%s: opcja '-W %s' wymaga argumentu\n"
+
+#: lib/obstack.c:338 lib/obstack.c:340 lib/xalloc-die.c:34
+msgid "memory exhausted"
+msgstr "pamięć wyczerpana"
+
+#: lib/spawn-pipe.c:135 lib/spawn-pipe.c:138 lib/spawn-pipe.c:259
+#: lib/spawn-pipe.c:262
+#, c-format
+msgid "cannot create pipe"
+msgstr "nie można utworzyć potoku"
+
+#: lib/spawn-pipe.c:229 lib/spawn-pipe.c:343 lib/wait-process.c:282
+#: lib/wait-process.c:356
+#, c-format
+msgid "%s subprocess failed"
+msgstr "podproces %s nie powiódł się"
+
+#. TRANSLATORS:
+#. Get translations for open and closing quotation marks.
+#. The message catalog should translate "`" to a left
+#. quotation mark suitable for the locale, and similarly for
+#. "'".  For example, a French Unicode local should translate
+#. these to U+00AB (LEFT-POINTING DOUBLE ANGLE
+#. QUOTATION MARK), and U+00BB (RIGHT-POINTING DOUBLE ANGLE
+#. QUOTATION MARK), respectively.
+#.
+#. If the catalog has no translation, we will try to
+#. use Unicode U+2018 (LEFT SINGLE QUOTATION MARK) and
+#. Unicode U+2019 (RIGHT SINGLE QUOTATION MARK).  If the
+#. current locale is not Unicode, locale_quoting_style
+#. will quote 'like this', and clocale_quoting_style will
+#. quote "like this".  You should always include translations
+#. for "`" and "'" even if U+2018 and U+2019 are appropriate
+#. for your locale.
+#.
+#. If you don't know what to put here, please see
+#. <http://en.wikipedia.org/wiki/Quotation_marks_in_other_languages>
+#. and use glyphs suitable for your language.
+#: lib/quotearg.c:312
+msgid "`"
+msgstr "`"
+
+#: lib/quotearg.c:313
+msgid "'"
+msgstr "'"
+
+#: lib/timevar.c:475
+msgid ""
+"\n"
+"Execution times (seconds)\n"
+msgstr ""
+"\n"
+"Czas wykonania (w sekundach)\n"
+
+#: lib/timevar.c:525
+msgid " TOTAL                 :"
+msgstr " CAŁKOWITY             :"
+
+#: lib/timevar.c:561
+#, c-format
+msgid "time in %s: %ld.%06ld (%ld%%)\n"
+msgstr "czas w %s: %ld.%06ld (%ld%%)\n"
+
+#: lib/w32spawn.h:43
+#, c-format
+msgid "_open_osfhandle failed"
+msgstr "_open_osfhandle nie powiodło się"
+
+#: lib/w32spawn.h:84
+#, c-format
+msgid "cannot restore fd %d: dup2 failed"
+msgstr "nie można odzyskać fd %d: wywołanie dup2 nie powiodło się"
+
+#: lib/wait-process.c:223 lib/wait-process.c:255 lib/wait-process.c:317
+#, c-format
+msgid "%s subprocess"
+msgstr "podproces %s"
+
+#: lib/wait-process.c:274 lib/wait-process.c:346
+#, c-format
+msgid "%s subprocess got fatal signal %d"
+msgstr "podproces %s otrzymał nieprawidłowy sygnał %d"
+
+#~ msgid "invalid $ value: $%d"
+#~ msgstr "nieprawidłowa wartość $: $%d"
+
+#~ msgid "empty"
+#~ msgstr "pusta"
+
+#~ msgid "a ';' might be needed at the end of action code"
+#~ msgstr "znak ';' może być konieczny na końcu kodu akcji"
+
+#~ msgid "future versions of Bison will not add the ';'"
+#~ msgstr "przyszłe wersje Bisona nie będą dodawać znaku ';'"
+
+#~ msgid "use of YYFAIL, which is deprecated and will be removed"
+#~ msgstr "użycie YYFAIL, które jest przestarzałe i będzie usunięte"
+
+#~ msgid "redeclaration for default tagged %%destructor"
+#~ msgstr "domyślny oznaczony %%destructor deklarowany ponownie"
+
+#~ msgid "redeclaration for default tagless %%destructor"
+#~ msgstr "domyślny nieoznaczony %%destructor deklarowany ponownie"
+
+#~ msgid "redeclaration for default tagged %%printer"
+#~ msgstr "domyślny oznaczony %%printer deklarowany ponownie"
+
+#~ msgid "redeclaration for default tagless %%printer"
+#~ msgstr "domyślny nieoznaczony %%printer deklarowany ponownie"
+
+#~ msgid "state %d"
+#~ msgstr "stan %d"
+
+#~ msgid "stray '@'"
+#~ msgstr "zabłąkany '@'"
+
+#~ msgid ""
+#~ "undefined %%define variable `%s' passed to muscle_percent_define_get_loc"
+#~ msgstr ""
+#~ "niezdefiniowana zmienna %%define `%s' przekazana do "
+#~ "muscle_percent_define_get_loc"
+
+#~ msgid ""
+#~ "undefined %%define variable `%s' passed to "
+#~ "muscle_percent_define_get_syncline"
+#~ msgstr ""
+#~ "niezdefiniowana zmienna %%define `%s' przekazana do "
+#~ "muscle_percent_define_get_syncline"
+
+#~ msgid ""
+#~ "undefined %%define variable `%s' passed to muscle_percent_define_flag_if"
+#~ msgstr ""
+#~ "niezdefiniowana zmienna %%define `%s' przekazana do "
+#~ "muscle_percent_define_flag_if"
+
+#~ msgid ""
+#~ "undefined %%define variable `%s' passed to "
+#~ "muscle_percent_define_check_values"
+#~ msgstr ""
+#~ "niezdefiniowana zmienna %%define `%s' przekazana do "
+#~ "muscle_percent_define_check_values"
+
+#~ msgid ""
+#~ "Generate LALR(1) and GLR parsers.\n"
+#~ "\n"
+#~ msgstr ""
+#~ "GNU Bison tworzy analizatory składni LALR(1) i GLR.\n"
+#~ "\n"
+
+#~ msgid "tokens %s and %s both assigned number %d"
+#~ msgstr "oba symbole leksykalne %s i %s mają przypisaną wartość %d"
+
+#~ msgid "subsidiary program `%s' could not be invoked"
+#~ msgstr "dodatkowy program `%s' nie mógł być wywołany"
+
+#~ msgid "invalid escape sequence: %s"
+#~ msgstr "nieprawidłowa sekwencja ucieczki: %s"
+
+#~ msgid "unrecognized escape sequence: %s"
+#~ msgstr "nierozpoznana sekwencja ucieczki: %s"
+
+#~ msgid "%s: illegal option -- %c\n"
+#~ msgstr "%s: niewłaściwa opcja -- %c\n"
+
+#~ msgid "%d nonterminal"
+#~ msgid_plural "%d nonterminals"
+#~ msgstr[0] "%d nieterminal"
+#~ msgstr[1] "%d nieterminale"
+#~ msgstr[2] "%d nieterminali"
+
+#~ msgid " and "
+#~ msgstr " i "
+
+#~ msgid "%d rule"
+#~ msgid_plural "%d rules"
+#~ msgstr[0] "%d reguła"
+#~ msgstr[1] "%d reguły"
+#~ msgstr[2] "%d reguł"
+
+#~ msgid ""
+#~ "If a long option shows an argument as mandatory, then it is mandatory\n"
+#~ "for the equivalent short option also.  Similarly for optional arguments.\n"
+#~ msgstr ""
+#~ "Jeśli długa opcja posiada obowiązkowy argument, to wtedy obowiązkowy "
+#~ "jest\n"
+#~ "on także dla równoważnej jej opcji krótkiej.  Podobnie jest dla "
+#~ "argumentów\n"
+#~ "opcjonalnych.\n"
+
+#~ msgid "Rules never reduced"
+#~ msgstr "Reguły nieredukowalne"
+
+#~ msgid "useless rule"
+#~ msgstr "bezużyteczna reguła"
+
+#~ msgid "useless nonterminal: %s"
+#~ msgstr "bezużyteczny symbol nieterminalny: %s"
+
+#~ msgid "Useless nonterminals"
+#~ msgstr "Bezużyteczne symbole nieterminalne"
+
+#~ msgid "Terminals which are not used"
+#~ msgstr "Symbole terminalne, które nie są użyte"
+
+#~ msgid "Useless rules"
+#~ msgstr "Bezużyteczne reguły"
+
+#~ msgid "%d rule never reduced\n"
+#~ msgid_plural "%d rules never reduced\n"
+#~ msgstr[0] "%d nieredukowalna reguła\n"
+#~ msgstr[1] "%d nieredukowalne reguły\n"
+#~ msgstr[2] "%d nieredukowalnych reguł\n"
+
+#~ msgid "warning: "
+#~ msgstr "ostrzeżenie: "
+
+#~ msgid "missing `{' in %s"
+#~ msgstr "brakuje `{' w %s"
+
+#~ msgid "subsidiary program `%s' failed (exit status %d)"
+#~ msgstr "dodatkowy program `%s' nie powiódł się (kod wyjścia %d)"
+
+#~ msgid "syntax error: cannot back up"
+#~ msgstr "błąd składni: nie można cofnąć przesunięcia symbolu leksykalnego"
+
+#~ msgid "Stack now"
+#~ msgstr "Stos obecnie"
+
+#~ msgid "Reducing stack by rule %d (line %u), "
+#~ msgstr "Redukcja stosu poprzez regułę %d (linia %u), "
+
+#~ msgid "parser stack overflow"
+#~ msgstr "przepełnienie stosu analizatora"
+
+#~ msgid "Stack size increased to %lu\n"
+#~ msgstr "Rozmiar stosu zwiększony do %lu\n"
+
+#~ msgid "Entering state %d\n"
+#~ msgstr "Wejście w stan %d\n"
+
+#~ msgid "Reading a token: "
+#~ msgstr "Odczyt symbolu leksykalnego: "
+
+#~ msgid "Now at end of input.\n"
+#~ msgstr "Teraz na końcu wejścia.\n"
+
+#~ msgid "Next token is"
+#~ msgstr "Następny symbol leksykalny to"
+
+#~ msgid "Shifting"
+#~ msgstr "Przesunięcie"
+
+#~ msgid "POSIX forbids declarations in the grammar"
+#~ msgstr "POSIX zabrania deklaracji w gramatyce"
+
+#~ msgid "syntax error, unexpected %s"
+#~ msgstr "błąd składni, niespodziewany symbol %s"
+
+#~ msgid "syntax error, unexpected %s, expecting %s"
+#~ msgstr "błąd składni, niespodziewany symbol %s, oczekiwano %s"
+
+#~ msgid "syntax error, unexpected %s, expecting %s or %s"
+#~ msgstr "błąd składni, niespodziewany symbol %s, oczekiwano %s lub %s"
+
+#~ msgid "syntax error, unexpected %s, expecting %s or %s or %s"
+#~ msgstr "błąd składni, niespodziewany %s, oczekiwano %s lub %s lub %s"
+
+#~ msgid "syntax error, unexpected %s, expecting %s or %s or %s or %s"
+#~ msgstr ""
+#~ "błąd składni, niespodziewany symbol %s, oczekiwano %s lub %s lub %s lub %s"
+
+#~ msgid "syntax error; also memory exhausted"
+#~ msgstr "błąd składni; ponadto wyczerpana pamięć"
+
+#~ msgid "syntax error"
+#~ msgstr "błąd składni"
+
+#~ msgid "Error: discarding"
+#~ msgstr "Błąd: odrzucenie"
+
+#~ msgid "Error: popping"
+#~ msgstr "Błąd: zdejmowanie"
+
+#~ msgid "Error: discarding lookahead"
+#~ msgstr "Błąd: odrzucenie symbolu-następcy"
+
+#~ msgid "invalid $ value"
+#~ msgstr "nieprawidłowa wartość $"
+
+#~ msgid "conflicting associativities for %s (%s) and %s (%s)"
+#~ msgstr "konflikt łączności operatorów dla %s (%s) i %s (%s)"

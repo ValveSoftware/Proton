@@ -1,0 +1,1714 @@
+e# Executing Actions.                               -*- Autotest -*-
+
+# Copyright (C) 2001-2015 Free Software Foundation, Inc.
+
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+AT_BANNER([[User Actions.]])
+
+## ------------------ ##
+## Mid-rule actions.  ##
+## ------------------ ##
+
+AT_SETUP([Mid-rule actions])
+
+# Bison once forgot the mid-rule actions.  It was because the action
+# was attached to the host rule (the one with the mid-rule action),
+# instead of being attached to the empty rule dedicated to this
+# action.
+
+AT_BISON_OPTION_PUSHDEFS
+AT_DATA_GRAMMAR([[input.y]],
+[[%define parse.error verbose
+%debug
+%code {
+]AT_YYERROR_DECLARE[
+]AT_YYLEX_DECLARE[
+}
+%%
+exp:     { putchar ('0'); }
+     '1' { putchar ('1'); }
+     '2' { putchar ('2'); }
+     '3' { putchar ('3'); }
+     '4' { putchar ('4'); }
+     '5' { putchar ('5'); }
+     '6' { putchar ('6'); }
+     '7' { putchar ('7'); }
+     '8' { putchar ('8'); }
+     '9' { putchar ('9'); }
+         { putchar ('\n'); }
+   ;
+%%
+]AT_YYERROR_DEFINE[
+]AT_YYLEX_DEFINE(["123456789"])[
+]AT_MAIN_DEFINE[
+]])
+AT_BISON_OPTION_POPDEFS
+
+AT_BISON_CHECK([-d -v -o input.c input.y])
+AT_COMPILE([input])
+AT_PARSER_CHECK([./input], 0,
+[[0123456789
+]])
+
+AT_CLEANUP
+
+## ----------------------- ##
+## Implicitly empty rule.  ##
+## ----------------------- ##
+
+AT_SETUP([Implicitly empty rule])
+
+AT_DATA_GRAMMAR([[1.y]],
+[[%%
+exp: a b;
+a: /* empty. */ {};
+// A mid-rule action does not count as an empty rule.
+b: {} {};
+]])
+
+AT_BISON_CHECK([-fcaret -Wempty-rule 1.y], [0], [],
+[[1.y:11.17-18: warning: empty rule without %empty [-Wempty-rule]
+ a: /* empty. */ {};
+                 ^^
+]])
+
+AT_DATA_GRAMMAR([[2.y]],
+[[%%
+exp: a b c;
+a: /* empty. */ {};
+b: %empty       {};
+c: /* empty. */ {};
+]])
+
+AT_BISON_CHECK([-fcaret 2.y], [0], [],
+[[2.y:11.17-18: warning: empty rule without %empty [-Wempty-rule]
+ a: /* empty. */ {};
+                 ^^
+2.y:13.17-18: warning: empty rule without %empty [-Wempty-rule]
+ c: /* empty. */ {};
+                 ^^
+]])
+
+AT_BISON_CHECK([-fcaret -Wno-empty-rule 2.y], [0])
+
+AT_CLEANUP
+
+## ------------------------ ##
+## Invalid uses of %empty.  ##
+## ------------------------ ##
+
+AT_SETUP([Invalid uses of %empty])
+
+AT_DATA_GRAMMAR([[one.y]],
+[[%%
+exp:
+  %empty {} %empty
+;
+]])
+
+AT_BISON_CHECK([-fcaret one.y], [1], [],
+[[one.y:11.13-18: error: only one %empty allowed per rule
+   %empty {} %empty
+             ^^^^^^
+one.y:11.3-8: previous declaration
+   %empty {} %empty
+   ^^^^^^
+]])
+
+AT_DATA_GRAMMAR([[two.y]],
+[[%%
+exp:
+  'a' %empty    {}
+| %empty 'a'    {}
+| %empty {}     {}
+;
+]])
+
+AT_BISON_CHECK([-fcaret two.y], [1], [],
+[[two.y:11.7-12: error: %empty on non-empty rule
+   'a' %empty    {}
+       ^^^^^^
+two.y:12.3-8: error: %empty on non-empty rule
+ | %empty 'a'    {}
+   ^^^^^^
+two.y:13.3-8: error: %empty on non-empty rule
+ | %empty {}     {}
+   ^^^^^^
+]])
+
+AT_CLEANUP
+
+## ---------------------- ##
+## Valid uses of %empty.  ##
+## ---------------------- ##
+
+AT_SETUP([Valid uses of %empty])
+
+AT_BISON_OPTION_PUSHDEFS
+AT_DATA_GRAMMAR([[input.y]],
+[[
+%debug
+%code
+{
+]AT_YYERROR_DECLARE[
+]AT_YYLEX_DECLARE[
+}
+%%
+exp: %empty {}
+%%
+]AT_YYERROR_DEFINE[
+]AT_YYLEX_DEFINE[
+]AT_MAIN_DEFINE[
+]])
+
+AT_FULL_COMPILE([input])
+AT_PARSER_CHECK([./input])
+AT_BISON_OPTION_POPDEFS
+AT_CLEANUP
+
+## ------------------ ##
+## Initial location.  ##
+## ------------------ ##
+
+# AT_TEST(SKELETON-NAME, DIRECTIVES, [MORE-DIRECTIVES], [LOCATION = 1.1])
+# -----------------------------------------------------------------------
+# Check that the initial location is correct.
+m4_pushdef([AT_TEST],
+[AT_SETUP([Initial location: $1 $2])
+
+AT_BISON_OPTION_PUSHDEFS([%locations %skeleton "$1" $2])
+AT_DATA_GRAMMAR([[input.y]],
+[[%locations
+%debug
+%skeleton "$1"
+]$2[
+]$3[
+%code
+{
+# include <stdio.h>
+# include <stdlib.h> /* getenv */
+]AT_YYERROR_DECLARE[
+]AT_YYLEX_DECLARE[
+}
+%%
+exp: { ]AT_SKEL_CC_IF([[std::cerr << @$ << std::endl]],
+                      [[LOCATION_PRINT(stderr, @$); fputc ('\n', stderr)]])[; }
+%%
+]AT_YYERROR_DEFINE[
+
+]AT_YYLEX_PROTOTYPE[
+{]AT_PURE_IF([
+  YYUSE(lvalp);
+  YYUSE(llocp);], [AT_SKEL_CC_IF([
+  YYUSE(lvalp);
+  YYUSE(llocp);])])[
+  return 'x';
+}
+
+int
+main (void)
+{]AT_SKEL_CC_IF([[
+  yy::parser p;
+  p.set_debug_level (!!getenv("YYDEBUG"));
+  return p.parse ();]], [[
+  yydebug = !!getenv("YYDEBUG");
+  return !!yyparse (]AT_PARAM_IF([0])[);]])[
+}
+]])
+
+AT_FULL_COMPILE([input])
+AT_PARSER_CHECK([./input], 1, [],
+[m4_default([$4], [1.1])
+m4_default([$4], [1.1])[: syntax error
+]])
+AT_BISON_OPTION_POPDEFS
+AT_CLEANUP
+])
+
+## FIXME: test Java, and iterate over skeletons.
+AT_TEST([yacc.c])
+AT_TEST([yacc.c], [%define api.pure full])
+AT_TEST([yacc.c], [%define api.pure %parse-param { int x }])
+AT_TEST([yacc.c], [%define api.push-pull both])
+AT_TEST([yacc.c], [%define api.push-pull both %define api.pure full])
+AT_TEST([glr.c])
+AT_TEST([glr.c], [%define api.pure])
+AT_TEST([lalr1.cc])
+AT_TEST([glr.cc])
+
+## A very different test, based on PostgreSQL's implementation of the
+## locations.  See
+## http://lists.gnu.org/archive/html/bug-bison/2012-11/msg00023.html
+##
+## Weirdly enough, to trigger the warning with GCC 4.7, we must not
+## use fprintf, so run the test twice: once to check the warning
+## (absence thereof), and another time to check the value.
+AT_TEST([yacc.c], [%define api.pure full],
+[[%{
+# define YYLTYPE int
+# define LOCATION_PRINT(Stream, Loc)      \
+   (void) (Loc)
+# define YYLLOC_DEFAULT(Current, Rhs, N)    \
+  (Current) = ((Rhs)[N ? 1 : 0])
+%}
+]],
+[@&t@])
+
+AT_TEST([yacc.c], [%define api.pure full],
+[[%{
+# define YYLTYPE int
+# define LOCATION_PRINT(Stream, Loc)      \
+    fprintf ((Stream), "%d", (Loc))
+# define YYLLOC_DEFAULT(Current, Rhs, N)    \
+  (Current) = ((Rhs)[N ? 1 : 0])
+%}
+]],
+[0])
+
+
+m4_popdef([AT_TEST])
+
+
+
+## ---------------- ##
+## Location Print.  ##
+## ---------------- ##
+
+# AT_TEST(SKELETON-NAME, DIRECTIVES, [MORE-DIRECTIVES])
+# -----------------------------------------------------
+# Check that the initial location is correct.
+m4_pushdef([AT_TEST],
+[AT_SETUP([Location print: $1 $2])
+
+AT_BISON_OPTION_PUSHDEFS([%locations %skeleton "$1" $2])
+AT_DATA_GRAMMAR([[input.y]],
+[[%locations
+%debug
+%skeleton "$1"
+]$2[
+]$3[
+%code
+{
+]AT_YYERROR_DECLARE[
+]AT_YYLEX_DECLARE[
+}
+%%
+exp: %empty;
+%%
+]AT_YYERROR_DEFINE[
+]AT_YYLEX_DEFINE[
+
+int
+main (void)
+{
+  ]AT_YYLTYPE[ loc;
+]AT_GLR_CC_IF([loc.initialize();])[
+#define TEST(L1, C1, L2, C2)          \
+  loc.]AT_FIRST_LINE[ = L1;           \
+  loc.]AT_FIRST_COLUMN[ = C1;         \
+  loc.]AT_LAST_LINE[ = L2;            \
+  loc.]AT_LAST_COLUMN[ = C2;          \
+  ]AT_SKEL_CC_IF([std::cout << loc],
+                 [LOCATION_PRINT(stdout, loc)])[;\
+  putchar ('\n');
+
+  TEST(1, 1, 1, 1);
+  TEST(2, 1, 2, 10);
+  TEST(3, 1, 4, 1);
+  TEST(5, 1, 6, 10);
+
+  TEST(7, 2, 0, 2);
+  TEST(8, 0, 8, 0);
+  return 0;
+}
+]])
+
+AT_FULL_COMPILE([input])
+AT_PARSER_CHECK([./input], 0,
+[[1.1
+2.1-9
+3.1-4.0
+5.1-6.9
+7.2
+8.0
+]])
+AT_BISON_OPTION_POPDEFS
+AT_CLEANUP
+])
+
+## FIXME: test Java, and iterate over skeletons.
+AT_TEST([yacc.c])
+AT_TEST([glr.c])
+AT_TEST([lalr1.cc])
+AT_TEST([glr.cc])
+
+m4_popdef([AT_TEST])
+
+
+
+## ---------------- ##
+## Exotic Dollars.  ##
+## ---------------- ##
+
+AT_SETUP([Exotic Dollars])
+
+AT_BISON_OPTION_PUSHDEFS
+AT_DATA_GRAMMAR([[input.y]],
+[[%define parse.error verbose
+%debug
+%code {
+]AT_YYERROR_DECLARE[
+]AT_YYLEX_DECLARE[
+# define USE(Var)
+}
+
+%union
+{
+  int val;
+};
+
+%type <val> a_1 a_2 a_5
+            sum_of_the_five_previous_values
+
+%%
+exp: a_1 a_2 { $<val>$ = 3; } { $<val>$ = $<val>3 + 1; } a_5
+     sum_of_the_five_previous_values
+    {
+       USE (($1, $2, $<foo>3, $<foo>4, $5));
+       printf ("%d\n", $6);
+    }
+;
+a_1: { $$ = 1; };
+a_2: { $$ = 2; };
+a_5: { $$ = 5; };
+
+sum_of_the_five_previous_values:
+    {
+       $$ = $<val>0 + $<val>-1 + $<val>-2 + $<val>-3 + $<val>-4;
+    }
+;
+
+%%
+]AT_YYERROR_DEFINE[
+]AT_YYLEX_DEFINE[
+]AT_MAIN_DEFINE[
+]])
+
+AT_BISON_CHECK([-d -v -o input.c input.y], 0)
+AT_COMPILE([input])
+AT_PARSER_CHECK([./input], 0,
+[[15
+]])
+
+# Make sure that fields after $n or $-n are parsed correctly.  At one
+# point while implementing dashes in symbol names, we were dropping
+# fields after $-n.
+AT_DATA_GRAMMAR([[input.y]],
+[[
+%{
+]AT_YYERROR_DECLARE[
+]AT_YYLEX_DECLARE[
+  typedef struct { int val; } stype;
+# define YYSTYPE stype
+%}
+
+%%
+start: one two { $$.val = $1.val + $2.val; } sum ;
+one: { $$.val = 1; } ;
+two: { $$.val = 2; } ;
+sum: { printf ("%d\n", $0.val + $-1.val + $-2.val); } ;
+
+%%
+]AT_YYERROR_DEFINE[
+]AT_YYLEX_DEFINE[
+]AT_MAIN_DEFINE[
+]])
+
+AT_FULL_COMPILE([input])
+AT_PARSER_CHECK([[./input]], [[0]],
+[[6
+]])
+
+AT_BISON_OPTION_POPDEFS
+AT_CLEANUP
+
+
+
+## -------------------------- ##
+## Printers and Destructors.  ##
+## -------------------------- ##
+
+# _AT_CHECK_PRINTER_AND_DESTRUCTOR($1, $2, $3, $4,
+#                                  BISON-DIRECTIVE, UNION-FLAG)
+# -------------------------------------------------------------
+m4_define([_AT_CHECK_PRINTER_AND_DESTRUCTOR],
+[# Make sure complex $n work.
+m4_if([$1$2$3$4], $[1]$[2]$[3]$[4], [],
+       [m4_fatal([$0: Invalid arguments: $@])])dnl
+
+# Be sure to pass all the %directives to this macro to have correct
+# helping macros.  So don't put any directly in the Bison file.
+AT_BISON_OPTION_PUSHDEFS([$5])
+AT_DATA_GRAMMAR([[input.y]],
+[[%code requires {
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <assert.h>
+
+#define YYINITDEPTH 10
+#define YYMAXDEPTH 10
+#define RANGE(Location) ]AT_LALR1_CC_IF([(Location).begin.line, (Location).end.line],
+      [(Location).first_line, (Location).last_line])[
+
+/* Display the symbol type Symbol.  */
+#define V(Symbol, Value, Location, Sep) \
+   fprintf (stderr, #Symbol " (%d@%d-%d)" Sep, Value, RANGE(Location))
+}
+
+$5
+]m4_ifval([$6], [%union
+{
+  int ival;
+}])
+AT_LALR1_CC_IF([%define global_tokens_and_yystype])
+m4_ifval([$6], [[%code provides {]], [[%code {]])
+AT_LALR1_CC_IF([typedef yy::location YYLTYPE;])[
+]AT_YYLEX_DECLARE[
+]AT_LALR1_CC_IF([], [AT_YYERROR_DECLARE])
+[}
+
+]m4_ifval([$6], [%type <ival> '(' 'x' 'y' ')' ';' thing line input END])[
+
+/* FIXME: This %printer isn't actually tested.  */
+%printer
+  {
+    ]AT_LALR1_CC_IF([debug_stream () << $$;],
+                    [fprintf (yyoutput, "%d", $$)])[;
+  }
+  input line thing 'x' 'y'
+
+%destructor
+  { fprintf (stderr, "Freeing nterm input (%d@%d-%d)\n", $$, RANGE (@$)); }
+  input
+
+%destructor
+  { fprintf (stderr, "Freeing nterm line (%d@%d-%d)\n", $$, RANGE (@$)); }
+  line
+
+%destructor
+  { fprintf (stderr, "Freeing nterm thing (%d@%d-%d)\n", $$, RANGE (@$)); }
+  thing
+
+%destructor
+  { fprintf (stderr, "Freeing token 'x' (%d@%d-%d)\n", $$, RANGE (@$)); }
+  'x'
+
+%destructor
+  { fprintf (stderr, "Freeing token 'y' (%d@%d-%d)\n", $$, RANGE (@$)); }
+  'y'
+
+%token END 0
+%destructor
+  { fprintf (stderr, "Freeing token END (%d@%d-%d)\n", $$, RANGE (@$)); }
+  END
+
+%%
+/*
+   This grammar is made to exercise error recovery.
+   "Lines" starting with '(' support error recovery, with
+   ')' as synchronizing token.  Lines starting with 'x' can never
+   be recovered from if in error.
+*/
+
+input:
+  /* Nothing. */
+    {
+      $$ = 0;
+      V(input, $$, @$, ": /* Nothing */\n");
+    }
+| line input /* Right recursive to load the stack so that popping at
+                END can be exercised.  */
+    {
+      $$ = 2;
+      V(input, $$, @$, ": ");
+      V(line,  $1, @1, " ");
+      V(input, $2, @2, "\n");
+    }
+;
+
+line:
+  thing thing thing ';'
+    {
+      $$ = $1;
+      V(line,  $$, @$, ": ");
+      V(thing, $1, @1, " ");
+      V(thing, $2, @2, " ");
+      V(thing, $3, @3, " ");
+      V(;,     $4, @4, "\n");
+    }
+| '(' thing thing ')'
+    {
+      $$ = $1;
+      V(line,  $$, @$, ": ");
+      V('(',   $1, @1, " ");
+      V(thing, $2, @2, " ");
+      V(thing, $3, @3, " ");
+      V(')',   $4, @4, "\n");
+    }
+| '(' thing ')'
+    {
+      $$ = $1;
+      V(line,  $$, @$, ": ");
+      V('(',   $1, @1, " ");
+      V(thing, $2, @2, " ");
+      V(')',   $3, @3, "\n");
+    }
+| '(' error ')'
+    {
+      $$ = -1;
+      V(line,  $$, @$, ": ");
+      V('(',   $1, @1, " ");
+      fprintf (stderr, "error (@%d-%d) ", RANGE(@2));
+      V(')',   $3, @3, "\n");
+    }
+;
+
+thing:
+  'x'
+    {
+      $$ = $1;
+      V(thing, $$, @$, ": ");
+      V('x',   $1, @1, "\n");
+    }
+;
+%%
+/* Alias to ARGV[1]. */
+const char *source = YY_NULLPTR;
+
+]AT_YYERROR_DEFINE[
+
+static
+]AT_YYLEX_PROTOTYPE[
+{
+  static unsigned int counter = 0;
+
+  unsigned int c = ]AT_VAL[]m4_ifval([$6], [.ival])[ = counter++;
+  /* As in BASIC, line numbers go from 10 to 10.  */
+  ]AT_LOC_FIRST_LINE[ = ]AT_LOC_FIRST_COLUMN[ = 10 * c;
+  ]AT_LOC_LAST_LINE[ = ]AT_LOC_LAST_COLUMN[ = ]AT_LOC_FIRST_LINE[ + 9;
+  assert (c <= strlen (source));
+  if (source[c])
+    fprintf (stderr, "sending: '%c'", source[c]);
+  else
+    fprintf (stderr, "sending: END");
+  fprintf (stderr, " (%d@%d-%d)\n", c, RANGE (]AT_LOC[));
+  return source[c];
+}
+]AT_LALR1_CC_IF(
+[static bool yydebug;
+int
+yyparse ()
+{
+  yy::parser parser;
+  parser.set_debug_level (yydebug);
+  return parser.parse ();
+}
+])[
+
+int
+main (int argc, const char *argv[])
+{
+  int status;
+  yydebug = !!getenv ("YYDEBUG");
+  assert (argc == 2); (void) argc;
+  source = argv[1];
+  status = yyparse ();
+  switch (status)
+    {
+      case 0: fprintf (stderr, "Successful parse.\n"); break;
+      case 1: fprintf (stderr, "Parsing FAILED.\n"); break;
+      default: fprintf (stderr, "Parsing FAILED (status %d).\n", status); break;
+    }
+  return status;
+}
+]])
+
+AT_FULL_COMPILE([input])
+
+
+# Check the location of "empty"
+# -----------------------------
+# I.e., epsilon-reductions, as in "(x)" which ends by reducing
+# an empty "line" nterm.
+# FIXME: This location is not satisfying.  Depend on the lookahead?
+AT_PARSER_CHECK([./input '(x)'], 0, [],
+[[sending: '(' (0@0-9)
+sending: 'x' (1@10-19)
+thing (1@10-19): 'x' (1@10-19)
+sending: ')' (2@20-29)
+line (0@0-29): '(' (0@0-9) thing (1@10-19) ')' (2@20-29)
+sending: END (3@30-39)
+input (0@29-29): /* Nothing */
+input (2@0-29): line (0@0-29) input (0@29-29)
+Freeing token END (3@30-39)
+Freeing nterm input (2@0-29)
+Successful parse.
+]])
+
+
+# Check locations in error recovery
+# ---------------------------------
+# '(y)' is an error, but can be recovered from.  But what's the location
+# of the error itself ('y'), and of the resulting reduction ('(error)').
+AT_PARSER_CHECK([./input '(y)'], 0, [],
+[[sending: '(' (0@0-9)
+sending: 'y' (1@10-19)
+10.10-19.18: syntax error, unexpected 'y', expecting 'x'
+Freeing token 'y' (1@10-19)
+sending: ')' (2@20-29)
+line (-1@0-29): '(' (0@0-9) error (@10-19) ')' (2@20-29)
+sending: END (3@30-39)
+input (0@29-29): /* Nothing */
+input (2@0-29): line (-1@0-29) input (0@29-29)
+Freeing token END (3@30-39)
+Freeing nterm input (2@0-29)
+Successful parse.
+]])
+
+
+# Syntax errors caught by the parser
+# ----------------------------------
+# Exercise the discarding of stack top and input until 'error'
+# can be reduced.
+#
+#     '(', 'x', 'x', 'x', 'x', 'x', ')',
+#
+# Load the stack and provoke an error that cannot be caught by the
+# grammar, to check that the stack is cleared.  And make sure the
+# lookahead is freed.
+#
+#     '(', 'x', ')',
+#     '(', 'x', ')',
+#     'y'
+AT_PARSER_CHECK([./input '(xxxxx)(x)(x)y'], 1, [],
+[[sending: '(' (0@0-9)
+sending: 'x' (1@10-19)
+thing (1@10-19): 'x' (1@10-19)
+sending: 'x' (2@20-29)
+thing (2@20-29): 'x' (2@20-29)
+sending: 'x' (3@30-39)
+30.30-39.38: syntax error, unexpected 'x', expecting ')'
+Freeing nterm thing (2@20-29)
+Freeing nterm thing (1@10-19)
+Freeing token 'x' (3@30-39)
+sending: 'x' (4@40-49)
+Freeing token 'x' (4@40-49)
+sending: 'x' (5@50-59)
+Freeing token 'x' (5@50-59)
+sending: ')' (6@60-69)
+line (-1@0-69): '(' (0@0-9) error (@10-59) ')' (6@60-69)
+sending: '(' (7@70-79)
+sending: 'x' (8@80-89)
+thing (8@80-89): 'x' (8@80-89)
+sending: ')' (9@90-99)
+line (7@70-99): '(' (7@70-79) thing (8@80-89) ')' (9@90-99)
+sending: '(' (10@100-109)
+sending: 'x' (11@110-119)
+thing (11@110-119): 'x' (11@110-119)
+sending: ')' (12@120-129)
+line (10@100-129): '(' (10@100-109) thing (11@110-119) ')' (12@120-129)
+sending: 'y' (13@130-139)
+input (0@129-129): /* Nothing */
+input (2@100-129): line (10@100-129) input (0@129-129)
+input (2@70-129): line (7@70-99) input (2@100-129)
+input (2@0-129): line (-1@0-69) input (2@70-129)
+130.130-139.138: syntax error, unexpected 'y', expecting END
+Freeing nterm input (2@0-129)
+Freeing token 'y' (13@130-139)
+Parsing FAILED.
+]])
+
+
+# Syntax error caught by the parser where lookahead = END
+# --------------------------------------------------------
+# Load the stack and provoke an error that cannot be caught by the
+# grammar, to check that the stack is cleared.  And make sure the
+# lookahead is freed.
+#
+#     '(', 'x', ')',
+#     '(', 'x', ')',
+#     'x'
+AT_PARSER_CHECK([./input '(x)(x)x'], 1, [],
+[[sending: '(' (0@0-9)
+sending: 'x' (1@10-19)
+thing (1@10-19): 'x' (1@10-19)
+sending: ')' (2@20-29)
+line (0@0-29): '(' (0@0-9) thing (1@10-19) ')' (2@20-29)
+sending: '(' (3@30-39)
+sending: 'x' (4@40-49)
+thing (4@40-49): 'x' (4@40-49)
+sending: ')' (5@50-59)
+line (3@30-59): '(' (3@30-39) thing (4@40-49) ')' (5@50-59)
+sending: 'x' (6@60-69)
+thing (6@60-69): 'x' (6@60-69)
+sending: END (7@70-79)
+70.70-79.78: syntax error, unexpected END, expecting 'x'
+Freeing nterm thing (6@60-69)
+Freeing nterm line (3@30-59)
+Freeing nterm line (0@0-29)
+Freeing token END (7@70-79)
+Parsing FAILED.
+]])
+
+
+# Check destruction upon stack overflow
+# -------------------------------------
+# Upon stack overflow, all symbols on the stack should be destroyed.
+# Only check for yacc.c.
+AT_YACC_IF([
+AT_PARSER_CHECK([./input '(x)(x)(x)(x)(x)(x)(x)'], 2, [],
+[[sending: '(' (0@0-9)
+sending: 'x' (1@10-19)
+thing (1@10-19): 'x' (1@10-19)
+sending: ')' (2@20-29)
+line (0@0-29): '(' (0@0-9) thing (1@10-19) ')' (2@20-29)
+sending: '(' (3@30-39)
+sending: 'x' (4@40-49)
+thing (4@40-49): 'x' (4@40-49)
+sending: ')' (5@50-59)
+line (3@30-59): '(' (3@30-39) thing (4@40-49) ')' (5@50-59)
+sending: '(' (6@60-69)
+sending: 'x' (7@70-79)
+thing (7@70-79): 'x' (7@70-79)
+sending: ')' (8@80-89)
+line (6@60-89): '(' (6@60-69) thing (7@70-79) ')' (8@80-89)
+sending: '(' (9@90-99)
+sending: 'x' (10@100-109)
+thing (10@100-109): 'x' (10@100-109)
+sending: ')' (11@110-119)
+line (9@90-119): '(' (9@90-99) thing (10@100-109) ')' (11@110-119)
+sending: '(' (12@120-129)
+sending: 'x' (13@130-139)
+thing (13@130-139): 'x' (13@130-139)
+sending: ')' (14@140-149)
+line (12@120-149): '(' (12@120-129) thing (13@130-139) ')' (14@140-149)
+sending: '(' (15@150-159)
+sending: 'x' (16@160-169)
+thing (16@160-169): 'x' (16@160-169)
+sending: ')' (17@170-179)
+line (15@150-179): '(' (15@150-159) thing (16@160-169) ')' (17@170-179)
+sending: '(' (18@180-189)
+sending: 'x' (19@190-199)
+thing (19@190-199): 'x' (19@190-199)
+sending: ')' (20@200-209)
+200.200-209.208: memory exhausted
+Freeing nterm thing (19@190-199)
+Freeing nterm line (15@150-179)
+Freeing nterm line (12@120-149)
+Freeing nterm line (9@90-119)
+Freeing nterm line (6@60-89)
+Freeing nterm line (3@30-59)
+Freeing nterm line (0@0-29)
+Parsing FAILED (status 2).
+]])
+])
+
+AT_BISON_OPTION_POPDEFS
+])# _AT_CHECK_PRINTER_AND_DESTRUCTOR
+
+
+# AT_CHECK_PRINTER_AND_DESTRUCTOR([BISON-OPTIONS], [UNION-FLAG], [SKIP_FLAG])
+# ---------------------------------------------------------------------------
+m4_define([AT_CHECK_PRINTER_AND_DESTRUCTOR],
+[AT_SETUP([Printers and Destructors$2]m4_ifval([$1], [[: $1]]))
+
+$3
+_AT_CHECK_PRINTER_AND_DESTRUCTOR($[1], $[2], $[3], $[4],
+[%define parse.error verbose
+%debug
+%verbose
+%locations
+$1], [$2])
+
+AT_CLEANUP
+])
+
+
+AT_CHECK_PRINTER_AND_DESTRUCTOR([])
+AT_CHECK_PRINTER_AND_DESTRUCTOR([], [ with union])
+
+AT_CHECK_PRINTER_AND_DESTRUCTOR([%defines %skeleton "lalr1.cc"])
+AT_CHECK_PRINTER_AND_DESTRUCTOR([%defines %skeleton "lalr1.cc"], [ with union])
+
+AT_CHECK_PRINTER_AND_DESTRUCTOR([%glr-parser])
+AT_CHECK_PRINTER_AND_DESTRUCTOR([%glr-parser], [ with union])
+
+
+
+## ----------------------------------------- ##
+## Default tagless %printer and %destructor. ##
+## ----------------------------------------- ##
+
+# Check that the right %printer and %destructor are called, that they're not
+# called for $end, and that $$ and @$ work correctly.
+
+AT_SETUP([Default tagless %printer and %destructor])
+AT_BISON_OPTION_PUSHDEFS([%locations %debug])
+AT_DATA_GRAMMAR([[input.y]],
+[[%define parse.error verbose
+%debug
+%locations
+
+%code {
+]AT_YYLEX_DECLARE[
+]AT_YYERROR_DECLARE[
+# define USE(SYM)
+}
+
+%printer {
+  fprintf (yyoutput, "<*> printer should not be called.\n");
+} <*>
+
+%printer {
+  fprintf (yyoutput, "<> printer for '%c' @ %d", $$, @$.first_column);
+} <>
+%destructor {
+  fprintf (stdout, "<> destructor for '%c' @ %d.\n", $$, @$.first_column);
+} <>
+
+%printer {
+  fprintf (yyoutput, "'b'/'c' printer for '%c' @ %d", $$, @$.first_column);
+} 'b' 'c'
+%destructor {
+  fprintf (stdout, "'b'/'c' destructor for '%c' @ %d.\n", $$, @$.first_column);
+} 'b' 'c'
+
+%destructor {
+  fprintf (yyoutput, "<*> destructor should not be called.\n");
+} <*>
+
+%%
+
+start: 'a' 'b' 'c' 'd' 'e' { $$ = 'S'; USE(($1, $2, $3, $4, $5)); } ;
+
+%%
+]AT_YYERROR_DEFINE[
+]AT_YYLEX_DEFINE(["abcd"], [[yylval = res]])[
+]AT_MAIN_DEFINE[
+]])
+
+AT_BISON_CHECK([-o input.c input.y], [], [],
+[[input.y:30.3-5: warning: useless %destructor for type <*> [-Wother]
+input.y:30.3-5: warning: useless %printer for type <*> [-Wother]
+]])
+AT_COMPILE([input])
+AT_PARSER_CHECK([./input --debug], 1,
+[[<> destructor for 'd' @ 4.
+'b'/'c' destructor for 'c' @ 3.
+'b'/'c' destructor for 'b' @ 2.
+<> destructor for 'a' @ 1.
+]],
+[[Starting parse
+Entering state 0
+Reading a token: Next token is token 'a' (1.1: <> printer for 'a' @ 1)
+Shifting token 'a' (1.1: <> printer for 'a' @ 1)
+Entering state 1
+Reading a token: Next token is token 'b' (1.2: 'b'/'c' printer for 'b' @ 2)
+Shifting token 'b' (1.2: 'b'/'c' printer for 'b' @ 2)
+Entering state 3
+Reading a token: Next token is token 'c' (1.3: 'b'/'c' printer for 'c' @ 3)
+Shifting token 'c' (1.3: 'b'/'c' printer for 'c' @ 3)
+Entering state 5
+Reading a token: Next token is token 'd' (1.4: <> printer for 'd' @ 4)
+Shifting token 'd' (1.4: <> printer for 'd' @ 4)
+Entering state 6
+Reading a token: Now at end of input.
+1.5: syntax error, unexpected $end, expecting 'e'
+Error: popping token 'd' (1.4: <> printer for 'd' @ 4)
+Stack now 0 1 3 5
+Error: popping token 'c' (1.3: 'b'/'c' printer for 'c' @ 3)
+Stack now 0 1 3
+Error: popping token 'b' (1.2: 'b'/'c' printer for 'b' @ 2)
+Stack now 0 1
+Error: popping token 'a' (1.1: <> printer for 'a' @ 1)
+Stack now 0
+Cleanup: discarding lookahead token $end (1.5: )
+Stack now 0
+]])
+
+AT_BISON_OPTION_POPDEFS
+AT_CLEANUP
+
+
+
+## ------------------------------------------------------ ##
+## Default tagged and per-type %printer and %destructor.  ##
+## ------------------------------------------------------ ##
+
+AT_SETUP([Default tagged and per-type %printer and %destructor])
+AT_BISON_OPTION_PUSHDEFS([%debug])
+AT_DATA_GRAMMAR([[input.y]],
+[[%define parse.error verbose
+%debug
+
+%{
+]AT_YYERROR_DECLARE[
+]AT_YYLEX_DECLARE[
+# define USE(SYM)
+%}
+
+%printer {
+  fprintf (yyoutput, "<> printer should not be called.\n");
+} <>
+
+%union { int field0; int field1; int field2; }
+%type <field0> start 'a' 'g'
+%type <field1> 'e'
+%type <field2> 'f'
+%printer {
+  fprintf (yyoutput, "<*>/<field2>/e printer");
+} <*> 'e' <field2>
+%destructor {
+  fprintf (stdout, "<*>/<field2>/e destructor.\n");
+} <*> 'e' <field2>
+
+%type <field1> 'b'
+%printer { fprintf (yyoutput, "<field1> printer"); } <field1>
+%destructor { fprintf (stdout, "<field1> destructor.\n"); } <field1>
+
+%type <field0> 'c'
+%printer { fprintf (yyoutput, "'c' printer"); } 'c'
+%destructor { fprintf (stdout, "'c' destructor.\n"); } 'c'
+
+%type <field1> 'd'
+%printer { fprintf (yyoutput, "'d' printer"); } 'd'
+%destructor { fprintf (stdout, "'d' destructor.\n"); } 'd'
+
+%destructor {
+  fprintf (yyoutput, "<> destructor should not be called.\n");
+} <>
+
+%%
+
+start:
+  'a' 'b' 'c' 'd' 'e' 'f' 'g'
+    {
+      USE(($1, $2, $3, $4, $5, $6, $7));
+      $$ = 'S';
+    }
+  ;
+
+%%
+]AT_YYERROR_DEFINE[
+]AT_YYLEX_DEFINE(["abcdef"])[
+]AT_MAIN_DEFINE[
+]])
+
+AT_BISON_CHECK([-o input.c input.y], [], [],
+[[input.y:22.3-4: warning: useless %destructor for type <> [-Wother]
+input.y:22.3-4: warning: useless %printer for type <> [-Wother]
+]])
+AT_COMPILE([input])
+AT_PARSER_CHECK([./input --debug], 1,
+[[<*>/<field2>/e destructor.
+<*>/<field2>/e destructor.
+'d' destructor.
+'c' destructor.
+<field1> destructor.
+<*>/<field2>/e destructor.
+]],
+[[Starting parse
+Entering state 0
+Reading a token: Next token is token 'a' (<*>/<field2>/e printer)
+Shifting token 'a' (<*>/<field2>/e printer)
+Entering state 1
+Reading a token: Next token is token 'b' (<field1> printer)
+Shifting token 'b' (<field1> printer)
+Entering state 3
+Reading a token: Next token is token 'c' ('c' printer)
+Shifting token 'c' ('c' printer)
+Entering state 5
+Reading a token: Next token is token 'd' ('d' printer)
+Shifting token 'd' ('d' printer)
+Entering state 6
+Reading a token: Next token is token 'e' (<*>/<field2>/e printer)
+Shifting token 'e' (<*>/<field2>/e printer)
+Entering state 7
+Reading a token: Next token is token 'f' (<*>/<field2>/e printer)
+Shifting token 'f' (<*>/<field2>/e printer)
+Entering state 8
+Reading a token: Now at end of input.
+syntax error, unexpected $end, expecting 'g'
+Error: popping token 'f' (<*>/<field2>/e printer)
+Stack now 0 1 3 5 6 7
+Error: popping token 'e' (<*>/<field2>/e printer)
+Stack now 0 1 3 5 6
+Error: popping token 'd' ('d' printer)
+Stack now 0 1 3 5
+Error: popping token 'c' ('c' printer)
+Stack now 0 1 3
+Error: popping token 'b' (<field1> printer)
+Stack now 0 1
+Error: popping token 'a' (<*>/<field2>/e printer)
+Stack now 0
+Cleanup: discarding lookahead token $end ()
+Stack now 0
+]])
+
+AT_BISON_OPTION_POPDEFS
+AT_CLEANUP
+
+
+
+## ------------------------------------------------------------- ##
+## Default %printer and %destructor for user-defined end token.  ##
+## ------------------------------------------------------------- ##
+
+AT_SETUP([Default %printer and %destructor for user-defined end token])
+
+# AT_TEST(TYPED)
+# --------------
+m4_pushdef([AT_TEST],
+[m4_if($1, 0,
+  [m4_pushdef([kind], []) m4_pushdef([not_kind], [*])],
+  [m4_pushdef([kind], [*]) m4_pushdef([not_kind], [])])
+
+AT_BISON_OPTION_PUSHDEFS([%locations %debug])
+AT_DATA_GRAMMAR([[input]]$1[[.y]],
+[[%define parse.error verbose
+%debug
+%locations
+
+%code {
+]AT_YYERROR_DECLARE[
+]AT_YYLEX_DECLARE[
+# define USE(SYM)
+}
+
+%destructor {
+  fprintf (yyoutput, "<]]not_kind[[> destructor should not be called.\n");
+} <]]not_kind[[>
+
+%token END 0
+%printer {
+  fprintf (yyoutput, "<]]kind[[> for '%c' @ %d", $$, @$.first_column);
+} <]]kind[[>
+%destructor {
+  fprintf (stdout, "<]]kind[[> for '%c' @ %d.\n", $$, @$.first_column);
+} <]]kind[[>
+
+%printer {
+  fprintf (yyoutput, "<]]not_kind[[> printer should not be called.\n");
+} <]]not_kind[[>
+
+]]m4_if($1, 0, [[[
+]]],
+[[[%union { char tag; }
+%type <tag> start END]]])[[
+
+%%
+
+start: { $$ = 'S'; } ;
+
+%%
+#include <stdlib.h> /* abort */
+static int
+yylex (void)
+{
+  static int called;
+  if (called++)
+    abort ();
+  yylval]]m4_if($1, 0,, [[[.tag]]])[[ = 'E';
+  yylloc.first_line = yylloc.last_line = 1;
+  yylloc.first_column = yylloc.last_column = 1;
+  return 0;
+}
+]AT_YYERROR_DEFINE[
+]AT_MAIN_DEFINE[
+]])
+AT_BISON_OPTION_POPDEFS
+
+AT_BISON_CHECK([-o input$1.c input$1.y], [], [],
+[m4_if([$1], [0],
+[[input0.y:30.3-5: warning: useless %destructor for type <*> [-Wother]
+input0.y:30.3-5: warning: useless %printer for type <*> [-Wother]
+]],
+[[input1.y:30.3-4: warning: useless %destructor for type <> [-Wother]
+input1.y:30.3-4: warning: useless %printer for type <> [-Wother]
+]])])
+
+AT_COMPILE([input$1])
+
+AT_PARSER_CHECK([./input$1 --debug], 0,
+[[<]]kind[[> for 'E' @ 1.
+<]]kind[[> for 'S' @ 1.
+]],
+[[Starting parse
+Entering state 0
+Reducing stack by rule 1 (line 49):
+-> $$ = nterm start (1.1: <]]kind[[> for 'S' @ 1)
+Stack now 0
+Entering state 1
+Reading a token: Now at end of input.
+Shifting token END (1.1: <]]kind[[> for 'E' @ 1)
+Entering state 2
+Stack now 0 1 2
+Cleanup: popping token END (1.1: <]]kind[[> for 'E' @ 1)
+Cleanup: popping nterm start (1.1: <]]kind[[> for 'S' @ 1)
+]])
+
+m4_popdef([kind])
+m4_popdef([not_kind])
+])
+
+AT_TEST(0)
+AT_TEST(1)
+
+m4_popdef([AT_TEST])
+
+AT_CLEANUP
+
+
+
+## ------------------------------------------------------------------ ##
+## Default %printer and %destructor are not for error or $undefined.  ##
+## ------------------------------------------------------------------ ##
+
+AT_SETUP([Default %printer and %destructor are not for error or $undefined])
+
+# If Bison were to apply the default %printer and %destructor to the error
+# token or to $undefined:
+#   - For the error token:
+#     - It would generate warnings for unused $n.
+#     - It would invoke the %printer and %destructor on the error token's
+#       semantic value, which would be initialized from the lookahead, which
+#       would be destroyed separately.
+#   - For $undefined, who knows what the semantic value would be.
+AT_BISON_OPTION_PUSHDEFS([%debug])
+AT_DATA_GRAMMAR([[input.y]],
+[[%debug
+
+%{
+# include <stdio.h>
+# include <stdlib.h>
+]AT_YYERROR_DECLARE[
+]AT_YYLEX_DECLARE[
+# define USE(SYM)
+%}
+
+%printer {
+  fprintf (yyoutput, "'%c'", $$);
+} <> <*>
+%destructor {
+  fprintf (stderr, "DESTROY '%c'\n", $$);
+} <> <*>
+
+%%
+
+start:
+  { $$ = 'S'; }
+  /* In order to reveal the problems that this bug caused during parsing, add
+   * $2 to USE.  */
+  | 'a' error 'b' 'c' { USE(($1, $3, $4)); $$ = 'S'; }
+  ;
+
+%%
+]AT_YYERROR_DEFINE[
+]AT_YYLEX_DEFINE(["abd"], [yylval = res])[
+]AT_MAIN_DEFINE[
+]])
+AT_BISON_OPTION_POPDEFS
+
+AT_BISON_CHECK([-o input.c input.y], [], [],
+[[input.y:23.6-8: warning: useless %destructor for type <*> [-Wother]
+input.y:23.6-8: warning: useless %printer for type <*> [-Wother]
+]])
+AT_COMPILE([input])
+AT_PARSER_CHECK([./input --debug], [1], [],
+[[Starting parse
+Entering state 0
+Reading a token: Next token is token 'a' ('a')
+Shifting token 'a' ('a')
+Entering state 1
+Reading a token: Next token is token 'b' ('b')
+syntax error
+Shifting token error ()
+Entering state 3
+Next token is token 'b' ('b')
+Shifting token 'b' ('b')
+Entering state 5
+Reading a token: Next token is token $undefined ()
+Error: popping token 'b' ('b')
+DESTROY 'b'
+Stack now 0 1 3
+Error: popping token error ()
+Stack now 0 1
+Shifting token error ()
+Entering state 3
+Next token is token $undefined ()
+Error: discarding token $undefined ()
+Error: popping token error ()
+Stack now 0 1
+Shifting token error ()
+Entering state 3
+Reading a token: Now at end of input.
+Cleanup: discarding lookahead token $end ()
+Stack now 0 1 3
+Cleanup: popping token error ()
+Cleanup: popping token 'a' ('a')
+DESTROY 'a'
+]])
+
+AT_CLEANUP
+
+
+
+## ------------------------------------------------------ ##
+## Default %printer and %destructor are not for $accept.  ##
+## ------------------------------------------------------ ##
+
+AT_SETUP([Default %printer and %destructor are not for $accept])
+
+# If YYSTYPE is a union and Bison were to apply the default %printer and
+# %destructor to $accept:
+#   - The %printer and %destructor code generated for $accept would always be
+#     dead code because $accept is currently never shifted onto the stack.
+#   - $$ for $accept would always be of type YYSTYPE because it's not possible
+#     to declare '%type <field> $accept'.  (Also true for $undefined.)
+#   - Thus, the compiler might complain that the user code assumes the wrong
+#     type for $$ since the code might assume the type associated with a
+#     specific union field, which is especially reasonable in C++ since that
+#     type may be a base type.  This test case checks for this problem.  (Also
+#     true for $undefined and the error token, so there are three warnings for
+#     %printer and three for %destructor.)
+
+AT_BISON_OPTION_PUSHDEFS([%debug])
+AT_DATA_GRAMMAR([[input.y]],
+[[%debug /* So that %printer is actually compiled.  */
+
+%{
+# include <stdio.h>
+# include <stdlib.h>
+]AT_YYERROR_DECLARE[
+]AT_YYLEX_DECLARE[
+# define USE(SYM)
+%}
+
+%printer {
+  char chr = $$;
+  fprintf (yyoutput, "'%c'", chr);
+} <> <*>
+%destructor {
+  char chr = $$;
+  fprintf (stderr, "DESTROY '%c'\n", chr);
+} <> <*>
+
+%union { char chr; }
+%type <chr> start
+
+%%
+
+start: { USE($$); } ;
+
+%%
+]AT_YYERROR_DEFINE[
+]AT_YYLEX_DEFINE[
+]AT_MAIN_DEFINE[
+]])
+AT_BISON_OPTION_POPDEFS
+
+AT_BISON_CHECK([-o input.c input.y], [], [],
+[[input.y:24.3-4: warning: useless %destructor for type <> [-Wother]
+input.y:24.3-4: warning: useless %printer for type <> [-Wother]
+]])
+AT_COMPILE([input])
+
+AT_CLEANUP
+
+
+
+## ------------------------------------------------------ ##
+## Default %printer and %destructor for mid-rule values.  ##
+## ------------------------------------------------------ ##
+
+AT_SETUP([Default %printer and %destructor for mid-rule values])
+
+AT_BISON_OPTION_PUSHDEFS([%debug])
+AT_DATA_GRAMMAR([[input.y]],
+[[%debug /* So that %printer is actually compiled.  */
+
+%{
+]AT_YYERROR_DECLARE[
+]AT_YYLEX_DECLARE[
+# define USE(SYM)
+# define YYLTYPE int
+# define YYLLOC_DEFAULT(Current, Rhs, N) (void)(Rhs)
+# define LOCATION_PRINT(File, Loc)
+%}
+
+%printer { fprintf (yyoutput, "%d", @$); } <>
+%destructor { fprintf (stderr, "DESTROY %d\n", @$); } <>
+%printer { fprintf (yyoutput, "<*> printer should not be called"); } <*>
+%destructor { fprintf (yyoutput, "<*> destructor should not be called"); } <*>
+
+%%
+
+start:
+  {           @$ = 1; } // Not set or used.
+  { USE ($$); @$ = 2; } // Both set and used.
+  { USE ($$); @$ = 3; } // Only set.
+  {           @$ = 4; } // Only used.
+  'c'
+  { USE (($$, $2, $4, $5)); @$ = 0; }
+  ;
+
+%%
+]AT_YYERROR_DEFINE[
+]AT_YYLEX_DEFINE[
+]AT_MAIN_DEFINE[
+]])
+AT_BISON_OPTION_POPDEFS
+
+AT_BISON_CHECK([-o input.c input.y], 0,,
+[[input.y:24.70-72: warning: useless %destructor for type <*> [-Wother]
+input.y:24.70-72: warning: useless %printer for type <*> [-Wother]
+input.y:33.3-23: warning: unset value: $$ [-Wother]
+input.y:32.3-23: warning: unused value: $3 [-Wother]
+]])
+
+AT_BISON_CHECK([-fcaret -o input.c input.y], 0,,
+[[input.y:24.70-72: warning: useless %destructor for type <*> [-Wother]
+ %printer { fprintf (yyoutput, "<*> printer should not be called"); } <*>
+                                                                      ^^^
+input.y:24.70-72: warning: useless %printer for type <*> [-Wother]
+ %printer { fprintf (yyoutput, "<*> printer should not be called"); } <*>
+                                                                      ^^^
+input.y:33.3-23: warning: unset value: $$ [-Wother]
+   {           @$ = 4; } // Only used.
+   ^^^^^^^^^^^^^^^^^^^^^
+input.y:32.3-23: warning: unused value: $3 [-Wother]
+   { USE ($$); @$ = 3; } // Only set.
+   ^^^^^^^^^^^^^^^^^^^^^
+]])
+
+AT_COMPILE([input])
+AT_PARSER_CHECK([./input --debug], 1,,
+[[Starting parse
+Entering state 0
+Reducing stack by rule 1 (line 30):
+-> $$ = nterm $@1 (: )
+Stack now 0
+Entering state 2
+Reducing stack by rule 2 (line 31):
+-> $$ = nterm @2 (: 2)
+Stack now 0 2
+Entering state 4
+Reducing stack by rule 3 (line 32):
+-> $$ = nterm @3 (: 3)
+Stack now 0 2 4
+Entering state 5
+Reducing stack by rule 4 (line 33):
+-> $$ = nterm @4 (: 4)
+Stack now 0 2 4 5
+Entering state 6
+Reading a token: Now at end of input.
+syntax error
+Error: popping nterm @4 (: 4)
+DESTROY 4
+Stack now 0 2 4 5
+Error: popping nterm @3 (: 3)
+DESTROY 3
+Stack now 0 2 4
+Error: popping nterm @2 (: 2)
+DESTROY 2
+Stack now 0 2
+Error: popping nterm $@1 (: )
+Stack now 0
+Cleanup: discarding lookahead token $end (: )
+Stack now 0
+]])
+
+AT_CLEANUP
+
+
+## ----------------------- ##
+## @$ implies %locations.  ##
+## ----------------------- ##
+
+# Bison once forgot to check for @$ in actions other than semantic actions.
+
+# AT_CHECK_ACTION_LOCATIONS(ACTION-DIRECTIVE)
+# -------------------------------------------
+m4_define([AT_CHECK_ACTION_LOCATIONS],
+[AT_SETUP([[@$ in ]$1[ implies %locations]])
+AT_BISON_OPTION_PUSHDEFS([%debug])
+AT_DATA_GRAMMAR([[input.y]],
+[[%code {
+  #include <stdio.h>
+]AT_YYERROR_DECLARE[
+]AT_YYLEX_DECLARE[
+}
+
+%debug
+
+]$1[ {
+  fprintf (stderr, "%d\n", @$.first_line);
+} ]m4_if($1, [%initial-action], [], [[start]])[
+
+%%
+
+start:  ;
+
+%%
+
+static int
+yylex (void)
+{
+  return 0;
+}
+
+]AT_YYERROR_DEFINE[
+]AT_MAIN_DEFINE[
+]])
+
+AT_BISON_CHECK([[-o input.c input.y]])
+AT_COMPILE([[input]])
+AT_BISON_OPTION_POPDEFS
+AT_CLEANUP])
+
+AT_CHECK_ACTION_LOCATIONS([[%initial-action]])
+AT_CHECK_ACTION_LOCATIONS([[%destructor]])
+AT_CHECK_ACTION_LOCATIONS([[%printer]])
+
+
+## ------------------------- ##
+## Qualified $$ in actions.  ##
+## ------------------------- ##
+
+# Check that we can use qualified $$ (v.g., $<type>$) not only in rule
+# actions, but also where $$ is valid: %destructor/%printer and
+# %initial-action.
+#
+# FIXME: Not actually checking %destructor, but it's the same code as
+# %printer...
+#
+# To do that, use a semantic value that has two fields (sem_type),
+# declare symbols to have only one of these types (INT, float), and
+# use $<type>$ to get the other one.  Including for symbols that are
+# not typed (UNTYPED).
+
+m4_pushdef([AT_TEST],
+[AT_SETUP([[Qualified $$ in actions: $1]])
+
+AT_BISON_OPTION_PUSHDEFS([%skeleton "$1" %debug])
+
+AT_DATA_GRAMMAR([[input.y]],
+[[%skeleton "$1"
+%debug
+%code requires
+{
+  typedef struct sem_type
+  {
+    int ival;
+    float fval;
+  } sem_type;
+
+# define YYSTYPE sem_type
+
+]AT_SKEL_CC_IF([[
+# include <iostream>
+  namespace
+  {
+    void
+    report (std::ostream& yyo, int ival, float fval)
+    {
+      yyo << "ival: " << ival << ", fval: " <<  fval;
+    }
+  }
+]], [[
+# include <stdio.h>
+  static void
+  report (FILE* yyo, int ival, float fval)
+  {
+    fprintf (yyo, "ival: %d, fval: %1.1f", ival, fval);
+  }
+]])[
+}
+
+%code
+{
+  ]AT_YYERROR_DECLARE[
+  ]AT_YYLEX_DECLARE[
+}
+
+%token UNTYPED
+%token <ival> INT
+%type <fval> float
+%printer { report (yyo, $$,       $<fval>$); } <ival>;
+%printer { report (yyo, $<ival>$, $$      ); } <fval>;
+%printer { report (yyo, $<ival>$, $<fval>$); } <>;
+
+%initial-action
+{
+  $<ival>$ = 42;
+  $<fval>$ = 4.2;
+}
+
+%%
+float: UNTYPED INT
+{
+  $$       = $<fval>1 + $<fval>2;
+  $<ival>$ = $<ival>1 + $][2;
+};
+%%
+]AT_YYERROR_DEFINE[
+]AT_YYLEX_DEFINE(AT_SKEL_CC_IF([[{yy::parser::token::UNTYPED,
+                                 yy::parser::token::INT,
+                                  EOF}]],
+                               [[{UNTYPED, INT, EOF}]]),
+                 [AT_VAL.ival = toknum * 10; AT_VAL.fval = toknum / 10.0;])[
+]AT_MAIN_DEFINE[
+]])
+
+AT_FULL_COMPILE([[input]])
+AT_PARSER_CHECK([./input --debug], 0, [], [stderr])
+# Don't be too picky on the traces, GLR is not exactly the same.  Keep
+# only the lines from the printer.
+AT_CHECK([[sed -ne '/ival:/p' stderr]], 0,
+[[Reading a token: Next token is token UNTYPED (ival: 10, fval: 0.1)
+Shifting token UNTYPED (ival: 10, fval: 0.1)
+Reading a token: Next token is token INT (ival: 20, fval: 0.2)
+Shifting token INT (ival: 20, fval: 0.2)
+   $][1 = token UNTYPED (ival: 10, fval: 0.1)
+   $][2 = token INT (ival: 20, fval: 0.2)
+-> $$ = nterm float (ival: 30, fval: 0.3)
+Cleanup: popping nterm float (ival: 30, fval: 0.3)
+]])
+
+AT_BISON_OPTION_POPDEFS
+
+AT_CLEANUP
+])
+
+AT_TEST([yacc.c])
+AT_TEST([glr.c])
+AT_TEST([lalr1.cc])
+AT_TEST([glr.cc])
+
+m4_popdef([AT_TEST])
+
+## -------------------------------------------------- ##
+## Destroying lookahead assigned by semantic action.  ##
+## -------------------------------------------------- ##
+
+AT_SETUP([[Destroying lookahead assigned by semantic action]])
+
+AT_BISON_OPTION_PUSHDEFS
+AT_DATA_GRAMMAR([input.y],
+[[
+%code {
+  #include <assert.h>
+  #include <stdio.h>
+]AT_YYERROR_DECLARE[
+]AT_YYLEX_DECLARE[
+  #define USE(Var)
+}
+
+%destructor { fprintf (stderr, "'a' destructor\n"); } 'a'
+%destructor { fprintf (stderr, "'b' destructor\n"); } 'b'
+
+%%
+
+// In a previous version of Bison, yychar assigned by the semantic
+// action below was not translated into yytoken before the lookahead was
+// discarded and thus before its destructor (selected according to
+// yytoken) was called in order to return from yyparse.  This would
+// happen even if YYACCEPT was performed in a later semantic action as
+// long as only consistent states with default reductions were visited
+// in between.  However, we leave YYACCEPT in the same semantic action
+// for this test in order to show that skeletons cannot simply translate
+// immediately after every semantic action because a semantic action
+// that has set yychar might not always return normally.  Instead,
+// skeletons must translate before every use of yytoken.
+start: 'a' accept { USE($1); } ;
+accept: %empty {
+  assert (yychar == YYEMPTY);
+  yychar = 'b';
+  YYACCEPT;
+} ;
+
+%%
+]AT_YYERROR_DEFINE[
+]AT_YYLEX_DEFINE(["a"])[
+]AT_MAIN_DEFINE[
+]])
+AT_BISON_OPTION_POPDEFS
+AT_BISON_CHECK([[-o input.c input.y]])
+AT_COMPILE([[input]])
+AT_PARSER_CHECK([[./input]], [[0]], [],
+[['b' destructor
+'a' destructor
+]])
+
+AT_CLEANUP
+
+## ---------- ##
+## YYBACKUP.  ##
+## ---------- ##
+
+AT_SETUP([[YYBACKUP]])
+
+AT_BISON_OPTION_PUSHDEFS([%pure-parser %debug])
+
+AT_DATA_GRAMMAR([input.y],
+[[
+%error-verbose
+%debug
+%pure-parser
+%code {
+# include <stdio.h>
+# include <stdlib.h>
+# include <assert.h>
+
+  ]AT_YYERROR_DECLARE[
+  ]AT_YYLEX_DECLARE[
+}
+%%
+input:
+  exp exp {}
+;
+
+exp:
+  'a'     { printf ("a: %d\n", $1); }
+| 'b'     { YYBACKUP('a', 123); }
+| 'c' 'd' { YYBACKUP('a', 456); }
+;
+
+%%
+]AT_YYERROR_DEFINE[
+]AT_YYLEX_DEFINE(["bcd"], [*lvalp = (toknum + 1) * 10])[
+]AT_MAIN_DEFINE[
+]])
+AT_BISON_OPTION_POPDEFS
+
+AT_BISON_CHECK([[-o input.c input.y]])
+AT_COMPILE([[input]])
+AT_PARSER_CHECK([[./input]], [[0]],
+[[a: 123
+a: 456
+]])
+
+AT_CLEANUP

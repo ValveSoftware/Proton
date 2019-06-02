@@ -1237,18 +1237,18 @@ index da802ee2e49..1f1883cafea 100644
  
  static void *wined3d_cs_st_require_space(struct wined3d_cs *cs, size_t size, enum wined3d_cs_queue_id queue_id)
 diff --git a/dlls/wined3d/device.c b/dlls/wined3d/device.c
-index 0c48e5fcc82..7102b7c3dff 100644
+index 751676b75a..81f076c02e 100644
 --- a/dlls/wined3d/device.c
 +++ b/dlls/wined3d/device.c
-@@ -488,6 +488,8 @@ ULONG CDECL wined3d_device_decref(struct wined3d_device *device)
+@@ -540,6 +540,8 @@ void wined3d_device_cleanup(struct wined3d_device *device)
  
-         wined3d_stateblock_state_cleanup(&device->stateblock_state);
+     wined3d_stateblock_state_cleanup(&device->stateblock_state);
  
-+        wined3d_destroy_gl_vr_context(&device->vr_context);
++    wined3d_destroy_gl_vr_context(&device->vr_context);
 +
-         wined3d_cs_destroy(device->cs);
+     wined3d_cs_destroy(device->cs);
  
-         if (device->recording && wined3d_stateblock_decref(device->recording))
+     if (device->recording && wined3d_stateblock_decref(device->recording))
 diff --git a/dlls/wined3d/texture.c b/dlls/wined3d/texture.c
 index 7ecaed1a038..bb2a557c972 100644
 --- a/dlls/wined3d/texture.c

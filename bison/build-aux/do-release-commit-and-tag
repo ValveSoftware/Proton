@@ -1,0 +1,179 @@
+#!/bin/sh
+# In a git/autoconf/automake-enabled project with a NEWS file and a version-
+# controlled .prev-version file, automate the procedure by which we record
+# the date, release-type and version string in the NEWS file.  That commit
+# will serve to identify the release, so apply a signed tag to it as well.
+VERSION=2012-08-01.09 # UTC
+
+# Note: this is a bash script (could be zsh or dash)
+
+# Copyright (C) 2009-2015 Free Software Foundation, Inc.
+
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+# Written by Jim Meyering
+
+ME=$(basename "$0")
+warn() { printf '%s: %s\n' "$ME" "$*" >&2; }
+die() { warn "$*"; exit 1; }
+
+help()
+{
+  cat <<EOF
+Usage: $ME [OPTION...] VERSION RELEASE_TYPE
+
+Run this script from top_srcdir to perform the final pre-release NEWS
+update in which the date, release-type and version string are
+recorded.  Commit that result with a log entry marking the release,
+and apply a signed tag.  Run it from your project's top-level
+directory.
+
+Requirements:
+- you use git for version-control
+- a version-controlled .prev-version file
+- a NEWS file, with line 3 identical to this:
+$noteworthy_stub
+
+Options:
+  --branch=BRANCH     set release branch (default: $branch)
+  -C, --builddir=DIR  location of (configured) Makefile (default: $builddir)
+  --help              print this help, then exit
+  --version           print version number, then exit
+
+EXAMPLE:
+To update NEWS and tag the beta 8.1 release of coreutils, I would run this:
+
+  $ME 8.1 beta
+
+Report bugs and patches to <bug-gnulib@gnu.org>.
+EOF
+  exit
+}
+
+version()
+{
+  year=$(echo "$VERSION" | sed 's/[^0-9].*//')
+  cat <<EOF
+$ME $VERSION
+Copyright (C) $year Free Software Foundation, Inc,
+License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+EOF
+  exit
+}
+
+## ------ ##
+## Main.  ##
+## ------ ##
+
+# Constants.
+noteworthy='* Noteworthy changes in release'
+noteworthy_stub="$noteworthy ?.? (????-??-??) [?]"
+
+# Variables.
+branch=$(git branch | sed -ne '/^\* /{s///;p;q;}')
+builddir=.
+
+while test $# != 0
+do
+  # Handle --option=value by splitting apart and putting back on argv.
+  case $1 in
+    --*=*)
+      opt=$(echo "$1" | sed -e 's/=.*//')
+      val=$(echo "$1" | sed -e 's/[^=]*=//')
+      shift
+      set dummy "$opt" "$val" ${1+"$@"}; shift
+      ;;
+  esac
+
+  case $1 in
+    --help|--version) ${1#--};;
+    --branch) shift; branch=$1; shift ;;
+    -C|--builddir) shift; builddir=$1; shift ;;
+    --*) die "unrecognized option: $1";;
+    *) break;;
+  esac
+done
+
+test $# = 2 \
+  || die "Usage: $ME [OPTION...] VERSION TYPE"
+
+ver=$1
+type=$2
+
+
+## ---------------------- ##
+## First, sanity checks.  ##
+## ---------------------- ##
+
+# Verify that $ver looks like a version number, and...
+echo "$ver"|grep -E '^[0-9][0-9.]*[0-9]$' > /dev/null \
+  || die "invalid version: $ver"
+prev_ver=$(cat .prev-version) \
+  || die 'failed to determine previous version number from .prev-version'
+
+# Verify that $ver is sensible (> .prev-version).
+case $(printf "$prev_ver\n$ver\n"|sort -V -u|tr '\n' ':') in
+  "$prev_ver:$ver:") ;;
+  *) die "invalid version: $ver (<= $prev_ver)";;
+esac
+
+case $type in
+  alpha|beta|stable) ;;
+  *) die "invalid release type: $type";;
+esac
+
+# No local modifications allowed.
+case $(git diff-index --name-only HEAD) in
+  '') ;;
+  *) die 'this tree is dirty; commit your changes first';;
+esac
+
+# Ensure the current branch name is correct:
+curr_br=$(git rev-parse --symbolic-full-name HEAD)
+test "$curr_br" = refs/heads/$branch || die not on branch $branch
+
+# Extract package name from Makefile.
+Makefile=$builddir/Makefile
+pkg=$(sed -n 's/^PACKAGE = \(.*\)/\1/p' "$Makefile") \
+  || die "failed to determine package name from $Makefile"
+
+# Check that line 3 of NEWS is the stub line about to be replaced.
+test "$(sed -n 3p NEWS)" = "$noteworthy_stub" \
+  || die "line 3 of NEWS must be exactly '$noteworthy_stub'"
+
+## --------------- ##
+## Then, changes.  ##
+## --------------- ##
+
+# Update NEWS to have today's date, plus desired version number and $type.
+perl -MPOSIX -ni -e 'my $today = strftime "%F", localtime time;' \
+ -e 'my ($type, $ver) = qw('"$type $ver"');' \
+ -e 'my $pfx = "'"$noteworthy"'";' \
+ -e 'print $.==3 ? "$pfx $ver ($today) [$type]\n" : $_' \
+     NEWS || die 'failed to update NEWS'
+
+printf "version $ver\n\n* NEWS: Record release date.\n" \
+    | git commit -F -  -a || die 'git commit failed'
+git tag -s -m "$pkg $ver" v$ver HEAD || die 'git tag failed'
+
+# Local variables:
+# indent-tabs-mode: nil
+# eval: (add-hook 'write-file-hooks 'time-stamp)
+# time-stamp-start: "VERSION="
+# time-stamp-format: "%:y-%02m-%02d.%02H"
+# time-stamp-time-zone: "UTC"
+# time-stamp-end: " # UTC"
+# End:

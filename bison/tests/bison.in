@@ -1,0 +1,56 @@
+#! @SHELL@
+# @configure_input@
+# Wrapper around a non installed bison to make it work as an installed one.
+
+# Copyright (C) 2001-2015 Free Software Foundation, Inc.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+abs_top_srcdir='@abs_top_srcdir@'
+abs_top_builddir='@abs_top_builddir@'
+: ${PERL='@PERL@'}
+
+# Use the shipped files, not those installed.
+BISON_PKGDATADIR=$abs_top_srcdir/data
+export BISON_PKGDATADIR
+
+$PREBISON "$abs_top_builddir/src/bison" ${1+"$@"}
+status=$?
+
+# As a special dark magic, if we are actually using this wrapper to
+# compile Bison's src/parse-gram.y, post-process the synclines to
+# avoid dependencies on the user's set up (srcdir vs. builddir).
+for i
+do
+  case $i in
+    */src/parse-gram.y)
+    if $PERL --version >/dev/null; then
+      # We are called by ylwrap which (if it's an old version) still
+      # uses y.tab.*, and post-processes the synclines on y.tab.c
+      # itself.  Don't let it do it.  Besides, it leaves
+      # "parse-gram.y" as the source, dropping the src/ part.
+      $PERL -pi -e 's{"y\.tab\.}{"parse-gram.}g;'                       \
+                -e 's{"(?:.*/)?(parse-gram\.[chy])"}{"src/$1"}g;'       \
+                -e 's{GRAM_Y_TAB_H}{GRAM_SRC_PARSE_GRAM_H}g;'           \
+           y.tab.[ch]
+    fi
+    ;;
+  esac
+done
+
+exit $status
+
+# Local Variables:
+# mode: shell-script
+# End:

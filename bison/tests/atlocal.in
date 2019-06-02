@@ -1,0 +1,141 @@
+# @configure_input@                                     -*- shell-script -*-
+# Configurable variable values for Bison test suite.
+
+# Copyright (C) 2000-2015 Free Software Foundation, Inc.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+# We need 'config.h'.
+CPPFLAGS="-I$abs_top_builddir/lib @CPPFLAGS@"
+
+# Don't just check if $POSIXLY_CORRECT is set, as Bash, when launched
+# as /bin/sh, sets the shell variable POSIXLY_CORRECT to y, but not
+# the environment variable.
+if env | grep '^POSIXLY_CORRECT=' >/dev/null; then
+  POSIXLY_CORRECT_IS_EXPORTED=true
+else
+  POSIXLY_CORRECT_IS_EXPORTED=false
+fi
+
+## ------------------- ##
+## C/C++ Compilation.  ##
+## ------------------- ##
+
+: ${CC='@CC@'}
+: ${CXX='@CXX@'}
+
+# Is the compiler GCC?
+GCC='@GCC@'
+
+# Sometimes a test group needs to ignore gcc warnings, so it locally
+# sets CFLAGS to this.
+  NO_WERROR_CFLAGS='@CFLAGS@   @WARN_CFLAGS@   @WARN_CFLAGS_TEST@'
+NO_WERROR_CXXFLAGS='@CXXFLAGS@ @WARN_CXXFLAGS@ @WARN_CXXFLAGS_TEST@'
+
+# But most of the time, we want -Werror.
+  CFLAGS="$NO_WERROR_CFLAGS   @WERROR_CFLAGS@"
+CXXFLAGS="$NO_WERROR_CXXFLAGS @WERROR_CXXFLAGS@"
+
+# If 'exit 77'; skip all C++ tests; otherwise ':'.
+BISON_CXX_WORKS='@BISON_CXX_WORKS@'
+
+# Be sure that the C++ compiler is not broken because of gnulib.  This
+# cannot be checked in configure (gnulib is not parameterized yet),
+# and checking this in every C++ test in AC_COMPILE_CXX is too costly.
+#
+# http://lists.gnu.org/archive/html/bug-bison/2013-06/msg00001.html
+#
+# FIXME: Check (say 2014) whether this is still needed.
+if $BISON_CXX_WORKS; then
+  # See AT_DATA_SOURCE_PROLOGUE.
+  cat >conftest.cc <<EOF
+#include <config.h>
+/* We don't need perfect functions for these tests. */
+#undef malloc
+#undef memcmp
+#undef realloc
+#include <iostream>
+
+int main ()
+{
+  std::cout << "Works" << std::endl;
+}
+EOF
+  $CXX $CXXFLAGS $CPPFLAGS $LDFLAGS $LIBS -o conftest conftest.cc
+  case $? in
+   0);;
+   *) BISON_CXX_WORKS="as_fn_error 77 cannot-compile-simple-program";;
+  esac
+  rm -fr conftest*
+fi
+
+# Whether the compiler supports POSIXLY_CORRECT defined.
+: ${C_COMPILER_POSIXLY_CORRECT='@C_COMPILER_POSIXLY_CORRECT@'}
+: ${CXX_COMPILER_POSIXLY_CORRECT='@CXX_COMPILER_POSIXLY_CORRECT@'}
+
+if $POSIXLY_CORRECT_IS_EXPORTED; then
+  $C_COMPILER_POSIXLY_CORRECT ||
+    BISON_C_WORKS="as_fn_error 77 POSIXLY_CORRECT"
+  $CXX_COMPILER_POSIXLY_CORRECT ||
+    BISON_CXX_WORKS="as_fn_error 77 POSIXLY_CORRECT"
+fi
+
+# Handle --compile-c-with-cxx here, once CXX and CXXFLAGS are known.
+if "$at_arg_compile_c_with_cxx"; then
+  CC_IS_CXX=1
+  CC=$CXX
+  NO_WERROR_CFLAGS=$NO_WERROR_CXXFLAGS
+  CFLAGS=$CXXFLAGS
+  BISON_C_WORKS=$BISON_CXX_WORKS
+else
+  CC_IS_CXX=0
+fi
+
+
+## ------- ##
+## Other.  ##
+## ------- ##
+
+# Empty if no javac was found
+CONF_JAVAC='@CONF_JAVAC@'
+
+# Empty if no Java VM was found
+CONF_JAVA='@CONF_JAVA@'
+
+# We need egrep and perl.
+: ${EGREP='@EGREP@'}
+: ${PERL='@PERL@'}
+
+# Use simple quotes (lib/quote.c).
+LC_CTYPE=C
+export LC_CTYPE
+
+# Are special link options needed?
+LDFLAGS='@LDFLAGS@'
+
+# Are special libraries needed?
+LIBS="$abs_top_builddir/lib/libbison.a @LIBS@ @INTLLIBS@"
+
+# Empty if no xsltproc was found
+: ${XSLTPROC='@XSLTPROC@'}
+
+# Don't just check if $POSIXLY_CORRECT is set, as Bash, when launched
+# as /bin/sh, sets the shell variable POSIXLY_CORRECT to y, but not
+# the environment variable.
+: ${C_COMPILER_POSIXLY_CORRECT='@C_COMPILER_POSIXLY_CORRECT@'}
+if env | grep '^POSIXLY_CORRECT=' >/dev/null; then
+  POSIXLY_CORRECT_IS_EXPORTED=true
+else
+  POSIXLY_CORRECT_IS_EXPORTED=false
+fi

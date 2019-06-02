@@ -1,0 +1,347 @@
+# Executing Actions.                               -*- Autotest -*-
+
+# Copyright (C) 2002, 2004-2005, 2007, 2009-2015 Free Software
+# Foundation, Inc.
+
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+AT_BANNER([[User Actions.]])
+
+
+# _AT_SYNCLINES_COMPILE(FILE)
+# ---------------------------
+# Compile FILE expecting an error, and save in the file stdout the
+# normalized output.  Ignore the exit status, since some compilers
+# (e.g. c89 on IRIX 6.5) trigger warnings on '#error', instead of
+# errors.
+m4_define([_AT_SYNCLINES_COMPILE],
+[AT_CHECK([$CC $CFLAGS $CPPFLAGS -c $1], [ignore], [], [stderr])
+
+# Transform stderr into something like this:
+#
+#   input.y:4: #error "4"
+#
+# In case GCC displays column information, strip it down.
+#
+#   input.y:4:2: #error "4"    or
+#   input.y:4.2: #error "4"    or
+#   input.y:4:2: error: #error "4"
+# =>
+#   input.y:4: #error "4"
+#
+# It may also issue more context information:
+#
+#   input.y: In function 'yyparse':
+#   input.y:8: #error "8"
+# =>
+#   input.y:4: #error "8"
+#
+# The message may include a caret-error (indented by GCC 4.8,
+# not by clang 3.2):
+#
+#   input.y:1:2: error: #error "1"
+#    #error "1"
+#     ^
+#
+# Possibly distcc adds its bits.
+#
+#   distcc[33187] ERROR: compile (null) on localhost failed
+#   syncline.c:1:2: error: #error "1"
+#   distcc[33185] ERROR: compile syncline.c on localhost failed
+#
+# or even
+#
+#   distcc[35882] (dcc_connect_by_name) ERROR: failed to look up host "chrisimac": Unknown host
+#   distcc[35882] Warning: failed to distribute input.c to chrisimac/4, running locally instead
+#
+# The compiler might end by the number of messages issued (Clang 3.2):
+#
+#    syncline.c:1:2: error: "1"
+#    #error "1"
+#     ^
+#    1 error generated.
+#
+# When c++ is used to compiler C, we might have more messages (Clang 3.2):
+#
+#    clang: warning: treating 'c' input as 'c++' when in C++ mode, this behavior is deprecated
+#
+#
+# xlc reports things like:
+#
+#    "input.yy", line 80.21: 1540-0218 (S) The call does not match any parameter list for "operator<<".
+#    "/usr/vacpp/include/iosfwd", line 32.6: 1506-205 (S) #error This file to be used only with IBM VisualAge C++ v4 and later compilers
+
+AT_CHECK([[$PERL -p -0777 - stderr <<\EOF
+  # 1. Remove useless lines.
+
+  # distcc clutter.
+  s/^distcc\[\d+\] .*\n//gm;
+  # c vs. c++.
+  s/^clang: warning: treating 'c' input as 'c\+\+'.*\n//gm;
+  # Function context.
+  s/^[^:]*: In function '[^']+':\n//gm;
+  # Caret error.
+  s/^ *#error.*\n *\^\n//gm;
+  # Number of errors.
+  s/^1 error generated\.\n//gm;
+
+  # 2. Normalize the lines we kept.
+
+  # xlc messages.  Remove also error identifier (e.g., "1540-0218 (S)").
+  s/^"(.*?)", line ([\w.]*): \d+-\d+ \(.\) /$][1:$][2: /gm;
+  # Remove column.
+  s/^([^:]+:\d+)[.:][^:]+:(.+)$/$][1:$][2/gm;
+  # Map all combinations of "error: " and "#error: " to "#error ".
+  s/^([^:]+:\d+):( |#error|error|:)+/$][1: #error /gm;
+EOF
+]],
+  0, [stdout])
+])
+
+
+
+# AT_SYNCLINES_COMPILE(FILE)
+# --------------------------
+# Compile FILE expecting an error, and save in the file stdout the
+# normalized output.  If we can't get a trustable location
+# from the compiler, just skip the test.
+#
+# It seems impossible to find a generic scheme to check the location
+# of an error.  Even requiring GCC is not sufficient, since for instance
+# the version modified by Apple:
+#
+# | Reading specs from /usr/libexec/gcc/darwin/ppc/2.95.2/specs
+# | Apple Computer, Inc. version gcc-934.3, based on gcc version 2.95.2
+# | 19991024 (release) configure:2124: $? = 0
+#
+# instead of:
+#
+# | input.y:2: #error "2"
+#
+# it reports:
+#
+# | input.y:2: "2"
+# | cpp-precomp: warning: errors during smart preprocessing, retrying in basic mode
+m4_define([AT_SYNCLINES_COMPILE],
+[# Check if we can trust location translation.
+AT_DATA([syncline.c],
+[[#error "1"
+int i; /* avoids -pedantic warning about an empty translation unit. */
+]])
+
+_AT_SYNCLINES_COMPILE([syncline.c])
+AT_CHECK([[test "`cat stdout`" = 'syncline.c:1: @%:@error "1"' || exit 77]])
+
+# Then work for real.
+_AT_SYNCLINES_COMPILE([$1])
+])
+
+
+# AT_TEST(TITLE, INPUT, ERROR-MSG)
+# --------------------------------
+# Check that compiling the parser produced from INPUT cause GCC
+# to issue ERROR-MSG.
+m4_pushdef([AT_TEST],
+[AT_SETUP([$1])
+AT_BISON_OPTION_PUSHDEFS
+
+AT_DATA([[input.y]], [$2])
+AT_BISON_CHECK([-o input.c input.y])
+AT_SYNCLINES_COMPILE([input.c])
+AT_CHECK([cat stdout], 0, [$3])
+AT_BISON_OPTION_POPDEFS
+AT_CLEANUP
+])
+
+
+## ------------------- ##
+## Prologue syncline.  ##
+## ------------------- ##
+
+
+AT_TEST([Prologue syncline],
+[[%{
+#error "2"
+]AT_YYERROR_DECLARE_EXTERN[
+]AT_YYLEX_DECLARE_EXTERN[
+%}
+%%
+exp: '0';
+%%
+]],
+[input.y:2: #error "2"
+])
+
+
+## ----------------- ##
+## %union syncline.  ##
+## ----------------- ##
+
+AT_TEST([%union syncline],
+[[%union {
+#error "2"
+  char dummy;
+}
+%{
+]AT_YYERROR_DECLARE_EXTERN[
+]AT_YYLEX_DECLARE_EXTERN[
+%}
+%%
+exp: '0';
+%%
+]],
+[input.y:2: #error "2"
+])
+
+
+## ---------------------- ##
+## %union name syncline.  ##
+## ---------------------- ##
+
+# Check that invalid union names are properly reported in the
+# source file.
+AT_SETUP([%union name syncline])
+AT_BISON_OPTION_PUSHDEFS
+AT_DATA([[input.y]],
+[[%union break
+{
+  char dummy;
+}
+%{
+]AT_YYERROR_DECLARE_EXTERN[
+]AT_YYLEX_DECLARE_EXTERN[
+%}
+%%
+exp: '0';
+%%
+]])
+
+AT_BISON_CHECK([-o input.c input.y])
+AT_SYNCLINES_COMPILE([input.c])
+AT_CHECK([[grep '^input.y:1' stdout]], 0, [ignore])
+AT_BISON_OPTION_POPDEFS
+AT_CLEANUP
+
+
+## ----------------------- ##
+## Postprologue syncline.  ##
+## ----------------------- ##
+
+AT_TEST([Postprologue syncline],
+[[%{
+]AT_YYERROR_DECLARE_EXTERN[
+]AT_YYLEX_DECLARE_EXTERN[
+%}
+%union
+{
+  int ival;
+}
+%{
+#error "10"
+%}
+%%
+exp: '0';
+%%
+]],
+[input.y:10: #error "10"
+])
+
+
+## ----------------- ##
+## Action syncline.  ##
+## ----------------- ##
+
+AT_TEST([Action syncline],
+[[%{
+]AT_YYERROR_DECLARE_EXTERN[
+]AT_YYLEX_DECLARE_EXTERN[
+%}
+%%
+exp:
+{
+#error "8"
+};
+]],
+[input.y:8: #error "8"
+])
+
+
+## ------------------- ##
+## Epilogue syncline.  ##
+## ------------------- ##
+
+AT_TEST([Epilogue syncline],
+[[%{
+]AT_YYERROR_DECLARE_EXTERN[
+]AT_YYLEX_DECLARE_EXTERN[
+%}
+%%
+exp: '0';
+%%
+#error "8"
+]],
+[input.y:8: #error "8"
+])
+
+## -------------------- ##
+## %code top syncline.  ##
+## -------------------- ##
+
+AT_TEST([%code top syncline],
+[[%code top {
+#error "2"
+}
+%{
+]AT_YYERROR_DECLARE_EXTERN[
+]AT_YYLEX_DECLARE_EXTERN[
+%}
+%%
+exp: '0';
+%%
+]],
+[input.y:2: #error "2"
+])
+
+m4_popdef([AT_TEST])
+
+## ----------- ##
+## %no-lines.  ##
+## ----------- ##
+
+m4_pushdef([AT_TEST],
+[AT_SETUP([%no-lines: $1])
+
+AT_BISON_OPTION_PUSHDEFS([%skeleton "$1" %defines])
+AT_DATA_GRAMMAR([input.y],
+[%skeleton "$1" %defines
+%{
+]AT_YYERROR_DECLARE_EXTERN[
+]AT_YYLEX_DECLARE_EXTERN[
+%}
+%%
+exp: '0'
+])
+AT_BISON_CHECK([--no-lines -o input.AT_SKEL_CC_IF([cc], [c]) -d input.y])
+AT_CHECK([[grep '#line' ]AT_SKEL_CC_IF([*.cc *.hh], [*.c *.h])], 1)
+AT_BISON_OPTION_POPDEFS
+
+AT_CLEANUP
+])
+
+AT_TEST([yacc.c])
+AT_TEST([glr.c])
+AT_TEST([lalr1.cc])
+AT_TEST([glr.cc])
+
+m4_popdef([AT_TEST])

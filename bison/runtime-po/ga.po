@@ -1,0 +1,62 @@
+# Irish translations for bison.
+# Copyright (C) 2004 Free Software Foundation, Inc.
+# This file is distributed under the same license as the bison package.
+# Kevin Patrick Scannell <scannell@SLU.EDU>, 2004, 2005.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: bison-runtime 2.1\n"
+"Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
+"POT-Creation-Date: 2015-01-23 13:55+0100\n"
+"PO-Revision-Date: 2005-09-18 23:14-0500\n"
+"Last-Translator: Kevin Patrick Scannell <scannell@SLU.EDU>\n"
+"Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
+"Language: ga\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: data/glr.c:803 data/yacc.c:643
+msgid "syntax error: cannot back up"
+msgstr "earráid chomhréire: ní féidir cúlú"
+
+#: data/glr.c:1687
+msgid "syntax is ambiguous"
+msgstr "comhréir dhébhríoch"
+
+#: data/glr.c:2008 data/glr.c:2088 data/glr.c:2128 data/glr.c:2392
+#: data/lalr1.cc:1094 data/lalr1.cc:1115 data/yacc.c:1210 data/yacc.c:1710
+#: data/yacc.c:1716
+msgid "syntax error"
+msgstr "earráid chomhréire"
+
+#: data/glr.c:2089 data/lalr1.cc:1095 data/yacc.c:1211
+#, c-format
+msgid "syntax error, unexpected %s"
+msgstr "earráid chomhréire, %s gan choinne"
+
+#: data/glr.c:2090 data/lalr1.cc:1096 data/yacc.c:1212
+#, c-format
+msgid "syntax error, unexpected %s, expecting %s"
+msgstr "earráid chomhréire, %s gan choinne, bhíothas ag súil le %s"
+
+#: data/glr.c:2091 data/lalr1.cc:1097 data/yacc.c:1213
+#, c-format
+msgid "syntax error, unexpected %s, expecting %s or %s"
+msgstr "earráid chomhréire, %s gan choinne, bhíothas ag súil le %s nó %s"
+
+#: data/glr.c:2092 data/lalr1.cc:1098 data/yacc.c:1214
+#, c-format
+msgid "syntax error, unexpected %s, expecting %s or %s or %s"
+msgstr "earráid chomhréire, %s gan choinne, bhíothas ag súil le %s nó %s nó %s"
+
+#: data/glr.c:2093 data/lalr1.cc:1099 data/yacc.c:1215
+#, c-format
+msgid "syntax error, unexpected %s, expecting %s or %s or %s or %s"
+msgstr ""
+"earráid chomhréire, %s gan choinne, bhíothas ag súil le %s nó %s nó %s nó %s"
+
+#: data/glr.c:2452 data/yacc.c:1295 data/yacc.c:1297 data/yacc.c:1470
+#: data/yacc.c:1867
+msgid "memory exhausted"
+msgstr "cuimhne ídithe"

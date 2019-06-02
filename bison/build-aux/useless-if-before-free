@@ -1,0 +1,207 @@
+eval '(exit $?0)' && eval 'exec perl -wST "$0" ${1+"$@"}'
+  & eval 'exec perl -wST "$0" $argv:q'
+    if 0;
+# Detect instances of "if (p) free (p);".
+# Likewise "if (p != 0)", "if (0 != p)", or with NULL; and with braces.
+
+my $VERSION = '2012-01-06 07:23'; # UTC
+# The definition above must lie within the first 8 lines in order
+# for the Emacs time-stamp write hook (at end) to update it.
+# If you change this file with Emacs, please let the write hook
+# do its job.  Otherwise, update this string manually.
+
+# Copyright (C) 2008-2015 Free Software Foundation, Inc.
+
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+# Written by Jim Meyering
+
+use strict;
+use warnings;
+use Getopt::Long;
+
+(my $ME = $0) =~ s|.*/||;
+
+# use File::Coda; # http://meyering.net/code/Coda/
+END {
+  defined fileno STDOUT or return;
+  close STDOUT and return;
+  warn "$ME: failed to close standard output: $!\n";
+  $? ||= 1;
+}
+
+sub usage ($)
+{
+  my ($exit_code) = @_;
+  my $STREAM = ($exit_code == 0 ? *STDOUT : *STDERR);
+  if ($exit_code != 0)
+    {
+      print $STREAM "Try '$ME --help' for more information.\n";
+    }
+  else
+    {
+      print $STREAM <<EOF;
+Usage: $ME [OPTIONS] FILE...
+
+Detect any instance in FILE of a useless "if" test before a free call, e.g.,
+"if (p) free (p);".  Any such test may be safely removed without affecting
+the semantics of the C code in FILE.  Use --name=FOO --name=BAR to also
+detect free-like functions named FOO and BAR.
+
+OPTIONS:
+
+   --list       print only the name of each matching FILE (\\0-terminated)
+   --name=N     add name N to the list of \'free\'-like functions to detect;
+                  may be repeated
+
+   --help       display this help and exit
+   --version    output version information and exit
+
+Exit status:
+
+  0   one or more matches
+  1   no match
+  2   an error
+
+EXAMPLE:
+
+For example, this command prints all removable "if" tests before "free"
+and "kfree" calls in the linux kernel sources:
+
+    git ls-files -z |xargs -0 $ME --name=kfree
+
+EOF
+    }
+  exit $exit_code;
+}
+
+sub is_NULL ($)
+{
+  my ($expr) = @_;
+  return ($expr eq 'NULL' || $expr eq '0');
+}
+
+{
+  sub EXIT_MATCH {0}
+  sub EXIT_NO_MATCH {1}
+  sub EXIT_ERROR {2}
+  my $err = EXIT_NO_MATCH;
+
+  my $list;
+  my @name = qw(free);
+  GetOptions
+    (
+     help => sub { usage 0 },
+     version => sub { print "$ME version $VERSION\n"; exit },
+     list => \$list,
+     'name=s@' => \@name,
+    ) or usage 1;
+
+  # Make sure we have the right number of non-option arguments.
+  # Always tell the user why we fail.
+  @ARGV < 1
+    and (warn "$ME: missing FILE argument\n"), usage EXIT_ERROR;
+
+  my $or = join '|', @name;
+  my $regexp = qr/(?:$or)/;
+
+  # Set the input record separator.
+  # Note: this makes it impractical to print line numbers.
+  $/ = '"';
+
+  my $found_match = 0;
+ FILE:
+  foreach my $file (@ARGV)
+    {
+      open FH, '<', $file
+        or (warn "$ME: can't open '$file' for reading: $!\n"),
+          $err = EXIT_ERROR, next;
+      while (defined (my $line = <FH>))
+        {
+          while ($line =~
+              /\b(if\s*\(\s*([^)]+?)(?:\s*!=\s*([^)]+?))?\s*\)
+              #  1          2                  3
+               (?:   \s*$regexp\s*\((?:\s*\([^)]+\))?\s*([^)]+)\)\s*;|
+                \s*\{\s*$regexp\s*\((?:\s*\([^)]+\))?\s*([^)]+)\)\s*;\s*\}))/sxg)
+            {
+              my $all = $1;
+              my ($lhs, $rhs) = ($2, $3);
+              my ($free_opnd, $braced_free_opnd) = ($4, $5);
+              my $non_NULL;
+              if (!defined $rhs) { $non_NULL = $lhs }
+              elsif (is_NULL $rhs) { $non_NULL = $lhs }
+              elsif (is_NULL $lhs) { $non_NULL = $rhs }
+              else { next }
+
+              # Compare the non-NULL part of the "if" expression and the
+              # free'd expression, without regard to white space.
+              $non_NULL =~ tr/ \t//d;
+              my $e2 = defined $free_opnd ? $free_opnd : $braced_free_opnd;
+              $e2 =~ tr/ \t//d;
+              if ($non_NULL eq $e2)
+                {
+                  $found_match = 1;
+                  $list
+                    and (print "$file\0"), next FILE;
+                  print "$file: $all\n";
+                }
+            }
+        }
+    }
+  continue
+    {
+      close FH;
+    }
+
+  $found_match && $err == EXIT_NO_MATCH
+    and $err = EXIT_MATCH;
+
+  exit $err;
+}
+
+my $foo = <<'EOF';
+# The above is to *find* them.
+# This adjusts them, removing the unnecessary "if (p)" part.
+
+# FIXME: do something like this as an option (doesn't do braces):
+free=xfree
+git grep -l -z "$free *(" \
+  | xargs -0 useless-if-before-free -l --name="$free" \
+  | xargs -0 perl -0x3b -pi -e \
+   's/\bif\s*\(\s*(\S+?)(?:\s*!=\s*(?:0|NULL))?\s*\)\s+('"$free"'\s*\((?:\s*\([^)]+\))?\s*\1\s*\)\s*;)/$2/s'
+
+# Use the following to remove redundant uses of kfree inside braces.
+# Note that -0777 puts perl in slurp-whole-file mode;
+# but we have plenty of memory, these days...
+free=kfree
+git grep -l -z "$free *(" \
+  | xargs -0 useless-if-before-free -l --name="$free" \
+  | xargs -0 perl -0777 -pi -e \
+     's/\bif\s*\(\s*(\S+?)(?:\s*!=\s*(?:0|NULL))?\s*\)\s*\{\s*('"$free"'\s*\((?:\s*\([^)]+\))?\s*\1\s*\);)\s*\}[^\n]*$/$2/gms'
+
+Be careful that the result of the above transformation is valid.
+If the matched string is followed by "else", then obviously, it won't be.
+
+When modifying files, refuse to process anything other than a regular file.
+EOF
+
+## Local Variables:
+## mode: perl
+## indent-tabs-mode: nil
+## eval: (add-hook 'write-file-hooks 'time-stamp)
+## time-stamp-start: "my $VERSION = '"
+## time-stamp-format: "%:y-%02m-%02d %02H:%02M"
+## time-stamp-time-zone: "UTC"
+## time-stamp-end: "'; # UTC"
+## End:

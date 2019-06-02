@@ -1,0 +1,269 @@
+# Bison Parser Headers.                               -*- Autotest -*-
+
+# Copyright (C) 2001-2002, 2006-2007, 2009-2015 Free Software
+# Foundation, Inc.
+
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+AT_BANNER([[Parser Headers.]])
+
+
+## --------------------- ##
+## Invalid CPP headers.  ##
+## --------------------- ##
+
+# AT_TEST_CPP_GUARD_H(BASE-NAME, [DIRECTIVES])
+# --------------------------------------------
+# FIXME: Much of this can be covered by calc.at.
+m4_define([AT_TEST_CPP_GUARD_H],
+[AT_SETUP([Invalid CPP guards: $2 --defines=$1.h])
+AT_BISON_OPTION_PUSHDEFS([$2])
+# Possibly create inner directories.
+dirname=`AS_DIRNAME([$1])`
+AS_MKDIR_P([$dirname])
+
+AT_DATA_GRAMMAR([$1.y],
+[$2
+%{
+#include <$1.h>
+]AT_YYERROR_DECLARE_EXTERN[
+]AT_YYLEX_DECLARE_EXTERN[
+%}
+%%
+dummy: /* empty */;
+%%
+#include <$1.h>
+])
+
+AT_BISON_CHECK([--defines=$1.h --output=$1.c $1.y])
+
+AT_COMPILE([$1.o], [-I. -c $1.c])
+
+AT_BISON_OPTION_POPDEFS
+AT_CLEANUP
+])
+
+AT_TEST_CPP_GUARD_H([input/input])
+AT_TEST_CPP_GUARD_H([9foo])
+AT_TEST_CPP_GUARD_H([input/input], [%glr-parser])
+AT_TEST_CPP_GUARD_H([9foo],        [%glr-parser])
+
+
+
+## ---------------- ##
+## export YYLTYPE.  ##
+## ---------------- ##
+
+
+AT_SETUP([export YYLTYPE])
+
+AT_BISON_OPTION_PUSHDEFS([%name-prefix "my_"])
+AT_DATA_GRAMMAR([input.y],
+[[%locations
+
+%name-prefix "my_"
+%{
+#include <stdio.h>
+#include <stdlib.h>
+
+]AT_YYERROR_DEFINE[
+]AT_YYLEX_DEFINE[
+%}
+%%
+exp: /* empty */;
+]])
+
+AT_BISON_CHECK([--defines -o input.c input.y])
+
+# YYLTYPE should be defined, and MY_LLOC declared.
+AT_DATA([caller.c],
+[[#include "input.h"
+YYLTYPE *my_llocp = &my_lloc;
+
+int my_parse (void);
+
+]AT_MAIN_DEFINE[
+]])
+
+# Link and execute, just to make sure everything is fine (and in
+# particular, that MY_LLOC is indeed defined somewhere).
+AT_COMPILE([caller.o])
+AT_COMPILE([input.o])
+AT_COMPILE([caller], [caller.o input.o])
+AT_PARSER_CHECK([./caller])
+AT_BISON_OPTION_POPDEFS
+AT_CLEANUP
+
+## ----------------- ##
+## Several parsers.  ##
+## ----------------- ##
+
+AT_SETUP([Several parsers])
+
+# AT_TEST([PREFIX], [DIRECTIVES])
+# -------------------------------
+# Generate and compile to *.o.  Make sure there is no (allowed) YY*
+# nor yy* identifiers in the header.  Check that headers are
+# self-contained, and can be compiled by a C++ compiler.
+m4_pushdef([AT_TEST],
+[AT_BISON_OPTION_PUSHDEFS([%define api.prefix {$1_} $2])
+AT_DATA_GRAMMAR([$1.y],
+[[%define api.prefix {$1_}
+$2
+%error-verbose
+%union
+{
+  int integer;
+}
+%{
+#include <stdio.h>
+  ]AT_YYERROR_DECLARE[
+  ]AT_YYLEX_DECLARE[
+%}
+%%
+exp:
+  'x' '1' { printf ("x1\n"); }
+| 'x' '2' { printf ("x2\n"); }
+| 'x' '3' { printf ("x3\n"); }
+| 'x' '4' { printf ("x4\n"); }
+| 'x' '5' { printf ("x5\n"); }
+| 'x' '6' { printf ("x6\n"); }
+| 'x' '7' { printf ("x7\n"); }
+| 'x' '8' { printf ("x8\n"); }
+;
+
+%%
+]AT_YYERROR_DEFINE[
+]AT_YYLEX_DEFINE(["$1"])[
+]])
+
+AT_BISON_CHECK([-d -o $1.AT_SKEL_CC_IF([cc], [c]) $1.y])
+
+AT_LANG_COMPILE([$1.o])
+AT_CHECK([[echo "$1" >>expout]])
+
+AT_BISON_OPTION_POPDEFS
+])# AT_TEST
+
+AT_DATA([main.cc],
+[AT_DATA_SOURCE_PROLOGUE
+[// If we are compiling with CC=$CXX, then do not load the C headers
+// inside extern "C", since they were _not_ compiled this way.
+#if ! CC_IS_CXX
+extern "C"
+{
+#endif
+  #include "x1.h"
+  #include "x2.h"
+  #include "x3.h"
+  #include "x4.h"
+  #include "x6.h"
+  #include "x7.h"
+  #include "x8.h"
+#if ! CC_IS_CXX
+}
+#endif
+#include "x5.hh"
+//#include "x6.hh"
+
+#define RUN(S)                                  \
+  do {                                          \
+    int res = S;                                \
+    if (res)                                    \
+      std::cerr << #S": " << res << std::endl;  \
+  } while (false)
+
+int
+main (void)
+{
+  RUN(x1_parse());
+  RUN(x2_parse());
+  RUN(x3_parse());
+  RUN(x4_parse());
+  x5_::parser p5;
+  RUN(p5.parse());
+  RUN(x6_parse());
+  RUN(x7_parse());
+  RUN(x8_parse());
+//  x6_::parser p6;
+//  RUN(p6.parse());
+  return 0;
+}
+]])# main.cc
+
+AT_TEST([x1], [])
+AT_TEST([x2], [%locations %debug])
+AT_TEST([x3], [%glr-parser])
+AT_TEST([x4], [%locations %debug %glr-parser])
+AT_TEST([x5], [%locations %debug %language "c++"])
+AT_TEST([x6], [%define api.pure])
+AT_TEST([x7], [%define api.push-pull both])
+AT_TEST([x8], [%define api.pure %define api.push-pull both])
+#AT_TEST([x5], [%locations %language "c++" %glr-parser])
+
+# Check there is no 'yy' left.
+# C++ output relies on namespaces and still uses yy a lot.
+#
+# Check there is no 'YY' left.
+# Ignore comments, YYChar (template parameter), YYPUSH_MORE(_DEFINED)?
+# (constant definition), YY_\w+_INCLUDED (header guards).
+# YYDEBUG (not renamed) can be read, but not changed.
+AT_CHECK([[$PERL -n -0777 -e '
+  s{/\*.*?\*/}{}gs;
+  s{//.*}{}g;
+  s{\b(YYChar
+      |YYPUSH_MORE(?:_DEFINED)?
+      |YYUSE
+      |YY_ATTRIBUTE(?:_PURE|_UNUSED)?
+      |YY_IGNORE_MAYBE_UNINITIALIZED_(?:BEGIN|END)
+      |YY_INITIAL_VALUE
+      |YY_\w+_INCLUDED
+      |YY_NULLPTR
+      |(defined|if)\ YYDEBUG
+      )\b}{}gx;
+  while (/^(.*YY.*)$/gm)
+  {
+    print "$ARGV: invalid exported YY: $1\n";
+  }
+  if ($ARGV =~ /\.h$/)
+  {
+    while (/^(.*yy.*)$/gm)
+    {
+      print "$ARGV: invalid exported yy: $1\n";
+    }
+  }
+' -- *.hh *.h]])
+
+# Check that the headers are self-contained, and protected against
+# multiple inclusions.  While at it, check they are sane for C++.
+for h in *.h *.hh
+do
+  # No shell expansion with AT_DATA.
+  cat >$h.cc <<EOF
+AT_DATA_SOURCE_PROLOGUE
+#include "$h"
+#include "$h"
+EOF
+  AT_COMPILE_CXX([$h.o])
+done
+
+# Do this late, so that other checks have been performed.
+AT_SKIP_IF_CANNOT_LINK_C_AND_CXX
+
+AT_COMPILE_CXX([parser], [[x[1-8].o -DCC_IS_CXX=$CC_IS_CXX main.cc]])
+AT_PARSER_CHECK([./parser], [0], [[expout]])
+
+m4_popdef([AT_TEST])
+
+AT_CLEANUP

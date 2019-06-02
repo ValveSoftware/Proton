@@ -1,0 +1,643 @@
+# Checking the output filenames.                    -*- Autotest -*-
+
+# Copyright (C) 2000-2002, 2005-2015 Free Software Foundation, Inc.
+
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+AT_BANNER([[Output file names.]])
+
+# AT_CHECK_FILES(EXPECTED-FILES, [IGNORED-FILES])
+# -----------------------------------------------
+# Check that the current directory contains FILE... (sorted).
+m4_define([AT_CHECK_FILES],
+[AT_CHECK([[find . -type f |
+           $PERL -ne '
+      s,\./,,; chomp;
+      push @file, $_ unless m{^($2|testsuite.log)$};
+      END { print join (" ", sort @file), "\n" }']],
+          [], [$1
+])])
+
+# AT_CHECK_OUTPUT(INPUT-FILE, [DIRECTIVES], [FLAGS], EXPECTED-FILES, [STATUS],
+#                 [ADDITIONAL-TESTS], [PRE-TESTS])
+# -----------------------------------------------------------------------------
+m4_define([AT_CHECK_OUTPUT],
+[AT_SETUP([[Output files: ]$2 $3])[
+]$7[
+for file in ]$1 $4[; do
+  case $file in
+    */*) mkdir -p `echo "$file" | sed 's,/[^/]*,,'`;;
+  esac
+done
+]AT_DATA([$1],
+[$2[
+%%
+foo: %empty {};
+]])[
+
+]AT_BISON_CHECK([$3 $1], [$5], [], [ignore])[
+# Ignore the files non-generated files
+]AT_CHECK_FILES([$4], [$1])[
+]$6[
+]AT_CLEANUP[
+]])
+
+AT_CHECK_OUTPUT([foo.y], [], [-dv],
+                [foo.output foo.tab.c foo.tab.h])
+
+# Some versions of Valgrind (at least valgrind-3.6.0.SVN-Debian) report
+# "fgrep: write error: Bad file descriptor" when stdout is closed, so we
+# skip this test group during maintainer-check-valgrind.
+AT_CHECK_OUTPUT([foo.y], [], [-dv >&-],
+                [foo.output foo.tab.c foo.tab.h],
+                [], [],
+                [AT_CHECK([[case "$PREBISON" in *valgrind*) exit 77;; esac]])])
+
+AT_CHECK_OUTPUT([foo.y], [], [-dv -o foo.c],
+                [foo.c foo.h foo.output])
+AT_CHECK_OUTPUT([foo.y], [], [-dv -o foo.tab.c],
+                [foo.output foo.tab.c foo.tab.h])
+
+AT_CHECK_OUTPUT([foo.y], [], [-dv -g --xml -y],
+                [y.dot y.output y.tab.c y.tab.h y.xml])
+# With '-o y.tab.c', we expect 'y.output' etc. (for compatility with Yacc).
+AT_CHECK_OUTPUT([foo.y], [], [-dv -g --xml -o y.tab.c],
+                [y.dot y.output y.tab.c y.tab.h y.xml])
+
+AT_CHECK_OUTPUT([foo.y], [], [-dv -b bar],
+                [bar.output bar.tab.c bar.tab.h])
+AT_CHECK_OUTPUT([foo.y], [], [-dv -g -o foo.c],
+                [foo.c foo.dot foo.h foo.output])
+
+
+AT_CHECK_OUTPUT([foo.y], [%defines %verbose],      [],
+                [foo.output foo.tab.c foo.tab.h])
+AT_CHECK_OUTPUT([foo.y], [%defines %verbose %yacc],[],
+                [y.output y.tab.c y.tab.h])
+
+AT_CHECK_OUTPUT([foo.yy], [%defines %verbose %yacc],[],
+                [y.output y.tab.c y.tab.h])
+
+# Exercise %output and %file-prefix including deprecated '='
+AT_CHECK_OUTPUT([foo.y], [%file-prefix "bar" %defines %verbose],      [],
+                [bar.output bar.tab.c bar.tab.h])
+AT_CHECK_OUTPUT([foo.y], [%output "bar.c" %defines %verbose %yacc],[],
+                [bar.c bar.h bar.output])
+AT_CHECK_OUTPUT([foo.y],
+                [%file-prefix "baz" %output "bar.c" %defines %verbose %yacc],
+                [],
+                [bar.c bar.h bar.output])
+
+
+# Check priorities of extension control.
+AT_CHECK_OUTPUT([foo.yy], [%defines %verbose], [],
+                [foo.output foo.tab.cc foo.tab.hh])
+
+AT_CHECK_OUTPUT([foo.yy], [%defines %verbose ], [-o foo.c],
+                [foo.c foo.h foo.output])
+
+AT_CHECK_OUTPUT([foo.yy], [],
+                [--defines=foo.hpp -o foo.c++],
+                [foo.c++ foo.hpp])
+
+AT_CHECK_OUTPUT([foo.yy], [%defines "foo.hpp"],
+                [-o foo.c++],
+                [foo.c++ foo.hpp])
+
+AT_CHECK_OUTPUT([foo.yy], [],
+                [-o foo.c++ --graph=foo.gph],
+                [foo.c++ foo.gph])
+
+# Do not generate code when there are early errors (even warnings as
+# errors).
+AT_CHECK_OUTPUT([foo.y], [%type <foo> useless],
+                [--defines --graph --xml --report=all -Wall -Werror],
+                [foo.dot foo.output foo.xml],
+                [1])
+
+# Do not generate code when there are late errors (even warnings as
+# errors).
+AT_CHECK_OUTPUT([foo.y], [%define useless],
+                [--defines --graph --xml --report=all -Wall -Werror],
+                [foo.dot foo.output foo.xml],
+                [1])
+
+
+## ------------ ##
+## C++ output.  ##
+## ------------ ##
+
+m4_define([AT_CHECK_NO_SUBDIR_PART],
+[# Also make sure that the includes do not refer to the subdirectory.
+AT_CHECK([grep 'include .subdir/' $1.cc], 1, [])
+AT_CHECK([grep 'include .subdir/' $1.hh], 1, [])
+])
+
+AT_CHECK_OUTPUT([foo.yy], [%skeleton "lalr1.cc" %verbose], [],
+                [foo.output foo.tab.cc])
+
+AT_CHECK_OUTPUT([foo.yy], [%skeleton "lalr1.cc" %defines %verbose], [],
+                [foo.output foo.tab.cc foo.tab.hh stack.hh])
+
+AT_CHECK_OUTPUT([foo.yy], [%skeleton "lalr1.cc" %verbose %locations], [],
+                [foo.output foo.tab.cc])
+
+AT_CHECK_OUTPUT([foo.yy], [%skeleton "lalr1.cc" %defines %verbose %locations], [],
+                [foo.output foo.tab.cc foo.tab.hh location.hh position.hh stack.hh])
+
+AT_CHECK_OUTPUT([subdir/foo.yy], [%skeleton "lalr1.cc" %defines %verbose], [],
+                [foo.output foo.tab.cc foo.tab.hh stack.hh],
+                [], [AT_CHECK_NO_SUBDIR_PART([foo.tab])])
+
+AT_CHECK_OUTPUT([subdir/foo.yy], [%skeleton "lalr1.cc" %defines %verbose %locations],
+                [-o subdir/foo.cc],
+                [subdir/foo.cc subdir/foo.hh subdir/foo.output subdir/location.hh subdir/position.hh subdir/stack.hh],
+                [], [AT_CHECK_NO_SUBDIR_PART([subdir/foo])])
+
+AT_CHECK_OUTPUT([gram_dir/foo.yy],
+                [%skeleton "lalr1.cc" %defines %verbose %file-prefix "output_dir/foo"],
+                [],
+                [output_dir/foo.output output_dir/foo.tab.cc output_dir/foo.tab.hh output_dir/stack.hh])
+
+AT_CHECK_OUTPUT([gram_dir/foo.yy],
+                [%skeleton "lalr1.cc" %defines %locations %verbose %file-prefix "output_dir/foo"],
+                [],
+                [output_dir/foo.output output_dir/foo.tab.cc output_dir/foo.tab.hh output_dir/location.hh output_dir/position.hh output_dir/stack.hh])
+
+
+# AT_CHECK_CONFLICTING_OUTPUT(INPUT-FILE, DIRECTIVES, FLAGS, STDERR,
+#                             [EXIT-STATUS])
+# ------------------------------------------------------------------
+m4_define([AT_CHECK_CONFLICTING_OUTPUT],
+[AT_SETUP([Conflicting output files: $2 $3])
+case "$1" in
+  */*) mkdir `echo "$1" | sed 's,/.*,,'`;;
+esac
+AT_DATA([$1],
+[[$2
+%%
+foo: {};
+]])
+
+[cp ]$1[ expout]
+# Because an output file name conflict is still a warning, Bison exits
+# with status 0, so AT_BISON_CHECK does not realize that there may be no
+# output file against which to check the XML.  AT_BISON_CHECK_NO_XML
+# avoids that problem.
+AT_BISON_CHECK_NO_XML([$3 $1], $5, [], [$4])
+AT_CHECK([[cat $1]], [[0]], [expout])
+AT_CLEANUP
+])
+
+AT_CHECK_CONFLICTING_OUTPUT([foo.y],
+[], [--graph="foo.tab.c"],
+[[foo.y: warning: conflicting outputs to file 'foo.tab.c' [-Wother]
+]])
+
+AT_CHECK_CONFLICTING_OUTPUT([foo.y],
+[%defines "foo.output"], [-v],
+[[foo.y: warning: conflicting outputs to file 'foo.output' [-Wother]
+]])
+
+AT_CHECK_CONFLICTING_OUTPUT([foo.y],
+[%skeleton "lalr1.cc" %defines %locations], [--graph="location.hh"],
+[[foo.y: warning: conflicting outputs to file 'location.hh' [-Wother]
+]])
+
+AT_CHECK_CONFLICTING_OUTPUT([foo.y], [], [-o foo.y],
+[[foo.y: error: refusing to overwrite the input file 'foo.y'
+]], 1)
+
+
+# AT_CHECK_OUTPUT_FILE_NAME(FILE-NAME-PREFIX, [ADDITIONAL-TESTS])
+# ---------------------------------------------------------------
+m4_define([AT_CHECK_OUTPUT_FILE_NAME],
+[AT_SETUP([Output file name: $1])
+
+AT_BISON_OPTION_PUSHDEFS
+# Skip if platform doesn't support file name.  For example, Cygwin
+# doesn't support file names containing ":" or "\".
+AT_CHECK([[touch "]AS_ESCAPE([$1[.tmp]])[" || exit 77]])
+
+AT_DATA_GRAMMAR([glr.y],
+[[%glr-parser
+%code {
+]AT_YYERROR_DECLARE_EXTERN[
+]AT_YYLEX_DECLARE_EXTERN[
+}
+%%
+start: {};
+]])
+AT_BISON_CHECK([-o "AS_ESCAPE([$1.c])" --defines="AS_ESCAPE([$1.h])" glr.y])
+AT_CHECK([ls "AS_ESCAPE([$1.c])" "AS_ESCAPE([$1.h])"], [], [ignore])
+AT_COMPILE([glr.o], [-c "AS_ESCAPE([$1.c])"])
+$2
+
+AT_DATA_GRAMMAR([cxx.y],
+[[%skeleton "lalr1.cc"
+%code { int yylex (yy::parser::semantic_type*); }
+%%
+start: {};
+]])
+AT_BISON_CHECK([-o "AS_ESCAPE([$1.cc])" --defines="AS_ESCAPE([$1.hh])" cxx.y])
+AT_CHECK([ls "AS_ESCAPE([$1.cc])" "AS_ESCAPE([$1.hh])"], [], [ignore])
+AT_COMPILE_CXX([cxx.o], [-c "AS_ESCAPE([$1.cc])"])
+$2
+
+AT_BISON_OPTION_POPDEFS
+AT_CLEANUP
+])
+
+# Notice that the header file name here cannot contain
+# '"' since FILENAME in '#include "FILENAME"' cannot.
+AT_CHECK_OUTPUT_FILE_NAME([[`~!@#$%^&*()-=_+{}[]|\:;<>, .']])
+dnl Work around a bug in m4_expand that broke AT_SETUP in autoconf 2.62,
+dnl by using the definition from 2.63.
+m4_version_prereq([2.63], [],
+[m4_define([m4_expand], [_$0(-=<{($1)}>=-)])
+m4_define([_m4_expand],
+[m4_changequote([-=<{(], [)}>=-])$1m4_changequote([, ])])])
+AT_CHECK_OUTPUT_FILE_NAME([[(]])
+AT_CHECK_OUTPUT_FILE_NAME([[)]])
+AT_CHECK_OUTPUT_FILE_NAME([[@%:@]])
+AT_CHECK_OUTPUT_FILE_NAME([[@@]])
+AT_CHECK_OUTPUT_FILE_NAME([[@{]])
+AT_CHECK_OUTPUT_FILE_NAME([[@}]])
+AT_CHECK_OUTPUT_FILE_NAME([[@<:@]])
+AT_CHECK_OUTPUT_FILE_NAME([[@:>@]])
+
+
+# AT_TEST(SETUP-NAME, GRAMMAR, DOT-BODY)
+# --------------------------------------
+# Check that the DOT graph for GRAMMAR is DOT-BODY.
+m4_pushdef([AT_TEST],
+[AT_SETUP([$1])
+AT_KEYWORDS([[graph]])
+AT_DATA([[input.y]], [$2])
+AT_BISON_CHECK([[-rall --graph input.y]], [0], [[]], [[ignore]])
+AT_CHECK([[grep -v // input.dot]], [0],
+[[
+digraph "input.y"
+{
+  node [fontname = courier, shape = box, colorscheme = paired6]
+  edge [fontname = courier]
+  ]$3[}
+]])
+AT_CLEANUP
+])
+
+
+## ------------------------ ##
+## Graph with no conflicts. ##
+## ------------------------ ##
+
+AT_TEST([Graph with no conflicts],
+[[%%
+exp: a '?' b;
+a: ;
+b: 'b';
+]],
+[[
+  0 [label="State 0\n\l  0 $accept: . exp $end\l  1 exp: . a '?' b\l  2 a: . %empty\l"]
+  0 -> 1 [style=dashed label="exp"]
+  0 -> 2 [style=dashed label="a"]
+  0 -> "0R2" [style=solid]
+ "0R2" [label="R2", fillcolor=3, shape=diamond, style=filled]
+  1 [label="State 1\n\l  0 $accept: exp . $end\l"]
+  1 -> 3 [style=solid label="$end"]
+  2 [label="State 2\n\l  1 exp: a . '?' b\l"]
+  2 -> 4 [style=solid label="'?'"]
+  3 [label="State 3\n\l  0 $accept: exp $end .\l"]
+  3 -> "3R0" [style=solid]
+ "3R0" [label="Acc", fillcolor=1, shape=diamond, style=filled]
+  4 [label="State 4\n\l  1 exp: a '?' . b\l  3 b: . 'b'\l"]
+  4 -> 5 [style=solid label="'b'"]
+  4 -> 6 [style=dashed label="b"]
+  5 [label="State 5\n\l  3 b: 'b' .\l"]
+  5 -> "5R3" [style=solid]
+ "5R3" [label="R3", fillcolor=3, shape=diamond, style=filled]
+  6 [label="State 6\n\l  1 exp: a '?' b .\l"]
+  6 -> "6R1" [style=solid]
+ "6R1" [label="R1", fillcolor=3, shape=diamond, style=filled]
+]])
+
+## ------------------------ ##
+## Graph with unsolved S/R. ##
+## ------------------------ ##
+
+AT_TEST([Graph with unsolved S/R],
+[[%%
+start:
+    'a'
+  | empty_a 'a'
+  | 'b'
+  | empty_b 'b'
+  | 'c'
+  | empty_c 'c'
+  ;
+empty_a: %prec 'a';
+empty_b: %prec 'b';
+empty_c: %prec 'c';
+]],
+[[
+  0 [label="State 0\n\l  0 $accept: . start $end\l  1 start: . 'a'\l  2      | . empty_a 'a'\l  3      | . 'b'\l  4      | . empty_b 'b'\l  5      | . 'c'\l  6      | . empty_c 'c'\l  7 empty_a: . %empty  ['a']\l  8 empty_b: . %empty  ['b']\l  9 empty_c: . %empty  ['c']\l"]
+  0 -> 1 [style=solid label="'a'"]
+  0 -> 2 [style=solid label="'b'"]
+  0 -> 3 [style=solid label="'c'"]
+  0 -> 4 [style=dashed label="start"]
+  0 -> 5 [style=dashed label="empty_a"]
+  0 -> 6 [style=dashed label="empty_b"]
+  0 -> 7 [style=dashed label="empty_c"]
+  0 -> "0R7d" [label="['a']", style=solid]
+ "0R7d" [label="R7", fillcolor=5, shape=diamond, style=filled]
+  0 -> "0R8d" [label="['b']", style=solid]
+ "0R8d" [label="R8", fillcolor=5, shape=diamond, style=filled]
+  0 -> "0R9d" [label="['c']", style=solid]
+ "0R9d" [label="R9", fillcolor=5, shape=diamond, style=filled]
+  1 [label="State 1\n\l  1 start: 'a' .\l"]
+  1 -> "1R1" [style=solid]
+ "1R1" [label="R1", fillcolor=3, shape=diamond, style=filled]
+  2 [label="State 2\n\l  3 start: 'b' .\l"]
+  2 -> "2R3" [style=solid]
+ "2R3" [label="R3", fillcolor=3, shape=diamond, style=filled]
+  3 [label="State 3\n\l  5 start: 'c' .\l"]
+  3 -> "3R5" [style=solid]
+ "3R5" [label="R5", fillcolor=3, shape=diamond, style=filled]
+  4 [label="State 4\n\l  0 $accept: start . $end\l"]
+  4 -> 8 [style=solid label="$end"]
+  5 [label="State 5\n\l  2 start: empty_a . 'a'\l"]
+  5 -> 9 [style=solid label="'a'"]
+  6 [label="State 6\n\l  4 start: empty_b . 'b'\l"]
+  6 -> 10 [style=solid label="'b'"]
+  7 [label="State 7\n\l  6 start: empty_c . 'c'\l"]
+  7 -> 11 [style=solid label="'c'"]
+  8 [label="State 8\n\l  0 $accept: start $end .\l"]
+  8 -> "8R0" [style=solid]
+ "8R0" [label="Acc", fillcolor=1, shape=diamond, style=filled]
+  9 [label="State 9\n\l  2 start: empty_a 'a' .\l"]
+  9 -> "9R2" [style=solid]
+ "9R2" [label="R2", fillcolor=3, shape=diamond, style=filled]
+  10 [label="State 10\n\l  4 start: empty_b 'b' .\l"]
+  10 -> "10R4" [style=solid]
+ "10R4" [label="R4", fillcolor=3, shape=diamond, style=filled]
+  11 [label="State 11\n\l  6 start: empty_c 'c' .\l"]
+  11 -> "11R6" [style=solid]
+ "11R6" [label="R6", fillcolor=3, shape=diamond, style=filled]
+]])
+
+## ---------------------- ##
+## Graph with solved S/R. ##
+## ---------------------- ##
+
+AT_TEST([Graph with solved S/R],
+[[%left 'a'
+%right 'b'
+%right 'c'
+%%
+start:
+    'a'
+  | empty_a 'a'
+  | 'b'
+  | empty_b 'b'
+  | 'c'
+  | empty_c 'c'
+  ;
+empty_a: %prec 'a';
+empty_b: %prec 'b';
+empty_c: %prec 'c';
+]],
+[[
+  0 [label="State 0\n\l  0 $accept: . start $end\l  1 start: . 'a'\l  2      | . empty_a 'a'\l  3      | . 'b'\l  4      | . empty_b 'b'\l  5      | . 'c'\l  6      | . empty_c 'c'\l  7 empty_a: . %empty  ['a']\l  8 empty_b: . %empty  []\l  9 empty_c: . %empty  []\l"]
+  0 -> 1 [style=solid label="'b'"]
+  0 -> 2 [style=solid label="'c'"]
+  0 -> 3 [style=dashed label="start"]
+  0 -> 4 [style=dashed label="empty_a"]
+  0 -> 5 [style=dashed label="empty_b"]
+  0 -> 6 [style=dashed label="empty_c"]
+  0 -> "0R7" [style=solid]
+ "0R7" [label="R7", fillcolor=3, shape=diamond, style=filled]
+  1 [label="State 1\n\l  3 start: 'b' .\l"]
+  1 -> "1R3" [style=solid]
+ "1R3" [label="R3", fillcolor=3, shape=diamond, style=filled]
+  2 [label="State 2\n\l  5 start: 'c' .\l"]
+  2 -> "2R5" [style=solid]
+ "2R5" [label="R5", fillcolor=3, shape=diamond, style=filled]
+  3 [label="State 3\n\l  0 $accept: start . $end\l"]
+  3 -> 7 [style=solid label="$end"]
+  4 [label="State 4\n\l  2 start: empty_a . 'a'\l"]
+  4 -> 8 [style=solid label="'a'"]
+  5 [label="State 5\n\l  4 start: empty_b . 'b'\l"]
+  5 -> 9 [style=solid label="'b'"]
+  6 [label="State 6\n\l  6 start: empty_c . 'c'\l"]
+  6 -> 10 [style=solid label="'c'"]
+  7 [label="State 7\n\l  0 $accept: start $end .\l"]
+  7 -> "7R0" [style=solid]
+ "7R0" [label="Acc", fillcolor=1, shape=diamond, style=filled]
+  8 [label="State 8\n\l  2 start: empty_a 'a' .\l"]
+  8 -> "8R2" [style=solid]
+ "8R2" [label="R2", fillcolor=3, shape=diamond, style=filled]
+  9 [label="State 9\n\l  4 start: empty_b 'b' .\l"]
+  9 -> "9R4" [style=solid]
+ "9R4" [label="R4", fillcolor=3, shape=diamond, style=filled]
+  10 [label="State 10\n\l  6 start: empty_c 'c' .\l"]
+  10 -> "10R6" [style=solid]
+ "10R6" [label="R6", fillcolor=3, shape=diamond, style=filled]
+]])
+
+## ---------------- ##
+## Graph with  R/R. ##
+## ---------------- ##
+
+AT_TEST([Graph with R/R],
+[[%%
+exp: a | b;
+a: ;
+b: ;
+]],
+[[
+  0 [label="State 0\n\l  0 $accept: . exp $end\l  1 exp: . a\l  2    | . b\l  3 a: . %empty  [$end]\l  4 b: . %empty  [$end]\l"]
+  0 -> 1 [style=dashed label="exp"]
+  0 -> 2 [style=dashed label="a"]
+  0 -> 3 [style=dashed label="b"]
+  0 -> "0R3" [style=solid]
+ "0R3" [label="R3", fillcolor=3, shape=diamond, style=filled]
+  0 -> "0R4d" [label="[$end]", style=solid]
+ "0R4d" [label="R4", fillcolor=5, shape=diamond, style=filled]
+  1 [label="State 1\n\l  0 $accept: exp . $end\l"]
+  1 -> 4 [style=solid label="$end"]
+  2 [label="State 2\n\l  1 exp: a .\l"]
+  2 -> "2R1" [style=solid]
+ "2R1" [label="R1", fillcolor=3, shape=diamond, style=filled]
+  3 [label="State 3\n\l  2 exp: b .\l"]
+  3 -> "3R2" [style=solid]
+ "3R2" [label="R2", fillcolor=3, shape=diamond, style=filled]
+  4 [label="State 4\n\l  0 $accept: exp $end .\l"]
+  4 -> "4R0" [style=solid]
+ "4R0" [label="Acc", fillcolor=1, shape=diamond, style=filled]
+]])
+
+## ---------------------------------------- ##
+## Graph with reductions with multiple LAT. ##
+## ---------------------------------------- ##
+
+AT_TEST([Graph with reductions with multiple LAT],
+[[%%
+exp: a ';' | a ';' | a '.' | b '?' | b '!' | c '?' | c ';';
+a: ;
+b: ;
+c: ;
+]],
+[[
+  0 [label="State 0\n\l  0 $accept: . exp $end\l  1 exp: . a ';'\l  2    | . a ';'\l  3    | . a '.'\l  4    | . b '?'\l  5    | . b '!'\l  6    | . c '?'\l  7    | . c ';'\l  8 a: . %empty  [';', '.']\l  9 b: . %empty  ['?', '!']\l 10 c: . %empty  [';', '?']\l"]
+  0 -> 1 [style=dashed label="exp"]
+  0 -> 2 [style=dashed label="a"]
+  0 -> 3 [style=dashed label="b"]
+  0 -> 4 [style=dashed label="c"]
+  0 -> "0R8" [style=solid]
+ "0R8" [label="R8", fillcolor=3, shape=diamond, style=filled]
+  0 -> "0R9" [label="['?', '!']", style=solid]
+ "0R9" [label="R9", fillcolor=3, shape=diamond, style=filled]
+  0 -> "0R10d" [label="[';', '?']", style=solid]
+ "0R10d" [label="R10", fillcolor=5, shape=diamond, style=filled]
+  1 [label="State 1\n\l  0 $accept: exp . $end\l"]
+  1 -> 5 [style=solid label="$end"]
+  2 [label="State 2\n\l  1 exp: a . ';'\l  2    | a . ';'\l  3    | a . '.'\l"]
+  2 -> 6 [style=solid label="';'"]
+  2 -> 7 [style=solid label="'.'"]
+  3 [label="State 3\n\l  4 exp: b . '?'\l  5    | b . '!'\l"]
+  3 -> 8 [style=solid label="'?'"]
+  3 -> 9 [style=solid label="'!'"]
+  4 [label="State 4\n\l  6 exp: c . '?'\l  7    | c . ';'\l"]
+  4 -> 10 [style=solid label="';'"]
+  4 -> 11 [style=solid label="'?'"]
+  5 [label="State 5\n\l  0 $accept: exp $end .\l"]
+  5 -> "5R0" [style=solid]
+ "5R0" [label="Acc", fillcolor=1, shape=diamond, style=filled]
+  6 [label="State 6\n\l  1 exp: a ';' .  [$end]\l  2    | a ';' .  [$end]\l"]
+  6 -> "6R1" [style=solid]
+ "6R1" [label="R1", fillcolor=3, shape=diamond, style=filled]
+  6 -> "6R2d" [label="[$end]", style=solid]
+ "6R2d" [label="R2", fillcolor=5, shape=diamond, style=filled]
+  7 [label="State 7\n\l  3 exp: a '.' .\l"]
+  7 -> "7R3" [style=solid]
+ "7R3" [label="R3", fillcolor=3, shape=diamond, style=filled]
+  8 [label="State 8\n\l  4 exp: b '?' .\l"]
+  8 -> "8R4" [style=solid]
+ "8R4" [label="R4", fillcolor=3, shape=diamond, style=filled]
+  9 [label="State 9\n\l  5 exp: b '!' .\l"]
+  9 -> "9R5" [style=solid]
+ "9R5" [label="R5", fillcolor=3, shape=diamond, style=filled]
+  10 [label="State 10\n\l  7 exp: c ';' .\l"]
+  10 -> "10R7" [style=solid]
+ "10R7" [label="R7", fillcolor=3, shape=diamond, style=filled]
+  11 [label="State 11\n\l  6 exp: c '?' .\l"]
+  11 -> "11R6" [style=solid]
+ "11R6" [label="R6", fillcolor=3, shape=diamond, style=filled]
+]])
+
+## ------------------------------------------------------ ##
+## Graph with a reduction rule both enabled and disabled. ##
+## ------------------------------------------------------ ##
+
+AT_TEST([Graph with a reduction rule both enabled and disabled],
+[[%%
+exp: ifexp | opexp | imm;
+ifexp: "if" exp "then" exp elseexp;
+elseexp: "else" exp | ;
+opexp: exp '+' exp;
+imm: '0';
+]],
+[[
+  0 [label="State 0\n\l  0 $accept: . exp $end\l  1 exp: . ifexp\l  2    | . opexp\l  3    | . imm\l  4 ifexp: . \"if\" exp \"then\" exp elseexp\l  7 opexp: . exp '+' exp\l  8 imm: . '0'\l"]
+  0 -> 1 [style=solid label="\"if\""]
+  0 -> 2 [style=solid label="'0'"]
+  0 -> 3 [style=dashed label="exp"]
+  0 -> 4 [style=dashed label="ifexp"]
+  0 -> 5 [style=dashed label="opexp"]
+  0 -> 6 [style=dashed label="imm"]
+  1 [label="State 1\n\l  1 exp: . ifexp\l  2    | . opexp\l  3    | . imm\l  4 ifexp: . \"if\" exp \"then\" exp elseexp\l  4      | \"if\" . exp \"then\" exp elseexp\l  7 opexp: . exp '+' exp\l  8 imm: . '0'\l"]
+  1 -> 1 [style=solid label="\"if\""]
+  1 -> 2 [style=solid label="'0'"]
+  1 -> 7 [style=dashed label="exp"]
+  1 -> 4 [style=dashed label="ifexp"]
+  1 -> 5 [style=dashed label="opexp"]
+  1 -> 6 [style=dashed label="imm"]
+  2 [label="State 2\n\l  8 imm: '0' .\l"]
+  2 -> "2R8" [style=solid]
+ "2R8" [label="R8", fillcolor=3, shape=diamond, style=filled]
+  3 [label="State 3\n\l  0 $accept: exp . $end\l  7 opexp: exp . '+' exp\l"]
+  3 -> 8 [style=solid label="$end"]
+  3 -> 9 [style=solid label="'+'"]
+  4 [label="State 4\n\l  1 exp: ifexp .\l"]
+  4 -> "4R1" [style=solid]
+ "4R1" [label="R1", fillcolor=3, shape=diamond, style=filled]
+  5 [label="State 5\n\l  2 exp: opexp .\l"]
+  5 -> "5R2" [style=solid]
+ "5R2" [label="R2", fillcolor=3, shape=diamond, style=filled]
+  6 [label="State 6\n\l  3 exp: imm .\l"]
+  6 -> "6R3" [style=solid]
+ "6R3" [label="R3", fillcolor=3, shape=diamond, style=filled]
+  7 [label="State 7\n\l  4 ifexp: \"if\" exp . \"then\" exp elseexp\l  7 opexp: exp . '+' exp\l"]
+  7 -> 10 [style=solid label="\"then\""]
+  7 -> 9 [style=solid label="'+'"]
+  8 [label="State 8\n\l  0 $accept: exp $end .\l"]
+  8 -> "8R0" [style=solid]
+ "8R0" [label="Acc", fillcolor=1, shape=diamond, style=filled]
+  9 [label="State 9\n\l  1 exp: . ifexp\l  2    | . opexp\l  3    | . imm\l  4 ifexp: . \"if\" exp \"then\" exp elseexp\l  7 opexp: . exp '+' exp\l  7      | exp '+' . exp\l  8 imm: . '0'\l"]
+  9 -> 1 [style=solid label="\"if\""]
+  9 -> 2 [style=solid label="'0'"]
+  9 -> 11 [style=dashed label="exp"]
+  9 -> 4 [style=dashed label="ifexp"]
+  9 -> 5 [style=dashed label="opexp"]
+  9 -> 6 [style=dashed label="imm"]
+  10 [label="State 10\n\l  1 exp: . ifexp\l  2    | . opexp\l  3    | . imm\l  4 ifexp: . \"if\" exp \"then\" exp elseexp\l  4      | \"if\" exp \"then\" . exp elseexp\l  7 opexp: . exp '+' exp\l  8 imm: . '0'\l"]
+  10 -> 1 [style=solid label="\"if\""]
+  10 -> 2 [style=solid label="'0'"]
+  10 -> 12 [style=dashed label="exp"]
+  10 -> 4 [style=dashed label="ifexp"]
+  10 -> 5 [style=dashed label="opexp"]
+  10 -> 6 [style=dashed label="imm"]
+  11 [label="State 11\n\l  7 opexp: exp . '+' exp\l  7      | exp '+' exp .  [$end, \"then\", \"else\", '+']\l"]
+  11 -> 9 [style=solid label="'+'"]
+  11 -> "11R7d" [label="['+']", style=solid]
+ "11R7d" [label="R7", fillcolor=5, shape=diamond, style=filled]
+  11 -> "11R7" [style=solid]
+ "11R7" [label="R7", fillcolor=3, shape=diamond, style=filled]
+  12 [label="State 12\n\l  4 ifexp: \"if\" exp \"then\" exp . elseexp\l  5 elseexp: . \"else\" exp\l  6        | . %empty  [$end, \"then\", \"else\", '+']\l  7 opexp: exp . '+' exp\l"]
+  12 -> 13 [style=solid label="\"else\""]
+  12 -> 9 [style=solid label="'+'"]
+  12 -> 14 [style=dashed label="elseexp"]
+  12 -> "12R6d" [label="[\"else\", '+']", style=solid]
+ "12R6d" [label="R6", fillcolor=5, shape=diamond, style=filled]
+  12 -> "12R6" [style=solid]
+ "12R6" [label="R6", fillcolor=3, shape=diamond, style=filled]
+  13 [label="State 13\n\l  1 exp: . ifexp\l  2    | . opexp\l  3    | . imm\l  4 ifexp: . \"if\" exp \"then\" exp elseexp\l  5 elseexp: \"else\" . exp\l  7 opexp: . exp '+' exp\l  8 imm: . '0'\l"]
+  13 -> 1 [style=solid label="\"if\""]
+  13 -> 2 [style=solid label="'0'"]
+  13 -> 15 [style=dashed label="exp"]
+  13 -> 4 [style=dashed label="ifexp"]
+  13 -> 5 [style=dashed label="opexp"]
+  13 -> 6 [style=dashed label="imm"]
+  14 [label="State 14\n\l  4 ifexp: \"if\" exp \"then\" exp elseexp .\l"]
+  14 -> "14R4" [style=solid]
+ "14R4" [label="R4", fillcolor=3, shape=diamond, style=filled]
+  15 [label="State 15\n\l  5 elseexp: \"else\" exp .  [$end, \"then\", \"else\", '+']\l  7 opexp: exp . '+' exp\l"]
+  15 -> 9 [style=solid label="'+'"]
+  15 -> "15R5d" [label="['+']", style=solid]
+ "15R5d" [label="R5", fillcolor=5, shape=diamond, style=filled]
+  15 -> "15R5" [style=solid]
+ "15R5" [label="R5", fillcolor=3, shape=diamond, style=filled]
+]])
+
+m4_popdef([AT_TEST])

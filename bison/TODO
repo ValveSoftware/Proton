@@ -1,0 +1,387 @@
+* Short term
+** Graphviz display code thoughts
+The code for the --graph option is over two files: print_graph, and
+graphviz. This is because Bison used to also produce VCG graphs, but since
+this is no longer true, maybe we could consider these files for fusion.
+
+An other consideration worth noting is that print_graph.c (correct me if I
+am wrong) should contain generic functions, whereas graphviz.c and other
+potential files should contain just the specific code for that output
+format. It will probably prove difficult to tell if the implementation is
+actually generic whilst only having support for a single format, but it
+would be nice to keep stuff a bit tidier: right now, the construction of the
+bitset used to show reductions is in the graphviz-specific code, and on the
+opposite side we have some use of \l, which is graphviz-specific, in what
+should be generic code.
+
+Little effort seems to have been given to factoring these files and their
+rint{,-xml} counterpart. We would very much like to re-use the pretty format
+of states from .output for the graphs, etc.
+
+Also, the underscore in print_graph.[ch] isn't very fitting considering the
+dashes in the other filenames.
+
+Since graphviz dies on medium-to-big grammars, maybe consider an other tool?
+
+** push-parser
+Check it too when checking the different kinds of parsers.  And be
+sure to check that the initial-action is performed once per parsing.
+
+** m4 names
+b4_shared_declarations is no longer what it is.  Make it
+b4_parser_declaration for instance.
+
+** yychar in lalr1.cc
+There is a large difference bw maint and master on the handling of
+yychar (which was removed in lalr1.cc).  See what needs to be
+back-ported.
+
+
+    /* User semantic actions sometimes alter yychar, and that requires
+       that yytoken be updated with the new translation.  We take the
+       approach of translating immediately before every use of yytoken.
+       One alternative is translating here after every semantic action,
+       but that translation would be missed if the semantic action
+       invokes YYABORT, YYACCEPT, or YYERROR immediately after altering
+       yychar.  In the case of YYABORT or YYACCEPT, an incorrect
+       destructor might then be invoked immediately.  In the case of
+       YYERROR, subsequent parser actions might lead to an incorrect
+       destructor call or verbose syntax error message before the
+       lookahead is translated.  */
+
+    /* Make sure we have latest lookahead translation.  See comments at
+       user semantic actions for why this is necessary.  */
+    yytoken = yytranslate_ (yychar);
+
+
+** stack.hh
+Get rid of it.  The original idea is nice, but actually it makes
+the code harder to follow, and uselessly different from the other
+skeletons.
+
+** Get rid of fake #lines [Bison: ...]
+Possibly as simple as checking whether the column number is nonnegative.
+
+I have seen messages like the following from GCC.
+
+<built-in>:0: fatal error: opening dependency file .deps/libltdl/argz.Tpo: No such file or directory
+
+
+** Discuss about %printer/%destroy in the case of C++.
+It would be very nice to provide the symbol classes with an operator<<
+and a destructor.  Unfortunately the syntax we have chosen for
+%destroy and %printer make them hard to reuse.  For instance, the user
+is invited to write something like
+
+   %printer { debug_stream() << $$; } <my_type>;
+
+which is hard to reuse elsewhere since it wants to use
+"debug_stream()" to find the stream to use.  The same applies to
+%destroy: we told the user she could use the members of the Parser
+class in the printers/destructors, which is not good for an operator<<
+since it is no longer bound to a particular parser, it's just a
+(standalone symbol).
+
+** Rename LR0.cc
+as lr0.cc, why upper case?
+
+* Various
+** YYERRCODE
+Defined to 256, but not used, not documented.  Probably the token
+number for the error token, which POSIX wants to be 256, but which
+Bison might renumber if the user used number 256.  Keep fix and doc?
+Throw away?
+
+Also, why don't we output the token name of the error token in the
+output?  It is explicitly skipped:
+
+      /* Skip error token and tokens without identifier.  */
+      if (sym != errtoken && id)
+
+Of course there are issues with name spaces, but if we disable we have
+something which seems to be more simpler and more consistent instead
+of the special case YYERRCODE.
+
+   enum yytokentype {
+     error = 256,
+     // ...
+   };
+
+
+We could (should?) also treat the case of the undef_token, which is
+numbered 257 for yylex, and 2 internal.  Both appear for instance in
+toknum:
+
+  const unsigned short int
+  parser::yytoken_number_[] =
+  {
+       0,   256,   257,   258,   259,   260,   261,   262,   263,   264,
+
+while here
+
+   enum yytokentype {
+     TOK_EOF = 0,
+     TOK_EQ = 258,
+
+so both 256 and 257 are "mysterious".
+
+  const char*
+  const parser::yytname_[] =
+  {
+  "\"end of command\"", "error", "$undefined", "\"=\"", "\"break\"",
+
+
+** yychar == yyempty_
+The code in yyerrlab reads:
+
+      if (yychar <= YYEOF)
+        {
+          /* Return failure if at end of input.  */
+          if (yychar == YYEOF)
+            YYABORT;
+        }
+
+There are only two yychar that can be <= YYEOF: YYEMPTY and YYEOF.
+But I can't produce the situation where yychar is YYEMPTY here, is it
+really possible?  The test suite does not exercise this case.
+
+This shows that it would be interesting to manage to install skeleton
+coverage analysis to the test suite.
+
+* From lalr1.cc to yacc.c
+** Single stack
+Merging the three stacks in lalr1.cc simplified the code, prompted for
+other improvements and also made it faster (probably because memory
+management is performed once instead of three times).  I suggest that
+we do the same in yacc.c.
+
+** yysyntax_error
+The code bw glr.c and yacc.c is really alike, we can certainly factor
+some parts.
+
+
+* Report
+
+** Figures
+Some statistics about the grammar and the parser would be useful,
+especially when asking the user to send some information about the
+grammars she is working on.  We should probably also include some
+information about the variables (I'm not sure for instance we even
+specify what LR variant was used).
+
+**  GLR
+How would Paul like to display the conflicted actions?  In particular,
+what when two reductions are possible on a given lookahead token, but one is
+part of $default.  Should we make the two reductions explicit, or just
+keep $default?  See the following point.
+
+** Disabled Reductions
+See 'tests/conflicts.at (Defaulted Conflicted Reduction)', and decide
+what we want to do.
+
+** Documentation
+Extend with error productions.  The hard part will probably be finding
+the right rule so that a single state does not exhibit too many yet
+undocumented ''features''.  Maybe an empty action ought to be
+presented too.  Shall we try to make a single grammar with all these
+features, or should we have several very small grammars?
+
+** --report=conflict-path
+Provide better assistance for understanding the conflicts by providing
+a sample text exhibiting the (LALR) ambiguity.  See the paper from
+DeRemer and Penello: they already provide the algorithm.
+
+** Statically check for potential ambiguities in GLR grammars.  See
+<http://www.i3s.unice.fr/~schmitz/papers.html#expamb> for an approach.
+
+
+* Extensions
+
+** $-1
+We should find a means to provide an access to values deep in the
+stack.  For instance, instead of
+
+        baz: qux { $$ = $<foo>-1 + $<bar>0 + $1; }
+
+we should be able to have:
+
+  foo($foo) bar($bar) baz($bar): qux($qux) { $baz = $foo + $bar + $qux; }
+
+Or something like this.
+
+** %if and the like
+It should be possible to have %if/%else/%endif.  The implementation is
+not clear: should it be lexical or syntactic.  Vadim Maslow thinks it
+must be in the scanner: we must not parse what is in a switched off
+part of %if.  Akim Demaille thinks it should be in the parser, so as
+to avoid falling into another CPP mistake.
+
+** XML Output
+There are couple of available extensions of Bison targeting some XML
+output.  Some day we should consider including them.  One issue is
+that they seem to be quite orthogonal to the parsing technique, and
+seem to depend mostly on the possibility to have some code triggered
+for each reduction.  As a matter of fact, such hooks could also be
+used to generate the yydebug traces.  Some generic scheme probably
+exists in there.
+
+XML output for GNU Bison and gcc
+   http://www.cs.may.ie/~jpower/Research/bisonXML/
+
+XML output for GNU Bison
+   http://yaxx.sourceforge.net/
+
+* Unit rules
+Maybe we could expand unit rules, i.e., transform
+
+        exp: arith | bool;
+        arith: exp '+' exp;
+        bool: exp '&' exp;
+
+into
+
+        exp: exp '+' exp | exp '&' exp;
+
+when there are no actions.  This can significantly speed up some
+grammars.  I can't find the papers.  In particular the book 'LR
+parsing: Theory and Practice' is impossible to find, but according to
+'Parsing Techniques: a Practical Guide', it includes information about
+this issue.  Does anybody have it?
+
+
+
+* Documentation
+
+** History/Bibliography
+Some history of Bison and some bibliography would be most welcome.
+Are there any Texinfo standards for bibliography?
+
+* Coding system independence
+Paul notes:
+
+        Currently Bison assumes 8-bit bytes (i.e. that UCHAR_MAX is
+        255).  It also assumes that the 8-bit character encoding is
+        the same for the invocation of 'bison' as it is for the
+        invocation of 'cc', but this is not necessarily true when
+        people run bison on an ASCII host and then use cc on an EBCDIC
+        host.  I don't think these topics are worth our time
+        addressing (unless we find a gung-ho volunteer for EBCDIC or
+        PDP-10 ports :-) but they should probably be documented
+        somewhere.
+
+        More importantly, Bison does not currently allow NUL bytes in
+        tokens, either via escapes (e.g., "x\0y") or via a NUL byte in
+        the source code.  This should get fixed.
+
+* Broken options ?
+** %token-table
+** Skeleton strategy
+Must we keep %token-table?
+
+* Precedence
+
+** Partial order
+It is unfortunate that there is a total order for precedence.  It
+makes it impossible to have modular precedence information.  We should
+move to partial orders (sounds like series/parallel orders to me).
+
+** RR conflicts
+See if we can use precedence between rules to solve RR conflicts.  See
+what POSIX says.
+
+
+* $undefined
+From Hans:
+- If the Bison generated parser experiences an undefined number in the
+character range, that character is written out in diagnostic messages, an
+addition to the $undefined value.
+
+Suggest: Change the name $undefined to undefined; looks better in outputs.
+
+
+* Default Action
+From Hans:
+- For use with my C++ parser, I transported the "switch (yyn)" statement
+that Bison writes to the bison.simple skeleton file. This way, I can remove
+the current default rule $$ = $1 implementation, which causes a double
+assignment to $$ which may not be OK under C++, replacing it with a
+"default:" part within the switch statement.
+
+Note that the default rule $$ = $1, when typed, is perfectly OK under C,
+but in the C++ implementation I made, this rule is different from
+$<type_name>$ = $<type_name>1. I therefore think that one should implement
+a Bison option where every typed default rule is explicitly written out
+(same typed ruled can of course be grouped together).
+
+* Pre and post actions.
+From: Florian Krohm <florian@edamail.fishkill.ibm.com>
+Subject: YYACT_EPILOGUE
+To: bug-bison@gnu.org
+X-Sent: 1 week, 4 days, 14 hours, 38 minutes, 11 seconds ago
+
+The other day I had the need for explicitly building the parse tree. I
+used %locations for that and defined YYLLOC_DEFAULT to call a function
+that returns the tree node for the production. Easy. But I also needed
+to assign the S-attribute to the tree node. That cannot be done in
+YYLLOC_DEFAULT, because it is invoked before the action is executed.
+The way I solved this was to define a macro YYACT_EPILOGUE that would
+be invoked after the action. For reasons of symmetry I also added
+YYACT_PROLOGUE. Although I had no use for that I can envision how it
+might come in handy for debugging purposes.
+All is needed is to add
+
+#if YYLSP_NEEDED
+    YYACT_EPILOGUE (yyval, (yyvsp - yylen), yylen, yyloc, (yylsp - yylen));
+#else
+    YYACT_EPILOGUE (yyval, (yyvsp - yylen), yylen);
+#endif
+
+at the proper place to bison.simple. Ditto for YYACT_PROLOGUE.
+
+I was wondering what you think about adding YYACT_PROLOGUE/EPILOGUE
+to bison. If you're interested, I'll work on a patch.
+
+* Better graphics
+Equip the parser with a means to create the (visual) parse tree.
+
+* Complaint submessage indentation.
+We already have an implementation that works fairly well for named
+reference messages, but it would be nice to use it consistently for all
+submessages from Bison.  For example, the "previous definition"
+submessage or the list of correct values for a %define variable might
+look better with indentation.
+
+However, the current implementation makes the assumption that the
+location printed on the first line is not usually much shorter than the
+locations printed on the submessage lines that follow.  That assumption
+may not hold true as often for some kinds of submessages especially if
+we ever support multiple grammar files.
+
+Here's a proposal for how a new implementation might look:
+
+  http://lists.gnu.org/archive/html/bison-patches/2009-09/msg00086.html
+
+
+Local Variables:
+mode: outline
+coding: utf-8
+End:
+
+-----
+
+Copyright (C) 2001-2004, 2006, 2008-2015 Free Software Foundation, Inc.
+
+This file is part of Bison, the GNU Compiler Compiler.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.

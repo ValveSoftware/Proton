@@ -1,0 +1,65 @@
+# Mesajele în limba românã pentru GNU Bison.
+# Copyright (C) 2004 Free Software Foundation, Inc.
+# Acest fiºier este distribuit sub aceeaºi licenþã ca ºi pachetul bison.
+# Laurentiu Buzdugan <lbuz@rolix.org>, 2003,2004,2005.
+#
+#
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: bison-runtime 2.1\n"
+"Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
+"POT-Creation-Date: 2015-01-23 13:55+0100\n"
+"PO-Revision-Date: 2005-09-20 12:00-0500\n"
+"Last-Translator: Laurentiu Buzdugan <lbuz@rolix.org>\n"
+"Language-Team: Romanian <translation-team-ro@lists.sourceforge.net>\n"
+"Language: ro\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-2\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : (n==0 || ((n%100) > 0 && (n"
+"%100) < 20)) ? 1 : 2);\n"
+
+#: data/glr.c:803 data/yacc.c:643
+msgid "syntax error: cannot back up"
+msgstr "eroare de sintaxã: nu pot da înapoi"
+
+#: data/glr.c:1687
+msgid "syntax is ambiguous"
+msgstr "sintaxa este ambiguã"
+
+#: data/glr.c:2008 data/glr.c:2088 data/glr.c:2128 data/glr.c:2392
+#: data/lalr1.cc:1094 data/lalr1.cc:1115 data/yacc.c:1210 data/yacc.c:1710
+#: data/yacc.c:1716
+msgid "syntax error"
+msgstr "eroare de sintaxã"
+
+#: data/glr.c:2089 data/lalr1.cc:1095 data/yacc.c:1211
+#, c-format
+msgid "syntax error, unexpected %s"
+msgstr "eroare de sintaxã, %s neaºteptat"
+
+#: data/glr.c:2090 data/lalr1.cc:1096 data/yacc.c:1212
+#, c-format
+msgid "syntax error, unexpected %s, expecting %s"
+msgstr "eroare de sintaxã, %s neaºteptat, aºtept %s"
+
+#: data/glr.c:2091 data/lalr1.cc:1097 data/yacc.c:1213
+#, c-format
+msgid "syntax error, unexpected %s, expecting %s or %s"
+msgstr "eroare de sintaxã, %s neaºteptat, aºtept %s sau %s"
+
+#: data/glr.c:2092 data/lalr1.cc:1098 data/yacc.c:1214
+#, c-format
+msgid "syntax error, unexpected %s, expecting %s or %s or %s"
+msgstr "eroare de sintaxã, %s neaºteptat, aºtept %s sau %s sau %s"
+
+#: data/glr.c:2093 data/lalr1.cc:1099 data/yacc.c:1215
+#, c-format
+msgid "syntax error, unexpected %s, expecting %s or %s or %s or %s"
+msgstr "eroare de sintaxã, %s neaºteptat, aºtept %s sau %s sau %s sau %s"
+
+#: data/glr.c:2452 data/yacc.c:1295 data/yacc.c:1297 data/yacc.c:1470
+#: data/yacc.c:1867
+msgid "memory exhausted"
+msgstr "memorie epuizatã"

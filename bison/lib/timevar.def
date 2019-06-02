@@ -1,0 +1,61 @@
+/* This file contains the definitions for timing variables used to -*- C -*-
+   measure run-time performance of the compiler.
+
+   Copyright (C) 2002, 2007, 2009-2015 Free Software Foundation, Inc.
+
+   Contributed by Akim Demaille <akim@freefriends.org>.
+
+   This file is part of Bison, the GNU Compiler Compiler.
+
+   This program is free software: you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation, either version 3 of the License, or
+   (at your option) any later version.
+
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
+
+/* This file contains timing variable definitions, used by timevar.h
+   and timevar.c.
+
+   Syntax:
+
+     DEFTIMEVAR (id, name)
+
+   where ID is the enumeral value used to identify the timing
+   variable, and NAME is a character string describing its purpose.  */
+
+/* The total execution time.  */
+DEFTIMEVAR (TV_TOTAL                 , "total time")
+
+/* Time spent in the reader.  */
+DEFTIMEVAR (TV_READER                , "reader")
+DEFTIMEVAR (TV_SCANNING              , "scanner")
+DEFTIMEVAR (TV_PARSING               , "parser")
+
+/* Time spent handling the grammar.  */
+DEFTIMEVAR (TV_REDUCE                , "reducing the grammar")
+DEFTIMEVAR (TV_SETS                  , "computing the sets")
+DEFTIMEVAR (TV_LR0                   , "LR(0)")
+DEFTIMEVAR (TV_LALR                  , "LALR(1)")
+DEFTIMEVAR (TV_IELR_PHASE1           , "IELR(1) Phase 1")
+DEFTIMEVAR (TV_IELR_PHASE2           , "IELR(1) Phase 2")
+DEFTIMEVAR (TV_IELR_PHASE3           , "IELR(1) Phase 3")
+DEFTIMEVAR (TV_IELR_PHASE4           , "IELR(1) Phase 4")
+DEFTIMEVAR (TV_CONFLICTS             , "conflicts")
+
+/* Time spent outputing results.  */
+DEFTIMEVAR (TV_REPORT                , "outputing report")
+DEFTIMEVAR (TV_GRAPH                 , "outputing graph")
+DEFTIMEVAR (TV_XML                   , "outputing xml")
+DEFTIMEVAR (TV_ACTIONS               , "parser action tables")
+DEFTIMEVAR (TV_PARSER                , "outputing parser")
+DEFTIMEVAR (TV_M4                    , "running m4")
+
+/* Time spent by freeing the memory :).  */
+DEFTIMEVAR (TV_FREE                  , "freeing")

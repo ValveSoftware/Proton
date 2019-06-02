@@ -1,0 +1,11 @@
+digraph "reduce.y"
+{
+  node [fontname=courier shape=box]
+  edge [fontname=courier]
+
+  1 [label="State 1\n  3 a: \"0\" .  [\".\"]\l  4 b: \"0\" .  [\";\"]\l"]
+  1 -> "1R3" [label="" style=solid]
+ "1R3" [style=filled shape=diamond fillcolor=yellowgreen label="R3"]
+  1 -> "1R4" [label="[\";\"]" style=solid]
+ "1R4" [style=filled shape=diamond fillcolor=yellowgreen label="R4"]
+}

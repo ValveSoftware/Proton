@@ -1,0 +1,9 @@
+digraph "shift.y"
+{
+  node [fontname=courier shape=box]
+  edge [fontname=courier]
+
+  3 [label="State 3\n  1 exp: a . \".\"\l"]
+  3 -> 6 [style=solid label="\".\""]
+  6 [label="State 6\n  1 exp: a \".\" .\l"]
+}

@@ -1,0 +1,1269 @@
+# Danish messages for bison.
+# Copyright © 2001, 2002 Free Software Foundation, Inc.
+# Keld Simonsen <keld@dkuug.dk>, 2002.
+# Byrial Ole Jensen <byrial@image.dk>, 2002-2004.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: bison 1.875d\n"
+"Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
+"POT-Creation-Date: 2015-01-23 13:55+0100\n"
+"PO-Revision-Date: 2004-05-22 11:14+0200\n"
+"Last-Translator: Byrial Ole Jensen <byrial@image.dk>\n"
+"Language-Team: Danish <dansk@klid.dk>\n"
+"Language: da\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=iso-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: src/complain.c:322
+#, fuzzy
+msgid "fatal error"
+msgstr "fatal fejl: "
+
+#: src/complain.c:323
+#, fuzzy
+msgid "error"
+msgstr "fatal fejl: "
+
+#: src/complain.c:324
+msgid "warning"
+msgstr "advarsel"
+
+#: src/complain.c:387
+#, fuzzy, c-format
+msgid "deprecated directive, use %s"
+msgstr "ugyldigt direktiv: %s"
+
+#: src/complain.c:391
+#, fuzzy, c-format
+msgid "deprecated directive: %s, use %s"
+msgstr "ugyldigt direktiv: %s"
+
+#: src/complain.c:400
+#, c-format
+msgid "only one %s allowed per rule"
+msgstr "kun en %s tilladt per regel"
+
+#: src/complain.c:402 src/reader.c:140 src/symtab.c:253 src/symtab.c:266
+#, fuzzy, c-format
+msgid "previous declaration"
+msgstr "flere %s-deklarationer"
+
+#: src/conflicts.c:77
+#, c-format
+msgid "    Conflict between rule %d and token %s resolved as shift"
+msgstr "    Konflikt mellem regel %d og element %s løstes som skift"
+
+#: src/conflicts.c:86
+#, c-format
+msgid "    Conflict between rule %d and token %s resolved as reduce"
+msgstr "    Konflikt mellem regel %d og element %s løstes som reducér"
+
+#: src/conflicts.c:94
+#, c-format
+msgid "    Conflict between rule %d and token %s resolved as an error"
+msgstr "    Konflikt mellem regel %d og element %s løstes som en fejl"
+
+#: src/conflicts.c:530
+#, c-format
+msgid "State %d "
+msgstr "Tilstand %d "
+
+#: src/conflicts.c:533
+#, c-format
+msgid "conflicts: %d shift/reduce, %d reduce/reduce\n"
+msgstr "konflikter: %d skift/reducér, %d reducér/reducér\n"
+
+#: src/conflicts.c:536
+#, c-format
+msgid "conflicts: %d shift/reduce\n"
+msgstr "konflikter:  %d skift/reducér\n"
+
+#: src/conflicts.c:538
+#, c-format
+msgid "conflicts: %d reduce/reduce\n"
+msgstr "konflikter:  %d reducér/reducér\n"
+
+#: src/conflicts.c:569
+#, c-format
+msgid "%%expect-rr applies only to GLR parsers"
+msgstr "%%expect-rr kan kun bruges ved GLR-fortolkere"
+
+#: src/conflicts.c:586
+#, c-format
+msgid "shift/reduce conflicts: %d found, %d expected"
+msgstr ""
+
+#: src/conflicts.c:591
+#, fuzzy, c-format
+msgid "%d shift/reduce conflict"
+msgid_plural "%d shift/reduce conflicts"
+msgstr[0] "forventede %d skift/reducér-konflikt"
+msgstr[1] "forventede %d skift/reducér-konflikter"
+
+#: src/conflicts.c:608
+#, c-format
+msgid "reduce/reduce conflicts: %d found, %d expected"
+msgstr ""
+
+#: src/conflicts.c:613
+#, fuzzy, c-format
+msgid "%d reduce/reduce conflict"
+msgid_plural "%d reduce/reduce conflicts"
+msgstr[0] "forventede %d reducér/reducér-konflikt"
+msgstr[1] "forventede %d reducér/reducér-konflikter"
+
+#: src/files.c:123
+#, fuzzy, c-format
+msgid "%s: cannot open"
+msgstr "kan ikke åbne filen \"%s\""
+
+#: src/files.c:139
+#, c-format
+msgid "input/output error"
+msgstr ""
+
+#: src/files.c:142
+#, c-format
+msgid "cannot close file"
+msgstr "kan ikke lukke fil"
+
+#: src/files.c:372
+#, c-format
+msgid "refusing to overwrite the input file %s"
+msgstr ""
+
+#: src/files.c:382
+#, c-format
+msgid "conflicting outputs to file %s"
+msgstr "konfliktende uddata til filen %s"
+
+#: src/getargs.c:252
+#, fuzzy, c-format
+msgid "Try '%s --help' for more information.\n"
+msgstr "Prøv med \"%s --help\" for mere information.\n"
+
+#: src/getargs.c:261
+#, c-format
+msgid "Usage: %s [OPTION]... FILE\n"
+msgstr "Brug: %s [FLAG]... FIL\n"
+
+#: src/getargs.c:262
+msgid ""
+"Generate a deterministic LR or generalized LR (GLR) parser employing\n"
+"LALR(1), IELR(1), or canonical LR(1) parser tables.  IELR(1) and\n"
+"canonical LR(1) support is experimental.\n"
+"\n"
+msgstr ""
+
+#: src/getargs.c:269
+msgid ""
+"Mandatory arguments to long options are mandatory for short options too.\n"
+msgstr ""
+
+#: src/getargs.c:272
+msgid "The same is true for optional arguments.\n"
+msgstr ""
+
+#: src/getargs.c:276
+msgid ""
+"\n"
+"Operation modes:\n"
+"  -h, --help                 display this help and exit\n"
+"  -V, --version              output version information and exit\n"
+"      --print-localedir      output directory containing locale-dependent "
+"data\n"
+"      --print-datadir        output directory containing skeletons and XSLT\n"
+"  -y, --yacc                 emulate POSIX Yacc\n"
+"  -W, --warnings[=CATEGORY]  report the warnings falling in CATEGORY\n"
+"  -f, --feature[=FEATURE]    activate miscellaneous features\n"
+"\n"
+msgstr ""
+
+#: src/getargs.c:289
+#, fuzzy, c-format
+msgid ""
+"Parser:\n"
+"  -L, --language=LANGUAGE          specify the output programming language\n"
+"  -S, --skeleton=FILE              specify the skeleton to use\n"
+"  -t, --debug                      instrument the parser for tracing\n"
+"                                   same as '-Dparse.trace'\n"
+"      --locations                  enable location support\n"
+"  -D, --define=NAME[=VALUE]        similar to '%define NAME \"VALUE\"'\n"
+"  -F, --force-define=NAME[=VALUE]  override '%define NAME \"VALUE\"'\n"
+"  -p, --name-prefix=PREFIX         prepend PREFIX to the external symbols\n"
+"                                   deprecated by '-Dapi.prefix=PREFIX'\n"
+"  -l, --no-lines                   don't generate '#line' directives\n"
+"  -k, --token-table                include a table of token names\n"
+msgstr ""
+"Fortolker:\n"
+"  -S, --skeleton=FIL         angiv skeletfilen som skal bruges\n"
+"  -t, --debug                instrumentér fortolkeren for fejlsøgning\n"
+"      --locations            aktivér tilstandsberegning\n"
+"  -p, --name-prefix=PRÆFIKS  tilføj PRÆFIKS for eksterne symboler\n"
+"  -l, --no-lines             generér ikke \"#line\"-direktiver\n"
+"  -n, --no-parser            generér kun tabellerne\n"
+"  -k, --token-table          inkludér en tabel over elementnavne\n"
+
+#: src/getargs.c:307
+#, fuzzy
+msgid ""
+"Output:\n"
+"      --defines[=FILE]       also produce a header file\n"
+"  -d                         likewise but cannot specify FILE (for POSIX "
+"Yacc)\n"
+"  -r, --report=THINGS        also produce details on the automaton\n"
+"      --report-file=FILE     write report to FILE\n"
+"  -v, --verbose              same as '--report=state'\n"
+"  -b, --file-prefix=PREFIX   specify a PREFIX for output files\n"
+"  -o, --output=FILE          leave output to FILE\n"
+"  -g, --graph[=FILE]         also output a graph of the automaton\n"
+"  -x, --xml[=FILE]           also output an XML report of the automaton\n"
+"                             (the XML schema is experimental)\n"
+msgstr ""
+"Uddata:\n"
+"  -d, --defines              lav også en hovedfil\n"
+"  -r, --report=SAGER         lav også detaljer om automaten\n"
+"  -v, --verbose              samme som \"--report=state\"\n"
+"  -b, --file-prefix=PRÆFIKS  angiv et PRÆFIKS for uddatafiler\n"
+"  -o, --output=FIL           læg uddata i FIL\n"
+"  -g, --graph                lav også en VCG-beskrivelse af automaten\n"
+
+#: src/getargs.c:322
+#, c-format
+msgid ""
+"Warning categories include:\n"
+"  'midrule-values'    unset or unused midrule values\n"
+"  'yacc'              incompatibilities with POSIX Yacc\n"
+"  'conflicts-sr'      S/R conflicts (enabled by default)\n"
+"  'conflicts-rr'      R/R conflicts (enabled by default)\n"
+"  'deprecated'        obsolete constructs\n"
+"  'empty-rule'        empty rules without %empty\n"
+"  'precedence'        useless precedence and associativity\n"
+"  'other'             all other warnings (enabled by default)\n"
+"  'all'               all the warnings except 'yacc'\n"
+"  'no-CATEGORY'       turn off warnings in CATEGORY\n"
+"  'none'              turn off all the warnings\n"
+"  'error[=CATEGORY]'  treat warnings as errors\n"
+msgstr ""
+
+#: src/getargs.c:339
+#, fuzzy
+msgid ""
+"THINGS is a list of comma separated words that can include:\n"
+"  'state'        describe the states\n"
+"  'itemset'      complete the core item sets with their closure\n"
+"  'lookahead'    explicitly associate lookahead tokens to items\n"
+"  'solved'       describe shift/reduce conflicts solving\n"
+"  'all'          include all the above information\n"
+"  'none'         disable the report\n"
+msgstr ""
+"TING er en liste med kommaseparerede ord som kan indeholde:\n"
+"  \"state\"        beskriv tilstandene\n"
+"  \"itemset\"      komplettér kerneobjektmængderne med deres afslutninger\n"
+"  \"lookahead\"    kobl udtrykkeligt fremadkig til objekter\n"
+"  \"solved\"       beskriv løsninger af skift/reducér-konflikter\n"
+"  \"all\"          inkludér al ovenstående information\n"
+"  \"none\"         deaktivér rapporten\n"
+
+#: src/getargs.c:350
+msgid ""
+"FEATURE is a list of comma separated words that can include:\n"
+"  'caret'        show errors with carets\n"
+"  'all'          all of the above\n"
+"  'none'         disable all of the above\n"
+"  "
+msgstr ""
+
+#: src/getargs.c:358
+#, fuzzy, c-format
+msgid "Report bugs to <%s>.\n"
+msgstr ""
+"Rapportér fejl til <bug-bison@gnu.org>.\n"
+"Rapportér synpunkter om oversættelsen til <dansk@klid.dk>.\n"
+
+#: src/getargs.c:359
+#, c-format
+msgid "%s home page: <%s>.\n"
+msgstr ""
+
+#: src/getargs.c:360
+msgid "General help using GNU software: <http://www.gnu.org/gethelp/>.\n"
+msgstr ""
+
+#. TRANSLATORS: Replace LANG_CODE in this URL with your language
+#. code <http://translationproject.org/team/LANG_CODE.html> to
+#. form one of the URLs at http://translationproject.org/team/.
+#. Otherwise, replace the entire URL with your translation team's
+#. email address.
+#: src/getargs.c:373
+msgid "Report translation bugs to <http://translationproject.org/team/>.\n"
+msgstr ""
+
+#: src/getargs.c:375
+msgid "For complete documentation, run: info bison.\n"
+msgstr ""
+
+#: src/getargs.c:391
+#, c-format
+msgid "bison (GNU Bison) %s"
+msgstr "bison (GNU Bison) %s"
+
+#: src/getargs.c:393
+msgid "Written by Robert Corbett and Richard Stallman.\n"
+msgstr "Skrevet af Robert Corbett og Richard Stallman.\n"
+
+#: src/getargs.c:397
+#, c-format
+msgid "Copyright (C) %d Free Software Foundation, Inc.\n"
+msgstr "Copyright © %d Free Software Foundation, Inc.\n"
+
+#: src/getargs.c:400
+msgid ""
+"This is free software; see the source for copying conditions.  There is NO\n"
+"warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n"
+msgstr ""
+"Dette er frit programmel, se kildekoden for kopieringsbetingelser. Der\n"
+"gives INGEN garanti, endog ikke for SALGBARHED eller EGNETHED FOR NOGET\n"
+"BESTEMT FORMÅL.\n"
+
+#: src/getargs.c:422
+#, fuzzy, c-format
+msgid "multiple skeleton declarations are invalid"
+msgstr "flere %s-deklarationer"
+
+#: src/getargs.c:440
+#, fuzzy, c-format
+msgid "%s: invalid language"
+msgstr "fejlagtig $-værdi"
+
+#: src/getargs.c:443
+#, fuzzy
+msgid "multiple language declarations are invalid"
+msgstr "flere %s-deklarationer"
+
+#: src/getargs.c:724
+#, fuzzy, c-format
+msgid "%s: missing operand"
+msgstr "manglende operand efter \"%s\""
+
+#: src/getargs.c:726
+#, fuzzy, c-format
+msgid "extra operand %s"
+msgstr "overtallig operand \"%s\""
+
+#: src/gram.c:185
+msgid "Grammar"
+msgstr "Grammatik"
+
+#: src/graphviz.c:45
+#, c-format
+msgid ""
+"// Generated by %s.\n"
+"// Report bugs to <%s>.\n"
+"// Home page: <%s>.\n"
+"\n"
+msgstr ""
+
+#: src/location.c:93 src/scan-gram.l:932
+#, c-format
+msgid "line number overflow"
+msgstr ""
+
+#: src/location.c:95
+#, c-format
+msgid "column number overflow"
+msgstr ""
+
+#: src/main.c:146
+#, fuzzy
+msgid "rule useless in parser due to conflicts"
+msgstr "regel aldrig reduceret på grund af konflikter"
+
+#: src/muscle-tab.c:514
+#, fuzzy, c-format
+msgid "%%define variable %s redefined"
+msgstr "symbol %s redefineret"
+
+#: src/muscle-tab.c:518
+#, c-format
+msgid "previous definition"
+msgstr ""
+
+#: src/muscle-tab.c:568 src/muscle-tab.c:669 src/muscle-tab.c:732
+#, c-format
+msgid "%s: undefined %%define variable %s"
+msgstr ""
+
+#: src/muscle-tab.c:663
+#, c-format
+msgid "invalid value for %%define Boolean variable %s"
+msgstr ""
+
+#: src/muscle-tab.c:717
+#, c-format
+msgid "invalid value for %%define variable %s: %s"
+msgstr ""
+
+#: src/muscle-tab.c:722
+#, fuzzy, c-format
+msgid "accepted value: %s"
+msgstr "fejlagtig værdi: %s"
+
+#: src/parse-gram.y:811
+#, c-format
+msgid "missing identifier in parameter declaration"
+msgstr "manglende identifikator i parameterdeklaration"
+
+#: src/print.c:47
+#, c-format
+msgid " type %d is %s\n"
+msgstr " type %d er %s\n"
+
+#: src/print.c:167
+#, c-format
+msgid "shift, and go to state %d\n"
+msgstr "skift, og gå til tilstand %d\n"
+
+#: src/print.c:169
+#, c-format
+msgid "go to state %d\n"
+msgstr "gå til tilstand %d\n"
+
+#: src/print.c:206
+msgid "error (nonassociative)\n"
+msgstr "fejl (ikke-associativ)\n"
+
+#: src/print.c:229
+#, c-format
+msgid "reduce using rule %d (%s)"
+msgstr "reducér med regel %d (%s)"
+
+#: src/print.c:231
+#, c-format
+msgid "accept"
+msgstr "acceptér"
+
+#: src/print.c:267 src/print.c:341
+msgid "$default"
+msgstr "$default"
+
+#: src/print.c:377 src/print_graph.c:61
+#, fuzzy, c-format
+msgid "State %d"
+msgstr "Tilstand %d "
+
+#: src/print.c:413
+msgid "Terminals, with rules where they appear"
+msgstr "Terminaler, med regler hvor de forekommer"
+
+#: src/print.c:440
+msgid "Nonterminals, with rules where they appear"
+msgstr "Ikke-terminaler, med regler hvor de forekommer"
+
+#: src/print.c:469
+#, c-format
+msgid " on left:"
+msgstr " til venstre:"
+
+#: src/print.c:486
+#, c-format
+msgid " on right:"
+msgstr " til højre:"
+
+#: src/print.c:514
+#, fuzzy
+msgid "Rules useless in parser due to conflicts"
+msgstr "regel aldrig reduceret på grund af konflikter"
+
+#: src/reader.c:62
+#, c-format
+msgid "multiple %s declarations"
+msgstr "flere %s-deklarationer"
+
+#: src/reader.c:133
+#, c-format
+msgid "result type clash on merge function %s: <%s> != <%s>"
+msgstr "resultattypekonflikt ved sammenfletningsfunktion %s: <%s> != <%s>"
+
+#: src/reader.c:206
+#, c-format
+msgid "duplicated symbol name for %s ignored"
+msgstr ""
+
+#: src/reader.c:250
+#, c-format
+msgid "rule given for %s, which is a token"
+msgstr "regel givet for %s som er et element"
+
+#: src/reader.c:306
+#, c-format
+msgid "type clash on default action: <%s> != <%s>"
+msgstr "typekonflikt for standardhandling: <%s> != <%s>"
+
+#: src/reader.c:312
+#, c-format
+msgid "empty rule for typed nonterminal, and no action"
+msgstr "tom regel for typet ikke-terminal, og ingen handling"
+
+#: src/reader.c:329
+#, fuzzy, c-format
+msgid "unused value: $%d"
+msgstr "fejlagtig værdi: %s"
+
+#: src/reader.c:331
+#, c-format
+msgid "unset value: $$"
+msgstr ""
+
+#: src/reader.c:340
+#, c-format
+msgid "%%empty on non-empty rule"
+msgstr ""
+
+#: src/reader.c:346
+#, c-format
+msgid "empty rule without %%empty"
+msgstr ""
+
+#: src/reader.c:355
+#, c-format
+msgid "token for %%prec is not defined: %s"
+msgstr ""
+
+#: src/reader.c:473 src/reader.c:495
+#, c-format
+msgid "%s affects only GLR parsers"
+msgstr "%s påvirker kun GLR-fortolkere"
+
+#: src/reader.c:476
+#, c-format
+msgid "%s must be followed by positive number"
+msgstr "%s skal følges af et positivt tal"
+
+#: src/reader.c:602
+#, c-format
+msgid "rule is too long"
+msgstr ""
+
+#: src/reader.c:718
+#, c-format
+msgid "no rules in the input grammar"
+msgstr "ingen regler i inddatagrammatikken"
+
+#: src/reduce.c:241
+#, fuzzy
+msgid "rule useless in grammar"
+msgstr "ingen regler i inddatagrammatikken"
+
+#: src/reduce.c:303
+#, c-format
+msgid "nonterminal useless in grammar: %s"
+msgstr ""
+
+#: src/reduce.c:351
+#, fuzzy
+msgid "Nonterminals useless in grammar"
+msgstr "Ikke-terminaler, med regler hvor de forekommer"
+
+#: src/reduce.c:364
+#, fuzzy
+msgid "Terminals unused in grammar"
+msgstr "ingen regler i inddatagrammatikken"
+
+#: src/reduce.c:373
+#, fuzzy
+msgid "Rules useless in grammar"
+msgstr "ingen regler i inddatagrammatikken"
+
+#: src/reduce.c:386
+#, c-format
+msgid "%d nonterminal useless in grammar"
+msgid_plural "%d nonterminals useless in grammar"
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/reduce.c:391
+#, fuzzy, c-format
+msgid "%d rule useless in grammar"
+msgid_plural "%d rules useless in grammar"
+msgstr[0] "ingen regler i inddatagrammatikken"
+msgstr[1] "ingen regler i inddatagrammatikken"
+
+#: src/reduce.c:420
+#, c-format
+msgid "start symbol %s does not derive any sentence"
+msgstr "startsymbolet %s genererer ingen sætninger"
+
+#: src/scan-code.l:157
+#, c-format
+msgid "stray '%s'"
+msgstr ""
+
+#: src/scan-code.l:339
+#, c-format
+msgid "refers to: %c%s at %s"
+msgstr ""
+
+#: src/scan-code.l:362
+#, c-format
+msgid "possibly meant: %c"
+msgstr ""
+
+#: src/scan-code.l:371
+#, c-format
+msgid ", hiding %c"
+msgstr ""
+
+#: src/scan-code.l:379
+#, c-format
+msgid " at %s"
+msgstr ""
+
+#: src/scan-code.l:383
+#, c-format
+msgid ", cannot be accessed from mid-rule action at $%d"
+msgstr ""
+
+#: src/scan-code.l:440 src/scan-gram.l:855
+#, c-format
+msgid "integer out of range: %s"
+msgstr "heltal uden for gyldigshedsområdet: %s"
+
+#: src/scan-code.l:530
+#, fuzzy, c-format
+msgid "invalid reference: %s"
+msgstr "ugyldigt direktiv: %s"
+
+#: src/scan-code.l:538
+#, c-format
+msgid "syntax error after '%c', expecting integer, letter, '_', '[', or '$'"
+msgstr ""
+
+#: src/scan-code.l:544
+#, c-format
+msgid "symbol not found in production before $%d: %.*s"
+msgstr ""
+
+#: src/scan-code.l:549
+#, c-format
+msgid "symbol not found in production: %.*s"
+msgstr ""
+
+#: src/scan-code.l:564
+#, fuzzy, c-format
+msgid "misleading reference: %s"
+msgstr "redefinition af præcedens for %s"
+
+#: src/scan-code.l:580
+#, fuzzy, c-format
+msgid "ambiguous reference: %s"
+msgstr "flertydigt argument %s til %s"
+
+#: src/scan-code.l:616
+#, c-format
+msgid "explicit type given in untyped grammar"
+msgstr ""
+
+#: src/scan-code.l:675
+#, fuzzy, c-format
+msgid "$$ for the midrule at $%d of %s has no declared type"
+msgstr "$%d for \"%s\" har ingen erklæret type"
+
+#: src/scan-code.l:681
+#, fuzzy, c-format
+msgid "$$ of %s has no declared type"
+msgstr "$$ for \"%s\" har ingen erklæret type"
+
+#: src/scan-code.l:703
+#, fuzzy, c-format
+msgid "$%s of %s has no declared type"
+msgstr "$%d for \"%s\" har ingen erklæret type"
+
+#: src/scan-gram.l:186
+#, fuzzy, c-format
+msgid "stray ',' treated as white space"
+msgstr "Malplaceret \",\" behandlet som blanktegn"
+
+#: src/scan-gram.l:276
+#, c-format
+msgid "invalid directive: %s"
+msgstr "ugyldigt direktiv: %s"
+
+#: src/scan-gram.l:302
+#, fuzzy, c-format
+msgid "invalid identifier: %s"
+msgstr "ugyldigt direktiv: %s"
+
+#: src/scan-gram.l:354
+#, fuzzy
+msgid "invalid character"
+msgid_plural "invalid characters"
+msgstr[0] "ugyldigt tegn: %s"
+msgstr[1] "ugyldigt tegn: %s"
+
+#: src/scan-gram.l:372
+#, c-format
+msgid "invalid null character"
+msgstr "ugyldigt NUL-tegn"
+
+#: src/scan-gram.l:425
+#, c-format
+msgid "unexpected identifier in bracketed name: %s"
+msgstr ""
+
+#: src/scan-gram.l:447
+#, c-format
+msgid "an identifier expected"
+msgstr ""
+
+#: src/scan-gram.l:452
+#, fuzzy
+msgid "invalid character in bracketed name"
+msgid_plural "invalid characters in bracketed name"
+msgstr[0] "ugyldigt tegn: %s"
+msgstr[1] "ugyldigt tegn: %s"
+
+#: src/scan-gram.l:544
+#, c-format
+msgid "empty character literal"
+msgstr ""
+
+#: src/scan-gram.l:550
+#, c-format
+msgid "extra characters in character literal"
+msgstr ""
+
+#: src/scan-gram.l:596 src/scan-gram.l:606 src/scan-gram.l:626
+#, fuzzy, c-format
+msgid "invalid number after \\-escape: %s"
+msgstr "ugyldigt NUL-tegn: %s"
+
+#: src/scan-gram.l:638
+#, fuzzy, c-format
+msgid "invalid character after \\-escape: %s"
+msgstr "ugyldigt tegn: %s"
+
+#: src/scan-gram.l:984
+#, fuzzy, c-format
+msgid "missing %s at end of file"
+msgstr "manglende \"%s\" ved slutningen af filen"
+
+#: src/scan-gram.l:995
+#, fuzzy, c-format
+msgid "missing %s at end of line"
+msgstr "manglende \"%s\" ved slutningen af linjen"
+
+#: src/scan-skel.l:139
+#, c-format
+msgid "unclosed %s directive in skeleton"
+msgstr ""
+
+#: src/scan-skel.l:256
+#, c-format
+msgid "too few arguments for %s directive in skeleton"
+msgstr ""
+
+#: src/scan-skel.l:263
+#, c-format
+msgid "too many arguments for %s directive in skeleton"
+msgstr ""
+
+#: src/symtab.c:75
+#, c-format
+msgid "POSIX Yacc forbids dashes in symbol names: %s"
+msgstr ""
+
+#: src/symtab.c:97
+#, c-format
+msgid "too many symbols in input grammar (limit is %d)"
+msgstr ""
+
+#: src/symtab.c:250
+#, c-format
+msgid "%s redeclaration for %s"
+msgstr "gentagen %s-erklæring for %s"
+
+#: src/symtab.c:263
+#, fuzzy, c-format
+msgid "%s redeclaration for <%s>"
+msgstr "gentagen %s-erklæring for %s"
+
+#: src/symtab.c:392
+#, c-format
+msgid "symbol %s redefined"
+msgstr "symbol %s redefineret"
+
+#: src/symtab.c:407
+#, fuzzy, c-format
+msgid "symbol %s redeclared"
+msgstr "symbol %s redefineret"
+
+#: src/symtab.c:429
+#, c-format
+msgid "redefining user token number of %s"
+msgstr "redefinition af elementnummer for %s"
+
+#: src/symtab.c:459
+#, c-format
+msgid "symbol %s is used, but is not defined as a token and has no rules"
+msgstr ""
+"symbol %s bruges, men er ikke defineret som et element og har ingen regler"
+
+#: src/symtab.c:497
+#, c-format
+msgid "useless %s for type <%s>"
+msgstr ""
+
+#: src/symtab.c:502
+#, fuzzy, c-format
+msgid "type <%s> is used, but is not associated to any symbol"
+msgstr ""
+"symbol %s bruges, men er ikke defineret som et element og har ingen regler"
+
+#: src/symtab.c:527
+#, fuzzy, c-format
+msgid "symbol %s used more than once as a literal string"
+msgstr "symbol \"%s\" bruges mere end en gang som en bogstavelig streng"
+
+#: src/symtab.c:530
+#, fuzzy, c-format
+msgid "symbol %s given more than one literal string"
+msgstr "symbol \"%s\" har fået mere end én bogstavelig streng"
+
+#: src/symtab.c:629
+#, fuzzy, c-format
+msgid "user token number %d redeclaration for %s"
+msgstr "gentagen typeerklæring for %s"
+
+#: src/symtab.c:633
+#, fuzzy, c-format
+msgid "previous declaration for %s"
+msgstr "gentagen typeerklæring for %s"
+
+#: src/symtab.c:1014
+#, c-format
+msgid "the start symbol %s is undefined"
+msgstr "startsymbolet %s er udefineret"
+
+#: src/symtab.c:1018
+#, c-format
+msgid "the start symbol %s is a token"
+msgstr "startsymbolet %s er et element"
+
+#: src/symtab.c:1193
+#, c-format
+msgid "useless precedence and associativity for %s"
+msgstr ""
+
+#: src/symtab.c:1196
+#, fuzzy, c-format
+msgid "useless precedence for %s"
+msgstr "modstridige præcedenser mellem %s og %s"
+
+#: src/symtab.c:1200
+#, c-format
+msgid "useless associativity for %s, use %%precedence"
+msgstr ""
+
+#: djgpp/subpipe.c:63 djgpp/subpipe.c:286 djgpp/subpipe.c:288
+#, c-format
+msgid "removing of '%s' failed"
+msgstr ""
+
+#: djgpp/subpipe.c:85 djgpp/subpipe.c:92
+#, c-format
+msgid "creation of a temporary file failed"
+msgstr ""
+
+#: djgpp/subpipe.c:127
+#, c-format
+msgid "saving stdin failed"
+msgstr ""
+
+#: djgpp/subpipe.c:131
+#, c-format
+msgid "saving stdout failed"
+msgstr ""
+
+#: djgpp/subpipe.c:153 djgpp/subpipe.c:197 djgpp/subpipe.c:258
+#, c-format
+msgid "opening of tmpfile failed"
+msgstr ""
+
+#: djgpp/subpipe.c:157
+#, c-format
+msgid "redirecting bison's stdout to the temporary file failed"
+msgstr ""
+
+#: djgpp/subpipe.c:201
+#, c-format
+msgid "redirecting m4's stdin from the temporary file failed"
+msgstr ""
+
+#: djgpp/subpipe.c:212
+#, c-format
+msgid "opening of a temporary file failed"
+msgstr ""
+
+#: djgpp/subpipe.c:218
+#, c-format
+msgid "redirecting m4's stdout to a temporary file failed"
+msgstr ""
+
+#: djgpp/subpipe.c:234
+#, fuzzy, c-format
+msgid "subsidiary program '%s' interrupted"
+msgstr "hjælpeprogrammet \"%s\" fejlede"
+
+#: djgpp/subpipe.c:241
+#, fuzzy, c-format
+msgid "subsidiary program '%s' not found"
+msgstr "hjælpeprogrammet \"%s\" ikke fundet"
+
+#: djgpp/subpipe.c:265
+#, c-format
+msgid "redirecting bison's stdin from the temporary file failed"
+msgstr ""
+
+#: lib/argmatch.c:133
+#, c-format
+msgid "invalid argument %s for %s"
+msgstr "ugyldigt argument %s til %s"
+
+#: lib/argmatch.c:134
+#, c-format
+msgid "ambiguous argument %s for %s"
+msgstr "flertydigt argument %s til %s"
+
+#: lib/argmatch.c:153
+msgid "Valid arguments are:"
+msgstr "Gyldige argumenter er:"
+
+#: lib/bitset_stats.c:177
+#, c-format
+msgid "%u bitset_allocs, %u freed (%.2f%%).\n"
+msgstr "%u bitmængdeallokeringer, %u frigjort (%.2f%%).\n"
+
+#: lib/bitset_stats.c:180
+#, c-format
+msgid "%u bitset_sets, %u cached (%.2f%%)\n"
+msgstr "%u bitmængdeindstillinger, %u cachede (%.2f%%)\n"
+
+#: lib/bitset_stats.c:183
+#, c-format
+msgid "%u bitset_resets, %u cached (%.2f%%)\n"
+msgstr "%u bitmængdenulstillinger, %u cachede (%.2f%%)\n"
+
+#: lib/bitset_stats.c:186
+#, c-format
+msgid "%u bitset_tests, %u cached (%.2f%%)\n"
+msgstr "%u bitmængdetest, %u cachede (%.2f%%)\n"
+
+#: lib/bitset_stats.c:190
+#, c-format
+msgid "%u bitset_lists\n"
+msgstr "%u bitmængdelister\n"
+
+#: lib/bitset_stats.c:192
+msgid "count log histogram\n"
+msgstr "kaldsloghistogram\n"
+
+#: lib/bitset_stats.c:195
+msgid "size log histogram\n"
+msgstr "størrelsesloghistogram\n"
+
+#: lib/bitset_stats.c:198
+msgid "density histogram\n"
+msgstr "densitetshistogram\n"
+
+#: lib/bitset_stats.c:212
+#, c-format
+msgid ""
+"Bitset statistics:\n"
+"\n"
+msgstr ""
+"Bitmængdestatistik:\n"
+"\n"
+
+#: lib/bitset_stats.c:215
+#, c-format
+msgid "Accumulated runs = %u\n"
+msgstr "Akkumulerede kørsler = %u\n"
+
+#: lib/bitset_stats.c:259 lib/bitset_stats.c:264
+#, fuzzy
+msgid "cannot read stats file"
+msgstr "Kunne ikke læse statistikfil."
+
+#: lib/bitset_stats.c:261
+#, fuzzy, c-format
+msgid "bad stats file size\n"
+msgstr "Dårlig statistikfilstørrelse.\n"
+
+#: lib/bitset_stats.c:287 lib/bitset_stats.c:289
+#, fuzzy
+msgid "cannot write stats file"
+msgstr "Kunne ikke skrive statistikfil."
+
+#: lib/bitset_stats.c:292
+#, fuzzy
+msgid "cannot open stats file for writing"
+msgstr "Kunne ikke åbne statistikfil for skrivning."
+
+#: lib/closeout.c:112
+#, fuzzy
+msgid "write error"
+msgstr "Fejl ved ind- eller udlæsning"
+
+#: lib/error.c:191
+msgid "Unknown system error"
+msgstr "Ukendt systemfejl"
+
+#: lib/getopt.c:547 lib/getopt.c:576
+#, fuzzy, c-format
+msgid "%s: option '%s' is ambiguous; possibilities:"
+msgstr "%s: flaget \"%s\" er flertydigt\n"
+
+#: lib/getopt.c:624 lib/getopt.c:628
+#, fuzzy, c-format
+msgid "%s: option '--%s' doesn't allow an argument\n"
+msgstr "%s: flaget \"--%s\" tager intet argument\n"
+
+#: lib/getopt.c:637 lib/getopt.c:642
+#, fuzzy, c-format
+msgid "%s: option '%c%s' doesn't allow an argument\n"
+msgstr "%s: flaget \"%c%s\" tager intet argument\n"
+
+#: lib/getopt.c:685 lib/getopt.c:704
+#, fuzzy, c-format
+msgid "%s: option '--%s' requires an argument\n"
+msgstr "%s: flaget \"%s\" behøver et argument\n"
+
+#: lib/getopt.c:742 lib/getopt.c:745
+#, fuzzy, c-format
+msgid "%s: unrecognized option '--%s'\n"
+msgstr "%s: ukendt flag \"--%s\"\n"
+
+#: lib/getopt.c:753 lib/getopt.c:756
+#, fuzzy, c-format
+msgid "%s: unrecognized option '%c%s'\n"
+msgstr "%s: ukendt flag \"%c%s\"\n"
+
+#: lib/getopt.c:805 lib/getopt.c:808
+#, fuzzy, c-format
+msgid "%s: invalid option -- '%c'\n"
+msgstr "%s: ugyldigt flag --%c\n"
+
+#: lib/getopt.c:861 lib/getopt.c:878 lib/getopt.c:1088 lib/getopt.c:1106
+#, fuzzy, c-format
+msgid "%s: option requires an argument -- '%c'\n"
+msgstr "%s: flaget behøver et argument -- %c\n"
+
+#: lib/getopt.c:934 lib/getopt.c:950
+#, fuzzy, c-format
+msgid "%s: option '-W %s' is ambiguous\n"
+msgstr "%s: flaget \"-W %s\" er flertydigt\n"
+
+#: lib/getopt.c:974 lib/getopt.c:992
+#, fuzzy, c-format
+msgid "%s: option '-W %s' doesn't allow an argument\n"
+msgstr "%s: flaget \"-W %s\" tager intet argument\n"
+
+#: lib/getopt.c:1013 lib/getopt.c:1031
+#, fuzzy, c-format
+msgid "%s: option '-W %s' requires an argument\n"
+msgstr "%s: flaget \"%s\" behøver et argument\n"
+
+#: lib/obstack.c:338 lib/obstack.c:340 lib/xalloc-die.c:34
+msgid "memory exhausted"
+msgstr "hukommelsen opbrugt"
+
+#: lib/spawn-pipe.c:135 lib/spawn-pipe.c:138 lib/spawn-pipe.c:259
+#: lib/spawn-pipe.c:262
+#, fuzzy, c-format
+msgid "cannot create pipe"
+msgstr "kan ikke lukke fil"
+
+#: lib/spawn-pipe.c:229 lib/spawn-pipe.c:343 lib/wait-process.c:282
+#: lib/wait-process.c:356
+#, c-format
+msgid "%s subprocess failed"
+msgstr ""
+
+# Når vi går over til Unicode mere allmænt måske vi bør oversættta båda disse
+# med U+201D (RIGHT DOUBLE QUOTATION MARK) på svenska.  Eller?
+#
+#. TRANSLATORS:
+#. Get translations for open and closing quotation marks.
+#. The message catalog should translate "`" to a left
+#. quotation mark suitable for the locale, and similarly for
+#. "'".  For example, a French Unicode local should translate
+#. these to U+00AB (LEFT-POINTING DOUBLE ANGLE
+#. QUOTATION MARK), and U+00BB (RIGHT-POINTING DOUBLE ANGLE
+#. QUOTATION MARK), respectively.
+#.
+#. If the catalog has no translation, we will try to
+#. use Unicode U+2018 (LEFT SINGLE QUOTATION MARK) and
+#. Unicode U+2019 (RIGHT SINGLE QUOTATION MARK).  If the
+#. current locale is not Unicode, locale_quoting_style
+#. will quote 'like this', and clocale_quoting_style will
+#. quote "like this".  You should always include translations
+#. for "`" and "'" even if U+2018 and U+2019 are appropriate
+#. for your locale.
+#.
+#. If you don't know what to put here, please see
+#. <http://en.wikipedia.org/wiki/Quotation_marks_in_other_languages>
+#. and use glyphs suitable for your language.
+#: lib/quotearg.c:312
+msgid "`"
+msgstr "\""
+
+#: lib/quotearg.c:313
+msgid "'"
+msgstr "\""
+
+#: lib/timevar.c:475
+msgid ""
+"\n"
+"Execution times (seconds)\n"
+msgstr ""
+"\n"
+"Udførelsestider (sekunder)\n"
+
+#: lib/timevar.c:525
+msgid " TOTAL                 :"
+msgstr " TOTALT                :"
+
+#: lib/timevar.c:561
+#, c-format
+msgid "time in %s: %ld.%06ld (%ld%%)\n"
+msgstr "tid i %s: %ld.%06ld (%ld%%)\n"
+
+#: lib/w32spawn.h:43
+#, c-format
+msgid "_open_osfhandle failed"
+msgstr ""
+
+#: lib/w32spawn.h:84
+#, c-format
+msgid "cannot restore fd %d: dup2 failed"
+msgstr ""
+
+#: lib/wait-process.c:223 lib/wait-process.c:255 lib/wait-process.c:317
+#, c-format
+msgid "%s subprocess"
+msgstr ""
+
+#: lib/wait-process.c:274 lib/wait-process.c:346
+#, c-format
+msgid "%s subprocess got fatal signal %d"
+msgstr ""
+
+#, fuzzy
+#~ msgid "invalid $ value: $%d"
+#~ msgstr "fejlagtig værdi: %s"
+
+#~ msgid "empty"
+#~ msgstr "tom"
+
+#~ msgid "state %d"
+#~ msgstr "tilstand %d"
+
+#, fuzzy
+#~ msgid "redeclaration for default tagged %s"
+#~ msgstr "gentagen %s-erklæring for %s"
+
+#, fuzzy
+#~ msgid "redeclaration for default tagless %s"
+#~ msgstr "gentagen %s-erklæring for %s"
+
+#~ msgid "warning: "
+#~ msgstr "advarsel: "
+
+#~ msgid "GNU bison generates parsers for LALR(1) grammars.\n"
+#~ msgstr "GNU bison genererer fortolkere til LALR(1)-grammatiker.\n"
+
+#~ msgid ""
+#~ "If a long option shows an argument as mandatory, then it is mandatory\n"
+#~ "for the equivalent short option also.  Similarly for optional arguments.\n"
+#~ msgstr ""
+#~ "Hvis et lang flag viser et argument som obligatorisk, er det også\n"
+#~ "obligatorisk for det tilsvarende korte flag. Tilsvarende\n"
+#~ "for valgfrie argumenter.\n"
+
+#~ msgid ""
+#~ "Operation modes:\n"
+#~ "  -h, --help      display this help and exit\n"
+#~ "  -V, --version   output version information and exit\n"
+#~ "  -y, --yacc      emulate POSIX yacc\n"
+#~ msgstr ""
+#~ "Arbejdstilstande:\n"
+#~ "  -h, --help      vis denne hjælpetekst og afslut\n"
+#~ "  -V, --version   vis versionsinformation og afslut\n"
+#~ "  -y, --yacc      emulér POSIX-yacc\n"
+
+#~ msgid "POSIX forbids declarations in the grammar"
+#~ msgstr "POSIX forbyder deklarationer i grammatikken"
+
+#~ msgid "Rules never reduced"
+#~ msgstr "Aldrig reducerede regler"
+
+#~ msgid "useless rule"
+#~ msgstr "ubrugelig regel"
+
+#~ msgid "useless nonterminal: %s"
+#~ msgstr "ubrugelig ikke-terminal: %s"
+
+#~ msgid "Useless nonterminals"
+#~ msgstr "Ubrugelige ikke-terminaler"
+
+#~ msgid "Terminals which are not used"
+#~ msgstr "Terminaler som ikke bruges"
+
+#~ msgid "Useless rules"
+#~ msgstr "Ubrugelige regler"
+
+#~ msgid "%d rule never reduced\n"
+#~ msgid_plural "%d rules never reduced\n"
+#~ msgstr[0] "%d regel reduceres aldrig\n"
+#~ msgstr[1] "%d regler reduceres aldrig\n"
+
+#~ msgid "%d useless nonterminal"
+#~ msgid_plural "%d useless nonterminals"
+#~ msgstr[0] "%d ubrugelig ikke-terminal"
+#~ msgstr[1] "%d ubrugelige ikke-terminaler"
+
+#~ msgid " and "
+#~ msgstr " og "
+
+#~ msgid "%d useless rule"
+#~ msgid_plural "%d useless rules"
+#~ msgstr[0] "%d ubrugelig regel"
+#~ msgstr[1] "%d ubrugelige regler"
+
+#~ msgid "invalid escape sequence: %s"
+#~ msgstr "ugyldig undvigesekvens: %s"
+
+#~ msgid "unrecognized escape sequence: %s"
+#~ msgstr "ukendt undvigesekvens: %s"
+
+#~ msgid "missing `{' in `%s'"
+#~ msgstr "manglende \"{\" i \"%s\""
+
+#~ msgid "conflicting associativities for %s (%s) and %s (%s)"
+#~ msgstr "modstridige associativiteter for %s (%s) og %s (%s)"
+
+#~ msgid "tokens %s and %s both assigned number %d"
+#~ msgstr "elementerne %s og %s har begge fået nummer %d"
+
+#~ msgid "%s: illegal option -- %c\n"
+#~ msgstr "%s: ikke tilladt flag -- %c\n"
+
+#~ msgid "subsidiary program `%s' could not be invoked"
+#~ msgstr "hjælpeprogrammet \"%s\" kunne ikke startes"
+
+#~ msgid "subsidiary program `%s' failed (exit status %d)"
+#~ msgstr "hjælpeprogrammet \"%s\" fejlede med afslutningskode %d"

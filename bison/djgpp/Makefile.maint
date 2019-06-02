@@ -1,0 +1,37 @@
+# DJGPP Maintainer's Makefile                                    -*-Makefile-*-
+# Requires GNU sed
+
+## Copyright (C) 2005-2015 Free Software Foundation, Inc.
+
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+top_srcdir = ..
+srcdir = .
+
+SHELL = /bin/sh
+
+all: README
+
+README: README.in $(top_srcdir)/configure
+	PACKAGE=`grep "^[	 ]*PACKAGE=" $(top_srcdir)/configure | sed -e 's/^[	 ]*PACKAGE=//' -e s/[\"\']//g`; \
+	VERSION=`grep "^[	 ]*VERSION=" $(top_srcdir)/configure | sed -e 's/^[	 ]*VERSION=//' -e s/[\"\']//g`; \
+	package_version=`echo "$${VERSION}" | sed 's/\.//g'`; \
+	tree_version=`echo "$${VERSION}" | sed 's/\.//2g'`; \
+	sed \
+	    -e "s/@V@/$${PACKAGE}-$${VERSION}/g" \
+	    -e "s/@VERSION@/$${VERSION}/g" \
+	    -e "s/@PACKAGE_VERSION@/$$package_version/g" \
+	    -e "s/@TREE_VERSION@/$$tree_version/g" \
+	  $(srcdir)/README.in > t-$@
+	mv t-$@ $@

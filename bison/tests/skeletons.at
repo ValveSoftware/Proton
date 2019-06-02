@@ -1,0 +1,325 @@
+# Checking skeleton support.                     -*- Autotest -*-
+
+# Copyright (C) 2007, 2009-2015 Free Software Foundation, Inc.
+
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+AT_BANNER([[Skeleton Support.]])
+
+## ------------------------------ ##
+## Relative skeleton file names.  ##
+## ------------------------------ ##
+
+AT_SETUP([[Relative skeleton file names]])
+
+AT_CHECK([[mkdir tmp]])
+
+AT_DATA([[tmp/skel.c]],
+[[m4@&t@_divert_push(0)d@&t@nl
+@output(b4_parser_file_name@)d@&t@nl
+b4_percent_define_get([[test]])
+m4@&t@_divert_pop(0)
+]])
+
+AT_DATA([[skel.c]],
+[[m4@&t@_divert_push(0)d@&t@nl
+@output(b4_parser_file_name@)d@&t@nl
+b4_percent_define_get([[test]]) -- Local
+m4@&t@_divert_pop(0)
+]])
+
+AT_DATA([[tmp/input-gram.y]],
+[[%skeleton "./skel.c"
+%define test "Hello World"
+%%
+start: ;
+]])
+
+AT_DATA([[input-gram.y]],
+[[%skeleton "./skel.c"
+%define test "Hello World"
+%%
+start: ;
+]])
+
+AT_DATA([[tmp/input-cmd-line.y]],
+[[%define test "Hello World"
+%%
+start: ;
+]])
+
+AT_BISON_CHECK([[tmp/input-gram.y]])
+AT_CHECK([[cat input-gram.tab.c]], [[0]],
+[[Hello World
+]])
+
+AT_BISON_CHECK([[input-gram.y]])
+AT_CHECK([[cat input-gram.tab.c]], [[0]],
+[[Hello World -- Local
+]])
+
+AT_BISON_CHECK([[--skeleton=tmp/skel.c tmp/input-cmd-line.y]])
+AT_CHECK([[cat input-cmd-line.tab.c]], [[0]],
+[[Hello World
+]])
+
+AT_CLEANUP
+
+
+## ------------------------------- ##
+## Installed skeleton file names.  ##
+## ------------------------------- ##
+
+AT_SETUP([[Installed skeleton file names]])
+
+AT_BISON_OPTION_PUSHDEFS
+m4_pushdef([AT_GRAM],
+[[%{
+  #include <stdio.h>
+  ]AT_YYERROR_DECLARE[
+  int yylex (void);
+%}
+
+%error-verbose
+%token 'a'
+
+%%
+
+start: ;
+
+%%
+
+]AT_YYERROR_DEFINE[
+int
+yylex (void)
+{
+  return 'a';
+}
+]AT_MAIN_DEFINE[
+]])
+
+AT_DATA_GRAMMAR([[input-cmd-line.y]],
+[AT_GRAM])
+
+AT_DATA_GRAMMAR([[input-gram.y]],
+[[%skeleton "yacc.c"]
+AT_GRAM])
+
+AT_BISON_CHECK([[--skeleton=yacc.c -o input-cmd-line.c input-cmd-line.y]])
+AT_COMPILE([[input-cmd-line]])
+AT_PARSER_CHECK([[./input-cmd-line]], [[1]], [],
+[[syntax error, unexpected 'a', expecting $end
+]])
+
+AT_BISON_CHECK([[-o input-gram.c input-gram.y]])
+AT_COMPILE([[input-gram]])
+AT_PARSER_CHECK([[./input-gram]], [[1]], [],
+[[syntax error, unexpected 'a', expecting $end
+]])
+
+m4_popdef([AT_GRAM])
+
+AT_BISON_OPTION_POPDEFS
+AT_CLEANUP
+
+
+## ------------------------------------------------------ ##
+## %define Boolean variables: invalid skeleton defaults.  ##
+## ------------------------------------------------------ ##
+
+AT_SETUP([[%define Boolean variables: invalid skeleton defaults]])
+
+AT_DATA([[skel.c]],
+[[b4_percent_define_default([[foo]], [[bogus value]])
+b4_percent_define_flag_if([[foo]])
+]])
+
+AT_DATA([[input.y]],
+[[%skeleton "./skel.c"
+%%
+start: ;
+]])
+
+AT_BISON_CHECK([[input.y]], [[1]], [[]],
+[[<skeleton default value>: error: invalid value for %define Boolean variable 'foo'
+]])
+
+AT_CLEANUP
+
+
+## --------------------------------------------- ##
+## Complaining during macro argument expansion.  ##
+## --------------------------------------------- ##
+
+AT_SETUP([[Complaining during macro argument expansion]])
+
+AT_DATA([[skel1.c]],
+[[m4@&t@_define([foow], [b4_warn([[foow fubar]])])
+m4@&t@_define([foowat], [b4_warn_at([[foow.y:2.3]],
+                                    [[foow.y:5.4]], [[foowat fubar]])])
+m4@&t@_define([fooc], [b4_complain([[fooc fubar]])])
+m4@&t@_define([foocat], [b4_complain_at([[fooc.y:1.1]],
+                                        [[fooc.y:10.6]], [[foocat fubar]])])
+m4@&t@_define([foof], [b4_fatal([[foof fubar]])])
+m4@&t@_if(foow, [1], [yes])
+m4@&t@_if(foowat, [1], [yes])
+m4@&t@_if(fooc, [1], [yes])
+m4@&t@_if(foocat, [1], [yes])
+m4@&t@_if(foof, [1], [yes])
+]])
+
+AT_DATA([[input1.y]],
+[[%skeleton "./skel1.c"
+%%
+start: ;
+]])
+
+AT_BISON_CHECK([[input1.y]], [[1]], [[]],
+[[input1.y: warning: foow fubar [-Wother]
+foow.y:2.3-5.3: warning: foowat fubar [-Wother]
+input1.y: error: fooc fubar
+fooc.y:1.1-10.5: error: foocat fubar
+input1.y: fatal error: foof fubar
+]])
+
+AT_DATA([[skel2.c]],
+[[m4@&t@_define([foofat], [b4_fatal_at([[foof.y:12.11]],
+                                       [[foof.y:100.123]], [[foofat fubar]])])
+m4@&t@_if(foofat, [1], [yes])
+]])
+
+AT_DATA([[input2.y]],
+[[%skeleton "./skel2.c"
+%%
+start: ;
+]])
+
+AT_BISON_CHECK([[input2.y]], [[1]], [[]],
+[[foof.y:12.11-100.122: fatal error: foofat fubar
+]])
+
+AT_DATA([[skel3.c]],
+[[b4_complain_at(b4_percent_define_get_loc([[bogus]]), [[bad value]])
+]])
+
+AT_DATA([[input3.y]],
+[[%skeleton "./skel3.c"
+%%
+start: ;
+]])
+
+AT_BISON_CHECK([[input3.y]], [[1]], [[]],
+[[input3.y: fatal error: b4_percent_define_get_loc: undefined %define variable 'bogus'
+]])
+
+AT_DATA([[skel4.c]],
+[[b4_warn_at(b4_percent_define_get_syncline([[bogus]]), [[bad value]])
+]])
+
+AT_DATA([[input4.y]],
+[[%skeleton "./skel4.c"
+%%
+start: ;
+]])
+
+AT_BISON_CHECK([[input4.y]], [[1]], [[]],
+[[input4.y: fatal error: b4_percent_define_get_syncline: undefined %define variable 'bogus'
+]])
+
+AT_CLEANUP
+
+
+## --------------------------------------- ##
+## Fatal errors make M4 exit immediately.  ##
+## --------------------------------------- ##
+
+AT_SETUP([[Fatal errors make M4 exit immediately]])
+
+AT_DATA([[skel1.c]],
+[[b4_complain([[non-fatal error]])
+b4_fatal([[M4 should exit immediately here]])
+m4@&t@_fatal([this should never be evaluated])
+]])
+
+AT_DATA([[input1.y]],
+[[%skeleton "./skel1.c"
+%%
+start: ;
+]])
+
+AT_BISON_CHECK([[input1.y]], [[1]], [[]],
+[[input1.y: error: non-fatal error
+input1.y: fatal error: M4 should exit immediately here
+]])
+
+AT_DATA([[skel2.c]],
+[[b4_warn([[morning]])
+b4_fatal_at([[foo.y:1.5]], [[foo.y:1.7]], [[M4 should exit immediately here]])
+m4@&t@_fatal([this should never be evaluated])
+]])
+
+AT_DATA([[input2.y]],
+[[%skeleton "./skel2.c"
+%%
+start: ;
+]])
+
+AT_BISON_CHECK([[input2.y]], [[1]], [[]],
+[[input2.y: warning: morning [-Wother]
+foo.y:1.5-6: fatal error: M4 should exit immediately here
+]])
+
+AT_CLEANUP
+
+
+## ------------------------------------------------ ##
+## Fatal errors but M4 continues producing output.  ##
+## ------------------------------------------------ ##
+
+# At one time, if Bison encountered a fatal error during M4 processing,
+# Bison failed to drain M4's output pipe.  The result was a SIGPIPE.
+# On some platforms, the default disposition for SIGPIPE is terminate,
+# which was fine.  On others, it's ignore, which caused M4 to report
+# the broken pipe to the user, but we don't want to bother the user with
+# that.
+
+# There is a race condition somewhere.  That is, before the associated
+# fix, running this test group many times in a row would occasionally
+# produce a pass among all the failures.
+
+AT_SETUP([[Fatal errors but M4 continues producing output]])
+
+AT_DATA([[gen-skel.pl]],
+[[use warnings;
+use strict;
+my $M4 = "m4";
+my $DNL = "d"."nl";
+print "${M4}_divert_push(0)$DNL\n";
+print '@output(@,@)', "\n";
+(print "garbage"x10, "\n") for (1..1000);
+print "${M4}_divert_pop(0)\n";
+]])
+AT_CHECK([[$PERL gen-skel.pl > skel.c || exit 77]])
+
+AT_DATA([[input.y]],
+[[%skeleton "./skel.c"
+%%
+start: ;
+]])
+
+AT_BISON_CHECK([[input.y]], [[1]], [[]],
+[[input.y: fatal error: too many arguments for @output directive in skeleton
+]])
+
+AT_CLEANUP

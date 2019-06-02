@@ -1,0 +1,179 @@
+#! /usr/bin/perl -w
+# Extract all examples from the manual source.
+
+# This file is part of GNU Bison
+
+# Copyright (C) 1992, 2000-2001, 2005-2006, 2009-2015 Free Software
+# Foundation, Inc.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+# Usage: extexi [OPTION...] input-file.texi ... -- [FILES to extract]
+
+# Look for @example environments preceded with lines such as:
+#
+#      @comment file calc.y
+# or
+#      @comment file calc.y: 3
+#
+# and output their content in that file (calc.y).  When numbers are
+# provided, use them to decide the output order (block numbered 1 is
+# output before block 2, even if the latter appears before).  The same
+# number may be used several time, in which case the order of
+# appearance is used.
+
+use strict;
+
+# Whether we generate synclines.
+my $synclines = 0;
+
+# normalize($block)
+# -----------------
+# Remove Texinfo mark up.
+sub normalize($)
+{
+  local ($_) = @_;
+
+  s/^\@(c |comment|dots|end (ignore|group)|ignore|group).*//mg;
+  s/\@value\{VERSION\}/$ENV{VERSION}/g;
+  s/^\@(error|result)\{\}//mg;
+  s/\@([{}@])/$1/g;
+  s/\@comment.*//;
+  $_;
+}
+
+# Print messages only once.
+my %msg;
+sub message($)
+{
+  my ($msg) = @_;
+  if (! $msg{$msg})
+    {
+      print STDERR "extexi: $msg\n";
+      $msg{$msg} = 1;
+    }
+}
+
+# basename => full file name for files we should extract.
+my %file_wanted;
+
+sub process ($)
+{
+  my ($in) = @_;
+  use IO::File;
+  my $f = new IO::File($in)
+    or die "$in: cannot open: $?";
+  # FILE-NAME => { BLOCK-NUM => CODE }
+  my %file;
+
+  # The latest "@comment file: FILE [BLOCK-NUM]" arguments.
+  my $file;
+  my $block;
+  # The @example block currently read.
+  my $input;
+  local $_;
+  while (<$f>)
+    {
+      if (/^\@comment file: ([^:\n]+)(?::\s*(\d+))?$/)
+        {
+          my $f = $1;
+          $block = $2 || 1;
+          if ($file_wanted{$f})
+            {
+              $file = $file_wanted{$f};
+              message(" GEN $file");
+            }
+          else
+            {
+              message("SKIP $f");
+            }
+        }
+      elsif ($file && /^\@(small)?example$/ .. /^\@end (small)?example$/)
+        {
+          if (/^\@(small)?example$/)
+            {
+              # Bison supports synclines, but not Flex.
+              $input .= sprintf ("#line %s \"$in\"\n", $. + 1)
+                if $synclines && $file =~ /\.[chy]*$/;
+              next;
+            }
+          elsif (/^\@end (small)?example$/)
+            {
+              die "no contents: $file"
+                if $input eq "";
+
+              $file{$file}{$block} .= normalize($input);
+              $file = $input = undef;
+              ++$block;
+            }
+          else
+            {
+              $input .= $_;
+            }
+        }
+    }
+
+  # Output the files.
+  for my $file (keys %file)
+    {
+      # No spurious end of line: use printf.
+      my $o = new IO::File(">$file")
+        or die "$file: cannot create: $?";
+      print $o $file{$file}{$_}
+        for sort keys %{$file{$file}};
+    }
+}
+
+my @input;
+my $seen_dash = 0;
+for my $arg (@ARGV)
+{
+  if ($seen_dash)
+    {
+      use File::Basename;
+      $file_wanted{basename($arg)} = $arg;
+    }
+  elsif ($arg eq '--')
+    {
+      $seen_dash = 1;
+    }
+  elsif ($arg eq '--synclines')
+    {
+      $synclines = 1;
+    }
+  else
+    {
+      push @input, $arg;
+    }
+}
+process $_
+  foreach @input;
+
+
+### Setup "GNU" style for perl-mode and cperl-mode.
+## Local Variables:
+## perl-indent-level: 2
+## perl-continued-statement-offset: 2
+## perl-continued-brace-offset: 0
+## perl-brace-offset: 0
+## perl-brace-imaginary-offset: 0
+## perl-label-offset: -2
+## cperl-indent-level: 2
+## cperl-brace-offset: 0
+## cperl-continued-brace-offset: 0
+## cperl-label-offset: -2
+## cperl-extra-newline-before-brace: t
+## cperl-merge-trailing-else: nil
+## cperl-continued-statement-offset: 2
+## End:

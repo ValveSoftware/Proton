@@ -1,0 +1,726 @@
+# Named references test.                           -*- Autotest -*-
+
+# Copyright (C) 2009-2015 Free Software Foundation, Inc.
+
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+# FIXME: Duplication with calc.at.
+AT_BANNER([[Named references tests.]])
+
+AT_SETUP([Tutorial calculator])
+AT_BISON_OPTION_PUSHDEFS
+AT_DATA_GRAMMAR([test.y],
+[[
+%{
+#include <assert.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
+typedef int semantic_value;
+FILE *input;
+static semantic_value global_result = 0;
+static int global_count = 0;
+static int power (int base, int exponent);
+]AT_YYERROR_DECLARE[
+]AT_YYLEX_DECLARE[
+%}
+
+%union
+{
+  semantic_value ival;
+};
+
+%token CALC_EOF 0 "end of input"
+%token <ival> NUM "number"
+%type  <ival> exp
+
+%nonassoc '='   /* comparison          */
+%left '-' '+'
+%left '*' '/'
+%precedence NEG /* negation--unary minus */
+%right '^'      /* exponentiation        */
+
+%%
+input:
+  line
+| input line         {}
+;
+
+line:
+  '\n'
+| exp '\n'           {}
+;
+
+exp:
+  NUM                { $$ = $NUM; }
+| exp[l] '=' exp[r]
+  {
+    if ($l != $r)
+      fprintf (stderr, "calc: error: %d != %d\n", $l, $r);
+   $$ = $l;
+  }
+| exp[x] '+' { $<ival>$ = $x; } [l] exp[r]  { $$ = $<ival>l + $r;    }
+| exp[l] '-' exp[r]  { $$ = $l - $r;        }
+| exp[l] '*' exp[r]  { $$ = $l * $r;        }
+| exp[l] '/' exp[r]  { $$ = $l / $r;        }
+| '-' exp  %prec NEG { $$ = -$2;            }
+| exp[l] '^' exp[r]  { $$ = power ($l, $r); }
+| '(' exp[e] ')'     { $$ = $e;           }
+| '(' error ')'      { $$ = 1111; yyerrok;  }
+| '!'                { $$ = 0; YYERROR;     }
+| '-' error          { $$ = 0; YYERROR;     }
+;
+%%
+]AT_YYERROR_DEFINE[
+static int get_char (void)
+{
+  int res = getc (input);
+  return res;
+}
+
+static void unget_char (int c)
+{
+  ungetc (c, input);
+}
+
+static int read_signed_integer (void)
+{
+  int c = get_char ();
+  int sign = 1;
+  int n = 0;
+  if (c == '-')
+    {
+      c = get_char ();
+      sign = -1;
+    }
+  while (isdigit (c))
+    {
+      n = 10 * n + (c - '0');
+      c = get_char ();
+    }
+  unget_char ( c);
+  return sign * n;
+}
+
+static int
+yylex (void)
+{
+  int c;
+  /* Skip white space.  */
+  while ((c = get_char ()) == ' ' || c == '\t') {}
+
+  /* process numbers   */
+  if (c == '.' || isdigit (c))
+    {
+      unget_char ( c);
+      (yylval).ival = read_signed_integer ();
+      return NUM;
+    }
+
+  /* Return end-of-file.  */
+  if (c == EOF)
+    return CALC_EOF;
+
+  /* Return single chars. */
+  return c;
+}
+
+static int power (int base, int exponent)
+{
+  int res = 1;
+  assert (0 <= exponent);
+  for (/* Niente */; exponent; --exponent)
+    res *= base;
+  return res;
+}
+
+int main (int argc, const char **argv)
+{
+  semantic_value result = 0;
+  int count = 0;
+  int status;
+  if (argc == 2)
+    input = fopen (argv[1], "r");
+  else
+    input = stdin;
+  if (!input)
+    {
+      perror (argv[1]);
+      return 3;
+    }
+  status = yyparse ();
+  fclose (input);
+  assert (global_result == result); (void) global_result; (void) result;
+  assert (global_count == count);   (void) global_count;  (void) count;
+  return status;
+}
+]])
+
+AT_DATA([input.txt],
+[[
+1 + 2 * 3 = 7
+1 + 2 * -3 = -5
+-1^2 = -1
+(-1)^2 = 1
+---1 = -1
+1 - 2 - 3 = -4
+1 - (2 - 3) = 2
+2^2^3 = 256
+(2^2)^3 = 64
+]])
+
+AT_FULL_COMPILE([[test]])
+AT_PARSER_CHECK([./test input.txt], 0, [], [stderr])
+AT_BISON_OPTION_POPDEFS
+AT_CLEANUP
+
+
+
+## ------------------------------------ ##
+## Undefined and ambiguous references.  ##
+## ------------------------------------ ##
+
+
+AT_SETUP([Undefined and ambiguous references])
+AT_BISON_OPTION_PUSHDEFS
+AT_DATA_GRAMMAR([test.y],
+[[
+%{
+static int power (int base, int exponent);
+]AT_YYERROR_DECLARE[
+]AT_YYLEX_DECLARE[
+%}
+
+%union
+{
+  int ival;
+};
+
+%token CALC_EOF 0 "end of input"
+%token <ival> NUM "number"
+%type  <ival> exp
+
+%nonassoc '='   /* comparison          */
+%left '-' '+'
+%left '*' '/'
+%precedence NEG /* negation--unary minus */
+%right '^'      /* exponentiation        */
+
+%%
+input:
+  line
+| input line         {}
+;
+
+line:
+  '\n'
+| exp '\n'           {}
+;
+
+exp:
+  NUM { $$ = $NUM; }
+| exp[l] '=' exp[r]
+  {
+    if ($l != $r)
+      fprintf (stderr, "calc: error: %d != %d\n", $l, $r);
+   $$ = $l;
+  }
+| exp[x] '+' { $<ival>$ = $x; } [l] exp[r] { $$ = $<ival>lo9 + $r; }
+| exp[x] '-' { $<ival>$ = $x; } [l] exp[r] { $$ = $<ival>exp - $r; }
+| exp[x] '*' { $<ival>$ = $x; } [l] exp[r] { $$ = $l * $r; }
+| exp[l] '/' exp[r]  { $$ = $l / $r;        }
+| '-' exp  %prec NEG { $$ = -$2;            }
+| exp[l] '^' exp[r]  { $$ = power ($l, $r12); }
+| '(' exp ')'        { $$ = $expo;           }
+| '(' error ')'      { $$ = 1111; yyerrok;  }
+| '!'                { $$ = 0; YYERROR;     }
+| '-' error          { $$ = 0; YYERROR;     }
+;
+%%
+]])
+
+AT_BISON_CHECK([-fcaret -o test.c test.y], 1, [],
+[[test.y:52.51-60: error: invalid reference: '$<ival>lo9'
+ | exp[x] '+' { $<ival>$ = $x; } [l] exp[r] { $$ = $<ival>lo9 + $r; }
+                                                   ^^^^^^^^^^
+test.y:52.3-68:      symbol not found in production: lo9
+ | exp[x] '+' { $<ival>$ = $x; } [l] exp[r] { $$ = $<ival>lo9 + $r; }
+   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+test.y:53.51-60: warning: misleading reference: '$<ival>exp' [-Wother]
+ | exp[x] '-' { $<ival>$ = $x; } [l] exp[r] { $$ = $<ival>exp - $r; }
+                                                   ^^^^^^^^^^
+test.y:44.1-3:       refers to: $exp at $$
+ exp:
+ ^^^
+test.y:53.7:         possibly meant: $x, hiding $exp at $1
+ | exp[x] '-' { $<ival>$ = $x; } [l] exp[r] { $$ = $<ival>exp - $r; }
+       ^
+test.y:53.41:        possibly meant: $r, hiding $exp at $4
+ | exp[x] '-' { $<ival>$ = $x; } [l] exp[r] { $$ = $<ival>exp - $r; }
+                                         ^
+test.y:54.51-52: error: $l of 'exp' has no declared type
+ | exp[x] '*' { $<ival>$ = $x; } [l] exp[r] { $$ = $l * $r; }
+                                                   ^^
+test.y:57.40-43: error: invalid reference: '$r12'
+ | exp[l] '^' exp[r]  { $$ = power ($l, $r12); }
+                                        ^^^^
+test.y:57.3-47:      symbol not found in production: r12
+ | exp[l] '^' exp[r]  { $$ = power ($l, $r12); }
+   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+test.y:58.29-33: error: invalid reference: '$expo'
+ | '(' exp ')'        { $$ = $expo;           }
+                             ^^^^^
+test.y:58.3-46:      symbol not found in production: expo
+ | '(' exp ')'        { $$ = $expo;           }
+   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+]])
+AT_BISON_OPTION_POPDEFS
+AT_CLEANUP
+
+
+## ----------------------- ##
+## Misleading references.  ##
+## ----------------------- ##
+
+AT_SETUP([Misleading references])
+AT_DATA_GRAMMAR([test.y],
+[[
+%%
+start: foo foo.bar { $foo.bar; }
+foo: '1'
+foo.bar: '2'
+]])
+AT_BISON_CHECK([-o test.c test.y], 0, [],
+[[test.y:11.22-29: warning: misleading reference: '$foo.bar' [-Wother]
+test.y:11.8-10:      refers to: $foo at $1
+test.y:11.12-18:     possibly meant: $[foo.bar] at $2
+]])
+AT_CLEANUP
+
+#######################################################################
+
+AT_SETUP([Many kinds of errors])
+AT_DATA_GRAMMAR([test.y],
+[[
+%token IDENT
+%token NUMBER
+%token ASSIGNOP
+%token IF
+%token IF1
+%token THEN
+%token ELSE
+%token FI
+%token WHILE
+%token DO
+%token OD
+%start program
+%%
+if_stmt1: IF expr[cond] THEN stmt[then] ELSE stmt.list[else] FI
+          { $if_stmt1 = new IfStmt($cond1, $then.f1, $else); };
+if_stmt2: IF expr[cond] THEN stmt[then] FI
+          { $if_stmt2 = new IfStmt($cond, $stmt.field, 0); };
+if_stmt3: IF expr[cond] THEN stmt.list FI
+          { $if_stmt3 = new IfStmt($cond, $stmt.list, 0); };
+if_stmt4: IF expr[cond] THEN stmt[xyz] ELSE stmt[xyz] FI
+          { $if_stmt4 = new IfStmt($cond, $xyz, $cond); };
+if_stmt5: IF expr[cond] THEN stmt.list[then] ELSE stmt.list[else] FI
+          { $if_stmt5 = new IfStmt($cond, $stmt.list, $else); };
+if_stmt6: IF expr[cond] THEN stmt.list[then] ELSE stmt.list[else] FI
+          { $if_stmt6 = new IfStmt($cond, $stmt.list.field, $else); };
+if_stmt7: IF expr[cond] THEN stmt.list[then] ELSE stmt.list[else] FI
+          { $if_stmt7 = new IfStmt($cond, $[stmt.list].field, $else); };
+if_stmt8: IF expr[cond] THEN stmt.list[then.1] ELSE stmt.list[else] FI
+          { $if_stmt8 = new IfStmt($cond, $then.1, $else); };
+if_stmt9: IF expr[cond] THEN stmt.list[then.1] ELSE stmt.list[else] FI
+          { $if_stmt9 = new IfStmt($cond, $then.1.field, $else); };
+if_stmt10: IF expr[cond] THEN stmt[stmt.x] FI
+          { $if_stmt10 = new IfStmt($cond, $stmt.x, 0); };
+if-stmt-a: IF expr[cond] THEN stmt.list[then] ELSE stmt.list[else] FI
+          { $if-stmt-a = new IfStmt($cond, $then, $else); };
+if-stmt-b: IF expr[cond] THEN if-stmt-a[then-a] ELSE stmt.list[else] FI
+          { $[if-stmt-b] = new IfStmt($cond, $then-a.f, $else); };
+program: stmt.list;
+stmt.list:  stmt ';' stmt.list { $3->insert($stmt); $$ = $3; }
+        |   stmt ';' { SL = new StmtList();  SL->insert($1); $$ = SL; }
+        ;
+stmt:  assign_stmt { $$ = $1; }
+    |  if_stmt { $$ = $1; }
+    |  if_stmt1 { $$ = $1; }
+    |  while_stmt { $$ = $1; }
+    ;
+assign_stmt: IDENT ASSIGNOP expr
+       { $$ = new AssignStmt(string($1),$3); };
+if_stmt: IF expr[cond] THEN stmt.list FI
+       { $if_stmt = new IfStmt($cond, $[stmt.list], 0); };
+while_stmt[res]: WHILE expr DO stmt.list OD
+       { $res = new WhileStmt($[expr], $[stmt.list]); };
+expr: expr '+' term   { $$ = new Plus($1,$3); }
+    | expr '-' term   { $$ = new Minus($1,$3); }
+    | term            { $$ = $1; }
+    ;
+term: term '*' factor   { $$ = new Times($1,$3); }
+    | factor            { $$ = $1; }
+    ;
+factor:     '(' expr ')'  { $$ = $2; }
+    |       NUMBER { $$ = new Number($1); }
+    |       IDENT { $$ = new Ident(string($1)); }
+    ;
+]])
+AT_BISON_CHECK([-o test.c test.y], 1, [],
+[[test.y:24.36-41: error: invalid reference: '$cond1'
+test.y:23.11-24.62:  symbol not found in production: cond1
+test.y:26.43-53: error: invalid reference: '$stmt.field'
+test.y:25.11-26.60:  symbol not found in production: stmt
+test.y:25.35-38:     possibly meant: $then.field, hiding $stmt.field at $4
+test.y:28.43-52: error: invalid reference: '$stmt.list'
+test.y:27.11-28.59:  symbol not found in production: stmt
+test.y:27.30-38:     possibly meant: $[stmt.list] at $4
+test.y:30.43-46: error: ambiguous reference: '$xyz'
+test.y:29.35-37:     refers to: $xyz at $4
+test.y:29.50-52:     refers to: $xyz at $6
+test.y:32.43-52: error: invalid reference: '$stmt.list'
+test.y:31.11-32.63:  symbol not found in production: stmt
+test.y:31.40-43:     possibly meant: $then, hiding $[stmt.list] at $4
+test.y:31.61-64:     possibly meant: $else, hiding $[stmt.list] at $6
+test.y:34.43-58: error: invalid reference: '$stmt.list.field'
+test.y:33.11-34.69:  symbol not found in production: stmt
+test.y:33.40-43:     possibly meant: $then.field, hiding $[stmt.list].field at $4
+test.y:33.61-64:     possibly meant: $else.field, hiding $[stmt.list].field at $6
+test.y:36.43-54: error: invalid reference: '$[stmt.list]'
+test.y:35.11-36.71:  symbol not found in production: stmt.list
+test.y:35.40-43:     possibly meant: $then, hiding $[stmt.list] at $4
+test.y:35.61-64:     possibly meant: $else, hiding $[stmt.list] at $6
+test.y:38.43-49: error: invalid reference: '$then.1'
+test.y:37.11-38.60:  symbol not found in production: then
+test.y:37.40-45:     possibly meant: $[then.1] at $4
+test.y:40.43-55: error: invalid reference: '$then.1.field'
+test.y:39.11-40.66:  symbol not found in production: then
+test.y:39.40-45:     possibly meant: $[then.1].field at $4
+test.y:42.44-50: error: invalid reference: '$stmt.x'
+test.y:41.12-42.57:  symbol not found in production: stmt
+test.y:41.36-41:     possibly meant: $[stmt.x].x, hiding $stmt.x at $4
+test.y:41.36-41:     possibly meant: $[stmt.x] at $4
+test.y:44.13-22: error: invalid reference: '$if-stmt-a'
+test.y:43.12-44.59:  symbol not found in production: if
+test.y:43.1-9:       possibly meant: $[if-stmt-a] at $$
+test.y:46.46-54: error: invalid reference: '$then-a.f'
+test.y:45.12-46.65:  symbol not found in production: then
+test.y:45.41-46:     possibly meant: $[then-a].f at $4
+]])
+
+AT_BISON_CHECK([-fcaret -o test.c test.y], 1, [],
+[[test.y:24.36-41: error: invalid reference: '$cond1'
+           { $if_stmt1 = new IfStmt($cond1, $then.f1, $else); };
+                                    ^^^^^^
+test.y:23.11-24.62:  symbol not found in production: cond1
+ if_stmt1: IF expr[cond] THEN stmt[then] ELSE stmt.list[else] FI
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+test.y:26.43-53: error: invalid reference: '$stmt.field'
+           { $if_stmt2 = new IfStmt($cond, $stmt.field, 0); };
+                                           ^^^^^^^^^^^
+test.y:25.11-26.60:  symbol not found in production: stmt
+ if_stmt2: IF expr[cond] THEN stmt[then] FI
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+test.y:25.35-38:     possibly meant: $then.field, hiding $stmt.field at $4
+ if_stmt2: IF expr[cond] THEN stmt[then] FI
+                                   ^^^^
+test.y:28.43-52: error: invalid reference: '$stmt.list'
+           { $if_stmt3 = new IfStmt($cond, $stmt.list, 0); };
+                                           ^^^^^^^^^^
+test.y:27.11-28.59:  symbol not found in production: stmt
+ if_stmt3: IF expr[cond] THEN stmt.list FI
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+test.y:27.30-38:     possibly meant: $[stmt.list] at $4
+ if_stmt3: IF expr[cond] THEN stmt.list FI
+                              ^^^^^^^^^
+test.y:30.43-46: error: ambiguous reference: '$xyz'
+           { $if_stmt4 = new IfStmt($cond, $xyz, $cond); };
+                                           ^^^^
+test.y:29.35-37:     refers to: $xyz at $4
+ if_stmt4: IF expr[cond] THEN stmt[xyz] ELSE stmt[xyz] FI
+                                   ^^^
+test.y:29.50-52:     refers to: $xyz at $6
+ if_stmt4: IF expr[cond] THEN stmt[xyz] ELSE stmt[xyz] FI
+                                                  ^^^
+test.y:32.43-52: error: invalid reference: '$stmt.list'
+           { $if_stmt5 = new IfStmt($cond, $stmt.list, $else); };
+                                           ^^^^^^^^^^
+test.y:31.11-32.63:  symbol not found in production: stmt
+ if_stmt5: IF expr[cond] THEN stmt.list[then] ELSE stmt.list[else] FI
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+test.y:31.40-43:     possibly meant: $then, hiding $[stmt.list] at $4
+ if_stmt5: IF expr[cond] THEN stmt.list[then] ELSE stmt.list[else] FI
+                                        ^^^^
+test.y:31.61-64:     possibly meant: $else, hiding $[stmt.list] at $6
+ if_stmt5: IF expr[cond] THEN stmt.list[then] ELSE stmt.list[else] FI
+                                                             ^^^^
+test.y:34.43-58: error: invalid reference: '$stmt.list.field'
+           { $if_stmt6 = new IfStmt($cond, $stmt.list.field, $else); };
+                                           ^^^^^^^^^^^^^^^^
+test.y:33.11-34.69:  symbol not found in production: stmt
+ if_stmt6: IF expr[cond] THEN stmt.list[then] ELSE stmt.list[else] FI
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+test.y:33.40-43:     possibly meant: $then.field, hiding $[stmt.list].field at $4
+ if_stmt6: IF expr[cond] THEN stmt.list[then] ELSE stmt.list[else] FI
+                                        ^^^^
+test.y:33.61-64:     possibly meant: $else.field, hiding $[stmt.list].field at $6
+ if_stmt6: IF expr[cond] THEN stmt.list[then] ELSE stmt.list[else] FI
+                                                             ^^^^
+test.y:36.43-54: error: invalid reference: '$[stmt.list]'
+           { $if_stmt7 = new IfStmt($cond, $[stmt.list].field, $else); };
+                                           ^^^^^^^^^^^^
+test.y:35.11-36.71:  symbol not found in production: stmt.list
+ if_stmt7: IF expr[cond] THEN stmt.list[then] ELSE stmt.list[else] FI
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+test.y:35.40-43:     possibly meant: $then, hiding $[stmt.list] at $4
+ if_stmt7: IF expr[cond] THEN stmt.list[then] ELSE stmt.list[else] FI
+                                        ^^^^
+test.y:35.61-64:     possibly meant: $else, hiding $[stmt.list] at $6
+ if_stmt7: IF expr[cond] THEN stmt.list[then] ELSE stmt.list[else] FI
+                                                             ^^^^
+test.y:38.43-49: error: invalid reference: '$then.1'
+           { $if_stmt8 = new IfStmt($cond, $then.1, $else); };
+                                           ^^^^^^^
+test.y:37.11-38.60:  symbol not found in production: then
+ if_stmt8: IF expr[cond] THEN stmt.list[then.1] ELSE stmt.list[else] FI
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+test.y:37.40-45:     possibly meant: $[then.1] at $4
+ if_stmt8: IF expr[cond] THEN stmt.list[then.1] ELSE stmt.list[else] FI
+                                        ^^^^^^
+test.y:40.43-55: error: invalid reference: '$then.1.field'
+           { $if_stmt9 = new IfStmt($cond, $then.1.field, $else); };
+                                           ^^^^^^^^^^^^^
+test.y:39.11-40.66:  symbol not found in production: then
+ if_stmt9: IF expr[cond] THEN stmt.list[then.1] ELSE stmt.list[else] FI
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+test.y:39.40-45:     possibly meant: $[then.1].field at $4
+ if_stmt9: IF expr[cond] THEN stmt.list[then.1] ELSE stmt.list[else] FI
+                                        ^^^^^^
+test.y:42.44-50: error: invalid reference: '$stmt.x'
+           { $if_stmt10 = new IfStmt($cond, $stmt.x, 0); };
+                                            ^^^^^^^
+test.y:41.12-42.57:  symbol not found in production: stmt
+ if_stmt10: IF expr[cond] THEN stmt[stmt.x] FI
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+test.y:41.36-41:     possibly meant: $[stmt.x].x, hiding $stmt.x at $4
+ if_stmt10: IF expr[cond] THEN stmt[stmt.x] FI
+                                    ^^^^^^
+test.y:41.36-41:     possibly meant: $[stmt.x] at $4
+ if_stmt10: IF expr[cond] THEN stmt[stmt.x] FI
+                                    ^^^^^^
+test.y:44.13-22: error: invalid reference: '$if-stmt-a'
+           { $if-stmt-a = new IfStmt($cond, $then, $else); };
+             ^^^^^^^^^^
+test.y:43.12-44.59:  symbol not found in production: if
+ if-stmt-a: IF expr[cond] THEN stmt.list[then] ELSE stmt.list[else] FI
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+test.y:43.1-9:       possibly meant: $[if-stmt-a] at $$
+ if-stmt-a: IF expr[cond] THEN stmt.list[then] ELSE stmt.list[else] FI
+ ^^^^^^^^^
+test.y:46.46-54: error: invalid reference: '$then-a.f'
+           { $[if-stmt-b] = new IfStmt($cond, $then-a.f, $else); };
+                                              ^^^^^^^^^
+test.y:45.12-46.65:  symbol not found in production: then
+ if-stmt-b: IF expr[cond] THEN if-stmt-a[then-a] ELSE stmt.list[else] FI
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+test.y:45.41-46:     possibly meant: $[then-a].f at $4
+ if-stmt-b: IF expr[cond] THEN if-stmt-a[then-a] ELSE stmt.list[else] FI
+                                         ^^^^^^
+]])
+
+AT_CLEANUP
+
+#######################################################################
+
+AT_SETUP([Missing identifiers in brackets])
+AT_DATA_GRAMMAR([test.y],
+[[
+%%
+start: foo[] bar
+  { s = $foo; }
+]])
+AT_BISON_CHECK([-o test.c test.y], 1, [],
+[[test.y:11.12: error: an identifier expected
+]])
+AT_CLEANUP
+
+#######################################################################
+
+AT_SETUP([Redundant words in brackets])
+AT_DATA_GRAMMAR([test.y],
+[[
+%%
+start: foo[ a d ] bar
+  { s = $foo; }
+]])
+AT_BISON_CHECK([-o test.c test.y], 1, [],
+[[test.y:11.15: error: unexpected identifier in bracketed name: 'd'
+]])
+AT_CLEANUP
+
+#######################################################################
+
+AT_SETUP([Comments in brackets])
+AT_DATA_GRAMMAR([test.y],
+[[
+%%
+start: foo[/* comment */] bar
+  { s = $foo; }
+]])
+AT_BISON_CHECK([-o test.c test.y], 1, [],
+[[test.y:11.25: error: an identifier expected
+]])
+AT_CLEANUP
+
+#######################################################################
+
+AT_SETUP([Stray symbols in brackets])
+AT_DATA_GRAMMAR([test.y],
+[[
+%%
+start: foo[ % /* aaa */ *&-.+\000\001\002\377 ] bar
+  { s = $foo; }
+]])
+AT_CHECK([[$PERL -pi -e 's/\\(\d{3})/chr(oct($1))/ge' test.y || exit 77]])
+AT_BISON_CHECK([-o test.c test.y], 1, [],
+[[test.y:11.13: error: invalid character in bracketed name: '%'
+test.y:11.25-27: error: invalid characters in bracketed name: '*&-'
+test.y:11.29-30: error: invalid characters in bracketed name: '+\0\001\002\377'
+]])
+AT_CLEANUP
+
+#######################################################################
+
+AT_SETUP([Redundant words in LHS brackets])
+AT_DATA_GRAMMAR([test.y],
+[[
+%%
+start[a s]: foo;
+]])
+AT_BISON_CHECK([-o test.c test.y], 1, [],
+[[test.y:11.9: error: unexpected identifier in bracketed name: 's'
+]])
+AT_CLEANUP
+
+#######################################################################
+
+# Bison used to free twice the named ref for "a", since a single copy
+# was used in two rules.
+AT_SETUP([Factored LHS])
+AT_DATA_GRAMMAR([test.y],
+[[
+%%
+start[a]: "foo" | "bar";
+]])
+AT_BISON_CHECK([-o test.c test.y])
+AT_CLEANUP
+
+#######################################################################
+
+AT_SETUP([Unresolved references])
+AT_DATA_GRAMMAR([test.y],
+[[
+%%
+stat:
+  sym_a sym_b { func($sym.field); }
+| sym_a sym_b { func($<aa>sym.field); }
+| sym_a sym_b { func($[sym.field]); }
+| sym_a sym_b { func($<aa>[sym.field]); }
+| sym_a sym_b { func($sym); }
+| sym_a sym_b { func($<aa>sym); }
+| sym_a sym_b { func($[sym]); } sym_a sym_b { func($<aa>[sym]); }
+;
+
+stat1:
+  sym_a sym_b { func($sym-field); }
+| sym_a sym_b { func($<aa>sym-field); }
+| sym_a sym_b { func($[sym-field]); }
+| sym_a sym_b { func($<aa>[sym-field]); }
+| sym_a sym_b { func($sym); }
+| sym_a sym_b { func($<aa>sym); }
+| sym_a sym_b { func($[sym]); } sym_a sym_b { func($<aa>[sym]); }
+;
+
+sym_a: 'a';
+sym_b: 'b';
+]])
+AT_BISON_CHECK([-o test.c test.y], 1, [],
+[[test.y:12.22-31: error: invalid reference: '$sym.field'
+test.y:12.3-35:      symbol not found in production: sym
+test.y:13.22-35: error: invalid reference: '$<aa>sym.field'
+test.y:13.3-39:      symbol not found in production: sym
+test.y:14.22-33: error: invalid reference: '$[sym.field]'
+test.y:14.3-37:      symbol not found in production: sym.field
+test.y:15.22-37: error: invalid reference: '$<aa>[sym.field]'
+test.y:15.3-41:      symbol not found in production: sym.field
+test.y:16.22-25: error: invalid reference: '$sym'
+test.y:16.3-29:      symbol not found in production: sym
+test.y:17.22-29: error: invalid reference: '$<aa>sym'
+test.y:17.3-33:      symbol not found in production: sym
+test.y:18.22-27: error: invalid reference: '$[sym]'
+test.y:18.3-65:      symbol not found in production before $3: sym
+test.y:18.52-61: error: invalid reference: '$<aa>[sym]'
+test.y:18.3-65:      symbol not found in production: sym
+test.y:22.22-31: error: invalid reference: '$sym-field'
+test.y:22.3-35:      symbol not found in production: sym
+test.y:23.22-35: error: invalid reference: '$<aa>sym-field'
+test.y:23.3-39:      symbol not found in production: sym
+test.y:24.22-33: error: invalid reference: '$[sym-field]'
+test.y:24.3-37:      symbol not found in production: sym-field
+test.y:25.22-37: error: invalid reference: '$<aa>[sym-field]'
+test.y:25.3-41:      symbol not found in production: sym-field
+test.y:26.22-25: error: invalid reference: '$sym'
+test.y:26.3-29:      symbol not found in production: sym
+test.y:27.22-29: error: invalid reference: '$<aa>sym'
+test.y:27.3-33:      symbol not found in production: sym
+test.y:28.22-27: error: invalid reference: '$[sym]'
+test.y:28.3-65:      symbol not found in production before $3: sym
+test.y:28.52-61: error: invalid reference: '$<aa>[sym]'
+test.y:28.3-65:      symbol not found in production: sym
+]])
+AT_CLEANUP
+
+#######################################################################
+
+AT_SETUP([[$ or @ followed by . or -]])
+AT_DATA([[test.y]],
+[[
+%%
+start:
+  .field { $.field; }
+| 'a'    { @.field; }
+;
+.field: ;
+]])
+AT_BISON_CHECK([[test.y]], [[1]], [],
+[[test.y:4.12-18: error: invalid reference: '$.field'
+test.y:4.13:        syntax error after '$', expecting integer, letter, '_', '@<:@', or '$'
+test.y:4.3-8:       possibly meant: $[.field] at $1
+test.y:5.12-18: error: invalid reference: '@.field'
+test.y:5.13:        syntax error after '@', expecting integer, letter, '_', '@<:@', or '$'
+]])
+AT_DATA([[test.y]],
+[[
+%%
+start:
+  'a' { $-field; }
+| 'b' { @-field; }
+;
+]])
+AT_BISON_CHECK([[test.y]], [[0]], [],
+[[test.y:4.9: warning: stray '$' [-Wother]
+test.y:5.9: warning: stray '@' [-Wother]
+]])
+AT_CLEANUP

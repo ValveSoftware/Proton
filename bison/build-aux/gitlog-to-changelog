@@ -1,0 +1,437 @@
+eval '(exit $?0)' && eval 'exec perl -wS "$0" ${1+"$@"}'
+  & eval 'exec perl -wS "$0" $argv:q'
+    if 0;
+# Convert git log output to ChangeLog format.
+
+my $VERSION = '2014-11-20 17:25'; # UTC
+# The definition above must lie within the first 8 lines in order
+# for the Emacs time-stamp write hook (at end) to update it.
+# If you change this file with Emacs, please let the write hook
+# do its job.  Otherwise, update this string manually.
+
+# Copyright (C) 2008-2015 Free Software Foundation, Inc.
+
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+# Written by Jim Meyering
+
+use strict;
+use warnings;
+use Getopt::Long;
+use POSIX qw(strftime);
+
+(my $ME = $0) =~ s|.*/||;
+
+# use File::Coda; # http://meyering.net/code/Coda/
+END {
+  defined fileno STDOUT or return;
+  close STDOUT and return;
+  warn "$ME: failed to close standard output: $!\n";
+  $? ||= 1;
+}
+
+sub usage ($)
+{
+  my ($exit_code) = @_;
+  my $STREAM = ($exit_code == 0 ? *STDOUT : *STDERR);
+  if ($exit_code != 0)
+    {
+      print $STREAM "Try '$ME --help' for more information.\n";
+    }
+  else
+    {
+      print $STREAM <<EOF;
+Usage: $ME [OPTIONS] [ARGS]
+
+Convert git log output to ChangeLog format.  If present, any ARGS
+are passed to "git log".  To avoid ARGS being parsed as options to
+$ME, they may be preceded by '--'.
+
+OPTIONS:
+
+   --amend=FILE FILE maps from an SHA1 to perl code (i.e., s/old/new/) that
+                  makes a change to SHA1's commit log text or metadata.
+   --append-dot append a dot to the first line of each commit message if
+                  there is no other punctuation or blank at the end.
+   --no-cluster never cluster commit messages under the same date/author
+                  header; the default is to cluster adjacent commit messages
+                  if their headers are the same and neither commit message
+                  contains multiple paragraphs.
+   --srcdir=DIR the root of the source tree, from which the .git/
+                  directory can be derived.
+   --since=DATE convert only the logs since DATE;
+                  the default is to convert all log entries.
+   --until=DATE convert only the logs older than DATE.
+   --format=FMT set format string for commit subject and body;
+                  see 'man git-log' for the list of format metacharacters;
+                  the default is '%s%n%b%n'
+   --strip-tab  remove one additional leading TAB from commit message lines.
+   --strip-cherry-pick  remove data inserted by "git cherry-pick";
+                  this includes the "cherry picked from commit ..." line,
+                  and the possible final "Conflicts:" paragraph.
+   --help       display this help and exit
+   --version    output version information and exit
+
+EXAMPLE:
+
+  $ME --since=2008-01-01 > ChangeLog
+  $ME -- -n 5 foo > last-5-commits-to-branch-foo
+
+SPECIAL SYNTAX:
+
+The following types of strings are interpreted specially when they appear
+at the beginning of a log message line.  They are not copied to the output.
+
+  Copyright-paperwork-exempt: Yes
+    Append the "(tiny change)" notation to the usual "date name email"
+    ChangeLog header to mark a change that does not require a copyright
+    assignment.
+  Co-authored-by: Joe User <user\@example.com>
+    List the specified name and email address on a second
+    ChangeLog header, denoting a co-author.
+  Signed-off-by: Joe User <user\@example.com>
+    These lines are simply elided.
+
+In a FILE specified via --amend, comment lines (starting with "#") are ignored.
+FILE must consist of <SHA,CODE+> pairs where SHA is a 40-byte SHA1 (alone on
+a line) referring to a commit in the current project, and CODE refers to one
+or more consecutive lines of Perl code.  Pairs must be separated by one or
+more blank line.
+
+Here is sample input for use with --amend=FILE, from coreutils:
+
+3a169f4c5d9159283548178668d2fae6fced3030
+# fix typo in title:
+s/all tile types/all file types/
+
+1379ed974f1fa39b12e2ffab18b3f7a607082202
+# Due to a bug in vc-dwim, I mis-attributed a patch by Paul to myself.
+# Change the author to be Paul.  Note the escaped "@":
+s,Jim .*>,Paul Eggert <eggert\\\@cs.ucla.edu>,
+
+EOF
+    }
+  exit $exit_code;
+}
+
+# If the string $S is a well-behaved file name, simply return it.
+# If it contains white space, quotes, etc., quote it, and return the new string.
+sub shell_quote($)
+{
+  my ($s) = @_;
+  if ($s =~ m![^\w+/.,-]!)
+    {
+      # Convert each single quote to '\''
+      $s =~ s/\'/\'\\\'\'/g;
+      # Then single quote the string.
+      $s = "'$s'";
+    }
+  return $s;
+}
+
+sub quoted_cmd(@)
+{
+  return join (' ', map {shell_quote $_} @_);
+}
+
+# Parse file F.
+# Comment lines (starting with "#") are ignored.
+# F must consist of <SHA,CODE+> pairs where SHA is a 40-byte SHA1
+# (alone on a line) referring to a commit in the current project, and
+# CODE refers to one or more consecutive lines of Perl code.
+# Pairs must be separated by one or more blank line.
+sub parse_amend_file($)
+{
+  my ($f) = @_;
+
+  open F, '<', $f
+    or die "$ME: $f: failed to open for reading: $!\n";
+
+  my $fail;
+  my $h = {};
+  my $in_code = 0;
+  my $sha;
+  while (defined (my $line = <F>))
+    {
+      $line =~ /^\#/
+        and next;
+      chomp $line;
+      $line eq ''
+        and $in_code = 0, next;
+
+      if (!$in_code)
+        {
+          $line =~ /^([0-9a-fA-F]{40})$/
+            or (warn "$ME: $f:$.: invalid line; expected an SHA1\n"),
+              $fail = 1, next;
+          $sha = lc $1;
+          $in_code = 1;
+          exists $h->{$sha}
+            and (warn "$ME: $f:$.: duplicate SHA1\n"),
+              $fail = 1, next;
+        }
+      else
+        {
+          $h->{$sha} ||= '';
+          $h->{$sha} .= "$line\n";
+        }
+    }
+  close F;
+
+  $fail
+    and exit 1;
+
+  return $h;
+}
+
+# git_dir_option $SRCDIR
+#
+# From $SRCDIR, the --git-dir option to pass to git (none if $SRCDIR
+# is undef).  Return as a list (0 or 1 element).
+sub git_dir_option($)
+{
+  my ($srcdir) = @_;
+  my @res = ();
+  if (defined $srcdir)
+    {
+      my $qdir = shell_quote $srcdir;
+      my $cmd = "cd $qdir && git rev-parse --show-toplevel";
+      my $qcmd = shell_quote $cmd;
+      my $git_dir = qx($cmd);
+      defined $git_dir
+        or die "$ME: cannot run $qcmd: $!\n";
+      $? == 0
+        or die "$ME: $qcmd had unexpected exit code or signal ($?)\n";
+      chomp $git_dir;
+      push @res, "--git-dir=$git_dir/.git";
+    }
+  @res;
+}
+
+{
+  my $since_date;
+  my $until_date;
+  my $format_string = '%s%n%b%n';
+  my $amend_file;
+  my $append_dot = 0;
+  my $cluster = 1;
+  my $strip_tab = 0;
+  my $strip_cherry_pick = 0;
+  my $srcdir;
+  GetOptions
+    (
+     help => sub { usage 0 },
+     version => sub { print "$ME version $VERSION\n"; exit },
+     'since=s' => \$since_date,
+     'until=s' => \$until_date,
+     'format=s' => \$format_string,
+     'amend=s' => \$amend_file,
+     'append-dot' => \$append_dot,
+     'cluster!' => \$cluster,
+     'strip-tab' => \$strip_tab,
+     'strip-cherry-pick' => \$strip_cherry_pick,
+     'srcdir=s' => \$srcdir,
+    ) or usage 1;
+
+  defined $since_date
+    and unshift @ARGV, "--since=$since_date";
+  defined $until_date
+    and unshift @ARGV, "--until=$until_date";
+
+  # This is a hash that maps an SHA1 to perl code (i.e., s/old/new/)
+  # that makes a correction in the log or attribution of that commit.
+  my $amend_code = defined $amend_file ? parse_amend_file $amend_file : {};
+
+  my @cmd = ('git',
+             git_dir_option $srcdir,
+             qw(log --log-size),
+             '--pretty=format:%H:%ct  %an  <%ae>%n%n'.$format_string, @ARGV);
+  open PIPE, '-|', @cmd
+    or die ("$ME: failed to run '". quoted_cmd (@cmd) ."': $!\n"
+            . "(Is your Git too old?  Version 1.5.1 or later is required.)\n");
+
+  my $prev_multi_paragraph;
+  my $prev_date_line = '';
+  my @prev_coauthors = ();
+  while (1)
+    {
+      defined (my $in = <PIPE>)
+        or last;
+      $in =~ /^log size (\d+)$/
+        or die "$ME:$.: Invalid line (expected log size):\n$in";
+      my $log_nbytes = $1;
+
+      my $log;
+      my $n_read = read PIPE, $log, $log_nbytes;
+      $n_read == $log_nbytes
+        or die "$ME:$.: unexpected EOF\n";
+
+      # Extract leading hash.
+      my ($sha, $rest) = split ':', $log, 2;
+      defined $sha
+        or die "$ME:$.: malformed log entry\n";
+      $sha =~ /^[0-9a-fA-F]{40}$/
+        or die "$ME:$.: invalid SHA1: $sha\n";
+
+      # If this commit's log requires any transformation, do it now.
+      my $code = $amend_code->{$sha};
+      if (defined $code)
+        {
+          eval 'use Safe';
+          my $s = new Safe;
+          # Put the unpreprocessed entry into "$_".
+          $_ = $rest;
+
+          # Let $code operate on it, safely.
+          my $r = $s->reval("$code")
+            or die "$ME:$.:$sha: failed to eval \"$code\":\n$@\n";
+
+          # Note that we've used this entry.
+          delete $amend_code->{$sha};
+
+          # Update $rest upon success.
+          $rest = $_;
+        }
+
+      # Remove lines inserted by "git cherry-pick".
+      if ($strip_cherry_pick)
+        {
+          $rest =~ s/^\s*Conflicts:\n.*//sm;
+          $rest =~ s/^\s*\(cherry picked from commit [\da-f]+\)\n//m;
+        }
+
+      my @line = split "\n", $rest;
+      my $author_line = shift @line;
+      defined $author_line
+        or die "$ME:$.: unexpected EOF\n";
+      $author_line =~ /^(\d+)  (.*>)$/
+        or die "$ME:$.: Invalid line "
+          . "(expected date/author/email):\n$author_line\n";
+
+      # Format 'Copyright-paperwork-exempt: Yes' as a standard ChangeLog
+      # `(tiny change)' annotation.
+      my $tiny = (grep (/^Copyright-paperwork-exempt:\s+[Yy]es$/, @line)
+                  ? '  (tiny change)' : '');
+
+      my $date_line = sprintf "%s  %s$tiny\n",
+        strftime ("%F", localtime ($1)), $2;
+
+      my @coauthors = grep /^Co-authored-by:.*$/, @line;
+      # Omit meta-data lines we've already interpreted.
+      @line = grep !/^(?:Signed-off-by:[ ].*>$
+                       |Co-authored-by:[ ]
+                       |Copyright-paperwork-exempt:[ ]
+                       )/x, @line;
+
+      # Remove leading and trailing blank lines.
+      if (@line)
+        {
+          while ($line[0] =~ /^\s*$/) { shift @line; }
+          while ($line[$#line] =~ /^\s*$/) { pop @line; }
+        }
+
+      # Record whether there are two or more paragraphs.
+      my $multi_paragraph = grep /^\s*$/, @line;
+
+      # Format 'Co-authored-by: A U Thor <email@example.com>' lines in
+      # standard multi-author ChangeLog format.
+      for (@coauthors)
+        {
+          s/^Co-authored-by:\s*/\t    /;
+          s/\s*</  </;
+
+          /<.*?@.*\..*>/
+            or warn "$ME: warning: missing email address for "
+              . substr ($_, 5) . "\n";
+        }
+
+      # If clustering of commit messages has been disabled, if this header
+      # would be different from the previous date/name/email/coauthors header,
+      # or if this or the previous entry consists of two or more paragraphs,
+      # then print the header.
+      if ( ! $cluster
+          || $date_line ne $prev_date_line
+          || "@coauthors" ne "@prev_coauthors"
+          || $multi_paragraph
+          || $prev_multi_paragraph)
+        {
+          $prev_date_line eq ''
+            or print "\n";
+          print $date_line;
+          @coauthors
+            and print join ("\n", @coauthors), "\n";
+        }
+      $prev_date_line = $date_line;
+      @prev_coauthors = @coauthors;
+      $prev_multi_paragraph = $multi_paragraph;
+
+      # If there were any lines
+      if (@line == 0)
+        {
+          warn "$ME: warning: empty commit message:\n  $date_line\n";
+        }
+      else
+        {
+          if ($append_dot)
+            {
+              # If the first line of the message has enough room, then
+              if (length $line[0] < 72)
+                {
+                  # append a dot if there is no other punctuation or blank
+                  # at the end.
+                  $line[0] =~ /[[:punct:]\s]$/
+                    or $line[0] .= '.';
+                }
+            }
+
+          # Remove one additional leading TAB from each line.
+          $strip_tab
+            and map { s/^\t// } @line;
+
+          # Prefix each non-empty line with a TAB.
+          @line = map { length $_ ? "\t$_" : '' } @line;
+
+          print "\n", join ("\n", @line), "\n";
+        }
+
+      defined ($in = <PIPE>)
+        or last;
+      $in ne "\n"
+        and die "$ME:$.: unexpected line:\n$in";
+    }
+
+  close PIPE
+    or die "$ME: error closing pipe from " . quoted_cmd (@cmd) . "\n";
+  # FIXME-someday: include $PROCESS_STATUS in the diagnostic
+
+  # Complain about any unused entry in the --amend=F specified file.
+  my $fail = 0;
+  foreach my $sha (keys %$amend_code)
+    {
+      warn "$ME:$amend_file: unused entry: $sha\n";
+      $fail = 1;
+    }
+
+  exit $fail;
+}
+
+# Local Variables:
+# mode: perl
+# indent-tabs-mode: nil
+# eval: (add-hook 'write-file-hooks 'time-stamp)
+# time-stamp-start: "my $VERSION = '"
+# time-stamp-format: "%:y-%02m-%02d %02H:%02M"
+# time-stamp-time-zone: "UTC"
+# time-stamp-end: "'; # UTC"
+# End:

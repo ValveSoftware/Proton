@@ -1,0 +1,68 @@
+# Vietnamese Translation for Bison-runtime.
+# Copyright © 2013 Free Software Foundation, Inc.
+# This file is distributed under the same license as the bison package.
+# Clytie Siddall <clytie@riverland.net.au>, 2005-2010.
+# Trần Ngọc Quân <vnwildman@gmail.com>, 2013.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: bison-runtime-3.0\n"
+"Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
+"POT-Creation-Date: 2015-01-23 13:55+0100\n"
+"PO-Revision-Date: 2013-07-26 14:19+0700\n"
+"Last-Translator: Trần Ngọc Quân <vnwildman@gmail.com>\n"
+"Language-Team: Vietnamese <translation-team-vi@lists.sourceforge.net>\n"
+"Language: vi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language-Team-Website: <http://translationproject.org/team/vi.html>\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 1.5.5\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-Language: Vietnamese\n"
+"X-Poedit-Country: VIET NAM\n"
+
+#: data/glr.c:803 data/yacc.c:643
+msgid "syntax error: cannot back up"
+msgstr "lỗi cú pháp: không thể sao lưu dự phòng"
+
+#: data/glr.c:1687
+msgid "syntax is ambiguous"
+msgstr "cú pháp chưa rõ ràng"
+
+#: data/glr.c:2008 data/glr.c:2088 data/glr.c:2128 data/glr.c:2392
+#: data/lalr1.cc:1094 data/lalr1.cc:1115 data/yacc.c:1210 data/yacc.c:1710
+#: data/yacc.c:1716
+msgid "syntax error"
+msgstr "lỗi cú pháp"
+
+#: data/glr.c:2089 data/lalr1.cc:1095 data/yacc.c:1211
+#, c-format
+msgid "syntax error, unexpected %s"
+msgstr "lỗi cú pháp, gặp %s bất thường"
+
+#: data/glr.c:2090 data/lalr1.cc:1096 data/yacc.c:1212
+#, c-format
+msgid "syntax error, unexpected %s, expecting %s"
+msgstr "lỗi cú pháp, gặp %s bất thường, cần %s"
+
+#: data/glr.c:2091 data/lalr1.cc:1097 data/yacc.c:1213
+#, c-format
+msgid "syntax error, unexpected %s, expecting %s or %s"
+msgstr "lỗi cú pháp, gặp %s bất thường, cần %s hoặc %s"
+
+#: data/glr.c:2092 data/lalr1.cc:1098 data/yacc.c:1214
+#, c-format
+msgid "syntax error, unexpected %s, expecting %s or %s or %s"
+msgstr "lỗi cú pháp, gặp %s bất thường, cần %s hoặc %s hay %s"
+
+#: data/glr.c:2093 data/lalr1.cc:1099 data/yacc.c:1215
+#, c-format
+msgid "syntax error, unexpected %s, expecting %s or %s or %s or %s"
+msgstr "lỗi cú pháp, gặp %s bất thường, cần %s hoặc %s hoặc %s hay %s "
+
+#: data/glr.c:2452 data/yacc.c:1295 data/yacc.c:1297 data/yacc.c:1470
+#: data/yacc.c:1867
+msgid "memory exhausted"
+msgstr "hết bộ nhớ"

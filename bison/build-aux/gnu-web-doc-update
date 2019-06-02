@@ -1,0 +1,194 @@
+#!/bin/sh
+# Run this after each non-alpha release, to update the web documentation at
+# http://www.gnu.org/software/$pkg/manual/
+
+VERSION=2012-12-16.14; # UTC
+
+# Copyright (C) 2009-2015 Free Software Foundation, Inc.
+
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+ME=$(basename "$0")
+warn() { printf '%s: %s\n' "$ME" "$*" >&2; }
+die() { warn "$*"; exit 1; }
+
+help()
+{
+  cat <<EOF
+Usage: $ME
+
+Run this script from top_srcdir (no arguments) after each non-alpha
+release, to update the web documentation at
+http://www.gnu.org/software/\$pkg/manual/
+
+This script assumes you're using git for revision control, and
+requires a .prev-version file as well as a Makefile, from which it
+extracts the version number and package name, respectively.  Also, it
+assumes all documentation is in the doc/ sub-directory.
+
+Options:
+  -C, --builddir=DIR  location of (configured) Makefile (default: .)
+  -n, --dry-run       don't actually commit anything
+  --help              print this help, then exit
+  --version           print version number, then exit
+
+Report bugs and patches to <bug-gnulib@gnu.org>.
+EOF
+  exit
+}
+
+version()
+{
+  year=$(echo "$VERSION" | sed 's/[^0-9].*//')
+  cat <<EOF
+$ME $VERSION
+Copyright (C) $year Free Software Foundation, Inc,
+License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+EOF
+  exit
+}
+
+# find_tool ENVVAR NAMES...
+# -------------------------
+# Search for a required program.  Use the value of ENVVAR, if set,
+# otherwise find the first of the NAMES that can be run (i.e.,
+# supports --version).  If found, set ENVVAR to the program name,
+# die otherwise.
+#
+# FIXME: code duplication, see also bootstrap.
+find_tool ()
+{
+  find_tool_envvar=$1
+  shift
+  find_tool_names=$@
+  eval "find_tool_res=\$$find_tool_envvar"
+  if test x"$find_tool_res" = x; then
+    for i
+    do
+      if ($i --version </dev/null) >/dev/null 2>&1; then
+       find_tool_res=$i
+       break
+      fi
+    done
+  else
+    find_tool_error_prefix="\$$find_tool_envvar: "
+  fi
+  test x"$find_tool_res" != x \
+    || die "one of these is required: $find_tool_names"
+  ($find_tool_res --version </dev/null) >/dev/null 2>&1 \
+    || die "${find_tool_error_prefix}cannot run $find_tool_res --version"
+  eval "$find_tool_envvar=\$find_tool_res"
+  eval "export $find_tool_envvar"
+}
+
+## ------ ##
+## Main.  ##
+## ------ ##
+
+# Requirements: everything required to bootstrap your package, plus
+# these.
+find_tool CVS cvs
+find_tool GIT git
+find_tool RSYNC rsync
+find_tool XARGS gxargs xargs
+
+builddir=.
+dryrun=
+while test $# != 0
+do
+  # Handle --option=value by splitting apart and putting back on argv.
+  case $1 in
+    --*=*)
+      opt=$(echo "$1" | sed -e 's/=.*//')
+      val=$(echo "$1" | sed -e 's/[^=]*=//')
+      shift
+      set dummy "$opt" "$val" ${1+"$@"}; shift
+      ;;
+  esac
+
+  case $1 in
+    --help|--version) ${1#--};;
+    -C|--builddir) shift; builddir=$1; shift ;;
+    -n|--dry-run) dryrun=echo; shift;;
+    --*) die "unrecognized option: $1";;
+    *) break;;
+  esac
+done
+
+test $# = 0 \
+  || die "too many arguments"
+
+prev=.prev-version
+version=$(cat $prev) || die "no $prev file?"
+pkg=$(sed -n 's/^PACKAGE = \(.*\)/\1/p' $builddir/Makefile) \
+  || die "no Makefile?"
+tmp_branch=web-doc-$version-$$
+current_branch=$($GIT branch | sed -ne '/^\* /{s///;p;q;}')
+
+cleanup()
+{
+  __st=$?
+  $dryrun rm -rf "$tmp"
+  $GIT checkout "$current_branch"
+  $GIT submodule update --recursive
+  $GIT branch -d $tmp_branch
+  exit $__st
+}
+trap cleanup 0
+trap 'exit $?' 1 2 13 15
+
+# We must build using sources for which --version reports the
+# just-released version number, not some string like 7.6.18-20761.
+# That version string propagates into all documentation.
+set -e
+$GIT checkout -b $tmp_branch v$version
+$GIT submodule update --recursive
+./bootstrap
+srcdir=$(pwd)
+cd "$builddir"
+  ./config.status --recheck
+  ./config.status
+  make
+  make web-manual
+cd "$srcdir"
+set +e
+
+tmp=$(mktemp -d web-doc-update.XXXXXX) || exit 1
+( cd $tmp \
+    && $CVS -d $USER@cvs.sv.gnu.org:/webcvs/$pkg co $pkg )
+$RSYNC -avP "$builddir"/doc/manual/ $tmp/$pkg/manual
+
+(
+  cd $tmp/$pkg/manual
+
+  # Add all the files.  This is simpler than trying to add only the
+  # new ones because of new directories: it would require iterating on
+  # adding the outer directories, and then their contents.
+  #
+  # find guarantees that we add outer directories first.
+  find . -name CVS -prune -o -print             \
+    | $XARGS --no-run-if-empty -- $dryrun $CVS add -ko
+
+  $dryrun $CVS ci -m $version
+)
+
+# Local variables:
+# eval: (add-hook 'write-file-hooks 'time-stamp)
+# time-stamp-start: "VERSION="
+# time-stamp-format: "%:y-%02m-%02d.%02H"
+# time-stamp-time-zone: "UTC"
+# time-stamp-end: "; # UTC"
+# End:

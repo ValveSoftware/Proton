@@ -1,0 +1,1633 @@
+# Exercising Bison Grammar Reduction.                      -*- Autotest -*-
+
+# Copyright (C) 2001-2002, 2007-2015 Free Software Foundation, Inc.
+
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+AT_BANNER([[Grammar Reduction.]])
+
+
+## ------------------- ##
+## Useless Terminals.  ##
+## ------------------- ##
+
+AT_SETUP([Useless Terminals])
+
+AT_DATA([[input.y]],
+[[%verbose
+%output "input.c"
+
+%token useless1
+%token useless2
+%token useless3
+%token useless4
+%token useless5
+%token useless6
+%token useless7
+%token useless8
+%token useless9
+
+%token useful
+%%
+exp: useful;
+]])
+
+AT_BISON_CHECK([[input.y]])
+
+AT_CHECK([[sed -n '/^Grammar/q;/^$/!p' input.output]], 0,
+[[Terminals unused in grammar
+   useless1
+   useless2
+   useless3
+   useless4
+   useless5
+   useless6
+   useless7
+   useless8
+   useless9
+]])
+
+AT_CLEANUP
+
+
+
+## ---------------------- ##
+## Useless Nonterminals.  ##
+## ---------------------- ##
+
+AT_SETUP([Useless Nonterminals])
+
+AT_DATA([[input.y]],
+[[%verbose
+%output "input.c"
+
+%nterm useless1
+%nterm useless2
+%nterm useless3
+%nterm useless4
+%nterm useless5
+%nterm useless6
+%nterm useless7
+%nterm useless8
+%nterm useless9
+
+%token useful
+%%
+exp: useful;
+]])
+
+AT_BISON_CHECK([[input.y]], 0, [],
+[[input.y: warning: 9 nonterminals useless in grammar [-Wother]
+input.y:4.8-15: warning: nonterminal useless in grammar: useless1 [-Wother]
+input.y:5.8-15: warning: nonterminal useless in grammar: useless2 [-Wother]
+input.y:6.8-15: warning: nonterminal useless in grammar: useless3 [-Wother]
+input.y:7.8-15: warning: nonterminal useless in grammar: useless4 [-Wother]
+input.y:8.8-15: warning: nonterminal useless in grammar: useless5 [-Wother]
+input.y:9.8-15: warning: nonterminal useless in grammar: useless6 [-Wother]
+input.y:10.8-15: warning: nonterminal useless in grammar: useless7 [-Wother]
+input.y:11.8-15: warning: nonterminal useless in grammar: useless8 [-Wother]
+input.y:12.8-15: warning: nonterminal useless in grammar: useless9 [-Wother]
+]])
+
+AT_CHECK([[sed -n '/^Grammar/q;/^$/!p' input.output]], 0,
+[[Nonterminals useless in grammar
+   useless1
+   useless2
+   useless3
+   useless4
+   useless5
+   useless6
+   useless7
+   useless8
+   useless9
+]])
+
+AT_CLEANUP
+
+
+
+## --------------- ##
+## Useless Rules.  ##
+## --------------- ##
+
+AT_SETUP([Useless Rules])
+
+AT_KEYWORDS([report])
+
+AT_DATA([[input.y]],
+[[%verbose
+%output "input.c"
+%token useful
+%%
+exp: useful;
+useless1: '1';
+useless2: '2';
+useless3: '3';
+useless4: '4';
+useless5: '5';
+useless6: '6';
+useless7: '7';
+useless8: '8';
+useless9: '9';
+]])
+
+AT_BISON_CHECK([[-fcaret input.y]], 0, [],
+[[input.y: warning: 9 nonterminals useless in grammar [-Wother]
+input.y: warning: 9 rules useless in grammar [-Wother]
+input.y:6.1-8: warning: nonterminal useless in grammar: useless1 [-Wother]
+ useless1: '1';
+ ^^^^^^^^
+input.y:7.1-8: warning: nonterminal useless in grammar: useless2 [-Wother]
+ useless2: '2';
+ ^^^^^^^^
+input.y:8.1-8: warning: nonterminal useless in grammar: useless3 [-Wother]
+ useless3: '3';
+ ^^^^^^^^
+input.y:9.1-8: warning: nonterminal useless in grammar: useless4 [-Wother]
+ useless4: '4';
+ ^^^^^^^^
+input.y:10.1-8: warning: nonterminal useless in grammar: useless5 [-Wother]
+ useless5: '5';
+ ^^^^^^^^
+input.y:11.1-8: warning: nonterminal useless in grammar: useless6 [-Wother]
+ useless6: '6';
+ ^^^^^^^^
+input.y:12.1-8: warning: nonterminal useless in grammar: useless7 [-Wother]
+ useless7: '7';
+ ^^^^^^^^
+input.y:13.1-8: warning: nonterminal useless in grammar: useless8 [-Wother]
+ useless8: '8';
+ ^^^^^^^^
+input.y:14.1-8: warning: nonterminal useless in grammar: useless9 [-Wother]
+ useless9: '9';
+ ^^^^^^^^
+input.y:6.11-13: warning: rule useless in grammar [-Wother]
+ useless1: '1';
+           ^^^
+input.y:7.11-13: warning: rule useless in grammar [-Wother]
+ useless2: '2';
+           ^^^
+input.y:8.11-13: warning: rule useless in grammar [-Wother]
+ useless3: '3';
+           ^^^
+input.y:9.11-13: warning: rule useless in grammar [-Wother]
+ useless4: '4';
+           ^^^
+input.y:10.11-13: warning: rule useless in grammar [-Wother]
+ useless5: '5';
+           ^^^
+input.y:11.11-13: warning: rule useless in grammar [-Wother]
+ useless6: '6';
+           ^^^
+input.y:12.11-13: warning: rule useless in grammar [-Wother]
+ useless7: '7';
+           ^^^
+input.y:13.11-13: warning: rule useless in grammar [-Wother]
+ useless8: '8';
+           ^^^
+input.y:14.11-13: warning: rule useless in grammar [-Wother]
+ useless9: '9';
+           ^^^
+]])
+
+
+AT_CHECK([[sed -n '/^Grammar/q;/^$/!p' input.output]], 0,
+[[Nonterminals useless in grammar
+   useless1
+   useless2
+   useless3
+   useless4
+   useless5
+   useless6
+   useless7
+   useless8
+   useless9
+Terminals unused in grammar
+   '1'
+   '2'
+   '3'
+   '4'
+   '5'
+   '6'
+   '7'
+   '8'
+   '9'
+Rules useless in grammar
+    2 useless1: '1'
+    3 useless2: '2'
+    4 useless3: '3'
+    5 useless4: '4'
+    6 useless5: '5'
+    7 useless6: '6'
+    8 useless7: '7'
+    9 useless8: '8'
+   10 useless9: '9'
+]])
+
+AT_CLEANUP
+
+
+
+## ------------------- ##
+## Reduced Automaton.  ##
+## ------------------- ##
+
+# Check that the automaton is that as the for the grammar reduced by
+# hand.
+
+AT_SETUP([Reduced Automaton])
+
+AT_KEYWORDS([report])
+
+# The non reduced grammar.
+# ------------------------
+AT_DATA([[not-reduced.y]],
+[[/* A useless token. */
+%token useless_token
+/* A useful one. */
+%token useful
+%verbose
+%output "not-reduced.c"
+
+%%
+
+exp: useful            { /* A useful action. */ }
+   | non_productive    { /* A non productive action. */ }
+   ;
+
+not_reachable: useful  { /* A not reachable action. */ }
+             ;
+
+non_productive: non_productive useless_token
+                       { /* Another non productive action. */ }
+              ;
+%%
+]])
+
+AT_BISON_CHECK([[-fcaret not-reduced.y]], 0, [],
+[[not-reduced.y: warning: 2 nonterminals useless in grammar [-Wother]
+not-reduced.y: warning: 3 rules useless in grammar [-Wother]
+not-reduced.y:14.1-13: warning: nonterminal useless in grammar: not_reachable [-Wother]
+ not_reachable: useful  { /* A not reachable action. */ }
+ ^^^^^^^^^^^^^
+not-reduced.y:11.6-19: warning: nonterminal useless in grammar: non_productive [-Wother]
+    | non_productive    { /* A non productive action. */ }
+      ^^^^^^^^^^^^^^
+not-reduced.y:11.6-57: warning: rule useless in grammar [-Wother]
+    | non_productive    { /* A non productive action. */ }
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+not-reduced.y:14.16-56: warning: rule useless in grammar [-Wother]
+ not_reachable: useful  { /* A not reachable action. */ }
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+not-reduced.y:17.17-18.63: warning: rule useless in grammar [-Wother]
+ non_productive: non_productive useless_token
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+]])
+
+AT_CHECK([[sed -n '/^Grammar/q;/^$/!p' not-reduced.output]], 0,
+[[Nonterminals useless in grammar
+   not_reachable
+   non_productive
+Terminals unused in grammar
+   useless_token
+Rules useless in grammar
+    2 exp: non_productive
+    3 not_reachable: useful
+    4 non_productive: non_productive useless_token
+]])
+
+# The reduced grammar.
+# --------------------
+AT_DATA([[reduced.y]],
+[[/* A useless token. */
+%token useless_token
+/* A useful one. */
+%token useful
+%verbose
+%output "reduced.c"
+
+%%
+
+exp: useful            { /* A useful action. */ }
+//   | non_productive    { /* A non productive action. */ } */
+   ;
+
+//not_reachable: useful  { /* A not reachable action. */ }
+//             ;
+
+//non_productive: non_productive useless_token
+//                       { /* Another non productive action. */ }
+//              ;
+%%
+]])
+
+AT_BISON_CHECK([[reduced.y]])
+
+# Comparing the parsers.
+cp reduced.c expout
+AT_CHECK([sed 's/not-reduced/reduced/g' not-reduced.c], 0, [expout])
+
+AT_CLEANUP
+
+
+
+## ------------------- ##
+## Underivable Rules.  ##
+## ------------------- ##
+
+AT_SETUP([Underivable Rules])
+
+AT_KEYWORDS([report])
+
+AT_DATA([[input.y]],
+[[%verbose
+%output "input.c"
+%token useful
+%%
+exp: useful | underivable;
+underivable: indirection;
+indirection: underivable;
+]])
+
+AT_BISON_CHECK([[input.y]], 0, [],
+[[input.y: warning: 2 nonterminals useless in grammar [-Wother]
+input.y: warning: 3 rules useless in grammar [-Wother]
+input.y:5.15-25: warning: nonterminal useless in grammar: underivable [-Wother]
+input.y:6.14-24: warning: nonterminal useless in grammar: indirection [-Wother]
+input.y:5.15-25: warning: rule useless in grammar [-Wother]
+input.y:6.14-24: warning: rule useless in grammar [-Wother]
+input.y:7.14-24: warning: rule useless in grammar [-Wother]
+]])
+
+AT_CHECK([[sed -n '/^Grammar/q;/^$/!p' input.output]], 0,
+[[Nonterminals useless in grammar
+   underivable
+   indirection
+Rules useless in grammar
+    2 exp: underivable
+    3 underivable: indirection
+    4 indirection: underivable
+]])
+
+AT_CLEANUP
+
+
+
+## ---------------- ##
+## Empty Language.  ##
+## ---------------- ##
+
+AT_SETUP([Empty Language])
+
+AT_DATA([[input.y]],
+[[%output "input.c"
+%%
+exp: exp;
+]])
+
+AT_BISON_CHECK([[input.y]], 1, [],
+[[input.y: warning: 2 nonterminals useless in grammar [-Wother]
+input.y: warning: 2 rules useless in grammar [-Wother]
+input.y:3.1-3: fatal error: start symbol exp does not derive any sentence
+]])
+
+AT_CLEANUP
+
+
+
+## ----------------- ##
+## %define lr.type.  ##
+## ----------------- ##
+
+# AT_TEST_LR_TYPE(DESCRIPTION,
+#                 DECLS, GRAMMAR, INPUT,
+#                 BISON-STDERR, TABLES,
+#                 [OTHER-CHECKS],
+#                 [PARSER-EXIT-VALUE],
+#                 [PARSER-STDOUT], [PARSER-STDERR])
+# -------------------------------------------------
+m4_define([AT_TEST_LR_TYPE],
+[
+AT_TEST_TABLES_AND_PARSE([[no %define lr.type: ]$1],
+                         [[LALR]], [[]],
+                         [$2], m4_shiftn(2, $@))
+AT_TEST_TABLES_AND_PARSE([[%define lr.type lalr: ]$1],
+                         [[LALR]], [[]],
+                         [[%define lr.type lalr
+]$2],
+                         m4_shiftn(2, $@))
+AT_TEST_TABLES_AND_PARSE([[%define lr.type ielr: ]$1],
+                         [[IELR]], [[]],
+                         [[%define lr.type ielr
+]$2],
+                         m4_shiftn(2, $@))
+AT_TEST_TABLES_AND_PARSE([[%define lr.type canonical-lr: ]$1],
+                         [[canonical LR]], [[]],
+                         [[%define lr.type canonical-lr
+]$2],
+                         m4_shiftn(2, $@))
+])
+
+AT_TEST_LR_TYPE([[Single State Split]],
+[[%left 'a'
+// Conflict resolution renders state 12 unreachable for canonical LR(1).  We
+// keep it so that the paser table diff is easier to code.
+%define lr.keep-unreachable-state]],
+[[
+S: 'a' A 'a' /* rule 1 */
+ | 'b' A 'b' /* rule 2 */
+ | 'c' c     /* rule 3 */
+ ;
+
+/* A conflict should appear after the first 'a' in rules 4 and 5 but only after
+   having shifted the first 'a' in rule 1.  However, when LALR(1) merging is
+   chosen, the state containing that conflict is reused after having seen the
+   first 'b' in rule 2 and then the first 'a' in rules 4 and 5.  In both cases,
+   because of the merged state, if the next token is an 'a', the %left forces a
+   reduction action with rule 5.  In the latter case, only a shift is actually
+   grammatically correct.  Thus, the parser would report a syntax error for the
+   grammatically correct sentence "baab" because it would encounter a syntax
+   error after that incorrect reduction.
+
+   Despite not being LALR(1), Menhir version 20070322 suffers from this problem
+   as well.  It uses David Pager's weak compatibility test for merging states.
+   Bison and Menhir accept non-LR(1) grammars with conflict resolution.  Pager
+   designed his algorithm only for LR(1) grammars.  */
+A: 'a' 'a' /* rule 4 */
+ | 'a'     /* rule 5 */
+ ;
+
+/* Rule 3, rule 6, and rule 7 ensure that Bison does not report rule 4 as
+   useless after conflict resolution.  This proves that, even though LALR(1)
+   generates incorrect parser tables sometimes, Bison will not necessarily
+   produce any warning to help the user realize it.  */
+c: 'a' 'b' /* rule 6 */
+ | A       /* rule 7 */
+ ;
+]],
+
+dnl INPUT
+[['b', 'a', 'a', 'b']],
+
+dnl BISON-STDERR
+[],
+
+dnl TABLES
+[[State 0
+
+    0 $accept: . S $end
+    1 S: . 'a' A 'a'
+    2  | . 'b' A 'b'
+    3  | . 'c' c
+
+    'a'  shift, and go to state 1
+    'b'  shift, and go to state 2
+    'c'  shift, and go to state 3
+
+    S  go to state 4
+
+
+State 1
+
+    1 S: 'a' . A 'a'
+    4 A: . 'a' 'a'
+    5  | . 'a'
+
+    'a'  shift, and go to state 5
+
+    A  go to state 6
+
+
+State 2
+
+    2 S: 'b' . A 'b'
+    4 A: . 'a' 'a'
+    5  | . 'a'
+
+    'a'  shift, and go to state ]AT_COND_CASE([[LALR]], [[5]], [[16]])[
+
+    A  go to state 7
+
+
+State 3
+
+    3 S: 'c' . c
+    4 A: . 'a' 'a'
+    5  | . 'a'
+    6 c: . 'a' 'b'
+    7  | . A
+
+    'a'  shift, and go to state 8
+
+    A  go to state 9
+    c  go to state 10
+
+
+State 4
+
+    0 $accept: S . $end
+
+    $end  shift, and go to state 11
+
+
+State 5
+
+    4 A: 'a' . 'a'
+    5  | 'a' .  ]AT_COND_CASE([[LALR]], [[['a', 'b']]], [[['a']]])[
+
+    ]AT_COND_CASE([[canonical LR]], [['a']],
+                  [[$default]])[  reduce using rule 5 (A)
+
+    Conflict between rule 5 and token 'a' resolved as reduce (%left 'a').
+
+
+State 6
+
+    1 S: 'a' A . 'a'
+
+    'a'  shift, and go to state 13
+
+
+State 7
+
+    2 S: 'b' A . 'b'
+
+    'b'  shift, and go to state 14
+
+
+State 8
+
+    4 A: 'a' . 'a'
+    5  | 'a' .  [$end]
+    6 c: 'a' . 'b'
+
+    'a'  shift, and go to state ]AT_COND_CASE([[canonical LR]], [[17]],
+                                              [[12]])[
+    'b'  shift, and go to state 15
+
+    ]AT_COND_CASE([[canonical LR]], [[$end]],
+                  [[$default]])[  reduce using rule 5 (A)
+
+
+State 9
+
+    7 c: A .]AT_COND_CASE([[canonical LR]], [[  [$end]]])[
+
+    ]AT_COND_CASE([[canonical LR]], [[$end]],
+                  [[$default]])[  reduce using rule 7 (c)
+
+
+State 10
+
+    3 S: 'c' c .]AT_COND_CASE([[canonical LR]], [[  [$end]]])[
+
+    ]AT_COND_CASE([[canonical LR]], [[$end]],
+                  [[$default]])[  reduce using rule 3 (S)
+
+
+State 11
+
+    0 $accept: S $end .
+
+    $default  accept
+
+
+State 12
+
+    4 A: 'a' 'a' .]AT_COND_CASE([[canonical LR]], [[  ['a']]])[
+
+    ]AT_COND_CASE([[canonical LR]], [['a']],
+                  [[$default]])[  reduce using rule 4 (A)
+
+
+State 13
+
+    1 S: 'a' A 'a' .]AT_COND_CASE([[canonical LR]], [[  [$end]]])[
+
+    ]AT_COND_CASE([[canonical LR]], [[$end]],
+                  [[$default]])[  reduce using rule 1 (S)
+
+
+State 14
+
+    2 S: 'b' A 'b' .]AT_COND_CASE([[canonical LR]], [[  [$end]]])[
+
+    ]AT_COND_CASE([[canonical LR]], [[$end]],
+                  [[$default]])[  reduce using rule 2 (S)
+
+
+State 15
+
+    6 c: 'a' 'b' .]AT_COND_CASE([[canonical LR]], [[  [$end]]])[
+
+    ]AT_COND_CASE([[canonical LR]], [[$end]],
+                  [[$default]])[  reduce using rule 6 (c)]AT_COND_CASE([[LALR]],
+                                                                       [[]], [[
+
+
+State 16
+
+    4 A: 'a' . 'a'
+    5  | 'a' .  ['b']
+
+    'a'  shift, and go to state ]AT_COND_CASE([[canonical LR]], [[18]],
+                                              [[12]])[
+
+    ]AT_COND_CASE([[canonical LR]], [['b']],
+                  [[$default]])[  reduce using rule 5 (A)]AT_COND_CASE([[canonical LR]], [[
+
+
+State 17
+
+    4 A: 'a' 'a' .  [$end]
+
+    $end  reduce using rule 4 (A)
+
+
+State 18
+
+    4 A: 'a' 'a' .  ['b']
+
+    'b'  reduce using rule 4 (A)]])])[
+]],
+
+dnl OTHER-CHECKS
+[],
+
+dnl PARSER-EXIT-VALUE, PARSER-STDOUT, PARSER-STDERR
+[AT_COND_CASE([[LALR]], [[1]], [[0]])],
+[],
+[AT_COND_CASE([[LALR]],
+[[syntax error
+]])])
+
+AT_TEST_LR_TYPE([[Lane Split]],
+[[%left 'a'
+// Conflict resolution renders state 16 unreachable for canonical LR(1).  We
+// keep it so that the paser table diff is easier to code.
+%define lr.keep-unreachable-state]],
+[[
+/* Similar to the last test case set but two states must be split.  */
+S: 'a' A 'a' /* rule 1 */
+ | 'b' A 'b' /* rule 2 */
+ | 'c' c     /* rule 3 */
+ ;
+
+A: 'a' 'a' 'a' /* rule 4 */
+ | 'a' 'a'     /* rule 5 */
+ ;
+
+c: 'a' 'a' 'b' /* rule 6 */
+ | A           /* rule 7 */
+ ;
+]],
+
+dnl INPUT
+[['b', 'a', 'a', 'a', 'b']],
+
+dnl BISON-STDERR
+[],
+
+dnl TABLES
+[[State 0
+
+    0 $accept: . S $end
+    1 S: . 'a' A 'a'
+    2  | . 'b' A 'b'
+    3  | . 'c' c
+
+    'a'  shift, and go to state 1
+    'b'  shift, and go to state 2
+    'c'  shift, and go to state 3
+
+    S  go to state 4
+
+
+State 1
+
+    1 S: 'a' . A 'a'
+    4 A: . 'a' 'a' 'a'
+    5  | . 'a' 'a'
+
+    'a'  shift, and go to state 5
+
+    A  go to state 6
+
+
+State 2
+
+    2 S: 'b' . A 'b'
+    4 A: . 'a' 'a' 'a'
+    5  | . 'a' 'a'
+
+    'a'  shift, and go to state ]AT_COND_CASE([[LALR]], [[5]], [[18]])[
+
+    A  go to state 7
+
+
+State 3
+
+    3 S: 'c' . c
+    4 A: . 'a' 'a' 'a'
+    5  | . 'a' 'a'
+    6 c: . 'a' 'a' 'b'
+    7  | . A
+
+    'a'  shift, and go to state 8
+
+    A  go to state 9
+    c  go to state 10
+
+
+State 4
+
+    0 $accept: S . $end
+
+    $end  shift, and go to state 11
+
+
+State 5
+
+    4 A: 'a' . 'a' 'a'
+    5  | 'a' . 'a'
+
+    'a'  shift, and go to state 12
+
+
+State 6
+
+    1 S: 'a' A . 'a'
+
+    'a'  shift, and go to state 13
+
+
+State 7
+
+    2 S: 'b' A . 'b'
+
+    'b'  shift, and go to state 14
+
+
+State 8
+
+    4 A: 'a' . 'a' 'a'
+    5  | 'a' . 'a'
+    6 c: 'a' . 'a' 'b'
+
+    'a'  shift, and go to state 15
+
+
+State 9
+
+    7 c: A .]AT_COND_CASE([[canonical LR]], [[  [$end]]])[
+
+    ]AT_COND_CASE([[canonical LR]], [[$end]],
+                  [[$default]])[  reduce using rule 7 (c)
+
+
+State 10
+
+    3 S: 'c' c .]AT_COND_CASE([[canonical LR]], [[  [$end]]])[
+
+    ]AT_COND_CASE([[canonical LR]], [[$end]],
+                  [[$default]])[  reduce using rule 3 (S)
+
+
+State 11
+
+    0 $accept: S $end .
+
+    $default  accept
+
+
+State 12
+
+    4 A: 'a' 'a' . 'a'
+    5  | 'a' 'a' .  ]AT_COND_CASE([[LALR]], [[['a', 'b']]], [[['a']]])[
+
+    ]AT_COND_CASE([[canonical LR]], [['a']],
+                  [[$default]])[  reduce using rule 5 (A)
+
+    Conflict between rule 5 and token 'a' resolved as reduce (%left 'a').
+
+
+State 13
+
+    1 S: 'a' A 'a' .]AT_COND_CASE([[canonical LR]], [[  [$end]]])[
+
+    ]AT_COND_CASE([[canonical LR]], [[$end]],
+                  [[$default]])[  reduce using rule 1 (S)
+
+
+State 14
+
+    2 S: 'b' A 'b' .]AT_COND_CASE([[canonical LR]], [[  [$end]]])[
+
+    ]AT_COND_CASE([[canonical LR]], [[$end]],
+                  [[$default]])[  reduce using rule 2 (S)
+
+
+State 15
+
+    4 A: 'a' 'a' . 'a'
+    5  | 'a' 'a' .  [$end]
+    6 c: 'a' 'a' . 'b'
+
+    'a'  shift, and go to state ]AT_COND_CASE([[canonical LR]], [[19]],
+                                              [[16]])[
+    'b'  shift, and go to state 17
+
+    ]AT_COND_CASE([[canonical LR]], [[$end]],
+                  [[$default]])[  reduce using rule 5 (A)
+
+
+State 16
+
+    4 A: 'a' 'a' 'a' .]AT_COND_CASE([[canonical LR]], [[  ['a']]])[
+
+    ]AT_COND_CASE([[canonical LR]], [['a']],
+                  [[$default]])[  reduce using rule 4 (A)
+
+
+State 17
+
+    6 c: 'a' 'a' 'b' .]AT_COND_CASE([[canonical LR]], [[  [$end]]])[
+
+    ]AT_COND_CASE([[canonical LR]], [[$end]],
+                  [[$default]])[  reduce using rule 6 (c)]AT_COND_CASE([[LALR]],
+                                                                       [[]], [[
+
+
+State 18
+
+    4 A: 'a' . 'a' 'a'
+    5  | 'a' . 'a'
+
+    'a'  shift, and go to state ]AT_COND_CASE([[canonical LR]], [[20]],
+                                              [[19]])[
+
+
+State 19]AT_COND_CASE([[canonical LR]], [[
+
+    4 A: 'a' 'a' 'a' .]AT_COND_CASE([[canonical LR]], [[  [$end]]])[
+
+    ]AT_COND_CASE([[canonical LR]], [[$end]],
+                  [[$default]])[  reduce using rule 4 (A)
+
+
+State 20]])[
+
+    4 A: 'a' 'a' . 'a'
+    5  | 'a' 'a' .  ['b']
+
+    'a'  shift, and go to state ]AT_COND_CASE([[canonical LR]], [[21]],
+                                              [[16]])[
+
+    ]AT_COND_CASE([[canonical LR]], [['b']],
+                  [[$default]])[  reduce using rule 5 (A)]AT_COND_CASE([[canonical LR]], [[
+
+
+State 21
+
+    4 A: 'a' 'a' 'a' .]AT_COND_CASE([[canonical LR]], [[  ['b']]])[
+
+    ]AT_COND_CASE([[canonical LR]], [['b']],
+                  [[$default]])[  reduce using rule 4 (A)]])])[
+]],
+
+dnl OTHER-CHECKS
+[],
+
+dnl PARSER-EXIT-VALUE, PARSER-STDOUT, PARSER-STDERR
+[AT_COND_CASE([[LALR]], [[1]], [[0]])],
+[],
+[AT_COND_CASE([[LALR]],
+[[syntax error
+]])])
+
+AT_TEST_LR_TYPE([[Complex Lane Split]],
+[[%left 'a'
+// Conflict resolution renders state 16 unreachable for canonical LR(1).  We
+// keep it so that the paser table diff is easier to code.
+%define lr.keep-unreachable-state]],
+[[
+/* Similar to the last test case set but forseeing the S/R conflict from the
+   first state that must be split is becoming difficult.  Imagine if B were
+   even more complex.  Imagine if A had other RHS's ending in other
+   nonterminals.  */
+S: 'a' A 'a'
+ | 'b' A 'b'
+ | 'c' c
+ ;
+A: 'a' 'a' B
+ ;
+B: 'a'
+ | %empty %prec 'a'
+ ;
+c: 'a' 'a' 'b'
+ | A
+ ;
+]],
+
+dnl INPUT
+[['b', 'a', 'a', 'a', 'b']],
+
+dnl BISON-STDERR
+[],
+
+dnl TABLES
+[[State 0
+
+    0 $accept: . S $end
+    1 S: . 'a' A 'a'
+    2  | . 'b' A 'b'
+    3  | . 'c' c
+
+    'a'  shift, and go to state 1
+    'b'  shift, and go to state 2
+    'c'  shift, and go to state 3
+
+    S  go to state 4
+
+
+State 1
+
+    1 S: 'a' . A 'a'
+    4 A: . 'a' 'a' B
+
+    'a'  shift, and go to state 5
+
+    A  go to state 6
+
+
+State 2
+
+    2 S: 'b' . A 'b'
+    4 A: . 'a' 'a' B
+
+    'a'  shift, and go to state ]AT_COND_CASE([[LALR]], [[5]], [[19]])[
+
+    A  go to state 7
+
+
+State 3
+
+    3 S: 'c' . c
+    4 A: . 'a' 'a' B
+    7 c: . 'a' 'a' 'b'
+    8  | . A
+
+    'a'  shift, and go to state 8
+
+    A  go to state 9
+    c  go to state 10
+
+
+State 4
+
+    0 $accept: S . $end
+
+    $end  shift, and go to state 11
+
+
+State 5
+
+    4 A: 'a' . 'a' B
+
+    'a'  shift, and go to state 12
+
+
+State 6
+
+    1 S: 'a' A . 'a'
+
+    'a'  shift, and go to state 13
+
+
+State 7
+
+    2 S: 'b' A . 'b'
+
+    'b'  shift, and go to state 14
+
+
+State 8
+
+    4 A: 'a' . 'a' B
+    7 c: 'a' . 'a' 'b'
+
+    'a'  shift, and go to state 15
+
+
+State 9
+
+    8 c: A .]AT_COND_CASE([[canonical LR]], [[  [$end]]])[
+
+    ]AT_COND_CASE([[canonical LR]], [[$end]],
+                  [[$default]])[  reduce using rule 8 (c)
+
+
+State 10
+
+    3 S: 'c' c .]AT_COND_CASE([[canonical LR]], [[  [$end]]])[
+
+    ]AT_COND_CASE([[canonical LR]], [[$end]],
+                  [[$default]])[  reduce using rule 3 (S)
+
+
+State 11
+
+    0 $accept: S $end .
+
+    $default  accept
+
+
+State 12
+
+    4 A: 'a' 'a' . B
+    5 B: . 'a'
+    6  | . %empty  ]AT_COND_CASE([[LALR]], [[['a', 'b']]], [[['a']]])[
+
+    ]AT_COND_CASE([[canonical LR]], [['a']],
+                  [[$default]])[  reduce using rule 6 (B)
+
+    B  go to state 17
+
+    Conflict between rule 6 and token 'a' resolved as reduce (%left 'a').
+
+
+State 13
+
+    1 S: 'a' A 'a' .]AT_COND_CASE([[canonical LR]], [[  [$end]]])[
+
+    ]AT_COND_CASE([[canonical LR]], [[$end]],
+                  [[$default]])[  reduce using rule 1 (S)
+
+
+State 14
+
+    2 S: 'b' A 'b' .]AT_COND_CASE([[canonical LR]], [[  [$end]]])[
+
+    ]AT_COND_CASE([[canonical LR]], [[$end]],
+                  [[$default]])[  reduce using rule 2 (S)
+
+
+State 15
+
+    4 A: 'a' 'a' . B
+    5 B: . 'a'
+    6  | . %empty  [$end]
+    7 c: 'a' 'a' . 'b'
+
+    'a'  shift, and go to state ]AT_COND_CASE([[canonical LR]], [[20]],
+                                              [[16]])[
+    'b'  shift, and go to state 18
+
+    ]AT_COND_CASE([[canonical LR]], [[$end]],
+                  [[$default]])[  reduce using rule 6 (B)
+
+    B  go to state ]AT_COND_CASE([[canonical LR]], [[21]], [[17]])[
+
+
+State 16
+
+    5 B: 'a' .]AT_COND_CASE([[canonical LR]], [[  ['a']]])[
+
+    ]AT_COND_CASE([[canonical LR]], [['a']],
+                  [[$default]])[  reduce using rule 5 (B)
+
+
+State 17
+
+    4 A: 'a' 'a' B .]AT_COND_CASE([[canonical LR]], [[  ['a']]])[
+
+    ]AT_COND_CASE([[canonical LR]], [['a']],
+                  [[$default]])[  reduce using rule 4 (A)
+
+
+State 18
+
+    7 c: 'a' 'a' 'b' .]AT_COND_CASE([[canonical LR]], [[  [$end]]])[
+
+    ]AT_COND_CASE([[canonical LR]], [[$end]],
+                  [[$default]])[  reduce using rule 7 (c)]AT_COND_CASE([[LALR]], [], [[
+
+
+State 19
+
+    4 A: 'a' . 'a' B
+
+    'a'  shift, and go to state ]AT_COND_CASE([[canonical LR]], [[22]],
+                                              [[20]])[
+
+
+State 20]AT_COND_CASE([[canonical LR]], [[
+
+    5 B: 'a' .  [$end]
+
+    $end  reduce using rule 5 (B)
+
+
+State 21
+
+    4 A: 'a' 'a' B .  [$end]
+
+    $end  reduce using rule 4 (A)
+
+
+State 22]])[
+
+    4 A: 'a' 'a' . B
+    5 B: . 'a'
+    6  | . %empty  ['b']
+
+    'a'  shift, and go to state ]AT_COND_CASE([[canonical LR]], [[23]],
+                                              [[16]])[
+
+    ]AT_COND_CASE([[canonical LR]], [['b']],
+                  [[$default]])[  reduce using rule 6 (B)
+
+    B  go to state ]AT_COND_CASE([[canonical LR]], [[24
+
+
+State 23
+
+    5 B: 'a' .  ['b']
+
+    'b'  reduce using rule 5 (B)
+
+
+State 24
+
+    4 A: 'a' 'a' B .  ['b']
+
+    'b'  reduce using rule 4 (A)]], [[17]])])[
+]],
+
+dnl OTHER-CHECKS
+[],
+
+dnl PARSER-EXIT-VALUE, PARSER-STDOUT, PARSER-STDERR
+[AT_COND_CASE([[LALR]], [[1]], [[0]])],
+[],
+[AT_COND_CASE([[LALR]],
+[[syntax error
+]])])
+
+AT_TEST_LR_TYPE([[Split During Added Lookahead Propagation]],
+[[%define lr.keep-unreachable-state]],
+[[
+/* The partial state chart diagram below is for LALR(1).  State 0 is the start
+   state.  States are iterated for successor construction in numerical order.
+   Transitions are downwards.
+
+   State 13 has a R/R conflict that cannot be predicted by Bison's LR(1)
+   algorithm using annotations alone.  That is, when state 11's successor on
+   'd' is merged with state 5 (which is originally just state 1's successor on
+   'd'), state 5's successor on 'e' must then be changed because the resulting
+   lookaheads that propagate to it now make it incompatible with state 8's
+   successor on 'e'.  In other words, state 13 must be split to avoid the
+   conflict.
+
+          0
+        / | \
+     a / c|  \ b
+      1   3   2
+      |   |   |
+     d|   |c  | d
+      |  11   |
+      |   |   |
+       \ /d   |
+        5     8
+         \    |
+        e \  / e
+           13
+           R/R
+
+   This grammar is designed carefully to make sure that, despite Bison's LR(1)
+   algorithm's bread-first iteration of transitions to reconstruct states,
+   state 11's successors are constructed after state 5's and state 8's.
+   Otherwise (for example, if you remove the first 'c' in each of rules 6 and
+   7), state 5's successor on 'e' would never be merged with state 8's, so the
+   split of the resulting state 13 would never need to be performed.  */
+S: 'a' A 'f'
+ | 'a' B
+ | 'b' A 'f'
+ | 'b' B 'g'
+ | 'b' 'd'
+ | 'c' 'c' A 'g'
+ | 'c' 'c' B
+ ;
+A: 'd' 'e' ;
+B: 'd' 'e' ;
+]],
+
+dnl INPUT
+[['b', 'd', 'e', 'g']],
+
+dnl BISON-STDERR
+[AT_COND_CASE([[LALR]],
+[[input.y: warning: 1 reduce/reduce conflict [-Wconflicts-rr]
+]], [])],
+
+dnl TABLES
+[[State 0
+
+    0 $accept: . S $end
+    1 S: . 'a' A 'f'
+    2  | . 'a' B
+    3  | . 'b' A 'f'
+    4  | . 'b' B 'g'
+    5  | . 'b' 'd'
+    6  | . 'c' 'c' A 'g'
+    7  | . 'c' 'c' B
+
+    'a'  shift, and go to state 1
+    'b'  shift, and go to state 2
+    'c'  shift, and go to state 3
+
+    S  go to state 4
+
+
+State 1
+
+    1 S: 'a' . A 'f'
+    2  | 'a' . B
+    8 A: . 'd' 'e'
+    9 B: . 'd' 'e'
+
+    'd'  shift, and go to state 5
+
+    A  go to state 6
+    B  go to state 7
+
+
+State 2
+
+    3 S: 'b' . A 'f'
+    4  | 'b' . B 'g'
+    5  | 'b' . 'd'
+    8 A: . 'd' 'e'
+    9 B: . 'd' 'e'
+
+    'd'  shift, and go to state 8
+
+    A  go to state 9
+    B  go to state 10
+
+
+State 3
+
+    6 S: 'c' . 'c' A 'g'
+    7  | 'c' . 'c' B
+
+    'c'  shift, and go to state 11
+
+
+State 4
+
+    0 $accept: S . $end
+
+    $end  shift, and go to state 12
+
+
+State 5
+
+    8 A: 'd' . 'e'
+    9 B: 'd' . 'e'
+
+    'e'  shift, and go to state ]AT_COND_CASE([[LALR]], [[13]],
+                                               [[canonical LR]], [[13]],
+                                               [[20]])[
+
+
+State 6
+
+    1 S: 'a' A . 'f'
+
+    'f'  shift, and go to state 14
+
+
+State 7
+
+    2 S: 'a' B .]AT_COND_CASE([[canonical LR]], [[  [$end]]])[
+
+    ]AT_COND_CASE([[canonical LR]], [[$end]],
+                  [[$default]])[  reduce using rule 2 (S)
+
+
+State 8
+
+    5 S: 'b' 'd' .  [$end]
+    8 A: 'd' . 'e'
+    9 B: 'd' . 'e'
+
+    'e'  shift, and go to state ]AT_COND_CASE([[canonical LR]], [[20]],
+                                              [[13]])[
+
+    ]AT_COND_CASE([[canonical LR]], [[$end]],
+                  [[$default]])[  reduce using rule 5 (S)
+
+
+State 9
+
+    3 S: 'b' A . 'f'
+
+    'f'  shift, and go to state 15
+
+
+State 10
+
+    4 S: 'b' B . 'g'
+
+    'g'  shift, and go to state 16
+
+
+State 11
+
+    6 S: 'c' 'c' . A 'g'
+    7  | 'c' 'c' . B
+    8 A: . 'd' 'e'
+    9 B: . 'd' 'e'
+
+    'd'  shift, and go to state ]AT_COND_CASE([[canonical LR]], [[21]],
+                                              [[5]])[
+
+    A  go to state 17
+    B  go to state 18
+
+
+State 12
+
+    0 $accept: S $end .
+
+    $default  accept]AT_COND_CASE([[LALR]], [[
+
+
+State 13
+
+    8 A: 'd' 'e' .  ['f', 'g']
+    9 B: 'd' 'e' .  [$end, 'g']
+
+    $end      reduce using rule 9 (B)
+    'g'       reduce using rule 8 (A)
+    'g'       [reduce using rule 9 (B)]
+    $default  reduce using rule 8 (A)]], [[
+
+
+State 13
+
+    8 A: 'd' 'e' .  ['f']
+    9 B: 'd' 'e' .  ]AT_COND_CASE([[canonical LR]], [[[$end]]], [[['g']]])[
+
+    ]AT_COND_CASE([[canonical LR]], [[$end]],
+                  [['g'     ]])[  reduce using rule 9 (B)
+    ]AT_COND_CASE([[canonical LR]], [['f' ]],
+                  [[$default]])[  reduce using rule 8 (A)]])[
+
+
+State 14
+
+    1 S: 'a' A 'f' .]AT_COND_CASE([[canonical LR]], [[  [$end]]])[
+
+    ]AT_COND_CASE([[canonical LR]], [[$end]],
+                  [[$default]])[  reduce using rule 1 (S)
+
+
+State 15
+
+    3 S: 'b' A 'f' .]AT_COND_CASE([[canonical LR]], [[  [$end]]])[
+
+    ]AT_COND_CASE([[canonical LR]], [[$end]],
+                  [[$default]])[  reduce using rule 3 (S)
+
+
+State 16
+
+    4 S: 'b' B 'g' .]AT_COND_CASE([[canonical LR]], [[  [$end]]])[
+
+    ]AT_COND_CASE([[canonical LR]], [[$end]],
+                  [[$default]])[  reduce using rule 4 (S)
+
+
+State 17
+
+    6 S: 'c' 'c' A . 'g'
+
+    'g'  shift, and go to state 19
+
+
+State 18
+
+    7 S: 'c' 'c' B .]AT_COND_CASE([[canonical LR]], [[  [$end]]])[
+
+    ]AT_COND_CASE([[canonical LR]], [[$end]],
+                  [[$default]])[  reduce using rule 7 (S)
+
+
+State 19
+
+    6 S: 'c' 'c' A 'g' .]AT_COND_CASE([[canonical LR]], [[  [$end]]])[
+
+    ]AT_COND_CASE([[canonical LR]], [[$end]],
+                  [[$default]])[  reduce using rule 6 (S)]AT_COND_CASE([[LALR]],
+                                                                       [[]], [[
+
+
+State 20]AT_COND_CASE([[canonical LR]], [[
+
+    8 A: 'd' 'e' .  ['f']
+    9 B: 'd' 'e' .  ['g']
+
+    'f'  reduce using rule 8 (A)
+    'g'  reduce using rule 9 (B)
+
+
+State 21
+
+    8 A: 'd' . 'e'
+    9 B: 'd' . 'e'
+
+    'e'  shift, and go to state 22
+
+
+State 22
+
+    8 A: 'd' 'e' .  ['g']
+    9 B: 'd' 'e' .  [$end]
+
+    $end  reduce using rule 9 (B)
+    'g'   reduce using rule 8 (A)]], [[
+
+    8 A: 'd' 'e' .  ['f', 'g']
+    9 B: 'd' 'e' .  [$end]
+
+    $end      reduce using rule 9 (B)
+    $default  reduce using rule 8 (A)]])])[
+]],
+
+dnl OTHER-CHECKS
+[],
+
+dnl PARSER-EXIT-VALUE, PARSER-STDOUT, PARSER-STDERR
+[AT_COND_CASE([[LALR]], [[1]], [[0]])],
+[],
+[AT_COND_CASE([[LALR]],
+[[syntax error
+]])])
+
+
+
+## ------------------------------- ##
+## %define lr.default-reduction.  ##
+## ------------------------------- ##
+
+# AT_TEST_LR_DEFAULT_REDUCTIONS(GRAMMAR, INPUT, TABLES)
+# -----------------------------------------------------
+m4_define([AT_TEST_LR_DEFAULT_REDUCTIONS],
+[
+AT_TEST_TABLES_AND_PARSE([[no %define lr.default-reduction]],
+                         [[most]], [[]],
+                         [[]],
+                         [$1], [$2], [[]], [$3])
+AT_TEST_TABLES_AND_PARSE([[%define lr.default-reduction most]],
+                         [[most]], [[]],
+                         [[%define lr.default-reduction most]],
+                         [$1], [$2], [[]], [$3])
+AT_TEST_TABLES_AND_PARSE([[%define lr.default-reduction consistent]],
+                         [[consistent]], [[]],
+                         [[%define lr.default-reduction consistent]],
+                         [$1], [$2], [[]], [$3])
+AT_TEST_TABLES_AND_PARSE([[%define lr.default-reduction accepting]],
+                         [[accepting]], [[]],
+                         [[%define lr.default-reduction accepting]],
+                         [$1], [$2], [[]], [$3])
+])
+
+AT_TEST_LR_DEFAULT_REDUCTIONS([[
+/* The start state is consistent and has a shift on 'a' and no reductions.
+   After pushing the b below, enter an inconsistent state that has a shift and
+   one reduction with one lookahead.  */
+start:
+    a b
+  | a b 'a'
+  | a c 'b'
+  ;
+
+/* After shifting this 'a', enter a consistent state that has no shift and 1
+   reduction with multiple lookaheads.  */
+a: 'a' ;
+
+/* After the previous reduction, enter an inconsistent state that has no shift
+   and multiple reductions.  The first reduction has more lookaheads than the
+   second, so the first should always be preferred as the default reduction if
+   enabled.  The second reduction has one lookahead.  */
+b: %empty;
+c: %empty;
+]],
+dnl Visit each state mentioned above.
+[['a', 'a']],
+[[State 0
+
+    0 $accept: . start $end
+    1 start: . a b
+    2      | . a b 'a'
+    3      | . a c 'b'
+    4 a: . 'a'
+
+    'a'  shift, and go to state 1
+
+    start  go to state 2
+    a      go to state 3
+
+
+State 1
+
+    4 a: 'a' .]AT_COND_CASE([[accepting]], [[  [$end, 'a', 'b']
+
+    $end  reduce using rule 4 (a)
+    'a'   reduce using rule 4 (a)
+    'b'   reduce using rule 4 (a)]], [[
+
+    $default  reduce using rule 4 (a)]])[
+
+
+State 2
+
+    0 $accept: start . $end
+
+    $end  shift, and go to state 4
+
+
+State 3
+
+    1 start: a . b
+    2      | a . b 'a'
+    3      | a . c 'b'
+    5 b: . %empty  [$end, 'a']
+    6 c: . %empty  ['b']]AT_COND_CASE([[most]], [[
+
+    'b'       reduce using rule 6 (c)
+    $default  reduce using rule 5 (b)]], [[
+
+    $end  reduce using rule 5 (b)
+    'a'   reduce using rule 5 (b)
+    'b'   reduce using rule 6 (c)]])[
+
+    b  go to state 5
+    c  go to state 6
+
+
+State 4
+
+    0 $accept: start $end .
+
+    $default  accept
+
+
+State 5
+
+    1 start: a b .  [$end]
+    2      | a b . 'a'
+
+    'a'  shift, and go to state 7
+
+    ]AT_COND_CASE([[most]], [[$default]],
+                  [[$end]])[  reduce using rule 1 (start)
+
+
+State 6
+
+    3 start: a c . 'b'
+
+    'b'  shift, and go to state 8
+
+
+State 7
+
+    2 start: a b 'a' .]AT_COND_CASE([[accepting]], [[  [$end]
+
+    $end  reduce using rule 2 (start)]], [[
+
+    $default  reduce using rule 2 (start)]])[
+
+
+State 8
+
+    3 start: a c 'b' .]AT_COND_CASE([[accepting]], [[  [$end]
+
+    $end  reduce using rule 3 (start)]], [[
+
+    $default  reduce using rule 3 (start)]])[
+]])

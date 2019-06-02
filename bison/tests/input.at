@@ -1,0 +1,2169 @@
+# Checking the Bison scanner.                    -*- Autotest -*-
+
+# Copyright (C) 2002-2015 Free Software Foundation, Inc.
+
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+AT_BANNER([[Input Processing.]])
+
+# Mostly test that we are robust to mistakes.
+
+
+## ----------------- ##
+## Invalid options.  ##
+## ----------------- ##
+
+AT_SETUP([Invalid options])
+
+AT_DATA([input.y],
+[[%%
+exp: '0'
+]])
+
+# We used to accept these, as -f, --report and others were sharing
+# their code with -W.
+AT_BISON_CHECK([-ferror=caret input.y], [1], [], [ignore])
+AT_BISON_CHECK([--report=error=itemsets input.y], [1], [], [ignore])
+
+# We used to accept any character after "-Werror", instead of ensuring
+# this is "=".
+AT_BISON_CHECK([-Werror?all input.y], [1], [], [ignore])
+
+AT_CLEANUP
+
+
+## ---------------- ##
+## Invalid inputs.  ##
+## ---------------- ##
+
+AT_SETUP([Invalid inputs])
+
+AT_DATA([input.y],
+[[\000\001\002\377?
+%%
+?
+default: 'a' }
+%&
+%a-does-not-exist
+%-
+%{
+]])
+AT_CHECK([[$PERL -pi -e 's/\\(\d{3})/chr(oct($1))/ge' input.y || exit 77]])
+
+AT_BISON_CHECK([input.y], [1], [],
+[[input.y:1.1-2: error: invalid characters: '\0\001\002\377?'
+input.y:3.1: error: invalid character: '?'
+input.y:4.14: error: invalid character: '}'
+input.y:5.1: error: invalid character: '%'
+input.y:5.2: error: invalid character: '&'
+input.y:6.1-17: error: invalid directive: '%a-does-not-exist'
+input.y:7.1: error: invalid character: '%'
+input.y:7.2: error: invalid character: '-'
+input.y:8.1-9.0: error: missing '%}' at end of file
+input.y:8.1-9.0: error: syntax error, unexpected %{...%}
+]])
+
+AT_CLEANUP
+
+
+AT_SETUP([Invalid inputs with {}])
+
+# We used to SEGV here.  See
+# http://lists.gnu.org/archive/html/bug-bison/2005-07/msg00053.html
+
+AT_DATA([input.y],
+[[
+%destructor
+%initial-action
+%lex-param
+%parse-param
+%printer
+%union
+]])
+
+AT_BISON_CHECK([input.y], [1], [],
+[[input.y:3.1-15: error: syntax error, unexpected %initial-action, expecting {...}
+]])
+
+AT_CLEANUP
+
+
+
+## ------------ ##
+## Invalid $n.  ##
+## ------------ ##
+
+AT_SETUP([Invalid $n and @n])
+
+AT_DATA([input.y],
+[[%%
+exp: %empty { $$ = $1 ; };
+exp: %empty { @$ = @1 ; };
+]])
+
+AT_BISON_CHECK([-fcaret input.y], [1], [],
+[[input.y:2.20-21: error: integer out of range: '$1'
+ exp: %empty { $$ = $1 ; };
+                    ^^
+input.y:3.20-21: error: integer out of range: '@1'
+ exp: %empty { @$ = @1 ; };
+                    ^^
+]])
+
+AT_CLEANUP
+
+
+## -------------- ##
+## Type Clashes.  ##
+## -------------- ##
+
+AT_SETUP([Type Clashes])
+
+AT_DATA([input.y],
+[[%union { int bar; }
+%token foo
+%type <bar> exp
+%%
+exp: foo { $$; } foo { $2; } foo
+   | foo
+   | %empty
+   ;
+]])
+
+AT_BISON_CHECK([-fcaret input.y], [1], [],
+[[input.y:5.12-13: error: $$ for the midrule at $2 of 'exp' has no declared type
+ exp: foo { $$; } foo { $2; } foo
+            ^^
+input.y:5.24-25: error: $2 of 'exp' has no declared type
+ exp: foo { $$; } foo { $2; } foo
+                        ^^
+input.y:5.6-32: warning: type clash on default action: <bar> != <> [-Wother]
+ exp: foo { $$; } foo { $2; } foo
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+input.y:6.6-8: warning: type clash on default action: <bar> != <> [-Wother]
+    | foo
+      ^^^
+input.y:7.6-11: warning: empty rule for typed nonterminal, and no action [-Wother]
+    | %empty
+      ^^^^^^
+]])
+
+AT_CLEANUP
+
+
+# _AT_UNUSED_VALUES_DECLARATIONS()
+# --------------------------------
+# Generate the token, type, and destructor
+# declarations for the unused values tests.
+m4_define([_AT_UNUSED_VALUES_DECLARATIONS],
+[[[%token <integer> INT;
+%type <integer> a b c d e f g h i j k l;
+%destructor { destroy ($$); } INT a b c d e f g h i j k l;]]])
+
+
+# AT_CHECK_UNUSED_VALUES(DECLARATIONS_AFTER, CHECK_MIDRULE_VALUES)
+# ----------------------------------------------------------------
+# Generate a grammar to test unused values, compile it, run it.  If
+# DECLARATIONS_AFTER is set, then the token, type, and destructor
+# declarations are generated after the rules rather than before.  If
+# CHECK_MIDRULE_VALUES is set, then --warnings=midrule-values is set.
+m4_define([AT_CHECK_UNUSED_VALUES],
+[AT_DATA([input.y],
+m4_ifval($1, [
+
+
+], [_AT_UNUSED_VALUES_DECLARATIONS
+])[[%%
+start:
+  'a' a { $]2[; } | 'b' b { $]2[; } | 'c' c { $]2[; } | 'd' d { $]2[; }
+| 'e' e { $]2[; } | 'f' f { $]2[; } | 'g' g { $]2[; } | 'h' h { $]2[; }
+| 'i' i { $]2[; } | 'j' j { $]2[; } | 'k' k { $]2[; } | 'l' l { $]2[; }
+;
+
+a: INT | INT { } INT { } INT { };
+b: INT | %empty;
+c: INT | INT { $]1[; } INT { $<integer>2; } INT { $<integer>4; };
+d: INT | INT { } INT { $]1[; } INT { $<integer>2; };
+e: INT | INT { } INT {  } INT { $]1[; };
+f: INT | INT { } INT {  } INT { $]$[ = $]1[ + $]3[ + $]5[; };
+g: INT | INT { $<integer>$; } INT { $<integer>$; } INT { };
+h: INT | INT { $<integer>$; } INT { $<integer>$ = $<integer>2; } INT { };
+i: INT | INT INT { } { $]$[ = $]1[ + $]2[; };
+j: INT | INT INT { $<integer>$ = 1; } { $]$[ = $]1[ + $]2[; };
+k: INT | INT INT { $<integer>$; } { $<integer>$ = $<integer>3; } { };
+l: INT | INT { $<integer>$ = $<integer>1; } INT { $<integer>$ = $<integer>2 + $<integer>3; } INT { $<integer>$ = $<integer>4 + $<integer>5; };]]m4_ifval($1, [
+_AT_UNUSED_VALUES_DECLARATIONS])
+)
+
+AT_BISON_CHECK(m4_ifval($2, [--warnings=midrule-values ])[-fcaret input.y],
+               [0], [],
+[[input.y:11.10-32: warning: unset value: $][$ [-Wother]
+ a: INT | INT { } INT { } INT { };
+          ^^^^^^^^^^^^^^^^^^^^^^^
+input.y:11.10-12: warning: unused value: $][1 [-Wother]
+ a: INT | INT { } INT { } INT { };
+          ^^^
+input.y:11.18-20: warning: unused value: $][3 [-Wother]
+ a: INT | INT { } INT { } INT { };
+                  ^^^
+input.y:11.26-28: warning: unused value: $][5 [-Wother]
+ a: INT | INT { } INT { } INT { };
+                          ^^^
+input.y:12.10-15: warning: empty rule for typed nonterminal, and no action [-Wother]
+ b: INT | %empty;
+          ^^^^^^
+]]m4_ifval($2, [[[input.y:13.14-20: warning: unset value: $][$ [-Wmidrule-values]
+ c: INT | INT { $][1; } INT { $<integer>2; } INT { $<integer>4; };
+              ^^^^^^^
+input.y:13.26-41: warning: unset value: $][$ [-Wmidrule-values]
+ c: INT | INT { $][1; } INT { $<integer>2; } INT { $<integer>4; };
+                          ^^^^^^^^^^^^^^^^
+]]])[[input.y:13.10-62: warning: unset value: $][$ [-Wother]
+ c: INT | INT { $][1; } INT { $<integer>2; } INT { $<integer>4; };
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+input.y:13.22-24: warning: unused value: $][3 [-Wother]
+ c: INT | INT { $][1; } INT { $<integer>2; } INT { $<integer>4; };
+                      ^^^
+input.y:13.43-45: warning: unused value: $][5 [-Wother]
+ c: INT | INT { $][1; } INT { $<integer>2; } INT { $<integer>4; };
+                                           ^^^
+]]m4_ifval($2, [[[input.y:14.14-16: warning: unset value: $][$ [-Wmidrule-values]
+ d: INT | INT { } INT { $][1; } INT { $<integer>2; };
+              ^^^
+]]])[[input.y:14.10-49: warning: unset value: $][$ [-Wother]
+ d: INT | INT { } INT { $][1; } INT { $<integer>2; };
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+input.y:14.18-20: warning: unused value: $][3 [-Wother]
+ d: INT | INT { } INT { $][1; } INT { $<integer>2; };
+                  ^^^
+input.y:14.30-32: warning: unused value: $][5 [-Wother]
+ d: INT | INT { } INT { $][1; } INT { $<integer>2; };
+                              ^^^
+input.y:15.10-37: warning: unset value: $][$ [-Wother]
+ e: INT | INT { } INT {  } INT { $][1; };
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+input.y:15.18-20: warning: unused value: $][3 [-Wother]
+ e: INT | INT { } INT {  } INT { $][1; };
+                  ^^^
+input.y:15.27-29: warning: unused value: $][5 [-Wother]
+ e: INT | INT { } INT {  } INT { $][1; };
+                           ^^^
+input.y:17.10-58: warning: unset value: $][$ [-Wother]
+ g: INT | INT { $<integer>$; } INT { $<integer>$; } INT { };
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+input.y:17.10-12: warning: unused value: $][1 [-Wother]
+ g: INT | INT { $<integer>$; } INT { $<integer>$; } INT { };
+          ^^^
+]]m4_ifval($2, [[[input.y:17.14-29: warning: unused value: $][2 [-Wmidrule-values]
+ g: INT | INT { $<integer>$; } INT { $<integer>$; } INT { };
+              ^^^^^^^^^^^^^^^^
+]]])[[input.y:17.31-33: warning: unused value: $][3 [-Wother]
+ g: INT | INT { $<integer>$; } INT { $<integer>$; } INT { };
+                               ^^^
+]]m4_ifval($2, [[[input.y:17.35-50: warning: unused value: $][4 [-Wmidrule-values]
+ g: INT | INT { $<integer>$; } INT { $<integer>$; } INT { };
+                                   ^^^^^^^^^^^^^^^^
+]]])[[input.y:17.52-54: warning: unused value: $][5 [-Wother]
+ g: INT | INT { $<integer>$; } INT { $<integer>$; } INT { };
+                                                    ^^^
+input.y:18.10-72: warning: unset value: $][$ [-Wother]
+ h: INT | INT { $<integer>$; } INT { $<integer>$ = $<integer>2; } INT { };
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+input.y:18.10-12: warning: unused value: $][1 [-Wother]
+ h: INT | INT { $<integer>$; } INT { $<integer>$ = $<integer>2; } INT { };
+          ^^^
+input.y:18.31-33: warning: unused value: $][3 [-Wother]
+ h: INT | INT { $<integer>$; } INT { $<integer>$ = $<integer>2; } INT { };
+                               ^^^
+]]m4_ifval($2, [[[input.y:18.35-64: warning: unused value: $][4 [-Wmidrule-values]
+ h: INT | INT { $<integer>$; } INT { $<integer>$ = $<integer>2; } INT { };
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+]]])[[input.y:18.66-68: warning: unused value: $][5 [-Wother]
+ h: INT | INT { $<integer>$; } INT { $<integer>$ = $<integer>2; } INT { };
+                                                                  ^^^
+]]m4_ifval($2, [[[input.y:20.18-37: warning: unused value: $][3 [-Wmidrule-values]
+ j: INT | INT INT { $<integer>$ = 1; } { $][$ = $][1 + $][2; };
+                  ^^^^^^^^^^^^^^^^^^^^
+]]])[[input.y:21.10-68: warning: unset value: $][$ [-Wother]
+ k: INT | INT INT { $<integer>$; } { $<integer>$ = $<integer>3; } { };
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+input.y:21.10-12: warning: unused value: $][1 [-Wother]
+ k: INT | INT INT { $<integer>$; } { $<integer>$ = $<integer>3; } { };
+          ^^^
+input.y:21.14-16: warning: unused value: $][2 [-Wother]
+ k: INT | INT INT { $<integer>$; } { $<integer>$ = $<integer>3; } { };
+              ^^^
+]]m4_ifval($2, [[[input.y:21.35-64: warning: unused value: $][4 [-Wmidrule-values]
+ k: INT | INT INT { $<integer>$; } { $<integer>$ = $<integer>3; } { };
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+]]]))
+])
+
+## --------------- ##
+## Unused values.  ##
+## --------------- ##
+
+AT_SETUP([Unused values])
+AT_CHECK_UNUSED_VALUES
+AT_CHECK_UNUSED_VALUES(, [1])
+AT_CLEANUP
+
+
+## ------------------------------------------ ##
+## Unused values before symbol declarations.  ##
+## ------------------------------------------ ##
+
+AT_SETUP([Unused values before symbol declarations])
+AT_CHECK_UNUSED_VALUES([1])
+AT_CHECK_UNUSED_VALUES([1], [1])
+AT_CLEANUP
+
+
+## --------------------------------------------- ##
+## Default %printer and %destructor redeclared.  ##
+## --------------------------------------------- ##
+
+AT_SETUP([Default %printer and %destructor redeclared])
+
+# AT_TEST([*])
+# ------------
+m4_pushdef([AT_TEST],
+[AT_DATA([[input.y]],
+[[%destructor { destroy ($$); } <$1> <$1>
+%printer { print ($$); } <$1> <$1>
+
+%destructor { destroy ($$); } <$1>
+%printer { print ($$); } <$1>
+
+%%
+
+start: %empty;
+
+%destructor { destroy ($$); } <$1>;
+%printer { print ($$); } <$1>;
+]])
+
+AT_BISON_CHECK([-fcaret input.y], [1], [],
+[[input.y:1.13-29: error: %destructor redeclaration for <>
+ %destructor { destroy ($$); } <> <>
+             ^^^^^^^^^^^^^^^^^
+input.y:1.13-29:     previous declaration
+ %destructor { destroy ($$); } <> <>
+             ^^^^^^^^^^^^^^^^^
+input.y:2.10-24: error: %printer redeclaration for <>
+ %printer { print ($$); } <> <>
+          ^^^^^^^^^^^^^^^
+input.y:2.10-24:     previous declaration
+ %printer { print ($$); } <> <>
+          ^^^^^^^^^^^^^^^
+input.y:4.13-29: error: %destructor redeclaration for <>
+ %destructor { destroy ($$); } <>
+             ^^^^^^^^^^^^^^^^^
+input.y:1.13-29:     previous declaration
+ %destructor { destroy ($$); } <> <>
+             ^^^^^^^^^^^^^^^^^
+input.y:5.10-24: error: %printer redeclaration for <>
+ %printer { print ($$); } <>
+          ^^^^^^^^^^^^^^^
+input.y:2.10-24:     previous declaration
+ %printer { print ($$); } <> <>
+          ^^^^^^^^^^^^^^^
+input.y:11.13-29: error: %destructor redeclaration for <>
+ %destructor { destroy ($$); } <>;
+             ^^^^^^^^^^^^^^^^^
+input.y:1.13-29:      previous declaration
+ %destructor { destroy ($$); } <> <>
+             ^^^^^^^^^^^^^^^^^
+input.y:12.10-24: error: %printer redeclaration for <>
+ %printer { print ($$); } <>;
+          ^^^^^^^^^^^^^^^
+input.y:2.10-24:      previous declaration
+ %printer { print ($$); } <> <>
+          ^^^^^^^^^^^^^^^
+]])
+])
+
+AT_TEST([], [], [])
+AT_TEST([], [*], [*])
+m4_popdef([AT_TEST])
+
+AT_CLEANUP
+
+
+## ---------------------------------------------- ##
+## Per-type %printer and %destructor redeclared.  ##
+## ---------------------------------------------- ##
+
+AT_SETUP([Per-type %printer and %destructor redeclared])
+
+AT_DATA([[input.y]],
+[[%destructor { destroy ($$); } <field1> <field2>
+%printer { print ($$); } <field1> <field2>
+
+%destructor { destroy ($$); } <field1> <field1>
+%printer { print ($$); } <field2> <field2>
+
+%%
+
+start: %empty;
+
+%destructor { destroy ($$); } <field2> <field1>;
+%printer { print ($$); } <field2> <field1>;
+]])
+
+AT_BISON_CHECK([input.y], [1], [],
+[[input.y:4.13-29: error: %destructor redeclaration for <field1>
+input.y:1.13-29:     previous declaration
+input.y:4.13-29: error: %destructor redeclaration for <field1>
+input.y:1.13-29:     previous declaration
+input.y:5.10-24: error: %printer redeclaration for <field2>
+input.y:2.10-24:     previous declaration
+input.y:5.10-24: error: %printer redeclaration for <field2>
+input.y:2.10-24:     previous declaration
+input.y:11.13-29: error: %destructor redeclaration for <field2>
+input.y:1.13-29:      previous declaration
+input.y:11.13-29: error: %destructor redeclaration for <field1>
+input.y:1.13-29:      previous declaration
+input.y:12.10-24: error: %printer redeclaration for <field2>
+input.y:2.10-24:      previous declaration
+input.y:12.10-24: error: %printer redeclaration for <field1>
+input.y:2.10-24:      previous declaration
+]])
+
+AT_CLEANUP
+
+## ------------------- ##
+## Undefined symbols.  ##
+## ------------------- ##
+
+AT_SETUP([Undefined symbols])
+
+AT_DATA([[input.y]],
+[[%printer {} foo baz
+%destructor {} bar
+%type <foo> qux
+%%
+exp: bar;
+]])
+
+AT_BISON_CHECK([-fcaret input.y], [1], [],
+[[input.y:2.16-18: error: symbol bar is used, but is not defined as a token and has no rules
+ %destructor {} bar
+                ^^^
+input.y:1.17-19: warning: symbol baz is used, but is not defined as a token and has no rules [-Wother]
+ %printer {} foo baz
+                 ^^^
+input.y:1.13-15: warning: symbol foo is used, but is not defined as a token and has no rules [-Wother]
+ %printer {} foo baz
+             ^^^
+input.y:3.13-15: warning: symbol qux is used, but is not defined as a token and has no rules [-Wother]
+ %type <foo> qux
+             ^^^
+]])
+
+AT_CLEANUP
+
+
+## ----------------------------------------------------- ##
+## Unassociated types used for a printer or destructor.  ##
+## ----------------------------------------------------- ##
+
+AT_SETUP([Unassociated types used for a printer or destructor])
+
+AT_DATA([[input.y]],
+[[%token <type1> tag1
+%type <type2> tag2
+
+%printer { } <type1> <type3>
+%destructor { } <type2> <type4>
+
+%%
+
+exp: tag1 { $1; }
+   | tag2 { $1; }
+
+tag2: "a" { $$; }
+]])
+
+AT_BISON_CHECK([input.y], [0], [],
+[[input.y:4.22-28: warning: type <type3> is used, but is not associated to any symbol [-Wother]
+input.y:5.25-31: warning: type <type4> is used, but is not associated to any symbol [-Wother]
+]])
+
+AT_CLEANUP
+
+
+## --------------------------------- ##
+## Useless printers or destructors.  ##
+## --------------------------------- ##
+
+AT_SETUP([Useless printers or destructors])
+
+# AT_TEST([INPUT], [STDERR])
+# --------------------------
+m4_pushdef([AT_TEST],
+[AT_DATA([[input.y]],
+[$1
+])
+AT_BISON_CHECK([input.y], [0], [], [$2
+])])
+
+AT_TEST([[%token <type1> token1
+%token <type2> token2
+%token <type3> token3
+%token <type4> token4
+%token <type5> token51 token52
+%token <type6> token61 token62
+%token <type7> token7
+
+%printer {} token1
+%destructor {} token2
+%printer {} token51
+%destructor {} token61
+
+%printer {} token7
+
+%printer {} <type1>
+%destructor {} <type2>
+%printer {} <type3>
+%destructor {} <type4>
+
+%printer {} <type5>
+%destructor {} <type6>
+
+%destructor {} <type7>
+
+%%
+exp: "a";]],
+[[input.y:16.13-19: warning: useless %printer for type <type1> [-Wother]
+input.y:17.16-22: warning: useless %destructor for type <type2> [-Wother]]])
+
+# If everybody is typed, <> is useless.
+AT_TEST([[%type <type> exp
+%token <type> a
+%printer {} <> <*>
+%%
+exp: a;]],
+[[input.y:3.13-14: warning: useless %printer for type <> [-Wother]]])
+
+# If nobody is typed, <*> is useless.
+AT_TEST([[%token a
+%printer {} <> <*>
+%%
+exp: a;]],
+[[input.y:2.16-18: warning: useless %printer for type <*> [-Wother]]])
+
+m4_popdef([AT_TEST])
+
+AT_CLEANUP
+
+
+## ---------------------------------------- ##
+## Unused values with default %destructor.  ##
+## ---------------------------------------- ##
+
+AT_SETUP([Unused values with default %destructor])
+
+AT_DATA([[input.y]],
+[[%destructor { destroy ($$); } <>
+%type <tag> tagged
+
+%%
+
+start: end end tagged tagged { $<tag>1; $3; } ;
+end: { } ;
+tagged: { } ;
+]])
+
+AT_BISON_CHECK([-fcaret input.y], [0], [],
+[[input.y:6.8-45: warning: unset value: $$ [-Wother]
+ start: end end tagged tagged { $<tag>1; $3; } ;
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+input.y:6.12-14: warning: unused value: $2 [-Wother]
+ start: end end tagged tagged { $<tag>1; $3; } ;
+            ^^^
+input.y:7.6-8: warning: unset value: $$ [-Wother]
+ end: { } ;
+      ^^^
+]])
+
+AT_DATA([[input.y]],
+[[%destructor { destroy ($$); } <*>
+%type <tag> tagged
+
+%%
+
+start: end end tagged tagged { $<tag>1; $3; } ;
+end: { } ;
+tagged: { } ;
+]])
+
+AT_BISON_CHECK([input.y], [0], [],
+[[input.y:6.23-28: warning: unused value: $4 [-Wother]
+input.y:8.9-11: warning: unset value: $$ [-Wother]
+]])
+
+AT_CLEANUP
+
+
+## ----------------------------------------- ##
+## Unused values with per-type %destructor.  ##
+## ----------------------------------------- ##
+
+AT_SETUP([Unused values with per-type %destructor])
+
+AT_DATA([[input.y]],
+[[%destructor { destroy ($$); } <field1>
+%type <field1> start end
+
+%%
+
+start: end end { $1; } ;
+end: { }  ;
+]])
+
+AT_BISON_CHECK([-fcaret input.y], [0], [],
+[[input.y:6.8-22: warning: unset value: $$ [-Wother]
+ start: end end { $1; } ;
+        ^^^^^^^^^^^^^^^
+input.y:6.12-14: warning: unused value: $2 [-Wother]
+ start: end end { $1; } ;
+            ^^^
+input.y:7.6-8: warning: unset value: $$ [-Wother]
+ end: { }  ;
+      ^^^
+]])
+
+AT_CLEANUP
+
+
+## ---------------------- ##
+## Incompatible Aliases.  ##
+## ---------------------- ##
+
+AT_SETUP([Incompatible Aliases])
+
+m4_pushdef([AT_TEST],
+[AT_DATA([input.y], [$1])
+AT_BISON_CHECK([-fcaret input.y], [1], [], [$2])
+])
+
+# Use the string-alias first to check the order between "first
+# declaration" and second.
+
+AT_TEST([[%token foo "foo"
+%type <bar> "foo"
+%type <baz> foo
+%%
+exp: foo;
+]],
+[[input.y:3.7-11: error: %type redeclaration for foo
+ %type <baz> foo
+       ^^^^^
+input.y:2.7-11:     previous declaration
+ %type <bar> "foo"
+       ^^^^^
+]])
+
+AT_TEST([[%token foo "foo"
+%printer {bar} "foo"
+%printer {baz} foo
+%%
+exp: foo;
+]],
+[[input.y:3.10-14: error: %printer redeclaration for foo
+ %printer {baz} foo
+          ^^^^^
+input.y:2.10-14:     previous declaration
+ %printer {bar} "foo"
+          ^^^^^
+]])
+
+AT_TEST([[%token foo "foo"
+%destructor {bar} "foo"
+%destructor {baz} foo
+%%
+exp: foo;
+]],
+[[input.y:3.13-17: error: %destructor redeclaration for foo
+ %destructor {baz} foo
+             ^^^^^
+input.y:2.13-17:     previous declaration
+ %destructor {bar} "foo"
+             ^^^^^
+]])
+
+AT_TEST([[%token foo "foo"
+%left "foo"
+%left foo
+%%
+exp: foo;
+]],
+[[input.y:3.1-5: error: %left redeclaration for foo
+ %left foo
+ ^^^^^
+input.y:2.1-5:     previous declaration
+ %left "foo"
+ ^^^^^
+]])
+
+# This time, declare the alias after its use.
+
+# Precedence/associativity.
+AT_TEST([[%left "foo"
+%left foo
+%token foo "foo"
+%%
+exp: foo;
+]],
+[[input.y:2.1-5: error: %left redeclaration for foo
+ %left foo
+ ^^^^^
+input.y:1.1-5:     previous declaration
+ %left "foo"
+ ^^^^^
+]])
+
+# Printer.
+AT_TEST([[%printer {} "foo"
+%printer {} foo
+%token foo "foo"
+%%
+exp: foo;
+]],
+[[input.y:2.10-11: error: %printer redeclaration for foo
+ %printer {} foo
+          ^^
+input.y:1.10-11:     previous declaration
+ %printer {} "foo"
+          ^^
+]])
+
+# Destructor.
+AT_TEST([[%destructor {} "foo"
+%destructor {} foo
+%token foo "foo"
+%%
+exp: foo;
+]],
+[[input.y:2.13-14: error: %destructor redeclaration for foo
+ %destructor {} foo
+             ^^
+input.y:1.13-14:     previous declaration
+ %destructor {} "foo"
+             ^^
+]])
+
+m4_popdef([AT_TEST])
+AT_CLEANUP
+
+
+
+## ----------------------- ##
+## Torturing the Scanner.  ##
+## ----------------------- ##
+
+# Be sure to compile and run, so that the C compiler checks what
+# we do.
+
+AT_SETUP([Torturing the Scanner])
+
+AT_BISON_OPTION_PUSHDEFS
+AT_DATA([input.y], [])
+AT_BISON_CHECK([input.y], [1], [],
+[[input.y:1.1: error: syntax error, unexpected end of file
+]])
+
+
+AT_DATA([input.y],
+[{}
+])
+AT_BISON_CHECK([-fcaret  input.y], [1], [],
+[[input.y:1.1-2: error: syntax error, unexpected {...}
+ {}
+ ^^
+]])
+
+
+AT_DATA_GRAMMAR([input.y],
+[[%{
+/* This is seen in GCC: a %{ and %} in middle of a comment. */
+const char *foo = "So %{ and %} can be here too.";
+
+#if 0
+/* These examples test Bison while not stressing C compilers too much.
+   Many C compilers mishandle backslash-newlines, so this part of the
+   test is inside "#if 0".  The comment and string are written so that
+   the "#endif" will be seen regardless of the C compiler bugs that we
+   know about, namely:
+
+     HP C (as of late 2002) mishandles *\[newline]\[newline]/ within a
+     comment.
+
+     The Apple Darwin compiler (as of late 2002) mishandles
+     \\[newline]' within a character constant.
+
+   */
+
+/\
+* A comment with backslash-newlines in it. %} *\
+\
+/
+/* { Close the above comment, if the C compiler mishandled it.  */
+
+char str[] = "\\
+" A string with backslash-newlines in it %{ %} \\
+\
+"";
+
+char apostrophe = '\'';
+#endif
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <assert.h>
+%}
+/* %{ and %} can be here too. */
+
+%{
+/* Exercise pre-prologue dependency to %union.  */
+typedef int value;
+%}
+
+/* Exercise M4 quoting: '@:>@@:>@', 0.  */
+
+/* Also exercise %union. */
+%union
+{
+  value ival; /* A comment to exercise an old bug. */
+};
+
+
+/* Exercise post-prologue dependency to %union.  */
+%{
+static YYSTYPE value_as_yystype (value val);
+
+/* Exercise quotes in declarations.  */
+char quote[] = "@:>@@:>@,";
+%}
+
+%{
+]AT_YYERROR_DECLARE[
+]AT_YYLEX_DECLARE[
+%}
+
+%type <ival> '@<:@'
+
+/* Exercise quotes in strings.  */
+%token FAKE "fake @<:@@:>@ \a\b\f\n\r\t\v\"\'\?\\\u005B\U0000005c ??!??'??(??)??-??/??<??=??> \x1\1"
+
+%%
+/* Exercise M4 quoting: '@:>@@:>@', @<:@, 1.  */
+exp: '@<:@' '\1' two '$' '@' '{' oline output.or.oline.opt
+  {
+    /* Exercise quotes in braces.  */
+    char tmp[] = "@<:@%c@:>@,\n";
+    printf (tmp, $1);
+  }
+;
+
+two: '\x000000000000000000000000000000000000000000000000000000000000000000002';
+oline: '@' 'o' 'l' 'i' 'n' 'e' '@' '_' '_' 'o' 'l' 'i' 'n' 'e' '_' '_';
+output.or.oline.opt: %empty;|oline;;|output;;;
+output: '#' 'o' 'u' 't' 'p' 'u' 't' ' ';
+%%
+/* Exercise M4 quoting: '@:>@@:>@', @<:@, 2.  */
+
+static YYSTYPE
+value_as_yystype (value val)
+{
+  YYSTYPE res;
+  res.ival = val;
+  return res;
+}
+]AT_YYERROR_DEFINE[
+static int
+yylex (void)
+{
+  static char const input[] = "@<:@\1\2$@{@oline@__@&t@oline__\
+#output "; /* "
+  */
+  static size_t toknum;
+  assert (toknum < sizeof input);
+  yylval = value_as_yystype (input[toknum]);
+  return input[toknum++];
+}
+]])
+
+# Pacify Emacs'font-lock-mode: "
+
+AT_DATA([main.c],
+[[typedef int value;
+#include "input.h"
+
+int yyparse (void);
+]AT_MAIN_DEFINE[
+]])
+AT_BISON_OPTION_POPDEFS
+
+AT_BISON_CHECK([-d -v -o input.c input.y])
+AT_COMPILE([input.o])
+AT_COMPILE([main.o])
+AT_COMPILE([input], [input.o main.o])
+AT_PARSER_CHECK([./input], 0,
+[[[@<:@],
+]])
+
+AT_CLEANUP
+
+
+## ---------------------- ##
+## Typed symbol aliases.  ##
+## ---------------------- ##
+
+AT_SETUP([Typed symbol aliases])
+
+# Bison 2.0 broke typed symbol aliases - ensure they work.
+
+AT_DATA_GRAMMAR([input.y],
+[[%union
+{
+  int val;
+};
+%token <val> MY_TOKEN "MY TOKEN"
+%type <val> exp
+%%
+exp: "MY TOKEN";
+%%
+]])
+
+AT_BISON_CHECK([-o input.c input.y])
+
+AT_CLEANUP
+
+
+## --------- ##
+## Require.  ##
+## --------- ##
+
+m4_define([AT_CHECK_REQUIRE],
+[AT_SETUP([Require $1])
+AT_DATA_GRAMMAR([input.y],
+[[%require "$1";
+%%
+empty_file: %empty;
+]])
+AT_BISON_CHECK([-o input.c input.y], $2, [], ignore)
+AT_CLEANUP
+])
+
+AT_CHECK_REQUIRE(1.0, 0)
+AT_CHECK_REQUIRE(AT_PACKAGE_VERSION, 0)
+## FIXME: Some day augment this version number.
+AT_CHECK_REQUIRE(100.0, 63)
+
+
+## ------------------------------------- ##
+## String aliases for character tokens.  ##
+## ------------------------------------- ##
+
+AT_SETUP([String aliases for character tokens])
+
+# Bison once thought a character token and its alias were different
+# symbols with the same user token number.
+
+AT_DATA_GRAMMAR([input.y],
+[[%token 'a' "a"
+%%
+start: 'a';
+%%
+]])
+
+AT_BISON_CHECK([-o input.c input.y])
+
+AT_CLEANUP
+
+
+## -------------- ##
+## Symbol names.  ##
+## -------------- ##
+
+AT_SETUP([Symbols])
+
+AT_BISON_OPTION_PUSHDEFS
+AT_DATA_GRAMMAR([input.y],
+[[%token WITH-DASH
+%token WITHOUT_DASH "WITHOUT-DASH"
+%token WITH.PERIOD
+%token WITHOUT_PERIOD "WITHOUT.PERIOD"
+%code {
+  ]AT_YYERROR_DECLARE[
+  ]AT_YYLEX_DECLARE[
+}
+%%
+start: with-dash without_dash with.period without_period;
+with-dash: WITH-DASH;
+without_dash: "WITHOUT-DASH";
+with.period: WITH.PERIOD;
+without_period: "WITHOUT.PERIOD";
+%%
+]AT_YYERROR_DEFINE[
+]AT_YYLEX_DEFINE[
+]])
+AT_BISON_OPTION_POPDEFS
+
+# POSIX Yacc accept periods, but not dashes.
+AT_BISON_CHECK([--yacc input.y], [1], [],
+[[input.y:9.8-16: error: POSIX Yacc forbids dashes in symbol names: WITH-DASH [-Werror=yacc]
+input.y:20.8-16: error: POSIX Yacc forbids dashes in symbol names: with-dash [-Werror=yacc]
+]])
+
+# Dashes are fine for GNU Bison.
+AT_BISON_CHECK([-o input.c input.y])
+
+# Make sure we don't export silly token identifiers with periods or dashes.
+AT_COMPILE([input.o])
+
+
+# Periods are genuine letters, they can start identifiers.
+# Digits and dashes cannot.
+AT_DATA_GRAMMAR([input.y],
+[[%token .GOOD
+         -GOOD
+         1NV4L1D
+         -123
+%%
+start: .GOOD GOOD
+]])
+AT_BISON_CHECK([-o input.c input.y], [1], [],
+[[input.y:10.10: error: invalid character: '-'
+input.y:11.10-16: error: invalid identifier: '1NV4L1D'
+input.y:12.10: error: invalid character: '-'
+]])
+
+AT_CLEANUP
+
+
+## ----------------- ##
+## Numbered tokens.  ##
+## ----------------- ##
+
+AT_SETUP([Numbered tokens])
+
+AT_DATA_GRAMMAR([redecl.y],
+[[%token DECIMAL_1     11259375
+         HEXADECIMAL_1 0xabcdef
+         HEXADECIMAL_2 0xFEDCBA
+         DECIMAL_2     16702650
+%%
+start: DECIMAL_1 HEXADECIMAL_2;
+]])
+
+AT_BISON_CHECK([redecl.y], [1], [],
+[[redecl.y:10.10-22: error: user token number 11259375 redeclaration for HEXADECIMAL_1
+redecl.y:9.8-16:       previous declaration for DECIMAL_1
+redecl.y:12.10-18: error: user token number 16702650 redeclaration for DECIMAL_2
+redecl.y:11.10-22:     previous declaration for HEXADECIMAL_2
+]])
+
+AT_DATA_GRAMMAR([too-large.y],
+[[%token TOO_LARGE_DEC 999999999999999999999
+         TOO_LARGE_HEX 0xFFFFFFFFFFFFFFFFFFF
+%%
+start: TOO_LARGE_DEC TOO_LARGE_HEX
+%%
+]])
+
+AT_BISON_CHECK([too-large.y], [1], [],
+[[too-large.y:9.22-42: error: integer out of range: '999999999999999999999'
+too-large.y:10.24-44: error: integer out of range: '0xFFFFFFFFFFFFFFFFFFF'
+]])
+
+AT_CLEANUP
+
+
+## --------------------- ##
+## Unclosed constructs.  ##
+## --------------------- ##
+
+AT_SETUP([Unclosed constructs])
+
+# Bison's scan-gram.l once forgot to STRING_FINISH some unclosed
+# constructs, so they were prepended to whatever it STRING_GROW'ed
+# next.  It also threw them away rather than returning them to the
+# parser.  The effect was confusing subsequent error messages.
+
+AT_DATA([input.y],
+[[%token A "a
+%token B "b"
+%token AB "ab" // Used to complain that "ab" was already used.
+%token C '1
+%token TWO "2"
+%token TICK_TWELVE "'12" // Used to complain that "'12" was already used.
+
+%%
+
+start: %empty;
+
+// Used to report a syntax error because it didn't see any kind of symbol
+// identifier.
+%type <f> 'a
+;
+%type <f> "a
+;
+// Used to report a syntax error because it didn't see braced code.
+%destructor { free ($$)
+]])
+
+AT_BISON_CHECK([-fcaret -o input.c input.y], 1, [],
+[[input.y:1.10-2.0: error: missing '"' at end of line
+ %token A "a
+          ^^
+input.y:4.10-5.0: error: missing "'" at end of line
+ %token C '1
+          ^^
+input.y:14.11-15.0: error: missing "'" at end of line
+ %type <f> 'a
+           ^^
+input.y:16.11-17.0: error: missing '"' at end of line
+ %type <f> "a
+           ^^
+input.y:19.13-20.0: error: missing '}' at end of file
+ %destructor { free ($$)
+             ^^^^^^^^^^^
+input.y:20.1: error: syntax error, unexpected end of file
+]])
+
+AT_CLEANUP
+
+
+## ------------------------- ##
+## %start after first rule.  ##
+## ------------------------- ##
+
+AT_SETUP([%start after first rule])
+
+# Bison once complained that a %start after the first rule was a
+# redeclaration of the start symbol.
+
+AT_DATA([input.y],
+[[%%
+false_start: %empty;
+start: false_start ;
+%start start;
+]])
+
+AT_BISON_CHECK([-o input.c input.y])
+
+AT_CLEANUP
+
+
+## --------------------- ##
+## %prec takes a token.  ##
+## --------------------- ##
+
+AT_SETUP([%prec takes a token])
+
+# Bison once allowed %prec sym where sym was a nonterminal.
+
+AT_DATA([input.y],
+[[%%
+start: PREC %prec PREC ;
+PREC: %empty;
+]])
+
+AT_BISON_CHECK([input.y], [1], [],
+[[input.y:3.1-4: error: rule given for PREC, which is a token
+]])
+
+AT_CLEANUP
+
+
+## ------------------------------- ##
+## %prec's token must be defined.  ##
+## ------------------------------- ##
+
+AT_SETUP([[%prec's token must be defined]])
+
+# According to POSIX, a %prec token must be defined separately.
+
+AT_DATA([[input.y]],
+[[%%
+start: %prec PREC ;
+]])
+
+AT_BISON_CHECK([[input.y]], [[0]], [],
+[[input.y:2.8-17: warning: token for %prec is not defined: PREC [-Wother]
+]])
+
+AT_CLEANUP
+
+
+## -------------------------------- ##
+## Reject unused %code qualifiers.  ##
+## -------------------------------- ##
+
+AT_SETUP([Reject unused %code qualifiers])
+
+AT_DATA([input-c.y],
+[[%code q {}
+%code bad {}
+%code bad {}
+%code format {}
+%%
+start: %empty;
+]])
+AT_BISON_CHECK([[input-c.y]], [[1]], [],
+[[input-c.y:1.7: error: %code qualifier 'q' is not used
+input-c.y:2.7-9: error: %code qualifier 'bad' is not used
+input-c.y:3.7-9: error: %code qualifier 'bad' is not used
+input-c.y:4.7-12: error: %code qualifier 'format' is not used
+]])
+
+AT_DATA([input-c-glr.y],
+[[%code q {}
+%code bad {}
+ %code bad {}
+%%
+start: %empty;
+]])
+AT_BISON_CHECK([[input-c-glr.y]], [[1]], [],
+[[input-c-glr.y:1.7: error: %code qualifier 'q' is not used
+input-c-glr.y:2.7-9: error: %code qualifier 'bad' is not used
+input-c-glr.y:3.8-10: error: %code qualifier 'bad' is not used
+]])
+
+AT_DATA([input-c++.y],
+[[%code q {}
+%code bad {}
+ %code q {}
+%%
+start: %empty;
+]])
+AT_BISON_CHECK([[input-c++.y]], [[1]], [],
+[[input-c++.y:1.7: error: %code qualifier 'q' is not used
+input-c++.y:2.7-9: error: %code qualifier 'bad' is not used
+input-c++.y:3.8: error: %code qualifier 'q' is not used
+]])
+
+AT_DATA([input-c++-glr.y],
+[[%code bad {}
+%code q {}
+%code q {}
+%%
+start: %empty;
+]])
+AT_BISON_CHECK([[input-c++-glr.y]], [[1]], [],
+[[input-c++-glr.y:1.7-9: error: %code qualifier 'bad' is not used
+input-c++-glr.y:2.7: error: %code qualifier 'q' is not used
+input-c++-glr.y:3.7: error: %code qualifier 'q' is not used
+]])
+
+AT_DATA([special-char-@@.y],
+[[%code bad {}
+%code q {}
+%code q {}
+%%
+start: %empty;
+]])
+AT_BISON_CHECK([[special-char-@@.y]], [[1]], [],
+[[special-char-@@.y:1.7-9: error: %code qualifier 'bad' is not used
+special-char-@@.y:2.7: error: %code qualifier 'q' is not used
+special-char-@@.y:3.7: error: %code qualifier 'q' is not used
+]])
+
+AT_DATA([special-char-@:>@.y],
+[[%code bad {}
+%code q {}
+%code q {}
+%%
+start: %empty;
+]])
+AT_BISON_CHECK([[special-char-@:>@.y]], [[1]], [],
+[[special-char-@:>@.y:1.7-9: error: %code qualifier 'bad' is not used
+special-char-@:>@.y:2.7: error: %code qualifier 'q' is not used
+special-char-@:>@.y:3.7: error: %code qualifier 'q' is not used
+]])
+
+AT_CLEANUP
+
+
+## ---------------- ##
+## Multiple %code.  ##
+## ---------------- ##
+
+AT_SETUP([Multiple %code])
+
+# Make sure that repeated arguments to %code are separated by
+# end-of-lines.  At some point, a missing eol would leave synclines
+# appended to the previous value.  Here, we use CPP directive to
+# introduce dependency on the absence/presence of the eol.
+AT_BISON_OPTION_PUSHDEFS
+
+AT_DATA([input.y],
+[[%code {#include <assert.h>}
+%code {#define A B}
+%code {#define B C}
+%code {#define C D}
+%code {#define D 42}
+%code {
+  ]AT_YYERROR_DECLARE[
+  ]AT_YYLEX_DECLARE[
+}
+%%
+start: %empty;
+%%
+]AT_YYERROR_DEFINE[
+]AT_YYLEX_DEFINE[
+int main (void)
+{
+  assert (A == 42);
+  return 0;
+}
+]])
+AT_FULL_COMPILE([input])
+AT_PARSER_CHECK([./input])
+
+AT_BISON_OPTION_POPDEFS
+AT_CLEANUP()
+
+## ---------------- ##
+## %define errors.  ##
+## ---------------- ##
+
+AT_SETUP([%define errors])
+
+AT_DATA([input-redefined.y],
+[[%define var "value1"
+%define var "value1"
+ %define var "value2"
+%define special1 "@:>@"
+%define special2 "@<:@"
+%%
+start: %empty;
+]])
+
+AT_BISON_CHECK([[input-redefined.y]], [[1]], [],
+[[input-redefined.y:2.9-11: error: %define variable 'var' redefined
+input-redefined.y:1.9-11:     previous definition
+input-redefined.y:3.10-12: error: %define variable 'var' redefined
+input-redefined.y:2.9-11:      previous definition
+]])
+
+AT_DATA([input-unused.y],
+[[%define var "value"
+%%
+start: %empty;
+]])
+
+AT_BISON_CHECK([[input-unused.y]], [[1]], [],
+[[input-unused.y:1.9-11: error: %define variable 'var' is not used
+]])
+
+AT_CLEANUP
+
+
+## ----------------------------------- ##
+## %define, --define, --force-define.  ##
+## ----------------------------------- ##
+
+AT_SETUP([[%define, --define, --force-define]])
+
+AT_DATA([[skel.c]],
+[[m4@&t@_divert_push(0)@
+@output(b4_parser_file_name@)@
+[var-dd: ]b4_percent_define_get([[var-dd]])[
+var-ff: ]b4_percent_define_get([[var-ff]])[
+var-dfg: ]b4_percent_define_get([[var-dfg]])[
+var-fd: ]b4_percent_define_get([[var-fd]])
+m4@&t@_divert_pop(0)
+]])
+AT_DATA([[input.y]],
+[[%define var-dfg "gram"
+%%
+start: %empty;
+]])
+AT_BISON_CHECK([[-Dvar-dd=cmd-d1 -Dvar-dd=cmd-d2 \
+                 -Fvar-ff=cmd-f1 -Fvar-ff=cmd-f2 \
+                 -Dvar-dfg=cmd-d -Fvar-dfg=cmd-f \
+                 -Fvar-fd=cmd-f -Dvar-fd=cmd-d   \
+                 --skeleton ./skel.c input.y]])
+AT_CHECK([[cat input.tab.c]], [[0]],
+[[var-dd: cmd-d2
+var-ff: cmd-f2
+var-dfg: cmd-f
+var-fd: cmd-d
+]])
+
+AT_DATA([[input-dg.y]],
+[[%define var "gram"
+%%
+start: %empty;
+]])
+AT_BISON_CHECK([[-Dvar=cmd-d input-dg.y]], [[1]], [],
+[[input-dg.y:1.9-11: error: %define variable 'var' redefined
+<command line>:2:      previous definition
+]])
+
+AT_DATA([[input-dg.y]],
+[[%define var "gram"
+%%
+start: %empty;
+]])
+AT_BISON_CHECK([[-fcaret -Dvar=cmd-d input-dg.y]], [[1]], [],
+[[input-dg.y:1.9-11: error: %define variable 'var' redefined
+ %define var "gram"
+         ^^^
+<command line>:3:      previous definition
+]])
+
+AT_DATA([[input-unused.y]],
+[[%%
+start: %empty;
+]])
+AT_BISON_CHECK([[-Dunused-d -Funused-f input-unused.y]], [[1]], [],
+[[<command line>:2: error: %define variable 'unused-d' is not used
+<command line>:3: error: %define variable 'unused-f' is not used
+]])
+
+AT_CLEANUP
+
+## --------------------------- ##
+## %define Boolean variables.  ##
+## --------------------------- ##
+
+AT_SETUP([["%define" Boolean variables]])
+
+AT_DATA([Input.y],
+[[%language "Java"
+%define public maybe
+%define parser_class_name {Input}
+%%
+start: %empty;
+]])
+
+AT_BISON_CHECK([[Input.y]], [1], [],
+[[Input.y:2.9-14: error: invalid value for %define Boolean variable 'public'
+]])
+
+AT_CLEANUP
+
+## ------------------------ ##
+## %define code variables.  ##
+## ------------------------ ##
+
+AT_SETUP([["%define" code variables]])
+
+m4_pushdef([AT_TEST],
+[AT_DATA([input.yy],
+[[%skeleton "lalr1.cc" %locations
+%define api.location.type ]$1[quux]$2[
+%define api.namespace     ]$1[quux]$2[
+%define api.prefix        ]$1[quux]$2[
+%define api.token.prefix  ]$1[quux]$2[
+%token TOK // Otherwise api.token.prefix is unused.
+%%
+start: TOK;
+]])
+
+AT_BISON_CHECK([[input.yy]], [0], [],
+[[input.yy:2.9-25: warning: %define variable 'api.location.type' requires '{...}' values [-Wdeprecated]
+input.yy:4.9-18: warning: %define variable 'api.prefix' requires '{...}' values [-Wdeprecated]
+input.yy:5.9-24: warning: %define variable 'api.token.prefix' requires '{...}' values [-Wdeprecated]
+input.yy:3.9-21: warning: %define variable 'api.namespace' requires '{...}' values [-Wdeprecated]
+]])
+])
+
+AT_TEST([],  [])
+AT_TEST(["], ["])
+m4_popdef([AT_TEST])
+
+AT_CLEANUP
+
+
+## --------------------------- ##
+## %define keyword variables.  ##
+## --------------------------- ##
+
+AT_SETUP([["%define" keyword variables]])
+
+m4_pushdef([AT_TEST],
+[AT_DATA([input.y],
+[[%define api.pure                ]$1[true]$2[
+%define api.push-pull             ]$1[both]$2[
+%define lr.default-reduction      ]$1[most]$2[
+%define lr.keep-unreachable-state ]$1[true]$2[
+%define lr.type                   ]$1[lalr]$2[
+%%
+exp: %empty
+]])
+
+AT_BISON_CHECK([[input.y]], [0], [],
+[[input.y:5.9-15: warning: %define variable 'lr.type' requires keyword values [-Wdeprecated]
+input.y:3.9-28: warning: %define variable 'lr.default-reduction' requires keyword values [-Wdeprecated]
+input.y:4.9-33: warning: %define variable 'lr.keep-unreachable-state' requires keyword values [-Wdeprecated]
+input.y:2.9-21: warning: %define variable 'api.push-pull' requires keyword values [-Wdeprecated]
+input.y:1.9-16: warning: %define variable 'api.pure' requires keyword values [-Wdeprecated]
+]])
+])
+
+AT_TEST(["], ["])
+AT_TEST([{], [}])
+m4_popdef([AT_TEST])
+
+AT_CLEANUP
+
+
+## ------------------------ ##
+## %define enum variables.  ##
+## ------------------------ ##
+
+AT_SETUP([["%define" enum variables]])
+
+# Check errors from the front-end, and the back-end.  Since the
+# front-end quits before calling the back-end, these tests cannot be
+# fused.
+
+# Front-end.
+AT_DATA([[input.y]],
+[[%define lr.default-reduction bogus
+%%
+start: %empty;
+]])
+AT_BISON_CHECK([[-fcaret input.y]], [[1]], [[]],
+[[input.y:1.9-28: error: invalid value for %define variable 'lr.default-reduction': 'bogus'
+ %define lr.default-reduction bogus
+         ^^^^^^^^^^^^^^^^^^^^
+input.y:1.9-28:     accepted value: 'most'
+input.y:1.9-28:     accepted value: 'consistent'
+input.y:1.9-28:     accepted value: 'accepting'
+]])
+
+# Back-end.
+AT_DATA([[input.y]],
+[[%define api.push-pull neither
+%%
+start: %empty;
+]])
+AT_BISON_CHECK([[-fcaret input.y]], [[1]], [[]],
+[[input.y:1.9-21: error: invalid value for %define variable 'api.push-pull': 'neither'
+ %define api.push-pull neither
+         ^^^^^^^^^^^^^
+input.y:1.9-21:     accepted value: 'pull'
+input.y:1.9-21:     accepted value: 'push'
+input.y:1.9-21:     accepted value: 'both'
+]])
+
+AT_CLEANUP
+
+## -------------------------------- ##
+## %define backward compatibility.  ##
+## -------------------------------- ##
+
+AT_SETUP([["%define" backward compatibility]])
+
+# The error messages tell us whether the variables are properly updated.
+AT_DATA([[input.y]],
+[[%define api.push_pull both
+%define lr.keep_unreachable_states maybe
+%define namespace "foo"
+%define api.namespace {foo}
+%define variant
+%%
+start: %empty;
+]])
+AT_BISON_CHECK([[-fcaret input.y]], [1], [],
+[[input.y:1.9-21: warning: deprecated directive, use '%define api.push-pull both' [-Wdeprecated]
+ %define api.push_pull both
+         ^^^^^^^^^^^^^
+input.y:2.9-34: warning: deprecated directive, use '%define lr.keep-unreachable-state maybe' [-Wdeprecated]
+ %define lr.keep_unreachable_states maybe
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^
+input.y:3.9-17: warning: deprecated directive, use '%define api.namespace foo' [-Wdeprecated]
+ %define namespace "foo"
+         ^^^^^^^^^
+input.y:4.9-21: error: %define variable 'api.namespace' redefined
+ %define api.namespace {foo}
+         ^^^^^^^^^^^^^
+input.y:3.9-17:     previous definition
+ %define namespace "foo"
+         ^^^^^^^^^
+input.y:5.9-15: warning: deprecated directive, use '%define api.value.type variant' [-Wdeprecated]
+ %define variant
+         ^^^^^^^
+]])
+
+AT_CLEANUP
+
+## ------------------------- ##
+## Unused %define api.pure.  ##
+## ------------------------- ##
+
+AT_SETUP([[Unused %define api.pure]])
+
+# AT_CHECK_API_PURE(DECLS, VALUE)
+# -------------------------------
+# Make sure Bison reports that '%define api.pure VALUE' is unused when DECLS
+# are specified.
+m4_define([AT_CHECK_API_PURE],
+[
+AT_DATA([[input.y]],
+[[%define api.pure ]$2[
+]$1[
+%%
+start: %empty;
+]])
+
+AT_BISON_CHECK([[input.y]], [[1]], [],
+[[input.y:1.9-16: error: %define variable 'api.pure' is not used
+]])
+])
+
+AT_CHECK_API_PURE([[%language "c++"]], [[]])
+AT_CHECK_API_PURE([[%language "c++"]], [[false]])
+AT_CHECK_API_PURE([[%language "c++" %glr-parser]], [[""]])
+AT_CHECK_API_PURE([[%language "c++" %glr-parser]], [[false]])
+AT_CHECK_API_PURE([[%language "java"]], [[true]])
+AT_CHECK_API_PURE([[%language "java"]], [[false]])
+
+AT_CLEANUP
+
+## -------------------------------- ##
+## C++ namespace reference errors.  ##
+## -------------------------------- ##
+
+AT_SETUP([[C++ namespace reference errors]])
+
+# AT_CHECK_NAMESPACE_ERROR(NAMESPACE-DECL, ERROR, [ERROR], ...)
+# -------------------------------------------------------------
+# Make sure Bison reports all ERROR's for %define namespace "NAMESPACE-DECL".
+m4_define([AT_CHECK_NAMESPACE_ERROR],
+[
+AT_DATA([[input.y]],
+[[%language "C++"
+%defines
+%define api.namespace {]$1[}
+%%
+start: %empty;
+]])
+
+AT_BISON_CHECK([[input.y]], [1], [],
+[m4_foreach([b4_arg], m4_dquote(m4_shift($@)),
+[[input.y:3.9-21: error: ]b4_arg[
+]])])
+])
+
+AT_CHECK_NAMESPACE_ERROR([[]],
+                         [[namespace reference is empty]])
+AT_CHECK_NAMESPACE_ERROR([[ @tb@@tb@  @tb@ @tb@]],
+                         [[namespace reference is empty]])
+AT_CHECK_NAMESPACE_ERROR([[foo::::bar]],
+                         [[namespace reference has consecutive "::"]])
+AT_CHECK_NAMESPACE_ERROR([[foo:: @tb@::bar]],
+                         [[namespace reference has consecutive "::"]])
+AT_CHECK_NAMESPACE_ERROR([[::::bar]],
+                         [[namespace reference has consecutive "::"]])
+AT_CHECK_NAMESPACE_ERROR([[:: ::bar]],
+                         [[namespace reference has consecutive "::"]])
+AT_CHECK_NAMESPACE_ERROR([[foo::bar::@tb@::]],
+                         [[namespace reference has consecutive "::"]],
+                         [[namespace reference has a trailing "::"]])
+AT_CHECK_NAMESPACE_ERROR([[foo::bar::]],
+                         [[namespace reference has a trailing "::"]])
+AT_CHECK_NAMESPACE_ERROR([[foo::bar:: @tb@]],
+                         [[namespace reference has a trailing "::"]])
+AT_CHECK_NAMESPACE_ERROR([[::]],
+                         [[namespace reference has a trailing "::"]])
+
+AT_CLEANUP
+
+## ------------------------ ##
+## Bad character literals.  ##
+## ------------------------ ##
+
+# Bison used to accept character literals that were empty or contained
+# too many characters.
+
+# FIXME: AT_DATA or some variant of AT_DATA may eventually permit
+# the final newline to be omitted.  See the threads starting at
+# <http://lists.gnu.org/archive/html/bison-patches/2009-07/msg00019.html>.
+
+AT_SETUP([[Bad character literals]])
+
+AT_DATA([empty.y],
+[[%%
+start: '';
+start: '
+]])
+AT_CHECK([[$PERL -e "print 'start: \'';" >> empty.y || exit 77]])
+
+AT_BISON_CHECK([-fcaret empty.y], [1], [],
+[[empty.y:2.8-9: warning: empty character literal [-Wother]
+ start: '';
+        ^^
+empty.y:3.8-4.0: error: missing "'" at end of line
+ start: '
+        ^
+empty.y:3.8-4.0: warning: empty character literal [-Wother]
+ start: '
+        ^
+empty.y:4.8: error: missing "'" at end of file
+ start: '
+        ^
+empty.y:4.8: warning: empty character literal [-Wother]
+ start: '
+        ^
+]])
+
+AT_DATA([two.y],
+[[%%
+start: 'ab';
+start: 'ab
+]])
+AT_CHECK([[$PERL -e "print 'start: \'ab';" >> two.y || exit 77]])
+
+AT_BISON_CHECK([two.y], [1], [],
+[[two.y:2.8-11: warning: extra characters in character literal [-Wother]
+two.y:3.8-4.0: error: missing "'" at end of line
+two.y:3.8-4.0: warning: extra characters in character literal [-Wother]
+two.y:4.8-10: error: missing "'" at end of file
+two.y:4.8-10: warning: extra characters in character literal [-Wother]
+]])
+
+AT_DATA([three.y],
+[[%%
+start: 'abc';
+start: 'abc
+]])
+AT_CHECK([[$PERL -e "print 'start: \'abc';" >> three.y || exit 77]])
+
+AT_BISON_CHECK([three.y], [1], [],
+[[three.y:2.8-12: warning: extra characters in character literal [-Wother]
+three.y:3.8-4.0: error: missing "'" at end of line
+three.y:3.8-4.0: warning: extra characters in character literal [-Wother]
+three.y:4.8-11: error: missing "'" at end of file
+three.y:4.8-11: warning: extra characters in character literal [-Wother]
+]])
+
+AT_CLEANUP
+
+## ------------------------- ##
+## Bad escapes in literals.  ##
+## ------------------------- ##
+
+AT_SETUP([[Bad escapes in literals]])
+
+AT_DATA([input.y],
+[[%%
+start: '\777' '\0' '\xfff' '\x0'
+       '\uffff' '\u0000' '\Uffffffff' '\U00000000'
+       '\ ' '\A';
+]])
+
+# It is not easy to create special characters, we cannot even trust tr.
+# Beside we cannot even expect "echo '\0'" to output two characters
+# (well three with \n): at least Bash 3.2 converts the two-character
+# sequence "\0" into a single NUL character.
+AT_CHECK([[$PERL -e 'print "start: \"\\\t\\\f\\\0\\\1\" ;";' >> input.y \
+           || exit 77]])
+
+AT_BISON_CHECK([input.y], [1], [],
+[[input.y:2.9-12: error: invalid number after \-escape: 777
+input.y:2.8-13: warning: empty character literal [-Wother]
+input.y:2.16-17: error: invalid number after \-escape: 0
+input.y:2.15-18: warning: empty character literal [-Wother]
+input.y:2.21-25: error: invalid number after \-escape: xfff
+input.y:2.20-26: warning: empty character literal [-Wother]
+input.y:2.29-31: error: invalid number after \-escape: x0
+input.y:2.28-32: warning: empty character literal [-Wother]
+input.y:3.9-14: error: invalid number after \-escape: uffff
+input.y:3.8-15: warning: empty character literal [-Wother]
+input.y:3.18-23: error: invalid number after \-escape: u0000
+input.y:3.17-24: warning: empty character literal [-Wother]
+input.y:3.27-36: error: invalid number after \-escape: Uffffffff
+input.y:3.26-37: warning: empty character literal [-Wother]
+input.y:3.40-49: error: invalid number after \-escape: U00000000
+input.y:3.39-50: warning: empty character literal [-Wother]
+input.y:4.9-10: error: invalid character after \-escape: ' '
+input.y:4.8-11: warning: empty character literal [-Wother]
+input.y:4.14-15: error: invalid character after \-escape: A
+input.y:4.13-16: warning: empty character literal [-Wother]
+input.y:5.9-16: error: invalid character after \-escape: \t
+input.y:5.17: error: invalid character after \-escape: \f
+input.y:5.18: error: invalid character after \-escape: \0
+input.y:5.19: error: invalid character after \-escape: \001
+]])
+
+AT_CLEANUP
+
+## ------------------------- ##
+## LAC: Errors for %define.  ##
+## ------------------------- ##
+
+AT_SETUP([[LAC: Errors for %define]])
+
+AT_DATA([[input.y]],
+[[%%
+start: %empty;
+]])
+
+# parse.lac.* options are useless if LAC isn't actually activated.
+AT_BISON_CHECK([[-Dparse.lac.es-capacity-initial=1 input.y]],
+               [[1]], [],
+[[<command line>:2: error: %define variable 'parse.lac.es-capacity-initial' is not used
+]])
+AT_BISON_CHECK([[-Dparse.lac.memory-trace=full input.y]],
+               [[1]], [],
+[[<command line>:2: error: %define variable 'parse.lac.memory-trace' is not used
+]])
+
+AT_CLEANUP
+
+## ---------------------- ##
+## -Werror combinations.  ##
+## ---------------------- ##
+
+AT_SETUP([[-Werror combinations]])
+
+AT_DATA([[input.y]],
+[[%%
+a: '0' { $$ = $; };
+]])
+
+# -Werror is not enabled by -Wall or equivalent.
+AT_BISON_CHECK([[-Wall input.y]], [[0]], [[]],
+[[input.y:2.15: warning: stray '$' [-Wother]
+]])
+AT_BISON_CHECK([[-W input.y]], [[0]], [[]],
+[[input.y:2.15: warning: stray '$' [-Wother]
+]])
+AT_BISON_CHECK([[-Wno-none input.y]], [[0]], [[]],
+[[input.y:2.15: warning: stray '$' [-Wother]
+]])
+
+# -Werror is not disabled by -Wnone or equivalent.
+AT_BISON_CHECK([[-Werror,none,other input.y]], [[1]], [[]],
+[[input.y:2.15: error: stray '$' [-Werror=other]
+]])
+AT_BISON_CHECK([[-Werror,no-all,other input.y]], [[1]], [[]],
+[[input.y:2.15: error: stray '$' [-Werror=other]
+]])
+
+# Check that -Wno-error keeps warnings enabled, but non fatal.
+AT_BISON_CHECK([[-Werror -Wno-error=other input.y]], [[0]], [[]],
+[[input.y:2.15: warning: stray '$' [-Wother]
+]])
+
+AT_BISON_CHECK([[-Wno-error=other -Werror input.y]], [[0]], [[]],
+[[input.y:2.15: warning: stray '$' [-Wother]
+]])
+
+AT_BISON_CHECK([[-Werror=other -Wno-other input.y]], [[0]], [[]],
+[[]])
+
+AT_CLEANUP
+
+
+## ------------------------------------------------------ ##
+## %name-prefix and %define api.prefix are incompatible.  ##
+## ------------------------------------------------------ ##
+
+AT_SETUP([[%name-prefix and api.prefix are incompatible]])
+
+# AT_TEST(DIRECTIVES, OPTIONS, ERROR-LOCATION)
+# --------------------------------------------
+m4_pushdef([AT_TEST],
+[AT_DATA([[input.y]],
+[[$1
+%%
+exp: %empty;
+]])
+AT_BISON_CHECK([[$2 input.y]], [[1]], [[]],
+[[$3: error: '%name-prefix' and '%define api.prefix' cannot be used together
+]])
+])
+
+AT_TEST([%define api.prefix {foo} %name-prefix "bar"], [], [input.y:1.9-18])
+AT_TEST([], [-Dapi.prefix={foo} -p bar], [<command line>:2])
+AT_TEST([%name-prefix "bar"], [-Dapi.prefix={foo}], [<command line>:2])
+AT_TEST([%define api.prefix {foo}], [-p bar], [input.y:1.9-18])
+
+m4_popdef([AT_TEST])
+
+AT_CLEANUP
+
+
+## ----------------------- ##
+## Redefined %union name.  ##
+## ----------------------- ##
+
+AT_SETUP([[Redefined %union name]])
+
+# AT_TEST(DIRECTIVES, ERROR)
+# --------------------------
+m4_pushdef([AT_TEST],
+[AT_DATA([[input.y]],
+[$1
+%%
+exp: %empty;
+])
+
+AT_BISON_CHECK([[input.y]], [[1]], [[]],
+[$2])
+])
+
+AT_TEST([[%union foo {};
+%union {};
+%union foo {};
+%define api.value.union.name foo]],
+[[input.y:3.8-10: error: %define variable 'api.value.union.name' redefined
+input.y:1.8-10:     previous definition
+input.y:4.9-28: error: %define variable 'api.value.union.name' redefined
+input.y:3.8-10:     previous definition
+]])
+
+AT_TEST([[%define api.value.union.name {foo}]],
+[[input.y:1.9-28: error: %define variable 'api.value.union.name' requires keyword values
+input.y:1.9-28: error: %define variable 'api.value.union.name' is not used
+]])
+
+AT_TEST([[%define api.value.union.name "foo"]],
+[[input.y:1.9-28: error: %define variable 'api.value.union.name' requires keyword values
+input.y:1.9-28: error: %define variable 'api.value.union.name' is not used
+]])
+
+m4_popdef([AT_TEST])
+AT_CLEANUP
+
+
+
+
+## -------------- ##
+## Stray $ or @.  ##
+## -------------- ##
+
+AT_SETUP([[Stray $ or @]])
+
+# Give %printer and %destructor "<*> exp TOK" instead of "<*>" to
+# check that the warnings are reported once, not three times.
+
+AT_DATA_GRAMMAR([[input.y]],
+[[%type <TYPE> exp
+%token <TYPE> TOK TOK2
+%destructor     { $%; @%; } <*> exp TOK;
+%initial-action { $%; @%; };
+%printer        { $%; @%; } <*> exp TOK;
+%{ $ @ %} // Should not warn.
+%%
+exp: TOK        { $%; @%; $$ = $1; };
+%%
+$ @ // Should not warn.
+]])
+
+AT_BISON_CHECK([[-Wall input.y]], 0, [],
+[[input.y:11.19: warning: stray '$' [-Wother]
+input.y:11.23: warning: stray '@' [-Wother]
+input.y:12.19: warning: stray '$' [-Wother]
+input.y:12.23: warning: stray '@' [-Wother]
+input.y:13.19: warning: stray '$' [-Wother]
+input.y:13.23: warning: stray '@' [-Wother]
+input.y:16.19: warning: stray '$' [-Wother]
+input.y:16.23: warning: stray '@' [-Wother]
+]])
+
+AT_CLEANUP
+
+
+
+## ---------------- ##
+## Code injection.  ##
+## ---------------- ##
+
+
+AT_SETUP([[Code injection]])
+
+m4_pattern_allow([^m4_errprintn$])
+
+# AT_TEST([MACRO])
+# ----------------
+# Try to have MACRO be run by bison.
+m4_pushdef([AT_TEST],
+[AT_DATA([[input.y]],
+[[%type <$1(DEAD %type)> exp
+%token <$1(DEAD %token)> a
+%token b
+%initial-action
+{
+  $$;
+  $<$1(DEAD %initial-action)>$
+};
+%printer
+{
+  $$
+  $<$1(DEAD %printer)>$
+} <> <*>;
+%lex-param
+{
+  $1(DEAD %lex-param)
+};
+%parse-param
+{
+  $1(DEAD %parse-param)
+};
+%%
+exp:
+  a a[name] b
+  {
+    $$;
+    $][1;
+    $<$1(DEAD action 1)>$
+    $<$1(DEAD action 2)>1
+    $<$1(DEAD action 3)>name
+    $<$1(DEAD action 4)>0
+    ;
+  };
+]])
+
+# FIXME: Provide a means to iterate over all the skeletons.
+AT_BISON_CHECK([[-d               input.y]])
+AT_BISON_CHECK([[-d -S glr.c      input.y]])
+AT_BISON_CHECK([[-d -S lalr1.cc   input.y]])
+AT_BISON_CHECK([[-d -S glr.cc     input.y]])
+AT_BISON_CHECK([[   -S lalr1.java input.y]])
+])
+
+AT_TEST([m4_errprintn])
+AT_TEST([@:>@m4_errprintn])
+
+m4_popdef([AT_TEST])
+
+AT_CLEANUP
+
+##----------------------- ##
+## Deprecated directives. ##
+## ---------------------- ##
+
+AT_SETUP([[Deprecated directives]])
+
+AT_KEYWORDS([[deprec]])
+
+AT_DATA_GRAMMAR([[input.y]],
+[[
+%default_prec
+%error_verbose
+%expect_rr 0
+%file-prefix = "foo"
+%file-prefix
+ =
+"bar"
+%fixed-output_files
+%fixed_output-files
+%fixed-output-files
+%name-prefix= "foo"
+%no-default_prec
+%no_default-prec
+%no_lines
+%output = "foo"
+%pure_parser
+%token_table
+%glr-parser
+%% exp : '0'
+]])
+
+AT_BISON_CHECK([[input.y]], [[0]], [[]],
+[[input.y:10.1-13: warning: deprecated directive: '%default_prec', use '%default-prec' [-Wdeprecated]
+input.y:11.1-14: warning: deprecated directive: '%error_verbose', use '%define parse.error verbose' [-Wdeprecated]
+input.y:12.1-10: warning: deprecated directive: '%expect_rr', use '%expect-rr' [-Wdeprecated]
+input.y:13.1-14: warning: deprecated directive: '%file-prefix =', use '%file-prefix' [-Wdeprecated]
+input.y:14.1-15.2: warning: deprecated directive: '%file-prefix\n =', use '%file-prefix' [-Wdeprecated]
+input.y:17.1-19: warning: deprecated directive: '%fixed-output_files', use '%fixed-output-files' [-Wdeprecated]
+input.y:18.1-19: warning: deprecated directive: '%fixed_output-files', use '%fixed-output-files' [-Wdeprecated]
+input.y:20.1-13: warning: deprecated directive: '%name-prefix=', use '%name-prefix' [-Wdeprecated]
+input.y:21.1-16: warning: deprecated directive: '%no-default_prec', use '%no-default-prec' [-Wdeprecated]
+input.y:22.1-16: warning: deprecated directive: '%no_default-prec', use '%no-default-prec' [-Wdeprecated]
+input.y:23.1-9: warning: deprecated directive: '%no_lines', use '%no-lines' [-Wdeprecated]
+input.y:24.1-9: warning: deprecated directive: '%output =', use '%output' [-Wdeprecated]
+input.y:25.1-12: warning: deprecated directive: '%pure_parser', use '%pure-parser' [-Wdeprecated]
+input.y:26.1-12: warning: deprecated directive: '%token_table', use '%token-table' [-Wdeprecated]
+]])
+
+AT_CLEANUP
+
+## ---------------------------- ##
+## Unput's effect on locations. ##
+## ---------------------------- ##
+dnl When the scanner detects a deprecated construct, it unputs the correct
+dnl version, but it should *not* have any impact on the scanner cursor. If it
+dnl does, the locations of directives on the same line become erroneous.
+
+AT_SETUP([[Unput's effect on locations]])
+
+AT_KEYWORDS([[deprec]])
+
+AT_DATA_GRAMMAR([[input.y]],
+[[
+%glr-parser
+%expect_rr 42 %expect_rr 42
+              %expect_rr 42
+%error_verbose %error_verbose
+               %error_verbose
+%% exp: '0'
+]])
+
+AT_BISON_CHECK([[input.y]], [[1]], [[]],
+[[input.y:11.1-10: warning: deprecated directive: '%expect_rr', use '%expect-rr' [-Wdeprecated]
+input.y:11.15-24: warning: deprecated directive: '%expect_rr', use '%expect-rr' [-Wdeprecated]
+input.y:12.15-24: warning: deprecated directive: '%expect_rr', use '%expect-rr' [-Wdeprecated]
+input.y:13.1-14: warning: deprecated directive: '%error_verbose', use '%define parse.error verbose' [-Wdeprecated]
+input.y:13.16-29: warning: deprecated directive: '%error_verbose', use '%define parse.error verbose' [-Wdeprecated]
+input.y:13.11-21: error: %define variable 'parse.error' redefined
+input.y:13-6:         previous definition
+input.y:14.16-29: warning: deprecated directive: '%error_verbose', use '%define parse.error verbose' [-Wdeprecated]
+input.y:14.11-21: error: %define variable 'parse.error' redefined
+input.y:13.11-21:     previous definition
+]])
+
+AT_CLEANUP
+
+##--------------------------- ##
+## Non-deprecated directives. ##
+## -------------------------- ##
+
+AT_SETUP([[Non-deprecated directives]])
+
+AT_KEYWORDS([[deprec]])
+
+AT_DATA_GRAMMAR([[input.y]],
+[[
+%default-prec
+%error-verbose
+%expect-rr 42
+%file-prefix "foo"
+%file-prefix
+"bar"
+%fixed-output-files
+%name-prefix "foo"
+%no-default-prec
+%no-lines
+%output "foo"
+%pure-parser
+%token-table
+%% exp : '0'
+]])
+
+AT_BISON_CHECK([[input.y]], [[0]], [[]],
+[[input.y: warning: %expect-rr applies only to GLR parsers [-Wother]
+]])
+
+AT_CLEANUP

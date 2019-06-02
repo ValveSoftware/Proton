@@ -1,0 +1,40 @@
+From d0d3899489a03c431c42f50db68b6442050feac1 Mon Sep 17 00:00:00 2001
+From: Ethan Lee <elee@codeweavers.com>
+Date: Fri, 26 Apr 2019 12:03:49 -0400
+Subject: [PATCH] Use the dxredist X3DAudio/XAPOFX DLLs for 64-bit
+
+---
+ dlls/xaudio2_7/x3daudio.c | 2 --
+ dlls/xaudio2_7/xapofx.c   | 2 --
+ 2 files changed, 4 deletions(-)
+
+diff --git a/dlls/xaudio2_7/x3daudio.c b/dlls/xaudio2_7/x3daudio.c
+index fdedeb00d57..77bb80266a0 100644
+--- a/dlls/xaudio2_7/x3daudio.c
++++ b/dlls/xaudio2_7/x3daudio.c
+@@ -38,10 +38,8 @@ BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD reason, void *pReserved)
+ 
+     switch (reason)
+     {
+-#ifndef _WIN64
+     case DLL_WINE_PREATTACH:
+         return FALSE;  /* prefer native version */
+-#endif
+     case DLL_PROCESS_ATTACH:
+         DisableThreadLibraryCalls( hinstDLL );
+         break;
+diff --git a/dlls/xaudio2_7/xapofx.c b/dlls/xaudio2_7/xapofx.c
+index 9ab9b403b74..623079f5088 100644
+--- a/dlls/xaudio2_7/xapofx.c
++++ b/dlls/xaudio2_7/xapofx.c
+@@ -43,10 +43,8 @@ BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD reason, void *pReserved)
+ 
+     switch (reason)
+     {
+-#ifndef _WIN64
+     case DLL_WINE_PREATTACH:
+         return FALSE;  /* prefer native version */
+-#endif
+     case DLL_PROCESS_ATTACH:
+         DisableThreadLibraryCalls( hinstDLL );
+         break;

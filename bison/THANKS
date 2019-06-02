@@ -1,0 +1,190 @@
+Bison was originally written by Robert Corbett.  It would not be what
+it is today without the invaluable help of these people:
+
+Aaro Koskinen             aaro.koskinen@iki.fi
+Аскар Сафин               safinaskar@mail.ru
+Airy Andre                Airy.Andre@edf.fr
+Akim Demaille             akim@lrde.epita.fr
+Albert Chin-A-Young       china@thewrittenword.com
+Alexander Belopolsky      alexb@rentec.com
+Alexandre Duret-Lutz      adl@lrde.epita.fr
+Andreas Schwab            schwab@suse.de
+Andrew Suffield           asuffield@users.sourceforge.net
+Angelo Borsotti           angelo.borsotti@gmail.com
+Anthony Heading           ajrh@ajrh.net
+Antonio Silva Correia     amsilvacorreia@hotmail.com
+Arnold Robbins            arnold@skeeve.com
+Art Haas                  ahaas@neosoft.com
+Baron Schwartz            baron@sequent.org
+Ben Pfaff                 blp@cs.stanford.edu
+Benoit Perrot             benoit.perrot@epita.fr
+Bernd Edlinger            bernd.edlinger@hotmail.de
+Bernd Kiefer              kiefer@dfki.de
+Bert Deknuydt             Bert.Deknuydt@esat.kuleuven.ac.be
+Bill Allombert            Bill.Allombert@math.u-bordeaux1.fr
+Bob Rossi                 bob@brasko.net
+Brandon Lucia             blucia@gmail.com
+Bruce Lilly               blilly@erols.com
+Bruno Haible              bruno@clisp.org
+Charles-Henri de Boysson  de-boy_c@epita.fr
+Christian Burger          cburger@sunysb.edu
+Colin Daley               colin.daley@outlook.com
+Cris Bailiff              c.bailiff+bison@awayweb.com
+Cris van Pelt             cris@amf03054.office.wxs.nl
+Csaba Raduly              csaba_22@yahoo.co.uk
+Dagobert Michelsen        dam@baltic-online.de
+Daniel Frużyński          daniel@poradnik-webmastera.com
+Daniel Galloway           dg1751@att.com
+Daniel Hagerty            hag@gnu.org
+David J. MacKenzie        djm@gnu.org
+David Kastrup             dak@gnu.org
+Dennis Clarke             dclarke@blastwave.org
+Derek M. Jones            derek@knosof.co.uk
+Di-an Jan                 dianj@freeshell.org
+Dick Streefland           dick.streefland@altium.nl
+Didier Godefroy           dg@ulysium.net
+Efi Fogel                 efifogel@gmail.com
+Enrico Scholz             enrico.scholz@informatik.tu-chemnitz.de
+Eric Blake                ebb9@byu.net
+Evgeny Stambulchik        fnevgeny@plasma-gate.weizmann.ac.il
+Fabrice Bauzac            noon@cote-dazur.com
+Florian Krohm             florian@edamail.fishkill.ibm.com
+Frank Heckenbach          frank@g-n-u.de
+Frans Englich             frans.englich@telia.com
+Gabriel Rassoul           gabriel.rassoul@epita.fr
+Georg Sauthoff            gsauthof@TechFak.Uni-Bielefeld.DE
+George Neuner             gneuner2@comcast.net
+Gilles Espinasse          g.esp@free.fr
+Goran Uddeborg            goeran@uddeborg.se
+Guido Trentalancia        trentalg@aston.ac.uk
+H. Merijn Brand           h.m.brand@hccnet.nl
+Hans Aberg                haberg@matematik.su.se
+Jan Nieuwenhuizen         janneke@gnu.org
+Jerry Quinn               jlquinn@optonline.net
+Jesse Thilo               jthilo@gnu.org
+Jim Kent                  jkent@arch.sel.sony.com
+Jim Meyering              jim@meyering.net
+Joel E. Denny             joeldenny@joeldenny.org
+Johan van Selst           johans@stack.nl
+John Horigan              john@glyphic.com
+Jonathan Fabrizio         jonathan.fabrizio@lrde.epita.fr
+Jonathan Nieder           jrnieder@gmail.com
+Juan Manuel Guerrero      juan.guerrero@gmx.de
+Kees Zeelenberg           kzlg@users.sourceforge.net
+Keith Browne              kbrowne@legato.com
+Ken Moffat                zarniwhoop@ntlworld.com
+Laurent Mascherpa         laurent.mascherpa@epita.fr
+Lie Yan                   lie.yan@kaust.edu.sa
+Magnus Fromreide          magfr@lysator.liu.se
+Marc Autret               autret_m@epita.fr
+Marc Mendiola             mmendiol@usc.edu
+Mark Boyall               wolfeinstein@gmail.com
+Martin Jacobs             martin.jacobs@arcor.de
+Martin Mokrejs            mmokrejs@natur.cuni.cz
+Martin Nylin              martin.nylin@linuxmail.org
+Matt Kraai                kraai@alumni.cmu.edu
+Matt Rosing               rosing@peakfive.com
+Michael Catanzaro         mcatanzaro@gnome.org
+Michael Felt              mamfelt@gmail.com
+Michael Hayes             m.hayes@elec.canterbury.ac.nz
+Michael Raskin            7c6f434c@mail.ru
+Michel d'Hooge            michel.dhooge@gmail.com
+Michiel De Wilde          mdewilde.agilent@gmail.com
+Mickael Labau             labau_m@epita.fr
+Mike Castle               dalgoda@ix.netcom.com
+Mike Sullivan             Mike.sullivan@Oracle.COM
+Neil Booth                NeilB@earthling.net
+Nelson H. F. Beebe        beebe@math.utah.edu
+Nick Bowler               nbowler@elliptictech.com
+Nicolas Bedon             nicolas.bedon@univ-rouen.fr
+Nicolas Burrus            nicolas.burrus@epita.fr
+Nicolas Tisserand         nicolas.tisserand@epita.fr
+Noah Friedman             friedman@gnu.org
+Odd Arild Olsen           oao@fibula.no
+Oleg Smolsky              oleg.smolsky@pacific-simulators.co.nz
+Oleksii Taran             oleksii.taran@gmail.com
+Paolo Bonzini             bonzini@gnu.org
+Paolo Simone Gasparello   djgaspa@gmail.com
+Pascal Bart               pascal.bart@epita.fr
+Paul Eggert               eggert@cs.ucla.edu
+Paul Hilfinger            Hilfinger@CS.Berkeley.EDU
+Per Allansson             per@appgate.com
+Peter Eisentraut          peter_e@gmx.net
+Peter Fales               psfales@lucent.com
+Peter Hamorsky            hamo@upjs.sk
+Peter Simons              simons@cryp.to
+Petr Machata              pmachata@redhat.com
+Pho                       pho@cielonegro.org
+Piotr Gackiewicz          gacek@intertel.com.pl
+Quentin Hocquet           hocquet@gostai.com
+Quoc Peyrot               chojin@lrde.epita.fr
+R Blake                   blakers@mac.com
+Raja R Harinath           harinath@cs.umn.edu
+Ralf Wildenhues           Ralf.Wildenhues@gmx.de
+Rich Wilson               richaw@gmail.com
+Richard Stallman          rms@gnu.org
+Rici Lake                 ricilake@gmail.com
+Rob Conde                 rob.conde@ai-solutions.com
+Rob Vermaas               rob.vermaas@gmail.com
+Robert Anisko             anisko_r@epita.fr
+Roland Levillain          roland@lrde.epita.fr
+Satya Kiran Popuri        satyakiran@gmail.com
+Sebastian Setzer          sebastian.setzer.ext@siemens.com
+Sebastien Fricker         sebastien.fricker@gmail.com
+Sergei Steshenko          sergstesh@yahoo.com
+Shura                     debil_urod@ngs.ru
+Stefano Lattarini         stefano.lattarini@gmail.com
+Stephen Cameron           stephenmcameron@gmail.com
+Steve Murphy              murf@parsetree.com
+Sum Wu                    sum@geekhouse.org
+Théophile Ranquet         theophile.ranquet@gmail.com
+Thiru Ramakrishnan        thiru.ramakrishnan@gmail.com
+Thomas Jahns              jahns@dkrz.de
+Tim Josling               tej@melbpc.org.au
+Tim Landscheidt           tim@tim-landscheidt.de
+Tim Van Holder            tim.van.holder@pandora.be
+Tobias Frost              tobi@debian.org
+Tom Lane                  tgl@sss.pgh.pa.us
+Tom Tromey                tromey@cygnus.com
+Tommy Nordgren            tommy.nordgren@chello.se
+Troy A. Johnson           troyj@ecn.purdue.edu
+Tys Lefering              gccbison@gmail.com
+Valentin Tolmer           nitnelave1@gmail.com
+Victor Khomenko           victor.khomenko@newcastle.ac.uk
+Vin Shelton               acs@alumni.princeton.edu
+W.C.A. Wijngaards         wouter@NLnetLabs.nl
+Wayne Green               wayne@infosavvy.com
+Wei Song                  wsong83@gmail.com
+Wojciech Polak            polak@gnu.org
+Wolfgang S. Kechel        wolfgang.kechel@prs.de
+Wolfram Wagner            ww@mpi-sb.mpg.de
+Wwp                       subscript@free.fr
+xolodho                   xolodho@gmail.com
+Zack Weinberg             zack@codesourcery.com
+
+Many people are not named here because we lost track of them.  We
+thank them!  Please, help us keeping this list up to date.
+
+Local Variables:
+mode: text
+coding: utf-8
+End:
+
+-----
+
+Copyright (C) 2000-2015 Free Software Foundation, Inc.
+
+This file is part of Bison, the GNU Parser Generator.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.

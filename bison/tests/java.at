@@ -1,0 +1,843 @@
+# Java tests for simple calculator.           -*- Autotest -*-
+
+# Copyright (C) 2007-2015 Free Software Foundation, Inc.
+
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+AT_BANNER([[Java Calculator.]])
+
+
+# ------------------------- #
+# Helping Autotest macros.  #
+# ------------------------- #
+
+
+# _AT_DATA_JAVA_CALC_Y($1, $2, $3, [BISON-DIRECTIVES])
+# ----------------------------------------------------
+# Produce 'calc.y'.  Don't call this macro directly, because it contains
+# some occurrences of '$1' etc. which will be interpreted by m4.  So
+# you should call it with $1, $2, and $3 as arguments, which is what
+# AT_DATA_JAVA_CALC_Y does.
+m4_define([_AT_DATA_JAVA_CALC_Y],
+[m4_if([$1$2$3], $[1]$[2]$[3], [],
+       [m4_fatal([$0: Invalid arguments: $@])])dnl
+AT_BISON_OPTION_PUSHDEFS([%language "Java" $4])
+AT_DATA([Calc.y],
+[[/* Infix notation calculator--calc */
+%language "Java"
+%name-prefix "Calc"
+%define parser_class_name {Calc}
+%define public
+
+]$4[
+
+%code imports {
+  import java.io.StreamTokenizer;
+  import java.io.InputStream;
+  import java.io.InputStreamReader;
+  import java.io.Reader;
+  import java.io.IOException;
+}
+
+/* Bison Declarations */
+%token <Integer> NUM "number"
+%type  <Integer> exp
+
+%nonassoc '='       /* comparison            */
+%left '-' '+'
+%left '*' '/'
+%precedence NEG     /* negation--unary minus */
+%right '^'          /* exponentiation        */
+
+/* Grammar follows */
+%%
+input:
+  line
+| input line
+;
+
+line:
+  '\n'
+| exp '\n'
+| error '\n'
+;
+
+exp:
+  NUM                { $$ = $1;                                             }
+| exp '=' exp
+  {
+    if ($1.intValue () != $3.intValue ())
+      yyerror (]AT_LOCATION_IF([[@$,]])[ "calc: error: " + $1 + " != " + $3);
+  }
+| exp '+' exp        { $$ = new Integer ($1.intValue () + $3.intValue ());  }
+| exp '-' exp        { $$ = new Integer ($1.intValue () - $3.intValue ());  }
+| exp '*' exp        { $$ = new Integer ($1.intValue () * $3.intValue ());  }
+| exp '/' exp        { $$ = new Integer ($1.intValue () / $3.intValue ());  }
+| '-' exp  %prec NEG { $$ = new Integer (-$2.intValue ());                  }
+| exp '^' exp        { $$ = new Integer ((int)
+                                         Math.pow ($1.intValue (),
+                                                   $3.intValue ()));        }
+| '(' exp ')'        { $$ = $2;                                             }
+| '(' error ')'      { $$ = new Integer (1111);                             }
+| '!'                { $$ = new Integer (0); return YYERROR;                }
+| '-' error          { $$ = new Integer (0); return YYERROR;                }
+;
+
+]AT_LEXPARAM_IF([[
+%code lexer {
+]],
+[[
+%%
+class CalcLexer implements Calc.Lexer {
+]])[
+  StreamTokenizer st;
+
+  public ]AT_LEXPARAM_IF([[YYLexer]], [[CalcLexer]]) (InputStream is)
+  {
+    st = new StreamTokenizer (new InputStreamReader (is));
+    st.resetSyntax ();
+    st.eolIsSignificant (true);
+    st.whitespaceChars (9, 9);
+    st.whitespaceChars (32, 32);
+    st.wordChars (48, 57);
+  }
+
+AT_LOCATION_IF([[
+  Position yypos = new Position (1, 0);
+
+  public Position getStartPos() {
+    return yypos;
+  }
+
+  public Position getEndPos() {
+    return yypos;
+  }
+]])[
+  ]AT_YYERROR_DEFINE[
+
+  Integer yylval;
+
+  public Object getLVal() {
+    return yylval;
+  }
+
+  public int yylex () throws IOException {
+    int ttype = st.nextToken ();
+    ]AT_LOCATION_IF([[yypos = new Position (yypos.lineno (),
+                                            yypos.token () + 1);]])[
+    if (ttype == st.TT_EOF)
+      return EOF;
+
+    else if (ttype == st.TT_EOL)
+      {
+        ]AT_LOCATION_IF([[yypos = new Position (yypos.lineno () + 1, 0);]])[
+        return (int) '\n';
+      }
+
+    else if (ttype == st.TT_WORD)
+      {
+        yylval = new Integer (st.sval);
+        return NUM;
+      }
+
+    else
+      return st.ttype;
+  }
+
+
+]AT_LEXPARAM_IF([[
+};
+%%]], [[
+}]])
+
+[
+class Position {
+  public int line;
+  public int token;
+
+  public Position ()
+  {
+    line = 0;
+    token = 0;
+  }
+
+  public Position (int l, int t)
+  {
+    line = l;
+    token = t;
+  }
+
+  public boolean equals (Position l)
+  {
+    return l.line == line && l.token == token;
+  }
+
+  public String toString ()
+  {
+    return Integer.toString (line) + "." + Integer.toString(token);
+  }
+
+  public int lineno ()
+  {
+    return line;
+  }
+
+  public int token ()
+  {
+    return token;
+  }
+}
+
+]])
+AT_BISON_OPTION_POPDEFS
+])# _AT_DATA_JAVA_CALC_Y
+
+
+# AT_DATA_CALC_Y([BISON-OPTIONS])
+# -------------------------------
+# Produce 'calc.y'.
+m4_define([AT_DATA_JAVA_CALC_Y],
+[_AT_DATA_JAVA_CALC_Y($[1], $[2], $[3], [$1])
+])
+
+
+# _AT_CHECK_JAVA_CALC_ERROR(BISON-OPTIONS, INPUT,
+#                           [VERBOSE-AND-LOCATED-ERROR-MESSAGE])
+# --------------------------------------------------------------
+# Run 'calc' on INPUT, and expect a 'syntax error' message.
+#
+# If INPUT starts with a slash, it is used as absolute input file name,
+# otherwise as contents.
+#
+# The VERBOSE-AND-LOCATED-ERROR-MESSAGE is stripped of locations
+# and expected tokens if necessary, and compared with the output.
+m4_define([_AT_CHECK_JAVA_CALC_ERROR],
+[m4_bmatch([$2], [^/],
+           [AT_JAVA_PARSER_CHECK([Calc < $2], 0, [], [stderr])],
+           [AT_DATA([[input]],
+[[$2
+]])
+AT_JAVA_PARSER_CHECK([Calc < input], 0, [], [stderr])])
+
+# Normalize the observed and expected error messages, depending upon the
+# options.
+# 1. Create the reference error message.
+AT_DATA([[expout]],
+[$3
+])
+# 2. If locations are not used, remove them.
+AT_YYERROR_SEES_LOC_IF([],
+[[sed 's/^[-0-9.]*: //' expout >at-expout
+mv at-expout expout]])
+# 3. If error-verbose is not used, strip the', unexpected....' part.
+m4_bmatch([$1], [%error-verbose], [],
+[[sed 's/syntax error, .*$/syntax error/' expout >at-expout
+mv at-expout expout]])
+# 4. Check
+AT_CHECK([cat stderr], 0, [expout])
+])
+
+# _AT_CHECK_JAVA_CALC([BISON-DIRECTIVES], [BISON-CODE])
+# -----------------------------------------------------
+# Start a testing chunk which compiles 'calc' grammar with
+# BISON-DIRECTIVES, and performs several tests over the parser.
+m4_define([_AT_CHECK_JAVA_CALC],
+[# We use integers to avoid dependencies upon the precision of doubles.
+AT_SETUP([Calculator $1])
+
+AT_BISON_OPTION_PUSHDEFS([$1])
+
+AT_DATA_JAVA_CALC_Y([$1
+%code {
+$2
+}])
+
+AT_BISON_CHECK([-o Calc.java Calc.y])
+AT_JAVA_COMPILE([Calc.java])
+
+# Test the priorities.
+AT_DATA([[input]],
+[[1 + 2 * 3 = 7
+1 + 2 * -3 = -5
+
+-1^2 = -1
+(-1)^2 = 1
+
+---1 = -1
+
+1 - 2 - 3 = -4
+1 - (2 - 3) = 2
+
+2^2^3 = 256
+(2^2)^3 = 64
+]])
+AT_JAVA_PARSER_CHECK([Calc < input], 0, [], [stderr])
+
+
+# Some syntax errors.
+_AT_CHECK_JAVA_CALC_ERROR([$1], [0 0],
+                          [1.2: syntax error, unexpected number])
+_AT_CHECK_JAVA_CALC_ERROR([$1], [1//2],
+                          [1.3: syntax error, unexpected '/', expecting number or '-' or '(' or '!'])
+_AT_CHECK_JAVA_CALC_ERROR([$1], [error],
+                          [1.1: syntax error, unexpected $undefined])
+_AT_CHECK_JAVA_CALC_ERROR([$1], [1 = 2 = 3],
+                          [1.4: syntax error, unexpected '='])
+_AT_CHECK_JAVA_CALC_ERROR([$1], [
++1],
+                          [2.1: syntax error, unexpected '+'])
+# Exercise error messages with EOF: work on an empty file.
+_AT_CHECK_JAVA_CALC_ERROR([$1], [/dev/null],
+                          [1.1: syntax error, unexpected end of input])
+
+# Exercise the error token: without it, we die at the first error,
+# hence be sure to
+#
+# - have several errors which exercise different shift/discardings
+#   - (): nothing to pop, nothing to discard
+#   - (1 + 1 + 1 +): a lot to pop, nothing to discard
+#   - (* * *): nothing to pop, a lot to discard
+#   - (1 + 2 * *): some to pop and discard
+#
+# - test the action associated to 'error'
+#
+# - check the lookahead that triggers an error is not discarded
+#   when we enter error recovery.  Below, the lookahead causing the
+#   first error is ")", which is needed to recover from the error and
+#   produce the "0" that triggers the "0 != 1" error.
+#
+_AT_CHECK_JAVA_CALC_ERROR([$1],
+                          [() + (1 + 1 + 1 +) + (* * *) + (1 * 2 * *) = 1],
+[1.2: syntax error, unexpected ')', expecting number or '-' or '(' or '!'
+1.11: syntax error, unexpected ')', expecting number or '-' or '(' or '!'
+1.14: syntax error, unexpected '*', expecting number or '-' or '(' or '!'
+1.24: syntax error, unexpected '*', expecting number or '-' or '(' or '!'
+1.1-1.27: calc: error: 4444 != 1])
+
+# The same, but this time exercising explicitly triggered syntax errors.
+# POSIX says the lookahead causing the error should not be discarded.
+_AT_CHECK_JAVA_CALC_ERROR([$1], [(!) + (0 0) = 1],
+[1.7: syntax error, unexpected number
+1.1-1.10: calc: error: 2222 != 1])
+_AT_CHECK_JAVA_CALC_ERROR([$1], [(- *) + (0 0) = 1],
+[1.3: syntax error, unexpected '*', expecting number or '-' or '(' or '!'
+1.8: syntax error, unexpected number
+1.1-1.11: calc: error: 2222 != 1])
+AT_BISON_OPTION_POPDEFS
+
+AT_CLEANUP
+])# _AT_CHECK_JAVA_CALC
+
+
+# AT_CHECK_JAVA_CALC([BISON-DIRECTIVES])
+# --------------------------------------
+# Start a testing chunk which compiles 'calc' grammar with
+# BISON-DIRECTIVES, and performs several tests over the parser.
+# Run the test with and without %error-verbose.
+m4_define([AT_CHECK_JAVA_CALC],
+[_AT_CHECK_JAVA_CALC([$1], [$2])
+_AT_CHECK_JAVA_CALC([%error-verbose $1], [$2])
+_AT_CHECK_JAVA_CALC([%locations $1], [$2])
+_AT_CHECK_JAVA_CALC([%error-verbose %locations $1], [$2])
+])# AT_CHECK_JAVA_CALC
+
+
+# ------------------------ #
+# Simple LALR Calculator.  #
+# ------------------------ #
+
+AT_CHECK_JAVA_CALC([], [[
+  public static void main (String args[]) throws IOException
+  {
+    CalcLexer l = new CalcLexer (System.in);
+    Calc p = new Calc (l);
+    p.parse ();
+  }
+]])
+
+AT_CHECK_JAVA_CALC([%lex-param { InputStream is } ], [[
+  public static void main (String args[]) throws IOException
+  {
+    new Calc (System.in).parse ();
+  }
+]])
+
+
+
+# -----------------#
+# Java Directives. #
+# -----------------#
+
+AT_BANNER([Java Parameters.])
+
+
+# AT_CHECK_JAVA_MINIMAL([DIRECTIVES], [PARSER_ACTION], [POSITION_CLASS])
+# ----------------------------------------------------------------------
+# Check that a mininal parser with DIRECTIVES compiles in Java.
+# Put the Java code in YYParser.java.
+m4_define([AT_CHECK_JAVA_MINIMAL],
+[
+AT_DATA([[YYParser.y]], [
+%language "Java"
+%locations
+%debug
+%error-verbose
+%token-table
+%token END "end"
+$1
+%%
+start: END {$2};
+%%
+class m4_default([$3], [Position]) {}
+])
+AT_BISON_CHECK([[YYParser.y]])
+AT_CHECK([[grep '[mb]4_' YYParser.y]], [1], [ignore])
+AT_JAVA_COMPILE([[YYParser.java]])
+])
+
+
+# AT_CHECK_JAVA_MINIMAL_W_LEXER([1:DIRECTIVES], [2:LEX_THROWS],
+#       [3:YYLEX_ACTION], [4:LEXER_BODY], [5:PARSER_ACTION], [6:VALUE_TYPE],
+#       [7:POSITION_TYPE], [8:LOCATION_TYPE])
+# ---------------------------------------------------------------------
+# Check that a mininal parser with DIRECTIVES and a "%code lexer".
+# YYLEX is the body of yylex () which throws LEX_THROW.
+# compiles in Java.
+m4_define([AT_CHECK_JAVA_MINIMAL_W_LEXER],
+[AT_CHECK_JAVA_MINIMAL([$1
+
+%code lexer
+{
+  m4_default([$6], [Object]) yylval;
+  public m4_default([$6], [Object]) getLVal() { return yylval; }
+
+  public m4_default([$7], [Position]) getStartPos() { return null; }
+  public m4_default([$7], [Position]) getEndPos()   { return null; }
+
+  public void yyerror (m4_default([$8], [Location]) loc, String s)
+  {
+    System.err.println (loc + ": " + s);
+  }
+
+  public int yylex ()$2
+  {
+    $3
+  }
+
+  $4
+}], [$5], [$7])])
+
+
+# AT_CHECK_JAVA_GREP([LINE], [COUNT=1])
+# -------------------------------------
+# Check that YYParser.java contains exactly COUNT lines matching ^LINE$
+# with grep.
+m4_define([AT_CHECK_JAVA_GREP],
+[AT_CHECK([grep -c '^$1$' YYParser.java], [ignore], [m4_default([$2], [1])
+])])
+
+
+# ------------------------------------- #
+# Java parser class and package names.  #
+# ------------------------------------- #
+
+AT_SETUP([Java parser class and package names])
+
+AT_CHECK_JAVA_MINIMAL([])
+AT_CHECK_JAVA_GREP([[class YYParser]])
+
+AT_CHECK_JAVA_MINIMAL([[%name-prefix "Prefix"]])
+AT_CHECK_JAVA_GREP([[class PrefixParser]])
+
+AT_CHECK_JAVA_MINIMAL([[%define api.token.prefix {TOK_}]])
+AT_CHECK_JAVA_GREP([[.*TOK_END.*]])
+
+AT_CHECK_JAVA_MINIMAL([[%define parser_class_name {ParserClassName}]])
+AT_CHECK_JAVA_GREP([[class ParserClassName]])
+
+AT_CHECK_JAVA_MINIMAL([[%define package {user_java_package}]])
+AT_CHECK_JAVA_GREP([[package user_java_package;]])
+
+AT_CLEANUP
+
+
+# ----------------------------- #
+# Java parser class modifiers.  #
+# ----------------------------- #
+
+AT_SETUP([Java parser class modifiers])
+
+AT_CHECK_JAVA_MINIMAL([[%define abstract]])
+AT_CHECK_JAVA_GREP([[abstract class YYParser]])
+
+AT_CHECK_JAVA_MINIMAL([[%define final]])
+AT_CHECK_JAVA_GREP([[final class YYParser]])
+
+AT_CHECK_JAVA_MINIMAL([[%define strictfp]])
+AT_CHECK_JAVA_GREP([[strictfp class YYParser]])
+
+AT_CHECK_JAVA_MINIMAL([[
+%define abstract
+%define strictfp]])
+AT_CHECK_JAVA_GREP([[abstract strictfp class YYParser]])
+
+AT_CHECK_JAVA_MINIMAL([[
+%define final
+%define strictfp]])
+AT_CHECK_JAVA_GREP([[final strictfp class YYParser]])
+
+AT_CHECK_JAVA_MINIMAL([[%define public]])
+AT_CHECK_JAVA_GREP([[public class YYParser]])
+
+AT_CHECK_JAVA_MINIMAL([[
+%define public
+%define abstract]])
+AT_CHECK_JAVA_GREP([[public abstract class YYParser]])
+
+AT_CHECK_JAVA_MINIMAL([[
+%define public
+%define final]])
+AT_CHECK_JAVA_GREP([[public final class YYParser]])
+
+AT_CHECK_JAVA_MINIMAL([[
+%define public
+%define strictfp]])
+AT_CHECK_JAVA_GREP([[public strictfp class YYParser]])
+
+AT_CHECK_JAVA_MINIMAL([[
+%define public
+%define abstract
+%define strictfp]])
+AT_CHECK_JAVA_GREP([[public abstract strictfp class YYParser]])
+
+AT_CHECK_JAVA_MINIMAL([[
+%define public
+%define final
+%define strictfp]])
+AT_CHECK_JAVA_GREP([[public final strictfp class YYParser]])
+
+# FIXME: Can't do a Java compile because javacomp.sh is configured for 1.3
+AT_CHECK_JAVA_MINIMAL([[
+%define annotations {/*@Deprecated @SupressWarnings("unchecked") @SupressWarnings({"unchecked", "deprecation"}) @SupressWarnings(value={"unchecked", "deprecation"})*/}
+%define public]])
+AT_CHECK_JAVA_GREP([[/\*@Deprecated @SupressWarnings("unchecked") @SupressWarnings({"unchecked", "deprecation"}) @SupressWarnings(value={"unchecked", "deprecation"})\*/ public class YYParser]])
+
+AT_CLEANUP
+
+
+# ---------------------------------------- #
+# Java parser class extends and implements #
+# ---------------------------------------- #
+
+AT_SETUP([Java parser class extends and implements])
+
+AT_CHECK_JAVA_MINIMAL([[%define extends {Thread}]])
+AT_CHECK_JAVA_GREP([[class YYParser extends Thread]])
+
+AT_CHECK_JAVA_MINIMAL([[%define implements {Cloneable}]])
+AT_CHECK_JAVA_GREP([[class YYParser implements Cloneable]])
+
+AT_CHECK_JAVA_MINIMAL([[
+%define extends {Thread}
+%define implements {Cloneable}]])
+AT_CHECK_JAVA_GREP([[class YYParser extends Thread implements Cloneable]])
+
+AT_CLEANUP
+
+
+# -------------------------------- #
+# Java %parse-param and %lex-param #
+# -------------------------------- #
+
+AT_SETUP([Java %parse-param and %lex-param])
+
+AT_CHECK_JAVA_MINIMAL([])
+AT_CHECK_JAVA_GREP([[ *public YYParser (Lexer yylexer) *]])
+
+AT_CHECK_JAVA_MINIMAL([[%parse-param {int parse_param1}]])
+AT_CHECK_JAVA_GREP([[ *protected final int parse_param1;]])
+AT_CHECK_JAVA_GREP([[ *public YYParser (Lexer yylexer, *int parse_param1) *]])
+AT_CHECK_JAVA_GREP([[ *this.parse_param1 = parse_param1;]])
+
+AT_CHECK_JAVA_MINIMAL([[
+%parse-param {int parse_param1}
+%parse-param {long parse_param2}]])
+AT_CHECK_JAVA_GREP([[ *protected final int parse_param1;]])
+AT_CHECK_JAVA_GREP([[ *protected final long parse_param2;]])
+AT_CHECK_JAVA_GREP([[ *public YYParser (Lexer yylexer, *int parse_param1, *long parse_param2) *]])
+AT_CHECK_JAVA_GREP([[ *this.parse_param1 = parse_param1;]])
+AT_CHECK_JAVA_GREP([[ *this.parse_param2 = parse_param2;]])
+
+AT_CHECK_JAVA_MINIMAL_W_LEXER([], [], [[return EOF;]])
+AT_CHECK_JAVA_GREP([[ *public YYParser () *]])
+AT_CHECK_JAVA_GREP([[ *protected YYParser (Lexer yylexer) *]])
+
+AT_CHECK_JAVA_MINIMAL_W_LEXER([[%parse-param {int parse_param1}]],
+    [], [[return EOF;]])
+AT_CHECK_JAVA_GREP([[ *protected final int parse_param1;]])
+AT_CHECK_JAVA_GREP([[ *public YYParser (int parse_param1) *]])
+AT_CHECK_JAVA_GREP([[ *protected YYParser (Lexer yylexer, *int parse_param1) *]])
+AT_CHECK_JAVA_GREP([[ *this.parse_param1 = parse_param1;]], [2])
+
+AT_CHECK_JAVA_MINIMAL_W_LEXER([[
+%parse-param {int parse_param1}
+%parse-param {long parse_param2}]],
+    [], [[return EOF;]])
+AT_CHECK_JAVA_GREP([[ *protected final int parse_param1;]])
+AT_CHECK_JAVA_GREP([[ *protected final long parse_param2;]])
+AT_CHECK_JAVA_GREP([[ *public YYParser (int parse_param1, *long parse_param2) *]])
+AT_CHECK_JAVA_GREP([[ *protected YYParser (Lexer yylexer, *int parse_param1, *long parse_param2) *]])
+AT_CHECK_JAVA_GREP([[ *this.parse_param1 = parse_param1;]], [2])
+AT_CHECK_JAVA_GREP([[ *this.parse_param2 = parse_param2;]], [2])
+
+AT_CHECK_JAVA_MINIMAL_W_LEXER([[%lex-param {char lex_param1}]],
+    [], [[return EOF;]], [[YYLexer (char lex_param1) {}]])
+AT_CHECK_JAVA_GREP([[ *public YYParser (char lex_param1) *]])
+AT_CHECK_JAVA_GREP([[.* = new YYLexer *(lex_param1);]])
+
+AT_CHECK_JAVA_MINIMAL_W_LEXER([[
+%lex-param {char lex_param1}
+%lex-param {short lex_param2}]],
+    [], [[return EOF;]], [[YYLexer (char lex_param1, short lex_param2) {}]])
+AT_CHECK_JAVA_GREP([[ *public YYParser (char lex_param1, *short lex_param2) *]])
+AT_CHECK_JAVA_GREP([[.* = new YYLexer *(lex_param1, *lex_param2);]])
+
+AT_CHECK_JAVA_MINIMAL_W_LEXER([[
+%parse-param {int parse_param1}
+%parse-param {long parse_param2}
+%lex-param {char lex_param1}
+%lex-param {short lex_param2}]],
+    [], [[return EOF;]], [[YYLexer (char lex_param1, short lex_param2) {}]])
+AT_CHECK_JAVA_GREP([[ *protected final int parse_param1;]])
+AT_CHECK_JAVA_GREP([[ *protected final long parse_param2;]])
+AT_CHECK_JAVA_GREP([[ *public YYParser (char lex_param1, *short lex_param2, *int parse_param1, *long parse_param2) *]])
+AT_CHECK_JAVA_GREP([[.* = new YYLexer *(lex_param1, *lex_param2);]])
+AT_CHECK_JAVA_GREP([[ *protected YYParser (Lexer yylexer, *int parse_param1, *long parse_param2) *]])
+AT_CHECK_JAVA_GREP([[ *this.parse_param1 = parse_param1;]], [2])
+AT_CHECK_JAVA_GREP([[ *this.parse_param2 = parse_param2;]], [2])
+
+AT_CLEANUP
+
+
+# ------------------------- #
+# Java throw specifications #
+# ------------------------- #
+
+AT_SETUP([Java throws specifications])
+
+# %define throws        - 0 1 2
+# %define lex-throws    - 0 1 2
+# %code lexer             0 1
+
+m4_define([AT_JT_lex_throws_define], [m4_case(AT_JT_lex_throws,
+        -1, [],
+         0, [[%define lex_throws {}]],
+         1, [[%define lex_throws {InterruptedException}]],
+         2, [[%define lex_throws {InterruptedException, IllegalAccessException}]])])
+
+m4_define([AT_JT_yylex_throws], [m4_case(AT_JT_lex_throws,
+        -1, [[ throws java.io.IOException]],
+         0, [],
+         1, [[ throws InterruptedException]],
+         2, [[ throws InterruptedException, IllegalAccessException]])])
+
+m4_define([AT_JT_yylex_action], [m4_case(AT_JT_lex_throws,
+        -1, [[throw new java.io.IOException();]],
+         0, [[return EOF;]],
+         1, [[throw new InterruptedException();]],
+         2, [[throw new IllegalAccessException();]])])
+
+
+m4_define([AT_JT_throws_define], [m4_case(AT_JT_throws,
+        -1, [],
+         0, [[%define throws {}]],
+         1, [[%define throws {ClassNotFoundException}]],
+         2, [[%define throws {ClassNotFoundException, InstantiationException}]])])
+
+m4_define([AT_JT_yyaction_throws], [m4_case(AT_JT_throws,
+        -1, [],
+         0, [],
+         1, [[ throws ClassNotFoundException]],
+         2, [[ throws ClassNotFoundException, InstantiationException]])])
+
+m4_define([AT_JT_parse_throws_2], [m4_case(AT_JT_throws,
+        -1, [],
+         0, [],
+         1, [[, ClassNotFoundException]],
+         2, [[, ClassNotFoundException, InstantiationException]])])
+
+m4_define([AT_JT_parse_throws],
+        [m4_if(m4_quote(AT_JT_yylex_throws), [],
+                [AT_JT_yyaction_throws],
+                [AT_JT_yylex_throws[]AT_JT_parse_throws_2])])
+
+m4_define([AT_JT_initial_action], [m4_case(AT_JT_throws,
+        -1, [],
+         0, [],
+         1, [[%initial-action {if (true) throw new ClassNotFoundException();}]],
+         2, [[%initial-action {if (true) throw new InstantiationException();}]])])
+
+m4_define([AT_JT_parse_action], [m4_case(AT_JT_throws,
+        -1, [],
+         0, [],
+         1, [[throw new ClassNotFoundException();]],
+         2, [[throw new ClassNotFoundException();]])])
+
+m4_for([AT_JT_lexer], 0, 1, 1,
+  [m4_for([AT_JT_lex_throws], -1, 2, 1,
+    [m4_for([AT_JT_throws], -1, 2, 1,
+      [m4_if(AT_JT_lexer, 0,
+        [AT_CHECK_JAVA_MINIMAL([
+AT_JT_throws_define
+AT_JT_lex_throws_define
+AT_JT_initial_action],
+[AT_JT_parse_action])],
+        [AT_CHECK_JAVA_MINIMAL_W_LEXER([
+AT_JT_throws_define
+AT_JT_lex_throws_define
+AT_JT_initial_action],
+[AT_JT_yylex_throws],
+[AT_JT_yylex_action],
+[],
+[AT_JT_parse_action])])
+AT_CHECK_JAVA_GREP([[ *int yylex ()]AT_JT_yylex_throws *[;]])
+AT_CHECK_JAVA_GREP([[ *private int yyaction ([^)]*)]AT_JT_yyaction_throws[ *]])
+AT_CHECK_JAVA_GREP([[ *public boolean parse ()]AT_JT_parse_throws[ *]])
+])])])
+
+AT_CLEANUP
+
+
+# ------------------------------------- #
+# Java constructor init and init_throws #
+# ------------------------------------- #
+
+AT_SETUP([Java constructor init and init_throws])
+
+m4_pushdef([AT_Witness],
+[super("Test Thread"); if (true) throw new InterruptedException();])
+
+AT_CHECK_JAVA_MINIMAL([[
+%define extends {Thread}
+%code init { ]AT_Witness[ }
+%define init_throws {InterruptedException}
+%lex-param {int lex_param}]])
+AT_CHECK([[grep ']AT_Witness[' YYParser.java]], 0, [ignore])
+
+AT_CHECK_JAVA_MINIMAL_W_LEXER([[
+%define extends {Thread}
+%code init { ]AT_Witness[ }
+%define init_throws {InterruptedException}]], [], [[return EOF;]])
+AT_CHECK([[grep ']AT_Witness[' YYParser.java]], 0, [ignore])
+
+m4_popdef([AT_Witness])
+
+AT_CLEANUP
+
+
+# ------------------------------------------ #
+# Java value, position, and location types.  #
+# ------------------------------------------ #
+
+AT_SETUP([Java value, position, and location types])
+
+AT_CHECK_JAVA_MINIMAL([[
+%define api.value.type {java.awt.Color}
+%type<java.awt.Color> start;
+%define api.location.type {MyLoc}
+%define api.position.type {MyPos}
+%code { class MyPos {} }]], [[$$ = $<java.awt.Color>1;]], [[MyPos]])
+AT_CHECK([[grep 'java.awt.Color' YYParser.java]], [0], [ignore])
+AT_CHECK([[$EGREP -v ' */?\*' YYParser.java | grep 'Position']], [1], [ignore])
+AT_CHECK([[$EGREP -v ' */?\*' YYParser.java | grep 'Location']], [1], [ignore])
+
+AT_CHECK_JAVA_MINIMAL_W_LEXER([[
+%define api.value.type {java.awt.Color}
+%type<java.awt.Color> start;
+%define api.location.type {MyLoc}
+%define api.position.type {MyPos}
+%code { class MyPos {} }]], [], [[return EOF;]], [],
+[[$$ = $<java.awt.Color>1;]],
+[[java.awt.Color]], [[MyPos]], [[MyLoc]])
+AT_CHECK([[grep 'java.awt.Color' YYParser.java]], [0], [ignore])
+AT_CHECK([[$EGREP -v ' */?\*' YYParser.java | grep 'Position']], [1], [ignore])
+AT_CHECK([[$EGREP -v ' */?\*' YYParser.java | grep 'Location']], [1], [ignore])
+
+AT_CLEANUP
+
+
+# ----------------------------------------------- #
+# Java syntax error handling without error token. #
+# ----------------------------------------------- #
+
+AT_SETUP([Java syntax error handling without error token])
+
+AT_DATA([[YYParser.y]], [[%language "Java"
+
+%lex-param { String s }
+
+%code imports {
+  import java.io.IOException;
+}
+
+%code lexer {
+  String Input;
+  int Position;
+
+  public YYLexer (String s)
+  {
+    Input    = s;
+    Position = 0;
+  }
+
+  public void yyerror (String s)
+  {
+    System.err.println (s);
+  }
+
+  public Object getLVal ()
+  {
+    return null;
+  }
+
+  public int yylex () throws IOException
+  {
+    if (Position >= Input.length ())
+      return EOF;
+    else
+      return Input.charAt (Position++);
+  }
+}
+
+%code {
+  public static void main (String args []) throws IOException
+  {
+    YYParser p = new YYParser (args [0]);
+    p.parse ();
+  }
+}
+%%
+input:
+  'a' 'a'
+;
+]])
+AT_BISON_CHECK([[YYParser.y]])
+AT_JAVA_COMPILE([[YYParser.java]])
+AT_JAVA_PARSER_CHECK([[YYParser aa]], [[0]], [[]], [[]])
+AT_JAVA_PARSER_CHECK([[YYParser ab]], [[0]], [[]], [[syntax error
+]])
+AT_JAVA_PARSER_CHECK([[YYParser ba]], [[0]], [[]], [[syntax error
+]])
+
+AT_CLEANUP

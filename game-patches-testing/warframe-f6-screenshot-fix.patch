@@ -1,40 +1,12 @@
-From 2af3a4665a5cb3d4589a4c3686ed6a2b11f5ffbf Mon Sep 17 00:00:00 2001
-From: John Thomson <git@johnthomson.fastmail.com.au>
-Date: Mon, 15 Apr 2019 16:53:10 +1000
-Subject: [PATCH] SHCreateDirectoryExW no ERROR_CANCELLED for
- ERROR_ALREADY_EXISTS
-
-If SHCreateDirectoryExW is passed a non-null hWnd,
-but the directory already exists,
-ERROR_CANCELLED is returned, rather than the ERROR_ALREADY_EXISTS
-
-An application relying on an expected return code
-may not proceed given the ERROR_CANCELLED, rather than the actual error.
-
-Warframe in-game screenshots (F6) demonstrates this behaviour
-
-Signed-off-by: John Thomson <git@johnthomson.fastmail.com.au>
----
- dlls/shell32/shlfileop.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
-
 diff --git a/dlls/shell32/shlfileop.c b/dlls/shell32/shlfileop.c
-index c7bd54d200..dbb52e0a20 100644
+index cd37594992..b7747301bd 100644
 --- a/dlls/shell32/shlfileop.c
 +++ b/dlls/shell32/shlfileop.c
-@@ -763,7 +763,10 @@ int WINAPI SHCreateDirectoryExW(HWND hWnd, LPCWSTR path, LPSECURITY_ATTRIBUTES s
- 	    }
- 	  }
+@@ -826,6 +826,7 @@ int WINAPI SHCreateDirectoryExW(HWND hWnd, LPCWSTR path, LPSECURITY_ATTRIBUTES s
  
--	  if (ret && hWnd && (ERROR_CANCELLED != ret))
-+	  if (ret && hWnd &&
-+	      ret != ERROR_CANCELLED &&
+ 	  if (ret && hWnd &&
+ 	      ret != ERROR_CANCELLED &&
 +	      ret != ERROR_FILE_EXISTS &&
-+	      ret != ERROR_ALREADY_EXISTS)
+ 	      ret != ERROR_ALREADY_EXISTS)
  	  {
  	    /* We failed and should show a dialog box */
- 	    FIXME("Show system error message, creating path %s, failed with error %d\n", debugstr_w(path), ret);
--- 
-2.21.0
-
-

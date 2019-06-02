@@ -1,0 +1,2 @@
+This file is a stub, not used by the documentation.  If you feel like
+contributing ASCII art for example.gv, please step forward!

@@ -231,6 +231,12 @@ CMAKE_OBJ64 := ./obj-cmake64
 CMAKE_BIN32 := $(CMAKE_OBJ32)/built/bin/cmake
 CMAKE_BIN64 := $(CMAKE_OBJ64)/built/bin/cmake
 
+BISON := $(SRCDIR)/bison
+BISON_OBJ32 := ./obj-bison32
+BISON_OBJ64 := ./obj-bison64
+BISON_BIN32 := $(BISON_OBJ32)/built/bin/bison
+BISON_BIN64 := $(BISON_OBJ64)/built/bin/bison
+
 FONTS := $(SRCDIR)/fonts
 FONTS_OBJ := ./obj-fonts
 
@@ -243,6 +249,7 @@ OBJ_DIRS := $(TOOLS_DIR32)        $(TOOLS_DIR64)        \
             $(WINE_OBJ32)         $(WINE_OBJ64)         \
             $(VRCLIENT_OBJ32)     $(VRCLIENT_OBJ64)     \
             $(DXVK_OBJ32)         $(DXVK_OBJ64)         \
+            $(BISON_OBJ32)         $(BISON_OBJ64)         \
             $(CMAKE_OBJ32)        $(CMAKE_OBJ64)
 
 $(OBJ_DIRS):
@@ -736,9 +743,10 @@ WINE32_MAKE_ARGS := \
 
 # 64bit-configure
 $(WINE_CONFIGURE_FILES64): SHELL = $(CONTAINER_SHELL64)
-$(WINE_CONFIGURE_FILES64): $(MAKEFILE_DEP) | faudio64 $(WINE_OBJ64)
+$(WINE_CONFIGURE_FILES64): $(MAKEFILE_DEP) | faudio64 $(WINE_OBJ64) bison64
 	cd $(dir $@) && \
 		STRIP=$(STRIP_QUOTED) \
+		BISON=$(abspath $(BISON_BIN64)) \
 		CFLAGS=-I$(abspath $(TOOLS_DIR64))"/include -g $(COMMON_FLAGS)" \
 		LDFLAGS="-L$(abspath $(TOOLS_DIR64))/lib -Wl,-rpath-link,$(abspath $(TOOLS_DIR64))/lib" \
 		PKG_CONFIG_PATH=$(abspath $(TOOLS_DIR64))/lib/pkgconfig \
@@ -751,9 +759,10 @@ $(WINE_CONFIGURE_FILES64): $(MAKEFILE_DEP) | faudio64 $(WINE_OBJ64)
 
 # 32-bit configure
 $(WINE_CONFIGURE_FILES32): SHELL = $(CONTAINER_SHELL32)
-$(WINE_CONFIGURE_FILES32): $(MAKEFILE_DEP) | faudio32 $(WINE_OBJ32)
+$(WINE_CONFIGURE_FILES32): $(MAKEFILE_DEP) | faudio32 $(WINE_OBJ32) bison32
 	cd $(dir $@) && \
 		STRIP=$(STRIP_QUOTED) \
+		BISON=$(abspath $(BISON_BIN32)) \
 		CFLAGS=-I$(abspath $(TOOLS_DIR32))"/include -g $(COMMON_FLAGS)" \
 		LDFLAGS="-L$(abspath $(TOOLS_DIR32))/lib -Wl,-rpath-link,$(abspath $(TOOLS_DIR32))/lib" \
 		PKG_CONFIG_PATH=$(abspath $(TOOLS_DIR32))/lib/pkgconfig \
@@ -961,6 +970,65 @@ cmake32-intermediate: $(CMAKE_CONFIGURE_FILES32) $(filter $(MAKECMDGOALS),cmake3
 	+$(MAKE) -C $(CMAKE_OBJ32)
 	+$(MAKE) -C $(CMAKE_OBJ32) install
 	touch $(CMAKE_BIN32)
+##
+## bison -- necessary for wine, steam runtime version too old
+##
+
+# TODO Don't bother with this in native mode
+
+## Create & configure object directory for cmake
+
+BISON_CONFIGURE_FILES32 := $(BISON_OBJ32)/Makefile
+BISON_CONFIGURE_FILES64 := $(BISON_OBJ64)/Makefile
+
+# 64-bit configure
+$(BISON_CONFIGURE_FILES64): SHELL = $(CONTAINER_SHELL64)
+$(BISON_CONFIGURE_FILES64): $(MAKEFILE_DEP) | $(BISON_OBJ64)
+	cd "$(BISON_OBJ64)" && \
+		../$(BISON)/configure --prefix=$(abspath $(BISON_OBJ64))/built
+
+# 32-bit configure
+$(BISON_CONFIGURE_FILES32): SHELL = $(CONTAINER_SHELL32)
+$(BISON_CONFIGURE_FILES32): $(MAKEFILE_DEP) | $(BISON_OBJ32)
+	cd "$(BISON_OBJ32)" && \
+		../$(BISON)/configure --prefix=$(abspath $(BISON_OBJ32))/built
+
+
+## bison goals
+BISON_TARGETS = bison bison_configure bison32 bison64 bison_configure32 bison_configure64
+
+ALL_TARGETS += $(BISON_TARGETS)
+
+.PHONY: $(BISON_TARGETS)
+
+bison_configure: $(BISON_CONFIGURE_FILES32) $(BISON_CONFIGURE_FILES64)
+
+bison_configure32: $(BISON_CONFIGURE_FILES32)
+
+bison_configure64: $(BISON_CONFIGURE_FILES64)
+
+bison: bison32 bison64
+
+# These have multiple targets that come from one invocation.  The way to do that is to have both targets on a single
+# intermediate.
+.INTERMEDIATE: bison64-intermediate bison32-intermediate
+
+$(BISON_BIN64) bison64: bison64-intermediate
+
+bison64-intermediate: SHELL = $(CONTAINER_SHELL64)
+bison64-intermediate: $(BISON_CONFIGURE_FILES64) $(filter $(MAKECMDGOALS),bison64)
+	+$(MAKE) -C $(BISON_OBJ64)
+	+$(MAKE) -C $(BISON_OBJ64) install
+	touch $(BISON_BIN64)
+
+$(BISON_BIN32) bison32: bison32-intermediate
+
+bison32-intermediate: SHELL = $(CONTAINER_SHELL32)
+bison32-intermediate: $(BISON_CONFIGURE_FILES32) $(filter $(MAKECMDGOALS),bison32)
+	+$(MAKE) -C $(BISON_OBJ32)
+	+$(MAKE) -C $(BISON_OBJ32) install
+	touch $(BISON_BIN32)
+
 
 ##
 ## dxvk

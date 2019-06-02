@@ -1,0 +1,510 @@
+% Bison Quick Reference
+
+%**start of header
+\newcount\columnsperpage
+
+% This file can be printed with 1 or 2 columns per page (see below).
+% Specify how many you want here.  Nothing else needs to be changed
+% unless you are maintaining the documentation.
+% For printing reference cards to use in books, specify one column
+% per page and reduce to 80%.
+% Note that if columnsperpage is set to 2, there will be a few overfull
+% boxes, but they are not serious. Just uncomment \finalout.
+
+\columnsperpage=1
+
+% comment out this line if you want page numbers to appear.
+\nopagenumbers
+
+\def\finalout{\overfullrule=0pt}
+%\finalout
+
+% Copyright (c) 1998, 2001, 2009-2015 Free Software Foundation, Inc.
+%
+% This file is part of Bison.
+%
+% This program is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+%
+% This program is distributed in the hope that it will be useful,
+% but WITHOUT ANY WARRANTY; without even the implied warranty of
+% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+% GNU General Public License for more details.
+%
+% You should have received a copy of the GNU General Public License
+% along with this program.  If not, see <http://www.gnu.org/licenses/>.
+%
+% This file is intended to be processed by plain TeX (TeX82).
+%
+% The final reference card has two columns:
+% This file can be used to produce it in any of three ways:
+% 1 column per page
+%    produces two separate pages, each of which needs to be reduced to 80%.
+%    This gives the best resolution.
+% 2 columns per page
+%    produces a single page.
+%    You will still need to cut and paste.
+% Which mode to use is controlled by setting \columnsperpage above.
+%
+% Authors:
+%  Brendan Kehoe
+%  UUCP: widener!brendan
+%  Internet: brendan@cs.widener.edu
+%
+%  Gavin Nicol
+%  Internet: nick@nsis.cl.co.jp
+%
+% This refcard format was created by Steve Gildea.
+%
+% Thanks to Paul Rubin, Bob Chassell, Len Tower, and Richard Mlynarik
+% for their many good ideas.
+
+% We only change the following to change the version numbers and
+% such.
+
+\def\bisonversion{1.31}                    % the bison version
+
+\def\refcardversion{0.5}                   % reference card version
+\def\month{November}                       % month
+\def\year{2001}                            % year
+\def\version{\month\ \year, Bison Refcard Version \refcardversion}
+
+% for copyright notices
+\def\small{\smallfont\textfont2=\smallsy\baselineskip=.8\baselineskip}
+\def\medium{\mediumfont\textfont2=\mediumsy\baselineskip=.8\baselineskip}
+
+\def\copyrightnotice{
+\vskip .15ex plus .25 fill
+\begingroup\medium
+\centerline{Copyright \copyright\ \year\ Free Software Foundation, Inc.}
+\vskip .2\baselineskip
+\centerline{\version}
+\vskip .2\baselineskip
+\centerline{designed by Brendan Kehoe and Gavin Nicol}
+\vskip .2\baselineskip
+\centerline{for Bison \bisonversion}
+
+Permission is granted to make and distribute copies of this card
+provided the copyright notice and this permission notice
+are preserved on all copies.
+\vskip .2\baselineskip
+For information, write to the:
+\vskip .2\baselineskip
+\centerline{Free Software Foundation, Inc.}
+\vskip .2\baselineskip
+\centerline{51 Franklin Street, Fifth Floor}
+\vskip .2\baselineskip
+\centerline{Boston, MA 02110-1301 USA}
+\endgroup}
+
+%%%% smallcopyrightnotice for two column printing on one page.
+\def\smallcopyrightnotice{
+\vskip .15ex plus .25 fill
+\begingroup\small
+\centerline{Copyright \copyright\ \year\ Free Software Foundation, Inc.}
+\vskip .2\baselineskip
+\centerline{\version}
+\vskip .2\baselineskip
+\centerline{designed by Brendan Kehoe and Gavin Nicol}
+\vskip .2\baselineskip
+\centerline{for Bison \bisonversion}
+
+Permission is granted to make and distribute copies of this card
+provided the copyright notice and this permission notice
+are preserved on all copies.
+\vskip .2\baselineskip
+For information, write to the:
+\vskip .2\baselineskip
+\centerline{Free Software Foundation, Inc.}
+\vskip .2\baselineskip
+\centerline{51 Franklin Street, Fifth Floor}
+\vskip .2\baselineskip
+\centerline{Boston, MA 02110-1301 USA}
+\endgroup}
+
+% make \bye not \outer so that the \def\bye in the \else clause below
+% can be scanned without complaint.
+\def\bye{\par\vfill\supereject\end}
+
+\newdimen\intercolumnskip
+\newbox\columna
+\newbox\columnb
+
+\def\ncolumns{\the\columnsperpage}
+
+\message{[\ncolumns\space
+  column\if 1\ncolumns\else s\fi\space per page]}
+
+\def\scaledmag#1{ scaled \magstep #1}
+
+% This multi-way format was designed by Stephen Gildea
+% October 1986.
+\if 1\ncolumns
+  \hsize 4in
+  \vsize 10in
+% We want output .3 inch *from top of paper edge*; i.e. -.7in from TeX default
+  \voffset -.7in % Comment out for xdvi viewing; include for printing.
+  \font\titlefont=\fontname\tenbf \scaledmag3
+  \font\headingfont=\fontname\tenbf \scaledmag2
+  \font\smallfont=cmr6
+  \font\smallsy=cmsy6
+  \font\mediumfont=cmr10
+  \font\mediumsy=cmsy10
+
+
+% two lines below commented out in Yet Another Attempt to eliminate
+% page numbers from the output.
+  \footline{\hss}
+% \footline{\hss\folio}
+  \def\makefootline{\baselineskip10pt\hsize6.5in\line{\the\footline}}
+\else
+  \hsize 3.2in
+  \vsize 7.95in
+  \hoffset -.75in
+  \voffset -.745in
+  \font\titlefont=cmbx10 \scaledmag2
+  \font\headingfont=cmbx10 \scaledmag1
+  \font\smallfont=cmr6
+  \font\smallsy=cmsy6
+  \font\eightrm=cmr8
+  \font\eightbf=cmbx8
+  \font\eightit=cmti8
+  \font\eighttt=cmtt8
+  \font\eightsy=cmsy8
+  \textfont0=\eightrm
+  \textfont2=\eightsy
+  \def\rm{\eightrm}
+  \def\bf{\eightbf}
+  \def\it{\eightit}
+  \def\tt{\eighttt}
+%%%% Reduce skip from .8 to .75 to permit printing on two pages.
+  \normalbaselineskip=.75\normalbaselineskip
+  \normallineskip=.75\normallineskip
+  \normallineskiplimit=.75\normallineskiplimit
+  \normalbaselines\rm           %make definitions take effect
+
+  \if 2\ncolumns
+    \let\maxcolumn=b
+    \footline{\hss\rm\folio\hss}
+    \def\makefootline{\vskip 2in \hsize=6.86in\line{\the\footline}}
+  \font\mediumfont=cmr10
+  \font\mediumsy=cmsy10
+
+% Leave 3 column code here in case size increases.
+  \else \if 3\ncolumns
+    \let\maxcolumn=c
+    \nopagenumbers
+  \font\mediumfont=cmr10
+  \font\mediumsy=cmsy10
+
+  \else
+    \errhelp{You must set \columnsperpage equal to 1, 2, or 3.}
+    \errmessage{Illegal number of columns per page}
+  \fi\fi
+
+  \intercolumnskip=.46in
+  \def\abc{a}
+  \output={%
+      % This next line is useful when designing the layout.
+      %\immediate\write16{Column \folio\abc\space starts with \firstmark}
+      \if \maxcolumn\abc \multicolumnformat \global\def\abc{a}
+      \else\if a\abc
+        \global\setbox\columna\columnbox \global\def\abc{b}
+        %% in case we never use \columnb (two-column mode)
+        \global\setbox\columnb\hbox to -\intercolumnskip{}
+      \else
+        \global\setbox\columnb\columnbox \global\def\abc{c}\fi\fi}
+  \def\multicolumnformat{\shipout\vbox{\makeheadline
+      \hbox{\box\columna\hskip\intercolumnskip
+        \box\columnb\hskip\intercolumnskip\columnbox}
+      \makefootline}\advancepageno}
+  \def\columnbox{\leftline{\pagebody}}
+
+  \def\bye{\par\vfill\supereject
+    \if a\abc \else\null\vfill\eject\fi
+    \if a\abc \else\null\vfill\eject\fi
+    \end}
+\fi
+
+% we won't be using math mode much, so redefine some of the characters
+% we might want to talk about
+\catcode`\^=12
+\catcode`\_=12
+
+\chardef\\=`\\
+\chardef\{=`\{
+\chardef\}=`\}
+
+\hyphenation{mini-buf-fer}
+
+\parindent 0pt
+% \parskip 1ex plus .5ex minus .5ex
+\parskip 0.5ex plus .25ex minus .25ex
+
+\outer\def\newcolumn{\vfill\eject}
+
+\outer\def\title#1{{\titlefont\centerline{#1}}\vskip 1ex plus .5ex}
+
+\outer\def\section#1{\par\filbreak
+  \vskip 1.5ex plus 1ex minus 1ex {\headingfont #1}\mark{#1}%
+  \vskip 1ex plus .5ex minus 0.75ex}
+
+\newdimen\keyindent
+
+\def\beginindentedkeys{\keyindent=1em}
+\def\endindentedkeys{\keyindent=0em}
+\endindentedkeys
+
+\def\paralign{\vskip\parskip\halign}
+
+\def\<#1>{$\langle${\rm #1}$\rangle$}
+
+\def\kbd#1{{\tt#1}\null}        %\null so not an abbrev even if period follows
+
+\def\beginexample{\par\leavevmode\begingroup
+  \obeylines\obeyspaces\parskip0pt\tt}
+{\obeyspaces\global\let =\ }
+\def\endexample{\endgroup}
+\def\begincexample{%
+  \par\leavevmode\begingroup%
+  \obeylines\obeyspaces%
+  % bpk--added indentation
+  \advance\leftskip.25truein
+%  \parskip0pt%
+  \tt}
+{\obeyspaces\global\let =\ }
+\def\endcexample{\endgroup}
+
+%%%%% Prime definition of key; redefined below to prevent overful hboxes
+
+\def\key#1#2{\leavevmode\hbox to \hsize
+  {\vtop {\hsize=.67\hsize \rightskip=1em #1}
+  \kbd{#2}\hfil}}
+
+\newbox\metaxbox
+\setbox\metaxbox\hbox{\kbd{M-x }}
+\newdimen\metaxwidth
+\metaxwidth=\wd\metaxbox
+
+\def\metax#1#2{\leavevmode\hbox to \hsize{\hbox to .75\hsize
+  {\hskip\keyindent\relax#1\hfil}%
+  \hskip -\metaxwidth minus 1fil
+  \kbd{#2}\hfil}}
+
+\def\threecol#1#2#3{\hskip\keyindent\relax#1\hfil&\kbd{#2}\quad
+  &\kbd{#3}\quad\cr}
+
+%**end of header
+
+%     ************
+%     **  BISON **
+%     ************
+
+\title{Bison Quick Reference}
+
+\section{Starting Bison}
+%***********************
+
+To use Bison, type: \kbd{bison {\it filename}}
+
+Options can be used as: \kbd{bison {\it options} {\it filename}}
+
+\section{Command Line Options}
+%*****************************
+
+\key{Display usage information.}                         {-h}
+\key{Display version information.}                       {-V}
+\key{Generate token and {\tt YYSTYPE} definitions.}      {-d}
+\key{Prepend a prefix to external symbols.}              {-p {\it prefix}}
+\key{Don't put {\tt \#line} directives in the parser.}   {-l}
+\key{Specify the output file.}                           {-o {\it filename}}
+\key{Debug or {\it trace} mode.}                      {-t}
+\key{Verbose description of the parser.}                 {-v}
+\key{Emulate {\tt yacc} (generate {\tt y.tab.*} files).} {-y}
+
+\vskip .10truein
+{\bf Note:} The token and {\tt YYSTYPE} definitions are generated
+to a file called {\tt y.tab.h} if the {\tt -y} option is used,
+otherwise it will have the format {\tt {\it name}.tab.h}, where
+{\it name} is the leading part of the parser definition filename.
+
+\section{Definitions}
+%********************
+
+\key{Declare a terminal symbol.}{\%token <{\it t\/}>
+      {\it n}}
+
+\key{Declare a terminal symbol, and define its association.}
+      {{\it association} <{\it t\/}> {\it n}}
+
+\vskip .2\baselineskip
+\key{Generate a reentrant (pure) parser.}
+      {\%pure_parser}
+
+\key{Define the union of all data types used in the parser.}
+      {\%union\{{\it field list}\} }
+
+\vskip .2\baselineskip
+\key{Tell {\tt bison} where to start parsing.}
+      {\%start {\it m}}
+
+\key{Tell {\tt bison} the data type of symbols.}
+      {\%type <{\it t\/}> {\it s1}\dots{\it sn}}
+
+\vskip .10truein
+
+In the above, {\it t} is a {\it type} defined in the {\tt \%union}
+definition,  {\it n} is a {\it terminal} symbol name, {\it m} is a
+{\it non-terminal} symbol name, and {\it association} can be one of
+{\tt \%left}, {\tt \%right}, or {\tt \%nonassoc}.
+
+\vskip .10truein
+
+The {\tt <{\it t\/}>} after {\tt \%token, \%left, \%right} and {\tt
+  \%nonassoc} is optional. Additionally, precedence may be overridden
+in the rules with {\tt \%prec} commands.
+
+\section{Parser Definition Files}
+%*********************************
+
+The general form for a parser definition is:
+
+\begincexample
+\{\%
+   /* Initial C code.  */
+\%\}
+
+ {\it Token and type definitions}
+
+\%\%
+
+   Rule definition 1
+          \vdots
+   Rule definition {\it n}
+
+\%\%
+
+  /* Other C code.  */
+\endcexample
+
+
+% Decrease standard baselineskip for the second page
+ \baselineskip = .9\baselineskip
+
+\section {Rule definitions}
+%**************************
+
+Rules take the form:
+
+\vskip -\baselineskip
+\beginexample
+     non-terminal : {\it statement} 1
+                  | {\it statement} 2
+                      \vdots
+                  | {\it statement n}
+                  ;
+\endexample
+
+Where {\it statements} can be either empty, or contain
+a mixture of C code (enclosed in {\tt \{...\}}), and the
+symbols that make up the non-terminal. For example:
+
+\vskip -\baselineskip
+\beginexample
+     expression : number '$+$' number \{ \$\$ $=$ \$1 $+$ \$3 \}
+                | number '$-$' number \{ \$\$ $=$ \$1 $-$ \$3 \}
+                | number '$/$' number \{ \$\$ $=$ \$1 $/$ \$3 \}
+                | number '$*$' number \{ \$\$ $=$ \$1 $*$ \$3 \}
+                ;
+\endexample
+
+For altering the precedence of a symbol use:
+\vskip -\baselineskip
+
+\beginexample
+     \%prec name
+\endexample
+
+For example:
+\vskip -\baselineskip
+\beginexample
+     foo : gnu bar gnu      \%prec bar
+         ;
+\endexample
+
+\section{Grammar Variables and Symbols}
+%**************************************
+
+\key{Recognize an error \& continue parsing.}{error}
+\key{Access data associated with a symbol.}  {\$\$, \$0\dots\${\it n}}
+\key{Access a field of the  data union.}    {\$\$.{\it t},
+                                     \$0.{\it t}\dots\${\it n}.{\it t}}
+\key{Access symbol's location.}             {@\$, @0\dots@{\it n}}
+\key{Access data's line location.}          {@{\it x}.{\it line\_spec}}
+\key{Access data's column location.}        {@{\it x}.{\it column\_spec}}
+
+
+\vskip .10truein
+%
+Where {\it t} is a type defined in the {\tt \%union}, {\it n} is a
+number, {\it x} is a number or \$, {\it line\_spec} one of {\tt
+  first_line} and {\tt last_line}, and {\it column\_spec} is specified
+as either {\tt first_column} or {\tt last_column}.
+
+\section {Variables and Types}
+%*****************************
+
+\key{Current lookahead token.}                 {yychar}
+\key{Debug mode flag.}                         {yydebug}
+\key{Data associated with the current token.}  {yylval}
+\key{Source position of current token.}        {yylloc}
+\key{Number of errors encountered.}            {yynerrs}
+\key{Position information type.}               {YYLTYPE}
+\key{Data type associated with symbols.}       {YYSTYPE}
+
+\section {Functions}
+%*******************
+
+% Redefine to prevent overfull hboxes
+\def\key#1#2{\leavevmode\hbox to \hsize
+  {\vtop {\hsize=.625\hsize \rightskip=1em #1}
+  \kbd{#2}\hfil}}
+
+\key{User defined error handler.}         {int yyerror(char *)}
+\key{User defined lexical analyzer.}      {int yylex()}
+\key{The grammar parser.}                 {int yyparse()}
+
+% Return to previous size
+\def\key#1#2{\leavevmode\hbox to \hsize
+  {\vtop {\hsize=.67\hsize \rightskip=1em #1}
+  \kbd{#2}\hfil}}
+
+\section{Macros}
+%***************
+
+\key{Quit parsing immediately. Return 1.}           {YYABORT}
+\key{Quit parsing immediately. Return 0.}           {YYACCEPT}
+\key{Pretend a syntax error occurred.}              {YYERROR}
+\key{Value in {\tt yychar} if no lookahead token.}  {YYEMPTY}
+\key{Clear previous lookahead token.}               {yyclearin}
+\key{Recover normally from an error.}               {yyerrok}
+
+% **************
+% ** The end  **
+% **************
+
+\vskip \baselineskip
+\if 1\ncolumns
+\copyrightnotice
+\else
+\smallcopyrightnotice
+\fi
+
+\bye
+
+
+% Local variables:
+% compile-command: "tex refcard"
+% End:

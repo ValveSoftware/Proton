@@ -1,0 +1,61 @@
+# Simplified Chinese translation for bison-runtime.
+# Copyright (C) 2005 Free Software Foundation, Inc.
+# This file is distributed under the same license as the bison package.
+#
+# Meng Jie <zuxyhere@eastday.com>, 2005, 2007.
+msgid ""
+msgstr ""
+"Project-Id-Version: bison-runtime 2.3a\n"
+"Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
+"POT-Creation-Date: 2015-01-23 13:55+0100\n"
+"PO-Revision-Date: 2007-08-13 23:19+0800\n"
+"Last-Translator: Meng Jie <zuxy.meng@gmail.com>\n"
+"Language-Team: Chinese (simplified) <i18n-zh@googlegroups.com>\n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: data/glr.c:803 data/yacc.c:643
+msgid "syntax error: cannot back up"
+msgstr "语法错误：不能备份"
+
+#: data/glr.c:1687
+msgid "syntax is ambiguous"
+msgstr "语法有歧义"
+
+#: data/glr.c:2008 data/glr.c:2088 data/glr.c:2128 data/glr.c:2392
+#: data/lalr1.cc:1094 data/lalr1.cc:1115 data/yacc.c:1210 data/yacc.c:1710
+#: data/yacc.c:1716
+msgid "syntax error"
+msgstr "语法错误"
+
+#: data/glr.c:2089 data/lalr1.cc:1095 data/yacc.c:1211
+#, c-format
+msgid "syntax error, unexpected %s"
+msgstr "语法错误，非预期的 %s"
+
+#: data/glr.c:2090 data/lalr1.cc:1096 data/yacc.c:1212
+#, c-format
+msgid "syntax error, unexpected %s, expecting %s"
+msgstr "语法错误，非预期的 %s，需要 %s"
+
+#: data/glr.c:2091 data/lalr1.cc:1097 data/yacc.c:1213
+#, c-format
+msgid "syntax error, unexpected %s, expecting %s or %s"
+msgstr "语法错误，非预期的 %s，需要 %s 或 %s"
+
+#: data/glr.c:2092 data/lalr1.cc:1098 data/yacc.c:1214
+#, c-format
+msgid "syntax error, unexpected %s, expecting %s or %s or %s"
+msgstr "语法错误，非预期的 %s，需要 %s，%s 或 %s"
+
+#: data/glr.c:2093 data/lalr1.cc:1099 data/yacc.c:1215
+#, c-format
+msgid "syntax error, unexpected %s, expecting %s or %s or %s or %s"
+msgstr "语法错误，非预期的 %s，需要 %s，%s，%s 或 %s"
+
+#: data/glr.c:2452 data/yacc.c:1295 data/yacc.c:1297 data/yacc.c:1470
+#: data/yacc.c:1867
+msgid "memory exhausted"
+msgstr "内存耗尽"

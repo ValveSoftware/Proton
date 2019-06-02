@@ -1,0 +1,2796 @@
+GNU Bison NEWS
+
+* Noteworthy changes in release 3.0.4 (2015-01-23) [stable]
+
+** Bug fixes
+
+*** C++ with Variants (lalr1.cc)
+
+  Fix a compiler warning when no %destructor use $$.
+
+*** Test suites
+
+  Several portability issues in tests were fixed.
+
+* Noteworthy changes in release 3.0.3 (2015-01-15) [stable]
+
+** Bug fixes
+
+*** C++ with Variants (lalr1.cc)
+
+  Problems with %destructor and '%define parse.assert' have been fixed.
+
+*** Named %union support (yacc.c, glr.c)
+
+  Bison 3.0 introduced a regression on named %union such as
+
+    %union foo { int ival; };
+
+  The possibility to use a name was introduced "for Yacc compatibility".
+  It is however not required by POSIX Yacc, and its usefulness is not clear.
+
+*** %define api.value.type union with %defines (yacc.c, glr.c)
+
+  The C parsers were broken when %defines was used together with "%define
+  api.value.type union".
+
+*** Redeclarations are reported in proper order
+
+  On
+
+    %token FOO "foo"
+    %printer {} "foo"
+    %printer {} FOO
+
+  bison used to report:
+
+    /tmp/foo.yy:2.10-11: error: %printer redeclaration for FOO
+     %printer {} "foo"
+              ^^
+    /tmp/foo.yy:3.10-11:     previous declaration
+     %printer {} FOO
+              ^^
+
+  Now, the "previous" declaration is always the first one.
+
+
+** Documentation
+
+  Bison now installs various files in its docdir (which defaults to
+  '/usr/local/share/doc/bison'), including the three fully blown examples
+  extracted from the documentation:
+
+   - rpcalc
+     Reverse polish calculator, a simple introductory example.
+   - mfcalc
+     Multi-function Calc, a calculator with memory and functions and located
+     error messages.
+   - calc++
+     a calculator in C++ using variant support and token constructors.
+
+* Noteworthy changes in release 3.0.2 (2013-12-05) [stable]
+
+** Bug fixes
+
+*** Generated source files when errors are reported
+
+  When warnings are issued and -Werror is set, bison would still generate
+  the source files (*.c, *.h...).  As a consequence, some runs of "make"
+  could fail the first time, but not the second (as the files were generated
+  anyway).
+
+  This is fixed: bison no longer generates this source files, but, of
+  course, still produces the various reports (*.output, *.xml, etc.).
+
+*** %empty is used in reports
+
+  Empty right-hand sides are denoted by '%empty' in all the reports (text,
+  dot, XML and formats derived from it).
+
+*** YYERROR and variants
+
+  When C++ variant support is enabled, an error triggered via YYERROR, but
+  not caught via error recovery, resulted in a double deletion.
+
+* Noteworthy changes in release 3.0.1 (2013-11-12) [stable]
+
+** Bug fixes
+
+*** Errors in caret diagnostics
+
+  On some platforms, some errors could result in endless diagnostics.
+
+*** Fixes of the -Werror option
+
+  Options such as "-Werror -Wno-error=foo" were still turning "foo"
+  diagnostics into errors instead of warnings.  This is fixed.
+
+  Actually, for consistency with GCC, "-Wno-error=foo -Werror" now also
+  leaves "foo" diagnostics as warnings.  Similarly, with "-Werror=foo
+  -Wno-error", "foo" diagnostics are now errors.
+
+*** GLR Predicates
+
+  As demonstrated in the documentation, one can now leave spaces between
+  "%?" and its "{".
+
+*** Installation
+
+  The yacc.1 man page is no longer installed if --disable-yacc was
+  specified.
+
+*** Fixes in the test suite
+
+  Bugs and portability issues.
+
+* Noteworthy changes in release 3.0 (2013-07-25) [stable]
+
+** WARNING: Future backward-incompatibilities!
+
+  Like other GNU packages, Bison will start using some of the C99 features
+  for its own code, especially the definition of variables after statements.
+  The generated C parsers still aim at C90.
+
+** Backward incompatible changes
+
+*** Obsolete features
+
+  Support for YYFAIL is removed (deprecated in Bison 2.4.2): use YYERROR.
+
+  Support for yystype and yyltype is removed (deprecated in Bison 1.875):
+  use YYSTYPE and YYLTYPE.
+
+  Support for YYLEX_PARAM and YYPARSE_PARAM is removed (deprecated in Bison
+  1.875): use %lex-param, %parse-param, or %param.
+
+  Missing semicolons at the end of actions are no longer added (as announced
+  in the release 2.5).
+
+*** Use of YACC='bison -y'
+
+  TL;DR: With Autoconf <= 2.69, pass -Wno-yacc to (AM_)YFLAGS if you use
+  Bison extensions.
+
+  Traditional Yacc generates 'y.tab.c' whatever the name of the input file.
+  Therefore Makefiles written for Yacc expect 'y.tab.c' (and possibly
+  'y.tab.h' and 'y.outout') to be generated from 'foo.y'.
+
+  To this end, for ages, AC_PROG_YACC, Autoconf's macro to look for an
+  implementation of Yacc, was using Bison as 'bison -y'.  While it does
+  ensure compatible output file names, it also enables warnings for
+  incompatibilities with POSIX Yacc.  In other words, 'bison -y' triggers
+  warnings for Bison extensions.
+
+  Autoconf 2.70+ fixes this incompatibility by using YACC='bison -o y.tab.c'
+  (which also generates 'y.tab.h' and 'y.output' when needed).
+  Alternatively, disable Yacc warnings by passing '-Wno-yacc' to your Yacc
+  flags (YFLAGS, or AM_YFLAGS with Automake).
+
+** Bug fixes
+
+*** The epilogue is no longer affected by internal #defines (glr.c)
+
+  The glr.c skeleton uses defines such as #define yylval (yystackp->yyval) in
+  generated code.  These weren't properly undefined before the inclusion of
+  the user epilogue, so functions such as the following were butchered by the
+  preprocessor expansion:
+
+    int yylex (YYSTYPE *yylval);
+
+  This is fixed: yylval, yynerrs, yychar, and yylloc are now valid
+  identifiers for user-provided variables.
+
+*** stdio.h is no longer needed when locations are enabled (yacc.c)
+
+  Changes in Bison 2.7 introduced a dependency on FILE and fprintf when
+  locations are enabled.  This is fixed.
+
+*** Warnings about useless %pure-parser/%define api.pure are restored
+
+** Diagnostics reported by Bison
+
+  Most of these features were contributed by Théophile Ranquet and Victor
+  Santet.
+
+*** Carets
+
+  Version 2.7 introduced caret errors, for a prettier output.  These are now
+  activated by default.  The old format can still be used by invoking Bison
+  with -fno-caret (or -fnone).
+
+  Some error messages that reproduced excerpts of the grammar are now using
+  the caret information only.  For instance on:
+
+    %%
+    exp: 'a' | 'a';
+
+  Bison 2.7 reports:
+
+    in.y: warning: 1 reduce/reduce conflict [-Wconflicts-rr]
+    in.y:2.12-14: warning: rule useless in parser due to conflicts: exp: 'a' [-Wother]
+
+  Now bison reports:
+
+    in.y: warning: 1 reduce/reduce conflict [-Wconflicts-rr]
+    in.y:2.12-14: warning: rule useless in parser due to conflicts [-Wother]
+     exp: 'a' | 'a';
+                ^^^
+
+  and "bison -fno-caret" reports:
+
+    in.y: warning: 1 reduce/reduce conflict [-Wconflicts-rr]
+    in.y:2.12-14: warning: rule useless in parser due to conflicts [-Wother]
+
+*** Enhancements of the -Werror option
+
+  The -Werror=CATEGORY option is now recognized, and will treat specified
+  warnings as errors. The warnings need not have been explicitly activated
+  using the -W option, this is similar to what GCC 4.7 does.
+
+  For example, given the following command line, Bison will treat both
+  warnings related to POSIX Yacc incompatibilities and S/R conflicts as
+  errors (and only those):
+
+    $ bison -Werror=yacc,error=conflicts-sr input.y
+
+  If no categories are specified, -Werror will make all active warnings into
+  errors. For example, the following line does the same the previous example:
+
+    $ bison -Werror -Wnone -Wyacc -Wconflicts-sr input.y
+
+  (By default -Wconflicts-sr,conflicts-rr,deprecated,other is enabled.)
+
+  Note that the categories in this -Werror option may not be prefixed with
+  "no-". However, -Wno-error[=CATEGORY] is valid.
+
+  Note that -y enables -Werror=yacc. Therefore it is now possible to require
+  Yacc-like behavior (e.g., always generate y.tab.c), but to report
+  incompatibilities as warnings: "-y -Wno-error=yacc".
+
+*** The display of warnings is now richer
+
+  The option that controls a given warning is now displayed:
+
+    foo.y:4.6: warning: type clash on default action: <foo> != <bar> [-Wother]
+
+  In the case of warnings treated as errors, the prefix is changed from
+  "warning: " to "error: ", and the suffix is displayed, in a manner similar
+  to GCC, as [-Werror=CATEGORY].
+
+  For instance, where the previous version of Bison would report (and exit
+  with failure):
+
+    bison: warnings being treated as errors
+    input.y:1.1: warning: stray ',' treated as white space
+
+  it now reports:
+
+    input.y:1.1: error: stray ',' treated as white space [-Werror=other]
+
+*** Deprecated constructs
+
+  The new 'deprecated' warning category flags obsolete constructs whose
+  support will be discontinued.  It is enabled by default.  These warnings
+  used to be reported as 'other' warnings.
+
+*** Useless semantic types
+
+  Bison now warns about useless (uninhabited) semantic types.  Since
+  semantic types are not declared to Bison (they are defined in the opaque
+  %union structure), it is %printer/%destructor directives about useless
+  types that trigger the warning:
+
+    %token <type1> term
+    %type  <type2> nterm
+    %printer    {} <type1> <type3>
+    %destructor {} <type2> <type4>
+    %%
+    nterm: term { $$ = $1; };
+
+    3.28-34: warning: type <type3> is used, but is not associated to any symbol
+    4.28-34: warning: type <type4> is used, but is not associated to any symbol
+
+*** Undefined but unused symbols
+
+  Bison used to raise an error for undefined symbols that are not used in
+  the grammar.  This is now only a warning.
+
+    %printer    {} symbol1
+    %destructor {} symbol2
+    %type <type>   symbol3
+    %%
+    exp: "a";
+
+*** Useless destructors or printers
+
+  Bison now warns about useless destructors or printers.  In the following
+  example, the printer for <type1>, and the destructor for <type2> are
+  useless: all symbols of <type1> (token1) already have a printer, and all
+  symbols of type <type2> (token2) already have a destructor.
+
+    %token <type1> token1
+           <type2> token2
+           <type3> token3
+           <type4> token4
+    %printer    {} token1 <type1> <type3>
+    %destructor {} token2 <type2> <type4>
+
+*** Conflicts
+
+  The warnings and error messages about shift/reduce and reduce/reduce
+  conflicts have been normalized.  For instance on the following foo.y file:
+
+    %glr-parser
+    %%
+    exp: exp '+' exp | '0' | '0';
+
+  compare the previous version of bison:
+
+    $ bison foo.y
+    foo.y: conflicts: 1 shift/reduce, 2 reduce/reduce
+    $ bison -Werror foo.y
+    bison: warnings being treated as errors
+    foo.y: conflicts: 1 shift/reduce, 2 reduce/reduce
+
+  with the new behavior:
+
+    $ bison foo.y
+    foo.y: warning: 1 shift/reduce conflict [-Wconflicts-sr]
+    foo.y: warning: 2 reduce/reduce conflicts [-Wconflicts-rr]
+    $ bison -Werror foo.y
+    foo.y: error: 1 shift/reduce conflict [-Werror=conflicts-sr]
+    foo.y: error: 2 reduce/reduce conflicts [-Werror=conflicts-rr]
+
+  When %expect or %expect-rr is used, such as with bar.y:
+
+    %expect 0
+    %glr-parser
+    %%
+    exp: exp '+' exp | '0' | '0';
+
+  Former behavior:
+
+    $ bison bar.y
+    bar.y: conflicts: 1 shift/reduce, 2 reduce/reduce
+    bar.y: expected 0 shift/reduce conflicts
+    bar.y: expected 0 reduce/reduce conflicts
+
+  New one:
+
+    $ bison bar.y
+    bar.y: error: shift/reduce conflicts: 1 found, 0 expected
+    bar.y: error: reduce/reduce conflicts: 2 found, 0 expected
+
+** Incompatibilities with POSIX Yacc
+
+  The 'yacc' category is no longer part of '-Wall', enable it explicitly
+  with '-Wyacc'.
+
+** Additional yylex/yyparse arguments
+
+  The new directive %param declares additional arguments to both yylex and
+  yyparse.  The %lex-param, %parse-param, and %param directives support one
+  or more arguments.  Instead of
+
+    %lex-param   {arg1_type *arg1}
+    %lex-param   {arg2_type *arg2}
+    %parse-param {arg1_type *arg1}
+    %parse-param {arg2_type *arg2}
+
+  one may now declare
+
+    %param {arg1_type *arg1} {arg2_type *arg2}
+
+** Types of values for %define variables
+
+  Bison used to make no difference between '%define foo bar' and '%define
+  foo "bar"'.  The former is now called a 'keyword value', and the latter a
+  'string value'.  A third kind was added: 'code values', such as '%define
+  foo {bar}'.
+
+  Keyword variables are used for fixed value sets, e.g.,
+
+    %define lr.type lalr
+
+  Code variables are used for value in the target language, e.g.,
+
+    %define api.value.type {struct semantic_type}
+
+  String variables are used remaining cases, e.g. file names.
+
+** Variable api.token.prefix
+
+  The variable api.token.prefix changes the way tokens are identified in
+  the generated files.  This is especially useful to avoid collisions
+  with identifiers in the target language.  For instance
+
+    %token FILE for ERROR
+    %define api.token.prefix {TOK_}
+    %%
+    start: FILE for ERROR;
+
+  will generate the definition of the symbols TOK_FILE, TOK_for, and
+  TOK_ERROR in the generated sources.  In particular, the scanner must
+  use these prefixed token names, although the grammar itself still
+  uses the short names (as in the sample rule given above).
+
+** Variable api.value.type
+
+  This new %define variable supersedes the #define macro YYSTYPE.  The use
+  of YYSTYPE is discouraged.  In particular, #defining YYSTYPE *and* either
+  using %union or %defining api.value.type results in undefined behavior.
+
+  Either define api.value.type, or use "%union":
+
+    %union
+    {
+      int ival;
+      char *sval;
+    }
+    %token <ival> INT "integer"
+    %token <sval> STRING "string"
+    %printer { fprintf (yyo, "%d", $$); } <ival>
+    %destructor { free ($$); } <sval>
+
+    /* In yylex().  */
+    yylval.ival = 42; return INT;
+    yylval.sval = "42"; return STRING;
+
+  The %define variable api.value.type supports both keyword and code values.
+
+  The keyword value 'union' means that the user provides genuine types, not
+  union member names such as "ival" and "sval" above (WARNING: will fail if
+  -y/--yacc/%yacc is enabled).
+
+    %define api.value.type union
+    %token <int> INT "integer"
+    %token <char *> STRING "string"
+    %printer { fprintf (yyo, "%d", $$); } <int>
+    %destructor { free ($$); } <char *>
+
+    /* In yylex().  */
+    yylval.INT = 42; return INT;
+    yylval.STRING = "42"; return STRING;
+
+  The keyword value variant is somewhat equivalent, but for C++ special
+  provision is made to allow classes to be used (more about this below).
+
+    %define api.value.type variant
+    %token <int> INT "integer"
+    %token <std::string> STRING "string"
+
+  Code values (in braces) denote user defined types.  This is where YYSTYPE
+  used to be used.
+
+    %code requires
+    {
+      struct my_value
+      {
+        enum
+        {
+          is_int, is_string
+        } kind;
+        union
+        {
+          int ival;
+          char *sval;
+        } u;
+      };
+    }
+    %define api.value.type {struct my_value}
+    %token <u.ival> INT "integer"
+    %token <u.sval> STRING "string"
+    %printer { fprintf (yyo, "%d", $$); } <u.ival>
+    %destructor { free ($$); } <u.sval>
+
+    /* In yylex().  */
+    yylval.u.ival = 42; return INT;
+    yylval.u.sval = "42"; return STRING;
+
+** Variable parse.error
+
+  This variable controls the verbosity of error messages.  The use of the
+  %error-verbose directive is deprecated in favor of "%define parse.error
+  verbose".
+
+** Renamed %define variables
+
+  The following variables have been renamed for consistency.  Backward
+  compatibility is ensured, but upgrading is recommended.
+
+    lr.default-reductions      -> lr.default-reduction
+    lr.keep-unreachable-states -> lr.keep-unreachable-state
+    namespace                  -> api.namespace
+    stype                      -> api.value.type
+
+** Semantic predicates
+
+  Contributed by Paul Hilfinger.
+
+  The new, experimental, semantic-predicate feature allows actions of the
+  form "%?{ BOOLEAN-EXPRESSION }", which cause syntax errors (as for
+  YYERROR) if the expression evaluates to 0, and are evaluated immediately
+  in GLR parsers, rather than being deferred.  The result is that they allow
+  the programmer to prune possible parses based on the values of run-time
+  expressions.
+
+** The directive %expect-rr is now an error in non GLR mode
+
+  It used to be an error only if used in non GLR mode, _and_ if there are
+  reduce/reduce conflicts.
+
+** Tokens are numbered in their order of appearance
+
+  Contributed by Valentin Tolmer.
+
+  With '%token A B', A had a number less than the one of B.  However,
+  precedence declarations used to generate a reversed order.  This is now
+  fixed, and introducing tokens with any of %token, %left, %right,
+  %precedence, or %nonassoc yields the same result.
+
+  When mixing declarations of tokens with a litteral character (e.g., 'a')
+  or with an identifier (e.g., B) in a precedence declaration, Bison
+  numbered the litteral characters first.  For example
+
+    %right A B 'c' 'd'
+
+  would lead to the tokens declared in this order: 'c' 'd' A B.  Again, the
+  input order is now preserved.
+
+  These changes were made so that one can remove useless precedence and
+  associativity declarations (i.e., map %nonassoc, %left or %right to
+  %precedence, or to %token) and get exactly the same output.
+
+** Useless precedence and associativity
+
+  Contributed by Valentin Tolmer.
+
+  When developing and maintaining a grammar, useless associativity and
+  precedence directives are common.  They can be a nuisance: new ambiguities
+  arising are sometimes masked because their conflicts are resolved due to
+  the extra precedence or associativity information.  Furthermore, it can
+  hinder the comprehension of a new grammar: one will wonder about the role
+  of a precedence, where in fact it is useless.  The following changes aim
+  at detecting and reporting these extra directives.
+
+*** Precedence warning category
+
+  A new category of warning, -Wprecedence, was introduced. It flags the
+  useless precedence and associativity directives.
+
+*** Useless associativity
+
+  Bison now warns about symbols with a declared associativity that is never
+  used to resolve conflicts.  In that case, using %precedence is sufficient;
+  the parsing tables will remain unchanged.  Solving these warnings may raise
+  useless precedence warnings, as the symbols no longer have associativity.
+  For example:
+
+    %left '+'
+    %left '*'
+    %%
+    exp:
+      "number"
+    | exp '+' "number"
+    | exp '*' exp
+    ;
+
+  will produce a
+
+    warning: useless associativity for '+', use %precedence [-Wprecedence]
+     %left '+'
+           ^^^
+
+*** Useless precedence
+
+  Bison now warns about symbols with a declared precedence and no declared
+  associativity (i.e., declared with %precedence), and whose precedence is
+  never used.  In that case, the symbol can be safely declared with %token
+  instead, without modifying the parsing tables.  For example:
+
+    %precedence '='
+    %%
+    exp: "var" '=' "number";
+
+  will produce a
+
+    warning: useless precedence for '=' [-Wprecedence]
+     %precedence '='
+                 ^^^
+
+*** Useless precedence and associativity
+
+  In case of both useless precedence and associativity, the issue is flagged
+  as follows:
+
+    %nonassoc '='
+    %%
+    exp: "var" '=' "number";
+
+  The warning is:
+
+    warning: useless precedence and associativity for '=' [-Wprecedence]
+     %nonassoc '='
+               ^^^
+
+** Empty rules
+
+  With help from Joel E. Denny and Gabriel Rassoul.
+
+  Empty rules (i.e., with an empty right-hand side) can now be explicitly
+  marked by the new %empty directive.  Using %empty on a non-empty rule is
+  an error.  The new -Wempty-rule warning reports empty rules without
+  %empty.  On the following grammar:
+
+    %%
+    s: a b c;
+    a: ;
+    b: %empty;
+    c: 'a' %empty;
+
+  bison reports:
+
+    3.4-5: warning: empty rule without %empty [-Wempty-rule]
+     a: {}
+        ^^
+    5.8-13: error: %empty on non-empty rule
+     c: 'a' %empty {};
+            ^^^^^^
+
+** Java skeleton improvements
+
+  The constants for token names were moved to the Lexer interface.  Also, it
+  is possible to add code to the parser's constructors using "%code init"
+  and "%define init_throws".
+  Contributed by Paolo Bonzini.
+
+  The Java skeleton now supports push parsing.
+  Contributed by Dennis Heimbigner.
+
+** C++ skeletons improvements
+
+*** The parser header is no longer mandatory (lalr1.cc, glr.cc)
+
+  Using %defines is now optional.  Without it, the needed support classes
+  are defined in the generated parser, instead of additional files (such as
+  location.hh, position.hh and stack.hh).
+
+*** Locations are no longer mandatory (lalr1.cc, glr.cc)
+
+  Both lalr1.cc and glr.cc no longer require %location.
+
+*** syntax_error exception (lalr1.cc)
+
+  The C++ parser features a syntax_error exception, which can be
+  thrown from the scanner or from user rules to raise syntax errors.
+  This facilitates reporting errors caught in sub-functions (e.g.,
+  rejecting too large integral literals from a conversion function
+  used by the scanner, or rejecting invalid combinations from a
+  factory invoked by the user actions).
+
+*** %define api.value.type variant
+
+  This is based on a submission from Michiel De Wilde.  With help
+  from Théophile Ranquet.
+
+  In this mode, complex C++ objects can be used as semantic values.  For
+  instance:
+
+    %token <::std::string> TEXT;
+    %token <int> NUMBER;
+    %token SEMICOLON ";"
+    %type <::std::string> item;
+    %type <::std::list<std::string>> list;
+    %%
+    result:
+      list  { std::cout << $1 << std::endl; }
+    ;
+
+    list:
+      %empty        { /* Generates an empty string list. */ }
+    | list item ";" { std::swap ($$, $1); $$.push_back ($2); }
+    ;
+
+    item:
+      TEXT    { std::swap ($$, $1); }
+    | NUMBER  { $$ = string_cast ($1); }
+    ;
+
+*** %define api.token.constructor
+
+  When variants are enabled, Bison can generate functions to build the
+  tokens.  This guarantees that the token type (e.g., NUMBER) is consistent
+  with the semantic value (e.g., int):
+
+    parser::symbol_type yylex ()
+    {
+      parser::location_type loc = ...;
+      ...
+      return parser::make_TEXT ("Hello, world!", loc);
+      ...
+      return parser::make_NUMBER (42, loc);
+      ...
+      return parser::make_SEMICOLON (loc);
+      ...
+    }
+
+*** C++ locations
+
+  There are operator- and operator-= for 'location'.  Negative line/column
+  increments can no longer underflow the resulting value.
+
+* Noteworthy changes in release 2.7.1 (2013-04-15) [stable]
+
+** Bug fixes
+
+*** Fix compiler attribute portability (yacc.c)
+
+  With locations enabled, __attribute__ was used unprotected.
+
+*** Fix some compiler warnings (lalr1.cc)
+
+* Noteworthy changes in release 2.7 (2012-12-12) [stable]
+
+** Bug fixes
+
+  Warnings about uninitialized yylloc in yyparse have been fixed.
+
+  Restored C90 compliance (yet no report was ever made).
+
+** Diagnostics are improved
+
+  Contributed by Théophile Ranquet.
+
+*** Changes in the format of error messages
+
+  This used to be the format of many error reports:
+
+    input.y:2.7-12: %type redeclaration for exp
+    input.y:1.7-12: previous declaration
+
+  It is now:
+
+    input.y:2.7-12: error: %type redeclaration for exp
+    input.y:1.7-12:     previous declaration
+
+*** New format for error reports: carets
+
+  Caret errors have been added to Bison:
+
+    input.y:2.7-12: error: %type redeclaration for exp
+     %type <sval> exp
+           ^^^^^^
+    input.y:1.7-12:     previous declaration
+     %type <ival> exp
+           ^^^^^^
+
+  or
+
+    input.y:3.20-23: error: ambiguous reference: '$exp'
+     exp: exp '+' exp { $exp = $1 + $3; };
+                        ^^^^
+    input.y:3.1-3:       refers to: $exp at $$
+     exp: exp '+' exp { $exp = $1 + $3; };
+     ^^^
+    input.y:3.6-8:       refers to: $exp at $1
+     exp: exp '+' exp { $exp = $1 + $3; };
+          ^^^
+    input.y:3.14-16:     refers to: $exp at $3
+     exp: exp '+' exp { $exp = $1 + $3; };
+                  ^^^
+
+  The default behavior for now is still not to display these unless
+  explicitly asked with -fcaret (or -fall). However, in a later release, it
+  will be made the default behavior (but may still be deactivated with
+  -fno-caret).
+
+** New value for %define variable: api.pure full
+
+  The %define variable api.pure requests a pure (reentrant) parser. However,
+  for historical reasons, using it in a location-tracking Yacc parser
+  resulted in a yyerror function that did not take a location as a
+  parameter. With this new value, the user may request a better pure parser,
+  where yyerror does take a location as a parameter (in location-tracking
+  parsers).
+
+  The use of "%define api.pure true" is deprecated in favor of this new
+  "%define api.pure full".
+
+** New %define variable: api.location.type (glr.cc, lalr1.cc, lalr1.java)
+
+  The %define variable api.location.type defines the name of the type to use
+  for locations.  When defined, Bison no longer generates the position.hh
+  and location.hh files, nor does the parser will include them: the user is
+  then responsible to define her type.
+
+  This can be used in programs with several parsers to factor their location
+  and position files: let one of them generate them, and the others just use
+  them.
+
+  This feature was actually introduced, but not documented, in Bison 2.5,
+  under the name "location_type" (which is maintained for backward
+  compatibility).
+
+  For consistency, lalr1.java's %define variables location_type and
+  position_type are deprecated in favor of api.location.type and
+  api.position.type.
+
+** Exception safety (lalr1.cc)
+
+  The parse function now catches exceptions, uses the %destructors to
+  release memory (the lookahead symbol and the symbols pushed on the stack)
+  before re-throwing the exception.
+
+  This feature is somewhat experimental.  User feedback would be
+  appreciated.
+
+** Graph improvements in DOT and XSLT
+
+  Contributed by Théophile Ranquet.
+
+  The graphical presentation of the states is more readable: their shape is
+  now rectangular, the state number is clearly displayed, and the items are
+  numbered and left-justified.
+
+  The reductions are now explicitly represented as transitions to other
+  diamond shaped nodes.
+
+  These changes are present in both --graph output and xml2dot.xsl XSLT
+  processing, with minor (documented) differences.
+
+** %language is no longer an experimental feature.
+
+  The introduction of this feature, in 2.4, was four years ago. The
+  --language option and the %language directive are no longer experimental.
+
+** Documentation
+
+  The sections about shift/reduce and reduce/reduce conflicts resolution
+  have been fixed and extended.
+
+  Although introduced more than four years ago, XML and Graphviz reports
+  were not properly documented.
+
+  The translation of mid-rule actions is now described.
+
+* Noteworthy changes in release 2.6.5 (2012-11-07) [stable]
+
+  We consider compiler warnings about Bison generated parsers to be bugs.
+  Rather than working around them in your own project, please consider
+  reporting them to us.
+
+** Bug fixes
+
+  Warnings about uninitialized yylval and/or yylloc for push parsers with a
+  pure interface have been fixed for GCC 4.0 up to 4.8, and Clang 2.9 to
+  3.2.
+
+  Other issues in the test suite have been addressed.
+
+  Null characters are correctly displayed in error messages.
+
+  When possible, yylloc is correctly initialized before calling yylex.  It
+  is no longer necessary to initialize it in the %initial-action.
+
+* Noteworthy changes in release 2.6.4 (2012-10-23) [stable]
+
+  Bison 2.6.3's --version was incorrect.  This release fixes this issue.
+
+* Noteworthy changes in release 2.6.3 (2012-10-22) [stable]
+
+** Bug fixes
+
+  Bugs and portability issues in the test suite have been fixed.
+
+  Some errors in translations have been addressed, and --help now directs
+  users to the appropriate place to report them.
+
+  Stray Info files shipped by accident are removed.
+
+  Incorrect definitions of YY_, issued by yacc.c when no parser header is
+  generated, are removed.
+
+  All the generated headers are self-contained.
+
+** Header guards (yacc.c, glr.c, glr.cc)
+
+  In order to avoid collisions, the header guards are now
+  YY_<PREFIX>_<FILE>_INCLUDED, instead of merely <PREFIX>_<FILE>.
+  For instance the header generated from
+
+    %define api.prefix "calc"
+    %defines "lib/parse.h"
+
+  will use YY_CALC_LIB_PARSE_H_INCLUDED as guard.
+
+** Fix compiler warnings in the generated parser (yacc.c, glr.c)
+
+  The compilation of pure parsers (%define api.pure) can trigger GCC
+  warnings such as:
+
+    input.c: In function 'yyparse':
+    input.c:1503:12: warning: 'yylval' may be used uninitialized in this
+                              function [-Wmaybe-uninitialized]
+       *++yyvsp = yylval;
+                ^
+
+  This is now fixed; pragmas to avoid these warnings are no longer needed.
+
+  Warnings from clang ("equality comparison with extraneous parentheses" and
+  "function declared 'noreturn' should not return") have also been
+  addressed.
+
+* Noteworthy changes in release 2.6.2 (2012-08-03) [stable]
+
+** Bug fixes
+
+  Buffer overruns, complaints from Flex, and portability issues in the test
+  suite have been fixed.
+
+** Spaces in %lex- and %parse-param (lalr1.cc, glr.cc)
+
+  Trailing end-of-lines in %parse-param or %lex-param would result in
+  invalid C++.  This is fixed.
+
+** Spurious spaces and end-of-lines
+
+  The generated files no longer end (nor start) with empty lines.
+
+* Noteworthy changes in release 2.6.1 (2012-07-30) [stable]
+
+ Bison no longer executes user-specified M4 code when processing a grammar.
+
+** Future Changes
+
+  In addition to the removal of the features announced in Bison 2.6, the
+  next major release will remove the "Temporary hack for adding a semicolon
+  to the user action", as announced in the release 2.5.  Instead of:
+
+    exp: exp "+" exp { $$ = $1 + $3 };
+
+  write:
+
+    exp: exp "+" exp { $$ = $1 + $3; };
+
+** Bug fixes
+
+*** Type names are now properly escaped.
+
+*** glr.cc: set_debug_level and debug_level work as expected.
+
+*** Stray @ or $ in actions
+
+  While Bison used to warn about stray $ or @ in action rules, it did not
+  for other actions such as printers, destructors, or initial actions.  It
+  now does.
+
+** Type names in actions
+
+  For consistency with rule actions, it is now possible to qualify $$ by a
+  type-name in destructors, printers, and initial actions.  For instance:
+
+    %printer { fprintf (yyo, "(%d, %f)", $<ival>$, $<fval>$); } <*> <>;
+
+  will display two values for each typed and untyped symbol (provided
+  that YYSTYPE has both "ival" and "fval" fields).
+
+* Noteworthy changes in release 2.6 (2012-07-19) [stable]
+
+** Future changes
+
+  The next major release of Bison will drop support for the following
+  deprecated features.  Please report disagreements to bug-bison@gnu.org.
+
+*** K&R C parsers
+
+  Support for generating parsers in K&R C will be removed.  Parsers
+  generated for C support ISO C90, and are tested with ISO C99 and ISO C11
+  compilers.
+
+*** Features deprecated since Bison 1.875
+
+  The definitions of yystype and yyltype will be removed; use YYSTYPE and
+  YYLTYPE.
+
+  YYPARSE_PARAM and YYLEX_PARAM, deprecated in favor of %parse-param and
+  %lex-param, will no longer be supported.
+
+  Support for the preprocessor symbol YYERROR_VERBOSE will be removed, use
+  %error-verbose.
+
+*** The generated header will be included (yacc.c)
+
+  Instead of duplicating the content of the generated header (definition of
+  YYSTYPE, yyparse declaration etc.), the generated parser will include it,
+  as is already the case for GLR or C++ parsers.  This change is deferred
+  because existing versions of ylwrap (e.g., Automake 1.12.1) do not support
+  it.
+
+** Generated Parser Headers
+
+*** Guards (yacc.c, glr.c, glr.cc)
+
+  The generated headers are now guarded, as is already the case for C++
+  parsers (lalr1.cc).  For instance, with --defines=foo.h:
+
+    #ifndef YY_FOO_H
+    # define YY_FOO_H
+    ...
+    #endif /* !YY_FOO_H  */
+
+*** New declarations (yacc.c, glr.c)
+
+  The generated header now declares yydebug and yyparse.  Both honor
+  --name-prefix=bar_, and yield
+
+    int bar_parse (void);
+
+  rather than
+
+    #define yyparse bar_parse
+    int yyparse (void);
+
+  in order to facilitate the inclusion of several parser headers inside a
+  single compilation unit.
+
+*** Exported symbols in C++
+
+  The symbols YYTOKEN_TABLE and YYERROR_VERBOSE, which were defined in the
+  header, are removed, as they prevent the possibility of including several
+  generated headers from a single compilation unit.
+
+*** YYLSP_NEEDED
+
+  For the same reasons, the undocumented and unused macro YYLSP_NEEDED is no
+  longer defined.
+
+** New %define variable: api.prefix
+
+  Now that the generated headers are more complete and properly protected
+  against multiple inclusions, constant names, such as YYSTYPE are a
+  problem.  While yyparse and others are properly renamed by %name-prefix,
+  YYSTYPE, YYDEBUG and others have never been affected by it.  Because it
+  would introduce backward compatibility issues in projects not expecting
+  YYSTYPE to be renamed, instead of changing the behavior of %name-prefix,
+  it is deprecated in favor of a new %define variable: api.prefix.
+
+  The following examples compares both:
+
+    %name-prefix "bar_"               | %define api.prefix "bar_"
+    %token <ival> FOO                   %token <ival> FOO
+    %union { int ival; }                %union { int ival; }
+    %%                                  %%
+    exp: 'a';                           exp: 'a';
+
+  bison generates:
+
+    #ifndef BAR_FOO_H                   #ifndef BAR_FOO_H
+    # define BAR_FOO_H                  # define BAR_FOO_H
+
+    /* Enabling traces.  */             /* Enabling traces.  */
+    # ifndef YYDEBUG                  | # ifndef BAR_DEBUG
+                                      > #  if defined YYDEBUG
+                                      > #   if YYDEBUG
+                                      > #    define BAR_DEBUG 1
+                                      > #   else
+                                      > #    define BAR_DEBUG 0
+                                      > #   endif
+                                      > #  else
+    #  define YYDEBUG 0               | #   define BAR_DEBUG 0
+                                      > #  endif
+    # endif                           | # endif
+
+    # if YYDEBUG                      | # if BAR_DEBUG
+    extern int bar_debug;               extern int bar_debug;
+    # endif                             # endif
+
+    /* Tokens.  */                      /* Tokens.  */
+    # ifndef YYTOKENTYPE              | # ifndef BAR_TOKENTYPE
+    #  define YYTOKENTYPE             | #  define BAR_TOKENTYPE
+       enum yytokentype {             |    enum bar_tokentype {
+         FOO = 258                           FOO = 258
+       };                                  };
+    # endif                             # endif
+
+    #if ! defined YYSTYPE \           | #if ! defined BAR_STYPE \
+     && ! defined YYSTYPE_IS_DECLARED |  && ! defined BAR_STYPE_IS_DECLARED
+    typedef union YYSTYPE             | typedef union BAR_STYPE
+    {                                   {
+     int ival;                           int ival;
+    } YYSTYPE;                        | } BAR_STYPE;
+    # define YYSTYPE_IS_DECLARED 1    | # define BAR_STYPE_IS_DECLARED 1
+    #endif                              #endif
+
+    extern YYSTYPE bar_lval;          | extern BAR_STYPE bar_lval;
+
+    int bar_parse (void);               int bar_parse (void);
+
+    #endif /* !BAR_FOO_H  */            #endif /* !BAR_FOO_H  */
+
+* Noteworthy changes in release 2.5.1 (2012-06-05) [stable]
+
+** Future changes:
+
+  The next major release will drop support for generating parsers in K&R C.
+
+** yacc.c: YYBACKUP works as expected.
+
+** glr.c improvements:
+
+*** Location support is eliminated when not requested:
+
+  GLR parsers used to include location-related code even when locations were
+  not requested, and therefore not even usable.
+
+*** __attribute__ is preserved:
+
+  __attribute__ is no longer disabled when __STRICT_ANSI__ is defined (i.e.,
+  when -std is passed to GCC).
+
+** lalr1.java: several fixes:
+
+  The Java parser no longer throws ArrayIndexOutOfBoundsException if the
+  first token leads to a syntax error.  Some minor clean ups.
+
+** Changes for C++:
+
+*** C++11 compatibility:
+
+  C and C++ parsers use "nullptr" instead of "0" when __cplusplus is 201103L
+  or higher.
+
+*** Header guards
+
+  The header files such as "parser.hh", "location.hh", etc. used a constant
+  name for preprocessor guards, for instance:
+
+    #ifndef BISON_LOCATION_HH
+    # define BISON_LOCATION_HH
+    ...
+    #endif // !BISON_LOCATION_HH
+
+  The inclusion guard is now computed from "PREFIX/FILE-NAME", where lower
+  case characters are converted to upper case, and series of
+  non-alphanumerical characters are converted to an underscore.
+
+  With "bison -o lang++/parser.cc", "location.hh" would now include:
+
+    #ifndef YY_LANG_LOCATION_HH
+    # define YY_LANG_LOCATION_HH
+    ...
+    #endif // !YY_LANG_LOCATION_HH
+
+*** C++ locations:
+
+  The position and location constructors (and their initialize methods)
+  accept new arguments for line and column.  Several issues in the
+  documentation were fixed.
+
+** liby is no longer asking for "rpl_fprintf" on some platforms.
+
+** Changes in the manual:
+
+*** %printer is documented
+
+  The "%printer" directive, supported since at least Bison 1.50, is finally
+  documented.  The "mfcalc" example is extended to demonstrate it.
+
+  For consistency with the C skeletons, the C++ parsers now also support
+  "yyoutput" (as an alias to "debug_stream ()").
+
+*** Several improvements have been made:
+
+  The layout for grammar excerpts was changed to a more compact scheme.
+  Named references are motivated.  The description of the automaton
+  description file (*.output) is updated to the current format.  Incorrect
+  index entries were fixed.  Some other errors were fixed.
+
+** Building bison:
+
+*** Conflicting prototypes with recent/modified Flex.
+
+  Fixed build problems with the current, unreleased, version of Flex, and
+  some modified versions of 2.5.35, which have modified function prototypes.
+
+*** Warnings during the build procedure have been eliminated.
+
+*** Several portability problems in the test suite have been fixed:
+
+  This includes warnings with some compilers, unexpected behavior of tools
+  such as diff, warning messages from the test suite itself, etc.
+
+*** The install-pdf target works properly:
+
+  Running "make install-pdf" (or -dvi, -html, -info, and -ps) no longer
+  halts in the middle of its course.
+
+* Changes in version 2.5 (2011-05-14):
+
+** Grammar symbol names can now contain non-initial dashes:
+
+  Consistently with directives (such as %error-verbose) and with
+  %define variables (e.g. push-pull), grammar symbol names may contain
+  dashes in any position except the beginning.  This is a GNU
+  extension over POSIX Yacc.  Thus, use of this extension is reported
+  by -Wyacc and rejected in Yacc mode (--yacc).
+
+** Named references:
+
+  Historically, Yacc and Bison have supported positional references
+  ($n, $$) to allow access to symbol values from inside of semantic
+  actions code.
+
+  Starting from this version, Bison can also accept named references.
+  When no ambiguity is possible, original symbol names may be used
+  as named references:
+
+    if_stmt : "if" cond_expr "then" then_stmt ';'
+    { $if_stmt = mk_if_stmt($cond_expr, $then_stmt); }
+
+  In the more common case, explicit names may be declared:
+
+    stmt[res] : "if" expr[cond] "then" stmt[then] "else" stmt[else] ';'
+    { $res = mk_if_stmt($cond, $then, $else); }
+
+  Location information is also accessible using @name syntax.  When
+  accessing symbol names containing dots or dashes, explicit bracketing
+  ($[sym.1]) must be used.
+
+  These features are experimental in this version.  More user feedback
+  will help to stabilize them.
+  Contributed by Alex Rozenman.
+
+** IELR(1) and canonical LR(1):
+
+  IELR(1) is a minimal LR(1) parser table generation algorithm.  That
+  is, given any context-free grammar, IELR(1) generates parser tables
+  with the full language-recognition power of canonical LR(1) but with
+  nearly the same number of parser states as LALR(1).  This reduction
+  in parser states is often an order of magnitude.  More importantly,
+  because canonical LR(1)'s extra parser states may contain duplicate
+  conflicts in the case of non-LR(1) grammars, the number of conflicts
+  for IELR(1) is often an order of magnitude less as well.  This can
+  significantly reduce the complexity of developing of a grammar.
+
+  Bison can now generate IELR(1) and canonical LR(1) parser tables in
+  place of its traditional LALR(1) parser tables, which remain the
+  default.  You can specify the type of parser tables in the grammar
+  file with these directives:
+
+    %define lr.type lalr
+    %define lr.type ielr
+    %define lr.type canonical-lr
+
+  The default-reduction optimization in the parser tables can also be
+  adjusted using "%define lr.default-reductions".  For details on both
+  of these features, see the new section "Tuning LR" in the Bison
+  manual.
+
+  These features are experimental.  More user feedback will help to
+  stabilize them.
+
+** LAC (Lookahead Correction) for syntax error handling
+
+  Contributed by Joel E. Denny.
+
+  Canonical LR, IELR, and LALR can suffer from a couple of problems
+  upon encountering a syntax error.  First, the parser might perform
+  additional parser stack reductions before discovering the syntax
+  error.  Such reductions can perform user semantic actions that are
+  unexpected because they are based on an invalid token, and they
+  cause error recovery to begin in a different syntactic context than
+  the one in which the invalid token was encountered.  Second, when
+  verbose error messages are enabled (with %error-verbose or the
+  obsolete "#define YYERROR_VERBOSE"), the expected token list in the
+  syntax error message can both contain invalid tokens and omit valid
+  tokens.
+
+  The culprits for the above problems are %nonassoc, default
+  reductions in inconsistent states, and parser state merging.  Thus,
+  IELR and LALR suffer the most.  Canonical LR can suffer only if
+  %nonassoc is used or if default reductions are enabled for
+  inconsistent states.
+
+  LAC is a new mechanism within the parsing algorithm that solves
+  these problems for canonical LR, IELR, and LALR without sacrificing
+  %nonassoc, default reductions, or state merging.  When LAC is in
+  use, canonical LR and IELR behave almost exactly the same for both
+  syntactically acceptable and syntactically unacceptable input.
+  While LALR still does not support the full language-recognition
+  power of canonical LR and IELR, LAC at least enables LALR's syntax
+  error handling to correctly reflect LALR's language-recognition
+  power.
+
+  Currently, LAC is only supported for deterministic parsers in C.
+  You can enable LAC with the following directive:
+
+    %define parse.lac full
+
+  See the new section "LAC" in the Bison manual for additional
+  details including a few caveats.
+
+  LAC is an experimental feature.  More user feedback will help to
+  stabilize it.
+
+** %define improvements:
+
+*** Can now be invoked via the command line:
+
+  Each of these command-line options
+
+    -D NAME[=VALUE]
+    --define=NAME[=VALUE]
+
+    -F NAME[=VALUE]
+    --force-define=NAME[=VALUE]
+
+  is equivalent to this grammar file declaration
+
+    %define NAME ["VALUE"]
+
+  except that the manner in which Bison processes multiple definitions
+  for the same NAME differs.  Most importantly, -F and --force-define
+  quietly override %define, but -D and --define do not.  For further
+  details, see the section "Bison Options" in the Bison manual.
+
+*** Variables renamed:
+
+  The following %define variables
+
+    api.push_pull
+    lr.keep_unreachable_states
+
+  have been renamed to
+
+    api.push-pull
+    lr.keep-unreachable-states
+
+  The old names are now deprecated but will be maintained indefinitely
+  for backward compatibility.
+
+*** Values no longer need to be quoted in the grammar file:
+
+  If a %define value is an identifier, it no longer needs to be placed
+  within quotations marks.  For example,
+
+    %define api.push-pull "push"
+
+  can be rewritten as
+
+    %define api.push-pull push
+
+*** Unrecognized variables are now errors not warnings.
+
+*** Multiple invocations for any variable is now an error not a warning.
+
+** Unrecognized %code qualifiers are now errors not warnings.
+
+** Character literals not of length one:
+
+  Previously, Bison quietly converted all character literals to length
+  one.  For example, without warning, Bison interpreted the operators in
+  the following grammar to be the same token:
+
+    exp: exp '++'
+       | exp '+' exp
+       ;
+
+  Bison now warns when a character literal is not of length one.  In
+  some future release, Bison will start reporting an error instead.
+
+** Destructor calls fixed for lookaheads altered in semantic actions:
+
+  Previously for deterministic parsers in C, if a user semantic action
+  altered yychar, the parser in some cases used the old yychar value to
+  determine which destructor to call for the lookahead upon a syntax
+  error or upon parser return.  This bug has been fixed.
+
+** C++ parsers use YYRHSLOC:
+
+  Similarly to the C parsers, the C++ parsers now define the YYRHSLOC
+  macro and use it in the default YYLLOC_DEFAULT.  You are encouraged
+  to use it.  If, for instance, your location structure has "first"
+  and "last" members, instead of
+
+    # define YYLLOC_DEFAULT(Current, Rhs, N)                             \
+      do                                                                 \
+        if (N)                                                           \
+          {                                                              \
+            (Current).first = (Rhs)[1].location.first;                   \
+            (Current).last  = (Rhs)[N].location.last;                    \
+          }                                                              \
+        else                                                             \
+          {                                                              \
+            (Current).first = (Current).last = (Rhs)[0].location.last;   \
+          }                                                              \
+      while (false)
+
+  use:
+
+    # define YYLLOC_DEFAULT(Current, Rhs, N)                             \
+      do                                                                 \
+        if (N)                                                           \
+          {                                                              \
+            (Current).first = YYRHSLOC (Rhs, 1).first;                   \
+            (Current).last  = YYRHSLOC (Rhs, N).last;                    \
+          }                                                              \
+        else                                                             \
+          {                                                              \
+            (Current).first = (Current).last = YYRHSLOC (Rhs, 0).last;   \
+          }                                                              \
+      while (false)
+
+** YYLLOC_DEFAULT in C++:
+
+  The default implementation of YYLLOC_DEFAULT used to be issued in
+  the header file.  It is now output in the implementation file, after
+  the user %code sections so that its #ifndef guard does not try to
+  override the user's YYLLOC_DEFAULT if provided.
+
+** YYFAIL now produces warnings and Java parsers no longer implement it:
+
+  YYFAIL has existed for many years as an undocumented feature of
+  deterministic parsers in C generated by Bison.  More recently, it was
+  a documented feature of Bison's experimental Java parsers.  As
+  promised in Bison 2.4.2's NEWS entry, any appearance of YYFAIL in a
+  semantic action now produces a deprecation warning, and Java parsers
+  no longer implement YYFAIL at all.  For further details, including a
+  discussion of how to suppress C preprocessor warnings about YYFAIL
+  being unused, see the Bison 2.4.2 NEWS entry.
+
+** Temporary hack for adding a semicolon to the user action:
+
+  Previously, Bison appended a semicolon to every user action for
+  reductions when the output language defaulted to C (specifically, when
+  neither %yacc, %language, %skeleton, or equivalent command-line
+  options were specified).  This allowed actions such as
+
+    exp: exp "+" exp { $$ = $1 + $3 };
+
+  instead of
+
+    exp: exp "+" exp { $$ = $1 + $3; };
+
+  As a first step in removing this misfeature, Bison now issues a
+  warning when it appends a semicolon.  Moreover, in cases where Bison
+  cannot easily determine whether a semicolon is needed (for example, an
+  action ending with a cpp directive or a braced compound initializer),
+  it no longer appends one.  Thus, the C compiler might now complain
+  about a missing semicolon where it did not before.  Future releases of
+  Bison will cease to append semicolons entirely.
+
+** Verbose syntax error message fixes:
+
+  When %error-verbose or the obsolete "#define YYERROR_VERBOSE" is
+  specified, syntax error messages produced by the generated parser
+  include the unexpected token as well as a list of expected tokens.
+  The effect of %nonassoc on these verbose messages has been corrected
+  in two ways, but a more complete fix requires LAC, described above:
+
+*** When %nonassoc is used, there can exist parser states that accept no
+    tokens, and so the parser does not always require a lookahead token
+    in order to detect a syntax error.  Because no unexpected token or
+    expected tokens can then be reported, the verbose syntax error
+    message described above is suppressed, and the parser instead
+    reports the simpler message, "syntax error".  Previously, this
+    suppression was sometimes erroneously triggered by %nonassoc when a
+    lookahead was actually required.  Now verbose messages are
+    suppressed only when all previous lookaheads have already been
+    shifted or discarded.
+
+*** Previously, the list of expected tokens erroneously included tokens
+    that would actually induce a syntax error because conflicts for them
+    were resolved with %nonassoc in the current parser state.  Such
+    tokens are now properly omitted from the list.
+
+*** Expected token lists are still often wrong due to state merging
+    (from LALR or IELR) and default reductions, which can both add
+    invalid tokens and subtract valid tokens.  Canonical LR almost
+    completely fixes this problem by eliminating state merging and
+    default reductions.  However, there is one minor problem left even
+    when using canonical LR and even after the fixes above.  That is,
+    if the resolution of a conflict with %nonassoc appears in a later
+    parser state than the one at which some syntax error is
+    discovered, the conflicted token is still erroneously included in
+    the expected token list.  Bison's new LAC implementation,
+    described above, eliminates this problem and the need for
+    canonical LR.  However, LAC is still experimental and is disabled
+    by default.
+
+** Java skeleton fixes:
+
+*** A location handling bug has been fixed.
+
+*** The top element of each of the value stack and location stack is now
+    cleared when popped so that it can be garbage collected.
+
+*** Parser traces now print the top element of the stack.
+
+** -W/--warnings fixes:
+
+*** Bison now properly recognizes the "no-" versions of categories:
+
+  For example, given the following command line, Bison now enables all
+  warnings except warnings for incompatibilities with POSIX Yacc:
+
+    bison -Wall,no-yacc gram.y
+
+*** Bison now treats S/R and R/R conflicts like other warnings:
+
+  Previously, conflict reports were independent of Bison's normal
+  warning system.  Now, Bison recognizes the warning categories
+  "conflicts-sr" and "conflicts-rr".  This change has important
+  consequences for the -W and --warnings command-line options.  For
+  example:
+
+    bison -Wno-conflicts-sr gram.y  # S/R conflicts not reported
+    bison -Wno-conflicts-rr gram.y  # R/R conflicts not reported
+    bison -Wnone            gram.y  # no conflicts are reported
+    bison -Werror           gram.y  # any conflict is an error
+
+  However, as before, if the %expect or %expect-rr directive is
+  specified, an unexpected number of conflicts is an error, and an
+  expected number of conflicts is not reported, so -W and --warning
+  then have no effect on the conflict report.
+
+*** The "none" category no longer disables a preceding "error":
+
+  For example, for the following command line, Bison now reports
+  errors instead of warnings for incompatibilities with POSIX Yacc:
+
+    bison -Werror,none,yacc gram.y
+
+*** The "none" category now disables all Bison warnings:
+
+  Previously, the "none" category disabled only Bison warnings for
+  which there existed a specific -W/--warning category.  However,
+  given the following command line, Bison is now guaranteed to
+  suppress all warnings:
+
+    bison -Wnone gram.y
+
+** Precedence directives can now assign token number 0:
+
+  Since Bison 2.3b, which restored the ability of precedence
+  directives to assign token numbers, doing so for token number 0 has
+  produced an assertion failure.  For example:
+
+    %left END 0
+
+  This bug has been fixed.
+
+* Changes in version 2.4.3 (2010-08-05):
+
+** Bison now obeys -Werror and --warnings=error for warnings about
+   grammar rules that are useless in the parser due to conflicts.
+
+** Problems with spawning M4 on at least FreeBSD 8 and FreeBSD 9 have
+   been fixed.
+
+** Failures in the test suite for GCC 4.5 have been fixed.
+
+** Failures in the test suite for some versions of Sun Studio C++ have
+   been fixed.
+
+** Contrary to Bison 2.4.2's NEWS entry, it has been decided that
+   warnings about undefined %prec identifiers will not be converted to
+   errors in Bison 2.5.  They will remain warnings, which should be
+   sufficient for POSIX while avoiding backward compatibility issues.
+
+** Minor documentation fixes.
+
+* Changes in version 2.4.2 (2010-03-20):
+
+** Some portability problems that resulted in failures and livelocks
+   in the test suite on some versions of at least Solaris, AIX, HP-UX,
+   RHEL4, and Tru64 have been addressed.  As a result, fatal Bison
+   errors should no longer cause M4 to report a broken pipe on the
+   affected platforms.
+
+** "%prec IDENTIFIER" requires IDENTIFIER to be defined separately.
+
+  POSIX specifies that an error be reported for any identifier that does
+  not appear on the LHS of a grammar rule and that is not defined by
+  %token, %left, %right, or %nonassoc.  Bison 2.3b and later lost this
+  error report for the case when an identifier appears only after a
+  %prec directive.  It is now restored.  However, for backward
+  compatibility with recent Bison releases, it is only a warning for
+  now.  In Bison 2.5 and later, it will return to being an error.
+  [Between the 2.4.2 and 2.4.3 releases, it was decided that this
+  warning will not be converted to an error in Bison 2.5.]
+
+** Detection of GNU M4 1.4.6 or newer during configure is improved.
+
+** Warnings from gcc's -Wundef option about undefined YYENABLE_NLS,
+   YYLTYPE_IS_TRIVIAL, and __STRICT_ANSI__ in C/C++ parsers are now
+   avoided.
+
+** %code is now a permanent feature.
+
+  A traditional Yacc prologue directive is written in the form:
+
+    %{CODE%}
+
+  To provide a more flexible alternative, Bison 2.3b introduced the
+  %code directive with the following forms for C/C++:
+
+    %code          {CODE}
+    %code requires {CODE}
+    %code provides {CODE}
+    %code top      {CODE}
+
+  These forms are now considered permanent features of Bison.  See the
+  %code entries in the section "Bison Declaration Summary" in the Bison
+  manual for a summary of their functionality.  See the section
+  "Prologue Alternatives" for a detailed discussion including the
+  advantages of %code over the traditional Yacc prologue directive.
+
+  Bison's Java feature as a whole including its current usage of %code
+  is still considered experimental.
+
+** YYFAIL is deprecated and will eventually be removed.
+
+  YYFAIL has existed for many years as an undocumented feature of
+  deterministic parsers in C generated by Bison.  Previously, it was
+  documented for Bison's experimental Java parsers.  YYFAIL is no longer
+  documented for Java parsers and is formally deprecated in both cases.
+  Users are strongly encouraged to migrate to YYERROR, which is
+  specified by POSIX.
+
+  Like YYERROR, you can invoke YYFAIL from a semantic action in order to
+  induce a syntax error.  The most obvious difference from YYERROR is
+  that YYFAIL will automatically invoke yyerror to report the syntax
+  error so that you don't have to.  However, there are several other
+  subtle differences between YYERROR and YYFAIL, and YYFAIL suffers from
+  inherent flaws when %error-verbose or "#define YYERROR_VERBOSE" is
+  used.  For a more detailed discussion, see:
+
+    http://lists.gnu.org/archive/html/bison-patches/2009-12/msg00024.html
+
+  The upcoming Bison 2.5 will remove YYFAIL from Java parsers, but
+  deterministic parsers in C will continue to implement it.  However,
+  because YYFAIL is already flawed, it seems futile to try to make new
+  Bison features compatible with it.  Thus, during parser generation,
+  Bison 2.5 will produce a warning whenever it discovers YYFAIL in a
+  rule action.  In a later release, YYFAIL will be disabled for
+  %error-verbose and "#define YYERROR_VERBOSE".  Eventually, YYFAIL will
+  be removed altogether.
+
+  There exists at least one case where Bison 2.5's YYFAIL warning will
+  be a false positive.  Some projects add phony uses of YYFAIL and other
+  Bison-defined macros for the sole purpose of suppressing C
+  preprocessor warnings (from GCC cpp's -Wunused-macros, for example).
+  To avoid Bison's future warning, such YYFAIL uses can be moved to the
+  epilogue (that is, after the second "%%") in the Bison input file.  In
+  this release (2.4.2), Bison already generates its own code to suppress
+  C preprocessor warnings for YYFAIL, so projects can remove their own
+  phony uses of YYFAIL if compatibility with Bison releases prior to
+  2.4.2 is not necessary.
+
+** Internationalization.
+
+  Fix a regression introduced in Bison 2.4: Under some circumstances,
+  message translations were not installed although supported by the
+  host system.
+
+* Changes in version 2.4.1 (2008-12-11):
+
+** In the GLR defines file, unexpanded M4 macros in the yylval and yylloc
+   declarations have been fixed.
+
+** Temporary hack for adding a semicolon to the user action.
+
+  Bison used to prepend a trailing semicolon at the end of the user
+  action for reductions.  This allowed actions such as
+
+    exp: exp "+" exp { $$ = $1 + $3 };
+
+  instead of
+
+    exp: exp "+" exp { $$ = $1 + $3; };
+
+  Some grammars still depend on this "feature".  Bison 2.4.1 restores
+  the previous behavior in the case of C output (specifically, when
+  neither %language or %skeleton or equivalent command-line options
+  are used) to leave more time for grammars depending on the old
+  behavior to be adjusted.  Future releases of Bison will disable this
+  feature.
+
+** A few minor improvements to the Bison manual.
+
+* Changes in version 2.4 (2008-11-02):
+
+** %language is an experimental feature.
+
+  We first introduced this feature in test release 2.3b as a cleaner
+  alternative to %skeleton.  Since then, we have discussed the possibility of
+  modifying its effect on Bison's output file names.  Thus, in this release,
+  we consider %language to be an experimental feature that will likely evolve
+  in future releases.
+
+** Forward compatibility with GNU M4 has been improved.
+
+** Several bugs in the C++ skeleton and the experimental Java skeleton have been
+  fixed.
+
+* Changes in version 2.3b (2008-05-27):
+
+** The quotes around NAME that used to be required in the following directive
+  are now deprecated:
+
+    %define NAME "VALUE"
+
+** The directive "%pure-parser" is now deprecated in favor of:
+
+    %define api.pure
+
+  which has the same effect except that Bison is more careful to warn about
+  unreasonable usage in the latter case.
+
+** Push Parsing
+
+  Bison can now generate an LALR(1) parser in C with a push interface.  That
+  is, instead of invoking "yyparse", which pulls tokens from "yylex", you can
+  push one token at a time to the parser using "yypush_parse", which will
+  return to the caller after processing each token.  By default, the push
+  interface is disabled.  Either of the following directives will enable it:
+
+    %define api.push_pull "push" // Just push; does not require yylex.
+    %define api.push_pull "both" // Push and pull; requires yylex.
+
+  See the new section "A Push Parser" in the Bison manual for details.
+
+  The current push parsing interface is experimental and may evolve.  More user
+  feedback will help to stabilize it.
+
+** The -g and --graph options now output graphs in Graphviz DOT format,
+  not VCG format.  Like --graph, -g now also takes an optional FILE argument
+  and thus cannot be bundled with other short options.
+
+** Java
+
+  Bison can now generate an LALR(1) parser in Java.  The skeleton is
+  "data/lalr1.java".  Consider using the new %language directive instead of
+  %skeleton to select it.
+
+  See the new section "Java Parsers" in the Bison manual for details.
+
+  The current Java interface is experimental and may evolve.  More user
+  feedback will help to stabilize it.
+  Contributed by Paolo Bonzini.
+
+** %language
+
+  This new directive specifies the programming language of the generated
+  parser, which can be C (the default), C++, or Java.  Besides the skeleton
+  that Bison uses, the directive affects the names of the generated files if
+  the grammar file's name ends in ".y".
+
+** XML Automaton Report
+
+  Bison can now generate an XML report of the LALR(1) automaton using the new
+  "--xml" option.  The current XML schema is experimental and may evolve.  More
+  user feedback will help to stabilize it.
+  Contributed by Wojciech Polak.
+
+** The grammar file may now specify the name of the parser header file using
+  %defines.  For example:
+
+    %defines "parser.h"
+
+** When reporting useless rules, useless nonterminals, and unused terminals,
+  Bison now employs the terms "useless in grammar" instead of "useless",
+  "useless in parser" instead of "never reduced", and "unused in grammar"
+  instead of "unused".
+
+** Unreachable State Removal
+
+  Previously, Bison sometimes generated parser tables containing unreachable
+  states.  A state can become unreachable during conflict resolution if Bison
+  disables a shift action leading to it from a predecessor state.  Bison now:
+
+    1. Removes unreachable states.
+
+    2. Does not report any conflicts that appeared in unreachable states.
+       WARNING: As a result, you may need to update %expect and %expect-rr
+       directives in existing grammar files.
+
+    3. For any rule used only in such states, Bison now reports the rule as
+       "useless in parser due to conflicts".
+
+  This feature can be disabled with the following directive:
+
+    %define lr.keep_unreachable_states
+
+  See the %define entry in the "Bison Declaration Summary" in the Bison manual
+  for further discussion.
+
+** Lookahead Set Correction in the ".output" Report
+
+  When instructed to generate a ".output" file including lookahead sets
+  (using "--report=lookahead", for example), Bison now prints each reduction's
+  lookahead set only next to the associated state's one item that (1) is
+  associated with the same rule as the reduction and (2) has its dot at the end
+  of its RHS.  Previously, Bison also erroneously printed the lookahead set
+  next to all of the state's other items associated with the same rule.  This
+  bug affected only the ".output" file and not the generated parser source
+  code.
+
+** --report-file=FILE is a new option to override the default ".output" file
+  name.
+
+** The "=" that used to be required in the following directives is now
+  deprecated:
+
+    %file-prefix "parser"
+    %name-prefix "c_"
+    %output "parser.c"
+
+** An Alternative to "%{...%}" -- "%code QUALIFIER {CODE}"
+
+  Bison 2.3a provided a new set of directives as a more flexible alternative to
+  the traditional Yacc prologue blocks.  Those have now been consolidated into
+  a single %code directive with an optional qualifier field, which identifies
+  the purpose of the code and thus the location(s) where Bison should generate
+  it:
+
+    1. "%code          {CODE}" replaces "%after-header  {CODE}"
+    2. "%code requires {CODE}" replaces "%start-header  {CODE}"
+    3. "%code provides {CODE}" replaces "%end-header    {CODE}"
+    4. "%code top      {CODE}" replaces "%before-header {CODE}"
+
+  See the %code entries in section "Bison Declaration Summary" in the Bison
+  manual for a summary of the new functionality.  See the new section "Prologue
+  Alternatives" for a detailed discussion including the advantages of %code
+  over the traditional Yacc prologues.
+
+  The prologue alternatives are experimental.  More user feedback will help to
+  determine whether they should become permanent features.
+
+** Revised warning: unset or unused mid-rule values
+
+  Since Bison 2.2, Bison has warned about mid-rule values that are set but not
+  used within any of the actions of the parent rule.  For example, Bison warns
+  about unused $2 in:
+
+    exp: '1' { $$ = 1; } '+' exp { $$ = $1 + $4; };
+
+  Now, Bison also warns about mid-rule values that are used but not set.  For
+  example, Bison warns about unset $$ in the mid-rule action in:
+
+    exp: '1' { $1 = 1; } '+' exp { $$ = $2 + $4; };
+
+  However, Bison now disables both of these warnings by default since they
+  sometimes prove to be false alarms in existing grammars employing the Yacc
+  constructs $0 or $-N (where N is some positive integer).
+
+  To enable these warnings, specify the option "--warnings=midrule-values" or
+  "-W", which is a synonym for "--warnings=all".
+
+** Default %destructor or %printer with "<*>" or "<>"
+
+  Bison now recognizes two separate kinds of default %destructor's and
+  %printer's:
+
+    1. Place "<*>" in a %destructor/%printer symbol list to define a default
+       %destructor/%printer for all grammar symbols for which you have formally
+       declared semantic type tags.
+
+    2. Place "<>" in a %destructor/%printer symbol list to define a default
+       %destructor/%printer for all grammar symbols without declared semantic
+       type tags.
+
+  Bison no longer supports the "%symbol-default" notation from Bison 2.3a.
+  "<*>" and "<>" combined achieve the same effect with one exception: Bison no
+  longer applies any %destructor to a mid-rule value if that mid-rule value is
+  not actually ever referenced using either $$ or $n in a semantic action.
+
+  The default %destructor's and %printer's are experimental.  More user
+  feedback will help to determine whether they should become permanent
+  features.
+
+  See the section "Freeing Discarded Symbols" in the Bison manual for further
+  details.
+
+** %left, %right, and %nonassoc can now declare token numbers.  This is required
+  by POSIX.  However, see the end of section "Operator Precedence" in the Bison
+  manual for a caveat concerning the treatment of literal strings.
+
+** The nonfunctional --no-parser, -n, and %no-parser options have been
+  completely removed from Bison.
+
+* Changes in version 2.3a, 2006-09-13:
+
+** Instead of %union, you can define and use your own union type
+  YYSTYPE if your grammar contains at least one <type> tag.
+  Your YYSTYPE need not be a macro; it can be a typedef.
+  This change is for compatibility with other Yacc implementations,
+  and is required by POSIX.
+
+** Locations columns and lines start at 1.
+  In accordance with the GNU Coding Standards and Emacs.
+
+** You may now declare per-type and default %destructor's and %printer's:
+
+  For example:
+
+    %union { char *string; }
+    %token <string> STRING1
+    %token <string> STRING2
+    %type  <string> string1
+    %type  <string> string2
+    %union { char character; }
+    %token <character> CHR
+    %type  <character> chr
+    %destructor { free ($$); } %symbol-default
+    %destructor { free ($$); printf ("%d", @$.first_line); } STRING1 string1
+    %destructor { } <character>
+
+  guarantees that, when the parser discards any user-defined symbol that has a
+  semantic type tag other than "<character>", it passes its semantic value to
+  "free".  However, when the parser discards a "STRING1" or a "string1", it
+  also prints its line number to "stdout".  It performs only the second
+  "%destructor" in this case, so it invokes "free" only once.
+
+  [Although we failed to mention this here in the 2.3a release, the default
+  %destructor's and %printer's were experimental, and they were rewritten in
+  future versions.]
+
+** Except for LALR(1) parsers in C with POSIX Yacc emulation enabled (with "-y",
+  "--yacc", or "%yacc"), Bison no longer generates #define statements for
+  associating token numbers with token names.  Removing the #define statements
+  helps to sanitize the global namespace during preprocessing, but POSIX Yacc
+  requires them.  Bison still generates an enum for token names in all cases.
+
+** Handling of traditional Yacc prologue blocks is now more consistent but
+  potentially incompatible with previous releases of Bison.
+
+  As before, you declare prologue blocks in your grammar file with the
+  "%{ ... %}" syntax.  To generate the pre-prologue, Bison concatenates all
+  prologue blocks that you've declared before the first %union.  To generate
+  the post-prologue, Bison concatenates all prologue blocks that you've
+  declared after the first %union.
+
+  Previous releases of Bison inserted the pre-prologue into both the header
+  file and the code file in all cases except for LALR(1) parsers in C.  In the
+  latter case, Bison inserted it only into the code file.  For parsers in C++,
+  the point of insertion was before any token definitions (which associate
+  token numbers with names).  For parsers in C, the point of insertion was
+  after the token definitions.
+
+  Now, Bison never inserts the pre-prologue into the header file.  In the code
+  file, it always inserts it before the token definitions.
+
+** Bison now provides a more flexible alternative to the traditional Yacc
+  prologue blocks: %before-header, %start-header, %end-header, and
+  %after-header.
+
+  For example, the following declaration order in the grammar file reflects the
+  order in which Bison will output these code blocks.  However, you are free to
+  declare these code blocks in your grammar file in whatever order is most
+  convenient for you:
+
+    %before-header {
+      /* Bison treats this block like a pre-prologue block: it inserts it into
+       * the code file before the contents of the header file.  It does *not*
+       * insert it into the header file.  This is a good place to put
+       * #include's that you want at the top of your code file.  A common
+       * example is '#include "system.h"'.  */
+    }
+    %start-header {
+      /* Bison inserts this block into both the header file and the code file.
+       * In both files, the point of insertion is before any Bison-generated
+       * token, semantic type, location type, and class definitions.  This is a
+       * good place to define %union dependencies, for example.  */
+    }
+    %union {
+      /* Unlike the traditional Yacc prologue blocks, the output order for the
+       * new %*-header blocks is not affected by their declaration position
+       * relative to any %union in the grammar file.  */
+    }
+    %end-header {
+      /* Bison inserts this block into both the header file and the code file.
+       * In both files, the point of insertion is after the Bison-generated
+       * definitions.  This is a good place to declare or define public
+       * functions or data structures that depend on the Bison-generated
+       * definitions.  */
+    }
+    %after-header {
+      /* Bison treats this block like a post-prologue block: it inserts it into
+       * the code file after the contents of the header file.  It does *not*
+       * insert it into the header file.  This is a good place to declare or
+       * define internal functions or data structures that depend on the
+       * Bison-generated definitions.  */
+    }
+
+  If you have multiple occurrences of any one of the above declarations, Bison
+  will concatenate the contents in declaration order.
+
+  [Although we failed to mention this here in the 2.3a release, the prologue
+  alternatives were experimental, and they were rewritten in future versions.]
+
+** The option "--report=look-ahead" has been changed to "--report=lookahead".
+  The old spelling still works, but is not documented and may be removed
+  in a future release.
+
+* Changes in version 2.3, 2006-06-05:
+
+** GLR grammars should now use "YYRECOVERING ()" instead of "YYRECOVERING",
+  for compatibility with LALR(1) grammars.
+
+** It is now documented that any definition of YYSTYPE or YYLTYPE should
+  be to a type name that does not contain parentheses or brackets.
+
+* Changes in version 2.2, 2006-05-19:
+
+** The distribution terms for all Bison-generated parsers now permit
+  using the parsers in nonfree programs.  Previously, this permission
+  was granted only for Bison-generated LALR(1) parsers in C.
+
+** %name-prefix changes the namespace name in C++ outputs.
+
+** The C++ parsers export their token_type.
+
+** Bison now allows multiple %union declarations, and concatenates
+  their contents together.
+
+** New warning: unused values
+  Right-hand side symbols whose values are not used are reported,
+  if the symbols have destructors.  For instance:
+
+     exp: exp "?" exp ":" exp { $1 ? $1 : $3; }
+        | exp "+" exp
+        ;
+
+  will trigger a warning about $$ and $5 in the first rule, and $3 in
+  the second ($1 is copied to $$ by the default rule).  This example
+  most likely contains three errors, and could be rewritten as:
+
+     exp: exp "?" exp ":" exp
+            { $$ = $1 ? $3 : $5; free ($1 ? $5 : $3); free ($1); }
+        | exp "+" exp
+            { $$ = $1 ? $1 : $3; if ($1) free ($3); }
+        ;
+
+  However, if the original actions were really intended, memory leaks
+  and all, the warnings can be suppressed by letting Bison believe the
+  values are used, e.g.:
+
+     exp: exp "?" exp ":" exp { $1 ? $1 : $3; (void) ($$, $5); }
+        | exp "+" exp         { $$ = $1; (void) $3; }
+        ;
+
+  If there are mid-rule actions, the warning is issued if no action
+  uses it.  The following triggers no warning: $1 and $3 are used.
+
+     exp: exp { push ($1); } '+' exp { push ($3); sum (); };
+
+  The warning is intended to help catching lost values and memory leaks.
+  If a value is ignored, its associated memory typically is not reclaimed.
+
+** %destructor vs. YYABORT, YYACCEPT, and YYERROR.
+  Destructors are now called when user code invokes YYABORT, YYACCEPT,
+  and YYERROR, for all objects on the stack, other than objects
+  corresponding to the right-hand side of the current rule.
+
+** %expect, %expect-rr
+  Incorrect numbers of expected conflicts are now actual errors,
+  instead of warnings.
+
+** GLR, YACC parsers.
+  The %parse-params are available in the destructors (and the
+  experimental printers) as per the documentation.
+
+** Bison now warns if it finds a stray "$" or "@" in an action.
+
+** %require "VERSION"
+  This specifies that the grammar file depends on features implemented
+  in Bison version VERSION or higher.
+
+** lalr1.cc: The token and value types are now class members.
+  The tokens were defined as free form enums and cpp macros.  YYSTYPE
+  was defined as a free form union.  They are now class members:
+  tokens are enumerations of the "yy::parser::token" struct, and the
+  semantic values have the "yy::parser::semantic_type" type.
+
+  If you do not want or can update to this scheme, the directive
+  '%define "global_tokens_and_yystype" "1"' triggers the global
+  definition of tokens and YYSTYPE.  This change is suitable both
+  for previous releases of Bison, and this one.
+
+  If you wish to update, then make sure older version of Bison will
+  fail using '%require "2.2"'.
+
+** DJGPP support added.
+
+* Changes in version 2.1, 2005-09-16:
+
+** The C++ lalr1.cc skeleton supports %lex-param.
+
+** Bison-generated parsers now support the translation of diagnostics like
+  "syntax error" into languages other than English.  The default
+  language is still English.  For details, please see the new
+  Internationalization section of the Bison manual.  Software
+  distributors should also see the new PACKAGING file.  Thanks to
+  Bruno Haible for this new feature.
+
+** Wording in the Bison-generated parsers has been changed slightly to
+  simplify translation.  In particular, the message "memory exhausted"
+  has replaced "parser stack overflow", as the old message was not
+  always accurate for modern Bison-generated parsers.
+
+** Destructors are now called when the parser aborts, for all symbols left
+  behind on the stack.  Also, the start symbol is now destroyed after a
+  successful parse.  In both cases, the behavior was formerly inconsistent.
+
+** When generating verbose diagnostics, Bison-generated parsers no longer
+  quote the literal strings associated with tokens.  For example, for
+  a syntax error associated with '%token NUM "number"' they might
+  print 'syntax error, unexpected number' instead of 'syntax error,
+  unexpected "number"'.
+
+* Changes in version 2.0, 2004-12-25:
+
+** Possibly-incompatible changes
+
+  - Bison-generated parsers no longer default to using the alloca function
+    (when available) to extend the parser stack, due to widespread
+    problems in unchecked stack-overflow detection.  You can "#define
+    YYSTACK_USE_ALLOCA 1" to require the use of alloca, but please read
+    the manual to determine safe values for YYMAXDEPTH in that case.
+
+  - Error token location.
+    During error recovery, the location of the syntax error is updated
+    to cover the whole sequence covered by the error token: it includes
+    the shifted symbols thrown away during the first part of the error
+    recovery, and the lookahead rejected during the second part.
+
+  - Semicolon changes:
+    . Stray semicolons are no longer allowed at the start of a grammar.
+    . Semicolons are now required after in-grammar declarations.
+
+  - Unescaped newlines are no longer allowed in character constants or
+    string literals.  They were never portable, and GCC 3.4.0 has
+    dropped support for them.  Better diagnostics are now generated if
+    forget a closing quote.
+
+  - NUL bytes are no longer allowed in Bison string literals, unfortunately.
+
+** New features
+
+  - GLR grammars now support locations.
+
+  - New directive: %initial-action.
+    This directive allows the user to run arbitrary code (including
+    initializing @$) from yyparse before parsing starts.
+
+  - A new directive "%expect-rr N" specifies the expected number of
+    reduce/reduce conflicts in GLR parsers.
+
+  - %token numbers can now be hexadecimal integers, e.g., "%token FOO 0x12d".
+    This is a GNU extension.
+
+  - The option "--report=lookahead" was changed to "--report=look-ahead".
+    [However, this was changed back after 2.3.]
+
+  - Experimental %destructor support has been added to lalr1.cc.
+
+  - New configure option --disable-yacc, to disable installation of the
+    yacc command and -ly library introduced in 1.875 for POSIX conformance.
+
+** Bug fixes
+
+  - For now, %expect-count violations are now just warnings, not errors.
+    This is for compatibility with Bison 1.75 and earlier (when there are
+    reduce/reduce conflicts) and with Bison 1.30 and earlier (when there
+    are too many or too few shift/reduce conflicts).  However, in future
+    versions of Bison we plan to improve the %expect machinery so that
+    these violations will become errors again.
+
+  - Within Bison itself, numbers (e.g., goto numbers) are no longer
+    arbitrarily limited to 16-bit counts.
+
+  - Semicolons are now allowed before "|" in grammar rules, as POSIX requires.
+
+* Changes in version 1.875, 2003-01-01:
+
+** The documentation license has been upgraded to version 1.2
+  of the GNU Free Documentation License.
+
+** syntax error processing
+
+  - In Yacc-style parsers YYLLOC_DEFAULT is now used to compute error
+    locations too.  This fixes bugs in error-location computation.
+
+  - %destructor
+    It is now possible to reclaim the memory associated to symbols
+    discarded during error recovery.  This feature is still experimental.
+
+  - %error-verbose
+    This new directive is preferred over YYERROR_VERBOSE.
+
+  - #defining yyerror to steal internal variables is discouraged.
+    It is not guaranteed to work forever.
+
+** POSIX conformance
+
+  - Semicolons are once again optional at the end of grammar rules.
+    This reverts to the behavior of Bison 1.33 and earlier, and improves
+    compatibility with Yacc.
+
+  - "parse error" -> "syntax error"
+    Bison now uniformly uses the term "syntax error"; formerly, the code
+    and manual sometimes used the term "parse error" instead.  POSIX
+    requires "syntax error" in diagnostics, and it was thought better to
+    be consistent.
+
+  - The documentation now emphasizes that yylex and yyerror must be
+    declared before use.  C99 requires this.
+
+  - Bison now parses C99 lexical constructs like UCNs and
+    backslash-newline within C escape sequences, as POSIX 1003.1-2001 requires.
+
+  - File names are properly escaped in C output.  E.g., foo\bar.y is
+    output as "foo\\bar.y".
+
+  - Yacc command and library now available
+    The Bison distribution now installs a "yacc" command, as POSIX requires.
+    Also, Bison now installs a small library liby.a containing
+    implementations of Yacc-compatible yyerror and main functions.
+    This library is normally not useful, but POSIX requires it.
+
+  - Type clashes now generate warnings, not errors.
+
+  - If the user does not define YYSTYPE as a macro, Bison now declares it
+    using typedef instead of defining it as a macro.
+    For consistency, YYLTYPE is also declared instead of defined.
+
+** Other compatibility issues
+
+  - %union directives can now have a tag before the "{", e.g., the
+    directive "%union foo {...}" now generates the C code
+    "typedef union foo { ... } YYSTYPE;"; this is for Yacc compatibility.
+    The default union tag is "YYSTYPE", for compatibility with Solaris 9 Yacc.
+    For consistency, YYLTYPE's struct tag is now "YYLTYPE" not "yyltype".
+    This is for compatibility with both Yacc and Bison 1.35.
+
+  - ";" is output before the terminating "}" of an action, for
+    compatibility with Bison 1.35.
+
+  - Bison now uses a Yacc-style format for conflict reports, e.g.,
+    "conflicts: 2 shift/reduce, 1 reduce/reduce".
+
+  - "yystype" and "yyltype" are now obsolescent macros instead of being
+    typedefs or tags; they are no longer documented and are planned to be
+    withdrawn in a future release.
+
+** GLR parser notes
+
+  - GLR and inline
+    Users of Bison have to decide how they handle the portability of the
+    C keyword "inline".
+
+  - "parsing stack overflow..." -> "parser stack overflow"
+    GLR parsers now report "parser stack overflow" as per the Bison manual.
+
+** %parse-param and %lex-param
+  The macros YYPARSE_PARAM and YYLEX_PARAM provide a means to pass
+  additional context to yyparse and yylex.  They suffer from several
+  shortcomings:
+
+  - a single argument only can be added,
+  - their types are weak (void *),
+  - this context is not passed to ancillary functions such as yyerror,
+  - only yacc.c parsers support them.
+
+  The new %parse-param/%lex-param directives provide a more precise control.
+  For instance:
+
+    %parse-param {int *nastiness}
+    %lex-param   {int *nastiness}
+    %parse-param {int *randomness}
+
+  results in the following signatures:
+
+    int yylex   (int *nastiness);
+    int yyparse (int *nastiness, int *randomness);
+
+  or, if both %pure-parser and %locations are used:
+
+    int yylex   (YYSTYPE *lvalp, YYLTYPE *llocp, int *nastiness);
+    int yyparse (int *nastiness, int *randomness);
+
+** Bison now warns if it detects conflicting outputs to the same file,
+  e.g., it generates a warning for "bison -d -o foo.h foo.y" since
+  that command outputs both code and header to foo.h.
+
+** #line in output files
+  - --no-line works properly.
+
+** Bison can no longer be built by a K&R C compiler; it requires C89 or
+  later to be built.  This change originally took place a few versions
+  ago, but nobody noticed until we recently asked someone to try
+  building Bison with a K&R C compiler.
+
+* Changes in version 1.75, 2002-10-14:
+
+** Bison should now work on 64-bit hosts.
+
+** Indonesian translation thanks to Tedi Heriyanto.
+
+** GLR parsers
+  Fix spurious parse errors.
+
+** Pure parsers
+  Some people redefine yyerror to steal yyparse' private variables.
+  Reenable this trick until an official feature replaces it.
+
+** Type Clashes
+  In agreement with POSIX and with other Yaccs, leaving a default
+  action is valid when $$ is untyped, and $1 typed:
+
+        untyped: ... typed;
+
+  but the converse remains an error:
+
+        typed: ... untyped;
+
+** Values of mid-rule actions
+  The following code:
+
+        foo: { ... } { $$ = $1; } ...
+
+  was incorrectly rejected: $1 is defined in the second mid-rule
+  action, and is equal to the $$ of the first mid-rule action.
+
+* Changes in version 1.50, 2002-10-04:
+
+** GLR parsing
+  The declaration
+     %glr-parser
+  causes Bison to produce a Generalized LR (GLR) parser, capable of handling
+  almost any context-free grammar, ambiguous or not.  The new declarations
+  %dprec and %merge on grammar rules allow parse-time resolution of
+  ambiguities.  Contributed by Paul Hilfinger.
+
+  Unfortunately Bison 1.50 does not work properly on 64-bit hosts
+  like the Alpha, so please stick to 32-bit hosts for now.
+
+** Output Directory
+  When not in Yacc compatibility mode, when the output file was not
+  specified, running "bison foo/bar.y" created "foo/bar.c".  It
+  now creates "bar.c".
+
+** Undefined token
+  The undefined token was systematically mapped to 2 which prevented
+  the use of 2 by the user.  This is no longer the case.
+
+** Unknown token numbers
+  If yylex returned an out of range value, yyparse could die.  This is
+  no longer the case.
+
+** Error token
+  According to POSIX, the error token must be 256.
+  Bison extends this requirement by making it a preference: *if* the
+  user specified that one of her tokens is numbered 256, then error
+  will be mapped onto another number.
+
+** Verbose error messages
+  They no longer report "..., expecting error or..." for states where
+  error recovery is possible.
+
+** End token
+  Defaults to "$end" instead of "$".
+
+** Error recovery now conforms to documentation and to POSIX
+  When a Bison-generated parser encounters a syntax error, it now pops
+  the stack until it finds a state that allows shifting the error
+  token.  Formerly, it popped the stack until it found a state that
+  allowed some non-error action other than a default reduction on the
+  error token.  The new behavior has long been the documented behavior,
+  and has long been required by POSIX.  For more details, please see
+  Paul Eggert, "Reductions during Bison error handling" (2002-05-20)
+  <http://lists.gnu.org/archive/html/bug-bison/2002-05/msg00038.html>.
+
+** Traces
+  Popped tokens and nonterminals are now reported.
+
+** Larger grammars
+  Larger grammars are now supported (larger token numbers, larger grammar
+  size (= sum of the LHS and RHS lengths), larger LALR tables).
+  Formerly, many of these numbers ran afoul of 16-bit limits;
+  now these limits are 32 bits on most hosts.
+
+** Explicit initial rule
+  Bison used to play hacks with the initial rule, which the user does
+  not write.  It is now explicit, and visible in the reports and
+  graphs as rule 0.
+
+** Useless rules
+  Before, Bison reported the useless rules, but, although not used,
+  included them in the parsers.  They are now actually removed.
+
+** Useless rules, useless nonterminals
+  They are now reported, as a warning, with their locations.
+
+** Rules never reduced
+  Rules that can never be reduced because of conflicts are now
+  reported.
+
+** Incorrect "Token not used"
+  On a grammar such as
+
+    %token useless useful
+    %%
+    exp: '0' %prec useful;
+
+  where a token was used to set the precedence of the last rule,
+  bison reported both "useful" and "useless" as useless tokens.
+
+** Revert the C++ namespace changes introduced in 1.31
+  as they caused too many portability hassles.
+
+** Default locations
+  By an accident of design, the default computation of @$ was
+  performed after another default computation was performed: @$ = @1.
+  The latter is now removed: YYLLOC_DEFAULT is fully responsible of
+  the computation of @$.
+
+** Token end-of-file
+  The token end of file may be specified by the user, in which case,
+  the user symbol is used in the reports, the graphs, and the verbose
+  error messages instead of "$end", which remains being the default.
+  For instance
+    %token MYEOF 0
+  or
+    %token MYEOF 0 "end of file"
+
+** Semantic parser
+  This old option, which has been broken for ages, is removed.
+
+** New translations
+  Brazilian Portuguese, thanks to Alexandre Folle de Menezes.
+  Croatian, thanks to Denis Lackovic.
+
+** Incorrect token definitions
+  When given
+    %token 'a' "A"
+  bison used to output
+    #define 'a' 65
+
+** Token definitions as enums
+  Tokens are output both as the traditional #define's, and, provided
+  the compiler supports ANSI C or is a C++ compiler, as enums.
+  This lets debuggers display names instead of integers.
+
+** Reports
+  In addition to --verbose, bison supports --report=THINGS, which
+  produces additional information:
+  - itemset
+    complete the core item sets with their closure
+  - lookahead [changed to "look-ahead" in 1.875e through 2.3, but changed back]
+    explicitly associate lookahead tokens to items
+  - solved
+    describe shift/reduce conflicts solving.
+    Bison used to systematically output this information on top of
+    the report.  Solved conflicts are now attached to their states.
+
+** Type clashes
+  Previous versions don't complain when there is a type clash on
+  the default action if the rule has a mid-rule action, such as in:
+
+    %type <foo> bar
+    %%
+    bar: '0' {} '0';
+
+  This is fixed.
+
+** GNU M4 is now required when using Bison.
+
+* Changes in version 1.35, 2002-03-25:
+
+** C Skeleton
+  Some projects use Bison's C parser with C++ compilers, and define
+  YYSTYPE as a class.  The recent adjustment of C parsers for data
+  alignment and 64 bit architectures made this impossible.
+
+  Because for the time being no real solution for C++ parser
+  generation exists, kludges were implemented in the parser to
+  maintain this use.  In the future, when Bison has C++ parsers, this
+  kludge will be disabled.
+
+  This kludge also addresses some C++ problems when the stack was
+  extended.
+
+* Changes in version 1.34, 2002-03-12:
+
+** File name clashes are detected
+  $ bison foo.y -d -o foo.x
+  fatal error: header and parser would both be named "foo.x"
+
+** A missing ";" at the end of a rule triggers a warning
+  In accordance with POSIX, and in agreement with other
+  Yacc implementations, Bison will mandate this semicolon in the near
+  future.  This eases the implementation of a Bison parser of Bison
+  grammars by making this grammar LALR(1) instead of LR(2).  To
+  facilitate the transition, this release introduces a warning.
+
+** Revert the C++ namespace changes introduced in 1.31, as they caused too
+  many portability hassles.
+
+** DJGPP support added.
+
+** Fix test suite portability problems.
+
+* Changes in version 1.33, 2002-02-07:
+
+** Fix C++ issues
+  Groff could not be compiled for the definition of size_t was lacking
+  under some conditions.
+
+** Catch invalid @n
+  As is done with $n.
+
+* Changes in version 1.32, 2002-01-23:
+
+** Fix Yacc output file names
+
+** Portability fixes
+
+** Italian, Dutch translations
+
+* Changes in version 1.31, 2002-01-14:
+
+** Many Bug Fixes
+
+** GNU Gettext and %expect
+  GNU Gettext asserts 10 s/r conflicts, but there are 7.  Now that
+  Bison dies on incorrect %expectations, we fear there will be
+  too many bug reports for Gettext, so _for the time being_, %expect
+  does not trigger an error when the input file is named "plural.y".
+
+** Use of alloca in parsers
+  If YYSTACK_USE_ALLOCA is defined to 0, then the parsers will use
+  malloc exclusively.  Since 1.29, but was not NEWS'ed.
+
+  alloca is used only when compiled with GCC, to avoid portability
+  problems as on AIX.
+
+** yyparse now returns 2 if memory is exhausted; formerly it dumped core.
+
+** When the generated parser lacks debugging code, YYDEBUG is now 0
+  (as POSIX requires) instead of being undefined.
+
+** User Actions
+  Bison has always permitted actions such as { $$ = $1 }: it adds the
+  ending semicolon.  Now if in Yacc compatibility mode, the semicolon
+  is no longer output: one has to write { $$ = $1; }.
+
+** Better C++ compliance
+  The output parsers try to respect C++ namespaces.
+  [This turned out to be a failed experiment, and it was reverted later.]
+
+** Reduced Grammars
+  Fixed bugs when reporting useless nonterminals.
+
+** 64 bit hosts
+  The parsers work properly on 64 bit hosts.
+
+** Error messages
+  Some calls to strerror resulted in scrambled or missing error messages.
+
+** %expect
+  When the number of shift/reduce conflicts is correct, don't issue
+  any warning.
+
+** The verbose report includes the rule line numbers.
+
+** Rule line numbers are fixed in traces.
+
+** Swedish translation
+
+** Parse errors
+  Verbose parse error messages from the parsers are better looking.
+  Before: parse error: unexpected `'/'', expecting `"number"' or `'-'' or `'(''
+     Now: parse error: unexpected '/', expecting "number" or '-' or '('
+
+** Fixed parser memory leaks.
+  When the generated parser was using malloc to extend its stacks, the
+  previous allocations were not freed.
+
+** Fixed verbose output file.
+  Some newlines were missing.
+  Some conflicts in state descriptions were missing.
+
+** Fixed conflict report.
+  Option -v was needed to get the result.
+
+** %expect
+  Was not used.
+  Mismatches are errors, not warnings.
+
+** Fixed incorrect processing of some invalid input.
+
+** Fixed CPP guards: 9foo.h uses BISON_9FOO_H instead of 9FOO_H.
+
+** Fixed some typos in the documentation.
+
+** %token MY_EOF 0 is supported.
+  Before, MY_EOF was silently renumbered as 257.
+
+** doc/refcard.tex is updated.
+
+** %output, %file-prefix, %name-prefix.
+  New.
+
+** --output
+  New, aliasing "--output-file".
+
+* Changes in version 1.30, 2001-10-26:
+
+** "--defines" and "--graph" have now an optional argument which is the
+  output file name. "-d" and "-g" do not change; they do not take any
+  argument.
+
+** "%source_extension" and "%header_extension" are removed, failed
+  experiment.
+
+** Portability fixes.
+
+* Changes in version 1.29, 2001-09-07:
+
+** The output file does not define const, as this caused problems when used
+  with common autoconfiguration schemes.  If you still use ancient compilers
+  that lack const, compile with the equivalent of the C compiler option
+  "-Dconst=".  Autoconf's AC_C_CONST macro provides one way to do this.
+
+** Added "-g" and "--graph".
+
+** The Bison manual is now distributed under the terms of the GNU FDL.
+
+** The input and the output files has automatically a similar extension.
+
+** Russian translation added.
+
+** NLS support updated; should hopefully be less troublesome.
+
+** Added the old Bison reference card.
+
+** Added "--locations" and "%locations".
+
+** Added "-S" and "--skeleton".
+
+** "%raw", "-r", "--raw" is disabled.
+
+** Special characters are escaped when output.  This solves the problems
+  of the #line lines with path names including backslashes.
+
+** New directives.
+  "%yacc", "%fixed_output_files", "%defines", "%no_parser", "%verbose",
+  "%debug", "%source_extension" and "%header_extension".
+
+** @$
+  Automatic location tracking.
+
+* Changes in version 1.28, 1999-07-06:
+
+** Should compile better now with K&R compilers.
+
+** Added NLS.
+
+** Fixed a problem with escaping the double quote character.
+
+** There is now a FAQ.
+
+* Changes in version 1.27:
+
+** The make rule which prevented bison.simple from being created on
+  some systems has been fixed.
+
+* Changes in version 1.26:
+
+** Bison now uses Automake.
+
+** New mailing lists: <bug-bison@gnu.org> and <help-bison@gnu.org>.
+
+** Token numbers now start at 257 as previously documented, not 258.
+
+** Bison honors the TMPDIR environment variable.
+
+** A couple of buffer overruns have been fixed.
+
+** Problems when closing files should now be reported.
+
+** Generated parsers should now work even on operating systems which do
+  not provide alloca().
+
+* Changes in version 1.25, 1995-10-16:
+
+** Errors in the input grammar are not fatal; Bison keeps reading
+the grammar file, and reports all the errors found in it.
+
+** Tokens can now be specified as multiple-character strings: for
+example, you could use "<=" for a token which looks like <=, instead
+of choosing a name like LESSEQ.
+
+** The %token_table declaration says to write a table of tokens (names
+and numbers) into the parser file.  The yylex function can use this
+table to recognize multiple-character string tokens, or for other
+purposes.
+
+** The %no_lines declaration says not to generate any #line preprocessor
+directives in the parser file.
+
+** The %raw declaration says to use internal Bison token numbers, not
+Yacc-compatible token numbers, when token names are defined as macros.
+
+** The --no-parser option produces the parser tables without including
+the parser engine; a project can now use its own parser engine.
+The actions go into a separate file called NAME.act, in the form of
+a switch statement body.
+
+* Changes in version 1.23:
+
+The user can define YYPARSE_PARAM as the name of an argument to be
+passed into yyparse.  The argument should have type void *.  It should
+actually point to an object.  Grammar actions can access the variable
+by casting it to the proper pointer type.
+
+Line numbers in output file corrected.
+
+* Changes in version 1.22:
+
+--help option added.
+
+* Changes in version 1.20:
+
+Output file does not redefine const for C++.
+
+-----
+
+Copyright (C) 1995-2015 Free Software Foundation, Inc.
+
+This file is part of Bison, the GNU Parser Generator.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+ LocalWords:  yacc YYBACKUP glr GCC lalr ArrayIndexOutOfBoundsException nullptr
+ LocalWords:  cplusplus liby rpl fprintf mfcalc Wyacc stmt cond expr mk sym lr
+ LocalWords:  IELR ielr Lookahead YYERROR nonassoc LALR's api lookaheads yychar
+ LocalWords:  destructor lookahead YYRHSLOC YYLLOC Rhs ifndef YYFAIL cpp sr rr
+ LocalWords:  preprocessor initializer Wno Wnone Werror FreeBSD prec livelocks
+ LocalWords:  Solaris AIX UX RHEL Tru LHS gcc's Wundef YYENABLE NLS YYLTYPE VCG
+ LocalWords:  yyerror cpp's Wunused yylval yylloc prepend yyparse yylex yypush
+ LocalWords:  Graphviz xml nonterminals midrule destructor's YYSTYPE typedef ly
+ LocalWords:  CHR chr printf stdout namespace preprocessing enum pre include's
+ LocalWords:  YYRECOVERING nonfree destructors YYABORT YYACCEPT params enums de
+ LocalWords:  struct yystype DJGPP lex param Haible NUM alloca YYSTACK NUL goto
+ LocalWords:  YYMAXDEPTH Unescaped UCNs YYLTYPE's yyltype typedefs inline Yaccs
+ LocalWords:  Heriyanto Reenable dprec Hilfinger Eggert MYEOF Folle Menezes EOF
+ LocalWords:  Lackovic define's itemset Groff Gettext malloc NEWS'ed YYDEBUG YY
+ LocalWords:  namespaces strerror const autoconfiguration Dconst Autoconf's FDL
+ LocalWords:  Automake TMPDIR LESSEQ ylwrap endif yydebug YYTOKEN YYLSP ival hh
+ LocalWords:  extern YYTOKENTYPE TOKENTYPE yytokentype tokentype STYPE lval pdf
+ LocalWords:  lang yyoutput dvi html ps POSIX lvalp llocp Wother nterm arg init
+ LocalWords:  TOK calc yyo fval Wconflicts parsers yystackp yyval yynerrs
+ LocalWords:  Théophile Ranquet Santet fno fnone stype associativity Tolmer
+ LocalWords:  Wprecedence Rassoul Wempty Paolo Bonzini parser's Michiel loc
+ LocalWords:  redeclaration sval fcaret reentrant XSLT xsl Wmaybe yyvsp Tedi
+ LocalWords:  pragmas noreturn untyped Rozenman unexpanded Wojciech Polak
+ LocalWords:  Alexandre MERCHANTABILITY yytype
+
+Local Variables:
+mode: outline
+fill-column: 76
+End:

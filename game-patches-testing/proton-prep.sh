@@ -1,13 +1,13 @@
 #!/bin/bash
 
     #DXVK ASYNC PATCH
-    cd dxvk
-    git reset --hard HEAD
-    git clean -xdf
+    #cd dxvk
+    #git reset --hard HEAD
+    #git clean -xdf
 
-    echo "applying async patch to dxvk and enabling it for warframe by default"
-    patch -Np1 < ../game-patches-testing/dxvk-warframe-async-patch.patch
-    cd ..
+    #echo "applying async patch to dxvk and enabling it for warframe by default"
+    #patch -Np1 < ../game-patches-testing/dxvk-warframe-async-patch.patch
+    #cd ..
 
     #ESYNC UPDATE
     cd esync
@@ -19,6 +19,8 @@
     patch -Np1 < ../game-patches-testing/esync-compat-fixes-r3.2.patch
     patch -Np1 < ../game-patches-testing/esync-compat-fixes-r3.3.patch
     patch -Np1 < ../game-patches-testing/esync-compat-fixes-r3.4.patch
+    patch -Np1 < ../game-patches-testing/esync-compat-fixes-r3.5.patch
+    patch -Np1 < ../game-patches-testing/esync-compat-fixes-r3.6.patch
     cd ..
 
 
@@ -26,9 +28,10 @@
     cd wine
     git reset --hard HEAD
     git clean -xdf
+    git revert --no-commit db201072655946662c041a66ee434c30c245e5b0
 
-    echo "system tray fix for kde plasma"
-    patch -Np1 < ../game-patches-testing/plasma_systray_fix.patch
+    #echo "system tray fix for kde plasma"
+    #patch -Np1 < ../game-patches-testing/plasma_systray_fix.patch
 
     echo "wine key translation fix from staging"
     patch -Np1 < ../game-patches-testing/wine-staging-key-translation-fix.patch
@@ -51,8 +54,8 @@
     echo "warframe F6 screenshot button fix"
     patch -Np1 < ../game-patches-testing/warframe-f6-screenshot-fix.patch
 
-    echo "uplay api loadstring patch"
-    patch -Np1 < ../game-patches-testing/uplay-api-loadstring-fix.patch
+    echo "overwatch 4.9 patch"
+    patch -Np1 < ../game-patches-testing/overwatch-4.9.patch
 
 
     #WINE FAUDIO PATCHES
@@ -65,7 +68,7 @@
     patch -Np1 < ../game-patches-testing/faudio-proton-xact-support-2.patch
     patch -Np1 < ../game-patches-testing/faudio-proton-fix-ed05940.patch
     patch -Np1 < ../game-patches-testing/faudio-proton-fix-837f11c.patch
-
+    patch -Np1 < ../game-patches-testing/faudio-proton-use-dxredist-x3daudio-xapofx.patch
 
     #WINE PROTONIFY
     echo "converting normal wine build into proton build"
@@ -79,7 +82,6 @@
     patch -Np1 < ../game-patches-testing/esync-no_kernel_obj_list.patch
     patch -Np1 < ../game-patches-testing/proton-restore-unicode.patch
     patch -Np1 < ../game-patches-testing/valve-gnutls.patch
-    patch -Np1 < ../game-patches-testing/valve-proton-sdl-joy.patch
     patch -Np1 < ../game-patches-testing/valve-hide-prefix-update-window.patch
     patch -Np1 < ../game-patches-testing/valve-wined3d-d3d11.patch
     patch -Np1 < ../game-patches-testing/valve-gdi32.patch
@@ -93,14 +95,12 @@
     patch -Np1 < ../game-patches-testing/valve-user32.patch
     patch -Np1 < ../game-patches-testing/valve-winemac.patch
     patch -Np1 < ../game-patches-testing/valve-windowscodecs.patch
-    patch -Np1 < ../game-patches-testing/valve-wine-mono.patch
-
-    # large address awareness
     patch -Np1 < ../game-patches-testing/valve-LAA.patch
+    patch -Np1 < ../game-patches-testing/valve-proton-sdl-joy.patch
+    patch -Np1 < ../game-patches-testing/valve-proton-gamepad-additions-50b9456.patch
+
 
     #WINE CUSTOM PATCHES
     #add your own custom patch lines below
 
-    #end
-    cd ..
-
+    #e

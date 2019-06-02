@@ -1,0 +1,63 @@
+# Translation of 'bison-runtime' messages to Kirghiz.
+# Copyright (C) 1999 Free Software Foundation, Inc.
+# This file is distributed under the same license as the PACKAGE package.
+# Ilyas Bakirov <just_ilyas@yahoo.com>, 2008.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: bison-runtime 2.3a\n"
+"Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
+"POT-Creation-Date: 2015-01-23 13:55+0100\n"
+"PO-Revision-Date: 2008-01-29 11:47+0600\n"
+"Last-Translator: Ilyas Bakirov <just_ilyas@yahoo.com>\n"
+"Language-Team: Kirghiz <i18n-team-ky-kyrgyz@lists.sourceforge.net>\n"
+"Language: ky\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: Kyrgyz\n"
+"X-Poedit-Country: KYRGYZSTAN\n"
+
+#: data/glr.c:803 data/yacc.c:643
+msgid "syntax error: cannot back up"
+msgstr "синтаксис катасы: көчурмө алынган жок"
+
+#: data/glr.c:1687
+msgid "syntax is ambiguous"
+msgstr "синтаксис анык эмес"
+
+#: data/glr.c:2008 data/glr.c:2088 data/glr.c:2128 data/glr.c:2392
+#: data/lalr1.cc:1094 data/lalr1.cc:1115 data/yacc.c:1210 data/yacc.c:1710
+#: data/yacc.c:1716
+msgid "syntax error"
+msgstr "синтаксис катасы"
+
+#: data/glr.c:2089 data/lalr1.cc:1095 data/yacc.c:1211
+#, c-format
+msgid "syntax error, unexpected %s"
+msgstr "синтаксис катасы, күтүлбөгөн %s"
+
+#: data/glr.c:2090 data/lalr1.cc:1096 data/yacc.c:1212
+#, c-format
+msgid "syntax error, unexpected %s, expecting %s"
+msgstr "синтаксис катасы, күтүлбөгөн %s, %s күтүлүүдө"
+
+#: data/glr.c:2091 data/lalr1.cc:1097 data/yacc.c:1213
+#, c-format
+msgid "syntax error, unexpected %s, expecting %s or %s"
+msgstr "синтаксис катасы, күтүлбөгөн %s, %s же %s күтүлүүдө"
+
+#: data/glr.c:2092 data/lalr1.cc:1098 data/yacc.c:1214
+#, c-format
+msgid "syntax error, unexpected %s, expecting %s or %s or %s"
+msgstr "синтаксис катасы, күтүлбөгөн %s, %s же %s же %s күтүлүүдө"
+
+#: data/glr.c:2093 data/lalr1.cc:1099 data/yacc.c:1215
+#, c-format
+msgid "syntax error, unexpected %s, expecting %s or %s or %s or %s"
+msgstr "синтаксис катасы, күтүлбөгөн %s, %s же %s же %s же %s күтүлүүдө"
+
+#: data/glr.c:2452 data/yacc.c:1295 data/yacc.c:1297 data/yacc.c:1470
+#: data/yacc.c:1867
+msgid "memory exhausted"
+msgstr "эс колдонулуп бүттүү"

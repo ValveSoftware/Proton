@@ -1,0 +1,195 @@
+This is a port of GNU Bison @VERSION@ to MSDOS/DJGPP.
+
+Copyright (C) 2005-2015 Free Software Foundation, Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+
+1.:     DJGPP specific changes.
+	=======================
+
+	The DJGPP port of Bison offers LFN and SFN support depending on which
+	OS it is running. If LFN support is available or not is determinated at
+	run time.  If LFN support is available (DOS session under Win9X, Win2K,
+	WinXP, etc.) the standard posix file name extensions will be used.
+	These are: y.tab.c, y.tab.c++, y.tab.h, y.output, etc.  If only SFN
+	support is available (plain DOS), then the standard MSDOS short file
+	names will be used. These are: y_tab.c, y_tab.h, y.out, etc.
+	It should be noticed that this bison version needs the m4 program as
+	back end to generate the parser file (y.tab.c etc.) from the skeleton
+	files.  This implies that m4 must always be installed to get bison
+	working.  m4 will use a couple of m4 scripts that will be installed in
+	/dev/env/DJDIR/share/bison and shall not be removed.
+	It should also be noticed that the skeleton files bison.simple and
+	bison.hairy are no longer supported.  This applies also to the environ-
+	ment variables BISON_HAIRY and BISON_SIMPLE.  Those variables are *no*
+	longer honored at all.
+	The kind of skeleton file bison.hairy is no longer supported at all.
+	The skeleton file bison.simple is now called yacc.c and is an m4 script.
+	The other two skeleton files supported by this bison version are glr.c
+	and lalr1.cc.  The first one is a generalized LR C parser based on
+	Bison's LALR(1) tables and the second one is a experimental C++ parser
+	class.
+	As has been told before, bison uses m4 to generate the parser file.
+	This is done by forking and using pipes for the IPC.  MSDOS does not
+	support this functionality so this has been reproduced in the usual
+	way by redirecting stdin and stdout of bison and m4 to temporary files
+	and processing these files in sequence.
+	It should be noticed that due to the great amount of file names that do
+	not cleanly map to 8.3 file names, you will need an OS with LFN support
+	to configure and compile the sources. On Win98 this implies that the
+	generation of numeric tails for 8.3 file name aliases must be enabled
+	or the compilation will fail.
+
+
+	Please **read** the docs.
+
+
+2.:     Installing the binary package.
+	==============================
+
+2.1.:   Copy the binary distribution into the top DJGPP installation directory,
+	just unzip it preserving the directory structure running *ONE* of the
+	following commands:
+	  unzip32 bsn@PACKAGE_VERSION@b.zip      or
+	  djtarx bsn@PACKAGE_VERSION@b.zip       or
+	  pkunzip -d bsn@PACKAGE_VERSION@b.zip
+
+
+
+3.:     Building the binaries from sources.
+	===================================
+
+3.1.:   Create a temporary directory and copy the source package into the
+	directory.  If you download the source distribution from one of the
+	DJGPP sites, just unzip it preserving the directory structure
+	running *ONE* of the following commands:
+	  unzip32 bsn@PACKAGE_VERSION@s.zip      or
+	  djtarx bsn@PACKAGE_VERSION@s.zip       or
+	  pkunzip -d bsn@PACKAGE_VERSION@s.zip
+	and proceed to the paragraph 3.3, below.
+
+3.2.:   Source distributions downloaded from one of the GNU FTP sites need
+	some more work to unpack, if LFN support is not available.  If LFN is
+	available then you can extract the source files from the archive with
+	any unzip program and proceed to the paragraph 3.3, below.  Any file
+	name issue will be handled by the DJGPP configuration files.
+	To unpack the source distribution on SFN systems, first, you MUST use
+	the `djunpack' batch file to unzip the package.  That is because some
+	file names in the official distributions need to be changed to avoid
+	problems on the various platforms supported by DJGPP.
+	`djunpack' invokes the `djtar' program (that is part of the basic DJGPP
+	development kit) to rename these files on the fly given a file with
+	name mappings; the distribution includes a file `djgpp/fnchange.lst'
+	with the necessary mappings.  So you need first to retrieve that batch
+	file, and then invoke it to unpack the distribution.  Here's how:
+
+	  djtar -x -p -o bison-@VERSION@/djgpp/djunpack.bat bison-@VERSION@.tar.gz > djunpack.bat
+	  djunpack bison-@VERSION@.tar.gz
+
+	(The name of the distribution archive and the leading directory of the
+	path to `djunpack.bat' in the distribution will be different for
+	versions of Bison other than @VERSION@.)
+
+	If the argument to `djunpack.bat' include leading directories, it MUST
+	be given with the DOS-style backslashes; Unix-style forward slashes
+	will NOT work.
+
+	If the distribution comes as a .tar.bz2 archive, and your version of
+	`djtar' doesn't support bzip2 decompression, you need to unpack it as
+	follows:
+
+	  bnzip2 bison-@VERSION@.tar.bz2
+	  djtar -x -p -o bison-@VERSION@/djgpp/djunpack.bat bison-@VERSION@.tar > djunpack.bat
+	  djunpack bison-@VERSION@.tar
+
+3.3.:   To build the binaries you will need the following binary packages:
+	  djdev203.zip (or a later but NOT a prior version)
+	  bsh204b.zip  (or a later but NOT a prior version)
+          gccNNNb.zip, gppNNN.zip, bnuNNNb.zip, makNNNb.zip, filNNNb.zip,
+          perlNNNb.zip, shlNNNb.zip, txtNNNb.zip, txiNNNb.zip, grepNNNb.zip,
+          sedNNNb.zip and m4NNN.zip
+
+	If you want to run the check you will need also:
+	  difNNNb.zip
+
+	NNN represents the latest version number of the binary packages. All
+	this packages can be found in the /v2gnu directory of any
+	ftp.delorie.com mirror.
+	You will need bsh204b.zip or later and *NOT* a prior version or
+	the build will fail.  The same applies to djdev203.zip.  Please note
+	that Bison requires m4-144b.zip or later to work properly.
+
+3.4.:   If for some reason you want to reconfigure the package cd into the top
+	srcdir (bison-@TREE_VERSION@) and run the following commands:
+	  del djgpp\config.cache
+	  make clean
+	  djgpp\config
+
+	Please note that you *MUST* delete the config.cache file in the djgpp
+	subdir or you will not really reconfigure the sources because the
+	configuration informations will be read from the cache file instead
+	of being newly computed.
+	To build the programs in a directory other than where the sources are,
+	you must add the parameter that specifies the source directory,
+	e.g:
+	  x:\src\gnu\bison-@TREE_VERSION@\djgpp\config x:/src/gnu/bison-@TREE_VERSION@
+
+	Lets assume you want to build the binaries in a directory placed on a
+	different drive (z:\build in this case) from where the sources are,
+	then you will run the following commands:
+	  z:
+	  md \build
+	  cd \build
+	  x:\src\gnu\bison-@TREE_VERSION@\djgpp\config x:/src/gnu/bison-@TREE_VERSION@
+
+	The order of the options and the srcdir option does not matter.  You
+	*MUST* use forward slashes to specify the source directory.
+
+	The batch file will set same environment variables, make MSDOS specific
+	modifications to the Makefile.in's and supply all other needed options
+	to the configure script.
+
+3.5.:   To compile the package run from the top srcdir the command:
+	  make
+
+3.6.:   Now you can run the tests if you like.  From the top srcdir run the
+	command:
+	  make check
+
+	No test should fail but the tests #131 (Doxygen Public Documentation)
+	and #132 (Doxygen Private Documentation) will be skipped.  Please note
+	that the testsuite only works with LFN available.  On plain DOS, most
+	of the tests will fail due to invalid DOS names.
+
+3.7.:   To install the binaries, header, library, catalogs, and info docs
+	run the following command from the top srcdir:
+	  make install
+
+	This will install the products into your DJGPP installation tree given
+	by the default prefix "/dev/env/DJDIR".  If you prefer to install them
+	into some other directory you will have to set prefix to the appropriate
+	value:
+	  make install prefix=z:/some/other/place
+
+
+
+	Send GNU bison specific bug reports to <bug-bison@gnu.org>.
+	Send suggestions and bug reports concerning the DJGPP port to
+	comp.os.msdos.djgpp or <djgpp@delorie.com>.
+
+
+Enjoy.
+
+	Guerrero, Juan Manuel <juan.guerrero@gmx.de>

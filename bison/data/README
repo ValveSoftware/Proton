@@ -1,0 +1,70 @@
+-*- outline -*-
+
+This directory contains data needed by Bison.
+
+* Skeletons
+Bison skeletons: the general shapes of the different parser kinds,
+that are specialized for specific grammars by the bison program.
+
+Currently, the supported skeletons are:
+
+- yacc.c
+  It used to be named bison.simple: it corresponds to C Yacc
+  compatible LALR(1) parsers.
+
+- lalr1.cc
+  Produces a C++ parser class.
+
+- lalr1.java
+  Produces a Java parser class.
+
+- glr.c
+  A Generalized LR C parser based on Bison's LALR(1) tables.
+
+- glr.cc
+  A Generalized LR C++ parser.  Actually a C++ wrapper around glr.c.
+
+These skeletons are the only ones supported by the Bison team.
+Because the interface between skeletons and the bison program is not
+finished, *we are not bound to it*.  In particular, Bison is not
+mature enough for us to consider that "foreign skeletons" are
+supported.
+
+* m4sugar
+This directory contains M4sugar, sort of an extended library for M4,
+which is used by Bison to instantiate the skeletons.
+
+* xslt
+This directory contains XSLT programs that transform Bison's XML output
+into various formats.
+
+- bison.xsl
+  A library of routines used by the other XSLT programs.
+
+- xml2dot.xsl
+  Conversion into GraphViz's dot format.
+
+- xml2text.xsl
+  Conversion into text.
+
+- xml2xhtml.xsl
+  Conversion into XHTML.
+
+-----
+
+Copyright (C) 2002, 2008-2015 Free Software Foundation, Inc.
+
+This file is part of GNU Bison.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.

@@ -1,0 +1,1180 @@
+# Traditional Chinese Messages for bison.
+# Copyright (C) 2006, 07 Free Software Foundation, Inc.
+# This file is distributed under the same license as the bison package.
+# Wei-Lun Chao <bluebat@member.fsf.org>, 2006, 2007, 2013.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: bison 2.7.90\n"
+"Report-Msgid-Bugs-To: bug-bison@gnu.org\n"
+"POT-Creation-Date: 2015-01-23 13:55+0100\n"
+"PO-Revision-Date: 2013-06-14 23:36+0800\n"
+"Last-Translator: Wei-Lun Chao <bluebat@member.fsf.org>\n"
+"Language-Team: Chinese (traditional) <zh-l10n@linux.org.tw>\n"
+"Language: zh_TW\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: src/complain.c:322
+msgid "fatal error"
+msgstr "嚴重錯誤"
+
+#: src/complain.c:323
+msgid "error"
+msgstr "錯誤"
+
+#: src/complain.c:324
+msgid "warning"
+msgstr "警告"
+
+#: src/complain.c:387
+#, c-format
+msgid "deprecated directive, use %s"
+msgstr "無效的指令：%s"
+
+#: src/complain.c:391
+#, c-format
+msgid "deprecated directive: %s, use %s"
+msgstr "不宜再用的指令：%s，應使用 %s"
+
+#: src/complain.c:400
+#, c-format
+msgid "only one %s allowed per rule"
+msgstr "每個規則只允許一個 %s"
+
+#: src/complain.c:402 src/reader.c:140 src/symtab.c:253 src/symtab.c:266
+#, c-format
+msgid "previous declaration"
+msgstr "前次宣告"
+
+#: src/conflicts.c:77
+#, c-format
+msgid "    Conflict between rule %d and token %s resolved as shift"
+msgstr "    在規則 %d 與字組 %s 之間的衝突以偏移來解決"
+
+#: src/conflicts.c:86
+#, c-format
+msgid "    Conflict between rule %d and token %s resolved as reduce"
+msgstr "    在規則 %d 與字組 %s 之間的衝突以縮減來解決"
+
+#: src/conflicts.c:94
+#, c-format
+msgid "    Conflict between rule %d and token %s resolved as an error"
+msgstr "    在規則 %d 與字組 %s 之間的衝突以視為錯誤來解決"
+
+#: src/conflicts.c:530
+#, c-format
+msgid "State %d "
+msgstr "狀態 %d "
+
+#: src/conflicts.c:533
+#, c-format
+msgid "conflicts: %d shift/reduce, %d reduce/reduce\n"
+msgstr "衝突：%d 項偏移/縮減，%d 項縮減/縮減\n"
+
+#: src/conflicts.c:536
+#, c-format
+msgid "conflicts: %d shift/reduce\n"
+msgstr "衝突：%d 項偏移/縮減\n"
+
+#: src/conflicts.c:538
+#, c-format
+msgid "conflicts: %d reduce/reduce\n"
+msgstr "衝突：%d 項縮減/縮減\n"
+
+#: src/conflicts.c:569
+#, c-format
+msgid "%%expect-rr applies only to GLR parsers"
+msgstr "%%expect-rr 只套用到 GLR 剖析器"
+
+#: src/conflicts.c:586
+#, c-format
+msgid "shift/reduce conflicts: %d found, %d expected"
+msgstr "偏移/縮減衝突：找到 %d 項，預期為 %d 項"
+
+#: src/conflicts.c:591
+#, c-format
+msgid "%d shift/reduce conflict"
+msgid_plural "%d shift/reduce conflicts"
+msgstr[0] "%d 項偏移/縮減衝突"
+
+#: src/conflicts.c:608
+#, c-format
+msgid "reduce/reduce conflicts: %d found, %d expected"
+msgstr "縮減/縮減衝突：找到 %d 項，預期為 %d 項"
+
+#: src/conflicts.c:613
+#, c-format
+msgid "%d reduce/reduce conflict"
+msgid_plural "%d reduce/reduce conflicts"
+msgstr[0] "%d 項縮減/縮減衝突"
+
+#: src/files.c:123
+#, c-format
+msgid "%s: cannot open"
+msgstr "%s：無法開啟"
+
+#: src/files.c:139
+#, c-format
+msgid "input/output error"
+msgstr "輸入/輸出錯誤"
+
+#: src/files.c:142
+#, c-format
+msgid "cannot close file"
+msgstr "無法關閉檔案"
+
+#: src/files.c:372
+#, c-format
+msgid "refusing to overwrite the input file %s"
+msgstr "拒絕覆寫輸入檔案 %s"
+
+#: src/files.c:382
+#, c-format
+msgid "conflicting outputs to file %s"
+msgstr "輸出至檔案 %s 時發生衝突"
+
+#: src/getargs.c:252
+#, c-format
+msgid "Try '%s --help' for more information.\n"
+msgstr "請嘗試執行 %s --help 來獲取更多資訊。\n"
+
+#: src/getargs.c:261
+#, c-format
+msgid "Usage: %s [OPTION]... FILE\n"
+msgstr "用法：%s [選項]… 檔案\n"
+
+#: src/getargs.c:262
+msgid ""
+"Generate a deterministic LR or generalized LR (GLR) parser employing\n"
+"LALR(1), IELR(1), or canonical LR(1) parser tables.  IELR(1) and\n"
+"canonical LR(1) support is experimental.\n"
+"\n"
+msgstr ""
+"產生確定性 LR 或一般化 LR (GLR) 剖析器會用到\n"
+"LALR(1)，IELR(1)，或規範的 LR(1) 剖析器表格。 IELR(1) 和\n"
+"規範的 LR(1) 支援是實驗性質。\n"
+"\n"
+
+#: src/getargs.c:269
+msgid ""
+"Mandatory arguments to long options are mandatory for short options too.\n"
+msgstr "長選項的必要引數對於短選項也同樣必要。\n"
+
+#: src/getargs.c:272
+msgid "The same is true for optional arguments.\n"
+msgstr "對於選擇性引數而言是相同的。\n"
+
+#: src/getargs.c:276
+msgid ""
+"\n"
+"Operation modes:\n"
+"  -h, --help                 display this help and exit\n"
+"  -V, --version              output version information and exit\n"
+"      --print-localedir      output directory containing locale-dependent "
+"data\n"
+"      --print-datadir        output directory containing skeletons and XSLT\n"
+"  -y, --yacc                 emulate POSIX Yacc\n"
+"  -W, --warnings[=CATEGORY]  report the warnings falling in CATEGORY\n"
+"  -f, --feature[=FEATURE]    activate miscellaneous features\n"
+"\n"
+msgstr ""
+"\n"
+"作業模式：\n"
+"  -h, --help                 顯示這份說明然後離開\n"
+"  -V, --version              輸出版本資訊然後離開\n"
+"      --print-localedir      輸出包含語區依存的資料目錄\n"
+"      --print-datadir        輸出包含架構和 XSLT 的目錄\n"
+"  -y, --yacc                 模擬 POSIX Yacc\n"
+"  -W, --warnings[=分類]      報告屬於該分類的警告\n"
+"  -f, --feature[=特色]       啟用雜項特色\n"
+"\n"
+
+# c-format
+#: src/getargs.c:289
+#, c-format
+msgid ""
+"Parser:\n"
+"  -L, --language=LANGUAGE          specify the output programming language\n"
+"  -S, --skeleton=FILE              specify the skeleton to use\n"
+"  -t, --debug                      instrument the parser for tracing\n"
+"                                   same as '-Dparse.trace'\n"
+"      --locations                  enable location support\n"
+"  -D, --define=NAME[=VALUE]        similar to '%define NAME \"VALUE\"'\n"
+"  -F, --force-define=NAME[=VALUE]  override '%define NAME \"VALUE\"'\n"
+"  -p, --name-prefix=PREFIX         prepend PREFIX to the external symbols\n"
+"                                   deprecated by '-Dapi.prefix=PREFIX'\n"
+"  -l, --no-lines                   don't generate '#line' directives\n"
+"  -k, --token-table                include a table of token names\n"
+msgstr ""
+"剖析器：\n"
+"  -L, --language=語言              指定輸出程式語言\n"
+"  -S, --skeleton=檔案              指定使用的架構\n"
+"  -t, --debug                      提供剖析器用於偵錯\n"
+"                                   如同 -Dparse.trace\n"
+"      --locations                  啟用位置支援\n"
+"  -D, --define=名稱[=值]           類似於 %define 名稱「值」\n"
+"  -F, --force-define=名稱[=值]     強制變更 %define 名稱「值」\n"
+"  -p, --name-prefix=前綴           前置前綴為外部符號\n"
+"                                   由 -Dapi.prefix=前綴 所取代\n"
+"  -l, --no-lines                   不產生 #line 指令\n"
+"  -k, --token-table                包含字組名稱的表格\n"
+
+#: src/getargs.c:307
+msgid ""
+"Output:\n"
+"      --defines[=FILE]       also produce a header file\n"
+"  -d                         likewise but cannot specify FILE (for POSIX "
+"Yacc)\n"
+"  -r, --report=THINGS        also produce details on the automaton\n"
+"      --report-file=FILE     write report to FILE\n"
+"  -v, --verbose              same as '--report=state'\n"
+"  -b, --file-prefix=PREFIX   specify a PREFIX for output files\n"
+"  -o, --output=FILE          leave output to FILE\n"
+"  -g, --graph[=FILE]         also output a graph of the automaton\n"
+"  -x, --xml[=FILE]           also output an XML report of the automaton\n"
+"                             (the XML schema is experimental)\n"
+msgstr ""
+"輸出：\n"
+"      --defines[=檔案]       也產生標頭檔\n"
+"  -d                         但是同樣無法指定檔案 (用於 POSIX Yacc)\n"
+"  -r, --report=事件          也於自動作業時產生細節\n"
+"      --report-file=檔案     寫入報告到檔案\n"
+"  -v, --verbose              如同 --report=狀態\n"
+"  -b, --file-prefix=前綴     指定輸出檔案的前綴\n"
+"  -o, --output=檔案          留下輸出到檔案\n"
+"  -g, --graph[=檔案]         也輸出圖形的自動裝置\n"
+"  -x, --xml[=檔案]           也輸出自動作業的 XML 報告\n"
+"                             (XML 結構描述為實驗性質)\n"
+
+#: src/getargs.c:322
+#, c-format
+msgid ""
+"Warning categories include:\n"
+"  'midrule-values'    unset or unused midrule values\n"
+"  'yacc'              incompatibilities with POSIX Yacc\n"
+"  'conflicts-sr'      S/R conflicts (enabled by default)\n"
+"  'conflicts-rr'      R/R conflicts (enabled by default)\n"
+"  'deprecated'        obsolete constructs\n"
+"  'empty-rule'        empty rules without %empty\n"
+"  'precedence'        useless precedence and associativity\n"
+"  'other'             all other warnings (enabled by default)\n"
+"  'all'               all the warnings except 'yacc'\n"
+"  'no-CATEGORY'       turn off warnings in CATEGORY\n"
+"  'none'              turn off all the warnings\n"
+"  'error[=CATEGORY]'  treat warnings as errors\n"
+msgstr ""
+"警告分類包含：\n"
+"  'midrule-values'    未設定或未使用的中段值\n"
+"  'yacc'              與 POSIX Yacc 不相容\n"
+"  'conflicts-sr'      S/R 衝突 (預設啟用)\n"
+"  'conflicts-rr'      R/R 衝突 (預設啟用)\n"
+"  'deprecated'        淘汰的建構\n"
+"  'empty-rule'        空的規則而不具有 %empty\n"
+"  'precedence'        無用的優先性與順序關聯性\n"
+"  'other'             所有其他警告 (預設啟用)\n"
+"  'all'               所有警告\n"
+"  'no-CATEGORY'       在分類中關閉警告\n"
+"  'none'              關閉所有警告\n"
+"  'error[=CATEGORY]'  將警告當作錯誤\n"
+
+#: src/getargs.c:339
+msgid ""
+"THINGS is a list of comma separated words that can include:\n"
+"  'state'        describe the states\n"
+"  'itemset'      complete the core item sets with their closure\n"
+"  'lookahead'    explicitly associate lookahead tokens to items\n"
+"  'solved'       describe shift/reduce conflicts solving\n"
+"  'all'          include all the above information\n"
+"  'none'         disable the report\n"
+msgstr ""
+"THINGS 是以逗號所分隔的字詞清單，其中可以包含：\n"
+"  'state'        描述狀態\n"
+"  'itemset'      完成核心項目集合並附有它們的結束\n"
+"  'lookahead'    明確地將預估字組關聯到項目\n"
+"  'solved'       描述正在解決的偏移/縮減衝突\n"
+"  'all'          包含所有以上的資訊\n"
+"  'none'         停用報告\n"
+
+#: src/getargs.c:350
+msgid ""
+"FEATURE is a list of comma separated words that can include:\n"
+"  'caret'        show errors with carets\n"
+"  'all'          all of the above\n"
+"  'none'         disable all of the above\n"
+"  "
+msgstr ""
+"FEATURE 是逗號分隔的字詞清單可以包含：\n"
+"  'caret'        以插字符號顯示錯誤\n"
+"  'all'          以上全部\n"
+"  'none'         停用以上全部\n"
+"  "
+
+#: src/getargs.c:358
+#, c-format
+msgid "Report bugs to <%s>.\n"
+msgstr "將錯誤通報給 <%s>。\n"
+
+#: src/getargs.c:359
+#, c-format
+msgid "%s home page: <%s>.\n"
+msgstr "%s 首頁：<%s>。\n"
+
+#: src/getargs.c:360
+msgid "General help using GNU software: <http://www.gnu.org/gethelp/>.\n"
+msgstr "使用 GNU 軟體的一般說明：<http://www.gnu.org/gethelp/>。\n"
+
+#. TRANSLATORS: Replace LANG_CODE in this URL with your language
+#. code <http://translationproject.org/team/LANG_CODE.html> to
+#. form one of the URLs at http://translationproject.org/team/.
+#. Otherwise, replace the entire URL with your translation team's
+#. email address.
+#: src/getargs.c:373
+msgid "Report translation bugs to <http://translationproject.org/team/>.\n"
+msgstr "報告翻譯錯誤給 <http://translationproject.org/team/>。\n"
+
+#: src/getargs.c:375
+msgid "For complete documentation, run: info bison.\n"
+msgstr "要取得完整文件請執行：info bison。\n"
+
+#: src/getargs.c:391
+#, c-format
+msgid "bison (GNU Bison) %s"
+msgstr "bison (GNU Bison) %s"
+
+#: src/getargs.c:393
+msgid "Written by Robert Corbett and Richard Stallman.\n"
+msgstr "由 Robert Corbett 與 Richard Stallman 編寫。\n"
+
+#: src/getargs.c:397
+#, c-format
+msgid "Copyright (C) %d Free Software Foundation, Inc.\n"
+msgstr "版權所有 (C) %d 自由軟體基金會。\n"
+
+#: src/getargs.c:400
+msgid ""
+"This is free software; see the source for copying conditions.  There is NO\n"
+"warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n"
+msgstr ""
+"這是自由軟體；請參考原始碼的版權聲明。本軟體不提供任何保證，甚至不會包括\n"
+"可售性或適用於任何特定目的的保證。\n"
+
+#: src/getargs.c:422
+#, c-format
+msgid "multiple skeleton declarations are invalid"
+msgstr "多重架構宣告無效"
+
+#: src/getargs.c:440
+#, c-format
+msgid "%s: invalid language"
+msgstr "%s：無效的語言"
+
+#: src/getargs.c:443
+msgid "multiple language declarations are invalid"
+msgstr "多重語言宣告無效"
+
+#: src/getargs.c:724
+#, c-format
+msgid "%s: missing operand"
+msgstr "%s：缺少運算元"
+
+#: src/getargs.c:726
+#, c-format
+msgid "extra operand %s"
+msgstr "額外運算元 %s"
+
+#: src/gram.c:185
+msgid "Grammar"
+msgstr "文法"
+
+#: src/graphviz.c:45
+#, c-format
+msgid ""
+"// Generated by %s.\n"
+"// Report bugs to <%s>.\n"
+"// Home page: <%s>.\n"
+"\n"
+msgstr ""
+"// 由 %s 所產生。\n"
+"// 將錯誤通報給 <%s>。\n"
+"// 首頁：<%s>。\n"
+"\n"
+
+#: src/location.c:93 src/scan-gram.l:932
+#, c-format
+msgid "line number overflow"
+msgstr "列號溢位"
+
+#: src/location.c:95
+#, c-format
+msgid "column number overflow"
+msgstr "欄數溢位"
+
+#: src/main.c:146
+msgid "rule useless in parser due to conflicts"
+msgstr "規則由於衝突而在剖析器中無用"
+
+#: src/muscle-tab.c:514
+#, c-format
+msgid "%%define variable %s redefined"
+msgstr "%%define 變數 %s 被重新定義"
+
+#: src/muscle-tab.c:518
+#, c-format
+msgid "previous definition"
+msgstr "前一個定義"
+
+#: src/muscle-tab.c:568 src/muscle-tab.c:669 src/muscle-tab.c:732
+#, c-format
+msgid "%s: undefined %%define variable %s"
+msgstr "%s：未定義的 %%define 變數 %s"
+
+#: src/muscle-tab.c:663
+#, c-format
+msgid "invalid value for %%define Boolean variable %s"
+msgstr "無效的值用於 %%define 布林變數 %s"
+
+#: src/muscle-tab.c:717
+#, c-format
+msgid "invalid value for %%define variable %s: %s"
+msgstr "無效的值用於 %%define 變數 %s：%s"
+
+#: src/muscle-tab.c:722
+#, c-format
+msgid "accepted value: %s"
+msgstr "被接受的值：%s"
+
+#: src/parse-gram.y:811
+#, c-format
+msgid "missing identifier in parameter declaration"
+msgstr "在參數宣告中缺少識別項"
+
+#: src/print.c:47
+#, c-format
+msgid " type %d is %s\n"
+msgstr " 類型 %d 為 %s\n"
+
+#: src/print.c:167
+#, c-format
+msgid "shift, and go to state %d\n"
+msgstr "偏移，並進入狀態 %d\n"
+
+#: src/print.c:169
+#, c-format
+msgid "go to state %d\n"
+msgstr "進入狀態 %d\n"
+
+#: src/print.c:206
+msgid "error (nonassociative)\n"
+msgstr "錯誤 (非相聯的)\n"
+
+#: src/print.c:229
+#, c-format
+msgid "reduce using rule %d (%s)"
+msgstr "使用規則 %d 以縮減 (%s)"
+
+#: src/print.c:231
+#, c-format
+msgid "accept"
+msgstr "接受"
+
+#: src/print.c:267 src/print.c:341
+msgid "$default"
+msgstr "$預設"
+
+#: src/print.c:377 src/print_graph.c:61
+#, c-format
+msgid "State %d"
+msgstr "狀態 %d"
+
+#: src/print.c:413
+msgid "Terminals, with rules where they appear"
+msgstr "終結語詞，附有它們出現處的規則"
+
+#: src/print.c:440
+msgid "Nonterminals, with rules where they appear"
+msgstr "非終結語詞，附有它們出現處的規則"
+
+#: src/print.c:469
+#, c-format
+msgid " on left:"
+msgstr " 於左側："
+
+#: src/print.c:486
+#, c-format
+msgid " on right:"
+msgstr "於右側："
+
+#: src/print.c:514
+msgid "Rules useless in parser due to conflicts"
+msgstr "規則由於衝突而在剖析器中無用"
+
+#: src/reader.c:62
+#, c-format
+msgid "multiple %s declarations"
+msgstr "多重 %s 宣告"
+
+#: src/reader.c:133
+#, c-format
+msgid "result type clash on merge function %s: <%s> != <%s>"
+msgstr "結果型態抵觸發生於合併函式 %s：<%s>!=<%s>"
+
+#: src/reader.c:206
+#, c-format
+msgid "duplicated symbol name for %s ignored"
+msgstr "重複的符號名稱用於 %s 被忽略"
+
+#: src/reader.c:250
+#, c-format
+msgid "rule given for %s, which is a token"
+msgstr "用於 %s 這項字組的規則"
+
+#: src/reader.c:306
+#, c-format
+msgid "type clash on default action: <%s> != <%s>"
+msgstr "類型與預設動作相抵觸：<%s> != <%s>"
+
+#: src/reader.c:312
+#, c-format
+msgid "empty rule for typed nonterminal, and no action"
+msgstr "空白規則用於賦予類型的非終結語詞，以及沒有動作"
+
+#: src/reader.c:329
+#, c-format
+msgid "unused value: $%d"
+msgstr "未使用的值：$%d"
+
+#: src/reader.c:331
+#, c-format
+msgid "unset value: $$"
+msgstr "解除設定值：$$"
+
+#: src/reader.c:340
+#, c-format
+msgid "%%empty on non-empty rule"
+msgstr "%%empty 於非空的規則"
+
+#: src/reader.c:346
+#, c-format
+msgid "empty rule without %%empty"
+msgstr "空的規則而無 %%empty"
+
+#: src/reader.c:355
+#, c-format
+msgid "token for %%prec is not defined: %s"
+msgstr "用於 %%prec 的字組未定義：%s"
+
+#: src/reader.c:473 src/reader.c:495
+#, c-format
+msgid "%s affects only GLR parsers"
+msgstr "%s 只影響 GLR 剖析器"
+
+#: src/reader.c:476
+#, c-format
+msgid "%s must be followed by positive number"
+msgstr "%s 必須在正數之後"
+
+#: src/reader.c:602
+#, c-format
+msgid "rule is too long"
+msgstr "規則太長"
+
+#: src/reader.c:718
+#, c-format
+msgid "no rules in the input grammar"
+msgstr "在輸入文法中沒有規則"
+
+#: src/reduce.c:241
+msgid "rule useless in grammar"
+msgstr "規則在文法中無用"
+
+#: src/reduce.c:303
+#, c-format
+msgid "nonterminal useless in grammar: %s"
+msgstr "非終結語詞在文法中無用：%s"
+
+#: src/reduce.c:351
+msgid "Nonterminals useless in grammar"
+msgstr "非終結語詞在文法中無用"
+
+#: src/reduce.c:364
+msgid "Terminals unused in grammar"
+msgstr "終端機在文法中未使用"
+
+#: src/reduce.c:373
+msgid "Rules useless in grammar"
+msgstr "規則在文法中無用"
+
+#: src/reduce.c:386
+#, c-format
+msgid "%d nonterminal useless in grammar"
+msgid_plural "%d nonterminals useless in grammar"
+msgstr[0] "%d 非終結語詞在文法中無用"
+
+#: src/reduce.c:391
+#, c-format
+msgid "%d rule useless in grammar"
+msgid_plural "%d rules useless in grammar"
+msgstr[0] "%d 規則在文法中無用"
+
+#: src/reduce.c:420
+#, c-format
+msgid "start symbol %s does not derive any sentence"
+msgstr "啟始符號 %s 不衍生任何句子"
+
+#: src/scan-code.l:157
+#, c-format
+msgid "stray '%s'"
+msgstr "零星的 %s"
+
+#: src/scan-code.l:339
+#, c-format
+msgid "refers to: %c%s at %s"
+msgstr "參考：%c%s 於 %s"
+
+#: src/scan-code.l:362
+#, c-format
+msgid "possibly meant: %c"
+msgstr "可能意指：%c"
+
+#: src/scan-code.l:371
+#, c-format
+msgid ", hiding %c"
+msgstr "，隱藏 %c"
+
+#: src/scan-code.l:379
+#, c-format
+msgid " at %s"
+msgstr " 於 %s"
+
+#: src/scan-code.l:383
+#, c-format
+msgid ", cannot be accessed from mid-rule action at $%d"
+msgstr "，無法從 位於 $%d 的 mid-rule 動作存取"
+
+#: src/scan-code.l:440 src/scan-gram.l:855
+#, c-format
+msgid "integer out of range: %s"
+msgstr "整數超過範圍：%s"
+
+#: src/scan-code.l:530
+#, c-format
+msgid "invalid reference: %s"
+msgstr "無效的參考：%s"
+
+#: src/scan-code.l:538
+#, c-format
+msgid "syntax error after '%c', expecting integer, letter, '_', '[', or '$'"
+msgstr "語法錯誤發生於 %c 之後，預期為整數、字母、'_'、'[' 或 '$'"
+
+#: src/scan-code.l:544
+#, c-format
+msgid "symbol not found in production before $%d: %.*s"
+msgstr "在 $%d 之前的結果中找不到符號：%.*s"
+
+#: src/scan-code.l:549
+#, c-format
+msgid "symbol not found in production: %.*s"
+msgstr "在結果中找不到符號：%.*s"
+
+#: src/scan-code.l:564
+#, c-format
+msgid "misleading reference: %s"
+msgstr "誤導的參考：%s"
+
+#: src/scan-code.l:580
+#, c-format
+msgid "ambiguous reference: %s"
+msgstr "模稜兩可的參考：%s"
+
+#: src/scan-code.l:616
+#, c-format
+msgid "explicit type given in untyped grammar"
+msgstr "在未定型態文法中給定明確的型態"
+
+#: src/scan-code.l:675
+#, c-format
+msgid "$$ for the midrule at $%d of %s has no declared type"
+msgstr "$$ 對於在 %2$s 中 $%1$d 的中段沒有任何宣告型態"
+
+#: src/scan-code.l:681
+#, c-format
+msgid "$$ of %s has no declared type"
+msgstr "%s 中的 $$ 沒有任何宣告型態"
+
+#: src/scan-code.l:703
+#, c-format
+msgid "$%s of %s has no declared type"
+msgstr "%2$s 中的 $%1$s 沒有任何宣告型態"
+
+#: src/scan-gram.l:186
+#, c-format
+msgid "stray ',' treated as white space"
+msgstr "零星的 ',' 將視為空白"
+
+#: src/scan-gram.l:276
+#, c-format
+msgid "invalid directive: %s"
+msgstr "無效的指令：%s"
+
+#: src/scan-gram.l:302
+#, c-format
+msgid "invalid identifier: %s"
+msgstr "無效的識別碼：%s"
+
+#: src/scan-gram.l:354
+msgid "invalid character"
+msgid_plural "invalid characters"
+msgstr[0] "無效字元"
+
+#: src/scan-gram.l:372
+#, c-format
+msgid "invalid null character"
+msgstr "無效的空字元"
+
+#: src/scan-gram.l:425
+#, c-format
+msgid "unexpected identifier in bracketed name: %s"
+msgstr "中括號內未預期的識別名稱：%s"
+
+#: src/scan-gram.l:447
+#, c-format
+msgid "an identifier expected"
+msgstr "預期是一個識別碼"
+
+#: src/scan-gram.l:452
+msgid "invalid character in bracketed name"
+msgid_plural "invalid characters in bracketed name"
+msgstr[0] "在中括號內的名稱有無效字元"
+
+#: src/scan-gram.l:544
+#, c-format
+msgid "empty character literal"
+msgstr "空的字元實字"
+
+#: src/scan-gram.l:550
+#, c-format
+msgid "extra characters in character literal"
+msgstr "額外字元於字元實字"
+
+#: src/scan-gram.l:596 src/scan-gram.l:606 src/scan-gram.l:626
+#, c-format
+msgid "invalid number after \\-escape: %s"
+msgstr "無效數字於 \\-escape 之後：%s"
+
+#: src/scan-gram.l:638
+#, c-format
+msgid "invalid character after \\-escape: %s"
+msgstr "\\-跳脫符號之後的無效字元：%s"
+
+#: src/scan-gram.l:984
+#, c-format
+msgid "missing %s at end of file"
+msgstr "於檔案結尾缺少 %s"
+
+#: src/scan-gram.l:995
+#, c-format
+msgid "missing %s at end of line"
+msgstr " 於列尾缺少 %s"
+
+#: src/scan-skel.l:139
+#, c-format
+msgid "unclosed %s directive in skeleton"
+msgstr "在架構中有未關閉的 %s 指令"
+
+#: src/scan-skel.l:256
+#, c-format
+msgid "too few arguments for %s directive in skeleton"
+msgstr "在架構中的 %s 指令引數太少"
+
+#: src/scan-skel.l:263
+#, c-format
+msgid "too many arguments for %s directive in skeleton"
+msgstr "在架構中的 %s 指令引數太多"
+
+#: src/symtab.c:75
+#, c-format
+msgid "POSIX Yacc forbids dashes in symbol names: %s"
+msgstr "POSIX Yacc 在符號名稱中禁用橫線：%s"
+
+#: src/symtab.c:97
+#, c-format
+msgid "too many symbols in input grammar (limit is %d)"
+msgstr "在輸入文法中太多符號 (限制為 %d)"
+
+#: src/symtab.c:250
+#, c-format
+msgid "%s redeclaration for %s"
+msgstr "%s 重複宣告了 %s"
+
+#: src/symtab.c:263
+#, c-format
+msgid "%s redeclaration for <%s>"
+msgstr "%s 重複宣告了 <%s>"
+
+#: src/symtab.c:392
+#, c-format
+msgid "symbol %s redefined"
+msgstr "符號 %s 被重新定義"
+
+#: src/symtab.c:407
+#, c-format
+msgid "symbol %s redeclared"
+msgstr "符號 %s 被重複宣告"
+
+#: src/symtab.c:429
+#, c-format
+msgid "redefining user token number of %s"
+msgstr "重新定義 %s 的使用者字組數目"
+
+#: src/symtab.c:459
+#, c-format
+msgid "symbol %s is used, but is not defined as a token and has no rules"
+msgstr "符號 %s 已使用過，但是並未定義為字組也沒有規則"
+
+#: src/symtab.c:497
+#, c-format
+msgid "useless %s for type <%s>"
+msgstr "%s 對於類型 <%s> 無作用"
+
+#: src/symtab.c:502
+#, c-format
+msgid "type <%s> is used, but is not associated to any symbol"
+msgstr "類型 <%s> 已使用過，但是並未與任何符號相關聯"
+
+#: src/symtab.c:527
+#, c-format
+msgid "symbol %s used more than once as a literal string"
+msgstr "符號 %s 超過一次使用為實字字串"
+
+#: src/symtab.c:530
+#, c-format
+msgid "symbol %s given more than one literal string"
+msgstr "符號 %s 給定了超過一個實字字串"
+
+#: src/symtab.c:629
+#, c-format
+msgid "user token number %d redeclaration for %s"
+msgstr "使用者字組數字 %d 被重複宣告為 %s"
+
+#: src/symtab.c:633
+#, c-format
+msgid "previous declaration for %s"
+msgstr "%s 的前一個宣告"
+
+#: src/symtab.c:1014
+#, c-format
+msgid "the start symbol %s is undefined"
+msgstr "未定義起始符號 %s"
+
+#: src/symtab.c:1018
+#, c-format
+msgid "the start symbol %s is a token"
+msgstr "起始符號 %s 是一項字組"
+
+#: src/symtab.c:1193
+#, c-format
+msgid "useless precedence and associativity for %s"
+msgstr "對於 %s 無作用的優先性與順序關聯性"
+
+#: src/symtab.c:1196
+#, c-format
+msgid "useless precedence for %s"
+msgstr "對於 %s 無作用的優先性"
+
+#: src/symtab.c:1200
+#, c-format
+msgid "useless associativity for %s, use %%precedence"
+msgstr "對於 %s 無作用的順序關聯性，使用 %%precedence"
+
+#: djgpp/subpipe.c:63 djgpp/subpipe.c:286 djgpp/subpipe.c:288
+#, c-format
+msgid "removing of '%s' failed"
+msgstr "移除 %s 時失敗"
+
+#: djgpp/subpipe.c:85 djgpp/subpipe.c:92
+#, c-format
+msgid "creation of a temporary file failed"
+msgstr "暫存檔的建立失敗"
+
+#: djgpp/subpipe.c:127
+#, c-format
+msgid "saving stdin failed"
+msgstr "儲存標準輸入時失敗"
+
+#: djgpp/subpipe.c:131
+#, c-format
+msgid "saving stdout failed"
+msgstr "儲存標準輸出時失敗"
+
+#: djgpp/subpipe.c:153 djgpp/subpipe.c:197 djgpp/subpipe.c:258
+#, c-format
+msgid "opening of tmpfile failed"
+msgstr "開啟暫存檔時失敗"
+
+#: djgpp/subpipe.c:157
+#, c-format
+msgid "redirecting bison's stdout to the temporary file failed"
+msgstr "將 bison 的標準輸出重導至暫存檔時失敗"
+
+#: djgpp/subpipe.c:201
+#, c-format
+msgid "redirecting m4's stdin from the temporary file failed"
+msgstr "將 m4 的標準輸入重導自暫存檔時失敗"
+
+#: djgpp/subpipe.c:212
+#, c-format
+msgid "opening of a temporary file failed"
+msgstr "開啟暫存檔時失敗"
+
+#: djgpp/subpipe.c:218
+#, c-format
+msgid "redirecting m4's stdout to a temporary file failed"
+msgstr "重新導向 m4 的標準輸出到暫存檔時失敗"
+
+#: djgpp/subpipe.c:234
+#, c-format
+msgid "subsidiary program '%s' interrupted"
+msgstr "附加程式 %s 被中斷"
+
+#: djgpp/subpipe.c:241
+#, c-format
+msgid "subsidiary program '%s' not found"
+msgstr "找不到附加程式 %s"
+
+#: djgpp/subpipe.c:265
+#, c-format
+msgid "redirecting bison's stdin from the temporary file failed"
+msgstr "從暫存檔重新導向 bison 的標準輸入時失敗"
+
+#: lib/argmatch.c:133
+#, c-format
+msgid "invalid argument %s for %s"
+msgstr "%2$s 的引數 %1$s 無效"
+
+#: lib/argmatch.c:134
+#, c-format
+msgid "ambiguous argument %s for %s"
+msgstr "%2$s 的引數 %1$s 不明確"
+
+#: lib/argmatch.c:153
+msgid "Valid arguments are:"
+msgstr "有效的引數為："
+
+#: lib/bitset_stats.c:177
+#, c-format
+msgid "%u bitset_allocs, %u freed (%.2f%%).\n"
+msgstr "%u bitset_allocs，%u 已釋放 (%.2f%%)。\n"
+
+#: lib/bitset_stats.c:180
+#, c-format
+msgid "%u bitset_sets, %u cached (%.2f%%)\n"
+msgstr "%u bitset_sets，%u 已快取 (%.2f%%)\n"
+
+#: lib/bitset_stats.c:183
+#, c-format
+msgid "%u bitset_resets, %u cached (%.2f%%)\n"
+msgstr "%u bitset_resets，%u 已快取 (%.2f%%)\n"
+
+#: lib/bitset_stats.c:186
+#, c-format
+msgid "%u bitset_tests, %u cached (%.2f%%)\n"
+msgstr "%u bitset_tests，%u 已快取 (%.2f%%)\n"
+
+#: lib/bitset_stats.c:190
+#, c-format
+msgid "%u bitset_lists\n"
+msgstr "%u bitset_lists\n"
+
+#: lib/bitset_stats.c:192
+msgid "count log histogram\n"
+msgstr "計算日誌長條圖\n"
+
+#: lib/bitset_stats.c:195
+msgid "size log histogram\n"
+msgstr "調整日誌長條圖大小\n"
+
+#: lib/bitset_stats.c:198
+msgid "density histogram\n"
+msgstr "密度長條圖\n"
+
+#: lib/bitset_stats.c:212
+#, c-format
+msgid ""
+"Bitset statistics:\n"
+"\n"
+msgstr ""
+"Bitset 統計：\n"
+"\n"
+
+#: lib/bitset_stats.c:215
+#, c-format
+msgid "Accumulated runs = %u\n"
+msgstr "累積的執行 = %u\n"
+
+#: lib/bitset_stats.c:259 lib/bitset_stats.c:264
+msgid "cannot read stats file"
+msgstr "無法讀取統計檔案"
+
+#: lib/bitset_stats.c:261
+#, c-format
+msgid "bad stats file size\n"
+msgstr "不當的統計檔案大小\n"
+
+#: lib/bitset_stats.c:287 lib/bitset_stats.c:289
+msgid "cannot write stats file"
+msgstr "無法寫入統計檔案"
+
+#: lib/bitset_stats.c:292
+msgid "cannot open stats file for writing"
+msgstr "無法開啟統計檔案用於寫入"
+
+#: lib/closeout.c:112
+msgid "write error"
+msgstr "寫入錯誤"
+
+#: lib/error.c:191
+msgid "Unknown system error"
+msgstr "不明的系統錯誤"
+
+#: lib/getopt.c:547 lib/getopt.c:576
+#, c-format
+msgid "%s: option '%s' is ambiguous; possibilities:"
+msgstr "%s：選項 %s 是模稜兩可的；可能性："
+
+#: lib/getopt.c:624 lib/getopt.c:628
+#, c-format
+msgid "%s: option '--%s' doesn't allow an argument\n"
+msgstr "%s：選項 --%s 不允許引數\n"
+
+#: lib/getopt.c:637 lib/getopt.c:642
+#, c-format
+msgid "%s: option '%c%s' doesn't allow an argument\n"
+msgstr "%s：選項 %c%s 不允許引數\n"
+
+#: lib/getopt.c:685 lib/getopt.c:704
+#, c-format
+msgid "%s: option '--%s' requires an argument\n"
+msgstr "%s：選項 --%s 需要一個引數\n"
+
+#: lib/getopt.c:742 lib/getopt.c:745
+#, c-format
+msgid "%s: unrecognized option '--%s'\n"
+msgstr "%s：無法辨識的選項 --%s\n"
+
+#: lib/getopt.c:753 lib/getopt.c:756
+#, c-format
+msgid "%s: unrecognized option '%c%s'\n"
+msgstr "%s：無法辨識的選項 %c%s\n"
+
+#: lib/getopt.c:805 lib/getopt.c:808
+#, c-format
+msgid "%s: invalid option -- '%c'\n"
+msgstr "%s：無效的選項 -- %c\n"
+
+#: lib/getopt.c:861 lib/getopt.c:878 lib/getopt.c:1088 lib/getopt.c:1106
+#, c-format
+msgid "%s: option requires an argument -- '%c'\n"
+msgstr "%s：選項需要一個引數 -- %c\n"
+
+#: lib/getopt.c:934 lib/getopt.c:950
+#, c-format
+msgid "%s: option '-W %s' is ambiguous\n"
+msgstr "%s：選項 -W %s 是模稜兩可的\n"
+
+#: lib/getopt.c:974 lib/getopt.c:992
+#, c-format
+msgid "%s: option '-W %s' doesn't allow an argument\n"
+msgstr "%s：選項 -W %s 不允許引數\n"
+
+#: lib/getopt.c:1013 lib/getopt.c:1031
+#, c-format
+msgid "%s: option '-W %s' requires an argument\n"
+msgstr "%s：選項 -W %s 需要一個引數\n"
+
+#: lib/obstack.c:338 lib/obstack.c:340 lib/xalloc-die.c:34
+msgid "memory exhausted"
+msgstr "記憶體耗盡"
+
+#: lib/spawn-pipe.c:135 lib/spawn-pipe.c:138 lib/spawn-pipe.c:259
+#: lib/spawn-pipe.c:262
+#, c-format
+msgid "cannot create pipe"
+msgstr "無法建立管線"
+
+#: lib/spawn-pipe.c:229 lib/spawn-pipe.c:343 lib/wait-process.c:282
+#: lib/wait-process.c:356
+#, c-format
+msgid "%s subprocess failed"
+msgstr "%s 子程序失敗"
+
+#. TRANSLATORS:
+#. Get translations for open and closing quotation marks.
+#. The message catalog should translate "`" to a left
+#. quotation mark suitable for the locale, and similarly for
+#. "'".  For example, a French Unicode local should translate
+#. these to U+00AB (LEFT-POINTING DOUBLE ANGLE
+#. QUOTATION MARK), and U+00BB (RIGHT-POINTING DOUBLE ANGLE
+#. QUOTATION MARK), respectively.
+#.
+#. If the catalog has no translation, we will try to
+#. use Unicode U+2018 (LEFT SINGLE QUOTATION MARK) and
+#. Unicode U+2019 (RIGHT SINGLE QUOTATION MARK).  If the
+#. current locale is not Unicode, locale_quoting_style
+#. will quote 'like this', and clocale_quoting_style will
+#. quote "like this".  You should always include translations
+#. for "`" and "'" even if U+2018 and U+2019 are appropriate
+#. for your locale.
+#.
+#. If you don't know what to put here, please see
+#. <http://en.wikipedia.org/wiki/Quotation_marks_in_other_languages>
+#. and use glyphs suitable for your language.
+#: lib/quotearg.c:312
+msgid "`"
+msgstr "「"
+
+#: lib/quotearg.c:313
+msgid "'"
+msgstr "」"
+
+#: lib/timevar.c:475
+msgid ""
+"\n"
+"Execution times (seconds)\n"
+msgstr ""
+"\n"
+"執行時間 (秒)\n"
+
+#: lib/timevar.c:525
+msgid " TOTAL                 :"
+msgstr " 總計                 ："
+
+#: lib/timevar.c:561
+#, c-format
+msgid "time in %s: %ld.%06ld (%ld%%)\n"
+msgstr "%s 中的時間：%ld.%06ld (%ld%%)\n"
+
+#: lib/w32spawn.h:43
+#, c-format
+msgid "_open_osfhandle failed"
+msgstr "_open_osfhandle 失敗"
+
+#: lib/w32spawn.h:84
+#, c-format
+msgid "cannot restore fd %d: dup2 failed"
+msgstr "無法還原 fd %d：dup2 失敗"
+
+#: lib/wait-process.c:223 lib/wait-process.c:255 lib/wait-process.c:317
+#, c-format
+msgid "%s subprocess"
+msgstr "%s 子程序"
+
+#: lib/wait-process.c:274 lib/wait-process.c:346
+#, c-format
+msgid "%s subprocess got fatal signal %d"
+msgstr "%s 子程序得到嚴重信號 %d"
+
+#~ msgid "invalid $ value: $%d"
+#~ msgstr "無效的 $ 值：$%d"

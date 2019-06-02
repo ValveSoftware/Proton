@@ -1,0 +1,525 @@
+# Torturing Bison.                                    -*- Autotest -*-
+
+# Copyright (C) 2001-2002, 2004-2007, 2009-2015 Free Software
+# Foundation, Inc.
+
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+AT_BANNER([[Torture Tests.]])
+
+
+# AT_INCREASE_DATA_SIZE(SIZE)
+# ---------------------------
+# Try to increase the data size to SIZE KiB if possible.
+m4_define([AT_INCREASE_DATA_SIZE],
+[data_limit=`(ulimit -S -d) 2>/dev/null`
+case $data_limit in
+[[0-9]]*)
+  if test "$data_limit" -lt $1; then
+    AT_CHECK([ulimit -S -d $1 || exit 77])
+    ulimit -S -d $1
+  fi
+esac])
+
+
+## ------------------------------------- ##
+## Creating a large artificial grammar.  ##
+## ------------------------------------- ##
+
+# AT_DATA_TRIANGULAR_GRAMMAR(FILE-NAME, SIZE)
+# -------------------------------------------
+# Create FILE-NAME, containing a self checking parser for a huge
+# triangular grammar.
+m4_define([AT_DATA_TRIANGULAR_GRAMMAR],
+[AT_BISON_OPTION_PUSHDEFS
+AT_DATA([[gengram.pl]],
+[[#! /usr/bin/perl -w
+
+use strict;
+my $max = $ARGV[0] || 10;
+
+print <<EOF;
+]AT_DATA_GRAMMAR_PROLOGUE[
+%error-verbose
+%debug
+%{
+#include <stdio.h>
+#include <stdlib.h>
+#include <assert.h>
+#define MAX $max
+]AT_YYLEX_DECLARE[
+]AT_YYERROR_DECLARE[
+%}
+%union
+{
+  int val;
+};
+
+%token END "end"
+%type <val> exp input
+EOF
+
+for my $size (1 .. $max)
+  {
+    print "%token t$size $size \"$size\"\n";
+  };
+
+print <<EOF;
+%%
+input:
+  exp        { assert (\@S|@1 == 0); \$\$ = \@S|@1; }
+| input exp  { assert (\@S|@2 == \@S|@1 + 1); \$\$ = \@S|@2; }
+;
+
+exp:
+  END
+    { \$\$ = 0; }
+EOF
+
+for my $size (1 .. $max)
+  {
+    use Text::Wrap;
+    print wrap ("| ", "   ",
+                (map { "\"$_\"" } (1 .. $size)),
+                " END \n"),
+                  "    { \$\$ = $size; }\n";
+  };
+print ";\n";
+
+print <<\EOF;
+%%
+]AT_YYERROR_DEFINE[
+static int
+yylex (void)
+{
+  static int inner = 1;
+  static int outer = 0;
+  if (outer > MAX)
+    return 0;
+  else if (inner > outer)
+    {
+      inner = 1;
+      ++outer;
+      return END;
+    }
+  return inner++;
+}
+]AT_MAIN_DEFINE[
+EOF
+]])
+AT_BISON_OPTION_POPDEFS
+
+AT_CHECK([$PERL -w ./gengram.pl $2 || exit 77], 0, [stdout])
+mv stdout $1
+])
+
+
+## -------------- ##
+## Big triangle.  ##
+## -------------- ##
+
+AT_SETUP([Big triangle])
+
+# I have been able to go up to 2000 on my machine.
+# I tried 3000, a 29Mb grammar file, but then my system killed bison.
+# With 500 and the new parser, which consume far too much memory,
+# it gets killed too.  Of course the parser is to be cleaned.
+AT_DATA_TRIANGULAR_GRAMMAR([input.y], [200])
+AT_BISON_CHECK_NO_XML([-v -o input.c input.y])
+AT_COMPILE([input])
+AT_PARSER_CHECK([./input])
+
+AT_CLEANUP
+
+
+
+# AT_DATA_HORIZONTAL_GRAMMAR(FILE-NAME, SIZE)
+# -------------------------------------------
+# Create FILE-NAME, containing a self checking parser for a huge
+# horizontal grammar.
+m4_define([AT_DATA_HORIZONTAL_GRAMMAR],
+[AT_BISON_OPTION_PUSHDEFS
+AT_DATA([[gengram.pl]],
+[[#! /usr/bin/perl -w
+
+use strict;
+my $max = $ARGV[0] || 10;
+
+print <<EOF;
+]AT_DATA_GRAMMAR_PROLOGUE[
+%error-verbose
+%debug
+%{
+#include <stdio.h>
+#include <stdlib.h>
+#define MAX $max
+]AT_YYLEX_DECLARE[
+]AT_YYERROR_DECLARE[
+%}
+
+%token
+EOF
+for my $size (1 .. $max)
+  {
+    print "    t$size $size \"$size\"\n";
+  };
+
+print <<EOF;
+
+%%
+EOF
+
+use Text::Wrap;
+print
+  wrap ("exp: ", "  ",
+        (map { "\"$_\"" } (1 .. $max)), ";"),
+  "\n";
+
+print <<\EOF;
+%%
+#include <assert.h>
+]AT_YYERROR_DEFINE[
+static int
+yylex (void)
+{
+  static int counter = 1;
+  if (counter <= MAX)
+    return counter++;
+  assert (counter++ == MAX + 1);
+  return 0;
+}
+]AT_MAIN_DEFINE[
+EOF
+]])
+
+AT_CHECK([$PERL -w ./gengram.pl $2 || exit 77], 0, [stdout])
+mv stdout $1
+AT_BISON_OPTION_POPDEFS
+])
+
+
+## ---------------- ##
+## Big horizontal.  ##
+## ---------------- ##
+
+AT_SETUP([Big horizontal])
+
+# I have been able to go up to 10000 on my machine, but I had to
+# increase the maximum stack size (* 100).  It gave:
+#
+# input.y      263k
+# input.tab.c  1.3M
+# input        453k
+#
+# gengram.pl 10000                 0.70s user 0.01s sys  99% cpu    0.711 total
+# bison input.y                  730.56s user 0.53s sys  99% cpu 12:12.34 total
+# gcc -Wall input.tab.c -o input   5.81s user 0.20s sys 100% cpu     6.01 total
+# ./input                          0.00s user 0.01s sys 108% cpu     0.01 total
+#
+AT_DATA_HORIZONTAL_GRAMMAR([input.y], [1000])
+
+# GNU m4 requires about 70 MiB for this test on a 32-bit host.
+# Ask for 200 MiB, which should be plenty even on a 64-bit host.
+AT_INCREASE_DATA_SIZE(204000)
+
+AT_BISON_CHECK_NO_XML([-v -o input.c input.y])
+AT_COMPILE([input])
+AT_PARSER_CHECK([./input])
+
+AT_CLEANUP
+
+
+
+# AT_DATA_LOOKAHEAD_TOKENS_GRAMMAR(FILE-NAME, SIZE)
+# --------------------------------------------------
+# Create FILE-NAME, containing a self checking parser for a grammar
+# requiring SIZE lookahead tokens.
+m4_define([AT_DATA_LOOKAHEAD_TOKENS_GRAMMAR],
+[AT_BISON_OPTION_PUSHDEFS
+AT_DATA([[gengram.pl]],
+[[#! /usr/bin/perl -w
+
+use strict;
+use Text::Wrap;
+my $max = $ARGV[0] || 10;
+
+print <<EOF;
+%error-verbose
+%debug
+%{
+]AT_DATA_SOURCE_PROLOGUE[
+# include <stdio.h>
+# include <stdlib.h>
+# include <assert.h>
+# define MAX $max
+]AT_YYLEX_DECLARE[
+]AT_YYERROR_DECLARE[
+%}
+%union
+{
+  int val;
+};
+
+%type <val> input exp
+%token token
+EOF
+
+print
+  wrap ("%type <val> ",
+        "            ",
+        map { "n$_" } (1 .. $max)),
+  "\n";
+
+print "%token\n";
+for my $count (1 .. $max)
+  {
+    print "    t$count $count \"$count\"\n";
+  };
+
+print <<EOF;
+%%
+input:
+  exp        { assert (\@S|@1 == 1); \$\$ = \@S|@1; }
+| input exp  { assert (\@S|@2 == \@S|@1 + 1); \$\$ = \@S|@2; }
+;
+
+exp:
+  n1 "1" { assert (\@S|@1 == 1); \@S|@\@S|@ = \@S|@1; }
+EOF
+
+for my $count (2 .. $max)
+  {
+    print "| n$count \"$count\" { assert (\@S|@1 == $count); \@S|@\@S|@ = \@S|@1; }\n";
+  };
+print ";\n";
+
+for my $count (1 .. $max)
+  {
+    print "n$count: token { \$\$ = $count; };\n";
+  };
+
+print <<\EOF;
+%%
+]AT_YYERROR_DEFINE[
+static int
+yylex (void)
+{
+  static int return_token = 1;
+  static int counter = 1;
+  if (counter > MAX)
+    {
+      assert (counter++ == MAX + 1);
+      return 0;
+    }
+  if (return_token)
+    {
+      return_token = 0;
+      return token;
+    }
+  return_token = 1;
+  return counter++;
+}
+
+]AT_MAIN_DEFINE[
+EOF
+]])
+
+AT_CHECK([$PERL -w ./gengram.pl $2 || exit 77], 0, [stdout])
+mv stdout $1
+AT_BISON_OPTION_POPDEFS
+])
+
+
+## ------------------------ ##
+## Many lookahead tokens.   ##
+## ------------------------ ##
+
+AT_SETUP([Many lookahead tokens])
+
+AT_DATA_LOOKAHEAD_TOKENS_GRAMMAR([input.y], [1000])
+
+# GNU m4 requires about 70 MiB for this test on a 32-bit host.
+# Ask for 200 MiB, which should be plenty even on a 64-bit host.
+AT_INCREASE_DATA_SIZE(204000)
+
+AT_BISON_CHECK([-v -o input.c input.y])
+AT_COMPILE([input])
+AT_PARSER_CHECK([./input])
+
+AT_CLEANUP
+
+
+
+# AT_DATA_STACK_TORTURE(C-PROLOGUE, [BISON-DECLS])
+# ------------------------------------------------
+# A parser specialized in torturing the stack size.
+m4_define([AT_DATA_STACK_TORTURE],
+[AT_BISON_OPTION_PUSHDEFS([$2])
+# A grammar of parens growing the stack thanks to right recursion.
+# exp:
+AT_DATA_GRAMMAR([input.y],
+[[%{
+#include <errno.h>
+#include <limits.h>
+#include <stdio.h>
+#include <stdlib.h>
+]$1[
+  ]AT_YYLEX_DECLARE[
+  ]AT_YYERROR_DECLARE[
+%}
+]$2[
+%error-verbose
+%debug
+%token WAIT_FOR_EOF
+%%
+exp: WAIT_FOR_EOF exp | ;
+%%
+]AT_YYERROR_DEFINE[
+#include <assert.h>
+static int
+yylex (void)
+{
+  assert (0 <= yylval);
+  if (yylval--)
+    return WAIT_FOR_EOF;
+  else
+    return EOF;
+}
+
+/* Return argv[1] as an int. */
+static int
+get_args (int argc, const char **argv)
+{
+  int res;
+  char *endp;
+  assert (argc == 2); (void) argc;
+  res = strtol (argv[1], &endp, 10);
+  assert (argv[1] != endp);
+  assert (0 <= res);
+  assert (res <= INT_MAX);
+  assert (errno != ERANGE);
+  return res;
+}
+
+int
+main (int argc, const char **argv)
+{
+  YYSTYPE yylval_init = get_args (argc, argv);
+  int status = 0;
+  int count;
+]m4_bmatch([$2], [api.push-pull both],
+[[  yypstate *ps = yypstate_new ();
+]])[  yydebug = 1;
+  for (count = 0; count < 2; ++count)
+    {
+      int new_status;
+      yylval = yylval_init;
+      new_status = ]m4_bmatch([$2], [api.push-pull both],
+                              [[yypull_parse (ps)]],
+                              [[yyparse ()]])[;
+      if (count == 0)
+        status = new_status;
+      else
+        assert (new_status == status);
+    }]m4_bmatch([$2], [api.push-pull both],[[
+  yypstate_delete (ps);]])[
+  return status;
+}
+]])
+AT_BISON_OPTION_POPDEFS([$2])
+AT_BISON_CHECK([-o input.c input.y])
+AT_COMPILE([input])
+])
+
+
+## -------------------------------------- ##
+## Exploding the Stack Size with Alloca.  ##
+## -------------------------------------- ##
+
+AT_SETUP([Exploding the Stack Size with Alloca])
+
+m4_pushdef([AT_USE_ALLOCA], [[
+#if (defined __GNUC__ || defined __BUILTIN_VA_ARG_INCR \
+     || defined _AIX || defined _MSC_VER || defined _ALLOCA_H)
+# define YYSTACK_USE_ALLOCA 1
+#endif
+]])
+
+AT_DATA_STACK_TORTURE([AT_USE_ALLOCA])
+
+# Below the limit of 200.
+AT_PARSER_CHECK([./input 20], 0, [], [ignore],
+                [[VALGRIND_OPTS="$VALGRIND_OPTS --log-fd=1"]])
+# Two enlargements: 2 * 2 * 200.
+AT_PARSER_CHECK([./input 900], 0, [], [ignore],
+                [[VALGRIND_OPTS="$VALGRIND_OPTS --log-fd=1"]])
+# Fails: beyond the limit of 10,000 (which we don't reach anyway since we
+# multiply by two starting at 200 => 5120 is the last possible).
+AT_PARSER_CHECK([./input 10000], 2, [], [ignore],
+                [[VALGRIND_OPTS="$VALGRIND_OPTS --log-fd=1"]])
+
+# The push parser can't use alloca since the stacks can't be locals.  This test
+# just helps guarantee we don't let the YYSTACK_USE_ALLOCA feature affect
+# push parsers.
+AT_DATA_STACK_TORTURE([AT_USE_ALLOCA],
+[[%define api.push-pull both
+]])
+AT_PARSER_CHECK([./input 20], 0, [], [ignore],
+                [[VALGRIND_OPTS="$VALGRIND_OPTS --log-fd=1"]])
+AT_PARSER_CHECK([./input 900], 0, [], [ignore],
+                [[VALGRIND_OPTS="$VALGRIND_OPTS --log-fd=1"]])
+AT_PARSER_CHECK([./input 10000], 2, [], [ignore],
+                [[VALGRIND_OPTS="$VALGRIND_OPTS --log-fd=1"]])
+
+m4_popdef([AT_USE_ALLOCA])
+
+AT_CLEANUP
+
+
+
+
+## -------------------------------------- ##
+## Exploding the Stack Size with Malloc.  ##
+## -------------------------------------- ##
+
+AT_SETUP([Exploding the Stack Size with Malloc])
+
+m4_pushdef([AT_USE_ALLOCA], [[#define YYSTACK_USE_ALLOCA 0]])
+
+AT_DATA_STACK_TORTURE([AT_USE_ALLOCA])
+
+# Below the limit of 200.
+AT_PARSER_CHECK([./input 20], 0, [], [ignore],
+                [[VALGRIND_OPTS="$VALGRIND_OPTS --log-fd=1"]])
+# Two enlargements: 2 * 2 * 200.
+AT_PARSER_CHECK([./input 900], 0, [], [ignore],
+                [[VALGRIND_OPTS="$VALGRIND_OPTS --log-fd=1"]])
+# Fails: beyond the limit of 10,000 (which we don't reach anyway since we
+# multiply by two starting at 200 => 5120 is the possible).
+AT_PARSER_CHECK([./input 10000], 2, [], [ignore],
+                [[VALGRIND_OPTS="$VALGRIND_OPTS --log-fd=1"]])
+
+AT_DATA_STACK_TORTURE([AT_USE_ALLOCA],
+[[%define api.push-pull both
+]])
+AT_PARSER_CHECK([./input 20], 0, [], [ignore],
+                [[VALGRIND_OPTS="$VALGRIND_OPTS --log-fd=1"]])
+AT_PARSER_CHECK([./input 900], 0, [], [ignore],
+                [[VALGRIND_OPTS="$VALGRIND_OPTS --log-fd=1"]])
+AT_PARSER_CHECK([./input 10000], 2, [], [ignore],
+                [[VALGRIND_OPTS="$VALGRIND_OPTS --log-fd=1"]])
+
+m4_popdef([AT_USE_ALLOCA])
+
+AT_CLEANUP

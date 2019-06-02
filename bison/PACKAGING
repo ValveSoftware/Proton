@@ -1,0 +1,54 @@
+Packaging hints for binary package distributors
+===============================================
+
+Although the source of the bison package comes as a single package,
+in distributions of binary packages the installed files should
+be split into two packages:
+
+   bison-runtime
+        Contents: Runtime libraries and programs.
+        Audience: Anyone who wants to run internationalized programs
+                  that contain Bison-generated parsers.
+
+   bison
+        Contents: Tools and documentation for developers that use Bison.
+        Audience: Anyone who wants to develop programs that use parsers.
+        Dependencies: requires bison-runtime.
+
+The 'bison-runtime' binary package is much smaller than the 'bison'
+binary package.  It should be included in any distribution that
+contains localized programs that use the diagnostics contained in
+Bison-generated parsers.
+
+If you want to install both packages at the same time, you simply do
+at the toplevel directory:
+
+      ./configure
+      make
+      make install
+
+After installation, the file
+
+      $prefix/share/locale/*/LC_MESSAGES/bison-runtime.mo
+
+belongs to the bison-runtime package; all other installed files belong
+to the bison package.
+
+-----
+
+Copyright (C) 2002, 2005, 2009-2015 Free Software Foundation, Inc.
+
+This file is part of Bison, the GNU Compiler Compiler.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.

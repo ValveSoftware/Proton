@@ -1,0 +1,1781 @@
+# Checking GLR Parsing: Regression Tests           -*- Autotest -*-
+
+# Copyright (C) 2002-2003, 2005-2007, 2009-2015 Free Software
+# Foundation, Inc.
+
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+AT_BANNER([[GLR Regression Tests]])
+
+## ---------------------------- ##
+## Badly Collapsed GLR States.  ##
+## ---------------------------- ##
+
+AT_SETUP([Badly Collapsed GLR States])
+
+AT_BISON_OPTION_PUSHDEFS
+AT_DATA_GRAMMAR([glr-regr1.y],
+[[/* Regression Test: Improper state compression */
+/* Reported by Scott McPeak */
+
+%{
+#include <stdio.h>
+#include <stdlib.h>
+#include <assert.h>
+
+#define YYSTYPE int
+static YYSTYPE exprMerge (YYSTYPE x0, YYSTYPE x1);
+]AT_YYERROR_DECLARE[
+]AT_YYLEX_DECLARE[
+%}
+
+
+%glr-parser
+
+
+/* -------- productions ------ */
+%%
+
+StartSymbol: E  { $$=0; }                   %merge <exprMerge>
+           ;
+
+E: E 'P' E { $$=1; printf("E -> E 'P' E\n"); }  %merge <exprMerge>
+ | 'B'     { $$=2; printf("E -> 'B'\n"); }      %merge <exprMerge>
+ ;
+
+
+
+/* ---------- C code ----------- */
+%%
+
+static YYSTYPE exprMerge (YYSTYPE x0, YYSTYPE x1)
+{
+  (void) x0;
+  (void) x1;
+  printf ("<OR>\n");
+  return 0;
+}
+
+const char *input = YY_NULLPTR;
+
+int
+main (int argc, const char* argv[])
+{
+  assert (argc == 2); (void) argc;
+  input = argv[1];
+  return yyparse ();
+}
+
+]AT_YYERROR_DEFINE[
+
+int
+yylex (void)
+{
+  return *input++;
+}
+]])
+AT_BISON_OPTION_POPDEFS
+
+AT_BISON_CHECK([[-o glr-regr1.c glr-regr1.y]], 0, [],
+[[glr-regr1.y: warning: 1 shift/reduce conflict [-Wconflicts-sr]
+]])
+AT_COMPILE([glr-regr1])
+AT_PARSER_CHECK([[./glr-regr1 BPBPB]], 0,
+[[E -> 'B'
+E -> 'B'
+E -> E 'P' E
+E -> 'B'
+E -> E 'P' E
+E -> 'B'
+E -> E 'P' E
+E -> E 'P' E
+<OR>
+]], [])
+
+AT_CLEANUP
+
+## -------------------------------------------------------------- ##
+## Improper handling of embedded actions and $-N in GLR parsers.  ##
+## -------------------------------------------------------------- ##
+
+AT_SETUP([Improper handling of embedded actions and dollar(-N) in GLR parsers])
+
+AT_BISON_OPTION_PUSHDEFS
+AT_DATA_GRAMMAR([glr-regr2a.y],
+[[/* Regression Test: Improper handling of embedded actions and $-N  */
+/* Reported by S. Eken */
+
+%{
+  #define YYSTYPE char *
+
+  #include <ctype.h>
+  #include <stdio.h>
+  #include <stdlib.h>
+  #include <string.h>
+  #include <assert.h>
+  ]AT_YYERROR_DECLARE[
+  ]AT_YYLEX_DECLARE[
+%}
+
+%glr-parser
+
+%%
+
+command:
+    's' var 't'
+       { printf ("Variable: '%s'\n", $2); }
+    'v' 'x' 'q'
+       { free ($2); }
+  | 's' var_list 't' 'e'
+       { printf ("Varlist: '%s'\n", $2); free ($2); }
+  | 's' var 't' var_printer 'x'
+       { free ($2); }
+  ;
+
+var:
+  'V'
+     { $$ = $1; }
+  ;
+
+var_list:
+  var
+    { $$ = $1; }
+  | var ',' var_list
+    {
+      char *s = (char *) realloc ($1, strlen ($1) + 1 + strlen ($3) + 1);
+      strcat (s, ",");
+      strcat (s, $3);
+      free ($3);
+      $$ = s;
+    }
+  ;
+
+var_printer: 'v'
+   { printf ("Variable: '%s'\n", $-1); }
+
+%%
+]AT_YYERROR_DEFINE[
+FILE *input;
+
+int
+yylex (void)
+{
+  char buf[50];
+  char *s;
+  assert (!feof (stdin));
+  switch (fscanf (input, " %1[a-z,]", buf))
+  {
+  case 1:
+    return buf[0];
+  case EOF:
+    return 0;
+  default:
+    break;
+  }
+  if (fscanf (input, "%49s", buf) != 1)
+    return 0;
+  assert (strlen (buf) < sizeof buf - 1);
+  s = (char *) malloc (strlen (buf) + 1);
+  strcpy (s, buf);
+  yylval = s;
+  return 'V';
+}
+
+int
+main (int argc, char **argv)
+{
+  int res;
+  input = stdin;
+  if (argc == 2 && !(input = fopen (argv[1], "r")))
+    return 3;
+  res = yyparse ();
+  if (argc == 2 && fclose (input))
+    return 4;
+  return res;
+}
+]])
+AT_BISON_OPTION_POPDEFS
+
+AT_BISON_CHECK([[-o glr-regr2a.c glr-regr2a.y]], 0, [],
+[[glr-regr2a.y: warning: 2 shift/reduce conflicts [-Wconflicts-sr]
+]])
+AT_COMPILE([glr-regr2a])
+
+AT_DATA([input1.txt],
+[[s VARIABLE_1 t v x q
+]])
+AT_PARSER_CHECK([[./glr-regr2a input1.txt]], 0,
+[[Variable: 'VARIABLE_1'
+]])
+
+AT_DATA([input2.txt],
+[[s VARIABLE_1 , ANOTHER_VARIABLE_2 t e
+]])
+AT_PARSER_CHECK([[./glr-regr2a input2.txt]],
+0,
+[[Varlist: 'VARIABLE_1,ANOTHER_VARIABLE_2'
+]])
+
+AT_DATA([input3.txt],
+[[s VARIABLE_3 t v x
+]])
+AT_PARSER_CHECK([[./glr-regr2a input3.txt]], 0,
+[[Variable: 'VARIABLE_3'
+]])
+
+
+AT_CLEANUP
+
+## --------------------------------------------- ##
+## Improper merging of GLR delayed action sets.  ##
+## --------------------------------------------- ##
+
+AT_SETUP([Improper merging of GLR delayed action sets])
+
+AT_BISON_OPTION_PUSHDEFS
+AT_DATA_GRAMMAR([glr-regr3.y],
+[[/* Regression Test: Improper merging of GLR delayed action sets.  */
+/* Reported by M. Rosien */
+
+%{
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdarg.h>
+#include <assert.h>
+
+static int MergeRule (int x0, int x1);
+]AT_YYERROR_DECLARE[
+]AT_YYLEX_DECLARE[
+
+#define RULE(x) (1 << (x))
+
+%}
+
+%glr-parser
+
+%token BAD_CHAR
+%token P1 P2 T1 T2 T3 T4 O1 O2
+
+%%
+
+S : P1 T4 O2 NT6 P2  { printf ("Result: %x\n", $4); }
+;
+
+NT1 : P1 T1 O1 T2 P2 { $$ = RULE(2); }  %merge<MergeRule>
+;
+
+NT2 : NT1             { $$ = RULE(3); } %merge<MergeRule>
+    | P1 NT1 O1 T3 P2 { $$ = RULE(4); } %merge<MergeRule>
+;
+
+NT3 : T3              { $$ = RULE(5); } %merge<MergeRule>
+    | P1 NT1 O1 T3 P2 { $$ = RULE(6); } %merge<MergeRule>
+;
+
+NT4 : NT3              { $$ = RULE(7); } %merge<MergeRule>
+    | NT2              { $$ = RULE(8); } %merge<MergeRule>
+    | P1 NT2 O1 NT3 P2 { $$ = RULE(9); } %merge<MergeRule>
+;
+
+NT5 : NT4              { $$ = RULE(10); } %merge<MergeRule>
+;
+
+NT6 : P1 NT1 O1 T3 P2  { $$ = RULE(11) | $2; } %merge<MergeRule>
+    | NT5              { $$ = RULE(12) | $1; } %merge<MergeRule>
+;
+
+%%
+
+static int
+MergeRule (int x0, int x1)
+{
+  return x0 | x1;
+}
+]AT_YYERROR_DEFINE[
+
+FILE *input = YY_NULLPTR;
+
+int P[] = { P1, P2 };
+int O[] = { O1, O2 };
+int T[] = { T1, T2, T3, T4 };
+
+int yylex (void)
+{
+  char inp[3];
+  assert (!feof (stdin));
+  if (fscanf (input, "%2s", inp) == EOF)
+    return 0;
+  switch (inp[0])
+    {
+    case 'p': return P[inp[1] - '1'];
+    case 't': return T[inp[1] - '1'];
+    case 'o': return O[inp[1] - '1'];
+    }
+  return BAD_CHAR;
+}
+
+int
+main (int argc, char* argv[])
+{
+  int res;
+  input = stdin;
+  if (argc == 2 && !(input = fopen (argv[1], "r")))
+    return 3;
+  res = yyparse ();
+  if (argc == 2 && fclose (input))
+    return 4;
+  return res;
+}
+]])
+AT_BISON_OPTION_POPDEFS
+
+AT_BISON_CHECK([[-o glr-regr3.c glr-regr3.y]], 0, [],
+[[glr-regr3.y: warning: 1 shift/reduce conflict [-Wconflicts-sr]
+glr-regr3.y: warning: 1 reduce/reduce conflict [-Wconflicts-rr]
+]])
+AT_COMPILE([glr-regr3])
+
+AT_DATA([input.txt],
+[[p1 t4 o2 p1 p1 t1 o1 t2 p2 o1 t3 p2 p2
+]])
+AT_PARSER_CHECK([[./glr-regr3 input.txt]],
+0,
+[[Result: 1c04
+]])
+
+AT_CLEANUP
+
+
+## ---------------------------------------------------------------------- ##
+## Duplicate representation of merged trees.  See                         ##
+## <http://lists.gnu.org/archive/html/help-bison/2005-07/msg00013.html>.  ##
+## ---------------------------------------------------------------------- ##
+
+AT_SETUP([Duplicate representation of merged trees])
+
+AT_BISON_OPTION_PUSHDEFS
+AT_DATA_GRAMMAR([glr-regr4.y],
+[[
+%union { char *ptr; }
+%type <ptr> S A A1 A2 B
+%glr-parser
+
+%{
+  #include <stdio.h>
+  #include <stdlib.h>
+  #include <string.h>
+  static char *merge (YYSTYPE, YYSTYPE);
+  static char *make_value (char const *, char const *);
+  ]AT_YYERROR_DECLARE[
+  ]AT_YYLEX_DECLARE[
+  static char *ptrs[100];
+  static char **ptrs_next = ptrs;
+%}
+
+%%
+
+tree: S { printf ("%s\n", $1); } ;
+
+S:
+  A   %merge<merge> { $$ = make_value ("S", $1); }
+  | B %merge<merge> { $$ = make_value ("S", $1); }
+  ;
+
+A:
+  A1   %merge<merge> { $$ = make_value ("A", $1); }
+  | A2 %merge<merge> { $$ = make_value ("A", $1); }
+  ;
+
+A1: 'a' { $$ = make_value ("A1", "'a'"); } ;
+A2: 'a' { $$ = make_value ("A2", "'a'"); } ;
+B:  'a' { $$ = make_value ("B", "'a'");  } ;
+
+%%
+]AT_YYERROR_DEFINE[
+]AT_YYLEX_DEFINE(["a"])[
+
+int
+main (void)
+{
+  int status = yyparse ();
+  while (ptrs_next != ptrs)
+    free (*--ptrs_next);
+  return status;
+}
+
+static char *
+make_value (char const *parent, char const *child)
+{
+  char const format[] = "%s <- %s";
+  char *value = *ptrs_next++ =
+    (char *) malloc (strlen (parent) + strlen (child) + sizeof format);
+  sprintf (value, format, parent, child);
+  return value;
+}
+
+static char *
+merge (YYSTYPE s1, YYSTYPE s2)
+{
+  char const format[] = "merge{ %s and %s }";
+  char *value = *ptrs_next++ =
+    (char *) malloc (strlen (s1.ptr) + strlen (s2.ptr) + sizeof format);
+  sprintf (value, format, s1.ptr, s2.ptr);
+  return value;
+}
+]])
+AT_BISON_OPTION_POPDEFS
+
+AT_BISON_CHECK([[-o glr-regr4.c glr-regr4.y]], 0, [],
+[[glr-regr4.y: warning: 1 reduce/reduce conflict [-Wconflicts-rr]
+]])
+AT_COMPILE([glr-regr4])
+
+AT_PARSER_CHECK([[./glr-regr4]], 0,
+[[merge{ S <- merge{ A <- A1 <- 'a' and A <- A2 <- 'a' } and S <- B <- 'a' }
+]], [])
+
+AT_CLEANUP
+
+
+## ------------------------------------------------------------------------- ##
+## User destructor for unresolved GLR semantic value.  See                   ##
+## <http://lists.gnu.org/archive/html/bison-patches/2005-08/msg00016.html>.  ##
+## ------------------------------------------------------------------------- ##
+
+AT_SETUP([User destructor for unresolved GLR semantic value])
+
+AT_BISON_OPTION_PUSHDEFS
+AT_DATA_GRAMMAR([glr-regr5.y],
+[[
+%{
+  #include <stdio.h>
+  #include <stdlib.h>
+  ]AT_YYERROR_DECLARE[
+  ]AT_YYLEX_DECLARE[
+  enum { MAGIC_VALUE = -1057808125 }; /* originally chosen at random */
+%}
+
+%glr-parser
+%union { int value; }
+%type <value> start
+
+%destructor {
+  if ($$ != MAGIC_VALUE)
+    {
+      fprintf (stderr, "Bad destructor call.\n");
+      exit (EXIT_FAILURE);
+    }
+} start
+
+%%
+
+start:
+   'a' { $$ = MAGIC_VALUE; }
+   | 'a' { $$ = MAGIC_VALUE; }
+   ;
+
+%%
+]AT_YYERROR_DEFINE[
+]AT_YYLEX_DEFINE(["a"])[
+]AT_MAIN_DEFINE[
+]])
+AT_BISON_OPTION_POPDEFS
+
+AT_BISON_CHECK([[-o glr-regr5.c glr-regr5.y]], 0, [],
+[[glr-regr5.y: warning: 1 reduce/reduce conflict [-Wconflicts-rr]
+]])
+AT_COMPILE([glr-regr5])
+
+AT_PARSER_CHECK([[./glr-regr5]], 1, [],
+[syntax is ambiguous
+])
+
+AT_CLEANUP
+
+
+## ------------------------------------------------------------------------- ##
+## User destructor after an error during a split parse.  See                 ##
+## <http://lists.gnu.org/archive/html/bison-patches/2005-08/msg00029.html>.  ##
+## ------------------------------------------------------------------------- ##
+
+AT_SETUP([User destructor after an error during a split parse])
+
+AT_BISON_OPTION_PUSHDEFS
+AT_DATA_GRAMMAR([glr-regr6.y],
+[[
+%{
+  #include <stdio.h>
+  #include <stdlib.h>
+  ]AT_YYERROR_DECLARE[
+  ]AT_YYLEX_DECLARE[
+%}
+
+%glr-parser
+%union { int value; }
+%type <value> 'a'
+
+%destructor {
+  printf ("Destructor called.\n");
+} 'a'
+
+%%
+
+start: 'a' | 'a' ;
+
+%%
+]AT_YYERROR_DEFINE[
+]AT_YYLEX_DEFINE(["a"])[
+]AT_MAIN_DEFINE[
+]])
+AT_BISON_OPTION_POPDEFS
+
+AT_BISON_CHECK([[-o glr-regr6.c glr-regr6.y]], 0, [],
+[[glr-regr6.y: warning: 1 reduce/reduce conflict [-Wconflicts-rr]
+]])
+AT_COMPILE([glr-regr6])
+
+AT_PARSER_CHECK([[./glr-regr6]], 1,
+[Destructor called.
+],
+[syntax is ambiguous
+])
+
+AT_CLEANUP
+
+
+## ------------------------------------------------------------------------- ##
+## Duplicated user destructor for lookahead.  See                            ##
+## <http://lists.gnu.org/archive/html/bison-patches/2005-08/msg00035.html>.  ##
+## ------------------------------------------------------------------------- ##
+
+AT_SETUP([Duplicated user destructor for lookahead])
+
+AT_BISON_OPTION_PUSHDEFS
+AT_DATA_GRAMMAR([glr-regr7.y],
+[[
+%{
+  #include <stdio.h>
+  #include <stdlib.h>
+  ]AT_YYERROR_DECLARE[
+  ]AT_YYLEX_DECLARE[
+  #define YYSTACKEXPANDABLE 0
+  typedef struct count_node {
+    int count;
+    struct count_node *prev;
+  } count_node;
+  static count_node *tail;
+%}
+
+%glr-parser
+%union { count_node *node; }
+%type <node> 'a'
+
+%destructor {
+  if ($$->count++)
+    fprintf (stderr, "Destructor called on same value twice.\n");
+} 'a'
+
+%%
+
+start:
+    stack1 start
+  | stack2 start
+  | /* empty */
+  ;
+stack1: 'a' ;
+stack2: 'a' ;
+
+%%
+
+static int
+yylex (void)
+{
+  yylval.node = (count_node*) malloc (sizeof *yylval.node);
+  if (!yylval.node)
+    {
+      fprintf (stderr, "Test inconclusive.\n");
+      exit (EXIT_FAILURE);
+    }
+  yylval.node->count = 0;
+  yylval.node->prev = tail;
+  tail = yylval.node;
+  return 'a';
+}
+
+]AT_YYERROR_DEFINE[
+int
+main (void)
+{
+  int status = yyparse ();
+  while (tail)
+    {
+      count_node *prev = tail->prev;
+      free (tail);
+      tail = prev;
+    }
+  return status;
+}
+]])
+AT_BISON_OPTION_POPDEFS
+
+AT_BISON_CHECK([[-o glr-regr7.c glr-regr7.y]], 0, [],
+[[glr-regr7.y: warning: 2 reduce/reduce conflicts [-Wconflicts-rr]
+]])
+AT_COMPILE([glr-regr7])
+
+AT_PARSER_CHECK([[./glr-regr7]], 2, [],
+[memory exhausted
+])
+
+AT_CLEANUP
+
+
+## ------------------------------------------------------------------------- ##
+## Incorrect default location for empty right-hand sides.  Adapted from bug  ##
+## report by Claudia Hermann.                                                ##
+## See http://lists.gnu.org/archive/html/bug-bison/2005-10/msg00069.html and ##
+## http://lists.gnu.org/archive/html/bug-bison/2005-10/msg00072.html         ##
+## ------------------------------------------------------------------------- ##
+
+AT_SETUP([Incorrectly initialized location for empty right-hand side in GLR])
+
+AT_BISON_OPTION_PUSHDEFS
+AT_DATA_GRAMMAR([glr-regr8.y],
+[[
+%{
+  #include <stdio.h>
+  #include <stdlib.h>
+  ]AT_YYERROR_DECLARE[
+  ]AT_YYLEX_DECLARE[
+%}
+
+%token T_CONSTANT
+%token T_PORT
+%token T_SIGNAL
+
+%glr-parser
+
+%%
+
+
+PortClause      : T_PORT InterfaceDeclaration T_PORT
+                { printf("%d/%d - %d/%d - %d/%d\n",
+                         @1.first_column, @1.last_column,
+                         @2.first_column, @2.last_column,
+                         @3.first_column, @3.last_column); }
+        ;
+
+InterfaceDeclaration    : OptConstantWord       %dprec 1
+        | OptSignalWord %dprec 2
+        ;
+
+OptConstantWord : /* empty */
+        | T_CONSTANT
+        ;
+
+OptSignalWord   : /* empty */
+                { printf("empty: %d/%d\n", @$.first_column, @$.last_column); }
+        | T_SIGNAL
+        ;
+
+%%
+
+]AT_YYERROR_DEFINE[
+static int lexIndex;
+
+int yylex (void)
+{
+  lexIndex += 1;
+  switch (lexIndex)
+    {
+    default:
+      abort ();
+    case 1:
+      yylloc.first_column = 1;
+      yylloc.last_column = 9;
+      return T_PORT;
+    case 2:
+      yylloc.first_column = 13;
+      yylloc.last_column = 17;
+      return T_PORT;
+    case 3:
+      return 0;
+    }
+}
+
+]AT_MAIN_DEFINE[
+]])
+AT_BISON_OPTION_POPDEFS
+
+AT_BISON_CHECK([[-o glr-regr8.c glr-regr8.y]], 0, [],
+[[glr-regr8.y: warning: 1 reduce/reduce conflict [-Wconflicts-rr]
+]])
+AT_COMPILE([glr-regr8])
+
+AT_PARSER_CHECK([[./glr-regr8]], 0,
+[empty: 9/9
+1/9 - 9/9 - 13/17
+],
+[])
+
+AT_CLEANUP
+
+
+## ------------------------------------------------------------------------- ##
+## No users destructors if stack 0 deleted.  See                             ##
+## <http://lists.gnu.org/archive/html/bison-patches/2005-09/msg00109.html>.  ##
+## ------------------------------------------------------------------------- ##
+
+AT_SETUP([No users destructors if stack 0 deleted])
+
+AT_BISON_OPTION_PUSHDEFS
+AT_DATA_GRAMMAR([glr-regr9.y],
+[[
+%{
+# include <stdio.h>
+# include <stdlib.h>
+  ]AT_YYERROR_DECLARE[
+  ]AT_YYLEX_DECLARE[
+# define YYSTACKEXPANDABLE 0
+  static int tokens = 0;
+  static int destructors = 0;
+# define USE(Var)
+%}
+
+%glr-parser
+%union { int dummy; }
+%type <dummy> 'a'
+
+%destructor {
+  destructors += 1;
+} 'a'
+
+%%
+
+start:
+    ambig0 'a'   { destructors += 2; USE ($2); }
+  | ambig1 start { destructors += 1; }
+  | ambig2 start { destructors += 1; }
+  ;
+
+ambig0: 'a' ;
+ambig1: 'a' ;
+ambig2: 'a' ;
+
+%%
+
+static int
+yylex (void)
+{
+  tokens += 1;
+  return 'a';
+}
+
+]AT_YYERROR_DEFINE[
+int
+main (void)
+{
+  int exit_status;
+  exit_status = yyparse ();
+  if (tokens != destructors)
+    {
+      fprintf (stderr, "Tokens = %d, Destructors = %d\n", tokens, destructors);
+      return 1;
+    }
+  return !exit_status;
+}
+]])
+AT_BISON_OPTION_POPDEFS
+
+AT_BISON_CHECK([[-o glr-regr9.c glr-regr9.y]], 0, [],
+[[glr-regr9.y: warning: 1 reduce/reduce conflict [-Wconflicts-rr]
+]])
+AT_COMPILE([glr-regr9])
+
+AT_PARSER_CHECK([[./glr-regr9]], 0, [],
+[memory exhausted
+])
+
+AT_CLEANUP
+
+
+## ------------------------------------------------------ ##
+## Corrupted semantic options if user action cuts parse.  ##
+## ------------------------------------------------------ ##
+
+AT_SETUP([Corrupted semantic options if user action cuts parse])
+
+AT_BISON_OPTION_PUSHDEFS
+AT_DATA_GRAMMAR([glr-regr10.y],
+[[
+%{
+# include <stdlib.h>
+# include <stdio.h>
+  ]AT_YYERROR_DECLARE[
+  ]AT_YYLEX_DECLARE[
+  #define GARBAGE_SIZE 50
+  static char garbage[GARBAGE_SIZE];
+%}
+
+%glr-parser
+%union { char *ptr; }
+%type <ptr> start
+
+%%
+
+start:
+    %dprec 2 { $$ = garbage; YYACCEPT; }
+  | %dprec 1 { $$ = garbage; YYACCEPT; }
+  ;
+
+%%
+]AT_YYERROR_DEFINE[
+]AT_YYLEX_DEFINE[
+
+int
+main (void)
+{
+  int i;
+  for (i = 0; i < GARBAGE_SIZE; i+=1)
+    garbage[i] = 108;
+  return yyparse ();
+}
+]])
+AT_BISON_OPTION_POPDEFS
+
+AT_BISON_CHECK([[-o glr-regr10.c glr-regr10.y]], 0, [],
+[[glr-regr10.y: warning: 1 reduce/reduce conflict [-Wconflicts-rr]
+]])
+AT_COMPILE([glr-regr10])
+
+AT_PARSER_CHECK([[./glr-regr10]], 0, [], [])
+
+AT_CLEANUP
+
+
+## --------------------------------------------------- ##
+## Undesirable destructors if user action cuts parse.  ##
+## --------------------------------------------------- ##
+
+AT_SETUP([Undesirable destructors if user action cuts parse])
+
+AT_BISON_OPTION_PUSHDEFS
+AT_DATA_GRAMMAR([glr-regr11.y],
+[[
+%{
+# include <stdlib.h>
+  ]AT_YYERROR_DECLARE[
+  ]AT_YYLEX_DECLARE[
+  static int destructors = 0;
+# define USE(val)
+%}
+
+%glr-parser
+%union { int dummy; }
+%type <int> 'a'
+%destructor { destructors += 1; } 'a'
+
+%%
+
+start:
+    'a' %dprec 2 { USE ($1); destructors += 1; YYACCEPT; }
+  | 'a' %dprec 1 { USE ($1); destructors += 1; YYACCEPT; }
+  ;
+
+%%
+
+]AT_YYERROR_DEFINE[
+]AT_YYLEX_DEFINE(["a"])[
+
+int
+main (void)
+{
+  int exit_status = yyparse ();
+  if (destructors != 1)
+    {
+      fprintf (stderr, "Destructor calls: %d\n", destructors);
+      return 1;
+    }
+  return exit_status;
+}
+]])
+AT_BISON_OPTION_POPDEFS
+
+AT_BISON_CHECK([[-o glr-regr11.c glr-regr11.y]], 0, [],
+[[glr-regr11.y: warning: 1 reduce/reduce conflict [-Wconflicts-rr]
+]])
+AT_COMPILE([glr-regr11])
+
+AT_PARSER_CHECK([[./glr-regr11]], 0, [], [])
+
+AT_CLEANUP
+
+
+## -------------------------------------------------- ##
+## Leaked semantic values if user action cuts parse.  ##
+## -------------------------------------------------- ##
+
+AT_SETUP([Leaked semantic values if user action cuts parse])
+
+AT_BISON_OPTION_PUSHDEFS
+AT_DATA_GRAMMAR([glr-regr12.y],
+[[
+%glr-parser
+%union { int dummy; }
+%token PARENT_RHS_AFTER
+%type <dummy> parent_rhs_before merged PARENT_RHS_AFTER
+%destructor { parent_rhs_before_value = 0; } parent_rhs_before
+%destructor { merged_value = 0; } merged
+%destructor { parent_rhs_after_value = 0; } PARENT_RHS_AFTER
+
+%{
+# include <stdlib.h>
+# include <assert.h>
+  static int merge (YYSTYPE, YYSTYPE);
+  ]AT_YYERROR_DECLARE[
+  ]AT_YYLEX_DECLARE[
+  static int parent_rhs_before_value = 0;
+  static int merged_value = 0;
+  static int parent_rhs_after_value = 0;
+# define USE(val)
+%}
+
+%%
+
+start:
+  alt1 %dprec 1
+  | alt2 %dprec 2
+  ;
+
+alt1:
+  PARENT_RHS_AFTER {
+    USE ($1);
+    parent_rhs_after_value = 0;
+  }
+  ;
+
+alt2:
+  parent_rhs_before merged PARENT_RHS_AFTER {
+    USE (($1, $2, $3));
+    parent_rhs_before_value = 0;
+    merged_value = 0;
+    parent_rhs_after_value = 0;
+  }
+  ;
+
+parent_rhs_before:
+  {
+    USE ($$);
+    parent_rhs_before_value = 1;
+  }
+  ;
+
+merged:
+  %merge<merge> {
+    USE ($$);
+    merged_value = 1;
+  }
+  | cut %merge<merge> {
+    USE ($$);
+    merged_value = 1;
+  }
+  ;
+
+cut: { YYACCEPT; } ;
+
+%%
+
+static int
+merge (YYSTYPE s1, YYSTYPE s2)
+{
+  /* Not invoked. */
+  char dummy = s1.dummy + s2.dummy;
+  return dummy;
+}
+
+]AT_YYERROR_DEFINE[
+]AT_YYLEX_DEFINE([{ PARENT_RHS_AFTER, 0 }],
+ [if (res == PARENT_RHS_AFTER)
+    parent_rhs_after_value = 1;])[
+
+int
+main (void)
+{
+  int exit_status = yyparse ();
+  if (parent_rhs_before_value)
+    {
+      fprintf (stderr, "'parent_rhs_before' destructor not called.\n");
+      exit_status = 1;
+    }
+  if (merged_value)
+    {
+      fprintf (stderr, "'merged' destructor not called.\n");
+      exit_status = 1;
+    }
+  if (parent_rhs_after_value)
+    {
+      fprintf (stderr, "'PARENT_RHS_AFTER' destructor not called.\n");
+      exit_status = 1;
+    }
+  return exit_status;
+}
+]])
+AT_BISON_OPTION_POPDEFS
+
+AT_BISON_CHECK([[-o glr-regr12.c glr-regr12.y]], 0, [],
+[[glr-regr12.y: warning: 1 shift/reduce conflict [-Wconflicts-sr]
+glr-regr12.y: warning: 1 reduce/reduce conflict [-Wconflicts-rr]
+]])
+AT_COMPILE([glr-regr12])
+
+AT_PARSER_CHECK([[./glr-regr12]], 0, [], [])
+
+AT_CLEANUP
+
+
+## ------------------------------------------------------------------------- ##
+## Incorrect lookahead during deterministic GLR.  See                        ##
+## <http://lists.gnu.org/archive/html/help-bison/2005-07/msg00017.html> and  ##
+## <http://lists.gnu.org/archive/html/bison-patches/2006-01/msg00060.html>.  ##
+## ------------------------------------------------------------------------- ##
+
+AT_SETUP([Incorrect lookahead during deterministic GLR])
+
+AT_BISON_OPTION_PUSHDEFS
+AT_DATA_GRAMMAR([glr-regr13.y],
+[[
+/* Tests:
+     - Defaulted state with initial yychar: yychar == YYEMPTY.
+     - Nondefaulted state: yychar != YYEMPTY.
+     - Defaulted state after lookahead: yychar != YYEMPTY.
+     - Defaulted state after shift: yychar == YYEMPTY.
+     - User action changing the lookahead.  */
+
+%{
+  #include <stdio.h>
+  #include <assert.h>
+  ]AT_YYERROR_DECLARE[
+  ]AT_YYLEX_DECLARE[
+  static void print_lookahead (char const *);
+  #define USE(value)
+%}
+
+%union { char value; }
+%type <value> 'a' 'b'
+%glr-parser
+%locations
+
+%%
+
+start:
+  defstate_init defstate_shift 'b' change_lookahead 'a' {
+    USE ($3);
+    print_lookahead ("start <- defstate_init defstate_shift 'b'");
+  }
+  ;
+defstate_init:
+  {
+    print_lookahead ("defstate_init <- empty string");
+  }
+  ;
+defstate_shift:
+  nondefstate defstate_look 'a' {
+    USE ($3);
+    print_lookahead ("defstate_shift <- nondefstate defstate_look 'a'");
+  }
+  ;
+defstate_look:
+  {
+    print_lookahead ("defstate_look <- empty string");
+  }
+  ;
+nondefstate:
+  {
+    print_lookahead ("nondefstate <- empty string");
+  }
+  | 'b' {
+    USE ($1);
+    print_lookahead ("nondefstate <- 'b'");
+  }
+  ;
+change_lookahead:
+  {
+    yychar = 'a';
+  }
+  ;
+
+%%
+
+]AT_YYERROR_DEFINE[
+]AT_YYLEX_DEFINE(["ab"],
+                 [yylval.value = res + 'A' - 'a'])[
+
+static void
+print_lookahead (char const *reduction)
+{
+  printf ("%s:\n  yychar=", reduction);
+  if (yychar == YYEMPTY)
+    printf ("YYEMPTY");
+  else if (yychar == YYEOF)
+    printf ("YYEOF");
+  else
+    {
+      printf ("'%c', yylval='", yychar);
+      if (yylval.value > ' ')
+        printf ("%c", yylval.value);
+      printf ("', yylloc=(%d,%d),(%d,%d)",
+              yylloc.first_line, yylloc.first_column,
+              yylloc.last_line, yylloc.last_column);
+    }
+  printf ("\n");
+}
+
+int
+main (void)
+{
+  yychar = '#'; /* Not a token in the grammar.  */
+  yylval.value = '!';
+  return yyparse ();
+}
+]])
+AT_BISON_OPTION_POPDEFS
+
+AT_BISON_CHECK([[-o glr-regr13.c glr-regr13.y]], 0, [], [])
+AT_COMPILE([glr-regr13])
+
+AT_PARSER_CHECK([[./glr-regr13]], 0,
+[defstate_init <- empty string:
+  yychar=YYEMPTY
+nondefstate <- empty string:
+  yychar='a', yylval='A', yylloc=(1,1),(1,1)
+defstate_look <- empty string:
+  yychar='a', yylval='A', yylloc=(1,1),(1,1)
+defstate_shift <- nondefstate defstate_look 'a':
+  yychar=YYEMPTY
+start <- defstate_init defstate_shift 'b':
+  yychar=YYEMPTY
+], [])
+
+AT_CLEANUP
+
+
+## ------------------------------------------------- ##
+## Incorrect lookahead during nondeterministic GLR.  ##
+## ------------------------------------------------- ##
+
+AT_SETUP([Incorrect lookahead during nondeterministic GLR])
+
+AT_BISON_OPTION_PUSHDEFS
+AT_DATA_GRAMMAR([glr-regr14.y],
+[[
+/* Tests:
+     - Conflicting actions (split-off parse, which copies lookahead need,
+       which is necessarily yytrue) and nonconflicting actions (non-split-off
+       parse) for nondefaulted state: yychar != YYEMPTY.
+     - Merged deferred actions (lookahead need and RHS from different stack
+       than the target state) and nonmerged deferred actions (same stack).
+     - Defaulted state after lookahead: yychar != YYEMPTY.
+     - Defaulted state after shift: yychar == YYEMPTY.
+     - yychar != YYEMPTY but lookahead need is yyfalse (a previous stack has
+       seen the lookahead but current stack has not).
+     - Exceeding stack capacity (stack explosion), and thus reallocating
+       lookahead need array.
+   Note that it does not seem possible to see the initial yychar value during
+   nondeterministic operation since:
+     - In order to preserve the initial yychar, only defaulted states may be
+       entered.
+     - If only defaulted states are entered, there are no conflicts, so
+       nondeterministic operation does not start.  */
+
+%union { char value; }
+
+%{
+  #include <stdlib.h>
+  #include <stdio.h>
+  #include <assert.h>
+  ]AT_YYERROR_DECLARE[
+  ]AT_YYLEX_DECLARE[
+  static void print_lookahead (char const *);
+  static char merge (union YYSTYPE, union YYSTYPE);
+  #define USE(value)
+%}
+
+%type <value> 'a' 'b' 'c' 'd' stack_explosion
+%glr-parser
+%locations
+
+%%
+
+start:
+  merge 'c' stack_explosion {
+    USE ($2); USE ($3);
+    print_lookahead ("start <- merge 'c' stack_explosion");
+  }
+  ;
+
+/* When merging the 2 deferred actions, the lookahead needs are different.  */
+merge:
+  nonconflict1 'a' 'b' nonconflict2 %dprec 1 {
+    USE ($2); USE ($3);
+    print_lookahead ("merge <- nonconflict1 'a' 'b' nonconflict2");
+  }
+  | conflict defstate_look 'a' nonconflict2 'b' defstate_shift %dprec 2 {
+    USE ($3); USE ($5);
+    print_lookahead ("merge <- conflict defstate_look 'a' nonconflict2 'b'"
+                      " defstate_shift");
+  }
+  ;
+
+nonconflict1:
+  {
+    print_lookahead ("nonconflict1 <- empty string");
+  }
+  ;
+nonconflict2:
+  {
+    print_lookahead ("nonconflict2 <- empty string");
+  }
+  | 'a' {
+    USE ($1);
+    print_lookahead ("nonconflict2 <- 'a'");
+  }
+  ;
+conflict:
+  {
+    print_lookahead ("conflict <- empty string");
+  }
+  ;
+defstate_look:
+  {
+    print_lookahead ("defstate_look <- empty string");
+  }
+  ;
+
+/* yychar != YYEMPTY but lookahead need is yyfalse.  */
+defstate_shift:
+  {
+    print_lookahead ("defstate_shift <- empty string");
+  }
+  ;
+
+stack_explosion:
+  { $$ = '\0'; }
+  | alt1 stack_explosion %merge<merge> { $$ = $2; }
+  | alt2 stack_explosion %merge<merge> { $$ = $2; }
+  | alt3 stack_explosion %merge<merge> { $$ = $2; }
+  ;
+alt1:
+  'd' no_look {
+    USE ($1);
+    if (yychar != 'd' && yychar != YYEOF)
+      {
+        fprintf (stderr, "Incorrect lookahead during stack explosion.\n");
+      }
+  }
+  ;
+alt2:
+  'd' no_look {
+    USE ($1);
+    if (yychar != 'd' && yychar != YYEOF)
+      {
+        fprintf (stderr, "Incorrect lookahead during stack explosion.\n");
+      }
+  }
+  ;
+alt3:
+  'd' no_look {
+    USE ($1);
+    if (yychar != 'd' && yychar != YYEOF)
+      {
+        fprintf (stderr, "Incorrect lookahead during stack explosion.\n");
+      }
+  }
+  ;
+no_look:
+  {
+    if (yychar != YYEMPTY)
+      {
+        fprintf (stderr,
+                 "Found lookahead where shouldn't during stack explosion.\n");
+      }
+  }
+  ;
+
+%%
+
+]AT_YYERROR_DEFINE[
+static int
+yylex (void)
+{
+  static char const input[] = "abcdddd";
+  static size_t toknum;
+  assert (toknum < sizeof input);
+  yylloc.first_line = yylloc.last_line = 1;
+  yylloc.first_column = yylloc.last_column = toknum + 1;
+  yylval.value = input[toknum] + 'A' - 'a';
+  return input[toknum++];
+}
+
+static void
+print_lookahead (char const *reduction)
+{
+  printf ("%s:\n  yychar=", reduction);
+  if (yychar == YYEMPTY)
+    printf ("YYEMPTY");
+  else if (yychar == YYEOF)
+    printf ("YYEOF");
+  else
+    {
+      printf ("'%c', yylval='", yychar);
+      if (yylval.value > ' ')
+        printf ("%c", yylval.value);
+      printf ("', yylloc=(%d,%d),(%d,%d)",
+              yylloc.first_line, yylloc.first_column,
+              yylloc.last_line, yylloc.last_column);
+    }
+  printf ("\n");
+}
+
+static char
+merge (union YYSTYPE s1, union YYSTYPE s2)
+{
+  char dummy = s1.value + s2.value;
+  return dummy;
+}
+
+int
+main (void)
+{
+  yychar = '#'; /* Not a token in the grammar.  */
+  yylval.value = '!';
+  return yyparse ();
+}
+]])
+AT_BISON_OPTION_POPDEFS
+
+AT_BISON_CHECK([[-o glr-regr14.c glr-regr14.y]], 0, [],
+[[glr-regr14.y: warning: 3 reduce/reduce conflicts [-Wconflicts-rr]
+]])
+AT_COMPILE([glr-regr14])
+
+AT_PARSER_CHECK([[./glr-regr14]], 0,
+[conflict <- empty string:
+  yychar='a', yylval='A', yylloc=(1,1),(1,1)
+defstate_look <- empty string:
+  yychar='a', yylval='A', yylloc=(1,1),(1,1)
+nonconflict2 <- empty string:
+  yychar='b', yylval='B', yylloc=(1,2),(1,2)
+defstate_shift <- empty string:
+  yychar=YYEMPTY
+merge <- conflict defstate_look 'a' nonconflict2 'b' defstate_shift:
+  yychar=YYEMPTY
+start <- merge 'c' stack_explosion:
+  yychar=YYEOF
+], [])
+
+AT_CLEANUP
+
+
+## ------------------------------------------------- ##
+## Leaked semantic values when reporting ambiguity.  ##
+## ------------------------------------------------- ##
+
+AT_SETUP([Leaked semantic values when reporting ambiguity])
+
+AT_BISON_OPTION_PUSHDEFS
+AT_DATA_GRAMMAR([glr-regr15.y],
+[[
+%glr-parser
+%destructor { parent_rhs_before_value = 0; } parent_rhs_before
+
+%{
+# include <stdlib.h>
+  ]AT_YYERROR_DECLARE[
+  ]AT_YYLEX_DECLARE[
+  static int parent_rhs_before_value = 0;
+# define USE(val)
+%}
+
+%%
+
+start:
+  alt1 %dprec 1
+  | alt2 %dprec 2
+  ;
+
+/* This stack must be merged into the other stacks *last* (added at the
+   beginning of the semantic options list) so that yyparse will choose to clean
+   it up rather than the tree for which some semantic actions have been
+   performed.  Thus, if yyreportAmbiguity longjmp's to yyparse, the values from
+   those other trees are not cleaned up.  */
+alt1: ;
+
+alt2:
+  parent_rhs_before ambiguity {
+    USE ($1);
+    parent_rhs_before_value = 0;
+  }
+  ;
+
+parent_rhs_before:
+  {
+    USE ($$);
+    parent_rhs_before_value = 1;
+  }
+  ;
+
+ambiguity: ambiguity1 | ambiguity2 ;
+ambiguity1: ;
+ambiguity2: ;
+
+%%
+]AT_YYERROR_DEFINE[
+]AT_YYLEX_DEFINE[
+
+int
+main (void)
+{
+  int exit_status = yyparse () != 1;
+  if (parent_rhs_before_value)
+    {
+      fprintf (stderr, "'parent_rhs_before' destructor not called.\n");
+      exit_status = 1;
+    }
+  return exit_status;
+}
+]])
+AT_BISON_OPTION_POPDEFS
+
+AT_BISON_CHECK([[-o glr-regr15.c glr-regr15.y]], 0, [],
+[[glr-regr15.y: warning: 2 reduce/reduce conflicts [-Wconflicts-rr]
+]])
+AT_COMPILE([glr-regr15])
+
+AT_PARSER_CHECK([[./glr-regr15]], 0, [],
+[syntax is ambiguous
+])
+
+AT_CLEANUP
+
+
+## ------------------------------------------------------------ ##
+## Leaked lookahead after nondeterministic parse syntax error.  ##
+## ------------------------------------------------------------ ##
+
+AT_SETUP([Leaked lookahead after nondeterministic parse syntax error])
+
+AT_BISON_OPTION_PUSHDEFS
+AT_DATA_GRAMMAR([glr-regr16.y],
+[[
+%glr-parser
+%destructor { lookahead_value = 0; } 'b'
+
+%{
+# include <stdlib.h>
+# include <assert.h>
+  ]AT_YYERROR_DECLARE[
+  ]AT_YYLEX_DECLARE[
+  static int lookahead_value = 0;
+# define USE(val)
+%}
+
+%%
+
+start: alt1 'a' | alt2 'a' ;
+alt1: ;
+alt2: ;
+
+%%
+
+]AT_YYERROR_DEFINE[
+]AT_YYLEX_DEFINE(["ab"],
+  [if (res == 'b')
+    lookahead_value = 1])[
+
+int
+main (void)
+{
+  int exit_status = yyparse () != 1;
+  if (lookahead_value)
+    {
+      fprintf (stderr, "Lookahead destructor not called.\n");
+      exit_status = 1;
+    }
+  return exit_status;
+}
+]])
+AT_BISON_OPTION_POPDEFS
+
+AT_BISON_CHECK([[-o glr-regr16.c glr-regr16.y]], 0, [],
+[[glr-regr16.y: warning: 1 reduce/reduce conflict [-Wconflicts-rr]
+]])
+AT_COMPILE([glr-regr16])
+
+AT_PARSER_CHECK([[./glr-regr16]], 0, [],
+[syntax error
+])
+
+AT_CLEANUP
+
+
+## ------------------------------------------------- ##
+## Uninitialized location when reporting ambiguity.  ##
+## ------------------------------------------------- ##
+
+AT_SETUP([Uninitialized location when reporting ambiguity])
+
+AT_BISON_OPTION_PUSHDEFS([%glr-parser %locations %define api.pure])
+
+AT_DATA_GRAMMAR([glr-regr17.y],
+[[
+%glr-parser
+%locations
+%define api.pure
+%error-verbose
+
+%union { int dummy; }
+
+%{
+  ]AT_YYERROR_DECLARE[
+  ]AT_YYLEX_DECLARE[
+%}
+
+%%
+
+/* Tests the case of an empty RHS that has inherited the location of the
+   previous nonterminal, which is unresolved.  That location is reported as the
+   last position of the ambiguity.  */
+start: ambig1 empty1 | ambig2 empty2 ;
+
+/* Tests multiple levels of yyresolveLocations recursion.  */
+ambig1: sub_ambig1 | sub_ambig2 ;
+ambig2: sub_ambig1 | sub_ambig2 ;
+
+/* Tests the case of a non-empty RHS as well as the case of an empty RHS that
+   has inherited the initial location.  The empty RHS's location is reported as
+   the first position in the ambiguity.  */
+sub_ambig1: empty1 'a' 'b' ;
+sub_ambig2: empty2 'a' 'b' ;
+empty1: ;
+empty2: ;
+
+%%
+# include <assert.h>
+
+]AT_YYERROR_DEFINE[
+static int
+yylex (YYSTYPE *lvalp, YYLTYPE *llocp)
+{
+  static char const input[] = "ab";
+  static size_t toknum;
+  assert (toknum < sizeof input);
+  lvalp->dummy = 0;
+  llocp->first_line = llocp->last_line = 2;
+  llocp->first_column = toknum + 1;
+  llocp->last_column = llocp->first_column + 1;
+  return input[toknum++];
+}
+
+]AT_MAIN_DEFINE[
+]])
+AT_BISON_OPTION_POPDEFS
+
+AT_BISON_CHECK([[-o glr-regr17.c glr-regr17.y]], 0, [],
+[[glr-regr17.y: warning: 3 reduce/reduce conflicts [-Wconflicts-rr]
+]])
+AT_COMPILE([glr-regr17])
+
+AT_PARSER_CHECK([[./glr-regr17]], 1, [],
+[1.1-2.2: syntax is ambiguous
+])
+
+AT_CLEANUP
+
+
+## ------------------------------------------------------------- ##
+## Missed %merge type warnings when LHS type is declared later.  ##
+## ------------------------------------------------------------- ##
+
+AT_SETUP([Missed %merge type warnings when LHS type is declared later])
+
+AT_BISON_OPTION_PUSHDEFS
+AT_DATA_GRAMMAR([glr-regr18.y],
+[[%glr-parser
+
+%{
+  #include <stdlib.h>
+  ]AT_YYERROR_DECLARE[
+  ]AT_YYLEX_DECLARE[
+%}
+
+%union {
+  int type1;
+  int type2;
+  int type3;
+}
+
+%%
+
+sym1: sym2 %merge<merge> { $$ = $1; } ;
+sym2: sym3 %merge<merge> { $$ = $1; } ;
+sym3: %merge<merge> { $$ = 0; } ;
+
+%type <type1> sym1;
+%type <type2> sym2;
+%type <type3> sym3;
+
+%%
+]AT_YYERROR_DEFINE[
+]AT_YYLEX_DEFINE[
+]AT_MAIN_DEFINE[
+]])
+AT_BISON_OPTION_POPDEFS
+
+AT_BISON_CHECK([[-o glr-regr18.c glr-regr18.y]], 1, [],
+[[glr-regr18.y:28.18-24: error: result type clash on merge function 'merge': <type2> != <type1>
+glr-regr18.y:27.18-24:     previous declaration
+glr-regr18.y:29.13-19: error: result type clash on merge function 'merge': <type3> != <type2>
+glr-regr18.y:28.18-24:     previous declaration
+]])
+
+AT_CLEANUP
+
+
+## ------------------- ##
+## Ambiguity reports.  ##
+## ------------------- ##
+
+AT_SETUP([Ambiguity reports])
+
+AT_BISON_OPTION_PUSHDEFS([%debug])
+AT_DATA_GRAMMAR([input.y],
+[[
+%{
+  #include <stdio.h>
+  #include <stdlib.h>
+  ]AT_YYERROR_DECLARE[
+  ]AT_YYLEX_DECLARE[
+%}
+
+%debug
+%glr-parser
+
+%%
+start:
+  'a' b 'c' d
+| 'a' b 'c' d
+;
+b: 'b';
+d: /* nada.  */;
+%%
+]AT_YYERROR_DEFINE[
+]AT_YYLEX_DEFINE(["abc"])[
+]AT_MAIN_DEFINE[
+]])
+AT_BISON_OPTION_POPDEFS
+
+AT_BISON_CHECK([[-o input.c input.y]], 0, [],
+[[input.y: warning: 1 reduce/reduce conflict [-Wconflicts-rr]
+]])
+AT_COMPILE([input])
+
+AT_PARSER_CHECK([[./input --debug]], 1, [],
+[Starting parse
+Entering state 0
+Reading a token: Next token is token 'a' ()
+Shifting token 'a' ()
+Entering state 1
+Reading a token: Next token is token 'b' ()
+Shifting token 'b' ()
+Entering state 3
+Reducing stack 0 by rule 3 (line 27):
+   $1 = token 'b' ()
+-> $$ = nterm b ()
+Entering state 4
+Reading a token: Next token is token 'c' ()
+Shifting token 'c' ()
+Entering state 6
+Reducing stack 0 by rule 4 (line 28):
+-> $$ = nterm d ()
+Entering state 7
+Reading a token: Now at end of input.
+Stack 0 Entering state 7
+Now at end of input.
+Splitting off stack 1 from 0.
+Reduced stack 1 by rule #2; action deferred.  Now in state 2.
+Stack 1 Entering state 2
+Now at end of input.
+Reduced stack 0 by rule #1; action deferred.  Now in state 2.
+Merging stack 0 into stack 1.
+Stack 1 Entering state 2
+Now at end of input.
+Removing dead stacks.
+Rename stack 1 -> 0.
+On stack 0, shifting token $end ()
+Stack 0 now in state #5
+Ambiguity detected.
+Option 1,
+  start -> <Rule 1, tokens 1 .. 3>
+    'a' <tokens 1 .. 1>
+    b <tokens 2 .. 2>
+    'c' <tokens 3 .. 3>
+    d <empty>
+
+Option 2,
+  start -> <Rule 2, tokens 1 .. 3>
+    'a' <tokens 1 .. 1>
+    b <tokens 2 .. 2>
+    'c' <tokens 3 .. 3>
+    d <empty>
+
+syntax is ambiguous
+Cleanup: popping token $end ()
+Cleanup: popping unresolved nterm start ()
+Cleanup: popping nterm d ()
+Cleanup: popping token 'c' ()
+Cleanup: popping nterm b ()
+Cleanup: popping token 'a' ()
+])
+
+AT_CLEANUP
+
+
+## ----------------------------------------------------------------- ##
+## Predicates.                                                       ##
+##                                                                   ##
+## http://lists.gnu.org/archive/html/bug-bison/2013-10/msg00004.html ##
+## ----------------------------------------------------------------- ##
+
+AT_SETUP([Predicates])
+
+# FIXME: We need genuine test cases with uses of %?.
+
+AT_DATA_GRAMMAR([input.y],
+[[%glr-parser
+%expect-rr 1
+%%
+// Exercise "%?{...}" and "%? {...}".
+widget:
+  %? {new_syntax} "widget" id new_args  { $$ = f($3, $4); }
+| %?{!new_syntax} "widget" id old_args  { $$ = f($3, $4); }
+;
+id:;
+new_args:;
+old_args:;
+%%
+]])
+
+AT_BISON_CHECK([[input.y]])
+
+AT_CLEANUP

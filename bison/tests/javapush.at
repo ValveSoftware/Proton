@@ -1,0 +1,864 @@
+# Checking Java Push Parsing.                            -*- Autotest -*-
+
+# Copyright (C) 2013-2015 Free Software Foundation, Inc.
+
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+# The Java push parser tests are intended primarily
+# to verify that the sequence of states that the parser
+# traverses is the same as a pull parser would traverse.
+
+##################################################
+# Provide a way to generate data with and without push parsing
+# so  it is possible to capture the output for comparison
+# (except the "trivial" tests).
+# Use "both" rather than "push" so we can also set it to "pull" to
+# get the "experr" data.
+
+m4_define([PUSHPULLFLAG],[-Dapi.push-pull=both])
+
+# AT_CHECK_JAVA_GREP(FILE, [LINE], [COUNT=1])
+# -------------------------------------------
+# Check that FILE contains exactly COUNT lines matching ^LINE$
+# with grep.  Unquoted so that COUNT can be a shell expression.
+m4_define([AT_CHECK_JAVA_GREP],
+[AT_CHECK_UNQUOTED([grep -c '^$2$' $1], [ignore], [m4_default([$3], [1])
+])])
+
+##################################################
+
+AT_BANNER([[Java Push Parsing Tests]])
+
+# Define a single copy of the trivial parser grammar.
+# This is missing main(), so two versions
+# are instantiated with different main() procedures.
+m4_define([AT_TRIVIAL_GRAMMAR],[
+%define parser_class_name {YYParser}
+%error-verbose
+
+%code imports {
+import java.io.*;
+import java.util.*;
+}
+
+%%
+
+start: 'a' 'b' 'c' ;
+
+%%
+])
+
+# Define comon code across to be includede in
+# class Main for the trivial parser tests.
+m4_define([AT_TRIVIAL_COMMON],[
+  static class YYerror implements YYParser.Lexer
+  {
+    public Object getLVal() {return null;}
+    public int yylex () throws java.io.IOException { return 0; }
+    public void yyerror (String msg) { System.err.println(msg); }
+  }
+
+  static YYParser parser = null;
+  static YYerror yyerror = null;
+  static int teststate = -1;
+
+  static void setup()
+    throws IOException
+  {
+      yyerror = new YYerror();
+      parser = new YYParser(yyerror);
+      parser.setDebugLevel(1);
+      teststate = -1;
+  }
+
+  static String[[]] teststatename
+    = new String[[]]{"YYACCEPT","YYABORT","YYERROR","UNKNOWN","YYPUSH_MORE"};
+
+  static void check(int teststate, int expected, String msg)
+  {
+    System.err.println("teststate="+teststatename[[teststate]]
+                       +"; expected="+teststatename[[expected]]);
+    if (teststate == expected)
+        return;
+    System.err.println("unexpected state: "+msg);
+    System.exit(1);
+  }
+])
+
+m4_define([AT_TRIVIAL_PARSER],[
+  AT_TRIVIAL_GRAMMAR
+
+  public class Main
+  {
+
+  AT_TRIVIAL_COMMON
+
+  static public void main (String[[]] argv)
+    throws IOException
+  {
+      setup();
+
+      teststate = parser.push_parse('a', null);
+      check(teststate,YYParser.YYPUSH_MORE,"push_parse('a', null)");
+
+      setup();
+
+      teststate = parser.push_parse('a', null);
+      check(teststate,YYParser.YYPUSH_MORE,"push_parse('a', null)");
+      teststate = parser.push_parse('b', null);
+      check(teststate,YYParser.YYPUSH_MORE,"push_parse('b', null)");
+      teststate = parser.push_parse('c', null);
+      check(teststate,YYParser.YYPUSH_MORE,"push_parse('c', null)");
+      teststate = parser.push_parse('\0', null);
+      check(teststate,YYParser.YYACCEPT,"push_parse('\\0', null)");
+
+      /* Reuse the parser instance and cause a failure */
+      teststate = parser.push_parse('b', null);
+      check(teststate,YYParser.YYABORT,"push_parse('b', null)");
+
+      System.exit(0);
+  }
+
+}
+])
+
+m4_define([AT_TRIVIAL_PARSER_INITIAL_ACTION],[
+  AT_TRIVIAL_GRAMMAR
+
+  public class Main
+  {
+
+  AT_TRIVIAL_COMMON
+
+  static public void main (String[[]] argv)
+    throws IOException
+  {
+      setup();
+
+      teststate = parser.push_parse('a', null);
+      check(teststate,YYParser.YYPUSH_MORE,"push_parse('a', null)");
+      teststate = parser.push_parse('b', null);
+      check(teststate,YYParser.YYPUSH_MORE,"push_parse('b', null)");
+      teststate = parser.push_parse('c', null);
+      check(teststate,YYParser.YYPUSH_MORE,"push_parse('c', null)");
+      teststate = parser.push_parse('\0', null);
+      check(teststate,YYParser.YYACCEPT,"push_parse('\\0', null)");
+
+      System.exit(0);
+  }
+
+}
+])
+
+## ----------------------------------------------------- ##
+## Trivial Push Parser with api.push-pull verification.  ##
+## ----------------------------------------------------- ##
+
+AT_SETUP([Trivial Push Parser with api.push-pull verification])
+AT_BISON_OPTION_PUSHDEFS
+
+AT_DATA([[input.y]],
+[[%language "Java"
+]AT_TRIVIAL_PARSER[
+]])
+
+# Verify that the proper procedure(s) are generated for each case.
+AT_BISON_CHECK([[-Dapi.push-pull=pull -o Main.java input.y]])
+AT_CHECK_JAVA_GREP([[Main.java]],
+                   [[.*public boolean parse ().*]],
+                   [1])
+# If BISON_USE_PUSH_FOR_PULL is set, then we have one occurrence of
+# this function, otherwise it should not be there.
+AT_CHECK_JAVA_GREP([[Main.java]],
+        [[.*public int push_parse (int yylextoken, Object yylexval).*]],
+        [${BISON_USE_PUSH_FOR_PULL-0}])
+
+AT_BISON_CHECK([[-Dapi.push-pull=both -o Main.java input.y]])
+AT_CHECK_JAVA_GREP([[Main.java]],
+                   [[.*public boolean parse ().*]],
+                   [1])
+AT_CHECK_JAVA_GREP([[Main.java]],
+        [[.*public int push_parse (int yylextoken, Object yylexval).*]],
+        [1])
+
+AT_BISON_CHECK([[-Dapi.push-pull=push -o Main.java input.y]])
+AT_CHECK_JAVA_GREP([[Main.java]],
+                   [[.*public boolean parse ().*]],
+                   [0])
+AT_CHECK_JAVA_GREP([[Main.java]],
+        [[.*public int push_parse (int yylextoken, Object yylexval).*]],
+        [1])
+
+AT_JAVA_COMPILE([[Main.java]])
+AT_JAVA_PARSER_CHECK([Main], 0, [], [stderr-nolog])
+AT_BISON_OPTION_POPDEFS
+AT_CLEANUP
+
+
+## ------------------------------------------ ##
+## Trivial Push Parser with %initial-action.  ##
+## ------------------------------------------ ##
+
+AT_SETUP([Trivial Push Parser with %initial-action])
+AT_BISON_OPTION_PUSHDEFS
+AT_DATA([[input.y]],[[%language "Java"
+%initial-action {
+System.err.println("Initial action invoked");
+}
+]AT_TRIVIAL_PARSER_INITIAL_ACTION[
+]])
+AT_BISON_OPTION_POPDEFS
+AT_BISON_CHECK([[-Dapi.push-pull=push -o Main.java input.y]])
+AT_CHECK_JAVA_GREP([[Main.java]],
+  [[System.err.println("Initial action invoked");]])
+AT_JAVA_COMPILE([[Main.java]])
+AT_JAVA_PARSER_CHECK([Main], 0, [], [stderr-nolog])
+# Verify that initial action is called exactly once.
+AT_CHECK_JAVA_GREP(
+        [[stderr]],
+        [[Initial action invoked]],
+        [1])
+AT_CLEANUP
+
+# Define a single copy of the Calculator grammar.
+m4_define([AT_CALC_BODY],[
+%code imports {
+  import java.io.*;
+}
+
+%code {
+  static StringReader
+  getinput(String filename) throws IOException
+  {
+    StringBuilder buf = new StringBuilder();
+    FileReader file = new FileReader(filename);
+    int c;
+    while ((c=file.read()) > 0)
+      buf.append((char)c);
+    file.close();
+    return new StringReader(buf.toString());
+  }
+}
+
+/* Bison Declarations */
+%token <Integer> NUM "number"
+%type  <Integer> exp
+
+%nonassoc '=' /* comparison            */
+%left '-' '+'
+%left '*' '/'
+%left NEG     /* negation--unary minus */
+%right '^'    /* exponentiation        */
+
+/* Grammar follows */
+%%
+input:
+  line
+| input line
+;
+
+line:
+  '\n'
+| exp '\n'
+        {System.out.println("total = "+$[]1);}
+| error '\n'
+;
+
+exp:
+  NUM                { $[]$ = $[]1;}
+| exp '=' exp
+  {
+    if ($[]1.intValue() != $[]3.intValue())
+      yyerror (]AT_LOCATION_IF([[@$,]])[ "calc: error: " + $[]1 + " != " + $[]3);
+  }
+| exp '+' exp
+    { $[]$ = new Integer ($[]1.intValue () + $[]3.intValue ());  }
+| exp '-' exp
+    { $[]$ = new Integer ($[]1.intValue () - $[]3.intValue ());  }
+| exp '*' exp
+    { $[]$ = new Integer ($[]1.intValue () * $[]3.intValue ());  }
+| exp '/' exp
+    { $[]$ = new Integer ($[]1.intValue () / $[]3.intValue ());  }
+| '-' exp  %prec NEG
+    { $[]$ = new Integer (-$[]2.intValue ());                    }
+| exp '^' exp
+    { $[]$ = new Integer ((int)Math.pow ($[]1.intValue (),
+                                         $[]3.intValue ()));     }
+| '(' exp ')'        { $[]$ = $[]2;}
+| '(' error ')'      { $[]$ = new Integer (1111);}
+| '!'                { $[]$ = new Integer (0); return YYERROR;}
+| '-' error          { $[]$ = new Integer (0); return YYERROR;}
+;
+])
+
+# Test that the states transitioned by the push parser are the
+# same as for the pull parser.  This test is assumed to work
+# if it produces the same partial trace of stack states as is
+# produced when using pull parsing.  The output is verbose,
+# but seems essential for verifying push parsing.
+
+AT_SETUP([Calc parser with api.push-pull both])
+AT_BISON_OPTION_PUSHDEFS
+
+# Define the calculator input.
+# Warning: if you changes the input file
+# then the locations test file position numbers
+# may be incorrect and you will have
+# to modify that file as well.
+
+AT_DATA([input],[[1 + 2 * 3 = 7
+1 + 2 * -3 = -5
+
+-1^2 = -1
+(-1)^2 = 1
+
+---1 = -1
+
+1 - 2 - 3 = -4
+1 - (2 - 3) = 2
+
+2^2^3 = 256
+(2^2)^3 = 64
+]])
+
+# Compose pieces to build the actual .y file.
+AT_DATA([Calc.y],[[/* Infix notation calculator--calc */
+%language "Java"
+%name-prefix "Calc"
+%define parser_class_name {Calc}
+
+%code {
+static class UserLexer implements Calc.Lexer
+{
+  StreamTokenizer st;
+  StringReader rdr;
+
+  public UserLexer(StringReader reader)
+  {
+    rdr = reader;
+    st = new StreamTokenizer(rdr);
+    st.resetSyntax();
+    st.eolIsSignificant(true);
+    st.whitespaceChars(9, 9);
+    st.whitespaceChars(32, 32);
+    st.wordChars(48, 57);
+  }
+
+  Integer yylval;
+
+  public Object getLVal() { return yylval; }
+
+  public void yyerror(String msg) { System.err.println(msg); }
+
+  public int yylex () throws IOException
+  {
+    switch (st.nextToken()) {
+    case StreamTokenizer.TT_EOF: return EOF;
+    case StreamTokenizer.TT_EOL: return (int) '\n';
+    case StreamTokenizer.TT_WORD:
+        yylval = new Integer (st.sval);
+        return NUM;
+    default: return st.ttype;
+    }
+  }
+}
+
+}
+
+%code {
+public static void main (String[] argv)
+      throws IOException
+{
+    StringReader reader = getinput(argv[0]);
+    UserLexer lexer = new UserLexer(reader);
+    Calc calc = new Calc(lexer);
+    calc.setDebugLevel(1);
+    calc.parse();
+}//main
+
+}
+
+]AT_CALC_BODY[
+
+]])
+
+# This data was captured from running a pull parser.
+AT_DATA([[expout]],[[Stack now 0
+Stack now 0 2
+Stack now 0 9
+Stack now 0 9 19
+Stack now 0 9 19 2
+Stack now 0 9 19 28
+Stack now 0 9 19 28 20
+Stack now 0 9 19 28 20 2
+Stack now 0 9 19 28 20 29
+Stack now 0 9 19 28
+Stack now 0 9
+Stack now 0 9 17
+Stack now 0 9 17 2
+Stack now 0 9 17 26
+Stack now 0 9
+Stack now 0 9 23
+Stack now 0 8
+Stack now 0 7
+Stack now 0 7 2
+Stack now 0 7 9
+Stack now 0 7 9 19
+Stack now 0 7 9 19 2
+Stack now 0 7 9 19 28
+Stack now 0 7 9 19 28 20
+Stack now 0 7 9 19 28 20 3
+Stack now 0 7 9 19 28 20 3 2
+Stack now 0 7 9 19 28 20 3 12
+Stack now 0 7 9 19 28 20 29
+Stack now 0 7 9 19 28
+Stack now 0 7 9
+Stack now 0 7 9 17
+Stack now 0 7 9 17 3
+Stack now 0 7 9 17 3 2
+Stack now 0 7 9 17 3 12
+Stack now 0 7 9 17 26
+Stack now 0 7 9
+Stack now 0 7 9 23
+Stack now 0 7 16
+Stack now 0 7
+Stack now 0 7 4
+Stack now 0 7 16
+Stack now 0 7
+Stack now 0 7 3
+Stack now 0 7 3 2
+Stack now 0 7 3 12
+Stack now 0 7 3 12 22
+Stack now 0 7 3 12 22 2
+Stack now 0 7 3 12 22 31
+Stack now 0 7 3 12
+Stack now 0 7 9
+Stack now 0 7 9 17
+Stack now 0 7 9 17 3
+Stack now 0 7 9 17 3 2
+Stack now 0 7 9 17 3 12
+Stack now 0 7 9 17 26
+Stack now 0 7 9
+Stack now 0 7 9 23
+Stack now 0 7 16
+Stack now 0 7
+Stack now 0 7 5
+Stack now 0 7 5 3
+Stack now 0 7 5 3 2
+Stack now 0 7 5 3 12
+Stack now 0 7 5 14
+Stack now 0 7 5 14 25
+Stack now 0 7 9
+Stack now 0 7 9 22
+Stack now 0 7 9 22 2
+Stack now 0 7 9 22 31
+Stack now 0 7 9
+Stack now 0 7 9 17
+Stack now 0 7 9 17 2
+Stack now 0 7 9 17 26
+Stack now 0 7 9
+Stack now 0 7 9 23
+Stack now 0 7 16
+Stack now 0 7
+Stack now 0 7 4
+Stack now 0 7 16
+Stack now 0 7
+Stack now 0 7 3
+Stack now 0 7 3 3
+Stack now 0 7 3 3 3
+Stack now 0 7 3 3 3 2
+Stack now 0 7 3 3 3 12
+Stack now 0 7 3 3 12
+Stack now 0 7 3 12
+Stack now 0 7 9
+Stack now 0 7 9 17
+Stack now 0 7 9 17 3
+Stack now 0 7 9 17 3 2
+Stack now 0 7 9 17 3 12
+Stack now 0 7 9 17 26
+Stack now 0 7 9
+Stack now 0 7 9 23
+Stack now 0 7 16
+Stack now 0 7
+Stack now 0 7 4
+Stack now 0 7 16
+Stack now 0 7
+Stack now 0 7 2
+Stack now 0 7 9
+Stack now 0 7 9 18
+Stack now 0 7 9 18 2
+Stack now 0 7 9 18 27
+Stack now 0 7 9
+Stack now 0 7 9 18
+Stack now 0 7 9 18 2
+Stack now 0 7 9 18 27
+Stack now 0 7 9
+Stack now 0 7 9 17
+Stack now 0 7 9 17 3
+Stack now 0 7 9 17 3 2
+Stack now 0 7 9 17 3 12
+Stack now 0 7 9 17 26
+Stack now 0 7 9
+Stack now 0 7 9 23
+Stack now 0 7 16
+Stack now 0 7
+Stack now 0 7 2
+Stack now 0 7 9
+Stack now 0 7 9 18
+Stack now 0 7 9 18 5
+Stack now 0 7 9 18 5 2
+Stack now 0 7 9 18 5 14
+Stack now 0 7 9 18 5 14 18
+Stack now 0 7 9 18 5 14 18 2
+Stack now 0 7 9 18 5 14 18 27
+Stack now 0 7 9 18 5 14
+Stack now 0 7 9 18 5 14 25
+Stack now 0 7 9 18 27
+Stack now 0 7 9
+Stack now 0 7 9 17
+Stack now 0 7 9 17 2
+Stack now 0 7 9 17 26
+Stack now 0 7 9
+Stack now 0 7 9 23
+Stack now 0 7 16
+Stack now 0 7
+Stack now 0 7 4
+Stack now 0 7 16
+Stack now 0 7
+Stack now 0 7 2
+Stack now 0 7 9
+Stack now 0 7 9 22
+Stack now 0 7 9 22 2
+Stack now 0 7 9 22 31
+Stack now 0 7 9 22 31 22
+Stack now 0 7 9 22 31 22 2
+Stack now 0 7 9 22 31 22 31
+Stack now 0 7 9 22 31
+Stack now 0 7 9
+Stack now 0 7 9 17
+Stack now 0 7 9 17 2
+Stack now 0 7 9 17 26
+Stack now 0 7 9
+Stack now 0 7 9 23
+Stack now 0 7 16
+Stack now 0 7
+Stack now 0 7 5
+Stack now 0 7 5 2
+Stack now 0 7 5 14
+Stack now 0 7 5 14 22
+Stack now 0 7 5 14 22 2
+Stack now 0 7 5 14 22 31
+Stack now 0 7 5 14
+Stack now 0 7 5 14 25
+Stack now 0 7 9
+Stack now 0 7 9 22
+Stack now 0 7 9 22 2
+Stack now 0 7 9 22 31
+Stack now 0 7 9
+Stack now 0 7 9 17
+Stack now 0 7 9 17 2
+Stack now 0 7 9 17 26
+Stack now 0 7 9
+Stack now 0 7 9 23
+Stack now 0 7 16
+Stack now 0 7
+Stack now 0 7 15
+]])
+
+AT_BISON_CHECK([PUSHPULLFLAG [-o Calc.java Calc.y]])
+AT_JAVA_COMPILE([[Calc.java]])
+#Verify that this is a push parser.
+AT_CHECK_JAVA_GREP([[Calc.java]],
+                   [[.*public void push_parse_initialize().*]])
+# Capture stderr output for comparison purposes.
+AT_JAVA_PARSER_CHECK([Calc input], 0, [ignore-nolog], [stderr-nolog])
+# Extract the "Stack Now" lines from the error output,
+# send them to stdout (via the sed command) and compare to expout.
+# NOTE: because the target is "expout", this macro automatically
+# compares the output of the sed command with the contents of
+# the file "expout" (defined above).
+AT_CHECK([[sed -e '/^Stack now.*$/p' -e d ./stderr]],
+         [ignore], [expout], [ignore-nolog])
+AT_BISON_OPTION_POPDEFS
+AT_CLEANUP
+
+# This test looks for location reporting by looking
+# at the lexer output with locations enabled.
+# It defines a lexer that reports location info.
+AT_SETUP([Calc parser with %locations %code lexer and api.push-pull both])
+AT_BISON_OPTION_PUSHDEFS
+
+AT_DATA([Calc.y],[[/* Infix notation calculator--calc.  */
+%language "Java"
+%name-prefix "Calc"
+%define parser_class_name {Calc}
+%lex-param { Reader rdr }
+%locations
+
+%code imports {
+  import java.io.*;
+}
+
+%code lexer {
+  StreamTokenizer st;
+  Integer yylval;
+
+  public YYLexer(Reader rdr)
+  {
+    st = new StreamTokenizer(rdr);
+    st.resetSyntax();
+    st.eolIsSignificant(true);
+    st.whitespaceChars(9, 9);
+    st.whitespaceChars(32, 32);
+    st.wordChars(48, 57);
+  }
+
+  Position yypos = new Position (1, 0);
+
+  public Position getStartPos() { return yypos; }
+
+  public Position getEndPos() { return yypos; }
+
+  public Object getLVal() { return yylval; }
+
+  public void yyerror(Location loc, String msg)
+  {
+    System.err.println(loc+":"+msg);
+  }
+
+  public int yylex () throws IOException
+  {
+    yypos = new Position (yypos.lineno (),yypos.token () + 1);
+    switch (st.nextToken()) {
+    case StreamTokenizer.TT_EOF:
+        return EOF;
+    case StreamTokenizer.TT_EOL:
+        yypos = new Position (yypos.lineno () + 1, 0);
+        return (int) '\n';
+    case StreamTokenizer.TT_WORD:
+        yylval = new Integer (st.sval);
+        return NUM;
+    default:
+      return st.ttype;
+    }
+  }
+}
+
+%code {
+class Position {
+  public int line;
+  public int token;
+
+  public Position () { line = 0; token = 0; }
+
+  public Position (int l, int t) { line = l; token = t; }
+
+  public boolean equals (Position l)
+  {
+    return l.line == line && l.token == token;
+  }
+
+  public String toString ()
+  {
+    return Integer.toString(line)  + "." + Integer.toString(token);
+  }
+
+  public int lineno () { return line; }
+
+  public int token () { return token; }
+}//Class Position
+}
+
+%code {
+public static void main (String[] argv)
+        throws IOException
+{
+  StringReader reader = getinput(argv[0]);
+  Calc calc = new Calc(reader);
+  calc.setDebugLevel(1);
+  calc.parse();
+}
+}
+
+]AT_CALC_BODY[
+
+]])
+
+# Define the expected calculator output.
+# This should match the output from a pull parser.
+AT_DATA([output],[[total = 7
+total = -5
+total = -1
+total = 1
+total = -1
+total = -4
+total = 2
+total = 256
+total = 64
+]])
+
+AT_DATA([locations],[[Next token is token "number" (1.1: 1)
+Next token is token '+' (1.2: 1)
+Next token is token "number" (1.3: 2)
+Next token is token '*' (1.4: 2)
+Next token is token "number" (1.5: 3)
+Next token is token '=' (1.6: 3)
+Next token is token '=' (1.6: 3)
+Next token is token '=' (1.6: 3)
+Next token is token "number" (1.7: 7)
+Next token is token '\n' (2.0: 7)
+Next token is token '\n' (2.0: 7)
+Next token is token "number" (2.1: 1)
+Next token is token '+' (2.2: 1)
+Next token is token "number" (2.3: 2)
+Next token is token '*' (2.4: 2)
+Next token is token '-' (2.5: 2)
+Next token is token "number" (2.6: 3)
+Next token is token '=' (2.7: 3)
+Next token is token '=' (2.7: 3)
+Next token is token '=' (2.7: 3)
+Next token is token '=' (2.7: 3)
+Next token is token '-' (2.8: 3)
+Next token is token "number" (2.9: 5)
+Next token is token '\n' (3.0: 5)
+Next token is token '\n' (3.0: 5)
+Next token is token '\n' (3.0: 5)
+Next token is token '\n' (4.0: 5)
+Next token is token '-' (4.1: 5)
+Next token is token "number" (4.2: 1)
+Next token is token '^' (4.3: 1)
+Next token is token "number" (4.4: 2)
+Next token is token '=' (4.5: 2)
+Next token is token '=' (4.5: 2)
+Next token is token '=' (4.5: 2)
+Next token is token '-' (4.6: 2)
+Next token is token "number" (4.7: 1)
+Next token is token '\n' (5.0: 1)
+Next token is token '\n' (5.0: 1)
+Next token is token '\n' (5.0: 1)
+Next token is token '(' (5.1: 1)
+Next token is token '-' (5.2: 1)
+Next token is token "number" (5.3: 1)
+Next token is token ')' (5.4: 1)
+Next token is token ')' (5.4: 1)
+Next token is token '^' (5.5: 1)
+Next token is token "number" (5.6: 2)
+Next token is token '=' (5.7: 2)
+Next token is token '=' (5.7: 2)
+Next token is token "number" (5.8: 1)
+Next token is token '\n' (6.0: 1)
+Next token is token '\n' (6.0: 1)
+Next token is token '\n' (7.0: 1)
+Next token is token '-' (7.1: 1)
+Next token is token '-' (7.2: 1)
+Next token is token '-' (7.3: 1)
+Next token is token "number" (7.4: 1)
+Next token is token '=' (7.5: 1)
+Next token is token '=' (7.5: 1)
+Next token is token '=' (7.5: 1)
+Next token is token '=' (7.5: 1)
+Next token is token '-' (7.6: 1)
+Next token is token "number" (7.7: 1)
+Next token is token '\n' (8.0: 1)
+Next token is token '\n' (8.0: 1)
+Next token is token '\n' (8.0: 1)
+Next token is token '\n' (9.0: 1)
+Next token is token "number" (9.1: 1)
+Next token is token '-' (9.2: 1)
+Next token is token "number" (9.3: 2)
+Next token is token '-' (9.4: 2)
+Next token is token '-' (9.4: 2)
+Next token is token "number" (9.5: 3)
+Next token is token '=' (9.6: 3)
+Next token is token '=' (9.6: 3)
+Next token is token '-' (9.7: 3)
+Next token is token "number" (9.8: 4)
+Next token is token '\n' (10.0: 4)
+Next token is token '\n' (10.0: 4)
+Next token is token '\n' (10.0: 4)
+Next token is token "number" (10.1: 1)
+Next token is token '-' (10.2: 1)
+Next token is token '(' (10.3: 1)
+Next token is token "number" (10.4: 2)
+Next token is token '-' (10.5: 2)
+Next token is token "number" (10.6: 3)
+Next token is token ')' (10.7: 3)
+Next token is token ')' (10.7: 3)
+Next token is token '=' (10.8: 3)
+Next token is token '=' (10.8: 3)
+Next token is token "number" (10.9: 2)
+Next token is token '\n' (11.0: 2)
+Next token is token '\n' (11.0: 2)
+Next token is token '\n' (12.0: 2)
+Next token is token "number" (12.1: 2)
+Next token is token '^' (12.2: 2)
+Next token is token "number" (12.3: 2)
+Next token is token '^' (12.4: 2)
+Next token is token "number" (12.5: 3)
+Next token is token '=' (12.6: 3)
+Next token is token '=' (12.6: 3)
+Next token is token '=' (12.6: 3)
+Next token is token "number" (12.7: 256)
+Next token is token '\n' (13.0: 256)
+Next token is token '\n' (13.0: 256)
+Next token is token '(' (13.1: 256)
+Next token is token "number" (13.2: 2)
+Next token is token '^' (13.3: 2)
+Next token is token "number" (13.4: 2)
+Next token is token ')' (13.5: 2)
+Next token is token ')' (13.5: 2)
+Next token is token '^' (13.6: 2)
+Next token is token "number" (13.7: 3)
+Next token is token '=' (13.8: 3)
+Next token is token '=' (13.8: 3)
+Next token is token "number" (13.9: 64)
+Next token is token '\n' (14.0: 64)
+Next token is token '\n' (14.0: 64)
+]])
+
+# Define the calculator input.
+# Warning: if you changes the input file
+# then the locations test file position numbers
+# may be incorrect and you will have
+# to modify that file as well.
+
+AT_DATA([input],[[1 + 2 * 3 = 7
+1 + 2 * -3 = -5
+
+-1^2 = -1
+(-1)^2 = 1
+
+---1 = -1
+
+1 - 2 - 3 = -4
+1 - (2 - 3) = 2
+
+2^2^3 = 256
+(2^2)^3 = 64
+]])
+
+AT_BISON_CHECK([PUSHPULLFLAG [-o Calc.java Calc.y]])
+AT_JAVA_COMPILE([[Calc.java]])
+# Verify that this is a push parser
+AT_CHECK_JAVA_GREP([[Calc.java]],
+                   [[.*public void push_parse_initialize().*]])
+# Capture the  stdout and stderr output for comparison purposes.
+AT_JAVA_PARSER_CHECK([Calc input], 0, [stdout-nolog], [stderr-nolog])
+# 1. Check that the token locations are correct
+AT_CHECK([[cp -f ./locations ./expout]],[ignore],[ignore-nolog],[ignore-nolog])
+AT_CHECK([[sed -e '/^Next token.*$/p' -e d ./stderr]],[ignore],[expout],[ignore-nolog])
+# 2. Check that the calculator output matches that of a pull parser
+AT_CHECK([[rm -f ./expout; cp -f ./output ./expout]],[ignore],[ignore-nolog],[ignore-nolog])
+AT_CHECK([[cat ./stdout]],[ignore],[expout],[ignore-nolog])
+AT_CLEANUP

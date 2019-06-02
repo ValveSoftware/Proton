@@ -1,0 +1,95 @@
+@item @option{--debug}
+@tab @option{-t}
+@tab @code{%debug}
+
+@item @option{--define=@var{name}[=@var{value}]}
+@tab @option{-D @var{name}[=@var{value}]}
+@tab @code{%define @var{name} ["@var{value}"]}
+
+@item @option{--defines[=@var{file}]}
+@tab @option{-d}
+@tab @code{%defines [@var{"file"}]}
+
+@item @option{--feature[=@var{feature}]}
+@tab @option{-f [@var{feature}]}
+@tab
+
+@item @option{--file-prefix=@var{prefix}}
+@tab @option{-b @var{prefix}}
+@tab @code{%file-prefix @var{"prefix"}}
+
+@item @option{--force-define=@var{name}[=@var{value}]}
+@tab @option{-F @var{name}[=@var{value}]}
+@tab @code{%define @var{name} ["@var{value}"]}
+
+@item @option{--graph[=@var{file}]}
+@tab @option{-g [@var{file}]}
+@tab
+
+@item @option{--help}
+@tab @option{-h}
+@tab
+
+@item @option{--language=@var{language}}
+@tab @option{-L @var{language}}
+@tab @code{%language @var{"language"}}
+
+@item @option{--locations}
+@tab
+@tab @code{%locations}
+
+@item @option{--name-prefix=@var{prefix}}
+@tab @option{-p @var{prefix}}
+@tab @code{%name-prefix @var{"prefix"}}
+
+@item @option{--no-lines}
+@tab @option{-l}
+@tab @code{%no-lines}
+
+@item @option{--output=@var{file}}
+@tab @option{-o @var{file}}
+@tab @code{%output @var{"file"}}
+
+@item @option{--print-datadir}
+@tab
+@tab
+
+@item @option{--print-localedir}
+@tab
+@tab
+
+@item @option{--report-file=@var{file}}
+@tab
+@tab
+
+@item @option{--report=@var{things}}
+@tab @option{-r @var{things}}
+@tab
+
+@item @option{--skeleton=@var{file}}
+@tab @option{-S @var{file}}
+@tab @code{%skeleton @var{"file"}}
+
+@item @option{--token-table}
+@tab @option{-k}
+@tab @code{%token-table}
+
+@item @option{--verbose}
+@tab @option{-v}
+@tab @code{%verbose}
+
+@item @option{--version}
+@tab @option{-V}
+@tab
+
+@item @option{--warnings[=@var{category}]}
+@tab @option{-W [@var{category}]}
+@tab
+
+@item @option{--xml[=@var{file}]}
+@tab @option{-x [@var{file}]}
+@tab
+
+@item @option{--yacc}
+@tab @option{-y}
+@tab @code{%yacc}

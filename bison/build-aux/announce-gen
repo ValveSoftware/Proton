@@ -1,0 +1,557 @@
+eval '(exit $?0)' && eval 'exec perl -wS "$0" ${1+"$@"}'
+  & eval 'exec perl -wS "$0" $argv:q'
+    if 0;
+# Generate a release announcement message.
+
+my $VERSION = '2013-07-09 06:39'; # UTC
+# The definition above must lie within the first 8 lines in order
+# for the Emacs time-stamp write hook (at end) to update it.
+# If you change this file with Emacs, please let the write hook
+# do its job.  Otherwise, update this string manually.
+
+# Copyright (C) 2002-2015 Free Software Foundation, Inc.
+
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+# Written by Jim Meyering
+
+use strict;
+
+use Getopt::Long;
+use POSIX qw(strftime);
+
+(my $ME = $0) =~ s|.*/||;
+
+my %valid_release_types = map {$_ => 1} qw (alpha beta stable);
+my @archive_suffixes = ('tar.gz', 'tar.bz2', 'tar.lzma', 'tar.xz');
+my %digest_classes =
+  (
+   'md5' => (eval { require Digest::MD5; } and 'Digest::MD5'),
+   'sha1' => ((eval { require Digest::SHA; } and 'Digest::SHA')
+              or (eval { require Digest::SHA1; } and 'Digest::SHA1'))
+  );
+my $srcdir = '.';
+
+sub usage ($)
+{
+  my ($exit_code) = @_;
+  my $STREAM = ($exit_code == 0 ? *STDOUT : *STDERR);
+  if ($exit_code != 0)
+    {
+      print $STREAM "Try '$ME --help' for more information.\n";
+    }
+  else
+    {
+      my @types = sort keys %valid_release_types;
+      print $STREAM <<EOF;
+Usage: $ME [OPTIONS]
+Generate an announcement message.  Run this from builddir.
+
+OPTIONS:
+
+These options must be specified:
+
+   --release-type=TYPE          TYPE must be one of @types
+   --package-name=PACKAGE_NAME
+   --previous-version=VER
+   --current-version=VER
+   --gpg-key-id=ID         The GnuPG ID of the key used to sign the tarballs
+   --url-directory=URL_DIR
+
+The following are optional:
+
+   --news=NEWS_FILE             include the NEWS section about this release
+                                from this NEWS_FILE; accumulates.
+   --srcdir=DIR                 where to find the NEWS_FILEs (default: $srcdir)
+   --bootstrap-tools=TOOL_LIST  a comma-separated list of tools, e.g.,
+                                autoconf,automake,bison,gnulib
+   --gnulib-version=VERSION     report VERSION as the gnulib version, where
+                                VERSION is the result of running git describe
+                                in the gnulib source directory.
+                                required if gnulib is in TOOL_LIST.
+   --no-print-checksums         do not emit MD5 or SHA1 checksums
+   --archive-suffix=SUF         add SUF to the list of archive suffixes
+   --mail-headers=HEADERS       a space-separated list of mail headers, e.g.,
+                                To: x\@example.com Cc: y-announce\@example.com,...
+
+   --help             display this help and exit
+   --version          output version information and exit
+
+EOF
+    }
+  exit $exit_code;
+}
+
+
+=item C<%size> = C<sizes (@file)>
+
+Compute the sizes of the C<@file> and return them as a hash.  Return
+C<undef> if one of the computation failed.
+
+=cut
+
+sub sizes (@)
+{
+  my (@file) = @_;
+
+  my $fail = 0;
+  my %res;
+  foreach my $f (@file)
+    {
+      my $cmd = "du -h $f";
+      my $t = `$cmd`;
+      # FIXME-someday: give a better diagnostic, a la $PROCESS_STATUS
+      $@
+        and (warn "command failed: '$cmd'\n"), $fail = 1;
+      chomp $t;
+      $t =~ s/^\s*([\d.]+[MkK]).*/${1}B/;
+      $res{$f} = $t;
+    }
+  return $fail ? undef : %res;
+}
+
+=item C<print_locations ($title, \@url, \%size, @file)
+
+Print a section C<$title> dedicated to the list of <@file>, which
+sizes are stored in C<%size>, and which are available from the C<@url>.
+
+=cut
+
+sub print_locations ($\@\%@)
+{
+  my ($title, $url, $size, @file) = @_;
+  print "Here are the $title:\n";
+  foreach my $url (@{$url})
+    {
+      for my $file (@file)
+        {
+          print "  $url/$file";
+          print "   (", $$size{$file}, ")"
+            if exists $$size{$file};
+          print "\n";
+        }
+    }
+  print "\n";
+}
+
+=item C<print_checksums (@file)
+
+Print the MD5 and SHA1 signature section for each C<@file>.
+
+=cut
+
+sub print_checksums (@)
+{
+  my (@file) = @_;
+
+  print "Here are the MD5 and SHA1 checksums:\n";
+  print "\n";
+
+  foreach my $meth (qw (md5 sha1))
+    {
+      my $class = $digest_classes{$meth} or next;
+      foreach my $f (@file)
+        {
+          open IN, '<', $f
+            or die "$ME: $f: cannot open for reading: $!\n";
+          binmode IN;
+          my $dig = $class->new->addfile(*IN)->hexdigest;
+          close IN;
+          print "$dig  $f\n";
+        }
+    }
+  print "\n";
+}
+
+=item C<print_news_deltas ($news_file, $prev_version, $curr_version)
+
+Print the section of the NEWS file C<$news_file> addressing changes
+between versions C<$prev_version> and C<$curr_version>.
+
+=cut
+
+sub print_news_deltas ($$$)
+{
+  my ($news_file, $prev_version, $curr_version) = @_;
+
+  my $news_name = $news_file;
+  $news_name =~ s|^\Q$srcdir\E/||;
+
+  print "\n$news_name\n\n";
+
+  # Print all lines from $news_file, starting with the first one
+  # that mentions $curr_version up to but not including
+  # the first occurrence of $prev_version.
+  my $in_items;
+
+  my $re_prefix = qr/(?:\* )?(?:Noteworthy c|Major c|C)(?i:hanges)/;
+
+  my $found_news;
+  open NEWS, '<', $news_file
+    or die "$ME: $news_file: cannot open for reading: $!\n";
+  while (defined (my $line = <NEWS>))
+    {
+      if ( ! $in_items)
+        {
+          # Match lines like these:
+          # * Major changes in release 5.0.1:
+          # * Noteworthy changes in release 6.6 (2006-11-22) [stable]
+          $line =~ /^$re_prefix.*(?:[^\d.]|$)\Q$curr_version\E(?:[^\d.]|$)/o
+            or next;
+          $in_items = 1;
+          print $line;
+        }
+      else
+        {
+          # This regexp must not match version numbers in NEWS items.
+          # For example, they might well say "introduced in 4.5.5",
+          # and we don't want that to match.
+          $line =~ /^$re_prefix.*(?:[^\d.]|$)\Q$prev_version\E(?:[^\d.]|$)/o
+            and last;
+          print $line;
+          $line =~ /\S/
+            and $found_news = 1;
+        }
+    }
+  close NEWS;
+
+  $in_items
+    or die "$ME: $news_file: no matching lines for '$curr_version'\n";
+  $found_news
+    or die "$ME: $news_file: no news item found for '$curr_version'\n";
+}
+
+sub print_changelog_deltas ($$)
+{
+  my ($package_name, $prev_version) = @_;
+
+  # Print new ChangeLog entries.
+
+  # First find all CVS-controlled ChangeLog files.
+  use File::Find;
+  my @changelog;
+  find ({wanted => sub {$_ eq 'ChangeLog' && -d 'CVS'
+                          and push @changelog, $File::Find::name}},
+        '.');
+
+  # If there are no ChangeLog files, we're done.
+  @changelog
+    or return;
+  my %changelog = map {$_ => 1} @changelog;
+
+  # Reorder the list of files so that if there are ChangeLog
+  # files in the specified directories, they're listed first,
+  # in this order:
+  my @dir = qw ( . src lib m4 config doc );
+
+  # A typical @changelog array might look like this:
+  # ./ChangeLog
+  # ./po/ChangeLog
+  # ./m4/ChangeLog
+  # ./lib/ChangeLog
+  # ./doc/ChangeLog
+  # ./config/ChangeLog
+  my @reordered;
+  foreach my $d (@dir)
+    {
+      my $dot_slash = $d eq '.' ? $d : "./$d";
+      my $target = "$dot_slash/ChangeLog";
+      delete $changelog{$target}
+        and push @reordered, $target;
+    }
+
+  # Append any remaining ChangeLog files.
+  push @reordered, sort keys %changelog;
+
+  # Remove leading './'.
+  @reordered = map { s!^\./!!; $_ } @reordered;
+
+  print "\nChangeLog entries:\n\n";
+  # print join ("\n", @reordered), "\n";
+
+  $prev_version =~ s/\./_/g;
+  my $prev_cvs_tag = "\U$package_name\E-$prev_version";
+
+  my $cmd = "cvs -n diff -u -r$prev_cvs_tag -rHEAD @reordered";
+  open DIFF, '-|', $cmd
+    or die "$ME: cannot run '$cmd': $!\n";
+  # Print two types of lines, making minor changes:
+  # Lines starting with '+++ ', e.g.,
+  # +++ ChangeLog   22 Feb 2003 16:52:51 -0000      1.247
+  # and those starting with '+'.
+  # Don't print the others.
+  my $prev_printed_line_empty = 1;
+  while (defined (my $line = <DIFF>))
+    {
+      if ($line =~ /^\+\+\+ /)
+        {
+          my $separator = "*"x70 ."\n";
+          $line =~ s///;
+          $line =~ s/\s.*//;
+          $prev_printed_line_empty
+            or print "\n";
+          print $separator, $line, $separator;
+        }
+      elsif ($line =~ /^\+/)
+        {
+          $line =~ s///;
+          print $line;
+          $prev_printed_line_empty = ($line =~ /^$/);
+        }
+    }
+  close DIFF;
+
+  # The exit code should be 1.
+  # Allow in case there are no modified ChangeLog entries.
+  $? == 256 || $? == 128
+    or warn "warning: '$cmd' had unexpected exit code or signal ($?)\n";
+}
+
+sub get_tool_versions ($$)
+{
+  my ($tool_list, $gnulib_version) = @_;
+  @$tool_list
+    or return ();
+
+  my $fail;
+  my @tool_version_pair;
+  foreach my $t (@$tool_list)
+    {
+      if ($t eq 'gnulib')
+        {
+          push @tool_version_pair, ucfirst $t . ' ' . $gnulib_version;
+          next;
+        }
+      # Assume that the last "word" on the first line of
+      # 'tool --version' output is the version string.
+      my ($first_line, undef) = split ("\n", `$t --version`);
+      if ($first_line =~ /.* (\d[\w.-]+)$/)
+        {
+          $t = ucfirst $t;
+          push @tool_version_pair, "$t $1";
+        }
+      else
+        {
+          defined $first_line
+            and $first_line = '';
+          warn "$t: unexpected --version output\n:$first_line";
+          $fail = 1;
+        }
+    }
+
+  $fail
+    and exit 1;
+
+  return @tool_version_pair;
+}
+
+{
+  # Neutralize the locale, so that, for instance, "du" does not
+  # issue "1,2" instead of "1.2", what confuses our regexps.
+  $ENV{LC_ALL} = "C";
+
+  my $mail_headers;
+  my $release_type;
+  my $package_name;
+  my $prev_version;
+  my $curr_version;
+  my $gpg_key_id;
+  my @url_dir_list;
+  my @news_file;
+  my $bootstrap_tools;
+  my $gnulib_version;
+  my $print_checksums_p = 1;
+
+  # Reformat the warnings before displaying them.
+  local $SIG{__WARN__} = sub
+    {
+      my ($msg) = @_;
+      # Warnings from GetOptions.
+      $msg =~ s/Option (\w)/option --$1/;
+      warn "$ME: $msg";
+    };
+
+  GetOptions
+    (
+     'mail-headers=s'     => \$mail_headers,
+     'release-type=s'     => \$release_type,
+     'package-name=s'     => \$package_name,
+     'previous-version=s' => \$prev_version,
+     'current-version=s'  => \$curr_version,
+     'gpg-key-id=s'       => \$gpg_key_id,
+     'url-directory=s'    => \@url_dir_list,
+     'news=s'             => \@news_file,
+     'srcdir=s'           => \$srcdir,
+     'bootstrap-tools=s'  => \$bootstrap_tools,
+     'gnulib-version=s'   => \$gnulib_version,
+     'print-checksums!'   => \$print_checksums_p,
+     'archive-suffix=s'   => \@archive_suffixes,
+
+     help => sub { usage 0 },
+     version => sub { print "$ME version $VERSION\n"; exit },
+    ) or usage 1;
+
+  my $fail = 0;
+  # Ensure that each required option is specified.
+  $release_type
+    or (warn "release type not specified\n"), $fail = 1;
+  $package_name
+    or (warn "package name not specified\n"), $fail = 1;
+  $prev_version
+    or (warn "previous version string not specified\n"), $fail = 1;
+  $curr_version
+    or (warn "current version string not specified\n"), $fail = 1;
+  $gpg_key_id
+    or (warn "GnuPG key ID not specified\n"), $fail = 1;
+  @url_dir_list
+    or (warn "URL directory name(s) not specified\n"), $fail = 1;
+
+  my @tool_list = split ',', $bootstrap_tools
+    if $bootstrap_tools;
+
+  grep (/^gnulib$/, @tool_list) ^ defined $gnulib_version
+    and (warn "when specifying gnulib as a tool, you must also specify\n"
+        . "--gnulib-version=V, where V is the result of running git describe\n"
+        . "in the gnulib source directory.\n"), $fail = 1;
+
+  !$release_type || exists $valid_release_types{$release_type}
+    or (warn "'$release_type': invalid release type\n"), $fail = 1;
+
+  @ARGV
+    and (warn "too many arguments:\n", join ("\n", @ARGV), "\n"),
+      $fail = 1;
+  $fail
+    and usage 1;
+
+  my $my_distdir = "$package_name-$curr_version";
+
+  my $xd = "$package_name-$prev_version-$curr_version.xdelta";
+
+  my @candidates = map { "$my_distdir.$_" } @archive_suffixes;
+  my @tarballs = grep {-f $_} @candidates;
+
+  @tarballs
+    or die "$ME: none of " . join(', ', @candidates) . " were found\n";
+  my @sizable = @tarballs;
+  -f $xd
+    and push @sizable, $xd;
+  my %size = sizes (@sizable);
+  %size
+    or exit 1;
+
+  my $headers = '';
+  if (defined $mail_headers)
+    {
+      ($headers = $mail_headers) =~ s/\s+(\S+:)/\n$1/g;
+      $headers .= "\n";
+    }
+
+  # The markup is escaped as <\# so that when this script is sent by
+  # mail (or part of a diff), Gnus is not triggered.
+  print <<EOF;
+
+${headers}Subject: $my_distdir released [$release_type]
+
+<\#secure method=pgpmime mode=sign>
+
+FIXME: put comments here
+
+EOF
+
+  if (@url_dir_list == 1 && @tarballs == 1)
+    {
+      # When there's only one tarball and one URL, use a more concise form.
+      my $m = "$url_dir_list[0]/$tarballs[0]";
+      print "Here are the compressed sources and a GPG detached signature[*]:\n"
+        . "  $m\n"
+        . "  $m.sig\n\n";
+    }
+  else
+    {
+      print_locations ("compressed sources", @url_dir_list, %size, @tarballs);
+      -f $xd
+        and print_locations ("xdelta diffs (useful? if so, "
+                             . "please tell bug-gnulib\@gnu.org)",
+                             @url_dir_list, %size, $xd);
+      my @sig_files = map { "$_.sig" } @tarballs;
+      print_locations ("GPG detached signatures[*]", @url_dir_list, %size,
+                       @sig_files);
+    }
+
+  if ($url_dir_list[0] =~ "gnu\.org")
+    {
+      print "Use a mirror for higher download bandwidth:\n";
+      if (@tarballs == 1 && $url_dir_list[0] =~ m!http://ftp\.gnu\.org/gnu/!)
+        {
+          (my $m = "$url_dir_list[0]/$tarballs[0]")
+            =~ s!http://ftp\.gnu\.org/gnu/!http://ftpmirror\.gnu\.org/!;
+          print "  $m\n"
+              . "  $m.sig\n\n";
+
+        }
+      else
+        {
+          print "  http://www.gnu.org/order/ftp.html\n\n";
+        }
+    }
+
+  $print_checksums_p
+    and print_checksums (@sizable);
+
+  print <<EOF;
+[*] Use a .sig file to verify that the corresponding file (without the
+.sig suffix) is intact.  First, be sure to download both the .sig file
+and the corresponding tarball.  Then, run a command like this:
+
+  gpg --verify $tarballs[0].sig
+
+If that command fails because you don't have the required public key,
+then run this command to import it:
+
+  gpg --keyserver keys.gnupg.net --recv-keys $gpg_key_id
+
+and rerun the 'gpg --verify' command.
+EOF
+
+  my @tool_versions = get_tool_versions (\@tool_list, $gnulib_version);
+  @tool_versions
+    and print "\nThis release was bootstrapped with the following tools:",
+      join ('', map {"\n  $_"} @tool_versions), "\n";
+
+  print_news_deltas ($_, $prev_version, $curr_version)
+    foreach @news_file;
+
+  $release_type eq 'stable'
+    or print_changelog_deltas ($package_name, $prev_version);
+
+  exit 0;
+}
+
+### Setup "GNU" style for perl-mode and cperl-mode.
+## Local Variables:
+## mode: perl
+## perl-indent-level: 2
+## perl-continued-statement-offset: 2
+## perl-continued-brace-offset: 0
+## perl-brace-offset: 0
+## perl-brace-imaginary-offset: 0
+## perl-label-offset: -2
+## perl-extra-newline-before-brace: t
+## perl-merge-trailing-else: nil
+## eval: (add-hook 'write-file-hooks 'time-stamp)
+## time-stamp-start: "my $VERSION = '"
+## time-stamp-format: "%:y-%02m-%02d %02H:%02M"
+## time-stamp-time-zone: "UTC"
+## time-stamp-end: "'; # UTC"
+## End:

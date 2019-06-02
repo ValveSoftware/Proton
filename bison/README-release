@@ -1,0 +1,100 @@
+Here are most of the steps we (maintainers) follow when making a release.
+
+* Start from a clean, up-to-date git directory on "master":
+
+    make -k maintainer-clean || { ./configure && make maintainer-clean; }
+    git checkout master
+    git pull origin master
+
+* Ensure that the latest stable versions of autoconf, automake, etc.
+  are in your PATH.  See the buildreq list in bootstrap.conf for
+  the complete list of tools.
+
+* Ensure that you have no uncommitted diffs.  This should produce no
+  output:
+
+    git diff
+
+* Ensure that you've pushed all changes that belong in the release:
+
+    git push origin master
+
+* Check that the NixOS/Hydra autobuilder is reporting all is well:
+
+    http://hydra.nixos.org/jobset/gnu/bison-master
+
+* Run the following command to download any new translations:
+
+    ./bootstrap && ./configure
+
+* Pre-release testing: ensure that the following command succeeds:
+
+    make check syntax-check distcheck
+
+* To (i) set the date, version number, and release TYPE on line 3 of
+  NEWS, (ii) commit that, and (iii) tag the release, run
+
+    # "TYPE" must be stable, beta or alpha
+    make release-commit RELEASE='X.Y TYPE'
+
+* Run the following to create release tarballs.  Your choice selects the
+  corresponding upload-to destination in the emitted gnupload command.
+  The different destinations are specified in cfg.mk.  See the definitions
+  of gnu_ftp_host-{alpha,beta,stable}.
+
+    make release RELEASE='X.Y TYPE'
+
+* Test the tarball.  Copy it to a few odd-ball systems and ensure that
+  it builds and passes all tests.
+
+* While that's happening, write the release announcement that you will
+  soon post.  Start with the template, $HOME/announce-bison-X.Y
+  that was just created by that "make" command.
+
+Once all the builds and tests have passed,
+
+* Run the gnupload command that was suggested by your "make release"
+  run above, or run
+
+    make upload RELEASE='X.Y TYPE'
+
+* Wait a few minutes (maybe up to 30?) and then use the release URLs to
+  download all tarball/signature pairs and use gpg --verify to ensure
+  that they're all valid.
+
+* Push the NEWS-updating changes and the new tag:
+
+    v=$(cat .prev-version)
+    git push origin master tag v$v
+
+* Announce it on Savannah first, so you can include the savannah.org
+  announcement link in the email message.
+
+  Go to the news-submission form:
+
+    https://savannah.gnu.org/news/submit.php?group=bison
+
+  If it does not work, then enable "News" for the project via this link:
+
+    https://savannah.gnu.org/project/admin/editgroupfeatures.php?group=bison
+
+  Write something like the following:
+
+    Subject: bison-X.Y released [stable]
+    +verbatim+
+    ...paste the announcement here...
+    -verbatim-
+
+  Then go here to approve it:
+
+    https://savannah.gnu.org/news/approve.php?group=bison
+
+* Send the announcement email message.
+
+* After each non-alpha release, run
+
+    make web-manual-update
+
+  to update the on-line manual accessible at
+
+    http://www.gnu.org/software/bison/manual/

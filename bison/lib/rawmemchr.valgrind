@@ -1,0 +1,12 @@
+# Suppress a valgrind message about use of uninitialized memory in rawmemchr().
+# This use is OK because it provides only a speedup.
+{
+    rawmemchr-value4
+    Memcheck:Value4
+    fun:rawmemchr
+}
+{
+    rawmemchr-value8
+    Memcheck:Value8
+    fun:rawmemchr
+}

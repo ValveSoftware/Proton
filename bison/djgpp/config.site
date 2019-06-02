@@ -1,0 +1,85 @@
+#! /bin/sh
+
+# This is the config.site file for configuring GNU packages
+# which are to be built with DJGPP tools.
+
+# Copyright (C) 2005-2015 Free Software Foundation, Inc.
+
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+
+# Include the djgpp subdirectory in PATH, so that getconf is found
+PATH="$srcdir/djgpp:$PATH"
+
+# These two variables are required, otherwise looking for
+# programs along the PATH will not work.
+PATH_SEPARATOR=:
+PATH_EXPAND=y
+
+# This is required in for "test -f foo" to find foo.exe
+export TEST_FINDS_EXE=y
+
+# The root of the DJGPP tree serves as the default prefix
+test "x$prefix" = xNONE && prefix='/dev/env/DJDIR'
+
+# This is required for config.status script to be run, since
+# ./configure runs it by invoking ${CONFIG_SHELL-/bin/sh}
+CONFIG_SHELL=${CONFIG_SHELL='sh'}
+
+# These are set here so the generated Makefile's will be good
+# for every DJGPP installation, not only the one where the
+# package was configured.
+# $INSTALL must be an absolute path name, otherwise config.status
+# will try to prepend ./ and ../ to it when it goes into subdirs.
+INSTALL=${INSTALL='/dev/env/DJDIR/bin/ginstall -c'}
+RANLIB=${RANLIB='ranlib'}
+GMSGFMT=${GMSGFMT='/dev/env/DJDIR/bin/msgfmt'}
+MSGFMT=${MSGFMT='/dev/env/DJDIR/bin/msgfmt'}
+XGETTEXT=${XGETTEXT='/dev/env/DJDIR/bin/xgettext'}
+AWK=${AWK='gawk'}
+
+# A sane default for emacs.
+ac_cv_path_EMACS=${EMACS='/dev/env/DJDIR/gnu/emacs/bin/emacs'}
+
+# A sane default for m4.
+ac_cv_path_M4=${M4='/dev/env/DJDIR/bin/m4'}
+
+# A sane default for grep.
+ac_cv_path_GREP=${GREP='/dev/env/DJDIR/bin/grep'}
+
+# A sane default for egrep.
+ac_cv_path_EGREP=${EGREP='/dev/env/DJDIR/bin/egrep'}
+
+# A sane default for fgrep.
+ac_cv_path_FGREP=${FGREP='/dev/env/DJDIR/bin/fgrep'}
+
+# A sane default for sed.
+ac_cv_path_SED=${SED='/dev/env/DJDIR/bin/sed'}
+
+# A sane default for mkdir.
+ac_cv_path_mkdir=${MKDIR_P='/dev/env/DJDIR/bin/mkdir -p'}
+
+# These are set here so the generated libtool will be good
+# for every DJGPP installation, not only the one where the
+# package was configured.
+NM=${NM='nm'}
+LD=${LD='ld'}
+
+# Force the test for 'ln -s' to report 'cp -pf'.
+ac_cv_prog_LN_S='cp -pf'
+
+# There is no fork and vfork functionality.
+ac_cv_func_fork=no
+ac_cv_func_vfork=no
+ac_cv_func_pipe=no

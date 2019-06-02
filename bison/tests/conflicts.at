@@ -1,0 +1,1829 @@
+# Exercising Bison on conflicts.                         -*- Autotest -*-
+
+# Copyright (C) 2002-2005, 2007-2015 Free Software Foundation, Inc.
+
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+AT_BANNER([[Conflicts.]])
+
+## ------------------------- ##
+## Token declaration order.  ##
+## ------------------------- ##
+
+# This test checks that token are declared left to right when in a precedence
+# statement.
+
+AT_SETUP([Token declaration order])
+
+AT_BISON_OPTION_PUSHDEFS
+
+AT_DATA_GRAMMAR([[input.y]],
+[[%code {
+  #include <stdio.h>
+  ]AT_YYERROR_DECLARE[
+  ]AT_YYLEX_DECLARE[
+}
+%token A B C
+%token D
+%right E F G
+%right H I
+%right J
+%left  K
+%left  L M N
+%nonassoc O P Q
+%precedence R S T U
+%precedence V W
+%%
+exp: A
+%%
+]AT_YYERROR_DEFINE[
+]AT_YYLEX_DEFINE[
+int main (void)
+{
+  assert (A < B);
+  assert (B < C);
+  assert (C < D);
+  assert (D < E);
+  assert (E < F);
+  assert (F < G);
+  assert (G < H);
+  assert (H < I);
+  assert (I < J);
+  assert (J < K);
+  assert (K < L);
+  assert (L < M);
+  assert (M < N);
+  assert (N < O);
+  assert (O < P);
+  assert (P < Q);
+  assert (Q < R);
+  assert (R < S);
+  assert (S < T);
+  assert (T < U);
+  assert (U < V);
+  assert (V < W);
+  return 0;
+}
+]])
+
+AT_BISON_CHECK([-o input.c input.y])
+AT_COMPILE([input])
+
+AT_PARSER_CHECK([./input])
+
+AT_BISON_OPTION_POPDEFS
+
+AT_CLEANUP
+
+
+## --------------------------------------------------- ##
+## Token declaration order: literals vs. identifiers.  ##
+## --------------------------------------------------- ##
+
+# This test checks that when several tokens are declared by the same keyword,
+# some of them defined as a character ('a'), others as simple textual reference
+# (A), they are declared correctly left to right.
+# Previously, the following test would declare the states in the order 'o' 'p'
+# M N, instead of M N 'o' 'p'.
+
+AT_SETUP([Token declaration order: literals vs. identifiers])
+
+AT_DATA_GRAMMAR([[input.y]],
+[[%token 'a' 'b' C D
+%token E F 'g' 'h'
+%right 'i' 'j' K L
+%right M N 'o' 'p'
+%%
+exp: 'a'
+   | 'b'
+   | C
+   | D
+   | E
+   | F
+   | 'g'
+   | 'h'
+   | 'i'
+   | 'j'
+   | K
+   | L
+   | M
+   | N
+   | 'o'
+   | 'p'
+;
+%%
+]])
+
+AT_BISON_CHECK([[--report=all -o input.c input.y]], 0, [], [ignore])
+AT_CHECK([[cat input.output | sed -n '/^State 0$/,/^State 1$/p']], 0,
+[[State 0
+
+    0 $accept: . exp $end
+    1 exp: . 'a'
+    2    | . 'b'
+    3    | . C
+    4    | . D
+    5    | . E
+    6    | . F
+    7    | . 'g'
+    8    | . 'h'
+    9    | . 'i'
+   10    | . 'j'
+   11    | . K
+   12    | . L
+   13    | . M
+   14    | . N
+   15    | . 'o'
+   16    | . 'p'
+
+    'a'  shift, and go to state 1
+    'b'  shift, and go to state 2
+    C    shift, and go to state 3
+    D    shift, and go to state 4
+    E    shift, and go to state 5
+    F    shift, and go to state 6
+    'g'  shift, and go to state 7
+    'h'  shift, and go to state 8
+    'i'  shift, and go to state 9
+    'j'  shift, and go to state 10
+    K    shift, and go to state 11
+    L    shift, and go to state 12
+    M    shift, and go to state 13
+    N    shift, and go to state 14
+    'o'  shift, and go to state 15
+    'p'  shift, and go to state 16
+
+    exp  go to state 17
+
+
+State 1
+]])
+
+AT_CLEANUP
+
+
+## ------------------------------- ##
+## Useless associativity warning.  ##
+## ------------------------------- ##
+
+AT_SETUP([Useless associativity warning])
+
+AT_DATA([[input.y]],
+[[%token EQ "=" PL "+" ST "*"  LP "("
+%nonassoc "="
+%left "+"
+%left "*"
+%precedence "("
+%%
+stmt:
+  exp
+| "var" "=" exp
+;
+
+exp:
+  exp "+" exp
+| exp "*" "num"
+| "(" exp ")"
+| "num"
+;
+]])
+
+AT_BISON_CHECK([-Wprecedence input.y], 0, [],
+[[input.y:2.1-9: warning: useless precedence and associativity for "=" [-Wprecedence]
+input.y:4.1-5: warning: useless associativity for "*", use %precedence [-Wprecedence]
+input.y:5.1-11: warning: useless precedence for "(" [-Wprecedence]
+]])
+
+AT_CLEANUP
+
+
+## ---------------------------- ##
+## Useless precedence warning.  ##
+## ---------------------------- ##
+
+AT_SETUP([Useless precedence warning])
+
+AT_DATA([[input.y]],
+[[%token A B U V W X Y Z
+%precedence Z
+%left X
+%precedence Y
+%left W
+%right V
+%nonassoc U
+%%
+a: b
+ | a U b
+ | f
+;
+b: c
+ | b V c
+;
+c: d
+ | c W d
+;
+d: A
+ | d X d
+ | d Y A
+;
+f: B
+ | f Z B
+;
+]])
+
+AT_BISON_CHECK([-Wprecedence -fcaret -o input.c input.y], 0, [],
+[[input.y:7.1-9: warning: useless precedence and associativity for U [-Wprecedence]
+ %nonassoc U
+ ^^^^^^^^^
+input.y:6.1-6: warning: useless precedence and associativity for V [-Wprecedence]
+ %right V
+ ^^^^^^
+input.y:5.1-5: warning: useless precedence and associativity for W [-Wprecedence]
+ %left W
+ ^^^^^
+input.y:2.1-11: warning: useless precedence for Z [-Wprecedence]
+ %precedence Z
+ ^^^^^^^^^^^
+]])
+
+AT_CLEANUP
+
+
+## ---------------- ##
+## S/R in initial.  ##
+## ---------------- ##
+
+# I once hacked Bison in such a way that it lost its reductions on the
+# initial state (because it was confusing it with the last state).  It
+# took me a while to strip down my failures to this simple case.  So
+# make sure it finds the s/r conflict below.
+
+AT_SETUP([S/R in initial])
+
+AT_DATA([[input.y]],
+[[%expect 1
+%%
+exp: e 'e';
+e: 'e' | /* Nothing. */;
+]])
+
+AT_BISON_CHECK([-o input.c input.y], 0, [],
+[[input.y:4.9: warning: rule useless in parser due to conflicts [-Wother]
+]])
+
+AT_BISON_CHECK([-fcaret -o input.c input.y], 0, [],
+[[input.y:4.9: warning: rule useless in parser due to conflicts [-Wother]
+ e: 'e' | /* Nothing. */;
+         ^
+]])
+
+AT_CLEANUP
+
+
+## ------------------- ##
+## %nonassoc and eof.  ##
+## ------------------- ##
+
+AT_SETUP([%nonassoc and eof])
+
+AT_BISON_OPTION_PUSHDEFS
+AT_DATA_GRAMMAR([input.y],
+[[
+%{
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <assert.h>
+
+#define YYERROR_VERBOSE 1
+]AT_YYERROR_DEFINE[
+/* The current argument. */
+static const char *input;
+
+static int
+yylex (void)
+{
+  static size_t toknum;
+  assert (toknum <= strlen (input));
+  return input[toknum++];
+}
+
+%}
+
+%nonassoc '<' '>'
+
+%%
+expr: expr '<' expr
+    | expr '>' expr
+    | '0'
+    ;
+%%
+int
+main (int argc, const char *argv[])
+{
+  input = argc <= 1 ? "" : argv[1];
+  return yyparse ();
+}
+]])
+AT_BISON_OPTION_POPDEFS
+
+m4_pushdef([AT_NONASSOC_AND_EOF_CHECK],
+[AT_BISON_CHECK([$1[ -o input.c input.y]])
+AT_COMPILE([input])
+
+m4_pushdef([AT_EXPECTING], [m4_if($2, [correct], [[, expecting $end]])])
+
+AT_PARSER_CHECK([./input '0<0'])
+AT_PARSER_CHECK([./input '0<0<0'], [1], [],
+         [syntax error, unexpected '<'AT_EXPECTING
+])
+
+AT_PARSER_CHECK([./input '0>0'])
+AT_PARSER_CHECK([./input '0>0>0'], [1], [],
+         [syntax error, unexpected '>'AT_EXPECTING
+])
+
+AT_PARSER_CHECK([./input '0<0>0'], [1], [],
+         [syntax error, unexpected '>'AT_EXPECTING
+])
+
+m4_popdef([AT_EXPECTING])])
+
+# Expected token list is missing.
+AT_NONASSOC_AND_EOF_CHECK([], [[incorrect]])
+
+# We must disable default reductions in inconsistent states in order to
+# have an explicit list of all expected tokens.
+AT_NONASSOC_AND_EOF_CHECK([[-Dlr.default-reduction=consistent]],
+                          [[correct]])
+
+# lr.default-reduction=consistent happens to work for this test case.
+# However, for other grammars, lookahead sets can be merged for
+# different left contexts, so it is still possible to have an incorrect
+# expected list.  Canonical LR is almost a general solution (that is, it
+# can fail only when %nonassoc is used), so make sure it gives the same
+# result as above.
+AT_NONASSOC_AND_EOF_CHECK([[-Dlr.type=canonical-lr]], [[correct]])
+
+# parse.lac=full is a completely general solution that does not require
+# any of the above sacrifices.  Of course, it does not extend the
+# language-recognition power of LALR to (IE)LR, but it does ensure that
+# the reported list of expected tokens matches what the given parser
+# would have accepted in place of the unexpected token.
+AT_NONASSOC_AND_EOF_CHECK([[-Dparse.lac=full]], [[correct]])
+
+m4_popdef([AT_NONASSOC_AND_EOF_CHECK])
+
+AT_CLEANUP
+
+
+
+## ------------------------------------------- ##
+## parse.error=verbose and consistent errors.  ##
+## ------------------------------------------- ##
+
+m4_pushdef([AT_CONSISTENT_ERRORS_CHECK], [
+
+AT_SETUP([[parse.error=verbose and consistent errors: ]$1])
+
+AT_BISON_OPTION_PUSHDEFS([$1])
+
+m4_pushdef([AT_YYLEX_PROTOTYPE],
+[AT_SKEL_CC_IF([[int yylex (yy::parser::semantic_type *lvalp)]],
+               [[int yylex (YYSTYPE *lvalp)]])])
+
+AT_SKEL_JAVA_IF([AT_DATA], [AT_DATA_GRAMMAR])([input.y],
+[AT_SKEL_JAVA_IF([[
+
+%code imports {
+  import java.io.IOException;
+}]], [[
+
+%code {]AT_SKEL_CC_IF([[
+  #include <string>]], [[
+  #include <assert.h>
+  #include <stdio.h>
+  ]AT_YYERROR_DECLARE])[
+  ]AT_YYLEX_PROTOTYPE[;
+  #define USE(Var)
+}
+
+]AT_SKEL_CC_IF([[%defines]], [[%define api.pure]])])[
+
+]$1[
+
+%define parse.error verbose
+
+%%
+
+]$2[
+
+]AT_SKEL_JAVA_IF([[%code lexer {]], [[%%]])[
+
+/*--------.
+| yylex.  |
+`--------*/]AT_SKEL_JAVA_IF([[
+
+public String input = "]$3[";
+public int index = 0;
+public int yylex ()
+{
+  if (index < input.length ())
+    return input.charAt (index++);
+  else
+    return 0;
+}
+public Object getLVal ()
+{
+  return new Integer(1);
+}]], [[
+
+]AT_YYLEX_PROTOTYPE[
+{
+  static char const *input = "]$3[";
+  *lvalp = 1;
+  return *input++;
+}]])[
+]AT_YYERROR_DEFINE[
+]AT_SKEL_JAVA_IF([[
+};
+
+%%]])[
+
+/*-------.
+| main.  |
+`-------*/
+]AT_MAIN_DEFINE
+])
+
+AT_FULL_COMPILE([[input]])
+
+m4_pushdef([AT_EXPECTING], [m4_if($5, [ab], [[, expecting 'a' or 'b']],
+                                  $5, [a],  [[, expecting 'a']],
+                                  $5, [b],  [[, expecting 'b']])])
+
+AT_SKEL_JAVA_IF([AT_JAVA_PARSER_CHECK([[input]], [[0]]],
+                [AT_PARSER_CHECK([[./input]], [[1]]]),
+[[]],
+[[syntax error, unexpected ]$4[]AT_EXPECTING[
+]])
+
+m4_popdef([AT_EXPECTING])
+m4_popdef([AT_YYLEX_PROTOTYPE])
+AT_BISON_OPTION_POPDEFS
+
+AT_CLEANUP
+]) dnl AT_CONSISTENT_ERRORS_CHECK
+
+
+
+
+m4_pushdef([AT_PREVIOUS_STATE_GRAMMAR],
+[[%nonassoc 'a';
+
+start: consistent-error-on-a-a 'a' ;
+
+consistent-error-on-a-a:
+    'a' default-reduction
+  | 'a' default-reduction 'a'
+  | 'a' shift
+  ;
+
+default-reduction: /*empty*/ ;
+shift: 'b' ;
+
+// Provide another context in which all rules are useful so that this
+// test case looks a little more realistic.
+start: 'b' consistent-error-on-a-a 'c' ;
+]])
+
+m4_pushdef([AT_PREVIOUS_STATE_INPUT], [[a]])
+
+# Unfortunately, no expected tokens are reported even though 'b' can be
+# accepted.  Nevertheless, the main point of this test is to make sure
+# that at least the unexpected token is reported.  In a previous version
+# of Bison, it wasn't reported because the error is detected in a
+# consistent state with an error action, and that case always triggered
+# the simple "syntax error" message.
+#
+# The point isn't to test IELR here, but state merging happens to
+# complicate this example.
+AT_CONSISTENT_ERRORS_CHECK([[%define lr.type ielr]],
+                           [AT_PREVIOUS_STATE_GRAMMAR],
+                           [AT_PREVIOUS_STATE_INPUT],
+                           [[$end]], [[none]])
+AT_CONSISTENT_ERRORS_CHECK([[%define lr.type ielr
+                             %glr-parser]],
+                           [AT_PREVIOUS_STATE_GRAMMAR],
+                           [AT_PREVIOUS_STATE_INPUT],
+                           [[$end]], [[none]])
+AT_CONSISTENT_ERRORS_CHECK([[%define lr.type ielr
+                             %language "c++"]],
+                           [AT_PREVIOUS_STATE_GRAMMAR],
+                           [AT_PREVIOUS_STATE_INPUT],
+                           [[$end]], [[none]])
+AT_CONSISTENT_ERRORS_CHECK([[%define lr.type ielr
+                             %language "java"]],
+                           [AT_PREVIOUS_STATE_GRAMMAR],
+                           [AT_PREVIOUS_STATE_INPUT],
+                           [[end of input]], [[none]])
+
+# Even canonical LR doesn't foresee the error for 'a'!
+AT_CONSISTENT_ERRORS_CHECK([[%define lr.type ielr
+                             %define lr.default-reduction consistent]],
+                           [AT_PREVIOUS_STATE_GRAMMAR],
+                           [AT_PREVIOUS_STATE_INPUT],
+                           [[$end]], [[ab]])
+AT_CONSISTENT_ERRORS_CHECK([[%define lr.type ielr
+                             %define lr.default-reduction accepting]],
+                           [AT_PREVIOUS_STATE_GRAMMAR],
+                           [AT_PREVIOUS_STATE_INPUT],
+                           [[$end]], [[ab]])
+AT_CONSISTENT_ERRORS_CHECK([[%define lr.type canonical-lr]],
+                           [AT_PREVIOUS_STATE_GRAMMAR],
+                           [AT_PREVIOUS_STATE_INPUT],
+                           [[$end]], [[ab]])
+
+# Only LAC gets it right.
+AT_CONSISTENT_ERRORS_CHECK([[%define lr.type canonical-lr
+                             %define parse.lac full]],
+                           [AT_PREVIOUS_STATE_GRAMMAR],
+                           [AT_PREVIOUS_STATE_INPUT],
+                           [[$end]], [[b]])
+AT_CONSISTENT_ERRORS_CHECK([[%define lr.type ielr
+                             %define parse.lac full]],
+                           [AT_PREVIOUS_STATE_GRAMMAR],
+                           [AT_PREVIOUS_STATE_INPUT],
+                           [[$end]], [[b]])
+
+m4_popdef([AT_PREVIOUS_STATE_GRAMMAR])
+m4_popdef([AT_PREVIOUS_STATE_INPUT])
+
+m4_pushdef([AT_USER_ACTION_GRAMMAR],
+[[%nonassoc 'a';
+
+// If $$ = 0 here, then we know that the 'a' destructor is being invoked
+// incorrectly for the 'b' set in the semantic action below.  All 'a'
+// tokens are returned by yylex, which sets $$ = 1.
+%destructor {
+  if (!$$)
+    fprintf (stderr, "Wrong destructor.\n");
+} 'a';
+
+// Rather than depend on an inconsistent state to induce reading a
+// lookahead as in the previous grammar, just assign the lookahead in a
+// semantic action.  That lookahead isn't needed before either error
+// action is encountered.  In a previous version of Bison, this was a
+// problem as it meant yychar was not translated into yytoken before
+// either error action.  The second error action thus invoked a
+// destructor that it selected according to the incorrect yytoken.  The
+// first error action would have reported an incorrect unexpected token
+// except that, due to the bug described in the previous grammar, the
+// unexpected token was not reported at all.
+start: error-reduce consistent-error 'a' { USE ($][3); } ;
+
+error-reduce:
+  'a' 'a' consistent-reduction consistent-error 'a'
+  { USE (($][1, $][2, $][5)); }
+| 'a' error
+  { USE ($][1); }
+;
+
+consistent-reduction: /*empty*/ {
+  assert (yychar == YYEMPTY);
+  yylval = 0;
+  yychar = 'b';
+} ;
+
+consistent-error:
+  'a' { USE ($][1); }
+| /*empty*/ %prec 'a'
+;
+
+// Provide another context in which all rules are useful so that this
+// test case looks a little more realistic.
+start: 'b' consistent-error 'b' ;
+]])
+m4_pushdef([AT_USER_ACTION_INPUT], [[aa]])
+
+AT_CONSISTENT_ERRORS_CHECK([[]],
+                           [AT_USER_ACTION_GRAMMAR],
+                           [AT_USER_ACTION_INPUT],
+                           [['b']], [[none]])
+AT_CONSISTENT_ERRORS_CHECK([[%glr-parser]],
+                           [AT_USER_ACTION_GRAMMAR],
+                           [AT_USER_ACTION_INPUT],
+                           [['b']], [[none]])
+# No C++ or Java test because yychar cannot be manipulated by users.
+
+AT_CONSISTENT_ERRORS_CHECK([[%define lr.default-reduction consistent]],
+                           [AT_USER_ACTION_GRAMMAR],
+                           [AT_USER_ACTION_INPUT],
+                           [['b']], [[none]])
+
+# Canonical LR doesn't foresee the error for 'a'!
+AT_CONSISTENT_ERRORS_CHECK([[%define lr.default-reduction accepting]],
+                           [AT_USER_ACTION_GRAMMAR],
+                           [AT_USER_ACTION_INPUT],
+                           [[$end]], [[a]])
+AT_CONSISTENT_ERRORS_CHECK([[%define lr.type canonical-lr]],
+                           [AT_USER_ACTION_GRAMMAR],
+                           [AT_USER_ACTION_INPUT],
+                           [[$end]], [[a]])
+
+AT_CONSISTENT_ERRORS_CHECK([[%define parse.lac full]],
+                           [AT_USER_ACTION_GRAMMAR],
+                           [AT_USER_ACTION_INPUT],
+                           [['b']], [[none]])
+AT_CONSISTENT_ERRORS_CHECK([[%define parse.lac full
+                             %define lr.default-reduction accepting]],
+                           [AT_USER_ACTION_GRAMMAR],
+                           [AT_USER_ACTION_INPUT],
+                           [[$end]], [[none]])
+
+m4_popdef([AT_USER_ACTION_GRAMMAR])
+m4_popdef([AT_USER_ACTION_INPUT])
+
+m4_popdef([AT_CONSISTENT_ERRORS_CHECK])
+
+
+
+
+## ------------------------------------------------------- ##
+## LAC: %nonassoc requires splitting canonical LR states.  ##
+## ------------------------------------------------------- ##
+
+# This test case demonstrates that, when %nonassoc is used, canonical
+# LR(1) parser table construction followed by conflict resolution
+# without further state splitting is not always sufficient to produce a
+# parser that can detect all syntax errors as soon as possible on one
+# token of lookahead.  However, LAC solves the problem completely even
+# with minimal LR parser tables.
+
+AT_SETUP([[LAC: %nonassoc requires splitting canonical LR states]])
+AT_BISON_OPTION_PUSHDEFS
+AT_DATA_GRAMMAR([[input.y]],
+[[%code {
+  #include <stdio.h>
+  ]AT_YYERROR_DECLARE[
+  ]AT_YYLEX_DECLARE[
+}
+
+%error-verbose
+%nonassoc 'a'
+
+%%
+
+start:
+  'a' problem 'a' // First context.
+| 'b' problem 'b' // Second context.
+| 'c' reduce-nonassoc // Just makes reduce-nonassoc useful.
+;
+
+problem:
+  look reduce-nonassoc
+| look 'a'
+| look 'b'
+;
+
+// For the state reached after shifting the 'a' in these productions,
+// lookahead sets are the same in both the first and second contexts.
+// Thus, canonical LR reuses the same state for both contexts.  However,
+// the lookahead 'a' for the reduction "look: 'a'" later becomes an
+// error action only in the first context.  In order to immediately
+// detect the syntax error on 'a' here for only the first context, this
+// canonical LR state would have to be split into two states, and the
+// 'a' lookahead would have to be removed from only one of the states.
+look:
+  'a' // Reduction lookahead set is always ['a', 'b'].
+| 'a' 'b'
+| 'a' 'c' // 'c' is forgotten as an expected token.
+;
+
+reduce-nonassoc: %prec 'a';
+
+%%
+]AT_YYERROR_DEFINE[
+]AT_YYLEX_DEFINE(["aaa"])[
+]AT_MAIN_DEFINE
+])
+AT_BISON_OPTION_POPDEFS
+
+# Show canonical LR's failure.
+AT_BISON_CHECK([[-Dlr.type=canonical-lr -o input.c input.y]],
+               [[0]], [[]],
+[[input.y: warning: 2 shift/reduce conflicts [-Wconflicts-sr]
+]])
+AT_COMPILE([[input]])
+AT_PARSER_CHECK([[./input]], [[1]], [[]],
+[[syntax error, unexpected 'a', expecting 'b'
+]])
+
+# It's corrected by LAC.
+AT_BISON_CHECK([[-Dlr.type=canonical-lr -Dparse.lac=full \
+                 -o input.c input.y]], [[0]], [[]],
+[[input.y: warning: 2 shift/reduce conflicts [-Wconflicts-sr]
+]])
+AT_COMPILE([[input]])
+AT_PARSER_CHECK([[./input]], [[1]], [[]],
+[[syntax error, unexpected 'a', expecting 'b' or 'c'
+]])
+
+# IELR is sufficient when LAC is used.
+AT_BISON_CHECK([[-Dlr.type=ielr -Dparse.lac=full -o input.c input.y]],
+               [[0]], [[]],
+[[input.y: warning: 2 shift/reduce conflicts [-Wconflicts-sr]
+]])
+AT_COMPILE([[input]])
+AT_PARSER_CHECK([[./input]], [[1]], [[]],
+[[syntax error, unexpected 'a', expecting 'b' or 'c'
+]])
+
+AT_CLEANUP
+
+## ------------------------- ##
+## Unresolved SR Conflicts.  ##
+## ------------------------- ##
+
+AT_SETUP([Unresolved SR Conflicts])
+
+AT_KEYWORDS([report])
+
+AT_DATA([input.y],
+[[%token NUM OP
+%%
+exp: exp OP exp | NUM;
+]])
+
+AT_BISON_CHECK([-o input.c --report=all input.y], 0, [],
+[[input.y: warning: 1 shift/reduce conflict [-Wconflicts-sr]
+]])
+
+# Check the contents of the report.
+AT_CHECK([cat input.output], [],
+[[State 5 conflicts: 1 shift/reduce
+
+
+Grammar
+
+    0 $accept: exp $end
+
+    1 exp: exp OP exp
+    2    | NUM
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+error (256)
+NUM (258) 2
+OP (259) 1
+
+
+Nonterminals, with rules where they appear
+
+$accept (5)
+    on left: 0
+exp (6)
+    on left: 1 2, on right: 0 1
+
+
+State 0
+
+    0 $accept: . exp $end
+    1 exp: . exp OP exp
+    2    | . NUM
+
+    NUM  shift, and go to state 1
+
+    exp  go to state 2
+
+
+State 1
+
+    2 exp: NUM .
+
+    $default  reduce using rule 2 (exp)
+
+
+State 2
+
+    0 $accept: exp . $end
+    1 exp: exp . OP exp
+
+    $end  shift, and go to state 3
+    OP    shift, and go to state 4
+
+
+State 3
+
+    0 $accept: exp $end .
+
+    $default  accept
+
+
+State 4
+
+    1 exp: . exp OP exp
+    1    | exp OP . exp
+    2    | . NUM
+
+    NUM  shift, and go to state 1
+
+    exp  go to state 5
+
+
+State 5
+
+    1 exp: exp . OP exp
+    1    | exp OP exp .  [$end, OP]
+
+    OP  shift, and go to state 4
+
+    OP        [reduce using rule 1 (exp)]
+    $default  reduce using rule 1 (exp)
+]])
+
+AT_CLEANUP
+
+
+
+## ----------------------- ##
+## Resolved SR Conflicts.  ##
+## ----------------------- ##
+
+AT_SETUP([Resolved SR Conflicts])
+
+AT_KEYWORDS([report])
+
+AT_DATA([input.y],
+[[%token NUM OP
+%left OP
+%%
+exp: exp OP exp | NUM;
+]])
+
+AT_BISON_CHECK([-o input.c --report=all input.y])
+
+# Check the contents of the report.
+AT_CHECK([cat input.output], [],
+[[Grammar
+
+    0 $accept: exp $end
+
+    1 exp: exp OP exp
+    2    | NUM
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+error (256)
+NUM (258) 2
+OP (259) 1
+
+
+Nonterminals, with rules where they appear
+
+$accept (5)
+    on left: 0
+exp (6)
+    on left: 1 2, on right: 0 1
+
+
+State 0
+
+    0 $accept: . exp $end
+    1 exp: . exp OP exp
+    2    | . NUM
+
+    NUM  shift, and go to state 1
+
+    exp  go to state 2
+
+
+State 1
+
+    2 exp: NUM .
+
+    $default  reduce using rule 2 (exp)
+
+
+State 2
+
+    0 $accept: exp . $end
+    1 exp: exp . OP exp
+
+    $end  shift, and go to state 3
+    OP    shift, and go to state 4
+
+
+State 3
+
+    0 $accept: exp $end .
+
+    $default  accept
+
+
+State 4
+
+    1 exp: . exp OP exp
+    1    | exp OP . exp
+    2    | . NUM
+
+    NUM  shift, and go to state 1
+
+    exp  go to state 5
+
+
+State 5
+
+    1 exp: exp . OP exp
+    1    | exp OP exp .  [$end, OP]
+
+    $default  reduce using rule 1 (exp)
+
+    Conflict between rule 1 and token OP resolved as reduce (%left OP).
+]])
+
+AT_CLEANUP
+
+
+## ---------------------- ##
+## %precedence suffices.  ##
+## ---------------------- ##
+
+AT_SETUP([%precedence suffices])
+
+AT_DATA([input.y],
+[[%precedence "then"
+%precedence "else"
+%%
+stmt:
+  "if" cond "then" stmt
+| "if" cond "then" stmt "else" stmt
+| "stmt"
+;
+
+cond:
+  "exp"
+;
+]])
+
+AT_BISON_CHECK([-o input.c input.y])
+
+AT_CLEANUP
+
+
+## ------------------------------ ##
+## %precedence does not suffice.  ##
+## ------------------------------ ##
+
+AT_SETUP([%precedence does not suffice])
+
+AT_DATA([input.y],
+[[%precedence "then"
+%precedence "else"
+%%
+stmt:
+  "if" cond "then" stmt
+| "if" cond "then" stmt "else" stmt
+| "stmt"
+;
+
+cond:
+  "exp"
+| cond "then" cond
+;
+]])
+
+AT_BISON_CHECK([-o input.c input.y], 0, [],
+[[input.y: warning: 1 shift/reduce conflict [-Wconflicts-sr]
+input.y:12.3-18: warning: rule useless in parser due to conflicts [-Wother]
+]])
+
+AT_CLEANUP
+
+
+## -------------------------------- ##
+## Defaulted Conflicted Reduction.  ##
+## -------------------------------- ##
+
+# When there are RR conflicts, some rules are disabled.  Usually it is
+# simply displayed as:
+#
+#    $end           reduce using rule 3 (num)
+#    $end           [reduce using rule 4 (id)]
+#
+# But when 'reduce 3' is the default action, we'd produce:
+#
+#    $end           [reduce using rule 4 (id)]
+#    $default    reduce using rule 3 (num)
+#
+# In this precise case (a reduction is masked by the default
+# reduction), we make the 'reduce 3' explicit:
+#
+#    $end           reduce using rule 3 (num)
+#    $end           [reduce using rule 4 (id)]
+#    $default    reduce using rule 3 (num)
+#
+# Maybe that's not the best display, but then, please propose something
+# else.
+
+AT_SETUP([Defaulted Conflicted Reduction])
+AT_KEYWORDS([report])
+
+AT_DATA([input.y],
+[[%%
+exp: num | id;
+num: '0';
+id : '0';
+%%
+]])
+
+AT_BISON_CHECK([-o input.c --report=all input.y], 0, [],
+[[input.y: warning: 1 reduce/reduce conflict [-Wconflicts-rr]
+input.y:4.6-8: warning: rule useless in parser due to conflicts [-Wother]
+]])
+
+# Check the contents of the report.
+AT_CHECK([cat input.output], [],
+[[Rules useless in parser due to conflicts
+
+    4 id: '0'
+
+
+State 1 conflicts: 1 reduce/reduce
+
+
+Grammar
+
+    0 $accept: exp $end
+
+    1 exp: num
+    2    | id
+
+    3 num: '0'
+
+    4 id: '0'
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+'0' (48) 3 4
+error (256)
+
+
+Nonterminals, with rules where they appear
+
+$accept (4)
+    on left: 0
+exp (5)
+    on left: 1 2, on right: 0
+num (6)
+    on left: 3, on right: 1
+id (7)
+    on left: 4, on right: 2
+
+
+State 0
+
+    0 $accept: . exp $end
+    1 exp: . num
+    2    | . id
+    3 num: . '0'
+    4 id: . '0'
+
+    '0'  shift, and go to state 1
+
+    exp  go to state 2
+    num  go to state 3
+    id   go to state 4
+
+
+State 1
+
+    3 num: '0' .  [$end]
+    4 id: '0' .  [$end]
+
+    $end      reduce using rule 3 (num)
+    $end      [reduce using rule 4 (id)]
+    $default  reduce using rule 3 (num)
+
+
+State 2
+
+    0 $accept: exp . $end
+
+    $end  shift, and go to state 5
+
+
+State 3
+
+    1 exp: num .
+
+    $default  reduce using rule 1 (exp)
+
+
+State 4
+
+    2 exp: id .
+
+    $default  reduce using rule 2 (exp)
+
+
+State 5
+
+    0 $accept: exp $end .
+
+    $default  accept
+]])
+
+AT_CLEANUP
+
+
+
+
+## -------------------- ##
+## %expect not enough.  ##
+## -------------------- ##
+
+AT_SETUP([%expect not enough])
+
+AT_DATA([input.y],
+[[%token NUM OP
+%expect 0
+%%
+exp: exp OP exp | NUM;
+]])
+
+AT_BISON_CHECK([-o input.c input.y], 1, [],
+[[input.y: error: shift/reduce conflicts: 1 found, 0 expected
+]])
+AT_CLEANUP
+
+
+## --------------- ##
+## %expect right.  ##
+## --------------- ##
+
+AT_SETUP([%expect right])
+
+AT_DATA([input.y],
+[[%token NUM OP
+%expect 1
+%%
+exp: exp OP exp | NUM;
+]])
+
+AT_BISON_CHECK([-o input.c input.y])
+AT_CLEANUP
+
+
+## ------------------ ##
+## %expect too much.  ##
+## ------------------ ##
+
+AT_SETUP([%expect too much])
+
+AT_DATA([input.y],
+[[%token NUM OP
+%expect 2
+%%
+exp: exp OP exp | NUM;
+]])
+
+AT_BISON_CHECK([-o input.c input.y], 1, [],
+[[input.y: error: shift/reduce conflicts: 1 found, 2 expected
+]])
+AT_CLEANUP
+
+
+## ------------------------------- ##
+## %expect with reduce conflicts.  ##
+## ------------------------------- ##
+
+AT_SETUP([%expect with reduce conflicts])
+
+AT_DATA([input.y],
+[[%expect 0
+%%
+program: a 'a' | a a;
+a: 'a';
+]])
+
+AT_BISON_CHECK([-o input.c input.y], 1, [],
+[[input.y: error: reduce/reduce conflicts: 1 found, 0 expected
+]])
+AT_CLEANUP
+
+
+## ------------------------- ##
+## %prec with user strings.  ##
+## ------------------------- ##
+
+AT_SETUP([%prec with user string])
+
+AT_DATA([[input.y]],
+[[%%
+exp:
+  "foo" %prec "foo"
+;
+]])
+
+AT_BISON_CHECK([-o input.c input.y])
+AT_CLEANUP
+
+
+## -------------------------------- ##
+## %no-default-prec without %prec.  ##
+## -------------------------------- ##
+
+AT_SETUP([%no-default-prec without %prec])
+
+AT_DATA([[input.y]],
+[[%left '+'
+%left '*'
+
+%%
+
+%no-default-prec;
+
+e:   e '+' e
+   | e '*' e
+   | '0'
+   ;
+]])
+
+AT_BISON_CHECK([-Wall -o input.c input.y], 0, [],
+[[input.y: warning: 4 shift/reduce conflicts [-Wconflicts-sr]
+input.y:1.1-5: warning: useless precedence and associativity for '+' [-Wprecedence]
+input.y:2.1-5: warning: useless precedence and associativity for '*' [-Wprecedence]
+]])
+AT_CLEANUP
+
+
+## ----------------------------- ##
+## %no-default-prec with %prec.  ##
+## ----------------------------- ##
+
+AT_SETUP([%no-default-prec with %prec])
+
+AT_DATA([[input.y]],
+[[%left '+'
+%left '*'
+
+%%
+
+%no-default-prec;
+
+e:   e '+' e %prec '+'
+   | e '*' e %prec '*'
+   | '0'
+   ;
+]])
+
+AT_BISON_CHECK([-o input.c input.y])
+AT_CLEANUP
+
+
+## --------------- ##
+## %default-prec.  ##
+## --------------- ##
+
+AT_SETUP([%default-prec])
+
+AT_DATA([[input.y]],
+[[%left '+'
+%left '*'
+
+%%
+
+%default-prec;
+
+e:   e '+' e
+   | e '*' e
+   | '0'
+   ;
+]])
+
+AT_BISON_CHECK([-o input.c input.y])
+AT_CLEANUP
+
+
+## ---------------------------------------------- ##
+## Unreachable States After Conflict Resolution.  ##
+## ---------------------------------------------- ##
+
+AT_SETUP([[Unreachable States After Conflict Resolution]])
+
+# If conflict resolution makes states unreachable, remove those states, report
+# rules that are then unused, and don't report conflicts in those states.  Test
+# what happens when a nonterminal becomes useless as a result of state removal
+# since that causes lalr.o's goto map to be rewritten.
+
+AT_DATA([[input.y]],
+[[%output "input.c"
+%left 'a'
+
+%%
+
+start: resolved_conflict 'a' reported_conflicts 'a' ;
+
+/* S/R conflict resolved as reduce, so the state with item
+ * (resolved_conflict: 'a' . unreachable1) and all it transition successors are
+ * unreachable, and the associated production is useless.  */
+resolved_conflict:
+    'a' unreachable1
+  | %prec 'a'
+  ;
+
+/* S/R conflict that need not be reported since it is unreachable because of
+ * the previous conflict resolution.  Nonterminal unreachable1 and all its
+ * productions are useless.  */
+unreachable1:
+    'a' unreachable2
+  |
+  ;
+
+/* Likewise for a R/R conflict and nonterminal unreachable2.  */
+unreachable2: | ;
+
+/* Make sure remaining S/R and R/R conflicts are still reported correctly even
+ * when their states are renumbered due to state removal.  */
+reported_conflicts:
+    'a'
+  | 'a'
+  |
+  ;
+
+]])
+
+AT_BISON_CHECK([[--report=all input.y]], 0, [],
+[[input.y: warning: 1 shift/reduce conflict [-Wconflicts-sr]
+input.y: warning: 1 reduce/reduce conflict [-Wconflicts-rr]
+input.y:12.5-20: warning: rule useless in parser due to conflicts [-Wother]
+input.y:20.5-20: warning: rule useless in parser due to conflicts [-Wother]
+input.y:21.4: warning: rule useless in parser due to conflicts [-Wother]
+input.y:25.13: warning: rule useless in parser due to conflicts [-Wother]
+input.y:25.16: warning: rule useless in parser due to conflicts [-Wother]
+input.y:31.5-7: warning: rule useless in parser due to conflicts [-Wother]
+input.y:32.4: warning: rule useless in parser due to conflicts [-Wother]
+]])
+
+AT_CHECK([[cat input.output]], 0,
+[[Rules useless in parser due to conflicts
+
+    2 resolved_conflict: 'a' unreachable1
+
+    4 unreachable1: 'a' unreachable2
+    5             | %empty
+
+    6 unreachable2: %empty
+    7             | %empty
+
+    9 reported_conflicts: 'a'
+   10                   | %empty
+
+
+State 4 conflicts: 1 shift/reduce
+State 5 conflicts: 1 reduce/reduce
+
+
+Grammar
+
+    0 $accept: start $end
+
+    1 start: resolved_conflict 'a' reported_conflicts 'a'
+
+    2 resolved_conflict: 'a' unreachable1
+    3                  | %empty
+
+    4 unreachable1: 'a' unreachable2
+    5             | %empty
+
+    6 unreachable2: %empty
+    7             | %empty
+
+    8 reported_conflicts: 'a'
+    9                   | 'a'
+   10                   | %empty
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+'a' (97) 1 2 4 8 9
+error (256)
+
+
+Nonterminals, with rules where they appear
+
+$accept (4)
+    on left: 0
+start (5)
+    on left: 1, on right: 0
+resolved_conflict (6)
+    on left: 2 3, on right: 1
+unreachable1 (7)
+    on left: 4 5, on right: 2
+unreachable2 (8)
+    on left: 6 7, on right: 4
+reported_conflicts (9)
+    on left: 8 9 10, on right: 1
+
+
+State 0
+
+    0 $accept: . start $end
+    1 start: . resolved_conflict 'a' reported_conflicts 'a'
+    2 resolved_conflict: . 'a' unreachable1
+    3                  | . %empty  ['a']
+
+    $default  reduce using rule 3 (resolved_conflict)
+
+    start              go to state 1
+    resolved_conflict  go to state 2
+
+    Conflict between rule 3 and token 'a' resolved as reduce (%left 'a').
+
+
+State 1
+
+    0 $accept: start . $end
+
+    $end  shift, and go to state 3
+
+
+State 2
+
+    1 start: resolved_conflict . 'a' reported_conflicts 'a'
+
+    'a'  shift, and go to state 4
+
+
+State 3
+
+    0 $accept: start $end .
+
+    $default  accept
+
+
+State 4
+
+    1 start: resolved_conflict 'a' . reported_conflicts 'a'
+    8 reported_conflicts: . 'a'
+    9                   | . 'a'
+   10                   | . %empty  ['a']
+
+    'a'  shift, and go to state 5
+
+    'a'  [reduce using rule 10 (reported_conflicts)]
+
+    reported_conflicts  go to state 6
+
+
+State 5
+
+    8 reported_conflicts: 'a' .  ['a']
+    9                   | 'a' .  ['a']
+
+    'a'       reduce using rule 8 (reported_conflicts)
+    'a'       [reduce using rule 9 (reported_conflicts)]
+    $default  reduce using rule 8 (reported_conflicts)
+
+
+State 6
+
+    1 start: resolved_conflict 'a' reported_conflicts . 'a'
+
+    'a'  shift, and go to state 7
+
+
+State 7
+
+    1 start: resolved_conflict 'a' reported_conflicts 'a' .
+
+    $default  reduce using rule 1 (start)
+]])
+
+AT_DATA([[input-keep.y]],
+[[%define lr.keep-unreachable-state
+]])
+AT_CHECK([[cat input.y >> input-keep.y]])
+
+AT_BISON_CHECK([[input-keep.y]], 0, [],
+[[input-keep.y: warning: 2 shift/reduce conflicts [-Wconflicts-sr]
+input-keep.y: warning: 2 reduce/reduce conflicts [-Wconflicts-rr]
+input-keep.y:22.4: warning: rule useless in parser due to conflicts [-Wother]
+input-keep.y:26.16: warning: rule useless in parser due to conflicts [-Wother]
+input-keep.y:32.5-7: warning: rule useless in parser due to conflicts [-Wother]
+input-keep.y:33.4: warning: rule useless in parser due to conflicts [-Wother]
+]])
+
+AT_CLEANUP
+
+
+## ------------------------------------------------------------ ##
+## Solved conflicts report for multiple reductions in a state.  ##
+## ------------------------------------------------------------ ##
+
+AT_SETUP([[Solved conflicts report for multiple reductions in a state]])
+
+# Used to lose earlier solved conflict messages even within a single S/R/R.
+
+AT_DATA([[input.y]],
+[[%left 'a'
+%right 'b'
+%right 'c'
+%right 'd'
+%%
+start:
+    'a'
+  | empty_a 'a'
+  | 'b'
+  | empty_b 'b'
+  | 'c'
+  | empty_c1 'c'
+  | empty_c2 'c'
+  | empty_c3 'c'
+  ;
+empty_a: %prec 'a' ;
+empty_b: %prec 'b' ;
+empty_c1: %prec 'c' ;
+empty_c2: %prec 'c' ;
+empty_c3: %prec 'd' ;
+]])
+AT_BISON_CHECK([[--report=all -o input.c input.y]], 0, [], [ignore])
+AT_CHECK([[cat input.output | sed -n '/^State 0$/,/^State 1$/p']], 0,
+[[State 0
+
+    0 $accept: . start $end
+    1 start: . 'a'
+    2      | . empty_a 'a'
+    3      | . 'b'
+    4      | . empty_b 'b'
+    5      | . 'c'
+    6      | . empty_c1 'c'
+    7      | . empty_c2 'c'
+    8      | . empty_c3 'c'
+    9 empty_a: . %empty  ['a']
+   10 empty_b: . %empty  []
+   11 empty_c1: . %empty  []
+   12 empty_c2: . %empty  []
+   13 empty_c3: . %empty  ['c']
+
+    'b'  shift, and go to state 1
+
+    'c'       reduce using rule 13 (empty_c3)
+    $default  reduce using rule 9 (empty_a)
+
+    start     go to state 2
+    empty_a   go to state 3
+    empty_b   go to state 4
+    empty_c1  go to state 5
+    empty_c2  go to state 6
+    empty_c3  go to state 7
+
+    Conflict between rule 9 and token 'a' resolved as reduce (%left 'a').
+    Conflict between rule 10 and token 'b' resolved as shift (%right 'b').
+    Conflict between rule 11 and token 'c' resolved as shift (%right 'c').
+    Conflict between rule 12 and token 'c' resolved as shift (%right 'c').
+    Conflict between rule 13 and token 'c' resolved as reduce ('c' < 'd').
+
+
+State 1
+]])
+
+AT_CLEANUP
+
+
+## ------------------------------------------------------------ ##
+## %nonassoc error actions for multiple reductions in a state.  ##
+## ------------------------------------------------------------ ##
+
+# Used to abort when trying to resolve conflicts as %nonassoc error actions for
+# multiple reductions in a state.
+
+# For a %nonassoc error action token, used to print the first remaining
+# reduction on that token without brackets.
+
+AT_SETUP([[%nonassoc error actions for multiple reductions in a state]])
+
+AT_DATA([[input.y]],
+[[%nonassoc 'a' 'b' 'c'
+%%
+start:
+    'a'
+  | empty_a 'a'
+  | 'b'
+  | empty_b 'b'
+  | 'c'
+  | empty_c1 'c'
+  | empty_c2 'c'
+  | empty_c3 'c'
+  ;
+empty_a: %prec 'a' ;
+empty_b: %prec 'b' ;
+empty_c1: %prec 'c' ;
+empty_c2: %prec 'c' ;
+empty_c3: %prec 'c' ;
+]])
+
+AT_BISON_CHECK([[--report=all -o input.c input.y]], 0, [], [ignore])
+AT_CHECK([[cat input.output | sed -n '/^State 0$/,/^State 1$/p']], 0,
+[[State 0
+
+    0 $accept: . start $end
+    1 start: . 'a'
+    2      | . empty_a 'a'
+    3      | . 'b'
+    4      | . empty_b 'b'
+    5      | . 'c'
+    6      | . empty_c1 'c'
+    7      | . empty_c2 'c'
+    8      | . empty_c3 'c'
+    9 empty_a: . %empty  []
+   10 empty_b: . %empty  []
+   11 empty_c1: . %empty  []
+   12 empty_c2: . %empty  ['c']
+   13 empty_c3: . %empty  ['c']
+
+    'a'  error (nonassociative)
+    'b'  error (nonassociative)
+    'c'  error (nonassociative)
+
+    'c'  [reduce using rule 12 (empty_c2)]
+    'c'  [reduce using rule 13 (empty_c3)]
+
+    start     go to state 1
+    empty_a   go to state 2
+    empty_b   go to state 3
+    empty_c1  go to state 4
+    empty_c2  go to state 5
+    empty_c3  go to state 6
+
+    Conflict between rule 9 and token 'a' resolved as an error (%nonassoc 'a').
+    Conflict between rule 10 and token 'b' resolved as an error (%nonassoc 'b').
+    Conflict between rule 11 and token 'c' resolved as an error (%nonassoc 'c').
+
+
+State 1
+]])
+AT_CLEANUP
+
+
+## -------------------- ##
+## %expect-rr non GLR.  ##
+## -------------------- ##
+
+AT_SETUP([[%expect-rr non GLR]])
+
+AT_DATA([[1.y]],
+[[%expect-rr 0
+%%
+exp: 'a'
+]])
+
+AT_BISON_CHECK([[1.y]], [[0]], [],
+[[1.y: warning: %expect-rr applies only to GLR parsers [-Wother]
+]])
+
+AT_DATA([[2.y]],
+[[%expect-rr 1
+%%
+exp: 'a' | 'a';
+]])
+
+AT_BISON_CHECK([[2.y]], [[0]], [],
+[[2.y: warning: %expect-rr applies only to GLR parsers [-Wother]
+2.y: warning: 1 reduce/reduce conflict [-Wconflicts-rr]
+2.y:3.12-14: warning: rule useless in parser due to conflicts [-Wother]
+]])
+
+AT_CLEANUP
+
+
+## ---------------------------------- ##
+## -W versus %expect and %expect-rr.  ##
+## ---------------------------------- ##
+
+AT_SETUP([[-W versus %expect and %expect-rr]])
+
+AT_DATA([[sr-rr.y]],
+[[%glr-parser
+%%
+start: 'a' | A 'a' | B 'a' ;
+A: ;
+B: ;
+]])
+AT_DATA([[sr.y]],
+[[%glr-parser
+%%
+start: 'a' | A 'a' ;
+A: ;
+]])
+AT_DATA([[rr.y]],
+[[%glr-parser
+%%
+start: A | B ;
+A: ;
+B: ;
+]])
+
+AT_BISON_CHECK([[sr-rr.y]], [[0]], [[]],
+[[sr-rr.y: warning: 1 shift/reduce conflict [-Wconflicts-sr]
+sr-rr.y: warning: 1 reduce/reduce conflict [-Wconflicts-rr]
+]])
+AT_BISON_CHECK([[-Wno-conflicts-sr sr-rr.y]], [[0]], [[]],
+[[sr-rr.y: warning: 1 reduce/reduce conflict [-Wconflicts-rr]
+]])
+AT_BISON_CHECK([[-Wno-conflicts-rr sr-rr.y]], [[0]], [[]],
+[[sr-rr.y: warning: 1 shift/reduce conflict [-Wconflicts-sr]
+]])
+
+[
+# This is piece of code is rather complex for a simple task: try every
+# combinaison of (0 or 1 real SR) x (0 or 1 real RR) x (don't %expect
+# or %expect 0, 1, or 2 SR) x (don't %expect-rr or %expect-rr 0, 1, or 2
+# RR).
+
+# Number and types of genuine conflicts in the grammar.
+for gram in sr-rr sr rr; do
+  # Number of expected s/r conflicts.
+  for sr_exp_i in '' 0 1 2; do
+    # Number of expected r/r conflicts.
+    for rr_exp_i in '' 0 1 2; do
+      test -z "$sr_exp_i" && test -z "$rr_exp_i" && continue
+
+      # Build grammar file.
+      sr_exp=0
+      rr_exp=0
+      file=$gram
+      directives=
+      if test -n "$sr_exp_i"; then
+        sr_exp=$sr_exp_i
+        file=$file-expect-$sr_exp
+        directives="%expect $sr_exp"
+      fi
+      if test -n "$rr_exp_i"; then
+        rr_exp=$rr_exp_i
+        file=$file-expect-rr-$rr_exp
+        directives="$directives %expect-rr $rr_exp"
+      fi
+      file=$file.y
+      echo "$directives" > $file
+      cat $gram.y >> $file
+
+      # Number of found conflicts.
+      case $gram in
+        (sr)    sr_count=1; rr_count=0;;
+        (rr)    sr_count=0; rr_count=1;;
+        (sr-rr) sr_count=1; rr_count=1;;
+      esac
+
+      # Update number of expected conflicts: if %expect is given then
+      # %expect-rr defaults to 0, and vice-versa.  Leave empty if
+      # nothing expected.
+      case $sr_exp_i:$rr_exp_i in
+        ?:) rr_exp_i=0;;
+        :?) sr_exp_i=0;;
+      esac
+
+      # Run tests.
+      if test $sr_count -eq $sr_exp && test $rr_count -eq $rr_exp; then
+        ]AT_BISON_CHECK([[-Wnone $file]])[
+        ]AT_BISON_CHECK([[-Werror $file]])[
+      else
+        {
+          if test -z "$sr_exp_i" && test "$sr_count" -ne 0; then
+            echo "warning: $sr_count shift/reduce conflicts"
+          elif test "$sr_exp_i" -ne "$sr_count"; then
+            echo "error: shift/reduce conflicts: $sr_count found, $sr_exp_i expected"
+          fi
+          if test -z "$rr_exp_i" && test "$rr_count" -ne 0; then
+            echo "warning: $rr_count reduce/reduce conflicts"
+          elif test "$rr_exp_i" -ne "$rr_count"; then
+            echo "error: reduce/reduce conflicts: $rr_count found, $rr_exp_i expected"
+          fi
+        } | sed -e "s/^/$file: /" > experr
+        ]AT_BISON_CHECK([[-Wnone $file]], [[1]], [[]], [[experr]])[
+        ]AT_BISON_CHECK([[-Werror $file]], [[1]], [[]], [[experr]])[
+      fi
+    done
+  done
+done]
+
+AT_CLEANUP

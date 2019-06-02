@@ -1,0 +1,453 @@
+# Checking GLR Parsing.                         -*- Autotest -*-
+
+# Copyright (C) 2002-2015 Free Software Foundation, Inc.
+
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+AT_BANNER([[C++ Type Syntax (GLR).]])
+
+# _AT_TEST_GLR_CXXTYPES(DECL, RESOLVE1, RESOLVE2)
+# -----------------------------------------------
+# Store into types.y the calc program, with DECL inserted as a declaration,
+# and with RESOLVE1 and RESOLVE2 as annotations on the conflicted rule for
+# stmt.  Then compile the result.
+m4_define([_AT_TEST_GLR_CXXTYPES],
+[AT_BISON_OPTION_PUSHDEFS([%glr-parser $1])
+
+AT_DATA_GRAMMAR([types.y],
+[[/* Simplified C++ Type and Expression Grammar.  */
+
+$1
+
+%code requires
+{
+  #include <stdio.h>
+  union Node {
+    struct {
+      int isNterm;
+      int parents;
+    } nodeInfo;
+    struct {
+      int isNterm; /* 1 */
+      int parents;
+      char const *form;
+      union Node *children[3];
+    } nterm;
+    struct {
+      int isNterm; /* 0 */
+      int parents;
+      char *text;
+    } term;
+  };
+  typedef union Node Node;
+  #define YYSTYPE Node *
+}
+
+%code
+{
+  static Node *new_nterm (char const *, Node *, Node *, Node *);
+  static Node *new_term (char *);
+  static void free_node (Node *);
+  static char *node_to_string (Node *);
+]m4_bmatch([$2], [stmtMerge],
+[ static YYSTYPE stmtMerge (YYSTYPE x0, YYSTYPE x1);])[
+  #define YYINITDEPTH 10
+  #define YYSTACKEXPANDABLE 1
+  ]AT_YYERROR_DECLARE[
+  ]AT_YYLEX_DECLARE[
+}
+
+%token TYPENAME ID
+
+%right '='
+%left '+'
+
+%glr-parser
+
+%destructor { free_node ($$); } stmt expr decl declarator TYPENAME ID
+
+%%
+
+prog :
+     | prog stmt   {
+                        char *output;]AT_LOCATION_IF([
+                        printf ("%d.%d-%d.%d: ",
+                             @2.first_line, @2.first_column,
+                             @2.last_line, @2.last_column);])[
+                        output = node_to_string (]$[2);
+                        printf ("%s\n", output);
+                        free (output);
+                        free_node (]$[2);
+                   }
+     ;
+
+stmt : expr ';'  $2     { $$ = ]$[1; }
+     | decl      $3
+     | error ';'        { $$ = new_nterm ("<error>", YY_NULLPTR, YY_NULLPTR, YY_NULLPTR); }
+     | '@'              { YYACCEPT; }
+     ;
+
+expr : ID
+     | TYPENAME '(' expr ')'
+                        { $$ = new_nterm ("<cast>(%s,%s)", ]$[3, ]$[1, YY_NULLPTR); }
+     | expr '+' expr    { $$ = new_nterm ("+(%s,%s)", ]$[1, ]$[3, YY_NULLPTR); }
+     | expr '=' expr    { $$ = new_nterm ("=(%s,%s)", ]$[1, ]$[3, YY_NULLPTR); }
+     ;
+
+decl : TYPENAME declarator ';'
+                        { $$ = new_nterm ("<declare>(%s,%s)", ]$[1, ]$[2, YY_NULLPTR); }
+     | TYPENAME declarator '=' expr ';'
+                        { $$ = new_nterm ("<init-declare>(%s,%s,%s)", ]$[1,
+                                          ]$[2, ]$[4); }
+     ;
+
+declarator : ID
+     | '(' declarator ')' { $$ = ]$[2; }
+     ;
+
+%%
+
+#include <ctype.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdarg.h>
+#include <assert.h>
+
+int
+main (int argc, char **argv)
+{
+  assert (argc == 2); (void) argc;
+  if (!freopen (argv[1], "r", stdin))
+    return 3;
+  return yyparse ();
+}
+
+]AT_YYERROR_DEFINE[
+
+]AT_YYLEX_PROTOTYPE[
+{
+  char buffer[256];
+  int c;
+  unsigned int i;
+  static int lineNum = 1;
+  static int colNum = 0;
+
+#if YYPURE
+# undef yylloc
+# define yylloc (*llocp)
+# undef yylval
+# define yylval (*lvalp)
+#endif
+
+  while (1)
+    {
+      assert (!feof (stdin));
+      c = getchar ();
+      switch (c)
+        {
+        case EOF:
+          return 0;
+        case '\t':
+          colNum = (colNum + 7) & ~7;
+          break;
+        case ' ': case '\f':
+          colNum += 1;
+          break;
+        case '\n':
+          lineNum += 1;
+          colNum = 0;
+          break;
+        default:
+          {
+            int tok;]AT_LOCATION_IF([[
+            yylloc.first_line = yylloc.last_line = lineNum;
+            yylloc.first_column = colNum;]])[
+            if (isalpha (c))
+              {
+                i = 0;
+
+                do
+                  {
+                    buffer[i++] = c;
+                    colNum += 1;
+                    assert (i != sizeof buffer - 1);
+                    c = getchar ();
+                  }
+                while (isalnum (c) || c == '_');
+
+                ungetc (c, stdin);
+                buffer[i++] = 0;
+                tok = isupper ((unsigned char) buffer[0]) ? TYPENAME : ID;
+                yylval = new_term (strcpy ((char *) malloc (i), buffer));
+              }
+            else
+              {
+                colNum += 1;
+                tok = c;
+                yylval = YY_NULLPTR;
+              }]AT_LOCATION_IF([[
+            yylloc.last_column = colNum-1;]])[
+            return tok;
+          }
+        }
+    }
+}
+
+static Node *
+new_nterm (char const *form, Node *child0, Node *child1, Node *child2)
+{
+  Node *node = (Node *) malloc (sizeof (Node));
+  node->nterm.isNterm = 1;
+  node->nterm.parents = 0;
+  node->nterm.form = form;
+  node->nterm.children[0] = child0;
+  if (child0)
+    child0->nodeInfo.parents += 1;
+  node->nterm.children[1] = child1;
+  if (child1)
+    child1->nodeInfo.parents += 1;
+  node->nterm.children[2] = child2;
+  if (child2)
+    child2->nodeInfo.parents += 1;
+  return node;
+}
+
+static Node *
+new_term (char *text)
+{
+  Node *node = (Node *) malloc (sizeof (Node));
+  node->term.isNterm = 0;
+  node->term.parents = 0;
+  node->term.text = text;
+  return node;
+}
+
+static void
+free_node (Node *node)
+{
+  if (!node)
+    return;
+  node->nodeInfo.parents -= 1;
+  /* Free only if 0 (last parent) or -1 (no parents).  */
+  if (node->nodeInfo.parents > 0)
+    return;
+  if (node->nodeInfo.isNterm == 1)
+    {
+      free_node (node->nterm.children[0]);
+      free_node (node->nterm.children[1]);
+      free_node (node->nterm.children[2]);
+    }
+  else
+    free (node->term.text);
+  free (node);
+}
+
+static char *
+node_to_string (Node *node)
+{
+  char *child0;
+  char *child1;
+  char *child2;
+  char *buffer;
+  if (!node)
+    {
+      buffer = (char *) malloc (1);
+      buffer[0] = 0;
+    }
+  else if (node->nodeInfo.isNterm == 1)
+    {
+      child0 = node_to_string (node->nterm.children[0]);
+      child1 = node_to_string (node->nterm.children[1]);
+      child2 = node_to_string (node->nterm.children[2]);
+      buffer = (char *) malloc (strlen (node->nterm.form) + strlen (child0)
+                                + strlen (child1) + strlen (child2) + 1);
+      sprintf (buffer, node->nterm.form, child0, child1, child2);
+      free (child0);
+      free (child1);
+      free (child2);
+    }
+  else
+    buffer = strdup (node->term.text);
+  return buffer;
+}
+
+]]
+m4_bmatch([$2], [stmtMerge],
+[[static YYSTYPE
+stmtMerge (YYSTYPE x0, YYSTYPE x1)
+{
+  return new_nterm ("<OR>(%s,%s)", x0, x1, YY_NULLPTR);
+}
+]])
+)
+
+AT_DATA([test-input],
+[[
+
+z + q;
+
+T x;
+
+T x = y;
+
+x = y;
+
+T (x) + y;
+
+T (x);
+
+T (y) = z + q;
+
+T (y y) = z + q;
+
+z + q;
+
+@
+
+This is total garbage, but it should be ignored.
+]])
+
+AT_BISON_CHECK([-o types.c types.y], 0, [], ignore)
+AT_COMPILE([types])
+AT_BISON_OPTION_POPDEFS
+])
+
+m4_define([_AT_RESOLVED_GLR_OUTPUT],
+[[+(z,q)
+<declare>(T,x)
+<init-declare>(T,x,y)
+=(x,y)
++(<cast>(x,T),y)
+<declare>(T,x)
+<init-declare>(T,y,+(z,q))
+<error>
++(z,q)
+]])
+
+m4_define([_AT_RESOLVED_GLR_OUTPUT_WITH_LOC],
+[[3.0-3.5: +(z,q)
+5.0-5.3: <declare>(T,x)
+7.0-7.7: <init-declare>(T,x,y)
+9.0-9.5: =(x,y)
+11.0-11.9: +(<cast>(x,T),y)
+13.0-13.5: <declare>(T,x)
+15.0-15.13: <init-declare>(T,y,+(z,q))
+17.0-17.15: <error>
+19.0-19.5: +(z,q)
+]])
+
+m4_define([_AT_AMBIG_GLR_OUTPUT],
+[[+(z,q)
+<declare>(T,x)
+<init-declare>(T,x,y)
+=(x,y)
++(<cast>(x,T),y)
+<OR>(<declare>(T,x),<cast>(x,T))
+<OR>(<init-declare>(T,y,+(z,q)),=(<cast>(y,T),+(z,q)))
+<error>
++(z,q)
+]])
+
+m4_define([_AT_AMBIG_GLR_OUTPUT_WITH_LOC],
+[[3.0-3.5: +(z,q)
+5.0-5.3: <declare>(T,x)
+7.0-7.7: <init-declare>(T,x,y)
+9.0-9.5: =(x,y)
+11.0-11.9: +(<cast>(x,T),y)
+13.0-13.5: <OR>(<declare>(T,x),<cast>(x,T))
+15.0-15.13: <OR>(<init-declare>(T,y,+(z,q)),=(<cast>(y,T),+(z,q)))
+17.0-17.15: <error>
+19.0-19.5: +(z,q)
+]])
+
+m4_define([_AT_GLR_STDERR],
+[[syntax error
+]])
+
+m4_define([_AT_GLR_STDERR_WITH_LOC],
+[[17.5: syntax error
+]])
+
+m4_define([_AT_VERBOSE_GLR_STDERR],
+[[syntax error, unexpected ID, expecting '=' or '+' or ')'
+]])
+
+m4_define([_AT_VERBOSE_GLR_STDERR_WITH_LOC],
+[[17.5: syntax error, unexpected ID, expecting '=' or '+' or ')'
+]])
+
+## ---------------------------------------------------- ##
+## Compile the grammar described in the documentation.  ##
+## ---------------------------------------------------- ##
+
+AT_SETUP([GLR: Resolve ambiguity, impure, no locations])
+_AT_TEST_GLR_CXXTYPES([],
+                      [%dprec 1], [%dprec 2])
+AT_PARSER_CHECK([[./types test-input]], 0,
+                [_AT_RESOLVED_GLR_OUTPUT], [_AT_GLR_STDERR])
+AT_CLEANUP
+
+AT_SETUP([GLR: Resolve ambiguity, impure, locations])
+_AT_TEST_GLR_CXXTYPES([%locations],[%dprec 1],[%dprec 2])
+AT_PARSER_CHECK([[./types test-input]], 0,
+                [_AT_RESOLVED_GLR_OUTPUT_WITH_LOC], [_AT_GLR_STDERR_WITH_LOC])
+AT_CLEANUP
+
+AT_SETUP([GLR: Resolve ambiguity, pure, no locations])
+_AT_TEST_GLR_CXXTYPES([%define api.pure],
+                      [%dprec 1], [%dprec 2])
+AT_PARSER_CHECK([[./types test-input]], 0,
+                [_AT_RESOLVED_GLR_OUTPUT], [_AT_GLR_STDERR])
+AT_CLEANUP
+
+AT_SETUP([GLR: Resolve ambiguity, pure, locations])
+_AT_TEST_GLR_CXXTYPES([%define api.pure %locations],
+                      [%dprec 1], [%dprec 2])
+AT_PARSER_CHECK([[./types test-input]], 0,
+                [_AT_RESOLVED_GLR_OUTPUT_WITH_LOC], [_AT_GLR_STDERR_WITH_LOC])
+AT_CLEANUP
+
+AT_SETUP([GLR: Merge conflicting parses, impure, no locations])
+_AT_TEST_GLR_CXXTYPES([],
+                      [%merge <stmtMerge>], [%merge <stmtMerge>])
+AT_PARSER_CHECK([[./types test-input]], 0,
+                [_AT_AMBIG_GLR_OUTPUT], [_AT_GLR_STDERR])
+AT_CLEANUP
+
+AT_SETUP([GLR: Merge conflicting parses, impure, locations])
+_AT_TEST_GLR_CXXTYPES([%locations],
+                      [%merge <stmtMerge>], [%merge <stmtMerge>])
+AT_PARSER_CHECK([[./types test-input]], 0,
+                [_AT_AMBIG_GLR_OUTPUT_WITH_LOC], [_AT_GLR_STDERR_WITH_LOC])
+AT_CLEANUP
+
+AT_SETUP([GLR: Merge conflicting parses, pure, no locations])
+_AT_TEST_GLR_CXXTYPES([%define api.pure],
+                      [%merge <stmtMerge>], [%merge <stmtMerge>])
+AT_PARSER_CHECK([[./types test-input]], 0,
+                [_AT_AMBIG_GLR_OUTPUT], [_AT_GLR_STDERR])
+AT_CLEANUP
+AT_SETUP([GLR: Merge conflicting parses, pure, locations])
+_AT_TEST_GLR_CXXTYPES([%define api.pure %locations],
+                      [%merge <stmtMerge>],[%merge <stmtMerge>])
+AT_PARSER_CHECK([[./types test-input]], 0,
+                [_AT_AMBIG_GLR_OUTPUT_WITH_LOC], [_AT_GLR_STDERR_WITH_LOC])
+AT_CLEANUP
+
+AT_SETUP([GLR: Verbose messages, resolve ambiguity, impure, no locations])
+_AT_TEST_GLR_CXXTYPES([%error-verbose],
+                      [%merge <stmtMerge>], [%merge <stmtMerge>])
+AT_PARSER_CHECK([[./types test-input]], 0,
+                [_AT_AMBIG_GLR_OUTPUT], [_AT_VERBOSE_GLR_STDERR])
+AT_CLEANUP

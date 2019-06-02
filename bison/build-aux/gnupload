@@ -1,0 +1,440 @@
+#!/bin/sh
+# Sign files and upload them.
+
+scriptversion=2013-03-19.17; # UTC
+
+# Copyright (C) 2004-2015 Free Software Foundation, Inc.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3, or (at your option)
+# any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+# Originally written by Alexandre Duret-Lutz <adl@gnu.org>.
+# The master copy of this file is maintained in the gnulib Git repository.
+# Please send bug reports and feature requests to bug-gnulib@gnu.org.
+
+set -e
+
+GPG='gpg --batch --no-tty'
+conffile=.gnuploadrc
+to=
+dry_run=false
+replace=
+symlink_files=
+delete_files=
+delete_symlinks=
+collect_var=
+dbg=
+nl='
+'
+
+usage="Usage: $0 [OPTION]... [CMD] FILE... [[CMD] FILE...]
+
+Sign all FILES, and process them at the destinations specified with --to.
+If CMD is not given, it defaults to uploading.  See examples below.
+
+Commands:
+  --delete                 delete FILES from destination
+  --symlink                create symbolic links
+  --rmsymlink              remove symbolic links
+  --                       treat the remaining arguments as files to upload
+
+Options:
+  --to DEST                specify a destination DEST for FILES
+                           (multiple --to options are allowed)
+  --user NAME              sign with key NAME
+  --replace                allow replacements of existing files
+  --symlink-regex[=EXPR]   use sed script EXPR to compute symbolic link names
+  --dry-run                do nothing, show what would have been done
+                           (including the constructed directive file)
+  --version                output version information and exit
+  --help                   print this help text and exit
+
+If --symlink-regex is given without EXPR, then the link target name
+is created by replacing the version information with '-latest', e.g.:
+  foo-1.3.4.tar.gz -> foo-latest.tar.gz
+
+Recognized destinations are:
+  alpha.gnu.org:DIRECTORY
+  savannah.gnu.org:DIRECTORY
+  savannah.nongnu.org:DIRECTORY
+  ftp.gnu.org:DIRECTORY
+                           build directive files and upload files by FTP
+  download.gnu.org.ua:{alpha|ftp}/DIRECTORY
+                           build directive files and upload files by SFTP
+  [user@]host:DIRECTORY    upload files with scp
+
+Options and commands are applied in order.  If the file $conffile exists
+in the current working directory, its contents are prepended to the
+actual command line options.  Use this to keep your defaults.  Comments
+(#) and empty lines in $conffile are allowed.
+
+<http://www.gnu.org/prep/maintain/html_node/Automated-FTP-Uploads.html>
+gives some further background.
+
+Examples:
+1. Upload foobar-1.0.tar.gz to ftp.gnu.org:
+  gnupload --to ftp.gnu.org:foobar foobar-1.0.tar.gz
+
+2. Upload foobar-1.0.tar.gz and foobar-1.0.tar.xz to ftp.gnu.org:
+  gnupload --to ftp.gnu.org:foobar foobar-1.0.tar.gz foobar-1.0.tar.xz
+
+3. Same as above, and also create symbolic links to foobar-latest.tar.*:
+  gnupload --to ftp.gnu.org:foobar \\
+           --symlink-regex \\
+           foobar-1.0.tar.gz foobar-1.0.tar.xz
+
+4. Upload foobar-0.9.90.tar.gz to two sites:
+  gnupload --to alpha.gnu.org:foobar \\
+           --to sources.redhat.com:~ftp/pub/foobar \\
+           foobar-0.9.90.tar.gz
+
+5. Delete oopsbar-0.9.91.tar.gz and upload foobar-0.9.91.tar.gz
+   (the -- terminates the list of files to delete):
+  gnupload --to alpha.gnu.org:foobar \\
+           --to sources.redhat.com:~ftp/pub/foobar \\
+           --delete oopsbar-0.9.91.tar.gz \\
+           -- foobar-0.9.91.tar.gz
+
+gnupload executes a program ncftpput to do the transfers; if you don't
+happen to have an ncftp package installed, the ncftpput-ftp script in
+the build-aux/ directory of the gnulib package
+(http://savannah.gnu.org/projects/gnulib) may serve as a replacement.
+
+Send patches and bug reports to <bug-gnulib@gnu.org>."
+
+# Read local configuration file
+if test -r "$conffile"; then
+  echo "$0: Reading configuration file $conffile"
+  conf=`sed 's/#.*$//;/^$/d' "$conffile" | tr "\015$nl" '  '`
+  eval set x "$conf \"\$@\""
+  shift
+fi
+
+while test -n "$1"; do
+  case $1 in
+  -*)
+    collect_var=
+    case $1 in
+    --help)
+      echo "$usage"
+      exit $?
+      ;;
+    --to)
+      if test -z "$2"; then
+        echo "$0: Missing argument for --to" 1>&2
+        exit 1
+      elif echo "$2" | grep 'ftp-upload\.gnu\.org' >/dev/null; then
+        echo "$0: Use ftp.gnu.org:PKGNAME or alpha.gnu.org:PKGNAME" >&2
+        echo "$0: for the destination, not ftp-upload.gnu.org (which" >&2
+        echo "$0:  is used for direct ftp uploads, not with gnupload)." >&2
+        echo "$0: See --help and its examples if need be." >&2
+        exit 1
+      else
+        to="$to $2"
+        shift
+      fi
+      ;;
+    --user)
+      if test -z "$2"; then
+        echo "$0: Missing argument for --user" 1>&2
+        exit 1
+      else
+        GPG="$GPG --local-user $2"
+        shift
+      fi
+      ;;
+    --delete)
+      collect_var=delete_files
+      ;;
+    --replace)
+      replace="replace: true"
+      ;;
+    --rmsymlink)
+      collect_var=delete_symlinks
+      ;;
+    --symlink-regex=*)
+      symlink_expr=`expr "$1" : '[^=]*=\(.*\)'`
+      ;;
+    --symlink-regex)
+      symlink_expr='s|-[0-9][0-9\.]*\(-[0-9][0-9]*\)\{0,1\}\.|-latest.|'
+      ;;
+    --symlink)
+      collect_var=symlink_files
+      ;;
+    --dry-run|-n)
+      dry_run=:
+      ;;
+    --version)
+      echo "gnupload $scriptversion"
+      exit $?
+      ;;
+    --)
+      shift
+      break
+      ;;
+    -*)
+      echo "$0: Unknown option '$1', try '$0 --help'" 1>&2
+      exit 1
+      ;;
+    esac
+    ;;
+  *)
+    if test -z "$collect_var"; then
+      break
+    else
+      eval "$collect_var=\"\$$collect_var $1\""
+    fi
+    ;;
+  esac
+  shift
+done
+
+dprint()
+{
+  echo "Running $* ..."
+}
+
+if $dry_run; then
+  dbg=dprint
+fi
+
+if test -z "$to"; then
+  echo "$0: Missing destination sites" >&2
+  exit 1
+fi
+
+if test -n "$symlink_files"; then
+  x=`echo "$symlink_files" | sed 's/[^ ]//g;s/  //g'`
+  if test -n "$x"; then
+    echo "$0: Odd number of symlink arguments" >&2
+    exit 1
+  fi
+fi
+
+if test $# = 0; then
+  if test -z "${symlink_files}${delete_files}${delete_symlinks}"; then
+    echo "$0: No file to upload" 1>&2
+    exit 1
+  fi
+else
+  # Make sure all files exist.  We don't want to ask
+  # for the passphrase if the script will fail.
+  for file
+  do
+    if test ! -f $file; then
+      echo "$0: Cannot find '$file'" 1>&2
+      exit 1
+    elif test -n "$symlink_expr"; then
+      linkname=`echo $file | sed "$symlink_expr"`
+      if test -z "$linkname"; then
+        echo "$0: symlink expression produces empty results" >&2
+        exit 1
+      elif test "$linkname" = $file; then
+        echo "$0: symlink expression does not alter file name" >&2
+        exit 1
+      fi
+    fi
+  done
+fi
+
+# Make sure passphrase is not exported in the environment.
+unset passphrase
+unset passphrase_fd_0
+GNUPGHOME=${GNUPGHOME:-$HOME/.gnupg}
+
+# Reset PATH to be sure that echo is a built-in.  We will later use
+# 'echo $passphrase' to output the passphrase, so it is important that
+# it is a built-in (third-party programs tend to appear in 'ps'
+# listings with their arguments...).
+# Remember this script runs with 'set -e', so if echo is not built-in
+# it will exit now.
+if $dry_run || grep -q "^use-agent" $GNUPGHOME/gpg.conf; then :; else
+  PATH=/empty echo -n "Enter GPG passphrase: "
+  stty -echo
+  read -r passphrase
+  stty echo
+  echo
+  passphrase_fd_0="--passphrase-fd 0"
+fi
+
+if test $# -ne 0; then
+  for file
+  do
+    echo "Signing $file ..."
+    rm -f $file.sig
+    echo "$passphrase" | $dbg $GPG $passphrase_fd_0 -ba -o $file.sig $file
+  done
+fi
+
+
+# mkdirective DESTDIR BASE FILE STMT
+# Arguments: See upload, below
+mkdirective ()
+{
+  stmt="$4"
+  if test -n "$3"; then
+    stmt="
+filename: $3$stmt"
+  fi
+
+  cat >${2}.directive<<EOF
+version: 1.2
+directory: $1
+comment: gnupload v. $scriptversion$stmt
+EOF
+  if $dry_run; then
+    echo "File ${2}.directive:"
+    cat ${2}.directive
+    echo "File ${2}.directive:" | sed 's/./-/g'
+  fi
+}
+
+mksymlink ()
+{
+  while test $# -ne 0
+  do
+    echo "symlink: $1 $2"
+    shift
+    shift
+  done
+}
+
+# upload DEST DESTDIR BASE FILE STMT FILES
+# Arguments:
+#  DEST     Destination site;
+#  DESTDIR  Destination directory;
+#  BASE     Base name for the directive file;
+#  FILE     Name of the file to distribute (may be empty);
+#  STMT     Additional statements for the directive file;
+#  FILES    List of files to upload.
+upload ()
+{
+  dest=$1
+  destdir=$2
+  base=$3
+  file=$4
+  stmt=$5
+  files=$6
+
+  rm -f $base.directive $base.directive.asc
+  case $dest in
+    alpha.gnu.org:*)
+      mkdirective "$destdir" "$base" "$file" "$stmt"
+      echo "$passphrase" | $dbg $GPG $passphrase_fd_0 --clearsign $base.directive
+      $dbg ncftpput ftp-upload.gnu.org /incoming/alpha $files $base.directive.asc
+      ;;
+    ftp.gnu.org:*)
+      mkdirective "$destdir" "$base" "$file" "$stmt"
+      echo "$passphrase" | $dbg $GPG $passphrase_fd_0 --clearsign $base.directive
+      $dbg ncftpput ftp-upload.gnu.org /incoming/ftp $files $base.directive.asc
+      ;;
+    savannah.gnu.org:*)
+      if test -z "$files"; then
+        echo "$0: warning: standalone directives not applicable for $dest" >&2
+      fi
+      $dbg ncftpput savannah.gnu.org /incoming/savannah/$destdir $files
+      ;;
+    savannah.nongnu.org:*)
+      if test -z "$files"; then
+        echo "$0: warning: standalone directives not applicable for $dest" >&2
+      fi
+      $dbg ncftpput savannah.nongnu.org /incoming/savannah/$destdir $files
+      ;;
+    download.gnu.org.ua:alpha/*|download.gnu.org.ua:ftp/*)
+      destdir_p1=`echo "$destdir" | sed 's,^[^/]*/,,'`
+      destdir_topdir=`echo "$destdir" | sed 's,/.*,,'`
+      mkdirective "$destdir_p1" "$base" "$file" "$stmt"
+      echo "$passphrase" | $dbg $GPG $passphrase_fd_0 --clearsign $base.directive
+      for f in $files $base.directive.asc
+      do
+        echo put $f
+      done | $dbg sftp -b - puszcza.gnu.org.ua:/incoming/$destdir_topdir
+      ;;
+    /*)
+      dest_host=`echo "$dest" | sed 's,:.*,,'`
+      mkdirective "$destdir" "$base" "$file" "$stmt"
+      echo "$passphrase" | $dbg $GPG $passphrase_fd_0 --clearsign $base.directive
+      $dbg cp $files $base.directive.asc $dest_host
+      ;;
+    *)
+      if test -z "$files"; then
+        echo "$0: warning: standalone directives not applicable for $dest" >&2
+      fi
+      $dbg scp $files $dest
+      ;;
+  esac
+  rm -f $base.directive $base.directive.asc
+}
+
+#####
+# Process any standalone directives
+stmt=
+if test -n "$symlink_files"; then
+  stmt="$stmt
+`mksymlink $symlink_files`"
+fi
+
+for file in $delete_files
+do
+  stmt="$stmt
+archive: $file"
+done
+
+for file in $delete_symlinks
+do
+  stmt="$stmt
+rmsymlink: $file"
+done
+
+if test -n "$stmt"; then
+  for dest in $to
+  do
+    destdir=`echo $dest | sed 's/[^:]*://'`
+    upload "$dest" "$destdir" "`hostname`-$$" "" "$stmt"
+  done
+fi
+
+# Process actual uploads
+for dest in $to
+do
+  for file
+  do
+    echo "Uploading $file to $dest ..."
+    stmt=
+    #
+    # allowing file replacement is all or nothing.
+    if test -n "$replace"; then stmt="$stmt
+$replace"
+    fi
+    #
+    files="$file $file.sig"
+    destdir=`echo $dest | sed 's/[^:]*://'`
+    if test -n "$symlink_expr"; then
+      linkname=`echo $file | sed "$symlink_expr"`
+      stmt="$stmt
+symlink: $file $linkname
+symlink: $file.sig $linkname.sig"
+    fi
+    upload "$dest" "$destdir" "$file" "$file" "$stmt" "$files"
+  done
+done
+
+exit 0
+
+# Local variables:
+# eval: (add-hook 'write-file-hooks 'time-stamp)
+# time-stamp-start: "scriptversion="
+# time-stamp-format: "%:y-%02m-%02d.%02H"
+# time-stamp-time-zone: "UTC"
+# time-stamp-end: "; # UTC"
+# End:

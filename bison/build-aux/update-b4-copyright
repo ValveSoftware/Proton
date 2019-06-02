@@ -1,0 +1,152 @@
+#!/usr/bin/perl -0777 -pi
+
+# Update b4_copyright invocations or b4_copyright_years definitions to
+# include the current year.
+
+# Copyright (C) 2009-2015 Free Software Foundation, Inc.
+
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3, or (at your option)
+# any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+use strict;
+use warnings;
+
+my $margin = 72;
+
+my $this_year = $ENV{UPDATE_COPYRIGHT_YEAR};
+if (!$this_year || $this_year !~ m/^\d{4}$/)
+  {
+    my ($sec, $min, $hour, $mday, $month, $year) = localtime (time ());
+    $this_year = $year + 1900;
+  }
+my $old_re = <<'EOF'
+  (
+    (?:^|\n)
+    #BEFORE
+    (?:
+      b4_copyright\(\[[^][]*]
+      | m4_(?:push|pop)def\(\[b4_copyright_years]
+    )
+    #AFTER
+  )
+  (?:
+    ,\s*
+    (
+      \[\s* (?:\d{4}(?:,\s*|-))* (\d{4}) \s*]
+    )
+  )?
+  \)
+EOF
+  ;
+
+while (/($old_re)/gx)
+  {
+    my $start = pos() - length ($1);
+    my $b4_copyright_line = $2;
+    my $year_lines = $3;
+    my $final_year = $4;
+    $year_lines .= ')';
+
+    # If there was a second argument, it contains years, so update them.
+    if ($final_year)
+      {
+        $b4_copyright_line .= ',';
+        if ($final_year != $this_year)
+          {
+            # Update the year.
+            $year_lines =~ s/$final_year/$final_year, $this_year/;
+          }
+
+        # Normalize all whitespace.
+        $year_lines =~ s/\s+/ /g;
+
+        # Put spaces after commas.
+        $year_lines =~ s/, ?/, /g;
+
+        # Compress to intervals.
+        $year_lines =~
+          s/
+            (\d{4})
+            (?:
+              (,\ |-)
+              ((??{
+                if    ($2 eq '-') { '\d{4}'; }
+                elsif (!$3)       { $1 + 1;  }
+                else              { $3 + 1;  }
+              }))
+            )+
+          /$1-$3/gx;
+
+        # Format within margin.
+        my $year_lines_new;
+        my $indent = index ($b4_copyright_line, '[');
+        --$indent if ($b4_copyright_line =~ m/^\n/);
+        while (length $year_lines)
+          {
+            my $text_margin = $margin - $indent;
+            if (($year_lines =~ s/^(.{1,$text_margin})(?: |$)//)
+                || ($year_lines =~ s/^([\S]+)(?: |$)//))
+              {
+                my $line = "\n" . (' 'x$indent) . $1;
+                ++$indent if (!$year_lines_new);
+                $year_lines_new .= $line;
+              }
+            else
+              {
+                # Should be unreachable, but we don't want an infinite
+                # loop if it can be reached.
+                die;
+              }
+          }
+
+        # Replace the old invocation.  Should never die.
+        die if (!s/$old_re\G/$b4_copyright_line$year_lines_new/x);
+
+        # Prepare for the next search.
+        pos () = $start + length ("$b4_copyright_line$year_lines_new");
+      }
+  }
+
+while (/(\bb4_copyright\()/g)
+  {
+    my $start = pos () - length ($1);
+    my $end = pos ();
+    my $re = $old_re;
+    pos () = $start;
+    $re =~ s/\#BEFORE/\\G/;
+    if (!/$re/x)
+      {
+        my $line = (substr ($_, 0, $start) =~ s/\n/\n/g) + 1;
+        print STDERR
+          "$ARGV:$line: warning: failed to update a b4_copyright\n";
+      }
+    pos () = $end;
+  }
+
+while (/(\[b4_copyright_years])/g)
+  {
+    my $start = pos () - length ($1);
+    my $end = pos ();
+    my $re = $old_re;
+    $re =~ s/\#AFTER/\\G/;
+    if (!/$re/x)
+      {
+        # The substr operation blows away pos (), so restoring pos ()
+        # at the end is necessary.
+        my $line = (substr ($_, 0, $start) =~ s/\n/\n/g) + 1;
+        print STDERR
+          "$ARGV:$line: warning: failed to update a"
+          . " b4_copyright_years\n";
+      }
+    pos () = $end;
+  }

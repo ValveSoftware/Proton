@@ -1,0 +1,33 @@
+--- a/dlls/kernel32/kernel32.spec	
++++ a/dlls/kernel32/kernel32.spec	
+@@ -858,8 +858,8 @@ 
+ @ stdcall GetThreadPriorityBoost(long ptr)
+ @ stdcall GetThreadSelectorEntry(long long ptr)
+ @ stdcall GetThreadTimes(long ptr ptr ptr ptr)
+-@ stdcall GetTickCount() ntdll.NtGetTickCount
+-@ stdcall -ret64 GetTickCount64() ntdll.NtGetTickCount
++@ stdcall GetTickCount()
++@ stdcall -ret64 GetTickCount64()
+ @ stdcall GetTimeFormatA(long long ptr str ptr long)
+ @ stdcall GetTimeFormatEx(wstr long ptr wstr ptr long)
+ @ stdcall GetTimeFormatW(long long ptr wstr ptr long)
+--- a/dlls/kernel32/kernel_main.c	
++++ a/dlls/kernel32/kernel_main.c	
+@@ -178,6 +178,16 @@ INT WINAPI MulDiv( INT nMultiplicand, INT nMultiplier, INT nDivisor)
+     return ret;
+ }
+ 
++ULONGLONG WINAPI DECLSPEC_HOTPATCH GetTickCount64(void)
++{
++    return NtGetTickCount();
++}
++
++DWORD WINAPI DECLSPEC_HOTPATCH GetTickCount(void)
++{
++    return NtGetTickCount();
++}
++
+ /******************************************************************************
+  *           GetSystemRegistryQuota       (KERNEL32.@)
+  */
+ 

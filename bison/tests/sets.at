@@ -1,0 +1,302 @@
+# Exercising Bison Grammar Sets.                      -*- Autotest -*-
+
+# Copyright (C) 2001-2002, 2005, 2007, 2009-2015 Free Software
+# Foundation, Inc.
+
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+
+# AT_EXTRACT_SETS(INPUT, OUTPUT)
+# ------------------------------
+# Extract the information about the grammar sets from a bison
+# trace output (INPUT), and save it in OUTPUT.
+# And remember, there is no alternation in portable sed.
+m4_define([AT_EXTRACT_SETS],
+[AT_DATA([extract.sed],
+[[#n
+/^NULLABLE$/ {
+   :null
+   p
+   n
+   /^ *$/ !b null
+}
+/^FIRSTS$/ {
+   :firsts
+   p
+   n
+   /^ *$/ !b firsts
+}
+/^FDERIVES$/ {
+   :fderiv
+   p
+   n
+   /^ *$/ !b fderiv
+}
+/^DERIVES$/ {
+   :deriv
+   p
+   n
+   /^ *$/ !b deriv
+}
+]])
+AT_CHECK([sed -f extract.sed $1], 0, [stdout])
+AT_CHECK([mv stdout $2])
+])
+
+
+
+AT_BANNER([[Grammar Sets (Firsts etc.).]])
+
+
+## ---------- ##
+## Nullable.  ##
+## ---------- ##
+
+AT_SETUP([Nullable])
+
+# At some point, nullable had been smoking grass, and managed to say:
+#
+# Entering set_nullable
+# NULLABLE
+#         'e': yes
+#         (null): no
+# ...
+
+AT_DATA([[input.y]],
+[[%%
+e: 'e' | /* Nothing */;
+]])
+
+AT_BISON_CHECK([[--trace=sets input.y]], [], [], [stderr])
+AT_EXTRACT_SETS([stderr], [sets])
+AT_CHECK([[cat sets]], [],
+[[DERIVES
+  $accept derives
+      0  e $end
+  e derives
+      1  'e'
+      2  %empty
+NULLABLE
+  $accept: no
+  e: yes
+FIRSTS
+  $accept firsts
+    $accept
+    e
+  e firsts
+    e
+FDERIVES
+  $accept derives
+      0  e $end
+      1  'e'
+      2  %empty
+  e derives
+      1  'e'
+      2  %empty
+]])
+
+AT_CLEANUP
+
+
+## ---------------- ##
+## Broken Closure.  ##
+## ---------------- ##
+
+# TC was once broken during a massive 'simplification' of the code.
+# It resulted in bison dumping core on the following grammar (the
+# computation of FIRSTS uses TC).  It managed to produce a pretty
+# exotic closure:
+#
+# TC: Input
+#
+#    01234567
+#   +--------+
+#  0| 1      |
+#  1|  1     |
+#  2|   1    |
+#  3|    1   |
+#  4|     1  |
+#  5|      1 |
+#  6|       1|
+#  7|        |
+#   +--------+
+#
+# TC: Output
+#
+#    01234567
+#   +--------+
+#  0| 1      |
+#  1| 111    |
+#  2| 111    |
+#  3| 1111   |
+#  4| 111 1  |
+#  5| 111  1 |
+#  6| 111   1|
+#  7| 111    |
+#   +--------+
+#
+# instead of that below.
+
+AT_SETUP([Broken Closure])
+
+AT_DATA([input.y],
+[[%%
+a: b;
+b: c;
+c: d;
+d: e;
+e: f;
+f: g;
+g: h;
+h: 'h';
+]])
+
+AT_BISON_CHECK([[--trace=sets input.y]], [], [], [stderr])
+
+AT_CHECK([[sed -n 's/[   ]*$//;/^RTC: Firsts Output BEGIN/,/^RTC: Firsts Output END/p' stderr]], [],
+[[RTC: Firsts Output BEGIN
+
+   012345678
+  .---------.
+ 0|111111111|
+ 1| 11111111|
+ 2|  1111111|
+ 3|   111111|
+ 4|    11111|
+ 5|     1111|
+ 6|      111|
+ 7|       11|
+ 8|        1|
+  `---------'
+RTC: Firsts Output END
+]])
+
+AT_CLEANUP
+
+
+
+## -------- ##
+## Firsts.  ##
+## -------- ##
+
+AT_SETUP([Firsts])
+
+AT_DATA([input.y],
+[[%nonassoc '<' '>'
+%left '+' '-'
+%right '^' '='
+%%
+exp:
+   exp '<' exp
+ | exp '>' exp
+ | exp '+' exp
+ | exp '-' exp
+ | exp '^' exp
+ | exp '=' exp
+ | "exp"
+ ;
+]])
+
+AT_BISON_CHECK([[--trace=sets input.y]], [], [], [stderr])
+AT_EXTRACT_SETS([stderr], [sets])
+AT_CHECK([[cat sets]], [],
+[[DERIVES
+  $accept derives
+      0  exp $end
+  exp derives
+      1  exp '<' exp
+      2  exp '>' exp
+      3  exp '+' exp
+      4  exp '-' exp
+      5  exp '^' exp
+      6  exp '=' exp
+      7  "exp"
+NULLABLE
+  $accept: no
+  exp: no
+FIRSTS
+  $accept firsts
+    $accept
+    exp
+  exp firsts
+    exp
+FDERIVES
+  $accept derives
+      0  exp $end
+      1  exp '<' exp
+      2  exp '>' exp
+      3  exp '+' exp
+      4  exp '-' exp
+      5  exp '^' exp
+      6  exp '=' exp
+      7  "exp"
+  exp derives
+      1  exp '<' exp
+      2  exp '>' exp
+      3  exp '+' exp
+      4  exp '-' exp
+      5  exp '^' exp
+      6  exp '=' exp
+      7  "exp"
+]])
+
+AT_CLEANUP
+
+
+
+
+## -------- ##
+## Accept.  ##
+## -------- ##
+
+# In some weird cases Bison could compute an incorrect final state
+# number.  This happens only if the $end token is used in the user
+# grammar, which is a very suspicious accidental feature introduced as
+# a side effect of allowing the user to name $end using '%token END 0
+# "end of file"'.
+
+AT_SETUP([Accept])
+
+AT_DATA([input.y],
+[[%token END 0
+%%
+input:
+  'a'
+| '(' input ')'
+| '(' error END
+;
+]])
+
+AT_BISON_CHECK([[-v -o input.c input.y]])
+
+# Get the final state in the parser.
+AT_CHECK([[sed -n 's/.*define YYFINAL *\([0-9][0-9]*\)/final state \1/p' input.c]],
+         0, [stdout])
+mv stdout expout
+
+# Get the final state in the report, from the "accept" action..
+AT_CHECK([sed -n '
+           /^State \(.*\)/{
+             s//final state \1/
+             x
+           }
+           / accept/{
+             x
+             p
+             q
+           }
+        ' input.output],
+        0, [expout])
+
+AT_CLEANUP
