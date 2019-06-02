@@ -1,3 +1,223 @@
+#if defined(SDKVER_144) || !defined(__cplusplus)
+#pragma pack( push, 8 )
+struct winSteamPartyBeaconLocation_t_144 {
+    ESteamPartyBeaconLocationType m_eType;
+    uint64 m_ulLocationID;
+}  __attribute__ ((ms_struct));
+#pragma pack( pop )
+typedef struct winSteamPartyBeaconLocation_t_144 winSteamPartyBeaconLocation_t_144;
+struct SteamPartyBeaconLocation_t;
+extern void win_to_lin_struct_SteamPartyBeaconLocation_t_144(const struct winSteamPartyBeaconLocation_t_144 *w, struct SteamPartyBeaconLocation_t *l);
+extern void lin_to_win_struct_SteamPartyBeaconLocation_t_144(const struct SteamPartyBeaconLocation_t *l, struct winSteamPartyBeaconLocation_t_144 *w);
+#endif
+
+#if defined(SDKVER_144) || !defined(__cplusplus)
+#pragma pack( push, 8 )
+struct winLeaderboardEntry_t_144 {
+    CSteamID m_steamIDUser;
+    int32 m_nGlobalRank;
+    int32 m_nScore;
+    int32 m_cDetails;
+    UGCHandle_t m_hUGC;
+}  __attribute__ ((ms_struct));
+#pragma pack( pop )
+typedef struct winLeaderboardEntry_t_144 winLeaderboardEntry_t_144;
+struct LeaderboardEntry_t;
+extern void win_to_lin_struct_LeaderboardEntry_t_144(const struct winLeaderboardEntry_t_144 *w, struct LeaderboardEntry_t *l);
+extern void lin_to_win_struct_LeaderboardEntry_t_144(const struct LeaderboardEntry_t *l, struct winLeaderboardEntry_t_144 *w);
+#endif
+
+#if defined(SDKVER_144) || !defined(__cplusplus)
+#pragma pack( push, 8 )
+struct winSteamUGCDetails_t_144 {
+    PublishedFileId_t m_nPublishedFileId;
+    EResult m_eResult;
+    EWorkshopFileType m_eFileType;
+    AppId_t m_nCreatorAppID;
+    AppId_t m_nConsumerAppID;
+    char m_rgchTitle[129];
+    char m_rgchDescription[8000];
+    uint64 m_ulSteamIDOwner;
+    uint32 m_rtimeCreated;
+    uint32 m_rtimeUpdated;
+    uint32 m_rtimeAddedToUserList;
+    ERemoteStoragePublishedFileVisibility m_eVisibility;
+    bool m_bBanned;
+    bool m_bAcceptedForUse;
+    bool m_bTagsTruncated;
+    char m_rgchTags[1025];
+    UGCHandle_t m_hFile;
+    UGCHandle_t m_hPreviewFile;
+    char m_pchFileName[260];
+    int32 m_nFileSize;
+    int32 m_nPreviewFileSize;
+    char m_rgchURL[256];
+    uint32 m_unVotesUp;
+    uint32 m_unVotesDown;
+    float m_flScore;
+    uint32 m_unNumChildren;
+}  __attribute__ ((ms_struct));
+#pragma pack( pop )
+typedef struct winSteamUGCDetails_t_144 winSteamUGCDetails_t_144;
+struct SteamUGCDetails_t;
+extern void win_to_lin_struct_SteamUGCDetails_t_144(const struct winSteamUGCDetails_t_144 *w, struct SteamUGCDetails_t *l);
+extern void lin_to_win_struct_SteamUGCDetails_t_144(const struct SteamUGCDetails_t *l, struct winSteamUGCDetails_t_144 *w);
+#endif
+
+#if defined(SDKVER_144) || !defined(__cplusplus)
+#pragma pack( push, 8 )
+struct winSteamNetworkingMessage_t_144 {
+    void * m_pData;
+    uint32 m_cbSize;
+    HSteamNetConnection m_conn;
+    SteamNetworkingIdentity m_sender;
+    int64 m_nConnUserData;
+    SteamNetworkingMicroseconds m_usecTimeReceived;
+    int64 m_nMessageNumber;
+    void *m_pfnFreeData; /*fn pointer*/
+    void *m_pfnRelease; /*fn pointer*/
+    int m_nChannel;
+    int m___nPadDummy;
+}  __attribute__ ((ms_struct));
+#pragma pack( pop )
+typedef struct winSteamNetworkingMessage_t_144 winSteamNetworkingMessage_t_144;
+struct SteamNetworkingMessage_t;
+extern void win_to_lin_struct_SteamNetworkingMessage_t_144(struct winSteamNetworkingMessage_t_144 **w, struct SteamNetworkingMessage_t **l);
+extern void lin_to_win_struct_SteamNetworkingMessage_t_144(int retval, struct SteamNetworkingMessage_t **l, struct winSteamNetworkingMessage_t_144 **w);
+#endif
+
+#if defined(SDKVER_143y) || !defined(__cplusplus)
+#pragma pack( push, 8 )
+struct winSteamPartyBeaconLocation_t_143y {
+    ESteamPartyBeaconLocationType m_eType;
+    uint64 m_ulLocationID;
+}  __attribute__ ((ms_struct));
+#pragma pack( pop )
+typedef struct winSteamPartyBeaconLocation_t_143y winSteamPartyBeaconLocation_t_143y;
+struct SteamPartyBeaconLocation_t;
+extern void win_to_lin_struct_SteamPartyBeaconLocation_t_143y(const struct winSteamPartyBeaconLocation_t_143y *w, struct SteamPartyBeaconLocation_t *l);
+extern void lin_to_win_struct_SteamPartyBeaconLocation_t_143y(const struct SteamPartyBeaconLocation_t *l, struct winSteamPartyBeaconLocation_t_143y *w);
+#endif
+
+#if defined(SDKVER_143y) || !defined(__cplusplus)
+#pragma pack( push, 8 )
+struct winLeaderboardEntry_t_143y {
+    CSteamID m_steamIDUser;
+    int32 m_nGlobalRank;
+    int32 m_nScore;
+    int32 m_cDetails;
+    UGCHandle_t m_hUGC;
+}  __attribute__ ((ms_struct));
+#pragma pack( pop )
+typedef struct winLeaderboardEntry_t_143y winLeaderboardEntry_t_143y;
+struct LeaderboardEntry_t;
+extern void win_to_lin_struct_LeaderboardEntry_t_143y(const struct winLeaderboardEntry_t_143y *w, struct LeaderboardEntry_t *l);
+extern void lin_to_win_struct_LeaderboardEntry_t_143y(const struct LeaderboardEntry_t *l, struct winLeaderboardEntry_t_143y *w);
+#endif
+
+#if defined(SDKVER_143y) || !defined(__cplusplus)
+#pragma pack( push, 8 )
+struct winSteamUGCDetails_t_143y {
+    PublishedFileId_t m_nPublishedFileId;
+    EResult m_eResult;
+    EWorkshopFileType m_eFileType;
+    AppId_t m_nCreatorAppID;
+    AppId_t m_nConsumerAppID;
+    char m_rgchTitle[129];
+    char m_rgchDescription[8000];
+    uint64 m_ulSteamIDOwner;
+    uint32 m_rtimeCreated;
+    uint32 m_rtimeUpdated;
+    uint32 m_rtimeAddedToUserList;
+    ERemoteStoragePublishedFileVisibility m_eVisibility;
+    bool m_bBanned;
+    bool m_bAcceptedForUse;
+    bool m_bTagsTruncated;
+    char m_rgchTags[1025];
+    UGCHandle_t m_hFile;
+    UGCHandle_t m_hPreviewFile;
+    char m_pchFileName[260];
+    int32 m_nFileSize;
+    int32 m_nPreviewFileSize;
+    char m_rgchURL[256];
+    uint32 m_unVotesUp;
+    uint32 m_unVotesDown;
+    float m_flScore;
+    uint32 m_unNumChildren;
+}  __attribute__ ((ms_struct));
+#pragma pack( pop )
+typedef struct winSteamUGCDetails_t_143y winSteamUGCDetails_t_143y;
+struct SteamUGCDetails_t;
+extern void win_to_lin_struct_SteamUGCDetails_t_143y(const struct winSteamUGCDetails_t_143y *w, struct SteamUGCDetails_t *l);
+extern void lin_to_win_struct_SteamUGCDetails_t_143y(const struct SteamUGCDetails_t *l, struct winSteamUGCDetails_t_143y *w);
+#endif
+
+#if defined(SDKVER_143x) || !defined(__cplusplus)
+#pragma pack( push, 8 )
+struct winSteamPartyBeaconLocation_t_143x {
+    ESteamPartyBeaconLocationType m_eType;
+    uint64 m_ulLocationID;
+}  __attribute__ ((ms_struct));
+#pragma pack( pop )
+typedef struct winSteamPartyBeaconLocation_t_143x winSteamPartyBeaconLocation_t_143x;
+struct SteamPartyBeaconLocation_t;
+extern void win_to_lin_struct_SteamPartyBeaconLocation_t_143x(const struct winSteamPartyBeaconLocation_t_143x *w, struct SteamPartyBeaconLocation_t *l);
+extern void lin_to_win_struct_SteamPartyBeaconLocation_t_143x(const struct SteamPartyBeaconLocation_t *l, struct winSteamPartyBeaconLocation_t_143x *w);
+#endif
+
+#if defined(SDKVER_143x) || !defined(__cplusplus)
+#pragma pack( push, 8 )
+struct winLeaderboardEntry_t_143x {
+    CSteamID m_steamIDUser;
+    int32 m_nGlobalRank;
+    int32 m_nScore;
+    int32 m_cDetails;
+    UGCHandle_t m_hUGC;
+}  __attribute__ ((ms_struct));
+#pragma pack( pop )
+typedef struct winLeaderboardEntry_t_143x winLeaderboardEntry_t_143x;
+struct LeaderboardEntry_t;
+extern void win_to_lin_struct_LeaderboardEntry_t_143x(const struct winLeaderboardEntry_t_143x *w, struct LeaderboardEntry_t *l);
+extern void lin_to_win_struct_LeaderboardEntry_t_143x(const struct LeaderboardEntry_t *l, struct winLeaderboardEntry_t_143x *w);
+#endif
+
+#if defined(SDKVER_143x) || !defined(__cplusplus)
+#pragma pack( push, 8 )
+struct winSteamUGCDetails_t_143x {
+    PublishedFileId_t m_nPublishedFileId;
+    EResult m_eResult;
+    EWorkshopFileType m_eFileType;
+    AppId_t m_nCreatorAppID;
+    AppId_t m_nConsumerAppID;
+    char m_rgchTitle[129];
+    char m_rgchDescription[8000];
+    uint64 m_ulSteamIDOwner;
+    uint32 m_rtimeCreated;
+    uint32 m_rtimeUpdated;
+    uint32 m_rtimeAddedToUserList;
+    ERemoteStoragePublishedFileVisibility m_eVisibility;
+    bool m_bBanned;
+    bool m_bAcceptedForUse;
+    bool m_bTagsTruncated;
+    char m_rgchTags[1025];
+    UGCHandle_t m_hFile;
+    UGCHandle_t m_hPreviewFile;
+    char m_pchFileName[260];
+    int32 m_nFileSize;
+    int32 m_nPreviewFileSize;
+    char m_rgchURL[256];
+    uint32 m_unVotesUp;
+    uint32 m_unVotesDown;
+    float m_flScore;
+    uint32 m_unNumChildren;
+}  __attribute__ ((ms_struct));
+#pragma pack( pop )
+typedef struct winSteamUGCDetails_t_143x winSteamUGCDetails_t_143x;
+struct SteamUGCDetails_t;
+extern void win_to_lin_struct_SteamUGCDetails_t_143x(const struct winSteamUGCDetails_t_143x *w, struct SteamUGCDetails_t *l);
+extern void lin_to_win_struct_SteamUGCDetails_t_143x(const struct SteamUGCDetails_t *l, struct winSteamUGCDetails_t_143x *w);
+#endif
+
 #if defined(SDKVER_143) || !defined(__cplusplus)
 #pragma pack( push, 8 )
 struct winSteamPartyBeaconLocation_t_143 {
@@ -1808,137 +2028,5 @@ typedef struct winLeaderboardEntry_t_111x winLeaderboardEntry_t_111x;
 struct LeaderboardEntry_t;
 extern void win_to_lin_struct_LeaderboardEntry_t_111x(const struct winLeaderboardEntry_t_111x *w, struct LeaderboardEntry_t *l);
 extern void lin_to_win_struct_LeaderboardEntry_t_111x(const struct LeaderboardEntry_t *l, struct winLeaderboardEntry_t_111x *w);
-#endif
-
-#if defined(SDKVER_next2) || !defined(__cplusplus)
-#pragma pack( push, 8 )
-struct winSteamPartyBeaconLocation_t_next2 {
-    ESteamPartyBeaconLocationType m_eType;
-    uint64 m_ulLocationID;
-}  __attribute__ ((ms_struct));
-#pragma pack( pop )
-typedef struct winSteamPartyBeaconLocation_t_next2 winSteamPartyBeaconLocation_t_next2;
-struct SteamPartyBeaconLocation_t;
-extern void win_to_lin_struct_SteamPartyBeaconLocation_t_next2(const struct winSteamPartyBeaconLocation_t_next2 *w, struct SteamPartyBeaconLocation_t *l);
-extern void lin_to_win_struct_SteamPartyBeaconLocation_t_next2(const struct SteamPartyBeaconLocation_t *l, struct winSteamPartyBeaconLocation_t_next2 *w);
-#endif
-
-#if defined(SDKVER_next2) || !defined(__cplusplus)
-#pragma pack( push, 8 )
-struct winLeaderboardEntry_t_next2 {
-    CSteamID m_steamIDUser;
-    int32 m_nGlobalRank;
-    int32 m_nScore;
-    int32 m_cDetails;
-    UGCHandle_t m_hUGC;
-}  __attribute__ ((ms_struct));
-#pragma pack( pop )
-typedef struct winLeaderboardEntry_t_next2 winLeaderboardEntry_t_next2;
-struct LeaderboardEntry_t;
-extern void win_to_lin_struct_LeaderboardEntry_t_next2(const struct winLeaderboardEntry_t_next2 *w, struct LeaderboardEntry_t *l);
-extern void lin_to_win_struct_LeaderboardEntry_t_next2(const struct LeaderboardEntry_t *l, struct winLeaderboardEntry_t_next2 *w);
-#endif
-
-#if defined(SDKVER_next2) || !defined(__cplusplus)
-#pragma pack( push, 8 )
-struct winSteamUGCDetails_t_next2 {
-    PublishedFileId_t m_nPublishedFileId;
-    EResult m_eResult;
-    EWorkshopFileType m_eFileType;
-    AppId_t m_nCreatorAppID;
-    AppId_t m_nConsumerAppID;
-    char m_rgchTitle[129];
-    char m_rgchDescription[8000];
-    uint64 m_ulSteamIDOwner;
-    uint32 m_rtimeCreated;
-    uint32 m_rtimeUpdated;
-    uint32 m_rtimeAddedToUserList;
-    ERemoteStoragePublishedFileVisibility m_eVisibility;
-    bool m_bBanned;
-    bool m_bAcceptedForUse;
-    bool m_bTagsTruncated;
-    char m_rgchTags[1025];
-    UGCHandle_t m_hFile;
-    UGCHandle_t m_hPreviewFile;
-    char m_pchFileName[260];
-    int32 m_nFileSize;
-    int32 m_nPreviewFileSize;
-    char m_rgchURL[256];
-    uint32 m_unVotesUp;
-    uint32 m_unVotesDown;
-    float m_flScore;
-    uint32 m_unNumChildren;
-}  __attribute__ ((ms_struct));
-#pragma pack( pop )
-typedef struct winSteamUGCDetails_t_next2 winSteamUGCDetails_t_next2;
-struct SteamUGCDetails_t;
-extern void win_to_lin_struct_SteamUGCDetails_t_next2(const struct winSteamUGCDetails_t_next2 *w, struct SteamUGCDetails_t *l);
-extern void lin_to_win_struct_SteamUGCDetails_t_next2(const struct SteamUGCDetails_t *l, struct winSteamUGCDetails_t_next2 *w);
-#endif
-
-#if defined(SDKVER_next) || !defined(__cplusplus)
-#pragma pack( push, 8 )
-struct winSteamPartyBeaconLocation_t_next {
-    ESteamPartyBeaconLocationType m_eType;
-    uint64 m_ulLocationID;
-}  __attribute__ ((ms_struct));
-#pragma pack( pop )
-typedef struct winSteamPartyBeaconLocation_t_next winSteamPartyBeaconLocation_t_next;
-struct SteamPartyBeaconLocation_t;
-extern void win_to_lin_struct_SteamPartyBeaconLocation_t_next(const struct winSteamPartyBeaconLocation_t_next *w, struct SteamPartyBeaconLocation_t *l);
-extern void lin_to_win_struct_SteamPartyBeaconLocation_t_next(const struct SteamPartyBeaconLocation_t *l, struct winSteamPartyBeaconLocation_t_next *w);
-#endif
-
-#if defined(SDKVER_next) || !defined(__cplusplus)
-#pragma pack( push, 8 )
-struct winLeaderboardEntry_t_next {
-    CSteamID m_steamIDUser;
-    int32 m_nGlobalRank;
-    int32 m_nScore;
-    int32 m_cDetails;
-    UGCHandle_t m_hUGC;
-}  __attribute__ ((ms_struct));
-#pragma pack( pop )
-typedef struct winLeaderboardEntry_t_next winLeaderboardEntry_t_next;
-struct LeaderboardEntry_t;
-extern void win_to_lin_struct_LeaderboardEntry_t_next(const struct winLeaderboardEntry_t_next *w, struct LeaderboardEntry_t *l);
-extern void lin_to_win_struct_LeaderboardEntry_t_next(const struct LeaderboardEntry_t *l, struct winLeaderboardEntry_t_next *w);
-#endif
-
-#if defined(SDKVER_next) || !defined(__cplusplus)
-#pragma pack( push, 8 )
-struct winSteamUGCDetails_t_next {
-    PublishedFileId_t m_nPublishedFileId;
-    EResult m_eResult;
-    EWorkshopFileType m_eFileType;
-    AppId_t m_nCreatorAppID;
-    AppId_t m_nConsumerAppID;
-    char m_rgchTitle[129];
-    char m_rgchDescription[8000];
-    uint64 m_ulSteamIDOwner;
-    uint32 m_rtimeCreated;
-    uint32 m_rtimeUpdated;
-    uint32 m_rtimeAddedToUserList;
-    ERemoteStoragePublishedFileVisibility m_eVisibility;
-    bool m_bBanned;
-    bool m_bAcceptedForUse;
-    bool m_bTagsTruncated;
-    char m_rgchTags[1025];
-    UGCHandle_t m_hFile;
-    UGCHandle_t m_hPreviewFile;
-    char m_pchFileName[260];
-    int32 m_nFileSize;
-    int32 m_nPreviewFileSize;
-    char m_rgchURL[256];
-    uint32 m_unVotesUp;
-    uint32 m_unVotesDown;
-    float m_flScore;
-    uint32 m_unNumChildren;
-}  __attribute__ ((ms_struct));
-#pragma pack( pop )
-typedef struct winSteamUGCDetails_t_next winSteamUGCDetails_t_next;
-struct SteamUGCDetails_t;
-extern void win_to_lin_struct_SteamUGCDetails_t_next(const struct winSteamUGCDetails_t_next *w, struct SteamUGCDetails_t *l);
-extern void lin_to_win_struct_SteamUGCDetails_t_next(const struct SteamUGCDetails_t *l, struct winSteamUGCDetails_t_next *w);
 #endif
 

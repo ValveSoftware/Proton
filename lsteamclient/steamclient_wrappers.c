@@ -280,3 +280,18 @@ void *create_LinuxISteamMatchmakingRulesResponse(void *win, const char *version)
 
     return ret;
 }
+
+
+/***** FSteamNetworkingSocketsDebugOutput *****/
+static void (CDECL *stored_FSteamNetworkingSocketsDebugOutput)(ESteamNetworkingSocketsDebugOutputType nType, const char *pszMsg);
+
+static void lin_FSteamNetworkingSocketsDebugOutput(ESteamNetworkingSocketsDebugOutputType nType, const char *pszMsg)
+{
+    stored_FSteamNetworkingSocketsDebugOutput(nType, pszMsg);
+}
+
+void *manual_convert_FSteamNetworkingSocketsDebugOutput(void *win_func)
+{
+    stored_FSteamNetworkingSocketsDebugOutput = (void*)win_func;
+    return &lin_FSteamNetworkingSocketsDebugOutput;
+}

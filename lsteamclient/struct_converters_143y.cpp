@@ -1,25 +1,25 @@
 #include "steam_defs.h"
-#include "steamworks_sdk_next/steam_api.h"
-#include "steamworks_sdk_next/isteamgameserver.h"
-#include "steamworks_sdk_next/isteamgameserverstats.h"
-#include "steamworks_sdk_next/isteamgamecoordinator.h"
+#include "steamworks_sdk_143y/steam_api.h"
+#include "steamworks_sdk_143y/isteamgameserver.h"
+#include "steamworks_sdk_143y/isteamgameserverstats.h"
+#include "steamworks_sdk_143y/isteamgamecoordinator.h"
 #include "steamclient_private.h"
 extern "C" {
-#define SDKVER_next
+#define SDKVER_143y
 #include "struct_converters.h"
-void win_to_lin_struct_SteamPartyBeaconLocation_t_next(const struct winSteamPartyBeaconLocation_t_next *win, struct SteamPartyBeaconLocation_t *lin)
+void win_to_lin_struct_SteamPartyBeaconLocation_t_143y(const struct winSteamPartyBeaconLocation_t_143y *win, struct SteamPartyBeaconLocation_t *lin)
 {
     lin->m_eType = win->m_eType;
     lin->m_ulLocationID = win->m_ulLocationID;
 }
 
-void lin_to_win_struct_SteamPartyBeaconLocation_t_next(const struct SteamPartyBeaconLocation_t *lin, struct winSteamPartyBeaconLocation_t_next *win)
+void lin_to_win_struct_SteamPartyBeaconLocation_t_143y(const struct SteamPartyBeaconLocation_t *lin, struct winSteamPartyBeaconLocation_t_143y *win)
 {
     win->m_eType = lin->m_eType;
     win->m_ulLocationID = lin->m_ulLocationID;
 }
 
-void win_to_lin_struct_LeaderboardEntry_t_next(const struct winLeaderboardEntry_t_next *win, struct LeaderboardEntry_t *lin)
+void win_to_lin_struct_LeaderboardEntry_t_143y(const struct winLeaderboardEntry_t_143y *win, struct LeaderboardEntry_t *lin)
 {
     lin->m_steamIDUser = win->m_steamIDUser;
     lin->m_nGlobalRank = win->m_nGlobalRank;
@@ -28,7 +28,7 @@ void win_to_lin_struct_LeaderboardEntry_t_next(const struct winLeaderboardEntry_
     lin->m_hUGC = win->m_hUGC;
 }
 
-void lin_to_win_struct_LeaderboardEntry_t_next(const struct LeaderboardEntry_t *lin, struct winLeaderboardEntry_t_next *win)
+void lin_to_win_struct_LeaderboardEntry_t_143y(const struct LeaderboardEntry_t *lin, struct winLeaderboardEntry_t_143y *win)
 {
     win->m_steamIDUser = lin->m_steamIDUser;
     win->m_nGlobalRank = lin->m_nGlobalRank;
@@ -37,7 +37,7 @@ void lin_to_win_struct_LeaderboardEntry_t_next(const struct LeaderboardEntry_t *
     win->m_hUGC = lin->m_hUGC;
 }
 
-void win_to_lin_struct_SteamUGCDetails_t_next(const struct winSteamUGCDetails_t_next *win, struct SteamUGCDetails_t *lin)
+void win_to_lin_struct_SteamUGCDetails_t_143y(const struct winSteamUGCDetails_t_143y *win, struct SteamUGCDetails_t *lin)
 {
     lin->m_nPublishedFileId = win->m_nPublishedFileId;
     lin->m_eResult = win->m_eResult;
@@ -67,7 +67,7 @@ void win_to_lin_struct_SteamUGCDetails_t_next(const struct winSteamUGCDetails_t_
     lin->m_unNumChildren = win->m_unNumChildren;
 }
 
-void lin_to_win_struct_SteamUGCDetails_t_next(const struct SteamUGCDetails_t *lin, struct winSteamUGCDetails_t_next *win)
+void lin_to_win_struct_SteamUGCDetails_t_143y(const struct SteamUGCDetails_t *lin, struct winSteamUGCDetails_t_143y *win)
 {
     win->m_nPublishedFileId = lin->m_nPublishedFileId;
     win->m_eResult = lin->m_eResult;

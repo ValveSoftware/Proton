@@ -226,7 +226,7 @@ prefix = os.environ["STEAM_COMPAT_DATA_PATH"] + "/pfx/"
 env["WINEPREFIX"] = prefix
 
 if "PROTON_LOG" in env and nonzero(env["PROTON_LOG"]):
-    env["WINEDEBUG"] = "+timestamp,+pid,+tid,+seh,+debugstr,+module,+mscoree"
+    env["WINEDEBUG"] = "+timestamp,+pid,+tid,+seh,+debugstr,+loaddll,+mscoree"
     env["DXVK_LOG_LEVEL"] = "info"
     env["WINE_MONO_TRACE"] = "E:System.NotImplementedException"
 

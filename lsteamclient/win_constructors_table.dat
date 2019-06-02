@@ -4,6 +4,7 @@
     {"SteamUtils009", &create_winISteamUtils_SteamUtils009},
     {"SteamMatchMaking009", &create_winISteamMatchmaking_SteamMatchMaking009},
     {"SteamMatchMakingServers002", &create_winISteamMatchmakingServers_SteamMatchMakingServers002},
+    {"SteamMatchGameSearch001", &create_winISteamGameSearch_SteamMatchGameSearch001},
     {"SteamParties002", &create_winISteamParties_SteamParties002},
     {"STEAMREMOTESTORAGE_INTERFACE_VERSION014", &create_winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014},
     {"STEAMUSERSTATS_INTERFACE_VERSION011", &create_winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011},
@@ -25,6 +26,11 @@
     {"SteamGameServerStats001", &create_winISteamGameServerStats_SteamGameServerStats001},
     {"SteamGameCoordinator001", &create_winISteamGameCoordinator_SteamGameCoordinator001},
     {"STEAMPARENTALSETTINGS_INTERFACE_VERSION001", &create_winISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001},
+    {"SteamNetworkingSockets002", &create_winISteamNetworkingSockets_SteamNetworkingSockets002},
+    {"SteamNetworkingUtils001", &create_winISteamNetworkingUtils_SteamNetworkingUtils001},
+    {"SteamNetworkingSocketsSerialized003", &create_winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized003},
+    {"SteamNetworkingSocketsSerialized002", &create_winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized002},
+    {"SteamNetworkingSocketsSerialized001", &create_winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized002}, /* alias */
     {"SteamClient017", &create_winISteamClient_SteamClient017},
     {"SteamUser019", &create_winISteamUser_SteamUser019},
     {"SteamFriends015", &create_winISteamFriends_SteamFriends015},
@@ -159,6 +165,3 @@
     {"SteamUser006", &create_winISteamUser_SteamUser006},
     {"SteamUser005", &create_winISteamUser_SteamUser005},
     {"SteamUser004", &create_winISteamUser_SteamUser004},
-    {"SteamNetworkingSocketsSerialized003", &create_winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized003},
-    {"SteamNetworkingSocketsSerialized002", &create_winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized002},
-    {"SteamNetworkingSocketsSerialized001", &create_winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized002}, /* alias */

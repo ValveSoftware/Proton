@@ -1,14 +1,5 @@
 #!/bin/bash
 
-    #DXVK ASYNC PATCH
-    #cd dxvk
-    #git reset --hard HEAD
-    #git clean -xdf
-
-    #echo "applying async patch to dxvk and enabling it for warframe by default"
-    #patch -Np1 < ../game-patches-testing/dxvk-warframe-async-patch.patch
-    #cd ..
-
     #ESYNC UPDATE
     cd esync
     git reset --hard HEAD
@@ -29,9 +20,6 @@
     git reset --hard HEAD
     git clean -xdf
     git revert --no-commit db201072655946662c041a66ee434c30c245e5b0
-
-    #echo "system tray fix for kde plasma"
-    #patch -Np1 < ../game-patches-testing/plasma_systray_fix.patch
 
     echo "wine key translation fix from staging"
     patch -Np1 < ../game-patches-testing/wine-staging-key-translation-fix.patch
@@ -103,4 +91,4 @@
     #WINE CUSTOM PATCHES
     #add your own custom patch lines below
 
-    #e
+    #end
