@@ -2369,3 +2369,21 @@ index 28ae1a9e0e..2e2ac8f0b4 100644
  };
  
  static void *X11DRV_get_vk_device_proc_addr(const char *name)
+diff --git a/include/wine/vulkan_driver.h b/include/wine/vulkan_driver.h
+index a5bc50325c7..bd27a1b0f19 100644
+--- a/include/wine/vulkan_driver.h
++++ b/include/wine/vulkan_driver.h
+@@ -65,6 +65,13 @@ struct vulkan_funcs
+     VkBool32 (*p_vkGetPhysicalDeviceWin32PresentationSupportKHR)(VkPhysicalDevice, uint32_t);
+     VkResult (*p_vkGetSwapchainImagesKHR)(VkDevice, VkSwapchainKHR, uint32_t *, VkImage *);
+     VkResult (*p_vkQueuePresentKHR)(VkQueue, const VkPresentInfoKHR *);
++
++    /* Optional. Returns TRUE if FS hack is active, otherwise returns FALSE. If
++     * it returns TRUE, then real_sz will contain the actual display
++     * resolution; user_sz will contain the app's requested mode; and dst_blit
++     * will contain the area to blit the user image to in real coordinates.
++     * All parameters are optional. */
++    VkBool32 (*query_fs_hack)(VkExtent2D *real_sz, VkExtent2D *user_sz, VkRect2D *dst_blit);
+ };
+ 
+ extern const struct vulkan_funcs * CDECL __wine_get_vulkan_driver(HDC hdc, UINT version);
