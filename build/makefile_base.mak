@@ -32,6 +32,9 @@ else # (Rest of the file is the else)
 #   STEAMRT32_MODE  - Same as above for 32-bit container (can be different type)
 #   STEAMRT32_IMAGE - Same as above for 32-bit container
 #   STEAMRT_PATH    - Path to built runtime which contains run.sh
+#   DXVK_CROSSCC_PREFIX - Quoted and comma-separated list of strings that
+#       should be prefixed before the cross compiler that builds DXVK, so
+#       we can execute it when it lives in a chroot, for example.
 
 ifeq ($(SRCDIR),)
 	foo := $(error SRCDIR not set, do not include makefile_base directly, run ./configure.sh to generate Makefile)
@@ -977,31 +980,24 @@ DXVK_CONFIGURE_FILES32 := $(DXVK_OBJ32)/build.ninja
 DXVK_CONFIGURE_FILES64 := $(DXVK_OBJ64)/build.ninja
 
 # 64bit-configure.  Remove coredata file if already configured (due to e.g. makefile changing)
-#   the sed junk is to work around meson not supporting command line args for --cross-file builds
-#   we need to pass in wine's header files since the debian9 mingw-w64 is too old for dxvk.
+#   sed is used to sub in our special cross compiler
 $(DXVK_CONFIGURE_FILES64): $(MAKEFILE_DEP) $(DXVK)/build-win64.txt | $(DXVK_OBJ64)
 	if [ -e "$(abspath $(DXVK_OBJ64))"/build.ninja ]; then \
 		rm -f "$(abspath $(DXVK_OBJ64))"/meson-private/coredata.dat; \
 	fi
-	mkdir -p "$(abspath $(DXVK_OBJ64))/new_includes" && \
-	cp $(abspath $(TOOLS_DIR64))/include/wine/windows/dxgi*.h "$(abspath $(DXVK_OBJ64))/new_includes" && \
 	cd "$(abspath $(DXVK))" && \
-	sed -e "s|@PROTON_C_ARGS@|'-I$(abspath $(DXVK_OBJ64))/new_includes'|" < build-win64.txt > "$(abspath $(DXVK_OBJ64))/proton-build-win64.txt" && \
+	sed -e "s|@PROTON_DXVK_CROSSCC_PREFIX@|$(subst ",\\\",$(DXVK_CROSSCC_PREFIX))|" < build-win64.txt > "$(abspath $(DXVK_OBJ64))/proton-build-win64.txt" && \
 	PATH="$(abspath $(SRCDIR))/glslang/bin/:$(PATH)" \
 		meson --prefix="$(abspath $(DXVK_OBJ64))" --cross-file "$(abspath $(DXVK_OBJ64))/proton-build-win64.txt" --strip --buildtype=release "$(abspath $(DXVK_OBJ64))"
 
 # 32-bit configure.  Remove coredata file if already configured (due to e.g. makefile changing)
-#   the sed junk is to work around meson not supporting command line args for --cross-file builds
-#   we need to pass in wine's header files since the debian9 mingw-w64 is too old for dxvk.
+#   sed is used to sub in our special cross compiler
 $(DXVK_CONFIGURE_FILES32): $(MAKEFILE_DEP) $(DXVK)/build-win32.txt | $(DXVK_OBJ32)
 	if [ -e "$(abspath $(DXVK_OBJ32))"/build.ninja ]; then \
 		rm -f "$(abspath $(DXVK_OBJ32))"/meson-private/coredata.dat; \
 	fi
 	cd "$(abspath $(DXVK))" && \
-	mkdir -p "$(abspath $(DXVK_OBJ32))/new_includes" && \
-	cp $(abspath $(TOOLS_DIR32))/include/wine/windows/dxgi*.h "$(abspath $(DXVK_OBJ32))/new_includes" && \
-	cd "$(abspath $(DXVK))" && \
-	sed -e "s|@PROTON_C_ARGS@|'-I$(abspath $(DXVK_OBJ32))/new_includes'|" < build-win32.txt > "$(abspath $(DXVK_OBJ32))/proton-build-win32.txt" && \
+	sed -e "s|@PROTON_DXVK_CROSSCC_PREFIX@|$(subst ",\\\",$(DXVK_CROSSCC_PREFIX))|" < build-win32.txt > "$(abspath $(DXVK_OBJ32))/proton-build-win32.txt" && \
 	PATH="$(abspath $(SRCDIR))/glslang/bin/:$(PATH)" \
 		meson --prefix="$(abspath $(DXVK_OBJ32))" --cross-file "$(abspath $(DXVK_OBJ32))/proton-build-win32.txt" --strip --buildtype=release "$(abspath $(DXVK_OBJ32))"
 

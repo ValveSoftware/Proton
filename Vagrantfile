@@ -78,7 +78,7 @@ Vagrant.configure(2) do |config|
 
     #install host build-time dependencies
     apt-get update
-    apt-get install -y gpgv2 gnupg2 g++ g++-6-multilib mingw-w64 git docker-ce fontforge-nox python-debian
+    apt-get install -y gpgv2 gnupg2 g++ g++-6-multilib git docker-ce fontforge-nox python-debian schroot
     apt-get -y -t stretch-backports install meson
 
     #winehq-devel is installed to pull in dependencies to run Wine
@@ -87,14 +87,25 @@ Vagrant.configure(2) do |config|
     #remove system Wine installation to ensure no accidental leakage
     apt-get remove -y winehq-devel
 
-    #configure posix mingw-w64 alternative for DXVK
-    update-alternatives --set x86_64-w64-mingw32-gcc `which x86_64-w64-mingw32-gcc-posix`
-    update-alternatives --set x86_64-w64-mingw32-g++ `which x86_64-w64-mingw32-g++-posix`
-    update-alternatives --set i686-w64-mingw32-gcc `which i686-w64-mingw32-gcc-posix`
-    update-alternatives --set i686-w64-mingw32-g++ `which i686-w64-mingw32-g++-posix`
-
     #allow vagrant user to run docker
     adduser vagrant docker
+
+    #download build of recent mingw-w64 with dwarf2 exceptions enabled
+    wget -O /root/dxvk_crosscc.tar.xz 'http://repo.steampowered.com/proton_mingw/proton_mingw-9.1-1.tar.xz'
+    unxz -T0 /root/dxvk_crosscc.tar.xz
+    mkdir -p /srv/chroot/dxvk_crosscc/
+    tar -xf /root/dxvk_crosscc.tar -C /srv/chroot/dxvk_crosscc/
+
+    #install dxvk_crosscc schroot
+    cat > /etc/schroot/chroot.d/dxvk_crosscc <<EOF
+[dxvk_crosscc]
+description=Special mingw-w64 for building DXVK
+type=directory
+directory=/srv/chroot/dxvk_crosscc/
+users=vagrant
+personality=linux
+preserve-environment=true
+EOF
   SHELL
 
   config.vm.provision "shell", privileged: "true", inline: <<-SHELL

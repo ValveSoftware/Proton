@@ -23,7 +23,7 @@ else
 endif
 
 
-CONFIGURE_CMD := ../proton/configure.sh --steam-runtime64=docker:steam-proton-dev --steam-runtime32=docker:steam-proton-dev32 --steam-runtime="$$HOME"/steam-runtime/runtime/ --build-name="$(_build_name)"
+CONFIGURE_CMD := ../proton/configure.sh --steam-runtime64=docker:steam-proton-dev --steam-runtime32=docker:steam-proton-dev32 --steam-runtime="$$HOME"/steam-runtime/runtime/ --build-name="$(_build_name)" --dxvk-crosscc-prefix=\"schroot\",\"-c\",\"dxvk_crosscc\",\"--\"
 
 # make doesn't handle spaces well... replace them with underscores in paths
 BUILD_DIR := "build-$(shell echo $(_build_name) | sed -e 's/ /_/g')"
@@ -78,7 +78,7 @@ clean: vagrant
 	vagrant ssh -c 'rm -rf $(BUILD_DIR)/'
 
 configure: vagrant
-	vagrant ssh -c 'if [ ! -e $(BUILD_DIR)/Makefile ]; then mkdir $(BUILD_DIR); (cd $(BUILD_DIR) && $(CONFIGURE_CMD)); fi'
+	vagrant ssh -c 'if [ ! -e $(BUILD_DIR)/Makefile ]; then mkdir -p $(BUILD_DIR); (cd $(BUILD_DIR) && $(CONFIGURE_CMD)); fi'
 
 proton: configure
 	vagrant ssh -c 'make -C $(BUILD_DIR)/ dist'
