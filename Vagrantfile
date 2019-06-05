@@ -90,14 +90,15 @@ Vagrant.configure(2) do |config|
     #allow vagrant user to run docker
     adduser vagrant docker
 
-    #download build of recent mingw-w64 with dwarf2 exceptions enabled
-    wget -O /root/dxvk_crosscc.tar.xz 'http://repo.steampowered.com/proton_mingw/proton_mingw-9.1-1.tar.xz'
-    unxz -T0 /root/dxvk_crosscc.tar.xz
-    mkdir -p /srv/chroot/dxvk_crosscc/
-    tar -xf /root/dxvk_crosscc.tar -C /srv/chroot/dxvk_crosscc/
+    if ! schroot -i -c dxvk_crosscc >/dev/null 2>&1; then
+      #download build of recent mingw-w64 with dwarf2 exceptions enabled
+      wget --progress=dot -O /root/dxvk_crosscc.tar.xz 'http://repo.steampowered.com/proton_mingw/proton_mingw-9.1-1.tar.xz'
+      unxz -T0 /root/dxvk_crosscc.tar.xz
+      mkdir -p /srv/chroot/dxvk_crosscc/
+      tar -xf /root/dxvk_crosscc.tar -C /srv/chroot/dxvk_crosscc/
 
-    #install dxvk_crosscc schroot
-    cat > /etc/schroot/chroot.d/dxvk_crosscc <<EOF
+      #install dxvk_crosscc schroot
+      cat > /etc/schroot/chroot.d/dxvk_crosscc <<EOF
 [dxvk_crosscc]
 description=Special mingw-w64 for building DXVK
 type=directory
@@ -106,6 +107,7 @@ users=vagrant
 personality=linux
 preserve-environment=true
 EOF
+    fi
   SHELL
 
   config.vm.provision "shell", privileged: "true", inline: <<-SHELL
