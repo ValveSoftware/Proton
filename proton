@@ -285,17 +285,21 @@ if "forcelgadd" in config_opts:
     env["WINE_LARGE_ADDRESS_AWARE"] = "1"
 
 lfile = None
-if "SteamGameId" in env:
+if "SteamGameId" in env or "PROTON_LOG_ALL_PROCESSES" in env:
     if env["WINEDEBUG"] != "-all":
-        lfile_path = os.environ["HOME"] + "/steam-" + os.environ["SteamGameId"] + ".log"
-        if os.path.exists(lfile_path):
-            os.remove(lfile_path)
+        if "PROTON_LOG_ALL_PROCESSES" in env:
+            lfile_path = os.environ["HOME"] + "/steam-proton.log"
+        else:
+            lfile_path = os.environ["HOME"] + "/steam-" + os.environ["SteamGameId"] + ".log"
+            if os.path.exists(lfile_path):
+                os.remove(lfile_path)
         lfile = open(lfile_path, "w+")
         lfile.write("======================\n")
         with open(basedir + "/version", "r") as f:
             lfile.write("Proton: " + f.readline().strip() + "\n")
-        lfile.write("SteamGameId: " + env["SteamGameId"] + "\n")
-        lfile.write("Command: " + str(sys.argv[2:]) + "\n")
+        if "SteamGameId" in env:
+            lfile.write("SteamGameId: " + env["SteamGameId"] + "\n")
+        lfile.write("Command: " + str(sys.argv[1:]) + "\n")
         lfile.write("======================\n")
         lfile.flush()
 else:
