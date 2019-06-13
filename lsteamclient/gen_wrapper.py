@@ -394,11 +394,25 @@ def find_windows_struct(struct):
             return child.type
     return None
 
+def find_windows64_struct(struct):
+    for child in list(windows_build64.cursor.get_children()):
+        if strip_const(struct.spelling) == child.spelling:
+            return child.type
+    return None
+
+def find_linux64_struct(struct):
+    for child in list(linux_build64.cursor.get_children()):
+        if strip_const(struct.spelling) == child.spelling:
+            return child.type
+    return None
+
 def struct_needs_conversion_nocache(struct):
     if strip_const(struct.spelling) in exempt_structs:
         return False
     if strip_const(struct.spelling) in manually_handled_structs:
         return True
+
+    #check 32-bit compat
     windows_struct = find_windows_struct(struct)
     assert(not windows_struct is None) #must find windows_struct
     for field in struct.get_fields():
@@ -407,6 +421,20 @@ def struct_needs_conversion_nocache(struct):
         if field.type.kind == clang.cindex.TypeKind.RECORD and \
                 struct_needs_conversion(field.type):
             return True
+
+    #check 64-bit compat
+    windows_struct = find_windows64_struct(struct)
+    assert(not windows_struct is None) #must find windows_struct
+    lin64_struct = find_linux64_struct(struct)
+    assert(not lin64_struct is None) #must find lin64_struct
+    for field in lin64_struct.get_fields():
+        if lin64_struct.get_offset(field.spelling) != windows_struct.get_offset(field.spelling):
+            return True
+        if field.type.kind == clang.cindex.TypeKind.RECORD and \
+                struct_needs_conversion(field.type):
+            return True
+
+    #check if any members need path conversion
     path_conv = get_path_converter(struct)
     if path_conv:
         return True
@@ -764,6 +792,7 @@ generated_cb_handlers = []
 generated_cb_ids = []
 cpp_files_need_close_brace = []
 cb_table = {}
+cb_table64 = {}
 
 def get_field_attribute_str(field):
     if field.type.kind != clang.cindex.TypeKind.RECORD:
@@ -794,9 +823,9 @@ def handle_struct(sdkver, struct):
     w2l_handler_name = None
     l2w_handler_name = None
 
-    def dump_win_struct(to_file):
+    def dump_win_struct(to_file, name):
         to_file.write("#pragma pack( push, 8 )\n")
-        to_file.write("struct win%s {\n" % struct_name)
+        to_file.write("struct win%s {\n" % name)
         for m in struct.get_children():
             if m.kind == clang.cindex.CursorKind.FIELD_DECL:
                 if m.type.kind == clang.cindex.TypeKind.CONSTANTARRAY:
@@ -831,9 +860,10 @@ def handle_struct(sdkver, struct):
 
         w2l_handler_name = "win_to_lin_struct_%s" % struct_name;
         l2w_handler_name = "lin_to_win_struct_%s" % struct_name;
+        l2w_handler_name64 = None
 
         hfile.write("#if defined(SDKVER_%s) || !defined(__cplusplus)\n" % sdkver)
-        dump_win_struct(hfile)
+        dump_win_struct(hfile, struct_name)
         hfile.write("typedef struct win%s win%s;\n" % (struct_name, struct_name))
         hfile.write("struct %s;\n" % struct.displayname);
 
@@ -847,8 +877,15 @@ def handle_struct(sdkver, struct):
     else:
         #for callbacks, we use the windows struct size in the cb dispatch switch
         windows_struct = find_windows_struct(struct.type)
+        windows_struct64 = find_windows64_struct(struct.type)
+        struct64 = find_linux64_struct(struct.type)
         struct_name = "%s_%s" % (struct.displayname, windows_struct.get_size())
         l2w_handler_name = "cb_%s" % struct_name;
+        if windows_struct64.get_size() != windows_struct.get_size():
+            struct_name64 = "%s_%s" % (struct.displayname, windows_struct64.get_size())
+            l2w_handler_name64 = "cb_%s" % struct_name64;
+        else:
+            l2w_handler_name64 = None
         if l2w_handler_name in generated_cb_handlers:
             # we already have a handler for the callback struct of this size
             return
@@ -856,6 +893,7 @@ def handle_struct(sdkver, struct):
             return
 
         cb_id = cb_num | (struct.type.get_size() << 16)
+        cb_id64 = cb_num | (struct64.get_size() << 16)
         if cb_id in generated_cb_ids:
             # either this cb changed name, or steam used the same ID for different structs
             return
@@ -863,19 +901,41 @@ def handle_struct(sdkver, struct):
         generated_cb_ids.append(cb_id)
 
         datfile = open("cb_converters.dat", "a")
-        datfile.write("case 0x%08x: win_msg->m_cubParam = %s; win_msg->m_pubParam = HeapAlloc(GetProcessHeap(), 0, win_msg->m_cubParam); %s((void*)lin_msg.m_pubParam, (void*)win_msg->m_pubParam); break;\n" % (cb_id, windows_struct.get_size(), l2w_handler_name))
+        if l2w_handler_name64:
+            datfile.write("#ifdef __i386__\n")
+            datfile.write("case 0x%08x: win_msg->m_cubParam = %s; win_msg->m_pubParam = HeapAlloc(GetProcessHeap(), 0, win_msg->m_cubParam); %s((void*)lin_msg.m_pubParam, (void*)win_msg->m_pubParam); break;\n" % (cb_id, windows_struct.get_size(), l2w_handler_name))
+            datfile.write("#endif\n")
+
+            datfile.write("#ifdef __x86_64__\n")
+            datfile.write("case 0x%08x: win_msg->m_cubParam = %s; win_msg->m_pubParam = HeapAlloc(GetProcessHeap(), 0, win_msg->m_cubParam); %s((void*)lin_msg.m_pubParam, (void*)win_msg->m_pubParam); break;\n" % (cb_id64, windows_struct64.get_size(), l2w_handler_name64))
+            datfile.write("#endif\n")
+        else:
+            datfile.write("case 0x%08x: win_msg->m_cubParam = %s; win_msg->m_pubParam = HeapAlloc(GetProcessHeap(), 0, win_msg->m_cubParam); %s((void*)lin_msg.m_pubParam, (void*)win_msg->m_pubParam); break;\n" % (cb_id, windows_struct.get_size(), l2w_handler_name))
 
         generated_cb_handlers.append(l2w_handler_name)
 
         if not cb_num in cb_table.keys():
             # latest SDK linux size, list of windows struct sizes and names
             cb_table[cb_num] = (struct.type.get_size(), [])
+            if l2w_handler_name64:
+                cb_table64[cb_num] = (struct64.get_size(), [])
         cb_table[cb_num][1].append((windows_struct.get_size(), struct_name))
 
         hfile = open("cb_converters.h", "a")
         hfile.write("struct %s;\n" % struct.displayname)
-        hfile.write("struct win%s;\n" % struct_name)
-        hfile.write("extern void %s(const struct %s *l, struct win%s *w);\n\n" % (l2w_handler_name, struct.displayname, struct_name))
+        if l2w_handler_name64:
+            cb_table64[cb_num][1].append((windows_struct64.get_size(), struct_name64))
+            hfile.write("#ifdef __i386__\n")
+            hfile.write("struct win%s;\n" % struct_name)
+            hfile.write("extern void %s(const struct %s *l, struct win%s *w);\n" % (l2w_handler_name, struct.displayname, struct_name))
+            hfile.write("#endif\n")
+            hfile.write("#ifdef __x86_64__\n")
+            hfile.write("struct win%s;\n" % struct_name64)
+            hfile.write("extern void %s(const struct %s *l, struct win%s *w);\n" % (l2w_handler_name64, struct.displayname, struct_name64))
+            hfile.write("#endif\n\n")
+        else:
+            hfile.write("struct win%s;\n" % struct_name)
+            hfile.write("extern void %s(const struct %s *l, struct win%s *w);\n\n" % (l2w_handler_name, struct.displayname, struct_name))
 
     cppname = "struct_converters_%s.cpp" % sdkver
     file_exists = os.path.isfile(cppname)
@@ -916,7 +976,15 @@ def handle_struct(sdkver, struct):
                 cppfile.write("    %s->%s = %s->%s;\n" % (dst, m.displayname, src, m.displayname))
 
     if not cb_num is None:
-        dump_win_struct(cppfile)
+        if l2w_handler_name64:
+            cppfile.write("#ifdef __i386__\n")
+            dump_win_struct(cppfile, struct_name)
+            cppfile.write("#endif\n")
+            cppfile.write("#ifdef __x86_64__\n")
+            dump_win_struct(cppfile, struct_name64)
+            cppfile.write("#endif\n")
+        else:
+            dump_win_struct(cppfile, struct_name)
 
     if w2l_handler_name:
         cppfile.write("void %s(const struct win%s *win, struct %s *lin)\n{\n" % (w2l_handler_name, struct_name, struct.displayname))
@@ -924,13 +992,25 @@ def handle_struct(sdkver, struct):
             handle_field(m, "win", "lin")
         cppfile.write("}\n\n")
 
+    if l2w_handler_name64:
+        cppfile.write("#ifdef __x86_64__\n")
+        cppfile.write("void %s(const struct %s *lin, struct win%s *win)\n{\n" % (l2w_handler_name64, struct.displayname, struct_name64))
+        for m in struct.get_children():
+            handle_field(m, "lin", "win")
+        cppfile.write("}\n")
+        cppfile.write("#endif\n\n")
+
     if l2w_handler_name:
+        if l2w_handler_name64:
+            cppfile.write("#ifdef __i386__\n")
         cppfile.write("void %s(const struct %s *lin, struct win%s *win)\n{\n" % (l2w_handler_name, struct.displayname, struct_name))
         for m in struct.get_children():
             handle_field(m, "lin", "win")
-        cppfile.write("}\n\n")
-
-#clang.cindex.Config.set_library_file("/usr/lib/llvm-3.8/lib/libclang-3.8.so.1");
+        cppfile.write("}\n")
+        if l2w_handler_name64:
+            cppfile.write("#endif\n\n")
+        else:
+            cppfile.write("\n")
 
 prog = re.compile("^#define\s*(\w*)\s*\"(.*)\"")
 for sdkver in sdk_versions:
@@ -945,13 +1025,13 @@ for sdkver in sdk_versions:
                     iface_versions[iface] = version
 
     for fname, classes in files:
-        # Parse as 32-bit C++
         input_name = "steamworks_sdk_%s/%s" % (sdkver, fname)
         sys.stdout.write("about to parse %s\n" % input_name)
         if not os.path.isfile(input_name):
             continue
         index = clang.cindex.Index.create()
         linux_build = index.parse(input_name, args=['-x', 'c++', '-m32', '-Isteamworks_sdk_%s/' % sdkver, '-I' + CLANG_PATH + '/include/'])
+        linux_build64 = index.parse(input_name, args=['-x', 'c++', '-Isteamworks_sdk_%s/' % sdkver, '-I' + CLANG_PATH + '/include/'])
 
         diagnostics = list(linux_build.diagnostics)
         if len(diagnostics) > 0:
@@ -959,6 +1039,7 @@ for sdkver in sdk_versions:
             pprint.pprint(diagnostics)
         else:
             windows_build = index.parse(input_name, args=['-x', 'c++', '-m32', '-Isteamworks_sdk_%s/' % sdkver, '-I' + CLANG_PATH + '/include/', '-mms-bitfields', '-U__linux__', '-Wno-incompatible-ms-struct'])
+            windows_build64 = index.parse(input_name, args=['-x', 'c++', '-Isteamworks_sdk_%s/' % sdkver, '-I' + CLANG_PATH + '/include/', '-mms-bitfields', '-U__linux__', '-Wno-incompatible-ms-struct'])
             diagnostics = list(windows_build.diagnostics)
             if len(diagnostics) > 0:
                 print('There were parse errors (windows build)')
@@ -980,6 +1061,9 @@ for f in cpp_files_need_close_brace:
 
 getapifile = open("cb_getapi_table.dat", "w")
 cbsizefile = open("cb_getapi_sizes.dat", "w")
+
+cbsizefile.write("#ifdef __i386__\n")
+getapifile.write("#ifdef __i386__\n")
 for cb in cb_table.keys():
     cbsizefile.write("case %u: /* %s */\n" % (cb, cb_table[cb][1][0][1]))
     cbsizefile.write("    return %u;\n" % cb_table[cb][0])
@@ -989,3 +1073,19 @@ for cb in cb_table.keys():
     for (size, name) in cb_table[cb][1]:
         getapifile.write("    case %s: cb_%s(lin_callback, callback); break;\n" % (size, name))
     getapifile.write("    }\n    break;\n")
+cbsizefile.write("#endif\n")
+getapifile.write("#endif\n")
+
+cbsizefile.write("#ifdef __x86_64__\n")
+getapifile.write("#ifdef __x86_64__\n")
+for cb in cb_table64.keys():
+    cbsizefile.write("case %u: /* %s */\n" % (cb, cb_table64[cb][1][0][1]))
+    cbsizefile.write("    return %u;\n" % cb_table64[cb][0])
+    getapifile.write("case %u:\n" % cb)
+    getapifile.write("    switch(callback_len){\n")
+    getapifile.write("    default:\n") # the first one should be the latest, should best support future SDK versions
+    for (size, name) in cb_table64[cb][1]:
+        getapifile.write("    case %s: cb_%s(lin_callback, callback); break;\n" % (size, name))
+    getapifile.write("    }\n    break;\n")
+cbsizefile.write("#endif\n")
+getapifile.write("#endif\n")

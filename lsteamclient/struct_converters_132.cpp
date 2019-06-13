@@ -101,5 +101,93 @@ void lin_to_win_struct_SteamUGCDetails_t_132(const struct SteamUGCDetails_t *lin
     win->m_unNumChildren = lin->m_unNumChildren;
 }
 
+#ifdef __i386__
+#pragma pack( push, 8 )
+struct winHTML_ComboNeedsPaint_t_16 {
+    HHTMLBrowser unBrowserHandle;
+    const char * pBGRA;
+    uint32 unWide;
+    uint32 unTall;
+}  __attribute__ ((ms_struct));
+#pragma pack( pop )
+#endif
+#ifdef __x86_64__
+#pragma pack( push, 8 )
+struct winHTML_ComboNeedsPaint_t_24 {
+    HHTMLBrowser unBrowserHandle;
+    const char * pBGRA;
+    uint32 unWide;
+    uint32 unTall;
+}  __attribute__ ((ms_struct));
+#pragma pack( pop )
+#endif
+#ifdef __x86_64__
+void cb_HTML_ComboNeedsPaint_t_24(const struct HTML_ComboNeedsPaint_t *lin, struct winHTML_ComboNeedsPaint_t_24 *win)
+{
+    win->unBrowserHandle = lin->unBrowserHandle;
+    win->pBGRA = lin->pBGRA;
+    win->unWide = lin->unWide;
+    win->unTall = lin->unTall;
+}
+#endif
+
+#ifdef __i386__
+void cb_HTML_ComboNeedsPaint_t_16(const struct HTML_ComboNeedsPaint_t *lin, struct winHTML_ComboNeedsPaint_t_16 *win)
+{
+    win->unBrowserHandle = lin->unBrowserHandle;
+    win->pBGRA = lin->pBGRA;
+    win->unWide = lin->unWide;
+    win->unTall = lin->unTall;
+}
+#endif
+
+#ifdef __i386__
+#pragma pack( push, 8 )
+struct winHTML_NewWindow_t_24 {
+    HHTMLBrowser unBrowserHandle;
+    const char * pchURL;
+    uint32 unX;
+    uint32 unY;
+    uint32 unWide;
+    uint32 unTall;
+}  __attribute__ ((ms_struct));
+#pragma pack( pop )
+#endif
+#ifdef __x86_64__
+#pragma pack( push, 8 )
+struct winHTML_NewWindow_t_32 {
+    HHTMLBrowser unBrowserHandle;
+    const char * pchURL;
+    uint32 unX;
+    uint32 unY;
+    uint32 unWide;
+    uint32 unTall;
+}  __attribute__ ((ms_struct));
+#pragma pack( pop )
+#endif
+#ifdef __x86_64__
+void cb_HTML_NewWindow_t_32(const struct HTML_NewWindow_t *lin, struct winHTML_NewWindow_t_32 *win)
+{
+    win->unBrowserHandle = lin->unBrowserHandle;
+    win->pchURL = lin->pchURL;
+    win->unX = lin->unX;
+    win->unY = lin->unY;
+    win->unWide = lin->unWide;
+    win->unTall = lin->unTall;
+}
+#endif
+
+#ifdef __i386__
+void cb_HTML_NewWindow_t_24(const struct HTML_NewWindow_t *lin, struct winHTML_NewWindow_t_24 *win)
+{
+    win->unBrowserHandle = lin->unBrowserHandle;
+    win->pchURL = lin->pchURL;
+    win->unX = lin->unX;
+    win->unY = lin->unY;
+    win->unWide = lin->unWide;
+    win->unTall = lin->unTall;
+}
+#endif
+
 
 }
