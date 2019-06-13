@@ -73,7 +73,7 @@ can be distributed as a Proton package. This is what we use to deploy Proton to
 Steam users. The package will be dropped into a new directory in
 `vagrant_share/`, named after the nearest Git tag (see `git describe`).
 
-`make clean` - This will completely erase the build tree.
+`make clean` - This will completely erase the build tree in the VM.
 
 `make help` - View the Makefile documentation and examples.
 
@@ -85,6 +85,8 @@ We also provide targets useful for simple Wine development:
 the specified module, and copy the result into the `vagrant_share` directory.
 This allows rapid iteration on one module. This target is only useful after
 building Proton.
+
+`make dxvk` - This will rebuild DXVK and copy it into `vagrant_share`.
 
 If you are doing significant Wine development or want to control the build with
 more fine detail, see the full documentation below.

@@ -52,10 +52,12 @@ help:
 	@echo "  vagrant - Start Vagrant VM"
 	@echo "  configure - Configure Proton build directory"
 	@echo "  proton - Build Proton"
-	@echo "  module - Build a single Wine module and copy into the shared directory."
-	@echo "           Note: This is a development loop target. Use it only after building"
-	@echo "           all of wine with one of the other targets."
+	@echo ""
+	@echo "  The following targets are development targets only useful after building Proton."
+	@echo "  module - Rebuild a single Wine module and copy into vagrant_share/."
 	@echo "           Specify module variable: make module=kernel32 module"
+	@echo "  dxvk - Rebuild DXVK and copy it into vagrant_share/."
+	@echo "  lsteamclient - Rebuild the Steam client wrapper and copy it into vagrant_share/."
 	@echo ""
 	@echo "Examples:"
 	@echo "  "make install" - Build Proton and install into this user's Steam installation,"
@@ -102,3 +104,17 @@ module: configure
 	vagrant ssh -c 'cp $(BUILD_DIR)/obj-wine32/dlls/$(module)/$(module)*.so /vagrant/$(module)/lib/wine/'
 	mkdir -p vagrant_share/$(module)/lib64/wine/
 	vagrant ssh -c 'cp $(BUILD_DIR)/obj-wine64/dlls/$(module)/$(module)*.so /vagrant/$(module)/lib64/wine/'
+
+dxvk: configure
+	vagrant ssh -c 'make -C $(BUILD_DIR)/ dxvk'
+	mkdir -p vagrant_share/dxvk/lib/wine/dxvk/
+	vagrant ssh -c 'cp $(BUILD_DIR)/dist/dist/lib/wine/dxvk/*.dll /vagrant/dxvk/lib/wine/dxvk/'
+	mkdir -p vagrant_share/dxvk/lib64/wine/dxvk/
+	vagrant ssh -c 'cp $(BUILD_DIR)/dist/dist/lib64/wine/dxvk/*.dll /vagrant/dxvk/lib64/wine/dxvk/'
+
+lsteamclient: configure
+	vagrant ssh -c 'make -C $(BUILD_DIR)/ lsteamclient'
+	mkdir -p vagrant_share/lsteamclient/lib/wine
+	vagrant ssh -c 'cp $(BUILD_DIR)/dist/dist/lib/wine/lsteamclient.dll.so /vagrant/lsteamclient/lib/wine'
+	mkdir -p vagrant_share/lsteamclient/lib64/wine
+	vagrant ssh -c 'cp $(BUILD_DIR)/dist/dist/lib64/wine/lsteamclient.dll.so /vagrant/lsteamclient/lib64/wine'
