@@ -1315,7 +1315,7 @@ index 7ecaed1a038..bb2a557c972 100644
 +    DescribePixelFormat(ctx->dc, pixel_format, sizeof(pfd), &pfd);
 +    SetPixelFormat(ctx->dc, pixel_format, &pfd);
 +
-+    share_ctx = device->context_count ? device->contexts[0]->glCtx : NULL;
++    share_ctx = device->context_count ? wined3d_context_gl(device->contexts[0])->gl_ctx : NULL;
 +    if (!(ctx->gl_ctx = context_create_wgl_attribs(gl_info, ctx->dc, share_ctx)))
 +    {
 +        WARN("Failed to create GL context for VR.\n");

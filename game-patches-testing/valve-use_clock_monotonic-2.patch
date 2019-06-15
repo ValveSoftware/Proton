@@ -1,0 +1,22 @@
+From c74573c68c98508801eac6607dad153155b9a625 Mon Sep 17 00:00:00 2001
+From: Tk-Glitch <ti3nou@gmail.com>
+Date: Fri, 14 Jun 2019 19:13:52 +0200
+Subject: kernel32: Never use CLOCK_MONOTONIC_RAW
+
+This is an addition for 13e11d3 to Andrew Eikum's patch for ntdll and server
+
+Signed-off-by: Tk-Glitch <ti3nou@gmail.com>
+
+diff --git a/dlls/kernel32/time.c b/dlls/kernel32/time.c
+index 737affcb38..f82d33c876 100644
+--- a/dlls/kernel32/time.c
++++ b/dlls/kernel32/time.c
+@@ -82,7 +82,7 @@ static inline ULONGLONG monotonic_counter(void)
+     return mach_absolute_time() * timebase.numer / timebase.denom / 100;
+ #elif defined(HAVE_CLOCK_GETTIME)
+     struct timespec ts;
+-#ifdef CLOCK_MONOTONIC_RAW
++#if 0
+     if (!clock_gettime( CLOCK_MONOTONIC_RAW, &ts ))
+         return ts.tv_sec * (ULONGLONG)TICKSPERSEC + ts.tv_nsec / 100;
+ #endif

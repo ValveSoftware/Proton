@@ -14,12 +14,19 @@
     patch -Np1 < ../game-patches-testing/esync-compat-fixes-r3.6.patch
     cd ..
 
+    #DXVK_ASYNC patch - Note: This is only enabled for Warframe and Path of Exile.
+    #It is disabled by default for all other games
+    #If you wish to use it with additional games, you will need to add DXVK_ASYNC=1 %command% to the game launch options in steam.
+    cd dxvk
+    git reset --hard HEAD
+    git clean -xdf
+    patch -Np1 < ../game-patches-testing/pipeline.patch
+    cd ..
 
     #WINE SYSTEM PERFORMANCE PATCHES
     cd wine
     git reset --hard HEAD
     git clean -xdf
-    git revert --no-commit db201072655946662c041a66ee434c30c245e5b0
 
     echo "wine key translation fix from staging"
     patch -Np1 < ../game-patches-testing/wine-staging-key-translation-fix.patch
@@ -41,9 +48,6 @@
 
     echo "warframe F6 screenshot button fix"
     patch -Np1 < ../game-patches-testing/warframe-f6-screenshot-fix.patch
-
-    echo "overwatch 4.9 patch"
-    patch -Np1 < ../game-patches-testing/overwatch-4.9.patch
 
 
     #WINE FAUDIO PATCHES
@@ -67,6 +71,7 @@
     done
 
     # this is needed for wine 4.5+
+    echo "adding proton patches"
     patch -Np1 < ../game-patches-testing/esync-no_kernel_obj_list.patch
     patch -Np1 < ../game-patches-testing/proton-restore-unicode.patch
     patch -Np1 < ../game-patches-testing/valve-gnutls.patch
@@ -84,8 +89,12 @@
     patch -Np1 < ../game-patches-testing/valve-winemac.patch
     patch -Np1 < ../game-patches-testing/valve-windowscodecs.patch
     patch -Np1 < ../game-patches-testing/valve-LAA.patch
-    patch -Np1 < ../game-patches-testing/valve-proton-sdl-joy.patch
-    patch -Np1 < ../game-patches-testing/valve-proton-gamepad-additions-50b9456.patch
+    patch -Np1 < ../game-patches-testing/proton-gamepad-additions-backport.patch
+    patch -Np1 < ../game-patches-testing/proton-sdl-joy.patch
+    patch -Np1 < ../game-patches-testing/proton-gamepad-additions.patch
+    patch -Np1 < ../game-patches-testing/valve-use_clock_monotonic-2.patch
+    patch -Np1 < ../game-patches-testing/msvcrt_nativebuiltin.patch
+
 
 
     #WINE CUSTOM PATCHES

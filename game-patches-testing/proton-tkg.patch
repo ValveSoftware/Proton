@@ -41,11 +41,10 @@ index 5767b29887c..75d5f4a7216 100644
  
  [DefaultInstall.Services]
  AddService=BITS,0,BITSService
-@@ -3518,3 +3521,13 @@ HKLM,Software\Wine\LicenseInformation,"Shell-InBoxGames-Shanghai-EnableGame",0x1
- HKLM,Software\Wine\LicenseInformation,"Shell-InBoxGames-Solitaire-EnableGame",0x10001,0x00000001
+@@ -3750,6 +3750,16 @@ HKLM,Software\Wine\LicenseInformation,"Shell-InBoxGames-Solitaire-EnableGame",0x
  HKLM,Software\Wine\LicenseInformation,"Shell-InBoxGames-SpiderSolitaire-EnableGame",0x10001,0x00000001
  HKLM,Software\Wine\LicenseInformation,"Shell-PremiumInBoxGames-Chess-EnableGame",0x10001,0x00000001
-+
+ 
 +[SteamClient]
 +HKCU,Software\Valve\Steam\ActiveProcess,"PID",0x10001,0x0000fffe
 +HKCU,Software\Valve\Steam\ActiveProcess,"SteamClientDll",,"%16422%\Steam\steamclient.dll"
@@ -55,6 +54,10 @@ index 5767b29887c..75d5f4a7216 100644
 +HKCU,Software\Valve\Steam\ActiveProcess,"PID",0x10001,0x0000fffe
 +HKCU,Software\Valve\Steam\ActiveProcess,"SteamClientDll",,"%16426%\Steam\steamclient.dll"
 +HKCU,Software\Valve\Steam\ActiveProcess,"SteamPath",,"%16426%\Steam"
++
+ [DestinationDirs]
+ l_intl_section = 11
+ inf_section = 17
 
 From bc614834ee153ce33449c06e697b4a30748e9257 Mon Sep 17 00:00:00 2001
 From: Andrew Eikum <aeikum@codeweavers.com>
@@ -400,12 +403,14 @@ diff --git a/loader/wine.inf.in b/loader/wine.inf.in
 index 75d5f4a7216..7fe2f49dcd9 100644
 --- a/loader/wine.inf.in
 +++ b/loader/wine.inf.in
-@@ -3530,4 +3530,5 @@ HKCU,Software\Valve\Steam\ActiveProcess,"SteamPath",,"%16422%\Steam"
+@@ -3758,6 +3758,7 @@ HKCU,Software\Valve\Steam\ActiveProcess,"SteamPath",,"%16422%\Steam"
  [SteamClient.ntamd64]
  HKCU,Software\Valve\Steam\ActiveProcess,"PID",0x10001,0x0000fffe
  HKCU,Software\Valve\Steam\ActiveProcess,"SteamClientDll",,"%16426%\Steam\steamclient.dll"
 +HKCU,Software\Valve\Steam\ActiveProcess,"SteamClientDll64",,"%16426%\Steam\steamclient64.dll"
  HKCU,Software\Valve\Steam\ActiveProcess,"SteamPath",,"%16426%\Steam"
+ 
+ [DestinationDirs]
 
 From bf02d103fde2c2e54a074b03021f47e4672d4b01 Mon Sep 17 00:00:00 2001
 From: Nikolay Sivov <nsivov@codeweavers.com>
@@ -421,11 +426,14 @@ diff --git a/loader/wine.inf.in b/loader/wine.inf.in
 index 5610c701d..3d71722ac 100644
 --- a/loader/wine.inf.in
 +++ b/loader/wine.inf.in
-@@ -3784,3 +3784,4 @@ HKCU,Software\Valve\Steam\ActiveProcess,"PID",0x10001,0x0000fffe
+@@ -3760,6 +3760,7 @@ HKCU,Software\Valve\Steam\ActiveProcess,"PID",0x10001,0x0000fffe
  HKCU,Software\Valve\Steam\ActiveProcess,"SteamClientDll",,"%16426%\Steam\steamclient.dll"
  HKCU,Software\Valve\Steam\ActiveProcess,"SteamClientDll64",,"%16426%\Steam\steamclient64.dll"
  HKCU,Software\Valve\Steam\ActiveProcess,"SteamPath",,"%16426%\Steam"
 +HKLM,Software\Wow6432Node\Valve\Steam,"InstallPath",,"%16422%\Steam"
+ 
+ [DestinationDirs]
+ l_intl_section = 11
 
 From bac899cd4531229baa7633d67578b74a2a98468f Mon Sep 17 00:00:00 2001
 From: Andrew Eikum <aeikum@codeweavers.com>
@@ -1791,3 +1799,108 @@ index 2b049eb91f8..e6948a73427 100644
  HKLM,"System\CurrentControlSet\Services\Eventlog\Application",,16
  HKLM,"System\CurrentControlSet\Services\Eventlog\System","Sources",0x10000,""
  HKLM,"System\CurrentControlSet\Services\Tcpip\Parameters","DataBasePath",2,"%11%\drivers"
+
+From aef0f1638ce13db03a4d3c0fe53972f44443c854 Mon Sep 17 00:00:00 2001
+From: Patryk Obara <dreamer.tan@gmail.com>
+Date: Fri, 26 Apr 2019 20:40:31 +0200
+Subject: [PATCH] winex11: Fill WM_CLASS based on Steam appid
+
+Some desktop environments (Gnome 3, Cinnamon) decide on an application
+icon in the following order:
+
+ - If the first string in WM_CLASS property can be correlated to
+  a name or StartupWMClass key in a .desktop entry file, then
+  the associated icon will be used.
+ - If the second string in WM_CLASS property can be correlated to
+  a name or StartupWMClass key in a .desktop entry file, then
+  the associated icon will be used.
+ - If the application has indicated an icon resource through WM_HINTS
+  property, then the associated X window or pixmaps will be used.
+
+Upstream Wine usually deals with this by placing a .desktop file with
+StartupWMClass filled to match first string in WM_CLASS property
+(which is the name of exe file being run).
+
+Wine in Proton does not do it, but still puts "Wine" as second string,
+therefore desktop environment can't differentiate between Wine in
+Proton and Wine installed in OS.
+
+By replacing "Wine" with "steam_app_<appid>" we force DE to fallback
+to icon indicated by WM_HINTS (ico file embedded in exe file).
+Steam can override this behaviour by installing properly crafted
+.desktop entry file.  If SteamAppId environment variable is missing,
+then generic "steam_proton" name is used instead.
+---
+ dlls/winex11.drv/window.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/dlls/winex11.drv/window.c b/dlls/winex11.drv/window.c
+index 1ec7c706511..9ae3da3d4a2 100644
+--- a/dlls/winex11.drv/window.c
++++ b/dlls/winex11.drv/window.c
+@@ -870,10 +870,13 @@ static void set_initial_wm_hints( Display *display, Window window )
+     /* class hints */
+     if ((class_hints = XAllocClassHint()))
+     {
+-        static char wine[] = "Wine";
++        static char steam_proton[] = "steam_proton";
++        char proton_app_class[128];
++        const char *app_id = getenv("SteamAppId");
+ 
++        snprintf(proton_app_class, sizeof(proton_app_class), "steam_app_%s", app_id);
+         class_hints->res_name = process_name;
+-        class_hints->res_class = wine;
++        class_hints->res_class = app_id ? proton_app_class : steam_proton;
+         XSetClassHint( display, window, class_hints );
+         XFree( class_hints );
+     }
+
+From 7e91b897e69854cb3afe761f48ef7c9b496ecf95 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?J=C3=B3zef=20Kucia?= <jkucia@codeweavers.com>
+Date: Wed, 1 May 2019 12:28:12 +0200
+Subject: [PATCH] vulkan-1: Prefer built-in DLL.
+
+Games may ship with their own Vulkan loader.
+---
+ dlls/vulkan-1/vulkan.c | 4 ----
+ 1 file changed, 4 deletions(-)
+
+diff --git a/dlls/vulkan-1/vulkan.c b/dlls/vulkan-1/vulkan.c
+index d3b35603a17..4926cf9bf4f 100644
+--- a/dlls/vulkan-1/vulkan.c
++++ b/dlls/vulkan-1/vulkan.c
+@@ -32,10 +32,6 @@ BOOL WINAPI DllMain(HINSTANCE hinst, DWORD reason, void *reserved)
+ 
+     switch (reason)
+     {
+-        case DLL_WINE_PREATTACH:
+-            /* Prefer native as it provides more functionality. */
+-            return FALSE;
+-
+         case DLL_PROCESS_ATTACH:
+             DisableThreadLibraryCalls(hinst);
+             return TRUE;
+
+From 90e3616c89ef7ed38763a3e3af3e9f0cd59697da Mon Sep 17 00:00:00 2001
+From: Nikolay Sivov <nsivov@codeweavers.com>
+Date: Wed, 8 Mar 2017 20:15:40 +0300
+Subject: [PATCH] HACK: dwrite: Don't recommend outline rendering mode
+
+---
+ dlls/dwrite/font.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/dlls/dwrite/font.c b/dlls/dwrite/font.c
+index e22559912c3..41ec809b727 100644
+--- a/dlls/dwrite/font.c
++++ b/dlls/dwrite/font.c
+@@ -740,7 +740,8 @@ static HRESULT WINAPI dwritefontface_GetRecommendedRenderingMode(IDWriteFontFace
+ 
+     ppem = emSize * ppdip;
+ 
+-    if (ppem >= RECOMMENDED_OUTLINE_AA_THRESHOLD) {
++    /* HACK: disable outline rendering mode to workaround d2d issue */
++    if (0 && ppem >= RECOMMENDED_OUTLINE_AA_THRESHOLD) {
+         *mode = DWRITE_RENDERING_MODE_OUTLINE;
+         return S_OK;
+     }

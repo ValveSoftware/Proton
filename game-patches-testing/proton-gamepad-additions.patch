@@ -406,7 +406,7 @@ index 769b7155ee6..3b34de321a5 100644
  NTSTATUS HID_CreateDevice(DEVICE_OBJECT *native_device, HID_MINIDRIVER_REGISTRATION *driver, DEVICE_OBJECT **device) DECLSPEC_HIDDEN;
 -NTSTATUS HID_LinkDevice(DEVICE_OBJECT *device) DECLSPEC_HIDDEN;
 +NTSTATUS HID_LinkDevice(DEVICE_OBJECT *device, BOOL xinput_hack) DECLSPEC_HIDDEN;
- void HID_DeleteDevice(HID_MINIDRIVER_REGISTRATION *driver, DEVICE_OBJECT *device) DECLSPEC_HIDDEN;
+ void HID_DeleteDevice(DEVICE_OBJECT *device) DECLSPEC_HIDDEN;
  void HID_StartDeviceThread(DEVICE_OBJECT *device) DECLSPEC_HIDDEN;
  
 diff --git a/dlls/hidclass.sys/pnp.c b/dlls/hidclass.sys/pnp.c
@@ -452,7 +452,7 @@ diff --git a/dlls/winebus.sys/bus_sdl.c b/dlls/winebus.sys/bus_sdl.c
 index d02572da59a..4608f249c4b 100644
 --- a/dlls/winebus.sys/bus_sdl.c
 +++ b/dlls/winebus.sys/bus_sdl.c
-@@ -72,10 +72,13 @@ DEFINE_GUID(GUID_DEVCLASS_SDL, 0x463d60b5,0x802b,0x4bb2,0x8f,0xdb,0x7d,0xa9,0xb9
+@@ -71,6 +71,8 @@ DEFINE_GUID(GUID_DEVCLASS_SDL, 0x463d60b5,0x802b,0x4bb2,0x8f,0xdb,0x7d,0xa9,0xb9
  
  static void *sdl_handle = NULL;
  
@@ -461,11 +461,6 @@ index d02572da59a..4608f249c4b 100644
  #ifdef SONAME_LIBSDL2
  #define MAKE_FUNCPTR(f) static typeof(f) * p##f = NULL
  MAKE_FUNCPTR(SDL_GetError);
- MAKE_FUNCPTR(SDL_Init);
-+MAKE_FUNCPTR(SDL_JoystickClose);
- MAKE_FUNCPTR(SDL_JoystickEventState);
- MAKE_FUNCPTR(SDL_JoystickGetGUID);
- MAKE_FUNCPTR(SDL_JoystickGetGUIDString);
 @@ -131,6 +134,8 @@ struct platform_private
  
      SDL_Haptic *sdl_haptic;
@@ -598,14 +593,6 @@ index d02572da59a..4608f249c4b 100644
  }
  
  static DWORD CALLBACK deviceloop_thread(void *args)
-@@ -1069,6 +1101,7 @@ NTSTATUS WINAPI sdl_driver_init(DRIVER_OBJECT *driver, UNICODE_STRING *registry_
- #define LOAD_FUNCPTR(f) if((p##f = wine_dlsym(sdl_handle, #f, NULL, 0)) == NULL){WARN("Can't find symbol %s\n", #f); goto sym_not_found;}
-         LOAD_FUNCPTR(SDL_GetError);
-         LOAD_FUNCPTR(SDL_Init);
-+        LOAD_FUNCPTR(SDL_JoystickClose);
-         LOAD_FUNCPTR(SDL_JoystickEventState);
-         LOAD_FUNCPTR(SDL_JoystickGetGUID);
-         LOAD_FUNCPTR(SDL_JoystickGetGUIDString);
 diff --git a/dlls/winebus.sys/bus_udev.c b/dlls/winebus.sys/bus_udev.c
 index c1b93d2bfd7..72b17179e64 100644
 --- a/dlls/winebus.sys/bus_udev.c
@@ -613,14 +600,14 @@ index c1b93d2bfd7..72b17179e64 100644
 @@ -1203,13 +1203,13 @@ static void try_add_device(struct udev_device *dev)
      if (strcmp(subsystem, "hidraw") == 0)
      {
-         device = bus_create_hid_device(udev_driver_obj, hidraw_busidW, vid, pid, input, version, 0, serial, is_gamepad,
+         device = bus_create_hid_device(hidraw_busidW, vid, pid, input, version, 0, serial, is_gamepad,
 -                                       &GUID_DEVCLASS_HIDRAW, &hidraw_vtbl, sizeof(struct platform_private));
 +                                       &GUID_DEVCLASS_HIDRAW, &hidraw_vtbl, sizeof(struct platform_private), FALSE);
      }
  #ifdef HAS_PROPER_INPUT_HEADER
      else if (strcmp(subsystem, "input") == 0)
      {
-         device = bus_create_hid_device(udev_driver_obj, lnxev_busidW, vid, pid, input, version, 0, serial, is_gamepad,
+         device = bus_create_hid_device(lnxev_busidW, vid, pid, input, version, 0, serial, is_gamepad,
 -                                       &GUID_DEVCLASS_LINUXEVENT, &lnxev_vtbl, sizeof(struct wine_input_private));
 +                                       &GUID_DEVCLASS_LINUXEVENT, &lnxev_vtbl, sizeof(struct wine_input_private), FALSE);
      }
