@@ -96,8 +96,8 @@
     patch -Np1 < ../game-patches-testing/msvcrt_nativebuiltin.patch
 
     #Valve game-specific registry entries
-    patch -Np1 < ../game-patches-testing/valve-Set-amd_ags_x64-to-built-in-for-Wolfenstein-2.patch
     patch -Np1 < ../game-patches-testing/valve-apply-LargeAddressAware-fix-for-Bayonetta.patch
+    patch -Np1 < ../game-patches-testing/valve-Set-amd_ags_x64-to-built-in-for-Wolfenstein-2.patch
 
 
 

@@ -11,10 +11,10 @@ diff --git a/loader/wine.inf.in b/loader/wine.inf.in
 index bb178c65c37..1f94c38d0c6 100644
 --- a/loader/wine.inf.in
 +++ b/loader/wine.inf.in
-@@ -3559,6 +3559,7 @@ HKCU,Software\Valve\Steam\ActiveProcess,"PID",0x10001,0x0000fffe
- HKCU,Software\Valve\Steam\ActiveProcess,"SteamClientDll",,"%16426%\Steam\steamclient.dll"
- HKCU,Software\Valve\Steam\ActiveProcess,"SteamClientDll64",,"%16426%\Steam\steamclient64.dll"
+@@ -3730,6 +3730,7 @@ HKCU,Software\Valve\Steam\ActiveProcess,"SteamClientDll64",,"%16426%\Steam\steam
  HKCU,Software\Valve\Steam\ActiveProcess,"SteamPath",,"%16426%\Steam"
+ HKLM,Software\Wow6432Node\Valve\Steam,"InstallPath",,"%16422%\Steam"
+ HKCU,Software\Wine\AppDefaults\Bayonetta.exe,"LargeAddressAware",0x10003,1
 +HKCU,Software\Wine\AppDefaults\NewColossus_x64vk.exe\DllOverrides,"amd_ags_x64",0x2,"builtin,native"
  ;;Likely want *80 and *90 too, but those require removing Wine's manifest files.
  HKCU,Software\Wine\DllOverrides,"atl100",0x2,"native,builtin"
