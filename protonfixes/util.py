@@ -394,6 +394,13 @@ def disable_d3d10():
     winedll_override('d3d10_1', '')
     winedll_override('d3d10core', '')
 
+def disable_d3d9():
+    """ Disable WINE d3d9* dlls
+    """
+
+    log.info('Disabling d3d9')
+    winedll_override('d3d9', 'b')
+
 def disable_dxvk():  # pylint: disable=missing-docstring
     set_environment('PROTON_USE_WINED3D11', '1')
 
