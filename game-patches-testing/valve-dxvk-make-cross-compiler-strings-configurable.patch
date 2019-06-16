@@ -1,0 +1,97 @@
+From 8ba89c94cd3fbc9788e4345aea7d4d69f632cc59 Mon Sep 17 00:00:00 2001
+From: Andrew Eikum <aeikum@codeweavers.com>
+Date: Mon, 3 Jun 2019 12:17:30 -0500
+Subject: [PATCH] Make cross-compiler strings configurable
+
+---
+ build-win32.txt |  9 +++++----
+ build-win64.txt |  9 +++++----
+ meson.build     | 20 ++++++++++++++++++--
+ 3 files changed, 28 insertions(+), 10 deletions(-)
+
+diff --git a/build-win32.txt b/build-win32.txt
+index 0865fc5e..656316b0 100644
+--- a/build-win32.txt
++++ b/build-win32.txt
+@@ -1,8 +1,8 @@
+ [binaries]
+-c = 'i686-w64-mingw32-gcc'
+-cpp = 'i686-w64-mingw32-g++'
+-ar = 'i686-w64-mingw32-ar'
+-strip = 'i686-w64-mingw32-strip'
++c = [@PROTON_DXVK_CROSSCC_PREFIX@'i686-w64-mingw32-gcc']
++cpp = [@PROTON_DXVK_CROSSCC_PREFIX@'i686-w64-mingw32-g++']
++ar = [@PROTON_DXVK_CROSSCC_PREFIX@'i686-w64-mingw32-ar']
++strip = [@PROTON_DXVK_CROSSCC_PREFIX@'i686-w64-mingw32-strip']
+ 
+ [properties]
+ c_args=['-msse', '-msse2']
+@@ -10,6 +10,7 @@ cpp_args=['-msse', '-msse2']
+ c_link_args = ['-static', '-static-libgcc']
+ cpp_link_args = ['-static', '-static-libgcc', '-static-libstdc++', '-Wl,--add-stdcall-alias,--enable-stdcall-fixup']
+ needs_exe_wrapper = true
++crosscc_prefix = [@PROTON_DXVK_CROSSCC_PREFIX@]
+ 
+ [host_machine]
+ system = 'windows'
+diff --git a/build-win64.txt b/build-win64.txt
+index 2a7fbee3..10357f31 100644
+--- a/build-win64.txt
++++ b/build-win64.txt
+@@ -1,13 +1,14 @@
+ [binaries]
+-c = 'x86_64-w64-mingw32-gcc'
+-cpp = 'x86_64-w64-mingw32-g++'
+-ar = 'x86_64-w64-mingw32-ar'
+-strip = 'x86_64-w64-mingw32-strip'
++c = [@PROTON_DXVK_CROSSCC_PREFIX@'x86_64-w64-mingw32-gcc']
++cpp = [@PROTON_DXVK_CROSSCC_PREFIX@'x86_64-w64-mingw32-g++']
++ar = [@PROTON_DXVK_CROSSCC_PREFIX@'x86_64-w64-mingw32-ar']
++strip = [@PROTON_DXVK_CROSSCC_PREFIX@'x86_64-w64-mingw32-strip']
+ 
+ [properties]
+ c_link_args = ['-static', '-static-libgcc']
+ cpp_link_args = ['-static', '-static-libgcc', '-static-libstdc++']
+ needs_exe_wrapper = true
++crosscc_prefix = [@PROTON_DXVK_CROSSCC_PREFIX@]
+ 
+ [host_machine]
+ system = 'windows'
+diff --git a/meson.build b/meson.build
+index 1e3c8ccd..b5fbc4dc 100644
+--- a/meson.build
++++ b/meson.build
+@@ -48,7 +48,23 @@ else
+   if dxvk_compiler.get_id() == 'msvc'
+     wrc = find_program('rc')
+   else
+-    wrc = cpu_family == 'x86_64' ? find_program('x86_64-w64-mingw32-windres') : find_program('i686-w64-mingw32-windres')
++    crosscc_prefix = meson.get_cross_property('crosscc_prefix')
++    if crosscc_prefix.length() > 0
++      wrc = find_program(crosscc_prefix[0])
++      wrc_opts = []
++      skip = true
++      foreach o : crosscc_prefix
++        if skip
++          skip = false
++          continue
++        endif
++        wrc_opts += o
++      endforeach
++      wrc_opts += cpu_family == 'x86_64' ? 'x86_64-w64-mingw32-windres' : 'i686-w64-mingw32-windres'
++    else
++      wrc = cpu_family == 'x86_64' ? find_program('x86_64-w64-mingw32-windres') : find_program('i686-w64-mingw32-windres')
++      wrc_opts = []
++    endif
+   endif
+ 
+   lib_vulkan  = dxvk_compiler.find_library('vulkan-1', dirs : dxvk_library_path)
+@@ -86,7 +102,7 @@ if dxvk_compiler.get_id() == 'msvc'
+ else
+   wrc_generator = generator(wrc,
+   output    : [ '@BASENAME@' + res_ext ],
+-  arguments : [ '-i', '@INPUT@', '-o', '@OUTPUT@' ])
++  arguments : wrc_opts + [ '-i', '@INPUT@', '-o', '@OUTPUT@' ])
+ endif
+ 
+ dxvk_version = vcs_tag(

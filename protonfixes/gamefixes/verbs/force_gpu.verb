@@ -1,0 +1,33 @@
+w_metadata force_gpu=amd settings \
+    title="Fake an AMD RADEON RX 480 card in place of Nvidia cards (default)"
+w_metadata force_gpu=nvidia settings \
+    title="Force Nvidia GeForce GTX 970 card"
+w_metadata force_gpu=no settings \
+    title="Use WINE/Proton defaults for GPU"
+
+load_force_gpu()
+{
+    # Both cards are from dlls/wined3d/adapter_gl.c
+    # cards_amd_mesa[] / cards_nvidia_mesa[] list
+    # most top in the list
+    case "$arg" in
+        amd) _W_gpu_vendor="dword:00001002"; _W_gpu_device="dword:000067df";;
+        nvidia) _W_gpu_vendor="dword:000010de"; _W_gpu_device="dword:000013c2";;
+        no) _W_gpu_vendor="-"; _W_gpu_device="-";;
+        *) w_die "Unexpected argument '$arg'. Should be default/amd/nvidia";;
+    esac
+
+    echo "Forcing GPU to '$arg'"
+    cat > "$W_TMP"/force_gpu.reg <<_EOF_
+REGEDIT4
+
+[HKEY_CURRENT_USER\\Software\\Wine\\Direct3D]
+"VideoPciVendorID"=${_W_gpu_vendor}
+"VideoPciDeviceID"=${_W_gpu_device}
+_EOF_
+
+    w_try_regedit "$W_TMP_WIN"\\force_gpu.reg
+
+    unset _W_gpu_vendor
+    unset _W_gpu_device
+}

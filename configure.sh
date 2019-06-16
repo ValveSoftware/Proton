@@ -111,6 +111,10 @@ function configure() {
     echo "STEAMRT32_IMAGE := $(escape_for_make "$steamrt32_name")"
     echo "STEAMRT_PATH    := $(escape_for_make "$steamrt_path")"
 
+    if [[ -n "$arg_crosscc_prefix" ]]; then
+      echo "DXVK_CROSSCC_PREFIX := $(escape_for_make "$arg_crosscc_prefix")," #comma is not a typo
+    fi
+
     # Include base
     echo ""
     echo "include \$(SRCDIR)/build/makefile_base.mak"
@@ -130,6 +134,7 @@ arg_steamrt=""
 arg_no_steamrt=""
 arg_ffmpeg=""
 arg_build_name=""
+arg_crosscc_prefix=""
 arg_help=""
 invalid_args=""
 function parse_args() {
@@ -165,6 +170,9 @@ function parse_args() {
       arg_help=1
     elif [[ $arg = --build-name ]]; then
       arg_build_name="$val"
+      val_used=1
+    elif [[ $arg = --dxvk-crosscc-prefix ]]; then
+      arg_crosscc_prefix="$val"
       val_used=1
     elif [[ $arg = --with-ffmpeg ]]; then
       arg_ffmpeg=1
@@ -223,6 +231,10 @@ usage() {
   "$1" "    --build-name=<name>  Set the name of the build that displays when used in Steam"
   "$1" ""
   "$1" "    --with-ffmpeg        Build ffmpeg for WMA audio support"
+  "$1" ""
+  "$1" "    --dxvk-crosscc-prefix='<prefix>' Quoted and comma-separated list of arguments to prefix before"
+  "$1" "                                     the cross-compiler that builds DXVK. E.g:"
+  "$1" "                                     --dxvk-crosscc-prefix=\"schroot\",\"-c\",\"some_chroot\",\"--\""
   "$1" ""
   "$1" "  Steam Runtime"
   "$1" "    Proton builds that are to be installed & run under the steam client must be built with"

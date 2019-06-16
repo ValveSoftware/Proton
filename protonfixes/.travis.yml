@@ -1,0 +1,6 @@
+language: python
+python:
+  - "3.6" # Ubuntu 18.04, Fedora 28
+install:
+  - pip install pylint
+script: pylint protonfixes/*
