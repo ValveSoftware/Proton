@@ -440,7 +440,7 @@ with prefix_lock:
         except (ValueError, OSError):
             log("Unable to write VR config! " + str(sys.exc_info()[1]))
 
-    dxvkfiles = ("d3d11", "d3d10", "d3d10core", "d3d10_1", "dxgi")
+    dxvkfiles = ("d3d11", "d3d10", "d3d10core", "d3d10_1", "d3d9", "dxgi")
     def make_dxvk_links(dll_dir, link_dir):
         for f in dxvkfiles:
             dst = link_dir + "/" + f + ".dll"
@@ -473,6 +473,9 @@ if "nod3d10" in config_opts:
     dlloverrides["d3d10_1"] = ""
     dlloverrides["d3d10"] = ""
     dlloverrides["dxgi"] = ""
+
+if "nod3d9" in config_opts:
+    dlloverrides["d3d9"] = ""
 
 s = ""
 for dll in dlloverrides:
