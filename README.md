@@ -2,14 +2,15 @@ This is my build of Proton which the most recent release of vanilla wine, has ff
 
 All patches:  
 -Warframe launcher loop patch  
--DXVK Async patch applied and enabled specifically for warframe
+-DXVK Async patch applied and enabled specifically for warframe and poe
 -Mech Warrior online patch  
 -Resident Evil 4 patch  
 -World of Final Fantasy patch  
 -Skyrim SE/Fallout 4 script extender patch  
--kde plasma systemtray fix patch
+-d9vk integration - 
+-protonfixes integration
 -FAudio with FFMpeg enabled (fixes audio/voices in multiple games)  
--All of Valve's wine proton patches. Yes. All of them. I got quite a few of them from TKG, and parsed the remaining patches myself from their git commits.
+-All of Valve's wine proton patches. Yes. All of them. 
 
 Building Proton in a nutshell:  
 
@@ -72,3 +73,13 @@ vagrant halt
 13. Now open vagrant_share inside the cloned repo folder on your main system. Extract the tarball into `~/.steam/root/compatibilitytools.d/`, and restart steam. You will have to create the compatibilitytools.d folder.  
 
 
+Credits to the proper people are deserved. Many people besides myself have contributed to various parts:
+
+https://github.com/ValveSoftware/Proton
+https://github.com/wine-mirror/wine
+https://github.com/wine-staging/wine-staging
+https://github.com/doitsujin/dxvk
+https://github.com/Joshua-Ashton/d9vk
+https://github.com/Tk-Glitch/PKGBUILDS/tree/master/wine-tkg-git/wine-tkg-patches
+https://github.com/jomihaka/dxvk-poe-hack
+https://github.com/simons-public/protonfixes
