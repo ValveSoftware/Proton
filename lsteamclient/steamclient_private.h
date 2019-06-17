@@ -42,6 +42,7 @@ bool steamclient_dos_path_to_unix_path(const char *src, char *dst);
 const char **steamclient_dos_to_unix_stringlist(const char **src);
 void steamclient_free_stringlist(const char **out);
 const char *steamclient_isteamcontroller_getglyph(int origin, const char *lin_path);
+uint32 manual_convert_nNativeKeyCode(uint32 win_vk);
 void *create_LinuxISteamMatchmakingServerListResponse(void *win, const char *version);
 void *create_LinuxISteamMatchmakingPingResponse(void *win, const char *version);
 void *create_LinuxISteamMatchmakingPlayersResponse(void *win, const char *version);
