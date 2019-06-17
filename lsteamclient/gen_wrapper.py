@@ -213,179 +213,301 @@ path_conversions = [
             "parent_name": "GetAppInstallDir",
             "l2w_names": ["pchDirectory"],
             "l2w_lens": ["cchNameMax"],
+            "l2w_urls": [False],
             "w2l_names": [],
             "w2l_arrays": [],
+            "w2l_urls": [],
             "return_is_size": True
         },
         {
             "parent_name": "GetAppInstallDir",
             "l2w_names": ["pchFolder"],
             "l2w_lens": ["cchFolderBufferSize"],
+            "l2w_urls": [False],
             "w2l_names": [],
             "w2l_arrays": [],
+            "w2l_urls": [],
             "return_is_size": True
         },
         {
             "parent_name": "GetFileDetails",
             "l2w_names": [],
             "l2w_lens": [],
+            "l2w_urls": [],
             "w2l_names": ["pszFileName"],
             "w2l_arrays": [False],
+            "w2l_urls": [False],
             "return_is_size": True
         },
         {
             "parent_name": "GetGlyphForActionOrigin",
             "l2w_names": [None], #return value
             "l2w_lens": [None],
+            "l2w_urls": [None],
             "w2l_names": [],
             "w2l_arrays": [],
+            "w2l_urls": [],
             "return_is_size": False
         },
         ### ISteamGameServer::SetModDir - "Just the folder name, not the whole path. I.e. "Spacewar"."
         {
+            "parent_name": "LoadURL",
+            "l2w_names": [],
+            "l2w_lens": [],
+            "l2w_urls": [],
+            "w2l_names": ["pchURL"],
+            "w2l_arrays": [False],
+            "w2l_urls": [True],
+            "return_is_size": False
+        },
+        {
             "parent_name": "FileLoadDialogResponse",
             "l2w_names": [],
             "l2w_lens": [],
+            "l2w_urls": [],
             "w2l_names": ["pchSelectedFiles"],
             "w2l_arrays": [True],
+            "w2l_urls": [False],
+            "return_is_size": False
+        },
+        {
+            "parent_name": "HTML_StartRequest_t",
+            "l2w_names": ["pchURL"],
+            "l2w_lens": [None],
+            "l2w_urls": [True],
+            "w2l_names": [],
+            "w2l_arrays": [],
+            "w2l_urls": [],
+            "return_is_size": False
+        },
+        {
+            "parent_name": "HTML_URLChanged_t",
+            "l2w_names": ["pchURL"],
+            "l2w_lens": [None],
+            "l2w_urls": [True],
+            "w2l_names": [],
+            "w2l_arrays": [],
+            "w2l_urls": [],
+            "return_is_size": False
+        },
+        {
+            "parent_name": "HTML_FinishedRequest_t",
+            "l2w_names": ["pchURL"],
+            "l2w_lens": [None],
+            "l2w_urls": [True],
+            "w2l_names": [],
+            "w2l_arrays": [],
+            "w2l_urls": [],
+            "return_is_size": False
+        },
+        {
+            "parent_name": "HTML_OpenLinkInNewTab_t",
+            "l2w_names": ["pchURL"],
+            "l2w_lens": [None],
+            "l2w_urls": [True],
+            "w2l_names": [],
+            "w2l_arrays": [],
+            "w2l_urls": [],
+            "return_is_size": False
+        },
+        {
+            "parent_name": "HTML_LinkAtPosition_t",
+            "l2w_names": ["pchURL"],
+            "l2w_lens": [None],
+            "l2w_urls": [True],
+            "w2l_names": [],
+            "w2l_arrays": [],
+            "w2l_urls": [],
             "return_is_size": False
         },
         {
             "parent_name": "HTML_FileOpenDialog_t",
             "l2w_names": ["pchInitialFile"],
             "l2w_lens": [None],
+            "l2w_urls": [True],
             "w2l_names": [],
             "w2l_arrays": [],
+            "w2l_urls": [],
             "return_is_size": False
         },
-        ### XXX: some URLs could be file: protocol
+        {
+            "parent_name": "HTML_NewWindow_t",
+            "l2w_names": ["pchURL"],
+            "l2w_lens": [None],
+            "l2w_urls": [True],
+            "w2l_names": [],
+            "w2l_arrays": [],
+            "w2l_urls": [],
+            "return_is_size": False
+        },
         {
             "parent_name": "PublishWorkshopFile",
             "l2w_names": [],
             "l2w_lens": [],
+            "l2w_urls": [],
             "w2l_names": ["pchFile", "pchPreviewFile"],
             "w2l_arrays": [False, False],
+            "w2l_urls": [False, False],
             "return_is_size": False
         },
         {
             "parent_name": "UpdatePublishedFileFile",
             "l2w_names": [],
             "l2w_lens": [],
+            "l2w_urls": [],
             "w2l_names": ["pchFile"],
             "w2l_arrays": [False],
+            "w2l_urls": [False],
             "return_is_size": False
         },
         {
             "parent_name": "UpdatePublishedFilePreviewFile",
             "l2w_names": [],
             "l2w_lens": [],
+            "l2w_urls": [],
             "w2l_names": ["pchPreviewFile"],
             "w2l_arrays": [False],
+            "w2l_urls": [False],
             "return_is_size": False
         },
         {
             "parent_name": "PublishVideo",
             "l2w_names": [],
             "l2w_lens": [],
+            "l2w_urls": [],
             "w2l_names": ["pchPreviewFile"],
             "w2l_arrays": [False],
+            "w2l_urls": [False],
             "return_is_size": False
         },
         {
             "parent_name": "AddScreenshotToLibrary",
             "l2w_names": [],
             "l2w_lens": [],
+            "l2w_urls": [],
             "w2l_names": ["pchFilename", "pchThumbnailFilename"],
             "w2l_arrays": [False, False],
+            "w2l_urls": [False, False],
             "return_is_size": False
         },
         {
             "parent_name": "AddVRScreenshotToLibrary",
             "l2w_names": [],
             "l2w_lens": [],
+            "l2w_urls": [],
             "w2l_names": ["pchFilename", "pchVRFilename"],
             "w2l_arrays": [False, False],
+            "w2l_urls": [False, False],
             "return_is_size": False
         },
         {
             "parent_name": "UGCDownloadToLocation",
             "l2w_names": [],
             "l2w_lens": [],
+            "l2w_urls": [],
             "w2l_names": ["pchLocation"],
             "w2l_arrays": [False],
+            "w2l_urls": [False],
             "return_is_size": False
         },
-        ### is GetQueryUGCAdditionalPreview URL a file:?
+        {
+            "parent_name": "GetQueryUGCAdditionalPreview",
+            "l2w_names": ["pchURLOrVideoID"],
+            "l2w_lens": ["cchURLSize"],
+            "l2w_urls": [True],
+            "w2l_names": [],
+            "w2l_arrays": [],
+            "w2l_urls": [],
+            "return_is_size": False
+        },
         {
             "parent_name": "SetItemContent",
             "l2w_names": [],
             "l2w_lens": [],
+            "l2w_urls": [],
             "w2l_names": ["pszContentFolder"],
             "w2l_arrays": [False],
+            "w2l_urls": [False],
             "return_is_size": False
         },
         {
             "parent_name": "SetItemPreview",
             "l2w_names": [],
             "l2w_lens": [],
+            "l2w_urls": [],
             "w2l_names": ["pszPreviewFile"],
             "w2l_arrays": [False],
+            "w2l_urls": [False],
             "return_is_size": False
         },
         {
             "parent_name": "AddItemPreviewFile",
             "l2w_names": [],
             "l2w_lens": [],
+            "l2w_urls": [],
             "w2l_names": ["pszPreviewFile"],
             "w2l_arrays": [False],
+            "w2l_urls": [False],
             "return_is_size": False
         },
         {
             "parent_name": "UpdateItemPreviewFile",
             "l2w_names": [],
             "l2w_lens": [],
+            "l2w_urls": [],
             "w2l_names": ["pszPreviewFile"],
             "w2l_arrays": [False],
+            "w2l_urls": [False],
             "return_is_size": False
         },
         {
             "parent_name": "GetItemInstallInfo",
             "l2w_names": ["pchFolder"],
             "l2w_lens": ["cchFolderSize"],
+            "l2w_urls": [False],
             "w2l_names": [],
             "w2l_arrays": [],
+            "w2l_urls": [],
             "return_is_size": False
         },
         {
             "parent_name": "BInitWorkshopForGameServer",
             "l2w_names": [],
             "l2w_lens": [],
+            "l2w_urls": [],
             "w2l_names": ["pszFolder"],
             "w2l_arrays": [False],
+            "w2l_urls": [False],
             "return_is_size": False
         },
         {
             "parent_name": "GetUserDataFolder",
             "l2w_names": ["pchBuffer"],
             "l2w_lens": ["cubBuffer"],
+            "l2w_urls": [False],
             "w2l_names": [],
             "w2l_arrays": [],
+            "w2l_urls": [],
             "return_is_size": False
         },
         {
             "parent_name": "CheckFileSignature",
             "l2w_names": [],
             "l2w_lens": [],
+            "l2w_urls": [],
             "w2l_names": ["szFileName"],
             "w2l_arrays": [False],
+            "w2l_urls": [False],
             "return_is_size": False
         },
         {
             "parent_name": "Init",
             "l2w_names": [],
             "l2w_lens": [],
+            "l2w_urls": [],
             "w2l_names": ["pchAbsolutePathToControllerConfigVDF"],
             "w2l_arrays": [False],
+            "w2l_urls": [False],
             "return_is_size": False
         }
 ]
@@ -476,6 +598,11 @@ class DummyWriter(object):
     def write(self, s):
         #noop
         pass
+
+def to_c_bool(b):
+    if b:
+        return "1"
+    return "0"
 
 dummy_writer = DummyWriter()
 
@@ -571,7 +698,7 @@ def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, e
                 pass
             else:
                 cfile.write("    char lin_%s[PATH_MAX];\n" % path_conv["w2l_names"][i])
-                cfile.write("    steamclient_dos_path_to_unix_path(%s, lin_%s);\n" % (path_conv["w2l_names"][i], path_conv["w2l_names"][i]))
+                cfile.write("    steamclient_dos_path_to_unix_path(%s, lin_%s, %s);\n" % (path_conv["w2l_names"][i], path_conv["w2l_names"][i], to_c_bool(path_conv["w2l_urls"][i])))
         if None in path_conv["l2w_names"]:
             cfile.write("    const char *path_result;\n")
         elif path_conv["return_is_size"]:
@@ -668,7 +795,7 @@ def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, e
                 cfile.write("    ")
                 if path_conv["return_is_size"]:
                     cfile.write("path_result = ")
-                cfile.write("steamclient_unix_path_to_dos_path(path_result, %s, %s, %s);\n" % (path_conv["l2w_names"][i], path_conv["l2w_names"][i], path_conv["l2w_lens"][i]))
+                cfile.write("steamclient_unix_path_to_dos_path(path_result, %s, %s, %s, %s);\n" % (path_conv["l2w_names"][i], path_conv["l2w_names"][i], path_conv["l2w_lens"][i], to_c_bool(path_conv["l2w_urls"][i])))
             else:
                 #string is in return value
                 #ISteamController::GetGlyphForActionOrigin is the only user here for now
@@ -980,7 +1107,11 @@ def handle_struct(sdkver, struct):
                     struct_needs_conversion(m.type):
                 cppfile.write("    %s_to_%s_struct_%s_%s(&%s->%s, &%s->%s);\n" % (src, dst, m.type.spelling, sdkver, src, m.displayname, dst, m.displayname))
             elif path_conv and m.displayname in path_conv["l2w_names"]:
-                cppfile.write("    steamclient_unix_path_to_dos_path(1, %s->%s, g_tmppath, sizeof(g_tmppath));\n" % (src, m.displayname))
+                for i in range(len(path_conv["l2w_names"])):
+                    if path_conv["l2w_names"][i] == m.displayname:
+                        url = path_conv["l2w_urls"][i]
+                        break
+                cppfile.write("    steamclient_unix_path_to_dos_path(1, %s->%s, g_tmppath, sizeof(g_tmppath), %s);\n" % (src, m.displayname, to_c_bool(url)))
                 cppfile.write("    %s->%s = g_tmppath;\n" % (dst, m.displayname))
             else:
                 cppfile.write("    %s->%s = %s->%s;\n" % (dst, m.displayname, src, m.displayname))

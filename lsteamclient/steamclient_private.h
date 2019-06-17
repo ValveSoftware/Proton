@@ -37,8 +37,8 @@ typedef struct __winISteamParties winISteamParties;
 typedef struct __winX winX;
 
 void *create_win_interface(const char *name, void *linux_side);
-unsigned int steamclient_unix_path_to_dos_path(bool api_result, const char *src, char *dst, uint32 dst_bytes);
-bool steamclient_dos_path_to_unix_path(const char *src, char *dst);
+unsigned int steamclient_unix_path_to_dos_path(bool api_result, const char *src, char *dst, uint32 dst_bytes, int is_url);
+bool steamclient_dos_path_to_unix_path(const char *src, char *dst, int is_url);
 const char **steamclient_dos_to_unix_stringlist(const char **src);
 void steamclient_free_stringlist(const char **out);
 const char *steamclient_isteamcontroller_getglyph(int origin, const char *lin_path);

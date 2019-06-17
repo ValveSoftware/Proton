@@ -1216,7 +1216,7 @@ DEFINE_THISCALL_WRAPPER(winISteamController_STEAMCONTROLLER_INTERFACE_VERSION_In
 bool __thiscall winISteamController_STEAMCONTROLLER_INTERFACE_VERSION_Init(winISteamController_STEAMCONTROLLER_INTERFACE_VERSION *_this, const char * pchAbsolutePathToControllerConfigVDF)
 {
     char lin_pchAbsolutePathToControllerConfigVDF[PATH_MAX];
-    steamclient_dos_path_to_unix_path(pchAbsolutePathToControllerConfigVDF, lin_pchAbsolutePathToControllerConfigVDF);
+    steamclient_dos_path_to_unix_path(pchAbsolutePathToControllerConfigVDF, lin_pchAbsolutePathToControllerConfigVDF, 0);
     TRACE("%p\n", _this);
     return cppISteamController_STEAMCONTROLLER_INTERFACE_VERSION_Init(_this->linux_side, pchAbsolutePathToControllerConfigVDF ? lin_pchAbsolutePathToControllerConfigVDF : NULL);
 }

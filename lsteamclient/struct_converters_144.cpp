@@ -889,7 +889,8 @@ struct winHTML_StartRequest_t_40 {
 void cb_HTML_StartRequest_t_40(const struct HTML_StartRequest_t *lin, struct winHTML_StartRequest_t_40 *win)
 {
     win->unBrowserHandle = lin->unBrowserHandle;
-    win->pchURL = lin->pchURL;
+    steamclient_unix_path_to_dos_path(1, lin->pchURL, g_tmppath, sizeof(g_tmppath), 1);
+    win->pchURL = g_tmppath;
     win->pchTarget = lin->pchTarget;
     win->pchPostData = lin->pchPostData;
     win->bIsRedirect = lin->bIsRedirect;
@@ -900,7 +901,8 @@ void cb_HTML_StartRequest_t_40(const struct HTML_StartRequest_t *lin, struct win
 void cb_HTML_StartRequest_t_20(const struct HTML_StartRequest_t *lin, struct winHTML_StartRequest_t_20 *win)
 {
     win->unBrowserHandle = lin->unBrowserHandle;
-    win->pchURL = lin->pchURL;
+    steamclient_unix_path_to_dos_path(1, lin->pchURL, g_tmppath, sizeof(g_tmppath), 1);
+    win->pchURL = g_tmppath;
     win->pchTarget = lin->pchTarget;
     win->pchPostData = lin->pchPostData;
     win->bIsRedirect = lin->bIsRedirect;
@@ -935,7 +937,8 @@ struct winHTML_URLChanged_t_48 {
 void cb_HTML_URLChanged_t_48(const struct HTML_URLChanged_t *lin, struct winHTML_URLChanged_t_48 *win)
 {
     win->unBrowserHandle = lin->unBrowserHandle;
-    win->pchURL = lin->pchURL;
+    steamclient_unix_path_to_dos_path(1, lin->pchURL, g_tmppath, sizeof(g_tmppath), 1);
+    win->pchURL = g_tmppath;
     win->pchPostData = lin->pchPostData;
     win->bIsRedirect = lin->bIsRedirect;
     win->pchPageTitle = lin->pchPageTitle;
@@ -947,7 +950,8 @@ void cb_HTML_URLChanged_t_48(const struct HTML_URLChanged_t *lin, struct winHTML
 void cb_HTML_URLChanged_t_24(const struct HTML_URLChanged_t *lin, struct winHTML_URLChanged_t_24 *win)
 {
     win->unBrowserHandle = lin->unBrowserHandle;
-    win->pchURL = lin->pchURL;
+    steamclient_unix_path_to_dos_path(1, lin->pchURL, g_tmppath, sizeof(g_tmppath), 1);
+    win->pchURL = g_tmppath;
     win->pchPostData = lin->pchPostData;
     win->bIsRedirect = lin->bIsRedirect;
     win->pchPageTitle = lin->pchPageTitle;
@@ -977,7 +981,8 @@ struct winHTML_FinishedRequest_t_24 {
 void cb_HTML_FinishedRequest_t_24(const struct HTML_FinishedRequest_t *lin, struct winHTML_FinishedRequest_t_24 *win)
 {
     win->unBrowserHandle = lin->unBrowserHandle;
-    win->pchURL = lin->pchURL;
+    steamclient_unix_path_to_dos_path(1, lin->pchURL, g_tmppath, sizeof(g_tmppath), 1);
+    win->pchURL = g_tmppath;
     win->pchPageTitle = lin->pchPageTitle;
 }
 #endif
@@ -986,7 +991,8 @@ void cb_HTML_FinishedRequest_t_24(const struct HTML_FinishedRequest_t *lin, stru
 void cb_HTML_FinishedRequest_t_12(const struct HTML_FinishedRequest_t *lin, struct winHTML_FinishedRequest_t_12 *win)
 {
     win->unBrowserHandle = lin->unBrowserHandle;
-    win->pchURL = lin->pchURL;
+    steamclient_unix_path_to_dos_path(1, lin->pchURL, g_tmppath, sizeof(g_tmppath), 1);
+    win->pchURL = g_tmppath;
     win->pchPageTitle = lin->pchPageTitle;
 }
 #endif
@@ -1011,7 +1017,8 @@ struct winHTML_OpenLinkInNewTab_t_16 {
 void cb_HTML_OpenLinkInNewTab_t_16(const struct HTML_OpenLinkInNewTab_t *lin, struct winHTML_OpenLinkInNewTab_t_16 *win)
 {
     win->unBrowserHandle = lin->unBrowserHandle;
-    win->pchURL = lin->pchURL;
+    steamclient_unix_path_to_dos_path(1, lin->pchURL, g_tmppath, sizeof(g_tmppath), 1);
+    win->pchURL = g_tmppath;
 }
 #endif
 
@@ -1019,7 +1026,8 @@ void cb_HTML_OpenLinkInNewTab_t_16(const struct HTML_OpenLinkInNewTab_t *lin, st
 void cb_HTML_OpenLinkInNewTab_t_8(const struct HTML_OpenLinkInNewTab_t *lin, struct winHTML_OpenLinkInNewTab_t_8 *win)
 {
     win->unBrowserHandle = lin->unBrowserHandle;
-    win->pchURL = lin->pchURL;
+    steamclient_unix_path_to_dos_path(1, lin->pchURL, g_tmppath, sizeof(g_tmppath), 1);
+    win->pchURL = g_tmppath;
 }
 #endif
 
@@ -1085,7 +1093,8 @@ void cb_HTML_LinkAtPosition_t_32(const struct HTML_LinkAtPosition_t *lin, struct
     win->unBrowserHandle = lin->unBrowserHandle;
     win->x = lin->x;
     win->y = lin->y;
-    win->pchURL = lin->pchURL;
+    steamclient_unix_path_to_dos_path(1, lin->pchURL, g_tmppath, sizeof(g_tmppath), 1);
+    win->pchURL = g_tmppath;
     win->bInput = lin->bInput;
     win->bLiveLink = lin->bLiveLink;
 }
@@ -1097,7 +1106,8 @@ void cb_HTML_LinkAtPosition_t_20(const struct HTML_LinkAtPosition_t *lin, struct
     win->unBrowserHandle = lin->unBrowserHandle;
     win->x = lin->x;
     win->y = lin->y;
-    win->pchURL = lin->pchURL;
+    steamclient_unix_path_to_dos_path(1, lin->pchURL, g_tmppath, sizeof(g_tmppath), 1);
+    win->pchURL = g_tmppath;
     win->bInput = lin->bInput;
     win->bLiveLink = lin->bLiveLink;
 }
@@ -1190,7 +1200,7 @@ void cb_HTML_FileOpenDialog_t_24(const struct HTML_FileOpenDialog_t *lin, struct
 {
     win->unBrowserHandle = lin->unBrowserHandle;
     win->pchTitle = lin->pchTitle;
-    steamclient_unix_path_to_dos_path(1, lin->pchInitialFile, g_tmppath, sizeof(g_tmppath));
+    steamclient_unix_path_to_dos_path(1, lin->pchInitialFile, g_tmppath, sizeof(g_tmppath), 1);
     win->pchInitialFile = g_tmppath;
 }
 #endif
@@ -1200,7 +1210,7 @@ void cb_HTML_FileOpenDialog_t_12(const struct HTML_FileOpenDialog_t *lin, struct
 {
     win->unBrowserHandle = lin->unBrowserHandle;
     win->pchTitle = lin->pchTitle;
-    steamclient_unix_path_to_dos_path(1, lin->pchInitialFile, g_tmppath, sizeof(g_tmppath));
+    steamclient_unix_path_to_dos_path(1, lin->pchInitialFile, g_tmppath, sizeof(g_tmppath), 1);
     win->pchInitialFile = g_tmppath;
 }
 #endif
@@ -1235,7 +1245,8 @@ struct winHTML_NewWindow_t_40 {
 void cb_HTML_NewWindow_t_40(const struct HTML_NewWindow_t *lin, struct winHTML_NewWindow_t_40 *win)
 {
     win->unBrowserHandle = lin->unBrowserHandle;
-    win->pchURL = lin->pchURL;
+    steamclient_unix_path_to_dos_path(1, lin->pchURL, g_tmppath, sizeof(g_tmppath), 1);
+    win->pchURL = g_tmppath;
     win->unX = lin->unX;
     win->unY = lin->unY;
     win->unWide = lin->unWide;
@@ -1248,7 +1259,8 @@ void cb_HTML_NewWindow_t_40(const struct HTML_NewWindow_t *lin, struct winHTML_N
 void cb_HTML_NewWindow_t_28(const struct HTML_NewWindow_t *lin, struct winHTML_NewWindow_t_28 *win)
 {
     win->unBrowserHandle = lin->unBrowserHandle;
-    win->pchURL = lin->pchURL;
+    steamclient_unix_path_to_dos_path(1, lin->pchURL, g_tmppath, sizeof(g_tmppath), 1);
+    win->pchURL = g_tmppath;
     win->unX = lin->unX;
     win->unY = lin->unY;
     win->unWide = lin->unWide;

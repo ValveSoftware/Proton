@@ -169,7 +169,8 @@ struct winHTML_NewWindow_t_32 {
 void cb_HTML_NewWindow_t_32(const struct HTML_NewWindow_t *lin, struct winHTML_NewWindow_t_32 *win)
 {
     win->unBrowserHandle = lin->unBrowserHandle;
-    win->pchURL = lin->pchURL;
+    steamclient_unix_path_to_dos_path(1, lin->pchURL, g_tmppath, sizeof(g_tmppath), 1);
+    win->pchURL = g_tmppath;
     win->unX = lin->unX;
     win->unY = lin->unY;
     win->unWide = lin->unWide;
@@ -181,7 +182,8 @@ void cb_HTML_NewWindow_t_32(const struct HTML_NewWindow_t *lin, struct winHTML_N
 void cb_HTML_NewWindow_t_24(const struct HTML_NewWindow_t *lin, struct winHTML_NewWindow_t_24 *win)
 {
     win->unBrowserHandle = lin->unBrowserHandle;
-    win->pchURL = lin->pchURL;
+    steamclient_unix_path_to_dos_path(1, lin->pchURL, g_tmppath, sizeof(g_tmppath), 1);
+    win->pchURL = g_tmppath;
     win->unX = lin->unX;
     win->unY = lin->unY;
     win->unWide = lin->unWide;

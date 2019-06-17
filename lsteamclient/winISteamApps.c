@@ -154,7 +154,7 @@ uint32 __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetAppInstallDir(
     uint32 path_result;
     TRACE("%p\n", _this);
     path_result = cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetAppInstallDir(_this->linux_side, appID, pchFolder, cchFolderBufferSize);
-    path_result = steamclient_unix_path_to_dos_path(path_result, pchFolder, pchFolder, cchFolderBufferSize);
+    path_result = steamclient_unix_path_to_dos_path(path_result, pchFolder, pchFolder, cchFolderBufferSize, 0);
     return path_result;
 }
 
@@ -205,7 +205,7 @@ DEFINE_THISCALL_WRAPPER(winISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetFileDeta
 SteamAPICall_t __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetFileDetails(winISteamApps_STEAMAPPS_INTERFACE_VERSION008 *_this, const char * pszFileName)
 {
     char lin_pszFileName[PATH_MAX];
-    steamclient_dos_path_to_unix_path(pszFileName, lin_pszFileName);
+    steamclient_dos_path_to_unix_path(pszFileName, lin_pszFileName, 0);
     uint32 path_result;
     TRACE("%p\n", _this);
     path_result = cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetFileDetails(_this->linux_side, pszFileName ? lin_pszFileName : NULL);
@@ -412,7 +412,7 @@ uint32 __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetAppInstallDir(
     uint32 path_result;
     TRACE("%p\n", _this);
     path_result = cppISteamApps_STEAMAPPS_INTERFACE_VERSION007_GetAppInstallDir(_this->linux_side, appID, pchFolder, cchFolderBufferSize);
-    path_result = steamclient_unix_path_to_dos_path(path_result, pchFolder, pchFolder, cchFolderBufferSize);
+    path_result = steamclient_unix_path_to_dos_path(path_result, pchFolder, pchFolder, cchFolderBufferSize, 0);
     return path_result;
 }
 
@@ -635,7 +635,7 @@ uint32 __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION006_GetAppInstallDir(
     uint32 path_result;
     TRACE("%p\n", _this);
     path_result = cppISteamApps_STEAMAPPS_INTERFACE_VERSION006_GetAppInstallDir(_this->linux_side, appID, pchFolder, cchFolderBufferSize);
-    path_result = steamclient_unix_path_to_dos_path(path_result, pchFolder, pchFolder, cchFolderBufferSize);
+    path_result = steamclient_unix_path_to_dos_path(path_result, pchFolder, pchFolder, cchFolderBufferSize, 0);
     return path_result;
 }
 
@@ -842,7 +842,7 @@ uint32 __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION005_GetAppInstallDir(
     uint32 path_result;
     TRACE("%p\n", _this);
     path_result = cppISteamApps_STEAMAPPS_INTERFACE_VERSION005_GetAppInstallDir(_this->linux_side, appID, pchFolder, cchFolderBufferSize);
-    path_result = steamclient_unix_path_to_dos_path(path_result, pchFolder, pchFolder, cchFolderBufferSize);
+    path_result = steamclient_unix_path_to_dos_path(path_result, pchFolder, pchFolder, cchFolderBufferSize, 0);
     return path_result;
 }
 

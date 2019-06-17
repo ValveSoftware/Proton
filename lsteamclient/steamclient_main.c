@@ -39,17 +39,34 @@ BOOL WINAPI DllMain(HINSTANCE instance, DWORD reason, void *reserved)
 }
 
 /* returns the number of bytes written to dst, not including the NUL terminator */
-unsigned int steamclient_unix_path_to_dos_path(bool api_result, const char *src, char *dst, uint32 dst_bytes)
+unsigned int steamclient_unix_path_to_dos_path(bool api_result, const char *src, char *dst, uint32 dst_bytes, int is_url)
 {
     WCHAR *dosW;
     uint32 r;
 
+    static const char file_prot[] = "file://";
+
     if(!dst || !dst_bytes)
         return 0;
 
-    if(!src || !api_result){
+    if(!src || !*src || !api_result){
         *dst = 0;
         return 0;
+    }
+
+    if(is_url){
+        /* convert only file: URLs */
+        if(strncmp(src, file_prot, 7) != 0){
+            strcpy(dst, src);
+            return strlen(dst);
+        }
+
+        src += 7;
+        memcpy(dst, file_prot, sizeof(file_prot));
+        if(dst_bytes < sizeof(file_prot))
+            return 0;
+        dst += 7;
+        dst_bytes -= 7;
     }
 
     dosW = wine_get_dos_file_name(src);
@@ -71,12 +88,25 @@ unsigned int steamclient_unix_path_to_dos_path(bool api_result, const char *src,
 #define IS_ABSOLUTE(x) (*x == '/' || *x == '\\' || (*x && *(x + 1) == ':'))
 
 /* returns non-zero on success, zero on failure */
-bool steamclient_dos_path_to_unix_path(const char *src, char *dst)
+bool steamclient_dos_path_to_unix_path(const char *src, char *dst, int is_url)
 {
+    static const char file_prot[] = "file://";
+
     *dst = 0;
 
     if(!src || !*src)
         return 0;
+
+    if(is_url){
+        if(strncmp(src, file_prot, 7) != 0){
+            strcpy(dst, src);
+            return 1;
+        }
+
+        src += 7;
+        memcpy(dst, file_prot, sizeof(file_prot));
+        dst += 7;
+    }
 
     if(IS_ABSOLUTE(src)){
         /* absolute path, use wine conversion */
@@ -172,7 +202,7 @@ const char *steamclient_isteamcontroller_getglyph(int origin, const char *lin_pa
     if(!controller_glyphs[origin])
         controller_glyphs[origin] = HeapAlloc(GetProcessHeap(), 0, PATH_MAX);
 
-    steamclient_unix_path_to_dos_path(1, lin_path, controller_glyphs[origin], PATH_MAX);
+    steamclient_unix_path_to_dos_path(1, lin_path, controller_glyphs[origin], PATH_MAX, 0);
 
     return controller_glyphs[origin];
 }
