@@ -15,9 +15,13 @@ diff -urN a/dlls/ntdll/misc.c a/dlls/ntdll/misc.c
 diff -urN a/dlls/ntdll/ntdll.spec a/dlls/ntdll/ntdll.spec
 --- a/dlls/ntdll/ntdll.spec	2019-04-24 18:23:50 +0900
 +++ a/dlls/ntdll/ntdll.spec	2019-04-24 18:48:37 +0900
-@@ -1537,3 +1537,5 @@
+@@ -1498,6 +1498,9 @@
+ # All functions must be prefixed with '__wine_' (for internal functions)
+ # or 'wine_' (for user-visible functions) to avoid namespace conflicts.
  
- # User shared data
- @ cdecl __wine_user_shared_data()
-+
++# FFXIV launcher fix - must be used with HideWineExports registry entry
 +@ cdecl IsTransgaming()
++
+ # Server interface
+ @ cdecl -norelay wine_server_call(ptr)
+ @ cdecl wine_server_fd_to_handle(long long long ptr)
