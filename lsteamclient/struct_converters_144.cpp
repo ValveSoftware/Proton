@@ -1,6 +1,7 @@
 #include "steam_defs.h"
 #include "steamworks_sdk_144/steam_api.h"
 #include "steamworks_sdk_144/isteamgameserver.h"
+#include "steamworks_sdk_144/isteamnetworkingsockets.h"
 #include "steamworks_sdk_144/isteamgameserverstats.h"
 #include "steamworks_sdk_144/isteamgamecoordinator.h"
 #include "steamworks_sdk_144/steamnetworkingtypes.h"
@@ -62,8 +63,8 @@ void cb_RequestPlayersForGameProgressCallback_t_16(const struct RequestPlayersFo
 struct winRequestPlayersForGameResultCallback_t_64 {
     EResult m_eResult;
     uint64 m_ullSearchID;
-    CSteamID m_SteamIDPlayerFound;
-    CSteamID m_SteamIDLobby;
+    CSteamID m_SteamIDPlayerFound __attribute__((aligned(1)));
+    CSteamID m_SteamIDLobby __attribute__((aligned(1)));
     RequestPlayersForGameResultCallback_t::PlayerAcceptState_t m_ePlayerAcceptState;
     int32 m_nPlayerIndex;
     int32 m_nTotalPlayersFound;
@@ -104,7 +105,7 @@ void cb_RequestPlayersForGameFinalResultCallback_t_24(const struct RequestPlayer
 struct winSubmitPlayerResultResultCallback_t_24 {
     EResult m_eResult;
     uint64 ullUniqueGameID;
-    CSteamID steamIDPlayer;
+    CSteamID steamIDPlayer __attribute__((aligned(1)));
 }  __attribute__ ((ms_struct));
 #pragma pack( pop )
 void cb_SubmitPlayerResultResultCallback_t_24(const struct SubmitPlayerResultResultCallback_t *lin, struct winSubmitPlayerResultResultCallback_t_24 *win)
@@ -130,7 +131,7 @@ void cb_EndGameResultCallback_t_16(const struct EndGameResultCallback_t *lin, st
 struct winJoinPartyCallback_t_280 {
     EResult m_eResult;
     PartyBeaconID_t m_ulBeaconID;
-    CSteamID m_SteamIDBeaconOwner;
+    CSteamID m_SteamIDBeaconOwner __attribute__((aligned(1)));
     char m_rgchConnectString[256];
 }  __attribute__ ((ms_struct));
 #pragma pack( pop )
@@ -839,6 +840,20 @@ void cb_GSReputation_t_40(const struct GSReputation_t *lin, struct winGSReputati
     win->m_usBannedPort = lin->m_usBannedPort;
     win->m_ulBannedGameID = lin->m_ulBannedGameID;
     win->m_unBanExpires = lin->m_unBanExpires;
+}
+
+#pragma pack( push, 8 )
+struct winSteamNetConnectionStatusChangedCallback_t_712 {
+    HSteamNetConnection m_hConn;
+    SteamNetConnectionInfo_t m_info __attribute__((aligned(8)));
+    ESteamNetworkingConnectionState m_eOldState;
+}  __attribute__ ((ms_struct));
+#pragma pack( pop )
+void cb_SteamNetConnectionStatusChangedCallback_t_712(const struct SteamNetConnectionStatusChangedCallback_t *lin, struct winSteamNetConnectionStatusChangedCallback_t_712 *win)
+{
+    win->m_hConn = lin->m_hConn;
+    win->m_info = lin->m_info;
+    win->m_eOldState = lin->m_eOldState;
 }
 
 

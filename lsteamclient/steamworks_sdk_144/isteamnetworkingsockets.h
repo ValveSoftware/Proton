@@ -424,6 +424,7 @@ extern "C" {
 	inline ISteamNetworkingSockets *SteamGameServerNetworkingSockets();
 	STEAM_DEFINE_GAMESERVER_INTERFACE_ACCESSOR( ISteamNetworkingSockets *, SteamGameServerNetworkingSockets, STEAMNETWORKINGSOCKETS_INTERFACE_VERSION );
 #endif
+}
 
 /// Callback struct used to notify when a connection has changed state
 #if defined( VALVE_CALLBACK_PACK_SMALL )
@@ -484,6 +485,5 @@ struct SteamNetConnectionStatusChangedCallback_t
 };
 #pragma pack( pop )
 
-}
 
 #endif // ISTEAMNETWORKINGSOCKETS

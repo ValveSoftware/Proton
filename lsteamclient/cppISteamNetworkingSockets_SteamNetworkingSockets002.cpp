@@ -74,24 +74,6 @@ EResult cppISteamNetworkingSockets_SteamNetworkingSockets002_FlushMessagesOnConn
     return ((ISteamNetworkingSockets*)linux_side)->FlushMessagesOnConnection((HSteamNetConnection)hConn);
 }
 
-int cppISteamNetworkingSockets_SteamNetworkingSockets002_ReceiveMessagesOnConnection(void *linux_side, HSteamNetConnection hConn, winSteamNetworkingMessage_t_144 ** ppOutMessages, int nMaxMessages)
-{
-    SteamNetworkingMessage_t * lin_ppOutMessages;
-    win_to_lin_struct_SteamNetworkingMessage_t_144(ppOutMessages, &lin_ppOutMessages);
-    int retval = ((ISteamNetworkingSockets*)linux_side)->ReceiveMessagesOnConnection((HSteamNetConnection)hConn, &lin_ppOutMessages, (int)nMaxMessages);
-    lin_to_win_struct_SteamNetworkingMessage_t_144(retval, &lin_ppOutMessages, ppOutMessages);
-    return retval;
-}
-
-int cppISteamNetworkingSockets_SteamNetworkingSockets002_ReceiveMessagesOnListenSocket(void *linux_side, HSteamListenSocket hSocket, winSteamNetworkingMessage_t_144 ** ppOutMessages, int nMaxMessages)
-{
-    SteamNetworkingMessage_t * lin_ppOutMessages;
-    win_to_lin_struct_SteamNetworkingMessage_t_144(ppOutMessages, &lin_ppOutMessages);
-    int retval = ((ISteamNetworkingSockets*)linux_side)->ReceiveMessagesOnListenSocket((HSteamListenSocket)hSocket, &lin_ppOutMessages, (int)nMaxMessages);
-    lin_to_win_struct_SteamNetworkingMessage_t_144(retval, &lin_ppOutMessages, ppOutMessages);
-    return retval;
-}
-
 bool cppISteamNetworkingSockets_SteamNetworkingSockets002_GetConnectionInfo(void *linux_side, HSteamNetConnection hConn, SteamNetConnectionInfo_t * pInfo)
 {
     return ((ISteamNetworkingSockets*)linux_side)->GetConnectionInfo((HSteamNetConnection)hConn, (SteamNetConnectionInfo_t *)pInfo);

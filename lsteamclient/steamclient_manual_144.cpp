@@ -1,5 +1,6 @@
 #include "steam_defs.h"
 #include "steamworks_sdk_144/steam_api.h"
+#include "steamworks_sdk_144/isteamnetworkingsockets.h"
 #include "steamworks_sdk_144/steamnetworkingtypes.h"
 #include "steamclient_private.h"
 extern "C" {
@@ -8,6 +9,10 @@ extern "C" {
 
 #include "windows.h"
 #include "queue.h"
+
+#include "wine/debug.h"
+
+WINE_DEFAULT_DEBUG_CHANNEL(steamclient);
 
 /***** manual struct converter for SteamNetworkingMessage_t *****/
 
@@ -23,18 +28,24 @@ struct msg_wrapper {
 SLIST_HEAD(free_msgs_head, msg_wrapper) free_msgs = SLIST_HEAD_INITIALIZER(free_msgs);
 CRITICAL_SECTION free_msgs_lock = { NULL, -1, 0, 0, 0, 0 };
 
-void CDECL win_FreeData(struct winSteamNetworkingMessage_t_144 *win_msg)
+void __attribute__((ms_abi)) win_FreeData(struct winSteamNetworkingMessage_t_144 *win_msg)
 {
     struct msg_wrapper *msg = CONTAINING_RECORD(win_msg, struct msg_wrapper, win_msg);
+    TRACE("%p\n", msg);
     if(msg->orig_FreeData)
+    {
+        msg->lin_msg->m_pData = msg->win_msg.m_pData;
         msg->orig_FreeData(msg->lin_msg);
+    }
 }
 
-void CDECL win_Release(struct winSteamNetworkingMessage_t_144 *win_msg)
+void __attribute__((ms_abi)) win_Release(struct winSteamNetworkingMessage_t_144 *win_msg)
 {
     struct msg_wrapper *msg = CONTAINING_RECORD(win_msg, struct msg_wrapper, win_msg);
+    TRACE("%p\n", msg);
     msg->lin_msg->m_pfnRelease(msg->lin_msg);
     msg->lin_msg = NULL;
+    msg->orig_FreeData = NULL;
     EnterCriticalSection(&free_msgs_lock);
     SLIST_INSERT_HEAD(&free_msgs, msg, entry);
     LeaveCriticalSection(&free_msgs_lock);
@@ -42,19 +53,19 @@ void CDECL win_Release(struct winSteamNetworkingMessage_t_144 *win_msg)
 
 void lin_FreeData(struct SteamNetworkingMessage_t *lin_msg)
 {
-    struct msg_wrapper *msg = CONTAINING_RECORD(&lin_msg, struct msg_wrapper, lin_msg);
+    struct msg_wrapper *msg = (struct msg_wrapper *)lin_msg->m_pData; /* ! see assignment, below */
+    TRACE("%p\n", msg);
     if(msg->win_msg.m_pfnFreeData)
-        ((void (*)(struct winSteamNetworkingMessage_t_144 *))msg->win_msg.m_pfnFreeData)(&msg->win_msg);
+        ((void (__attribute__((ms_abi))*)(struct winSteamNetworkingMessage_t_144 *))msg->win_msg.m_pfnFreeData)(&msg->win_msg);
 }
 
-void win_to_lin_struct_SteamNetworkingMessage_t_144(struct winSteamNetworkingMessage_t_144 **w, struct SteamNetworkingMessage_t **l)
-{
-    /* it's an output param, do nothing. */
-}
-
-void lin_to_win_struct_SteamNetworkingMessage_t_144(int n_messages, struct SteamNetworkingMessage_t **l, struct winSteamNetworkingMessage_t_144 **w)
+void lin_to_win_struct_SteamNetworkingMessage_t_144(int n_messages, struct SteamNetworkingMessage_t **l, struct winSteamNetworkingMessage_t_144 **w, int max_messages)
 {
     int i;
+
+    if(n_messages > 0)
+        TRACE("%u %p %p\n", n_messages, l, w);
+
     for(i = 0; i < n_messages; ++i)
     {
         struct msg_wrapper *msg;
@@ -64,11 +75,12 @@ void lin_to_win_struct_SteamNetworkingMessage_t_144(int n_messages, struct Steam
         msg = SLIST_FIRST(&free_msgs);
 
         if(!msg){
+            int n;
             /* allocs can be pricey, so alloc in blocks */
 #define MSGS_PER_BLOCK 16
             struct msg_wrapper *msgs = (struct msg_wrapper *)HeapAlloc(GetProcessHeap(), 0, sizeof(struct msg_wrapper) * MSGS_PER_BLOCK);
-            for(i = 1; i < MSGS_PER_BLOCK; ++i)
-                SLIST_INSERT_HEAD(&free_msgs, &msg[i], entry);
+            for(n = 1; n < MSGS_PER_BLOCK; ++n)
+                SLIST_INSERT_HEAD(&free_msgs, &msgs[n], entry);
             msg = &msgs[0];
         }else
             SLIST_REMOVE_HEAD(&free_msgs, entry);
@@ -76,9 +88,6 @@ void lin_to_win_struct_SteamNetworkingMessage_t_144(int n_messages, struct Steam
         LeaveCriticalSection(&free_msgs_lock);
 
         msg->lin_msg = l[i];
-
-        msg->orig_FreeData = msg->lin_msg->m_pfnFreeData;
-        msg->lin_msg->m_pfnFreeData = lin_FreeData;
 
         msg->win_msg.m_pData = msg->lin_msg->m_pData;
         msg->win_msg.m_cbSize = msg->lin_msg->m_cbSize;
@@ -92,8 +101,37 @@ void lin_to_win_struct_SteamNetworkingMessage_t_144(int n_messages, struct Steam
         msg->win_msg.m_nChannel = msg->lin_msg->m_nChannel;
         msg->win_msg.m___nPadDummy = msg->lin_msg->m___nPadDummy;
 
+        msg->orig_FreeData = msg->lin_msg->m_pfnFreeData;
+        msg->lin_msg->m_pfnFreeData = lin_FreeData;
+        /* ! store the wrapper here and restore the original pointer from win_msg before calling orig_FreeData */
+        msg->lin_msg->m_pData = msg;
+
         w[i] = &msg->win_msg;
+        TRACE("done with %u, returned wrapper %p\n", i, msg);
     }
+
+    for(; i < max_messages; ++i)
+        w[i] = NULL;
+}
+
+int cppISteamNetworkingSockets_SteamNetworkingSockets002_ReceiveMessagesOnConnection(
+        void *linux_side, HSteamNetConnection hConn,
+        winSteamNetworkingMessage_t_144 **ppOutMessages, int nMaxMessages)
+{
+    SteamNetworkingMessage_t *lin_ppOutMessages[nMaxMessages];
+    int retval = ((ISteamNetworkingSockets*)linux_side)->ReceiveMessagesOnConnection(hConn, lin_ppOutMessages, nMaxMessages);
+    lin_to_win_struct_SteamNetworkingMessage_t_144(retval, lin_ppOutMessages, ppOutMessages, nMaxMessages);
+    return retval;
+}
+
+int cppISteamNetworkingSockets_SteamNetworkingSockets002_ReceiveMessagesOnListenSocket(
+        void *linux_side, HSteamListenSocket hSocket,
+        winSteamNetworkingMessage_t_144 **ppOutMessages, int nMaxMessages)
+{
+    SteamNetworkingMessage_t *lin_ppOutMessages[nMaxMessages];
+    int retval = ((ISteamNetworkingSockets*)linux_side)->ReceiveMessagesOnListenSocket(hSocket, lin_ppOutMessages, nMaxMessages);
+    lin_to_win_struct_SteamNetworkingMessage_t_144(retval, lin_ppOutMessages, ppOutMessages, nMaxMessages);
+    return retval;
 }
 
 }

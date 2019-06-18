@@ -186,6 +186,10 @@ struct GSReputation_t;
 struct winGSReputation_t_40;
 extern void cb_GSReputation_t_40(const struct GSReputation_t *l, struct winGSReputation_t_40 *w);
 
+struct SteamNetConnectionStatusChangedCallback_t;
+struct winSteamNetConnectionStatusChangedCallback_t_712;
+extern void cb_SteamNetConnectionStatusChangedCallback_t_712(const struct SteamNetConnectionStatusChangedCallback_t *l, struct winSteamNetConnectionStatusChangedCallback_t_712 *w);
+
 struct HTTPRequestCompleted_t;
 struct winHTTPRequestCompleted_t_24;
 extern void cb_HTTPRequestCompleted_t_24(const struct HTTPRequestCompleted_t *l, struct winHTTPRequestCompleted_t_24 *w);
