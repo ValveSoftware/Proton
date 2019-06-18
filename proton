@@ -297,6 +297,7 @@ if "SteamGameId" in env:
             lfile.write("Proton: " + f.readline().strip() + "\n")
         lfile.write("SteamGameId: " + env["SteamGameId"] + "\n")
         lfile.write("Command: " + str(sys.argv[2:]) + "\n")
+        lfile.write("Options: " + str(config_opts) + "\n")
         lfile.write("======================\n")
         lfile.flush()
 else:
