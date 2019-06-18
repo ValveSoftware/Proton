@@ -244,6 +244,8 @@ if os.path.exists(basedir + "/user_settings.py"):
         log("%s" % sys.exc_info()[1])
         log("************************************************")
 
+import protonfixes
+
 def check_environment(env_name, config_name):
     if not env_name in env:
         return False

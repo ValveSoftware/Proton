@@ -282,9 +282,6 @@ $(PROTON37_TRACKED_FILES_TARGET): $(addprefix $(SRCDIR)/,proton_3.7_tracked_file
 USER_SETTINGS_SAMPLE_PY_TARGET := $(addprefix $(DST_BASE)/,user_settings.sample.py)
 $(USER_SETTINGS_SAMPLE_TARGET): $(addprefix $(SRCDIR)/,user_settings.sample.py)
 
-USER_SETTINGS_PY_TARGET := $(addprefix $(DST_BASE)/,user_settings.py)
-$(USER_SETTINGS_PY_TARGET): $(addprefix $(SRCDIR)/,user_settings.py)
-
 PROTONFIXES_TARGET := $(addprefix $(DST_BASE)/,protonfixes)
 $(PROTONFIXES_TARGET): $(addprefix $(SRCDIR)/,protonfixes)
 
