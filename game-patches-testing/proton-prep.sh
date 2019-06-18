@@ -51,6 +51,8 @@
     echo "warframe F6 screenshot button fix"
     patch -Np1 < ../game-patches-testing/warframe-f6-screenshot-fix.patch
 
+    echo "final fantasy XIV launcher patch"
+    patch -Np1 < ../game-patches-testing/ffxiv-launcher.patch
 
     #WINE FAUDIO PATCHES
 

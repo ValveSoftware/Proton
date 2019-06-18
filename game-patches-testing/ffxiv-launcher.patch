@@ -1,0 +1,23 @@
+diff -urN a/dlls/ntdll/misc.c a/dlls/ntdll/misc.c
+--- a/dlls/ntdll/misc.c	2019-04-13 03:10:12 +0900
++++ a/dlls/ntdll/misc.c	2019-04-24 19:10:44 +0900
+@@ -524,3 +524,10 @@
+         *present = TRUE;
+     return TRUE;
+ }
++
++BOOL IsTransgaming(void)
++{
++    static int call_count = -1;
++    call_count++;
++    return call_count == 1;
++}
+diff -urN a/dlls/ntdll/ntdll.spec a/dlls/ntdll/ntdll.spec
+--- a/dlls/ntdll/ntdll.spec	2019-04-24 18:23:50 +0900
++++ a/dlls/ntdll/ntdll.spec	2019-04-24 18:48:37 +0900
+@@ -1537,3 +1537,5 @@
+ 
+ # User shared data
+ @ cdecl __wine_user_shared_data()
++
++@ cdecl IsTransgaming()
