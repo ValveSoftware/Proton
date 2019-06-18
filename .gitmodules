@@ -19,3 +19,6 @@
 [submodule "FAudio"]
 	path = FAudio
 	url = https://github.com/FNA-XNA/FAudio/
+[submodule "d9vk"]
+	path = d9vk
+	url = https://github.com/ValveSoftware/dxvk/

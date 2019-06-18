@@ -263,6 +263,7 @@ if "wined3d11" in config_opts:
 
 if not check_environment("PROTON_USE_WINED3D", "wined3d"):
     check_environment("PROTON_USE_WINED3D11", "wined3d")
+check_environment("PROTON_USE_D9VK", "d9vk")
 check_environment("PROTON_NO_D3D11", "nod3d11")
 check_environment("PROTON_NO_D3D10", "nod3d10")
 check_environment("PROTON_NO_ESYNC", "noesync")
@@ -440,7 +441,7 @@ with prefix_lock:
         except (ValueError, OSError):
             log("Unable to write VR config! " + str(sys.exc_info()[1]))
 
-    dxvkfiles = ("d3d11", "d3d10", "d3d10core", "d3d10_1", "dxgi")
+    dxvkfiles = ("d3d11", "d3d10", "d3d10core", "d3d10_1", "d3d9", "dxgi")
     def make_dxvk_links(dll_dir, link_dir):
         for f in dxvkfiles:
             dst = link_dir + "/" + f + ".dll"
@@ -462,7 +463,11 @@ with prefix_lock:
         make_dxvk_links(basedir + "/dist/lib/wine/dxvk/",
             prefix + "drive_c/windows/syswow64")
         for f in dxvkfiles:
-            dlloverrides[f] = "n"
+            if f == "d3d9":
+                if "d9vk" in config_opts:
+                    dlloverrides[f] = "n"
+            else:
+                dlloverrides[f] = "n"
 
 if "nod3d11" in config_opts:
     dlloverrides["d3d11"] = ""

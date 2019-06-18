@@ -228,6 +228,10 @@ DXVK := $(SRCDIR)/dxvk
 DXVK_OBJ32 := ./obj-dxvk32
 DXVK_OBJ64 := ./obj-dxvk64
 
+D9VK := $(SRCDIR)/d9vk
+D9VK_OBJ32 := ./obj-d9vk32
+D9VK_OBJ64 := ./obj-d9vk64
+
 CMAKE := $(SRCDIR)/cmake
 CMAKE_OBJ32 := ./obj-cmake32
 CMAKE_OBJ64 := ./obj-cmake64
@@ -246,6 +250,7 @@ OBJ_DIRS := $(TOOLS_DIR32)        $(TOOLS_DIR64)        \
             $(WINE_OBJ32)         $(WINE_OBJ64)         \
             $(VRCLIENT_OBJ32)     $(VRCLIENT_OBJ64)     \
             $(DXVK_OBJ32)         $(DXVK_OBJ64)         \
+            $(D9VK_OBJ32)         $(D9VK_OBJ64)         \
             $(CMAKE_OBJ32)        $(CMAKE_OBJ64)
 
 $(OBJ_DIRS):
@@ -366,7 +371,7 @@ $(DIST_FONTS): fonts
 ALL_TARGETS += dist
 GOAL_TARGETS += dist
 
-dist: $(DIST_TARGETS) wine vrclient lsteamclient steam dxvk | $(DST_DIR)
+dist: $(DIST_TARGETS) wine vrclient lsteamclient steam dxvk d9vk | $(DST_DIR)
 	echo `date '+%s'` `GIT_DIR=$(abspath $(SRCDIR)/.git) git describe --tags` > $(DIST_VERSION)
 	cp $(DIST_VERSION) $(DST_BASE)/
 	rm -rf $(abspath $(DIST_PREFIX)) && \
@@ -1037,6 +1042,60 @@ dxvk32: $(DXVK_CONFIGURE_FILES32)
 	cp "$(DXVK_OBJ32)"/bin/d3d10_1.dll "$(DST_DIR)"/lib/wine/dxvk/
 	cp "$(DXVK_OBJ32)"/bin/d3d10core.dll "$(DST_DIR)"/lib/wine/dxvk/
 	if test -e $(SRCDIR)/.git; then ( cd $(SRCDIR) && git submodule status -- dxvk ) > "$(DST_DIR)"/lib/wine/dxvk/version; fi
+
+D9VK_CONFIGURE_FILES32 := $(D9VK_OBJ32)/build.ninja
+D9VK_CONFIGURE_FILES64 := $(D9VK_OBJ64)/build.ninja
+
+# 64bit-configure.  Remove coredata file if already configured (due to e.g. makefile changing)
+#   sed is used to sub in our special cross compiler
+$(D9VK_CONFIGURE_FILES64): $(MAKEFILE_DEP) $(D9VK)/build-win64.txt | $(D9VK_OBJ64)
+	if [ -e "$(abspath $(D9VK_OBJ64))"/build.ninja ]; then \
+		rm -f "$(abspath $(D9VK_OBJ64))"/meson-private/coredata.dat; \
+	fi
+	cd "$(abspath $(D9VK))" && \
+	sed -e "s|@PROTON_DXVK_CROSSCC_PREFIX@|$(subst ",\\\",$(DXVK_CROSSCC_PREFIX))|" < build-win64.txt > "$(abspath $(D9VK_OBJ64))/proton-build-win64.txt" && \
+	PATH="$(abspath $(SRCDIR))/glslang/bin/:$(PATH)" \
+		meson --prefix="$(abspath $(D9VK_OBJ64))" --cross-file "$(abspath $(D9VK_OBJ64))/proton-build-win64.txt" --strip --buildtype=release -Denable_dxgi=false -Denable_d3d10=false -Denable_d3d11=false "$(abspath $(D9VK_OBJ64))"
+
+# 32-bit configure.  Remove coredata file if already configured (due to e.g. makefile changing)
+#   sed is used to sub in our special cross compiler
+$(D9VK_CONFIGURE_FILES32): $(MAKEFILE_DEP) $(D9VK)/build-win32.txt | $(D9VK_OBJ32)
+	if [ -e "$(abspath $(D9VK_OBJ32))"/build.ninja ]; then \
+		rm -f "$(abspath $(D9VK_OBJ32))"/meson-private/coredata.dat; \
+	fi
+	cd "$(abspath $(D9VK))" && \
+	sed -e "s|@PROTON_DXVK_CROSSCC_PREFIX@|$(subst ",\\\",$(DXVK_CROSSCC_PREFIX))|" < build-win32.txt > "$(abspath $(D9VK_OBJ32))/proton-build-win32.txt" && \
+	PATH="$(abspath $(SRCDIR))/glslang/bin/:$(PATH)" \
+		meson --prefix="$(abspath $(D9VK_OBJ32))" --cross-file "$(abspath $(D9VK_OBJ32))/proton-build-win32.txt" --strip --buildtype=release -Denable_dxgi=false -Denable_d3d10=false -Denable_d3d11=false "$(abspath $(D9VK_OBJ32))"
+
+## d9vk goals
+D9VK_TARGETS = d9vk d9vk_configure d9vk32 d9vk64 d9vk_configure32 d9vk_configure64
+
+ALL_TARGETS += $(D9VK_TARGETS)
+GOAL_TARGETS_LIBS += d9vk
+
+.PHONY: $(D9VK_TARGETS)
+
+d9vk_configure: $(D9VK_CONFIGURE_FILES32) $(D9VK_CONFIGURE_FILES64)
+
+d9vk_configure64: $(D9VK_CONFIGURE_FILES64)
+
+d9vk_configure32: $(D9VK_CONFIGURE_FILES32)
+
+d9vk: d9vk32 d9vk64
+
+d9vk64: $(D9VK_CONFIGURE_FILES64)
+	env PATH="$(abspath $(SRCDIR))/glslang/bin/:$(PATH)" ninja -C "$(D9VK_OBJ64)" install
+	mkdir -p "$(DST_DIR)/lib64/wine/dxvk"
+	cp "$(D9VK_OBJ64)"/bin/d3d9.dll "$(DST_DIR)"/lib64/wine/dxvk
+	if test -e $(SRCDIR)/.git; then ( cd $(SRCDIR) && git submodule status -- d9vk ) > "$(DST_DIR)"/lib64/wine/dxvk/d9vk_version; fi
+
+
+d9vk32: $(D9VK_CONFIGURE_FILES32)
+	env PATH="$(abspath $(SRCDIR))/glslang/bin/:$(PATH)" ninja -C "$(D9VK_OBJ32)" install
+	mkdir -p "$(DST_DIR)"/lib/wine/dxvk
+	cp "$(D9VK_OBJ32)"/bin/d3d9.dll "$(DST_DIR)"/lib/wine/dxvk/
+	if test -e $(SRCDIR)/.git; then ( cd $(SRCDIR) && git submodule status -- d9vk ) > "$(DST_DIR)"/lib/wine/dxvk/d9vk_version; fi
 
 endif # NO_DXVK
 
