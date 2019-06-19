@@ -93,28 +93,26 @@ install: configure
 	echo "Proton installed to your local Steam installation"
 
 deploy: configure
-	vagrant ssh -c 'make -C $(BUILD_DIR)/ deploy'
 	mkdir -p vagrant_share/$(DEPLOY_DIR)
-	vagrant ssh -c 'cp $(BUILD_DIR)/deploy/* /vagrant/$(DEPLOY_DIR)'
+	vagrant ssh -c 'make -C $(BUILD_DIR)/ deploy && cp $(BUILD_DIR)/deploy/* /vagrant/$(DEPLOY_DIR)'
 	echo "Proton deployed to vagrant_share/$(DEPLOY_DIR)"
 
 module: configure
-	vagrant ssh -c 'make -C $(BUILD_DIR)/ module=$(module) module'
-	mkdir -p vagrant_share/$(module)/lib/wine/
-	vagrant ssh -c 'cp $(BUILD_DIR)/obj-wine32/dlls/$(module)/$(module)*.so /vagrant/$(module)/lib/wine/'
-	mkdir -p vagrant_share/$(module)/lib64/wine/
-	vagrant ssh -c 'cp $(BUILD_DIR)/obj-wine64/dlls/$(module)/$(module)*.so /vagrant/$(module)/lib64/wine/'
+	mkdir -p vagrant_share/$(module)/lib/wine/ vagrant_share/$(module)/lib64/wine/
+	vagrant ssh -c 'make -C $(BUILD_DIR)/ module=$(module) module && \
+		cp $(BUILD_DIR)/obj-wine32/dlls/$(module)/$(module)*.so /vagrant/$(module)/lib/wine/ && \
+		cp $(BUILD_DIR)/obj-wine64/dlls/$(module)/$(module)*.so /vagrant/$(module)/lib64/wine/'
 
 dxvk: configure
-	vagrant ssh -c 'make -C $(BUILD_DIR)/ dxvk'
 	mkdir -p vagrant_share/dxvk/lib/wine/dxvk/
-	vagrant ssh -c 'cp $(BUILD_DIR)/dist/dist/lib/wine/dxvk/*.dll /vagrant/dxvk/lib/wine/dxvk/'
 	mkdir -p vagrant_share/dxvk/lib64/wine/dxvk/
-	vagrant ssh -c 'cp $(BUILD_DIR)/dist/dist/lib64/wine/dxvk/*.dll /vagrant/dxvk/lib64/wine/dxvk/'
+	vagrant ssh -c 'make -C $(BUILD_DIR)/ dxvk && \
+		cp $(BUILD_DIR)/dist/dist/lib/wine/dxvk/*.dll /vagrant/dxvk/lib/wine/dxvk/ && \
+		cp $(BUILD_DIR)/dist/dist/lib64/wine/dxvk/*.dll /vagrant/dxvk/lib64/wine/dxvk/'
 
 lsteamclient: configure
-	vagrant ssh -c 'make -C $(BUILD_DIR)/ lsteamclient'
 	mkdir -p vagrant_share/lsteamclient/lib/wine
-	vagrant ssh -c 'cp $(BUILD_DIR)/dist/dist/lib/wine/lsteamclient.dll.so /vagrant/lsteamclient/lib/wine'
 	mkdir -p vagrant_share/lsteamclient/lib64/wine
-	vagrant ssh -c 'cp $(BUILD_DIR)/dist/dist/lib64/wine/lsteamclient.dll.so /vagrant/lsteamclient/lib64/wine'
+	vagrant ssh -c 'make -C $(BUILD_DIR)/ lsteamclient && \
+		cp $(BUILD_DIR)/dist/dist/lib/wine/lsteamclient.dll.so /vagrant/lsteamclient/lib/wine && \
+		cp $(BUILD_DIR)/dist/dist/lib64/wine/lsteamclient.dll.so /vagrant/lsteamclient/lib64/wine'
