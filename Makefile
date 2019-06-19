@@ -80,7 +80,7 @@ clean: vagrant
 	vagrant ssh -c 'rm -rf $(BUILD_DIR)/'
 
 configure: vagrant
-	@vagrant ssh -c 'if [ ! -e $(BUILD_DIR)/Makefile ]; then if ! schroot -i -c dxvk_crosscc >/dev/null 2>&1; then echo !!!! You must run \"vagrant provision\" !!!!; exit 1; fi; mkdir -p $(BUILD_DIR); (cd $(BUILD_DIR) && $(CONFIGURE_CMD)); fi'
+	@vagrant ssh -c 'if [ ! -e $(BUILD_DIR)/Makefile ]; then if ! schroot -i -c dxvk_crosscc >/dev/null 2>&1; then echo !!!! You must run \"vagrant provision\" !!!!; exit 1; fi; mkdir -p $(BUILD_DIR); (cd $(BUILD_DIR) && $(CONFIGURE_CMD)); fi && make -C $(BUILD_DIR) downloads'
 
 proton: configure
 	vagrant ssh -c 'make -C $(BUILD_DIR)/ dist'
