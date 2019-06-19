@@ -33,6 +33,8 @@
  * Windows version of Steam running. */
 
 #include <windows.h>
+#include <string.h>
+#include <stdio.h>
 
 #pragma push_macro("_WIN32")
 #pragma push_macro("__cdecl")
@@ -42,7 +44,6 @@
 #pragma pop_macro("_WIN32")
 #pragma pop_macro("__cdecl")
 
-#include "wine/unicode.h"
 #include "wine/debug.h"
 
 WINE_DEFAULT_DEBUG_CHANNEL(steam);
@@ -118,7 +119,7 @@ static void setup_steam_registry(void)
 
 static WCHAR *find_quote(WCHAR *str)
 {
-    WCHAR *end = strchrW(str, '"'), *ch;
+    WCHAR *end = wcschr(str, '"'), *ch;
     int odd;
     while (end)
     {
@@ -131,7 +132,7 @@ static WCHAR *find_quote(WCHAR *str)
         }
         if (!odd)
             return end;
-        end = strchrW(end + 1, '"');
+        end = wcschr(end + 1, '"');
     }
     return NULL;
 }
@@ -150,7 +151,7 @@ static HANDLE run_process(void)
     }
     else
     {
-        cmdline = strchrW(cmdline, ' ');
+        cmdline = wcschr(cmdline, ' ');
     }
     if (!cmdline)
     {
@@ -187,9 +188,9 @@ static HANDLE run_process(void)
         else
         {
             start = cmdline;
-            end = strchrW(start, ' ');
+            end = wcschr(start, ' ');
             if (!end)
-                end = strchrW(start, '\0');
+                end = wcschr(start, '\0');
             remainder = end;
         }
 
@@ -220,11 +221,11 @@ static HANDLE run_process(void)
         dos = wine_get_dos_file_name(scratchA);
 
         new_cmdline = (WCHAR *)HeapAlloc(GetProcessHeap(), 0,
-                (strlenW(dos) + 3 + strlenW(remainder) + 1) * sizeof(WCHAR));
-        strcpyW(new_cmdline, dquoteW);
-        strcatW(new_cmdline, dos);
-        strcatW(new_cmdline, dquoteW);
-        strcatW(new_cmdline, remainder);
+                (lstrlenW(dos) + 3 + lstrlenW(remainder) + 1) * sizeof(WCHAR));
+        lstrcpyW(new_cmdline, dquoteW);
+        lstrcatW(new_cmdline, dos);
+        lstrcatW(new_cmdline, dquoteW);
+        lstrcatW(new_cmdline, remainder);
 
         cmdline = new_cmdline;
     }
