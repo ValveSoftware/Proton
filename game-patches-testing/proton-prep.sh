@@ -18,8 +18,8 @@
     #It is disabled by default for all other games
     #If you wish to use it with additional games, you will need to add DXVK_ASYNC=1 %command% to the game launch options in steam.
     cd dxvk
-    git reset --hard HEAD
-    git clean -xdf
+    #git reset --hard HEAD
+    #git clean -xdf
     patch -Np1 < ../game-patches-testing/valve-dxvk-avoid-spamming-log-with-requests-for-IWineD3D11Texture2D.patch
     patch -Np1 < ../game-patches-testing/valve-dxvk-make-cross-compiler-strings-configurable.patch
     patch -Np1 < ../game-patches-testing/pipeline.patch
@@ -51,8 +51,10 @@
     echo "warframe F6 screenshot button fix"
     patch -Np1 < ../game-patches-testing/warframe-f6-screenshot-fix.patch
 
-    echo "final fantasy XIV launcher patch"
+    #echo "final fantasy XIV launcher patch"
     patch -Np1 < ../game-patches-testing/ffxiv-launcher.patch
+
+
 
     #WINE FAUDIO PATCHES
 
@@ -88,11 +90,12 @@
     patch -Np1 < ../game-patches-testing/valve-unity-mouse-pointer-drift.patch
     patch -Np1 < ../game-patches-testing/valve-pulseaudio-patchset.patch
     patch -Np1 < ../game-patches-testing/valve-winevulkan-patchset.patch
-    patch -Np1 < ../game-patches-testing/valve-ntdll.patch
     patch -Np1 < ../game-patches-testing/valve-user32.patch
     patch -Np1 < ../game-patches-testing/valve-winemac.patch
     patch -Np1 < ../game-patches-testing/valve-windowscodecs.patch
+    patch -Np1 < ../game-patches-testing/valve-ntdll.patch
     patch -Np1 < ../game-patches-testing/valve-LAA.patch
+    patch -Np1 < ../game-patches-testing/wine-staging-hide-wine-exports.patch
     patch -Np1 < ../game-patches-testing/proton-gamepad-additions-backport.patch
     patch -Np1 < ../game-patches-testing/proton-sdl-joy.patch
     patch -Np1 < ../game-patches-testing/proton-gamepad-additions.patch

@@ -1,0 +1,161 @@
+From c9e0926469230f97d3cee6bc22b7d27099f1d555 Mon Sep 17 00:00:00 2001
+From: Sebastian Lackner <sebastian@fds-team.de>
+Date: Sat, 30 May 2015 02:23:15 +0200
+Subject: [PATCH] ntdll: Add support for hiding wine version information from
+ applications.
+
+---
+ dlls/ntdll/loader.c     | 96 ++++++++++++++++++++++++++++++++++++++++++++++++-
+ dlls/ntdll/ntdll_misc.h |  5 +++
+ 2 files changed, 100 insertions(+), 1 deletion(-)
+
+diff --git a/dlls/ntdll/loader.c b/dlls/ntdll/loader.c
+index 7588d5a..8073434 100644
+--- a/dlls/ntdll/loader.c
++++ b/dlls/ntdll/loader.c
+@@ -68,9 +68,12 @@ typedef void  (CALLBACK *LDRENUMPROC)(LDR_MODULE *, void *, BOOLEAN *);
+ const WCHAR system_dir[] = {'C',':','\\','w','i','n','d','o','w','s','\\',
+                             's','y','s','t','e','m','3','2','\\',0};
+ 
++#define IS_OPTION_TRUE(ch) ((ch) == 'y' || (ch) == 'Y' || (ch) == 't' || (ch) == 'T' || (ch) == '1')
++
+ static BOOL imports_fixup_done = FALSE;  /* set once the imports have been fixed up, before attaching them */
+ static BOOL process_detaching = FALSE;  /* set on process detach to avoid deadlocks with thread detach */
+ static int free_lib_count;   /* recursion depth of LdrUnloadDll calls */
++static BOOL hide_wine_exports = FALSE;  /* try to hide ntdll wine exports from applications */
+ 
+ struct ldr_notification
+ {
+@@ -1602,6 +1605,96 @@ NTSTATUS WINAPI LdrUnlockLoaderLock( ULONG flags, ULONG_PTR magic )
+ }
+ 
+ 
++/***********************************************************************
++ *           hidden_exports_init
++ *
++ * Initializes the hide_wine_exports options.
++ */
++static void hidden_exports_init( const WCHAR *appname )
++{
++    static const WCHAR configW[] = {'S','o','f','t','w','a','r','e','\\','W','i','n','e',0};
++    static const WCHAR appdefaultsW[] = {'A','p','p','D','e','f','a','u','l','t','s','\\',0};
++    static const WCHAR hideWineExports[] = {'H','i','d','e','W','i','n','e','E','x','p','o','r','t','s',0};
++    OBJECT_ATTRIBUTES attr;
++    UNICODE_STRING nameW;
++    HANDLE root, config_key, hkey;
++    BOOL got_hide_wine_exports = FALSE;
++    char tmp[80];
++    DWORD dummy;
++
++    RtlOpenCurrentUser( KEY_ALL_ACCESS, &root );
++    attr.Length = sizeof(attr);
++    attr.RootDirectory = root;
++    attr.ObjectName = &nameW;
++    attr.Attributes = OBJ_CASE_INSENSITIVE;
++    attr.SecurityDescriptor = NULL;
++    attr.SecurityQualityOfService = NULL;
++    RtlInitUnicodeString( &nameW, configW );
++
++    /* @@ Wine registry key: HKCU\Software\Wine */
++    if (NtOpenKey( &config_key, KEY_QUERY_VALUE, &attr )) config_key = 0;
++    NtClose( root );
++    if (!config_key) return;
++
++    if (appname && *appname)
++    {
++        const WCHAR *p;
++        WCHAR appversion[MAX_PATH+20];
++
++        if ((p = strrchrW( appname, '/' ))) appname = p + 1;
++        if ((p = strrchrW( appname, '\\' ))) appname = p + 1;
++
++        strcpyW( appversion, appdefaultsW );
++        strcatW( appversion, appname );
++        RtlInitUnicodeString( &nameW, appversion );
++        attr.RootDirectory = config_key;
++
++        /* @@ Wine registry key: HKCU\Software\Wine\AppDefaults\app.exe */
++        if (!NtOpenKey( &hkey, KEY_QUERY_VALUE, &attr ))
++        {
++            TRACE( "getting HideWineExports from %s\n", debugstr_w(appversion) );
++
++            RtlInitUnicodeString( &nameW, hideWineExports );
++            if (!NtQueryValueKey( hkey, &nameW, KeyValuePartialInformation, tmp, sizeof(tmp), &dummy ))
++            {
++                WCHAR *str = (WCHAR *)((KEY_VALUE_PARTIAL_INFORMATION *)tmp)->Data;
++                hide_wine_exports = IS_OPTION_TRUE( str[0] );
++                got_hide_wine_exports = TRUE;
++            }
++
++            NtClose( hkey );
++        }
++    }
++
++    if (!got_hide_wine_exports)
++    {
++        TRACE( "getting default HideWineExports\n" );
++
++        RtlInitUnicodeString( &nameW, hideWineExports );
++        if (!NtQueryValueKey( config_key, &nameW, KeyValuePartialInformation, tmp, sizeof(tmp), &dummy ))
++        {
++            WCHAR *str = (WCHAR *)((KEY_VALUE_PARTIAL_INFORMATION *)tmp)->Data;
++            hide_wine_exports = IS_OPTION_TRUE( str[0] );
++        }
++    }
++
++    NtClose( config_key );
++}
++
++
++/***********************************************************************
++ *           is_hidden_export
++ *
++ * Checks if a specific export should be hidden.
++ */
++static BOOL is_hidden_export( void *proc )
++{
++    return hide_wine_exports && (proc == &NTDLL_wine_get_version ||
++                                 proc == &NTDLL_wine_get_build_id ||
++                                 proc == &NTDLL_wine_get_host_version);
++}
++
++
+ /******************************************************************
+  *		LdrGetProcedureAddress  (NTDLL.@)
+  */
+@@ -1622,7 +1715,7 @@ NTSTATUS WINAPI LdrGetProcedureAddress(HMODULE module, const ANSI_STRING *name,
+         LPCWSTR load_path = NtCurrentTeb()->Peb->ProcessParameters->DllPath.Buffer;
+         void *proc = name ? find_named_export( module, exports, exp_size, name->Buffer, -1, load_path )
+                           : find_ordinal_export( module, exports, exp_size, ord - exports->Base, load_path );
+-        if (proc)
++        if (proc && !is_hidden_export( proc ))
+         {
+             *address = proc;
+             ret = STATUS_SUCCESS;
+@@ -3576,6 +3669,7 @@ void __wine_process_init(void)
+     NtCurrentTeb()->Peb->LoaderLock = &loader_section;
+     update_user_process_params( &wm->ldr.FullDllName );
+     version_init( wm->ldr.FullDllName.Buffer );
+     virtual_set_large_address_space(needs_override_large_address_aware(NtCurrentTeb()->Peb->ProcessParameters->ImagePathName.Buffer));
++    hidden_exports_init( wm->ldr.FullDllName.Buffer );
+ 
+     LdrQueryImageFileExecutionOptions( &wm->ldr.FullDllName, globalflagW, REG_DWORD,
+diff --git a/dlls/ntdll/ntdll_misc.h b/dlls/ntdll/ntdll_misc.h
+index c21ec79..0dba878 100644
+--- a/dlls/ntdll/ntdll_misc.h
++++ b/dlls/ntdll/ntdll_misc.h
+@@ -265,6 +306,11 @@ extern SYSTEM_CPU_INFORMATION cpu_info DECLSPEC_HIDDEN;
+ NTSTATUS WINAPI RtlHashUnicodeString(PCUNICODE_STRING,BOOLEAN,ULONG,ULONG*);
+ void     WINAPI LdrInitializeThunk(CONTEXT*,void**,ULONG_PTR,ULONG_PTR);
+ 
++/* version */
++extern const char * CDECL NTDLL_wine_get_version(void);
++extern const char * CDECL NTDLL_wine_get_build_id(void);
++extern void CDECL NTDLL_wine_get_host_version( const char **sysname, const char **release );
++
+ /* string functions */
+ int __cdecl NTDLL_tolower( int c );
+ int __cdecl _stricmp( LPCSTR str1, LPCSTR str2 );
+-- 
+1.9.1
+
