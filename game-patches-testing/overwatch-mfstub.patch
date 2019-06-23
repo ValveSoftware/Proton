@@ -1,0 +1,32 @@
+diff --git a/dlls/mfreadwrite/main.c b/dlls/mfreadwrite/main.c
+index 78d96e4f8c..1a06efe8d4 100644
+--- a/dlls/mfreadwrite/main.c
++++ b/dlls/mfreadwrite/main.c
+@@ -1087,6 +1087,14 @@ HRESULT WINAPI MFCreateSourceReaderFromURL(const WCHAR *url, IMFAttributes *attr
+     return create_source_reader_from_url(url, attributes, &IID_IMFSourceReader, (void **)reader);
+ }
+ 
++HRESULT WINAPI MFCreateSinkWriterFromURL(const WCHAR *url, IMFByteStream *stream, IMFAttributes *attributes,
++        IMFSinkWriter **writer)
++{
++     TRACE("%s, %p, %p, %p.\n", debugstr_w(url), stream, attributes, writer);
++
++     return MF_E_NOT_FOUND;
++}
++
+ static HRESULT WINAPI readwrite_factory_QueryInterface(IMFReadWriteClassFactory *iface, REFIID riid, void **out)
+ {
+     if (IsEqualIID(riid, &IID_IMFReadWriteClassFactory) ||
+diff --git a/dlls/mfreadwrite/mfreadwrite.spec b/dlls/mfreadwrite/mfreadwrite.spec
+index 3a215a9cc6..b00128e43c 100644
+--- a/dlls/mfreadwrite/mfreadwrite.spec
++++ b/dlls/mfreadwrite/mfreadwrite.spec
+@@ -3,7 +3,7 @@
+ @ stdcall -private DllRegisterServer()
+ @ stdcall -private DllUnregisterServer()
+ @ stdcall MFCreateSinkWriterFromMediaSink(ptr ptr ptr)
+-@ stub MFCreateSinkWriterFromURL
++@ stdcall MFCreateSinkWriterFromURL(ptr ptr ptr ptr)
+ @ stdcall MFCreateSourceReaderFromByteStream(ptr ptr ptr)
+ @ stdcall MFCreateSourceReaderFromMediaSource(ptr ptr ptr)
+ @ stdcall MFCreateSourceReaderFromURL(wstr ptr ptr)

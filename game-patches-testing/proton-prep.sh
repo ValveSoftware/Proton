@@ -51,10 +51,11 @@
     echo "warframe F6 screenshot button fix"
     patch -Np1 < ../game-patches-testing/warframe-f6-screenshot-fix.patch
 
-    #echo "final fantasy XIV launcher patch"
+    echo "final fantasy XIV launcher patch"
     patch -Np1 < ../game-patches-testing/ffxiv-launcher.patch
 
-
+    echo "overwatch highlight save patch"
+    patch -Np1 < ../game-patches-testing/overwatch-mfstub.patch
 
     #WINE FAUDIO PATCHES
 
@@ -110,5 +111,8 @@
 
     #WINE CUSTOM PATCHES
     #add your own custom patch lines below
+
+    # Guy's raw input patch
+    patch -Np1 < ../game-patches-testing/guy1524-raw.patch
 
     #end
