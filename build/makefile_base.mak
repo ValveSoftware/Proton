@@ -32,9 +32,6 @@ else # (Rest of the file is the else)
 #   STEAMRT32_MODE  - Same as above for 32-bit container (can be different type)
 #   STEAMRT32_IMAGE - Same as above for 32-bit container
 #   STEAMRT_PATH    - Path to built runtime which contains run.sh
-#   DXVK_CROSSCC_PREFIX - Quoted and comma-separated list of strings that
-#       should be prefixed before the cross compiler that builds DXVK, so
-#       we can execute it when it lives in a chroot, for example.
 
 ifeq ($(SRCDIR),)
 	foo := $(error SRCDIR not set, do not include makefile_base directly, run ./configure.sh to generate Makefile)
@@ -1106,26 +1103,22 @@ DXVK_CONFIGURE_FILES32 := $(DXVK_OBJ32)/build.ninja
 DXVK_CONFIGURE_FILES64 := $(DXVK_OBJ64)/build.ninja
 
 # 64bit-configure.  Remove coredata file if already configured (due to e.g. makefile changing)
-#   sed is used to sub in our special cross compiler
 $(DXVK_CONFIGURE_FILES64): $(MAKEFILE_DEP) $(DXVK)/build-win64.txt | $(DXVK_OBJ64)
 	if [ -e "$(abspath $(DXVK_OBJ64))"/build.ninja ]; then \
 		rm -f "$(abspath $(DXVK_OBJ64))"/meson-private/coredata.dat; \
 	fi
 	cd "$(abspath $(DXVK))" && \
-	sed -e "s|@PROTON_DXVK_CROSSCC_PREFIX@|$(subst ",\\\",$(DXVK_CROSSCC_PREFIX))|" < build-win64.txt > "$(abspath $(DXVK_OBJ64))/proton-build-win64.txt" && \
 	PATH="$(abspath $(SRCDIR))/glslang/bin/:$(PATH)" \
-		meson --prefix="$(abspath $(DXVK_OBJ64))" --cross-file "$(abspath $(DXVK_OBJ64))/proton-build-win64.txt" --strip --buildtype=release "$(abspath $(DXVK_OBJ64))"
+		meson --prefix="$(abspath $(DXVK_OBJ64))" --cross-file "$(abspath $(DXVK))/build-win64.txt" --strip --buildtype=release "$(abspath $(DXVK_OBJ64))"
 
 # 32-bit configure.  Remove coredata file if already configured (due to e.g. makefile changing)
-#   sed is used to sub in our special cross compiler
 $(DXVK_CONFIGURE_FILES32): $(MAKEFILE_DEP) $(DXVK)/build-win32.txt | $(DXVK_OBJ32)
 	if [ -e "$(abspath $(DXVK_OBJ32))"/build.ninja ]; then \
 		rm -f "$(abspath $(DXVK_OBJ32))"/meson-private/coredata.dat; \
 	fi
 	cd "$(abspath $(DXVK))" && \
-	sed -e "s|@PROTON_DXVK_CROSSCC_PREFIX@|$(subst ",\\\",$(DXVK_CROSSCC_PREFIX))|" < build-win32.txt > "$(abspath $(DXVK_OBJ32))/proton-build-win32.txt" && \
 	PATH="$(abspath $(SRCDIR))/glslang/bin/:$(PATH)" \
-		meson --prefix="$(abspath $(DXVK_OBJ32))" --cross-file "$(abspath $(DXVK_OBJ32))/proton-build-win32.txt" --strip --buildtype=release "$(abspath $(DXVK_OBJ32))"
+		meson --prefix="$(abspath $(DXVK_OBJ32))" --cross-file "$(abspath $(DXVK))/build-win32.txt" --strip --buildtype=release "$(abspath $(DXVK_OBJ32))"
 
 ## dxvk goals
 DXVK_TARGETS = dxvk dxvk_configure dxvk32 dxvk64 dxvk_configure32 dxvk_configure64
@@ -1168,26 +1161,22 @@ D9VK_CONFIGURE_FILES32 := $(D9VK_OBJ32)/build.ninja
 D9VK_CONFIGURE_FILES64 := $(D9VK_OBJ64)/build.ninja
 
 # 64bit-configure.  Remove coredata file if already configured (due to e.g. makefile changing)
-#   sed is used to sub in our special cross compiler
 $(D9VK_CONFIGURE_FILES64): $(MAKEFILE_DEP) $(D9VK)/build-win64.txt | $(D9VK_OBJ64)
 	if [ -e "$(abspath $(D9VK_OBJ64))"/build.ninja ]; then \
 		rm -f "$(abspath $(D9VK_OBJ64))"/meson-private/coredata.dat; \
 	fi
 	cd "$(abspath $(D9VK))" && \
-	sed -e "s|@PROTON_DXVK_CROSSCC_PREFIX@|$(subst ",\\\",$(DXVK_CROSSCC_PREFIX))|" < build-win64.txt > "$(abspath $(D9VK_OBJ64))/proton-build-win64.txt" && \
 	PATH="$(abspath $(SRCDIR))/glslang/bin/:$(PATH)" \
-		meson --prefix="$(abspath $(D9VK_OBJ64))" --cross-file "$(abspath $(D9VK_OBJ64))/proton-build-win64.txt" --strip --buildtype=release -Denable_dxgi=false -Denable_d3d10=false -Denable_d3d11=false "$(abspath $(D9VK_OBJ64))"
+		meson --prefix="$(abspath $(D9VK_OBJ64))" --cross-file "$(abspath $(D9VK))/build-win64.txt" --strip --buildtype=release -Denable_dxgi=false -Denable_d3d10=false -Denable_d3d11=false "$(abspath $(D9VK_OBJ64))"
 
 # 32-bit configure.  Remove coredata file if already configured (due to e.g. makefile changing)
-#   sed is used to sub in our special cross compiler
 $(D9VK_CONFIGURE_FILES32): $(MAKEFILE_DEP) $(D9VK)/build-win32.txt | $(D9VK_OBJ32)
 	if [ -e "$(abspath $(D9VK_OBJ32))"/build.ninja ]; then \
 		rm -f "$(abspath $(D9VK_OBJ32))"/meson-private/coredata.dat; \
 	fi
 	cd "$(abspath $(D9VK))" && \
-	sed -e "s|@PROTON_DXVK_CROSSCC_PREFIX@|$(subst ",\\\",$(DXVK_CROSSCC_PREFIX))|" < build-win32.txt > "$(abspath $(D9VK_OBJ32))/proton-build-win32.txt" && \
 	PATH="$(abspath $(SRCDIR))/glslang/bin/:$(PATH)" \
-		meson --prefix="$(abspath $(D9VK_OBJ32))" --cross-file "$(abspath $(D9VK_OBJ32))/proton-build-win32.txt" --strip --buildtype=release -Denable_dxgi=false -Denable_d3d10=false -Denable_d3d11=false "$(abspath $(D9VK_OBJ32))"
+		meson --prefix="$(abspath $(D9VK_OBJ32))" --cross-file "$(abspath $(D9VK))/build-win32.txt" --strip --buildtype=release -Denable_dxgi=false -Denable_d3d10=false -Denable_d3d11=false "$(abspath $(D9VK_OBJ32))"
 
 ## d9vk goals
 D9VK_TARGETS = d9vk d9vk_configure d9vk32 d9vk64 d9vk_configure32 d9vk_configure64

@@ -13,7 +13,7 @@ if [ ! -e "$HOME/bin/schroot_wrapper" ]; then
     mkdir -p $HOME/bin/
     cat > $HOME/bin/schroot_wrapper <<EOF
 #!/bin/bash
-schroot -c dxvk_crosscc -- /usr/bin/\$(basename \$0) \$@
+schroot -c proton_crosscc -- /usr/bin/\$(basename \$0) \$@
 EOF
     chmod 755 $HOME/bin/schroot_wrapper
     for a in x86_64 i686
@@ -23,9 +23,11 @@ EOF
             w64-mingw32-as \
             w64-mingw32-dlltool \
             w64-mingw32-gcc \
+            w64-mingw32-g++ \
             w64-mingw32-ld \
             w64-mingw32-nm \
             w64-mingw32-ranlib \
+            w64-mingw32-strip \
             w64-mingw32-windres
         do
             ln -s schroot_wrapper $HOME/bin/$a-$f

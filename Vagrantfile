@@ -90,19 +90,19 @@ Vagrant.configure(2) do |config|
     #allow vagrant user to run docker
     adduser vagrant docker
 
-    if ! schroot -i -c dxvk_crosscc >/dev/null 2>&1; then
+    if ! schroot -i -c proton_crosscc >/dev/null 2>&1; then
       #download build of recent mingw-w64 with dwarf2 exceptions enabled
-      wget --progress=dot -O /root/dxvk_crosscc.tar.xz 'http://repo.steampowered.com/proton_mingw/proton_mingw-9.1-1.tar.xz'
-      unxz -T0 /root/dxvk_crosscc.tar.xz
-      mkdir -p /srv/chroot/dxvk_crosscc/
-      tar -xf /root/dxvk_crosscc.tar -C /srv/chroot/dxvk_crosscc/
+      wget --progress=dot -O /root/proton_crosscc.tar.xz 'http://repo.steampowered.com/proton_mingw/proton_mingw-9.1-1.tar.xz'
+      unxz -T0 /root/proton_crosscc.tar.xz
+      mkdir -p /srv/chroot/proton_crosscc/
+      tar -xf /root/proton_crosscc.tar -C /srv/chroot/proton_crosscc/
 
-      #install dxvk_crosscc schroot
-      cat > /etc/schroot/chroot.d/dxvk_crosscc <<EOF
-[dxvk_crosscc]
+      #install proton_crosscc schroot
+      cat > /etc/schroot/chroot.d/proton_crosscc <<EOF
+[proton_crosscc]
 description=Special mingw-w64 for building DXVK
 type=directory
-directory=/srv/chroot/dxvk_crosscc/
+directory=/srv/chroot/proton_crosscc/
 users=vagrant
 personality=linux
 preserve-environment=true

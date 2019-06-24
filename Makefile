@@ -27,8 +27,7 @@ CONFIGURE_CMD := ../proton/configure.sh \
 	--steam-runtime64=docker:steam-proton-dev --steam-runtime32=docker:steam-proton-dev32 \
 	--steam-runtime="$$HOME"/steam-runtime/runtime/ \
 	--build-name="$(_build_name)" \
-	--dxvk-crosscc-prefix=\"schroot\",\"-c\",\"dxvk_crosscc\",\"--\" \
-	--docker-opts=-v\ /srv/chroot:/srv/chroot\ -v\ /etc/schroot/chroot.d/dxvk_crosscc:/etc/schroot/chroot.d/dxvk_crosscc\ -v\ /home/vagrant/rbind_fstab:/etc/schroot/default/fstab
+	--docker-opts=-v\ /srv/chroot:/srv/chroot\ -v\ /etc/schroot/chroot.d/proton_crosscc:/etc/schroot/chroot.d/proton_crosscc\ -v\ /home/vagrant/rbind_fstab:/etc/schroot/default/fstab
 
 # make doesn't handle spaces well... replace them with underscores in paths
 BUILD_DIR := "build-$(shell echo $(_build_name) | sed -e 's/ /_/g')"
@@ -85,7 +84,7 @@ clean: vagrant
 	vagrant ssh -c 'rm -rf $(BUILD_DIR)/'
 
 configure: vagrant
-	@vagrant ssh -c 'if [ ! -e $(BUILD_DIR)/Makefile ]; then if ! schroot -i -c dxvk_crosscc >/dev/null 2>&1; then echo !!!! You must run \"vagrant provision\" !!!!; exit 1; fi; mkdir -p $(BUILD_DIR); (cd $(BUILD_DIR) && $(CONFIGURE_CMD)); fi && make -C $(BUILD_DIR) downloads'
+	@vagrant ssh -c 'if [ ! -e $(BUILD_DIR)/Makefile ]; then if ! schroot -i -c proton_crosscc >/dev/null 2>&1; then echo !!!! You must run \"vagrant provision\" !!!!; exit 1; fi; mkdir -p $(BUILD_DIR); (cd $(BUILD_DIR) && $(CONFIGURE_CMD)); fi && make -C $(BUILD_DIR) downloads'
 
 proton: configure
 	vagrant ssh -c 'make -C $(BUILD_DIR)/ dist'
