@@ -7,8 +7,7 @@ index 1e3c8ccd..b93ae1d7 100644
  
  dxvk_version = vcs_tag(
 -  command: ['git', 'describe', '--dirty=+'],
-+  command: ['git', 'describe', '--dirty=-
-'],
++  command: ['git', 'describe', '--dirty=-'],
    input:  'version.h.in',
    output: 'version.h')
  
