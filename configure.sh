@@ -115,6 +115,10 @@ function configure() {
       echo "DXVK_CROSSCC_PREFIX := $(escape_for_make "$arg_crosscc_prefix")," #comma is not a typo
     fi
 
+    if [[ -n "$arg_docker_opts" ]]; then
+      echo "DOCKER_OPTS := $arg_docker_opts"
+    fi
+
     # Include base
     echo ""
     echo "include \$(SRCDIR)/build/makefile_base.mak"
@@ -135,6 +139,7 @@ arg_no_steamrt=""
 arg_ffmpeg=""
 arg_build_name=""
 arg_crosscc_prefix=""
+arg_docker_opts=""
 arg_help=""
 invalid_args=""
 function parse_args() {
@@ -173,6 +178,9 @@ function parse_args() {
       val_used=1
     elif [[ $arg = --dxvk-crosscc-prefix ]]; then
       arg_crosscc_prefix="$val"
+      val_used=1
+    elif [[ $arg = --docker-opts ]]; then
+      arg_docker_opts="$val"
       val_used=1
     elif [[ $arg = --with-ffmpeg ]]; then
       arg_ffmpeg=1
@@ -235,6 +243,8 @@ usage() {
   "$1" "    --dxvk-crosscc-prefix='<prefix>' Quoted and comma-separated list of arguments to prefix before"
   "$1" "                                     the cross-compiler that builds DXVK. E.g:"
   "$1" "                                     --dxvk-crosscc-prefix=\"schroot\",\"-c\",\"some_chroot\",\"--\""
+  "$1" ""
+  "$1" "    --docker-opts='<options>' Extra options to pass to Docker when invoking the runtime."
   "$1" ""
   "$1" "  Steam Runtime"
   "$1" "    Proton builds that are to be installed & run under the steam client must be built with"

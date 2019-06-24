@@ -23,7 +23,12 @@ else
 endif
 
 
-CONFIGURE_CMD := ../proton/configure.sh --steam-runtime64=docker:steam-proton-dev --steam-runtime32=docker:steam-proton-dev32 --steam-runtime="$$HOME"/steam-runtime/runtime/ --build-name="$(_build_name)" --dxvk-crosscc-prefix=\"schroot\",\"-c\",\"dxvk_crosscc\",\"--\"
+CONFIGURE_CMD := ../proton/configure.sh \
+	--steam-runtime64=docker:steam-proton-dev --steam-runtime32=docker:steam-proton-dev32 \
+	--steam-runtime="$$HOME"/steam-runtime/runtime/ \
+	--build-name="$(_build_name)" \
+	--dxvk-crosscc-prefix=\"schroot\",\"-c\",\"dxvk_crosscc\",\"--\" \
+	--docker-opts=-v\ /srv/chroot:/srv/chroot\ -v\ /etc/schroot/chroot.d/dxvk_crosscc:/etc/schroot/chroot.d/dxvk_crosscc\ -v\ /home/vagrant/rbind_fstab:/etc/schroot/default/fstab
 
 # make doesn't handle spaces well... replace them with underscores in paths
 BUILD_DIR := "build-$(shell echo $(_build_name) | sed -e 's/ /_/g')"

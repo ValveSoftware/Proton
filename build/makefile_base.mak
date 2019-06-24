@@ -58,9 +58,12 @@ cc-option = $(shell if test -z "`echo 'void*p=1;' | \
               then echo "$(2)"; else echo "$(3)"; fi ;)
 
 # Selected container mode shell
-DOCKER_SHELL_BASE = docker run --rm --init -v $(HOME):$(HOME) -w $(CURDIR) -e HOME=$(HOME) \
-                                    -v /etc/passwd:/etc/passwd:ro -u $(shell id -u):$(shell id -g) -h $(shell hostname) \
-                                    -v /tmp:/tmp $(SELECT_DOCKER_IMAGE) /dev/init -sg -- /bin/bash
+DOCKER_SHELL_BASE = docker run --rm --init --privileged --cap-add=SYS_ADMIN --security-opt apparmor:unconfined \
+                                    -v $(HOME):$(HOME) -v /tmp:/tmp \
+                                    -v /etc/passwd:/etc/passwd:ro -v /etc/group:/etc/group:ro  -v /etc/shadow:/etc/shadow:ro \
+                                    -w $(CURDIR) -e HOME=$(HOME) -e PATH=$(PATH) -u $(shell id -u):$(shell id -g) -h $(shell hostname) \
+                                    $(DOCKER_OPTS) \
+                                    $(SELECT_DOCKER_IMAGE) /dev/init -sg -- /bin/bash
 
 # If STEAMRT64_MODE/STEAMRT32_MODE is set, set the nested SELECT_DOCKER_IMAGE to the _IMAGE variable and eval
 # DOCKER_SHELL_BASE with it to create the CONTAINER_SHELL setting.
