@@ -18,8 +18,8 @@
     #It is disabled by default for all other games
     #If you wish to use it with additional games, you will need to add DXVK_ASYNC=1 %command% to the game launch options in steam.
     cd dxvk
-    #git reset --hard HEAD
-    #git clean -xdf
+    git reset --hard HEAD
+    git clean -xdf
     patch -Np1 < ../game-patches-testing/valve-dxvk-avoid-spamming-log-with-requests-for-IWineD3D11Texture2D.patch
     patch -Np1 < ../game-patches-testing/valve-dxvk-make-cross-compiler-strings-configurable.patch
     patch -Np1 < ../game-patches-testing/pipeline.patch
@@ -91,7 +91,6 @@
     patch -Np1 < ../game-patches-testing/valve-unity-mouse-pointer-drift.patch
     patch -Np1 < ../game-patches-testing/valve-pulseaudio-patchset.patch
     patch -Np1 < ../game-patches-testing/valve-winevulkan-patchset.patch
-    patch -Np1 < ../game-patches-testing/valve-user32.patch
     patch -Np1 < ../game-patches-testing/valve-winemac.patch
     patch -Np1 < ../game-patches-testing/valve-windowscodecs.patch
     patch -Np1 < ../game-patches-testing/valve-ntdll.patch
@@ -107,12 +106,10 @@
     patch -Np1 < ../game-patches-testing/valve-apply-LargeAddressAware-fix-for-Bayonetta.patch
     patch -Np1 < ../game-patches-testing/valve-Set-amd_ags_x64-to-built-in-for-Wolfenstein-2.patch
 
-
-
     #WINE CUSTOM PATCHES
     #add your own custom patch lines below
 
     # Guy's raw input patch
-    patch -Np1 < ../game-patches-testing/guy1524-raw.patch
+    patch -Np1 < ../game-patches-testing/guy1524-raw-proton.patch
 
     #end

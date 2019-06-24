@@ -2306,17 +2306,6 @@ diff --git a/dlls/vulkan-1/vulkan.c b/dlls/vulkan-1/vulkan.c
 index d3b35603a1..4926cf9bf4 100644
 --- a/dlls/vulkan-1/vulkan.c
 +++ b/dlls/vulkan-1/vulkan.c
-@@ -32,10 +32,6 @@ BOOL WINAPI DllMain(HINSTANCE hinst, DWORD reason, void *reserved)
- 
-     switch (reason)
-     {
--        case DLL_WINE_PREATTACH:
--            /* Prefer native as it provides more functionality. */
--            return FALSE;
--
-         case DLL_PROCESS_ATTACH:
-             DisableThreadLibraryCalls(hinst);
-             return TRUE;
 diff --git a/dlls/winex11.drv/vulkan.c b/dlls/winex11.drv/vulkan.c
 index 28ae1a9e0e..2e2ac8f0b4 100644
 --- a/dlls/winex11.drv/vulkan.c

@@ -12,14 +12,6 @@ diff --git a/dlls/winex11.drv/xinerama.c b/dlls/winex11.drv/xinerama.c
 index 739b139736c..7b8bc8bafbe 100644
 --- a/dlls/winex11.drv/xinerama.c
 +++ b/dlls/winex11.drv/xinerama.c
-@@ -30,6 +30,7 @@
- #include "wine/library.h"
- #include "x11drv.h"
- #include "wine/debug.h"
-+#include "wine/unicode.h"
- 
- WINE_DEFAULT_DEBUG_CHANNEL(x11drv);
- 
 @@ -43,6 +44,7 @@ static MONITORINFOEXW default_monitor =
      MONITORINFOF_PRIMARY,       /* dwFlags */
      { '\\','\\','.','\\','D','I','S','P','L','A','Y','1',0 }   /* szDevice */

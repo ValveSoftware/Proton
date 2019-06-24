@@ -127,10 +127,10 @@ index d5b8597d8e..7103b86055 100644
 +@ cdecl __wine_send_raw_input(ptr)
  @ cdecl __wine_set_pixel_format(long long)
 diff --git a/dlls/winex11.drv/mouse.c b/dlls/winex11.drv/mouse.c
-index f737a306a5..06cfbd9e0d 100644
+index 17c1e1ef0c..05bae2d6e8 100644
 --- a/dlls/winex11.drv/mouse.c
 +++ b/dlls/winex11.drv/mouse.c
-@@ -286,9 +286,9 @@ static void update_relative_valuators(XIAnyClassInfo **valuators, int n_valuator
+@@ -288,9 +288,9 @@ static void update_relative_valuators(XIAnyClassInfo **valuators, int n_valuator
  
  
  /***********************************************************************
@@ -142,7 +142,7 @@ index f737a306a5..06cfbd9e0d 100644
  {
  #ifdef HAVE_X11_EXTENSIONS_XINPUT2_H
      struct x11drv_thread_data *data = x11drv_thread_data();
-@@ -318,7 +318,6 @@ static void enable_xinput2(void)
+@@ -320,7 +320,6 @@ static void enable_xinput2(void)
      memset( mask_bits, 0, sizeof(mask_bits) );
      XISetMask( mask_bits, XI_DeviceChanged );
      XISetMask( mask_bits, XI_RawMotion );
@@ -150,7 +150,7 @@ index f737a306a5..06cfbd9e0d 100644
  
      pXISelectEvents( data->display, DefaultRootWindow( data->display ), &mask, 1 );
  
-@@ -349,7 +348,7 @@ static void disable_xinput2(void)
+@@ -351,7 +350,7 @@ static void disable_xinput2(void)
      struct x11drv_thread_data *data = x11drv_thread_data();
      XIEventMask mask;
  
@@ -159,7 +159,7 @@ index f737a306a5..06cfbd9e0d 100644
  
      TRACE( "disabling\n" );
      data->xi2_state = xi_disabled;
-@@ -368,6 +367,21 @@ static void disable_xinput2(void)
+@@ -372,6 +371,21 @@ static void disable_xinput2(void)
  #endif
  }
  
@@ -181,7 +181,7 @@ index f737a306a5..06cfbd9e0d 100644
  
  /***********************************************************************
   *		grab_clipping_window
-@@ -393,9 +407,9 @@ static BOOL grab_clipping_window( const RECT *clip )
+@@ -398,9 +412,9 @@ static BOOL grab_clipping_window( const RECT *clip )
          return TRUE;
  
      /* enable XInput2 unless we are already clipping */
@@ -193,7 +193,7 @@ index f737a306a5..06cfbd9e0d 100644
      {
          WARN( "XInput2 not supported, refusing to clip to %s\n", wine_dbgstr_rect(clip) );
          DestroyWindow( msg_hwnd );
-@@ -423,7 +437,7 @@ static BOOL grab_clipping_window( const RECT *clip )
+@@ -447,7 +461,7 @@ static BOOL grab_clipping_window( const RECT *clip )
  
      if (!clipping_cursor)
      {
@@ -202,7 +202,7 @@ index f737a306a5..06cfbd9e0d 100644
          DestroyWindow( msg_hwnd );
          return FALSE;
      }
-@@ -489,7 +503,7 @@ LRESULT clip_cursor_notify( HWND hwnd, HWND new_clip_hwnd )
+@@ -514,7 +528,7 @@ LRESULT clip_cursor_notify( HWND hwnd, HWND new_clip_hwnd )
          TRACE( "clip hwnd reset from %p\n", hwnd );
          data->clip_hwnd = 0;
          data->clip_reset = GetTickCount();
@@ -211,13 +211,14 @@ index f737a306a5..06cfbd9e0d 100644
          DestroyWindow( hwnd );
      }
      else if (hwnd == GetForegroundWindow())  /* request to clip */
-@@ -1724,16 +1738,18 @@ static BOOL X11DRV_RawMotion( XGenericEventCookie *xev )
+@@ -1775,17 +1789,19 @@ static BOOL X11DRV_RawMotion( XGenericEventCookie *xev )
  {
      XIRawEvent *event = xev->data;
      const double *values = event->valuators.values;
 +    const double *raw_values = event->raw_values;
      RECT virtual_rect;
      INPUT input;
+     POINT pt;
 +    RAWINPUT raw_input;
      int i;
 -    double dx = 0, dy = 0, val;
@@ -232,7 +233,7 @@ index f737a306a5..06cfbd9e0d 100644
  
      /* If there is no slave currently detected, no previous motion nor device
       * change events were received. Look it up now on the device list in this
-@@ -1758,25 +1774,21 @@ static BOOL X11DRV_RawMotion( XGenericEventCookie *xev )
+@@ -1810,13 +1826,6 @@ static BOOL X11DRV_RawMotion( XGenericEventCookie *xev )
      x_rel = &thread_data->x_rel_valuator;
      y_rel = &thread_data->y_rel_valuator;
  
@@ -246,35 +247,36 @@ index f737a306a5..06cfbd9e0d 100644
      virtual_rect = get_virtual_screen_rect();
  
      for (i = 0; i <= max ( x_rel->number, y_rel->number ); i++)
-     {
-         if (!XIMaskIsSet( event->valuators.mask, i )) continue;
+@@ -1824,12 +1833,15 @@ static BOOL X11DRV_RawMotion( XGenericEventCookie *xev )
+         if (!XIMaskIsSet( event->valuators.mask, i ))
+             continue;
          val = *values++;
 +        raw_val = *raw_values++;
          if (i == x_rel->number)
          {
-             input.u.mi.dx = dx = val;
+             dx = val;
              if (x_rel->min < x_rel->max)
-                 input.u.mi.dx = val * (virtual_rect.right - virtual_rect.left)
-                                     / (x_rel->max - x_rel->min);
+                 dx = val * (virtual_rect.right - virtual_rect.left)
+                          / (x_rel->max - x_rel->min);
 +
 +            raw_dx = raw_val;
          }
          if (i == y_rel->number)
          {
-@@ -1784,6 +1796,8 @@ static BOOL X11DRV_RawMotion( XGenericEventCookie *xev )
+@@ -1837,6 +1849,8 @@ static BOOL X11DRV_RawMotion( XGenericEventCookie *xev )
              if (y_rel->min < y_rel->max)
-                 input.u.mi.dy = val * (virtual_rect.bottom - virtual_rect.top)
-                                     / (y_rel->max - y_rel->min);
+                 dy = val * (virtual_rect.bottom - virtual_rect.top)
+                          / (y_rel->max - y_rel->min);
 +
 +            raw_dy = raw_val;
          }
      }
  
-@@ -1793,10 +1807,30 @@ static BOOL X11DRV_RawMotion( XGenericEventCookie *xev )
-         return FALSE;
-     }
+@@ -1867,10 +1881,30 @@ static BOOL X11DRV_RawMotion( XGenericEventCookie *xev )
+     input.u.mi.dx = pt.x;
+     input.u.mi.dy = pt.y;
  
--    TRACE( "pos %d,%d (event %f,%f)\n", input.u.mi.dx, input.u.mi.dy, dx, dy );
+-    TRACE( "pos %d,%d (event %f,%f, accum %f,%f)\n", input.u.mi.dx, input.u.mi.dy, dx, dy, x_rel->accum, y_rel->accum );
 +    raw_input.data.mouse.lLastX = raw_dx;
 +    raw_input.data.mouse.lLastY = raw_dy;
 +    raw_input.data.mouse.u.usButtonFlags = 0;
@@ -605,3 +607,4 @@ index 367f245653..b293ff13a6 100755
  );
  
  my @requests = ();
+
