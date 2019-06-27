@@ -4,6 +4,8 @@
 
 from __future__ import print_function
 
+import fcntl
+import array
 import filecmp
 import json
 import os
@@ -323,6 +325,25 @@ def create_fonts_symlinks(prefix_path):
         else:
             os.symlink(fname, lname)
 
+EXT2_IOC_GETFLAGS = 0x80086601
+EXT2_IOC_SETFLAGS = 0x40086602
+
+EXT4_CASEFOLD_FL = 0x40000000
+
+def set_dir_casefold_bit(dir_path):
+    dr = os.open(dir_path, 0o644)
+    if dr < 0:
+        return
+    try:
+        dat = array.array('I', [0])
+        if fcntl.ioctl(dr, EXT2_IOC_GETFLAGS, dat, True) >= 0:
+            dat[0] = dat[0] | EXT4_CASEFOLD_FL
+            fcntl.ioctl(dr, EXT2_IOC_SETFLAGS, dat, False)
+    except OSError:
+        #no problem
+        pass
+    os.close(dr)
+
 prefix_lock = FileLock(os.environ["STEAM_COMPAT_DATA_PATH"] + "/pfx.lock", timeout=-1)
 with prefix_lock:
     version_file = os.environ["STEAM_COMPAT_DATA_PATH"] + "/version"
@@ -331,6 +352,10 @@ with prefix_lock:
             upgrade_pfx(f.readline().strip())
     else:
         upgrade_pfx(None)
+
+    if not os.path.exists(prefix):
+        makedirs(prefix + "/drive_c")
+        set_dir_casefold_bit(prefix + "/drive_c")
 
     if not os.path.exists(prefix + "/user.reg"):
         #copy default prefix into place
