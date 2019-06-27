@@ -1056,12 +1056,17 @@ def handle_struct(sdkver, struct):
             cb_table[cb_num] = (struct.type.get_size(), [])
             if l2w_handler_name64:
                 cb_table64[cb_num] = (struct64.get_size(), [])
+            else:
+                cb_table64[cb_num] = (struct.type.get_size(), [])
         cb_table[cb_num][1].append((windows_struct.get_size(), struct_name))
+        if l2w_handler_name64:
+            cb_table64[cb_num][1].append((windows_struct64.get_size(), struct_name64))
+        else:
+            cb_table64[cb_num][1].append((windows_struct.get_size(), struct_name))
 
         hfile = open("cb_converters.h", "a")
         hfile.write("struct %s;\n" % struct.displayname)
         if l2w_handler_name64:
-            cb_table64[cb_num][1].append((windows_struct64.get_size(), struct_name64))
             hfile.write("#ifdef __i386__\n")
             hfile.write("struct win%s;\n" % struct_name)
             hfile.write("extern void %s(const struct %s *l, struct win%s *w);\n" % (l2w_handler_name, struct.displayname, struct_name))
