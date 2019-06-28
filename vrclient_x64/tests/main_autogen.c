@@ -20,8 +20,9 @@ int main(void)
     test_capi_thunks_IVRResources_001();
     test_capi_thunks_IVRDriverManager_001();
     test_capi_thunks_IVRInput_005();
-    test_capi_thunks_IVRIOBuffer_001();
+    test_capi_thunks_IVRIOBuffer_002();
     test_capi_thunks_IVRClientCore_003();
+    test_capi_thunks_IVRIOBuffer_001();
     test_capi_thunks_IVRChaperoneSetup_005();
     test_capi_thunks_IVROverlay_018();
     test_capi_thunks_IVRTrackedCamera_004();

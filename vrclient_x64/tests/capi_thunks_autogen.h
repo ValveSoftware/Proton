@@ -671,17 +671,19 @@ EVRInputError __thiscall IVRInput_005_ShowActionOrigins(void *_this, VRActionSet
 
 EVRInputError __thiscall IVRInput_005_ShowBindingsForActionSet(void *_this, VRActiveActionSet_t * pSets, uint32_t unSizeOfVRSelectedActionSet_t, uint32_t unSetCount, VRInputValueHandle_t originToHighlight);
 
-void test_capi_thunks_IVRIOBuffer_001(void);
+void test_capi_thunks_IVRIOBuffer_002(void);
 
-EIOBufferError __thiscall IVRIOBuffer_001_Open(void *_this, const char * pchPath, EIOBufferMode mode, uint32_t unElementSize, uint32_t unElements, IOBufferHandle_t * pulBuffer);
+EIOBufferError __thiscall IVRIOBuffer_002_Open(void *_this, const char * pchPath, EIOBufferMode mode, uint32_t unElementSize, uint32_t unElements, IOBufferHandle_t * pulBuffer);
 
-EIOBufferError __thiscall IVRIOBuffer_001_Close(void *_this, IOBufferHandle_t ulBuffer);
+EIOBufferError __thiscall IVRIOBuffer_002_Close(void *_this, IOBufferHandle_t ulBuffer);
 
-EIOBufferError __thiscall IVRIOBuffer_001_Read(void *_this, IOBufferHandle_t ulBuffer, void * pDst, uint32_t unBytes, uint32_t * punRead);
+EIOBufferError __thiscall IVRIOBuffer_002_Read(void *_this, IOBufferHandle_t ulBuffer, void * pDst, uint32_t unBytes, uint32_t * punRead);
 
-EIOBufferError __thiscall IVRIOBuffer_001_Write(void *_this, IOBufferHandle_t ulBuffer, void * pSrc, uint32_t unBytes);
+EIOBufferError __thiscall IVRIOBuffer_002_Write(void *_this, IOBufferHandle_t ulBuffer, void * pSrc, uint32_t unBytes);
 
-PropertyContainerHandle_t __thiscall IVRIOBuffer_001_PropertyContainer(void *_this, IOBufferHandle_t ulBuffer);
+PropertyContainerHandle_t __thiscall IVRIOBuffer_002_PropertyContainer(void *_this, IOBufferHandle_t ulBuffer);
+
+bool __thiscall IVRIOBuffer_002_HasReaders(void *_this, IOBufferHandle_t ulBuffer);
 
 void test_capi_thunks_IVRClientCore_003(void);
 
@@ -698,6 +700,18 @@ bool __thiscall IVRClientCore_003_BIsHmdPresent(void *_this);
 const char * __thiscall IVRClientCore_003_GetEnglishStringForHmdError(void *_this, EVRInitError eError);
 
 const char * __thiscall IVRClientCore_003_GetIDForVRInitError(void *_this, EVRInitError eError);
+
+void test_capi_thunks_IVRIOBuffer_001(void);
+
+EIOBufferError __thiscall IVRIOBuffer_001_Open(void *_this, const char * pchPath, EIOBufferMode mode, uint32_t unElementSize, uint32_t unElements, IOBufferHandle_t * pulBuffer);
+
+EIOBufferError __thiscall IVRIOBuffer_001_Close(void *_this, IOBufferHandle_t ulBuffer);
+
+EIOBufferError __thiscall IVRIOBuffer_001_Read(void *_this, IOBufferHandle_t ulBuffer, void * pDst, uint32_t unBytes, uint32_t * punRead);
+
+EIOBufferError __thiscall IVRIOBuffer_001_Write(void *_this, IOBufferHandle_t ulBuffer, void * pSrc, uint32_t unBytes);
+
+PropertyContainerHandle_t __thiscall IVRIOBuffer_001_PropertyContainer(void *_this, IOBufferHandle_t ulBuffer);
 
 void test_capi_thunks_IVRChaperoneSetup_005(void);
 

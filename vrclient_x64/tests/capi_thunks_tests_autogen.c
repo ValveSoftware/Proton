@@ -3012,58 +3012,66 @@ void test_capi_thunks_IVRInput_005(void)
     VirtualFree(t, 0, MEM_RELEASE);
 }
 
-void test_capi_thunks_IVRIOBuffer_001(void)
+void test_capi_thunks_IVRIOBuffer_002(void)
 {
     struct thunk *t = alloc_thunks(1);
 
-    init_thunk(t, this_ptr_value, IVRIOBuffer_001_Open, 5, FALSE, FALSE);
-    EIOBufferError (__stdcall *capi_IVRIOBuffer_001_Open)(const char * pchPath, EIOBufferMode mode, uint32_t unElementSize, uint32_t unElements, IOBufferHandle_t * pulBuffer) = (void *)t;
+    init_thunk(t, this_ptr_value, IVRIOBuffer_002_Open, 5, FALSE, FALSE);
+    EIOBufferError (__stdcall *capi_IVRIOBuffer_002_Open)(const char * pchPath, EIOBufferMode mode, uint32_t unElementSize, uint32_t unElements, IOBufferHandle_t * pulBuffer) = (void *)t;
 
     clear_parameters();
-    capi_IVRIOBuffer_001_Open((void *)1, 2, 3, 4, (void *)5);
-    check_ptr_parameter("IVRIOBuffer_001_Open", this_ptr_value);
-    check_ptr_parameter("IVRIOBuffer_001_Open", (void *)1);
-    check_uint32_parameter("IVRIOBuffer_001_Open", 2);
-    check_uint32_parameter("IVRIOBuffer_001_Open", 3);
-    check_uint32_parameter("IVRIOBuffer_001_Open", 4);
-    check_ptr_parameter("IVRIOBuffer_001_Open", (void *)5);
+    capi_IVRIOBuffer_002_Open((void *)1, 2, 3, 4, (void *)5);
+    check_ptr_parameter("IVRIOBuffer_002_Open", this_ptr_value);
+    check_ptr_parameter("IVRIOBuffer_002_Open", (void *)1);
+    check_uint32_parameter("IVRIOBuffer_002_Open", 2);
+    check_uint32_parameter("IVRIOBuffer_002_Open", 3);
+    check_uint32_parameter("IVRIOBuffer_002_Open", 4);
+    check_ptr_parameter("IVRIOBuffer_002_Open", (void *)5);
 
-    init_thunk(t, this_ptr_value, IVRIOBuffer_001_Close, 1, FALSE, FALSE);
-    EIOBufferError (__stdcall *capi_IVRIOBuffer_001_Close)(IOBufferHandle_t ulBuffer) = (void *)t;
-
-    clear_parameters();
-    capi_IVRIOBuffer_001_Close(1);
-    check_ptr_parameter("IVRIOBuffer_001_Close", this_ptr_value);
-    check_uint64_parameter("IVRIOBuffer_001_Close", 1);
-
-    init_thunk(t, this_ptr_value, IVRIOBuffer_001_Read, 4, FALSE, FALSE);
-    EIOBufferError (__stdcall *capi_IVRIOBuffer_001_Read)(IOBufferHandle_t ulBuffer, void * pDst, uint32_t unBytes, uint32_t * punRead) = (void *)t;
+    init_thunk(t, this_ptr_value, IVRIOBuffer_002_Close, 1, FALSE, FALSE);
+    EIOBufferError (__stdcall *capi_IVRIOBuffer_002_Close)(IOBufferHandle_t ulBuffer) = (void *)t;
 
     clear_parameters();
-    capi_IVRIOBuffer_001_Read(1, (void *)2, 3, (void *)4);
-    check_ptr_parameter("IVRIOBuffer_001_Read", this_ptr_value);
-    check_uint64_parameter("IVRIOBuffer_001_Read", 1);
-    check_ptr_parameter("IVRIOBuffer_001_Read", (void *)2);
-    check_uint32_parameter("IVRIOBuffer_001_Read", 3);
-    check_ptr_parameter("IVRIOBuffer_001_Read", (void *)4);
+    capi_IVRIOBuffer_002_Close(1);
+    check_ptr_parameter("IVRIOBuffer_002_Close", this_ptr_value);
+    check_uint64_parameter("IVRIOBuffer_002_Close", 1);
 
-    init_thunk(t, this_ptr_value, IVRIOBuffer_001_Write, 3, FALSE, FALSE);
-    EIOBufferError (__stdcall *capi_IVRIOBuffer_001_Write)(IOBufferHandle_t ulBuffer, void * pSrc, uint32_t unBytes) = (void *)t;
+    init_thunk(t, this_ptr_value, IVRIOBuffer_002_Read, 4, FALSE, FALSE);
+    EIOBufferError (__stdcall *capi_IVRIOBuffer_002_Read)(IOBufferHandle_t ulBuffer, void * pDst, uint32_t unBytes, uint32_t * punRead) = (void *)t;
 
     clear_parameters();
-    capi_IVRIOBuffer_001_Write(1, (void *)2, 3);
-    check_ptr_parameter("IVRIOBuffer_001_Write", this_ptr_value);
-    check_uint64_parameter("IVRIOBuffer_001_Write", 1);
-    check_ptr_parameter("IVRIOBuffer_001_Write", (void *)2);
-    check_uint32_parameter("IVRIOBuffer_001_Write", 3);
+    capi_IVRIOBuffer_002_Read(1, (void *)2, 3, (void *)4);
+    check_ptr_parameter("IVRIOBuffer_002_Read", this_ptr_value);
+    check_uint64_parameter("IVRIOBuffer_002_Read", 1);
+    check_ptr_parameter("IVRIOBuffer_002_Read", (void *)2);
+    check_uint32_parameter("IVRIOBuffer_002_Read", 3);
+    check_ptr_parameter("IVRIOBuffer_002_Read", (void *)4);
 
-    init_thunk(t, this_ptr_value, IVRIOBuffer_001_PropertyContainer, 1, FALSE, FALSE);
-    PropertyContainerHandle_t (__stdcall *capi_IVRIOBuffer_001_PropertyContainer)(IOBufferHandle_t ulBuffer) = (void *)t;
+    init_thunk(t, this_ptr_value, IVRIOBuffer_002_Write, 3, FALSE, FALSE);
+    EIOBufferError (__stdcall *capi_IVRIOBuffer_002_Write)(IOBufferHandle_t ulBuffer, void * pSrc, uint32_t unBytes) = (void *)t;
 
     clear_parameters();
-    capi_IVRIOBuffer_001_PropertyContainer(1);
-    check_ptr_parameter("IVRIOBuffer_001_PropertyContainer", this_ptr_value);
-    check_uint64_parameter("IVRIOBuffer_001_PropertyContainer", 1);
+    capi_IVRIOBuffer_002_Write(1, (void *)2, 3);
+    check_ptr_parameter("IVRIOBuffer_002_Write", this_ptr_value);
+    check_uint64_parameter("IVRIOBuffer_002_Write", 1);
+    check_ptr_parameter("IVRIOBuffer_002_Write", (void *)2);
+    check_uint32_parameter("IVRIOBuffer_002_Write", 3);
+
+    init_thunk(t, this_ptr_value, IVRIOBuffer_002_PropertyContainer, 1, FALSE, FALSE);
+    PropertyContainerHandle_t (__stdcall *capi_IVRIOBuffer_002_PropertyContainer)(IOBufferHandle_t ulBuffer) = (void *)t;
+
+    clear_parameters();
+    capi_IVRIOBuffer_002_PropertyContainer(1);
+    check_ptr_parameter("IVRIOBuffer_002_PropertyContainer", this_ptr_value);
+    check_uint64_parameter("IVRIOBuffer_002_PropertyContainer", 1);
+
+    init_thunk(t, this_ptr_value, IVRIOBuffer_002_HasReaders, 1, FALSE, FALSE);
+    bool (__stdcall *capi_IVRIOBuffer_002_HasReaders)(IOBufferHandle_t ulBuffer) = (void *)t;
+
+    clear_parameters();
+    capi_IVRIOBuffer_002_HasReaders(1);
+    check_ptr_parameter("IVRIOBuffer_002_HasReaders", this_ptr_value);
+    check_uint64_parameter("IVRIOBuffer_002_HasReaders", 1);
     VirtualFree(t, 0, MEM_RELEASE);
 }
 
@@ -3126,6 +3134,61 @@ void test_capi_thunks_IVRClientCore_003(void)
     capi_IVRClientCore_003_GetIDForVRInitError(1);
     check_ptr_parameter("IVRClientCore_003_GetIDForVRInitError", this_ptr_value);
     check_uint32_parameter("IVRClientCore_003_GetIDForVRInitError", 1);
+    VirtualFree(t, 0, MEM_RELEASE);
+}
+
+void test_capi_thunks_IVRIOBuffer_001(void)
+{
+    struct thunk *t = alloc_thunks(1);
+
+    init_thunk(t, this_ptr_value, IVRIOBuffer_001_Open, 5, FALSE, FALSE);
+    EIOBufferError (__stdcall *capi_IVRIOBuffer_001_Open)(const char * pchPath, EIOBufferMode mode, uint32_t unElementSize, uint32_t unElements, IOBufferHandle_t * pulBuffer) = (void *)t;
+
+    clear_parameters();
+    capi_IVRIOBuffer_001_Open((void *)1, 2, 3, 4, (void *)5);
+    check_ptr_parameter("IVRIOBuffer_001_Open", this_ptr_value);
+    check_ptr_parameter("IVRIOBuffer_001_Open", (void *)1);
+    check_uint32_parameter("IVRIOBuffer_001_Open", 2);
+    check_uint32_parameter("IVRIOBuffer_001_Open", 3);
+    check_uint32_parameter("IVRIOBuffer_001_Open", 4);
+    check_ptr_parameter("IVRIOBuffer_001_Open", (void *)5);
+
+    init_thunk(t, this_ptr_value, IVRIOBuffer_001_Close, 1, FALSE, FALSE);
+    EIOBufferError (__stdcall *capi_IVRIOBuffer_001_Close)(IOBufferHandle_t ulBuffer) = (void *)t;
+
+    clear_parameters();
+    capi_IVRIOBuffer_001_Close(1);
+    check_ptr_parameter("IVRIOBuffer_001_Close", this_ptr_value);
+    check_uint64_parameter("IVRIOBuffer_001_Close", 1);
+
+    init_thunk(t, this_ptr_value, IVRIOBuffer_001_Read, 4, FALSE, FALSE);
+    EIOBufferError (__stdcall *capi_IVRIOBuffer_001_Read)(IOBufferHandle_t ulBuffer, void * pDst, uint32_t unBytes, uint32_t * punRead) = (void *)t;
+
+    clear_parameters();
+    capi_IVRIOBuffer_001_Read(1, (void *)2, 3, (void *)4);
+    check_ptr_parameter("IVRIOBuffer_001_Read", this_ptr_value);
+    check_uint64_parameter("IVRIOBuffer_001_Read", 1);
+    check_ptr_parameter("IVRIOBuffer_001_Read", (void *)2);
+    check_uint32_parameter("IVRIOBuffer_001_Read", 3);
+    check_ptr_parameter("IVRIOBuffer_001_Read", (void *)4);
+
+    init_thunk(t, this_ptr_value, IVRIOBuffer_001_Write, 3, FALSE, FALSE);
+    EIOBufferError (__stdcall *capi_IVRIOBuffer_001_Write)(IOBufferHandle_t ulBuffer, void * pSrc, uint32_t unBytes) = (void *)t;
+
+    clear_parameters();
+    capi_IVRIOBuffer_001_Write(1, (void *)2, 3);
+    check_ptr_parameter("IVRIOBuffer_001_Write", this_ptr_value);
+    check_uint64_parameter("IVRIOBuffer_001_Write", 1);
+    check_ptr_parameter("IVRIOBuffer_001_Write", (void *)2);
+    check_uint32_parameter("IVRIOBuffer_001_Write", 3);
+
+    init_thunk(t, this_ptr_value, IVRIOBuffer_001_PropertyContainer, 1, FALSE, FALSE);
+    PropertyContainerHandle_t (__stdcall *capi_IVRIOBuffer_001_PropertyContainer)(IOBufferHandle_t ulBuffer) = (void *)t;
+
+    clear_parameters();
+    capi_IVRIOBuffer_001_PropertyContainer(1);
+    check_ptr_parameter("IVRIOBuffer_001_PropertyContainer", this_ptr_value);
+    check_uint64_parameter("IVRIOBuffer_001_PropertyContainer", 1);
     VirtualFree(t, 0, MEM_RELEASE);
 }
 

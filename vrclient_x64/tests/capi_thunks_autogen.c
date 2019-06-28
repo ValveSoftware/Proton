@@ -2546,7 +2546,7 @@ EVRInputError __thiscall IVRInput_005_ShowBindingsForActionSet(void *_this, VRAc
     return 0;
 }
 
-EIOBufferError __thiscall IVRIOBuffer_001_Open(void *_this, const char * pchPath, EIOBufferMode mode, uint32_t unElementSize, uint32_t unElements, IOBufferHandle_t * pulBuffer)
+EIOBufferError __thiscall IVRIOBuffer_002_Open(void *_this, const char * pchPath, EIOBufferMode mode, uint32_t unElementSize, uint32_t unElements, IOBufferHandle_t * pulBuffer)
 {
     push_ptr_parameter(_this);
     push_ptr_parameter(pchPath);
@@ -2557,14 +2557,14 @@ EIOBufferError __thiscall IVRIOBuffer_001_Open(void *_this, const char * pchPath
     return 0;
 }
 
-EIOBufferError __thiscall IVRIOBuffer_001_Close(void *_this, IOBufferHandle_t ulBuffer)
+EIOBufferError __thiscall IVRIOBuffer_002_Close(void *_this, IOBufferHandle_t ulBuffer)
 {
     push_ptr_parameter(_this);
     push_uint64_parameter(ulBuffer);
     return 0;
 }
 
-EIOBufferError __thiscall IVRIOBuffer_001_Read(void *_this, IOBufferHandle_t ulBuffer, void * pDst, uint32_t unBytes, uint32_t * punRead)
+EIOBufferError __thiscall IVRIOBuffer_002_Read(void *_this, IOBufferHandle_t ulBuffer, void * pDst, uint32_t unBytes, uint32_t * punRead)
 {
     push_ptr_parameter(_this);
     push_uint64_parameter(ulBuffer);
@@ -2574,7 +2574,7 @@ EIOBufferError __thiscall IVRIOBuffer_001_Read(void *_this, IOBufferHandle_t ulB
     return 0;
 }
 
-EIOBufferError __thiscall IVRIOBuffer_001_Write(void *_this, IOBufferHandle_t ulBuffer, void * pSrc, uint32_t unBytes)
+EIOBufferError __thiscall IVRIOBuffer_002_Write(void *_this, IOBufferHandle_t ulBuffer, void * pSrc, uint32_t unBytes)
 {
     push_ptr_parameter(_this);
     push_uint64_parameter(ulBuffer);
@@ -2583,7 +2583,14 @@ EIOBufferError __thiscall IVRIOBuffer_001_Write(void *_this, IOBufferHandle_t ul
     return 0;
 }
 
-PropertyContainerHandle_t __thiscall IVRIOBuffer_001_PropertyContainer(void *_this, IOBufferHandle_t ulBuffer)
+PropertyContainerHandle_t __thiscall IVRIOBuffer_002_PropertyContainer(void *_this, IOBufferHandle_t ulBuffer)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(ulBuffer);
+    return 0;
+}
+
+bool __thiscall IVRIOBuffer_002_HasReaders(void *_this, IOBufferHandle_t ulBuffer)
 {
     push_ptr_parameter(_this);
     push_uint64_parameter(ulBuffer);
@@ -2635,6 +2642,50 @@ const char * __thiscall IVRClientCore_003_GetIDForVRInitError(void *_this, EVRIn
 {
     push_ptr_parameter(_this);
     push_uint32_parameter(eError);
+    return 0;
+}
+
+EIOBufferError __thiscall IVRIOBuffer_001_Open(void *_this, const char * pchPath, EIOBufferMode mode, uint32_t unElementSize, uint32_t unElements, IOBufferHandle_t * pulBuffer)
+{
+    push_ptr_parameter(_this);
+    push_ptr_parameter(pchPath);
+    push_uint32_parameter(mode);
+    push_uint32_parameter(unElementSize);
+    push_uint32_parameter(unElements);
+    push_ptr_parameter(pulBuffer);
+    return 0;
+}
+
+EIOBufferError __thiscall IVRIOBuffer_001_Close(void *_this, IOBufferHandle_t ulBuffer)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(ulBuffer);
+    return 0;
+}
+
+EIOBufferError __thiscall IVRIOBuffer_001_Read(void *_this, IOBufferHandle_t ulBuffer, void * pDst, uint32_t unBytes, uint32_t * punRead)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(ulBuffer);
+    push_ptr_parameter(pDst);
+    push_uint32_parameter(unBytes);
+    push_ptr_parameter(punRead);
+    return 0;
+}
+
+EIOBufferError __thiscall IVRIOBuffer_001_Write(void *_this, IOBufferHandle_t ulBuffer, void * pSrc, uint32_t unBytes)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(ulBuffer);
+    push_ptr_parameter(pSrc);
+    push_uint32_parameter(unBytes);
+    return 0;
+}
+
+PropertyContainerHandle_t __thiscall IVRIOBuffer_001_PropertyContainer(void *_this, IOBufferHandle_t ulBuffer)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(ulBuffer);
     return 0;
 }
 

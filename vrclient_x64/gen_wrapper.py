@@ -12,6 +12,7 @@ import os
 import re
 
 sdk_versions = [
+    "v1.2.10",
     "v1.1.3b",
     "v1.0.17",
     "v1.0.16",
@@ -1099,7 +1100,7 @@ for sdkver in sdk_versions:
         if not os.path.isfile(input_name):
             continue
         index = clang.cindex.Index.create()
-        tu = index.parse(input_name, args=['-x', 'c++', '-std=c++11', '-DGNUC', '-Iopenvr_%s/' % sdkver, '-I/usr/lib/clang/7.0.1/include/'])
+        tu = index.parse(input_name, args=['-x', 'c++', '-std=c++11', '-DGNUC', '-Iopenvr_%s/' % sdkver, '-I/usr/lib/clang/8.0.0/include/'])
 
         diagnostics = list(tu.diagnostics)
         if len(diagnostics) > 0:
