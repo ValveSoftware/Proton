@@ -45,6 +45,8 @@ extern uint32_t cppIVRCompositor_IVRCompositor_022_GetVulkanDeviceExtensionsRequ
 extern void cppIVRCompositor_IVRCompositor_022_SetExplicitTimingMode(void *, EVRCompositorTimingMode);
 extern EVRCompositorError cppIVRCompositor_IVRCompositor_022_SubmitExplicitTimingData(void *);
 extern bool cppIVRCompositor_IVRCompositor_022_IsMotionSmoothingEnabled(void *);
+extern bool cppIVRCompositor_IVRCompositor_022_IsMotionSmoothingSupported(void *);
+extern bool cppIVRCompositor_IVRCompositor_022_IsCurrentSceneFocusAppLoading(void *);
 #ifdef __cplusplus
 }
 #endif

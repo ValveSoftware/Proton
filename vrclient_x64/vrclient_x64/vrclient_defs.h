@@ -64,7 +64,8 @@ typedef int
         EIOBufferMode,
         EVRSkeletalMotionRange,
         EVRSkeletalReferencePose,
-        EVRSkeletalTrackingLevel;
+        EVRSkeletalTrackingLevel,
+        EVRSummaryType;
 
 typedef uint32_t DriverId_t;
 typedef uint32_t TrackedDeviceIndex_t;

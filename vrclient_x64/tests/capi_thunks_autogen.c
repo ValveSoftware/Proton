@@ -900,6 +900,11 @@ void __thiscall IVRChaperoneSetup_006_HideWorkingSetPreview(void *_this)
     push_ptr_parameter(_this);
 }
 
+void __thiscall IVRChaperoneSetup_006_RoomSetupStarting(void *_this)
+{
+    push_ptr_parameter(_this);
+}
+
 void __thiscall IVRCompositor_022_SetTrackingSpace(void *_this, ETrackingUniverseOrigin eOrigin)
 {
     push_ptr_parameter(_this);
@@ -1192,6 +1197,18 @@ EVRCompositorError __thiscall IVRCompositor_022_SubmitExplicitTimingData(void *_
 }
 
 bool __thiscall IVRCompositor_022_IsMotionSmoothingEnabled(void *_this)
+{
+    push_ptr_parameter(_this);
+    return 0;
+}
+
+bool __thiscall IVRCompositor_022_IsMotionSmoothingSupported(void *_this)
+{
+    push_ptr_parameter(_this);
+    return 0;
+}
+
+bool __thiscall IVRCompositor_022_IsCurrentSceneFocusAppLoading(void *_this)
 {
     push_ptr_parameter(_this);
     return 0;
@@ -2319,6 +2336,350 @@ DriverHandle_t __thiscall IVRDriverManager_001_GetDriverHandle(void *_this, cons
     return 0;
 }
 
+EVRInputError __thiscall IVRInput_006_SetActionManifestPath(void *_this, const char * pchActionManifestPath)
+{
+    push_ptr_parameter(_this);
+    push_ptr_parameter(pchActionManifestPath);
+    return 0;
+}
+
+EVRInputError __thiscall IVRInput_006_GetActionSetHandle(void *_this, const char * pchActionSetName, VRActionSetHandle_t * pHandle)
+{
+    push_ptr_parameter(_this);
+    push_ptr_parameter(pchActionSetName);
+    push_ptr_parameter(pHandle);
+    return 0;
+}
+
+EVRInputError __thiscall IVRInput_006_GetActionHandle(void *_this, const char * pchActionName, VRActionHandle_t * pHandle)
+{
+    push_ptr_parameter(_this);
+    push_ptr_parameter(pchActionName);
+    push_ptr_parameter(pHandle);
+    return 0;
+}
+
+EVRInputError __thiscall IVRInput_006_GetInputSourceHandle(void *_this, const char * pchInputSourcePath, VRInputValueHandle_t * pHandle)
+{
+    push_ptr_parameter(_this);
+    push_ptr_parameter(pchInputSourcePath);
+    push_ptr_parameter(pHandle);
+    return 0;
+}
+
+EVRInputError __thiscall IVRInput_006_UpdateActionState(void *_this, VRActiveActionSet_t * pSets, uint32_t unSizeOfVRSelectedActionSet_t, uint32_t unSetCount)
+{
+    push_ptr_parameter(_this);
+    push_ptr_parameter(pSets);
+    push_uint32_parameter(unSizeOfVRSelectedActionSet_t);
+    push_uint32_parameter(unSetCount);
+    return 0;
+}
+
+EVRInputError __thiscall IVRInput_006_GetDigitalActionData(void *_this, VRActionHandle_t action, InputDigitalActionData_t * pActionData, uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(action);
+    push_ptr_parameter(pActionData);
+    push_uint32_parameter(unActionDataSize);
+    push_uint64_parameter(ulRestrictToDevice);
+    return 0;
+}
+
+EVRInputError __thiscall IVRInput_006_GetAnalogActionData(void *_this, VRActionHandle_t action, InputAnalogActionData_t * pActionData, uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(action);
+    push_ptr_parameter(pActionData);
+    push_uint32_parameter(unActionDataSize);
+    push_uint64_parameter(ulRestrictToDevice);
+    return 0;
+}
+
+EVRInputError __thiscall IVRInput_006_GetPoseActionDataRelativeToNow(void *_this, VRActionHandle_t action, ETrackingUniverseOrigin eOrigin, float fPredictedSecondsFromNow, InputPoseActionData_t * pActionData, uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(action);
+    push_uint32_parameter(eOrigin);
+    push_float_parameter(fPredictedSecondsFromNow);
+    push_ptr_parameter(pActionData);
+    push_uint32_parameter(unActionDataSize);
+    push_uint64_parameter(ulRestrictToDevice);
+    return 0;
+}
+
+EVRInputError __thiscall IVRInput_006_GetPoseActionDataForNextFrame(void *_this, VRActionHandle_t action, ETrackingUniverseOrigin eOrigin, InputPoseActionData_t * pActionData, uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(action);
+    push_uint32_parameter(eOrigin);
+    push_ptr_parameter(pActionData);
+    push_uint32_parameter(unActionDataSize);
+    push_uint64_parameter(ulRestrictToDevice);
+    return 0;
+}
+
+EVRInputError __thiscall IVRInput_006_GetSkeletalActionData(void *_this, VRActionHandle_t action, InputSkeletalActionData_t * pActionData, uint32_t unActionDataSize)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(action);
+    push_ptr_parameter(pActionData);
+    push_uint32_parameter(unActionDataSize);
+    return 0;
+}
+
+EVRInputError __thiscall IVRInput_006_GetBoneCount(void *_this, VRActionHandle_t action, uint32_t * pBoneCount)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(action);
+    push_ptr_parameter(pBoneCount);
+    return 0;
+}
+
+EVRInputError __thiscall IVRInput_006_GetBoneHierarchy(void *_this, VRActionHandle_t action, BoneIndex_t * pParentIndices, uint32_t unIndexArayCount)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(action);
+    push_ptr_parameter(pParentIndices);
+    push_uint32_parameter(unIndexArayCount);
+    return 0;
+}
+
+EVRInputError __thiscall IVRInput_006_GetBoneName(void *_this, VRActionHandle_t action, BoneIndex_t nBoneIndex, char * pchBoneName, uint32_t unNameBufferSize)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(action);
+    push_uint32_parameter(nBoneIndex);
+    push_ptr_parameter(pchBoneName);
+    push_uint32_parameter(unNameBufferSize);
+    return 0;
+}
+
+EVRInputError __thiscall IVRInput_006_GetSkeletalReferenceTransforms(void *_this, VRActionHandle_t action, EVRSkeletalTransformSpace eTransformSpace, EVRSkeletalReferencePose eReferencePose, VRBoneTransform_t * pTransformArray, uint32_t unTransformArrayCount)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(action);
+    push_uint32_parameter(eTransformSpace);
+    push_uint32_parameter(eReferencePose);
+    push_ptr_parameter(pTransformArray);
+    push_uint32_parameter(unTransformArrayCount);
+    return 0;
+}
+
+EVRInputError __thiscall IVRInput_006_GetSkeletalTrackingLevel(void *_this, VRActionHandle_t action, EVRSkeletalTrackingLevel * pSkeletalTrackingLevel)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(action);
+    push_ptr_parameter(pSkeletalTrackingLevel);
+    return 0;
+}
+
+EVRInputError __thiscall IVRInput_006_GetSkeletalBoneData(void *_this, VRActionHandle_t action, EVRSkeletalTransformSpace eTransformSpace, EVRSkeletalMotionRange eMotionRange, VRBoneTransform_t * pTransformArray, uint32_t unTransformArrayCount)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(action);
+    push_uint32_parameter(eTransformSpace);
+    push_uint32_parameter(eMotionRange);
+    push_ptr_parameter(pTransformArray);
+    push_uint32_parameter(unTransformArrayCount);
+    return 0;
+}
+
+EVRInputError __thiscall IVRInput_006_GetSkeletalSummaryData(void *_this, VRActionHandle_t action, EVRSummaryType eSummaryType, VRSkeletalSummaryData_t * pSkeletalSummaryData)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(action);
+    push_uint32_parameter(eSummaryType);
+    push_ptr_parameter(pSkeletalSummaryData);
+    return 0;
+}
+
+EVRInputError __thiscall IVRInput_006_GetSkeletalBoneDataCompressed(void *_this, VRActionHandle_t action, EVRSkeletalMotionRange eMotionRange, void * pvCompressedData, uint32_t unCompressedSize, uint32_t * punRequiredCompressedSize)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(action);
+    push_uint32_parameter(eMotionRange);
+    push_ptr_parameter(pvCompressedData);
+    push_uint32_parameter(unCompressedSize);
+    push_ptr_parameter(punRequiredCompressedSize);
+    return 0;
+}
+
+EVRInputError __thiscall IVRInput_006_DecompressSkeletalBoneData(void *_this, const void * pvCompressedBuffer, uint32_t unCompressedBufferSize, EVRSkeletalTransformSpace eTransformSpace, VRBoneTransform_t * pTransformArray, uint32_t unTransformArrayCount)
+{
+    push_ptr_parameter(_this);
+    push_ptr_parameter(pvCompressedBuffer);
+    push_uint32_parameter(unCompressedBufferSize);
+    push_uint32_parameter(eTransformSpace);
+    push_ptr_parameter(pTransformArray);
+    push_uint32_parameter(unTransformArrayCount);
+    return 0;
+}
+
+EVRInputError __thiscall IVRInput_006_TriggerHapticVibrationAction(void *_this, VRActionHandle_t action, float fStartSecondsFromNow, float fDurationSeconds, float fFrequency, float fAmplitude, VRInputValueHandle_t ulRestrictToDevice)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(action);
+    push_float_parameter(fStartSecondsFromNow);
+    push_float_parameter(fDurationSeconds);
+    push_float_parameter(fFrequency);
+    push_float_parameter(fAmplitude);
+    push_uint64_parameter(ulRestrictToDevice);
+    return 0;
+}
+
+EVRInputError __thiscall IVRInput_006_GetActionOrigins(void *_this, VRActionSetHandle_t actionSetHandle, VRActionHandle_t digitalActionHandle, VRInputValueHandle_t * originsOut, uint32_t originOutCount)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(actionSetHandle);
+    push_uint64_parameter(digitalActionHandle);
+    push_ptr_parameter(originsOut);
+    push_uint32_parameter(originOutCount);
+    return 0;
+}
+
+EVRInputError __thiscall IVRInput_006_GetOriginLocalizedName(void *_this, VRInputValueHandle_t origin, char * pchNameArray, uint32_t unNameArraySize, int32_t unStringSectionsToInclude)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(origin);
+    push_ptr_parameter(pchNameArray);
+    push_uint32_parameter(unNameArraySize);
+    push_uint32_parameter(unStringSectionsToInclude);
+    return 0;
+}
+
+EVRInputError __thiscall IVRInput_006_GetOriginTrackedDeviceInfo(void *_this, VRInputValueHandle_t origin, InputOriginInfo_t * pOriginInfo, uint32_t unOriginInfoSize)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(origin);
+    push_ptr_parameter(pOriginInfo);
+    push_uint32_parameter(unOriginInfoSize);
+    return 0;
+}
+
+EVRInputError __thiscall IVRInput_006_ShowActionOrigins(void *_this, VRActionSetHandle_t actionSetHandle, VRActionHandle_t ulActionHandle)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(actionSetHandle);
+    push_uint64_parameter(ulActionHandle);
+    return 0;
+}
+
+EVRInputError __thiscall IVRInput_006_ShowBindingsForActionSet(void *_this, VRActiveActionSet_t * pSets, uint32_t unSizeOfVRSelectedActionSet_t, uint32_t unSetCount, VRInputValueHandle_t originToHighlight)
+{
+    push_ptr_parameter(_this);
+    push_ptr_parameter(pSets);
+    push_uint32_parameter(unSizeOfVRSelectedActionSet_t);
+    push_uint32_parameter(unSetCount);
+    push_uint64_parameter(originToHighlight);
+    return 0;
+}
+
+bool __thiscall IVRInput_006_IsUsingLegacyInput(void *_this)
+{
+    push_ptr_parameter(_this);
+    return 0;
+}
+
+EIOBufferError __thiscall IVRIOBuffer_002_Open(void *_this, const char * pchPath, EIOBufferMode mode, uint32_t unElementSize, uint32_t unElements, IOBufferHandle_t * pulBuffer)
+{
+    push_ptr_parameter(_this);
+    push_ptr_parameter(pchPath);
+    push_uint32_parameter(mode);
+    push_uint32_parameter(unElementSize);
+    push_uint32_parameter(unElements);
+    push_ptr_parameter(pulBuffer);
+    return 0;
+}
+
+EIOBufferError __thiscall IVRIOBuffer_002_Close(void *_this, IOBufferHandle_t ulBuffer)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(ulBuffer);
+    return 0;
+}
+
+EIOBufferError __thiscall IVRIOBuffer_002_Read(void *_this, IOBufferHandle_t ulBuffer, void * pDst, uint32_t unBytes, uint32_t * punRead)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(ulBuffer);
+    push_ptr_parameter(pDst);
+    push_uint32_parameter(unBytes);
+    push_ptr_parameter(punRead);
+    return 0;
+}
+
+EIOBufferError __thiscall IVRIOBuffer_002_Write(void *_this, IOBufferHandle_t ulBuffer, void * pSrc, uint32_t unBytes)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(ulBuffer);
+    push_ptr_parameter(pSrc);
+    push_uint32_parameter(unBytes);
+    return 0;
+}
+
+PropertyContainerHandle_t __thiscall IVRIOBuffer_002_PropertyContainer(void *_this, IOBufferHandle_t ulBuffer)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(ulBuffer);
+    return 0;
+}
+
+bool __thiscall IVRIOBuffer_002_HasReaders(void *_this, IOBufferHandle_t ulBuffer)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(ulBuffer);
+    return 0;
+}
+
+EVRInitError __thiscall IVRClientCore_003_Init(void *_this, EVRApplicationType eApplicationType, const char * pStartupInfo)
+{
+    push_ptr_parameter(_this);
+    push_uint32_parameter(eApplicationType);
+    push_ptr_parameter(pStartupInfo);
+    return 0;
+}
+
+void __thiscall IVRClientCore_003_Cleanup(void *_this)
+{
+    push_ptr_parameter(_this);
+}
+
+EVRInitError __thiscall IVRClientCore_003_IsInterfaceVersionValid(void *_this, const char * pchInterfaceVersion)
+{
+    push_ptr_parameter(_this);
+    push_ptr_parameter(pchInterfaceVersion);
+    return 0;
+}
+
+void * __thiscall IVRClientCore_003_GetGenericInterface(void *_this, const char * pchNameAndVersion, EVRInitError * peError)
+{
+    push_ptr_parameter(_this);
+    push_ptr_parameter(pchNameAndVersion);
+    push_ptr_parameter(peError);
+    return 0;
+}
+
+bool __thiscall IVRClientCore_003_BIsHmdPresent(void *_this)
+{
+    push_ptr_parameter(_this);
+    return 0;
+}
+
+const char * __thiscall IVRClientCore_003_GetEnglishStringForHmdError(void *_this, EVRInitError eError)
+{
+    push_ptr_parameter(_this);
+    push_uint32_parameter(eError);
+    return 0;
+}
+
+const char * __thiscall IVRClientCore_003_GetIDForVRInitError(void *_this, EVRInitError eError)
+{
+    push_ptr_parameter(_this);
+    push_uint32_parameter(eError);
+    return 0;
+}
+
 EVRInputError __thiscall IVRInput_005_SetActionManifestPath(void *_this, const char * pchActionManifestPath)
 {
     push_ptr_parameter(_this);
@@ -2549,105 +2910,6 @@ EVRInputError __thiscall IVRInput_005_ShowBindingsForActionSet(void *_this, VRAc
 bool __thiscall IVRInput_005_IsUsingLegacyInput(void *_this)
 {
     push_ptr_parameter(_this);
-    return 0;
-}
-
-EIOBufferError __thiscall IVRIOBuffer_002_Open(void *_this, const char * pchPath, EIOBufferMode mode, uint32_t unElementSize, uint32_t unElements, IOBufferHandle_t * pulBuffer)
-{
-    push_ptr_parameter(_this);
-    push_ptr_parameter(pchPath);
-    push_uint32_parameter(mode);
-    push_uint32_parameter(unElementSize);
-    push_uint32_parameter(unElements);
-    push_ptr_parameter(pulBuffer);
-    return 0;
-}
-
-EIOBufferError __thiscall IVRIOBuffer_002_Close(void *_this, IOBufferHandle_t ulBuffer)
-{
-    push_ptr_parameter(_this);
-    push_uint64_parameter(ulBuffer);
-    return 0;
-}
-
-EIOBufferError __thiscall IVRIOBuffer_002_Read(void *_this, IOBufferHandle_t ulBuffer, void * pDst, uint32_t unBytes, uint32_t * punRead)
-{
-    push_ptr_parameter(_this);
-    push_uint64_parameter(ulBuffer);
-    push_ptr_parameter(pDst);
-    push_uint32_parameter(unBytes);
-    push_ptr_parameter(punRead);
-    return 0;
-}
-
-EIOBufferError __thiscall IVRIOBuffer_002_Write(void *_this, IOBufferHandle_t ulBuffer, void * pSrc, uint32_t unBytes)
-{
-    push_ptr_parameter(_this);
-    push_uint64_parameter(ulBuffer);
-    push_ptr_parameter(pSrc);
-    push_uint32_parameter(unBytes);
-    return 0;
-}
-
-PropertyContainerHandle_t __thiscall IVRIOBuffer_002_PropertyContainer(void *_this, IOBufferHandle_t ulBuffer)
-{
-    push_ptr_parameter(_this);
-    push_uint64_parameter(ulBuffer);
-    return 0;
-}
-
-bool __thiscall IVRIOBuffer_002_HasReaders(void *_this, IOBufferHandle_t ulBuffer)
-{
-    push_ptr_parameter(_this);
-    push_uint64_parameter(ulBuffer);
-    return 0;
-}
-
-EVRInitError __thiscall IVRClientCore_003_Init(void *_this, EVRApplicationType eApplicationType, const char * pStartupInfo)
-{
-    push_ptr_parameter(_this);
-    push_uint32_parameter(eApplicationType);
-    push_ptr_parameter(pStartupInfo);
-    return 0;
-}
-
-void __thiscall IVRClientCore_003_Cleanup(void *_this)
-{
-    push_ptr_parameter(_this);
-}
-
-EVRInitError __thiscall IVRClientCore_003_IsInterfaceVersionValid(void *_this, const char * pchInterfaceVersion)
-{
-    push_ptr_parameter(_this);
-    push_ptr_parameter(pchInterfaceVersion);
-    return 0;
-}
-
-void * __thiscall IVRClientCore_003_GetGenericInterface(void *_this, const char * pchNameAndVersion, EVRInitError * peError)
-{
-    push_ptr_parameter(_this);
-    push_ptr_parameter(pchNameAndVersion);
-    push_ptr_parameter(peError);
-    return 0;
-}
-
-bool __thiscall IVRClientCore_003_BIsHmdPresent(void *_this)
-{
-    push_ptr_parameter(_this);
-    return 0;
-}
-
-const char * __thiscall IVRClientCore_003_GetEnglishStringForHmdError(void *_this, EVRInitError eError)
-{
-    push_ptr_parameter(_this);
-    push_uint32_parameter(eError);
-    return 0;
-}
-
-const char * __thiscall IVRClientCore_003_GetIDForVRInitError(void *_this, EVRInitError eError)
-{
-    push_ptr_parameter(_this);
-    push_uint32_parameter(eError);
     return 0;
 }
 
