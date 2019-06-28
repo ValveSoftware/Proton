@@ -3009,6 +3009,13 @@ void test_capi_thunks_IVRInput_005(void)
     check_uint32_parameter("IVRInput_005_ShowBindingsForActionSet", 2);
     check_uint32_parameter("IVRInput_005_ShowBindingsForActionSet", 3);
     check_uint64_parameter("IVRInput_005_ShowBindingsForActionSet", 4);
+
+    init_thunk(t, this_ptr_value, IVRInput_005_IsUsingLegacyInput, 0, FALSE, FALSE);
+    bool (__stdcall *capi_IVRInput_005_IsUsingLegacyInput)() = (void *)t;
+
+    clear_parameters();
+    capi_IVRInput_005_IsUsingLegacyInput();
+    check_ptr_parameter("IVRInput_005_IsUsingLegacyInput", this_ptr_value);
     VirtualFree(t, 0, MEM_RELEASE);
 }
 

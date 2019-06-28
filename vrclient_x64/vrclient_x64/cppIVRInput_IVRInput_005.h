@@ -25,6 +25,7 @@ extern EVRInputError cppIVRInput_IVRInput_005_GetOriginLocalizedName(void *, VRI
 extern EVRInputError cppIVRInput_IVRInput_005_GetOriginTrackedDeviceInfo(void *, VRInputValueHandle_t, InputOriginInfo_t *, uint32_t);
 extern EVRInputError cppIVRInput_IVRInput_005_ShowActionOrigins(void *, VRActionSetHandle_t, VRActionHandle_t);
 extern EVRInputError cppIVRInput_IVRInput_005_ShowBindingsForActionSet(void *, VRActiveActionSet_t *, uint32_t, uint32_t, VRInputValueHandle_t);
+extern bool cppIVRInput_IVRInput_005_IsUsingLegacyInput(void *);
 #ifdef __cplusplus
 }
 #endif

@@ -341,7 +341,7 @@ EVROverlayError __thiscall winIVROverlay_IVROverlay_019_GetTransformForOverlayCo
 }
 
 DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_019_PollNextOverlayEvent, 24)
-bool __thiscall winIVROverlay_IVROverlay_019_PollNextOverlayEvent(winIVROverlay_IVROverlay_019 *_this, VROverlayHandle_t ulOverlayHandle, winVREvent_t_1210 * pEvent, uint32_t uncbVREvent)
+bool __thiscall winIVROverlay_IVROverlay_019_PollNextOverlayEvent(winIVROverlay_IVROverlay_019 *_this, VROverlayHandle_t ulOverlayHandle, winVREvent_t_1322 * pEvent, uint32_t uncbVREvent)
 {
     TRACE("%p\n", _this);
     return cppIVROverlay_IVROverlay_019_PollNextOverlayEvent(_this->linux_side, ulOverlayHandle, pEvent, uncbVREvent);

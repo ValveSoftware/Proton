@@ -195,6 +195,13 @@ EVRInputError __thiscall winIVRInput_IVRInput_005_ShowBindingsForActionSet(winIV
     return cppIVRInput_IVRInput_005_ShowBindingsForActionSet(_this->linux_side, pSets, unSizeOfVRSelectedActionSet_t, unSetCount, originToHighlight);
 }
 
+DEFINE_THISCALL_WRAPPER(winIVRInput_IVRInput_005_IsUsingLegacyInput, 4)
+bool __thiscall winIVRInput_IVRInput_005_IsUsingLegacyInput(winIVRInput_IVRInput_005 *_this)
+{
+    TRACE("%p\n", _this);
+    return cppIVRInput_IVRInput_005_IsUsingLegacyInput(_this->linux_side);
+}
+
 extern vtable_ptr winIVRInput_IVRInput_005_vtable;
 
 #ifndef __GNUC__
@@ -225,6 +232,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winIVRInput_IVRInput_005_GetOriginTrackedDeviceInfo)
         VTABLE_ADD_FUNC(winIVRInput_IVRInput_005_ShowActionOrigins)
         VTABLE_ADD_FUNC(winIVRInput_IVRInput_005_ShowBindingsForActionSet)
+        VTABLE_ADD_FUNC(winIVRInput_IVRInput_005_IsUsingLegacyInput)
     );
 #ifndef __GNUC__
 }
@@ -248,8 +256,8 @@ void destroy_winIVRInput_IVRInput_005(void *object)
 winIVRInput_IVRInput_005 *create_winIVRInput_IVRInput_005_FnTable(void *linux_side)
 {
     winIVRInput_IVRInput_005 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRInput_IVRInput_005));
-    struct thunk *thunks = alloc_thunks(24);
-    struct thunk **vtable = HeapAlloc(GetProcessHeap(), 0, 24 * sizeof(*vtable));
+    struct thunk *thunks = alloc_thunks(25);
+    struct thunk **vtable = HeapAlloc(GetProcessHeap(), 0, 25 * sizeof(*vtable));
     int i;
 
     TRACE("-> %p, vtable %p, thunks %p\n", r, vtable, thunks);
@@ -277,7 +285,8 @@ winIVRInput_IVRInput_005 *create_winIVRInput_IVRInput_005_FnTable(void *linux_si
     init_thunk(&thunks[21], r, winIVRInput_IVRInput_005_GetOriginTrackedDeviceInfo, 3, FALSE, FALSE);
     init_thunk(&thunks[22], r, winIVRInput_IVRInput_005_ShowActionOrigins, 2, FALSE, FALSE);
     init_thunk(&thunks[23], r, winIVRInput_IVRInput_005_ShowBindingsForActionSet, 4, FALSE, FALSE);
-    for (i = 0; i < 24; i++)
+    init_thunk(&thunks[24], r, winIVRInput_IVRInput_005_IsUsingLegacyInput, 0, FALSE, FALSE);
+    for (i = 0; i < 25; i++)
         vtable[i] = &thunks[i];
     r->linux_side = linux_side;
     r->vtable = (void *)vtable;

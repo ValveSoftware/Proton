@@ -2546,6 +2546,12 @@ EVRInputError __thiscall IVRInput_005_ShowBindingsForActionSet(void *_this, VRAc
     return 0;
 }
 
+bool __thiscall IVRInput_005_IsUsingLegacyInput(void *_this)
+{
+    push_ptr_parameter(_this);
+    return 0;
+}
+
 EIOBufferError __thiscall IVRIOBuffer_002_Open(void *_this, const char * pchPath, EIOBufferMode mode, uint32_t unElementSize, uint32_t unElements, IOBufferHandle_t * pulBuffer)
 {
     push_ptr_parameter(_this);

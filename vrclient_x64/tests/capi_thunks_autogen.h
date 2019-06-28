@@ -671,6 +671,8 @@ EVRInputError __thiscall IVRInput_005_ShowActionOrigins(void *_this, VRActionSet
 
 EVRInputError __thiscall IVRInput_005_ShowBindingsForActionSet(void *_this, VRActiveActionSet_t * pSets, uint32_t unSizeOfVRSelectedActionSet_t, uint32_t unSetCount, VRInputValueHandle_t originToHighlight);
 
+bool __thiscall IVRInput_005_IsUsingLegacyInput(void *_this);
+
 void test_capi_thunks_IVRIOBuffer_002(void);
 
 EIOBufferError __thiscall IVRIOBuffer_002_Open(void *_this, const char * pchPath, EIOBufferMode mode, uint32_t unElementSize, uint32_t unElements, IOBufferHandle_t * pulBuffer);
