@@ -244,7 +244,8 @@ This file is located in the Proton installation directory in your Steam library
 (often `~/.steam/steam/steamapps/common/Proton #.#`). If you want to change the
 runtime configuration for a specific game, you can use the `Set Launch Options`
 setting in the game's `Properties` dialog in the Steam client.  You can launch
-the game with environment variables using "`PROTON_VARIABLE=1 %command%`".
+the game with environment variables using "`PROTON_VARIABLE=1 %command%`". For
+example, "`PROTON_NO_ESYNC=1 %command%`" disables Esync.
 
 To enable an option, set the variable to a non-<tt>0</tt> value.  To disable an
 option, set the variable to <tt>0</tt>. To use Steam's default configuration, do
