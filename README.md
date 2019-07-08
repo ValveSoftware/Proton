@@ -238,13 +238,17 @@ Runtime Config Options
 Proton can be tuned at runtime to help certain games run. The Steam client sets
 some options for known games using the <tt>STEAM_COMPAT_CONFIG</tt> variable.
 You can override these options using the environment variables described below.
+
 The best way to set these environment overrides for all games is by renaming
 `user_settings.sample.py` to `user_settings.py` and modifying it appropriately.
 This file is located in the Proton installation directory in your Steam library
-(often `~/.steam/steam/steamapps/common/Proton #.#`). If you want to change the
-runtime configuration for a specific game, you can use the `Set Launch Options`
-setting in the game's `Properties` dialog in the Steam client.  You can launch
-the game with environment variables using "`PROTON_VARIABLE=1 %command%`".
+(often `~/.steam/steam/steamapps/common/Proton #.#`).
+
+If you want to change the runtime configuration for a specific game, you can
+use the `Set Launch Options` setting in the game's `Properties` dialog in the
+Steam client. Set the variable, followed by `%command%`. For example, input
+"`PROTON_USE_WINED3D=1 %command%`" to use the OpenGL-based wined3d renderer
+instead of the Vulkan-based DXVK renderer.
 
 To enable an option, set the variable to a non-<tt>0</tt> value.  To disable an
 option, set the variable to <tt>0</tt>. To use Steam's default configuration, do
