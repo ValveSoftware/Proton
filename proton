@@ -269,11 +269,15 @@ check_environment("PROTON_USE_D9VK", "d9vk")
 check_environment("PROTON_NO_D3D11", "nod3d11")
 check_environment("PROTON_NO_D3D10", "nod3d10")
 check_environment("PROTON_NO_ESYNC", "noesync")
+check_environment("PROTON_NO_FSYNC", "nofsync")
 check_environment("PROTON_FORCE_LARGE_ADDRESS_AWARE", "forcelgadd")
 check_environment("PROTON_OLD_GL_STRING", "oldglstr")
 
 if not "noesync" in config_opts:
     env["WINEESYNC"] = "1"
+
+if not "nofsync" in config_opts:
+    env["WINEFSYNC"] = "1"
 
 if "oldglstr" in config_opts:
     #mesa override
