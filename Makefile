@@ -22,6 +22,13 @@ else
     DEPLOY_DIR := $(_build_name)
 endif
 
+ifneq ($(module),)
+    ifneq ($(findstring .,$(module)),)
+		MODULE_SFX :=
+	else
+		MODULE_SFX := .dll
+	endif
+endif
 
 CONFIGURE_CMD := ../proton/configure.sh \
 	--steam-runtime64=docker:steam-proton-dev --steam-runtime32=docker:steam-proton-dev32 \
@@ -104,8 +111,9 @@ deploy: configure
 module: configure
 	mkdir -p vagrant_share/$(module)/lib/wine/ vagrant_share/$(module)/lib64/wine/
 	vagrant ssh -c 'make -C $(BUILD_DIR)/ module=$(module) module && \
-		cp $(BUILD_DIR)/obj-wine32/dlls/$(module)/$(module)*.so /vagrant/$(module)/lib/wine/ && \
-		cp $(BUILD_DIR)/obj-wine64/dlls/$(module)/$(module)*.so /vagrant/$(module)/lib64/wine/'
+		cp $(BUILD_DIR)/obj-wine32/dlls/$(module)/$(module)$(MODULE_SFX)* /vagrant/$(module)/lib/wine/ && \
+		cp $(BUILD_DIR)/obj-wine64/dlls/$(module)/$(module)$(MODULE_SFX)* /vagrant/$(module)/lib64/wine/'
+	rm -f vagrant_share/$(module)/lib*/wine/*.fake
 
 dxvk: configure
 	mkdir -p vagrant_share/dxvk/lib/wine/dxvk/
