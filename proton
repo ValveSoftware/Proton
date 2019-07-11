@@ -130,6 +130,12 @@ def makedirs(path):
 
 def try_copy(src, dst):
     try:
+        if os.path.isdir(dst):
+            dstfile = dst + "/" + os.path.basename(src)
+            if os.path.lexists(dstfile):
+                os.remove(dstfile)
+        elif os.path.lexists(dst):
+            os.remove(dst)
         shutil.copy(src, dst)
     except PermissionError as e:
         if e.errno == errno.EPERM:
