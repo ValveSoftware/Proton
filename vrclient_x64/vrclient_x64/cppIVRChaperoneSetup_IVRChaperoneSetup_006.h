@@ -20,6 +20,7 @@ extern bool cppIVRChaperoneSetup_IVRChaperoneSetup_006_ExportLiveToBuffer(void *
 extern bool cppIVRChaperoneSetup_IVRChaperoneSetup_006_ImportFromBufferToWorking(void *, const char *, uint32_t);
 extern void cppIVRChaperoneSetup_IVRChaperoneSetup_006_ShowWorkingSetPreview(void *);
 extern void cppIVRChaperoneSetup_IVRChaperoneSetup_006_HideWorkingSetPreview(void *);
+extern void cppIVRChaperoneSetup_IVRChaperoneSetup_006_RoomSetupStarting(void *);
 #ifdef __cplusplus
 }
 #endif

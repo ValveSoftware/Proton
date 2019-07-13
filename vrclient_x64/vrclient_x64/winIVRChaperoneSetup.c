@@ -158,6 +158,13 @@ void __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_006_HideWorkingSetPreview
     cppIVRChaperoneSetup_IVRChaperoneSetup_006_HideWorkingSetPreview(_this->linux_side);
 }
 
+DEFINE_THISCALL_WRAPPER(winIVRChaperoneSetup_IVRChaperoneSetup_006_RoomSetupStarting, 4)
+void __thiscall winIVRChaperoneSetup_IVRChaperoneSetup_006_RoomSetupStarting(winIVRChaperoneSetup_IVRChaperoneSetup_006 *_this)
+{
+    TRACE("%p\n", _this);
+    cppIVRChaperoneSetup_IVRChaperoneSetup_006_RoomSetupStarting(_this->linux_side);
+}
+
 extern vtable_ptr winIVRChaperoneSetup_IVRChaperoneSetup_006_vtable;
 
 #ifndef __GNUC__
@@ -183,6 +190,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winIVRChaperoneSetup_IVRChaperoneSetup_006_ImportFromBufferToWorking)
         VTABLE_ADD_FUNC(winIVRChaperoneSetup_IVRChaperoneSetup_006_ShowWorkingSetPreview)
         VTABLE_ADD_FUNC(winIVRChaperoneSetup_IVRChaperoneSetup_006_HideWorkingSetPreview)
+        VTABLE_ADD_FUNC(winIVRChaperoneSetup_IVRChaperoneSetup_006_RoomSetupStarting)
     );
 #ifndef __GNUC__
 }
@@ -206,8 +214,8 @@ void destroy_winIVRChaperoneSetup_IVRChaperoneSetup_006(void *object)
 winIVRChaperoneSetup_IVRChaperoneSetup_006 *create_winIVRChaperoneSetup_IVRChaperoneSetup_006_FnTable(void *linux_side)
 {
     winIVRChaperoneSetup_IVRChaperoneSetup_006 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRChaperoneSetup_IVRChaperoneSetup_006));
-    struct thunk *thunks = alloc_thunks(19);
-    struct thunk **vtable = HeapAlloc(GetProcessHeap(), 0, 19 * sizeof(*vtable));
+    struct thunk *thunks = alloc_thunks(20);
+    struct thunk **vtable = HeapAlloc(GetProcessHeap(), 0, 20 * sizeof(*vtable));
     int i;
 
     TRACE("-> %p, vtable %p, thunks %p\n", r, vtable, thunks);
@@ -230,7 +238,8 @@ winIVRChaperoneSetup_IVRChaperoneSetup_006 *create_winIVRChaperoneSetup_IVRChape
     init_thunk(&thunks[16], r, winIVRChaperoneSetup_IVRChaperoneSetup_006_ImportFromBufferToWorking, 2, FALSE, FALSE);
     init_thunk(&thunks[17], r, winIVRChaperoneSetup_IVRChaperoneSetup_006_ShowWorkingSetPreview, 0, FALSE, FALSE);
     init_thunk(&thunks[18], r, winIVRChaperoneSetup_IVRChaperoneSetup_006_HideWorkingSetPreview, 0, FALSE, FALSE);
-    for (i = 0; i < 19; i++)
+    init_thunk(&thunks[19], r, winIVRChaperoneSetup_IVRChaperoneSetup_006_RoomSetupStarting, 0, FALSE, FALSE);
+    for (i = 0; i < 20; i++)
         vtable[i] = &thunks[i];
     r->linux_side = linux_side;
     r->vtable = (void *)vtable;

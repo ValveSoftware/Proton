@@ -12,6 +12,10 @@ import os
 import re
 
 sdk_versions = [
+    "v1.5.17",
+    "v1.4.18",
+    "v1.3.22",
+#    "v1.2.10", causes utf-8 error
     "v1.1.3b",
     "v1.0.17",
     "v1.0.16",

@@ -46,6 +46,13 @@ DriverHandle_t __thiscall winIVRDriverManager_IVRDriverManager_001_GetDriverHand
     return cppIVRDriverManager_IVRDriverManager_001_GetDriverHandle(_this->linux_side, pchDriverName);
 }
 
+DEFINE_THISCALL_WRAPPER(winIVRDriverManager_IVRDriverManager_001_IsEnabled, 8)
+bool __thiscall winIVRDriverManager_IVRDriverManager_001_IsEnabled(winIVRDriverManager_IVRDriverManager_001 *_this, DriverId_t nDriver)
+{
+    TRACE("%p\n", _this);
+    return cppIVRDriverManager_IVRDriverManager_001_IsEnabled(_this->linux_side, nDriver);
+}
+
 extern vtable_ptr winIVRDriverManager_IVRDriverManager_001_vtable;
 
 #ifndef __GNUC__
@@ -55,6 +62,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winIVRDriverManager_IVRDriverManager_001_GetDriverCount)
         VTABLE_ADD_FUNC(winIVRDriverManager_IVRDriverManager_001_GetDriverName)
         VTABLE_ADD_FUNC(winIVRDriverManager_IVRDriverManager_001_GetDriverHandle)
+        VTABLE_ADD_FUNC(winIVRDriverManager_IVRDriverManager_001_IsEnabled)
     );
 #ifndef __GNUC__
 }
@@ -78,15 +86,16 @@ void destroy_winIVRDriverManager_IVRDriverManager_001(void *object)
 winIVRDriverManager_IVRDriverManager_001 *create_winIVRDriverManager_IVRDriverManager_001_FnTable(void *linux_side)
 {
     winIVRDriverManager_IVRDriverManager_001 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRDriverManager_IVRDriverManager_001));
-    struct thunk *thunks = alloc_thunks(3);
-    struct thunk **vtable = HeapAlloc(GetProcessHeap(), 0, 3 * sizeof(*vtable));
+    struct thunk *thunks = alloc_thunks(4);
+    struct thunk **vtable = HeapAlloc(GetProcessHeap(), 0, 4 * sizeof(*vtable));
     int i;
 
     TRACE("-> %p, vtable %p, thunks %p\n", r, vtable, thunks);
     init_thunk(&thunks[0], r, winIVRDriverManager_IVRDriverManager_001_GetDriverCount, 0, FALSE, FALSE);
     init_thunk(&thunks[1], r, winIVRDriverManager_IVRDriverManager_001_GetDriverName, 3, FALSE, FALSE);
     init_thunk(&thunks[2], r, winIVRDriverManager_IVRDriverManager_001_GetDriverHandle, 1, FALSE, FALSE);
-    for (i = 0; i < 3; i++)
+    init_thunk(&thunks[3], r, winIVRDriverManager_IVRDriverManager_001_IsEnabled, 1, FALSE, FALSE);
+    for (i = 0; i < 4; i++)
         vtable[i] = &thunks[i];
     r->linux_side = linux_side;
     r->vtable = (void *)vtable;
