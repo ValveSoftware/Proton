@@ -1,14 +1,14 @@
 /* This file is auto-generated, do not edit. */
 #include "capi_thunks_autogen.h"
 
-void __thiscall IVRSystem_019_GetRecommendedRenderTargetSize(void *_this, uint32_t * pnWidth, uint32_t * pnHeight)
+void __thiscall IVRSystem_020_GetRecommendedRenderTargetSize(void *_this, uint32_t * pnWidth, uint32_t * pnHeight)
 {
     push_ptr_parameter(_this);
     push_ptr_parameter(pnWidth);
     push_ptr_parameter(pnHeight);
 }
 
-HmdMatrix44_t *__thiscall IVRSystem_019_GetProjectionMatrix(void *_this, HmdMatrix44_t *_r, EVREye eEye, float fNearZ, float fFarZ)
+HmdMatrix44_t *__thiscall IVRSystem_020_GetProjectionMatrix(void *_this, HmdMatrix44_t *_r, EVREye eEye, float fNearZ, float fFarZ)
 {
     push_ptr_parameter(_this);
     push_ptr_parameter(_r);
@@ -18,7 +18,7 @@ HmdMatrix44_t *__thiscall IVRSystem_019_GetProjectionMatrix(void *_this, HmdMatr
     return 0;
 }
 
-void __thiscall IVRSystem_019_GetProjectionRaw(void *_this, EVREye eEye, float * pfLeft, float * pfRight, float * pfTop, float * pfBottom)
+void __thiscall IVRSystem_020_GetProjectionRaw(void *_this, EVREye eEye, float * pfLeft, float * pfRight, float * pfTop, float * pfBottom)
 {
     push_ptr_parameter(_this);
     push_uint32_parameter(eEye);
@@ -28,7 +28,7 @@ void __thiscall IVRSystem_019_GetProjectionRaw(void *_this, EVREye eEye, float *
     push_ptr_parameter(pfBottom);
 }
 
-bool __thiscall IVRSystem_019_ComputeDistortion(void *_this, EVREye eEye, float fU, float fV, DistortionCoordinates_t * pDistortionCoordinates)
+bool __thiscall IVRSystem_020_ComputeDistortion(void *_this, EVREye eEye, float fU, float fV, DistortionCoordinates_t * pDistortionCoordinates)
 {
     push_ptr_parameter(_this);
     push_uint32_parameter(eEye);
@@ -38,7 +38,7 @@ bool __thiscall IVRSystem_019_ComputeDistortion(void *_this, EVREye eEye, float 
     return 0;
 }
 
-HmdMatrix34_t *__thiscall IVRSystem_019_GetEyeToHeadTransform(void *_this, HmdMatrix34_t *_r, EVREye eEye)
+HmdMatrix34_t *__thiscall IVRSystem_020_GetEyeToHeadTransform(void *_this, HmdMatrix34_t *_r, EVREye eEye)
 {
     push_ptr_parameter(_this);
     push_ptr_parameter(_r);
@@ -46,7 +46,7 @@ HmdMatrix34_t *__thiscall IVRSystem_019_GetEyeToHeadTransform(void *_this, HmdMa
     return 0;
 }
 
-bool __thiscall IVRSystem_019_GetTimeSinceLastVsync(void *_this, float * pfSecondsSinceLastVsync, uint64_t * pulFrameCounter)
+bool __thiscall IVRSystem_020_GetTimeSinceLastVsync(void *_this, float * pfSecondsSinceLastVsync, uint64_t * pulFrameCounter)
 {
     push_ptr_parameter(_this);
     push_ptr_parameter(pfSecondsSinceLastVsync);
@@ -54,19 +54,19 @@ bool __thiscall IVRSystem_019_GetTimeSinceLastVsync(void *_this, float * pfSecon
     return 0;
 }
 
-int32_t __thiscall IVRSystem_019_GetD3D9AdapterIndex(void *_this)
+int32_t __thiscall IVRSystem_020_GetD3D9AdapterIndex(void *_this)
 {
     push_ptr_parameter(_this);
     return 0;
 }
 
-void __thiscall IVRSystem_019_GetDXGIOutputInfo(void *_this, int32_t * pnAdapterIndex)
+void __thiscall IVRSystem_020_GetDXGIOutputInfo(void *_this, int32_t * pnAdapterIndex)
 {
     push_ptr_parameter(_this);
     push_ptr_parameter(pnAdapterIndex);
 }
 
-void __thiscall IVRSystem_019_GetOutputDevice(void *_this, uint64_t * pnDevice, ETextureType textureType, VkInstance_T * pInstance)
+void __thiscall IVRSystem_020_GetOutputDevice(void *_this, uint64_t * pnDevice, ETextureType textureType, VkInstance_T * pInstance)
 {
     push_ptr_parameter(_this);
     push_ptr_parameter(pnDevice);
@@ -74,20 +74,20 @@ void __thiscall IVRSystem_019_GetOutputDevice(void *_this, uint64_t * pnDevice, 
     push_ptr_parameter(pInstance);
 }
 
-bool __thiscall IVRSystem_019_IsDisplayOnDesktop(void *_this)
+bool __thiscall IVRSystem_020_IsDisplayOnDesktop(void *_this)
 {
     push_ptr_parameter(_this);
     return 0;
 }
 
-bool __thiscall IVRSystem_019_SetDisplayVisibility(void *_this, bool bIsVisibleOnDesktop)
+bool __thiscall IVRSystem_020_SetDisplayVisibility(void *_this, bool bIsVisibleOnDesktop)
 {
     push_ptr_parameter(_this);
     push_bool_parameter(bIsVisibleOnDesktop);
     return 0;
 }
 
-void __thiscall IVRSystem_019_GetDeviceToAbsoluteTrackingPose(void *_this, ETrackingUniverseOrigin eOrigin, float fPredictedSecondsToPhotonsFromNow, TrackedDevicePose_t * pTrackedDevicePoseArray, uint32_t unTrackedDevicePoseArrayCount)
+void __thiscall IVRSystem_020_GetDeviceToAbsoluteTrackingPose(void *_this, ETrackingUniverseOrigin eOrigin, float fPredictedSecondsToPhotonsFromNow, TrackedDevicePose_t * pTrackedDevicePoseArray, uint32_t unTrackedDevicePoseArrayCount)
 {
     push_ptr_parameter(_this);
     push_uint32_parameter(eOrigin);
@@ -96,26 +96,26 @@ void __thiscall IVRSystem_019_GetDeviceToAbsoluteTrackingPose(void *_this, ETrac
     push_uint32_parameter(unTrackedDevicePoseArrayCount);
 }
 
-void __thiscall IVRSystem_019_ResetSeatedZeroPose(void *_this)
+void __thiscall IVRSystem_020_ResetSeatedZeroPose(void *_this)
 {
     push_ptr_parameter(_this);
 }
 
-HmdMatrix34_t *__thiscall IVRSystem_019_GetSeatedZeroPoseToStandingAbsoluteTrackingPose(void *_this, HmdMatrix34_t *_r)
-{
-    push_ptr_parameter(_this);
-    push_ptr_parameter(_r);
-    return 0;
-}
-
-HmdMatrix34_t *__thiscall IVRSystem_019_GetRawZeroPoseToStandingAbsoluteTrackingPose(void *_this, HmdMatrix34_t *_r)
+HmdMatrix34_t *__thiscall IVRSystem_020_GetSeatedZeroPoseToStandingAbsoluteTrackingPose(void *_this, HmdMatrix34_t *_r)
 {
     push_ptr_parameter(_this);
     push_ptr_parameter(_r);
     return 0;
 }
 
-uint32_t __thiscall IVRSystem_019_GetSortedTrackedDeviceIndicesOfClass(void *_this, ETrackedDeviceClass eTrackedDeviceClass, TrackedDeviceIndex_t * punTrackedDeviceIndexArray, uint32_t unTrackedDeviceIndexArrayCount, TrackedDeviceIndex_t unRelativeToTrackedDeviceIndex)
+HmdMatrix34_t *__thiscall IVRSystem_020_GetRawZeroPoseToStandingAbsoluteTrackingPose(void *_this, HmdMatrix34_t *_r)
+{
+    push_ptr_parameter(_this);
+    push_ptr_parameter(_r);
+    return 0;
+}
+
+uint32_t __thiscall IVRSystem_020_GetSortedTrackedDeviceIndicesOfClass(void *_this, ETrackedDeviceClass eTrackedDeviceClass, TrackedDeviceIndex_t * punTrackedDeviceIndexArray, uint32_t unTrackedDeviceIndexArrayCount, TrackedDeviceIndex_t unRelativeToTrackedDeviceIndex)
 {
     push_ptr_parameter(_this);
     push_uint32_parameter(eTrackedDeviceClass);
@@ -125,14 +125,14 @@ uint32_t __thiscall IVRSystem_019_GetSortedTrackedDeviceIndicesOfClass(void *_th
     return 0;
 }
 
-EDeviceActivityLevel __thiscall IVRSystem_019_GetTrackedDeviceActivityLevel(void *_this, TrackedDeviceIndex_t unDeviceId)
+EDeviceActivityLevel __thiscall IVRSystem_020_GetTrackedDeviceActivityLevel(void *_this, TrackedDeviceIndex_t unDeviceId)
 {
     push_ptr_parameter(_this);
     push_uint32_parameter(unDeviceId);
     return 0;
 }
 
-void __thiscall IVRSystem_019_ApplyTransform(void *_this, TrackedDevicePose_t * pOutputPose, TrackedDevicePose_t * pTrackedDevicePose, HmdMatrix34_t * pTransform)
+void __thiscall IVRSystem_020_ApplyTransform(void *_this, TrackedDevicePose_t * pOutputPose, TrackedDevicePose_t * pTrackedDevicePose, HmdMatrix34_t * pTransform)
 {
     push_ptr_parameter(_this);
     push_ptr_parameter(pOutputPose);
@@ -140,44 +140,35 @@ void __thiscall IVRSystem_019_ApplyTransform(void *_this, TrackedDevicePose_t * 
     push_ptr_parameter(pTransform);
 }
 
-TrackedDeviceIndex_t __thiscall IVRSystem_019_GetTrackedDeviceIndexForControllerRole(void *_this, ETrackedControllerRole unDeviceType)
+TrackedDeviceIndex_t __thiscall IVRSystem_020_GetTrackedDeviceIndexForControllerRole(void *_this, ETrackedControllerRole unDeviceType)
 {
     push_ptr_parameter(_this);
     push_uint32_parameter(unDeviceType);
     return 0;
 }
 
-ETrackedControllerRole __thiscall IVRSystem_019_GetControllerRoleForTrackedDeviceIndex(void *_this, TrackedDeviceIndex_t unDeviceIndex)
+ETrackedControllerRole __thiscall IVRSystem_020_GetControllerRoleForTrackedDeviceIndex(void *_this, TrackedDeviceIndex_t unDeviceIndex)
 {
     push_ptr_parameter(_this);
     push_uint32_parameter(unDeviceIndex);
     return 0;
 }
 
-ETrackedDeviceClass __thiscall IVRSystem_019_GetTrackedDeviceClass(void *_this, TrackedDeviceIndex_t unDeviceIndex)
+ETrackedDeviceClass __thiscall IVRSystem_020_GetTrackedDeviceClass(void *_this, TrackedDeviceIndex_t unDeviceIndex)
 {
     push_ptr_parameter(_this);
     push_uint32_parameter(unDeviceIndex);
     return 0;
 }
 
-bool __thiscall IVRSystem_019_IsTrackedDeviceConnected(void *_this, TrackedDeviceIndex_t unDeviceIndex)
+bool __thiscall IVRSystem_020_IsTrackedDeviceConnected(void *_this, TrackedDeviceIndex_t unDeviceIndex)
 {
     push_ptr_parameter(_this);
     push_uint32_parameter(unDeviceIndex);
     return 0;
 }
 
-bool __thiscall IVRSystem_019_GetBoolTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError)
-{
-    push_ptr_parameter(_this);
-    push_uint32_parameter(unDeviceIndex);
-    push_uint32_parameter(prop);
-    push_ptr_parameter(pError);
-    return 0;
-}
-
-float __thiscall IVRSystem_019_GetFloatTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError)
+bool __thiscall IVRSystem_020_GetBoolTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError)
 {
     push_ptr_parameter(_this);
     push_uint32_parameter(unDeviceIndex);
@@ -186,7 +177,7 @@ float __thiscall IVRSystem_019_GetFloatTrackedDeviceProperty(void *_this, Tracke
     return 0;
 }
 
-int32_t __thiscall IVRSystem_019_GetInt32TrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError)
+float __thiscall IVRSystem_020_GetFloatTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError)
 {
     push_ptr_parameter(_this);
     push_uint32_parameter(unDeviceIndex);
@@ -195,7 +186,7 @@ int32_t __thiscall IVRSystem_019_GetInt32TrackedDeviceProperty(void *_this, Trac
     return 0;
 }
 
-uint64_t __thiscall IVRSystem_019_GetUint64TrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError)
+int32_t __thiscall IVRSystem_020_GetInt32TrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError)
 {
     push_ptr_parameter(_this);
     push_uint32_parameter(unDeviceIndex);
@@ -204,7 +195,16 @@ uint64_t __thiscall IVRSystem_019_GetUint64TrackedDeviceProperty(void *_this, Tr
     return 0;
 }
 
-HmdMatrix34_t *__thiscall IVRSystem_019_GetMatrix34TrackedDeviceProperty(void *_this, HmdMatrix34_t *_r, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError)
+uint64_t __thiscall IVRSystem_020_GetUint64TrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError)
+{
+    push_ptr_parameter(_this);
+    push_uint32_parameter(unDeviceIndex);
+    push_uint32_parameter(prop);
+    push_ptr_parameter(pError);
+    return 0;
+}
+
+HmdMatrix34_t *__thiscall IVRSystem_020_GetMatrix34TrackedDeviceProperty(void *_this, HmdMatrix34_t *_r, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError)
 {
     push_ptr_parameter(_this);
     push_ptr_parameter(_r);
@@ -214,7 +214,7 @@ HmdMatrix34_t *__thiscall IVRSystem_019_GetMatrix34TrackedDeviceProperty(void *_
     return 0;
 }
 
-uint32_t __thiscall IVRSystem_019_GetArrayTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, PropertyTypeTag_t propType, void * pBuffer, uint32_t unBufferSize, ETrackedPropertyError * pError)
+uint32_t __thiscall IVRSystem_020_GetArrayTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, PropertyTypeTag_t propType, void * pBuffer, uint32_t unBufferSize, ETrackedPropertyError * pError)
 {
     push_ptr_parameter(_this);
     push_uint32_parameter(unDeviceIndex);
@@ -226,7 +226,7 @@ uint32_t __thiscall IVRSystem_019_GetArrayTrackedDeviceProperty(void *_this, Tra
     return 0;
 }
 
-uint32_t __thiscall IVRSystem_019_GetStringTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, char * pchValue, uint32_t unBufferSize, ETrackedPropertyError * pError)
+uint32_t __thiscall IVRSystem_020_GetStringTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, char * pchValue, uint32_t unBufferSize, ETrackedPropertyError * pError)
 {
     push_ptr_parameter(_this);
     push_uint32_parameter(unDeviceIndex);
@@ -237,14 +237,14 @@ uint32_t __thiscall IVRSystem_019_GetStringTrackedDeviceProperty(void *_this, Tr
     return 0;
 }
 
-const char * __thiscall IVRSystem_019_GetPropErrorNameFromEnum(void *_this, ETrackedPropertyError error)
+const char * __thiscall IVRSystem_020_GetPropErrorNameFromEnum(void *_this, ETrackedPropertyError error)
 {
     push_ptr_parameter(_this);
     push_uint32_parameter(error);
     return 0;
 }
 
-bool __thiscall IVRSystem_019_PollNextEvent(void *_this, VREvent_t * pEvent, uint32_t uncbVREvent)
+bool __thiscall IVRSystem_020_PollNextEvent(void *_this, VREvent_t * pEvent, uint32_t uncbVREvent)
 {
     push_ptr_parameter(_this);
     push_ptr_parameter(pEvent);
@@ -252,7 +252,7 @@ bool __thiscall IVRSystem_019_PollNextEvent(void *_this, VREvent_t * pEvent, uin
     return 0;
 }
 
-bool __thiscall IVRSystem_019_PollNextEventWithPose(void *_this, ETrackingUniverseOrigin eOrigin, VREvent_t * pEvent, uint32_t uncbVREvent, TrackedDevicePose_t * pTrackedDevicePose)
+bool __thiscall IVRSystem_020_PollNextEventWithPose(void *_this, ETrackingUniverseOrigin eOrigin, VREvent_t * pEvent, uint32_t uncbVREvent, TrackedDevicePose_t * pTrackedDevicePose)
 {
     push_ptr_parameter(_this);
     push_uint32_parameter(eOrigin);
@@ -262,14 +262,14 @@ bool __thiscall IVRSystem_019_PollNextEventWithPose(void *_this, ETrackingUniver
     return 0;
 }
 
-const char * __thiscall IVRSystem_019_GetEventTypeNameFromEnum(void *_this, EVREventType eType)
+const char * __thiscall IVRSystem_020_GetEventTypeNameFromEnum(void *_this, EVREventType eType)
 {
     push_ptr_parameter(_this);
     push_uint32_parameter(eType);
     return 0;
 }
 
-HiddenAreaMesh_t *__thiscall IVRSystem_019_GetHiddenAreaMesh(void *_this, HiddenAreaMesh_t *_r, EVREye eEye, EHiddenAreaMeshType type)
+HiddenAreaMesh_t *__thiscall IVRSystem_020_GetHiddenAreaMesh(void *_this, HiddenAreaMesh_t *_r, EVREye eEye, EHiddenAreaMeshType type)
 {
     push_ptr_parameter(_this);
     push_ptr_parameter(_r);
@@ -278,7 +278,7 @@ HiddenAreaMesh_t *__thiscall IVRSystem_019_GetHiddenAreaMesh(void *_this, Hidden
     return 0;
 }
 
-bool __thiscall IVRSystem_019_GetControllerState(void *_this, TrackedDeviceIndex_t unControllerDeviceIndex, VRControllerState_t * pControllerState, uint32_t unControllerStateSize)
+bool __thiscall IVRSystem_020_GetControllerState(void *_this, TrackedDeviceIndex_t unControllerDeviceIndex, VRControllerState_t * pControllerState, uint32_t unControllerStateSize)
 {
     push_ptr_parameter(_this);
     push_uint32_parameter(unControllerDeviceIndex);
@@ -287,7 +287,7 @@ bool __thiscall IVRSystem_019_GetControllerState(void *_this, TrackedDeviceIndex
     return 0;
 }
 
-bool __thiscall IVRSystem_019_GetControllerStateWithPose(void *_this, ETrackingUniverseOrigin eOrigin, TrackedDeviceIndex_t unControllerDeviceIndex, VRControllerState_t * pControllerState, uint32_t unControllerStateSize, TrackedDevicePose_t * pTrackedDevicePose)
+bool __thiscall IVRSystem_020_GetControllerStateWithPose(void *_this, ETrackingUniverseOrigin eOrigin, TrackedDeviceIndex_t unControllerDeviceIndex, VRControllerState_t * pControllerState, uint32_t unControllerStateSize, TrackedDevicePose_t * pTrackedDevicePose)
 {
     push_ptr_parameter(_this);
     push_uint32_parameter(eOrigin);
@@ -298,7 +298,7 @@ bool __thiscall IVRSystem_019_GetControllerStateWithPose(void *_this, ETrackingU
     return 0;
 }
 
-void __thiscall IVRSystem_019_TriggerHapticPulse(void *_this, TrackedDeviceIndex_t unControllerDeviceIndex, uint32_t unAxisId, unsigned short usDurationMicroSec)
+void __thiscall IVRSystem_020_TriggerHapticPulse(void *_this, TrackedDeviceIndex_t unControllerDeviceIndex, uint32_t unAxisId, unsigned short usDurationMicroSec)
 {
     push_ptr_parameter(_this);
     push_uint32_parameter(unControllerDeviceIndex);
@@ -306,67 +306,57 @@ void __thiscall IVRSystem_019_TriggerHapticPulse(void *_this, TrackedDeviceIndex
     push_uint32_parameter(usDurationMicroSec);
 }
 
-const char * __thiscall IVRSystem_019_GetButtonIdNameFromEnum(void *_this, EVRButtonId eButtonId)
+const char * __thiscall IVRSystem_020_GetButtonIdNameFromEnum(void *_this, EVRButtonId eButtonId)
 {
     push_ptr_parameter(_this);
     push_uint32_parameter(eButtonId);
     return 0;
 }
 
-const char * __thiscall IVRSystem_019_GetControllerAxisTypeNameFromEnum(void *_this, EVRControllerAxisType eAxisType)
+const char * __thiscall IVRSystem_020_GetControllerAxisTypeNameFromEnum(void *_this, EVRControllerAxisType eAxisType)
 {
     push_ptr_parameter(_this);
     push_uint32_parameter(eAxisType);
     return 0;
 }
 
-bool __thiscall IVRSystem_019_IsInputAvailable(void *_this)
+bool __thiscall IVRSystem_020_IsInputAvailable(void *_this)
 {
     push_ptr_parameter(_this);
     return 0;
 }
 
-bool __thiscall IVRSystem_019_IsSteamVRDrawingControllers(void *_this)
+bool __thiscall IVRSystem_020_IsSteamVRDrawingControllers(void *_this)
 {
     push_ptr_parameter(_this);
     return 0;
 }
 
-bool __thiscall IVRSystem_019_ShouldApplicationPause(void *_this)
+bool __thiscall IVRSystem_020_ShouldApplicationPause(void *_this)
 {
     push_ptr_parameter(_this);
     return 0;
 }
 
-bool __thiscall IVRSystem_019_ShouldApplicationReduceRenderingWork(void *_this)
+bool __thiscall IVRSystem_020_ShouldApplicationReduceRenderingWork(void *_this)
 {
     push_ptr_parameter(_this);
     return 0;
 }
 
-uint32_t __thiscall IVRSystem_019_DriverDebugRequest(void *_this, TrackedDeviceIndex_t unDeviceIndex, const char * pchRequest, char * pchResponseBuffer, uint32_t unResponseBufferSize)
-{
-    push_ptr_parameter(_this);
-    push_uint32_parameter(unDeviceIndex);
-    push_ptr_parameter(pchRequest);
-    push_ptr_parameter(pchResponseBuffer);
-    push_uint32_parameter(unResponseBufferSize);
-    return 0;
-}
-
-EVRFirmwareError __thiscall IVRSystem_019_PerformFirmwareUpdate(void *_this, TrackedDeviceIndex_t unDeviceIndex)
+EVRFirmwareError __thiscall IVRSystem_020_PerformFirmwareUpdate(void *_this, TrackedDeviceIndex_t unDeviceIndex)
 {
     push_ptr_parameter(_this);
     push_uint32_parameter(unDeviceIndex);
     return 0;
 }
 
-void __thiscall IVRSystem_019_AcknowledgeQuit_Exiting(void *_this)
+void __thiscall IVRSystem_020_AcknowledgeQuit_Exiting(void *_this)
 {
     push_ptr_parameter(_this);
 }
 
-void __thiscall IVRSystem_019_AcknowledgeQuit_UserPrompt(void *_this)
+void __thiscall IVRSystem_020_AcknowledgeQuit_UserPrompt(void *_this)
 {
     push_ptr_parameter(_this);
 }
@@ -2336,6 +2326,738 @@ DriverHandle_t __thiscall IVRDriverManager_001_GetDriverHandle(void *_this, cons
     return 0;
 }
 
+bool __thiscall IVRDriverManager_001_IsEnabled(void *_this, DriverId_t nDriver)
+{
+    push_ptr_parameter(_this);
+    push_uint32_parameter(nDriver);
+    return 0;
+}
+
+EVRInputError __thiscall IVRInput_007_SetActionManifestPath(void *_this, const char * pchActionManifestPath)
+{
+    push_ptr_parameter(_this);
+    push_ptr_parameter(pchActionManifestPath);
+    return 0;
+}
+
+EVRInputError __thiscall IVRInput_007_GetActionSetHandle(void *_this, const char * pchActionSetName, VRActionSetHandle_t * pHandle)
+{
+    push_ptr_parameter(_this);
+    push_ptr_parameter(pchActionSetName);
+    push_ptr_parameter(pHandle);
+    return 0;
+}
+
+EVRInputError __thiscall IVRInput_007_GetActionHandle(void *_this, const char * pchActionName, VRActionHandle_t * pHandle)
+{
+    push_ptr_parameter(_this);
+    push_ptr_parameter(pchActionName);
+    push_ptr_parameter(pHandle);
+    return 0;
+}
+
+EVRInputError __thiscall IVRInput_007_GetInputSourceHandle(void *_this, const char * pchInputSourcePath, VRInputValueHandle_t * pHandle)
+{
+    push_ptr_parameter(_this);
+    push_ptr_parameter(pchInputSourcePath);
+    push_ptr_parameter(pHandle);
+    return 0;
+}
+
+EVRInputError __thiscall IVRInput_007_UpdateActionState(void *_this, VRActiveActionSet_t * pSets, uint32_t unSizeOfVRSelectedActionSet_t, uint32_t unSetCount)
+{
+    push_ptr_parameter(_this);
+    push_ptr_parameter(pSets);
+    push_uint32_parameter(unSizeOfVRSelectedActionSet_t);
+    push_uint32_parameter(unSetCount);
+    return 0;
+}
+
+EVRInputError __thiscall IVRInput_007_GetDigitalActionData(void *_this, VRActionHandle_t action, InputDigitalActionData_t * pActionData, uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(action);
+    push_ptr_parameter(pActionData);
+    push_uint32_parameter(unActionDataSize);
+    push_uint64_parameter(ulRestrictToDevice);
+    return 0;
+}
+
+EVRInputError __thiscall IVRInput_007_GetAnalogActionData(void *_this, VRActionHandle_t action, InputAnalogActionData_t * pActionData, uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(action);
+    push_ptr_parameter(pActionData);
+    push_uint32_parameter(unActionDataSize);
+    push_uint64_parameter(ulRestrictToDevice);
+    return 0;
+}
+
+EVRInputError __thiscall IVRInput_007_GetPoseActionDataRelativeToNow(void *_this, VRActionHandle_t action, ETrackingUniverseOrigin eOrigin, float fPredictedSecondsFromNow, InputPoseActionData_t * pActionData, uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(action);
+    push_uint32_parameter(eOrigin);
+    push_float_parameter(fPredictedSecondsFromNow);
+    push_ptr_parameter(pActionData);
+    push_uint32_parameter(unActionDataSize);
+    push_uint64_parameter(ulRestrictToDevice);
+    return 0;
+}
+
+EVRInputError __thiscall IVRInput_007_GetPoseActionDataForNextFrame(void *_this, VRActionHandle_t action, ETrackingUniverseOrigin eOrigin, InputPoseActionData_t * pActionData, uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(action);
+    push_uint32_parameter(eOrigin);
+    push_ptr_parameter(pActionData);
+    push_uint32_parameter(unActionDataSize);
+    push_uint64_parameter(ulRestrictToDevice);
+    return 0;
+}
+
+EVRInputError __thiscall IVRInput_007_GetSkeletalActionData(void *_this, VRActionHandle_t action, InputSkeletalActionData_t * pActionData, uint32_t unActionDataSize)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(action);
+    push_ptr_parameter(pActionData);
+    push_uint32_parameter(unActionDataSize);
+    return 0;
+}
+
+EVRInputError __thiscall IVRInput_007_GetBoneCount(void *_this, VRActionHandle_t action, uint32_t * pBoneCount)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(action);
+    push_ptr_parameter(pBoneCount);
+    return 0;
+}
+
+EVRInputError __thiscall IVRInput_007_GetBoneHierarchy(void *_this, VRActionHandle_t action, BoneIndex_t * pParentIndices, uint32_t unIndexArayCount)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(action);
+    push_ptr_parameter(pParentIndices);
+    push_uint32_parameter(unIndexArayCount);
+    return 0;
+}
+
+EVRInputError __thiscall IVRInput_007_GetBoneName(void *_this, VRActionHandle_t action, BoneIndex_t nBoneIndex, char * pchBoneName, uint32_t unNameBufferSize)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(action);
+    push_uint32_parameter(nBoneIndex);
+    push_ptr_parameter(pchBoneName);
+    push_uint32_parameter(unNameBufferSize);
+    return 0;
+}
+
+EVRInputError __thiscall IVRInput_007_GetSkeletalReferenceTransforms(void *_this, VRActionHandle_t action, EVRSkeletalTransformSpace eTransformSpace, EVRSkeletalReferencePose eReferencePose, VRBoneTransform_t * pTransformArray, uint32_t unTransformArrayCount)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(action);
+    push_uint32_parameter(eTransformSpace);
+    push_uint32_parameter(eReferencePose);
+    push_ptr_parameter(pTransformArray);
+    push_uint32_parameter(unTransformArrayCount);
+    return 0;
+}
+
+EVRInputError __thiscall IVRInput_007_GetSkeletalTrackingLevel(void *_this, VRActionHandle_t action, EVRSkeletalTrackingLevel * pSkeletalTrackingLevel)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(action);
+    push_ptr_parameter(pSkeletalTrackingLevel);
+    return 0;
+}
+
+EVRInputError __thiscall IVRInput_007_GetSkeletalBoneData(void *_this, VRActionHandle_t action, EVRSkeletalTransformSpace eTransformSpace, EVRSkeletalMotionRange eMotionRange, VRBoneTransform_t * pTransformArray, uint32_t unTransformArrayCount)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(action);
+    push_uint32_parameter(eTransformSpace);
+    push_uint32_parameter(eMotionRange);
+    push_ptr_parameter(pTransformArray);
+    push_uint32_parameter(unTransformArrayCount);
+    return 0;
+}
+
+EVRInputError __thiscall IVRInput_007_GetSkeletalSummaryData(void *_this, VRActionHandle_t action, EVRSummaryType eSummaryType, VRSkeletalSummaryData_t * pSkeletalSummaryData)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(action);
+    push_uint32_parameter(eSummaryType);
+    push_ptr_parameter(pSkeletalSummaryData);
+    return 0;
+}
+
+EVRInputError __thiscall IVRInput_007_GetSkeletalBoneDataCompressed(void *_this, VRActionHandle_t action, EVRSkeletalMotionRange eMotionRange, void * pvCompressedData, uint32_t unCompressedSize, uint32_t * punRequiredCompressedSize)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(action);
+    push_uint32_parameter(eMotionRange);
+    push_ptr_parameter(pvCompressedData);
+    push_uint32_parameter(unCompressedSize);
+    push_ptr_parameter(punRequiredCompressedSize);
+    return 0;
+}
+
+EVRInputError __thiscall IVRInput_007_DecompressSkeletalBoneData(void *_this, const void * pvCompressedBuffer, uint32_t unCompressedBufferSize, EVRSkeletalTransformSpace eTransformSpace, VRBoneTransform_t * pTransformArray, uint32_t unTransformArrayCount)
+{
+    push_ptr_parameter(_this);
+    push_ptr_parameter(pvCompressedBuffer);
+    push_uint32_parameter(unCompressedBufferSize);
+    push_uint32_parameter(eTransformSpace);
+    push_ptr_parameter(pTransformArray);
+    push_uint32_parameter(unTransformArrayCount);
+    return 0;
+}
+
+EVRInputError __thiscall IVRInput_007_TriggerHapticVibrationAction(void *_this, VRActionHandle_t action, float fStartSecondsFromNow, float fDurationSeconds, float fFrequency, float fAmplitude, VRInputValueHandle_t ulRestrictToDevice)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(action);
+    push_float_parameter(fStartSecondsFromNow);
+    push_float_parameter(fDurationSeconds);
+    push_float_parameter(fFrequency);
+    push_float_parameter(fAmplitude);
+    push_uint64_parameter(ulRestrictToDevice);
+    return 0;
+}
+
+EVRInputError __thiscall IVRInput_007_GetActionOrigins(void *_this, VRActionSetHandle_t actionSetHandle, VRActionHandle_t digitalActionHandle, VRInputValueHandle_t * originsOut, uint32_t originOutCount)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(actionSetHandle);
+    push_uint64_parameter(digitalActionHandle);
+    push_ptr_parameter(originsOut);
+    push_uint32_parameter(originOutCount);
+    return 0;
+}
+
+EVRInputError __thiscall IVRInput_007_GetOriginLocalizedName(void *_this, VRInputValueHandle_t origin, char * pchNameArray, uint32_t unNameArraySize, int32_t unStringSectionsToInclude)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(origin);
+    push_ptr_parameter(pchNameArray);
+    push_uint32_parameter(unNameArraySize);
+    push_uint32_parameter(unStringSectionsToInclude);
+    return 0;
+}
+
+EVRInputError __thiscall IVRInput_007_GetOriginTrackedDeviceInfo(void *_this, VRInputValueHandle_t origin, InputOriginInfo_t * pOriginInfo, uint32_t unOriginInfoSize)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(origin);
+    push_ptr_parameter(pOriginInfo);
+    push_uint32_parameter(unOriginInfoSize);
+    return 0;
+}
+
+EVRInputError __thiscall IVRInput_007_GetActionBindingInfo(void *_this, VRActionHandle_t action, InputBindingInfo_t * pOriginInfo, uint32_t unBindingInfoSize, uint32_t unBindingInfoCount, uint32_t * punReturnedBindingInfoCount)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(action);
+    push_ptr_parameter(pOriginInfo);
+    push_uint32_parameter(unBindingInfoSize);
+    push_uint32_parameter(unBindingInfoCount);
+    push_ptr_parameter(punReturnedBindingInfoCount);
+    return 0;
+}
+
+EVRInputError __thiscall IVRInput_007_ShowActionOrigins(void *_this, VRActionSetHandle_t actionSetHandle, VRActionHandle_t ulActionHandle)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(actionSetHandle);
+    push_uint64_parameter(ulActionHandle);
+    return 0;
+}
+
+EVRInputError __thiscall IVRInput_007_ShowBindingsForActionSet(void *_this, VRActiveActionSet_t * pSets, uint32_t unSizeOfVRSelectedActionSet_t, uint32_t unSetCount, VRInputValueHandle_t originToHighlight)
+{
+    push_ptr_parameter(_this);
+    push_ptr_parameter(pSets);
+    push_uint32_parameter(unSizeOfVRSelectedActionSet_t);
+    push_uint32_parameter(unSetCount);
+    push_uint64_parameter(originToHighlight);
+    return 0;
+}
+
+bool __thiscall IVRInput_007_IsUsingLegacyInput(void *_this)
+{
+    push_ptr_parameter(_this);
+    return 0;
+}
+
+EIOBufferError __thiscall IVRIOBuffer_002_Open(void *_this, const char * pchPath, EIOBufferMode mode, uint32_t unElementSize, uint32_t unElements, IOBufferHandle_t * pulBuffer)
+{
+    push_ptr_parameter(_this);
+    push_ptr_parameter(pchPath);
+    push_uint32_parameter(mode);
+    push_uint32_parameter(unElementSize);
+    push_uint32_parameter(unElements);
+    push_ptr_parameter(pulBuffer);
+    return 0;
+}
+
+EIOBufferError __thiscall IVRIOBuffer_002_Close(void *_this, IOBufferHandle_t ulBuffer)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(ulBuffer);
+    return 0;
+}
+
+EIOBufferError __thiscall IVRIOBuffer_002_Read(void *_this, IOBufferHandle_t ulBuffer, void * pDst, uint32_t unBytes, uint32_t * punRead)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(ulBuffer);
+    push_ptr_parameter(pDst);
+    push_uint32_parameter(unBytes);
+    push_ptr_parameter(punRead);
+    return 0;
+}
+
+EIOBufferError __thiscall IVRIOBuffer_002_Write(void *_this, IOBufferHandle_t ulBuffer, void * pSrc, uint32_t unBytes)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(ulBuffer);
+    push_ptr_parameter(pSrc);
+    push_uint32_parameter(unBytes);
+    return 0;
+}
+
+PropertyContainerHandle_t __thiscall IVRIOBuffer_002_PropertyContainer(void *_this, IOBufferHandle_t ulBuffer)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(ulBuffer);
+    return 0;
+}
+
+bool __thiscall IVRIOBuffer_002_HasReaders(void *_this, IOBufferHandle_t ulBuffer)
+{
+    push_ptr_parameter(_this);
+    push_uint64_parameter(ulBuffer);
+    return 0;
+}
+
+EVRInitError __thiscall IVRClientCore_003_Init(void *_this, EVRApplicationType eApplicationType, const char * pStartupInfo)
+{
+    push_ptr_parameter(_this);
+    push_uint32_parameter(eApplicationType);
+    push_ptr_parameter(pStartupInfo);
+    return 0;
+}
+
+void __thiscall IVRClientCore_003_Cleanup(void *_this)
+{
+    push_ptr_parameter(_this);
+}
+
+EVRInitError __thiscall IVRClientCore_003_IsInterfaceVersionValid(void *_this, const char * pchInterfaceVersion)
+{
+    push_ptr_parameter(_this);
+    push_ptr_parameter(pchInterfaceVersion);
+    return 0;
+}
+
+void * __thiscall IVRClientCore_003_GetGenericInterface(void *_this, const char * pchNameAndVersion, EVRInitError * peError)
+{
+    push_ptr_parameter(_this);
+    push_ptr_parameter(pchNameAndVersion);
+    push_ptr_parameter(peError);
+    return 0;
+}
+
+bool __thiscall IVRClientCore_003_BIsHmdPresent(void *_this)
+{
+    push_ptr_parameter(_this);
+    return 0;
+}
+
+const char * __thiscall IVRClientCore_003_GetEnglishStringForHmdError(void *_this, EVRInitError eError)
+{
+    push_ptr_parameter(_this);
+    push_uint32_parameter(eError);
+    return 0;
+}
+
+const char * __thiscall IVRClientCore_003_GetIDForVRInitError(void *_this, EVRInitError eError)
+{
+    push_ptr_parameter(_this);
+    push_uint32_parameter(eError);
+    return 0;
+}
+
+void __thiscall IVRSystem_019_GetRecommendedRenderTargetSize(void *_this, uint32_t * pnWidth, uint32_t * pnHeight)
+{
+    push_ptr_parameter(_this);
+    push_ptr_parameter(pnWidth);
+    push_ptr_parameter(pnHeight);
+}
+
+HmdMatrix44_t *__thiscall IVRSystem_019_GetProjectionMatrix(void *_this, HmdMatrix44_t *_r, EVREye eEye, float fNearZ, float fFarZ)
+{
+    push_ptr_parameter(_this);
+    push_ptr_parameter(_r);
+    push_uint32_parameter(eEye);
+    push_float_parameter(fNearZ);
+    push_float_parameter(fFarZ);
+    return 0;
+}
+
+void __thiscall IVRSystem_019_GetProjectionRaw(void *_this, EVREye eEye, float * pfLeft, float * pfRight, float * pfTop, float * pfBottom)
+{
+    push_ptr_parameter(_this);
+    push_uint32_parameter(eEye);
+    push_ptr_parameter(pfLeft);
+    push_ptr_parameter(pfRight);
+    push_ptr_parameter(pfTop);
+    push_ptr_parameter(pfBottom);
+}
+
+bool __thiscall IVRSystem_019_ComputeDistortion(void *_this, EVREye eEye, float fU, float fV, DistortionCoordinates_t * pDistortionCoordinates)
+{
+    push_ptr_parameter(_this);
+    push_uint32_parameter(eEye);
+    push_float_parameter(fU);
+    push_float_parameter(fV);
+    push_ptr_parameter(pDistortionCoordinates);
+    return 0;
+}
+
+HmdMatrix34_t *__thiscall IVRSystem_019_GetEyeToHeadTransform(void *_this, HmdMatrix34_t *_r, EVREye eEye)
+{
+    push_ptr_parameter(_this);
+    push_ptr_parameter(_r);
+    push_uint32_parameter(eEye);
+    return 0;
+}
+
+bool __thiscall IVRSystem_019_GetTimeSinceLastVsync(void *_this, float * pfSecondsSinceLastVsync, uint64_t * pulFrameCounter)
+{
+    push_ptr_parameter(_this);
+    push_ptr_parameter(pfSecondsSinceLastVsync);
+    push_ptr_parameter(pulFrameCounter);
+    return 0;
+}
+
+int32_t __thiscall IVRSystem_019_GetD3D9AdapterIndex(void *_this)
+{
+    push_ptr_parameter(_this);
+    return 0;
+}
+
+void __thiscall IVRSystem_019_GetDXGIOutputInfo(void *_this, int32_t * pnAdapterIndex)
+{
+    push_ptr_parameter(_this);
+    push_ptr_parameter(pnAdapterIndex);
+}
+
+void __thiscall IVRSystem_019_GetOutputDevice(void *_this, uint64_t * pnDevice, ETextureType textureType, VkInstance_T * pInstance)
+{
+    push_ptr_parameter(_this);
+    push_ptr_parameter(pnDevice);
+    push_uint32_parameter(textureType);
+    push_ptr_parameter(pInstance);
+}
+
+bool __thiscall IVRSystem_019_IsDisplayOnDesktop(void *_this)
+{
+    push_ptr_parameter(_this);
+    return 0;
+}
+
+bool __thiscall IVRSystem_019_SetDisplayVisibility(void *_this, bool bIsVisibleOnDesktop)
+{
+    push_ptr_parameter(_this);
+    push_bool_parameter(bIsVisibleOnDesktop);
+    return 0;
+}
+
+void __thiscall IVRSystem_019_GetDeviceToAbsoluteTrackingPose(void *_this, ETrackingUniverseOrigin eOrigin, float fPredictedSecondsToPhotonsFromNow, TrackedDevicePose_t * pTrackedDevicePoseArray, uint32_t unTrackedDevicePoseArrayCount)
+{
+    push_ptr_parameter(_this);
+    push_uint32_parameter(eOrigin);
+    push_float_parameter(fPredictedSecondsToPhotonsFromNow);
+    push_ptr_parameter(pTrackedDevicePoseArray);
+    push_uint32_parameter(unTrackedDevicePoseArrayCount);
+}
+
+void __thiscall IVRSystem_019_ResetSeatedZeroPose(void *_this)
+{
+    push_ptr_parameter(_this);
+}
+
+HmdMatrix34_t *__thiscall IVRSystem_019_GetSeatedZeroPoseToStandingAbsoluteTrackingPose(void *_this, HmdMatrix34_t *_r)
+{
+    push_ptr_parameter(_this);
+    push_ptr_parameter(_r);
+    return 0;
+}
+
+HmdMatrix34_t *__thiscall IVRSystem_019_GetRawZeroPoseToStandingAbsoluteTrackingPose(void *_this, HmdMatrix34_t *_r)
+{
+    push_ptr_parameter(_this);
+    push_ptr_parameter(_r);
+    return 0;
+}
+
+uint32_t __thiscall IVRSystem_019_GetSortedTrackedDeviceIndicesOfClass(void *_this, ETrackedDeviceClass eTrackedDeviceClass, TrackedDeviceIndex_t * punTrackedDeviceIndexArray, uint32_t unTrackedDeviceIndexArrayCount, TrackedDeviceIndex_t unRelativeToTrackedDeviceIndex)
+{
+    push_ptr_parameter(_this);
+    push_uint32_parameter(eTrackedDeviceClass);
+    push_ptr_parameter(punTrackedDeviceIndexArray);
+    push_uint32_parameter(unTrackedDeviceIndexArrayCount);
+    push_uint32_parameter(unRelativeToTrackedDeviceIndex);
+    return 0;
+}
+
+EDeviceActivityLevel __thiscall IVRSystem_019_GetTrackedDeviceActivityLevel(void *_this, TrackedDeviceIndex_t unDeviceId)
+{
+    push_ptr_parameter(_this);
+    push_uint32_parameter(unDeviceId);
+    return 0;
+}
+
+void __thiscall IVRSystem_019_ApplyTransform(void *_this, TrackedDevicePose_t * pOutputPose, TrackedDevicePose_t * pTrackedDevicePose, HmdMatrix34_t * pTransform)
+{
+    push_ptr_parameter(_this);
+    push_ptr_parameter(pOutputPose);
+    push_ptr_parameter(pTrackedDevicePose);
+    push_ptr_parameter(pTransform);
+}
+
+TrackedDeviceIndex_t __thiscall IVRSystem_019_GetTrackedDeviceIndexForControllerRole(void *_this, ETrackedControllerRole unDeviceType)
+{
+    push_ptr_parameter(_this);
+    push_uint32_parameter(unDeviceType);
+    return 0;
+}
+
+ETrackedControllerRole __thiscall IVRSystem_019_GetControllerRoleForTrackedDeviceIndex(void *_this, TrackedDeviceIndex_t unDeviceIndex)
+{
+    push_ptr_parameter(_this);
+    push_uint32_parameter(unDeviceIndex);
+    return 0;
+}
+
+ETrackedDeviceClass __thiscall IVRSystem_019_GetTrackedDeviceClass(void *_this, TrackedDeviceIndex_t unDeviceIndex)
+{
+    push_ptr_parameter(_this);
+    push_uint32_parameter(unDeviceIndex);
+    return 0;
+}
+
+bool __thiscall IVRSystem_019_IsTrackedDeviceConnected(void *_this, TrackedDeviceIndex_t unDeviceIndex)
+{
+    push_ptr_parameter(_this);
+    push_uint32_parameter(unDeviceIndex);
+    return 0;
+}
+
+bool __thiscall IVRSystem_019_GetBoolTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError)
+{
+    push_ptr_parameter(_this);
+    push_uint32_parameter(unDeviceIndex);
+    push_uint32_parameter(prop);
+    push_ptr_parameter(pError);
+    return 0;
+}
+
+float __thiscall IVRSystem_019_GetFloatTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError)
+{
+    push_ptr_parameter(_this);
+    push_uint32_parameter(unDeviceIndex);
+    push_uint32_parameter(prop);
+    push_ptr_parameter(pError);
+    return 0;
+}
+
+int32_t __thiscall IVRSystem_019_GetInt32TrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError)
+{
+    push_ptr_parameter(_this);
+    push_uint32_parameter(unDeviceIndex);
+    push_uint32_parameter(prop);
+    push_ptr_parameter(pError);
+    return 0;
+}
+
+uint64_t __thiscall IVRSystem_019_GetUint64TrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError)
+{
+    push_ptr_parameter(_this);
+    push_uint32_parameter(unDeviceIndex);
+    push_uint32_parameter(prop);
+    push_ptr_parameter(pError);
+    return 0;
+}
+
+HmdMatrix34_t *__thiscall IVRSystem_019_GetMatrix34TrackedDeviceProperty(void *_this, HmdMatrix34_t *_r, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError)
+{
+    push_ptr_parameter(_this);
+    push_ptr_parameter(_r);
+    push_uint32_parameter(unDeviceIndex);
+    push_uint32_parameter(prop);
+    push_ptr_parameter(pError);
+    return 0;
+}
+
+uint32_t __thiscall IVRSystem_019_GetArrayTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, PropertyTypeTag_t propType, void * pBuffer, uint32_t unBufferSize, ETrackedPropertyError * pError)
+{
+    push_ptr_parameter(_this);
+    push_uint32_parameter(unDeviceIndex);
+    push_uint32_parameter(prop);
+    push_uint32_parameter(propType);
+    push_ptr_parameter(pBuffer);
+    push_uint32_parameter(unBufferSize);
+    push_ptr_parameter(pError);
+    return 0;
+}
+
+uint32_t __thiscall IVRSystem_019_GetStringTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, char * pchValue, uint32_t unBufferSize, ETrackedPropertyError * pError)
+{
+    push_ptr_parameter(_this);
+    push_uint32_parameter(unDeviceIndex);
+    push_uint32_parameter(prop);
+    push_ptr_parameter(pchValue);
+    push_uint32_parameter(unBufferSize);
+    push_ptr_parameter(pError);
+    return 0;
+}
+
+const char * __thiscall IVRSystem_019_GetPropErrorNameFromEnum(void *_this, ETrackedPropertyError error)
+{
+    push_ptr_parameter(_this);
+    push_uint32_parameter(error);
+    return 0;
+}
+
+bool __thiscall IVRSystem_019_PollNextEvent(void *_this, VREvent_t * pEvent, uint32_t uncbVREvent)
+{
+    push_ptr_parameter(_this);
+    push_ptr_parameter(pEvent);
+    push_uint32_parameter(uncbVREvent);
+    return 0;
+}
+
+bool __thiscall IVRSystem_019_PollNextEventWithPose(void *_this, ETrackingUniverseOrigin eOrigin, VREvent_t * pEvent, uint32_t uncbVREvent, TrackedDevicePose_t * pTrackedDevicePose)
+{
+    push_ptr_parameter(_this);
+    push_uint32_parameter(eOrigin);
+    push_ptr_parameter(pEvent);
+    push_uint32_parameter(uncbVREvent);
+    push_ptr_parameter(pTrackedDevicePose);
+    return 0;
+}
+
+const char * __thiscall IVRSystem_019_GetEventTypeNameFromEnum(void *_this, EVREventType eType)
+{
+    push_ptr_parameter(_this);
+    push_uint32_parameter(eType);
+    return 0;
+}
+
+HiddenAreaMesh_t *__thiscall IVRSystem_019_GetHiddenAreaMesh(void *_this, HiddenAreaMesh_t *_r, EVREye eEye, EHiddenAreaMeshType type)
+{
+    push_ptr_parameter(_this);
+    push_ptr_parameter(_r);
+    push_uint32_parameter(eEye);
+    push_uint32_parameter(type);
+    return 0;
+}
+
+bool __thiscall IVRSystem_019_GetControllerState(void *_this, TrackedDeviceIndex_t unControllerDeviceIndex, VRControllerState_t * pControllerState, uint32_t unControllerStateSize)
+{
+    push_ptr_parameter(_this);
+    push_uint32_parameter(unControllerDeviceIndex);
+    push_ptr_parameter(pControllerState);
+    push_uint32_parameter(unControllerStateSize);
+    return 0;
+}
+
+bool __thiscall IVRSystem_019_GetControllerStateWithPose(void *_this, ETrackingUniverseOrigin eOrigin, TrackedDeviceIndex_t unControllerDeviceIndex, VRControllerState_t * pControllerState, uint32_t unControllerStateSize, TrackedDevicePose_t * pTrackedDevicePose)
+{
+    push_ptr_parameter(_this);
+    push_uint32_parameter(eOrigin);
+    push_uint32_parameter(unControllerDeviceIndex);
+    push_ptr_parameter(pControllerState);
+    push_uint32_parameter(unControllerStateSize);
+    push_ptr_parameter(pTrackedDevicePose);
+    return 0;
+}
+
+void __thiscall IVRSystem_019_TriggerHapticPulse(void *_this, TrackedDeviceIndex_t unControllerDeviceIndex, uint32_t unAxisId, unsigned short usDurationMicroSec)
+{
+    push_ptr_parameter(_this);
+    push_uint32_parameter(unControllerDeviceIndex);
+    push_uint32_parameter(unAxisId);
+    push_uint32_parameter(usDurationMicroSec);
+}
+
+const char * __thiscall IVRSystem_019_GetButtonIdNameFromEnum(void *_this, EVRButtonId eButtonId)
+{
+    push_ptr_parameter(_this);
+    push_uint32_parameter(eButtonId);
+    return 0;
+}
+
+const char * __thiscall IVRSystem_019_GetControllerAxisTypeNameFromEnum(void *_this, EVRControllerAxisType eAxisType)
+{
+    push_ptr_parameter(_this);
+    push_uint32_parameter(eAxisType);
+    return 0;
+}
+
+bool __thiscall IVRSystem_019_IsInputAvailable(void *_this)
+{
+    push_ptr_parameter(_this);
+    return 0;
+}
+
+bool __thiscall IVRSystem_019_IsSteamVRDrawingControllers(void *_this)
+{
+    push_ptr_parameter(_this);
+    return 0;
+}
+
+bool __thiscall IVRSystem_019_ShouldApplicationPause(void *_this)
+{
+    push_ptr_parameter(_this);
+    return 0;
+}
+
+bool __thiscall IVRSystem_019_ShouldApplicationReduceRenderingWork(void *_this)
+{
+    push_ptr_parameter(_this);
+    return 0;
+}
+
+uint32_t __thiscall IVRSystem_019_DriverDebugRequest(void *_this, TrackedDeviceIndex_t unDeviceIndex, const char * pchRequest, char * pchResponseBuffer, uint32_t unResponseBufferSize)
+{
+    push_ptr_parameter(_this);
+    push_uint32_parameter(unDeviceIndex);
+    push_ptr_parameter(pchRequest);
+    push_ptr_parameter(pchResponseBuffer);
+    push_uint32_parameter(unResponseBufferSize);
+    return 0;
+}
+
+EVRFirmwareError __thiscall IVRSystem_019_PerformFirmwareUpdate(void *_this, TrackedDeviceIndex_t unDeviceIndex)
+{
+    push_ptr_parameter(_this);
+    push_uint32_parameter(unDeviceIndex);
+    return 0;
+}
+
+void __thiscall IVRSystem_019_AcknowledgeQuit_Exiting(void *_this)
+{
+    push_ptr_parameter(_this);
+}
+
+void __thiscall IVRSystem_019_AcknowledgeQuit_UserPrompt(void *_this)
+{
+    push_ptr_parameter(_this);
+}
+
 EVRInputError __thiscall IVRInput_006_SetActionManifestPath(void *_this, const char * pchActionManifestPath)
 {
     push_ptr_parameter(_this);
@@ -2578,105 +3300,6 @@ EVRInputError __thiscall IVRInput_006_ShowBindingsForActionSet(void *_this, VRAc
 bool __thiscall IVRInput_006_IsUsingLegacyInput(void *_this)
 {
     push_ptr_parameter(_this);
-    return 0;
-}
-
-EIOBufferError __thiscall IVRIOBuffer_002_Open(void *_this, const char * pchPath, EIOBufferMode mode, uint32_t unElementSize, uint32_t unElements, IOBufferHandle_t * pulBuffer)
-{
-    push_ptr_parameter(_this);
-    push_ptr_parameter(pchPath);
-    push_uint32_parameter(mode);
-    push_uint32_parameter(unElementSize);
-    push_uint32_parameter(unElements);
-    push_ptr_parameter(pulBuffer);
-    return 0;
-}
-
-EIOBufferError __thiscall IVRIOBuffer_002_Close(void *_this, IOBufferHandle_t ulBuffer)
-{
-    push_ptr_parameter(_this);
-    push_uint64_parameter(ulBuffer);
-    return 0;
-}
-
-EIOBufferError __thiscall IVRIOBuffer_002_Read(void *_this, IOBufferHandle_t ulBuffer, void * pDst, uint32_t unBytes, uint32_t * punRead)
-{
-    push_ptr_parameter(_this);
-    push_uint64_parameter(ulBuffer);
-    push_ptr_parameter(pDst);
-    push_uint32_parameter(unBytes);
-    push_ptr_parameter(punRead);
-    return 0;
-}
-
-EIOBufferError __thiscall IVRIOBuffer_002_Write(void *_this, IOBufferHandle_t ulBuffer, void * pSrc, uint32_t unBytes)
-{
-    push_ptr_parameter(_this);
-    push_uint64_parameter(ulBuffer);
-    push_ptr_parameter(pSrc);
-    push_uint32_parameter(unBytes);
-    return 0;
-}
-
-PropertyContainerHandle_t __thiscall IVRIOBuffer_002_PropertyContainer(void *_this, IOBufferHandle_t ulBuffer)
-{
-    push_ptr_parameter(_this);
-    push_uint64_parameter(ulBuffer);
-    return 0;
-}
-
-bool __thiscall IVRIOBuffer_002_HasReaders(void *_this, IOBufferHandle_t ulBuffer)
-{
-    push_ptr_parameter(_this);
-    push_uint64_parameter(ulBuffer);
-    return 0;
-}
-
-EVRInitError __thiscall IVRClientCore_003_Init(void *_this, EVRApplicationType eApplicationType, const char * pStartupInfo)
-{
-    push_ptr_parameter(_this);
-    push_uint32_parameter(eApplicationType);
-    push_ptr_parameter(pStartupInfo);
-    return 0;
-}
-
-void __thiscall IVRClientCore_003_Cleanup(void *_this)
-{
-    push_ptr_parameter(_this);
-}
-
-EVRInitError __thiscall IVRClientCore_003_IsInterfaceVersionValid(void *_this, const char * pchInterfaceVersion)
-{
-    push_ptr_parameter(_this);
-    push_ptr_parameter(pchInterfaceVersion);
-    return 0;
-}
-
-void * __thiscall IVRClientCore_003_GetGenericInterface(void *_this, const char * pchNameAndVersion, EVRInitError * peError)
-{
-    push_ptr_parameter(_this);
-    push_ptr_parameter(pchNameAndVersion);
-    push_ptr_parameter(peError);
-    return 0;
-}
-
-bool __thiscall IVRClientCore_003_BIsHmdPresent(void *_this)
-{
-    push_ptr_parameter(_this);
-    return 0;
-}
-
-const char * __thiscall IVRClientCore_003_GetEnglishStringForHmdError(void *_this, EVRInitError eError)
-{
-    push_ptr_parameter(_this);
-    push_uint32_parameter(eError);
-    return 0;
-}
-
-const char * __thiscall IVRClientCore_003_GetIDForVRInitError(void *_this, EVRInitError eError)
-{
-    push_ptr_parameter(_this);
-    push_uint32_parameter(eError);
     return 0;
 }
 

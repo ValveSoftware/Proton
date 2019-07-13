@@ -5,7 +5,7 @@
 
 int main(void)
 {
-    test_capi_thunks_IVRSystem_019();
+    test_capi_thunks_IVRSystem_020();
     test_capi_thunks_IVRApplications_006();
     test_capi_thunks_IVRSettings_002();
     test_capi_thunks_IVRChaperone_003();
@@ -19,9 +19,11 @@ int main(void)
     test_capi_thunks_IVRScreenshots_001();
     test_capi_thunks_IVRResources_001();
     test_capi_thunks_IVRDriverManager_001();
-    test_capi_thunks_IVRInput_006();
+    test_capi_thunks_IVRInput_007();
     test_capi_thunks_IVRIOBuffer_002();
     test_capi_thunks_IVRClientCore_003();
+    test_capi_thunks_IVRSystem_019();
+    test_capi_thunks_IVRInput_006();
     test_capi_thunks_IVRInput_005();
     test_capi_thunks_IVRIOBuffer_001();
     test_capi_thunks_IVRChaperoneSetup_005();

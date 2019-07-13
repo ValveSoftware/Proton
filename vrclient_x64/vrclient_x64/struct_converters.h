@@ -1,3 +1,13 @@
+typedef struct winVREvent_t_1517 winVREvent_t_1517;
+extern void struct_VREvent_t_1517_lin_to_win(void *l, void *w);
+typedef struct winVRControllerState001_t_1517 winVRControllerState001_t_1517;
+extern void struct_VRControllerState001_t_1517_lin_to_win(void *l, void *w);
+typedef struct winRenderModel_TextureMap_t_1517 winRenderModel_TextureMap_t_1517;
+extern struct winRenderModel_TextureMap_t_1517 *struct_RenderModel_TextureMap_t_1517_wrap(void *l);
+extern RenderModel_TextureMap_t *struct_RenderModel_TextureMap_t_1517_unwrap(winRenderModel_TextureMap_t_1517 *w);
+typedef struct winRenderModel_t_1517 winRenderModel_t_1517;
+extern struct winRenderModel_t_1517 *struct_RenderModel_t_1517_wrap(void *l);
+extern RenderModel_t *struct_RenderModel_t_1517_unwrap(winRenderModel_t_1517 *w);
 typedef struct winVREvent_t_1418 winVREvent_t_1418;
 extern void struct_VREvent_t_1418_lin_to_win(void *l, void *w);
 typedef struct winVRControllerState001_t_1418 winVRControllerState001_t_1418;

@@ -18,6 +18,483 @@
 
 WINE_DEFAULT_DEBUG_CHANNEL(vrclient);
 
+#include "cppIVRSystem_IVRSystem_020.h"
+
+typedef struct __winIVRSystem_IVRSystem_020 {
+    vtable_ptr *vtable;
+    void *linux_side;
+} winIVRSystem_IVRSystem_020;
+
+DEFINE_THISCALL_WRAPPER(winIVRSystem_IVRSystem_020_GetRecommendedRenderTargetSize, 20)
+void __thiscall winIVRSystem_IVRSystem_020_GetRecommendedRenderTargetSize(winIVRSystem_IVRSystem_020 *_this, uint32_t * pnWidth, uint32_t * pnHeight)
+{
+    TRACE("%p\n", _this);
+    cppIVRSystem_IVRSystem_020_GetRecommendedRenderTargetSize(_this->linux_side, pnWidth, pnHeight);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVRSystem_IVRSystem_020_GetProjectionMatrix, 20)
+HmdMatrix44_t *__thiscall winIVRSystem_IVRSystem_020_GetProjectionMatrix(winIVRSystem_IVRSystem_020 *_this, HmdMatrix44_t *_r, EVREye eEye, float fNearZ, float fFarZ)
+{
+    TRACE("%p\n", _this);
+    *_r = cppIVRSystem_IVRSystem_020_GetProjectionMatrix(_this->linux_side, eEye, fNearZ, fFarZ);
+    return _r;
+}
+
+DEFINE_THISCALL_WRAPPER(winIVRSystem_IVRSystem_020_GetProjectionRaw, 40)
+void __thiscall winIVRSystem_IVRSystem_020_GetProjectionRaw(winIVRSystem_IVRSystem_020 *_this, EVREye eEye, float * pfLeft, float * pfRight, float * pfTop, float * pfBottom)
+{
+    TRACE("%p\n", _this);
+    cppIVRSystem_IVRSystem_020_GetProjectionRaw(_this->linux_side, eEye, pfLeft, pfRight, pfTop, pfBottom);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVRSystem_IVRSystem_020_ComputeDistortion, 24)
+bool __thiscall winIVRSystem_IVRSystem_020_ComputeDistortion(winIVRSystem_IVRSystem_020 *_this, EVREye eEye, float fU, float fV, DistortionCoordinates_t * pDistortionCoordinates)
+{
+    TRACE("%p\n", _this);
+    return cppIVRSystem_IVRSystem_020_ComputeDistortion(_this->linux_side, eEye, fU, fV, pDistortionCoordinates);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVRSystem_IVRSystem_020_GetEyeToHeadTransform, 12)
+HmdMatrix34_t *__thiscall winIVRSystem_IVRSystem_020_GetEyeToHeadTransform(winIVRSystem_IVRSystem_020 *_this, HmdMatrix34_t *_r, EVREye eEye)
+{
+    TRACE("%p\n", _this);
+    *_r = cppIVRSystem_IVRSystem_020_GetEyeToHeadTransform(_this->linux_side, eEye);
+    return _r;
+}
+
+DEFINE_THISCALL_WRAPPER(winIVRSystem_IVRSystem_020_GetTimeSinceLastVsync, 20)
+bool __thiscall winIVRSystem_IVRSystem_020_GetTimeSinceLastVsync(winIVRSystem_IVRSystem_020 *_this, float * pfSecondsSinceLastVsync, uint64_t * pulFrameCounter)
+{
+    TRACE("%p\n", _this);
+    return cppIVRSystem_IVRSystem_020_GetTimeSinceLastVsync(_this->linux_side, pfSecondsSinceLastVsync, pulFrameCounter);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVRSystem_IVRSystem_020_GetD3D9AdapterIndex, 4)
+int32_t __thiscall winIVRSystem_IVRSystem_020_GetD3D9AdapterIndex(winIVRSystem_IVRSystem_020 *_this)
+{
+    TRACE("%p\n", _this);
+    return cppIVRSystem_IVRSystem_020_GetD3D9AdapterIndex(_this->linux_side);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVRSystem_IVRSystem_020_GetDXGIOutputInfo, 12)
+void __thiscall winIVRSystem_IVRSystem_020_GetDXGIOutputInfo(winIVRSystem_IVRSystem_020 *_this, int32_t * pnAdapterIndex)
+{
+    TRACE("%p\n", _this);
+    get_dxgi_output_info(cppIVRSystem_IVRSystem_020_GetDXGIOutputInfo, _this->linux_side, pnAdapterIndex, 20);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVRSystem_IVRSystem_020_GetOutputDevice, 24)
+void __thiscall winIVRSystem_IVRSystem_020_GetOutputDevice(winIVRSystem_IVRSystem_020 *_this, uint64_t * pnDevice, ETextureType textureType, VkInstance_T * pInstance)
+{
+    TRACE("%p\n", _this);
+    ivrsystem_get_output_device(cppIVRSystem_IVRSystem_020_GetOutputDevice, _this->linux_side, pnDevice, textureType, pInstance, 20);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVRSystem_IVRSystem_020_IsDisplayOnDesktop, 4)
+bool __thiscall winIVRSystem_IVRSystem_020_IsDisplayOnDesktop(winIVRSystem_IVRSystem_020 *_this)
+{
+    TRACE("%p\n", _this);
+    return cppIVRSystem_IVRSystem_020_IsDisplayOnDesktop(_this->linux_side);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVRSystem_IVRSystem_020_SetDisplayVisibility, 5)
+bool __thiscall winIVRSystem_IVRSystem_020_SetDisplayVisibility(winIVRSystem_IVRSystem_020 *_this, bool bIsVisibleOnDesktop)
+{
+    TRACE("%p\n", _this);
+    return cppIVRSystem_IVRSystem_020_SetDisplayVisibility(_this->linux_side, bIsVisibleOnDesktop);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVRSystem_IVRSystem_020_GetDeviceToAbsoluteTrackingPose, 24)
+void __thiscall winIVRSystem_IVRSystem_020_GetDeviceToAbsoluteTrackingPose(winIVRSystem_IVRSystem_020 *_this, ETrackingUniverseOrigin eOrigin, float fPredictedSecondsToPhotonsFromNow, TrackedDevicePose_t * pTrackedDevicePoseArray, uint32_t unTrackedDevicePoseArrayCount)
+{
+    TRACE("%p\n", _this);
+    cppIVRSystem_IVRSystem_020_GetDeviceToAbsoluteTrackingPose(_this->linux_side, eOrigin, fPredictedSecondsToPhotonsFromNow, pTrackedDevicePoseArray, unTrackedDevicePoseArrayCount);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVRSystem_IVRSystem_020_ResetSeatedZeroPose, 4)
+void __thiscall winIVRSystem_IVRSystem_020_ResetSeatedZeroPose(winIVRSystem_IVRSystem_020 *_this)
+{
+    TRACE("%p\n", _this);
+    cppIVRSystem_IVRSystem_020_ResetSeatedZeroPose(_this->linux_side);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVRSystem_IVRSystem_020_GetSeatedZeroPoseToStandingAbsoluteTrackingPose, 8)
+HmdMatrix34_t *__thiscall winIVRSystem_IVRSystem_020_GetSeatedZeroPoseToStandingAbsoluteTrackingPose(winIVRSystem_IVRSystem_020 *_this, HmdMatrix34_t *_r)
+{
+    TRACE("%p\n", _this);
+    *_r = cppIVRSystem_IVRSystem_020_GetSeatedZeroPoseToStandingAbsoluteTrackingPose(_this->linux_side);
+    return _r;
+}
+
+DEFINE_THISCALL_WRAPPER(winIVRSystem_IVRSystem_020_GetRawZeroPoseToStandingAbsoluteTrackingPose, 8)
+HmdMatrix34_t *__thiscall winIVRSystem_IVRSystem_020_GetRawZeroPoseToStandingAbsoluteTrackingPose(winIVRSystem_IVRSystem_020 *_this, HmdMatrix34_t *_r)
+{
+    TRACE("%p\n", _this);
+    *_r = cppIVRSystem_IVRSystem_020_GetRawZeroPoseToStandingAbsoluteTrackingPose(_this->linux_side);
+    return _r;
+}
+
+DEFINE_THISCALL_WRAPPER(winIVRSystem_IVRSystem_020_GetSortedTrackedDeviceIndicesOfClass, 24)
+uint32_t __thiscall winIVRSystem_IVRSystem_020_GetSortedTrackedDeviceIndicesOfClass(winIVRSystem_IVRSystem_020 *_this, ETrackedDeviceClass eTrackedDeviceClass, TrackedDeviceIndex_t * punTrackedDeviceIndexArray, uint32_t unTrackedDeviceIndexArrayCount, TrackedDeviceIndex_t unRelativeToTrackedDeviceIndex)
+{
+    TRACE("%p\n", _this);
+    return cppIVRSystem_IVRSystem_020_GetSortedTrackedDeviceIndicesOfClass(_this->linux_side, eTrackedDeviceClass, punTrackedDeviceIndexArray, unTrackedDeviceIndexArrayCount, unRelativeToTrackedDeviceIndex);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVRSystem_IVRSystem_020_GetTrackedDeviceActivityLevel, 8)
+EDeviceActivityLevel __thiscall winIVRSystem_IVRSystem_020_GetTrackedDeviceActivityLevel(winIVRSystem_IVRSystem_020 *_this, TrackedDeviceIndex_t unDeviceId)
+{
+    TRACE("%p\n", _this);
+    return cppIVRSystem_IVRSystem_020_GetTrackedDeviceActivityLevel(_this->linux_side, unDeviceId);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVRSystem_IVRSystem_020_ApplyTransform, 28)
+void __thiscall winIVRSystem_IVRSystem_020_ApplyTransform(winIVRSystem_IVRSystem_020 *_this, TrackedDevicePose_t * pOutputPose, TrackedDevicePose_t * pTrackedDevicePose, HmdMatrix34_t * pTransform)
+{
+    TRACE("%p\n", _this);
+    cppIVRSystem_IVRSystem_020_ApplyTransform(_this->linux_side, pOutputPose, pTrackedDevicePose, pTransform);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVRSystem_IVRSystem_020_GetTrackedDeviceIndexForControllerRole, 8)
+TrackedDeviceIndex_t __thiscall winIVRSystem_IVRSystem_020_GetTrackedDeviceIndexForControllerRole(winIVRSystem_IVRSystem_020 *_this, ETrackedControllerRole unDeviceType)
+{
+    TRACE("%p\n", _this);
+    return cppIVRSystem_IVRSystem_020_GetTrackedDeviceIndexForControllerRole(_this->linux_side, unDeviceType);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVRSystem_IVRSystem_020_GetControllerRoleForTrackedDeviceIndex, 8)
+ETrackedControllerRole __thiscall winIVRSystem_IVRSystem_020_GetControllerRoleForTrackedDeviceIndex(winIVRSystem_IVRSystem_020 *_this, TrackedDeviceIndex_t unDeviceIndex)
+{
+    TRACE("%p\n", _this);
+    return cppIVRSystem_IVRSystem_020_GetControllerRoleForTrackedDeviceIndex(_this->linux_side, unDeviceIndex);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVRSystem_IVRSystem_020_GetTrackedDeviceClass, 8)
+ETrackedDeviceClass __thiscall winIVRSystem_IVRSystem_020_GetTrackedDeviceClass(winIVRSystem_IVRSystem_020 *_this, TrackedDeviceIndex_t unDeviceIndex)
+{
+    TRACE("%p\n", _this);
+    return cppIVRSystem_IVRSystem_020_GetTrackedDeviceClass(_this->linux_side, unDeviceIndex);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVRSystem_IVRSystem_020_IsTrackedDeviceConnected, 8)
+bool __thiscall winIVRSystem_IVRSystem_020_IsTrackedDeviceConnected(winIVRSystem_IVRSystem_020 *_this, TrackedDeviceIndex_t unDeviceIndex)
+{
+    TRACE("%p\n", _this);
+    return cppIVRSystem_IVRSystem_020_IsTrackedDeviceConnected(_this->linux_side, unDeviceIndex);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVRSystem_IVRSystem_020_GetBoolTrackedDeviceProperty, 20)
+bool __thiscall winIVRSystem_IVRSystem_020_GetBoolTrackedDeviceProperty(winIVRSystem_IVRSystem_020 *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError)
+{
+    TRACE("%p\n", _this);
+    return cppIVRSystem_IVRSystem_020_GetBoolTrackedDeviceProperty(_this->linux_side, unDeviceIndex, prop, pError);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVRSystem_IVRSystem_020_GetFloatTrackedDeviceProperty, 20)
+float __thiscall winIVRSystem_IVRSystem_020_GetFloatTrackedDeviceProperty(winIVRSystem_IVRSystem_020 *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError)
+{
+    TRACE("%p\n", _this);
+    return cppIVRSystem_IVRSystem_020_GetFloatTrackedDeviceProperty(_this->linux_side, unDeviceIndex, prop, pError);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVRSystem_IVRSystem_020_GetInt32TrackedDeviceProperty, 20)
+int32_t __thiscall winIVRSystem_IVRSystem_020_GetInt32TrackedDeviceProperty(winIVRSystem_IVRSystem_020 *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError)
+{
+    TRACE("%p\n", _this);
+    return cppIVRSystem_IVRSystem_020_GetInt32TrackedDeviceProperty(_this->linux_side, unDeviceIndex, prop, pError);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVRSystem_IVRSystem_020_GetUint64TrackedDeviceProperty, 20)
+uint64_t __thiscall winIVRSystem_IVRSystem_020_GetUint64TrackedDeviceProperty(winIVRSystem_IVRSystem_020 *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError)
+{
+    TRACE("%p\n", _this);
+    return cppIVRSystem_IVRSystem_020_GetUint64TrackedDeviceProperty(_this->linux_side, unDeviceIndex, prop, pError);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVRSystem_IVRSystem_020_GetMatrix34TrackedDeviceProperty, 24)
+HmdMatrix34_t *__thiscall winIVRSystem_IVRSystem_020_GetMatrix34TrackedDeviceProperty(winIVRSystem_IVRSystem_020 *_this, HmdMatrix34_t *_r, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError)
+{
+    TRACE("%p\n", _this);
+    *_r = cppIVRSystem_IVRSystem_020_GetMatrix34TrackedDeviceProperty(_this->linux_side, unDeviceIndex, prop, pError);
+    return _r;
+}
+
+DEFINE_THISCALL_WRAPPER(winIVRSystem_IVRSystem_020_GetArrayTrackedDeviceProperty, 36)
+uint32_t __thiscall winIVRSystem_IVRSystem_020_GetArrayTrackedDeviceProperty(winIVRSystem_IVRSystem_020 *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, PropertyTypeTag_t propType, void * pBuffer, uint32_t unBufferSize, ETrackedPropertyError * pError)
+{
+    TRACE("%p\n", _this);
+    return cppIVRSystem_IVRSystem_020_GetArrayTrackedDeviceProperty(_this->linux_side, unDeviceIndex, prop, propType, pBuffer, unBufferSize, pError);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVRSystem_IVRSystem_020_GetStringTrackedDeviceProperty, 32)
+uint32_t __thiscall winIVRSystem_IVRSystem_020_GetStringTrackedDeviceProperty(winIVRSystem_IVRSystem_020 *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, char * pchValue, uint32_t unBufferSize, ETrackedPropertyError * pError)
+{
+    TRACE("%p\n", _this);
+    return cppIVRSystem_IVRSystem_020_GetStringTrackedDeviceProperty(_this->linux_side, unDeviceIndex, prop, pchValue, unBufferSize, pError);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVRSystem_IVRSystem_020_GetPropErrorNameFromEnum, 8)
+const char * __thiscall winIVRSystem_IVRSystem_020_GetPropErrorNameFromEnum(winIVRSystem_IVRSystem_020 *_this, ETrackedPropertyError error)
+{
+    TRACE("%p\n", _this);
+    return cppIVRSystem_IVRSystem_020_GetPropErrorNameFromEnum(_this->linux_side, error);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVRSystem_IVRSystem_020_PollNextEvent, 16)
+bool __thiscall winIVRSystem_IVRSystem_020_PollNextEvent(winIVRSystem_IVRSystem_020 *_this, winVREvent_t_1517 * pEvent, uint32_t uncbVREvent)
+{
+    TRACE("%p\n", _this);
+    return cppIVRSystem_IVRSystem_020_PollNextEvent(_this->linux_side, pEvent, uncbVREvent);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVRSystem_IVRSystem_020_PollNextEventWithPose, 28)
+bool __thiscall winIVRSystem_IVRSystem_020_PollNextEventWithPose(winIVRSystem_IVRSystem_020 *_this, ETrackingUniverseOrigin eOrigin, winVREvent_t_1517 * pEvent, uint32_t uncbVREvent, TrackedDevicePose_t * pTrackedDevicePose)
+{
+    TRACE("%p\n", _this);
+    return cppIVRSystem_IVRSystem_020_PollNextEventWithPose(_this->linux_side, eOrigin, pEvent, uncbVREvent, pTrackedDevicePose);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVRSystem_IVRSystem_020_GetEventTypeNameFromEnum, 8)
+const char * __thiscall winIVRSystem_IVRSystem_020_GetEventTypeNameFromEnum(winIVRSystem_IVRSystem_020 *_this, EVREventType eType)
+{
+    TRACE("%p\n", _this);
+    return cppIVRSystem_IVRSystem_020_GetEventTypeNameFromEnum(_this->linux_side, eType);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVRSystem_IVRSystem_020_GetHiddenAreaMesh, 16)
+HiddenAreaMesh_t *__thiscall winIVRSystem_IVRSystem_020_GetHiddenAreaMesh(winIVRSystem_IVRSystem_020 *_this, HiddenAreaMesh_t *_r, EVREye eEye, EHiddenAreaMeshType type)
+{
+    TRACE("%p\n", _this);
+    *_r = cppIVRSystem_IVRSystem_020_GetHiddenAreaMesh(_this->linux_side, eEye, type);
+    return _r;
+}
+
+DEFINE_THISCALL_WRAPPER(winIVRSystem_IVRSystem_020_GetControllerState, 20)
+bool __thiscall winIVRSystem_IVRSystem_020_GetControllerState(winIVRSystem_IVRSystem_020 *_this, TrackedDeviceIndex_t unControllerDeviceIndex, winVRControllerState001_t_1517 * pControllerState, uint32_t unControllerStateSize)
+{
+    TRACE("%p\n", _this);
+    return cppIVRSystem_IVRSystem_020_GetControllerState(_this->linux_side, unControllerDeviceIndex, pControllerState, unControllerStateSize);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVRSystem_IVRSystem_020_GetControllerStateWithPose, 32)
+bool __thiscall winIVRSystem_IVRSystem_020_GetControllerStateWithPose(winIVRSystem_IVRSystem_020 *_this, ETrackingUniverseOrigin eOrigin, TrackedDeviceIndex_t unControllerDeviceIndex, winVRControllerState001_t_1517 * pControllerState, uint32_t unControllerStateSize, TrackedDevicePose_t * pTrackedDevicePose)
+{
+    TRACE("%p\n", _this);
+    return cppIVRSystem_IVRSystem_020_GetControllerStateWithPose(_this->linux_side, eOrigin, unControllerDeviceIndex, pControllerState, unControllerStateSize, pTrackedDevicePose);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVRSystem_IVRSystem_020_TriggerHapticPulse, 14)
+void __thiscall winIVRSystem_IVRSystem_020_TriggerHapticPulse(winIVRSystem_IVRSystem_020 *_this, TrackedDeviceIndex_t unControllerDeviceIndex, uint32_t unAxisId, unsigned short usDurationMicroSec)
+{
+    TRACE("%p\n", _this);
+    cppIVRSystem_IVRSystem_020_TriggerHapticPulse(_this->linux_side, unControllerDeviceIndex, unAxisId, usDurationMicroSec);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVRSystem_IVRSystem_020_GetButtonIdNameFromEnum, 8)
+const char * __thiscall winIVRSystem_IVRSystem_020_GetButtonIdNameFromEnum(winIVRSystem_IVRSystem_020 *_this, EVRButtonId eButtonId)
+{
+    TRACE("%p\n", _this);
+    return cppIVRSystem_IVRSystem_020_GetButtonIdNameFromEnum(_this->linux_side, eButtonId);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVRSystem_IVRSystem_020_GetControllerAxisTypeNameFromEnum, 8)
+const char * __thiscall winIVRSystem_IVRSystem_020_GetControllerAxisTypeNameFromEnum(winIVRSystem_IVRSystem_020 *_this, EVRControllerAxisType eAxisType)
+{
+    TRACE("%p\n", _this);
+    return cppIVRSystem_IVRSystem_020_GetControllerAxisTypeNameFromEnum(_this->linux_side, eAxisType);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVRSystem_IVRSystem_020_IsInputAvailable, 4)
+bool __thiscall winIVRSystem_IVRSystem_020_IsInputAvailable(winIVRSystem_IVRSystem_020 *_this)
+{
+    TRACE("%p\n", _this);
+    return cppIVRSystem_IVRSystem_020_IsInputAvailable(_this->linux_side);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVRSystem_IVRSystem_020_IsSteamVRDrawingControllers, 4)
+bool __thiscall winIVRSystem_IVRSystem_020_IsSteamVRDrawingControllers(winIVRSystem_IVRSystem_020 *_this)
+{
+    TRACE("%p\n", _this);
+    return cppIVRSystem_IVRSystem_020_IsSteamVRDrawingControllers(_this->linux_side);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVRSystem_IVRSystem_020_ShouldApplicationPause, 4)
+bool __thiscall winIVRSystem_IVRSystem_020_ShouldApplicationPause(winIVRSystem_IVRSystem_020 *_this)
+{
+    TRACE("%p\n", _this);
+    return cppIVRSystem_IVRSystem_020_ShouldApplicationPause(_this->linux_side);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVRSystem_IVRSystem_020_ShouldApplicationReduceRenderingWork, 4)
+bool __thiscall winIVRSystem_IVRSystem_020_ShouldApplicationReduceRenderingWork(winIVRSystem_IVRSystem_020 *_this)
+{
+    TRACE("%p\n", _this);
+    return cppIVRSystem_IVRSystem_020_ShouldApplicationReduceRenderingWork(_this->linux_side);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVRSystem_IVRSystem_020_PerformFirmwareUpdate, 8)
+EVRFirmwareError __thiscall winIVRSystem_IVRSystem_020_PerformFirmwareUpdate(winIVRSystem_IVRSystem_020 *_this, TrackedDeviceIndex_t unDeviceIndex)
+{
+    TRACE("%p\n", _this);
+    return cppIVRSystem_IVRSystem_020_PerformFirmwareUpdate(_this->linux_side, unDeviceIndex);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVRSystem_IVRSystem_020_AcknowledgeQuit_Exiting, 4)
+void __thiscall winIVRSystem_IVRSystem_020_AcknowledgeQuit_Exiting(winIVRSystem_IVRSystem_020 *_this)
+{
+    TRACE("%p\n", _this);
+    cppIVRSystem_IVRSystem_020_AcknowledgeQuit_Exiting(_this->linux_side);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVRSystem_IVRSystem_020_AcknowledgeQuit_UserPrompt, 4)
+void __thiscall winIVRSystem_IVRSystem_020_AcknowledgeQuit_UserPrompt(winIVRSystem_IVRSystem_020 *_this)
+{
+    TRACE("%p\n", _this);
+    cppIVRSystem_IVRSystem_020_AcknowledgeQuit_UserPrompt(_this->linux_side);
+}
+
+extern vtable_ptr winIVRSystem_IVRSystem_020_vtable;
+
+#ifndef __GNUC__
+void __asm_dummy_vtables(void) {
+#endif
+    __ASM_VTABLE(winIVRSystem_IVRSystem_020,
+        VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_020_GetRecommendedRenderTargetSize)
+        VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_020_GetProjectionMatrix)
+        VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_020_GetProjectionRaw)
+        VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_020_ComputeDistortion)
+        VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_020_GetEyeToHeadTransform)
+        VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_020_GetTimeSinceLastVsync)
+        VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_020_GetD3D9AdapterIndex)
+        VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_020_GetDXGIOutputInfo)
+        VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_020_GetOutputDevice)
+        VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_020_IsDisplayOnDesktop)
+        VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_020_SetDisplayVisibility)
+        VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_020_GetDeviceToAbsoluteTrackingPose)
+        VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_020_ResetSeatedZeroPose)
+        VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_020_GetSeatedZeroPoseToStandingAbsoluteTrackingPose)
+        VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_020_GetRawZeroPoseToStandingAbsoluteTrackingPose)
+        VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_020_GetSortedTrackedDeviceIndicesOfClass)
+        VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_020_GetTrackedDeviceActivityLevel)
+        VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_020_ApplyTransform)
+        VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_020_GetTrackedDeviceIndexForControllerRole)
+        VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_020_GetControllerRoleForTrackedDeviceIndex)
+        VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_020_GetTrackedDeviceClass)
+        VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_020_IsTrackedDeviceConnected)
+        VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_020_GetBoolTrackedDeviceProperty)
+        VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_020_GetFloatTrackedDeviceProperty)
+        VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_020_GetInt32TrackedDeviceProperty)
+        VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_020_GetUint64TrackedDeviceProperty)
+        VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_020_GetMatrix34TrackedDeviceProperty)
+        VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_020_GetArrayTrackedDeviceProperty)
+        VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_020_GetStringTrackedDeviceProperty)
+        VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_020_GetPropErrorNameFromEnum)
+        VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_020_PollNextEvent)
+        VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_020_PollNextEventWithPose)
+        VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_020_GetEventTypeNameFromEnum)
+        VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_020_GetHiddenAreaMesh)
+        VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_020_GetControllerState)
+        VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_020_GetControllerStateWithPose)
+        VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_020_TriggerHapticPulse)
+        VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_020_GetButtonIdNameFromEnum)
+        VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_020_GetControllerAxisTypeNameFromEnum)
+        VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_020_IsInputAvailable)
+        VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_020_IsSteamVRDrawingControllers)
+        VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_020_ShouldApplicationPause)
+        VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_020_ShouldApplicationReduceRenderingWork)
+        VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_020_PerformFirmwareUpdate)
+        VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_020_AcknowledgeQuit_Exiting)
+        VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_020_AcknowledgeQuit_UserPrompt)
+    );
+#ifndef __GNUC__
+}
+#endif
+
+winIVRSystem_IVRSystem_020 *create_winIVRSystem_IVRSystem_020(void *linux_side)
+{
+    winIVRSystem_IVRSystem_020 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRSystem_IVRSystem_020));
+    TRACE("-> %p\n", r);
+    r->vtable = &winIVRSystem_IVRSystem_020_vtable;
+    r->linux_side = linux_side;
+    return r;
+}
+
+void destroy_winIVRSystem_IVRSystem_020(void *object)
+{
+    TRACE("%p\n", object);
+    HeapFree(GetProcessHeap(), 0, object);
+}
+
+winIVRSystem_IVRSystem_020 *create_winIVRSystem_IVRSystem_020_FnTable(void *linux_side)
+{
+    winIVRSystem_IVRSystem_020 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRSystem_IVRSystem_020));
+    struct thunk *thunks = alloc_thunks(46);
+    struct thunk **vtable = HeapAlloc(GetProcessHeap(), 0, 46 * sizeof(*vtable));
+    int i;
+
+    TRACE("-> %p, vtable %p, thunks %p\n", r, vtable, thunks);
+    init_thunk(&thunks[0], r, winIVRSystem_IVRSystem_020_GetRecommendedRenderTargetSize, 2, FALSE, FALSE);
+    init_thunk(&thunks[1], r, winIVRSystem_IVRSystem_020_GetProjectionMatrix, 4, TRUE, TRUE);
+    init_thunk(&thunks[2], r, winIVRSystem_IVRSystem_020_GetProjectionRaw, 5, FALSE, FALSE);
+    init_thunk(&thunks[3], r, winIVRSystem_IVRSystem_020_ComputeDistortion, 4, TRUE, FALSE);
+    init_thunk(&thunks[4], r, winIVRSystem_IVRSystem_020_GetEyeToHeadTransform, 2, FALSE, FALSE);
+    init_thunk(&thunks[5], r, winIVRSystem_IVRSystem_020_GetTimeSinceLastVsync, 2, FALSE, FALSE);
+    init_thunk(&thunks[6], r, winIVRSystem_IVRSystem_020_GetD3D9AdapterIndex, 0, FALSE, FALSE);
+    init_thunk(&thunks[7], r, winIVRSystem_IVRSystem_020_GetDXGIOutputInfo, 1, FALSE, FALSE);
+    init_thunk(&thunks[8], r, winIVRSystem_IVRSystem_020_GetOutputDevice, 3, FALSE, FALSE);
+    init_thunk(&thunks[9], r, winIVRSystem_IVRSystem_020_IsDisplayOnDesktop, 0, FALSE, FALSE);
+    init_thunk(&thunks[10], r, winIVRSystem_IVRSystem_020_SetDisplayVisibility, 1, FALSE, FALSE);
+    init_thunk(&thunks[11], r, winIVRSystem_IVRSystem_020_GetDeviceToAbsoluteTrackingPose, 4, TRUE, FALSE);
+    init_thunk(&thunks[12], r, winIVRSystem_IVRSystem_020_ResetSeatedZeroPose, 0, FALSE, FALSE);
+    init_thunk(&thunks[13], r, winIVRSystem_IVRSystem_020_GetSeatedZeroPoseToStandingAbsoluteTrackingPose, 1, FALSE, FALSE);
+    init_thunk(&thunks[14], r, winIVRSystem_IVRSystem_020_GetRawZeroPoseToStandingAbsoluteTrackingPose, 1, FALSE, FALSE);
+    init_thunk(&thunks[15], r, winIVRSystem_IVRSystem_020_GetSortedTrackedDeviceIndicesOfClass, 4, FALSE, FALSE);
+    init_thunk(&thunks[16], r, winIVRSystem_IVRSystem_020_GetTrackedDeviceActivityLevel, 1, FALSE, FALSE);
+    init_thunk(&thunks[17], r, winIVRSystem_IVRSystem_020_ApplyTransform, 3, FALSE, FALSE);
+    init_thunk(&thunks[18], r, winIVRSystem_IVRSystem_020_GetTrackedDeviceIndexForControllerRole, 1, FALSE, FALSE);
+    init_thunk(&thunks[19], r, winIVRSystem_IVRSystem_020_GetControllerRoleForTrackedDeviceIndex, 1, FALSE, FALSE);
+    init_thunk(&thunks[20], r, winIVRSystem_IVRSystem_020_GetTrackedDeviceClass, 1, FALSE, FALSE);
+    init_thunk(&thunks[21], r, winIVRSystem_IVRSystem_020_IsTrackedDeviceConnected, 1, FALSE, FALSE);
+    init_thunk(&thunks[22], r, winIVRSystem_IVRSystem_020_GetBoolTrackedDeviceProperty, 3, FALSE, FALSE);
+    init_thunk(&thunks[23], r, winIVRSystem_IVRSystem_020_GetFloatTrackedDeviceProperty, 3, FALSE, FALSE);
+    init_thunk(&thunks[24], r, winIVRSystem_IVRSystem_020_GetInt32TrackedDeviceProperty, 3, FALSE, FALSE);
+    init_thunk(&thunks[25], r, winIVRSystem_IVRSystem_020_GetUint64TrackedDeviceProperty, 3, FALSE, FALSE);
+    init_thunk(&thunks[26], r, winIVRSystem_IVRSystem_020_GetMatrix34TrackedDeviceProperty, 4, FALSE, FALSE);
+    init_thunk(&thunks[27], r, winIVRSystem_IVRSystem_020_GetArrayTrackedDeviceProperty, 6, FALSE, FALSE);
+    init_thunk(&thunks[28], r, winIVRSystem_IVRSystem_020_GetStringTrackedDeviceProperty, 5, FALSE, FALSE);
+    init_thunk(&thunks[29], r, winIVRSystem_IVRSystem_020_GetPropErrorNameFromEnum, 1, FALSE, FALSE);
+    init_thunk(&thunks[30], r, winIVRSystem_IVRSystem_020_PollNextEvent, 2, FALSE, FALSE);
+    init_thunk(&thunks[31], r, winIVRSystem_IVRSystem_020_PollNextEventWithPose, 4, FALSE, FALSE);
+    init_thunk(&thunks[32], r, winIVRSystem_IVRSystem_020_GetEventTypeNameFromEnum, 1, FALSE, FALSE);
+    init_thunk(&thunks[33], r, winIVRSystem_IVRSystem_020_GetHiddenAreaMesh, 3, FALSE, FALSE);
+    init_thunk(&thunks[34], r, winIVRSystem_IVRSystem_020_GetControllerState, 3, FALSE, FALSE);
+    init_thunk(&thunks[35], r, winIVRSystem_IVRSystem_020_GetControllerStateWithPose, 5, FALSE, FALSE);
+    init_thunk(&thunks[36], r, winIVRSystem_IVRSystem_020_TriggerHapticPulse, 3, FALSE, FALSE);
+    init_thunk(&thunks[37], r, winIVRSystem_IVRSystem_020_GetButtonIdNameFromEnum, 1, FALSE, FALSE);
+    init_thunk(&thunks[38], r, winIVRSystem_IVRSystem_020_GetControllerAxisTypeNameFromEnum, 1, FALSE, FALSE);
+    init_thunk(&thunks[39], r, winIVRSystem_IVRSystem_020_IsInputAvailable, 0, FALSE, FALSE);
+    init_thunk(&thunks[40], r, winIVRSystem_IVRSystem_020_IsSteamVRDrawingControllers, 0, FALSE, FALSE);
+    init_thunk(&thunks[41], r, winIVRSystem_IVRSystem_020_ShouldApplicationPause, 0, FALSE, FALSE);
+    init_thunk(&thunks[42], r, winIVRSystem_IVRSystem_020_ShouldApplicationReduceRenderingWork, 0, FALSE, FALSE);
+    init_thunk(&thunks[43], r, winIVRSystem_IVRSystem_020_PerformFirmwareUpdate, 1, FALSE, FALSE);
+    init_thunk(&thunks[44], r, winIVRSystem_IVRSystem_020_AcknowledgeQuit_Exiting, 0, FALSE, FALSE);
+    init_thunk(&thunks[45], r, winIVRSystem_IVRSystem_020_AcknowledgeQuit_UserPrompt, 0, FALSE, FALSE);
+    for (i = 0; i < 46; i++)
+        vtable[i] = &thunks[i];
+    r->linux_side = linux_side;
+    r->vtable = (void *)vtable;
+    return r;
+}
+
+void destroy_winIVRSystem_IVRSystem_020_FnTable(void *object)
+{
+    winIVRSystem_IVRSystem_020 *win_object = object;
+    TRACE("%p\n", win_object);
+    VirtualFree(win_object->vtable[0], 0, MEM_RELEASE);
+    HeapFree(GetProcessHeap(), 0, win_object->vtable);
+    HeapFree(GetProcessHeap(), 0, win_object);
+}
+
 #include "cppIVRSystem_IVRSystem_019.h"
 
 typedef struct __winIVRSystem_IVRSystem_019 {
