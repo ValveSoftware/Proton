@@ -118,3 +118,10 @@ lsteamclient: configure
 	vagrant ssh -c 'cp $(BUILD_DIR)/dist/dist/lib/wine/lsteamclient.dll.so /vagrant/lsteamclient/lib/wine'
 	mkdir -p vagrant_share/lsteamclient/lib64/wine
 	vagrant ssh -c 'cp $(BUILD_DIR)/dist/dist/lib64/wine/lsteamclient.dll.so /vagrant/lsteamclient/lib64/wine'
+
+vrclient: configure
+	vagrant ssh -c 'make -C $(BUILD_DIR)/ vrclient'
+	mkdir -p vagrant_share/vrclient/lib/wine
+	vagrant ssh -c 'cp $(BUILD_DIR)/dist/dist/lib/wine/vrclient.dll.so /vagrant/vrclient/lib/wine'
+	mkdir -p vagrant_share/vrclient/lib64/wine
+	vagrant ssh -c 'cp $(BUILD_DIR)/dist/dist/lib64/wine/vrclient_x64.dll.so /vagrant/vrclient/lib64/wine'
