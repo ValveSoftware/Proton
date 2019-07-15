@@ -196,7 +196,10 @@ with dist_lock:
         try_copy(basedir + "/version", basedir + "/dist/")
 
 env = dict(os.environ)
-dlloverrides = {"steam.exe": "b"} #always use our special built-in steam.exe
+dlloverrides = {
+        "steam.exe": "b", #always use our special built-in steam.exe
+        "mfplay": "n" #disable built-in mfplay
+    }
 
 if "HOST_LC_ALL" in env and len(env["HOST_LC_ALL"]) > 0:
     #steam sets LC_ALL=C to help some games, but Wine requires the real value
