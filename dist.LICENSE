@@ -1,4 +1,4 @@
-Copyright (c) 2018, Valve Corporation
+Copyright (c) 2018-2019, Valve Corporation
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification,
@@ -34,7 +34,7 @@ Browse the source code for more information
 
 This software contains Wine licensed under the LGPL 2.1. Wine is
 
-    Copyright (c) 1993-2018 the Wine project authors
+    Copyright (c) 1993-2019 the Wine project authors
 
 Browse the source code for more information
 
@@ -44,11 +44,82 @@ Browse the source code for more information
 
 This software contains DXVK licensed under the zlib/libpng license. DXVK is
 
-    Copyright (c) 2017 Philip Rebohle
+    Copyright (c) 2017-2019 Philip Rebohle
 
 Visit DXVK at
 
     https://github.com/doitsujin/dxvk/
+
+---- ---- ---- ----
+
+This software contains D9VK licensed under the zlib/libpng license. D9VK is
+
+    Copyright (c) 2017-2019 Philip Rebohle
+
+Visit D9VK at
+
+    https://github.com/Joshua-Ashton/d9vk/
+
+---- ---- ---- ----
+
+This software contains FAudio licensed under the zlib license. FAudio is
+
+    Copyright (c) 2011-2018 Ethan Lee, Luigi Auriemma, and the MonoGame Team
+
+Visit FAudio at
+
+    https://github.com/FNA-XNA/FAudio
+
+---- ---- ---- ----
+
+This software contains some Liberation Fonts licensed under the SIL Open Font License. These fonts are
+
+    Copyright (c) 2010 Google Corporation
+    Copyright (c) 2012 Red Hat, Inc.
+
+Visit Liberation Fonts at
+
+    https://github.com/liberationfonts/liberation-fonts
+
+---- ---- ---- ----
+
+This software contains wine-mono, parts of which are included under a variety of licenses.
+
+    Parts of Mono (mono/) are variously licensed under the GPL, LGPL, and MIT X11 licenses. All parts are available as LGPL or MIT X11 except for the following:
+     * The ICSharpCode.SharpZipLib library is available as GPL with an exception (see mono/mcs/class/ICSharpCode.SharpZipLib/README).
+     * mcs/jay is BSD-licensed.
+
+    The Visual Basic class libraries (mono-basic/) are MIT X11. The compiler is LGPL v2.
+
+    OpenTK (opentk/) is MIT X11.
+
+    Lidgren.Network (MonoGame/ThirdParty/Lidgren.Network) is MIT.
+
+    MonoGame uses GamepadConfig, Tao.Sdl, and SDL for its gamepad support. GamepadConfig has a non-free license, so gamepad support is disabled in Wine Mono to eliminate those dependencies.
+
+    MonoGame (MonoGame/) is Ms-PL.
+
+wine-mono itself is included under the MIT license. wine-mono is
+
+    Copyright (c) 2012 Vincent Povirk for CodeWeavers
+
+Visit wine-mono at
+
+    https://github.com/madewokherd/wine-mono
+
+View wine-mono's complete license at
+
+    https://github.com/madewokherd/wine-mono/blob/master/COPYING
+
+---- ---- ---- ----
+
+This software contains wine-gecko, parts of which are included under a variety of licenses.
+
+wine-gecko itself is included under the Mozilla Public License 2.0.
+
+wine-gecko is available in Source Code form at
+
+    https://sourceforge.net/p/wine/wine-gecko/
 
 ---- ---- ---- ----
 
@@ -59,14 +130,6 @@ Parts of this software are based on the OpenVR SDK, which is
 Visit OpenVR at
 
     https://github.com/ValveSoftware/openvr/
-
----- ---- ---- ----
-
-This software contains openal-soft licensed under the LGPL 2.
-
-Visit openal-soft at
-
-    https://github.com/kcat/openal-soft/
 
 ---- ---- ---- ----
 
