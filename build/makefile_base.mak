@@ -60,7 +60,7 @@ DOCKER_SHELL_BASE = docker run --rm --init --privileged --cap-add=SYS_ADMIN --se
                                     -v /etc/passwd:/etc/passwd:ro -v /etc/group:/etc/group:ro  -v /etc/shadow:/etc/shadow:ro \
                                     -w $(CURDIR) -e HOME=$(HOME) -e PATH=$(PATH) -u $(shell id -u):$(shell id -g) -h $(shell hostname) \
                                     $(DOCKER_OPTS) \
-                                    $(SELECT_DOCKER_IMAGE) /dev/init -sg -- /bin/bash
+                                    $(SELECT_DOCKER_IMAGE) /sbin/docker-init -sg -- /bin/bash
 
 # If STEAMRT64_MODE/STEAMRT32_MODE is set, set the nested SELECT_DOCKER_IMAGE to the _IMAGE variable and eval
 # DOCKER_SHELL_BASE with it to create the CONTAINER_SHELL setting.
