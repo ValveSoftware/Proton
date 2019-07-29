@@ -33,30 +33,6 @@ def log(msg):
     sys.stderr.write(PFX + msg + os.linesep)
     sys.stderr.flush()
 
-def remove_tracked_files(prefix):
-    if not os.path.exists(prefix + "/tracked_files"):
-        log("Prefix has no tracked_files??")
-        return
-
-    with open(prefix + "/tracked_files", "r") as tracked_files:
-        dirs = []
-        for f in tracked_files:
-            path = prefix + "/pfx/" + f.strip()
-            if os.path.exists(path):
-                if os.path.isfile(path) or os.path.islink(path):
-                    os.remove(path)
-                else:
-                    dirs.append(path)
-        for d in dirs:
-            try:
-                os.rmdir(d)
-            except OSError:
-                #not empty
-                pass
-
-    os.remove(prefix + "/tracked_files")
-    os.remove(prefix + "/version")
-
 def file_is_wine_fake_dll(path):
     if not os.path.exists(path):
         return False
@@ -67,56 +43,6 @@ def file_is_wine_fake_dll(path):
         return tag == b"Wine placeholder DLL"
     except IOError:
         return False
-
-def upgrade_pfx(old_ver):
-    if old_ver == CURRENT_PREFIX_VERSION:
-        return
-
-    log("Upgrading prefix from " + str(old_ver) + " to " + CURRENT_PREFIX_VERSION + " (" + g_compatdata.base_dir + ")")
-
-    if old_ver is None:
-        return
-
-    if not '-' in old_ver:
-        #How can this happen??
-        log("Prefix has an invalid version?! You may want to back up user files and delete this prefix.")
-        #If it does, just let the Wine upgrade happen and hope it works...
-        return
-
-    try:
-        old_proton_ver, old_prefix_ver = old_ver.split('-')
-        old_proton_maj, old_proton_min = old_proton_ver.split('.')
-        new_proton_ver, new_prefix_ver = CURRENT_PREFIX_VERSION.split('-')
-        new_proton_maj, new_proton_min = new_proton_ver.split('.')
-
-        if int(new_proton_maj) < int(old_proton_maj) or \
-                (int(new_proton_maj) == int(old_proton_maj) and \
-                 int(new_proton_min) < int(old_proton_min)):
-            log("Removing newer prefix")
-            if old_proton_ver == "3.7" and not os.path.exists(g_compatdata.tracked_files_file):
-                #proton 3.7 did not generate tracked_files, so copy it into place first
-                try_copy(g_proton.path("proton_3.7_tracked_files"), g_compatdata.tracked_files_file)
-            remove_tracked_files(g_compatdata.base_dir)
-            return
-
-        if old_proton_ver == "3.7" and old_prefix_ver == "1":
-            if not os.path.exists(g_compatdata.prefix_dir + "/drive_c/windows/syswow64/kernel32.dll"):
-                #shipped a busted 64-bit-only installation on 20180822. detect and wipe clean
-                log("Detected broken 64-bit-only installation, re-creating prefix.")
-                shutil.rmtree(g_compatdata.prefix_dir)
-                return
-
-        #replace broken .NET installations with wine-mono support
-        if os.path.exists(g_compatdata.prefix_dir + "/drive_c/windows/Microsoft.NET/NETFXRepair.exe") and \
-                file_is_wine_fake_dll(g_compatdata.prefix_dir + "/drive_c/windows/system32/mscoree.dll"):
-            log("Broken .NET installation detected, switching to wine-mono.")
-            #deleting this directory allows wine-mono to work
-            shutil.rmtree(g_compatdata.prefix_dir + "/drive_c/windows/Microsoft.NET")
-
-    except ValueError:
-        log("Prefix has an invalid version?! You may want to back up user files and delete this prefix.")
-        #Just let the Wine upgrade happen and hope it works...
-        return
 
 def run_wine(args):
     subprocess.call(args, env=env, stderr=lfile, stdout=lfile)
@@ -150,26 +76,24 @@ def real_copy(src, dst):
     else:
         try_copy(src, dst)
 
-def mergedirs(src, dst, tracked_files):
-    for src_dir, dirs, files in os.walk(src):
-        rel_dir = src_dir.replace(src, "", 1).lstrip('/')
-        if len(rel_dir) > 0:
-            rel_dir = rel_dir + "/"
-        dst_dir = src_dir.replace(src, dst, 1)
-        if not os.path.exists(dst_dir):
-            os.makedirs(dst_dir)
-            tracked_files.write(rel_dir + "\n")
-        for dir_ in dirs:
-            src_file = os.path.join(src_dir, dir_)
-            dst_file = os.path.join(dst_dir, dir_)
-            if os.path.islink(src_file) and not os.path.exists(dst_file):
-                real_copy(src_file, dst_file)
-        for file_ in files:
-            src_file = os.path.join(src_dir, file_)
-            dst_file = os.path.join(dst_dir, file_)
-            if not os.path.exists(dst_file):
-                real_copy(src_file, dst_file)
-                tracked_files.write(rel_dir + file_ + "\n")
+EXT2_IOC_GETFLAGS = 0x80086601
+EXT2_IOC_SETFLAGS = 0x40086602
+
+EXT4_CASEFOLD_FL = 0x40000000
+
+def set_dir_casefold_bit(dir_path):
+    dr = os.open(dir_path, 0o644)
+    if dr < 0:
+        return
+    try:
+        dat = array.array('I', [0])
+        if fcntl.ioctl(dr, EXT2_IOC_GETFLAGS, dat, True) >= 0:
+            dat[0] = dat[0] | EXT4_CASEFOLD_FL
+            fcntl.ioctl(dr, EXT2_IOC_SETFLAGS, dat, False)
+    except OSError:
+        #no problem
+        pass
+    os.close(dr)
 
 class Proton:
     def __init__(self, base_dir):
@@ -220,6 +144,268 @@ class CompatData:
 
     def path(self, d):
         return self.base_dir + d
+
+    def remove_tracked_files(self, prefix):
+        if not os.path.exists(prefix + "/tracked_files"):
+            log("Prefix has no tracked_files??")
+            return
+
+        with open(prefix + "/tracked_files", "r") as tracked_files:
+            dirs = []
+            for f in tracked_files:
+                path = prefix + "/pfx/" + f.strip()
+                if os.path.exists(path):
+                    if os.path.isfile(path) or os.path.islink(path):
+                        os.remove(path)
+                    else:
+                        dirs.append(path)
+            for d in dirs:
+                try:
+                    os.rmdir(d)
+                except OSError:
+                    #not empty
+                    pass
+
+        os.remove(prefix + "/tracked_files")
+        os.remove(prefix + "/version")
+
+    def upgrade_pfx(self, old_ver):
+        if old_ver == CURRENT_PREFIX_VERSION:
+            return
+
+        log("Upgrading prefix from " + str(old_ver) + " to " + CURRENT_PREFIX_VERSION + " (" + g_compatdata.base_dir + ")")
+
+        if old_ver is None:
+            return
+
+        if not '-' in old_ver:
+            #How can this happen??
+            log("Prefix has an invalid version?! You may want to back up user files and delete this prefix.")
+            #If it does, just let the Wine upgrade happen and hope it works...
+            return
+
+        try:
+            old_proton_ver, old_prefix_ver = old_ver.split('-')
+            old_proton_maj, old_proton_min = old_proton_ver.split('.')
+            new_proton_ver, new_prefix_ver = CURRENT_PREFIX_VERSION.split('-')
+            new_proton_maj, new_proton_min = new_proton_ver.split('.')
+
+            if int(new_proton_maj) < int(old_proton_maj) or \
+                    (int(new_proton_maj) == int(old_proton_maj) and \
+                     int(new_proton_min) < int(old_proton_min)):
+                log("Removing newer prefix")
+                if old_proton_ver == "3.7" and not os.path.exists(g_compatdata.tracked_files_file):
+                    #proton 3.7 did not generate tracked_files, so copy it into place first
+                    try_copy(g_proton.path("proton_3.7_tracked_files"), g_compatdata.tracked_files_file)
+                self.remove_tracked_files(g_compatdata.base_dir)
+                return
+
+            if old_proton_ver == "3.7" and old_prefix_ver == "1":
+                if not os.path.exists(g_compatdata.prefix_dir + "/drive_c/windows/syswow64/kernel32.dll"):
+                    #shipped a busted 64-bit-only installation on 20180822. detect and wipe clean
+                    log("Detected broken 64-bit-only installation, re-creating prefix.")
+                    shutil.rmtree(g_compatdata.prefix_dir)
+                    return
+
+            #replace broken .NET installations with wine-mono support
+            if os.path.exists(g_compatdata.prefix_dir + "/drive_c/windows/Microsoft.NET/NETFXRepair.exe") and \
+                    file_is_wine_fake_dll(g_compatdata.prefix_dir + "/drive_c/windows/system32/mscoree.dll"):
+                log("Broken .NET installation detected, switching to wine-mono.")
+                #deleting this directory allows wine-mono to work
+                shutil.rmtree(g_compatdata.prefix_dir + "/drive_c/windows/Microsoft.NET")
+
+        except ValueError:
+            log("Prefix has an invalid version?! You may want to back up user files and delete this prefix.")
+            #Just let the Wine upgrade happen and hope it works...
+            return
+
+    def mergedirs(self, src, dst, tracked_files):
+        for src_dir, dirs, files in os.walk(src):
+            rel_dir = src_dir.replace(src, "", 1).lstrip('/')
+            if len(rel_dir) > 0:
+                rel_dir = rel_dir + "/"
+            dst_dir = src_dir.replace(src, dst, 1)
+            if not os.path.exists(dst_dir):
+                os.makedirs(dst_dir)
+                tracked_files.write(rel_dir + "\n")
+            for dir_ in dirs:
+                src_file = os.path.join(src_dir, dir_)
+                dst_file = os.path.join(dst_dir, dir_)
+                if os.path.islink(src_file) and not os.path.exists(dst_file):
+                    real_copy(src_file, dst_file)
+            for file_ in files:
+                src_file = os.path.join(src_dir, file_)
+                dst_file = os.path.join(dst_dir, file_)
+                if not os.path.exists(dst_file):
+                    real_copy(src_file, dst_file)
+                    tracked_files.write(rel_dir + file_ + "\n")
+
+    def create_fonts_symlinks(self, prefix_path):
+        fontsmap = [
+            ( "LiberationSans-Regular.ttf", "arial.ttf" ),
+            ( "LiberationSans-Bold.ttf", "arialbd.ttf" ),
+            ( "LiberationSerif-Regular.ttf", "times.ttf" ),
+            ( "LiberationMono-Regular.ttf", "cour.ttf" ),
+        ]
+
+        windowsfonts = prefix_path + "/drive_c/windows/Fonts"
+        makedirs(windowsfonts)
+        for p in fontsmap:
+            lname = os.path.join(windowsfonts, p[1])
+            fname = os.path.join(g_proton.fonts_dir, p[0])
+            if os.path.lexists(lname):
+                if os.path.islink(lname):
+                    os.remove(lname)
+                    os.symlink(fname, lname)
+            else:
+                os.symlink(fname, lname)
+
+    def setup_prefix(self, config_opts):
+        with g_compatdata.prefix_lock:
+            if os.path.exists(g_compatdata.version_file):
+                with open(g_compatdata.version_file, "r") as f:
+                    self.upgrade_pfx(f.readline().strip())
+            else:
+                self.upgrade_pfx(None)
+
+            if not os.path.exists(g_compatdata.prefix_dir):
+                makedirs(g_compatdata.prefix_dir + "/drive_c")
+                set_dir_casefold_bit(g_compatdata.prefix_dir + "/drive_c")
+
+            if not os.path.exists(g_compatdata.prefix_dir + "/user.reg"):
+                #copy default prefix into place
+                with open(g_compatdata.tracked_files_file, "w") as tfiles:
+                    self.mergedirs(g_proton.default_pfx_dir, g_compatdata.prefix_dir, tfiles)
+
+            with open(g_compatdata.version_file, "w") as f:
+                f.write(CURRENT_PREFIX_VERSION + "\n")
+
+            #create font files symlinks
+            self.create_fonts_symlinks(g_compatdata.prefix_dir)
+
+            #copy steam files into place
+            if "STEAM_COMPAT_CLIENT_INSTALL_PATH" in os.environ:
+                #modern steam client sets this
+                steamdir = os.environ["STEAM_COMPAT_CLIENT_INSTALL_PATH"]
+            else:
+                #linux-only fallback, really shouldn't get here
+                steamdir = os.environ["HOME"] + ".steam/root/"
+            dst = g_compatdata.prefix_dir + "/drive_c/Program Files (x86)/"
+            makedirs(dst + "Steam")
+            filestocopy = ["steamclient.dll",
+                    "steamclient64.dll",
+                    "Steam.dll"]
+            for f in filestocopy:
+                if os.path.isfile(steamdir + "/legacycompat/" + f):
+                    dstfile = dst + "Steam/" + f
+                    if os.path.isfile(dstfile):
+                        os.remove(dstfile)
+                    try_copy(steamdir + "/legacycompat/" + f, dstfile)
+
+            #copy openvr files into place
+            dst = g_compatdata.prefix_dir + "/drive_c/vrclient/bin/"
+            makedirs(dst)
+            try_copy(g_proton.lib_dir + "wine/fakedlls/vrclient.dll", dst)
+            try_copy(g_proton.lib64_dir + "wine/fakedlls/vrclient_x64.dll", dst)
+
+            try_copy(g_proton.lib_dir + "wine/dxvk/openvr_api_dxvk.dll", g_compatdata.prefix_dir + "/drive_c/windows/syswow64/")
+            try_copy(g_proton.lib64_dir + "wine/dxvk/openvr_api_dxvk.dll", g_compatdata.prefix_dir + "/drive_c/windows/system32/")
+
+            #parse linux openvr config and present it in win32 format to the app.
+            #logic from openvr's CVRPathRegistry_Public::GetPaths
+
+            #check environment for overrides
+            vr_runtime = None
+            if "VR_OVERRIDE" in env:
+                vr_runtime = env["VR_OVERRIDE"]
+                env.pop("VR_OVERRIDE")
+
+            vr_config = None
+            if "VR_CONFIG_PATH" in env:
+                vr_config = env["VR_CONFIG_PATH"]
+                env.pop("VR_CONFIG_PATH")
+
+            vr_log = None
+            if "VR_LOG_PATH" in env:
+                vr_log = env["VR_LOG_PATH"]
+                env.pop("VR_LOG_PATH")
+
+            #load from json if needed
+            if vr_runtime is None or \
+                    vr_config is None or \
+                    vr_log is None:
+                try:
+                    path = os.environ.get("XDG_CONFIG_HOME", os.environ["HOME"] + "/.config")
+                    path = path + "/openvr/openvrpaths.vrpath"
+
+                    with open(path, "r") as jfile:
+                        j = json.load(jfile)
+
+                    if vr_runtime is None:
+                        vr_runtime = j["runtime"][0]
+
+                    if vr_config is None:
+                        vr_config = j["config"][0]
+
+                    if vr_log is None:
+                        vr_log = j["log"][0]
+                except (TypeError, ValueError, OSError):
+                    log("Missing or invalid openvrpaths.vrpath file! " + str(sys.exc_info()[1]))
+
+            makedirs(g_compatdata.prefix_dir + "/drive_c/users/steamuser/Local Settings/Application Data/openvr")
+
+            #remove existing file
+            vrpaths_name = g_compatdata.prefix_dir + "/drive_c/users/steamuser/Local Settings/Application Data/openvr/openvrpaths.vrpath"
+            if os.path.exists(vrpaths_name):
+                os.remove(vrpaths_name)
+
+            #dump new file
+            if not vr_runtime is None:
+                try:
+                    env["PROTON_VR_RUNTIME"] = vr_runtime
+
+                    j = { "runtime": [ "C:\\vrclient\\", "C:\\vrclient" ] }
+
+                    if not vr_config is None:
+                        win_vr_config = subprocess.check_output([g_proton.wine_bin, "winepath", "-w", vr_config], env=env, stderr=lfile).decode("utf-8")
+                        j["config"] = [ win_vr_config.strip() ]
+
+                    if not vr_log is None:
+                        win_vr_log = subprocess.check_output([g_proton.wine_bin, "winepath", "-w", vr_log], env=env, stderr=lfile).decode("utf-8")
+                        j["log"] = [ win_vr_log.strip() ]
+
+                    j["version"] = 1
+                    j["jsonid"] = "vrpathreg"
+
+                    with open(vrpaths_name, "w") as vfile:
+                        json.dump(j, vfile, indent=2)
+                except (ValueError, OSError):
+                    log("Unable to write VR config! " + str(sys.exc_info()[1]))
+
+            if "wined3d" in config_opts:
+                dxvkfiles = []
+                wined3dfiles = ["d3d11", "d3d10", "d3d10core", "d3d10_1", "dxgi", "d3d9"]
+            else:
+                dxvkfiles = ["d3d11", "d3d10", "d3d10core", "d3d10_1", "dxgi"]
+                wined3dfiles = []
+                if "d9vk" in config_opts:
+                    dxvkfiles.append("d3d9")
+                else:
+                    wined3dfiles.append("d3d9")
+
+            for f in wined3dfiles:
+                try_copy(g_proton.default_pfx_dir + "drive_c/windows/system32/" + f + ".dll",
+                        g_compatdata.prefix_dir + "drive_c/windows/system32/" + f + ".dll")
+                try_copy(g_proton.default_pfx_dir + "drive_c/windows/syswow64/" + f + ".dll",
+                        g_compatdata.prefix_dir + "drive_c/windows/syswow64/" + f + ".dll")
+
+            for f in dxvkfiles:
+                try_copy(g_proton.lib64_dir + "wine/dxvk/" + f + ".dll",
+                        g_compatdata.prefix_dir + "drive_c/windows/system32/" + f + ".dll")
+                try_copy(g_proton.lib_dir + "wine/dxvk/" + f + ".dll",
+                        g_compatdata.prefix_dir + "drive_c/windows/syswow64/" + f + ".dll")
+                dlloverrides[f] = "n"
+
 
 if not "STEAM_COMPAT_DATA_PATH" in os.environ:
     log("No compat data path?")
@@ -348,189 +534,7 @@ if "SteamGameId" in env:
 else:
     env["WINEDEBUG"] = "-all"
 
-def create_fonts_symlinks(prefix_path):
-    fontsmap = [
-        ( "LiberationSans-Regular.ttf", "arial.ttf" ),
-        ( "LiberationSans-Bold.ttf", "arialbd.ttf" ),
-        ( "LiberationSerif-Regular.ttf", "times.ttf" ),
-        ( "LiberationMono-Regular.ttf", "cour.ttf" ),
-    ]
-
-    windowsfonts = prefix_path + "/drive_c/windows/Fonts"
-    makedirs(windowsfonts)
-    for p in fontsmap:
-        lname = os.path.join(windowsfonts, p[1])
-        fname = os.path.join(g_proton.fonts_dir, p[0])
-        if os.path.lexists(lname):
-            if os.path.islink(lname):
-                os.remove(lname)
-                os.symlink(fname, lname)
-        else:
-            os.symlink(fname, lname)
-
-EXT2_IOC_GETFLAGS = 0x80086601
-EXT2_IOC_SETFLAGS = 0x40086602
-
-EXT4_CASEFOLD_FL = 0x40000000
-
-def set_dir_casefold_bit(dir_path):
-    dr = os.open(dir_path, 0o644)
-    if dr < 0:
-        return
-    try:
-        dat = array.array('I', [0])
-        if fcntl.ioctl(dr, EXT2_IOC_GETFLAGS, dat, True) >= 0:
-            dat[0] = dat[0] | EXT4_CASEFOLD_FL
-            fcntl.ioctl(dr, EXT2_IOC_SETFLAGS, dat, False)
-    except OSError:
-        #no problem
-        pass
-    os.close(dr)
-
-with g_compatdata.prefix_lock:
-    if os.path.exists(g_compatdata.version_file):
-        with open(g_compatdata.version_file, "r") as f:
-            upgrade_pfx(f.readline().strip())
-    else:
-        upgrade_pfx(None)
-
-    if not os.path.exists(g_compatdata.prefix_dir):
-        makedirs(g_compatdata.prefix_dir + "/drive_c")
-        set_dir_casefold_bit(g_compatdata.prefix_dir + "/drive_c")
-
-    if not os.path.exists(g_compatdata.prefix_dir + "/user.reg"):
-        #copy default prefix into place
-        with open(g_compatdata.tracked_files_file, "w") as tfiles:
-            mergedirs(g_proton.default_pfx_dir, g_compatdata.prefix_dir, tfiles)
-
-    with open(g_compatdata.version_file, "w") as f:
-        f.write(CURRENT_PREFIX_VERSION + "\n")
-
-    #create font files symlinks
-    create_fonts_symlinks(g_compatdata.prefix_dir)
-
-    #copy steam files into place
-    if "STEAM_COMPAT_CLIENT_INSTALL_PATH" in os.environ:
-        #modern steam client sets this
-        steamdir = os.environ["STEAM_COMPAT_CLIENT_INSTALL_PATH"]
-    else:
-        #linux-only fallback, really shouldn't get here
-        steamdir = os.environ["HOME"] + ".steam/root/"
-    dst = g_compatdata.prefix_dir + "/drive_c/Program Files (x86)/"
-    makedirs(dst + "Steam")
-    filestocopy = ["steamclient.dll",
-            "steamclient64.dll",
-            "Steam.dll"]
-    for f in filestocopy:
-        if os.path.isfile(steamdir + "/legacycompat/" + f):
-            dstfile = dst + "Steam/" + f
-            if os.path.isfile(dstfile):
-                os.remove(dstfile)
-            try_copy(steamdir + "/legacycompat/" + f, dstfile)
-
-    #copy openvr files into place
-    dst = g_compatdata.prefix_dir + "/drive_c/vrclient/bin/"
-    makedirs(dst)
-    try_copy(g_proton.lib_dir + "wine/fakedlls/vrclient.dll", dst)
-    try_copy(g_proton.lib64_dir + "wine/fakedlls/vrclient_x64.dll", dst)
-
-    try_copy(g_proton.lib_dir + "wine/dxvk/openvr_api_dxvk.dll", g_compatdata.prefix_dir + "/drive_c/windows/syswow64/")
-    try_copy(g_proton.lib64_dir + "wine/dxvk/openvr_api_dxvk.dll", g_compatdata.prefix_dir + "/drive_c/windows/system32/")
-
-    #parse linux openvr config and present it in win32 format to the app.
-    #logic from openvr's CVRPathRegistry_Public::GetPaths
-
-    #check environment for overrides
-    vr_runtime = None
-    if "VR_OVERRIDE" in env:
-        vr_runtime = env["VR_OVERRIDE"]
-        env.pop("VR_OVERRIDE")
-
-    vr_config = None
-    if "VR_CONFIG_PATH" in env:
-        vr_config = env["VR_CONFIG_PATH"]
-        env.pop("VR_CONFIG_PATH")
-
-    vr_log = None
-    if "VR_LOG_PATH" in env:
-        vr_log = env["VR_LOG_PATH"]
-        env.pop("VR_LOG_PATH")
-
-    #load from json if needed
-    if vr_runtime is None or \
-            vr_config is None or \
-            vr_log is None:
-        try:
-            path = os.environ.get("XDG_CONFIG_HOME", os.environ["HOME"] + "/.config")
-            path = path + "/openvr/openvrpaths.vrpath"
-
-            with open(path, "r") as jfile:
-                j = json.load(jfile)
-
-            if vr_runtime is None:
-                vr_runtime = j["runtime"][0]
-
-            if vr_config is None:
-                vr_config = j["config"][0]
-
-            if vr_log is None:
-                vr_log = j["log"][0]
-        except (TypeError, ValueError, OSError):
-            log("Missing or invalid openvrpaths.vrpath file! " + str(sys.exc_info()[1]))
-
-    makedirs(g_compatdata.prefix_dir + "/drive_c/users/steamuser/Local Settings/Application Data/openvr")
-
-    #remove existing file
-    vrpaths_name = g_compatdata.prefix_dir + "/drive_c/users/steamuser/Local Settings/Application Data/openvr/openvrpaths.vrpath"
-    if os.path.exists(vrpaths_name):
-        os.remove(vrpaths_name)
-
-    #dump new file
-    if not vr_runtime is None:
-        try:
-            env["PROTON_VR_RUNTIME"] = vr_runtime
-
-            j = { "runtime": [ "C:\\vrclient\\", "C:\\vrclient" ] }
-
-            if not vr_config is None:
-                win_vr_config = subprocess.check_output([g_proton.wine_bin, "winepath", "-w", vr_config], env=env, stderr=lfile).decode("utf-8")
-                j["config"] = [ win_vr_config.strip() ]
-
-            if not vr_log is None:
-                win_vr_log = subprocess.check_output([g_proton.wine_bin, "winepath", "-w", vr_log], env=env, stderr=lfile).decode("utf-8")
-                j["log"] = [ win_vr_log.strip() ]
-
-            j["version"] = 1
-            j["jsonid"] = "vrpathreg"
-
-            with open(vrpaths_name, "w") as vfile:
-                json.dump(j, vfile, indent=2)
-        except (ValueError, OSError):
-            log("Unable to write VR config! " + str(sys.exc_info()[1]))
-
-    if "wined3d" in config_opts:
-        dxvkfiles = []
-        wined3dfiles = ["d3d11", "d3d10", "d3d10core", "d3d10_1", "dxgi", "d3d9"]
-    else:
-        dxvkfiles = ["d3d11", "d3d10", "d3d10core", "d3d10_1", "dxgi"]
-        wined3dfiles = []
-        if "d9vk" in config_opts:
-            dxvkfiles.append("d3d9")
-        else:
-            wined3dfiles.append("d3d9")
-
-    for f in wined3dfiles:
-        try_copy(g_proton.default_pfx_dir + "drive_c/windows/system32/" + f + ".dll",
-                g_compatdata.prefix_dir + "drive_c/windows/system32/" + f + ".dll")
-        try_copy(g_proton.default_pfx_dir + "drive_c/windows/syswow64/" + f + ".dll",
-                g_compatdata.prefix_dir + "drive_c/windows/syswow64/" + f + ".dll")
-
-    for f in dxvkfiles:
-        try_copy(g_proton.lib64_dir + "wine/dxvk/" + f + ".dll",
-                g_compatdata.prefix_dir + "drive_c/windows/system32/" + f + ".dll")
-        try_copy(g_proton.lib_dir + "wine/dxvk/" + f + ".dll",
-                g_compatdata.prefix_dir + "drive_c/windows/syswow64/" + f + ".dll")
-        dlloverrides[f] = "n"
+g_compatdata.setup_prefix(config_opts)
 
 if "nod3d11" in config_opts:
     dlloverrides["d3d11"] = ""
