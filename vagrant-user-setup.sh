@@ -5,7 +5,7 @@ if [ ! -e "$HOME/steam-runtime" ]; then
     git clone https://github.com/ValveSoftware/steam-runtime.git
     ./steam-runtime/setup_docker.sh amd64 --extra-bootstrap=/home/vagrant/proton/steamrt-bootstrap.sh steam-proton-dev
     ./steam-runtime/setup_docker.sh i386 --extra-bootstrap=/home/vagrant/proton/steamrt-bootstrap.sh steam-proton-dev32
-    (cd steam-runtime && ./build-runtime.py --output=./runtime/)
+    (cd steam-runtime && ./build-runtime.py --verbose --output=./runtime/)
 fi
 
 if [ ! -e "$HOME/bin/schroot_wrapper" ]; then
