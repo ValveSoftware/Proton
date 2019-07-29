@@ -189,6 +189,27 @@ class Proton:
     def path(self, d):
         return self.base_dir + d
 
+    def extract_tarball(self):
+        with self.dist_lock:
+            if not os.path.exists(self.dist_dir) or \
+                    not os.path.exists(self.path("dist/version")) or \
+                    not filecmp.cmp(self.version_file, self.path("dist/version")):
+                if os.path.exists(self.dist_dir):
+                    shutil.rmtree(self.dist_dir)
+                tar = tarfile.open(self.path("proton_dist.tar.gz"), mode="r:gz")
+                tar.extractall(path=self.dist_dir)
+                tar.close()
+                try_copy(self.version_file, self.dist_dir)
+
+    def make_default_prefix(self, env):
+        with self.dist_lock:
+            local_env = dict(env)
+            if not os.path.isdir(self.default_pfx_dir):
+                #make default prefix
+                local_env["WINEPREFIX"] = self.default_pfx_dir
+                run_wine([self.wine, "wineboot"])
+                run_wine([self.wineserver, "-w"])
+
 class CompatData:
     def __init__(self, compatdata):
         self.base_dir = compatdata + "/"
@@ -205,19 +226,10 @@ if not "STEAM_COMPAT_DATA_PATH" in os.environ:
     sys.exit(1)
 
 g_proton = Proton(os.path.dirname(sys.argv[0]))
-g_compatdata = CompatData(os.environ["STEAM_COMPAT_DATA_PATH"])
 
-#extract if needed
-with g_proton.dist_lock:
-    if not os.path.exists(g_proton.dist_dir) or \
-            not os.path.exists(g_proton.path("dist/version")) or \
-            not filecmp.cmp(g_proton.version_file, g_proton.path("dist/version")):
-        if os.path.exists(g_proton.dist_dir):
-            shutil.rmtree(g_proton.dist_dir)
-        tar = tarfile.open(g_proton.path("proton_dist.tar.gz"), mode="r:gz")
-        tar.extractall(path=g_proton.dist_dir)
-        tar.close()
-        try_copy(g_proton.version_file, g_proton.dist_dir)
+g_proton.extract_tarball()
+
+g_compatdata = CompatData(os.environ["STEAM_COMPAT_DATA_PATH"])
 
 env = dict(os.environ)
 dlloverrides = {
@@ -250,12 +262,7 @@ if "PATH" in os.environ:
 else:
     env["PATH"] = g_proton.bin_dir
 
-with g_proton.dist_lock:
-    if not os.path.isdir(g_proton.default_pfx_dir):
-        #make default prefix
-        env["WINEPREFIX"] = g_proton.default_pfx_dir
-        run_wine([g_proton.wine_bin, "wineboot"])
-        run_wine([g_proton.wineserver_bin, "-w"])
+g_proton.make_default_prefix(env)
 
 env["WINEPREFIX"] = g_compatdata.prefix_dir
 
