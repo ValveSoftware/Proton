@@ -45,7 +45,7 @@ def file_is_wine_fake_dll(path):
         return False
 
 def run_wine(args):
-    subprocess.call(args, env=env, stderr=lfile, stdout=lfile)
+    subprocess.call(args, env=g_session.env, stderr=g_session.log_file, stdout=g_session.log_file)
 
 def makedirs(path):
     try:
@@ -261,7 +261,7 @@ class CompatData:
             else:
                 os.symlink(fname, lname)
 
-    def setup_prefix(self, config_opts):
+    def setup_prefix(self):
         with self.prefix_lock:
             if os.path.exists(self.version_file):
                 with open(self.version_file, "r") as f:
@@ -315,19 +315,19 @@ class CompatData:
 
             #check environment for overrides
             vr_runtime = None
-            if "VR_OVERRIDE" in env:
-                vr_runtime = env["VR_OVERRIDE"]
-                env.pop("VR_OVERRIDE")
+            if "VR_OVERRIDE" in g_session.env:
+                vr_runtime = g_session.env["VR_OVERRIDE"]
+                g_session.env.pop("VR_OVERRIDE")
 
             vr_config = None
-            if "VR_CONFIG_PATH" in env:
-                vr_config = env["VR_CONFIG_PATH"]
-                env.pop("VR_CONFIG_PATH")
+            if "VR_CONFIG_PATH" in g_session.env:
+                vr_config = g_session.env["VR_CONFIG_PATH"]
+                g_session.env.pop("VR_CONFIG_PATH")
 
             vr_log = None
-            if "VR_LOG_PATH" in env:
-                vr_log = env["VR_LOG_PATH"]
-                env.pop("VR_LOG_PATH")
+            if "VR_LOG_PATH" in g_session.env:
+                vr_log = g_session.env["VR_LOG_PATH"]
+                g_session.env.pop("VR_LOG_PATH")
 
             #load from json if needed
             if vr_runtime is None or \
@@ -361,16 +361,16 @@ class CompatData:
             #dump new file
             if not vr_runtime is None:
                 try:
-                    env["PROTON_VR_RUNTIME"] = vr_runtime
+                    g_session.env["PROTON_VR_RUNTIME"] = vr_runtime
 
                     j = { "runtime": [ "C:\\vrclient\\", "C:\\vrclient" ] }
 
                     if not vr_config is None:
-                        win_vr_config = subprocess.check_output([g_proton.wine_bin, "winepath", "-w", vr_config], env=env, stderr=lfile).decode("utf-8")
+                        win_vr_config = subprocess.check_output([g_proton.wine_bin, "winepath", "-w", vr_config], env=g_session.env, stderr=g_session.log_file).decode("utf-8")
                         j["config"] = [ win_vr_config.strip() ]
 
                     if not vr_log is None:
-                        win_vr_log = subprocess.check_output([g_proton.wine_bin, "winepath", "-w", vr_log], env=env, stderr=lfile).decode("utf-8")
+                        win_vr_log = subprocess.check_output([g_proton.wine_bin, "winepath", "-w", vr_log], env=g_session.env, stderr=g_session.log_file).decode("utf-8")
                         j["log"] = [ win_vr_log.strip() ]
 
                     j["version"] = 1
@@ -381,13 +381,13 @@ class CompatData:
                 except (ValueError, OSError):
                     log("Unable to write VR config! " + str(sys.exc_info()[1]))
 
-            if "wined3d" in config_opts:
+            if "wined3d" in g_session.compat_config:
                 dxvkfiles = []
                 wined3dfiles = ["d3d11", "d3d10", "d3d10core", "d3d10_1", "dxgi", "d3d9"]
             else:
                 dxvkfiles = ["d3d11", "d3d10", "d3d10core", "d3d10_1", "dxgi"]
                 wined3dfiles = []
-                if "d9vk" in config_opts:
+                if "d9vk" in g_session.compat_config:
                     dxvkfiles.append("d3d9")
                 else:
                     wined3dfiles.append("d3d9")
@@ -403,7 +403,20 @@ class CompatData:
                         self.prefix_dir + "drive_c/windows/system32/" + f + ".dll")
                 try_copy(g_proton.lib_dir + "wine/dxvk/" + f + ".dll",
                         self.prefix_dir + "drive_c/windows/syswow64/" + f + ".dll")
-                dlloverrides[f] = "n"
+                g_session.dlloverrides[f] = "n"
+
+class Session:
+    def __init__(self):
+        self.log_file = None
+        self.env = dict(os.environ)
+        self.dlloverrides = {
+                "steam.exe": "b", #always use our special built-in steam.exe
+                "mfplay": "n" #disable built-in mfplay
+        }
+        if "STEAM_COMPAT_CONFIG" in os.environ:
+            self.compat_config = set(os.environ["STEAM_COMPAT_CONFIG"].split(","))
+        else:
+            self.compat_config = set()
 
 
 if not "STEAM_COMPAT_DATA_PATH" in os.environ:
@@ -416,54 +429,50 @@ g_proton.extract_tarball()
 
 g_compatdata = CompatData(os.environ["STEAM_COMPAT_DATA_PATH"])
 
-env = dict(os.environ)
-dlloverrides = {
-        "steam.exe": "b", #always use our special built-in steam.exe
-        "mfplay": "n" #disable built-in mfplay
-    }
+g_session = Session()
 
-if "HOST_LC_ALL" in env and len(env["HOST_LC_ALL"]) > 0:
+if "HOST_LC_ALL" in g_session.env and len(g_session.env["HOST_LC_ALL"]) > 0:
     #steam sets LC_ALL=C to help some games, but Wine requires the real value
     #in order to do path conversion between win32 and host. steam sets
     #HOST_LC_ALL to allow us to use the real value.
-    env["LC_ALL"] = env["HOST_LC_ALL"]
+    g_session.env["LC_ALL"] = g_session.env["HOST_LC_ALL"]
 else:
-    env.pop("LC_ALL", "")
+    g_session.env.pop("LC_ALL", "")
 
 #for performance, logging is disabled by default; override with user_settings.py
-env["DXVK_LOG_LEVEL"] = "none"
-env["WINEDEBUG"] = "-all"
-env.pop("WINEARCH", "")
+g_session.env["DXVK_LOG_LEVEL"] = "none"
+g_session.env["WINEDEBUG"] = "-all"
+g_session.env.pop("WINEARCH", "")
 
 if ld_path_var in os.environ:
-    env[ld_path_var] = g_proton.lib64_dir + ":" + g_proton.lib_dir + ":" + os.environ[ld_path_var]
+    g_session.env[ld_path_var] = g_proton.lib64_dir + ":" + g_proton.lib_dir + ":" + os.environ[ld_path_var]
 else:
-    env[ld_path_var] = g_proton.lib64_dir + ":" + g_proton.lib_dir
+    g_session.env[ld_path_var] = g_proton.lib64_dir + ":" + g_proton.lib_dir
 
-env["WINEDLLPATH"] = g_proton.lib64_dir + "/wine:" + g_proton.lib_dir + "/wine"
+g_session.env["WINEDLLPATH"] = g_proton.lib64_dir + "/wine:" + g_proton.lib_dir + "/wine"
 
 if "PATH" in os.environ:
-    env["PATH"] = g_proton.bin_dir + ":" + os.environ["PATH"]
+    g_session.env["PATH"] = g_proton.bin_dir + ":" + os.environ["PATH"]
 else:
-    env["PATH"] = g_proton.bin_dir
+    g_session.env["PATH"] = g_proton.bin_dir
 
-g_proton.make_default_prefix(env)
+g_proton.make_default_prefix(g_session.env)
 
-env["WINEPREFIX"] = g_compatdata.prefix_dir
+g_session.env["WINEPREFIX"] = g_compatdata.prefix_dir
 
-if "PROTON_LOG" in env and nonzero(env["PROTON_LOG"]):
-    env["WINEDEBUG"] = "+timestamp,+pid,+tid,+seh,+debugstr,+loaddll,+mscoree"
-    env["DXVK_LOG_LEVEL"] = "info"
-    env["WINE_MONO_TRACE"] = "E:System.NotImplementedException"
+if "PROTON_LOG" in g_session.env and nonzero(g_session.env["PROTON_LOG"]):
+    g_session.env["WINEDEBUG"] = "+timestamp,+pid,+tid,+seh,+debugstr,+loaddll,+mscoree"
+    g_session.env["DXVK_LOG_LEVEL"] = "info"
+    g_session.env["WINE_MONO_TRACE"] = "E:System.NotImplementedException"
 
 #default wine-mono override for FNA games
-env["WINE_MONO_OVERRIDES"] = "Microsoft.Xna.Framework.*,Gac=n"
+g_session.env["WINE_MONO_OVERRIDES"] = "Microsoft.Xna.Framework.*,Gac=n"
 
 #load environment overrides
 if os.path.exists(g_proton.user_settings_file):
     try:
         import user_settings
-        env.update(user_settings.user_settings)
+        g_session.env.update(user_settings.user_settings)
     except:
         log("************************************************")
         log("THERE IS AN ERROR IN YOUR user_settings.py FILE:")
@@ -471,21 +480,16 @@ if os.path.exists(g_proton.user_settings_file):
         log("************************************************")
 
 def check_environment(env_name, config_name):
-    if not env_name in env:
+    if not env_name in g_session.env:
         return False
-    if nonzero(env[env_name]):
-        config_opts.add(config_name)
+    if nonzero(g_session.env[env_name]):
+        g_session.compat_config.add(config_name)
     else:
-        config_opts.discard(config_name)
+        g_session.compat_config.discard(config_name)
     return True
 
-if "STEAM_COMPAT_CONFIG" in os.environ:
-    config_opts = set(os.environ["STEAM_COMPAT_CONFIG"].split(","))
-else:
-    config_opts = set()
-
-if "wined3d11" in config_opts:
-    config_opts.add("wined3d")
+if "wined3d11" in g_session.compat_config:
+    g_session.compat_config.add("wined3d")
 
 if not check_environment("PROTON_USE_WINED3D", "wined3d"):
     check_environment("PROTON_USE_WINED3D11", "wined3d")
@@ -497,92 +501,91 @@ check_environment("PROTON_NO_FSYNC", "nofsync")
 check_environment("PROTON_FORCE_LARGE_ADDRESS_AWARE", "forcelgadd")
 check_environment("PROTON_OLD_GL_STRING", "oldglstr")
 
-if not "noesync" in config_opts:
-    env["WINEESYNC"] = "1"
+if not "noesync" in g_session.compat_config:
+    g_session.env["WINEESYNC"] = "1"
 
-if not "nofsync" in config_opts:
-    env["WINEFSYNC"] = "1"
+if not "nofsync" in g_session.compat_config:
+    g_session.env["WINEFSYNC"] = "1"
 
-if "oldglstr" in config_opts:
+if "oldglstr" in g_session.compat_config:
     #mesa override
-    env["MESA_EXTENSION_MAX_YEAR"] = "2003"
+    g_session.env["MESA_EXTENSION_MAX_YEAR"] = "2003"
     #nvidia override
-    env["__GL_ExtensionStringVersion"] = "17700"
+    g_session.env["__GL_ExtensionStringVersion"] = "17700"
 
-if "forcelgadd" in config_opts:
+if "forcelgadd" in g_session.compat_config:
     #forcelgadd should be used just for testing whether a game is helped by
     #setting LARGE_ADDRESS_AWARE. If it does, then add an AppDefault in the
     #registry, so that it doesn't impact every executable in the prefix.
-    env["WINE_LARGE_ADDRESS_AWARE"] = "1"
+    g_session.env["WINE_LARGE_ADDRESS_AWARE"] = "1"
 
-lfile = None
-if "SteamGameId" in env:
-    if env["WINEDEBUG"] != "-all":
+if "SteamGameId" in g_session.env:
+    if g_session.env["WINEDEBUG"] != "-all":
         lfile_path = os.environ["HOME"] + "/steam-" + os.environ["SteamGameId"] + ".log"
         if os.path.exists(lfile_path):
             os.remove(lfile_path)
-        lfile = open(lfile_path, "w+")
-        lfile.write("======================\n")
+        g_session.log_file = open(lfile_path, "w+")
+        g_session.log_file.write("======================\n")
         with open(g_proton.version_file, "r") as f:
-            lfile.write("Proton: " + f.readline().strip() + "\n")
-        lfile.write("SteamGameId: " + env["SteamGameId"] + "\n")
-        lfile.write("Command: " + str(sys.argv[2:]) + "\n")
-        lfile.write("Options: " + str(config_opts) + "\n")
-        lfile.write("======================\n")
-        lfile.flush()
+            g_session.log_file.write("Proton: " + f.readline().strip() + "\n")
+        g_session.log_file.write("SteamGameId: " + g_session.env["SteamGameId"] + "\n")
+        g_session.log_file.write("Command: " + str(sys.argv[2:]) + "\n")
+        g_session.log_file.write("Options: " + str(g_session.compat_config) + "\n")
+        g_session.log_file.write("======================\n")
+        g_session.log_file.flush()
 else:
-    env["WINEDEBUG"] = "-all"
+    g_session.env["WINEDEBUG"] = "-all"
 
-g_compatdata.setup_prefix(config_opts)
+g_compatdata.setup_prefix()
 
-if "nod3d11" in config_opts:
-    dlloverrides["d3d11"] = ""
-    if "dxgi" in dlloverrides:
-        del dlloverrides["dxgi"]
+if "nod3d11" in g_session.compat_config:
+    g_session.dlloverrides["d3d11"] = ""
+    if "dxgi" in g_session.dlloverrides:
+        del g_session.dlloverrides["dxgi"]
 
-if "nod3d10" in config_opts:
-    dlloverrides["d3d10_1"] = ""
-    dlloverrides["d3d10"] = ""
-    dlloverrides["dxgi"] = ""
+if "nod3d10" in g_session.compat_config:
+    g_session.dlloverrides["d3d10_1"] = ""
+    g_session.dlloverrides["d3d10"] = ""
+    g_session.dlloverrides["dxgi"] = ""
 
 s = ""
-for dll in dlloverrides:
-    setting = dlloverrides[dll]
+for dll in g_session.dlloverrides:
+    setting = g_session.dlloverrides[dll]
     if len(s) > 0:
         s = s + ";" + dll + "=" + setting
     else:
         s = dll + "=" + setting
 if "WINEDLLOVERRIDES" in os.environ:
-    env["WINEDLLOVERRIDES"] = os.environ["WINEDLLOVERRIDES"] + ";" + s
+    g_session.env["WINEDLLOVERRIDES"] = os.environ["WINEDLLOVERRIDES"] + ";" + s
 else:
-    env["WINEDLLOVERRIDES"] = s
+    g_session.env["WINEDLLOVERRIDES"] = s
 
 def dump_dbg_env(f):
-    f.write("PATH=\"" + env["PATH"] + "\" \\\n")
+    f.write("PATH=\"" + g_session.env["PATH"] + "\" \\\n")
     f.write("\tTERM=\"xterm\" \\\n") #XXX
     f.write("\tWINEDEBUG=\"-all\" \\\n")
-    f.write("\tWINEDLLPATH=\"" + env["WINEDLLPATH"] + "\" \\\n")
-    f.write("\t" + ld_path_var + "=\"" + env[ld_path_var] + "\" \\\n")
-    f.write("\tWINEPREFIX=\"" + env["WINEPREFIX"] + "\" \\\n")
-    if "WINEESYNC" in env:
-        f.write("\tWINEESYNC=\"" + env["WINEESYNC"] + "\" \\\n")
-    if "SteamGameId" in env:
-        f.write("\tSteamGameId=\"" + env["SteamGameId"] + "\" \\\n")
-    if "SteamAppId" in env:
-        f.write("\tSteamAppId=\"" + env["SteamAppId"] + "\" \\\n")
-    if "PROTON_VR_RUNTIME" in env:
-        f.write("\tPROTON_VR_RUNTIME=\"" + env["PROTON_VR_RUNTIME"] + "\" \\\n")
-    if "WINEDLLOVERRIDES" in env:
-        f.write("\tWINEDLLOVERRIDES=\"" + env["WINEDLLOVERRIDES"] + "\" \\\n")
-    if "STEAM_COMPAT_CLIENT_INSTALL_PATH" in env:
-        f.write("\tSTEAM_COMPAT_CLIENT_INSTALL_PATH=\"" + env["STEAM_COMPAT_CLIENT_INSTALL_PATH"] + "\" \\\n")
-    if "WINE_LARGE_ADDRESS_AWARE" in env:
-        f.write("\tWINE_LARGE_ADDRESS_AWARE=\"" + env["WINE_LARGE_ADDRESS_AWARE"] + "\" \\\n")
+    f.write("\tWINEDLLPATH=\"" + g_session.env["WINEDLLPATH"] + "\" \\\n")
+    f.write("\t" + ld_path_var + "=\"" + g_session.env[ld_path_var] + "\" \\\n")
+    f.write("\tWINEPREFIX=\"" + g_session.env["WINEPREFIX"] + "\" \\\n")
+    if "WINEESYNC" in g_session.env:
+        f.write("\tWINEESYNC=\"" + g_session.env["WINEESYNC"] + "\" \\\n")
+    if "SteamGameId" in g_session.env:
+        f.write("\tSteamGameId=\"" + g_session.env["SteamGameId"] + "\" \\\n")
+    if "SteamAppId" in g_session.env:
+        f.write("\tSteamAppId=\"" + g_session.env["SteamAppId"] + "\" \\\n")
+    if "PROTON_VR_RUNTIME" in g_session.env:
+        f.write("\tPROTON_VR_RUNTIME=\"" + g_session.env["PROTON_VR_RUNTIME"] + "\" \\\n")
+    if "WINEDLLOVERRIDES" in g_session.env:
+        f.write("\tWINEDLLOVERRIDES=\"" + g_session.env["WINEDLLOVERRIDES"] + "\" \\\n")
+    if "STEAM_COMPAT_CLIENT_INSTALL_PATH" in g_session.env:
+        f.write("\tSTEAM_COMPAT_CLIENT_INSTALL_PATH=\"" + g_session.env["STEAM_COMPAT_CLIENT_INSTALL_PATH"] + "\" \\\n")
+    if "WINE_LARGE_ADDRESS_AWARE" in g_session.env:
+        f.write("\tWINE_LARGE_ADDRESS_AWARE=\"" + g_session.env["WINE_LARGE_ADDRESS_AWARE"] + "\" \\\n")
 
 def dump_dbg_scripts():
     exe_name = os.path.basename(sys.argv[2])
 
-    tmpdir = env.get("PROTON_DEBUG_DIR", "/tmp") + "/proton_" + os.environ["USER"] + "/"
+    tmpdir = g_session.env.get("PROTON_DEBUG_DIR", "/tmp") + "/proton_" + os.environ["USER"] + "/"
     makedirs(tmpdir)
 
     with open(tmpdir + "winedbg", "w") as f:
@@ -660,7 +663,7 @@ def dump_dbg_scripts():
     os.chmod(tmpdir + "run", 0o755)
 
 def run():
-    if "PROTON_DUMP_DEBUG_COMMANDS" in env and nonzero(env["PROTON_DUMP_DEBUG_COMMANDS"]):
+    if "PROTON_DUMP_DEBUG_COMMANDS" in g_session.env and nonzero(g_session.env["PROTON_DUMP_DEBUG_COMMANDS"]):
         try:
             dump_dbg_scripts()
         except OSError:
@@ -685,11 +688,11 @@ elif sys.argv[1] == "waitforexitandrun":
     run()
 elif sys.argv[1] == "getcompatpath":
     #linux -> windows path
-    path = subprocess.check_output([g_proton.wine_bin, "winepath", "-w", sys.argv[2]], env=env, stderr=lfile)
+    path = subprocess.check_output([g_proton.wine_bin, "winepath", "-w", sys.argv[2]], env=g_session.env, stderr=g_session.log_file)
     binary_stdout.write(path)
 elif sys.argv[1] == "getnativepath":
     #windows -> linux path
-    path = subprocess.check_output([g_proton.wine_bin, "winepath", sys.argv[2]], env=env, stderr=lfile)
+    path = subprocess.check_output([g_proton.wine_bin, "winepath", sys.argv[2]], env=g_session.env, stderr=g_session.log_file)
     binary_stdout.write(path)
 else:
     log("Need a verb.")
