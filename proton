@@ -44,9 +44,6 @@ def file_is_wine_fake_dll(path):
     except IOError:
         return False
 
-def run_wine(args):
-    subprocess.call(args, env=g_session.env, stderr=g_session.log_file, stdout=g_session.log_file)
-
 def makedirs(path):
     try:
         os.makedirs(path)
@@ -131,8 +128,8 @@ class Proton:
             if not os.path.isdir(self.default_pfx_dir):
                 #make default prefix
                 local_env["WINEPREFIX"] = self.default_pfx_dir
-                run_wine([self.wine, "wineboot"])
-                run_wine([self.wineserver, "-w"])
+                g_session.run_wine([self.wine, "wineboot"])
+                g_session.run_wine([self.wineserver, "-w"])
 
 class CompatData:
     def __init__(self, compatdata):
@@ -418,6 +415,248 @@ class Session:
         else:
             self.compat_config = set()
 
+    def init_wine(self):
+        if "HOST_LC_ALL" in g_session.env and len(g_session.env["HOST_LC_ALL"]) > 0:
+            #steam sets LC_ALL=C to help some games, but Wine requires the real value
+            #in order to do path conversion between win32 and host. steam sets
+            #HOST_LC_ALL to allow us to use the real value.
+            g_session.env["LC_ALL"] = g_session.env["HOST_LC_ALL"]
+        else:
+            g_session.env.pop("LC_ALL", "")
+
+        #for performance, logging is disabled by default; override with user_settings.py
+        g_session.env["DXVK_LOG_LEVEL"] = "none"
+        g_session.env["WINEDEBUG"] = "-all"
+        g_session.env.pop("WINEARCH", "")
+
+        if ld_path_var in os.environ:
+            g_session.env[ld_path_var] = g_proton.lib64_dir + ":" + g_proton.lib_dir + ":" + os.environ[ld_path_var]
+        else:
+            g_session.env[ld_path_var] = g_proton.lib64_dir + ":" + g_proton.lib_dir
+
+        g_session.env["WINEDLLPATH"] = g_proton.lib64_dir + "/wine:" + g_proton.lib_dir + "/wine"
+
+        if "PATH" in os.environ:
+            g_session.env["PATH"] = g_proton.bin_dir + ":" + os.environ["PATH"]
+        else:
+            g_session.env["PATH"] = g_proton.bin_dir
+
+    def check_environment(self, env_name, config_name):
+        if not env_name in g_session.env:
+            return False
+        if nonzero(g_session.env[env_name]):
+            g_session.compat_config.add(config_name)
+        else:
+            g_session.compat_config.discard(config_name)
+        return True
+
+    def init_session(self):
+        g_session.env["WINEPREFIX"] = g_compatdata.prefix_dir
+
+        if "PROTON_LOG" in g_session.env and nonzero(g_session.env["PROTON_LOG"]):
+            g_session.env["WINEDEBUG"] = "+timestamp,+pid,+tid,+seh,+debugstr,+loaddll,+mscoree"
+            g_session.env["DXVK_LOG_LEVEL"] = "info"
+            g_session.env["WINE_MONO_TRACE"] = "E:System.NotImplementedException"
+
+        #default wine-mono override for FNA games
+        g_session.env["WINE_MONO_OVERRIDES"] = "Microsoft.Xna.Framework.*,Gac=n"
+
+        #load environment overrides
+        if os.path.exists(g_proton.user_settings_file):
+            try:
+                import user_settings
+                g_session.env.update(user_settings.user_settings)
+            except:
+                log("************************************************")
+                log("THERE IS AN ERROR IN YOUR user_settings.py FILE:")
+                log("%s" % sys.exc_info()[1])
+                log("************************************************")
+
+        if "wined3d11" in g_session.compat_config:
+            g_session.compat_config.add("wined3d")
+
+        if not self.check_environment("PROTON_USE_WINED3D", "wined3d"):
+            self.check_environment("PROTON_USE_WINED3D11", "wined3d")
+        self.check_environment("PROTON_USE_D9VK", "d9vk")
+        self.check_environment("PROTON_NO_D3D11", "nod3d11")
+        self.check_environment("PROTON_NO_D3D10", "nod3d10")
+        self.check_environment("PROTON_NO_ESYNC", "noesync")
+        self.check_environment("PROTON_NO_FSYNC", "nofsync")
+        self.check_environment("PROTON_FORCE_LARGE_ADDRESS_AWARE", "forcelgadd")
+        self.check_environment("PROTON_OLD_GL_STRING", "oldglstr")
+
+        if not "noesync" in g_session.compat_config:
+            g_session.env["WINEESYNC"] = "1"
+
+        if not "nofsync" in g_session.compat_config:
+            g_session.env["WINEFSYNC"] = "1"
+
+        if "oldglstr" in g_session.compat_config:
+            #mesa override
+            g_session.env["MESA_EXTENSION_MAX_YEAR"] = "2003"
+            #nvidia override
+            g_session.env["__GL_ExtensionStringVersion"] = "17700"
+
+        if "forcelgadd" in g_session.compat_config:
+            #forcelgadd should be used just for testing whether a game is helped by
+            #setting LARGE_ADDRESS_AWARE. If it does, then add an AppDefault in the
+            #registry, so that it doesn't impact every executable in the prefix.
+            g_session.env["WINE_LARGE_ADDRESS_AWARE"] = "1"
+
+        if "SteamGameId" in g_session.env:
+            if g_session.env["WINEDEBUG"] != "-all":
+                lfile_path = os.environ["HOME"] + "/steam-" + os.environ["SteamGameId"] + ".log"
+                if os.path.exists(lfile_path):
+                    os.remove(lfile_path)
+                g_session.log_file = open(lfile_path, "w+")
+                g_session.log_file.write("======================\n")
+                with open(g_proton.version_file, "r") as f:
+                    g_session.log_file.write("Proton: " + f.readline().strip() + "\n")
+                g_session.log_file.write("SteamGameId: " + g_session.env["SteamGameId"] + "\n")
+                g_session.log_file.write("Command: " + str(sys.argv[2:]) + "\n")
+                g_session.log_file.write("Options: " + str(g_session.compat_config) + "\n")
+                g_session.log_file.write("======================\n")
+                g_session.log_file.flush()
+        else:
+            g_session.env["WINEDEBUG"] = "-all"
+
+        g_compatdata.setup_prefix()
+
+        if "nod3d11" in g_session.compat_config:
+            g_session.dlloverrides["d3d11"] = ""
+            if "dxgi" in g_session.dlloverrides:
+                del g_session.dlloverrides["dxgi"]
+
+        if "nod3d10" in g_session.compat_config:
+            g_session.dlloverrides["d3d10_1"] = ""
+            g_session.dlloverrides["d3d10"] = ""
+            g_session.dlloverrides["dxgi"] = ""
+
+        s = ""
+        for dll in g_session.dlloverrides:
+            setting = g_session.dlloverrides[dll]
+            if len(s) > 0:
+                s = s + ";" + dll + "=" + setting
+            else:
+                s = dll + "=" + setting
+        if "WINEDLLOVERRIDES" in os.environ:
+            g_session.env["WINEDLLOVERRIDES"] = os.environ["WINEDLLOVERRIDES"] + ";" + s
+        else:
+            g_session.env["WINEDLLOVERRIDES"] = s
+
+    def dump_dbg_env(self, f):
+        f.write("PATH=\"" + g_session.env["PATH"] + "\" \\\n")
+        f.write("\tTERM=\"xterm\" \\\n") #XXX
+        f.write("\tWINEDEBUG=\"-all\" \\\n")
+        f.write("\tWINEDLLPATH=\"" + g_session.env["WINEDLLPATH"] + "\" \\\n")
+        f.write("\t" + ld_path_var + "=\"" + g_session.env[ld_path_var] + "\" \\\n")
+        f.write("\tWINEPREFIX=\"" + g_session.env["WINEPREFIX"] + "\" \\\n")
+        if "WINEESYNC" in g_session.env:
+            f.write("\tWINEESYNC=\"" + g_session.env["WINEESYNC"] + "\" \\\n")
+        if "SteamGameId" in g_session.env:
+            f.write("\tSteamGameId=\"" + g_session.env["SteamGameId"] + "\" \\\n")
+        if "SteamAppId" in g_session.env:
+            f.write("\tSteamAppId=\"" + g_session.env["SteamAppId"] + "\" \\\n")
+        if "PROTON_VR_RUNTIME" in g_session.env:
+            f.write("\tPROTON_VR_RUNTIME=\"" + g_session.env["PROTON_VR_RUNTIME"] + "\" \\\n")
+        if "WINEDLLOVERRIDES" in g_session.env:
+            f.write("\tWINEDLLOVERRIDES=\"" + g_session.env["WINEDLLOVERRIDES"] + "\" \\\n")
+        if "STEAM_COMPAT_CLIENT_INSTALL_PATH" in g_session.env:
+            f.write("\tSTEAM_COMPAT_CLIENT_INSTALL_PATH=\"" + g_session.env["STEAM_COMPAT_CLIENT_INSTALL_PATH"] + "\" \\\n")
+        if "WINE_LARGE_ADDRESS_AWARE" in g_session.env:
+            f.write("\tWINE_LARGE_ADDRESS_AWARE=\"" + g_session.env["WINE_LARGE_ADDRESS_AWARE"] + "\" \\\n")
+
+    def dump_dbg_scripts(self):
+        exe_name = os.path.basename(sys.argv[2])
+
+        tmpdir = g_session.env.get("PROTON_DEBUG_DIR", "/tmp") + "/proton_" + os.environ["USER"] + "/"
+        makedirs(tmpdir)
+
+        with open(tmpdir + "winedbg", "w") as f:
+            f.write("#!/bin/bash\n")
+            f.write("#Run winedbg with args\n\n")
+            f.write("cd \"" + os.getcwd() + "\"\n")
+            self.dump_dbg_env(f)
+            f.write("\t\"" + g_proton.wine_bin + "\" winedbg \"$@\"\n")
+        os.chmod(tmpdir + "winedbg", 0o755)
+
+        with open(tmpdir + "winedbg_run", "w") as f:
+            f.write("#!/bin/bash\n")
+            f.write("#Run winedbg and prepare to run game or given program\n\n")
+            f.write("cd \"" + os.getcwd() + "\"\n")
+            f.write("DEF_CMD=(")
+            first = True
+            for arg in sys.argv[2:]:
+                if first:
+                    f.write("\"" + arg + "\"")
+                    first = False
+                else:
+                    f.write(" \"" + arg + "\"")
+            f.write(")\n")
+            self.dump_dbg_env(f)
+            f.write("\t\"" + g_proton.wine_bin + "\" winedbg \"${@:-${DEF_CMD[@]}}\"\n")
+        os.chmod(tmpdir + "winedbg_run", 0o755)
+
+        with open(tmpdir + "gdb_attach", "w") as f:
+            f.write("#!/bin/bash\n")
+            f.write("#Run winedbg in gdb mode and auto-attach to already-running program\n\n")
+            f.write("cd \"" + os.getcwd() + "\"\n")
+            f.write("EXE_NAME=${1:-\"" + exe_name + "\"}\n")
+            f.write("WPID_HEX=$(\"" + tmpdir + "winedbg\" --command 'info process' | grep -i \"$EXE_NAME\" | cut -f2 -d' ' | tr -d '0')\n")
+            f.write("if [ -z \"$WPID_HEX\" ]; then \n")
+            f.write("    echo \"Program does not appear to be running: \\\"$EXE_NAME\\\"\"\n")
+            f.write("    exit 1\n")
+            f.write("fi\n")
+            f.write("WPID_DEC=$(printf %d 0x$WPID_HEX)\n")
+            self.dump_dbg_env(f)
+            f.write("\t\"" + g_proton.wine_bin + "\" winedbg --gdb $WPID_DEC\n")
+        os.chmod(tmpdir + "gdb_attach", 0o755)
+
+        with open(tmpdir + "gdb_run", "w") as f:
+            f.write("#!/bin/bash\n")
+            f.write("#Run winedbg in gdb mode and prepare to run game or given program\n\n")
+            f.write("cd \"" + os.getcwd() + "\"\n")
+            f.write("DEF_CMD=(")
+            first = True
+            for arg in sys.argv[2:]:
+                if first:
+                    f.write("\"" + arg + "\"")
+                    first = False
+                else:
+                    f.write(" \"" + arg + "\"")
+            f.write(")\n")
+            self.dump_dbg_env(f)
+            f.write("\t\"" + g_proton.wine_bin + "\" winedbg --gdb \"${@:-${DEF_CMD[@]}}\"\n")
+        os.chmod(tmpdir + "gdb_run", 0o755)
+
+        with open(tmpdir + "run", "w") as f:
+            f.write("#!/bin/bash\n")
+            f.write("#Run game or given command in environment\n\n")
+            f.write("cd \"" + os.getcwd() + "\"\n")
+            f.write("DEF_CMD=(")
+            first = True
+            for arg in sys.argv[2:]:
+                if first:
+                    f.write("\"" + arg + "\"")
+                    first = False
+                else:
+                    f.write(" \"" + arg + "\"")
+            f.write(")\n")
+            self.dump_dbg_env(f)
+            f.write("\t\"" + g_proton.wine_bin + "\" steam.exe \"${@:-${DEF_CMD[@]}}\"\n")
+        os.chmod(tmpdir + "run", 0o755)
+
+    def run_wine(self, args):
+        subprocess.call(args, env=g_session.env, stderr=g_session.log_file, stdout=g_session.log_file)
+
+    def run(self):
+        if "PROTON_DUMP_DEBUG_COMMANDS" in g_session.env and nonzero(g_session.env["PROTON_DUMP_DEBUG_COMMANDS"]):
+            try:
+                self.dump_dbg_scripts()
+            except OSError:
+                log("Unable to write debug scripts! " + str(sys.exc_info()[1]))
+        self.run_wine([g_proton.wine_bin, "steam"] + sys.argv[2:])
+
 
 if not "STEAM_COMPAT_DATA_PATH" in os.environ:
     log("No compat data path?")
@@ -431,244 +670,11 @@ g_compatdata = CompatData(os.environ["STEAM_COMPAT_DATA_PATH"])
 
 g_session = Session()
 
-if "HOST_LC_ALL" in g_session.env and len(g_session.env["HOST_LC_ALL"]) > 0:
-    #steam sets LC_ALL=C to help some games, but Wine requires the real value
-    #in order to do path conversion between win32 and host. steam sets
-    #HOST_LC_ALL to allow us to use the real value.
-    g_session.env["LC_ALL"] = g_session.env["HOST_LC_ALL"]
-else:
-    g_session.env.pop("LC_ALL", "")
-
-#for performance, logging is disabled by default; override with user_settings.py
-g_session.env["DXVK_LOG_LEVEL"] = "none"
-g_session.env["WINEDEBUG"] = "-all"
-g_session.env.pop("WINEARCH", "")
-
-if ld_path_var in os.environ:
-    g_session.env[ld_path_var] = g_proton.lib64_dir + ":" + g_proton.lib_dir + ":" + os.environ[ld_path_var]
-else:
-    g_session.env[ld_path_var] = g_proton.lib64_dir + ":" + g_proton.lib_dir
-
-g_session.env["WINEDLLPATH"] = g_proton.lib64_dir + "/wine:" + g_proton.lib_dir + "/wine"
-
-if "PATH" in os.environ:
-    g_session.env["PATH"] = g_proton.bin_dir + ":" + os.environ["PATH"]
-else:
-    g_session.env["PATH"] = g_proton.bin_dir
+g_session.init_wine()
 
 g_proton.make_default_prefix(g_session.env)
 
-g_session.env["WINEPREFIX"] = g_compatdata.prefix_dir
-
-if "PROTON_LOG" in g_session.env and nonzero(g_session.env["PROTON_LOG"]):
-    g_session.env["WINEDEBUG"] = "+timestamp,+pid,+tid,+seh,+debugstr,+loaddll,+mscoree"
-    g_session.env["DXVK_LOG_LEVEL"] = "info"
-    g_session.env["WINE_MONO_TRACE"] = "E:System.NotImplementedException"
-
-#default wine-mono override for FNA games
-g_session.env["WINE_MONO_OVERRIDES"] = "Microsoft.Xna.Framework.*,Gac=n"
-
-#load environment overrides
-if os.path.exists(g_proton.user_settings_file):
-    try:
-        import user_settings
-        g_session.env.update(user_settings.user_settings)
-    except:
-        log("************************************************")
-        log("THERE IS AN ERROR IN YOUR user_settings.py FILE:")
-        log("%s" % sys.exc_info()[1])
-        log("************************************************")
-
-def check_environment(env_name, config_name):
-    if not env_name in g_session.env:
-        return False
-    if nonzero(g_session.env[env_name]):
-        g_session.compat_config.add(config_name)
-    else:
-        g_session.compat_config.discard(config_name)
-    return True
-
-if "wined3d11" in g_session.compat_config:
-    g_session.compat_config.add("wined3d")
-
-if not check_environment("PROTON_USE_WINED3D", "wined3d"):
-    check_environment("PROTON_USE_WINED3D11", "wined3d")
-check_environment("PROTON_USE_D9VK", "d9vk")
-check_environment("PROTON_NO_D3D11", "nod3d11")
-check_environment("PROTON_NO_D3D10", "nod3d10")
-check_environment("PROTON_NO_ESYNC", "noesync")
-check_environment("PROTON_NO_FSYNC", "nofsync")
-check_environment("PROTON_FORCE_LARGE_ADDRESS_AWARE", "forcelgadd")
-check_environment("PROTON_OLD_GL_STRING", "oldglstr")
-
-if not "noesync" in g_session.compat_config:
-    g_session.env["WINEESYNC"] = "1"
-
-if not "nofsync" in g_session.compat_config:
-    g_session.env["WINEFSYNC"] = "1"
-
-if "oldglstr" in g_session.compat_config:
-    #mesa override
-    g_session.env["MESA_EXTENSION_MAX_YEAR"] = "2003"
-    #nvidia override
-    g_session.env["__GL_ExtensionStringVersion"] = "17700"
-
-if "forcelgadd" in g_session.compat_config:
-    #forcelgadd should be used just for testing whether a game is helped by
-    #setting LARGE_ADDRESS_AWARE. If it does, then add an AppDefault in the
-    #registry, so that it doesn't impact every executable in the prefix.
-    g_session.env["WINE_LARGE_ADDRESS_AWARE"] = "1"
-
-if "SteamGameId" in g_session.env:
-    if g_session.env["WINEDEBUG"] != "-all":
-        lfile_path = os.environ["HOME"] + "/steam-" + os.environ["SteamGameId"] + ".log"
-        if os.path.exists(lfile_path):
-            os.remove(lfile_path)
-        g_session.log_file = open(lfile_path, "w+")
-        g_session.log_file.write("======================\n")
-        with open(g_proton.version_file, "r") as f:
-            g_session.log_file.write("Proton: " + f.readline().strip() + "\n")
-        g_session.log_file.write("SteamGameId: " + g_session.env["SteamGameId"] + "\n")
-        g_session.log_file.write("Command: " + str(sys.argv[2:]) + "\n")
-        g_session.log_file.write("Options: " + str(g_session.compat_config) + "\n")
-        g_session.log_file.write("======================\n")
-        g_session.log_file.flush()
-else:
-    g_session.env["WINEDEBUG"] = "-all"
-
-g_compatdata.setup_prefix()
-
-if "nod3d11" in g_session.compat_config:
-    g_session.dlloverrides["d3d11"] = ""
-    if "dxgi" in g_session.dlloverrides:
-        del g_session.dlloverrides["dxgi"]
-
-if "nod3d10" in g_session.compat_config:
-    g_session.dlloverrides["d3d10_1"] = ""
-    g_session.dlloverrides["d3d10"] = ""
-    g_session.dlloverrides["dxgi"] = ""
-
-s = ""
-for dll in g_session.dlloverrides:
-    setting = g_session.dlloverrides[dll]
-    if len(s) > 0:
-        s = s + ";" + dll + "=" + setting
-    else:
-        s = dll + "=" + setting
-if "WINEDLLOVERRIDES" in os.environ:
-    g_session.env["WINEDLLOVERRIDES"] = os.environ["WINEDLLOVERRIDES"] + ";" + s
-else:
-    g_session.env["WINEDLLOVERRIDES"] = s
-
-def dump_dbg_env(f):
-    f.write("PATH=\"" + g_session.env["PATH"] + "\" \\\n")
-    f.write("\tTERM=\"xterm\" \\\n") #XXX
-    f.write("\tWINEDEBUG=\"-all\" \\\n")
-    f.write("\tWINEDLLPATH=\"" + g_session.env["WINEDLLPATH"] + "\" \\\n")
-    f.write("\t" + ld_path_var + "=\"" + g_session.env[ld_path_var] + "\" \\\n")
-    f.write("\tWINEPREFIX=\"" + g_session.env["WINEPREFIX"] + "\" \\\n")
-    if "WINEESYNC" in g_session.env:
-        f.write("\tWINEESYNC=\"" + g_session.env["WINEESYNC"] + "\" \\\n")
-    if "SteamGameId" in g_session.env:
-        f.write("\tSteamGameId=\"" + g_session.env["SteamGameId"] + "\" \\\n")
-    if "SteamAppId" in g_session.env:
-        f.write("\tSteamAppId=\"" + g_session.env["SteamAppId"] + "\" \\\n")
-    if "PROTON_VR_RUNTIME" in g_session.env:
-        f.write("\tPROTON_VR_RUNTIME=\"" + g_session.env["PROTON_VR_RUNTIME"] + "\" \\\n")
-    if "WINEDLLOVERRIDES" in g_session.env:
-        f.write("\tWINEDLLOVERRIDES=\"" + g_session.env["WINEDLLOVERRIDES"] + "\" \\\n")
-    if "STEAM_COMPAT_CLIENT_INSTALL_PATH" in g_session.env:
-        f.write("\tSTEAM_COMPAT_CLIENT_INSTALL_PATH=\"" + g_session.env["STEAM_COMPAT_CLIENT_INSTALL_PATH"] + "\" \\\n")
-    if "WINE_LARGE_ADDRESS_AWARE" in g_session.env:
-        f.write("\tWINE_LARGE_ADDRESS_AWARE=\"" + g_session.env["WINE_LARGE_ADDRESS_AWARE"] + "\" \\\n")
-
-def dump_dbg_scripts():
-    exe_name = os.path.basename(sys.argv[2])
-
-    tmpdir = g_session.env.get("PROTON_DEBUG_DIR", "/tmp") + "/proton_" + os.environ["USER"] + "/"
-    makedirs(tmpdir)
-
-    with open(tmpdir + "winedbg", "w") as f:
-        f.write("#!/bin/bash\n")
-        f.write("#Run winedbg with args\n\n")
-        f.write("cd \"" + os.getcwd() + "\"\n")
-        dump_dbg_env(f)
-        f.write("\t\"" + g_proton.wine_bin + "\" winedbg \"$@\"\n")
-    os.chmod(tmpdir + "winedbg", 0o755)
-
-    with open(tmpdir + "winedbg_run", "w") as f:
-        f.write("#!/bin/bash\n")
-        f.write("#Run winedbg and prepare to run game or given program\n\n")
-        f.write("cd \"" + os.getcwd() + "\"\n")
-        f.write("DEF_CMD=(")
-        first = True
-        for arg in sys.argv[2:]:
-            if first:
-                f.write("\"" + arg + "\"")
-                first = False
-            else:
-                f.write(" \"" + arg + "\"")
-        f.write(")\n")
-        dump_dbg_env(f)
-        f.write("\t\"" + g_proton.wine_bin + "\" winedbg \"${@:-${DEF_CMD[@]}}\"\n")
-    os.chmod(tmpdir + "winedbg_run", 0o755)
-
-    with open(tmpdir + "gdb_attach", "w") as f:
-        f.write("#!/bin/bash\n")
-        f.write("#Run winedbg in gdb mode and auto-attach to already-running program\n\n")
-        f.write("cd \"" + os.getcwd() + "\"\n")
-        f.write("EXE_NAME=${1:-\"" + exe_name + "\"}\n")
-        f.write("WPID_HEX=$(\"" + tmpdir + "winedbg\" --command 'info process' | grep -i \"$EXE_NAME\" | cut -f2 -d' ' | tr -d '0')\n")
-        f.write("if [ -z \"$WPID_HEX\" ]; then \n")
-        f.write("    echo \"Program does not appear to be running: \\\"$EXE_NAME\\\"\"\n")
-        f.write("    exit 1\n")
-        f.write("fi\n")
-        f.write("WPID_DEC=$(printf %d 0x$WPID_HEX)\n")
-        dump_dbg_env(f)
-        f.write("\t\"" + g_proton.wine_bin + "\" winedbg --gdb $WPID_DEC\n")
-    os.chmod(tmpdir + "gdb_attach", 0o755)
-
-    with open(tmpdir + "gdb_run", "w") as f:
-        f.write("#!/bin/bash\n")
-        f.write("#Run winedbg in gdb mode and prepare to run game or given program\n\n")
-        f.write("cd \"" + os.getcwd() + "\"\n")
-        f.write("DEF_CMD=(")
-        first = True
-        for arg in sys.argv[2:]:
-            if first:
-                f.write("\"" + arg + "\"")
-                first = False
-            else:
-                f.write(" \"" + arg + "\"")
-        f.write(")\n")
-        dump_dbg_env(f)
-        f.write("\t\"" + g_proton.wine_bin + "\" winedbg --gdb \"${@:-${DEF_CMD[@]}}\"\n")
-    os.chmod(tmpdir + "gdb_run", 0o755)
-
-    with open(tmpdir + "run", "w") as f:
-        f.write("#!/bin/bash\n")
-        f.write("#Run game or given command in environment\n\n")
-        f.write("cd \"" + os.getcwd() + "\"\n")
-        f.write("DEF_CMD=(")
-        first = True
-        for arg in sys.argv[2:]:
-            if first:
-                f.write("\"" + arg + "\"")
-                first = False
-            else:
-                f.write(" \"" + arg + "\"")
-        f.write(")\n")
-        dump_dbg_env(f)
-        f.write("\t\"" + g_proton.wine_bin + "\" steam.exe \"${@:-${DEF_CMD[@]}}\"\n")
-    os.chmod(tmpdir + "run", 0o755)
-
-def run():
-    if "PROTON_DUMP_DEBUG_COMMANDS" in g_session.env and nonzero(g_session.env["PROTON_DUMP_DEBUG_COMMANDS"]):
-        try:
-            dump_dbg_scripts()
-        except OSError:
-            log("Unable to write debug scripts! " + str(sys.exc_info()[1]))
-    run_wine([g_proton.wine_bin, "steam"] + sys.argv[2:])
+g_session.init_session()
 
 if sys.version_info[0] == 2:
     binary_stdout = sys.stdout
@@ -680,12 +686,12 @@ else:
 #determine mode
 if sys.argv[1] == "run":
     #start target app
-    run()
+    g_session.run()
 elif sys.argv[1] == "waitforexitandrun":
     #wait for wineserver to shut down
-    run_wine([g_proton.wineserver_bin, "-w"])
+    g_session.run_wine([g_proton.wineserver_bin, "-w"])
     #then run
-    run()
+    g_session.run()
 elif sys.argv[1] == "getcompatpath":
     #linux -> windows path
     path = subprocess.check_output([g_proton.wine_bin, "winepath", "-w", sys.argv[2]], env=g_session.env, stderr=g_session.log_file)
