@@ -11,7 +11,6 @@ import json
 import os
 import shutil
 import errno
-import struct
 import subprocess
 import sys
 import tarfile
@@ -128,8 +127,8 @@ class Proton:
             if not os.path.isdir(self.default_pfx_dir):
                 #make default prefix
                 local_env["WINEPREFIX"] = self.default_pfx_dir
-                g_session.run_proc([self.wine, "wineboot"], local_env)
-                g_session.run_proc([self.wineserver, "-w"], local_env)
+                g_session.run_proc([self.wine_bin, "wineboot"], local_env)
+                g_session.run_proc([self.wineserver_bin, "-w"], local_env)
 
 class CompatData:
     def __init__(self, compatdata):
@@ -647,7 +646,7 @@ class Session:
         os.chmod(tmpdir + "run", 0o755)
 
     def run_proc(self, args, local_env=None):
-        if local_env == None:
+        if local_env is None:
             local_env = self.env
         subprocess.call(args, env=local_env, stderr=self.log_file, stdout=self.log_file)
 
@@ -709,4 +708,5 @@ if __name__ == "__main__":
 
     sys.exit(0)
 
+#pylint --disable=C0301,C0326,C0330,C0111,C0103,R0902,C1801,R0914,R0912,R0915
 # vim: set syntax=python:
