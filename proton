@@ -660,52 +660,53 @@ class Session:
         self.run_proc([g_proton.wine_bin, "steam"] + sys.argv[2:])
 
 
-if not "STEAM_COMPAT_DATA_PATH" in os.environ:
-    log("No compat data path?")
-    sys.exit(1)
+if __name__ == "__main__":
+    if not "STEAM_COMPAT_DATA_PATH" in os.environ:
+        log("No compat data path?")
+        sys.exit(1)
 
-g_proton = Proton(os.path.dirname(sys.argv[0]))
+    g_proton = Proton(os.path.dirname(sys.argv[0]))
 
-g_proton.extract_tarball()
+    g_proton.extract_tarball()
 
-g_compatdata = CompatData(os.environ["STEAM_COMPAT_DATA_PATH"])
+    g_compatdata = CompatData(os.environ["STEAM_COMPAT_DATA_PATH"])
 
-g_session = Session()
+    g_session = Session()
 
-g_session.init_wine()
+    g_session.init_wine()
 
-g_proton.make_default_prefix()
+    g_proton.make_default_prefix()
 
-g_session.init_session()
+    g_session.init_session()
 
-if sys.version_info[0] == 2:
-    binary_stdout = sys.stdout
-elif sys.version_info[0] == 3:
-    binary_stdout = sys.stdout.buffer
-else:
-    raise Exception("Unsupported python version")
+    if sys.version_info[0] == 2:
+        binary_stdout = sys.stdout
+    elif sys.version_info[0] == 3:
+        binary_stdout = sys.stdout.buffer
+    else:
+        raise Exception("Unsupported python version")
 
-#determine mode
-if sys.argv[1] == "run":
-    #start target app
-    g_session.run()
-elif sys.argv[1] == "waitforexitandrun":
-    #wait for wineserver to shut down
-    g_session.run_proc([g_proton.wineserver_bin, "-w"])
-    #then run
-    g_session.run()
-elif sys.argv[1] == "getcompatpath":
-    #linux -> windows path
-    path = subprocess.check_output([g_proton.wine_bin, "winepath", "-w", sys.argv[2]], env=g_session.env, stderr=g_session.log_file)
-    binary_stdout.write(path)
-elif sys.argv[1] == "getnativepath":
-    #windows -> linux path
-    path = subprocess.check_output([g_proton.wine_bin, "winepath", sys.argv[2]], env=g_session.env, stderr=g_session.log_file)
-    binary_stdout.write(path)
-else:
-    log("Need a verb.")
-    sys.exit(1)
+    #determine mode
+    if sys.argv[1] == "run":
+        #start target app
+        g_session.run()
+    elif sys.argv[1] == "waitforexitandrun":
+        #wait for wineserver to shut down
+        g_session.run_proc([g_proton.wineserver_bin, "-w"])
+        #then run
+        g_session.run()
+    elif sys.argv[1] == "getcompatpath":
+        #linux -> windows path
+        path = subprocess.check_output([g_proton.wine_bin, "winepath", "-w", sys.argv[2]], env=g_session.env, stderr=g_session.log_file)
+        binary_stdout.write(path)
+    elif sys.argv[1] == "getnativepath":
+        #windows -> linux path
+        path = subprocess.check_output([g_proton.wine_bin, "winepath", sys.argv[2]], env=g_session.env, stderr=g_session.log_file)
+        binary_stdout.write(path)
+    else:
+        log("Need a verb.")
+        sys.exit(1)
 
-sys.exit(0)
+    sys.exit(0)
 
 # vim: set syntax=python:
