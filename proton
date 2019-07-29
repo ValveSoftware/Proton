@@ -95,7 +95,7 @@ def upgrade_pfx(old_ver):
             log("Removing newer prefix")
             if old_proton_ver == "3.7" and not os.path.exists(os.environ["STEAM_COMPAT_DATA_PATH"] + "/tracked_files"):
                 #proton 3.7 did not generate tracked_files, so copy it into place first
-                try_copy(basedir + "/proton_3.7_tracked_files", os.environ["STEAM_COMPAT_DATA_PATH"] + "/tracked_files")
+                try_copy(g_proton.path("proton_3.7_tracked_files"), os.environ["STEAM_COMPAT_DATA_PATH"] + "/tracked_files")
             remove_tracked_files(os.environ["STEAM_COMPAT_DATA_PATH"])
             return
 
@@ -171,29 +171,41 @@ def mergedirs(src, dst, tracked_files):
                 real_copy(src_file, dst_file)
                 tracked_files.write(rel_dir + file_ + "\n")
 
+class Proton:
+    def __init__(self, base_dir):
+        self.base_dir = base_dir + "/"
+        self.dist_dir = self.path("dist/")
+        self.bin_dir = self.path("dist/bin/")
+        self.lib_dir = self.path("dist/lib/")
+        self.lib64_dir = self.path("dist/lib64/")
+        self.fonts_dir = self.path("dist/share/fonts/")
+        self.version_file = self.path("version")
+        self.default_pfx_dir = self.path("dist/share/default_pfx/")
+        self.user_settings_file = self.path("user_settings.py")
+        self.wine_bin = self.bin_dir + "wine"
+        self.wineserver_bin = self.bin_dir + "wineserver"
+        self.dist_lock = FileLock(self.path("dist.lock"), timeout=-1)
+
+    def path(self, d):
+        return self.base_dir + d
+
 if not "STEAM_COMPAT_DATA_PATH" in os.environ:
     log("No compat data path?")
     sys.exit(1)
 
-basedir = os.path.dirname(sys.argv[0])
-bindir = basedir + "/dist/bin/"
-libdir = basedir + "/dist/lib"
-lib64dir = basedir + "/dist/lib64"
-fontsdir = basedir + "/dist/share/fonts"
-wine_path = bindir + "/wine"
+g_proton = Proton(os.path.dirname(sys.argv[0]))
 
 #extract if needed
-dist_lock = FileLock(basedir + "/dist.lock", timeout=-1)
-with dist_lock:
-    if not os.path.exists(basedir + "/dist") or \
-            not os.path.exists(basedir + "/dist/version") or \
-            not filecmp.cmp(basedir + "/version", basedir + "/dist/version"):
-        if os.path.exists(basedir + "/dist"):
-            shutil.rmtree(basedir + "/dist")
-        tar = tarfile.open(basedir + "/proton_dist.tar.gz", mode="r:gz")
-        tar.extractall(path=basedir + "/dist")
+with g_proton.dist_lock:
+    if not os.path.exists(g_proton.dist_dir) or \
+            not os.path.exists(g_proton.path("dist/version")) or \
+            not filecmp.cmp(g_proton.version_file, g_proton.path("dist/version")):
+        if os.path.exists(g_proton.dist_dir):
+            shutil.rmtree(g_proton.dist_dir)
+        tar = tarfile.open(g_proton.path("proton_dist.tar.gz"), mode="r:gz")
+        tar.extractall(path=g_proton.dist_dir)
         tar.close()
-        try_copy(basedir + "/version", basedir + "/dist/")
+        try_copy(g_proton.version_file, g_proton.dist_dir)
 
 env = dict(os.environ)
 dlloverrides = {
@@ -215,23 +227,23 @@ env["WINEDEBUG"] = "-all"
 env.pop("WINEARCH", "")
 
 if ld_path_var in os.environ:
-    env[ld_path_var] = lib64dir + ":" + libdir + ":" + os.environ[ld_path_var]
+    env[ld_path_var] = g_proton.lib64_dir + ":" + g_proton.lib_dir + ":" + os.environ[ld_path_var]
 else:
-    env[ld_path_var] = lib64dir + ":" + libdir
+    env[ld_path_var] = g_proton.lib64_dir + ":" + g_proton.lib_dir
 
-env["WINEDLLPATH"] = lib64dir + "/wine:" + libdir + "/wine"
+env["WINEDLLPATH"] = g_proton.lib64_dir + "/wine:" + g_proton.lib_dir + "/wine"
 
 if "PATH" in os.environ:
-    env["PATH"] = bindir + ":" + os.environ["PATH"]
+    env["PATH"] = g_proton.bin_dir + ":" + os.environ["PATH"]
 else:
-    env["PATH"] = bindir
+    env["PATH"] = g_proton.bin_dir
 
-with dist_lock:
-    if not os.path.isdir(basedir + "/dist/share/default_pfx"):
+with g_proton.dist_lock:
+    if not os.path.isdir(g_proton.default_pfx_dir):
         #make default prefix
-        env["WINEPREFIX"] = basedir + "/dist/share/default_pfx"
-        run_wine([wine_path, "wineboot"])
-        run_wine([bindir + "/wineserver", "-w"])
+        env["WINEPREFIX"] = g_proton.default_pfx_dir
+        run_wine([g_proton.wine_bin, "wineboot"])
+        run_wine([g_proton.wineserver_bin, "-w"])
 
 prefix = os.environ["STEAM_COMPAT_DATA_PATH"] + "/pfx/"
 env["WINEPREFIX"] = prefix
@@ -245,7 +257,7 @@ if "PROTON_LOG" in env and nonzero(env["PROTON_LOG"]):
 env["WINE_MONO_OVERRIDES"] = "Microsoft.Xna.Framework.*,Gac=n"
 
 #load environment overrides
-if os.path.exists(basedir + "/user_settings.py"):
+if os.path.exists(g_proton.user_settings_file):
     try:
         import user_settings
         env.update(user_settings.user_settings)
@@ -308,7 +320,7 @@ if "SteamGameId" in env:
             os.remove(lfile_path)
         lfile = open(lfile_path, "w+")
         lfile.write("======================\n")
-        with open(basedir + "/version", "r") as f:
+        with open(g_proton.version_file, "r") as f:
             lfile.write("Proton: " + f.readline().strip() + "\n")
         lfile.write("SteamGameId: " + env["SteamGameId"] + "\n")
         lfile.write("Command: " + str(sys.argv[2:]) + "\n")
@@ -330,7 +342,7 @@ def create_fonts_symlinks(prefix_path):
     makedirs(windowsfonts)
     for p in fontsmap:
         lname = os.path.join(windowsfonts, p[1])
-        fname = os.path.join(fontsdir, p[0])
+        fname = os.path.join(g_proton.fonts_dir, p[0])
         if os.path.lexists(lname):
             if os.path.islink(lname):
                 os.remove(lname)
@@ -373,7 +385,7 @@ with prefix_lock:
     if not os.path.exists(prefix + "/user.reg"):
         #copy default prefix into place
         with open(os.environ["STEAM_COMPAT_DATA_PATH"] + "/tracked_files", "w") as tfiles:
-            mergedirs(basedir + "/dist/share/default_pfx", prefix, tfiles)
+            mergedirs(g_proton.default_pfx_dir, prefix, tfiles)
 
     with open(version_file, "w") as f:
         f.write(CURRENT_PREFIX_VERSION + "\n")
@@ -403,11 +415,11 @@ with prefix_lock:
     #copy openvr files into place
     dst = prefix + "/drive_c/vrclient/bin/"
     makedirs(dst)
-    try_copy(basedir + "/dist/lib/wine/fakedlls/vrclient.dll", dst)
-    try_copy(basedir + "/dist/lib64/wine/fakedlls/vrclient_x64.dll", dst)
+    try_copy(g_proton.lib_dir + "wine/fakedlls/vrclient.dll", dst)
+    try_copy(g_proton.lib64_dir + "wine/fakedlls/vrclient_x64.dll", dst)
 
-    try_copy(basedir + "/dist/lib/wine/dxvk/openvr_api_dxvk.dll", prefix + "/drive_c/windows/syswow64/")
-    try_copy(basedir + "/dist/lib64/wine/dxvk/openvr_api_dxvk.dll", prefix + "/drive_c/windows/system32/")
+    try_copy(g_proton.lib_dir + "wine/dxvk/openvr_api_dxvk.dll", prefix + "/drive_c/windows/syswow64/")
+    try_copy(g_proton.lib64_dir + "wine/dxvk/openvr_api_dxvk.dll", prefix + "/drive_c/windows/system32/")
 
     #parse linux openvr config and present it in win32 format to the app.
     #logic from openvr's CVRPathRegistry_Public::GetPaths
@@ -465,11 +477,11 @@ with prefix_lock:
             j = { "runtime": [ "C:\\vrclient\\", "C:\\vrclient" ] }
 
             if not vr_config is None:
-                win_vr_config = subprocess.check_output([wine_path, "winepath", "-w", vr_config], env=env, stderr=lfile).decode("utf-8")
+                win_vr_config = subprocess.check_output([g_proton.wine_bin, "winepath", "-w", vr_config], env=env, stderr=lfile).decode("utf-8")
                 j["config"] = [ win_vr_config.strip() ]
 
             if not vr_log is None:
-                win_vr_log = subprocess.check_output([wine_path, "winepath", "-w", vr_log], env=env, stderr=lfile).decode("utf-8")
+                win_vr_log = subprocess.check_output([g_proton.wine_bin, "winepath", "-w", vr_log], env=env, stderr=lfile).decode("utf-8")
                 j["log"] = [ win_vr_log.strip() ]
 
             j["version"] = 1
@@ -492,15 +504,15 @@ with prefix_lock:
             wined3dfiles.append("d3d9")
 
     for f in wined3dfiles:
-        try_copy(basedir + "/dist/share/default_pfx/drive_c/windows/system32/" + f + ".dll",
+        try_copy(g_proton.default_pfx_dir + "drive_c/windows/system32/" + f + ".dll",
                 prefix + "drive_c/windows/system32/" + f + ".dll")
-        try_copy(basedir + "/dist/share/default_pfx/drive_c/windows/syswow64/" + f + ".dll",
+        try_copy(g_proton.default_pfx_dir + "drive_c/windows/syswow64/" + f + ".dll",
                 prefix + "drive_c/windows/syswow64/" + f + ".dll")
 
     for f in dxvkfiles:
-        try_copy(basedir + "/dist/lib64/wine/dxvk/" + f + ".dll",
+        try_copy(g_proton.lib64_dir + "wine/dxvk/" + f + ".dll",
                 prefix + "drive_c/windows/system32/" + f + ".dll")
-        try_copy(basedir + "/dist/lib/wine/dxvk/" + f + ".dll",
+        try_copy(g_proton.lib_dir + "wine/dxvk/" + f + ".dll",
                 prefix + "drive_c/windows/syswow64/" + f + ".dll")
         dlloverrides[f] = "n"
 
@@ -559,7 +571,7 @@ def dump_dbg_scripts():
         f.write("#Run winedbg with args\n\n")
         f.write("cd \"" + os.getcwd() + "\"\n")
         dump_dbg_env(f)
-        f.write("\t\"" + wine_path + "\" winedbg \"$@\"\n")
+        f.write("\t\"" + g_proton.wine_bin + "\" winedbg \"$@\"\n")
     os.chmod(tmpdir + "winedbg", 0o755)
 
     with open(tmpdir + "winedbg_run", "w") as f:
@@ -576,7 +588,7 @@ def dump_dbg_scripts():
                 f.write(" \"" + arg + "\"")
         f.write(")\n")
         dump_dbg_env(f)
-        f.write("\t\"" + wine_path + "\" winedbg \"${@:-${DEF_CMD[@]}}\"\n")
+        f.write("\t\"" + g_proton.wine_bin + "\" winedbg \"${@:-${DEF_CMD[@]}}\"\n")
     os.chmod(tmpdir + "winedbg_run", 0o755)
 
     with open(tmpdir + "gdb_attach", "w") as f:
@@ -591,7 +603,7 @@ def dump_dbg_scripts():
         f.write("fi\n")
         f.write("WPID_DEC=$(printf %d 0x$WPID_HEX)\n")
         dump_dbg_env(f)
-        f.write("\t\"" + wine_path + "\" winedbg --gdb $WPID_DEC\n")
+        f.write("\t\"" + g_proton.wine_bin + "\" winedbg --gdb $WPID_DEC\n")
     os.chmod(tmpdir + "gdb_attach", 0o755)
 
     with open(tmpdir + "gdb_run", "w") as f:
@@ -608,7 +620,7 @@ def dump_dbg_scripts():
                 f.write(" \"" + arg + "\"")
         f.write(")\n")
         dump_dbg_env(f)
-        f.write("\t\"" + wine_path + "\" winedbg --gdb \"${@:-${DEF_CMD[@]}}\"\n")
+        f.write("\t\"" + g_proton.wine_bin + "\" winedbg --gdb \"${@:-${DEF_CMD[@]}}\"\n")
     os.chmod(tmpdir + "gdb_run", 0o755)
 
     with open(tmpdir + "run", "w") as f:
@@ -625,7 +637,7 @@ def dump_dbg_scripts():
                 f.write(" \"" + arg + "\"")
         f.write(")\n")
         dump_dbg_env(f)
-        f.write("\t\"" + wine_path + "\" steam.exe \"${@:-${DEF_CMD[@]}}\"\n")
+        f.write("\t\"" + g_proton.wine_bin + "\" steam.exe \"${@:-${DEF_CMD[@]}}\"\n")
     os.chmod(tmpdir + "run", 0o755)
 
 def run():
@@ -634,7 +646,7 @@ def run():
             dump_dbg_scripts()
         except OSError:
             log("Unable to write debug scripts! " + str(sys.exc_info()[1]))
-    run_wine([wine_path, "steam"] + sys.argv[2:])
+    run_wine([g_proton.wine_bin, "steam"] + sys.argv[2:])
 
 if sys.version_info[0] == 2:
     binary_stdout = sys.stdout
@@ -649,16 +661,16 @@ if sys.argv[1] == "run":
     run()
 elif sys.argv[1] == "waitforexitandrun":
     #wait for wineserver to shut down
-    run_wine([bindir + "/wineserver", "-w"])
+    run_wine([g_proton.wineserver_bin, "-w"])
     #then run
     run()
 elif sys.argv[1] == "getcompatpath":
     #linux -> windows path
-    path = subprocess.check_output([wine_path, "winepath", "-w", sys.argv[2]], env=env, stderr=lfile)
+    path = subprocess.check_output([g_proton.wine_bin, "winepath", "-w", sys.argv[2]], env=env, stderr=lfile)
     binary_stdout.write(path)
 elif sys.argv[1] == "getnativepath":
     #windows -> linux path
-    path = subprocess.check_output([wine_path, "winepath", sys.argv[2]], env=env, stderr=lfile)
+    path = subprocess.check_output([g_proton.wine_bin, "winepath", sys.argv[2]], env=env, stderr=lfile)
     binary_stdout.write(path)
 else:
     log("Need a verb.")
