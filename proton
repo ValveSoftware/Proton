@@ -122,14 +122,14 @@ class Proton:
                 tar.close()
                 try_copy(self.version_file, self.dist_dir)
 
-    def make_default_prefix(self, env):
+    def make_default_prefix(self):
         with self.dist_lock:
-            local_env = dict(env)
+            local_env = dict(g_session.env)
             if not os.path.isdir(self.default_pfx_dir):
                 #make default prefix
                 local_env["WINEPREFIX"] = self.default_pfx_dir
-                g_session.run_proc([self.wine, "wineboot"])
-                g_session.run_proc([self.wineserver, "-w"])
+                g_session.run_proc([self.wine, "wineboot"], local_env)
+                g_session.run_proc([self.wineserver, "-w"], local_env)
 
 class CompatData:
     def __init__(self, compatdata):
@@ -646,8 +646,10 @@ class Session:
             f.write("\t\"" + g_proton.wine_bin + "\" steam.exe \"${@:-${DEF_CMD[@]}}\"\n")
         os.chmod(tmpdir + "run", 0o755)
 
-    def run_proc(self, args):
-        subprocess.call(args, env=self.env, stderr=self.log_file, stdout=self.log_file)
+    def run_proc(self, args, local_env=None):
+        if local_env == None:
+            local_env = self.env
+        subprocess.call(args, env=local_env, stderr=self.log_file, stdout=self.log_file)
 
     def run(self):
         if "PROTON_DUMP_DEBUG_COMMANDS" in self.env and nonzero(self.env["PROTON_DUMP_DEBUG_COMMANDS"]):
@@ -672,7 +674,7 @@ g_session = Session()
 
 g_session.init_wine()
 
-g_proton.make_default_prefix(g_session.env)
+g_proton.make_default_prefix()
 
 g_session.init_session()
 
