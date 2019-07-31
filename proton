@@ -127,6 +127,7 @@ class Proton:
             if not os.path.isdir(self.default_pfx_dir):
                 #make default prefix
                 local_env["WINEPREFIX"] = self.default_pfx_dir
+                local_env["WINEDEBUG"] = "-all"
                 g_session.run_proc([self.wine_bin, "wineboot"], local_env)
                 g_session.run_proc([self.wineserver_bin, "-w"], local_env)
 
@@ -423,9 +424,6 @@ class Session:
         else:
             self.env.pop("LC_ALL", "")
 
-        #for performance, logging is disabled by default; override with user_settings.py
-        self.env["DXVK_LOG_LEVEL"] = "none"
-        self.env["WINEDEBUG"] = "-all"
         self.env.pop("WINEARCH", "")
 
         if ld_path_var in os.environ:
@@ -452,24 +450,29 @@ class Session:
     def init_session(self):
         self.env["WINEPREFIX"] = g_compatdata.prefix_dir
 
-        if "PROTON_LOG" in self.env and nonzero(self.env["PROTON_LOG"]):
-            self.env["WINEDEBUG"] = "+timestamp,+pid,+tid,+seh,+debugstr,+loaddll,+mscoree"
-            self.env["DXVK_LOG_LEVEL"] = "info"
-            self.env["WINE_MONO_TRACE"] = "E:System.NotImplementedException"
-
-        #default wine-mono override for FNA games
-        self.env["WINE_MONO_OVERRIDES"] = "Microsoft.Xna.Framework.*,Gac=n"
-
         #load environment overrides
         if os.path.exists(g_proton.user_settings_file):
             try:
                 import user_settings
-                self.env.update(user_settings.user_settings)
+                for key, value in user_settings.user_settings.items():
+                    self.env.setdefault(key, value)
             except:
                 log("************************************************")
                 log("THERE IS AN ERROR IN YOUR user_settings.py FILE:")
                 log("%s" % sys.exc_info()[1])
                 log("************************************************")
+
+        if "PROTON_LOG" in self.env and nonzero(self.env["PROTON_LOG"]):
+            self.env.setdefault("WINEDEBUG", "+timestamp,+pid,+tid,+seh,+debugstr,+loaddll,+mscoree")
+            self.env.setdefault("DXVK_LOG_LEVEL", "info")
+            self.env.setdefault("WINE_MONO_TRACE", "E:System.NotImplementedException")
+
+        #for performance, logging is disabled by default; override with user_settings.py
+        self.env.setdefault("WINEDEBUG", "-all")
+        self.env.setdefault("DXVK_LOG_LEVEL", "none")
+
+        #default wine-mono override for FNA games
+        self.env.setdefault("WINE_MONO_OVERRIDES", "Microsoft.Xna.Framework.*,Gac=n")
 
         if "wined3d11" in self.compat_config:
             self.compat_config.add("wined3d")
