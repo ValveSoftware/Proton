@@ -29,4 +29,7 @@ user_settings = {
 
     #Disable in-process synchronization primitives
 #    "PROTON_NO_ESYNC": "1",
+
+    #Disable FSYNC entirely
+#    "PROTON_NO_FSYNC": "1",
 }
