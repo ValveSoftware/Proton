@@ -27,6 +27,9 @@ user_settings = {
     #Disable d3d11 entirely
 #    "PROTON_NO_D3D11": "1",
 
-    #Disable in-process synchronization primitives
+    #Disable eventfd-based in-process synchronization primitives
 #    "PROTON_NO_ESYNC": "1",
+
+    #Disable futex-based in-process synchronization primitives
+#    "PROTON_NO_FSYNC": "1",
 }
