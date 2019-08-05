@@ -236,9 +236,9 @@ DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERS
 SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_PublishWorkshopFile(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014 *_this, const char * pchFile, const char * pchPreviewFile, AppId_t nConsumerAppId, const char * pchTitle, const char * pchDescription, ERemoteStoragePublishedFileVisibility eVisibility, SteamParamStringArray_t * pTags, EWorkshopFileType eWorkshopFileType)
 {
     char lin_pchFile[PATH_MAX];
-    steamclient_dos_path_to_unix_path(pchFile, lin_pchFile);
+    steamclient_dos_path_to_unix_path(pchFile, lin_pchFile, 0);
     char lin_pchPreviewFile[PATH_MAX];
-    steamclient_dos_path_to_unix_path(pchPreviewFile, lin_pchPreviewFile);
+    steamclient_dos_path_to_unix_path(pchPreviewFile, lin_pchPreviewFile, 0);
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_PublishWorkshopFile(_this->linux_side, pchFile ? lin_pchFile : NULL, pchPreviewFile ? lin_pchPreviewFile : NULL, nConsumerAppId, pchTitle, pchDescription, eVisibility, pTags, eWorkshopFileType);
 }
@@ -254,7 +254,7 @@ DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERS
 bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_UpdatePublishedFileFile(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014 *_this, PublishedFileUpdateHandle_t updateHandle, const char * pchFile)
 {
     char lin_pchFile[PATH_MAX];
-    steamclient_dos_path_to_unix_path(pchFile, lin_pchFile);
+    steamclient_dos_path_to_unix_path(pchFile, lin_pchFile, 0);
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_UpdatePublishedFileFile(_this->linux_side, updateHandle, pchFile ? lin_pchFile : NULL);
 }
@@ -263,7 +263,7 @@ DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERS
 bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_UpdatePublishedFilePreviewFile(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014 *_this, PublishedFileUpdateHandle_t updateHandle, const char * pchPreviewFile)
 {
     char lin_pchPreviewFile[PATH_MAX];
-    steamclient_dos_path_to_unix_path(pchPreviewFile, lin_pchPreviewFile);
+    steamclient_dos_path_to_unix_path(pchPreviewFile, lin_pchPreviewFile, 0);
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_UpdatePublishedFilePreviewFile(_this->linux_side, updateHandle, pchPreviewFile ? lin_pchPreviewFile : NULL);
 }
@@ -384,7 +384,7 @@ DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERS
 SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_PublishVideo(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014 *_this, EWorkshopVideoProvider eVideoProvider, const char * pchVideoAccount, const char * pchVideoIdentifier, const char * pchPreviewFile, AppId_t nConsumerAppId, const char * pchTitle, const char * pchDescription, ERemoteStoragePublishedFileVisibility eVisibility, SteamParamStringArray_t * pTags)
 {
     char lin_pchPreviewFile[PATH_MAX];
-    steamclient_dos_path_to_unix_path(pchPreviewFile, lin_pchPreviewFile);
+    steamclient_dos_path_to_unix_path(pchPreviewFile, lin_pchPreviewFile, 0);
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_PublishVideo(_this->linux_side, eVideoProvider, pchVideoAccount, pchVideoIdentifier, pchPreviewFile ? lin_pchPreviewFile : NULL, nConsumerAppId, pchTitle, pchDescription, eVisibility, pTags);
 }
@@ -414,7 +414,7 @@ DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERS
 SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_UGCDownloadToLocation(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014 *_this, UGCHandle_t hContent, const char * pchLocation, uint32 unPriority)
 {
     char lin_pchLocation[PATH_MAX];
-    steamclient_dos_path_to_unix_path(pchLocation, lin_pchLocation);
+    steamclient_dos_path_to_unix_path(pchLocation, lin_pchLocation, 0);
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION014_UGCDownloadToLocation(_this->linux_side, hContent, pchLocation ? lin_pchLocation : NULL, unPriority);
 }
@@ -715,9 +715,9 @@ DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERS
 SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_PublishWorkshopFile(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013 *_this, const char * pchFile, const char * pchPreviewFile, AppId_t nConsumerAppId, const char * pchTitle, const char * pchDescription, ERemoteStoragePublishedFileVisibility eVisibility, SteamParamStringArray_t * pTags, EWorkshopFileType eWorkshopFileType)
 {
     char lin_pchFile[PATH_MAX];
-    steamclient_dos_path_to_unix_path(pchFile, lin_pchFile);
+    steamclient_dos_path_to_unix_path(pchFile, lin_pchFile, 0);
     char lin_pchPreviewFile[PATH_MAX];
-    steamclient_dos_path_to_unix_path(pchPreviewFile, lin_pchPreviewFile);
+    steamclient_dos_path_to_unix_path(pchPreviewFile, lin_pchPreviewFile, 0);
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_PublishWorkshopFile(_this->linux_side, pchFile ? lin_pchFile : NULL, pchPreviewFile ? lin_pchPreviewFile : NULL, nConsumerAppId, pchTitle, pchDescription, eVisibility, pTags, eWorkshopFileType);
 }
@@ -733,7 +733,7 @@ DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERS
 bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_UpdatePublishedFileFile(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013 *_this, PublishedFileUpdateHandle_t updateHandle, const char * pchFile)
 {
     char lin_pchFile[PATH_MAX];
-    steamclient_dos_path_to_unix_path(pchFile, lin_pchFile);
+    steamclient_dos_path_to_unix_path(pchFile, lin_pchFile, 0);
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_UpdatePublishedFileFile(_this->linux_side, updateHandle, pchFile ? lin_pchFile : NULL);
 }
@@ -742,7 +742,7 @@ DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERS
 bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_UpdatePublishedFilePreviewFile(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013 *_this, PublishedFileUpdateHandle_t updateHandle, const char * pchPreviewFile)
 {
     char lin_pchPreviewFile[PATH_MAX];
-    steamclient_dos_path_to_unix_path(pchPreviewFile, lin_pchPreviewFile);
+    steamclient_dos_path_to_unix_path(pchPreviewFile, lin_pchPreviewFile, 0);
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_UpdatePublishedFilePreviewFile(_this->linux_side, updateHandle, pchPreviewFile ? lin_pchPreviewFile : NULL);
 }
@@ -863,7 +863,7 @@ DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERS
 SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_PublishVideo(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013 *_this, EWorkshopVideoProvider eVideoProvider, const char * pchVideoAccount, const char * pchVideoIdentifier, const char * pchPreviewFile, AppId_t nConsumerAppId, const char * pchTitle, const char * pchDescription, ERemoteStoragePublishedFileVisibility eVisibility, SteamParamStringArray_t * pTags)
 {
     char lin_pchPreviewFile[PATH_MAX];
-    steamclient_dos_path_to_unix_path(pchPreviewFile, lin_pchPreviewFile);
+    steamclient_dos_path_to_unix_path(pchPreviewFile, lin_pchPreviewFile, 0);
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_PublishVideo(_this->linux_side, eVideoProvider, pchVideoAccount, pchVideoIdentifier, pchPreviewFile ? lin_pchPreviewFile : NULL, nConsumerAppId, pchTitle, pchDescription, eVisibility, pTags);
 }
@@ -893,7 +893,7 @@ DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERS
 SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_UGCDownloadToLocation(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013 *_this, UGCHandle_t hContent, const char * pchLocation, uint32 unPriority)
 {
     char lin_pchLocation[PATH_MAX];
-    steamclient_dos_path_to_unix_path(pchLocation, lin_pchLocation);
+    steamclient_dos_path_to_unix_path(pchLocation, lin_pchLocation, 0);
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION013_UGCDownloadToLocation(_this->linux_side, hContent, pchLocation ? lin_pchLocation : NULL, unPriority);
 }
@@ -1173,9 +1173,9 @@ DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERS
 SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_PublishWorkshopFile(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012 *_this, const char * pchFile, const char * pchPreviewFile, AppId_t nConsumerAppId, const char * pchTitle, const char * pchDescription, ERemoteStoragePublishedFileVisibility eVisibility, SteamParamStringArray_t * pTags, EWorkshopFileType eWorkshopFileType)
 {
     char lin_pchFile[PATH_MAX];
-    steamclient_dos_path_to_unix_path(pchFile, lin_pchFile);
+    steamclient_dos_path_to_unix_path(pchFile, lin_pchFile, 0);
     char lin_pchPreviewFile[PATH_MAX];
-    steamclient_dos_path_to_unix_path(pchPreviewFile, lin_pchPreviewFile);
+    steamclient_dos_path_to_unix_path(pchPreviewFile, lin_pchPreviewFile, 0);
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_PublishWorkshopFile(_this->linux_side, pchFile ? lin_pchFile : NULL, pchPreviewFile ? lin_pchPreviewFile : NULL, nConsumerAppId, pchTitle, pchDescription, eVisibility, pTags, eWorkshopFileType);
 }
@@ -1191,7 +1191,7 @@ DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERS
 bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_UpdatePublishedFileFile(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012 *_this, PublishedFileUpdateHandle_t updateHandle, const char * pchFile)
 {
     char lin_pchFile[PATH_MAX];
-    steamclient_dos_path_to_unix_path(pchFile, lin_pchFile);
+    steamclient_dos_path_to_unix_path(pchFile, lin_pchFile, 0);
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_UpdatePublishedFileFile(_this->linux_side, updateHandle, pchFile ? lin_pchFile : NULL);
 }
@@ -1200,7 +1200,7 @@ DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERS
 bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_UpdatePublishedFilePreviewFile(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012 *_this, PublishedFileUpdateHandle_t updateHandle, const char * pchPreviewFile)
 {
     char lin_pchPreviewFile[PATH_MAX];
-    steamclient_dos_path_to_unix_path(pchPreviewFile, lin_pchPreviewFile);
+    steamclient_dos_path_to_unix_path(pchPreviewFile, lin_pchPreviewFile, 0);
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_UpdatePublishedFilePreviewFile(_this->linux_side, updateHandle, pchPreviewFile ? lin_pchPreviewFile : NULL);
 }
@@ -1321,7 +1321,7 @@ DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERS
 SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_PublishVideo(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012 *_this, EWorkshopVideoProvider eVideoProvider, const char * pchVideoAccount, const char * pchVideoIdentifier, const char * pchPreviewFile, AppId_t nConsumerAppId, const char * pchTitle, const char * pchDescription, ERemoteStoragePublishedFileVisibility eVisibility, SteamParamStringArray_t * pTags)
 {
     char lin_pchPreviewFile[PATH_MAX];
-    steamclient_dos_path_to_unix_path(pchPreviewFile, lin_pchPreviewFile);
+    steamclient_dos_path_to_unix_path(pchPreviewFile, lin_pchPreviewFile, 0);
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_PublishVideo(_this->linux_side, eVideoProvider, pchVideoAccount, pchVideoIdentifier, pchPreviewFile ? lin_pchPreviewFile : NULL, nConsumerAppId, pchTitle, pchDescription, eVisibility, pTags);
 }
@@ -1351,7 +1351,7 @@ DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERS
 SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_UGCDownloadToLocation(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012 *_this, UGCHandle_t hContent, const char * pchLocation, uint32 unPriority)
 {
     char lin_pchLocation[PATH_MAX];
-    steamclient_dos_path_to_unix_path(pchLocation, lin_pchLocation);
+    steamclient_dos_path_to_unix_path(pchLocation, lin_pchLocation, 0);
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION012_UGCDownloadToLocation(_this->linux_side, hContent, pchLocation ? lin_pchLocation : NULL, unPriority);
 }
@@ -1628,9 +1628,9 @@ DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERS
 SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_PublishWorkshopFile(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011 *_this, const char * pchFile, const char * pchPreviewFile, AppId_t nConsumerAppId, const char * pchTitle, const char * pchDescription, ERemoteStoragePublishedFileVisibility eVisibility, SteamParamStringArray_t * pTags, EWorkshopFileType eWorkshopFileType)
 {
     char lin_pchFile[PATH_MAX];
-    steamclient_dos_path_to_unix_path(pchFile, lin_pchFile);
+    steamclient_dos_path_to_unix_path(pchFile, lin_pchFile, 0);
     char lin_pchPreviewFile[PATH_MAX];
-    steamclient_dos_path_to_unix_path(pchPreviewFile, lin_pchPreviewFile);
+    steamclient_dos_path_to_unix_path(pchPreviewFile, lin_pchPreviewFile, 0);
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_PublishWorkshopFile(_this->linux_side, pchFile ? lin_pchFile : NULL, pchPreviewFile ? lin_pchPreviewFile : NULL, nConsumerAppId, pchTitle, pchDescription, eVisibility, pTags, eWorkshopFileType);
 }
@@ -1646,7 +1646,7 @@ DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERS
 bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_UpdatePublishedFileFile(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011 *_this, PublishedFileUpdateHandle_t updateHandle, const char * pchFile)
 {
     char lin_pchFile[PATH_MAX];
-    steamclient_dos_path_to_unix_path(pchFile, lin_pchFile);
+    steamclient_dos_path_to_unix_path(pchFile, lin_pchFile, 0);
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_UpdatePublishedFileFile(_this->linux_side, updateHandle, pchFile ? lin_pchFile : NULL);
 }
@@ -1655,7 +1655,7 @@ DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERS
 bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_UpdatePublishedFilePreviewFile(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011 *_this, PublishedFileUpdateHandle_t updateHandle, const char * pchPreviewFile)
 {
     char lin_pchPreviewFile[PATH_MAX];
-    steamclient_dos_path_to_unix_path(pchPreviewFile, lin_pchPreviewFile);
+    steamclient_dos_path_to_unix_path(pchPreviewFile, lin_pchPreviewFile, 0);
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_UpdatePublishedFilePreviewFile(_this->linux_side, updateHandle, pchPreviewFile ? lin_pchPreviewFile : NULL);
 }
@@ -1776,7 +1776,7 @@ DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERS
 SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_PublishVideo(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011 *_this, EWorkshopVideoProvider eVideoProvider, const char * pchVideoAccount, const char * pchVideoIdentifier, const char * pchPreviewFile, AppId_t nConsumerAppId, const char * pchTitle, const char * pchDescription, ERemoteStoragePublishedFileVisibility eVisibility, SteamParamStringArray_t * pTags)
 {
     char lin_pchPreviewFile[PATH_MAX];
-    steamclient_dos_path_to_unix_path(pchPreviewFile, lin_pchPreviewFile);
+    steamclient_dos_path_to_unix_path(pchPreviewFile, lin_pchPreviewFile, 0);
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_PublishVideo(_this->linux_side, eVideoProvider, pchVideoAccount, pchVideoIdentifier, pchPreviewFile ? lin_pchPreviewFile : NULL, nConsumerAppId, pchTitle, pchDescription, eVisibility, pTags);
 }
@@ -1806,7 +1806,7 @@ DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERS
 SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_UGCDownloadToLocation(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011 *_this, UGCHandle_t hContent, const char * pchLocation, uint32 unPriority)
 {
     char lin_pchLocation[PATH_MAX];
-    steamclient_dos_path_to_unix_path(pchLocation, lin_pchLocation);
+    steamclient_dos_path_to_unix_path(pchLocation, lin_pchLocation, 0);
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION011_UGCDownloadToLocation(_this->linux_side, hContent, pchLocation ? lin_pchLocation : NULL, unPriority);
 }
@@ -2083,9 +2083,9 @@ DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERS
 SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_PublishWorkshopFile(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010 *_this, const char * pchFile, const char * pchPreviewFile, AppId_t nConsumerAppId, const char * pchTitle, const char * pchDescription, ERemoteStoragePublishedFileVisibility eVisibility, SteamParamStringArray_t * pTags, EWorkshopFileType eWorkshopFileType)
 {
     char lin_pchFile[PATH_MAX];
-    steamclient_dos_path_to_unix_path(pchFile, lin_pchFile);
+    steamclient_dos_path_to_unix_path(pchFile, lin_pchFile, 0);
     char lin_pchPreviewFile[PATH_MAX];
-    steamclient_dos_path_to_unix_path(pchPreviewFile, lin_pchPreviewFile);
+    steamclient_dos_path_to_unix_path(pchPreviewFile, lin_pchPreviewFile, 0);
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_PublishWorkshopFile(_this->linux_side, pchFile ? lin_pchFile : NULL, pchPreviewFile ? lin_pchPreviewFile : NULL, nConsumerAppId, pchTitle, pchDescription, eVisibility, pTags, eWorkshopFileType);
 }
@@ -2101,7 +2101,7 @@ DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERS
 bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_UpdatePublishedFileFile(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010 *_this, PublishedFileUpdateHandle_t updateHandle, const char * pchFile)
 {
     char lin_pchFile[PATH_MAX];
-    steamclient_dos_path_to_unix_path(pchFile, lin_pchFile);
+    steamclient_dos_path_to_unix_path(pchFile, lin_pchFile, 0);
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_UpdatePublishedFileFile(_this->linux_side, updateHandle, pchFile ? lin_pchFile : NULL);
 }
@@ -2110,7 +2110,7 @@ DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERS
 bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_UpdatePublishedFilePreviewFile(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010 *_this, PublishedFileUpdateHandle_t updateHandle, const char * pchPreviewFile)
 {
     char lin_pchPreviewFile[PATH_MAX];
-    steamclient_dos_path_to_unix_path(pchPreviewFile, lin_pchPreviewFile);
+    steamclient_dos_path_to_unix_path(pchPreviewFile, lin_pchPreviewFile, 0);
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_UpdatePublishedFilePreviewFile(_this->linux_side, updateHandle, pchPreviewFile ? lin_pchPreviewFile : NULL);
 }
@@ -2231,7 +2231,7 @@ DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERS
 SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_PublishVideo(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010 *_this, EWorkshopVideoProvider eVideoProvider, const char * pchVideoAccount, const char * pchVideoIdentifier, const char * pchPreviewFile, AppId_t nConsumerAppId, const char * pchTitle, const char * pchDescription, ERemoteStoragePublishedFileVisibility eVisibility, SteamParamStringArray_t * pTags)
 {
     char lin_pchPreviewFile[PATH_MAX];
-    steamclient_dos_path_to_unix_path(pchPreviewFile, lin_pchPreviewFile);
+    steamclient_dos_path_to_unix_path(pchPreviewFile, lin_pchPreviewFile, 0);
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_PublishVideo(_this->linux_side, eVideoProvider, pchVideoAccount, pchVideoIdentifier, pchPreviewFile ? lin_pchPreviewFile : NULL, nConsumerAppId, pchTitle, pchDescription, eVisibility, pTags);
 }
@@ -2261,7 +2261,7 @@ DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERS
 SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_UGCDownloadToLocation(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010 *_this, UGCHandle_t hContent, const char * pchLocation, uint32 unPriority)
 {
     char lin_pchLocation[PATH_MAX];
-    steamclient_dos_path_to_unix_path(pchLocation, lin_pchLocation);
+    steamclient_dos_path_to_unix_path(pchLocation, lin_pchLocation, 0);
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION010_UGCDownloadToLocation(_this->linux_side, hContent, pchLocation ? lin_pchLocation : NULL, unPriority);
 }
@@ -2538,9 +2538,9 @@ DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERS
 SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_PublishWorkshopFile(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009 *_this, const char * pchFile, const char * pchPreviewFile, AppId_t nConsumerAppId, const char * pchTitle, const char * pchDescription, ERemoteStoragePublishedFileVisibility eVisibility, SteamParamStringArray_t * pTags, EWorkshopFileType eWorkshopFileType)
 {
     char lin_pchFile[PATH_MAX];
-    steamclient_dos_path_to_unix_path(pchFile, lin_pchFile);
+    steamclient_dos_path_to_unix_path(pchFile, lin_pchFile, 0);
     char lin_pchPreviewFile[PATH_MAX];
-    steamclient_dos_path_to_unix_path(pchPreviewFile, lin_pchPreviewFile);
+    steamclient_dos_path_to_unix_path(pchPreviewFile, lin_pchPreviewFile, 0);
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_PublishWorkshopFile(_this->linux_side, pchFile ? lin_pchFile : NULL, pchPreviewFile ? lin_pchPreviewFile : NULL, nConsumerAppId, pchTitle, pchDescription, eVisibility, pTags, eWorkshopFileType);
 }
@@ -2556,7 +2556,7 @@ DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERS
 bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_UpdatePublishedFileFile(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009 *_this, PublishedFileUpdateHandle_t updateHandle, const char * pchFile)
 {
     char lin_pchFile[PATH_MAX];
-    steamclient_dos_path_to_unix_path(pchFile, lin_pchFile);
+    steamclient_dos_path_to_unix_path(pchFile, lin_pchFile, 0);
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_UpdatePublishedFileFile(_this->linux_side, updateHandle, pchFile ? lin_pchFile : NULL);
 }
@@ -2565,7 +2565,7 @@ DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERS
 bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_UpdatePublishedFilePreviewFile(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009 *_this, PublishedFileUpdateHandle_t updateHandle, const char * pchPreviewFile)
 {
     char lin_pchPreviewFile[PATH_MAX];
-    steamclient_dos_path_to_unix_path(pchPreviewFile, lin_pchPreviewFile);
+    steamclient_dos_path_to_unix_path(pchPreviewFile, lin_pchPreviewFile, 0);
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_UpdatePublishedFilePreviewFile(_this->linux_side, updateHandle, pchPreviewFile ? lin_pchPreviewFile : NULL);
 }
@@ -2686,7 +2686,7 @@ DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERS
 SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_PublishVideo(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009 *_this, EWorkshopVideoProvider eVideoProvider, const char * pchVideoAccount, const char * pchVideoIdentifier, const char * pchPreviewFile, AppId_t nConsumerAppId, const char * pchTitle, const char * pchDescription, ERemoteStoragePublishedFileVisibility eVisibility, SteamParamStringArray_t * pTags)
 {
     char lin_pchPreviewFile[PATH_MAX];
-    steamclient_dos_path_to_unix_path(pchPreviewFile, lin_pchPreviewFile);
+    steamclient_dos_path_to_unix_path(pchPreviewFile, lin_pchPreviewFile, 0);
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION009_PublishVideo(_this->linux_side, eVideoProvider, pchVideoAccount, pchVideoIdentifier, pchPreviewFile ? lin_pchPreviewFile : NULL, nConsumerAppId, pchTitle, pchDescription, eVisibility, pTags);
 }
@@ -2983,9 +2983,9 @@ DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERS
 SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_PublishWorkshopFile(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008 *_this, const char * pchFile, const char * pchPreviewFile, AppId_t nConsumerAppId, const char * pchTitle, const char * pchDescription, ERemoteStoragePublishedFileVisibility eVisibility, SteamParamStringArray_t * pTags, EWorkshopFileType eWorkshopFileType)
 {
     char lin_pchFile[PATH_MAX];
-    steamclient_dos_path_to_unix_path(pchFile, lin_pchFile);
+    steamclient_dos_path_to_unix_path(pchFile, lin_pchFile, 0);
     char lin_pchPreviewFile[PATH_MAX];
-    steamclient_dos_path_to_unix_path(pchPreviewFile, lin_pchPreviewFile);
+    steamclient_dos_path_to_unix_path(pchPreviewFile, lin_pchPreviewFile, 0);
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_PublishWorkshopFile(_this->linux_side, pchFile ? lin_pchFile : NULL, pchPreviewFile ? lin_pchPreviewFile : NULL, nConsumerAppId, pchTitle, pchDescription, eVisibility, pTags, eWorkshopFileType);
 }
@@ -3001,7 +3001,7 @@ DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERS
 bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_UpdatePublishedFileFile(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008 *_this, PublishedFileUpdateHandle_t updateHandle, const char * pchFile)
 {
     char lin_pchFile[PATH_MAX];
-    steamclient_dos_path_to_unix_path(pchFile, lin_pchFile);
+    steamclient_dos_path_to_unix_path(pchFile, lin_pchFile, 0);
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_UpdatePublishedFileFile(_this->linux_side, updateHandle, pchFile ? lin_pchFile : NULL);
 }
@@ -3010,7 +3010,7 @@ DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERS
 bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_UpdatePublishedFilePreviewFile(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008 *_this, PublishedFileUpdateHandle_t updateHandle, const char * pchPreviewFile)
 {
     char lin_pchPreviewFile[PATH_MAX];
-    steamclient_dos_path_to_unix_path(pchPreviewFile, lin_pchPreviewFile);
+    steamclient_dos_path_to_unix_path(pchPreviewFile, lin_pchPreviewFile, 0);
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_UpdatePublishedFilePreviewFile(_this->linux_side, updateHandle, pchPreviewFile ? lin_pchPreviewFile : NULL);
 }
@@ -3131,7 +3131,7 @@ DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERS
 SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_PublishVideo(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008 *_this, EWorkshopVideoProvider eVideoProvider, const char * pchVideoAccount, const char * pchVideoIdentifier, const char * pchPreviewFile, AppId_t nConsumerAppId, const char * pchTitle, const char * pchDescription, ERemoteStoragePublishedFileVisibility eVisibility, SteamParamStringArray_t * pTags)
 {
     char lin_pchPreviewFile[PATH_MAX];
-    steamclient_dos_path_to_unix_path(pchPreviewFile, lin_pchPreviewFile);
+    steamclient_dos_path_to_unix_path(pchPreviewFile, lin_pchPreviewFile, 0);
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION008_PublishVideo(_this->linux_side, eVideoProvider, pchVideoAccount, pchVideoIdentifier, pchPreviewFile ? lin_pchPreviewFile : NULL, nConsumerAppId, pchTitle, pchDescription, eVisibility, pTags);
 }
@@ -3400,9 +3400,9 @@ DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERS
 SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_PublishWorkshopFile(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007 *_this, const char * pchFile, const char * pchPreviewFile, AppId_t nConsumerAppId, const char * pchTitle, const char * pchDescription, ERemoteStoragePublishedFileVisibility eVisibility, SteamParamStringArray_t * pTags, EWorkshopFileType eWorkshopFileType)
 {
     char lin_pchFile[PATH_MAX];
-    steamclient_dos_path_to_unix_path(pchFile, lin_pchFile);
+    steamclient_dos_path_to_unix_path(pchFile, lin_pchFile, 0);
     char lin_pchPreviewFile[PATH_MAX];
-    steamclient_dos_path_to_unix_path(pchPreviewFile, lin_pchPreviewFile);
+    steamclient_dos_path_to_unix_path(pchPreviewFile, lin_pchPreviewFile, 0);
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_PublishWorkshopFile(_this->linux_side, pchFile ? lin_pchFile : NULL, pchPreviewFile ? lin_pchPreviewFile : NULL, nConsumerAppId, pchTitle, pchDescription, eVisibility, pTags, eWorkshopFileType);
 }
@@ -3418,7 +3418,7 @@ DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERS
 bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_UpdatePublishedFileFile(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007 *_this, PublishedFileUpdateHandle_t updateHandle, const char * pchFile)
 {
     char lin_pchFile[PATH_MAX];
-    steamclient_dos_path_to_unix_path(pchFile, lin_pchFile);
+    steamclient_dos_path_to_unix_path(pchFile, lin_pchFile, 0);
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_UpdatePublishedFileFile(_this->linux_side, updateHandle, pchFile ? lin_pchFile : NULL);
 }
@@ -3427,7 +3427,7 @@ DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERS
 bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_UpdatePublishedFilePreviewFile(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007 *_this, PublishedFileUpdateHandle_t updateHandle, const char * pchPreviewFile)
 {
     char lin_pchPreviewFile[PATH_MAX];
-    steamclient_dos_path_to_unix_path(pchPreviewFile, lin_pchPreviewFile);
+    steamclient_dos_path_to_unix_path(pchPreviewFile, lin_pchPreviewFile, 0);
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_UpdatePublishedFilePreviewFile(_this->linux_side, updateHandle, pchPreviewFile ? lin_pchPreviewFile : NULL);
 }
@@ -3548,7 +3548,7 @@ DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERS
 SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_PublishVideo(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007 *_this, EWorkshopVideoProvider eVideoProvider, const char * pchVideoAccount, const char * pchVideoIdentifier, const char * pchPreviewFile, AppId_t nConsumerAppId, const char * pchTitle, const char * pchDescription, ERemoteStoragePublishedFileVisibility eVisibility, SteamParamStringArray_t * pTags)
 {
     char lin_pchPreviewFile[PATH_MAX];
-    steamclient_dos_path_to_unix_path(pchPreviewFile, lin_pchPreviewFile);
+    steamclient_dos_path_to_unix_path(pchPreviewFile, lin_pchPreviewFile, 0);
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION007_PublishVideo(_this->linux_side, eVideoProvider, pchVideoAccount, pchVideoIdentifier, pchPreviewFile ? lin_pchPreviewFile : NULL, nConsumerAppId, pchTitle, pchDescription, eVisibility, pTags);
 }
@@ -3813,9 +3813,9 @@ DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERS
 SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_PublishWorkshopFile(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006 *_this, const char * pchFile, const char * pchPreviewFile, AppId_t nConsumerAppId, const char * pchTitle, const char * pchDescription, ERemoteStoragePublishedFileVisibility eVisibility, SteamParamStringArray_t * pTags, EWorkshopFileType eWorkshopFileType)
 {
     char lin_pchFile[PATH_MAX];
-    steamclient_dos_path_to_unix_path(pchFile, lin_pchFile);
+    steamclient_dos_path_to_unix_path(pchFile, lin_pchFile, 0);
     char lin_pchPreviewFile[PATH_MAX];
-    steamclient_dos_path_to_unix_path(pchPreviewFile, lin_pchPreviewFile);
+    steamclient_dos_path_to_unix_path(pchPreviewFile, lin_pchPreviewFile, 0);
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_PublishWorkshopFile(_this->linux_side, pchFile ? lin_pchFile : NULL, pchPreviewFile ? lin_pchPreviewFile : NULL, nConsumerAppId, pchTitle, pchDescription, eVisibility, pTags, eWorkshopFileType);
 }
@@ -3831,7 +3831,7 @@ DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERS
 bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_UpdatePublishedFileFile(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006 *_this, PublishedFileUpdateHandle_t updateHandle, const char * pchFile)
 {
     char lin_pchFile[PATH_MAX];
-    steamclient_dos_path_to_unix_path(pchFile, lin_pchFile);
+    steamclient_dos_path_to_unix_path(pchFile, lin_pchFile, 0);
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_UpdatePublishedFileFile(_this->linux_side, updateHandle, pchFile ? lin_pchFile : NULL);
 }
@@ -3840,7 +3840,7 @@ DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERS
 bool __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_UpdatePublishedFilePreviewFile(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006 *_this, PublishedFileUpdateHandle_t updateHandle, const char * pchPreviewFile)
 {
     char lin_pchPreviewFile[PATH_MAX];
-    steamclient_dos_path_to_unix_path(pchPreviewFile, lin_pchPreviewFile);
+    steamclient_dos_path_to_unix_path(pchPreviewFile, lin_pchPreviewFile, 0);
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_UpdatePublishedFilePreviewFile(_this->linux_side, updateHandle, pchPreviewFile ? lin_pchPreviewFile : NULL);
 }
@@ -3961,7 +3961,7 @@ DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERS
 SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_PublishVideo(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006 *_this, const char * pchVideoURL, const char * pchPreviewFile, AppId_t nConsumerAppId, const char * pchTitle, const char * pchDescription, ERemoteStoragePublishedFileVisibility eVisibility, SteamParamStringArray_t * pTags)
 {
     char lin_pchPreviewFile[PATH_MAX];
-    steamclient_dos_path_to_unix_path(pchPreviewFile, lin_pchPreviewFile);
+    steamclient_dos_path_to_unix_path(pchPreviewFile, lin_pchPreviewFile, 0);
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION006_PublishVideo(_this->linux_side, pchVideoURL, pchPreviewFile ? lin_pchPreviewFile : NULL, nConsumerAppId, pchTitle, pchDescription, eVisibility, pTags);
 }
@@ -4226,9 +4226,9 @@ DEFINE_THISCALL_WRAPPER(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERS
 SteamAPICall_t __thiscall winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_PublishWorkshopFile(winISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005 *_this, const char * pchFile, const char * pchPreviewFile, AppId_t nConsumerAppId, const char * pchTitle, const char * pchDescription, SteamParamStringArray_t * pTags)
 {
     char lin_pchFile[PATH_MAX];
-    steamclient_dos_path_to_unix_path(pchFile, lin_pchFile);
+    steamclient_dos_path_to_unix_path(pchFile, lin_pchFile, 0);
     char lin_pchPreviewFile[PATH_MAX];
-    steamclient_dos_path_to_unix_path(pchPreviewFile, lin_pchPreviewFile);
+    steamclient_dos_path_to_unix_path(pchPreviewFile, lin_pchPreviewFile, 0);
     TRACE("%p\n", _this);
     return cppISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION005_PublishWorkshopFile(_this->linux_side, pchFile ? lin_pchFile : NULL, pchPreviewFile ? lin_pchPreviewFile : NULL, nConsumerAppId, pchTitle, pchDescription, pTags);
 }

@@ -64,7 +64,8 @@ typedef int
         EIOBufferMode,
         EVRSkeletalMotionRange,
         EVRSkeletalReferencePose,
-        EVRSkeletalTrackingLevel;
+        EVRSkeletalTrackingLevel,
+        EVRSummaryType;
 
 typedef uint32_t DriverId_t;
 typedef uint32_t TrackedDeviceIndex_t;
@@ -121,6 +122,7 @@ typedef struct VRBoneTransform_t VRBoneTransform_t;
 typedef struct InputOriginInfo_t InputOriginInfo_t;
 typedef struct InputSkeletalActionData_t InputSkeletalActionData_t;
 typedef struct VRSkeletalSummaryData_t VRSkeletalSummaryData_t;
+typedef struct InputBindingInfo_t InputBindingInfo_t;
 
 /* dereferenced structs */
 typedef struct HmdMatrix34_t

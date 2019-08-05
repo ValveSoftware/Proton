@@ -1,6 +1,6 @@
 #include "vrclient_private.h"
 #include "vrclient_defs.h"
-#include "openvr_v1.1.3b/ivrclientcore.h"
+#include "openvr_v1.5.17/ivrclientcore.h"
 using namespace vr;
 extern "C" {
 #include "struct_converters.h"
@@ -22,6 +22,11 @@ uint32_t cppIVRDriverManager_IVRDriverManager_001_GetDriverName(void *linux_side
 vr::DriverHandle_t cppIVRDriverManager_IVRDriverManager_001_GetDriverHandle(void *linux_side, const char * pchDriverName)
 {
     return ((IVRDriverManager*)linux_side)->GetDriverHandle((const char *)pchDriverName);
+}
+
+bool cppIVRDriverManager_IVRDriverManager_001_IsEnabled(void *linux_side, DriverId_t nDriver)
+{
+    return ((IVRDriverManager*)linux_side)->IsEnabled((vr::DriverId_t)nDriver);
 }
 
 #ifdef __cplusplus

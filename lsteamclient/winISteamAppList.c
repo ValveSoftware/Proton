@@ -49,7 +49,7 @@ int __thiscall winISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetAppInstallD
     uint32 path_result;
     TRACE("%p\n", _this);
     path_result = cppISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001_GetAppInstallDir(_this->linux_side, nAppID, pchDirectory, cchNameMax);
-    path_result = steamclient_unix_path_to_dos_path(path_result, pchDirectory, pchDirectory, cchNameMax);
+    path_result = steamclient_unix_path_to_dos_path(path_result, pchDirectory, pchDirectory, cchNameMax, 0);
     return path_result;
 }
 

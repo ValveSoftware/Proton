@@ -174,9 +174,145 @@ struct DeleteItemResult_t;
 struct winDeleteItemResult_t_16;
 extern void cb_DeleteItemResult_t_16(const struct DeleteItemResult_t *l, struct winDeleteItemResult_t_16 *w);
 
+struct HTML_NeedsPaint_t;
+#ifdef __i386__
+struct winHTML_NeedsPaint_t_48;
+extern void cb_HTML_NeedsPaint_t_48(const struct HTML_NeedsPaint_t *l, struct winHTML_NeedsPaint_t_48 *w);
+#endif
+#ifdef __x86_64__
+struct winHTML_NeedsPaint_t_56;
+extern void cb_HTML_NeedsPaint_t_56(const struct HTML_NeedsPaint_t *l, struct winHTML_NeedsPaint_t_56 *w);
+#endif
+
+struct HTML_StartRequest_t;
+#ifdef __i386__
+struct winHTML_StartRequest_t_20;
+extern void cb_HTML_StartRequest_t_20(const struct HTML_StartRequest_t *l, struct winHTML_StartRequest_t_20 *w);
+#endif
+#ifdef __x86_64__
+struct winHTML_StartRequest_t_40;
+extern void cb_HTML_StartRequest_t_40(const struct HTML_StartRequest_t *l, struct winHTML_StartRequest_t_40 *w);
+#endif
+
+struct HTML_URLChanged_t;
+#ifdef __i386__
+struct winHTML_URLChanged_t_24;
+extern void cb_HTML_URLChanged_t_24(const struct HTML_URLChanged_t *l, struct winHTML_URLChanged_t_24 *w);
+#endif
+#ifdef __x86_64__
+struct winHTML_URLChanged_t_48;
+extern void cb_HTML_URLChanged_t_48(const struct HTML_URLChanged_t *l, struct winHTML_URLChanged_t_48 *w);
+#endif
+
+struct HTML_FinishedRequest_t;
+#ifdef __i386__
+struct winHTML_FinishedRequest_t_12;
+extern void cb_HTML_FinishedRequest_t_12(const struct HTML_FinishedRequest_t *l, struct winHTML_FinishedRequest_t_12 *w);
+#endif
+#ifdef __x86_64__
+struct winHTML_FinishedRequest_t_24;
+extern void cb_HTML_FinishedRequest_t_24(const struct HTML_FinishedRequest_t *l, struct winHTML_FinishedRequest_t_24 *w);
+#endif
+
+struct HTML_OpenLinkInNewTab_t;
+#ifdef __i386__
+struct winHTML_OpenLinkInNewTab_t_8;
+extern void cb_HTML_OpenLinkInNewTab_t_8(const struct HTML_OpenLinkInNewTab_t *l, struct winHTML_OpenLinkInNewTab_t_8 *w);
+#endif
+#ifdef __x86_64__
+struct winHTML_OpenLinkInNewTab_t_16;
+extern void cb_HTML_OpenLinkInNewTab_t_16(const struct HTML_OpenLinkInNewTab_t *l, struct winHTML_OpenLinkInNewTab_t_16 *w);
+#endif
+
+struct HTML_ChangedTitle_t;
+#ifdef __i386__
+struct winHTML_ChangedTitle_t_8;
+extern void cb_HTML_ChangedTitle_t_8(const struct HTML_ChangedTitle_t *l, struct winHTML_ChangedTitle_t_8 *w);
+#endif
+#ifdef __x86_64__
+struct winHTML_ChangedTitle_t_16;
+extern void cb_HTML_ChangedTitle_t_16(const struct HTML_ChangedTitle_t *l, struct winHTML_ChangedTitle_t_16 *w);
+#endif
+
+struct HTML_LinkAtPosition_t;
+#ifdef __i386__
+struct winHTML_LinkAtPosition_t_20;
+extern void cb_HTML_LinkAtPosition_t_20(const struct HTML_LinkAtPosition_t *l, struct winHTML_LinkAtPosition_t_20 *w);
+#endif
+#ifdef __x86_64__
+struct winHTML_LinkAtPosition_t_32;
+extern void cb_HTML_LinkAtPosition_t_32(const struct HTML_LinkAtPosition_t *l, struct winHTML_LinkAtPosition_t_32 *w);
+#endif
+
+struct HTML_JSAlert_t;
+#ifdef __i386__
+struct winHTML_JSAlert_t_8;
+extern void cb_HTML_JSAlert_t_8(const struct HTML_JSAlert_t *l, struct winHTML_JSAlert_t_8 *w);
+#endif
+#ifdef __x86_64__
+struct winHTML_JSAlert_t_16;
+extern void cb_HTML_JSAlert_t_16(const struct HTML_JSAlert_t *l, struct winHTML_JSAlert_t_16 *w);
+#endif
+
+struct HTML_JSConfirm_t;
+#ifdef __i386__
+struct winHTML_JSConfirm_t_8;
+extern void cb_HTML_JSConfirm_t_8(const struct HTML_JSConfirm_t *l, struct winHTML_JSConfirm_t_8 *w);
+#endif
+#ifdef __x86_64__
+struct winHTML_JSConfirm_t_16;
+extern void cb_HTML_JSConfirm_t_16(const struct HTML_JSConfirm_t *l, struct winHTML_JSConfirm_t_16 *w);
+#endif
+
 struct HTML_FileOpenDialog_t;
+#ifdef __i386__
 struct winHTML_FileOpenDialog_t_12;
 extern void cb_HTML_FileOpenDialog_t_12(const struct HTML_FileOpenDialog_t *l, struct winHTML_FileOpenDialog_t_12 *w);
+#endif
+#ifdef __x86_64__
+struct winHTML_FileOpenDialog_t_24;
+extern void cb_HTML_FileOpenDialog_t_24(const struct HTML_FileOpenDialog_t *l, struct winHTML_FileOpenDialog_t_24 *w);
+#endif
+
+struct HTML_NewWindow_t;
+#ifdef __i386__
+struct winHTML_NewWindow_t_28;
+extern void cb_HTML_NewWindow_t_28(const struct HTML_NewWindow_t *l, struct winHTML_NewWindow_t_28 *w);
+#endif
+#ifdef __x86_64__
+struct winHTML_NewWindow_t_40;
+extern void cb_HTML_NewWindow_t_40(const struct HTML_NewWindow_t *l, struct winHTML_NewWindow_t_40 *w);
+#endif
+
+struct HTML_StatusText_t;
+#ifdef __i386__
+struct winHTML_StatusText_t_8;
+extern void cb_HTML_StatusText_t_8(const struct HTML_StatusText_t *l, struct winHTML_StatusText_t_8 *w);
+#endif
+#ifdef __x86_64__
+struct winHTML_StatusText_t_16;
+extern void cb_HTML_StatusText_t_16(const struct HTML_StatusText_t *l, struct winHTML_StatusText_t_16 *w);
+#endif
+
+struct HTML_ShowToolTip_t;
+#ifdef __i386__
+struct winHTML_ShowToolTip_t_8;
+extern void cb_HTML_ShowToolTip_t_8(const struct HTML_ShowToolTip_t *l, struct winHTML_ShowToolTip_t_8 *w);
+#endif
+#ifdef __x86_64__
+struct winHTML_ShowToolTip_t_16;
+extern void cb_HTML_ShowToolTip_t_16(const struct HTML_ShowToolTip_t *l, struct winHTML_ShowToolTip_t_16 *w);
+#endif
+
+struct HTML_UpdateToolTip_t;
+#ifdef __i386__
+struct winHTML_UpdateToolTip_t_8;
+extern void cb_HTML_UpdateToolTip_t_8(const struct HTML_UpdateToolTip_t *l, struct winHTML_UpdateToolTip_t_8 *w);
+#endif
+#ifdef __x86_64__
+struct winHTML_UpdateToolTip_t_16;
+extern void cb_HTML_UpdateToolTip_t_16(const struct HTML_UpdateToolTip_t *l, struct winHTML_UpdateToolTip_t_16 *w);
+#endif
 
 struct SteamInventoryStartPurchaseResult_t;
 struct winSteamInventoryStartPurchaseResult_t_24;
@@ -193,6 +329,26 @@ extern void cb_SteamNetConnectionStatusChangedCallback_t_712(const struct SteamN
 struct HTTPRequestCompleted_t;
 struct winHTTPRequestCompleted_t_24;
 extern void cb_HTTPRequestCompleted_t_24(const struct HTTPRequestCompleted_t *l, struct winHTTPRequestCompleted_t_24 *w);
+
+struct HTML_ComboNeedsPaint_t;
+#ifdef __i386__
+struct winHTML_ComboNeedsPaint_t_16;
+extern void cb_HTML_ComboNeedsPaint_t_16(const struct HTML_ComboNeedsPaint_t *l, struct winHTML_ComboNeedsPaint_t_16 *w);
+#endif
+#ifdef __x86_64__
+struct winHTML_ComboNeedsPaint_t_24;
+extern void cb_HTML_ComboNeedsPaint_t_24(const struct HTML_ComboNeedsPaint_t *l, struct winHTML_ComboNeedsPaint_t_24 *w);
+#endif
+
+struct HTML_NewWindow_t;
+#ifdef __i386__
+struct winHTML_NewWindow_t_24;
+extern void cb_HTML_NewWindow_t_24(const struct HTML_NewWindow_t *l, struct winHTML_NewWindow_t_24 *w);
+#endif
+#ifdef __x86_64__
+struct winHTML_NewWindow_t_32;
+extern void cb_HTML_NewWindow_t_32(const struct HTML_NewWindow_t *l, struct winHTML_NewWindow_t_32 *w);
+#endif
 
 struct SteamUGCRequestUGCDetailsResult_t;
 struct winSteamUGCRequestUGCDetailsResult_t_9776;

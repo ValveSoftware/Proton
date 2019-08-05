@@ -57,8 +57,10 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_Remo
 DEFINE_THISCALL_WRAPPER(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_LoadURL, 16)
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_LoadURL(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005 *_this, HHTMLBrowser unBrowserHandle, const char * pchURL, const char * pchPostData)
 {
+    char lin_pchURL[PATH_MAX];
+    steamclient_dos_path_to_unix_path(pchURL, lin_pchURL, 1);
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_LoadURL(_this->linux_side, unBrowserHandle, pchURL, pchPostData);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_LoadURL(_this->linux_side, unBrowserHandle, pchURL ? lin_pchURL : NULL, pchPostData);
 }
 
 DEFINE_THISCALL_WRAPPER(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005_SetSize, 16)
@@ -387,8 +389,10 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_Remo
 DEFINE_THISCALL_WRAPPER(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_LoadURL, 16)
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_LoadURL(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004 *_this, HHTMLBrowser unBrowserHandle, const char * pchURL, const char * pchPostData)
 {
+    char lin_pchURL[PATH_MAX];
+    steamclient_dos_path_to_unix_path(pchURL, lin_pchURL, 1);
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_LoadURL(_this->linux_side, unBrowserHandle, pchURL, pchPostData);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_LoadURL(_this->linux_side, unBrowserHandle, pchURL ? lin_pchURL : NULL, pchPostData);
 }
 
 DEFINE_THISCALL_WRAPPER(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_004_SetSize, 16)
@@ -709,8 +713,10 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_Remo
 DEFINE_THISCALL_WRAPPER(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_LoadURL, 16)
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_LoadURL(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003 *_this, HHTMLBrowser unBrowserHandle, const char * pchURL, const char * pchPostData)
 {
+    char lin_pchURL[PATH_MAX];
+    steamclient_dos_path_to_unix_path(pchURL, lin_pchURL, 1);
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_LoadURL(_this->linux_side, unBrowserHandle, pchURL, pchPostData);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_LoadURL(_this->linux_side, unBrowserHandle, pchURL ? lin_pchURL : NULL, pchPostData);
 }
 
 DEFINE_THISCALL_WRAPPER(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_003_SetSize, 16)
@@ -1023,8 +1029,10 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_Remo
 DEFINE_THISCALL_WRAPPER(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_LoadURL, 16)
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_LoadURL(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002 *_this, HHTMLBrowser unBrowserHandle, const char * pchURL, const char * pchPostData)
 {
+    char lin_pchURL[PATH_MAX];
+    steamclient_dos_path_to_unix_path(pchURL, lin_pchURL, 1);
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_LoadURL(_this->linux_side, unBrowserHandle, pchURL, pchPostData);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_LoadURL(_this->linux_side, unBrowserHandle, pchURL ? lin_pchURL : NULL, pchPostData);
 }
 
 DEFINE_THISCALL_WRAPPER(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_002_SetSize, 16)
@@ -1329,8 +1337,10 @@ void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_Remo
 DEFINE_THISCALL_WRAPPER(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_LoadURL, 16)
 void __thiscall winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_LoadURL(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001 *_this, HHTMLBrowser unBrowserHandle, const char * pchURL, const char * pchPostData)
 {
+    char lin_pchURL[PATH_MAX];
+    steamclient_dos_path_to_unix_path(pchURL, lin_pchURL, 1);
     TRACE("%p\n", _this);
-    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_LoadURL(_this->linux_side, unBrowserHandle, pchURL, pchPostData);
+    cppISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_LoadURL(_this->linux_side, unBrowserHandle, pchURL ? lin_pchURL : NULL, pchPostData);
 }
 
 DEFINE_THISCALL_WRAPPER(winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_001_SetSize, 16)

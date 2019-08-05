@@ -1,6 +1,6 @@
 #include "vrclient_private.h"
 #include "vrclient_defs.h"
-#include "openvr_v1.1.3b/ivrclientcore.h"
+#include "openvr_v1.3.22/ivrclientcore.h"
 using namespace vr;
 extern "C" {
 #include "struct_converters.h"
@@ -127,6 +127,11 @@ vr::EVRInputError cppIVRInput_IVRInput_005_ShowActionOrigins(void *linux_side, V
 vr::EVRInputError cppIVRInput_IVRInput_005_ShowBindingsForActionSet(void *linux_side, VRActiveActionSet_t * pSets, uint32_t unSizeOfVRSelectedActionSet_t, uint32_t unSetCount, VRInputValueHandle_t originToHighlight)
 {
     return ((IVRInput*)linux_side)->ShowBindingsForActionSet((vr::VRActiveActionSet_t *)pSets, (uint32_t)unSizeOfVRSelectedActionSet_t, (uint32_t)unSetCount, (vr::VRInputValueHandle_t)originToHighlight);
+}
+
+bool cppIVRInput_IVRInput_005_IsUsingLegacyInput(void *linux_side)
+{
+    return ((IVRInput*)linux_side)->IsUsingLegacyInput();
 }
 
 #ifdef __cplusplus

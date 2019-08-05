@@ -1,6 +1,6 @@
 #include "vrclient_private.h"
 #include "vrclient_defs.h"
-#include "openvr_v1.1.3b/ivrclientcore.h"
+#include "openvr_v1.5.17/ivrclientcore.h"
 using namespace vr;
 extern "C" {
 #include "struct_converters.h"
@@ -102,6 +102,11 @@ void cppIVRChaperoneSetup_IVRChaperoneSetup_006_ShowWorkingSetPreview(void *linu
 void cppIVRChaperoneSetup_IVRChaperoneSetup_006_HideWorkingSetPreview(void *linux_side)
 {
     ((IVRChaperoneSetup*)linux_side)->HideWorkingSetPreview();
+}
+
+void cppIVRChaperoneSetup_IVRChaperoneSetup_006_RoomSetupStarting(void *linux_side)
+{
+    ((IVRChaperoneSetup*)linux_side)->RoomSetupStarting();
 }
 
 #ifdef __cplusplus

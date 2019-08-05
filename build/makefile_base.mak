@@ -32,9 +32,6 @@ else # (Rest of the file is the else)
 #   STEAMRT32_MODE  - Same as above for 32-bit container (can be different type)
 #   STEAMRT32_IMAGE - Same as above for 32-bit container
 #   STEAMRT_PATH    - Path to built runtime which contains run.sh
-#   DXVK_CROSSCC_PREFIX - Quoted and comma-separated list of strings that
-#       should be prefixed before the cross compiler that builds DXVK, so
-#       we can execute it when it lives in a chroot, for example.
 
 ifeq ($(SRCDIR),)
 	foo := $(error SRCDIR not set, do not include makefile_base directly, run ./configure.sh to generate Makefile)
@@ -58,9 +55,12 @@ cc-option = $(shell if test -z "`echo 'void*p=1;' | \
               then echo "$(2)"; else echo "$(3)"; fi ;)
 
 # Selected container mode shell
-DOCKER_SHELL_BASE = docker run --rm --init -v $(HOME):$(HOME) -w $(CURDIR) -e HOME=$(HOME) \
-                                    -v /etc/passwd:/etc/passwd:ro -u $(shell id -u):$(shell id -g) -h $(shell hostname) \
-                                    -v /tmp:/tmp $(SELECT_DOCKER_IMAGE) /dev/init -sg -- /bin/bash
+DOCKER_SHELL_BASE = docker run --rm --init --privileged --cap-add=SYS_ADMIN --security-opt apparmor:unconfined \
+                                    -v $(HOME):$(HOME) -v /tmp:/tmp \
+                                    -v /etc/passwd:/etc/passwd:ro -v /etc/group:/etc/group:ro  -v /etc/shadow:/etc/shadow:ro \
+                                    -w $(CURDIR) -e HOME=$(HOME) -e PATH=$(PATH) -u $(shell id -u):$(shell id -g) -h $(shell hostname) \
+                                    $(DOCKER_OPTS) \
+                                    $(SELECT_DOCKER_IMAGE) /sbin/docker-init -sg -- /bin/bash
 
 # If STEAMRT64_MODE/STEAMRT32_MODE is set, set the nested SELECT_DOCKER_IMAGE to the _IMAGE variable and eval
 # DOCKER_SHELL_BASE with it to create the CONTAINER_SHELL setting.
@@ -178,7 +178,7 @@ GECKO_VER := 2.47
 GECKO32_MSI := wine_gecko-$(GECKO_VER)-x86.msi
 GECKO64_MSI := wine_gecko-$(GECKO_VER)-x86_64.msi
 
-WINEMONO_VER := 4.8.2
+WINEMONO_VER := 4.9.0
 WINEMONO_TARBALL := wine-mono-bin-$(WINEMONO_VER).tar.gz
 
 FFMPEG := $(SRCDIR)/ffmpeg
@@ -228,6 +228,10 @@ DXVK := $(SRCDIR)/dxvk
 DXVK_OBJ32 := ./obj-dxvk32
 DXVK_OBJ64 := ./obj-dxvk64
 
+D9VK := $(SRCDIR)/d9vk
+D9VK_OBJ32 := ./obj-d9vk32
+D9VK_OBJ64 := ./obj-d9vk64
+
 CMAKE := $(SRCDIR)/cmake
 CMAKE_OBJ32 := ./obj-cmake32
 CMAKE_OBJ64 := ./obj-cmake64
@@ -252,6 +256,7 @@ OBJ_DIRS := $(TOOLS_DIR32)        $(TOOLS_DIR64)        \
             $(WINE_OBJ32)         $(WINE_OBJ64)         \
             $(VRCLIENT_OBJ32)     $(VRCLIENT_OBJ64)     \
             $(DXVK_OBJ32)         $(DXVK_OBJ64)         \
+            $(D9VK_OBJ32)         $(D9VK_OBJ64)         \
             $(BISON_OBJ32)         $(BISON_OBJ64)         \
             $(CMAKE_OBJ32)        $(CMAKE_OBJ64)
 
@@ -377,7 +382,7 @@ $(DIST_FONTS): fonts
 ALL_TARGETS += dist
 GOAL_TARGETS += dist
 
-dist: $(DIST_TARGETS) ffmpeg wine vrclient lsteamclient steam dxvk | $(DST_DIR)
+dist: $(DIST_TARGETS) ffmpeg wine vrclient lsteamclient steam dxvk d9vk | $(DST_DIR)
 	echo `date '+%s'` `GIT_DIR=$(abspath $(SRCDIR)/.git) git describe --tags` > $(DIST_VERSION)
 	cp $(DIST_VERSION) $(DST_BASE)/
 	rm -rf $(abspath $(DIST_PREFIX)) && \
@@ -689,10 +694,11 @@ STEAMEXE_CONFIGURE_FILES := $(STEAMEXE_OBJ)/Makefile
 $(STEAMEXE_CONFIGURE_FILES): SHELL = $(CONTAINER_SHELL32)
 $(STEAMEXE_CONFIGURE_FILES): $(STEAMEXE_SYN) $(MAKEFILE_DEP) | $(STEAMEXE_OBJ) $(WINEMAKER)
 	cd $(dir $@) && \
-		$(WINEMAKER) --nosource-fix --nolower-include --nodlls --nomsvcrt --wine32 \
+		$(WINEMAKER) --nosource-fix --nolower-include --nodlls --wine32 \
 			-I"../$(TOOLS_DIR32)"/include/ \
 			-I"../$(TOOLS_DIR32)"/include/wine/ \
 			-I"../$(TOOLS_DIR32)"/include/wine/windows/ \
+			-I"../$(TOOLS_DIR32)"/include/wine/msvcrt/ \
 			-I"../$(SRCDIR)"/lsteamclient/steamworks_sdk_142/ \
 			-L"../$(TOOLS_DIR32)"/lib/ \
 			-L"../$(TOOLS_DIR32)"/lib/wine/ \
@@ -1051,26 +1057,22 @@ DXVK_CONFIGURE_FILES32 := $(DXVK_OBJ32)/build.ninja
 DXVK_CONFIGURE_FILES64 := $(DXVK_OBJ64)/build.ninja
 
 # 64bit-configure.  Remove coredata file if already configured (due to e.g. makefile changing)
-#   sed is used to sub in our special cross compiler
 $(DXVK_CONFIGURE_FILES64): $(MAKEFILE_DEP) $(DXVK)/build-win64.txt | $(DXVK_OBJ64)
 	if [ -e "$(abspath $(DXVK_OBJ64))"/build.ninja ]; then \
 		rm -f "$(abspath $(DXVK_OBJ64))"/meson-private/coredata.dat; \
 	fi
 	cd "$(abspath $(DXVK))" && \
-	sed -e "s|@PROTON_DXVK_CROSSCC_PREFIX@|$(subst ",\\\",$(DXVK_CROSSCC_PREFIX))|" < build-win64.txt > "$(abspath $(DXVK_OBJ64))/proton-build-win64.txt" && \
 	PATH="$(abspath $(SRCDIR))/glslang/bin/:$(PATH)" \
-		meson --prefix="$(abspath $(DXVK_OBJ64))" --cross-file "$(abspath $(DXVK_OBJ64))/proton-build-win64.txt" --strip --buildtype=release "$(abspath $(DXVK_OBJ64))"
+		meson --prefix="$(abspath $(DXVK_OBJ64))" --cross-file "$(abspath $(DXVK))/build-win64.txt" --strip --buildtype=release "$(abspath $(DXVK_OBJ64))"
 
 # 32-bit configure.  Remove coredata file if already configured (due to e.g. makefile changing)
-#   sed is used to sub in our special cross compiler
 $(DXVK_CONFIGURE_FILES32): $(MAKEFILE_DEP) $(DXVK)/build-win32.txt | $(DXVK_OBJ32)
 	if [ -e "$(abspath $(DXVK_OBJ32))"/build.ninja ]; then \
 		rm -f "$(abspath $(DXVK_OBJ32))"/meson-private/coredata.dat; \
 	fi
 	cd "$(abspath $(DXVK))" && \
-	sed -e "s|@PROTON_DXVK_CROSSCC_PREFIX@|$(subst ",\\\",$(DXVK_CROSSCC_PREFIX))|" < build-win32.txt > "$(abspath $(DXVK_OBJ32))/proton-build-win32.txt" && \
 	PATH="$(abspath $(SRCDIR))/glslang/bin/:$(PATH)" \
-		meson --prefix="$(abspath $(DXVK_OBJ32))" --cross-file "$(abspath $(DXVK_OBJ32))/proton-build-win32.txt" --strip --buildtype=release "$(abspath $(DXVK_OBJ32))"
+		meson --prefix="$(abspath $(DXVK_OBJ32))" --cross-file "$(abspath $(DXVK))/build-win32.txt" --strip --buildtype=release "$(abspath $(DXVK_OBJ32))"
 
 ## dxvk goals
 DXVK_TARGETS = dxvk dxvk_configure dxvk32 dxvk64 dxvk_configure32 dxvk_configure64
@@ -1091,7 +1093,6 @@ dxvk: dxvk32 dxvk64
 dxvk64: $(DXVK_CONFIGURE_FILES64)
 	env PATH="$(abspath $(SRCDIR))/glslang/bin/:$(PATH)" ninja -C "$(DXVK_OBJ64)" install
 	mkdir -p "$(DST_DIR)/lib64/wine/dxvk"
-	cp "$(DXVK_OBJ64)"/bin/d3d9.dll "$(DST_DIR)"/lib64/wine/dxvk
 	cp "$(DXVK_OBJ64)"/bin/dxgi.dll "$(DST_DIR)"/lib64/wine/dxvk
 	cp "$(DXVK_OBJ64)"/bin/d3d11.dll "$(DST_DIR)"/lib64/wine/dxvk
 	cp "$(DXVK_OBJ64)"/bin/d3d10.dll "$(DST_DIR)"/lib64/wine/dxvk
@@ -1103,7 +1104,6 @@ dxvk64: $(DXVK_CONFIGURE_FILES64)
 dxvk32: $(DXVK_CONFIGURE_FILES32)
 	env PATH="$(abspath $(SRCDIR))/glslang/bin/:$(PATH)" ninja -C "$(DXVK_OBJ32)" install
 	mkdir -p "$(DST_DIR)"/lib/wine/dxvk
-	cp "$(DXVK_OBJ32)"/bin/d3d9.dll "$(DST_DIR)"/lib/wine/dxvk/
 	cp "$(DXVK_OBJ32)"/bin/dxgi.dll "$(DST_DIR)"/lib/wine/dxvk/
 	cp "$(DXVK_OBJ32)"/bin/d3d11.dll "$(DST_DIR)"/lib/wine/dxvk/
 	cp "$(DXVK_OBJ32)"/bin/d3d10.dll "$(DST_DIR)"/lib/wine/dxvk/
@@ -1111,7 +1111,58 @@ dxvk32: $(DXVK_CONFIGURE_FILES32)
 	cp "$(DXVK_OBJ32)"/bin/d3d10core.dll "$(DST_DIR)"/lib/wine/dxvk/
 	if test -e $(SRCDIR)/.git; then ( cd $(SRCDIR) && git submodule status -- dxvk ) > "$(DST_DIR)"/lib/wine/dxvk/version; fi
 
+D9VK_CONFIGURE_FILES32 := $(D9VK_OBJ32)/build.ninja
+D9VK_CONFIGURE_FILES64 := $(D9VK_OBJ64)/build.ninja
+
+# 64bit-configure.  Remove coredata file if already configured (due to e.g. makefile changing)
+$(D9VK_CONFIGURE_FILES64): $(MAKEFILE_DEP) $(D9VK)/build-win64.txt | $(D9VK_OBJ64)
+	if [ -e "$(abspath $(D9VK_OBJ64))"/build.ninja ]; then \
+		rm -f "$(abspath $(D9VK_OBJ64))"/meson-private/coredata.dat; \
+	fi
+	cd "$(abspath $(D9VK))" && \
+	PATH="$(abspath $(SRCDIR))/glslang/bin/:$(PATH)" \
+		meson --prefix="$(abspath $(D9VK_OBJ64))" --cross-file "$(abspath $(D9VK))/build-win64.txt" --strip --buildtype=release -Denable_dxgi=false -Denable_d3d10=false -Denable_d3d11=false "$(abspath $(D9VK_OBJ64))"
+
+# 32-bit configure.  Remove coredata file if already configured (due to e.g. makefile changing)
+$(D9VK_CONFIGURE_FILES32): $(MAKEFILE_DEP) $(D9VK)/build-win32.txt | $(D9VK_OBJ32)
+	if [ -e "$(abspath $(D9VK_OBJ32))"/build.ninja ]; then \
+		rm -f "$(abspath $(D9VK_OBJ32))"/meson-private/coredata.dat; \
+	fi
+	cd "$(abspath $(D9VK))" && \
+	PATH="$(abspath $(SRCDIR))/glslang/bin/:$(PATH)" \
+		meson --prefix="$(abspath $(D9VK_OBJ32))" --cross-file "$(abspath $(D9VK))/build-win32.txt" --strip --buildtype=release -Denable_dxgi=false -Denable_d3d10=false -Denable_d3d11=false "$(abspath $(D9VK_OBJ32))"
+
+## d9vk goals
+D9VK_TARGETS = d9vk d9vk_configure d9vk32 d9vk64 d9vk_configure32 d9vk_configure64
+
+ALL_TARGETS += $(D9VK_TARGETS)
+GOAL_TARGETS_LIBS += d9vk
+
+.PHONY: $(D9VK_TARGETS)
+
+d9vk_configure: $(D9VK_CONFIGURE_FILES32) $(D9VK_CONFIGURE_FILES64)
+
+d9vk_configure64: $(D9VK_CONFIGURE_FILES64)
+
+d9vk_configure32: $(D9VK_CONFIGURE_FILES32)
+
+d9vk: d9vk32 d9vk64
+
+d9vk64: $(D9VK_CONFIGURE_FILES64)
+	env PATH="$(abspath $(SRCDIR))/glslang/bin/:$(PATH)" ninja -C "$(D9VK_OBJ64)" install
+	mkdir -p "$(DST_DIR)/lib64/wine/dxvk"
+	cp "$(D9VK_OBJ64)"/bin/d3d9.dll "$(DST_DIR)"/lib64/wine/dxvk
+	if test -e $(SRCDIR)/.git; then ( cd $(SRCDIR) && git submodule status -- d9vk ) > "$(DST_DIR)"/lib64/wine/dxvk/d9vk_version; fi
+
+
+d9vk32: $(D9VK_CONFIGURE_FILES32)
+	env PATH="$(abspath $(SRCDIR))/glslang/bin/:$(PATH)" ninja -C "$(D9VK_OBJ32)" install
+	mkdir -p "$(DST_DIR)"/lib/wine/dxvk
+	cp "$(D9VK_OBJ32)"/bin/d3d9.dll "$(DST_DIR)"/lib/wine/dxvk/
+	if test -e $(SRCDIR)/.git; then ( cd $(SRCDIR) && git submodule status -- d9vk ) > "$(DST_DIR)"/lib/wine/dxvk/d9vk_version; fi
+
 endif # NO_DXVK
+
 
 # TODO Tests
 #  build_vrclient64_tests

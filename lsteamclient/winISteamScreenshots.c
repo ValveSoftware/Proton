@@ -33,9 +33,9 @@ DEFINE_THISCALL_WRAPPER(winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION0
 ScreenshotHandle __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_AddScreenshotToLibrary(winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003 *_this, const char * pchFilename, const char * pchThumbnailFilename, int nWidth, int nHeight)
 {
     char lin_pchFilename[PATH_MAX];
-    steamclient_dos_path_to_unix_path(pchFilename, lin_pchFilename);
+    steamclient_dos_path_to_unix_path(pchFilename, lin_pchFilename, 0);
     char lin_pchThumbnailFilename[PATH_MAX];
-    steamclient_dos_path_to_unix_path(pchThumbnailFilename, lin_pchThumbnailFilename);
+    steamclient_dos_path_to_unix_path(pchThumbnailFilename, lin_pchThumbnailFilename, 0);
     TRACE("%p\n", _this);
     return cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_AddScreenshotToLibrary(_this->linux_side, pchFilename ? lin_pchFilename : NULL, pchThumbnailFilename ? lin_pchThumbnailFilename : NULL, nWidth, nHeight);
 }
@@ -86,9 +86,9 @@ DEFINE_THISCALL_WRAPPER(winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION0
 ScreenshotHandle __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_AddVRScreenshotToLibrary(winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003 *_this, EVRScreenshotType eType, const char * pchFilename, const char * pchVRFilename)
 {
     char lin_pchFilename[PATH_MAX];
-    steamclient_dos_path_to_unix_path(pchFilename, lin_pchFilename);
+    steamclient_dos_path_to_unix_path(pchFilename, lin_pchFilename, 0);
     char lin_pchVRFilename[PATH_MAX];
-    steamclient_dos_path_to_unix_path(pchVRFilename, lin_pchVRFilename);
+    steamclient_dos_path_to_unix_path(pchVRFilename, lin_pchVRFilename, 0);
     TRACE("%p\n", _this);
     return cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION003_AddVRScreenshotToLibrary(_this->linux_side, eType, pchFilename ? lin_pchFilename : NULL, pchVRFilename ? lin_pchVRFilename : NULL);
 }
@@ -140,9 +140,9 @@ DEFINE_THISCALL_WRAPPER(winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION0
 ScreenshotHandle __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_AddScreenshotToLibrary(winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002 *_this, const char * pchFilename, const char * pchThumbnailFilename, int nWidth, int nHeight)
 {
     char lin_pchFilename[PATH_MAX];
-    steamclient_dos_path_to_unix_path(pchFilename, lin_pchFilename);
+    steamclient_dos_path_to_unix_path(pchFilename, lin_pchFilename, 0);
     char lin_pchThumbnailFilename[PATH_MAX];
-    steamclient_dos_path_to_unix_path(pchThumbnailFilename, lin_pchThumbnailFilename);
+    steamclient_dos_path_to_unix_path(pchThumbnailFilename, lin_pchThumbnailFilename, 0);
     TRACE("%p\n", _this);
     return cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION002_AddScreenshotToLibrary(_this->linux_side, pchFilename ? lin_pchFilename : NULL, pchThumbnailFilename ? lin_pchThumbnailFilename : NULL, nWidth, nHeight);
 }
@@ -227,9 +227,9 @@ DEFINE_THISCALL_WRAPPER(winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION0
 ScreenshotHandle __thiscall winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001_AddScreenshotToLibrary(winISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001 *_this, const char * pchFilename, const char * pchThumbnailFilename, int nWidth, int nHeight)
 {
     char lin_pchFilename[PATH_MAX];
-    steamclient_dos_path_to_unix_path(pchFilename, lin_pchFilename);
+    steamclient_dos_path_to_unix_path(pchFilename, lin_pchFilename, 0);
     char lin_pchThumbnailFilename[PATH_MAX];
-    steamclient_dos_path_to_unix_path(pchThumbnailFilename, lin_pchThumbnailFilename);
+    steamclient_dos_path_to_unix_path(pchThumbnailFilename, lin_pchThumbnailFilename, 0);
     TRACE("%p\n", _this);
     return cppISteamScreenshots_STEAMSCREENSHOTS_INTERFACE_VERSION001_AddScreenshotToLibrary(_this->linux_side, pchFilename ? lin_pchFilename : NULL, pchThumbnailFilename ? lin_pchThumbnailFilename : NULL, nWidth, nHeight);
 }

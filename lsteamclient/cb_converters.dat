@@ -42,11 +42,106 @@ case 0x00100d56: win_msg->m_cubParam = 24; win_msg->m_pubParam = HeapAlloc(GetPr
 case 0x00100d57: win_msg->m_cubParam = 24; win_msg->m_pubParam = HeapAlloc(GetProcessHeap(), 0, win_msg->m_cubParam); cb_RemoveAppDependencyResult_t_24((void*)lin_msg.m_pubParam, (void*)win_msg->m_pubParam); break;
 case 0x00940d58: win_msg->m_cubParam = 152; win_msg->m_pubParam = HeapAlloc(GetProcessHeap(), 0, win_msg->m_cubParam); cb_GetAppDependenciesResult_t_152((void*)lin_msg.m_pubParam, (void*)win_msg->m_pubParam); break;
 case 0x000c0d59: win_msg->m_cubParam = 16; win_msg->m_pubParam = HeapAlloc(GetProcessHeap(), 0, win_msg->m_cubParam); cb_DeleteItemResult_t_16((void*)lin_msg.m_pubParam, (void*)win_msg->m_pubParam); break;
+#ifdef __i386__
+case 0x00301196: win_msg->m_cubParam = 48; win_msg->m_pubParam = HeapAlloc(GetProcessHeap(), 0, win_msg->m_cubParam); cb_HTML_NeedsPaint_t_48((void*)lin_msg.m_pubParam, (void*)win_msg->m_pubParam); break;
+#endif
+#ifdef __x86_64__
+case 0x00341196: win_msg->m_cubParam = 56; win_msg->m_pubParam = HeapAlloc(GetProcessHeap(), 0, win_msg->m_cubParam); cb_HTML_NeedsPaint_t_56((void*)lin_msg.m_pubParam, (void*)win_msg->m_pubParam); break;
+#endif
+#ifdef __i386__
+case 0x00141197: win_msg->m_cubParam = 20; win_msg->m_pubParam = HeapAlloc(GetProcessHeap(), 0, win_msg->m_cubParam); cb_HTML_StartRequest_t_20((void*)lin_msg.m_pubParam, (void*)win_msg->m_pubParam); break;
+#endif
+#ifdef __x86_64__
+case 0x00201197: win_msg->m_cubParam = 40; win_msg->m_pubParam = HeapAlloc(GetProcessHeap(), 0, win_msg->m_cubParam); cb_HTML_StartRequest_t_40((void*)lin_msg.m_pubParam, (void*)win_msg->m_pubParam); break;
+#endif
+#ifdef __i386__
+case 0x00181199: win_msg->m_cubParam = 24; win_msg->m_pubParam = HeapAlloc(GetProcessHeap(), 0, win_msg->m_cubParam); cb_HTML_URLChanged_t_24((void*)lin_msg.m_pubParam, (void*)win_msg->m_pubParam); break;
+#endif
+#ifdef __x86_64__
+case 0x00241199: win_msg->m_cubParam = 48; win_msg->m_pubParam = HeapAlloc(GetProcessHeap(), 0, win_msg->m_cubParam); cb_HTML_URLChanged_t_48((void*)lin_msg.m_pubParam, (void*)win_msg->m_pubParam); break;
+#endif
+#ifdef __i386__
+case 0x000c119a: win_msg->m_cubParam = 12; win_msg->m_pubParam = HeapAlloc(GetProcessHeap(), 0, win_msg->m_cubParam); cb_HTML_FinishedRequest_t_12((void*)lin_msg.m_pubParam, (void*)win_msg->m_pubParam); break;
+#endif
+#ifdef __x86_64__
+case 0x0014119a: win_msg->m_cubParam = 24; win_msg->m_pubParam = HeapAlloc(GetProcessHeap(), 0, win_msg->m_cubParam); cb_HTML_FinishedRequest_t_24((void*)lin_msg.m_pubParam, (void*)win_msg->m_pubParam); break;
+#endif
+#ifdef __i386__
+case 0x0008119b: win_msg->m_cubParam = 8; win_msg->m_pubParam = HeapAlloc(GetProcessHeap(), 0, win_msg->m_cubParam); cb_HTML_OpenLinkInNewTab_t_8((void*)lin_msg.m_pubParam, (void*)win_msg->m_pubParam); break;
+#endif
+#ifdef __x86_64__
+case 0x000c119b: win_msg->m_cubParam = 16; win_msg->m_pubParam = HeapAlloc(GetProcessHeap(), 0, win_msg->m_cubParam); cb_HTML_OpenLinkInNewTab_t_16((void*)lin_msg.m_pubParam, (void*)win_msg->m_pubParam); break;
+#endif
+#ifdef __i386__
+case 0x0008119c: win_msg->m_cubParam = 8; win_msg->m_pubParam = HeapAlloc(GetProcessHeap(), 0, win_msg->m_cubParam); cb_HTML_ChangedTitle_t_8((void*)lin_msg.m_pubParam, (void*)win_msg->m_pubParam); break;
+#endif
+#ifdef __x86_64__
+case 0x000c119c: win_msg->m_cubParam = 16; win_msg->m_pubParam = HeapAlloc(GetProcessHeap(), 0, win_msg->m_cubParam); cb_HTML_ChangedTitle_t_16((void*)lin_msg.m_pubParam, (void*)win_msg->m_pubParam); break;
+#endif
+#ifdef __i386__
+case 0x001411a1: win_msg->m_cubParam = 20; win_msg->m_pubParam = HeapAlloc(GetProcessHeap(), 0, win_msg->m_cubParam); cb_HTML_LinkAtPosition_t_20((void*)lin_msg.m_pubParam, (void*)win_msg->m_pubParam); break;
+#endif
+#ifdef __x86_64__
+case 0x001811a1: win_msg->m_cubParam = 32; win_msg->m_pubParam = HeapAlloc(GetProcessHeap(), 0, win_msg->m_cubParam); cb_HTML_LinkAtPosition_t_32((void*)lin_msg.m_pubParam, (void*)win_msg->m_pubParam); break;
+#endif
+#ifdef __i386__
+case 0x000811a2: win_msg->m_cubParam = 8; win_msg->m_pubParam = HeapAlloc(GetProcessHeap(), 0, win_msg->m_cubParam); cb_HTML_JSAlert_t_8((void*)lin_msg.m_pubParam, (void*)win_msg->m_pubParam); break;
+#endif
+#ifdef __x86_64__
+case 0x000c11a2: win_msg->m_cubParam = 16; win_msg->m_pubParam = HeapAlloc(GetProcessHeap(), 0, win_msg->m_cubParam); cb_HTML_JSAlert_t_16((void*)lin_msg.m_pubParam, (void*)win_msg->m_pubParam); break;
+#endif
+#ifdef __i386__
+case 0x000811a3: win_msg->m_cubParam = 8; win_msg->m_pubParam = HeapAlloc(GetProcessHeap(), 0, win_msg->m_cubParam); cb_HTML_JSConfirm_t_8((void*)lin_msg.m_pubParam, (void*)win_msg->m_pubParam); break;
+#endif
+#ifdef __x86_64__
+case 0x000c11a3: win_msg->m_cubParam = 16; win_msg->m_pubParam = HeapAlloc(GetProcessHeap(), 0, win_msg->m_cubParam); cb_HTML_JSConfirm_t_16((void*)lin_msg.m_pubParam, (void*)win_msg->m_pubParam); break;
+#endif
+#ifdef __i386__
 case 0x000c11a4: win_msg->m_cubParam = 12; win_msg->m_pubParam = HeapAlloc(GetProcessHeap(), 0, win_msg->m_cubParam); cb_HTML_FileOpenDialog_t_12((void*)lin_msg.m_pubParam, (void*)win_msg->m_pubParam); break;
+#endif
+#ifdef __x86_64__
+case 0x001411a4: win_msg->m_cubParam = 24; win_msg->m_pubParam = HeapAlloc(GetProcessHeap(), 0, win_msg->m_cubParam); cb_HTML_FileOpenDialog_t_24((void*)lin_msg.m_pubParam, (void*)win_msg->m_pubParam); break;
+#endif
+#ifdef __i386__
+case 0x001c11a9: win_msg->m_cubParam = 28; win_msg->m_pubParam = HeapAlloc(GetProcessHeap(), 0, win_msg->m_cubParam); cb_HTML_NewWindow_t_28((void*)lin_msg.m_pubParam, (void*)win_msg->m_pubParam); break;
+#endif
+#ifdef __x86_64__
+case 0x002011a9: win_msg->m_cubParam = 40; win_msg->m_pubParam = HeapAlloc(GetProcessHeap(), 0, win_msg->m_cubParam); cb_HTML_NewWindow_t_40((void*)lin_msg.m_pubParam, (void*)win_msg->m_pubParam); break;
+#endif
+#ifdef __i386__
+case 0x000811ab: win_msg->m_cubParam = 8; win_msg->m_pubParam = HeapAlloc(GetProcessHeap(), 0, win_msg->m_cubParam); cb_HTML_StatusText_t_8((void*)lin_msg.m_pubParam, (void*)win_msg->m_pubParam); break;
+#endif
+#ifdef __x86_64__
+case 0x000c11ab: win_msg->m_cubParam = 16; win_msg->m_pubParam = HeapAlloc(GetProcessHeap(), 0, win_msg->m_cubParam); cb_HTML_StatusText_t_16((void*)lin_msg.m_pubParam, (void*)win_msg->m_pubParam); break;
+#endif
+#ifdef __i386__
+case 0x000811ac: win_msg->m_cubParam = 8; win_msg->m_pubParam = HeapAlloc(GetProcessHeap(), 0, win_msg->m_cubParam); cb_HTML_ShowToolTip_t_8((void*)lin_msg.m_pubParam, (void*)win_msg->m_pubParam); break;
+#endif
+#ifdef __x86_64__
+case 0x000c11ac: win_msg->m_cubParam = 16; win_msg->m_pubParam = HeapAlloc(GetProcessHeap(), 0, win_msg->m_cubParam); cb_HTML_ShowToolTip_t_16((void*)lin_msg.m_pubParam, (void*)win_msg->m_pubParam); break;
+#endif
+#ifdef __i386__
+case 0x000811ad: win_msg->m_cubParam = 8; win_msg->m_pubParam = HeapAlloc(GetProcessHeap(), 0, win_msg->m_cubParam); cb_HTML_UpdateToolTip_t_8((void*)lin_msg.m_pubParam, (void*)win_msg->m_pubParam); break;
+#endif
+#ifdef __x86_64__
+case 0x000c11ad: win_msg->m_cubParam = 16; win_msg->m_pubParam = HeapAlloc(GetProcessHeap(), 0, win_msg->m_cubParam); cb_HTML_UpdateToolTip_t_16((void*)lin_msg.m_pubParam, (void*)win_msg->m_pubParam); break;
+#endif
 case 0x00141260: win_msg->m_cubParam = 24; win_msg->m_pubParam = HeapAlloc(GetProcessHeap(), 0, win_msg->m_cubParam); cb_SteamInventoryStartPurchaseResult_t_24((void*)lin_msg.m_pubParam, (void*)win_msg->m_pubParam); break;
 case 0x002000d1: win_msg->m_cubParam = 40; win_msg->m_pubParam = HeapAlloc(GetProcessHeap(), 0, win_msg->m_cubParam); cb_GSReputation_t_40((void*)lin_msg.m_pubParam, (void*)win_msg->m_pubParam); break;
 case 0x02c004c5: win_msg->m_cubParam = 712; win_msg->m_pubParam = HeapAlloc(GetProcessHeap(), 0, win_msg->m_cubParam); cb_SteamNetConnectionStatusChangedCallback_t_712((void*)lin_msg.m_pubParam, (void*)win_msg->m_pubParam); break;
 case 0x00140835: win_msg->m_cubParam = 24; win_msg->m_pubParam = HeapAlloc(GetProcessHeap(), 0, win_msg->m_cubParam); cb_HTTPRequestCompleted_t_24((void*)lin_msg.m_pubParam, (void*)win_msg->m_pubParam); break;
+#ifdef __i386__
+case 0x001011a5: win_msg->m_cubParam = 16; win_msg->m_pubParam = HeapAlloc(GetProcessHeap(), 0, win_msg->m_cubParam); cb_HTML_ComboNeedsPaint_t_16((void*)lin_msg.m_pubParam, (void*)win_msg->m_pubParam); break;
+#endif
+#ifdef __x86_64__
+case 0x001411a5: win_msg->m_cubParam = 24; win_msg->m_pubParam = HeapAlloc(GetProcessHeap(), 0, win_msg->m_cubParam); cb_HTML_ComboNeedsPaint_t_24((void*)lin_msg.m_pubParam, (void*)win_msg->m_pubParam); break;
+#endif
+#ifdef __i386__
+case 0x001811a9: win_msg->m_cubParam = 24; win_msg->m_pubParam = HeapAlloc(GetProcessHeap(), 0, win_msg->m_cubParam); cb_HTML_NewWindow_t_24((void*)lin_msg.m_pubParam, (void*)win_msg->m_pubParam); break;
+#endif
+#ifdef __x86_64__
+case 0x001c11a9: win_msg->m_cubParam = 32; win_msg->m_pubParam = HeapAlloc(GetProcessHeap(), 0, win_msg->m_cubParam); cb_HTML_NewWindow_t_32((void*)lin_msg.m_pubParam, (void*)win_msg->m_pubParam); break;
+#endif
 case 0x26240d4a: win_msg->m_cubParam = 9776; win_msg->m_pubParam = HeapAlloc(GetProcessHeap(), 0, win_msg->m_cubParam); cb_SteamUGCRequestUGCDetailsResult_t_9776((void*)lin_msg.m_pubParam, (void*)win_msg->m_pubParam); break;
 case 0x000c051b: win_msg->m_cubParam = 16; win_msg->m_pubParam = HeapAlloc(GetProcessHeap(), 0, win_msg->m_cubParam); cb_RemoteStorageFileShareResult_t_16((void*)lin_msg.m_pubParam, (void*)win_msg->m_pubParam); break;
 case 0x26200d4a: win_msg->m_cubParam = 9768; win_msg->m_pubParam = HeapAlloc(GetProcessHeap(), 0, win_msg->m_cubParam); cb_SteamUGCRequestUGCDetailsResult_t_9768((void*)lin_msg.m_pubParam, (void*)win_msg->m_pubParam); break;

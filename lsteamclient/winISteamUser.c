@@ -71,7 +71,7 @@ bool __thiscall winISteamUser_SteamUser020_GetUserDataFolder(winISteamUser_Steam
     bool path_result;
     TRACE("%p\n", _this);
     path_result = cppISteamUser_SteamUser020_GetUserDataFolder(_this->linux_side, pchBuffer, cubBuffer);
-    steamclient_unix_path_to_dos_path(path_result, pchBuffer, pchBuffer, cubBuffer);
+    steamclient_unix_path_to_dos_path(path_result, pchBuffer, pchBuffer, cubBuffer, 0);
     return path_result;
 }
 
@@ -342,7 +342,7 @@ bool __thiscall winISteamUser_SteamUser019_GetUserDataFolder(winISteamUser_Steam
     bool path_result;
     TRACE("%p\n", _this);
     path_result = cppISteamUser_SteamUser019_GetUserDataFolder(_this->linux_side, pchBuffer, cubBuffer);
-    steamclient_unix_path_to_dos_path(path_result, pchBuffer, pchBuffer, cubBuffer);
+    steamclient_unix_path_to_dos_path(path_result, pchBuffer, pchBuffer, cubBuffer, 0);
     return path_result;
 }
 
@@ -605,7 +605,7 @@ bool __thiscall winISteamUser_SteamUser018_GetUserDataFolder(winISteamUser_Steam
     bool path_result;
     TRACE("%p\n", _this);
     path_result = cppISteamUser_SteamUser018_GetUserDataFolder(_this->linux_side, pchBuffer, cubBuffer);
-    steamclient_unix_path_to_dos_path(path_result, pchBuffer, pchBuffer, cubBuffer);
+    steamclient_unix_path_to_dos_path(path_result, pchBuffer, pchBuffer, cubBuffer, 0);
     return path_result;
 }
 
@@ -836,7 +836,7 @@ bool __thiscall winISteamUser_SteamUser017_GetUserDataFolder(winISteamUser_Steam
     bool path_result;
     TRACE("%p\n", _this);
     path_result = cppISteamUser_SteamUser017_GetUserDataFolder(_this->linux_side, pchBuffer, cubBuffer);
-    steamclient_unix_path_to_dos_path(path_result, pchBuffer, pchBuffer, cubBuffer);
+    steamclient_unix_path_to_dos_path(path_result, pchBuffer, pchBuffer, cubBuffer, 0);
     return path_result;
 }
 
@@ -1059,7 +1059,7 @@ bool __thiscall winISteamUser_SteamUser016_GetUserDataFolder(winISteamUser_Steam
     bool path_result;
     TRACE("%p\n", _this);
     path_result = cppISteamUser_SteamUser016_GetUserDataFolder(_this->linux_side, pchBuffer, cubBuffer);
-    steamclient_unix_path_to_dos_path(path_result, pchBuffer, pchBuffer, cubBuffer);
+    steamclient_unix_path_to_dos_path(path_result, pchBuffer, pchBuffer, cubBuffer, 0);
     return path_result;
 }
 
@@ -1266,7 +1266,7 @@ bool __thiscall winISteamUser_SteamUser015_GetUserDataFolder(winISteamUser_Steam
     bool path_result;
     TRACE("%p\n", _this);
     path_result = cppISteamUser_SteamUser015_GetUserDataFolder(_this->linux_side, pchBuffer, cubBuffer);
-    steamclient_unix_path_to_dos_path(path_result, pchBuffer, pchBuffer, cubBuffer);
+    steamclient_unix_path_to_dos_path(path_result, pchBuffer, pchBuffer, cubBuffer, 0);
     return path_result;
 }
 
@@ -1473,7 +1473,7 @@ bool __thiscall winISteamUser_SteamUser014_GetUserDataFolder(winISteamUser_Steam
     bool path_result;
     TRACE("%p\n", _this);
     path_result = cppISteamUser_SteamUser014_GetUserDataFolder(_this->linux_side, pchBuffer, cubBuffer);
-    steamclient_unix_path_to_dos_path(path_result, pchBuffer, pchBuffer, cubBuffer);
+    steamclient_unix_path_to_dos_path(path_result, pchBuffer, pchBuffer, cubBuffer, 0);
     return path_result;
 }
 
@@ -1672,7 +1672,7 @@ bool __thiscall winISteamUser_SteamUser013_GetUserDataFolder(winISteamUser_Steam
     bool path_result;
     TRACE("%p\n", _this);
     path_result = cppISteamUser_SteamUser013_GetUserDataFolder(_this->linux_side, pchBuffer, cubBuffer);
-    steamclient_unix_path_to_dos_path(path_result, pchBuffer, pchBuffer, cubBuffer);
+    steamclient_unix_path_to_dos_path(path_result, pchBuffer, pchBuffer, cubBuffer, 0);
     return path_result;
 }
 
@@ -1839,7 +1839,7 @@ bool __thiscall winISteamUser_SteamUser012_GetUserDataFolder(winISteamUser_Steam
     bool path_result;
     TRACE("%p\n", _this);
     path_result = cppISteamUser_SteamUser012_GetUserDataFolder(_this->linux_side, pchBuffer, cubBuffer);
-    steamclient_unix_path_to_dos_path(path_result, pchBuffer, pchBuffer, cubBuffer);
+    steamclient_unix_path_to_dos_path(path_result, pchBuffer, pchBuffer, cubBuffer, 0);
     return path_result;
 }
 
@@ -1998,7 +1998,7 @@ bool __thiscall winISteamUser_SteamUser011_GetUserDataFolder(winISteamUser_Steam
     bool path_result;
     TRACE("%p\n", _this);
     path_result = cppISteamUser_SteamUser011_GetUserDataFolder(_this->linux_side, pchBuffer, cubBuffer);
-    steamclient_unix_path_to_dos_path(path_result, pchBuffer, pchBuffer, cubBuffer);
+    steamclient_unix_path_to_dos_path(path_result, pchBuffer, pchBuffer, cubBuffer, 0);
     return path_result;
 }
 

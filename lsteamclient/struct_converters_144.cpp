@@ -791,6 +791,393 @@ void cb_DeleteItemResult_t_16(const struct DeleteItemResult_t *lin, struct winDe
     win->m_nPublishedFileId = lin->m_nPublishedFileId;
 }
 
+#ifdef __i386__
+#pragma pack( push, 8 )
+struct winHTML_NeedsPaint_t_48 {
+    HHTMLBrowser unBrowserHandle;
+    const char * pBGRA;
+    uint32 unWide;
+    uint32 unTall;
+    uint32 unUpdateX;
+    uint32 unUpdateY;
+    uint32 unUpdateWide;
+    uint32 unUpdateTall;
+    uint32 unScrollX;
+    uint32 unScrollY;
+    float flPageScale;
+    uint32 unPageSerial;
+}  __attribute__ ((ms_struct));
+#pragma pack( pop )
+#endif
+#ifdef __x86_64__
+#pragma pack( push, 8 )
+struct winHTML_NeedsPaint_t_56 {
+    HHTMLBrowser unBrowserHandle;
+    const char * pBGRA;
+    uint32 unWide;
+    uint32 unTall;
+    uint32 unUpdateX;
+    uint32 unUpdateY;
+    uint32 unUpdateWide;
+    uint32 unUpdateTall;
+    uint32 unScrollX;
+    uint32 unScrollY;
+    float flPageScale;
+    uint32 unPageSerial;
+}  __attribute__ ((ms_struct));
+#pragma pack( pop )
+#endif
+#ifdef __x86_64__
+void cb_HTML_NeedsPaint_t_56(const struct HTML_NeedsPaint_t *lin, struct winHTML_NeedsPaint_t_56 *win)
+{
+    win->unBrowserHandle = lin->unBrowserHandle;
+    win->pBGRA = lin->pBGRA;
+    win->unWide = lin->unWide;
+    win->unTall = lin->unTall;
+    win->unUpdateX = lin->unUpdateX;
+    win->unUpdateY = lin->unUpdateY;
+    win->unUpdateWide = lin->unUpdateWide;
+    win->unUpdateTall = lin->unUpdateTall;
+    win->unScrollX = lin->unScrollX;
+    win->unScrollY = lin->unScrollY;
+    win->flPageScale = lin->flPageScale;
+    win->unPageSerial = lin->unPageSerial;
+}
+#endif
+
+#ifdef __i386__
+void cb_HTML_NeedsPaint_t_48(const struct HTML_NeedsPaint_t *lin, struct winHTML_NeedsPaint_t_48 *win)
+{
+    win->unBrowserHandle = lin->unBrowserHandle;
+    win->pBGRA = lin->pBGRA;
+    win->unWide = lin->unWide;
+    win->unTall = lin->unTall;
+    win->unUpdateX = lin->unUpdateX;
+    win->unUpdateY = lin->unUpdateY;
+    win->unUpdateWide = lin->unUpdateWide;
+    win->unUpdateTall = lin->unUpdateTall;
+    win->unScrollX = lin->unScrollX;
+    win->unScrollY = lin->unScrollY;
+    win->flPageScale = lin->flPageScale;
+    win->unPageSerial = lin->unPageSerial;
+}
+#endif
+
+#ifdef __i386__
+#pragma pack( push, 8 )
+struct winHTML_StartRequest_t_20 {
+    HHTMLBrowser unBrowserHandle;
+    const char * pchURL;
+    const char * pchTarget;
+    const char * pchPostData;
+    bool bIsRedirect;
+}  __attribute__ ((ms_struct));
+#pragma pack( pop )
+#endif
+#ifdef __x86_64__
+#pragma pack( push, 8 )
+struct winHTML_StartRequest_t_40 {
+    HHTMLBrowser unBrowserHandle;
+    const char * pchURL;
+    const char * pchTarget;
+    const char * pchPostData;
+    bool bIsRedirect;
+}  __attribute__ ((ms_struct));
+#pragma pack( pop )
+#endif
+#ifdef __x86_64__
+void cb_HTML_StartRequest_t_40(const struct HTML_StartRequest_t *lin, struct winHTML_StartRequest_t_40 *win)
+{
+    win->unBrowserHandle = lin->unBrowserHandle;
+    steamclient_unix_path_to_dos_path(1, lin->pchURL, g_tmppath, sizeof(g_tmppath), 1);
+    win->pchURL = g_tmppath;
+    win->pchTarget = lin->pchTarget;
+    win->pchPostData = lin->pchPostData;
+    win->bIsRedirect = lin->bIsRedirect;
+}
+#endif
+
+#ifdef __i386__
+void cb_HTML_StartRequest_t_20(const struct HTML_StartRequest_t *lin, struct winHTML_StartRequest_t_20 *win)
+{
+    win->unBrowserHandle = lin->unBrowserHandle;
+    steamclient_unix_path_to_dos_path(1, lin->pchURL, g_tmppath, sizeof(g_tmppath), 1);
+    win->pchURL = g_tmppath;
+    win->pchTarget = lin->pchTarget;
+    win->pchPostData = lin->pchPostData;
+    win->bIsRedirect = lin->bIsRedirect;
+}
+#endif
+
+#ifdef __i386__
+#pragma pack( push, 8 )
+struct winHTML_URLChanged_t_24 {
+    HHTMLBrowser unBrowserHandle;
+    const char * pchURL;
+    const char * pchPostData;
+    bool bIsRedirect;
+    const char * pchPageTitle;
+    bool bNewNavigation;
+}  __attribute__ ((ms_struct));
+#pragma pack( pop )
+#endif
+#ifdef __x86_64__
+#pragma pack( push, 8 )
+struct winHTML_URLChanged_t_48 {
+    HHTMLBrowser unBrowserHandle;
+    const char * pchURL;
+    const char * pchPostData;
+    bool bIsRedirect;
+    const char * pchPageTitle;
+    bool bNewNavigation;
+}  __attribute__ ((ms_struct));
+#pragma pack( pop )
+#endif
+#ifdef __x86_64__
+void cb_HTML_URLChanged_t_48(const struct HTML_URLChanged_t *lin, struct winHTML_URLChanged_t_48 *win)
+{
+    win->unBrowserHandle = lin->unBrowserHandle;
+    steamclient_unix_path_to_dos_path(1, lin->pchURL, g_tmppath, sizeof(g_tmppath), 1);
+    win->pchURL = g_tmppath;
+    win->pchPostData = lin->pchPostData;
+    win->bIsRedirect = lin->bIsRedirect;
+    win->pchPageTitle = lin->pchPageTitle;
+    win->bNewNavigation = lin->bNewNavigation;
+}
+#endif
+
+#ifdef __i386__
+void cb_HTML_URLChanged_t_24(const struct HTML_URLChanged_t *lin, struct winHTML_URLChanged_t_24 *win)
+{
+    win->unBrowserHandle = lin->unBrowserHandle;
+    steamclient_unix_path_to_dos_path(1, lin->pchURL, g_tmppath, sizeof(g_tmppath), 1);
+    win->pchURL = g_tmppath;
+    win->pchPostData = lin->pchPostData;
+    win->bIsRedirect = lin->bIsRedirect;
+    win->pchPageTitle = lin->pchPageTitle;
+    win->bNewNavigation = lin->bNewNavigation;
+}
+#endif
+
+#ifdef __i386__
+#pragma pack( push, 8 )
+struct winHTML_FinishedRequest_t_12 {
+    HHTMLBrowser unBrowserHandle;
+    const char * pchURL;
+    const char * pchPageTitle;
+}  __attribute__ ((ms_struct));
+#pragma pack( pop )
+#endif
+#ifdef __x86_64__
+#pragma pack( push, 8 )
+struct winHTML_FinishedRequest_t_24 {
+    HHTMLBrowser unBrowserHandle;
+    const char * pchURL;
+    const char * pchPageTitle;
+}  __attribute__ ((ms_struct));
+#pragma pack( pop )
+#endif
+#ifdef __x86_64__
+void cb_HTML_FinishedRequest_t_24(const struct HTML_FinishedRequest_t *lin, struct winHTML_FinishedRequest_t_24 *win)
+{
+    win->unBrowserHandle = lin->unBrowserHandle;
+    steamclient_unix_path_to_dos_path(1, lin->pchURL, g_tmppath, sizeof(g_tmppath), 1);
+    win->pchURL = g_tmppath;
+    win->pchPageTitle = lin->pchPageTitle;
+}
+#endif
+
+#ifdef __i386__
+void cb_HTML_FinishedRequest_t_12(const struct HTML_FinishedRequest_t *lin, struct winHTML_FinishedRequest_t_12 *win)
+{
+    win->unBrowserHandle = lin->unBrowserHandle;
+    steamclient_unix_path_to_dos_path(1, lin->pchURL, g_tmppath, sizeof(g_tmppath), 1);
+    win->pchURL = g_tmppath;
+    win->pchPageTitle = lin->pchPageTitle;
+}
+#endif
+
+#ifdef __i386__
+#pragma pack( push, 8 )
+struct winHTML_OpenLinkInNewTab_t_8 {
+    HHTMLBrowser unBrowserHandle;
+    const char * pchURL;
+}  __attribute__ ((ms_struct));
+#pragma pack( pop )
+#endif
+#ifdef __x86_64__
+#pragma pack( push, 8 )
+struct winHTML_OpenLinkInNewTab_t_16 {
+    HHTMLBrowser unBrowserHandle;
+    const char * pchURL;
+}  __attribute__ ((ms_struct));
+#pragma pack( pop )
+#endif
+#ifdef __x86_64__
+void cb_HTML_OpenLinkInNewTab_t_16(const struct HTML_OpenLinkInNewTab_t *lin, struct winHTML_OpenLinkInNewTab_t_16 *win)
+{
+    win->unBrowserHandle = lin->unBrowserHandle;
+    steamclient_unix_path_to_dos_path(1, lin->pchURL, g_tmppath, sizeof(g_tmppath), 1);
+    win->pchURL = g_tmppath;
+}
+#endif
+
+#ifdef __i386__
+void cb_HTML_OpenLinkInNewTab_t_8(const struct HTML_OpenLinkInNewTab_t *lin, struct winHTML_OpenLinkInNewTab_t_8 *win)
+{
+    win->unBrowserHandle = lin->unBrowserHandle;
+    steamclient_unix_path_to_dos_path(1, lin->pchURL, g_tmppath, sizeof(g_tmppath), 1);
+    win->pchURL = g_tmppath;
+}
+#endif
+
+#ifdef __i386__
+#pragma pack( push, 8 )
+struct winHTML_ChangedTitle_t_8 {
+    HHTMLBrowser unBrowserHandle;
+    const char * pchTitle;
+}  __attribute__ ((ms_struct));
+#pragma pack( pop )
+#endif
+#ifdef __x86_64__
+#pragma pack( push, 8 )
+struct winHTML_ChangedTitle_t_16 {
+    HHTMLBrowser unBrowserHandle;
+    const char * pchTitle;
+}  __attribute__ ((ms_struct));
+#pragma pack( pop )
+#endif
+#ifdef __x86_64__
+void cb_HTML_ChangedTitle_t_16(const struct HTML_ChangedTitle_t *lin, struct winHTML_ChangedTitle_t_16 *win)
+{
+    win->unBrowserHandle = lin->unBrowserHandle;
+    win->pchTitle = lin->pchTitle;
+}
+#endif
+
+#ifdef __i386__
+void cb_HTML_ChangedTitle_t_8(const struct HTML_ChangedTitle_t *lin, struct winHTML_ChangedTitle_t_8 *win)
+{
+    win->unBrowserHandle = lin->unBrowserHandle;
+    win->pchTitle = lin->pchTitle;
+}
+#endif
+
+#ifdef __i386__
+#pragma pack( push, 8 )
+struct winHTML_LinkAtPosition_t_20 {
+    HHTMLBrowser unBrowserHandle;
+    uint32 x;
+    uint32 y;
+    const char * pchURL;
+    bool bInput;
+    bool bLiveLink;
+}  __attribute__ ((ms_struct));
+#pragma pack( pop )
+#endif
+#ifdef __x86_64__
+#pragma pack( push, 8 )
+struct winHTML_LinkAtPosition_t_32 {
+    HHTMLBrowser unBrowserHandle;
+    uint32 x;
+    uint32 y;
+    const char * pchURL;
+    bool bInput;
+    bool bLiveLink;
+}  __attribute__ ((ms_struct));
+#pragma pack( pop )
+#endif
+#ifdef __x86_64__
+void cb_HTML_LinkAtPosition_t_32(const struct HTML_LinkAtPosition_t *lin, struct winHTML_LinkAtPosition_t_32 *win)
+{
+    win->unBrowserHandle = lin->unBrowserHandle;
+    win->x = lin->x;
+    win->y = lin->y;
+    steamclient_unix_path_to_dos_path(1, lin->pchURL, g_tmppath, sizeof(g_tmppath), 1);
+    win->pchURL = g_tmppath;
+    win->bInput = lin->bInput;
+    win->bLiveLink = lin->bLiveLink;
+}
+#endif
+
+#ifdef __i386__
+void cb_HTML_LinkAtPosition_t_20(const struct HTML_LinkAtPosition_t *lin, struct winHTML_LinkAtPosition_t_20 *win)
+{
+    win->unBrowserHandle = lin->unBrowserHandle;
+    win->x = lin->x;
+    win->y = lin->y;
+    steamclient_unix_path_to_dos_path(1, lin->pchURL, g_tmppath, sizeof(g_tmppath), 1);
+    win->pchURL = g_tmppath;
+    win->bInput = lin->bInput;
+    win->bLiveLink = lin->bLiveLink;
+}
+#endif
+
+#ifdef __i386__
+#pragma pack( push, 8 )
+struct winHTML_JSAlert_t_8 {
+    HHTMLBrowser unBrowserHandle;
+    const char * pchMessage;
+}  __attribute__ ((ms_struct));
+#pragma pack( pop )
+#endif
+#ifdef __x86_64__
+#pragma pack( push, 8 )
+struct winHTML_JSAlert_t_16 {
+    HHTMLBrowser unBrowserHandle;
+    const char * pchMessage;
+}  __attribute__ ((ms_struct));
+#pragma pack( pop )
+#endif
+#ifdef __x86_64__
+void cb_HTML_JSAlert_t_16(const struct HTML_JSAlert_t *lin, struct winHTML_JSAlert_t_16 *win)
+{
+    win->unBrowserHandle = lin->unBrowserHandle;
+    win->pchMessage = lin->pchMessage;
+}
+#endif
+
+#ifdef __i386__
+void cb_HTML_JSAlert_t_8(const struct HTML_JSAlert_t *lin, struct winHTML_JSAlert_t_8 *win)
+{
+    win->unBrowserHandle = lin->unBrowserHandle;
+    win->pchMessage = lin->pchMessage;
+}
+#endif
+
+#ifdef __i386__
+#pragma pack( push, 8 )
+struct winHTML_JSConfirm_t_8 {
+    HHTMLBrowser unBrowserHandle;
+    const char * pchMessage;
+}  __attribute__ ((ms_struct));
+#pragma pack( pop )
+#endif
+#ifdef __x86_64__
+#pragma pack( push, 8 )
+struct winHTML_JSConfirm_t_16 {
+    HHTMLBrowser unBrowserHandle;
+    const char * pchMessage;
+}  __attribute__ ((ms_struct));
+#pragma pack( pop )
+#endif
+#ifdef __x86_64__
+void cb_HTML_JSConfirm_t_16(const struct HTML_JSConfirm_t *lin, struct winHTML_JSConfirm_t_16 *win)
+{
+    win->unBrowserHandle = lin->unBrowserHandle;
+    win->pchMessage = lin->pchMessage;
+}
+#endif
+
+#ifdef __i386__
+void cb_HTML_JSConfirm_t_8(const struct HTML_JSConfirm_t *lin, struct winHTML_JSConfirm_t_8 *win)
+{
+    win->unBrowserHandle = lin->unBrowserHandle;
+    win->pchMessage = lin->pchMessage;
+}
+#endif
+
+#ifdef __i386__
 #pragma pack( push, 8 )
 struct winHTML_FileOpenDialog_t_12 {
     HHTMLBrowser unBrowserHandle;
@@ -798,13 +1185,185 @@ struct winHTML_FileOpenDialog_t_12 {
     const char * pchInitialFile;
 }  __attribute__ ((ms_struct));
 #pragma pack( pop )
+#endif
+#ifdef __x86_64__
+#pragma pack( push, 8 )
+struct winHTML_FileOpenDialog_t_24 {
+    HHTMLBrowser unBrowserHandle;
+    const char * pchTitle;
+    const char * pchInitialFile;
+}  __attribute__ ((ms_struct));
+#pragma pack( pop )
+#endif
+#ifdef __x86_64__
+void cb_HTML_FileOpenDialog_t_24(const struct HTML_FileOpenDialog_t *lin, struct winHTML_FileOpenDialog_t_24 *win)
+{
+    win->unBrowserHandle = lin->unBrowserHandle;
+    win->pchTitle = lin->pchTitle;
+    steamclient_unix_path_to_dos_path(1, lin->pchInitialFile, g_tmppath, sizeof(g_tmppath), 1);
+    win->pchInitialFile = g_tmppath;
+}
+#endif
+
+#ifdef __i386__
 void cb_HTML_FileOpenDialog_t_12(const struct HTML_FileOpenDialog_t *lin, struct winHTML_FileOpenDialog_t_12 *win)
 {
     win->unBrowserHandle = lin->unBrowserHandle;
     win->pchTitle = lin->pchTitle;
-    steamclient_unix_path_to_dos_path(1, lin->pchInitialFile, g_tmppath, sizeof(g_tmppath));
+    steamclient_unix_path_to_dos_path(1, lin->pchInitialFile, g_tmppath, sizeof(g_tmppath), 1);
     win->pchInitialFile = g_tmppath;
 }
+#endif
+
+#ifdef __i386__
+#pragma pack( push, 8 )
+struct winHTML_NewWindow_t_28 {
+    HHTMLBrowser unBrowserHandle;
+    const char * pchURL;
+    uint32 unX;
+    uint32 unY;
+    uint32 unWide;
+    uint32 unTall;
+    HHTMLBrowser unNewWindow_BrowserHandle_IGNORE;
+}  __attribute__ ((ms_struct));
+#pragma pack( pop )
+#endif
+#ifdef __x86_64__
+#pragma pack( push, 8 )
+struct winHTML_NewWindow_t_40 {
+    HHTMLBrowser unBrowserHandle;
+    const char * pchURL;
+    uint32 unX;
+    uint32 unY;
+    uint32 unWide;
+    uint32 unTall;
+    HHTMLBrowser unNewWindow_BrowserHandle_IGNORE;
+}  __attribute__ ((ms_struct));
+#pragma pack( pop )
+#endif
+#ifdef __x86_64__
+void cb_HTML_NewWindow_t_40(const struct HTML_NewWindow_t *lin, struct winHTML_NewWindow_t_40 *win)
+{
+    win->unBrowserHandle = lin->unBrowserHandle;
+    steamclient_unix_path_to_dos_path(1, lin->pchURL, g_tmppath, sizeof(g_tmppath), 1);
+    win->pchURL = g_tmppath;
+    win->unX = lin->unX;
+    win->unY = lin->unY;
+    win->unWide = lin->unWide;
+    win->unTall = lin->unTall;
+    win->unNewWindow_BrowserHandle_IGNORE = lin->unNewWindow_BrowserHandle_IGNORE;
+}
+#endif
+
+#ifdef __i386__
+void cb_HTML_NewWindow_t_28(const struct HTML_NewWindow_t *lin, struct winHTML_NewWindow_t_28 *win)
+{
+    win->unBrowserHandle = lin->unBrowserHandle;
+    steamclient_unix_path_to_dos_path(1, lin->pchURL, g_tmppath, sizeof(g_tmppath), 1);
+    win->pchURL = g_tmppath;
+    win->unX = lin->unX;
+    win->unY = lin->unY;
+    win->unWide = lin->unWide;
+    win->unTall = lin->unTall;
+    win->unNewWindow_BrowserHandle_IGNORE = lin->unNewWindow_BrowserHandle_IGNORE;
+}
+#endif
+
+#ifdef __i386__
+#pragma pack( push, 8 )
+struct winHTML_StatusText_t_8 {
+    HHTMLBrowser unBrowserHandle;
+    const char * pchMsg;
+}  __attribute__ ((ms_struct));
+#pragma pack( pop )
+#endif
+#ifdef __x86_64__
+#pragma pack( push, 8 )
+struct winHTML_StatusText_t_16 {
+    HHTMLBrowser unBrowserHandle;
+    const char * pchMsg;
+}  __attribute__ ((ms_struct));
+#pragma pack( pop )
+#endif
+#ifdef __x86_64__
+void cb_HTML_StatusText_t_16(const struct HTML_StatusText_t *lin, struct winHTML_StatusText_t_16 *win)
+{
+    win->unBrowserHandle = lin->unBrowserHandle;
+    win->pchMsg = lin->pchMsg;
+}
+#endif
+
+#ifdef __i386__
+void cb_HTML_StatusText_t_8(const struct HTML_StatusText_t *lin, struct winHTML_StatusText_t_8 *win)
+{
+    win->unBrowserHandle = lin->unBrowserHandle;
+    win->pchMsg = lin->pchMsg;
+}
+#endif
+
+#ifdef __i386__
+#pragma pack( push, 8 )
+struct winHTML_ShowToolTip_t_8 {
+    HHTMLBrowser unBrowserHandle;
+    const char * pchMsg;
+}  __attribute__ ((ms_struct));
+#pragma pack( pop )
+#endif
+#ifdef __x86_64__
+#pragma pack( push, 8 )
+struct winHTML_ShowToolTip_t_16 {
+    HHTMLBrowser unBrowserHandle;
+    const char * pchMsg;
+}  __attribute__ ((ms_struct));
+#pragma pack( pop )
+#endif
+#ifdef __x86_64__
+void cb_HTML_ShowToolTip_t_16(const struct HTML_ShowToolTip_t *lin, struct winHTML_ShowToolTip_t_16 *win)
+{
+    win->unBrowserHandle = lin->unBrowserHandle;
+    win->pchMsg = lin->pchMsg;
+}
+#endif
+
+#ifdef __i386__
+void cb_HTML_ShowToolTip_t_8(const struct HTML_ShowToolTip_t *lin, struct winHTML_ShowToolTip_t_8 *win)
+{
+    win->unBrowserHandle = lin->unBrowserHandle;
+    win->pchMsg = lin->pchMsg;
+}
+#endif
+
+#ifdef __i386__
+#pragma pack( push, 8 )
+struct winHTML_UpdateToolTip_t_8 {
+    HHTMLBrowser unBrowserHandle;
+    const char * pchMsg;
+}  __attribute__ ((ms_struct));
+#pragma pack( pop )
+#endif
+#ifdef __x86_64__
+#pragma pack( push, 8 )
+struct winHTML_UpdateToolTip_t_16 {
+    HHTMLBrowser unBrowserHandle;
+    const char * pchMsg;
+}  __attribute__ ((ms_struct));
+#pragma pack( pop )
+#endif
+#ifdef __x86_64__
+void cb_HTML_UpdateToolTip_t_16(const struct HTML_UpdateToolTip_t *lin, struct winHTML_UpdateToolTip_t_16 *win)
+{
+    win->unBrowserHandle = lin->unBrowserHandle;
+    win->pchMsg = lin->pchMsg;
+}
+#endif
+
+#ifdef __i386__
+void cb_HTML_UpdateToolTip_t_8(const struct HTML_UpdateToolTip_t *lin, struct winHTML_UpdateToolTip_t_8 *win)
+{
+    win->unBrowserHandle = lin->unBrowserHandle;
+    win->pchMsg = lin->pchMsg;
+}
+#endif
 
 #pragma pack( push, 8 )
 struct winSteamInventoryStartPurchaseResult_t_24 {

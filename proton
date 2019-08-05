@@ -4,6 +4,8 @@
 
 from __future__ import print_function
 
+import fcntl
+import array
 import filecmp
 import json
 import os
@@ -128,6 +130,12 @@ def makedirs(path):
 
 def try_copy(src, dst):
     try:
+        if os.path.isdir(dst):
+            dstfile = dst + "/" + os.path.basename(src)
+            if os.path.lexists(dstfile):
+                os.remove(dstfile)
+        elif os.path.lexists(dst):
+            os.remove(dst)
         shutil.copy(src, dst)
     except PermissionError as e:
         if e.errno == errno.EPERM:
@@ -188,7 +196,10 @@ with dist_lock:
         try_copy(basedir + "/version", basedir + "/dist/")
 
 env = dict(os.environ)
-dlloverrides = {"steam.exe": "b"} #always use our special built-in steam.exe
+dlloverrides = {
+        "steam.exe": "b", #always use our special built-in steam.exe
+        "mfplay": "n" #disable built-in mfplay
+    }
 
 if "HOST_LC_ALL" in env and len(env["HOST_LC_ALL"]) > 0:
     #steam sets LC_ALL=C to help some games, but Wine requires the real value
@@ -269,11 +280,15 @@ check_environment("PROTON_NO_D3D11", "nod3d11")
 check_environment("PROTON_NO_D3D10", "nod3d10")
 check_environment("PROTON_NO_D3D9", "nod3d9")
 check_environment("PROTON_NO_ESYNC", "noesync")
+check_environment("PROTON_NO_FSYNC", "nofsync")
 check_environment("PROTON_FORCE_LARGE_ADDRESS_AWARE", "forcelgadd")
 check_environment("PROTON_OLD_GL_STRING", "oldglstr")
 
 if not "noesync" in config_opts:
     env["WINEESYNC"] = "1"
+
+if not "nofsync" in config_opts:
+    env["WINEFSYNC"] = "1"
 
 if "oldglstr" in config_opts:
     #mesa override
@@ -324,6 +339,25 @@ def create_fonts_symlinks(prefix_path):
         else:
             os.symlink(fname, lname)
 
+EXT2_IOC_GETFLAGS = 0x80086601
+EXT2_IOC_SETFLAGS = 0x40086602
+
+EXT4_CASEFOLD_FL = 0x40000000
+
+def set_dir_casefold_bit(dir_path):
+    dr = os.open(dir_path, 0o644)
+    if dr < 0:
+        return
+    try:
+        dat = array.array('I', [0])
+        if fcntl.ioctl(dr, EXT2_IOC_GETFLAGS, dat, True) >= 0:
+            dat[0] = dat[0] | EXT4_CASEFOLD_FL
+            fcntl.ioctl(dr, EXT2_IOC_SETFLAGS, dat, False)
+    except OSError:
+        #no problem
+        pass
+    os.close(dr)
+
 prefix_lock = FileLock(os.environ["STEAM_COMPAT_DATA_PATH"] + "/pfx.lock", timeout=-1)
 with prefix_lock:
     version_file = os.environ["STEAM_COMPAT_DATA_PATH"] + "/version"
@@ -332,6 +366,10 @@ with prefix_lock:
             upgrade_pfx(f.readline().strip())
     else:
         upgrade_pfx(None)
+
+    if not os.path.exists(prefix):
+        makedirs(prefix + "/drive_c")
+        set_dir_casefold_bit(prefix + "/drive_c")
 
     if not os.path.exists(prefix + "/user.reg"):
         #copy default prefix into place
@@ -443,29 +481,29 @@ with prefix_lock:
         except (ValueError, OSError):
             log("Unable to write VR config! " + str(sys.exc_info()[1]))
 
-    dxvkfiles = ("d3d11", "d3d10", "d3d10core", "d3d10_1", "d3d9", "dxgi")
-    def make_dxvk_links(dll_dir, link_dir):
-        for f in dxvkfiles:
-            dst = link_dir + "/" + f + ".dll"
-            src = dll_dir + "/" + f + ".dll"
-            if os.path.lexists(dst):
-                os.remove(dst)
-            os.symlink(src, dst)
-
     if "wined3d" in config_opts:
-        #use gl-based wined3d for d3d11 and d3d10
-        make_dxvk_links(basedir + "/dist/lib64/wine/fakedlls/",
-            prefix + "drive_c/windows/system32")
-        make_dxvk_links(basedir + "/dist/lib/wine/fakedlls/",
-            prefix + "drive_c/windows/syswow64")
+        dxvkfiles = []
+        wined3dfiles = ["d3d11", "d3d10", "d3d10core", "d3d10_1", "dxgi", "d3d9"]
     else:
-        #use vulkan-based dxvk for d3d11 and d3d10
-        make_dxvk_links(basedir + "/dist/lib64/wine/dxvk/",
-            prefix + "drive_c/windows/system32")
-        make_dxvk_links(basedir + "/dist/lib/wine/dxvk/",
-            prefix + "drive_c/windows/syswow64")
-        for f in dxvkfiles:
-            dlloverrides[f] = "n"
+        dxvkfiles = ["d3d11", "d3d10", "d3d10core", "d3d10_1", "dxgi"]
+        wined3dfiles = []
+        if "d9vk" in config_opts:
+            dxvkfiles.append("d3d9")
+        else:
+            wined3dfiles.append("d3d9")
+
+    for f in wined3dfiles:
+        try_copy(basedir + "/dist/share/default_pfx/drive_c/windows/system32/" + f + ".dll",
+                prefix + "drive_c/windows/system32/" + f + ".dll")
+        try_copy(basedir + "/dist/share/default_pfx/drive_c/windows/syswow64/" + f + ".dll",
+                prefix + "drive_c/windows/syswow64/" + f + ".dll")
+
+    for f in dxvkfiles:
+        try_copy(basedir + "/dist/lib64/wine/dxvk/" + f + ".dll",
+                prefix + "drive_c/windows/system32/" + f + ".dll")
+        try_copy(basedir + "/dist/lib/wine/dxvk/" + f + ".dll",
+                prefix + "drive_c/windows/syswow64/" + f + ".dll")
+        dlloverrides[f] = "n"
 
 if "nod3d11" in config_opts:
     dlloverrides["d3d11"] = ""

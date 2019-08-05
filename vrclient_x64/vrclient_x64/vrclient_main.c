@@ -32,8 +32,8 @@ typedef struct winRenderModel_t_1015 winRenderModel_t_1015;
 typedef struct winRenderModel_TextureMap_t_1015 winRenderModel_TextureMap_t_1015;
 #include "cppIVRRenderModels_IVRRenderModels_005.h"
 
-typedef struct winRenderModel_t_113b winRenderModel_t_113b;
-typedef struct winRenderModel_TextureMap_t_113b winRenderModel_TextureMap_t_113b;
+typedef struct winRenderModel_t_1517 winRenderModel_t_1517;
+typedef struct winRenderModel_TextureMap_t_1517 winRenderModel_TextureMap_t_1517;
 #include "cppIVRRenderModels_IVRRenderModels_006.h"
 
 WINE_DEFAULT_DEBUG_CHANNEL(vrclient);
@@ -228,7 +228,7 @@ static int load_vrclient(void)
 
     vrclient_lib = wine_dlopen(path, RTLD_NOW, NULL, 0);
     if(!vrclient_lib){
-        ERR("unable to load vrclient.so\n");
+        TRACE("unable to load vrclient.so\n");
         return 0;
     }
 
@@ -290,7 +290,7 @@ EVRInitError ivrclientcore_002_init(EVRInitError (*cpp_func)(void *, EVRApplicat
 
     error = cpp_func(linux_side, application_type);
     if (error)
-        ERR("error %#x\n", error);
+        WARN("error %#x\n", error);
     return error;
 }
 
@@ -306,7 +306,7 @@ EVRInitError ivrclientcore_init(EVRInitError (*cpp_func)(void *, EVRApplicationT
 
     error = cpp_func(linux_side, application_type, startup_info);
     if (error)
-        ERR("error %#x\n", error);
+        WARN("error %#x\n", error);
     return error;
 }
 
@@ -500,7 +500,7 @@ static CDECL void d3d11_texture_callback(unsigned int gl_texture, unsigned int g
     error = submit_data->submit(submit_data->linux_side, submit_data->eye,
             tex, &bounds, submit_data->flags);
     if (error)
-        ERR("error %#x\n", error);
+        WARN("error %#x\n", error);
 }
 
 void ivrcompositor_005_submit(
@@ -581,7 +581,7 @@ static EVRCompositorError ivrcompositor_submit_wined3d(
         }
         else
         {
-            ERR("Failed to get device, hr %#x.\n", hr);
+            WARN("Failed to get device, hr %#x.\n", hr);
             user_data->wined3d_device = NULL;
         }
 
@@ -638,7 +638,7 @@ static EVRCompositorError ivrcompositor_submit_wined3d(
     {
         if (FAILED(hr = depth_texture_unk->lpVtbl->QueryInterface(depth_texture_unk,
                 &IID_IWineD3D11Texture2D, (void **)&depth_texture)))
-            ERR("Failed to get IWineD3D11Texture2D from depth texture.\n");
+            WARN("Failed to get IWineD3D11Texture2D from depth texture.\n");
     }
 
     if (async)
@@ -882,7 +882,7 @@ EVRCompositorError ivrcompositor_submit(
             }
 #endif
 
-            ERR("Invalid D3D11 texture %p.\n", texture);
+            WARN("Invalid D3D11 texture %p.\n", texture);
             return cpp_func(linux_side, eye, texture, bounds, flags);
         }
 
@@ -969,7 +969,7 @@ static CDECL void d3d11_explicit_timing_callback(const void *data, unsigned int 
     }
 
     if (error)
-        ERR("error %#x\n", error);
+        WARN("error %#x\n", error);
 }
 
 EVRCompositorError ivrcompositor_wait_get_poses(
@@ -1094,7 +1094,7 @@ EVRRenderModelError ivrrendermodels_load_into_texture_d3d11_async(
         error = cppIVRRenderModels_IVRRenderModels_005_LoadTexture_Async(linux_side, texture_id, &texture_map);
         break;
     case 6:
-        error = cppIVRRenderModels_IVRRenderModels_006_LoadTexture_Async(linux_side, texture_id, (struct winRenderModel_TextureMap_t_113b **)&texture_map);
+        error = cppIVRRenderModels_IVRRenderModels_006_LoadTexture_Async(linux_side, texture_id, (struct winRenderModel_TextureMap_t_1517 **)&texture_map);
         break;
     }
     if (error == VRRenderModelError_Loading)
@@ -1124,7 +1124,7 @@ EVRRenderModelError ivrrendermodels_load_into_texture_d3d11_async(
         cppIVRRenderModels_IVRRenderModels_005_FreeTexture(linux_side, texture_map);
         break;
     case 6:
-        cppIVRRenderModels_IVRRenderModels_006_FreeTexture(linux_side, (struct winRenderModel_TextureMap_t_113b *)texture_map);
+        cppIVRRenderModels_IVRRenderModels_006_FreeTexture(linux_side, (struct winRenderModel_TextureMap_t_1517 *)texture_map);
         break;
     }
     return error;
