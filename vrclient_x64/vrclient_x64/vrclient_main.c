@@ -204,6 +204,7 @@ static pfn_dtor get_win_destructor(const char *name)
 }
 
 static void *vrclient_lib;
+static void *(*vrclient_HmdSystemFactory)(const char *name, int *return_code);
 static void *(*vrclient_VRClientCoreFactory)(const char *name, int *return_code);
 
 static int load_vrclient(void)
@@ -232,6 +233,12 @@ static int load_vrclient(void)
         return 0;
     }
 
+    vrclient_HmdSystemFactory = wine_dlsym(vrclient_lib, "HmdSystemFactory", NULL, 0);
+    if(!vrclient_HmdSystemFactory){
+        ERR("unable to load HmdSystemFactory method\n");
+        return 0;
+    }
+
     vrclient_VRClientCoreFactory = wine_dlsym(vrclient_lib, "VRClientCoreFactory", NULL, 0);
     if(!vrclient_VRClientCoreFactory){
         ERR("unable to load VRClientCoreFactory method\n");
@@ -239,6 +246,16 @@ static int load_vrclient(void)
     }
 
     return 1;
+}
+
+void *CDECL HmdSystemFactory(const char *name, int *return_code)
+{
+    TRACE("name: %s, return_code: %p\n", name, return_code);
+
+    if(!load_vrclient())
+        return NULL;
+
+    return create_win_interface(name, vrclient_HmdSystemFactory(name, return_code));
 }
 
 void *CDECL VRClientCoreFactory(const char *name, int *return_code)
