@@ -142,6 +142,7 @@ static HANDLE run_process(void)
     WCHAR *cmdline = GetCommandLineW();
     STARTUPINFOW si = { sizeof(si) };
     PROCESS_INFORMATION pi;
+    DWORD flags = 0;
 
     /* skip argv[0] */
     if (*cmdline == '"')
@@ -169,6 +170,8 @@ static HANDLE run_process(void)
         WCHAR *start, *end, *dos, *remainder, *new_cmdline;
         size_t argv0_len;
         int r;
+        DWORD_PTR console;
+        SHFILEINFOW sfi;
 
         static const WCHAR dquoteW[] = {'"',0};
 
@@ -220,6 +223,12 @@ static HANDLE run_process(void)
 
         dos = wine_get_dos_file_name(scratchA);
 
+        CoInitialize(NULL);
+
+        console = SHGetFileInfoW(dos, 0, &sfi, sizeof(sfi), SHGFI_EXETYPE);
+        if (console && !HIWORD(console))
+            flags |= CREATE_NEW_CONSOLE;
+
         new_cmdline = (WCHAR *)HeapAlloc(GetProcessHeap(), 0,
                 (lstrlenW(dos) + 3 + lstrlenW(remainder) + 1) * sizeof(WCHAR));
         lstrcpyW(new_cmdline, dquoteW);
@@ -233,7 +242,7 @@ static HANDLE run_process(void)
 run:
     WINE_TRACE("Running command %s\n", wine_dbgstr_w(cmdline));
 
-    if (!CreateProcessW(NULL, cmdline, NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi))
+    if (!CreateProcessW(NULL, cmdline, NULL, NULL, FALSE, flags, NULL, NULL, &si, &pi))
     {
         WINE_ERR("Failed to create process %s: %u\n", wine_dbgstr_w(cmdline), GetLastError());
         return INVALID_HANDLE_VALUE;
