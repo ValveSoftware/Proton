@@ -19,7 +19,6 @@
     git reset --hard HEAD
     git clean -xdf
     patch -Np1 < ../game-patches-testing/valve-dxvk-avoid-spamming-log-with-requests-for-IWineD3D11Texture2D.patch
-    patch -Np1 < ../game-patches-testing/valve-dxvk-make-cross-compiler-strings-configurable.patch
     cd ..
 
     #WINE SYSTEM PERFORMANCE PATCHES
