@@ -485,12 +485,7 @@ with prefix_lock:
         dxvkfiles = []
         wined3dfiles = ["d3d11", "d3d10", "d3d10core", "d3d10_1", "dxgi", "d3d9"]
     else:
-        dxvkfiles = ["d3d11", "d3d10", "d3d10core", "d3d10_1", "dxgi"]
-        wined3dfiles = []
-        if "d9vk" in config_opts:
-            dxvkfiles.append("d3d9")
-        else:
-            wined3dfiles.append("d3d9")
+        dxvkfiles = ["d3d11", "d3d10", "d3d10core", "d3d10_1", "dxgi", "d3d9"]
 
     for f in wined3dfiles:
         try_copy(basedir + "/dist/share/default_pfx/drive_c/windows/system32/" + f + ".dll",
