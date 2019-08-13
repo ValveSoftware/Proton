@@ -20,7 +20,7 @@ from filelock import FileLock
 #To enable debug logging, copy "user_settings.sample.py" to "user_settings.py"
 #and edit it if needed.
 
-CURRENT_PREFIX_VERSION="4.11-1"
+CURRENT_PREFIX_VERSION="4.11-2"
 
 PFX="Proton: "
 ld_path_var = "LD_LIBRARY_PATH"
@@ -210,6 +210,32 @@ class CompatData:
                 log("Broken .NET installation detected, switching to wine-mono.")
                 #deleting this directory allows wine-mono to work
                 shutil.rmtree(self.prefix_dir + "/drive_c/windows/Microsoft.NET")
+
+            #prior to prefix version 4.11-2, all controllers were xbox controllers. wipe out the old registry entries.
+            if (int(old_proton_maj) < 4 or (int(old_proton_maj) == 4 and int(old_proton_min) == 11)) and \
+                    int(old_prefix_ver) < 2:
+                log("Removing old xinput registry entries.")
+                with open(self.prefix_dir + "system.reg", "r") as reg_in:
+                    with open(self.prefix_dir + "system.reg.new", "w") as reg_out:
+                        for line in reg_in:
+                            if line[0] == '[' and "CurrentControlSet" in line and "IG_" in line:
+                                if "DeviceClasses" in line:
+                                    reg_out.write(line.replace("DeviceClasses", "DeviceClasses_old"))
+                                elif "Enum" in line:
+                                    reg_out.write(line.replace("Enum", "Enum_old"))
+                            else:
+                                reg_out.write(line)
+                try:
+                    os.rename(self.prefix_dir + "system.reg", self.prefix_dir + "system.reg.old")
+                except OSError:
+                    os.remove(self.prefix_dir + "system.reg")
+                    pass
+
+                try:
+                    os.rename(self.prefix_dir + "system.reg.new", self.prefix_dir + "system.reg")
+                except OSError:
+                    log("Unable to write new registry file to " + self.prefix_dir + "system.reg")
+                    pass
 
         except ValueError:
             log("Prefix has an invalid version?! You may want to back up user files and delete this prefix.")
