@@ -1,18 +1,24 @@
+extern "C" {
+#include <stdarg.h>
+
+#include "windef.h"
+#include "winbase.h"
+#include "wine/debug.h"
+
+WINE_DEFAULT_DEBUG_CHANNEL(steamclient);
+}
+
 #include "steam_defs.h"
 #include "steamworks_sdk_144/steam_api.h"
 #include "steamworks_sdk_144/isteamnetworkingsockets.h"
 #include "steamworks_sdk_144/steamnetworkingtypes.h"
 #include "steamclient_private.h"
+
 extern "C" {
 #define SDKVER_144
 #include "struct_converters.h"
 
-#include "windows.h"
 #include "queue.h"
-
-#include "wine/debug.h"
-
-WINE_DEFAULT_DEBUG_CHANNEL(steamclient);
 
 /***** manual struct converter for SteamNetworkingMessage_t *****/
 
