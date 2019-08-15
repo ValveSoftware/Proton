@@ -174,6 +174,7 @@ void cppISteamClient_SteamClient017_DEPRECATED_Remove_SteamAPI_CPostAPIResultInP
 
 void cppISteamClient_SteamClient017_Set_SteamAPI_CCheckCallbackRegisteredInProcess(void *linux_side, SteamAPI_CheckCallbackRegistered_t func)
 {
+    func = (SteamAPI_CheckCallbackRegistered_t)manual_convert_SteamAPI_CheckCallbackRegistered_t((void*)func);
     ((ISteamClient*)linux_side)->Set_SteamAPI_CCheckCallbackRegisteredInProcess((SteamAPI_CheckCallbackRegistered_t)func);
 }
 

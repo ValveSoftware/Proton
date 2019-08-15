@@ -5,7 +5,7 @@
 
 from __future__ import print_function
 
-CLANG_PATH='/usr/lib/clang/8.0.0'
+CLANG_PATH='/usr/lib/clang/8.0.1'
 
 import pprint
 import sys
@@ -178,7 +178,8 @@ manually_handled_methods = {
 
 # manual converters for simple types (function pointers)
 manual_type_converters = [
-        "FSteamNetworkingSocketsDebugOutput"
+        "FSteamNetworkingSocketsDebugOutput",
+        "SteamAPI_CheckCallbackRegistered_t"
 ]
 
 # manual converters for specific parameters

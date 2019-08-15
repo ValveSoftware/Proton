@@ -205,11 +205,9 @@ typedef struct SteamNetworkingQuickConnectionStatus SteamNetworkingQuickConnecti
 typedef struct SteamDatagramRelayAuthTicket SteamDatagramRelayAuthTicket;
 typedef struct SteamDatagramHostedAddress SteamDatagramHostedAddress;
 
-/* FIXME: we don't care about fn pointer types, just pass 'em through */
-typedef void *SteamAPI_CheckCallbackRegistered_t;
-typedef void *SteamAPIWarningMessageHook_t;
-typedef void *SteamAPI_PostAPIResultInProcess_t;
-
+typedef uint32 (*SteamAPI_CheckCallbackRegistered_t)(int cb);
+typedef void *SteamAPIWarningMessageHook_t; //already cdecl, no need for conversion(?)
+typedef void *SteamAPI_PostAPIResultInProcess_t; //unused
 typedef void (*FSteamNetworkingSocketsDebugOutput)(ESteamNetworkingSocketsDebugOutputType nType, const char *pszMsg);
 
 typedef uint8 Salt_t[8];
