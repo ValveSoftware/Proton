@@ -259,6 +259,13 @@ EControllerActionOrigin __thiscall winISteamController_SteamController007_Transl
     return cppISteamController_SteamController007_TranslateActionOrigin(_this->linux_side, eDestinationInputType, eSourceOrigin);
 }
 
+DEFINE_THISCALL_WRAPPER(winISteamController_SteamController007_GetControllerBindingRevision, 20)
+bool __thiscall winISteamController_SteamController007_GetControllerBindingRevision(winISteamController_SteamController007 *_this, ControllerHandle_t controllerHandle, int * pMajor, int * pMinor)
+{
+    TRACE("%p\n", _this);
+    return cppISteamController_SteamController007_GetControllerBindingRevision(_this->linux_side, controllerHandle, pMajor, pMinor);
+}
+
 extern vtable_ptr winISteamController_SteamController007_vtable;
 
 #ifndef __GNUC__
@@ -298,6 +305,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamController_SteamController007_GetGlyphForXboxOrigin)
         VTABLE_ADD_FUNC(winISteamController_SteamController007_GetActionOriginFromXboxOrigin)
         VTABLE_ADD_FUNC(winISteamController_SteamController007_TranslateActionOrigin)
+        VTABLE_ADD_FUNC(winISteamController_SteamController007_GetControllerBindingRevision)
     );
 #ifndef __GNUC__
 }

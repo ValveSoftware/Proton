@@ -16,7 +16,7 @@ extern void *create_winISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001(v
 extern void *create_winISteamHTTP_STEAMHTTP_INTERFACE_VERSION003(void *);
 extern void *create_winISteamInput_SteamInput001(void *);
 extern void *create_winISteamController_SteamController007(void *);
-extern void *create_winISteamUGC_STEAMUGC_INTERFACE_VERSION012(void *);
+extern void *create_winISteamUGC_STEAMUGC_INTERFACE_VERSION013(void *);
 extern void *create_winISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001(void *);
 extern void *create_winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005(void *);
 extern void *create_winISteamInventory_STEAMINVENTORY_INTERFACE_V003(void *);
@@ -26,6 +26,9 @@ extern void *create_winISteamGameServer_SteamGameServer012(void *);
 extern void *create_winISteamGameServerStats_SteamGameServerStats001(void *);
 extern void *create_winISteamGameCoordinator_SteamGameCoordinator001(void *);
 extern void *create_winISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001(void *);
+extern void *create_winISteamNetworkingSockets_SteamNetworkingSockets003(void *);
+extern void *create_winISteamNetworkingUtils_SteamNetworkingUtils002(void *);
+extern void *create_winISteamUGC_STEAMUGC_INTERFACE_VERSION012(void *);
 extern void *create_winISteamNetworkingSockets_SteamNetworkingSockets002(void *);
 extern void *create_winISteamNetworkingUtils_SteamNetworkingUtils001(void *);
 extern void *create_winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized003(void *);

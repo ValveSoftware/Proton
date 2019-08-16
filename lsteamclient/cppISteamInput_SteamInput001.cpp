@@ -1,11 +1,11 @@
 #include "steam_defs.h"
-#include "steamworks_sdk_144/steam_api.h"
-#include "steamworks_sdk_144/steamnetworkingtypes.h"
+#include "steamworks_sdk_145/steam_api.h"
+#include "steamworks_sdk_145/steamnetworkingtypes.h"
 #include "steamclient_private.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
-#define SDKVER_144
+#define SDKVER_145
 #include "struct_converters.h"
 #include "cppISteamInput_SteamInput001.h"
 bool cppISteamInput_SteamInput001_Init(void *linux_side)
@@ -171,6 +171,11 @@ EInputActionOrigin cppISteamInput_SteamInput001_GetActionOriginFromXboxOrigin(vo
 EInputActionOrigin cppISteamInput_SteamInput001_TranslateActionOrigin(void *linux_side, ESteamInputType eDestinationInputType, EInputActionOrigin eSourceOrigin)
 {
     return ((ISteamInput*)linux_side)->TranslateActionOrigin((ESteamInputType)eDestinationInputType, (EInputActionOrigin)eSourceOrigin);
+}
+
+bool cppISteamInput_SteamInput001_GetDeviceBindingRevision(void *linux_side, InputHandle_t inputHandle, int * pMajor, int * pMinor)
+{
+    return ((ISteamInput*)linux_side)->GetDeviceBindingRevision((InputHandle_t)inputHandle, (int *)pMajor, (int *)pMinor);
 }
 
 #ifdef __cplusplus

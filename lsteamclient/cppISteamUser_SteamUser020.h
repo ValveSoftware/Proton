@@ -28,3 +28,4 @@ extern bool cppISteamUser_SteamUser020_BIsTwoFactorEnabled(void *);
 extern bool cppISteamUser_SteamUser020_BIsPhoneIdentifying(void *);
 extern bool cppISteamUser_SteamUser020_BIsPhoneRequiringVerification(void *);
 extern SteamAPICall_t cppISteamUser_SteamUser020_GetMarketEligibility(void *);
+extern SteamAPICall_t cppISteamUser_SteamUser020_GetDurationControl(void *);

@@ -1,11 +1,11 @@
 #include "steam_defs.h"
-#include "steamworks_sdk_144/steam_api.h"
-#include "steamworks_sdk_144/steamnetworkingtypes.h"
+#include "steamworks_sdk_145/steam_api.h"
+#include "steamworks_sdk_145/steamnetworkingtypes.h"
 #include "steamclient_private.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
-#define SDKVER_144
+#define SDKVER_145
 #include "struct_converters.h"
 #include "cppISteamController_SteamController007.h"
 bool cppISteamController_SteamController007_Init(void *linux_side)
@@ -171,6 +171,11 @@ EControllerActionOrigin cppISteamController_SteamController007_GetActionOriginFr
 EControllerActionOrigin cppISteamController_SteamController007_TranslateActionOrigin(void *linux_side, ESteamInputType eDestinationInputType, EControllerActionOrigin eSourceOrigin)
 {
     return ((ISteamController*)linux_side)->TranslateActionOrigin((ESteamInputType)eDestinationInputType, (EControllerActionOrigin)eSourceOrigin);
+}
+
+bool cppISteamController_SteamController007_GetControllerBindingRevision(void *linux_side, ControllerHandle_t controllerHandle, int * pMajor, int * pMinor)
+{
+    return ((ISteamController*)linux_side)->GetControllerBindingRevision((ControllerHandle_t)controllerHandle, (int *)pMajor, (int *)pMinor);
 }
 
 #ifdef __cplusplus
