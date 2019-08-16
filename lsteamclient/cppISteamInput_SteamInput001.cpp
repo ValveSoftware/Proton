@@ -1,11 +1,11 @@
 #include "steam_defs.h"
-#include "steamworks_sdk_145/steam_api.h"
-#include "steamworks_sdk_145/steamnetworkingtypes.h"
+#include "steamworks_sdk_146/steam_api.h"
+#include "steamworks_sdk_146/steamnetworkingtypes.h"
 #include "steamclient_private.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
-#define SDKVER_145
+#define SDKVER_146
 #include "struct_converters.h"
 #include "cppISteamInput_SteamInput001.h"
 bool cppISteamInput_SteamInput001_Init(void *linux_side)
@@ -176,6 +176,11 @@ EInputActionOrigin cppISteamInput_SteamInput001_TranslateActionOrigin(void *linu
 bool cppISteamInput_SteamInput001_GetDeviceBindingRevision(void *linux_side, InputHandle_t inputHandle, int * pMajor, int * pMinor)
 {
     return ((ISteamInput*)linux_side)->GetDeviceBindingRevision((InputHandle_t)inputHandle, (int *)pMajor, (int *)pMinor);
+}
+
+uint32 cppISteamInput_SteamInput001_GetRemotePlaySessionID(void *linux_side, InputHandle_t inputHandle)
+{
+    return ((ISteamInput*)linux_side)->GetRemotePlaySessionID((InputHandle_t)inputHandle);
 }
 
 #ifdef __cplusplus

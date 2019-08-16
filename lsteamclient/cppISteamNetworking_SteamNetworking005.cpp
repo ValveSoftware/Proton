@@ -1,11 +1,11 @@
 #include "steam_defs.h"
-#include "steamworks_sdk_145/steam_api.h"
-#include "steamworks_sdk_145/steamnetworkingtypes.h"
+#include "steamworks_sdk_146/steam_api.h"
+#include "steamworks_sdk_146/steamnetworkingtypes.h"
 #include "steamclient_private.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
-#define SDKVER_145
+#define SDKVER_146
 #include "struct_converters.h"
 #include "cppISteamNetworking_SteamNetworking005.h"
 bool cppISteamNetworking_SteamNetworking005_SendP2PPacket(void *linux_side, CSteamID steamIDRemote, const void * pubData, uint32 cubData, EP2PSend eP2PSendType, int nChannel)

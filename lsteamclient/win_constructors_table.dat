@@ -1,4 +1,4 @@
-    {"SteamClient018", &create_winISteamClient_SteamClient018},
+    {"SteamClient019", &create_winISteamClient_SteamClient019},
     {"SteamUser020", &create_winISteamUser_SteamUser020},
     {"SteamFriends017", &create_winISteamFriends_SteamFriends017},
     {"SteamUtils009", &create_winISteamUtils_SteamUtils009},
@@ -28,6 +28,7 @@
     {"STEAMPARENTALSETTINGS_INTERFACE_VERSION001", &create_winISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001},
     {"SteamNetworkingSockets003", &create_winISteamNetworkingSockets_SteamNetworkingSockets003},
     {"SteamNetworkingUtils002", &create_winISteamNetworkingUtils_SteamNetworkingUtils002},
+    {"SteamClient018", &create_winISteamClient_SteamClient018},
     {"STEAMUGC_INTERFACE_VERSION012", &create_winISteamUGC_STEAMUGC_INTERFACE_VERSION012},
     {"SteamNetworkingSockets002", &create_winISteamNetworkingSockets_SteamNetworkingSockets002},
     {"SteamNetworkingUtils001", &create_winISteamNetworkingUtils_SteamNetworkingUtils001},

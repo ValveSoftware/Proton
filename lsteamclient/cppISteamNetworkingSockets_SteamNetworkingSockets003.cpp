@@ -1,12 +1,12 @@
 #include "steam_defs.h"
-#include "steamworks_sdk_145/steam_api.h"
-#include "steamworks_sdk_145/steamnetworkingtypes.h"
-#include "steamworks_sdk_145/isteamnetworkingsockets.h"
+#include "steamworks_sdk_146/steam_api.h"
+#include "steamworks_sdk_146/steamnetworkingtypes.h"
+#include "steamworks_sdk_146/isteamnetworkingsockets.h"
 #include "steamclient_private.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
-#define SDKVER_145
+#define SDKVER_146
 #include "struct_converters.h"
 #include "cppISteamNetworkingSockets_SteamNetworkingSockets003.h"
 HSteamListenSocket cppISteamNetworkingSockets_SteamNetworkingSockets003_CreateListenSocketIP(void *linux_side, const SteamNetworkingIPAddr * localAddress)

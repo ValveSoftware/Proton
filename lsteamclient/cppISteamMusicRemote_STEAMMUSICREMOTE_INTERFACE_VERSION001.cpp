@@ -1,11 +1,11 @@
 #include "steam_defs.h"
-#include "steamworks_sdk_145/steam_api.h"
-#include "steamworks_sdk_145/steamnetworkingtypes.h"
+#include "steamworks_sdk_146/steam_api.h"
+#include "steamworks_sdk_146/steamnetworkingtypes.h"
 #include "steamclient_private.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
-#define SDKVER_145
+#define SDKVER_146
 #include "struct_converters.h"
 #include "cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001.h"
 bool cppISteamMusicRemote_STEAMMUSICREMOTE_INTERFACE_VERSION001_RegisterSteamMusicRemote(void *linux_side, const char * pchName)

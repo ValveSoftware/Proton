@@ -1,4 +1,4 @@
-extern void *create_winISteamClient_SteamClient018(void *);
+extern void *create_winISteamClient_SteamClient019(void *);
 extern void *create_winISteamUser_SteamUser020(void *);
 extern void *create_winISteamFriends_SteamFriends017(void *);
 extern void *create_winISteamUtils_SteamUtils009(void *);
@@ -28,6 +28,7 @@ extern void *create_winISteamGameCoordinator_SteamGameCoordinator001(void *);
 extern void *create_winISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001(void *);
 extern void *create_winISteamNetworkingSockets_SteamNetworkingSockets003(void *);
 extern void *create_winISteamNetworkingUtils_SteamNetworkingUtils002(void *);
+extern void *create_winISteamClient_SteamClient018(void *);
 extern void *create_winISteamUGC_STEAMUGC_INTERFACE_VERSION012(void *);
 extern void *create_winISteamNetworkingSockets_SteamNetworkingSockets002(void *);
 extern void *create_winISteamNetworkingUtils_SteamNetworkingUtils001(void *);

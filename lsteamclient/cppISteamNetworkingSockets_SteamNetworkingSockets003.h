@@ -11,8 +11,8 @@ extern void cppISteamNetworkingSockets_SteamNetworkingSockets003_SetConnectionNa
 extern bool cppISteamNetworkingSockets_SteamNetworkingSockets003_GetConnectionName(void *, HSteamNetConnection, char *, int);
 extern EResult cppISteamNetworkingSockets_SteamNetworkingSockets003_SendMessageToConnection(void *, HSteamNetConnection, const void *, uint32, int);
 extern EResult cppISteamNetworkingSockets_SteamNetworkingSockets003_FlushMessagesOnConnection(void *, HSteamNetConnection);
-extern int cppISteamNetworkingSockets_SteamNetworkingSockets003_ReceiveMessagesOnConnection(void *, HSteamNetConnection, winSteamNetworkingMessage_t_145 **, int);
-extern int cppISteamNetworkingSockets_SteamNetworkingSockets003_ReceiveMessagesOnListenSocket(void *, HSteamListenSocket, winSteamNetworkingMessage_t_145 **, int);
+extern int cppISteamNetworkingSockets_SteamNetworkingSockets003_ReceiveMessagesOnConnection(void *, HSteamNetConnection, winSteamNetworkingMessage_t_146 **, int);
+extern int cppISteamNetworkingSockets_SteamNetworkingSockets003_ReceiveMessagesOnListenSocket(void *, HSteamListenSocket, winSteamNetworkingMessage_t_146 **, int);
 extern bool cppISteamNetworkingSockets_SteamNetworkingSockets003_GetConnectionInfo(void *, HSteamNetConnection, SteamNetConnectionInfo_t *);
 extern bool cppISteamNetworkingSockets_SteamNetworkingSockets003_GetQuickConnectionStatus(void *, HSteamNetConnection, SteamNetworkingQuickConnectionStatus *);
 extern int cppISteamNetworkingSockets_SteamNetworkingSockets003_GetDetailedConnectionStatus(void *, HSteamNetConnection, char *, int);

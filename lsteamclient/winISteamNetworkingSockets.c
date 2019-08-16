@@ -114,14 +114,14 @@ EResult __thiscall winISteamNetworkingSockets_SteamNetworkingSockets003_FlushMes
 }
 
 DEFINE_THISCALL_WRAPPER(winISteamNetworkingSockets_SteamNetworkingSockets003_ReceiveMessagesOnConnection, 16)
-int __thiscall winISteamNetworkingSockets_SteamNetworkingSockets003_ReceiveMessagesOnConnection(winISteamNetworkingSockets_SteamNetworkingSockets003 *_this, HSteamNetConnection hConn, winSteamNetworkingMessage_t_145 ** ppOutMessages, int nMaxMessages)
+int __thiscall winISteamNetworkingSockets_SteamNetworkingSockets003_ReceiveMessagesOnConnection(winISteamNetworkingSockets_SteamNetworkingSockets003 *_this, HSteamNetConnection hConn, winSteamNetworkingMessage_t_146 ** ppOutMessages, int nMaxMessages)
 {
     TRACE("%p\n", _this);
     return cppISteamNetworkingSockets_SteamNetworkingSockets003_ReceiveMessagesOnConnection(_this->linux_side, hConn, ppOutMessages, nMaxMessages);
 }
 
 DEFINE_THISCALL_WRAPPER(winISteamNetworkingSockets_SteamNetworkingSockets003_ReceiveMessagesOnListenSocket, 16)
-int __thiscall winISteamNetworkingSockets_SteamNetworkingSockets003_ReceiveMessagesOnListenSocket(winISteamNetworkingSockets_SteamNetworkingSockets003 *_this, HSteamListenSocket hSocket, winSteamNetworkingMessage_t_145 ** ppOutMessages, int nMaxMessages)
+int __thiscall winISteamNetworkingSockets_SteamNetworkingSockets003_ReceiveMessagesOnListenSocket(winISteamNetworkingSockets_SteamNetworkingSockets003 *_this, HSteamListenSocket hSocket, winSteamNetworkingMessage_t_146 ** ppOutMessages, int nMaxMessages)
 {
     TRACE("%p\n", _this);
     return cppISteamNetworkingSockets_SteamNetworkingSockets003_ReceiveMessagesOnListenSocket(_this->linux_side, hSocket, ppOutMessages, nMaxMessages);
