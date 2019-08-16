@@ -361,6 +361,20 @@ void __thiscall IVRSystem_020_AcknowledgeQuit_UserPrompt(void *_this)
     push_ptr_parameter(_this);
 }
 
+uint32_t __thiscall IVRSystem_020_GetAppContainerFilePaths(void *_this, char * pchBuffer, uint32_t unBufferSize)
+{
+    push_ptr_parameter(_this);
+    push_ptr_parameter(pchBuffer);
+    push_uint32_parameter(unBufferSize);
+    return 0;
+}
+
+const char * __thiscall IVRSystem_020_GetRuntimeVersion(void *_this)
+{
+    push_ptr_parameter(_this);
+    return 0;
+}
+
 EVRApplicationError __thiscall IVRApplications_006_AddApplicationManifest(void *_this, const char * pchApplicationManifestFullPath, bool bTemporary)
 {
     push_ptr_parameter(_this);

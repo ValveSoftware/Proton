@@ -241,14 +241,14 @@ const char * __thiscall winIVRSystem_IVRSystem_020_GetPropErrorNameFromEnum(winI
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRSystem_IVRSystem_020_PollNextEvent, 16)
-bool __thiscall winIVRSystem_IVRSystem_020_PollNextEvent(winIVRSystem_IVRSystem_020 *_this, winVREvent_t_1517 * pEvent, uint32_t uncbVREvent)
+bool __thiscall winIVRSystem_IVRSystem_020_PollNextEvent(winIVRSystem_IVRSystem_020 *_this, winVREvent_t_1610 * pEvent, uint32_t uncbVREvent)
 {
     TRACE("%p\n", _this);
     return cppIVRSystem_IVRSystem_020_PollNextEvent(_this->linux_side, pEvent, uncbVREvent);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRSystem_IVRSystem_020_PollNextEventWithPose, 28)
-bool __thiscall winIVRSystem_IVRSystem_020_PollNextEventWithPose(winIVRSystem_IVRSystem_020 *_this, ETrackingUniverseOrigin eOrigin, winVREvent_t_1517 * pEvent, uint32_t uncbVREvent, TrackedDevicePose_t * pTrackedDevicePose)
+bool __thiscall winIVRSystem_IVRSystem_020_PollNextEventWithPose(winIVRSystem_IVRSystem_020 *_this, ETrackingUniverseOrigin eOrigin, winVREvent_t_1610 * pEvent, uint32_t uncbVREvent, TrackedDevicePose_t * pTrackedDevicePose)
 {
     TRACE("%p\n", _this);
     return cppIVRSystem_IVRSystem_020_PollNextEventWithPose(_this->linux_side, eOrigin, pEvent, uncbVREvent, pTrackedDevicePose);
@@ -270,14 +270,14 @@ HiddenAreaMesh_t *__thiscall winIVRSystem_IVRSystem_020_GetHiddenAreaMesh(winIVR
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRSystem_IVRSystem_020_GetControllerState, 20)
-bool __thiscall winIVRSystem_IVRSystem_020_GetControllerState(winIVRSystem_IVRSystem_020 *_this, TrackedDeviceIndex_t unControllerDeviceIndex, winVRControllerState001_t_1517 * pControllerState, uint32_t unControllerStateSize)
+bool __thiscall winIVRSystem_IVRSystem_020_GetControllerState(winIVRSystem_IVRSystem_020 *_this, TrackedDeviceIndex_t unControllerDeviceIndex, winVRControllerState001_t_1610 * pControllerState, uint32_t unControllerStateSize)
 {
     TRACE("%p\n", _this);
     return cppIVRSystem_IVRSystem_020_GetControllerState(_this->linux_side, unControllerDeviceIndex, pControllerState, unControllerStateSize);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRSystem_IVRSystem_020_GetControllerStateWithPose, 32)
-bool __thiscall winIVRSystem_IVRSystem_020_GetControllerStateWithPose(winIVRSystem_IVRSystem_020 *_this, ETrackingUniverseOrigin eOrigin, TrackedDeviceIndex_t unControllerDeviceIndex, winVRControllerState001_t_1517 * pControllerState, uint32_t unControllerStateSize, TrackedDevicePose_t * pTrackedDevicePose)
+bool __thiscall winIVRSystem_IVRSystem_020_GetControllerStateWithPose(winIVRSystem_IVRSystem_020 *_this, ETrackingUniverseOrigin eOrigin, TrackedDeviceIndex_t unControllerDeviceIndex, winVRControllerState001_t_1610 * pControllerState, uint32_t unControllerStateSize, TrackedDevicePose_t * pTrackedDevicePose)
 {
     TRACE("%p\n", _this);
     return cppIVRSystem_IVRSystem_020_GetControllerStateWithPose(_this->linux_side, eOrigin, unControllerDeviceIndex, pControllerState, unControllerStateSize, pTrackedDevicePose);
@@ -353,6 +353,20 @@ void __thiscall winIVRSystem_IVRSystem_020_AcknowledgeQuit_UserPrompt(winIVRSyst
     cppIVRSystem_IVRSystem_020_AcknowledgeQuit_UserPrompt(_this->linux_side);
 }
 
+DEFINE_THISCALL_WRAPPER(winIVRSystem_IVRSystem_020_GetAppContainerFilePaths, 16)
+uint32_t __thiscall winIVRSystem_IVRSystem_020_GetAppContainerFilePaths(winIVRSystem_IVRSystem_020 *_this, char * pchBuffer, uint32_t unBufferSize)
+{
+    TRACE("%p\n", _this);
+    return cppIVRSystem_IVRSystem_020_GetAppContainerFilePaths(_this->linux_side, pchBuffer, unBufferSize);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVRSystem_IVRSystem_020_GetRuntimeVersion, 4)
+const char * __thiscall winIVRSystem_IVRSystem_020_GetRuntimeVersion(winIVRSystem_IVRSystem_020 *_this)
+{
+    TRACE("%p\n", _this);
+    return cppIVRSystem_IVRSystem_020_GetRuntimeVersion(_this->linux_side);
+}
+
 extern vtable_ptr winIVRSystem_IVRSystem_020_vtable;
 
 #ifndef __GNUC__
@@ -405,6 +419,8 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_020_PerformFirmwareUpdate)
         VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_020_AcknowledgeQuit_Exiting)
         VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_020_AcknowledgeQuit_UserPrompt)
+        VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_020_GetAppContainerFilePaths)
+        VTABLE_ADD_FUNC(winIVRSystem_IVRSystem_020_GetRuntimeVersion)
     );
 #ifndef __GNUC__
 }
@@ -428,8 +444,8 @@ void destroy_winIVRSystem_IVRSystem_020(void *object)
 winIVRSystem_IVRSystem_020 *create_winIVRSystem_IVRSystem_020_FnTable(void *linux_side)
 {
     winIVRSystem_IVRSystem_020 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRSystem_IVRSystem_020));
-    struct thunk *thunks = alloc_thunks(46);
-    struct thunk **vtable = HeapAlloc(GetProcessHeap(), 0, 46 * sizeof(*vtable));
+    struct thunk *thunks = alloc_thunks(48);
+    struct thunk **vtable = HeapAlloc(GetProcessHeap(), 0, 48 * sizeof(*vtable));
     int i;
 
     TRACE("-> %p, vtable %p, thunks %p\n", r, vtable, thunks);
@@ -479,7 +495,9 @@ winIVRSystem_IVRSystem_020 *create_winIVRSystem_IVRSystem_020_FnTable(void *linu
     init_thunk(&thunks[43], r, winIVRSystem_IVRSystem_020_PerformFirmwareUpdate, 1, FALSE, FALSE);
     init_thunk(&thunks[44], r, winIVRSystem_IVRSystem_020_AcknowledgeQuit_Exiting, 0, FALSE, FALSE);
     init_thunk(&thunks[45], r, winIVRSystem_IVRSystem_020_AcknowledgeQuit_UserPrompt, 0, FALSE, FALSE);
-    for (i = 0; i < 46; i++)
+    init_thunk(&thunks[46], r, winIVRSystem_IVRSystem_020_GetAppContainerFilePaths, 2, FALSE, FALSE);
+    init_thunk(&thunks[47], r, winIVRSystem_IVRSystem_020_GetRuntimeVersion, 0, FALSE, FALSE);
+    for (i = 0; i < 48; i++)
         vtable[i] = &thunks[i];
     r->linux_side = linux_side;
     r->vtable = (void *)vtable;

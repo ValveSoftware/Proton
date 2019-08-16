@@ -1,6 +1,6 @@
 #include "vrclient_private.h"
 #include "vrclient_defs.h"
-#include "openvr_v1.5.17/ivrclientcore.h"
+#include "openvr_v1.6.10/ivrclientcore.h"
 using namespace vr;
 extern "C" {
 #include "struct_converters.h"
@@ -159,21 +159,21 @@ const char * cppIVRSystem_IVRSystem_020_GetPropErrorNameFromEnum(void *linux_sid
     return ((IVRSystem*)linux_side)->GetPropErrorNameFromEnum((vr::ETrackedPropertyError)error);
 }
 
-bool cppIVRSystem_IVRSystem_020_PollNextEvent(void *linux_side, winVREvent_t_1517 * pEvent, uint32_t uncbVREvent)
+bool cppIVRSystem_IVRSystem_020_PollNextEvent(void *linux_side, winVREvent_t_1610 * pEvent, uint32_t uncbVREvent)
 {
     VREvent_t lin;
     bool _ret;
     _ret = ((IVRSystem*)linux_side)->PollNextEvent(&lin, sizeof(lin));
-    struct_VREvent_t_1517_lin_to_win(&lin, pEvent);
+    struct_VREvent_t_1610_lin_to_win(&lin, pEvent);
     return _ret;
 }
 
-bool cppIVRSystem_IVRSystem_020_PollNextEventWithPose(void *linux_side, ETrackingUniverseOrigin eOrigin, winVREvent_t_1517 * pEvent, uint32_t uncbVREvent, TrackedDevicePose_t * pTrackedDevicePose)
+bool cppIVRSystem_IVRSystem_020_PollNextEventWithPose(void *linux_side, ETrackingUniverseOrigin eOrigin, winVREvent_t_1610 * pEvent, uint32_t uncbVREvent, TrackedDevicePose_t * pTrackedDevicePose)
 {
     VREvent_t lin;
     bool _ret;
     _ret = ((IVRSystem*)linux_side)->PollNextEventWithPose((vr::ETrackingUniverseOrigin)eOrigin, &lin, sizeof(lin), (vr::TrackedDevicePose_t *)pTrackedDevicePose);
-    struct_VREvent_t_1517_lin_to_win(&lin, pEvent);
+    struct_VREvent_t_1610_lin_to_win(&lin, pEvent);
     return _ret;
 }
 
@@ -187,21 +187,21 @@ vr::HiddenAreaMesh_t cppIVRSystem_IVRSystem_020_GetHiddenAreaMesh(void *linux_si
     return ((IVRSystem*)linux_side)->GetHiddenAreaMesh((vr::EVREye)eEye, (vr::EHiddenAreaMeshType)type);
 }
 
-bool cppIVRSystem_IVRSystem_020_GetControllerState(void *linux_side, TrackedDeviceIndex_t unControllerDeviceIndex, winVRControllerState001_t_1517 * pControllerState, uint32_t unControllerStateSize)
+bool cppIVRSystem_IVRSystem_020_GetControllerState(void *linux_side, TrackedDeviceIndex_t unControllerDeviceIndex, winVRControllerState001_t_1610 * pControllerState, uint32_t unControllerStateSize)
 {
     VRControllerState001_t lin;
     bool _ret;
     _ret = ((IVRSystem*)linux_side)->GetControllerState((vr::TrackedDeviceIndex_t)unControllerDeviceIndex, &lin, sizeof(lin));
-    struct_VRControllerState001_t_1517_lin_to_win(&lin, pControllerState);
+    struct_VRControllerState001_t_1610_lin_to_win(&lin, pControllerState);
     return _ret;
 }
 
-bool cppIVRSystem_IVRSystem_020_GetControllerStateWithPose(void *linux_side, ETrackingUniverseOrigin eOrigin, TrackedDeviceIndex_t unControllerDeviceIndex, winVRControllerState001_t_1517 * pControllerState, uint32_t unControllerStateSize, TrackedDevicePose_t * pTrackedDevicePose)
+bool cppIVRSystem_IVRSystem_020_GetControllerStateWithPose(void *linux_side, ETrackingUniverseOrigin eOrigin, TrackedDeviceIndex_t unControllerDeviceIndex, winVRControllerState001_t_1610 * pControllerState, uint32_t unControllerStateSize, TrackedDevicePose_t * pTrackedDevicePose)
 {
     VRControllerState001_t lin;
     bool _ret;
     _ret = ((IVRSystem*)linux_side)->GetControllerStateWithPose((vr::ETrackingUniverseOrigin)eOrigin, (vr::TrackedDeviceIndex_t)unControllerDeviceIndex, &lin, sizeof(lin), (vr::TrackedDevicePose_t *)pTrackedDevicePose);
-    struct_VRControllerState001_t_1517_lin_to_win(&lin, pControllerState);
+    struct_VRControllerState001_t_1610_lin_to_win(&lin, pControllerState);
     return _ret;
 }
 
@@ -253,6 +253,16 @@ void cppIVRSystem_IVRSystem_020_AcknowledgeQuit_Exiting(void *linux_side)
 void cppIVRSystem_IVRSystem_020_AcknowledgeQuit_UserPrompt(void *linux_side)
 {
     ((IVRSystem*)linux_side)->AcknowledgeQuit_UserPrompt();
+}
+
+uint32_t cppIVRSystem_IVRSystem_020_GetAppContainerFilePaths(void *linux_side, char * pchBuffer, uint32_t unBufferSize)
+{
+    return ((IVRSystem*)linux_side)->GetAppContainerFilePaths((char *)pchBuffer, (uint32_t)unBufferSize);
+}
+
+const char * cppIVRSystem_IVRSystem_020_GetRuntimeVersion(void *linux_side)
+{
+    return ((IVRSystem*)linux_side)->GetRuntimeVersion();
 }
 
 #ifdef __cplusplus
