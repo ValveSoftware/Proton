@@ -876,11 +876,14 @@ WINE_DEFAULT_DEBUG_CHANNEL(steamclient);
 
     cpp = open("%s.cpp" % cppname, "w")
     cpp.write("#include \"steam_defs.h\"\n")
+    cpp.write("#pragma push_macro(\"__cdecl\")\n")
+    cpp.write("#undef __cdecl\n")
     cpp.write("#include \"steamworks_sdk_%s/steam_api.h\"\n" % sdkver)
     if os.path.isfile("steamworks_sdk_%s/steamnetworkingtypes.h" % sdkver):
         cpp.write("#include \"steamworks_sdk_%s/steamnetworkingtypes.h\"\n" % sdkver)
     if not fname == "steam_api.h":
         cpp.write("#include \"steamworks_sdk_%s/%s\"\n" % (sdkver, fname))
+    cpp.write("#pragma pop_macro(\"__cdecl\")\n")
     cpp.write("#include \"steamclient_private.h\"\n")
     cpp.write("#ifdef __cplusplus\nextern \"C\" {\n#endif\n")
     cpp.write("#define SDKVER_%s\n" % sdkver)
@@ -1092,6 +1095,8 @@ def handle_struct(sdkver, struct):
     cppfile = open(cppname, "a")
     if not file_exists:
         cppfile.write("#include \"steam_defs.h\"\n")
+        cppfile.write("#pragma push_macro(\"__cdecl\")\n")
+        cppfile.write("#undef __cdecl\n")
         cppfile.write("#include \"steamworks_sdk_%s/steam_api.h\"\n" % sdkver)
         cppfile.write("#include \"steamworks_sdk_%s/isteamgameserver.h\"\n" % (sdkver))
         if os.path.isfile("steamworks_sdk_%s/isteamnetworkingsockets.h" % sdkver):
@@ -1102,6 +1107,7 @@ def handle_struct(sdkver, struct):
             cppfile.write("#include \"steamworks_sdk_%s/isteamgamecoordinator.h\"\n" % sdkver)
         if os.path.isfile("steamworks_sdk_%s/steamnetworkingtypes.h" % sdkver):
             cppfile.write("#include \"steamworks_sdk_%s/steamnetworkingtypes.h\"\n" % sdkver)
+        cppfile.write("#pragma pop_macro(\"__cdecl\")\n")
         cppfile.write("#include \"steamclient_private.h\"\n")
         cppfile.write("extern \"C\" {\n")
         cppfile.write("#define SDKVER_%s\n" % sdkver)

@@ -1,8 +1,11 @@
 #include "steam_defs.h"
+#pragma push_macro("__cdecl")
+#undef __cdecl
 #include "steamworks_sdk_116x/steam_api.h"
 #include "steamworks_sdk_116x/isteamgameserver.h"
 #include "steamworks_sdk_116x/isteamgameserverstats.h"
 #include "steamworks_sdk_116x/isteamgamecoordinator.h"
+#pragma pop_macro("__cdecl")
 #include "steamclient_private.h"
 extern "C" {
 #define SDKVER_116x

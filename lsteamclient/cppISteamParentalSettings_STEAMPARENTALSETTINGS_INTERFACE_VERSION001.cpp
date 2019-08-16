@@ -1,7 +1,10 @@
 #include "steam_defs.h"
+#pragma push_macro("__cdecl")
+#undef __cdecl
 #include "steamworks_sdk_146/steam_api.h"
 #include "steamworks_sdk_146/steamnetworkingtypes.h"
 #include "steamworks_sdk_146/isteamparentalsettings.h"
+#pragma pop_macro("__cdecl")
 #include "steamclient_private.h"
 #ifdef __cplusplus
 extern "C" {
