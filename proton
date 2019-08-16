@@ -270,6 +270,7 @@ class CompatData:
             ( "LiberationSans-Bold.ttf", "arialbd.ttf" ),
             ( "LiberationSerif-Regular.ttf", "times.ttf" ),
             ( "LiberationMono-Regular.ttf", "cour.ttf" ),
+            ( "SourceHanSansSCRegular.otf", "msyh.ttf" ),
         ]
 
         windowsfonts = self.prefix_dir + "/drive_c/windows/Fonts"
