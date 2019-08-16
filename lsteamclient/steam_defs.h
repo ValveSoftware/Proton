@@ -93,7 +93,8 @@ typedef uint32_t EUserUGCList,
         ESteamNetworkingGetConfigValueResult,
         EGameSearchErrorCode_t,
         EPlayerResult_t,
-        ESteamNetworkingAvailability
+        ESteamNetworkingAvailability,
+        ESteamDeviceFormFactor
 ;
 
 /* structs below are PODs with identical size & layout across platforms */

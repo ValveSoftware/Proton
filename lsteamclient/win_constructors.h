@@ -21,6 +21,7 @@ extern void *create_winISteamAppList_STEAMAPPLIST_INTERFACE_VERSION001(void *);
 extern void *create_winISteamHTMLSurface_STEAMHTMLSURFACE_INTERFACE_VERSION_005(void *);
 extern void *create_winISteamInventory_STEAMINVENTORY_INTERFACE_V003(void *);
 extern void *create_winISteamVideo_STEAMVIDEO_INTERFACE_V002(void *);
+extern void *create_winISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION001(void *);
 extern void *create_winISteamAppTicket_STEAMAPPTICKET_INTERFACE_VERSION001(void *);
 extern void *create_winISteamGameServer_SteamGameServer012(void *);
 extern void *create_winISteamGameServerStats_SteamGameServerStats001(void *);

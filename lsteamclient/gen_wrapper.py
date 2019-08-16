@@ -107,6 +107,7 @@ files = [
         "ISteamMusicRemote",
         "ISteamNetworking",
         "ISteamParties",
+        "ISteamRemotePlay",
         "ISteamRemoteStorage",
         "ISteamScreenshots",
         "ISteamUGC",
