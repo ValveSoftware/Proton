@@ -468,7 +468,11 @@ class Session:
         #load environment overrides
         if os.path.exists(g_proton.user_settings_file):
             try:
-                import user_settings
+                import importlib.util
+                spec = importlib.util.spec_from_file_location('user_settings', g_proton.user_settings_file)
+                user_settings = importlib.util.module_from_spec(spec)
+                spec.loader.exec_module(user_settings)
+
                 for key, value in user_settings.user_settings.items():
                     self.env.setdefault(key, value)
             except:
