@@ -14,7 +14,7 @@
 
     #WINE STAGING
     echo "applying staging patches"
-    ../wine-staging/patches/patchinstall.sh DESTDIR="." --all -W winex11.drv-mouse-coorrds
+    ../wine-staging/patches/patchinstall.sh DESTDIR="." --all -W winex11.drv-mouse-coorrds -W server-Desktop_Refcount -W ws2_32-TransmitFile
 
     #WINE VULKAN
     echo "applying winevulkan patches"
@@ -47,7 +47,6 @@
     #WINE FSYNC
     echo "applying fsync patches"
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-fsync_staging.patch
-    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-fsync_staging_no_alloc_handle.patch
 
     #PROTON
     echo "applying proton patches"

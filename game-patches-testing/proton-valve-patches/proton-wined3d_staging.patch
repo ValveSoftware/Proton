@@ -50,7 +50,7 @@ index 7e1c4ef0ecc..23a871cd815 100644
 +    struct wined3d_context *context;
 +
 +    context = context_acquire(cs->device, NULL, 0);
-+    gl_info = context->gl_info;
++    gl_info = wined3d_context_gl(context)->gl_info;
 +
 +    wined3d_texture_load_location(&texture->t, 0, context, WINED3D_LOCATION_TEXTURE_RGB);
 +
@@ -192,7 +192,7 @@ index 23a871cd815..42acc62aa6d 100644
 +    struct wined3d_context *context;
 +
 +    context = context_acquire(cs->device, NULL, 0);
-+    gl_info = context->gl_info;
++    gl_info = wined3d_context_gl(context)->gl_info;
 +
 +    op->callback(op->data, op->data_size);
 +
@@ -892,7 +892,7 @@ index abfcf3f9404..5a204693abb 100644
      struct wined3d_context *context;
  
 @@ -2532,8 +2534,12 @@ static void wined3d_cs_exec_gl_texture_callback(struct wined3d_cs *cs, const voi
-     gl_info = context->gl_info;
+     gl_info = wined3d_context_gl(context)->gl_info;
  
      wined3d_texture_load_location(&texture->t, 0, context, WINED3D_LOCATION_TEXTURE_RGB);
 +    if (depth_texture)
@@ -1161,10 +1161,10 @@ index da802ee2e49..1f1883cafea 100644
 +    GLsync fence;
 +
 +    context = context_acquire(cs->device, NULL, 0);
-+    gl_info = context->gl_info;
++    gl_info = wined3d_context_gl(context)->gl_info;
 +
 +    fence = GL_EXTCALL(glFenceSync(GL_SYNC_GPU_COMMANDS_COMPLETE, 0));
-+    context->gl_info->gl_ops.gl.p_glFlush();
++    wined3d_context_gl(context)->gl_info->gl_ops.gl.p_glFlush();
 +
 +    *op->fence = fence;
 +
@@ -1439,12 +1439,12 @@ index 1f1883cafea..85cbc4cdbbc 100644
  
 @@ -2618,6 +2619,8 @@ static void wined3d_cs_exec_fence(struct wined3d_cs *cs, const void *data)
      context = context_acquire(cs->device, NULL, 0);
-     gl_info = context->gl_info;
+     gl_info = wined3d_context_gl(context)->gl_info;
  
 +    wined3d_texture_load_location(op->texture, 0, context, WINED3D_LOCATION_TEXTURE_RGB);
 +
      fence = GL_EXTCALL(glFenceSync(GL_SYNC_GPU_COMMANDS_COMPLETE, 0));
-     context->gl_info->gl_ops.gl.p_glFlush();
+     wined3d_context_gl(context)->gl_info->gl_ops.gl.p_glFlush();
  
 @@ -2628,13 +2631,14 @@ static void wined3d_cs_exec_fence(struct wined3d_cs *cs, const void *data)
      context_release(context);
