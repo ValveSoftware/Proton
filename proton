@@ -93,27 +93,42 @@ def set_dir_casefold_bit(dir_path):
 
 class Proton:
     def __init__(self, base_dir):
-        self.base_dir = base_dir + "/"
-        self.dist_dir = self.path("dist/")
-        self.bin_dir = self.path("dist/bin/")
-        self.lib_dir = self.path("dist/lib/")
-        self.lib64_dir = self.path("dist/lib64/")
-        self.fonts_dir = self.path("dist/share/fonts/")
-        self.version_file = self.path("version")
-        self.default_pfx_dir = self.path("dist/share/default_pfx/")
-        self.user_settings_file = self.path("user_settings.py")
-        self.wine_bin = self.bin_dir + "wine"
-        self.wineserver_bin = self.bin_dir + "wineserver"
-        self.dist_lock = FileLock(self.path("dist.lock"), timeout=-1)
+        import configparser
+        self.conf = configparser.ConfigParser()
+        self.conf.optionxform = str
+        self.conf.read(base_dir + "/proton.conf")
+
+        self.base_dir = self.conf_path("base_dir", base_dir + "/")
+        self.dist_dir = self.conf_path("dist_dir", self.path("dist/"))
+
+        self.bin_dir = self.conf_path("bin_dir", self.path(self.dist_dir + "bin/"))
+        self.lib_dir = self.conf_path("lib_dir", self.path(self.dist_dir + "lib/"))
+        self.lib64_dir = self.conf_path("lib64_dir", self.path(self.dist_dir + "lib64/"))
+        self.fonts_dir = self.conf_path("fonts_dir", self.path(self.dist_dir + "share/fonts/"))
+
+        self.default_pfx_dir = self.conf_path("default_pfx_dir", self.path(self.dist_dir + "share/default_pfx/"))
+
+        self.version_file = self.conf_path("version_file", self.path("version"))
+        self.dist_lock_file = self.conf_path("dist_lock_file", self.path("dist.lock"))
+        self.dist_version_file = self.conf_path("dist_version_file", self.path(self.dist_dir + "version"))
+        self.user_settings_file = self.conf_path("user_settings_file", self.path("user_settings.py"))
+
+        self.wine_bin = self.conf_path("wine_bin", self.bin_dir + "wine")
+        self.wineserver_bin = self.conf_path("wineserver_bin", self.bin_dir + "wineserver")
+
+        self.dist_lock = FileLock(self.dist_lock_file, timeout=-1)
 
     def path(self, d):
         return self.base_dir + d
 
+    def conf_path(self, n, f):
+        return os.path.expanduser(self.conf.get("paths", n, fallback = f))
+
     def extract_tarball(self):
         with self.dist_lock:
             if not os.path.exists(self.dist_dir) or \
-                    not os.path.exists(self.path("dist/version")) or \
-                    not filecmp.cmp(self.version_file, self.path("dist/version")):
+                    not os.path.exists(self.dist_version_file) or \
+                    not filecmp.cmp(self.version_file, self.dist_version_file):
                 if os.path.exists(self.dist_dir):
                     shutil.rmtree(self.dist_dir)
                 tar = tarfile.open(self.path("proton_dist.tar.gz"), mode="r:gz")
