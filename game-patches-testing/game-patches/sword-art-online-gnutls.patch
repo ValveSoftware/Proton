@@ -48,3 +48,4 @@ index cb90d1c40d7..cbf8104a984 100644
      TRACE("Using %s priority\n", debugstr_a(priority));
      err = pgnutls_priority_set_direct(*s, priority, NULL);
      if (err != GNUTLS_E_SUCCESS)
+ 

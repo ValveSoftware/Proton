@@ -1,3 +1,510 @@
+From 8b947e5cc131821ec51434ee2446682a707e02cb Mon Sep 17 00:00:00 2001
+From: Tk-Glitch <ti3nou@gmail.com>
+Date: Tue, 13 Aug 2019 05:16:50 +0200
+Subject: Revert "kernel32: Move some module functions to kernelbase."
+
+This reverts commit 05d00276c627753487c571c30fddfc56c02ad37e.
+
+diff --git a/dlls/kernel32/kernel32.spec b/dlls/kernel32/kernel32.spec
+index 016c3022dc..bb496425aa 100644
+--- a/dlls/kernel32/kernel32.spec
++++ b/dlls/kernel32/kernel32.spec
+@@ -377,7 +377,7 @@
+ @ stdcall DeleteVolumeMountPointW(wstr)
+ @ stdcall -arch=x86_64 DequeueUmsCompletionListItems(ptr long ptr)
+ @ stdcall DeviceIoControl(long long ptr long ptr long ptr ptr)
+-@ stdcall -import DisableThreadLibraryCalls(long)
++@ stdcall DisableThreadLibraryCalls(long)
+ @ stdcall -import DisconnectNamedPipe(long)
+ @ stdcall DnsHostnameToComputerNameA (str ptr ptr)
+ @ stdcall DnsHostnameToComputerNameW (wstr ptr ptr)
+@@ -718,12 +718,12 @@
+ @ stdcall GetMailslotInfo(long ptr ptr ptr ptr)
+ @ stdcall GetMaximumProcessorCount(long)
+ @ stdcall GetMaximumProcessorGroupCount()
+-@ stdcall -import GetModuleFileNameA(long ptr long)
+-@ stdcall -import GetModuleFileNameW(long ptr long)
+-@ stdcall -import GetModuleHandleA(str)
+-@ stdcall -import GetModuleHandleExA(long ptr ptr)
+-@ stdcall -import GetModuleHandleExW(long ptr ptr)
+-@ stdcall -import GetModuleHandleW(wstr)
++@ stdcall GetModuleFileNameA(long ptr long)
++@ stdcall GetModuleFileNameW(long ptr long)
++@ stdcall GetModuleHandleA(str)
++@ stdcall GetModuleHandleExA(long ptr ptr)
++@ stdcall GetModuleHandleExW(long ptr ptr)
++@ stdcall GetModuleHandleW(wstr)
+ # @ stub GetNamedPipeAttribute
+ # @ stub GetNamedPipeClientComputerNameA
+ # @ stub GetNamedPipeClientComputerNameW
+diff --git a/dlls/kernel32/module.c b/dlls/kernel32/module.c
+index acfc365200..386a7c2239 100644
+--- a/dlls/kernel32/module.c
++++ b/dlls/kernel32/module.c
+@@ -233,6 +233,33 @@ BOOL WINAPI SetDefaultDllDirectories( DWORD flags )
+ }
+ 
+ 
++/****************************************************************************
++ *              DisableThreadLibraryCalls (KERNEL32.@)
++ *
++ * Inform the module loader that thread notifications are not required for a dll.
++ *
++ * PARAMS
++ *  hModule [I] Module handle to skip calls for
++ *
++ * RETURNS
++ *  Success: TRUE. Thread attach and detach notifications will not be sent
++ *           to hModule.
++ *  Failure: FALSE. Use GetLastError() to determine the cause.
++ *
++ * NOTES
++ *  This is typically called from the dll entry point of a dll during process
++ *  attachment, for dlls that do not need to process thread notifications.
++ */
++BOOL WINAPI DisableThreadLibraryCalls( HMODULE hModule )
++{
++    NTSTATUS    nts = LdrDisableThreadCalloutsForDll( hModule );
++    if (nts == STATUS_SUCCESS) return TRUE;
++
++    SetLastError( RtlNtStatusToDosError( nts ) );
++    return FALSE;
++}
++
++
+ /***********************************************************************
+  *             GetBinaryTypeW                     [KERNEL32.@]
+  *
+@@ -375,6 +402,194 @@ BOOL WINAPI GetBinaryTypeA( LPCSTR lpApplicationName, LPDWORD lpBinaryType )
+     return FALSE;
+ }
+ 
++/***********************************************************************
++ *              GetModuleHandleExA         (KERNEL32.@)
++ */
++BOOL WINAPI GetModuleHandleExA( DWORD flags, LPCSTR name, HMODULE *module )
++{
++    WCHAR *nameW;
++
++    if (!name || (flags & GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS))
++        return GetModuleHandleExW( flags, (LPCWSTR)name, module );
++
++    if (!(nameW = FILE_name_AtoW( name, FALSE ))) return FALSE;
++    return GetModuleHandleExW( flags, nameW, module );
++}
++
++/***********************************************************************
++ *              GetModuleHandleExW         (KERNEL32.@)
++ */
++BOOL WINAPI GetModuleHandleExW( DWORD flags, LPCWSTR name, HMODULE *module )
++{
++    NTSTATUS status = STATUS_SUCCESS;
++    HMODULE ret;
++    ULONG_PTR magic;
++    BOOL lock;
++
++    if (!module)
++    {
++        SetLastError( ERROR_INVALID_PARAMETER );
++        return FALSE;
++    }
++
++    /* if we are messing with the refcount, grab the loader lock */
++    lock = (flags & GET_MODULE_HANDLE_EX_FLAG_PIN) || !(flags & GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT);
++    if (lock)
++        LdrLockLoaderLock( 0, NULL, &magic );
++
++    if (!name)
++    {
++        ret = NtCurrentTeb()->Peb->ImageBaseAddress;
++    }
++    else if (flags & GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS)
++    {
++        void *dummy;
++        if (!(ret = RtlPcToFileHeader( (void *)name, &dummy ))) status = STATUS_DLL_NOT_FOUND;
++    }
++    else
++    {
++        UNICODE_STRING wstr;
++        RtlInitUnicodeString( &wstr, name );
++        status = LdrGetDllHandle( NULL, 0, &wstr, &ret );
++    }
++
++    if (status == STATUS_SUCCESS)
++    {
++        if (flags & GET_MODULE_HANDLE_EX_FLAG_PIN)
++            LdrAddRefDll( LDR_ADDREF_DLL_PIN, ret );
++        else if (!(flags & GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT))
++            LdrAddRefDll( 0, ret );
++    }
++    else SetLastError( RtlNtStatusToDosError( status ) );
++
++    if (lock)
++        LdrUnlockLoaderLock( 0, magic );
++
++    if (status == STATUS_SUCCESS) *module = ret;
++    else *module = NULL;
++
++    return (status == STATUS_SUCCESS);
++}
++
++/***********************************************************************
++ *              GetModuleHandleA         (KERNEL32.@)
++ *
++ * Get the handle of a dll loaded into the process address space.
++ *
++ * PARAMS
++ *  module [I] Name of the dll
++ *
++ * RETURNS
++ *  Success: A handle to the loaded dll.
++ *  Failure: A NULL handle. Use GetLastError() to determine the cause.
++ */
++HMODULE WINAPI DECLSPEC_HOTPATCH GetModuleHandleA(LPCSTR module)
++{
++    HMODULE ret;
++
++    GetModuleHandleExA( GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT, module, &ret );
++    return ret;
++}
++
++/***********************************************************************
++ *		GetModuleHandleW (KERNEL32.@)
++ *
++ * Unicode version of GetModuleHandleA.
++ */
++HMODULE WINAPI GetModuleHandleW(LPCWSTR module)
++{
++    HMODULE ret;
++
++    GetModuleHandleExW( GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT, module, &ret );
++    return ret;
++}
++
++
++/***********************************************************************
++ *              GetModuleFileNameA      (KERNEL32.@)
++ *
++ * Get the file name of a loaded module from its handle.
++ *
++ * RETURNS
++ *  Success: The length of the file name, excluding the terminating NUL.
++ *  Failure: 0. Use GetLastError() to determine the cause.
++ *
++ * NOTES
++ *  This function always returns the long path of hModule
++ *  The function doesn't write a terminating '\0' if the buffer is too 
++ *  small.
++ */
++DWORD WINAPI GetModuleFileNameA(
++	HMODULE hModule,	/* [in] Module handle (32 bit) */
++	LPSTR lpFileName,	/* [out] Destination for file name */
++        DWORD size )		/* [in] Size of lpFileName in characters */
++{
++    LPWSTR filenameW = HeapAlloc( GetProcessHeap(), 0, size * sizeof(WCHAR) );
++    DWORD len;
++
++    if (!filenameW)
++    {
++        SetLastError( ERROR_NOT_ENOUGH_MEMORY );
++        return 0;
++    }
++    if ((len = GetModuleFileNameW( hModule, filenameW, size )))
++    {
++    	len = FILE_name_WtoA( filenameW, len, lpFileName, size );
++        if (len < size)
++            lpFileName[len] = '\0';
++        else
++            SetLastError( ERROR_INSUFFICIENT_BUFFER );
++    }
++    HeapFree( GetProcessHeap(), 0, filenameW );
++    return len;
++}
++
++/***********************************************************************
++ *              GetModuleFileNameW      (KERNEL32.@)
++ *
++ * Unicode version of GetModuleFileNameA.
++ */
++DWORD WINAPI GetModuleFileNameW( HMODULE hModule, LPWSTR lpFileName, DWORD size )
++{
++    ULONG len = 0;
++    ULONG_PTR magic;
++    LDR_MODULE *pldr;
++    NTSTATUS nts;
++    WIN16_SUBSYSTEM_TIB *win16_tib;
++
++    if (!hModule && ((win16_tib = NtCurrentTeb()->Tib.SubSystemTib)) && win16_tib->exe_name)
++    {
++        len = min(size, win16_tib->exe_name->Length / sizeof(WCHAR));
++        memcpy( lpFileName, win16_tib->exe_name->Buffer, len * sizeof(WCHAR) );
++        if (len < size) lpFileName[len] = '\0';
++        goto done;
++    }
++
++    LdrLockLoaderLock( 0, NULL, &magic );
++
++    if (!hModule) hModule = NtCurrentTeb()->Peb->ImageBaseAddress;
++    nts = LdrFindEntryForAddress( hModule, &pldr );
++    if (nts == STATUS_SUCCESS)
++    {
++        len = min(size, pldr->FullDllName.Length / sizeof(WCHAR));
++        memcpy(lpFileName, pldr->FullDllName.Buffer, len * sizeof(WCHAR));
++        if (len < size)
++        {
++            lpFileName[len] = '\0';
++            SetLastError( 0 );
++        }
++        else
++            SetLastError( ERROR_INSUFFICIENT_BUFFER );
++    }
++    else SetLastError( RtlNtStatusToDosError( nts ) );
++
++    LdrUnlockLoaderLock( 0, magic );
++done:
++    TRACE( "%s\n", debugstr_wn(lpFileName, len) );
++    return len;
++}
++
++
+ /***********************************************************************
+  *           get_dll_system_path
+  */
+diff --git a/dlls/kernelbase/kernelbase.spec b/dlls/kernelbase/kernelbase.spec
+index 4bb2b55cde..1b8c4cc236 100644
+--- a/dlls/kernelbase/kernelbase.spec
++++ b/dlls/kernelbase/kernelbase.spec
+@@ -263,7 +263,7 @@
+ @ stdcall DestroyPrivateObjectSecurity(ptr)
+ @ stdcall DeviceIoControl(long long ptr long ptr long ptr ptr) kernel32.DeviceIoControl
+ @ stdcall DisablePredefinedHandleTableInternal(long)
+-@ stdcall DisableThreadLibraryCalls(long)
++@ stdcall DisableThreadLibraryCalls(long) kernel32.DisableThreadLibraryCalls
+ @ stdcall DisassociateCurrentThreadFromCallback(ptr) ntdll.TpDisassociateCallback
+ # @ stub DiscardVirtualMemory
+ @ stdcall DisconnectNamedPipe(long)
+@@ -556,14 +556,14 @@
+ # @ stub GetMemoryErrorHandlingCapabilities
+ # @ stub GetModuleBaseNameA
+ # @ stub GetModuleBaseNameW
+-@ stdcall GetModuleFileNameA(long ptr long)
++@ stdcall GetModuleFileNameA(long ptr long) kernel32.GetModuleFileNameA
+ # @ stub GetModuleFileNameExA
+ # @ stub GetModuleFileNameExW
+-@ stdcall GetModuleFileNameW(long ptr long)
+-@ stdcall GetModuleHandleA(str)
+-@ stdcall GetModuleHandleExA(long ptr ptr)
+-@ stdcall GetModuleHandleExW(long ptr ptr)
+-@ stdcall GetModuleHandleW(wstr)
++@ stdcall GetModuleFileNameW(long ptr long) kernel32.GetModuleFileNameW
++@ stdcall GetModuleHandleA(str) kernel32.GetModuleHandleA
++@ stdcall GetModuleHandleExA(long ptr ptr) kernel32.GetModuleHandleExA
++@ stdcall GetModuleHandleExW(long ptr ptr) kernel32.GetModuleHandleExW
++@ stdcall GetModuleHandleW(wstr) kernel32.GetModuleHandleW
+ # @ stub GetModuleInformation
+ @ stub GetNLSVersion
+ @ stub GetNLSVersionEx
+diff --git a/dlls/kernelbase/loader.c b/dlls/kernelbase/loader.c
+index 34c8add910..91daa4ec14 100644
+--- a/dlls/kernelbase/loader.c
++++ b/dlls/kernelbase/loader.c
+@@ -37,176 +37,6 @@
+ WINE_DEFAULT_DEBUG_CHANNEL(module);
+ 
+ 
+-/***********************************************************************
+- * Modules
+- ***********************************************************************/
+-
+-
+-/****************************************************************************
+- *	DisableThreadLibraryCalls   (kernelbase.@)
+- */
+-BOOL WINAPI DECLSPEC_HOTPATCH DisableThreadLibraryCalls( HMODULE module )
+-{
+-    return set_ntstatus( LdrDisableThreadCalloutsForDll( module ));
+-}
+-
+-
+-/***********************************************************************
+- *	GetModuleFileNameA   (kernelbase.@)
+- */
+-DWORD WINAPI DECLSPEC_HOTPATCH GetModuleFileNameA( HMODULE module, LPSTR filename, DWORD size )
+-{
+-    LPWSTR filenameW = HeapAlloc( GetProcessHeap(), 0, size * sizeof(WCHAR) );
+-    DWORD len;
+-
+-    if (!filenameW)
+-    {
+-        SetLastError( ERROR_NOT_ENOUGH_MEMORY );
+-        return 0;
+-    }
+-    if ((len = GetModuleFileNameW( module, filenameW, size )))
+-    {
+-    	len = file_name_WtoA( filenameW, len, filename, size );
+-        if (len < size)
+-            filename[len] = 0;
+-        else
+-            SetLastError( ERROR_INSUFFICIENT_BUFFER );
+-    }
+-    HeapFree( GetProcessHeap(), 0, filenameW );
+-    return len;
+-}
+-
+-
+-/***********************************************************************
+- *	GetModuleFileNameW   (kernelbase.@)
+- */
+-DWORD WINAPI DECLSPEC_HOTPATCH GetModuleFileNameW( HMODULE module, LPWSTR filename, DWORD size )
+-{
+-    ULONG len = 0;
+-    ULONG_PTR magic;
+-    LDR_MODULE *pldr;
+-    WIN16_SUBSYSTEM_TIB *win16_tib;
+-
+-    if (!module && ((win16_tib = NtCurrentTeb()->Tib.SubSystemTib)) && win16_tib->exe_name)
+-    {
+-        len = min( size, win16_tib->exe_name->Length / sizeof(WCHAR) );
+-        memcpy( filename, win16_tib->exe_name->Buffer, len * sizeof(WCHAR) );
+-        if (len < size) filename[len] = 0;
+-        goto done;
+-    }
+-
+-    LdrLockLoaderLock( 0, NULL, &magic );
+-
+-    if (!module) module = NtCurrentTeb()->Peb->ImageBaseAddress;
+-    if (set_ntstatus( LdrFindEntryForAddress( module, &pldr )))
+-    {
+-        len = min( size, pldr->FullDllName.Length / sizeof(WCHAR) );
+-        memcpy( filename, pldr->FullDllName.Buffer, len * sizeof(WCHAR) );
+-        if (len < size)
+-        {
+-            filename[len] = 0;
+-            SetLastError( 0 );
+-        }
+-        else SetLastError( ERROR_INSUFFICIENT_BUFFER );
+-    }
+-
+-    LdrUnlockLoaderLock( 0, magic );
+-done:
+-    TRACE( "%s\n", debugstr_wn(filename, len) );
+-    return len;
+-}
+-
+-
+-/***********************************************************************
+- *	GetModuleHandleA   (kernelbase.@)
+- */
+-HMODULE WINAPI DECLSPEC_HOTPATCH GetModuleHandleA( LPCSTR module )
+-{
+-    HMODULE ret;
+-
+-    GetModuleHandleExA( GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT, module, &ret );
+-    return ret;
+-}
+-
+-
+-/***********************************************************************
+- *	GetModuleHandleW   (kernelbase.@)
+- */
+-HMODULE WINAPI DECLSPEC_HOTPATCH GetModuleHandleW( LPCWSTR module )
+-{
+-    HMODULE ret;
+-
+-    GetModuleHandleExW( GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT, module, &ret );
+-    return ret;
+-}
+-
+-
+-/***********************************************************************
+- *	GetModuleHandleExA   (kernelbase.@)
+- */
+-BOOL WINAPI DECLSPEC_HOTPATCH GetModuleHandleExA( DWORD flags, LPCSTR name, HMODULE *module )
+-{
+-    WCHAR *nameW;
+-
+-    if (!name || (flags & GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS))
+-        return GetModuleHandleExW( flags, (LPCWSTR)name, module );
+-
+-    if (!(nameW = file_name_AtoW( name, FALSE ))) return FALSE;
+-    return GetModuleHandleExW( flags, nameW, module );
+-}
+-
+-
+-/***********************************************************************
+- *	GetModuleHandleExW   (kernelbase.@)
+- */
+-BOOL WINAPI DECLSPEC_HOTPATCH GetModuleHandleExW( DWORD flags, LPCWSTR name, HMODULE *module )
+-{
+-    NTSTATUS status = STATUS_SUCCESS;
+-    HMODULE ret = NULL;
+-    ULONG_PTR magic;
+-    BOOL lock;
+-
+-    if (!module)
+-    {
+-        SetLastError( ERROR_INVALID_PARAMETER );
+-        return FALSE;
+-    }
+-
+-    /* if we are messing with the refcount, grab the loader lock */
+-    lock = (flags & GET_MODULE_HANDLE_EX_FLAG_PIN) || !(flags & GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT);
+-    if (lock) LdrLockLoaderLock( 0, NULL, &magic );
+-
+-    if (!name)
+-    {
+-        ret = NtCurrentTeb()->Peb->ImageBaseAddress;
+-    }
+-    else if (flags & GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS)
+-    {
+-        void *dummy;
+-        if (!(ret = RtlPcToFileHeader( (void *)name, &dummy ))) status = STATUS_DLL_NOT_FOUND;
+-    }
+-    else
+-    {
+-        UNICODE_STRING wstr;
+-        RtlInitUnicodeString( &wstr, name );
+-        status = LdrGetDllHandle( NULL, 0, &wstr, &ret );
+-    }
+-
+-    if (status == STATUS_SUCCESS)
+-    {
+-        if (flags & GET_MODULE_HANDLE_EX_FLAG_PIN)
+-            LdrAddRefDll( LDR_ADDREF_DLL_PIN, ret );
+-        else if (!(flags & GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT))
+-            LdrAddRefDll( 0, ret );
+-    }
+-
+-    if (lock) LdrUnlockLoaderLock( 0, magic );
+-
+-    *module = ret;
+-    return set_ntstatus( status );
+-}
+-
+-
+ /***********************************************************************
+  * Resources
+  ***********************************************************************/
+@@ -259,7 +89,7 @@ static NTSTATUS get_res_nameW( LPCWSTR name, UNICODE_STRING *str )
+ 
+ 
+ /**********************************************************************
+- *	EnumResourceLanguagesExA	(kernelbase.@)
++ *	EnumResourceLanguagesExA	(KERNEL32.@)
+  */
+ BOOL WINAPI DECLSPEC_HOTPATCH EnumResourceLanguagesExA( HMODULE module, LPCSTR type, LPCSTR name,
+                                                         ENUMRESLANGPROCA func, LONG_PTR param,
+@@ -319,7 +149,7 @@ done:
+ 
+ 
+ /**********************************************************************
+- *	EnumResourceLanguagesExW	(kernelbase.@)
++ *	EnumResourceLanguagesExW	(KERNEL32.@)
+  */
+ BOOL WINAPI DECLSPEC_HOTPATCH EnumResourceLanguagesExW( HMODULE module, LPCWSTR type, LPCWSTR name,
+                                                         ENUMRESLANGPROCW func, LONG_PTR param,
+
+
 From aa88eb017be4c3615d0f8aab8a2e16769a6568ad Mon Sep 17 00:00:00 2001
 From: Andrew Eikum <aeikum@codeweavers.com>
 Date: Wed, 27 Dec 2017 13:31:59 -0600
@@ -62,20 +569,20 @@ index 5767b29887c..75d5f4a7216 100644
 From bc614834ee153ce33449c06e697b4a30748e9257 Mon Sep 17 00:00:00 2001
 From: Andrew Eikum <aeikum@codeweavers.com>
 Date: Thu, 27 Apr 2017 13:25:04 -0500
-Subject: [PATCH] HACK kernel32: Substitute the current pid for the Steam
+Subject: [PATCH] HACK kernelbase: Substitute the current pid for the Steam
  client pid
 
 ---
- dlls/kernel32/process.c | 16 ++++++++++++++++
+ dlls/kernelbase/process.c | 16 ++++++++++++++++
  1 file changed, 16 insertions(+)
 
-diff --git a/dlls/kernel32/process.c b/dlls/kernel32/process.c
+diff --git a/dlls/kernelbase/process.c b/dlls/kernelbase/process.c
 index 85e0042024c..9c957f02c06 100644
---- a/dlls/kernel32/process.c
-+++ b/dlls/kernel32/process.c
-@@ -3001,6 +3001,22 @@ HANDLE WINAPI OpenProcess( DWORD access, BOOL inherit, DWORD id )
-     OBJECT_ATTRIBUTES   attr;
-     CLIENT_ID           cid;
+--- a/dlls/kernelbase/process.c
++++ b/dlls/kernelbase/process.c
+@@ -220,6 +220,22 @@ HANDLE WINAPI DECLSPEC_HOTPATCH OpenProcess( DWORD access, BOOL inherit, DWORD id )
+     attr.SecurityDescriptor = NULL;
+     attr.SecurityQualityOfService = NULL;
  
 +    if(id == 0xfffe)
 +        /* STEAMOS HACK:
@@ -94,7 +601,7 @@ index 85e0042024c..9c957f02c06 100644
 +        id = GetCurrentProcessId();
 +
      cid.UniqueProcess = ULongToHandle(id);
-     cid.UniqueThread = 0; /* FIXME ? */
+     cid.UniqueThread  = 0;
  
 From a277e32030a31abe90af9d38462f1159bc94b7b0 Mon Sep 17 00:00:00 2001
 From: Andrew Eikum <aeikum@codeweavers.com>
@@ -877,280 +1384,6 @@ index 9c957f02c06..e14b514ccc1 100644
              !strncmp( var, "VK_", sizeof("VK_")-1 ));
  }
  
-From 59e3f7faf3aca068ca37ad274490e4d7bcd85907 Mon Sep 17 00:00:00 2001
-From: Andrew Eikum <aeikum@codeweavers.com>
-Date: Mon, 11 Jun 2018 13:40:24 -0500
-Subject: [PATCH] kernel32: Implement Set and GetThreadDescription
-
----
- dlls/kernel32/kernel32.spec  |   2 +
- dlls/kernel32/tests/thread.c |  46 ++++++++++++++
- dlls/kernel32/thread.c       | 112 ++++++++++++++++++++++++++++++++---
- include/winbase.h            |   2 +
- 4 files changed, 154 insertions(+), 8 deletions(-)
-
-diff --git a/dlls/kernel32/kernel32.spec b/dlls/kernel32/kernel32.spec
-index f1d75b8e1c6..98f37215756 100644
---- a/dlls/kernel32/kernel32.spec
-+++ b/dlls/kernel32/kernel32.spec
-@@ -847,6 +847,7 @@
- @ stdcall GetTempPathA(long ptr)
- @ stdcall GetTempPathW(long ptr)
- @ stdcall GetThreadContext(long ptr)
-+@ stdcall GetThreadDescription(long ptr)
- @ stdcall GetThreadErrorMode()
- @ stdcall GetThreadGroupAffinity(long ptr)
- @ stdcall GetThreadId(ptr)
-@@ -1447,6 +1448,7 @@
- @ stdcall SetTermsrvAppInstallMode(long)
- @ stdcall SetThreadAffinityMask(long long)
- @ stdcall SetThreadContext(long ptr)
-+@ stdcall SetThreadDescription(long ptr)
- @ stdcall SetThreadErrorMode(long ptr)
- @ stdcall SetThreadExecutionState(long)
- @ stdcall SetThreadGroupAffinity(long ptr ptr)
-diff --git a/dlls/kernel32/tests/thread.c b/dlls/kernel32/tests/thread.c
-index b69d2eb371f..2be405e7ae7 100644
---- a/dlls/kernel32/tests/thread.c
-+++ b/dlls/kernel32/tests/thread.c
-@@ -102,6 +102,8 @@ static NTSTATUS (WINAPI *pNtQueryInformationThread)(HANDLE,THREADINFOCLASS,PVOID
- static BOOL (WINAPI *pGetThreadGroupAffinity)(HANDLE,GROUP_AFFINITY*);
- static BOOL (WINAPI *pSetThreadGroupAffinity)(HANDLE,const GROUP_AFFINITY*,GROUP_AFFINITY*);
- static NTSTATUS (WINAPI *pNtSetInformationThread)(HANDLE,THREADINFOCLASS,LPCVOID,ULONG);
-+static HRESULT (WINAPI *pSetThreadDescription)(HANDLE,const WCHAR *);
-+static HRESULT (WINAPI *pGetThreadDescription)(HANDLE,WCHAR **);
- 
- static HANDLE create_target_process(const char *arg)
- {
-@@ -1594,6 +1596,47 @@ static void test_ThreadErrorMode(void)
-     pSetThreadErrorMode(oldmode, NULL);
- }
- 
-+static void test_ThreadDescription(void)
-+{
-+    HRESULT hr;
-+    static const WCHAR test_nameW[] = {'t','e','s','t','_','n','a','m','e',0};
-+    static const WCHAR emptyW[] = {0};
-+    WCHAR *out;
-+
-+    if (!pSetThreadDescription)
-+    {
-+        win_skip("SetThreadDescription not implemented\n");
-+        return;
-+    }
-+
-+    if(0)
-+    {
-+        /* crash on win10 */
-+        hr = pGetThreadDescription(GetCurrentThread(), NULL);
-+    }
-+
-+    hr = pGetThreadDescription(GetCurrentThread(), &out);
-+    ok(hr == 0x10000000, "GetThreadDescription failed: 0x%x\n", hr);
-+    todo_wine ok(!lstrcmpW(out, emptyW), "Got non-empty thread name: %s\n", wine_dbgstr_w(out));
-+    LocalFree(out);
-+
-+    hr = pSetThreadDescription(GetCurrentThread(), test_nameW);
-+    ok(hr == 0x10000000, "SetThreadDescription failed: 0x%x\n", hr);
-+
-+    hr = pGetThreadDescription(GetCurrentThread(), &out);
-+    ok(hr == 0x10000000, "GetThreadDescription failed: 0x%x\n", hr);
-+    ok(!lstrcmpW(test_nameW, out), "Got wrong thread name: %s\n", wine_dbgstr_w(out));
-+    LocalFree(out);
-+
-+    hr = pSetThreadDescription(GetCurrentThread(), NULL);
-+    ok(hr == 0x10000000, "SetThreadDescription should have failed: 0x%x\n", hr);
-+
-+    hr = pGetThreadDescription(GetCurrentThread(), &out);
-+    ok(hr == 0x10000000, "GetThreadDescription failed: 0x%x\n", hr);
-+    ok(!lstrcmpW(emptyW, out), "Got wrong thread name: %s\n", wine_dbgstr_w(out));
-+    LocalFree(out);
-+}
-+
- #if (defined(__GNUC__) && (defined(__i386__) || defined(__x86_64__))) || (defined(_MSC_VER) && defined(__i386__))
- static inline void set_fpu_cw(WORD cw)
- {
-@@ -2024,6 +2067,8 @@ static void init_funcs(void)
- 
-     X(GetThreadGroupAffinity);
-     X(SetThreadGroupAffinity);
-+    X(SetThreadDescription);
-+    X(GetThreadDescription);
- 
-     X(FlsAlloc);
-     X(FlsFree);
-@@ -2096,6 +2141,7 @@ START_TEST(thread)
-    test_TLS();
-    test_FLS();
-    test_ThreadErrorMode();
-+   test_ThreadDescription();
- #if (defined(__GNUC__) && (defined(__i386__) || defined(__x86_64__))) || (defined(_MSC_VER) && defined(__i386__))
-    test_thread_fpu_cw();
- #endif
-diff --git a/dlls/kernel32/thread.c b/dlls/kernel32/thread.c
-index a86ad3443a4..6cc11a69fed 100644
---- a/dlls/kernel32/thread.c
-+++ b/dlls/kernel32/thread.c
-@@ -28,6 +28,9 @@
- #ifdef HAVE_UNISTD_H
- # include <unistd.h>
- #endif
-+#ifdef HAVE_SYS_PRCTL_H
-+# include <sys/prctl.h>
-+#endif
- 
- #include "ntstatus.h"
- #define WIN32_NO_STATUS
-@@ -35,6 +38,7 @@
- #include "winbase.h"
- #include "winerror.h"
- #include "winternl.h"
-+#include "winnls.h"
- #include "wine/exception.h"
- #include "wine/library.h"
- #include "wine/server.h"
-@@ -269,20 +273,112 @@ BOOL WINAPI GetThreadContext( HANDLE handle,     /* [in]  Handle to thread with
- 
- 
- /***********************************************************************
-- * Wow64GetThreadContext [KERNEL32.@]
-- */
-+* Wow64GetThreadContext [KERNEL32.@]
-+*/
- BOOL WINAPI Wow64GetThreadContext( HANDLE handle, WOW64_CONTEXT *context)
- {
- #ifdef __i386__
--    NTSTATUS status = NtGetContextThread( handle, (CONTEXT *)context );
-+NTSTATUS status = NtGetContextThread( handle, (CONTEXT *)context );
- #elif defined(__x86_64__)
--    NTSTATUS status = RtlWow64GetThreadContext( handle, context );
-+NTSTATUS status = RtlWow64GetThreadContext( handle, context );
- #else
--    NTSTATUS status = STATUS_NOT_IMPLEMENTED;
--    FIXME("not implemented on this platform\n");
-+NTSTATUS status = STATUS_NOT_IMPLEMENTED;
-+FIXME("not implemented on this platform\n");
- #endif
--    if (status) SetLastError( RtlNtStatusToDosError(status) );
--    return !status;
-+if (status) SetLastError( RtlNtStatusToDosError(status) );
-+return !status;
-+}
-+
-+
-+/* ??? MSDN says it should be HRESULT, but we get this */
-+#define THREADDESC_SUCCESS 0x10000000
-+
-+/***********************************************************************
-+* SetThreadDescription [KERNEL32.@]  Sets name of thread.
-+*
-+* RETURNS
-+*    Success: TRUE
-+*    Failure: FALSE
-+*/
-+HRESULT WINAPI SetThreadDescription( HANDLE handle, const WCHAR *descW )
-+{
-+TRACE("(%p,%s)\n", handle, wine_dbgstr_w( descW ));
-+
-+if (handle != GetCurrentThread())
-+{
-+    FIXME("Can't set other thread description\n");
-+    return THREADDESC_SUCCESS;
-+}
-+
-+#ifdef HAVE_PRCTL
-+
-+#ifndef PR_SET_NAME
-+# define PR_SET_NAME 15
-+#endif
-+
-+if (descW)
-+{
-+    DWORD length;
-+    char *descA;
-+
-+    length = WideCharToMultiByte( CP_UNIXCP, 0, descW, -1, NULL, 0, NULL, NULL );
-+    if (!(descA = HeapAlloc( GetProcessHeap(), 0, length ))) return E_OUTOFMEMORY;
-+    WideCharToMultiByte( CP_UNIXCP, 0, descW, -1, descA, length, NULL, NULL );
-+
-+    prctl( PR_SET_NAME, descA );
-+
-+    HeapFree( GetProcessHeap(), 0, descA );
-+}
-+else
-+    prctl( PR_SET_NAME, "" );
-+
-+#endif  /* HAVE_PRCTL */
-+
-+return THREADDESC_SUCCESS;
-+}
-+
-+
-+/***********************************************************************
-+* GetThreadDescription [KERNEL32.@]  Retrieves name of thread.
-+*
-+* RETURNS
-+*    Success: TRUE
-+*    Failure: FALSE
-+*/
-+HRESULT WINAPI GetThreadDescription( HANDLE handle, WCHAR **descW )
-+{
-+#ifdef HAVE_PRCTL
-+char descA[16];
-+#endif
-+
-+*descW = LocalAlloc( 0, 16 * sizeof(WCHAR) );
-+if(!*descW)
-+    return E_OUTOFMEMORY;
-+
-+if (handle != GetCurrentThread())
-+{
-+    FIXME("Can't get other thread description\n");
-+    (*descW)[0] = 0;
-+    return THREADDESC_SUCCESS;
-+}
-+
-+#ifdef HAVE_PRCTL
-+#ifndef PR_GET_NAME
-+# define PR_GET_NAME 16
-+#endif
-+
-+    if (prctl( PR_GET_NAME, descA ) != 0)
-+    {
-+        (*descW)[0] = 0;
-+        return THREADDESC_SUCCESS;
-+    }
-+
-+    MultiByteToWideChar( CP_UNIXCP, 0, descA, -1, *descW, 16 );
-+#else
-+    (*descW)[0] = 0;
-+#endif
-+
-+    return THREADDESC_SUCCESS;
- }
- 
- 
-diff --git a/include/winbase.h b/include/winbase.h
-index 8b26308b956..bfbc81ca098 100644
---- a/include/winbase.h
-+++ b/include/winbase.h
-@@ -2247,6 +2247,7 @@ WINBASEAPI DWORD       WINAPI GetTickCount(void);
- WINBASEAPI ULONGLONG   WINAPI GetTickCount64(void);
- WINBASEAPI DWORD       WINAPI GetTimeZoneInformation(LPTIME_ZONE_INFORMATION);
- WINBASEAPI BOOL        WINAPI GetThreadContext(HANDLE,CONTEXT *);
-+WINBASEAPI HRESULT     WINAPI GetThreadDescription(HANDLE,WCHAR **);
- WINBASEAPI DWORD       WINAPI GetThreadErrorMode(void);
- WINBASEAPI INT         WINAPI GetThreadPriority(HANDLE);
- WINBASEAPI BOOL        WINAPI GetThreadPriorityBoost(HANDLE,PBOOL);
-@@ -2612,6 +2613,7 @@ WINBASEAPI DWORD       WINAPI SetTapeParameters(HANDLE,DWORD,LPVOID);
- WINBASEAPI DWORD       WINAPI SetTapePosition(HANDLE,DWORD,DWORD,DWORD,DWORD,BOOL);
- WINBASEAPI DWORD_PTR   WINAPI SetThreadAffinityMask(HANDLE,DWORD_PTR);
- WINBASEAPI BOOL        WINAPI SetThreadContext(HANDLE,const CONTEXT *);
-+WINBASEAPI HRESULT     WINAPI SetThreadDescription(HANDLE,const WCHAR *);
- WINBASEAPI BOOL        WINAPI SetThreadErrorMode(DWORD,LPDWORD);
- WINBASEAPI DWORD       WINAPI SetThreadExecutionState(EXECUTION_STATE);
- WINBASEAPI DWORD       WINAPI SetThreadIdealProcessor(HANDLE,DWORD);
-
 From 971dc3c4225b33fb5346187cd37e8355f265800f Mon Sep 17 00:00:00 2001
 From: Andrew Eikum <aeikum@codeweavers.com>
 Date: Mon, 18 Jun 2018 07:56:35 -0500
@@ -1478,9 +1711,9 @@ index f1c883167ed..50b3323ae9f 100644
 --- a/dlls/user32/focus.c
 +++ b/dlls/user32/focus.c
 @@ -156,6 +156,8 @@ static BOOL set_active_window( HWND hwnd, HWND *prev, BOOL mouse, BOOL focus )
-                       (LPARAM)previous );
-         if (GetAncestor( hwnd, GA_PARENT ) == GetDesktopWindow())
-             PostMessageW( GetDesktopWindow(), WM_PARENTNOTIFY, WM_NCACTIVATE, (LPARAM)hwnd );
+ 
+         if (hwnd == GetForegroundWindow() && !IsIconic( hwnd ))
+             USER_Driver->pSetActiveWindow( hwnd );
 +
 +        imm_activate_window( hwnd );
      }
@@ -1904,3 +2137,4 @@ index e22559912c3..41ec809b727 100644
          *mode = DWRITE_RENDERING_MODE_OUTLINE;
          return S_OK;
      }
+ 

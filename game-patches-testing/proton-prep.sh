@@ -1,107 +1,75 @@
 #!/bin/bash
 
-    #ESYNC UPDATE
-    #cd esync
-    #git reset --hard HEAD
-    #git clean -xdf
-
-    #patch -Np1 < ../game-patches-testing/esync-compat-fixes-r3.patch
-    #patch -Np1 < ../game-patches-testing/esync-compat-fixes-r3.1.patch
-    #patch -Np1 < ../game-patches-testing/esync-compat-fixes-r3.2.patch
-    #patch -Np1 < ../game-patches-testing/esync-compat-fixes-r3.3.patch
-    #patch -Np1 < ../game-patches-testing/esync-compat-fixes-r3.4.patch
-    #patch -Np1 < ../game-patches-testing/esync-compat-fixes-r3.5.patch
-    #patch -Np1 < ../game-patches-testing/esync-compat-fixes-r3.6.patch
-    #cd ..
-
     # Valve DXVK patches
     cd dxvk
     git reset --hard HEAD
     git clean -xdf
-    patch -Np1 < ../game-patches-testing/valve-dxvk-avoid-spamming-log-with-requests-for-IWineD3D11Texture2D.patch
+    patch -Np1 < ../game-patches-testing/dxvk-patches/valve-dxvk-avoid-spamming-log-with-requests-for-IWineD3D11Texture2D.patch
     cd ..
 
-    #WINE SYSTEM PERFORMANCE PATCHES
+    #WINE HOT FIXES
     cd wine
     git reset --hard HEAD
     git clean -xdf
-    git revert --no-commit bc6e52fdc7d26ac7a4d6182f70a0d3bc01c504ca
 
-    echo "wine key translation fix from staging"
-    patch -Np1 < ../game-patches-testing/wine-staging-key-translation-fix.patch
+    #WINE STAGING
+    echo "applying staging patches"
+    ../wine-staging/patches/patchinstall.sh DESTDIR="." --all -W winex11.drv-mouse-coorrds
 
-    #WINE GAME SPECIFIC PATCHES
+    #WINE VULKAN
+    echo "applying winevulkan patches"
+    patch -Np1 < ../game-patches-testing/wine-patches/winevulkan-childwindow.patch
 
+    #WINE FAUDIO
+    echo "applying faudio patches"
+    patch -Np1 < ../game-patches-testing/faudio-patches/faudio-ffmpeg.patch
 
-    echo "fix for Skyrim Script Extender not working"
-    patch -Np1 < ../game-patches-testing/f4skyrimse-fix.patch
+    #WINE GAME PATCHES
 
-    echo "mech warrior online patch"
-    patch -Np1 < ../game-patches-testing/mwo.patch
+    echo "mech warrior online"
+    patch -Np1 < ../game-patches-testing/game-patches/mwo.patch
 
-    echo "world of final fantasy patch"
-    #patch -Np1 < ../game-patches-testing/woff-hack.patch
+    echo "warframe"
+    patch -Np1 < ../game-patches-testing/game-patches/warframe-f6-screenshot-fix.patch
 
-    echo "warframe F6 screenshot button fix"
-    patch -Np1 < ../game-patches-testing/warframe-f6-screenshot-fix.patch
+    echo "final fantasy XIV"
+    patch -Np1 < ../game-patches-testing/game-patches/ffxiv-launcher.patch
 
-    echo "final fantasy XIV launcher patch"
-    patch -Np1 < ../game-patches-testing/ffxiv-launcher.patch
+    echo "assetto corsa"
+    patch -Np1 < ../game-patches-testing/game-patches/assettocorsa-hud.patch
 
-    #WINE FAUDIO PATCHES
+    echo "sword art online"
+    patch -Np1 < ../game-patches-testing/game-patches/sword-art-online-gnutls.patch
 
-    echo "allow wine to use faudio with ffmpeg"
-    patch -Np1 < ../game-patches-testing/faudio-ffmpeg.patch
+    echo "steam crossover patch"
+    patch -Np1 < ../game-patches-testing/game-patches/steam-crossover.patch
 
-    #echo "add missing upstream faudio patches"
-    #patch -Np1 < ../game-patches-testing/faudio-proton-xact-support-1.patch
-    #patch -Np1 < ../game-patches-testing/faudio-proton-xact-support-2.patch
-    #patch -Np1 < ../game-patches-testing/faudio-proton-fix-ed05940.patch
-    #patch -Np1 < ../game-patches-testing/faudio-proton-fix-837f11c.patch
-    #patch -Np1 < ../game-patches-testing/faudio-proton-use-dxredist-x3daudio-xapofx.patch
+    #WINE FSYNC
+    echo "applying fsync patches"
+    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-fsync_staging.patch
+    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-fsync_staging_no_alloc_handle.patch
 
-    #WINE PROTONIFY
-    #echo "converting normal wine build into proton build"
-    #patch -Np1 < ../game-patches-testing/proton-tkg.patch
+    #PROTON
+    echo "applying proton patches"
+    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-protonify_staging.patch
+    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-LAA_staging.patch
+    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-use_clock_monotonic.patch
+    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-amd_ags.patch
+    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-hide_prefix_update_window.patch
+    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-FS_bypass_compositor.patch
+    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-fullscreen_hack_staging.patch
+    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-fullscreen_hack_realmodes.patch
+    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-vk_bits_4.5+.patch
+    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-sdl_joy.patch
+    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-sdl_joy_2.patch
+    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-gamepad_additions.patch
+    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-apply_LargeAddressAware_fix_for_Bayonetta.patch
+    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-Set_amd_ags_x64_to_built_in_for_Wolfenstein_2.patch
 
-    #for _f in "../esync/"*.patch; do
-    #    git apply -C1 --verbose < "${_f}"
-    #done
-
-    # this is needed for wine 4.5+
-    #patch -Np1 < ../game-patches-testing/esync-no_kernel_obj_list.patch
-
-    #echo "adding proton patches"
-    #patch -Np1 < ../game-patches-testing/proton-restore-unicode.patch
-    #patch -Np1 < ../game-patches-testing/valve-gnutls.patch
-    #patch -Np1 < ../game-patches-testing/valve-hide-prefix-update-window.patch
-    #patch -Np1 < ../game-patches-testing/valve-wined3d-d3d11.patch
-    #patch -Np1 < ../game-patches-testing/valve-gdi32.patch
-    #patch -Np1 < ../game-patches-testing/valve-FS_bypass_compositor.patch
-    #patch -Np1 < ../game-patches-testing/valve-winex11-fullscreen-hack.patch
-    #patch -Np1 < ../game-patches-testing/valve-amd-ags.patch
-    #patch -Np1 < ../game-patches-testing/valve-unity-mouse-pointer-drift.patch
-    #patch -Np1 < ../game-patches-testing/valve-pulseaudio-patchset.patch
-    #patch -Np1 < ../game-patches-testing/valve-winevulkan-patchset.patch
-    #patch -Np1 < ../game-patches-testing/valve-winemac.patch
-    #patch -Np1 < ../game-patches-testing/valve-windowscodecs.patch
-    #patch -Np1 < ../game-patches-testing/valve-ntdll.patch
-    #patch -Np1 < ../game-patches-testing/valve-LAA.patch
-    #patch -Np1 < ../game-patches-testing/wine-staging-hide-wine-exports.patch
-    #patch -Np1 < ../game-patches-testing/proton-gamepad-additions-backport.patch
-    #patch -Np1 < ../game-patches-testing/proton-sdl-joy.patch
-    #patch -Np1 < ../game-patches-testing/proton-gamepad-additions.patch
-    #patch -Np1 < ../game-patches-testing/valve-use_clock_monotonic-2.patch
-    #patch -Np1 < ../game-patches-testing/msvcrt_nativebuiltin.patch
-    #patch -Np1 < ../game-patches-testing/valve-apply-LargeAddressAware-fix-for-Bayonetta.patch
-    #patch -Np1 < ../game-patches-testing/valve-Set-amd_ags_x64-to-built-in-for-Wolfenstein-2.patch
+    #need for VR to compile
+    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-wined3d_staging.patch
 
     #WINE CUSTOM PATCHES
     #add your own custom patch lines below
-
-    # Guy's raw input patch
-    patch -Np1 < ../game-patches-testing/raw-input-proton.patch
-
-    ./tools/make_requests
 
     #end

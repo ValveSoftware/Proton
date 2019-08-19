@@ -1,5 +1,5 @@
-From c5258048038798fd67bff1de619cf8be4cbb273b Mon Sep 17 00:00:00 2001
-From: =?UTF-8?q?J=C3=B3zef=20Kucia?= <jkucia@codeweavers.com>
+From afaf271f5ae5a74ddc3914301c0103f1a67c0bb2 Mon Sep 17 00:00:00 2001
+From: Józef Kucia <jkucia@codeweavers.com>
 Date: Mon, 23 Jul 2018 19:53:20 +0200
 Subject: [PATCH] amd_ags_x64: Import v5.1.1 amd_ags.h.
 
@@ -959,8 +959,9 @@ index 00000000000..9c3e37e52e5
 +#endif
 +
 +#endif // AMD_AGS_H
-From 47a5e6ea04eab2a45d6e79903c53259700deaae1 Mon Sep 17 00:00:00 2001
-From: =?UTF-8?q?J=C3=B3zef=20Kucia?= <jkucia@codeweavers.com>
+
+From e10f7f83b4d7c4269b93b79912cb3ee4ba58187e Mon Sep 17 00:00:00 2001
+From: Józef Kucia <jkucia@codeweavers.com>
 Date: Mon, 23 Jul 2018 19:53:20 +0200
 Subject: [PATCH] amd_ags_x64: Make amd_ags.h usable with gcc.
 
@@ -1272,8 +1273,10 @@ index 9c3e37e52e5..a83a1f88692 100644
  
  ///
  /// Function used to create a D3D11 device with additional AMD-specific initialization parameters.
-From 7aebd95909b3890df7a14ee7b2ac5325ab258362 Mon Sep 17 00:00:00 2001
-From: =?UTF-8?q?J=C3=B3zef=20Kucia?= <jkucia@codeweavers.com>
+
+
+From e0c31d82fb16f5a5b4346bf4c0729613244cfbd1 Mon Sep 17 00:00:00 2001
+From: Józef Kucia <jkucia@codeweavers.com>
 Date: Mon, 23 Jul 2018 19:53:20 +0200
 Subject: [PATCH] amd_ags_x64: Add dll.
 
@@ -1291,10 +1294,10 @@ AMD hardware.
  create mode 100644 dlls/amd_ags_x64/amd_ags_x64_main.c
 
 diff --git a/configure b/configure
-index 44d97a89f6..7714fed773 100755
+index 089a87b863b..1e1b06a61dc 100755
 --- a/configure
 +++ b/configure
-@@ -899,6 +899,7 @@ enable_adsldp
+@@ -904,6 +904,7 @@ enable_adsldp
  enable_adsldpc
  enable_advapi32
  enable_advpack
@@ -1302,7 +1305,7 @@ index 44d97a89f6..7714fed773 100755
  enable_amsi
  enable_amstream
  enable_api_ms_win_appmodel_identity_l1_1_0
-@@ -19097,6 +19165,7 @@ wine_fn_config_makefile dlls/advapi32 enable_advapi32
+@@ -19271,6 +19272,7 @@ wine_fn_config_makefile dlls/advapi32 enable_advapi32
  wine_fn_config_makefile dlls/advapi32/tests enable_tests
  wine_fn_config_makefile dlls/advpack enable_advpack
  wine_fn_config_makefile dlls/advpack/tests enable_tests
@@ -1311,10 +1314,10 @@ index 44d97a89f6..7714fed773 100755
  wine_fn_config_makefile dlls/amstream enable_amstream
  wine_fn_config_makefile dlls/amstream/tests enable_tests
 diff --git a/configure.ac b/configure.ac
-index d4168e410bc..4906cf548a8 100644
+index 224bc2e7030..49c37fabe0c 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -2818,6 +2847,7 @@ WINE_CONFIG_MAKEFILE(dlls/advapi32)
+@@ -2896,6 +2896,7 @@ WINE_CONFIG_MAKEFILE(dlls/advapi32)
  WINE_CONFIG_MAKEFILE(dlls/advapi32/tests)
  WINE_CONFIG_MAKEFILE(dlls/advpack)
  WINE_CONFIG_MAKEFILE(dlls/advpack/tests)

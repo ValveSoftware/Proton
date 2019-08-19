@@ -180,9 +180,9 @@ index d7dbe573a4f..e03335a2709 100644
  /******************************************************************************
   *	load_native_dll  (internal)
 @@ -3550,7 +3671,7 @@ void __wine_process_init(void)
-     NtCurrentTeb()->Peb->LoaderLock = &loader_section;
-     update_user_process_params( &wm->ldr.FullDllName );
      version_init( wm->ldr.FullDllName.Buffer );
+     user_shared_data_init();
+     hidden_exports_init( wm->ldr.FullDllName.Buffer );
 -    virtual_set_large_address_space();
 +    virtual_set_large_address_space(needs_override_large_address_aware(NtCurrentTeb()->Peb->ProcessParameters->ImagePathName.Buffer));
  

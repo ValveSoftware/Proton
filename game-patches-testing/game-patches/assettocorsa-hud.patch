@@ -1,0 +1,23 @@
+From 488290d912e4c40f159249f0df2f994355fab398 Mon Sep 17 00:00:00 2001
+From: Tk-Glitch <ti3nou@gmail.com>
+Date: Mon, 1 Jul 2019 05:05:56 +0200
+Subject: dwrite: Don't release file streams when building collections. Fixes
+ Assetto Corsa performance drop when HUD elements are displayed. This
+ effectively reverts d19e34d8f072514cb903bda89767996ba078bae4
+
+Signed-off-by: Tk-Glitch <ti3nou@gmail.com>
+
+diff --git a/dlls/dwrite/font.c b/dlls/dwrite/font.c
+index 5f4abc7ee6..69413cdde5 100644
+--- a/dlls/dwrite/font.c
++++ b/dlls/dwrite/font.c
+@@ -3900,8 +3900,6 @@ HRESULT create_font_collection(IDWriteFactory5 *factory, IDWriteFontFileEnumerat
+             if (FAILED(hr))
+                 break;
+         }
+-
+-        IDWriteFontFileStream_Release(stream);
+     }
+ 
+     LIST_FOR_EACH_ENTRY_SAFE(fileenum, fileenum2, &scannedfiles, struct fontfile_enum, entry) {
+ 

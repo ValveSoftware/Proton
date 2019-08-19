@@ -479,28 +479,12 @@ index d02572da59a..4608f249c4b 100644
  {
      BYTE *report_ptr;
      INT descript_size;
-@@ -770,7 +775,6 @@ static BOOL set_report_from_event(SDL_Event *event)
-     device = bus_find_hid_device(&sdl_vtbl, ULongToPtr(index));
-     if (!device)
-     {
--        ERR("Failed to find device at index %i\n",index);
-         return FALSE;
-     }
-     private = impl_from_DEVICE_OBJECT(device);
-@@ -834,7 +838,6 @@ static BOOL set_mapped_report_from_event(SDL_Event *event)
-     device = bus_find_hid_device(&sdl_vtbl, ULongToPtr(index));
-     if (!device)
-     {
--        ERR("Failed to find device at index %i\n",index);
-         return FALSE;
-     }
-     private = impl_from_DEVICE_OBJECT(device);
 @@ -920,7 +923,7 @@ static void try_remove_device(SDL_JoystickID index)
      bus_remove_hid_device(device);
  }
  
--static void try_add_device(SDL_JoystickID index)
-+static void try_add_device(SDL_JoystickID index, BOOL xinput_hack)
+-static void try_add_device(unsigned int index)
++static void try_add_device(unsigned int index, BOOL xinput_hack)
  {
      DWORD vid = 0, pid = 0, version = 0;
      DEVICE_OBJECT *device = NULL;
@@ -543,7 +527,7 @@ index d02572da59a..4608f249c4b 100644
 @@ -978,7 +990,7 @@ static void try_add_device(SDL_JoystickID index)
  
      device = bus_create_hid_device(sdl_driver_obj, sdl_busidW, vid, pid,
-             input, version, id, serial, is_xbox_gamepad, &GUID_DEVCLASS_SDL,
+             input, version, index, serial, is_xbox_gamepad, &GUID_DEVCLASS_SDL,
 -            &sdl_vtbl, sizeof(struct platform_private));
 +            &sdl_vtbl, sizeof(struct platform_private), xinput_hack);
  
@@ -942,4 +926,102 @@ index cd26e1b2df7..50a09ac1d3a 100644
      default:
          return JoystickWGenericImpl_GetProperty(iface, rguid, pdiph);
      }
+ 
+From 117e6df888d18c14c12b7fa59b2c076f1230a24d Mon Sep 17 00:00:00 2001
+From: Tk-Glitch <ti3nou@gmail.com>
+Date: Fri, 5 Jul 2019 19:39:19 +0200
+Subject: Fix too few arguments to the bus_create_hid_device function added with 9c6ea019358eadcf86159872e2890ffc94960965
+
+
+diff --git a/dlls/winebus.sys/main.c b/dlls/winebus.sys/main.c
+index 89ea65bba6..711e333f4c 100644
+--- a/dlls/winebus.sys/main.c
++++ b/dlls/winebus.sys/main.c
+@@ -838,7 +838,7 @@ static void mouse_device_create(void)
+     static const WCHAR busidW[] = {'W','I','N','E','M','O','U','S','E',0};
+ 
+     mouse_obj = bus_create_hid_device(busidW, 0, 0, -1, 0, 0, busidW, FALSE,
+-            &wine_mouse_class, &mouse_vtbl, 0);
++            &wine_mouse_class, &mouse_vtbl, 0, 0);
+     IoInvalidateDeviceRelations(mouse_obj, BusRelations);
+ }
+ 
+From 45fda2263b4dac746e356fd603d9f1207d7b8f6a Mon Sep 17 00:00:00 2001
+From: Brendan Shanks <bshanks@codeweavers.com>
+Date: Wed, 19 Jun 2019 14:40:42 -0700
+Subject: [PATCH] dinput: Use the "PIDVID" GUID for the device product GUID
+
+Windows uses {PID_VID-0000-0000-0000-504944564944} ("PIDVID") for
+guidProduct.
+
+This GUID is not officially documented, but DiRT Rally 2.0 compares
+against the entire GUID to detect specific devices (and seems to disable
+force feedback for unknown devices).
+SDL and GLFW both look for "PIDVID" in Data4 before extracting the
+PID/VID from Data1.
+
+Signed-off-by: Brendan Shanks <bshanks@codeweavers.com>
+---
+ dlls/dinput/joystick_sdl.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
+
+diff --git a/dlls/dinput/joystick_sdl.c b/dlls/dinput/joystick_sdl.c
+index 50a09ac1d3a..2872788f5c7 100644
+--- a/dlls/dinput/joystick_sdl.c
++++ b/dlls/dinput/joystick_sdl.c
+@@ -108,6 +108,10 @@ static const GUID DInput_Wine_SDL_Joystick_GUID = { /* 001E36B7-5DBA-4C4F-A8C9-C
+   0x001E36B7, 0x5DBA, 0x4C4F, {0xA8, 0xC9, 0xCF, 0xC8, 0x68, 0x9D, 0xB4, 0x03}
+ };
+ 
++static const GUID DInput_PIDVID_Product_GUID = { /* PIDVID-0000-0000-0000-504944564944 "PIDVID" */
++  0x00000000, 0x0000, 0x0000, {0x00, 0x00, 0x50, 0x49, 0x44, 0x56, 0x49, 0x44}
++};
++
+ static int have_sdldevs = -1;
+ static struct SDLDev *sdldevs = NULL;
+ 
+@@ -214,7 +218,7 @@ static void fill_joystick_dideviceinstanceW(LPDIDEVICEINSTANCEW lpddi, DWORD ver
+     lpddi->dwSize       = dwSize;
+     lpddi->guidInstance = DInput_Wine_SDL_Joystick_GUID;
+     lpddi->guidInstance.Data3 = id;
+-    lpddi->guidProduct = DInput_Wine_SDL_Joystick_GUID;
++    lpddi->guidProduct = DInput_PIDVID_Product_GUID;
+     lpddi->guidProduct.Data1 = MAKELONG(sdldevs[id].vendor_id, sdldevs[id].product_id);
+     lpddi->guidFFDriver = GUID_NULL;
+ 
+@@ -389,7 +393,7 @@ static JoystickImpl *alloc_device(REFGUID rguid, IDirectInputImpl *dinput, unsig
+ 
+     newDevice->generic.guidInstance = DInput_Wine_SDL_Joystick_GUID;
+     newDevice->generic.guidInstance.Data3 = index;
+-    newDevice->generic.guidProduct = DInput_Wine_SDL_Joystick_GUID;
++    newDevice->generic.guidProduct = DInput_PIDVID_Product_GUID;
+     newDevice->generic.guidProduct.Data1 = MAKELONG(sdldevs[index].vendor_id, sdldevs[index].product_id);
+     newDevice->generic.joy_polldev = poll_sdl_device_state;
+ 
+From 073d099bbfa972d7980b7f287f308a34a4de4331 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
+Date: Tue, 30 Jul 2019 15:00:02 +0200
+Subject: [PATCH] winebus: Add xinput-specific device interface first
+
+This way, when a game receives the HID WM_DEVICECHANGE notification,
+the xinput-interface is already there and XInput does not return a
+ERROR_DEVICE_NOT_CONNECTED error on first call.
+---
+ dlls/winebus.sys/bus_sdl.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/dlls/winebus.sys/bus_sdl.c b/dlls/winebus.sys/bus_sdl.c
+index 95a096bad89..1fa31b8cd9d 100644
+--- a/dlls/winebus.sys/bus_sdl.c
++++ b/dlls/winebus.sys/bus_sdl.c
+@@ -1101,8 +1101,8 @@ static void process_device_event(SDL_Event *event)
+ 
+     if (event->type == SDL_JOYDEVICEADDED)
+     {
+-        try_add_device(((SDL_JoyDeviceEvent*)event)->which, FALSE);
+         try_add_device(((SDL_JoyDeviceEvent*)event)->which, TRUE);
++        try_add_device(((SDL_JoyDeviceEvent*)event)->which, FALSE);
+     }
+     else if (event->type == SDL_JOYDEVICEREMOVED)
+     {
  

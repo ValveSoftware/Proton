@@ -1,0 +1,90 @@
+From baea79ca61114f68f8ff46d4fa0c2bbcd43b75cf Mon Sep 17 00:00:00 2001
+From: Andrew Eikum <aeikum@codeweavers.com>
+Date: Fri, 10 May 2019 08:02:01 -0500
+Subject: [PATCH] dinput: For SDL, also allow enumeration of joysticks with
+ DirectX 3.
+
+---
+ dlls/dinput/joystick_sdl.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/dlls/dinput/joystick_sdl.c b/dlls/dinput/joystick_sdl.c
+index e6d7cc429dc..cd26e1b2df7 100644
+--- a/dlls/dinput/joystick_sdl.c
++++ b/dlls/dinput/joystick_sdl.c
+@@ -261,7 +261,7 @@ static HRESULT sdl_enum_deviceA(DWORD dwDevType, DWORD dwFlags, LPDIDEVICEINSTAN
+   }
+ 
+   if (!((dwDevType == 0) ||
+-        ((dwDevType == DIDEVTYPE_JOYSTICK) && (version > 0x0300 && version < 0x0800)) ||
++        ((dwDevType == DIDEVTYPE_JOYSTICK) && (version >= 0x0300 && version < 0x0800)) ||
+         (((dwDevType == DI8DEVCLASS_GAMECTRL) || (dwDevType == DI8DEVTYPE_JOYSTICK)) && (version >= 0x0800))))
+     return S_FALSE;
+ 
+@@ -281,7 +281,7 @@ static HRESULT sdl_enum_deviceW(DWORD dwDevType, DWORD dwFlags, LPDIDEVICEINSTAN
+   }
+ 
+   if (!((dwDevType == 0) ||
+-        ((dwDevType == DIDEVTYPE_JOYSTICK) && (version > 0x0300 && version < 0x0800)) ||
++        ((dwDevType == DIDEVTYPE_JOYSTICK) && (version >= 0x0300 && version < 0x0800)) ||
+         (((dwDevType == DI8DEVCLASS_GAMECTRL) || (dwDevType == DI8DEVTYPE_JOYSTICK)) && (version >= 0x0800))))
+     return S_FALSE;
+ 
+From 0b593ce7859e8ebb65ffa8fdeccbde0bcf3a89ed Mon Sep 17 00:00:00 2001
+From: Andrew Eikum <aeikum@codeweavers.com>
+Date: Wed, 8 May 2019 12:35:47 -0500
+Subject: [PATCH] dinput: Assign joystick/gamepad for SDL devices
+
+---
+ dlls/dinput/joystick_sdl.c | 17 +++++++++++------
+ 1 file changed, 11 insertions(+), 6 deletions(-)
+
+diff --git a/dlls/dinput/joystick_sdl.c b/dlls/dinput/joystick_sdl.c
+index 909c63078bb..e6d7cc429dc 100644
+--- a/dlls/dinput/joystick_sdl.c
++++ b/dlls/dinput/joystick_sdl.c
+@@ -71,7 +71,7 @@ struct SDLDev {
+     WORD product_id;
+     CHAR *name;
+ 
+-    BOOL has_ff;
++    BOOL has_ff, is_joystick;
+     int autocenter;
+     int gain;
+     struct list effects;
+@@ -174,6 +174,14 @@ static void find_sdldevs(void)
+             sdldev.product_id = SDL_JoystickInstanceID(device) + 1;
+         }
+ 
++        {
++            SDL_JoystickType type = SDL_JoystickGetType(device);
++            sdldev.is_joystick =
++                type == SDL_JOYSTICK_TYPE_WHEEL ||
++                type == SDL_JOYSTICK_TYPE_FLIGHT_STICK ||
++                type == SDL_JOYSTICK_TYPE_THROTTLE;
++        }
++
+         if (!have_sdldevs)
+             new_sdldevs = HeapAlloc(GetProcessHeap(), 0, sizeof(struct SDLDev));
+         else
+@@ -204,17 +212,14 @@ static void fill_joystick_dideviceinstanceW(LPDIDEVICEINSTANCEW lpddi, DWORD ver
+     lpddi->guidProduct.Data1 = MAKELONG(sdldevs[id].vendor_id, sdldevs[id].product_id);
+     lpddi->guidFFDriver = GUID_NULL;
+ 
+-    if (version >= 0x0800)
+-        lpddi->dwDevType = DI8DEVTYPE_JOYSTICK | (DI8DEVTYPEJOYSTICK_STANDARD << 8);
+-    else
+-        lpddi->dwDevType = DIDEVTYPE_JOYSTICK | (DIDEVTYPEJOYSTICK_TRADITIONAL << 8);
++    lpddi->dwDevType = get_device_type(version, sdldevs[id].is_joystick);
+ 
+     /* Assume the joystick as HID if it is attached to USB bus and has a valid VID/PID */
+     if ( sdldevs[id].vendor_id && sdldevs[id].product_id)
+     {
+         lpddi->dwDevType |= DIDEVTYPE_HID;
+         lpddi->wUsagePage = 0x01; /* Desktop */
+-        if (lpddi->dwDevType == DI8DEVTYPE_JOYSTICK || lpddi->dwDevType == DIDEVTYPE_JOYSTICK)
++        if (sdldevs[id].is_joystick)
+             lpddi->wUsage = 0x04; /* Joystick */
+         else
+             lpddi->wUsage = 0x05; /* Game Pad */
+ 
