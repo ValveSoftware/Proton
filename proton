@@ -119,7 +119,7 @@ class Proton:
         self.dist_lock = FileLock(self.dist_lock_file, timeout=-1)
 
     def path(self, d):
-        return os.path.join(self.base_dir, d)
+        return self.base_dir + d
 
     def conf_path(self, n, f):
         return os.path.expanduser(self.conf.get("paths", n, fallback = f))
