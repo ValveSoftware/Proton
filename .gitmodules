@@ -2,7 +2,7 @@
 	path = wine
 	url = https://github.com/wine-mirror/wine/
 [submodule "wine-staging"]
-	path = wine
+	path = wine-staging
 	url = https://github.com/wine-staging/wine-staging/
 [submodule "dxvk"]
 	path = dxvk
