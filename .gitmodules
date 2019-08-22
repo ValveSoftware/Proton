@@ -22,3 +22,12 @@
 [submodule "d9vk"]
 	path = d9vk
 	url = https://github.com/ValveSoftware/dxvk/
+[submodule "vkd3d"]
+	path = vkd3d
+	url = git://source.winehq.org/git/vkd3d.git
+[submodule "SPIRV-Headers"]
+	path = SPIRV-Headers
+	url = https://github.com/KhronosGroup/SPIRV-Headers
+[submodule "Vulkan-Headers"]
+	path = Vulkan-Headers
+	url = https://github.com/KhronosGroup/Vulkan-Headers

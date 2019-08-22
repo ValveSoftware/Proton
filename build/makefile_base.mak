@@ -219,6 +219,11 @@ WINEGCC64 := $(TOOLS_DIR64)/bin/winegcc
 WINEBUILD64 := $(TOOLS_DIR64)/bin/winebuild
 WINE_BUILDTOOLS64 := $(WINEGCC64) $(WINEBUILD64)
 
+WINEWIDL_OBJ32 := ./obj-widl32
+WINEWIDL_OBJ64 := ./obj-widl64
+WINEWIDL32 := $(WINEWIDL_OBJ32)/tools/widl/widl
+WINEWIDL64 := $(WINEWIDL_OBJ64)/tools/widl/widl
+
 VRCLIENT := $(SRCDIR)/vrclient_x64
 VRCLIENT32 := ./syn-vrclient32
 VRCLIENT_OBJ64 := ./obj-vrclient64
@@ -231,6 +236,22 @@ DXVK_OBJ64 := ./obj-dxvk64
 D9VK := $(SRCDIR)/d9vk
 D9VK_OBJ32 := ./obj-d9vk32
 D9VK_OBJ64 := ./obj-d9vk64
+
+VULKAN_HEADERS := $(SRCDIR)/Vulkan-Headers
+VULKAN_H_OBJ32 := ./obj-vulkan-headers32
+VULKAN_H_OBJ64 := ./obj-vulkan-headers64
+VULKAN_H32 := $(TOOLS_DIR32)/include/vulkan/vulkan.h
+VULKAN_H64 := $(TOOLS_DIR64)/include/vulkan/vulkan.h
+
+SPIRV_HEADERS := $(SRCDIR)/SPIRV-Headers
+SPIRV_H_OBJ32 := ./obj-spirv-headers32
+SPIRV_H_OBJ64 := ./obj-spirv-headers64
+SPIRV_H32 := $(TOOLS_DIR32)/include/spirv/spirv.h
+SPIRV_H64 := $(TOOLS_DIR64)/include/spirv/spirv.h
+
+VKD3D := $(SRCDIR)/vkd3d
+VKD3D_OBJ32 := ./obj-vkd3d32
+VKD3D_OBJ64 := ./obj-vkd3d64
 
 CMAKE := $(SRCDIR)/cmake
 CMAKE_OBJ32 := ./obj-cmake32
@@ -261,6 +282,10 @@ OBJ_DIRS := $(TOOLS_DIR32)        $(TOOLS_DIR64)        \
             $(DXVK_OBJ32)         $(DXVK_OBJ64)         \
             $(D9VK_OBJ32)         $(D9VK_OBJ64)         \
             $(BISON_OBJ32)        $(BISON_OBJ64)        \
+            $(VULKAN_H_OBJ32)     $(VULKAN_H_OBJ64)     \
+            $(SPIRV_H_OBJ32)      $(SPIRV_H_OBJ64)      \
+            $(WINEWIDL_OBJ32)     $(WINEWIDL_OBJ64)     \
+            $(VKD3D_OBJ32)        $(VKD3D_OBJ64)        \
             $(CMAKE_OBJ32)        $(CMAKE_OBJ64)
 
 $(OBJ_DIRS):
@@ -791,7 +816,7 @@ WINE32_MAKE_ARGS := \
 
 # 64bit-configure
 $(WINE_CONFIGURE_FILES64): SHELL = $(CONTAINER_SHELL64)
-$(WINE_CONFIGURE_FILES64): $(MAKEFILE_DEP) | faudio64 $(WINE_OBJ64) bison64
+$(WINE_CONFIGURE_FILES64): $(MAKEFILE_DEP) | faudio64 vkd3d64 $(WINE_OBJ64) bison64
 	cd $(dir $@) && \
 		STRIP=$(STRIP_QUOTED) \
 		BISON=$(abspath $(BISON_BIN64)) \
@@ -807,7 +832,7 @@ $(WINE_CONFIGURE_FILES64): $(MAKEFILE_DEP) | faudio64 $(WINE_OBJ64) bison64
 
 # 32-bit configure
 $(WINE_CONFIGURE_FILES32): SHELL = $(CONTAINER_SHELL32)
-$(WINE_CONFIGURE_FILES32): $(MAKEFILE_DEP) | faudio32 $(WINE_OBJ32) bison32
+$(WINE_CONFIGURE_FILES32): $(MAKEFILE_DEP) | faudio32 vkd3d32 $(WINE_OBJ32) bison32
 	cd $(dir $@) && \
 		STRIP=$(STRIP_QUOTED) \
 		BISON=$(abspath $(BISON_BIN32)) \
@@ -1208,6 +1233,142 @@ d9vk32: $(D9VK_CONFIGURE_FILES32)
 	if test -e $(SRCDIR)/.git; then ( cd $(SRCDIR) && git submodule status -- d9vk ) > "$(DST_DIR)"/lib/wine/dxvk/d9vk_version; fi
 
 endif # NO_DXVK
+
+# Vulkan-Headers
+
+VULKAN_H_CONFIGURE_FILES32 := $(VULKAN_H_OBJ32)/Makefile
+VULKAN_H_CONFIGURE_FILES64 := $(VULKAN_H_OBJ64)/Makefile
+
+$(VULKAN_H_CONFIGURE_FILES32): SHELL = $(CONTAINER_SHELL32)
+$(VULKAN_H_CONFIGURE_FILES32): $(MAKEFILE_DEP) $(CMAKE_BIN32) $(VULKAN_HEADERS)/CMakeLists.txt | $(VULKAN_H_OBJ32)
+	cd $(abspath $(VULKAN_H_OBJ32)) && \
+	../$(CMAKE_BIN32) -DCMAKE_INSTALL_PREFIX=$(abspath $(TOOLS_DIR32)) $(abspath $(VULKAN_HEADERS))
+
+$(VULKAN_H_CONFIGURE_FILES64): SHELL = $(CONTAINER_SHELL64)
+$(VULKAN_H_CONFIGURE_FILES64): $(MAKEFILE_DEP) $(CMAKE_BIN64) $(VULKAN_HEADERS)/CMakeLists.txt | $(VULKAN_H_OBJ64)
+	cd $(abspath $(VULKAN_H_OBJ64)) && \
+	../$(CMAKE_BIN64) -DCMAKE_INSTALL_PREFIX=$(abspath $(TOOLS_DIR64)) $(abspath $(VULKAN_HEADERS))
+
+$(VULKAN_H32): SHELL = $(CONTAINER_SHELL32)
+$(VULKAN_H32): $(VULKAN_H_CONFIGURE_FILES32) | $(VULKAN_H_OBJ32)
+	cd $(abspath $(VULKAN_H_OBJ32)) && \
+	../$(CMAKE_BIN32) --build . --target install
+
+$(VULKAN_H64): SHELL = $(CONTAINER_SHELL64)
+$(VULKAN_H64): $(VULKAN_H_CONFIGURE_FILES64) | $(VULKAN_H_OBJ64)
+	cd $(abspath $(VULKAN_H_OBJ64)) && \
+	../$(CMAKE_BIN64) --build . --target install
+
+# SPIRV-Headers
+
+SPIRV_H_CONFIGURE_FILES32 := $(SPIRV_H_OBJ32)/Makefile
+SPIRV_H_CONFIGURE_FILES64 := $(SPIRV_H_OBJ64)/Makefile
+
+$(SPIRV_H_CONFIGURE_FILES32): SHELL = $(CONTAINER_SHELL32)
+$(SPIRV_H_CONFIGURE_FILES32): $(MAKEFILE_DEP) $(CMAKE_BIN32) $(SPIRV_HEADERS)/CMakeLists.txt | $(SPIRV_H_OBJ32)
+	cd $(abspath $(SPIRV_H_OBJ32)) && \
+	../$(CMAKE_BIN32) -DCMAKE_INSTALL_PREFIX=$(abspath $(TOOLS_DIR32)) $(abspath $(SPIRV_HEADERS))
+
+$(SPIRV_H_CONFIGURE_FILES64): SHELL = $(CONTAINER_SHELL64)
+$(SPIRV_H_CONFIGURE_FILES64): $(MAKEFILE_DEP) $(CMAKE_BIN64) $(SPIRV_HEADERS)/CMakeLists.txt | $(SPIRV_H_OBJ64)
+	cd $(abspath $(SPIRV_H_OBJ64)) && \
+	../$(CMAKE_BIN64) -DCMAKE_INSTALL_PREFIX=$(abspath $(TOOLS_DIR64)) $(abspath $(SPIRV_HEADERS))
+
+$(SPIRV_H32): SHELL = $(CONTAINER_SHELL32)
+$(SPIRV_H32): $(SPIRV_H_CONFIGURE_FILES32)
+	cd $(abspath $(SPIRV_H_OBJ32)) && \
+	../$(CMAKE_BIN32) --build . --target install
+
+$(SPIRV_H64): SHELL = $(CONTAINER_SHELL64)
+$(SPIRV_H64): $(SPIRV_H_CONFIGURE_FILES64)
+	cd $(abspath $(SPIRV_H_OBJ64)) && \
+	../$(CMAKE_BIN64) --build . --target install
+
+# widl; required for vkd3d, which is built before wine
+
+WINEWIDL_CONFIGURE_FILES64 := $(WINEWIDL_OBJ64)/Makefile
+WINEWIDL_CONFIGURE_FILES32 := $(WINEWIDL_OBJ32)/Makefile
+
+$(WINEWIDL_CONFIGURE_FILES32): SHELL = $(CONTAINER_SHELL32)
+$(WINEWIDL_CONFIGURE_FILES32): $(MAKEFILE_DEP) | $(WINEWIDL_OBJ32) bison32
+	cd $(dir $@) && \
+		STRIP=$(STRIP_QUOTED) \
+		BISON=$(abspath $(BISON_BIN32)) \
+		CFLAGS=-I$(abspath $(TOOLS_DIR64))"/include -g $(COMMON_FLAGS)" \
+		LDFLAGS=-L$(abspath $(TOOLS_DIR32))/lib \
+		PKG_CONFIG_PATH=$(abspath $(TOOLS_DIR32))/lib/pkgconfig \
+		CC=$(CC_QUOTED) \
+		CXX=$(CXX_QUOTED) \
+		../$(WINE)/configure \
+			$(WINE32_AUTOCONF) \
+			--without-curses \
+			--disable-tests
+
+$(WINEWIDL32): SHELL = $(CONTAINER_SHELL32)
+$(WINEWIDL32): $(WINEWIDL_CONFIGURE_FILES32)
+	cd $(WINEWIDL_OBJ32) && \
+	make tools/widl
+
+$(WINEWIDL_CONFIGURE_FILES64): SHELL = $(CONTAINER_SHELL64)
+$(WINEWIDL_CONFIGURE_FILES64): $(MAKEFILE_DEP) | $(WINEWIDL_OBJ64) bison64
+	cd $(dir $@) && \
+		STRIP=$(STRIP_QUOTED) \
+		BISON=$(abspath $(BISON_BIN64)) \
+		CFLAGS=-I$(abspath $(TOOLS_DIR64))"/include -g $(COMMON_FLAGS)" \
+		LDFLAGS=-L$(abspath $(TOOLS_DIR64))/lib \
+		PKG_CONFIG_PATH=$(abspath $(TOOLS_DIR64))/lib/pkgconfig \
+		CC=$(CC_QUOTED) \
+		CXX=$(CXX_QUOTED) \
+		../$(WINE)/configure \
+			$(WINE64_AUTOCONF) \
+			--without-curses \
+			--enable-win64 --disable-tests
+
+$(WINEWIDL64): SHELL = $(CONTAINER_SHELL64)
+$(WINEWIDL64): $(WINEWIDL_CONFIGURE_FILES64)
+	cd $(WINEWIDL_OBJ64) && \
+	make tools/widl
+
+# VKD3D
+
+VKD3D_CONFIGURE_FILES32 := $(VKD3D_OBJ32)/Makefile
+VKD3D_CONFIGURE_FILES64 := $(VKD3D_OBJ64)/Makefile
+
+#use host autotools to generate configure script
+$(VKD3D)/configure: SHELL = /bin/bash
+$(VKD3D)/configure: $(MAKEFILE_DEP) $(VKD3D)/configure.ac
+	cd $(abspath $(VKD3D)) && ./autogen.sh
+
+$(VKD3D_CONFIGURE_FILES32): SHELL = $(CONTAINER_SHELL32)
+$(VKD3D_CONFIGURE_FILES32): $(MAKEFILE_DEP) $(VULKAN_H32) $(SPIRV_H32) $(VKD3D)/configure $(WINEWIDL32) | $(VKD3D_OBJ32)
+	cd $(abspath $(VKD3D_OBJ32)) && \
+	CFLAGS="-I$(abspath $(TOOLS_DIR32))/include -g $(COMMON_FLAGS)" \
+	LDFLAGS=-L$(abspath $(TOOLS_DIR32))/lib \
+	WIDL="$(abspath $(WINEWIDL32))" \
+	$(abspath $(VKD3D))/configure --disable-tests --prefix=$(abspath $(TOOLS_DIR32))
+
+vkd3d32: SHELL = $(CONTAINER_SHELL32)
+vkd3d32: $(VKD3D_CONFIGURE_FILES32)
+	cd $(abspath $(VKD3D_OBJ32)) && \
+	make V=1 && make install && \
+	mkdir -p $(abspath $(DST_DIR))/lib/ && \
+	cp -a $(abspath $(TOOLS_DIR32))/lib/libvkd3d*.so* $(abspath $(DST_DIR))/lib/
+
+$(VKD3D_CONFIGURE_FILES64): SHELL = $(CONTAINER_SHELL64)
+$(VKD3D_CONFIGURE_FILES64): $(MAKEFILE_DEP) $(VULKAN_H64) $(SPIRV_H64) $(VKD3D)/configure $(WINEWIDL64) | $(VKD3D_OBJ64)
+	cd $(abspath $(VKD3D_OBJ64)) && \
+	CFLAGS="-I$(abspath $(TOOLS_DIR64))/include -g $(COMMON_FLAGS)" \
+	LDFLAGS=-L$(abspath $(TOOLS_DIR64))/lib \
+	WIDL="$(abspath $(WINEWIDL64))" \
+	$(abspath $(VKD3D))/configure --disable-tests --prefix=$(abspath $(TOOLS_DIR64))
+
+vkd3d64: SHELL = $(CONTAINER_SHELL64)
+vkd3d64: $(VKD3D_CONFIGURE_FILES64)
+	cd $(abspath $(VKD3D_OBJ64)) && \
+	make V=1 && make install && \
+	mkdir -p $(abspath $(DST_DIR))/lib64/ && \
+	cp -a $(abspath $(TOOLS_DIR64))/lib/libvkd3d*.so* $(abspath $(DST_DIR))/lib64/
+
 
 # TODO Tests
 #  build_vrclient64_tests
