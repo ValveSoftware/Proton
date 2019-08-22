@@ -234,7 +234,9 @@ CMAKE_OBJ64 := ./obj-cmake64
 CMAKE_BIN32 := $(CMAKE_OBJ32)/built/bin/cmake
 CMAKE_BIN64 := $(CMAKE_OBJ64)/built/bin/cmake
 
-BISON := $(SRCDIR)/bison
+BISON_VER = 3.3.2
+BISON_TARBALL := bison-$(BISON_VER).tar.xz
+BISON := $(SRCDIR)/contrib/bison-$(BISON_VER)
 BISON_OBJ32 := ./obj-bison32
 BISON_OBJ64 := ./obj-bison64
 BISON_BIN32 := $(BISON_OBJ32)/built/bin/bison
@@ -257,6 +259,40 @@ OBJ_DIRS := $(TOOLS_DIR32)        $(TOOLS_DIR64)        \
 
 $(OBJ_DIRS):
 	mkdir -p $@
+
+## downloads -- Convenience target to download packages used during the build
+## process. Places them in subdirs one up from the Proton source dir, so
+## they won't be wiped during git-clean, vagrant rsync, etc.
+
+.PHONY: downloads
+
+BISON_TARBALL_URL := https://ftpmirror.gnu.org/bison/$(BISON_TARBALL)
+GECKO64_MSI_URL := https://dl.winehq.org/wine/wine-gecko/$(GECKO_VER)/$(GECKO64_MSI)
+GECKO32_MSI_URL := https://dl.winehq.org/wine/wine-gecko/$(GECKO_VER)/$(GECKO32_MSI)
+MONO_TARBALL_URL := https://github.com/madewokherd/wine-mono/releases/download/wine-mono-$(WINEMONO_VER)/$(WINEMONO_TARBALL)
+
+SHARED_BISON_TARBALL := $(SRCDIR)/../bison/$(BISON_TARBALL)
+SHARED_GECKO64_MSI := $(SRCDIR)/../gecko/$(GECKO64_MSI)
+SHARED_GECKO32_MSI := $(SRCDIR)/../gecko/$(GECKO32_MSI)
+SHARED_MONO_TARBALL := $(SRCDIR)/../mono/$(WINEMONO_TARBALL)
+
+$(SHARED_BISON_TARBALL):
+	mkdir -p $(dir $@)
+	wget -O "$@" "$(BISON_TARBALL_URL)"
+
+$(SHARED_GECKO64_MSI):
+	mkdir -p $(dir $@)
+	wget -O "$@" "$(GECKO64_MSI_URL)"
+
+$(SHARED_GECKO32_MSI):
+	mkdir -p $(dir $@)
+	wget -O "$@" "$(GECKO32_MSI_URL)"
+
+$(SHARED_MONO_TARBALL):
+	mkdir -p $(dir $@)
+	wget -O "$@" "$(MONO_TARBALL_URL)"
+
+downloads: $(SHARED_BISON_TARBALL) $(SHARED_GECKO64_MSI) $(SHARED_GECKO32_MSI) $(SHARED_MONO_TARBALL)
 
 ##
 ## dist/install -- steps to finalize the install
@@ -984,22 +1020,33 @@ cmake32-intermediate: $(CMAKE_CONFIGURE_FILES32) $(filter $(MAKECMDGOALS),cmake3
 
 # TODO Don't bother with this in native mode
 
-## Create & configure object directory for cmake
+$(BISON):
+	if [ -e "$(SRCDIR)/../bison/$(BISON_TARBALL)" ]; then \
+		mkdir -p $(dir $@); \
+		tar -xf "$(SRCDIR)/../bison/$(BISON_TARBALL)" -C "$(dir $@)"; \
+	else \
+		mkdir -p $(SRCDIR)/contrib/; \
+		if [ ! -e "$(SRCDIR)/contrib/$(BISON_TARBALL)" ]; then \
+			echo ">>>> Downloading bison. To avoid this in future, put it here: $(SRCDIR)/../bison/$(BISON_TARBALL)"; \
+			wget -O "$(SRCDIR)/contrib/$(BISON_TARBALL)" "$(BISON_TARBALL_URL)"; \
+		fi; \
+		tar -xf "$(SRCDIR)/contrib/$(BISON_TARBALL)" -C "$(dir $@)"; \
+	fi
 
 BISON_CONFIGURE_FILES32 := $(BISON_OBJ32)/Makefile
 BISON_CONFIGURE_FILES64 := $(BISON_OBJ64)/Makefile
 
 # 64-bit configure
 $(BISON_CONFIGURE_FILES64): SHELL = $(CONTAINER_SHELL64)
-$(BISON_CONFIGURE_FILES64): $(MAKEFILE_DEP) | $(BISON_OBJ64)
+$(BISON_CONFIGURE_FILES64): $(MAKEFILE_DEP) $(BISON) | $(BISON_OBJ64)
 	cd "$(BISON_OBJ64)" && \
-		../$(BISON)/configure --prefix=$(abspath $(BISON_OBJ64))/built
+		LIBS='-lrt' ../$(BISON)/configure --prefix=$(abspath $(BISON_OBJ64))/built
 
 # 32-bit configure
 $(BISON_CONFIGURE_FILES32): SHELL = $(CONTAINER_SHELL32)
-$(BISON_CONFIGURE_FILES32): $(MAKEFILE_DEP) | $(BISON_OBJ32)
+$(BISON_CONFIGURE_FILES32): $(MAKEFILE_DEP) $(BISON) | $(BISON_OBJ32)
 	cd "$(BISON_OBJ32)" && \
-		../$(BISON)/configure --prefix=$(abspath $(BISON_OBJ32))/built
+		LIBS='-lrt' ../$(BISON)/configure --prefix=$(abspath $(BISON_OBJ32))/built
 
 
 ## bison goals
@@ -1036,7 +1083,6 @@ bison32-intermediate: $(BISON_CONFIGURE_FILES32) $(filter $(MAKECMDGOALS),bison3
 	+$(MAKE) -C $(BISON_OBJ32)
 	+$(MAKE) -C $(BISON_OBJ32) install
 	touch $(BISON_BIN32)
-
 
 ##
 ## dxvk
