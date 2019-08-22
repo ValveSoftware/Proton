@@ -1,0 +1,18 @@
+@@ -, +, @@ 
+ SetThreadStackGuarantee().
+---
+ dlls/kernelbase/thread.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+--- a/dlls/kernelbase/thread.c	
++++ a/dlls/kernelbase/thread.c	
+@@ -468,7 +468,7 @@ BOOL WINAPI DECLSPEC_HOTPATCH SetThreadPriorityBoost( HANDLE thread, BOOL disabl
+ /**********************************************************************
+  *           SetThreadStackGuarantee   (kernelbase.@)
+  */
+-BOOL WINAPI DECLSPEC_HOTPATCH SetThreadStackGuarantee( ULONG *size )
++BOOL WINAPI SetThreadStackGuarantee( ULONG *size )
+ {
+     static int once;
+     if (once++ == 0) FIXME("(%p): stub\n", size);
+-- 
+ 

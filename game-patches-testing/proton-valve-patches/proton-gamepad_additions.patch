@@ -969,17 +969,6 @@ diff --git a/dlls/dinput/joystick_sdl.c b/dlls/dinput/joystick_sdl.c
 index 50a09ac1d3a..2872788f5c7 100644
 --- a/dlls/dinput/joystick_sdl.c
 +++ b/dlls/dinput/joystick_sdl.c
-@@ -108,6 +108,10 @@ static const GUID DInput_Wine_SDL_Joystick_GUID = { /* 001E36B7-5DBA-4C4F-A8C9-C
-   0x001E36B7, 0x5DBA, 0x4C4F, {0xA8, 0xC9, 0xCF, 0xC8, 0x68, 0x9D, 0xB4, 0x03}
- };
- 
-+static const GUID DInput_PIDVID_Product_GUID = { /* PIDVID-0000-0000-0000-504944564944 "PIDVID" */
-+  0x00000000, 0x0000, 0x0000, {0x00, 0x00, 0x50, 0x49, 0x44, 0x56, 0x49, 0x44}
-+};
-+
- static int have_sdldevs = -1;
- static struct SDLDev *sdldevs = NULL;
- 
 @@ -214,7 +218,7 @@ static void fill_joystick_dideviceinstanceW(LPDIDEVICEINSTANCEW lpddi, DWORD ver
      lpddi->dwSize       = dwSize;
      lpddi->guidInstance = DInput_Wine_SDL_Joystick_GUID;
@@ -1024,4 +1013,3 @@ index 95a096bad89..1fa31b8cd9d 100644
      }
      else if (event->type == SDL_JOYDEVICEREMOVED)
      {
- 

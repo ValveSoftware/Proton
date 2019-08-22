@@ -7,10 +7,23 @@
     patch -Np1 < ../game-patches-testing/dxvk-patches/valve-dxvk-avoid-spamming-log-with-requests-for-IWineD3D11Texture2D.patch
     cd ..
 
-    #WINE HOT FIXES
+    #WINE
     cd wine
     git reset --hard HEAD
     git clean -xdf
+
+    #HOT FIXES
+
+    # https://bugs.winehq.org/show_bug.cgi?id=45774
+    git revert --no-commit 6ccb94392a8ef4bca701ae2a560f4ea1da677edd
+
+    # https://bugs.winehq.org/show_bug.cgi?id=47633
+    patch -Np1 < ../game-patches-testing/wine-patches/4.14-hotfix-kernel-SetThreadStackGuarantee.patch
+
+    # https://bugs.winehq.org/show_bug.cgi?id=47636
+    patch -Np1 < ../game-patches-testing/wine-patches/4.14-hotfix-upside-down-text-wined3d.patch
+
+
 
     #WINE STAGING
     echo "applying staging patches"

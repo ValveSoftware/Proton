@@ -4,9 +4,6 @@
 [submodule "dxvk"]
 	path = dxvk
 	url = https://github.com/gloriouseggroll/proton-dxvk/
-[submodule "esync"]
-	path = esync
-	url = https://github.com/GloriousEggroll/esync
 [submodule "ffmpeg"]
 	path = ffmpeg
 	url = https://git.ffmpeg.org/ffmpeg.git
