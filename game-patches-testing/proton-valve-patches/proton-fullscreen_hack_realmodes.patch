@@ -491,4 +491,166 @@ index 7a528d6c593..d0970e845c3 100644
      return ret;
  }
  
+From f8a795dd545ab1446dc370e7024ec5eac50aec55 Mon Sep 17 00:00:00 2001
+From: Andrew Eikum <aeikum@codeweavers.com>
+Date: Mon, 12 Aug 2019 15:10:19 -0500
+Subject: [PATCH] winex11.drv: Account for crtc transformation when reporting
+ modes
+
+---
+ dlls/winex11.drv/xrandr.c | 31 ++++++++++++++++++++++++++-----
+ 1 file changed, 26 insertions(+), 5 deletions(-)
+
+diff --git a/dlls/winex11.drv/xrandr.c b/dlls/winex11.drv/xrandr.c
+index b78df2bd8f8..c9bb5bb5943 100644
+--- a/dlls/winex11.drv/xrandr.c
++++ b/dlls/winex11.drv/xrandr.c
+@@ -447,7 +447,7 @@ static int xrandr12_init_modes(void)
+     unsigned int only_one_resolution = 1, mode_count;
+     XRRScreenResources *resources;
+     XRROutputInfo *output_info;
+-    XRRModeInfo *primary_mode = NULL;
++    XRRModeInfo *primary_mode = NULL, rotated_mode;
+     XRRCrtcInfo *crtc_info;
+     unsigned int primary_refresh, primary_dots;
+     int ret = -1;
+@@ -533,10 +533,20 @@ static int xrandr12_init_modes(void)
  
+             if (mode->id == output_info->modes[i])
+             {
+-                if(X11DRV_Settings_AddOneMode( mode->width, mode->height, 0, primary_refresh ))
++
++                rotated_mode = *mode;
++                if((crtc_info->rotation & RR_Rotate_90) ||
++                        (crtc_info->rotation & RR_Rotate_270))
+                 {
+-                    TRACE("Added mode %#lx: %ux%u@%u.\n", mode->id, mode->width, mode->height, primary_refresh);
+-                    xrandr12_modes[xrandr_mode_count++] = mode->id;
++                    int tmp = rotated_mode.width;
++                    rotated_mode.width = rotated_mode.height;
++                    rotated_mode.height = tmp;
++                }
++
++                if(X11DRV_Settings_AddOneMode( rotated_mode.width, rotated_mode.height, 0, primary_refresh ))
++                {
++                    TRACE("Added mode %#lx: %ux%u@%u.\n", rotated_mode.id, rotated_mode.width, rotated_mode.height, primary_refresh);
++                    xrandr12_modes[xrandr_mode_count++] = rotated_mode.id;
+                 }
+                 break;
+             }
+@@ -554,7 +564,18 @@ static int xrandr12_init_modes(void)
+     }
+ 
+     if(primary_mode)
+-        X11DRV_Settings_SetRealMode(primary_mode->width, primary_mode->height);
++    {
++        rotated_mode = *primary_mode;
++        if((crtc_info->rotation & RR_Rotate_90) ||
++                (crtc_info->rotation & RR_Rotate_270))
++        {
++            int tmp = rotated_mode.width;
++            rotated_mode.width = rotated_mode.height;
++            rotated_mode.height = tmp;
++        }
++
++        X11DRV_Settings_SetRealMode(rotated_mode.width, rotated_mode.height);
++    }
+     else
+         X11DRV_Settings_SetRealMode(crtc_info->width, crtc_info->height);
+ 
+From b897b017d28457bdb8a1d75b25f8758234978608 Mon Sep 17 00:00:00 2001
+From: Andrew Eikum <aeikum@codeweavers.com>
+Date: Tue, 13 Aug 2019 13:20:24 -0500
+Subject: [PATCH] winex11.drv: Don't report real modes that are larger than the
+ current mode
+
+---
+ dlls/winex11.drv/xrandr.c | 42 ++++++++++++++++++++-------------------
+ 1 file changed, 22 insertions(+), 20 deletions(-)
+
+diff --git a/dlls/winex11.drv/xrandr.c b/dlls/winex11.drv/xrandr.c
+index c9bb5bb5943..06e5462f59a 100644
+--- a/dlls/winex11.drv/xrandr.c
++++ b/dlls/winex11.drv/xrandr.c
+@@ -444,10 +444,10 @@ static XRRCrtcInfo *xrandr12_get_primary_crtc_info( XRRScreenResources *resource
+ 
+ static int xrandr12_init_modes(void)
+ {
+-    unsigned int only_one_resolution = 1, mode_count;
++    unsigned int only_one_resolution = 1, mode_count, primary_width, primary_height;
+     XRRScreenResources *resources;
+     XRROutputInfo *output_info;
+-    XRRModeInfo *primary_mode = NULL, rotated_mode;
++    XRRModeInfo *primary_mode = NULL;
+     XRRCrtcInfo *crtc_info;
+     unsigned int primary_refresh, primary_dots;
+     int ret = -1;
+@@ -519,11 +519,23 @@ static int xrandr12_init_modes(void)
+     {
+         primary_dots = primary_mode->hTotal * primary_mode->vTotal;
+         primary_refresh = primary_dots ? (primary_mode->dotClock + primary_dots / 2) / primary_dots : 0;
++        primary_width = primary_mode->width;
++        primary_height = primary_mode->height;
+     }
+     else
+     {
+         WARN("Couldn't find primary mode! defaulting to 60 Hz\n");
+         primary_refresh = 60;
++        primary_width = crtc_info->width;
++        primary_height = crtc_info->height;
++    }
++
++    if((crtc_info->rotation & RR_Rotate_90) ||
++            (crtc_info->rotation & RR_Rotate_270))
++    {
++        unsigned int tmp = primary_width;
++        primary_width = primary_height;
++        primary_height = tmp;
+     }
+ 
+     xrandr_mode_count = 0;
+@@ -534,16 +548,18 @@ static int xrandr12_init_modes(void)
+             if (mode->id == output_info->modes[i])
+             {
+ 
+-                rotated_mode = *mode;
++                XRRModeInfo rotated_mode = *mode;
+                 if((crtc_info->rotation & RR_Rotate_90) ||
+                         (crtc_info->rotation & RR_Rotate_270))
+                 {
+-                    int tmp = rotated_mode.width;
++                    unsigned int tmp = rotated_mode.width;
+                     rotated_mode.width = rotated_mode.height;
+                     rotated_mode.height = tmp;
+                 }
+ 
+-                if(X11DRV_Settings_AddOneMode( rotated_mode.width, rotated_mode.height, 0, primary_refresh ))
++                if(rotated_mode.width <= primary_width &&
++                        rotated_mode.height <= primary_height &&
++                        X11DRV_Settings_AddOneMode( rotated_mode.width, rotated_mode.height, 0, primary_refresh ))
+                 {
+                     TRACE("Added mode %#lx: %ux%u@%u.\n", rotated_mode.id, rotated_mode.width, rotated_mode.height, primary_refresh);
+                     xrandr12_modes[xrandr_mode_count++] = rotated_mode.id;
+@@ -563,21 +579,7 @@ static int xrandr12_init_modes(void)
+         }
+     }
+ 
+-    if(primary_mode)
+-    {
+-        rotated_mode = *primary_mode;
+-        if((crtc_info->rotation & RR_Rotate_90) ||
+-                (crtc_info->rotation & RR_Rotate_270))
+-        {
+-            int tmp = rotated_mode.width;
+-            rotated_mode.width = rotated_mode.height;
+-            rotated_mode.height = tmp;
+-        }
+-
+-        X11DRV_Settings_SetRealMode(rotated_mode.width, rotated_mode.height);
+-    }
+-    else
+-        X11DRV_Settings_SetRealMode(crtc_info->width, crtc_info->height);
++    X11DRV_Settings_SetRealMode(primary_width, primary_height);
+ 
+     /* Recent (304.64, possibly earlier) versions of the nvidia driver only
+      * report a DFP's native mode through RandR 1.2 / 1.3. Standard DMT modes
