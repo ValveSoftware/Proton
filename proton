@@ -460,6 +460,8 @@ class Session:
         else:
             self.env["PATH"] = g_proton.bin_dir
 
+    import protonfixes
+
     def check_environment(self, env_name, config_name):
         if not env_name in self.env:
             return False
