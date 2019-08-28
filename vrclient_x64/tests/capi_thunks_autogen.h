@@ -105,6 +105,10 @@ void __thiscall IVRSystem_020_AcknowledgeQuit_Exiting(void *_this);
 
 void __thiscall IVRSystem_020_AcknowledgeQuit_UserPrompt(void *_this);
 
+uint32_t __thiscall IVRSystem_020_GetAppContainerFilePaths(void *_this, char * pchBuffer, uint32_t unBufferSize);
+
+const char * __thiscall IVRSystem_020_GetRuntimeVersion(void *_this);
+
 void test_capi_thunks_IVRApplications_006(void);
 
 EVRApplicationError __thiscall IVRApplications_006_AddApplicationManifest(void *_this, const char * pchApplicationManifestFullPath, bool bTemporary);

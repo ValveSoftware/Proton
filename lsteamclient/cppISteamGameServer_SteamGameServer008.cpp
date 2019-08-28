@@ -1,6 +1,9 @@
 #include "steam_defs.h"
+#pragma push_macro("__cdecl")
+#undef __cdecl
 #include "steamworks_sdk_104/steam_api.h"
 #include "steamworks_sdk_104/isteamgameserver.h"
+#pragma pop_macro("__cdecl")
 #include "steamclient_private.h"
 #ifdef __cplusplus
 extern "C" {

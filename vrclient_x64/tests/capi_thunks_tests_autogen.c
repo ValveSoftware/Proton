@@ -420,6 +420,22 @@ void test_capi_thunks_IVRSystem_020(void)
     clear_parameters();
     capi_IVRSystem_020_AcknowledgeQuit_UserPrompt();
     check_ptr_parameter("IVRSystem_020_AcknowledgeQuit_UserPrompt", this_ptr_value);
+
+    init_thunk(t, this_ptr_value, IVRSystem_020_GetAppContainerFilePaths, 2, FALSE, FALSE);
+    uint32_t (__stdcall *capi_IVRSystem_020_GetAppContainerFilePaths)(char * pchBuffer, uint32_t unBufferSize) = (void *)t;
+
+    clear_parameters();
+    capi_IVRSystem_020_GetAppContainerFilePaths((void *)1, 2);
+    check_ptr_parameter("IVRSystem_020_GetAppContainerFilePaths", this_ptr_value);
+    check_ptr_parameter("IVRSystem_020_GetAppContainerFilePaths", (void *)1);
+    check_uint32_parameter("IVRSystem_020_GetAppContainerFilePaths", 2);
+
+    init_thunk(t, this_ptr_value, IVRSystem_020_GetRuntimeVersion, 0, FALSE, FALSE);
+    const char * (__stdcall *capi_IVRSystem_020_GetRuntimeVersion)() = (void *)t;
+
+    clear_parameters();
+    capi_IVRSystem_020_GetRuntimeVersion();
+    check_ptr_parameter("IVRSystem_020_GetRuntimeVersion", this_ptr_value);
     VirtualFree(t, 0, MEM_RELEASE);
 }
 

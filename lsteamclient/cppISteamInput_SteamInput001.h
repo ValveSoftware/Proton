@@ -31,3 +31,5 @@ extern const char * cppISteamInput_SteamInput001_GetStringForXboxOrigin(void *, 
 extern const char * cppISteamInput_SteamInput001_GetGlyphForXboxOrigin(void *, EXboxOrigin);
 extern EInputActionOrigin cppISteamInput_SteamInput001_GetActionOriginFromXboxOrigin(void *, InputHandle_t, EXboxOrigin);
 extern EInputActionOrigin cppISteamInput_SteamInput001_TranslateActionOrigin(void *, ESteamInputType, EInputActionOrigin);
+extern bool cppISteamInput_SteamInput001_GetDeviceBindingRevision(void *, InputHandle_t, int *, int *);
+extern uint32 cppISteamInput_SteamInput001_GetRemotePlaySessionID(void *, InputHandle_t);

@@ -295,3 +295,18 @@ void *manual_convert_FSteamNetworkingSocketsDebugOutput(void *win_func)
     stored_FSteamNetworkingSocketsDebugOutput = (void*)win_func;
     return &lin_FSteamNetworkingSocketsDebugOutput;
 }
+
+
+/***** SteamAPI_CheckCallbackRegistered_t *****/
+static uint32 (__attribute__((ms_abi)) *stored_SteamAPI_CheckCallbackRegistered_t)(int cb);
+
+static uint32 lin_SteamAPI_CheckCallbackRegistered_t(int cb)
+{
+    return stored_SteamAPI_CheckCallbackRegistered_t(cb);
+}
+
+void *manual_convert_SteamAPI_CheckCallbackRegistered_t(void *win_func)
+{
+    stored_SteamAPI_CheckCallbackRegistered_t = (void*)win_func;
+    return &lin_SteamAPI_CheckCallbackRegistered_t;
+}

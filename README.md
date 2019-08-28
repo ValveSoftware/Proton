@@ -71,11 +71,10 @@ vagrant halt
 
 Credits to the proper people are deserved. Many people besides myself have contributed to various parts:
 
-https://github.com/ValveSoftware/Proton
-https://github.com/wine-mirror/wine
-https://github.com/wine-staging/wine-staging
-https://github.com/doitsujin/dxvk
-https://github.com/Joshua-Ashton/d9vk
-https://github.com/Tk-Glitch/PKGBUILDS/tree/master/wine-tkg-git/wine-tkg-patches
-https://github.com/jomihaka/dxvk-poe-hack
-https://github.com/simons-public/protonfixes
+https://github.com/ValveSoftware/Proton  
+https://github.com/wine-mirror/wine  
+https://github.com/wine-staging/wine-staging  
+https://github.com/doitsujin/dxvk  
+https://github.com/Joshua-Ashton/d9vk  
+https://github.com/Tk-Glitch/PKGBUILDS/tree/master/wine-tkg-git/wine-tkg-patches  
+https://github.com/simons-public/protonfixes  

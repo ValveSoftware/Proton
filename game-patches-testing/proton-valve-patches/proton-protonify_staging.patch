@@ -2137,4 +2137,317 @@ index e22559912c3..41ec809b727 100644
          *mode = DWRITE_RENDERING_MODE_OUTLINE;
          return S_OK;
      }
+
+From 5c59517008697ce74becddb59a3e6702a963bb49 Mon Sep 17 00:00:00 2001
+From: Zhiyi Zhang <zzhang@codeweavers.com>
+Date: Fri, 16 Aug 2019 09:46:25 +0000
+Subject: [PATCH] msctf: Use list to keep thread managers.
+
+Thread managers were stored in thread local storage,
+which have a major flaw that they can't not be released
+by another thread.
+
+Signed-off-by: Zhiyi Zhang <zzhang@codeweavers.com>
+---
+ dlls/msctf/msctf.c          | 46 +++++++----------------
+ dlls/msctf/msctf_internal.h |  1 -
+ dlls/msctf/threadmgr.c      | 73 ++++++++++++++++++++++++++++++++-----
+ 3 files changed, 76 insertions(+), 44 deletions(-)
+
+diff --git a/dlls/msctf/msctf.c b/dlls/msctf/msctf.c
+index c6e3a2ca597..fd919295c5a 100644
+--- a/dlls/msctf/msctf.c
++++ b/dlls/msctf/msctf.c
+@@ -69,7 +69,6 @@ static UINT array_size;
+ static struct list AtsList = LIST_INIT(AtsList);
+ static UINT activated = 0;
  
+-DWORD tlsIndex = 0;
+ TfClientId processId = 0;
+ ITfCompartmentMgr *globalCompartmentMgr = NULL;
+ 
+@@ -397,23 +396,19 @@ HRESULT add_active_textservice(TF_LANGUAGEPROFILE *lp)
+     ActivatedTextService *actsvr;
+     ITfCategoryMgr *catmgr;
+     AtsEntry *entry;
+-    ITfThreadMgrEx *tm = TlsGetValue(tlsIndex);
++    ITfThreadMgr *tm;
+     ITfClientId *clientid;
+ 
+-    if (!tm) return E_UNEXPECTED;
++    if (FAILED(TF_GetThreadMgr(&tm))) return E_UNEXPECTED;
+ 
+     actsvr = HeapAlloc(GetProcessHeap(),0,sizeof(ActivatedTextService));
+-    if (!actsvr) return E_OUTOFMEMORY;
++    if (!actsvr) goto fail;
+ 
+-    ITfThreadMgrEx_QueryInterface(tm, &IID_ITfClientId, (void **)&clientid);
++    ITfThreadMgr_QueryInterface(tm, &IID_ITfClientId, (void **)&clientid);
+     ITfClientId_GetClientId(clientid, &lp->clsid, &actsvr->tid);
+     ITfClientId_Release(clientid);
+ 
+-    if (!actsvr->tid)
+-    {
+-        HeapFree(GetProcessHeap(),0,actsvr);
+-        return E_OUTOFMEMORY;
+-    }
++    if (!actsvr->tid) goto fail;
+ 
+     actsvr->pITfTextInputProcessor = NULL;
+     actsvr->LanguageProfile = *lp;
+@@ -440,20 +435,21 @@ HRESULT add_active_textservice(TF_LANGUAGEPROFILE *lp)
+         deactivate_remove_conflicting_ts(&actsvr->LanguageProfile.catid);
+ 
+     if (activated > 0)
+-        activate_given_ts(actsvr, tm);
++        activate_given_ts(actsvr, (ITfThreadMgrEx *)tm);
+ 
+     entry = HeapAlloc(GetProcessHeap(),0,sizeof(AtsEntry));
+-
+-    if (!entry)
+-    {
+-        HeapFree(GetProcessHeap(),0,actsvr);
+-        return E_OUTOFMEMORY;
+-    }
++    if (!entry) goto fail;
+ 
+     entry->ats = actsvr;
+     list_add_head(&AtsList, &entry->entry);
+ 
++    ITfThreadMgr_Release(tm);
+     return S_OK;
++
++fail:
++    ITfThreadMgr_Release(tm);
++    HeapFree(GetProcessHeap(), 0, actsvr);
++    return E_OUTOFMEMORY;
+ }
+ 
+ BOOL get_active_textservice(REFCLSID rclsid, TF_LANGUAGEPROFILE *profile)
+@@ -560,11 +556,9 @@ BOOL WINAPI DllMain(HINSTANCE hinst, DWORD fdwReason, LPVOID fImpLoad)
+             return FALSE;   /* prefer native version */
+         case DLL_PROCESS_ATTACH:
+             MSCTF_hinstance = hinst;
+-            tlsIndex = TlsAlloc();
+             break;
+         case DLL_PROCESS_DETACH:
+             if (fImpLoad) break;
+-            TlsFree(tlsIndex);
+             break;
+     }
+     return TRUE;
+@@ -622,20 +616,6 @@ HRESULT WINAPI TF_CreateThreadMgr(ITfThreadMgr **pptim)
+     return ThreadMgr_Constructor(NULL,(IUnknown**)pptim);
+ }
+ 
+-/***********************************************************************
+- *              TF_GetThreadMgr (MSCTF.@)
+- */
+-HRESULT WINAPI TF_GetThreadMgr(ITfThreadMgr **pptim)
+-{
+-    TRACE("\n");
+-    *pptim = TlsGetValue(tlsIndex);
+-
+-    if (*pptim)
+-        ITfThreadMgr_AddRef(*pptim);
+-
+-    return S_OK;
+-}
+-
+ /***********************************************************************
+  *              SetInputScope(MSCTF.@)
+  */
+diff --git a/dlls/msctf/msctf_internal.h b/dlls/msctf/msctf_internal.h
+index 584bb1044ed..ace2bee23d9 100644
+--- a/dlls/msctf/msctf_internal.h
++++ b/dlls/msctf/msctf_internal.h
+@@ -35,7 +35,6 @@
+ #define COOKIE_MAGIC_UIELEMENTSINK 0x00a0
+ #define COOKIE_MAGIC_INPUTPROCESSORPROFILEACTIVATIONSINK 0x00b0
+ 
+-extern DWORD tlsIndex DECLSPEC_HIDDEN;
+ extern TfClientId processId DECLSPEC_HIDDEN;
+ extern ITfCompartmentMgr *globalCompartmentMgr DECLSPEC_HIDDEN;
+ 
+diff --git a/dlls/msctf/threadmgr.c b/dlls/msctf/threadmgr.c
+index 2c208fbc04f..2119ea2193b 100644
+--- a/dlls/msctf/threadmgr.c
++++ b/dlls/msctf/threadmgr.c
+@@ -37,6 +37,17 @@
+ 
+ WINE_DEFAULT_DEBUG_CHANNEL(msctf);
+ 
++static CRITICAL_SECTION ThreadMgrCs;
++static CRITICAL_SECTION_DEBUG ThreadMgrCsDebug =
++{
++    0, 0, &ThreadMgrCs,
++    {&ThreadMgrCsDebug.ProcessLocksList,
++     &ThreadMgrCsDebug.ProcessLocksList },
++     0, 0, {(DWORD_PTR)(__FILE__ ": ThreadMgrCs")}
++};
++static CRITICAL_SECTION ThreadMgrCs = {&ThreadMgrCsDebug, -1, 0, 0, 0, 0};
++struct list ThreadMgrList = LIST_INIT(ThreadMgrList);
++
+ typedef struct tagPreservedKey
+ {
+     struct list     entry;
+@@ -98,6 +109,9 @@ typedef struct tagACLMulti {
+     struct list     ThreadMgrEventSink;
+     struct list     UIElementSink;
+     struct list     InputProcessorProfileActivationSink;
++
++    DWORD threadId;
++    struct list entry;
+ } ThreadMgr;
+ 
+ typedef struct tagEnumTfDocumentMgr {
+@@ -110,6 +124,11 @@ typedef struct tagEnumTfDocumentMgr {
+ 
+ static HRESULT EnumTfDocumentMgr_Constructor(struct list* head, IEnumTfDocumentMgrs **ppOut);
+ 
++static inline ThreadMgr *impl_from_ITfThreadMgr(ITfThreadMgr *iface)
++{
++    return CONTAINING_RECORD(iface, ThreadMgr, ITfThreadMgrEx_iface);
++}
++
+ static inline ThreadMgr *impl_from_ITfThreadMgrEx(ITfThreadMgrEx *iface)
+ {
+     return CONTAINING_RECORD(iface, ThreadMgr, ITfThreadMgrEx_iface);
+@@ -155,6 +174,35 @@ static inline EnumTfDocumentMgr *impl_from_IEnumTfDocumentMgrs(IEnumTfDocumentMg
+     return CONTAINING_RECORD(iface, EnumTfDocumentMgr, IEnumTfDocumentMgrs_iface);
+ }
+ 
++/***********************************************************************
++ *              TF_GetThreadMgr (MSCTF.@)
++ */
++HRESULT WINAPI TF_GetThreadMgr(ITfThreadMgr **pptim)
++{
++    DWORD id = GetCurrentThreadId();
++    ThreadMgr *cursor;
++
++    TRACE("%p\n", pptim);
++
++    if (!pptim)
++        return E_INVALIDARG;
++
++    EnterCriticalSection(&ThreadMgrCs);
++    LIST_FOR_EACH_ENTRY(cursor, &ThreadMgrList, ThreadMgr, entry)
++    {
++        if (cursor->threadId == id)
++        {
++            ITfThreadMgrEx_AddRef(&cursor->ITfThreadMgrEx_iface);
++            *pptim = (ITfThreadMgr *)&cursor->ITfThreadMgrEx_iface;
++            LeaveCriticalSection(&ThreadMgrCs);
++            return S_OK;
++        }
++    }
++    LeaveCriticalSection(&ThreadMgrCs);
++    *pptim = NULL;
++    return E_FAIL;
++}
++
+ static void ThreadMgr_Destructor(ThreadMgr *This)
+ {
+     struct list *cursor, *cursor2;
+@@ -163,7 +211,9 @@ static void ThreadMgr_Destructor(ThreadMgr *This)
+     if (This->focusHook)
+         UnhookWindowsHookEx(This->focusHook);
+ 
+-    TlsSetValue(tlsIndex,NULL);
++    EnterCriticalSection(&ThreadMgrCs);
++    list_remove(&This->entry);
++    LeaveCriticalSection(&ThreadMgrCs);
+     TRACE("destroying %p\n", This);
+     if (This->focus)
+         ITfDocumentMgr_Release(This->focus);
+@@ -386,17 +436,20 @@ static HRESULT WINAPI ThreadMgr_SetFocus(ITfThreadMgrEx *iface, ITfDocumentMgr *
+ 
+ static LRESULT CALLBACK ThreadFocusHookProc(int nCode, WPARAM wParam, LPARAM lParam)
+ {
++    ITfThreadMgr *ThreadMgr_iface;
+     ThreadMgr *This;
+ 
+-    This = TlsGetValue(tlsIndex);
+-    if (!This)
++    if (FAILED(TF_GetThreadMgr(&ThreadMgr_iface)))
+     {
+         ERR("Hook proc but no ThreadMgr for this thread. Serious Error\n");
+         return 0;
+     }
++
++    This = impl_from_ITfThreadMgr(ThreadMgr_iface);
+     if (!This->focusHook)
+     {
+         ERR("Hook proc but no ThreadMgr focus Hook. Serious Error\n");
++        ITfThreadMgr_Release(ThreadMgr_iface);
+         return 0;
+     }
+ 
+@@ -417,6 +470,7 @@ static LRESULT CALLBACK ThreadFocusHookProc(int nCode, WPARAM wParam, LPARAM lPa
+         }
+     }
+ 
++    ITfThreadMgr_Release(ThreadMgr_iface);
+     return CallNextHookEx(This->focusHook, nCode, wParam, lParam);
+ }
+ 
+@@ -1338,13 +1392,8 @@ HRESULT ThreadMgr_Constructor(IUnknown *pUnkOuter, IUnknown **ppOut)
+         return CLASS_E_NOAGGREGATION;
+ 
+     /* Only 1 ThreadMgr is created per thread */
+-    This = TlsGetValue(tlsIndex);
+-    if (This)
+-    {
+-        ThreadMgr_AddRef(&This->ITfThreadMgrEx_iface);
+-        *ppOut = (IUnknown*)&This->ITfThreadMgrEx_iface;
++    if (SUCCEEDED(TF_GetThreadMgr((ITfThreadMgr **)ppOut)))
+         return S_OK;
+-    }
+ 
+     This = HeapAlloc(GetProcessHeap(),HEAP_ZERO_MEMORY,sizeof(ThreadMgr));
+     if (This == NULL)
+@@ -1359,7 +1408,6 @@ HRESULT ThreadMgr_Constructor(IUnknown *pUnkOuter, IUnknown **ppOut)
+     This->ITfUIElementMgr_iface.lpVtbl = &ThreadMgrUIElementMgrVtbl;
+     This->ITfSourceSingle_iface.lpVtbl = &SourceSingleVtbl;
+     This->refCount = 1;
+-    TlsSetValue(tlsIndex,This);
+ 
+     CompartmentMgr_Constructor((IUnknown*)&This->ITfThreadMgrEx_iface, &IID_IUnknown, (IUnknown**)&This->CompartmentMgr);
+ 
+@@ -1376,6 +1424,11 @@ HRESULT ThreadMgr_Constructor(IUnknown *pUnkOuter, IUnknown **ppOut)
+     list_init(&This->UIElementSink);
+     list_init(&This->InputProcessorProfileActivationSink);
+ 
++    This->threadId = GetCurrentThreadId();
++    EnterCriticalSection(&ThreadMgrCs);
++    list_add_tail(&ThreadMgrList, &This->entry);
++    LeaveCriticalSection(&ThreadMgrCs);
++
+     TRACE("returning %p\n", This);
+     *ppOut = (IUnknown *)&This->ITfThreadMgrEx_iface;
+     return S_OK;
+From 57f18487fb073df1adf3fcdb0726175d530aa737 Mon Sep 17 00:00:00 2001
+From: Juuso Alasuutari <juuso.alasuutari@gmail.com>
+Date: Sun, 18 Aug 2019 09:27:13 +0300
+Subject: [PATCH] kernel32: Ensure that the loader lock is released before
+ returning from GetModuleHandleExW().
+
+Signed-off-by: Juuso Alasuutari <juuso.alasuutari@gmail.com>
+Reviewed-by: Richard Yao <ryao@gentoo.org>
+---
+ dlls/kernel32/module.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/dlls/kernel32/module.c b/dlls/kernel32/module.c
+index 9ae687cb840..4289f20d3c2 100644
+--- a/dlls/kernel32/module.c
++++ b/dlls/kernel32/module.c
+@@ -479,6 +479,8 @@ BOOL WINAPI GetModuleHandleExW( DWORD flags, LPCWSTR name, HMODULE *module )
+         UNICODE_STRING wstr;
+         if(steamclient_hmod != NULL && strcasestrW(name, steamclientW)){
+             *module = steamclient_hmod;
++            if (lock)
++                LdrUnlockLoaderLock( 0, magic );
+             return TRUE;
+         }
+         RtlInitUnicodeString( &wstr, name );

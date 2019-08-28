@@ -31,3 +31,4 @@ extern const char * cppISteamController_SteamController007_GetStringForXboxOrigi
 extern const char * cppISteamController_SteamController007_GetGlyphForXboxOrigin(void *, EXboxOrigin);
 extern EControllerActionOrigin cppISteamController_SteamController007_GetActionOriginFromXboxOrigin(void *, ControllerHandle_t, EXboxOrigin);
 extern EControllerActionOrigin cppISteamController_SteamController007_TranslateActionOrigin(void *, ESteamInputType, EControllerActionOrigin);
+extern bool cppISteamController_SteamController007_GetControllerBindingRevision(void *, ControllerHandle_t, int *, int *);

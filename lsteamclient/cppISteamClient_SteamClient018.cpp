@@ -1,11 +1,14 @@
 #include "steam_defs.h"
-#include "steamworks_sdk_144/steam_api.h"
-#include "steamworks_sdk_144/steamnetworkingtypes.h"
+#pragma push_macro("__cdecl")
+#undef __cdecl
+#include "steamworks_sdk_145/steam_api.h"
+#include "steamworks_sdk_145/steamnetworkingtypes.h"
+#pragma pop_macro("__cdecl")
 #include "steamclient_private.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
-#define SDKVER_144
+#define SDKVER_145
 #include "struct_converters.h"
 #include "cppISteamClient_SteamClient018.h"
 HSteamPipe cppISteamClient_SteamClient018_CreateSteamPipe(void *linux_side)
@@ -180,6 +183,7 @@ void cppISteamClient_SteamClient018_DEPRECATED_Remove_SteamAPI_CPostAPIResultInP
 
 void cppISteamClient_SteamClient018_Set_SteamAPI_CCheckCallbackRegisteredInProcess(void *linux_side, SteamAPI_CheckCallbackRegistered_t func)
 {
+    func = (SteamAPI_CheckCallbackRegistered_t)manual_convert_SteamAPI_CheckCallbackRegistered_t((void*)func);
     ((ISteamClient*)linux_side)->Set_SteamAPI_CCheckCallbackRegisteredInProcess((SteamAPI_CheckCallbackRegistered_t)func);
 }
 

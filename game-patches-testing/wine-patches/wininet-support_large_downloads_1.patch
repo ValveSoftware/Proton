@@ -1,0 +1,259 @@
+Signed-off-by: Daniel Lehman <dlehman25@gmail.com>
+---
+v2:
+ - just use strtoulW with overflow check
+ - make this patch first since it's really 0003 that needs it
+
+---
+ dlls/wininet/http.c       | 21 +++++++++++++---
+ dlls/wininet/tests/http.c | 51 +++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 69 insertions(+), 3 deletions(-)
+
+diff --git a/dlls/wininet/http.c b/dlls/wininet/http.c
+index 538fc2bf6b..f771356760 100644
+--- a/dlls/wininet/http.c
++++ b/dlls/wininet/http.c
+@@ -3724,9 +3724,24 @@ static DWORD HTTP_HttpQueryInfoW(http_request_t *request, DWORD dwInfoLevel,
+     /* coalesce value to requested type */
+     if (dwInfoLevel & HTTP_QUERY_FLAG_NUMBER && lpBuffer)
+     {
+-        *(int *)lpBuffer = atoiW(lphttpHdr->lpszValue);
+-        TRACE(" returning number: %d\n", *(int *)lpBuffer);
+-     }
++        unsigned long value;
++
++        if (*lpdwBufferLength != sizeof(DWORD))
++        {
++            LeaveCriticalSection( &request->headers_section );
++            return ERROR_HTTP_INVALID_HEADER;
++        }
++
++        value = strtoulW( lphttpHdr->lpszValue, NULL, 10 );
++        if (value >= UINT_MAX)
++        {
++            LeaveCriticalSection( &request->headers_section );
++            return ERROR_HTTP_INVALID_HEADER;
++        }
++
++        *(DWORD *)lpBuffer = value;
++        TRACE(" returning number: %u\n", *(DWORD *)lpBuffer);
++    }
+     else if (dwInfoLevel & HTTP_QUERY_FLAG_SYSTEMTIME && lpBuffer)
+     {
+         time_t tmpTime;
+diff --git a/dlls/wininet/tests/http.c b/dlls/wininet/tests/http.c
+index 6db33e4033..076c6ce5a4 100644
+--- a/dlls/wininet/tests/http.c
++++ b/dlls/wininet/tests/http.c
+@@ -2061,6 +2061,11 @@ static const char okmsg2[] =
+ "Set-Cookie: two\r\n"
+ "\r\n";
+
++static const char notok4gb[] =
++"HTTP/1.1 200 OK\r\n"
++"Content-Length: 4294967296\r\n"
++"\r\n";
++
+ static const char notokmsg[] =
+ "HTTP/1.1 400 Bad Request\r\n"
+ "Server: winetest\r\n"
+@@ -2455,6 +2460,10 @@ static DWORD CALLBACK server_thread(LPVOID param)
+         {
+             send(c, okmsg, sizeof(okmsg)-1, 0);
+         }
++        if (strstr(buffer, "HEAD /test_4GB"))
++        {
++            send(c, notok4gb, sizeof(notok4gb)-1, 0);
++        }
+         shutdown(c, 2);
+         closesocket(c);
+         c = -1;
+@@ -5515,6 +5524,47 @@ static void test_remove_dot_segments(int port)
+     close_request(&req);
+ }
+
++static void test_large_content(int port)
++{
++    test_request_t req;
++    DWORD len, len2;
++    DWORD64 len64;
++    BOOL ret;
++
++    open_simple_request(&req, "localhost", port, "HEAD", "/test_4GB");
++
++    ret = HttpSendRequestA(req.request, NULL, 0, NULL, 0);
++    ok(ret, "HttpSendRequest failed: %u\n", GetLastError());
++
++    /* test argument size */
++    len = sizeof(len64);
++    len64 = ~0;
++    SetLastError(0xdeadbeef);
++    ret = HttpQueryInfoA(req.request, HTTP_QUERY_FLAG_NUMBER|HTTP_QUERY_CONTENT_LENGTH,
++                         &len64, &len, 0);
++    ok(!ret, "HttpQueryInfo should have failed\n");
++    ok(GetLastError() == ERROR_HTTP_INVALID_HEADER,
++        "HttpQueryInfo should have set last error to ERROR_HTTP_INVALID_HEADER instead of %u\n",
++        GetLastError());
++    ok(len == sizeof(DWORD64), "len = %u\n", len);
++    ok(len64 == ~0, "len64 = %x%08x\n", (DWORD)(len64 >> 32), (DWORD)len64);
++
++    /* test overflow */
++    len = sizeof(len2);
++    len2 = ~0;
++    SetLastError(0xdeadbeef);
++    ret = HttpQueryInfoA(req.request, HTTP_QUERY_FLAG_NUMBER|HTTP_QUERY_CONTENT_LENGTH,
++                         &len2, &len, 0);
++    ok(!ret, "HttpQueryInfo should have failed\n");
++    ok(GetLastError() == ERROR_HTTP_INVALID_HEADER,
++        "HttpQueryInfo should have set last error to ERROR_HTTP_INVALID_HEADER instead of %u\n",
++        GetLastError());
++    ok(len == sizeof(DWORD), "len = %u\n", len);
++    ok(len2 == ~0, "len2 = %x\n", len2);
++
++    close_request(&req);
++}
++
+ static void test_http_connection(void)
+ {
+     struct server_info si;
+@@ -5573,6 +5623,7 @@ static void test_http_connection(void)
+     test_redirect(si.port);
+     test_persistent_connection(si.port);
+     test_remove_dot_segments(si.port);
++    test_large_content(si.port);
+
+     /* send the basic request again to shutdown the server thread */
+     test_basic_request(si.port, "GET", "/quit");
+Daniel Lehman dlehman25@gmail.com via winehq.org 
+	
+10:17 PM (14 minutes ago)
+	
+to wine-devel
+Signed-off-by: Daniel Lehman <dlehman25@gmail.com>
+---
+v2:
+ - just use strtoulW with overflow check
+ - make this patch first since it's really 0003 that needs it
+
+---
+ dlls/wininet/http.c       | 21 +++++++++++++---
+ dlls/wininet/tests/http.c | 51 +++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 69 insertions(+), 3 deletions(-)
+
+diff --git a/dlls/wininet/http.c b/dlls/wininet/http.c
+index 538fc2bf6b..f771356760 100644
+--- a/dlls/wininet/http.c
++++ b/dlls/wininet/http.c
+@@ -3724,9 +3724,24 @@ static DWORD HTTP_HttpQueryInfoW(http_request_t *request, DWORD dwInfoLevel,
+     /* coalesce value to requested type */
+     if (dwInfoLevel & HTTP_QUERY_FLAG_NUMBER && lpBuffer)
+     {
+-        *(int *)lpBuffer = atoiW(lphttpHdr->lpszValue);
+-        TRACE(" returning number: %d\n", *(int *)lpBuffer);
+-     }
++        unsigned long value;
++
++        if (*lpdwBufferLength != sizeof(DWORD))
++        {
++            LeaveCriticalSection( &request->headers_section );
++            return ERROR_HTTP_INVALID_HEADER;
++        }
++
++        value = strtoulW( lphttpHdr->lpszValue, NULL, 10 );
++        if (value >= UINT_MAX)
++        {
++            LeaveCriticalSection( &request->headers_section );
++            return ERROR_HTTP_INVALID_HEADER;
++        }
++
++        *(DWORD *)lpBuffer = value;
++        TRACE(" returning number: %u\n", *(DWORD *)lpBuffer);
++    }
+     else if (dwInfoLevel & HTTP_QUERY_FLAG_SYSTEMTIME && lpBuffer)
+     {
+         time_t tmpTime;
+diff --git a/dlls/wininet/tests/http.c b/dlls/wininet/tests/http.c
+index 6db33e4033..076c6ce5a4 100644
+--- a/dlls/wininet/tests/http.c
++++ b/dlls/wininet/tests/http.c
+@@ -2061,6 +2061,11 @@ static const char okmsg2[] =
+ "Set-Cookie: two\r\n"
+ "\r\n";
+
++static const char notok4gb[] =
++"HTTP/1.1 200 OK\r\n"
++"Content-Length: 4294967296\r\n"
++"\r\n";
++
+ static const char notokmsg[] =
+ "HTTP/1.1 400 Bad Request\r\n"
+ "Server: winetest\r\n"
+@@ -2455,6 +2460,10 @@ static DWORD CALLBACK server_thread(LPVOID param)
+         {
+             send(c, okmsg, sizeof(okmsg)-1, 0);
+         }
++        if (strstr(buffer, "HEAD /test_4GB"))
++        {
++            send(c, notok4gb, sizeof(notok4gb)-1, 0);
++        }
+         shutdown(c, 2);
+         closesocket(c);
+         c = -1;
+@@ -5515,6 +5524,47 @@ static void test_remove_dot_segments(int port)
+     close_request(&req);
+ }
+
++static void test_large_content(int port)
++{
++    test_request_t req;
++    DWORD len, len2;
++    DWORD64 len64;
++    BOOL ret;
++
++    open_simple_request(&req, "localhost", port, "HEAD", "/test_4GB");
++
++    ret = HttpSendRequestA(req.request, NULL, 0, NULL, 0);
++    ok(ret, "HttpSendRequest failed: %u\n", GetLastError());
++
++    /* test argument size */
++    len = sizeof(len64);
++    len64 = ~0;
++    SetLastError(0xdeadbeef);
++    ret = HttpQueryInfoA(req.request, HTTP_QUERY_FLAG_NUMBER|HTTP_QUERY_CONTENT_LENGTH,
++                         &len64, &len, 0);
++    ok(!ret, "HttpQueryInfo should have failed\n");
++    ok(GetLastError() == ERROR_HTTP_INVALID_HEADER,
++        "HttpQueryInfo should have set last error to ERROR_HTTP_INVALID_HEADER instead of %u\n",
++        GetLastError());
++    ok(len == sizeof(DWORD64), "len = %u\n", len);
++    ok(len64 == ~0, "len64 = %x%08x\n", (DWORD)(len64 >> 32), (DWORD)len64);
++
++    /* test overflow */
++    len = sizeof(len2);
++    len2 = ~0;
++    SetLastError(0xdeadbeef);
++    ret = HttpQueryInfoA(req.request, HTTP_QUERY_FLAG_NUMBER|HTTP_QUERY_CONTENT_LENGTH,
++                         &len2, &len, 0);
++    ok(!ret, "HttpQueryInfo should have failed\n");
++    ok(GetLastError() == ERROR_HTTP_INVALID_HEADER,
++        "HttpQueryInfo should have set last error to ERROR_HTTP_INVALID_HEADER instead of %u\n",
++        GetLastError());
++    ok(len == sizeof(DWORD), "len = %u\n", len);
++    ok(len2 == ~0, "len2 = %x\n", len2);
++
++    close_request(&req);
++}
++
+ static void test_http_connection(void)
+ {
+     struct server_info si;
+@@ -5573,6 +5623,7 @@ static void test_http_connection(void)
+     test_redirect(si.port);
+     test_persistent_connection(si.port);
+     test_remove_dot_segments(si.port);
++    test_large_content(si.port);
+
+     /* send the basic request again to shutdown the server thread */
+     test_basic_request(si.port, "GET", "/quit");
+-- 
+2.17.1

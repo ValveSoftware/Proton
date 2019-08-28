@@ -32,8 +32,8 @@ typedef struct winRenderModel_t_1015 winRenderModel_t_1015;
 typedef struct winRenderModel_TextureMap_t_1015 winRenderModel_TextureMap_t_1015;
 #include "cppIVRRenderModels_IVRRenderModels_005.h"
 
-typedef struct winRenderModel_t_1517 winRenderModel_t_1517;
-typedef struct winRenderModel_TextureMap_t_1517 winRenderModel_TextureMap_t_1517;
+typedef struct winRenderModel_t_1610 winRenderModel_t_1610;
+typedef struct winRenderModel_TextureMap_t_1610 winRenderModel_TextureMap_t_1610;
 #include "cppIVRRenderModels_IVRRenderModels_006.h"
 
 WINE_DEFAULT_DEBUG_CHANNEL(vrclient);
@@ -204,6 +204,7 @@ static pfn_dtor get_win_destructor(const char *name)
 }
 
 static void *vrclient_lib;
+static void *(*vrclient_HmdSystemFactory)(const char *name, int *return_code);
 static void *(*vrclient_VRClientCoreFactory)(const char *name, int *return_code);
 
 static int load_vrclient(void)
@@ -232,6 +233,12 @@ static int load_vrclient(void)
         return 0;
     }
 
+    vrclient_HmdSystemFactory = wine_dlsym(vrclient_lib, "HmdSystemFactory", NULL, 0);
+    if(!vrclient_HmdSystemFactory){
+        ERR("unable to load HmdSystemFactory method\n");
+        return 0;
+    }
+
     vrclient_VRClientCoreFactory = wine_dlsym(vrclient_lib, "VRClientCoreFactory", NULL, 0);
     if(!vrclient_VRClientCoreFactory){
         ERR("unable to load VRClientCoreFactory method\n");
@@ -239,6 +246,16 @@ static int load_vrclient(void)
     }
 
     return 1;
+}
+
+void *CDECL HmdSystemFactory(const char *name, int *return_code)
+{
+    TRACE("name: %s, return_code: %p\n", name, return_code);
+
+    if(!load_vrclient())
+        return NULL;
+
+    return create_win_interface(name, vrclient_HmdSystemFactory(name, return_code));
 }
 
 void *CDECL VRClientCoreFactory(const char *name, int *return_code)
@@ -1094,7 +1111,7 @@ EVRRenderModelError ivrrendermodels_load_into_texture_d3d11_async(
         error = cppIVRRenderModels_IVRRenderModels_005_LoadTexture_Async(linux_side, texture_id, &texture_map);
         break;
     case 6:
-        error = cppIVRRenderModels_IVRRenderModels_006_LoadTexture_Async(linux_side, texture_id, (struct winRenderModel_TextureMap_t_1517 **)&texture_map);
+        error = cppIVRRenderModels_IVRRenderModels_006_LoadTexture_Async(linux_side, texture_id, (struct winRenderModel_TextureMap_t_1610 **)&texture_map);
         break;
     }
     if (error == VRRenderModelError_Loading)
@@ -1124,7 +1141,7 @@ EVRRenderModelError ivrrendermodels_load_into_texture_d3d11_async(
         cppIVRRenderModels_IVRRenderModels_005_FreeTexture(linux_side, texture_map);
         break;
     case 6:
-        cppIVRRenderModels_IVRRenderModels_006_FreeTexture(linux_side, (struct winRenderModel_TextureMap_t_1517 *)texture_map);
+        cppIVRRenderModels_IVRRenderModels_006_FreeTexture(linux_side, (struct winRenderModel_TextureMap_t_1610 *)texture_map);
         break;
     }
     return error;

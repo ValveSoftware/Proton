@@ -1,12 +1,15 @@
 #include "steam_defs.h"
-#include "steamworks_sdk_144/steam_api.h"
-#include "steamworks_sdk_144/steamnetworkingtypes.h"
-#include "steamworks_sdk_144/isteamgameserver.h"
+#pragma push_macro("__cdecl")
+#undef __cdecl
+#include "steamworks_sdk_146/steam_api.h"
+#include "steamworks_sdk_146/steamnetworkingtypes.h"
+#include "steamworks_sdk_146/isteamgameserver.h"
+#pragma pop_macro("__cdecl")
 #include "steamclient_private.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
-#define SDKVER_144
+#define SDKVER_146
 #include "struct_converters.h"
 #include "cppISteamGameServer_SteamGameServer012.h"
 bool cppISteamGameServer_SteamGameServer012_InitGameServer(void *linux_side, uint32 unIP, uint16 usGamePort, uint16 usQueryPort, uint32 unFlags, AppId_t nGameAppId, const char * pchVersionString)

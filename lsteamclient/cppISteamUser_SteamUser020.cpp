@@ -1,11 +1,14 @@
 #include "steam_defs.h"
-#include "steamworks_sdk_144/steam_api.h"
-#include "steamworks_sdk_144/steamnetworkingtypes.h"
+#pragma push_macro("__cdecl")
+#undef __cdecl
+#include "steamworks_sdk_146/steam_api.h"
+#include "steamworks_sdk_146/steamnetworkingtypes.h"
+#pragma pop_macro("__cdecl")
 #include "steamclient_private.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
-#define SDKVER_144
+#define SDKVER_146
 #include "struct_converters.h"
 #include "cppISteamUser_SteamUser020.h"
 HSteamUser cppISteamUser_SteamUser020_GetHSteamUser(void *linux_side)
@@ -156,6 +159,11 @@ bool cppISteamUser_SteamUser020_BIsPhoneRequiringVerification(void *linux_side)
 SteamAPICall_t cppISteamUser_SteamUser020_GetMarketEligibility(void *linux_side)
 {
     return ((ISteamUser*)linux_side)->GetMarketEligibility();
+}
+
+SteamAPICall_t cppISteamUser_SteamUser020_GetDurationControl(void *linux_side)
+{
+    return ((ISteamUser*)linux_side)->GetDurationControl();
 }
 
 #ifdef __cplusplus

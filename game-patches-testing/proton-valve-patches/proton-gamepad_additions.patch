@@ -1,3 +1,336 @@
+From a4fda32d2dc0115017f3fa87413d84a08d193328 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
+Date: Tue, 9 Jul 2019 11:12:07 +0200
+Subject: [PATCH] winebus.sys: Report the native product string for some Xbox
+ gamepads
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Some games are checking the hid product string of connected gamepads in
+order to decide whether or not to activate rumble.
+
+Wine usually delegates these queries to the backend driver, but they
+don't always report the same product strings as on Windows. This will
+allow to override backend strings with the actual strings as reported
+by native drivers.
+
+Signed-off-by: Rémi Bernon <rbernon@codeweavers.com>
+---
+ dlls/winebus.sys/main.c | 98 ++++++++++++++++++++++++++++++++++-------
+ 1 file changed, 81 insertions(+), 17 deletions(-)
+
+diff --git a/dlls/winebus.sys/main.c b/dlls/winebus.sys/main.c
+index 26200bde3e..12ff0b3e15 100644
+--- a/dlls/winebus.sys/main.c
++++ b/dlls/winebus.sys/main.c
+@@ -49,22 +49,39 @@ WINE_DECLARE_DEBUG_CHANNEL(hid_report);
+ 
+ static const WCHAR backslashW[] = {'\\',0};
+ 
++struct product_desc
++{
++    WORD vid;
++    WORD pid;
++    const WCHAR* manufacturer;
++    const WCHAR* product;
++    const WCHAR* serialnumber;
++};
++
+ #define VID_MICROSOFT 0x045e
+ 
+-static const WORD PID_XBOX_CONTROLLERS[] =  {
+-    0x0202, /* Xbox Controller */
+-    0x0285, /* Xbox Controller S */
+-    0x0289, /* Xbox Controller S */
+-    0x028e, /* Xbox360 Controller */
+-    0x028f, /* Xbox360 Wireless Controller */
+-    0x02d1, /* Xbox One Controller */
+-    0x02dd, /* Xbox One Controller (Covert Forces/Firmware 2015) */
+-    0x02e0, /* Xbox One X Controller */
+-    0x02e3, /* Xbox One Elite Controller */
+-    0x02e6, /* Wireless XBox Controller Dongle */
+-    0x02ea, /* Xbox One S Controller */
+-    0x02fd, /* Xbox One S Controller (Firmware 2017) */
+-    0x0719, /* Xbox 360 Wireless Adapter */
++static const WCHAR xbox360_product_string[] = {
++    'C','o','n','t','r','o','l','l','e','r',' ','(','X','B','O','X',' ','3','6','0',' ','F','o','r',' ','W','i','n','d','o','w','s',')',0
++};
++
++static const WCHAR xboxone_product_string[] = {
++    'C','o','n','t','r','o','l','l','e','r',' ','(','X','B','O','X',' ','O','n','e',' ','F','o','r',' ','W','i','n','d','o','w','s',')',0
++};
++
++static const struct product_desc XBOX_CONTROLLERS[] = {
++    {VID_MICROSOFT, 0x0202, NULL, NULL, NULL}, /* Xbox Controller */
++    {VID_MICROSOFT, 0x0285, NULL, NULL, NULL}, /* Xbox Controller S */
++    {VID_MICROSOFT, 0x0289, NULL, NULL, NULL}, /* Xbox Controller S */
++    {VID_MICROSOFT, 0x028e, NULL, xbox360_product_string, NULL}, /* Xbox360 Controller */
++    {VID_MICROSOFT, 0x028f, NULL, xbox360_product_string, NULL}, /* Xbox360 Wireless Controller */
++    {VID_MICROSOFT, 0x02d1, NULL, xboxone_product_string, NULL}, /* Xbox One Controller */
++    {VID_MICROSOFT, 0x02dd, NULL, xboxone_product_string, NULL}, /* Xbox One Controller (Covert Forces/Firmware 2015) */
++    {VID_MICROSOFT, 0x02e0, NULL, NULL, NULL}, /* Xbox One X Controller */
++    {VID_MICROSOFT, 0x02e3, NULL, xboxone_product_string, NULL}, /* Xbox One Elite Controller */
++    {VID_MICROSOFT, 0x02e6, NULL, NULL, NULL}, /* Wireless XBox Controller Dongle */
++    {VID_MICROSOFT, 0x02ea, NULL, xboxone_product_string, NULL}, /* Xbox One S Controller */
++    {VID_MICROSOFT, 0x02fd, NULL, xboxone_product_string, NULL}, /* Xbox One S Controller (Firmware 2017) */
++    {VID_MICROSOFT, 0x0719, NULL, xbox360_product_string, NULL}, /* Xbox 360 Wireless Adapter */
+ };
+ 
+ static DRIVER_OBJECT *driver_obj;
+@@ -565,6 +582,51 @@ static NTSTATUS deliver_last_report(struct device_extension *ext, DWORD buffer_l
+     }
+ }
+ 
++static NTSTATUS hid_get_native_string(DEVICE_OBJECT *device, DWORD index, WCHAR *buffer, DWORD length)
++{
++    struct device_extension *ext = (struct device_extension *)device->DeviceExtension;
++    int i;
++
++    if (ext->vid == VID_MICROSOFT)
++    {
++        for (i = 0; i < ARRAY_SIZE(XBOX_CONTROLLERS); i++)
++        {
++            if (ext->pid == XBOX_CONTROLLERS[i].pid)
++                break;
++        }
++
++        if (i >= ARRAY_SIZE(XBOX_CONTROLLERS))
++            return STATUS_UNSUCCESSFUL;
++
++        switch (index)
++        {
++        case HID_STRING_ID_IPRODUCT:
++            if (XBOX_CONTROLLERS[i].product)
++            {
++                strcpyW(buffer, XBOX_CONTROLLERS[i].product);
++                return STATUS_SUCCESS;
++            }
++            break;
++        case HID_STRING_ID_IMANUFACTURER:
++            if (XBOX_CONTROLLERS[i].manufacturer)
++            {
++                strcpyW(buffer, XBOX_CONTROLLERS[i].manufacturer);
++                return STATUS_SUCCESS;
++            }
++            break;
++        case HID_STRING_ID_ISERIALNUMBER:
++            if (XBOX_CONTROLLERS[i].serialnumber)
++            {
++                strcpyW(buffer, XBOX_CONTROLLERS[i].serialnumber);
++                return STATUS_SUCCESS;
++            }
++            break;
++        }
++    }
++
++    return STATUS_UNSUCCESSFUL;
++}
++
+ static NTSTATUS WINAPI hid_internal_dispatch(DEVICE_OBJECT *device, IRP *irp)
+ {
+     NTSTATUS status = irp->IoStatus.u.Status;
+@@ -650,7 +712,9 @@ static NTSTATUS WINAPI hid_internal_dispatch(DEVICE_OBJECT *device, IRP *irp)
+             DWORD index = (ULONG_PTR)irpsp->Parameters.DeviceIoControl.Type3InputBuffer;
+             TRACE("IOCTL_HID_GET_STRING[%08x]\n", index);
+ 
+-            irp->IoStatus.u.Status = status = ext->vtbl->get_string(device, index, (WCHAR *)irp->UserBuffer, length);
++            irp->IoStatus.u.Status = status = hid_get_native_string(device, index, (WCHAR *)irp->UserBuffer, length);
++            if (status != STATUS_SUCCESS)
++                irp->IoStatus.u.Status = status = ext->vtbl->get_string(device, index, (WCHAR *)irp->UserBuffer, length);
+             if (status == STATUS_SUCCESS)
+                 irp->IoStatus.Information = (strlenW((WCHAR *)irp->UserBuffer) + 1) * sizeof(WCHAR);
+             break;
+@@ -815,8 +879,8 @@ BOOL is_xbox_gamepad(WORD vid, WORD pid)
+     if (vid != VID_MICROSOFT)
+         return FALSE;
+ 
+-    for (i = 0; i < ARRAY_SIZE(PID_XBOX_CONTROLLERS); i++)
+-        if (pid == PID_XBOX_CONTROLLERS[i]) return TRUE;
++    for (i = 0; i < ARRAY_SIZE(XBOX_CONTROLLERS); i++)
++        if (pid == XBOX_CONTROLLERS[i].pid) return TRUE;
+ 
+     return FALSE;
+ }
+-- 
+2.17.1
+
+From 81132a69914175ad0d9d275327ebb2dfce248bb6 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
+Date: Thu, 25 Jul 2019 16:23:51 +0200
+Subject: [PATCH 2/3] ntoskrnl: Update the interface if it is already in the
+ device_interfaces tree
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+As we are going to reuse the same device id when re-plugging a
+previously plugged SDL controller, the device interfaces are still
+present in the tree and IoRegisterDeviceInterface was not updating the
+device pointer.
+
+Signed-off-by: Rémi Bernon <rbernon@codeweavers.com>
+---
+ dlls/ntoskrnl.exe/pnp.c | 25 ++++++++++++++++++++-----
+ 1 file changed, 20 insertions(+), 5 deletions(-)
+
+diff --git a/dlls/ntoskrnl.exe/pnp.c b/dlls/ntoskrnl.exe/pnp.c
+index c618885d427..32274533c36 100644
+--- a/dlls/ntoskrnl.exe/pnp.c
++++ b/dlls/ntoskrnl.exe/pnp.c
+@@ -688,7 +688,9 @@ NTSTATUS WINAPI IoRegisterDeviceInterface(DEVICE_OBJECT *device, const GUID *cla
+     WCHAR device_instance_id[MAX_DEVICE_ID_LEN];
+     SP_DEVICE_INTERFACE_DETAIL_DATA_W *data;
+     NTSTATUS status = STATUS_SUCCESS;
++    UNICODE_STRING device_path;
+     struct device_interface *iface;
++    struct wine_rb_entry *entry;
+     DWORD required;
+     HDEVINFO set;
+ 
+@@ -726,19 +728,32 @@ NTSTATUS WINAPI IoRegisterDeviceInterface(DEVICE_OBJECT *device, const GUID *cla
+ 
+     data->DevicePath[1] = '?';
+     TRACE("Returning path %s.\n", debugstr_w(data->DevicePath));
++    RtlCreateUnicodeString( &device_path, data->DevicePath);
++
++    entry = wine_rb_get( &device_interfaces, &device_path );
++    if (entry)
++    {
++        iface = WINE_RB_ENTRY_VALUE( entry, struct device_interface, entry );
++        if (iface->enabled)
++            ERR("Device interface %s is still enabled.\n", debugstr_us(&iface->symbolic_link));
++    }
++    else
++    {
++        iface = heap_alloc_zero( sizeof(struct device_interface) );
++        RtlCreateUnicodeString(&iface->symbolic_link, data->DevicePath);
++        if (wine_rb_put( &device_interfaces, &iface->symbolic_link, &iface->entry ))
++            ERR("Failed to insert interface %s into tree.\n", debugstr_us(&iface->symbolic_link));
++    }
+ 
+-    iface = heap_alloc_zero( sizeof(struct device_interface) );
+     iface->device = device;
+     iface->interface_class = *class_guid;
+-    RtlCreateUnicodeString(&iface->symbolic_link, data->DevicePath);
+     if (symbolic_link)
+         RtlCreateUnicodeString( symbolic_link, data->DevicePath);
+ 
+-    if (wine_rb_put( &device_interfaces, &iface->symbolic_link, &iface->entry ))
+-        ERR("Failed to insert interface %s into tree.\n", debugstr_us(&iface->symbolic_link));
+-
+     HeapFree( GetProcessHeap(), 0, data );
+ 
++    RtlFreeUnicodeString( &device_path );
++
+     return status;
+ }
+ 
+-- 
+2.17.1
+
+From f074fb7a491d062a31fdb67d84ebfb454495a1d6 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
+Date: Thu, 25 Jul 2019 16:23:52 +0200
+Subject: [PATCH 3/3] winebus: Use the SDL joystick index as device id instead
+ of instance id
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Some games are using the HID device id as the gamepad index for xinput
+API. When hotplugging devices, SDL increases its instances id and it
+doesn't match anymore with xinput gamepad numbers.
+
+Signed-off-by: Rémi Bernon <rbernon@codeweavers.com>
+---
+ dlls/winebus.sys/bus_sdl.c | 26 +++++++++++++++-----------
+ 1 file changed, 15 insertions(+), 11 deletions(-)
+
+diff --git a/dlls/winebus.sys/bus_sdl.c b/dlls/winebus.sys/bus_sdl.c
+index 781deda7670..3bd27ca5bf0 100644
+--- a/dlls/winebus.sys/bus_sdl.c
++++ b/dlls/winebus.sys/bus_sdl.c
+@@ -744,17 +744,21 @@ static const platform_vtbl sdl_vtbl =
+     set_feature_report,
+ };
+ 
++static int compare_joystick_id(DEVICE_OBJECT *device, void* context)
++{
++    return impl_from_DEVICE_OBJECT(device)->id - PtrToUlong(context);
++}
++
+ static BOOL set_report_from_event(SDL_Event *event)
+ {
+     DEVICE_OBJECT *device;
+     struct platform_private *private;
+     /* All the events coming in will have 'which' as a 3rd field */
+-    SDL_JoystickID index = ((SDL_JoyButtonEvent*)event)->which;
+-
+-    device = bus_find_hid_device(&sdl_vtbl, ULongToPtr(index));
++    SDL_JoystickID id = ((SDL_JoyButtonEvent*)event)->which;
++    device = bus_enumerate_hid_devices(&sdl_vtbl, compare_joystick_id, ULongToPtr(id));
+     if (!device)
+     {
+-        ERR("Failed to find device at index %i\n",index);
++        ERR("Failed to find device at index %i\n",id);
+         return FALSE;
+     }
+     private = impl_from_DEVICE_OBJECT(device);
+@@ -814,11 +818,11 @@ static BOOL set_mapped_report_from_event(SDL_Event *event)
+     DEVICE_OBJECT *device;
+     struct platform_private *private;
+     /* All the events coming in will have 'which' as a 3rd field */
+-    int index = ((SDL_ControllerButtonEvent*)event)->which;
+-    device = bus_find_hid_device(&sdl_vtbl, ULongToPtr(index));
++    SDL_JoystickID id = ((SDL_ControllerButtonEvent*)event)->which;
++    device = bus_enumerate_hid_devices(&sdl_vtbl, compare_joystick_id, ULongToPtr(id));
+     if (!device)
+     {
+-        ERR("Failed to find device at index %i\n",index);
++        ERR("Failed to find device at index %i\n",id);
+         return FALSE;
+     }
+     private = impl_from_DEVICE_OBJECT(device);
+@@ -878,7 +882,7 @@ static BOOL set_mapped_report_from_event(SDL_Event *event)
+     return FALSE;
+ }
+ 
+-static void try_remove_device(SDL_JoystickID index)
++static void try_remove_device(SDL_JoystickID id)
+ {
+     DEVICE_OBJECT *device = NULL;
+     struct platform_private *private;
+@@ -886,7 +890,7 @@ static void try_remove_device(SDL_JoystickID index)
+     SDL_GameController *sdl_controller;
+     SDL_Haptic *sdl_haptic;
+ 
+-    device = bus_find_hid_device(&sdl_vtbl, ULongToPtr(index));
++    device = bus_enumerate_hid_devices(&sdl_vtbl, compare_joystick_id, ULongToPtr(id));
+     if (!device) return;
+ 
+     private = impl_from_DEVICE_OBJECT(device);
+@@ -905,7 +909,7 @@ static void try_remove_device(SDL_JoystickID index)
+         pSDL_HapticClose(sdl_haptic);
+ }
+ 
+-static void try_add_device(SDL_JoystickID index)
++static void try_add_device(unsigned int index)
+ {
+     DWORD vid = 0, pid = 0, version = 0;
+     DEVICE_OBJECT *device = NULL;
+@@ -967,7 +971,7 @@ static void try_add_device(SDL_JoystickID index)
+         input = 0;
+ 
+     device = bus_create_hid_device(sdl_busidW, vid, pid,
+-            input, version, id, serial, is_xbox_gamepad, &GUID_DEVCLASS_SDL,
++            input, version, index, serial, is_xbox_gamepad, &GUID_DEVCLASS_SDL,
+             &sdl_vtbl, sizeof(struct platform_private));
+ 
+     if (device)
+-- 
+2.17.1
+
 From ddceb34906882d9170f107b2ad738e8f7851da5e Mon Sep 17 00:00:00 2001
 From: Andrew Eikum <aeikum@codeweavers.com>
 Date: Thu, 2 May 2019 10:17:49 -0500
@@ -969,17 +1302,6 @@ diff --git a/dlls/dinput/joystick_sdl.c b/dlls/dinput/joystick_sdl.c
 index 50a09ac1d3a..2872788f5c7 100644
 --- a/dlls/dinput/joystick_sdl.c
 +++ b/dlls/dinput/joystick_sdl.c
-@@ -108,6 +108,10 @@ static const GUID DInput_Wine_SDL_Joystick_GUID = { /* 001E36B7-5DBA-4C4F-A8C9-C
-   0x001E36B7, 0x5DBA, 0x4C4F, {0xA8, 0xC9, 0xCF, 0xC8, 0x68, 0x9D, 0xB4, 0x03}
- };
- 
-+static const GUID DInput_PIDVID_Product_GUID = { /* PIDVID-0000-0000-0000-504944564944 "PIDVID" */
-+  0x00000000, 0x0000, 0x0000, {0x00, 0x00, 0x50, 0x49, 0x44, 0x56, 0x49, 0x44}
-+};
-+
- static int have_sdldevs = -1;
- static struct SDLDev *sdldevs = NULL;
- 
 @@ -214,7 +218,7 @@ static void fill_joystick_dideviceinstanceW(LPDIDEVICEINSTANCEW lpddi, DWORD ver
      lpddi->dwSize       = dwSize;
      lpddi->guidInstance = DInput_Wine_SDL_Joystick_GUID;
@@ -1024,3 +1346,1280 @@ index 95a096bad89..1fa31b8cd9d 100644
      }
      else if (event->type == SDL_JOYDEVICEREMOVED)
      {
+From 06405e0ae3eeb4f3b6fcf33e0ac8aee678534d9b Mon Sep 17 00:00:00 2001
+From: Andrew Eikum <aeikum@codeweavers.com>
+Date: Tue, 6 Aug 2019 13:27:25 -0500
+Subject: [PATCH] winebus.sys: Disable linuxevent API
+
+We either go through SDL or hidraw directly.
+---
+ dlls/winebus.sys/bus_udev.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/dlls/winebus.sys/bus_udev.c b/dlls/winebus.sys/bus_udev.c
+index a807ae7371a..6594e8a3618 100644
+--- a/dlls/winebus.sys/bus_udev.c
++++ b/dlls/winebus.sys/bus_udev.c
+@@ -47,7 +47,7 @@
+ # include <linux/input.h>
+ # undef SW_MAX
+ # if defined(EVIOCGBIT) && defined(EV_ABS) && defined(BTN_PINKIE)
+-#  define HAS_PROPER_INPUT_HEADER
++//#  define HAS_PROPER_INPUT_HEADER
+ # endif
+ # ifndef SYN_DROPPED
+ #  define SYN_DROPPED 3
+From a15601217fe2f35337420463754522573384c893 Mon Sep 17 00:00:00 2001
+From: Andrew Eikum <aeikum@codeweavers.com>
+Date: Mon, 19 Aug 2019 14:01:55 -0500
+Subject: [PATCH] winebus.sys: Try to open devices with hidraw first
+
+---
+ dlls/winebus.sys/bus.h      |  2 ++
+ dlls/winebus.sys/bus_sdl.c  | 31 +++++++++++++++++++------------
+ dlls/winebus.sys/bus_udev.c | 22 ++++++++++++++++++++++
+ dlls/winebus.sys/main.c     |  8 ++++----
+ 4 files changed, 47 insertions(+), 16 deletions(-)
+
+diff --git a/dlls/winebus.sys/bus.h b/dlls/winebus.sys/bus.h
+index f886ff8d4ac..ff6d4f42d78 100644
+--- a/dlls/winebus.sys/bus.h
++++ b/dlls/winebus.sys/bus.h
+@@ -53,4 +53,6 @@ DEVICE_OBJECT* bus_enumerate_hid_devices(const platform_vtbl *vtbl, enum_func fu
+ DWORD check_bus_option(const UNICODE_STRING *option, DWORD default_value) DECLSPEC_HIDDEN;
+ BOOL is_xbox_gamepad(WORD vid, WORD pid) DECLSPEC_HIDDEN;
+ 
++BOOL is_already_opened_by_hidraw(DWORD vid, DWORD pid) DECLSPEC_HIDDEN;
++
+ HANDLE driver_key DECLSPEC_HIDDEN;
+diff --git a/dlls/winebus.sys/bus_sdl.c b/dlls/winebus.sys/bus_sdl.c
+index 1fa31b8cd9d..7423aa57fe4 100644
+--- a/dlls/winebus.sys/bus_sdl.c
++++ b/dlls/winebus.sys/bus_sdl.c
+@@ -1011,6 +1011,25 @@ static void try_add_device(unsigned int index, BOOL xinput_hack)
+         return;
+     }
+ 
++    if (pSDL_JoystickGetProductVersion != NULL) {
++        vid = pSDL_JoystickGetVendor(joystick);
++        pid = pSDL_JoystickGetProduct(joystick);
++        version = pSDL_JoystickGetProductVersion(joystick);
++    }
++    else
++    {
++        vid = 0x01;
++        pid = pSDL_JoystickInstanceID(joystick) + 1;
++        version = 0;
++    }
++
++    if(is_already_opened_by_hidraw(vid, pid))
++    {
++        /* we use SDL only for controllers which hidraw couldn't open */
++        TRACE("device %04x/%04x already opened by hidraw, skipping\n", vid, pid);
++        return;
++    }
++
+     if (map_controllers && pSDL_IsGameController(index))
+         controller = pSDL_GameControllerOpen(index);
+ 
+@@ -1028,18 +1047,6 @@ static void try_add_device(unsigned int index, BOOL xinput_hack)
+         index |= XINPUT_HACK_ID_BIT;
+     }
+ 
+-    if (pSDL_JoystickGetProductVersion != NULL) {
+-        vid = pSDL_JoystickGetVendor(joystick);
+-        pid = pSDL_JoystickGetProduct(joystick);
+-        version = pSDL_JoystickGetProductVersion(joystick);
+-    }
+-    else
+-    {
+-        vid = 0x01;
+-        pid = pSDL_JoystickInstanceID(joystick) + 1;
+-        version = 0;
+-    }
+-
+     guid = pSDL_JoystickGetGUID(joystick);
+     pSDL_JoystickGetGUIDString(guid, guid_str, sizeof(guid_str));
+     MultiByteToWideChar(CP_ACP, 0, guid_str, -1, serial, sizeof(guid_str));
+diff --git a/dlls/winebus.sys/bus_udev.c b/dlls/winebus.sys/bus_udev.c
+index 6594e8a3618..b702d75e2ca 100644
+--- a/dlls/winebus.sys/bus_udev.c
++++ b/dlls/winebus.sys/bus_udev.c
+@@ -100,6 +100,10 @@ static const WCHAR lnxev_busidW[] = {'L','N','X','E','V',0};
+ DEFINE_GUID(GUID_DEVCLASS_HIDRAW, 0x3def44ad,0x242e,0x46e5,0x82,0x6d,0x70,0x72,0x13,0xf3,0xaa,0x81);
+ DEFINE_GUID(GUID_DEVCLASS_LINUXEVENT, 0x1b932c0d,0xfea7,0x42cd,0x8e,0xaa,0x0e,0x48,0x79,0xb6,0x9e,0xaa);
+ 
++struct vidpid {
++    WORD vid, pid;
++};
++
+ struct platform_private
+ {
+     struct udev_device *udev_device;
+@@ -107,6 +111,8 @@ struct platform_private
+ 
+     HANDLE report_thread;
+     int control_pipe[2];
++
++    struct vidpid vidpid;
+ };
+ 
+ static inline struct platform_private *impl_from_DEVICE_OBJECT(DEVICE_OBJECT *device)
+@@ -1137,6 +1143,20 @@ static DWORD a_to_bcd(const char *s)
+     return r;
+ }
+ 
++static int check_for_vidpid(DEVICE_OBJECT *device, void* context)
++{
++    struct vidpid *vidpid = context;
++    struct platform_private *dev = impl_from_DEVICE_OBJECT(device);
++    return !(dev->vidpid.vid == vidpid->vid &&
++        dev->vidpid.pid == vidpid->pid);
++}
++
++BOOL is_already_opened_by_hidraw(DWORD vid, DWORD pid)
++{
++    struct vidpid vidpid = {vid, pid};
++    return bus_enumerate_hid_devices(&hidraw_vtbl, check_for_vidpid, &vidpid) != NULL;
++}
++
+ static void try_add_device(struct udev_device *dev)
+ {
+     DWORD vid = 0, pid = 0, version = 0;
+@@ -1254,6 +1274,8 @@ static void try_add_device(struct udev_device *dev)
+         struct platform_private *private = impl_from_DEVICE_OBJECT(device);
+         private->udev_device = udev_device_ref(dev);
+         private->device_fd = fd;
++        private->vidpid.vid = vid;
++        private->vidpid.pid = pid;
+ #ifdef HAS_PROPER_INPUT_HEADER
+         if (strcmp(subsystem, "input") == 0)
+             if (!build_report_descriptor((struct wine_input_private*)private, dev))
+diff --git a/dlls/winebus.sys/main.c b/dlls/winebus.sys/main.c
+index dd55655572c..dd767a59d19 100644
+--- a/dlls/winebus.sys/main.c
++++ b/dlls/winebus.sys/main.c
+@@ -487,13 +487,13 @@ static NTSTATUS fdo_pnp_dispatch(DEVICE_OBJECT *device, IRP *irp)
+         irp->IoStatus.u.Status = handle_IRP_MN_QUERY_DEVICE_RELATIONS(irp);
+         break;
+     case IRP_MN_START_DEVICE:
++        udev_driver_init();
++        iohid_driver_init();
++
+         if (check_bus_option(&SDL_enabled, 1))
+         {
+-            if (sdl_driver_init() == STATUS_SUCCESS)
+-                return STATUS_SUCCESS;
++            sdl_driver_init();
+         }
+-        udev_driver_init();
+-        iohid_driver_init();
+         irp->IoStatus.u.Status = STATUS_SUCCESS;
+         break;
+     case IRP_MN_SURPRISE_REMOVAL:
+From e176616c84e5abb9dfd6373c683e8e5be853215c Mon Sep 17 00:00:00 2001
+From: Andrew Eikum <aeikum@codeweavers.com>
+Date: Tue, 6 Aug 2019 13:37:38 -0500
+Subject: [PATCH] winebus.sys: Don't use hidraw for xbox controllers
+
+Xbox controllers don't present real HID devices.
+---
+ dlls/winebus.sys/bus_udev.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/dlls/winebus.sys/bus_udev.c b/dlls/winebus.sys/bus_udev.c
+index b702d75e2ca..2a825a833ff 100644
+--- a/dlls/winebus.sys/bus_udev.c
++++ b/dlls/winebus.sys/bus_udev.c
+@@ -1239,7 +1239,11 @@ static void try_add_device(struct udev_device *dev)
+ #endif
+ 
+     if (is_xbox_gamepad(vid, pid))
+-        is_gamepad = TRUE;
++    {
++        /* SDL handles xbox (and steam) controllers */
++        close(fd);
++        return;
++    }
+ #ifdef HAS_PROPER_INPUT_HEADER
+     else
+     {
+From 4f57e01fcaf7d31c6e085fdbd91250b47d83633b Mon Sep 17 00:00:00 2001
+From: Andrew Eikum <aeikum@codeweavers.com>
+Date: Wed, 14 Aug 2019 08:47:53 -0500
+Subject: [PATCH] winebus: Don't report hidraw devices which are being used as
+ virtual controllers
+
+---
+ dlls/winebus.sys/bus_udev.c | 21 +++++++++++++++++++++
+ 1 file changed, 21 insertions(+)
+
+diff --git a/dlls/winebus.sys/bus_udev.c b/dlls/winebus.sys/bus_udev.c
+index 2a825a833ff..be468d12319 100644
+--- a/dlls/winebus.sys/bus_udev.c
++++ b/dlls/winebus.sys/bus_udev.c
+@@ -18,6 +18,7 @@
+  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
+  */
+ 
++#define _GNU_SOURCE
+ #include "config.h"
+ #include <errno.h>
+ #include <fcntl.h>
+@@ -1157,6 +1158,19 @@ BOOL is_already_opened_by_hidraw(DWORD vid, DWORD pid)
+     return bus_enumerate_hid_devices(&hidraw_vtbl, check_for_vidpid, &vidpid) != NULL;
+ }
+ 
++static BOOL is_in_sdl_blacklist(DWORD vid, DWORD pid)
++{
++    char needle[16];
++    const char *blacklist = getenv("SDL_GAMECONTROLLER_IGNORE_DEVICES");
++
++    if (!blacklist)
++        return FALSE;
++
++    sprintf(needle, "0x%04x/0x%04x", vid, pid);
++
++    return strcasestr(blacklist, needle) != NULL;
++}
++
+ static void try_add_device(struct udev_device *dev)
+ {
+     DWORD vid = 0, pid = 0, version = 0;
+@@ -1238,6 +1252,13 @@ static void try_add_device(struct udev_device *dev)
+         WARN("Could not get device to query VID, PID, Version and Serial\n");
+ #endif
+ 
++    if (is_in_sdl_blacklist(vid, pid))
++    {
++        /* this device is being used as a virtual Steam controller */
++        close(fd);
++        return;
++    }
++
+     if (is_xbox_gamepad(vid, pid))
+     {
+         /* SDL handles xbox (and steam) controllers */
+From e7e9fb91a2dd72c048aecdcf6650ca3f8ff33d99 Mon Sep 17 00:00:00 2001
+From: Andrew Eikum <aeikum@codeweavers.com>
+Date: Wed, 14 Aug 2019 09:15:21 -0500
+Subject: [PATCH] winebus.sys: Don't use hidraw for Steam controllers
+
+---
+ dlls/winebus.sys/bus.h      |  1 +
+ dlls/winebus.sys/bus_udev.c |  4 +++-
+ dlls/winebus.sys/main.c     | 24 ++++++++++++++++++++++++
+ 3 files changed, 28 insertions(+), 1 deletion(-)
+
+diff --git a/dlls/winebus.sys/bus.h b/dlls/winebus.sys/bus.h
+index ff6d4f42d78..01dcb86da64 100644
+--- a/dlls/winebus.sys/bus.h
++++ b/dlls/winebus.sys/bus.h
+@@ -52,6 +52,7 @@ DEVICE_OBJECT* bus_enumerate_hid_devices(const platform_vtbl *vtbl, enum_func fu
+ /* General Bus Functions */
+ DWORD check_bus_option(const UNICODE_STRING *option, DWORD default_value) DECLSPEC_HIDDEN;
+ BOOL is_xbox_gamepad(WORD vid, WORD pid) DECLSPEC_HIDDEN;
++BOOL is_steam_controller(WORD vid, WORD pid) DECLSPEC_HIDDEN;
+ 
+ BOOL is_already_opened_by_hidraw(DWORD vid, DWORD pid) DECLSPEC_HIDDEN;
+ 
+diff --git a/dlls/winebus.sys/bus_udev.c b/dlls/winebus.sys/bus_udev.c
+index be468d12319..161b1d5e2a8 100644
+--- a/dlls/winebus.sys/bus_udev.c
++++ b/dlls/winebus.sys/bus_udev.c
+@@ -1252,9 +1252,10 @@ static void try_add_device(struct udev_device *dev)
+         WARN("Could not get device to query VID, PID, Version and Serial\n");
+ #endif
+ 
+-    if (is_in_sdl_blacklist(vid, pid))
++    if (is_steam_controller(vid, pid) || is_in_sdl_blacklist(vid, pid))
+     {
+         /* this device is being used as a virtual Steam controller */
++        TRACE("hidraw %s: ignoring device %04x/%04x with virtual Steam controller\n", debugstr_a(devnode), vid, pid);
+         close(fd);
+         return;
+     }
+@@ -1262,6 +1263,7 @@ static void try_add_device(struct udev_device *dev)
+     if (is_xbox_gamepad(vid, pid))
+     {
+         /* SDL handles xbox (and steam) controllers */
++        TRACE("hidraw %s: ignoring xinput device %04x/%04x\n", debugstr_a(devnode), vid, pid);
+         close(fd);
+         return;
+     }
+diff --git a/dlls/winebus.sys/main.c b/dlls/winebus.sys/main.c
+index dd767a59d19..9db40cd7be4 100644
+--- a/dlls/winebus.sys/main.c
++++ b/dlls/winebus.sys/main.c
+@@ -82,6 +82,18 @@ static const struct product_desc XBOX_CONTROLLERS[] = {
+     {VID_MICROSOFT, 0x0719, NULL, xbox360_product_string, NULL}, /* Xbox 360 Wireless Adapter */
+ };
+ 
++#define VID_VALVE 0x28de
++
++static const struct product_desc STEAM_CONTROLLERS[] = {
++    {VID_VALVE, 0x1101, NULL, NULL, NULL}, /* Valve Legacy Steam Controller */
++    {VID_VALVE, 0x1102, NULL, NULL, NULL}, /* Valve wired Steam Controller */
++    {VID_VALVE, 0x1105, NULL, NULL, NULL}, /* Valve Bluetooth Steam Controller */
++    {VID_VALVE, 0x1106, NULL, NULL, NULL}, /* Valve Bluetooth Steam Controller */
++    {VID_VALVE, 0x1142, NULL, NULL, NULL}, /* Valve wireless Steam Controller */
++    {VID_VALVE, 0x1201, NULL, NULL, NULL}, /* Valve wired Steam Controller */
++    {VID_VALVE, 0x1202, NULL, NULL, NULL}, /* Valve Bluetooth Steam Controller */
++};
++
+ static DRIVER_OBJECT *driver_obj;
+ 
+ HANDLE driver_key;
+@@ -827,6 +839,18 @@ BOOL is_xbox_gamepad(WORD vid, WORD pid)
+     return FALSE;
+ }
+ 
++BOOL is_steam_controller(WORD vid, WORD pid)
++{
++    if (vid == VID_VALVE)
++    {
++        int i;
++        for (i = 0; i < ARRAY_SIZE(STEAM_CONTROLLERS); i++)
++            if (pid == STEAM_CONTROLLERS[i].pid) return TRUE;
++    }
++
++    return FALSE;
++}
++
+ static void WINAPI driver_unload(DRIVER_OBJECT *driver)
+ {
+     udev_driver_unload();
+From 183f90fe21134d65ef1332a4205e8f6ede65da89 Mon Sep 17 00:00:00 2001
+From: Andrew Eikum <aeikum@codeweavers.com>
+Date: Thu, 22 Aug 2019 09:59:27 -0500
+Subject: [PATCH] winebus.drv: Also respect the SDL device whitelist
+
+---
+ dlls/winebus.sys/bus_udev.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/dlls/winebus.sys/bus_udev.c b/dlls/winebus.sys/bus_udev.c
+index 161b1d5e2a8..5439513b048 100644
+--- a/dlls/winebus.sys/bus_udev.c
++++ b/dlls/winebus.sys/bus_udev.c
+@@ -1162,6 +1162,14 @@ static BOOL is_in_sdl_blacklist(DWORD vid, DWORD pid)
+ {
+     char needle[16];
+     const char *blacklist = getenv("SDL_GAMECONTROLLER_IGNORE_DEVICES");
++    const char *whitelist = getenv("SDL_GAMECONTROLLER_IGNORE_DEVICES_EXCEPT");
++
++    if (whitelist)
++    {
++        sprintf(needle, "0x%04x/0x%04x", vid, pid);
++
++        return strcasestr(whitelist, needle) == NULL;
++    }
+ 
+     if (!blacklist)
+         return FALSE;
+From d2c13155abbc9d97880ff580c44b894d919807c7 Mon Sep 17 00:00:00 2001
+From: Andrew Eikum <aeikum@codeweavers.com>
+Date: Tue, 16 Jul 2019 08:59:24 -0500
+Subject: [PATCH] dinput: Search setupapi to find xinput devices
+
+---
+ dlls/dinput/Makefile.in    |  2 +-
+ dlls/dinput/joystick.c     | 73 ++++++++++++++++++++++++++------------
+ dlls/dinput/joystick_sdl.c |  5 +--
+ dlls/dinput8/Makefile.in   |  2 +-
+ 4 files changed, 53 insertions(+), 29 deletions(-)
+
+diff --git a/dlls/dinput/Makefile.in b/dlls/dinput/Makefile.in
+index a3e38816636..91aca91c25c 100644
+--- a/dlls/dinput/Makefile.in
++++ b/dlls/dinput/Makefile.in
+@@ -1,6 +1,6 @@
+ MODULE    = dinput.dll
+ IMPORTLIB = dinput
+-IMPORTS   = dxguid uuid comctl32 ole32 user32 advapi32
++IMPORTS   = dxguid uuid comctl32 ole32 user32 advapi32 setupapi hid
+ EXTRADEFS = -DDIRECTINPUT_VERSION=0x0700
+ EXTRALIBS = $(IOKIT_LIBS) $(FORCEFEEDBACK_LIBS) $(SDL2_LIBS)
+ EXTRAINCL = $(SDL2_CFLAGS)
+diff --git a/dlls/dinput/joystick.c b/dlls/dinput/joystick.c
+index a5308b6cc48..b89a83500fe 100644
+--- a/dlls/dinput/joystick.c
++++ b/dlls/dinput/joystick.c
+@@ -31,27 +31,11 @@
+ #include "joystick_private.h"
+ #include "wine/debug.h"
+ #include "winreg.h"
++#include "setupapi.h"
++#include "ddk/hidsdi.h"
+ 
+ WINE_DEFAULT_DEBUG_CHANNEL(dinput);
+ 
+-#define VID_MICROSOFT 0x045e
+-
+-static const WORD PID_XBOX_CONTROLLERS[] =  {
+-    0x0202, /* Xbox Controller */
+-    0x0285, /* Xbox Controller S */
+-    0x0289, /* Xbox Controller S */
+-    0x028e, /* Xbox360 Controller */
+-    0x028f, /* Xbox360 Wireless Controller */
+-    0x02d1, /* Xbox One Controller */
+-    0x02dd, /* Xbox One Controller (Covert Forces/Firmware 2015) */
+-    0x02e0, /* Xbox One X Controller */
+-    0x02e3, /* Xbox One Elite Controller */
+-    0x02e6, /* Wireless XBox Controller Dongle */
+-    0x02ea, /* Xbox One S Controller */
+-    0x02fd, /* Xbox One S Controller (Firmware 2017) */
+-    0x0719, /* Xbox 360 Wireless Adapter */
+-};
+-
+ /* Windows uses this GUID for guidProduct on non-keyboard/mouse devices.
+  * Data1 contains the device VID (low word) and PID (high word).
+  * Data4 ends with the ASCII bytes "PIDVID".
+@@ -301,15 +285,58 @@ BOOL device_disabled_registry(const char* name)
+ 
+ BOOL is_xinput_device(const DIDEVCAPS *devcaps, WORD vid, WORD pid)
+ {
+-    int i;
++    HDEVINFO device_info_set;
++    GUID hid_guid;
++    SP_DEVICE_INTERFACE_DATA interface_data;
++    SP_DEVICE_INTERFACE_DETAIL_DATA_W *data;
++    DWORD idx;
++    BOOL ret = FALSE;
++    char pathA[MAX_PATH];
++
++    HidD_GetHidGuid(&hid_guid);
++    hid_guid.Data4[7]++; /* HACK: look up the xinput-specific devices */
++
++    device_info_set = SetupDiGetClassDevsW(&hid_guid, NULL, NULL, DIGCF_DEVICEINTERFACE | DIGCF_PRESENT);
++
++    data = HeapAlloc(GetProcessHeap(), 0 , sizeof(*data) + MAX_PATH * sizeof(WCHAR));
++    data->cbSize = sizeof(*data);
+ 
+-    if (vid == VID_MICROSOFT)
++    ZeroMemory(&interface_data, sizeof(interface_data));
++    interface_data.cbSize = sizeof(interface_data);
++
++    idx = 0;
++    while (!ret && SetupDiEnumDeviceInterfaces(device_info_set, NULL, &hid_guid, idx++,
++           &interface_data))
+     {
+-        for (i = 0; i < ARRAY_SIZE(PID_XBOX_CONTROLLERS); i++)
+-            if (pid == PID_XBOX_CONTROLLERS[i]) return TRUE;
++        const char *vid_s, *pid_s;
++        DWORD di_vid = 0, di_pid = 0;
++        static const WCHAR ig[] = {'I','G','_',0};
++
++        if (!SetupDiGetDeviceInterfaceDetailW(device_info_set,
++                &interface_data, data, sizeof(*data) + MAX_PATH * sizeof(WCHAR), NULL, NULL))
++            continue;
++
++        if (!strstrW(data->DevicePath, ig))
++            continue;
++
++        WideCharToMultiByte(CP_ACP, 0, data->DevicePath, -1,
++                pathA, sizeof(pathA), NULL, NULL);
++
++        vid_s = strstr(pathA, "VID_");
++        if (vid_s)
++            sscanf(vid_s, "VID_%4X", &di_vid);
++
++        pid_s = strstr(pathA, "PID_");
++        if (pid_s)
++            sscanf(pid_s, "PID_%4X", &di_pid);
++
++        ret = vid == di_vid && pid == di_pid;
+     }
+ 
+-    return (devcaps->dwAxes == 6 && devcaps->dwButtons >= 14);
++    HeapFree(GetProcessHeap(), 0, data);
++    SetupDiDestroyDeviceInfoList(device_info_set);
++
++    return ret;
+ }
+ 
+ /******************************************************************************
+diff --git a/dlls/dinput/joystick_sdl.c b/dlls/dinput/joystick_sdl.c
+index 88fbca05da4..5426fec6d3b 100644
+--- a/dlls/dinput/joystick_sdl.c
++++ b/dlls/dinput/joystick_sdl.c
+@@ -187,10 +187,7 @@ static void find_sdldevs(void)
+                 type == SDL_JOYSTICK_TYPE_FLIGHT_STICK ||
+                 type == SDL_JOYSTICK_TYPE_THROTTLE;
+ 
+-            if (SDL_IsGameController(i))
+-                sdldev.is_xbox_gamepad = TRUE;
+-            else
+-                sdldev.is_xbox_gamepad  = SDL_JoystickNumAxes(device) == 6 && SDL_JoystickNumButtons(device) >= 14;
++            sdldev.is_xbox_gamepad = is_xinput_device(NULL, sdldev.vendor_id, sdldev.product_id);
+         }
+ 
+         if (!have_sdldevs)
+diff --git a/dlls/dinput8/Makefile.in b/dlls/dinput8/Makefile.in
+index 9735fb55465..4e4ba0c064e 100644
+--- a/dlls/dinput8/Makefile.in
++++ b/dlls/dinput8/Makefile.in
+@@ -1,6 +1,6 @@
+ MODULE    = dinput8.dll
+ IMPORTLIB = dinput8
+-IMPORTS   = dxguid uuid comctl32 ole32 user32 advapi32
++IMPORTS   = dxguid uuid comctl32 ole32 user32 advapi32 setupapi hid
+ EXTRADEFS = -DDIRECTINPUT_VERSION=0x0800
+ EXTRALIBS = $(IOKIT_LIBS) $(FORCEFEEDBACK_LIBS) $(SDL2_LIBS)
+ EXTRAINCL = $(SDL2_CFLAGS)
+From f398d24efec7927a6b152b71f91438ccca97d436 Mon Sep 17 00:00:00 2001
+From: Andrew Eikum <aeikum@codeweavers.com>
+Date: Tue, 6 Aug 2019 08:42:14 -0500
+Subject: [PATCH] dinput: Only enumerate SDL devices
+
+---
+ dlls/dinput/dinput_main.c | 3 ---
+ 1 file changed, 3 deletions(-)
+
+diff --git a/dlls/dinput/dinput_main.c b/dlls/dinput/dinput_main.c
+index 1a58155db3e..7efee27d95e 100644
+--- a/dlls/dinput/dinput_main.c
++++ b/dlls/dinput/dinput_main.c
+@@ -91,9 +91,6 @@ static const struct dinput_device *dinput_devices[] =
+     &mouse_device,
+     &keyboard_device,
+     &joystick_sdl_device,
+-    &joystick_linuxinput_device,
+-    &joystick_linux_device,
+-    &joystick_osx_device
+ };
+ 
+ HINSTANCE DINPUT_instance;
+From 959fa5f8ddd8cde1bf1376eeb4efeb68f25939f2 Mon Sep 17 00:00:00 2001
+From: Andrew Eikum <aeikum@codeweavers.com>
+Date: Mon, 5 Aug 2019 10:55:26 -0500
+Subject: [PATCH] dinput: Add a mapping function for specific device types
+
+---
+ dlls/dinput/joystick_sdl.c | 215 ++++++++++++++++++++++++++-----------
+ 1 file changed, 150 insertions(+), 65 deletions(-)
+
+diff --git a/dlls/dinput/joystick_sdl.c b/dlls/dinput/joystick_sdl.c
+index 5426fec6d3b..4233b25dccf 100644
+--- a/dlls/dinput/joystick_sdl.c
++++ b/dlls/dinput/joystick_sdl.c
+@@ -65,6 +65,17 @@ HRESULT sdl_create_effect(SDL_Haptic *haptic, REFGUID rguid, struct list *parent
+ HRESULT sdl_input_get_info_A(SDL_Joystick *dev, REFGUID rguid, LPDIEFFECTINFOA info);
+ HRESULT sdl_input_get_info_W(SDL_Joystick *dev, REFGUID rguid, LPDIEFFECTINFOW info);
+ 
++#define ITEM_TYPE_BUTTON 1
++#define ITEM_TYPE_AXIS 2
++#define ITEM_TYPE_HAT 3
++
++struct device_state_item {
++    int type;
++    int idx;
++    int val;
++};
++
++typedef BOOL (*enum_device_state_function)(JoystickImpl*, struct device_state_item *, int);
+ 
+ struct SDLDev {
+     int id;
+@@ -73,6 +84,8 @@ struct SDLDev {
+     CHAR *name;
+     BOOL is_xbox_gamepad;
+ 
++    int n_buttons, n_axes, n_hats;
++
+     BOOL has_ff, is_joystick;
+     int autocenter;
+     int gain;
+@@ -87,6 +100,8 @@ struct JoystickImpl
+     SDL_Joystick *device;
+     SDL_Haptic *haptic;
+     BOOL ff_paused;
++
++    enum_device_state_function enum_device_state;
+ };
+ 
+ static inline JoystickImpl *impl_from_IDirectInputDevice8A(IDirectInputDevice8A *iface)
+@@ -190,6 +205,10 @@ static void find_sdldevs(void)
+             sdldev.is_xbox_gamepad = is_xinput_device(NULL, sdldev.vendor_id, sdldev.product_id);
+         }
+ 
++        sdldev.n_buttons = SDL_JoystickNumButtons(device);
++        sdldev.n_axes = SDL_JoystickNumAxes(device);
++        sdldev.n_hats = SDL_JoystickNumHats(device);
++
+         if (!have_sdldevs)
+             new_sdldevs = HeapAlloc(GetProcessHeap(), 0, sizeof(struct SDLDev));
+         else
+@@ -300,91 +319,143 @@ static HRESULT sdl_enum_deviceW(DWORD dwDevType, DWORD dwFlags, LPDIDEVICEINSTAN
+   return S_FALSE;
+ }
+ 
++/* straight 1:1 mapping of SDL items and dinput items */
++static BOOL enum_device_state_standard(JoystickImpl *This, struct device_state_item *st, int idx)
++{
++    if(idx < This->sdldev->n_buttons)
++    {
++        st->type = ITEM_TYPE_BUTTON;
++        st->idx = idx;
++        st->val = SDL_JoystickGetButton(This->device, idx);
++        return TRUE;
++    }
++
++    idx -= This->sdldev->n_buttons;
++
++    if(idx < This->sdldev->n_axes)
++    {
++        st->type = ITEM_TYPE_AXIS;
++        st->idx = idx;
++        st->val = SDL_JoystickGetAxis(This->device, idx);
++        return TRUE;
++    }
++
++    idx -= This->sdldev->n_axes;
++
++    if(idx < This->sdldev->n_hats)
++    {
++        st->type = ITEM_TYPE_HAT;
++        st->idx = idx;
++        st->val = SDL_JoystickGetHat(This->device, idx);
++        return TRUE;
++    }
++
++    return FALSE;
++}
++
+ static void poll_sdl_device_state(LPDIRECTINPUTDEVICE8A iface)
+ {
+     JoystickImpl *This = impl_from_IDirectInputDevice8A(iface);
+-    int i;
++    int i = 0;
+     int inst_id = 0;
+     int newVal = 0;
++    struct device_state_item item;
+ 
+     SDL_JoystickUpdate();
+ 
+-    for (i = 0; i < SDL_JoystickNumButtons(This->device); i++)
+-    {
+-        int val = SDL_JoystickGetButton(This->device, i);
+-        int oldVal = This->generic.js.rgbButtons[i];
+-        newVal = val ? 0x80 : 0x0;
+-        This->generic.js.rgbButtons[i] = newVal;
+-        if (oldVal != newVal)
+-        {
+-            TRACE("Button: %i val %d oldVal %d newVal %d\n",  i, val, oldVal, newVal);
+-            inst_id = DIDFT_MAKEINSTANCE(i) | DIDFT_PSHBUTTON;
+-            queue_event(iface, inst_id, newVal, GetCurrentTime(), This->generic.base.dinput->evsequence++);
+-        }
+-    }
+-    for (i = 0; i < SDL_JoystickNumAxes(This->device); i++)
++    while(This->enum_device_state(This, &item, i++))
+     {
+-        int oldVal;
+-        newVal = SDL_JoystickGetAxis(This->device, i);
+-        newVal = joystick_map_axis(&This->generic.props[i], newVal);
+-        switch (i)
++        switch(item.type){
++        case ITEM_TYPE_BUTTON:
+         {
+-            case 0: oldVal = This->generic.js.lX;
+-                    This->generic.js.lX  = newVal; break;
+-            case 1: oldVal = This->generic.js.lY;
+-                    This->generic.js.lY  = newVal; break;
+-            case 2: oldVal = This->generic.js.lZ;
+-                    This->generic.js.lZ  = newVal; break;
+-            case 3: oldVal = This->generic.js.lRx;
+-                    This->generic.js.lRx = newVal; break;
+-            case 4: oldVal = This->generic.js.lRy;
+-                    This->generic.js.lRy = newVal; break;
+-            case 5: oldVal = This->generic.js.lRz;
+-                    This->generic.js.lRz = newVal; break;
+-            case 6: oldVal = This->generic.js.rglSlider[0];
+-                    This->generic.js.rglSlider[0] = newVal; break;
+-            case 7: oldVal = This->generic.js.rglSlider[1];
+-                    This->generic.js.rglSlider[1] = newVal; break;
++            int val = item.val;
++            int oldVal = This->generic.js.rgbButtons[item.idx];
++            newVal = val ? 0x80 : 0x0;
++            This->generic.js.rgbButtons[item.idx] = newVal;
++            if (oldVal != newVal)
++            {
++                TRACE("Button: %i val %d oldVal %d newVal %d\n",  item.idx, val, oldVal, newVal);
++                inst_id = DIDFT_MAKEINSTANCE(item.idx) | DIDFT_PSHBUTTON;
++                queue_event(iface, inst_id, newVal, GetCurrentTime(), This->generic.base.dinput->evsequence++);
++            }
++            break;
+         }
+-        if (oldVal != newVal)
++
++        case ITEM_TYPE_AXIS:
+         {
+-            TRACE("Axis: %i oldVal %d newVal %d\n",  i, oldVal, newVal);
+-            inst_id = DIDFT_MAKEINSTANCE(i) | DIDFT_ABSAXIS;
+-            queue_event(iface, inst_id, newVal, GetCurrentTime(), This->generic.base.dinput->evsequence++);
++            int oldVal;
++            newVal = item.val;
++            newVal = joystick_map_axis(&This->generic.props[item.idx], newVal);
++            switch (item.idx)
++            {
++                case 0: oldVal = This->generic.js.lX;
++                        This->generic.js.lX  = newVal; break;
++                case 1: oldVal = This->generic.js.lY;
++                        This->generic.js.lY  = newVal; break;
++                case 2: oldVal = This->generic.js.lZ;
++                        This->generic.js.lZ  = newVal; break;
++                case 3: oldVal = This->generic.js.lRx;
++                        This->generic.js.lRx = newVal; break;
++                case 4: oldVal = This->generic.js.lRy;
++                        This->generic.js.lRy = newVal; break;
++                case 5: oldVal = This->generic.js.lRz;
++                        This->generic.js.lRz = newVal; break;
++                case 6: oldVal = This->generic.js.rglSlider[0];
++                        This->generic.js.rglSlider[0] = newVal; break;
++                case 7: oldVal = This->generic.js.rglSlider[1];
++                        This->generic.js.rglSlider[1] = newVal; break;
++            }
++            if (oldVal != newVal)
++            {
++                TRACE("Axis: %i oldVal %d newVal %d\n",  item.idx, oldVal, newVal);
++                inst_id = DIDFT_MAKEINSTANCE(item.idx) | DIDFT_ABSAXIS;
++                queue_event(iface, inst_id, newVal, GetCurrentTime(), This->generic.base.dinput->evsequence++);
++            }
++            break;
+         }
+-    }
+-    for (i = 0; i < SDL_JoystickNumHats(This->device); i++)
+-    {
+-        int oldVal = This->generic.js.rgdwPOV[i];
+-        newVal = SDL_JoystickGetHat(This->device, i);
+-        switch (newVal)
++
++        case ITEM_TYPE_HAT:
+         {
+-            case SDL_HAT_CENTERED: newVal = -1; break;
+-            case SDL_HAT_UP: newVal = 0; break;
+-            case SDL_HAT_RIGHTUP:newVal = 4500; break;
+-            case SDL_HAT_RIGHT: newVal = 9000; break;
+-            case SDL_HAT_RIGHTDOWN: newVal = 13500; break;
+-            case SDL_HAT_DOWN: newVal = 18000; break;
+-            case SDL_HAT_LEFTDOWN: newVal = 22500; break;
+-            case SDL_HAT_LEFT: newVal = 27000; break;
+-            case SDL_HAT_LEFTUP: newVal = 31500; break;
++            int oldVal = This->generic.js.rgdwPOV[item.idx];
++            newVal = item.val;
++            switch (newVal)
++            {
++                case SDL_HAT_CENTERED: newVal = -1; break;
++                case SDL_HAT_UP: newVal = 0; break;
++                case SDL_HAT_RIGHTUP:newVal = 4500; break;
++                case SDL_HAT_RIGHT: newVal = 9000; break;
++                case SDL_HAT_RIGHTDOWN: newVal = 13500; break;
++                case SDL_HAT_DOWN: newVal = 18000; break;
++                case SDL_HAT_LEFTDOWN: newVal = 22500; break;
++                case SDL_HAT_LEFT: newVal = 27000; break;
++                case SDL_HAT_LEFTUP: newVal = 31500; break;
++            }
++            if (oldVal != newVal)
++            {
++                TRACE("Hat : %i oldVal %d newVal %d\n",  item.idx, oldVal, newVal);
++                This->generic.js.rgdwPOV[item.idx] = newVal;
++                inst_id = DIDFT_MAKEINSTANCE(item.idx) | DIDFT_POV;
++                queue_event(iface, inst_id, newVal, GetCurrentTime(), This->generic.base.dinput->evsequence++);
++            }
++            break;
+         }
+-        if (oldVal != newVal)
+-        {
+-            TRACE("Hat : %i oldVal %d newVal %d\n",  i, oldVal, newVal);
+-            This->generic.js.rgdwPOV[i] = newVal;
+-            inst_id = DIDFT_MAKEINSTANCE(i) | DIDFT_POV;
+-            queue_event(iface, inst_id, newVal, GetCurrentTime(), This->generic.base.dinput->evsequence++);
+         }
+     }
+ }
+ 
++static enum_device_state_function select_enum_function(struct SDLDev *sdldev)
++{
++    TRACE("for %04x/%04x, using no maps\n", sdldev->vendor_id, sdldev->product_id);
++    return enum_device_state_standard;
++}
++
+ static JoystickImpl *alloc_device(REFGUID rguid, IDirectInputImpl *dinput, unsigned short index)
+ {
+     JoystickImpl* newDevice;
+     LPDIDATAFORMAT df = NULL;
+     DIDEVICEINSTANCEW ddi;
+-    int i,idx = 0;
++    int i,idx = 0, axis_count = 0, button_count = 0, hat_count = 0;
++    struct device_state_item item;
+ 
+     newDevice = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(JoystickImpl));
+     if (!newDevice) return NULL;
+@@ -394,6 +465,7 @@ static JoystickImpl *alloc_device(REFGUID rguid, IDirectInputImpl *dinput, unsig
+     newDevice->generic.guidProduct = DInput_PIDVID_Product_GUID;
+     newDevice->generic.guidProduct.Data1 = MAKELONG(sdldevs[index].vendor_id, sdldevs[index].product_id);
+     newDevice->generic.joy_polldev = poll_sdl_device_state;
++    newDevice->enum_device_state = select_enum_function(&sdldevs[index]);
+ 
+     newDevice->generic.base.IDirectInputDevice8A_iface.lpVtbl = &JoystickAvt;
+     newDevice->generic.base.IDirectInputDevice8W_iface.lpVtbl = &JoystickWvt;
+@@ -413,9 +485,22 @@ static JoystickImpl *alloc_device(REFGUID rguid, IDirectInputImpl *dinput, unsig
+     newDevice->device = SDL_JoystickOpen(newDevice->sdldev->id);
+     newDevice->haptic = SDL_HapticOpenFromJoystick(newDevice->device);
+ 
+-    /* Count number of available axes - supported Axis & POVs */
+-    newDevice->generic.devcaps.dwAxes = SDL_JoystickNumAxes(newDevice->device);
++    i = 0;
++    while(newDevice->enum_device_state(newDevice, &item, i++)){
++        switch(item.type){
++            case ITEM_TYPE_BUTTON:
++                ++button_count;
++                break;
++            case ITEM_TYPE_AXIS:
++                ++axis_count;
++                break;
++            case ITEM_TYPE_HAT:
++                ++hat_count;
++                break;
++        }
++    }
+ 
++    newDevice->generic.devcaps.dwAxes = axis_count;
+     if (newDevice->generic.devcaps.dwAxes > 8 )
+     {
+         WARN("Can't support %d axis. Clamping down to 8\n", newDevice->generic.devcaps.dwAxes);
+@@ -432,14 +517,14 @@ static JoystickImpl *alloc_device(REFGUID rguid, IDirectInputImpl *dinput, unsig
+         newDevice->generic.props[i].lSaturation = 0;
+     }
+ 
+-    newDevice->generic.devcaps.dwPOVs = SDL_JoystickNumHats(newDevice->device);
++    newDevice->generic.devcaps.dwPOVs = hat_count;
+     if (newDevice->generic.devcaps.dwPOVs > 4)
+     {
+         WARN("Can't support %d POV. Clamping down to 4\n", newDevice->generic.devcaps.dwPOVs);
+         newDevice->generic.devcaps.dwPOVs = 4;
+     }
+ 
+-    newDevice->generic.devcaps.dwButtons = SDL_JoystickNumButtons(newDevice->device);
++    newDevice->generic.devcaps.dwButtons = button_count;
+     if (newDevice->generic.devcaps.dwButtons > 128)
+     {
+         WARN("Can't support %d buttons. Clamping down to 128\n", newDevice->generic.devcaps.dwButtons);
+From 51993d095e8e564c77d33a9d80d0777a6d6819ee Mon Sep 17 00:00:00 2001
+From: Andrew Eikum <aeikum@codeweavers.com>
+Date: Mon, 5 Aug 2019 11:38:25 -0500
+Subject: [PATCH] dinput: Add mappings for dualshock 4 controllers
+
+---
+ dlls/dinput/joystick_sdl.c | 219 +++++++++++++++++++++++++++++++++++++
+ 1 file changed, 219 insertions(+)
+
+diff --git a/dlls/dinput/joystick_sdl.c b/dlls/dinput/joystick_sdl.c
+index 4233b25dccf..820f95d7a0c 100644
+--- a/dlls/dinput/joystick_sdl.c
++++ b/dlls/dinput/joystick_sdl.c
+@@ -319,6 +319,208 @@ static HRESULT sdl_enum_deviceW(DWORD dwDevType, DWORD dwFlags, LPDIDEVICEINSTAN
+   return S_FALSE;
+ }
+ 
++static int buttons_to_sdl_hat(int u, int r, int d, int l)
++{
++    if(u == d)
++    {
++        if(l == r)
++            return SDL_HAT_CENTERED;
++        if(l)
++            return SDL_HAT_LEFT;
++        return SDL_HAT_RIGHT;
++    }
++    if(u)
++    {
++        if(l == r)
++            return SDL_HAT_UP;
++        if(l)
++            return SDL_HAT_LEFTUP;
++        return SDL_HAT_RIGHTUP;
++    }
++    if(l == r)
++        return SDL_HAT_DOWN;
++    if(l)
++        return SDL_HAT_LEFTDOWN;
++    return SDL_HAT_RIGHTDOWN;
++}
++
++/* playstation controllers */
++#define VID_SONY 0x054c
++#define PID_SONY_DUALSHOCK_4 0x05c4
++#define PID_SONY_DUALSHOCK_4_2 0x09cc
++#define PID_SONY_DUALSHOCK_4_DONGLE 0x0ba0
++
++static BOOL enum_device_state_ds4_16button(JoystickImpl *This, struct device_state_item *st, int idx)
++{
++    static const int button_map_ds4_16button[] = {
++        /* [linux button] -> windows button */
++
++        /* [0] -> */ 1, /* cross */
++        /* [1] -> */ 2, /* circle */
++        /* [2] -> */ 0, /* square */
++        /* [3] -> */ 3, /* triangle */
++
++        /* [4] -> */ 8, /* share */
++        /* [5] -> */ 12, /* guide */
++        /* [6] -> */ 9, /* options */
++
++        /* [7] -> */ 10, /* L3 */
++        /* [8] -> */ 11, /* R3 */
++
++        /* [9] -> */ 4, /* L1 */
++        /* [10] -> */ 5, /* R1 */
++    };
++
++    static const int axis_map_ds4_16button[] = {
++        /* [linux axis] -> windows axis */
++
++        /* [0] -> */ 0, /* left horiz */
++        /* [1] -> */ 1, /* left vert */
++        /* [2] -> */ 2, /* right horiz */
++        /* [3] -> */ 5, /* right vert */
++        /* [4] -> */ 3, /* L2 */
++        /* [5] -> */ 4, /* R2 */
++    };
++
++    static const int DNP_TOUCHPAD_BUTTON = 13;
++    static const int SDL_TOUCHPAD_BUTTON = 15;
++
++    static const int DNP_L2_BUTTON = 6;
++    static const int SDL_L2_AXIS = 4;
++
++    static const int DNP_R2_BUTTON = 7;
++    static const int SDL_R2_AXIS = 5;
++
++    static const int SDL_DPAD_UP_BUTTON = 11;
++    static const int SDL_DPAD_DOWN_BUTTON = 12;
++    static const int SDL_DPAD_LEFT_BUTTON = 13;
++    static const int SDL_DPAD_RIGHT_BUTTON = 14;
++
++    if(idx < 11)
++    {
++        /* first 11 buttons */
++        st->type = ITEM_TYPE_BUTTON;
++        st->idx = button_map_ds4_16button[idx];
++        st->val = SDL_JoystickGetButton(This->device, idx);
++        return TRUE;
++    }
++
++    if(idx < 17)
++    {
++        /* six axes */
++        idx -= 11;
++        st->type = ITEM_TYPE_AXIS;
++        st->idx = axis_map_ds4_16button[idx];
++        st->val = SDL_JoystickGetAxis(This->device, idx);
++        return TRUE;
++    }
++
++    switch(idx)
++    {
++    case 17:
++        /* touchpad button */
++        st->type = ITEM_TYPE_BUTTON;
++        st->idx = DNP_TOUCHPAD_BUTTON;
++        st->val = SDL_JoystickGetButton(This->device, SDL_TOUCHPAD_BUTTON);
++        return TRUE;
++
++    case 18:
++        /* L2 button */
++        st->type = ITEM_TYPE_BUTTON;
++        st->idx = DNP_L2_BUTTON;
++        /* turn button on at about 1/8 of the trigger travel */
++        st->val = SDL_JoystickGetAxis(This->device, SDL_L2_AXIS) > 3 * SDL_JOYSTICK_AXIS_MIN / 4;
++        return TRUE;
++
++    case 19:
++        /* R2 button */
++        st->type = ITEM_TYPE_BUTTON;
++        st->idx = DNP_R2_BUTTON;
++        /* turn button on at about 1/8 of the trigger travel */
++        st->val = SDL_JoystickGetAxis(This->device, SDL_R2_AXIS) > 3 * SDL_JOYSTICK_AXIS_MIN / 4;
++        return TRUE;
++
++    case 20:
++        /* dpad buttons --> hatswitch */
++        st->type = ITEM_TYPE_HAT;
++        st->idx = 0;
++        st->val = buttons_to_sdl_hat(
++                SDL_JoystickGetButton(This->device, SDL_DPAD_UP_BUTTON),
++                SDL_JoystickGetButton(This->device, SDL_DPAD_RIGHT_BUTTON),
++                SDL_JoystickGetButton(This->device, SDL_DPAD_DOWN_BUTTON),
++                SDL_JoystickGetButton(This->device, SDL_DPAD_LEFT_BUTTON));
++        return TRUE;
++    }
++
++    return FALSE;
++}
++
++static BOOL enum_device_state_ds4_13button(JoystickImpl *This, struct device_state_item *st, int idx)
++{
++    static const int button_map_ds4_13button[] = {
++        /* [linux button] -> windows button */
++
++        /* [0] -> */ 1, /* cross */
++        /* [1] -> */ 2, /* circle */
++        /* [2] -> */ 3, /* triangle */
++        /* [3] -> */ 0, /* square */
++
++        /* [4] -> */ 4, /* L1 */
++        /* [5] -> */ 5, /* R1 */
++        /* [6] -> */ 6, /* L2 */
++        /* [7] -> */ 7, /* R2 */
++        /* [8] -> */ 8, /* share */
++        /* [9] -> */ 9, /* options */
++
++        /* [10] -> */ 12, /* guide */
++        /* [11] -> */ 10, /* L3 */
++        /* [12] -> */ 11, /* R3 */
++
++        /* ps4 controller through linux event API does not support touchpad button */
++    };
++
++    static const int axis_map_ds4_13button[] = {
++        /* [linux axis] -> windows axis */
++
++        /* [0] -> */ 0, /* left horiz */
++        /* [1] -> */ 1, /* left vert */
++        /* [2] -> */ 3, /* L2 */
++        /* [3] -> */ 2, /* right horiz */
++        /* [4] -> */ 5, /* right vert */
++        /* [5] -> */ 4, /* R2 */
++    };
++
++    if(idx < This->sdldev->n_buttons)
++    {
++        st->type = ITEM_TYPE_BUTTON;
++        st->idx = button_map_ds4_13button[idx];
++        st->val = SDL_JoystickGetButton(This->device, idx);
++        return TRUE;
++    }
++
++    idx -= This->sdldev->n_buttons;
++
++    if(idx < This->sdldev->n_axes)
++    {
++        st->type = ITEM_TYPE_AXIS;
++        st->idx = axis_map_ds4_13button[idx];
++        st->val = SDL_JoystickGetAxis(This->device, idx);
++        return TRUE;
++    }
++
++    idx -= This->sdldev->n_axes;
++
++    if(idx < This->sdldev->n_hats)
++    {
++        st->type = ITEM_TYPE_HAT;
++        st->idx = idx;
++        st->val = SDL_JoystickGetHat(This->device, idx);
++        return TRUE;
++    }
++
++    return FALSE;
++}
++
+ /* straight 1:1 mapping of SDL items and dinput items */
+ static BOOL enum_device_state_standard(JoystickImpl *This, struct device_state_item *st, int idx)
+ {
+@@ -445,6 +647,23 @@ static void poll_sdl_device_state(LPDIRECTINPUTDEVICE8A iface)
+ 
+ static enum_device_state_function select_enum_function(struct SDLDev *sdldev)
+ {
++    switch(sdldev->vendor_id){
++    case VID_SONY:
++        switch(sdldev->product_id){
++        case PID_SONY_DUALSHOCK_4:
++        case PID_SONY_DUALSHOCK_4_2:
++        case PID_SONY_DUALSHOCK_4_DONGLE:
++            TRACE("for %04x/%04x, polling ds4 controller\n", sdldev->vendor_id, sdldev->product_id);
++            if(sdldev->n_buttons >= 16)
++                return enum_device_state_ds4_16button;
++
++            TRACE("SDL only reports %u buttons for this PS4 controller. Please upgrade SDL to > 2.0.10 and/or give your user hidraw access.\n",
++                    sdldev->n_buttons);
++            return enum_device_state_ds4_13button;
++        }
++        break;
++    }
++
+     TRACE("for %04x/%04x, using no maps\n", sdldev->vendor_id, sdldev->product_id);
+     return enum_device_state_standard;
+ }
+From 13a93703ca2a57325845bc4678b8e9db325f8987 Mon Sep 17 00:00:00 2001
+From: Andrew Eikum <aeikum@codeweavers.com>
+Date: Wed, 21 Aug 2019 10:28:44 -0500
+Subject: [PATCH] dinput: Implement SDL GetDeviceInfoW on top of GetDeviceInfoA
+
+---
+ dlls/dinput/joystick_sdl.c | 32 ++++++++++++++++----------------
+ 1 file changed, 16 insertions(+), 16 deletions(-)
+
+diff --git a/dlls/dinput/joystick_sdl.c b/dlls/dinput/joystick_sdl.c
+index 820f95d7a0c..a309c6b617f 100644
+--- a/dlls/dinput/joystick_sdl.c
++++ b/dlls/dinput/joystick_sdl.c
+@@ -225,7 +225,7 @@ static void find_sdldevs(void)
+     }
+ }
+ 
+-static void fill_joystick_dideviceinstanceW(LPDIDEVICEINSTANCEW lpddi, DWORD version, int id)
++static void fill_joystick_dideviceinstanceA(LPDIDEVICEINSTANCEA lpddi, DWORD version, int id)
+ {
+     DWORD dwSize = lpddi->dwSize;
+ 
+@@ -252,31 +252,31 @@ static void fill_joystick_dideviceinstanceW(LPDIDEVICEINSTANCEW lpddi, DWORD ver
+             lpddi->wUsage = 0x05; /* Game Pad */
+     }
+ 
+-    MultiByteToWideChar(CP_ACP, 0, sdldevs[id].name, -1, lpddi->tszInstanceName, MAX_PATH);
+-    MultiByteToWideChar(CP_ACP, 0, sdldevs[id].name, -1, lpddi->tszProductName, MAX_PATH);
++    strcpy(lpddi->tszInstanceName, sdldevs[id].name);
++    strcpy(lpddi->tszProductName,  sdldevs[id].name);
+ }
+ 
+-static void fill_joystick_dideviceinstanceA(LPDIDEVICEINSTANCEA lpddi, DWORD version, int id)
++static void fill_joystick_dideviceinstanceW(LPDIDEVICEINSTANCEW lpddi, DWORD version, int id)
+ {
+-    DIDEVICEINSTANCEW lpddiW;
++    DIDEVICEINSTANCEA lpddiA;
+     DWORD dwSize = lpddi->dwSize;
+ 
+-    lpddiW.dwSize = sizeof(lpddiW);
+-    fill_joystick_dideviceinstanceW(&lpddiW, version, id);
++    lpddiA.dwSize = sizeof(lpddiA);
++    fill_joystick_dideviceinstanceA(&lpddiA, version, id);
+ 
+     TRACE("%d %p\n", dwSize, lpddi);
+     memset(lpddi, 0, dwSize);
+ 
+-    /* Convert W->A */
++    /* Convert A->W */
+     lpddi->dwSize = dwSize;
+-    lpddi->guidInstance = lpddiW.guidInstance;
+-    lpddi->guidProduct = lpddiW.guidProduct;
+-    lpddi->dwDevType = lpddiW.dwDevType;
+-    strcpy(lpddi->tszInstanceName, sdldevs[id].name);
+-    strcpy(lpddi->tszProductName,  sdldevs[id].name);
+-    lpddi->guidFFDriver = lpddiW.guidFFDriver;
+-    lpddi->wUsagePage = lpddiW.wUsagePage;
+-    lpddi->wUsage = lpddiW.wUsage;
++    lpddi->guidInstance = lpddiA.guidInstance;
++    lpddi->guidProduct = lpddiA.guidProduct;
++    lpddi->dwDevType = lpddiA.dwDevType;
++    MultiByteToWideChar(CP_ACP, 0, lpddiA.tszInstanceName, -1, lpddi->tszInstanceName, MAX_PATH);
++    MultiByteToWideChar(CP_ACP, 0, lpddiA.tszProductName, -1, lpddi->tszProductName, MAX_PATH);
++    lpddi->guidFFDriver = lpddiA.guidFFDriver;
++    lpddi->wUsagePage = lpddiA.wUsagePage;
++    lpddi->wUsage = lpddiA.wUsage;
+ }
+ 
+ static HRESULT sdl_enum_deviceA(DWORD dwDevType, DWORD dwFlags, LPDIDEVICEINSTANCEA lpddi, DWORD version, int id)
+From 7f936bd5b7d7dfbd779371d034acb7775bdeb0ab Mon Sep 17 00:00:00 2001
+From: Andrew Eikum <aeikum@codeweavers.com>
+Date: Wed, 21 Aug 2019 10:25:12 -0500
+Subject: [PATCH] dinput: Add device info overrides for dualshock 4
+
+---
+ dlls/dinput/joystick_sdl.c | 60 +++++++++++++++++++++++++++++++++-----
+ 1 file changed, 52 insertions(+), 8 deletions(-)
+
+diff --git a/dlls/dinput/joystick_sdl.c b/dlls/dinput/joystick_sdl.c
+index a309c6b617f..53bc50d1639 100644
+--- a/dlls/dinput/joystick_sdl.c
++++ b/dlls/dinput/joystick_sdl.c
+@@ -56,6 +56,11 @@
+ 
+ WINE_DEFAULT_DEBUG_CHANNEL(dinput);
+ 
++#define VID_SONY 0x054c
++#define PID_SONY_DUALSHOCK_4 0x05c4
++#define PID_SONY_DUALSHOCK_4_2 0x09cc
++#define PID_SONY_DUALSHOCK_4_DONGLE 0x0ba0
++
+ typedef struct JoystickImpl JoystickImpl;
+ static const IDirectInputDevice8AVtbl JoystickAvt;
+ static const IDirectInputDevice8WVtbl JoystickWvt;
+@@ -225,9 +230,30 @@ static void find_sdldevs(void)
+     }
+ }
+ 
++static struct device_info_override {
++    WORD vid;
++    WORD pid;
++    const char *instance_name;
++    const char *product_name;
++    DWORD dev_type;
++    DWORD dev_type8;
++} device_info_overrides[] = {
++    { VID_SONY, PID_SONY_DUALSHOCK_4, "Wireless Controller", "Wireless Controller",
++        DIDEVTYPE_HID | DIDEVTYPE_JOYSTICK | (DIDEVTYPEJOYSTICK_GAMEPAD << 8),
++        DIDEVTYPE_HID | DI8DEVTYPE_1STPERSON | (DI8DEVTYPE1STPERSON_SIXDOF << 8) },
++
++    { VID_SONY, PID_SONY_DUALSHOCK_4_2, "Wireless Controller", "Wireless Controller",
++        DIDEVTYPE_HID | DIDEVTYPE_JOYSTICK | (DIDEVTYPEJOYSTICK_GAMEPAD << 8),
++        DIDEVTYPE_HID | DI8DEVTYPE_1STPERSON | (DI8DEVTYPE1STPERSON_SIXDOF << 8) },
++
++    { VID_SONY, PID_SONY_DUALSHOCK_4_DONGLE, "Wireless Controller", "Wireless Controller",
++        DIDEVTYPE_HID | DIDEVTYPE_JOYSTICK | (DIDEVTYPEJOYSTICK_GAMEPAD << 8),
++        DIDEVTYPE_HID | DI8DEVTYPE_1STPERSON | (DI8DEVTYPE1STPERSON_SIXDOF << 8) },
++};
++
+ static void fill_joystick_dideviceinstanceA(LPDIDEVICEINSTANCEA lpddi, DWORD version, int id)
+ {
+-    DWORD dwSize = lpddi->dwSize;
++    DWORD dwSize = lpddi->dwSize, i;
+ 
+     TRACE("%d %p\n", dwSize, lpddi);
+     memset(lpddi, 0, dwSize);
+@@ -252,8 +278,31 @@ static void fill_joystick_dideviceinstanceA(LPDIDEVICEINSTANCEA lpddi, DWORD ver
+             lpddi->wUsage = 0x05; /* Game Pad */
+     }
+ 
+-    strcpy(lpddi->tszInstanceName, sdldevs[id].name);
+-    strcpy(lpddi->tszProductName,  sdldevs[id].name);
++    for(i = 0; i < ARRAY_SIZE(device_info_overrides); ++i)
++    {
++        const struct device_info_override *override = &device_info_overrides[i];
++        if(sdldevs[id].vendor_id == override->vid &&
++                sdldevs[id].product_id == override->pid)
++        {
++            TRACE("found devinfo override for %04hx/%04hx\n",
++                    override->vid, override->pid);
++            if(version >= 0x800)
++                lpddi->dwDevType = override->dev_type8;
++            else
++                lpddi->dwDevType = override->dev_type;
++
++            strcpy(lpddi->tszInstanceName, override->instance_name);
++            strcpy(lpddi->tszProductName,  override->product_name);
++
++            break;
++        }
++    }
++
++    if(i >= ARRAY_SIZE(device_info_overrides))
++    {
++        strcpy(lpddi->tszInstanceName, sdldevs[id].name);
++        strcpy(lpddi->tszProductName,  sdldevs[id].name);
++    }
+ }
+ 
+ static void fill_joystick_dideviceinstanceW(LPDIDEVICEINSTANCEW lpddi, DWORD version, int id)
+@@ -345,11 +394,6 @@ static int buttons_to_sdl_hat(int u, int r, int d, int l)
+ }
+ 
+ /* playstation controllers */
+-#define VID_SONY 0x054c
+-#define PID_SONY_DUALSHOCK_4 0x05c4
+-#define PID_SONY_DUALSHOCK_4_2 0x09cc
+-#define PID_SONY_DUALSHOCK_4_DONGLE 0x0ba0
+-
+ static BOOL enum_device_state_ds4_16button(JoystickImpl *This, struct device_state_item *st, int idx)
+ {
+     static const int button_map_ds4_16button[] = {

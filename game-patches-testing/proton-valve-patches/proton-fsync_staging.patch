@@ -4272,4 +4272,394 @@ index 88b5ce2792..e9474df707 100644
              esync_wake_fd( thread->esync_apc_fd );
      }
  
+From 22febac9c67150769a389cb97dbf904033f9046f Mon Sep 17 00:00:00 2001
+From: Zebediah Figura <zfigura@codeweavers.com>
+Date: Wed, 7 Aug 2019 17:07:15 -0500
+Subject: [PATCH] ntdll: Store the fsync APC futex in the thread data directly.
+
+Essentially so we can take get_shm() out of any critical paths.
+---
+ dlls/ntdll/fsync.c      | 26 +++++++++++++++-----------
+ dlls/ntdll/ntdll_misc.h |  2 +-
+ dlls/ntdll/thread.c     |  4 ++--
+ 3 files changed, 18 insertions(+), 14 deletions(-)
+
+diff --git a/dlls/ntdll/fsync.c b/dlls/ntdll/fsync.c
+index dbc852987ba..5ae7a2d2e22 100644
+--- a/dlls/ntdll/fsync.c
++++ b/dlls/ntdll/fsync.c
+@@ -658,15 +658,15 @@ static NTSTATUS do_single_wait( int *addr, int val, ULONGLONG *end, BOOLEAN aler
  
+     if (alertable)
+     {
+-        struct event *apc_event = get_shm( ntdll_get_thread_data()->fsync_apc_idx );
++        int *apc_futex = ntdll_get_thread_data()->fsync_apc_futex;
+         struct futex_wait_block futexes[2];
+ 
+-        if (__atomic_load_n( &apc_event->signaled, __ATOMIC_SEQ_CST ))
++        if (__atomic_load_n( apc_futex, __ATOMIC_SEQ_CST ))
+             return STATUS_USER_APC;
+ 
+         futexes[0].addr = addr;
+         futexes[0].val = val;
+-        futexes[1].addr = &apc_event->signaled;
++        futexes[1].addr = apc_futex;
+         futexes[1].val = 0;
+ #if __SIZEOF_POINTER__ == 4
+         futexes[0].pad = futexes[1].pad = 0;
+@@ -684,7 +684,7 @@ static NTSTATUS do_single_wait( int *addr, int val, ULONGLONG *end, BOOLEAN aler
+         else
+             ret = futex_wait_multiple( futexes, 2, NULL );
+ 
+-        if (__atomic_load_n( &apc_event->signaled, __ATOMIC_SEQ_CST ))
++        if (__atomic_load_n( apc_futex, __ATOMIC_SEQ_CST ))
+             return STATUS_USER_APC;
+     }
+     else
+@@ -726,14 +726,21 @@ static NTSTATUS __fsync_wait_objects( DWORD count, const HANDLE *handles,
+     int i, ret;
+ 
+     /* Grab the APC futex if we don't already have it. */
+-    if (alertable && !ntdll_get_thread_data()->fsync_apc_idx)
++    if (alertable && !ntdll_get_thread_data()->fsync_apc_futex)
+     {
++        unsigned int idx = 0;
+         SERVER_START_REQ( get_fsync_apc_idx )
+         {
+             if (!(ret = wine_server_call( req )))
+-                ntdll_get_thread_data()->fsync_apc_idx = reply->shm_idx;
++                idx = reply->shm_idx;
+         }
+         SERVER_END_REQ;
++
++        if (idx)
++        {
++            struct event *apc_event = get_shm( idx );
++            ntdll_get_thread_data()->fsync_apc_futex = &apc_event->signaled;
++        }
+     }
+ 
+     NtQuerySystemTime( &now );
+@@ -797,9 +804,7 @@ static NTSTATUS __fsync_wait_objects( DWORD count, const HANDLE *handles,
+             {
+                 /* We must check this first! The server may set an event that
+                  * we're waiting on, but we need to return STATUS_USER_APC. */
+-                struct event *event = get_shm( ntdll_get_thread_data()->fsync_apc_idx );
+-                TRACE("...%d\n", __atomic_load_n( &event->signaled, __ATOMIC_SEQ_CST ));
+-                if (__atomic_load_n( &event->signaled, __ATOMIC_SEQ_CST ))
++                if (__atomic_load_n( ntdll_get_thread_data()->fsync_apc_futex, __ATOMIC_SEQ_CST ))
+                     goto userapc;
+             }
+ 
+@@ -911,9 +916,8 @@ static NTSTATUS __fsync_wait_objects( DWORD count, const HANDLE *handles,
+ 
+             if (alertable)
+             {
+-                struct event *event = get_shm( ntdll_get_thread_data()->fsync_apc_idx );
+                 /* We already checked if it was signaled; don't bother doing it again. */
+-                futexes[i].addr = &event->signaled;
++                futexes[i].addr = ntdll_get_thread_data()->fsync_apc_futex;
+                 futexes[i].val = 0;
+ #if __SIZEOF_POINTER__ == 4
+                 futexes[i].pad = 0;
+diff --git a/dlls/ntdll/ntdll_misc.h b/dlls/ntdll/ntdll_misc.h
+index 0b6a624d2c9..bf5aa20d38d 100644
+--- a/dlls/ntdll/ntdll_misc.h
++++ b/dlls/ntdll/ntdll_misc.h
+@@ -281,7 +281,7 @@ struct ntdll_thread_data
+     struct debug_info *debug_info;    /* info for debugstr functions */
+     int                esync_queue_fd;/* fd to wait on for driver events */
+     int                esync_apc_fd;  /* fd to wait on for user APCs */
+-    unsigned int       fsync_apc_idx;
++    int               *fsync_apc_futex;
+     void              *start_stack;   /* stack for thread startup */
+     int                request_fd;    /* fd for sending server requests */
+     int                reply_fd;      /* fd for receiving server replies */
+diff --git a/dlls/ntdll/thread.c b/dlls/ntdll/thread.c
+index c6e86c196bd..f73e141911b 100644
+--- a/dlls/ntdll/thread.c
++++ b/dlls/ntdll/thread.c
+@@ -233,7 +233,7 @@ void thread_init(void)
+     thread_data->wait_fd[1] = -1;
+     thread_data->esync_queue_fd = -1;
+     thread_data->esync_apc_fd = -1;
+-    thread_data->fsync_apc_idx = 0;
++    thread_data->fsync_apc_futex = NULL;
+ 
+     signal_init_thread( teb );
+     virtual_init_threading();
+@@ -531,7 +531,7 @@ NTSTATUS WINAPI RtlCreateUserThread( HANDLE process, SECURITY_DESCRIPTOR *descr,
+     thread_data->start_stack = (char *)teb->Tib.StackBase;
+     thread_data->esync_queue_fd = -1;
+     thread_data->esync_apc_fd = -1;
+-    thread_data->fsync_apc_idx = 0;
++    thread_data->fsync_apc_futex = NULL;
+ 
+     pthread_attr_init( &attr );
+     pthread_attr_setstack( &attr, teb->DeallocationStack,
+From c39afe1d984797bfc7b537b4867b93b53e1bf958 Mon Sep 17 00:00:00 2001
+From: Zebediah Figura <zfigura@codeweavers.com>
+Date: Wed, 7 Aug 2019 17:14:59 -0500
+Subject: [PATCH] ntdll/fsync: Lock accessing the shm_addrs array.
+
+---
+ dlls/ntdll/fsync.c | 18 +++++++++++++++++-
+ 1 file changed, 17 insertions(+), 1 deletion(-)
+
+diff --git a/dlls/ntdll/fsync.c b/dlls/ntdll/fsync.c
+index 5ae7a2d2e22..e209f21bf43 100644
+--- a/dlls/ntdll/fsync.c
++++ b/dlls/ntdll/fsync.c
+@@ -134,10 +134,22 @@ static void **shm_addrs;
+ static int shm_addrs_size;  /* length of the allocated shm_addrs array */
+ static long pagesize;
+ 
++static RTL_CRITICAL_SECTION shm_addrs_section;
++static RTL_CRITICAL_SECTION_DEBUG shm_addrs_debug =
++{
++    0, 0, &shm_addrs_section,
++    { &shm_addrs_debug.ProcessLocksList, &shm_addrs_debug.ProcessLocksList },
++      0, 0, { (DWORD_PTR)(__FILE__ ": shm_addrs_section") }
++};
++static RTL_CRITICAL_SECTION shm_addrs_section = { &shm_addrs_debug, -1, 0, 0, 0, 0 };
++
+ static void *get_shm( unsigned int idx )
+ {
+     int entry  = (idx * 8) / pagesize;
+     int offset = (idx * 8) % pagesize;
++    void *ret;
++
++    RtlEnterCriticalSection(&shm_addrs_section);
+ 
+     if (entry >= shm_addrs_size)
+     {
+@@ -159,7 +171,11 @@ static void *get_shm( unsigned int idx )
+             munmap( addr, pagesize ); /* someone beat us to it */
+     }
+ 
+-    return (void *)((unsigned long)shm_addrs[entry] + offset);
++    ret = (void *)((unsigned long)shm_addrs[entry] + offset);
++
++    RtlLeaveCriticalSection(&shm_addrs_section);
++
++    return ret;
+ }
+ 
+ /* We'd like lookup to be fast. To that end, we use a static list indexed by handle.
+From 6d23707f60898e08b7df7738613aa233ba9951bf Mon Sep 17 00:00:00 2001
+From: Zebediah Figura <zfigura@codeweavers.com>
+Date: Wed, 7 Aug 2019 17:14:54 -0500
+Subject: [PATCH] ntdll/esync: Lock accessing the shm_addrs array.
+
+---
+ dlls/ntdll/esync.c | 18 +++++++++++++++++-
+ 1 file changed, 17 insertions(+), 1 deletion(-)
+
+diff --git a/dlls/ntdll/esync.c b/dlls/ntdll/esync.c
+index b6613bf0dcf..8054f80a09f 100644
+--- a/dlls/ntdll/esync.c
++++ b/dlls/ntdll/esync.c
+@@ -156,10 +156,22 @@ void esync_init(void)
+     shm_addrs_size = 128;
+ }
+ 
++static RTL_CRITICAL_SECTION shm_addrs_section;
++static RTL_CRITICAL_SECTION_DEBUG shm_addrs_debug =
++{
++    0, 0, &shm_addrs_section,
++    { &shm_addrs_debug.ProcessLocksList, &shm_addrs_debug.ProcessLocksList },
++      0, 0, { (DWORD_PTR)(__FILE__ ": shm_addrs_section") }
++};
++static RTL_CRITICAL_SECTION shm_addrs_section = { &shm_addrs_debug, -1, 0, 0, 0, 0 };
++
+ static void *get_shm( unsigned int idx )
+ {
+     int entry  = (idx * 8) / pagesize;
+     int offset = (idx * 8) % pagesize;
++    void *ret;
++
++    RtlEnterCriticalSection(&shm_addrs_section);
+ 
+     if (entry >= shm_addrs_size)
+     {
+@@ -181,7 +193,11 @@ static void *get_shm( unsigned int idx )
+             munmap( addr, pagesize ); /* someone beat us to it */
+     }
+ 
+-    return (void *)((unsigned long)shm_addrs[entry] + offset);
++    ret = (void *)((unsigned long)shm_addrs[entry] + offset);
++
++    RtlLeaveCriticalSection(&shm_addrs_section);
++
++    return ret;
+ }
+ 
+ /* We'd like lookup to be fast. To that end, we use a static list indexed by handle.
+From 80b7510e9db28cb83834e0b47662012848f61481 Mon Sep 17 00:00:00 2001
+From: Zebediah Figura <zfigura@codeweavers.com>
+Date: Thu, 8 Aug 2019 17:12:46 -0500
+Subject: [PATCH] ntdll/fsync: Fix a race condition when waiting on a mutex.
+
+---
+ dlls/ntdll/fsync.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/dlls/ntdll/fsync.c b/dlls/ntdll/fsync.c
+index e209f21bf43..bcb927fd581 100644
+--- a/dlls/ntdll/fsync.c
++++ b/dlls/ntdll/fsync.c
+@@ -862,6 +862,7 @@ static NTSTATUS __fsync_wait_objects( DWORD count, const HANDLE *handles,
+                     case FSYNC_MUTEX:
+                     {
+                         struct mutex *mutex = obj->shm;
++                        int tid;
+ 
+                         if (mutex->tid == GetCurrentThreadId())
+                         {
+@@ -870,7 +871,7 @@ static NTSTATUS __fsync_wait_objects( DWORD count, const HANDLE *handles,
+                             return i;
+                         }
+ 
+-                        if (!__sync_val_compare_and_swap( &mutex->tid, 0, GetCurrentThreadId() ))
++                        if (!(tid = __sync_val_compare_and_swap( &mutex->tid, 0, GetCurrentThreadId() )))
+                         {
+                             TRACE("Woken up by handle %p [%d].\n", handles[i], i);
+                             mutex->count = 1;
+@@ -878,7 +879,7 @@ static NTSTATUS __fsync_wait_objects( DWORD count, const HANDLE *handles,
+                         }
+ 
+                         futexes[i].addr = &mutex->tid;
+-                        futexes[i].val  = mutex->tid;
++                        futexes[i].val  = tid;
+                         break;
+                     }
+                     case FSYNC_AUTO_EVENT:
+From ecfa1989fe9bd940a7d8b0529eca0766b7aecb47 Mon Sep 17 00:00:00 2001
+From: Zebediah Figura <zfigura@codeweavers.com>
+Date: Mon, 19 Aug 2019 18:25:42 -0500
+Subject: [PATCH] ntdll/fsync: Introduce a configurable spin count.
+
+---
+ dlls/ntdll/fsync.c | 56 +++++++++++++++++++++++++++++++++++-----------
+ 1 file changed, 43 insertions(+), 13 deletions(-)
+
+diff --git a/dlls/ntdll/fsync.c b/dlls/ntdll/fsync.c
+index bcb927fd581..20de45bc595 100644
+--- a/dlls/ntdll/fsync.c
++++ b/dlls/ntdll/fsync.c
+@@ -64,6 +64,15 @@ struct futex_wait_block
+ };
+ #include "poppack.h"
+ 
++static inline void small_pause(void)
++{
++#if defined(__i386__) || defined(__x86_64__)
++    __asm__ __volatile__( "rep;nop" : : : "memory" );
++#else
++    __asm__ __volatile__( "" : : : "memory" );
++#endif
++}
++
+ static inline int futex_wait_multiple( const struct futex_wait_block *futexes,
+         int count, const struct timespec *timeout )
+ {
+@@ -80,6 +89,8 @@ static inline int futex_wait( int *addr, int val, struct timespec *timeout )
+     return syscall( __NR_futex, addr, 0, val, timeout, 0, 0 );
+ }
+ 
++static unsigned int spincount;
++
+ int do_fsync(void)
+ {
+ #ifdef __linux__
+@@ -90,6 +101,8 @@ int do_fsync(void)
+         static const struct timespec zero;
+         futex_wait_multiple( NULL, 0, &zero );
+         do_fsync_cached = getenv("WINEFSYNC") && atoi(getenv("WINEFSYNC")) && errno != ENOSYS;
++        if (getenv("WINEFSYNC_SPINCOUNT"))
++            spincount = atoi(getenv("WINEFSYNC_SPINCOUNT"));
+     }
+ 
+     return do_fsync_cached;
+@@ -735,6 +748,7 @@ static NTSTATUS __fsync_wait_objects( DWORD count, const HANDLE *handles,
+     int has_fsync = 0, has_server = 0;
+     BOOL msgwait = FALSE;
+     int dummy_futex = 0;
++    unsigned int spin;
+     LONGLONG timeleft;
+     LARGE_INTEGER now;
+     DWORD waitcount;
+@@ -844,10 +858,14 @@ static NTSTATUS __fsync_wait_objects( DWORD count, const HANDLE *handles,
+                         struct semaphore *semaphore = obj->shm;
+                         int current;
+ 
+-                        do
++                        for (spin = 0; spin < spincount + 1; ++spin)
+                         {
+-                            if (!(current = semaphore->count)) break;
+-                        } while (__sync_val_compare_and_swap( &semaphore->count, current, current - 1 ) != current);
++                            do
++                            {
++                                if (!(current = semaphore->count)) break;
++                            } while (__sync_val_compare_and_swap( &semaphore->count, current, current - 1 ) != current);
++                            small_pause();
++                        }
+ 
+                         if (current)
+                         {
+@@ -871,11 +889,15 @@ static NTSTATUS __fsync_wait_objects( DWORD count, const HANDLE *handles,
+                             return i;
+                         }
+ 
+-                        if (!(tid = __sync_val_compare_and_swap( &mutex->tid, 0, GetCurrentThreadId() )))
++                        for (spin = 0; spin < spincount + 1; ++spin)
+                         {
+-                            TRACE("Woken up by handle %p [%d].\n", handles[i], i);
+-                            mutex->count = 1;
+-                            return i;
++                            if (!(tid = __sync_val_compare_and_swap( &mutex->tid, 0, GetCurrentThreadId() )))
++                            {
++                                TRACE("Woken up by handle %p [%d].\n", handles[i], i);
++                                mutex->count = 1;
++                                return i;
++                            }
++                            small_pause();
+                         }
+ 
+                         futexes[i].addr = &mutex->tid;
+@@ -887,10 +909,14 @@ static NTSTATUS __fsync_wait_objects( DWORD count, const HANDLE *handles,
+                     {
+                         struct event *event = obj->shm;
+ 
+-                        if (__sync_val_compare_and_swap( &event->signaled, 1, 0 ))
++                        for (spin = 0; spin < spincount + 1; ++spin)
+                         {
+-                            TRACE("Woken up by handle %p [%d].\n", handles[i], i);
+-                            return i;
++                            if (__sync_val_compare_and_swap( &event->signaled, 1, 0 ))
++                            {
++                                TRACE("Woken up by handle %p [%d].\n", handles[i], i);
++                                return i;
++                            }
++                            small_pause();
+                         }
+ 
+                         futexes[i].addr = &event->signaled;
+@@ -903,10 +929,14 @@ static NTSTATUS __fsync_wait_objects( DWORD count, const HANDLE *handles,
+                     {
+                         struct event *event = obj->shm;
+ 
+-                        if (__atomic_load_n( &event->signaled, __ATOMIC_SEQ_CST ))
++                        for (spin = 0; spin < spincount + 1; ++spin)
+                         {
+-                            TRACE("Woken up by handle %p [%d].\n", handles[i], i);
+-                            return i;
++                            if (__atomic_load_n( &event->signaled, __ATOMIC_SEQ_CST ))
++                            {
++                                TRACE("Woken up by handle %p [%d].\n", handles[i], i);
++                                return i;
++                            }
++                            small_pause();
+                         }
+ 
+                         futexes[i].addr = &event->signaled;

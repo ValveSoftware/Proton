@@ -236,6 +236,13 @@ SteamAPICall_t __thiscall winISteamUser_SteamUser020_GetMarketEligibility(winISt
     return cppISteamUser_SteamUser020_GetMarketEligibility(_this->linux_side);
 }
 
+DEFINE_THISCALL_WRAPPER(winISteamUser_SteamUser020_GetDurationControl, 4)
+SteamAPICall_t __thiscall winISteamUser_SteamUser020_GetDurationControl(winISteamUser_SteamUser020 *_this)
+{
+    TRACE("%p\n", _this);
+    return cppISteamUser_SteamUser020_GetDurationControl(_this->linux_side);
+}
+
 extern vtable_ptr winISteamUser_SteamUser020_vtable;
 
 #ifndef __GNUC__
@@ -272,6 +279,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamUser_SteamUser020_BIsPhoneIdentifying)
         VTABLE_ADD_FUNC(winISteamUser_SteamUser020_BIsPhoneRequiringVerification)
         VTABLE_ADD_FUNC(winISteamUser_SteamUser020_GetMarketEligibility)
+        VTABLE_ADD_FUNC(winISteamUser_SteamUser020_GetDurationControl)
     );
 #ifndef __GNUC__
 }

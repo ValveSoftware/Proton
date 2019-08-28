@@ -1,11 +1,14 @@
 #include "steam_defs.h"
-#include "steamworks_sdk_144/steam_api.h"
-#include "steamworks_sdk_144/steamnetworkingtypes.h"
+#pragma push_macro("__cdecl")
+#undef __cdecl
+#include "steamworks_sdk_146/steam_api.h"
+#include "steamworks_sdk_146/steamnetworkingtypes.h"
+#pragma pop_macro("__cdecl")
 #include "steamclient_private.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
-#define SDKVER_144
+#define SDKVER_146
 #include "struct_converters.h"
 #include "cppISteamUtils_SteamUtils009.h"
 uint32 cppISteamUtils_SteamUtils009_GetSecondsSinceAppActive(void *linux_side)
@@ -156,6 +159,21 @@ bool cppISteamUtils_SteamUtils009_IsVRHeadsetStreamingEnabled(void *linux_side)
 void cppISteamUtils_SteamUtils009_SetVRHeadsetStreamingEnabled(void *linux_side, bool bEnabled)
 {
     ((ISteamUtils*)linux_side)->SetVRHeadsetStreamingEnabled((bool)bEnabled);
+}
+
+bool cppISteamUtils_SteamUtils009_IsSteamChinaLauncher(void *linux_side)
+{
+    return ((ISteamUtils*)linux_side)->IsSteamChinaLauncher();
+}
+
+bool cppISteamUtils_SteamUtils009_InitFilterText(void *linux_side)
+{
+    return ((ISteamUtils*)linux_side)->InitFilterText();
+}
+
+int cppISteamUtils_SteamUtils009_FilterText(void *linux_side, char * pchOutFilteredText, uint32 nByteSizeOutFilteredText, const char * pchInputMessage, bool bLegalOnly)
+{
+    return ((ISteamUtils*)linux_side)->FilterText((char *)pchOutFilteredText, (uint32)nByteSizeOutFilteredText, (const char *)pchInputMessage, (bool)bLegalOnly);
 }
 
 #ifdef __cplusplus

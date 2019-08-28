@@ -34,6 +34,7 @@ typedef struct __winISteamParentalSettings winISteamParentalSettings;
 typedef struct __winISteamGameSearch winISteamGameSearch;
 typedef struct __winISteamInput winISteamInput;
 typedef struct __winISteamParties winISteamParties;
+typedef struct __winISteamRemotePlay winISteamRemotePlay;
 typedef struct __winX winX;
 
 void *create_win_interface(const char *name, void *linux_side);
@@ -48,6 +49,7 @@ void *create_LinuxISteamMatchmakingPingResponse(void *win, const char *version);
 void *create_LinuxISteamMatchmakingPlayersResponse(void *win, const char *version);
 void *create_LinuxISteamMatchmakingRulesResponse(void *win, const char *version);
 void *manual_convert_FSteamNetworkingSocketsDebugOutput(void *win_func);
+void *manual_convert_SteamAPI_CheckCallbackRegistered_t(void *win_func);
 
 extern char g_tmppath[PATH_MAX];
 

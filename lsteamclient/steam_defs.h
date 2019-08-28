@@ -92,7 +92,9 @@ typedef uint32_t EUserUGCList,
         ESteamNetworkingSocketsDebugOutputType,
         ESteamNetworkingGetConfigValueResult,
         EGameSearchErrorCode_t,
-        EPlayerResult_t
+        EPlayerResult_t,
+        ESteamNetworkingAvailability,
+        ESteamDeviceFormFactor
 ;
 
 /* structs below are PODs with identical size & layout across platforms */
@@ -185,7 +187,7 @@ typedef struct SteamNetworkingIdentity
 
 #pragma pack( pop )
 
-/* never dereferenced */
+/* never dereferenced and needs no conversion */
 typedef struct FriendGameInfo_t FriendGameInfo_t;
 typedef struct P2PSessionState_t P2PSessionState_t;
 typedef struct SteamParamStringArray_t SteamParamStringArray_t;
@@ -204,12 +206,13 @@ typedef struct SteamNetConnectionInfo_t SteamNetConnectionInfo_t;
 typedef struct SteamNetworkingQuickConnectionStatus SteamNetworkingQuickConnectionStatus;
 typedef struct SteamDatagramRelayAuthTicket SteamDatagramRelayAuthTicket;
 typedef struct SteamDatagramHostedAddress SteamDatagramHostedAddress;
+typedef struct SteamNetAuthenticationStatus_t SteamNetAuthenticationStatus_t;
+typedef struct SteamDatagramGameCoordinatorServerLogin SteamDatagramGameCoordinatorServerLogin;
+typedef struct SteamRelayNetworkStatus_t SteamRelayNetworkStatus_t;
 
-/* FIXME: we don't care about fn pointer types, just pass 'em through */
-typedef void *SteamAPI_CheckCallbackRegistered_t;
-typedef void *SteamAPIWarningMessageHook_t;
-typedef void *SteamAPI_PostAPIResultInProcess_t;
-
+typedef uint32 (*SteamAPI_CheckCallbackRegistered_t)(int cb);
+typedef void *SteamAPIWarningMessageHook_t; //already cdecl, no need for conversion(?)
+typedef void *SteamAPI_PostAPIResultInProcess_t; //unused
 typedef void (*FSteamNetworkingSocketsDebugOutput)(ESteamNetworkingSocketsDebugOutputType nType, const char *pszMsg);
 
 typedef uint8 Salt_t[8];

@@ -259,6 +259,20 @@ EInputActionOrigin __thiscall winISteamInput_SteamInput001_TranslateActionOrigin
     return cppISteamInput_SteamInput001_TranslateActionOrigin(_this->linux_side, eDestinationInputType, eSourceOrigin);
 }
 
+DEFINE_THISCALL_WRAPPER(winISteamInput_SteamInput001_GetDeviceBindingRevision, 20)
+bool __thiscall winISteamInput_SteamInput001_GetDeviceBindingRevision(winISteamInput_SteamInput001 *_this, InputHandle_t inputHandle, int * pMajor, int * pMinor)
+{
+    TRACE("%p\n", _this);
+    return cppISteamInput_SteamInput001_GetDeviceBindingRevision(_this->linux_side, inputHandle, pMajor, pMinor);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamInput_SteamInput001_GetRemotePlaySessionID, 12)
+uint32 __thiscall winISteamInput_SteamInput001_GetRemotePlaySessionID(winISteamInput_SteamInput001 *_this, InputHandle_t inputHandle)
+{
+    TRACE("%p\n", _this);
+    return cppISteamInput_SteamInput001_GetRemotePlaySessionID(_this->linux_side, inputHandle);
+}
+
 extern vtable_ptr winISteamInput_SteamInput001_vtable;
 
 #ifndef __GNUC__
@@ -298,6 +312,8 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamInput_SteamInput001_GetGlyphForXboxOrigin)
         VTABLE_ADD_FUNC(winISteamInput_SteamInput001_GetActionOriginFromXboxOrigin)
         VTABLE_ADD_FUNC(winISteamInput_SteamInput001_TranslateActionOrigin)
+        VTABLE_ADD_FUNC(winISteamInput_SteamInput001_GetDeviceBindingRevision)
+        VTABLE_ADD_FUNC(winISteamInput_SteamInput001_GetRemotePlaySessionID)
     );
 #ifndef __GNUC__
 }

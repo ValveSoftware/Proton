@@ -234,6 +234,27 @@ void __thiscall winISteamUtils_SteamUtils009_SetVRHeadsetStreamingEnabled(winISt
     cppISteamUtils_SteamUtils009_SetVRHeadsetStreamingEnabled(_this->linux_side, bEnabled);
 }
 
+DEFINE_THISCALL_WRAPPER(winISteamUtils_SteamUtils009_IsSteamChinaLauncher, 4)
+bool __thiscall winISteamUtils_SteamUtils009_IsSteamChinaLauncher(winISteamUtils_SteamUtils009 *_this)
+{
+    TRACE("%p\n", _this);
+    return cppISteamUtils_SteamUtils009_IsSteamChinaLauncher(_this->linux_side);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamUtils_SteamUtils009_InitFilterText, 4)
+bool __thiscall winISteamUtils_SteamUtils009_InitFilterText(winISteamUtils_SteamUtils009 *_this)
+{
+    TRACE("%p\n", _this);
+    return cppISteamUtils_SteamUtils009_InitFilterText(_this->linux_side);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamUtils_SteamUtils009_FilterText, 20)
+int __thiscall winISteamUtils_SteamUtils009_FilterText(winISteamUtils_SteamUtils009 *_this, char * pchOutFilteredText, uint32 nByteSizeOutFilteredText, const char * pchInputMessage, bool bLegalOnly)
+{
+    TRACE("%p\n", _this);
+    return cppISteamUtils_SteamUtils009_FilterText(_this->linux_side, pchOutFilteredText, nByteSizeOutFilteredText, pchInputMessage, bLegalOnly);
+}
+
 extern vtable_ptr winISteamUtils_SteamUtils009_vtable;
 
 #ifndef __GNUC__
@@ -270,6 +291,9 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamUtils_SteamUtils009_StartVRDashboard)
         VTABLE_ADD_FUNC(winISteamUtils_SteamUtils009_IsVRHeadsetStreamingEnabled)
         VTABLE_ADD_FUNC(winISteamUtils_SteamUtils009_SetVRHeadsetStreamingEnabled)
+        VTABLE_ADD_FUNC(winISteamUtils_SteamUtils009_IsSteamChinaLauncher)
+        VTABLE_ADD_FUNC(winISteamUtils_SteamUtils009_InitFilterText)
+        VTABLE_ADD_FUNC(winISteamUtils_SteamUtils009_FilterText)
     );
 #ifndef __GNUC__
 }
