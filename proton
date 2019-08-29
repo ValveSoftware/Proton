@@ -558,7 +558,7 @@ class Session:
             self.dlloverrides["d3d10"] = ""
             self.dlloverrides["dxgi"] = ""
 
-        if "nod3d9" in config_opts:
+        if "nod3d9" in self.compat_config:
             self.dlloverrides["d3d9"] = ""
 
         s = ""
