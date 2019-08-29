@@ -29,12 +29,6 @@
     echo "applying faudio patches"
     patch -Np1 < ../game-patches-testing/faudio-patches/faudio-ffmpeg.patch
 
-    #WINE PERFORMANCE PATCHES
-    echo "applying wine performance patches"
-    patch -Np1 < ../game-patches-testing/wine-patches/wininet-support_large_downloads_1.patch
-    patch -Np1 < ../game-patches-testing/wine-patches/wininet-support_large_downloads_2.patch
-    patch -Np1 < ../game-patches-testing/wine-patches/wininet-support_large_downloads_3.patch
-
     #WINE GAME PATCHES
 
     echo "mech warrior online"
