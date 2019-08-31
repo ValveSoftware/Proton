@@ -1,0 +1,68 @@
+From cef8c79e65ba18e496c2538c553162f0a12cd88e Mon Sep 17 00:00:00 2001
+From: Andrew Eikum <aeikum@codeweavers.com>
+Date: Thu, 29 Aug 2019 15:04:36 -0500
+Subject: [PATCH 3/7] winebus.sys: Ignore blacklisted SDL joysticks, too
+
+SDL only respects these variables for game controllers. All joysticks
+are allowed through. But we don't want to present these at all, so we'll
+check the variables manually.
+---
+ dlls/winebus.sys/bus_sdl.c | 35 +++++++++++++++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
+
+diff --git a/dlls/winebus.sys/bus_sdl.c b/dlls/winebus.sys/bus_sdl.c
+index 7423aa57fe4..5f0f5116e9e 100644
+--- a/dlls/winebus.sys/bus_sdl.c
++++ b/dlls/winebus.sys/bus_sdl.c
+@@ -991,6 +991,35 @@ static void try_remove_device(SDL_JoystickID id)
+         pSDL_HapticClose(sdl_haptic);
+ }
+ 
++/* logic from SDL2's SDL_ShouldIgnoreGameController */
++static BOOL is_in_sdl_blacklist(DWORD vid, DWORD pid)
++{
++    char needle[16];
++    const char *blacklist = getenv("SDL_GAMECONTROLLER_IGNORE_DEVICES");
++    const char *whitelist = getenv("SDL_GAMECONTROLLER_IGNORE_DEVICES_EXCEPT");
++    const char *allow_virtual = getenv("SDL_GAMECONTROLLER_ALLOW_STEAM_VIRTUAL_GAMEPAD");
++
++    if (!blacklist && !whitelist)
++        return FALSE;
++
++    if (allow_virtual && *allow_virtual != '0')
++    {
++        if(vid == 0x28DE && pid == 0x11FF)
++            return FALSE;
++    }
++
++    if (whitelist)
++    {
++        sprintf(needle, "0x%04x/0x%04x", vid, pid);
++
++        return strcasestr(whitelist, needle) == NULL;
++    }
++
++    sprintf(needle, "0x%04x/0x%04x", vid, pid);
++
++    return strcasestr(blacklist, needle) != NULL;
++}
++
+ static void try_add_device(unsigned int index, BOOL xinput_hack)
+ {
+     DWORD vid = 0, pid = 0, version = 0;
+@@ -1030,6 +1059,12 @@ static void try_add_device(unsigned int index, BOOL xinput_hack)
+         return;
+     }
+ 
++    if(is_in_sdl_blacklist(vid, pid))
++    {
++        TRACE("device %04x/%04x is in blacklist, ignoring\n", vid, pid);
++        return;
++    }
++
+     if (map_controllers && pSDL_IsGameController(index))
+         controller = pSDL_GameControllerOpen(index);
+ 
+-- 
+2.20.1
+

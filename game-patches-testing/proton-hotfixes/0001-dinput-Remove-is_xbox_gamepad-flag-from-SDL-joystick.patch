@@ -1,7 +1,7 @@
-From ea451a6466f6731664052742c2b8582410f97226 Mon Sep 17 00:00:00 2001
+From ea73eb9fde440132679ce19e44225eb3f2ba7a19 Mon Sep 17 00:00:00 2001
 From: Alexey Prokhin <alexey@prokhin.ru>
 Date: Tue, 27 Aug 2019 20:42:07 +0300
-Subject: [PATCH] dinput: Remove is_xbox_gamepad flag from SDL joysticks
+Subject: [PATCH 1/7] dinput: Remove is_xbox_gamepad flag from SDL joysticks
 
 ---
  dlls/dinput/joystick_sdl.c | 7 +++----
@@ -46,3 +46,6 @@ index 53bc50d1639..228447085d1 100644
  
              TRACE("DIPROP_GUIDANDPATH(%s, %s): returning fake path\n", debugstr_guid(&pd->guidClass), debugstr_w(pd->wszPath));
              break;
+-- 
+2.20.1
+

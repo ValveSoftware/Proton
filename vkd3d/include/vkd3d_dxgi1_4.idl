@@ -1,0 +1,47 @@
+/*
+ * Copyright 2016 Józef Kucia for CodeWeavers
+ * Copyright 2016 Henri Verbeet for CodeWeavers
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
+ */
+
+import "vkd3d_dxgi1_3.idl";
+
+[
+    local,
+    object,
+    uuid(94d99bdb-f1f8-4ab0-b236-7da0170edab1),
+    pointer_default(unique)
+]
+interface IDXGISwapChain3 : IDXGISwapChain2
+{
+    UINT GetCurrentBackBufferIndex();
+    HRESULT CheckColorSpaceSupport(DXGI_COLOR_SPACE_TYPE type, UINT *support);
+    HRESULT SetColorSpace1(DXGI_COLOR_SPACE_TYPE type);
+    HRESULT ResizeBuffers1(UINT buffer_count, UINT width, UINT height, DXGI_FORMAT format,
+            UINT flags, const UINT *node_mask, IUnknown *const *present_queue);
+}
+
+[
+    local,
+    object,
+    uuid(1bc6ea02-ef36-464f-bf0c-21ca39e5168a),
+    pointer_default(unique),
+]
+interface IDXGIFactory4 : IDXGIFactory3
+{
+    HRESULT EnumAdapterByLuid(LUID luid, REFIID iid, void **adapter);
+    HRESULT EnumWarpAdapter(REFIID iid, void **adapter);
+}

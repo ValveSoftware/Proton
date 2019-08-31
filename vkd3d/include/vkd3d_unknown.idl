@@ -1,0 +1,55 @@
+/*
+ * Copyright 2016 Józef Kucia for CodeWeavers
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
+ */
+
+cpp_quote("#ifndef __VKD3D_UNKNOWN_H")
+cpp_quote("#define __VKD3D_UNKNOWN_H")
+
+/* For IDL only. */
+cpp_quote("#if 0")
+typedef IID *REFIID;
+typedef IID *REFGUID;
+cpp_quote("#endif")
+
+cpp_quote("#if !defined(_WIN32)")
+typedef void *HWND;
+typedef void *HMODULE;
+
+typedef struct LUID
+{
+    DWORD LowPart;
+    LONG HighPart;
+} LUID;
+
+typedef struct _RECT
+{
+    LONG left;
+    LONG top;
+    LONG right;
+    LONG bottom;
+} RECT;
+cpp_quote("#endif")
+
+[uuid(00000000-0000-0000-C000-000000000046), object, local, pointer_default(unique)]
+interface IUnknown
+{
+    HRESULT QueryInterface(REFIID riid, void **object);
+    ULONG AddRef();
+    ULONG Release();
+}
+
+cpp_quote("#endif   /* __VKD3D_UNKNOWN_H */")

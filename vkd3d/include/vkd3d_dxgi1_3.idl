@@ -1,0 +1,50 @@
+/*
+ * Copyright 2016 Józef Kucia for CodeWeavers
+ * Copyright 2016 Henri Verbeet for CodeWeavers
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
+ */
+
+import "vkd3d_dxgi1_2.idl";
+
+typedef struct DXGI_MATRIX_3X2_F DXGI_MATRIX_3X2_F;
+
+[
+    local,
+    object,
+    uuid(a8be2ac4-199f-4946-b331-79599fb98de7),
+    pointer_default(unique)
+]
+interface IDXGISwapChain2 : IDXGISwapChain1
+{
+    HRESULT SetSourceSize(UINT width, UINT height);
+    HRESULT GetSourceSize(UINT *width, UINT *height);
+    HRESULT SetMaximumFrameLatency(UINT latency);
+    HRESULT GetMaximumFrameLatency(UINT *latency);
+    HANDLE  GetFrameLatencyWaitableObject();
+    HRESULT SetMatrixTransform(const DXGI_MATRIX_3X2_F *matrix);
+    HRESULT GetMatrixTransform(DXGI_MATRIX_3X2_F *matrix);
+}
+
+[
+    local,
+    object,
+    uuid(25483823-cd46-4c7d-86ca-47aa95b837bd),
+    pointer_default(unique)
+]
+interface IDXGIFactory3 : IDXGIFactory2
+{
+    UINT GetCreationFlags();
+}

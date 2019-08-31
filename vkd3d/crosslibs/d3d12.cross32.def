@@ -1,0 +1,7 @@
+LIBRARY D3D12.dll
+
+EXPORTS
+    D3D12CreateDevice@16 @101
+    D3D12GetDebugInterface@8 @102
+    D3D12CreateRootSignatureDeserializer@16 @106
+    D3D12SerializeRootSignature@16 @107

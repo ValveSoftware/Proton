@@ -1,0 +1,100 @@
+/*
+ * Copyright 2016 Józef Kucia for CodeWeavers
+ * Copyright 2016 Henri Verbeet for CodeWeavers
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
+ */
+
+import "vkd3d_dxgi.idl";
+
+typedef enum DXGI_SCALING
+{
+    DXGI_SCALING_STRETCH              = 0x0,
+    DXGI_SCALING_NONE                 = 0x1,
+    DXGI_SCALING_ASPECT_RATIO_STRETCH = 0x2,
+    DXGI_SCALING_FORCE_DWORD          = 0xffffffff,
+} DXGI_SCALING;
+
+typedef enum DXGI_ALPHA_MODE
+{
+    DXGI_ALPHA_MODE_UNSPECIFIED   = 0x0,
+    DXGI_ALPHA_MODE_PREMULTIPLIED = 0x1,
+    DXGI_ALPHA_MODE_STRAIGHT      = 0x2,
+    DXGI_ALPHA_MODE_IGNORE        = 0x3,
+    DXGI_ALPHA_MODE_FORCE_DWORD   = 0xffffffff,
+} DXGI_ALPHA_MODE;
+
+typedef struct DXGI_SWAP_CHAIN_DESC1
+{
+    UINT Width;
+    UINT Height;
+    DXGI_FORMAT Format;
+    BOOL Stereo;
+    DXGI_SAMPLE_DESC SampleDesc;
+    DXGI_USAGE BufferUsage;
+    UINT BufferCount;
+    DXGI_SCALING Scaling;
+    DXGI_SWAP_EFFECT SwapEffect;
+    DXGI_ALPHA_MODE AlphaMode;
+    UINT Flags;
+} DXGI_SWAP_CHAIN_DESC1;
+
+typedef struct DXGI_SWAP_CHAIN_FULLSCREEN_DESC DXGI_SWAP_CHAIN_FULLSCREEN_DESC;
+typedef struct DXGI_PRESENT_PARAMETERS DXGI_PRESENT_PARAMETERS;
+
+[
+    local,
+    object,
+    uuid(790a45f7-0d42-4876-983a-0a55cfe6f4aa),
+    pointer_default(unique)
+]
+interface IDXGISwapChain1 : IDXGISwapChain
+{
+    HRESULT GetDesc1(DXGI_SWAP_CHAIN_DESC1 *desc);
+    HRESULT GetFullscreenDesc(DXGI_SWAP_CHAIN_FULLSCREEN_DESC *desc);
+    HRESULT GetHwnd(HWND *hwnd);
+    HRESULT GetCoreWindow(REFIID riid, void **object);
+    HRESULT Present1(UINT sync_interval, UINT flags, const DXGI_PRESENT_PARAMETERS *parameters);
+    BOOL IsTemporaryMonoSupported();
+    HRESULT GetRestrictToOutput(IDXGIOutput **output);
+    HRESULT SetBackgroundColor(const DXGI_RGBA *color);
+    HRESULT GetBackgroundColor(DXGI_RGBA *color);
+    HRESULT SetRotation(DXGI_MODE_ROTATION rotation);
+    HRESULT GetRotation(DXGI_MODE_ROTATION *rotation);
+}
+
+[
+    local,
+    object,
+    uuid(50c83a1c-e072-4c48-87b0-3630fa36a6d0),
+    pointer_default(unique)
+]
+interface IDXGIFactory2 : IDXGIFactory1
+{
+    BOOL IsWindowedStereoEnabled();
+    HRESULT CreateSwapChainForHwnd(IUnknown *device, HWND window, const DXGI_SWAP_CHAIN_DESC1 *desc,
+            const DXGI_SWAP_CHAIN_FULLSCREEN_DESC *fullscreen_desc, IDXGIOutput *output, IDXGISwapChain1 **swapchain);
+    HRESULT CreateSwapChainForCoreWindow(IUnknown *device, IUnknown *window, const DXGI_SWAP_CHAIN_DESC1 *desc,
+            IDXGIOutput *output, IDXGISwapChain1 **swapchain);
+    HRESULT GetSharedResourceAdapterLuid(HANDLE resource, LUID *luid);
+    HRESULT RegisterStereoStatusWindow(HWND window, UINT msg, DWORD *cookie);
+    HRESULT RegisterStereoStatusEvent(HANDLE event, DWORD *cookie);
+    void UnregisterStereoStatus(DWORD cookie);
+    HRESULT RegisterOcclusionStatusWindow(HWND window, UINT msg, DWORD *cookie);
+    HRESULT RegisterOcclusionStatusEvent(HANDLE event, DWORD *cookie);
+    void UnregisterOcclusionStatus(DWORD cookie);
+    HRESULT CreateSwapChainForComposition(IUnknown *device, const DXGI_SWAP_CHAIN_DESC1 *desc,
+            IDXGIOutput *output, IDXGISwapChain1 **swapchain);
+}

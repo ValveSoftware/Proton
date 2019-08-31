@@ -1,0 +1,76 @@
+=============================
+The vkd3d 3D Graphics Library
+=============================
+
+Vkd3d is a 3D graphics library built on top of Vulkan. It has an API very
+similar, but not identical, to Direct3D 12.
+
+==============
+Building vkd3d
+==============
+
+Vkd3d depends on SPIRV-Headers and Vulkan-Headers (>= 1.1.113).
+
+Vkd3d generates some of its headers from IDL files. If you are using the
+release tarballs, then these headers are pre-generated and are included. If
+you are building from git, then they will be generated at build-time using
+widl. By default, vkd3d will use the widl found in `PATH'. If widl is not
+available or is not recent (>= 3.20), then you can build Wine with `make
+tools/widl' to avoid building all of Wine. You can then point vkd3d's
+configure at that widl binary with `WIDL="/path/to/widl"'.
+
+For release builds, you may want to define NDEBUG. If you do not need debug log
+messages, you may also consider VKD3D_NO_TRACE_MESSAGES and
+VKD3D_NO_DEBUG_MESSAGES. For example, you can pass `CPPFLAGS="-DNDEBUG
+-DVKD3D_NO_TRACE_MESSAGES"' to configure.
+
+===========
+Using vkd3d
+===========
+
+Vkd3d can be used by projects that target Direct3D 12 as a drop-in replacement
+at build-time with some modest source modifications.
+
+If vkd3d is available when building Wine, then Wine will use it to support
+Direct3D 12 applications.
+
+=====================
+Environment variables
+=====================
+
+Most of the environment variables used by vkd3d are for debugging purposes. The
+environment variables are not considered a part of API and might be changed or
+removed in the future versions of vkd3d.
+
+Some of debug variables are lists of elements. Elements must be separated by
+commas or semicolons.
+
+ * VKD3D_CONFIG - a list of options that change the behavior of libvkd3d.
+    * vk_debug - enables Vulkan debug extensions.
+
+ * VKD3D_DEBUG - controls the debug level for log messages produced by
+   libvkd3d. Accepts the following values: none, err, fixme, warn, trace.
+
+ * VKD3D_VULKAN_DEVICE - a zero-based device index. Use to force the selected
+   Vulkan device.
+
+ * VKD3D_DISABLE_EXTENSIONS - a list of Vulkan extensions that libvkd3d should
+   not use even if available.
+
+ * VKD3D_SHADER_DEBUG - controls the debug level for log messages produced by
+   libvkd3d-shader. See VKD3D_DEBUG for accepted values.
+
+ * VKD3D_SHADER_DUMP_PATH - path where shader bytecode is dumped.
+
+ * VKD3D_TEST_DEBUG - enables additional debug messages in tests. Set to 0, 1
+   or 2.
+
+ * VKD3D_TEST_FILTER - a filter string. Only the tests whose names matches the
+   filter string will be run, e.g. VKD3D_TEST_FILTER=clear_render_target.
+   Useful for debugging or developing new tests.
+
+ * VKD3D_TEST_PLATFORM - can be set to "wine", "windows" or "other". The test
+   platform controls the behavior of todo(), todo_if(), bug_if() and broken()
+   conditions in tests.
+
+ * VKD3D_TEST_BUG - set to 0 to disable bug_if() conditions in tests.

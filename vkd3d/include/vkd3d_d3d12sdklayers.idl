@@ -1,0 +1,43 @@
+/*
+ * Copyright 2016-2019 Józef Kucia for CodeWeavers
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
+ */
+
+import "vkd3d_d3d12.idl";
+
+[
+    uuid(344488b7-6846-474b-b989-f027448245e0),
+    object,
+    local,
+    pointer_default(unique)
+]
+interface ID3D12Debug : IUnknown
+{
+    void EnableDebugLayer();
+}
+
+[
+    uuid(affaa4ca-63fe-4d8e-b8ad-159000af4304),
+    object,
+    local,
+    pointer_default(unique)
+]
+interface ID3D12Debug1 : IUnknown
+{
+    void EnableDebugLayer();
+    void SetEnableGPUBasedValidation(BOOL enable);
+    void SetEnableSynchronizedCommandQueueValidation(BOOL enable);
+}

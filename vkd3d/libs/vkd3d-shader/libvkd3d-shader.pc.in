@@ -1,0 +1,10 @@
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+libdir=@libdir@
+includedir=@includedir@
+
+Name: vkd3d-shader
+Description: The vkd3d Shader Translation Library
+Version: @PACKAGE_VERSION@
+Cflags: -I${includedir}/vkd3d
+Libs: -L${libdir} -lvkd3d-shader

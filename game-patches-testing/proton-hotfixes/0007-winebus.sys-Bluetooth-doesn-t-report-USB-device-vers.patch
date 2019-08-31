@@ -1,0 +1,43 @@
+From 213289c20c6a0629fed92cc8150db83782f1fe05 Mon Sep 17 00:00:00 2001
+From: Andrew Eikum <aeikum@codeweavers.com>
+Date: Fri, 30 Aug 2019 12:12:26 -0500
+Subject: [PATCH 7/7] winebus.sys: Bluetooth doesn't report USB device version
+
+---
+ dlls/winebus.sys/bus_udev.c | 19 +++++++++++--------
+ 1 file changed, 11 insertions(+), 8 deletions(-)
+
+diff --git a/dlls/winebus.sys/bus_udev.c b/dlls/winebus.sys/bus_udev.c
+index c5aab2a8ad6..b3889ad15c9 100644
+--- a/dlls/winebus.sys/bus_udev.c
++++ b/dlls/winebus.sys/bus_udev.c
+@@ -1261,15 +1261,18 @@ static void try_add_device(struct udev_device *dev)
+         if (serial == NULL)
+             serial = strdupAtoW(base_serial);
+ 
+-        walk_device = dev;
+-        while (walk_device && !bcdDevice)
++        if(bus_type != BUS_BLUETOOTH)
+         {
+-            bcdDevice = udev_device_get_sysattr_value(walk_device, "bcdDevice");
+-            walk_device = udev_device_get_parent(walk_device);
+-        }
+-        if (bcdDevice)
+-        {
+-            version = a_to_bcd(bcdDevice);
++            walk_device = dev;
++            while (walk_device && !bcdDevice)
++            {
++                bcdDevice = udev_device_get_sysattr_value(walk_device, "bcdDevice");
++                walk_device = udev_device_get_parent(walk_device);
++            }
++            if (bcdDevice)
++            {
++                version = a_to_bcd(bcdDevice);
++            }
+         }
+     }
+ #ifdef HAS_PROPER_INPUT_HEADER
+-- 
+2.20.1
+

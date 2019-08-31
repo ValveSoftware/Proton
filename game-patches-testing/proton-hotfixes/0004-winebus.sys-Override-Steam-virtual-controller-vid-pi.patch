@@ -1,0 +1,32 @@
+From 1540795a54113b40e2e3055228d6bc8f4ade8b1e Mon Sep 17 00:00:00 2001
+From: Andrew Eikum <aeikum@codeweavers.com>
+Date: Fri, 30 Aug 2019 10:20:16 -0500
+Subject: [PATCH 4/7] winebus.sys: Override Steam virtual controller vid/pid
+ with Xbox
+
+Matches Windows Steam client behavior.
+---
+ dlls/winebus.sys/bus_sdl.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/dlls/winebus.sys/bus_sdl.c b/dlls/winebus.sys/bus_sdl.c
+index 5f0f5116e9e..c16ed5658da 100644
+--- a/dlls/winebus.sys/bus_sdl.c
++++ b/dlls/winebus.sys/bus_sdl.c
+@@ -1091,6 +1091,13 @@ static void try_add_device(unsigned int index, BOOL xinput_hack)
+         TRACE("Found sdl game controller 0x%x (vid %04x, pid %04x, version %u, serial %s, xinput_hack: %u)\n",
+               id, vid, pid, version, debugstr_w(serial), xinput_hack);
+         is_xbox_gamepad = TRUE;
++
++        if(vid == 0x28DE && pid == 0x11FF)
++        {
++            TRACE("Steam virtual controller, pretending it's an Xbox 360 controller\n");
++            vid = 0x045e;
++            pid = 0x028e;
++        }
+     }
+     else
+     {
+-- 
+2.20.1
+
