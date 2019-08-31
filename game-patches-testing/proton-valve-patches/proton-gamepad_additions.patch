@@ -1240,7 +1240,7 @@ index cd26e1b2df7..50a09ac1d3a 100644
 +        {
 +            static const WCHAR formatW[] =  {'\\','\\','?','\\','H','I','D','#','V','I','D','_','%','0','4', 'x','&',
 +                                             'P','I','D','_','%','0','4','x','&', '%','s','_','%','i',0};
-+            static const WCHAR imW[] = {'I','M',0};
++            static const WCHAR miW[] = {'M','I',0};
 +            static const WCHAR igW[] = {'I','G',0};
 +
 +            LPDIPROPGUIDANDPATH pd = (LPDIPROPGUIDANDPATH)pdiph;
@@ -1250,7 +1250,7 @@ index cd26e1b2df7..50a09ac1d3a 100644
 +
 +            pd->guidClass = This->generic.base.guid;
 +            sprintfW(pd->wszPath, formatW, This->sdldev->vendor_id, This->sdldev->product_id,
-+                     This->sdldev->is_xbox_gamepad ? igW : imW, This->sdldev->id);
++                     This->sdldev->is_xbox_gamepad ? igW : miW, This->sdldev->id);
 +
 +            TRACE("DIPROP_GUIDANDPATH(%s, %s): returning fake path\n", debugstr_guid(&pd->guidClass), debugstr_w(pd->wszPath));
 +            break;

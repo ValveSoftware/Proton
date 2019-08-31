@@ -29,7 +29,7 @@ index 53bc50d1639..228447085d1 100644
  
          sdldev.n_buttons = SDL_JoystickNumButtons(device);
 @@ -1091,14 +1091,16 @@ static HRESULT WINAPI JoystickWImpl_GetProperty(LPDIRECTINPUTDEVICE8W iface, REF
-             static const WCHAR imW[] = {'I','M',0};
+             static const WCHAR miW[] = {'M','I',0};
              static const WCHAR igW[] = {'I','G',0};
  
 +            BOOL is_gamepad;
