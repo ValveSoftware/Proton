@@ -19,7 +19,7 @@
 
     #WINE STAGING
     echo "applying staging patches"
-    ../wine-staging/patches/patchinstall.sh DESTDIR="." --all -W server-Desktop_Refcount -W ws2_32-TransmitFile
+    ../wine-staging/patches/patchinstall.sh DESTDIR="." --all -W server-Desktop_Refcount -W ws2_32-TransmitFile -W winex11.drv-mouse-coorrds
 
     #WINE VULKAN
     echo "applying winevulkan patches"
