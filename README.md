@@ -8,6 +8,7 @@ All patches:
 -Vulkan child window patch  
 -sword art online gnutls patch  
 -d9vk integration  
+-vkd3d integration  
 -protonfixes integration  
 -FAudio with FFMpeg enabled (fixes audio/voices in multiple games)  
 -All of Valve's wine proton patches. Yes. All of them.  
