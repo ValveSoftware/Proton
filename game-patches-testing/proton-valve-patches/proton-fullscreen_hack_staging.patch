@@ -2488,21 +2488,6 @@ index 1209a250b0..077c18ac10 100644
          __wine_send_input( hwnd, input );
          return;
      }
-@@ -598,7 +631,13 @@ static void send_mouse_input( HWND hwnd, Window window, unsigned int state, INPU
- 
-     if (!(data = get_win_data( hwnd ))) return;
- 
--    if (window == data->whole_window)
-+    if(data->fs_hack)
-+        fs_hack_real_to_user(&pt);
-+
-+    input->u.mi.dx = pt.x;
-+    input->u.mi.dy = pt.y;
-+
-+    if (window == data->whole_window && !data->fs_hack)
-     {
-         pt.x += data->whole_rect.left - data->client_rect.left;
-         pt.y += data->whole_rect.top - data->client_rect.top;
 @@ -1432,13 +1471,19 @@ void CDECL X11DRV_SetCursor( HCURSOR handle )
  BOOL CDECL X11DRV_SetCursorPos( INT x, INT y )
  {
@@ -4896,3 +4881,22 @@ index 3e95df3873c..ba68447d2e1 100644
                  SendMessageW( hwnd, WM_SYSCOMMAND, SC_RESTORE, 0 );
                  return;
              }
+diff --git a/dlls/winex11.drv/mouse.c b/dlls/winex11.drv/mouse.c
+index 2b61972edb..9e1f9397ec 100644
+--- a/dlls/winex11.drv/mouse.c
++++ b/dlls/winex11.drv/mouse.c
+@@ -635,7 +635,13 @@ static POINT map_event_coords(const XButtonEvent *event, HWND hwnd)
+ 
+     if ((data = get_win_data(hwnd)))
+     {
+-        if (event->window == data->whole_window)
++        if(data->fs_hack)
++            fs_hack_real_to_user(&pt);
++
++        input->u.mi.dx = pt.x;
++        input->u.mi.dy = pt.y;
++
++        if (event->window == data->whole_window && !data->fs_hack)
+         {
+             pt.x += data->whole_rect.left - data->client_rect.left;
+             pt.y += data->whole_rect.top  - data->client_rect.top;
