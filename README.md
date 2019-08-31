@@ -1,18 +1,29 @@
 This is my build of Proton which the most recent release of vanilla wine, has ffmpeg enabled for faudio by default, and all of Proton's patches ported over to be applied to vanilla wine.
 
 All patches:  
--Warframe launcher loop patch  
--DXVK Async patch applied and enabled specifically for warframe and poe
+-Warframe screenshot F6 patch 
+-FFXIV Launcher patch
 -Mech Warrior online patch  
--Resident Evil 4 patch  
--World of Final Fantasy patch  
--Skyrim SE/Fallout 4 script extender patch  
--d9vk integration - 
--protonfixes integration
+-Assetto Corsa HUD patch 
+-Vulkan child window patch  
+-sword art online gnutls patch  
+-d9vk integration  
+-protonfixes integration  
 -FAudio with FFMpeg enabled (fixes audio/voices in multiple games)  
--All of Valve's wine proton patches. Yes. All of them. 
+-All of Valve's wine proton patches. Yes. All of them.  
+-wine staging patches  
+-various wine hot fixes for wine functionality that fix regressions per version  
 
-Building Proton in a nutshell:  
+Full patches can be viewed in game-patches-testing/proton-prep.sh  
+
+How to install:
+
+1. Either follow the build guide below, or download a release from the Releases section of this git repo.
+2. Extract the release tarball into `~/.steam/root/compatibilitytools.d/`, and restart steam. You will have to create the compatibilitytools.d folder.  
+3. Right click any game in steam and click Properties
+4. At the bottom of the General tab, Check "Force the use of a specific Steam Play compatibility tool" then select the new Proton version.
+
+How to build:  
 
 1. Install virtualbox and its kernel modules, make sure they are enabled at boot  
 2. Install vagrant  
@@ -65,8 +76,22 @@ tar -cvzf Proton-Custom-Name.tar.gz Proton-Custom-Name/
 exit
 vagrant halt
 ```
+12. Now open vagrant_share inside the cloned repo folder on your main system and you will see your new proton version in a .tar.gz from here follow the install instructions listed in the first section of this README.
 
-12. Now open vagrant_share inside the cloned repo folder on your main system. Extract the tarball into `~/.steam/root/compatibilitytools.d/`, and restart steam. You will have to create the compatibilitytools.d folder.  
+| Compat config string  | Environment Variable           | Description  |
+| :-------------------- | :----------------------------- | :----------- |
+|                       | <tt>PROTON_LOG</tt>            | Convenience method for dumping a useful debug log to `$HOME/steam-$APPID.log`. For more thorough logging, use `user_settings.py`. |
+|                       | <tt>PROTON_DUMP_DEBUG_COMMANDS</tt> | When running a game, Proton will write some useful debug scripts for that game into `$PROTON_DEBUG_DIR/proton_$USER/`. |
+|                       | <tt>PROTON_DEBUG_DIR</tt>      | Root directory for the Proton debug scripts, `/tmp` by default. |
+| <tt>wined3d</tt>      | <tt>PROTON_USE_WINED3D</tt>    | Use OpenGL-based wined3d instead of Vulkan-based DXVK for d3d11 and d3d10. This used to be called `PROTON_USE_WINED3D11`, which is now an alias for this same option. |
+| <tt>nod3d11</tt>      | <tt>PROTON_NO_D3D11</tt>       | Disable <tt>d3d11.dll</tt>, for d3d11 games which can fall back to and run better with d3d9. |
+| <tt>nod3d10</tt>      | <tt>PROTON_NO_D3D10</tt>       | Disable <tt>d3d10.dll</tt> and <tt>dxgi.dll</tt>, for d3d10 games which can fall back to and run better with d3d9. |
+| <tt>d9vk</tt>         | <tt>PROTON_NO_D9VK</tt>        | Disable d9vk so that wined3d is used for dx9 games. |
+| <tt>d9vk</tt>         | <tt>PROTON_USE_VKD3D</tt>      | Use vkd3d for DX12 games. NOTE: This will disable DXVK since it relies on dxgi.dll  |
+| <tt>noesync</tt>      | <tt>PROTON_NO_ESYNC</tt>       | Do not use eventfd-based in-process synchronization primitives. |
+| <tt>nofsync</tt>      | <tt>PROTON_NO_FSYNC</tt>       | Do not use futex-based in-process synchronization primitives. (Automatically disabled on systems with no `FUTEX_WAIT_MULTIPLE` support.) |
+| <tt>forcelgadd</tt>   | <tt>PROTON_FORCE_LARGE_ADDRESS_AWARE</tt> | Force Wine to enable the LARGE_ADDRESS_AWARE flag for all executables. |
+| <tt>oldglstr</tt>     | <tt>PROTON_OLD_GL_STRING</tt>  | Set some driver overrides to limit the length of the GL extension string, for old games that crash on very long extension strings. |
 
 
 Credits to the proper people are deserved. Many people besides myself have contributed to various parts:
@@ -76,5 +101,6 @@ https://github.com/wine-mirror/wine
 https://github.com/wine-staging/wine-staging  
 https://github.com/doitsujin/dxvk  
 https://github.com/Joshua-Ashton/d9vk  
+https://github.com/FNA-XNA/Faudio  
 https://github.com/Tk-Glitch/PKGBUILDS/tree/master/wine-tkg-git/wine-tkg-patches  
 https://github.com/simons-public/protonfixes  

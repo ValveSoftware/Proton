@@ -505,8 +505,9 @@ class Session:
             self.check_environment("PROTON_USE_WINED3D11", "wined3d")
         self.check_environment("PROTON_NO_D3D11", "nod3d11")
         self.check_environment("PROTON_NO_D3D10", "nod3d10")
-        self.check_environment("PROTON_NO_D3D9",  "nod3d9")
+        self.check_environment("PROTON_NO_D9VK",  "nod3d9")
         self.check_environment("PROTON_NO_ESYNC", "noesync")
+        self.check_environment("PROTON_USE_VKD3D", "vkd3d")
         self.check_environment("PROTON_NO_FSYNC", "nofsync")
         self.check_environment("PROTON_FORCE_LARGE_ADDRESS_AWARE", "forcelgadd")
         self.check_environment("PROTON_OLD_GL_STRING", "oldglstr")
@@ -560,6 +561,9 @@ class Session:
 
         if "nod3d9" in self.compat_config:
             self.dlloverrides["d3d9"] = ""
+
+        if "vkd3d" in self.compat_config:
+            self.dlloverrides["dxgi"] = "b"
 
         s = ""
         for dll in self.dlloverrides:
