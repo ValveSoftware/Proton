@@ -41,7 +41,7 @@ index 53bc50d1639..228447085d1 100644
 +            is_gamepad = is_xinput_device(&This->generic.devcaps, This->sdldev->vendor_id, This->sdldev->product_id);
              pd->guidClass = This->generic.base.guid;
              sprintfW(pd->wszPath, formatW, This->sdldev->vendor_id, This->sdldev->product_id,
--                     This->sdldev->is_xbox_gamepad ? igW : imW, This->sdldev->id);
+-                     This->sdldev->is_xbox_gamepad ? igW : miW, This->sdldev->id);
 +                     is_gamepad ? igW : miW, This->sdldev->id);
  
              TRACE("DIPROP_GUIDANDPATH(%s, %s): returning fake path\n", debugstr_guid(&pd->guidClass), debugstr_w(pd->wszPath));
