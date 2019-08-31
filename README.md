@@ -78,6 +78,9 @@ vagrant halt
 ```
 12. Now open vagrant_share inside the cloned repo folder on your main system and you will see your new proton version in a .tar.gz from here follow the install instructions listed in the first section of this README.
 
+
+Environment variable options:  
+
 | Compat config string  | Environment Variable           | Description  |
 | :-------------------- | :----------------------------- | :----------- |
 |                       | <tt>PROTON_LOG</tt>            | Convenience method for dumping a useful debug log to `$HOME/steam-$APPID.log`. For more thorough logging, use `user_settings.py`. |
