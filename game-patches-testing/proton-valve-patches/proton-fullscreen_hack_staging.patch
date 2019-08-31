@@ -2488,6 +2488,21 @@ index 1209a250b0..077c18ac10 100644
          __wine_send_input( hwnd, input );
          return;
      }
+@@ -598,7 +631,13 @@ static void send_mouse_input( HWND hwnd, Window window, unsigned int state, INPU
+ 
+     if (!(data = get_win_data( hwnd ))) return;
+ 
+-    if (window == data->whole_window)
++    if(data->fs_hack)
++        fs_hack_real_to_user(&pt);
++
++    input->u.mi.dx = pt.x;
++    input->u.mi.dy = pt.y;
++
++    if (window == data->whole_window && !data->fs_hack)
+     {
+         pt.x += data->whole_rect.left - data->client_rect.left;
+         pt.y += data->whole_rect.top - data->client_rect.top;
 @@ -1432,13 +1471,19 @@ void CDECL X11DRV_SetCursor( HCURSOR handle )
  BOOL CDECL X11DRV_SetCursorPos( INT x, INT y )
  {
@@ -2544,15 +2559,15 @@ index 1209a250b0..077c18ac10 100644
                      return TRUE;
              }
          }
-@@ -1836,6 +1853,7 @@ static BOOL X11DRV_RawMotion( XGenericEventCookie *xev )
+@@ -1730,6 +1777,7 @@ static BOOL X11DRV_RawMotion( XGenericEventCookie *xev )
+     const double *values = event->valuators.values;
      RECT virtual_rect;
      INPUT input;
-     int i;
 +    POINT pt;
+     int i;
      double dx = 0, dy = 0, val;
      struct x11drv_thread_data *thread_data = x11drv_thread_data();
-     struct x11drv_valuator_data *x_rel, *y_rel;
-@@ -1902,6 +1920,12 @@ static BOOL X11DRV_RawMotion( XGenericEventCookie *xev )
+@@ -1813,6 +1861,12 @@ static BOOL X11DRV_RawMotion( XGenericEventCookie *xev )
          return FALSE;
      }
  
@@ -4764,7 +4779,7 @@ index 23be3e56ac7..a20342c9d05 100644
  
      if (GetWindowThreadProcessId( GetDesktopWindow(), NULL ) == GetCurrentThreadId())
          return TRUE;  /* don't clip in the desktop process */
-@@ -454,13 +454,24 @@ static BOOL grab_clipping_window( const RECT *clip )
+@@ -454,13 +458,24 @@ static BOOL grab_clipping_window( const RECT *clip )
          clip->right < clip_rect.right || clip->bottom < clip_rect.bottom)
          data->warp_serial = NextRequest( data->display );
  
@@ -4881,22 +4896,3 @@ index 3e95df3873c..ba68447d2e1 100644
                  SendMessageW( hwnd, WM_SYSCOMMAND, SC_RESTORE, 0 );
                  return;
              }
-diff --git a/dlls/winex11.drv/mouse.c b/dlls/winex11.drv/mouse.c
-index 2b61972edb..9e1f9397ec 100644
---- a/dlls/winex11.drv/mouse.c
-+++ b/dlls/winex11.drv/mouse.c
-@@ -635,7 +635,13 @@ static POINT map_event_coords(const XButtonEvent *event, HWND hwnd)
- 
-     if ((data = get_win_data(hwnd)))
-     {
--        if (event->window == data->whole_window)
-+        if(data->fs_hack)
-+            fs_hack_real_to_user(&pt);
-+
-+        input->u.mi.dx = pt.x;
-+        input->u.mi.dy = pt.y;
-+
-+        if (event->window == data->whole_window && !data->fs_hack)
-         {
-             pt.x += data->whole_rect.left - data->client_rect.left;
-             pt.y += data->whole_rect.top  - data->client_rect.top;
