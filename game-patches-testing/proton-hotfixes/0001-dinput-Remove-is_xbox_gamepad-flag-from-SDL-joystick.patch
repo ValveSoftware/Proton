@@ -28,9 +28,9 @@ index 53bc50d1639..228447085d1 100644
          }
  
          sdldev.n_buttons = SDL_JoystickNumButtons(device);
-@@ -1011,14 +1008,16 @@ static HRESULT WINAPI JoystickWImpl_GetProperty(LPDIRECTINPUTDEVICE8W iface, REF
-             static const WCHAR miW[] = {'m','i',0};
-             static const WCHAR igW[] = {'i','g',0};
+@@ -1091,14 +1091,16 @@ static HRESULT WINAPI JoystickWImpl_GetProperty(LPDIRECTINPUTDEVICE8W iface, REF
+             static const WCHAR imW[] = {'I','M',0};
+             static const WCHAR igW[] = {'I','G',0};
  
 +            BOOL is_gamepad;
              LPDIPROPGUIDANDPATH pd = (LPDIPROPGUIDANDPATH)pdiph;
@@ -39,9 +39,9 @@ index 53bc50d1639..228447085d1 100644
                  return DIERR_UNSUPPORTED;
  
 +            is_gamepad = is_xinput_device(&This->generic.devcaps, This->sdldev->vendor_id, This->sdldev->product_id);
-             pd->guidClass = GUID_DEVCLASS_HIDCLASS;
+             pd->guidClass = This->generic.base.guid;
              sprintfW(pd->wszPath, formatW, This->sdldev->vendor_id, This->sdldev->product_id,
--                     This->sdldev->is_xbox_gamepad ? igW : miW, This->sdldev->id);
+-                     This->sdldev->is_xbox_gamepad ? igW : imW, This->sdldev->id);
 +                     is_gamepad ? igW : miW, This->sdldev->id);
  
              TRACE("DIPROP_GUIDANDPATH(%s, %s): returning fake path\n", debugstr_guid(&pd->guidClass), debugstr_w(pd->wszPath));
