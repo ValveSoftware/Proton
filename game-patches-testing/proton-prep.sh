@@ -1,5 +1,12 @@
 #!/bin/bash
 
+    # VKD3D patches
+    cd vkd3d
+    git reset --hard HEAD
+    git clean -xdf
+    patch -Np1 < ../game-patches-testing/vkd3d-patches/wow-flicker.patch
+    cd ..
+
     # Valve DXVK patches
     cd dxvk
     git reset --hard HEAD
