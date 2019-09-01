@@ -1,4 +1,4 @@
-This is my build of Proton which the most recent release of vanilla wine, has ffmpeg enabled for faudio by default, and all of Proton's patches ported over to be applied to vanilla wine.
+This is my build of Proton with the most recent release of vanilla wine, has ffmpeg enabled for faudio by default, and all of Proton's patches ported over to be applied to wine, as well as wine-staging and vkd3d.
 
 All patches:  
 -Warframe screenshot F6 patch 
