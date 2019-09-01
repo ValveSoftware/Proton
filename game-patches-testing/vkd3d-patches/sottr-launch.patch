@@ -1,0 +1,106 @@
+diff --git a/libs/vkd3d/command.c b/libs/vkd3d/command.c
+index eeae9cf4efe2..c040a46e4b03 100644
+--- a/libs/vkd3d/command.c
++++ b/libs/vkd3d/command.c
+@@ -2827,6 +2827,8 @@ static void d3d12_command_list_update_descriptors(struct d3d12_command_list *lis
+     if (bindings->descriptor_table_dirty_mask || bindings->push_descriptor_dirty_mask)
+         d3d12_command_list_prepare_descriptors(list, bind_point);
+ 
++    pthread_mutex_lock(&list->device->mutex);
++
+     for (i = 0; i < ARRAY_SIZE(bindings->descriptor_tables); ++i)
+     {
+         if (bindings->descriptor_table_dirty_mask & ((uint64_t)1 << i))
+@@ -2839,7 +2841,7 @@ static void d3d12_command_list_update_descriptors(struct d3d12_command_list *lis
+     }
+     bindings->descriptor_table_dirty_mask = 0;
+ 
+-    d3d12_command_list_update_push_descriptors(list, bind_point);
++    pthread_mutex_unlock(&list->device->mutex);
+ 
+     if (bindings->descriptor_set)
+     {
+diff --git a/libs/vkd3d/device.c b/libs/vkd3d/device.c
+index b9ac829734f4..4d07cbd61fb4 100644
+--- a/libs/vkd3d/device.c
++++ b/libs/vkd3d/device.c
+@@ -2559,33 +2559,45 @@ static HRESULT STDMETHODCALLTYPE d3d12_device_CreateRootSignature(ID3D12Device *
+ static void STDMETHODCALLTYPE d3d12_device_CreateConstantBufferView(ID3D12Device *iface,
+         const D3D12_CONSTANT_BUFFER_VIEW_DESC *desc, D3D12_CPU_DESCRIPTOR_HANDLE descriptor)
+ {
++    struct d3d12_device *device = impl_from_ID3D12Device(iface);
++
+     TRACE("iface %p, desc %p, descriptor %#lx.\n", iface, desc, descriptor.ptr);
+ 
++    pthread_mutex_lock(&device->mutex);
+     d3d12_desc_create_cbv(d3d12_desc_from_cpu_handle(descriptor),
+             impl_from_ID3D12Device(iface), desc);
++    pthread_mutex_unlock(&device->mutex);
+ }
+ 
+ static void STDMETHODCALLTYPE d3d12_device_CreateShaderResourceView(ID3D12Device *iface,
+         ID3D12Resource *resource, const D3D12_SHADER_RESOURCE_VIEW_DESC *desc,
+         D3D12_CPU_DESCRIPTOR_HANDLE descriptor)
+ {
++    struct d3d12_device *device = impl_from_ID3D12Device(iface);
++
+     TRACE("iface %p, resource %p, desc %p, descriptor %#lx.\n",
+             iface, resource, desc, descriptor.ptr);
+ 
++    pthread_mutex_lock(&device->mutex);
+     d3d12_desc_create_srv(d3d12_desc_from_cpu_handle(descriptor),
+             impl_from_ID3D12Device(iface), unsafe_impl_from_ID3D12Resource(resource), desc);
++    pthread_mutex_unlock(&device->mutex);
+ }
+ 
+ static void STDMETHODCALLTYPE d3d12_device_CreateUnorderedAccessView(ID3D12Device *iface,
+         ID3D12Resource *resource, ID3D12Resource *counter_resource,
+         const D3D12_UNORDERED_ACCESS_VIEW_DESC *desc, D3D12_CPU_DESCRIPTOR_HANDLE descriptor)
+ {
++    struct d3d12_device *device = impl_from_ID3D12Device(iface);
++
+     TRACE("iface %p, resource %p, counter_resource %p, desc %p, descriptor %#lx.\n",
+             iface, resource, counter_resource, desc, descriptor.ptr);
+ 
++    pthread_mutex_lock(&device->mutex);
+     d3d12_desc_create_uav(d3d12_desc_from_cpu_handle(descriptor),
+             impl_from_ID3D12Device(iface), unsafe_impl_from_ID3D12Resource(resource),
+             unsafe_impl_from_ID3D12Resource(counter_resource), desc);
++    pthread_mutex_unlock(&device->mutex);
+ }
+ 
+ static void STDMETHODCALLTYPE d3d12_device_CreateRenderTargetView(ID3D12Device *iface,
+@@ -2613,10 +2625,14 @@ static void STDMETHODCALLTYPE d3d12_device_CreateDepthStencilView(ID3D12Device *
+ static void STDMETHODCALLTYPE d3d12_device_CreateSampler(ID3D12Device *iface,
+         const D3D12_SAMPLER_DESC *desc, D3D12_CPU_DESCRIPTOR_HANDLE descriptor)
+ {
++    struct d3d12_device *device = impl_from_ID3D12Device(iface);
++
+     TRACE("iface %p, desc %p, descriptor %#lx.\n", iface, desc, descriptor.ptr);
+ 
++    pthread_mutex_lock(&device->mutex);
+     d3d12_desc_create_sampler(d3d12_desc_from_cpu_handle(descriptor),
+             impl_from_ID3D12Device(iface), desc);
++    pthread_mutex_unlock(&device->mutex);
+ }
+ 
+ static void STDMETHODCALLTYPE d3d12_device_CopyDescriptors(ID3D12Device *iface,
+@@ -2647,6 +2663,8 @@ static void STDMETHODCALLTYPE d3d12_device_CopyDescriptors(ID3D12Device *iface,
+         return;
+     }
+ 
++    pthread_mutex_lock(&device->mutex);
++
+     dst_range_idx = dst_idx = 0;
+     src_range_idx = src_idx = 0;
+     while (dst_range_idx < dst_descriptor_range_count && src_range_idx < src_descriptor_range_count)
+@@ -2671,6 +2689,8 @@ static void STDMETHODCALLTYPE d3d12_device_CopyDescriptors(ID3D12Device *iface,
+             src_idx = 0;
+         }
+     }
++
++    pthread_mutex_unlock(&device->mutex);
+ }
+ 
+ static void STDMETHODCALLTYPE d3d12_device_CopyDescriptorsSimple(ID3D12Device *iface,
+ 
