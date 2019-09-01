@@ -1,6 +1,0 @@
-# Python cache
-__pycache__
-*.pyc
-build
-.vscode/
-**/.*.swp
