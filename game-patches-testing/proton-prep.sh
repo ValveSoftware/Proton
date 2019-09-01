@@ -5,6 +5,7 @@
     git reset --hard HEAD
     git clean -xdf
     patch -Np1 < ../game-patches-testing/vkd3d-patches/wow-flicker.patch
+    patch -Np1 < ../game-patches-testing/vkd3d-patches/sottr-launch.patch
     cd ..
 
     # Valve DXVK patches
