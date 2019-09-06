@@ -1,7 +1,7 @@
-From cef8c79e65ba18e496c2538c553162f0a12cd88e Mon Sep 17 00:00:00 2001
+From 127feb7008e91fa3a622667bd03081d423306606 Mon Sep 17 00:00:00 2001
 From: Andrew Eikum <aeikum@codeweavers.com>
 Date: Thu, 29 Aug 2019 15:04:36 -0500
-Subject: [PATCH 3/7] winebus.sys: Ignore blacklisted SDL joysticks, too
+Subject: [PATCH 03/10] winebus.sys: Ignore blacklisted SDL joysticks, too
 
 SDL only respects these variables for game controllers. All joysticks
 are allowed through. But we don't want to present these at all, so we'll

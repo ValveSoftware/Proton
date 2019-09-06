@@ -1,7 +1,7 @@
-From b6187874453e9eaccba9abfa414c376f2ed31faa Mon Sep 17 00:00:00 2001
+From c3ea2e128b2933116aa61ba8b8df99dcf84179a7 Mon Sep 17 00:00:00 2001
 From: Andrew Eikum <aeikum@codeweavers.com>
 Date: Fri, 30 Aug 2019 09:20:46 -0500
-Subject: [PATCH 2/7] dinput: Don't enumerate joysticks that are blacklisted
+Subject: [PATCH 02/10] dinput: Don't enumerate joysticks that are blacklisted
 
 SDL only respects these variables for game controllers. All joysticks
 are allowed through. But we don't want to present these at all, so we'll

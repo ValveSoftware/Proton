@@ -1,7 +1,7 @@
-From 5cea7485588a3dbd542ecd6272fc225c1a18dc39 Mon Sep 17 00:00:00 2001
+From d1ecb3c0bafe8ef168ce1e7a0703f56ad8da71e8 Mon Sep 17 00:00:00 2001
 From: Andrew Eikum <aeikum@codeweavers.com>
 Date: Thu, 29 Aug 2019 11:20:23 -0500
-Subject: [PATCH 6/7] winebus: Extract bluetooth info from uevent
+Subject: [PATCH 06/10] winebus: Extract bluetooth info from uevent
 
 udev doesn't report this info.
 ---

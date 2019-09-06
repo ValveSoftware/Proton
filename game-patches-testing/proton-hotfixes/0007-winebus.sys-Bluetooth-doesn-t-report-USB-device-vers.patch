@@ -1,7 +1,8 @@
-From 213289c20c6a0629fed92cc8150db83782f1fe05 Mon Sep 17 00:00:00 2001
+From 86b681bf56ed14ba674d185d457d75f05b887dfe Mon Sep 17 00:00:00 2001
 From: Andrew Eikum <aeikum@codeweavers.com>
 Date: Fri, 30 Aug 2019 12:12:26 -0500
-Subject: [PATCH 7/7] winebus.sys: Bluetooth doesn't report USB device version
+Subject: [PATCH 07/10] winebus.sys: Bluetooth doesn't report USB device
+ version
 
 ---
  dlls/winebus.sys/bus_udev.c | 19 +++++++++++--------

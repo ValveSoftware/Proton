@@ -1,7 +1,7 @@
-From 1540795a54113b40e2e3055228d6bc8f4ade8b1e Mon Sep 17 00:00:00 2001
+From 55e97a0d5d40149cf071e9db1e2da307448b222e Mon Sep 17 00:00:00 2001
 From: Andrew Eikum <aeikum@codeweavers.com>
 Date: Fri, 30 Aug 2019 10:20:16 -0500
-Subject: [PATCH 4/7] winebus.sys: Override Steam virtual controller vid/pid
+Subject: [PATCH 04/10] winebus.sys: Override Steam virtual controller vid/pid
  with Xbox
 
 Matches Windows Steam client behavior.

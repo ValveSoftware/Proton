@@ -1,7 +1,7 @@
-From ea73eb9fde440132679ce19e44225eb3f2ba7a19 Mon Sep 17 00:00:00 2001
+From 8be1ea8cd6f343dc566c131f5a08792f57125ccb Mon Sep 17 00:00:00 2001
 From: Alexey Prokhin <alexey@prokhin.ru>
 Date: Tue, 27 Aug 2019 20:42:07 +0300
-Subject: [PATCH 1/7] dinput: Remove is_xbox_gamepad flag from SDL joysticks
+Subject: [PATCH 01/10] dinput: Remove is_xbox_gamepad flag from SDL joysticks
 
 ---
  dlls/dinput/joystick_sdl.c | 7 +++----

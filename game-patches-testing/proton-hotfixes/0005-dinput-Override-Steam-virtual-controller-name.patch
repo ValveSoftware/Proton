@@ -1,7 +1,7 @@
-From 41f13c39575d7077bb9d51d578d98c3f153a8846 Mon Sep 17 00:00:00 2001
+From ea26282d93a68611d40633b5721cf29cd4690d9f Mon Sep 17 00:00:00 2001
 From: Andrew Eikum <aeikum@codeweavers.com>
 Date: Fri, 30 Aug 2019 10:58:16 -0500
-Subject: [PATCH 5/7] dinput: Override Steam virtual controller name
+Subject: [PATCH 05/10] dinput: Override Steam virtual controller name
 
 Matching Windows behavior, the vid/pid remains the same.
 ---

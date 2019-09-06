@@ -42,9 +42,6 @@
     echo "mech warrior online"
     patch -Np1 < ../game-patches-testing/game-patches/mwo.patch
 
-    echo "warframe"
-    patch -Np1 < ../game-patches-testing/game-patches/warframe-f6-screenshot-fix.patch
-
     echo "final fantasy XIV"
     patch -Np1 < ../game-patches-testing/game-patches/ffxiv-launcher.patch
 
@@ -89,6 +86,10 @@
     patch -Np1 < ../game-patches-testing/proton-hotfixes/0005-dinput-Override-Steam-virtual-controller-name.patch
     patch -Np1 < ../game-patches-testing/proton-hotfixes/0006-winebus-Extract-bluetooth-info-from-uevent.patch
     patch -Np1 < ../game-patches-testing/proton-hotfixes/0007-winebus.sys-Bluetooth-doesn-t-report-USB-device-vers.patch
+    patch -Np1 < ../game-patches-testing/proton-hotfixes/0008-dinput-Return-real-rawinput-path-for-dinput-device.patch
+    patch -Np1 < ../game-patches-testing/proton-hotfixes/0009-dinput-Use-axis-ID-to-look-up-properties-not-data-of.patch
+    patch -Np1 < ../game-patches-testing/proton-hotfixes/0010-dinput-Fix-DS4-object-enumeration-order.patch
+
 
     #need for VR to compile
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-wined3d_staging.patch

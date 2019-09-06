@@ -1,0 +1,67 @@
+From 621034617093ce30db1564b5544fee40090f1f7a Mon Sep 17 00:00:00 2001
+From: Andrew Eikum <aeikum@codeweavers.com>
+Date: Thu, 5 Sep 2019 10:31:35 -0500
+Subject: [PATCH 09/10] dinput: Use axis ID to look up properties, not data
+ offset
+
+---
+ dlls/dinput/joystick.c | 36 ++++++++++++++++++------------------
+ 1 file changed, 18 insertions(+), 18 deletions(-)
+
+diff --git a/dlls/dinput/joystick.c b/dlls/dinput/joystick.c
+index b89a83500fe..06e733b9e5e 100644
+--- a/dlls/dinput/joystick.c
++++ b/dlls/dinput/joystick.c
+@@ -380,15 +380,15 @@ HRESULT WINAPI JoystickWGenericImpl_SetProperty(LPDIRECTINPUTDEVICE8W iface, REF
+                     remap_props.lMin = pr->lMin;
+                     remap_props.lMax = pr->lMax;
+ 
+-                    switch (This->base.data_format.wine_df->rgodf[i].dwOfs) {
+-                    case DIJOFS_X        : This->js.lX  = joystick_map_axis(&remap_props, This->js.lX); break;
+-                    case DIJOFS_Y        : This->js.lY  = joystick_map_axis(&remap_props, This->js.lY); break;
+-                    case DIJOFS_Z        : This->js.lZ  = joystick_map_axis(&remap_props, This->js.lZ); break;
+-                    case DIJOFS_RX       : This->js.lRx = joystick_map_axis(&remap_props, This->js.lRx); break;
+-                    case DIJOFS_RY       : This->js.lRy = joystick_map_axis(&remap_props, This->js.lRy); break;
+-                    case DIJOFS_RZ       : This->js.lRz = joystick_map_axis(&remap_props, This->js.lRz); break;
+-                    case DIJOFS_SLIDER(0): This->js.rglSlider[0] = joystick_map_axis(&remap_props, This->js.rglSlider[0]); break;
+-                    case DIJOFS_SLIDER(1): This->js.rglSlider[1] = joystick_map_axis(&remap_props, This->js.rglSlider[1]); break;
++                    switch (DIDFT_GETINSTANCE(This->base.data_format.wine_df->rgodf[i].dwType)) {
++                    case 0: This->js.lX  = joystick_map_axis(&remap_props, This->js.lX); break;
++                    case 1: This->js.lY  = joystick_map_axis(&remap_props, This->js.lY); break;
++                    case 2: This->js.lZ  = joystick_map_axis(&remap_props, This->js.lZ); break;
++                    case 3: This->js.lRx = joystick_map_axis(&remap_props, This->js.lRx); break;
++                    case 4: This->js.lRy = joystick_map_axis(&remap_props, This->js.lRy); break;
++                    case 5: This->js.lRz = joystick_map_axis(&remap_props, This->js.lRz); break;
++                    case 6: This->js.rglSlider[0] = joystick_map_axis(&remap_props, This->js.rglSlider[0]); break;
++                    case 7: This->js.rglSlider[1] = joystick_map_axis(&remap_props, This->js.rglSlider[1]); break;
+ 	            default: break;
+                     }
+ 
+@@ -410,15 +410,15 @@ HRESULT WINAPI JoystickWGenericImpl_SetProperty(LPDIRECTINPUTDEVICE8W iface, REF
+                     remap_props.lMin = pr->lMin;
+                     remap_props.lMax = pr->lMax;
+ 
+-                    switch (This->base.data_format.wine_df->rgodf[obj].dwOfs) {
+-                    case DIJOFS_X        : This->js.lX  = joystick_map_axis(&remap_props, This->js.lX); break;
+-                    case DIJOFS_Y        : This->js.lY  = joystick_map_axis(&remap_props, This->js.lY); break;
+-                    case DIJOFS_Z        : This->js.lZ  = joystick_map_axis(&remap_props, This->js.lZ); break;
+-                    case DIJOFS_RX       : This->js.lRx = joystick_map_axis(&remap_props, This->js.lRx); break;
+-                    case DIJOFS_RY       : This->js.lRy = joystick_map_axis(&remap_props, This->js.lRy); break;
+-                    case DIJOFS_RZ       : This->js.lRz = joystick_map_axis(&remap_props, This->js.lRz); break;
+-                    case DIJOFS_SLIDER(0): This->js.rglSlider[0] = joystick_map_axis(&remap_props, This->js.rglSlider[0]); break;
+-                    case DIJOFS_SLIDER(1): This->js.rglSlider[1] = joystick_map_axis(&remap_props, This->js.rglSlider[1]); break;
++                    switch (DIDFT_GETINSTANCE(This->base.data_format.wine_df->rgodf[obj].dwType)) {
++                    case 0: This->js.lX  = joystick_map_axis(&remap_props, This->js.lX); break;
++                    case 1: This->js.lY  = joystick_map_axis(&remap_props, This->js.lY); break;
++                    case 2: This->js.lZ  = joystick_map_axis(&remap_props, This->js.lZ); break;
++                    case 3: This->js.lRx = joystick_map_axis(&remap_props, This->js.lRx); break;
++                    case 4: This->js.lRy = joystick_map_axis(&remap_props, This->js.lRy); break;
++                    case 5: This->js.lRz = joystick_map_axis(&remap_props, This->js.lRz); break;
++                    case 6: This->js.rglSlider[0] = joystick_map_axis(&remap_props, This->js.rglSlider[0]); break;
++                    case 7: This->js.rglSlider[1] = joystick_map_axis(&remap_props, This->js.rglSlider[1]); break;
+ 		    default: break;
+                     }
+ 
+-- 
+2.20.1
+
