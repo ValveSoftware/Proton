@@ -14,14 +14,13 @@ import errno
 import subprocess
 import sys
 import tarfile
-import protonfixes
 
 from filelock import FileLock
 
 #To enable debug logging, copy "user_settings.sample.py" to "user_settings.py"
 #and edit it if needed.
 
-CURRENT_PREFIX_VERSION="4.14-3"
+CURRENT_PREFIX_VERSION="4.15-2"
 
 PFX="Proton: "
 ld_path_var = "LD_LIBRARY_PATH"
@@ -740,6 +739,8 @@ if __name__ == "__main__":
         sys.exit(1)
 
     sys.exit(0)
+
+import protonfixes
 
 #pylint --disable=C0301,C0326,C0330,C0111,C0103,R0902,C1801,R0914,R0912,R0915
 # vim: set syntax=python:
