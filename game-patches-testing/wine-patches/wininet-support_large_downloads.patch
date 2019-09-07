@@ -1,0 +1,171 @@
+From: Daniel Lehman <dlehman25@gmail.com>
+Subject: [PATCH] wininet: Support large downloads.
+Message-Id: <20190907045748.28588-1-dlehman25@gmail.com>
+Date: Fri,  6 Sep 2019 21:57:48 -0700
+
+Signed-off-by: Daniel Lehman <dlehman25@gmail.com>
+---
+ dlls/wininet/http.c       | 25 ++++++++++++++-----------
+ dlls/wininet/internet.h   |  6 +++---
+ dlls/wininet/tests/http.c | 20 ++++++++++++++++++++
+ 3 files changed, 37 insertions(+), 14 deletions(-)
+
+diff --git a/dlls/wininet/http.c b/dlls/wininet/http.c
+index fccbb02f17..ad01420d45 100644
+--- a/dlls/wininet/http.c
++++ b/dlls/wininet/http.c
+@@ -52,7 +52,6 @@
+ #include "winternl.h"
+ #define NO_SHLWAPI_STREAM
+ #define NO_SHLWAPI_REG
+-#define NO_SHLWAPI_STRFCNS
+ #define NO_SHLWAPI_GDI
+ #include "shlwapi.h"
+ #include "sspi.h"
+@@ -2442,7 +2441,7 @@ static void create_cache_entry(http_request_t *req)
+         return;
+     }
+ 
+-    b = CreateUrlCacheEntryW(url, req->contentLength == ~0u ? 0 : req->contentLength, NULL, file_name, 0);
++    b = CreateUrlCacheEntryW(url, req->contentLength == ~0 ? 0 : req->contentLength, NULL, file_name, 0);
+     if(!b) {
+         WARN("Could not create cache entry: %08x\n", GetLastError());
+         return;
+@@ -2646,7 +2645,7 @@ static DWORD netconn_drain_content(data_stream_t *stream, http_request_t *req, B
+     int len, res;
+     size_t size;
+ 
+-    if(netconn_stream->content_length == ~0u)
++    if(netconn_stream->content_length == ~0)
+         return WSAEISCONN;
+ 
+     while(netconn_stream->content_read < netconn_stream->content_length) {
+@@ -2752,7 +2751,7 @@ static DWORD chunked_read(data_stream_t *stream, http_request_t *req, BYTE *buf,
+                 TRACE("reading %u byte chunk\n", chunked_stream->chunk_size);
+                 chunked_stream->buf_size++;
+                 chunked_stream->buf_pos--;
+-                if(req->contentLength == ~0u) req->contentLength = chunked_stream->chunk_size;
++                if(req->contentLength == ~0) req->contentLength = chunked_stream->chunk_size;
+                 else req->contentLength += chunked_stream->chunk_size;
+                 chunked_stream->state = CHUNKED_STREAM_STATE_DISCARD_EOL_AFTER_SIZE;
+             }
+@@ -2874,6 +2873,7 @@ static DWORD set_content_length(http_request_t *request)
+ {
+     static const WCHAR szChunked[] = {'c','h','u','n','k','e','d',0};
+     static const WCHAR headW[] = {'H','E','A','D',0};
++    WCHAR contentLength[32];
+     WCHAR encoding[20];
+     DWORD size;
+ 
+@@ -2882,10 +2882,13 @@ static DWORD set_content_length(http_request_t *request)
+         return ERROR_SUCCESS;
+     }
+ 
+-    size = sizeof(request->contentLength);
+-    if (HTTP_HttpQueryInfoW(request, HTTP_QUERY_FLAG_NUMBER|HTTP_QUERY_CONTENT_LENGTH,
+-                            &request->contentLength, &size, NULL) != ERROR_SUCCESS)
+-        request->contentLength = ~0u;
++    size = sizeof(contentLength);
++    if (HTTP_HttpQueryInfoW(request, HTTP_QUERY_CONTENT_LENGTH,
++                            contentLength, &size, NULL) != ERROR_SUCCESS ||
++        !StrToInt64ExW(contentLength, STIF_DEFAULT, (LONGLONG*)&request->contentLength)) {
++        request->contentLength = ~0;
++    }
++
+     request->netconn_stream.content_length = request->contentLength;
+     request->netconn_stream.content_read = request->read_size;
+ 
+@@ -2911,7 +2914,7 @@ static DWORD set_content_length(http_request_t *request)
+         }
+ 
+         request->data_stream = &chunked_stream->data_stream;
+-        request->contentLength = ~0u;
++        request->contentLength = ~0;
+     }
+ 
+     if(request->hdr.decoding) {
+@@ -3301,7 +3304,7 @@ static DWORD HTTP_HttpOpenRequestW(http_session_t *session,
+     request->hdr.dwFlags = dwFlags;
+     request->hdr.dwContext = dwContext;
+     request->hdr.decoding = session->hdr.decoding;
+-    request->contentLength = ~0u;
++    request->contentLength = ~0;
+ 
+     request->netconn_stream.data_stream.vtbl = &netconn_stream_vtbl;
+     request->data_stream = &request->netconn_stream.data_stream;
+@@ -4925,7 +4928,7 @@ static DWORD HTTP_HttpSendRequestW(http_request_t *request, LPCWSTR lpszHeaders,
+         loop_next = FALSE;
+ 
+         if(redirected) {
+-            request->contentLength = ~0u;
++            request->contentLength = ~0;
+             request->bytesToWrite = 0;
+         }
+ 
+diff --git a/dlls/wininet/internet.h b/dlls/wininet/internet.h
+index f712fb6b64..40e51bec32 100644
+--- a/dlls/wininet/internet.h
++++ b/dlls/wininet/internet.h
+@@ -335,8 +335,8 @@ typedef struct {
+ 
+ typedef struct {
+     data_stream_t data_stream;
+-    DWORD content_length;
+-    DWORD content_read;
++    ULONGLONG content_length;
++    ULONGLONG content_read;
+ } netconn_stream_t;
+ 
+ #define READ_BUFFER_SIZE 8192
+@@ -372,7 +372,7 @@ typedef struct
+     struct HttpAuthInfo *proxyAuthInfo;
+ 
+     CRITICAL_SECTION read_section;  /* section to protect the following fields */
+-    DWORD contentLength;  /* total number of bytes to be read */
++    ULONGLONG contentLength;  /* total number of bytes to be read */
+     BOOL  read_gzip;      /* are we reading in gzip mode? */
+     DWORD read_pos;       /* current read position in read_buf */
+     DWORD read_size;      /* valid data size in read_buf */
+diff --git a/dlls/wininet/tests/http.c b/dlls/wininet/tests/http.c
+index fcbd95b837..a4521a94a4 100644
+--- a/dlls/wininet/tests/http.c
++++ b/dlls/wininet/tests/http.c
+@@ -5545,7 +5545,9 @@ static void test_large_content(int port)
+     };
+     test_request_t req;
+     DWORD sizelen, len;
++    DWORD read_size;
+     DWORD64 len64;
++    char buf[16];
+     BOOL ret;
+     size_t i;
+ 
+@@ -5594,6 +5596,24 @@ static void test_large_content(int port)
+     ok(len64 == ~0, "len64 %x%08x\n", (DWORD)(len64 >> 32), (DWORD)len64);
+ 
+     close_request(&req);
++
++    /* test internal use of HttpQueryInfo on large size */
++    open_read_test_request(port, &req,
++                           "HTTP/1.1 200 OK\r\n"
++                           "Server: winetest\r\n"
++                           "Content-Length: 4294967296\r\n"
++                           "\r\n"
++                           "xx");
++    read_expect_async(req.request, buf, 4, &read_size, "xx");
++    send_response_and_wait("yy1234567890", FALSE, buf, &read_size, "xxyy", 4, 0, 2);
++    read_expect_sync_data(req.request, buf, 10, "1234567890");
++
++    SET_EXPECT(INTERNET_STATUS_CLOSING_CONNECTION);
++    SET_EXPECT(INTERNET_STATUS_CONNECTION_CLOSED);
++    close_async_handle(req.session, 2);
++    CHECK_NOTIFIED(INTERNET_STATUS_CLOSING_CONNECTION);
++    CHECK_NOTIFIED(INTERNET_STATUS_CONNECTION_CLOSED);
++    close_connection();
+ }
+ 
+ static void test_http_connection(void)
+
+-- 
+2.17.1
+

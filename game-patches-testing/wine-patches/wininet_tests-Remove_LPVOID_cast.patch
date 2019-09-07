@@ -1,0 +1,24 @@
+From a1d966e49454dc3d3d24276d938b6218e117a440 Mon Sep 17 00:00:00 2001
+From: Andrey Gusev <andrey.goosev@gmail.com>
+Date: Mon, 2 Sep 2019 21:13:33 +0300
+Subject: [PATCH] wininet/tests: Remove LPVOID cast.
+
+Signed-off-by: Andrey Gusev <andrey.goosev@gmail.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/wininet/tests/http.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/dlls/wininet/tests/http.c b/dlls/wininet/tests/http.c
+index 6db33e4033b..cb96abe6128 100644
+--- a/dlls/wininet/tests/http.c
++++ b/dlls/wininet/tests/http.c
+@@ -5524,7 +5524,7 @@ static void test_http_connection(void)
+     si.hEvent = CreateEventW(NULL, 0, 0, NULL);
+     si.port = 7531;
+ 
+-    hThread = CreateThread(NULL, 0, server_thread, (LPVOID) &si, 0, &id);
++    hThread = CreateThread(NULL, 0, server_thread, &si, 0, &id);
+     ok( hThread != NULL, "create thread failed\n");
+ 
+     r = WaitForSingleObject(si.hEvent, 10000);

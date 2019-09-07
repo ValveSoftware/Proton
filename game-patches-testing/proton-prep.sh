@@ -27,7 +27,18 @@
 
     #WINE STAGING
     echo "applying staging patches"
-    ../wine-staging/patches/patchinstall.sh DESTDIR="." --all -W server-Desktop_Refcount -W ws2_32-TransmitFile -W winex11.drv-mouse-coorrds
+    ../wine-staging/patches/patchinstall.sh DESTDIR="." --all \
+    -W server-Desktop_Refcount \
+    -W ws2_32-TransmitFile \
+    -W winex11.drv-mouse-coorrds \
+    -W wininet-Cleanup \
+    -W winex11-_NET_ACTIVE_WINDOW \
+    -W winex11-WM_WINDOWPOSCHANGING \
+    -W dinput-SetActionMap-genre \
+    -W dinput-axis-recalc \
+    -W dinput-joy-mappings \
+    -W dinput-reconnect-joystick \
+    -W dinput-remap-joystick
 
     #WINE VULKAN
     echo "applying winevulkan patches"
@@ -93,6 +104,12 @@
 
     #need for VR to compile
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-wined3d_staging.patch
+
+    #wininet backport upstream changes post 4.15 release to allow large downloads
+    patch -Np1 < ../game-patches-testing/wine-patches/wininet_tests-Remove_LPVOID_cast.patch
+    patch -Np1 < ../game-patches-testing/wine-patches/wininet-Return_error_from_HttpQueryInfo_if_number_argument_is_invalid.patch
+    patch -Np1 < ../game-patches-testing/wine-patches/wininet-Include_limits_to_define_UINT_MAX_and_ULONG_MAX.patch
+    patch -Np1 < ../game-patches-testing/wine-patches/wininet-support_large_downloads.patch
 
     #WINE CUSTOM PATCHES
     #add your own custom patch lines below

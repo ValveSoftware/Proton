@@ -1,0 +1,25 @@
+From f5a3d43f45fdc5ab2b451e8592d4f8e1508f22a0 Mon Sep 17 00:00:00 2001
+From: Huw Davies <huw@codeweavers.com>
+Date: Thu, 5 Sep 2019 08:39:56 +0100
+Subject: [PATCH] wininet: Include limits.h to define UINT_MAX and ULONG_MAX.
+
+Fixes build error on macOS introduced by commit 968201424d92a2117d91ba0253f30a9c67018e7e
+
+Signed-off-by: Huw Davies <huw@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/wininet/http.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/dlls/wininet/http.c b/dlls/wininet/http.c
+index 065a8b74e72..fccbb02f175 100644
+--- a/dlls/wininet/http.c
++++ b/dlls/wininet/http.c
+@@ -43,6 +43,7 @@
+ #include <time.h>
+ #include <assert.h>
+ #include <errno.h>
++#include <limits.h>
+ 
+ #include "windef.h"
+ #include "winbase.h"
