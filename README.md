@@ -21,8 +21,10 @@ How to install:
 
 1. Either follow the build guide below, or download a release from the Releases section of this git repo.
 2. Extract the release tarball into `~/.steam/root/compatibilitytools.d/`, and restart steam. You will have to create the compatibilitytools.d folder.  
-3. Right click any game in steam and click Properties
-4. At the bottom of the General tab, Check "Force the use of a specific Steam Play compatibility tool" then select the new Proton version.
+3. Restart Steam.  
+3. Right click any game in Steam and click Properties  
+4. At the bottom of the General tab, Check "Force the use of a specific Steam Play compatibility tool" then select the new Proton version.  
+5. Launch the game.  
 
 How to build:  
 
