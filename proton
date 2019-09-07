@@ -710,6 +710,8 @@ if __name__ == "__main__":
 
     g_session.init_session()
 
+    import protonfixes
+
     if sys.version_info[0] == 2:
         binary_stdout = sys.stdout
     elif sys.version_info[0] == 3:
@@ -739,8 +741,6 @@ if __name__ == "__main__":
         sys.exit(1)
 
     sys.exit(0)
-
-import protonfixes
 
 #pylint --disable=C0301,C0326,C0330,C0111,C0103,R0902,C1801,R0914,R0912,R0915
 # vim: set syntax=python:
