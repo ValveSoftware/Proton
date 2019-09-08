@@ -2560,13 +2560,13 @@ index 1209a250b0..077c18ac10 100644
              }
          }
 @@ -1730,6 +1777,7 @@ static BOOL X11DRV_RawMotion( XGenericEventCookie *xev )
-     const double *values = event->valuators.values;
+     const double *raw_values = event->raw_values;
      RECT virtual_rect;
      INPUT input;
 +    POINT pt;
+     RAWINPUT raw_input;
      int i;
-     double dx = 0, dy = 0, val;
-     struct x11drv_thread_data *thread_data = x11drv_thread_data();
+     double dx = 0, dy = 0, raw_dx = 0, raw_dy = 0, raw_dwheel = 0, val, raw_val;
 @@ -1813,6 +1861,12 @@ static BOOL X11DRV_RawMotion( XGenericEventCookie *xev )
          return FALSE;
      }
@@ -2577,9 +2577,9 @@ index 1209a250b0..077c18ac10 100644
 +    input.u.mi.dx = pt.x;
 +    input.u.mi.dy = pt.y;
 +
-     TRACE( "pos %d,%d (event %f,%f)\n", input.u.mi.dx, input.u.mi.dy, dx, dy );
- 
-     input.type = INPUT_MOUSE;
+     /* Accumulate the fractional parts so they aren't lost after casting
+      *  successive motion values to integral fields.
+      *
 diff --git a/dlls/winex11.drv/opengl.c b/dlls/winex11.drv/opengl.c
 index 9de3ded4af..10e39dd43f 100644
 --- a/dlls/winex11.drv/opengl.c
@@ -4804,7 +4804,7 @@ index 23be3e56ac7..a20342c9d05 100644
      if (!clipping_cursor)
      {
 +        ERR("Failed to grab pointer\n");
-         disable_xinput2();
+         disable_xinput2_path();
          DestroyWindow( msg_hwnd );
          return FALSE;
 

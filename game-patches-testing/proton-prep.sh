@@ -31,7 +31,6 @@
     -W server-Desktop_Refcount \
     -W ws2_32-TransmitFile \
     -W winex11.drv-mouse-coorrds \
-    -W wininet-Cleanup \
     -W winex11-_NET_ACTIVE_WINDOW \
     -W winex11-WM_WINDOWPOSCHANGING \
     -W dinput-SetActionMap-genre \
@@ -77,6 +76,10 @@
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-amd_ags.patch
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-hide_prefix_update_window.patch
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-FS_bypass_compositor.patch
+
+    #rawinput patch
+    patch -Np1 < ../game-patches-testing/wine-patches/user32-raw_input.patch
+
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-fullscreen_hack_staging.patch
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-fullscreen_hack_realmodes.patch
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-vk_bits_4.5+.patch
@@ -110,6 +113,8 @@
     patch -Np1 < ../game-patches-testing/wine-patches/wininet-Return_error_from_HttpQueryInfo_if_number_argument_is_invalid.patch
     patch -Np1 < ../game-patches-testing/wine-patches/wininet-Include_limits_to_define_UINT_MAX_and_ULONG_MAX.patch
     patch -Np1 < ../game-patches-testing/wine-patches/wininet-support_large_downloads.patch
+
+    ./tools/make_requests
 
     #WINE CUSTOM PATCHES
     #add your own custom patch lines below
