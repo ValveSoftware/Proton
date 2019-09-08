@@ -2503,7 +2503,7 @@ index 1209a250b0..077c18ac10 100644
      {
          pt.x += data->whole_rect.left - data->client_rect.left;
          pt.y += data->whole_rect.top - data->client_rect.top;
-@@ -1432,13 +1471,19 @@ void CDECL X11DRV_SetCursor( HCURSOR handle )
+@@ -1432,7 +1432,13 @@ void CDECL X11DRV_SetCursor( HCURSOR handle )
  BOOL CDECL X11DRV_SetCursorPos( INT x, INT y )
  {
      struct x11drv_thread_data *data = x11drv_init_thread_data();
@@ -2516,8 +2516,10 @@ index 1209a250b0..077c18ac10 100644
 +    TRACE("real setting to %u, %u\n",
 +            pos.x, pos.y);
  
-     XWarpPointer( data->display, root_window, root_window, 0, 0, 0, 0, pos.x, pos.y );
-     data->warp_serial = NextRequest( data->display );
+     if (keyboard_grabbed)
+     {
+@@ -1457,7 +1463,7 @@ BOOL CDECL X11DRV_SetCursorPos( INT x, INT y )
+ 
      XNoOp( data->display );
      XFlush( data->display ); /* avoids bad mouse lag in games that do their own mouse warping */
 -    TRACE( "warped to %d,%d serial %lu\n", x, y, data->warp_serial );
@@ -2560,13 +2562,13 @@ index 1209a250b0..077c18ac10 100644
              }
          }
 @@ -1730,6 +1777,7 @@ static BOOL X11DRV_RawMotion( XGenericEventCookie *xev )
-     const double *raw_values = event->raw_values;
+     const double *values = event->valuators.values;
      RECT virtual_rect;
      INPUT input;
 +    POINT pt;
-     RAWINPUT raw_input;
      int i;
-     double dx = 0, dy = 0, raw_dx = 0, raw_dy = 0, raw_dwheel = 0, val, raw_val;
+     double dx = 0, dy = 0, val;
+     struct x11drv_thread_data *thread_data = x11drv_thread_data();
 @@ -1813,6 +1861,12 @@ static BOOL X11DRV_RawMotion( XGenericEventCookie *xev )
          return FALSE;
      }
@@ -2577,9 +2579,9 @@ index 1209a250b0..077c18ac10 100644
 +    input.u.mi.dx = pt.x;
 +    input.u.mi.dy = pt.y;
 +
-     /* Accumulate the fractional parts so they aren't lost after casting
-      *  successive motion values to integral fields.
-      *
+     TRACE( "pos %d,%d (event %f,%f)\n", input.u.mi.dx, input.u.mi.dy, dx, dy );
+ 
+     input.type = INPUT_MOUSE;
 diff --git a/dlls/winex11.drv/opengl.c b/dlls/winex11.drv/opengl.c
 index 9de3ded4af..10e39dd43f 100644
 --- a/dlls/winex11.drv/opengl.c
@@ -4454,298 +4456,6 @@ index 17c1e1ef0c0..dce71284e23 100644
      }
      return ret;
 
-From 7031b6d4b46256c97e9a953806b68fbb97b22e09 Mon Sep 17 00:00:00 2001
-From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
-Date: Tue, 11 Jun 2019 18:51:54 +0200
-Subject: [PATCH] winex11.drv: Do not react to keyboard grab focus events
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-
-Several window managers are sending FocusOut with NotifyGrab mode
-then FocusOut with NotifyWhileGrabbed mode when a window focus is lost,
-as a consequence of grabbing the keyboard input before changing window
-focus.
-
-This is the case during alt-tab, but keyboard can also be grabbed when
-bringing activity view or clicking on the title bar. In this cases
-NotifyWhileGrabbed events aren't sent until the window really loses
-foreground.
-
-In the same manner, when focus is restored, they usually send FocusIn
-with NotifyWhileGrabbed mode followed by FocusIn with NotifyUngrab mode
-when the keyboard grab is released.
-
-When bringing activity view back and forth, or clicking on the title
-bar, only NotifyUngrab event will be sent.
-
-In order to be consistent across WM and to help simplifying focus
-handling, just ignore focus events related to keyboard grabs.
-
-Signed-off-by: Rémi Bernon <rbernon@codeweavers.com>
----
- dlls/winex11.drv/event.c | 27 +++++++++++++++++++++++++++
- 1 file changed, 27 insertions(+)
-
-diff --git a/dlls/winex11.drv/event.c b/dlls/winex11.drv/event.c
-index ba68447d2e1..6d6ebb58ca3 100644
---- a/dlls/winex11.drv/event.c
-+++ b/dlls/winex11.drv/event.c
-@@ -764,6 +764,19 @@ static BOOL X11DRV_FocusIn( HWND hwnd, XEvent *xev )
-     if (event->detail == NotifyPointer) return FALSE;
-     if (hwnd == GetDesktopWindow()) return FALSE;
- 
-+    switch (event->mode)
-+    {
-+    case NotifyGrab:
-+        WARN( "unexpected FocusIn event with NotifyGrab mode\n" );
-+        break;
-+    case NotifyWhileGrabbed:
-+        break;
-+    case NotifyNormal:
-+        break;
-+    case NotifyUngrab:
-+        return TRUE; /* ignore wm specific NotifyUngrab / NotifyGrab events w.r.t focus */
-+    }
-+
-     if ((xic = X11DRV_get_ic( hwnd ))) XSetICFocus( xic );
-     if (use_take_focus)
-     {
-@@ -865,6 +878,20 @@ static BOOL X11DRV_FocusOut( HWND hwnd, XEvent *xev )
-         return TRUE;
-     }
-     if (!hwnd) return FALSE;
-+
-+    switch (event->mode)
-+    {
-+    case NotifyUngrab:
-+        WARN( "unexpected FocusOut event with NotifyUngrab mode\n" );
-+        break;
-+    case NotifyNormal:
-+        break;
-+    case NotifyWhileGrabbed:
-+        break;
-+    case NotifyGrab:
-+        return TRUE; /* ignore wm specific NotifyUngrab / NotifyGrab events w.r.t focus */
-+    }
-+
-     focus_out( event->display, hwnd );
-     return TRUE;
- }
-
-From 5819d9af91b986f8fe8f5a29ad40c1ac0cc67337 Mon Sep 17 00:00:00 2001
-From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
-Date: Tue, 11 Jun 2019 18:51:55 +0200
-Subject: [PATCH] winex11.drv: Only grab or warp the cursor when keyboard isn't
- grabbed
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-
-When the window manager has taken a keyboard grab, it may be going to
-move the window itself, so the application should not move the cursor
-at the same time.
-
-Signed-off-by: Rémi Bernon <rbernon@codeweavers.com>
----
- dlls/winex11.drv/event.c  |  9 +++++++++
- dlls/winex11.drv/mouse.c  | 12 ++++++++++++
- dlls/winex11.drv/x11drv.h |  1 +
- 3 files changed, 22 insertions(+)
-
-diff --git a/dlls/winex11.drv/event.c b/dlls/winex11.drv/event.c
-index 6d6ebb58ca3..3dbcdad3aae 100644
---- a/dlls/winex11.drv/event.c
-+++ b/dlls/winex11.drv/event.c
-@@ -155,6 +155,9 @@ static const char * event_names[MAX_EVENT_HANDLERS] =
-     "SelectionNotify", "ColormapNotify", "ClientMessage", "MappingNotify", "GenericEvent"
- };
- 
-+/* is someone else grabbing the keyboard, for example the WM, when manipulating the window */
-+BOOL keyboard_grabbed = FALSE;
-+
- int xinput2_opcode = 0;
- 
- /* return the name of an X event */
-@@ -770,10 +773,13 @@ static BOOL X11DRV_FocusIn( HWND hwnd, XEvent *xev )
-         WARN( "unexpected FocusIn event with NotifyGrab mode\n" );
-         break;
-     case NotifyWhileGrabbed:
-+        keyboard_grabbed = TRUE;
-         break;
-     case NotifyNormal:
-+        keyboard_grabbed = FALSE;
-         break;
-     case NotifyUngrab:
-+        keyboard_grabbed = FALSE;
-         return TRUE; /* ignore wm specific NotifyUngrab / NotifyGrab events w.r.t focus */
-     }
- 
-@@ -885,10 +891,13 @@ static BOOL X11DRV_FocusOut( HWND hwnd, XEvent *xev )
-         WARN( "unexpected FocusOut event with NotifyUngrab mode\n" );
-         break;
-     case NotifyNormal:
-+        keyboard_grabbed = FALSE;
-         break;
-     case NotifyWhileGrabbed:
-+        keyboard_grabbed = TRUE;
-         break;
-     case NotifyGrab:
-+        keyboard_grabbed = TRUE;
-         return TRUE; /* ignore wm specific NotifyUngrab / NotifyGrab events w.r.t focus */
-     }
- 
-diff --git a/dlls/winex11.drv/mouse.c b/dlls/winex11.drv/mouse.c
-index dce71284e23..12e59a370fb 100644
---- a/dlls/winex11.drv/mouse.c
-+++ b/dlls/winex11.drv/mouse.c
-@@ -397,6 +397,12 @@ static BOOL grab_clipping_window( const RECT *clip )
-                                     GetModuleHandleW(0), NULL )))
-         return TRUE;
- 
-+    if (keyboard_grabbed)
-+    {
-+        WARN( "refusing to clip to %s\n", wine_dbgstr_rect(clip) );
-+        return FALSE;
-+    }
-+
-     /* enable XInput2 unless we are already clipping */
-     if (!data->clip_hwnd) enable_xinput2();
- 
-@@ -1476,6 +1482,12 @@ BOOL CDECL X11DRV_SetCursorPos( INT x, INT y )
-     fs_hack_user_to_real(&pos);
-     pos = virtual_screen_to_root( pos.x, pos.y );
- 
-+    if (keyboard_grabbed)
-+    {
-+        WARN( "refusing to warp to %u, %u\n", pos.x, pos.y );
-+        return FALSE;
-+    }
-+
-     TRACE("real setting to %u, %u\n",
-             pos.x, pos.y);
- 
-diff --git a/dlls/winex11.drv/x11drv.h b/dlls/winex11.drv/x11drv.h
-index e251cb42d22..a2da967db57 100644
---- a/dlls/winex11.drv/x11drv.h
-+++ b/dlls/winex11.drv/x11drv.h
-@@ -386,6 +386,7 @@ extern Colormap default_colormap DECLSPEC_HIDDEN;
- extern XPixmapFormatValues **pixmap_formats DECLSPEC_HIDDEN;
- extern Window root_window DECLSPEC_HIDDEN;
- extern BOOL clipping_cursor DECLSPEC_HIDDEN;
-+extern BOOL keyboard_grabbed DECLSPEC_HIDDEN;
- extern unsigned int screen_bpp DECLSPEC_HIDDEN;
- extern BOOL use_xkb DECLSPEC_HIDDEN;
- extern BOOL usexrandr DECLSPEC_HIDDEN;
-
-From 49b5f916e675f9d90a1d78eb258fcf6f36f5114e Mon Sep 17 00:00:00 2001
-From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
-Date: Tue, 11 Jun 2019 18:51:56 +0200
-Subject: [PATCH] winex11.drv: Retry last ClipCursor when grab is released
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-
-As we ignore these NotifyGrab / NotifyUngrab w.r.t focus decisions,
-some applications are unaware of mouse grabs being lost and sometimes
-cursor clipping is lost. We have to keep the last clip rectangle and
-restore it when grab is released.
-
-Signed-off-by: Rémi Bernon <rbernon@codeweavers.com>
----
- dlls/winex11.drv/event.c  |  8 ++++++++
- dlls/winex11.drv/mouse.c  | 22 ++++++++++++++++++++++
- dlls/winex11.drv/x11drv.h |  1 +
- 3 files changed, 31 insertions(+)
-
-diff --git a/dlls/winex11.drv/event.c b/dlls/winex11.drv/event.c
-index 3dbcdad3aae..231807a137d 100644
---- a/dlls/winex11.drv/event.c
-+++ b/dlls/winex11.drv/event.c
-@@ -780,6 +780,7 @@ static BOOL X11DRV_FocusIn( HWND hwnd, XEvent *xev )
-         break;
-     case NotifyUngrab:
-         keyboard_grabbed = FALSE;
-+        retry_grab_clipping_window();
-         return TRUE; /* ignore wm specific NotifyUngrab / NotifyGrab events w.r.t focus */
-     }
- 
-@@ -898,6 +899,13 @@ static BOOL X11DRV_FocusOut( HWND hwnd, XEvent *xev )
-         break;
-     case NotifyGrab:
-         keyboard_grabbed = TRUE;
-+
-+        /* This will do nothing due to keyboard_grabbed == TRUE, but it
-+         * will save the current clipping rect so we can restore it on
-+         * FocusIn with NotifyUngrab mode.
-+         */
-+        retry_grab_clipping_window();
-+
-         return TRUE; /* ignore wm specific NotifyUngrab / NotifyGrab events w.r.t focus */
-     }
- 
-diff --git a/dlls/winex11.drv/mouse.c b/dlls/winex11.drv/mouse.c
-index 12e59a370fb..23be3e56ac7 100644
---- a/dlls/winex11.drv/mouse.c
-+++ b/dlls/winex11.drv/mouse.c
-@@ -125,6 +125,8 @@ XContext cursor_context = 0;
- static HWND cursor_window;
- static HCURSOR last_cursor;
- static DWORD last_cursor_change;
-+static RECT last_clip_rect;
-+static BOOL last_clip_refused;
- static RECT clip_rect;
- static Cursor create_cursor( HANDLE handle );
- 
-@@ -400,8 +402,14 @@ static BOOL grab_clipping_window( const RECT *clip )
-     if (keyboard_grabbed)
-     {
-         WARN( "refusing to clip to %s\n", wine_dbgstr_rect(clip) );
-+        last_clip_refused = TRUE;
-+        last_clip_rect = *clip;
-         return FALSE;
-     }
-+    else
-+    {
-+        last_clip_refused = FALSE;
-+    }
- 
-     /* enable XInput2 unless we are already clipping */
-     if (!data->clip_hwnd) enable_xinput2();
-@@ -495,6 +503,20 @@ void reset_clipping_window(void)
-     ClipCursor( NULL );  /* make sure the clip rectangle is reset too */
- }
- 
-+/***********************************************************************
-+ *      retry_grab_clipping_window
-+ *
-+ * Restore the current clip rectangle or retry the last one if it has
-+ * been refused because of an active keyboard grab.
-+ */
-+void retry_grab_clipping_window(void)
-+{
-+    if (clipping_cursor)
-+        ClipCursor( &clip_rect );
-+    else if (last_clip_refused)
-+        ClipCursor( &last_clip_rect );
-+}
-+
- BOOL CDECL X11DRV_ClipCursor( const RECT *clip );
- 
- /***********************************************************************
-diff --git a/dlls/winex11.drv/x11drv.h b/dlls/winex11.drv/x11drv.h
-index a2da967db57..97500ae6d9b 100644
---- a/dlls/winex11.drv/x11drv.h
-+++ b/dlls/winex11.drv/x11drv.h
-@@ -654,6 +654,7 @@ extern void sync_window_cursor( Window window ) DECLSPEC_HIDDEN;
- extern LRESULT clip_cursor_notify( HWND hwnd, HWND new_clip_hwnd ) DECLSPEC_HIDDEN;
- extern void ungrab_clipping_window(void) DECLSPEC_HIDDEN;
- extern void reset_clipping_window(void) DECLSPEC_HIDDEN;
-+extern void retry_grab_clipping_window(void) DECLSPEC_HIDDEN;
- extern BOOL clip_fullscreen_window( HWND hwnd, BOOL reset ) DECLSPEC_HIDDEN;
- extern void move_resize_window( HWND hwnd, int dir ) DECLSPEC_HIDDEN;
- extern void X11DRV_InitKeyboard( Display *display ) DECLSPEC_HIDDEN;
-
 From fc8b8204984c0e2c7f9818b93d9b015a4238717f Mon Sep 17 00:00:00 2001
 From: Zhiyi Zhang <zzhang@codeweavers.com>
 Date: Mon, 10 Jun 2019 21:23:03 +0800
@@ -4804,7 +4514,7 @@ index 23be3e56ac7..a20342c9d05 100644
      if (!clipping_cursor)
      {
 +        ERR("Failed to grab pointer\n");
-         disable_xinput2_path();
+         disable_xinput2();
          DestroyWindow( msg_hwnd );
          return FALSE;
 

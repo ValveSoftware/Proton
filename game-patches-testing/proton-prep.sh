@@ -13,6 +13,7 @@
     git reset --hard HEAD
     git clean -xdf
     patch -Np1 < ../game-patches-testing/dxvk-patches/valve-dxvk-avoid-spamming-log-with-requests-for-IWineD3D11Texture2D.patch
+    patch -Np1 < ../game-patches-testing/dxvk-patches/dxvk-async.patch
     cd ..
 
     #WINE
@@ -31,8 +32,6 @@
     -W server-Desktop_Refcount \
     -W ws2_32-TransmitFile \
     -W winex11.drv-mouse-coorrds \
-    -W winex11-_NET_ACTIVE_WINDOW \
-    -W winex11-WM_WINDOWPOSCHANGING \
     -W dinput-SetActionMap-genre \
     -W dinput-axis-recalc \
     -W dinput-joy-mappings \
@@ -68,6 +67,9 @@
     echo "applying fsync patches"
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-fsync_staging.patch
 
+    patch -Np1 < ../game-patches-testing/wine-patches/winex11-mouse_focus_backport.patch
+    patch -Np1 < ../game-patches-testing/wine-patches/user32-nolegacy.patch
+
     #PROTON
     echo "applying proton patches"
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-protonify_staging.patch
@@ -76,10 +78,6 @@
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-amd_ags.patch
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-hide_prefix_update_window.patch
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-FS_bypass_compositor.patch
-
-    #rawinput patch
-    patch -Np1 < ../game-patches-testing/wine-patches/user32-raw_input.patch
-
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-fullscreen_hack_staging.patch
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-fullscreen_hack_realmodes.patch
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-vk_bits_4.5+.patch
