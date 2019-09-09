@@ -13,7 +13,7 @@ bool cppIVRRenderModels_IVRRenderModels_002_LoadRenderModel(void *linux_side, co
 {
     RenderModel_t *lin;
     bool _ret;
-    _ret = ((IVRRenderModels*)linux_side)->LoadRenderModel((const char *)pchRenderModelName, &lin);
+    _ret = ((IVRRenderModels*)linux_side)->LoadRenderModel((const char *)pchRenderModelName, ppRenderModel ? &lin : nullptr);
     if(_ret == 0)
         *ppRenderModel = struct_RenderModel_t_0915_wrap(lin);
     return _ret;
@@ -28,7 +28,7 @@ bool cppIVRRenderModels_IVRRenderModels_002_LoadTexture(void *linux_side, Textur
 {
     RenderModel_TextureMap_t *lin;
     bool _ret;
-    _ret = ((IVRRenderModels*)linux_side)->LoadTexture((vr::TextureID_t)textureId, &lin);
+    _ret = ((IVRRenderModels*)linux_side)->LoadTexture((vr::TextureID_t)textureId, ppTexture ? &lin : nullptr);
     if(_ret == 0)
         *ppTexture = struct_RenderModel_TextureMap_t_0915_wrap(lin);
     return _ret;

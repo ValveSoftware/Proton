@@ -13,7 +13,7 @@ vr::EVRRenderModelError cppIVRRenderModels_IVRRenderModels_005_LoadRenderModel_A
 {
     RenderModel_t *lin;
     vr::EVRRenderModelError _ret;
-    _ret = ((IVRRenderModels*)linux_side)->LoadRenderModel_Async((const char *)pchRenderModelName, &lin);
+    _ret = ((IVRRenderModels*)linux_side)->LoadRenderModel_Async((const char *)pchRenderModelName, ppRenderModel ? &lin : nullptr);
     if(_ret == 0)
         *ppRenderModel = struct_RenderModel_t_1015_wrap(lin);
     return _ret;
@@ -28,7 +28,7 @@ vr::EVRRenderModelError cppIVRRenderModels_IVRRenderModels_005_LoadTexture_Async
 {
     RenderModel_TextureMap_t *lin;
     vr::EVRRenderModelError _ret;
-    _ret = ((IVRRenderModels*)linux_side)->LoadTexture_Async((vr::TextureID_t)textureId, &lin);
+    _ret = ((IVRRenderModels*)linux_side)->LoadTexture_Async((vr::TextureID_t)textureId, ppTexture ? &lin : nullptr);
     if(_ret == 0)
         *ppTexture = struct_RenderModel_TextureMap_t_1015_wrap(lin);
     return _ret;

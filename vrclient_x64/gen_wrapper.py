@@ -469,7 +469,7 @@ def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, e
             if do_lin_to_win and do_lin_to_win[1] == param.spelling or \
                     do_wrap and do_wrap[1] == param.spelling:
                 cfile.write(", %s" % param.spelling)
-                cpp.write("&lin")
+                cpp.write("%s ? &lin : nullptr" % param.spelling)
                 if do_lin_to_win and \
                         (do_lin_to_win[0] == "VREvent_t" or \
                          do_lin_to_win[0] == "VRControllerState001_t"):
@@ -484,7 +484,7 @@ def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, e
                 cfile.write(", %s" % param.spelling)
                 next_is_size = False
                 if param.type.spelling == "uint32_t":
-                    cpp.write("sizeof(lin)")
+                    cpp.write("%s ? sizeof(lin) : 0" % param.spelling)
                 else:
                     cpp.write("(%s)%s" % (param.type.spelling, param.spelling))
             elif "&" in param.type.spelling:
@@ -518,7 +518,8 @@ def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, e
             if path_conv["w2l_arrays"][i]:
                 cfile.write("    vrclient_free_stringlist(lin_%s);\n" % path_conv["w2l_names"][i])
     if do_lin_to_win:
-        cpp.write("    struct_%s_%s_lin_to_win(&lin, %s);\n" % (strip_ns(do_lin_to_win[0]), display_sdkver(sdkver), do_lin_to_win[1]))
+        cpp.write("    if(%s)\n" % do_lin_to_win[1])
+        cpp.write("        struct_%s_%s_lin_to_win(&lin, %s);\n" % (strip_ns(do_lin_to_win[0]), display_sdkver(sdkver), do_lin_to_win[1]))
         cpp.write("    return _ret;\n")
     if do_wrap:
         cpp.write("    if(_ret == 0)\n")
