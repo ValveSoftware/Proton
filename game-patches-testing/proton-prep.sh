@@ -67,7 +67,6 @@
     echo "applying fsync patches"
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-fsync_staging.patch
 
-    patch -Np1 < ../game-patches-testing/wine-patches/winex11-mouse_focus_backport.patch
     patch -Np1 < ../game-patches-testing/wine-patches/user32-nolegacy.patch
 
     #PROTON
@@ -105,12 +104,6 @@
 
     #need for VR to compile
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-wined3d_staging.patch
-
-    #wininet backport upstream changes post 4.15 release to allow large downloads
-    patch -Np1 < ../game-patches-testing/wine-patches/wininet_tests-Remove_LPVOID_cast.patch
-    patch -Np1 < ../game-patches-testing/wine-patches/wininet-Return_error_from_HttpQueryInfo_if_number_argument_is_invalid.patch
-    patch -Np1 < ../game-patches-testing/wine-patches/wininet-Include_limits_to_define_UINT_MAX_and_ULONG_MAX.patch
-    patch -Np1 < ../game-patches-testing/wine-patches/wininet-support_large_downloads.patch
 
     ./tools/make_requests
 
