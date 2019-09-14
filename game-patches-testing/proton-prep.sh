@@ -16,6 +16,14 @@
     patch -Np1 < ../game-patches-testing/dxvk-patches/dxvk-async.patch
     cd ..
 
+    # Valve DXVK patches
+    cd d9vk
+    git reset --hard HEAD
+    git clean -xdf
+    # revert this as it breaks "new game" in Warlock: Master of the Arcane
+    git revert --no-commit 3909a78579e7fef47bdda38562595f7f36e6c0b6
+    cd ..
+
     #WINE
     cd wine
     git reset --hard HEAD
