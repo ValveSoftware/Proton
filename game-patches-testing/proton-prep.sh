@@ -94,22 +94,6 @@
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-apply_LargeAddressAware_fix_for_Bayonetta.patch
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-Set_amd_ags_x64_to_built_in_for_Wolfenstein_2.patch
 
-    #PROTON HOTFIXES
-    echo "applying proton hotfix patches"
-
-    #https://github.com/ValveSoftware/wine/pull/65/files
-    patch -Np1 < ../game-patches-testing/proton-hotfixes/0001-dinput-Remove-is_xbox_gamepad-flag-from-SDL-joystick.patch
-    patch -Np1 < ../game-patches-testing/proton-hotfixes/0002-dinput-Don-t-enumerate-joysticks-that-are-blackliste.patch
-    patch -Np1 < ../game-patches-testing/proton-hotfixes/0003-winebus.sys-Ignore-blacklisted-SDL-joysticks-too.patch
-    patch -Np1 < ../game-patches-testing/proton-hotfixes/0004-winebus.sys-Override-Steam-virtual-controller-vid-pi.patch
-    patch -Np1 < ../game-patches-testing/proton-hotfixes/0005-dinput-Override-Steam-virtual-controller-name.patch
-    patch -Np1 < ../game-patches-testing/proton-hotfixes/0006-winebus-Extract-bluetooth-info-from-uevent.patch
-    patch -Np1 < ../game-patches-testing/proton-hotfixes/0007-winebus.sys-Bluetooth-doesn-t-report-USB-device-vers.patch
-    patch -Np1 < ../game-patches-testing/proton-hotfixes/0008-dinput-Return-real-rawinput-path-for-dinput-device.patch
-    patch -Np1 < ../game-patches-testing/proton-hotfixes/0009-dinput-Use-axis-ID-to-look-up-properties-not-data-of.patch
-    patch -Np1 < ../game-patches-testing/proton-hotfixes/0010-dinput-Fix-DS4-object-enumeration-order.patch
-
-
     #need for VR to compile
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-wined3d_staging.patch
 
