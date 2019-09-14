@@ -4663,3 +4663,31 @@ index bcb927fd581..20de45bc595 100644
                          }
  
                          futexes[i].addr = &event->signaled;
+
+From 9b714d4047bf136b87b94fa27dac38bbbb7d68ac Mon Sep 17 00:00:00 2001
+From: "Pierre-Loup A. Griffais" <pgriffais@valvesoftware.com>
+Date: Tue, 10 Sep 2019 11:49:05 -0700
+Subject: [PATCH] ntdll: fix spin count for fsync semaphores
+
+---
+ dlls/ntdll/fsync.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/dlls/ntdll/fsync.c b/dlls/ntdll/fsync.c
+index 20de45bc595..b3871ad3834 100644
+--- a/dlls/ntdll/fsync.c
++++ b/dlls/ntdll/fsync.c
+@@ -862,11 +862,11 @@ static NTSTATUS __fsync_wait_objects( DWORD count, const HANDLE *handles,
+                         {
+                             do
+                             {
+-                                if (!(current = semaphore->count)) break;
++                                if (!(current = semaphore->count)) goto out;
+                             } while (__sync_val_compare_and_swap( &semaphore->count, current, current - 1 ) != current);
+                             small_pause();
+                         }
+-
++out:
+                         if (current)
+                         {
+                             TRACE("Woken up by handle %p [%d].\n", handles[i], i);
