@@ -563,6 +563,8 @@ class Session:
         if "vkd3d" in self.compat_config:
             self.dlloverrides["dxgi"] = "b"
 
+        import protonfixes
+
         s = ""
         for dll in self.dlloverrides:
             setting = self.dlloverrides[dll]
@@ -709,8 +711,6 @@ if __name__ == "__main__":
     g_proton.make_default_prefix()
 
     g_session.init_session()
-
-    import protonfixes
 
     if sys.version_info[0] == 2:
         binary_stdout = sys.stdout
