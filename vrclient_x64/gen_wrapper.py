@@ -376,7 +376,6 @@ def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, e
             while real_type.kind == clang.cindex.TypeKind.POINTER:
                 real_type = real_type.get_pointee()
             if param.type.kind == clang.cindex.TypeKind.POINTER:
-                print("checking param %s" % real_type.spelling)
                 if strip_ns(param.type.get_pointee().get_canonical().spelling) in user_structs:
                     do_lin_to_win = (strip_ns(param.type.get_pointee().get_canonical().spelling), param.spelling)
                     typename = "win" + do_lin_to_win[0] + "_" + display_sdkver(sdkver) + " *"
@@ -888,6 +887,9 @@ def handle_struct(sdkver, struct):
                     #TODO: if this is a struct, or packed differently, we'll have to
                     # copy each element in a for-loop
                     cppfile.write("    memcpy(win->%s, lin->%s, sizeof(win->%s));\n" % (m.displayname, m.displayname, m.displayname))
+                elif m.type.kind == clang.cindex.TypeKind.RECORD and \
+                        struct_needs_conversion(m.type):
+                    cppfile.write("    lin_to_win_struct_%s_%s(&lin->%s, &win->%s);\n" % (strip_ns(m.type.spelling), display_sdkver(sdkver), m.displayname, m.displayname))
                 else:
                     cppfile.write("    win->%s = lin->%s;\n" % (m.displayname, m.displayname))
 
@@ -906,6 +908,9 @@ def handle_struct(sdkver, struct):
                     #TODO: if this is a struct, or packed differently, we'll have to
                     # copy each element in a for-loop
                     cppfile.write("    memcpy(lin->%s, win->%s, sizeof(lin->%s));\n" % (m.displayname, m.displayname, m.displayname))
+                elif m.type.kind == clang.cindex.TypeKind.RECORD and \
+                        struct_needs_conversion(m.type):
+                    cppfile.write("    win_to_lin_struct_%s_%s(&win->%s, &lin->%s);\n" % (m.type.spelling, display_sdkver(sdkver), m.displayname, m.displayname))
                 else:
                     cppfile.write("    lin->%s = win->%s;\n" % (m.displayname, m.displayname))
 

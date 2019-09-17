@@ -74,7 +74,7 @@ void struct_RenderModel_t_093_lin_to_win(void *l, void *w)
     win->unVertexCount = lin->unVertexCount;
     win->rIndexData = lin->rIndexData;
     win->unTriangleCount = lin->unTriangleCount;
-    win->diffuseTexture = lin->diffuseTexture;
+    lin_to_win_struct_RenderModel_TextureMap_t_093(&lin->diffuseTexture, &win->diffuseTexture);
 }
 
 void struct_RenderModel_t_093_win_to_lin(void *w, void *l)
@@ -86,7 +86,7 @@ void struct_RenderModel_t_093_win_to_lin(void *w, void *l)
     lin->unVertexCount = win->unVertexCount;
     lin->rIndexData = win->rIndexData;
     lin->unTriangleCount = win->unTriangleCount;
-    lin->diffuseTexture = win->diffuseTexture;
+    win_to_lin_struct_vr::RenderModel_TextureMap_t_093(&win->diffuseTexture, &lin->diffuseTexture);
 }
 
 struct winRenderModel_t_093 *struct_RenderModel_t_093_wrap(void *l)
