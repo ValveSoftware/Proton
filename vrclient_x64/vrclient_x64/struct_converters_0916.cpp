@@ -25,6 +25,16 @@ void struct_VREvent_t_0916_lin_to_win(void *l, void *w)
     win->data = lin->data;
 }
 
+void struct_VREvent_t_0916_win_to_lin(void *w, void *l)
+{
+    struct winVREvent_t_0916 *win = (struct winVREvent_t_0916 *)w;
+    VREvent_t *lin = (VREvent_t *)l;
+    lin->eventType = win->eventType;
+    lin->trackedDeviceIndex = win->trackedDeviceIndex;
+    lin->eventAgeSeconds = win->eventAgeSeconds;
+    lin->data = win->data;
+}
+
 #pragma pack(push, 8)
 struct winVRControllerState001_t_0916 {
     uint32_t unPacketNum;
@@ -44,6 +54,16 @@ void struct_VRControllerState001_t_0916_lin_to_win(void *l, void *w)
     memcpy(win->rAxis, lin->rAxis, sizeof(win->rAxis));
 }
 
+void struct_VRControllerState001_t_0916_win_to_lin(void *w, void *l)
+{
+    struct winVRControllerState001_t_0916 *win = (struct winVRControllerState001_t_0916 *)w;
+    VRControllerState001_t *lin = (VRControllerState001_t *)l;
+    lin->unPacketNum = win->unPacketNum;
+    lin->ulButtonPressed = win->ulButtonPressed;
+    lin->ulButtonTouched = win->ulButtonTouched;
+    memcpy(lin->rAxis, win->rAxis, sizeof(lin->rAxis));
+}
+
 #pragma pack(push, 8)
 struct winRenderModel_TextureMap_t_0916 {
     uint16_t unWidth;
@@ -53,6 +73,24 @@ struct winRenderModel_TextureMap_t_0916 {
     RenderModel_TextureMap_t *linux_side;
 }  __attribute__ ((ms_struct));
 #pragma pack(pop)
+
+void struct_RenderModel_TextureMap_t_0916_lin_to_win(void *l, void *w)
+{
+    struct winRenderModel_TextureMap_t_0916 *win = (struct winRenderModel_TextureMap_t_0916 *)w;
+    RenderModel_TextureMap_t *lin = (RenderModel_TextureMap_t *)l;
+    win->unWidth = lin->unWidth;
+    win->unHeight = lin->unHeight;
+    win->rubTextureMapData = lin->rubTextureMapData;
+}
+
+void struct_RenderModel_TextureMap_t_0916_win_to_lin(void *w, void *l)
+{
+    struct winRenderModel_TextureMap_t_0916 *win = (struct winRenderModel_TextureMap_t_0916 *)w;
+    RenderModel_TextureMap_t *lin = (RenderModel_TextureMap_t *)l;
+    lin->unWidth = win->unWidth;
+    lin->unHeight = win->unHeight;
+    lin->rubTextureMapData = win->rubTextureMapData;
+}
 
 struct winRenderModel_TextureMap_t_0916 *struct_RenderModel_TextureMap_t_0916_wrap(void *l)
 {
@@ -83,6 +121,28 @@ struct winRenderModel_t_0916 {
     RenderModel_t *linux_side;
 }  __attribute__ ((ms_struct));
 #pragma pack(pop)
+
+void struct_RenderModel_t_0916_lin_to_win(void *l, void *w)
+{
+    struct winRenderModel_t_0916 *win = (struct winRenderModel_t_0916 *)w;
+    RenderModel_t *lin = (RenderModel_t *)l;
+    win->rVertexData = lin->rVertexData;
+    win->unVertexCount = lin->unVertexCount;
+    win->rIndexData = lin->rIndexData;
+    win->unTriangleCount = lin->unTriangleCount;
+    win->diffuseTextureId = lin->diffuseTextureId;
+}
+
+void struct_RenderModel_t_0916_win_to_lin(void *w, void *l)
+{
+    struct winRenderModel_t_0916 *win = (struct winRenderModel_t_0916 *)w;
+    RenderModel_t *lin = (RenderModel_t *)l;
+    lin->rVertexData = win->rVertexData;
+    lin->unVertexCount = win->unVertexCount;
+    lin->rIndexData = win->rIndexData;
+    lin->unTriangleCount = win->unTriangleCount;
+    lin->diffuseTextureId = win->diffuseTextureId;
+}
 
 struct winRenderModel_t_0916 *struct_RenderModel_t_0916_wrap(void *l)
 {
