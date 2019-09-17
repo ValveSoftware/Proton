@@ -5,6 +5,8 @@
 
 from __future__ import print_function
 
+CLANG_PATH='/usr/lib/clang/8.0.1'
+
 import pprint
 import sys
 import clang.cindex
@@ -699,6 +701,24 @@ WINE_DEFAULT_DEBUG_CHANNEL(vrclient);
 
     generate_c_api_thunk_tests(winclassname, methods, method_names)
 
+def strip_const(typename):
+    return typename.replace("const ", "", 1)
+
+def find_windows_struct(struct):
+    for child in list(windows_build.cursor.get_children()):
+        if strip_const(struct.spelling) == child.spelling:
+            return child.type
+    return None
+
+def get_field_attribute_str(field):
+    if field.type.kind != clang.cindex.TypeKind.RECORD:
+        return ""
+    win_struct = find_windows_struct(field.type)
+    if win_struct is None:
+        align = field.type.get_align()
+    else:
+        align = win_struct.get_align()
+    return " __attribute__((aligned(" + str(align) + ")))"
 
 generated_struct_handlers = []
 cpp_files_need_close_brace = []
@@ -744,7 +764,7 @@ def handle_struct(sdkver, struct, which):
             if m.type.kind == clang.cindex.TypeKind.CONSTANTARRAY:
                 cppfile.write("    %s %s[%u];\n" % (m.type.element_type.spelling, m.displayname, m.type.element_count))
             else:
-                cppfile.write("    %s %s;\n" % (m.type.spelling, m.displayname))
+                cppfile.write("    %s %s%s;\n" % (m.type.spelling, m.displayname, get_field_attribute_str(m)))
     if which == WRAPPERS:
         cppfile.write("\n    %s *linux_side;\n" % struct.displayname)
     cppfile.write("}  __attribute__ ((ms_struct));\n")
@@ -1105,7 +1125,8 @@ for sdkver in sdk_versions:
         if not os.path.isfile(input_name):
             continue
         index = clang.cindex.Index.create()
-        tu = index.parse(input_name, args=['-x', 'c++', '-std=c++11', '-DGNUC', '-Iopenvr_%s/' % sdkver, '-I/usr/lib/clang/8.0.1/include/'])
+        windows_build = index.parse(input_name, args=['-x', 'c++', '-m32', '-Iopenvr_%s/' % sdkver, '-I' + CLANG_PATH + '/include/', '-mms-bitfields', '-U__linux__', '-Wno-incompatible-ms-struct'])
+        tu = index.parse(input_name, args=['-x', 'c++', '-std=c++11', '-DGNUC', '-Iopenvr_%s/' % sdkver, '-I' + CLANG_PATH + '/include/'])
 
         diagnostics = list(tu.diagnostics)
         if len(diagnostics) > 0:

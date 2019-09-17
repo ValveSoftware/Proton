@@ -41,7 +41,7 @@ struct winRenderModel_t_094 {
     uint32_t unVertexCount;
     const uint16_t * rIndexData;
     uint32_t unTriangleCount;
-    vr::RenderModel_TextureMap_t diffuseTexture;
+    vr::RenderModel_TextureMap_t diffuseTexture __attribute__((aligned(4)));
 
     RenderModel_t *linux_side;
 }  __attribute__ ((ms_struct));
