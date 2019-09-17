@@ -10,7 +10,7 @@ extern "C" {
 struct winVREvent_t_0912 {
     vr::EVREventType eventType;
     vr::TrackedDeviceIndex_t trackedDeviceIndex;
-    vr::VREvent_Data_t data;
+    vr::VREvent_Data_t data __attribute__((aligned(8)));
     float eventAgeSeconds;
 }  __attribute__ ((ms_struct));
 #pragma pack(pop)
@@ -67,7 +67,7 @@ struct winCameraVideoStreamFrame_t_0912 {
     double m_flFrameElapsedTime;
     double m_flFrameCaptureTime;
     bool m_bPoseIsValid;
-    vr::HmdMatrix34_t m_matDeviceToAbsoluteTracking;
+    vr::HmdMatrix34_t m_matDeviceToAbsoluteTracking __attribute__((aligned(4)));
     float m_Pad[4];
     void * m_pImageData;
 }  __attribute__ ((ms_struct));
@@ -120,7 +120,7 @@ struct winCompositor_FrameTiming_0912 {
     float frameVSync;
     uint32_t droppedFrames;
     uint32_t frameIndex;
-    vr::TrackedDevicePose_t pose;
+    vr::TrackedDevicePose_t pose __attribute__((aligned(4)));
     float prediction;
     float m_flFrameIntervalMs;
     float m_flSceneRenderCpuMs;

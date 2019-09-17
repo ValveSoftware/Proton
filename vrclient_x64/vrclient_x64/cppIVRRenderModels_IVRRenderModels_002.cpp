@@ -71,7 +71,14 @@ uint32_t cppIVRRenderModels_IVRRenderModels_002_GetComponentRenderModelName(void
 
 bool cppIVRRenderModels_IVRRenderModels_002_GetComponentState(void *linux_side, const char * pchRenderModelName, const char * pchComponentName, VRControllerState_t * pControllerState, RenderModel_ComponentState_t * pComponentState)
 {
-    return ((IVRRenderModels*)linux_side)->GetComponentState((const char *)pchRenderModelName, (const char *)pchComponentName, (const vr::VRControllerState_t *)pControllerState, (vr::RenderModel_ComponentState_t *)pComponentState);
+    const VRControllerState_t lin;
+    bool _ret;
+    if(pControllerState)
+        struct_const VRControllerState_t_0915_win_to_lin(pControllerState, &lin);
+    _ret = ((IVRRenderModels*)linux_side)->GetComponentState((const char *)pchRenderModelName, (const char *)pchComponentName, pControllerState ? &lin : nullptr, (vr::RenderModel_ComponentState_t *)pComponentState);
+    if(pControllerState)
+        struct_const VRControllerState_t_0915_lin_to_win(&lin, pControllerState);
+    return _ret;
 }
 
 bool cppIVRRenderModels_IVRRenderModels_002_RenderModelHasComponent(void *linux_side, const char * pchRenderModelName, const char * pchComponentName)

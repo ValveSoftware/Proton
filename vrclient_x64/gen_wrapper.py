@@ -382,12 +382,12 @@ def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, e
                 elif strip_ns(param.type.get_pointee().get_canonical().spelling) in system_structs:
                     do_unwrap = (strip_ns(param.type.get_pointee().get_canonical().spelling), param.spelling)
                     typename = "win" + do_unwrap[0] + "_" + display_sdkver(sdkver) + " *"
-                elif param.type.get_pointee().kind == clang.cindex.TypeKind.POINTER and \
+                elif param.type.get_pointee().get_canonical().kind == clang.cindex.TypeKind.POINTER and \
                         strip_ns(param.type.get_pointee().get_pointee().get_canonical().spelling) in system_structs:
                     do_wrap = (strip_ns(param.type.get_pointee().get_pointee().get_canonical().spelling), param.spelling)
                     typename = "win" + do_wrap[0] + "_" + display_sdkver(sdkver) + " **"
-                elif real_type.kind == clang.cindex.TypeKind.RECORD and \
-                        struct_needs_conversion(real_type):
+                elif real_type.get_canonical().kind == clang.cindex.TypeKind.RECORD and \
+                        struct_needs_conversion(real_type.get_canonical()):
                     do_win_to_lin = (strip_ns(real_type.spelling), param.spelling)
                     do_lin_to_win = (strip_ns(real_type.spelling), param.spelling)
                     #preserve pointers
@@ -771,8 +771,8 @@ def struct_needs_conversion_nocache(struct):
     for field in struct.get_fields():
         if struct.get_offset(field.spelling) != windows_struct.get_offset(field.spelling):
             return True
-        if field.type.kind == clang.cindex.TypeKind.RECORD and \
-                struct_needs_conversion(field.type):
+        if field.type.get_canonical().kind == clang.cindex.TypeKind.RECORD and \
+                struct_needs_conversion(field.type.get_canonical()):
             return True
 
     #check 64-bit compat
@@ -783,8 +783,8 @@ def struct_needs_conversion_nocache(struct):
     for field in lin64_struct.get_fields():
         if lin64_struct.get_offset(field.spelling) != windows_struct.get_offset(field.spelling):
             return True
-        if field.type.kind == clang.cindex.TypeKind.RECORD and \
-                struct_needs_conversion(field.type):
+        if field.type.get_canonical().kind == clang.cindex.TypeKind.RECORD and \
+                struct_needs_conversion(field.type.get_canonical()):
             return True
 
     return False
@@ -797,9 +797,10 @@ def struct_needs_conversion(struct):
     return struct_conversion_cache[sdkver][strip_const(struct.spelling)]
 
 def get_field_attribute_str(field):
-    if field.type.kind != clang.cindex.TypeKind.RECORD:
+    ftype = field.type.get_canonical()
+    if ftype.kind != clang.cindex.TypeKind.RECORD:
         return ""
-    win_struct = find_windows_struct(field.type)
+    win_struct = find_windows_struct(ftype)
     align = win_struct.get_align()
     return " __attribute__((aligned(" + str(align) + ")))"
 
@@ -822,7 +823,7 @@ def handle_struct(sdkver, struct):
 
     which = set()
 
-    if struct_needs_conversion(struct.type):
+    if struct_needs_conversion(struct.type.get_canonical()):
         which.add(LIN_TO_WIN)
         which.add(WIN_TO_LIN)
 
@@ -858,13 +859,13 @@ def handle_struct(sdkver, struct):
     cppfile.write("struct win%s {\n" % handler_name)
     for m in struct.get_children():
         if m.kind == clang.cindex.CursorKind.FIELD_DECL:
-            if m.type.kind == clang.cindex.TypeKind.CONSTANTARRAY:
+            if m.type.get_canonical().kind == clang.cindex.TypeKind.CONSTANTARRAY:
                 cppfile.write("    %s %s[%u];\n" % (m.type.element_type.spelling, m.displayname, m.type.element_count))
-            elif m.type.kind == clang.cindex.TypeKind.RECORD and \
-                    struct_needs_conversion(m.type):
+            elif m.type.get_canonical().kind == clang.cindex.TypeKind.RECORD and \
+                    struct_needs_conversion(m.type.get_canonical()):
                 cppfile.write("    win%s_%s %s;\n" % (strip_ns(m.type.spelling), display_sdkver(sdkver), m.displayname))
             else:
-                if m.type.kind == clang.cindex.TypeKind.POINTER and \
+                if m.type.get_canonical().kind == clang.cindex.TypeKind.POINTER and \
                         m.type.get_pointee().kind == clang.cindex.TypeKind.FUNCTIONPROTO:
                     cppfile.write("    void *%s; /*fn pointer*/\n" % m.displayname)
                 else:
@@ -883,12 +884,12 @@ def handle_struct(sdkver, struct):
 
         for m in struct.get_children():
             if m.kind == clang.cindex.CursorKind.FIELD_DECL:
-                if m.type.kind == clang.cindex.TypeKind.CONSTANTARRAY:
+                if m.type.get_canonical().kind == clang.cindex.TypeKind.CONSTANTARRAY:
                     #TODO: if this is a struct, or packed differently, we'll have to
                     # copy each element in a for-loop
                     cppfile.write("    memcpy(win->%s, lin->%s, sizeof(win->%s));\n" % (m.displayname, m.displayname, m.displayname))
-                elif m.type.kind == clang.cindex.TypeKind.RECORD and \
-                        struct_needs_conversion(m.type):
+                elif m.type.get_canonical().kind == clang.cindex.TypeKind.RECORD and \
+                        struct_needs_conversion(m.type.get_canonical()):
                     cppfile.write("    lin_to_win_struct_%s_%s(&lin->%s, &win->%s);\n" % (strip_ns(m.type.spelling), display_sdkver(sdkver), m.displayname, m.displayname))
                 else:
                     cppfile.write("    win->%s = lin->%s;\n" % (m.displayname, m.displayname))
@@ -904,12 +905,12 @@ def handle_struct(sdkver, struct):
 
         for m in struct.get_children():
             if m.kind == clang.cindex.CursorKind.FIELD_DECL:
-                if m.type.kind == clang.cindex.TypeKind.CONSTANTARRAY:
+                if m.type.get_canonical().kind == clang.cindex.TypeKind.CONSTANTARRAY:
                     #TODO: if this is a struct, or packed differently, we'll have to
                     # copy each element in a for-loop
                     cppfile.write("    memcpy(lin->%s, win->%s, sizeof(lin->%s));\n" % (m.displayname, m.displayname, m.displayname))
-                elif m.type.kind == clang.cindex.TypeKind.RECORD and \
-                        struct_needs_conversion(m.type):
+                elif m.type.get_canonical().kind == clang.cindex.TypeKind.RECORD and \
+                        struct_needs_conversion(m.type.get_canonical()):
                     cppfile.write("    win_to_lin_struct_%s_%s(&win->%s, &lin->%s);\n" % (m.type.spelling, display_sdkver(sdkver), m.displayname, m.displayname))
                 else:
                     cppfile.write("    lin->%s = win->%s;\n" % (m.displayname, m.displayname))
@@ -925,7 +926,7 @@ def handle_struct(sdkver, struct):
 
         for m in struct.get_children():
             if m.kind == clang.cindex.CursorKind.FIELD_DECL:
-                if m.type.kind == clang.cindex.TypeKind.CONSTANTARRAY:
+                if m.type.get_canonical().kind == clang.cindex.TypeKind.CONSTANTARRAY:
                     #TODO: if this is a struct, or packed differently, we'll have to
                     # copy each element in a for-loop
                     cppfile.write("    memcpy(win->%s, lin->%s, sizeof(win->%s));\n" % (m.displayname, m.displayname, m.displayname))

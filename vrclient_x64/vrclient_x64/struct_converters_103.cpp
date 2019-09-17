@@ -11,7 +11,7 @@ struct winVREvent_t_103 {
     uint32_t eventType;
     vr::TrackedDeviceIndex_t trackedDeviceIndex;
     float eventAgeSeconds;
-    vr::VREvent_Data_t data;
+    vr::VREvent_Data_t data __attribute__((aligned(8)));
 }  __attribute__ ((ms_struct));
 #pragma pack(pop)
 
@@ -88,7 +88,7 @@ struct winCompositor_FrameTiming_103 {
     float m_flCompositorUpdateStartMs;
     float m_flCompositorUpdateEndMs;
     float m_flCompositorRenderStartMs;
-    vr::TrackedDevicePose_t m_HmdPose;
+    vr::TrackedDevicePose_t m_HmdPose __attribute__((aligned(4)));
 }  __attribute__ ((ms_struct));
 #pragma pack(pop)
 

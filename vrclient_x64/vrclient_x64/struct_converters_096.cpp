@@ -114,7 +114,7 @@ struct RenderModel_t *struct_RenderModel_t_096_unwrap(winRenderModel_t_096 *w)
 struct winVREvent_t_096 {
     vr::EVREventType eventType;
     vr::TrackedDeviceIndex_t trackedDeviceIndex;
-    vr::VREvent_Data_t data;
+    vr::VREvent_Data_t data __attribute__((aligned(8)));
     float eventAgeSeconds;
 }  __attribute__ ((ms_struct));
 #pragma pack(pop)
@@ -165,7 +165,7 @@ struct winCompositor_FrameTiming_096 {
     float frameVSync;
     uint32_t droppedFrames;
     uint32_t frameIndex;
-    vr::TrackedDevicePose_t pose;
+    vr::TrackedDevicePose_t pose __attribute__((aligned(4)));
     float prediction;
     float m_flFrameIntervalMs;
     float m_flSceneRenderCpuMs;

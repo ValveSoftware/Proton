@@ -11,7 +11,7 @@ struct winVREvent_t_1517 {
     uint32_t eventType;
     vr::TrackedDeviceIndex_t trackedDeviceIndex;
     float eventAgeSeconds;
-    vr::VREvent_Data_t data;
+    vr::VREvent_Data_t data __attribute__((aligned(8)));
 }  __attribute__ ((ms_struct));
 #pragma pack(pop)
 
