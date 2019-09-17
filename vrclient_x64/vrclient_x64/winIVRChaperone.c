@@ -32,14 +32,14 @@ ChaperoneCalibrationState __thiscall winIVRChaperone_IVRChaperone_003_GetCalibra
     return cppIVRChaperone_IVRChaperone_003_GetCalibrationState(_this->linux_side);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRChaperone_IVRChaperone_003_GetPlayAreaSize, 20)
+DEFINE_THISCALL_WRAPPER(winIVRChaperone_IVRChaperone_003_GetPlayAreaSize, 12)
 bool __thiscall winIVRChaperone_IVRChaperone_003_GetPlayAreaSize(winIVRChaperone_IVRChaperone_003 *_this, float * pSizeX, float * pSizeZ)
 {
     TRACE("%p\n", _this);
     return cppIVRChaperone_IVRChaperone_003_GetPlayAreaSize(_this->linux_side, pSizeX, pSizeZ);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRChaperone_IVRChaperone_003_GetPlayAreaRect, 12)
+DEFINE_THISCALL_WRAPPER(winIVRChaperone_IVRChaperone_003_GetPlayAreaRect, 8)
 bool __thiscall winIVRChaperone_IVRChaperone_003_GetPlayAreaRect(winIVRChaperone_IVRChaperone_003 *_this, HmdQuad_t * rect)
 {
     TRACE("%p\n", _this);
@@ -60,7 +60,7 @@ void __thiscall winIVRChaperone_IVRChaperone_003_SetSceneColor(winIVRChaperone_I
     cppIVRChaperone_IVRChaperone_003_SetSceneColor(_this->linux_side, color);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRChaperone_IVRChaperone_003_GetBoundsColor, 28)
+DEFINE_THISCALL_WRAPPER(winIVRChaperone_IVRChaperone_003_GetBoundsColor, 20)
 void __thiscall winIVRChaperone_IVRChaperone_003_GetBoundsColor(winIVRChaperone_IVRChaperone_003 *_this, HmdColor_t * pOutputColorArray, int nNumOutputColors, float flCollisionBoundsFadeDistance, HmdColor_t * pOutputCameraColor)
 {
     TRACE("%p\n", _this);
@@ -161,21 +161,21 @@ ChaperoneCalibrationState __thiscall winIVRChaperone_IVRChaperone_002_GetCalibra
     return cppIVRChaperone_IVRChaperone_002_GetCalibrationState(_this->linux_side);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRChaperone_IVRChaperone_002_GetSoftBoundsInfo, 12)
+DEFINE_THISCALL_WRAPPER(winIVRChaperone_IVRChaperone_002_GetSoftBoundsInfo, 8)
 bool __thiscall winIVRChaperone_IVRChaperone_002_GetSoftBoundsInfo(winIVRChaperone_IVRChaperone_002 *_this, ChaperoneSoftBoundsInfo_t * pInfo)
 {
     TRACE("%p\n", _this);
     return cppIVRChaperone_IVRChaperone_002_GetSoftBoundsInfo(_this->linux_side, pInfo);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRChaperone_IVRChaperone_002_GetHardBoundsInfo, 20)
+DEFINE_THISCALL_WRAPPER(winIVRChaperone_IVRChaperone_002_GetHardBoundsInfo, 12)
 bool __thiscall winIVRChaperone_IVRChaperone_002_GetHardBoundsInfo(winIVRChaperone_IVRChaperone_002 *_this, HmdQuad_t * pQuadsBuffer, uint32_t * punQuadsCount)
 {
     TRACE("%p\n", _this);
     return cppIVRChaperone_IVRChaperone_002_GetHardBoundsInfo(_this->linux_side, pQuadsBuffer, punQuadsCount);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRChaperone_IVRChaperone_002_GetSeatedBoundsInfo, 12)
+DEFINE_THISCALL_WRAPPER(winIVRChaperone_IVRChaperone_002_GetSeatedBoundsInfo, 8)
 bool __thiscall winIVRChaperone_IVRChaperone_002_GetSeatedBoundsInfo(winIVRChaperone_IVRChaperone_002 *_this, ChaperoneSeatedBoundsInfo_t * pInfo)
 {
     TRACE("%p\n", _this);
@@ -196,7 +196,7 @@ void __thiscall winIVRChaperone_IVRChaperone_002_SetSceneColor(winIVRChaperone_I
     cppIVRChaperone_IVRChaperone_002_SetSceneColor(_this->linux_side, color);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRChaperone_IVRChaperone_002_GetBoundsColor, 16)
+DEFINE_THISCALL_WRAPPER(winIVRChaperone_IVRChaperone_002_GetBoundsColor, 12)
 void __thiscall winIVRChaperone_IVRChaperone_002_GetBoundsColor(winIVRChaperone_IVRChaperone_002 *_this, HmdColor_t * pOutputColorArray, int nNumOutputColors)
 {
     TRACE("%p\n", _this);

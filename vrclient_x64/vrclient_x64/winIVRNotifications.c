@@ -25,7 +25,7 @@ typedef struct __winIVRNotifications_IVRNotifications_002 {
     void *linux_side;
 } winIVRNotifications_IVRNotifications_002;
 
-DEFINE_THISCALL_WRAPPER(winIVRNotifications_IVRNotifications_002_CreateNotification, 52)
+DEFINE_THISCALL_WRAPPER(winIVRNotifications_IVRNotifications_002_CreateNotification, 40)
 EVRNotificationError __thiscall winIVRNotifications_IVRNotifications_002_CreateNotification(winIVRNotifications_IVRNotifications_002 *_this, VROverlayHandle_t ulOverlayHandle, uint64_t ulUserValue, EVRNotificationType type, const char * pchText, EVRNotificationStyle style, NotificationBitmap_t * pImage, VRNotificationId * pNotificationId)
 {
     TRACE("%p\n", _this);
@@ -100,14 +100,14 @@ typedef struct __winIVRNotifications_IVRNotifications_001 {
     void *linux_side;
 } winIVRNotifications_IVRNotifications_001;
 
-DEFINE_THISCALL_WRAPPER(winIVRNotifications_IVRNotifications_001_GetErrorString, 20)
+DEFINE_THISCALL_WRAPPER(winIVRNotifications_IVRNotifications_001_GetErrorString, 16)
 uint32_t __thiscall winIVRNotifications_IVRNotifications_001_GetErrorString(winIVRNotifications_IVRNotifications_001 *_this, NotificationError_t error, char * pchBuffer, uint32_t unBufferSize)
 {
     TRACE("%p\n", _this);
     return cppIVRNotifications_IVRNotifications_001_GetErrorString(_this->linux_side, error, pchBuffer, unBufferSize);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRNotifications_IVRNotifications_001_CreateNotification, 60)
+DEFINE_THISCALL_WRAPPER(winIVRNotifications_IVRNotifications_001_CreateNotification, 40)
 NotificationError_t __thiscall winIVRNotifications_IVRNotifications_001_CreateNotification(winIVRNotifications_IVRNotifications_001 *_this, VROverlayHandle_t ulOverlayHandle, uint64_t ulUserValue, const char * strType, const char * strText, const char * strCategory, NotificationBitmap * photo, VRNotificationId * notificationId)
 {
     TRACE("%p\n", _this);

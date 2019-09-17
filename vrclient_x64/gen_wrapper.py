@@ -1126,7 +1126,7 @@ for sdkver in sdk_versions:
             continue
         index = clang.cindex.Index.create()
         windows_build = index.parse(input_name, args=['-x', 'c++', '-m32', '-Iopenvr_%s/' % sdkver, '-I' + CLANG_PATH + '/include/', '-mms-bitfields', '-U__linux__', '-Wno-incompatible-ms-struct'])
-        tu = index.parse(input_name, args=['-x', 'c++', '-std=c++11', '-DGNUC', '-Iopenvr_%s/' % sdkver, '-I' + CLANG_PATH + '/include/'])
+        tu = index.parse(input_name, args=['-x', 'c++', '-m32', '-std=c++11', '-DGNUC', '-Iopenvr_%s/' % sdkver, '-I' + CLANG_PATH + '/include/'])
 
         diagnostics = list(tu.diagnostics)
         if len(diagnostics) > 0:

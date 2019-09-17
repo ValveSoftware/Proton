@@ -25,7 +25,7 @@ typedef struct __winIVRScreenshots_IVRScreenshots_001 {
     void *linux_side;
 } winIVRScreenshots_IVRScreenshots_001;
 
-DEFINE_THISCALL_WRAPPER(winIVRScreenshots_IVRScreenshots_001_RequestScreenshot, 32)
+DEFINE_THISCALL_WRAPPER(winIVRScreenshots_IVRScreenshots_001_RequestScreenshot, 20)
 EVRScreenshotError __thiscall winIVRScreenshots_IVRScreenshots_001_RequestScreenshot(winIVRScreenshots_IVRScreenshots_001 *_this, ScreenshotHandle_t * pOutScreenshotHandle, EVRScreenshotType type, const char * pchPreviewFilename, const char * pchVRFilename)
 {
     char lin_pchPreviewFilename[PATH_MAX];
@@ -36,21 +36,21 @@ EVRScreenshotError __thiscall winIVRScreenshots_IVRScreenshots_001_RequestScreen
     return cppIVRScreenshots_IVRScreenshots_001_RequestScreenshot(_this->linux_side, pOutScreenshotHandle, type, pchPreviewFilename ? lin_pchPreviewFilename : NULL, pchVRFilename ? lin_pchVRFilename : NULL);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRScreenshots_IVRScreenshots_001_HookScreenshot, 16)
+DEFINE_THISCALL_WRAPPER(winIVRScreenshots_IVRScreenshots_001_HookScreenshot, 12)
 EVRScreenshotError __thiscall winIVRScreenshots_IVRScreenshots_001_HookScreenshot(winIVRScreenshots_IVRScreenshots_001 *_this, EVRScreenshotType * pSupportedTypes, int numTypes)
 {
     TRACE("%p\n", _this);
     return cppIVRScreenshots_IVRScreenshots_001_HookScreenshot(_this->linux_side, pSupportedTypes, numTypes);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRScreenshots_IVRScreenshots_001_GetScreenshotPropertyType, 16)
+DEFINE_THISCALL_WRAPPER(winIVRScreenshots_IVRScreenshots_001_GetScreenshotPropertyType, 12)
 EVRScreenshotType __thiscall winIVRScreenshots_IVRScreenshots_001_GetScreenshotPropertyType(winIVRScreenshots_IVRScreenshots_001 *_this, ScreenshotHandle_t screenshotHandle, EVRScreenshotError * pError)
 {
     TRACE("%p\n", _this);
     return cppIVRScreenshots_IVRScreenshots_001_GetScreenshotPropertyType(_this->linux_side, screenshotHandle, pError);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRScreenshots_IVRScreenshots_001_GetScreenshotPropertyFilename, 32)
+DEFINE_THISCALL_WRAPPER(winIVRScreenshots_IVRScreenshots_001_GetScreenshotPropertyFilename, 24)
 uint32_t __thiscall winIVRScreenshots_IVRScreenshots_001_GetScreenshotPropertyFilename(winIVRScreenshots_IVRScreenshots_001 *_this, ScreenshotHandle_t screenshotHandle, EVRScreenshotPropertyFilenames filenameType, char * pchFilename, uint32_t cchFilename, EVRScreenshotError * pError)
 {
     uint32_t path_result;
@@ -67,7 +67,7 @@ EVRScreenshotError __thiscall winIVRScreenshots_IVRScreenshots_001_UpdateScreens
     return cppIVRScreenshots_IVRScreenshots_001_UpdateScreenshotProgress(_this->linux_side, screenshotHandle, flProgress);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRScreenshots_IVRScreenshots_001_TakeStereoScreenshot, 28)
+DEFINE_THISCALL_WRAPPER(winIVRScreenshots_IVRScreenshots_001_TakeStereoScreenshot, 16)
 EVRScreenshotError __thiscall winIVRScreenshots_IVRScreenshots_001_TakeStereoScreenshot(winIVRScreenshots_IVRScreenshots_001 *_this, ScreenshotHandle_t * pOutScreenshotHandle, const char * pchPreviewFilename, const char * pchVRFilename)
 {
     char lin_pchPreviewFilename[PATH_MAX];
@@ -78,7 +78,7 @@ EVRScreenshotError __thiscall winIVRScreenshots_IVRScreenshots_001_TakeStereoScr
     return cppIVRScreenshots_IVRScreenshots_001_TakeStereoScreenshot(_this->linux_side, pOutScreenshotHandle, pchPreviewFilename ? lin_pchPreviewFilename : NULL, pchVRFilename ? lin_pchVRFilename : NULL);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRScreenshots_IVRScreenshots_001_SubmitScreenshot, 28)
+DEFINE_THISCALL_WRAPPER(winIVRScreenshots_IVRScreenshots_001_SubmitScreenshot, 20)
 EVRScreenshotError __thiscall winIVRScreenshots_IVRScreenshots_001_SubmitScreenshot(winIVRScreenshots_IVRScreenshots_001 *_this, ScreenshotHandle_t screenshotHandle, EVRScreenshotType type, const char * pchSourcePreviewFilename, const char * pchSourceVRFilename)
 {
     char lin_pchSourcePreviewFilename[PATH_MAX];

@@ -14431,7 +14431,7 @@ void test_capi_thunks_IVRTrackedCamera_002(void)
     clear_parameters();
     capi_IVRTrackedCamera_002_ReleaseVideoStreamingService(1);
     check_ptr_parameter("IVRTrackedCamera_002_ReleaseVideoStreamingService", this_ptr_value);
-    check_uint64_parameter("IVRTrackedCamera_002_ReleaseVideoStreamingService", 1);
+    check_uint32_parameter("IVRTrackedCamera_002_ReleaseVideoStreamingService", 1);
 
     init_thunk(t, this_ptr_value, IVRTrackedCamera_002_GetVideoStreamFrameBuffer, 6, FALSE, FALSE);
     EVRTrackedCameraError (__stdcall *capi_IVRTrackedCamera_002_GetVideoStreamFrameBuffer)(TrackedCameraHandle_t hTrackedCamera, EVRTrackedCameraFrameType eFrameType, void * pFrameBuffer, uint32_t nFrameBufferSize, CameraVideoStreamFrameHeader_t * pFrameHeader, uint32_t nFrameHeaderSize) = (void *)t;
@@ -14439,7 +14439,7 @@ void test_capi_thunks_IVRTrackedCamera_002(void)
     clear_parameters();
     capi_IVRTrackedCamera_002_GetVideoStreamFrameBuffer(1, 2, (void *)3, 4, (void *)5, 6);
     check_ptr_parameter("IVRTrackedCamera_002_GetVideoStreamFrameBuffer", this_ptr_value);
-    check_uint64_parameter("IVRTrackedCamera_002_GetVideoStreamFrameBuffer", 1);
+    check_uint32_parameter("IVRTrackedCamera_002_GetVideoStreamFrameBuffer", 1);
     check_uint32_parameter("IVRTrackedCamera_002_GetVideoStreamFrameBuffer", 2);
     check_ptr_parameter("IVRTrackedCamera_002_GetVideoStreamFrameBuffer", (void *)3);
     check_uint32_parameter("IVRTrackedCamera_002_GetVideoStreamFrameBuffer", 4);
