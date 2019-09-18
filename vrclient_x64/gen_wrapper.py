@@ -879,16 +879,17 @@ def handle_struct(sdkver, struct):
     for m in struct.get_children():
         if m.kind == clang.cindex.CursorKind.FIELD_DECL:
             if m.type.get_canonical().kind == clang.cindex.TypeKind.CONSTANTARRAY:
-                cppfile.write("    %s %s[%u];\n" % (m.type.element_type.spelling, m.displayname, m.type.element_count))
+                cppfile.write("    %s %s[%u]" % (m.type.element_type.spelling, m.displayname, m.type.element_count))
             elif m.type.get_canonical().kind == clang.cindex.TypeKind.RECORD and \
                     struct_needs_conversion(m.type.get_canonical()):
-                cppfile.write("    win%s_%s %s;\n" % (strip_ns(m.type.spelling), display_sdkver(sdkver), m.displayname))
+                cppfile.write("    win%s_%s %s" % (strip_ns(m.type.spelling), display_sdkver(sdkver), m.displayname))
             else:
                 if m.type.get_canonical().kind == clang.cindex.TypeKind.POINTER and \
                         m.type.get_pointee().kind == clang.cindex.TypeKind.FUNCTIONPROTO:
-                    cppfile.write("    void *%s; /*fn pointer*/\n" % m.displayname)
+                    cppfile.write("    void *%s /*fn pointer*/ " % m.displayname)
                 else:
-                    cppfile.write("    %s %s%s;\n" % (m.type.spelling, m.displayname, get_field_attribute_str(m)))
+                    cppfile.write("    %s %s" % (m.type.spelling, m.displayname))
+            cppfile.write(get_field_attribute_str(m) + ";\n")
     if WRAPPERS in which:
         cppfile.write("\n    %s *linux_side;\n" % struct.displayname)
     cppfile.write("}  __attribute__ ((ms_struct));\n")
