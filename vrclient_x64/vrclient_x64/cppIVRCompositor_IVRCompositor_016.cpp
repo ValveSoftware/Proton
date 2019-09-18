@@ -49,7 +49,7 @@ void cppIVRCompositor_IVRCompositor_016_PostPresentHandoff(void *linux_side)
     ((IVRCompositor*)linux_side)->PostPresentHandoff();
 }
 
-bool cppIVRCompositor_IVRCompositor_016_GetFrameTiming(void *linux_side, Compositor_FrameTiming * pTiming, uint32_t unFramesAgo)
+bool cppIVRCompositor_IVRCompositor_016_GetFrameTiming(void *linux_side, winCompositor_FrameTiming_103 * pTiming, uint32_t unFramesAgo)
 {
     Compositor_FrameTiming lin;
     bool _ret;

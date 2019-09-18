@@ -15,7 +15,7 @@ extern void cppIVRCompositor_IVRCompositor_005_SetOverlay(void *, void *, Compos
 extern void cppIVRCompositor_IVRCompositor_005_SetOverlayRaw(void *, void *, uint32_t, uint32_t, uint32_t, Compositor_OverlaySettings *);
 extern void cppIVRCompositor_IVRCompositor_005_SetOverlayFromFile(void *, const char *, Compositor_OverlaySettings *);
 extern void cppIVRCompositor_IVRCompositor_005_ClearOverlay(void *);
-extern bool cppIVRCompositor_IVRCompositor_005_GetFrameTiming(void *, Compositor_FrameTiming *, uint32_t);
+extern bool cppIVRCompositor_IVRCompositor_005_GetFrameTiming(void *, winCompositor_FrameTiming_091 *, uint32_t);
 extern void cppIVRCompositor_IVRCompositor_005_FadeToColor(void *, float, float, float, float, float, bool);
 extern void cppIVRCompositor_IVRCompositor_005_FadeGrid(void *, float, bool);
 extern void cppIVRCompositor_IVRCompositor_005_CompositorBringToFront(void *);

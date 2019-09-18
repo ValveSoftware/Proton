@@ -79,7 +79,7 @@ void cppIVRCompositor_IVRCompositor_005_ClearOverlay(void *linux_side)
     ((IVRCompositor*)linux_side)->ClearOverlay();
 }
 
-bool cppIVRCompositor_IVRCompositor_005_GetFrameTiming(void *linux_side, Compositor_FrameTiming * pTiming, uint32_t unFramesAgo)
+bool cppIVRCompositor_IVRCompositor_005_GetFrameTiming(void *linux_side, winCompositor_FrameTiming_091 * pTiming, uint32_t unFramesAgo)
 {
     Compositor_FrameTiming lin;
     bool _ret;

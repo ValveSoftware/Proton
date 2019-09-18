@@ -8,7 +8,7 @@ extern EVRCompositorError cppIVRCompositor_IVRCompositor_010_GetLastPoses(void *
 extern EVRCompositorError cppIVRCompositor_IVRCompositor_010_Submit(void *, EVREye, Texture_t *, VRTextureBounds_t *, EVRSubmitFlags);
 extern void cppIVRCompositor_IVRCompositor_010_ClearLastSubmittedFrame(void *);
 extern void cppIVRCompositor_IVRCompositor_010_PostPresentHandoff(void *);
-extern bool cppIVRCompositor_IVRCompositor_010_GetFrameTiming(void *, Compositor_FrameTiming *, uint32_t);
+extern bool cppIVRCompositor_IVRCompositor_010_GetFrameTiming(void *, winCompositor_FrameTiming_0914 *, uint32_t);
 extern float cppIVRCompositor_IVRCompositor_010_GetFrameTimeRemaining(void *);
 extern void cppIVRCompositor_IVRCompositor_010_FadeToColor(void *, float, float, float, float, float, bool);
 extern void cppIVRCompositor_IVRCompositor_010_FadeGrid(void *, float, bool);

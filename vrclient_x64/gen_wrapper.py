@@ -388,10 +388,12 @@ def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, e
                     typename = "win" + do_wrap[0] + "_" + display_sdkver(sdkver) + " **"
                 elif real_type.get_canonical().kind == clang.cindex.TypeKind.RECORD and \
                         struct_needs_conversion(real_type.get_canonical()):
-                    do_win_to_lin = (strip_ns(real_type.spelling), param.spelling)
-                    do_lin_to_win = (strip_ns(real_type.spelling), param.spelling)
+                    do_win_to_lin = (strip_const(strip_ns(real_type.spelling)), param.spelling)
+                    if not real_type.is_const_qualified():
+                        do_lin_to_win = (strip_const(strip_ns(real_type.spelling)), param.spelling)
                     #preserve pointers
-                    typename = typename.replace(real_type.spelling, "win%s_%s" % (strip_ns(real_type.spelling), display_sdkver(sdkver)))
+                    print("typename: \"" + typename + "\" real_type.spelling: \"" + real_type.spelling + "\"")
+                    typename = typename.replace(strip_ns(real_type.spelling), "win%s_%s" % (strip_ns(real_type.spelling), display_sdkver(sdkver)))
 
         if param.spelling == "":
             cfile.write(", %s _%s" % (typename, unnamed))
@@ -425,7 +427,10 @@ def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, e
             cfile.write("    %s path_result;\n" % method.result_type.spelling)
 
     if do_lin_to_win or do_win_to_lin:
-        cpp.write("    %s lin;\n" % do_lin_to_win[0])
+        if do_lin_to_win:
+            cpp.write("    %s lin;\n" % do_lin_to_win[0])
+        else:
+            cpp.write("    %s lin;\n" % do_win_to_lin[0])
         cpp.write("    %s _ret;\n" % method.result_type.spelling)
 
     if do_wrap:
@@ -541,6 +546,7 @@ def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, e
     if do_lin_to_win:
         cpp.write("    if(%s)\n" % do_lin_to_win[1])
         cpp.write("        struct_%s_%s_lin_to_win(&lin, %s);\n" % (strip_ns(do_lin_to_win[0]), display_sdkver(sdkver), do_lin_to_win[1]))
+    if do_lin_to_win or do_win_to_lin:
         cpp.write("    return _ret;\n")
     if do_wrap:
         cpp.write("    if(_ret == 0)\n")

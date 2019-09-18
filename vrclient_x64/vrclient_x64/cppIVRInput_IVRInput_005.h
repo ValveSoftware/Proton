@@ -6,10 +6,10 @@ extern EVRInputError cppIVRInput_IVRInput_005_GetActionSetHandle(void *, const c
 extern EVRInputError cppIVRInput_IVRInput_005_GetActionHandle(void *, const char *, VRActionHandle_t *);
 extern EVRInputError cppIVRInput_IVRInput_005_GetInputSourceHandle(void *, const char *, VRInputValueHandle_t *);
 extern EVRInputError cppIVRInput_IVRInput_005_UpdateActionState(void *, VRActiveActionSet_t *, uint32_t, uint32_t);
-extern EVRInputError cppIVRInput_IVRInput_005_GetDigitalActionData(void *, VRActionHandle_t, InputDigitalActionData_t *, uint32_t, VRInputValueHandle_t);
-extern EVRInputError cppIVRInput_IVRInput_005_GetAnalogActionData(void *, VRActionHandle_t, InputAnalogActionData_t *, uint32_t, VRInputValueHandle_t);
-extern EVRInputError cppIVRInput_IVRInput_005_GetPoseActionData(void *, VRActionHandle_t, ETrackingUniverseOrigin, float, InputPoseActionData_t *, uint32_t, VRInputValueHandle_t);
-extern EVRInputError cppIVRInput_IVRInput_005_GetSkeletalActionData(void *, VRActionHandle_t, InputSkeletalActionData_t *, uint32_t);
+extern EVRInputError cppIVRInput_IVRInput_005_GetDigitalActionData(void *, VRActionHandle_t, winInputDigitalActionData_t_1322 *, uint32_t, VRInputValueHandle_t);
+extern EVRInputError cppIVRInput_IVRInput_005_GetAnalogActionData(void *, VRActionHandle_t, winInputAnalogActionData_t_1322 *, uint32_t, VRInputValueHandle_t);
+extern EVRInputError cppIVRInput_IVRInput_005_GetPoseActionData(void *, VRActionHandle_t, ETrackingUniverseOrigin, float, winInputPoseActionData_t_1322 *, uint32_t, VRInputValueHandle_t);
+extern EVRInputError cppIVRInput_IVRInput_005_GetSkeletalActionData(void *, VRActionHandle_t, winInputSkeletalActionData_t_1322 *, uint32_t);
 extern EVRInputError cppIVRInput_IVRInput_005_GetBoneCount(void *, VRActionHandle_t, uint32_t *);
 extern EVRInputError cppIVRInput_IVRInput_005_GetBoneHierarchy(void *, VRActionHandle_t, BoneIndex_t *, uint32_t);
 extern EVRInputError cppIVRInput_IVRInput_005_GetBoneName(void *, VRActionHandle_t, BoneIndex_t, char *, uint32_t);

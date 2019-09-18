@@ -6,11 +6,11 @@ extern EVRInputError cppIVRInput_IVRInput_006_GetActionSetHandle(void *, const c
 extern EVRInputError cppIVRInput_IVRInput_006_GetActionHandle(void *, const char *, VRActionHandle_t *);
 extern EVRInputError cppIVRInput_IVRInput_006_GetInputSourceHandle(void *, const char *, VRInputValueHandle_t *);
 extern EVRInputError cppIVRInput_IVRInput_006_UpdateActionState(void *, VRActiveActionSet_t *, uint32_t, uint32_t);
-extern EVRInputError cppIVRInput_IVRInput_006_GetDigitalActionData(void *, VRActionHandle_t, InputDigitalActionData_t *, uint32_t, VRInputValueHandle_t);
-extern EVRInputError cppIVRInput_IVRInput_006_GetAnalogActionData(void *, VRActionHandle_t, InputAnalogActionData_t *, uint32_t, VRInputValueHandle_t);
-extern EVRInputError cppIVRInput_IVRInput_006_GetPoseActionDataRelativeToNow(void *, VRActionHandle_t, ETrackingUniverseOrigin, float, InputPoseActionData_t *, uint32_t, VRInputValueHandle_t);
-extern EVRInputError cppIVRInput_IVRInput_006_GetPoseActionDataForNextFrame(void *, VRActionHandle_t, ETrackingUniverseOrigin, InputPoseActionData_t *, uint32_t, VRInputValueHandle_t);
-extern EVRInputError cppIVRInput_IVRInput_006_GetSkeletalActionData(void *, VRActionHandle_t, InputSkeletalActionData_t *, uint32_t);
+extern EVRInputError cppIVRInput_IVRInput_006_GetDigitalActionData(void *, VRActionHandle_t, winInputDigitalActionData_t_1418 *, uint32_t, VRInputValueHandle_t);
+extern EVRInputError cppIVRInput_IVRInput_006_GetAnalogActionData(void *, VRActionHandle_t, winInputAnalogActionData_t_1418 *, uint32_t, VRInputValueHandle_t);
+extern EVRInputError cppIVRInput_IVRInput_006_GetPoseActionDataRelativeToNow(void *, VRActionHandle_t, ETrackingUniverseOrigin, float, winInputPoseActionData_t_1418 *, uint32_t, VRInputValueHandle_t);
+extern EVRInputError cppIVRInput_IVRInput_006_GetPoseActionDataForNextFrame(void *, VRActionHandle_t, ETrackingUniverseOrigin, winInputPoseActionData_t_1418 *, uint32_t, VRInputValueHandle_t);
+extern EVRInputError cppIVRInput_IVRInput_006_GetSkeletalActionData(void *, VRActionHandle_t, winInputSkeletalActionData_t_1418 *, uint32_t);
 extern EVRInputError cppIVRInput_IVRInput_006_GetBoneCount(void *, VRActionHandle_t, uint32_t *);
 extern EVRInputError cppIVRInput_IVRInput_006_GetBoneHierarchy(void *, VRActionHandle_t, BoneIndex_t *, uint32_t);
 extern EVRInputError cppIVRInput_IVRInput_006_GetBoneName(void *, VRActionHandle_t, BoneIndex_t, char *, uint32_t);

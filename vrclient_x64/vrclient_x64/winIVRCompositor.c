@@ -2650,7 +2650,7 @@ void __thiscall winIVRCompositor_IVRCompositor_016_PostPresentHandoff(winIVRComp
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_016_GetFrameTiming, 12)
-bool __thiscall winIVRCompositor_IVRCompositor_016_GetFrameTiming(winIVRCompositor_IVRCompositor_016 *_this, Compositor_FrameTiming * pTiming, uint32_t unFramesAgo)
+bool __thiscall winIVRCompositor_IVRCompositor_016_GetFrameTiming(winIVRCompositor_IVRCompositor_016 *_this, winCompositor_FrameTiming_103 * pTiming, uint32_t unFramesAgo)
 {
     TRACE("%p\n", _this);
     return cppIVRCompositor_IVRCompositor_016_GetFrameTiming(_this->linux_side, pTiming, unFramesAgo);
@@ -4611,7 +4611,7 @@ void __thiscall winIVRCompositor_IVRCompositor_010_PostPresentHandoff(winIVRComp
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_010_GetFrameTiming, 12)
-bool __thiscall winIVRCompositor_IVRCompositor_010_GetFrameTiming(winIVRCompositor_IVRCompositor_010 *_this, Compositor_FrameTiming * pTiming, uint32_t unFramesAgo)
+bool __thiscall winIVRCompositor_IVRCompositor_010_GetFrameTiming(winIVRCompositor_IVRCompositor_010 *_this, winCompositor_FrameTiming_0914 * pTiming, uint32_t unFramesAgo)
 {
     TRACE("%p\n", _this);
     return cppIVRCompositor_IVRCompositor_010_GetFrameTiming(_this->linux_side, pTiming, unFramesAgo);
@@ -4888,7 +4888,7 @@ void __thiscall winIVRCompositor_IVRCompositor_009_PostPresentHandoff(winIVRComp
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_009_GetFrameTiming, 12)
-bool __thiscall winIVRCompositor_IVRCompositor_009_GetFrameTiming(winIVRCompositor_IVRCompositor_009 *_this, Compositor_FrameTiming * pTiming, uint32_t unFramesAgo)
+bool __thiscall winIVRCompositor_IVRCompositor_009_GetFrameTiming(winIVRCompositor_IVRCompositor_009 *_this, winCompositor_FrameTiming_0913 * pTiming, uint32_t unFramesAgo)
 {
     TRACE("%p\n", _this);
     return cppIVRCompositor_IVRCompositor_009_GetFrameTiming(_this->linux_side, pTiming, unFramesAgo);
@@ -5172,7 +5172,7 @@ void __thiscall winIVRCompositor_IVRCompositor_008_ClearLastSubmittedFrame(winIV
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_008_GetFrameTiming, 12)
-bool __thiscall winIVRCompositor_IVRCompositor_008_GetFrameTiming(winIVRCompositor_IVRCompositor_008 *_this, Compositor_FrameTiming * pTiming, uint32_t unFramesAgo)
+bool __thiscall winIVRCompositor_IVRCompositor_008_GetFrameTiming(winIVRCompositor_IVRCompositor_008 *_this, winCompositor_FrameTiming_0910 * pTiming, uint32_t unFramesAgo)
 {
     TRACE("%p\n", _this);
     return cppIVRCompositor_IVRCompositor_008_GetFrameTiming(_this->linux_side, pTiming, unFramesAgo);
@@ -5467,7 +5467,7 @@ void __thiscall winIVRCompositor_IVRCompositor_007_ClearLastSubmittedFrame(winIV
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_007_GetFrameTiming, 12)
-bool __thiscall winIVRCompositor_IVRCompositor_007_GetFrameTiming(winIVRCompositor_IVRCompositor_007 *_this, Compositor_FrameTiming * pTiming, uint32_t unFramesAgo)
+bool __thiscall winIVRCompositor_IVRCompositor_007_GetFrameTiming(winIVRCompositor_IVRCompositor_007 *_this, winCompositor_FrameTiming_098 * pTiming, uint32_t unFramesAgo)
 {
     TRACE("%p\n", _this);
     return cppIVRCompositor_IVRCompositor_007_GetFrameTiming(_this->linux_side, pTiming, unFramesAgo);
@@ -5706,7 +5706,7 @@ void __thiscall winIVRCompositor_IVRCompositor_006_ClearLastSubmittedFrame(winIV
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_006_GetFrameTiming, 12)
-bool __thiscall winIVRCompositor_IVRCompositor_006_GetFrameTiming(winIVRCompositor_IVRCompositor_006 *_this, Compositor_FrameTiming * pTiming, uint32_t unFramesAgo)
+bool __thiscall winIVRCompositor_IVRCompositor_006_GetFrameTiming(winIVRCompositor_IVRCompositor_006 *_this, winCompositor_FrameTiming_092 * pTiming, uint32_t unFramesAgo)
 {
     TRACE("%p\n", _this);
     return cppIVRCompositor_IVRCompositor_006_GetFrameTiming(_this->linux_side, pTiming, unFramesAgo);
@@ -5984,7 +5984,7 @@ void __thiscall winIVRCompositor_IVRCompositor_005_ClearOverlay(winIVRCompositor
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRCompositor_IVRCompositor_005_GetFrameTiming, 12)
-bool __thiscall winIVRCompositor_IVRCompositor_005_GetFrameTiming(winIVRCompositor_IVRCompositor_005 *_this, Compositor_FrameTiming * pTiming, uint32_t unFramesAgo)
+bool __thiscall winIVRCompositor_IVRCompositor_005_GetFrameTiming(winIVRCompositor_IVRCompositor_005 *_this, winCompositor_FrameTiming_091 * pTiming, uint32_t unFramesAgo)
 {
     TRACE("%p\n", _this);
     return cppIVRCompositor_IVRCompositor_005_GetFrameTiming(_this->linux_side, pTiming, unFramesAgo);

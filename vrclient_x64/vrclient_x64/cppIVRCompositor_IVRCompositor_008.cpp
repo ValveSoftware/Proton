@@ -49,7 +49,7 @@ void cppIVRCompositor_IVRCompositor_008_ClearLastSubmittedFrame(void *linux_side
     ((IVRCompositor*)linux_side)->ClearLastSubmittedFrame();
 }
 
-bool cppIVRCompositor_IVRCompositor_008_GetFrameTiming(void *linux_side, Compositor_FrameTiming * pTiming, uint32_t unFramesAgo)
+bool cppIVRCompositor_IVRCompositor_008_GetFrameTiming(void *linux_side, winCompositor_FrameTiming_0910 * pTiming, uint32_t unFramesAgo)
 {
     Compositor_FrameTiming lin;
     bool _ret;

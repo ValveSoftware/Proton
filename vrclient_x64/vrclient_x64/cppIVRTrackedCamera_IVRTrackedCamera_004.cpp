@@ -44,7 +44,7 @@ vr::EVRTrackedCameraError cppIVRTrackedCamera_IVRTrackedCamera_004_ReleaseVideoS
     return ((IVRTrackedCamera*)linux_side)->ReleaseVideoStreamingService((vr::TrackedCameraHandle_t)hTrackedCamera);
 }
 
-vr::EVRTrackedCameraError cppIVRTrackedCamera_IVRTrackedCamera_004_GetVideoStreamFrameBuffer(void *linux_side, TrackedCameraHandle_t hTrackedCamera, EVRTrackedCameraFrameType eFrameType, void * pFrameBuffer, uint32_t nFrameBufferSize, CameraVideoStreamFrameHeader_t * pFrameHeader, uint32_t nFrameHeaderSize)
+vr::EVRTrackedCameraError cppIVRTrackedCamera_IVRTrackedCamera_004_GetVideoStreamFrameBuffer(void *linux_side, TrackedCameraHandle_t hTrackedCamera, EVRTrackedCameraFrameType eFrameType, void * pFrameBuffer, uint32_t nFrameBufferSize, winCameraVideoStreamFrameHeader_t_1017 * pFrameHeader, uint32_t nFrameHeaderSize)
 {
     CameraVideoStreamFrameHeader_t lin;
     vr::EVRTrackedCameraError _ret;
@@ -61,7 +61,7 @@ vr::EVRTrackedCameraError cppIVRTrackedCamera_IVRTrackedCamera_004_GetVideoStrea
     return ((IVRTrackedCamera*)linux_side)->GetVideoStreamTextureSize((vr::TrackedDeviceIndex_t)nDeviceIndex, (vr::EVRTrackedCameraFrameType)eFrameType, (vr::VRTextureBounds_t *)pTextureBounds, (uint32_t *)pnWidth, (uint32_t *)pnHeight);
 }
 
-vr::EVRTrackedCameraError cppIVRTrackedCamera_IVRTrackedCamera_004_GetVideoStreamTextureD3D11(void *linux_side, TrackedCameraHandle_t hTrackedCamera, EVRTrackedCameraFrameType eFrameType, void * pD3D11DeviceOrResource, void ** ppD3D11ShaderResourceView, CameraVideoStreamFrameHeader_t * pFrameHeader, uint32_t nFrameHeaderSize)
+vr::EVRTrackedCameraError cppIVRTrackedCamera_IVRTrackedCamera_004_GetVideoStreamTextureD3D11(void *linux_side, TrackedCameraHandle_t hTrackedCamera, EVRTrackedCameraFrameType eFrameType, void * pD3D11DeviceOrResource, void ** ppD3D11ShaderResourceView, winCameraVideoStreamFrameHeader_t_1017 * pFrameHeader, uint32_t nFrameHeaderSize)
 {
     CameraVideoStreamFrameHeader_t lin;
     vr::EVRTrackedCameraError _ret;
@@ -73,7 +73,7 @@ vr::EVRTrackedCameraError cppIVRTrackedCamera_IVRTrackedCamera_004_GetVideoStrea
     return _ret;
 }
 
-vr::EVRTrackedCameraError cppIVRTrackedCamera_IVRTrackedCamera_004_GetVideoStreamTextureGL(void *linux_side, TrackedCameraHandle_t hTrackedCamera, EVRTrackedCameraFrameType eFrameType, glUInt_t * pglTextureId, CameraVideoStreamFrameHeader_t * pFrameHeader, uint32_t nFrameHeaderSize)
+vr::EVRTrackedCameraError cppIVRTrackedCamera_IVRTrackedCamera_004_GetVideoStreamTextureGL(void *linux_side, TrackedCameraHandle_t hTrackedCamera, EVRTrackedCameraFrameType eFrameType, glUInt_t * pglTextureId, winCameraVideoStreamFrameHeader_t_1017 * pFrameHeader, uint32_t nFrameHeaderSize)
 {
     CameraVideoStreamFrameHeader_t lin;
     vr::EVRTrackedCameraError _ret;
