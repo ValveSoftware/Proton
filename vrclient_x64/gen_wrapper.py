@@ -367,7 +367,7 @@ def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, e
             #unspecified function pointer
             typename = "void *"
         else:
-            typename = param.type.spelling.split("::")[-1].replace("&", "*");
+            typename = param.type.spelling.split("::")[-1].replace("&", "*")
             real_type = param.type;
             while real_type.kind == clang.cindex.TypeKind.POINTER:
                 real_type = real_type.get_pointee()
@@ -381,11 +381,11 @@ def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, e
                     typename = "win" + do_wrap[0] + "_" + display_sdkver(sdkver) + " **"
                 elif real_type.get_canonical().kind == clang.cindex.TypeKind.RECORD and \
                         struct_needs_conversion(real_type.get_canonical()):
-                    do_win_to_lin = (strip_const(strip_ns(real_type.spelling)), param.spelling)
+                    do_win_to_lin = (strip_const(strip_ns(real_type.get_canonical().spelling)), param.spelling)
                     if not real_type.is_const_qualified():
-                        do_lin_to_win = (strip_const(strip_ns(real_type.spelling)), param.spelling)
+                        do_lin_to_win = (strip_const(strip_ns(real_type.get_canonical().spelling)), param.spelling)
                     #preserve pointers
-                    typename = typename.replace(strip_ns(real_type.spelling), "win%s_%s" % (strip_ns(real_type.spelling), display_sdkver(sdkver)))
+                    typename = typename.replace(strip_ns(real_type.spelling), "win%s_%s" % (strip_ns(real_type.get_canonical().spelling), display_sdkver(sdkver)))
 
         if param.spelling == "":
             cfile.write(", %s _%s" % (typename, unnamed))

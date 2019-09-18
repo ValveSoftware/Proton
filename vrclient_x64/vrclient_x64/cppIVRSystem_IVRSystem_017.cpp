@@ -188,27 +188,27 @@ vr::HiddenAreaMesh_t cppIVRSystem_IVRSystem_017_GetHiddenAreaMesh(void *linux_si
     return ((IVRSystem*)linux_side)->GetHiddenAreaMesh((vr::EVREye)eEye, (vr::EHiddenAreaMeshType)type);
 }
 
-bool cppIVRSystem_IVRSystem_017_GetControllerState(void *linux_side, TrackedDeviceIndex_t unControllerDeviceIndex, winVRControllerState_t_1011 * pControllerState, uint32_t unControllerStateSize)
+bool cppIVRSystem_IVRSystem_017_GetControllerState(void *linux_side, TrackedDeviceIndex_t unControllerDeviceIndex, winVRControllerState001_t_1011 * pControllerState, uint32_t unControllerStateSize)
 {
-    VRControllerState_t lin;
+    VRControllerState001_t lin;
     bool _ret;
     if(pControllerState)
-        struct_VRControllerState_t_1011_win_to_lin(pControllerState, &lin);
-    _ret = ((IVRSystem*)linux_side)->GetControllerState((vr::TrackedDeviceIndex_t)unControllerDeviceIndex, pControllerState ? &lin : nullptr, (uint32_t)unControllerStateSize);
+        struct_VRControllerState001_t_1011_win_to_lin(pControllerState, &lin);
+    _ret = ((IVRSystem*)linux_side)->GetControllerState((vr::TrackedDeviceIndex_t)unControllerDeviceIndex, pControllerState ? &lin : nullptr, unControllerStateSize ? sizeof(lin) : 0);
     if(pControllerState)
-        struct_VRControllerState_t_1011_lin_to_win(&lin, pControllerState);
+        struct_VRControllerState001_t_1011_lin_to_win(&lin, pControllerState);
     return _ret;
 }
 
-bool cppIVRSystem_IVRSystem_017_GetControllerStateWithPose(void *linux_side, ETrackingUniverseOrigin eOrigin, TrackedDeviceIndex_t unControllerDeviceIndex, winVRControllerState_t_1011 * pControllerState, uint32_t unControllerStateSize, TrackedDevicePose_t * pTrackedDevicePose)
+bool cppIVRSystem_IVRSystem_017_GetControllerStateWithPose(void *linux_side, ETrackingUniverseOrigin eOrigin, TrackedDeviceIndex_t unControllerDeviceIndex, winVRControllerState001_t_1011 * pControllerState, uint32_t unControllerStateSize, TrackedDevicePose_t * pTrackedDevicePose)
 {
-    VRControllerState_t lin;
+    VRControllerState001_t lin;
     bool _ret;
     if(pControllerState)
-        struct_VRControllerState_t_1011_win_to_lin(pControllerState, &lin);
-    _ret = ((IVRSystem*)linux_side)->GetControllerStateWithPose((vr::ETrackingUniverseOrigin)eOrigin, (vr::TrackedDeviceIndex_t)unControllerDeviceIndex, pControllerState ? &lin : nullptr, (uint32_t)unControllerStateSize, (vr::TrackedDevicePose_t *)pTrackedDevicePose);
+        struct_VRControllerState001_t_1011_win_to_lin(pControllerState, &lin);
+    _ret = ((IVRSystem*)linux_side)->GetControllerStateWithPose((vr::ETrackingUniverseOrigin)eOrigin, (vr::TrackedDeviceIndex_t)unControllerDeviceIndex, pControllerState ? &lin : nullptr, unControllerStateSize ? sizeof(lin) : 0, (vr::TrackedDevicePose_t *)pTrackedDevicePose);
     if(pControllerState)
-        struct_VRControllerState_t_1011_lin_to_win(&lin, pControllerState);
+        struct_VRControllerState001_t_1011_lin_to_win(&lin, pControllerState);
     return _ret;
 }
 
