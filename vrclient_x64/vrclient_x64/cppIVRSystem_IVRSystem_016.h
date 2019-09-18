@@ -34,8 +34,8 @@ extern bool cppIVRSystem_IVRSystem_016_PollNextEvent(void *, winVREvent_t_109 *,
 extern bool cppIVRSystem_IVRSystem_016_PollNextEventWithPose(void *, ETrackingUniverseOrigin, winVREvent_t_109 *, uint32_t, TrackedDevicePose_t *);
 extern const char * cppIVRSystem_IVRSystem_016_GetEventTypeNameFromEnum(void *, EVREventType);
 extern HiddenAreaMesh_t cppIVRSystem_IVRSystem_016_GetHiddenAreaMesh(void *, EVREye, EHiddenAreaMeshType);
-extern bool cppIVRSystem_IVRSystem_016_GetControllerState(void *, TrackedDeviceIndex_t, winVRControllerState001_t_109 *, uint32_t);
-extern bool cppIVRSystem_IVRSystem_016_GetControllerStateWithPose(void *, ETrackingUniverseOrigin, TrackedDeviceIndex_t, winVRControllerState001_t_109 *, uint32_t, TrackedDevicePose_t *);
+extern bool cppIVRSystem_IVRSystem_016_GetControllerState(void *, TrackedDeviceIndex_t, winVRControllerState_t_109 *, uint32_t);
+extern bool cppIVRSystem_IVRSystem_016_GetControllerStateWithPose(void *, ETrackingUniverseOrigin, TrackedDeviceIndex_t, winVRControllerState_t_109 *, uint32_t, TrackedDevicePose_t *);
 extern void cppIVRSystem_IVRSystem_016_TriggerHapticPulse(void *, TrackedDeviceIndex_t, uint32_t, unsigned short);
 extern const char * cppIVRSystem_IVRSystem_016_GetButtonIdNameFromEnum(void *, EVRButtonId);
 extern const char * cppIVRSystem_IVRSystem_016_GetControllerAxisTypeNameFromEnum(void *, EVRControllerAxisType);

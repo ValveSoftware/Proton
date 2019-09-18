@@ -169,14 +169,9 @@ vr::EVROverlayError cppIVROverlay_IVROverlay_008_GetTransformForOverlayCoordinat
     return ((IVROverlay*)linux_side)->GetTransformForOverlayCoordinates((vr::VROverlayHandle_t)ulOverlayHandle, (vr::ETrackingUniverseOrigin)eTrackingOrigin, (vr::HmdVector2_t)coordinatesInOverlay, (vr::HmdMatrix34_t *)pmatTransform);
 }
 
-bool cppIVROverlay_IVROverlay_008_PollNextOverlayEvent(void *linux_side, VROverlayHandle_t ulOverlayHandle, winVREvent_t_0914 * pEvent)
+bool cppIVROverlay_IVROverlay_008_PollNextOverlayEvent(void *linux_side, VROverlayHandle_t ulOverlayHandle, VREvent_t * pEvent)
 {
-    VREvent_t lin;
-    bool _ret;
-    _ret = ((IVROverlay*)linux_side)->PollNextOverlayEvent((vr::VROverlayHandle_t)ulOverlayHandle, pEvent ? &lin : nullptr);
-    if(pEvent)
-        struct_VREvent_t_0914_lin_to_win(&lin, pEvent);
-    return _ret;
+    return ((IVROverlay*)linux_side)->PollNextOverlayEvent((vr::VROverlayHandle_t)ulOverlayHandle, (vr::VREvent_t *)pEvent);
 }
 
 vr::EVROverlayError cppIVROverlay_IVROverlay_008_GetOverlayInputMethod(void *linux_side, VROverlayHandle_t ulOverlayHandle, VROverlayInputMethod * peInputMethod)

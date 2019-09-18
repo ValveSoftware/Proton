@@ -24,12 +24,12 @@ extern uint64_t cppIVRSystem_IVRSystem_004_GetUint64TrackedDeviceProperty(void *
 extern HmdMatrix34_t cppIVRSystem_IVRSystem_004_GetMatrix34TrackedDeviceProperty(void *, TrackedDeviceIndex_t, TrackedDeviceProperty, TrackedPropertyError *);
 extern uint32_t cppIVRSystem_IVRSystem_004_GetStringTrackedDeviceProperty(void *, TrackedDeviceIndex_t, TrackedDeviceProperty, char *, uint32_t, TrackedPropertyError *);
 extern const char * cppIVRSystem_IVRSystem_004_GetPropErrorNameFromEnum(void *, TrackedPropertyError);
-extern bool cppIVRSystem_IVRSystem_004_PollNextEvent(void *, winVREvent_t_092 *);
-extern bool cppIVRSystem_IVRSystem_004_PollNextEventWithPose(void *, TrackingUniverseOrigin, winVREvent_t_092 *, TrackedDevicePose_t *);
+extern bool cppIVRSystem_IVRSystem_004_PollNextEvent(void *, VREvent_t *);
+extern bool cppIVRSystem_IVRSystem_004_PollNextEventWithPose(void *, TrackingUniverseOrigin, VREvent_t *, TrackedDevicePose_t *);
 extern const char * cppIVRSystem_IVRSystem_004_GetEventTypeNameFromEnum(void *, EVREventType);
 extern HiddenAreaMesh_t cppIVRSystem_IVRSystem_004_GetHiddenAreaMesh(void *, Hmd_Eye);
-extern bool cppIVRSystem_IVRSystem_004_GetControllerState(void *, TrackedDeviceIndex_t, winVRControllerState001_t_092 *);
-extern bool cppIVRSystem_IVRSystem_004_GetControllerStateWithPose(void *, TrackingUniverseOrigin, TrackedDeviceIndex_t, winVRControllerState001_t_092 *, TrackedDevicePose_t *);
+extern bool cppIVRSystem_IVRSystem_004_GetControllerState(void *, TrackedDeviceIndex_t, winVRControllerState_t_092 *);
+extern bool cppIVRSystem_IVRSystem_004_GetControllerStateWithPose(void *, TrackingUniverseOrigin, TrackedDeviceIndex_t, winVRControllerState_t_092 *, TrackedDevicePose_t *);
 extern void cppIVRSystem_IVRSystem_004_TriggerHapticPulse(void *, TrackedDeviceIndex_t, uint32_t, unsigned short);
 extern const char * cppIVRSystem_IVRSystem_004_GetButtonIdNameFromEnum(void *, EVRButtonId);
 extern const char * cppIVRSystem_IVRSystem_004_GetControllerAxisTypeNameFromEnum(void *, EVRControllerAxisType);

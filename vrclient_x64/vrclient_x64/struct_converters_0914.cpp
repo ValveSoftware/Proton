@@ -7,25 +7,6 @@ using namespace vr;
 extern "C" {
 #include "struct_converters.h"
 #pragma pack(push, 8)
-struct winVREvent_t_0914 {
-    vr::EVREventType eventType;
-    vr::TrackedDeviceIndex_t trackedDeviceIndex;
-    vr::VREvent_Data_t data __attribute__((aligned(8)));
-    float eventAgeSeconds;
-}  __attribute__ ((ms_struct));
-#pragma pack(pop)
-
-void struct_VREvent_t_0914_lin_to_win(void *l, void *w)
-{
-    struct winVREvent_t_0914 *win = (struct winVREvent_t_0914 *)w;
-    VREvent_t *lin = (VREvent_t *)l;
-    win->eventType = lin->eventType;
-    win->trackedDeviceIndex = lin->trackedDeviceIndex;
-    win->data = lin->data;
-    win->eventAgeSeconds = lin->eventAgeSeconds;
-}
-
-#pragma pack(push, 8)
 struct winVRControllerState001_t_0914 {
     uint32_t unPacketNum;
     uint64_t ulButtonPressed;

@@ -27,7 +27,7 @@ extern VROverlayError cppIVROverlay_IVROverlay_001_SetOverlayVisibility(void *, 
 extern VROverlayError cppIVROverlay_IVROverlay_001_ShowOverlay(void *, VROverlayHandle_t);
 extern VROverlayError cppIVROverlay_IVROverlay_001_HideOverlay(void *, VROverlayHandle_t);
 extern bool cppIVROverlay_IVROverlay_001_IsOverlayVisible(void *, VROverlayHandle_t);
-extern bool cppIVROverlay_IVROverlay_001_PollNextOverlayEvent(void *, VROverlayHandle_t, winVREvent_t_092 *);
+extern bool cppIVROverlay_IVROverlay_001_PollNextOverlayEvent(void *, VROverlayHandle_t, VREvent_t *);
 extern VROverlayError cppIVROverlay_IVROverlay_001_GetOverlayInputMethod(void *, VROverlayHandle_t, VROverlayInputMethod *);
 extern VROverlayError cppIVROverlay_IVROverlay_001_SetOverlayInputMethod(void *, VROverlayHandle_t, VROverlayInputMethod);
 extern VROverlayError cppIVROverlay_IVROverlay_001_GetOverlayMouseScale(void *, VROverlayHandle_t, HmdVector2_t *);

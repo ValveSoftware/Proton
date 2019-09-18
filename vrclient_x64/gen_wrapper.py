@@ -81,9 +81,6 @@ files = [
         "IVRSettings",
         "IVRSystem",
         "IVRTrackedCamera",
-        ], [ #user-allocated structs
-        "VRControllerState001_t",
-        "VREvent_t",
         ], [ #vrclient-allocated structs
         "RenderModel_t",
         "RenderModel_TextureMap_t",
@@ -92,7 +89,6 @@ files = [
     ("ivrclientcore.h",
         [ #classes
         "IVRClientCore",
-        ], [ #user-allocated structs
         ], [ #vrclient-allocated structs
         ]
     ),
@@ -376,10 +372,7 @@ def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, e
             while real_type.kind == clang.cindex.TypeKind.POINTER:
                 real_type = real_type.get_pointee()
             if param.type.kind == clang.cindex.TypeKind.POINTER:
-                if strip_ns(param.type.get_pointee().get_canonical().spelling) in user_structs:
-                    do_lin_to_win = (strip_ns(param.type.get_pointee().get_canonical().spelling), param.spelling)
-                    typename = "win" + do_lin_to_win[0] + "_" + display_sdkver(sdkver) + " *"
-                elif strip_ns(param.type.get_pointee().get_canonical().spelling) in system_structs:
+                if strip_ns(param.type.get_pointee().get_canonical().spelling) in system_structs:
                     do_unwrap = (strip_ns(param.type.get_pointee().get_canonical().spelling), param.spelling)
                     typename = "win" + do_unwrap[0] + "_" + display_sdkver(sdkver) + " *"
                 elif param.type.get_pointee().get_canonical().kind == clang.cindex.TypeKind.POINTER and \
@@ -392,7 +385,6 @@ def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, e
                     if not real_type.is_const_qualified():
                         do_lin_to_win = (strip_const(strip_ns(real_type.spelling)), param.spelling)
                     #preserve pointers
-                    print("typename: \"" + typename + "\" real_type.spelling: \"" + real_type.spelling + "\"")
                     typename = typename.replace(strip_ns(real_type.spelling), "win%s_%s" % (strip_ns(real_type.spelling), display_sdkver(sdkver)))
 
         if param.spelling == "":
@@ -833,9 +825,6 @@ def handle_struct(sdkver, struct):
         which.add(LIN_TO_WIN)
         which.add(WIN_TO_LIN)
 
-    if strip_ns(vrchild.displayname) in user_structs:
-        which.add(LIN_TO_WIN)
-
     if strip_ns(vrchild.displayname) in system_structs:
         which.add(WRAPPERS)
 
@@ -1247,7 +1236,7 @@ for sdkver in sdk_versions:
                     iface, version = result.group(1, 2)
                     iface_versions[iface] = version
 
-    for fname, classes, user_structs, system_structs in files:
+    for fname, classes, system_structs in files:
         # Parse as 32-bit C++
         input_name = "openvr_%s/%s" % (sdkver, fname)
         sys.stdout.write("about to parse %s\n" % input_name)

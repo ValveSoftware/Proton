@@ -6847,7 +6847,7 @@ EVROverlayError __thiscall winIVROverlay_IVROverlay_008_GetTransformForOverlayCo
 }
 
 DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_008_PollNextOverlayEvent, 16)
-bool __thiscall winIVROverlay_IVROverlay_008_PollNextOverlayEvent(winIVROverlay_IVROverlay_008 *_this, VROverlayHandle_t ulOverlayHandle, winVREvent_t_0914 * pEvent)
+bool __thiscall winIVROverlay_IVROverlay_008_PollNextOverlayEvent(winIVROverlay_IVROverlay_008 *_this, VROverlayHandle_t ulOverlayHandle, VREvent_t * pEvent)
 {
     TRACE("%p\n", _this);
     return cppIVROverlay_IVROverlay_008_PollNextOverlayEvent(_this->linux_side, ulOverlayHandle, pEvent);
@@ -7439,7 +7439,7 @@ bool __thiscall winIVROverlay_IVROverlay_007_IsOverlayVisible(winIVROverlay_IVRO
 }
 
 DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_007_PollNextOverlayEvent, 16)
-bool __thiscall winIVROverlay_IVROverlay_007_PollNextOverlayEvent(winIVROverlay_IVROverlay_007 *_this, VROverlayHandle_t ulOverlayHandle, winVREvent_t_0912 * pEvent)
+bool __thiscall winIVROverlay_IVROverlay_007_PollNextOverlayEvent(winIVROverlay_IVROverlay_007 *_this, VROverlayHandle_t ulOverlayHandle, VREvent_t * pEvent)
 {
     TRACE("%p\n", _this);
     return cppIVROverlay_IVROverlay_007_PollNextOverlayEvent(_this->linux_side, ulOverlayHandle, pEvent);
@@ -8011,7 +8011,7 @@ bool __thiscall winIVROverlay_IVROverlay_005_IsOverlayVisible(winIVROverlay_IVRO
 }
 
 DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_005_PollNextOverlayEvent, 16)
-bool __thiscall winIVROverlay_IVROverlay_005_PollNextOverlayEvent(winIVROverlay_IVROverlay_005 *_this, VROverlayHandle_t ulOverlayHandle, winVREvent_t_0910 * pEvent)
+bool __thiscall winIVROverlay_IVROverlay_005_PollNextOverlayEvent(winIVROverlay_IVROverlay_005 *_this, VROverlayHandle_t ulOverlayHandle, VREvent_t * pEvent)
 {
     TRACE("%p\n", _this);
     return cppIVROverlay_IVROverlay_005_PollNextOverlayEvent(_this->linux_side, ulOverlayHandle, pEvent);
@@ -8538,7 +8538,7 @@ bool __thiscall winIVROverlay_IVROverlay_004_IsOverlayVisible(winIVROverlay_IVRO
 }
 
 DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_004_PollNextOverlayEvent, 16)
-bool __thiscall winIVROverlay_IVROverlay_004_PollNextOverlayEvent(winIVROverlay_IVROverlay_004 *_this, VROverlayHandle_t ulOverlayHandle, winVREvent_t_098 * pEvent)
+bool __thiscall winIVROverlay_IVROverlay_004_PollNextOverlayEvent(winIVROverlay_IVROverlay_004 *_this, VROverlayHandle_t ulOverlayHandle, VREvent_t * pEvent)
 {
     TRACE("%p\n", _this);
     return cppIVROverlay_IVROverlay_004_PollNextOverlayEvent(_this->linux_side, ulOverlayHandle, pEvent);
@@ -9015,7 +9015,7 @@ bool __thiscall winIVROverlay_IVROverlay_003_IsOverlayVisible(winIVROverlay_IVRO
 }
 
 DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_003_PollNextOverlayEvent, 16)
-bool __thiscall winIVROverlay_IVROverlay_003_PollNextOverlayEvent(winIVROverlay_IVROverlay_003 *_this, VROverlayHandle_t ulOverlayHandle, winVREvent_t_097 * pEvent)
+bool __thiscall winIVROverlay_IVROverlay_003_PollNextOverlayEvent(winIVROverlay_IVROverlay_003 *_this, VROverlayHandle_t ulOverlayHandle, VREvent_t * pEvent)
 {
     TRACE("%p\n", _this);
     return cppIVROverlay_IVROverlay_003_PollNextOverlayEvent(_this->linux_side, ulOverlayHandle, pEvent);
@@ -9467,7 +9467,7 @@ bool __thiscall winIVROverlay_IVROverlay_002_IsOverlayVisible(winIVROverlay_IVRO
 }
 
 DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_002_PollNextOverlayEvent, 16)
-bool __thiscall winIVROverlay_IVROverlay_002_PollNextOverlayEvent(winIVROverlay_IVROverlay_002 *_this, VROverlayHandle_t ulOverlayHandle, winVREvent_t_094 * pEvent)
+bool __thiscall winIVROverlay_IVROverlay_002_PollNextOverlayEvent(winIVROverlay_IVROverlay_002 *_this, VROverlayHandle_t ulOverlayHandle, VREvent_t * pEvent)
 {
     TRACE("%p\n", _this);
     return cppIVROverlay_IVROverlay_002_PollNextOverlayEvent(_this->linux_side, ulOverlayHandle, pEvent);
@@ -9904,7 +9904,7 @@ bool __thiscall winIVROverlay_IVROverlay_001_IsOverlayVisible(winIVROverlay_IVRO
 }
 
 DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_001_PollNextOverlayEvent, 16)
-bool __thiscall winIVROverlay_IVROverlay_001_PollNextOverlayEvent(winIVROverlay_IVROverlay_001 *_this, VROverlayHandle_t ulOverlayHandle, winVREvent_t_092 * pEvent)
+bool __thiscall winIVROverlay_IVROverlay_001_PollNextOverlayEvent(winIVROverlay_IVROverlay_001 *_this, VROverlayHandle_t ulOverlayHandle, VREvent_t * pEvent)
 {
     TRACE("%p\n", _this);
     return cppIVROverlay_IVROverlay_001_PollNextOverlayEvent(_this->linux_side, ulOverlayHandle, pEvent);
