@@ -881,46 +881,34 @@ def handle_struct(sdkver, struct):
     cppfile.write("}  __attribute__ ((ms_struct));\n")
     cppfile.write("#pragma pack(pop)\n\n")
 
-    if LIN_TO_WIN in which:
-        hfile.write("extern void struct_%s_lin_to_win(void *l, void *w);\n" % handler_name)
-
-        cppfile.write("void struct_%s_lin_to_win(void *l, void *w)\n{\n" % handler_name)
-        cppfile.write("    struct win%s *win = (struct win%s *)w;\n" % (handler_name, handler_name))
-        cppfile.write("    %s *lin = (%s *)l;\n" % (struct.displayname, struct.displayname))
-
+    def dump_converter(src, dst):
         for m in struct.get_children():
             if m.kind == clang.cindex.CursorKind.FIELD_DECL:
                 if m.type.get_canonical().kind == clang.cindex.TypeKind.CONSTANTARRAY:
                     #TODO: if this is a struct, or packed differently, we'll have to
                     # copy each element in a for-loop
-                    cppfile.write("    memcpy(win->%s, lin->%s, sizeof(win->%s));\n" % (m.displayname, m.displayname, m.displayname))
+                    cppfile.write("    memcpy(" + dst + "->" + m.displayname + ", " + src + "->" + m.displayname + ", sizeof(" + dst + "->" + m.displayname + "));\n")
                 elif m.type.get_canonical().kind == clang.cindex.TypeKind.RECORD and \
                         struct_needs_conversion(m.type.get_canonical()):
-                    cppfile.write("    lin_to_win_struct_%s_%s(&lin->%s, &win->%s);\n" % (strip_ns(m.type.spelling), display_sdkver(sdkver), m.displayname, m.displayname))
+                    cppfile.write("    struct_" + strip_ns(m.type.spelling) + "_" + display_sdkver(sdkver) + "_" + src + "_to_" + dst + \
+                            "(&" + src + "->" + m.displayname + ", &" + dst + "->" + m.displayname + ");\n")
                 else:
-                    cppfile.write("    win->%s = lin->%s;\n" % (m.displayname, m.displayname))
+                    cppfile.write("    " + dst + "->" + m.displayname + " = " + src + "->" + m.displayname + ";\n")
 
+    if LIN_TO_WIN in which:
+        hfile.write("extern void struct_%s_lin_to_win(void *l, void *w);\n" % handler_name)
+        cppfile.write("void struct_%s_lin_to_win(void *l, void *w)\n{\n" % handler_name)
+        cppfile.write("    struct win%s *win = (struct win%s *)w;\n" % (handler_name, handler_name))
+        cppfile.write("    %s *lin = (%s *)l;\n" % (struct.displayname, struct.displayname))
+        dump_converter("lin", "win")
         cppfile.write("}\n\n")
 
     if WIN_TO_LIN in which:
         hfile.write("extern void struct_%s_win_to_lin(void *w, void *l);\n" % handler_name)
-
         cppfile.write("void struct_%s_win_to_lin(void *w, void *l)\n{\n" % handler_name)
         cppfile.write("    struct win%s *win = (struct win%s *)w;\n" % (handler_name, handler_name))
         cppfile.write("    %s *lin = (%s *)l;\n" % (struct.displayname, struct.displayname))
-
-        for m in struct.get_children():
-            if m.kind == clang.cindex.CursorKind.FIELD_DECL:
-                if m.type.get_canonical().kind == clang.cindex.TypeKind.CONSTANTARRAY:
-                    #TODO: if this is a struct, or packed differently, we'll have to
-                    # copy each element in a for-loop
-                    cppfile.write("    memcpy(lin->%s, win->%s, sizeof(lin->%s));\n" % (m.displayname, m.displayname, m.displayname))
-                elif m.type.get_canonical().kind == clang.cindex.TypeKind.RECORD and \
-                        struct_needs_conversion(m.type.get_canonical()):
-                    cppfile.write("    win_to_lin_struct_%s_%s(&win->%s, &lin->%s);\n" % (m.type.spelling, display_sdkver(sdkver), m.displayname, m.displayname))
-                else:
-                    cppfile.write("    lin->%s = win->%s;\n" % (m.displayname, m.displayname))
-
+        dump_converter("win", "lin")
         cppfile.write("}\n\n")
 
     if WRAPPERS in which:
@@ -930,14 +918,7 @@ def handle_struct(sdkver, struct):
         cppfile.write("    struct win%s *win = (struct win%s *)malloc(sizeof(*win));\n" % (handler_name, handler_name))
         cppfile.write("    %s *lin = (%s *)l;\n" % (struct.displayname, struct.displayname))
 
-        for m in struct.get_children():
-            if m.kind == clang.cindex.CursorKind.FIELD_DECL:
-                if m.type.get_canonical().kind == clang.cindex.TypeKind.CONSTANTARRAY:
-                    #TODO: if this is a struct, or packed differently, we'll have to
-                    # copy each element in a for-loop
-                    cppfile.write("    memcpy(win->%s, lin->%s, sizeof(win->%s));\n" % (m.displayname, m.displayname, m.displayname))
-                else:
-                    cppfile.write("    win->%s = lin->%s;\n" % (m.displayname, m.displayname))
+        dump_converter("lin", "win")
 
         cppfile.write("    win->linux_side = lin;\n");
         cppfile.write("    return win;\n")
