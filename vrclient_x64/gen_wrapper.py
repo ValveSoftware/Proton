@@ -94,6 +94,30 @@ files = [
     ),
 ]
 
+next_is_size_structs = [
+        "VREvent_t",
+        "VRControllerState001_t",
+        "InputAnalogActionData_t",
+        "InputDigitalActionData_t",
+        "InputPoseActionData_t",
+        "InputSkeletalActionData_t",
+        "CameraVideoStreamFrameHeader_t",
+        "Compositor_CumulativeStats",
+        "VRActiveActionSet_t",
+        "InputOriginInfo_t",
+        "InputBindingInfo_t",
+]
+
+unhandled_next_is_size_structs = [
+        "VROverlayIntersectionMaskPrimitive_t" # not next, but next-next uint32 is the size
+]
+
+struct_size_fields = {
+        "Compositor_OverlaySettings": ["size"],
+        "Compositor_FrameTiming": ["size", "m_nSize"],
+        "DriverDirectMode_FrameTiming": ["m_nSize"],
+}
+
 path_conversions = [
     {
         "parent_name": "SetActionManifestPath",
@@ -488,10 +512,10 @@ def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, e
                     do_wrap and do_wrap[1] == param.spelling:
                 cfile.write(", %s" % param.spelling)
                 cpp.write("%s ? &lin : nullptr" % param.spelling)
-                if do_lin_to_win and \
-                        (do_lin_to_win[0] == "VREvent_t" or \
-                         do_lin_to_win[0] == "VRControllerState001_t"):
-                    next_is_size = True
+                if do_win_to_lin:
+                    assert(not do_win_to_lin[0] in unhandled_next_is_size_structs)
+                    if do_win_to_lin[0] in next_is_size_structs:
+                        next_is_size = True
             elif do_unwrap and do_unwrap[1] == param.spelling:
                 cfile.write(", %s" % param.spelling)
                 cpp.write("struct_%s_%s_unwrap(%s)" % (strip_ns(do_unwrap[0]), display_sdkver(sdkver), do_unwrap[1]))
@@ -881,6 +905,9 @@ def handle_struct(sdkver, struct):
                         struct_needs_conversion(m.type.get_canonical()):
                     cppfile.write("    struct_" + strip_ns(m.type.spelling) + "_" + display_sdkver(sdkver) + "_" + src + "_to_" + dst + \
                             "(&" + src + "->" + m.displayname + ", &" + dst + "->" + m.displayname + ");\n")
+                elif struct.displayname in struct_size_fields and \
+                    m.displayname in struct_size_fields[struct.displayname]:
+                        cppfile.write("    " + dst + "->" + m.displayname + " = sizeof(*" + dst + ");\n")
                 else:
                     cppfile.write("    " + dst + "->" + m.displayname + " = " + src + "->" + m.displayname + ";\n")
 

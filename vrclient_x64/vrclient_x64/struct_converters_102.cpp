@@ -96,7 +96,7 @@ void struct_Compositor_FrameTiming_102_lin_to_win(void *l, void *w)
 {
     struct winCompositor_FrameTiming_102 *win = (struct winCompositor_FrameTiming_102 *)w;
     Compositor_FrameTiming *lin = (Compositor_FrameTiming *)l;
-    win->m_nSize = lin->m_nSize;
+    win->m_nSize = sizeof(*win);
     win->m_nFrameIndex = lin->m_nFrameIndex;
     win->m_nNumFramePresents = lin->m_nNumFramePresents;
     win->m_nNumDroppedFrames = lin->m_nNumDroppedFrames;
@@ -125,7 +125,7 @@ void struct_Compositor_FrameTiming_102_win_to_lin(void *w, void *l)
 {
     struct winCompositor_FrameTiming_102 *win = (struct winCompositor_FrameTiming_102 *)w;
     Compositor_FrameTiming *lin = (Compositor_FrameTiming *)l;
-    lin->m_nSize = win->m_nSize;
+    lin->m_nSize = sizeof(*lin);
     lin->m_nFrameIndex = win->m_nFrameIndex;
     lin->m_nNumFramePresents = win->m_nNumFramePresents;
     lin->m_nNumDroppedFrames = win->m_nNumDroppedFrames;

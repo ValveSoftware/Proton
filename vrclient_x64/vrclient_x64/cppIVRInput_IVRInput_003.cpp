@@ -40,7 +40,7 @@ vr::EVRInputError cppIVRInput_IVRInput_003_GetDigitalActionData(void *linux_side
     vr::EVRInputError _ret;
     if(pActionData)
         struct_InputDigitalActionData_t_1015_win_to_lin(pActionData, &lin);
-    _ret = ((IVRInput*)linux_side)->GetDigitalActionData((vr::VRActionHandle_t)action, pActionData ? &lin : nullptr, (uint32_t)unActionDataSize);
+    _ret = ((IVRInput*)linux_side)->GetDigitalActionData((vr::VRActionHandle_t)action, pActionData ? &lin : nullptr, unActionDataSize ? sizeof(lin) : 0);
     if(pActionData)
         struct_InputDigitalActionData_t_1015_lin_to_win(&lin, pActionData);
     return _ret;
@@ -52,7 +52,7 @@ vr::EVRInputError cppIVRInput_IVRInput_003_GetAnalogActionData(void *linux_side,
     vr::EVRInputError _ret;
     if(pActionData)
         struct_InputAnalogActionData_t_1015_win_to_lin(pActionData, &lin);
-    _ret = ((IVRInput*)linux_side)->GetAnalogActionData((vr::VRActionHandle_t)action, pActionData ? &lin : nullptr, (uint32_t)unActionDataSize);
+    _ret = ((IVRInput*)linux_side)->GetAnalogActionData((vr::VRActionHandle_t)action, pActionData ? &lin : nullptr, unActionDataSize ? sizeof(lin) : 0);
     if(pActionData)
         struct_InputAnalogActionData_t_1015_lin_to_win(&lin, pActionData);
     return _ret;
@@ -64,7 +64,7 @@ vr::EVRInputError cppIVRInput_IVRInput_003_GetPoseActionData(void *linux_side, V
     vr::EVRInputError _ret;
     if(pActionData)
         struct_InputPoseActionData_t_1015_win_to_lin(pActionData, &lin);
-    _ret = ((IVRInput*)linux_side)->GetPoseActionData((vr::VRActionHandle_t)action, (vr::ETrackingUniverseOrigin)eOrigin, (float)fPredictedSecondsFromNow, pActionData ? &lin : nullptr, (uint32_t)unActionDataSize);
+    _ret = ((IVRInput*)linux_side)->GetPoseActionData((vr::VRActionHandle_t)action, (vr::ETrackingUniverseOrigin)eOrigin, (float)fPredictedSecondsFromNow, pActionData ? &lin : nullptr, unActionDataSize ? sizeof(lin) : 0);
     if(pActionData)
         struct_InputPoseActionData_t_1015_lin_to_win(&lin, pActionData);
     return _ret;
