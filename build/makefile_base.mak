@@ -130,9 +130,6 @@ DST_BASE := ./dist
 DST_DIR := $(DST_BASE)/dist
 DEPLOY_DIR := ./deploy
 
-# TODO Release/debug configuration
-INSTALL_PROGRAM_FLAGS :=
-
 # All top level goals.  Lazy evaluated so they can be added below.
 GOAL_TARGETS = $(GOAL_TARGETS_LIBS)
 # Excluding goals like wine and dist that are either long running or slow per invocation
@@ -144,7 +141,15 @@ ALL_TARGETS =
 ## Platform-specific variables
 ##
 
-STRIP := strip
+ifneq ($(UNSTRIPPED_BUILD),)
+    STRIP :=
+    INSTALL_PROGRAM_FLAGS :=
+    MESON_STRIP_ARG :=
+else
+    STRIP := strip
+    INSTALL_PROGRAM_FLAGS := -s
+    MESON_STRIP_ARG := --strip
+endif
 WINE32_AUTOCONF :=
 WINE64_AUTOCONF :=
 
@@ -852,6 +857,8 @@ wine64-intermediate: $(WINE_CONFIGURE_FILES64)
 	+$(MAKE) -C $(WINE_OBJ64) $(WINE_COMMON_MAKE_ARGS)
 	+$(MAKE) -C $(WINE_OBJ64) $(WINE_COMMON_MAKE_ARGS) install-lib
 	+$(MAKE) -C $(WINE_OBJ64) $(WINE64_MAKE_ARGS) install-lib install-dev
+	if [ "$(UNSTRIPPED_BUILD)" == "" ]; then rm -rf $(DST_DIR)/lib64/wine/.debug; fi
+	if [ "$(UNSTRIPPED_BUILD)" != "" ]; then make -C $(WINE_OBJ64) $(WINE64_MAKE_ARGS) install-cross-debug; cp -a $(TOOLS_DIR64)/lib64/wine/.debug $(DST_DIR)/lib64/wine/; fi
 	rm -f $(DST_DIR)/bin/{msiexec,notepad,regedit,regsvr32,wineboot,winecfg,wineconsole,winedbg,winefile,winemine,winepath}
 	rm -rf $(DST_DIR)/share/man/
 
@@ -868,6 +875,8 @@ wine32-intermediate: $(WINE_CONFIGURE_FILES32)
 	cp -a $(WINE_DST32)/lib $(DST_DIR)/
 	cp -a $(WINE_DST32)/bin/wine $(DST_DIR)/bin/
 	cp -a $(WINE_DST32)/bin/wine-preloader $(DST_DIR)/bin/
+	if [ "$(UNSTRIPPED_BUILD)" == "" ]; then rm -rf $(DST_DIR)/lib/wine/.debug; fi
+	if [ "$(UNSTRIPPED_BUILD)" != "" ]; then make -C $(WINE_OBJ32) $(WINE32_MAKE_ARGS) install-cross-debug; cp -a $(TOOLS_DIR32)/lib/wine/.debug $(DST_DIR)/lib/wine/; fi
 
 ##
 ## vrclient
@@ -1112,7 +1121,7 @@ $(DXVK_CONFIGURE_FILES64): $(MAKEFILE_DEP) $(DXVK)/build-win64.txt | $(DXVK_OBJ6
 	fi
 	cd "$(abspath $(DXVK))" && \
 	PATH="$(abspath $(SRCDIR))/glslang/bin/:$(PATH)" \
-		meson --prefix="$(abspath $(DXVK_OBJ64))" --cross-file "$(abspath $(DXVK))/build-win64.txt" --strip --buildtype=release "$(abspath $(DXVK_OBJ64))"
+		meson --prefix="$(abspath $(DXVK_OBJ64))" --cross-file "$(abspath $(DXVK))/build-win64.txt" $(MESON_STRIP_ARG) --buildtype=release "$(abspath $(DXVK_OBJ64))"
 
 # 32-bit configure.  Remove coredata file if already configured (due to e.g. makefile changing)
 $(DXVK_CONFIGURE_FILES32): $(MAKEFILE_DEP) $(DXVK)/build-win32.txt | $(DXVK_OBJ32)
@@ -1121,7 +1130,7 @@ $(DXVK_CONFIGURE_FILES32): $(MAKEFILE_DEP) $(DXVK)/build-win32.txt | $(DXVK_OBJ3
 	fi
 	cd "$(abspath $(DXVK))" && \
 	PATH="$(abspath $(SRCDIR))/glslang/bin/:$(PATH)" \
-		meson --prefix="$(abspath $(DXVK_OBJ32))" --cross-file "$(abspath $(DXVK))/build-win32.txt" --strip --buildtype=release "$(abspath $(DXVK_OBJ32))"
+		meson --prefix="$(abspath $(DXVK_OBJ32))" --cross-file "$(abspath $(DXVK))/build-win32.txt" $(MESON_STRIP_ARG) --buildtype=release "$(abspath $(DXVK_OBJ32))"
 
 ## dxvk goals
 DXVK_TARGETS = dxvk dxvk_configure dxvk32 dxvk64 dxvk_configure32 dxvk_configure64
@@ -1170,7 +1179,7 @@ $(D9VK_CONFIGURE_FILES64): $(MAKEFILE_DEP) $(D9VK)/build-win64.txt | $(D9VK_OBJ6
 	fi
 	cd "$(abspath $(D9VK))" && \
 	PATH="$(abspath $(SRCDIR))/glslang/bin/:$(PATH)" \
-		meson --prefix="$(abspath $(D9VK_OBJ64))" --cross-file "$(abspath $(D9VK))/build-win64.txt" --strip --buildtype=release -Denable_dxgi=false -Denable_d3d10=false -Denable_d3d11=false "$(abspath $(D9VK_OBJ64))"
+		meson --prefix="$(abspath $(D9VK_OBJ64))" --cross-file "$(abspath $(D9VK))/build-win64.txt" $(MESON_STRIP_ARG) --buildtype=release -Denable_dxgi=false -Denable_d3d10=false -Denable_d3d11=false "$(abspath $(D9VK_OBJ64))"
 
 # 32-bit configure.  Remove coredata file if already configured (due to e.g. makefile changing)
 $(D9VK_CONFIGURE_FILES32): $(MAKEFILE_DEP) $(D9VK)/build-win32.txt | $(D9VK_OBJ32)
@@ -1179,7 +1188,7 @@ $(D9VK_CONFIGURE_FILES32): $(MAKEFILE_DEP) $(D9VK)/build-win32.txt | $(D9VK_OBJ3
 	fi
 	cd "$(abspath $(D9VK))" && \
 	PATH="$(abspath $(SRCDIR))/glslang/bin/:$(PATH)" \
-		meson --prefix="$(abspath $(D9VK_OBJ32))" --cross-file "$(abspath $(D9VK))/build-win32.txt" --strip --buildtype=release -Denable_dxgi=false -Denable_d3d10=false -Denable_d3d11=false "$(abspath $(D9VK_OBJ32))"
+		meson --prefix="$(abspath $(D9VK_OBJ32))" --cross-file "$(abspath $(D9VK))/build-win32.txt" $(MESON_STRIP_ARG) --buildtype=release -Denable_dxgi=false -Denable_d3d10=false -Denable_d3d11=false "$(abspath $(D9VK_OBJ32))"
 
 ## d9vk goals
 D9VK_TARGETS = d9vk d9vk_configure d9vk32 d9vk64 d9vk_configure32 d9vk_configure64
