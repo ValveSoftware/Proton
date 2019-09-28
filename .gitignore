@@ -5,3 +5,6 @@
 /syn-*
 
 /vrclient_x64/vrclient_x64/Makefile
+
+/.vagrant/
+/vagrant_share/
