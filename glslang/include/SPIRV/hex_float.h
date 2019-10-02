@@ -853,7 +853,7 @@ std::istream& operator>>(std::istream& is, HexFloat<T, Traits>& value) {
   value.set_value(static_cast<typename HF::native_type>(0.f));
 
   if (is.flags() & std::ios::skipws) {
-    // If the user wants to skip whitespace , then we should obey that.
+    // If the user wants to skip whitespace, then we should obey that.
     while (std::isspace(is.peek())) {
       is.get();
     }
