@@ -82,6 +82,8 @@ help:
 	@echo ""
 	@echo "  "make build_name=mytest module=dsound module" - Build only the dsound module"
 	@echo "      in the \"mytest\" build directory and place it into vagrant_share/dsound/."
+	@echo ""
+	@echo "Running out of disk space in the VM? See resize-vagrant-disk.sh"
 
 vagrant:
 	vagrant up
