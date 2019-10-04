@@ -87,7 +87,7 @@ help:
 
 vagrant:
 	vagrant up
-	vagrant rsync
+	vagrant rsync debian10
 
 clean: vagrant
 	vagrant ssh -c 'rm -rf $(BUILD_DIR)/'

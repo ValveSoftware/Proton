@@ -43,8 +43,6 @@ Vagrant.configure(2) do |config|
   #different synced folder type per provider, so we always use it.
   config.vagrant.plugins = "vagrant-sshfs"
 
-  config.vm.box = "generic/debian9"
-
   config.vm.provider "virtualbox" do |v|
     v.cpus = cpus
     v.memory = memory
@@ -57,53 +55,43 @@ Vagrant.configure(2) do |config|
     v.default_prefix = ENV['USER'].to_s.dup.concat('_').concat(File.basename(Dir.pwd))
   end
 
-  config.vm.synced_folder "./vagrant_share/", "/vagrant/", create: true, type: "sshfs", sshfs_opts_append: "-o cache=no"
-  config.vm.synced_folder ".", "/home/vagrant/proton", id: "proton", type: "rsync", rsync__exclude: ["vagrant_share"]
+  #deiban10-based build VM
+  config.vm.define "debian10", primary: true do |debian10|
 
-  #this is where the VM is initialized on first setup
-  config.vm.provision "shell", privileged: "true", inline: <<-SHELL
-    #install docker and steam-runtime dependencies
-    dpkg --add-architecture i386
-    apt-get update
-    apt-get install -y apt-transport-https ca-certificates curl gnupg2 software-properties-common
+    debian10.vm.box = "generic/debian10"
 
-    #add winehq repo
-    curl -fsSL https://dl.winehq.org/wine-builds/winehq.key | apt-key add -
-    echo 'deb http://dl.winehq.org/wine-builds/debian stretch main' > /etc/apt/sources.list.d/winehq.list
+    debian10.vm.synced_folder "./vagrant_share/", "/vagrant/", create: true, type: "sshfs", sshfs_opts_append: "-o cache=no"
+    debian10.vm.synced_folder ".", "/home/vagrant/proton", id: "proton", type: "rsync", rsync__exclude: ["vagrant_share"]
 
-    #add docker repo
-    curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add -
-    add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/debian stretch stable"
+    debian10.vm.provision "shell", privileged: "true", inline: <<-SHELL
+      #install docker and steam-runtime dependencies
+      dpkg --add-architecture i386
+      apt-get update
+      apt-get install -y apt-transport-https ca-certificates curl gnupg2 software-properties-common
 
-    #add backports
-    echo 'deb http://ftp.debian.org/debian stretch-backports main' > /etc/apt/sources.list.d/backports.list
+      #add docker repo
+      curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add -
+      add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/debian buster stable"
 
-    #install host build-time dependencies
-    apt-get update
-    apt-get install -y gpgv2 gnupg2 g++ g++-6-multilib git docker-ce fontforge-nox python-debian schroot python-pip
-    apt-get -y -t stretch-backports install meson
+      #install host build-time dependencies
+      apt-get update
+      apt-get install -y gpgv2 gnupg2 g++ g++-multilib git docker-ce docker-ce-cli containerd.io fontforge-nox python-debian schroot python-pip meson
 
-    #install adobe font devkit to build source san hans
-    pip install afdko
+      #install adobe font devkit to build source san hans
+      pip install afdko
 
-    #winehq-devel is installed to pull in dependencies to run Wine
-    apt-get install -y --install-recommends winehq-devel
+      #allow vagrant user to run docker
+      adduser vagrant docker
 
-    #remove system Wine installation to ensure no accidental leakage
-    apt-get remove -y winehq-devel
+      if ! schroot -i -c proton_crosscc >/dev/null 2>&1; then
+        #download build of recent mingw-w64 with dwarf2 exceptions enabled
+        wget --progress=dot -O /root/proton_crosscc.tar.xz 'http://repo.steampowered.com/proton_mingw/proton_mingw-9.1-1.tar.xz'
+        unxz -T0 /root/proton_crosscc.tar.xz
+        mkdir -p /srv/chroot/proton_crosscc/
+        tar -xf /root/proton_crosscc.tar -C /srv/chroot/proton_crosscc/
 
-    #allow vagrant user to run docker
-    adduser vagrant docker
-
-    if ! schroot -i -c proton_crosscc >/dev/null 2>&1; then
-      #download build of recent mingw-w64 with dwarf2 exceptions enabled
-      wget --progress=dot -O /root/proton_crosscc.tar.xz 'http://repo.steampowered.com/proton_mingw/proton_mingw-9.1-1.tar.xz'
-      unxz -T0 /root/proton_crosscc.tar.xz
-      mkdir -p /srv/chroot/proton_crosscc/
-      tar -xf /root/proton_crosscc.tar -C /srv/chroot/proton_crosscc/
-
-      #install proton_crosscc schroot
-      cat > /etc/schroot/chroot.d/proton_crosscc <<EOF
+        #install proton_crosscc schroot
+        cat > /etc/schroot/chroot.d/proton_crosscc <<EOF
 [proton_crosscc]
 description=Special mingw-w64 for building DXVK
 type=directory
@@ -112,13 +100,12 @@ users=vagrant
 personality=linux
 preserve-environment=true
 EOF
-    fi
-  SHELL
+      fi
 
-  config.vm.provision "shell", privileged: "true", inline: <<-SHELL
-    # unprivileged shell still runs as root for some reason
+      # unprivileged shell still runs as root for some reason
 
-    # the script below will set up the steam-runtime docker containers
-    sudo -u vagrant /home/vagrant/proton/vagrant-user-setup.sh
-  SHELL
+      # the script below will set up the steam-runtime docker containers
+      sudo -u vagrant /home/vagrant/proton/vagrant-user-setup.sh
+    SHELL
+  end
 end
