@@ -14,8 +14,7 @@ set -xe
 
 apt-get install -y gcc-5 g++-5 g++-5-multilib flex libosmesa6-dev libpcap-dev \
                    libhal-dev libsane-dev libv4l-dev libgphoto2-2-dev libcapi20-dev \
-                   libgsm1-dev libmpg123-dev libvulkan-dev libxslt1-dev nasm yasm ccache \
-                   schroot
+                   libgsm1-dev libmpg123-dev libvulkan-dev libxslt1-dev nasm yasm ccache
 update-alternatives --install "$(command -v gcc)" gcc "$(command -v gcc-5)" 50
 update-alternatives --set gcc "$(command -v gcc-5)"
 update-alternatives --install "$(command -v g++)" g++ "$(command -v g++-5)" 50
