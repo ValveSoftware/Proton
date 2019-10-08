@@ -15,14 +15,14 @@ struct winVREvent_t_1517 {
 }  __attribute__ ((ms_struct));
 #pragma pack(pop)
 
-void struct_VREvent_t_1517_lin_to_win(void *l, void *w)
+void struct_VREvent_t_1517_lin_to_win(void *l, void *w, uint32_t sz)
 {
     struct winVREvent_t_1517 *win = (struct winVREvent_t_1517 *)w;
     VREvent_t *lin = (VREvent_t *)l;
     win->eventType = lin->eventType;
     win->trackedDeviceIndex = lin->trackedDeviceIndex;
     win->eventAgeSeconds = lin->eventAgeSeconds;
-    win->data = lin->data;
+    memcpy(&win->data, &lin->data, sz - (((char*)&win->data) - ((char*)win)));
 }
 
 void struct_VREvent_t_1517_win_to_lin(void *w, void *l)
@@ -44,7 +44,7 @@ struct winVRControllerState001_t_1517 {
 }  __attribute__ ((ms_struct));
 #pragma pack(pop)
 
-void struct_VRControllerState001_t_1517_lin_to_win(void *l, void *w)
+void struct_VRControllerState001_t_1517_lin_to_win(void *l, void *w, uint32_t sz)
 {
     struct winVRControllerState001_t_1517 *win = (struct winVRControllerState001_t_1517 *)w;
     VRControllerState001_t *lin = (VRControllerState001_t *)l;
@@ -76,7 +76,7 @@ struct winCameraVideoStreamFrameHeader_t_1517 {
 }  __attribute__ ((ms_struct));
 #pragma pack(pop)
 
-void struct_CameraVideoStreamFrameHeader_t_1517_lin_to_win(void *l, void *w)
+void struct_CameraVideoStreamFrameHeader_t_1517_lin_to_win(void *l, void *w, uint32_t sz)
 {
     struct winCameraVideoStreamFrameHeader_t_1517 *win = (struct winCameraVideoStreamFrameHeader_t_1517 *)w;
     CameraVideoStreamFrameHeader_t *lin = (CameraVideoStreamFrameHeader_t *)l;
@@ -216,7 +216,7 @@ struct winInputAnalogActionData_t_1517 {
 }  __attribute__ ((ms_struct));
 #pragma pack(pop)
 
-void struct_InputAnalogActionData_t_1517_lin_to_win(void *l, void *w)
+void struct_InputAnalogActionData_t_1517_lin_to_win(void *l, void *w, uint32_t sz)
 {
     struct winInputAnalogActionData_t_1517 *win = (struct winInputAnalogActionData_t_1517 *)w;
     InputAnalogActionData_t *lin = (InputAnalogActionData_t *)l;
@@ -256,7 +256,7 @@ struct winInputDigitalActionData_t_1517 {
 }  __attribute__ ((ms_struct));
 #pragma pack(pop)
 
-void struct_InputDigitalActionData_t_1517_lin_to_win(void *l, void *w)
+void struct_InputDigitalActionData_t_1517_lin_to_win(void *l, void *w, uint32_t sz)
 {
     struct winInputDigitalActionData_t_1517 *win = (struct winInputDigitalActionData_t_1517 *)w;
     InputDigitalActionData_t *lin = (InputDigitalActionData_t *)l;
@@ -286,7 +286,7 @@ struct winInputPoseActionData_t_1517 {
 }  __attribute__ ((ms_struct));
 #pragma pack(pop)
 
-void struct_InputPoseActionData_t_1517_lin_to_win(void *l, void *w)
+void struct_InputPoseActionData_t_1517_lin_to_win(void *l, void *w, uint32_t sz)
 {
     struct winInputPoseActionData_t_1517 *win = (struct winInputPoseActionData_t_1517 *)w;
     InputPoseActionData_t *lin = (InputPoseActionData_t *)l;
@@ -311,7 +311,7 @@ struct winInputSkeletalActionData_t_1517 {
 }  __attribute__ ((ms_struct));
 #pragma pack(pop)
 
-void struct_InputSkeletalActionData_t_1517_lin_to_win(void *l, void *w)
+void struct_InputSkeletalActionData_t_1517_lin_to_win(void *l, void *w, uint32_t sz)
 {
     struct winInputSkeletalActionData_t_1517 *win = (struct winInputSkeletalActionData_t_1517 *)w;
     InputSkeletalActionData_t *lin = (InputSkeletalActionData_t *)l;

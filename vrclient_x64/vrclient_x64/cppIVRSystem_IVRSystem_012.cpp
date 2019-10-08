@@ -157,7 +157,7 @@ bool cppIVRSystem_IVRSystem_012_PollNextEvent(void *linux_side, winVREvent_t_103
         struct_VREvent_t_103_win_to_lin(pEvent, &lin);
     _ret = ((IVRSystem*)linux_side)->PollNextEvent(pEvent ? &lin : nullptr, uncbVREvent ? sizeof(lin) : 0);
     if(pEvent)
-        struct_VREvent_t_103_lin_to_win(&lin, pEvent);
+        struct_VREvent_t_103_lin_to_win(&lin, pEvent, uncbVREvent);
     return _ret;
 }
 
@@ -169,7 +169,7 @@ bool cppIVRSystem_IVRSystem_012_PollNextEventWithPose(void *linux_side, ETrackin
         struct_VREvent_t_103_win_to_lin(pEvent, &lin);
     _ret = ((IVRSystem*)linux_side)->PollNextEventWithPose((vr::ETrackingUniverseOrigin)eOrigin, pEvent ? &lin : nullptr, uncbVREvent ? sizeof(lin) : 0, (vr::TrackedDevicePose_t *)pTrackedDevicePose);
     if(pEvent)
-        struct_VREvent_t_103_lin_to_win(&lin, pEvent);
+        struct_VREvent_t_103_lin_to_win(&lin, pEvent, uncbVREvent);
     return _ret;
 }
 
@@ -191,7 +191,7 @@ bool cppIVRSystem_IVRSystem_012_GetControllerState(void *linux_side, TrackedDevi
         struct_VRControllerState001_t_103_win_to_lin(pControllerState, &lin);
     _ret = ((IVRSystem*)linux_side)->GetControllerState((vr::TrackedDeviceIndex_t)unControllerDeviceIndex, pControllerState ? &lin : nullptr);
     if(pControllerState)
-        struct_VRControllerState001_t_103_lin_to_win(&lin, pControllerState);
+        struct_VRControllerState001_t_103_lin_to_win(&lin, pControllerState, -1);
     return _ret;
 }
 
@@ -203,7 +203,7 @@ bool cppIVRSystem_IVRSystem_012_GetControllerStateWithPose(void *linux_side, ETr
         struct_VRControllerState001_t_103_win_to_lin(pControllerState, &lin);
     _ret = ((IVRSystem*)linux_side)->GetControllerStateWithPose((vr::ETrackingUniverseOrigin)eOrigin, (vr::TrackedDeviceIndex_t)unControllerDeviceIndex, pControllerState ? &lin : nullptr, (vr::TrackedDevicePose_t *)pTrackedDevicePose);
     if(pControllerState)
-        struct_VRControllerState001_t_103_lin_to_win(&lin, pControllerState);
+        struct_VRControllerState001_t_103_lin_to_win(&lin, pControllerState, -1);
     return _ret;
 }
 

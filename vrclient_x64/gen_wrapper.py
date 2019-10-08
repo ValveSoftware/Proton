@@ -456,6 +456,7 @@ def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, e
     cfile.write("    TRACE(\"%p\\n\", _this);\n")
 
     if do_win_to_lin:
+        #XXX we should pass the struct size here
         cpp.write("    if(%s)\n" % do_win_to_lin[1])
         cpp.write("        struct_%s_%s_win_to_lin(%s, &lin);\n" % (strip_ns(do_win_to_lin[0]), display_sdkver(sdkver), do_win_to_lin[1]))
 
@@ -497,6 +498,7 @@ def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, e
     unnamed = 'a'
     first = True
     next_is_size = False
+    convert_size_param = ""
     for param in get_params(method):
         if not first:
             cpp.write(", ")
@@ -527,8 +529,10 @@ def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, e
                 next_is_size = False
                 if param.type.spelling == "uint32_t":
                     cpp.write("%s ? sizeof(lin) : 0" % param.spelling)
+                    convert_size_param = ", " + param.spelling
                 else:
                     cpp.write("(%s)%s" % (param.type.spelling, param.spelling))
+                    convert_size_param = ", -1"
             elif "&" in param.type.spelling:
                 cfile.write(", %s" % param.spelling)
                 cpp.write("*%s" % param.spelling)
@@ -560,8 +564,10 @@ def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, e
             if path_conv["w2l_arrays"][i]:
                 cfile.write("    vrclient_free_stringlist(lin_%s);\n" % path_conv["w2l_names"][i])
     if do_lin_to_win:
+        if next_is_size and not convert_size_param:
+            convert_size_param = ", -1"
         cpp.write("    if(%s)\n" % do_lin_to_win[1])
-        cpp.write("        struct_%s_%s_lin_to_win(&lin, %s);\n" % (strip_ns(do_lin_to_win[0]), display_sdkver(sdkver), do_lin_to_win[1]))
+        cpp.write("        struct_%s_%s_lin_to_win(&lin, %s%s);\n" % (strip_ns(do_lin_to_win[0]), display_sdkver(sdkver), do_lin_to_win[1], convert_size_param))
     if do_lin_to_win or do_win_to_lin:
         cpp.write("    return _ret;\n")
     if do_wrap:
@@ -849,7 +855,7 @@ def handle_struct(sdkver, struct):
         which.add(LIN_TO_WIN)
         which.add(WIN_TO_LIN)
 
-    if strip_ns(vrchild.displayname) in system_structs:
+    if strip_ns(struct.displayname) in system_structs:
         which.add(WRAPPERS)
 
     if len(which) == 0:
@@ -895,7 +901,7 @@ def handle_struct(sdkver, struct):
     cppfile.write("}  __attribute__ ((ms_struct));\n")
     cppfile.write("#pragma pack(pop)\n\n")
 
-    def dump_converter(src, dst):
+    def dump_converter(src, dst, size):
         for m in struct.get_children():
             if m.kind == clang.cindex.CursorKind.FIELD_DECL:
                 if m.type.get_canonical().kind == clang.cindex.TypeKind.CONSTANTARRAY:
@@ -909,23 +915,35 @@ def handle_struct(sdkver, struct):
                 elif struct.displayname in struct_size_fields and \
                     m.displayname in struct_size_fields[struct.displayname]:
                         cppfile.write("    " + dst + "->" + m.displayname + " = sizeof(*" + dst + ");\n")
+                elif size and strip_ns(m.type.get_canonical().spelling) == "VREvent_Data_t":
+                    #truncate variable-length data struct at the end of the parent struct
+                    #XXX: dumb hard-coding. are the other types with lengths variable length?
+                    cppfile.write("    memcpy(&" + dst + "->data, &" + src + "->data, " + size + " - (((char*)&" + dst + "->data) - ((char*)" + dst + ")));\n")
                 else:
                     cppfile.write("    " + dst + "->" + m.displayname + " = " + src + "->" + m.displayname + ";\n")
 
+    if strip_ns(struct.displayname) in next_is_size_structs:
+        size_arg = "sz"
+        size_arg_type = ", uint32_t sz"
+    else:
+        size_arg = None
+        size_arg_type = ""
+
     if LIN_TO_WIN in which:
-        hfile.write("extern void struct_%s_lin_to_win(void *l, void *w);\n" % handler_name)
-        cppfile.write("void struct_%s_lin_to_win(void *l, void *w)\n{\n" % handler_name)
+        hfile.write("extern void struct_%s_lin_to_win(void *l, void *w%s);\n" % (handler_name, size_arg_type))
+        cppfile.write("void struct_%s_lin_to_win(void *l, void *w%s)\n{\n" % (handler_name, size_arg_type))
         cppfile.write("    struct win%s *win = (struct win%s *)w;\n" % (handler_name, handler_name))
         cppfile.write("    %s *lin = (%s *)l;\n" % (struct.displayname, struct.displayname))
-        dump_converter("lin", "win")
+        dump_converter("lin", "win", size_arg)
         cppfile.write("}\n\n")
 
     if WIN_TO_LIN in which:
+        #XXX: should pass size param here, too
         hfile.write("extern void struct_%s_win_to_lin(void *w, void *l);\n" % handler_name)
         cppfile.write("void struct_%s_win_to_lin(void *w, void *l)\n{\n" % handler_name)
         cppfile.write("    struct win%s *win = (struct win%s *)w;\n" % (handler_name, handler_name))
         cppfile.write("    %s *lin = (%s *)l;\n" % (struct.displayname, struct.displayname))
-        dump_converter("win", "lin")
+        dump_converter("win", "lin", None)
         cppfile.write("}\n\n")
 
     if WRAPPERS in which:
@@ -935,7 +953,7 @@ def handle_struct(sdkver, struct):
         cppfile.write("    struct win%s *win = (struct win%s *)malloc(sizeof(*win));\n" % (handler_name, handler_name))
         cppfile.write("    %s *lin = (%s *)l;\n" % (struct.displayname, struct.displayname))
 
-        dump_converter("lin", "win")
+        dump_converter("lin", "win", None)
 
         cppfile.write("    win->linux_side = lin;\n");
         cppfile.write("    return win;\n")

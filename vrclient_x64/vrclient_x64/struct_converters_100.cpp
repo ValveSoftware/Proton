@@ -15,14 +15,14 @@ struct winVREvent_t_100 {
 }  __attribute__ ((ms_struct));
 #pragma pack(pop)
 
-void struct_VREvent_t_100_lin_to_win(void *l, void *w)
+void struct_VREvent_t_100_lin_to_win(void *l, void *w, uint32_t sz)
 {
     struct winVREvent_t_100 *win = (struct winVREvent_t_100 *)w;
     VREvent_t *lin = (VREvent_t *)l;
     win->eventType = lin->eventType;
     win->trackedDeviceIndex = lin->trackedDeviceIndex;
     win->eventAgeSeconds = lin->eventAgeSeconds;
-    win->data = lin->data;
+    memcpy(&win->data, &lin->data, sz - (((char*)&win->data) - ((char*)win)));
 }
 
 void struct_VREvent_t_100_win_to_lin(void *w, void *l)
@@ -44,7 +44,7 @@ struct winVRControllerState001_t_100 {
 }  __attribute__ ((ms_struct));
 #pragma pack(pop)
 
-void struct_VRControllerState001_t_100_lin_to_win(void *l, void *w)
+void struct_VRControllerState001_t_100_lin_to_win(void *l, void *w, uint32_t sz)
 {
     struct winVRControllerState001_t_100 *win = (struct winVRControllerState001_t_100 *)w;
     VRControllerState001_t *lin = (VRControllerState001_t *)l;

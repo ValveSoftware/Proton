@@ -119,7 +119,7 @@ struct winVRControllerState001_t_099 {
 }  __attribute__ ((ms_struct));
 #pragma pack(pop)
 
-void struct_VRControllerState001_t_099_lin_to_win(void *l, void *w)
+void struct_VRControllerState001_t_099_lin_to_win(void *l, void *w, uint32_t sz)
 {
     struct winVRControllerState001_t_099 *win = (struct winVRControllerState001_t_099 *)w;
     VRControllerState001_t *lin = (VRControllerState001_t *)l;

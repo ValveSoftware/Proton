@@ -52,7 +52,7 @@ vr::EVRTrackedCameraError cppIVRTrackedCamera_IVRTrackedCamera_004_GetVideoStrea
         struct_CameraVideoStreamFrameHeader_t_1017_win_to_lin(pFrameHeader, &lin);
     _ret = ((IVRTrackedCamera*)linux_side)->GetVideoStreamFrameBuffer((vr::TrackedCameraHandle_t)hTrackedCamera, (vr::EVRTrackedCameraFrameType)eFrameType, (void *)pFrameBuffer, (uint32_t)nFrameBufferSize, pFrameHeader ? &lin : nullptr, nFrameHeaderSize ? sizeof(lin) : 0);
     if(pFrameHeader)
-        struct_CameraVideoStreamFrameHeader_t_1017_lin_to_win(&lin, pFrameHeader);
+        struct_CameraVideoStreamFrameHeader_t_1017_lin_to_win(&lin, pFrameHeader, nFrameHeaderSize);
     return _ret;
 }
 
@@ -69,7 +69,7 @@ vr::EVRTrackedCameraError cppIVRTrackedCamera_IVRTrackedCamera_004_GetVideoStrea
         struct_CameraVideoStreamFrameHeader_t_1017_win_to_lin(pFrameHeader, &lin);
     _ret = ((IVRTrackedCamera*)linux_side)->GetVideoStreamTextureD3D11((vr::TrackedCameraHandle_t)hTrackedCamera, (vr::EVRTrackedCameraFrameType)eFrameType, (void *)pD3D11DeviceOrResource, (void **)ppD3D11ShaderResourceView, pFrameHeader ? &lin : nullptr, nFrameHeaderSize ? sizeof(lin) : 0);
     if(pFrameHeader)
-        struct_CameraVideoStreamFrameHeader_t_1017_lin_to_win(&lin, pFrameHeader);
+        struct_CameraVideoStreamFrameHeader_t_1017_lin_to_win(&lin, pFrameHeader, nFrameHeaderSize);
     return _ret;
 }
 
@@ -81,7 +81,7 @@ vr::EVRTrackedCameraError cppIVRTrackedCamera_IVRTrackedCamera_004_GetVideoStrea
         struct_CameraVideoStreamFrameHeader_t_1017_win_to_lin(pFrameHeader, &lin);
     _ret = ((IVRTrackedCamera*)linux_side)->GetVideoStreamTextureGL((vr::TrackedCameraHandle_t)hTrackedCamera, (vr::EVRTrackedCameraFrameType)eFrameType, (vr::glUInt_t *)pglTextureId, pFrameHeader ? &lin : nullptr, nFrameHeaderSize ? sizeof(lin) : 0);
     if(pFrameHeader)
-        struct_CameraVideoStreamFrameHeader_t_1017_lin_to_win(&lin, pFrameHeader);
+        struct_CameraVideoStreamFrameHeader_t_1017_lin_to_win(&lin, pFrameHeader, nFrameHeaderSize);
     return _ret;
 }
 
