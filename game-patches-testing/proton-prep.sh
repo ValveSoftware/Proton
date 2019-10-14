@@ -78,6 +78,7 @@
 
     #PROTON
     echo "applying proton patches"
+    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-protonify_prepatch.patch
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-protonify_staging.patch
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-LAA_staging.patch
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-use_clock_monotonic.patch
