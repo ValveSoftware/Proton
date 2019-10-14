@@ -5,7 +5,6 @@
     git reset --hard HEAD
     git clean -xdf
     patch -Np1 < ../game-patches-testing/vkd3d-patches/wow-flicker.patch
-    patch -Np1 < ../game-patches-testing/vkd3d-patches/sottr-launch.patch
     cd ..
 
     # Valve DXVK patches
@@ -39,7 +38,7 @@
     ../wine-staging/patches/patchinstall.sh DESTDIR="." --all \
     -W server-Desktop_Refcount \
     -W ws2_32-TransmitFile \
-    -W winex11.drv-mouse-coorrds \
+    -W user32-rawinput \
     -W dinput-SetActionMap-genre \
     -W dinput-axis-recalc \
     -W dinput-joy-mappings \
@@ -91,6 +90,7 @@
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-sdl_joy.patch
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-sdl_joy_2.patch
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-gamepad_additions.patch
+    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-mf_hacks.patch
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-apply_LargeAddressAware_fix_for_Bayonetta.patch
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-Set_amd_ags_x64_to_built_in_for_Wolfenstein_2.patch
 

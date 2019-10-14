@@ -44,9 +44,16 @@ void cppIVRCompositor_IVRCompositor_009_PostPresentHandoff(void *linux_side)
     ((IVRCompositor*)linux_side)->PostPresentHandoff();
 }
 
-bool cppIVRCompositor_IVRCompositor_009_GetFrameTiming(void *linux_side, Compositor_FrameTiming * pTiming, uint32_t unFramesAgo)
+bool cppIVRCompositor_IVRCompositor_009_GetFrameTiming(void *linux_side, winCompositor_FrameTiming_0913 * pTiming, uint32_t unFramesAgo)
 {
-    return ((IVRCompositor*)linux_side)->GetFrameTiming((vr::Compositor_FrameTiming *)pTiming, (uint32_t)unFramesAgo);
+    Compositor_FrameTiming lin;
+    bool _ret;
+    if(pTiming)
+        struct_Compositor_FrameTiming_0913_win_to_lin(pTiming, &lin);
+    _ret = ((IVRCompositor*)linux_side)->GetFrameTiming(pTiming ? &lin : nullptr, (uint32_t)unFramesAgo);
+    if(pTiming)
+        struct_Compositor_FrameTiming_0913_lin_to_win(&lin, pTiming);
+    return _ret;
 }
 
 float cppIVRCompositor_IVRCompositor_009_GetFrameTimeRemaining(void *linux_side)

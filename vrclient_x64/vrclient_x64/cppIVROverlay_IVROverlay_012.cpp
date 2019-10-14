@@ -193,8 +193,11 @@ bool cppIVROverlay_IVROverlay_012_PollNextOverlayEvent(void *linux_side, VROverl
 {
     VREvent_t lin;
     bool _ret;
-    _ret = ((IVROverlay*)linux_side)->PollNextOverlayEvent((vr::VROverlayHandle_t)ulOverlayHandle, &lin, sizeof(lin));
-    struct_VREvent_t_101_lin_to_win(&lin, pEvent);
+    if(pEvent)
+        struct_VREvent_t_101_win_to_lin(pEvent, &lin);
+    _ret = ((IVROverlay*)linux_side)->PollNextOverlayEvent((vr::VROverlayHandle_t)ulOverlayHandle, pEvent ? &lin : nullptr, uncbVREvent ? sizeof(lin) : 0);
+    if(pEvent)
+        struct_VREvent_t_101_lin_to_win(&lin, pEvent, uncbVREvent);
     return _ret;
 }
 

@@ -1,336 +1,3 @@
-From a4fda32d2dc0115017f3fa87413d84a08d193328 Mon Sep 17 00:00:00 2001
-From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
-Date: Tue, 9 Jul 2019 11:12:07 +0200
-Subject: [PATCH] winebus.sys: Report the native product string for some Xbox
- gamepads
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-
-Some games are checking the hid product string of connected gamepads in
-order to decide whether or not to activate rumble.
-
-Wine usually delegates these queries to the backend driver, but they
-don't always report the same product strings as on Windows. This will
-allow to override backend strings with the actual strings as reported
-by native drivers.
-
-Signed-off-by: Rémi Bernon <rbernon@codeweavers.com>
----
- dlls/winebus.sys/main.c | 98 ++++++++++++++++++++++++++++++++++-------
- 1 file changed, 81 insertions(+), 17 deletions(-)
-
-diff --git a/dlls/winebus.sys/main.c b/dlls/winebus.sys/main.c
-index 26200bde3e..12ff0b3e15 100644
---- a/dlls/winebus.sys/main.c
-+++ b/dlls/winebus.sys/main.c
-@@ -49,22 +49,39 @@ WINE_DECLARE_DEBUG_CHANNEL(hid_report);
- 
- static const WCHAR backslashW[] = {'\\',0};
- 
-+struct product_desc
-+{
-+    WORD vid;
-+    WORD pid;
-+    const WCHAR* manufacturer;
-+    const WCHAR* product;
-+    const WCHAR* serialnumber;
-+};
-+
- #define VID_MICROSOFT 0x045e
- 
--static const WORD PID_XBOX_CONTROLLERS[] =  {
--    0x0202, /* Xbox Controller */
--    0x0285, /* Xbox Controller S */
--    0x0289, /* Xbox Controller S */
--    0x028e, /* Xbox360 Controller */
--    0x028f, /* Xbox360 Wireless Controller */
--    0x02d1, /* Xbox One Controller */
--    0x02dd, /* Xbox One Controller (Covert Forces/Firmware 2015) */
--    0x02e0, /* Xbox One X Controller */
--    0x02e3, /* Xbox One Elite Controller */
--    0x02e6, /* Wireless XBox Controller Dongle */
--    0x02ea, /* Xbox One S Controller */
--    0x02fd, /* Xbox One S Controller (Firmware 2017) */
--    0x0719, /* Xbox 360 Wireless Adapter */
-+static const WCHAR xbox360_product_string[] = {
-+    'C','o','n','t','r','o','l','l','e','r',' ','(','X','B','O','X',' ','3','6','0',' ','F','o','r',' ','W','i','n','d','o','w','s',')',0
-+};
-+
-+static const WCHAR xboxone_product_string[] = {
-+    'C','o','n','t','r','o','l','l','e','r',' ','(','X','B','O','X',' ','O','n','e',' ','F','o','r',' ','W','i','n','d','o','w','s',')',0
-+};
-+
-+static const struct product_desc XBOX_CONTROLLERS[] = {
-+    {VID_MICROSOFT, 0x0202, NULL, NULL, NULL}, /* Xbox Controller */
-+    {VID_MICROSOFT, 0x0285, NULL, NULL, NULL}, /* Xbox Controller S */
-+    {VID_MICROSOFT, 0x0289, NULL, NULL, NULL}, /* Xbox Controller S */
-+    {VID_MICROSOFT, 0x028e, NULL, xbox360_product_string, NULL}, /* Xbox360 Controller */
-+    {VID_MICROSOFT, 0x028f, NULL, xbox360_product_string, NULL}, /* Xbox360 Wireless Controller */
-+    {VID_MICROSOFT, 0x02d1, NULL, xboxone_product_string, NULL}, /* Xbox One Controller */
-+    {VID_MICROSOFT, 0x02dd, NULL, xboxone_product_string, NULL}, /* Xbox One Controller (Covert Forces/Firmware 2015) */
-+    {VID_MICROSOFT, 0x02e0, NULL, NULL, NULL}, /* Xbox One X Controller */
-+    {VID_MICROSOFT, 0x02e3, NULL, xboxone_product_string, NULL}, /* Xbox One Elite Controller */
-+    {VID_MICROSOFT, 0x02e6, NULL, NULL, NULL}, /* Wireless XBox Controller Dongle */
-+    {VID_MICROSOFT, 0x02ea, NULL, xboxone_product_string, NULL}, /* Xbox One S Controller */
-+    {VID_MICROSOFT, 0x02fd, NULL, xboxone_product_string, NULL}, /* Xbox One S Controller (Firmware 2017) */
-+    {VID_MICROSOFT, 0x0719, NULL, xbox360_product_string, NULL}, /* Xbox 360 Wireless Adapter */
- };
- 
- static DRIVER_OBJECT *driver_obj;
-@@ -565,6 +582,51 @@ static NTSTATUS deliver_last_report(struct device_extension *ext, DWORD buffer_l
-     }
- }
- 
-+static NTSTATUS hid_get_native_string(DEVICE_OBJECT *device, DWORD index, WCHAR *buffer, DWORD length)
-+{
-+    struct device_extension *ext = (struct device_extension *)device->DeviceExtension;
-+    int i;
-+
-+    if (ext->vid == VID_MICROSOFT)
-+    {
-+        for (i = 0; i < ARRAY_SIZE(XBOX_CONTROLLERS); i++)
-+        {
-+            if (ext->pid == XBOX_CONTROLLERS[i].pid)
-+                break;
-+        }
-+
-+        if (i >= ARRAY_SIZE(XBOX_CONTROLLERS))
-+            return STATUS_UNSUCCESSFUL;
-+
-+        switch (index)
-+        {
-+        case HID_STRING_ID_IPRODUCT:
-+            if (XBOX_CONTROLLERS[i].product)
-+            {
-+                strcpyW(buffer, XBOX_CONTROLLERS[i].product);
-+                return STATUS_SUCCESS;
-+            }
-+            break;
-+        case HID_STRING_ID_IMANUFACTURER:
-+            if (XBOX_CONTROLLERS[i].manufacturer)
-+            {
-+                strcpyW(buffer, XBOX_CONTROLLERS[i].manufacturer);
-+                return STATUS_SUCCESS;
-+            }
-+            break;
-+        case HID_STRING_ID_ISERIALNUMBER:
-+            if (XBOX_CONTROLLERS[i].serialnumber)
-+            {
-+                strcpyW(buffer, XBOX_CONTROLLERS[i].serialnumber);
-+                return STATUS_SUCCESS;
-+            }
-+            break;
-+        }
-+    }
-+
-+    return STATUS_UNSUCCESSFUL;
-+}
-+
- static NTSTATUS WINAPI hid_internal_dispatch(DEVICE_OBJECT *device, IRP *irp)
- {
-     NTSTATUS status = irp->IoStatus.u.Status;
-@@ -650,7 +712,9 @@ static NTSTATUS WINAPI hid_internal_dispatch(DEVICE_OBJECT *device, IRP *irp)
-             DWORD index = (ULONG_PTR)irpsp->Parameters.DeviceIoControl.Type3InputBuffer;
-             TRACE("IOCTL_HID_GET_STRING[%08x]\n", index);
- 
--            irp->IoStatus.u.Status = status = ext->vtbl->get_string(device, index, (WCHAR *)irp->UserBuffer, length);
-+            irp->IoStatus.u.Status = status = hid_get_native_string(device, index, (WCHAR *)irp->UserBuffer, length);
-+            if (status != STATUS_SUCCESS)
-+                irp->IoStatus.u.Status = status = ext->vtbl->get_string(device, index, (WCHAR *)irp->UserBuffer, length);
-             if (status == STATUS_SUCCESS)
-                 irp->IoStatus.Information = (strlenW((WCHAR *)irp->UserBuffer) + 1) * sizeof(WCHAR);
-             break;
-@@ -815,8 +879,8 @@ BOOL is_xbox_gamepad(WORD vid, WORD pid)
-     if (vid != VID_MICROSOFT)
-         return FALSE;
- 
--    for (i = 0; i < ARRAY_SIZE(PID_XBOX_CONTROLLERS); i++)
--        if (pid == PID_XBOX_CONTROLLERS[i]) return TRUE;
-+    for (i = 0; i < ARRAY_SIZE(XBOX_CONTROLLERS); i++)
-+        if (pid == XBOX_CONTROLLERS[i].pid) return TRUE;
- 
-     return FALSE;
- }
--- 
-2.17.1
-
-From 81132a69914175ad0d9d275327ebb2dfce248bb6 Mon Sep 17 00:00:00 2001
-From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
-Date: Thu, 25 Jul 2019 16:23:51 +0200
-Subject: [PATCH 2/3] ntoskrnl: Update the interface if it is already in the
- device_interfaces tree
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-
-As we are going to reuse the same device id when re-plugging a
-previously plugged SDL controller, the device interfaces are still
-present in the tree and IoRegisterDeviceInterface was not updating the
-device pointer.
-
-Signed-off-by: Rémi Bernon <rbernon@codeweavers.com>
----
- dlls/ntoskrnl.exe/pnp.c | 25 ++++++++++++++++++++-----
- 1 file changed, 20 insertions(+), 5 deletions(-)
-
-diff --git a/dlls/ntoskrnl.exe/pnp.c b/dlls/ntoskrnl.exe/pnp.c
-index c618885d427..32274533c36 100644
---- a/dlls/ntoskrnl.exe/pnp.c
-+++ b/dlls/ntoskrnl.exe/pnp.c
-@@ -688,7 +688,9 @@ NTSTATUS WINAPI IoRegisterDeviceInterface(DEVICE_OBJECT *device, const GUID *cla
-     WCHAR device_instance_id[MAX_DEVICE_ID_LEN];
-     SP_DEVICE_INTERFACE_DETAIL_DATA_W *data;
-     NTSTATUS status = STATUS_SUCCESS;
-+    UNICODE_STRING device_path;
-     struct device_interface *iface;
-+    struct wine_rb_entry *entry;
-     DWORD required;
-     HDEVINFO set;
- 
-@@ -726,19 +728,32 @@ NTSTATUS WINAPI IoRegisterDeviceInterface(DEVICE_OBJECT *device, const GUID *cla
- 
-     data->DevicePath[1] = '?';
-     TRACE("Returning path %s.\n", debugstr_w(data->DevicePath));
-+    RtlCreateUnicodeString( &device_path, data->DevicePath);
-+
-+    entry = wine_rb_get( &device_interfaces, &device_path );
-+    if (entry)
-+    {
-+        iface = WINE_RB_ENTRY_VALUE( entry, struct device_interface, entry );
-+        if (iface->enabled)
-+            ERR("Device interface %s is still enabled.\n", debugstr_us(&iface->symbolic_link));
-+    }
-+    else
-+    {
-+        iface = heap_alloc_zero( sizeof(struct device_interface) );
-+        RtlCreateUnicodeString(&iface->symbolic_link, data->DevicePath);
-+        if (wine_rb_put( &device_interfaces, &iface->symbolic_link, &iface->entry ))
-+            ERR("Failed to insert interface %s into tree.\n", debugstr_us(&iface->symbolic_link));
-+    }
- 
--    iface = heap_alloc_zero( sizeof(struct device_interface) );
-     iface->device = device;
-     iface->interface_class = *class_guid;
--    RtlCreateUnicodeString(&iface->symbolic_link, data->DevicePath);
-     if (symbolic_link)
-         RtlCreateUnicodeString( symbolic_link, data->DevicePath);
- 
--    if (wine_rb_put( &device_interfaces, &iface->symbolic_link, &iface->entry ))
--        ERR("Failed to insert interface %s into tree.\n", debugstr_us(&iface->symbolic_link));
--
-     HeapFree( GetProcessHeap(), 0, data );
- 
-+    RtlFreeUnicodeString( &device_path );
-+
-     return status;
- }
- 
--- 
-2.17.1
-
-From f074fb7a491d062a31fdb67d84ebfb454495a1d6 Mon Sep 17 00:00:00 2001
-From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
-Date: Thu, 25 Jul 2019 16:23:52 +0200
-Subject: [PATCH 3/3] winebus: Use the SDL joystick index as device id instead
- of instance id
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-
-Some games are using the HID device id as the gamepad index for xinput
-API. When hotplugging devices, SDL increases its instances id and it
-doesn't match anymore with xinput gamepad numbers.
-
-Signed-off-by: Rémi Bernon <rbernon@codeweavers.com>
----
- dlls/winebus.sys/bus_sdl.c | 26 +++++++++++++++-----------
- 1 file changed, 15 insertions(+), 11 deletions(-)
-
-diff --git a/dlls/winebus.sys/bus_sdl.c b/dlls/winebus.sys/bus_sdl.c
-index 781deda7670..3bd27ca5bf0 100644
---- a/dlls/winebus.sys/bus_sdl.c
-+++ b/dlls/winebus.sys/bus_sdl.c
-@@ -744,17 +744,21 @@ static const platform_vtbl sdl_vtbl =
-     set_feature_report,
- };
- 
-+static int compare_joystick_id(DEVICE_OBJECT *device, void* context)
-+{
-+    return impl_from_DEVICE_OBJECT(device)->id - PtrToUlong(context);
-+}
-+
- static BOOL set_report_from_event(SDL_Event *event)
- {
-     DEVICE_OBJECT *device;
-     struct platform_private *private;
-     /* All the events coming in will have 'which' as a 3rd field */
--    SDL_JoystickID index = ((SDL_JoyButtonEvent*)event)->which;
--
--    device = bus_find_hid_device(&sdl_vtbl, ULongToPtr(index));
-+    SDL_JoystickID id = ((SDL_JoyButtonEvent*)event)->which;
-+    device = bus_enumerate_hid_devices(&sdl_vtbl, compare_joystick_id, ULongToPtr(id));
-     if (!device)
-     {
--        ERR("Failed to find device at index %i\n",index);
-+        ERR("Failed to find device at index %i\n",id);
-         return FALSE;
-     }
-     private = impl_from_DEVICE_OBJECT(device);
-@@ -814,11 +818,11 @@ static BOOL set_mapped_report_from_event(SDL_Event *event)
-     DEVICE_OBJECT *device;
-     struct platform_private *private;
-     /* All the events coming in will have 'which' as a 3rd field */
--    int index = ((SDL_ControllerButtonEvent*)event)->which;
--    device = bus_find_hid_device(&sdl_vtbl, ULongToPtr(index));
-+    SDL_JoystickID id = ((SDL_ControllerButtonEvent*)event)->which;
-+    device = bus_enumerate_hid_devices(&sdl_vtbl, compare_joystick_id, ULongToPtr(id));
-     if (!device)
-     {
--        ERR("Failed to find device at index %i\n",index);
-+        ERR("Failed to find device at index %i\n",id);
-         return FALSE;
-     }
-     private = impl_from_DEVICE_OBJECT(device);
-@@ -878,7 +882,7 @@ static BOOL set_mapped_report_from_event(SDL_Event *event)
-     return FALSE;
- }
- 
--static void try_remove_device(SDL_JoystickID index)
-+static void try_remove_device(SDL_JoystickID id)
- {
-     DEVICE_OBJECT *device = NULL;
-     struct platform_private *private;
-@@ -886,7 +890,7 @@ static void try_remove_device(SDL_JoystickID index)
-     SDL_GameController *sdl_controller;
-     SDL_Haptic *sdl_haptic;
- 
--    device = bus_find_hid_device(&sdl_vtbl, ULongToPtr(index));
-+    device = bus_enumerate_hid_devices(&sdl_vtbl, compare_joystick_id, ULongToPtr(id));
-     if (!device) return;
- 
-     private = impl_from_DEVICE_OBJECT(device);
-@@ -905,7 +909,7 @@ static void try_remove_device(SDL_JoystickID index)
-         pSDL_HapticClose(sdl_haptic);
- }
- 
--static void try_add_device(SDL_JoystickID index)
-+static void try_add_device(unsigned int index)
- {
-     DWORD vid = 0, pid = 0, version = 0;
-     DEVICE_OBJECT *device = NULL;
-@@ -967,7 +971,7 @@ static void try_add_device(SDL_JoystickID index)
-         input = 0;
- 
-     device = bus_create_hid_device(sdl_busidW, vid, pid,
--            input, version, id, serial, is_xbox_gamepad, &GUID_DEVCLASS_SDL,
-+            input, version, index, serial, is_xbox_gamepad, &GUID_DEVCLASS_SDL,
-             &sdl_vtbl, sizeof(struct platform_private));
- 
-     if (device)
--- 
-2.17.1
-
 From ddceb34906882d9170f107b2ad738e8f7851da5e Mon Sep 17 00:00:00 2001
 From: Andrew Eikum <aeikum@codeweavers.com>
 Date: Thu, 2 May 2019 10:17:49 -0500
@@ -3920,3 +3587,2596 @@ index 219f7743826..581e47a25aa 100644
      }
  
      if (newDevice->sdldev->has_ff)
+
+From 33c20bdf86ab69ff34773d914f99eab5e88fe723 Mon Sep 17 00:00:00 2001
+From: Andrew Eikum <aeikum@codeweavers.com>
+Date: Mon, 16 Sep 2019 14:32:02 -0500
+Subject: [PATCH] dinput: Fix devices with too many objects
+
+---
+ dlls/dinput/joystick_sdl.c | 18 +++++++++++++-----
+ 1 file changed, 13 insertions(+), 5 deletions(-)
+
+diff --git a/dlls/dinput/joystick_sdl.c b/dlls/dinput/joystick_sdl.c
+index 581e47a25aa..cac7be30593 100644
+--- a/dlls/dinput/joystick_sdl.c
++++ b/dlls/dinput/joystick_sdl.c
+@@ -659,7 +659,11 @@ static BOOL enum_device_state_ds4_13button(JoystickImpl *This, struct device_sta
+ /* straight 1:1 mapping of SDL items and dinput items */
+ static BOOL enum_device_state_standard(JoystickImpl *This, struct device_state_item *st, int idx)
+ {
+-    if(idx < This->sdldev->n_buttons)
++    DWORD n_buttons, n_axes, n_hats;
++
++    n_buttons = This->generic.devcaps.dwButtons ? This->generic.devcaps.dwButtons : This->sdldev->n_buttons;
++
++    if(idx < n_buttons)
+     {
+         st->type = ITEM_TYPE_BUTTON;
+         st->id = idx;
+@@ -667,9 +671,11 @@ static BOOL enum_device_state_standard(JoystickImpl *This, struct device_state_i
+         return TRUE;
+     }
+ 
+-    idx -= This->sdldev->n_buttons;
++    idx -= n_buttons;
+ 
+-    if(idx < This->sdldev->n_axes)
++    n_axes = This->generic.devcaps.dwAxes ? This->generic.devcaps.dwAxes : This->sdldev->n_axes;
++
++    if(idx < n_axes)
+     {
+         st->type = ITEM_TYPE_AXIS;
+         st->id = idx;
+@@ -677,9 +683,11 @@ static BOOL enum_device_state_standard(JoystickImpl *This, struct device_state_i
+         return TRUE;
+     }
+ 
+-    idx -= This->sdldev->n_axes;
++    idx -= n_axes;
++
++    n_hats = This->generic.devcaps.dwPOVs ? This->generic.devcaps.dwPOVs : This->sdldev->n_hats;
+ 
+-    if(idx < This->sdldev->n_hats)
++    if(idx < n_hats)
+     {
+         st->type = ITEM_TYPE_HAT;
+         st->id = idx;
+
+From dc6c36904d8c26ea2a0a74d38f6bdad4eab96e9c Mon Sep 17 00:00:00 2001
+From: Andrew Eikum <aeikum@codeweavers.com>
+Date: Wed, 21 Aug 2019 14:12:27 -0500
+Subject: [PATCH] dinput: Check for device loss in joystick Poll
+
+---
+ dlls/dinput/joystick.c            | 16 +++++++++-------
+ dlls/dinput/joystick_linux.c      | 16 +++++++++-------
+ dlls/dinput/joystick_linuxinput.c | 12 +++++++-----
+ dlls/dinput/joystick_osx.c        | 20 +++++++++++---------
+ dlls/dinput/joystick_private.h    |  2 +-
+ dlls/dinput/joystick_sdl.c        |  7 ++++++-
+ 6 files changed, 43 insertions(+), 30 deletions(-)
+
+diff --git a/dlls/dinput/joystick.c b/dlls/dinput/joystick.c
+index 06e733b9e5e..a3373c06cc5 100644
+--- a/dlls/dinput/joystick.c
++++ b/dlls/dinput/joystick.c
+@@ -793,8 +793,7 @@ HRESULT WINAPI JoystickWGenericImpl_Poll(LPDIRECTINPUTDEVICE8W iface)
+         return DIERR_NOTACQUIRED;
+     }
+ 
+-    This->joy_polldev(IDirectInputDevice8A_from_impl(This));
+-    return DI_OK;
++    return This->joy_polldev(IDirectInputDevice8A_from_impl(This));
+ }
+ 
+ HRESULT WINAPI JoystickAGenericImpl_Poll(LPDIRECTINPUTDEVICE8A iface)
+@@ -809,6 +808,7 @@ HRESULT WINAPI JoystickAGenericImpl_Poll(LPDIRECTINPUTDEVICE8A iface)
+   */
+ HRESULT WINAPI JoystickWGenericImpl_GetDeviceState(LPDIRECTINPUTDEVICE8W iface, DWORD len, LPVOID ptr)
+ {
++    HRESULT hr;
+     JoystickGenericImpl *This = impl_from_IDirectInputDevice8W(iface);
+ 
+     TRACE("(%p,0x%08x,%p)\n", This, len, ptr);
+@@ -819,12 +819,14 @@ HRESULT WINAPI JoystickWGenericImpl_GetDeviceState(LPDIRECTINPUTDEVICE8W iface,
+     }
+ 
+     /* update joystick state */
+-    This->joy_polldev(IDirectInputDevice8A_from_impl(This));
+-
+-    /* convert and copy data to user supplied buffer */
+-    fill_DataFormat(ptr, len, &This->js, &This->base.data_format);
++    hr = This->joy_polldev(IDirectInputDevice8A_from_impl(This));
++    if (SUCCEEDED(hr))
++    {
++        /* convert and copy data to user supplied buffer */
++        fill_DataFormat(ptr, len, &This->js, &This->base.data_format);
++    }
+ 
+-    return DI_OK;
++    return hr;
+ }
+ 
+ HRESULT WINAPI JoystickAGenericImpl_GetDeviceState(LPDIRECTINPUTDEVICE8A iface, DWORD len, LPVOID ptr)
+diff --git a/dlls/dinput/joystick_linux.c b/dlls/dinput/joystick_linux.c
+index 7e01f90843b..24b8fac862a 100644
+--- a/dlls/dinput/joystick_linux.c
++++ b/dlls/dinput/joystick_linux.c
+@@ -143,7 +143,7 @@ static const GUID DInput_Wine_Joystick_Constant_Part_GUID = {
+ static INT joystick_devices_count = -1;
+ static struct JoyDev *joystick_devices;
+ 
+-static void joy_polldev(LPDIRECTINPUTDEVICE8A iface);
++static HRESULT joy_polldev(LPDIRECTINPUTDEVICE8A iface);
+ 
+ #define SYS_PATH_FORMAT "/sys/class/input/js%d/device/id/%s"
+ static BOOL read_sys_id_variable(int index, const char *property, WORD *value)
+@@ -845,7 +845,7 @@ static HRESULT WINAPI JoystickLinuxAImpl_Unacquire(LPDIRECTINPUTDEVICE8A iface)
+     return JoystickLinuxWImpl_Unacquire(IDirectInputDevice8W_from_impl(This));
+ }
+ 
+-static void joy_polldev(LPDIRECTINPUTDEVICE8A iface)
++static HRESULT joy_polldev(LPDIRECTINPUTDEVICE8A iface)
+ {
+     struct pollfd plfd;
+     struct js_event jse;
+@@ -855,7 +855,7 @@ static void joy_polldev(LPDIRECTINPUTDEVICE8A iface)
+ 
+     if (This->joyfd==-1) {
+         WARN("no device\n");
+-        return;
++        return DIERR_INPUTLOST;
+     }
+     while (1)
+     {
+@@ -865,16 +865,16 @@ static void joy_polldev(LPDIRECTINPUTDEVICE8A iface)
+ 	plfd.fd = This->joyfd;
+ 	plfd.events = POLLIN;
+ 	if (poll(&plfd,1,0) != 1)
+-	    return;
++	    return DI_OK;
+ 	/* we have one event, so we can read */
+ 	if (sizeof(jse)!=read(This->joyfd,&jse,sizeof(jse))) {
+-	    return;
++	    return DIERR_INPUTLOST;
+ 	}
+         TRACE("js_event: type 0x%x, number %d, value %d\n",
+               jse.type,jse.number,jse.value);
+         if (jse.type & JS_EVENT_BUTTON)
+         {
+-            if (jse.number >= This->generic.devcaps.dwButtons) return;
++            if (jse.number >= This->generic.devcaps.dwButtons) continue;
+ 
+             inst_id = DIDFT_MAKEINSTANCE(jse.number) | DIDFT_PSHBUTTON;
+             This->generic.js.rgbButtons[jse.number] = value = jse.value ? 0x80 : 0x00;
+@@ -883,7 +883,7 @@ static void joy_polldev(LPDIRECTINPUTDEVICE8A iface)
+         {
+             int number = This->generic.axis_map[jse.number];	/* wine format object index */
+ 
+-            if (number < 0) return;
++            if (number < 0) continue;
+             inst_id = number < 8 ?  DIDFT_MAKEINSTANCE(number) | DIDFT_ABSAXIS :
+                                     DIDFT_MAKEINSTANCE(number - 8) | DIDFT_POV;
+             value = joystick_map_axis(&This->generic.props[id_to_object(This->generic.base.data_format.wine_df, inst_id)], jse.value);
+@@ -918,6 +918,8 @@ static void joy_polldev(LPDIRECTINPUTDEVICE8A iface)
+         if (inst_id >= 0)
+             queue_event(iface, inst_id, value, GetCurrentTime(), This->generic.base.dinput->evsequence++);
+     }
++
++    return DI_OK;
+ }
+ 
+ static const IDirectInputDevice8AVtbl JoystickAvt =
+diff --git a/dlls/dinput/joystick_linuxinput.c b/dlls/dinput/joystick_linuxinput.c
+index 1e8c542f21d..e65a6b281bf 100644
+--- a/dlls/dinput/joystick_linuxinput.c
++++ b/dlls/dinput/joystick_linuxinput.c
+@@ -155,7 +155,7 @@ static inline IDirectInputDevice8W *IDirectInputDevice8W_from_impl(JoystickImpl
+ 
+ static void fake_current_js_state(JoystickImpl *ji);
+ static void find_joydevs(void);
+-static void joy_polldev(LPDIRECTINPUTDEVICE8A iface);
++static HRESULT joy_polldev(LPDIRECTINPUTDEVICE8A iface);
+ 
+ /* This GUID is slightly different from the linux joystick one. Take note. */
+ static const GUID DInput_Wine_Joystick_Base_GUID = { /* 9e573eda-7734-11d2-8d4a-23903fb6bdf7 */
+@@ -826,14 +826,14 @@ static void fake_current_js_state(JoystickImpl *ji)
+ #undef CENTER_AXIS
+ 
+ /* convert wine format offset to user format object index */
+-static void joy_polldev(LPDIRECTINPUTDEVICE8A iface)
++static HRESULT joy_polldev(LPDIRECTINPUTDEVICE8A iface)
+ {
+     struct pollfd plfd;
+     struct input_event ie;
+     JoystickImpl *This = impl_from_IDirectInputDevice8A(iface);
+ 
+     if (This->joyfd==-1)
+-	return;
++	return DIERR_INPUTLOST;
+ 
+     while (1)
+     {
+@@ -844,11 +844,11 @@ static void joy_polldev(LPDIRECTINPUTDEVICE8A iface)
+ 	plfd.events = POLLIN;
+ 
+ 	if (poll(&plfd,1,0) != 1)
+-	    return;
++	    return DI_OK;
+ 
+ 	/* we have one event, so we can read */
+ 	if (sizeof(ie)!=read(This->joyfd,&ie,sizeof(ie)))
+-	    return;
++	    return DIERR_INPUTLOST;
+ 
+ 	TRACE("input_event: type %d, code %d, value %d\n",ie.type,ie.code,ie.value);
+ 	switch (ie.type) {
+@@ -927,6 +927,8 @@ static void joy_polldev(LPDIRECTINPUTDEVICE8A iface)
+             queue_event(iface, inst_id,
+                         value, GetCurrentTime(), This->generic.base.dinput->evsequence++);
+     }
++
++    return DI_OK;
+ }
+ 
+ /******************************************************************************
+diff --git a/dlls/dinput/joystick_osx.c b/dlls/dinput/joystick_osx.c
+index 884dd7f3e19..9a0fb10a56d 100644
+--- a/dlls/dinput/joystick_osx.c
++++ b/dlls/dinput/joystick_osx.c
+@@ -767,7 +767,7 @@ static void get_osx_device_elements_props(JoystickImpl *device)
+     }
+ }
+ 
+-static void poll_osx_device_state(LPDIRECTINPUTDEVICE8A iface)
++static HRESULT poll_osx_device_state(LPDIRECTINPUTDEVICE8A iface)
+ {
+     JoystickImpl *device = impl_from_IDirectInputDevice8A(iface);
+     IOHIDElementRef device_main_element;
+@@ -776,13 +776,13 @@ static void poll_osx_device_state(LPDIRECTINPUTDEVICE8A iface)
+     TRACE("device %p device->id %i\n", device, device->id);
+ 
+     if (!device_main_elements || device->id >= CFArrayGetCount(device_main_elements))
+-        return;
++        return DIERR_INPUTLOST;
+ 
+     device_main_element = (IOHIDElementRef) CFArrayGetValueAtIndex(device_main_elements, device->id);
+     hid_device = IOHIDElementGetDevice(device_main_element);
+     TRACE("main element %s hid_device %s\n", debugstr_element(device_main_element), debugstr_device(hid_device));
+     if (!hid_device)
+-        return;
++        return DIERR_INPUTLOST;
+ 
+     if (device->elements)
+     {
+@@ -809,9 +809,9 @@ static void poll_osx_device_state(LPDIRECTINPUTDEVICE8A iface)
+                     {
+                         valueRef = NULL;
+                         if (IOHIDDeviceGetValue(hid_device, element, &valueRef) != kIOReturnSuccess)
+-                            return;
++                            continue;
+                         if (valueRef == NULL)
+-                            return;
++                            continue;
+                         val = IOHIDValueGetIntegerValue(valueRef);
+                         newVal = val ? 0x80 : 0x0;
+                         oldVal = device->generic.js.rgbButtons[button_idx];
+@@ -835,9 +835,9 @@ static void poll_osx_device_state(LPDIRECTINPUTDEVICE8A iface)
+                             TRACE("kIOHIDElementTypeInput_Misc / kHIDUsage_GD_Hatswitch\n");
+                             valueRef = NULL;
+                             if (IOHIDDeviceGetValue(hid_device, element, &valueRef) != kIOReturnSuccess)
+-                                return;
++                                continue;
+                             if (valueRef == NULL)
+-                                return;
++                                continue;
+                             val = IOHIDValueGetIntegerValue(valueRef);
+                             oldVal = device->generic.js.rgdwPOV[pov_idx];
+                             if (val >= 8)
+@@ -866,9 +866,9 @@ static void poll_osx_device_state(LPDIRECTINPUTDEVICE8A iface)
+ 
+                             valueRef = NULL;
+                             if (IOHIDDeviceGetValue(hid_device, element, &valueRef) != kIOReturnSuccess)
+-                                return;
++                                continue;
+                             if (valueRef == NULL)
+-                                return;
++                                continue;
+                             val = IOHIDValueGetIntegerValue(valueRef);
+                             newVal = joystick_map_axis(&device->generic.props[idx], val);
+                             switch (usage)
+@@ -937,6 +937,8 @@ static void poll_osx_device_state(LPDIRECTINPUTDEVICE8A iface)
+             }
+         }
+     }
++
++    return DI_OK;
+ }
+ 
+ static INT find_joystick_devices(void)
+diff --git a/dlls/dinput/joystick_private.h b/dlls/dinput/joystick_private.h
+index b786c84decb..2af4a294303 100644
+--- a/dlls/dinput/joystick_private.h
++++ b/dlls/dinput/joystick_private.h
+@@ -33,7 +33,7 @@
+ #define MAX_PROPS 164
+ struct JoystickGenericImpl;
+ 
+-typedef void joy_polldev_handler(LPDIRECTINPUTDEVICE8A iface);
++typedef HRESULT joy_polldev_handler(LPDIRECTINPUTDEVICE8A iface);
+ 
+ typedef struct JoystickGenericImpl
+ {
+diff --git a/dlls/dinput/joystick_sdl.c b/dlls/dinput/joystick_sdl.c
+index cac7be30593..44e2a454651 100644
+--- a/dlls/dinput/joystick_sdl.c
++++ b/dlls/dinput/joystick_sdl.c
+@@ -698,7 +698,7 @@ static BOOL enum_device_state_standard(JoystickImpl *This, struct device_state_i
+     return FALSE;
+ }
+ 
+-static void poll_sdl_device_state(LPDIRECTINPUTDEVICE8A iface)
++static HRESULT poll_sdl_device_state(LPDIRECTINPUTDEVICE8A iface)
+ {
+     JoystickImpl *This = impl_from_IDirectInputDevice8A(iface);
+     int i = 0;
+@@ -706,6 +706,9 @@ static void poll_sdl_device_state(LPDIRECTINPUTDEVICE8A iface)
+     int newVal = 0;
+     struct device_state_item item;
+ 
++    if(!SDL_JoystickGetAttached(This->device))
++        return DIERR_INPUTLOST;
++
+     SDL_JoystickUpdate();
+ 
+     while(This->enum_device_state(This, &item, i++))
+@@ -789,6 +792,8 @@ static void poll_sdl_device_state(LPDIRECTINPUTDEVICE8A iface)
+         }
+         }
+     }
++
++    return DI_OK;
+ }
+ 
+ static enum_device_state_function select_enum_function(struct SDLDev *sdldev)
+
+From df028719498646f518cbdc9a76b400ba34ed3f4e Mon Sep 17 00:00:00 2001
+From: Andrew Eikum <aeikum@codeweavers.com>
+Date: Thu, 12 Sep 2019 12:35:08 -0500
+Subject: [PATCH] dinput: Keep track of joysticks even after disconnected
+
+---
+ dlls/dinput/joystick_sdl.c | 107 +++++++++++++++++++++----------------
+ 1 file changed, 61 insertions(+), 46 deletions(-)
+
+diff --git a/dlls/dinput/joystick_sdl.c b/dlls/dinput/joystick_sdl.c
+index 44e2a454651..98a2eb7b808 100644
+--- a/dlls/dinput/joystick_sdl.c
++++ b/dlls/dinput/joystick_sdl.c
+@@ -97,7 +97,9 @@ struct device_state_item {
+ typedef BOOL (*enum_device_state_function)(JoystickImpl*, struct device_state_item *, int);
+ 
+ struct SDLDev {
+-    int id;
++    BOOL valid;
++
++    int instance_id;
+     WORD vendor_id;
+     WORD product_id;
+     CHAR *name;
+@@ -146,8 +148,16 @@ static const GUID DInput_PIDVID_Product_GUID = { /* PIDVID-0000-0000-0000-504944
+   0x00000000, 0x0000, 0x0000, {0x00, 0x00, 0x50, 0x49, 0x44, 0x56, 0x49, 0x44}
+ };
+ 
+-static int have_sdldevs = -1;
+-static struct SDLDev *sdldevs = NULL;
++static CRITICAL_SECTION sdldevs_lock;
++static CRITICAL_SECTION_DEBUG sdldevs_lock_debug =
++{
++    0, 0, &sdldevs_lock,
++    { &sdldevs_lock_debug.ProcessLocksList, &sdldevs_lock_debug.ProcessLocksList },
++      0, 0, { (DWORD_PTR)(__FILE__ ": sdldevs_lock") }
++};
++static CRITICAL_SECTION sdldevs_lock = { &sdldevs_lock_debug, -1, 0, 0, 0, 0 };
++
++static struct SDLDev sdldevs[64];
+ 
+ /* logic from SDL2's SDL_ShouldIgnoreGameController */
+ static BOOL is_in_sdl_blacklist(DWORD vid, DWORD pid)
+@@ -184,6 +194,7 @@ static void find_sdldevs(void)
+     Uint16 (*pSDL_JoystickGetProduct)(SDL_Joystick * joystick) = NULL;
+     Uint16 (*pSDL_JoystickGetVendor)(SDL_Joystick * joystick) = NULL;
+     void *sdl_handle = NULL;
++    static int have_sdldevs = -1;
+ 
+     if (InterlockedCompareExchange(&have_sdldevs, 0, -1) != -1)
+         /* Someone beat us to it */
+@@ -204,25 +215,24 @@ static void find_sdldevs(void)
+ 
+     for (i = 0; i < SDL_NumJoysticks(); i++)
+     {
+-        struct SDLDev sdldev = {0};
+-        struct SDLDev *new_sdldevs;
++        struct SDLDev *sdldev = &sdldevs[have_sdldevs];
+         SDL_Joystick *device;
+         const CHAR* name;
+ 
+-        sdldev.id = i;
+         device = SDL_JoystickOpen(i);
++        sdldev->instance_id = SDL_JoystickInstanceID(device);
+ 
+         name = SDL_JoystickName(device);
+-        sdldev.name = HeapAlloc(GetProcessHeap(), 0, strlen(name) + 1);
+-        strcpy(sdldev.name, name);
++        sdldev->name = HeapAlloc(GetProcessHeap(), 0, strlen(name) + 1);
++        strcpy(sdldev->name, name);
+ 
+-        if (device_disabled_registry(sdldev.name)) {
++        if (device_disabled_registry(sdldev->name)) {
+             SDL_JoystickClose(device);
+-            HeapFree(GetProcessHeap(), 0, sdldev.name);
++            HeapFree(GetProcessHeap(), 0, sdldev->name);
+             continue;
+         }
+ 
+-        TRACE("Found a joystick (%i) on %p: %s\n", have_sdldevs, device, sdldev.name);
++        TRACE("Found a joystick (%i) on %p: %s\n", have_sdldevs, device, sdldev->name);
+ 
+         if (SDL_JoystickIsHaptic(device))
+         {
+@@ -230,56 +240,48 @@ static void find_sdldevs(void)
+             if (haptic)
+             {
+                 TRACE(" ... with force feedback\n");
+-                sdldev.has_ff = TRUE;
++                sdldev->has_ff = TRUE;
+                 SDL_HapticClose(haptic);
+             }
+         }
+ 
+         if(pSDL_JoystickGetVendor){
+-            sdldev.vendor_id = pSDL_JoystickGetVendor(device);
+-            sdldev.product_id = pSDL_JoystickGetProduct(device);
++            sdldev->vendor_id = pSDL_JoystickGetVendor(device);
++            sdldev->product_id = pSDL_JoystickGetProduct(device);
+         }else{
+-            sdldev.vendor_id = 0x01;
+-            sdldev.product_id = SDL_JoystickInstanceID(device) + 1;
++            sdldev->vendor_id = 0x01;
++            sdldev->product_id = SDL_JoystickInstanceID(device) + 1;
+         }
+ 
+-        if(is_in_sdl_blacklist(sdldev.vendor_id, sdldev.product_id))
++        if(is_in_sdl_blacklist(sdldev->vendor_id, sdldev->product_id))
+         {
+-            TRACE("joystick %04x/%04x is in SDL blacklist, ignoring\n", sdldev.vendor_id, sdldev.product_id);
++            TRACE("joystick %04x/%04x is in SDL blacklist, ignoring\n", sdldev->vendor_id, sdldev->product_id);
+             SDL_JoystickClose(device);
+             continue;
+         }
+ 
+-        if(sdldev.vendor_id == VID_VALVE && sdldev.product_id == PID_VALVE_VIRTUAL_CONTROLLER)
++        if(sdldev->vendor_id == VID_VALVE && sdldev->product_id == PID_VALVE_VIRTUAL_CONTROLLER)
+         {
+-            sdldev.vendor_id = VID_MICROSOFT;
+-            sdldev.product_id = PID_MICROSOFT_XBOX_360;
++            sdldev->vendor_id = VID_MICROSOFT;
++            sdldev->product_id = PID_MICROSOFT_XBOX_360;
+         }
+ 
+         {
+             SDL_JoystickType type = SDL_JoystickGetType(device);
+-            sdldev.is_joystick =
++            sdldev->is_joystick =
+                 type == SDL_JOYSTICK_TYPE_WHEEL ||
+                 type == SDL_JOYSTICK_TYPE_FLIGHT_STICK ||
+                 type == SDL_JOYSTICK_TYPE_THROTTLE;
+         }
+ 
+-        sdldev.n_buttons = SDL_JoystickNumButtons(device);
+-        sdldev.n_axes = SDL_JoystickNumAxes(device);
+-        sdldev.n_hats = SDL_JoystickNumHats(device);
++        sdldev->n_buttons = SDL_JoystickNumButtons(device);
++        sdldev->n_axes = SDL_JoystickNumAxes(device);
++        sdldev->n_hats = SDL_JoystickNumHats(device);
+ 
+-        if (!have_sdldevs)
+-            new_sdldevs = HeapAlloc(GetProcessHeap(), 0, sizeof(struct SDLDev));
+-        else
+-            new_sdldevs = HeapReAlloc(GetProcessHeap(), 0, sdldevs, (1 + have_sdldevs) * sizeof(struct SDLDev));
++        sdldev->valid = TRUE;
+ 
+         SDL_JoystickClose(device);
+-        if (!new_sdldevs)
+-        {
+-            continue;
+-        }
+-        sdldevs = new_sdldevs;
+-        sdldevs[have_sdldevs] = sdldev;
++
+         have_sdldevs++;
+     }
+ }
+@@ -418,9 +420,8 @@ static HRESULT sdl_enum_deviceA(DWORD dwDevType, DWORD dwFlags, LPDIDEVICEINSTAN
+ {
+   find_sdldevs();
+ 
+-  if (id >= have_sdldevs) {
+-    return E_FAIL;
+-  }
++    if (id >= ARRAY_SIZE(sdldevs) || !sdldevs[id].valid)
++        return E_FAIL;
+ 
+   if (!((dwDevType == 0) ||
+         ((dwDevType == DIDEVTYPE_JOYSTICK) && (version >= 0x0300 && version < 0x0800)) ||
+@@ -436,11 +437,13 @@ static HRESULT sdl_enum_deviceA(DWORD dwDevType, DWORD dwFlags, LPDIDEVICEINSTAN
+ 
+ static HRESULT sdl_enum_deviceW(DWORD dwDevType, DWORD dwFlags, LPDIDEVICEINSTANCEW lpddi, DWORD version, int id)
+ {
+-  find_sdldevs();
++    find_sdldevs();
+ 
+-  if (id >= have_sdldevs) {
+-    return E_FAIL;
+-  }
++    if (id >= ARRAY_SIZE(sdldevs) || !sdldevs[id].valid)
++        return E_FAIL;
++
++  if (!sdldevs[id].valid)
++      return E_FAIL;
+ 
+   if (!((dwDevType == 0) ||
+         ((dwDevType == DIDEVTYPE_JOYSTICK) && (version >= 0x0300 && version < 0x0800)) ||
+@@ -826,6 +829,17 @@ static JoystickImpl *alloc_device(REFGUID rguid, IDirectInputImpl *dinput, unsig
+     DIDEVICEINSTANCEW ddi;
+     int i,idx = 0, axis_count = 0, button_count = 0, hat_count = 0;
+     struct device_state_item item;
++    SDL_Joystick *sdl_js;
++
++    sdl_js = SDL_JoystickFromInstanceID(sdldevs[index].instance_id);
++    if (!sdl_js)
++        return NULL;
++
++    if (!SDL_JoystickGetAttached(sdl_js))
++    {
++        SDL_JoystickClose(sdl_js);
++        return NULL;
++    }
+ 
+     newDevice = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(JoystickImpl));
+     if (!newDevice) return NULL;
+@@ -852,7 +866,7 @@ static JoystickImpl *alloc_device(REFGUID rguid, IDirectInputImpl *dinput, unsig
+     newDevice->generic.base.crit.DebugInfo->Spare[0] = (DWORD_PTR)(__FILE__ ": JoystickImpl*->base.crit");
+ 
+     /* Open Device */
+-    newDevice->device = SDL_JoystickOpen(newDevice->sdldev->id);
++    newDevice->device = sdl_js;
+     newDevice->haptic = SDL_HapticOpenFromJoystick(newDevice->device);
+ 
+     i = 0;
+@@ -992,8 +1006,7 @@ static HRESULT sdl_create_device(IDirectInputImpl *dinput, REFGUID rguid, REFIID
+     find_sdldevs();
+     *pdev = NULL;
+ 
+-    if ((index = get_joystick_index(rguid)) < 0xffff &&
+-        have_sdldevs && index < have_sdldevs)
++    if ((index = get_joystick_index(rguid)) < 0xffff && sdldevs[index].valid)
+     {
+         JoystickImpl *This;
+ 
+@@ -1020,6 +1033,8 @@ static HRESULT sdl_create_device(IDirectInputImpl *dinput, REFGUID rguid, REFIID
+         }
+ 
+         This = alloc_device(rguid, dinput, index);
++        if (!This)
++            return DIERR_INPUTLOST;
+         TRACE("Created a Joystick device (%p)\n", This);
+ 
+         if (!This) return DIERR_OUTOFMEMORY;
+@@ -1106,7 +1121,7 @@ static HRESULT WINAPI JoystickWImpl_GetProperty(LPDIRECTINPUTDEVICE8W iface, REF
+         {
+             LPDIPROPDWORD pd = (LPDIPROPDWORD)pdiph;
+ 
+-            pd->dwData = This->sdldev->id;
++            pd->dwData = This->sdldev - sdldevs;
+             TRACE("DIPROP_JOYSTICKID(%d)\n", pd->dwData);
+             break;
+         }
+
+From 16069034cacff363fe6ee0d8774f6c86932c3695 Mon Sep 17 00:00:00 2001
+From: Andrew Eikum <aeikum@codeweavers.com>
+Date: Thu, 12 Sep 2019 14:21:08 -0500
+Subject: [PATCH] dinput: Poll for new SDL devices when requested
+
+---
+ dlls/dinput/joystick_sdl.c | 136 ++++++++++++++++++++++++-------------
+ 1 file changed, 90 insertions(+), 46 deletions(-)
+
+diff --git a/dlls/dinput/joystick_sdl.c b/dlls/dinput/joystick_sdl.c
+index 98a2eb7b808..a1680d7265d 100644
+--- a/dlls/dinput/joystick_sdl.c
++++ b/dlls/dinput/joystick_sdl.c
+@@ -109,6 +109,9 @@ struct SDLDev {
+     BOOL has_ff, is_joystick;
+     int autocenter;
+     int gain;
++
++    SDL_Joystick *sdl_js;
++
+     struct list effects;
+ };
+ 
+@@ -188,20 +191,12 @@ static BOOL is_in_sdl_blacklist(DWORD vid, DWORD pid)
+     return strcasestr(blacklist, needle) != NULL;
+ }
+ 
+-static void find_sdldevs(void)
++static Uint16 (*pSDL_JoystickGetProduct)(SDL_Joystick *);
++static Uint16 (*pSDL_JoystickGetVendor)(SDL_Joystick *);
++
++static BOOL WINAPI sdldrv_init(INIT_ONCE *once, void *param, void **context)
+ {
+-    int i;
+-    Uint16 (*pSDL_JoystickGetProduct)(SDL_Joystick * joystick) = NULL;
+-    Uint16 (*pSDL_JoystickGetVendor)(SDL_Joystick * joystick) = NULL;
+     void *sdl_handle = NULL;
+-    static int have_sdldevs = -1;
+-
+-    if (InterlockedCompareExchange(&have_sdldevs, 0, -1) != -1)
+-        /* Someone beat us to it */
+-        return;
+-
+-    SDL_Init(SDL_INIT_JOYSTICK|SDL_INIT_HAPTIC);
+-    SDL_JoystickEventState(SDL_ENABLE);
+ 
+     sdl_handle = wine_dlopen(SONAME_LIBSDL2, RTLD_NOW, NULL, 0);
+     if (sdl_handle) {
+@@ -213,12 +208,59 @@ static void find_sdldevs(void)
+         ERR("SDL installation is old! Please upgrade to >=2.0.6 to get accurate joystick information.\n");
+     }
+ 
++    SDL_Init(SDL_INIT_JOYSTICK|SDL_INIT_HAPTIC);
++    SDL_JoystickEventState(SDL_ENABLE);
++
++    return TRUE;
++}
++
++static void find_sdldevs(void)
++{
++    static INIT_ONCE init_once = INIT_ONCE_STATIC_INIT;
++    static ULONGLONG last_check = 0;
++    ULONGLONG now;
++    int i;
++
++    InitOnceExecuteOnce(&init_once, sdldrv_init, NULL, NULL);
++
++    SDL_PumpEvents();
++
++    now = GetTickCount64();
++
++    if(last_check > 0 && last_check + 1000 > now)
++        return;
++
++    last_check = now;
++
++    EnterCriticalSection(&sdldevs_lock);
++
+     for (i = 0; i < SDL_NumJoysticks(); i++)
+     {
+-        struct SDLDev *sdldev = &sdldevs[have_sdldevs];
++        struct SDLDev *sdldev = &sdldevs[0];
+         SDL_Joystick *device;
+         const CHAR* name;
+ 
++        while(sdldev < &sdldevs[ARRAY_SIZE(sdldevs)] &&
++                sdldev->valid)
++        {
++            if(sdldev->instance_id == SDL_JoystickGetDeviceInstanceID(i))
++                break;
++            sdldev++;
++        }
++
++        if(sdldev >= &sdldevs[ARRAY_SIZE(sdldevs)])
++        {
++            ERR("ran out of joystick slots!!\n");
++            LeaveCriticalSection(&sdldevs_lock);
++            return;
++        }
++
++        if(sdldev->valid)
++        {
++            /* this joystic is already discovered */
++            continue;
++        }
++
+         device = SDL_JoystickOpen(i);
+         sdldev->instance_id = SDL_JoystickInstanceID(device);
+ 
+@@ -232,7 +274,7 @@ static void find_sdldevs(void)
+             continue;
+         }
+ 
+-        TRACE("Found a joystick (%i) on %p: %s\n", have_sdldevs, device, sdldev->name);
++        TRACE("Found a joystick on %p: %s\n", device, sdldev->name);
+ 
+         if (SDL_JoystickIsHaptic(device))
+         {
+@@ -257,6 +299,7 @@ static void find_sdldevs(void)
+         {
+             TRACE("joystick %04x/%04x is in SDL blacklist, ignoring\n", sdldev->vendor_id, sdldev->product_id);
+             SDL_JoystickClose(device);
++            HeapFree(GetProcessHeap(), 0, sdldev->name);
+             continue;
+         }
+ 
+@@ -278,12 +321,13 @@ static void find_sdldevs(void)
+         sdldev->n_axes = SDL_JoystickNumAxes(device);
+         sdldev->n_hats = SDL_JoystickNumHats(device);
+ 
+-        sdldev->valid = TRUE;
+-
+-        SDL_JoystickClose(device);
++        sdldev->sdl_js = device;
+ 
+-        have_sdldevs++;
++        /* must be last member to be set */
++        sdldev->valid = TRUE;
+     }
++
++    LeaveCriticalSection(&sdldevs_lock);
+ }
+ 
+ static struct device_info_override {
+@@ -418,21 +462,27 @@ static void fill_joystick_dideviceinstanceW(LPDIDEVICEINSTANCEW lpddi, DWORD ver
+ 
+ static HRESULT sdl_enum_deviceA(DWORD dwDevType, DWORD dwFlags, LPDIDEVICEINSTANCEA lpddi, DWORD version, int id)
+ {
+-  find_sdldevs();
++    find_sdldevs();
+ 
+     if (id >= ARRAY_SIZE(sdldevs) || !sdldevs[id].valid)
+         return E_FAIL;
+ 
+-  if (!((dwDevType == 0) ||
+-        ((dwDevType == DIDEVTYPE_JOYSTICK) && (version >= 0x0300 && version < 0x0800)) ||
+-        (((dwDevType == DI8DEVCLASS_GAMECTRL) || (dwDevType == DI8DEVTYPE_JOYSTICK)) && (version >= 0x0800))))
+-    return S_FALSE;
++    if (!((dwDevType == 0) ||
++          ((dwDevType == DIDEVTYPE_JOYSTICK) && (version >= 0x0300 && version < 0x0800)) ||
++          (((dwDevType == DI8DEVCLASS_GAMECTRL) || (dwDevType == DI8DEVTYPE_JOYSTICK)) && (version >= 0x0800))))
++        return S_FALSE;
++
++    if ((dwFlags & DIEDFL_FORCEFEEDBACK) && !sdldevs[id].has_ff)
++        return S_FALSE;
++
++    if (dwFlags & DIEDFL_ATTACHEDONLY)
++    {
++        if (!SDL_JoystickGetAttached(sdldevs[id].sdl_js))
++            return S_FALSE;
++    }
+ 
+-  if (!(dwFlags & DIEDFL_FORCEFEEDBACK) || sdldevs[id].has_ff) {
+     fill_joystick_dideviceinstanceA(lpddi, version, id);
+     return S_OK;
+-  }
+-  return S_FALSE;
+ }
+ 
+ static HRESULT sdl_enum_deviceW(DWORD dwDevType, DWORD dwFlags, LPDIDEVICEINSTANCEW lpddi, DWORD version, int id)
+@@ -442,19 +492,22 @@ static HRESULT sdl_enum_deviceW(DWORD dwDevType, DWORD dwFlags, LPDIDEVICEINSTAN
+     if (id >= ARRAY_SIZE(sdldevs) || !sdldevs[id].valid)
+         return E_FAIL;
+ 
+-  if (!sdldevs[id].valid)
+-      return E_FAIL;
++    if (!((dwDevType == 0) ||
++          ((dwDevType == DIDEVTYPE_JOYSTICK) && (version >= 0x0300 && version < 0x0800)) ||
++          (((dwDevType == DI8DEVCLASS_GAMECTRL) || (dwDevType == DI8DEVTYPE_JOYSTICK)) && (version >= 0x0800))))
++        return S_FALSE;
++
++    if ((dwFlags & DIEDFL_FORCEFEEDBACK) && !sdldevs[id].has_ff)
++        return S_FALSE;
+ 
+-  if (!((dwDevType == 0) ||
+-        ((dwDevType == DIDEVTYPE_JOYSTICK) && (version >= 0x0300 && version < 0x0800)) ||
+-        (((dwDevType == DI8DEVCLASS_GAMECTRL) || (dwDevType == DI8DEVTYPE_JOYSTICK)) && (version >= 0x0800))))
+-    return S_FALSE;
++    if (dwFlags & DIEDFL_ATTACHEDONLY)
++    {
++        if (!SDL_JoystickGetAttached(sdldevs[id].sdl_js))
++            return S_FALSE;
++    }
+ 
+-  if (!(dwFlags & DIEDFL_FORCEFEEDBACK) || sdldevs[id].has_ff) {
+     fill_joystick_dideviceinstanceW(lpddi, version, id);
+     return S_OK;
+-  }
+-  return S_FALSE;
+ }
+ 
+ static int buttons_to_sdl_hat(int u, int r, int d, int l)
+@@ -829,18 +882,10 @@ static JoystickImpl *alloc_device(REFGUID rguid, IDirectInputImpl *dinput, unsig
+     DIDEVICEINSTANCEW ddi;
+     int i,idx = 0, axis_count = 0, button_count = 0, hat_count = 0;
+     struct device_state_item item;
+-    SDL_Joystick *sdl_js;
+ 
+-    sdl_js = SDL_JoystickFromInstanceID(sdldevs[index].instance_id);
+-    if (!sdl_js)
++    if (!SDL_JoystickGetAttached(sdldevs[index].sdl_js))
+         return NULL;
+ 
+-    if (!SDL_JoystickGetAttached(sdl_js))
+-    {
+-        SDL_JoystickClose(sdl_js);
+-        return NULL;
+-    }
+-
+     newDevice = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(JoystickImpl));
+     if (!newDevice) return NULL;
+ 
+@@ -866,7 +911,7 @@ static JoystickImpl *alloc_device(REFGUID rguid, IDirectInputImpl *dinput, unsig
+     newDevice->generic.base.crit.DebugInfo->Spare[0] = (DWORD_PTR)(__FILE__ ": JoystickImpl*->base.crit");
+ 
+     /* Open Device */
+-    newDevice->device = sdl_js;
++    newDevice->device = sdldevs[index].sdl_js;
+     newDevice->haptic = SDL_HapticOpenFromJoystick(newDevice->device);
+ 
+     i = 0;
+@@ -1066,7 +1111,6 @@ static ULONG WINAPI JoystickWImpl_Release(LPDIRECTINPUTDEVICE8W iface)
+         TRACE("Closing Joystick: %p\n",This);
+         if (This->sdldev->has_ff)
+             SDL_HapticClose(This->haptic);
+-        SDL_JoystickClose(This->device);
+         This->device = NULL;
+     }
+     return IDirectInputDevice2WImpl_Release(iface);
+
+From 9fe580cc20e2b91acbef8ed47e89c9246d405645 Mon Sep 17 00:00:00 2001
+From: Andrew Eikum <aeikum@codeweavers.com>
+Date: Mon, 16 Sep 2019 12:31:37 -0500
+Subject: [PATCH] dinput: Access SDL_Joystick member once per operation
+
+In case it changes out from under us.
+---
+ dlls/dinput/joystick_sdl.c | 103 +++++++++++++++++--------------------
+ 1 file changed, 48 insertions(+), 55 deletions(-)
+
+diff --git a/dlls/dinput/joystick_sdl.c b/dlls/dinput/joystick_sdl.c
+index a1680d7265d..059f048300e 100644
+--- a/dlls/dinput/joystick_sdl.c
++++ b/dlls/dinput/joystick_sdl.c
+@@ -94,7 +94,7 @@ struct device_state_item {
+     int val;
+ };
+ 
+-typedef BOOL (*enum_device_state_function)(JoystickImpl*, struct device_state_item *, int);
++typedef BOOL (*enum_device_state_function)(SDL_Joystick *, JoystickImpl *, struct device_state_item *, int);
+ 
+ struct SDLDev {
+     BOOL valid;
+@@ -106,11 +106,12 @@ struct SDLDev {
+ 
+     int n_buttons, n_axes, n_hats;
+ 
+-    BOOL has_ff, is_joystick;
++    BOOL is_joystick;
+     int autocenter;
+     int gain;
+ 
+     SDL_Joystick *sdl_js;
++    SDL_Haptic *sdl_haptic;
+ 
+     struct list effects;
+ };
+@@ -120,8 +121,6 @@ struct JoystickImpl
+     struct JoystickGenericImpl generic;
+     struct SDLDev              *sdldev;
+ 
+-    SDL_Joystick *device;
+-    SDL_Haptic *haptic;
+     BOOL ff_paused;
+ 
+     enum_device_state_function enum_device_state;
+@@ -238,6 +237,7 @@ static void find_sdldevs(void)
+     {
+         struct SDLDev *sdldev = &sdldevs[0];
+         SDL_Joystick *device;
++        SDL_Haptic *haptic = NULL;
+         const CHAR* name;
+ 
+         while(sdldev < &sdldevs[ARRAY_SIZE(sdldevs)] &&
+@@ -278,12 +278,10 @@ static void find_sdldevs(void)
+ 
+         if (SDL_JoystickIsHaptic(device))
+         {
+-            SDL_Haptic *haptic = SDL_HapticOpenFromJoystick(device);
++            haptic = SDL_HapticOpenFromJoystick(device);
+             if (haptic)
+             {
+                 TRACE(" ... with force feedback\n");
+-                sdldev->has_ff = TRUE;
+-                SDL_HapticClose(haptic);
+             }
+         }
+ 
+@@ -322,6 +320,7 @@ static void find_sdldevs(void)
+         sdldev->n_hats = SDL_JoystickNumHats(device);
+ 
+         sdldev->sdl_js = device;
++        sdldev->sdl_haptic = haptic;
+ 
+         /* must be last member to be set */
+         sdldev->valid = TRUE;
+@@ -472,7 +471,7 @@ static HRESULT sdl_enum_deviceA(DWORD dwDevType, DWORD dwFlags, LPDIDEVICEINSTAN
+           (((dwDevType == DI8DEVCLASS_GAMECTRL) || (dwDevType == DI8DEVTYPE_JOYSTICK)) && (version >= 0x0800))))
+         return S_FALSE;
+ 
+-    if ((dwFlags & DIEDFL_FORCEFEEDBACK) && !sdldevs[id].has_ff)
++    if ((dwFlags & DIEDFL_FORCEFEEDBACK) && !sdldevs[id].sdl_haptic)
+         return S_FALSE;
+ 
+     if (dwFlags & DIEDFL_ATTACHEDONLY)
+@@ -497,7 +496,7 @@ static HRESULT sdl_enum_deviceW(DWORD dwDevType, DWORD dwFlags, LPDIDEVICEINSTAN
+           (((dwDevType == DI8DEVCLASS_GAMECTRL) || (dwDevType == DI8DEVTYPE_JOYSTICK)) && (version >= 0x0800))))
+         return S_FALSE;
+ 
+-    if ((dwFlags & DIEDFL_FORCEFEEDBACK) && !sdldevs[id].has_ff)
++    if ((dwFlags & DIEDFL_FORCEFEEDBACK) && !sdldevs[id].sdl_haptic)
+         return S_FALSE;
+ 
+     if (dwFlags & DIEDFL_ATTACHEDONLY)
+@@ -536,7 +535,7 @@ static int buttons_to_sdl_hat(int u, int r, int d, int l)
+ }
+ 
+ /* playstation controllers */
+-static BOOL enum_device_state_ds4_16button(JoystickImpl *This, struct device_state_item *st, int idx)
++static BOOL enum_device_state_ds4_16button(SDL_Joystick *js, JoystickImpl *This, struct device_state_item *st, int idx)
+ {
+ #define SPECIALCASE_HAT -1
+ #define SPECIALCASE_L2_BUTTON -2
+@@ -588,15 +587,15 @@ static BOOL enum_device_state_ds4_16button(JoystickImpl *This, struct device_sta
+         switch(map_ds4_16button[idx].type)
+         {
+         case ITEM_TYPE_BUTTON:
+-            st->val = SDL_JoystickGetButton(This->device, map_ds4_16button[idx].sdl_idx);
++            st->val = SDL_JoystickGetButton(js, map_ds4_16button[idx].sdl_idx);
+             return TRUE;
+ 
+         case ITEM_TYPE_AXIS:
+-            st->val = SDL_JoystickGetAxis(This->device, map_ds4_16button[idx].sdl_idx);
++            st->val = SDL_JoystickGetAxis(js, map_ds4_16button[idx].sdl_idx);
+             return TRUE;
+ 
+         case ITEM_TYPE_HAT:
+-            st->val = SDL_JoystickGetHat(This->device, map_ds4_16button[idx].sdl_idx);
++            st->val = SDL_JoystickGetHat(js, map_ds4_16button[idx].sdl_idx);
+             return TRUE;
+         }
+     }
+@@ -610,10 +609,10 @@ static BOOL enum_device_state_ds4_16button(JoystickImpl *This, struct device_sta
+         static const int SDL_DPAD_LEFT_BUTTON = 13;
+         static const int SDL_DPAD_RIGHT_BUTTON = 14;
+         st->val = buttons_to_sdl_hat(
+-                SDL_JoystickGetButton(This->device, SDL_DPAD_UP_BUTTON),
+-                SDL_JoystickGetButton(This->device, SDL_DPAD_RIGHT_BUTTON),
+-                SDL_JoystickGetButton(This->device, SDL_DPAD_DOWN_BUTTON),
+-                SDL_JoystickGetButton(This->device, SDL_DPAD_LEFT_BUTTON));
++                SDL_JoystickGetButton(js, SDL_DPAD_UP_BUTTON),
++                SDL_JoystickGetButton(js, SDL_DPAD_RIGHT_BUTTON),
++                SDL_JoystickGetButton(js, SDL_DPAD_DOWN_BUTTON),
++                SDL_JoystickGetButton(js, SDL_DPAD_LEFT_BUTTON));
+         return TRUE;
+     }
+ 
+@@ -622,7 +621,7 @@ static BOOL enum_device_state_ds4_16button(JoystickImpl *This, struct device_sta
+         /* L2 button */
+         /* turn button on at about 1/8 of the trigger travel */
+         static const int SDL_L2_AXIS = 4;
+-        st->val = SDL_JoystickGetAxis(This->device, SDL_L2_AXIS) > 3 * SDL_JOYSTICK_AXIS_MIN / 4;
++        st->val = SDL_JoystickGetAxis(js, SDL_L2_AXIS) > 3 * SDL_JOYSTICK_AXIS_MIN / 4;
+         return TRUE;
+     }
+ 
+@@ -631,7 +630,7 @@ static BOOL enum_device_state_ds4_16button(JoystickImpl *This, struct device_sta
+         /* R2 button */
+         /* turn button on at about 1/8 of the trigger travel */
+         static const int SDL_R2_AXIS = 5;
+-        st->val = SDL_JoystickGetAxis(This->device, SDL_R2_AXIS) > 3 * SDL_JOYSTICK_AXIS_MIN / 4;
++        st->val = SDL_JoystickGetAxis(js, SDL_R2_AXIS) > 3 * SDL_JOYSTICK_AXIS_MIN / 4;
+         return TRUE;
+     }
+     }
+@@ -644,7 +643,7 @@ static BOOL enum_device_state_ds4_16button(JoystickImpl *This, struct device_sta
+ #undef SPECIALCASE_R2_BUTTON
+ }
+ 
+-static BOOL enum_device_state_ds4_13button(JoystickImpl *This, struct device_state_item *st, int idx)
++static BOOL enum_device_state_ds4_13button(SDL_Joystick *js, JoystickImpl *This, struct device_state_item *st, int idx)
+ {
+     static const struct {
+         int type;
+@@ -696,15 +695,15 @@ static BOOL enum_device_state_ds4_13button(JoystickImpl *This, struct device_sta
+     switch(map_ds4_13button[idx].type)
+     {
+     case ITEM_TYPE_BUTTON:
+-        st->val = SDL_JoystickGetButton(This->device, map_ds4_13button[idx].sdl_idx);
++        st->val = SDL_JoystickGetButton(js, map_ds4_13button[idx].sdl_idx);
+         return TRUE;
+ 
+     case ITEM_TYPE_AXIS:
+-        st->val = SDL_JoystickGetAxis(This->device, map_ds4_13button[idx].sdl_idx);
++        st->val = SDL_JoystickGetAxis(js, map_ds4_13button[idx].sdl_idx);
+         return TRUE;
+ 
+     case ITEM_TYPE_HAT:
+-        st->val = SDL_JoystickGetHat(This->device, map_ds4_13button[idx].sdl_idx);
++        st->val = SDL_JoystickGetHat(js, map_ds4_13button[idx].sdl_idx);
+         return TRUE;
+     }
+ 
+@@ -713,7 +712,7 @@ static BOOL enum_device_state_ds4_13button(JoystickImpl *This, struct device_sta
+ }
+ 
+ /* straight 1:1 mapping of SDL items and dinput items */
+-static BOOL enum_device_state_standard(JoystickImpl *This, struct device_state_item *st, int idx)
++static BOOL enum_device_state_standard(SDL_Joystick *js, JoystickImpl *This, struct device_state_item *st, int idx)
+ {
+     DWORD n_buttons, n_axes, n_hats;
+ 
+@@ -723,7 +722,7 @@ static BOOL enum_device_state_standard(JoystickImpl *This, struct device_state_i
+     {
+         st->type = ITEM_TYPE_BUTTON;
+         st->id = idx;
+-        st->val = SDL_JoystickGetButton(This->device, idx);
++        st->val = SDL_JoystickGetButton(js, idx);
+         return TRUE;
+     }
+ 
+@@ -735,7 +734,7 @@ static BOOL enum_device_state_standard(JoystickImpl *This, struct device_state_i
+     {
+         st->type = ITEM_TYPE_AXIS;
+         st->id = idx;
+-        st->val = SDL_JoystickGetAxis(This->device, idx);
++        st->val = SDL_JoystickGetAxis(js, idx);
+         return TRUE;
+     }
+ 
+@@ -747,7 +746,7 @@ static BOOL enum_device_state_standard(JoystickImpl *This, struct device_state_i
+     {
+         st->type = ITEM_TYPE_HAT;
+         st->id = idx;
+-        st->val = SDL_JoystickGetHat(This->device, idx);
++        st->val = SDL_JoystickGetHat(js, idx);
+         return TRUE;
+     }
+ 
+@@ -761,13 +760,14 @@ static HRESULT poll_sdl_device_state(LPDIRECTINPUTDEVICE8A iface)
+     int inst_id = 0;
+     int newVal = 0;
+     struct device_state_item item;
++    SDL_Joystick *js = This->sdldev->sdl_js;
+ 
+-    if(!SDL_JoystickGetAttached(This->device))
++    if(!SDL_JoystickGetAttached(js))
+         return DIERR_INPUTLOST;
+ 
+     SDL_JoystickUpdate();
+ 
+-    while(This->enum_device_state(This, &item, i++))
++    while(This->enum_device_state(js, This, &item, i++))
+     {
+         switch(item.type){
+         case ITEM_TYPE_BUTTON:
+@@ -882,8 +882,11 @@ static JoystickImpl *alloc_device(REFGUID rguid, IDirectInputImpl *dinput, unsig
+     DIDEVICEINSTANCEW ddi;
+     int i,idx = 0, axis_count = 0, button_count = 0, hat_count = 0;
+     struct device_state_item item;
++    SDL_Joystick *js;
+ 
+-    if (!SDL_JoystickGetAttached(sdldevs[index].sdl_js))
++    js = sdldevs[index].sdl_js;
++
++    if (!SDL_JoystickGetAttached(js))
+         return NULL;
+ 
+     newDevice = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(JoystickImpl));
+@@ -911,11 +914,9 @@ static JoystickImpl *alloc_device(REFGUID rguid, IDirectInputImpl *dinput, unsig
+     newDevice->generic.base.crit.DebugInfo->Spare[0] = (DWORD_PTR)(__FILE__ ": JoystickImpl*->base.crit");
+ 
+     /* Open Device */
+-    newDevice->device = sdldevs[index].sdl_js;
+-    newDevice->haptic = SDL_HapticOpenFromJoystick(newDevice->device);
+ 
+     i = 0;
+-    while(newDevice->enum_device_state(newDevice, &item, i++)){
++    while(newDevice->enum_device_state(js, newDevice, &item, i++)){
+         switch(item.type){
+             case ITEM_TYPE_BUTTON:
+                 ++button_count;
+@@ -960,7 +961,7 @@ static JoystickImpl *alloc_device(REFGUID rguid, IDirectInputImpl *dinput, unsig
+     if (!(df->rgodf = HeapAlloc(GetProcessHeap(), 0, df->dwNumObjs * df->dwObjSize))) goto failed;
+ 
+     i = 0;
+-    while(newDevice->enum_device_state(newDevice, &item, i++)){
++    while(newDevice->enum_device_state(js, newDevice, &item, i++)){
+         switch(item.type){
+             case ITEM_TYPE_BUTTON:
+                 memcpy(&df->rgodf[idx], &c_dfDIJoystick2.rgodf[item.id + 12], df->dwObjSize);
+@@ -971,7 +972,7 @@ static JoystickImpl *alloc_device(REFGUID rguid, IDirectInputImpl *dinput, unsig
+             case ITEM_TYPE_AXIS:
+                 memcpy(&df->rgodf[idx], &c_dfDIJoystick2.rgodf[item.id], df->dwObjSize);
+                 df->rgodf[idx].dwType = DIDFT_MAKEINSTANCE(item.id) | DIDFT_ABSAXIS;
+-                if (newDevice->sdldev->has_ff && i < 2)
++                if (newDevice->sdldev->sdl_haptic && i < 2)
+                      df->rgodf[idx].dwFlags |= DIDOI_FFACTUATOR;
+ 
+                 newDevice->generic.props[idx].lDevMin = -32768;
+@@ -991,7 +992,7 @@ static JoystickImpl *alloc_device(REFGUID rguid, IDirectInputImpl *dinput, unsig
+         }
+     }
+ 
+-    if (newDevice->sdldev->has_ff)
++    if (newDevice->sdldev->sdl_haptic)
+         newDevice->generic.devcaps.dwFlags |= DIDC_FORCEFEEDBACK;
+ 
+     newDevice->generic.base.data_format.wine_df = df;
+@@ -1004,7 +1005,7 @@ static JoystickImpl *alloc_device(REFGUID rguid, IDirectInputImpl *dinput, unsig
+     fill_joystick_dideviceinstanceW(&ddi, newDevice->generic.base.dinput->dwVersion, index);
+     newDevice->generic.devcaps.dwDevType = ddi.dwDevType;
+ 
+-    if (newDevice->sdldev->has_ff)
++    if (newDevice->sdldev->sdl_haptic)
+         newDevice->generic.devcaps.dwFlags |= DIDC_FORCEFEEDBACK;
+ 
+     IDirectInput_AddRef(&newDevice->generic.base.dinput->IDirectInput7A_iface);
+@@ -1104,15 +1105,7 @@ const struct dinput_device joystick_sdl_device = {
+ 
+ static ULONG WINAPI JoystickWImpl_Release(LPDIRECTINPUTDEVICE8W iface)
+ {
+-    JoystickImpl *This = impl_from_IDirectInputDevice8W(iface);
+     TRACE("(this=%p)\n", iface);
+-    if (This->generic.base.ref == 1 && This->device >= 0)
+-    {
+-        TRACE("Closing Joystick: %p\n",This);
+-        if (This->sdldev->has_ff)
+-            SDL_HapticClose(This->haptic);
+-        This->device = NULL;
+-    }
+     return IDirectInputDevice2WImpl_Release(iface);
+ }
+ 
+@@ -1266,7 +1259,7 @@ static BOOL _SetProperty(JoystickImpl *This, const GUID *prop, const DIPROPHEADE
+ 
+             This->sdldev->autocenter = pd->dwData == DIPROPAUTOCENTER_ON;
+ 
+-            rc = SDL_HapticSetAutocenter(This->haptic, This->sdldev->autocenter * 100);
++            rc = SDL_HapticSetAutocenter(This->sdldev->sdl_haptic, This->sdldev->autocenter * 100);
+             if (rc != 0)
+                 ERR("SDL_HapticSetAutocenter failed: %s\n", SDL_GetError());
+             break;
+@@ -1280,7 +1273,7 @@ static BOOL _SetProperty(JoystickImpl *This, const GUID *prop, const DIPROPHEADE
+ 
+             This->sdldev->gain = pd->dwData;
+ 
+-            rc = SDL_HapticSetGain(This->haptic, sdl_gain);
++            rc = SDL_HapticSetGain(This->sdldev->sdl_haptic, sdl_gain);
+             if (rc != 0)
+                 ERR("SDL_HapticSetGain (%i -> %i) failed: %s\n", pd->dwData, sdl_gain, SDL_GetError());
+             break;
+@@ -1366,7 +1359,7 @@ static HRESULT WINAPI JoystickWImpl_CreateEffect(IDirectInputDevice8W *iface,
+     TRACE("%p %s %p %p %p\n", iface, debugstr_guid(rguid), lpeff, ppdef, pUnkOuter);
+     if (lpeff) dump_DIEFFECT(lpeff, rguid, 0);
+ 
+-    if(!This->sdldev->has_ff){
++    if(!This->sdldev->sdl_haptic){
+         TRACE("No force feedback support\n");
+         *ppdef = NULL;
+         return DIERR_UNSUPPORTED;
+@@ -1384,7 +1377,7 @@ static HRESULT WINAPI JoystickWImpl_CreateEffect(IDirectInputDevice8W *iface,
+     if (!(new_effect = HeapAlloc(GetProcessHeap(), 0, sizeof(*new_effect))))
+     return DIERR_OUTOFMEMORY;
+ 
+-    retval = sdl_create_effect(This->haptic, rguid, &new_effect->entry, &new_effect->ref);
++    retval = sdl_create_effect(This->sdldev->sdl_haptic, rguid, &new_effect->entry, &new_effect->ref);
+     if (retval != DI_OK)
+     {
+         HeapFree(GetProcessHeap(), 0, new_effect);
+@@ -1435,7 +1428,7 @@ static HRESULT WINAPI JoystickWImpl_EnumEffects(LPDIRECTINPUTDEVICE8W iface,
+     TRACE("(this=%p,%p,%d) type=%d\n", This, pvRef, dwEffType, type);
+ 
+     dei.dwSize = sizeof(DIEFFECTINFOW);
+-    query = SDL_HapticQuery(This->haptic);
++    query = SDL_HapticQuery(This->sdldev->sdl_haptic);
+     TRACE("Effects 0x%x\n",query);
+ 
+     if ((type == DIEFT_ALL || type == DIEFT_CONSTANTFORCE)
+@@ -1516,7 +1509,7 @@ static HRESULT WINAPI JoystickAImpl_EnumEffects(LPDIRECTINPUTDEVICE8A iface,
+     TRACE("(this=%p,%p,%d) type=%d\n", This, pvRef, dwEffType, type);
+ 
+     dei.dwSize = sizeof(DIEFFECTINFOA);
+-    query = SDL_HapticQuery(This->haptic);
++    query = SDL_HapticQuery(This->sdldev->sdl_haptic);
+     TRACE("Effects 0x%x\n",query);
+ 
+     if ((type == DIEFT_ALL || type == DIEFT_CONSTANTFORCE)
+@@ -1590,7 +1583,7 @@ static HRESULT WINAPI JoystickWImpl_GetEffectInfo(LPDIRECTINPUTDEVICE8W iface,
+ {
+     JoystickImpl* This = impl_from_IDirectInputDevice8W(iface);
+     TRACE("(this=%p,%p,%s)\n", This, pdei, _dump_dinput_GUID(guid));
+-    return sdl_input_get_info_W(This->device, guid, pdei);
++    return sdl_input_get_info_W(This->sdldev->sdl_js, guid, pdei);
+ }
+ 
+ static HRESULT WINAPI JoystickAImpl_GetEffectInfo(LPDIRECTINPUTDEVICE8A iface,
+@@ -1599,7 +1592,7 @@ static HRESULT WINAPI JoystickAImpl_GetEffectInfo(LPDIRECTINPUTDEVICE8A iface,
+ {
+     JoystickImpl* This = impl_from_IDirectInputDevice8A(iface);
+     TRACE("(this=%p,%p,%s)\n", This, pdei, _dump_dinput_GUID(guid));
+-    return sdl_input_get_info_A(This->device, guid, pdei);
++    return sdl_input_get_info_A(This->sdldev->sdl_js, guid, pdei);
+ }
+ 
+ static HRESULT WINAPI JoystickWImpl_SendForceFeedbackCommand(LPDIRECTINPUTDEVICE8W iface, DWORD dwFlags)
+@@ -1633,12 +1626,12 @@ static HRESULT WINAPI JoystickWImpl_SendForceFeedbackCommand(LPDIRECTINPUTDEVICE
+     }
+     case DISFFC_PAUSE:
+         This->ff_paused = TRUE;
+-        if (SDL_HapticPause(This->haptic) != 0)
++        if (SDL_HapticPause(This->sdldev->sdl_haptic) != 0)
+             ERR("SDL_HapticPause failed: %s\n",SDL_GetError());
+         break;
+     case DISFFC_CONTINUE:
+         This->ff_paused = FALSE;
+-        if (SDL_HapticUnpause(This->haptic) != 0)
++        if (SDL_HapticUnpause(This->sdldev->sdl_haptic) != 0)
+             ERR("SDL_HapticUnpause failed: %s\n",SDL_GetError());
+         break;
+ 
+
+From a762c30a3019470b3b84e74eca25797cb0771197 Mon Sep 17 00:00:00 2001
+From: Andrew Eikum <aeikum@codeweavers.com>
+Date: Mon, 16 Sep 2019 13:49:06 -0500
+Subject: [PATCH] dinput: Check for new devices on every access
+
+---
+ dlls/dinput/joystick_sdl.c | 36 +++++++++++++++++++++++++++++++++---
+ 1 file changed, 33 insertions(+), 3 deletions(-)
+
+diff --git a/dlls/dinput/joystick_sdl.c b/dlls/dinput/joystick_sdl.c
+index 059f048300e..324e8679601 100644
+--- a/dlls/dinput/joystick_sdl.c
++++ b/dlls/dinput/joystick_sdl.c
+@@ -102,6 +102,7 @@ struct SDLDev {
+     int instance_id;
+     WORD vendor_id;
+     WORD product_id;
++    SDL_JoystickGUID sdl_guid;
+     CHAR *name;
+ 
+     int n_buttons, n_axes, n_hats;
+@@ -243,8 +244,15 @@ static void find_sdldevs(void)
+         while(sdldev < &sdldevs[ARRAY_SIZE(sdldevs)] &&
+                 sdldev->valid)
+         {
++            SDL_JoystickGUID sdl_guid;
+             if(sdldev->instance_id == SDL_JoystickGetDeviceInstanceID(i))
+                 break;
++            sdl_guid = SDL_JoystickGetDeviceGUID(i);
++            if(!memcmp(&sdldev->sdl_guid, &sdl_guid, sizeof(SDL_JoystickGUID))){
++                if(!SDL_JoystickGetAttached(sdldev->sdl_js))
++                    /* same GUID but detached; reconnected, so assign to this slot */
++                    break;
++            }
+             sdldev++;
+         }
+ 
+@@ -257,12 +265,26 @@ static void find_sdldevs(void)
+ 
+         if(sdldev->valid)
+         {
+-            /* this joystic is already discovered */
++            if(SDL_JoystickGetAttached(sdldev->sdl_js))
++            {
++                /* this joystic is already discovered */
++                continue;
++            }
++
++            /* reconnected, update sdldev */
++            TRACE("reconnected \"%s\"\n", sdldev->name);
++            device = SDL_JoystickOpen(i);
++            sdldev->instance_id = SDL_JoystickInstanceID(device);
++            if (SDL_JoystickIsHaptic(device))
++                sdldev->sdl_haptic = SDL_HapticOpenFromJoystick(device);
++
++            InterlockedExchangePointer((void**)&sdldev->sdl_js, device);
+             continue;
+         }
+ 
+         device = SDL_JoystickOpen(i);
+         sdldev->instance_id = SDL_JoystickInstanceID(device);
++        sdldev->sdl_guid = SDL_JoystickGetGUID(device);
+ 
+         name = SDL_JoystickName(device);
+         sdldev->name = HeapAlloc(GetProcessHeap(), 0, strlen(name) + 1);
+@@ -762,10 +784,16 @@ static HRESULT poll_sdl_device_state(LPDIRECTINPUTDEVICE8A iface)
+     struct device_state_item item;
+     SDL_Joystick *js = This->sdldev->sdl_js;
+ 
++    SDL_JoystickUpdate();
++
+     if(!SDL_JoystickGetAttached(js))
+-        return DIERR_INPUTLOST;
++    {
++        find_sdldevs();
+ 
+-    SDL_JoystickUpdate();
++        js = This->sdldev->sdl_js;
++        if(!SDL_JoystickGetAttached(js))
++            return DIERR_INPUTLOST;
++    }
+ 
+     while(This->enum_device_state(js, This, &item, i++))
+     {
+@@ -1583,6 +1611,7 @@ static HRESULT WINAPI JoystickWImpl_GetEffectInfo(LPDIRECTINPUTDEVICE8W iface,
+ {
+     JoystickImpl* This = impl_from_IDirectInputDevice8W(iface);
+     TRACE("(this=%p,%p,%s)\n", This, pdei, _dump_dinput_GUID(guid));
++    find_sdldevs();
+     return sdl_input_get_info_W(This->sdldev->sdl_js, guid, pdei);
+ }
+ 
+@@ -1592,6 +1621,7 @@ static HRESULT WINAPI JoystickAImpl_GetEffectInfo(LPDIRECTINPUTDEVICE8A iface,
+ {
+     JoystickImpl* This = impl_from_IDirectInputDevice8A(iface);
+     TRACE("(this=%p,%p,%s)\n", This, pdei, _dump_dinput_GUID(guid));
++    find_sdldevs();
+     return sdl_input_get_info_A(This->sdldev->sdl_js, guid, pdei);
+ }
+ 
+
+From 6ecd118c5fe80b6d0143c8eed21ee7f1507b0d7f Mon Sep 17 00:00:00 2001
+From: Andrew Eikum <aeikum@codeweavers.com>
+Date: Mon, 30 Sep 2019 14:57:46 -0500
+Subject: [PATCH] xinput: Make device hotplugging thread-safe
+
+---
+ dlls/xinput1_3/hid.c            | 246 ++++++++++++++++----------------
+ dlls/xinput1_3/xinput_main.c    |  95 +++++++++++-
+ dlls/xinput1_3/xinput_private.h |   7 +-
+ 3 files changed, 213 insertions(+), 135 deletions(-)
+
+diff --git a/dlls/xinput1_3/hid.c b/dlls/xinput1_3/hid.c
+index 89e7ba43dba..2b7b4d99847 100644
+--- a/dlls/xinput1_3/hid.c
++++ b/dlls/xinput1_3/hid.c
+@@ -50,15 +50,6 @@ WINE_DEFAULT_DEBUG_CHANNEL(xinput);
+ 
+ #define XINPUT_GAMEPAD_GUIDE 0x0400
+ 
+-static CRITICAL_SECTION hid_xinput_crit;
+-static CRITICAL_SECTION_DEBUG hid_critsect_debug =
+-{
+-    0, 0, &hid_xinput_crit,
+-    { &hid_critsect_debug.ProcessLocksList, &hid_critsect_debug.ProcessLocksList },
+-      0, 0, { (DWORD_PTR)(__FILE__ ": hid_xinput_crit") }
+-};
+-static CRITICAL_SECTION hid_xinput_crit = { &hid_critsect_debug, -1, 0, 0, 0, 0 };
+-
+ struct axis_info
+ {
+     LONG min;
+@@ -72,8 +63,6 @@ struct hid_platform_private {
+     WCHAR *device_path;
+     BOOL enabled;
+ 
+-    CRITICAL_SECTION crit;
+-
+     DWORD report_length;
+     BYTE current_report;
+     CHAR *reports[2];
+@@ -196,9 +185,6 @@ static void build_private(struct hid_platform_private *private, PHIDP_PREPARSED_
+     private->device_path = HeapAlloc(GetProcessHeap(), 0, size);
+     memcpy(private->device_path, path, size);
+     private->enabled = TRUE;
+-
+-    InitializeCriticalSection(&private->crit);
+-    private->crit.DebugInfo->Spare[0] = (DWORD_PTR)(__FILE__ ": JoystickImpl*->generic.base.crit");
+ }
+ 
+ void HID_find_gamepads(xinput_controller *devices)
+@@ -209,21 +195,27 @@ void HID_find_gamepads(xinput_controller *devices)
+     SP_DEVICE_INTERFACE_DETAIL_DATA_W *data;
+     PHIDP_PREPARSED_DATA ppd;
+     DWORD detail_size = MAX_PATH * sizeof(WCHAR);
+-    HANDLE device = INVALID_HANDLE_VALUE;
++    HANDLE device;
+     HIDP_CAPS Caps;
+-    DWORD idx,didx;
+-    int i;
++    DWORD idx;
++    int i, open_device_idx;
+ 
+     idx = GetTickCount();
+     if ((idx - last_check) < 2000)
+         return;
++
++    EnterCriticalSection(&xinput_crit);
++
++    if ((idx - last_check) < 2000)
++    {
++        LeaveCriticalSection(&xinput_crit);
++        return;
++    }
+     last_check = idx;
+ 
+     HidD_GetHidGuid(&hid_guid);
+     hid_guid.Data4[7]++; /* HACK: look up the xinput-specific devices */
+ 
+-    EnterCriticalSection(&hid_xinput_crit);
+-
+     device_info_set = SetupDiGetClassDevsW(&hid_guid, NULL, NULL, DIGCF_DEVICEINTERFACE | DIGCF_PRESENT);
+ 
+     data = HeapAlloc(GetProcessHeap(), 0 , sizeof(*data) + detail_size);
+@@ -232,9 +224,9 @@ void HID_find_gamepads(xinput_controller *devices)
+     ZeroMemory(&interface_data, sizeof(interface_data));
+     interface_data.cbSize = sizeof(interface_data);
+ 
+-    idx = didx = 0;
++    idx = 0;
+     while (SetupDiEnumDeviceInterfaces(device_info_set, NULL, &hid_guid, idx++,
+-           &interface_data) && didx < XUSER_MAX_COUNT)
++           &interface_data))
+     {
+         static const WCHAR ig[] = {'I','G','_',0};
+         if (!SetupDiGetDeviceInterfaceDetailW(device_info_set,
+@@ -244,14 +236,24 @@ void HID_find_gamepads(xinput_controller *devices)
+         if (!strstrW(data->DevicePath, ig))
+             continue;
+ 
++        open_device_idx = -1;
+         for (i = 0; i < XUSER_MAX_COUNT; i++)
+         {
+             struct hid_platform_private *private = devices[i].platform_private;
+-            if (devices[i].connected && !wcscmp(data->DevicePath, private->device_path))
+-                break;
++            if (devices[i].connected)
++            {
++                if (!wcscmp(data->DevicePath, private->device_path))
++                    break;
++            }
++            else if(open_device_idx < 0)
++                open_device_idx = i;
+         }
+         if (i != XUSER_MAX_COUNT)
++            /* this device is already opened */
+             continue;
++        if (open_device_idx < 0)
++            /* no open device slots */
++            break;
+         device = CreateFileW(data->DevicePath, GENERIC_READ|GENERIC_WRITE, FILE_SHARE_READ|FILE_SHARE_WRITE, NULL, OPEN_EXISTING, 0, 0 );
+         if (device == INVALID_HANDLE_VALUE)
+             continue;
+@@ -264,13 +266,12 @@ void HID_find_gamepads(xinput_controller *devices)
+              Caps.Usage == 0x8 /* Multi-axis Controller */))
+         {
+             struct hid_platform_private *private = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(struct hid_platform_private));
+-            if (VerifyGamepad(ppd, &(devices[didx].caps), private, &Caps))
++            if (VerifyGamepad(ppd, &devices[open_device_idx].caps, private, &Caps))
+             {
+-                TRACE("Found gamepad %i %s\n",didx, debugstr_w(data->DevicePath));
+-                devices[didx].connected = TRUE;
++                TRACE("Found gamepad %i %s\n", open_device_idx, debugstr_w(data->DevicePath));
+                 build_private(private, ppd, &Caps, device, data->DevicePath);
+-                devices[didx].platform_private = private;
+-                didx++;
++                devices[open_device_idx].platform_private = private;
++                devices[open_device_idx].connected = TRUE;
+             }
+             else
+             {
+@@ -284,41 +285,39 @@ void HID_find_gamepads(xinput_controller *devices)
+             CloseHandle(device);
+             HidD_FreePreparsedData(ppd);
+         }
+-        device = INVALID_HANDLE_VALUE;
+     }
+     HeapFree(GetProcessHeap(), 0, data);
+     SetupDiDestroyDeviceInfoList(device_info_set);
+-    LeaveCriticalSection(&hid_xinput_crit);
+-    return;
++    LeaveCriticalSection(&xinput_crit);
+ }
+ 
+ static void remove_gamepad(xinput_controller *device)
+ {
++    EnterCriticalSection(&device->crit);
++
+     if (device->connected)
+     {
+         struct hid_platform_private *private = device->platform_private;
+ 
+-        EnterCriticalSection(&private->crit);
++        device->connected = FALSE;
++
+         CloseHandle(private->device);
+         HeapFree(GetProcessHeap(), 0, private->reports[0]);
+         HeapFree(GetProcessHeap(), 0, private->reports[1]);
+         HeapFree(GetProcessHeap(), 0, private->device_path);
+         HidD_FreePreparsedData(private->ppd);
+         device->platform_private = NULL;
+-        device->connected = FALSE;
+-        LeaveCriticalSection(&private->crit);
+-        DeleteCriticalSection(&private->crit);
+         HeapFree(GetProcessHeap(), 0, private);
+     }
++
++    LeaveCriticalSection(&device->crit);
+ }
+ 
+ void HID_destroy_gamepads(xinput_controller *devices)
+ {
+     int i;
+-    EnterCriticalSection(&hid_xinput_crit);
+     for (i = 0; i < XUSER_MAX_COUNT; i++)
+         remove_gamepad(&devices[i]);
+-    LeaveCriticalSection(&hid_xinput_crit);
+ }
+ 
+ static SHORT scale_short(LONG value, const struct axis_info *axis)
+@@ -331,7 +330,7 @@ static BYTE scale_byte(LONG value, const struct axis_info *axis)
+     return (((ULONGLONG)(value - axis->min)) * 0xff) / axis->range;
+ }
+ 
+-void HID_update_state(xinput_controller* device)
++void HID_update_state(xinput_controller *device, XINPUT_STATE *state)
+ {
+     struct hid_platform_private *private = device->platform_private;
+     int i;
+@@ -345,109 +345,111 @@ void HID_update_state(xinput_controller *device, XINPUT_STATE *state)
+     if (!private->enabled)
+         return;
+ 
+-    EnterCriticalSection(&private->crit);
+     if (!HidD_GetInputReport(private->device, target_report, private->report_length))
+     {
+         if (GetLastError() == ERROR_ACCESS_DENIED || GetLastError() == ERROR_INVALID_HANDLE)
++        {
++            EnterCriticalSection(&xinput_crit);
+             remove_gamepad(device);
++            LeaveCriticalSection(&xinput_crit);
++        }
+         else
+             ERR("Failed to get Input Report (%x)\n", GetLastError());
+-        LeaveCriticalSection(&private->crit);
+         return;
+     }
+-    if (memcmp(report, target_report, private->report_length) == 0)
++    if (memcmp(report, target_report, private->report_length) != 0)
+     {
+-        LeaveCriticalSection(&private->crit);
+-        return;
+-    }
++        private->current_report = (private->current_report+1)%2;
+ 
+-    private->current_report = (private->current_report+1)%2;
++        device->state.dwPacketNumber++;
++        button_length = ARRAY_SIZE(buttons);
++        HidP_GetUsages(HidP_Input, HID_USAGE_PAGE_BUTTON, 0, buttons, &button_length, private->ppd, target_report, private->report_length);
+ 
+-    device->state.dwPacketNumber++;
+-    button_length = ARRAY_SIZE(buttons);
+-    HidP_GetUsages(HidP_Input, HID_USAGE_PAGE_BUTTON, 0, buttons, &button_length, private->ppd, target_report, private->report_length);
+-
+-    device->state.Gamepad.wButtons = 0;
+-    for (i = 0; i < button_length; i++)
+-    {
+-        switch (buttons[i])
++        device->state.Gamepad.wButtons = 0;
++        for (i = 0; i < button_length; i++)
+         {
+-            case 1: device->state.Gamepad.wButtons |= XINPUT_GAMEPAD_A; break;
+-            case 2: device->state.Gamepad.wButtons |= XINPUT_GAMEPAD_B; break;
+-            case 3: device->state.Gamepad.wButtons |= XINPUT_GAMEPAD_X; break;
+-            case 4: device->state.Gamepad.wButtons |= XINPUT_GAMEPAD_Y; break;
+-            case 5: device->state.Gamepad.wButtons |= XINPUT_GAMEPAD_LEFT_SHOULDER; break;
+-            case 6: device->state.Gamepad.wButtons |= XINPUT_GAMEPAD_RIGHT_SHOULDER; break;
+-            case 7: device->state.Gamepad.wButtons |= XINPUT_GAMEPAD_BACK; break;
+-            case 8: device->state.Gamepad.wButtons |= XINPUT_GAMEPAD_START; break;
+-            case 9: device->state.Gamepad.wButtons |= XINPUT_GAMEPAD_LEFT_THUMB; break;
+-            case 10: device->state.Gamepad.wButtons |= XINPUT_GAMEPAD_RIGHT_THUMB; break;
+-            case 11: device->state.Gamepad.wButtons |= XINPUT_GAMEPAD_GUIDE; break;
++            switch (buttons[i])
++            {
++                case 1: device->state.Gamepad.wButtons |= XINPUT_GAMEPAD_A; break;
++                case 2: device->state.Gamepad.wButtons |= XINPUT_GAMEPAD_B; break;
++                case 3: device->state.Gamepad.wButtons |= XINPUT_GAMEPAD_X; break;
++                case 4: device->state.Gamepad.wButtons |= XINPUT_GAMEPAD_Y; break;
++                case 5: device->state.Gamepad.wButtons |= XINPUT_GAMEPAD_LEFT_SHOULDER; break;
++                case 6: device->state.Gamepad.wButtons |= XINPUT_GAMEPAD_RIGHT_SHOULDER; break;
++                case 7: device->state.Gamepad.wButtons |= XINPUT_GAMEPAD_BACK; break;
++                case 8: device->state.Gamepad.wButtons |= XINPUT_GAMEPAD_START; break;
++                case 9: device->state.Gamepad.wButtons |= XINPUT_GAMEPAD_LEFT_THUMB; break;
++                case 10: device->state.Gamepad.wButtons |= XINPUT_GAMEPAD_RIGHT_THUMB; break;
++                case 11: device->state.Gamepad.wButtons |= XINPUT_GAMEPAD_GUIDE; break;
++            }
+         }
+-    }
+ 
+-    if(HidP_GetUsageValue(HidP_Input, HID_USAGE_PAGE_GENERIC, 0, HID_USAGE_GENERIC_HATSWITCH, &hat_value,
+-                              private->ppd, target_report, private->report_length) == HIDP_STATUS_SUCCESS)
+-    {
+-        switch(hat_value){
+-            /* 8 1 2
+-             * 7 0 3
+-             * 6 5 4 */
+-            case 0:
+-                break;
+-            case 1:
+-                device->state.Gamepad.wButtons |= XINPUT_GAMEPAD_DPAD_UP;
+-                break;
+-            case 2:
+-                device->state.Gamepad.wButtons |= XINPUT_GAMEPAD_DPAD_UP | XINPUT_GAMEPAD_DPAD_RIGHT;
+-                break;
+-            case 3:
+-                device->state.Gamepad.wButtons |= XINPUT_GAMEPAD_DPAD_RIGHT;
+-                break;
+-            case 4:
+-                device->state.Gamepad.wButtons |= XINPUT_GAMEPAD_DPAD_RIGHT | XINPUT_GAMEPAD_DPAD_DOWN;
+-                break;
+-            case 5:
+-                device->state.Gamepad.wButtons |= XINPUT_GAMEPAD_DPAD_DOWN;
+-                break;
+-            case 6:
+-                device->state.Gamepad.wButtons |= XINPUT_GAMEPAD_DPAD_DOWN | XINPUT_GAMEPAD_DPAD_LEFT;
+-                break;
+-            case 7:
+-                device->state.Gamepad.wButtons |= XINPUT_GAMEPAD_DPAD_LEFT;
+-                break;
+-            case 8:
+-                device->state.Gamepad.wButtons |= XINPUT_GAMEPAD_DPAD_LEFT | XINPUT_GAMEPAD_DPAD_UP;
+-                break;
++        if(HidP_GetUsageValue(HidP_Input, HID_USAGE_PAGE_GENERIC, 0, HID_USAGE_GENERIC_HATSWITCH, &hat_value,
++                                  private->ppd, target_report, private->report_length) == HIDP_STATUS_SUCCESS)
++        {
++            switch(hat_value){
++                /* 8 1 2
++                 * 7 0 3
++                 * 6 5 4 */
++                case 0:
++                    break;
++                case 1:
++                    device->state.Gamepad.wButtons |= XINPUT_GAMEPAD_DPAD_UP;
++                    break;
++                case 2:
++                    device->state.Gamepad.wButtons |= XINPUT_GAMEPAD_DPAD_UP | XINPUT_GAMEPAD_DPAD_RIGHT;
++                    break;
++                case 3:
++                    device->state.Gamepad.wButtons |= XINPUT_GAMEPAD_DPAD_RIGHT;
++                    break;
++                case 4:
++                    device->state.Gamepad.wButtons |= XINPUT_GAMEPAD_DPAD_RIGHT | XINPUT_GAMEPAD_DPAD_DOWN;
++                    break;
++                case 5:
++                    device->state.Gamepad.wButtons |= XINPUT_GAMEPAD_DPAD_DOWN;
++                    break;
++                case 6:
++                    device->state.Gamepad.wButtons |= XINPUT_GAMEPAD_DPAD_DOWN | XINPUT_GAMEPAD_DPAD_LEFT;
++                    break;
++                case 7:
++                    device->state.Gamepad.wButtons |= XINPUT_GAMEPAD_DPAD_LEFT;
++                    break;
++                case 8:
++                    device->state.Gamepad.wButtons |= XINPUT_GAMEPAD_DPAD_LEFT | XINPUT_GAMEPAD_DPAD_UP;
++                    break;
++            }
+         }
+-    }
+ 
+-    if(HidP_GetScaledUsageValue(HidP_Input, HID_USAGE_PAGE_GENERIC, 0, HID_USAGE_GENERIC_X, &value,
+-                                    private->ppd, target_report, private->report_length) == HIDP_STATUS_SUCCESS)
+-        device->state.Gamepad.sThumbLX = scale_short(value, &private->lx);
++        if(HidP_GetScaledUsageValue(HidP_Input, HID_USAGE_PAGE_GENERIC, 0, HID_USAGE_GENERIC_X, &value,
++                                        private->ppd, target_report, private->report_length) == HIDP_STATUS_SUCCESS)
++            device->state.Gamepad.sThumbLX = scale_short(value, &private->lx);
+ 
+-    if(HidP_GetScaledUsageValue(HidP_Input, HID_USAGE_PAGE_GENERIC, 0, HID_USAGE_GENERIC_Y, &value,
+-                                    private->ppd, target_report, private->report_length) == HIDP_STATUS_SUCCESS)
+-        device->state.Gamepad.sThumbLY = -scale_short(value, &private->ly) - 1;
++        if(HidP_GetScaledUsageValue(HidP_Input, HID_USAGE_PAGE_GENERIC, 0, HID_USAGE_GENERIC_Y, &value,
++                                        private->ppd, target_report, private->report_length) == HIDP_STATUS_SUCCESS)
++            device->state.Gamepad.sThumbLY = -scale_short(value, &private->ly) - 1;
+ 
+-    if(HidP_GetScaledUsageValue(HidP_Input, HID_USAGE_PAGE_GENERIC, 0, HID_USAGE_GENERIC_RX, &value,
+-                                    private->ppd, target_report, private->report_length) == HIDP_STATUS_SUCCESS)
+-        device->state.Gamepad.sThumbRX = scale_short(value, &private->rx);
++        if(HidP_GetScaledUsageValue(HidP_Input, HID_USAGE_PAGE_GENERIC, 0, HID_USAGE_GENERIC_RX, &value,
++                                        private->ppd, target_report, private->report_length) == HIDP_STATUS_SUCCESS)
++            device->state.Gamepad.sThumbRX = scale_short(value, &private->rx);
+ 
+-    if(HidP_GetScaledUsageValue(HidP_Input, HID_USAGE_PAGE_GENERIC, 0, HID_USAGE_GENERIC_RY, &value,
+-                                    private->ppd, target_report, private->report_length) == HIDP_STATUS_SUCCESS)
+-        device->state.Gamepad.sThumbRY = -scale_short(value, &private->ry) - 1;
++        if(HidP_GetScaledUsageValue(HidP_Input, HID_USAGE_PAGE_GENERIC, 0, HID_USAGE_GENERIC_RY, &value,
++                                        private->ppd, target_report, private->report_length) == HIDP_STATUS_SUCCESS)
++            device->state.Gamepad.sThumbRY = -scale_short(value, &private->ry) - 1;
+ 
+-    /* Wine-specific hack: Windows HID mangles trigger values irretrievably, so
+-     * we instead encode them in a different format in winebus. We use that
+-     * format here. We should be using WineBus to talk directly to the
+-     * controller's USB device so they can be correctly mangled in HID. */
+-    if(HidP_GetScaledUsageValue(HidP_Input, HID_USAGE_PAGE_GENERIC, 0, HID_USAGE_GENERIC_Z, &value,
+-                                    private->ppd, target_report, private->report_length) == HIDP_STATUS_SUCCESS)
+-        device->state.Gamepad.bLeftTrigger = (value >> 8) & 0xFF;//scale_byte(value, &private->ltrigger);
+-        device->state.Gamepad.bRightTrigger = value & 0xFF;//scale_byte(value, &private->rtrigger);
++        if(HidP_GetScaledUsageValue(HidP_Input, HID_USAGE_PAGE_GENERIC, 0, HID_USAGE_GENERIC_Z, &value,
++                                        private->ppd, target_report, private->report_length) == HIDP_STATUS_SUCCESS)
++        {
++            /* Wine-specific hack: Windows HID mangles trigger values irretrievably, so
++             * we instead encode them in a different format in winebus. We use that
++             * format here. We should be using WineBus to talk directly to the
++             * controller's USB device so they can be correctly mangled in HID. */
++            HidP_GetScaledUsageValue(HidP_Input, HID_USAGE_PAGE_GENERIC, 0, HID_USAGE_GENERIC_Z, &value, private->ppd, target_report, private->report_length);
++            device->state.Gamepad.bLeftTrigger = (value >> 8) & 0xFF;//scale_byte(value, &private->ltrigger);
++            device->state.Gamepad.bRightTrigger = value & 0xFF;//scale_byte(value, &private->rtrigger);
++        }
++    }
+ 
+-    LeaveCriticalSection(&private->crit);
++    memcpy(state, &device->state, sizeof(*state));
+ }
+ 
+ DWORD HID_set_state(xinput_controller* device, XINPUT_VIBRATION* state)
+@@ -481,9 +479,7 @@ DWORD HID_set_state(xinput_controller* device, XINPUT_VIBRATION* state)
+             report.right = (BYTE)(state->wRightMotorSpeed / 256);
+             memset(&report.pad2, 0, sizeof(report.pad2));
+ 
+-            EnterCriticalSection(&private->crit);
+             rc = HidD_SetOutputReport(private->device, &report, sizeof(report));
+-            LeaveCriticalSection(&private->crit);
+             if (rc)
+                 return ERROR_SUCCESS;
+             return GetLastError();
+@@ -499,7 +495,6 @@ void HID_enable(xinput_controller* device, BOOL enable)
+ 
+     if (device->caps.Flags & XINPUT_CAPS_FFB_SUPPORTED)
+     {
+-        EnterCriticalSection(&private->crit);
+         if (private->enabled && !enable)
+         {
+             XINPUT_VIBRATION state;
+@@ -511,7 +506,6 @@ void HID_enable(xinput_controller* device, BOOL enable)
+         {
+             HID_set_state(device, &device->vibration);
+         }
+-        LeaveCriticalSection(&private->crit);
+     }
+ 
+     private->enabled = enable;
+diff --git a/dlls/xinput1_3/xinput_main.c b/dlls/xinput1_3/xinput_main.c
+index 23d9c43239f..1e5d0856c9d 100644
+--- a/dlls/xinput1_3/xinput_main.c
++++ b/dlls/xinput1_3/xinput_main.c
+@@ -35,7 +35,66 @@
+ 
+ WINE_DEFAULT_DEBUG_CHANNEL(xinput);
+ 
+-xinput_controller controllers[XUSER_MAX_COUNT];
++/* xinput_crit guards controllers array */
++static CRITICAL_SECTION_DEBUG xinput_critsect_debug =
++{
++    0, 0, &xinput_crit,
++    { &xinput_critsect_debug.ProcessLocksList, &xinput_critsect_debug.ProcessLocksList },
++      0, 0, { (DWORD_PTR)(__FILE__ ": xinput_crit") }
++};
++CRITICAL_SECTION xinput_crit = { &xinput_critsect_debug, -1, 0, 0, 0, 0 };
++
++static CRITICAL_SECTION_DEBUG controller_critsect_debug[XUSER_MAX_COUNT] =
++{
++    {
++        0, 0, &controllers[0].crit,
++        { &controller_critsect_debug[0].ProcessLocksList, &controller_critsect_debug[0].ProcessLocksList },
++          0, 0, { (DWORD_PTR)(__FILE__ ": controllers[0].crit") }
++    },
++    {
++        0, 0, &controllers[1].crit,
++        { &controller_critsect_debug[1].ProcessLocksList, &controller_critsect_debug[1].ProcessLocksList },
++          0, 0, { (DWORD_PTR)(__FILE__ ": controllers[1].crit") }
++    },
++    {
++        0, 0, &controllers[2].crit,
++        { &controller_critsect_debug[2].ProcessLocksList, &controller_critsect_debug[2].ProcessLocksList },
++          0, 0, { (DWORD_PTR)(__FILE__ ": controllers[2].crit") }
++    },
++    {
++        0, 0, &controllers[3].crit,
++        { &controller_critsect_debug[3].ProcessLocksList, &controller_critsect_debug[3].ProcessLocksList },
++          0, 0, { (DWORD_PTR)(__FILE__ ": controllers[3].crit") }
++    },
++};
++
++xinput_controller controllers[XUSER_MAX_COUNT] = {
++    {{ &controller_critsect_debug[0], -1, 0, 0, 0, 0 }},
++    {{ &controller_critsect_debug[1], -1, 0, 0, 0, 0 }},
++    {{ &controller_critsect_debug[2], -1, 0, 0, 0, 0 }},
++    {{ &controller_critsect_debug[3], -1, 0, 0, 0, 0 }},
++};
++
++static BOOL verify_and_lock_device(xinput_controller *device)
++{
++    if (!device->connected)
++        return FALSE;
++
++    EnterCriticalSection(&device->crit);
++
++    if (!device->connected)
++    {
++        LeaveCriticalSection(&device->crit);
++        return FALSE;
++    }
++
++    return TRUE;
++}
++
++static void unlock_device(xinput_controller *device)
++{
++    LeaveCriticalSection(&device->crit);
++}
+ 
+ BOOL WINAPI DllMain(HINSTANCE inst, DWORD reason, LPVOID reserved)
+ {
+@@ -66,23 +125,30 @@ void WINAPI DECLSPEC_HOTPATCH XInputEnable(BOOL enable)
+ 
+     for (index = 0; index < XUSER_MAX_COUNT; index ++)
+     {
+-        if (!controllers[index].connected) continue;
++        if (!verify_and_lock_device(&controllers[index])) continue;
+         HID_enable(&controllers[index], enable);
++        unlock_device(&controllers[index]);
+     }
+ }
+ 
+ DWORD WINAPI DECLSPEC_HOTPATCH XInputSetState(DWORD index, XINPUT_VIBRATION* vibration)
+ {
++    DWORD ret;
++
+     TRACE("(index %u, vibration %p)\n", index, vibration);
+ 
+     HID_find_gamepads(controllers);
+ 
+     if (index >= XUSER_MAX_COUNT)
+         return ERROR_BAD_ARGUMENTS;
+-    if (!controllers[index].connected)
++    if (!verify_and_lock_device(&controllers[index]))
+         return ERROR_DEVICE_NOT_CONNECTED;
+ 
+-    return HID_set_state(&controllers[index], vibration);
++    ret = HID_set_state(&controllers[index], vibration);
++
++    unlock_device(&controllers[index]);
++
++    return ret;
+ }
+ 
+ /* Some versions of SteamOverlayRenderer hot-patch XInputGetStateEx() and call
+@@ -96,11 +162,19 @@ static DWORD xinput_get_state(DWORD index, XINPUT_STATE *state)
+ 
+     if (index >= XUSER_MAX_COUNT)
+         return ERROR_BAD_ARGUMENTS;
++    if (!verify_and_lock_device(&controllers[index]))
++        return ERROR_DEVICE_NOT_CONNECTED;
++
++    HID_update_state(&controllers[index], state);
++
+     if (!controllers[index].connected)
++    {
++        /* update_state may have disconnected the controller */
++        unlock_device(&controllers[index]);
+         return ERROR_DEVICE_NOT_CONNECTED;
++    }
+ 
+-    HID_update_state(&controllers[index]);
+-    memcpy(state, &controllers[index].state, sizeof(XINPUT_STATE));
++    unlock_device(&controllers[index]);
+ 
+     return ERROR_SUCCESS;
+ }
+@@ -152,13 +226,20 @@ DWORD WINAPI DECLSPEC_HOTPATCH XInputGetCapabilities(DWORD index, DWORD flags, X
+ 
+     if (index >= XUSER_MAX_COUNT)
+         return ERROR_BAD_ARGUMENTS;
+-    if (!controllers[index].connected)
++
++    if (!verify_and_lock_device(&controllers[index]))
+         return ERROR_DEVICE_NOT_CONNECTED;
++
+     if (flags & XINPUT_FLAG_GAMEPAD && controllers[index].caps.SubType != XINPUT_DEVSUBTYPE_GAMEPAD)
++    {
++        unlock_device(&controllers[index]);
+         return ERROR_DEVICE_NOT_CONNECTED;
++    }
+ 
+     memcpy(capabilities, &controllers[index].caps, sizeof(*capabilities));
+ 
++    unlock_device(&controllers[index]);
++
+     return ERROR_SUCCESS;
+ }
+ 
+diff --git a/dlls/xinput1_3/xinput_private.h b/dlls/xinput1_3/xinput_private.h
+index d6e0e9614ee..74cf318a6fb 100644
+--- a/dlls/xinput1_3/xinput_private.h
++++ b/dlls/xinput1_3/xinput_private.h
+@@ -19,16 +19,19 @@
+ 
+ typedef struct _xinput_controller
+ {
+-    BOOL connected;
++    CRITICAL_SECTION crit;
++    BOOL connected; /* only TRUE when device is valid; may be used without holding crit */
+     XINPUT_CAPABILITIES caps;
+     void *platform_private;
+     XINPUT_STATE state;
+     XINPUT_VIBRATION vibration;
+ } xinput_controller;
+ 
++CRITICAL_SECTION xinput_crit;
++xinput_controller controllers[XUSER_MAX_COUNT];
+ 
+ void HID_find_gamepads(xinput_controller *devices) DECLSPEC_HIDDEN;
+ void HID_destroy_gamepads(xinput_controller *devices) DECLSPEC_HIDDEN;
+-void HID_update_state(xinput_controller* device) DECLSPEC_HIDDEN;
++void HID_update_state(xinput_controller* device, XINPUT_STATE *state) DECLSPEC_HIDDEN;
+ DWORD HID_set_state(xinput_controller* device, XINPUT_VIBRATION* state) DECLSPEC_HIDDEN;
+ void HID_enable(xinput_controller* device, BOOL enable) DECLSPEC_HIDDEN;
+
+From 2809fc54357ce49e3c0cc778bb19b4aec51ad038 Mon Sep 17 00:00:00 2001
+From: Andrew Eikum <aeikum@codeweavers.com>
+Date: Tue, 1 Oct 2019 09:09:39 -0500
+Subject: [PATCH] xinput: Consolidate new device setup
+
+---
+ dlls/xinput1_3/hid.c | 32 +++++++++++++++++++-------------
+ 1 file changed, 19 insertions(+), 13 deletions(-)
+
+diff --git a/dlls/xinput1_3/hid.c b/dlls/xinput1_3/hid.c
+index 2b7b4d99847..a91326e3227 100644
+--- a/dlls/xinput1_3/hid.c
++++ b/dlls/xinput1_3/hid.c
+@@ -172,19 +172,34 @@ static BOOL VerifyGamepad(PHIDP_PREPARSED_DATA ppd, XINPUT_CAPABILITIES *xinput_
+     return TRUE;
+ }
+ 
+-static void build_private(struct hid_platform_private *private, PHIDP_PREPARSED_DATA ppd, HIDP_CAPS *caps, HANDLE device, WCHAR *path)
++static BOOL init_controller(xinput_controller *controller, PHIDP_PREPARSED_DATA ppd, HIDP_CAPS *caps, HANDLE device, WCHAR *device_path)
+ {
+     size_t size;
++    struct hid_platform_private *private = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(struct hid_platform_private));
++
++    if (!VerifyGamepad(ppd, &controller->caps, private, caps))
++    {
++        HeapFree(GetProcessHeap(), 0, private);
++        return FALSE;
++    }
++
++    TRACE("Found gamepad %s\n", debugstr_w(device_path));
++
+     private->ppd = ppd;
+     private->device = device;
+     private->report_length = caps->InputReportByteLength + 1;
+     private->current_report = 0;
+     private->reports[0] = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, private->report_length);
+     private->reports[1] = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, private->report_length);
+-    size = (lstrlenW(path) + 1) * sizeof(WCHAR);
++    size = (lstrlenW(device_path) + 1) * sizeof(WCHAR);
+     private->device_path = HeapAlloc(GetProcessHeap(), 0, size);
+-    memcpy(private->device_path, path, size);
++    memcpy(private->device_path, device_path, size);
+     private->enabled = TRUE;
++
++    controller->platform_private = private;
++    controller->connected = TRUE;
++
++    return TRUE;
+ }
+ 
+ void HID_find_gamepads(xinput_controller *devices)
+@@ -265,19 +280,10 @@ void HID_find_gamepads(xinput_controller *devices)
+              Caps.Usage == HID_USAGE_GENERIC_JOYSTICK ||
+              Caps.Usage == 0x8 /* Multi-axis Controller */))
+         {
+-            struct hid_platform_private *private = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(struct hid_platform_private));
+-            if (VerifyGamepad(ppd, &devices[open_device_idx].caps, private, &Caps))
+-            {
+-                TRACE("Found gamepad %i %s\n", open_device_idx, debugstr_w(data->DevicePath));
+-                build_private(private, ppd, &Caps, device, data->DevicePath);
+-                devices[open_device_idx].platform_private = private;
+-                devices[open_device_idx].connected = TRUE;
+-            }
+-            else
++            if(!init_controller(&devices[open_device_idx], ppd, &Caps, device, data->DevicePath))
+             {
+                 CloseHandle(device);
+                 HidD_FreePreparsedData(ppd);
+-                HeapFree(GetProcessHeap(), 0, private);
+             }
+         }
+         else
+
+From 61ad68c775dc2c3b2836824b3961383e2a5e4d7c Mon Sep 17 00:00:00 2001
+From: Andrew Eikum <aeikum@codeweavers.com>
+Date: Tue, 1 Oct 2019 10:57:56 -0500
+Subject: [PATCH] xinput: Clear instance data when a controller is hotplugged
+
+---
+ dlls/xinput1_3/hid.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/dlls/xinput1_3/hid.c b/dlls/xinput1_3/hid.c
+index a91326e3227..c30bdbbcf44 100644
+--- a/dlls/xinput1_3/hid.c
++++ b/dlls/xinput1_3/hid.c
+@@ -196,6 +196,9 @@ static BOOL init_controller(xinput_controller *controller, PHIDP_PREPARSED_DATA
+     memcpy(private->device_path, device_path, size);
+     private->enabled = TRUE;
+ 
++    memset(&controller->state, 0, sizeof(controller->state));
++    memset(&controller->vibration, 0, sizeof(controller->vibration));
++
+     controller->platform_private = private;
+     controller->connected = TRUE;
+ 
+
+From 0f58c93fbf3b234dbe4aa9fa272ac16a79c4ad39 Mon Sep 17 00:00:00 2001
+From: Andrew Eikum <aeikum@codeweavers.com>
+Date: Tue, 1 Oct 2019 12:46:16 -0500
+Subject: [PATCH] xinput: Get rid of redundant connected boolean
+
+---
+ dlls/xinput1_3/hid.c            |  8 +++-----
+ dlls/xinput1_3/xinput_main.c    | 12 ++++++------
+ dlls/xinput1_3/xinput_private.h |  3 +--
+ 3 files changed, 10 insertions(+), 13 deletions(-)
+
+diff --git a/dlls/xinput1_3/hid.c b/dlls/xinput1_3/hid.c
+index c30bdbbcf44..49099605e44 100644
+--- a/dlls/xinput1_3/hid.c
++++ b/dlls/xinput1_3/hid.c
+@@ -200,7 +200,6 @@ static BOOL init_controller(xinput_controller *controller, PHIDP_PREPARSED_DATA
+     memset(&controller->vibration, 0, sizeof(controller->vibration));
+ 
+     controller->platform_private = private;
+-    controller->connected = TRUE;
+ 
+     return TRUE;
+ }
+@@ -258,7 +257,7 @@ void HID_find_gamepads(xinput_controller *devices)
+         for (i = 0; i < XUSER_MAX_COUNT; i++)
+         {
+             struct hid_platform_private *private = devices[i].platform_private;
+-            if (devices[i].connected)
++            if (devices[i].platform_private)
+             {
+                 if (!strcmpW(data->DevicePath, private->device_path))
+                     break;
+@@ -304,18 +303,17 @@ static void remove_gamepad(xinput_controller *device)
+ {
+     EnterCriticalSection(&device->crit);
+ 
+-    if (device->connected)
++    if (device->platform_private)
+     {
+         struct hid_platform_private *private = device->platform_private;
+ 
+-        device->connected = FALSE;
++        device->platform_private = NULL;
+ 
+         CloseHandle(private->device);
+         HeapFree(GetProcessHeap(), 0, private->reports[0]);
+         HeapFree(GetProcessHeap(), 0, private->reports[1]);
+         HeapFree(GetProcessHeap(), 0, private->device_path);
+         HidD_FreePreparsedData(private->ppd);
+-        device->platform_private = NULL;
+         HeapFree(GetProcessHeap(), 0, private);
+     }
+ 
+diff --git a/dlls/xinput1_3/xinput_main.c b/dlls/xinput1_3/xinput_main.c
+index 1e5d0856c9d..1c6895d4403 100644
+--- a/dlls/xinput1_3/xinput_main.c
++++ b/dlls/xinput1_3/xinput_main.c
+@@ -77,12 +77,12 @@ xinput_controller controllers[XUSER_MAX_COUNT] = {
+ 
+ static BOOL verify_and_lock_device(xinput_controller *device)
+ {
+-    if (!device->connected)
++    if (!device->platform_private)
+         return FALSE;
+ 
+     EnterCriticalSection(&device->crit);
+ 
+-    if (!device->connected)
++    if (!device->platform_private)
+     {
+         LeaveCriticalSection(&device->crit);
+         return FALSE;
+@@ -167,7 +167,7 @@ static DWORD xinput_get_state(DWORD index, XINPUT_STATE *state)
+ 
+     HID_update_state(&controllers[index], state);
+ 
+-    if (!controllers[index].connected)
++    if (!controllers[index].platform_private)
+     {
+         /* update_state may have disconnected the controller */
+         unlock_device(&controllers[index]);
+@@ -212,7 +212,7 @@ DWORD WINAPI DECLSPEC_HOTPATCH XInputGetKeystroke(DWORD index, DWORD reserved, P
+ 
+     if (index >= XUSER_MAX_COUNT)
+         return ERROR_BAD_ARGUMENTS;
+-    if (!controllers[index].connected)
++    if (!controllers[index].platform_private)
+         return ERROR_DEVICE_NOT_CONNECTED;
+ 
+     return ERROR_NOT_SUPPORTED;
+@@ -249,7 +249,7 @@ DWORD WINAPI DECLSPEC_HOTPATCH XInputGetDSoundAudioDeviceGuids(DWORD index, GUID
+ 
+     if (index >= XUSER_MAX_COUNT)
+         return ERROR_BAD_ARGUMENTS;
+-    if (!controllers[index].connected)
++    if (!controllers[index].platform_private)
+         return ERROR_DEVICE_NOT_CONNECTED;
+ 
+     return ERROR_NOT_SUPPORTED;
+@@ -264,7 +264,7 @@ DWORD WINAPI DECLSPEC_HOTPATCH XInputGetBatteryInformation(DWORD index, BYTE typ
+ 
+     if (index >= XUSER_MAX_COUNT)
+         return ERROR_BAD_ARGUMENTS;
+-    if (!controllers[index].connected)
++    if (!controllers[index].platform_private)
+         return ERROR_DEVICE_NOT_CONNECTED;
+ 
+     return ERROR_NOT_SUPPORTED;
+diff --git a/dlls/xinput1_3/xinput_private.h b/dlls/xinput1_3/xinput_private.h
+index 74cf318a6fb..f3456cd8e7c 100644
+--- a/dlls/xinput1_3/xinput_private.h
++++ b/dlls/xinput1_3/xinput_private.h
+@@ -20,9 +20,8 @@
+ typedef struct _xinput_controller
+ {
+     CRITICAL_SECTION crit;
+-    BOOL connected; /* only TRUE when device is valid; may be used without holding crit */
+     XINPUT_CAPABILITIES caps;
+-    void *platform_private;
++    void *platform_private; /* non-NULL when device is valid; validity may be read without holding crit */
+     XINPUT_STATE state;
+     XINPUT_VIBRATION vibration;
+ } xinput_controller;
+
+From ff58d2a0390fb7d228722408bbac050d7a586a2e Mon Sep 17 00:00:00 2001
+From: Andrew Eikum <aeikum@codeweavers.com>
+Date: Tue, 1 Oct 2019 12:26:39 -0500
+Subject: [PATCH] xinput: Recheck when a device notification is sent
+
+Dark Souls Remasters checks for xinput devices when it receives a
+WM_DEVICECHANGE message. We would only poll for new devices if it had
+been at least 2 seconds since the last check. So often, DS would receive
+the message, but we would refuse to poll for devices, so the game would
+think no controller was present.
+
+This commit fixes that by also subscribing to event notifications and
+triggering a poll. This isn't quite what Windows does. If the game
+subscribes to event notifications _before_ our xinput does, then it
+could still fail as Dark Souls does (but Dark Souls does not register in
+that order). For this reason we also keep the timeout mechanism, which
+will hopefully work for any games that are unlucky enough to fall into
+this corner case.
+---
+ dlls/xinput1_1/Makefile.in   |   2 +-
+ dlls/xinput1_2/Makefile.in   |   2 +-
+ dlls/xinput1_3/Makefile.in   |   2 +-
+ dlls/xinput1_3/hid.c         |  16 -----
+ dlls/xinput1_3/xinput_main.c | 127 +++++++++++++++++++++++++++++++++--
+ dlls/xinput1_4/Makefile.in   |   2 +-
+ dlls/xinput9_1_0/Makefile.in |   2 +-
+ 7 files changed, 128 insertions(+), 25 deletions(-)
+
+diff --git a/dlls/xinput1_1/Makefile.in b/dlls/xinput1_1/Makefile.in
+index d1c425872e1..743ad448ecb 100644
+--- a/dlls/xinput1_1/Makefile.in
++++ b/dlls/xinput1_1/Makefile.in
+@@ -1,6 +1,6 @@
+ MODULE    = xinput1_1.dll
+ PARENTSRC = ../xinput1_3
+-DELAYIMPORTS = hid setupapi
++DELAYIMPORTS = hid setupapi user32
+ 
+ C_SRCS = \
+ 	hid.c \
+diff --git a/dlls/xinput1_2/Makefile.in b/dlls/xinput1_2/Makefile.in
+index 822ec157ac8..ed00fed1ab7 100644
+--- a/dlls/xinput1_2/Makefile.in
++++ b/dlls/xinput1_2/Makefile.in
+@@ -1,6 +1,6 @@
+ MODULE    = xinput1_2.dll
+ PARENTSRC = ../xinput1_3
+-DELAYIMPORTS = hid setupapi
++DELAYIMPORTS = hid setupapi user32
+ 
+ C_SRCS = \
+ 	hid.c \
+diff --git a/dlls/xinput1_3/Makefile.in b/dlls/xinput1_3/Makefile.in
+index 9c873f93889..907a56cc13f 100644
+--- a/dlls/xinput1_3/Makefile.in
++++ b/dlls/xinput1_3/Makefile.in
+@@ -1,6 +1,6 @@
+ MODULE    = xinput1_3.dll
+ IMPORTLIB = xinput
+-DELAYIMPORTS = hid setupapi
++DELAYIMPORTS = hid setupapi user32
+ 
+ C_SRCS = \
+ 	hid.c \
+diff --git a/dlls/xinput1_3/hid.c b/dlls/xinput1_3/hid.c
+index 49099605e44..9d43f0edbda 100644
+--- a/dlls/xinput1_3/hid.c
++++ b/dlls/xinput1_3/hid.c
+@@ -70,8 +70,6 @@ struct hid_platform_private {
+     struct axis_info lx, ly, triggers, rx, ry;
+ };
+ 
+-static DWORD last_check = 0;
+-
+ static void MarkUsage(struct hid_platform_private *private, WORD usage, LONG min, LONG max, USHORT bits)
+ {
+     struct axis_info info = {min, max-min, bits};
+@@ -217,19 +215,6 @@ void HID_find_gamepads(xinput_controller *devices)
+     DWORD idx;
+     int i, open_device_idx;
+ 
+-    idx = GetTickCount();
+-    if ((idx - last_check) < 2000)
+-        return;
+-
+-    EnterCriticalSection(&xinput_crit);
+-
+-    if ((idx - last_check) < 2000)
+-    {
+-        LeaveCriticalSection(&xinput_crit);
+-        return;
+-    }
+-    last_check = idx;
+-
+     HidD_GetHidGuid(&hid_guid);
+     hid_guid.Data4[7]++; /* HACK: look up the xinput-specific devices */
+ 
+@@ -296,7 +281,6 @@ void HID_find_gamepads(xinput_controller *devices)
+     }
+     HeapFree(GetProcessHeap(), 0, data);
+     SetupDiDestroyDeviceInfoList(device_info_set);
+-    LeaveCriticalSection(&xinput_crit);
+ }
+ 
+ static void remove_gamepad(xinput_controller *device)
+diff --git a/dlls/xinput1_3/xinput_main.c b/dlls/xinput1_3/xinput_main.c
+index 1c6895d4403..bfef381d086 100644
+--- a/dlls/xinput1_3/xinput_main.c
++++ b/dlls/xinput1_3/xinput_main.c
+@@ -26,6 +26,7 @@
+ #include "windef.h"
+ #include "winbase.h"
+ #include "winerror.h"
++#include "winuser.h"
+ 
+ #include "xinput.h"
+ #include "xinput_private.h"
+@@ -35,6 +36,8 @@
+ 
+ WINE_DEFAULT_DEBUG_CHANNEL(xinput);
+ 
++static HINSTANCE xinput_instance;
++
+ /* xinput_crit guards controllers array */
+ static CRITICAL_SECTION_DEBUG xinput_critsect_debug =
+ {
+@@ -96,11 +99,79 @@ static void unlock_device(xinput_controller *device)
+     LeaveCriticalSection(&device->crit);
+ }
+ 
++static BOOL should_check = TRUE;
++static BOOL msg_wnd_quit;
++static HWND msg_wnd;
++static HANDLE msg_wnd_thread;
++static HINSTANCE msg_wnd_module;
++
++static LRESULT CALLBACK device_notification_wndproc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
++{
++    switch(msg)
++    {
++    case WM_DEVICECHANGE:
++        should_check = TRUE;
++        break;
++    case WM_USER:
++        DestroyWindow(msg_wnd);
++        break;
++    case WM_DESTROY:
++        msg_wnd_quit = TRUE;
++        break;
++    }
++    return DefWindowProcW(hwnd, msg, wparam, lparam);
++}
++
++static DWORD WINAPI msg_wnd_threadproc(void *user)
++{
++    MSG msg;
++    WNDCLASSEXW cls = {0};
++    HANDLE inst;
++    HANDLE evt = user;
++
++    static const WCHAR xinput_class[] = {'_','_','w','i','n','e','_','x','i','n','p','u','t','_','d','e','v','n','o','t','i','f','y',0};
++
++    cls.cbSize = sizeof(cls);
++    cls.hInstance = xinput_instance;
++    cls.lpszClassName = xinput_class;
++    cls.lpfnWndProc = device_notification_wndproc;
++    RegisterClassExW(&cls);
++
++    msg_wnd = CreateWindowExW(0, xinput_class, NULL, 0, 0, 0, 0, 0,
++            HWND_MESSAGE, NULL, NULL, NULL);
++
++    RegisterDeviceNotificationW(msg_wnd, NULL, 0);
++
++    msg_wnd_quit = FALSE;
++
++    SetEvent(evt);
++    evt = NULL;
++
++    while(!msg_wnd_quit && ((int)GetMessageW(&msg, msg_wnd, 0, 0)) > 0)
++    {
++        TranslateMessage(&msg);
++        DispatchMessageW(&msg);
++    }
++
++    EnterCriticalSection(&xinput_crit);
++    inst = msg_wnd_module;
++    msg_wnd_module = NULL;
++    CloseHandle(msg_wnd_thread);
++    msg_wnd_thread = NULL;
++    msg_wnd = NULL;
++    LeaveCriticalSection(&xinput_crit);
++
++    FreeLibraryAndExitThread(inst, 0);
++
++    return 0;
++}
++
+ BOOL WINAPI DllMain(HINSTANCE inst, DWORD reason, LPVOID reserved)
+ {
+     switch(reason)
+     {
+         case DLL_PROCESS_ATTACH:
++            xinput_instance = inst;
+             DisableThreadLibraryCalls(inst);
+             break;
+         case DLL_PROCESS_DETACH:
+@@ -111,6 +182,43 @@ BOOL WINAPI DllMain(HINSTANCE inst, DWORD reason, LPVOID reserved)
+     return TRUE;
+ }
+ 
++static void find_gamepads(void)
++{
++    static ULONGLONG last_check = 0;
++    ULONGLONG now;
++
++#define DELAY_BETWEEN_CHECKS_MS 2000
++
++    now = GetTickCount64();
++    if (!should_check && (now - last_check) < DELAY_BETWEEN_CHECKS_MS)
++        return;
++
++    EnterCriticalSection(&xinput_crit);
++
++    if (!msg_wnd_thread)
++    {
++        HANDLE evt = CreateEventW(NULL, 0, 0, NULL);
++        GetModuleHandleExW(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS,
++                (const WCHAR *)&msg_wnd_threadproc, &msg_wnd_module);
++        msg_wnd_thread = CreateThread(NULL, 0, &msg_wnd_threadproc, evt, 0, NULL);
++        WaitForSingleObject(evt, INFINITE);
++        CloseHandle(evt);
++    }
++
++    if (!should_check && (now - last_check) < DELAY_BETWEEN_CHECKS_MS)
++    {
++        LeaveCriticalSection(&xinput_crit);
++        return;
++    }
++
++    last_check = now;
++    should_check = FALSE;
++
++    HID_find_gamepads(controllers);
++
++    LeaveCriticalSection(&xinput_crit);
++}
++
+ void WINAPI DECLSPEC_HOTPATCH XInputEnable(BOOL enable)
+ {
+     int index;
+@@ -121,7 +229,18 @@ void WINAPI DECLSPEC_HOTPATCH XInputEnable(BOOL enable)
+     to the controllers. Setting to true will send the last vibration
+     value (sent to XInputSetState) to the controller and allow messages to
+     be sent */
+-    HID_find_gamepads(controllers);
++
++    if (enable)
++    {
++        find_gamepads();
++    }
++    else
++    {
++        EnterCriticalSection(&xinput_crit);
++        if(msg_wnd)
++            PostMessageW(msg_wnd, WM_USER, 0, 0);
++        LeaveCriticalSection(&xinput_crit);
++    }
+ 
+     for (index = 0; index < XUSER_MAX_COUNT; index ++)
+     {
+@@ -137,7 +256,7 @@ DWORD WINAPI DECLSPEC_HOTPATCH XInputSetState(DWORD index, XINPUT_VIBRATION* vib
+ 
+     TRACE("(index %u, vibration %p)\n", index, vibration);
+ 
+-    HID_find_gamepads(controllers);
++    find_gamepads();
+ 
+     if (index >= XUSER_MAX_COUNT)
+         return ERROR_BAD_ARGUMENTS;
+@@ -158,7 +277,7 @@ static DWORD xinput_get_state(DWORD index, XINPUT_STATE *state)
+     if (!state)
+         return ERROR_BAD_ARGUMENTS;
+ 
+-    HID_find_gamepads(controllers);
++    find_gamepads();
+ 
+     if (index >= XUSER_MAX_COUNT)
+         return ERROR_BAD_ARGUMENTS;
+@@ -222,7 +341,7 @@ DWORD WINAPI DECLSPEC_HOTPATCH XInputGetCapabilities(DWORD index, DWORD flags, X
+ {
+     TRACE("(index %u, flags 0x%x, capabilities %p)\n", index, flags, capabilities);
+ 
+-    HID_find_gamepads(controllers);
++    find_gamepads();
+ 
+     if (index >= XUSER_MAX_COUNT)
+         return ERROR_BAD_ARGUMENTS;
+diff --git a/dlls/xinput1_4/Makefile.in b/dlls/xinput1_4/Makefile.in
+index 7acb9dc061b..2817636e475 100644
+--- a/dlls/xinput1_4/Makefile.in
++++ b/dlls/xinput1_4/Makefile.in
+@@ -1,6 +1,6 @@
+ MODULE    = xinput1_4.dll
+ PARENTSRC = ../xinput1_3
+-DELAYIMPORTS = hid setupapi
++DELAYIMPORTS = hid setupapi user32
+ 
+ C_SRCS = \
+ 	hid.c \
+diff --git a/dlls/xinput9_1_0/Makefile.in b/dlls/xinput9_1_0/Makefile.in
+index c07022a70ba..05806489d02 100644
+--- a/dlls/xinput9_1_0/Makefile.in
++++ b/dlls/xinput9_1_0/Makefile.in
+@@ -1,6 +1,6 @@
+ MODULE    = xinput9_1_0.dll
+ PARENTSRC = ../xinput1_3
+-DELAYIMPORTS = hid setupapi
++DELAYIMPORTS = hid setupapi user32
+ 
+ C_SRCS = \
+ 	hid.c \
+
+From 41c7d676d89d3aa3a4add4bedb1ec89c8a4d89f8 Mon Sep 17 00:00:00 2001
+From: Andrew Eikum <aeikum@codeweavers.com>
+Date: Tue, 1 Oct 2019 12:40:24 -0500
+Subject: [PATCH] xinput: Check for new devices in the notification thread
+
+---
+ dlls/xinput1_3/xinput_main.c | 20 ++++++++++----------
+ 1 file changed, 10 insertions(+), 10 deletions(-)
+
+diff --git a/dlls/xinput1_3/xinput_main.c b/dlls/xinput1_3/xinput_main.c
+index bfef381d086..a663c021543 100644
+--- a/dlls/xinput1_3/xinput_main.c
++++ b/dlls/xinput1_3/xinput_main.c
+@@ -99,18 +99,19 @@ static void unlock_device(xinput_controller *device)
+     LeaveCriticalSection(&device->crit);
+ }
+ 
+-static BOOL should_check = TRUE;
+ static BOOL msg_wnd_quit;
+ static HWND msg_wnd;
+ static HANDLE msg_wnd_thread;
+ static HINSTANCE msg_wnd_module;
+ 
++static void find_gamepads(BOOL force);
++
+ static LRESULT CALLBACK device_notification_wndproc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
+ {
+     switch(msg)
+     {
+     case WM_DEVICECHANGE:
+-        should_check = TRUE;
++        find_gamepads(TRUE);
+         break;
+     case WM_USER:
+         DestroyWindow(msg_wnd);
+@@ -182,7 +183,7 @@ BOOL WINAPI DllMain(HINSTANCE inst, DWORD reason, LPVOID reserved)
+     return TRUE;
+ }
+ 
+-static void find_gamepads(void)
++static void find_gamepads(BOOL force)
+ {
+     static ULONGLONG last_check = 0;
+     ULONGLONG now;
+@@ -190,7 +191,7 @@ static void find_gamepads(void)
+ #define DELAY_BETWEEN_CHECKS_MS 2000
+ 
+     now = GetTickCount64();
+-    if (!should_check && (now - last_check) < DELAY_BETWEEN_CHECKS_MS)
++    if (!force && (now - last_check) < DELAY_BETWEEN_CHECKS_MS)
+         return;
+ 
+     EnterCriticalSection(&xinput_crit);
+@@ -205,14 +206,13 @@ static void find_gamepads(void)
+         CloseHandle(evt);
+     }
+ 
+-    if (!should_check && (now - last_check) < DELAY_BETWEEN_CHECKS_MS)
++    if (!force && (now - last_check) < DELAY_BETWEEN_CHECKS_MS)
+     {
+         LeaveCriticalSection(&xinput_crit);
+         return;
+     }
+ 
+     last_check = now;
+-    should_check = FALSE;
+ 
+     HID_find_gamepads(controllers);
+ 
+@@ -232,7 +232,7 @@ void WINAPI DECLSPEC_HOTPATCH XInputEnable(BOOL enable)
+ 
+     if (enable)
+     {
+-        find_gamepads();
++        find_gamepads(FALSE);
+     }
+     else
+     {
+@@ -256,7 +256,7 @@ DWORD WINAPI DECLSPEC_HOTPATCH XInputSetState(DWORD index, XINPUT_VIBRATION* vib
+ 
+     TRACE("(index %u, vibration %p)\n", index, vibration);
+ 
+-    find_gamepads();
++    find_gamepads(FALSE);
+ 
+     if (index >= XUSER_MAX_COUNT)
+         return ERROR_BAD_ARGUMENTS;
+@@ -277,7 +277,7 @@ static DWORD xinput_get_state(DWORD index, XINPUT_STATE *state)
+     if (!state)
+         return ERROR_BAD_ARGUMENTS;
+ 
+-    find_gamepads();
++    find_gamepads(FALSE);
+ 
+     if (index >= XUSER_MAX_COUNT)
+         return ERROR_BAD_ARGUMENTS;
+@@ -341,7 +341,7 @@ DWORD WINAPI DECLSPEC_HOTPATCH XInputGetCapabilities(DWORD index, DWORD flags, X
+ {
+     TRACE("(index %u, flags 0x%x, capabilities %p)\n", index, flags, capabilities);
+ 
+-    find_gamepads();
++    find_gamepads(FALSE);
+ 
+     if (index >= XUSER_MAX_COUNT)
+         return ERROR_BAD_ARGUMENTS;

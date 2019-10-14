@@ -2566,9 +2566,9 @@ index 1209a250b0..077c18ac10 100644
      RECT virtual_rect;
      INPUT input;
 +    POINT pt;
+     RAWINPUT raw_input;
      int i;
-     double dx = 0, dy = 0, val;
-     struct x11drv_thread_data *thread_data = x11drv_thread_data();
+     double dx = 0, dy = 0, raw_dx = 0, raw_dy = 0, raw_dwheel = 0, val, raw_val;
 @@ -1813,6 +1861,12 @@ static BOOL X11DRV_RawMotion( XGenericEventCookie *xev )
          return FALSE;
      }
@@ -2579,9 +2579,9 @@ index 1209a250b0..077c18ac10 100644
 +    input.u.mi.dx = pt.x;
 +    input.u.mi.dy = pt.y;
 +
-     TRACE( "pos %d,%d (event %f,%f)\n", input.u.mi.dx, input.u.mi.dy, dx, dy );
- 
-     input.type = INPUT_MOUSE;
+     /* Accumulate the fractional parts so they aren't lost after casting
+      *  successive motion values to integral fields.
+      *
 diff --git a/dlls/winex11.drv/opengl.c b/dlls/winex11.drv/opengl.c
 index 9de3ded4af..10e39dd43f 100644
 --- a/dlls/winex11.drv/opengl.c
@@ -4059,6 +4059,59 @@ index fbc6716e94..1ca8c3ed0f 100644
  	CheckDlgButton(dialog, IDC_FULLSCREEN_GRAB, BST_CHECKED);
      else
 
+From 3ea9e7ce1bf15192d8b72dfaa91311a912128bab Mon Sep 17 00:00:00 2001
+From: Andrew Eikum <aeikum@codeweavers.com>
+Date: Wed, 30 May 2018 09:03:34 -0500
+Subject: [PATCH] winex11: Set WM hints before setting FS state
+
+This needed so we can resize the window on Ubuntu.
+---
+ dlls/winex11.drv/desktop.c | 3 ++-
+ dlls/winex11.drv/window.c  | 2 +-
+ dlls/winex11.drv/x11drv.h  | 1 +
+ 3 files changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/dlls/winex11.drv/desktop.c b/dlls/winex11.drv/desktop.c
+index 780b42dacc5..dad5f9e311c 100644
+--- a/dlls/winex11.drv/desktop.c
++++ b/dlls/winex11.drv/desktop.c
+@@ -242,8 +242,9 @@ static BOOL CALLBACK update_windows_on_desktop_resize( HWND hwnd, LPARAM lparam
+         if(!data->fs_hack){
+             POINT p = fs_hack_real_mode();
+             POINT tl = virtual_screen_to_root(0, 0);
+-            TRACE("Enabling fs hack, resizing the window to (%u,%u)-(%u,%u)\n", tl.x, tl.y, p.x, p.y);
++            TRACE("Enabling fs hack, resizing window %p to (%u,%u)-(%u,%u)\n", hwnd, tl.x, tl.y, p.x, p.y);
+             data->fs_hack = TRUE;
++            set_wm_hints( data );
+             XMoveResizeWindow(data->display, data->whole_window, tl.x, tl.y, p.x, p.y);
+             if(data->client_window)
+                 XMoveResizeWindow(data->display, data->client_window, 0, 0, p.x, p.y);
+diff --git a/dlls/winex11.drv/window.c b/dlls/winex11.drv/window.c
+index 08ca698f533..f0c4347f723 100644
+--- a/dlls/winex11.drv/window.c
++++ b/dlls/winex11.drv/window.c
+@@ -873,7 +873,7 @@ static void make_owner_managed( HWND hwnd )
+  *
+  * Set all the window manager hints for a window.
+  */
+-static void set_wm_hints( struct x11drv_win_data *data )
++void set_wm_hints( struct x11drv_win_data *data )
+ {
+     DWORD style, ex_style;
+ 
+diff --git a/dlls/winex11.drv/x11drv.h b/dlls/winex11.drv/x11drv.h
+index a9e7934be15..21b115318c2 100644
+--- a/dlls/winex11.drv/x11drv.h
++++ b/dlls/winex11.drv/x11drv.h
+@@ -603,6 +603,7 @@ extern void update_systray_balloon_position(void) DECLSPEC_HIDDEN;
+ extern HWND create_foreign_window( Display *display, Window window ) DECLSPEC_HIDDEN;
+ extern BOOL update_clipboard( HWND hwnd ) DECLSPEC_HIDDEN;
+ 
++extern void set_wm_hints( struct x11drv_win_data *data ) DECLSPEC_HIDDEN;
+ extern BOOL fs_hack_enabled(void) DECLSPEC_HIDDEN;
+ extern BOOL fs_hack_matches_current_mode(int w, int h) DECLSPEC_HIDDEN;
+ extern BOOL fs_hack_matches_real_mode(int w, int h) DECLSPEC_HIDDEN;
+
 From 27a329cfc69f3df40f346a6ea6388bc9e43f41fc Mon Sep 17 00:00:00 2001
 From: Zebediah Figura <zfigura@codeweavers.com>
 Date: Mon, 13 Aug 2018 15:04:04 -0500
@@ -4514,11 +4567,38 @@ index 23be3e56ac7..a20342c9d05 100644
      if (!clipping_cursor)
      {
 +        ERR("Failed to grab pointer\n");
-         disable_xinput2();
+         disable_xinput2_path();
          DestroyWindow( msg_hwnd );
          return FALSE;
 
-From 0edbe1dfc574b7ea30936e12371336ac5754e5dd Mon Sep 17 00:00:00 2001
+From 91b92633da9a6c990072fd3a82fb585d4b53901b Mon Sep 17 00:00:00 2001
+From: Andrew Eikum <aeikum@codeweavers.com>
+Date: Wed, 26 Jun 2019 08:09:27 -0500
+Subject: [PATCH] Revert "winex11.drv: Activate window when restoring from
+ iconic state."
+
+This reverts commit 82c6ec3a32f44e8b3e0cc88b7f10e0c0d7fa1b89.
+
+Causes alt-tab problems with several games.
+---
+ dlls/winex11.drv/event.c | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/dlls/winex11.drv/event.c b/dlls/winex11.drv/event.c
+index 3e95df3873c..ba68447d2e1 100644
+--- a/dlls/winex11.drv/event.c
++++ b/dlls/winex11.drv/event.c
+@@ -1311,8 +1311,6 @@ static void handle_wm_state_notify( HWND hwnd, XPropertyEvent *event, BOOL updat
+             {
+                 TRACE( "restoring win %p/%lx\n", data->hwnd, data->whole_window );
+                 release_win_data( data );
+-                if ((style & (WS_MINIMIZE | WS_VISIBLE)) == (WS_MINIMIZE | WS_VISIBLE))
+-                    SetActiveWindow( hwnd );
+                 SendMessageW( hwnd, WM_SYSCOMMAND, SC_RESTORE, 0 );
+                 return;
+             }
+
+From a1e3dbb4f7b9db6e1452e95d5e665260ed38650d Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
 Date: Tue, 25 Jun 2019 18:21:38 +0200
 Subject: [PATCH] winex11.drv: Add a bit of delay before restoring mouse grabs
@@ -4528,6 +4608,8 @@ With gnome-shell, for example, focus is lost then restored when pressing
 Super key, but the activity view is only toggled after that, and only if
 cursor is not grabbed, so we need to wait a bit or the Super key will do
 nothing.
+
+(cherry picked from commit 0edbe1dfc574b7ea30936e12371336ac5754e5dd)
 ---
  dlls/winex11.drv/event.c  | 8 ++++++++
  dlls/winex11.drv/window.c | 2 +-
@@ -4535,7 +4617,7 @@ nothing.
  3 files changed, 11 insertions(+), 1 deletion(-)
 
 diff --git a/dlls/winex11.drv/event.c b/dlls/winex11.drv/event.c
-index 5eaafc8154f..ceef9700c22 100644
+index 6c6dd0eb681..9a5a6f72ca7 100644
 --- a/dlls/winex11.drv/event.c
 +++ b/dlls/winex11.drv/event.c
 @@ -787,6 +787,14 @@ static BOOL X11DRV_FocusIn( HWND hwnd, XEvent *xev )
@@ -4567,7 +4649,7 @@ index dda6094255b..f5503d6cad1 100644
      Window root = DefaultRootWindow(display), *wm_check;
      Atom type;
 diff --git a/dlls/winex11.drv/x11drv.h b/dlls/winex11.drv/x11drv.h
-index 97500ae6d9b..2fd7685f8bf 100644
+index 6a98ad485f0..c389ddda618 100644
 --- a/dlls/winex11.drv/x11drv.h
 +++ b/dlls/winex11.drv/x11drv.h
 @@ -632,6 +632,8 @@ extern double fs_hack_user_to_real_w, fs_hack_user_to_real_h DECLSPEC_HIDDEN;
@@ -4580,29 +4662,219 @@ index 97500ae6d9b..2fd7685f8bf 100644
  {
      int width = window_rect->right - window_rect->left;
 
-From 91b92633da9a6c990072fd3a82fb585d4b53901b Mon Sep 17 00:00:00 2001
-From: Andrew Eikum <aeikum@codeweavers.com>
-Date: Wed, 26 Jun 2019 08:09:27 -0500
-Subject: [PATCH] Revert "winex11.drv: Activate window when restoring from
- iconic state."
+From 0bda58158a2de709002800ab112782c0740a5bef Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
+Date: Wed, 26 Jun 2019 18:42:37 +0200
+Subject: [PATCH] winex11.drv: Workaround mutter issue #649 with windows losing
+ focus
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-This reverts commit 82c6ec3a32f44e8b3e0cc88b7f10e0c0d7fa1b89.
+When decorations are modified too quickly, mutter loses tracks of the
+reparenting requests and does not gives focus back to the window.
 
-Causes alt-tab problems with several games.
+Signed-off-by: Rémi Bernon <rbernon@codeweavers.com>
 ---
- dlls/winex11.drv/event.c | 2 --
- 1 file changed, 2 deletions(-)
+ dlls/winex11.drv/window.c | 39 +++++++++++++++++++++++++++++++++++++--
+ dlls/winex11.drv/x11drv.h |  1 +
+ 2 files changed, 38 insertions(+), 2 deletions(-)
+
+diff --git a/dlls/winex11.drv/window.c b/dlls/winex11.drv/window.c
+index 21cb4ac835c..3b3a43fb29d 100644
+--- a/dlls/winex11.drv/window.c
++++ b/dlls/winex11.drv/window.c
+@@ -738,6 +738,13 @@ static void set_size_hints( struct x11drv_win_data *data, DWORD style )
+     XFree( size_hints );
+ }
+ 
++static Bool is_unmap_notify( Display *display, XEvent *event, XPointer arg )
++{
++    struct x11drv_win_data *data = (struct x11drv_win_data *)arg;
++    return event->xany.serial >= data->unmapnotify_serial &&
++           event->xany.window == data->whole_window &&
++           event->type == UnmapNotify;
++}
+ 
+ /***********************************************************************
+  *              set_mwm_hints
+@@ -745,6 +752,7 @@ static void set_size_hints( struct x11drv_win_data *data, DWORD style )
+ static void set_mwm_hints( struct x11drv_win_data *data, DWORD style, DWORD ex_style )
+ {
+     MwmHints mwm_hints;
++    int enable_mutter_workaround, mapped;
+ 
+     if (data->hwnd == GetDesktopWindow())
+     {
+@@ -775,16 +783,43 @@ static void set_mwm_hints( struct x11drv_win_data *data, DWORD style, DWORD ex_s
+     TRACE( "%p setting mwm hints to %lx,%lx (style %x exstyle %x)\n",
+            data->hwnd, mwm_hints.decorations, mwm_hints.functions, style, ex_style );
+ 
++    enable_mutter_workaround = wm_is_mutter(data->display) && GetFocus() == data->hwnd &&
++                               !!data->prev_hints.decorations != !!mwm_hints.decorations;
++
++    /* workaround for mutter gitlab bug #649, we cannot trust the
++     * data->mapped flag as mapping is asynchronous.
++     */
++    if (enable_mutter_workaround)
++    {
++        XWindowAttributes attr;
++
++        mapped = data->mapped;
++        if (XGetWindowAttributes( data->display, data->whole_window, &attr ))
++            mapped = (attr.map_state != IsUnmapped);
++    }
++
+     mwm_hints.flags = MWM_HINTS_FUNCTIONS | MWM_HINTS_DECORATIONS;
+     mwm_hints.input_mode = 0;
+     mwm_hints.status = 0;
++    data->unmapnotify_serial = NextRequest( data->display );
+     XChangeProperty( data->display, data->whole_window, x11drv_atom(_MOTIF_WM_HINTS),
+                      x11drv_atom(_MOTIF_WM_HINTS), 32, PropModeReplace,
+                      (unsigned char*)&mwm_hints, sizeof(mwm_hints)/sizeof(long) );
+ 
+-    if (wm_is_mutter(data->display) && GetFocus() == data->hwnd &&
+-            !!data->prev_hints.decorations != !!mwm_hints.decorations)
++    if (enable_mutter_workaround)
+     {
++        XEvent event;
++
++        /* workaround for mutter gitlab bug #649, wait for the map notify
++         * event each time the decorations are modified before modifying
++         * them again.
++         */
++        if (mapped)
++        {
++            TRACE("workaround mutter bug #649, waiting for UnmapNotify\n");
++            XPeekIfEvent( data->display, &event, is_unmap_notify, (XPointer)data );
++        }
++
+         /* workaround for mutter gitlab bug #273 */
+         TRACE("workaround mutter bug, setting take_focus_back\n");
+         data->take_focus_back = GetTickCount64();
+diff --git a/dlls/winex11.drv/x11drv.h b/dlls/winex11.drv/x11drv.h
+index c389ddda618..869cbd64265 100644
+--- a/dlls/winex11.drv/x11drv.h
++++ b/dlls/winex11.drv/x11drv.h
+@@ -581,6 +581,7 @@ struct x11drv_win_data
+     int         wm_state;       /* current value of the WM_STATE property */
+     DWORD       net_wm_state;   /* bit mask of active x11drv_net_wm_state values */
+     Window      embedder;       /* window id of embedder */
++    unsigned long unmapnotify_serial; /* serial number of last UnmapNotify event */
+     unsigned long configure_serial; /* serial number of last configure request */
+     struct window_surface *surface;
+     Pixmap         icon_pixmap;
+
+From 154a5c07fdc552dcefa7804f0fd8845fdf4ecbce Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
+Date: Wed, 24 Jul 2019 11:34:15 +0200
+Subject: [PATCH] winex11.drv: Workaround mutter issue #676 with compositing
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Changing decorations of a fullscreen and unredirected window breaks
+compositing. So, we now ignore any decoration changes while window is
+bypassing the compositor.
+
+Decoration state will be restored as soon as the window changes its
+state again. The windows are only bypassing compositor if they are also
+fullscreen, so this should not have any visible side effect.
+
+Signed-off-by: Rémi Bernon <rbernon@codeweavers.com>
+---
+ dlls/winex11.drv/event.c  | 13 +++++++++++++
+ dlls/winex11.drv/window.c | 27 +++++++++++++++++++++++++++
+ 2 files changed, 40 insertions(+)
 
 diff --git a/dlls/winex11.drv/event.c b/dlls/winex11.drv/event.c
-index 3e95df3873c..ba68447d2e1 100644
+index 9a5a6f72ca7..442cd956615 100644
 --- a/dlls/winex11.drv/event.c
 +++ b/dlls/winex11.drv/event.c
-@@ -1311,8 +1311,6 @@ static void handle_wm_state_notify( HWND hwnd, XPropertyEvent *event, BOOL updat
-             {
-                 TRACE( "restoring win %p/%lx\n", data->hwnd, data->whole_window );
-                 release_win_data( data );
--                if ((style & (WS_MINIMIZE | WS_VISIBLE)) == (WS_MINIMIZE | WS_VISIBLE))
--                    SetActiveWindow( hwnd );
-                 SendMessageW( hwnd, WM_SYSCOMMAND, SC_RESTORE, 0 );
-                 return;
-             }
+@@ -1425,6 +1425,19 @@ static BOOL X11DRV_PropertyNotify( HWND hwnd, XEvent *xev )
+         XFree(name);
+     }
+ 
++    if (event->atom == x11drv_atom(_NET_WM_BYPASS_COMPOSITOR))
++    {
++        struct x11drv_win_data *data = get_win_data( hwnd );
++        if (!data) return TRUE;
++
++        /* workaround for mutter gitlab bug #676, changing decorations of a
++         * fullscreen and unredirected window freezes the compositing.
++         */
++        if (wm_is_mutter( data->display )) set_wm_hints( data );
++
++        release_win_data( data );
++    }
++
+     if (event->atom == x11drv_atom(WM_STATE)) handle_wm_state_notify( hwnd, event, TRUE );
+     else if (event->atom == x11drv_atom(_NET_WM_STATE)) handle__net_wm_state_notify( hwnd, event );
+     return TRUE;
+diff --git a/dlls/winex11.drv/window.c b/dlls/winex11.drv/window.c
+index 3b3a43fb29d..444f5752f73 100644
+--- a/dlls/winex11.drv/window.c
++++ b/dlls/winex11.drv/window.c
+@@ -754,6 +754,33 @@ static void set_mwm_hints( struct x11drv_win_data *data, DWORD style, DWORD ex_s
+     MwmHints mwm_hints;
+     int enable_mutter_workaround, mapped;
+ 
++    /* workaround for mutter gitlab bug #676, changing decorations of a
++     * fullscreen and unredirected window freezes the compositing.
++     * The window style will be updated again once the window has returned
++     * from fullscreen.
++     */
++    if (wm_is_mutter(data->display) && (data->net_wm_state & (1 << NET_WM_STATE_FULLSCREEN)))
++    {
++        Atom type;
++        int format;
++        unsigned long *property, net_wm_bypass_compositor = 0, count, remaining;
++
++        if (XGetWindowProperty( data->display, data->whole_window, x11drv_atom(_NET_WM_BYPASS_COMPOSITOR), 0,
++                                1, False, XA_CARDINAL, &type, &format, &count, &remaining,
++                                (unsigned char **)&property ) == Success &&
++            property)
++        {
++            net_wm_bypass_compositor = *property;
++            XFree(property);
++        }
++
++        if (net_wm_bypass_compositor)
++        {
++            TRACE("workaround mutter bug, ignoring decorations while compositor is bypassed\n");
++            return;
++        }
++    }
++
+     if (data->hwnd == GetDesktopWindow())
+     {
+         if (is_desktop_fullscreen()) mwm_hints.decorations = 0;
+
+From f9373c6c4c187c9d80083dca2f6fb6bbb3700fd7 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
+Date: Tue, 17 Sep 2019 10:50:10 +0200
+Subject: [PATCH] winex11.drv: Enable mutter workaround for issue #649 only
+ when virtual desktop is disabled.
+
+Otherwise our windows are created as children of a custom root window,
+which is the one that is being managed and decorated by mutter - this
+is the case when using virtual desktop for example - and in this case
+the event sequence is different and the workaround will cause freezes.
+---
+ dlls/winex11.drv/window.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/dlls/winex11.drv/window.c b/dlls/winex11.drv/window.c
+index 2ab2cc8fee6..ac0a8b73d8a 100644
+--- a/dlls/winex11.drv/window.c
++++ b/dlls/winex11.drv/window.c
+@@ -811,7 +811,8 @@ static void set_mwm_hints( struct x11drv_win_data *data, DWORD style, DWORD ex_s
+            data->hwnd, mwm_hints.decorations, mwm_hints.functions, style, ex_style );
+ 
+     enable_mutter_workaround = wm_is_mutter(data->display) && GetFocus() == data->hwnd &&
+-                               !!data->prev_hints.decorations != !!mwm_hints.decorations;
++                               !!data->prev_hints.decorations != !!mwm_hints.decorations &&
++                               root_window == DefaultRootWindow(data->display);
+ 
+     /* workaround for mutter gitlab bug #649, we cannot trust the
+      * data->mapped flag as mapping is asynchronous.

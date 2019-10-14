@@ -26,7 +26,7 @@ typedef struct __winIVRClientCore_IVRClientCore_003 {
     struct client_core_data user_data;
 } winIVRClientCore_IVRClientCore_003;
 
-DEFINE_THISCALL_WRAPPER(winIVRClientCore_IVRClientCore_003_Init, 16)
+DEFINE_THISCALL_WRAPPER(winIVRClientCore_IVRClientCore_003_Init, 12)
 EVRInitError __thiscall winIVRClientCore_IVRClientCore_003_Init(winIVRClientCore_IVRClientCore_003 *_this, EVRApplicationType eApplicationType, const char * pStartupInfo)
 {
     TRACE("%p\n", _this);
@@ -40,14 +40,14 @@ void __thiscall winIVRClientCore_IVRClientCore_003_Cleanup(winIVRClientCore_IVRC
     ivrclientcore_cleanup(cppIVRClientCore_IVRClientCore_003_Cleanup, _this->linux_side, 3, &_this->user_data);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRClientCore_IVRClientCore_003_IsInterfaceVersionValid, 12)
+DEFINE_THISCALL_WRAPPER(winIVRClientCore_IVRClientCore_003_IsInterfaceVersionValid, 8)
 EVRInitError __thiscall winIVRClientCore_IVRClientCore_003_IsInterfaceVersionValid(winIVRClientCore_IVRClientCore_003 *_this, const char * pchInterfaceVersion)
 {
     TRACE("%p\n", _this);
     return cppIVRClientCore_IVRClientCore_003_IsInterfaceVersionValid(_this->linux_side, pchInterfaceVersion);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRClientCore_IVRClientCore_003_GetGenericInterface, 20)
+DEFINE_THISCALL_WRAPPER(winIVRClientCore_IVRClientCore_003_GetGenericInterface, 12)
 void * __thiscall winIVRClientCore_IVRClientCore_003_GetGenericInterface(winIVRClientCore_IVRClientCore_003 *_this, const char * pchNameAndVersion, EVRInitError * peError)
 {
     TRACE("%p\n", _this);
@@ -161,14 +161,14 @@ void __thiscall winIVRClientCore_IVRClientCore_002_Cleanup(winIVRClientCore_IVRC
     ivrclientcore_cleanup(cppIVRClientCore_IVRClientCore_002_Cleanup, _this->linux_side, 2, &_this->user_data);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRClientCore_IVRClientCore_002_IsInterfaceVersionValid, 12)
+DEFINE_THISCALL_WRAPPER(winIVRClientCore_IVRClientCore_002_IsInterfaceVersionValid, 8)
 EVRInitError __thiscall winIVRClientCore_IVRClientCore_002_IsInterfaceVersionValid(winIVRClientCore_IVRClientCore_002 *_this, const char * pchInterfaceVersion)
 {
     TRACE("%p\n", _this);
     return cppIVRClientCore_IVRClientCore_002_IsInterfaceVersionValid(_this->linux_side, pchInterfaceVersion);
 }
 
-DEFINE_THISCALL_WRAPPER(winIVRClientCore_IVRClientCore_002_GetGenericInterface, 20)
+DEFINE_THISCALL_WRAPPER(winIVRClientCore_IVRClientCore_002_GetGenericInterface, 12)
 void * __thiscall winIVRClientCore_IVRClientCore_002_GetGenericInterface(winIVRClientCore_IVRClientCore_002 *_this, const char * pchNameAndVersion, EVRInitError * peError)
 {
     TRACE("%p\n", _this);

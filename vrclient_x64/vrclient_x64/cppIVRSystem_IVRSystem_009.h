@@ -27,8 +27,8 @@ extern uint64_t cppIVRSystem_IVRSystem_009_GetUint64TrackedDeviceProperty(void *
 extern HmdMatrix34_t cppIVRSystem_IVRSystem_009_GetMatrix34TrackedDeviceProperty(void *, TrackedDeviceIndex_t, ETrackedDeviceProperty, ETrackedPropertyError *);
 extern uint32_t cppIVRSystem_IVRSystem_009_GetStringTrackedDeviceProperty(void *, TrackedDeviceIndex_t, ETrackedDeviceProperty, char *, uint32_t, ETrackedPropertyError *);
 extern const char * cppIVRSystem_IVRSystem_009_GetPropErrorNameFromEnum(void *, ETrackedPropertyError);
-extern bool cppIVRSystem_IVRSystem_009_PollNextEvent(void *, winVREvent_t_0912 *);
-extern bool cppIVRSystem_IVRSystem_009_PollNextEventWithPose(void *, ETrackingUniverseOrigin, winVREvent_t_0912 *, TrackedDevicePose_t *);
+extern bool cppIVRSystem_IVRSystem_009_PollNextEvent(void *, VREvent_t *);
+extern bool cppIVRSystem_IVRSystem_009_PollNextEventWithPose(void *, ETrackingUniverseOrigin, VREvent_t *, TrackedDevicePose_t *);
 extern const char * cppIVRSystem_IVRSystem_009_GetEventTypeNameFromEnum(void *, EVREventType);
 extern HiddenAreaMesh_t cppIVRSystem_IVRSystem_009_GetHiddenAreaMesh(void *, EVREye);
 extern bool cppIVRSystem_IVRSystem_009_GetControllerState(void *, TrackedDeviceIndex_t, winVRControllerState001_t_0912 *);

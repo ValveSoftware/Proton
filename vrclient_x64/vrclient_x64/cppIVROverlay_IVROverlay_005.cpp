@@ -164,13 +164,9 @@ bool cppIVROverlay_IVROverlay_005_IsOverlayVisible(void *linux_side, VROverlayHa
     return ((IVROverlay*)linux_side)->IsOverlayVisible((vr::VROverlayHandle_t)ulOverlayHandle);
 }
 
-bool cppIVROverlay_IVROverlay_005_PollNextOverlayEvent(void *linux_side, VROverlayHandle_t ulOverlayHandle, winVREvent_t_0910 * pEvent)
+bool cppIVROverlay_IVROverlay_005_PollNextOverlayEvent(void *linux_side, VROverlayHandle_t ulOverlayHandle, VREvent_t * pEvent)
 {
-    VREvent_t lin;
-    bool _ret;
-    _ret = ((IVROverlay*)linux_side)->PollNextOverlayEvent((vr::VROverlayHandle_t)ulOverlayHandle, &lin);
-    struct_VREvent_t_0910_lin_to_win(&lin, pEvent);
-    return _ret;
+    return ((IVROverlay*)linux_side)->PollNextOverlayEvent((vr::VROverlayHandle_t)ulOverlayHandle, (vr::VREvent_t *)pEvent);
 }
 
 vr::VROverlayError cppIVROverlay_IVROverlay_005_GetOverlayInputMethod(void *linux_side, VROverlayHandle_t ulOverlayHandle, VROverlayInputMethod * peInputMethod)

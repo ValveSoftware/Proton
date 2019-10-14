@@ -13,7 +13,7 @@ vr::EVRRenderModelError cppIVRRenderModels_IVRRenderModels_005_LoadRenderModel_A
 {
     RenderModel_t *lin;
     vr::EVRRenderModelError _ret;
-    _ret = ((IVRRenderModels*)linux_side)->LoadRenderModel_Async((const char *)pchRenderModelName, &lin);
+    _ret = ((IVRRenderModels*)linux_side)->LoadRenderModel_Async((const char *)pchRenderModelName, ppRenderModel ? &lin : nullptr);
     if(_ret == 0)
         *ppRenderModel = struct_RenderModel_t_1015_wrap(lin);
     return _ret;
@@ -28,7 +28,7 @@ vr::EVRRenderModelError cppIVRRenderModels_IVRRenderModels_005_LoadTexture_Async
 {
     RenderModel_TextureMap_t *lin;
     vr::EVRRenderModelError _ret;
-    _ret = ((IVRRenderModels*)linux_side)->LoadTexture_Async((vr::TextureID_t)textureId, &lin);
+    _ret = ((IVRRenderModels*)linux_side)->LoadTexture_Async((vr::TextureID_t)textureId, ppTexture ? &lin : nullptr);
     if(_ret == 0)
         *ppTexture = struct_RenderModel_TextureMap_t_1015_wrap(lin);
     return _ret;
@@ -86,7 +86,12 @@ uint32_t cppIVRRenderModels_IVRRenderModels_005_GetComponentRenderModelName(void
 
 bool cppIVRRenderModels_IVRRenderModels_005_GetComponentState(void *linux_side, const char * pchRenderModelName, const char * pchComponentName, VRControllerState_t * pControllerState, RenderModel_ControllerMode_State_t * pState, RenderModel_ComponentState_t * pComponentState)
 {
-    return ((IVRRenderModels*)linux_side)->GetComponentState((const char *)pchRenderModelName, (const char *)pchComponentName, (const vr::VRControllerState_t *)pControllerState, (const vr::RenderModel_ControllerMode_State_t *)pState, (vr::RenderModel_ComponentState_t *)pComponentState);
+    VRControllerState001_t lin;
+    bool _ret;
+    if(pControllerState)
+        struct_VRControllerState001_t_1015_win_to_lin(pControllerState, &lin);
+    _ret = ((IVRRenderModels*)linux_side)->GetComponentState((const char *)pchRenderModelName, (const char *)pchComponentName, pControllerState ? &lin : nullptr, (const vr::RenderModel_ControllerMode_State_t *)pState, (vr::RenderModel_ComponentState_t *)pComponentState);
+    return _ret;
 }
 
 bool cppIVRRenderModels_IVRRenderModels_005_RenderModelHasComponent(void *linux_side, const char * pchRenderModelName, const char * pchComponentName)

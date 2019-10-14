@@ -12298,14 +12298,14 @@ EVRTrackedCameraError __thiscall IVRTrackedCamera_002_AcquireVideoStreamingServi
 EVRTrackedCameraError __thiscall IVRTrackedCamera_002_ReleaseVideoStreamingService(void *_this, TrackedCameraHandle_t hTrackedCamera)
 {
     push_ptr_parameter(_this);
-    push_uint64_parameter(hTrackedCamera);
+    push_uint32_parameter(hTrackedCamera);
     return 0;
 }
 
 EVRTrackedCameraError __thiscall IVRTrackedCamera_002_GetVideoStreamFrameBuffer(void *_this, TrackedCameraHandle_t hTrackedCamera, EVRTrackedCameraFrameType eFrameType, void * pFrameBuffer, uint32_t nFrameBufferSize, CameraVideoStreamFrameHeader_t * pFrameHeader, uint32_t nFrameHeaderSize)
 {
     push_ptr_parameter(_this);
-    push_uint64_parameter(hTrackedCamera);
+    push_uint32_parameter(hTrackedCamera);
     push_uint32_parameter(eFrameType);
     push_ptr_parameter(pFrameBuffer);
     push_uint32_parameter(nFrameBufferSize);
