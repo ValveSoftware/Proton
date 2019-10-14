@@ -1598,18 +1598,15 @@ diff --git a/dlls/wined3d/wined3d.spec b/dlls/wined3d/wined3d.spec
 index bead68fc22..4e5efea8f1 100644
 --- a/dlls/wined3d/wined3d.spec
 +++ b/dlls/wined3d/wined3d.spec
-@@ -320,6 +320,11 @@
+@@ -326,3 +326,8 @@
+ @ cdecl wined3d_vertex_declaration_incref(ptr)
  
  @ cdecl wined3d_extract_shader_input_signature_from_dxbc(ptr ptr long)
- 
++
 +@ cdecl wined3d_access_gl_texture(ptr ptr ptr long)
 +@ cdecl wined3d_device_run_cs_callback(ptr ptr ptr long)
 +@ cdecl wined3d_device_wait_idle(ptr)
 +@ cdecl wined3d_get_gl_texture(ptr)
-+
- @ cdecl wined3d_dxt1_decode(ptr ptr long long long long long)
- @ cdecl wined3d_dxt1_encode(ptr ptr long long long long long)
- @ cdecl wined3d_dxt3_decode(ptr ptr long long long long long)
 -- 
 2.21.0
 

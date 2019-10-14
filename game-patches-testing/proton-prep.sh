@@ -38,7 +38,7 @@
     ../wine-staging/patches/patchinstall.sh DESTDIR="." --all \
     -W server-Desktop_Refcount \
     -W ws2_32-TransmitFile \
-    -W user32-rawinput \
+    -W winex11.drv-mouse-coorrds \
     -W dinput-SetActionMap-genre \
     -W dinput-axis-recalc \
     -W dinput-joy-mappings \
@@ -81,6 +81,11 @@
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-protonify_prepatch.patch
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-protonify_staging.patch
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-LAA_staging.patch
+
+    # this needs to come after LAA patch
+    echo "mortal kombat 11 patch"
+    patch -Np1 < ../game-patches-testing/game-patches/mk11.patch
+
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-use_clock_monotonic.patch
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-amd_ags.patch
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-hide_prefix_update_window.patch

@@ -1,0 +1,331 @@
+commit 585b6f89affa3482caee9bf17f20dad77dc82d07
+Author: Derek Lesho <dlesho@codeweavers.com>
+Date:   Wed Oct 2 09:10:26 2019 -0500
+
+    Vincent's Changes
+
+diff --git a/dlls/wbemprox/builtin.c b/dlls/wbemprox/builtin.c
+index 96d1e0b850..423d47bd24 100644
+--- a/dlls/wbemprox/builtin.c
++++ b/dlls/wbemprox/builtin.c
+@@ -792,7 +792,8 @@ static const struct column col_sounddevice[] =
+ {
+     { prop_nameW,        CIM_STRING },
+     { prop_productnameW, CIM_STRING },
+-    { prop_statusinfoW,  CIM_UINT16 }
++    { prop_statusinfoW,  CIM_UINT16 },
++    { prop_manufacturerW,       CIM_STRING }
+ };
+ static const struct column col_stdregprov[] =
+ {
+@@ -933,6 +934,10 @@ static const WCHAR quickfixengineering_captionW[] =
+     {'h','t','t','p',':','/','/','w','i','n','e','h','q','.','o','r','g',0};
+ static const WCHAR quickfixengineering_hotfixidW[] =
+     {'K','B','1','2','3','4','5','6','7',0};
++static const WCHAR physicalmemory_partnumberW[] =
++    {'B','L','S','8','G','3','D','1','6','0','9','D','S','1','S','0','0','.',0};
++static const WCHAR sounddevice_manufacturerW[] =
++    {'T','h','e',' ','W','i','n','e',' ','P','r','o','j','e','c','t',0};
+ static const WCHAR sounddevice_productnameW[] =
+     {'W','i','n','e',' ','A','u','d','i','o',' ','D','e','v','i','c','e',0};
+ static const WCHAR systemenclosure_systemenclosureW[] =
+@@ -1272,6 +1277,7 @@ struct record_sounddevice
+     const WCHAR *name;
+     const WCHAR *productname;
+     UINT16       statusinfo;
++    const WCHAR *manufacturer;
+ };
+ struct record_stdregprov
+ {
+@@ -1388,7 +1394,7 @@ static const struct record_quickfixengineering data_quickfixengineering[] =
+ };
+ static const struct record_sounddevice data_sounddevice[] =
+ {
+-    { sounddevice_productnameW, sounddevice_productnameW, 3 /* enabled */ }
++    { sounddevice_productnameW, sounddevice_productnameW, 3 /* enabled */, sounddevice_manufacturerW }
+ };
+ static const struct record_stdregprov data_stdregprov[] =
+ {
+@@ -3349,10 +3355,10 @@ static enum fill_status fill_physicalmemory( struct table *table, const struct e
+ 
+     rec = (struct record_physicalmemory *)table->data;
+     rec->capacity             = get_total_physical_memory();
+-    rec->configuredclockspeed = 0;
++    rec->configuredclockspeed = 1600;
+     rec->devicelocator        = dimm0W;
+     rec->memorytype           = 9; /* RAM */
+-    rec->partnumber           = NULL;
++    rec->partnumber           = physicalmemory_partnumberW;
+     if (!match_row( table, row, cond, &status )) free_row_values( table, row );
+     else row++;
+ 
+diff --git a/dlls/ws2_32/Makefile.in b/dlls/ws2_32/Makefile.in
+index 9d7dfafeb3..c7f24168da 100644
+--- a/dlls/ws2_32/Makefile.in
++++ b/dlls/ws2_32/Makefile.in
+@@ -1,6 +1,7 @@
+ EXTRADEFS = -DUSE_WS_PREFIX
+ MODULE    = ws2_32.dll
+ IMPORTLIB = ws2_32
++IMPORTS = kernelbase
+ DELAYIMPORTS = iphlpapi user32
+ EXTRALIBS = $(POLL_LIBS)
+ 
+commit f4d63311736e7a5db2e9c327a3fbbc21d8cf9c7c
+Author: Derek Lesho <dlesho@codeweavers.com>
+Date:   Wed Oct 2 09:11:03 2019 -0500
+
+    gfesdk stub
+
+diff --git a/configure.ac b/configure.ac
+index b9339b90aa..81995b05a4 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -3330,6 +3330,7 @@ WINE_CONFIG_MAKEFILE(dlls/gdi32)
+ WINE_CONFIG_MAKEFILE(dlls/gdi32/tests)
+ WINE_CONFIG_MAKEFILE(dlls/gdiplus)
+ WINE_CONFIG_MAKEFILE(dlls/gdiplus/tests)
++WINE_CONFIG_MAKEFILE(dlls/gfesdk)
+ WINE_CONFIG_MAKEFILE(dlls/glu32)
+ WINE_CONFIG_MAKEFILE(dlls/gphoto2.ds)
+ WINE_CONFIG_MAKEFILE(dlls/gpkcsp)
+diff --git a/dlls/gfesdk/Makefile.in b/dlls/gfesdk/Makefile.in
+new file mode 100644
+index 0000000000..339ccfd7e7
+--- /dev/null
++++ b/dlls/gfesdk/Makefile.in
+@@ -0,0 +1,7 @@
++MODULE = gfesdk.dll
++IMPORTLIB = gfesdk
++
++EXTRADLLFLAGS = -mno-cygwin
++
++C_SRCS = \
++    gfesdk_main.c
+diff --git a/dlls/gfesdk/gfesdk.spec b/dlls/gfesdk/gfesdk.spec
+new file mode 100644
+index 0000000000..816f5bc8aa
+--- /dev/null
++++ b/dlls/gfesdk/gfesdk.spec
+@@ -0,0 +1,16 @@
++@ cdecl NVGSDK_AttachLogListener(ptr)
++@ cdecl NVGSDK_Create(ptr ptr ptr)
++@ cdecl NVGSDK_GetUILanguageAsync(ptr ptr ptr)
++#@ cdecl NVGSDK_Highlights_CloseGroupAsync(ptr ptr ptr ptr)
++#@ cdecl NVGSDK_Highlights_ConfigureAsync(ptr ptr ptr ptr)
++#@ cdecl NVGSDK_Highlights_GetNumberOfHighlightsAsync(ptr ptr ptr ptr)
++#@ cdecl NVGSDK_Highlights_GetUserSettingsAsync(ptr ptr ptr)
++#@ cdecl NVGSDK_Highlights_OpenGroupAsync(ptr ptr ptr ptr)
++#@ cdecl NVGSDK_Highlights_OpenSummaryAsync(ptr ptr ptr ptr)
++#@ cdecl NVGSDK_Highlights_SetScreenshotHighlightAsync(ptr ptr ptr ptr)
++#@ cdecl NVGSDK_Highlights_SetVideoHighlightAsync(ptr ptr ptr ptr)
++@ cdecl NVGSDK_Poll(ptr)
++@ cdecl NVGSDK_Release(ptr)
++@ cdecl NVGSDK_RequestPermissionsAsync(ptr ptr ptr ptr)
++@ cdecl NVGSDK_SetListenerLogLevel(long)
++@ cdecl NVGSDK_SetLogLevel(long)
+diff --git a/dlls/gfesdk/gfesdk_main.c b/dlls/gfesdk/gfesdk_main.c
+new file mode 100644
+index 0000000000..f0af7e7568
+--- /dev/null
++++ b/dlls/gfesdk/gfesdk_main.c
+@@ -0,0 +1,70 @@
++#include <windef.h>
++
++#include "wine/debug.h"
++
++#include "nvgsdk.h"
++
++WINE_DEFAULT_DEBUG_CHANNEL(gfesdk);
++
++NVGSDK_RetCode CDECL NVGSDK_Create(NVGSDK_HANDLE **handle, NVGSDK_CreateInputParams const *params, NVGSDK_CreateResponse *response)
++{
++    FIXME("stub(%p %p %p %p)\n", handle, params, response);
++
++    /* SDK specifies "On fatal error, this will be NULL", which I assume means we clean it? */
++    if (response)
++    {
++        //memset(response, 0, sizeof(*response));
++    }
++
++    return NVGSDK_ERR_LOAD_LIBRARY;
++}
++
++NVGSDK_RetCode CDECL NVGSDK_Release(NVGSDK_HANDLE *handle)
++{
++    FIXME("stub(%p)\n", handle);
++
++    return NVGSDK_ERR_INVALID_PARAMETER;
++}
++
++NVGSDK_RetCode CDECL NVGSDK_Poll(NVGSDK_HANDLE *handle)
++{
++    FIXME("stub(%p)\n", handle);
++
++    /* SDK doesn't document failure of this function */
++    return NVGSDK_ERR_INVALID_PARAMETER;
++}
++
++NVGSDK_RetCode CDECL NVGSDK_SetLogLevel(NVGSDK_LogLevel lvl)
++{
++    FIXME("stub(%u)\n", lvl);
++
++    return NVGSDK_SUCCESS;
++}
++
++NVGSDK_RetCode CDECL NVGSDK_AttachLogListener(NVGSDK_LoggingCallback callback)
++{
++    FIXME("stub(%p)\n");
++
++    return NVGSDK_SUCCESS;
++}
++
++NVGSDK_RetCode CDECL NVGSDK_SetListenerLogLevel(NVGSDK_LogLevel lvl)
++{
++    FIXME("stub(%u)\n");
++
++    return NVGSDK_SUCCESS;
++}
++
++void CDECL NVGSDK_RequestPermissionsAsync(NVGSDK_HANDLE *handle, NVGSDK_RequestPermissionsParams const *params, NVGSDK_EmptyCallback callback, void *context)
++{
++    FIXME("stub(%p %p %p %p)\n", handle, params, callback, context);
++
++    callback(NVGSDK_SUCCESS, context);
++}
++
++void CDECL NVGSDK_GetUILanguageAsync(NVGSDK_HANDLE *handle, NVGSDK_GetUILanguageCallback callback, void *context)
++{
++    FIXME("stub(%p %p %p)\n", handle, callback, context);
++
++    callback(NVGSDK_ERR_NOT_SET, NULL, context);
++}
+diff --git a/dlls/gfesdk/nvgsdk.h b/dlls/gfesdk/nvgsdk.h
+new file mode 100644
+index 0000000000..457f234073
+--- /dev/null
++++ b/dlls/gfesdk/nvgsdk.h
+@@ -0,0 +1,30 @@
++#include <windef.h>
++
++typedef struct _NVGSDK_HANDLE NVGSDK_HANDLE;
++
++typedef struct _NVGSDK_CreateInputParams NVGSDK_CreateInputParams;
++
++typedef struct _NVGSDK_CreateResponse NVGSDK_CreateResponse;
++
++typedef struct _NVGSDK_RequestPermissionsParams NVGSDK_RequestPermissionsParams;
++
++typedef struct _NVGSDK_Language NVGSDK_Language;
++
++typedef enum _NVGSDK_LogLevel
++{
++  NVGSDK_LOG_NONE = 0,
++} NVGSDK_LogLevel;
++
++typedef enum _NVGSDK_RetCode
++{
++    NVGSDK_SUCCESS = 0,
++    NVGSDK_ERR_INVALID_PARAMETER = -1005,
++    NVGSDK_ERR_NOT_SET = -1006,
++    NVGSDK_ERR_LOAD_LIBRARY = -1022,
++} NVGSDK_RetCode;
++
++typedef void (CALLBACK *NVGSDK_LoggingCallback)(NVGSDK_LogLevel lvl, char const *msg);
++
++typedef void(CALLBACK *NVGSDK_EmptyCallback)(NVGSDK_RetCode ret, void *context);
++
++typedef void(CALLBACK *NVGSDK_GetUILanguageCallback)(NVGSDK_RetCode ret, NVGSDK_Language const *lang, void *context);
+
+From: Derek Lesho <dlesho@codeweavers.com>
+Subject: RFC: Limit addresses to 43 bits on 64-bit.
+Message-Id: <20191002153838.878501-1-dlesho@codeweavers.com>
+Date: Wed,  2 Oct 2019 10:38:38 -0500
+
+Mortal Kombat 11 allocates memory, with zero_bits set to 0, and applies
+a 43-bit mask on the pointer.  This would have worked in Windows 7, as
+MSDN says that 43-bits was the maximum pointer size, but the game
+exhibits this same behavior in wine even when the windows version is
+set to 8+.  This is probably not an issue on Windows, as the allocator
+may return a much lower address.
+---
+ dlls/ntdll/virtual.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/dlls/ntdll/virtual.c b/dlls/ntdll/virtual.c
+index 181dffe42e..437aef099e 100644
+--- a/dlls/ntdll/virtual.c
++++ b/dlls/ntdll/virtual.c
+@@ -132,7 +132,7 @@ static void *address_space_start = (void *)0x110000;    /* keep DOS area clear *
+ static const UINT page_shift = 12;
+ static const UINT_PTR page_mask = 0xfff;
+ static void *address_space_limit = (void *)0x7fffffff0000;
+-static void *user_space_limit    = (void *)0x7fffffff0000;
++static void *user_space_limit    = (void *)0x7ffffff0000;
+ static void *working_set_limit   = (void *)0x7fffffff0000;
+ static void *address_space_start = (void *)0x10000;
+ #else
+@@ -2625,6 +2625,7 @@ void virtual_set_large_address_space(BOOL force_large_address)
+ {
+     IMAGE_NT_HEADERS *nt = RtlImageNtHeader( NtCurrentTeb()->Peb->ImageBaseAddress );
+ 
++    if (is_win64) return;
+     if (!(nt->FileHeader.Characteristics & IMAGE_FILE_LARGE_ADDRESS_AWARE) && !force_large_address) return;
+ 
+     /* no large address space on win9x */
+-- 
+2.23.0
+
+From: Derek Lesho <dlesho@codeweavers.com>
+Subject: [PATCH] ntdll: Only call wine handlers if they're in the same stack.
+Message-Id: <20191002154547.878669-1-dlesho@codeweavers.com>
+Date: Wed,  2 Oct 2019 10:45:47 -0500
+
+In Mortal Kombat 11, the game creates its own stack, with an address higher
+than the default wine stack.  Because of this, when we unwind a C++ exception,
+we assume we are inside a wine frame, and we crash trying to unwind to it.
+
+Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
+---
+ dlls/ntdll/signal_x86_64.c | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
+
+diff --git a/dlls/ntdll/signal_x86_64.c b/dlls/ntdll/signal_x86_64.c
+index 427a4a0e05..8d6f351f4b 100644
+--- a/dlls/ntdll/signal_x86_64.c
++++ b/dlls/ntdll/signal_x86_64.c
+@@ -2427,12 +2427,21 @@ static NTSTATUS call_stack_handlers( EXCEPTION_RECORD *rec, CONTEXT *orig_contex
+     UNWIND_HISTORY_TABLE table;
+     DISPATCHER_CONTEXT dispatch;
+     CONTEXT context;
++    MEMORY_BASIC_INFORMATION wine_frame_stack_info, current_stack_info;
++    int is_teb_frame_in_current_stack = 1;
+     NTSTATUS status;
+ 
+     context = *orig_context;
+     dispatch.TargetIp      = 0;
+     dispatch.ContextRecord = &context;
+     dispatch.HistoryTable  = &table;
++
++    if ( !(NtQueryVirtualMemory(NtCurrentProcess(), teb_frame, MemoryBasicInformation, &wine_frame_stack_info, sizeof(MEMORY_BASIC_INFORMATION), NULL)) &&
++         !(NtQueryVirtualMemory(NtCurrentProcess(), (PVOID)context.Rsp, MemoryBasicInformation, &current_stack_info, sizeof(MEMORY_BASIC_INFORMATION), NULL)))
++    {
++        is_teb_frame_in_current_stack = wine_frame_stack_info.AllocationBase == current_stack_info.AllocationBase;
++    }
++
+     for (;;)
+     {
+         status = virtual_unwind( UNW_FLAG_EHANDLER, &dispatch, &context );
+@@ -2478,7 +2487,7 @@ static NTSTATUS call_stack_handlers( EXCEPTION_RECORD *rec, CONTEXT *orig_contex
+             }
+         }
+         /* hack: call wine handlers registered in the tib list */
+-        else while ((ULONG64)teb_frame < context.Rsp)
++        else if (is_teb_frame_in_current_stack) while ((ULONG64)teb_frame < context.Rsp)
+         {
+             TRACE( "found wine frame %p rsp %lx handler %p\n",
+                     teb_frame, context.Rsp, teb_frame->Handler );
+
+-- 
+2.23.0
+ 

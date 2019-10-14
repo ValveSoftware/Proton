@@ -33,16 +33,15 @@ index 96d29375..8fe29c49 100644
  
      // Find out if the render target view is currently bound,
      // so that we can avoid spilling the render pass if it is.
-@@ -3499,7 +3499,8 @@ namespace dxvk {
-       // Retrieve and bind actual Vulkan pipeline handle
-       m_gpActivePipeline = m_state.gp.pipeline != nullptr && m_state.om.framebuffer != nullptr
-         ? m_state.gp.pipeline->getPipelineHandle(m_state.gp.state,
--            m_state.om.framebuffer->getRenderPass())
-+            m_state.om.framebuffer->getRenderPass(),
-+            this->checkAsyncCompilationCompat())
-         : VK_NULL_HANDLE;
-       
-       if (m_gpActivePipeline != VK_NULL_HANDLE) {
+@@ -3658,7 +3658,7 @@ namespace dxvk {
+       : DxvkContextFlag::GpDirtyStencilRef);
+     
+     // Retrieve and bind actual Vulkan pipeline handle
+-    m_gpActivePipeline = m_state.gp.pipeline->getPipelineHandle(m_state.gp.state, m_state.om.framebuffer->getRenderPass());
++    m_gpActivePipeline = m_state.gp.pipeline->getPipelineHandle(m_state.gp.state, m_state.om.framebuffer->getRenderPass(),this->checkAsyncCompilationCompat());
+ 
+     if (unlikely(!m_gpActivePipeline))
+       return false;
 @@ -3766,7 +3767,7 @@ namespace dxvk {
    }
    
@@ -102,15 +101,15 @@ index bb5b8a6f..ec456c78 100644
      
      void updateIndexBufferBinding();
      void updateVertexBufferBindings();
-@@ -1151,6 +1151,7 @@ namespace dxvk {
+@@ -1183,6 +1183,8 @@ namespace dxvk {
  
      void trackDrawBuffer();
-     
+ 
 +    bool checkAsyncCompilationCompat();
-   };
-   
- }
-\ No newline at end of file
++
+     DxvkGraphicsPipeline* lookupGraphicsPipeline(
+       const DxvkGraphicsPipelineShaders&  shaders);
+ 
 diff --git a/src/dxvk/dxvk_framebuffer.h b/src/dxvk/dxvk_framebuffer.h
 index 5e4038b0..cba2d274 100644
 --- a/src/dxvk/dxvk_framebuffer.h

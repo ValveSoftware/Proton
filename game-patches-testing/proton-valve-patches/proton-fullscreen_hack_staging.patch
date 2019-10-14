@@ -2566,9 +2566,9 @@ index 1209a250b0..077c18ac10 100644
      RECT virtual_rect;
      INPUT input;
 +    POINT pt;
-     RAWINPUT raw_input;
      int i;
-     double dx = 0, dy = 0, raw_dx = 0, raw_dy = 0, raw_dwheel = 0, val, raw_val;
+     double dx = 0, dy = 0, val;
+     struct x11drv_thread_data *thread_data = x11drv_thread_data();
 @@ -1813,6 +1861,12 @@ static BOOL X11DRV_RawMotion( XGenericEventCookie *xev )
          return FALSE;
      }
@@ -2579,9 +2579,9 @@ index 1209a250b0..077c18ac10 100644
 +    input.u.mi.dx = pt.x;
 +    input.u.mi.dy = pt.y;
 +
-     /* Accumulate the fractional parts so they aren't lost after casting
-      *  successive motion values to integral fields.
-      *
+     TRACE( "pos %d,%d (event %f,%f)\n", input.u.mi.dx, input.u.mi.dy, dx, dy );
+ 
+     input.type = INPUT_MOUSE;
 diff --git a/dlls/winex11.drv/opengl.c b/dlls/winex11.drv/opengl.c
 index 9de3ded4af..10e39dd43f 100644
 --- a/dlls/winex11.drv/opengl.c
@@ -4098,7 +4098,7 @@ index 08ca698f533..f0c4347f723 100644
 +void set_wm_hints( struct x11drv_win_data *data )
  {
      DWORD style, ex_style;
- 
+
 diff --git a/dlls/winex11.drv/x11drv.h b/dlls/winex11.drv/x11drv.h
 index a9e7934be15..21b115318c2 100644
 --- a/dlls/winex11.drv/x11drv.h
@@ -4106,7 +4106,7 @@ index a9e7934be15..21b115318c2 100644
 @@ -603,6 +603,7 @@ extern void update_systray_balloon_position(void) DECLSPEC_HIDDEN;
  extern HWND create_foreign_window( Display *display, Window window ) DECLSPEC_HIDDEN;
  extern BOOL update_clipboard( HWND hwnd ) DECLSPEC_HIDDEN;
- 
+
 +extern void set_wm_hints( struct x11drv_win_data *data ) DECLSPEC_HIDDEN;
  extern BOOL fs_hack_enabled(void) DECLSPEC_HIDDEN;
  extern BOOL fs_hack_matches_current_mode(int w, int h) DECLSPEC_HIDDEN;
@@ -4567,7 +4567,7 @@ index 23be3e56ac7..a20342c9d05 100644
      if (!clipping_cursor)
      {
 +        ERR("Failed to grab pointer\n");
-         disable_xinput2_path();
+         disable_xinput2();
          DestroyWindow( msg_hwnd );
          return FALSE;
 
@@ -4687,7 +4687,7 @@ index 21cb4ac835c..3b3a43fb29d 100644
 @@ -738,6 +738,13 @@ static void set_size_hints( struct x11drv_win_data *data, DWORD style )
      XFree( size_hints );
  }
- 
+
 +static Bool is_unmap_notify( Display *display, XEvent *event, XPointer arg )
 +{
 +    struct x11drv_win_data *data = (struct x11drv_win_data *)arg;
@@ -4695,7 +4695,7 @@ index 21cb4ac835c..3b3a43fb29d 100644
 +           event->xany.window == data->whole_window &&
 +           event->type == UnmapNotify;
 +}
- 
+
  /***********************************************************************
   *              set_mwm_hints
 @@ -745,6 +752,7 @@ static void set_size_hints( struct x11drv_win_data *data, DWORD style )
@@ -4703,13 +4703,13 @@ index 21cb4ac835c..3b3a43fb29d 100644
  {
      MwmHints mwm_hints;
 +    int enable_mutter_workaround, mapped;
- 
+
      if (data->hwnd == GetDesktopWindow())
      {
 @@ -775,16 +783,43 @@ static void set_mwm_hints( struct x11drv_win_data *data, DWORD style, DWORD ex_s
      TRACE( "%p setting mwm hints to %lx,%lx (style %x exstyle %x)\n",
             data->hwnd, mwm_hints.decorations, mwm_hints.functions, style, ex_style );
- 
+
 +    enable_mutter_workaround = wm_is_mutter(data->display) && GetFocus() == data->hwnd &&
 +                               !!data->prev_hints.decorations != !!mwm_hints.decorations;
 +
@@ -4732,7 +4732,7 @@ index 21cb4ac835c..3b3a43fb29d 100644
      XChangeProperty( data->display, data->whole_window, x11drv_atom(_MOTIF_WM_HINTS),
                       x11drv_atom(_MOTIF_WM_HINTS), 32, PropModeReplace,
                       (unsigned char*)&mwm_hints, sizeof(mwm_hints)/sizeof(long) );
- 
+
 -    if (wm_is_mutter(data->display) && GetFocus() == data->hwnd &&
 -            !!data->prev_hints.decorations != !!mwm_hints.decorations)
 +    if (enable_mutter_workaround)
@@ -4794,7 +4794,7 @@ index 9a5a6f72ca7..442cd956615 100644
 @@ -1425,6 +1425,19 @@ static BOOL X11DRV_PropertyNotify( HWND hwnd, XEvent *xev )
          XFree(name);
      }
- 
+
 +    if (event->atom == x11drv_atom(_NET_WM_BYPASS_COMPOSITOR))
 +    {
 +        struct x11drv_win_data *data = get_win_data( hwnd );
@@ -4818,7 +4818,7 @@ index 3b3a43fb29d..444f5752f73 100644
 @@ -754,6 +754,33 @@ static void set_mwm_hints( struct x11drv_win_data *data, DWORD style, DWORD ex_s
      MwmHints mwm_hints;
      int enable_mutter_workaround, mapped;
- 
+
 +    /* workaround for mutter gitlab bug #676, changing decorations of a
 +     * fullscreen and unredirected window freezes the compositing.
 +     * The window style will be updated again once the window has returned
@@ -4870,11 +4870,11 @@ index 2ab2cc8fee6..ac0a8b73d8a 100644
 +++ b/dlls/winex11.drv/window.c
 @@ -811,7 +811,8 @@ static void set_mwm_hints( struct x11drv_win_data *data, DWORD style, DWORD ex_s
             data->hwnd, mwm_hints.decorations, mwm_hints.functions, style, ex_style );
- 
+
      enable_mutter_workaround = wm_is_mutter(data->display) && GetFocus() == data->hwnd &&
 -                               !!data->prev_hints.decorations != !!mwm_hints.decorations;
 +                               !!data->prev_hints.decorations != !!mwm_hints.decorations &&
 +                               root_window == DefaultRootWindow(data->display);
- 
+
      /* workaround for mutter gitlab bug #649, we cannot trust the
       * data->mapped flag as mapping is asynchronous.
