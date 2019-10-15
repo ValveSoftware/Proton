@@ -38,10 +38,6 @@ end
 puts "Platform: " + cpus.to_s + " CPUs, " + memory.to_s + " MB memory"
 
 Vagrant.configure(2) do |config|
-  #libvirt doesn't have a decent synced folder, so we have to use vagrant-sshfs.
-  #This is not needed for virtualbox, but I couldn't find a way to use a
-  #different synced folder type per provider, so we always use it.
-  config.vagrant.plugins = "vagrant-sshfs"
 
   config.vm.box = "generic/debian9"
 
@@ -50,14 +46,7 @@ Vagrant.configure(2) do |config|
     v.memory = memory
   end
 
-  config.vm.provider "libvirt" do |v|
-    v.cpus = cpus
-    v.memory = memory
-    v.random_hostname = true
-    v.default_prefix = ENV['USER'].to_s.dup.concat('_').concat(File.basename(Dir.pwd))
-  end
-
-  config.vm.synced_folder "./vagrant_share/", "/vagrant/", create: true, type: "sshfs", sshfs_opts_append: "-o cache=no"
+  config.vm.synced_folder "./vagrant_share/", "/vagrant/", id: "share", create: true
   config.vm.synced_folder ".", "/home/vagrant/proton", id: "proton", type: "rsync", rsync__exclude: ["vagrant_share"]
 
   #this is where the VM is initialized on first setup
