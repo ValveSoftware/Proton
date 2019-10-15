@@ -67,6 +67,9 @@
     echo "sword art online"
     patch -Np1 < ../game-patches-testing/game-patches/sword-art-online-gnutls.patch
 
+    echo "gta v launcher fix"
+    patch -Np1 < ../game-patches-testing/game-patches/gtav-launcher.patch
+
     echo "steam crossover patch"
     patch -Np1 < ../game-patches-testing/game-patches/steam-crossover.patch
 

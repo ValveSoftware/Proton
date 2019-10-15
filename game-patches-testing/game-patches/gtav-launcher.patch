@@ -1,0 +1,102 @@
+From a9a93e69b5e5d9cb5aeed6e03ed6adda506ba282 Mon Sep 17 00:00:00 2001
+From: Brendan Shanks <bshanks@codeweavers.com>
+Date: Fri, 27 Sep 2019 15:20:48 -0700
+Subject: [PATCH] server: Don't block when reading from named pipes in
+ non-blocking mode
+
+---
+ server/named_pipe.c | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/server/named_pipe.c b/server/named_pipe.c
+index 2827f982582..56b02de0756 100644
+--- a/server/named_pipe.c
++++ b/server/named_pipe.c
+@@ -861,6 +861,11 @@ static int pipe_end_read( struct fd *fd, struct async *async, file_pos_t pos )
+     switch (pipe_end->state)
+     {
+     case FILE_PIPE_CONNECTED_STATE:
++        if ((pipe_end->flags & NAMED_PIPE_NONBLOCKING_MODE) && list_empty( &pipe_end->message_queue ))
++        {
++            set_error( STATUS_PIPE_EMPTY );
++            return 0;
++        }
+         break;
+     case FILE_PIPE_DISCONNECTED_STATE:
+         set_error( STATUS_PIPE_DISCONNECTED );
+From e1c3bafed37df7da8fa35f47b7b0674696be04f3 Mon Sep 17 00:00:00 2001
+From: Brendan Shanks <bshanks@codeweavers.com>
+Date: Thu, 26 Sep 2019 23:13:22 -0700
+Subject: [PATCH] wmic: Output in ASCII using fwprintf
+
+---
+ programs/wmic/main.c | 33 ++++++++-------------------------
+ 1 file changed, 8 insertions(+), 25 deletions(-)
+
+diff --git a/programs/wmic/main.c b/programs/wmic/main.c
+index e20b1f8c107..9b0f8405e87 100644
+--- a/programs/wmic/main.c
++++ b/programs/wmic/main.c
+@@ -120,21 +120,16 @@ static WCHAR *find_prop( IWbemClassObject *class, const WCHAR *prop )
+     return ret;
+ }
+ 
+-static int WINAPIV output_string( HANDLE handle, const WCHAR *msg, ... )
++static int WINAPIV output_string( FILE *stream, const WCHAR *msg, ... )
+ {
+     __ms_va_list va_args;
+     int len;
+-    DWORD count;
+-    WCHAR buffer[8192];
+ 
+     __ms_va_start( va_args, msg );
+-    len = vswprintf( buffer, ARRAY_SIZE(buffer), msg, va_args );
++    len = vfwprintf( stream, msg, va_args );
+     __ms_va_end( va_args );
+ 
+-    if (!WriteConsoleW( handle, buffer, len, &count, NULL ))
+-        WriteFile( handle, buffer, len * sizeof(WCHAR), &count, FALSE );
+-
+-    return count;
++    return len;
+ }
+ 
+ static int output_error( int msg )
+@@ -143,32 +138,20 @@ static int output_error( int msg )
+     WCHAR buffer[8192];
+ 
+     LoadStringW( GetModuleHandleW(NULL), msg, buffer, ARRAY_SIZE(buffer));
+-    return output_string( GetStdHandle(STD_ERROR_HANDLE), fmtW, buffer );
++    return output_string( stderr, fmtW, buffer );
+ }
+ 
+ static int output_header( const WCHAR *prop, ULONG column_width )
+ {
+-    static const WCHAR bomW[] = {0xfeff}, fmtW[] = {'%','-','*','s','\r','\n',0};
+-    int len;
+-    DWORD count;
+-    WCHAR buffer[8192];
+-
+-    len = swprintf( buffer, ARRAY_SIZE(buffer), fmtW, column_width, prop );
+-
+-    if (!WriteConsoleW( GetStdHandle(STD_OUTPUT_HANDLE), buffer, len, &count, NULL )) /* redirected */
+-    {
+-        WriteFile( GetStdHandle(STD_OUTPUT_HANDLE), bomW, sizeof(bomW), &count, FALSE );
+-        WriteFile( GetStdHandle(STD_OUTPUT_HANDLE), buffer, len * sizeof(WCHAR), &count, FALSE );
+-        count += sizeof(bomW);
+-    }
++    static const WCHAR fmtW[] = {'%','-','*','s','\r','\n',0};
+ 
+-    return count;
++    return fwprintf( stdout, fmtW, column_width, prop );
+ }
+ 
+ static int output_line( const WCHAR *str, ULONG column_width )
+ {
+-    static const WCHAR fmtW[] = {'%','-','*','s','\r','\n',0};
+-    return output_string( GetStdHandle(STD_OUTPUT_HANDLE), fmtW, column_width, str );
++    static const WCHAR fmtW[] = {'%','-','*','s','\r','\n','\r','\n',0};
++    return output_string( stdout, fmtW, column_width, str );
+ }
+ 
+ static int query_prop( const WCHAR *class, const WCHAR *propname )
