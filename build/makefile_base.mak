@@ -267,6 +267,7 @@ BISON_OBJ64 := ./obj-bison64
 BISON_BIN32 := $(BISON_OBJ32)/built/bin/bison
 BISON_BIN64 := $(BISON_OBJ64)/built/bin/bison
 
+
 FONTS := $(SRCDIR)/fonts
 FONTS_OBJ := ./obj-fonts
 
@@ -289,6 +290,7 @@ OBJ_DIRS := $(TOOLS_DIR32)        $(TOOLS_DIR64)        \
 
 $(OBJ_DIRS):
 	mkdir -p $@
+
 
 ## downloads -- Convenience target to download packages used during the build
 ## process. Places them in subdirs one up from the Proton source dir, so
@@ -345,15 +347,11 @@ $(PROTON_PY_TARGET): $(addprefix $(SRCDIR)/,proton)
 PROTON37_TRACKED_FILES_TARGET := $(addprefix $(DST_BASE)/,proton_3.7_tracked_files)
 $(PROTON37_TRACKED_FILES_TARGET): $(addprefix $(SRCDIR)/,proton_3.7_tracked_files)
 
-USER_SETTINGS_SAMPLE_PY_TARGET := $(addprefix $(DST_BASE)/,user_settings.sample.py)
-$(USER_SETTINGS_SAMPLE_TARGET): $(addprefix $(SRCDIR)/,user_settings.sample.py)
-
-PROTONFIXES_TARGET := $(addprefix $(DST_BASE)/,protonfixes)
-$(PROTONFIXES_TARGET): $(addprefix $(SRCDIR)/,protonfixes)
+USER_SETTINGS_PY_TARGET := $(addprefix $(DST_BASE)/,user_settings.sample.py)
+$(USER_SETTINGS_PY_TARGET): $(addprefix $(SRCDIR)/,user_settings.sample.py)
 
 DIST_COPY_TARGETS := $(TOOLMANIFEST_TARGET) $(FILELOCK_TARGET) $(PROTON_PY_TARGET) \
-                     $(PROTON37_TRACKED_FILES_TARGET) $(USER_SETTINGS_PY_TARGET) \
-                     $(USER_SETTINGS_SAMPLE_PY_TARGET) $(PROTONFIXES_TARGET) \
+                     $(PROTON37_TRACKED_FILES_TARGET) $(USER_SETTINGS_PY_TARGET)
 
 DIST_VERSION := $(DST_DIR)/version
 DIST_OVR32 := $(DST_DIR)/lib/wine/dxvk/openvr_api_dxvk.dll
@@ -401,7 +399,7 @@ $(DIST_GECKO64): | $(DIST_GECKO_DIR)
 		mkdir -p $(SRCDIR)/contrib/; \
 		if [ ! -e "$(SRCDIR)/contrib/$(GECKO64_MSI)" ]; then \
 			echo ">>>> Downloading wine-gecko. To avoid this in future, put it here: $(SRCDIR)/../gecko/$(GECKO64_MSI)"; \
-			wget -O "$(SRCDIR)/contrib/$(GECKO64_MSI)" "https://dl.winehq.org/wine/wine-gecko/$(GECKO_VER)/$(GECKO64_MSI)"; \
+			wget -O "$(SRCDIR)/contrib/$(GECKO64_MSI)" "$(GECKO64_MSI_URL)"; \
 		fi; \
 		cp "$(SRCDIR)/contrib/$(GECKO64_MSI)" "$@"; \
 	fi
@@ -413,7 +411,7 @@ $(DIST_GECKO32): | $(DIST_GECKO_DIR)
 		mkdir -p $(SRCDIR)/contrib/; \
 		if [ ! -e "$(SRCDIR)/contrib/$(GECKO32_MSI)" ]; then \
 			echo ">>>> Downloading wine-gecko. To avoid this in future, put it here: $(SRCDIR)/../gecko/$(GECKO32_MSI)"; \
-			wget -O "$(SRCDIR)/contrib/$(GECKO32_MSI)" "https://dl.winehq.org/wine/wine-gecko/$(GECKO_VER)/$(GECKO32_MSI)"; \
+			wget -O "$(SRCDIR)/contrib/$(GECKO32_MSI)" "$(GECKO32_MSI_URL)"; \
 		fi; \
 		cp "$(SRCDIR)/contrib/$(GECKO32_MSI)" "$@"; \
 	fi
@@ -428,7 +426,7 @@ $(DIST_WINEMONO): | $(DIST_WINEMONO_DIR)
 		mkdir -p $(SRCDIR)/contrib/; \
 		if [ ! -e "$(SRCDIR)/contrib/$(WINEMONO_TARBALL)" ]; then \
 			echo ">>>> Downloading wine-mono. To avoid this in future, put it here: $(SRCDIR)/../mono/$(WINEMONO_TARBALL)"; \
-			wget -O "$(SRCDIR)/contrib/$(WINEMONO_TARBALL)" "https://github.com/madewokherd/wine-mono/releases/download/wine-mono-$(WINEMONO_VER)/$(WINEMONO_TARBALL)"; \
+			wget -O "$(SRCDIR)/contrib/$(WINEMONO_TARBALL)" "$(MONO_TARBALL_URL)"; \
 		fi; \
 		tar -xf "$(SRCDIR)/contrib/$(WINEMONO_TARBALL)" -C "$(dir $@)"; \
 	fi
@@ -437,6 +435,7 @@ $(DIST_WINEMONO): | $(DIST_WINEMONO_DIR)
 $(DIST_FONTS): fonts
 	mkdir -p $@
 	cp $(FONTS_OBJ)/*.ttf "$@"
+	cp $(FONTS_OBJ)/*.otf "$@"
 
 .PHONY: dist
 
@@ -452,10 +451,12 @@ dist: $(DIST_TARGETS) ffmpeg wine vrclient lsteamclient steam dxvk d9vk | $(DST_
 		ln -s $(FONTLINKPATH)/LiberationSans-Regular.ttf $(abspath $(DIST_PREFIX))/drive_c/windows/Fonts/arial.ttf && \
 		ln -s $(FONTLINKPATH)/LiberationSans-Bold.ttf $(abspath $(DIST_PREFIX))/drive_c/windows/Fonts/arialbd.ttf && \
 		ln -s $(FONTLINKPATH)/LiberationSerif-Regular.ttf $(abspath $(DIST_PREFIX))/drive_c/windows/Fonts/times.ttf && \
-		ln -s $(FONTLINKPATH)/LiberationMono-Regular.ttf $(abspath $(DIST_PREFIX))/drive_c/windows/Fonts/cour.ttf
+		ln -s $(FONTLINKPATH)/LiberationMono-Regular.ttf $(abspath $(DIST_PREFIX))/drive_c/windows/Fonts/cour.ttf && \
+		ln -s $(FONTLINKPATH)/SourceHanSansSCRegular.otf $(abspath $(DIST_PREFIX))/drive_c/windows/Fonts/msyh.ttf
 #The use of "arial" here is for compatibility with programs that require that exact string. These links do not point to Arial.
 #The use of "times" here is for compatibility with programs that require that exact string. This link does not point to Times New Roman.
 #The use of "cour" here is for compatibility with programs that require that exact string. This link does not point to Courier New.
+#The use of "msyh" here is for compatibility with programs that require that exact string. This link does not point to Microsoft YaHei.
 
 deploy: dist | $(filter-out dist deploy install,$(MAKECMDGOALS))
 	mkdir -p $(DEPLOY_DIR) && \
@@ -466,7 +467,7 @@ deploy: dist | $(filter-out dist deploy install,$(MAKECMDGOALS))
 install: dist | $(filter-out dist deploy install,$(MAKECMDGOALS))
 	if [ ! -d $(STEAM_DIR) ]; then echo >&2 "!! "$(STEAM_DIR)" does not exist, cannot install"; return 1; fi
 	mkdir -p $(STEAM_DIR)/compatibilitytools.d/$(BUILD_NAME)
-	cp -a $(DST_BASE)/* $(STEAM_DIR)/compatibilitytools.d/$(BUILD_NAME)
+	cp -r $(DST_BASE)/* $(STEAM_DIR)/compatibilitytools.d/$(BUILD_NAME)
 	@echo "Installed Proton to "$(STEAM_DIR)/compatibilitytools.d/$(BUILD_NAME)
 	@echo "You may need to restart Steam to select this tool"
 
@@ -1044,6 +1045,7 @@ cmake32-intermediate: $(CMAKE_CONFIGURE_FILES32) $(filter $(MAKECMDGOALS),cmake3
 	+$(MAKE) -C $(CMAKE_OBJ32)
 	+$(MAKE) -C $(CMAKE_OBJ32) install
 	touch $(CMAKE_BIN32)
+
 ##
 ## bison -- necessary for wine, steam runtime version too old
 ##
@@ -1383,16 +1385,25 @@ FONTSCRIPT = $(FONTS)/scripts/generatefont.pe
 FONTLINKPATH = ../../../../fonts
 
 LIBERATION_SRCDIR = $(FONTS)/liberation-fonts/src
+SOURCE_HAN_SANS_SRCDIR =$(FONTS)/source-han-sans
 
 LIBERATION_SANS_REGULAR_SFD = LiberationSans-Regular.sfd
 LIBERATION_SANS_BOLD_SFD = LiberationSans-Bold.sfd
 LIBERATION_SERIF_REGULAR_SFD = LiberationSerif-Regular.sfd
 LIBERATION_MONO_REGULAR_SFD = LiberationMono-Regular.sfd
 
+SOURCE_HAN_SANS_REGULAR_CIDFONTINFO = $(SOURCE_HAN_SANS_SRCDIR)/cidfontinfo.OTC.SC
+SOURCE_HAN_SANS_REGULAR_CIDFONT = $(SOURCE_HAN_SANS_SRCDIR)/cidfont.ps.OTC.SC
+SOURCE_HAN_SANS_REGULAR_FEATURES = $(SOURCE_HAN_SANS_SRCDIR)/features.OTC.SC
+SOURCE_HAN_SANS_REGULAR_SEQUENCES = $(SOURCE_HAN_SANS_SRCDIR)/SourceHanSans_CN_sequences.txt
+SOURCE_HAN_SANS_REGULAR_UNISOURCE = $(SOURCE_HAN_SANS_SRCDIR)/UniSourceHanSansCN-UTF32-H
+YAHEI_MENUNAMEDB = $(FONTS)/patches/YaHei-FontMenuNameDB
+
 LIBERATION_SANS_REGULAR_TTF = $(addprefix $(FONTS_OBJ)/, $(LIBERATION_SANS_REGULAR_SFD:.sfd=.ttf))
 LIBERATION_SANS_BOLD_TTF = $(addprefix $(FONTS_OBJ)/, $(LIBERATION_SANS_BOLD_SFD:.sfd=.ttf))
 LIBERATION_SERIF_REGULAR_TTF = $(addprefix $(FONTS_OBJ)/, $(LIBERATION_SERIF_REGULAR_SFD:.sfd=.ttf))
 LIBERATION_MONO_REGULAR_TTF = $(addprefix $(FONTS_OBJ)/, $(LIBERATION_MONO_REGULAR_SFD:.sfd=.ttf))
+SOURCE_HAN_SANS_REGULAR_OTF = $(FONTS_OBJ)/SourceHanSansSCRegular.otf
 
 LIBERATION_SFDS = $(LIBERATION_SANS_REGULAR_SFD) $(LIBERATION_SANS_BOLD_SFD) $(LIBERATION_SERIF_REGULAR_SFD) $(LIBERATION_MONO_REGULAR_SFD)
 FONT_TTFS = $(LIBERATION_SANS_REGULAR_TTF) $(LIBERATION_SANS_BOLD_TTF) \
@@ -1416,6 +1427,15 @@ $(LIBERATION_MONO_REGULAR_TTF): $(FONTS_SRC) $(FONTSCRIPT)
 	patch $(@:.ttf=.sfd) $(FONTS)/patches/$(LIBERATION_MONO_REGULAR_SFD:.sfd=.patch)
 	$(FONTFORGE) -script $(FONTSCRIPT) $(@:.ttf=.sfd) "CourierNew" "Courier New" "Courier New"
 
+#The use of "YaHei" for compatibility with programs that require that exact string. This font is not Microsoft YaHei.
+$(SOURCE_HAN_SANS_REGULAR_OTF): $(SOURCE_HAN_SANS_REGULAR_CIDFONTINFO) $(SOURCE_HAN_SANS_REGULAR_CIDFONT) \
+		$(SOURCE_HAN_SANS_REGULAR_FEATURES) $(SOURCE_HAN_SANS_REGULAR_SEQUENCES) $(SOURCE_HAN_SANS_REGULAR_UNISOURCE) $(YAHEI_MENUNAMEDB)
+	makeotf -f $(SOURCE_HAN_SANS_REGULAR_CIDFONT) -omitMacNames -ff $(SOURCE_HAN_SANS_REGULAR_FEATURES) \
+		-fi $(SOURCE_HAN_SANS_REGULAR_CIDFONTINFO) -mf $(YAHEI_MENUNAMEDB) -r -nS -cs 25 -ch $(SOURCE_HAN_SANS_REGULAR_UNISOURCE) \
+		-ci $(SOURCE_HAN_SANS_REGULAR_SEQUENCES) -o $(SOURCE_HAN_SANS_REGULAR_OTF)
+	tx -cff +S -no_futile $(SOURCE_HAN_SANS_REGULAR_CIDFONT) $(FONTS_OBJ)/CFF.OTC.SC
+	sfntedit -a CFF=$(FONTS_OBJ)/CFF.OTC.SC $(SOURCE_HAN_SANS_REGULAR_OTF)
+
 $(FONTS_OBJ):
 	mkdir -p $@
 
@@ -1423,7 +1443,8 @@ $(FONTS_SRC): $(FONTS_OBJ)
 	cp -n $(addprefix $(LIBERATION_SRCDIR)/, $(LIBERATION_SFDS)) $<
 
 fonts: $(LIBERATION_SANS_REGULAR_TTF) $(LIBERATION_SANS_BOLD_TTF) \
-       $(LIBERATION_SERIF_REGULAR_TTF) $(LIBERATION_MONO_REGULAR_TTF) | $(FONTS_SRC)
+       $(LIBERATION_SERIF_REGULAR_TTF) $(LIBERATION_MONO_REGULAR_TTF) \
+       $(SOURCE_HAN_SANS_REGULAR_OTF) | $(FONTS_SRC)
 
 ##
 ## Targets

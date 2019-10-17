@@ -18,10 +18,10 @@ index 96d1e0b850..423d47bd24 100644
  };
  static const struct column col_stdregprov[] =
  {
-@@ -933,6 +934,10 @@ static const WCHAR quickfixengineering_captionW[] =
-     {'h','t','t','p',':','/','/','w','i','n','e','h','q','.','o','r','g',0};
- static const WCHAR quickfixengineering_hotfixidW[] =
-     {'K','B','1','2','3','4','5','6','7',0};
+@@ -921,6 +921,10 @@ static const WCHAR os_serialnumberW[] =
+     {'1','2','3','4','5','-','O','E','M','-','1','2','3','4','5','6','7','-','1','2','3','4','5',0};
+ static const WCHAR physicalmedia_tagW[] =
+     {'\\','\\','.','\\','P','H','Y','S','I','C','A','L','D','R','I','V','E','0',0};
 +static const WCHAR physicalmemory_partnumberW[] =
 +    {'B','L','S','8','G','3','D','1','6','0','9','D','S','1','S','0','0','.',0};
 +static const WCHAR sounddevice_manufacturerW[] =

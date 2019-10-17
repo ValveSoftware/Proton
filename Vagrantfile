@@ -69,8 +69,11 @@ Vagrant.configure(2) do |config|
 
     #install host build-time dependencies
     apt-get update
-    apt-get install -y gpgv2 gnupg2 g++ g++-6-multilib git docker-ce fontforge-nox python-debian schroot
+    apt-get install -y gpgv2 gnupg2 g++ g++-6-multilib git docker-ce fontforge-nox python-debian schroot python-pip
     apt-get -y -t stretch-backports install meson
+
+    #install adobe font devkit to build source san hans
+    pip install afdko
 
     #winehq-devel is installed to pull in dependencies to run Wine
     apt-get install -y --install-recommends winehq-devel
