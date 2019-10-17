@@ -33,9 +33,6 @@
     # https://bugs.winehq.org/show_bug.cgi?id=45774
     git revert --no-commit 6ccb94392a8ef4bca701ae2a560f4ea1da677edd
 
-    # https://bugs.winehq.org/show_bug.cgi?id=47912
-    git revert --no-commit 9839bb7691a1b1c57a4ca501d03825420c1609d7
-
     #WINE STAGING
     echo "applying staging patches"
     ../wine-staging/patches/patchinstall.sh DESTDIR="." --all \
@@ -55,7 +52,6 @@
     -W winex11-Window_Style \
     -W winex11-WM_WINDOWPOSCHANGING \
     -W winex11-XEMBED \
-    -W user32-rawinput \
     -W dinput-SetActionMap-genre \
     -W dinput-axis-recalc \
     -W dinput-joy-mappings \
@@ -84,7 +80,7 @@
     echo "sword art online"
     patch -Np1 < ../game-patches-testing/game-patches/sword-art-online-gnutls.patch
 
-    echo "gta v launcher fix #2"
+    echo "gta v launcher fix"
     patch -Np1 < ../game-patches-testing/game-patches/gtav-launcher.patch
 
     echo "steam crossover patch"
@@ -99,9 +95,8 @@
     #PROTON
     echo "applying proton patches"
     #only use these 3 in 4.18+ build
-    #patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-protonify_prepatch.patch
-    #patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-kernelbase_reverts.patch
-    #patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-protonify_staging_rpc.patch
+    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-kernelbase_reverts.patch
+    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-protonify_staging_rpc.patch
 
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-protonify_staging.patch
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-LAA_staging.patch

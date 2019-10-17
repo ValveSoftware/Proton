@@ -151,14 +151,14 @@ These APIs don't work yet anyway, so this avoids a crash.
  1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/dlls/mf/session.c b/dlls/mf/session.c
-index c1daef3a91..8984b90ffe 100644
+index c43e6d2838b..f35106b505b 100644
 --- a/dlls/mf/session.c
 +++ b/dlls/mf/session.c
-@@ -448,9 +448,9 @@ static HRESULT WINAPI mfsession_BeginGetEvent(IMFMediaSession *iface, IMFAsyncCa
+@@ -335,9 +335,9 @@ static HRESULT WINAPI mfsession_BeginGetEvent(IMFMediaSession *iface, IMFAsyncCa
  {
      struct media_session *session = impl_from_IMFMediaSession(iface);
  
--    TRACE("(%p)->(%p, %p)\n", iface, callback, state);
+-    TRACE("%p, %p, %p.\n", iface, callback, state);
 +    FIXME("%p, %p, %p.\n", iface, callback, state);
  
 -    return IMFMediaEventQueue_BeginGetEvent(session->event_queue, callback, state);
@@ -166,3 +166,4 @@ index c1daef3a91..8984b90ffe 100644
  }
  
  static HRESULT WINAPI mfsession_EndGetEvent(IMFMediaSession *iface, IMFAsyncResult *result, IMFMediaEvent **event)
+

@@ -1,0 +1,95 @@
+From 22993aff94ad4b3539ed99648f8180cfc7b9253c Mon Sep 17 00:00:00 2001
+From: Zebediah Figura <z.figura12@gmail.com>
+Date: Wed, 18 Sep 2019 21:44:19 -0500
+Subject: [PATCH] winex11: Track the client colormap separately.
+
+If a window with an OpenGL surface attached is reparented as a child window,
+and then reparented as a top-level window, so that its whole window is
+destroyed and then recreated, it will be recreated with the colormap of its
+child window, which more than likely has a different visual. This violates
+the X11 specification, which states that a window's colormap must have the
+same visual as the window itself, and causes the X server to return BadMatch
+to the CreateWindow request.
+
+Signed-off-by: Zebediah Figura <z.figura12@gmail.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/winex11.drv/window.c | 21 +++++++++++----------
+ dlls/winex11.drv/x11drv.h |  3 ++-
+ 2 files changed, 13 insertions(+), 11 deletions(-)
+
+diff --git a/dlls/winex11.drv/window.c b/dlls/winex11.drv/window.c
+index e1f1d30170a..4e01eb201c9 100644
+--- a/dlls/winex11.drv/window.c
++++ b/dlls/winex11.drv/window.c
+@@ -314,7 +314,7 @@ static unsigned long get_mwm_decorations( struct x11drv_win_data *data,
+ static int get_window_attributes( struct x11drv_win_data *data, XSetWindowAttributes *attr )
+ {
+     attr->override_redirect = !data->managed;
+-    attr->colormap          = data->colormap ? data->colormap : default_colormap;
++    attr->colormap          = data->whole_colormap ? data->whole_colormap : default_colormap;
+     attr->save_under        = ((GetClassLongW( data->hwnd, GCL_STYLE ) & CS_SAVEBITS) != 0);
+     attr->bit_gravity       = NorthWestGravity;
+     attr->backing_store     = NotUseful;
+@@ -1445,12 +1445,12 @@ Window create_client_window( HWND hwnd, const XVisualInfo *visual )
+         TRACE( "%p reparent xwin %lx/%lx\n", data->hwnd, data->whole_window, data->client_window );
+     }
+ 
+-    if (data->colormap) XFreeColormap( gdi_display, data->colormap );
+-    data->colormap = XCreateColormap( gdi_display, dummy_parent, visual->visual,
+-                                      (visual->class == PseudoColor ||
+-                                       visual->class == GrayScale ||
+-                                       visual->class == DirectColor) ? AllocAll : AllocNone );
+-    attr.colormap = data->colormap;
++    if (data->client_colormap) XFreeColormap( gdi_display, data->client_colormap );
++    data->client_colormap = XCreateColormap( gdi_display, dummy_parent, visual->visual,
++                                            (visual->class == PseudoColor ||
++                                             visual->class == GrayScale ||
++                                             visual->class == DirectColor) ? AllocAll : AllocNone );
++    attr.colormap = data->client_colormap;
+     attr.bit_gravity = NorthWestGravity;
+     attr.win_gravity = NorthWestGravity;
+     attr.backing_store = NotUseful;
+@@ -1509,7 +1509,7 @@ static void create_whole_window( struct x11drv_win_data *data )
+     data->shaped = (win_rgn != 0);
+ 
+     if (data->vis.visualid != default_visual.visualid)
+-        data->colormap = XCreateColormap( data->display, root_window, data->vis.visual, AllocNone );
++        data->whole_colormap = XCreateColormap( data->display, root_window, data->vis.visual, AllocNone );
+ 
+     mask = get_window_attributes( data, &attr );
+ 
+@@ -1586,9 +1586,9 @@ static void destroy_whole_window( struct x11drv_win_data *data, BOOL already_des
+         XDeleteContext( data->display, data->whole_window, winContext );
+         if (!already_destroyed) XDestroyWindow( data->display, data->whole_window );
+     }
+-    if (data->colormap) XFreeColormap( data->display, data->colormap );
++    if (data->whole_colormap) XFreeColormap( data->display, data->whole_colormap );
+     data->whole_window = data->client_window = 0;
+-    data->colormap = 0;
++    data->whole_colormap = 0;
+     data->wm_state = WithdrawnState;
+     data->net_wm_state = 0;
+     data->mapped = FALSE;
+@@ -1694,6 +1694,7 @@ void CDECL X11DRV_DestroyWindow( HWND hwnd )
+     if (thread_data->last_xic_hwnd == hwnd) thread_data->last_xic_hwnd = 0;
+     if (data->icon_pixmap) XFreePixmap( gdi_display, data->icon_pixmap );
+     if (data->icon_mask) XFreePixmap( gdi_display, data->icon_mask );
++    if (data->client_colormap) XFreeColormap( data->display, data->client_colormap );
+     HeapFree( GetProcessHeap(), 0, data->icon_bits );
+     XDeleteContext( gdi_display, (XID)hwnd, win_data_context );
+     release_win_data( data );
+diff --git a/dlls/winex11.drv/x11drv.h b/dlls/winex11.drv/x11drv.h
+index 9ac83e57b1a..e71156cbb0e 100644
+--- a/dlls/winex11.drv/x11drv.h
++++ b/dlls/winex11.drv/x11drv.h
+@@ -553,7 +553,8 @@ struct x11drv_win_data
+ {
+     Display    *display;        /* display connection for the thread owning the window */
+     XVisualInfo vis;            /* X visual used by this window */
+-    Colormap    colormap;       /* colormap if non-default visual */
++    Colormap    whole_colormap; /* colormap if non-default visual */
++    Colormap    client_colormap; /* colormap for the client window */
+     HWND        hwnd;           /* hwnd that this private data belongs to */
+     Window      whole_window;   /* X window for the complete window */
+     Window      client_window;  /* X window for the client area */

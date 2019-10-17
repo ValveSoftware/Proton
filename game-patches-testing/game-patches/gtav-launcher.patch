@@ -100,3 +100,95 @@ index e20b1f8c107..9b0f8405e87 100644
  }
  
  static int query_prop( const WCHAR *class, const WCHAR *propname )
+From: Brendan Shanks <bshanks@codeweavers.com>
+Subject: [PATCH] ntdll: Always add a tail to heap allocations.
+Message-Id: <20190919223935.22589-1-bshanks@codeweavers.com>
+Date: Thu, 19 Sep 2019 15:39:35 -0700
+
+Fixes the Rockstar Games Launcher installer (and possibly other
+NSIS-based installers) from crashing due to passing a too-small buffer
+to GetWindowInfo().
+
+Wine-Bug: https://bugs.winehq.org/show_bug.cgi?id=47783
+Signed-off-by: Brendan Shanks <bshanks@codeweavers.com>
+---
+ dlls/ntdll/heap.c | 11 +++++------
+ 1 file changed, 5 insertions(+), 6 deletions(-)
+
+diff --git a/dlls/ntdll/heap.c b/dlls/ntdll/heap.c
+index e8ac1ffa7a..e7da86e09a 100644
+--- a/dlls/ntdll/heap.c
++++ b/dlls/ntdll/heap.c
+@@ -110,9 +110,8 @@ C_ASSERT( sizeof(ARENA_LARGE) % LARGE_ALIGNMENT == 0 );
+ #define HEAP_MIN_SHRINK_SIZE  (HEAP_MIN_DATA_SIZE+sizeof(ARENA_FREE))
+ /* minimum size to start allocating large blocks */
+ #define HEAP_MIN_LARGE_BLOCK_SIZE  0x7f000
+-/* extra size to add at the end of block for tail checking */
+-#define HEAP_TAIL_EXTRA_SIZE(flags) \
+-    ((flags & HEAP_TAIL_CHECKING_ENABLED) || RUNNING_ON_VALGRIND ? ALIGNMENT : 0)
++/* extra size to add at the end of block to mitigate overruns and allow tail checking */
++#define HEAP_TAIL_EXTRA_SIZE ALIGNMENT
+ 
+ /* There will be a free list bucket for every arena size up to and including this value */
+ #define HEAP_MAX_SMALL_FREE_LIST 0x100
+@@ -722,7 +721,7 @@ static void HEAP_ShrinkBlock(SUBHEAP *subheap, ARENA_INUSE *pArena, SIZE_T size)
+ static void *allocate_large_block( HEAP *heap, DWORD flags, SIZE_T size )
+ {
+     ARENA_LARGE *arena;
+-    SIZE_T block_size = sizeof(*arena) + ROUND_SIZE(size) + HEAP_TAIL_EXTRA_SIZE(flags);
++    SIZE_T block_size = sizeof(*arena) + ROUND_SIZE(size) + HEAP_TAIL_EXTRA_SIZE;
+     LPVOID address = NULL;
+ 
+     if (block_size < size) return NULL;  /* overflow */
+@@ -1674,7 +1673,7 @@ void * WINAPI DECLSPEC_HOTPATCH RtlAllocateHeap( HANDLE heap, ULONG flags, SIZE_
+     if (!heapPtr) return NULL;
+     flags &= HEAP_GENERATE_EXCEPTIONS | HEAP_NO_SERIALIZE | HEAP_ZERO_MEMORY;
+     flags |= heapPtr->flags;
+-    rounded_size = ROUND_SIZE(size) + HEAP_TAIL_EXTRA_SIZE( flags );
++    rounded_size = ROUND_SIZE(size) + HEAP_TAIL_EXTRA_SIZE;
+     if (rounded_size < size)  /* overflow */
+     {
+         if (flags & HEAP_GENERATE_EXCEPTIONS) RtlRaiseStatus( STATUS_NO_MEMORY );
+@@ -1828,7 +1827,7 @@ PVOID WINAPI RtlReAllocateHeap( HANDLE heap, ULONG flags, PVOID ptr, SIZE_T size
+     flags |= heapPtr->flags;
+     if (!(flags & HEAP_NO_SERIALIZE)) RtlEnterCriticalSection( &heapPtr->critSection );
+ 
+-    rounded_size = ROUND_SIZE(size) + HEAP_TAIL_EXTRA_SIZE(flags);
++    rounded_size = ROUND_SIZE(size) + HEAP_TAIL_EXTRA_SIZE;
+     if (rounded_size < size) goto oom;  /* overflow */
+     if (rounded_size < HEAP_MIN_DATA_SIZE) rounded_size = HEAP_MIN_DATA_SIZE;
+ 
+
+-- 
+2.17.1
+
+From: Brendan Shanks <bshanks@codeweavers.com>
+Subject: [PATCH v2] user32: WARN() when WINDOWINFO cbSize is incorrect.
+Message-Id: <20190919225120.348-1-bshanks@codeweavers.com>
+Date: Thu, 19 Sep 2019 15:51:20 -0700
+
+Wine-Bug: https://bugs.winehq.org/show_bug.cgi?id=47783
+Signed-off-by: Brendan Shanks <bshanks@codeweavers.com>
+---
+v2: Fix warning when building for Win64
+
+ dlls/user32/win.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/dlls/user32/win.c b/dlls/user32/win.c
+index 3582262b7d..0523fc2479 100644
+--- a/dlls/user32/win.c
++++ b/dlls/user32/win.c
+@@ -3849,6 +3863,8 @@ BOOL WINAPI DECLSPEC_HOTPATCH GetWindowInfo( HWND hwnd, PWINDOWINFO pwi)
+ 
+     if (!WIN_GetRectangles( hwnd, COORDS_SCREEN, &rcWindow, &rcClient )) return FALSE;
+     if (!pwi) return FALSE;
++    if (sizeof(WINDOWINFO) != pwi->cbSize)
++        WARN("Incorrect cbSize %d\n", pwi->cbSize);
+ 
+     pwi->rcWindow = rcWindow;
+     pwi->rcClient = rcClient;
+
+-- 
+2.17.1
+

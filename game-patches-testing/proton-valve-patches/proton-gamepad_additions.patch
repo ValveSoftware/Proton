@@ -4937,46 +4937,6 @@ index 059f048300e..324e8679601 100644
  }
  
 
-From b84a4aa53b29c52be82d95c1fc867cb16dd64276 Mon Sep 17 00:00:00 2001
-From: Andrew Eikum <aeikum@codeweavers.com>
-Date: Mon, 30 Sep 2019 13:04:26 -0500
-Subject: [PATCH] xinput: Check for NULL argument in XInputGetState.
-
-Signed-off-by: Andrew Eikum <aeikum@codeweavers.com>
-Signed-off-by: Alexandre Julliard <julliard@winehq.org>
----
- dlls/xinput1_3/tests/xinput.c | 3 +++
- dlls/xinput1_3/xinput_main.c  | 3 +++
- 2 files changed, 6 insertions(+)
-
-diff --git a/dlls/xinput1_3/tests/xinput.c b/dlls/xinput1_3/tests/xinput.c
-index e5eb504d522..a6e2107446c 100644
---- a/dlls/xinput1_3/tests/xinput.c
-+++ b/dlls/xinput1_3/tests/xinput.c
-@@ -126,6 +126,9 @@ static void test_get_state(void)
-         }
-     }
- 
-+    result = pXInputGetState(0, NULL);
-+    ok(result == ERROR_BAD_ARGUMENTS, "XInputGetState returned (%d)\n", result);
-+
-     result = pXInputGetState(XUSER_MAX_COUNT, &state);
-     ok(result == ERROR_BAD_ARGUMENTS, "XInputGetState returned (%d)\n", result);
- 
-diff --git a/dlls/xinput1_3/xinput_main.c b/dlls/xinput1_3/xinput_main.c
-index 57337e09ad9..a417fec7ad1 100644
---- a/dlls/xinput1_3/xinput_main.c
-+++ b/dlls/xinput1_3/xinput_main.c
-@@ -88,6 +88,9 @@ DWORD WINAPI DECLSPEC_HOTPATCH XInputSetState(DWORD index, XINPUT_VIBRATION* vib
-  * XInputGetState() in the hook, so we need a wrapper. */
- static DWORD xinput_get_state(DWORD index, XINPUT_STATE *state)
- {
-+    if (!state)
-+        return ERROR_BAD_ARGUMENTS;
-+
-     HID_find_gamepads(controllers);
- 
-     if (index >= XUSER_MAX_COUNT)
 From 6ecd118c5fe80b6d0143c8eed21ee7f1507b0d7f Mon Sep 17 00:00:00 2001
 From: Andrew Eikum <aeikum@codeweavers.com>
 Date: Mon, 30 Sep 2019 14:57:46 -0500
