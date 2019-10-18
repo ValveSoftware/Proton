@@ -129,6 +129,7 @@ TOOLS_DIR64 := ./obj-tools64
 DST_BASE := ./dist
 DST_DIR := $(DST_BASE)/dist
 DEPLOY_DIR := ./deploy
+REDIST_DIR := ./redist
 
 # All top level goals.  Lazy evaluated so they can be added below.
 GOAL_TARGETS = $(GOAL_TARGETS_LIBS)
@@ -351,6 +352,7 @@ DIST_TARGETS := $(DIST_COPY_TARGETS) $(DIST_OVR32) $(DIST_OVR64) \
                 $(DIST_COMPAT_MANIFEST) $(DIST_LICENSE) $(DIST_FONTS)
 
 DEPLOY_COPY_TARGETS := $(DIST_COPY_TARGETS) $(DIST_VERSION) $(DIST_LICENSE)
+REDIST_COPY_TARGETS := $(DEPLOY_COPY_TARGETS) $(DIST_COMPAT_MANIFEST)
 
 $(DIST_LICENSE): $(LICENSE)
 	cp -a $< $@
@@ -438,18 +440,24 @@ dist: $(DIST_TARGETS) wine vrclient lsteamclient steam dxvk d9vk | $(DST_DIR)
 #The use of "cour" here is for compatibility with programs that require that exact string. This link does not point to Courier New.
 #The use of "msyh" here is for compatibility with programs that require that exact string. This link does not point to Microsoft YaHei.
 
-deploy: dist | $(filter-out dist deploy install,$(MAKECMDGOALS))
+deploy: dist | $(filter-out dist deploy install redist,$(MAKECMDGOALS))
 	mkdir -p $(DEPLOY_DIR) && \
 	cp -a $(DEPLOY_COPY_TARGETS) $(DEPLOY_DIR) && \
 	tar -C $(DST_DIR) -c . > $(DEPLOY_DIR)/proton_dist.tar
 	@echo "Created deployment archive at "$(DEPLOY_DIR)"/proton_dist.tar"
 
-install: dist | $(filter-out dist deploy install,$(MAKECMDGOALS))
+install: dist | $(filter-out dist deploy install redist,$(MAKECMDGOALS))
 	if [ ! -d $(STEAM_DIR) ]; then echo >&2 "!! "$(STEAM_DIR)" does not exist, cannot install"; return 1; fi
 	mkdir -p $(STEAM_DIR)/compatibilitytools.d/$(BUILD_NAME)
 	cp -r $(DST_BASE)/* $(STEAM_DIR)/compatibilitytools.d/$(BUILD_NAME)
 	@echo "Installed Proton to "$(STEAM_DIR)/compatibilitytools.d/$(BUILD_NAME)
 	@echo "You may need to restart Steam to select this tool"
+
+redist: dist | $(filter-out dist deploy install redist,$(MAKECMDGOALS))
+	mkdir -p $(REDIST_DIR)
+	cp -a $(REDIST_COPY_TARGETS) $(REDIST_DIR)
+	tar -C $(DST_DIR) -c . | gzip -c -1 > $(REDIST_DIR)/proton_dist.tar.gz
+	@echo "Created redistribution tarball at "$(REDIST_DIR)"/proton_dist.tar.gz"
 
 .PHONY: module32 module64 module
 

@@ -50,9 +50,11 @@ all: help
 help:
 	@echo "Proton Makefile instructions"
 	@echo ""
-	@echo ""Quick start" Makefile targets:"
+	@echo "\"Quick start\" Makefile targets:"
 	@echo "  install - Install Proton into current user's Steam installation"
-	@echo "  deploy - Build deployment files into a directory in vagrant_share/ named"
+	@echo "  redist - Build a package suitable for manual installation or distribution"
+	@echo "           to other users in vagrant_share/ named after the nearest git tag"
+	@echo "  deploy - Build Steam deployment files into a directory in vagrant_share/ named"
 	@echo "           after the nearest git tag"
 	@echo "  clean - Delete the Proton build directory"
 	@echo ""
@@ -76,16 +78,16 @@ help:
 	@echo "  lsteamclient - Rebuild the Steam client wrapper and copy it into vagrant_share/."
 	@echo ""
 	@echo "Examples:"
-	@echo "  "make install" - Build Proton and install into this user's Steam installation,"
+	@echo "  make install - Build Proton and install into this user's Steam installation,"
 	@echo "      with the current Proton branch name as the tool's name."
 	@echo ""
-	@echo "  "make deploy" - Build a Proton deployment package in a tagged directory"
+	@echo "  make redist - Build a Proton redistribution package in a tagged directory"
 	@echo "      in vagrant_share/."
 	@echo ""
-	@echo "  "make build_name=mytest install" - Build Proton with the tool name \"mytest\" and"
+	@echo "  make build_name=mytest install - Build Proton with the tool name \"mytest\" and"
 	@echo "      install into this user's Steam installation."
 	@echo ""
-	@echo "  "make build_name=mytest module=dsound module" - Build only the dsound module"
+	@echo "  make build_name=mytest module=dsound module - Build only the dsound module"
 	@echo "      in the \"mytest\" build directory and place it into vagrant_share/dsound/."
 	@echo ""
 	@echo "Running out of disk space in the VM? See resize-vagrant-disk.sh"
@@ -110,10 +112,15 @@ install: configure
 	cp -R vagrant_share/compatibilitytools.d/$(_build_name) $(STEAM_DIR)/compatibilitytools.d/
 	echo "Proton installed to your local Steam installation"
 
-deploy: configure
+redist: configure
 	mkdir -p vagrant_share/$(DEPLOY_DIR)
-	vagrant ssh -c 'make -C $(BUILD_DIR)/ $(UNSTRIPPED) deploy && cp $(BUILD_DIR)/deploy/* /vagrant/$(DEPLOY_DIR)'
-	echo "Proton deployed to vagrant_share/$(DEPLOY_DIR)"
+	vagrant ssh -c 'make -C $(BUILD_DIR)/ $(UNSTRIPPED) redist && cp $(BUILD_DIR)/redist/* /vagrant/$(DEPLOY_DIR)'
+	echo "Proton build available at vagrant_share/$(DEPLOY_DIR)"
+
+deploy: configure
+	mkdir -p vagrant_share/$(DEPLOY_DIR)-deploy
+	vagrant ssh -c 'make -C $(BUILD_DIR)/ $(UNSTRIPPED) deploy && cp $(BUILD_DIR)/deploy/* /vagrant/$(DEPLOY_DIR)-deploy'
+	echo "Proton deployed to vagrant_share/$(DEPLOY_DIR)-deploy"
 
 module: configure
 	mkdir -p vagrant_share/$(module)/lib/wine/ vagrant_share/$(module)/lib64/wine/
