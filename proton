@@ -116,7 +116,14 @@ class Proton:
                     not filecmp.cmp(self.version_file, self.path("dist/version")):
                 if os.path.exists(self.dist_dir):
                     shutil.rmtree(self.dist_dir)
-                tar = tarfile.open(self.path("proton_dist.tar"), mode="r")
+                tar = None
+                for sf in ["", ".xz", ".bz2", ".gz"]:
+                    if os.path.exists(self.path("proton_dist.tar" + sf)):
+                        tar = tarfile.open(self.path("proton_dist.tar" + sf), mode="r:*")
+                        break
+                if not tar:
+                    log("No proton_dist tarball??")
+                    sys.exit(1)
                 tar.extractall(path=self.dist_dir)
                 tar.close()
                 try_copy(self.version_file, self.dist_dir)
