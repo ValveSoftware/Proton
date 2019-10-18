@@ -1,0 +1,44 @@
+From 1c17f72fcef7616aee032ec17e534b5205441ca8 Mon Sep 17 00:00:00 2001
+From: Andrew Eikum <aeikum@codeweavers.com>
+Date: Thu, 17 Oct 2019 12:46:16 -0500
+Subject: Fix size of dos_message type in internal_extra_pe_filehdr
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="------------2.23.0"
+
+This is a multi-part message in MIME format.
+--------------2.23.0
+Content-Type: text/plain; charset=UTF-8; format=fixed
+Content-Transfer-Encoding: 8bit
+
+
+As shown by other declarations in include/coff/, and its usage in
+bfd/peXXigen.c, dos_message is clearly meant to be 64 bytes long. On
+Linux 64-bit, long is 8 bytes, which means the dos_message field in
+internal_extra_pe_filehdr would be 128 bytes long.
+---
+ include/coff/internal.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+
+--------------2.23.0
+Content-Type: text/x-patch; name="0001-Fix-size-of-dos_message-type-in-internal_extra_pe_fi.patch"
+Content-Transfer-Encoding: 8bit
+Content-Disposition: inline; filename="0001-Fix-size-of-dos_message-type-in-internal_extra_pe_fi.patch"
+
+diff --git a/include/coff/internal.h b/include/coff/internal.h
+index 9b55769421..1371b2c73c 100644
+--- a/include/coff/internal.h
++++ b/include/coff/internal.h
+@@ -54,7 +54,7 @@ struct internal_extra_pe_filehdr
+   unsigned short e_oeminfo;	/* OEM information; e_oemid specific, 0x0 */
+   unsigned short e_res2[10];	/* Reserved words, all 0x0 */
+   bfd_vma  e_lfanew;		/* File address of new exe header, 0x80 */
+-  unsigned long dos_message[16]; /* text which always follows dos header */
++  unsigned int dos_message[16]; /* text which always follows dos header */
+   bfd_vma  nt_signature;   	/* required NT signature, 0x4550 */
+ };
+ 
+
+--------------2.23.0--
+
+

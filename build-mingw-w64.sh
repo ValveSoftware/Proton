@@ -37,6 +37,9 @@ function setup_src {
 
     if [ ! -e "$BINUTILS_SRCDIR" ]; then
         tar -xf "$BINUTILS_SRCTARBALL"
+        for f in $(dirname $0)/mingw-w64-patches/binutils-*; do
+            patch -d "$BINUTILS_SRCDIR" -p1 < $f
+        done
     fi
 
     if [ ! -e "$GCC_SRCTARBALL" ]; then
