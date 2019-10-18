@@ -217,7 +217,7 @@ A correct local tool installation should look like this:
         ├── filelock.py
         ├── LICENSE
         ├── proton
-        ├── proton_dist.tar.gz
+        ├── proton_dist.tar
         ├── toolmanifest.vdf
         ├── user_settings.sample.py
         └── version
