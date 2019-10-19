@@ -1,18 +1,231 @@
-From a9a93e69b5e5d9cb5aeed6e03ed6adda506ba282 Mon Sep 17 00:00:00 2001
 From: Brendan Shanks <bshanks@codeweavers.com>
-Date: Fri, 27 Sep 2019 15:20:48 -0700
-Subject: [PATCH] server: Don't block when reading from named pipes in
- non-blocking mode
+Subject: [PATCH v4 1/4] kernel32/tests: Add tests for named pipes in PIPE_NOWAIT mode.
+Message-Id: <20191004184159.23229-1-bshanks@codeweavers.com>
+Date: Fri,  4 Oct 2019 11:41:56 -0700
 
+Signed-off-by: Brendan Shanks <bshanks@codeweavers.com>
 ---
- server/named_pipe.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ dlls/kernel32/tests/pipe.c | 165 +++++++++++++++++++++++++++++++++++++
+ 1 file changed, 165 insertions(+)
 
+diff --git a/dlls/kernel32/tests/pipe.c b/dlls/kernel32/tests/pipe.c
+index f61d441303..dbc4642b82 100644
+--- a/dlls/kernel32/tests/pipe.c
++++ b/dlls/kernel32/tests/pipe.c
+@@ -3887,6 +3887,170 @@ static void test_wait_pipe(void)
+     CloseHandle(ov.hEvent);
+ }
+ 
++static void test_nowait(void)
++{
++    HANDLE piperead, pipewrite, hFile;
++    OVERLAPPED ol, ol2;
++    DWORD read, write;
++    char readbuf[32768];
++    static const char teststring[] = "bits";
++
++    /* CreateNamedPipe with PIPE_NOWAIT, and read from empty pipe */
++    piperead = CreateNamedPipeA(PIPENAME, FILE_FLAG_OVERLAPPED | PIPE_ACCESS_DUPLEX,
++        /* dwPipeMode */ PIPE_TYPE_BYTE | PIPE_NOWAIT,
++        /* nMaxInstances */ 1,
++        /* nOutBufSize */ 512,
++        /* nInBufSize */ 512,
++        /* nDefaultWait */ NMPWAIT_USE_DEFAULT_WAIT,
++        /* lpSecurityAttrib */ NULL);
++    ok(piperead != INVALID_HANDLE_VALUE, "CreateNamedPipe failed\n");
++    pipewrite = CreateFileA(PIPENAME, GENERIC_WRITE, 0, NULL, OPEN_EXISTING, 0, 0);
++    ok(pipewrite != INVALID_HANDLE_VALUE, "CreateFileA failed\n");
++    memset(&ol, 0, sizeof(ol));
++    ol.hEvent = CreateEventW(NULL, TRUE, FALSE, NULL);
++    SetLastError(0xdeadbeef);
++    ok(ReadFile(piperead, readbuf, sizeof(readbuf), &read, &ol) == FALSE, "ReadFile should fail\n");
++    todo_wine ok(GetLastError() == ERROR_NO_DATA, "got %d should be ERROR_NO_DATA\n", GetLastError());
++    if (GetLastError() == ERROR_IO_PENDING)
++        CancelIo(piperead);
++
++    /* test a small write/read */
++    ok(WriteFile(pipewrite, teststring, sizeof(teststring), &write, NULL), "WriteFile should succeed\n");
++    ok(ReadFile(piperead, readbuf, sizeof(readbuf), &read, &ol), "ReadFile should succeed\n");
++    ok(read == write, "read/write bytes should match\n");
++    ok(CloseHandle(ol.hEvent), "CloseHandle for the event failed\n");
++    ok(CloseHandle(pipewrite), "CloseHandle for the write pipe failed\n");
++    ok(CloseHandle(piperead), "CloseHandle for the read pipe failed\n");
++
++
++    /* create write side with PIPE_NOWAIT, read side PIPE_WAIT, and test writes */
++    pipewrite = CreateNamedPipeA(PIPENAME, FILE_FLAG_OVERLAPPED | PIPE_ACCESS_DUPLEX,
++        /* dwPipeMode */ PIPE_TYPE_BYTE | PIPE_NOWAIT,
++        /* nMaxInstances */ 1,
++        /* nOutBufSize */ 512,
++        /* nInBufSize */ 512,
++        /* nDefaultWait */ NMPWAIT_USE_DEFAULT_WAIT,
++        /* lpSecurityAttrib */ NULL);
++    ok(pipewrite != INVALID_HANDLE_VALUE, "CreateNamedPipe failed\n");
++    piperead = CreateFileA(PIPENAME, GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_FLAG_OVERLAPPED, 0);
++    ok(piperead != INVALID_HANDLE_VALUE, "CreateFileA failed\n");
++    memset(&ol, 0, sizeof(ol));
++    ol.hEvent = CreateEventW(NULL, TRUE, FALSE, NULL);
++    memset(&ol2, 0, sizeof(ol2));
++    ol2.hEvent = CreateEventW(NULL, TRUE, FALSE, NULL);
++
++    /* write one byte larger than the buffer size, should fail */
++    SetLastError(0xdeadbeef);
++    todo_wine ok(WriteFile(pipewrite, readbuf, 513, &write, &ol), "WriteFile should succeed\n");
++    /* WriteFile only documents that 'write < sizeof(readbuf)' for this case, but Windows
++     * doesn't seem to do partial writes ('write == 0' always)
++     */
++    ok(write < sizeof(readbuf), "WriteFile should fail to write the whole buffer\n");
++    ok(write == 0, "WriteFile doesn't do partial writes here\n");
++    if (GetLastError() == ERROR_IO_PENDING)
++        CancelIo(piperead);
++
++    /* overlapped read of 32768, non-blocking write of 512 */
++    SetLastError(0xdeadbeef);
++    todo_wine ok(ReadFile(piperead, readbuf, sizeof(readbuf), &read, &ol2) == FALSE, "ReadFile should fail\n");
++    todo_wine ok(GetLastError() == ERROR_IO_PENDING, "got %d should be ERROR_IO_PENDING\n", GetLastError());
++    ok(WriteFile(pipewrite, teststring, sizeof(teststring), &write, &ol), "WriteFile should succeed\n");
++    ok(write == sizeof(teststring), "got %d, write should be %d\n", write, sizeof(teststring));
++    ok(GetOverlappedResult(piperead, &ol2, &read, FALSE), "GetOverlappedResult should succeed\n");
++    todo_wine ok(read == sizeof(teststring), "got %d, read should be %d\n", read, sizeof(teststring));
++    if (GetOverlappedResult(piperead, &ol2, &read, FALSE) == FALSE)
++        CancelIo(piperead);
++
++    /* overlapped read of 32768, non-blocking write of 513 */
++    SetLastError(0xdeadbeef);
++    todo_wine ok(ReadFile(piperead, readbuf, sizeof(readbuf), &read, &ol2) == FALSE, "ReadFile should fail\n");
++    todo_wine ok(GetLastError() == ERROR_IO_PENDING, "got %d should be ERROR_IO_PENDING\n", GetLastError());
++    todo_wine ok(WriteFile(pipewrite, readbuf, 513, &write, &ol), "WriteFile should succeed\n");
++    todo_wine ok(write == 513, "got %d, write should be %d\n", write, 513);
++    ok(GetOverlappedResult(piperead, &ol2, &read, FALSE), "GetOverlappedResult should succeed\n");
++    todo_wine ok(read == 513, "got %d, read should be %d\n", read, 513);
++    if (GetOverlappedResult(piperead, &ol2, &read, FALSE) == FALSE)
++        CancelIo(piperead);
++
++    /* overlapped read of 1 byte, non-blocking write of 513 bytes */
++    SetLastError(0xdeadbeef);
++    todo_wine ok(ReadFile(piperead, readbuf, 1, &read, &ol2) == FALSE, "ReadFile should fail\n");
++    todo_wine ok(GetLastError() == ERROR_IO_PENDING, "got %d should be ERROR_IO_PENDING\n", GetLastError());
++    todo_wine ok(WriteFile(pipewrite, readbuf, 513, &write, &ol), "WriteFile should succeed\n");
++    todo_wine ok(write == 513, "got %d, write should be %d\n", write, 513);
++    ok(GetOverlappedResult(piperead, &ol2, &read, FALSE), "GetOverlappedResult should succeed\n");
++    ok(read == 1, "got %d, read should be %d\n", read, 1);
++    if (GetOverlappedResult(piperead, &ol2, &read, FALSE) == FALSE)
++        CancelIo(piperead);
++    /* read the remaining 512 bytes */
++    SetLastError(0xdeadbeef);
++    ok(ReadFile(piperead, readbuf, sizeof(readbuf), &read, &ol2), "ReadFile should succeed\n");
++    todo_wine ok(read == 512, "got %d, write should be %d\n", write, 512);
++    if (GetOverlappedResult(piperead, &ol2, &read, FALSE) == FALSE)
++        CancelIo(piperead);
++
++    /* overlapped read of 1 byte, non-blocking write of 514 bytes */
++    SetLastError(0xdeadbeef);
++    ok(ReadFile(piperead, readbuf, 1, &read, &ol2) == FALSE, "ReadFile should fail\n");
++    ok(GetLastError() == ERROR_IO_PENDING, "got %d should be ERROR_IO_PENDING\n", GetLastError());
++    todo_wine ok(WriteFile(pipewrite, readbuf, 514, &write, &ol), "WriteFile should succeed\n");
++    todo_wine ok(write == 1, "got %d, write should be %d\n", write, 1);
++    ok(GetOverlappedResult(piperead, &ol2, &read, FALSE), "GetOverlappedResult should succeed\n");
++    ok(read == 1, "got %d, read should be %d\n", read, 1);
++    if (GetOverlappedResult(piperead, &ol2, &read, FALSE) == FALSE)
++        CancelIo(piperead);
++
++    /* write the exact buffer size, should succeed */
++    SetLastError(0xdeadbeef);
++    todo_wine ok(WriteFile(pipewrite, readbuf, 512, &write, &ol), "WriteFile should succeed\n");
++    todo_wine ok(write == 512, "WriteFile should write the whole buffer\n");
++    if (GetLastError() == ERROR_IO_PENDING)
++        CancelIo(piperead);
++
++    ok(CloseHandle(ol.hEvent), "CloseHandle for the event failed\n");
++    ok(CloseHandle(ol2.hEvent), "CloseHandle for the event failed\n");
++    ok(CloseHandle(pipewrite), "CloseHandle for the write pipe failed\n");
++    ok(CloseHandle(piperead), "CloseHandle for the read pipe failed\n");
++
++
++    /* CreateNamedPipe with PIPE_NOWAIT, test ConnectNamedPipe */
++    pipewrite = CreateNamedPipeA(PIPENAME, FILE_FLAG_OVERLAPPED | PIPE_ACCESS_DUPLEX,
++        /* dwPipeMode */ PIPE_TYPE_BYTE | PIPE_NOWAIT,
++        /* nMaxInstances */ 1,
++        /* nOutBufSize */ 512,
++        /* nInBufSize */ 512,
++        /* nDefaultWait */ NMPWAIT_USE_DEFAULT_WAIT,
++        /* lpSecurityAttrib */ NULL);
++    ok(pipewrite != INVALID_HANDLE_VALUE, "CreateNamedPipe failed\n");
++    memset(&ol, 0, sizeof(ol));
++    ol.hEvent = CreateEventW(NULL, TRUE, FALSE, NULL);
++    SetLastError(0xdeadbeef);
++    ok(ConnectNamedPipe(pipewrite, &ol) == FALSE, "ConnectNamedPipe should fail\n");
++    todo_wine ok(GetLastError() == ERROR_PIPE_LISTENING, "got %d should be ERROR_PIPE_LISTENING\n", GetLastError());
++    if (GetLastError() == ERROR_IO_PENDING)
++        CancelIo(pipewrite);
++
++    /* connect and disconnect, then test ConnectNamedPipe again */
++    hFile = CreateFileA(PIPENAME, GENERIC_READ | GENERIC_WRITE, 0, NULL, OPEN_EXISTING, 0, 0);
++    ok(hFile != INVALID_HANDLE_VALUE, "CreateFileA failed\n");
++    ok(CloseHandle(hFile), "CloseHandle failed\n");
++    SetLastError(0xdeadbeef);
++    ok(ConnectNamedPipe(pipewrite,&ol) == FALSE, "ConnectNamedPipe should fail\n");
++    ok(GetLastError() == ERROR_NO_DATA, "got %d should be ERROR_NO_DATA\n", GetLastError());
++    if (GetLastError() == ERROR_IO_PENDING)
++        CancelIo(pipewrite);
++
++    /* call DisconnectNamedPipe and test ConnectNamedPipe again */
++    ok(DisconnectNamedPipe(pipewrite) == TRUE, "DisconnectNamedPipe should succeed\n");
++    SetLastError(0xdeadbeef);
++    ok(ConnectNamedPipe(pipewrite,&ol) == FALSE, "ConnectNamedPipe should fail\n");
++    todo_wine ok(GetLastError() == ERROR_PIPE_LISTENING, "got %d should be ERROR_PIPE_LISTENING\n", GetLastError());
++    if (GetLastError() == ERROR_IO_PENDING)
++        CancelIo(pipewrite);
++    ok(CloseHandle(ol.hEvent), "CloseHandle for the event failed\n");
++    ok(CloseHandle(pipewrite), "CloseHandle for the write pipe failed\n");
++}
++
+ START_TEST(pipe)
+ {
+     char **argv;
+@@ -3954,4 +4118,5 @@ START_TEST(pipe)
+     test_namedpipe_session_id();
+     test_multiple_instances();
+     test_wait_pipe();
++    test_nowait();
+ }
+
+-- 
+2.17.1
+
+From: Brendan Shanks <bshanks@codeweavers.com>
+Subject: [PATCH v4 2/4] server: Don't block when reading from named pipes in PIPE_NOWAIT mode.
+Message-Id: <20191004184159.23229-2-bshanks@codeweavers.com>
+Date: Fri,  4 Oct 2019 11:41:57 -0700
+In-Reply-To: <20191004184159.23229-1-bshanks@codeweavers.com>
+References: <20191004184159.23229-1-bshanks@codeweavers.com>
+
+Fixes Rockstar Games Launcher hanging for some users.
+
+Signed-off-by: Brendan Shanks <bshanks@codeweavers.com>
+---
+ dlls/kernel32/tests/pipe.c | 2 +-
+ server/named_pipe.c        | 5 +++++
+ 2 files changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/dlls/kernel32/tests/pipe.c b/dlls/kernel32/tests/pipe.c
+index dbc4642b82..59f1684c2a 100644
+--- a/dlls/kernel32/tests/pipe.c
++++ b/dlls/kernel32/tests/pipe.c
+@@ -3910,7 +3910,7 @@ static void test_nowait(void)
+     ol.hEvent = CreateEventW(NULL, TRUE, FALSE, NULL);
+     SetLastError(0xdeadbeef);
+     ok(ReadFile(piperead, readbuf, sizeof(readbuf), &read, &ol) == FALSE, "ReadFile should fail\n");
+-    todo_wine ok(GetLastError() == ERROR_NO_DATA, "got %d should be ERROR_NO_DATA\n", GetLastError());
++    ok(GetLastError() == ERROR_NO_DATA, "got %d should be ERROR_NO_DATA\n", GetLastError());
+     if (GetLastError() == ERROR_IO_PENDING)
+         CancelIo(piperead);
+ 
 diff --git a/server/named_pipe.c b/server/named_pipe.c
-index 2827f982582..56b02de0756 100644
+index 8e0380d060..6926712b8c 100644
 --- a/server/named_pipe.c
 +++ b/server/named_pipe.c
-@@ -861,6 +861,11 @@ static int pipe_end_read( struct fd *fd, struct async *async, file_pos_t pos )
+@@ -851,6 +851,11 @@ static int pipe_end_read( struct fd *fd, struct async *async, file_pos_t pos )
      switch (pipe_end->state)
      {
      case FILE_PIPE_CONNECTED_STATE:
@@ -24,82 +237,239 @@ index 2827f982582..56b02de0756 100644
          break;
      case FILE_PIPE_DISCONNECTED_STATE:
          set_error( STATUS_PIPE_DISCONNECTED );
-From e1c3bafed37df7da8fa35f47b7b0674696be04f3 Mon Sep 17 00:00:00 2001
+
+-- 
+2.17.1
+
 From: Brendan Shanks <bshanks@codeweavers.com>
-Date: Thu, 26 Sep 2019 23:13:22 -0700
-Subject: [PATCH] wmic: Output in ASCII using fwprintf
+Subject: [PATCH v4 3/4] server: Don't block when writing to named pipes in PIPE_NOWAIT mode.
+Message-Id: <20191004184159.23229-3-bshanks@codeweavers.com>
+Date: Fri,  4 Oct 2019 11:41:58 -0700
+In-Reply-To: <20191004184159.23229-1-bshanks@codeweavers.com>
+References: <20191004184159.23229-1-bshanks@codeweavers.com>
 
+Signed-off-by: Brendan Shanks <bshanks@codeweavers.com>
 ---
- programs/wmic/main.c | 33 ++++++++-------------------------
- 1 file changed, 8 insertions(+), 25 deletions(-)
+v4: async_waiting() only checks the head of the queue, use
+find_pending_async() instead
 
-diff --git a/programs/wmic/main.c b/programs/wmic/main.c
-index e20b1f8c107..9b0f8405e87 100644
---- a/programs/wmic/main.c
-+++ b/programs/wmic/main.c
-@@ -120,21 +120,16 @@ static WCHAR *find_prop( IWbemClassObject *class, const WCHAR *prop )
-     return ret;
+ dlls/kernel32/tests/pipe.c | 36 ++++++++++++++++++------------------
+ server/named_pipe.c        | 25 ++++++++++++++++++++-----
+ 2 files changed, 38 insertions(+), 23 deletions(-)
+
+diff --git a/dlls/kernel32/tests/pipe.c b/dlls/kernel32/tests/pipe.c
+index 59f1684c2a..46b9e1c667 100644
+--- a/dlls/kernel32/tests/pipe.c
++++ b/dlls/kernel32/tests/pipe.c
+@@ -3941,7 +3941,7 @@ static void test_nowait(void)
+ 
+     /* write one byte larger than the buffer size, should fail */
+     SetLastError(0xdeadbeef);
+-    todo_wine ok(WriteFile(pipewrite, readbuf, 513, &write, &ol), "WriteFile should succeed\n");
++    ok(WriteFile(pipewrite, readbuf, 513, &write, &ol), "WriteFile should succeed\n");
+     /* WriteFile only documents that 'write < sizeof(readbuf)' for this case, but Windows
+      * doesn't seem to do partial writes ('write == 0' always)
+      */
+@@ -3952,32 +3952,32 @@ static void test_nowait(void)
+ 
+     /* overlapped read of 32768, non-blocking write of 512 */
+     SetLastError(0xdeadbeef);
+-    todo_wine ok(ReadFile(piperead, readbuf, sizeof(readbuf), &read, &ol2) == FALSE, "ReadFile should fail\n");
+-    todo_wine ok(GetLastError() == ERROR_IO_PENDING, "got %d should be ERROR_IO_PENDING\n", GetLastError());
++    ok(ReadFile(piperead, readbuf, sizeof(readbuf), &read, &ol2) == FALSE, "ReadFile should fail\n");
++    ok(GetLastError() == ERROR_IO_PENDING, "got %d should be ERROR_IO_PENDING\n", GetLastError());
+     ok(WriteFile(pipewrite, teststring, sizeof(teststring), &write, &ol), "WriteFile should succeed\n");
+     ok(write == sizeof(teststring), "got %d, write should be %d\n", write, sizeof(teststring));
+     ok(GetOverlappedResult(piperead, &ol2, &read, FALSE), "GetOverlappedResult should succeed\n");
+-    todo_wine ok(read == sizeof(teststring), "got %d, read should be %d\n", read, sizeof(teststring));
++    ok(read == sizeof(teststring), "got %d, read should be %d\n", read, sizeof(teststring));
+     if (GetOverlappedResult(piperead, &ol2, &read, FALSE) == FALSE)
+         CancelIo(piperead);
+ 
+     /* overlapped read of 32768, non-blocking write of 513 */
+     SetLastError(0xdeadbeef);
+-    todo_wine ok(ReadFile(piperead, readbuf, sizeof(readbuf), &read, &ol2) == FALSE, "ReadFile should fail\n");
+-    todo_wine ok(GetLastError() == ERROR_IO_PENDING, "got %d should be ERROR_IO_PENDING\n", GetLastError());
+-    todo_wine ok(WriteFile(pipewrite, readbuf, 513, &write, &ol), "WriteFile should succeed\n");
+-    todo_wine ok(write == 513, "got %d, write should be %d\n", write, 513);
++    ok(ReadFile(piperead, readbuf, sizeof(readbuf), &read, &ol2) == FALSE, "ReadFile should fail\n");
++    ok(GetLastError() == ERROR_IO_PENDING, "got %d should be ERROR_IO_PENDING\n", GetLastError());
++    ok(WriteFile(pipewrite, readbuf, 513, &write, &ol), "WriteFile should succeed\n");
++    ok(write == 513, "got %d, write should be %d\n", write, 513);
+     ok(GetOverlappedResult(piperead, &ol2, &read, FALSE), "GetOverlappedResult should succeed\n");
+-    todo_wine ok(read == 513, "got %d, read should be %d\n", read, 513);
++    ok(read == 513, "got %d, read should be %d\n", read, 513);
+     if (GetOverlappedResult(piperead, &ol2, &read, FALSE) == FALSE)
+         CancelIo(piperead);
+ 
+     /* overlapped read of 1 byte, non-blocking write of 513 bytes */
+     SetLastError(0xdeadbeef);
+-    todo_wine ok(ReadFile(piperead, readbuf, 1, &read, &ol2) == FALSE, "ReadFile should fail\n");
+-    todo_wine ok(GetLastError() == ERROR_IO_PENDING, "got %d should be ERROR_IO_PENDING\n", GetLastError());
+-    todo_wine ok(WriteFile(pipewrite, readbuf, 513, &write, &ol), "WriteFile should succeed\n");
+-    todo_wine ok(write == 513, "got %d, write should be %d\n", write, 513);
++    ok(ReadFile(piperead, readbuf, 1, &read, &ol2) == FALSE, "ReadFile should fail\n");
++    ok(GetLastError() == ERROR_IO_PENDING, "got %d should be ERROR_IO_PENDING\n", GetLastError());
++    ok(WriteFile(pipewrite, readbuf, 513, &write, &ol), "WriteFile should succeed\n");
++    ok(write == 513, "got %d, write should be %d\n", write, 513);
+     ok(GetOverlappedResult(piperead, &ol2, &read, FALSE), "GetOverlappedResult should succeed\n");
+     ok(read == 1, "got %d, read should be %d\n", read, 1);
+     if (GetOverlappedResult(piperead, &ol2, &read, FALSE) == FALSE)
+@@ -3985,7 +3985,7 @@ static void test_nowait(void)
+     /* read the remaining 512 bytes */
+     SetLastError(0xdeadbeef);
+     ok(ReadFile(piperead, readbuf, sizeof(readbuf), &read, &ol2), "ReadFile should succeed\n");
+-    todo_wine ok(read == 512, "got %d, write should be %d\n", write, 512);
++    ok(read == 512, "got %d, write should be %d\n", write, 512);
+     if (GetOverlappedResult(piperead, &ol2, &read, FALSE) == FALSE)
+         CancelIo(piperead);
+ 
+@@ -3993,8 +3993,8 @@ static void test_nowait(void)
+     SetLastError(0xdeadbeef);
+     ok(ReadFile(piperead, readbuf, 1, &read, &ol2) == FALSE, "ReadFile should fail\n");
+     ok(GetLastError() == ERROR_IO_PENDING, "got %d should be ERROR_IO_PENDING\n", GetLastError());
+-    todo_wine ok(WriteFile(pipewrite, readbuf, 514, &write, &ol), "WriteFile should succeed\n");
+-    todo_wine ok(write == 1, "got %d, write should be %d\n", write, 1);
++    ok(WriteFile(pipewrite, readbuf, 514, &write, &ol), "WriteFile should succeed\n");
++    ok(write == 1, "got %d, write should be %d\n", write, 1);
+     ok(GetOverlappedResult(piperead, &ol2, &read, FALSE), "GetOverlappedResult should succeed\n");
+     ok(read == 1, "got %d, read should be %d\n", read, 1);
+     if (GetOverlappedResult(piperead, &ol2, &read, FALSE) == FALSE)
+@@ -4002,8 +4002,8 @@ static void test_nowait(void)
+ 
+     /* write the exact buffer size, should succeed */
+     SetLastError(0xdeadbeef);
+-    todo_wine ok(WriteFile(pipewrite, readbuf, 512, &write, &ol), "WriteFile should succeed\n");
+-    todo_wine ok(write == 512, "WriteFile should write the whole buffer\n");
++    ok(WriteFile(pipewrite, readbuf, 512, &write, &ol), "WriteFile should succeed\n");
++    ok(write == 512, "WriteFile should write the whole buffer\n");
+     if (GetLastError() == ERROR_IO_PENDING)
+         CancelIo(piperead);
+ 
+diff --git a/server/named_pipe.c b/server/named_pipe.c
+index 6926712b8c..a709ad0503 100644
+--- a/server/named_pipe.c
++++ b/server/named_pipe.c
+@@ -363,7 +363,7 @@ static struct pipe_message *queue_message( struct pipe_end *pipe_end, struct ios
+     return message;
  }
  
--static int WINAPIV output_string( HANDLE handle, const WCHAR *msg, ... )
-+static int WINAPIV output_string( FILE *stream, const WCHAR *msg, ... )
+-static void wake_message( struct pipe_message *message )
++static void wake_message( struct pipe_message *message, data_size_t result )
  {
-     __ms_va_list va_args;
-     int len;
--    DWORD count;
--    WCHAR buffer[8192];
+     struct async *async = message->async;
  
-     __ms_va_start( va_args, msg );
--    len = vswprintf( buffer, ARRAY_SIZE(buffer), msg, va_args );
-+    len = vfwprintf( stream, msg, va_args );
-     __ms_va_end( va_args );
+@@ -371,7 +371,7 @@ static void wake_message( struct pipe_message *message )
+     if (!async) return;
  
--    if (!WriteConsoleW( handle, buffer, len, &count, NULL ))
--        WriteFile( handle, buffer, len * sizeof(WCHAR), &count, FALSE );
--
--    return count;
-+    return len;
+     message->iosb->status = STATUS_SUCCESS;
+-    message->iosb->result = message->iosb->in_size;
++    message->iosb->result = result;
+     async_terminate( async, message->iosb->result ? STATUS_ALERTED : STATUS_SUCCESS );
+     release_object( async );
  }
+@@ -749,7 +749,7 @@ static void message_queue_read( struct pipe_end *pipe_end, struct iosb *iosb )
+     {
+         iosb->out_data = message->iosb->in_data;
+         message->iosb->in_data = NULL;
+-        wake_message( message );
++        wake_message( message, message->iosb->in_size );
+         free_message( message );
+     }
+     else
+@@ -773,7 +773,7 @@ static void message_queue_read( struct pipe_end *pipe_end, struct iosb *iosb )
+             message->read_pos += writing;
+             if (message->read_pos == message->iosb->in_size)
+             {
+-                wake_message(message);
++                wake_message(message, message->iosb->in_size);
+                 free_message(message);
+             }
+         } while (write_pos < iosb->out_size);
+@@ -836,7 +836,22 @@ static void reselect_write_queue( struct pipe_end *pipe_end )
+         {
+             avail += message->iosb->in_size - message->read_pos;
+             if (message->async && (avail <= reader->buffer_size || !message->iosb->in_size))
+-                wake_message( message );
++            {
++                wake_message( message, message->iosb->in_size );
++            }
++            else if (message->async && (pipe_end->flags & NAMED_PIPE_NONBLOCKING_MODE))
++            {
++                struct async *async = find_pending_async( &reader->read_q );
++                if (!async)
++                {
++                    wake_message( message, message->read_pos );
++                    free_message( message );
++                }
++                else
++                {
++                    release_object( async );
++                }
++            }
+         }
+     }
  
- static int output_error( int msg )
-@@ -143,32 +138,20 @@ static int output_error( int msg )
-     WCHAR buffer[8192];
+
+-- 
+2.17.1
+
+From: Brendan Shanks <bshanks@codeweavers.com>
+Subject: [PATCH v4 4/4] server: Don't block ConnectNamedPipe for pipe in PIPE_NOWAIT mode.
+Message-Id: <20191004184159.23229-4-bshanks@codeweavers.com>
+Date: Fri,  4 Oct 2019 11:41:59 -0700
+In-Reply-To: <20191004184159.23229-1-bshanks@codeweavers.com>
+References: <20191004184159.23229-1-bshanks@codeweavers.com>
+
+Signed-off-by: Brendan Shanks <bshanks@codeweavers.com>
+---
+ dlls/kernel32/tests/pipe.c | 4 ++--
+ server/named_pipe.c        | 6 ++++++
+ 2 files changed, 8 insertions(+), 2 deletions(-)
+
+diff --git a/dlls/kernel32/tests/pipe.c b/dlls/kernel32/tests/pipe.c
+index 46b9e1c667..f53a59db14 100644
+--- a/dlls/kernel32/tests/pipe.c
++++ b/dlls/kernel32/tests/pipe.c
+@@ -4026,7 +4026,7 @@ static void test_nowait(void)
+     ol.hEvent = CreateEventW(NULL, TRUE, FALSE, NULL);
+     SetLastError(0xdeadbeef);
+     ok(ConnectNamedPipe(pipewrite, &ol) == FALSE, "ConnectNamedPipe should fail\n");
+-    todo_wine ok(GetLastError() == ERROR_PIPE_LISTENING, "got %d should be ERROR_PIPE_LISTENING\n", GetLastError());
++    ok(GetLastError() == ERROR_PIPE_LISTENING, "got %d should be ERROR_PIPE_LISTENING\n", GetLastError());
+     if (GetLastError() == ERROR_IO_PENDING)
+         CancelIo(pipewrite);
  
-     LoadStringW( GetModuleHandleW(NULL), msg, buffer, ARRAY_SIZE(buffer));
--    return output_string( GetStdHandle(STD_ERROR_HANDLE), fmtW, buffer );
-+    return output_string( stderr, fmtW, buffer );
- }
+@@ -4044,7 +4044,7 @@ static void test_nowait(void)
+     ok(DisconnectNamedPipe(pipewrite) == TRUE, "DisconnectNamedPipe should succeed\n");
+     SetLastError(0xdeadbeef);
+     ok(ConnectNamedPipe(pipewrite,&ol) == FALSE, "ConnectNamedPipe should fail\n");
+-    todo_wine ok(GetLastError() == ERROR_PIPE_LISTENING, "got %d should be ERROR_PIPE_LISTENING\n", GetLastError());
++    ok(GetLastError() == ERROR_PIPE_LISTENING, "got %d should be ERROR_PIPE_LISTENING\n", GetLastError());
+     if (GetLastError() == ERROR_IO_PENDING)
+         CancelIo(pipewrite);
+     ok(CloseHandle(ol.hEvent), "CloseHandle for the event failed\n");
+diff --git a/server/named_pipe.c b/server/named_pipe.c
+index a709ad0503..309dd8b0c5 100644
+--- a/server/named_pipe.c
++++ b/server/named_pipe.c
+@@ -1115,6 +1115,12 @@ static int pipe_server_ioctl( struct fd *fd, ioctl_code_t code, struct async *as
+             return 0;
+         }
  
- static int output_header( const WCHAR *prop, ULONG column_width )
- {
--    static const WCHAR bomW[] = {0xfeff}, fmtW[] = {'%','-','*','s','\r','\n',0};
--    int len;
--    DWORD count;
--    WCHAR buffer[8192];
--
--    len = swprintf( buffer, ARRAY_SIZE(buffer), fmtW, column_width, prop );
--
--    if (!WriteConsoleW( GetStdHandle(STD_OUTPUT_HANDLE), buffer, len, &count, NULL )) /* redirected */
--    {
--        WriteFile( GetStdHandle(STD_OUTPUT_HANDLE), bomW, sizeof(bomW), &count, FALSE );
--        WriteFile( GetStdHandle(STD_OUTPUT_HANDLE), buffer, len * sizeof(WCHAR), &count, FALSE );
--        count += sizeof(bomW);
--    }
-+    static const WCHAR fmtW[] = {'%','-','*','s','\r','\n',0};
- 
--    return count;
-+    return fwprintf( stdout, fmtW, column_width, prop );
- }
- 
- static int output_line( const WCHAR *str, ULONG column_width )
- {
--    static const WCHAR fmtW[] = {'%','-','*','s','\r','\n',0};
--    return output_string( GetStdHandle(STD_OUTPUT_HANDLE), fmtW, column_width, str );
-+    static const WCHAR fmtW[] = {'%','-','*','s','\r','\n','\r','\n',0};
-+    return output_string( stdout, fmtW, column_width, str );
- }
- 
- static int query_prop( const WCHAR *class, const WCHAR *propname )
++        if (server->pipe_end.flags & NAMED_PIPE_NONBLOCKING_MODE)
++        {
++            set_error( STATUS_PIPE_LISTENING );
++            return 0;
++        }
++
+         queue_async( &server->listen_q, async );
+         async_wake_up( &server->pipe_end.pipe->waiters, STATUS_SUCCESS );
+         set_error( STATUS_PENDING );
+
+-- 
+2.17.1
+
 From: Brendan Shanks <bshanks@codeweavers.com>
 Subject: [PATCH] ntdll: Always add a tail to heap allocations.
 Message-Id: <20190919223935.22589-1-bshanks@codeweavers.com>
@@ -179,9 +549,9 @@ diff --git a/dlls/user32/win.c b/dlls/user32/win.c
 index 3582262b7d..0523fc2479 100644
 --- a/dlls/user32/win.c
 +++ b/dlls/user32/win.c
-@@ -3849,6 +3863,8 @@ BOOL WINAPI DECLSPEC_HOTPATCH GetWindowInfo( HWND hwnd, PWINDOWINFO pwi)
- 
-     if (!WIN_GetRectangles( hwnd, COORDS_SCREEN, &rcWindow, &rcClient )) return FALSE;
+@@ -3847,6 +3847,8 @@ BOOL WINAPI DECLSPEC_HOTPATCH GetWindowInfo( HWND hwnd, PWINDOWINFO pwi)
+ {
+     if (!WIN_GetRectangles( hwnd, COORDS_SCREEN, &pwi->rcWindow, &pwi->rcClient )) return FALSE;
      if (!pwi) return FALSE;
 +    if (sizeof(WINDOWINFO) != pwi->cbSize)
 +        WARN("Incorrect cbSize %d\n", pwi->cbSize);
@@ -191,4 +561,3 @@ index 3582262b7d..0523fc2479 100644
 
 -- 
 2.17.1
-

@@ -38,20 +38,7 @@
     ../wine-staging/patches/patchinstall.sh DESTDIR="." --all \
     -W server-Desktop_Refcount \
     -W ws2_32-TransmitFile \
-    -W winex11-CandidateWindowPos \
-    -W winex11-DefaultDisplayFrequency \
     -W winex11.drv-mouse-coorrds \
-    -W winex11.drv-Query_server_position \
-    -W winex11-ime-check-thread-data \
-    -W winex11-key_translation \
-    -W winex11-MWM_Decorations \
-    -W winex11-_NET_ACTIVE_WINDOW \
-    -W winex11-UpdateLayeredWindow \
-    -W winex11-Vulkan_support \
-    -W winex11-wglShareLists \
-    -W winex11-Window_Style \
-    -W winex11-WM_WINDOWPOSCHANGING \
-    -W winex11-XEMBED \
     -W dinput-SetActionMap-genre \
     -W dinput-axis-recalc \
     -W dinput-joy-mappings \
@@ -108,11 +95,10 @@
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-use_clock_monotonic.patch
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-amd_ags.patch
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-hide_prefix_update_window.patch
-#    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-FS_bypass_compositor.patch
-    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-fullscreen_hack_staging_vulkan.patch
-    patch -Np1 < ../game-patches-testing/proton-valve-patches/winex11.patch
-#    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-fullscreen_hack_staging.patch
-#    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-fullscreen_hack_realmodes.patch
+    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-FS_bypass_compositor.patch
+#    patch -Np1 < ../game-patches-testing/proton-valve-patches/winex11.patch
+    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-fullscreen_hack_staging.patch
+    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-fullscreen_hack_realmodes.patch
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-vk_bits_4.5+.patch
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-sdl_joy.patch
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-sdl_joy_2.patch
