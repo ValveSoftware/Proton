@@ -1178,9 +1178,9 @@ index f1c883167ed..50b3323ae9f 100644
 --- a/dlls/user32/focus.c
 +++ b/dlls/user32/focus.c
 @@ -156,6 +156,8 @@ static BOOL set_active_window( HWND hwnd, HWND *prev, BOOL mouse, BOOL focus )
-                       (LPARAM)previous );
-         if (GetAncestor( hwnd, GA_PARENT ) == GetDesktopWindow())
-             PostMessageW( GetDesktopWindow(), WM_PARENTNOTIFY, WM_NCACTIVATE, (LPARAM)hwnd );
+ 
+         if (hwnd == GetForegroundWindow() && !IsIconic( hwnd ))
+             USER_Driver->pSetActiveWindow( hwnd );
 +
 +        imm_activate_window( hwnd );
      }

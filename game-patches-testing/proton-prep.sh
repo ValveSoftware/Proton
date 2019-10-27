@@ -4,7 +4,8 @@
     cd vkd3d
     git reset --hard HEAD
     git clean -xdf
-    patch -Np1 < ../game-patches-testing/vkd3d-patches/wow-flicker.patch
+    # unsure if this is still needed to fix flicker in wow
+    # patch -Np1 < ../game-patches-testing/vkd3d-patches/wow-flicker.patch
     cd ..
 
     # Valve DXVK patches
@@ -39,6 +40,9 @@
     -W server-Desktop_Refcount \
     -W ws2_32-TransmitFile \
     -W winex11.drv-mouse-coorrds \
+    -W winex11-MWM_Decorations \
+    -W winex11-_NET_ACTIVE_WINDOW \
+    -W winex11-WM_WINDOWPOSCHANGING \
     -W dinput-SetActionMap-genre \
     -W dinput-axis-recalc \
     -W dinput-joy-mappings \
@@ -68,7 +72,7 @@
     patch -Np1 < ../game-patches-testing/game-patches/sword-art-online-gnutls.patch
 
     echo "gta v launcher fix"
-    patch -Np1 < ../game-patches-testing/game-patches/gtav-launcher.patch
+    #patch -Np1 < ../game-patches-testing/game-patches/gtav-launcher.patch
 
     echo "steam crossover patch"
     patch -Np1 < ../game-patches-testing/game-patches/steam-crossover.patch
@@ -89,16 +93,21 @@
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-LAA_staging.patch
 
     # this needs to come after LAA patch
+
+    echo "skyrim se skyui status icon fix patch"
+    patch -Np1 < ../game-patches-testing/game-patches/skyrimse-skyui_status_icon_fix.patch
+
     echo "mortal kombat 11 patch"
-#    patch -Np1 < ../game-patches-testing/game-patches/mk11.patch
+    patch -Np1 < ../game-patches-testing/game-patches/mk11.patch
 
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-use_clock_monotonic.patch
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-amd_ags.patch
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-hide_prefix_update_window.patch
-    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-FS_bypass_compositor.patch
-#    patch -Np1 < ../game-patches-testing/proton-valve-patches/winex11.patch
-    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-fullscreen_hack_staging.patch
-    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-fullscreen_hack_realmodes.patch
+#    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-FS_bypass_compositor.patch
+    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-fullscreen_hack_staging_vulkan.patch   
+    patch -Np1 < ../game-patches-testing/proton-valve-patches/winex11.patch
+#    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-fullscreen_hack_staging.patch
+#    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-fullscreen_hack_realmodes.patch
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-vk_bits_4.5+.patch
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-sdl_joy.patch
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-sdl_joy_2.patch
