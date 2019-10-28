@@ -6,6 +6,22 @@
     git clean -xdf
     # unsure if this is still needed to fix flicker in wow
     # patch -Np1 < ../game-patches-testing/vkd3d-patches/wow-flicker.patch
+
+    patch -Np1 < ../game-patches-testing/vkd3d-patches/171975.patch
+    patch -Np1 < ../game-patches-testing/vkd3d-patches/171985-1.patch
+    patch -Np1 < ../game-patches-testing/vkd3d-patches/171985-2.patch
+    patch -Np1 < ../game-patches-testing/vkd3d-patches/172006-1.patch
+    patch -Np1 < ../game-patches-testing/vkd3d-patches/172006-2.patch
+    patch -Np1 < ../game-patches-testing/vkd3d-patches/172006-3.patch
+    patch -Np1 < ../game-patches-testing/vkd3d-patches/172006-4.patch
+    patch -Np1 < ../game-patches-testing/vkd3d-patches/172006-5.patch
+    patch -Np1 < ../game-patches-testing/vkd3d-patches/172006-6.patch
+    patch -Np1 < ../game-patches-testing/vkd3d-patches/172033.patch
+    patch -Np1 < ../game-patches-testing/vkd3d-patches/172037.patch
+    patch -Np1 < ../game-patches-testing/vkd3d-patches/172053-1.patch
+    patch -Np1 < ../game-patches-testing/vkd3d-patches/172053-2.patch
+    patch -Np1 < ../game-patches-testing/vkd3d-patches/172080.patch
+
     cd ..
 
     # Valve DXVK patches
@@ -72,7 +88,7 @@
     patch -Np1 < ../game-patches-testing/game-patches/sword-art-online-gnutls.patch
 
     echo "gta v launcher fix"
-    #patch -Np1 < ../game-patches-testing/game-patches/gtav-launcher.patch
+    patch -Np1 < ../game-patches-testing/game-patches/gtav-launcher.patch
 
     echo "steam crossover patch"
     patch -Np1 < ../game-patches-testing/game-patches/steam-crossover.patch
@@ -94,20 +110,14 @@
 
     # this needs to come after LAA patch
 
-    echo "skyrim se skyui status icon fix patch"
-    patch -Np1 < ../game-patches-testing/game-patches/skyrimse-skyui_status_icon_fix.patch
-
     echo "mortal kombat 11 patch"
     patch -Np1 < ../game-patches-testing/game-patches/mk11.patch
 
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-use_clock_monotonic.patch
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-amd_ags.patch
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-hide_prefix_update_window.patch
-#    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-FS_bypass_compositor.patch
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-fullscreen_hack_staging_vulkan.patch   
     patch -Np1 < ../game-patches-testing/proton-valve-patches/winex11.patch
-#    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-fullscreen_hack_staging.patch
-#    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-fullscreen_hack_realmodes.patch
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-vk_bits_4.5+.patch
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-sdl_joy.patch
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-sdl_joy_2.patch

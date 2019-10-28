@@ -1,0 +1,113 @@
+From: Henri Verbeet <hverbeet@codeweavers.com>
+Subject: [PATCH vkd3d 5/6] vkd3d-shader: Compute correct output array index for line tess factors.
+Message-Id: <20191024172817.5662-5-hverbeet@codeweavers.com>
+Date: Thu, 24 Oct 2019 20:58:16 +0330
+
+From: Philip Rebohle <philip.rebohle@tu-dortmund.de>
+
+Line tessellation factors use two different DXBC semantics that
+both map to the same SPIR-V built-in. In this case, we cannot
+rely on the semantic index.
+
+Signed-off-by: Philip Rebohle <philip.rebohle@tu-dortmund.de>
+Signed-off-by: Henri Verbeet <hverbeet@codeweavers.com>
+---
+This supersedes patches 171408 and 171409.
+
+ libs/vkd3d-shader/spirv.c | 46 ++++++++++++++++++++++++++++++++++++++++++----
+ 1 file changed, 42 insertions(+), 4 deletions(-)
+
+diff --git a/libs/vkd3d-shader/spirv.c b/libs/vkd3d-shader/spirv.c
+index 936b014..22fbcd6 100644
+--- a/libs/vkd3d-shader/spirv.c
++++ b/libs/vkd3d-shader/spirv.c
+@@ -129,7 +129,8 @@ static const void *vkd3d_find_struct_(const struct vkd3d_struct *chain,
+     return NULL;
+ }
+ 
+-static enum vkd3d_shader_input_sysval_semantic vkd3d_siv_from_sysval(enum vkd3d_sysval_semantic sysval)
++static enum vkd3d_shader_input_sysval_semantic vkd3d_siv_from_sysval_indexed(enum vkd3d_sysval_semantic sysval,
++        unsigned int index)
+ {
+     switch (sysval)
+     {
+@@ -137,12 +138,29 @@ static enum vkd3d_shader_input_sysval_semantic vkd3d_siv_from_sysval(enum vkd3d_
+             return VKD3D_SIV_NONE;
+         case VKD3D_SV_POSITION:
+             return VKD3D_SIV_POSITION;
++        case VKD3D_SV_TESS_FACTOR_QUADEDGE:
++            return VKD3D_SIV_QUAD_U0_TESS_FACTOR + index;
++        case VKD3D_SV_TESS_FACTOR_QUADINT:
++            return VKD3D_SIV_QUAD_U_INNER_TESS_FACTOR + index;
++        case VKD3D_SV_TESS_FACTOR_TRIEDGE:
++            return VKD3D_SIV_TRIANGLE_U_TESS_FACTOR + index;
++        case VKD3D_SV_TESS_FACTOR_TRIINT:
++            return VKD3D_SIV_TRIANGLE_INNER_TESS_FACTOR;
++        case VKD3D_SV_TESS_FACTOR_LINEDET:
++            return VKD3D_SIV_LINE_DETAIL_TESS_FACTOR;
++        case VKD3D_SV_TESS_FACTOR_LINEDEN:
++            return VKD3D_SIV_LINE_DENSITY_TESS_FACTOR;
+         default:
+-            FIXME("Unhandled sysval %#x.\n", sysval);
++            FIXME("Unhandled sysval %#x, index %u.\n", sysval, index);
+             return VKD3D_SIV_NONE;
+     }
+ }
+ 
++static enum vkd3d_shader_input_sysval_semantic vkd3d_siv_from_sysval(enum vkd3d_sysval_semantic sysval)
++{
++      return vkd3d_siv_from_sysval_indexed(sysval, 0);
++}
++
+ #define VKD3D_SPIRV_VERSION 0x00010000
+ #define VKD3D_SPIRV_GENERATOR_ID 18
+ #define VKD3D_SPIRV_GENERATOR_VERSION 1
+@@ -4474,6 +4492,25 @@ static void vkd3d_dxbc_compiler_emit_shader_phase_output(struct vkd3d_dxbc_compi
+     vkd3d_dxbc_compiler_put_symbol(compiler, &reg_symbol);
+ }
+ 
++static uint32_t vkd3d_dxbc_compiler_get_output_array_index(struct vkd3d_dxbc_compiler *compiler,
++        const struct vkd3d_shader_signature_element *e)
++{
++    enum vkd3d_shader_input_sysval_semantic sysval;
++    const struct vkd3d_spirv_builtin *builtin;
++
++    sysval = vkd3d_siv_from_sysval_indexed(e->sysval_semantic, e->semantic_index);
++    builtin = get_spirv_builtin_for_sysval(compiler, sysval);
++
++    switch (sysval)
++    {
++        case VKD3D_SIV_LINE_DETAIL_TESS_FACTOR:
++        case VKD3D_SIV_LINE_DENSITY_TESS_FACTOR:
++            return builtin->member_idx;
++        default:
++            return e->semantic_index;
++    }
++}
++
+ static void vkd3d_dxbc_compiler_emit_store_shader_output(struct vkd3d_dxbc_compiler *compiler,
+         const struct vkd3d_shader_signature_element *output,
+         const struct vkd3d_shader_output_info *output_info,
+@@ -4482,7 +4519,7 @@ static void vkd3d_dxbc_compiler_emit_store_shader_output(struct vkd3d_dxbc_compi
+     unsigned int dst_write_mask, use_mask, uninit_mask, swizzle, mask;
+     struct vkd3d_spirv_builder *builder = &compiler->spirv_builder;
+     uint32_t type_id, zero_id, ptr_type_id, chain_id, object_id;
+-    unsigned int i, index;
++    unsigned int i, index, array_idx;
+     uint32_t output_id;
+ 
+     dst_write_mask = output->mask & 0xff;
+@@ -4535,7 +4572,8 @@ static void vkd3d_dxbc_compiler_emit_store_shader_output(struct vkd3d_dxbc_compi
+     type_id = vkd3d_spirv_get_type_id(builder, output_info->component_type, 1);
+     ptr_type_id = vkd3d_spirv_get_op_type_pointer(builder, SpvStorageClassOutput, type_id);
+     mask = output_info->array_element_mask;
+-    mask &= (1u << (output->semantic_index * VKD3D_VEC4_SIZE)) - 1;
++    array_idx = vkd3d_dxbc_compiler_get_output_array_index(compiler, output);
++    mask &= (1u << (array_idx * VKD3D_VEC4_SIZE)) - 1;
+     for (i = 0, index = vkd3d_popcount(mask); i < VKD3D_VEC4_SIZE; ++i)
+     {
+         if (!(write_mask & (VKD3DSP_WRITEMASK_0 << i)))
+
+-- 
+2.11.0
+

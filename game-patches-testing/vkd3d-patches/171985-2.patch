@@ -1,0 +1,383 @@
+From: Henri Verbeet <hverbeet@codeweavers.com>
+Subject: [PATCH vkd3d 2/2] vkd3d: Optimise the GPU VA allocator.
+Message-Id: <20191024143341.29145-2-hverbeet@codeweavers.com>
+Date: Thu, 24 Oct 2019 18:03:41 +0330
+
+From: Hans-Kristian Arntzen <post@arntzen-software.no>
+
+The GPU VA allocator was allocating memory in a way where dereferencing
+GPU VA required a lock + bsearch() to find the right VA range.
+
+Rather than going this route, we turn the common case into O(1) and
+lock-free by creating a slab allocator which allows us to lookup a
+pointer directly from a GPU VA with (VA - Base) / PageSize.
+
+The number of allocations in the fast path must be limited since we
+cannot trivially grow the allocator while remaining lock-free for
+dereferences.
+
+Signed-off-by: Hans-Kristian Arntzen <post@arntzen-software.no>
+Signed-off-by: Henri Verbeet <hverbeet@codeweavers.com>
+---
+This supersedes patch 171219.
+
+ libs/vkd3d/device.c        | 226 +++++++++++++++++++++++++++++++++++++--------
+ libs/vkd3d/vkd3d_private.h |  28 ++++--
+ 2 files changed, 204 insertions(+), 50 deletions(-)
+
+diff --git a/libs/vkd3d/device.c b/libs/vkd3d/device.c
+index 2dee5e3..4d6f7c9 100644
+--- a/libs/vkd3d/device.c
++++ b/libs/vkd3d/device.c
+@@ -1822,11 +1822,70 @@ static void d3d12_device_destroy_pipeline_cache(struct d3d12_device *device)
+     pthread_mutex_destroy(&device->mutex);
+ }
+ 
+-D3D12_GPU_VIRTUAL_ADDRESS vkd3d_gpu_va_allocator_allocate(struct vkd3d_gpu_va_allocator *allocator,
+-        size_t alignment, size_t size, void *ptr)
++#define VKD3D_VA_FALLBACK_BASE      0x8000000000000000ull
++#define VKD3D_VA_SLAB_BASE          0x0000001000000000ull
++#define VKD3D_VA_SLAB_SIZE_SHIFT    32
++#define VKD3D_VA_SLAB_SIZE          (1ull << VKD3D_VA_SLAB_SIZE_SHIFT)
++#define VKD3D_VA_SLAB_COUNT         (64 * 1024)
++
++static D3D12_GPU_VIRTUAL_ADDRESS vkd3d_gpu_va_allocator_allocate_slab(struct vkd3d_gpu_va_allocator *allocator,
++        size_t aligned_size, void *ptr)
++{
++    struct vkd3d_gpu_va_slab *slab;
++    D3D12_GPU_VIRTUAL_ADDRESS address;
++    unsigned slab_idx;
++
++    slab = allocator->free_slab;
++    allocator->free_slab = slab->ptr;
++    slab->size = aligned_size;
++    slab->ptr = ptr;
++
++    /* It is critical that the multiplication happens in 64-bit to not
++     * overflow. */
++    slab_idx = slab - allocator->slabs;
++    address = VKD3D_VA_SLAB_BASE + slab_idx * VKD3D_VA_SLAB_SIZE;
++
++    TRACE("Allocated address %#"PRIx64", slab %u, size %zu.\n", address, slab_idx, aligned_size);
++
++    return address;
++}
++
++static D3D12_GPU_VIRTUAL_ADDRESS vkd3d_gpu_va_allocator_allocate_fallback(struct vkd3d_gpu_va_allocator *allocator,
++        size_t alignment, size_t aligned_size, void *ptr)
+ {
+     struct vkd3d_gpu_va_allocation *allocation;
+     D3D12_GPU_VIRTUAL_ADDRESS base, ceiling;
++
++    base = allocator->fallback_floor;
++    ceiling = ~(D3D12_GPU_VIRTUAL_ADDRESS)0;
++    ceiling -= alignment - 1;
++    if (aligned_size > ceiling || ceiling - aligned_size < base)
++        return 0;
++
++    base = (base + (alignment - 1)) & ~((D3D12_GPU_VIRTUAL_ADDRESS)alignment - 1);
++
++    if (!vkd3d_array_reserve((void **)&allocator->fallback_allocations, &allocator->fallback_allocations_size,
++            allocator->fallback_allocation_count + 1, sizeof(*allocator->fallback_allocations)))
++        return 0;
++
++    allocation = &allocator->fallback_allocations[allocator->fallback_allocation_count++];
++    allocation->base = base;
++    allocation->size = aligned_size;
++    allocation->ptr = ptr;
++
++    /* This pointer is bumped and never lowered on a free. However, this will
++     * only fail once we have exhausted 63 bits of address space. */
++    allocator->fallback_floor = base + aligned_size;
++
++    TRACE("Allocated address %#"PRIx64", size %zu.\n", base, aligned_size);
++
++    return base;
++}
++
++D3D12_GPU_VIRTUAL_ADDRESS vkd3d_gpu_va_allocator_allocate(struct vkd3d_gpu_va_allocator *allocator,
++        size_t alignment, size_t size, void *ptr)
++{
++    D3D12_GPU_VIRTUAL_ADDRESS address;
+     int rc;
+ 
+     if (size > ~(size_t)0 - (alignment - 1))
+@@ -1839,34 +1898,41 @@ D3D12_GPU_VIRTUAL_ADDRESS vkd3d_gpu_va_allocator_allocate(struct vkd3d_gpu_va_al
+         return 0;
+     }
+ 
+-    base = allocator->floor;
+-    ceiling = ~(D3D12_GPU_VIRTUAL_ADDRESS)0;
+-    ceiling -= alignment - 1;
+-    if (size > ceiling || ceiling - size < base)
+-    {
+-        pthread_mutex_unlock(&allocator->mutex);
+-        return 0;
+-    }
++    if (size <= VKD3D_VA_SLAB_SIZE && allocator->free_slab)
++        address = vkd3d_gpu_va_allocator_allocate_slab(allocator, size, ptr);
++    else
++        address = vkd3d_gpu_va_allocator_allocate_fallback(allocator, alignment, size, ptr);
+ 
+-    base = (base + (alignment - 1)) & ~((D3D12_GPU_VIRTUAL_ADDRESS)alignment - 1);
++    pthread_mutex_unlock(&allocator->mutex);
+ 
+-    if (!vkd3d_array_reserve((void **)&allocator->allocations, &allocator->allocations_size,
+-            allocator->allocation_count + 1, sizeof(*allocator->allocations)))
+-    {
+-        pthread_mutex_unlock(&allocator->mutex);
+-        return 0;
+-    }
++    return address;
++}
+ 
+-    allocation = &allocator->allocations[allocator->allocation_count++];
+-    allocation->base = base;
+-    allocation->size = size;
+-    allocation->ptr = ptr;
++static void *vkd3d_gpu_va_allocator_dereference_slab(struct vkd3d_gpu_va_allocator *allocator,
++        D3D12_GPU_VIRTUAL_ADDRESS address)
++{
++    const struct vkd3d_gpu_va_slab *slab;
++    D3D12_GPU_VIRTUAL_ADDRESS base_offset;
++    unsigned int slab_idx;
+ 
+-    allocator->floor = base + size;
++    base_offset = address - VKD3D_VA_SLAB_BASE;
++    slab_idx = base_offset >> VKD3D_VA_SLAB_SIZE_SHIFT;
+ 
+-    pthread_mutex_unlock(&allocator->mutex);
++    if (slab_idx >= VKD3D_VA_SLAB_COUNT)
++    {
++        ERR("Invalid slab index %u for address %#"PRIx64".\n", slab_idx, address);
++        return NULL;
++    }
+ 
+-    return allocation->base;
++    slab = &allocator->slabs[slab_idx];
++    base_offset -= slab_idx * VKD3D_VA_SLAB_SIZE;
++    if (base_offset >= slab->size)
++    {
++        ERR("Address %#"PRIx64" is %#"PRIx64" bytes into slab %u of size %zu.\n",
++                address, base_offset, slab_idx, slab->size);
++        return NULL;
++    }
++    return slab->ptr;
+ }
+ 
+ static int vkd3d_gpu_va_allocation_compare(const void *k, const void *e)
+@@ -1881,30 +1947,94 @@ static int vkd3d_gpu_va_allocation_compare(const void *k, const void *e)
+     return 0;
+ }
+ 
+-void *vkd3d_gpu_va_allocator_dereference(struct vkd3d_gpu_va_allocator *allocator,
++static void *vkd3d_gpu_va_allocator_dereference_fallback(struct vkd3d_gpu_va_allocator *allocator,
+         D3D12_GPU_VIRTUAL_ADDRESS address)
+ {
+     struct vkd3d_gpu_va_allocation *allocation;
++
++    allocation = bsearch(&address, allocator->fallback_allocations, allocator->fallback_allocation_count,
++            sizeof(*allocation), vkd3d_gpu_va_allocation_compare);
++
++    return allocation ? allocation->ptr : NULL;
++}
++
++void *vkd3d_gpu_va_allocator_dereference(struct vkd3d_gpu_va_allocator *allocator,
++        D3D12_GPU_VIRTUAL_ADDRESS address)
++{
++    void *ret;
+     int rc;
+ 
++    /* If we land in the non-fallback region, dereferencing VA is lock-less.
++     * The base pointer is immutable, and the only way we can have a data race
++     * is if some other thread is poking into the
++     * slab_mem_allocation[base_index] block. This can only happen if someone
++     * is trying to free the entry while we're dereferencing it, which would
++     * be a serious application bug. */
++    if (address < VKD3D_VA_FALLBACK_BASE)
++        return vkd3d_gpu_va_allocator_dereference_slab(allocator, address);
++
++    /* Slow fallback. */
+     if ((rc = pthread_mutex_lock(&allocator->mutex)))
+     {
+         ERR("Failed to lock mutex, error %d.\n", rc);
+         return NULL;
+     }
+ 
+-    allocation = bsearch(&address, allocator->allocations, allocator->allocation_count,
+-            sizeof(*allocation), vkd3d_gpu_va_allocation_compare);
++    ret = vkd3d_gpu_va_allocator_dereference_fallback(allocator, address);
+ 
+     pthread_mutex_unlock(&allocator->mutex);
+ 
+-    return allocation ? allocation->ptr : NULL;
++    return ret;
+ }
+ 
+-void vkd3d_gpu_va_allocator_free(struct vkd3d_gpu_va_allocator *allocator, D3D12_GPU_VIRTUAL_ADDRESS address)
++static void vkd3d_gpu_va_allocator_free_slab(struct vkd3d_gpu_va_allocator *allocator,
++        D3D12_GPU_VIRTUAL_ADDRESS address)
++{
++    D3D12_GPU_VIRTUAL_ADDRESS base_offset;
++    struct vkd3d_gpu_va_slab *slab;
++    unsigned int slab_idx;
++
++    base_offset = address - VKD3D_VA_SLAB_BASE;
++    slab_idx = base_offset >> VKD3D_VA_SLAB_SIZE_SHIFT;
++
++    if (slab_idx >= VKD3D_VA_SLAB_COUNT)
++    {
++        ERR("Invalid slab index %u for address %#"PRIx64".\n", slab_idx, address);
++        return;
++    }
++
++    TRACE("Freeing address %#"PRIx64", slab %u.\n", address, slab_idx);
++
++    slab = &allocator->slabs[slab_idx];
++    slab->size = 0;
++    slab->ptr = allocator->free_slab;
++    allocator->free_slab = slab;
++}
++
++static void vkd3d_gpu_va_allocator_free_fallback(struct vkd3d_gpu_va_allocator *allocator,
++        D3D12_GPU_VIRTUAL_ADDRESS address)
+ {
+     struct vkd3d_gpu_va_allocation *allocation;
+     unsigned int index;
++
++    allocation = bsearch(&address, allocator->fallback_allocations, allocator->fallback_allocation_count,
++            sizeof(*allocation), vkd3d_gpu_va_allocation_compare);
++
++    if (!allocation || allocation->base != address)
++    {
++        ERR("Address %#"PRIx64" does not match any allocation.\n", address);
++        return;
++    }
++
++    index = allocation - allocator->fallback_allocations;
++    --allocator->fallback_allocation_count;
++    if (index != allocator->fallback_allocation_count)
++        memmove(&allocator->fallback_allocations[index], &allocator->fallback_allocations[index + 1],
++                (allocator->fallback_allocation_count - index) * sizeof(*allocation));
++}
++
++void vkd3d_gpu_va_allocator_free(struct vkd3d_gpu_va_allocator *allocator, D3D12_GPU_VIRTUAL_ADDRESS address)
++{
+     int rc;
+ 
+     if ((rc = pthread_mutex_lock(&allocator->mutex)))
+@@ -1913,32 +2043,45 @@ void vkd3d_gpu_va_allocator_free(struct vkd3d_gpu_va_allocator *allocator, D3D12
+         return;
+     }
+ 
+-    allocation = bsearch(&address, allocator->allocations, allocator->allocation_count,
+-            sizeof(*allocation), vkd3d_gpu_va_allocation_compare);
+-    if (allocation && allocation->base == address)
++    if (address < VKD3D_VA_FALLBACK_BASE)
+     {
+-        index = allocation - allocator->allocations;
+-        --allocator->allocation_count;
+-        if (index != allocator->allocation_count)
+-        {
+-            memmove(&allocator->allocations[index], &allocator->allocations[index + 1],
+-                    (allocator->allocation_count - index) * sizeof(*allocation));
+-        }
++        vkd3d_gpu_va_allocator_free_slab(allocator, address);
++        pthread_mutex_unlock(&allocator->mutex);
++        return;
+     }
+ 
++    vkd3d_gpu_va_allocator_free_fallback(allocator, address);
++
+     pthread_mutex_unlock(&allocator->mutex);
+ }
+ 
+ static bool vkd3d_gpu_va_allocator_init(struct vkd3d_gpu_va_allocator *allocator)
+ {
++    unsigned int i;
+     int rc;
+ 
+     memset(allocator, 0, sizeof(*allocator));
+-    allocator->floor = 0x1000;
++    allocator->fallback_floor = VKD3D_VA_FALLBACK_BASE;
++
++    /* To remain lock-less, we cannot grow the slabs array after the fact. If
++     * we commit to a maximum number of allocations here, we can dereference
++     * without taking a lock as the base pointer never changes. We would be
++     * able to grow more seamlessly using an array of pointers, but that would
++     * make dereferencing slightly less efficient. */
++    if (!(allocator->slabs = vkd3d_calloc(VKD3D_VA_SLAB_COUNT, sizeof(*allocator->slabs))))
++        return false;
++
++    /* Mark all slabs as free. */
++    allocator->free_slab = &allocator->slabs[0];
++    for (i = 0; i < VKD3D_VA_SLAB_COUNT - 1; ++i)
++    {
++        allocator->slabs[i].ptr = &allocator->slabs[i + 1];
++    }
+ 
+     if ((rc = pthread_mutex_init(&allocator->mutex, NULL)))
+     {
+         ERR("Failed to initialize mutex, error %d.\n", rc);
++        vkd3d_free(allocator->slabs);
+         return false;
+     }
+ 
+@@ -1954,7 +2097,8 @@ static void vkd3d_gpu_va_allocator_cleanup(struct vkd3d_gpu_va_allocator *alloca
+         ERR("Failed to lock mutex, error %d.\n", rc);
+         return;
+     }
+-    vkd3d_free(allocator->allocations);
++    vkd3d_free(allocator->slabs);
++    vkd3d_free(allocator->fallback_allocations);
+     pthread_mutex_unlock(&allocator->mutex);
+     pthread_mutex_destroy(&allocator->mutex);
+ }
+diff --git a/libs/vkd3d/vkd3d_private.h b/libs/vkd3d/vkd3d_private.h
+index 520dab1..1cb40f2 100644
+--- a/libs/vkd3d/vkd3d_private.h
++++ b/libs/vkd3d/vkd3d_private.h
+@@ -202,20 +202,30 @@ HRESULT vkd3d_fence_worker_start(struct vkd3d_fence_worker *worker,
+ HRESULT vkd3d_fence_worker_stop(struct vkd3d_fence_worker *worker,
+         struct d3d12_device *device) DECLSPEC_HIDDEN;
+ 
++struct vkd3d_gpu_va_allocation
++{
++    D3D12_GPU_VIRTUAL_ADDRESS base;
++    SIZE_T size;
++    void *ptr;
++};
++
++struct vkd3d_gpu_va_slab
++{
++    SIZE_T size;
++    void *ptr;
++};
++
+ struct vkd3d_gpu_va_allocator
+ {
+     pthread_mutex_t mutex;
+ 
+-    D3D12_GPU_VIRTUAL_ADDRESS floor;
++    D3D12_GPU_VIRTUAL_ADDRESS fallback_floor;
++    struct vkd3d_gpu_va_allocation *fallback_allocations;
++    size_t fallback_allocations_size;
++    size_t fallback_allocation_count;
+ 
+-    struct vkd3d_gpu_va_allocation
+-    {
+-        D3D12_GPU_VIRTUAL_ADDRESS base;
+-        SIZE_T size;
+-        void *ptr;
+-    } *allocations;
+-    size_t allocations_size;
+-    size_t allocation_count;
++    struct vkd3d_gpu_va_slab *slabs;
++    struct vkd3d_gpu_va_slab *free_slab;
+ };
+ 
+ D3D12_GPU_VIRTUAL_ADDRESS vkd3d_gpu_va_allocator_allocate(struct vkd3d_gpu_va_allocator *allocator,
+
+-- 
+2.11.0
+

@@ -1,0 +1,185 @@
+From: Henri Verbeet <hverbeet@codeweavers.com>
+Subject: [PATCH vkd3d 6/6] vkd3d-shader: Handle tessellation factor built-ins in emit_output.
+Message-Id: <20191024172817.5662-6-hverbeet@codeweavers.com>
+Date: Thu, 24 Oct 2019 20:58:17 +0330
+
+From: Philip Rebohle <philip.rebohle@tu-dortmund.de>
+
+Uses the private patch constant array for tessellation factor built-ins.
+Fixes two separate issues encountered in Shadow of the Tomb Raider:
+
+- The output registers that have one component mapped to any of
+  the TESS_FACTOR sysvals can have their other components mapped
+  to a regular patch constant output, in which case we need to
+  use a private io variable.
+
+- The tessellation factor outputs are not necessarily dynamically
+  indexed within shader code. Previously, this did not work correctly
+  and lead to invalid store operations in the generated SPIR-V.
+
+Signed-off-by: Philip Rebohle <philip.rebohle@tu-dortmund.de>
+Signed-off-by: Henri Verbeet <hverbeet@codeweavers.com>
+---
+This supersedes patches 171407 and 171413.
+
+ libs/vkd3d-shader/spirv.c | 110 +++++++++++++++++++++++++++-------------------
+ 1 file changed, 64 insertions(+), 46 deletions(-)
+
+diff --git a/libs/vkd3d-shader/spirv.c b/libs/vkd3d-shader/spirv.c
+index 22fbcd6..6291036 100644
+--- a/libs/vkd3d-shader/spirv.c
++++ b/libs/vkd3d-shader/spirv.c
+@@ -4188,6 +4188,34 @@ static void calculate_clip_or_cull_distance_mask(const struct vkd3d_shader_signa
+     *mask |= (e->mask & VKD3DSP_WRITEMASK_ALL) << (VKD3D_VEC4_SIZE * e->semantic_index);
+ }
+ 
++static uint32_t calculate_sysval_array_mask(struct vkd3d_dxbc_compiler *compiler,
++        const struct vkd3d_shader_signature *signature, enum vkd3d_shader_input_sysval_semantic sysval)
++{
++    const struct vkd3d_shader_signature_element *e;
++    const struct vkd3d_spirv_builtin *sig_builtin;
++    const struct vkd3d_spirv_builtin *builtin;
++    uint32_t signature_idx, mask = 0;
++
++    if (!(builtin = get_spirv_builtin_for_sysval(compiler, sysval)))
++    {
++        FIXME("Unhandled sysval %#x.\n", sysval);
++        return 0;
++    }
++
++    for (signature_idx = 0; signature_idx < signature->element_count; ++signature_idx)
++    {
++        e = &signature->elements[signature_idx];
++
++        sig_builtin = get_spirv_builtin_for_sysval(compiler,
++                vkd3d_siv_from_sysval_indexed(e->sysval_semantic, e->semantic_index));
++
++        if (sig_builtin && sig_builtin->spirv_builtin == builtin->spirv_builtin)
++            mask |= (e->mask & VKD3DSP_WRITEMASK_ALL) << (VKD3D_VEC4_SIZE * sig_builtin->member_idx);
++    }
++
++    return mask;
++}
++
+ /* Emits arrayed SPIR-V built-in variables. */
+ static void vkd3d_dxbc_compiler_emit_shader_signature_outputs(struct vkd3d_dxbc_compiler *compiler)
+ {
+@@ -4283,6 +4311,31 @@ static void vkd3d_dxbc_compiler_emit_output_register(struct vkd3d_dxbc_compiler
+     vkd3d_dxbc_compiler_emit_register_debug_name(builder, output_id, reg);
+ }
+ 
++static uint32_t vkd3d_dxbc_compiler_emit_shader_phase_builtin_variable(struct vkd3d_dxbc_compiler *compiler,
++        const struct vkd3d_shader_phase *phase, const struct vkd3d_spirv_builtin *builtin)
++{
++    struct vkd3d_spirv_builder *builder = &compiler->spirv_builder;
++    uint32_t *variable_id, id;
++
++    variable_id = NULL;
++
++    if (builtin->spirv_builtin == SpvBuiltInTessLevelOuter)
++        variable_id = &compiler->hs.tess_level_outer_id;
++    else if (builtin->spirv_builtin == SpvBuiltInTessLevelInner)
++        variable_id = &compiler->hs.tess_level_inner_id;
++
++    if (variable_id && *variable_id)
++        return *variable_id;
++
++    id = vkd3d_dxbc_compiler_emit_builtin_variable(compiler, builtin, SpvStorageClassOutput, 0);
++    if (phase->type == VKD3DSIH_HS_FORK_PHASE || phase->type == VKD3DSIH_HS_JOIN_PHASE)
++        vkd3d_spirv_build_op_decorate(builder, id, SpvDecorationPatch, NULL, 0);
++
++    if (variable_id)
++        *variable_id = id;
++    return id;
++}
++
+ static void vkd3d_dxbc_compiler_emit_output(struct vkd3d_dxbc_compiler *compiler,
+         const struct vkd3d_shader_dst_param *dst, enum vkd3d_shader_input_sysval_semantic sysval)
+ {
+@@ -4367,8 +4420,17 @@ static void vkd3d_dxbc_compiler_emit_output(struct vkd3d_dxbc_compiler *compiler
+     {
+         if (builtin)
+         {
+-            id = vkd3d_dxbc_compiler_emit_builtin_variable(compiler, builtin, storage_class, array_size);
++            if (phase)
++                id = vkd3d_dxbc_compiler_emit_shader_phase_builtin_variable(compiler, phase, builtin);
++            else
++                id = vkd3d_dxbc_compiler_emit_builtin_variable(compiler, builtin, storage_class, array_size);
++
++            if (builtin->spirv_array_size)
++                compiler->output_info[signature_idx].array_element_mask =
++                        calculate_sysval_array_mask(compiler, shader_signature, sysval);
++
+             vkd3d_dxbc_compiler_emit_register_execution_mode(compiler, &dst->reg);
++
+             if (component_idx)
+                 FIXME("Unhandled component index %u.\n", component_idx);
+         }
+@@ -4452,46 +4514,6 @@ static void vkd3d_dxbc_compiler_emit_output(struct vkd3d_dxbc_compiler *compiler
+     }
+ }
+ 
+-static void vkd3d_dxbc_compiler_emit_shader_phase_output(struct vkd3d_dxbc_compiler *compiler,
+-        const struct vkd3d_shader_phase *phase, const struct vkd3d_shader_dst_param *dst,
+-        enum vkd3d_shader_input_sysval_semantic sysval)
+-{
+-    struct vkd3d_spirv_builder *builder = &compiler->spirv_builder;
+-    const struct vkd3d_shader_register *reg = &dst->reg;
+-    const struct vkd3d_spirv_builtin *builtin;
+-    struct vkd3d_symbol reg_symbol;
+-    uint32_t *variable_id;
+-
+-    variable_id = NULL;
+-    if ((builtin = get_spirv_builtin_for_sysval(compiler, sysval)))
+-    {
+-        if (builtin->spirv_builtin == SpvBuiltInTessLevelOuter)
+-            variable_id = &compiler->hs.tess_level_outer_id;
+-        else if (builtin->spirv_builtin == SpvBuiltInTessLevelInner)
+-            variable_id = &compiler->hs.tess_level_inner_id;
+-    }
+-
+-    if (!variable_id)
+-    {
+-        FIXME("Unhandled shader phase output register %#x, sysval %#x.\n", reg->type, sysval);
+-        return;
+-    }
+-
+-    if (!*variable_id)
+-    {
+-        *variable_id = vkd3d_dxbc_compiler_emit_builtin_variable(compiler, builtin, SpvStorageClassOutput, 0);
+-        if (phase->type == VKD3DSIH_HS_FORK_PHASE || phase->type == VKD3DSIH_HS_JOIN_PHASE)
+-            vkd3d_spirv_build_op_decorate(builder, *variable_id, SpvDecorationPatch, NULL, 0);
+-    }
+-
+-    vkd3d_symbol_make_register(&reg_symbol, reg);
+-    vkd3d_symbol_set_register_info(&reg_symbol, *variable_id, SpvStorageClassOutput,
+-            builtin->component_type, vkd3d_write_mask_from_component_count(builtin->component_count));
+-    reg_symbol.info.reg.member_idx = builtin->member_idx;
+-    reg_symbol.info.reg.is_aggregate = builtin->spirv_array_size;
+-    vkd3d_dxbc_compiler_put_symbol(compiler, &reg_symbol);
+-}
+-
+ static uint32_t vkd3d_dxbc_compiler_get_output_array_index(struct vkd3d_dxbc_compiler *compiler,
+         const struct vkd3d_shader_signature_element *e)
+ {
+@@ -5350,15 +5372,11 @@ static void vkd3d_dxbc_compiler_emit_dcl_output_siv(struct vkd3d_dxbc_compiler *
+ {
+     enum vkd3d_shader_input_sysval_semantic sysval;
+     const struct vkd3d_shader_dst_param *dst;
+-    const struct vkd3d_shader_phase *phase;
+ 
+     dst = &instruction->declaration.register_semantic.reg;
+     sysval = instruction->declaration.register_semantic.sysval_semantic;
+ 
+-    if ((phase = vkd3d_dxbc_compiler_get_current_shader_phase(compiler)))
+-        vkd3d_dxbc_compiler_emit_shader_phase_output(compiler, phase, dst, sysval);
+-    else
+-        vkd3d_dxbc_compiler_emit_output(compiler, dst, sysval);
++    vkd3d_dxbc_compiler_emit_output(compiler, dst, sysval);
+ }
+ 
+ static bool vkd3d_dxbc_compiler_check_index_range(struct vkd3d_dxbc_compiler *compiler,
+
+-- 
+2.11.0
+

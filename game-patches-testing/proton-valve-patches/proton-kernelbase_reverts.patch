@@ -1,3 +1,843 @@
+From fdc66a9a22cc689b90123524dce8457718ade72e Mon Sep 17 00:00:00 2001
+From: Tk-Glitch <ti3nou@gmail.com>
+Date: Wed, 23 Oct 2019 03:51:13 +0200
+Subject: Revert fd3735c, 2607bfa, ee56be3, 075741b, cac9599
+
+diff --git a/dlls/kernel32/process.c b/dlls/kernel32/process.c
+index 36ed82bff8..ec50ddba06 100644
+--- a/dlls/kernel32/process.c
++++ b/dlls/kernel32/process.c
+@@ -37,6 +37,9 @@
+ #ifdef HAVE_SYS_SOCKET_H
+ #include <sys/socket.h>
+ #endif
++#ifdef HAVE_SYS_PRCTL_H
++# include <sys/prctl.h>
++#endif
+ #include <sys/types.h>
+ #ifdef HAVE_SYS_WAIT_H
+ # include <sys/wait.h>
+@@ -835,28 +838,45 @@ static void set_wow64_environment(void)
+ }
+ 
+ /***********************************************************************
+- *              set_library_argv
++ *              set_library_wargv
+  *
+- * Set the Wine library argv global variables.
++ * Set the Wine library Unicode argv global variables.
+  */
+-static void set_library_argv( WCHAR **wargv )
++static void set_library_wargv( char **argv )
+ {
+     int argc;
+-    char *p, **argv;
++    char *q;
++    WCHAR *p;
++    WCHAR **wargv;
+     DWORD total = 0;
+ 
++    for (argc = 0; argv[argc]; argc++)
++        total += MultiByteToWideChar( CP_UNIXCP, 0, argv[argc], -1, NULL, 0 );
++
++    wargv = RtlAllocateHeap( GetProcessHeap(), 0,
++                             total * sizeof(WCHAR) + (argc + 1) * sizeof(*wargv) );
++    p = (WCHAR *)(wargv + argc + 1);
++    for (argc = 0; argv[argc]; argc++)
++    {
++        DWORD reslen = MultiByteToWideChar( CP_UNIXCP, 0, argv[argc], -1, p, total );
++        wargv[argc] = p;
++        p += reslen;
++        total -= reslen;
++    }
++    wargv[argc] = NULL;
++
+     /* convert argv back from Unicode since it has to be in the Ansi codepage not the Unix one */
+ 
+     for (argc = 0; wargv[argc]; argc++)
+         total += WideCharToMultiByte( CP_ACP, 0, wargv[argc], -1, NULL, 0, NULL, NULL );
+ 
+     argv = RtlAllocateHeap( GetProcessHeap(), 0, total + (argc + 1) * sizeof(*argv) );
+-    p = (char *)(argv + argc + 1);
++    q = (char *)(argv + argc + 1);
+     for (argc = 0; wargv[argc]; argc++)
+     {
+-        DWORD reslen = WideCharToMultiByte( CP_ACP, 0, wargv[argc], -1, p, total, NULL, NULL );
+-        argv[argc] = p;
+-        p += reslen;
++        DWORD reslen = WideCharToMultiByte( CP_ACP, 0, wargv[argc], -1, q, total, NULL, NULL );
++        argv[argc] = q;
++        q += reslen;
+         total -= reslen;
+     }
+     argv[argc] = NULL;
+@@ -867,6 +887,173 @@ static void set_library_argv( WCHAR **wargv )
+ }
+ 
+ 
++/***********************************************************************
++ *              update_library_argv0
++ *
++ * Update the argv[0] global variable with the binary we have found.
++ */
++static void update_library_argv0( const WCHAR *argv0 )
++{
++    DWORD len = strlenW( argv0 );
++
++    if (len > strlenW( __wine_main_wargv[0] ))
++    {
++        __wine_main_wargv[0] = RtlAllocateHeap( GetProcessHeap(), 0, (len + 1) * sizeof(WCHAR) );
++    }
++    strcpyW( __wine_main_wargv[0], argv0 );
++
++    len = WideCharToMultiByte( CP_ACP, 0, argv0, -1, NULL, 0, NULL, NULL );
++    if (len > strlen( __wine_main_argv[0] ) + 1)
++    {
++        __wine_main_argv[0] = RtlAllocateHeap( GetProcessHeap(), 0, len );
++    }
++    WideCharToMultiByte( CP_ACP, 0, argv0, -1, __wine_main_argv[0], len, NULL, NULL );
++}
++
++
++/***********************************************************************
++ *           build_command_line
++ *
++ * Build the command line of a process from the argv array.
++ *
++ * Note that it does NOT necessarily include the file name.
++ * Sometimes we don't even have any command line options at all.
++ *
++ * We must quote and escape characters so that the argv array can be rebuilt
++ * from the command line:
++ * - spaces and tabs must be quoted
++ *   'a b'   -> '"a b"'
++ * - quotes must be escaped
++ *   '"'     -> '\"'
++ * - if '\'s are followed by a '"', they must be doubled and followed by '\"',
++ *   resulting in an odd number of '\' followed by a '"'
++ *   '\"'    -> '\\\"'
++ *   '\\"'   -> '\\\\\"'
++ * - '\'s are followed by the closing '"' must be doubled,
++ *   resulting in an even number of '\' followed by a '"'
++ *   ' \'    -> '" \\"'
++ *   ' \\'    -> '" \\\\"'
++ * - '\'s that are not followed by a '"' can be left as is
++ *   'a\b'   == 'a\b'
++ *   'a\\b'  == 'a\\b'
++ */
++static BOOL build_command_line( WCHAR **argv )
++{
++    int len;
++    WCHAR **arg;
++    LPWSTR p;
++    RTL_USER_PROCESS_PARAMETERS* rupp = NtCurrentTeb()->Peb->ProcessParameters;
++
++    if (rupp->CommandLine.Buffer) return TRUE; /* already got it from the server */
++
++    len = 0;
++    for (arg = argv; *arg; arg++)
++    {
++        BOOL has_space;
++        int bcount;
++        WCHAR* a;
++
++        has_space=FALSE;
++        bcount=0;
++        a=*arg;
++        if( arg == argv || !*a ) has_space=TRUE;
++        while (*a!='\0') {
++            if (*a=='\\') {
++                bcount++;
++            } else {
++                if (*a==' ' || *a=='\t') {
++                    has_space=TRUE;
++                } else if (*a=='"') {
++                    /* doubling of '\' preceding a '"',
++                     * plus escaping of said '"'
++                     */
++                    len+=2*bcount+1;
++                }
++                bcount=0;
++            }
++            a++;
++        }
++        len+=(a-*arg)+1 /* for the separating space */;
++        if (has_space)
++            len+=2+bcount; /* for the quotes and doubling of '\' preceding the closing quote */
++    }
++
++    if (!(rupp->CommandLine.Buffer = RtlAllocateHeap( GetProcessHeap(), 0, len * sizeof(WCHAR))))
++        return FALSE;
++
++    p = rupp->CommandLine.Buffer;
++    rupp->CommandLine.Length = (len - 1) * sizeof(WCHAR);
++    rupp->CommandLine.MaximumLength = len * sizeof(WCHAR);
++    for (arg = argv; *arg; arg++)
++    {
++        BOOL has_space,has_quote;
++        WCHAR* a;
++        int bcount;
++
++        /* Check for quotes and spaces in this argument */
++        has_space=has_quote=FALSE;
++        a=*arg;
++        if( arg == argv || !*a ) has_space=TRUE;
++        while (*a!='\0') {
++            if (*a==' ' || *a=='\t') {
++                has_space=TRUE;
++                if (has_quote)
++                    break;
++            } else if (*a=='"') {
++                has_quote=TRUE;
++                if (has_space)
++                    break;
++            }
++            a++;
++        }
++
++        /* Now transfer it to the command line */
++        if (has_space)
++            *p++='"';
++        if (has_quote || has_space) {
++            bcount=0;
++            a=*arg;
++            while (*a!='\0') {
++                if (*a=='\\') {
++                    *p++=*a;
++                    bcount++;
++                } else {
++                    if (*a=='"') {
++                        int i;
++
++                        /* Double all the '\\' preceding this '"', plus one */
++                        for (i=0;i<=bcount;i++)
++                            *p++='\\';
++                        *p++='"';
++                    } else {
++                        *p++=*a;
++                    }
++                    bcount=0;
++                }
++                a++;
++            }
++        } else {
++            WCHAR* x = *arg;
++            while ((*p=*x++)) p++;
++        }
++        if (has_space) {
++            int i;
++
++            /* Double all the '\' preceding the closing quote */
++            for (i=0;i<bcount;i++)
++                *p++='\\';
++            *p++='"';
++        }
++        *p++=' ';
++    }
++    if (p > rupp->CommandLine.Buffer)
++        p--;  /* remove last space */
++    *p = '\0';
++
++    return TRUE;
++}
++
++
+ /***********************************************************************
+  *           init_windows_dirs
+  */
+@@ -1013,6 +1200,68 @@ void WINAPI start_process( LPTHREAD_START_ROUTINE entry, PEB *peb )
+ }
+ 
+ 
++/***********************************************************************
++ *           set_process_name
++ *
++ * Change the process name in the ps output.
++ */
++static void set_process_name( int argc, char *argv[] )
++{
++    BOOL shift_strings;
++    char *p, *name;
++    int i;
++
++#ifdef HAVE_SETPROCTITLE
++    setproctitle("-%s", argv[1]);
++    shift_strings = FALSE;
++#else
++    p = argv[0];
++
++    shift_strings = (argc >= 2);
++    for (i = 1; i < argc; i++)
++    {
++        p += strlen(p) + 1;
++        if (p != argv[i])
++        {
++            shift_strings = FALSE;
++            break;
++        }
++    }
++#endif
++
++    if (shift_strings)
++    {
++        int offset = argv[1] - argv[0];
++        char *end = argv[argc-1] + strlen(argv[argc-1]) + 1;
++        memmove( argv[0], argv[1], end - argv[1] );
++        memset( end - offset, 0, offset );
++        for (i = 1; i < argc; i++)
++            argv[i-1] = argv[i] - offset;
++        argv[i-1] = NULL;
++    }
++    else
++    {
++        /* remove argv[0] */
++        memmove( argv, argv + 1, argc * sizeof(argv[0]) );
++    }
++
++    name = argv[0];
++    if ((p = strrchr( name, '\\' ))) name = p + 1;
++    if ((p = strrchr( name, '/' ))) name = p + 1;
++
++#if defined(HAVE_SETPROGNAME)
++    setprogname( name );
++#endif
++
++#ifdef HAVE_PRCTL
++#ifndef PR_SET_NAME
++# define PR_SET_NAME 15
++#endif
++    prctl( PR_SET_NAME, name );
++#endif  /* HAVE_PRCTL */
++}
++
++
+ /***********************************************************************
+  *           __wine_kernel_init
+  *
+@@ -1028,6 +1277,7 @@ void * CDECL __wine_kernel_init(void)
+     RTL_USER_PROCESS_PARAMETERS *params = peb->ProcessParameters;
+     HANDLE boot_events[2];
+     BOOL got_environment = TRUE;
++    WCHAR *load_path, *dummy;
+ 
+     /* Initialize everything */
+ 
+@@ -1038,25 +1288,51 @@ void * CDECL __wine_kernel_init(void)
+     RtlSetUnhandledExceptionFilter( UnhandledExceptionFilter );
+ 
+     LOCALE_Init();
+-    init_windows_dirs();
+-    boot_events[0] = boot_events[1] = 0;
+ 
+     if (!peb->ProcessParameters->WindowTitle.Buffer)
+     {
+         /* convert old configuration to new format */
+         convert_old_config();
+         got_environment = has_registry_environment();
++    }
++
++    init_windows_dirs();
++
++    set_process_name( __wine_main_argc, __wine_main_argv );
++    set_library_wargv( __wine_main_argv );
++    boot_events[0] = boot_events[1] = 0;
++
++    if (peb->ProcessParameters->ImagePathName.Buffer)
++    {
++        strcpyW( main_exe_name, peb->ProcessParameters->ImagePathName.Buffer );
++    }
++    else
++    {
++        BOOL is_64bit;
++
++        RtlGetExePath( __wine_main_wargv[0], &load_path );
++        if (!SearchPathW( load_path, __wine_main_wargv[0], exeW, MAX_PATH, main_exe_name, NULL ) &&
++            !get_builtin_path( __wine_main_wargv[0], exeW, main_exe_name, MAX_PATH, &is_64bit ))
++        {
++            MESSAGE( "wine: cannot find '%s'\n", __wine_main_argv[0] );
++            ExitProcess( GetLastError() );
++        }
++        RtlReleasePath( load_path );
++        update_library_argv0( main_exe_name );
++        if (!build_command_line( __wine_main_wargv )) goto error;
+         start_wineboot( boot_events );
+     }
+ 
+     /* if there's no extension, append a dot to prevent LoadLibrary from appending .dll */
+-    strcpyW( main_exe_name, peb->ProcessParameters->ImagePathName.Buffer );
+     p = strrchrW( main_exe_name, '.' );
+     if (!p || strchrW( p, '/' ) || strchrW( p, '\\' )) strcatW( main_exe_name, dotW );
+ 
+     TRACE( "starting process name=%s argv[0]=%s\n",
+            debugstr_w(main_exe_name), debugstr_w(__wine_main_wargv[0]) );
+ 
++    LdrGetDllPath( main_exe_name, 0, &load_path, &dummy );
++    RtlInitUnicodeString( &NtCurrentTeb()->Peb->ProcessParameters->DllPath, load_path );
++
+     if (boot_events[0])
+     {
+         DWORD timeout = 2 * 60 * 1000, count = 1;
+@@ -1072,7 +1348,6 @@ void * CDECL __wine_kernel_init(void)
+         set_additional_environment();
+     }
+     set_wow64_environment();
+-    set_library_argv( __wine_main_wargv );
+ 
+     if (!(peb->ImageBaseAddress = LoadLibraryExW( main_exe_name, 0, DONT_RESOLVE_DLL_REFERENCES )))
+     {
+@@ -1112,6 +1387,9 @@ void * CDECL __wine_kernel_init(void)
+     if (!params->CurrentDirectory.Handle) chdir("/"); /* avoid locking removable devices */
+ 
+     return start_process_wrapper;
++
++ error:
++    ExitProcess( GetLastError() );
+ }
+ 
+ 
+diff --git a/dlls/ntdll/env.c b/dlls/ntdll/env.c
+index 919fc64e2f..1b7d848f30 100644
+--- a/dlls/ntdll/env.c
++++ b/dlls/ntdll/env.c
+@@ -47,8 +47,6 @@ static WCHAR empty[] = {0};
+ static const UNICODE_STRING empty_str = { 0, sizeof(empty), empty };
+ static const UNICODE_STRING null_str = { 0, 0, NULL };
+ 
+-static const BOOL is_win64 = (sizeof(void *) > sizeof(int));
+-
+ static const WCHAR windows_dir[] = {'C',':','\\','w','i','n','d','o','w','s',0};
+ 
+ static inline SIZE_T get_env_length( const WCHAR *env )
+@@ -442,201 +440,6 @@ static void get_current_directory( UNICODE_STRING *dir )
+ }
+ 
+ 
+-/***********************************************************************
+- *           is_path_prefix
+- */
+-static inline BOOL is_path_prefix( const WCHAR *prefix, const WCHAR *path, const WCHAR *file )
+-{
+-    DWORD len = strlenW( prefix );
+-
+-    if (strncmpiW( path, prefix, len )) return FALSE;
+-    while (path[len] == '\\') len++;
+-    return path + len == file;
+-}
+-
+-
+-/***********************************************************************
+- *           get_image_path
+- */
+-static void get_image_path( const char *argv0, UNICODE_STRING *path )
+-{
+-    static const WCHAR exeW[] = {'.','e','x','e',0};
+-    WCHAR *load_path, *file_part, *name, full_name[MAX_PATH];
+-    DWORD len;
+-
+-    len = ntdll_umbstowcs( 0, argv0, strlen(argv0) + 1, NULL, 0 );
+-    if (!(name = RtlAllocateHeap( GetProcessHeap(), 0, len * sizeof(WCHAR) ))) goto failed;
+-    ntdll_umbstowcs( 0, argv0, strlen(argv0) + 1, name, len );
+-
+-    if (RtlDetermineDosPathNameType_U( name ) != RELATIVE_PATH ||
+-        strchrW( name, '/' ) || strchrW( name, '\\' ))
+-    {
+-        len = RtlGetFullPathName_U( name, sizeof(full_name), full_name, &file_part );
+-        if (!len || len > sizeof(full_name)) goto failed;
+-        /* try first without extension */
+-        if (RtlDoesFileExists_U( full_name )) goto done;
+-        if (len < (MAX_PATH - 4) * sizeof(WCHAR) && !strchrW( file_part, '.' ))
+-        {
+-            strcatW( file_part, exeW );
+-            if (RtlDoesFileExists_U( full_name )) goto done;
+-        }
+-        /* check for builtin path inside system directory */
+-        if (!is_path_prefix( system_dir, full_name, file_part ))
+-        {
+-            if (!is_win64 && !is_wow64) goto failed;
+-            if (!is_path_prefix( syswow64_dir, full_name, file_part )) goto failed;
+-        }
+-    }
+-    else
+-    {
+-        RtlGetExePath( name, &load_path );
+-        len = RtlDosSearchPath_U( load_path, name, exeW, sizeof(full_name), full_name, &file_part );
+-        RtlReleasePath( load_path );
+-        if (!len || len > sizeof(full_name))
+-        {
+-            /* build builtin path inside system directory */
+-            len = strlenW( system_dir );
+-            if (strlenW( name ) >= MAX_PATH - 4 - len) goto failed;
+-            strcpyW( full_name, system_dir );
+-            strcatW( full_name, name );
+-            if (!strchrW( name, '.' )) strcatW( full_name, exeW );
+-        }
+-    }
+-done:
+-    RtlCreateUnicodeString( path, full_name );
+-    RtlFreeHeap( GetProcessHeap(), 0, name );
+-    return;
+-
+-failed:
+-    MESSAGE( "wine: cannot find '%s'\n", argv0 );
+-    RtlExitUserProcess( GetLastError() );
+-}
+-
+-
+-/***********************************************************************
+- *              set_library_wargv
+- *
+- * Set the Wine library Unicode argv global variables.
+- */
+-static void set_library_wargv( char **argv, const UNICODE_STRING *image )
+-{
+-    int argc;
+-    WCHAR *p, **wargv;
+-    DWORD total = 0;
+-
+-    if (image) total += 1 + image->Length / sizeof(WCHAR);
+-    for (argc = (image != NULL); argv[argc]; argc++)
+-        total += ntdll_umbstowcs( 0, argv[argc], strlen(argv[argc]) + 1, NULL, 0 );
+-
+-    wargv = RtlAllocateHeap( GetProcessHeap(), 0,
+-                             total * sizeof(WCHAR) + (argc + 1) * sizeof(*wargv) );
+-    p = (WCHAR *)(wargv + argc + 1);
+-    if (image)
+-    {
+-        strcpyW( p, image->Buffer );
+-        wargv[0] = p;
+-        p += 1 + image->Length / sizeof(WCHAR);
+-        total -= 1 + image->Length / sizeof(WCHAR);
+-    }
+-    for (argc = (image != NULL); argv[argc]; argc++)
+-    {
+-        DWORD reslen = ntdll_umbstowcs( 0, argv[argc], strlen(argv[argc]) + 1, p, total );
+-        wargv[argc] = p;
+-        p += reslen;
+-        total -= reslen;
+-    }
+-    wargv[argc] = NULL;
+-
+-    __wine_main_argc = argc;
+-    __wine_main_wargv = wargv;
+-}
+-
+-
+-/***********************************************************************
+- *           build_command_line
+- *
+- * Build the command line of a process from the argv array.
+- *
+- * Note that it does NOT necessarily include the file name.
+- * Sometimes we don't even have any command line options at all.
+- *
+- * We must quote and escape characters so that the argv array can be rebuilt
+- * from the command line:
+- * - spaces and tabs must be quoted
+- *   'a b'   -> '"a b"'
+- * - quotes must be escaped
+- *   '"'     -> '\"'
+- * - if '\'s are followed by a '"', they must be doubled and followed by '\"',
+- *   resulting in an odd number of '\' followed by a '"'
+- *   '\"'    -> '\\\"'
+- *   '\\"'   -> '\\\\\"'
+- * - '\'s are followed by the closing '"' must be doubled,
+- *   resulting in an even number of '\' followed by a '"'
+- *   ' \'    -> '" \\"'
+- *   ' \\'    -> '" \\\\"'
+- * - '\'s that are not followed by a '"' can be left as is
+- *   'a\b'   == 'a\b'
+- *   'a\\b'  == 'a\\b'
+- */
+-static void build_command_line( WCHAR **argv, UNICODE_STRING *cmdline )
+-{
+-    int len;
+-    WCHAR **arg;
+-    LPWSTR p;
+-
+-    len = 1;
+-    for (arg = argv; *arg; arg++) len += 3 + 2 * strlenW( *arg );
+-    cmdline->MaximumLength = len * sizeof(WCHAR);
+-    if (!(cmdline->Buffer = RtlAllocateHeap( GetProcessHeap(), 0, cmdline->MaximumLength ))) return;
+-
+-    p = cmdline->Buffer;
+-    for (arg = argv; *arg; arg++)
+-    {
+-        BOOL has_space, has_quote;
+-        int i, bcount;
+-        WCHAR *a;
+-
+-        /* check for quotes and spaces in this argument */
+-        if (arg == argv || !**arg) has_space = TRUE;
+-        else has_space = strchrW( *arg, ' ' ) || strchrW( *arg, '\t' );
+-        has_quote = strchrW( *arg, '"' ) != NULL;
+-
+-        /* now transfer it to the command line */
+-        if (has_space) *p++ = '"';
+-        if (has_quote || has_space)
+-        {
+-            bcount = 0;
+-            for (a = *arg; *a; a++)
+-            {
+-                if (*a == '\\') bcount++;
+-                else
+-                {
+-                    if (*a == '"') /* double all the '\\' preceding this '"', plus one */
+-                        for (i = 0; i <= bcount; i++) *p++ = '\\';
+-                    bcount = 0;
+-                }
+-                *p++ = *a;
+-            }
+-        }
+-        else
+-        {
+-            strcpyW( p, *arg );
+-            p += strlenW( p );
+-        }
+-        if (has_space)
+-        {
+-            /* Double all the '\' preceding the closing quote */
+-            for (i = 0; i < bcount; i++) *p++ = '\\';
+-            *p++ = '"';
+-        }
+-        *p++ = ' ';
+-    }
+-    if (p > cmdline->Buffer) p--;  /* remove last space */
+-    *p = 0;
+-    cmdline->Length = (p - cmdline->Buffer) * sizeof(WCHAR);
+-}
+-
+-
+ /******************************************************************************
+  *  NtQuerySystemEnvironmentValue		[NTDLL.@]
+  */
+@@ -1140,7 +943,7 @@ static inline void get_unicode_string( UNICODE_STRING *str, WCHAR **src, UINT le
+  */
+ void init_user_process_params( SIZE_T data_size )
+ {
+-    WCHAR *src, *load_path, *dummy;
++    WCHAR *src;
+     SIZE_T info_size, env_size;
+     NTSTATUS status;
+     startup_info_t *info = NULL;
+@@ -1157,12 +960,6 @@ void init_user_process_params( SIZE_T data_size )
+         NtCurrentTeb()->Peb->ProcessParameters = params;
+         params->Environment = build_initial_environment( __wine_get_main_environment() );
+         get_current_directory( &params->CurrentDirectory.DosPath );
+-        get_image_path( __wine_main_argv[0], &params->ImagePathName );
+-        set_library_wargv( __wine_main_argv, &params->ImagePathName );
+-        build_command_line( __wine_main_wargv, &params->CommandLine );
+-        LdrGetDllPath( params->ImagePathName.Buffer, 0, &load_path, &dummy );
+-        RtlCreateUnicodeString( &params->DllPath, load_path );
+-        RtlReleasePath( load_path );
+ 
+         if (isatty(0) || isatty(1) || isatty(2))
+             params->ConsoleHandle = (HANDLE)2; /* see kernel32/kernel_private.h */
+@@ -1232,8 +1029,6 @@ void init_user_process_params( SIZE_T data_size )
+         else params->Environment[0] = 0;
+     }
+ 
+-    set_library_wargv( __wine_main_argv, NULL );
+-
+ done:
+     RtlFreeHeap( GetProcessHeap(), 0, info );
+     if (RtlSetCurrentDirectory_U( &params->CurrentDirectory.DosPath ))
+diff --git a/dlls/ntdll/loader.c b/dlls/ntdll/loader.c
+index 2bae3c7bd5..e33c24d7af 100644
+--- a/dlls/ntdll/loader.c
++++ b/dlls/ntdll/loader.c
+@@ -67,8 +67,6 @@ typedef void  (CALLBACK *LDRENUMPROC)(LDR_MODULE *, void *, BOOLEAN *);
+ /* system directory with trailing backslash */
+ const WCHAR system_dir[] = {'C',':','\\','w','i','n','d','o','w','s','\\',
+                             's','y','s','t','e','m','3','2','\\',0};
+-const WCHAR syswow64_dir[] = {'C',':','\\','w','i','n','d','o','w','s','\\',
+-                              's','y','s','w','o','w','6','4','\\',0};
+ 
+ /* system search path */
+ static const WCHAR system_path[] =
+diff --git a/dlls/ntdll/ntdll_misc.h b/dlls/ntdll/ntdll_misc.h
+index 20e64c80c7..04aa15636d 100644
+--- a/dlls/ntdll/ntdll_misc.h
++++ b/dlls/ntdll/ntdll_misc.h
+@@ -123,7 +123,6 @@ extern FARPROC SNOOP_GetProcAddress( HMODULE hmod, const IMAGE_EXPORT_DIRECTORY
+ extern void RELAY_SetupDLL( HMODULE hmod ) DECLSPEC_HIDDEN;
+ extern void SNOOP_SetupDLL( HMODULE hmod ) DECLSPEC_HIDDEN;
+ extern const WCHAR system_dir[] DECLSPEC_HIDDEN;
+-extern const WCHAR syswow64_dir[] DECLSPEC_HIDDEN;
+ 
+ extern void (WINAPI *kernel32_start_process)(LPTHREAD_START_ROUTINE,void*) DECLSPEC_HIDDEN;
+ 
+diff --git a/dlls/ntdll/thread.c b/dlls/ntdll/thread.c
+index be54f89082..97bd4bfeb4 100644
+--- a/dlls/ntdll/thread.c
++++ b/dlls/ntdll/thread.c
+@@ -28,9 +28,6 @@
+ #ifdef HAVE_SYS_MMAN_H
+ #include <sys/mman.h>
+ #endif
+-#ifdef HAVE_SYS_PRCTL_H
+-# include <sys/prctl.h>
+-#endif
+ #ifdef HAVE_SYS_TIMES_H
+ #include <sys/times.h>
+ #endif
+@@ -150,69 +147,6 @@ static ULONG_PTR get_image_addr(void)
+ }
+ #endif
+ 
+-
+-/***********************************************************************
+- *           set_process_name
+- *
+- * Change the process name in the ps output.
+- */
+-static void set_process_name( int argc, char *argv[] )
+-{
+-    BOOL shift_strings;
+-    char *p, *name;
+-    int i;
+-
+-#ifdef HAVE_SETPROCTITLE
+-    setproctitle("-%s", argv[1]);
+-    shift_strings = FALSE;
+-#else
+-    p = argv[0];
+-
+-    shift_strings = (argc >= 2);
+-    for (i = 1; i < argc; i++)
+-    {
+-        p += strlen(p) + 1;
+-        if (p != argv[i])
+-        {
+-            shift_strings = FALSE;
+-            break;
+-        }
+-    }
+-#endif
+-
+-    if (shift_strings)
+-    {
+-        int offset = argv[1] - argv[0];
+-        char *end = argv[argc-1] + strlen(argv[argc-1]) + 1;
+-        memmove( argv[0], argv[1], end - argv[1] );
+-        memset( end - offset, 0, offset );
+-        for (i = 1; i < argc; i++)
+-            argv[i-1] = argv[i] - offset;
+-        argv[i-1] = NULL;
+-    }
+-    else
+-    {
+-        /* remove argv[0] */
+-        memmove( argv, argv + 1, argc * sizeof(argv[0]) );
+-    }
+-
+-    name = argv[0];
+-    if ((p = strrchr( name, '\\' ))) name = p + 1;
+-    if ((p = strrchr( name, '/' ))) name = p + 1;
+-
+-#if defined(HAVE_SETPROGNAME)
+-    setprogname( name );
+-#endif
+-
+-#ifdef HAVE_PRCTL
+-#ifndef PR_SET_NAME
+-# define PR_SET_NAME 15
+-#endif
+-    prctl( PR_SET_NAME, name );
+-#endif  /* HAVE_PRCTL */
+-}
+-
+-
+ /***********************************************************************
+  *           thread_init
+  *
+@@ -311,7 +245,6 @@ void thread_init(void)
+         exit(1);
+     }
+ 
+-    set_process_name( __wine_main_argc, __wine_main_argv );
+     init_directories();
+     init_user_process_params( info_size );
+ 
+From 860ec944323ba8435a9df7cb12ab7151a9af29dd Mon Sep 17 00:00:00 2001
+From: Tk-Glitch <ti3nou@gmail.com>
+Date: Tue, 22 Oct 2019 06:31:05 +0200
+
+This reverts commit c258b5ef1100c8c238aab0a17ca743a326829aac
+
+diff --git a/dlls/kernel32/process.c b/dlls/kernel32/process.c
+index d2682ac83ec..693179fa05a 100644
+--- a/dlls/kernel32/process.c
++++ b/dlls/kernel32/process.c
+@@ -1885,9 +1885,9 @@ static RTL_USER_PROCESS_PARAMETERS *create_process_params( LPCWSTR filename, LPC
+                                                            const STARTUPINFOW *startup )
+ {
+     RTL_USER_PROCESS_PARAMETERS *params;
+-    UNICODE_STRING imageW, dllpathW, curdirW, cmdlineW, titleW, desktopW, runtimeW, newdirW;
++    UNICODE_STRING imageW, curdirW, cmdlineW, titleW, desktopW, runtimeW, newdirW;
+     WCHAR imagepath[MAX_PATH];
+-    WCHAR *load_path, *dummy, *envW = env;
++    WCHAR *envW = env;
+ 
+     if(!GetLongPathNameW( filename, imagepath, MAX_PATH ))
+         lstrcpynW( imagepath, filename, MAX_PATH );
+@@ -1914,24 +1914,20 @@ static RTL_USER_PROCESS_PARAMETERS *create_process_params( LPCWSTR filename, LPC
+         else
+             cur_dir = NULL;
+     }
+-    LdrGetDllPath( imagepath, LOAD_WITH_ALTERED_SEARCH_PATH, &load_path, &dummy );
+     RtlInitUnicodeString( &imageW, imagepath );
+-    RtlInitUnicodeString( &dllpathW, load_path );
+     RtlInitUnicodeString( &curdirW, cur_dir );
+     RtlInitUnicodeString( &cmdlineW, cmdline );
+     RtlInitUnicodeString( &titleW, startup->lpTitle ? startup->lpTitle : imagepath );
+     RtlInitUnicodeString( &desktopW, startup->lpDesktop );
+     runtimeW.Buffer = (WCHAR *)startup->lpReserved2;
+     runtimeW.Length = runtimeW.MaximumLength = startup->cbReserved2;
+-    if (RtlCreateProcessParametersEx( &params, &imageW, &dllpathW, cur_dir ? &curdirW : NULL,
++    if (RtlCreateProcessParametersEx( &params, &imageW, NULL, cur_dir ? &curdirW : NULL,
+                                       &cmdlineW, envW, &titleW, &desktopW,
+                                       NULL, &runtimeW, PROCESS_PARAMS_FLAG_NORMALIZED ))
+     {
+-        RtlReleasePath( load_path );
+         if (envW != env) HeapFree( GetProcessHeap(), 0, envW );
+         return NULL;
+     }
+-    RtlReleasePath( load_path );
+ 
+     if (flags & CREATE_NEW_PROCESS_GROUP) params->ConsoleFlags = 1;
+     if (flags & CREATE_NEW_CONSOLE) params->ConsoleHandle = KERNEL32_CONSOLE_ALLOC;
+
+From 2d049f6e78eaa3eafbb60a884091a6fcd4c7d7be Mon Sep 17 00:00:00 2001
+From: Tk-Glitch <ti3nou@gmail.com>
+Date: Tue, 22 Oct 2019 06:31:01 +0200
+Subject: Revert kernelbase: Fix variable name aliasing issue.
+
+This reverts commit 9551cb0b84dc0c0c9c1778cc37d7bafef4fd4299
+
+diff --git a/dlls/kernelbase/loader.c b/dlls/kernelbase/loader.c
+index 5b70dfd874a..456a9f2da49 100644
+--- a/dlls/kernelbase/loader.c
++++ b/dlls/kernelbase/loader.c
+@@ -114,12 +114,12 @@ static BOOL load_library_as_datafile( LPCWSTR load_path, DWORD flags, LPCWSTR na
+ 
+         if (flags & LOAD_LIBRARY_AS_DATAFILE_EXCLUSIVE)
+         {
+-            struct exclusive_datafile *datafile = HeapAlloc( GetProcessHeap(), 0, sizeof(*datafile) );
+-            if (!datafile) goto failed;
+-            datafile->module = *mod_ret;
+-            datafile->file   = file;
+-            list_add_head( &exclusive_datafile_list, &datafile->entry );
+-            TRACE( "delaying close %p for module %p\n", datafile->file, datafile->module );
++            struct exclusive_datafile *file = HeapAlloc( GetProcessHeap(), 0, sizeof(*file) );
++            if (!file) goto failed;
++            file->module = *mod_ret;
++            file->file   = file;
++            list_add_head( &exclusive_datafile_list, &file->entry );
++            TRACE( "delaying close %p for module %p\n", file->file, file->module );
+             return TRUE;
+         }
+     }
+
 From 171675e5015b0946ea755d7d2c4182f4cfa5358a Mon Sep 17 00:00:00 2001
 From: Tk-Glitch <ti3nou@gmail.com>
 Date: Sat, 5 Oct 2019 01:33:26 +0200

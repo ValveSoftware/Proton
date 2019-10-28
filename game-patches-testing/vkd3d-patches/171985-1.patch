@@ -1,0 +1,104 @@
+From: Henri Verbeet <hverbeet@codeweavers.com>
+Subject: [PATCH vkd3d 1/2] vkd3d: Align allocated GPU address ranges to the requested resource alignment.
+Message-Id: <20191024143341.29145-1-hverbeet@codeweavers.com>
+Date: Thu, 24 Oct 2019 18:03:40 +0330
+
+From: Hans-Kristian Arntzen <post@arntzen-software.no>
+
+Signed-off-by: Hans-Kristian Arntzen <post@arntzen-software.no>
+Signed-off-by: Henri Verbeet <hverbeet@codeweavers.com>
+---
+This (partially) supersedes patch 171219.
+
+ libs/vkd3d/device.c        | 23 ++++++++++++++++-------
+ libs/vkd3d/resource.c      |  1 +
+ libs/vkd3d/vkd3d_private.h |  2 +-
+ 3 files changed, 18 insertions(+), 8 deletions(-)
+
+diff --git a/libs/vkd3d/device.c b/libs/vkd3d/device.c
+index d30c447..2dee5e3 100644
+--- a/libs/vkd3d/device.c
++++ b/libs/vkd3d/device.c
+@@ -1823,37 +1823,46 @@ static void d3d12_device_destroy_pipeline_cache(struct d3d12_device *device)
+ }
+ 
+ D3D12_GPU_VIRTUAL_ADDRESS vkd3d_gpu_va_allocator_allocate(struct vkd3d_gpu_va_allocator *allocator,
+-        size_t size, void *ptr)
++        size_t alignment, size_t size, void *ptr)
+ {
+-    D3D12_GPU_VIRTUAL_ADDRESS ceiling = ~(D3D12_GPU_VIRTUAL_ADDRESS)0;
+     struct vkd3d_gpu_va_allocation *allocation;
++    D3D12_GPU_VIRTUAL_ADDRESS base, ceiling;
+     int rc;
+ 
++    if (size > ~(size_t)0 - (alignment - 1))
++        return 0;
++    size = align(size, alignment);
++
+     if ((rc = pthread_mutex_lock(&allocator->mutex)))
+     {
+         ERR("Failed to lock mutex, error %d.\n", rc);
+         return 0;
+     }
+ 
+-    if (!vkd3d_array_reserve((void **)&allocator->allocations, &allocator->allocations_size,
+-            allocator->allocation_count + 1, sizeof(*allocator->allocations)))
++    base = allocator->floor;
++    ceiling = ~(D3D12_GPU_VIRTUAL_ADDRESS)0;
++    ceiling -= alignment - 1;
++    if (size > ceiling || ceiling - size < base)
+     {
+         pthread_mutex_unlock(&allocator->mutex);
+         return 0;
+     }
+ 
+-    if (size > ceiling || ceiling - size < allocator->floor)
++    base = (base + (alignment - 1)) & ~((D3D12_GPU_VIRTUAL_ADDRESS)alignment - 1);
++
++    if (!vkd3d_array_reserve((void **)&allocator->allocations, &allocator->allocations_size,
++            allocator->allocation_count + 1, sizeof(*allocator->allocations)))
+     {
+         pthread_mutex_unlock(&allocator->mutex);
+         return 0;
+     }
+ 
+     allocation = &allocator->allocations[allocator->allocation_count++];
+-    allocation->base = allocator->floor;
++    allocation->base = base;
+     allocation->size = size;
+     allocation->ptr = ptr;
+ 
+-    allocator->floor += size;
++    allocator->floor = base + size;
+ 
+     pthread_mutex_unlock(&allocator->mutex);
+ 
+diff --git a/libs/vkd3d/resource.c b/libs/vkd3d/resource.c
+index 626772e..f15c371 100644
+--- a/libs/vkd3d/resource.c
++++ b/libs/vkd3d/resource.c
+@@ -1684,6 +1684,7 @@ static HRESULT d3d12_resource_init(struct d3d12_resource *resource, struct d3d12
+                     &resource->desc, &resource->u.vk_buffer)))
+                 return hr;
+             if (!(resource->gpu_address = vkd3d_gpu_va_allocator_allocate(&device->gpu_va_allocator,
++                    desc->Alignment ? desc->Alignment : D3D12_DEFAULT_RESOURCE_PLACEMENT_ALIGNMENT,
+                     desc->Width, resource)))
+             {
+                 ERR("Failed to allocate GPU VA.\n");
+diff --git a/libs/vkd3d/vkd3d_private.h b/libs/vkd3d/vkd3d_private.h
+index 69b08a2..520dab1 100644
+--- a/libs/vkd3d/vkd3d_private.h
++++ b/libs/vkd3d/vkd3d_private.h
+@@ -219,7 +219,7 @@ struct vkd3d_gpu_va_allocator
+ };
+ 
+ D3D12_GPU_VIRTUAL_ADDRESS vkd3d_gpu_va_allocator_allocate(struct vkd3d_gpu_va_allocator *allocator,
+-        size_t size, void *ptr) DECLSPEC_HIDDEN;
++        size_t alignment, size_t size, void *ptr) DECLSPEC_HIDDEN;
+ void *vkd3d_gpu_va_allocator_dereference(struct vkd3d_gpu_va_allocator *allocator,
+         D3D12_GPU_VIRTUAL_ADDRESS address) DECLSPEC_HIDDEN;
+ void vkd3d_gpu_va_allocator_free(struct vkd3d_gpu_va_allocator *allocator,
+
+-- 
+2.11.0
+

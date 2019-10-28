@@ -1,0 +1,69 @@
+From: "Rémi Bernon" <rbernon@codeweavers.com>
+Subject: [PATCH vkd3d v2] vkd3d: Do not report a root signature version higher than requested.
+Message-Id: <20191025155815.12233-1-rbernon@codeweavers.com>
+Date: Fri, 25 Oct 2019 17:58:14 +0200
+
+This fixes Shadow of the Tomb Raider crashing because of NULL root
+signatures being passed since c002aee119b638d30eeb7cdc91099449ccafeafc.
+
+Signed-off-by: Rémi Bernon <rbernon@codeweavers.com>
+---
+v2: Add related test cases.
+
+ libs/vkd3d/device.c |  3 ++-
+ tests/d3d12.c       | 18 ++++++++++++++++++
+ 2 files changed, 20 insertions(+), 1 deletion(-)
+
+diff --git a/libs/vkd3d/device.c b/libs/vkd3d/device.c
+index d30c447c..30cee112 100644
+--- a/libs/vkd3d/device.c
++++ b/libs/vkd3d/device.c
+@@ -2512,7 +2512,8 @@ static HRESULT STDMETHODCALLTYPE d3d12_device_CheckFeatureSupport(ID3D12Device *
+                 return E_INVALIDARG;
+             }
+
+-            data->HighestVersion = D3D_ROOT_SIGNATURE_VERSION_1_1;
++            TRACE("Root signature requested %#x.\n", data->HighestVersion);
++            data->HighestVersion = min(data->HighestVersion, D3D_ROOT_SIGNATURE_VERSION_1_1);
+
+             TRACE("Root signature version %#x.\n", data->HighestVersion);
+             return S_OK;
+diff --git a/tests/d3d12.c b/tests/d3d12.c
+index 9fe47c6c..7bc8baef 100644
+--- a/tests/d3d12.c
++++ b/tests/d3d12.c
+@@ -1026,6 +1026,7 @@ static void test_check_feature_support(void)
+     D3D_FEATURE_LEVEL max_supported_feature_level;
+     D3D12_FEATURE_DATA_ARCHITECTURE architecture;
+     D3D12_FEATURE_DATA_FORMAT_INFO format_info;
++    D3D12_FEATURE_DATA_ROOT_SIGNATURE root_signature;
+     unsigned int expected_plane_count;
+     ID3D12Device *device;
+     DXGI_FORMAT format;
+@@ -1213,6 +1214,23 @@ static void test_check_feature_support(void)
+     trace("GPU virtual address bits per process: %u.\n",
+             gpu_virtual_address.MaxGPUVirtualAddressBitsPerProcess);
+
++    root_signature.HighestVersion = D3D_ROOT_SIGNATURE_VERSION_1_0;
++    hr = ID3D12Device_CheckFeatureSupport(device, D3D12_FEATURE_ROOT_SIGNATURE,
++            &root_signature, sizeof(root_signature));
++    ok(hr == S_OK, "Failed to get root signature feature support, hr %#x.\n", hr);
++    ok(root_signature.HighestVersion == D3D_ROOT_SIGNATURE_VERSION_1_0,
++       "Unexpected %d root signature feature version returned.\n",
++       root_signature.HighestVersion);
++
++    root_signature.HighestVersion = D3D_ROOT_SIGNATURE_VERSION_1_1;
++    hr = ID3D12Device_CheckFeatureSupport(device, D3D12_FEATURE_ROOT_SIGNATURE,
++            &root_signature, sizeof(root_signature));
++    ok(hr == S_OK, "Failed to get root signature feature support, hr %#x.\n", hr);
++    ok(root_signature.HighestVersion == D3D_ROOT_SIGNATURE_VERSION_1_0 ||
++       root_signature.HighestVersion == D3D_ROOT_SIGNATURE_VERSION_1_1,
++       "Unexpected %d root signature feature version returned.\n",
++       root_signature.HighestVersion);
++
+     refcount = ID3D12Device_Release(device);
+     ok(!refcount, "ID3D12Device has %u references left.\n", (unsigned int)refcount);
+ }
+--
+2.24.0.rc0
+
