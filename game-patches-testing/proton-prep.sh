@@ -4,8 +4,8 @@
     cd vkd3d
     git reset --hard HEAD
     git clean -xdf
-    # unsure if this is still needed to fix flicker in wow
-    patch -Np1 < ../game-patches-testing/vkd3d-patches/wow-flicker.patch
+    # wow root signatures patch
+    patch -Np1 < ../game-patches-testing/vkd3d-patches/wow-rs.patch
     cd ..
 
     # Valve DXVK patches
@@ -35,6 +35,7 @@
     git revert --no-commit 6ccb94392a8ef4bca701ae2a560f4ea1da677edd
 
     # necessary reverts for FS Hack
+    git revert --no-commit 413aad39135b0b0f8255500b85fcc05337a5f138
     git revert --no-commit de94cfa775f9f41d1d65cbd8e7bf861cd7f9a871
     git revert --no-commit ffd4caa5f0e401cf973078fbbd54e4950d408792
     git revert --no-commit 22795243b2d21e1a667215f54c3a15634735749c

@@ -1,0 +1,1497 @@
+From: Hans-Kristian Arntzen <post@arntzen-software.no>
+Subject: [PATCH v2] vkd3d: Allocate huge descriptor pools when root signature demands it.
+Message-Id: <20191101210239.23545-1-post@arntzen-software.no>
+Date: Fri,  1 Nov 2019 22:02:39 +0100
+
+Currently, descriptor pools are allocated with the intention of being
+used as a suballocator, but for a bindless style, root signatures can
+contain many thousand descriptors.
+
+Fall back to single allocations for these cases and do not attempt to recycle these descriptor sets.
+
+This path is triggered by Control DX12 which creates a RS with > ~200k
+SRVs in register space 1.
+
+Signed-off-by: Hans-Kristian Arntzen <post@arntzen-software.no>
+---
+ libs/vkd3d/command.c       | 79 ++++++++++++++++++++++++++++----------
+ libs/vkd3d/state.c         | 19 +--------
+ libs/vkd3d/vkd3d_private.h | 23 +++++++++++
+ 3 files changed, 84 insertions(+), 37 deletions(-)
+
+diff --git a/libs/vkd3d/command.c b/libs/vkd3d/command.c
+index 3f78d17..34d2505 100644
+--- a/libs/vkd3d/command.c
++++ b/libs/vkd3d/command.c
+@@ -1264,13 +1264,24 @@ static bool d3d12_command_allocator_add_framebuffer(struct d3d12_command_allocat
+ }
+ 
+ static bool d3d12_command_allocator_add_descriptor_pool(struct d3d12_command_allocator *allocator,
+-        VkDescriptorPool pool)
++        VkDescriptorPool pool, bool recycle)
+ {
+-    if (!vkd3d_array_reserve((void **)&allocator->descriptor_pools, &allocator->descriptor_pools_size,
++    if (recycle)
++    {
++        if (!vkd3d_array_reserve((void **)&allocator->descriptor_pools, &allocator->descriptor_pools_size,
+             allocator->descriptor_pool_count + 1, sizeof(*allocator->descriptor_pools)))
+-        return false;
++            return false;
+ 
+-    allocator->descriptor_pools[allocator->descriptor_pool_count++] = pool;
++        allocator->descriptor_pools[allocator->descriptor_pool_count++] = pool;
++    }
++    else
++    {
++        if (!vkd3d_array_reserve((void **)&allocator->descriptor_pools_huge, &allocator->descriptor_pools_huge_size,
++            allocator->descriptor_pool_huge_count + 1, sizeof(*allocator->descriptor_pools_huge)))
++            return false;
++
++        allocator->descriptor_pools_huge[allocator->descriptor_pool_huge_count++] = pool;
++    }
+ 
+     return true;
+ }
+@@ -1313,9 +1324,17 @@ static bool d3d12_command_allocator_add_transfer_buffer(struct d3d12_command_all
+ }
+ 
+ static VkDescriptorPool d3d12_command_allocator_allocate_descriptor_pool(
+-        struct d3d12_command_allocator *allocator)
++        struct d3d12_command_allocator *allocator, const struct d3d12_root_signature_info *root_signature)
+ {
+-    static const VkDescriptorPoolSize pool_sizes[] =
++    bool huge_root_signature = false;
++    struct d3d12_device *device = allocator->device;
++    const struct vkd3d_vk_device_procs *vk_procs = &device->vk_procs;
++    struct VkDescriptorPoolCreateInfo pool_desc;
++    VkDevice vk_device = device->vk_device;
++    VkDescriptorPool vk_pool;
++    VkResult vr;
++
++    VkDescriptorPoolSize pool_sizes[] =
+     {
+         {VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 1024},
+         {VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER, 1024},
+@@ -1324,14 +1343,23 @@ static VkDescriptorPool d3d12_command_allocator_allocate_descriptor_pool(
+         {VK_DESCRIPTOR_TYPE_STORAGE_IMAGE, 1024},
+         {VK_DESCRIPTOR_TYPE_SAMPLER, 1024},
+     };
+-    struct d3d12_device *device = allocator->device;
+-    const struct vkd3d_vk_device_procs *vk_procs = &device->vk_procs;
+-    struct VkDescriptorPoolCreateInfo pool_desc;
+-    VkDevice vk_device = device->vk_device;
+-    VkDescriptorPool vk_pool;
+-    VkResult vr;
+ 
+-    if (allocator->free_descriptor_pool_count > 0)
++    if (root_signature && (
++        root_signature->cbv_count > 1024 ||
++        root_signature->srv_count > 1024 ||
++        root_signature->uav_count + root_signature->buffer_uav_count > 1024 ||
++        root_signature->sampler_count > 1024))
++    {
++        huge_root_signature = true;
++        pool_sizes[0].descriptorCount = root_signature->cbv_count;
++        pool_sizes[1].descriptorCount = root_signature->srv_count;
++        pool_sizes[2].descriptorCount = root_signature->srv_count;
++        pool_sizes[3].descriptorCount = root_signature->uav_count + root_signature->buffer_uav_count;
++        pool_sizes[4].descriptorCount = root_signature->uav_count;
++        pool_sizes[5].descriptorCount = root_signature->sampler_count;
++    }
++
++    if (!huge_root_signature && allocator->free_descriptor_pool_count > 0)
+     {
+         vk_pool = allocator->free_descriptor_pools[allocator->free_descriptor_pool_count - 1];
+         allocator->free_descriptor_pools[allocator->free_descriptor_pool_count - 1] = VK_NULL_HANDLE;
+@@ -1342,7 +1370,7 @@ static VkDescriptorPool d3d12_command_allocator_allocate_descriptor_pool(
+         pool_desc.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
+         pool_desc.pNext = NULL;
+         pool_desc.flags = device->vk_info.EXT_descriptor_indexing ? VK_DESCRIPTOR_POOL_CREATE_UPDATE_AFTER_BIND_BIT_EXT : 0;
+-        pool_desc.maxSets = 512;
++        pool_desc.maxSets = huge_root_signature ? 1 : 512;
+         pool_desc.poolSizeCount = ARRAY_SIZE(pool_sizes);
+         pool_desc.pPoolSizes = pool_sizes;
+         if ((vr = VK_CALL(vkCreateDescriptorPool(vk_device, &pool_desc, NULL, &vk_pool))) < 0)
+@@ -1352,7 +1380,7 @@ static VkDescriptorPool d3d12_command_allocator_allocate_descriptor_pool(
+         }
+     }
+ 
+-    if (!(d3d12_command_allocator_add_descriptor_pool(allocator, vk_pool)))
++    if (!(d3d12_command_allocator_add_descriptor_pool(allocator, vk_pool, !huge_root_signature)))
+     {
+         ERR("Failed to add descriptor pool.\n");
+         VK_CALL(vkDestroyDescriptorPool(vk_device, vk_pool, NULL));
+@@ -1363,7 +1391,8 @@ static VkDescriptorPool d3d12_command_allocator_allocate_descriptor_pool(
+ }
+ 
+ static VkDescriptorSet d3d12_command_allocator_allocate_descriptor_set(
+-        struct d3d12_command_allocator *allocator, VkDescriptorSetLayout vk_set_layout)
++        struct d3d12_command_allocator *allocator, VkDescriptorSetLayout vk_set_layout,
++        const struct d3d12_root_signature_info *root_signature)
+ {
+     struct d3d12_device *device = allocator->device;
+     const struct vkd3d_vk_device_procs *vk_procs = &device->vk_procs;
+@@ -1373,7 +1402,7 @@ static VkDescriptorSet d3d12_command_allocator_allocate_descriptor_set(
+     VkResult vr;
+ 
+     if (!allocator->vk_descriptor_pool)
+-        allocator->vk_descriptor_pool = d3d12_command_allocator_allocate_descriptor_pool(allocator);
++        allocator->vk_descriptor_pool = d3d12_command_allocator_allocate_descriptor_pool(allocator, root_signature);
+     if (!allocator->vk_descriptor_pool)
+         return VK_NULL_HANDLE;
+ 
+@@ -1387,7 +1416,7 @@ static VkDescriptorSet d3d12_command_allocator_allocate_descriptor_set(
+ 
+     allocator->vk_descriptor_pool = VK_NULL_HANDLE;
+     if (vr == VK_ERROR_FRAGMENTED_POOL || vr == VK_ERROR_OUT_OF_POOL_MEMORY_KHR)
+-        allocator->vk_descriptor_pool = d3d12_command_allocator_allocate_descriptor_pool(allocator);
++        allocator->vk_descriptor_pool = d3d12_command_allocator_allocate_descriptor_pool(allocator, root_signature);
+     if (!allocator->vk_descriptor_pool)
+     {
+         ERR("Failed to allocate descriptor set, vr %d.\n", vr);
+@@ -1478,6 +1507,12 @@ static void d3d12_command_allocator_free_resources(struct d3d12_command_allocato
+     }
+     allocator->descriptor_pool_count = 0;
+ 
++    for (i = 0; i < allocator->descriptor_pool_huge_count; ++i)
++    {
++        VK_CALL(vkDestroyDescriptorPool(device->vk_device, allocator->descriptor_pools_huge[i], NULL));
++    }
++    allocator->descriptor_pool_huge_count = 0;
++
+     for (i = 0; i < allocator->framebuffer_count; ++i)
+     {
+         VK_CALL(vkDestroyFramebuffer(device->vk_device, allocator->framebuffers[i], NULL));
+@@ -1755,6 +1790,10 @@ static HRESULT d3d12_command_allocator_init(struct d3d12_command_allocator *allo
+     allocator->descriptor_pools_size = 0;
+     allocator->descriptor_pool_count = 0;
+ 
++    allocator->descriptor_pools_huge = NULL;
++    allocator->descriptor_pools_huge_size = 0;
++    allocator->descriptor_pool_huge_count = 0;
++
+     allocator->views = NULL;
+     allocator->views_size = 0;
+     allocator->view_count = 0;
+@@ -2547,7 +2586,7 @@ static void d3d12_command_list_prepare_descriptors(struct d3d12_command_list *li
+      * we need at the very least a new descriptor set.
+      */
+     bindings->descriptor_set = d3d12_command_allocator_allocate_descriptor_set(list->allocator,
+-            root_signature->vk_set_layout);
++            root_signature->vk_set_layout, &root_signature->info);
+ 
+     bindings->in_use = false;
+ 
+@@ -2582,7 +2621,7 @@ static void d3d12_command_list_prepare_uav_counter_descriptors(struct d3d12_comm
+     if (list->state->uav_counter_mask)
+     {
+         bindings->uav_counter_descriptor_set = d3d12_command_allocator_allocate_descriptor_set(list->allocator,
+-                list->state->vk_set_layout);
++                list->state->vk_set_layout, NULL);
+     }
+     else
+         bindings->uav_counter_descriptor_set = VK_NULL_HANDLE;
+diff --git a/libs/vkd3d/state.c b/libs/vkd3d/state.c
+index ed20de7..eb87350 100644
+--- a/libs/vkd3d/state.c
++++ b/libs/vkd3d/state.c
+@@ -314,23 +314,6 @@ static bool vk_binding_from_d3d12_descriptor_range(struct VkDescriptorSetLayoutB
+     return true;
+ }
+ 
+-struct d3d12_root_signature_info
+-{
+-    size_t cbv_count;
+-    size_t buffer_uav_count;
+-    size_t uav_count;
+-    size_t buffer_srv_count;
+-    size_t srv_count;
+-    size_t sampler_count;
+-
+-    size_t descriptor_count;
+-
+-    size_t root_constant_count;
+-    size_t root_descriptor_count;
+-
+-    size_t cost;
+-};
+-
+ static HRESULT d3d12_root_signature_info_count_descriptors(struct d3d12_root_signature_info *info,
+         const D3D12_DESCRIPTOR_RANGE *range)
+ {
+@@ -919,6 +902,8 @@ static HRESULT d3d12_root_signature_init(struct d3d12_root_signature *root_signa
+     if (FAILED(hr = vkd3d_private_store_init(&root_signature->private_store)))
+         goto fail;
+ 
++    root_signature->info = info;
++
+     d3d12_device_add_ref(root_signature->device = device);
+ 
+     return S_OK;
+diff --git a/libs/vkd3d/vkd3d_private.h b/libs/vkd3d/vkd3d_private.h
+index bd54c67..3a263ef 100644
+--- a/libs/vkd3d/vkd3d_private.h
++++ b/libs/vkd3d/vkd3d_private.h
+@@ -666,6 +666,23 @@ struct d3d12_root_parameter
+ };
+ 
+ /* ID3D12RootSignature */
++struct d3d12_root_signature_info
++{
++    size_t cbv_count;
++    size_t buffer_uav_count;
++    size_t uav_count;
++    size_t buffer_srv_count;
++    size_t srv_count;
++    size_t sampler_count;
++
++    size_t descriptor_count;
++
++    size_t root_constant_count;
++    size_t root_descriptor_count;
++
++    size_t cost;
++};
++
+ struct d3d12_root_signature
+ {
+     ID3D12RootSignature ID3D12RootSignature_iface;
+@@ -699,6 +716,8 @@ struct d3d12_root_signature
+     unsigned int static_sampler_count;
+     VkSampler *static_samplers;
+ 
++    struct d3d12_root_signature_info info;
++
+     struct d3d12_device *device;
+ 
+     struct vkd3d_private_store private_store;
+@@ -846,6 +865,10 @@ struct d3d12_command_allocator
+     size_t descriptor_pools_size;
+     size_t descriptor_pool_count;
+ 
++    VkDescriptorPool *descriptor_pools_huge;
++    size_t descriptor_pools_huge_size;
++    size_t descriptor_pool_huge_count;
++
+     struct vkd3d_view **views;
+     size_t views_size;
+     size_t view_count;
+
+-- 
+2.23.0
+
+From: Hans-Kristian Arntzen <post@arntzen-software.no>
+Subject: [PATCH] vkd3d: Support RS 1.0 VOLATILE descriptors.
+Message-Id: <20191101133638.6565-1-post@arntzen-software.no>
+Date: Fri,  1 Nov 2019 14:36:36 +0100
+
+Use EXT_descriptor_indexing's UPDATE_AFTER_BIND feature to support
+semantics required by RS 1.0 VOLATILE descriptors. We implement this by
+deferring all updates of desciptor sets until Submit time.
+
+This is fine, as command buffers cannot be executed simultaneously on
+D3D12, so at Submit time, we know that the command buffer is not being
+executed on the GPU, and updating descriptors for multiple submissions
+is correct.
+
+If EXT_descriptor_indexing is not available, the fallback is the older
+method, which matches RS 1.1 STATIC descriptor model.
+
+Signed-off-by: Hans-Kristian Arntzen <post@arntzen-software.no>
+---
+ libs/vkd3d/command.c       | 358 +++++++++++++++++++++++++++++--------
+ libs/vkd3d/device.c        |  20 ++-
+ libs/vkd3d/state.c         |  22 +++
+ libs/vkd3d/vkd3d_private.h |  19 +-
+ tests/d3d12.c              |   2 +-
+ 5 files changed, 338 insertions(+), 83 deletions(-)
+
+diff --git a/libs/vkd3d/command.c b/libs/vkd3d/command.c
+index 0532ec0..3f78d17 100644
+--- a/libs/vkd3d/command.c
++++ b/libs/vkd3d/command.c
+@@ -1341,7 +1341,7 @@ static VkDescriptorPool d3d12_command_allocator_allocate_descriptor_pool(
+     {
+         pool_desc.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
+         pool_desc.pNext = NULL;
+-        pool_desc.flags = 0;
++        pool_desc.flags = device->vk_info.EXT_descriptor_indexing ? VK_DESCRIPTOR_POOL_CREATE_UPDATE_AFTER_BIND_BIT_EXT : 0;
+         pool_desc.maxSets = 512;
+         pool_desc.poolSizeCount = ARRAY_SIZE(pool_sizes);
+         pool_desc.pPoolSizes = pool_sizes;
+@@ -1865,6 +1865,10 @@ static void d3d12_command_list_invalidate_bindings(struct d3d12_command_list *li
+     if (!state)
+         return;
+ 
++    /* Each pipeline state has its own set layout for UAV counters
++     * based on their implicit usage in the shader.
++     * Binding a different pipeline state means having to re-remit
++     * UAV counters in a new descriptor set (and layout). */
+     if (state->uav_counter_mask)
+     {
+         struct vkd3d_pipeline_bindings *bindings = &list->pipeline_bindings[state->vk_bind_point];
+@@ -2196,6 +2200,7 @@ static ULONG STDMETHODCALLTYPE d3d12_command_list_Release(ID3D12GraphicsCommandL
+         if (list->allocator)
+             d3d12_command_allocator_free_command_buffer(list->allocator, list);
+ 
++        vkd3d_free(list->descriptor_updates);
+         vkd3d_free(list);
+ 
+         d3d12_device_release(device);
+@@ -2334,6 +2339,9 @@ static void d3d12_command_list_reset_state(struct d3d12_command_list *list,
+ 
+     list->state = NULL;
+ 
++    /* Recycle deferred descriptor update memory if possible. */
++    list->descriptor_updates_count = 0;
++
+     memset(list->so_counter_buffers, 0, sizeof(list->so_counter_buffers));
+     memset(list->so_counter_buffer_offsets, 0, sizeof(list->so_counter_buffer_offsets));
+ 
+@@ -2534,15 +2542,54 @@ static void d3d12_command_list_prepare_descriptors(struct d3d12_command_list *li
+      *   time in between. Thus, the contents must not be altered (overwritten
+      *   by an update command, or freed) between when the command is recorded
+      *   and when the command completes executing on the queue."
++     *
++     * Even if we have descriptor indexing and UPDATE_AFTER_BIND,
++     * we need at the very least a new descriptor set.
+      */
+     bindings->descriptor_set = d3d12_command_allocator_allocate_descriptor_set(list->allocator,
+             root_signature->vk_set_layout);
++
+     bindings->in_use = false;
+ 
+     bindings->descriptor_table_dirty_mask |= bindings->descriptor_table_active_mask & root_signature->descriptor_table_mask;
+     bindings->push_descriptor_dirty_mask |= bindings->push_descriptor_active_mask & root_signature->push_descriptor_mask;
+ }
+ 
++static void d3d12_command_list_prepare_uav_counter_descriptors(struct d3d12_command_list *list,
++        VkPipelineBindPoint bind_point)
++{
++    struct vkd3d_pipeline_bindings *bindings = &list->pipeline_bindings[bind_point];
++
++    if (bindings->uav_counter_descriptor_set && !bindings->uav_counter_in_use)
++        return;
++
++    /* We cannot modify bound descriptor sets. We need a new descriptor set if
++     * we are about to update resource bindings.
++     *
++     * The Vulkan spec says:
++     *
++     *   "The descriptor set contents bound by a call to
++     *   vkCmdBindDescriptorSets may be consumed during host execution of the
++     *   command, or during shader execution of the resulting draws, or any
++     *   time in between. Thus, the contents must not be altered (overwritten
++     *   by an update command, or freed) between when the command is recorded
++     *   and when the command completes executing on the queue."
++     *
++     * Even if we have descriptor indexing and UPDATE_AFTER_BIND,
++     * we need at the very least a new descriptor set.
++     */
++
++    if (list->state->uav_counter_mask)
++    {
++        bindings->uav_counter_descriptor_set = d3d12_command_allocator_allocate_descriptor_set(list->allocator,
++                list->state->vk_set_layout);
++    }
++    else
++        bindings->uav_counter_descriptor_set = VK_NULL_HANDLE;
++
++    bindings->uav_counter_in_use = false;
++}
++
+ static bool vk_write_descriptor_set_from_d3d12_desc(VkWriteDescriptorSet *vk_descriptor_write,
+         VkDescriptorImageInfo *vk_image_info, const struct d3d12_desc *descriptor,
+         uint32_t descriptor_range_magic, VkDescriptorSet vk_descriptor_set,
+@@ -2611,26 +2658,61 @@ static bool vk_write_descriptor_set_from_d3d12_desc(VkWriteDescriptorSet *vk_des
+     return true;
+ }
+ 
+-static void d3d12_command_list_update_descriptor_table(struct d3d12_command_list *list,
+-        VkPipelineBindPoint bind_point, unsigned int index, struct d3d12_desc *base_descriptor)
++static void d3d12_command_list_defer_update_descriptor_table(struct d3d12_command_list *list,
++        VkPipelineBindPoint bind_point, uint64_t table_mask, bool uav)
+ {
++    const struct d3d12_desc *base_descriptor;
++    unsigned i;
++    struct d3d12_deferred_descriptor_set_update *update;
+     struct vkd3d_pipeline_bindings *bindings = &list->pipeline_bindings[bind_point];
+-    struct VkWriteDescriptorSet descriptor_writes[24], *current_descriptor_write;
+-    const struct d3d12_root_signature *root_signature = bindings->root_signature;
++
++    for (i = 0; i < ARRAY_SIZE(bindings->descriptor_tables); ++i)
++    {
++        if (table_mask & ((uint64_t)1 << i))
++        {
++            if ((base_descriptor = d3d12_desc_from_gpu_handle(bindings->descriptor_tables[i])))
++            {
++                vkd3d_array_reserve((void **)&list->descriptor_updates, &list->descriptor_updates_size,
++                                    list->descriptor_updates_count + 1, sizeof(*list->descriptor_updates));
++                update = &list->descriptor_updates[list->descriptor_updates_count];
++
++                update->base_descriptor = base_descriptor;
++                update->index = i;
++                update->root_signature = bindings->root_signature;
++                update->descriptor_set = uav ? bindings->uav_counter_descriptor_set : bindings->descriptor_set;
++                update->uav = uav;
++                list->descriptor_updates_count++;
++            }
++            else
++                WARN("Descriptor table %u is not set.\n", i);
++        }
++    }
++}
++
++static void d3d12_command_list_resolve_descriptor_table_uav(struct d3d12_command_list *list,
++                                                            const struct d3d12_deferred_descriptor_set_update *update)
++{
++    const struct d3d12_root_signature *root_signature = update->root_signature;
+     const struct vkd3d_vk_device_procs *vk_procs = &list->device->vk_procs;
+-    struct VkDescriptorImageInfo image_infos[24], *current_image_info;
+     const struct d3d12_root_descriptor_table *descriptor_table;
+     const struct d3d12_root_descriptor_table_range *range;
+     VkDevice vk_device = list->device->vk_device;
+-    unsigned int i, j, descriptor_count;
+-    struct d3d12_desc *descriptor;
+-
+-    descriptor_table = root_signature_get_descriptor_table(root_signature, index);
++    unsigned int i, j;
++    unsigned int uav_counter_count;
++    const struct d3d12_desc *descriptor;
++    VkWriteDescriptorSet vk_descriptor_writes[VKD3D_SHADER_MAX_UNORDERED_ACCESS_VIEWS];
++    VkBufferView vk_uav_counter_views[VKD3D_SHADER_MAX_UNORDERED_ACCESS_VIEWS];
++    VkDescriptorSet vk_descriptor_set;
++    const struct d3d12_desc *base_descriptor = update->base_descriptor;
+ 
++    descriptor_table = root_signature_get_descriptor_table(root_signature, update->index);
+     descriptor = base_descriptor;
+-    descriptor_count = 0;
+-    current_descriptor_write = descriptor_writes;
+-    current_image_info = image_infos;
++
++    vk_descriptor_set = update->descriptor_set;
++    if (!vk_descriptor_set)
++        return;
++
++    /* FIXME: There should be a smarter way than scanning through all the descriptor table ranges for this. */
+     for (i = 0; i < descriptor_table->range_count; ++i)
+     {
+         range = &descriptor_table->ranges[i];
+@@ -2644,20 +2726,74 @@ static void d3d12_command_list_update_descriptor_table(struct d3d12_command_list
+         {
+             unsigned int register_idx = range->base_register_idx + j;
+ 
+-            /* Track UAV counters. */
++            /* Fish out UAV counters. */
+             if (range->descriptor_magic == VKD3D_DESCRIPTOR_MAGIC_UAV
+-                    && register_idx < ARRAY_SIZE(bindings->vk_uav_counter_views))
++                && register_idx < ARRAY_SIZE(vk_uav_counter_views))
+             {
+                 VkBufferView vk_counter_view = descriptor->magic == VKD3D_DESCRIPTOR_MAGIC_UAV
+-                        ? descriptor->u.view->vk_counter_view : VK_NULL_HANDLE;
+-                if (bindings->vk_uav_counter_views[register_idx] != vk_counter_view)
+-                    bindings->uav_counter_dirty_mask |= 1u << register_idx;
+-                bindings->vk_uav_counter_views[register_idx] = vk_counter_view;
++                                               ? descriptor->u.view->vk_counter_view : VK_NULL_HANDLE;
++                vk_uav_counter_views[register_idx] = vk_counter_view;
+             }
++        }
++    }
++
++    uav_counter_count = vkd3d_popcount(list->state->uav_counter_mask);
++    assert(uav_counter_count <= ARRAY_SIZE(vk_descriptor_writes));
++
++    for (i = 0; i < uav_counter_count; ++i)
++    {
++        const struct vkd3d_shader_uav_counter_binding *uav_counter = &list->state->uav_counters[i];
++        assert(vk_uav_counter_views[uav_counter->register_index]);
++
++        vk_descriptor_writes[i].sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
++        vk_descriptor_writes[i].pNext = NULL;
++        vk_descriptor_writes[i].dstSet = vk_descriptor_set;
++        vk_descriptor_writes[i].dstBinding = uav_counter->binding.binding;
++        vk_descriptor_writes[i].dstArrayElement = 0;
++        vk_descriptor_writes[i].descriptorCount = 1;
++        vk_descriptor_writes[i].descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER;
++        vk_descriptor_writes[i].pImageInfo = NULL;
++        vk_descriptor_writes[i].pBufferInfo = NULL;
++        vk_descriptor_writes[i].pTexelBufferView = &vk_uav_counter_views[uav_counter->register_index];
++    }
++
++    VK_CALL(vkUpdateDescriptorSets(vk_device, uav_counter_count, vk_descriptor_writes, 0, NULL));
++}
++
++static void d3d12_command_list_resolve_descriptor_table_normal(struct d3d12_command_list *list,
++        const struct d3d12_deferred_descriptor_set_update *update)
++{
++    const struct d3d12_root_descriptor_table *descriptor_table;
++    struct VkWriteDescriptorSet descriptor_writes[24], *current_descriptor_write;
++    struct VkDescriptorImageInfo image_infos[24], *current_image_info;
++    const struct d3d12_root_signature *root_signature = update->root_signature;
++    const struct vkd3d_vk_device_procs *vk_procs = &list->device->vk_procs;
++    const struct d3d12_root_descriptor_table_range *range;
++    VkDevice vk_device = list->device->vk_device;
++    unsigned int i, j, descriptor_count;
++    const struct d3d12_desc *descriptor;
++    const struct d3d12_desc *base_descriptor = update->base_descriptor;
++
++    descriptor_table = root_signature_get_descriptor_table(root_signature, update->index);
++
++    descriptor = update->base_descriptor;
++    descriptor_count = 0;
++    current_descriptor_write = descriptor_writes;
++    current_image_info = image_infos;
++    for (i = 0; i < descriptor_table->range_count; ++i)
++    {
++        range = &descriptor_table->ranges[i];
+ 
++        if (range->offset != D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND)
++        {
++            descriptor = base_descriptor + range->offset;
++        }
++
++        for (j = 0; j < range->descriptor_count; ++j, ++descriptor)
++        {
+             if (!vk_write_descriptor_set_from_d3d12_desc(current_descriptor_write,
+-                    current_image_info, descriptor, range->descriptor_magic,
+-                    bindings->descriptor_set, range->binding, j))
++                                                         current_image_info, descriptor, range->descriptor_magic,
++                                                         update->descriptor_set, range->binding, j))
+                 continue;
+ 
+             ++descriptor_count;
+@@ -2677,6 +2813,52 @@ static void d3d12_command_list_update_descriptor_table(struct d3d12_command_list
+     VK_CALL(vkUpdateDescriptorSets(vk_device, descriptor_count, descriptor_writes, 0, NULL));
+ }
+ 
++static void d3d12_command_list_resolve_descriptor_table(struct d3d12_command_list *list,
++                                                        const struct d3d12_deferred_descriptor_set_update *update)
++{
++    if (update->uav)
++        d3d12_command_list_resolve_descriptor_table_uav(list, update);
++    else
++        d3d12_command_list_resolve_descriptor_table_normal(list, update);
++}
++
++static void d3d12_command_list_resolve_descriptor_tables(struct d3d12_command_list *list)
++{
++    unsigned i;
++    for (i = 0; i < list->descriptor_updates_count; i++)
++        d3d12_command_list_resolve_descriptor_table(list, &list->descriptor_updates[i]);
++}
++
++static void d3d12_command_list_update_descriptor_table(struct d3d12_command_list *list,
++        VkPipelineBindPoint bind_point, unsigned int index, struct d3d12_desc *base_descriptor)
++{
++    struct d3d12_deferred_descriptor_set_update update;
++    struct vkd3d_pipeline_bindings *bindings = &list->pipeline_bindings[bind_point];
++    const struct d3d12_root_signature *root_signature = bindings->root_signature;
++
++    update.descriptor_set = bindings->descriptor_set;
++    update.index = index;
++    update.root_signature = root_signature;
++    update.base_descriptor = base_descriptor;
++    update.uav = false;
++    d3d12_command_list_resolve_descriptor_table_normal(list, &update);
++}
++
++static void d3d12_command_list_update_uav_counter_descriptor_table(struct d3d12_command_list *list,
++        VkPipelineBindPoint bind_point, unsigned int index, struct d3d12_desc *base_descriptor)
++{
++    struct d3d12_deferred_descriptor_set_update update;
++    struct vkd3d_pipeline_bindings *bindings = &list->pipeline_bindings[bind_point];
++    const struct d3d12_root_signature *root_signature = bindings->root_signature;
++
++    update.descriptor_set = bindings->uav_counter_descriptor_set;
++    update.index = index;
++    update.root_signature = root_signature;
++    update.base_descriptor = base_descriptor;
++    update.uav = true;
++    d3d12_command_list_resolve_descriptor_table_uav(list, &update);
++}
++
+ static bool vk_write_descriptor_set_from_root_descriptor(VkWriteDescriptorSet *vk_descriptor_write,
+         const struct d3d12_root_parameter *root_parameter, VkDescriptorSet vk_descriptor_set,
+         VkBufferView *vk_buffer_view, const VkDescriptorBufferInfo *vk_buffer_info)
+@@ -2781,55 +2963,6 @@ done:
+     vkd3d_free(buffer_infos);
+ }
+ 
+-static void d3d12_command_list_update_uav_counter_descriptors(struct d3d12_command_list *list,
+-        VkPipelineBindPoint bind_point)
+-{
+-    VkWriteDescriptorSet vk_descriptor_writes[VKD3D_SHADER_MAX_UNORDERED_ACCESS_VIEWS];
+-    struct vkd3d_pipeline_bindings *bindings = &list->pipeline_bindings[bind_point];
+-    const struct vkd3d_vk_device_procs *vk_procs = &list->device->vk_procs;
+-    const struct d3d12_pipeline_state *state = list->state;
+-    VkDevice vk_device = list->device->vk_device;
+-    VkDescriptorSet vk_descriptor_set;
+-    unsigned int uav_counter_count;
+-    unsigned int i;
+-
+-    if (!state || !(state->uav_counter_mask & bindings->uav_counter_dirty_mask))
+-        return;
+-
+-    uav_counter_count = vkd3d_popcount(state->uav_counter_mask);
+-    assert(uav_counter_count <= ARRAY_SIZE(vk_descriptor_writes));
+-
+-    vk_descriptor_set = d3d12_command_allocator_allocate_descriptor_set(list->allocator, state->vk_set_layout);
+-    if (!vk_descriptor_set)
+-        return;
+-
+-    for (i = 0; i < uav_counter_count; ++i)
+-    {
+-        const struct vkd3d_shader_uav_counter_binding *uav_counter = &state->uav_counters[i];
+-        const VkBufferView *vk_uav_counter_views = bindings->vk_uav_counter_views;
+-
+-        assert(vk_uav_counter_views[uav_counter->register_index]);
+-
+-        vk_descriptor_writes[i].sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+-        vk_descriptor_writes[i].pNext = NULL;
+-        vk_descriptor_writes[i].dstSet = vk_descriptor_set;
+-        vk_descriptor_writes[i].dstBinding = uav_counter->binding.binding;
+-        vk_descriptor_writes[i].dstArrayElement = 0;
+-        vk_descriptor_writes[i].descriptorCount = 1;
+-        vk_descriptor_writes[i].descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER;
+-        vk_descriptor_writes[i].pImageInfo = NULL;
+-        vk_descriptor_writes[i].pBufferInfo = NULL;
+-        vk_descriptor_writes[i].pTexelBufferView = &vk_uav_counter_views[uav_counter->register_index];
+-    }
+-
+-    VK_CALL(vkUpdateDescriptorSets(vk_device, uav_counter_count, vk_descriptor_writes, 0, NULL));
+-
+-    VK_CALL(vkCmdBindDescriptorSets(list->vk_command_buffer, bind_point,
+-            state->vk_pipeline_layout, state->set_index, 1, &vk_descriptor_set, 0, NULL));
+-
+-    bindings->uav_counter_dirty_mask = 0;
+-}
+-
+ static void d3d12_command_list_update_descriptors(struct d3d12_command_list *list,
+         VkPipelineBindPoint bind_point)
+ {
+@@ -2842,31 +2975,86 @@ static void d3d12_command_list_update_descriptors(struct d3d12_command_list *lis
+     if (!rs || !rs->vk_set_layout)
+         return;
+ 
++    if ((bindings->descriptor_table_active_mask | bindings->push_descriptor_dirty_mask |
++         (list->state->uav_counter_mask & bindings->uav_counter_dirty_mask)) == 0)
++    {
++        /* Nothing is dirty, so just return early. */
++        return;
++    }
++
+     if (bindings->descriptor_table_dirty_mask || bindings->push_descriptor_dirty_mask)
+         d3d12_command_list_prepare_descriptors(list, bind_point);
++    if (list->state->uav_counter_mask & bindings->uav_counter_dirty_mask)
++        d3d12_command_list_prepare_uav_counter_descriptors(list, bind_point);
+ 
+-    for (i = 0; i < ARRAY_SIZE(bindings->descriptor_tables); ++i)
++    if (list->device->vk_info.EXT_descriptor_indexing)
++    {
++        d3d12_command_list_defer_update_descriptor_table(list, bind_point, bindings->descriptor_table_dirty_mask,
++                                                         false);
++    }
++    else
+     {
+-        if (bindings->descriptor_table_dirty_mask & ((uint64_t)1 << i))
++        /* FIXME: FOR_EACH_BIT */
++        for (i = 0; i < ARRAY_SIZE(bindings->descriptor_tables); ++i)
+         {
+-            if ((base_descriptor = d3d12_desc_from_gpu_handle(bindings->descriptor_tables[i])))
+-                d3d12_command_list_update_descriptor_table(list, bind_point, i, base_descriptor);
+-            else
+-                WARN("Descriptor table %u is not set.\n", i);
++            if (bindings->descriptor_table_dirty_mask & ((uint64_t) 1 << i))
++            {
++                if ((base_descriptor = d3d12_desc_from_gpu_handle(bindings->descriptor_tables[i])))
++                    d3d12_command_list_update_descriptor_table(list, bind_point, i, base_descriptor);
++                else
++                    WARN("Descriptor table %u is not set.\n", i);
++            }
+         }
+     }
+     bindings->descriptor_table_dirty_mask = 0;
+ 
++    /* Need to go through all descriptor tables here in the root signature,
++     * not just descriptor_table_dirty_mask. Binding a different shader may not invalidate descriptor tables,
++     * but it may invalidate the UAV counter set. */
++    if (bindings->uav_counter_dirty_mask)
++    {
++        if (list->device->vk_info.EXT_descriptor_indexing)
++        {
++            d3d12_command_list_defer_update_descriptor_table(list, bind_point, bindings->descriptor_table_active_mask,
++                                                             true);
++        }
++        else
++        {
++            /* FIXME: FOR_EACH_BIT */
++            for (i = 0; i < ARRAY_SIZE(bindings->descriptor_tables); i++)
++            {
++                if (bindings->descriptor_table_active_mask & ((uint64_t) 1 << i))
++                {
++                    if ((base_descriptor = d3d12_desc_from_gpu_handle(bindings->descriptor_tables[i])))
++                        d3d12_command_list_update_uav_counter_descriptor_table(list, bind_point, i, base_descriptor);
++                    else
++                        WARN("Descriptor table %u is not set.\n", i);
++                }
++            }
++        }
++    }
++    bindings->uav_counter_dirty_mask = 0;
++
+     d3d12_command_list_update_push_descriptors(list, bind_point);
+ 
+-    if (bindings->descriptor_set)
++    /* Don't rebind the same descriptor set as long as we're in same pipeline layout. */
++    if (bindings->descriptor_set && bindings->descriptor_set != bindings->descriptor_set_bound)
+     {
+         VK_CALL(vkCmdBindDescriptorSets(list->vk_command_buffer, bind_point,
+                 rs->vk_pipeline_layout, rs->main_set, 1, &bindings->descriptor_set, 0, NULL));
+         bindings->in_use = true;
++        bindings->descriptor_set_bound = bindings->descriptor_set;
+     }
+ 
+-    d3d12_command_list_update_uav_counter_descriptors(list, bind_point);
++    /* Don't rebind the same descriptor set as long as we're in same pipeline layout. */
++    if (bindings->uav_counter_descriptor_set &&
++        bindings->uav_counter_descriptor_set != bindings->uav_counter_descriptor_set_bound)
++    {
++        VK_CALL(vkCmdBindDescriptorSets(list->vk_command_buffer, bind_point,
++                list->state->vk_pipeline_layout, list->state->set_index, 1, &bindings->uav_counter_descriptor_set, 0, NULL));
++        bindings->uav_counter_in_use = true;
++        bindings->uav_counter_descriptor_set_bound = bindings->uav_counter_descriptor_set;
++    }
+ }
+ 
+ static bool d3d12_command_list_begin_render_pass(struct d3d12_command_list *list)
+@@ -4032,6 +4220,10 @@ static void d3d12_command_list_set_root_signature(struct d3d12_command_list *lis
+     bindings->descriptor_set = VK_NULL_HANDLE;
+     bindings->descriptor_table_dirty_mask = bindings->descriptor_table_active_mask & root_signature->descriptor_table_mask;
+     bindings->push_descriptor_dirty_mask = bindings->push_descriptor_active_mask & root_signature->push_descriptor_mask;
++
++    bindings->uav_counter_descriptor_set = VK_NULL_HANDLE;
++    bindings->descriptor_set_bound = VK_NULL_HANDLE;
++    bindings->uav_counter_descriptor_set_bound = VK_NULL_HANDLE;
+ }
+ 
+ static void STDMETHODCALLTYPE d3d12_command_list_SetComputeRootSignature(ID3D12GraphicsCommandList1 *iface,
+@@ -5405,6 +5597,9 @@ static HRESULT d3d12_command_list_init(struct d3d12_command_list *list, struct d
+     d3d12_device_add_ref(list->device = device);
+ 
+     list->allocator = allocator;
++    list->descriptor_updates = NULL;
++    list->descriptor_updates_count = 0;
++    list->descriptor_updates_size = 0;
+ 
+     if (SUCCEEDED(hr = d3d12_command_allocator_allocate_command_buffer(allocator, list)))
+     {
+@@ -5642,6 +5837,13 @@ static void STDMETHODCALLTYPE d3d12_command_queue_ExecuteCommandLists(ID3D12Comm
+             return;
+         }
+ 
++        /* Descriptors in root signature in 1.0 are VOLATILE by default, so
++         * the descriptor heap only need to be valid right before we submit them to the GPU.
++         * If we have EXT_descriptor_indexing enabled with UpdateAfterBind, we update
++         * descriptor sets here rather than while we're recording the command buffer.
++         * For each submission of the command buffer, we can modify the descriptor heap as we please. */
++        d3d12_command_list_resolve_descriptor_tables(cmd_list);
++
+         buffers[i] = cmd_list->vk_command_buffer;
+     }
+ 
+diff --git a/libs/vkd3d/device.c b/libs/vkd3d/device.c
+index 13ebc70..e159c1f 100644
+--- a/libs/vkd3d/device.c
++++ b/libs/vkd3d/device.c
+@@ -1436,11 +1436,25 @@ static HRESULT vkd3d_init_device_caps(struct d3d12_device *device,
+     }
+ 
+     if (vulkan_info->EXT_descriptor_indexing && descriptor_indexing
+-            && (descriptor_indexing->descriptorBindingUniformBufferUpdateAfterBind
+-            || descriptor_indexing->descriptorBindingStorageBufferUpdateAfterBind
++        && descriptor_indexing->descriptorBindingUniformBufferUpdateAfterBind
++        && descriptor_indexing->descriptorBindingSampledImageUpdateAfterBind
++        && descriptor_indexing->descriptorBindingStorageImageUpdateAfterBind
++        && descriptor_indexing->descriptorBindingUniformTexelBufferUpdateAfterBind)
++    {
++        TRACE("Enabling VK_EXT_descriptor_indexing for volatile descriptor updates.\n");
++    }
++    else
++    {
++        WARN("VK_EXT_descriptor indexing not supported in sufficient capacity. Volatile descriptor updates will not work.\n");
++        vulkan_info->EXT_descriptor_indexing = false;
++    }
++
++    if (vulkan_info->EXT_descriptor_indexing && descriptor_indexing
++        && (descriptor_indexing->descriptorBindingUniformBufferUpdateAfterBind
+             || descriptor_indexing->descriptorBindingUniformTexelBufferUpdateAfterBind
++            || descriptor_indexing->descriptorBindingStorageBufferUpdateAfterBind
+             || descriptor_indexing->descriptorBindingStorageTexelBufferUpdateAfterBind)
+-            && !physical_device_info->descriptor_indexing_properties.robustBufferAccessUpdateAfterBind)
++        && !physical_device_info->descriptor_indexing_properties.robustBufferAccessUpdateAfterBind)
+     {
+         WARN("Disabling robust buffer access for the update after bind feature.\n");
+         features->robustBufferAccess = VK_FALSE;
+diff --git a/libs/vkd3d/state.c b/libs/vkd3d/state.c
+index a321fa4..50cff1f 100644
+--- a/libs/vkd3d/state.c
++++ b/libs/vkd3d/state.c
+@@ -745,21 +745,43 @@ static HRESULT vkd3d_create_descriptor_set_layout(struct d3d12_device *device,
+         VkDescriptorSetLayoutCreateFlags flags, unsigned int binding_count,
+         const VkDescriptorSetLayoutBinding *bindings, VkDescriptorSetLayout *set_layout)
+ {
++    unsigned int i;
+     const struct vkd3d_vk_device_procs *vk_procs = &device->vk_procs;
+     VkDescriptorSetLayoutCreateInfo set_desc;
+     VkResult vr;
++    VkDescriptorSetLayoutBindingFlagsCreateInfoEXT flags_info;
++    VkDescriptorBindingFlagsEXT *binding_flags = NULL;
+ 
+     set_desc.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
+     set_desc.pNext = NULL;
+     set_desc.flags = flags;
+     set_desc.bindingCount = binding_count;
+     set_desc.pBindings = bindings;
++
++    if (!(flags & VK_DESCRIPTOR_SET_LAYOUT_CREATE_PUSH_DESCRIPTOR_BIT_KHR) && device->vk_info.EXT_descriptor_indexing)
++    {
++        set_desc.flags |= VK_DESCRIPTOR_SET_LAYOUT_CREATE_UPDATE_AFTER_BIND_POOL_BIT_EXT;
++        flags_info.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_BINDING_FLAGS_CREATE_INFO_EXT;
++        flags_info.pNext = NULL;
++        flags_info.bindingCount = binding_count;
++        binding_flags = vkd3d_malloc(sizeof(*binding_flags) * binding_count);
++        for (i = 0; i < binding_count; i++)
++        {
++            binding_flags[i] = VK_DESCRIPTOR_BINDING_UPDATE_AFTER_BIND_BIT_EXT |
++                               VK_DESCRIPTOR_BINDING_UPDATE_UNUSED_WHILE_PENDING_BIT_EXT;
++        }
++        flags_info.pBindingFlags = binding_flags;
++        set_desc.pNext = &flags_info;
++    }
++
+     if ((vr = VK_CALL(vkCreateDescriptorSetLayout(device->vk_device, &set_desc, NULL, set_layout))) < 0)
+     {
+         WARN("Failed to create Vulkan descriptor set layout, vr %d.\n", vr);
++        vkd3d_free(binding_flags);
+         return hresult_from_vk_result(vr);
+     }
+ 
++    vkd3d_free(binding_flags);
+     return S_OK;
+ }
+ 
+diff --git a/libs/vkd3d/vkd3d_private.h b/libs/vkd3d/vkd3d_private.h
+index 2d62fda..58e9aa9 100644
+--- a/libs/vkd3d/vkd3d_private.h
++++ b/libs/vkd3d/vkd3d_private.h
+@@ -888,13 +888,16 @@ struct vkd3d_pipeline_bindings
+     const struct d3d12_root_signature *root_signature;
+ 
+     VkDescriptorSet descriptor_set;
++    VkDescriptorSet uav_counter_descriptor_set;
++    VkDescriptorSet descriptor_set_bound;
++    VkDescriptorSet uav_counter_descriptor_set_bound;
+     bool in_use;
++    bool uav_counter_in_use;
+ 
+     D3D12_GPU_DESCRIPTOR_HANDLE descriptor_tables[D3D12_MAX_ROOT_COST];
+     uint64_t descriptor_table_dirty_mask;
+     uint64_t descriptor_table_active_mask;
+ 
+-    VkBufferView vk_uav_counter_views[VKD3D_SHADER_MAX_UNORDERED_ACCESS_VIEWS];
+     uint8_t uav_counter_dirty_mask;
+ 
+     /* Needed when VK_KHR_push_descriptor is not available. */
+@@ -903,6 +906,16 @@ struct vkd3d_pipeline_bindings
+     uint32_t push_descriptor_active_mask;
+ };
+ 
++struct d3d12_deferred_descriptor_set_update
++{
++    const struct d3d12_desc *base_descriptor;
++    unsigned int index;
++
++    const struct d3d12_root_signature *root_signature;
++    VkDescriptorSet descriptor_set;
++    bool uav;
++};
++
+ /* ID3D12CommandList */
+ struct d3d12_command_list
+ {
+@@ -946,6 +959,10 @@ struct d3d12_command_list
+     VkBuffer so_counter_buffers[D3D12_SO_BUFFER_SLOT_COUNT];
+     VkDeviceSize so_counter_buffer_offsets[D3D12_SO_BUFFER_SLOT_COUNT];
+ 
++    struct d3d12_deferred_descriptor_set_update *descriptor_updates;
++    size_t descriptor_updates_size;
++    size_t descriptor_updates_count;
++
+     struct vkd3d_private_store private_store;
+ };
+ 
+diff --git a/tests/d3d12.c b/tests/d3d12.c
+index 858cf99..16a048c 100644
+--- a/tests/d3d12.c
++++ b/tests/d3d12.c
+@@ -15799,7 +15799,7 @@ static void test_update_descriptor_heap_after_closing_command_list(void)
+             D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_COPY_SOURCE);
+     get_texture_readback_with_command_list(context.render_target, 0, &rb, queue, command_list);
+     value = get_readback_uint(&rb, 0, 0, 0);
+-    todo ok(value == 0xff00ff00, "Got unexpected value %#x.\n", value);
++    ok(value == 0xff00ff00, "Got unexpected value %#x.\n", value);
+     release_resource_readback(&rb);
+ 
+     ID3D12DescriptorHeap_Release(cpu_heap);
+
+-- 
+2.23.0
+
+From: Hans-Kristian Arntzen <post@arntzen-software.no>
+Subject: [PATCH] vkd3d: Fix handling of SM 5.1 register spaces.
+Message-Id: <20191101133638.6565-2-post@arntzen-software.no>
+Date: Fri,  1 Nov 2019 14:36:37 +0100
+In-Reply-To: <20191101133638.6565-1-post@arntzen-software.no>
+References: <20191101133638.6565-1-post@arntzen-software.no>
+
+The resource index is not found in idx[0], but idx[1] when using SM 5.1,
+and register space information depends on resource type.
+
+Pass down space/index information directly to resource declaration
+functions instead rather than relying on this information being in
+reg.idx[0].
+
+Signed-off-by: Hans-Kristian Arntzen <post@arntzen-software.no>
+---
+ include/vkd3d_shader.h                   |  3 ++
+ libs/vkd3d-shader/dxbc.c                 | 31 ++++++++++++
+ libs/vkd3d-shader/spirv.c                | 63 ++++++++++++++----------
+ libs/vkd3d-shader/vkd3d_shader_private.h |  5 ++
+ libs/vkd3d/state.c                       | 24 +++++----
+ libs/vkd3d/vkd3d_private.h               |  1 +
+ 6 files changed, 87 insertions(+), 40 deletions(-)
+
+diff --git a/include/vkd3d_shader.h b/include/vkd3d_shader.h
+index 6b4d3f5..8f43d66 100644
+--- a/include/vkd3d_shader.h
++++ b/include/vkd3d_shader.h
+@@ -138,6 +138,7 @@ struct vkd3d_shader_parameter
+ struct vkd3d_shader_resource_binding
+ {
+     enum vkd3d_shader_descriptor_type type;
++    unsigned int register_space;
+     unsigned int register_index;
+     enum vkd3d_shader_visibility shader_visibility;
+     unsigned int flags; /* vkd3d_shader_binding_flags */
+@@ -159,6 +160,7 @@ struct vkd3d_shader_combined_resource_sampler
+ 
+ struct vkd3d_shader_uav_counter_binding
+ {
++    unsigned int register_space;
+     unsigned int register_index; /* u# */
+     enum vkd3d_shader_visibility shader_visibility;
+ 
+@@ -168,6 +170,7 @@ struct vkd3d_shader_uav_counter_binding
+ 
+ struct vkd3d_shader_push_constant_buffer
+ {
++    unsigned int register_space;
+     unsigned int register_index;
+     enum vkd3d_shader_visibility shader_visibility;
+ 
+diff --git a/libs/vkd3d-shader/dxbc.c b/libs/vkd3d-shader/dxbc.c
+index 98c51e4..f9f6614 100644
+--- a/libs/vkd3d-shader/dxbc.c
++++ b/libs/vkd3d-shader/dxbc.c
+@@ -624,6 +624,10 @@ static void shader_sm4_read_dcl_resource(struct vkd3d_shader_instruction *ins,
+         ins->flags = (opcode_token & VKD3D_SM5_UAV_FLAGS_MASK) >> VKD3D_SM5_UAV_FLAGS_SHIFT;
+ 
+     shader_sm4_read_register_space(priv, &tokens, end, &ins->declaration.semantic.register_space);
++    if (shader_is_sm_5_1(priv))
++        ins->declaration.semantic.register_index = ins->declaration.semantic.reg.reg.idx[1].offset;
++    else
++        ins->declaration.semantic.register_index = ins->declaration.semantic.reg.reg.idx[0].offset;
+ }
+ 
+ static void shader_sm4_read_dcl_constant_buffer(struct vkd3d_shader_instruction *ins,
+@@ -647,9 +651,14 @@ static void shader_sm4_read_dcl_constant_buffer(struct vkd3d_shader_instruction
+             return;
+         }
+ 
++        /* Apparently both idx[1] and idx[2] contain the range for indexed resources,
++         * but only support plain CBV here and ignore idx[2]. */
++        ins->declaration.cb.register_index = ins->declaration.cb.src.reg.idx[1].offset;
+         ins->declaration.cb.size = *tokens++;
+         shader_sm4_read_register_space(priv, &tokens, end, &ins->declaration.cb.register_space);
+     }
++    else
++        ins->declaration.cb.register_index = ins->declaration.cb.src.reg.idx[0].offset;
+ }
+ 
+ static void shader_sm4_read_dcl_sampler(struct vkd3d_shader_instruction *ins,
+@@ -663,6 +672,10 @@ static void shader_sm4_read_dcl_sampler(struct vkd3d_shader_instruction *ins,
+         FIXME("Unhandled sampler mode %#x.\n", ins->flags);
+     shader_sm4_read_src_param(priv, &tokens, end, VKD3D_DATA_SAMPLER, &ins->declaration.sampler.src);
+     shader_sm4_read_register_space(priv, &tokens, end, &ins->declaration.sampler.register_space);
++    if (shader_is_sm_5_1(priv))
++        ins->declaration.sampler.register_index = ins->declaration.sampler.src.reg.idx[1].offset;
++    else
++        ins->declaration.sampler.register_index = ins->declaration.sampler.src.reg.idx[0].offset;
+ }
+ 
+ static void shader_sm4_read_dcl_index_range(struct vkd3d_shader_instruction *ins,
+@@ -863,6 +876,10 @@ static void shader_sm5_read_dcl_uav_raw(struct vkd3d_shader_instruction *ins,
+     shader_sm4_read_dst_param(priv, &tokens, end, VKD3D_DATA_UAV, &ins->declaration.raw_resource.dst);
+     ins->flags = (opcode_token & VKD3D_SM5_UAV_FLAGS_MASK) >> VKD3D_SM5_UAV_FLAGS_SHIFT;
+     shader_sm4_read_register_space(priv, &tokens, end, &ins->declaration.raw_resource.register_space);
++    if (shader_is_sm_5_1(priv))
++        ins->declaration.raw_resource.register_index = ins->declaration.raw_resource.dst.reg.idx[1].offset;
++    else
++        ins->declaration.raw_resource.register_index = ins->declaration.raw_resource.dst.reg.idx[0].offset;
+ }
+ 
+ static void shader_sm5_read_dcl_uav_structured(struct vkd3d_shader_instruction *ins,
+@@ -874,9 +891,14 @@ static void shader_sm5_read_dcl_uav_structured(struct vkd3d_shader_instruction *
+     shader_sm4_read_dst_param(priv, &tokens, end, VKD3D_DATA_UAV, &ins->declaration.structured_resource.reg);
+     ins->flags = (opcode_token & VKD3D_SM5_UAV_FLAGS_MASK) >> VKD3D_SM5_UAV_FLAGS_SHIFT;
+     ins->declaration.structured_resource.byte_stride = *tokens;
++    tokens++;
+     if (ins->declaration.structured_resource.byte_stride % 4)
+         FIXME("Byte stride %u is not multiple of 4.\n", ins->declaration.structured_resource.byte_stride);
+     shader_sm4_read_register_space(priv, &tokens, end, &ins->declaration.structured_resource.register_space);
++    if (shader_is_sm_5_1(priv))
++        ins->declaration.structured_resource.register_index = ins->declaration.structured_resource.reg.reg.idx[1].offset;
++    else
++        ins->declaration.structured_resource.register_index = ins->declaration.structured_resource.reg.reg.idx[0].offset;
+ }
+ 
+ static void shader_sm5_read_dcl_tgsm_raw(struct vkd3d_shader_instruction *ins,
+@@ -909,9 +931,14 @@ static void shader_sm5_read_dcl_resource_structured(struct vkd3d_shader_instruct
+ 
+     shader_sm4_read_dst_param(priv, &tokens, end, VKD3D_DATA_RESOURCE, &ins->declaration.structured_resource.reg);
+     ins->declaration.structured_resource.byte_stride = *tokens;
++    tokens++;
+     if (ins->declaration.structured_resource.byte_stride % 4)
+         FIXME("Byte stride %u is not multiple of 4.\n", ins->declaration.structured_resource.byte_stride);
+     shader_sm4_read_register_space(priv, &tokens, end, &ins->declaration.structured_resource.register_space);
++    if (shader_is_sm_5_1(priv))
++        ins->declaration.structured_resource.register_index = ins->declaration.structured_resource.reg.reg.idx[1].offset;
++    else
++        ins->declaration.structured_resource.register_index = ins->declaration.structured_resource.reg.reg.idx[0].offset;
+ }
+ 
+ static void shader_sm5_read_dcl_resource_raw(struct vkd3d_shader_instruction *ins,
+@@ -922,6 +949,10 @@ static void shader_sm5_read_dcl_resource_raw(struct vkd3d_shader_instruction *in
+ 
+     shader_sm4_read_dst_param(priv, &tokens, end, VKD3D_DATA_RESOURCE, &ins->declaration.dst);
+     shader_sm4_read_register_space(priv, &tokens, end, &ins->declaration.raw_resource.register_space);
++    if (shader_is_sm_5_1(priv))
++        ins->declaration.raw_resource.register_index = ins->declaration.dst.reg.idx[1].offset;
++    else
++        ins->declaration.raw_resource.register_index = ins->declaration.dst.reg.idx[0].offset;
+ }
+ 
+ static void shader_sm5_read_sync(struct vkd3d_shader_instruction *ins,
+diff --git a/libs/vkd3d-shader/spirv.c b/libs/vkd3d-shader/spirv.c
+index a949e4a..aaae1b6 100644
+--- a/libs/vkd3d-shader/spirv.c
++++ b/libs/vkd3d-shader/spirv.c
+@@ -2052,6 +2052,7 @@ struct vkd3d_hull_shader_variables
+ 
+ struct vkd3d_dxbc_compiler
+ {
++    struct vkd3d_shader_version shader_version;
+     struct vkd3d_spirv_builder spirv_builder;
+ 
+     uint32_t options;
+@@ -2107,6 +2108,11 @@ struct vkd3d_dxbc_compiler
+     size_t spec_constants_size;
+ };
+ 
++static bool shader_is_sm_5_1(const struct vkd3d_dxbc_compiler *compiler)
++{
++    return (compiler->shader_version.major * 100 + compiler->shader_version.minor) >= 501;
++}
++
+ static bool is_control_point_phase(const struct vkd3d_shader_phase *phase)
+ {
+     return phase && phase->type == VKD3DSIH_HS_CONTROL_POINT_PHASE;
+@@ -2131,6 +2137,8 @@ struct vkd3d_dxbc_compiler *vkd3d_dxbc_compiler_create(const struct vkd3d_shader
+ 
+     memset(compiler, 0, sizeof(*compiler));
+ 
++    compiler->shader_version = *shader_version;
++
+     max_element_count = max(output_signature->element_count, patch_constant_signature->element_count);
+     if (!(compiler->output_info = vkd3d_calloc(max_element_count, sizeof(*compiler->output_info))))
+     {
+@@ -2227,9 +2235,10 @@ static bool vkd3d_dxbc_compiler_check_shader_visibility(const struct vkd3d_dxbc_
+ }
+ 
+ static struct vkd3d_push_constant_buffer_binding *vkd3d_dxbc_compiler_find_push_constant_buffer(
+-        const struct vkd3d_dxbc_compiler *compiler, const struct vkd3d_shader_register *reg)
++        const struct vkd3d_dxbc_compiler *compiler, const struct vkd3d_shader_constant_buffer *cb)
+ {
+-    unsigned int reg_idx = reg->idx[0].offset;
++    unsigned int reg_idx = cb->register_index;
++    unsigned int reg_space = cb->register_space;
+     unsigned int i;
+ 
+     for (i = 0; i < compiler->shader_interface.push_constant_buffer_count; ++i)
+@@ -2239,7 +2248,7 @@ static struct vkd3d_push_constant_buffer_binding *vkd3d_dxbc_compiler_find_push_
+         if (!vkd3d_dxbc_compiler_check_shader_visibility(compiler, current->pc.shader_visibility))
+             continue;
+ 
+-        if (current->pc.register_index == reg_idx)
++        if (current->pc.register_index == reg_idx && current->pc.register_space == reg_space)
+             return current;
+     }
+ 
+@@ -2276,13 +2285,13 @@ static bool vkd3d_dxbc_compiler_has_combined_sampler(const struct vkd3d_dxbc_com
+ 
+ static struct vkd3d_shader_descriptor_binding vkd3d_dxbc_compiler_get_descriptor_binding(
+         struct vkd3d_dxbc_compiler *compiler, const struct vkd3d_shader_register *reg,
++        unsigned int reg_idx, unsigned int reg_space,
+         enum vkd3d_shader_resource_type resource_type, bool is_uav_counter)
+ {
+     const struct vkd3d_shader_interface_info *shader_interface = &compiler->shader_interface;
+     enum vkd3d_shader_descriptor_type descriptor_type;
+     enum vkd3d_shader_binding_flag resource_type_flag;
+     struct vkd3d_shader_descriptor_binding binding;
+-    unsigned int reg_idx = reg->idx[0].offset;
+     unsigned int i;
+ 
+     descriptor_type = VKD3D_SHADER_DESCRIPTOR_TYPE_UNKNOWN;
+@@ -2313,7 +2322,7 @@ static struct vkd3d_shader_descriptor_binding vkd3d_dxbc_compiler_get_descriptor
+             if (current->offset)
+                 FIXME("Atomic counter offsets are not supported yet.\n");
+ 
+-            if (current->register_index == reg_idx)
++            if (current->register_index == reg_idx && current->register_space == reg_space)
+                 return current->binding;
+         }
+         if (shader_interface->uav_counter_count)
+@@ -2331,7 +2340,7 @@ static struct vkd3d_shader_descriptor_binding vkd3d_dxbc_compiler_get_descriptor
+             if (!vkd3d_dxbc_compiler_check_shader_visibility(compiler, current->shader_visibility))
+                 continue;
+ 
+-            if (current->type == descriptor_type && current->register_index == reg_idx)
++            if (current->type == descriptor_type && current->register_index == reg_idx && current->register_space == reg_space)
+                 return current->binding;
+         }
+         if (shader_interface->binding_count)
+@@ -2354,12 +2363,12 @@ static void vkd3d_dxbc_compiler_emit_descriptor_binding(struct vkd3d_dxbc_compil
+ }
+ 
+ static void vkd3d_dxbc_compiler_emit_descriptor_binding_for_reg(struct vkd3d_dxbc_compiler *compiler,
+-        uint32_t variable_id, const struct vkd3d_shader_register *reg,
++        uint32_t variable_id, const struct vkd3d_shader_register *reg, unsigned int reg_idx, unsigned int reg_space,
+         enum vkd3d_shader_resource_type resource_type, bool is_uav_counter)
+ {
+     struct vkd3d_shader_descriptor_binding binding;
+ 
+-    binding = vkd3d_dxbc_compiler_get_descriptor_binding(compiler, reg, resource_type, is_uav_counter);
++    binding = vkd3d_dxbc_compiler_get_descriptor_binding(compiler, reg, reg_idx, reg_space, resource_type, is_uav_counter);
+     vkd3d_dxbc_compiler_emit_descriptor_binding(compiler, variable_id, &binding);
+ }
+ 
+@@ -2825,7 +2834,8 @@ static void vkd3d_dxbc_compiler_emit_dereference_register(struct vkd3d_dxbc_comp
+     {
+         assert(!reg->idx[0].rel_addr);
+         indexes[index_count++] = vkd3d_dxbc_compiler_get_constant_uint(compiler, register_info->member_idx);
+-        indexes[index_count++] = vkd3d_dxbc_compiler_emit_register_addressing(compiler, &reg->idx[1]);
++        indexes[index_count++] = vkd3d_dxbc_compiler_emit_register_addressing(compiler,
++                &reg->idx[shader_is_sm_5_1(compiler) ? 2 : 1]);
+     }
+     else if (reg->type == VKD3DSPR_IMMCONSTBUFFER)
+     {
+@@ -2835,6 +2845,11 @@ static void vkd3d_dxbc_compiler_emit_dereference_register(struct vkd3d_dxbc_comp
+     {
+         indexes[index_count++] = vkd3d_dxbc_compiler_emit_register_addressing(compiler, &reg->idx[1]);
+     }
++    else if (reg->type == VKD3DSPR_SAMPLER)
++    {
++        /* SM 5.1 will have an index here referring to something which we throw away. */
++        index_count = 0;
++    }
+     else if (register_info->is_aggregate)
+     {
+         struct vkd3d_shader_register_index reg_idx = reg->idx[0];
+@@ -4957,10 +4972,7 @@ static void vkd3d_dxbc_compiler_emit_dcl_constant_buffer(struct vkd3d_dxbc_compi
+ 
+     assert(!(instruction->flags & ~VKD3DSI_INDEXED_DYNAMIC));
+ 
+-    if (cb->register_space)
+-        FIXME("Unhandled register space %u.\n", cb->register_space);
+-
+-    if ((push_cb = vkd3d_dxbc_compiler_find_push_constant_buffer(compiler, reg)))
++    if ((push_cb = vkd3d_dxbc_compiler_find_push_constant_buffer(compiler, cb)))
+     {
+         /* Push constant buffers are handled in
+          * vkd3d_dxbc_compiler_emit_push_constant_buffers().
+@@ -4990,7 +5002,7 @@ static void vkd3d_dxbc_compiler_emit_dcl_constant_buffer(struct vkd3d_dxbc_compi
+             pointer_type_id, storage_class, 0);
+ 
+     vkd3d_dxbc_compiler_emit_descriptor_binding_for_reg(compiler,
+-            var_id, reg, VKD3D_SHADER_RESOURCE_BUFFER, false);
++            var_id, reg, cb->register_index, cb->register_space, VKD3D_SHADER_RESOURCE_BUFFER, false);
+ 
+     vkd3d_dxbc_compiler_emit_register_debug_name(builder, var_id, reg);
+ 
+@@ -5042,9 +5054,6 @@ static void vkd3d_dxbc_compiler_emit_dcl_sampler(struct vkd3d_dxbc_compiler *com
+     uint32_t type_id, ptr_type_id, var_id;
+     struct vkd3d_symbol reg_symbol;
+ 
+-    if (instruction->declaration.sampler.register_space)
+-        FIXME("Unhandled register space %u.\n", instruction->declaration.sampler.register_space);
+-
+     if (vkd3d_dxbc_compiler_has_combined_sampler(compiler, NULL, reg))
+         return;
+ 
+@@ -5054,7 +5063,9 @@ static void vkd3d_dxbc_compiler_emit_dcl_sampler(struct vkd3d_dxbc_compiler *com
+             ptr_type_id, storage_class, 0);
+ 
+     vkd3d_dxbc_compiler_emit_descriptor_binding_for_reg(compiler,
+-            var_id, reg, VKD3D_SHADER_RESOURCE_NONE, false);
++            var_id, reg,
++            instruction->declaration.sampler.register_index, instruction->declaration.sampler.register_space,
++            VKD3D_SHADER_RESOURCE_NONE, false);
+ 
+     vkd3d_dxbc_compiler_emit_register_debug_name(builder, var_id, reg);
+ 
+@@ -5185,7 +5196,8 @@ static void vkd3d_dxbc_compiler_emit_combined_sampler_declarations(struct vkd3d_
+ }
+ 
+ static void vkd3d_dxbc_compiler_emit_resource_declaration(struct vkd3d_dxbc_compiler *compiler,
+-        const struct vkd3d_shader_register *reg, enum vkd3d_shader_resource_type resource_type,
++        const struct vkd3d_shader_register *reg, unsigned int reg_idx, unsigned reg_space,
++        enum vkd3d_shader_resource_type resource_type,
+         enum vkd3d_data_type resource_data_type, unsigned int structure_stride, bool raw)
+ {
+     uint32_t counter_type_id, type_id, ptr_type_id, var_id, counter_var_id = 0;
+@@ -5220,7 +5232,7 @@ static void vkd3d_dxbc_compiler_emit_resource_declaration(struct vkd3d_dxbc_comp
+     var_id = vkd3d_spirv_build_op_variable(builder, &builder->global_stream,
+             ptr_type_id, storage_class, 0);
+ 
+-    vkd3d_dxbc_compiler_emit_descriptor_binding_for_reg(compiler, var_id, reg, resource_type, false);
++    vkd3d_dxbc_compiler_emit_descriptor_binding_for_reg(compiler, var_id, reg, reg_idx, reg_space, resource_type, false);
+ 
+     vkd3d_dxbc_compiler_emit_register_debug_name(builder, var_id, reg);
+ 
+@@ -5243,7 +5255,7 @@ static void vkd3d_dxbc_compiler_emit_resource_declaration(struct vkd3d_dxbc_comp
+                 ptr_type_id, storage_class, 0);
+ 
+         vkd3d_dxbc_compiler_emit_descriptor_binding_for_reg(compiler,
+-                counter_var_id, reg, resource_type, true);
++                counter_var_id, reg, reg_idx, reg_space, resource_type, true);
+ 
+         vkd3d_spirv_build_op_name(builder, counter_var_id, "u%u_counter", reg->idx[0].offset);
+     }
+@@ -5264,12 +5276,11 @@ static void vkd3d_dxbc_compiler_emit_dcl_resource(struct vkd3d_dxbc_compiler *co
+ {
+     const struct vkd3d_shader_semantic *semantic = &instruction->declaration.semantic;
+ 
+-    if (semantic->register_space)
+-        FIXME("Unhandled register space %u.\n", semantic->register_space);
+     if (instruction->flags)
+         FIXME("Unhandled UAV flags %#x.\n", instruction->flags);
+ 
+     vkd3d_dxbc_compiler_emit_resource_declaration(compiler, &semantic->reg.reg,
++            semantic->register_index, semantic->register_space,
+             semantic->resource_type, semantic->resource_data_type, 0, false);
+ }
+ 
+@@ -5278,12 +5289,11 @@ static void vkd3d_dxbc_compiler_emit_dcl_resource_raw(struct vkd3d_dxbc_compiler
+ {
+     const struct vkd3d_shader_raw_resource *resource = &instruction->declaration.raw_resource;
+ 
+-    if (resource->register_space)
+-        FIXME("Unhandled register space %u.\n", resource->register_space);
+     if (instruction->flags)
+         FIXME("Unhandled UAV flags %#x.\n", instruction->flags);
+ 
+     vkd3d_dxbc_compiler_emit_resource_declaration(compiler, &resource->dst.reg,
++            resource->register_index, resource->register_space,
+             VKD3D_SHADER_RESOURCE_BUFFER, VKD3D_DATA_UINT, 0, true);
+ }
+ 
+@@ -5294,12 +5304,11 @@ static void vkd3d_dxbc_compiler_emit_dcl_resource_structured(struct vkd3d_dxbc_c
+     const struct vkd3d_shader_register *reg = &resource->reg.reg;
+     unsigned int stride = resource->byte_stride;
+ 
+-    if (resource->register_space)
+-        FIXME("Unhandled register space %u.\n", resource->register_space);
+     if (instruction->flags)
+         FIXME("Unhandled UAV flags %#x.\n", instruction->flags);
+ 
+     vkd3d_dxbc_compiler_emit_resource_declaration(compiler, reg,
++            resource->register_index, resource->register_space,
+             VKD3D_SHADER_RESOURCE_BUFFER, VKD3D_DATA_UINT, stride / 4, false);
+ }
+ 
+diff --git a/libs/vkd3d-shader/vkd3d_shader_private.h b/libs/vkd3d-shader/vkd3d_shader_private.h
+index 940cb76..1c052a0 100644
+--- a/libs/vkd3d-shader/vkd3d_shader_private.h
++++ b/libs/vkd3d-shader/vkd3d_shader_private.h
+@@ -615,6 +615,7 @@ struct vkd3d_shader_semantic
+     enum vkd3d_data_type resource_data_type;
+     struct vkd3d_shader_dst_param reg;
+     unsigned int register_space;
++    unsigned int register_index;
+ };
+ 
+ enum vkd3d_shader_input_sysval_semantic
+@@ -662,6 +663,7 @@ struct vkd3d_shader_register_semantic
+ struct vkd3d_shader_sampler
+ {
+     struct vkd3d_shader_src_param src;
++    unsigned int register_index;
+     unsigned int register_space;
+ };
+ 
+@@ -669,6 +671,7 @@ struct vkd3d_shader_constant_buffer
+ {
+     struct vkd3d_shader_src_param src;
+     unsigned int size;
++    unsigned int register_index;
+     unsigned int register_space;
+ };
+ 
+@@ -676,12 +679,14 @@ struct vkd3d_shader_structured_resource
+ {
+     struct vkd3d_shader_dst_param reg;
+     unsigned int byte_stride;
++    unsigned int register_index;
+     unsigned int register_space;
+ };
+ 
+ struct vkd3d_shader_raw_resource
+ {
+     struct vkd3d_shader_dst_param dst;
++    unsigned int register_index;
+     unsigned int register_space;
+ };
+ 
+diff --git a/libs/vkd3d/state.c b/libs/vkd3d/state.c
+index 50cff1f..ed20de7 100644
+--- a/libs/vkd3d/state.c
++++ b/libs/vkd3d/state.c
+@@ -308,12 +308,6 @@ static bool vk_binding_from_d3d12_descriptor_range(struct VkDescriptorSetLayoutB
+             = vk_descriptor_type_from_d3d12_range_type(descriptor_range->RangeType, is_buffer);
+     binding_desc->descriptorCount = 1;
+ 
+-    if (descriptor_range->RegisterSpace)
+-    {
+-        FIXME("Unhandled register space %u.\n", descriptor_range->RegisterSpace);
+-        return false;
+-    }
+-
+     binding_desc->stageFlags = stage_flags_from_visibility(shader_visibility);
+     binding_desc->pImmutableSamplers = NULL;
+ 
+@@ -509,6 +503,7 @@ static HRESULT d3d12_root_signature_init_push_constants(struct d3d12_root_signat
+                 ? push_constants[0].stageFlags : stage_flags_from_visibility(p->ShaderVisibility);
+         root_constant->offset = offset;
+ 
++        root_signature->root_constants[j].register_space = p->u.Constants.RegisterSpace;
+         root_signature->root_constants[j].register_index = p->u.Constants.ShaderRegister;
+         root_signature->root_constants[j].shader_visibility
+                 = vkd3d_shader_visibility_from_d3d12(p->ShaderVisibility);
+@@ -532,7 +527,7 @@ struct vkd3d_descriptor_set_context
+ };
+ 
+ static void d3d12_root_signature_append_vk_binding(struct d3d12_root_signature *root_signature,
+-        enum vkd3d_shader_descriptor_type descriptor_type, unsigned int register_idx,
++        enum vkd3d_shader_descriptor_type descriptor_type, unsigned int register_space, unsigned int register_idx,
+         bool buffer_descriptor, enum vkd3d_shader_visibility shader_visibility,
+         struct vkd3d_descriptor_set_context *context)
+ {
+@@ -540,6 +535,7 @@ static void d3d12_root_signature_append_vk_binding(struct d3d12_root_signature *
+             = &root_signature->descriptor_mapping[context->descriptor_index++];
+ 
+     mapping->type = descriptor_type;
++    mapping->register_space = register_space;
+     mapping->register_index = register_idx;
+     mapping->shader_visibility = shader_visibility;
+     mapping->flags = buffer_descriptor ? VKD3D_SHADER_BINDING_FLAG_BUFFER : VKD3D_SHADER_BINDING_FLAG_IMAGE;
+@@ -548,7 +544,7 @@ static void d3d12_root_signature_append_vk_binding(struct d3d12_root_signature *
+ }
+ 
+ static uint32_t d3d12_root_signature_assign_vk_bindings(struct d3d12_root_signature *root_signature,
+-        enum vkd3d_shader_descriptor_type descriptor_type, unsigned int base_register_idx,
++        enum vkd3d_shader_descriptor_type descriptor_type, unsigned int register_space, unsigned int base_register_idx,
+         unsigned int binding_count, bool is_buffer_descriptor, bool duplicate_descriptors,
+         enum vkd3d_shader_visibility shader_visibility, struct vkd3d_descriptor_set_context *context)
+ {
+@@ -565,10 +561,10 @@ static uint32_t d3d12_root_signature_assign_vk_bindings(struct d3d12_root_signat
+     {
+         if (duplicate_descriptors)
+             d3d12_root_signature_append_vk_binding(root_signature, descriptor_type,
+-                    base_register_idx + i, true, shader_visibility, context);
++                    register_space, base_register_idx + i, true, shader_visibility, context);
+ 
+         d3d12_root_signature_append_vk_binding(root_signature, descriptor_type,
+-                base_register_idx + i, is_buffer_descriptor, shader_visibility, context);
++                register_space, base_register_idx + i, is_buffer_descriptor, shader_visibility, context);
+     }
+     return first_binding;
+ }
+@@ -624,7 +620,7 @@ static HRESULT d3d12_root_signature_init_root_descriptor_tables(struct d3d12_roo
+ 
+             vk_binding = d3d12_root_signature_assign_vk_bindings(root_signature,
+                     vkd3d_descriptor_type_from_d3d12_range_type(range->RangeType),
+-                    range->BaseShaderRegister, range->NumDescriptors, false, true,
++                    range->RegisterSpace, range->BaseShaderRegister, range->NumDescriptors, false, true,
+                     vkd3d_shader_visibility_from_d3d12(p->ShaderVisibility), context);
+ 
+             /* Unroll descriptor range. */
+@@ -657,6 +653,7 @@ static HRESULT d3d12_root_signature_init_root_descriptor_tables(struct d3d12_roo
+             table->ranges[j].binding = vk_binding;
+             table->ranges[j].descriptor_magic = vkd3d_descriptor_magic_from_d3d12(range->RangeType);
+             table->ranges[j].base_register_idx = range->BaseShaderRegister;
++            table->ranges[j].register_space = range->RegisterSpace;
+         }
+     }
+ 
+@@ -690,7 +687,7 @@ static HRESULT d3d12_root_signature_init_root_descriptors(struct d3d12_root_sign
+ 
+         cur_binding->binding = d3d12_root_signature_assign_vk_bindings(root_signature,
+                 vkd3d_descriptor_type_from_d3d12_root_parameter_type(p->ParameterType),
+-                p->u.Descriptor.ShaderRegister, 1, true, false,
++                p->u.Descriptor.RegisterSpace, p->u.Descriptor.ShaderRegister, 1, true, false,
+                 vkd3d_shader_visibility_from_d3d12(p->ShaderVisibility), context);
+         cur_binding->descriptorType = vk_descriptor_type_from_d3d12_root_parameter(p->ParameterType);
+         cur_binding->descriptorCount = 1;
+@@ -727,7 +724,7 @@ static HRESULT d3d12_root_signature_init_static_samplers(struct d3d12_root_signa
+             return hr;
+ 
+         cur_binding->binding = d3d12_root_signature_assign_vk_bindings(root_signature,
+-                VKD3D_SHADER_DESCRIPTOR_TYPE_SAMPLER, s->ShaderRegister, 1, false, false,
++                VKD3D_SHADER_DESCRIPTOR_TYPE_SAMPLER, s->RegisterSpace, s->ShaderRegister, 1, false, false,
+                 vkd3d_shader_visibility_from_d3d12(s->ShaderVisibility), context);
+         cur_binding->descriptorType = VK_DESCRIPTOR_TYPE_SAMPLER;
+         cur_binding->descriptorCount = 1;
+@@ -1441,6 +1438,7 @@ static HRESULT d3d12_pipeline_state_init_compute_uav_counters(struct d3d12_pipel
+         if (!(shader_info->uav_counter_mask & (1u << i)))
+             continue;
+ 
++        state->uav_counters[j].register_space = 0;
+         state->uav_counters[j].register_index = i;
+         state->uav_counters[j].shader_visibility = VKD3D_SHADER_VISIBILITY_COMPUTE;
+         state->uav_counters[j].binding.set = context.set_index;
+diff --git a/libs/vkd3d/vkd3d_private.h b/libs/vkd3d/vkd3d_private.h
+index 58e9aa9..bd54c67 100644
+--- a/libs/vkd3d/vkd3d_private.h
++++ b/libs/vkd3d/vkd3d_private.h
+@@ -634,6 +634,7 @@ struct d3d12_root_descriptor_table_range
+ 
+     uint32_t descriptor_magic;
+     unsigned int base_register_idx;
++    unsigned int register_space;
+ };
+ 
+ struct d3d12_root_descriptor_table
+
+-- 
+2.23.0
+
