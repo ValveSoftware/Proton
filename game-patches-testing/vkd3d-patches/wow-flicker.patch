@@ -1,8 +1,8 @@
 diff --git a/libs/vkd3d/command.c b/libs/vkd3d/command.c
-index 922265d68e05..4984d4dbed99 100644
+index c401349..62b4751 100644
 --- a/libs/vkd3d/command.c
 +++ b/libs/vkd3d/command.c
-@@ -1372,14 +1372,17 @@ static void d3d12_command_list_invalidate_current_render_pass(struct d3d12_comma
+@@ -1862,14 +1862,17 @@ static void d3d12_command_list_invalidate_current_render_pass(struct d3d12_comma
  static void d3d12_command_list_invalidate_bindings(struct d3d12_command_list *list,
          struct d3d12_pipeline_state *state)
  {
@@ -22,5 +22,4 @@ index 922265d68e05..4984d4dbed99 100644
 -    }
  }
  
- static bool vk_barrier_parameters_from_d3d12_resource_state(unsigned int state,
- 
+ static bool vk_barrier_parameters_from_d3d12_resource_state(unsigned int state, unsigned int stencil_state,

@@ -5,23 +5,7 @@
     git reset --hard HEAD
     git clean -xdf
     # unsure if this is still needed to fix flicker in wow
-    # patch -Np1 < ../game-patches-testing/vkd3d-patches/wow-flicker.patch
-
-    patch -Np1 < ../game-patches-testing/vkd3d-patches/171975.patch
-    patch -Np1 < ../game-patches-testing/vkd3d-patches/171985-1.patch
-    patch -Np1 < ../game-patches-testing/vkd3d-patches/171985-2.patch
-    patch -Np1 < ../game-patches-testing/vkd3d-patches/172006-1.patch
-    patch -Np1 < ../game-patches-testing/vkd3d-patches/172006-2.patch
-    patch -Np1 < ../game-patches-testing/vkd3d-patches/172006-3.patch
-    patch -Np1 < ../game-patches-testing/vkd3d-patches/172006-4.patch
-    patch -Np1 < ../game-patches-testing/vkd3d-patches/172006-5.patch
-    patch -Np1 < ../game-patches-testing/vkd3d-patches/172006-6.patch
-    patch -Np1 < ../game-patches-testing/vkd3d-patches/172033.patch
-    patch -Np1 < ../game-patches-testing/vkd3d-patches/172037.patch
-    patch -Np1 < ../game-patches-testing/vkd3d-patches/172053-1.patch
-    patch -Np1 < ../game-patches-testing/vkd3d-patches/172053-2.patch
-    patch -Np1 < ../game-patches-testing/vkd3d-patches/172080.patch
-
+    patch -Np1 < ../game-patches-testing/vkd3d-patches/wow-flicker.patch
     cd ..
 
     # Valve DXVK patches
@@ -32,12 +16,12 @@
     patch -Np1 < ../game-patches-testing/dxvk-patches/dxvk-async.patch
     cd ..
 
-    # Valve DXVK patches
+    # Valve D9VK patches
     cd d9vk
     git reset --hard HEAD
     git clean -xdf
-    # revert this as it breaks "new game" in Warlock: Master of the Arcane
-    git revert --no-commit 3909a78579e7fef47bdda38562595f7f36e6c0b6
+    # revert this as it breaks Warlock: Master of the Arcane
+    git revert --no-commit c2a42cc7b9d60ebfda1198e1bd28e09a2fd72545
     cd ..
 
     #WINE
@@ -49,6 +33,12 @@
 
     # https://bugs.winehq.org/show_bug.cgi?id=45774
     git revert --no-commit 6ccb94392a8ef4bca701ae2a560f4ea1da677edd
+
+    # necessary reverts for FS Hack
+    git revert --no-commit de94cfa775f9f41d1d65cbd8e7bf861cd7f9a871
+    git revert --no-commit ffd4caa5f0e401cf973078fbbd54e4950d408792
+    git revert --no-commit 22795243b2d21e1a667215f54c3a15634735749c
+    git revert --no-commit be54adcffc249a44cb52c24320a7ad3db758ba54
 
     #WINE STAGING
     echo "applying staging patches"
@@ -116,8 +106,16 @@
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-use_clock_monotonic.patch
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-amd_ags.patch
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-hide_prefix_update_window.patch
-    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-fullscreen_hack_staging_vulkan.patch   
-    patch -Np1 < ../game-patches-testing/proton-valve-patches/winex11.patch
+
+#TKG FS Hack
+    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-FS_bypass_compositor.patch
+    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-fullscreen_hack_staging.patch
+    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-fullscreen_hack_realmodes.patch
+
+# EG FS Hack
+#    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-fullscreen_hack_staging_vulkan.patch
+#    patch -Np1 < ../game-patches-testing/proton-valve-patches/winex11.patch
+
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-vk_bits_4.5+.patch
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-sdl_joy.patch
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-sdl_joy_2.patch
