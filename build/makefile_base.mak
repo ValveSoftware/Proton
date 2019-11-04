@@ -146,10 +146,12 @@ ifneq ($(UNSTRIPPED_BUILD),)
     STRIP :=
     INSTALL_PROGRAM_FLAGS :=
     MESON_STRIP_ARG :=
+    VKD3D_INSTALL_TARGET := install
 else
     STRIP := strip
     INSTALL_PROGRAM_FLAGS := -s
     MESON_STRIP_ARG := --strip
+    VKD3D_INSTALL_TARGET := install-strip
 endif
 WINE32_AUTOCONF :=
 WINE64_AUTOCONF :=
@@ -1364,7 +1366,7 @@ $(VKD3D)/configure: $(MAKEFILE_DEP) $(VKD3D)/configure.ac
 $(VKD3D_CONFIGURE_FILES32): SHELL = $(CONTAINER_SHELL32)
 $(VKD3D_CONFIGURE_FILES32): $(MAKEFILE_DEP) $(VULKAN_H32) $(SPIRV_H32) $(VKD3D)/configure $(WINEWIDL32) | $(VKD3D_OBJ32)
 	cd $(abspath $(VKD3D_OBJ32)) && \
-	CFLAGS="-I$(abspath $(TOOLS_DIR32))/include -g $(COMMON_FLAGS)" \
+	CFLAGS="-I$(abspath $(TOOLS_DIR32))/include -g $(COMMON_FLAGS) -DNDEBUG" \
 	LDFLAGS=-L$(abspath $(TOOLS_DIR32))/lib \
 	WIDL="$(abspath $(WINEWIDL32))" \
 	$(abspath $(VKD3D))/configure --disable-tests --prefix=$(abspath $(TOOLS_DIR32))
@@ -1372,14 +1374,14 @@ $(VKD3D_CONFIGURE_FILES32): $(MAKEFILE_DEP) $(VULKAN_H32) $(SPIRV_H32) $(VKD3D)/
 vkd3d32: SHELL = $(CONTAINER_SHELL32)
 vkd3d32: $(VKD3D_CONFIGURE_FILES32)
 	cd $(abspath $(VKD3D_OBJ32)) && \
-	make V=1 && make install && \
+	make V=1 && make $(VKD3D_INSTALL_TARGET) && \
 	mkdir -p $(abspath $(DST_DIR))/lib/ && \
 	cp -a $(abspath $(TOOLS_DIR32))/lib/libvkd3d*.so* $(abspath $(DST_DIR))/lib/
 
 $(VKD3D_CONFIGURE_FILES64): SHELL = $(CONTAINER_SHELL64)
 $(VKD3D_CONFIGURE_FILES64): $(MAKEFILE_DEP) $(VULKAN_H64) $(SPIRV_H64) $(VKD3D)/configure $(WINEWIDL64) | $(VKD3D_OBJ64)
 	cd $(abspath $(VKD3D_OBJ64)) && \
-	CFLAGS="-I$(abspath $(TOOLS_DIR64))/include -g $(COMMON_FLAGS)" \
+	CFLAGS="-I$(abspath $(TOOLS_DIR64))/include -g $(COMMON_FLAGS) -DNDEBUG" \
 	LDFLAGS=-L$(abspath $(TOOLS_DIR64))/lib \
 	WIDL="$(abspath $(WINEWIDL64))" \
 	$(abspath $(VKD3D))/configure --disable-tests --prefix=$(abspath $(TOOLS_DIR64))
@@ -1387,7 +1389,7 @@ $(VKD3D_CONFIGURE_FILES64): $(MAKEFILE_DEP) $(VULKAN_H64) $(SPIRV_H64) $(VKD3D)/
 vkd3d64: SHELL = $(CONTAINER_SHELL64)
 vkd3d64: $(VKD3D_CONFIGURE_FILES64)
 	cd $(abspath $(VKD3D_OBJ64)) && \
-	make V=1 && make install && \
+	make V=1 && make $(VKD3D_INSTALL_TARGET) && \
 	mkdir -p $(abspath $(DST_DIR))/lib64/ && \
 	cp -a $(abspath $(TOOLS_DIR64))/lib/libvkd3d*.so* $(abspath $(DST_DIR))/lib64/
 
