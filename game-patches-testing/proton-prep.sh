@@ -34,12 +34,20 @@
     # https://bugs.winehq.org/show_bug.cgi?id=45774
     git revert --no-commit 6ccb94392a8ef4bca701ae2a560f4ea1da677edd
 
-    # necessary reverts for FS Hack
+    # necessary reverts for TKG FS Hack
+#    git revert --no-commit 413aad39135b0b0f8255500b85fcc05337a5f138
+#    git revert --no-commit de94cfa775f9f41d1d65cbd8e7bf861cd7f9a871
+#    git revert --no-commit ffd4caa5f0e401cf973078fbbd54e4950d408792
+#    git revert --no-commit 22795243b2d21e1a667215f54c3a15634735749c
+#    git revert --no-commit be54adcffc249a44cb52c24320a7ad3db758ba54
+
+    # necessary reverts for GE FS Hack
     git revert --no-commit 413aad39135b0b0f8255500b85fcc05337a5f138
+    git revert --no-commit 9ae8da6bb4a8f66d55975fa0f14e5e413756d324
     git revert --no-commit de94cfa775f9f41d1d65cbd8e7bf861cd7f9a871
-    git revert --no-commit ffd4caa5f0e401cf973078fbbd54e4950d408792
-    git revert --no-commit 22795243b2d21e1a667215f54c3a15634735749c
-    git revert --no-commit be54adcffc249a44cb52c24320a7ad3db758ba54
+    git revert --no-commit 6dbb153ede48e77a87dddf37e5276276a701c5c3
+    git revert --no-commit 81f8b6e8c215dc04a19438e4369fcba8f7f4f333
+
 
     #WINE STAGING
     echo "applying staging patches"
@@ -84,6 +92,10 @@
     echo "steam crossover patch"
     patch -Np1 < ../game-patches-testing/game-patches/steam-crossover.patch
 
+    echo "wow d3d12 patch"
+    patch -Np1 < ../game-patches-testing/game-patches/wow-d3d12.patch
+
+
     #WINE FSYNC
     echo "applying fsync patches"
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-fsync_staging.patch
@@ -109,13 +121,13 @@
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-hide_prefix_update_window.patch
 
 #TKG FS Hack
-    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-FS_bypass_compositor.patch
-    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-fullscreen_hack_staging.patch
-    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-fullscreen_hack_realmodes.patch
+#    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-FS_bypass_compositor.patch
+#    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-fullscreen_hack_staging.patch
+#    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-fullscreen_hack_realmodes.patch
 
 # EG FS Hack
-#    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-fullscreen_hack_staging_vulkan.patch
-#    patch -Np1 < ../game-patches-testing/proton-valve-patches/winex11.patch
+    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-fullscreen_hack_staging_vulkan.patch
+    patch -Np1 < ../game-patches-testing/proton-valve-patches/winex11.patch
 
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-vk_bits_4.5+.patch
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-sdl_joy.patch
