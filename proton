@@ -505,11 +505,13 @@ class Session:
         if "PROTON_LOG" in self.env and nonzero(self.env["PROTON_LOG"]):
             self.env.setdefault("WINEDEBUG", "+timestamp,+pid,+tid,+seh,+debugstr,+loaddll,+mscoree")
             self.env.setdefault("DXVK_LOG_LEVEL", "info")
+            self.env.setdefault("VKD3D_DEBUG", "warn")
             self.env.setdefault("WINE_MONO_TRACE", "E:System.NotImplementedException")
 
         #for performance, logging is disabled by default; override with user_settings.py
         self.env.setdefault("WINEDEBUG", "-all")
         self.env.setdefault("DXVK_LOG_LEVEL", "none")
+        self.env.setdefault("VKD3D_DEBUG", "none")
 
         #default wine-mono override for FNA games
         self.env.setdefault("WINE_MONO_OVERRIDES", "Microsoft.Xna.Framework.*,Gac=n")
