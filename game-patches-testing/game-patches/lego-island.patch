@@ -1,0 +1,590 @@
+ 
+From: MattKC <itsmattkc@gmail.com>
+Subject: [PATCH v2] ddraw: implement Pick() and GetPickRecords().
+Message-Id: <f2f3608a-4e27-f118-c576-79d3fa99d2d9@gmail.com>
+Date: Sun, 18 Aug 2019 14:25:29 +1000
+
+From 6f39309b0d716af4036a3004ddf6065b0354df5b Mon Sep 17 00:00:00 2001
+From: Matthew Wong <itsmattkc@gmail.com>
+Date: Sun, 18 Aug 2019 13:43:45 +1000
+Subject: [PATCH v2] ddraw: implement Pick() and GetPickRecords().
+
+Implement functions used by some games (notably LEGO Island) for
+determining which 3D object in a scene was clicked by the mouse cursor.
+Fighting Steel also uses this function for mouse over. Previous stubs
+would cause LEGO Island to crash upon any click and Fighting Steel
+to crash on game start. A patch posted years ago on the bug thread
+provided the minimum functionality to prevent crashes, but still
+rendered large portions of the game inaccessible without them
+implemented correctly.
+
+Picking has been implemented by adding a "pick mode" in
+d3d_execute_buffer_execute() which skips any drawing functions
+leaving just the vertex processing. Adds click tests for each triangle
+when in pick mode for creating an array of D3DPICKRECORDs.
+
+Add a D3DPICKRECORD array and DWORD counter to d3d_device. These are
+initiated in d3d_device_init(), allocated/written in
+d3d_execute_buffer_execute(), and accessed/read in
+d3d_device1_GetPickRecords(). The counter is used to determine the array
+size (0 meaning array is not allocated). The array is free'd whenever
+the data is no longer necessary by d3d_execute_buffer_execute(),
+d3d_device1_GetPickRecords(), and d3d_device_inner_Release().
+
+Add a compliance test to ddraw1 to test whether certain screen points
+result in successful picks or not, as well as whether the data returned
+from GetPickRecords() is valid and correct.
+
+Stress testing reveals this patch's Pick() implementation may have
+slight inaccuracies to the original function; occasionally pixels right
+on triangle edges result in successful picks when they don't with the
+original function (and vice versa). It may be some sort of floating
+point rounding error or other algorithm difference that would be
+difficult to determine without seeing the original code. In practice, I
+believe this inaccuracy is so negligible that it won't produce any
+undesirable results for the user.
+
+Wine-Bug: https://bugs.winehq.org/show_bug.cgi?id=10729
+Signed-off-by: Matthew Wong <itsmattkc@gmail.com>
+---
+v2: Merged previous two-function strategy into one function
+    Added a compliance test ( test_pick() )
+---
+ dlls/ddraw/ddraw_private.h |   6 +-
+ dlls/ddraw/device.c        |  63 ++++++++++--
+ dlls/ddraw/executebuffer.c | 198 +++++++++++++++++++++++++++++++++++--
+ dlls/ddraw/tests/ddraw1.c  | 124 +++++++++++++++++++++++
+ 4 files changed, 376 insertions(+), 15 deletions(-)
+
+diff --git a/dlls/ddraw/ddraw_private.h b/dlls/ddraw/ddraw_private.h
+index 11861f2a12..3e7a2df0c4 100644
+--- a/dlls/ddraw/ddraw_private.h
++++ b/dlls/ddraw/ddraw_private.h
+@@ -326,6 +326,10 @@ struct d3d_device
+     struct d3d_viewport *current_viewport;
+     D3DVIEWPORT7 active_viewport;
+
++    /* Pick data */
++    D3DPICKRECORD* pick_records;
++    DWORD pick_record_count;
++
+     /* Required to keep track which of two available texture blending modes in d3ddevice3 is used */
+     BOOL legacyTextureBlending;
+     D3DTEXTUREBLEND texture_map_blend;
+@@ -559,7 +563,7 @@ struct d3d_execute_buffer *unsafe_impl_from_IDirect3DExecuteBuffer(IDirect3DExec
+
+ /* The execute function */
+ HRESULT d3d_execute_buffer_execute(struct d3d_execute_buffer *execute_buffer,
+-        struct d3d_device *device) DECLSPEC_HIDDEN;
++        struct d3d_device *device, D3DRECT* pick_rect) DECLSPEC_HIDDEN;
+
+ /*****************************************************************************
+  * IDirect3DVertexBuffer
+diff --git a/dlls/ddraw/device.c b/dlls/ddraw/device.c
+index 690332dbdc..2d434233d6 100644
+--- a/dlls/ddraw/device.c
++++ b/dlls/ddraw/device.c
+@@ -306,6 +306,11 @@ static ULONG WINAPI d3d_device_inner_Release(IUnknown *iface)
+             IDirect3DDevice3_DeleteViewport(&This->IDirect3DDevice3_iface, &vp->IDirect3DViewport3_iface);
+         }
+
++        /* Free pick records array if any are allocated */
++        if (This->pick_record_count > 0) {
++            free(This->pick_records);
++        }
++
+         TRACE("Releasing render target %p.\n", This->rt_iface);
+         rt_iface = This->rt_iface;
+         This->rt_iface = NULL;
+@@ -715,7 +720,7 @@ static HRESULT WINAPI d3d_device1_Execute(IDirect3DDevice *iface,
+
+     /* Execute... */
+     wined3d_mutex_lock();
+-    hr = d3d_execute_buffer_execute(buffer, device);
++    hr = d3d_execute_buffer_execute(buffer, device, NULL);
+     wined3d_mutex_unlock();
+
+     return hr;
+@@ -982,16 +987,36 @@ static HRESULT WINAPI d3d_device1_NextViewport(IDirect3DDevice *iface,
+  *        x2 and y2 are ignored.
+  *
+  * Returns:
+- *  D3D_OK because it's a stub
++ *  D3D_OK on success
++ *  DDERR_INVALIDPARAMS if any of the parameters == NULL
+  *
+  *****************************************************************************/
+ static HRESULT WINAPI d3d_device1_Pick(IDirect3DDevice *iface, IDirect3DExecuteBuffer *buffer,
+         IDirect3DViewport *viewport, DWORD flags, D3DRECT *rect)
+ {
+-    FIXME("iface %p, buffer %p, viewport %p, flags %#x, rect %s stub!\n",
++    struct d3d_device *device = impl_from_IDirect3DDevice(iface);
++    struct d3d_execute_buffer *buffer_impl = unsafe_impl_from_IDirect3DExecuteBuffer(buffer);
++    struct d3d_viewport *viewport_impl = unsafe_impl_from_IDirect3DViewport(viewport);
++    HRESULT hr;
++
++    TRACE("iface %p, buffer %p, viewport %p, flags %#x, rect %s.\n",
+             iface, buffer, viewport, flags, wine_dbgstr_rect((RECT *)rect));
+
+-    return D3D_OK;
++    /* Sanity checks */
++    if (!iface || !buffer || !viewport) {
++        return DDERR_INVALIDPARAMS;
++    }
++
++    if (FAILED(hr = IDirect3DDevice3_SetCurrentViewport
++            (&device->IDirect3DDevice3_iface, &viewport_impl->IDirect3DViewport3_iface)))
++        return hr;
++
++    /* Execute the pick */
++    wined3d_mutex_lock();
++    hr = d3d_execute_buffer_execute(buffer_impl, device, rect);
++    wined3d_mutex_unlock();
++
++    return hr;
+ }
+
+ /*****************************************************************************
+@@ -1007,13 +1032,36 @@ static HRESULT WINAPI d3d_device1_Pick(IDirect3DDevice *iface, IDirect3DExecuteB
+  *  D3DPickRec: Address to store the resulting D3DPICKRECORD array.
+  *
+  * Returns:
+- *  D3D_OK, because it's a stub
++ *  D3D_OK always
+  *
+  *****************************************************************************/
+ static HRESULT WINAPI d3d_device1_GetPickRecords(IDirect3DDevice *iface,
+         DWORD *count, D3DPICKRECORD *records)
+ {
+-    FIXME("iface %p, count %p, records %p stub!\n", iface, count, records);
++    struct d3d_device *device;
++
++    TRACE("iface %p, count %p, records %p.\n", iface, count, records);
++
++    wined3d_mutex_lock();
++
++    device = impl_from_IDirect3DDevice(iface);
++
++    /* Set count to the number of pick records we have */
++    *count = device->pick_record_count;
++
++    /* It is correct usage according to documentation to call this function with records == NULL
++       to retrieve _just_ the record count, which the caller can then use to allocate an
++       appropriately sized array, then call this function again to fill that array with data. */
++    if (records && count) {
++        /* If we have a destination array and records to copy, copy them now */
++        memcpy(records, device->pick_records, sizeof(D3DPICKRECORD) * device->pick_record_count);
++
++        /* We're now done with the old pick records and can free them */
++        free(device->pick_records);
++        device->pick_record_count = 0;
++    }
++
++    wined3d_mutex_unlock();
+
+     return D3D_OK;
+ }
+@@ -6989,6 +7037,9 @@ static HRESULT d3d_device_init(struct d3d_device *device, struct ddraw *ddraw,
+
+     ddraw->d3ddevice = device;
+
++    /* Initialize pick records array */
++    device->pick_record_count = 0;
++
+     wined3d_device_set_render_state(ddraw->wined3d_device, WINED3D_RS_ZENABLE,
+             d3d_device_update_depth_stencil(device));
+     if (version == 1) /* Color keying is initially enabled for version 1 devices. */
+diff --git a/dlls/ddraw/executebuffer.c b/dlls/ddraw/executebuffer.c
+index 80dbdfd88b..38b9c8c62c 100644
+--- a/dlls/ddraw/executebuffer.c
++++ b/dlls/ddraw/executebuffer.c
+@@ -45,15 +45,110 @@ static void _dump_D3DEXECUTEBUFFERDESC(const D3DEXECUTEBUFFERDESC *lpDesc) {
+     TRACE("lpData       : %p\n", lpDesc->lpData);
+ }
+
+-HRESULT d3d_execute_buffer_execute(struct d3d_execute_buffer *buffer, struct d3d_device *device)
++#define TRIANGLE_SIZE 3
++/*****************************************************************************
++ * d3d_execute_buffer_pick_test
++ *
++ * Determines whether a "point" is inside a "triangle". Mainly used when
++ * executing a "pick" from an execute buffer to determine whether a pixel
++ * coordinate (often a mouse coordinate) is inside a triangle (and
++ * therefore clicking or hovering over a 3D object in the scene). This
++ * function uses triangle rasterization algorithms to determine if the
++ * pixel falls inside (using the top-left rule, in accordance with
++ * documentation).
++ *
++ * Params:
++ *  x:     The X coordinate of the point to verify.
++ *  y:     The Y coordinate of the point to verify.
++ *  verts: An array of vertices describing the screen coordinates of the
++ *         triangle. This function expects 3 elements in this array.
++ *
++ * Returns:
++ *  TRUE if the pixel coordinate is inside this triangle
++ *  FALSE if not
++ *
++ *****************************************************************************/
++static BOOL d3d_execute_buffer_pick_test(LONG x, LONG y, D3DTLVERTEX* verts)
++{
++    INT i;
++
++    for (i=0;i<TRIANGLE_SIZE;i++)
++    {
++        D3DTLVERTEX* v1 = &verts[(i)%TRIANGLE_SIZE];
++        D3DTLVERTEX* v2 = &verts[(i+1)%TRIANGLE_SIZE];
++        D3DVALUE bias = 0.0f;
++
++        /* Edge function - determines whether pixel is inside triangle */
++        D3DVALUE w = (v2->u1.sx-v1->u1.sx)*(y-v1->u2.sy) - (v2->u2.sy-v1->u2.sy)*(x-v1->u1.sx);
++
++        /* Force top-left rule */
++        if ((v1->u2.sy == v2->u2.sy && v1->u1.sx > v2->u1.sx) || (v1->u2.sy < v2->u2.sy))
++            bias = 1.0f;
++
++        if (w < bias)
++            return FALSE;
++    }
++
++    return TRUE;
++}
++
++/*****************************************************************************
++ * d3d_execute_buffer_z_value_at_coords
++ *
++ * Returns the Z point of a triangle given an X, Y coordinate somewhere inside
++ * the triangle. Used as the `dvZ` parameter of D3DPICKRECORD.
++ *
++ * Params:
++ *  x:     The X coordinate of the point to verify.
++ *  y:     The Y coordinate of the point to verify.
++ *  verts: An array of vertices describing the screen coordinates of the
++ *         triangle. This function expects 3 elements in this array.
++ *
++ * Returns:
++ *  A floating-point Z value that can be used directly as the dvZ member of a
++ *  D3DPICKRECORD.
++ *
++ *****************************************************************************/
++static D3DVALUE d3d_execute_buffer_z_value_at_coords(LONG x, LONG y, D3DTLVERTEX* verts)
++{
++    INT i;
++
++    D3DVALUE z1 = 0;
++    D3DVALUE z2 = 0;
++
++    for (i=0;i<TRIANGLE_SIZE;i++)
++    {
++        D3DTLVERTEX* v1 = &verts[i];
++        D3DTLVERTEX* v2 = &verts[(i+1)%TRIANGLE_SIZE];
++        D3DTLVERTEX* v3 = &verts[(i+2)%TRIANGLE_SIZE];
++
++        z1 += v3->u3.sz * (x - v1->u1.sx) * (y - v2->u2.sy) - v2->u3.sz * (x - v1->u1.sx) * (y - v3->u2.sy);
++        z2 += (x - v1->u1.sx) * (y - v2->u2.sy) - (x - v1->u1.sx) * (y - v3->u2.sy);
++    }
++
++    return z1 / z2;
++}
++
++HRESULT d3d_execute_buffer_execute(struct d3d_execute_buffer *buffer, struct d3d_device *device,
++    D3DRECT* pick_rect)
+ {
+     DWORD is = buffer->data.dwInstructionOffset;
+     char *instr = (char *)buffer->desc.lpData + is;
+     unsigned int i, primitive_size;
+-    struct wined3d_map_desc map_desc;
++    struct wined3d_map_desc map_desc, vert_map_desc;
+     struct wined3d_box box = {0};
+     HRESULT hr;
+
++    /* Variables used for picking */
++    const unsigned int vertex_size = get_flexible_vertex_size(D3DFVF_TLVERTEX);
++    D3DTLVERTEX verts[TRIANGLE_SIZE];
++
++    /* Check for any un-freed pick records */
++    if (device->pick_record_count > 0) {
++        free(device->pick_records);
++        device->pick_record_count = 0;
++    }
++
+     TRACE("ExecuteData :\n");
+     if (TRACE_ON(ddraw))
+         _dump_executedata(&(buffer->data));
+@@ -69,6 +164,26 @@ HRESULT d3d_execute_buffer_execute(struct d3d_execute_buffer *buffer, struct d3d
+         instr += sizeof(*current);
+         primitive_size = 0;
+
++        /* We can skip these opcodes when Picking */
++        if (pick_rect != NULL)
++        {
++            switch (current->bOpcode)
++            {
++                /* None of these opcodes seem to be necessary for picking */
++                case D3DOP_POINT:
++                case D3DOP_LINE:
++                case D3DOP_STATETRANSFORM:
++                case D3DOP_STATELIGHT:
++                case D3DOP_STATERENDER:
++                case D3DOP_TEXTURELOAD:
++                case D3DOP_SPAN:
++                    instr += count * size;
++                    continue;
++                default:
++                    break;
++            }
++        }
++
+         switch (current->bOpcode)
+         {
+             case D3DOP_POINT:
+@@ -95,6 +210,7 @@ HRESULT d3d_execute_buffer_execute(struct d3d_execute_buffer *buffer, struct d3d
+             {
+                 WORD *indices;
+                 unsigned int index_pos = buffer->index_pos, index_count;
++
+                 TRACE("TRIANGLE         (%d)\n", count);
+
+                 if (!count)
+@@ -173,6 +289,67 @@ HRESULT d3d_execute_buffer_execute(struct d3d_execute_buffer *buffer, struct d3d
+                     {
+                         case 3:
+                             indices[(i * primitive_size) + 2] = ci->u3.v3;
++
++                            if (pick_rect != NULL) {
++                                INT j;
++
++                                /* Get D3DTLVERTEX objects for each triangle vertex */
++                                for (j=0;j<TRIANGLE_SIZE;j++) {
++
++                                    /* Get index of vertex from D3DTRIANGLE struct */
++                                    switch (j) {
++                                    case 0: box.left = vertex_size * ci->u1.v1; break;
++                                    case 1: box.left = vertex_size * ci->u2.v2; break;
++                                    case 2: box.left = vertex_size * ci->u3.v3; break;
++                                    }
++
++                                    box.right = box.left + vertex_size;
++                                    if (FAILED(hr = wined3d_resource_map(wined3d_buffer_get_resource(buffer->dst_vertex_buffer),
++                                            0, &vert_map_desc, &box, WINED3D_MAP_WRITE))) {
++                                        return hr;
++                                    } else {
++                                        /* Copy vert data into stack array */
++                                        verts[j] = *((D3DTLVERTEX*)vert_map_desc.data);
++
++                                        wined3d_resource_unmap(wined3d_buffer_get_resource(buffer->dst_vertex_buffer), 0);
++                                    }
++                                }
++
++                                /* Use vertices acquired above to test for clicking */
++                                if (d3d_execute_buffer_pick_test(pick_rect->u1.x1, pick_rect->u2.y1, verts))
++                                {
++                                    D3DPICKRECORD* record;
++
++                                    /* Create new array to fit one more record */
++                                    DWORD new_record_count = device->pick_record_count + 1;
++                                    D3DPICKRECORD* new_record_array = malloc(sizeof(D3DPICKRECORD) * new_record_count);
++                                    if (device->pick_record_count > 0) {
++                                        memcpy(new_record_array, device->pick_records, sizeof(D3DPICKRECORD) * device->pick_record_count);
++                                        free(device->pick_records);
++                                    }
++
++                                    /* Fill record parameters */
++                                    record = &new_record_array[device->pick_record_count];
++
++                                    record->bOpcode = current->bOpcode;
++                                    record->bPad = 0;
++
++                                    /* Write current instruction offset into file */
++                                    record->dwOffset = (DWORD)instr - (DWORD)buffer->desc.lpData - is;
++
++                                    /* Formula for returning the Z value at this X/Y */
++                                    record->dvZ = d3d_execute_buffer_z_value_at_coords(pick_rect->u1.x1, pick_rect->u2.y1, verts);
++
++                                    /* Point device info to new record information */
++                                    device->pick_records = new_record_array;
++                                    device->pick_record_count = new_record_count;
++
++                                    /* We have a successful pick so we can skip the rest of the triangles */
++                                    instr += size * (count - i - 1);
++                                    count = i;
++                                }
++                            }
++
+                             /* Drop through. */
+                         case 2:
+                             indices[(i * primitive_size) + 1] = ci->u2.v2;
+@@ -183,12 +360,16 @@ HRESULT d3d_execute_buffer_execute(struct d3d_execute_buffer *buffer, struct d3d
+
+                 wined3d_resource_unmap(wined3d_buffer_get_resource(buffer->index_buffer), 0);
+
+-                wined3d_device_set_stream_source(device->wined3d_device, 0,
+-                        buffer->dst_vertex_buffer, 0, sizeof(D3DTLVERTEX));
+-                wined3d_device_set_vertex_declaration(device->wined3d_device,
+-                        ddraw_find_decl(device->ddraw, D3DFVF_TLVERTEX));
+-                wined3d_device_set_index_buffer(device->wined3d_device, buffer->index_buffer, WINED3DFMT_R16_UINT, 0);
+-                wined3d_device_draw_indexed_primitive(device->wined3d_device, index_pos, index_count);
++                /* Skip drawing if we're picking */
++                if (pick_rect == NULL)
++                {
++                    wined3d_device_set_stream_source(device->wined3d_device, 0,
++                            buffer->dst_vertex_buffer, 0, sizeof(D3DTLVERTEX));
++                    wined3d_device_set_vertex_declaration(device->wined3d_device,
++                            ddraw_find_decl(device->ddraw, D3DFVF_TLVERTEX));
++                    wined3d_device_set_index_buffer(device->wined3d_device, buffer->index_buffer, WINED3DFMT_R16_UINT, 0);
++                    wined3d_device_draw_indexed_primitive(device->wined3d_device, index_pos, index_count);
++                }
+
+                 buffer->index_pos = index_pos + index_count;
+                 break;
+@@ -421,6 +602,7 @@ HRESULT d3d_execute_buffer_execute(struct d3d_execute_buffer *buffer, struct d3d
+ end_of_buffer:
+     return D3D_OK;
+ }
++#undef TRIANGLE_SIZE
+
+ static inline struct d3d_execute_buffer *impl_from_IDirect3DExecuteBuffer(IDirect3DExecuteBuffer *iface)
+ {
+diff --git a/dlls/ddraw/tests/ddraw1.c b/dlls/ddraw/tests/ddraw1.c
+index cc228028e1..926579d48f 100644
+--- a/dlls/ddraw/tests/ddraw1.c
++++ b/dlls/ddraw/tests/ddraw1.c
+@@ -13065,6 +13065,129 @@ static void test_d32_support(void)
+     DestroyWindow(window);
+ }
+
++static void test_pick(void)
++{
++    static D3DTLVERTEX tquad[] =
++    {
++        {{320.0f}, {480.0f}, { 1.5f}, {1.0f}, {0xff00ff00}, {0x00000000}, {0.0f}, {0.0f}},
++        {{  0.0f}, {480.0f}, {-0.5f}, {1.0f}, {0xff00ff00}, {0x00000000}, {0.0f}, {0.0f}},
++        {{320.0f}, {  0.0f}, { 1.5f}, {1.0f}, {0xff00ff00}, {0x00000000}, {0.0f}, {0.0f}},
++        {{  0.0f}, {  0.0f}, {-0.5f}, {1.0f}, {0xff00ff00}, {0x00000000}, {0.0f}, {0.0f}},
++    };
++    IDirect3DExecuteBuffer *execute_buffer;
++    D3DEXECUTEBUFFERDESC exec_desc;
++    IDirect3DViewport *viewport;
++    IDirect3DDevice *device;
++    IDirectDraw *ddraw;
++    UINT inst_length;
++    HWND window;
++    HRESULT hr;
++    void *ptr;
++    DWORD rec_count;
++    D3DRECT pick_rect;
++    UINT screen_width = 640;
++    UINT screen_height = 480;
++    UINT hits = 0;
++    UINT nohits = 0;
++
++    window = create_window();
++    ddraw = create_ddraw();
++    ok(!!ddraw, "Failed to create a ddraw object.\n");
++    if (!(device = create_device(ddraw, window, DDSCL_NORMAL)))
++    {
++        skip("Failed to create a 3D device, skipping test.\n");
++        IDirectDraw_Release(ddraw);
++        DestroyWindow(window);
++        return;
++    }
++
++    viewport = create_viewport(device, 0, 0, screen_width, screen_height);
++
++    memset(&exec_desc, 0, sizeof(exec_desc));
++    exec_desc.dwSize = sizeof(exec_desc);
++    exec_desc.dwFlags = D3DDEB_BUFSIZE | D3DDEB_CAPS;
++    exec_desc.dwBufferSize = 1024;
++    exec_desc.dwCaps = D3DDEBCAPS_SYSTEMMEMORY;
++
++    hr = IDirect3DDevice_CreateExecuteBuffer(device, &exec_desc, &execute_buffer, NULL);
++    ok(SUCCEEDED(hr), "Failed to create execute buffer, hr %#x.\n", hr);
++    hr = IDirect3DExecuteBuffer_Lock(execute_buffer, &exec_desc);
++    ok(SUCCEEDED(hr), "Failed to lock execute buffer, hr %#x.\n", hr);
++    memcpy(exec_desc.lpData, tquad, sizeof(tquad));
++    ptr = ((BYTE *)exec_desc.lpData) + sizeof(tquad);
++    emit_process_vertices(&ptr, D3DPROCESSVERTICES_COPY, 0, 4);
++    emit_tquad(&ptr, 0);
++    emit_end(&ptr);
++    inst_length = (BYTE *)ptr - (BYTE *)exec_desc.lpData;
++    inst_length -= sizeof(tquad);
++    hr = IDirect3DExecuteBuffer_Unlock(execute_buffer);
++    ok(SUCCEEDED(hr), "Failed to unlock execute buffer, hr %#x.\n", hr);
++
++    set_execute_data(execute_buffer, 4, sizeof(tquad), inst_length);
++
++    /* Perform a number of picks, we should have a specific amount by the end */
++    for (int i=0;i<screen_width;i+=80)
++    {
++        for (int j=0;j<screen_height;j+=60)
++        {
++            pick_rect.x1 = i;
++            pick_rect.y1 = j;
++
++            hr = IDirect3DDevice_Pick(device, execute_buffer, viewport, 0, &pick_rect);
++            ok(SUCCEEDED(hr), "Failed to perform pick, hr %#x.\n", hr);
++            hr = IDirect3DDevice_GetPickRecords(device, &rec_count, NULL);
++            ok(SUCCEEDED(hr), "Failed to get pick records, hr %#x.\n", hr);
++            if (rec_count > 0)
++                hits++;
++            else
++                nohits++;
++        }
++    }
++
++    /*
++        We should have gotten precisely equal numbers of hits and no hits since our quad
++        covers exactly half the screen
++    */
++    ok(hits == nohits, "Got a non-equal amount of pick successes/failures: %i vs %i.\n", hits, nohits);
++
++    /* Try some specific pixel picks */
++    pick_rect.x1 = 480;
++    pick_rect.y1 = 360;
++    hr = IDirect3DDevice_Pick(device, execute_buffer, viewport, 0, &pick_rect);
++    ok(SUCCEEDED(hr), "Failed to perform pick, hr %#x.\n", hr);
++    hr = IDirect3DDevice_GetPickRecords(device, &rec_count, NULL);
++    ok(SUCCEEDED(hr), "Failed to get pick records, hr %#x.\n", hr);
++    ok(rec_count == 0, "Got incorrect number of pick records (expected 0): %i.\n", rec_count);
++
++    pick_rect.x1 = 240;
++    pick_rect.y1 = 120;
++    hr = IDirect3DDevice_Pick(device, execute_buffer, viewport, 0, &pick_rect);
++    ok(SUCCEEDED(hr), "Failed to perform pick, hr %#x.\n", hr);
++    hr = IDirect3DDevice_GetPickRecords(device, &rec_count, NULL);
++    ok(SUCCEEDED(hr), "Failed to get pick records, hr %#x.\n", hr);
++    ok(rec_count == 1, "Got incorrect number of pick records (expected 1): %i.\n", rec_count);
++
++    if (rec_count == 1)
++    {
++        D3DPICKRECORD record;
++
++        hr = IDirect3DDevice_GetPickRecords(device, &rec_count, &record);
++        ok(SUCCEEDED(hr), "Failed to get pick records, hr %#x.\n", hr);
++
++        /* Tests D3DPICKRECORD for correct information */
++        ok(record.bOpcode == 3, "Got incorrect bOpcode: %i.\n", record.bOpcode);
++        ok(record.bPad == 0, "Got incorrect bPad: %i.\n", record.bPad);
++        ok(record.dwOffset == 24, "Got incorrect dwOffset: %i.\n", record.dwOffset);
++        ok(record.dvZ > 0.99 && record.dvZ < 1.01, "Got incorrect dvZ: %f.\n", record.dvZ);
++    }
++
++    destroy_viewport(device, viewport);
++    IDirect3DExecuteBuffer_Release(execute_buffer);
++    IDirect3DDevice_Release(device);
++    IDirectDraw_Release(ddraw);
++    DestroyWindow(window);
++}
++
+ START_TEST(ddraw1)
+ {
+     DDDEVICEIDENTIFIER identifier;
+@@ -13177,4 +13300,5 @@ START_TEST(ddraw1)
+     test_clipper_refcount();
+     test_caps();
+     test_d32_support();
++    test_pick();
+ }
+--
+2.22.1
+
