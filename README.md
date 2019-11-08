@@ -68,6 +68,12 @@ You may need to restart the Steam client to see it. The tool's name in the
 Steam client will be based on the currently checked out branch of Proton. You
 can override this name using the `build_name` variable.
 
+`make redist` - This will create a build which you can easily redistribute to
+other users.  The package will be dropped into a new directory in
+`vagrant_share/`, named after the nearest Git tag (see `git describe`). Copying
+this directory into `~/.steam/root/compatibilitytools.d/` will make the build
+available after restarting the Steam client.
+
 `make deploy` - This will create a deployment tarball and set of files which
 can be distributed as a Proton package. This is what we use to deploy Proton to
 Steam users. The package will be dropped into a new directory in
