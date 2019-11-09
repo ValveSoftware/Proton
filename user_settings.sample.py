@@ -11,6 +11,9 @@ user_settings = {
     #DXVK debug logging
     "DXVK_LOG_LEVEL": "info",
 
+    #vkd3d debug logging
+    "VKD3D_DEBUG": "warn",
+
     #wine-mono debug logging (Wine's .NET replacement)
     "WINE_MONO_TRACE": "E:System.NotImplementedException",
     #"MONO_LOG_LEVEL": "info",

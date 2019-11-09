@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 # This is free and unencumbered software released into the public domain.
 #
 # Anyone is free to copy, modify, publish, use, compile, sell, or
@@ -71,7 +69,7 @@ __all__ = [
     "FileLock"
 ]
 
-__version__ = "3.0.4"
+__version__ = "3.0.12"
 
 
 _logger = None
@@ -105,6 +103,29 @@ class Timeout(TimeoutError):
 
 # Classes
 # ------------------------------------------------
+
+# This is a helper class which is returned by :meth:`BaseFileLock.acquire`
+# and wraps the lock to make sure __enter__ is not called twice when entering
+# the with statement.
+# If we would simply return *self*, the lock would be acquired again
+# in the *__enter__* method of the BaseFileLock, but not released again
+# automatically.
+#
+# :seealso: issue #37 (memory leak)
+class _Acquire_ReturnProxy(object):
+
+    def __init__(self, lock):
+        self.lock = lock
+        return None
+
+    def __enter__(self):
+        return self.lock
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        self.lock.release()
+        return None
+
+
 class BaseFileLock(object):
     """
     Implements the base class of a file lock.
@@ -214,7 +235,7 @@ class BaseFileLock(object):
 
         :arg float timeout:
             The maximum time waited for the file lock.
-            If ``timeout <= 0``, there is no timeout and this method will
+            If ``timeout < 0``, there is no timeout and this method will
             block until the lock could be acquired.
             If ``timeout`` is None, the default :attr:`~timeout` is used.
 
@@ -239,12 +260,11 @@ class BaseFileLock(object):
         with self._thread_lock:
             self._lock_counter += 1
 
+        lock_id = id(self)
+        lock_filename = self._lock_file
+        start_time = time.time()
         try:
-            start_time = time.time()
             while True:
-                lock_id = id(self)
-                lock_filename = self._lock_file
-
                 with self._thread_lock:
                     if not self.is_locked:
                         logger().debug('Attempting to acquire lock %s on %s', lock_id, lock_filename)
@@ -268,26 +288,7 @@ class BaseFileLock(object):
                 self._lock_counter = max(0, self._lock_counter - 1)
 
             raise
-
-        # This class wraps the lock to make sure __enter__ is not called
-        # twiced when entering the with statement.
-        # If we would simply return *self*, the lock would be acquired again
-        # in the *__enter__* method of the BaseFileLock, but not released again
-        # automatically.
-        class ReturnProxy(object):
-
-            def __init__(self, lock):
-                self.lock = lock
-                return None
-
-            def __enter__(self):
-                return self.lock
-
-            def __exit__(self, exc_type, exc_value, traceback):
-                self.lock.release()
-                return None
-
-        return ReturnProxy(lock = self)
+        return _Acquire_ReturnProxy(lock = self)
 
     def release(self, force = False):
         """
