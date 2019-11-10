@@ -20,6 +20,9 @@
     cd d9vk
     git reset --hard HEAD
     git clean -xdf
+    # revert this as it breaks Warlock: Master of the Arcane
+    #git revert --no-commit 9d571bf74aa80a15baa98a6bc20305e068e13c73
+    #git revert --no-commit c2a42cc7b9d60ebfda1198e1bd28e09a2fd72545
     cd ..
 
     #WINE
@@ -31,6 +34,18 @@
 
     # https://bugs.winehq.org/show_bug.cgi?id=45774
     git revert --no-commit 6ccb94392a8ef4bca701ae2a560f4ea1da677edd
+
+
+    # necessary reverts for proton kernelbase
+    git revert --no-commit b0199ea2fe8f9b77aee7ab4f68c9ae1755442586
+    git revert --no-commit 608d086f1b1bb7168e9322c65224c23f34e75f29
+    git revert --no-commit b7db0b52cee65a008f503ce727befcad3ba8d28a
+    git revert --no-commit 3ede217e5cd80b18f709339aea281356579756cb
+    git revert --no-commit 87307de2173ee813daca9bd93ec750f17d3eda94
+    git revert --no-commit 3dadd980bfbb2fb05a1a695decd06a429ddda97c
+    git revert --no-commit e5354008f46bc0e345c06ac06a7a7780faa9398b
+    git revert --no-commit 461b5e56f95eb095d97e4af1cb1c5fd64bb2862a
+
 
     # necessary reverts for TKG FS Hack
     git revert --no-commit 413aad39135b0b0f8255500b85fcc05337a5f138
@@ -82,6 +97,9 @@
     echo "lego island fix"
     patch -Np1 < ../game-patches-testing/game-patches/lego-island.patch
 
+    echo "leends of runeterra fix"
+    patch -Np1 < ../game-patches-testing/game-patches/legendsofruneterra.patch
+
     echo "steam crossover patch"
     patch -Np1 < ../game-patches-testing/game-patches/steam-crossover.patch
 
@@ -95,6 +113,8 @@
 
     #PROTON
     echo "applying proton patches"
+
+    
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-kernelbase_reverts.patch
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-protonify_staging_rpc.patch
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-protonify_staging.patch
@@ -108,14 +128,16 @@
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-amd_ags.patch
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-hide_prefix_update_window.patch
 
-    #rawinput
+    #rawinput WIP do not enable
     #echo "raw input patch"
     #patch -Np1 < ../game-patches-testing/proton-hotfixes/rbernon-rawinput.patch
 
     #TKG FS Hack
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-FS_bypass_compositor.patch
-    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-fullscreen_hack_staging-clean.patch
-    #patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-fullscreen_hack_realmodes.patch
+    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-fullscreen_hack_staging.patch
+    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-fullscreen_hack_staging.patch
+
+    patch -Np1 < ../game-patches-testing/proton-hotfixes/proton-alt_tab_fix.patch
 
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-vk_bits_4.5+.patch
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-sdl_joy.patch

@@ -1,3 +1,124 @@
+From 7cfff233776a82a119b94b8c9c007370cd13d5df Mon Sep 17 00:00:00 2001
+From: Tk-Glitch <ti3nou@gmail.com>
+Date: Wed, 6 Nov 2019 10:38:55 +0100
+Subject: ntdll
+
+
+diff --git a/dlls/ntdll/env.c b/dlls/ntdll/env.c
+index 6931cb6e04..919fc64e2f 100644
+--- a/dlls/ntdll/env.c
++++ b/dlls/ntdll/env.c
+@@ -1149,31 +1149,19 @@ void init_user_process_params( SIZE_T data_size )
+ 
+     if (!data_size)
+     {
+-        RTL_USER_PROCESS_PARAMETERS initial_params = {0};
+-        WCHAR *env, curdir_buffer[MAX_PATH];
+-
+-        NtCurrentTeb()->Peb->ProcessParameters = &initial_params;
+-        initial_params.Environment = build_initial_environment( __wine_get_main_environment() );
+-        curdir.Buffer = curdir_buffer;
+-        curdir.MaximumLength = sizeof(curdir_buffer);
+-        get_current_directory( &curdir );
+-        initial_params.CurrentDirectory.DosPath = curdir;
+-        get_image_path( __wine_main_argv[0], &initial_params.ImagePathName );
+-        set_library_wargv( __wine_main_argv, &initial_params.ImagePathName );
+-        build_command_line( __wine_main_wargv, &cmdline );
+-        LdrGetDllPath( initial_params.ImagePathName.Buffer, 0, &load_path, &dummy );
+-        RtlInitUnicodeString( &dllpath, load_path );
+-
+-        env = initial_params.Environment;
+-        initial_params.Environment = NULL;  /* avoid copying it */
+-        if (RtlCreateProcessParametersEx( &params, &initial_params.ImagePathName, &dllpath, &curdir,
+-                                          &cmdline, NULL, &initial_params.ImagePathName, NULL, NULL, NULL,
++        if (RtlCreateProcessParametersEx( &params, &null_str, &null_str, &empty_str, &null_str, NULL,
++                                          &null_str, &null_str, &null_str, &null_str,
+                                           PROCESS_PARAMS_FLAG_NORMALIZED ))
+             return;
+ 
+-        params->Environment = env;
+         NtCurrentTeb()->Peb->ProcessParameters = params;
+-        RtlFreeUnicodeString( &cmdline );
++        params->Environment = build_initial_environment( __wine_get_main_environment() );
++        get_current_directory( &params->CurrentDirectory.DosPath );
++        get_image_path( __wine_main_argv[0], &params->ImagePathName );
++        set_library_wargv( __wine_main_argv, &params->ImagePathName );
++        build_command_line( __wine_main_wargv, &params->CommandLine );
++        LdrGetDllPath( params->ImagePathName.Buffer, 0, &load_path, &dummy );
++        RtlCreateUnicodeString( &params->DllPath, load_path );
+         RtlReleasePath( load_path );
+ 
+         if (isatty(0) || isatty(1) || isatty(2))
+@@ -1256,3 +1244,44 @@ done:
+         RtlSetCurrentDirectory_U( &curdir );
+     }
+ }
++
++
++/***********************************************************************
++ *           update_user_process_params
++ *
++ * Rebuild the RTL_USER_PROCESS_PARAMETERS structure once we have initialized all the fields.
++ */
++void update_user_process_params( const UNICODE_STRING *image )
++{
++    RTL_USER_PROCESS_PARAMETERS *params, *cur_params = NtCurrentTeb()->Peb->ProcessParameters;
++    UNICODE_STRING title = cur_params->WindowTitle;
++    WCHAR *env = cur_params->Environment;
++
++    cur_params->Environment = NULL;  /* avoid copying it */
++    if (!title.Buffer) title = *image;
++    if (RtlCreateProcessParametersEx( &params, image, &cur_params->DllPath, NULL,
++                                      &cur_params->CommandLine, NULL, &title, &cur_params->Desktop,
++                                      &cur_params->ShellInfo, &cur_params->RuntimeInfo,
++                                      PROCESS_PARAMS_FLAG_NORMALIZED ))
++        return;
++
++    params->DebugFlags      = cur_params->DebugFlags;
++    params->ConsoleHandle   = cur_params->ConsoleHandle;
++    params->ConsoleFlags    = cur_params->ConsoleFlags;
++    params->hStdInput       = cur_params->hStdInput;
++    params->hStdOutput      = cur_params->hStdOutput;
++    params->hStdError       = cur_params->hStdError;
++    params->dwX             = cur_params->dwX;
++    params->dwY             = cur_params->dwY;
++    params->dwXSize         = cur_params->dwXSize;
++    params->dwYSize         = cur_params->dwYSize;
++    params->dwXCountChars   = cur_params->dwXCountChars;
++    params->dwYCountChars   = cur_params->dwYCountChars;
++    params->dwFillAttribute = cur_params->dwFillAttribute;
++    params->dwFlags         = cur_params->dwFlags;
++    params->wShowWindow     = cur_params->wShowWindow;
++    params->Environment     = env;
++
++    RtlFreeHeap( GetProcessHeap(), 0, cur_params );
++    NtCurrentTeb()->Peb->ProcessParameters = params;
++}
+diff --git a/dlls/ntdll/loader.c b/dlls/ntdll/loader.c
+index dc5870aa7f..972f76d7b3 100644
+--- a/dlls/ntdll/loader.c
++++ b/dlls/ntdll/loader.c
+@@ -4620,6 +4620,7 @@ void __wine_process_init(void)
+     }
+ 
+     NtCurrentTeb()->Peb->LoaderLock = &loader_section;
++    update_user_process_params( &wm->ldr.FullDllName );
+     version_init( wm->ldr.FullDllName.Buffer );
+     user_shared_data_init();
+     hidden_exports_init( wm->ldr.FullDllName.Buffer );
+diff --git a/dlls/ntdll/ntdll_misc.h b/dlls/ntdll/ntdll_misc.h
+index 01e9087a60..3ebbf1a62e 100644
+--- a/dlls/ntdll/ntdll_misc.h
++++ b/dlls/ntdll/ntdll_misc.h
+@@ -88,6 +88,7 @@ extern void virtual_init_threading(void) DECLSPEC_HIDDEN;
+ extern void fill_cpu_info(void) DECLSPEC_HIDDEN;
+ extern void heap_set_debug_flags( HANDLE handle ) DECLSPEC_HIDDEN;
+ extern void init_user_process_params( SIZE_T data_size ) DECLSPEC_HIDDEN;
++extern void update_user_process_params( const UNICODE_STRING *image ) DECLSPEC_HIDDEN;
+ 
+ /* token */
+ extern HANDLE CDECL __wine_create_default_token(BOOL admin);
+
 From fdc66a9a22cc689b90123524dce8457718ade72e Mon Sep 17 00:00:00 2001
 From: Tk-Glitch <ti3nou@gmail.com>
 Date: Wed, 23 Oct 2019 03:51:13 +0200

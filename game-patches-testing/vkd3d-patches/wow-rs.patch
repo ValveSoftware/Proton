@@ -1,4 +1,416 @@
 From: Hans-Kristian Arntzen <post@arntzen-software.no>
+Subject: [PATCH v3 1/2] vkd3d: Allocate one large buffer for a heap and offset into it.
+Message-Id: <20191023100907.25912-1-post@arntzen-software.no>
+Date: Wed, 23 Oct 2019 12:09:06 +0200
+
+Greatly reduce VA allocations we have to make and makes returned VA more
+sensible, and better matches returned VAs we see on native drivers.
+
+D3D12 usage flags for buffers seem generic enough that there
+is no obvious benefit to place smaller VkBuffers on top of
+VkDeviceMemory.
+
+Ideally, physical_buffer_address is used here, but this works as a
+good fallback if that path is added later.
+
+With this patch and previous VA optimization, I'm observing a 2.0-2.5%
+FPS uplift on SOTTR when CPU bound.
+
+Signed-off-by: Hans-Kristian Arntzen <post@arntzen-software.no>
+---
+ libs/vkd3d/command.c       |  15 +++--
+ libs/vkd3d/resource.c      | 135 ++++++++++++++++++++++++++++++++-----
+ libs/vkd3d/vkd3d_private.h |   2 +
+ 3 files changed, 130 insertions(+), 22 deletions(-)
+
+diff --git a/libs/vkd3d/command.c b/libs/vkd3d/command.c
+index d420863..4f74fa4 100644
+--- a/libs/vkd3d/command.c
++++ b/libs/vkd3d/command.c
+@@ -3031,8 +3031,8 @@ static void STDMETHODCALLTYPE d3d12_command_list_CopyBufferRegion(ID3D12Graphics
+ 
+     d3d12_command_list_end_current_render_pass(list);
+ 
+-    buffer_copy.srcOffset = src_offset;
+-    buffer_copy.dstOffset = dst_offset;
++    buffer_copy.srcOffset = src_offset + src_resource->heap_offset;
++    buffer_copy.dstOffset = dst_offset + dst_resource->heap_offset;
+     buffer_copy.size = byte_count;
+ 
+     VK_CALL(vkCmdCopyBuffer(list->vk_command_buffer,
+@@ -3341,6 +3341,7 @@ static void STDMETHODCALLTYPE d3d12_command_list_CopyTextureRegion(ID3D12Graphic
+ 
+         vk_image_buffer_copy_from_d3d12(&buffer_image_copy, &dst->u.PlacedFootprint,
+                 src->u.SubresourceIndex, &src_resource->desc, dst_format, src_box, dst_x, dst_y, dst_z);
++        buffer_image_copy.bufferOffset += dst_resource->heap_offset;
+         VK_CALL(vkCmdCopyImageToBuffer(list->vk_command_buffer,
+                 src_resource->u.vk_image, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
+                 dst_resource->u.vk_buffer, 1, &buffer_image_copy));
+@@ -3370,6 +3371,7 @@ static void STDMETHODCALLTYPE d3d12_command_list_CopyTextureRegion(ID3D12Graphic
+ 
+         vk_buffer_image_copy_from_d3d12(&buffer_image_copy, &src->u.PlacedFootprint,
+                 dst->u.SubresourceIndex, &dst_resource->desc, src_format, src_box, dst_x, dst_y, dst_z);
++        buffer_image_copy.bufferOffset += src_resource->heap_offset;
+         VK_CALL(vkCmdCopyBufferToImage(list->vk_command_buffer,
+                 src_resource->u.vk_buffer, dst_resource->u.vk_image,
+                 VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &buffer_image_copy));
+@@ -3450,8 +3452,8 @@ static void STDMETHODCALLTYPE d3d12_command_list_CopyResource(ID3D12GraphicsComm
+         assert(d3d12_resource_is_buffer(src_resource));
+         assert(src_resource->desc.Width == dst_resource->desc.Width);
+ 
+-        vk_buffer_copy.srcOffset = 0;
+-        vk_buffer_copy.dstOffset = 0;
++        vk_buffer_copy.srcOffset = src_resource->heap_offset;
++        vk_buffer_copy.dstOffset = dst_resource->heap_offset;
+         vk_buffer_copy.size = dst_resource->desc.Width;
+         VK_CALL(vkCmdCopyBuffer(list->vk_command_buffer,
+                 src_resource->u.vk_buffer, dst_resource->u.vk_buffer, 1, &vk_buffer_copy));
+@@ -3842,8 +3844,8 @@ static void STDMETHODCALLTYPE d3d12_command_list_ResourceBarrier(ID3D12GraphicsC
+             vk_barrier.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+             vk_barrier.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+             vk_barrier.buffer = resource->u.vk_buffer;
+-            vk_barrier.offset = 0;
+-            vk_barrier.size = VK_WHOLE_SIZE;
++            vk_barrier.offset = resource->heap_offset;
++            vk_barrier.size = resource->desc.Width;
+ 
+             VK_CALL(vkCmdPipelineBarrier(list->vk_command_buffer, src_stage_mask, dst_stage_mask, 0,
+                     0, NULL, 1, &vk_barrier, 0, NULL));
+@@ -4728,6 +4730,7 @@ static void STDMETHODCALLTYPE d3d12_command_list_ClearUnorderedAccessViewUint(ID
+             return;
+         }
+ 
++        /* Offset from heap with placed buffers is already applied in CPU descriptor. */
+         VK_CALL(vkCmdFillBuffer(list->vk_command_buffer, resource_impl->u.vk_buffer,
+                 cpu_descriptor->uav.buffer.offset, cpu_descriptor->uav.buffer.size, values[0]));
+ 
+diff --git a/libs/vkd3d/resource.c b/libs/vkd3d/resource.c
+index 6c9564b..c289fa8 100644
+--- a/libs/vkd3d/resource.c
++++ b/libs/vkd3d/resource.c
+@@ -292,6 +292,8 @@ static ULONG STDMETHODCALLTYPE d3d12_heap_AddRef(ID3D12Heap *iface)
+     return refcount;
+ }
+ 
++static ULONG d3d12_resource_decref(struct d3d12_resource *resource);
++
+ static void d3d12_heap_destroy(struct d3d12_heap *heap)
+ {
+     struct d3d12_device *device = heap->device;
+@@ -299,6 +301,9 @@ static void d3d12_heap_destroy(struct d3d12_heap *heap)
+ 
+     TRACE("Destroying heap %p.\n", heap);
+ 
++    if (heap->buffer_resource)
++        d3d12_resource_decref(heap->buffer_resource);
++
+     vkd3d_private_store_destroy(&heap->private_store);
+ 
+     VK_CALL(vkFreeMemory(device->vk_device, heap->vk_memory, NULL));
+@@ -539,6 +544,12 @@ static HRESULT validate_heap_desc(const D3D12_HEAP_DESC *desc, const struct d3d1
+     return S_OK;
+ }
+ 
++static HRESULT d3d12_resource_create(struct d3d12_device *device,
++                                     const D3D12_HEAP_PROPERTIES *heap_properties, D3D12_HEAP_FLAGS heap_flags,
++                                     const D3D12_RESOURCE_DESC *desc, D3D12_RESOURCE_STATES initial_state,
++                                     const D3D12_CLEAR_VALUE *optimized_clear_value, bool placed,
++                                     struct d3d12_resource **resource);
++
+ static HRESULT d3d12_heap_init(struct d3d12_heap *heap,
+         struct d3d12_device *device, const D3D12_HEAP_DESC *desc, const struct d3d12_resource *resource)
+ {
+@@ -546,6 +557,9 @@ static HRESULT d3d12_heap_init(struct d3d12_heap *heap,
+     VkDeviceSize vk_memory_size;
+     HRESULT hr;
+     int rc;
++    bool buffers_allowed;
++    D3D12_RESOURCE_DESC resource_desc;
++    D3D12_RESOURCE_STATES initial_resource_state;
+ 
+     heap->ID3D12Heap_iface.lpVtbl = &d3d12_heap_vtbl;
+     heap->refcount = 1;
+@@ -556,6 +570,7 @@ static HRESULT d3d12_heap_init(struct d3d12_heap *heap,
+ 
+     heap->map_ptr = NULL;
+     heap->map_count = 0;
++    heap->buffer_resource = NULL;
+ 
+     if (!heap->desc.Properties.CreationNodeMask)
+         heap->desc.Properties.CreationNodeMask = 1;
+@@ -583,6 +598,53 @@ static HRESULT d3d12_heap_init(struct d3d12_heap *heap,
+         return hr;
+     }
+ 
++    buffers_allowed = !(heap->desc.Flags & D3D12_HEAP_FLAG_DENY_BUFFERS);
++    if (buffers_allowed && !resource)
++    {
++        /* Create a single omnipotent buffer which fills the entire heap.
++         * Whenever we place buffer resources on this heap, we'll just offset this VkBuffer.
++         * This allows us to keep VA space somewhat sane, and keeps number of (limited) VA allocations down.
++         * One possible downside is that the buffer might be slightly slower to access,
++         * but D3D12 has very lenient usage flags for buffers. */
++
++        memset(&resource_desc, 0, sizeof(resource_desc));
++        resource_desc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
++        resource_desc.Width = desc->SizeInBytes;
++        resource_desc.Height = 1;
++        resource_desc.DepthOrArraySize = 1;
++        resource_desc.MipLevels = 1;
++        resource_desc.SampleDesc.Count = 1;
++        resource_desc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
++
++        switch (desc->Properties.Type)
++        {
++        case D3D12_HEAP_TYPE_UPLOAD:
++            initial_resource_state = D3D12_RESOURCE_STATE_GENERIC_READ;
++            break;
++
++        case D3D12_HEAP_TYPE_READBACK:
++            initial_resource_state = D3D12_RESOURCE_STATE_COPY_DEST;
++            break;
++
++        default:
++            /* Upload and readback heaps do not allow UAV access, only enable this flag for other heaps. */
++            resource_desc.Flags |= D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS;
++            initial_resource_state = D3D12_RESOURCE_STATE_COMMON;
++            break;
++        }
++
++        if (FAILED(hr = d3d12_resource_create(device, &desc->Properties, desc->Flags,
++                                              &resource_desc, initial_resource_state,
++                                              NULL, false, &heap->buffer_resource)))
++        {
++            heap->buffer_resource = NULL;
++            return hr;
++        }
++        /* This internal resource should not own a reference on the device.
++         * d3d12_resource_create takes a reference on the device. */
++        d3d12_device_release(device);
++    }
++
+     if (resource)
+     {
+         if (d3d12_resource_is_buffer(resource))
+@@ -600,8 +662,16 @@ static HRESULT d3d12_heap_init(struct d3d12_heap *heap,
+ 
+         heap->desc.SizeInBytes = vk_memory_size;
+     }
++    else if (heap->buffer_resource)
++    {
++        hr = vkd3d_allocate_buffer_memory(device, heap->buffer_resource->u.vk_buffer,
++                                          &heap->desc.Properties, heap->desc.Flags,
++                                          &heap->vk_memory, &heap->vk_memory_type, &vk_memory_size);
++    }
+     else
+     {
++        /* Allocate generic memory which should hopefully match up with whatever resources
++         * we want to place here. */
+         memory_requirements.size = heap->desc.SizeInBytes;
+         memory_requirements.alignment = heap->desc.Alignment;
+         memory_requirements.memoryTypeBits = ~(uint32_t)0;
+@@ -614,6 +684,11 @@ static HRESULT d3d12_heap_init(struct d3d12_heap *heap,
+     {
+         vkd3d_private_store_destroy(&heap->private_store);
+         pthread_mutex_destroy(&heap->mutex);
++        if (heap->buffer_resource)
++        {
++            d3d12_resource_decref(heap->buffer_resource);
++            heap->buffer_resource = NULL;
++        }
+         return hr;
+     }
+ 
+@@ -1003,13 +1078,16 @@ static void d3d12_resource_destroy(struct d3d12_resource *resource, struct d3d12
+     if (resource->flags & VKD3D_RESOURCE_EXTERNAL)
+         return;
+ 
+-    if (resource->gpu_address)
+-        vkd3d_gpu_va_allocator_free(&device->gpu_va_allocator, resource->gpu_address);
++    if (!(resource->flags & VKD3D_RESOURCE_PLACED_BUFFER))
++    {
++        if (resource->gpu_address)
++            vkd3d_gpu_va_allocator_free(&device->gpu_va_allocator, resource->gpu_address);
+ 
+-    if (d3d12_resource_is_buffer(resource))
+-        VK_CALL(vkDestroyBuffer(device->vk_device, resource->u.vk_buffer, NULL));
+-    else
+-        VK_CALL(vkDestroyImage(device->vk_device, resource->u.vk_image, NULL));
++        if (d3d12_resource_is_buffer(resource))
++            VK_CALL(vkDestroyBuffer(device->vk_device, resource->u.vk_buffer, NULL));
++        else
++            VK_CALL(vkDestroyImage(device->vk_device, resource->u.vk_image, NULL));
++    }
+ 
+     if (resource->flags & VKD3D_RESOURCE_DEDICATED_HEAP)
+         d3d12_heap_destroy(resource->heap);
+@@ -1669,7 +1747,7 @@ static bool d3d12_resource_validate_heap_properties(const struct d3d12_resource
+ static HRESULT d3d12_resource_init(struct d3d12_resource *resource, struct d3d12_device *device,
+         const D3D12_HEAP_PROPERTIES *heap_properties, D3D12_HEAP_FLAGS heap_flags,
+         const D3D12_RESOURCE_DESC *desc, D3D12_RESOURCE_STATES initial_state,
+-        const D3D12_CLEAR_VALUE *optimized_clear_value)
++        const D3D12_CLEAR_VALUE *optimized_clear_value, bool placed)
+ {
+     HRESULT hr;
+ 
+@@ -1699,6 +1777,8 @@ static HRESULT d3d12_resource_init(struct d3d12_resource *resource, struct d3d12
+ 
+     resource->gpu_address = 0;
+     resource->flags = 0;
++    if (placed && d3d12_resource_is_buffer(resource))
++        resource->flags |= VKD3D_RESOURCE_PLACED_BUFFER;
+ 
+     if (FAILED(hr = d3d12_resource_validate_desc(&resource->desc)))
+         return hr;
+@@ -1706,6 +1786,13 @@ static HRESULT d3d12_resource_init(struct d3d12_resource *resource, struct d3d12
+     switch (desc->Dimension)
+     {
+         case D3D12_RESOURCE_DIMENSION_BUFFER:
++            /* We'll inherit a VkBuffer reference from the heap with an implied offset. */
++            if (placed)
++            {
++                resource->u.vk_buffer = VK_NULL_HANDLE;
++                break;
++            }
++
+             if (FAILED(hr = vkd3d_create_buffer(device, heap_properties, heap_flags,
+                     &resource->desc, &resource->u.vk_buffer)))
+                 return hr;
+@@ -1755,7 +1842,7 @@ static HRESULT d3d12_resource_init(struct d3d12_resource *resource, struct d3d12
+ static HRESULT d3d12_resource_create(struct d3d12_device *device,
+         const D3D12_HEAP_PROPERTIES *heap_properties, D3D12_HEAP_FLAGS heap_flags,
+         const D3D12_RESOURCE_DESC *desc, D3D12_RESOURCE_STATES initial_state,
+-        const D3D12_CLEAR_VALUE *optimized_clear_value, struct d3d12_resource **resource)
++        const D3D12_CLEAR_VALUE *optimized_clear_value, bool placed, struct d3d12_resource **resource)
+ {
+     struct d3d12_resource *object;
+     HRESULT hr;
+@@ -1764,7 +1851,7 @@ static HRESULT d3d12_resource_create(struct d3d12_device *device,
+         return E_OUTOFMEMORY;
+ 
+     if (FAILED(hr = d3d12_resource_init(object, device, heap_properties, heap_flags,
+-            desc, initial_state, optimized_clear_value)))
++            desc, initial_state, optimized_clear_value, placed)))
+     {
+         vkd3d_free(object);
+         return hr;
+@@ -1806,7 +1893,7 @@ HRESULT d3d12_committed_resource_create(struct d3d12_device *device,
+     }
+ 
+     if (FAILED(hr = d3d12_resource_create(device, heap_properties, heap_flags,
+-            desc, initial_state, optimized_clear_value, &object)))
++            desc, initial_state, optimized_clear_value, false, &object)))
+         return hr;
+ 
+     if (FAILED(hr = vkd3d_allocate_resource_memory(device, object, heap_properties, heap_flags)))
+@@ -1830,6 +1917,16 @@ static HRESULT vkd3d_bind_heap_memory(struct d3d12_device *device,
+     VkMemoryRequirements requirements;
+     VkResult vr;
+ 
++    if (resource->flags & VKD3D_RESOURCE_PLACED_BUFFER)
++    {
++        /* Just inherit the buffer from the heap. */
++        resource->u.vk_buffer = heap->buffer_resource->u.vk_buffer;
++        resource->heap = heap;
++        resource->heap_offset = heap_offset;
++        resource->gpu_address = heap->buffer_resource->gpu_address + heap_offset;
++        return S_OK;
++    }
++
+     if (d3d12_resource_is_buffer(resource))
+         VK_CALL(vkGetBufferMemoryRequirements(vk_device, resource->u.vk_buffer, &requirements));
+     else
+@@ -1879,7 +1976,7 @@ HRESULT d3d12_placed_resource_create(struct d3d12_device *device, struct d3d12_h
+     HRESULT hr;
+ 
+     if (FAILED(hr = d3d12_resource_create(device, &heap->desc.Properties, heap->desc.Flags,
+-            desc, initial_state, optimized_clear_value, &object)))
++            desc, initial_state, optimized_clear_value, true, &object)))
+         return hr;
+ 
+     if (FAILED(hr = vkd3d_bind_heap_memory(device, object, heap, heap_offset)))
+@@ -1903,7 +2000,7 @@ HRESULT d3d12_reserved_resource_create(struct d3d12_device *device,
+     HRESULT hr;
+ 
+     if (FAILED(hr = d3d12_resource_create(device, NULL, 0,
+-            desc, initial_state, optimized_clear_value, &object)))
++            desc, initial_state, optimized_clear_value, false, &object)))
+         return hr;
+ 
+     TRACE("Created reserved resource %p.\n", object);
+@@ -2205,7 +2302,7 @@ static bool vkd3d_create_buffer_view_for_resource(struct d3d12_device *device,
+     assert(d3d12_resource_is_buffer(resource));
+ 
+     return vkd3d_create_buffer_view(device, resource->u.vk_buffer,
+-            format, offset * element_size, size * element_size, view);
++            format, resource->heap_offset + offset * element_size, size * element_size, view);
+ }
+ 
+ static void vkd3d_set_view_swizzle_for_format(VkComponentMapping *components,
+@@ -2807,7 +2904,7 @@ static void vkd3d_create_buffer_uav(struct d3d12_desc *descriptor, struct d3d12_
+ 
+         format = vkd3d_get_format(device, DXGI_FORMAT_R32_UINT, false);
+         if (!vkd3d_create_vk_buffer_view(device, counter_resource->u.vk_buffer, format,
+-                desc->u.Buffer.CounterOffsetInBytes, sizeof(uint32_t), &view->vk_counter_view))
++                desc->u.Buffer.CounterOffsetInBytes + resource->heap_offset, sizeof(uint32_t), &view->vk_counter_view))
+         {
+             WARN("Failed to create counter buffer view.\n");
+             view->vk_counter_view = VK_NULL_HANDLE;
+@@ -2821,7 +2918,7 @@ static void vkd3d_create_buffer_uav(struct d3d12_desc *descriptor, struct d3d12_
+     {
+         const struct vkd3d_format *format = vkd3d_get_format(device, DXGI_FORMAT_R32_UINT, false);
+ 
+-        descriptor->uav.buffer.offset = desc->u.Buffer.FirstElement * format->byte_count;
++        descriptor->uav.buffer.offset = desc->u.Buffer.FirstElement * format->byte_count + resource->heap_offset;
+         descriptor->uav.buffer.size = desc->u.Buffer.NumElements * format->byte_count;
+     }
+ }
+@@ -2913,12 +3010,18 @@ bool vkd3d_create_raw_buffer_view(struct d3d12_device *device,
+ {
+     const struct vkd3d_format *format;
+     struct d3d12_resource *resource;
++    uint64_t range;
++    uint64_t offset;
+ 
+     format = vkd3d_get_format(device, DXGI_FORMAT_R32_UINT, false);
+     resource = vkd3d_gpu_va_allocator_dereference(&device->gpu_va_allocator, gpu_address);
+     assert(d3d12_resource_is_buffer(resource));
++
++    offset = gpu_address - resource->gpu_address;
++    range = min(resource->desc.Width - offset, device->vk_info.device_limits.maxStorageBufferRange);
++
+     return vkd3d_create_vk_buffer_view(device, resource->u.vk_buffer, format,
+-            gpu_address - resource->gpu_address, VK_WHOLE_SIZE, vk_buffer_view);
++            offset, range, vk_buffer_view);
+ }
+ 
+ /* samplers */
+diff --git a/libs/vkd3d/vkd3d_private.h b/libs/vkd3d/vkd3d_private.h
+index a5f7c81..2b1ae30 100644
+--- a/libs/vkd3d/vkd3d_private.h
++++ b/libs/vkd3d/vkd3d_private.h
+@@ -380,6 +380,7 @@ struct d3d12_heap
+     unsigned int map_count;
+     uint32_t vk_memory_type;
+ 
++    struct d3d12_resource *buffer_resource;
+     struct d3d12_device *device;
+ 
+     struct vkd3d_private_store private_store;
+@@ -394,6 +395,7 @@ struct d3d12_heap *unsafe_impl_from_ID3D12Heap(ID3D12Heap *iface) DECLSPEC_HIDDE
+ #define VKD3D_RESOURCE_EXTERNAL       0x00000004
+ #define VKD3D_RESOURCE_DEDICATED_HEAP 0x00000008
+ #define VKD3D_RESOURCE_LINEAR_TILING  0x00000010
++#define VKD3D_RESOURCE_PLACED_BUFFER  0x00000020
+ 
+ /* ID3D12Resource */
+ struct d3d12_resource
+
+-- 
+2.23.0
+
+
+From: Hans-Kristian Arntzen <post@arntzen-software.no>
 Subject: [PATCH] vkd3d: Support RS 1.0 VOLATILE descriptors.
 Message-Id: <20191101133638.6565-1-post@arntzen-software.no>
 Date: Fri,  1 Nov 2019 14:36:36 +0100
@@ -666,288 +1078,6 @@ index 858cf99..16a048c 100644
 2.23.0
 
 From: Hans-Kristian Arntzen <post@arntzen-software.no>
-Subject: [PATCH v2] vkd3d: Allocate huge descriptor pools when root signature demands it.
-Message-Id: <20191101210239.23545-1-post@arntzen-software.no>
-Date: Fri,  1 Nov 2019 22:02:39 +0100
-
-Currently, descriptor pools are allocated with the intention of being
-used as a suballocator, but for a bindless style, root signatures can
-contain many thousand descriptors.
-
-Fall back to single allocations for these cases and do not attempt to recycle these descriptor sets.
-
-This path is triggered by Control DX12 which creates a RS with > ~200k
-SRVs in register space 1.
-
-Signed-off-by: Hans-Kristian Arntzen <post@arntzen-software.no>
----
- libs/vkd3d/command.c       | 79 ++++++++++++++++++++++++++++----------
- libs/vkd3d/state.c         | 19 +--------
- libs/vkd3d/vkd3d_private.h | 23 +++++++++++
- 3 files changed, 84 insertions(+), 37 deletions(-)
-
-diff --git a/libs/vkd3d/command.c b/libs/vkd3d/command.c
-index 3f78d17..34d2505 100644
---- a/libs/vkd3d/command.c
-+++ b/libs/vkd3d/command.c
-@@ -1264,13 +1264,24 @@ static bool d3d12_command_allocator_add_framebuffer(struct d3d12_command_allocat
- }
- 
- static bool d3d12_command_allocator_add_descriptor_pool(struct d3d12_command_allocator *allocator,
--        VkDescriptorPool pool)
-+        VkDescriptorPool pool, bool recycle)
- {
--    if (!vkd3d_array_reserve((void **)&allocator->descriptor_pools, &allocator->descriptor_pools_size,
-+    if (recycle)
-+    {
-+        if (!vkd3d_array_reserve((void **)&allocator->descriptor_pools, &allocator->descriptor_pools_size,
-             allocator->descriptor_pool_count + 1, sizeof(*allocator->descriptor_pools)))
--        return false;
-+            return false;
- 
--    allocator->descriptor_pools[allocator->descriptor_pool_count++] = pool;
-+        allocator->descriptor_pools[allocator->descriptor_pool_count++] = pool;
-+    }
-+    else
-+    {
-+        if (!vkd3d_array_reserve((void **)&allocator->descriptor_pools_huge, &allocator->descriptor_pools_huge_size,
-+            allocator->descriptor_pool_huge_count + 1, sizeof(*allocator->descriptor_pools_huge)))
-+            return false;
-+
-+        allocator->descriptor_pools_huge[allocator->descriptor_pool_huge_count++] = pool;
-+    }
- 
-     return true;
- }
-@@ -1313,9 +1324,17 @@ static bool d3d12_command_allocator_add_transfer_buffer(struct d3d12_command_all
- }
- 
- static VkDescriptorPool d3d12_command_allocator_allocate_descriptor_pool(
--        struct d3d12_command_allocator *allocator)
-+        struct d3d12_command_allocator *allocator, const struct d3d12_root_signature_info *root_signature)
- {
--    static const VkDescriptorPoolSize pool_sizes[] =
-+    bool huge_root_signature = false;
-+    struct d3d12_device *device = allocator->device;
-+    const struct vkd3d_vk_device_procs *vk_procs = &device->vk_procs;
-+    struct VkDescriptorPoolCreateInfo pool_desc;
-+    VkDevice vk_device = device->vk_device;
-+    VkDescriptorPool vk_pool;
-+    VkResult vr;
-+
-+    VkDescriptorPoolSize pool_sizes[] =
-     {
-         {VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 1024},
-         {VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER, 1024},
-@@ -1324,14 +1343,23 @@ static VkDescriptorPool d3d12_command_allocator_allocate_descriptor_pool(
-         {VK_DESCRIPTOR_TYPE_STORAGE_IMAGE, 1024},
-         {VK_DESCRIPTOR_TYPE_SAMPLER, 1024},
-     };
--    struct d3d12_device *device = allocator->device;
--    const struct vkd3d_vk_device_procs *vk_procs = &device->vk_procs;
--    struct VkDescriptorPoolCreateInfo pool_desc;
--    VkDevice vk_device = device->vk_device;
--    VkDescriptorPool vk_pool;
--    VkResult vr;
- 
--    if (allocator->free_descriptor_pool_count > 0)
-+    if (root_signature && (
-+        root_signature->cbv_count > 1024 ||
-+        root_signature->srv_count > 1024 ||
-+        root_signature->uav_count + root_signature->buffer_uav_count > 1024 ||
-+        root_signature->sampler_count > 1024))
-+    {
-+        huge_root_signature = true;
-+        pool_sizes[0].descriptorCount = root_signature->cbv_count;
-+        pool_sizes[1].descriptorCount = root_signature->srv_count;
-+        pool_sizes[2].descriptorCount = root_signature->srv_count;
-+        pool_sizes[3].descriptorCount = root_signature->uav_count + root_signature->buffer_uav_count;
-+        pool_sizes[4].descriptorCount = root_signature->uav_count;
-+        pool_sizes[5].descriptorCount = root_signature->sampler_count;
-+    }
-+
-+    if (!huge_root_signature && allocator->free_descriptor_pool_count > 0)
-     {
-         vk_pool = allocator->free_descriptor_pools[allocator->free_descriptor_pool_count - 1];
-         allocator->free_descriptor_pools[allocator->free_descriptor_pool_count - 1] = VK_NULL_HANDLE;
-@@ -1370,7 +1370,7 @@ static VkDescriptorPool d3d12_command_allocator_allocate_descriptor_pool(
-         pool_desc.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
-         pool_desc.pNext = NULL;
-         pool_desc.flags = device->vk_info.EXT_descriptor_indexing ? VK_DESCRIPTOR_POOL_CREATE_UPDATE_AFTER_BIND_BIT_EXT : 0;
--        pool_desc.maxSets = 512;
-+        pool_desc.maxSets = huge_root_signature ? 1 : 512;
-         pool_desc.poolSizeCount = ARRAY_SIZE(pool_sizes);
-         pool_desc.pPoolSizes = pool_sizes;
-         if ((vr = VK_CALL(vkCreateDescriptorPool(vk_device, &pool_desc, NULL, &vk_pool))) < 0)
-@@ -1352,7 +1380,7 @@ static VkDescriptorPool d3d12_command_allocator_allocate_descriptor_pool(
-         }
-     }
- 
--    if (!(d3d12_command_allocator_add_descriptor_pool(allocator, vk_pool)))
-+    if (!(d3d12_command_allocator_add_descriptor_pool(allocator, vk_pool, !huge_root_signature)))
-     {
-         ERR("Failed to add descriptor pool.\n");
-         VK_CALL(vkDestroyDescriptorPool(vk_device, vk_pool, NULL));
-@@ -1363,7 +1391,8 @@ static VkDescriptorPool d3d12_command_allocator_allocate_descriptor_pool(
- }
- 
- static VkDescriptorSet d3d12_command_allocator_allocate_descriptor_set(
--        struct d3d12_command_allocator *allocator, VkDescriptorSetLayout vk_set_layout)
-+        struct d3d12_command_allocator *allocator, VkDescriptorSetLayout vk_set_layout,
-+        const struct d3d12_root_signature_info *root_signature)
- {
-     struct d3d12_device *device = allocator->device;
-     const struct vkd3d_vk_device_procs *vk_procs = &device->vk_procs;
-@@ -1373,7 +1402,7 @@ static VkDescriptorSet d3d12_command_allocator_allocate_descriptor_set(
-     VkResult vr;
- 
-     if (!allocator->vk_descriptor_pool)
--        allocator->vk_descriptor_pool = d3d12_command_allocator_allocate_descriptor_pool(allocator);
-+        allocator->vk_descriptor_pool = d3d12_command_allocator_allocate_descriptor_pool(allocator, root_signature);
-     if (!allocator->vk_descriptor_pool)
-         return VK_NULL_HANDLE;
- 
-@@ -1387,7 +1416,7 @@ static VkDescriptorSet d3d12_command_allocator_allocate_descriptor_set(
- 
-     allocator->vk_descriptor_pool = VK_NULL_HANDLE;
-     if (vr == VK_ERROR_FRAGMENTED_POOL || vr == VK_ERROR_OUT_OF_POOL_MEMORY_KHR)
--        allocator->vk_descriptor_pool = d3d12_command_allocator_allocate_descriptor_pool(allocator);
-+        allocator->vk_descriptor_pool = d3d12_command_allocator_allocate_descriptor_pool(allocator, root_signature);
-     if (!allocator->vk_descriptor_pool)
-     {
-         ERR("Failed to allocate descriptor set, vr %d.\n", vr);
-@@ -1478,6 +1507,12 @@ static void d3d12_command_allocator_free_resources(struct d3d12_command_allocato
-     }
-     allocator->descriptor_pool_count = 0;
- 
-+    for (i = 0; i < allocator->descriptor_pool_huge_count; ++i)
-+    {
-+        VK_CALL(vkDestroyDescriptorPool(device->vk_device, allocator->descriptor_pools_huge[i], NULL));
-+    }
-+    allocator->descriptor_pool_huge_count = 0;
-+
-     for (i = 0; i < allocator->framebuffer_count; ++i)
-     {
-         VK_CALL(vkDestroyFramebuffer(device->vk_device, allocator->framebuffers[i], NULL));
-@@ -1755,6 +1790,10 @@ static HRESULT d3d12_command_allocator_init(struct d3d12_command_allocator *allo
-     allocator->descriptor_pools_size = 0;
-     allocator->descriptor_pool_count = 0;
- 
-+    allocator->descriptor_pools_huge = NULL;
-+    allocator->descriptor_pools_huge_size = 0;
-+    allocator->descriptor_pool_huge_count = 0;
-+
-     allocator->views = NULL;
-     allocator->views_size = 0;
-     allocator->view_count = 0;
-@@ -2586,7 +2586,7 @@ static void d3d12_command_list_prepare_descriptors(struct d3d12_command_list *li
-      * we need at the very least a new descriptor set.
-      */
-     bindings->descriptor_set = d3d12_command_allocator_allocate_descriptor_set(list->allocator,
--            root_signature->vk_set_layout);
-+            root_signature->vk_set_layout, &root_signature->info);
- 
-     bindings->in_use = false;
- 
-@@ -2621,7 +2621,7 @@ static void d3d12_command_list_prepare_uav_counter_descriptors(struct d3d12_comm
-     if (list->state->uav_counter_mask)
-     {
-         bindings->uav_counter_descriptor_set = d3d12_command_allocator_allocate_descriptor_set(list->allocator,
--                list->state->vk_set_layout);
-+                list->state->vk_set_layout, NULL);
-     }
-     else
-         bindings->uav_counter_descriptor_set = VK_NULL_HANDLE;
-diff --git a/libs/vkd3d/state.c b/libs/vkd3d/state.c
-index ed20de7..eb87350 100644
---- a/libs/vkd3d/state.c
-+++ b/libs/vkd3d/state.c
-@@ -314,23 +314,6 @@ static bool vk_binding_from_d3d12_descriptor_range(struct VkDescriptorSetLayoutB
-     return true;
- }
- 
--struct d3d12_root_signature_info
--{
--    size_t cbv_count;
--    size_t buffer_uav_count;
--    size_t uav_count;
--    size_t buffer_srv_count;
--    size_t srv_count;
--    size_t sampler_count;
--
--    size_t descriptor_count;
--
--    size_t root_constant_count;
--    size_t root_descriptor_count;
--
--    size_t cost;
--};
--
- static HRESULT d3d12_root_signature_info_count_descriptors(struct d3d12_root_signature_info *info,
-         const D3D12_DESCRIPTOR_RANGE *range)
- {
-@@ -919,6 +902,8 @@ static HRESULT d3d12_root_signature_init(struct d3d12_root_signature *root_signa
-     if (FAILED(hr = vkd3d_private_store_init(&root_signature->private_store)))
-         goto fail;
- 
-+    root_signature->info = info;
-+
-     d3d12_device_add_ref(root_signature->device = device);
- 
-     return S_OK;
-diff --git a/libs/vkd3d/vkd3d_private.h b/libs/vkd3d/vkd3d_private.h
-index bd54c67..3a263ef 100644
---- a/libs/vkd3d/vkd3d_private.h
-+++ b/libs/vkd3d/vkd3d_private.h
-@@ -666,6 +666,23 @@ struct d3d12_root_parameter
- };
- 
- /* ID3D12RootSignature */
-+struct d3d12_root_signature_info
-+{
-+    size_t cbv_count;
-+    size_t buffer_uav_count;
-+    size_t uav_count;
-+    size_t buffer_srv_count;
-+    size_t srv_count;
-+    size_t sampler_count;
-+
-+    size_t descriptor_count;
-+
-+    size_t root_constant_count;
-+    size_t root_descriptor_count;
-+
-+    size_t cost;
-+};
-+
- struct d3d12_root_signature
- {
-     ID3D12RootSignature ID3D12RootSignature_iface;
-@@ -699,6 +716,8 @@ struct d3d12_root_signature
-     unsigned int static_sampler_count;
-     VkSampler *static_samplers;
- 
-+    struct d3d12_root_signature_info info;
-+
-     struct d3d12_device *device;
- 
-     struct vkd3d_private_store private_store;
-@@ -846,6 +865,10 @@ struct d3d12_command_allocator
-     size_t descriptor_pools_size;
-     size_t descriptor_pool_count;
- 
-+    VkDescriptorPool *descriptor_pools_huge;
-+    size_t descriptor_pools_huge_size;
-+    size_t descriptor_pool_huge_count;
-+
-     struct vkd3d_view **views;
-     size_t views_size;
-     size_t view_count;
-
--- 
-2.23.0
-
-From: Hans-Kristian Arntzen <post@arntzen-software.no>
 Subject: [PATCH] vkd3d: Fix handling of SM 5.1 register spaces.
 Message-Id: <20191101133638.6565-2-post@arntzen-software.no>
 Date: Fri,  1 Nov 2019 14:36:37 +0100
@@ -1491,6 +1621,288 @@ index 58e9aa9..bd54c67 100644
  };
  
  struct d3d12_root_descriptor_table
+
+-- 
+2.23.0
+
+From: Hans-Kristian Arntzen <post@arntzen-software.no>
+Subject: [PATCH v2] vkd3d: Allocate huge descriptor pools when root signature demands it.
+Message-Id: <20191101210239.23545-1-post@arntzen-software.no>
+Date: Fri,  1 Nov 2019 22:02:39 +0100
+
+Currently, descriptor pools are allocated with the intention of being
+used as a suballocator, but for a bindless style, root signatures can
+contain many thousand descriptors.
+
+Fall back to single allocations for these cases and do not attempt to recycle these descriptor sets.
+
+This path is triggered by Control DX12 which creates a RS with > ~200k
+SRVs in register space 1.
+
+Signed-off-by: Hans-Kristian Arntzen <post@arntzen-software.no>
+---
+ libs/vkd3d/command.c       | 79 ++++++++++++++++++++++++++++----------
+ libs/vkd3d/state.c         | 19 +--------
+ libs/vkd3d/vkd3d_private.h | 23 +++++++++++
+ 3 files changed, 84 insertions(+), 37 deletions(-)
+
+diff --git a/libs/vkd3d/command.c b/libs/vkd3d/command.c
+index 3f78d17..34d2505 100644
+--- a/libs/vkd3d/command.c
++++ b/libs/vkd3d/command.c
+@@ -1264,13 +1264,24 @@ static bool d3d12_command_allocator_add_framebuffer(struct d3d12_command_allocat
+ }
+ 
+ static bool d3d12_command_allocator_add_descriptor_pool(struct d3d12_command_allocator *allocator,
+-        VkDescriptorPool pool)
++        VkDescriptorPool pool, bool recycle)
+ {
+-    if (!vkd3d_array_reserve((void **)&allocator->descriptor_pools, &allocator->descriptor_pools_size,
++    if (recycle)
++    {
++        if (!vkd3d_array_reserve((void **)&allocator->descriptor_pools, &allocator->descriptor_pools_size,
+             allocator->descriptor_pool_count + 1, sizeof(*allocator->descriptor_pools)))
+-        return false;
++            return false;
+ 
+-    allocator->descriptor_pools[allocator->descriptor_pool_count++] = pool;
++        allocator->descriptor_pools[allocator->descriptor_pool_count++] = pool;
++    }
++    else
++    {
++        if (!vkd3d_array_reserve((void **)&allocator->descriptor_pools_huge, &allocator->descriptor_pools_huge_size,
++            allocator->descriptor_pool_huge_count + 1, sizeof(*allocator->descriptor_pools_huge)))
++            return false;
++
++        allocator->descriptor_pools_huge[allocator->descriptor_pool_huge_count++] = pool;
++    }
+ 
+     return true;
+ }
+@@ -1313,9 +1324,17 @@ static bool d3d12_command_allocator_add_transfer_buffer(struct d3d12_command_all
+ }
+ 
+ static VkDescriptorPool d3d12_command_allocator_allocate_descriptor_pool(
+-        struct d3d12_command_allocator *allocator)
++        struct d3d12_command_allocator *allocator, const struct d3d12_root_signature_info *root_signature)
+ {
+-    static const VkDescriptorPoolSize pool_sizes[] =
++    bool huge_root_signature = false;
++    struct d3d12_device *device = allocator->device;
++    const struct vkd3d_vk_device_procs *vk_procs = &device->vk_procs;
++    struct VkDescriptorPoolCreateInfo pool_desc;
++    VkDevice vk_device = device->vk_device;
++    VkDescriptorPool vk_pool;
++    VkResult vr;
++
++    VkDescriptorPoolSize pool_sizes[] =
+     {
+         {VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 1024},
+         {VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER, 1024},
+@@ -1324,14 +1343,23 @@ static VkDescriptorPool d3d12_command_allocator_allocate_descriptor_pool(
+         {VK_DESCRIPTOR_TYPE_STORAGE_IMAGE, 1024},
+         {VK_DESCRIPTOR_TYPE_SAMPLER, 1024},
+     };
+-    struct d3d12_device *device = allocator->device;
+-    const struct vkd3d_vk_device_procs *vk_procs = &device->vk_procs;
+-    struct VkDescriptorPoolCreateInfo pool_desc;
+-    VkDevice vk_device = device->vk_device;
+-    VkDescriptorPool vk_pool;
+-    VkResult vr;
+ 
+-    if (allocator->free_descriptor_pool_count > 0)
++    if (root_signature && (
++        root_signature->cbv_count > 1024 ||
++        root_signature->srv_count > 1024 ||
++        root_signature->uav_count + root_signature->buffer_uav_count > 1024 ||
++        root_signature->sampler_count > 1024))
++    {
++        huge_root_signature = true;
++        pool_sizes[0].descriptorCount = root_signature->cbv_count;
++        pool_sizes[1].descriptorCount = root_signature->srv_count;
++        pool_sizes[2].descriptorCount = root_signature->srv_count;
++        pool_sizes[3].descriptorCount = root_signature->uav_count + root_signature->buffer_uav_count;
++        pool_sizes[4].descriptorCount = root_signature->uav_count;
++        pool_sizes[5].descriptorCount = root_signature->sampler_count;
++    }
++
++    if (!huge_root_signature && allocator->free_descriptor_pool_count > 0)
+     {
+         vk_pool = allocator->free_descriptor_pools[allocator->free_descriptor_pool_count - 1];
+         allocator->free_descriptor_pools[allocator->free_descriptor_pool_count - 1] = VK_NULL_HANDLE;
+@@ -1370,7 +1370,7 @@ static VkDescriptorPool d3d12_command_allocator_allocate_descriptor_pool(
+         pool_desc.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
+         pool_desc.pNext = NULL;
+         pool_desc.flags = device->vk_info.EXT_descriptor_indexing ? VK_DESCRIPTOR_POOL_CREATE_UPDATE_AFTER_BIND_BIT_EXT : 0;
+-        pool_desc.maxSets = 512;
++        pool_desc.maxSets = huge_root_signature ? 1 : 512;
+         pool_desc.poolSizeCount = ARRAY_SIZE(pool_sizes);
+         pool_desc.pPoolSizes = pool_sizes;
+         if ((vr = VK_CALL(vkCreateDescriptorPool(vk_device, &pool_desc, NULL, &vk_pool))) < 0)
+@@ -1352,7 +1380,7 @@ static VkDescriptorPool d3d12_command_allocator_allocate_descriptor_pool(
+         }
+     }
+ 
+-    if (!(d3d12_command_allocator_add_descriptor_pool(allocator, vk_pool)))
++    if (!(d3d12_command_allocator_add_descriptor_pool(allocator, vk_pool, !huge_root_signature)))
+     {
+         ERR("Failed to add descriptor pool.\n");
+         VK_CALL(vkDestroyDescriptorPool(vk_device, vk_pool, NULL));
+@@ -1363,7 +1391,8 @@ static VkDescriptorPool d3d12_command_allocator_allocate_descriptor_pool(
+ }
+ 
+ static VkDescriptorSet d3d12_command_allocator_allocate_descriptor_set(
+-        struct d3d12_command_allocator *allocator, VkDescriptorSetLayout vk_set_layout)
++        struct d3d12_command_allocator *allocator, VkDescriptorSetLayout vk_set_layout,
++        const struct d3d12_root_signature_info *root_signature)
+ {
+     struct d3d12_device *device = allocator->device;
+     const struct vkd3d_vk_device_procs *vk_procs = &device->vk_procs;
+@@ -1373,7 +1402,7 @@ static VkDescriptorSet d3d12_command_allocator_allocate_descriptor_set(
+     VkResult vr;
+ 
+     if (!allocator->vk_descriptor_pool)
+-        allocator->vk_descriptor_pool = d3d12_command_allocator_allocate_descriptor_pool(allocator);
++        allocator->vk_descriptor_pool = d3d12_command_allocator_allocate_descriptor_pool(allocator, root_signature);
+     if (!allocator->vk_descriptor_pool)
+         return VK_NULL_HANDLE;
+ 
+@@ -1387,7 +1416,7 @@ static VkDescriptorSet d3d12_command_allocator_allocate_descriptor_set(
+ 
+     allocator->vk_descriptor_pool = VK_NULL_HANDLE;
+     if (vr == VK_ERROR_FRAGMENTED_POOL || vr == VK_ERROR_OUT_OF_POOL_MEMORY_KHR)
+-        allocator->vk_descriptor_pool = d3d12_command_allocator_allocate_descriptor_pool(allocator);
++        allocator->vk_descriptor_pool = d3d12_command_allocator_allocate_descriptor_pool(allocator, root_signature);
+     if (!allocator->vk_descriptor_pool)
+     {
+         ERR("Failed to allocate descriptor set, vr %d.\n", vr);
+@@ -1478,6 +1507,12 @@ static void d3d12_command_allocator_free_resources(struct d3d12_command_allocato
+     }
+     allocator->descriptor_pool_count = 0;
+ 
++    for (i = 0; i < allocator->descriptor_pool_huge_count; ++i)
++    {
++        VK_CALL(vkDestroyDescriptorPool(device->vk_device, allocator->descriptor_pools_huge[i], NULL));
++    }
++    allocator->descriptor_pool_huge_count = 0;
++
+     for (i = 0; i < allocator->framebuffer_count; ++i)
+     {
+         VK_CALL(vkDestroyFramebuffer(device->vk_device, allocator->framebuffers[i], NULL));
+@@ -1755,6 +1790,10 @@ static HRESULT d3d12_command_allocator_init(struct d3d12_command_allocator *allo
+     allocator->descriptor_pools_size = 0;
+     allocator->descriptor_pool_count = 0;
+ 
++    allocator->descriptor_pools_huge = NULL;
++    allocator->descriptor_pools_huge_size = 0;
++    allocator->descriptor_pool_huge_count = 0;
++
+     allocator->views = NULL;
+     allocator->views_size = 0;
+     allocator->view_count = 0;
+@@ -2586,7 +2586,7 @@ static void d3d12_command_list_prepare_descriptors(struct d3d12_command_list *li
+      * we need at the very least a new descriptor set.
+      */
+     bindings->descriptor_set = d3d12_command_allocator_allocate_descriptor_set(list->allocator,
+-            root_signature->vk_set_layout);
++            root_signature->vk_set_layout, &root_signature->info);
+ 
+     bindings->in_use = false;
+ 
+@@ -2621,7 +2621,7 @@ static void d3d12_command_list_prepare_uav_counter_descriptors(struct d3d12_comm
+     if (list->state->uav_counter_mask)
+     {
+         bindings->uav_counter_descriptor_set = d3d12_command_allocator_allocate_descriptor_set(list->allocator,
+-                list->state->vk_set_layout);
++                list->state->vk_set_layout, NULL);
+     }
+     else
+         bindings->uav_counter_descriptor_set = VK_NULL_HANDLE;
+diff --git a/libs/vkd3d/state.c b/libs/vkd3d/state.c
+index ed20de7..eb87350 100644
+--- a/libs/vkd3d/state.c
++++ b/libs/vkd3d/state.c
+@@ -314,23 +314,6 @@ static bool vk_binding_from_d3d12_descriptor_range(struct VkDescriptorSetLayoutB
+     return true;
+ }
+ 
+-struct d3d12_root_signature_info
+-{
+-    size_t cbv_count;
+-    size_t buffer_uav_count;
+-    size_t uav_count;
+-    size_t buffer_srv_count;
+-    size_t srv_count;
+-    size_t sampler_count;
+-
+-    size_t descriptor_count;
+-
+-    size_t root_constant_count;
+-    size_t root_descriptor_count;
+-
+-    size_t cost;
+-};
+-
+ static HRESULT d3d12_root_signature_info_count_descriptors(struct d3d12_root_signature_info *info,
+         const D3D12_DESCRIPTOR_RANGE *range)
+ {
+@@ -919,6 +902,8 @@ static HRESULT d3d12_root_signature_init(struct d3d12_root_signature *root_signa
+     if (FAILED(hr = vkd3d_private_store_init(&root_signature->private_store)))
+         goto fail;
+ 
++    root_signature->info = info;
++
+     d3d12_device_add_ref(root_signature->device = device);
+ 
+     return S_OK;
+diff --git a/libs/vkd3d/vkd3d_private.h b/libs/vkd3d/vkd3d_private.h
+index bd54c67..3a263ef 100644
+--- a/libs/vkd3d/vkd3d_private.h
++++ b/libs/vkd3d/vkd3d_private.h
+@@ -666,6 +666,23 @@ struct d3d12_root_parameter
+ };
+ 
+ /* ID3D12RootSignature */
++struct d3d12_root_signature_info
++{
++    size_t cbv_count;
++    size_t buffer_uav_count;
++    size_t uav_count;
++    size_t buffer_srv_count;
++    size_t srv_count;
++    size_t sampler_count;
++
++    size_t descriptor_count;
++
++    size_t root_constant_count;
++    size_t root_descriptor_count;
++
++    size_t cost;
++};
++
+ struct d3d12_root_signature
+ {
+     ID3D12RootSignature ID3D12RootSignature_iface;
+@@ -699,6 +716,8 @@ struct d3d12_root_signature
+     unsigned int static_sampler_count;
+     VkSampler *static_samplers;
+ 
++    struct d3d12_root_signature_info info;
++
+     struct d3d12_device *device;
+ 
+     struct vkd3d_private_store private_store;
+@@ -846,6 +865,10 @@ struct d3d12_command_allocator
+     size_t descriptor_pools_size;
+     size_t descriptor_pool_count;
+ 
++    VkDescriptorPool *descriptor_pools_huge;
++    size_t descriptor_pools_huge_size;
++    size_t descriptor_pool_huge_count;
++
+     struct vkd3d_view **views;
+     size_t views_size;
+     size_t view_count;
 
 -- 
 2.23.0

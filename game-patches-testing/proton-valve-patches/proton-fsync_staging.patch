@@ -1537,14 +1537,6 @@ diff --git a/dlls/ntdll/thread.c b/dlls/ntdll/thread.c
 index 7d7259425b..c6e86c196b 100644
 --- a/dlls/ntdll/thread.c
 +++ b/dlls/ntdll/thread.c
-@@ -46,6 +46,7 @@
- #include "ddk/wdm.h"
- #include "wine/exception.h"
- #include "esync.h"
-+#include "fsync.h"
- 
- WINE_DEFAULT_DEBUG_CHANNEL(thread);
- 
 @@ -232,6 +233,7 @@ void thread_init(void)
      thread_data->wait_fd[1] = -1;
      thread_data->esync_queue_fd = -1;
@@ -1553,15 +1545,6 @@ index 7d7259425b..c6e86c196b 100644
  
      signal_init_thread( teb );
      virtual_init_threading();
-@@ -261,6 +263,8 @@ void thread_init(void)
- 
-     fill_cpu_info();
- 
-+    fsync_init();
-+
-     esync_init();
- 
-     NtCreateKeyedEvent( &keyed_event, GENERIC_READ | GENERIC_WRITE, NULL, 0 );
 @@ -527,6 +531,7 @@ NTSTATUS WINAPI RtlCreateUserThread( HANDLE process, SECURITY_DESCRIPTOR *descr,
      thread_data->start_stack = (char *)teb->Tib.StackBase;
      thread_data->esync_queue_fd = -1;
@@ -1570,6 +1553,26 @@ index 7d7259425b..c6e86c196b 100644
  
      pthread_attr_init( &attr );
      pthread_attr_setstack( &attr, teb->DeallocationStack,
+diff --git a/dlls/ntdll/loader.c b/dlls/ntdll/loader.c
+index 2f66065e3..98cd95055 100644
+--- a/dlls/ntdll/loader.c
++++ b/dlls/ntdll/loader.c
+@@ -44,6 +44,7 @@
+ #include "ntdll_misc.h"
+ #include "ddk/wdm.h"
+ #include "esync.h"
++#include "fsync.h"
+ 
+ WINE_DEFAULT_DEBUG_CHANNEL(module);
+ WINE_DECLARE_DEBUG_CHANNEL(relay);
+@@ -4407,6 +4407,7 @@ void __wine_process_init(void)
+    peb->ProcessHeap = RtlCreateHeap( HEAP_GROWABLE, NULL, 0, 0, NULL, NULL );
+    peb->LoaderLock = &loader_section;
+ 
++    fsync_init();
+     esync_init();
+ 
+    init_directories();
 diff --git a/include/wine/server_protocol.h b/include/wine/server_protocol.h
 index 0c83438c45..3e2f82e47d 100644
 --- a/include/wine/server_protocol.h
@@ -4408,3 +4411,79 @@ index 20de45bc595..b3871ad3834 100644
                          if (current)
                          {
                              TRACE("Woken up by handle %p [%d].\n", handles[i], i);
+From 455786a3e6750ae502376da06e41424d012d52bf Mon Sep 17 00:00:00 2001
+From: Zebediah Figura <zfigura@codeweavers.com>
+Date: Mon, 16 Sep 2019 12:11:36 -0500
+Subject: [PATCH] ntdll: fix for spincounts
+
+---
+ dlls/ntdll/fsync.c | 14 +++++---------
+ 1 file changed, 5 insertions(+), 9 deletions(-)
+
+diff --git a/dlls/ntdll/fsync.c b/dlls/ntdll/fsync.c
+index b3871ad3834..2c4c656d276 100644
+--- a/dlls/ntdll/fsync.c
++++ b/dlls/ntdll/fsync.c
+@@ -860,18 +860,14 @@ static NTSTATUS __fsync_wait_objects( DWORD count, const HANDLE *handles,
+ 
+                         for (spin = 0; spin < spincount + 1; ++spin)
+                         {
+-                            do
++                            if ((current = __atomic_load_n( &semaphore->count, __ATOMIC_SEQ_CST ))
++                                    && __sync_val_compare_and_swap( &semaphore->count, current, current - 1) == current)
+                             {
+-                                if (!(current = semaphore->count)) goto out;
+-                            } while (__sync_val_compare_and_swap( &semaphore->count, current, current - 1 ) != current);
++                                TRACE("Woken up by handle %p [%d].\n", handles[i], i);
++                                return i;
++                            }
+                             small_pause();
+                         }
+-out:
+-                        if (current)
+-                        {
+-                            TRACE("Woken up by handle %p [%d].\n", handles[i], i);
+-                            return i;
+-                        }
+ 
+                         futexes[i].addr = &semaphore->count;
+                         futexes[i].val = current;
+From 367e8f9e04164299c175ade7a77915d1698d4770 Mon Sep 17 00:00:00 2001
+From: Zebediah Figura <z.figura12@gmail.com>
+Date: Tue, 29 Oct 2019 19:09:17 -0500
+Subject: [PATCH] ntdll/fsync: Fix spincounts for semaphores, again.
+
+---
+ dlls/ntdll/fsync.c | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
+
+diff --git a/dlls/ntdll/fsync.c b/dlls/ntdll/fsync.c
+index 2c4c656d276..16bd38e7c8f 100644
+--- a/dlls/ntdll/fsync.c
++++ b/dlls/ntdll/fsync.c
+@@ -858,10 +858,14 @@ static NTSTATUS __fsync_wait_objects( DWORD count, const HANDLE *handles,
+                         struct semaphore *semaphore = obj->shm;
+                         int current;
+ 
+-                        for (spin = 0; spin < spincount + 1; ++spin)
++                        /* It would be a little clearer (and less error-prone)
++                         * to use a dedicated interlocked_dec_if_nonzero()
++                         * helper, but nesting loops like that is probably not
++                         * great for performance... */
++                        for (spin = 0; spin < spincount + 1 || current; ++spin)
+                         {
+                             if ((current = __atomic_load_n( &semaphore->count, __ATOMIC_SEQ_CST ))
+-                                    && __sync_val_compare_and_swap( &semaphore->count, current, current - 1) == current)
++                                    && __sync_val_compare_and_swap( &semaphore->count, current, current - 1 ) == current)
+                             {
+                                 TRACE("Woken up by handle %p [%d].\n", handles[i], i);
+                                 return i;
+@@ -870,7 +874,7 @@ static NTSTATUS __fsync_wait_objects( DWORD count, const HANDLE *handles,
+                         }
+ 
+                         futexes[i].addr = &semaphore->count;
+-                        futexes[i].val = current;
++                        futexes[i].val = 0;
+                         break;
+                     }
+                     case FSYNC_MUTEX:

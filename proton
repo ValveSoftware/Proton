@@ -343,20 +343,10 @@ class CompatData:
 
             if "wined3d" in g_session.compat_config:
                 dxvkfiles = []
-                wined3dfiles = ["d3d11", "d3d10", "d3d10core", "d3d10_1", "d3d9"]
+                wined3dfiles = ["d3d11", "d3d10", "d3d10core", "d3d10_1", "dxgi", "d3d9"]
             else:
-                dxvkfiles = ["d3d11", "d3d10", "d3d10core", "d3d10_1"]
+                dxvkfiles = ["d3d11", "d3d10", "d3d10core", "d3d10_1", "dxgi", "d3d9"]
                 wined3dfiles = []
-                if "d9vk" in g_session.compat_config:
-                    dxvkfiles.append("d3d9")
-                else:
-                    wined3dfiles.append("d3d9")
-
-            #if the user asked for dxvk's dxgi (dxgi=n), then copy it into place
-            if "WINEDLLOVERRIDES" in os.environ and "dxgi=n" in os.environ["WINEDLLOVERRIDES"]:
-                dxvkfiles.append("dxgi")
-            else:
-                wined3dfiles.append("dxgi")
 
             for f in wined3dfiles:
                 try_copy(g_proton.default_pfx_dir + "drive_c/windows/system32/" + f + ".dll",
@@ -449,7 +439,7 @@ class Session:
             self.compat_config.add("wined3d")
 
         if not self.check_environment("PROTON_USE_WINED3D", "wined3d"):
-            self.check_environment("PROTON_USE_WINED3D11", "wined3d")
+            self.check_environment("PROTON_USE_WINED3D11", "wined3d") | self.check_environment("PROTON_USE_WINED3D12",  "wined3d")
         self.check_environment("PROTON_NO_D3D11", "nod3d11")
         self.check_environment("PROTON_NO_D3D10", "nod3d10")
         self.check_environment("PROTON_NO_D9VK",  "nod3d9")
@@ -507,6 +497,11 @@ class Session:
 
         if "nod3d9" in self.compat_config:
             self.dlloverrides["d3d9"] = ""
+
+        if "vkd3d" in self.compat_config:
+            self.dlloverrides["d3d11"] = ""
+            if "dxgi" in self.dlloverrides:
+                del self.dlloverrides["dxgi"]
 
         import protonfixes
 
