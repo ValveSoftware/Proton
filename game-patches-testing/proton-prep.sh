@@ -30,24 +30,12 @@
     git reset --hard HEAD
     git clean -xdf
 
-    #HOT FIXES
-
-    # https://bugs.winehq.org/show_bug.cgi?id=45774
-    git revert --no-commit 6ccb94392a8ef4bca701ae2a560f4ea1da677edd
-
-
-    # necessary reverts for proton kernelbase
-    git revert --no-commit b0199ea2fe8f9b77aee7ab4f68c9ae1755442586
-    git revert --no-commit 608d086f1b1bb7168e9322c65224c23f34e75f29
-    git revert --no-commit b7db0b52cee65a008f503ce727befcad3ba8d28a
-    git revert --no-commit 3ede217e5cd80b18f709339aea281356579756cb
-    git revert --no-commit 87307de2173ee813daca9bd93ec750f17d3eda94
-    git revert --no-commit 3dadd980bfbb2fb05a1a695decd06a429ddda97c
-    git revert --no-commit e5354008f46bc0e345c06ac06a7a7780faa9398b
-    git revert --no-commit 461b5e56f95eb095d97e4af1cb1c5fd64bb2862a
-
-
-    # necessary reverts for TKG FS Hack
+    #FS HACK REVERTS NECESSARY
+    git revert --no-commit 427152ec7b4ee85631617b693dbf1deea763c0ba
+    git revert --no-commit b7b4bacaf99661e07c2f07a0260680b4e8bed4f8
+    git revert --no-commit acf03ed9da0f7d3f94de9b47c44366be3ee47f8e
+    git revert --no-commit 914b5519b1cd96f9ae19f1eec226e94af96354b9
+    git revert --no-commit 99d047724e768822d6508573cd82a5c75b30bdcb
     git revert --no-commit 413aad39135b0b0f8255500b85fcc05337a5f138
     git revert --no-commit 9ae8da6bb4a8f66d55975fa0f14e5e413756d324
     git revert --no-commit de94cfa775f9f41d1d65cbd8e7bf861cd7f9a871
@@ -91,9 +79,6 @@
     echo "sword art online"
     patch -Np1 < ../game-patches-testing/game-patches/sword-art-online-gnutls.patch
 
-    echo "gta v launcher fix"
-    patch -Np1 < ../game-patches-testing/game-patches/gtav-launcher.patch
-
     echo "lego island fix"
     patch -Np1 < ../game-patches-testing/game-patches/lego-island.patch
 
@@ -106,16 +91,12 @@
     echo "wow d3d12 patch"
     patch -Np1 < ../game-patches-testing/game-patches/wow-d3d12.patch
 
-
     #WINE FSYNC
     echo "applying fsync patches"
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-fsync_staging.patch
 
     #PROTON
     echo "applying proton patches"
-
-    
-    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-kernelbase_reverts.patch
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-protonify_staging_rpc.patch
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-protonify_staging.patch
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-LAA_staging.patch
@@ -124,17 +105,8 @@
     echo "mortal kombat 11 patch"
     patch -Np1 < ../game-patches-testing/game-patches/mk11.patch
 
-    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-use_clock_monotonic.patch
-    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-amd_ags.patch
-    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-hide_prefix_update_window.patch
-
-    #rawinput WIP do not enable
-    #echo "raw input patch"
-    #patch -Np1 < ../game-patches-testing/proton-hotfixes/rbernon-rawinput.patch
-
     #TKG FS Hack
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-FS_bypass_compositor.patch
-    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-fullscreen_hack_staging.patch
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-fullscreen_hack_staging.patch
 
     patch -Np1 < ../game-patches-testing/proton-hotfixes/proton-alt_tab_fix.patch
