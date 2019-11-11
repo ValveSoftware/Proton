@@ -39,6 +39,7 @@ puts "Platform: " + cpus.to_s + " CPUs, " + memory.to_s + " MB memory"
 
 Vagrant.configure(2) do |config|
 
+  config.vagrant.plugins = "vagrant-sshfs"
 
   config.vm.provider "virtualbox" do |v|
     v.cpus = cpus
@@ -48,7 +49,7 @@ Vagrant.configure(2) do |config|
   #deiban10-based build VM
   config.vm.define "debian10", primary: true do |debian10|
     debian10.vm.box = "generic/debian10"
-    debian10.vm.synced_folder "./vagrant_share/", "/vagrant/", id: "share", create: true
+    debian10.vm.synced_folder "./vagrant_share/", "/vagrant/", create: true, type: "sshfs", sshfs_opts_append: "-o cache=no"
     debian10.vm.synced_folder ".", "/home/vagrant/proton", id: "proton", type: "rsync", rsync__exclude: ["vagrant_share"]
 
     debian10.vm.provision "shell", privileged: "true", inline: <<-SHELL

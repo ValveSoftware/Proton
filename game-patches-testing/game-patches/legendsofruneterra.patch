@@ -1,65 +1,15 @@
-From 471dc198a8bdeb9b9f0c5309b9d473253a1c9a31 Mon Sep 17 00:00:00 2001
-From: Zebediah Figura <z.figura12@gmail.com>
-Date: Wed, 6 Nov 2019 21:50:28 -0600
-Subject: [PATCH] ntdll-NtContinue: Also use NtContinue() to continue after an
- exception on x86_64.
-
-Patch by David Torok.
-
-Wine-Bug: https://bugs.winehq.org/show_bug.cgi?id=47970
+@@ -, +, @@ 
 ---
- ...o-continue-execution-after-exception.patch | 30 ++++++++++++++++---
- 1 file changed, 26 insertions(+), 4 deletions(-)
-
-diff --git a/patches/ntdll-NtContinue/0002-Use-NtContinue-to-continue-execution-after-exception.patch b/patches/ntdll-NtContinue/0002-Use-NtContinue-to-continue-execution-after-exception.patch
-index 80bac176b..3e3d55566 100644
---- a/patches/ntdll-NtContinue/0002-Use-NtContinue-to-continue-execution-after-exception.patch
-+++ b/patches/ntdll-NtContinue/0002-Use-NtContinue-to-continue-execution-after-exception.patch
-@@ -1,4 +1,4 @@
--From 1bcb3f9cab95745b01de529ae9b861c667be1394 Mon Sep 17 00:00:00 2001
-+From d2dd24b9d13e1115822022b55e5f48cd5744ead3 Mon Sep 17 00:00:00 2001
- From: Andrew Wesie <awesie@gmail.com>
- Date: Fri, 27 Jul 2018 01:26:56 -0500
- Subject: [PATCH] ntdll: Use NtContinue to continue execution after exceptions.
-@@ -14,9 +14,10 @@ unlikely that it has the correct behavior if called by an external caller.
- The __syscall_NtContinue wrapper is used so that it can be hooked by a
- third-party.
- ---
-- dlls/ntdll/exception.c   | 5 +++--
-- dlls/ntdll/signal_i386.c | 3 ++-
-- 2 files changed, 5 insertions(+), 3 deletions(-)
-+ dlls/ntdll/exception.c     | 5 +++--
-+ dlls/ntdll/signal_i386.c   | 3 ++-
-+ dlls/ntdll/signal_x86_64.c | 3 ++-
-+ 3 files changed, 7 insertions(+), 4 deletions(-)
- 
- diff --git a/dlls/ntdll/exception.c b/dlls/ntdll/exception.c
- index 3b85f1efa0..bc972254f1 100644
-@@ -55,6 +56,27 @@ index e551646301..8fc885ed49 100644
-  }
-  
-  
-+diff --git a/dlls/ntdll/signal_x86_64.c b/dlls/ntdll/signal_x86_64.c
-+index e48529d73a..bf0ae2a98b 100644
-+--- a/dlls/ntdll/signal_x86_64.c
-++++ b/dlls/ntdll/signal_x86_64.c
-+@@ -2520,6 +2520,7 @@ static NTSTATUS call_stack_handlers( EXCEPTION_RECORD *rec, CONTEXT *orig_contex
-+     return STATUS_UNHANDLED_EXCEPTION;
-+ }
-+ 
-++NTSTATUS WINAPI __syscall_NtContinue( CONTEXT *context, BOOLEAN alert );
-+ 
-+ static NTSTATUS raise_exception( EXCEPTION_RECORD *rec, CONTEXT *context, BOOL first_chance )
-+ {
-+@@ -2582,7 +2583,7 @@ static NTSTATUS raise_exception( EXCEPTION_RECORD *rec, CONTEXT *context, BOOL f
-+     }
-+ 
-+ done:
-+-    return NtSetContextThread( GetCurrentThread(), context );
-++    return __syscall_NtContinue( GetCurrentThread(), context );
-+ }
-+ 
-+ 
- -- 
- 2.23.0
-
+ dlls/ntdll/signal_x86_64.c | 1 +
+ 1 file changed, 1 insertion(+)
+--- a/dlls/ntdll/signal_x86_64.c	
++++ a/dlls/ntdll/signal_x86_64.c	
+@@ -4204,6 +4204,7 @@ static void init_thread_context( CONTEXT *context, LPTHREAD_START_ROUTINE entry,
+ {
+     __asm__( "movw %%cs,%0" : "=m" (context->SegCs) );
+     __asm__( "movw %%ss,%0" : "=m" (context->SegSs) );
++    __asm__( "movw %0,%%ds" :: "m" (context->SegSs) );
+     context->Rcx    = (ULONG_PTR)entry;
+     context->Rdx    = (ULONG_PTR)arg;
+     context->Rsp    = (ULONG_PTR)NtCurrentTeb()->Tib.StackBase - 0x28;
+-- 

@@ -20,9 +20,8 @@
     cd d9vk
     git reset --hard HEAD
     git clean -xdf
-    # revert this as it breaks Warlock: Master of the Arcane
-    #git revert --no-commit 9d571bf74aa80a15baa98a6bc20305e068e13c73
-    #git revert --no-commit c2a42cc7b9d60ebfda1198e1bd28e09a2fd72545
+    # revert this as it breaks "new game" in Warlock: Master of the Arcane
+    git revert --no-commit 3909a78579e7fef47bdda38562595f7f36e6c0b6
     cd ..
 
     #WINE
@@ -31,11 +30,6 @@
     git clean -xdf
 
     #FS HACK REVERTS NECESSARY
-    git revert --no-commit 427152ec7b4ee85631617b693dbf1deea763c0ba
-    git revert --no-commit b7b4bacaf99661e07c2f07a0260680b4e8bed4f8
-    git revert --no-commit acf03ed9da0f7d3f94de9b47c44366be3ee47f8e
-    git revert --no-commit 914b5519b1cd96f9ae19f1eec226e94af96354b9
-    git revert --no-commit 99d047724e768822d6508573cd82a5c75b30bdcb
     git revert --no-commit 413aad39135b0b0f8255500b85fcc05337a5f138
     git revert --no-commit 9ae8da6bb4a8f66d55975fa0f14e5e413756d324
     git revert --no-commit de94cfa775f9f41d1d65cbd8e7bf861cd7f9a871
@@ -73,6 +67,9 @@
     echo "final fantasy XIV"
     patch -Np1 < ../game-patches-testing/game-patches/ffxiv-launcher.patch
 
+    echo "rockstar launcher patch"
+    patch -Np1 < ../game-patches-testing/game-patches/gtav-launcher.patch
+
     echo "assetto corsa"
     patch -Np1 < ../game-patches-testing/game-patches/assettocorsa-hud.patch
 
@@ -82,7 +79,7 @@
     echo "lego island fix"
     patch -Np1 < ../game-patches-testing/game-patches/lego-island.patch
 
-    echo "leends of runeterra fix"
+    echo "legends of runeterra"
     patch -Np1 < ../game-patches-testing/game-patches/legendsofruneterra.patch
 
     echo "steam crossover patch"
