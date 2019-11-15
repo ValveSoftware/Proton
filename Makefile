@@ -136,6 +136,13 @@ dxvk: configure
 		cp $(BUILD_DIR)/dist/dist/lib/wine/dxvk/*.dll /vagrant/dxvk/lib/wine/dxvk/ && \
 		cp $(BUILD_DIR)/dist/dist/lib64/wine/dxvk/*.dll /vagrant/dxvk/lib64/wine/dxvk/'
 
+d9vk: configure
+	mkdir -p vagrant_share/d9vk/lib/wine/dxvk/
+	mkdir -p vagrant_share/d9vk/lib64/wine/dxvk/
+	vagrant ssh -c 'make -C $(BUILD_DIR)/ $(UNSTRIPPED) d9vk && \
+		cp $(BUILD_DIR)/dist/dist/lib/wine/dxvk/*.dll /vagrant/d9vk/lib/wine/dxvk/ && \
+		cp $(BUILD_DIR)/dist/dist/lib64/wine/dxvk/*.dll /vagrant/d9vk/lib64/wine/dxvk/'
+
 vkd3d: configure
 	mkdir -p vagrant_share/vkd3d/lib/
 	mkdir -p vagrant_share/vkd3d/lib64/
