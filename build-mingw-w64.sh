@@ -30,6 +30,11 @@ MINGW_W64_GITVER=v6.0.0
 MINGW_W64_GITURL="git://git.code.sf.net/p/mingw-w64/mingw-w64"
 MINGW_W64_SRCDIR=mingw-w64-git
 
+ISL_VER=0.21
+ISL_SRCTARBALL=isl-$ISL_VER.tar.bz2
+ISL_URL="http://isl.gforge.inria.fr/isl-$ISL_VER.tar.bz2"
+ISL_SRCDIR=isl-$ISL_VER
+
 function setup_src {
     if [ ! -e "$BINUTILS_SRCTARBALL" ]; then
         wget -O "$BINUTILS_SRCTARBALL" "$BINUTILS_URL"
@@ -42,12 +47,21 @@ function setup_src {
         done
     fi
 
+    if [ ! -e "$ISL_SRCTARBALL" ]; then
+        wget -O "$ISL_SRCTARBALL" "$ISL_URL"
+    fi
+
+    if [ ! -e "$ISL_SRCDIR" ]; then
+        tar -xf "$ISL_SRCTARBALL"
+    fi
+
     if [ ! -e "$GCC_SRCTARBALL" ]; then
         wget -O "$GCC_SRCTARBALL" "$GCC_URL"
     fi
 
     if [ ! -e "$GCC_SRCDIR" ]; then
         tar -xf "$GCC_SRCTARBALL"
+        ln -s ../$ISL_SRCDIR $GCC_SRCDIR/isl
     fi
 
     if [ ! -e "$MINGW_W64_SRCDIR" ]; then
@@ -74,8 +88,12 @@ function build_arch {
                     --build=$BUILD_ARCH \
                     --host=$HOST_ARCH \
                     --target=$WIN32_TARGET_ARCH \
-                    --disable-multilib \
                     --enable-lto \
+                    --enable-plugins \
+                    --enable-deterministic-archives \
+                    --disable-multilib \
+                    --disable-nls \
+                    --disable-werror \
                     $BINUTILS_EXTRA_CONFIGURE
             fi
             make $JOBS configure-host
@@ -108,15 +126,16 @@ function build_arch {
                     --build=$BUILD_ARCH \
                     --host=$HOST_ARCH \
                     --target=$WIN32_TARGET_ARCH \
-                    --with-gnu-ld \
-                    --with-gnu-as \
-                    --enable-languages=c,c++ \
+                    --enable-static \
+                    --enable-shared \
+                    --enable-languages=c,lto,c++ \
                     --disable-multilib \
                     --enable-threads=posix \
                     --enable-fully-dynamic-string \
                     --enable-libstdcxx-time=yes \
                     --enable-libstdcxx-filesystem-ts=yes \
                     --enable-cloog-backend=isl \
+                    --enable-libgomp \
                     --enable-lto \
                     --disable-sjlj-exceptions \
                     --with-dwarf2 \
