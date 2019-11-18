@@ -1,0 +1,54 @@
+From: Derek Lesho <dlesho@codeweavers.com>
+Subject: [PATCH v3 1/4] winex11: Set the scan code prefix when necessary.
+Message-Id: <20191112205019.44202-2-dlesho@codeweavers.com>
+Date: Tue, 12 Nov 2019 14:50:16 -0600
+In-Reply-To: <20191112205019.44202-1-dlesho@codeweavers.com>
+References: <20191112205019.44202-1-dlesho@codeweavers.com>
+
+Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
+---
+ dlls/winex11.drv/keyboard.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
+
+diff --git a/dlls/winex11.drv/keyboard.c b/dlls/winex11.drv/keyboard.c
+index 131c5f5442..3b7a6fa252 100644
+--- a/dlls/winex11.drv/keyboard.c
++++ b/dlls/winex11.drv/keyboard.c
+@@ -2077,7 +2077,7 @@ SHORT CDECL X11DRV_VkKeyScanEx(WCHAR wChar, HKL hkl)
+  */
+ UINT CDECL X11DRV_MapVirtualKeyEx(UINT wCode, UINT wMapType, HKL hkl)
+ {
+-    UINT ret = 0;
++    UINT ret = 0, prefix = 0;
+     int keyc;
+     Display *display = thread_init_display();
+ 
+@@ -2107,6 +2107,13 @@ UINT CDECL X11DRV_MapVirtualKeyEx(UINT wCode, UINT wMapType, HKL hkl)
+                     break;
+                 }
+             }
++
++            /* set scan code prefix */
++            if (wCode == VK_RCONTROL || wCode == VK_RMENU)
++                prefix = 0xE0;
++
++            if (wMapType == MAPVK_VK_TO_VSC_EX)
++                ret |= ((prefix << 8) & 0xFF00);
+             break;
+ 
+         case MAPVK_VSC_TO_VK: /* scan-code to vkey-code */
+
+-- 
+2.23.0
+
+--- a/dlls/winex11.drv/event.c
++++ b/dlls/winex11.drv/event.c
+@@ -1299,8 +1299,6 @@ static void handle_wm_state_notify( HWND hwnd, XPropertyEvent *event, BOOL updat
+             {
+                 TRACE( "restoring win %p/%lx\n", data->hwnd, data->whole_window );
+                 release_win_data( data );
+-                if ((style & (WS_MINIMIZE | WS_VISIBLE)) == (WS_MINIMIZE | WS_VISIBLE))
+-                    SetActiveWindow( hwnd );
+                 SendMessageW( hwnd, WM_SYSCOMMAND, SC_RESTORE, 0 );
+                 return;
+             }

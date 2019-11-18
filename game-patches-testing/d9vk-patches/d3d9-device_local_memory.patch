@@ -1,0 +1,60 @@
+diff --git a/src/util/config/config.cpp b/src/util/config/config.cpp
+index da46e3eb0..8f0fe528f 100644
+--- a/src/util/config/config.cpp
++++ b/src/util/config/config.cpp
+@@ -251,6 +251,10 @@ namespace dxvk {
+       { "d3d9.memoryTrackTest",             "True" },
+       { "d3d9.maxAvailableMemory",          "1073741824" },
+     }} },
++    /* Warlock: Master of the Arcane        */
++    { R"(\\Game\.exe$)", {{
++      { "d3d9.deviceLocalMemory",        "True" },
++    }} },
+   }};
+ 
+ 
+diff --git a/src/d3d9/d3d9_options.h b/src/d3d9/d3d9_options.h
+index d0a5c59d1..eceedd8fe 100644
+--- a/src/d3d9/d3d9_options.h
++++ b/src/d3d9/d3d9_options.h
+@@ -100,6 +100,9 @@ namespace dxvk {
+ 
+     /// Support VCACHE query
+     bool supportVCache;
++
++    /// Allow DEVICE_LOCAL memory for shader constant buffers
++    bool deviceLocalMemory;
+   };
+ 
+ }
+\ No newline at end of file
+diff --git a/src/d3d9/d3d9_options.cpp b/src/d3d9/d3d9_options.cpp
+index 85322f562..0a092f728 100644
+--- a/src/d3d9/d3d9_options.cpp
++++ b/src/d3d9/d3d9_options.cpp
+@@ -58,6 +58,7 @@ namespace dxvk {
+     this->invariantPosition     = config.getOption<bool>    ("d3d9.invariantPosition",     false);
+     this->memoryTrackTest       = config.getOption<bool>    ("d3d9.memoryTrackTest",       false);
+     this->supportVCache         = config.getOption<bool>    ("d3d9.supportVCache",         vendorId == 0x10de);
++    this->deviceLocalMemory     = config.getOption<bool>    ("d3d9.deviceLocalMemory",     false);
+ 
+     // If we are not Nvidia, enable general hazards.
+     this->generalHazards = adapter == nullptr || !adapter->matchesDriver(DxvkGpuVendor::Nvidia, VK_DRIVER_ID_NVIDIA_PROPRIETARY_KHR, 0, 0);
+diff --git a/src/d3d9/d3d9_device.cpp b/src/d3d9/d3d9_device.cpp
+index 9ff65aeb0..a6c3dd5fd 100644
+--- a/src/d3d9/d3d9_device.cpp
++++ b/src/d3d9/d3d9_device.cpp
+@@ -4614,6 +4614,13 @@ namespace dxvk {
+     VkMemoryPropertyFlags memoryFlags = VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
+                                       | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;
+ 
++    if(m_d3d9Options.deviceLocalMemory)
++    {
++        memoryFlags = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
++                    | VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
++                    | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;
++    }
++
+     info.stages = VK_PIPELINE_STAGE_VERTEX_SHADER_BIT;
+     info.size   = m_vsLayout.totalSize();
+     m_consts[DxsoProgramTypes::VertexShader].buffer = m_dxvkDevice->createBuffer(info, memoryFlags);

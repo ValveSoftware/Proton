@@ -407,9 +407,9 @@ index 394feabb..df05ecd8 100644
    DxvkOptions::DxvkOptions(const Config& config) {
      enableStateCache      = config.getOption<bool>    ("dxvk.enableStateCache",       true);
 +    useAsync              = config.getOption<bool>    ("dxvk.useAsync",               false);
+     enableOpenVR          = config.getOption<bool>    ("dxvk.enableOpenVR",           true);
      numCompilerThreads    = config.getOption<int32_t> ("dxvk.numCompilerThreads",     0);
      asyncPresent          = config.getOption<Tristate>("dxvk.asyncPresent",           Tristate::Auto);
-     useRawSsbo            = config.getOption<Tristate>("dxvk.useRawSsbo",             Tristate::Auto);
 diff --git a/src/dxvk/dxvk_options.h b/src/dxvk/dxvk_options.h
 index 79259875..db2f8a32 100644
 --- a/src/dxvk/dxvk_options.h

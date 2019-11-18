@@ -425,11 +425,11 @@ index 16e9bf7d540..673cb2953ce 100644
 --- a/dlls/winebus.sys/bus.h
 +++ b/dlls/winebus.sys/bus.h
 @@ -44,7 +44,7 @@ void *get_platform_private(DEVICE_OBJECT *device) DECLSPEC_HIDDEN;
- /* HID Plug and Play Bus */
- DEVICE_OBJECT *bus_create_hid_device(const WCHAR *busidW, WORD vid, WORD pid,
+ NTSTATUS WINAPI common_pnp_dispatch(DEVICE_OBJECT *device, IRP *irp) DECLSPEC_HIDDEN;
+ DEVICE_OBJECT *bus_create_hid_device(DRIVER_OBJECT *driver, const WCHAR *busidW, WORD vid, WORD pid,
                                       WORD input, DWORD version, DWORD uid, const WCHAR *serialW, BOOL is_gamepad,
--                                     const platform_vtbl *vtbl, DWORD platform_data_size) DECLSPEC_HIDDEN;
-+                                     const platform_vtbl *vtbl, DWORD platform_data_size, BOOL xinput_hack) DECLSPEC_HIDDEN;
+-                                     const GUID *class, const platform_vtbl *vtbl, DWORD platform_data_size) DECLSPEC_HIDDEN;
++                                     const GUID *class, const platform_vtbl *vtbl, DWORD platform_data_size, BOOL xinput_hack) DECLSPEC_HIDDEN;
  DEVICE_OBJECT *bus_find_hid_device(const platform_vtbl *vtbl, void *platform_dev) DECLSPEC_HIDDEN;
  void bus_remove_hid_device(DEVICE_OBJECT *device) DECLSPEC_HIDDEN;
  NTSTATUS WINAPI hid_internal_dispatch(DEVICE_OBJECT *device, IRP *irp) DECLSPEC_HIDDEN;
@@ -439,8 +439,8 @@ index 95077ac0be2..bd8986f2d4c 100644
 +++ b/dlls/winebus.sys/bus_iohid.c
 @@ -344,7 +344,7 @@ static void handle_DeviceMatchingCallback(void *context, IOReturn result, void *
  
-     device = bus_create_hid_device(busidW, vid, pid, input,
-             version, uid, str ? serial_string : NULL, is_gamepad,
+     device = bus_create_hid_device(iohid_driver_obj, busidW, vid, pid, input,
+             version, uid, str?serial_string:NULL, is_gamepad, &GUID_DEVCLASS_IOHID,
 -            &iohid_vtbl, sizeof(struct platform_private));
 +            &iohid_vtbl, sizeof(struct platform_private), FALSE);
      if (!device)
@@ -523,11 +523,11 @@ index d02572da59a..4608f249c4b 100644
  
          axis_count = pSDL_JoystickNumAxes(joystick);
 @@ -978,7 +990,7 @@ static void try_add_device(SDL_JoystickID index)
-         input = 0;
  
-     device = bus_create_hid_device(sdl_busidW, vid, pid, input, version, index,
--            serial, is_xbox_gamepad, &sdl_vtbl, sizeof(struct platform_private));
-+            serial, is_xbox_gamepad, &sdl_vtbl, sizeof(struct platform_private), xinput_hack);
+     device = bus_create_hid_device(sdl_driver_obj, sdl_busidW, vid, pid,
+             input, version, index, serial, is_xbox_gamepad, &GUID_DEVCLASS_SDL,
+-            &sdl_vtbl, sizeof(struct platform_private));
++            &sdl_vtbl, sizeof(struct platform_private), xinput_hack);
  
      if (device)
      {
@@ -583,15 +583,15 @@ index c1b93d2bfd7..72b17179e64 100644
      if (strcmp(subsystem, "hidraw") == 0)
      {
          device = bus_create_hid_device(hidraw_busidW, vid, pid, input, version, 0, serial, is_gamepad,
--                                       &hidraw_vtbl, sizeof(struct platform_private));
-+                                       &hidraw_vtbl, sizeof(struct platform_private), FALSE);
+-                                       &GUID_DEVCLASS_HIDRAW, &hidraw_vtbl, sizeof(struct platform_private));
++                                       &GUID_DEVCLASS_HIDRAW, &hidraw_vtbl, sizeof(struct platform_private), FALSE);
      }
  #ifdef HAS_PROPER_INPUT_HEADER
      else if (strcmp(subsystem, "input") == 0)
      {
          device = bus_create_hid_device(lnxev_busidW, vid, pid, input, version, 0, serial, is_gamepad,
--                                       &lnxev_vtbl, sizeof(struct wine_input_private));
-+                                       &lnxev_vtbl, sizeof(struct wine_input_private), FALSE);
+-                                       &GUID_DEVCLASS_LINUXEVENT, &lnxev_vtbl, sizeof(struct wine_input_private));
++                                       &GUID_DEVCLASS_LINUXEVENT, &lnxev_vtbl, sizeof(struct wine_input_private), FALSE);
      }
  #endif
  
@@ -610,10 +610,10 @@ index 299cec5034d..678de08b238 100644
  
 @@ -198,7 +198,8 @@ static WCHAR *get_compatible_ids(DEVICE_OBJECT *device)
  
- DEVICE_OBJECT *bus_create_hid_device(const WCHAR *busidW, WORD vid, WORD pid,
+ DEVICE_OBJECT *bus_create_hid_device(DRIVER_OBJECT *driver, const WCHAR *busidW, WORD vid, WORD pid,
                                       WORD input, DWORD version, DWORD uid, const WCHAR *serialW, BOOL is_gamepad,
--                                     const platform_vtbl *vtbl, DWORD platform_data_size)
-+                                     const platform_vtbl *vtbl, DWORD platform_data_size,
+-                                     const GUID *class, const platform_vtbl *vtbl, DWORD platform_data_size)
++                                     const GUID *class, const platform_vtbl *vtbl, DWORD platform_data_size,
 +                                     BOOL xinput_hack)
  {
      static const WCHAR device_name_fmtW[] = {'\\','D','e','v','i','c','e','\\','%','s','#','%','p',0};
@@ -935,12 +935,12 @@ index 89ea65bba6..711e333f4c 100644
 --- a/dlls/winebus.sys/main.c
 +++ b/dlls/winebus.sys/main.c
 @@ -838,7 +838,7 @@ static void mouse_device_create(void)
- {
      static const WCHAR busidW[] = {'W','I','N','E','M','O','U','S','E',0};
  
--    mouse_obj = bus_create_hid_device(busidW, 0, 0, -1, 0, 0, busidW, FALSE, &mouse_vtbl, 0);
-+    mouse_obj = bus_create_hid_device(busidW, 0, 0, -1, 0, 0, busidW, FALSE, &mouse_vtbl, 0, 0);
-     IoInvalidateDeviceRelations(bus_pdo, BusRelations);
+     mouse_obj = bus_create_hid_device(busidW, 0, 0, -1, 0, 0, busidW, FALSE,
+-            &wine_mouse_class, &mouse_vtbl, 0);
++            &wine_mouse_class, &mouse_vtbl, 0, 0);
+     IoInvalidateDeviceRelations(mouse_obj, BusRelations);
  }
  
 From 45fda2263b4dac746e356fd603d9f1207d7b8f6a Mon Sep 17 00:00:00 2001
@@ -1211,13 +1211,13 @@ diff --git a/dlls/winebus.sys/main.c b/dlls/winebus.sys/main.c
 index dd55655572c..dd767a59d19 100644
 --- a/dlls/winebus.sys/main.c
 +++ b/dlls/winebus.sys/main.c
-@@ -487,13 +487,12 @@ static NTSTATUS fdo_pnp_dispatch(DEVICE_OBJECT *device, IRP *irp)
+@@ -487,13 +487,13 @@ static NTSTATUS fdo_pnp_dispatch(DEVICE_OBJECT *device, IRP *irp)
+         irp->IoStatus.u.Status = handle_IRP_MN_QUERY_DEVICE_RELATIONS(irp);
          break;
      case IRP_MN_START_DEVICE:
-         mouse_device_create();
 +        udev_driver_init();
 +        iohid_driver_init();
- 
++
          if (check_bus_option(&SDL_enabled, 1))
          {
 -            if (sdl_driver_init() == STATUS_SUCCESS)

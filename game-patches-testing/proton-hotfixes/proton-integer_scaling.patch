@@ -1,0 +1,145 @@
+From 16c68ef126f47c5df5f882b73146bf152523df34 Mon Sep 17 00:00:00 2001
+From: Joshua Ashton <joshua@froggi.es>
+Date: Wed, 13 Nov 2019 19:37:50 +0000
+Subject: [PATCH 1/2] winex11: Implement integer scaling option
+
+This adds the env var PROTON_FSHACK_INTEGER_SCALING to do nearest neighbour upscaling for fshack.
+
+May help out some users playing pixel art titles at lower resolutions for UI scale or other reasons.
+---
+ dlls/winex11.drv/opengl.c | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
+
+diff --git a/dlls/winex11.drv/opengl.c b/dlls/winex11.drv/opengl.c
+index e237456fbe9..e7054e1498d 100644
+--- a/dlls/winex11.drv/opengl.c
++++ b/dlls/winex11.drv/opengl.c
+@@ -214,6 +214,7 @@ struct wgl_context
+     GLuint fs_hack_fbo, fs_hack_resolve_fbo;
+     GLuint fs_hack_color_texture, fs_hack_ds_texture;
+     GLuint fs_hack_color_renderbuffer, fs_hack_color_resolve_renderbuffer, fs_hack_ds_renderbuffer;
++    GLenum fs_hack_filter;
+     POINT setup_for;
+     GLuint current_draw_fbo, current_read_fbo;
+     struct list entry;
+@@ -1985,6 +1986,7 @@ static void fs_hack_setup_context( struct wgl_context *ctx, struct gl_drawable *
+         {GLX_FRAMEBUFFER_SRGB_CAPABLE_EXT, offsetof(struct fs_hack_fbconfig_attribs, srgb)},
+     };
+     BYTE *ptr = (BYTE *)&attribs;
++    const char* filter_name = getenv("PROTON_FSHACK_INTEGER_SCALING");
+ 
+     if (ctx->fs_hack)
+     {
+@@ -1995,6 +1997,10 @@ static void fs_hack_setup_context( struct wgl_context *ctx, struct gl_drawable *
+         opengl_funcs.gl.p_glGetFloatv( GL_COLOR_CLEAR_VALUE, prev_clear_color );
+         TRACE( "Previous draw FBO %u, read FBO %u for ctx %p\n", prev_draw_fbo, prev_read_fbo, ctx);
+ 
++        ctx->fs_hack_filter = GL_LINEAR;
++        if (filter_name != NULL && !strcmp(filter_name, "1"))
++            ctx->fs_hack_filter = GL_NEAREST;
++
+         if (!ctx->fs_hack_fbo)
+         {
+             pglGenFramebuffers( 1, &ctx->fs_hack_fbo );
+@@ -2344,6 +2350,7 @@ static void fs_hack_blit_framebuffer( struct gl_drawable *gl, GLenum draw_buffer
+     POINT real = fs_hack_real_mode();
+     POINT scaled_origin = {0, 0};
+     float prev_clear_color[4];
++    GLenum filter = ctx->fs_hack_filter;
+ 
+     fs_hack_user_to_real(&scaled_origin);
+ 
+@@ -2369,7 +2376,7 @@ static void fs_hack_blit_framebuffer( struct gl_drawable *gl, GLenum draw_buffer
+     if (ctx->fs_hack_color_resolve_renderbuffer)
+     {
+         pglBindFramebuffer( GL_DRAW_FRAMEBUFFER, ctx->fs_hack_resolve_fbo );
+-        pglBlitFramebuffer( 0, 0, src.x, src.y, 0, 0, src.x, src.y, GL_COLOR_BUFFER_BIT, GL_NEAREST );
++        pglBlitFramebuffer( 0, 0, src.x, src.y, 0, 0, src.x, src.y, GL_COLOR_BUFFER_BIT, filter );
+         pglBindFramebuffer( GL_READ_FRAMEBUFFER, ctx->fs_hack_resolve_fbo );
+     }
+     pglBindFramebuffer( GL_DRAW_FRAMEBUFFER, 0 );
+@@ -2383,7 +2390,7 @@ static void fs_hack_blit_framebuffer( struct gl_drawable *gl, GLenum draw_buffer
+     opengl_funcs.gl.p_glClear( GL_COLOR_BUFFER_BIT );
+     opengl_funcs.gl.p_glClearColor( prev_clear_color[0], prev_clear_color[1], prev_clear_color[2], prev_clear_color[3] );
+ 
+-    pglBlitFramebuffer( 0, 0, src.x, src.y, scaled_origin.x, scaled_origin.y, scaled_origin.x + scaled.x, scaled_origin.y + scaled.y, GL_COLOR_BUFFER_BIT, GL_LINEAR );
++    pglBlitFramebuffer( 0, 0, src.x, src.y, scaled_origin.x, scaled_origin.y, scaled_origin.x + scaled.x, scaled_origin.y + scaled.y, GL_COLOR_BUFFER_BIT, filter );
+     //HACK
+     if ( draw_buffer == GL_FRONT )
+         pglXSwapBuffers(gdi_display, gl->drawable);
+
+From 18285c3d36064e9702ab690a7a2d1f6648c063c4 Mon Sep 17 00:00:00 2001
+From: Joshua Ashton <joshua@froggi.es>
+Date: Wed, 13 Nov 2019 19:38:05 +0000
+Subject: [PATCH 2/2] winevulkan: Implement integer scaling option
+
+This adds the env var PROTON_FSHACK_INTEGER_SCALING to do nearest neighbour upscaling for fshack.
+
+May help out some users playing pixel art titles at lower resolutions for UI scale or other reasons.
+---
+ dlls/winevulkan/vulkan.c         | 11 ++++++++---
+ dlls/winevulkan/vulkan_private.h |  1 +
+ 2 files changed, 9 insertions(+), 3 deletions(-)
+
+diff --git a/dlls/winevulkan/vulkan.c b/dlls/winevulkan/vulkan.c
+index ddcb95cd422..984e3da6653 100644
+--- a/dlls/winevulkan/vulkan.c
++++ b/dlls/winevulkan/vulkan.c
+@@ -19,6 +19,7 @@
+ 
+ #include <stdarg.h>
+ #include <math.h>
++#include <stdlib.h>
+ 
+ #include "windef.h"
+ #include "winbase.h"
+@@ -1699,6 +1700,7 @@ VkResult WINAPI wine_vkCreateSwapchainKHR(VkDevice device, const VkSwapchainCrea
+     VkExtent2D user_sz;
+     struct VkSwapchainKHR_T *object;
+     uint32_t i;
++    const char* filter_name = getenv("PROTON_FSHACK_INTEGER_SCALING");
+ 
+     TRACE("%p, %p, %p, %p\n", device, pCreateInfo, pAllocator, pSwapchain);
+ 
+@@ -1748,6 +1750,9 @@ VkResult WINAPI wine_vkCreateSwapchainKHR(VkDevice device, const VkSwapchainCrea
+         }
+ 
+         object->fs_hack_enabled = TRUE;
++        object->fs_hack_filter = VK_FILTER_LINEAR;
++        if (filter_name != NULL && !strcmp(filter_name, "1"))
++            object->fs_hack_filter = VK_FILTER_NEAREST;
+     }
+ 
+     result = device->funcs.p_vkCreateSwapchainKHR(device->device, &our_createinfo, NULL, &object->swapchain);
+@@ -1946,8 +1951,8 @@ static VkResult init_blit_images(VkDevice device, struct VkSwapchainKHR_T *swapc
+     uint32_t blit_memory_type = -1, i;
+ 
+     samplerInfo.sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;
+-    samplerInfo.magFilter = VK_FILTER_LINEAR;
+-    samplerInfo.minFilter = VK_FILTER_LINEAR;
++    samplerInfo.magFilter = swapchain->fs_hack_filter;
++    samplerInfo.minFilter = swapchain->fs_hack_filter;
+     samplerInfo.addressModeU = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_BORDER;
+     samplerInfo.addressModeV = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_BORDER;
+     samplerInfo.addressModeW = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_BORDER;
+@@ -2494,7 +2499,7 @@ static VkResult record_graphics_cmd(VkDevice device, struct VkSwapchainKHR_T *sw
+     device->funcs.p_vkCmdBlitImage(hack->cmd,
+             hack->user_image, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
+             hack->swapchain_image, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+-            1, &blitregion, VK_FILTER_LINEAR /* CUBIC_IMG? */);
++            1, &blitregion, swapchain->fs_hack_filter);
+ 
+     /* transition user image from TRANSFER_SRC_OPTIMAL to GENERAL */
+     barriers[0].sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
+diff --git a/dlls/winevulkan/vulkan_private.h b/dlls/winevulkan/vulkan_private.h
+index 145635eea24..00626eff1e3 100644
+--- a/dlls/winevulkan/vulkan_private.h
++++ b/dlls/winevulkan/vulkan_private.h
+@@ -165,6 +165,7 @@ struct VkSwapchainKHR_T
+     VkDeviceMemory user_image_memory, blit_image_memory;
+     uint32_t n_images;
+     struct fs_hack_image *fs_hack_images; /* struct fs_hack_image[n_images] */
++    VkFilter fs_hack_filter;
+     VkSampler sampler;
+     VkDescriptorPool descriptor_pool;
+     VkDescriptorSetLayout descriptor_set_layout;

@@ -180,14 +180,14 @@ index d7dbe573a4f..e03335a2709 100644
  /******************************************************************************
   *	load_native_dll  (internal)
 @@ -3550,7 +3671,7 @@ void __wine_process_init(void)
+     version_init( wm->ldr.FullDllName.Buffer );
      user_shared_data_init();
      hidden_exports_init( wm->ldr.FullDllName.Buffer );
- 
 -    virtual_set_large_address_space();
 +    virtual_set_large_address_space(needs_override_large_address_aware(NtCurrentTeb()->Peb->ProcessParameters->ImagePathName.Buffer));
  
-     /* elevate process if necessary */
-     status = RtlQueryInformationActivationContext( 0, NULL, 0, RunlevelInformationInActivationContext,
+     LdrQueryImageFileExecutionOptions( &wm->ldr.FullDllName, globalflagW, REG_DWORD,
+                                        &NtCurrentTeb()->Peb->NtGlobalFlag, sizeof(DWORD), NULL );
 diff --git a/dlls/ntdll/ntdll.spec b/dlls/ntdll/ntdll.spec
 index fe96472cb86..42f6ee2576d 100644
 --- a/dlls/ntdll/ntdll.spec
