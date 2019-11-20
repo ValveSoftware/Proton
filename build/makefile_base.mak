@@ -834,33 +834,36 @@ WINE32_MAKE_ARGS := \
 $(WINE_CONFIGURE_FILES64): SHELL = $(CONTAINER_SHELL64)
 $(WINE_CONFIGURE_FILES64): $(MAKEFILE_DEP) | faudio64 vkd3d64 $(WINE_OBJ64) bison64
 	cd $(dir $@) && \
-		STRIP=$(STRIP_QUOTED) \
-		PATH="$(dir $(abspath $(BISON_BIN64))):$(PATH)" \
-		CFLAGS="-I$(abspath $(TOOLS_DIR64))/include -g $(COMMON_FLAGS)" \
-		CXXFLAGS="-I$(abspath $(TOOLS_DIR64))/include -g $(COMMON_FLAGS) -fno-gnu-unique -std=c++17" \
-		LDFLAGS=-L$(abspath $(TOOLS_DIR64))/lib \
-		PKG_CONFIG_PATH=$(abspath $(TOOLS_DIR64))/lib/pkgconfig \
-		CC=$(CC_QUOTED) \
-		CXX=$(CXX_QUOTED) \
 		../$(WINE)/configure \
 			--without-curses \
-			--enable-win64 --disable-tests --prefix=$(abspath $(DST_DIR))
+			--enable-win64 \
+			--disable-tests \
+			--prefix=$(abspath $(DST_DIR)) \
+			STRIP=$(STRIP_QUOTED) \
+			PATH="$(dir $(abspath $(BISON_BIN64))):$(PATH)" \
+			CFLAGS="-I$(abspath $(TOOLS_DIR64))/include -g $(COMMON_FLAGS)" \
+			CXXFLAGS="-I$(abspath $(TOOLS_DIR64))/include -g $(COMMON_FLAGS) -fno-gnu-unique -std=c++17" \
+			LDFLAGS=-L$(abspath $(TOOLS_DIR64))/lib \
+			PKG_CONFIG_PATH=$(abspath $(TOOLS_DIR64))/lib/pkgconfig \
+			CC=$(CC_QUOTED) \
+			CXX=$(CXX_QUOTED)
 
 # 32-bit configure
 $(WINE_CONFIGURE_FILES32): SHELL = $(CONTAINER_SHELL32)
 $(WINE_CONFIGURE_FILES32): $(MAKEFILE_DEP) | faudio32 vkd3d32 $(WINE_OBJ32) bison32
 	cd $(dir $@) && \
-		STRIP=$(STRIP_QUOTED) \
-		PATH="$(dir $(abspath $(BISON_BIN32))):$(PATH)" \
-		CFLAGS="-I$(abspath $(TOOLS_DIR32))/include -g $(COMMON_FLAGS)" \
-		CXXFLAGS="-I$(abspath $(TOOLS_DIR32))/include -g $(COMMON_FLAGS) -fno-gnu-unique -std=c++17" \
-		LDFLAGS=-L$(abspath $(TOOLS_DIR32))/lib \
-		PKG_CONFIG_PATH=$(abspath $(TOOLS_DIR32))/lib/pkgconfig \
-		CC=$(CC_QUOTED) \
-		CXX=$(CXX_QUOTED) \
 		../$(WINE)/configure \
 			--without-curses \
-			--disable-tests --prefix=$(abspath $(WINE_DST32))
+			--disable-tests \
+			--prefix=$(abspath $(WINE_DST32)) \
+			STRIP=$(STRIP_QUOTED) \
+			PATH="$(dir $(abspath $(BISON_BIN32))):$(PATH)" \
+			CFLAGS="-I$(abspath $(TOOLS_DIR32))/include -g $(COMMON_FLAGS)" \
+			CXXFLAGS="-I$(abspath $(TOOLS_DIR32))/include -g $(COMMON_FLAGS) -fno-gnu-unique -std=c++17" \
+			LDFLAGS=-L$(abspath $(TOOLS_DIR32))/lib \
+			PKG_CONFIG_PATH=$(abspath $(TOOLS_DIR32))/lib/pkgconfig \
+			CC=$(CC_QUOTED) \
+			CXX=$(CXX_QUOTED)
 
 ## wine goals
 WINE_TARGETS = wine wine_configure wine32 wine64 wine_configure32 wine_configure64
@@ -1090,13 +1093,13 @@ BISON_CONFIGURE_FILES64 := $(BISON_OBJ64)/Makefile
 $(BISON_CONFIGURE_FILES64): SHELL = $(CONTAINER_SHELL64)
 $(BISON_CONFIGURE_FILES64): $(MAKEFILE_DEP) $(BISON) | $(BISON_OBJ64)
 	cd "$(BISON_OBJ64)" && \
-		LIBS='-lrt' ../$(BISON)/configure --prefix=$(abspath $(BISON_OBJ64))/built
+		../$(BISON)/configure --prefix=$(abspath $(BISON_OBJ64))/built LIBS='-lrt'
 
 # 32-bit configure
 $(BISON_CONFIGURE_FILES32): SHELL = $(CONTAINER_SHELL32)
 $(BISON_CONFIGURE_FILES32): $(MAKEFILE_DEP) $(BISON) | $(BISON_OBJ32)
 	cd "$(BISON_OBJ32)" && \
-		LIBS='-lrt' ../$(BISON)/configure --prefix=$(abspath $(BISON_OBJ32))/built
+		../$(BISON)/configure --prefix=$(abspath $(BISON_OBJ32))/built LIBS='-lrt'
 
 
 ## bison goals
@@ -1312,16 +1315,16 @@ WINEWIDL_CONFIGURE_FILES32 := $(WINEWIDL_OBJ32)/Makefile
 $(WINEWIDL_CONFIGURE_FILES32): SHELL = $(CONTAINER_SHELL32)
 $(WINEWIDL_CONFIGURE_FILES32): $(MAKEFILE_DEP) | $(WINEWIDL_OBJ32) bison32
 	cd $(dir $@) && \
-		STRIP=$(STRIP_QUOTED) \
-		BISON=$(abspath $(BISON_BIN32)) \
-		CFLAGS=-I$(abspath $(TOOLS_DIR64))"/include -g $(COMMON_FLAGS)" \
-		LDFLAGS=-L$(abspath $(TOOLS_DIR32))/lib \
-		PKG_CONFIG_PATH=$(abspath $(TOOLS_DIR32))/lib/pkgconfig \
-		CC=$(CC_QUOTED) \
-		CXX=$(CXX_QUOTED) \
 		../$(WINE)/configure \
 			--without-curses \
-			--disable-tests
+			--disable-tests \
+			STRIP=$(STRIP_QUOTED) \
+			BISON=$(abspath $(BISON_BIN32)) \
+			CFLAGS=-I$(abspath $(TOOLS_DIR64))"/include -g $(COMMON_FLAGS)" \
+			LDFLAGS=-L$(abspath $(TOOLS_DIR32))/lib \
+			PKG_CONFIG_PATH=$(abspath $(TOOLS_DIR32))/lib/pkgconfig \
+			CC=$(CC_QUOTED) \
+			CXX=$(CXX_QUOTED)
 
 $(WINEWIDL32): SHELL = $(CONTAINER_SHELL32)
 $(WINEWIDL32): $(WINEWIDL_CONFIGURE_FILES32)
@@ -1331,16 +1334,17 @@ $(WINEWIDL32): $(WINEWIDL_CONFIGURE_FILES32)
 $(WINEWIDL_CONFIGURE_FILES64): SHELL = $(CONTAINER_SHELL64)
 $(WINEWIDL_CONFIGURE_FILES64): $(MAKEFILE_DEP) | $(WINEWIDL_OBJ64) bison64
 	cd $(dir $@) && \
-		STRIP=$(STRIP_QUOTED) \
-		BISON=$(abspath $(BISON_BIN64)) \
-		CFLAGS=-I$(abspath $(TOOLS_DIR64))"/include -g $(COMMON_FLAGS)" \
-		LDFLAGS=-L$(abspath $(TOOLS_DIR64))/lib \
-		PKG_CONFIG_PATH=$(abspath $(TOOLS_DIR64))/lib/pkgconfig \
-		CC=$(CC_QUOTED) \
-		CXX=$(CXX_QUOTED) \
 		../$(WINE)/configure \
 			--without-curses \
-			--enable-win64 --disable-tests
+			--enable-win64 \
+			--disable-tests \
+			STRIP=$(STRIP_QUOTED) \
+			BISON=$(abspath $(BISON_BIN64)) \
+			CFLAGS=-I$(abspath $(TOOLS_DIR64))"/include -g $(COMMON_FLAGS)" \
+			LDFLAGS=-L$(abspath $(TOOLS_DIR64))/lib \
+			PKG_CONFIG_PATH=$(abspath $(TOOLS_DIR64))/lib/pkgconfig \
+			CC=$(CC_QUOTED) \
+			CXX=$(CXX_QUOTED)
 
 $(WINEWIDL64): SHELL = $(CONTAINER_SHELL64)
 $(WINEWIDL64): $(WINEWIDL_CONFIGURE_FILES64)
@@ -1360,10 +1364,12 @@ $(VKD3D)/configure: $(MAKEFILE_DEP) $(VKD3D)/configure.ac
 $(VKD3D_CONFIGURE_FILES32): SHELL = $(CONTAINER_SHELL32)
 $(VKD3D_CONFIGURE_FILES32): $(MAKEFILE_DEP) $(VULKAN_H32) $(SPIRV_H32) $(VKD3D)/configure $(WINEWIDL32) | $(VKD3D_OBJ32)
 	cd $(abspath $(VKD3D_OBJ32)) && \
-	CFLAGS="-I$(abspath $(TOOLS_DIR32))/include -g $(COMMON_FLAGS) -DNDEBUG" \
-	LDFLAGS=-L$(abspath $(TOOLS_DIR32))/lib \
-	WIDL="$(abspath $(WINEWIDL32))" \
-	$(abspath $(VKD3D))/configure --disable-tests --prefix=$(abspath $(TOOLS_DIR32))
+		$(abspath $(VKD3D))/configure \
+			--disable-tests \
+			--prefix=$(abspath $(TOOLS_DIR32)) \
+			CFLAGS="-I$(abspath $(TOOLS_DIR32))/include -g $(COMMON_FLAGS) -DNDEBUG" \
+			LDFLAGS=-L$(abspath $(TOOLS_DIR32))/lib \
+			WIDL="$(abspath $(WINEWIDL32))"
 
 vkd3d32: SHELL = $(CONTAINER_SHELL32)
 vkd3d32: $(VKD3D_CONFIGURE_FILES32)
@@ -1375,10 +1381,12 @@ vkd3d32: $(VKD3D_CONFIGURE_FILES32)
 $(VKD3D_CONFIGURE_FILES64): SHELL = $(CONTAINER_SHELL64)
 $(VKD3D_CONFIGURE_FILES64): $(MAKEFILE_DEP) $(VULKAN_H64) $(SPIRV_H64) $(VKD3D)/configure $(WINEWIDL64) | $(VKD3D_OBJ64)
 	cd $(abspath $(VKD3D_OBJ64)) && \
-	CFLAGS="-I$(abspath $(TOOLS_DIR64))/include -g $(COMMON_FLAGS) -DNDEBUG" \
-	LDFLAGS=-L$(abspath $(TOOLS_DIR64))/lib \
-	WIDL="$(abspath $(WINEWIDL64))" \
-	$(abspath $(VKD3D))/configure --disable-tests --prefix=$(abspath $(TOOLS_DIR64))
+		$(abspath $(VKD3D))/configure \
+			--disable-tests \
+			--prefix=$(abspath $(TOOLS_DIR64)) \
+			CFLAGS="-I$(abspath $(TOOLS_DIR64))/include -g $(COMMON_FLAGS) -DNDEBUG" \
+			LDFLAGS=-L$(abspath $(TOOLS_DIR64))/lib \
+			WIDL="$(abspath $(WINEWIDL64))"
 
 vkd3d64: SHELL = $(CONTAINER_SHELL64)
 vkd3d64: $(VKD3D_CONFIGURE_FILES64)
