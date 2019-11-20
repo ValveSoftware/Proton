@@ -33,7 +33,7 @@
  * Windows version of Steam running. */
 
 #include <windows.h>
-#include <string.h>
+#include <string>
 #include <stdio.h>
 
 #pragma push_macro("_WIN32")
@@ -140,9 +140,6 @@ static WCHAR *find_quote(WCHAR *str)
 static HANDLE run_process(void)
 {
     WCHAR *cmdline = GetCommandLineW();
-    STARTUPINFOW si = { sizeof(si) };
-    PROCESS_INFORMATION pi;
-    DWORD flags = 0;
 
     /* skip argv[0] */
     if (*cmdline == '"')
@@ -161,95 +158,59 @@ static HANDLE run_process(void)
     }
     while (*cmdline == ' ') cmdline++;
 
-    /* convert absolute unix path to dos */
-    if (cmdline[0] == '/' ||
-            (cmdline[0] == '"' && cmdline[1] == '/'))
+    /* separate the file and the arguments */
+    std::wstring filename;
+    if (cmdline[0] == '"')
     {
-        WCHAR *scratchW;
-        char *scratchA;
-        WCHAR *start, *end, *dos, *remainder, *new_cmdline;
-        size_t argv0_len;
-        int r;
-        DWORD_PTR console;
-        SHFILEINFOW sfi;
-
-        static const WCHAR dquoteW[] = {'"',0};
-
-        WINE_TRACE("Converting unix command: %s\n", wine_dbgstr_w(cmdline));
-
-        if (cmdline[0] == '"')
+        WCHAR *end = find_quote(cmdline + 1);
+        if (!end)
         {
-            start = cmdline + 1;
-            end = find_quote(start);
-            if (!end)
-            {
-                WINE_ERR("Unmatched quote? %s\n", wine_dbgstr_w(cmdline));
-                goto run;
-            }
-            remainder = end + 1;
+            WINE_ERR("Unmatched quote? %s\n", wine_dbgstr_w(cmdline));
+            return INVALID_HANDLE_VALUE;
+        }
+        size_t filename_length = end - (cmdline + 1);
+        filename = std::wstring(cmdline + 1, filename_length);
+        cmdline = end + 2;
+    }
+    else
+    {
+        WCHAR *next = wcschr(cmdline, ' ');
+        if (next)
+        {
+            size_t filename_length = wcschr(cmdline, ' ') - cmdline;
+            filename = std::wstring(cmdline, filename_length);
+            cmdline = next + 1;
         }
         else
         {
-            start = cmdline;
-            end = wcschr(start, ' ');
-            if (!end)
-                end = wcschr(start, '\0');
-            remainder = end;
+            filename = std::wstring(cmdline);
+            cmdline = nullptr;
         }
+    }
+    
+    /* convert absolute unix path to dos */
+    if (filename[0] == '/')
+    {
+        WINE_TRACE("Converting unix command: %s\n", wine_dbgstr_w(filename.c_str()));
 
-        argv0_len = end - start;
-
-        scratchW = (WCHAR *)HeapAlloc(GetProcessHeap(), 0, (argv0_len + 1) * sizeof(WCHAR));
-        memcpy(scratchW, start, argv0_len * sizeof(WCHAR));
-        scratchW[argv0_len] = '\0';
-
-        r = WideCharToMultiByte(CP_UNIXCP, 0, scratchW, -1,
-                NULL, 0, NULL, NULL);
-        if (!r)
-        {
-            WINE_ERR("Char conversion size failed?\n");
-            goto run;
-        }
-
-        scratchA = (char *)HeapAlloc(GetProcessHeap(), 0, r);
-
-        r = WideCharToMultiByte(CP_UNIXCP, 0, scratchW, -1,
-                scratchA, r, NULL, NULL);
-        if (!r)
-        {
-            WINE_ERR("Char conversion failed?\n");
-            goto run;
-        }
-
-        dos = wine_get_dos_file_name(scratchA);
-
-        CoInitialize(NULL);
-
-        console = SHGetFileInfoW(dos, 0, &sfi, sizeof(sfi), SHGFI_EXETYPE);
-        if (console && !HIWORD(console))
-            flags |= CREATE_NEW_CONSOLE;
-
-        new_cmdline = (WCHAR *)HeapAlloc(GetProcessHeap(), 0,
-                (lstrlenW(dos) + 3 + lstrlenW(remainder) + 1) * sizeof(WCHAR));
-        lstrcpyW(new_cmdline, dquoteW);
-        lstrcatW(new_cmdline, dos);
-        lstrcatW(new_cmdline, dquoteW);
-        lstrcatW(new_cmdline, remainder);
-
-        cmdline = new_cmdline;
+        filename = std::wstring(wine_get_dos_file_name(std::string(filename.begin(), filename.end()).c_str()));
     }
 
-run:
-    WINE_TRACE("Running command %s\n", wine_dbgstr_w(cmdline));
+    WINE_TRACE("Running command %s %s\n", wine_dbgstr_w(filename.c_str()), wine_dbgstr_w(cmdline));
 
-    if (!CreateProcessW(NULL, cmdline, NULL, NULL, FALSE, flags, NULL, NULL, &si, &pi))
+    SHELLEXECUTEINFOW ex_info = {};
+    ex_info.cbSize = sizeof(ex_info);
+    ex_info.fMask = SEE_MASK_NOCLOSEPROCESS;
+    ex_info.lpFile = filename.c_str();
+    ex_info.lpParameters = cmdline;
+    ex_info.nShow  = SW_SHOWDEFAULT;
+    if (!(ShellExecuteExW(&ex_info))) 
     {
         WINE_ERR("Failed to create process %s: %u\n", wine_dbgstr_w(cmdline), GetLastError());
         return INVALID_HANDLE_VALUE;
     }
 
-    CloseHandle(pi.hThread);
-    return pi.hProcess;
+    return ex_info.hProcess;
 }
 
 int main(int argc, char *argv[])
