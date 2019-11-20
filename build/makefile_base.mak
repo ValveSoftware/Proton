@@ -153,8 +153,6 @@ else
     MESON_STRIP_ARG := --strip
     VKD3D_INSTALL_TARGET := install-strip
 endif
-WINE32_AUTOCONF :=
-WINE64_AUTOCONF :=
 
 OPTIMIZE_FLAGS := -O2 -march=nocona $(call cc-option,$(CC),-mtune=core-avx2,) -mfpmath=sse
 SANITY_FLAGS   := -fwrapv -fno-strict-aliasing
@@ -845,7 +843,6 @@ $(WINE_CONFIGURE_FILES64): $(MAKEFILE_DEP) | faudio64 vkd3d64 $(WINE_OBJ64) biso
 		CC=$(CC_QUOTED) \
 		CXX=$(CXX_QUOTED) \
 		../$(WINE)/configure \
-			$(WINE64_AUTOCONF) \
 			--without-curses \
 			--enable-win64 --disable-tests --prefix=$(abspath $(DST_DIR))
 
@@ -862,7 +859,6 @@ $(WINE_CONFIGURE_FILES32): $(MAKEFILE_DEP) | faudio32 vkd3d32 $(WINE_OBJ32) biso
 		CC=$(CC_QUOTED) \
 		CXX=$(CXX_QUOTED) \
 		../$(WINE)/configure \
-			$(WINE32_AUTOCONF) \
 			--without-curses \
 			--disable-tests --prefix=$(abspath $(WINE_DST32))
 
@@ -1324,7 +1320,6 @@ $(WINEWIDL_CONFIGURE_FILES32): $(MAKEFILE_DEP) | $(WINEWIDL_OBJ32) bison32
 		CC=$(CC_QUOTED) \
 		CXX=$(CXX_QUOTED) \
 		../$(WINE)/configure \
-			$(WINE32_AUTOCONF) \
 			--without-curses \
 			--disable-tests
 
@@ -1344,7 +1339,6 @@ $(WINEWIDL_CONFIGURE_FILES64): $(MAKEFILE_DEP) | $(WINEWIDL_OBJ64) bison64
 		CC=$(CC_QUOTED) \
 		CXX=$(CXX_QUOTED) \
 		../$(WINE)/configure \
-			$(WINE64_AUTOCONF) \
 			--without-curses \
 			--enable-win64 --disable-tests
 
