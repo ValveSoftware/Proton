@@ -120,12 +120,19 @@ function build_arch {
         popd
 
         pushd gcc/
-            #below steps require libgcc in default library location, but
+            #next step requires libgcc in default library location, but
             #"canadian" build doesn't handle that, so install it explicitly
             PATH=$NEWPATH make configure-target-libgcc
             PATH=$NEWPATH make -C $WIN32_TARGET_ARCH/libgcc $JOBS
             PATH=$NEWPATH make -C $WIN32_TARGET_ARCH/libgcc $JOBS install
 
+            #install libstdc++ and other stuff
+            PATH=$NEWPATH make $JOBS
+            PATH=$NEWPATH make $JOBS install
+
+            #libstdc++ requires that libstdc++ is installed in order to find gettimeofday(???)
+            #so, rebuild libstdc++ after installing it above
+            PATH=$NEWPATH make $JOBS -C $WIN32_TARGET_ARCH/libstdc++-v3/ distclean
             PATH=$NEWPATH make $JOBS
             PATH=$NEWPATH make $JOBS install
         popd
