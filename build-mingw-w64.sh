@@ -109,7 +109,6 @@ function build_arch {
                     --host=$WIN32_TARGET_ARCH \
                     --enable-sdk=all \
                     --enable-secure-api \
-                    --enable-idl \
                     $MINGW_W64_HEADERS_EXTRA_CONFIGURE
             fi
             PATH=$NEWPATH:$PATH make $JOBS install
@@ -151,6 +150,7 @@ function build_arch {
                 PATH=$NEWPATH ../../$MINGW_W64_SRCDIR/mingw-w64-crt/configure \
                     --prefix=$DST_DIR/$WIN32_TARGET_ARCH/ \
                     --host=$WIN32_TARGET_ARCH \
+                    --enable-wildcard \
                     $MINGW_W64_CRT_EXTRA_CONFIGURE
             fi
             PATH=$NEWPATH make $JOBS
@@ -163,6 +163,8 @@ function build_arch {
                 PATH=$NEWPATH ../../$MINGW_W64_SRCDIR/mingw-w64-libraries/winpthreads/configure \
                     --prefix=$DST_DIR/$WIN32_TARGET_ARCH/ \
                     --host=$WIN32_TARGET_ARCH \
+                    --enable-static \
+                    --enable-shared \
                     $MINGW_W64_WINPTHREADS_EXTRA_CONFIGURE
             fi
             PATH=$NEWPATH make $JOBS
@@ -194,8 +196,8 @@ setup_src
 
 mkdir -p $DST_DIR
 
-build_arch i686-linux-gnu i686-w64-mingw32
+MINGW_W64_CRT_EXTRA_CONFIGURE="--disable-lib64 --enable-lib32" build_arch i686-linux-gnu i686-w64-mingw32
 
-build_arch x86_64-linux-gnu x86_64-w64-mingw32
+MINGW_W64_CRT_EXTRA_CONFIGURE="--disable-lib32 --enable-lib64" build_arch x86_64-linux-gnu x86_64-w64-mingw32
 
 echo "Done!"
