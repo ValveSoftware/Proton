@@ -69,7 +69,14 @@ function build_arch {
         mkdir -p binutils/
         pushd binutils/
             if [ ! -e Makefile ]; then
-                ../../$BINUTILS_SRCDIR/configure --prefix=$DST_DIR/ --build=$BUILD_ARCH --host=$HOST_ARCH --target=$WIN32_TARGET_ARCH --disable-multilib --enable-lto $BINUTILS_EXTRA_CONFIGURE
+                ../../$BINUTILS_SRCDIR/configure \
+                    --prefix=$DST_DIR/ \
+                    --build=$BUILD_ARCH \
+                    --host=$HOST_ARCH \
+                    --target=$WIN32_TARGET_ARCH \
+                    --disable-multilib \
+                    --enable-lto \
+                    $BINUTILS_EXTRA_CONFIGURE
             fi
             make $JOBS configure-host
             make $JOBS LDFLAGS=-all-static
@@ -79,7 +86,13 @@ function build_arch {
         mkdir -p mingw-w64-headers/
         pushd mingw-w64-headers/
             if [ ! -e Makefile ]; then
-                PATH=$NEWPATH:$PATH ../../$MINGW_W64_SRCDIR/mingw-w64-headers/configure --prefix=$DST_DIR/$WIN32_TARGET_ARCH/ --host=$WIN32_TARGET_ARCH --enable-sdk=all --enable-secure-api --enable-idl $MINGW_W64_HEADERS_EXTRA_CONFIGURE
+                PATH=$NEWPATH:$PATH ../../$MINGW_W64_SRCDIR/mingw-w64-headers/configure \
+                    --prefix=$DST_DIR/$WIN32_TARGET_ARCH/ \
+                    --host=$WIN32_TARGET_ARCH \
+                    --enable-sdk=all \
+                    --enable-secure-api \
+                    --enable-idl \
+                    $MINGW_W64_HEADERS_EXTRA_CONFIGURE
             fi
             PATH=$NEWPATH:$PATH make $JOBS install
         popd
@@ -90,11 +103,23 @@ function build_arch {
                 #arguments mostly taken from Arch AUR mingw-w64-gcc PKGBUILD,
                 #except "--disable-dw2-exceptions" swapped for "--disable-sjlj-exceptions --with-dwarf2"
                 #for performance reasons on 32-bit
-                LDFLAGS=-static PATH=$NEWPATH:$PATH ../../$GCC_SRCDIR/configure --prefix=$DST_DIR/ \
-                    --build=$BUILD_ARCH --host=$HOST_ARCH --target=$WIN32_TARGET_ARCH --with-gnu-ld --with-gnu-as \
-                    --enable-languages=c,c++ --disable-multilib --enable-threads=posix --enable-fully-dynamic-string \
-                    --enable-libstdcxx-time=yes --enable-libstdcxx-filesystem-ts=yes --enable-cloog-backend=isl \
-                    --enable-lto --disable-sjlj-exceptions --with-dwarf2 \
+                LDFLAGS=-static PATH=$NEWPATH:$PATH ../../$GCC_SRCDIR/configure \
+                    --prefix=$DST_DIR/ \
+                    --build=$BUILD_ARCH \
+                    --host=$HOST_ARCH \
+                    --target=$WIN32_TARGET_ARCH \
+                    --with-gnu-ld \
+                    --with-gnu-as \
+                    --enable-languages=c,c++ \
+                    --disable-multilib \
+                    --enable-threads=posix \
+                    --enable-fully-dynamic-string \
+                    --enable-libstdcxx-time=yes \
+                    --enable-libstdcxx-filesystem-ts=yes \
+                    --enable-cloog-backend=isl \
+                    --enable-lto \
+                    --disable-sjlj-exceptions \
+                    --with-dwarf2 \
                     $GCC_EXTRA_CONFIGURE
             fi
             PATH=$NEWPATH make $JOBS all-gcc
@@ -104,7 +129,10 @@ function build_arch {
         mkdir -p mingw-w64-crt/
         pushd mingw-w64-crt/
             if [ ! -e Makefile ]; then
-                PATH=$NEWPATH ../../$MINGW_W64_SRCDIR/mingw-w64-crt/configure --prefix=$DST_DIR/$WIN32_TARGET_ARCH/ --host=$WIN32_TARGET_ARCH $MINGW_W64_CRT_EXTRA_CONFIGURE
+                PATH=$NEWPATH ../../$MINGW_W64_SRCDIR/mingw-w64-crt/configure \
+                    --prefix=$DST_DIR/$WIN32_TARGET_ARCH/ \
+                    --host=$WIN32_TARGET_ARCH \
+                    $MINGW_W64_CRT_EXTRA_CONFIGURE
             fi
             PATH=$NEWPATH make $JOBS
             PATH=$NEWPATH make $JOBS install
@@ -113,7 +141,10 @@ function build_arch {
         mkdir -p mingw-w64-winpthreads/
         pushd mingw-w64-winpthreads/
             if [ ! -e Makefile ]; then
-                PATH=$NEWPATH ../../$MINGW_W64_SRCDIR/mingw-w64-libraries/winpthreads/configure --prefix=$DST_DIR/$WIN32_TARGET_ARCH/ --host=$WIN32_TARGET_ARCH $MINGW_W64_WINPTHREADS_EXTRA_CONFIGURE
+                PATH=$NEWPATH ../../$MINGW_W64_SRCDIR/mingw-w64-libraries/winpthreads/configure \
+                    --prefix=$DST_DIR/$WIN32_TARGET_ARCH/ \
+                    --host=$WIN32_TARGET_ARCH \
+                    $MINGW_W64_WINPTHREADS_EXTRA_CONFIGURE
             fi
             PATH=$NEWPATH make $JOBS
             PATH=$NEWPATH make $JOBS install
