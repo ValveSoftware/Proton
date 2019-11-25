@@ -5,6 +5,8 @@ set -e
 if [ -z "$1" ]; then
     echo "Makes a local build of mingw-w64 in this directory and installs it to the given path."
     echo ""
+    echo "Note: Requires a system mingw-w64 to be present already, for us to bootstrap with."
+    echo ""
     echo "usage:"
     echo -e "\t$0 <installation path e.g. \$HOME/.local>"
     exit 1

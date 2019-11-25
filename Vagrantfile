@@ -94,6 +94,9 @@ Vagrant.configure(2) do |config|
 
       # the script below will set up the steam-runtime docker containers
       sudo -u vagrant /home/vagrant/proton/vagrant-user-setup.sh
+
+      #ensure we use only the mingw-w64 that we built
+      apt-get remove -y '*mingw-w64*'
     SHELL
   end
 end
