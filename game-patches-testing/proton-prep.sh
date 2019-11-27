@@ -4,8 +4,6 @@
     cd vkd3d
     git reset --hard HEAD
     git clean -xdf
-    # unsure if this is still needed to fix flicker in wow
-    patch -Np1 < ../game-patches-testing/vkd3d-patches/wow-flicker.patch
     cd ..
 
     # Valve DXVK patches
@@ -20,8 +18,8 @@
     cd d9vk
     git reset --hard HEAD
     git clean -xdf
-    # revert this as it breaks Warlock: Master of the Arcane
-    git revert --no-commit c2a42cc7b9d60ebfda1198e1bd28e09a2fd72545
+    # Warlock: Master of the Arcane new game hang fix
+    patch -Np1 < ../game-patches-testing/d9vk-patches/d3d9-device_local_memory.patch
     cd ..
 
     #WINE
@@ -34,11 +32,17 @@
     # https://bugs.winehq.org/show_bug.cgi?id=45774
     git revert --no-commit 6ccb94392a8ef4bca701ae2a560f4ea1da677edd
 
-    # necessary reverts for FS Hack
+    #FS HACK REVERTS NECESSARY
+    git revert --no-commit 427152ec7b4ee85631617b693dbf1deea763c0ba
+    git revert --no-commit b7b4bacaf99661e07c2f07a0260680b4e8bed4f8
+    git revert --no-commit acf03ed9da0f7d3f94de9b47c44366be3ee47f8e
+    git revert --no-commit 914b5519b1cd96f9ae19f1eec226e94af96354b9
+    git revert --no-commit 99d047724e768822d6508573cd82a5c75b30bdcb
+    git revert --no-commit 413aad39135b0b0f8255500b85fcc05337a5f138
+    git revert --no-commit 9ae8da6bb4a8f66d55975fa0f14e5e413756d324
     git revert --no-commit de94cfa775f9f41d1d65cbd8e7bf861cd7f9a871
-    git revert --no-commit ffd4caa5f0e401cf973078fbbd54e4950d408792
-    git revert --no-commit 22795243b2d21e1a667215f54c3a15634735749c
-    git revert --no-commit be54adcffc249a44cb52c24320a7ad3db758ba54
+    git revert --no-commit 6dbb153ede48e77a87dddf37e5276276a701c5c3
+    git revert --no-commit 81f8b6e8c215dc04a19438e4369fcba8f7f4f333
 
     #WINE STAGING
     echo "applying staging patches"
@@ -71,14 +75,20 @@
     echo "final fantasy XIV"
     patch -Np1 < ../game-patches-testing/game-patches/ffxiv-launcher.patch
 
+    echo "final fantasy XV"
+    patch -Np1 < ../game-patches-testing/game-patches/ffxv-steam-fix.patch
+
     echo "assetto corsa"
     patch -Np1 < ../game-patches-testing/game-patches/assettocorsa-hud.patch
 
     echo "sword art online"
     patch -Np1 < ../game-patches-testing/game-patches/sword-art-online-gnutls.patch
 
-    echo "gta v launcher fix"
-    patch -Np1 < ../game-patches-testing/game-patches/gtav-launcher.patch
+    echo "jedi fallen order stub"
+    patch -Np1 < ../game-patches-testing/game-patches/star-wars-jedi.patch
+
+    echo "origin downloads fix"
+    patch -Np1 < ../game-patches-testing/game-patches/origin-downloads_fix.patch
 
     echo "steam crossover patch"
     patch -Np1 < ../game-patches-testing/game-patches/steam-crossover.patch
@@ -91,14 +101,11 @@
 
     #PROTON
     echo "applying proton patches"
-    #only use these 3 in 4.18+ build
-    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-kernelbase_reverts.patch
-    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-protonify_staging_rpc.patch
 
+    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-steamclient_swap.patch
+    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-protonify_staging_rpc.patch
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-protonify_staging.patch
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-LAA_staging.patch
-
-    # this needs to come after LAA patch
 
     echo "mortal kombat 11 patch"
     patch -Np1 < ../game-patches-testing/game-patches/mk11.patch
@@ -107,20 +114,23 @@
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-amd_ags.patch
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-hide_prefix_update_window.patch
 
-#TKG FS Hack
+    echo "fullscreen hack"
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-FS_bypass_compositor.patch
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-fullscreen_hack_staging.patch
-    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-fullscreen_hack_realmodes.patch
-
-# EG FS Hack
-#    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-fullscreen_hack_staging_vulkan.patch
-#    patch -Np1 < ../game-patches-testing/proton-valve-patches/winex11.patch
-
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-vk_bits_4.5+.patch
+    patch -Np1 < ../game-patches-testing/proton-hotfixes/proton-integer_scaling.patch
+
+    echo "SDL Joystick"
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-sdl_joy.patch
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-sdl_joy_2.patch
+
+    echo "gamepad additions"
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-gamepad_additions.patch
+
+    echo "mf hacks"
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-mf_hacks.patch
+
+    echo "registry entries"
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-apply_LargeAddressAware_fix_for_Bayonetta.patch
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-Set_amd_ags_x64_to_built_in_for_Wolfenstein_2.patch
 

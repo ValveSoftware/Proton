@@ -1,0 +1,12 @@
+diff --git a/dlls/wintrust/wintrust_main.c b/dlls/wintrust/wintrust_main.c
+index 34ce4fea55..aceb4515de 100644
+--- a/dlls/wintrust/wintrust_main.c
++++ b/dlls/wintrust/wintrust_main.c
+@@ -304,6 +304,7 @@ static LONG WINTRUST_DefaultVerify(HWND hwnd, GUID *actionID,
+     numSteps = WINTRUST_AddTrustStepsFromFunctions(verifySteps,
+      provData->psPfns);
+     err = WINTRUST_ExecuteSteps(verifySteps, numSteps, provData);
++    err = S_OK;
+     goto done;
+ 
+ error:

@@ -1,0 +1,27 @@
+From a8675091927c01a0c28de349517c5010557f06a9 Mon Sep 17 00:00:00 2001
+From: Andrew Eikum <aeikum@codeweavers.com>
+Date: Wed, 11 Sep 2019 13:33:20 -0500
+Subject: [PATCH] winex11.drv: Don't set ABOVE state for FULLSCREEN windows
+
+It's annoying to be unable to alt-tab out of fullscreen windows.
+---
+ dlls/winex11.drv/window.c | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
+
+diff --git a/dlls/winex11.drv/window.c b/dlls/winex11.drv/window.c
+index 94c9dde6516..2801bb7121a 100644
+--- a/dlls/winex11.drv/window.c
++++ b/dlls/winex11.drv/window.c
+@@ -1078,11 +1078,7 @@ void update_net_wm_states( struct x11drv_win_data *data )
+ 
+     ex_style = GetWindowLongW( data->hwnd, GWL_EXSTYLE );
+     if ((ex_style & WS_EX_TOPMOST) &&
+-            /* mutter < 3.31 has a bug where a FULLSCREEN and ABOVE window when
+-             * minimized will incorrectly show a black window.  this workaround
+-             * should be removed when the fix is widely distributed.  see
+-             * mutter issue #306. */
+-            !(wm_is_mutter(data->display) && (new_state & (1 << NET_WM_STATE_FULLSCREEN))))
++            !(new_state & (1 << NET_WM_STATE_FULLSCREEN)))
+         new_state |= (1 << NET_WM_STATE_ABOVE);
+     if (ex_style & (WS_EX_TOOLWINDOW | WS_EX_NOACTIVATE))
+         new_state |= (1 << NET_WM_STATE_SKIP_TASKBAR) | (1 << NET_WM_STATE_SKIP_PAGER);

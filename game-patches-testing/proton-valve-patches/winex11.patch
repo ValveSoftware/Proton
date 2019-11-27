@@ -4102,3 +4102,4 @@ index fbc6716e94..1ca8c3ed0f 100644
      if (IS_OPTION_TRUE(*buf))
  	CheckDlgButton(dialog, IDC_FULLSCREEN_GRAB, BST_CHECKED);
      else
+ 

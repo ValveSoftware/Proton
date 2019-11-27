@@ -399,15 +399,15 @@ index 378bb3d1..5a33a3cc 100644
    
    
 diff --git a/src/dxvk/dxvk_options.cpp b/src/dxvk/dxvk_options.cpp
-index 394feabb..1d8f4c3e 100644
+index 394feabb..df05ecd8 100644
 --- a/src/dxvk/dxvk_options.cpp
 +++ b/src/dxvk/dxvk_options.cpp
-@@ -4,6 +4,7 @@ namespace dxvk {
+@@ -5,6 +5,7 @@ namespace dxvk {
  
    DxvkOptions::DxvkOptions(const Config& config) {
      enableStateCache      = config.getOption<bool>    ("dxvk.enableStateCache",       true);
 +    useAsync              = config.getOption<bool>    ("dxvk.useAsync",               false);
-     enableTransferQueue   = config.getOption<bool>    ("dxvk.enableTransferQueue",    true);
+     enableOpenVR          = config.getOption<bool>    ("dxvk.enableOpenVR",           true);
      numCompilerThreads    = config.getOption<int32_t> ("dxvk.numCompilerThreads",     0);
      asyncPresent          = config.getOption<Tristate>("dxvk.asyncPresent",           Tristate::Auto);
 diff --git a/src/dxvk/dxvk_options.h b/src/dxvk/dxvk_options.h

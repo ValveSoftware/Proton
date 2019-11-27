@@ -1,0 +1,118 @@
+From 34ed4fc1d9eecb70ee8417b60d25178b87d7bc4c Mon Sep 17 00:00:00 2001
+From: Derek Lesho <dlesho@codeweavers.com>
+Date: Tue, 12 Nov 2019 11:44:07 -0600
+Subject: [PATCH] lsteamclient hack
+
+---
+ dlls/ntdll/loader.c | 70 +++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 70 insertions(+)
+
+diff --git a/dlls/ntdll/loader.c b/dlls/ntdll/loader.c
+index 031bf83b4b..26565e84cf 100644
+--- a/dlls/ntdll/loader.c
++++ b/dlls/ntdll/loader.c
+@@ -1710,6 +1710,54 @@ NTSTATUS WINAPI LdrUnlockLoaderLock( ULONG flags, ULONG_PTR magic )
+ }
+ 
+ 
++#ifdef _WIN64
++    static WCHAR steamclient_w[] = {'s','t','e','a','m','c','l','i','e','n','t','6','4',0};
++#else
++    static WCHAR steamclient_w[] = {'s','t','e','a','m','c','l','i','e','n','t',0};
++#endif
++static WCHAR lsteamclient_w[] = {'l','s','t','e','a','m','c','l','i','e','n','t',0};
++
++static HMODULE get_lsteamclient_mod(void)
++{
++    HMODULE lsteamclient_mod = 0;
++    UNICODE_STRING lsteamclient_us;
++
++    RtlInitUnicodeString(&lsteamclient_us, lsteamclient_w);
++    LdrGetDllHandle(NULL, 0, &lsteamclient_us, &lsteamclient_mod);
++
++    if (lsteamclient_mod)
++        return lsteamclient_mod;
++
++    LdrLoadDll(NULL, 0, &lsteamclient_us, &lsteamclient_mod);
++    return lsteamclient_mod;
++}
++
++static void swap_steam_to_lsteam_hack(HMODULE *module)
++{
++    UNICODE_STRING steamclient_us;
++    HMODULE steamclient_mod;
++
++    RtlInitUnicodeString(&steamclient_us, steamclient_w);
++    if (!(LdrGetDllHandle(NULL, 0, &steamclient_us, &steamclient_mod)) && steamclient_mod == *module)
++    {
++        WARN("HACK: Swapping steamclient module for lsteamclient\n");
++        *module = get_lsteamclient_mod();
++    }
++}
++
++static void swap_lsteam_to_steam_hack(HMODULE *module)
++{
++    UNICODE_STRING steamclient_us;
++
++    if (*module ==  get_lsteamclient_mod())
++    {
++        WARN("HACK: Swapping lsteamclient module for steamclient\n");
++
++        RtlInitUnicodeString(&steamclient_us, steamclient_w);
++        LdrGetDllHandle(NULL, 0, &steamclient_us, module);
++    }
++}
++
+ /******************************************************************
+  *		LdrGetProcedureAddress  (NTDLL.@)
+  */
+@@ -1720,6 +1768,9 @@ NTSTATUS WINAPI LdrGetProcedureAddress(HMODULE module, const ANSI_STRING *name,
+     DWORD exp_size;
+     NTSTATUS ret = STATUS_PROCEDURE_NOT_FOUND;
+ 
++    /* redirection hack */
++    swap_steam_to_lsteam_hack(&module);
++
+     RtlEnterCriticalSection( &loader_section );
+ 
+     /* check if the module itself is invalid to return the proper error */
+@@ -2329,6 +2380,13 @@ static NTSTATUS open_dll_file( UNICODE_STRING *nt_name, WINE_MODREF **pwm,
+     }
+     if (!status && !is_valid_binary( *module, image_info ))
+     {
++        #ifdef _WIN64
++        if (strstrW(nt_name->Buffer, steamclient_w))
++        {
++            WARN("HACK: Accepting steamclient64 even though it's the wrong arch\n");
++            return STATUS_SUCCESS;
++        }
++        #endif
+         TRACE( "%s is for arch %x, continuing search\n", debugstr_us(nt_name), image_info->machine );
+         NtUnmapViewOfSection( NtCurrentProcess(), *module );
+         *module = NULL;
+@@ -2974,6 +3032,17 @@ static NTSTATUS load_dll( const WCHAR *load_path, const WCHAR *libname, const WC
+         return STATUS_SUCCESS;
+     }
+ 
++    #ifdef _WIN64
++    if (strstrW(libname, steamclient_w))
++    {
++        WARN("HACK: Allocating module, but not loading dll for %s\n", debugstr_w(libname));
++        /* don't actually load */
++        if (!(*pwm = alloc_module( module, &nt_name, FALSE)))
++            return STATUS_NO_MEMORY;
++        return STATUS_SUCCESS;
++    }
++    #endif
++
+     if (nts && nts != STATUS_DLL_NOT_FOUND && nts != STATUS_INVALID_IMAGE_NOT_MZ) goto done;
+ 
+     main_exe = get_modref( NtCurrentTeb()->Peb->ImageBaseAddress );
+@@ -3953,6 +4022,7 @@ PVOID WINAPI RtlPcToFileHeader( PVOID pc, PVOID *address )
+ 
+     RtlEnterCriticalSection( &loader_section );
+     if (!LdrFindEntryForAddress( pc, &module )) ret = module->BaseAddress;
++    swap_lsteam_to_steam_hack((HMODULE*)&ret);
+     RtlLeaveCriticalSection( &loader_section );
+     *address = ret;
+     return ret; 

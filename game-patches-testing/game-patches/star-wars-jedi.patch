@@ -1,0 +1,46 @@
+From f1b94dc16c35a5c477b6df8aa94c6d3537642c77 Mon Sep 17 00:00:00 2001
+From: Derek Lesho <dlesho@codeweavers.com>
+Date: Mon, 18 Nov 2019 16:20:12 -0600
+Subject: [PATCH] setupapi: Add SetupGetInfDriverStoreLocationW stub.
+
+Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/setupapi/query.c       | 14 ++++++++++++++
+ dlls/setupapi/setupapi.spec |  1 +
+ 2 files changed, 15 insertions(+)
+
+diff --git a/dlls/setupapi/query.c b/dlls/setupapi/query.c
+index ea1b9696182..828d8a1145a 100644
+--- a/dlls/setupapi/query.c
++++ b/dlls/setupapi/query.c
+@@ -717,3 +717,17 @@ BOOL WINAPI SetupQueryInfOriginalFileInformationW(
+ 
+     return TRUE;
+ }
++
++/***********************************************************************
++ *      SetupGetInfDriverStoreLocationW (SETUPAPI.@)
++ */
++BOOL WINAPI SetupGetInfDriverStoreLocationW(
++    PCWSTR FileName, PSP_ALTPLATFORM_INFO AlternativePlatformInfo,
++    PCWSTR LocaleName, PWSTR ReturnBuffer, DWORD ReturnBufferSize,
++    PDWORD RequiredSize)
++{
++    FIXME("stub: %s %p %s %p %u %p\n", debugstr_w(FileName), AlternativePlatformInfo, debugstr_w(LocaleName), ReturnBuffer, ReturnBufferSize, RequiredSize);
++
++    SetLastError(ERROR_CALL_NOT_IMPLEMENTED);
++    return FALSE;
++}
+diff --git a/dlls/setupapi/setupapi.spec b/dlls/setupapi/setupapi.spec
+index 81256a3417c..8c4ebcc1011 100644
+--- a/dlls/setupapi/setupapi.spec
++++ b/dlls/setupapi/setupapi.spec
+@@ -421,6 +421,7 @@
+ @ stdcall SetupGetFileCompressionInfoW(wstr ptr ptr ptr ptr)
+ @ stdcall SetupGetFileQueueCount(long long ptr)
+ @ stdcall SetupGetFileQueueFlags(long ptr)
++@ stdcall SetupGetInfDriverStoreLocationW(wstr ptr wstr ptr long ptr)
+ @ stdcall SetupGetInfFileListA(str long ptr long ptr)
+ @ stdcall SetupGetInfFileListW(wstr long ptr long ptr)
+ @ stdcall SetupGetInfInformationA(ptr long ptr long ptr)

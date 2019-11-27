@@ -298,7 +298,7 @@ $(OBJ_DIRS):
 
 .PHONY: downloads
 
-BISON_TARBALL_URL := https://ftpmirror.gnu.org/bison/$(BISON_TARBALL)
+BISON_TARBALL_URL := https://ftp.gnu.org/gnu/bison/$(BISON_TARBALL)
 GECKO64_MSI_URL := https://dl.winehq.org/wine/wine-gecko/$(GECKO_VER)/$(GECKO64_MSI)
 GECKO32_MSI_URL := https://dl.winehq.org/wine/wine-gecko/$(GECKO_VER)/$(GECKO32_MSI)
 MONO_TARBALL_URL := https://github.com/madewokherd/wine-mono/releases/download/wine-mono-$(WINEMONO_VER)/$(WINEMONO_TARBALL)
