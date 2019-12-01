@@ -5360,3 +5360,26 @@ index bfef381d086..a663c021543 100644
  
      if (index >= XUSER_MAX_COUNT)
          return ERROR_BAD_ARGUMENTS;
+From 7f0040cd9bc1f830140053422294af8f6ecb2305 Mon Sep 17 00:00:00 2001
+From: Andrew Eikum <aeikum@codeweavers.com>
+Date: Mon, 18 Nov 2019 14:30:03 -0600
+Subject: [PATCH] dinput: Assign FFACTUATOR bit to the correct axes
+
+Squash onto "dinput: Fix DS4 object enumeration order".
+---
+ dlls/dinput/joystick_sdl.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/dlls/dinput/joystick_sdl.c b/dlls/dinput/joystick_sdl.c
+index 324e8679601..78e6f08391a 100644
+--- a/dlls/dinput/joystick_sdl.c
++++ b/dlls/dinput/joystick_sdl.c
+@@ -1000,7 +1000,7 @@ static JoystickImpl *alloc_device(REFGUID rguid, IDirectInputImpl *dinput, unsig
+             case ITEM_TYPE_AXIS:
+                 memcpy(&df->rgodf[idx], &c_dfDIJoystick2.rgodf[item.id], df->dwObjSize);
+                 df->rgodf[idx].dwType = DIDFT_MAKEINSTANCE(item.id) | DIDFT_ABSAXIS;
+-                if (newDevice->sdldev->sdl_haptic && i < 2)
++                if (newDevice->sdldev->sdl_haptic && item.id < 2)
+                      df->rgodf[idx].dwFlags |= DIDOI_FFACTUATOR;
+ 
+                 newDevice->generic.props[idx].lDevMin = -32768;

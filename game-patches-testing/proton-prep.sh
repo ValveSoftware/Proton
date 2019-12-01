@@ -1,4 +1,9 @@
 #!/bin/bash
+    # Steam Helper patch
+    #cd steam_helper
+    #git checkout steam.cpp
+    #patch -Np1 < ../game-patches-testing/proton-hotfixes/steam-helper.patch
+    #cd ..
 
     # VKD3D patches
     cd vkd3d
