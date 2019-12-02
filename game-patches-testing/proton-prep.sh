@@ -37,6 +37,9 @@
     # https://bugs.winehq.org/show_bug.cgi?id=45774
     git revert --no-commit 6ccb94392a8ef4bca701ae2a560f4ea1da677edd
 
+    # https://bugs.winehq.org/show_bug.cgi?id=48160
+    git revert --no-commit 0e183cc3c0d3b6f89f79047cdd71c389afc75073
+
     #FS HACK REVERTS NECESSARY
     git revert --no-commit 427152ec7b4ee85631617b693dbf1deea763c0ba
     git revert --no-commit b7b4bacaf99661e07c2f07a0260680b4e8bed4f8
