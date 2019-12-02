@@ -99,6 +99,8 @@ Environment variable options:
 | <tt>nofsync</tt>      | <tt>PROTON_NO_FSYNC</tt>       | Do not use futex-based in-process synchronization primitives. (Automatically disabled on systems with no `FUTEX_WAIT_MULTIPLE` support.) |
 | <tt>forcelgadd</tt>   | <tt>PROTON_FORCE_LARGE_ADDRESS_AWARE</tt> | Force Wine to enable the LARGE_ADDRESS_AWARE flag for all executables. |
 | <tt>oldglstr</tt>     | <tt>PROTON_OLD_GL_STRING</tt>  | Set some driver overrides to limit the length of the GL extension string, for old games that crash on very long extension strings. |
+|                       | <tt>DXVK_ASYNC</tt>  | Enable Asynchronous shader compiling in dxvk. Set to 1 to enable. |
+|                       | <tt>WINE_MEM_ALLOC_MOD</tt>  | Enables mem alloc mod. Fixes some games such as MK11 and the skyui status effect icons in skyrim se. Set to 1 to enable. |
 
 
 Credits to the proper people are deserved. Many people besides myself have contributed to various parts:
