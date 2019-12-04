@@ -101,6 +101,9 @@
     echo "steam crossover patch"
     patch -Np1 < ../game-patches-testing/game-patches/steam-crossover.patch
 
+    echo "halo mcc workaround"
+    patch -Np1 < ../game-patches-testing/game-patches/halo_mcc.patch
+
     #WINE FSYNC
     echo "applying fsync patches"
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-fsync_staging.patch

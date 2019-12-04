@@ -512,10 +512,10 @@ class Session:
         self.check_environment("PROTON_OLD_GL_STRING", "oldglstr")
 
         if not "noesync" in self.compat_config:
-            self.env["WINEESYNC"] = "1"
+            self.env["WINEESYNC"] = "1" if "SteamGameId" in self.env else "0"
 
         if not "nofsync" in self.compat_config:
-            self.env["WINEFSYNC"] = "1"
+            self.env["WINEFSYNC"] = "1" if "SteamGameId" in self.env else "0"
 
         if "oldglstr" in self.compat_config:
             #mesa override
