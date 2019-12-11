@@ -31,3 +31,4 @@ extern void cppISteamUtils_SteamUtils009_SetVRHeadsetStreamingEnabled(void *, bo
 extern bool cppISteamUtils_SteamUtils009_IsSteamChinaLauncher(void *);
 extern bool cppISteamUtils_SteamUtils009_InitFilterText(void *);
 extern int cppISteamUtils_SteamUtils009_FilterText(void *, char *, uint32, const char *, bool);
+extern ESteamIPv6ConnectivityState cppISteamUtils_SteamUtils009_GetIPv6ConnectivityState(void *, ESteamIPv6ConnectivityProtocol);

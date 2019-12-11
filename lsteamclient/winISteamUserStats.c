@@ -233,7 +233,7 @@ SteamAPICall_t __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011
 }
 
 DEFINE_THISCALL_WRAPPER(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetDownloadedLeaderboardEntry, 28)
-bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetDownloadedLeaderboardEntry(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011 *_this, SteamLeaderboardEntries_t hSteamLeaderboardEntries, int index, winLeaderboardEntry_t_146 * pLeaderboardEntry, int32 * pDetails, int cDetailsMax)
+bool __thiscall winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetDownloadedLeaderboardEntry(winISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011 *_this, SteamLeaderboardEntries_t hSteamLeaderboardEntries, int index, winLeaderboardEntry_t_147 * pLeaderboardEntry, int32 * pDetails, int cDetailsMax)
 {
     TRACE("%p\n", _this);
     return cppISteamUserStats_STEAMUSERSTATS_INTERFACE_VERSION011_GetDownloadedLeaderboardEntry(_this->linux_side, hSteamLeaderboardEntries, index, pLeaderboardEntry, pDetails, cDetailsMax);

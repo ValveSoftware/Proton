@@ -63,3 +63,4 @@ bool do_cb_wrap(HSteamPipe pipe, void *linux_side, bool (*cpp_func)(void *, Stea
 #define TRACE WINE_TRACE
 #define ERR WINE_ERR
 #define WARN WINE_WARN
+#define FIXME WINE_FIXME

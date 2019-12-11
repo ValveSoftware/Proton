@@ -94,8 +94,14 @@ typedef uint32_t EUserUGCList,
         EGameSearchErrorCode_t,
         EPlayerResult_t,
         ESteamNetworkingAvailability,
-        ESteamDeviceFormFactor
+        ESteamDeviceFormFactor,
+        ESteamIPv6ConnectivityState,
+        ESteamIPv6ConnectivityProtocol
 ;
+
+/* XXX NO */
+typedef struct ISteamNetworkingCustomSignalingRecvContext ISteamNetworkingCustomSignalingRecvContext;
+typedef struct ISteamNetworkingConnectionCustomSignaling ISteamNetworkingConnectionCustomSignaling;
 
 /* structs below are PODs with identical size & layout across platforms */
 
@@ -106,6 +112,9 @@ typedef struct ControllerAnalogActionData_t { unsigned char a[13]; } ControllerA
 typedef struct ControllerDigitalActionData_t { unsigned char a[2]; } ControllerDigitalActionData_t;
 typedef struct ControllerMotionData_t { unsigned char a[40]; } ControllerMotionData_t;
 typedef struct SteamNetworkPingLocation_t { uint8 m_data[ 512 ]; } SteamNetworkPingLocation_t;
+
+/* XXX GET SIZE */
+typedef struct SteamIPAddress_t { uint8 m_data[12]; } SteamIPAddress_t;
 
 #pragma pack( push, 1 )
 
@@ -209,6 +218,9 @@ typedef struct SteamDatagramHostedAddress SteamDatagramHostedAddress;
 typedef struct SteamNetAuthenticationStatus_t SteamNetAuthenticationStatus_t;
 typedef struct SteamDatagramGameCoordinatorServerLogin SteamDatagramGameCoordinatorServerLogin;
 typedef struct SteamRelayNetworkStatus_t SteamRelayNetworkStatus_t;
+typedef struct SteamIPAddress_t SteamIPAddress_t;
+typedef struct SteamNetworkingConfigValue_t SteamNetworkingConfigValue_t;
+typedef struct SteamNetworkingMessage_t SteamNetworkingMessage_t;
 
 typedef uint32 (*SteamAPI_CheckCallbackRegistered_t)(int cb);
 typedef void *SteamAPIWarningMessageHook_t; //already cdecl, no need for conversion(?)
@@ -270,6 +282,7 @@ typedef uint32 HSteamNetConnection;
 typedef int64 SteamNetworkingMicroseconds;
 typedef uint32 HSteamListenSocket;
 typedef uint32 SteamNetworkingPOPID;
+typedef uint32 RemotePlaySessionID_t;
 
 #pragma pack( push, 4 )
 typedef struct CallbackMsg_t

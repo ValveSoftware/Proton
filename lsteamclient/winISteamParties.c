@@ -37,7 +37,7 @@ PartyBeaconID_t __thiscall winISteamParties_SteamParties002_GetBeaconByIndex(win
 }
 
 DEFINE_THISCALL_WRAPPER(winISteamParties_SteamParties002_GetBeaconDetails, 28)
-bool __thiscall winISteamParties_SteamParties002_GetBeaconDetails(winISteamParties_SteamParties002 *_this, PartyBeaconID_t ulBeaconID, CSteamID * pSteamIDBeaconOwner, winSteamPartyBeaconLocation_t_146 * pLocation, char * pchMetadata, int cchMetadata)
+bool __thiscall winISteamParties_SteamParties002_GetBeaconDetails(winISteamParties_SteamParties002 *_this, PartyBeaconID_t ulBeaconID, CSteamID * pSteamIDBeaconOwner, winSteamPartyBeaconLocation_t_147 * pLocation, char * pchMetadata, int cchMetadata)
 {
     TRACE("%p\n", _this);
     return cppISteamParties_SteamParties002_GetBeaconDetails(_this->linux_side, ulBeaconID, pSteamIDBeaconOwner, pLocation, pchMetadata, cchMetadata);
@@ -58,14 +58,14 @@ bool __thiscall winISteamParties_SteamParties002_GetNumAvailableBeaconLocations(
 }
 
 DEFINE_THISCALL_WRAPPER(winISteamParties_SteamParties002_GetAvailableBeaconLocations, 12)
-bool __thiscall winISteamParties_SteamParties002_GetAvailableBeaconLocations(winISteamParties_SteamParties002 *_this, winSteamPartyBeaconLocation_t_146 * pLocationList, uint32 uMaxNumLocations)
+bool __thiscall winISteamParties_SteamParties002_GetAvailableBeaconLocations(winISteamParties_SteamParties002 *_this, winSteamPartyBeaconLocation_t_147 * pLocationList, uint32 uMaxNumLocations)
 {
     TRACE("%p\n", _this);
     return cppISteamParties_SteamParties002_GetAvailableBeaconLocations(_this->linux_side, pLocationList, uMaxNumLocations);
 }
 
 DEFINE_THISCALL_WRAPPER(winISteamParties_SteamParties002_CreateBeacon, 20)
-SteamAPICall_t __thiscall winISteamParties_SteamParties002_CreateBeacon(winISteamParties_SteamParties002 *_this, uint32 unOpenSlots, winSteamPartyBeaconLocation_t_146 * pBeaconLocation, const char * pchConnectString, const char * pchMetadata)
+SteamAPICall_t __thiscall winISteamParties_SteamParties002_CreateBeacon(winISteamParties_SteamParties002 *_this, uint32 unOpenSlots, winSteamPartyBeaconLocation_t_147 * pBeaconLocation, const char * pchConnectString, const char * pchMetadata)
 {
     TRACE("%p\n", _this);
     return cppISteamParties_SteamParties002_CreateBeacon(_this->linux_side, unOpenSlots, pBeaconLocation, pchConnectString, pchMetadata);
@@ -100,7 +100,7 @@ bool __thiscall winISteamParties_SteamParties002_DestroyBeacon(winISteamParties_
 }
 
 DEFINE_THISCALL_WRAPPER(winISteamParties_SteamParties002_GetBeaconLocationData, 28)
-bool __thiscall winISteamParties_SteamParties002_GetBeaconLocationData(winISteamParties_SteamParties002 *_this, winSteamPartyBeaconLocation_t_146 BeaconLocation, ESteamPartyBeaconLocationData eData, char * pchDataStringOut, int cchDataStringOut)
+bool __thiscall winISteamParties_SteamParties002_GetBeaconLocationData(winISteamParties_SteamParties002 *_this, winSteamPartyBeaconLocation_t_147 BeaconLocation, ESteamPartyBeaconLocationData eData, char * pchDataStringOut, int cchDataStringOut)
 {
     TRACE("%p\n", _this);
     return cppISteamParties_SteamParties002_GetBeaconLocationData(_this->linux_side, BeaconLocation, eData, pchDataStringOut, cchDataStringOut);

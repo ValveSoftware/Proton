@@ -5,7 +5,7 @@
 
 from __future__ import print_function
 
-CLANG_PATH='/usr/lib/clang/8.0.1'
+CLANG_PATH='/usr/lib/clang/9.0.0'
 
 import pprint
 import sys
@@ -181,7 +181,15 @@ manually_handled_methods = {
         "cppISteamNetworkingSockets_SteamNetworkingSockets003": [
             "ReceiveMessagesOnConnection",
             "ReceiveMessagesOnListenSocket"
-        ]
+        ],
+        "cppISteamNetworkingSockets_SteamNetworkingSockets006": [
+            "ReceiveMessagesOnConnection",
+            "ReceiveMessagesOnListenSocket",
+            "SendMessages"
+        ],
+        "cppISteamNetworkingUtils_SteamNetworkingUtils003": [
+            "AllocateMessage",
+        ],
 }
 
 # manual converters for simple types (function pointers)

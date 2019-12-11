@@ -1,14 +1,14 @@
 #include "steam_defs.h"
 #pragma push_macro("__cdecl")
 #undef __cdecl
-#include "steamworks_sdk_146/steam_api.h"
-#include "steamworks_sdk_146/steamnetworkingtypes.h"
+#include "steamworks_sdk_147/steam_api.h"
+#include "steamworks_sdk_147/steamnetworkingtypes.h"
 #pragma pop_macro("__cdecl")
 #include "steamclient_private.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
-#define SDKVER_146
+#define SDKVER_147
 #include "struct_converters.h"
 #include "cppISteamParties_SteamParties002.h"
 uint32 cppISteamParties_SteamParties002_GetNumActiveBeacons(void *linux_side)
@@ -21,12 +21,12 @@ PartyBeaconID_t cppISteamParties_SteamParties002_GetBeaconByIndex(void *linux_si
     return ((ISteamParties*)linux_side)->GetBeaconByIndex((uint32)unIndex);
 }
 
-bool cppISteamParties_SteamParties002_GetBeaconDetails(void *linux_side, PartyBeaconID_t ulBeaconID, CSteamID * pSteamIDBeaconOwner, winSteamPartyBeaconLocation_t_146 * pLocation, char * pchMetadata, int cchMetadata)
+bool cppISteamParties_SteamParties002_GetBeaconDetails(void *linux_side, PartyBeaconID_t ulBeaconID, CSteamID * pSteamIDBeaconOwner, winSteamPartyBeaconLocation_t_147 * pLocation, char * pchMetadata, int cchMetadata)
 {
     SteamPartyBeaconLocation_t lin_pLocation;
-    win_to_lin_struct_SteamPartyBeaconLocation_t_146(pLocation, &lin_pLocation);
+    win_to_lin_struct_SteamPartyBeaconLocation_t_147(pLocation, &lin_pLocation);
     bool retval = ((ISteamParties*)linux_side)->GetBeaconDetails((PartyBeaconID_t)ulBeaconID, (CSteamID *)pSteamIDBeaconOwner, &lin_pLocation, (char *)pchMetadata, (int)cchMetadata);
-    lin_to_win_struct_SteamPartyBeaconLocation_t_146(&lin_pLocation, pLocation);
+    lin_to_win_struct_SteamPartyBeaconLocation_t_147(&lin_pLocation, pLocation);
     return retval;
 }
 
@@ -40,21 +40,21 @@ bool cppISteamParties_SteamParties002_GetNumAvailableBeaconLocations(void *linux
     return ((ISteamParties*)linux_side)->GetNumAvailableBeaconLocations((uint32 *)puNumLocations);
 }
 
-bool cppISteamParties_SteamParties002_GetAvailableBeaconLocations(void *linux_side, winSteamPartyBeaconLocation_t_146 * pLocationList, uint32 uMaxNumLocations)
+bool cppISteamParties_SteamParties002_GetAvailableBeaconLocations(void *linux_side, winSteamPartyBeaconLocation_t_147 * pLocationList, uint32 uMaxNumLocations)
 {
     SteamPartyBeaconLocation_t lin_pLocationList;
-    win_to_lin_struct_SteamPartyBeaconLocation_t_146(pLocationList, &lin_pLocationList);
+    win_to_lin_struct_SteamPartyBeaconLocation_t_147(pLocationList, &lin_pLocationList);
     bool retval = ((ISteamParties*)linux_side)->GetAvailableBeaconLocations(&lin_pLocationList, (uint32)uMaxNumLocations);
-    lin_to_win_struct_SteamPartyBeaconLocation_t_146(&lin_pLocationList, pLocationList);
+    lin_to_win_struct_SteamPartyBeaconLocation_t_147(&lin_pLocationList, pLocationList);
     return retval;
 }
 
-SteamAPICall_t cppISteamParties_SteamParties002_CreateBeacon(void *linux_side, uint32 unOpenSlots, winSteamPartyBeaconLocation_t_146 * pBeaconLocation, const char * pchConnectString, const char * pchMetadata)
+SteamAPICall_t cppISteamParties_SteamParties002_CreateBeacon(void *linux_side, uint32 unOpenSlots, winSteamPartyBeaconLocation_t_147 * pBeaconLocation, const char * pchConnectString, const char * pchMetadata)
 {
     SteamPartyBeaconLocation_t lin_pBeaconLocation;
-    win_to_lin_struct_SteamPartyBeaconLocation_t_146(pBeaconLocation, &lin_pBeaconLocation);
+    win_to_lin_struct_SteamPartyBeaconLocation_t_147(pBeaconLocation, &lin_pBeaconLocation);
     SteamAPICall_t retval = ((ISteamParties*)linux_side)->CreateBeacon((uint32)unOpenSlots, &lin_pBeaconLocation, (const char *)pchConnectString, (const char *)pchMetadata);
-    lin_to_win_struct_SteamPartyBeaconLocation_t_146(&lin_pBeaconLocation, pBeaconLocation);
+    lin_to_win_struct_SteamPartyBeaconLocation_t_147(&lin_pBeaconLocation, pBeaconLocation);
     return retval;
 }
 
@@ -78,12 +78,12 @@ bool cppISteamParties_SteamParties002_DestroyBeacon(void *linux_side, PartyBeaco
     return ((ISteamParties*)linux_side)->DestroyBeacon((PartyBeaconID_t)ulBeacon);
 }
 
-bool cppISteamParties_SteamParties002_GetBeaconLocationData(void *linux_side, winSteamPartyBeaconLocation_t_146 BeaconLocation, ESteamPartyBeaconLocationData eData, char * pchDataStringOut, int cchDataStringOut)
+bool cppISteamParties_SteamParties002_GetBeaconLocationData(void *linux_side, winSteamPartyBeaconLocation_t_147 BeaconLocation, ESteamPartyBeaconLocationData eData, char * pchDataStringOut, int cchDataStringOut)
 {
     SteamPartyBeaconLocation_t lin_BeaconLocation;
-    win_to_lin_struct_SteamPartyBeaconLocation_t_146(&BeaconLocation, &lin_BeaconLocation);
+    win_to_lin_struct_SteamPartyBeaconLocation_t_147(&BeaconLocation, &lin_BeaconLocation);
     bool retval = ((ISteamParties*)linux_side)->GetBeaconLocationData(lin_BeaconLocation, (ESteamPartyBeaconLocationData)eData, (char *)pchDataStringOut, (int)cchDataStringOut);
-    lin_to_win_struct_SteamPartyBeaconLocation_t_146(&lin_BeaconLocation, &BeaconLocation);
+    lin_to_win_struct_SteamPartyBeaconLocation_t_147(&lin_BeaconLocation, &BeaconLocation);
     return retval;
 }
 

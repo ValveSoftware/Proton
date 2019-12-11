@@ -34,10 +34,10 @@ struct msg_wrapper {
     SLIST_ENTRY(msg_wrapper) entry;
 };
 
-SLIST_HEAD(free_msgs_head, msg_wrapper) free_msgs = SLIST_HEAD_INITIALIZER(free_msgs);
-CRITICAL_SECTION free_msgs_lock = { NULL, -1, 0, 0, 0, 0 };
+static SLIST_HEAD(free_msgs_head, msg_wrapper) free_msgs = SLIST_HEAD_INITIALIZER(free_msgs);
+static CRITICAL_SECTION free_msgs_lock = { NULL, -1, 0, 0, 0, 0 };
 
-void __attribute__((ms_abi)) win_FreeData(struct winSteamNetworkingMessage_t_144 *win_msg)
+static void __attribute__((ms_abi)) win_FreeData(struct winSteamNetworkingMessage_t_144 *win_msg)
 {
     struct msg_wrapper *msg = CONTAINING_RECORD(win_msg, struct msg_wrapper, win_msg);
     TRACE("%p\n", msg);
@@ -48,7 +48,7 @@ void __attribute__((ms_abi)) win_FreeData(struct winSteamNetworkingMessage_t_144
     }
 }
 
-void __attribute__((ms_abi)) win_Release(struct winSteamNetworkingMessage_t_144 *win_msg)
+static void __attribute__((ms_abi)) win_Release(struct winSteamNetworkingMessage_t_144 *win_msg)
 {
     struct msg_wrapper *msg = CONTAINING_RECORD(win_msg, struct msg_wrapper, win_msg);
     TRACE("%p\n", msg);
@@ -60,7 +60,7 @@ void __attribute__((ms_abi)) win_Release(struct winSteamNetworkingMessage_t_144 
     LeaveCriticalSection(&free_msgs_lock);
 }
 
-void lin_FreeData(struct SteamNetworkingMessage_t *lin_msg)
+static void lin_FreeData(struct SteamNetworkingMessage_t *lin_msg)
 {
     struct msg_wrapper *msg = (struct msg_wrapper *)lin_msg->m_pData; /* ! see assignment, below */
     TRACE("%p\n", msg);
