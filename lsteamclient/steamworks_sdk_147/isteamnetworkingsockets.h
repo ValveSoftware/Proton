@@ -61,7 +61,7 @@ public:
 	///
 	/// When a client attempts to connect, a SteamNetConnectionStatusChangedCallback_t
 	/// will be posted.  The connection will be in the connecting state.
-	virtual HSteamListenSocket CreateListenSocketIP( const SteamNetworkingIPAddr &localAddress, int nOptions, const SteamNetworkingConfigValue_t *pOptions ) = 0;
+	virtual HSteamListenSocket CreateListenSocketIP( const SteamNetworkingIPAddr *localAddress, int nOptions, const SteamNetworkingConfigValue_t *pOptions ) = 0;
 
 	/// Creates a connection and begins talking to a "server" over UDP at the
 	/// given IPv4 or IPv6 address.  The remote host must be listening with a
@@ -85,7 +85,7 @@ public:
 	/// If you need to set any initial config options, pass them here.  See
 	/// SteamNetworkingConfigValue_t for more about why this is preferable to
 	/// setting the options "immediately" after creation.
-	virtual HSteamNetConnection ConnectByIPAddress( const SteamNetworkingIPAddr &address, int nOptions, const SteamNetworkingConfigValue_t *pOptions ) = 0;
+	virtual HSteamNetConnection ConnectByIPAddress( const SteamNetworkingIPAddr *address, int nOptions, const SteamNetworkingConfigValue_t *pOptions ) = 0;
 
 #ifdef STEAMNETWORKINGSOCKETS_ENABLE_SDR
 	/// Like CreateListenSocketIP, but clients will connect using ConnectP2P
@@ -115,7 +115,7 @@ public:
 	/// If you need to set any initial config options, pass them here.  See
 	/// SteamNetworkingConfigValue_t for more about why this is preferable to
 	/// setting the options "immediately" after creation.
-	virtual HSteamNetConnection ConnectP2P( const SteamNetworkingIdentity &identityRemote, int nVirtualPort, int nOptions, const SteamNetworkingConfigValue_t *pOptions ) = 0;
+	virtual HSteamNetConnection ConnectP2P( const SteamNetworkingIdentity *identityRemote, int nVirtualPort, int nOptions, const SteamNetworkingConfigValue_t *pOptions ) = 0;
 #endif
 
 	/// Accept an incoming connection that has been received on a listen socket.
@@ -275,7 +275,7 @@ public:
 	/// -k_EResultInvalidState if the connection was in an invalid state.
 	/// See ISteamNetworkingSockets::SendMessageToConnection for possible
 	/// failure codes.
-	virtual void SendMessages( int nMessages, SteamNetworkingMessage_t *const *pMessages, int64 *pOutMessageNumberOrResult ) = 0;
+	virtual void SendMessages( int nMessages, SteamNetworkingMessage_t **pMessages, int64 *pOutMessageNumberOrResult ) = 0;
 
 	/// Flush any messages waiting on the Nagle timer and send them
 	/// at the next transmission opportunity (often that means right now).
@@ -424,7 +424,7 @@ public:
 	///
 	/// Typically this is useful just to confirm that you have a ticket, before you
 	/// call ConnectToHostedDedicatedServer to connect to the server.
-	virtual int FindRelayAuthTicketForServer( const SteamNetworkingIdentity &identityGameServer, int nVirtualPort, SteamDatagramRelayAuthTicket *pOutParsedTicket ) = 0;
+	virtual int FindRelayAuthTicketForServer( const SteamNetworkingIdentity *identityGameServer, int nVirtualPort, SteamDatagramRelayAuthTicket *pOutParsedTicket ) = 0;
 
 	/// Client call to connect to a server hosted in a Valve data center, on the specified virtual
 	/// port.  You must have placed a ticket for this server into the cache, or else this connect attempt will fail!
@@ -439,7 +439,7 @@ public:
 	/// If you need to set any initial config options, pass them here.  See
 	/// SteamNetworkingConfigValue_t for more about why this is preferable to
 	/// setting the options "immediately" after creation.
-	virtual HSteamNetConnection ConnectToHostedDedicatedServer( const SteamNetworkingIdentity &identityTarget, int nVirtualPort, int nOptions, const SteamNetworkingConfigValue_t *pOptions ) = 0;
+	virtual HSteamNetConnection ConnectToHostedDedicatedServer( const SteamNetworkingIdentity *identityTarget, int nVirtualPort, int nOptions, const SteamNetworkingConfigValue_t *pOptions ) = 0;
 
 	//
 	// Servers hosted in data centers known to the Valve relay network
@@ -613,11 +613,11 @@ public:
 	/// size.  (256 bytes is a very conservative estimate.)
 	///
 	/// Pass this blob to your game coordinator and call SteamDatagram_CreateCert.
-	virtual bool GetCertificateRequest( int *pcbBlob, void *pBlob, SteamNetworkingErrMsg &errMsg ) = 0;
+	virtual bool GetCertificateRequest( int *pcbBlob, void *pBlob, SteamNetworkingErrMsg *errMsg ) = 0;
 
 	/// Set the certificate.  The certificate blob should be the output of
 	/// SteamDatagram_CreateCert.
-	virtual bool SetCertificate( const void *pCertificate, int cbCertificate, SteamNetworkingErrMsg &errMsg ) = 0;
+	virtual bool SetCertificate( const void *pCertificate, int cbCertificate, SteamNetworkingErrMsg *errMsg ) = 0;
 #endif
 
 	// Invoke all callbacks queued for this interface.
@@ -658,7 +658,7 @@ public:
 	/// Signaling objects will not be shared between connections.
 	/// You can assume that the same value of hConn will be used
 	/// every time.
-	virtual bool SendSignal( HSteamNetConnection hConn, const SteamNetConnectionInfo_t &info, const void *pMsg, int cbMsg ) = 0;
+	virtual bool SendSignal( HSteamNetConnection hConn, const SteamNetConnectionInfo_t *info, const void *pMsg, int cbMsg ) = 0;
 
 	/// Called when the connection no longer needs to send signals.
 	/// Note that this happens eventually (but not immediately) after
@@ -699,13 +699,13 @@ public:
 	///
 	/// After accepting a connection (through either means), the connection
 	/// will transition into the "finding route" state.
-	virtual ISteamNetworkingConnectionCustomSignaling *OnConnectRequest( HSteamNetConnection hConn, const SteamNetworkingIdentity &identityPeer ) = 0;
+	virtual ISteamNetworkingConnectionCustomSignaling *OnConnectRequest( HSteamNetConnection hConn, const SteamNetworkingIdentity *identityPeer ) = 0;
 
 	/// This is called actively communication rejection or failure
 	/// to the incoming message.  If you intend to ignore all incoming requests
 	/// that you do not wish to accept, then it's not strictly necessary to
 	/// implement this.
-	virtual void SendRejectionSignal( const SteamNetworkingIdentity &identityPeer, const void *pMsg, int cbMsg ) = 0;
+	virtual void SendRejectionSignal( const SteamNetworkingIdentity *identityPeer, const void *pMsg, int cbMsg ) = 0;
 };
 
 
@@ -734,6 +734,8 @@ extern "C" {
 	inline ISteamNetworkingSockets *SteamGameServerNetworkingSockets();
 	STEAM_DEFINE_GAMESERVER_INTERFACE_ACCESSOR( ISteamNetworkingSockets *, SteamGameServerNetworkingSockets, STEAMNETWORKINGSOCKETS_INTERFACE_VERSION );
 #endif
+
+}
 
 /// Callback struct used to notify when a connection has changed state
 #if defined( VALVE_CALLBACK_PACK_SMALL )
@@ -815,6 +817,5 @@ struct SteamNetAuthenticationStatus_t
 
 #pragma pack( pop )
 
-}
 
 #endif // ISTEAMNETWORKINGSOCKETS
