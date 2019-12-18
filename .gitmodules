@@ -7,9 +7,6 @@
 [submodule "dxvk"]
 	path = dxvk
 	url = https://github.com/doitsujin/dxvk/
-[submodule "d9vk"]
-        path = d9vk
-        url = https://github.com/Joshua-Ashton/d9vk
 [submodule "ffmpeg"]
 	path = ffmpeg
 	url = https://git.ffmpeg.org/ffmpeg.git

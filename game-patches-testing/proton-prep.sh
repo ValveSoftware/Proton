@@ -16,15 +16,6 @@
     git reset --hard HEAD
     git clean -xdf
     patch -Np1 < ../game-patches-testing/dxvk-patches/valve-dxvk-avoid-spamming-log-with-requests-for-IWineD3D11Texture2D.patch
-    patch -Np1 < ../game-patches-testing/dxvk-patches/dxvk-async.patch
-    cd ..
-
-    # Valve D9VK patches
-    cd d9vk
-    git reset --hard HEAD
-    git clean -xdf
-    # Warlock: Master of the Arcane new game hang fix
-    patch -Np1 < ../game-patches-testing/d9vk-patches/d3d9-device_local_memory.patch
     cd ..
 
     #WINE
@@ -38,7 +29,7 @@
     git revert --no-commit 6ccb94392a8ef4bca701ae2a560f4ea1da677edd
 
     # https://bugs.winehq.org/show_bug.cgi?id=48160
-    git revert --no-commit 0e183cc3c0d3b6f89f79047cdd71c389afc75073
+    git patch -Np1 ../game-patches-testing/wine-patches/implement-strtod-without-using-long-double.patch
 
     #FS HACK REVERTS NECESSARY
     git revert --no-commit 427152ec7b4ee85631617b693dbf1deea763c0ba
@@ -61,11 +52,6 @@
     -W winex11-MWM_Decorations \
     -W winex11-_NET_ACTIVE_WINDOW \
     -W winex11-WM_WINDOWPOSCHANGING \
-    -W dinput-SetActionMap-genre \
-    -W dinput-axis-recalc \
-    -W dinput-joy-mappings \
-    -W dinput-reconnect-joystick \
-    -W dinput-remap-joystick
 
     #WINE VULKAN
     echo "applying winevulkan patches"
@@ -97,6 +83,9 @@
 
     echo "origin downloads fix"
     patch -Np1 < ../game-patches-testing/game-patches/origin-downloads_fix.patch
+
+    echo "gta v loading fix"
+    patch -Np1 < ../game-patches-testing/game-patches/gtav-load-fix.patch
 
     echo "steam crossover patch"
     patch -Np1 < ../game-patches-testing/game-patches/steam-crossover.patch
@@ -134,9 +123,6 @@
     echo "SDL Joystick"
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-sdl_joy.patch
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-sdl_joy_2.patch
-
-    echo "gamepad additions"
-    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-gamepad_additions.patch
 
     echo "mf hacks"
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-mf_hacks.patch

@@ -1,0 +1,132 @@
+@@ -, +, @@ 
+    msvcrt: Implement strtod without using 'long double'.
+    
+    Wine-Bug: https://bugs.winehq.org/show_bug.cgi?id=48160
+--- a/dlls/msvcrt/string.c	
++++ a/dlls/msvcrt/string.c	
+@@ -558,16 +558,27 @@ static double strtod16(int sign, const char *p, char **end,
+ }
+ #endif
+ 
++static double MSVCRT_mul_pow10(double x, int exp)
++{
++    BOOL negexp;
++    double ret;
++
++    negexp = (exp < 0);
++    if(negexp)
++        exp = -exp;
++    ret = pow(10.0, exp);
++    return negexp ? x/ret : x*ret;
++}
++
+ static double strtod_helper(const char *str, char **end, MSVCRT__locale_t locale, int *err)
+ {
++    int exp1=0, exp2=0, exp3=0, sign=1;
+     MSVCRT_pthreadlocinfo locinfo;
+     unsigned __int64 d=0, hlp;
++    BOOL found_digit = FALSE;
+     unsigned fpcontrol;
+-    int exp=0, sign=1;
+     const char *p;
+     double ret;
+-    long double lret=1, expcnt = 10;
+-    BOOL found_digit = FALSE, negexp;
+ 
+     if(err)
+         *err = 0;
+@@ -621,13 +632,13 @@ static double strtod_helper(const char *str, char **end, MSVCRT__locale_t locale
+         found_digit = TRUE;
+         hlp = d * 10 + *p++ - '0';
+         if(d>MSVCRT_UI64_MAX/10 || hlp<d) {
+-            exp++;
++            exp1++;
+             break;
+         } else
+             d = hlp;
+     }
+     while(*p>='0' && *p<='9') {
+-        exp++;
++        exp1++;
+         p++;
+     }
+ 
+@@ -640,7 +651,7 @@ static double strtod_helper(const char *str, char **end, MSVCRT__locale_t locale
+         if(d>MSVCRT_UI64_MAX/10 || hlp<d)
+             break;
+         d = hlp;
+-        exp--;
++        exp1--;
+     }
+     while(*p>='0' && *p<='9')
+         p++;
+@@ -669,34 +680,35 @@ static double strtod_helper(const char *str, char **end, MSVCRT__locale_t locale
+             }
+             e *= s;
+ 
+-            if(exp<0 && e<0 && exp+e>=0) exp = INT_MIN;
+-            else if(exp>0 && e>0 && exp+e<0) exp = INT_MAX;
+-            else exp += e;
++            if(exp1<0 && e<0 && exp1+e>=0) exp1 = INT_MIN;
++            else if(exp1>0 && e>0 && exp1+e<0) exp1 = INT_MAX;
++            else exp3 = e;
+         } else {
+             if(*p=='-' || *p=='+')
+                 p--;
+             p--;
+         }
+     }
+-
++ 
+     fpcontrol = _control87(0, 0);
+     _control87(MSVCRT__EM_DENORMAL|MSVCRT__EM_INVALID|MSVCRT__EM_ZERODIVIDE
+             |MSVCRT__EM_OVERFLOW|MSVCRT__EM_UNDERFLOW|MSVCRT__EM_INEXACT, 0xffffffff);
+ 
+-    negexp = (exp < 0);
+-    if(negexp)
+-        exp = -exp;
+-    while(exp) {
+-        if(exp & 1)
+-            lret *= expcnt;
+-        exp /= 2;
+-        expcnt = expcnt*expcnt;
+-    }
+-    ret = (long double)sign * (negexp ? d/lret : d*lret);
++    /* take the number without exponent and convert it into a double */
++    ret = MSVCRT_mul_pow10(d, exp1);
++    /* shift the number to the representation where the first non-zero digit is in the ones place */
++    exp2 = (ret != 0.0 ? (int)log10(ret) : 0);
++    ret = MSVCRT_mul_pow10(ret, exp2);
++    /* apply the exponent (and undo any shift) */
++    ret = MSVCRT_mul_pow10(ret, exp3-exp2);
++    /* apply the sign bit */
++    ret *= sign;
+ 
+     _control87(fpcontrol, 0xffffffff);
+ 
+     if((d && ret==0.0) || isinf(ret)) {
++        if(ret == 0.0)
++            ret = MSVCRT_DBL_MIN/2; /* for weird test at msvcrt/tests/string.c:3039 and 3042 */
+         if(err)
+             *err = MSVCRT_ERANGE;
+         else
+--- a/dlls/msvcrt/tests/string.c	
++++ a/dlls/msvcrt/tests/string.c	
+@@ -28,6 +28,7 @@ 
+ #include <locale.h>
+ #include <errno.h>
+ #include <limits.h>
++#include <float.h>
+ #include <math.h>
+ 
+ /* make it use a definition from string.h */
+@@ -1990,6 +1991,9 @@ static void test__strtod(void)
+     errno = 0xdeadbeef;
+     strtod("-1d309", NULL);
+     ok(errno == ERANGE, "errno = %x\n", errno);
++
++    d = strtod("1.7976931348623158e+308", NULL);
++    ok(almost_equal(d, DBL_MAX), "d = %lf (%lf)\n", d, DBL_MAX);
+ }
+ 
+ static void test_mbstowcs(void)

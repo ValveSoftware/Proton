@@ -1,0 +1,17 @@
+@@ -, +, @@ 
+---
+ include/winternl.h | 2 ++
+ 1 file changed, 2 insertions(+)
+--- a/include/winternl.h	
++++ a/include/winternl.h	
+@@ -213,6 +213,8 @@ typedef struct _PEB_LDR_DATA
+     LIST_ENTRY          InMemoryOrderModuleList;
+     LIST_ENTRY          InInitializationOrderModuleList;
+     PVOID               EntryInProgress;
++    BOOLEAN             ShutdownInProgress;
++    HANDLE              ShutdownThreadId;
+ } PEB_LDR_DATA, *PPEB_LDR_DATA;
+ 
+ typedef struct _GDI_TEB_BATCH
+-- 
+

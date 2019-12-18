@@ -20,7 +20,7 @@ from filelock import FileLock
 #To enable debug logging, copy "user_settings.sample.py" to "user_settings.py"
 #and edit it if needed.
 
-CURRENT_PREFIX_VERSION="4.21-1"
+CURRENT_PREFIX_VERSION="4.21-2"
 
 PFX="Proton: "
 ld_path_var = "LD_LIBRARY_PATH"
@@ -439,10 +439,6 @@ class Session:
             self.compat_config.add("wined3d")
 
         if not self.check_environment("PROTON_USE_WINED3D", "wined3d"):
-            self.check_environment("PROTON_USE_WINED3D11", "wined3d")
-        self.check_environment("PROTON_NO_D3D11", "nod3d11")
-        self.check_environment("PROTON_NO_D3D10", "nod3d10")
-        self.check_environment("PROTON_NO_D9VK",  "nod3d9")
         self.check_environment("PROTON_NO_ESYNC", "noesync")
         self.check_environment("PROTON_USE_VKD3D", "vkd3d")
         self.check_environment("PROTON_NO_FSYNC", "nofsync")
@@ -485,19 +481,6 @@ class Session:
             self.env["WINEDEBUG"] = "-all"
 
         g_compatdata.setup_prefix()
-
-        if "nod3d11" in self.compat_config:
-            self.dlloverrides["d3d11"] = ""
-            if "dxgi" in self.dlloverrides:
-                del self.dlloverrides["dxgi"]
-
-        if "nod3d10" in self.compat_config:
-            self.dlloverrides["d3d10_1"] = ""
-            self.dlloverrides["d3d10"] = ""
-            self.dlloverrides["dxgi"] = ""
-
-        if "nod3d9" in self.compat_config:
-            self.dlloverrides["d3d9"] = ""
 
         if "vkd3d" in self.compat_config:
             self.dlloverrides["dxgi"] = "b"
