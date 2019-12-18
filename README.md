@@ -15,6 +15,15 @@ All patches:
 -wine staging patches  
 -various wine hot fixes for wine functionality that fix regressions per version  
 
+
+NOTES REGARDING SPECIFIC GAME QUIRKS:  
+-Warframe does NOT need "WINEDLLOVERRIDES="xaudio2_7=n,b" - FAudio replaces xaudio2. Using this override WILL lead to game crashes.  
+-Warframe needs xboxdrv running in the background as a service. This is an issue related to Steam only. If it does not detect a controller within 5 minutes the game will close.  
+-Warframe is problematic with vsync. Turn it off or on in game, do not set Auto.  
+-Warframe needs a set a frame limit in game. Unlimited framerate can cause slowdowns  
+-Warframe on Nvidia you may need to disable GPU Particles in game otherwise the game can freeze randomly. On AMD they work fine  
+
+
 Full patches can be viewed in game-patches-testing/proton-prep.sh  
 
 How to install:
