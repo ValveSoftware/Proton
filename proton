@@ -439,7 +439,7 @@ class Session:
             self.compat_config.add("wined3d")
 
         if not self.check_environment("PROTON_USE_WINED3D", "wined3d"):
-        self.check_environment("PROTON_NO_ESYNC", "noesync")
+        	self.check_environment("PROTON_NO_ESYNC", "noesync")
         self.check_environment("PROTON_USE_VKD3D", "vkd3d")
         self.check_environment("PROTON_NO_FSYNC", "nofsync")
         self.check_environment("PROTON_FORCE_LARGE_ADDRESS_AWARE", "forcelgadd")
