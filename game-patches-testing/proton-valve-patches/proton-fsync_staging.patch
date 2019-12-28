@@ -2307,7 +2307,7 @@ new file mode 100644
 index 0000000000..822c4c07ff
 --- /dev/null
 +++ b/server/fsync.c
-@@ -0,0 +1,472 @@
+@@ -0,0 +1,471 @@
 +/*
 + * futex-based synchronization objects
 + *
@@ -2351,7 +2351,6 @@ index 0000000000..822c4c07ff
 +#define WIN32_NO_STATUS
 +#include "windef.h"
 +#include "winternl.h"
-+#include "wine/library.h"
 +
 +#include "handle.h"
 +#include "request.h"
@@ -2412,8 +2411,8 @@ index 0000000000..822c4c07ff
 +{
 +    struct stat st;
 +
-+    if (stat( wine_get_config_dir(), &st ) == -1)
-+        fatal_error( "cannot stat %s\n", wine_get_config_dir() );
++    if (fstat( config_dir_fd, &st ) == -1)
++        fatal_error( "cannot stat config dir\n" );
 +
 +    if (st.st_ino != (unsigned long)st.st_ino)
 +        sprintf( shm_name, "/wine-%lx%08lx-fsync", (unsigned long)((unsigned long long)st.st_ino >> 32), (unsigned long)st.st_ino );
@@ -2880,9 +2879,9 @@ index aca8738c4c..97a66c16d4 100644
  #include "request.h"
  #include "esync.h"
 +#include "fsync.h"
- #include "wine/library.h"
  
  /* command-line options */
+ int debug_level = 0;
 @@ -142,6 +143,9 @@ int main( int argc, char *argv[] )
      sock_init();
      open_master_socket();

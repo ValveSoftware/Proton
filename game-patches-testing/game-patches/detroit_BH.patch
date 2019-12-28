@@ -1,0 +1,746 @@
+From 3e2b4add1f2587abf2d064ac4b7aa51adbbd7cd0 Mon Sep 17 00:00:00 2001
+From: Paul Gofman <gofmanp@gmail.com>
+Date: Wed, 25 Dec 2019 15:59:04 +0300
+Subject: [PATCH] ntdll: Handle unaligned addresses in for condition variables.
+
+Signed-off-by: Paul Gofman <gofmanp@gmail.com>
+---
+ dlls/ntdll/sync.c | 152 +++++++++++++++++++++++++++-------------------
+ 1 file changed, 88 insertions(+), 64 deletions(-)
+
+diff --git a/dlls/ntdll/sync.c b/dlls/ntdll/sync.c
+index f087492143..77357031b3 100644
+--- a/dlls/ntdll/sync.c
++++ b/dlls/ntdll/sync.c
+@@ -68,6 +68,7 @@ WINE_DEFAULT_DEBUG_CHANNEL(sync);
+ HANDLE keyed_event = NULL;
+ 
+ static const LARGE_INTEGER zero_timeout;
++static const BOOL is_win64 = sizeof(void *) > sizeof(int);
+ 
+ #define TICKSPERSEC 10000000
+ 
+@@ -100,7 +101,12 @@ static inline int futex_wake_bitset( const int *addr, int val, int mask )
+     return syscall( __NR_futex, addr, FUTEX_WAKE_BITSET | futex_private, val, NULL, 0, mask );
+ }
+ 
+-static inline int use_futexes(void)
++static inline int *try_align_futex_ptr(void *ptr)
++{
++    return is_win64 ? (int *)(((ULONG_PTR)ptr + 3) & ~3) : (int *)ptr;
++}
++
++static inline int use_futexes(const void *addr)
+ {
+     static int supported = -1;
+ 
+@@ -114,7 +120,7 @@ static inline int use_futexes(void)
+         }
+         supported = (errno != ENOSYS);
+     }
+-    return supported;
++    return supported && !((ULONG_PTR)addr & 0x3);
+ }
+ 
+ static void timespec_from_timeout( struct timespec *timespec, const LARGE_INTEGER *timeout )
+@@ -1747,12 +1753,13 @@ static NTSTATUS fast_try_acquire_srw_exclusive( RTL_SRWLOCK *lock )
+ {
+     int old, new;
+     NTSTATUS ret;
++    int *ptr = try_align_futex_ptr(&lock->Ptr);
+ 
+-    if (!use_futexes()) return STATUS_NOT_IMPLEMENTED;
++    if (!use_futexes(ptr)) return STATUS_NOT_IMPLEMENTED;
+ 
+     do
+     {
+-        old = *(int *)lock;
++        old = *ptr;
+ 
+         if (!(old & SRWLOCK_FUTEX_EXCLUSIVE_LOCK_BIT)
+                 && !(old & SRWLOCK_FUTEX_SHARED_OWNERS_MASK))
+@@ -1766,7 +1773,7 @@ static NTSTATUS fast_try_acquire_srw_exclusive( RTL_SRWLOCK *lock )
+             new = old;
+             ret = STATUS_TIMEOUT;
+         }
+-    } while (interlocked_cmpxchg( (int *)lock, new, old ) != old);
++    } while (interlocked_cmpxchg( ptr, new, old ) != old);
+ 
+     return ret;
+ }
+@@ -1775,22 +1782,23 @@ static NTSTATUS fast_acquire_srw_exclusive( RTL_SRWLOCK *lock )
+ {
+     int old, new;
+     BOOLEAN wait;
++    int *ptr = try_align_futex_ptr(&lock->Ptr);
+ 
+-    if (!use_futexes()) return STATUS_NOT_IMPLEMENTED;
++    if (!use_futexes(ptr)) return STATUS_NOT_IMPLEMENTED;
+ 
+     /* Atomically increment the exclusive waiter count. */
+     do
+     {
+-        old = *(int *)lock;
++        old = *ptr;
+         new = old + SRWLOCK_FUTEX_EXCLUSIVE_WAITERS_INC;
+         assert(new & SRWLOCK_FUTEX_EXCLUSIVE_WAITERS_MASK);
+-    } while (interlocked_cmpxchg( (int *)lock, new, old ) != old);
++    } while (interlocked_cmpxchg( ptr, new, old ) != old);
+ 
+     for (;;)
+     {
+         do
+         {
+-            old = *(int *)lock;
++            old = *ptr;
+ 
+             if (!(old & SRWLOCK_FUTEX_EXCLUSIVE_LOCK_BIT)
+                     && !(old & SRWLOCK_FUTEX_SHARED_OWNERS_MASK))
+@@ -1806,12 +1814,12 @@ static NTSTATUS fast_acquire_srw_exclusive( RTL_SRWLOCK *lock )
+                 new = old;
+                 wait = TRUE;
+             }
+-        } while (interlocked_cmpxchg( (int *)lock, new, old ) != old);
++        } while (interlocked_cmpxchg( ptr, new, old ) != old);
+ 
+         if (!wait)
+             return STATUS_SUCCESS;
+ 
+-        futex_wait_bitset( (int *)lock, new, NULL, SRWLOCK_FUTEX_BITSET_EXCLUSIVE );
++        futex_wait_bitset( ptr, new, NULL, SRWLOCK_FUTEX_BITSET_EXCLUSIVE );
+     }
+ 
+     return STATUS_SUCCESS;
+@@ -1821,12 +1829,13 @@ static NTSTATUS fast_try_acquire_srw_shared( RTL_SRWLOCK *lock )
+ {
+     int new, old;
+     NTSTATUS ret;
++    int *ptr = try_align_futex_ptr(&lock->Ptr);
+ 
+-    if (!use_futexes()) return STATUS_NOT_IMPLEMENTED;
++    if (!use_futexes(ptr)) return STATUS_NOT_IMPLEMENTED;
+ 
+     do
+     {
+-        old = *(int *)lock;
++        old = *ptr;
+ 
+         if (!(old & SRWLOCK_FUTEX_EXCLUSIVE_LOCK_BIT)
+                 && !(old & SRWLOCK_FUTEX_EXCLUSIVE_WAITERS_MASK))
+@@ -1842,7 +1851,7 @@ static NTSTATUS fast_try_acquire_srw_shared( RTL_SRWLOCK *lock )
+             new = old;
+             ret = STATUS_TIMEOUT;
+         }
+-    } while (interlocked_cmpxchg( (int *)lock, new, old ) != old);
++    } while (interlocked_cmpxchg( ptr, new, old ) != old);
+ 
+     return ret;
+ }
+@@ -1851,14 +1860,15 @@ static NTSTATUS fast_acquire_srw_shared( RTL_SRWLOCK *lock )
+ {
+     int old, new;
+     BOOLEAN wait;
++    int *ptr = try_align_futex_ptr(&lock->Ptr);
+ 
+-    if (!use_futexes()) return STATUS_NOT_IMPLEMENTED;
++    if (!use_futexes(ptr)) return STATUS_NOT_IMPLEMENTED;
+ 
+     for (;;)
+     {
+         do
+         {
+-            old = *(int *)lock;
++            old = *ptr;
+ 
+             if (!(old & SRWLOCK_FUTEX_EXCLUSIVE_LOCK_BIT)
+                     && !(old & SRWLOCK_FUTEX_EXCLUSIVE_WAITERS_MASK))
+@@ -1874,12 +1884,12 @@ static NTSTATUS fast_acquire_srw_shared( RTL_SRWLOCK *lock )
+                 new = old | SRWLOCK_FUTEX_SHARED_WAITERS_BIT;
+                 wait = TRUE;
+             }
+-        } while (interlocked_cmpxchg( (int *)lock, new, old ) != old);
++        } while (interlocked_cmpxchg( ptr, new, old ) != old);
+ 
+         if (!wait)
+             return STATUS_SUCCESS;
+ 
+-        futex_wait_bitset( (int *)lock, new, NULL, SRWLOCK_FUTEX_BITSET_SHARED );
++        futex_wait_bitset( ptr, new, NULL, SRWLOCK_FUTEX_BITSET_SHARED );
+     }
+ 
+     return STATUS_SUCCESS;
+@@ -1888,16 +1898,17 @@ static NTSTATUS fast_acquire_srw_shared( RTL_SRWLOCK *lock )
+ static NTSTATUS fast_release_srw_exclusive( RTL_SRWLOCK *lock )
+ {
+     int old, new;
++    int *ptr = try_align_futex_ptr(&lock->Ptr);
+ 
+-    if (!use_futexes()) return STATUS_NOT_IMPLEMENTED;
++    if (!use_futexes(ptr)) return STATUS_NOT_IMPLEMENTED;
+ 
+     do
+     {
+-        old = *(int *)lock;
++        old = *ptr;
+ 
+         if (!(old & SRWLOCK_FUTEX_EXCLUSIVE_LOCK_BIT))
+         {
+-            ERR("Lock %p is not owned exclusive! (%#x)\n", lock, *(int *)lock);
++            ERR("Lock %p is not owned exclusive! (%#x)\n", ptr, *ptr);
+             return STATUS_RESOURCE_NOT_OWNED;
+         }
+ 
+@@ -1905,12 +1916,12 @@ static NTSTATUS fast_release_srw_exclusive( RTL_SRWLOCK *lock )
+ 
+         if (!(new & SRWLOCK_FUTEX_EXCLUSIVE_WAITERS_MASK))
+             new &= ~SRWLOCK_FUTEX_SHARED_WAITERS_BIT;
+-    } while (interlocked_cmpxchg( (int *)lock, new, old ) != old);
++    } while (interlocked_cmpxchg( ptr, new, old ) != old);
+ 
+     if (new & SRWLOCK_FUTEX_EXCLUSIVE_WAITERS_MASK)
+-        futex_wake_bitset( (int *)lock, 1, SRWLOCK_FUTEX_BITSET_EXCLUSIVE );
++        futex_wake_bitset( ptr, 1, SRWLOCK_FUTEX_BITSET_EXCLUSIVE );
+     else if (old & SRWLOCK_FUTEX_SHARED_WAITERS_BIT)
+-        futex_wake_bitset( (int *)lock, INT_MAX, SRWLOCK_FUTEX_BITSET_SHARED );
++        futex_wake_bitset( ptr, INT_MAX, SRWLOCK_FUTEX_BITSET_SHARED );
+ 
+     return STATUS_SUCCESS;
+ }
+@@ -1918,30 +1929,31 @@ static NTSTATUS fast_release_srw_exclusive( RTL_SRWLOCK *lock )
+ static NTSTATUS fast_release_srw_shared( RTL_SRWLOCK *lock )
+ {
+     int old, new;
++    int *ptr = try_align_futex_ptr(&lock->Ptr);
+ 
+-    if (!use_futexes()) return STATUS_NOT_IMPLEMENTED;
++    if (!use_futexes(ptr)) return STATUS_NOT_IMPLEMENTED;
+ 
+     do
+     {
+-        old = *(int *)lock;
++        old = *ptr;
+ 
+         if (old & SRWLOCK_FUTEX_EXCLUSIVE_LOCK_BIT)
+         {
+-            ERR("Lock %p is owned exclusive! (%#x)\n", lock, *(int *)lock);
++            ERR("Lock %p is owned exclusive! (%#x)\n", ptr, *ptr);
+             return STATUS_RESOURCE_NOT_OWNED;
+         }
+         else if (!(old & SRWLOCK_FUTEX_SHARED_OWNERS_MASK))
+         {
+-            ERR("Lock %p is not owned shared! (%#x)\n", lock, *(int *)lock);
++            ERR("Lock %p is not owned shared! (%#x)\n", ptr, *ptr);
+             return STATUS_RESOURCE_NOT_OWNED;
+         }
+ 
+         new = old - SRWLOCK_FUTEX_SHARED_OWNERS_INC;
+-    } while (interlocked_cmpxchg( (int *)lock, new, old ) != old);
++    } while (interlocked_cmpxchg( ptr, new, old ) != old);
+ 
+     /* Optimization: only bother waking if there are actually exclusive waiters. */
+     if (!(new & SRWLOCK_FUTEX_SHARED_OWNERS_MASK) && (new & SRWLOCK_FUTEX_EXCLUSIVE_WAITERS_MASK))
+-        futex_wake_bitset( (int *)lock, 1, SRWLOCK_FUTEX_BITSET_EXCLUSIVE );
++        futex_wake_bitset(ptr, 1, SRWLOCK_FUTEX_BITSET_EXCLUSIVE );
+ 
+     return STATUS_SUCCESS;
+ }
+@@ -2025,11 +2037,11 @@ static NTSTATUS fast_release_srw_shared( RTL_SRWLOCK *lock )
+ #define SRWLOCK_RES_SHARED            0x00000001
+ 
+ #ifdef WORDS_BIGENDIAN
+-#define srwlock_key_exclusive(lock)   (&lock->Ptr)
+-#define srwlock_key_shared(lock)      ((void *)((char *)&lock->Ptr + 2))
++#define srwlock_key_exclusive(lock)   (try_align_futex_ptr(&lock->Ptr))
++#define srwlock_key_shared(lock)      ((void *)((char *)try_align_futex_ptr(&lock->Ptr) + 2))
+ #else
+-#define srwlock_key_exclusive(lock)   ((void *)((char *)&lock->Ptr + 2))
+-#define srwlock_key_shared(lock)      (&lock->Ptr)
++#define srwlock_key_exclusive(lock)   ((void *)((char *)try_align_futex_ptr(&lock->Ptr) + 2))
++#define srwlock_key_shared(lock)      (try_align_futex_ptr(&lock->Ptr))
+ #endif
+ 
+ static inline void srwlock_check_invalid( unsigned int val )
+@@ -2129,7 +2141,7 @@ void WINAPI RtlAcquireSRWLockExclusive( RTL_SRWLOCK *lock )
+     if (fast_acquire_srw_exclusive( lock ) != STATUS_NOT_IMPLEMENTED)
+         return;
+ 
+-    if (srwlock_lock_exclusive( (unsigned int *)&lock->Ptr, SRWLOCK_RES_EXCLUSIVE ))
++    if (srwlock_lock_exclusive( (unsigned int *)try_align_futex_ptr(&lock->Ptr), SRWLOCK_RES_EXCLUSIVE ))
+         NtWaitForKeyedEvent( 0, srwlock_key_exclusive(lock), FALSE, NULL );
+ }
+ 
+@@ -2143,19 +2155,20 @@ void WINAPI RtlAcquireSRWLockExclusive( RTL_SRWLOCK *lock )
+ void WINAPI RtlAcquireSRWLockShared( RTL_SRWLOCK *lock )
+ {
+     unsigned int val, tmp;
++    int *ptr = try_align_futex_ptr(&lock->Ptr);
+ 
+     if (fast_acquire_srw_shared( lock ) != STATUS_NOT_IMPLEMENTED)
+         return;
+ 
+     /* Acquires a shared lock. If it's currently not possible to add elements to
+      * the shared queue, then request exclusive access instead. */
+-    for (val = *(unsigned int *)&lock->Ptr;; val = tmp)
++    for (val = *(unsigned int *)ptr;; val = tmp)
+     {
+         if ((val & SRWLOCK_MASK_EXCLUSIVE_QUEUE) && !(val & SRWLOCK_MASK_IN_EXCLUSIVE))
+             tmp = val + SRWLOCK_RES_EXCLUSIVE;
+         else
+             tmp = val + SRWLOCK_RES_SHARED;
+-        if ((tmp = interlocked_cmpxchg( (int *)&lock->Ptr, tmp, val )) == val)
++        if ((tmp = interlocked_cmpxchg( ptr, tmp, val )) == val)
+             break;
+     }
+ 
+@@ -2163,7 +2176,7 @@ void WINAPI RtlAcquireSRWLockShared( RTL_SRWLOCK *lock )
+     if ((val & SRWLOCK_MASK_EXCLUSIVE_QUEUE) && !(val & SRWLOCK_MASK_IN_EXCLUSIVE))
+     {
+         NtWaitForKeyedEvent( 0, srwlock_key_exclusive(lock), FALSE, NULL );
+-        val = srwlock_unlock_exclusive( (unsigned int *)&lock->Ptr, (SRWLOCK_RES_SHARED
++        val = srwlock_unlock_exclusive( (unsigned int *)ptr, (SRWLOCK_RES_SHARED
+                                         - SRWLOCK_RES_EXCLUSIVE) ) - SRWLOCK_RES_EXCLUSIVE;
+         srwlock_leave_exclusive( lock, val );
+     }
+@@ -2180,7 +2193,7 @@ void WINAPI RtlReleaseSRWLockExclusive( RTL_SRWLOCK *lock )
+     if (fast_release_srw_exclusive( lock ) != STATUS_NOT_IMPLEMENTED)
+         return;
+ 
+-    srwlock_leave_exclusive( lock, srwlock_unlock_exclusive( (unsigned int *)&lock->Ptr,
++    srwlock_leave_exclusive( lock, srwlock_unlock_exclusive( (unsigned int *)try_align_futex_ptr(&lock->Ptr),
+                              - SRWLOCK_RES_EXCLUSIVE ) - SRWLOCK_RES_EXCLUSIVE );
+ }
+ 
+@@ -2192,7 +2205,7 @@ void WINAPI RtlReleaseSRWLockShared( RTL_SRWLOCK *lock )
+     if (fast_release_srw_shared( lock ) != STATUS_NOT_IMPLEMENTED)
+         return;
+ 
+-    srwlock_leave_shared( lock, srwlock_lock_exclusive( (unsigned int *)&lock->Ptr,
++    srwlock_leave_shared( lock, srwlock_lock_exclusive( (unsigned int *)try_align_futex_ptr(&lock->Ptr),
+                           - SRWLOCK_RES_SHARED ) - SRWLOCK_RES_SHARED );
+ }
+ 
+@@ -2210,7 +2223,7 @@ BOOLEAN WINAPI RtlTryAcquireSRWLockExclusive( RTL_SRWLOCK *lock )
+     if ((ret = fast_try_acquire_srw_exclusive( lock )) != STATUS_NOT_IMPLEMENTED)
+         return (ret == STATUS_SUCCESS);
+ 
+-    return interlocked_cmpxchg( (int *)&lock->Ptr, SRWLOCK_MASK_IN_EXCLUSIVE |
++    return interlocked_cmpxchg( try_align_futex_ptr(&lock->Ptr), SRWLOCK_MASK_IN_EXCLUSIVE |
+                                 SRWLOCK_RES_EXCLUSIVE, 0 ) == 0;
+ }
+ 
+@@ -2220,48 +2233,53 @@ BOOLEAN WINAPI RtlTryAcquireSRWLockExclusive( RTL_SRWLOCK *lock )
+ BOOLEAN WINAPI RtlTryAcquireSRWLockShared( RTL_SRWLOCK *lock )
+ {
+     unsigned int val, tmp;
++    int *ptr = try_align_futex_ptr(&lock->Ptr);
+     NTSTATUS ret;
+ 
+     if ((ret = fast_try_acquire_srw_shared( lock )) != STATUS_NOT_IMPLEMENTED)
+         return (ret == STATUS_SUCCESS);
+ 
+-    for (val = *(unsigned int *)&lock->Ptr;; val = tmp)
++    for (val = *(unsigned int *)ptr;; val = tmp)
+     {
+         if (val & SRWLOCK_MASK_EXCLUSIVE_QUEUE)
+             return FALSE;
+-        if ((tmp = interlocked_cmpxchg( (int *)&lock->Ptr, val + SRWLOCK_RES_SHARED, val )) == val)
++        if ((tmp = interlocked_cmpxchg( ptr, val + SRWLOCK_RES_SHARED, val )) == val)
+             break;
+     }
+     return TRUE;
+ }
+ 
+ #ifdef __linux__
+-static NTSTATUS fast_wait_cv( RTL_CONDITION_VARIABLE *variable, int val, const LARGE_INTEGER *timeout )
++static NTSTATUS fast_wait_cv( int *ptr, int val, const LARGE_INTEGER *timeout )
+ {
+     struct timespec timespec;
+     int ret;
+ 
+-    if (!use_futexes())
++    if (!use_futexes(ptr))
+         return STATUS_NOT_IMPLEMENTED;
+ 
+     if (timeout && timeout->QuadPart != TIMEOUT_INFINITE)
+     {
+         timespec_from_timeout( &timespec, timeout );
+-        ret = futex_wait( (int *)&variable->Ptr, val, &timespec );
++        ret = futex_wait( ptr, val, &timespec );
+     }
+     else
+-        ret = futex_wait( (int *)&variable->Ptr, val, NULL );
++        ret = futex_wait( ptr, val, NULL );
+ 
+     if (ret == -1 && errno == ETIMEDOUT)
+         return STATUS_TIMEOUT;
++
++    if (ret == -1 && errno != EAGAIN)
++        ERR("futex wait failed, %s.\n", strerror(errno));
++
+     return STATUS_WAIT_0;
+ }
+ 
+-static NTSTATUS fast_wake_cv( RTL_CONDITION_VARIABLE *variable, int count )
++static NTSTATUS fast_wake_cv( int *ptr, int count )
+ {
+-    if (!use_futexes()) return STATUS_NOT_IMPLEMENTED;
++    if (!use_futexes(ptr)) return STATUS_NOT_IMPLEMENTED;
+ 
+-    futex_wake( (int *)&variable->Ptr, count );
++    futex_wake( ptr, count );
+     return STATUS_SUCCESS;
+ }
+ #else
+@@ -2309,9 +2327,11 @@ void WINAPI RtlInitializeConditionVariable( RTL_CONDITION_VARIABLE *variable )
+  */
+ void WINAPI RtlWakeConditionVariable( RTL_CONDITION_VARIABLE *variable )
+ {
+-    interlocked_xchg_add( (int *)&variable->Ptr, 1 );
+-    if (fast_wake_cv( variable, 1 ) == STATUS_NOT_IMPLEMENTED)
+-        RtlWakeAddressSingle( variable );
++    int *ptr = try_align_futex_ptr(&variable->Ptr);
++
++    interlocked_xchg_add( ptr, 1 );
++    if (fast_wake_cv( ptr, 1 ) == STATUS_NOT_IMPLEMENTED)
++        RtlWakeAddressSingle( ptr );
+ }
+ 
+ /***********************************************************************
+@@ -2321,9 +2341,11 @@ void WINAPI RtlWakeConditionVariable( RTL_CONDITION_VARIABLE *variable )
+  */
+ void WINAPI RtlWakeAllConditionVariable( RTL_CONDITION_VARIABLE *variable )
+ {
+-    interlocked_xchg_add( (int *)&variable->Ptr, 1 );
+-    if (fast_wake_cv( variable, INT_MAX ) == STATUS_NOT_IMPLEMENTED)
+-        RtlWakeAddressAll( variable );
++    int *ptr = try_align_futex_ptr(&variable->Ptr);
++
++    interlocked_xchg_add( ptr, 1 );
++    if (fast_wake_cv( ptr, INT_MAX ) == STATUS_NOT_IMPLEMENTED)
++        RtlWakeAddressAll( ptr );
+ }
+ 
+ /***********************************************************************
+@@ -2345,12 +2367,13 @@ NTSTATUS WINAPI RtlSleepConditionVariableCS( RTL_CONDITION_VARIABLE *variable, R
+                                              const LARGE_INTEGER *timeout )
+ {
+     NTSTATUS status;
+-    int val = *(int *)&variable->Ptr;
++    int *ptr = try_align_futex_ptr(&variable->Ptr);
++    int val = *ptr;
+ 
+     RtlLeaveCriticalSection( crit );
+ 
+-    if ((status = fast_wait_cv( variable, val, timeout )) == STATUS_NOT_IMPLEMENTED)
+-        status = RtlWaitOnAddress( &variable->Ptr, &val, sizeof(int), timeout );
++    if ((status = fast_wait_cv( ptr, val, timeout )) == STATUS_NOT_IMPLEMENTED)
++        status = RtlWaitOnAddress( ptr, &val, sizeof(int), timeout );
+ 
+     RtlEnterCriticalSection( crit );
+ 
+@@ -2380,15 +2403,16 @@ NTSTATUS WINAPI RtlSleepConditionVariableSRW( RTL_CONDITION_VARIABLE *variable,
+                                               const LARGE_INTEGER *timeout, ULONG flags )
+ {
+     NTSTATUS status;
+-    int val = *(int *)&variable->Ptr;
++    int *ptr = try_align_futex_ptr(&variable->Ptr);
++    int val = *ptr;
+ 
+     if (flags & RTL_CONDITION_VARIABLE_LOCKMODE_SHARED)
+         RtlReleaseSRWLockShared( lock );
+     else
+         RtlReleaseSRWLockExclusive( lock );
+ 
+-    if ((status = fast_wait_cv( variable, val, timeout )) == STATUS_NOT_IMPLEMENTED)
+-        status = RtlWaitOnAddress( &variable->Ptr, &val, sizeof(int), timeout );
++    if ((status = fast_wait_cv( ptr, val, timeout )) == STATUS_NOT_IMPLEMENTED)
++        status = RtlWaitOnAddress( ptr, &val, sizeof(int), timeout );
+ 
+     if (flags & RTL_CONDITION_VARIABLE_LOCKMODE_SHARED)
+         RtlAcquireSRWLockShared( lock );
+@@ -2446,7 +2470,7 @@ static inline NTSTATUS fast_wait_addr( const void *addr, const void *cmp, SIZE_T
+     struct timespec timespec;
+     int ret;
+ 
+-    if (!use_futexes())
++    if (!use_futexes(NULL))
+         return STATUS_NOT_IMPLEMENTED;
+ 
+     futex = hash_addr( addr );
+@@ -2477,7 +2501,7 @@ static inline NTSTATUS fast_wake_addr( const void *addr )
+ {
+     int *futex;
+ 
+-    if (!use_futexes())
++    if (!use_futexes(NULL))
+         return STATUS_NOT_IMPLEMENTED;
+ 
+     futex = hash_addr( addr );
+-- 
+2.24.1
+
+From 787526e19538caa71b23c71f3fe01f6166a3de5a Mon Sep 17 00:00:00 2001
+From: Paul Gofman <gofmanp@gmail.com>
+Date: Tue, 24 Dec 2019 19:24:33 +0300
+Subject: [PATCH] (temp) Detroit Become Human fixes.
+
+---
+ dlls/ntdll/nt.c            | 35 ++++++++++--------
+ dlls/ntdll/signal_x86_64.c | 73 +++++++++++++++++++++++++++++++++++++-
+ dlls/ntdll/version.c       |  4 +++
+ tools/winebuild/spec32.c   |  9 +++--
+ 4 files changed, 103 insertions(+), 18 deletions(-)
+
+diff --git a/dlls/ntdll/nt.c b/dlls/ntdll/nt.c
+index 524e39144b..d39e487842 100644
+--- a/dlls/ntdll/nt.c
++++ b/dlls/ntdll/nt.c
+@@ -1172,6 +1172,7 @@ static inline BOOL have_sse_daz_mode(void)
+ static inline void get_cpuinfo(SYSTEM_CPU_INFORMATION* info)
+ {
+     unsigned int regs[4], regs2[4];
++    BOOL amd_or_intel = FALSE;
+ 
+ #if defined(__i386__)
+     info->Architecture = PROCESSOR_ARCHITECTURE_INTEL;
+@@ -1183,6 +1184,8 @@ static inline void get_cpuinfo(SYSTEM_CPU_INFORMATION* info)
+     info->FeatureSet = CPU_FEATURE_VME | CPU_FEATURE_X86 | CPU_FEATURE_PGE;
+     info->Level = 3;
+ 
++    user_shared_data->ProcessorFeatures[PF_RDWRFSGSBASE_AVAILABLE] = TRUE;
++
+     if (!have_cpuid()) return;
+ 
+     do_cpuid(0x00000000, regs);  /* get standard cpuid level and vendor name */
+@@ -1227,15 +1230,7 @@ static inline void get_cpuinfo(SYSTEM_CPU_INFORMATION* info)
+             info->Revision |= ((regs2[0] >> 4 ) & 0xf) << 8;  /* model          */
+             info->Revision |= regs2[0] & 0xf;                 /* stepping       */
+ 
+-            do_cpuid(0x80000000, regs);  /* get vendor cpuid level */
+-            if (regs[0] >= 0x80000001)
+-            {
+-                do_cpuid(0x80000001, regs2);  /* get vendor features */
+-                user_shared_data->ProcessorFeatures[PF_VIRT_FIRMWARE_ENABLED]        = (regs2[2] >> 2) & 1;
+-                user_shared_data->ProcessorFeatures[PF_NX_ENABLED]                   = (regs2[3] >> 20) & 1;
+-                user_shared_data->ProcessorFeatures[PF_3DNOW_INSTRUCTIONS_AVAILABLE] = (regs2[3] >> 31) & 1;
+-                if (regs2[3] >> 31) info->FeatureSet |= CPU_FEATURE_3DNOW;
+-            }
++            amd_or_intel = TRUE;
+         }
+         else if (regs[1] == GENU && regs[3] == INEI && regs[2] == NTEL)
+         {
+@@ -1250,12 +1245,7 @@ static inline void get_cpuinfo(SYSTEM_CPU_INFORMATION* info)
+             if(regs2[3] & (1 << 21)) info->FeatureSet |= CPU_FEATURE_DS;
+             user_shared_data->ProcessorFeatures[PF_VIRT_FIRMWARE_ENABLED] = (regs2[2] >> 5) & 1;
+ 
+-            do_cpuid(0x80000000, regs);  /* get vendor cpuid level */
+-            if (regs[0] >= 0x80000001)
+-            {
+-                do_cpuid(0x80000001, regs2);  /* get vendor features */
+-                user_shared_data->ProcessorFeatures[PF_NX_ENABLED] = (regs2[3] >> 20) & 1;
+-            }
++            amd_or_intel = TRUE;
+         }
+         else
+         {
+@@ -1265,6 +1255,21 @@ static inline void get_cpuinfo(SYSTEM_CPU_INFORMATION* info)
+             info->Revision = ((regs2[0] >> 4 ) & 0xf) << 8;  /* model    */
+             info->Revision |= regs2[0] & 0xf;                /* stepping */
+         }
++
++        if (amd_or_intel)
++        {
++            do_cpuid(0x80000000, regs);  /* get vendor cpuid level */
++            if (regs[0] >= 0x80000001)
++            {
++                do_cpuid(0x80000001, regs2);  /* get vendor features */
++                user_shared_data->ProcessorFeatures[PF_VIRT_FIRMWARE_ENABLED]        = (regs2[2] >> 2) & 1;
++                user_shared_data->ProcessorFeatures[PF_NX_ENABLED]                   = (regs2[3] >> 20) & 1;
++                user_shared_data->ProcessorFeatures[PF_3DNOW_INSTRUCTIONS_AVAILABLE] = (regs2[3] >> 31) & 1;
++                user_shared_data->ProcessorFeatures[PF_RDTSC_INSTRUCTION_AVAILABLE] = (regs2[3] >> 27) & 1;
++                if (regs2[3] >> 31) info->FeatureSet |= CPU_FEATURE_3DNOW;
++                if ((regs2[3] >> 27) & 1) info->FeatureSet |= CPU_FEATURE_TSC;
++            }
++        }
+     }
+ }
+ 
+diff --git a/dlls/ntdll/signal_x86_64.c b/dlls/ntdll/signal_x86_64.c
+index 6cde57a0c5..0b9a318112 100644
+--- a/dlls/ntdll/signal_x86_64.c
++++ b/dlls/ntdll/signal_x86_64.c
+@@ -59,6 +59,10 @@
+ # include <mach/mach.h>
+ #endif
+ 
++#include <linux/filter.h>
++#include <linux/seccomp.h>
++#include <sys/prctl.h>
++
+ #define NONAMELESSUNION
+ #define NONAMELESSSTRUCT
+ #include "ntstatus.h"
+@@ -355,7 +359,7 @@ static inline void set_sigcontext( const CONTEXT *context, ucontext_t *sigcontex
+ #endif
+ }
+ 
+-extern void DECLSPEC_NORETURN __wine_syscall_dispatcher( void );
++void DECLSPEC_NORETURN __wine_syscall_dispatcher( void );
+ 
+ /***********************************************************************
+  * Definitions for Win32 unwind tables
+@@ -3097,6 +3101,38 @@ static void usr1_handler( int signal, siginfo_t *siginfo, void *ucontext )
+     restore_context( &context, ucontext );
+ }
+ 
++extern unsigned int __wine_nb_syscalls;
++
++extern void __wine_syscall_dispatcher();
++
++static void sigsys_handler( int signal, siginfo_t *siginfo, void *sigcontext )
++{
++    unsigned int thunk_ret_offset;
++    ucontext_t *ctx = sigcontext;
++    unsigned int syscall_nr;
++    void ***rsp;
++
++    WARN("SIGSYS, rax %#llx.\n", ctx->uc_mcontext.gregs[REG_RAX]);
++
++    syscall_nr = ctx->uc_mcontext.gregs[REG_RAX] - 0xf000;
++    if (syscall_nr >= __wine_nb_syscalls)
++    {
++        ERR("Syscall %u is undefined.\n", syscall_nr);
++        return;
++    }
++
++    rsp = (void ***)&ctx->uc_mcontext.gregs[REG_RSP];
++    *rsp -= 1;
++
++#ifdef __APPLE__
++    thunk_ret_offset = 0xb;
++#else
++    thunk_ret_offset = 0xc;
++#endif
++
++    **rsp = (void *)(ctx->uc_mcontext.gregs[REG_RIP] + thunk_ret_offset);
++    ctx->uc_mcontext.gregs[REG_RIP] = (ULONG64)__wine_syscall_dispatcher;
++}
+ 
+ /***********************************************************************
+  *           __wine_set_signal_handler   (NTDLL.@)
+@@ -3267,6 +3303,38 @@ void signal_init_thread( TEB *teb )
+ #endif
+ }
+ 
++static void install_bpf(struct sigaction *sig_act)
++{
++    static struct sock_filter filter[] =
++    {
++       BPF_STMT(BPF_LD | BPF_W | BPF_ABS,
++                (offsetof(struct seccomp_data, nr))),
++       BPF_JUMP(BPF_JMP | BPF_JGE | BPF_K, 0xf00, 0, 1),
++       BPF_STMT(BPF_RET | BPF_K, SECCOMP_RET_TRAP),
++       BPF_STMT(BPF_RET | BPF_K, SECCOMP_RET_ALLOW),
++    };
++    struct sock_fprog prog;
++
++    memset(&prog, 0, sizeof(prog));
++    prog.len = ARRAY_SIZE(filter);
++    prog.filter = filter;
++
++    if (prctl(PR_SET_NO_NEW_PRIVS, 1, 0, 0, 0))
++    {
++        perror("prctl(PR_SET_NO_NEW_PRIVS, ...)");
++        exit(1);
++    }
++
++    if (prctl(PR_SET_SECCOMP, SECCOMP_MODE_FILTER, &prog, 0, 0))
++    {
++        perror("prctl(PR_SET_SECCOMP, ...)");
++        exit(1);
++    }
++
++    sig_act->sa_sigaction = sigsys_handler;
++    sigaction(SIGSYS, sig_act, NULL);
++}
++
+ /**********************************************************************
+  *		signal_init_process
+  */
+@@ -3299,6 +3367,9 @@ void signal_init_process(void)
+     sig_act.sa_sigaction = trap_handler;
+     if (sigaction( SIGTRAP, &sig_act, NULL ) == -1) goto error;
+ #endif
++
++    install_bpf(&sig_act);
++
+     return;
+ 
+  error:
+diff --git a/dlls/ntdll/version.c b/dlls/ntdll/version.c
+index 61e48f6fbd..cc2b690b61 100644
+--- a/dlls/ntdll/version.c
++++ b/dlls/ntdll/version.c
+@@ -482,6 +482,7 @@ void version_init(void)
+     BOOL got_win_ver = FALSE;
+     const WCHAR *p, *appname = NtCurrentTeb()->Peb->ProcessParameters->ImagePathName.Buffer;
+     WCHAR appversion[MAX_PATH+20];
++    SYSTEM_BASIC_INFORMATION sbi;
+ 
+     current_version = &VersionData[WIN7];
+ 
+@@ -547,6 +548,9 @@ done:
+     user_shared_data->NtMinorVersion     = current_version->dwMinorVersion;
+     user_shared_data->SuiteMask          = current_version->wSuiteMask;
+ 
++    virtual_get_system_info(&sbi);
++    user_shared_data->NumberOfPhysicalPages = sbi.MmNumberOfPhysicalPages;
++
+     TRACE( "got %d.%d platform %d build %x name %s service pack %d.%d product %d\n",
+            current_version->dwMajorVersion, current_version->dwMinorVersion,
+            current_version->dwPlatformId, current_version->dwBuildNumber,
+diff --git a/tools/winebuild/spec32.c b/tools/winebuild/spec32.c
+index 05f5be6e48..0107f327cc 100644
+--- a/tools/winebuild/spec32.c
++++ b/tools/winebuild/spec32.c
+@@ -531,7 +531,7 @@ static void output_syscall_thunks_x64( DLLSPEC *spec )
+         output_cfi( ".cfi_startproc" );
+         output( "\t.byte 0x4c,0x8b,0xd1\n" );                               /* mov r10, rcx */
+         output( "\t.byte 0xb8\n" );                                         /* mov eax, SYSCALL */
+-        output( "\t.long %d\n", i );
++        output( "\t.long %d\n", i + 0xf000 );
+         output( "\t.byte 0xf6,0x04,0x25,0x08,0x03,0xfe,0x7f,0x01\n" );      /* test byte ptr [0x7ffe0308], 1 */
+         output( "\t.byte 0x75,0x03\n" );                                    /* jne (over syscall) */
+         output( "\t.byte 0x0f,0x05\n" );                                    /* syscall */
+@@ -576,6 +576,9 @@ static void output_syscall_thunks_x64( DLLSPEC *spec )
+         output( "\t.byte %d\n", max(get_args_size(odp), 32) - 32 );
+     }
+ 
++    output( "%s\n", asm_globl("__wine_nb_syscalls") );
++    output( "\t.long %u\n", spec->nb_syscalls );
++
+     output( "\n/* syscall dispatcher */\n\n" );
+     output( "\t.text\n" );
+     output( "\t.align %d\n", get_alignment(16) );
+@@ -601,6 +604,8 @@ static void output_syscall_thunks_x64( DLLSPEC *spec )
+     else
+         output( "\tsubq $0xc,0x8(%%rbp)\n" );
+ 
++    output( "\tsub $0xf000,%%rax\n" );
++
+     /* copy over any arguments on the stack */
+     output( "\tleaq 0x38(%%rbp),%%rsi\n" );
+     if (UsePIC)
+@@ -1233,7 +1238,7 @@ static void create_stub_exports_text_x64( DLLSPEC *spec )
+         align_output_rva( 16, 16 );
+         put_label( odp->link_name );
+         put_byte( 0x4c ); put_byte( 0x8b ); put_byte( 0xd1 );  /* mov r10, rcx */
+-        put_byte( 0xb8 ); put_dword( i );                      /* mov eax, SYSCALL */
++        put_byte( 0xb8 ); put_dword( i + 0xf000 );              /* mov eax, SYSCALL */
+         put_byte( 0xf6 ); put_byte( 0x04 ); put_byte( 0x25 );  /* test byte ptr [0x7ffe0308], 1 */
+                 put_byte( 0x08 ); put_byte( 0x03 ); put_byte( 0xfe );
+                 put_byte( 0x7f ); put_byte( 0x01 );
+-- 
+2.24.1
+
+ 

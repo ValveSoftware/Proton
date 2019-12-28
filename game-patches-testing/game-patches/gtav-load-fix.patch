@@ -1,9 +1,17 @@
-@@ -, +, @@ 
+From de412decebab6e0a5d0b9dc5aff7f631a7a455f8 Mon Sep 17 00:00:00 2001
+From: Paul Gofman <gofmanp@gmail.com>
+Date: Wed, 18 Dec 2019 01:43:51 +0300
+Subject: [PATCH] inlcude/winternl.h: Add Vista+ PEB_LDR_DATA structure fields.
+
+Signed-off-by: Paul Gofman <gofmanp@gmail.com>
 ---
  include/winternl.h | 2 ++
  1 file changed, 2 insertions(+)
---- a/include/winternl.h	
-+++ a/include/winternl.h	
+
+diff --git a/include/winternl.h b/include/winternl.h
+index 9e7e2bad93..33b1260323 100644
+--- a/include/winternl.h
++++ b/include/winternl.h
 @@ -213,6 +213,8 @@ typedef struct _PEB_LDR_DATA
      LIST_ENTRY          InMemoryOrderModuleList;
      LIST_ENTRY          InInitializationOrderModuleList;
@@ -14,4 +22,6 @@
  
  typedef struct _GDI_TEB_BATCH
 -- 
+2.23.0
+
 

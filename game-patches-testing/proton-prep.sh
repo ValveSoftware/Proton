@@ -28,9 +28,6 @@
     # https://bugs.winehq.org/show_bug.cgi?id=45774
     git revert --no-commit 6ccb94392a8ef4bca701ae2a560f4ea1da677edd
 
-    # https://bugs.winehq.org/show_bug.cgi?id=48160
-    git patch -Np1 ../game-patches-testing/wine-patches/implement-strtod-without-using-long-double.patch
-
     #FS HACK REVERTS NECESSARY
     git revert --no-commit 427152ec7b4ee85631617b693dbf1deea763c0ba
     git revert --no-commit b7b4bacaf99661e07c2f07a0260680b4e8bed4f8
@@ -52,6 +49,12 @@
     -W winex11-MWM_Decorations \
     -W winex11-_NET_ACTIVE_WINDOW \
     -W winex11-WM_WINDOWPOSCHANGING \
+    -W user32-rawinput-mouse \
+    -W user32-rawinput-nolegacy \
+    -W user32-rawinput-mouse-experimental \
+    -W user32-rawinput-hid \
+    -W user32-rawinput-keyboard \
+    -W winex11-key_translation
 
     #WINE VULKAN
     echo "applying winevulkan patches"
@@ -78,11 +81,17 @@
     echo "sword art online"
     patch -Np1 < ../game-patches-testing/game-patches/sword-art-online-gnutls.patch
 
-    echo "jedi fallen order stub"
-    patch -Np1 < ../game-patches-testing/game-patches/star-wars-jedi.patch
-
     echo "origin downloads fix"
     patch -Np1 < ../game-patches-testing/game-patches/origin-downloads_fix.patch
+
+    echo "star citizen crash fix"
+    patch -Np1 < ../game-patches-testing/game-patches/star-citizen-NAN.patch
+
+    echo "Detroit Become Human fix"
+    patch -Np1 < ../game-patches-testing/game-patches/detroit_BH.patch
+
+    echo "origin regression fix "
+    patch -Np1 < ../game-patches-testing/game-patches/origin_wine5.0rc2_regression.patch 
 
     echo "gta v loading fix"
     patch -Np1 < ../game-patches-testing/game-patches/gtav-load-fix.patch
@@ -90,14 +99,11 @@
     echo "steam crossover patch"
     patch -Np1 < ../game-patches-testing/game-patches/steam-crossover.patch
 
-    echo "halo mcc workaround"
-    patch -Np1 < ../game-patches-testing/game-patches/halo_mcc.patch
-
+    echo "valve mouse overlay fix"
+    patch -Np1 < ../game-patches-testing/game-patches/valve-overlay-mouse-fix.patch
     #WINE FSYNC
     echo "applying fsync patches"
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-fsync_staging.patch
-
-    patch -Np1 < ../game-patches-testing/wine-patches/user32-nolegacy.patch
 
     #PROTON
     echo "applying proton patches"
@@ -116,9 +122,17 @@
 
     echo "fullscreen hack"
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-FS_bypass_compositor.patch
-    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-fullscreen_hack_staging.patch
+    patch -Np1 < ../game-patches-testing/proton-valve-patches/valve_proton_fullscreen_hack-staging.patch
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-vk_bits_4.5+.patch
     patch -Np1 < ../game-patches-testing/proton-hotfixes/proton-integer_scaling.patch
+
+    echo "raw input"
+    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-rawinput.patch
+
+    echo "applying key translation patches from staging post-rawinput"
+    patch -Np1 < ../wine-staging/patches/winex11-key_translation/0001-winex11-Match-keyboard-in-Unicode.patch
+    patch -Np1 < ../wine-staging/patches/winex11-key_translation/0002-winex11-Fix-more-key-translation.patch
+    patch -Np1 < ../wine-staging/patches/winex11-key_translation/0003-winex11.drv-Fix-main-Russian-keyboard-layout.patch
 
     echo "SDL Joystick"
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-sdl_joy.patch

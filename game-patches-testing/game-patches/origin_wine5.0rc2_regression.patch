@@ -1,0 +1,28 @@
+See https://bugs.winehq.org/show_bug.cgi?id=48357
+
+--- b/dlls/ws2_32/tests/sock.c
++++ a/dlls/ws2_32/tests/sock.c
+@@ -3053,8 +3053,9 @@
+                 }
+                 else
+                 {
++                    todo_wine_if (i != 0) /* Remove when fixed */
++                        ok (net_events.lNetworkEvents == 0, "Test[%d]: expected 0, got %d\n",
++                            i, net_events.lNetworkEvents);
+-                    ok (net_events.lNetworkEvents == 0, "Test[%d]: expected 0, got %d\n",
+-                        i, net_events.lNetworkEvents);
+                 }
+                 for (k = 0; k < FD_MAX_EVENTS; k++)
+                 {
+--- b/server/sock.c
++++ a/server/sock.c
+@@ -1228,7 +1228,7 @@
+                                                 FILE_WRITE_ATTRIBUTES, &sock_ops))) return;
+     old_event = sock->event;
+     sock->mask    = req->mask;
++    sock->hmask   &= ~req->mask; /* re-enable held events */
+-    sock->hmask   &= (FD_WRITE | ~req->mask); /* re-enable held events */
+     sock->event   = NULL;
+     sock->window  = req->window;
+     sock->message = req->msg;
+ 

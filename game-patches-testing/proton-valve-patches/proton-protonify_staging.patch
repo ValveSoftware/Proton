@@ -222,9 +222,9 @@ index f08474b3635..2f637f25537 100644
      else
      {
 +#endif
-         /* '$HOME' doesn't exist. Create 'My Pictures', 'My Videos' and 'My Music' subdirs
-          * in '%USERPROFILE%\\My Documents' or fail silently if they already exist. */
-         pszHome = NULL;
+         /* '$HOME' doesn't exist. Create subdirs for 'My Pictures', 'My Videos',
+          * 'My Music' etc. in '%USERPROFILE%\My Documents' or fail silently if
+          * they already exist. */
 @@ -4486,8 +4488,11 @@ static void _SHCreateSymbolicLinks(void)
              if (_SHAppendToUnixPath(szMyStuffTarget, MAKEINTRESOURCEW(aidsMyStuff[i])))
                  mkdir(szMyStuffTarget, 0777);
@@ -234,7 +234,7 @@ index f08474b3635..2f637f25537 100644
 +#endif
  
 +#if 0
-     /* Create symbolic links for 'My Pictures', 'My Videos' and 'My Music'. */
+     /* Create symbolic links for 'My Pictures', 'My Videos', 'My Music' etc. */
      for (i=0; i < ARRAY_SIZE(aidsMyStuff); i++)
      {
 @@ -4532,13 +4537,17 @@ static void _SHCreateSymbolicLinks(void)
@@ -2819,8 +2819,8 @@ index d420dcb45aa..bd3660331eb 100644
  EXTRADEFS = -D_USER32_ -D_WINABLE_
  MODULE    = user32.dll
  IMPORTLIB = user32
--IMPORTS   = gdi32 version advapi32
-+IMPORTS   = gdi32 version advapi32 sechost
+-IMPORTS   = gdi32 version advapi32 kernelbase
++IMPORTS   = gdi32 version advapi32 kernelbase sechost
  EXTRAINCL = $(PNG_CFLAGS)
  DELAYIMPORTS = hid imm32 setupapi usp10
  
@@ -3307,20 +3307,9 @@ diff --git a/tools/winegcc/winegcc.c b/tools/winegcc/winegcc.c
 index 3d1817a36bb..899a3b3d5d9 100644
 --- a/tools/winegcc/winegcc.c
 +++ b/tools/winegcc/winegcc.c
-@@ -408,6 +408,10 @@ static strarray *get_link_args( struct options *opts, const char *output_name )
-             strarray_add( flags, "-image_base" );
-             strarray_add( flags, opts->image_base );
-         }
-+        /* On Mac, change -s into -Wl,-x. ld's -s switch
-+         * is deprecated, and it doesn't work on Tiger with
-+         * MH_BUNDLEs anyway
-+         */
-         if (opts->strip) strarray_add( flags, "-Wl,-x" );
-         return flags;
- 
 @@ -1162,9 +1166,21 @@ static void build(struct options* opts)
  
-     if (opts->nodefaultlibs && is_pe) strarray_add( link_args, "-lgcc" );
+     if (libgcc) strarray_add(link_args, libgcc);
  
 +    if (opts->target_platform != PLATFORM_APPLE && !is_pe && opts->strip)
 +        strarray_add(link_args, "-s");
@@ -3337,7 +3326,7 @@ index 3d1817a36bb..899a3b3d5d9 100644
 +        strarray_free(strip_args);
 +    }
 +
-     if (is_pe && opts->wine_builtin) make_wine_builtin( output_path );
+     if (is_pe && opts->wine_builtin) make_wine_builtin( opts, output_path );
  
      /* set the base address with prelink if linker support is not present */
 @@ -1555,12 +1571,8 @@ int main(int argc, char **argv)
@@ -3817,3 +3806,64 @@ index d2fc629c843..5a97590dbce 100644
  
      desc->VendorId = adapter_id.vendor_id;
      desc->DeviceId = adapter_id.device_id;
+From 304683886016ec940a9b331ce33fcbaf47e893c3 Mon Sep 17 00:00:00 2001
+From: Sven Baars <sbaars@codeweavers.com>
+Date: Thu, 5 Dec 2019 13:48:38 +0100
+Subject: [PATCH] HACK: ntdll: Return a handle to kernel32 when being asked for
+ mfc42.
+
+For some applications mfc42 is loaded, but never actually used. We can
+add Steam game IDs when we find more of such applications.
+---
+ dlls/ntdll/loader.c | 31 +++++++++++++++++++++++++++++++
+ 1 file changed, 31 insertions(+)
+
+diff --git a/dlls/ntdll/loader.c b/dlls/ntdll/loader.c
+index 431c247a072..c9fcad79316 100644
+--- a/dlls/ntdll/loader.c
++++ b/dlls/ntdll/loader.c
+@@ -159,6 +159,18 @@ static inline void ascii_to_unicode( WCHAR *dst, const char *src, size_t len )
+     while (len--) *dst++ = (unsigned char)*src++;
+ }
+ 
++static WCHAR *strcasestrW( const WCHAR *str, const WCHAR *sub )
++{
++    while (*str)
++    {
++        const WCHAR *p1 = str, *p2 = sub;
++        while (*p1 && *p2 && tolowerW(*p1) == tolowerW(*p2)) { p1++; p2++; }
++        if (!*p2) return (WCHAR *)str;
++        str++;
++    }
++    return NULL;
++}
++
+ #define RTL_UNLOAD_EVENT_TRACE_NUMBER 64
+ 
+ typedef struct _RTL_UNLOAD_EVENT_TRACE
+@@ -2869,6 +2881,25 @@ static NTSTATUS find_dll_file( const WCHAR *load_path, const WCHAR *libname,
+ done:
+     RtlFreeHeap( GetProcessHeap(), 0, dllname );
+     if (wow64_old_value) RtlWow64EnableFsRedirectionEx( 1, &wow64_old_value );
++
++    if (status != STATUS_SUCCESS)
++    {
++        /* HACK for Proton issue #17
++         *
++         * Some games try to load mfc42.dll, but then proceed to not use it.
++         * Just return a handle to kernel32 in that case.
++         */
++        static const WCHAR mfc42W[] = {'m','f','c','4','2',0};
++        static const WCHAR kernel32W[] = {'k','e','r','n','e','l','3','2','.','d','l','l',0};
++        const char *sgi = getenv( "SteamGameId" );
++        if (sgi &&
++            !strcmp( sgi, "105450" ) && /* AoE3 */
++            strcasestrW( libname, mfc42W ))
++        {
++            WARN_(loaddll)( "Using a fake mfc42 handle\n" );
++            status = find_dll_file( load_path, kernel32W, nt_name, pwm, mfc42W, module, image_info, st );
++        }
++    }
+     return status;
+ }
+ 
