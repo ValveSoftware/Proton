@@ -22,4 +22,4 @@ index c401349..62b4751 100644
 -    }
  }
  
- static bool vk_barrier_parameters_from_d3d12_resource_state(unsigned int state, unsigned int stencil_state,
+ static void d3d12_command_list_invalidate_root_parameters(struct d3d12_command_list *list,

@@ -9,6 +9,8 @@
     cd vkd3d
     git reset --hard HEAD
     git clean -xdf
+    patch -Np1 < ../game-patches-testing/vkd3d-patches/Support_RS_1.0_Volatile.patch
+    patch -Np1 < ../game-patches-testing/vkd3d-patches/wow-flicker.patch
     cd ..
 
     # Valve DXVK patches
@@ -55,6 +57,11 @@
     -W user32-rawinput-hid \
     -W user32-rawinput-keyboard \
     -W winex11-key_translation
+
+    #VKD3D-WINE
+    echo "applying vkd3d wine patches"
+    patch -Np1 < ../game-patches-testing/wine-patches/D3D12SerializeVersionedRootSignature.patch
+    patch -Np1 < ../game-patches-testing/wine-patches/D3D12CreateVersionedRootSignatureDeserializer.patch
 
     #WINE VULKAN
     echo "applying winevulkan patches"
