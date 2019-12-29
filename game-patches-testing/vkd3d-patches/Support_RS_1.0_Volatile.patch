@@ -17,7 +17,7 @@ method, which matches RS 1.1 STATIC descriptor model.
 
 Signed-off-by: Hans-Kristian Arntzen <post@arntzen-software.no>
 ---
- libs/vkd3d/command.c       | 359 +++++++++++++++++++++++++++++--------
+ libs/vkd3d/command.c       | 355 +++++++++++++++++++++++++++++--------
  libs/vkd3d/device.c        |  20 ++-
  libs/vkd3d/state.c         |  22 +++
  libs/vkd3d/vkd3d_private.h |  19 +-
@@ -37,17 +37,6 @@ index 8a7ff66..4c8efeb 100644
          pool_desc.maxSets = 512;
          pool_desc.poolSizeCount = ARRAY_SIZE(pool_sizes);
          pool_desc.pPoolSizes = pool_sizes;
-@@ -1865,6 +1865,10 @@ static void d3d12_command_list_invalidate_bindings(struct d3d12_command_list *li
-     if (!state)
-         return;
- 
-+    /* Each pipeline state has its own set layout for UAV counters
-+     * based on their implicit usage in the shader.
-+     * Binding a different pipeline state means having to re-remit
-+     * UAV counters in a new descriptor set (and layout). */
-     if (state->uav_counter_mask)
-     {
-         struct vkd3d_pipeline_bindings *bindings = &list->pipeline_bindings[state->vk_bind_point];
 @@ -2210,6 +2214,7 @@ static ULONG STDMETHODCALLTYPE d3d12_command_list_Release(ID3D12GraphicsCommandL
          if (list->allocator)
              d3d12_command_allocator_free_command_buffer(list->allocator, list);

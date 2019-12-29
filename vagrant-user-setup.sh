@@ -48,4 +48,4 @@ fi
 
 mkdir ~/build/
 cd ~/build
-../proton/configure.sh --steam-runtime64=docker:steam-proton-dev --steam-runtime32=docker:steam-proton-dev32 --steam-runtime=$HOME/steam-runtime/runtime/ --with-ffmpeg --build-name=Proton-4.21-GE-2
+../proton/configure.sh --steam-runtime64=docker:steam-proton-dev --steam-runtime32=docker:steam-proton-dev32 --steam-runtime=$HOME/steam-runtime/runtime/ --with-ffmpeg --build-name=Proton-5.0-rc3-GE-1
