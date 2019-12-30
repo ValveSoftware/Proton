@@ -75,16 +75,8 @@ Vagrant.configure(2) do |config|
 
       #install host build-time dependencies
       apt-get update
-      apt-get install -y gpgv2 gnupg2 git docker-ce docker-ce-cli containerd.io \
-          fontforge-nox python-debian python-pip meson libmpc-dev libmpc-dev:i386 \
-          gcc g++ gcc-i686-linux-gnu g++-i686-linux-gnu binutils-i686-linux-gnu \
-          gcc-mingw-w64-i686 gcc-mingw-w64-x86-64 \
-          g++-mingw-w64-i686 g++-mingw-w64-x86-64
+      apt-get install -y gpgv2 gnupg2 g++ g++-multilib git docker-ce docker-ce-cli containerd.io fontforge-nox python-debian schroot python-pip meson
 
-      update-alternatives --set x86_64-w64-mingw32-gcc `which x86_64-w64-mingw32-gcc-posix`
-      update-alternatives --set x86_64-w64-mingw32-g++ `which x86_64-w64-mingw32-g++-posix`
-      update-alternatives --set i686-w64-mingw32-gcc `which i686-w64-mingw32-gcc-posix`
-      update-alternatives --set i686-w64-mingw32-g++ `which i686-w64-mingw32-g++-posix`
 
       #install adobe font devkit to build source san hans
       pip install afdko
@@ -92,11 +84,28 @@ Vagrant.configure(2) do |config|
       #allow vagrant user to run docker
       adduser vagrant docker
 
+      if ! schroot -i -c proton_crosscc >/dev/null 2>&1; then
+        #download build of recent mingw-w64 with dwarf2 exceptions enabled
+        wget --progress=dot -O /root/proton_crosscc.tar.xz 'http://repo.steampowered.com/proton_mingw/proton_mingw-9.1-1.tar.xz'
+        unxz -T0 /root/proton_crosscc.tar.xz
+        mkdir -p /srv/chroot/proton_crosscc/
+        tar -xf /root/proton_crosscc.tar -C /srv/chroot/proton_crosscc/
+        #install proton_crosscc schroot
+        cat > /etc/schroot/chroot.d/proton_crosscc <<EOF
+[proton_crosscc]
+description=Special mingw-w64 for building DXVK
+type=directory
+directory=/srv/chroot/proton_crosscc/
+users=vagrant
+personality=linux
+preserve-environment=true
+EOF
+      fi
+      # unprivileged shell still runs as root for some reason
+
       # the script below will set up the steam-runtime docker containers
       sudo -u vagrant /home/vagrant/proton/vagrant-user-setup.sh
 
-      #ensure we use only the mingw-w64 that we built
-      apt-get remove -y '*mingw-w64*'
     SHELL
   end
 end
