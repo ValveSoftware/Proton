@@ -1215,6 +1215,9 @@ EVRRenderModelError ivrrendermodels_load_into_texture_d3d11_async(
     EVRRenderModelError error;
     ID3D11Texture2D *texture;
 
+    if (!dst_texture)
+        return VRRenderModelError_InvalidArg;
+
     error = load_linux_texture_map(linux_side, texture_id, &texture_map, version);
     if (error == VRRenderModelError_Loading)
     {
