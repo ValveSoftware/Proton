@@ -39,8 +39,8 @@ typedef struct winRenderModel_TextureMap_t_1015 winRenderModel_TextureMap_t_1015
 
 /* this is cast to 1015 during load_linux_texture_map, so ensure they're
  * binary compatible before updating this number */
-typedef struct winRenderModel_t_1610 winRenderModel_t_1610;
-typedef struct winRenderModel_TextureMap_t_1610 winRenderModel_TextureMap_t_1610;
+typedef struct winRenderModel_t_1715 winRenderModel_t_1715;
+typedef struct winRenderModel_TextureMap_t_1715 winRenderModel_TextureMap_t_1715;
 #include "cppIVRRenderModels_IVRRenderModels_006.h"
 
 WINE_DEFAULT_DEBUG_CHANNEL(vrclient);
@@ -1113,7 +1113,7 @@ static EVRRenderModelError load_linux_texture_map(void *linux_side, TextureID_t 
     case 5:
         return cppIVRRenderModels_IVRRenderModels_005_LoadTexture_Async(linux_side, texture_id, texture_map);
     case 6:
-        return cppIVRRenderModels_IVRRenderModels_006_LoadTexture_Async(linux_side, texture_id, (struct winRenderModel_TextureMap_t_1610 **)texture_map);
+        return cppIVRRenderModels_IVRRenderModels_006_LoadTexture_Async(linux_side, texture_id, (struct winRenderModel_TextureMap_t_1715 **)texture_map);
     }
     FIXME("Unsupported IVRRenderModels version! %u\n", version);
     return VRRenderModelError_NotSupported;
@@ -1130,7 +1130,7 @@ static void free_linux_texture_map(void *linux_side,
         cppIVRRenderModels_IVRRenderModels_005_FreeTexture(linux_side, texture_map);
         break;
     case 6:
-        cppIVRRenderModels_IVRRenderModels_006_FreeTexture(linux_side, (struct winRenderModel_TextureMap_t_1610 *)texture_map);
+        cppIVRRenderModels_IVRRenderModels_006_FreeTexture(linux_side, (struct winRenderModel_TextureMap_t_1715 *)texture_map);
         break;
     default:
         FIXME("Unsupported IVRRenderModels version! %u\n", version);
