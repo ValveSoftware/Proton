@@ -65,7 +65,8 @@ typedef int
         EVRSkeletalMotionRange,
         EVRSkeletalReferencePose,
         EVRSkeletalTrackingLevel,
-        EVRSummaryType;
+        EVRSummaryType,
+        EVRSceneApplicationState;
 
 typedef uint32_t DriverId_t;
 typedef uint32_t TrackedDeviceIndex_t;

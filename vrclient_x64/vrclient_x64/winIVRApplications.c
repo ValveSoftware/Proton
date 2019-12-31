@@ -18,6 +18,337 @@
 
 WINE_DEFAULT_DEBUG_CHANNEL(vrclient);
 
+#include "cppIVRApplications_IVRApplications_007.h"
+
+typedef struct __winIVRApplications_IVRApplications_007 {
+    vtable_ptr *vtable;
+    void *linux_side;
+} winIVRApplications_IVRApplications_007;
+
+DEFINE_THISCALL_WRAPPER(winIVRApplications_IVRApplications_007_AddApplicationManifest, 9)
+EVRApplicationError __thiscall winIVRApplications_IVRApplications_007_AddApplicationManifest(winIVRApplications_IVRApplications_007 *_this, const char * pchApplicationManifestFullPath, bool bTemporary)
+{
+    char lin_pchApplicationManifestFullPath[PATH_MAX];
+    vrclient_dos_path_to_unix_path(pchApplicationManifestFullPath, lin_pchApplicationManifestFullPath);
+    TRACE("%p\n", _this);
+    return cppIVRApplications_IVRApplications_007_AddApplicationManifest(_this->linux_side, pchApplicationManifestFullPath ? lin_pchApplicationManifestFullPath : NULL, bTemporary);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVRApplications_IVRApplications_007_RemoveApplicationManifest, 8)
+EVRApplicationError __thiscall winIVRApplications_IVRApplications_007_RemoveApplicationManifest(winIVRApplications_IVRApplications_007 *_this, const char * pchApplicationManifestFullPath)
+{
+    char lin_pchApplicationManifestFullPath[PATH_MAX];
+    vrclient_dos_path_to_unix_path(pchApplicationManifestFullPath, lin_pchApplicationManifestFullPath);
+    TRACE("%p\n", _this);
+    return cppIVRApplications_IVRApplications_007_RemoveApplicationManifest(_this->linux_side, pchApplicationManifestFullPath ? lin_pchApplicationManifestFullPath : NULL);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVRApplications_IVRApplications_007_IsApplicationInstalled, 8)
+bool __thiscall winIVRApplications_IVRApplications_007_IsApplicationInstalled(winIVRApplications_IVRApplications_007 *_this, const char * pchAppKey)
+{
+    TRACE("%p\n", _this);
+    return cppIVRApplications_IVRApplications_007_IsApplicationInstalled(_this->linux_side, pchAppKey);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVRApplications_IVRApplications_007_GetApplicationCount, 4)
+uint32_t __thiscall winIVRApplications_IVRApplications_007_GetApplicationCount(winIVRApplications_IVRApplications_007 *_this)
+{
+    TRACE("%p\n", _this);
+    return cppIVRApplications_IVRApplications_007_GetApplicationCount(_this->linux_side);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVRApplications_IVRApplications_007_GetApplicationKeyByIndex, 16)
+EVRApplicationError __thiscall winIVRApplications_IVRApplications_007_GetApplicationKeyByIndex(winIVRApplications_IVRApplications_007 *_this, uint32_t unApplicationIndex, char * pchAppKeyBuffer, uint32_t unAppKeyBufferLen)
+{
+    TRACE("%p\n", _this);
+    return cppIVRApplications_IVRApplications_007_GetApplicationKeyByIndex(_this->linux_side, unApplicationIndex, pchAppKeyBuffer, unAppKeyBufferLen);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVRApplications_IVRApplications_007_GetApplicationKeyByProcessId, 16)
+EVRApplicationError __thiscall winIVRApplications_IVRApplications_007_GetApplicationKeyByProcessId(winIVRApplications_IVRApplications_007 *_this, uint32_t unProcessId, char * pchAppKeyBuffer, uint32_t unAppKeyBufferLen)
+{
+    TRACE("%p\n", _this);
+    return cppIVRApplications_IVRApplications_007_GetApplicationKeyByProcessId(_this->linux_side, unProcessId, pchAppKeyBuffer, unAppKeyBufferLen);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVRApplications_IVRApplications_007_LaunchApplication, 8)
+EVRApplicationError __thiscall winIVRApplications_IVRApplications_007_LaunchApplication(winIVRApplications_IVRApplications_007 *_this, const char * pchAppKey)
+{
+    TRACE("%p\n", _this);
+    return cppIVRApplications_IVRApplications_007_LaunchApplication(_this->linux_side, pchAppKey);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVRApplications_IVRApplications_007_LaunchTemplateApplication, 20)
+EVRApplicationError __thiscall winIVRApplications_IVRApplications_007_LaunchTemplateApplication(winIVRApplications_IVRApplications_007 *_this, const char * pchTemplateAppKey, const char * pchNewAppKey, AppOverrideKeys_t * pKeys, uint32_t unKeys)
+{
+    TRACE("%p\n", _this);
+    return cppIVRApplications_IVRApplications_007_LaunchTemplateApplication(_this->linux_side, pchTemplateAppKey, pchNewAppKey, pKeys, unKeys);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVRApplications_IVRApplications_007_LaunchApplicationFromMimeType, 12)
+EVRApplicationError __thiscall winIVRApplications_IVRApplications_007_LaunchApplicationFromMimeType(winIVRApplications_IVRApplications_007 *_this, const char * pchMimeType, const char * pchArgs)
+{
+    TRACE("%p\n", _this);
+    return cppIVRApplications_IVRApplications_007_LaunchApplicationFromMimeType(_this->linux_side, pchMimeType, pchArgs);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVRApplications_IVRApplications_007_LaunchDashboardOverlay, 8)
+EVRApplicationError __thiscall winIVRApplications_IVRApplications_007_LaunchDashboardOverlay(winIVRApplications_IVRApplications_007 *_this, const char * pchAppKey)
+{
+    TRACE("%p\n", _this);
+    return cppIVRApplications_IVRApplications_007_LaunchDashboardOverlay(_this->linux_side, pchAppKey);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVRApplications_IVRApplications_007_CancelApplicationLaunch, 8)
+bool __thiscall winIVRApplications_IVRApplications_007_CancelApplicationLaunch(winIVRApplications_IVRApplications_007 *_this, const char * pchAppKey)
+{
+    TRACE("%p\n", _this);
+    return cppIVRApplications_IVRApplications_007_CancelApplicationLaunch(_this->linux_side, pchAppKey);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVRApplications_IVRApplications_007_IdentifyApplication, 12)
+EVRApplicationError __thiscall winIVRApplications_IVRApplications_007_IdentifyApplication(winIVRApplications_IVRApplications_007 *_this, uint32_t unProcessId, const char * pchAppKey)
+{
+    TRACE("%p\n", _this);
+    return cppIVRApplications_IVRApplications_007_IdentifyApplication(_this->linux_side, unProcessId, pchAppKey);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVRApplications_IVRApplications_007_GetApplicationProcessId, 8)
+uint32_t __thiscall winIVRApplications_IVRApplications_007_GetApplicationProcessId(winIVRApplications_IVRApplications_007 *_this, const char * pchAppKey)
+{
+    TRACE("%p\n", _this);
+    return cppIVRApplications_IVRApplications_007_GetApplicationProcessId(_this->linux_side, pchAppKey);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVRApplications_IVRApplications_007_GetApplicationsErrorNameFromEnum, 8)
+const char * __thiscall winIVRApplications_IVRApplications_007_GetApplicationsErrorNameFromEnum(winIVRApplications_IVRApplications_007 *_this, EVRApplicationError error)
+{
+    TRACE("%p\n", _this);
+    return cppIVRApplications_IVRApplications_007_GetApplicationsErrorNameFromEnum(_this->linux_side, error);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVRApplications_IVRApplications_007_GetApplicationPropertyString, 24)
+uint32_t __thiscall winIVRApplications_IVRApplications_007_GetApplicationPropertyString(winIVRApplications_IVRApplications_007 *_this, const char * pchAppKey, EVRApplicationProperty eProperty, char * pchPropertyValueBuffer, uint32_t unPropertyValueBufferLen, EVRApplicationError * peError)
+{
+    TRACE("%p\n", _this);
+    return cppIVRApplications_IVRApplications_007_GetApplicationPropertyString(_this->linux_side, pchAppKey, eProperty, pchPropertyValueBuffer, unPropertyValueBufferLen, peError);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVRApplications_IVRApplications_007_GetApplicationPropertyBool, 16)
+bool __thiscall winIVRApplications_IVRApplications_007_GetApplicationPropertyBool(winIVRApplications_IVRApplications_007 *_this, const char * pchAppKey, EVRApplicationProperty eProperty, EVRApplicationError * peError)
+{
+    TRACE("%p\n", _this);
+    return cppIVRApplications_IVRApplications_007_GetApplicationPropertyBool(_this->linux_side, pchAppKey, eProperty, peError);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVRApplications_IVRApplications_007_GetApplicationPropertyUint64, 16)
+uint64_t __thiscall winIVRApplications_IVRApplications_007_GetApplicationPropertyUint64(winIVRApplications_IVRApplications_007 *_this, const char * pchAppKey, EVRApplicationProperty eProperty, EVRApplicationError * peError)
+{
+    TRACE("%p\n", _this);
+    return cppIVRApplications_IVRApplications_007_GetApplicationPropertyUint64(_this->linux_side, pchAppKey, eProperty, peError);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVRApplications_IVRApplications_007_SetApplicationAutoLaunch, 9)
+EVRApplicationError __thiscall winIVRApplications_IVRApplications_007_SetApplicationAutoLaunch(winIVRApplications_IVRApplications_007 *_this, const char * pchAppKey, bool bAutoLaunch)
+{
+    TRACE("%p\n", _this);
+    return cppIVRApplications_IVRApplications_007_SetApplicationAutoLaunch(_this->linux_side, pchAppKey, bAutoLaunch);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVRApplications_IVRApplications_007_GetApplicationAutoLaunch, 8)
+bool __thiscall winIVRApplications_IVRApplications_007_GetApplicationAutoLaunch(winIVRApplications_IVRApplications_007 *_this, const char * pchAppKey)
+{
+    TRACE("%p\n", _this);
+    return cppIVRApplications_IVRApplications_007_GetApplicationAutoLaunch(_this->linux_side, pchAppKey);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVRApplications_IVRApplications_007_SetDefaultApplicationForMimeType, 12)
+EVRApplicationError __thiscall winIVRApplications_IVRApplications_007_SetDefaultApplicationForMimeType(winIVRApplications_IVRApplications_007 *_this, const char * pchAppKey, const char * pchMimeType)
+{
+    TRACE("%p\n", _this);
+    return cppIVRApplications_IVRApplications_007_SetDefaultApplicationForMimeType(_this->linux_side, pchAppKey, pchMimeType);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVRApplications_IVRApplications_007_GetDefaultApplicationForMimeType, 16)
+bool __thiscall winIVRApplications_IVRApplications_007_GetDefaultApplicationForMimeType(winIVRApplications_IVRApplications_007 *_this, const char * pchMimeType, char * pchAppKeyBuffer, uint32_t unAppKeyBufferLen)
+{
+    TRACE("%p\n", _this);
+    return cppIVRApplications_IVRApplications_007_GetDefaultApplicationForMimeType(_this->linux_side, pchMimeType, pchAppKeyBuffer, unAppKeyBufferLen);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVRApplications_IVRApplications_007_GetApplicationSupportedMimeTypes, 16)
+bool __thiscall winIVRApplications_IVRApplications_007_GetApplicationSupportedMimeTypes(winIVRApplications_IVRApplications_007 *_this, const char * pchAppKey, char * pchMimeTypesBuffer, uint32_t unMimeTypesBuffer)
+{
+    TRACE("%p\n", _this);
+    return cppIVRApplications_IVRApplications_007_GetApplicationSupportedMimeTypes(_this->linux_side, pchAppKey, pchMimeTypesBuffer, unMimeTypesBuffer);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVRApplications_IVRApplications_007_GetApplicationsThatSupportMimeType, 16)
+uint32_t __thiscall winIVRApplications_IVRApplications_007_GetApplicationsThatSupportMimeType(winIVRApplications_IVRApplications_007 *_this, const char * pchMimeType, char * pchAppKeysThatSupportBuffer, uint32_t unAppKeysThatSupportBuffer)
+{
+    TRACE("%p\n", _this);
+    return cppIVRApplications_IVRApplications_007_GetApplicationsThatSupportMimeType(_this->linux_side, pchMimeType, pchAppKeysThatSupportBuffer, unAppKeysThatSupportBuffer);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVRApplications_IVRApplications_007_GetApplicationLaunchArguments, 16)
+uint32_t __thiscall winIVRApplications_IVRApplications_007_GetApplicationLaunchArguments(winIVRApplications_IVRApplications_007 *_this, uint32_t unHandle, char * pchArgs, uint32_t unArgs)
+{
+    TRACE("%p\n", _this);
+    return cppIVRApplications_IVRApplications_007_GetApplicationLaunchArguments(_this->linux_side, unHandle, pchArgs, unArgs);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVRApplications_IVRApplications_007_GetStartingApplication, 12)
+EVRApplicationError __thiscall winIVRApplications_IVRApplications_007_GetStartingApplication(winIVRApplications_IVRApplications_007 *_this, char * pchAppKeyBuffer, uint32_t unAppKeyBufferLen)
+{
+    TRACE("%p\n", _this);
+    return cppIVRApplications_IVRApplications_007_GetStartingApplication(_this->linux_side, pchAppKeyBuffer, unAppKeyBufferLen);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVRApplications_IVRApplications_007_GetSceneApplicationState, 4)
+EVRSceneApplicationState __thiscall winIVRApplications_IVRApplications_007_GetSceneApplicationState(winIVRApplications_IVRApplications_007 *_this)
+{
+    TRACE("%p\n", _this);
+    return cppIVRApplications_IVRApplications_007_GetSceneApplicationState(_this->linux_side);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVRApplications_IVRApplications_007_PerformApplicationPrelaunchCheck, 8)
+EVRApplicationError __thiscall winIVRApplications_IVRApplications_007_PerformApplicationPrelaunchCheck(winIVRApplications_IVRApplications_007 *_this, const char * pchAppKey)
+{
+    TRACE("%p\n", _this);
+    return cppIVRApplications_IVRApplications_007_PerformApplicationPrelaunchCheck(_this->linux_side, pchAppKey);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVRApplications_IVRApplications_007_GetSceneApplicationStateNameFromEnum, 8)
+const char * __thiscall winIVRApplications_IVRApplications_007_GetSceneApplicationStateNameFromEnum(winIVRApplications_IVRApplications_007 *_this, EVRSceneApplicationState state)
+{
+    TRACE("%p\n", _this);
+    return cppIVRApplications_IVRApplications_007_GetSceneApplicationStateNameFromEnum(_this->linux_side, state);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVRApplications_IVRApplications_007_LaunchInternalProcess, 16)
+EVRApplicationError __thiscall winIVRApplications_IVRApplications_007_LaunchInternalProcess(winIVRApplications_IVRApplications_007 *_this, const char * pchBinaryPath, const char * pchArguments, const char * pchWorkingDirectory)
+{
+    TRACE("%p\n", _this);
+    return cppIVRApplications_IVRApplications_007_LaunchInternalProcess(_this->linux_side, pchBinaryPath, pchArguments, pchWorkingDirectory);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVRApplications_IVRApplications_007_GetCurrentSceneProcessId, 4)
+uint32_t __thiscall winIVRApplications_IVRApplications_007_GetCurrentSceneProcessId(winIVRApplications_IVRApplications_007 *_this)
+{
+    TRACE("%p\n", _this);
+    return cppIVRApplications_IVRApplications_007_GetCurrentSceneProcessId(_this->linux_side);
+}
+
+extern vtable_ptr winIVRApplications_IVRApplications_007_vtable;
+
+#ifndef __GNUC__
+void __asm_dummy_vtables(void) {
+#endif
+    __ASM_VTABLE(winIVRApplications_IVRApplications_007,
+        VTABLE_ADD_FUNC(winIVRApplications_IVRApplications_007_AddApplicationManifest)
+        VTABLE_ADD_FUNC(winIVRApplications_IVRApplications_007_RemoveApplicationManifest)
+        VTABLE_ADD_FUNC(winIVRApplications_IVRApplications_007_IsApplicationInstalled)
+        VTABLE_ADD_FUNC(winIVRApplications_IVRApplications_007_GetApplicationCount)
+        VTABLE_ADD_FUNC(winIVRApplications_IVRApplications_007_GetApplicationKeyByIndex)
+        VTABLE_ADD_FUNC(winIVRApplications_IVRApplications_007_GetApplicationKeyByProcessId)
+        VTABLE_ADD_FUNC(winIVRApplications_IVRApplications_007_LaunchApplication)
+        VTABLE_ADD_FUNC(winIVRApplications_IVRApplications_007_LaunchTemplateApplication)
+        VTABLE_ADD_FUNC(winIVRApplications_IVRApplications_007_LaunchApplicationFromMimeType)
+        VTABLE_ADD_FUNC(winIVRApplications_IVRApplications_007_LaunchDashboardOverlay)
+        VTABLE_ADD_FUNC(winIVRApplications_IVRApplications_007_CancelApplicationLaunch)
+        VTABLE_ADD_FUNC(winIVRApplications_IVRApplications_007_IdentifyApplication)
+        VTABLE_ADD_FUNC(winIVRApplications_IVRApplications_007_GetApplicationProcessId)
+        VTABLE_ADD_FUNC(winIVRApplications_IVRApplications_007_GetApplicationsErrorNameFromEnum)
+        VTABLE_ADD_FUNC(winIVRApplications_IVRApplications_007_GetApplicationPropertyString)
+        VTABLE_ADD_FUNC(winIVRApplications_IVRApplications_007_GetApplicationPropertyBool)
+        VTABLE_ADD_FUNC(winIVRApplications_IVRApplications_007_GetApplicationPropertyUint64)
+        VTABLE_ADD_FUNC(winIVRApplications_IVRApplications_007_SetApplicationAutoLaunch)
+        VTABLE_ADD_FUNC(winIVRApplications_IVRApplications_007_GetApplicationAutoLaunch)
+        VTABLE_ADD_FUNC(winIVRApplications_IVRApplications_007_SetDefaultApplicationForMimeType)
+        VTABLE_ADD_FUNC(winIVRApplications_IVRApplications_007_GetDefaultApplicationForMimeType)
+        VTABLE_ADD_FUNC(winIVRApplications_IVRApplications_007_GetApplicationSupportedMimeTypes)
+        VTABLE_ADD_FUNC(winIVRApplications_IVRApplications_007_GetApplicationsThatSupportMimeType)
+        VTABLE_ADD_FUNC(winIVRApplications_IVRApplications_007_GetApplicationLaunchArguments)
+        VTABLE_ADD_FUNC(winIVRApplications_IVRApplications_007_GetStartingApplication)
+        VTABLE_ADD_FUNC(winIVRApplications_IVRApplications_007_GetSceneApplicationState)
+        VTABLE_ADD_FUNC(winIVRApplications_IVRApplications_007_PerformApplicationPrelaunchCheck)
+        VTABLE_ADD_FUNC(winIVRApplications_IVRApplications_007_GetSceneApplicationStateNameFromEnum)
+        VTABLE_ADD_FUNC(winIVRApplications_IVRApplications_007_LaunchInternalProcess)
+        VTABLE_ADD_FUNC(winIVRApplications_IVRApplications_007_GetCurrentSceneProcessId)
+    );
+#ifndef __GNUC__
+}
+#endif
+
+winIVRApplications_IVRApplications_007 *create_winIVRApplications_IVRApplications_007(void *linux_side)
+{
+    winIVRApplications_IVRApplications_007 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRApplications_IVRApplications_007));
+    TRACE("-> %p\n", r);
+    r->vtable = &winIVRApplications_IVRApplications_007_vtable;
+    r->linux_side = linux_side;
+    return r;
+}
+
+void destroy_winIVRApplications_IVRApplications_007(void *object)
+{
+    TRACE("%p\n", object);
+    HeapFree(GetProcessHeap(), 0, object);
+}
+
+winIVRApplications_IVRApplications_007 *create_winIVRApplications_IVRApplications_007_FnTable(void *linux_side)
+{
+    winIVRApplications_IVRApplications_007 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRApplications_IVRApplications_007));
+    struct thunk *thunks = alloc_thunks(30);
+    struct thunk **vtable = HeapAlloc(GetProcessHeap(), 0, 30 * sizeof(*vtable));
+    int i;
+
+    TRACE("-> %p, vtable %p, thunks %p\n", r, vtable, thunks);
+    init_thunk(&thunks[0], r, winIVRApplications_IVRApplications_007_AddApplicationManifest, 2, FALSE, FALSE);
+    init_thunk(&thunks[1], r, winIVRApplications_IVRApplications_007_RemoveApplicationManifest, 1, FALSE, FALSE);
+    init_thunk(&thunks[2], r, winIVRApplications_IVRApplications_007_IsApplicationInstalled, 1, FALSE, FALSE);
+    init_thunk(&thunks[3], r, winIVRApplications_IVRApplications_007_GetApplicationCount, 0, FALSE, FALSE);
+    init_thunk(&thunks[4], r, winIVRApplications_IVRApplications_007_GetApplicationKeyByIndex, 3, FALSE, FALSE);
+    init_thunk(&thunks[5], r, winIVRApplications_IVRApplications_007_GetApplicationKeyByProcessId, 3, FALSE, FALSE);
+    init_thunk(&thunks[6], r, winIVRApplications_IVRApplications_007_LaunchApplication, 1, FALSE, FALSE);
+    init_thunk(&thunks[7], r, winIVRApplications_IVRApplications_007_LaunchTemplateApplication, 4, FALSE, FALSE);
+    init_thunk(&thunks[8], r, winIVRApplications_IVRApplications_007_LaunchApplicationFromMimeType, 2, FALSE, FALSE);
+    init_thunk(&thunks[9], r, winIVRApplications_IVRApplications_007_LaunchDashboardOverlay, 1, FALSE, FALSE);
+    init_thunk(&thunks[10], r, winIVRApplications_IVRApplications_007_CancelApplicationLaunch, 1, FALSE, FALSE);
+    init_thunk(&thunks[11], r, winIVRApplications_IVRApplications_007_IdentifyApplication, 2, FALSE, FALSE);
+    init_thunk(&thunks[12], r, winIVRApplications_IVRApplications_007_GetApplicationProcessId, 1, FALSE, FALSE);
+    init_thunk(&thunks[13], r, winIVRApplications_IVRApplications_007_GetApplicationsErrorNameFromEnum, 1, FALSE, FALSE);
+    init_thunk(&thunks[14], r, winIVRApplications_IVRApplications_007_GetApplicationPropertyString, 5, FALSE, FALSE);
+    init_thunk(&thunks[15], r, winIVRApplications_IVRApplications_007_GetApplicationPropertyBool, 3, FALSE, FALSE);
+    init_thunk(&thunks[16], r, winIVRApplications_IVRApplications_007_GetApplicationPropertyUint64, 3, FALSE, FALSE);
+    init_thunk(&thunks[17], r, winIVRApplications_IVRApplications_007_SetApplicationAutoLaunch, 2, FALSE, FALSE);
+    init_thunk(&thunks[18], r, winIVRApplications_IVRApplications_007_GetApplicationAutoLaunch, 1, FALSE, FALSE);
+    init_thunk(&thunks[19], r, winIVRApplications_IVRApplications_007_SetDefaultApplicationForMimeType, 2, FALSE, FALSE);
+    init_thunk(&thunks[20], r, winIVRApplications_IVRApplications_007_GetDefaultApplicationForMimeType, 3, FALSE, FALSE);
+    init_thunk(&thunks[21], r, winIVRApplications_IVRApplications_007_GetApplicationSupportedMimeTypes, 3, FALSE, FALSE);
+    init_thunk(&thunks[22], r, winIVRApplications_IVRApplications_007_GetApplicationsThatSupportMimeType, 3, FALSE, FALSE);
+    init_thunk(&thunks[23], r, winIVRApplications_IVRApplications_007_GetApplicationLaunchArguments, 3, FALSE, FALSE);
+    init_thunk(&thunks[24], r, winIVRApplications_IVRApplications_007_GetStartingApplication, 2, FALSE, FALSE);
+    init_thunk(&thunks[25], r, winIVRApplications_IVRApplications_007_GetSceneApplicationState, 0, FALSE, FALSE);
+    init_thunk(&thunks[26], r, winIVRApplications_IVRApplications_007_PerformApplicationPrelaunchCheck, 1, FALSE, FALSE);
+    init_thunk(&thunks[27], r, winIVRApplications_IVRApplications_007_GetSceneApplicationStateNameFromEnum, 1, FALSE, FALSE);
+    init_thunk(&thunks[28], r, winIVRApplications_IVRApplications_007_LaunchInternalProcess, 3, FALSE, FALSE);
+    init_thunk(&thunks[29], r, winIVRApplications_IVRApplications_007_GetCurrentSceneProcessId, 0, FALSE, FALSE);
+    for (i = 0; i < 30; i++)
+        vtable[i] = &thunks[i];
+    r->linux_side = linux_side;
+    r->vtable = (void *)vtable;
+    return r;
+}
+
+void destroy_winIVRApplications_IVRApplications_007_FnTable(void *object)
+{
+    winIVRApplications_IVRApplications_007 *win_object = object;
+    TRACE("%p\n", win_object);
+    VirtualFree(win_object->vtable[0], 0, MEM_RELEASE);
+    HeapFree(GetProcessHeap(), 0, win_object->vtable);
+    HeapFree(GetProcessHeap(), 0, win_object);
+}
+
 #include "cppIVRApplications_IVRApplications_006.h"
 
 typedef struct __winIVRApplications_IVRApplications_006 {
