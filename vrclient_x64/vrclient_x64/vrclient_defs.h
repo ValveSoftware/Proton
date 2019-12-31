@@ -298,6 +298,7 @@ typedef enum EVRRenderModelError
     VRRenderModelError_None = 0,
     VRRenderModelError_Loading = 100,
     VRRenderModelError_NotSupported = 200,
+    VRRenderModelError_InvalidTexture = 400,
 } EVRRenderModelError;
 
 #endif
