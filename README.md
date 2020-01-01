@@ -52,44 +52,24 @@ How to build:
 ``` 
 in the main proton-ge-custom directory. Open patchlog.txt and search "fail" to make sure no patch failures occured.
 
-6. in a terminal and type:  
+6. Open proton-ge-custom a terminal and type the following:  
 
+`vagrant up` (On the first run choose yes, it will ask you to run vagrant up again)  
 `vagrant up` (this will take a while on the first run, as it prepares everything)  
-`vagrant ssh` (this will ssh you into the vagrant VM  
+`build_name=some_custom_build_name make redist` (this will start the build)  
+`vagrant halt` (this will shut down the build afterwards)  
 
-To leave the VM at any time just type `exit`  
+For future builds you only need to run:  
+
+`build_name=some_custom_build_name make redist`  
+`vagrant halt`  
+
+Builds will be placed in proton-ge-custom/vagrant_share/ as both the full folder and a .tar.gz of the folder.  
+
 
 NOTE ON MODIFICATIONS:  
 vagrant syncs the proton directory to any files in the cloned repo. So, if you want to make changes, close the VM with `vagrant halt`, make your changes, then launch vagrant again with `vagrant up`  
 
-7. Edit the build name and build proton  
-```
-cd ~/build
-nano Makefile
-```
-Change the BUILD_NAME to whatever you want, then save & exit  
-
-8. Build proton  
-```
-cd ~/build
-make all dist
-```
-9. Rename the dist folder to your BUILD_NAME, then tar it for easier distribution:  
-```
-mv dist Proton-Custom-Name
-tar -cvzf Proton-Custom-Name.tar.gz Proton-Custom-Name/
-```
-
-10. Move it to the /vagrant folder. This folder is accessible on your main system in the vagrant_share folder inside the cloned repository folder:  
-
-`mv Proton-Custom-Name.tar.gz /vagrant/`  
-
-11. Shut down the VM:  
-```
-exit
-vagrant halt
-```
-12. Now open vagrant_share inside the cloned repo folder on your main system and you will see your new proton version in a .tar.gz from here follow the install instructions listed in the first section of this README.
 
 
 Environment variable options:  
