@@ -1,3 +1,16 @@
+diff --git a/configure.ac b/configure.ac
+index 5e36331596..8f4ad7627c 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -1741,7 +1741,7 @@ WINE_NOTICE_WITH(sdl,[test "x$ac_cv_lib_soname_SDL2" = "x"],
+ dnl **** Check for FAudio ****
+ if test "x$with_faudio" != "xno"
+ then
+-    WINE_PACKAGE_FLAGS(FAUDIO,[faudio],[-lFAudio],,,
++    WINE_PACKAGE_FLAGS(FAUDIO,[faudio],[-lFAudio -lavcodec -lavutil -lswresample],,,
+         [AC_CHECK_HEADERS([FAudio.h],
+             [WINE_CHECK_SONAME(FAudio,FAudioCreate,,,[$FAUDIO_LIBS],[[libFAudio*]])])
+              WINE_CHECK_LIB_FUNCS([FAudio_CommitOperationSet \
 diff --git a/configure b/configure
 index 818d31d270..bb3c4b5fbd 100755
 --- a/configure

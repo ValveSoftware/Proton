@@ -111,6 +111,10 @@ function configure() {
     echo "STEAMRT32_IMAGE := $(escape_for_make "$steamrt32_name")"
     echo "STEAMRT_PATH    := $(escape_for_make "$steamrt_path")"
 
+    if [[ -n "$arg_docker_opts" ]]; then
+      echo "DOCKER_OPTS := $arg_docker_opts"
+    fi
+
     # Include base
     echo ""
     echo "include \$(SRCDIR)/build/makefile_base.mak"
@@ -130,6 +134,7 @@ arg_steamrt=""
 arg_no_steamrt=""
 arg_ffmpeg=""
 arg_build_name=""
+arg_docker_opts=""
 arg_help=""
 invalid_args=""
 function parse_args() {
@@ -165,6 +170,9 @@ function parse_args() {
       arg_help=1
     elif [[ $arg = --build-name ]]; then
       arg_build_name="$val"
+      val_used=1
+    elif [[ $arg = --docker-opts ]]; then
+      arg_docker_opts="$val"
       val_used=1
     elif [[ $arg = --with-ffmpeg ]]; then
       arg_ffmpeg=1
@@ -223,6 +231,8 @@ usage() {
   "$1" "    --build-name=<name>  Set the name of the build that displays when used in Steam"
   "$1" ""
   "$1" "    --with-ffmpeg        Build ffmpeg for WMA audio support"
+  "$1" ""
+  "$1" "    --docker-opts='<options>' Extra options to pass to Docker when invoking the runtime."
   "$1" ""
   "$1" "  Steam Runtime"
   "$1" "    Proton builds that are to be installed & run under the steam client must be built with"
