@@ -260,7 +260,7 @@ class CompatData:
                     rel_dir = rel_dir + "/"
                 dst_dir = src_dir.replace(g_proton.default_pfx_dir, self.prefix_dir, 1)
                 if not os.path.exists(dst_dir):
-                    os.makedirs(dst_dir)
+                    makedirs(dst_dir)
                     tracked_files.write(rel_dir + "\n")
                 for dir_ in dirs:
                     src_file = os.path.join(src_dir, dir_)
