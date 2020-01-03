@@ -49,7 +49,8 @@ def makedirs(path):
             return
         
         os.makedirs(path)
-    except OSError:
+    except OSError as err:
+        log("Error when creating directory {0}: {1}".format(path, err))
         pass
 
 def try_copy(src, dst):
