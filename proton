@@ -45,9 +45,11 @@ def file_is_wine_fake_dll(path):
 
 def makedirs(path):
     try:
+        if os.path.lexists(path):
+            return
+        
         os.makedirs(path)
     except OSError:
-        #already exists
         pass
 
 def try_copy(src, dst):
