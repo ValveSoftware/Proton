@@ -168,9 +168,10 @@ class CompatData:
                         dirs.append(path)
             for d in dirs:
                 try:
-                    os.rmdir(d)
-                except OSError:
-                    #not empty
+                    if len(os.listdir(d)) != 0:
+                        os.rmdir(d)
+                except OSError as err:
+                    log("Error deleting directory {0}: {1}".format(d, err))
                     pass
 
         os.remove(self.tracked_files_file)
