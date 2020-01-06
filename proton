@@ -168,7 +168,7 @@ class CompatData:
                         dirs.append(path)
             for d in dirs:
                 try:
-                    if len(os.listdir(d)) != 0:
+                    if not any(os.scandir(d)):
                         os.rmdir(d)
                 except OSError as err:
                     log("Error deleting directory {0}: {1}".format(d, err))
