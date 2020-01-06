@@ -10,3 +10,64 @@ index 34ce4fea55..aceb4515de 100644
      goto done;
  
  error:
+diff --git a/dlls/windowscodecs/converter.c b/dlls/windowscodecs/converter.c
+index dcc2f05693..6e4f5c5f9b 100644
+--- a/dlls/windowscodecs/converter.c
++++ b/dlls/windowscodecs/converter.c
+@@ -1038,6 +1038,7 @@ static HRESULT copypixels_to_24bppBGR(struct FormatConverter *This, const WICRec
+     case format_32bppBGR:
+     case format_32bppBGRA:
+     case format_32bppPBGRA:
++    case format_32bppRGBA:
+         if (prc)
+         {
+             HRESULT res;
+@@ -1061,17 +1062,38 @@ static HRESULT copypixels_to_24bppBGR(struct FormatConverter *This, const WICRec
+             {
+                 srcrow = srcdata;
+                 dstrow = pbBuffer;
+-                for (y=0; y<prc->Height; y++) {
+-                    srcpixel=srcrow;
+-                    dstpixel=dstrow;
+-                    for (x=0; x<prc->Width; x++) {
+-                        *dstpixel++=*srcpixel++; /* blue */
+-                        *dstpixel++=*srcpixel++; /* green */
+-                        *dstpixel++=*srcpixel++; /* red */
+-                        srcpixel++; /* alpha */
++
++                if (source_format == format_32bppRGBA)
++                {
++                    for (y = 0; y < prc->Height; y++)
++                    {
++                        srcpixel = srcrow;
++                        dstpixel = dstrow;
++                        for (x = 0; x < prc->Width; x++) {
++                            *dstpixel++ = srcpixel[2]; /* blue */
++                            *dstpixel++ = srcpixel[1]; /* green */
++                            *dstpixel++ = srcpixel[0]; /* red */
++                            srcpixel += 4;
++                        }
++                        srcrow += srcstride;
++                        dstrow += cbStride;
++                    }
++                }
++                else
++                {
++                    for (y = 0; y < prc->Height; y++)
++                    {
++                        srcpixel = srcrow;
++                        dstpixel = dstrow;
++                        for (x = 0; x < prc->Width; x++) {
++                            *dstpixel++ = *srcpixel++; /* blue */
++                            *dstpixel++ = *srcpixel++; /* green */
++                            *dstpixel++ = *srcpixel++; /* red */
++                            srcpixel++; /* alpha */
++                        }
++                        srcrow += srcstride;
++                        dstrow += cbStride;
+                     }
+-                    srcrow += srcstride;
+-                    dstrow += cbStride;
+                 }
+             }
+ 

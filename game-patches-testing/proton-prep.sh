@@ -2,7 +2,7 @@
     # Steam Helper patch
     cd steam_helper
     git checkout steam.cpp
-    patch -Np1 < ../game-patches-testing/proton-hotfixes/steam-helper.patch
+    #patch -Np1 < ../game-patches-testing/proton-hotfixes/steam-helper.patch
     cd ..
 
     # VKD3D patches
@@ -26,9 +26,12 @@
     git clean -xdf
 
     #HOT FIXES
-
-    # https://bugs.winehq.org/show_bug.cgi?id=45774
-    git revert --no-commit 6ccb94392a8ef4bca701ae2a560f4ea1da677edd
+    git revert --no-commit c4ad7391956fcbfe7a1a9324ebda1e013e5f6edd
+    git revert --no-commit 1366dd69d5a0578299dc69365db972b0341456d2
+    git revert --no-commit 1d91c196e71413b9c72aebc2c4b8df246985fea0
+    git revert --no-commit f99d307a3e1f9beb7fd9dc8892b5cfabbabf816b
+    git revert --no-commit 66c9c358ae5c50fc246cf4a4e280b401a5fc730b
+    git revert --no-commit b12d6d405ab89477dee1083f4af4b858a118ff46
 
     #FS HACK REVERTS NECESSARY
     git revert --no-commit 427152ec7b4ee85631617b693dbf1deea763c0ba
@@ -73,41 +76,33 @@
 
     #WINE GAME PATCHES
 
-    echo "mech warrior online"
+    echo "mech warrior online" - tested OK
     patch -Np1 < ../game-patches-testing/game-patches/mwo.patch
 
-    echo "final fantasy XIV"
+    echo "final fantasy XIV" - tested OK
     patch -Np1 < ../game-patches-testing/game-patches/ffxiv-launcher.patch
 
-    echo "final fantasy XV"
+    echo "final fantasy XV" - tested OK
     patch -Np1 < ../game-patches-testing/game-patches/ffxv-steam-fix.patch
 
     echo "assetto corsa"
     patch -Np1 < ../game-patches-testing/game-patches/assettocorsa-hud.patch
 
-    echo "sword art online"
+    echo "sword art online" - tested OK
     patch -Np1 < ../game-patches-testing/game-patches/sword-art-online-gnutls.patch
 
-    echo "origin downloads fix"
+    echo "origin downloads fix" - tested OK
     patch -Np1 < ../game-patches-testing/game-patches/origin-downloads_fix.patch
 
-    echo "star citizen crash fix"
-    patch -Np1 < ../game-patches-testing/game-patches/star-citizen-NAN.patch
-
-    echo "Detroit Become Human fix"
-    patch -Np1 < ../game-patches-testing/game-patches/detroit_BH.patch
-
-    echo "origin regression fix "
+    echo "origin regression fix " - tested OK
     patch -Np1 < ../game-patches-testing/game-patches/origin_wine5.0rc2_regression.patch 
 
     echo "gta v loading fix"
     patch -Np1 < ../game-patches-testing/game-patches/gtav-load-fix.patch
 
-    echo "steam crossover patch"
-    patch -Np1 < ../game-patches-testing/game-patches/steam-crossover.patch
-
     echo "valve mouse overlay fix"
     patch -Np1 < ../game-patches-testing/game-patches/valve-overlay-mouse-fix.patch
+
     #WINE FSYNC
     echo "applying fsync patches"
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-fsync_staging.patch
@@ -116,9 +111,16 @@
     echo "applying proton patches"
 
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-steamclient_swap.patch
+
+    #staging
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-protonify_staging_rpc.patch
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-protonify_staging.patch
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-LAA_staging.patch
+
+    #non-staging
+    #patch -Np1 < ../game-patches-testing/proton-non-staging/proton-protonify_mainline_rpc.patch
+    #patch -Np1 < ../game-patches-testing/proton-non-staging/proton-protonify_mainline.patch
+    #patch -Np1 < ../game-patches-testing/proton-non-staging/proton-LAA.patch
 
     echo "mortal kombat 11 patch"
     patch -Np1 < ../game-patches-testing/game-patches/mk11.patch
@@ -129,6 +131,8 @@
 
     echo "fullscreen hack"
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-FS_bypass_compositor.patch
+
+    #staging
     patch -Np1 < ../game-patches-testing/proton-valve-patches/valve_proton_fullscreen_hack-staging.patch
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-vk_bits_4.5+.patch
     patch -Np1 < ../game-patches-testing/proton-hotfixes/proton-integer_scaling.patch
@@ -148,16 +152,22 @@
     echo "mf hacks"
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-mf_hacks.patch
 
+    #echo "msvcrt overrides"
+    #patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-msvcrt_nativebuiltin.patch
+
     echo "registry entries"
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-apply_LargeAddressAware_fix_for_Bayonetta.patch
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-Set_amd_ags_x64_to_built_in_for_Wolfenstein_2.patch
 
     #need for VR to compile
-    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-wined3d_staging.patch
+
+    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-wined3d.patch
 
     ./tools/make_requests
 
     #WINE CUSTOM PATCHES
     #add your own custom patch lines below
+
+    patch -Np1 < ../game-patches-testing/wine-patches/wine-rc4_server_reverts.patch
 
     #end

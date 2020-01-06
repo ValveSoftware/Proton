@@ -141,10 +141,11 @@ index 5610c701d..3d71722ac 100644
  HKCU,Software\Valve\Steam\ActiveProcess,"SteamClientDll",,"%16426%\Steam\steamclient.dll"
  HKCU,Software\Valve\Steam\ActiveProcess,"SteamClientDll64",,"%16426%\Steam\steamclient64.dll"
  HKCU,Software\Valve\Steam\ActiveProcess,"SteamPath",,"%16426%\Steam"
-+HKLM,Software\Valve\Steam,"InstallPath",,"%16422%\Steam"
++HKLM,Software\Wow6432Node\Valve\Steam,"InstallPath",,"%16422%\Steam"
  
  [DestinationDirs]
  l_intl_section = 11
+
 From 7bd039f34f5fc1123524ddb22769f6e16e7d9c88 Mon Sep 17 00:00:00 2001
 From: Andrew Eikum <aeikum@codeweavers.com>
 Date: Thu, 11 May 2017 10:01:16 -0500
@@ -1308,7 +1309,6 @@ index e22559912c3..41ec809b727 100644
          *mode = DWRITE_RENDERING_MODE_OUTLINE;
          return S_OK;
      }
-
 From 5c59517008697ce74becddb59a3e6702a963bb49 Mon Sep 17 00:00:00 2001
 From: Zhiyi Zhang <zzhang@codeweavers.com>
 Date: Fri, 16 Aug 2019 09:46:25 +0000
@@ -1708,7 +1708,6 @@ index 6344157f384..6fefe5d6d80 100644
 +    rounded_size = ROUND_SIZE(size) + HEAP_TAIL_EXTRA_SIZE;
      if (rounded_size < size) goto oom;  /* overflow */
      if (rounded_size < HEAP_MIN_DATA_SIZE) rounded_size = HEAP_MIN_DATA_SIZE;
- 
 
 From 21b43e000eb18207eb7ee68267d8ef38da6ad1c0 Mon Sep 17 00:00:00 2001
 From: Micah N Gorrell <mgorrell@codeweavers.com>
@@ -2503,13 +2502,12 @@ index 2823a1cd4f1..69e5f60e7c6 100644
  
  static inline LPCSTR debugstr_us( const UNICODE_STRING *us )
  {
-@@ -82,6 +82,8 @@ static const WCHAR servicesW[] = {'\\','R','e','g','i','s','t','r','y',
-                                   '\\','C','u','r','r','e','n','t','C','o','n','t','r','o','l','S','e','t',
+@@ -82,6 +84,8 @@ static const WCHAR servicesW[] = {'\\','R','e','g','i','s','t','r','y',
                                    '\\','S','e','r','v','i','c','e','s',
                                    '\\',0};
-+
-+DWORD send_device_notification( DEV_BROADCAST_DEVICEINTERFACE_W *broadcast, BOOL enable );
  
++DWORD send_device_notification( DEV_BROADCAST_DEVICEINTERFACE_W *broadcast, BOOL enable );
++
  struct wine_device
  {
      DEVICE_OBJECT device_obj;
@@ -3229,66 +3227,6 @@ index 00000000000..7231f86b722
 +    else
 +        win_skip("I_ScRegisterDeviceNotification is not available\n");
 +}
-From 33cd3de313071c787bece5acc31351c36abd74e9 Mon Sep 17 00:00:00 2001
-From: Brendan Shanks <bshanks@codeweavers.com>
-Date: Tue, 22 Oct 2019 16:27:51 -0700
-Subject: [PATCH] HACK: ntdll: Run WT_EXECUTEINWAITTHREAD wait callbacks
- serially.
-
-On Windows, waits registered with the WT_EXECUTEINWAITTHREAD flag will
-often have their callbacks run serially (since they're all handled by
-the same wait thread). Running them in parallel can expose race
-conditions.
-Use a process-wide critical section to serialize these callbacks.
-
-Wine-Bug: https://bugs.winehq.org/show_bug.cgi?id=47843
----
- dlls/ntdll/threadpool.c | 24 ++++++++++++++++++++++++
- 1 file changed, 24 insertions(+)
-
-diff --git a/dlls/ntdll/threadpool.c b/dlls/ntdll/threadpool.c
-index 639e032f629..dbd9577d6bc 100644
---- a/dlls/ntdll/threadpool.c
-+++ b/dlls/ntdll/threadpool.c
-@@ -84,6 +84,17 @@ struct wait_work_item
-     int CallbackInProgress;
- };
- 
-+static RTL_CRITICAL_SECTION_DEBUG wait_thread_executeinwaitthread_cs_debug;
-+
-+static RTL_CRITICAL_SECTION wait_thread_executeinwaitthread_cs = {&wait_thread_executeinwaitthread_cs_debug, -1, 0, 0, 0, 0};
-+
-+static RTL_CRITICAL_SECTION_DEBUG wait_thread_executeinwaitthread_cs_debug =
-+{
-+    0, 0, &wait_thread_executeinwaitthread_cs,
-+    { &wait_thread_executeinwaitthread_cs_debug.ProcessLocksList, &wait_thread_executeinwaitthread_cs_debug.ProcessLocksList },
-+      0, 0, { (DWORD_PTR)(__FILE__ ": wait_thread_executeinwaitthread_cs") }
-+};
-+
- struct timer_queue;
- struct queue_timer
- {
-@@ -527,7 +538,20 @@ static DWORD CALLBACK wait_thread_proc(LPVOID Arg)
-                 TRACE( "Work has been canceled.\n" );
-                 break;
-             }
-+
-+            /* HACK: On Windows, waits created with WT_EXECUTEINWAITTHREAD often end up on the same wait thread
-+             * and run serialized. Running these waits simultaneously on separate threads may expose race conditions
-+             * not seen on Windows.
-+             * Use a critical section to ensure these callbacks run serially.
-+             */
-+            if (wait_work_item->Flags & WT_EXECUTEINWAITTHREAD)
-+                enter_critical_section(&wait_thread_executeinwaitthread_cs);
-+
-             wait_work_item->Callback( wait_work_item->Context, TimerOrWaitFired );
-+
-+            if (wait_work_item->Flags & WT_EXECUTEINWAITTHREAD)
-+                leave_critical_section(&wait_thread_executeinwaitthread_cs);
-+
-             interlocked_xchg( &wait_work_item->CallbackInProgress, FALSE );
- 
-             if (wait_work_item->Flags & WT_EXECUTEONLYONCE)
 From 30440e42234e781932bb436fa53394a465358829 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
 Date: Wed, 9 Oct 2019 09:47:09 +0200

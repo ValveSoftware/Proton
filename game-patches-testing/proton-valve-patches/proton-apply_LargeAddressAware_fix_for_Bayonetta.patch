@@ -23,7 +23,7 @@ index 518d6cbd77..2f389d3af7 100644
 @@ -3964,6 +3965,7 @@ HKCU,Software\Valve\Steam\ActiveProcess,"SteamClientDll",,"%16426%\Steam\steamcl
  HKCU,Software\Valve\Steam\ActiveProcess,"SteamClientDll64",,"%16426%\Steam\steamclient64.dll"
  HKCU,Software\Valve\Steam\ActiveProcess,"SteamPath",,"%16426%\Steam"
- HKLM,Software\Wow6432Node\Valve\Steam,"InstallPath",,"%16422%\Steam"
+ HKLM,Software\Valve\Steam,"InstallPath",,"%16422%\Steam"
 +HKCU,Software\Wine\AppDefaults\Bayonetta.exe,"LargeAddressAware",0x10003,1
  
  [DestinationDirs]

@@ -141,10 +141,11 @@ index 5610c701d..3d71722ac 100644
  HKCU,Software\Valve\Steam\ActiveProcess,"SteamClientDll",,"%16426%\Steam\steamclient.dll"
  HKCU,Software\Valve\Steam\ActiveProcess,"SteamClientDll64",,"%16426%\Steam\steamclient64.dll"
  HKCU,Software\Valve\Steam\ActiveProcess,"SteamPath",,"%16426%\Steam"
-+HKLM,Software\Valve\Steam,"InstallPath",,"%16422%\Steam"
++HKLM,Software\Wow6432Node\Valve\Steam,"InstallPath",,"%16422%\Steam"
  
  [DestinationDirs]
  l_intl_section = 11
+
 From 7bd039f34f5fc1123524ddb22769f6e16e7d9c88 Mon Sep 17 00:00:00 2001
 From: Andrew Eikum <aeikum@codeweavers.com>
 Date: Thu, 11 May 2017 10:01:16 -0500
@@ -222,9 +223,9 @@ index f08474b3635..2f637f25537 100644
      else
      {
 +#endif
-         /* '$HOME' doesn't exist. Create subdirs for 'My Pictures', 'My Videos',
-          * 'My Music' etc. in '%USERPROFILE%\My Documents' or fail silently if
-          * they already exist. */
+         /* '$HOME' doesn't exist. Create 'My Pictures', 'My Videos' and 'My Music' subdirs
+          * in '%USERPROFILE%\\My Documents' or fail silently if they already exist. */
+         pszHome = NULL;
 @@ -4486,8 +4488,11 @@ static void _SHCreateSymbolicLinks(void)
              if (_SHAppendToUnixPath(szMyStuffTarget, MAKEINTRESOURCEW(aidsMyStuff[i])))
                  mkdir(szMyStuffTarget, 0777);
@@ -234,7 +235,7 @@ index f08474b3635..2f637f25537 100644
 +#endif
  
 +#if 0
-     /* Create symbolic links for 'My Pictures', 'My Videos', 'My Music' etc. */
+     /* Create symbolic links for 'My Pictures', 'My Videos' and 'My Music'. */
      for (i=0; i < ARRAY_SIZE(aidsMyStuff); i++)
      {
 @@ -4532,13 +4537,17 @@ static void _SHCreateSymbolicLinks(void)
@@ -1308,7 +1309,6 @@ index e22559912c3..41ec809b727 100644
          *mode = DWRITE_RENDERING_MODE_OUTLINE;
          return S_OK;
      }
-
 From 5c59517008697ce74becddb59a3e6702a963bb49 Mon Sep 17 00:00:00 2001
 From: Zhiyi Zhang <zzhang@codeweavers.com>
 Date: Fri, 16 Aug 2019 09:46:25 +0000
@@ -1708,7 +1708,6 @@ index 6344157f384..6fefe5d6d80 100644
 +    rounded_size = ROUND_SIZE(size) + HEAP_TAIL_EXTRA_SIZE;
      if (rounded_size < size) goto oom;  /* overflow */
      if (rounded_size < HEAP_MIN_DATA_SIZE) rounded_size = HEAP_MIN_DATA_SIZE;
- 
 
 From 21b43e000eb18207eb7ee68267d8ef38da6ad1c0 Mon Sep 17 00:00:00 2001
 From: Micah N Gorrell <mgorrell@codeweavers.com>
@@ -2503,13 +2502,12 @@ index 2823a1cd4f1..69e5f60e7c6 100644
  
  static inline LPCSTR debugstr_us( const UNICODE_STRING *us )
  {
-@@ -82,6 +82,8 @@ static const WCHAR servicesW[] = {'\\','R','e','g','i','s','t','r','y',
-                                   '\\','C','u','r','r','e','n','t','C','o','n','t','r','o','l','S','e','t',
+@@ -82,6 +84,8 @@ static const WCHAR servicesW[] = {'\\','R','e','g','i','s','t','r','y',
                                    '\\','S','e','r','v','i','c','e','s',
                                    '\\',0};
-+
-+DWORD send_device_notification( DEV_BROADCAST_DEVICEINTERFACE_W *broadcast, BOOL enable );
  
++DWORD send_device_notification( DEV_BROADCAST_DEVICEINTERFACE_W *broadcast, BOOL enable );
++
  struct wine_device
  {
      DEVICE_OBJECT device_obj;
@@ -2819,8 +2817,8 @@ index d420dcb45aa..bd3660331eb 100644
  EXTRADEFS = -D_USER32_ -D_WINABLE_
  MODULE    = user32.dll
  IMPORTLIB = user32
--IMPORTS   = gdi32 version advapi32 kernelbase
-+IMPORTS   = gdi32 version advapi32 kernelbase sechost
+-IMPORTS   = gdi32 version advapi32
++IMPORTS   = gdi32 version advapi32 sechost
  EXTRAINCL = $(PNG_CFLAGS)
  DELAYIMPORTS = hid imm32 setupapi usp10
  
@@ -3229,66 +3227,6 @@ index 00000000000..7231f86b722
 +    else
 +        win_skip("I_ScRegisterDeviceNotification is not available\n");
 +}
-From 33cd3de313071c787bece5acc31351c36abd74e9 Mon Sep 17 00:00:00 2001
-From: Brendan Shanks <bshanks@codeweavers.com>
-Date: Tue, 22 Oct 2019 16:27:51 -0700
-Subject: [PATCH] HACK: ntdll: Run WT_EXECUTEINWAITTHREAD wait callbacks
- serially.
-
-On Windows, waits registered with the WT_EXECUTEINWAITTHREAD flag will
-often have their callbacks run serially (since they're all handled by
-the same wait thread). Running them in parallel can expose race
-conditions.
-Use a process-wide critical section to serialize these callbacks.
-
-Wine-Bug: https://bugs.winehq.org/show_bug.cgi?id=47843
----
- dlls/ntdll/threadpool.c | 24 ++++++++++++++++++++++++
- 1 file changed, 24 insertions(+)
-
-diff --git a/dlls/ntdll/threadpool.c b/dlls/ntdll/threadpool.c
-index 639e032f629..dbd9577d6bc 100644
---- a/dlls/ntdll/threadpool.c
-+++ b/dlls/ntdll/threadpool.c
-@@ -84,6 +84,17 @@ struct wait_work_item
-     int CallbackInProgress;
- };
- 
-+static RTL_CRITICAL_SECTION_DEBUG wait_thread_executeinwaitthread_cs_debug;
-+
-+static RTL_CRITICAL_SECTION wait_thread_executeinwaitthread_cs = {&wait_thread_executeinwaitthread_cs_debug, -1, 0, 0, 0, 0};
-+
-+static RTL_CRITICAL_SECTION_DEBUG wait_thread_executeinwaitthread_cs_debug =
-+{
-+    0, 0, &wait_thread_executeinwaitthread_cs,
-+    { &wait_thread_executeinwaitthread_cs_debug.ProcessLocksList, &wait_thread_executeinwaitthread_cs_debug.ProcessLocksList },
-+      0, 0, { (DWORD_PTR)(__FILE__ ": wait_thread_executeinwaitthread_cs") }
-+};
-+
- struct timer_queue;
- struct queue_timer
- {
-@@ -527,7 +538,20 @@ static DWORD CALLBACK wait_thread_proc(LPVOID Arg)
-                 TRACE( "Work has been canceled.\n" );
-                 break;
-             }
-+
-+            /* HACK: On Windows, waits created with WT_EXECUTEINWAITTHREAD often end up on the same wait thread
-+             * and run serialized. Running these waits simultaneously on separate threads may expose race conditions
-+             * not seen on Windows.
-+             * Use a critical section to ensure these callbacks run serially.
-+             */
-+            if (wait_work_item->Flags & WT_EXECUTEINWAITTHREAD)
-+                enter_critical_section(&wait_thread_executeinwaitthread_cs);
-+
-             wait_work_item->Callback( wait_work_item->Context, TimerOrWaitFired );
-+
-+            if (wait_work_item->Flags & WT_EXECUTEINWAITTHREAD)
-+                leave_critical_section(&wait_thread_executeinwaitthread_cs);
-+
-             interlocked_xchg( &wait_work_item->CallbackInProgress, FALSE );
- 
-             if (wait_work_item->Flags & WT_EXECUTEONLYONCE)
 From 30440e42234e781932bb436fa53394a465358829 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
 Date: Wed, 9 Oct 2019 09:47:09 +0200
@@ -3307,9 +3245,20 @@ diff --git a/tools/winegcc/winegcc.c b/tools/winegcc/winegcc.c
 index 3d1817a36bb..899a3b3d5d9 100644
 --- a/tools/winegcc/winegcc.c
 +++ b/tools/winegcc/winegcc.c
+@@ -408,6 +408,10 @@ static strarray *get_link_args( struct options *opts, const char *output_name )
+             strarray_add( flags, "-image_base" );
+             strarray_add( flags, opts->image_base );
+         }
++        /* On Mac, change -s into -Wl,-x. ld's -s switch
++         * is deprecated, and it doesn't work on Tiger with
++         * MH_BUNDLEs anyway
++         */
+         if (opts->strip) strarray_add( flags, "-Wl,-x" );
+         return flags;
+ 
 @@ -1162,9 +1166,21 @@ static void build(struct options* opts)
  
-     if (libgcc) strarray_add(link_args, libgcc);
+     if (opts->nodefaultlibs && is_pe) strarray_add( link_args, "-lgcc" );
  
 +    if (opts->target_platform != PLATFORM_APPLE && !is_pe && opts->strip)
 +        strarray_add(link_args, "-s");
@@ -3326,7 +3275,7 @@ index 3d1817a36bb..899a3b3d5d9 100644
 +        strarray_free(strip_args);
 +    }
 +
-     if (is_pe && opts->wine_builtin) make_wine_builtin( opts, output_path );
+     if (is_pe && opts->wine_builtin) make_wine_builtin( output_path );
  
      /* set the base address with prelink if linker support is not present */
 @@ -1555,12 +1571,8 @@ int main(int argc, char **argv)
@@ -3806,64 +3755,3 @@ index d2fc629c843..5a97590dbce 100644
  
      desc->VendorId = adapter_id.vendor_id;
      desc->DeviceId = adapter_id.device_id;
-From 304683886016ec940a9b331ce33fcbaf47e893c3 Mon Sep 17 00:00:00 2001
-From: Sven Baars <sbaars@codeweavers.com>
-Date: Thu, 5 Dec 2019 13:48:38 +0100
-Subject: [PATCH] HACK: ntdll: Return a handle to kernel32 when being asked for
- mfc42.
-
-For some applications mfc42 is loaded, but never actually used. We can
-add Steam game IDs when we find more of such applications.
----
- dlls/ntdll/loader.c | 31 +++++++++++++++++++++++++++++++
- 1 file changed, 31 insertions(+)
-
-diff --git a/dlls/ntdll/loader.c b/dlls/ntdll/loader.c
-index 431c247a072..c9fcad79316 100644
---- a/dlls/ntdll/loader.c
-+++ b/dlls/ntdll/loader.c
-@@ -159,6 +159,18 @@ static inline void ascii_to_unicode( WCHAR *dst, const char *src, size_t len )
-     while (len--) *dst++ = (unsigned char)*src++;
- }
- 
-+static WCHAR *strcasestrW( const WCHAR *str, const WCHAR *sub )
-+{
-+    while (*str)
-+    {
-+        const WCHAR *p1 = str, *p2 = sub;
-+        while (*p1 && *p2 && tolowerW(*p1) == tolowerW(*p2)) { p1++; p2++; }
-+        if (!*p2) return (WCHAR *)str;
-+        str++;
-+    }
-+    return NULL;
-+}
-+
- #define RTL_UNLOAD_EVENT_TRACE_NUMBER 64
- 
- typedef struct _RTL_UNLOAD_EVENT_TRACE
-@@ -2869,6 +2881,25 @@ static NTSTATUS find_dll_file( const WCHAR *load_path, const WCHAR *libname,
- done:
-     RtlFreeHeap( GetProcessHeap(), 0, dllname );
-     if (wow64_old_value) RtlWow64EnableFsRedirectionEx( 1, &wow64_old_value );
-+
-+    if (status != STATUS_SUCCESS)
-+    {
-+        /* HACK for Proton issue #17
-+         *
-+         * Some games try to load mfc42.dll, but then proceed to not use it.
-+         * Just return a handle to kernel32 in that case.
-+         */
-+        static const WCHAR mfc42W[] = {'m','f','c','4','2',0};
-+        static const WCHAR kernel32W[] = {'k','e','r','n','e','l','3','2','.','d','l','l',0};
-+        const char *sgi = getenv( "SteamGameId" );
-+        if (sgi &&
-+            !strcmp( sgi, "105450" ) && /* AoE3 */
-+            strcasestrW( libname, mfc42W ))
-+        {
-+            WARN_(loaddll)( "Using a fake mfc42 handle\n" );
-+            status = find_dll_file( load_path, kernel32W, nt_name, pwm, mfc42W, module, image_info, st );
-+        }
-+    }
-     return status;
- }
- 
