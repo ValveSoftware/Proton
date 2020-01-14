@@ -1,5 +1,5 @@
 #!/bin/bash
-    # Steam Helper patch
+    # Steam Helper patch - currently broken
     cd steam_helper
     git checkout steam.cpp
     #patch -Np1 < ../game-patches-testing/proton-hotfixes/steam-helper.patch
@@ -24,14 +24,6 @@
     cd wine
     git reset --hard HEAD
     git clean -xdf
-
-    #HOT FIXES
-    git revert --no-commit c4ad7391956fcbfe7a1a9324ebda1e013e5f6edd
-    git revert --no-commit 1366dd69d5a0578299dc69365db972b0341456d2
-    git revert --no-commit 1d91c196e71413b9c72aebc2c4b8df246985fea0
-    git revert --no-commit f99d307a3e1f9beb7fd9dc8892b5cfabbabf816b
-    git revert --no-commit 66c9c358ae5c50fc246cf4a4e280b401a5fc730b
-    git revert --no-commit b12d6d405ab89477dee1083f4af4b858a118ff46
 
     #FS HACK REVERTS NECESSARY
     git revert --no-commit 427152ec7b4ee85631617b693dbf1deea763c0ba
@@ -60,6 +52,9 @@
     -W user32-rawinput-hid \
     -W user32-rawinput-keyboard \
     -W winex11-key_translation
+
+    # Staging hotfix
+    patch -Np1 < ../game-patches-testing/wine-patches/bottomalloc_staging_fix.patch
 
     #VKD3D-WINE
     echo "applying vkd3d wine patches"
@@ -94,14 +89,12 @@
     echo "origin downloads fix" - tested OK
     patch -Np1 < ../game-patches-testing/game-patches/origin-downloads_fix.patch
 
-    echo "origin regression fix " - tested OK
-    patch -Np1 < ../game-patches-testing/game-patches/origin_wine5.0rc2_regression.patch 
-
     echo "gta v loading fix"
     patch -Np1 < ../game-patches-testing/game-patches/gtav-load-fix.patch
 
-    echo "valve mouse overlay fix"
-    patch -Np1 < ../game-patches-testing/game-patches/valve-overlay-mouse-fix.patch
+    echo "bcrypt fix for honor, steep"
+    patch -Np1 < ../game-patches-testing/game-patches/0001-bcrypt-Implement-BCryptSecretAgreement-with-libgcryp.patch
+    patch -Np1 < ../game-patches-testing/game-patches/0002-bcrypt-Implement-BCryptSecretAgreement-with-libgcryp.patch
 
     #WINE FSYNC
     echo "applying fsync patches"
@@ -109,20 +102,14 @@
 
     #PROTON
     echo "applying proton patches"
-
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-steamclient_swap.patch
-
+    
     #staging
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-protonify_staging_rpc.patch
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-protonify_staging.patch
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-LAA_staging.patch
 
-    #non-staging
-    #patch -Np1 < ../game-patches-testing/proton-non-staging/proton-protonify_mainline_rpc.patch
-    #patch -Np1 < ../game-patches-testing/proton-non-staging/proton-protonify_mainline.patch
-    #patch -Np1 < ../game-patches-testing/proton-non-staging/proton-LAA.patch
-
-    echo "mortal kombat 11 patch"
+    #mk11
     patch -Np1 < ../game-patches-testing/game-patches/mk11.patch
 
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-use_clock_monotonic.patch
@@ -137,10 +124,10 @@
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-vk_bits_4.5+.patch
     patch -Np1 < ../game-patches-testing/proton-hotfixes/proton-integer_scaling.patch
 
-    echo "raw input"
+    #echo "raw input"
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-rawinput.patch
 
-    echo "applying key translation patches from staging post-rawinput"
+    #echo "applying key translation patches from staging post-rawinput"
     patch -Np1 < ../wine-staging/patches/winex11-key_translation/0001-winex11-Match-keyboard-in-Unicode.patch
     patch -Np1 < ../wine-staging/patches/winex11-key_translation/0002-winex11-Fix-more-key-translation.patch
     patch -Np1 < ../wine-staging/patches/winex11-key_translation/0003-winex11.drv-Fix-main-Russian-keyboard-layout.patch
@@ -148,11 +135,12 @@
     echo "SDL Joystick"
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-sdl_joy.patch
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-sdl_joy_2.patch
+    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-sdl_joy_3.patch
 
     echo "mf hacks"
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-mf_hacks.patch
 
-    #echo "msvcrt overrides"
+    #echo "msvcrt overrides" - disabled, breaks some games
     #patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-msvcrt_nativebuiltin.patch
 
     echo "registry entries"
@@ -163,11 +151,13 @@
 
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-wined3d.patch
 
-    ./tools/make_requests
-
     #WINE CUSTOM PATCHES
     #add your own custom patch lines below
 
-    patch -Np1 < ../game-patches-testing/wine-patches/wine-rc4_server_reverts.patch
+    #fix steep fullscreen
+    patch -Np1 < ../game-patches-testing/wine-patches/0001-Add-some-semi-stubs-in-user32.patch
+
+    ./tools/make_requests
+    autoreconf -f
 
     #end

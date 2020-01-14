@@ -315,9 +315,9 @@ index 31c008abb8f..ce689dbe6cf 100644
 + * bother parsing anything. */
 +return FALSE;
 +
-     dwarf2_init_section(&eh_frame,                fmap, ".eh_frame",     NULL,             &eh_frame_sect);
-     dwarf2_init_section(&section[section_debug],  fmap, ".debug_info",   ".zdebug_info",   &debug_sect);
-     dwarf2_init_section(&section[section_abbrev], fmap, ".debug_abbrev", ".zdebug_abbrev", &debug_abbrev_sect);
+     if (!dwarf2_init_section(&eh_frame,                fmap, ".eh_frame",     NULL,             &eh_frame_sect))
+         /* lld produces .eh_fram to avoid generating a long name */
+         dwarf2_init_section(&eh_frame,                fmap, ".eh_fram",      NULL,             &eh_frame_sect);
 
 From a13270aea50af90aa6c721080b956870d67d81c2 Mon Sep 17 00:00:00 2001
 From: Andrew Eikum <aeikum@codeweavers.com>
