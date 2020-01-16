@@ -9,8 +9,9 @@
     cd vkd3d
     git reset --hard HEAD
     git clean -xdf
+    #Don't apply wow patches for now, they tend to crash other vkd3d games
     #patch -Np1 < ../game-patches-testing/vkd3d-patches/Support_RS_1.0_Volatile.patch
-    patch -Np1 < ../game-patches-testing/vkd3d-patches/wow-flicker.patch
+    #patch -Np1 < ../game-patches-testing/vkd3d-patches/wow-flicker.patch
     cd ..
 
     # Valve DXVK patches
@@ -60,6 +61,7 @@
     patch -Np1 < ../game-patches-testing/proton-hotfixes/0005-ntdll-Permanently-exclude-natively-mapped-areas-from.patch
 
     #VKD3D-WINE
+    #Don't apply these for now,they are part of the wow patches
     #echo "applying vkd3d wine patches"
     #patch -Np1 < ../game-patches-testing/wine-patches/D3D12SerializeVersionedRootSignature.patch
     #patch -Np1 < ../game-patches-testing/wine-patches/D3D12CreateVersionedRootSignatureDeserializer.patch
