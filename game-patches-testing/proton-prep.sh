@@ -9,7 +9,7 @@
     cd vkd3d
     git reset --hard HEAD
     git clean -xdf
-    patch -Np1 < ../game-patches-testing/vkd3d-patches/Support_RS_1.0_Volatile.patch
+    #patch -Np1 < ../game-patches-testing/vkd3d-patches/Support_RS_1.0_Volatile.patch
     patch -Np1 < ../game-patches-testing/vkd3d-patches/wow-flicker.patch
     cd ..
 
@@ -50,16 +50,19 @@
     -W user32-rawinput-nolegacy \
     -W user32-rawinput-mouse-experimental \
     -W user32-rawinput-hid \
-    -W user32-rawinput-keyboard \
     -W winex11-key_translation
 
     # Staging hotfix
-    patch -Np1 < ../game-patches-testing/wine-patches/bottomalloc_staging_fix.patch
+    patch -Np1 < ../game-patches-testing/proton-hotfixes/0001-ntdll-Check-first-page-in-range-with-mincore-in-try_.patch
+    patch -Np1 < ../game-patches-testing/proton-hotfixes/0002-ntdll-Increase-step-after-failed-map-attempt-in-try_.patch
+    patch -Np1 < ../game-patches-testing/proton-hotfixes/0003-libs-wine-Add-functions-for-managing-free-area-list.patch
+    patch -Np1 < ../game-patches-testing/proton-hotfixes/0004-ntdll-Use-free-area-list-for-virtual-memory-allocati.patch
+    patch -Np1 < ../game-patches-testing/proton-hotfixes/0005-ntdll-Permanently-exclude-natively-mapped-areas-from.patch
 
     #VKD3D-WINE
-    echo "applying vkd3d wine patches"
-    patch -Np1 < ../game-patches-testing/wine-patches/D3D12SerializeVersionedRootSignature.patch
-    patch -Np1 < ../game-patches-testing/wine-patches/D3D12CreateVersionedRootSignatureDeserializer.patch
+    #echo "applying vkd3d wine patches"
+    #patch -Np1 < ../game-patches-testing/wine-patches/D3D12SerializeVersionedRootSignature.patch
+    #patch -Np1 < ../game-patches-testing/wine-patches/D3D12CreateVersionedRootSignatureDeserializer.patch
 
     #WINE VULKAN
     echo "applying winevulkan patches"
@@ -91,6 +94,9 @@
 
     echo "gta v loading fix"
     patch -Np1 < ../game-patches-testing/game-patches/gtav-load-fix.patch
+
+    echo "monster hunter world fix"
+    patch -Np1 < ../game-patches-testing/game-patches/mhw_fix.patch
 
     echo "bcrypt fix for honor, steep"
     patch -Np1 < ../game-patches-testing/game-patches/0001-bcrypt-Implement-BCryptSecretAgreement-with-libgcryp.patch

@@ -1,0 +1,189 @@
+From ee57eef3f4f6296a18b4224961ce6c310e06278e Mon Sep 17 00:00:00 2001
+From: Paul Gofman <gofmanp@gmail.com>
+Date: Tue, 14 Jan 2020 21:42:21 +0300
+Subject: [PATCH 4/5] ntdll: Use free area list for virtual memory allocation.
+
+Signed-off-by: Paul Gofman <gofmanp@gmail.com>
+---
+ dlls/ntdll/virtual.c | 108 +++++++++++++++++++++----------------------
+ 1 file changed, 52 insertions(+), 56 deletions(-)
+
+diff --git a/dlls/ntdll/virtual.c b/dlls/ntdll/virtual.c
+index 50a88d283c..b7d8a88abb 100644
+--- a/dlls/ntdll/virtual.c
++++ b/dlls/ntdll/virtual.c
+@@ -628,60 +628,6 @@ static void* try_map_free_area( void *base, void *end, ptrdiff_t step,
+     return NULL;
+ }
+ 
+-
+-/***********************************************************************
+- *           map_free_area
+- *
+- * Find a free area between views inside the specified range and map it.
+- * The csVirtual section must be held by caller.
+- */
+-static void *map_free_area( void *base, void *end, size_t size, size_t mask, int top_down,
+-                             int unix_prot )
+-{
+-    struct wine_rb_entry *first = find_view_inside_range( &base, &end, top_down );
+-    ptrdiff_t step = top_down ? -(mask + 1) : (mask + 1);
+-    void *start;
+-
+-    if (top_down)
+-    {
+-        start = ROUND_ADDR( (char *)end - size, mask );
+-        if (start >= end || start < base) return NULL;
+-
+-        while (first)
+-        {
+-            struct file_view *view = WINE_RB_ENTRY_VALUE( first, struct file_view, entry );
+-            if ((start = try_map_free_area( (char *)view->base + view->size, (char *)start + size, step,
+-                                            start, size, unix_prot ))) break;
+-            start = ROUND_ADDR( (char *)view->base - size, mask );
+-            /* stop if remaining space is not large enough */
+-            if (!start || start >= end || start < base) return NULL;
+-            first = wine_rb_prev( first );
+-        }
+-    }
+-    else
+-    {
+-        start = ROUND_ADDR( (char *)base + mask, mask );
+-        if (!start || start >= end || (char *)end - (char *)start < size) return NULL;
+-
+-        while (first)
+-        {
+-            struct file_view *view = WINE_RB_ENTRY_VALUE( first, struct file_view, entry );
+-            if ((start = try_map_free_area( start, view->base, step,
+-                                            start, size, unix_prot ))) break;
+-            start = ROUND_ADDR( (char *)view->base + view->size + mask, mask );
+-            /* stop if remaining space is not large enough */
+-            if (!start || start >= end || (char *)end - (char *)start < size) return NULL;
+-            first = wine_rb_next( first );
+-        }
+-    }
+-
+-    if (!first)
+-        return try_map_free_area( base, end, step, start, size, unix_prot );
+-
+-    return start;
+-}
+-
+-
+ /***********************************************************************
+  *           find_reserved_free_area
+  *
+@@ -896,6 +842,7 @@ static struct file_view *alloc_view(void)
+  */
+ static void delete_view( struct file_view *view ) /* [in] View */
+ {
++    wine_mmap_add_free_area(view->base, view->size);
+     if (!(view->protect & VPROT_SYSTEM)) unmap_area( view->base, view->size );
+     set_page_vprot( view->base, view->size, 0 );
+     wine_rb_remove( &views_tree, &view->entry );
+@@ -953,6 +900,7 @@ static NTSTATUS create_view( struct file_view **view_ret, void *base, size_t siz
+         TRACE( "forcing exec permission on %p-%p\n", base, (char *)base + size - 1 );
+         mprotect( base, size, unix_prot | PROT_EXEC );
+     }
++    wine_mmap_remove_free_area(view->base, view->size, 0);
+     return STATUS_SUCCESS;
+ }
+ 
+@@ -1190,6 +1138,7 @@ struct alloc_area
+     int    top_down;
+     void  *limit;
+     void  *result;
++    int    unix_prot;
+ };
+ 
+ /***********************************************************************
+@@ -1231,6 +1180,41 @@ static int alloc_reserved_area_callback( void *start, size_t size, void *arg )
+     return 0;
+ }
+ 
++static int alloc_free_area_callback( void *base, size_t area_size, void *arg )
++{
++    struct alloc_area *alloc = arg;
++    void *end = (char *)base + area_size;
++    size_t size = alloc->size;
++    ptrdiff_t step = alloc->top_down ? -(alloc->mask + 1) : (alloc->mask + 1);
++    void *start;
++
++    if (base < address_space_start) base = address_space_start;
++    if (is_beyond_limit( base, size, alloc->limit )) end = alloc->limit;
++    if (base >= end) return 0;
++
++    if (alloc->top_down)
++    {
++        start = ROUND_ADDR( (char *)end - size, alloc->mask );
++        if (start >= end || start < base)
++            return 0;
++
++        if ((alloc->result = try_map_free_area( base, (char *)start + size, step,
++                start, size, alloc->unix_prot )))
++            return 1;
++    }
++    else
++    {
++        start = ROUND_ADDR( (char *)base + alloc->mask, alloc->mask );
++        if (!start || start >= end || (char *)end - (char *)start < size)
++            return 0;
++
++        if ((alloc->result = try_map_free_area( start, end, step,
++                start, size, alloc->unix_prot )))
++            return 1;
++    }
++    return 0;
++}
++
+ /***********************************************************************
+  *           map_fixed_area
+  *
+@@ -1318,6 +1302,7 @@ static NTSTATUS map_view( struct file_view **view_ret, void *base, size_t size,
+         alloc.mask = mask;
+         alloc.top_down = top_down;
+         alloc.limit = (void*)(get_zero_bits_64_mask( zero_bits_64 ) & (UINT_PTR)user_space_limit);
++        alloc.unix_prot = VIRTUAL_GetUnixProt(vprot);
+ 
+         if (is_win64 && !top_down)
+         {
+@@ -1336,9 +1321,11 @@ static NTSTATUS map_view( struct file_view **view_ret, void *base, size_t size,
+ 
+         if (is_win64 || zero_bits_64)
+         {
+-            if (!(ptr = map_free_area( address_space_start, alloc.limit, size, mask, top_down, VIRTUAL_GetUnixProt(vprot) )))
++            if (!wine_mmap_enum_free_areas( alloc_free_area_callback, &alloc, top_down ))
+                 return STATUS_NO_MEMORY;
+-            TRACE( "got mem with map_free_area %p-%p\n", ptr, (char *)ptr + size );
++
++            ptr = alloc.result;
++            TRACE( "got mem in free area %p-%p\n", ptr, (char *)ptr + size );
+             goto done;
+         }
+ 
+@@ -2013,6 +2000,12 @@ static int alloc_virtual_heap( void *base, size_t size, void *arg )
+     return (alloc->base != (void *)-1);
+ }
+ 
++static int remove_reserved_area_from_free( void *base, size_t size, void *arg )
++{
++    wine_mmap_remove_free_area(base, size, 0);
++    return 0;
++}
++
+ /***********************************************************************
+  *           virtual_init
+  */
+@@ -2071,6 +2064,9 @@ void virtual_init(void)
+     size = (char *)address_space_start - (char *)0x10000;
+     if (size && wine_mmap_is_in_reserved_area( (void*)0x10000, size ) == 1)
+         wine_anon_mmap( (void *)0x10000, size, PROT_READ | PROT_WRITE, MAP_FIXED );
++
++    wine_mmap_add_free_area(address_space_start, (char *)user_space_limit - (char *)address_space_start);
++    wine_mmap_enum_reserved_areas( remove_reserved_area_from_free, NULL, 0);
+ }
+ 
+ 
+-- 
+2.24.1
+
