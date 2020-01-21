@@ -11,7 +11,7 @@
     git clean -xdf
     #Don't apply wow patches for now, they tend to crash other vkd3d games
     #patch -Np1 < ../game-patches-testing/vkd3d-patches/Support_RS_1.0_Volatile.patch
-    #patch -Np1 < ../game-patches-testing/vkd3d-patches/wow-flicker.patch
+    patch -Np1 < ../game-patches-testing/vkd3d-patches/wow-flicker.patch
     cd ..
 
     # Valve DXVK patches
@@ -52,13 +52,6 @@
     -W user32-rawinput-mouse-experimental \
     -W user32-rawinput-hid \
     -W winex11-key_translation
-
-    # Staging hotfix
-    patch -Np1 < ../game-patches-testing/proton-hotfixes/0001-ntdll-Check-first-page-in-range-with-mincore-in-try_.patch
-    patch -Np1 < ../game-patches-testing/proton-hotfixes/0002-ntdll-Increase-step-after-failed-map-attempt-in-try_.patch
-    patch -Np1 < ../game-patches-testing/proton-hotfixes/0003-libs-wine-Add-functions-for-managing-free-area-list.patch
-    patch -Np1 < ../game-patches-testing/proton-hotfixes/0004-ntdll-Use-free-area-list-for-virtual-memory-allocati.patch
-    patch -Np1 < ../game-patches-testing/proton-hotfixes/0005-ntdll-Permanently-exclude-natively-mapped-areas-from.patch
 
     #VKD3D-WINE
     #Don't apply these for now,they are part of the wow patches
@@ -103,6 +96,9 @@
     echo "bcrypt fix for honor, steep"
     patch -Np1 < ../game-patches-testing/game-patches/0001-bcrypt-Implement-BCryptSecretAgreement-with-libgcryp.patch
     patch -Np1 < ../game-patches-testing/game-patches/0002-bcrypt-Implement-BCryptSecretAgreement-with-libgcryp.patch
+
+    echo "bnet beta win10 crash fix"
+    patch -Np1 < ../game-patches-testing/game-patches/bnet-beta_win10_crash_fix.patch
 
     #WINE FSYNC
     echo "applying fsync patches"
@@ -155,15 +151,15 @@
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-apply_LargeAddressAware_fix_for_Bayonetta.patch
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-Set_amd_ags_x64_to_built_in_for_Wolfenstein_2.patch
 
+    #fix steep fullscreen
+    patch -Np1 < ../game-patches-testing/wine-patches/0001-Add-some-semi-stubs-in-user32.patch
+
     #need for VR to compile
 
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-wined3d.patch
 
     #WINE CUSTOM PATCHES
     #add your own custom patch lines below
-
-    #fix steep fullscreen
-    patch -Np1 < ../game-patches-testing/wine-patches/0001-Add-some-semi-stubs-in-user32.patch
 
     ./tools/make_requests
     autoreconf -f

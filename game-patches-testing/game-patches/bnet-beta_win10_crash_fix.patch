@@ -1,0 +1,157 @@
+ 
+From: Derek Lesho <dlesho@codeweavers.com>
+Subject: [PATCH] msctf: Always provide a context when from GetBase/Top.
+Message-Id: <20200115213436.327681-1-dlesho@codeweavers.com>
+Date: Wed, 15 Jan 2020 15:34:36 -0600
+
+Wine-Bug: https://bugs.winehq.org/show_bug.cgi?id=48405
+Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
+---
+ dlls/msctf/documentmgr.c          | 20 +++++++++++++++++---
+ dlls/msctf/tests/inputprocessor.c | 26 ++++++++++++++++++++++++--
+ 2 files changed, 41 insertions(+), 5 deletions(-)
+
+diff --git a/dlls/msctf/documentmgr.c b/dlls/msctf/documentmgr.c
+index 44856db632..37d55557f5 100644
+--- a/dlls/msctf/documentmgr.c
++++ b/dlls/msctf/documentmgr.c
+@@ -44,6 +44,7 @@ typedef struct tagDocumentMgr {
+     /* Aggregation */
+     ITfCompartmentMgr  *CompartmentMgr;
+ 
++    ITfContext* initialContext;
+     ITfContext*  contextStack[2]; /* limit of 2 contexts */
+     ITfThreadMgrEventSink* ThreadMgrSink;
+ 
+@@ -87,6 +88,8 @@ static void DocumentMgr_Destructor(DocumentMgr *This)
+         ITfThreadMgr_Release(tm);
+     }
+ 
++    if (This->initialContext)
++        ITfContext_Release(This->initialContext);
+     if (This->contextStack[0])
+         ITfContext_Release(This->contextStack[0]);
+     if (This->contextStack[1])
+@@ -222,14 +225,21 @@ static HRESULT WINAPI DocumentMgr_Pop(ITfDocumentMgr *iface, DWORD dwFlags)
+ static HRESULT WINAPI DocumentMgr_GetTop(ITfDocumentMgr *iface, ITfContext **ppic)
+ {
+     DocumentMgr *This = impl_from_ITfDocumentMgr(iface);
++    ITfContext *tgt;
++
+     TRACE("(%p)\n",This);
+     if (!ppic)
+         return E_INVALIDARG;
+ 
+     if (This->contextStack[0])
+-        ITfContext_AddRef(This->contextStack[0]);
++        tgt = This->contextStack[0];
++    else
++        tgt = This->initialContext;
++
++    if (tgt)
++        ITfContext_AddRef(tgt);
+ 
+-    *ppic = This->contextStack[0];
++    *ppic = tgt;
+ 
+     return S_OK;
+ }
+@@ -245,8 +255,10 @@ static HRESULT WINAPI DocumentMgr_GetBase(ITfDocumentMgr *iface, ITfContext **pp
+ 
+     if (This->contextStack[1])
+         tgt = This->contextStack[1];
+-    else
++    else if (This->contextStack[0])
+         tgt = This->contextStack[0];
++    else
++        tgt = This->initialContext;
+ 
+     if (tgt)
+         ITfContext_AddRef(tgt);
+@@ -342,6 +354,7 @@ static const ITfSourceVtbl DocumentMgrSourceVtbl =
+ HRESULT DocumentMgr_Constructor(ITfThreadMgrEventSink *ThreadMgrSink, ITfDocumentMgr **ppOut)
+ {
+     DocumentMgr *This;
++    DWORD cookie;
+ 
+     This = HeapAlloc(GetProcessHeap(),HEAP_ZERO_MEMORY,sizeof(DocumentMgr));
+     if (This == NULL)
+@@ -354,6 +367,7 @@ HRESULT DocumentMgr_Constructor(ITfThreadMgrEventSink *ThreadMgrSink, ITfDocumen
+     list_init(&This->TransitoryExtensionSink);
+ 
+     CompartmentMgr_Constructor((IUnknown*)&This->ITfDocumentMgr_iface, &IID_IUnknown, (IUnknown**)&This->CompartmentMgr);
++    Context_Constructor(processId,NULL,&This->ITfDocumentMgr_iface, &This->initialContext, &cookie);
+ 
+     *ppOut = &This->ITfDocumentMgr_iface;
+     TRACE("returning %p\n", *ppOut);
+diff --git a/dlls/msctf/tests/inputprocessor.c b/dlls/msctf/tests/inputprocessor.c
+index 38c591ea40..52921ec7cd 100644
+--- a/dlls/msctf/tests/inputprocessor.c
++++ b/dlls/msctf/tests/inputprocessor.c
+@@ -1639,10 +1639,10 @@ static HRESULT TextEditSink_Constructor(ITfTextEditSink **ppOut)
+ static void test_startSession(void)
+ {
+     HRESULT hr;
+-    DWORD cnt;
++    DWORD cnt, initial_ctx_cnt;
+     DWORD editCookie;
+     ITfDocumentMgr *dmtest;
+-    ITfContext *cxt,*cxt2,*cxt3,*cxtTest;
++    ITfContext *cxt,*cxt2,*cxt3,*cxtTest,*initial_ctx;
+     ITextStoreACP *ts = NULL;
+     TfClientId cid2 = 0;
+     ITfThreadMgrEx *tmex;
+@@ -1684,6 +1684,23 @@ static void test_startSession(void)
+     hr = ITfThreadMgr_CreateDocumentMgr(g_tm,&g_dm);
+     ok(SUCCEEDED(hr),"CreateDocumentMgr failed\n");
+ 
++    test_OnPushContext = SINK_EXPECTED;
++    test_OnInitDocumentMgr = SINK_EXPECTED;
++
++    /* For some reason, even when the object isn't initialized, this yields a context */
++    hr = ITfDocumentMgr_GetBase(g_dm, &initial_ctx);
++    ok(SUCCEEDED(hr), "GetBase Failed\n");
++    hr = ITfDocumentMgr_GetTop(g_dm, &cxtTest);
++    ok(SUCCEEDED(hr), "GetTop Failed\n");
++    ok(cxtTest == initial_ctx, "GetTop != GetBase\n");
++
++    ok(initial_ctx != NULL, "Expected initial context\n");
++    initial_ctx_cnt = check_context_refcount(initial_ctx);
++    hr = ITfContext_GetDocumentMgr(initial_ctx,&dmtest);
++    ok(hr == S_OK, "ITfContext_GetDocumentMgr failed with %x\n",hr);
++    ok(dmtest == g_dm, "Wrong documentmgr\n");
++    ITfDocumentMgr_Release(dmtest);
++
+     test_EnumDocumentMgr(g_tm,g_dm,NULL);
+ 
+     hr = ITfThreadMgr_CreateDocumentMgr(g_tm,&dmtest);
+@@ -1740,6 +1757,7 @@ static void test_startSession(void)
+     test_OnPushContext = SINK_EXPECTED;
+     test_ACP_AdviseSink = SINK_EXPECTED;
+     test_OnInitDocumentMgr = SINK_EXPECTED;
++
+     hr = ITfDocumentMgr_Push(g_dm, cxt);
+     ok(SUCCEEDED(hr),"Push Failed\n");
+     ok(check_context_refcount(cxt) > cnt, "Ref count did not increase\n");
+@@ -1749,6 +1767,9 @@ static void test_startSession(void)
+ 
+     test_EnumContexts(g_dm, cxt);
+ 
++    /* the initial context is released with the document manager */
++    ok(initial_ctx_cnt == check_context_refcount(initial_ctx), "Context ref count changed after documentmgr initialization\n");
++
+     hr = ITfDocumentMgr_GetTop(g_dm, &cxtTest);
+     ok(SUCCEEDED(hr),"GetTop Failed\n");
+     ok(cxtTest == cxt, "Wrong context on top\n");
+@@ -1859,6 +1880,7 @@ static void test_startSession(void)
+     ITfContext_Release(cxt);
+     ITfContext_Release(cxt2);
+     ITfContext_Release(cxt3);
++    ITfContext_Release(initial_ctx);
+     ITextStoreACP_Release(ts);
+ }
+ 
+
+-- 
+2.25.0
+
