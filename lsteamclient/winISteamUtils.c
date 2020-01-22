@@ -255,6 +255,13 @@ int __thiscall winISteamUtils_SteamUtils009_FilterText(winISteamUtils_SteamUtils
     return cppISteamUtils_SteamUtils009_FilterText(_this->linux_side, pchOutFilteredText, nByteSizeOutFilteredText, pchInputMessage, bLegalOnly);
 }
 
+DEFINE_THISCALL_WRAPPER(winISteamUtils_SteamUtils009_GetIPv6ConnectivityState, 8)
+ESteamIPv6ConnectivityState __thiscall winISteamUtils_SteamUtils009_GetIPv6ConnectivityState(winISteamUtils_SteamUtils009 *_this, ESteamIPv6ConnectivityProtocol eProtocol)
+{
+    TRACE("%p\n", _this);
+    return cppISteamUtils_SteamUtils009_GetIPv6ConnectivityState(_this->linux_side, eProtocol);
+}
+
 extern vtable_ptr winISteamUtils_SteamUtils009_vtable;
 
 #ifndef __GNUC__
@@ -294,6 +301,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamUtils_SteamUtils009_IsSteamChinaLauncher)
         VTABLE_ADD_FUNC(winISteamUtils_SteamUtils009_InitFilterText)
         VTABLE_ADD_FUNC(winISteamUtils_SteamUtils009_FilterText)
+        VTABLE_ADD_FUNC(winISteamUtils_SteamUtils009_GetIPv6ConnectivityState)
     );
 #ifndef __GNUC__
 }

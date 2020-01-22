@@ -63,35 +63,35 @@ EVRInputError __thiscall winIVRInput_IVRInput_007_UpdateActionState(winIVRInput_
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRInput_IVRInput_007_GetDigitalActionData, 28)
-EVRInputError __thiscall winIVRInput_IVRInput_007_GetDigitalActionData(winIVRInput_IVRInput_007 *_this, VRActionHandle_t action, winInputDigitalActionData_t_1610 * pActionData, uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice)
+EVRInputError __thiscall winIVRInput_IVRInput_007_GetDigitalActionData(winIVRInput_IVRInput_007 *_this, VRActionHandle_t action, winInputDigitalActionData_t_1819 * pActionData, uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice)
 {
     TRACE("%p\n", _this);
     return cppIVRInput_IVRInput_007_GetDigitalActionData(_this->linux_side, action, pActionData, unActionDataSize, ulRestrictToDevice);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRInput_IVRInput_007_GetAnalogActionData, 28)
-EVRInputError __thiscall winIVRInput_IVRInput_007_GetAnalogActionData(winIVRInput_IVRInput_007 *_this, VRActionHandle_t action, winInputAnalogActionData_t_1610 * pActionData, uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice)
+EVRInputError __thiscall winIVRInput_IVRInput_007_GetAnalogActionData(winIVRInput_IVRInput_007 *_this, VRActionHandle_t action, winInputAnalogActionData_t_1819 * pActionData, uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice)
 {
     TRACE("%p\n", _this);
     return cppIVRInput_IVRInput_007_GetAnalogActionData(_this->linux_side, action, pActionData, unActionDataSize, ulRestrictToDevice);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRInput_IVRInput_007_GetPoseActionDataRelativeToNow, 36)
-EVRInputError __thiscall winIVRInput_IVRInput_007_GetPoseActionDataRelativeToNow(winIVRInput_IVRInput_007 *_this, VRActionHandle_t action, ETrackingUniverseOrigin eOrigin, float fPredictedSecondsFromNow, winInputPoseActionData_t_1610 * pActionData, uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice)
+EVRInputError __thiscall winIVRInput_IVRInput_007_GetPoseActionDataRelativeToNow(winIVRInput_IVRInput_007 *_this, VRActionHandle_t action, ETrackingUniverseOrigin eOrigin, float fPredictedSecondsFromNow, winInputPoseActionData_t_1819 * pActionData, uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice)
 {
     TRACE("%p\n", _this);
     return cppIVRInput_IVRInput_007_GetPoseActionDataRelativeToNow(_this->linux_side, action, eOrigin, fPredictedSecondsFromNow, pActionData, unActionDataSize, ulRestrictToDevice);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRInput_IVRInput_007_GetPoseActionDataForNextFrame, 32)
-EVRInputError __thiscall winIVRInput_IVRInput_007_GetPoseActionDataForNextFrame(winIVRInput_IVRInput_007 *_this, VRActionHandle_t action, ETrackingUniverseOrigin eOrigin, winInputPoseActionData_t_1610 * pActionData, uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice)
+EVRInputError __thiscall winIVRInput_IVRInput_007_GetPoseActionDataForNextFrame(winIVRInput_IVRInput_007 *_this, VRActionHandle_t action, ETrackingUniverseOrigin eOrigin, winInputPoseActionData_t_1819 * pActionData, uint32_t unActionDataSize, VRInputValueHandle_t ulRestrictToDevice)
 {
     TRACE("%p\n", _this);
     return cppIVRInput_IVRInput_007_GetPoseActionDataForNextFrame(_this->linux_side, action, eOrigin, pActionData, unActionDataSize, ulRestrictToDevice);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRInput_IVRInput_007_GetSkeletalActionData, 20)
-EVRInputError __thiscall winIVRInput_IVRInput_007_GetSkeletalActionData(winIVRInput_IVRInput_007 *_this, VRActionHandle_t action, winInputSkeletalActionData_t_1610 * pActionData, uint32_t unActionDataSize)
+EVRInputError __thiscall winIVRInput_IVRInput_007_GetSkeletalActionData(winIVRInput_IVRInput_007 *_this, VRActionHandle_t action, winInputSkeletalActionData_t_1819 * pActionData, uint32_t unActionDataSize)
 {
     TRACE("%p\n", _this);
     return cppIVRInput_IVRInput_007_GetSkeletalActionData(_this->linux_side, action, pActionData, unActionDataSize);
@@ -216,6 +216,13 @@ bool __thiscall winIVRInput_IVRInput_007_IsUsingLegacyInput(winIVRInput_IVRInput
     return cppIVRInput_IVRInput_007_IsUsingLegacyInput(_this->linux_side);
 }
 
+DEFINE_THISCALL_WRAPPER(winIVRInput_IVRInput_007_OpenBindingUI, 25)
+EVRInputError __thiscall winIVRInput_IVRInput_007_OpenBindingUI(winIVRInput_IVRInput_007 *_this, const char * pchAppKey, VRActionSetHandle_t ulActionSetHandle, VRInputValueHandle_t ulDeviceHandle, bool bShowOnDesktop)
+{
+    TRACE("%p\n", _this);
+    return cppIVRInput_IVRInput_007_OpenBindingUI(_this->linux_side, pchAppKey, ulActionSetHandle, ulDeviceHandle, bShowOnDesktop);
+}
+
 extern vtable_ptr winIVRInput_IVRInput_007_vtable;
 
 #ifndef __GNUC__
@@ -249,6 +256,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winIVRInput_IVRInput_007_ShowActionOrigins)
         VTABLE_ADD_FUNC(winIVRInput_IVRInput_007_ShowBindingsForActionSet)
         VTABLE_ADD_FUNC(winIVRInput_IVRInput_007_IsUsingLegacyInput)
+        VTABLE_ADD_FUNC(winIVRInput_IVRInput_007_OpenBindingUI)
     );
 #ifndef __GNUC__
 }
@@ -272,8 +280,8 @@ void destroy_winIVRInput_IVRInput_007(void *object)
 winIVRInput_IVRInput_007 *create_winIVRInput_IVRInput_007_FnTable(void *linux_side)
 {
     winIVRInput_IVRInput_007 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRInput_IVRInput_007));
-    struct thunk *thunks = alloc_thunks(27);
-    struct thunk **vtable = HeapAlloc(GetProcessHeap(), 0, 27 * sizeof(*vtable));
+    struct thunk *thunks = alloc_thunks(28);
+    struct thunk **vtable = HeapAlloc(GetProcessHeap(), 0, 28 * sizeof(*vtable));
     int i;
 
     TRACE("-> %p, vtable %p, thunks %p\n", r, vtable, thunks);
@@ -304,7 +312,8 @@ winIVRInput_IVRInput_007 *create_winIVRInput_IVRInput_007_FnTable(void *linux_si
     init_thunk(&thunks[24], r, winIVRInput_IVRInput_007_ShowActionOrigins, 2, FALSE, FALSE);
     init_thunk(&thunks[25], r, winIVRInput_IVRInput_007_ShowBindingsForActionSet, 4, FALSE, FALSE);
     init_thunk(&thunks[26], r, winIVRInput_IVRInput_007_IsUsingLegacyInput, 0, FALSE, FALSE);
-    for (i = 0; i < 27; i++)
+    init_thunk(&thunks[27], r, winIVRInput_IVRInput_007_OpenBindingUI, 4, FALSE, FALSE);
+    for (i = 0; i < 28; i++)
         vtable[i] = &thunks[i];
     r->linux_side = linux_side;
     r->vtable = (void *)vtable;

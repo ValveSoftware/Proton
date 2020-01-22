@@ -1,14 +1,14 @@
 #include "steam_defs.h"
 #pragma push_macro("__cdecl")
 #undef __cdecl
-#include "steamworks_sdk_146/steam_api.h"
-#include "steamworks_sdk_146/steamnetworkingtypes.h"
+#include "steamworks_sdk_147/steam_api.h"
+#include "steamworks_sdk_147/steamnetworkingtypes.h"
 #pragma pop_macro("__cdecl")
 #include "steamclient_private.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
-#define SDKVER_146
+#define SDKVER_147
 #include "struct_converters.h"
 #include "cppISteamUtils_SteamUtils009.h"
 uint32 cppISteamUtils_SteamUtils009_GetSecondsSinceAppActive(void *linux_side)
@@ -174,6 +174,11 @@ bool cppISteamUtils_SteamUtils009_InitFilterText(void *linux_side)
 int cppISteamUtils_SteamUtils009_FilterText(void *linux_side, char * pchOutFilteredText, uint32 nByteSizeOutFilteredText, const char * pchInputMessage, bool bLegalOnly)
 {
     return ((ISteamUtils*)linux_side)->FilterText((char *)pchOutFilteredText, (uint32)nByteSizeOutFilteredText, (const char *)pchInputMessage, (bool)bLegalOnly);
+}
+
+ESteamIPv6ConnectivityState cppISteamUtils_SteamUtils009_GetIPv6ConnectivityState(void *linux_side, ESteamIPv6ConnectivityProtocol eProtocol)
+{
+    return ((ISteamUtils*)linux_side)->GetIPv6ConnectivityState((ESteamIPv6ConnectivityProtocol)eProtocol);
 }
 
 #ifdef __cplusplus

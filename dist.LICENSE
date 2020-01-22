@@ -1,4 +1,4 @@
-Copyright (c) 2018-2019, Valve Corporation
+Copyright (c) 2018-2020, Valve Corporation
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification,
@@ -28,43 +28,42 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 Browse the source code for more information
 
-    https://github.com/ValveSoftware/Proton/
+    https://github.com/ValveSoftware/Proton
 
 ---- ---- ---- ----
 
-This software contains Wine licensed under the LGPL 2.1. Wine is
+This software contains a modified version of Wine licensed under the LGPL 2.1. Wine is
 
-    Copyright (c) 1993-2019 the Wine project authors
+    Copyright (c) 1993-2020 the Wine project authors
 
-Browse the source code for more information
+Visit Wine at
 
-    https://github.com/ValveSoftware/wine/
+    https://winehq.org
+
+View our modifications at
+
+    https://github.com/ValveSoftware/wine
 
 ---- ---- ---- ----
 
-This software contains DXVK licensed under the zlib/libpng license. DXVK is
+This software contains a modified version of DXVK licensed under the zlib/libpng license. DXVK is
 
-    Copyright (c) 2017-2019 Philip Rebohle
+    Copyright (c) 2017-2020 Philip Rebohle
+    Copyright (c) 2019-2020 Joshua Ashton
 
 Visit DXVK at
 
-    https://github.com/doitsujin/dxvk/
+    https://github.com/doitsujin/dxvk
 
----- ---- ---- ----
+View our modifications at
 
-This software contains D9VK licensed under the zlib/libpng license. D9VK is
-
-    Copyright (c) 2017-2019 Philip Rebohle
-
-Visit D9VK at
-
-    https://github.com/Joshua-Ashton/d9vk/
+    https://github.com/ValveSoftware/dxvk
 
 ---- ---- ---- ----
 
 This software contains FAudio licensed under the zlib license. FAudio is
 
-    Copyright (c) 2011-2018 Ethan Lee, Luigi Auriemma, and the MonoGame Team
+    Copyright (c) 2011-2020 Ethan Lee, Luigi Auriemma, and the MonoGame Team
 
 Visit FAudio at
 
@@ -72,7 +71,7 @@ Visit FAudio at
 
 ---- ---- ---- ----
 
-This software contains some Liberation Fonts licensed under the SIL Open Font License. These fonts are
+This software contains some Liberation Fonts licensed under the SIL Open Font License, available at LICENSE.OFL. These fonts are
 
     Copyright (c) 2010 Google Corporation
     Copyright (c) 2012 Red Hat, Inc.
@@ -83,7 +82,7 @@ Visit Liberation Fonts at
 
 ---- ---- ---- ----
 
-This software contains Source Han Sans licensed under the SIL Open Font License. This font is
+This software contains Source Han Sans licensed under the SIL Open Font License, available at LICENSE.OFL. This font is
 
     Copyright 2014-2019 Adobe (http://www.adobe.com/)
 
@@ -101,17 +100,33 @@ This software contains wine-mono, parts of which are included under a variety of
 
     The Visual Basic class libraries (mono-basic/) are MIT X11. The compiler is LGPL v2.
 
-    OpenTK (opentk/) is MIT X11.
+    FNA is a mix of MSPL and MIT. It has the following library dependencies:
+     * FAudio, MojoShader, Theorafile, SDL2, SDL_image_compact, and SDL2-CS are zlib-licensed. SDL2-CS is built into FNA.dll.
+     * FNA.NetStub is MSPL.
 
-    Lidgren.Network (MonoGame/ThirdParty/Lidgren.Network) is MIT.
-
-    MonoGame uses GamepadConfig, Tao.Sdl, and SDL for its gamepad support. GamepadConfig has a non-free license, so gamepad support is disabled in Wine Mono to eliminate those dependencies.
-
-    MonoGame (MonoGame/) is Ms-PL.
+    The winforms and wpf libraries are MIT.
 
 wine-mono itself is included under the MIT license. wine-mono is
 
     Copyright (c) 2012 Vincent Povirk for CodeWeavers
+
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+
+    The above copyright notice and this permission notice shall be included in
+    all copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+    THE SOFTWARE.
 
 Visit wine-mono at
 
@@ -129,30 +144,78 @@ wine-gecko itself is included under the Mozilla Public License 2.0.
 
 wine-gecko is available in Source Code form at
 
-    https://sourceforge.net/p/wine/wine-gecko/
+    https://sourceforge.net/p/wine/wine-gecko
+
+---- ---- ---- ----
+
+This software contains a modified version of Vkd3d licensed under the LGPL 2.1. Vkd3d is
+
+    Copyright 2016-2019 the Vkd3d project authors
+
+Visit Vkd3d at
+
+    https://source.winehq.org/git/vkd3d.git
+
+View our modifications at
+
+    https://github.com/ValveSoftware/vkd3d
 
 ---- ---- ---- ----
 
 Parts of this software are based on the OpenVR SDK, which is
 
     Copyright (c) 2015, Valve Corporation
+    All rights reserved.
+
+    Redistribution and use in source and binary forms, with or without modification,
+    are permitted provided that the following conditions are met:
+
+    1. Redistributions of source code must retain the above copyright notice, this
+    list of conditions and the following disclaimer.
+
+    2. Redistributions in binary form must reproduce the above copyright notice,
+    this list of conditions and the following disclaimer in the documentation and/or
+    other materials provided with the distribution.
+
+    3. Neither the name of the copyright holder nor the names of its contributors
+    may be used to endorse or promote products derived from this software without
+    specific prior written permission.
+
+    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+    ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+    WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+    DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
+    ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+    (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+    LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+    ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+    (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 Visit OpenVR at
 
-    https://github.com/ValveSoftware/openvr/
-
----- ---- ---- ----
-
-This software contains Vkd3d, which is
-
-    Copyright 2016-2019 the Vkd3d project authors
-
-Visit Vkd3d at
-
-    https://source.winehq.org/git/vkd3d.git/
+    https://github.com/ValveSoftware/openvr
 
 ---- ---- ---- ----
 
 Parts of this software are based on the AMD AGS library, which is
 
     Copyright (c) 2017 Advanced Micro Devices, Inc. All rights reserved.
+
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+
+    The above copyright notice and this permission notice shall be included in
+    all copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+    THE SOFTWARE.

@@ -135,9 +135,15 @@ uint32_t ivrcompositor_get_vulkan_device_extensions_required(
         void *linux_side, VkPhysicalDevice_T *phys_dev, char *value, uint32_t bufsize,
         unsigned int version, struct compositor_data *user_data);
 
+EVRRenderModelError ivrrendermodels_load_texture_d3d11_async(
+        EVRRenderModelError (*cpp_func)(void *, TextureID_t, void *, void **),
+        void *linux_side, TextureID_t texture_id, void *d3d11_device, void **dst_texture, unsigned int version);
 EVRRenderModelError ivrrendermodels_load_into_texture_d3d11_async(
         EVRRenderModelError (*cpp_func)(void *, TextureID_t, void *),
         void *linux_side, TextureID_t texture_id, void *dst_texture, unsigned int version);
+void ivrrendermodels_free_texture_d3d11(
+        void (*cpp_func)(void *, void *),
+        void *linux_side, void *dst_texture, unsigned int version);
 
 #endif  /* __cplusplus */
 

@@ -1,6 +1,6 @@
 #include "vrclient_private.h"
 #include "vrclient_defs.h"
-#include "openvr_v1.6.10/ivrclientcore.h"
+#include "openvr_v1.8.19/ivrclientcore.h"
 using namespace vr;
 extern "C" {
 #include "struct_converters.h"

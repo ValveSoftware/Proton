@@ -18,6 +18,1528 @@
 
 WINE_DEFAULT_DEBUG_CHANNEL(vrclient);
 
+#include "cppIVROverlay_IVROverlay_021.h"
+
+typedef struct __winIVROverlay_IVROverlay_021 {
+    vtable_ptr *vtable;
+    void *linux_side;
+} winIVROverlay_IVROverlay_021;
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_021_FindOverlay, 12)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_021_FindOverlay(winIVROverlay_IVROverlay_021 *_this, const char * pchOverlayKey, VROverlayHandle_t * pOverlayHandle)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_021_FindOverlay(_this->linux_side, pchOverlayKey, pOverlayHandle);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_021_CreateOverlay, 16)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_021_CreateOverlay(winIVROverlay_IVROverlay_021 *_this, const char * pchOverlayKey, const char * pchOverlayName, VROverlayHandle_t * pOverlayHandle)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_021_CreateOverlay(_this->linux_side, pchOverlayKey, pchOverlayName, pOverlayHandle);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_021_DestroyOverlay, 12)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_021_DestroyOverlay(winIVROverlay_IVROverlay_021 *_this, VROverlayHandle_t ulOverlayHandle)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_021_DestroyOverlay(_this->linux_side, ulOverlayHandle);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_021_GetOverlayKey, 24)
+uint32_t __thiscall winIVROverlay_IVROverlay_021_GetOverlayKey(winIVROverlay_IVROverlay_021 *_this, VROverlayHandle_t ulOverlayHandle, char * pchValue, uint32_t unBufferSize, EVROverlayError * pError)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_021_GetOverlayKey(_this->linux_side, ulOverlayHandle, pchValue, unBufferSize, pError);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_021_GetOverlayName, 24)
+uint32_t __thiscall winIVROverlay_IVROverlay_021_GetOverlayName(winIVROverlay_IVROverlay_021 *_this, VROverlayHandle_t ulOverlayHandle, char * pchValue, uint32_t unBufferSize, EVROverlayError * pError)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_021_GetOverlayName(_this->linux_side, ulOverlayHandle, pchValue, unBufferSize, pError);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_021_SetOverlayName, 16)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_021_SetOverlayName(winIVROverlay_IVROverlay_021 *_this, VROverlayHandle_t ulOverlayHandle, const char * pchName)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_021_SetOverlayName(_this->linux_side, ulOverlayHandle, pchName);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_021_GetOverlayImageData, 28)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_021_GetOverlayImageData(winIVROverlay_IVROverlay_021 *_this, VROverlayHandle_t ulOverlayHandle, void * pvBuffer, uint32_t unBufferSize, uint32_t * punWidth, uint32_t * punHeight)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_021_GetOverlayImageData(_this->linux_side, ulOverlayHandle, pvBuffer, unBufferSize, punWidth, punHeight);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_021_GetOverlayErrorNameFromEnum, 8)
+const char * __thiscall winIVROverlay_IVROverlay_021_GetOverlayErrorNameFromEnum(winIVROverlay_IVROverlay_021 *_this, EVROverlayError error)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_021_GetOverlayErrorNameFromEnum(_this->linux_side, error);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_021_SetOverlayRenderingPid, 16)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_021_SetOverlayRenderingPid(winIVROverlay_IVROverlay_021 *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unPID)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_021_SetOverlayRenderingPid(_this->linux_side, ulOverlayHandle, unPID);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_021_GetOverlayRenderingPid, 12)
+uint32_t __thiscall winIVROverlay_IVROverlay_021_GetOverlayRenderingPid(winIVROverlay_IVROverlay_021 *_this, VROverlayHandle_t ulOverlayHandle)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_021_GetOverlayRenderingPid(_this->linux_side, ulOverlayHandle);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_021_SetOverlayFlag, 17)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_021_SetOverlayFlag(winIVROverlay_IVROverlay_021 *_this, VROverlayHandle_t ulOverlayHandle, VROverlayFlags eOverlayFlag, bool bEnabled)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_021_SetOverlayFlag(_this->linux_side, ulOverlayHandle, eOverlayFlag, bEnabled);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_021_GetOverlayFlag, 20)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_021_GetOverlayFlag(winIVROverlay_IVROverlay_021 *_this, VROverlayHandle_t ulOverlayHandle, VROverlayFlags eOverlayFlag, bool * pbEnabled)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_021_GetOverlayFlag(_this->linux_side, ulOverlayHandle, eOverlayFlag, pbEnabled);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_021_SetOverlayColor, 24)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_021_SetOverlayColor(winIVROverlay_IVROverlay_021 *_this, VROverlayHandle_t ulOverlayHandle, float fRed, float fGreen, float fBlue)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_021_SetOverlayColor(_this->linux_side, ulOverlayHandle, fRed, fGreen, fBlue);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_021_GetOverlayColor, 24)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_021_GetOverlayColor(winIVROverlay_IVROverlay_021 *_this, VROverlayHandle_t ulOverlayHandle, float * pfRed, float * pfGreen, float * pfBlue)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_021_GetOverlayColor(_this->linux_side, ulOverlayHandle, pfRed, pfGreen, pfBlue);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_021_SetOverlayAlpha, 16)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_021_SetOverlayAlpha(winIVROverlay_IVROverlay_021 *_this, VROverlayHandle_t ulOverlayHandle, float fAlpha)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_021_SetOverlayAlpha(_this->linux_side, ulOverlayHandle, fAlpha);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_021_GetOverlayAlpha, 16)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_021_GetOverlayAlpha(winIVROverlay_IVROverlay_021 *_this, VROverlayHandle_t ulOverlayHandle, float * pfAlpha)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_021_GetOverlayAlpha(_this->linux_side, ulOverlayHandle, pfAlpha);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_021_SetOverlayTexelAspect, 16)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_021_SetOverlayTexelAspect(winIVROverlay_IVROverlay_021 *_this, VROverlayHandle_t ulOverlayHandle, float fTexelAspect)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_021_SetOverlayTexelAspect(_this->linux_side, ulOverlayHandle, fTexelAspect);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_021_GetOverlayTexelAspect, 16)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_021_GetOverlayTexelAspect(winIVROverlay_IVROverlay_021 *_this, VROverlayHandle_t ulOverlayHandle, float * pfTexelAspect)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_021_GetOverlayTexelAspect(_this->linux_side, ulOverlayHandle, pfTexelAspect);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_021_SetOverlaySortOrder, 16)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_021_SetOverlaySortOrder(winIVROverlay_IVROverlay_021 *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unSortOrder)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_021_SetOverlaySortOrder(_this->linux_side, ulOverlayHandle, unSortOrder);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_021_GetOverlaySortOrder, 16)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_021_GetOverlaySortOrder(winIVROverlay_IVROverlay_021 *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * punSortOrder)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_021_GetOverlaySortOrder(_this->linux_side, ulOverlayHandle, punSortOrder);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_021_SetOverlayWidthInMeters, 16)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_021_SetOverlayWidthInMeters(winIVROverlay_IVROverlay_021 *_this, VROverlayHandle_t ulOverlayHandle, float fWidthInMeters)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_021_SetOverlayWidthInMeters(_this->linux_side, ulOverlayHandle, fWidthInMeters);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_021_GetOverlayWidthInMeters, 16)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_021_GetOverlayWidthInMeters(winIVROverlay_IVROverlay_021 *_this, VROverlayHandle_t ulOverlayHandle, float * pfWidthInMeters)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_021_GetOverlayWidthInMeters(_this->linux_side, ulOverlayHandle, pfWidthInMeters);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_021_SetOverlayCurvature, 16)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_021_SetOverlayCurvature(winIVROverlay_IVROverlay_021 *_this, VROverlayHandle_t ulOverlayHandle, float fCurvature)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_021_SetOverlayCurvature(_this->linux_side, ulOverlayHandle, fCurvature);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_021_GetOverlayCurvature, 16)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_021_GetOverlayCurvature(winIVROverlay_IVROverlay_021 *_this, VROverlayHandle_t ulOverlayHandle, float * pfCurvature)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_021_GetOverlayCurvature(_this->linux_side, ulOverlayHandle, pfCurvature);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_021_SetOverlayTextureColorSpace, 16)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_021_SetOverlayTextureColorSpace(winIVROverlay_IVROverlay_021 *_this, VROverlayHandle_t ulOverlayHandle, EColorSpace eTextureColorSpace)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_021_SetOverlayTextureColorSpace(_this->linux_side, ulOverlayHandle, eTextureColorSpace);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_021_GetOverlayTextureColorSpace, 16)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_021_GetOverlayTextureColorSpace(winIVROverlay_IVROverlay_021 *_this, VROverlayHandle_t ulOverlayHandle, EColorSpace * peTextureColorSpace)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_021_GetOverlayTextureColorSpace(_this->linux_side, ulOverlayHandle, peTextureColorSpace);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_021_SetOverlayTextureBounds, 16)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_021_SetOverlayTextureBounds(winIVROverlay_IVROverlay_021 *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t * pOverlayTextureBounds)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_021_SetOverlayTextureBounds(_this->linux_side, ulOverlayHandle, pOverlayTextureBounds);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_021_GetOverlayTextureBounds, 16)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_021_GetOverlayTextureBounds(winIVROverlay_IVROverlay_021 *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t * pOverlayTextureBounds)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_021_GetOverlayTextureBounds(_this->linux_side, ulOverlayHandle, pOverlayTextureBounds);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_021_GetOverlayRenderModel, 28)
+uint32_t __thiscall winIVROverlay_IVROverlay_021_GetOverlayRenderModel(winIVROverlay_IVROverlay_021 *_this, VROverlayHandle_t ulOverlayHandle, char * pchValue, uint32_t unBufferSize, HmdColor_t * pColor, EVROverlayError * pError)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_021_GetOverlayRenderModel(_this->linux_side, ulOverlayHandle, pchValue, unBufferSize, pColor, pError);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_021_SetOverlayRenderModel, 20)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_021_SetOverlayRenderModel(winIVROverlay_IVROverlay_021 *_this, VROverlayHandle_t ulOverlayHandle, const char * pchRenderModel, HmdColor_t * pColor)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_021_SetOverlayRenderModel(_this->linux_side, ulOverlayHandle, pchRenderModel, pColor);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_021_GetOverlayTransformType, 16)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_021_GetOverlayTransformType(winIVROverlay_IVROverlay_021 *_this, VROverlayHandle_t ulOverlayHandle, VROverlayTransformType * peTransformType)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_021_GetOverlayTransformType(_this->linux_side, ulOverlayHandle, peTransformType);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_021_SetOverlayTransformAbsolute, 20)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_021_SetOverlayTransformAbsolute(winIVROverlay_IVROverlay_021 *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin eTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToOverlayTransform)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_021_SetOverlayTransformAbsolute(_this->linux_side, ulOverlayHandle, eTrackingOrigin, pmatTrackingOriginToOverlayTransform);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_021_GetOverlayTransformAbsolute, 20)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_021_GetOverlayTransformAbsolute(winIVROverlay_IVROverlay_021 *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin * peTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToOverlayTransform)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_021_GetOverlayTransformAbsolute(_this->linux_side, ulOverlayHandle, peTrackingOrigin, pmatTrackingOriginToOverlayTransform);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_021_SetOverlayTransformTrackedDeviceRelative, 20)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_021_SetOverlayTransformTrackedDeviceRelative(winIVROverlay_IVROverlay_021 *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unTrackedDevice, HmdMatrix34_t * pmatTrackedDeviceToOverlayTransform)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_021_SetOverlayTransformTrackedDeviceRelative(_this->linux_side, ulOverlayHandle, unTrackedDevice, pmatTrackedDeviceToOverlayTransform);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_021_GetOverlayTransformTrackedDeviceRelative, 20)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_021_GetOverlayTransformTrackedDeviceRelative(winIVROverlay_IVROverlay_021 *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t * punTrackedDevice, HmdMatrix34_t * pmatTrackedDeviceToOverlayTransform)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_021_GetOverlayTransformTrackedDeviceRelative(_this->linux_side, ulOverlayHandle, punTrackedDevice, pmatTrackedDeviceToOverlayTransform);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_021_SetOverlayTransformTrackedDeviceComponent, 20)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_021_SetOverlayTransformTrackedDeviceComponent(winIVROverlay_IVROverlay_021 *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unDeviceIndex, const char * pchComponentName)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_021_SetOverlayTransformTrackedDeviceComponent(_this->linux_side, ulOverlayHandle, unDeviceIndex, pchComponentName);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_021_GetOverlayTransformTrackedDeviceComponent, 24)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_021_GetOverlayTransformTrackedDeviceComponent(winIVROverlay_IVROverlay_021 *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t * punDeviceIndex, char * pchComponentName, uint32_t unComponentNameSize)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_021_GetOverlayTransformTrackedDeviceComponent(_this->linux_side, ulOverlayHandle, punDeviceIndex, pchComponentName, unComponentNameSize);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_021_GetOverlayTransformOverlayRelative, 20)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_021_GetOverlayTransformOverlayRelative(winIVROverlay_IVROverlay_021 *_this, VROverlayHandle_t ulOverlayHandle, VROverlayHandle_t * ulOverlayHandleParent, HmdMatrix34_t * pmatParentOverlayToOverlayTransform)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_021_GetOverlayTransformOverlayRelative(_this->linux_side, ulOverlayHandle, ulOverlayHandleParent, pmatParentOverlayToOverlayTransform);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_021_SetOverlayTransformOverlayRelative, 24)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_021_SetOverlayTransformOverlayRelative(winIVROverlay_IVROverlay_021 *_this, VROverlayHandle_t ulOverlayHandle, VROverlayHandle_t ulOverlayHandleParent, HmdMatrix34_t * pmatParentOverlayToOverlayTransform)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_021_SetOverlayTransformOverlayRelative(_this->linux_side, ulOverlayHandle, ulOverlayHandleParent, pmatParentOverlayToOverlayTransform);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_021_ShowOverlay, 12)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_021_ShowOverlay(winIVROverlay_IVROverlay_021 *_this, VROverlayHandle_t ulOverlayHandle)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_021_ShowOverlay(_this->linux_side, ulOverlayHandle);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_021_HideOverlay, 12)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_021_HideOverlay(winIVROverlay_IVROverlay_021 *_this, VROverlayHandle_t ulOverlayHandle)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_021_HideOverlay(_this->linux_side, ulOverlayHandle);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_021_IsOverlayVisible, 12)
+bool __thiscall winIVROverlay_IVROverlay_021_IsOverlayVisible(winIVROverlay_IVROverlay_021 *_this, VROverlayHandle_t ulOverlayHandle)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_021_IsOverlayVisible(_this->linux_side, ulOverlayHandle);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_021_GetTransformForOverlayCoordinates, 28)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_021_GetTransformForOverlayCoordinates(winIVROverlay_IVROverlay_021 *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin eTrackingOrigin, HmdVector2_t coordinatesInOverlay, HmdMatrix34_t * pmatTransform)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_021_GetTransformForOverlayCoordinates(_this->linux_side, ulOverlayHandle, eTrackingOrigin, coordinatesInOverlay, pmatTransform);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_021_PollNextOverlayEvent, 20)
+bool __thiscall winIVROverlay_IVROverlay_021_PollNextOverlayEvent(winIVROverlay_IVROverlay_021 *_this, VROverlayHandle_t ulOverlayHandle, winVREvent_t_1819 * pEvent, uint32_t uncbVREvent)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_021_PollNextOverlayEvent(_this->linux_side, ulOverlayHandle, pEvent, uncbVREvent);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_021_GetOverlayInputMethod, 16)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_021_GetOverlayInputMethod(winIVROverlay_IVROverlay_021 *_this, VROverlayHandle_t ulOverlayHandle, VROverlayInputMethod * peInputMethod)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_021_GetOverlayInputMethod(_this->linux_side, ulOverlayHandle, peInputMethod);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_021_SetOverlayInputMethod, 16)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_021_SetOverlayInputMethod(winIVROverlay_IVROverlay_021 *_this, VROverlayHandle_t ulOverlayHandle, VROverlayInputMethod eInputMethod)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_021_SetOverlayInputMethod(_this->linux_side, ulOverlayHandle, eInputMethod);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_021_GetOverlayMouseScale, 16)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_021_GetOverlayMouseScale(winIVROverlay_IVROverlay_021 *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvecMouseScale)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_021_GetOverlayMouseScale(_this->linux_side, ulOverlayHandle, pvecMouseScale);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_021_SetOverlayMouseScale, 16)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_021_SetOverlayMouseScale(winIVROverlay_IVROverlay_021 *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvecMouseScale)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_021_SetOverlayMouseScale(_this->linux_side, ulOverlayHandle, pvecMouseScale);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_021_ComputeOverlayIntersection, 20)
+bool __thiscall winIVROverlay_IVROverlay_021_ComputeOverlayIntersection(winIVROverlay_IVROverlay_021 *_this, VROverlayHandle_t ulOverlayHandle, VROverlayIntersectionParams_t * pParams, VROverlayIntersectionResults_t * pResults)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_021_ComputeOverlayIntersection(_this->linux_side, ulOverlayHandle, pParams, pResults);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_021_IsHoverTargetOverlay, 12)
+bool __thiscall winIVROverlay_IVROverlay_021_IsHoverTargetOverlay(winIVROverlay_IVROverlay_021 *_this, VROverlayHandle_t ulOverlayHandle)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_021_IsHoverTargetOverlay(_this->linux_side, ulOverlayHandle);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_021_SetOverlayDualAnalogTransform, 24)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_021_SetOverlayDualAnalogTransform(winIVROverlay_IVROverlay_021 *_this, VROverlayHandle_t ulOverlay, EDualAnalogWhich eWhich, HmdVector2_t * pvCenter, float fRadius)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_021_SetOverlayDualAnalogTransform(_this->linux_side, ulOverlay, eWhich, pvCenter, fRadius);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_021_GetOverlayDualAnalogTransform, 24)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_021_GetOverlayDualAnalogTransform(winIVROverlay_IVROverlay_021 *_this, VROverlayHandle_t ulOverlay, EDualAnalogWhich eWhich, HmdVector2_t * pvCenter, float * pfRadius)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_021_GetOverlayDualAnalogTransform(_this->linux_side, ulOverlay, eWhich, pvCenter, pfRadius);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_021_SetOverlayTexture, 16)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_021_SetOverlayTexture(winIVROverlay_IVROverlay_021 *_this, VROverlayHandle_t ulOverlayHandle, Texture_t * pTexture)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_021_SetOverlayTexture(_this->linux_side, ulOverlayHandle, pTexture);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_021_ClearOverlayTexture, 12)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_021_ClearOverlayTexture(winIVROverlay_IVROverlay_021 *_this, VROverlayHandle_t ulOverlayHandle)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_021_ClearOverlayTexture(_this->linux_side, ulOverlayHandle);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_021_SetOverlayRaw, 28)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_021_SetOverlayRaw(winIVROverlay_IVROverlay_021 *_this, VROverlayHandle_t ulOverlayHandle, void * pvBuffer, uint32_t unWidth, uint32_t unHeight, uint32_t unDepth)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_021_SetOverlayRaw(_this->linux_side, ulOverlayHandle, pvBuffer, unWidth, unHeight, unDepth);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_021_SetOverlayFromFile, 16)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_021_SetOverlayFromFile(winIVROverlay_IVROverlay_021 *_this, VROverlayHandle_t ulOverlayHandle, const char * pchFilePath)
+{
+    char lin_pchFilePath[PATH_MAX];
+    vrclient_dos_path_to_unix_path(pchFilePath, lin_pchFilePath);
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_021_SetOverlayFromFile(_this->linux_side, ulOverlayHandle, pchFilePath ? lin_pchFilePath : NULL);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_021_GetOverlayTexture, 44)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_021_GetOverlayTexture(winIVROverlay_IVROverlay_021 *_this, VROverlayHandle_t ulOverlayHandle, void ** pNativeTextureHandle, void * pNativeTextureRef, uint32_t * pWidth, uint32_t * pHeight, uint32_t * pNativeFormat, ETextureType * pAPIType, EColorSpace * pColorSpace, VRTextureBounds_t * pTextureBounds)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_021_GetOverlayTexture(_this->linux_side, ulOverlayHandle, pNativeTextureHandle, pNativeTextureRef, pWidth, pHeight, pNativeFormat, pAPIType, pColorSpace, pTextureBounds);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_021_ReleaseNativeOverlayHandle, 16)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_021_ReleaseNativeOverlayHandle(winIVROverlay_IVROverlay_021 *_this, VROverlayHandle_t ulOverlayHandle, void * pNativeTextureHandle)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_021_ReleaseNativeOverlayHandle(_this->linux_side, ulOverlayHandle, pNativeTextureHandle);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_021_GetOverlayTextureSize, 20)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_021_GetOverlayTextureSize(winIVROverlay_IVROverlay_021 *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * pWidth, uint32_t * pHeight)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_021_GetOverlayTextureSize(_this->linux_side, ulOverlayHandle, pWidth, pHeight);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_021_CreateDashboardOverlay, 20)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_021_CreateDashboardOverlay(winIVROverlay_IVROverlay_021 *_this, const char * pchOverlayKey, const char * pchOverlayFriendlyName, VROverlayHandle_t * pMainHandle, VROverlayHandle_t * pThumbnailHandle)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_021_CreateDashboardOverlay(_this->linux_side, pchOverlayKey, pchOverlayFriendlyName, pMainHandle, pThumbnailHandle);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_021_IsDashboardVisible, 4)
+bool __thiscall winIVROverlay_IVROverlay_021_IsDashboardVisible(winIVROverlay_IVROverlay_021 *_this)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_021_IsDashboardVisible(_this->linux_side);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_021_IsActiveDashboardOverlay, 12)
+bool __thiscall winIVROverlay_IVROverlay_021_IsActiveDashboardOverlay(winIVROverlay_IVROverlay_021 *_this, VROverlayHandle_t ulOverlayHandle)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_021_IsActiveDashboardOverlay(_this->linux_side, ulOverlayHandle);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_021_SetDashboardOverlaySceneProcess, 16)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_021_SetDashboardOverlaySceneProcess(winIVROverlay_IVROverlay_021 *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unProcessId)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_021_SetDashboardOverlaySceneProcess(_this->linux_side, ulOverlayHandle, unProcessId);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_021_GetDashboardOverlaySceneProcess, 16)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_021_GetDashboardOverlaySceneProcess(winIVROverlay_IVROverlay_021 *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * punProcessId)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_021_GetDashboardOverlaySceneProcess(_this->linux_side, ulOverlayHandle, punProcessId);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_021_ShowDashboard, 8)
+void __thiscall winIVROverlay_IVROverlay_021_ShowDashboard(winIVROverlay_IVROverlay_021 *_this, const char * pchOverlayToShow)
+{
+    TRACE("%p\n", _this);
+    cppIVROverlay_IVROverlay_021_ShowDashboard(_this->linux_side, pchOverlayToShow);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_021_GetPrimaryDashboardDevice, 4)
+TrackedDeviceIndex_t __thiscall winIVROverlay_IVROverlay_021_GetPrimaryDashboardDevice(winIVROverlay_IVROverlay_021 *_this)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_021_GetPrimaryDashboardDevice(_this->linux_side);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_021_ShowKeyboard, 33)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_021_ShowKeyboard(winIVROverlay_IVROverlay_021 *_this, EGamepadTextInputMode eInputMode, EGamepadTextInputLineMode eLineInputMode, const char * pchDescription, uint32_t unCharMax, const char * pchExistingText, bool bUseMinimalMode, uint64_t uUserValue)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_021_ShowKeyboard(_this->linux_side, eInputMode, eLineInputMode, pchDescription, unCharMax, pchExistingText, bUseMinimalMode, uUserValue);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_021_ShowKeyboardForOverlay, 41)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_021_ShowKeyboardForOverlay(winIVROverlay_IVROverlay_021 *_this, VROverlayHandle_t ulOverlayHandle, EGamepadTextInputMode eInputMode, EGamepadTextInputLineMode eLineInputMode, const char * pchDescription, uint32_t unCharMax, const char * pchExistingText, bool bUseMinimalMode, uint64_t uUserValue)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_021_ShowKeyboardForOverlay(_this->linux_side, ulOverlayHandle, eInputMode, eLineInputMode, pchDescription, unCharMax, pchExistingText, bUseMinimalMode, uUserValue);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_021_GetKeyboardText, 12)
+uint32_t __thiscall winIVROverlay_IVROverlay_021_GetKeyboardText(winIVROverlay_IVROverlay_021 *_this, char * pchText, uint32_t cchText)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_021_GetKeyboardText(_this->linux_side, pchText, cchText);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_021_HideKeyboard, 4)
+void __thiscall winIVROverlay_IVROverlay_021_HideKeyboard(winIVROverlay_IVROverlay_021 *_this)
+{
+    TRACE("%p\n", _this);
+    cppIVROverlay_IVROverlay_021_HideKeyboard(_this->linux_side);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_021_SetKeyboardTransformAbsolute, 12)
+void __thiscall winIVROverlay_IVROverlay_021_SetKeyboardTransformAbsolute(winIVROverlay_IVROverlay_021 *_this, ETrackingUniverseOrigin eTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToKeyboardTransform)
+{
+    TRACE("%p\n", _this);
+    cppIVROverlay_IVROverlay_021_SetKeyboardTransformAbsolute(_this->linux_side, eTrackingOrigin, pmatTrackingOriginToKeyboardTransform);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_021_SetKeyboardPositionForOverlay, 28)
+void __thiscall winIVROverlay_IVROverlay_021_SetKeyboardPositionForOverlay(winIVROverlay_IVROverlay_021 *_this, VROverlayHandle_t ulOverlayHandle, HmdRect2_t avoidRect)
+{
+    TRACE("%p\n", _this);
+    cppIVROverlay_IVROverlay_021_SetKeyboardPositionForOverlay(_this->linux_side, ulOverlayHandle, avoidRect);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_021_SetOverlayIntersectionMask, 24)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_021_SetOverlayIntersectionMask(winIVROverlay_IVROverlay_021 *_this, VROverlayHandle_t ulOverlayHandle, VROverlayIntersectionMaskPrimitive_t * pMaskPrimitives, uint32_t unNumMaskPrimitives, uint32_t unPrimitiveSize)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_021_SetOverlayIntersectionMask(_this->linux_side, ulOverlayHandle, pMaskPrimitives, unNumMaskPrimitives, unPrimitiveSize);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_021_GetOverlayFlags, 16)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_021_GetOverlayFlags(winIVROverlay_IVROverlay_021 *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * pFlags)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_021_GetOverlayFlags(_this->linux_side, ulOverlayHandle, pFlags);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_021_ShowMessageOverlay, 28)
+VRMessageOverlayResponse __thiscall winIVROverlay_IVROverlay_021_ShowMessageOverlay(winIVROverlay_IVROverlay_021 *_this, const char * pchText, const char * pchCaption, const char * pchButton0Text, const char * pchButton1Text, const char * pchButton2Text, const char * pchButton3Text)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_021_ShowMessageOverlay(_this->linux_side, pchText, pchCaption, pchButton0Text, pchButton1Text, pchButton2Text, pchButton3Text);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_021_CloseMessageOverlay, 4)
+void __thiscall winIVROverlay_IVROverlay_021_CloseMessageOverlay(winIVROverlay_IVROverlay_021 *_this)
+{
+    TRACE("%p\n", _this);
+    cppIVROverlay_IVROverlay_021_CloseMessageOverlay(_this->linux_side);
+}
+
+extern vtable_ptr winIVROverlay_IVROverlay_021_vtable;
+
+#ifndef __GNUC__
+void __asm_dummy_vtables(void) {
+#endif
+    __ASM_VTABLE(winIVROverlay_IVROverlay_021,
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_021_FindOverlay)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_021_CreateOverlay)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_021_DestroyOverlay)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_021_GetOverlayKey)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_021_GetOverlayName)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_021_SetOverlayName)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_021_GetOverlayImageData)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_021_GetOverlayErrorNameFromEnum)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_021_SetOverlayRenderingPid)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_021_GetOverlayRenderingPid)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_021_SetOverlayFlag)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_021_GetOverlayFlag)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_021_SetOverlayColor)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_021_GetOverlayColor)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_021_SetOverlayAlpha)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_021_GetOverlayAlpha)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_021_SetOverlayTexelAspect)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_021_GetOverlayTexelAspect)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_021_SetOverlaySortOrder)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_021_GetOverlaySortOrder)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_021_SetOverlayWidthInMeters)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_021_GetOverlayWidthInMeters)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_021_SetOverlayCurvature)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_021_GetOverlayCurvature)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_021_SetOverlayTextureColorSpace)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_021_GetOverlayTextureColorSpace)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_021_SetOverlayTextureBounds)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_021_GetOverlayTextureBounds)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_021_GetOverlayRenderModel)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_021_SetOverlayRenderModel)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_021_GetOverlayTransformType)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_021_SetOverlayTransformAbsolute)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_021_GetOverlayTransformAbsolute)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_021_SetOverlayTransformTrackedDeviceRelative)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_021_GetOverlayTransformTrackedDeviceRelative)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_021_SetOverlayTransformTrackedDeviceComponent)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_021_GetOverlayTransformTrackedDeviceComponent)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_021_GetOverlayTransformOverlayRelative)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_021_SetOverlayTransformOverlayRelative)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_021_ShowOverlay)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_021_HideOverlay)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_021_IsOverlayVisible)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_021_GetTransformForOverlayCoordinates)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_021_PollNextOverlayEvent)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_021_GetOverlayInputMethod)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_021_SetOverlayInputMethod)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_021_GetOverlayMouseScale)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_021_SetOverlayMouseScale)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_021_ComputeOverlayIntersection)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_021_IsHoverTargetOverlay)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_021_SetOverlayDualAnalogTransform)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_021_GetOverlayDualAnalogTransform)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_021_SetOverlayTexture)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_021_ClearOverlayTexture)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_021_SetOverlayRaw)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_021_SetOverlayFromFile)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_021_GetOverlayTexture)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_021_ReleaseNativeOverlayHandle)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_021_GetOverlayTextureSize)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_021_CreateDashboardOverlay)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_021_IsDashboardVisible)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_021_IsActiveDashboardOverlay)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_021_SetDashboardOverlaySceneProcess)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_021_GetDashboardOverlaySceneProcess)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_021_ShowDashboard)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_021_GetPrimaryDashboardDevice)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_021_ShowKeyboard)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_021_ShowKeyboardForOverlay)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_021_GetKeyboardText)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_021_HideKeyboard)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_021_SetKeyboardTransformAbsolute)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_021_SetKeyboardPositionForOverlay)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_021_SetOverlayIntersectionMask)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_021_GetOverlayFlags)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_021_ShowMessageOverlay)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_021_CloseMessageOverlay)
+    );
+#ifndef __GNUC__
+}
+#endif
+
+winIVROverlay_IVROverlay_021 *create_winIVROverlay_IVROverlay_021(void *linux_side)
+{
+    winIVROverlay_IVROverlay_021 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVROverlay_IVROverlay_021));
+    TRACE("-> %p\n", r);
+    r->vtable = &winIVROverlay_IVROverlay_021_vtable;
+    r->linux_side = linux_side;
+    return r;
+}
+
+void destroy_winIVROverlay_IVROverlay_021(void *object)
+{
+    TRACE("%p\n", object);
+    HeapFree(GetProcessHeap(), 0, object);
+}
+
+winIVROverlay_IVROverlay_021 *create_winIVROverlay_IVROverlay_021_FnTable(void *linux_side)
+{
+    winIVROverlay_IVROverlay_021 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVROverlay_IVROverlay_021));
+    struct thunk *thunks = alloc_thunks(76);
+    struct thunk **vtable = HeapAlloc(GetProcessHeap(), 0, 76 * sizeof(*vtable));
+    int i;
+
+    TRACE("-> %p, vtable %p, thunks %p\n", r, vtable, thunks);
+    init_thunk(&thunks[0], r, winIVROverlay_IVROverlay_021_FindOverlay, 2, FALSE, FALSE);
+    init_thunk(&thunks[1], r, winIVROverlay_IVROverlay_021_CreateOverlay, 3, FALSE, FALSE);
+    init_thunk(&thunks[2], r, winIVROverlay_IVROverlay_021_DestroyOverlay, 1, FALSE, FALSE);
+    init_thunk(&thunks[3], r, winIVROverlay_IVROverlay_021_GetOverlayKey, 4, FALSE, FALSE);
+    init_thunk(&thunks[4], r, winIVROverlay_IVROverlay_021_GetOverlayName, 4, FALSE, FALSE);
+    init_thunk(&thunks[5], r, winIVROverlay_IVROverlay_021_SetOverlayName, 2, FALSE, FALSE);
+    init_thunk(&thunks[6], r, winIVROverlay_IVROverlay_021_GetOverlayImageData, 5, FALSE, FALSE);
+    init_thunk(&thunks[7], r, winIVROverlay_IVROverlay_021_GetOverlayErrorNameFromEnum, 1, FALSE, FALSE);
+    init_thunk(&thunks[8], r, winIVROverlay_IVROverlay_021_SetOverlayRenderingPid, 2, FALSE, FALSE);
+    init_thunk(&thunks[9], r, winIVROverlay_IVROverlay_021_GetOverlayRenderingPid, 1, FALSE, FALSE);
+    init_thunk(&thunks[10], r, winIVROverlay_IVROverlay_021_SetOverlayFlag, 3, FALSE, FALSE);
+    init_thunk(&thunks[11], r, winIVROverlay_IVROverlay_021_GetOverlayFlag, 3, FALSE, FALSE);
+    init_thunk(&thunks[12], r, winIVROverlay_IVROverlay_021_SetOverlayColor, 4, TRUE, TRUE);
+    init_thunk(&thunks[13], r, winIVROverlay_IVROverlay_021_GetOverlayColor, 4, FALSE, FALSE);
+    init_thunk(&thunks[14], r, winIVROverlay_IVROverlay_021_SetOverlayAlpha, 2, TRUE, FALSE);
+    init_thunk(&thunks[15], r, winIVROverlay_IVROverlay_021_GetOverlayAlpha, 2, FALSE, FALSE);
+    init_thunk(&thunks[16], r, winIVROverlay_IVROverlay_021_SetOverlayTexelAspect, 2, TRUE, FALSE);
+    init_thunk(&thunks[17], r, winIVROverlay_IVROverlay_021_GetOverlayTexelAspect, 2, FALSE, FALSE);
+    init_thunk(&thunks[18], r, winIVROverlay_IVROverlay_021_SetOverlaySortOrder, 2, FALSE, FALSE);
+    init_thunk(&thunks[19], r, winIVROverlay_IVROverlay_021_GetOverlaySortOrder, 2, FALSE, FALSE);
+    init_thunk(&thunks[20], r, winIVROverlay_IVROverlay_021_SetOverlayWidthInMeters, 2, TRUE, FALSE);
+    init_thunk(&thunks[21], r, winIVROverlay_IVROverlay_021_GetOverlayWidthInMeters, 2, FALSE, FALSE);
+    init_thunk(&thunks[22], r, winIVROverlay_IVROverlay_021_SetOverlayCurvature, 2, TRUE, FALSE);
+    init_thunk(&thunks[23], r, winIVROverlay_IVROverlay_021_GetOverlayCurvature, 2, FALSE, FALSE);
+    init_thunk(&thunks[24], r, winIVROverlay_IVROverlay_021_SetOverlayTextureColorSpace, 2, FALSE, FALSE);
+    init_thunk(&thunks[25], r, winIVROverlay_IVROverlay_021_GetOverlayTextureColorSpace, 2, FALSE, FALSE);
+    init_thunk(&thunks[26], r, winIVROverlay_IVROverlay_021_SetOverlayTextureBounds, 2, FALSE, FALSE);
+    init_thunk(&thunks[27], r, winIVROverlay_IVROverlay_021_GetOverlayTextureBounds, 2, FALSE, FALSE);
+    init_thunk(&thunks[28], r, winIVROverlay_IVROverlay_021_GetOverlayRenderModel, 5, FALSE, FALSE);
+    init_thunk(&thunks[29], r, winIVROverlay_IVROverlay_021_SetOverlayRenderModel, 3, FALSE, FALSE);
+    init_thunk(&thunks[30], r, winIVROverlay_IVROverlay_021_GetOverlayTransformType, 2, FALSE, FALSE);
+    init_thunk(&thunks[31], r, winIVROverlay_IVROverlay_021_SetOverlayTransformAbsolute, 3, FALSE, FALSE);
+    init_thunk(&thunks[32], r, winIVROverlay_IVROverlay_021_GetOverlayTransformAbsolute, 3, FALSE, FALSE);
+    init_thunk(&thunks[33], r, winIVROverlay_IVROverlay_021_SetOverlayTransformTrackedDeviceRelative, 3, FALSE, FALSE);
+    init_thunk(&thunks[34], r, winIVROverlay_IVROverlay_021_GetOverlayTransformTrackedDeviceRelative, 3, FALSE, FALSE);
+    init_thunk(&thunks[35], r, winIVROverlay_IVROverlay_021_SetOverlayTransformTrackedDeviceComponent, 3, FALSE, FALSE);
+    init_thunk(&thunks[36], r, winIVROverlay_IVROverlay_021_GetOverlayTransformTrackedDeviceComponent, 4, FALSE, FALSE);
+    init_thunk(&thunks[37], r, winIVROverlay_IVROverlay_021_GetOverlayTransformOverlayRelative, 3, FALSE, FALSE);
+    init_thunk(&thunks[38], r, winIVROverlay_IVROverlay_021_SetOverlayTransformOverlayRelative, 3, FALSE, FALSE);
+    init_thunk(&thunks[39], r, winIVROverlay_IVROverlay_021_ShowOverlay, 1, FALSE, FALSE);
+    init_thunk(&thunks[40], r, winIVROverlay_IVROverlay_021_HideOverlay, 1, FALSE, FALSE);
+    init_thunk(&thunks[41], r, winIVROverlay_IVROverlay_021_IsOverlayVisible, 1, FALSE, FALSE);
+    init_thunk(&thunks[42], r, winIVROverlay_IVROverlay_021_GetTransformForOverlayCoordinates, 4, FALSE, FALSE);
+    init_thunk(&thunks[43], r, winIVROverlay_IVROverlay_021_PollNextOverlayEvent, 3, FALSE, FALSE);
+    init_thunk(&thunks[44], r, winIVROverlay_IVROverlay_021_GetOverlayInputMethod, 2, FALSE, FALSE);
+    init_thunk(&thunks[45], r, winIVROverlay_IVROverlay_021_SetOverlayInputMethod, 2, FALSE, FALSE);
+    init_thunk(&thunks[46], r, winIVROverlay_IVROverlay_021_GetOverlayMouseScale, 2, FALSE, FALSE);
+    init_thunk(&thunks[47], r, winIVROverlay_IVROverlay_021_SetOverlayMouseScale, 2, FALSE, FALSE);
+    init_thunk(&thunks[48], r, winIVROverlay_IVROverlay_021_ComputeOverlayIntersection, 3, FALSE, FALSE);
+    init_thunk(&thunks[49], r, winIVROverlay_IVROverlay_021_IsHoverTargetOverlay, 1, FALSE, FALSE);
+    init_thunk(&thunks[50], r, winIVROverlay_IVROverlay_021_SetOverlayDualAnalogTransform, 4, TRUE, TRUE);
+    init_thunk(&thunks[51], r, winIVROverlay_IVROverlay_021_GetOverlayDualAnalogTransform, 4, FALSE, FALSE);
+    init_thunk(&thunks[52], r, winIVROverlay_IVROverlay_021_SetOverlayTexture, 2, FALSE, FALSE);
+    init_thunk(&thunks[53], r, winIVROverlay_IVROverlay_021_ClearOverlayTexture, 1, FALSE, FALSE);
+    init_thunk(&thunks[54], r, winIVROverlay_IVROverlay_021_SetOverlayRaw, 5, FALSE, FALSE);
+    init_thunk(&thunks[55], r, winIVROverlay_IVROverlay_021_SetOverlayFromFile, 2, FALSE, FALSE);
+    init_thunk(&thunks[56], r, winIVROverlay_IVROverlay_021_GetOverlayTexture, 9, FALSE, FALSE);
+    init_thunk(&thunks[57], r, winIVROverlay_IVROverlay_021_ReleaseNativeOverlayHandle, 2, FALSE, FALSE);
+    init_thunk(&thunks[58], r, winIVROverlay_IVROverlay_021_GetOverlayTextureSize, 3, FALSE, FALSE);
+    init_thunk(&thunks[59], r, winIVROverlay_IVROverlay_021_CreateDashboardOverlay, 4, FALSE, FALSE);
+    init_thunk(&thunks[60], r, winIVROverlay_IVROverlay_021_IsDashboardVisible, 0, FALSE, FALSE);
+    init_thunk(&thunks[61], r, winIVROverlay_IVROverlay_021_IsActiveDashboardOverlay, 1, FALSE, FALSE);
+    init_thunk(&thunks[62], r, winIVROverlay_IVROverlay_021_SetDashboardOverlaySceneProcess, 2, FALSE, FALSE);
+    init_thunk(&thunks[63], r, winIVROverlay_IVROverlay_021_GetDashboardOverlaySceneProcess, 2, FALSE, FALSE);
+    init_thunk(&thunks[64], r, winIVROverlay_IVROverlay_021_ShowDashboard, 1, FALSE, FALSE);
+    init_thunk(&thunks[65], r, winIVROverlay_IVROverlay_021_GetPrimaryDashboardDevice, 0, FALSE, FALSE);
+    init_thunk(&thunks[66], r, winIVROverlay_IVROverlay_021_ShowKeyboard, 7, FALSE, FALSE);
+    init_thunk(&thunks[67], r, winIVROverlay_IVROverlay_021_ShowKeyboardForOverlay, 8, FALSE, FALSE);
+    init_thunk(&thunks[68], r, winIVROverlay_IVROverlay_021_GetKeyboardText, 2, FALSE, FALSE);
+    init_thunk(&thunks[69], r, winIVROverlay_IVROverlay_021_HideKeyboard, 0, FALSE, FALSE);
+    init_thunk(&thunks[70], r, winIVROverlay_IVROverlay_021_SetKeyboardTransformAbsolute, 2, FALSE, FALSE);
+    init_thunk(&thunks[71], r, winIVROverlay_IVROverlay_021_SetKeyboardPositionForOverlay, 2, FALSE, FALSE);
+    init_thunk(&thunks[72], r, winIVROverlay_IVROverlay_021_SetOverlayIntersectionMask, 4, FALSE, FALSE);
+    init_thunk(&thunks[73], r, winIVROverlay_IVROverlay_021_GetOverlayFlags, 2, FALSE, FALSE);
+    init_thunk(&thunks[74], r, winIVROverlay_IVROverlay_021_ShowMessageOverlay, 6, FALSE, FALSE);
+    init_thunk(&thunks[75], r, winIVROverlay_IVROverlay_021_CloseMessageOverlay, 0, FALSE, FALSE);
+    for (i = 0; i < 76; i++)
+        vtable[i] = &thunks[i];
+    r->linux_side = linux_side;
+    r->vtable = (void *)vtable;
+    return r;
+}
+
+void destroy_winIVROverlay_IVROverlay_021_FnTable(void *object)
+{
+    winIVROverlay_IVROverlay_021 *win_object = object;
+    TRACE("%p\n", win_object);
+    VirtualFree(win_object->vtable[0], 0, MEM_RELEASE);
+    HeapFree(GetProcessHeap(), 0, win_object->vtable);
+    HeapFree(GetProcessHeap(), 0, win_object);
+}
+
+#include "cppIVROverlay_IVROverlay_020.h"
+
+typedef struct __winIVROverlay_IVROverlay_020 {
+    vtable_ptr *vtable;
+    void *linux_side;
+} winIVROverlay_IVROverlay_020;
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_020_FindOverlay, 12)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_020_FindOverlay(winIVROverlay_IVROverlay_020 *_this, const char * pchOverlayKey, VROverlayHandle_t * pOverlayHandle)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_020_FindOverlay(_this->linux_side, pchOverlayKey, pOverlayHandle);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_020_CreateOverlay, 16)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_020_CreateOverlay(winIVROverlay_IVROverlay_020 *_this, const char * pchOverlayKey, const char * pchOverlayName, VROverlayHandle_t * pOverlayHandle)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_020_CreateOverlay(_this->linux_side, pchOverlayKey, pchOverlayName, pOverlayHandle);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_020_DestroyOverlay, 12)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_020_DestroyOverlay(winIVROverlay_IVROverlay_020 *_this, VROverlayHandle_t ulOverlayHandle)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_020_DestroyOverlay(_this->linux_side, ulOverlayHandle);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_020_GetOverlayKey, 24)
+uint32_t __thiscall winIVROverlay_IVROverlay_020_GetOverlayKey(winIVROverlay_IVROverlay_020 *_this, VROverlayHandle_t ulOverlayHandle, char * pchValue, uint32_t unBufferSize, EVROverlayError * pError)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_020_GetOverlayKey(_this->linux_side, ulOverlayHandle, pchValue, unBufferSize, pError);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_020_GetOverlayName, 24)
+uint32_t __thiscall winIVROverlay_IVROverlay_020_GetOverlayName(winIVROverlay_IVROverlay_020 *_this, VROverlayHandle_t ulOverlayHandle, char * pchValue, uint32_t unBufferSize, EVROverlayError * pError)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_020_GetOverlayName(_this->linux_side, ulOverlayHandle, pchValue, unBufferSize, pError);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_020_SetOverlayName, 16)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_020_SetOverlayName(winIVROverlay_IVROverlay_020 *_this, VROverlayHandle_t ulOverlayHandle, const char * pchName)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_020_SetOverlayName(_this->linux_side, ulOverlayHandle, pchName);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_020_GetOverlayImageData, 28)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_020_GetOverlayImageData(winIVROverlay_IVROverlay_020 *_this, VROverlayHandle_t ulOverlayHandle, void * pvBuffer, uint32_t unBufferSize, uint32_t * punWidth, uint32_t * punHeight)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_020_GetOverlayImageData(_this->linux_side, ulOverlayHandle, pvBuffer, unBufferSize, punWidth, punHeight);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_020_GetOverlayErrorNameFromEnum, 8)
+const char * __thiscall winIVROverlay_IVROverlay_020_GetOverlayErrorNameFromEnum(winIVROverlay_IVROverlay_020 *_this, EVROverlayError error)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_020_GetOverlayErrorNameFromEnum(_this->linux_side, error);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_020_SetOverlayRenderingPid, 16)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_020_SetOverlayRenderingPid(winIVROverlay_IVROverlay_020 *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unPID)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_020_SetOverlayRenderingPid(_this->linux_side, ulOverlayHandle, unPID);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_020_GetOverlayRenderingPid, 12)
+uint32_t __thiscall winIVROverlay_IVROverlay_020_GetOverlayRenderingPid(winIVROverlay_IVROverlay_020 *_this, VROverlayHandle_t ulOverlayHandle)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_020_GetOverlayRenderingPid(_this->linux_side, ulOverlayHandle);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_020_SetOverlayFlag, 17)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_020_SetOverlayFlag(winIVROverlay_IVROverlay_020 *_this, VROverlayHandle_t ulOverlayHandle, VROverlayFlags eOverlayFlag, bool bEnabled)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_020_SetOverlayFlag(_this->linux_side, ulOverlayHandle, eOverlayFlag, bEnabled);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_020_GetOverlayFlag, 20)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_020_GetOverlayFlag(winIVROverlay_IVROverlay_020 *_this, VROverlayHandle_t ulOverlayHandle, VROverlayFlags eOverlayFlag, bool * pbEnabled)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_020_GetOverlayFlag(_this->linux_side, ulOverlayHandle, eOverlayFlag, pbEnabled);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_020_SetOverlayColor, 24)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_020_SetOverlayColor(winIVROverlay_IVROverlay_020 *_this, VROverlayHandle_t ulOverlayHandle, float fRed, float fGreen, float fBlue)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_020_SetOverlayColor(_this->linux_side, ulOverlayHandle, fRed, fGreen, fBlue);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_020_GetOverlayColor, 24)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_020_GetOverlayColor(winIVROverlay_IVROverlay_020 *_this, VROverlayHandle_t ulOverlayHandle, float * pfRed, float * pfGreen, float * pfBlue)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_020_GetOverlayColor(_this->linux_side, ulOverlayHandle, pfRed, pfGreen, pfBlue);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_020_SetOverlayAlpha, 16)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_020_SetOverlayAlpha(winIVROverlay_IVROverlay_020 *_this, VROverlayHandle_t ulOverlayHandle, float fAlpha)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_020_SetOverlayAlpha(_this->linux_side, ulOverlayHandle, fAlpha);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_020_GetOverlayAlpha, 16)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_020_GetOverlayAlpha(winIVROverlay_IVROverlay_020 *_this, VROverlayHandle_t ulOverlayHandle, float * pfAlpha)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_020_GetOverlayAlpha(_this->linux_side, ulOverlayHandle, pfAlpha);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_020_SetOverlayTexelAspect, 16)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_020_SetOverlayTexelAspect(winIVROverlay_IVROverlay_020 *_this, VROverlayHandle_t ulOverlayHandle, float fTexelAspect)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_020_SetOverlayTexelAspect(_this->linux_side, ulOverlayHandle, fTexelAspect);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_020_GetOverlayTexelAspect, 16)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_020_GetOverlayTexelAspect(winIVROverlay_IVROverlay_020 *_this, VROverlayHandle_t ulOverlayHandle, float * pfTexelAspect)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_020_GetOverlayTexelAspect(_this->linux_side, ulOverlayHandle, pfTexelAspect);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_020_SetOverlaySortOrder, 16)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_020_SetOverlaySortOrder(winIVROverlay_IVROverlay_020 *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unSortOrder)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_020_SetOverlaySortOrder(_this->linux_side, ulOverlayHandle, unSortOrder);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_020_GetOverlaySortOrder, 16)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_020_GetOverlaySortOrder(winIVROverlay_IVROverlay_020 *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * punSortOrder)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_020_GetOverlaySortOrder(_this->linux_side, ulOverlayHandle, punSortOrder);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_020_SetOverlayWidthInMeters, 16)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_020_SetOverlayWidthInMeters(winIVROverlay_IVROverlay_020 *_this, VROverlayHandle_t ulOverlayHandle, float fWidthInMeters)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_020_SetOverlayWidthInMeters(_this->linux_side, ulOverlayHandle, fWidthInMeters);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_020_GetOverlayWidthInMeters, 16)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_020_GetOverlayWidthInMeters(winIVROverlay_IVROverlay_020 *_this, VROverlayHandle_t ulOverlayHandle, float * pfWidthInMeters)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_020_GetOverlayWidthInMeters(_this->linux_side, ulOverlayHandle, pfWidthInMeters);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_020_SetOverlayAutoCurveDistanceRangeInMeters, 20)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_020_SetOverlayAutoCurveDistanceRangeInMeters(winIVROverlay_IVROverlay_020 *_this, VROverlayHandle_t ulOverlayHandle, float fMinDistanceInMeters, float fMaxDistanceInMeters)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_020_SetOverlayAutoCurveDistanceRangeInMeters(_this->linux_side, ulOverlayHandle, fMinDistanceInMeters, fMaxDistanceInMeters);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_020_GetOverlayAutoCurveDistanceRangeInMeters, 20)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_020_GetOverlayAutoCurveDistanceRangeInMeters(winIVROverlay_IVROverlay_020 *_this, VROverlayHandle_t ulOverlayHandle, float * pfMinDistanceInMeters, float * pfMaxDistanceInMeters)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_020_GetOverlayAutoCurveDistanceRangeInMeters(_this->linux_side, ulOverlayHandle, pfMinDistanceInMeters, pfMaxDistanceInMeters);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_020_SetOverlayTextureColorSpace, 16)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_020_SetOverlayTextureColorSpace(winIVROverlay_IVROverlay_020 *_this, VROverlayHandle_t ulOverlayHandle, EColorSpace eTextureColorSpace)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_020_SetOverlayTextureColorSpace(_this->linux_side, ulOverlayHandle, eTextureColorSpace);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_020_GetOverlayTextureColorSpace, 16)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_020_GetOverlayTextureColorSpace(winIVROverlay_IVROverlay_020 *_this, VROverlayHandle_t ulOverlayHandle, EColorSpace * peTextureColorSpace)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_020_GetOverlayTextureColorSpace(_this->linux_side, ulOverlayHandle, peTextureColorSpace);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_020_SetOverlayTextureBounds, 16)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_020_SetOverlayTextureBounds(winIVROverlay_IVROverlay_020 *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t * pOverlayTextureBounds)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_020_SetOverlayTextureBounds(_this->linux_side, ulOverlayHandle, pOverlayTextureBounds);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_020_GetOverlayTextureBounds, 16)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_020_GetOverlayTextureBounds(winIVROverlay_IVROverlay_020 *_this, VROverlayHandle_t ulOverlayHandle, VRTextureBounds_t * pOverlayTextureBounds)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_020_GetOverlayTextureBounds(_this->linux_side, ulOverlayHandle, pOverlayTextureBounds);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_020_GetOverlayRenderModel, 28)
+uint32_t __thiscall winIVROverlay_IVROverlay_020_GetOverlayRenderModel(winIVROverlay_IVROverlay_020 *_this, VROverlayHandle_t ulOverlayHandle, char * pchValue, uint32_t unBufferSize, HmdColor_t * pColor, EVROverlayError * pError)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_020_GetOverlayRenderModel(_this->linux_side, ulOverlayHandle, pchValue, unBufferSize, pColor, pError);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_020_SetOverlayRenderModel, 20)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_020_SetOverlayRenderModel(winIVROverlay_IVROverlay_020 *_this, VROverlayHandle_t ulOverlayHandle, const char * pchRenderModel, HmdColor_t * pColor)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_020_SetOverlayRenderModel(_this->linux_side, ulOverlayHandle, pchRenderModel, pColor);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_020_GetOverlayTransformType, 16)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_020_GetOverlayTransformType(winIVROverlay_IVROverlay_020 *_this, VROverlayHandle_t ulOverlayHandle, VROverlayTransformType * peTransformType)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_020_GetOverlayTransformType(_this->linux_side, ulOverlayHandle, peTransformType);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_020_SetOverlayTransformAbsolute, 20)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_020_SetOverlayTransformAbsolute(winIVROverlay_IVROverlay_020 *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin eTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToOverlayTransform)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_020_SetOverlayTransformAbsolute(_this->linux_side, ulOverlayHandle, eTrackingOrigin, pmatTrackingOriginToOverlayTransform);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_020_GetOverlayTransformAbsolute, 20)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_020_GetOverlayTransformAbsolute(winIVROverlay_IVROverlay_020 *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin * peTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToOverlayTransform)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_020_GetOverlayTransformAbsolute(_this->linux_side, ulOverlayHandle, peTrackingOrigin, pmatTrackingOriginToOverlayTransform);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_020_SetOverlayTransformTrackedDeviceRelative, 20)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_020_SetOverlayTransformTrackedDeviceRelative(winIVROverlay_IVROverlay_020 *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unTrackedDevice, HmdMatrix34_t * pmatTrackedDeviceToOverlayTransform)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_020_SetOverlayTransformTrackedDeviceRelative(_this->linux_side, ulOverlayHandle, unTrackedDevice, pmatTrackedDeviceToOverlayTransform);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_020_GetOverlayTransformTrackedDeviceRelative, 20)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_020_GetOverlayTransformTrackedDeviceRelative(winIVROverlay_IVROverlay_020 *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t * punTrackedDevice, HmdMatrix34_t * pmatTrackedDeviceToOverlayTransform)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_020_GetOverlayTransformTrackedDeviceRelative(_this->linux_side, ulOverlayHandle, punTrackedDevice, pmatTrackedDeviceToOverlayTransform);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_020_SetOverlayTransformTrackedDeviceComponent, 20)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_020_SetOverlayTransformTrackedDeviceComponent(winIVROverlay_IVROverlay_020 *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t unDeviceIndex, const char * pchComponentName)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_020_SetOverlayTransformTrackedDeviceComponent(_this->linux_side, ulOverlayHandle, unDeviceIndex, pchComponentName);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_020_GetOverlayTransformTrackedDeviceComponent, 24)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_020_GetOverlayTransformTrackedDeviceComponent(winIVROverlay_IVROverlay_020 *_this, VROverlayHandle_t ulOverlayHandle, TrackedDeviceIndex_t * punDeviceIndex, char * pchComponentName, uint32_t unComponentNameSize)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_020_GetOverlayTransformTrackedDeviceComponent(_this->linux_side, ulOverlayHandle, punDeviceIndex, pchComponentName, unComponentNameSize);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_020_GetOverlayTransformOverlayRelative, 20)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_020_GetOverlayTransformOverlayRelative(winIVROverlay_IVROverlay_020 *_this, VROverlayHandle_t ulOverlayHandle, VROverlayHandle_t * ulOverlayHandleParent, HmdMatrix34_t * pmatParentOverlayToOverlayTransform)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_020_GetOverlayTransformOverlayRelative(_this->linux_side, ulOverlayHandle, ulOverlayHandleParent, pmatParentOverlayToOverlayTransform);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_020_SetOverlayTransformOverlayRelative, 24)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_020_SetOverlayTransformOverlayRelative(winIVROverlay_IVROverlay_020 *_this, VROverlayHandle_t ulOverlayHandle, VROverlayHandle_t ulOverlayHandleParent, HmdMatrix34_t * pmatParentOverlayToOverlayTransform)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_020_SetOverlayTransformOverlayRelative(_this->linux_side, ulOverlayHandle, ulOverlayHandleParent, pmatParentOverlayToOverlayTransform);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_020_ShowOverlay, 12)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_020_ShowOverlay(winIVROverlay_IVROverlay_020 *_this, VROverlayHandle_t ulOverlayHandle)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_020_ShowOverlay(_this->linux_side, ulOverlayHandle);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_020_HideOverlay, 12)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_020_HideOverlay(winIVROverlay_IVROverlay_020 *_this, VROverlayHandle_t ulOverlayHandle)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_020_HideOverlay(_this->linux_side, ulOverlayHandle);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_020_IsOverlayVisible, 12)
+bool __thiscall winIVROverlay_IVROverlay_020_IsOverlayVisible(winIVROverlay_IVROverlay_020 *_this, VROverlayHandle_t ulOverlayHandle)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_020_IsOverlayVisible(_this->linux_side, ulOverlayHandle);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_020_GetTransformForOverlayCoordinates, 28)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_020_GetTransformForOverlayCoordinates(winIVROverlay_IVROverlay_020 *_this, VROverlayHandle_t ulOverlayHandle, ETrackingUniverseOrigin eTrackingOrigin, HmdVector2_t coordinatesInOverlay, HmdMatrix34_t * pmatTransform)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_020_GetTransformForOverlayCoordinates(_this->linux_side, ulOverlayHandle, eTrackingOrigin, coordinatesInOverlay, pmatTransform);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_020_PollNextOverlayEvent, 20)
+bool __thiscall winIVROverlay_IVROverlay_020_PollNextOverlayEvent(winIVROverlay_IVROverlay_020 *_this, VROverlayHandle_t ulOverlayHandle, winVREvent_t_1715 * pEvent, uint32_t uncbVREvent)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_020_PollNextOverlayEvent(_this->linux_side, ulOverlayHandle, pEvent, uncbVREvent);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_020_GetOverlayInputMethod, 16)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_020_GetOverlayInputMethod(winIVROverlay_IVROverlay_020 *_this, VROverlayHandle_t ulOverlayHandle, VROverlayInputMethod * peInputMethod)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_020_GetOverlayInputMethod(_this->linux_side, ulOverlayHandle, peInputMethod);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_020_SetOverlayInputMethod, 16)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_020_SetOverlayInputMethod(winIVROverlay_IVROverlay_020 *_this, VROverlayHandle_t ulOverlayHandle, VROverlayInputMethod eInputMethod)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_020_SetOverlayInputMethod(_this->linux_side, ulOverlayHandle, eInputMethod);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_020_GetOverlayMouseScale, 16)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_020_GetOverlayMouseScale(winIVROverlay_IVROverlay_020 *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvecMouseScale)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_020_GetOverlayMouseScale(_this->linux_side, ulOverlayHandle, pvecMouseScale);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_020_SetOverlayMouseScale, 16)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_020_SetOverlayMouseScale(winIVROverlay_IVROverlay_020 *_this, VROverlayHandle_t ulOverlayHandle, HmdVector2_t * pvecMouseScale)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_020_SetOverlayMouseScale(_this->linux_side, ulOverlayHandle, pvecMouseScale);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_020_ComputeOverlayIntersection, 20)
+bool __thiscall winIVROverlay_IVROverlay_020_ComputeOverlayIntersection(winIVROverlay_IVROverlay_020 *_this, VROverlayHandle_t ulOverlayHandle, VROverlayIntersectionParams_t * pParams, VROverlayIntersectionResults_t * pResults)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_020_ComputeOverlayIntersection(_this->linux_side, ulOverlayHandle, pParams, pResults);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_020_IsHoverTargetOverlay, 12)
+bool __thiscall winIVROverlay_IVROverlay_020_IsHoverTargetOverlay(winIVROverlay_IVROverlay_020 *_this, VROverlayHandle_t ulOverlayHandle)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_020_IsHoverTargetOverlay(_this->linux_side, ulOverlayHandle);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_020_GetGamepadFocusOverlay, 4)
+VROverlayHandle_t __thiscall winIVROverlay_IVROverlay_020_GetGamepadFocusOverlay(winIVROverlay_IVROverlay_020 *_this)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_020_GetGamepadFocusOverlay(_this->linux_side);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_020_SetGamepadFocusOverlay, 12)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_020_SetGamepadFocusOverlay(winIVROverlay_IVROverlay_020 *_this, VROverlayHandle_t ulNewFocusOverlay)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_020_SetGamepadFocusOverlay(_this->linux_side, ulNewFocusOverlay);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_020_SetOverlayNeighbor, 24)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_020_SetOverlayNeighbor(winIVROverlay_IVROverlay_020 *_this, EOverlayDirection eDirection, VROverlayHandle_t ulFrom, VROverlayHandle_t ulTo)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_020_SetOverlayNeighbor(_this->linux_side, eDirection, ulFrom, ulTo);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_020_MoveGamepadFocusToNeighbor, 16)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_020_MoveGamepadFocusToNeighbor(winIVROverlay_IVROverlay_020 *_this, EOverlayDirection eDirection, VROverlayHandle_t ulFrom)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_020_MoveGamepadFocusToNeighbor(_this->linux_side, eDirection, ulFrom);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_020_SetOverlayDualAnalogTransform, 24)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_020_SetOverlayDualAnalogTransform(winIVROverlay_IVROverlay_020 *_this, VROverlayHandle_t ulOverlay, EDualAnalogWhich eWhich, HmdVector2_t * pvCenter, float fRadius)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_020_SetOverlayDualAnalogTransform(_this->linux_side, ulOverlay, eWhich, pvCenter, fRadius);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_020_GetOverlayDualAnalogTransform, 24)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_020_GetOverlayDualAnalogTransform(winIVROverlay_IVROverlay_020 *_this, VROverlayHandle_t ulOverlay, EDualAnalogWhich eWhich, HmdVector2_t * pvCenter, float * pfRadius)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_020_GetOverlayDualAnalogTransform(_this->linux_side, ulOverlay, eWhich, pvCenter, pfRadius);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_020_SetOverlayTexture, 16)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_020_SetOverlayTexture(winIVROverlay_IVROverlay_020 *_this, VROverlayHandle_t ulOverlayHandle, Texture_t * pTexture)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_020_SetOverlayTexture(_this->linux_side, ulOverlayHandle, pTexture);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_020_ClearOverlayTexture, 12)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_020_ClearOverlayTexture(winIVROverlay_IVROverlay_020 *_this, VROverlayHandle_t ulOverlayHandle)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_020_ClearOverlayTexture(_this->linux_side, ulOverlayHandle);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_020_SetOverlayRaw, 28)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_020_SetOverlayRaw(winIVROverlay_IVROverlay_020 *_this, VROverlayHandle_t ulOverlayHandle, void * pvBuffer, uint32_t unWidth, uint32_t unHeight, uint32_t unDepth)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_020_SetOverlayRaw(_this->linux_side, ulOverlayHandle, pvBuffer, unWidth, unHeight, unDepth);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_020_SetOverlayFromFile, 16)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_020_SetOverlayFromFile(winIVROverlay_IVROverlay_020 *_this, VROverlayHandle_t ulOverlayHandle, const char * pchFilePath)
+{
+    char lin_pchFilePath[PATH_MAX];
+    vrclient_dos_path_to_unix_path(pchFilePath, lin_pchFilePath);
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_020_SetOverlayFromFile(_this->linux_side, ulOverlayHandle, pchFilePath ? lin_pchFilePath : NULL);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_020_GetOverlayTexture, 44)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_020_GetOverlayTexture(winIVROverlay_IVROverlay_020 *_this, VROverlayHandle_t ulOverlayHandle, void ** pNativeTextureHandle, void * pNativeTextureRef, uint32_t * pWidth, uint32_t * pHeight, uint32_t * pNativeFormat, ETextureType * pAPIType, EColorSpace * pColorSpace, VRTextureBounds_t * pTextureBounds)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_020_GetOverlayTexture(_this->linux_side, ulOverlayHandle, pNativeTextureHandle, pNativeTextureRef, pWidth, pHeight, pNativeFormat, pAPIType, pColorSpace, pTextureBounds);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_020_ReleaseNativeOverlayHandle, 16)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_020_ReleaseNativeOverlayHandle(winIVROverlay_IVROverlay_020 *_this, VROverlayHandle_t ulOverlayHandle, void * pNativeTextureHandle)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_020_ReleaseNativeOverlayHandle(_this->linux_side, ulOverlayHandle, pNativeTextureHandle);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_020_GetOverlayTextureSize, 20)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_020_GetOverlayTextureSize(winIVROverlay_IVROverlay_020 *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * pWidth, uint32_t * pHeight)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_020_GetOverlayTextureSize(_this->linux_side, ulOverlayHandle, pWidth, pHeight);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_020_CreateDashboardOverlay, 20)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_020_CreateDashboardOverlay(winIVROverlay_IVROverlay_020 *_this, const char * pchOverlayKey, const char * pchOverlayFriendlyName, VROverlayHandle_t * pMainHandle, VROverlayHandle_t * pThumbnailHandle)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_020_CreateDashboardOverlay(_this->linux_side, pchOverlayKey, pchOverlayFriendlyName, pMainHandle, pThumbnailHandle);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_020_IsDashboardVisible, 4)
+bool __thiscall winIVROverlay_IVROverlay_020_IsDashboardVisible(winIVROverlay_IVROverlay_020 *_this)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_020_IsDashboardVisible(_this->linux_side);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_020_IsActiveDashboardOverlay, 12)
+bool __thiscall winIVROverlay_IVROverlay_020_IsActiveDashboardOverlay(winIVROverlay_IVROverlay_020 *_this, VROverlayHandle_t ulOverlayHandle)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_020_IsActiveDashboardOverlay(_this->linux_side, ulOverlayHandle);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_020_SetDashboardOverlaySceneProcess, 16)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_020_SetDashboardOverlaySceneProcess(winIVROverlay_IVROverlay_020 *_this, VROverlayHandle_t ulOverlayHandle, uint32_t unProcessId)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_020_SetDashboardOverlaySceneProcess(_this->linux_side, ulOverlayHandle, unProcessId);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_020_GetDashboardOverlaySceneProcess, 16)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_020_GetDashboardOverlaySceneProcess(winIVROverlay_IVROverlay_020 *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * punProcessId)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_020_GetDashboardOverlaySceneProcess(_this->linux_side, ulOverlayHandle, punProcessId);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_020_ShowDashboard, 8)
+void __thiscall winIVROverlay_IVROverlay_020_ShowDashboard(winIVROverlay_IVROverlay_020 *_this, const char * pchOverlayToShow)
+{
+    TRACE("%p\n", _this);
+    cppIVROverlay_IVROverlay_020_ShowDashboard(_this->linux_side, pchOverlayToShow);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_020_GetPrimaryDashboardDevice, 4)
+TrackedDeviceIndex_t __thiscall winIVROverlay_IVROverlay_020_GetPrimaryDashboardDevice(winIVROverlay_IVROverlay_020 *_this)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_020_GetPrimaryDashboardDevice(_this->linux_side);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_020_ShowKeyboard, 33)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_020_ShowKeyboard(winIVROverlay_IVROverlay_020 *_this, EGamepadTextInputMode eInputMode, EGamepadTextInputLineMode eLineInputMode, const char * pchDescription, uint32_t unCharMax, const char * pchExistingText, bool bUseMinimalMode, uint64_t uUserValue)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_020_ShowKeyboard(_this->linux_side, eInputMode, eLineInputMode, pchDescription, unCharMax, pchExistingText, bUseMinimalMode, uUserValue);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_020_ShowKeyboardForOverlay, 41)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_020_ShowKeyboardForOverlay(winIVROverlay_IVROverlay_020 *_this, VROverlayHandle_t ulOverlayHandle, EGamepadTextInputMode eInputMode, EGamepadTextInputLineMode eLineInputMode, const char * pchDescription, uint32_t unCharMax, const char * pchExistingText, bool bUseMinimalMode, uint64_t uUserValue)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_020_ShowKeyboardForOverlay(_this->linux_side, ulOverlayHandle, eInputMode, eLineInputMode, pchDescription, unCharMax, pchExistingText, bUseMinimalMode, uUserValue);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_020_GetKeyboardText, 12)
+uint32_t __thiscall winIVROverlay_IVROverlay_020_GetKeyboardText(winIVROverlay_IVROverlay_020 *_this, char * pchText, uint32_t cchText)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_020_GetKeyboardText(_this->linux_side, pchText, cchText);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_020_HideKeyboard, 4)
+void __thiscall winIVROverlay_IVROverlay_020_HideKeyboard(winIVROverlay_IVROverlay_020 *_this)
+{
+    TRACE("%p\n", _this);
+    cppIVROverlay_IVROverlay_020_HideKeyboard(_this->linux_side);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_020_SetKeyboardTransformAbsolute, 12)
+void __thiscall winIVROverlay_IVROverlay_020_SetKeyboardTransformAbsolute(winIVROverlay_IVROverlay_020 *_this, ETrackingUniverseOrigin eTrackingOrigin, HmdMatrix34_t * pmatTrackingOriginToKeyboardTransform)
+{
+    TRACE("%p\n", _this);
+    cppIVROverlay_IVROverlay_020_SetKeyboardTransformAbsolute(_this->linux_side, eTrackingOrigin, pmatTrackingOriginToKeyboardTransform);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_020_SetKeyboardPositionForOverlay, 28)
+void __thiscall winIVROverlay_IVROverlay_020_SetKeyboardPositionForOverlay(winIVROverlay_IVROverlay_020 *_this, VROverlayHandle_t ulOverlayHandle, HmdRect2_t avoidRect)
+{
+    TRACE("%p\n", _this);
+    cppIVROverlay_IVROverlay_020_SetKeyboardPositionForOverlay(_this->linux_side, ulOverlayHandle, avoidRect);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_020_SetOverlayIntersectionMask, 24)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_020_SetOverlayIntersectionMask(winIVROverlay_IVROverlay_020 *_this, VROverlayHandle_t ulOverlayHandle, VROverlayIntersectionMaskPrimitive_t * pMaskPrimitives, uint32_t unNumMaskPrimitives, uint32_t unPrimitiveSize)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_020_SetOverlayIntersectionMask(_this->linux_side, ulOverlayHandle, pMaskPrimitives, unNumMaskPrimitives, unPrimitiveSize);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_020_GetOverlayFlags, 16)
+EVROverlayError __thiscall winIVROverlay_IVROverlay_020_GetOverlayFlags(winIVROverlay_IVROverlay_020 *_this, VROverlayHandle_t ulOverlayHandle, uint32_t * pFlags)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_020_GetOverlayFlags(_this->linux_side, ulOverlayHandle, pFlags);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_020_ShowMessageOverlay, 28)
+VRMessageOverlayResponse __thiscall winIVROverlay_IVROverlay_020_ShowMessageOverlay(winIVROverlay_IVROverlay_020 *_this, const char * pchText, const char * pchCaption, const char * pchButton0Text, const char * pchButton1Text, const char * pchButton2Text, const char * pchButton3Text)
+{
+    TRACE("%p\n", _this);
+    return cppIVROverlay_IVROverlay_020_ShowMessageOverlay(_this->linux_side, pchText, pchCaption, pchButton0Text, pchButton1Text, pchButton2Text, pchButton3Text);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_020_CloseMessageOverlay, 4)
+void __thiscall winIVROverlay_IVROverlay_020_CloseMessageOverlay(winIVROverlay_IVROverlay_020 *_this)
+{
+    TRACE("%p\n", _this);
+    cppIVROverlay_IVROverlay_020_CloseMessageOverlay(_this->linux_side);
+}
+
+extern vtable_ptr winIVROverlay_IVROverlay_020_vtable;
+
+#ifndef __GNUC__
+void __asm_dummy_vtables(void) {
+#endif
+    __ASM_VTABLE(winIVROverlay_IVROverlay_020,
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_020_FindOverlay)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_020_CreateOverlay)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_020_DestroyOverlay)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_020_GetOverlayKey)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_020_GetOverlayName)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_020_SetOverlayName)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_020_GetOverlayImageData)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_020_GetOverlayErrorNameFromEnum)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_020_SetOverlayRenderingPid)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_020_GetOverlayRenderingPid)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_020_SetOverlayFlag)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_020_GetOverlayFlag)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_020_SetOverlayColor)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_020_GetOverlayColor)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_020_SetOverlayAlpha)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_020_GetOverlayAlpha)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_020_SetOverlayTexelAspect)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_020_GetOverlayTexelAspect)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_020_SetOverlaySortOrder)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_020_GetOverlaySortOrder)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_020_SetOverlayWidthInMeters)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_020_GetOverlayWidthInMeters)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_020_SetOverlayAutoCurveDistanceRangeInMeters)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_020_GetOverlayAutoCurveDistanceRangeInMeters)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_020_SetOverlayTextureColorSpace)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_020_GetOverlayTextureColorSpace)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_020_SetOverlayTextureBounds)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_020_GetOverlayTextureBounds)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_020_GetOverlayRenderModel)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_020_SetOverlayRenderModel)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_020_GetOverlayTransformType)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_020_SetOverlayTransformAbsolute)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_020_GetOverlayTransformAbsolute)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_020_SetOverlayTransformTrackedDeviceRelative)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_020_GetOverlayTransformTrackedDeviceRelative)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_020_SetOverlayTransformTrackedDeviceComponent)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_020_GetOverlayTransformTrackedDeviceComponent)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_020_GetOverlayTransformOverlayRelative)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_020_SetOverlayTransformOverlayRelative)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_020_ShowOverlay)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_020_HideOverlay)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_020_IsOverlayVisible)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_020_GetTransformForOverlayCoordinates)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_020_PollNextOverlayEvent)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_020_GetOverlayInputMethod)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_020_SetOverlayInputMethod)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_020_GetOverlayMouseScale)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_020_SetOverlayMouseScale)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_020_ComputeOverlayIntersection)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_020_IsHoverTargetOverlay)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_020_GetGamepadFocusOverlay)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_020_SetGamepadFocusOverlay)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_020_SetOverlayNeighbor)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_020_MoveGamepadFocusToNeighbor)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_020_SetOverlayDualAnalogTransform)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_020_GetOverlayDualAnalogTransform)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_020_SetOverlayTexture)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_020_ClearOverlayTexture)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_020_SetOverlayRaw)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_020_SetOverlayFromFile)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_020_GetOverlayTexture)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_020_ReleaseNativeOverlayHandle)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_020_GetOverlayTextureSize)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_020_CreateDashboardOverlay)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_020_IsDashboardVisible)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_020_IsActiveDashboardOverlay)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_020_SetDashboardOverlaySceneProcess)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_020_GetDashboardOverlaySceneProcess)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_020_ShowDashboard)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_020_GetPrimaryDashboardDevice)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_020_ShowKeyboard)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_020_ShowKeyboardForOverlay)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_020_GetKeyboardText)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_020_HideKeyboard)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_020_SetKeyboardTransformAbsolute)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_020_SetKeyboardPositionForOverlay)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_020_SetOverlayIntersectionMask)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_020_GetOverlayFlags)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_020_ShowMessageOverlay)
+        VTABLE_ADD_FUNC(winIVROverlay_IVROverlay_020_CloseMessageOverlay)
+    );
+#ifndef __GNUC__
+}
+#endif
+
+winIVROverlay_IVROverlay_020 *create_winIVROverlay_IVROverlay_020(void *linux_side)
+{
+    winIVROverlay_IVROverlay_020 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVROverlay_IVROverlay_020));
+    TRACE("-> %p\n", r);
+    r->vtable = &winIVROverlay_IVROverlay_020_vtable;
+    r->linux_side = linux_side;
+    return r;
+}
+
+void destroy_winIVROverlay_IVROverlay_020(void *object)
+{
+    TRACE("%p\n", object);
+    HeapFree(GetProcessHeap(), 0, object);
+}
+
+winIVROverlay_IVROverlay_020 *create_winIVROverlay_IVROverlay_020_FnTable(void *linux_side)
+{
+    winIVROverlay_IVROverlay_020 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVROverlay_IVROverlay_020));
+    struct thunk *thunks = alloc_thunks(80);
+    struct thunk **vtable = HeapAlloc(GetProcessHeap(), 0, 80 * sizeof(*vtable));
+    int i;
+
+    TRACE("-> %p, vtable %p, thunks %p\n", r, vtable, thunks);
+    init_thunk(&thunks[0], r, winIVROverlay_IVROverlay_020_FindOverlay, 2, FALSE, FALSE);
+    init_thunk(&thunks[1], r, winIVROverlay_IVROverlay_020_CreateOverlay, 3, FALSE, FALSE);
+    init_thunk(&thunks[2], r, winIVROverlay_IVROverlay_020_DestroyOverlay, 1, FALSE, FALSE);
+    init_thunk(&thunks[3], r, winIVROverlay_IVROverlay_020_GetOverlayKey, 4, FALSE, FALSE);
+    init_thunk(&thunks[4], r, winIVROverlay_IVROverlay_020_GetOverlayName, 4, FALSE, FALSE);
+    init_thunk(&thunks[5], r, winIVROverlay_IVROverlay_020_SetOverlayName, 2, FALSE, FALSE);
+    init_thunk(&thunks[6], r, winIVROverlay_IVROverlay_020_GetOverlayImageData, 5, FALSE, FALSE);
+    init_thunk(&thunks[7], r, winIVROverlay_IVROverlay_020_GetOverlayErrorNameFromEnum, 1, FALSE, FALSE);
+    init_thunk(&thunks[8], r, winIVROverlay_IVROverlay_020_SetOverlayRenderingPid, 2, FALSE, FALSE);
+    init_thunk(&thunks[9], r, winIVROverlay_IVROverlay_020_GetOverlayRenderingPid, 1, FALSE, FALSE);
+    init_thunk(&thunks[10], r, winIVROverlay_IVROverlay_020_SetOverlayFlag, 3, FALSE, FALSE);
+    init_thunk(&thunks[11], r, winIVROverlay_IVROverlay_020_GetOverlayFlag, 3, FALSE, FALSE);
+    init_thunk(&thunks[12], r, winIVROverlay_IVROverlay_020_SetOverlayColor, 4, TRUE, TRUE);
+    init_thunk(&thunks[13], r, winIVROverlay_IVROverlay_020_GetOverlayColor, 4, FALSE, FALSE);
+    init_thunk(&thunks[14], r, winIVROverlay_IVROverlay_020_SetOverlayAlpha, 2, TRUE, FALSE);
+    init_thunk(&thunks[15], r, winIVROverlay_IVROverlay_020_GetOverlayAlpha, 2, FALSE, FALSE);
+    init_thunk(&thunks[16], r, winIVROverlay_IVROverlay_020_SetOverlayTexelAspect, 2, TRUE, FALSE);
+    init_thunk(&thunks[17], r, winIVROverlay_IVROverlay_020_GetOverlayTexelAspect, 2, FALSE, FALSE);
+    init_thunk(&thunks[18], r, winIVROverlay_IVROverlay_020_SetOverlaySortOrder, 2, FALSE, FALSE);
+    init_thunk(&thunks[19], r, winIVROverlay_IVROverlay_020_GetOverlaySortOrder, 2, FALSE, FALSE);
+    init_thunk(&thunks[20], r, winIVROverlay_IVROverlay_020_SetOverlayWidthInMeters, 2, TRUE, FALSE);
+    init_thunk(&thunks[21], r, winIVROverlay_IVROverlay_020_GetOverlayWidthInMeters, 2, FALSE, FALSE);
+    init_thunk(&thunks[22], r, winIVROverlay_IVROverlay_020_SetOverlayAutoCurveDistanceRangeInMeters, 3, TRUE, FALSE);
+    init_thunk(&thunks[23], r, winIVROverlay_IVROverlay_020_GetOverlayAutoCurveDistanceRangeInMeters, 3, FALSE, FALSE);
+    init_thunk(&thunks[24], r, winIVROverlay_IVROverlay_020_SetOverlayTextureColorSpace, 2, FALSE, FALSE);
+    init_thunk(&thunks[25], r, winIVROverlay_IVROverlay_020_GetOverlayTextureColorSpace, 2, FALSE, FALSE);
+    init_thunk(&thunks[26], r, winIVROverlay_IVROverlay_020_SetOverlayTextureBounds, 2, FALSE, FALSE);
+    init_thunk(&thunks[27], r, winIVROverlay_IVROverlay_020_GetOverlayTextureBounds, 2, FALSE, FALSE);
+    init_thunk(&thunks[28], r, winIVROverlay_IVROverlay_020_GetOverlayRenderModel, 5, FALSE, FALSE);
+    init_thunk(&thunks[29], r, winIVROverlay_IVROverlay_020_SetOverlayRenderModel, 3, FALSE, FALSE);
+    init_thunk(&thunks[30], r, winIVROverlay_IVROverlay_020_GetOverlayTransformType, 2, FALSE, FALSE);
+    init_thunk(&thunks[31], r, winIVROverlay_IVROverlay_020_SetOverlayTransformAbsolute, 3, FALSE, FALSE);
+    init_thunk(&thunks[32], r, winIVROverlay_IVROverlay_020_GetOverlayTransformAbsolute, 3, FALSE, FALSE);
+    init_thunk(&thunks[33], r, winIVROverlay_IVROverlay_020_SetOverlayTransformTrackedDeviceRelative, 3, FALSE, FALSE);
+    init_thunk(&thunks[34], r, winIVROverlay_IVROverlay_020_GetOverlayTransformTrackedDeviceRelative, 3, FALSE, FALSE);
+    init_thunk(&thunks[35], r, winIVROverlay_IVROverlay_020_SetOverlayTransformTrackedDeviceComponent, 3, FALSE, FALSE);
+    init_thunk(&thunks[36], r, winIVROverlay_IVROverlay_020_GetOverlayTransformTrackedDeviceComponent, 4, FALSE, FALSE);
+    init_thunk(&thunks[37], r, winIVROverlay_IVROverlay_020_GetOverlayTransformOverlayRelative, 3, FALSE, FALSE);
+    init_thunk(&thunks[38], r, winIVROverlay_IVROverlay_020_SetOverlayTransformOverlayRelative, 3, FALSE, FALSE);
+    init_thunk(&thunks[39], r, winIVROverlay_IVROverlay_020_ShowOverlay, 1, FALSE, FALSE);
+    init_thunk(&thunks[40], r, winIVROverlay_IVROverlay_020_HideOverlay, 1, FALSE, FALSE);
+    init_thunk(&thunks[41], r, winIVROverlay_IVROverlay_020_IsOverlayVisible, 1, FALSE, FALSE);
+    init_thunk(&thunks[42], r, winIVROverlay_IVROverlay_020_GetTransformForOverlayCoordinates, 4, FALSE, FALSE);
+    init_thunk(&thunks[43], r, winIVROverlay_IVROverlay_020_PollNextOverlayEvent, 3, FALSE, FALSE);
+    init_thunk(&thunks[44], r, winIVROverlay_IVROverlay_020_GetOverlayInputMethod, 2, FALSE, FALSE);
+    init_thunk(&thunks[45], r, winIVROverlay_IVROverlay_020_SetOverlayInputMethod, 2, FALSE, FALSE);
+    init_thunk(&thunks[46], r, winIVROverlay_IVROverlay_020_GetOverlayMouseScale, 2, FALSE, FALSE);
+    init_thunk(&thunks[47], r, winIVROverlay_IVROverlay_020_SetOverlayMouseScale, 2, FALSE, FALSE);
+    init_thunk(&thunks[48], r, winIVROverlay_IVROverlay_020_ComputeOverlayIntersection, 3, FALSE, FALSE);
+    init_thunk(&thunks[49], r, winIVROverlay_IVROverlay_020_IsHoverTargetOverlay, 1, FALSE, FALSE);
+    init_thunk(&thunks[50], r, winIVROverlay_IVROverlay_020_GetGamepadFocusOverlay, 0, FALSE, FALSE);
+    init_thunk(&thunks[51], r, winIVROverlay_IVROverlay_020_SetGamepadFocusOverlay, 1, FALSE, FALSE);
+    init_thunk(&thunks[52], r, winIVROverlay_IVROverlay_020_SetOverlayNeighbor, 3, FALSE, FALSE);
+    init_thunk(&thunks[53], r, winIVROverlay_IVROverlay_020_MoveGamepadFocusToNeighbor, 2, FALSE, FALSE);
+    init_thunk(&thunks[54], r, winIVROverlay_IVROverlay_020_SetOverlayDualAnalogTransform, 4, TRUE, TRUE);
+    init_thunk(&thunks[55], r, winIVROverlay_IVROverlay_020_GetOverlayDualAnalogTransform, 4, FALSE, FALSE);
+    init_thunk(&thunks[56], r, winIVROverlay_IVROverlay_020_SetOverlayTexture, 2, FALSE, FALSE);
+    init_thunk(&thunks[57], r, winIVROverlay_IVROverlay_020_ClearOverlayTexture, 1, FALSE, FALSE);
+    init_thunk(&thunks[58], r, winIVROverlay_IVROverlay_020_SetOverlayRaw, 5, FALSE, FALSE);
+    init_thunk(&thunks[59], r, winIVROverlay_IVROverlay_020_SetOverlayFromFile, 2, FALSE, FALSE);
+    init_thunk(&thunks[60], r, winIVROverlay_IVROverlay_020_GetOverlayTexture, 9, FALSE, FALSE);
+    init_thunk(&thunks[61], r, winIVROverlay_IVROverlay_020_ReleaseNativeOverlayHandle, 2, FALSE, FALSE);
+    init_thunk(&thunks[62], r, winIVROverlay_IVROverlay_020_GetOverlayTextureSize, 3, FALSE, FALSE);
+    init_thunk(&thunks[63], r, winIVROverlay_IVROverlay_020_CreateDashboardOverlay, 4, FALSE, FALSE);
+    init_thunk(&thunks[64], r, winIVROverlay_IVROverlay_020_IsDashboardVisible, 0, FALSE, FALSE);
+    init_thunk(&thunks[65], r, winIVROverlay_IVROverlay_020_IsActiveDashboardOverlay, 1, FALSE, FALSE);
+    init_thunk(&thunks[66], r, winIVROverlay_IVROverlay_020_SetDashboardOverlaySceneProcess, 2, FALSE, FALSE);
+    init_thunk(&thunks[67], r, winIVROverlay_IVROverlay_020_GetDashboardOverlaySceneProcess, 2, FALSE, FALSE);
+    init_thunk(&thunks[68], r, winIVROverlay_IVROverlay_020_ShowDashboard, 1, FALSE, FALSE);
+    init_thunk(&thunks[69], r, winIVROverlay_IVROverlay_020_GetPrimaryDashboardDevice, 0, FALSE, FALSE);
+    init_thunk(&thunks[70], r, winIVROverlay_IVROverlay_020_ShowKeyboard, 7, FALSE, FALSE);
+    init_thunk(&thunks[71], r, winIVROverlay_IVROverlay_020_ShowKeyboardForOverlay, 8, FALSE, FALSE);
+    init_thunk(&thunks[72], r, winIVROverlay_IVROverlay_020_GetKeyboardText, 2, FALSE, FALSE);
+    init_thunk(&thunks[73], r, winIVROverlay_IVROverlay_020_HideKeyboard, 0, FALSE, FALSE);
+    init_thunk(&thunks[74], r, winIVROverlay_IVROverlay_020_SetKeyboardTransformAbsolute, 2, FALSE, FALSE);
+    init_thunk(&thunks[75], r, winIVROverlay_IVROverlay_020_SetKeyboardPositionForOverlay, 2, FALSE, FALSE);
+    init_thunk(&thunks[76], r, winIVROverlay_IVROverlay_020_SetOverlayIntersectionMask, 4, FALSE, FALSE);
+    init_thunk(&thunks[77], r, winIVROverlay_IVROverlay_020_GetOverlayFlags, 2, FALSE, FALSE);
+    init_thunk(&thunks[78], r, winIVROverlay_IVROverlay_020_ShowMessageOverlay, 6, FALSE, FALSE);
+    init_thunk(&thunks[79], r, winIVROverlay_IVROverlay_020_CloseMessageOverlay, 0, FALSE, FALSE);
+    for (i = 0; i < 80; i++)
+        vtable[i] = &thunks[i];
+    r->linux_side = linux_side;
+    r->vtable = (void *)vtable;
+    return r;
+}
+
+void destroy_winIVROverlay_IVROverlay_020_FnTable(void *object)
+{
+    winIVROverlay_IVROverlay_020 *win_object = object;
+    TRACE("%p\n", win_object);
+    VirtualFree(win_object->vtable[0], 0, MEM_RELEASE);
+    HeapFree(GetProcessHeap(), 0, win_object->vtable);
+    HeapFree(GetProcessHeap(), 0, win_object);
+}
+
 #include "cppIVROverlay_IVROverlay_019.h"
 
 typedef struct __winIVROverlay_IVROverlay_019 {

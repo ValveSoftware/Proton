@@ -5,7 +5,7 @@
 
 from __future__ import print_function
 
-CLANG_PATH='/usr/lib/clang/8.0.1'
+CLANG_PATH='/usr/lib/clang/9.0.1'
 
 import pprint
 import sys
@@ -14,6 +14,8 @@ import os
 import re
 
 sdk_versions = [
+    "v1.8.19",
+    "v1.7.15",
     "v1.6.10",
     "v1.5.17",
     "v1.4.18",
@@ -297,6 +299,14 @@ def ivrcompositor_wait_get_poses(cppname, method):
 def ivrcompositor_get_vulkan_device_extensions_required(cppname, method):
     return "ivrcompositor_get_vulkan_device_extensions_required"
 
+def ivrrendermodels_load_texture_d3d11_async(cppname, method):
+    assert "004" in cppname or "005" in cppname or "006" in cppname
+    return "ivrrendermodels_load_texture_d3d11_async"
+
+def ivrrendermodels_free_texture_d3d11(cppname, method):
+    assert "004" in cppname or "005" in cppname or "006" in cppname
+    return "ivrrendermodels_free_texture_d3d11"
+
 def ivrrendermodels_load_into_texture_d3d11_async(cppname, method):
     assert "005" in cppname or "006" in cppname
     return "ivrrendermodels_load_into_texture_d3d11_async"
@@ -311,6 +321,8 @@ method_overrides = [
     ("IVRCompositor", "PostPresentHandoff", ivrcompositor_post_present_handoff),
     ("IVRCompositor", "WaitGetPoses", ivrcompositor_wait_get_poses),
     ("IVRCompositor", "GetVulkanDeviceExtensionsRequired", ivrcompositor_get_vulkan_device_extensions_required),
+    ("IVRRenderModels", "LoadTextureD3D11_Async", ivrrendermodels_load_texture_d3d11_async),
+    ("IVRRenderModels", "FreeTextureD3D11", ivrrendermodels_free_texture_d3d11),
     ("IVRRenderModels", "LoadIntoTextureD3D11_Async", ivrrendermodels_load_into_texture_d3d11_async),
 ]
 

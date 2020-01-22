@@ -28,12 +28,19 @@
 #include "cppIVRCompositor_IVRCompositor_021.h"
 #include "cppIVRCompositor_IVRCompositor_022.h"
 
+/* 0918 is binary compatible with 1015 */
+typedef struct winRenderModel_t_0918 winRenderModel_t_0918;
+typedef struct winRenderModel_TextureMap_t_0918 winRenderModel_TextureMap_t_0918;
+#include "cppIVRRenderModels_IVRRenderModels_004.h"
+
 typedef struct winRenderModel_t_1015 winRenderModel_t_1015;
 typedef struct winRenderModel_TextureMap_t_1015 winRenderModel_TextureMap_t_1015;
 #include "cppIVRRenderModels_IVRRenderModels_005.h"
 
-typedef struct winRenderModel_t_1610 winRenderModel_t_1610;
-typedef struct winRenderModel_TextureMap_t_1610 winRenderModel_TextureMap_t_1610;
+/* this is cast to 1015 during load_linux_texture_map, so ensure they're
+ * binary compatible before updating this number */
+typedef struct winRenderModel_t_1819 winRenderModel_t_1819;
+typedef struct winRenderModel_TextureMap_t_1819 winRenderModel_TextureMap_t_1819;
 #include "cppIVRRenderModels_IVRRenderModels_006.h"
 
 WINE_DEFAULT_DEBUG_CHANNEL(vrclient);
@@ -1097,6 +1104,108 @@ static EVRRenderModelError load_into_texture_d3d11(ID3D11Texture2D *texture,
     return VRRenderModelError_None;
 }
 
+static EVRRenderModelError load_linux_texture_map(void *linux_side, TextureID_t texture_id,
+        struct winRenderModel_TextureMap_t_1015 **texture_map, unsigned int version)
+{
+    switch(version){
+    case 4:
+        return cppIVRRenderModels_IVRRenderModels_004_LoadTexture_Async(linux_side, texture_id, (struct winRenderModel_TextureMap_t_0918 **)texture_map);
+    case 5:
+        return cppIVRRenderModels_IVRRenderModels_005_LoadTexture_Async(linux_side, texture_id, texture_map);
+    case 6:
+        return cppIVRRenderModels_IVRRenderModels_006_LoadTexture_Async(linux_side, texture_id, (struct winRenderModel_TextureMap_t_1819 **)texture_map);
+    }
+    FIXME("Unsupported IVRRenderModels version! %u\n", version);
+    return VRRenderModelError_NotSupported;
+}
+
+static void free_linux_texture_map(void *linux_side,
+        struct winRenderModel_TextureMap_t_1015 *texture_map, unsigned int version)
+{
+    switch(version){
+    case 4:
+        cppIVRRenderModels_IVRRenderModels_004_FreeTexture(linux_side, (struct winRenderModel_TextureMap_t_0918 *)texture_map);
+        break;
+    case 5:
+        cppIVRRenderModels_IVRRenderModels_005_FreeTexture(linux_side, texture_map);
+        break;
+    case 6:
+        cppIVRRenderModels_IVRRenderModels_006_FreeTexture(linux_side, (struct winRenderModel_TextureMap_t_1819 *)texture_map);
+        break;
+    default:
+        FIXME("Unsupported IVRRenderModels version! %u\n", version);
+        break;
+    }
+}
+
+EVRRenderModelError ivrrendermodels_load_texture_d3d11_async(
+        EVRRenderModelError (*cpp_func)(void *, TextureID_t, void *, void **),
+        void *linux_side, TextureID_t texture_id, void *device,
+        void **dst_texture, unsigned int version)
+{
+    struct winRenderModel_TextureMap_t_1015 *texture_map;
+    EVRRenderModelError error;
+    D3D11_TEXTURE2D_DESC desc;
+    ID3D11Device *d3d11_device = device;
+    ID3D11Texture2D *texture;
+    HRESULT hr;
+
+    error = load_linux_texture_map(linux_side, texture_id, &texture_map, version);
+    if (error == VRRenderModelError_Loading)
+    {
+        TRACE("Loading.\n");
+        return error;
+    }
+    if (error != VRRenderModelError_None)
+    {
+        WARN("Failed to load texture %#x.\n", error);
+        return error;
+    }
+
+    desc.Width = texture_map->unWidth;
+    desc.Height = texture_map->unHeight;
+    desc.MipLevels = 1;
+    desc.ArraySize = 1;
+    desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+    desc.SampleDesc.Count = 1;
+    desc.SampleDesc.Quality = 0;
+    desc.Usage = D3D11_USAGE_DEFAULT;
+    desc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
+    desc.CPUAccessFlags = 0;
+    desc.MiscFlags = 0;
+
+    hr = d3d11_device->lpVtbl->CreateTexture2D(d3d11_device, &desc, NULL, &texture);
+    if (FAILED(hr))
+    {
+        WARN("Failed to create D3D11 texture %#x\n", hr);
+        free_linux_texture_map(linux_side, texture_map, version);
+        return VRRenderModelError_InvalidTexture;
+    }
+
+    error = load_into_texture_d3d11(texture, texture_map);
+    if (error == VRRenderModelError_None)
+    {
+        *dst_texture = texture;
+    }
+    else
+    {
+        texture->lpVtbl->Release(texture);
+        *dst_texture = NULL;
+    }
+
+    free_linux_texture_map(linux_side, texture_map, version);
+
+    return error;
+}
+
+void ivrrendermodels_free_texture_d3d11(
+        void (*cpp_func)(void *, void *),
+        void *linux_side, void *dst_texture, unsigned int version)
+{
+    ID3D11Texture2D *d3d11_texture = dst_texture;
+    d3d11_texture->lpVtbl->Release(d3d11_texture);
+}
+
 EVRRenderModelError ivrrendermodels_load_into_texture_d3d11_async(
         EVRRenderModelError (*cpp_func)(void *, TextureID_t, void *),
         void *linux_side, TextureID_t texture_id, void *dst_texture, unsigned int version)
@@ -1106,14 +1215,10 @@ EVRRenderModelError ivrrendermodels_load_into_texture_d3d11_async(
     EVRRenderModelError error;
     ID3D11Texture2D *texture;
 
-    switch(version){
-    case 5:
-        error = cppIVRRenderModels_IVRRenderModels_005_LoadTexture_Async(linux_side, texture_id, &texture_map);
-        break;
-    case 6:
-        error = cppIVRRenderModels_IVRRenderModels_006_LoadTexture_Async(linux_side, texture_id, (struct winRenderModel_TextureMap_t_1610 **)&texture_map);
-        break;
-    }
+    if (!dst_texture)
+        return VRRenderModelError_InvalidArg;
+
+    error = load_linux_texture_map(linux_side, texture_id, &texture_map, version);
     if (error == VRRenderModelError_Loading)
     {
         TRACE("Loading.\n");
@@ -1136,14 +1241,8 @@ EVRRenderModelError ivrrendermodels_load_into_texture_d3d11_async(
         error = VRRenderModelError_NotSupported;
     }
 
-    switch(version){
-    case 5:
-        cppIVRRenderModels_IVRRenderModels_005_FreeTexture(linux_side, texture_map);
-        break;
-    case 6:
-        cppIVRRenderModels_IVRRenderModels_006_FreeTexture(linux_side, (struct winRenderModel_TextureMap_t_1610 *)texture_map);
-        break;
-    }
+    free_linux_texture_map(linux_side, texture_map, version);
+
     return error;
 }
 

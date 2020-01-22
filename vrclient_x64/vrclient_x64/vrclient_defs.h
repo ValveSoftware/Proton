@@ -65,7 +65,8 @@ typedef int
         EVRSkeletalMotionRange,
         EVRSkeletalReferencePose,
         EVRSkeletalTrackingLevel,
-        EVRSummaryType;
+        EVRSummaryType,
+        EVRSceneApplicationState;
 
 typedef uint32_t DriverId_t;
 typedef uint32_t TrackedDeviceIndex_t;
@@ -298,6 +299,8 @@ typedef enum EVRRenderModelError
     VRRenderModelError_None = 0,
     VRRenderModelError_Loading = 100,
     VRRenderModelError_NotSupported = 200,
+    VRRenderModelError_InvalidArg = 300,
+    VRRenderModelError_InvalidTexture = 400,
 } EVRRenderModelError;
 
 #endif

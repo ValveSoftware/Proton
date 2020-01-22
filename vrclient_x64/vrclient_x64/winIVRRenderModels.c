@@ -26,28 +26,28 @@ typedef struct __winIVRRenderModels_IVRRenderModels_006 {
 } winIVRRenderModels_IVRRenderModels_006;
 
 DEFINE_THISCALL_WRAPPER(winIVRRenderModels_IVRRenderModels_006_LoadRenderModel_Async, 12)
-EVRRenderModelError __thiscall winIVRRenderModels_IVRRenderModels_006_LoadRenderModel_Async(winIVRRenderModels_IVRRenderModels_006 *_this, const char * pchRenderModelName, winRenderModel_t_1610 ** ppRenderModel)
+EVRRenderModelError __thiscall winIVRRenderModels_IVRRenderModels_006_LoadRenderModel_Async(winIVRRenderModels_IVRRenderModels_006 *_this, const char * pchRenderModelName, winRenderModel_t_1819 ** ppRenderModel)
 {
     TRACE("%p\n", _this);
     return cppIVRRenderModels_IVRRenderModels_006_LoadRenderModel_Async(_this->linux_side, pchRenderModelName, ppRenderModel);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRRenderModels_IVRRenderModels_006_FreeRenderModel, 8)
-void __thiscall winIVRRenderModels_IVRRenderModels_006_FreeRenderModel(winIVRRenderModels_IVRRenderModels_006 *_this, winRenderModel_t_1610 * pRenderModel)
+void __thiscall winIVRRenderModels_IVRRenderModels_006_FreeRenderModel(winIVRRenderModels_IVRRenderModels_006 *_this, winRenderModel_t_1819 * pRenderModel)
 {
     TRACE("%p\n", _this);
     cppIVRRenderModels_IVRRenderModels_006_FreeRenderModel(_this->linux_side, pRenderModel);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRRenderModels_IVRRenderModels_006_LoadTexture_Async, 12)
-EVRRenderModelError __thiscall winIVRRenderModels_IVRRenderModels_006_LoadTexture_Async(winIVRRenderModels_IVRRenderModels_006 *_this, TextureID_t textureId, winRenderModel_TextureMap_t_1610 ** ppTexture)
+EVRRenderModelError __thiscall winIVRRenderModels_IVRRenderModels_006_LoadTexture_Async(winIVRRenderModels_IVRRenderModels_006 *_this, TextureID_t textureId, winRenderModel_TextureMap_t_1819 ** ppTexture)
 {
     TRACE("%p\n", _this);
     return cppIVRRenderModels_IVRRenderModels_006_LoadTexture_Async(_this->linux_side, textureId, ppTexture);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRRenderModels_IVRRenderModels_006_FreeTexture, 8)
-void __thiscall winIVRRenderModels_IVRRenderModels_006_FreeTexture(winIVRRenderModels_IVRRenderModels_006 *_this, winRenderModel_TextureMap_t_1610 * pTexture)
+void __thiscall winIVRRenderModels_IVRRenderModels_006_FreeTexture(winIVRRenderModels_IVRRenderModels_006 *_this, winRenderModel_TextureMap_t_1819 * pTexture)
 {
     TRACE("%p\n", _this);
     cppIVRRenderModels_IVRRenderModels_006_FreeTexture(_this->linux_side, pTexture);
@@ -57,7 +57,7 @@ DEFINE_THISCALL_WRAPPER(winIVRRenderModels_IVRRenderModels_006_LoadTextureD3D11_
 EVRRenderModelError __thiscall winIVRRenderModels_IVRRenderModels_006_LoadTextureD3D11_Async(winIVRRenderModels_IVRRenderModels_006 *_this, TextureID_t textureId, void * pD3D11Device, void ** ppD3D11Texture2D)
 {
     TRACE("%p\n", _this);
-    return cppIVRRenderModels_IVRRenderModels_006_LoadTextureD3D11_Async(_this->linux_side, textureId, pD3D11Device, ppD3D11Texture2D);
+    return ivrrendermodels_load_texture_d3d11_async(cppIVRRenderModels_IVRRenderModels_006_LoadTextureD3D11_Async, _this->linux_side, textureId, pD3D11Device, ppD3D11Texture2D, 6);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRRenderModels_IVRRenderModels_006_LoadIntoTextureD3D11_Async, 12)
@@ -71,7 +71,7 @@ DEFINE_THISCALL_WRAPPER(winIVRRenderModels_IVRRenderModels_006_FreeTextureD3D11,
 void __thiscall winIVRRenderModels_IVRRenderModels_006_FreeTextureD3D11(winIVRRenderModels_IVRRenderModels_006 *_this, void * pD3D11Texture2D)
 {
     TRACE("%p\n", _this);
-    cppIVRRenderModels_IVRRenderModels_006_FreeTextureD3D11(_this->linux_side, pD3D11Texture2D);
+    ivrrendermodels_free_texture_d3d11(cppIVRRenderModels_IVRRenderModels_006_FreeTextureD3D11, _this->linux_side, pD3D11Texture2D, 6);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRRenderModels_IVRRenderModels_006_GetRenderModelName, 16)
@@ -285,7 +285,7 @@ DEFINE_THISCALL_WRAPPER(winIVRRenderModels_IVRRenderModels_005_LoadTextureD3D11_
 EVRRenderModelError __thiscall winIVRRenderModels_IVRRenderModels_005_LoadTextureD3D11_Async(winIVRRenderModels_IVRRenderModels_005 *_this, TextureID_t textureId, void * pD3D11Device, void ** ppD3D11Texture2D)
 {
     TRACE("%p\n", _this);
-    return cppIVRRenderModels_IVRRenderModels_005_LoadTextureD3D11_Async(_this->linux_side, textureId, pD3D11Device, ppD3D11Texture2D);
+    return ivrrendermodels_load_texture_d3d11_async(cppIVRRenderModels_IVRRenderModels_005_LoadTextureD3D11_Async, _this->linux_side, textureId, pD3D11Device, ppD3D11Texture2D, 5);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRRenderModels_IVRRenderModels_005_LoadIntoTextureD3D11_Async, 12)
@@ -299,7 +299,7 @@ DEFINE_THISCALL_WRAPPER(winIVRRenderModels_IVRRenderModels_005_FreeTextureD3D11,
 void __thiscall winIVRRenderModels_IVRRenderModels_005_FreeTextureD3D11(winIVRRenderModels_IVRRenderModels_005 *_this, void * pD3D11Texture2D)
 {
     TRACE("%p\n", _this);
-    cppIVRRenderModels_IVRRenderModels_005_FreeTextureD3D11(_this->linux_side, pD3D11Texture2D);
+    ivrrendermodels_free_texture_d3d11(cppIVRRenderModels_IVRRenderModels_005_FreeTextureD3D11, _this->linux_side, pD3D11Texture2D, 5);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRRenderModels_IVRRenderModels_005_GetRenderModelName, 16)
@@ -504,14 +504,14 @@ DEFINE_THISCALL_WRAPPER(winIVRRenderModels_IVRRenderModels_004_LoadTextureD3D11_
 EVRRenderModelError __thiscall winIVRRenderModels_IVRRenderModels_004_LoadTextureD3D11_Async(winIVRRenderModels_IVRRenderModels_004 *_this, TextureID_t textureId, void * pD3D11Device, void ** ppD3D11Texture2D)
 {
     TRACE("%p\n", _this);
-    return cppIVRRenderModels_IVRRenderModels_004_LoadTextureD3D11_Async(_this->linux_side, textureId, pD3D11Device, ppD3D11Texture2D);
+    return ivrrendermodels_load_texture_d3d11_async(cppIVRRenderModels_IVRRenderModels_004_LoadTextureD3D11_Async, _this->linux_side, textureId, pD3D11Device, ppD3D11Texture2D, 4);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRRenderModels_IVRRenderModels_004_FreeTextureD3D11, 8)
 void __thiscall winIVRRenderModels_IVRRenderModels_004_FreeTextureD3D11(winIVRRenderModels_IVRRenderModels_004 *_this, void * pD3D11Texture2D)
 {
     TRACE("%p\n", _this);
-    cppIVRRenderModels_IVRRenderModels_004_FreeTextureD3D11(_this->linux_side, pD3D11Texture2D);
+    ivrrendermodels_free_texture_d3d11(cppIVRRenderModels_IVRRenderModels_004_FreeTextureD3D11, _this->linux_side, pD3D11Texture2D, 4);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRRenderModels_IVRRenderModels_004_GetRenderModelName, 16)
