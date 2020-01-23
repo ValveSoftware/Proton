@@ -182,8 +182,8 @@ LICENSE := $(SRCDIR)/dist.LICENSE
 OFL_LICENSE := $(SRCDIR)/fonts/liberation-fonts/LICENSE
 
 GECKO_VER := 2.47.1
-GECKO32_MSI := wine_gecko-$(GECKO_VER)-x86.msi
-GECKO64_MSI := wine_gecko-$(GECKO_VER)-x86_64.msi
+GECKO32_TARBALL := wine-gecko-$(GECKO_VER)-x86.tar.bz2
+GECKO64_TARBALL := wine-gecko-$(GECKO_VER)-x86_64.tar.bz2
 
 WINEMONO_VER := 4.9.4
 WINEMONO_TARBALL := wine-mono-bin-$(WINEMONO_VER).tar.gz
@@ -301,32 +301,32 @@ $(OBJ_DIRS):
 .PHONY: downloads
 
 BISON_TARBALL_URL := https://ftpmirror.gnu.org/bison/$(BISON_TARBALL)
-GECKO64_MSI_URL := https://dl.winehq.org/wine/wine-gecko/$(GECKO_VER)/$(GECKO64_MSI)
-GECKO32_MSI_URL := https://dl.winehq.org/wine/wine-gecko/$(GECKO_VER)/$(GECKO32_MSI)
+GECKO64_TARBALL_URL := https://dl.winehq.org/wine/wine-gecko/$(GECKO_VER)/$(GECKO64_TARBALL)
+GECKO32_TARBALL_URL := https://dl.winehq.org/wine/wine-gecko/$(GECKO_VER)/$(GECKO32_TARBALL)
 MONO_TARBALL_URL := https://github.com/madewokherd/wine-mono/releases/download/wine-mono-$(WINEMONO_VER)/$(WINEMONO_TARBALL)
 
 SHARED_BISON_TARBALL := $(SRCDIR)/../bison/$(BISON_TARBALL)
-SHARED_GECKO64_MSI := $(SRCDIR)/../gecko/$(GECKO64_MSI)
-SHARED_GECKO32_MSI := $(SRCDIR)/../gecko/$(GECKO32_MSI)
+SHARED_GECKO64_TARBALL := $(SRCDIR)/../gecko/$(GECKO64_TARBALL)
+SHARED_GECKO32_TARBALL := $(SRCDIR)/../gecko/$(GECKO32_TARBALL)
 SHARED_MONO_TARBALL := $(SRCDIR)/../mono/$(WINEMONO_TARBALL)
 
 $(SHARED_BISON_TARBALL):
 	mkdir -p $(dir $@)
 	wget -O "$@" "$(BISON_TARBALL_URL)"
 
-$(SHARED_GECKO64_MSI):
+$(SHARED_GECKO64_TARBALL):
 	mkdir -p $(dir $@)
-	wget -O "$@" "$(GECKO64_MSI_URL)"
+	wget -O "$@" "$(GECKO64_TARBALL_URL)"
 
-$(SHARED_GECKO32_MSI):
+$(SHARED_GECKO32_TARBALL):
 	mkdir -p $(dir $@)
-	wget -O "$@" "$(GECKO32_MSI_URL)"
+	wget -O "$@" "$(GECKO32_TARBALL_URL)"
 
 $(SHARED_MONO_TARBALL):
 	mkdir -p $(dir $@)
 	wget -O "$@" "$(MONO_TARBALL_URL)"
 
-downloads: $(SHARED_BISON_TARBALL) $(SHARED_GECKO64_MSI) $(SHARED_GECKO32_MSI) $(SHARED_MONO_TARBALL)
+downloads: $(SHARED_BISON_TARBALL) $(SHARED_GECKO64_TARBALL) $(SHARED_GECKO32_TARBALL) $(SHARED_MONO_TARBALL)
 
 ##
 ## dist/install -- steps to finalize the install
@@ -363,8 +363,8 @@ DIST_COMPAT_MANIFEST := $(DST_BASE)/compatibilitytool.vdf
 DIST_LICENSE := $(DST_BASE)/LICENSE
 DIST_OFL_LICENSE := $(DST_BASE)/LICENSE.OFL
 DIST_GECKO_DIR := $(DST_DIR)/share/wine/gecko
-DIST_GECKO32 := $(DIST_GECKO_DIR)/$(GECKO32_MSI)
-DIST_GECKO64 := $(DIST_GECKO_DIR)/$(GECKO64_MSI)
+DIST_GECKO32 := $(DIST_GECKO_DIR)/wine-gecko-$(GECKO_VER)-x86
+DIST_GECKO64 := $(DIST_GECKO_DIR)/wine-gecko-$(GECKO_VER)-x86_64
 DIST_WINEMONO_DIR := $(DST_DIR)/share/wine/mono
 DIST_WINEMONO := $(DIST_WINEMONO_DIR)/wine-mono-$(WINEMONO_VER)
 DIST_FONTS := $(DST_DIR)/share/fonts
@@ -400,35 +400,35 @@ $(DIST_GECKO_DIR):
 	mkdir -p $@
 
 $(DIST_GECKO64): | $(DIST_GECKO_DIR)
-	if [ -e "$(SRCDIR)/../gecko/$(GECKO64_MSI)" ]; then \
-		cp "$(SRCDIR)/../gecko/$(GECKO64_MSI)" "$@"; \
+	if [ -e "$(SHARED_GECKO64_TARBALL)" ]; then \
+		tar -xf "$(SHARED_GECKO64_TARBALL)" -C "$(dir $@)"; \
 	else \
 		mkdir -p $(SRCDIR)/contrib/; \
-		if [ ! -e "$(SRCDIR)/contrib/$(GECKO64_MSI)" ]; then \
-			echo ">>>> Downloading wine-gecko. To avoid this in future, put it here: $(SRCDIR)/../gecko/$(GECKO64_MSI)"; \
-			wget -O "$(SRCDIR)/contrib/$(GECKO64_MSI)" "$(GECKO64_MSI_URL)"; \
+		if [ ! -e "$(SRCDIR)/contrib/$(GECKO64_TARBALL)" ]; then \
+			echo ">>>> Downloading wine-gecko. To avoid this in future, put it here: $(SRCDIR)/../gecko/$(GECKO64_TARBALL)"; \
+			wget -O "$(SRCDIR)/contrib/$(GECKO64_TARBALL)" "$(GECKO64_TARBALL_URL)"; \
 		fi; \
-		cp "$(SRCDIR)/contrib/$(GECKO64_MSI)" "$@"; \
+		tar -xf "$(SRCDIR)/contrib/$(GECKO64_TARBALL)" -C "$(dir $@)"; \
 	fi
 
 $(DIST_GECKO32): | $(DIST_GECKO_DIR)
-	if [ -e "$(SRCDIR)/../gecko/$(GECKO32_MSI)" ]; then \
-		cp "$(SRCDIR)/../gecko/$(GECKO32_MSI)" "$@"; \
+	if [ -e "$(SHARED_GECKO32_TARBALL)" ]; then \
+		tar -xf "$(SHARED_GECKO32_TARBALL)" -C "$(dir $@)"; \
 	else \
 		mkdir -p $(SRCDIR)/contrib/; \
-		if [ ! -e "$(SRCDIR)/contrib/$(GECKO32_MSI)" ]; then \
-			echo ">>>> Downloading wine-gecko. To avoid this in future, put it here: $(SRCDIR)/../gecko/$(GECKO32_MSI)"; \
-			wget -O "$(SRCDIR)/contrib/$(GECKO32_MSI)" "$(GECKO32_MSI_URL)"; \
+		if [ ! -e "$(SRCDIR)/contrib/$(GECKO32_TARBALL)" ]; then \
+			echo ">>>> Downloading wine-gecko. To avoid this in future, put it here: $(SRCDIR)/../gecko/$(GECKO32_TARBALL)"; \
+			wget -O "$(SRCDIR)/contrib/$(GECKO32_TARBALL)" "$(GECKO32_TARBALL_URL)"; \
 		fi; \
-		cp "$(SRCDIR)/contrib/$(GECKO32_MSI)" "$@"; \
+		tar -xf "$(SRCDIR)/contrib/$(GECKO32_TARBALL)" -C "$(dir $@)"; \
 	fi
 
 $(DIST_WINEMONO_DIR):
 	mkdir -p $@
 
 $(DIST_WINEMONO): | $(DIST_WINEMONO_DIR)
-	if [ -e "$(SRCDIR)/../mono/$(WINEMONO_TARBALL)" ]; then \
-		tar -xf "$(SRCDIR)/../mono/$(WINEMONO_TARBALL)" -C "$(dir $@)"; \
+	if [ -e "$(SHARED_MONO_TARBALL)" ]; then \
+		tar -xf "$(SHARED_MONO_TARBALL)" -C "$(dir $@)"; \
 	else \
 		mkdir -p $(SRCDIR)/contrib/; \
 		if [ ! -e "$(SRCDIR)/contrib/$(WINEMONO_TARBALL)" ]; then \
@@ -437,7 +437,6 @@ $(DIST_WINEMONO): | $(DIST_WINEMONO_DIR)
 		fi; \
 		tar -xf "$(SRCDIR)/contrib/$(WINEMONO_TARBALL)" -C "$(dir $@)"; \
 	fi
-
 
 $(DIST_FONTS): fonts
 	mkdir -p $@
