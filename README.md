@@ -116,10 +116,10 @@ Set up the build environment
 Proton has a lot of build-time dependencies. The following instructions
 describe how we create the build environment for the production builds of
 Proton. For reproducibility and security reasons, we will be setting up a
-Debian 9 virtual machine. However, you should be able to follow these
+Debian virtual machine. However, you should be able to follow these
 instructions on other distributions as well.
 
-Proton provides a Vagrantfile, which will automatically set up the Debian 9 VM
+Proton provides a Vagrantfile, which will automatically set up the Debian VM
 for you. After installing [Vagrant](https://www.vagrantup.com/), initialize the
 VM by running from within the Proton directory:
 
@@ -155,7 +155,7 @@ Vagrant VMs.
 If you do not wish to use Vagrant, you can read through both Vagrantfile and
 `vagrant-user-setup.sh` for the list of dependencies and instructions on how to
 set up your own machine or another VM of your choosing. It is aimed at Debian
-9, but you should be able to adapt them for other distributions.
+10, but you should be able to adapt them for other distributions.
 
 ---
 Alternative: Building without the Steam Runtime
