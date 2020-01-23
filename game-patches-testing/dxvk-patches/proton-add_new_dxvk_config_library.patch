@@ -1,0 +1,191 @@
+From fc569626a6c83c9c0a008e98d5d664be60a93e8f Mon Sep 17 00:00:00 2001
+From: Andrew Eikum <aeikum@codeweavers.com>
+Date: Tue, 10 Dec 2019 08:43:06 -0600
+Subject: [PATCH] [dxvk_config] Add new dxvk_config library
+
+For exporting DVXK's config options to external DXGI implementations
+(wined3d).
+---
+ src/dxvk_config/dxvk_config.cpp  | 48 ++++++++++++++++++++++++++++++++
+ src/dxvk_config/dxvk_config.def  |  3 ++
+ src/dxvk_config/dxvk_config.h    | 15 ++++++++++
+ src/dxvk_config/dxvk_config.spec |  1 +
+ src/dxvk_config/meson.build      | 21 ++++++++++++++
+ src/dxvk_config/version.rc       | 32 +++++++++++++++++++++
+ src/meson.build                  |  1 +
+ 7 files changed, 121 insertions(+)
+ create mode 100644 src/dxvk_config/dxvk_config.cpp
+ create mode 100644 src/dxvk_config/dxvk_config.def
+ create mode 100644 src/dxvk_config/dxvk_config.h
+ create mode 100644 src/dxvk_config/dxvk_config.spec
+ create mode 100644 src/dxvk_config/meson.build
+ create mode 100644 src/dxvk_config/version.rc
+
+diff --git a/src/dxvk_config/dxvk_config.cpp b/src/dxvk_config/dxvk_config.cpp
+new file mode 100644
+index 00000000..c40b4704
+--- /dev/null
++++ b/src/dxvk_config/dxvk_config.cpp
+@@ -0,0 +1,48 @@
++#include "../dxgi/dxgi_include.h"
++
++#include "../util/config/config.h"
++
++#include "dxvk_config.h"
++
++namespace dxvk {
++  Logger Logger::s_instance("dxvk_config.log");
++}
++
++static int32_t parsePciId(const std::string& str) {
++  if (str.size() != 4)
++    return -1;
++
++  int32_t id = 0;
++
++  for (size_t i = 0; i < str.size(); i++) {
++    id *= 16;
++
++    if (str[i] >= '0' && str[i] <= '9')
++      id += str[i] - '0';
++    else if (str[i] >= 'A' && str[i] <= 'F')
++      id += str[i] - 'A' + 10;
++    else if (str[i] >= 'a' && str[i] <= 'f')
++      id += str[i] - 'a' + 10;
++    else
++      return -1;
++  }
++
++  return id;
++}
++
++extern "C" {
++    using namespace dxvk;
++
++    DLLEXPORT HRESULT __stdcall DXVKGetOptions(struct DXVKOptions *opts)
++    {
++        Config config(Config::getUserConfig());
++
++        config.merge(Config::getAppConfig(env::getExePath()));
++
++        opts->nvapiHack = config.getOption<bool>("dxgi.nvapiHack", true) ? 1 : 0;
++        opts->customVendorId = parsePciId(config.getOption<std::string>("dxgi.customVendorId"));
++        opts->customDeviceId = parsePciId(config.getOption<std::string>("dxgi.customDeviceId"));
++
++        return S_OK;
++    }
++}
+diff --git a/src/dxvk_config/dxvk_config.def b/src/dxvk_config/dxvk_config.def
+new file mode 100644
+index 00000000..1d064560
+--- /dev/null
++++ b/src/dxvk_config/dxvk_config.def
+@@ -0,0 +1,3 @@
++LIBRARY DXVK_CONFIG.DLL
++EXPORTS
++    DXVKGetOptions
+diff --git a/src/dxvk_config/dxvk_config.h b/src/dxvk_config/dxvk_config.h
+new file mode 100644
+index 00000000..3c9968a7
+--- /dev/null
++++ b/src/dxvk_config/dxvk_config.h
+@@ -0,0 +1,15 @@
++#ifdef __cplusplus
++extern "C" {
++#endif
++
++    struct DXVKOptions {
++        int32_t customVendorId;
++        int32_t customDeviceId;
++        int32_t nvapiHack;
++    };
++
++    DLLEXPORT HRESULT __stdcall DXVKGetOptions(struct DXVKOptions *out_opts);
++
++#ifdef __cplusplus
++}
++#endif
+diff --git a/src/dxvk_config/dxvk_config.spec b/src/dxvk_config/dxvk_config.spec
+new file mode 100644
+index 00000000..0ae3d27e
+--- /dev/null
++++ b/src/dxvk_config/dxvk_config.spec
+@@ -0,0 +1 @@
++@ stdcall DXVKGetOptions(ptr)
+diff --git a/src/dxvk_config/meson.build b/src/dxvk_config/meson.build
+new file mode 100644
+index 00000000..3e207d9b
+--- /dev/null
++++ b/src/dxvk_config/meson.build
+@@ -0,0 +1,21 @@
++dxvk_config_res = wrc_generator.process('version.rc')
++
++dxvk_config_src = [
++  'dxvk_config.cpp',
++]
++
++dxvk_config_dll = shared_library('dxvk_config'+dll_ext, dxvk_config_src, dxvk_config_res,
++  name_prefix         : '',
++  dependencies        : [ lib_dxgi, dxvk_dep ],
++  include_directories : dxvk_include_path,
++  install             : true,
++  objects             : not dxvk_msvc ? 'dxvk_config'+def_spec_ext : [],
++  vs_module_defs      : 'dxvk_config'+def_spec_ext,
++  override_options    : ['cpp_std='+dxvk_cpp_std])
++
++install_headers('dxvk_config.h',
++  subdir              : 'dxvk')
++
++dxvk_config_dep = declare_dependency(
++  link_with           : [ dxvk_config_dll ],
++  include_directories : [ dxvk_include_path ])
+diff --git a/src/dxvk_config/version.rc b/src/dxvk_config/version.rc
+new file mode 100644
+index 00000000..ce1e40d9
+--- /dev/null
++++ b/src/dxvk_config/version.rc
+@@ -0,0 +1,32 @@
++#include <windows.h>
++
++// DLL version information.
++VS_VERSION_INFO    VERSIONINFO
++FILEVERSION        10,0,17763,1
++PRODUCTVERSION     10,0,17763,1
++FILEFLAGSMASK      VS_FFI_FILEFLAGSMASK
++FILEFLAGS          0
++FILEOS VOS_NT_WINDOWS32
++FILETYPE VFT_DLL
++FILESUBTYPE VFT2_UNKNOWN
++BEGIN
++  BLOCK "StringFileInfo"
++  BEGIN
++    BLOCK "080904b0"
++    BEGIN
++      VALUE "CompanyName",      "DXVK"
++      VALUE "FileDescription",  "DXVK Config"
++      VALUE "FileVersion",      "10.0.17763.1 (WinBuild.160101.0800)"
++      VALUE "InternalName",     "DXVK_CONFIG.dll"
++      VALUE "LegalCopyright",   "zlib/libpng license"
++      VALUE "OriginalFilename", "DXVK_CONFIG.dll"
++      VALUE "ProductName",      "DXVK"
++      VALUE "ProductVersion",   "10.0.17763.1"
++    END
++  END
++  BLOCK "VarFileInfo"
++  BEGIN
++    VALUE "Translation", 0x0809, 1200
++  END
++END
++
+diff --git a/src/meson.build b/src/meson.build
+index c5d2753a..cc86630d 100644
+--- a/src/meson.build
++++ b/src/meson.build
+@@ -2,6 +2,7 @@ subdir('util')
+ subdir('spirv')
+ subdir('vulkan')
+ subdir('dxvk')
++subdir('dxvk_config')
+ 
+ if get_option('enable_dxgi')
+   if not get_option('enable_d3d11')

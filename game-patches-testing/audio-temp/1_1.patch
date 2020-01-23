@@ -1,0 +1,598 @@
+From: Alistair Leslie-Hughes <leslie_alistair@hotmail.com>
+Subject: [PATCH 1/4] include: Add xact.idl
+Message-Id: <PS2P216MB041738C0AC1C16A75FB7B0C2930C0@PS2P216MB0417.KORP216.PROD.OUTLOOK.COM>
+Date: Wed, 22 Jan 2020 00:12:10 +0000
+
+From: Ethan Lee <elee@codeweavers.com>
+
+Signed-off-by: Alistair Leslie-Hughes <leslie_alistair@hotmail.com>
+---
+ include/Makefile.in |   1 +
+ include/xact3.idl   | 560 ++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 561 insertions(+)
+ create mode 100644 include/xact3.idl
+
+diff --git a/include/Makefile.in b/include/Makefile.in
+index 8284d6fdf3..01fc25ebf8 100644
+--- a/include/Makefile.in
++++ b/include/Makefile.in
+@@ -772,6 +772,7 @@ SOURCES = \
+ 	wtypes.idl \
+ 	wuapi.idl \
+ 	x3daudio.h \
++	xact3.idl \
+ 	xapo.idl \
+ 	xapofx.h \
+ 	xaudio2.idl \
+diff --git a/include/xact3.idl b/include/xact3.idl
+new file mode 100644
+index 0000000000..eaab56203c
+--- /dev/null
++++ b/include/xact3.idl
+@@ -0,0 +1,560 @@
++/*
++ * Copyright (c) 2018 Ethan Lee for CodeWeavers
++ *
++ * This library is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU Lesser General Public
++ * License as published by the Free Software Foundation; either
++ * version 2.1 of the License, or (at your option) any later version.
++ *
++ * This library is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++ * Lesser General Public License for more details.
++ *
++ * You should have received a copy of the GNU Lesser General Public
++ * License along with this library; if not, write to the Free Software
++ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
++ */
++
++import "unknwn.idl";
++import "xaudio2.idl";
++
++[
++    uuid(bcc782bc-6492-4c22-8c35-f5d72fe73c6e)
++]
++coclass XACTEngine
++{
++    interface IUnknown;
++}
++
++interface IXACT3Engine;
++interface IXACT3SoundBank;
++interface IXACT3WaveBank;
++interface IXACT3Cue;
++interface IXACT3Wave;
++
++typedef WORD XACTCATEGORY;
++typedef BYTE XACTCHANNEL;
++typedef WORD XACTINDEX;
++typedef BYTE XACTINSTANCELIMIT;
++typedef BYTE XACTLOOPCOUNT;
++typedef BYTE XACTNOTIFICATIONTYPE;
++typedef SHORT XACTPITCH;
++typedef LONG XACTTIME;
++typedef WORD XACTVARIABLEINDEX;
++typedef FLOAT XACTVARIABLEVALUE;
++typedef BYTE XACTVARIATIONWEIGHT;
++typedef FLOAT XACTVOLUME;
++
++typedef struct XACT_RENDERER_DETAILS
++{
++    WCHAR rendererID[0xFF];
++    WCHAR displayName[0xFF];
++    BOOL defaultDevice;
++} XACT_RENDERER_DETAILS;
++
++typedef BOOL (__stdcall *XACT_READFILE_CALLBACK)(
++    HANDLE hFile,
++    LPVOID lpBuffer,
++    DWORD nNumberOfBytesRead,
++    LPDWORD lpNumberOfBytesRead,
++    void* lpOverlapped
++);
++typedef BOOL (__stdcall *XACT_GETOVERLAPPEDRESULT_CALLBACK)(
++    HANDLE hFile,
++    void* lpOverlapped,
++    LPDWORD lpNumberOfBytesTransferred,
++    BOOL bWait
++);
++typedef struct XACT_FILEIO_CALLBACKS
++{
++    BYTE* readFileCallback; /* FIXME: XACT_READFILE_CALLBACK */
++    BYTE* getOverlappedResultCallback; /* FIXME: XACT_GETOVERLAPPEDRESULT_CALLBACK */
++} XACT_FILEIO_CALLBACKS;
++
++typedef struct XACT_NOTIFICATION XACT_NOTIFICATION;
++typedef void (__stdcall *XACT_NOTIFICATION_CALLBACK)(
++    const XACT_NOTIFICATION *pNotification
++);
++
++typedef struct XACT_RUNTIME_PARAMETERS
++{
++    DWORD lookAheadTime;
++    BYTE* pGlobalSettingsBuffer; /* FIXME: void* */
++    DWORD globalSettingsBufferSize;
++    DWORD globalSettingsFlags;
++    DWORD globalSettingsAllocAttributes;
++    XACT_FILEIO_CALLBACKS fileIOCallbacks;
++    BYTE* fnNotificationCallback; /* FIXME: XACT_NOTIFICATION_CALLBACK */
++    LPCWSTR pRendererID;
++    IXAudio2 *pXAudio2;
++    IXAudio2MasteringVoice *pMasteringVoice;
++} XACT_RUNTIME_PARAMETERS;
++
++typedef struct XACT_STREAMING_PARAMETERS
++{
++    BYTE* file; /* FIXME: HANDLE */
++    DWORD offset;
++    DWORD flags;
++    WORD packetSize;
++} XACT_STREAMING_PARAMETERS;
++
++cpp_quote("#include <pshpack1.h>")
++
++typedef struct WAVEBANKREGION
++{
++    DWORD dwOffset;
++    DWORD dwLength;
++} WAVEBANKREGION;
++
++typedef struct WAVEBANKSAMPLEREGION
++{
++    DWORD dwStartSample;
++    DWORD dwTotalSamples;
++} WAVEBANKSAMPLEREGION;
++
++typedef union WAVEBANKMINIWAVEFORMAT
++{
++    union /* struct */
++    {
++        DWORD wFormatTag; /* : 2; */
++        DWORD nChannels; /* : 3; */
++        DWORD nSamplesPerSec; /* : 18; */
++        DWORD wBlockAlign; /* : 8; */
++        DWORD wBitsPerSample; /* : 1; */
++    } NONAMELESSUNION;
++    DWORD dwValue;
++} WAVEBANKMINIWAVEFORMAT;
++
++typedef struct WAVEBANKENTRY
++{
++    union
++    {
++        union /* struct */
++        {
++            DWORD dwFlags; /* : 4; */
++            DWORD Duration; /* : 28; */
++        } NONAMELESSUNION;
++        DWORD dwFlagsAndDuration;
++    };
++    WAVEBANKMINIWAVEFORMAT Format;
++    WAVEBANKREGION PlayRegion;
++    WAVEBANKSAMPLEREGION LoopRegion;
++} WAVEBANKENTRY;
++
++cpp_quote("#include <poppack.h>")
++
++typedef struct XACT_WAVE_PROPERTIES
++{
++    char friendlyName[64];
++    WAVEBANKMINIWAVEFORMAT format;
++    DWORD durationInSamples;
++    WAVEBANKSAMPLEREGION loopRegion;
++    BOOL streaming;
++} XACT_WAVE_PROPERTIES;
++
++typedef struct XACT_WAVE_INSTANCE_PROPERTIES
++{
++    XACT_WAVE_PROPERTIES waveProperties; /* FIXME: 'properties' */
++    BOOL backgroundMusic;
++} XACT_WAVE_INSTANCE_PROPERTIES;
++
++typedef struct XACT_CUE_PROPERTIES
++{
++    char friendlyName[0xFF];
++    BOOL interactive;
++    XACTINDEX iaVariableIndex;
++    XACTINDEX numVariations;
++    XACTINSTANCELIMIT maxInstances;
++    XACTINSTANCELIMIT currentInstances;
++} XACT_CUE_PROPERTIES;
++
++typedef struct XACT_TRACK_PROPERTIES
++{
++    XACTTIME duration;
++    XACTINDEX numVariations;
++    XACTCHANNEL numChannels;
++    XACTINDEX waveVariation;
++    XACTLOOPCOUNT loopCount;
++} XACT_TRACK_PROPERTIES;
++
++typedef struct XACT_VARIATION_PROPERTIES
++{
++    XACTINDEX index;
++    XACTVARIATIONWEIGHT weight;
++    XACTVARIABLEVALUE iaVariableMin;
++    XACTVARIABLEVALUE iaVariableMax;
++    BOOL linger;
++} XACT_VARIATION_PROPERTIES;
++
++typedef struct XACT_SOUND_PROPERTIES
++{
++    XACTCATEGORY category;
++    BYTE priority;
++    XACTPITCH pitch;
++    XACTVOLUME volume;
++    XACTINDEX numTracks;
++    XACT_TRACK_PROPERTIES arrTrackProperties[1];
++} XACT_SOUND_PROPERTIES;
++
++typedef struct XACT_SOUND_VARIATION_PROPERTIES
++{
++    XACT_VARIATION_PROPERTIES variationProperties;
++    XACT_SOUND_PROPERTIES soundProperties;
++} XACT_SOUND_VARIATION_PROPERTIES;
++
++typedef struct XACT_CUE_INSTANCE_PROPERTIES
++{
++    DWORD allocAttributes;
++    XACT_CUE_PROPERTIES cueProperties;
++    XACT_SOUND_VARIATION_PROPERTIES activeVariationProperties;
++} XACT_CUE_INSTANCE_PROPERTIES;
++
++cpp_quote("#include <pshpack1.h>")
++
++typedef struct XACT_NOTIFICATION_DESCRIPTION
++{
++    XACTNOTIFICATIONTYPE type;
++    BYTE flags;
++    IXACT3SoundBank *pSoundBank;
++    IXACT3WaveBank *pWaveBank;
++    IXACT3Cue *pCue;
++    IXACT3Wave *pWave;
++    XACTINDEX cueIndex;
++    XACTINDEX waveIndex;
++    BYTE* pvContext; /* FIXME: LPVOID */
++} XACT_NOTIFICATION_DESCRIPTION;
++
++typedef struct XACT_NOTIFICATION_CUE
++{
++    XACTINDEX cueIndex;
++    IXACT3SoundBank *pSoundBank;
++    IXACT3Cue *pCue;
++} XACT_NOTIFICATION_CUE;
++
++typedef struct XACT_NOTIFICATION_MARKER
++{
++    XACTINDEX cueIndex;
++    IXACT3SoundBank *pSoundBank;
++    IXACT3Cue *pCue;
++    DWORD marker;
++} XACT_NOTIFICATION_MARKER;
++
++typedef struct XACT_NOTIFICATION_SOUNDBANK
++{
++    IXACT3SoundBank *pSoundBank;
++} XACT_NOTIFICATION_SOUNDBANK;
++
++typedef struct XACT_NOTIFICATION_WAVEBANK
++{
++    IXACT3WaveBank *pWaveBank;
++} XACT_NOTIFICATION_WAVEBANK;
++
++typedef struct XACT_NOTIFICATION_VARIABLE
++{
++    XACTINDEX cueIndex;
++    IXACT3SoundBank *pSoundBank;
++    IXACT3Cue *pCue;
++    XACTVARIABLEINDEX variableIndex;
++    XACTVARIABLEVALUE variableValue;
++    BOOL local;
++} XACT_NOTIFICATION_VARIABLE;
++
++typedef struct XACT_NOTIFICATION_GUI
++{
++    DWORD reserved;
++} XACT_NOTIFICATION_GUI;
++
++typedef struct XACT_NOTIFICATION_WAVE
++{
++    IXACT3WaveBank *pWaveBank;
++    XACTINDEX waveIndex;
++    XACTINDEX cueIndex;
++    IXACT3SoundBank *pSoundBank;
++    IXACT3Cue *pCue;
++    IXACT3Wave *pWave;
++} XACT_NOTIFICATION_WAVE;
++
++struct XACT_NOTIFICATION
++{
++    XACTNOTIFICATIONTYPE type;
++    LONG timeStamp;
++    PVOID pvContext;
++    union
++    {
++        XACT_NOTIFICATION_CUE cue;
++        XACT_NOTIFICATION_MARKER marker;
++        XACT_NOTIFICATION_SOUNDBANK soundBank;
++        XACT_NOTIFICATION_WAVEBANK waveBank;
++        XACT_NOTIFICATION_VARIABLE variable;
++        XACT_NOTIFICATION_GUI gui;
++        XACT_NOTIFICATION_WAVE wave;
++    };
++};
++
++cpp_quote("#include <poppack.h>")
++
++static const XACTNOTIFICATIONTYPE XACTNOTIFICATIONTYPE_CUEDESTROYED = 4;
++static const XACTNOTIFICATIONTYPE XACTNOTIFICATIONTYPE_SOUNDBANKDESTROYED = 6;
++static const XACTNOTIFICATIONTYPE XACTNOTIFICATIONTYPE_WAVEBANKDESTROYED = 7;
++static const XACTNOTIFICATIONTYPE XACTNOTIFICATIONTYPE_WAVEDESTROYED = 16;
++
++[
++    object,
++    uuid(b1ee676a-d9cd-4d2a-89a8-fa53eb9e480b),
++]
++interface IXACT3Engine : IUnknown
++{
++    HRESULT GetRendererCount([out] XACTINDEX *pnRendererCount);
++
++    HRESULT GetRendererDetails(
++        XACTINDEX nRendererIndex,
++        [out] XACT_RENDERER_DETAILS *pRendererDetails);
++
++    HRESULT GetFinalMixFormat([out] WAVEFORMATEXTENSIBLE *pFinalMixFormat);
++
++    HRESULT Initialize([in] const XACT_RUNTIME_PARAMETERS *pParams);
++
++    HRESULT ShutDown();
++
++    HRESULT DoWork();
++
++    HRESULT CreateSoundBank(
++        [in] const BYTE* pvBuffer, /* FIXME: void* */
++        DWORD dwSize,
++        DWORD dwFlags,
++        DWORD dwAllocAttributes,
++        [out] IXACT3SoundBank **ppSoundBank);
++
++    HRESULT CreateInMemoryWaveBank(
++        [in] const BYTE* pvBuffer, /* FIXME: void* */
++        DWORD dwSize,
++        DWORD dwFlags,
++        DWORD dwAllocAttributes,
++        [out] IXACT3WaveBank **ppWaveBank);
++
++    HRESULT CreateStreamingWaveBank(
++        [in] const XACT_STREAMING_PARAMETERS *pParms,
++        [out] IXACT3WaveBank **ppWaveBank);
++
++    HRESULT PrepareWave(
++        DWORD dwFlags,
++        [in] LPCSTR szWavePath,
++        WORD wStreamingPacketSize,
++        DWORD dwAlignment,
++        DWORD dwPlayOffset,
++        XACTLOOPCOUNT nLoopCount,
++        [out] IXACT3Wave **ppWave);
++
++    HRESULT PrepareInMemoryWave(
++        DWORD dwFlags,
++        WAVEBANKENTRY entry,
++        [in] DWORD *pdwSeekTable,
++        [in] BYTE *pbWaveData,
++        DWORD dwPlayOffset,
++        XACTLOOPCOUNT nLoopCount,
++        [out] IXACT3Wave **ppWave);
++
++    HRESULT PrepareStreamingWave(
++        DWORD dwFlags,
++        WAVEBANKENTRY entry,
++        XACT_STREAMING_PARAMETERS streamingParams,
++        DWORD dwAlignment,
++        [in] DWORD *pdwSeekTable,
++        DWORD dwPlayOffset,
++        XACTLOOPCOUNT nLoopCount,
++        [out] IXACT3Wave **ppWave);
++
++    HRESULT RegisterNotification(
++        [in] const XACT_NOTIFICATION_DESCRIPTION *pNotificationDesc);
++
++    HRESULT UnRegisterNotification(
++        [in] const XACT_NOTIFICATION_DESCRIPTION *pNotificationDesc);
++
++    XACTCATEGORY GetCategory(
++        [in] LPCSTR szFriendlyName);
++
++    HRESULT Stop(XACTCATEGORY nCategory, DWORD dwFlags);
++
++    HRESULT SetVolume(XACTCATEGORY nCategory, XACTVOLUME nVolume);
++
++    HRESULT Pause(XACTCATEGORY nCategory, BOOL fPause);
++
++    XACTVARIABLEINDEX GetGlobalVariableIndex([in] LPCSTR szFriendlyName);
++
++    HRESULT SetGlobalVariable(
++        XACTVARIABLEINDEX nIndex,
++        XACTVARIABLEVALUE nValue);
++
++    HRESULT GetGlobalVariable(
++        XACTVARIABLEINDEX nIndex,
++        [out] XACTVARIABLEVALUE *nValue);
++}
++
++[
++    object,
++    local
++]
++interface IXACT3SoundBank
++{
++    XACTINDEX GetCueIndex([in] LPCSTR szFriendlyName);
++
++    HRESULT GetNumCues([out] XACTINDEX *pnNumCues);
++
++    HRESULT GetCueProperties(
++        XACTINDEX nCueIndex,
++        [out] XACT_CUE_PROPERTIES *pProperties);
++
++    HRESULT Prepare(
++        XACTINDEX nCueIndex,
++        DWORD dwFlags,
++        XACTTIME timeOffset,
++        [out] IXACT3Cue **ppCue);
++
++    HRESULT Play(
++        XACTINDEX nCueIndex,
++        DWORD dwFlags,
++        XACTTIME timeOffset,
++        [out] IXACT3Cue **ppCue);
++
++    HRESULT Stop(XACTINDEX nCueIndex, DWORD dwFlags);
++
++    HRESULT Destroy();
++
++    HRESULT GetState([out] DWORD *pdwState);
++}
++
++[
++    object,
++    local
++]
++interface IXACT3WaveBank
++{
++    HRESULT Destroy();
++
++    HRESULT GetNumWaves([out] XACTINDEX *pnNumWaves);
++
++    XACTINDEX GetWaveIndex([in] LPCSTR szFriendlyName);
++
++    HRESULT GetWaveProperties(
++        XACTINDEX nWaveIndex,
++        [out] XACT_WAVE_PROPERTIES *pWaveProperties);
++
++    HRESULT Prepare(
++        XACTINDEX nWaveIndex,
++        DWORD dwFlags,
++        DWORD dwPlayOffset,
++        XACTLOOPCOUNT nLoopCount,
++        [out] IXACT3Wave **ppWave);
++
++    HRESULT Play(
++        XACTINDEX nWaveIndex,
++        DWORD dwFlags,
++        DWORD dwPlayOffset,
++        XACTLOOPCOUNT nLoopCount,
++        [out] IXACT3Wave **ppWave);
++
++    HRESULT Stop(XACTINDEX nWaveIndex, DWORD dwFlags);
++
++    HRESULT GetState([out] DWORD *pdwState);
++}
++
++[
++    object,
++    local
++]
++interface IXACT34Cue
++{
++    HRESULT Play();
++
++    HRESULT Stop(DWORD dwFlags);
++
++    HRESULT GetState([out] DWORD *pdwState);
++
++    HRESULT Destroy();
++
++    HRESULT SetMatrixCoefficients(
++        UINT32 uSrcChannelCount,
++        UINT32 uDstChannelCount,
++        [in] float *pMatrixCoefficients);
++
++    XACTVARIABLEINDEX GetVariableIndex([in] LPCSTR szFriendlyName);
++
++    HRESULT SetVariable(XACTVARIABLEINDEX nIndex, XACTVARIABLEVALUE nValue);
++
++    HRESULT GetVariable(
++        XACTVARIABLEINDEX nIndex,
++        [out] XACTVARIABLEVALUE *nValue);
++
++    HRESULT Pause(BOOL fPause);
++
++    HRESULT GetProperties([out] XACT_CUE_INSTANCE_PROPERTIES **ppProperties);
++}
++
++[
++    object,
++    local
++]
++interface IXACT3Cue
++{
++    HRESULT Play();
++
++    HRESULT Stop(DWORD dwFlags);
++
++    HRESULT GetState([out] DWORD *pdwState);
++
++    HRESULT Destroy();
++
++    HRESULT SetMatrixCoefficients(
++        UINT32 uSrcChannelCount,
++        UINT32 uDstChannelCount,
++        [in] float *pMatrixCoefficients);
++
++    XACTVARIABLEINDEX GetVariableIndex([in] LPCSTR szFriendlyName);
++
++    HRESULT SetVariable(XACTVARIABLEINDEX nIndex, XACTVARIABLEVALUE nValue);
++
++    HRESULT GetVariable(
++        XACTVARIABLEINDEX nIndex,
++        [out] XACTVARIABLEVALUE *nValue);
++
++    HRESULT Pause(BOOL fPause);
++
++    HRESULT GetProperties([out] XACT_CUE_INSTANCE_PROPERTIES **ppProperties);
++
++    HRESULT SetOutputVoices([in] const XAUDIO2_VOICE_SENDS *pSendList);
++
++    HRESULT SetOutputVoiceMatrix(
++        [in] IXAudio2Voice *pDestinationVoice,
++        UINT32 SourceChannels,
++        UINT32 DestinationChannels,
++        [in, size_is(SourceChannels * DestinationChannels)] const float *pLevelMatrix);
++}
++
++[
++    object,
++    local
++]
++interface IXACT3Wave
++{
++    HRESULT Destroy();
++
++    HRESULT Play();
++
++    HRESULT Stop(DWORD dwFlags);
++
++    HRESULT Pause(BOOL fPause);
++
++    HRESULT GetState([out] DWORD *pdwState);
++
++    HRESULT SetPitch(XACTPITCH pitch);
++
++    HRESULT SetVolume(XACTVOLUME volume);
++
++    HRESULT SetMatrixCoefficients(
++        UINT32 uSrcChannelCount,
++        UINT32 uDstChannelCount,
++        [in] float *pMatrixCoefficients);
++
++    HRESULT GetProperties([out] XACT_WAVE_INSTANCE_PROPERTIES *pProperties);
++}
+
+-- 
+2.24.1
+
+
+

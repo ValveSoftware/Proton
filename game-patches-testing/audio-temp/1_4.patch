@@ -1,0 +1,73 @@
+From: Alistair Leslie-Hughes <leslie_alistair@hotmail.com>
+Subject: [PATCH 4/4] include: Add XACT defines
+Message-Id: <PS2P216MB0417368F1FBADEA8CDABCE36930C0@PS2P216MB0417.KORP216.PROD.OUTLOOK.COM>
+Date: Wed, 22 Jan 2020 00:12:14 +0000
+In-Reply-To: <20200122001154.403554-1-leslie_alistair@hotmail.com>
+References: <20200122001154.403554-1-leslie_alistair@hotmail.com>
+
+Signed-off-by: Alistair Leslie-Hughes <leslie_alistair@hotmail.com>
+---
+ include/xact3.idl | 37 +++++++++++++++++++++++++++++++++++++
+ 1 file changed, 37 insertions(+)
+
+diff --git a/include/xact3.idl b/include/xact3.idl
+index a77afff6d4..cfa9e00fdc 100644
+--- a/include/xact3.idl
++++ b/include/xact3.idl
+@@ -19,6 +19,9 @@
+ import "unknwn.idl";
+ import "xaudio2.idl";
+ 
++cpp_quote("#include <limits.h>")
++cpp_quote("#include <float.h>")
++
+ [
+     uuid(bcc782bc-6492-4c22-8c35-f5d72fe73c6e)
+ ]
+@@ -313,6 +316,40 @@ cpp_quote("static const XACTNOTIFICATIONTYPE XACTNOTIFICATIONTYPE_WAVEDESTROYED
+ cpp_quote("static const XACTNOTIFICATIONTYPE XACTNOTIFICATIONTYPE_WAVEBANKPREPARED                 = 17;")
+ cpp_quote("static const XACTNOTIFICATIONTYPE XACTNOTIFICATIONTYPE_WAVEBANKSTREAMING_INVALIDCONTENT = 18;")
+ 
++cpp_quote("static const XACTTIME             XACTTIME_MIN               = INT_MIN;")
++cpp_quote("static const XACTTIME             XACTTIME_MAX               = INT_MAX;")
++cpp_quote("static const XACTTIME             XACTTIME_INFINITE          = INT_MAX;")
++cpp_quote("static const XACTINSTANCELIMIT    XACTINSTANCELIMIT_INFINITE = 0xff;")
++cpp_quote("static const XACTINSTANCELIMIT    XACTINSTANCELIMIT_MIN      = 0x00;")
++cpp_quote("static const XACTINSTANCELIMIT    XACTINSTANCELIMIT_MAX      = 0xfe;")
++cpp_quote("static const XACTINDEX            XACTINDEX_MIN              = 0x00;")
++cpp_quote("static const XACTINDEX            XACTINDEX_MAX              = 0xfffe;")
++cpp_quote("static const XACTINDEX            XACTINDEX_INVALID          = 0xffff;")
++cpp_quote("static const XACTNOTIFICATIONTYPE XACTNOTIFICATIONTYPE_MIN   = 0x00;")
++cpp_quote("static const XACTNOTIFICATIONTYPE XACTNOTIFICATIONTYPE_MAX   = 0xff;")
++cpp_quote("static const XACTVARIABLEVALUE    XACTVARIABLEVALUE_MIN      = -FLT_MAX;")
++cpp_quote("static const XACTVARIABLEVALUE    XACTVARIABLEVALUE_MAX      = FLT_MAX;")
++cpp_quote("static const XACTVARIABLEINDEX    XACTVARIABLEINDEX_MIN      = 0x0000;")
++cpp_quote("static const XACTVARIABLEINDEX    XACTVARIABLEINDEX_MAX      = 0xfffe;")
++cpp_quote("static const XACTVARIABLEINDEX    XACTVARIABLEINDEX_INVALID  = 0xffff;")
++cpp_quote("static const XACTCATEGORY         XACTCATEGORY_MIN           = 0x0;")
++cpp_quote("static const XACTCATEGORY         XACTCATEGORY_MAX           = 0xfffe;")
++cpp_quote("static const XACTCATEGORY         XACTCATEGORY_INVALID       = 0xffff;")
++cpp_quote("static const XACTCHANNEL          XACTCHANNEL_MIN            = 0;")
++cpp_quote("static const XACTCHANNEL          XACTCHANNEL_MAX            = 0xff;")
++cpp_quote("static const XACTPITCH            XACTPITCH_MIN              = -1200;")
++cpp_quote("static const XACTPITCH            XACTPITCH_MAX              =  1200;")
++cpp_quote("static const XACTPITCH            XACTPITCH_MIN_TOTAL        = -2400;")
++cpp_quote("static const XACTPITCH            XACTPITCH_MAX_TOTAL        =  2400;")
++cpp_quote("static const XACTVOLUME           XACTVOLUME_MIN             = 0.0f;")
++cpp_quote("static const XACTVOLUME           XACTVOLUME_MAX             = 16777216.0f;")
++cpp_quote("static const XACTVARIABLEVALUE    XACTPARAMETERVALUE_MIN     = -FLT_MAX;")
++cpp_quote("static const XACTVARIABLEVALUE    XACTPARAMETERVALUE_MAX     = FLT_MAX;")
++cpp_quote("static const XACTLOOPCOUNT        XACTLOOPCOUNT_MIN          = 0x00;")
++cpp_quote("static const XACTLOOPCOUNT        XACTLOOPCOUNT_MAX          = 0xfe;")
++cpp_quote("static const XACTLOOPCOUNT        XACTLOOPCOUNT_INFINITE     = 0xff;")
++cpp_quote("static const DWORD                XACTWAVEALIGNMENT_MIN      = 2048;")
++
+ [
+     object,
+     uuid(b1ee676a-d9cd-4d2a-89a8-fa53eb9e480b),
+
+-- 
+2.24.1
+
+
+

@@ -11,7 +11,7 @@
     git clean -xdf
     #Don't apply wow patches for now, they tend to crash other vkd3d games
     #patch -Np1 < ../game-patches-testing/vkd3d-patches/Support_RS_1.0_Volatile.patch
-    patch -Np1 < ../game-patches-testing/vkd3d-patches/wow-flicker.patch
+    #patch -Np1 < ../game-patches-testing/vkd3d-patches/wow-flicker.patch
     cd ..
 
     # Valve DXVK patches
@@ -19,6 +19,7 @@
     git reset --hard HEAD
     git clean -xdf
     patch -Np1 < ../game-patches-testing/dxvk-patches/valve-dxvk-avoid-spamming-log-with-requests-for-IWineD3D11Texture2D.patch
+    patch -Np1 < ../game-patches-testing/dxvk-patches/proton-add_new_dxvk_config_library.patch
     cd ..
 
     #WINE
@@ -66,6 +67,15 @@
     #WINE FAUDIO
     echo "applying faudio patches"
     patch -Np1 < ../game-patches-testing/faudio-patches/faudio-ffmpeg.patch
+    patch -Np1 < ../game-patches-testing/audio-temp/1.patch
+    patch -Np1 < ../game-patches-testing/audio-temp/2.patch
+    patch -Np1 < ../game-patches-testing/audio-temp/3.patch
+    patch -Np1 < ../game-patches-testing/audio-temp/4.patch
+    patch -Np1 < ../game-patches-testing/audio-temp/1_1.patch
+    patch -Np1 < ../game-patches-testing/audio-temp/1_2.patch
+    patch -Np1 < ../game-patches-testing/audio-temp/1_3.patch
+    patch -Np1 < ../game-patches-testing/audio-temp/1_4.patch
+
 
     #WINE GAME PATCHES
 
@@ -107,31 +117,28 @@
     #PROTON
     echo "applying proton patches"
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-steamclient_swap.patch
-    
-    #staging
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-protonify_staging_rpc.patch
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-protonify_staging.patch
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-LAA_staging.patch
 
-    #mk11
+    echo "mk11 patch"
     patch -Np1 < ../game-patches-testing/game-patches/mk11.patch
 
+    echo "clock monotinic, amd ags, hide prefix update"
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-use_clock_monotonic.patch
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-amd_ags.patch
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-hide_prefix_update_window.patch
 
     echo "fullscreen hack"
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-FS_bypass_compositor.patch
-
-    #staging
     patch -Np1 < ../game-patches-testing/proton-valve-patches/valve_proton_fullscreen_hack-staging.patch
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-vk_bits_4.5+.patch
     patch -Np1 < ../game-patches-testing/proton-hotfixes/proton-integer_scaling.patch
 
-    #echo "raw input"
+    echo "raw input"
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-rawinput.patch
 
-    #echo "applying key translation patches from staging post-rawinput"
+    echo "applying key translation patches from staging post-rawinput"
     patch -Np1 < ../wine-staging/patches/winex11-key_translation/0001-winex11-Match-keyboard-in-Unicode.patch
     patch -Np1 < ../wine-staging/patches/winex11-key_translation/0002-winex11-Fix-more-key-translation.patch
     patch -Np1 < ../wine-staging/patches/winex11-key_translation/0003-winex11.drv-Fix-main-Russian-keyboard-layout.patch
@@ -147,15 +154,14 @@
     #echo "msvcrt overrides" - disabled, breaks some games
     #patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-msvcrt_nativebuiltin.patch
 
-    echo "registry entries"
+    echo "valve registry entries"
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-apply_LargeAddressAware_fix_for_Bayonetta.patch
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-Set_amd_ags_x64_to_built_in_for_Wolfenstein_2.patch
 
-    #fix steep fullscreen
+    echo "fix steep fullscreeni"
     patch -Np1 < ../game-patches-testing/wine-patches/0001-Add-some-semi-stubs-in-user32.patch
 
-    #need for VR to compile
-
+    echo "Valve wined3d VR patches"
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-wined3d.patch
 
     #WINE CUSTOM PATCHES

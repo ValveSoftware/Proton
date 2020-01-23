@@ -1,0 +1,452 @@
+From: Alistair Leslie-Hughes <leslie_alistair@hotmail.com>
+Subject: [PATCH] include: Add directmanipulation.idl
+Message-Id: <PS2P216MB0417B2AB18F4F19AAF31C4E6930D0@PS2P216MB0417.KORP216.PROD.OUTLOOK.COM>
+Date: Tue, 21 Jan 2020 23:43:56 +0000
+
+Signed-off-by: Alistair Leslie-Hughes <leslie_alistair@hotmail.com>
+---
+ include/Makefile.in            |   1 +
+ include/directmanipulation.idl | 416 +++++++++++++++++++++++++++++++++
+ 2 files changed, 417 insertions(+)
+ create mode 100644 include/directmanipulation.idl
+
+diff --git a/include/Makefile.in b/include/Makefile.in
+index 8a05f5d01c..8284d6fdf3 100644
+--- a/include/Makefile.in
++++ b/include/Makefile.in
+@@ -200,6 +200,7 @@ SOURCES = \
+ 	dimm.idl \
+ 	dinput.h \
+ 	dinputd.h \
++	directmanipulation.idl \
+ 	dispdib.h \
+ 	dispex.idl \
+ 	dlgs.h \
+diff --git a/include/directmanipulation.idl b/include/directmanipulation.idl
+new file mode 100644
+index 0000000000..a49f368d11
+--- /dev/null
++++ b/include/directmanipulation.idl
+@@ -0,0 +1,416 @@
++/*
++ * Copyright 2019 Alistair Leslie-Hughes
++ *
++ * This library is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU Lesser General Public
++ * License as published by the Free Software Foundation; either
++ * version 2.1 of the License, or (at your option) any later version.
++ *
++ * This library is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++ * Lesser General Public License for more details.
++ *
++ * You should have received a copy of the GNU Lesser General Public
++ * License along with this library; if not, write to the Free Software
++ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
++ */
++
++import "oaidl.idl";
++import "ocidl.idl";
++
++cpp_quote("#if 0")
++typedef void* HWND;
++cpp_quote("#endif")
++
++interface IDirectManipulationViewportEventHandler;
++
++typedef enum DIRECTMANIPULATION_HITTEST_TYPE
++{
++    DIRECTMANIPULATION_HITTEST_TYPE_ASYNCHRONOUS     = 0x00000000,
++    DIRECTMANIPULATION_HITTEST_TYPE_SYNCHRONOUS      = 0x00000001,
++    DIRECTMANIPULATION_HITTEST_TYPE_AUTO_SYNCHRONOUS = 0x00000002
++} DIRECTMANIPULATION_HITTEST_TYPE;
++
++typedef enum DIRECTMANIPULATION_STATUS
++{
++    DIRECTMANIPULATION_BUILDING  = 0,
++    DIRECTMANIPULATION_ENABLED   = 1,
++    DIRECTMANIPULATION_DISABLED  = 2,
++    DIRECTMANIPULATION_RUNNING   = 3,
++    DIRECTMANIPULATION_INERTIA   = 4,
++    DIRECTMANIPULATION_READY     = 5,
++    DIRECTMANIPULATION_SUSPENDED = 6
++} DIRECTMANIPULATION_STATUS;
++
++typedef enum DIRECTMANIPULATION_VIEWPORT_OPTIONS
++{
++    DIRECTMANIPULATION_VIEWPORT_OPTIONS_DEFAULT              = 0x0000,
++    DIRECTMANIPULATION_VIEWPORT_OPTIONS_AUTODISABLE          = 0x0001,
++    DIRECTMANIPULATION_VIEWPORT_OPTIONS_MANUALUPDATE         = 0x0002,
++    DIRECTMANIPULATION_VIEWPORT_OPTIONS_INPUT                = 0x0004,
++    DIRECTMANIPULATION_VIEWPORT_OPTIONS_EXPLICITHITTEST      = 0x0008,
++    DIRECTMANIPULATION_VIEWPORT_OPTIONS_DISABLEPIXELSNAPPING = 0x0010,
++} DIRECTMANIPULATION_VIEWPORT_OPTIONS;
++
++typedef enum DIRECTMANIPULATION_CONFIGURATION
++{
++    DIRECTMANIPULATION_CONFIGURATION_NONE                = 0x00000000,
++    DIRECTMANIPULATION_CONFIGURATION_INTERACTION         = 0x00000001,
++    DIRECTMANIPULATION_CONFIGURATION_TRANSLATION_X       = 0x00000002,
++    DIRECTMANIPULATION_CONFIGURATION_TRANSLATION_Y       = 0x00000004,
++    DIRECTMANIPULATION_CONFIGURATION_SCALING             = 0x00000010,
++    DIRECTMANIPULATION_CONFIGURATION_TRANSLATION_INERTIA = 0x00000020,
++    DIRECTMANIPULATION_CONFIGURATION_SCALING_INERTIA     = 0x00000080,
++    DIRECTMANIPULATION_CONFIGURATION_RAILS_X             = 0x00000100,
++    DIRECTMANIPULATION_CONFIGURATION_RAILS_Y             = 0x00000200,
++} DIRECTMANIPULATION_CONFIGURATION;
++
++typedef enum DIRECTMANIPULATION_GESTURE_CONFIGURATION
++{
++    DIRECTMANIPULATION_GESTURE_NONE                   = 0x00000000,
++    DIRECTMANIPULATION_GESTURE_DEFAULT                = 0x00000000,
++    DIRECTMANIPULATION_GESTURE_CROSS_SLIDE_VERTICAL   = 0x00000008,
++    DIRECTMANIPULATION_GESTURE_CROSS_SLIDE_HORIZONTAL = 0x00000010,
++    DIRECTMANIPULATION_GESTURE_PINCH_ZOOM             = 0x00000020,
++} DIRECTMANIPULATION_GESTURE_CONFIGURATION;
++
++typedef enum DIRECTMANIPULATION_MOTION_TYPES
++{
++    DIRECTMANIPULATION_MOTION_NONE       = 0x0000,
++    DIRECTMANIPULATION_MOTION_TRANSLATEX = 0x0001,
++    DIRECTMANIPULATION_MOTION_TRANSLATEY = 0x0002,
++    DIRECTMANIPULATION_MOTION_ZOOM       = 0x0004,
++    DIRECTMANIPULATION_MOTION_CENTERX    = 0x0010,
++    DIRECTMANIPULATION_MOTION_CENTERY    = 0x0020,
++    DIRECTMANIPULATION_MOTION_ALL        = DIRECTMANIPULATION_MOTION_TRANSLATEX | DIRECTMANIPULATION_MOTION_TRANSLATEY |
++                                           DIRECTMANIPULATION_MOTION_ZOOM | DIRECTMANIPULATION_MOTION_CENTERX |
++                                           DIRECTMANIPULATION_MOTION_CENTERY
++} DIRECTMANIPULATION_MOTION_TYPES;
++
++typedef enum DIRECTMANIPULATION_SNAPPOINT_TYPE
++{
++    DIRECTMANIPULATION_SNAPPOINT_MANDATORY        = 0,
++    DIRECTMANIPULATION_SNAPPOINT_OPTIONAL         = 1,
++    DIRECTMANIPULATION_SNAPPOINT_MANDATORY_SINGLE = 2,
++    DIRECTMANIPULATION_SNAPPOINT_OPTIONAL_SINGLE  = 3
++} DIRECTMANIPULATION_SNAPPOINT_TYPE;
++
++typedef enum DIRECTMANIPULATION_SNAPPOINT_COORDINATE
++{
++    DIRECTMANIPULATION_COORDINATE_BOUNDARY  = 0x00,
++    DIRECTMANIPULATION_COORDINATE_ORIGIN    = 0x01,
++    DIRECTMANIPULATION_COORDINATE_MIRRORED  = 0x10
++} DIRECTMANIPULATION_SNAPPOINT_COORDINATE;
++
++typedef enum DIRECTMANIPULATION_HORIZONTALALIGNMENT
++{
++    DIRECTMANIPULATION_HORIZONTALALIGNMENT_NONE         = 0x00,
++    DIRECTMANIPULATION_HORIZONTALALIGNMENT_LEFT         = 0x01,
++    DIRECTMANIPULATION_HORIZONTALALIGNMENT_CENTER       = 0x02,
++    DIRECTMANIPULATION_HORIZONTALALIGNMENT_RIGHT        = 0x04,
++    DIRECTMANIPULATION_HORIZONTALALIGNMENT_UNLOCKCENTER = 0x08
++} DIRECTMANIPULATION_HORIZONTALALIGNMENT;
++
++typedef enum DIRECTMANIPULATION_VERTICALALIGNMENT
++{
++    DIRECTMANIPULATION_VERTICALALIGNMENT_NONE         = 0x00,
++    DIRECTMANIPULATION_VERTICALALIGNMENT_TOP          = 0x01,
++    DIRECTMANIPULATION_VERTICALALIGNMENT_CENTER       = 0x02,
++    DIRECTMANIPULATION_VERTICALALIGNMENT_BOTTOM       = 0x04,
++    DIRECTMANIPULATION_VERTICALALIGNMENT_UNLOCKCENTER = 0x08
++} DIRECTMANIPULATION_VERTICALALIGNMENT;
++
++typedef enum DIRECTMANIPULATION_INPUT_MODE
++{
++    DIRECTMANIPULATION_INPUT_MODE_AUTOMATIC = 0,
++    DIRECTMANIPULATION_INPUT_MODE_MANUAL    = 1
++} DIRECTMANIPULATION_INPUT_MODE;
++
++[
++    local,
++    object,
++    uuid(fb759dba-6f4c-4c01-874e-19c8a05907f9),
++    pointer_default(unique)
++]
++interface IDirectManipulationFrameInfoProvider : IUnknown
++{
++    HRESULT GetNextFrameInfo([out] ULONGLONG *time, [out] ULONGLONG *process, [out] ULONGLONG *composition);
++}
++
++[
++    local,
++    object,
++    uuid(fbf5d3b4-70c7-4163-9322-5a6f660d6fbc),
++    pointer_default(unique)
++]
++interface IDirectManipulationManager : IUnknown
++{
++    HRESULT Activate([in] HWND window);
++
++    HRESULT Deactivate([in] HWND window);
++
++    HRESULT RegisterHitTestTarget([in] HWND window, [in] HWND hittest, [in] DIRECTMANIPULATION_HITTEST_TYPE type);
++
++    HRESULT ProcessInput([in] const MSG *msg, [out, retval] BOOL *handled);
++
++    HRESULT GetUpdateManager([in] REFIID riid, [out, iid_is(riid), retval,] void **obj);
++
++    HRESULT CreateViewport([in] IDirectManipulationFrameInfoProvider *frame, [in] HWND window,
++                           [in] REFIID riid, [out, iid_is(riid), retval] void **obj);
++
++    HRESULT CreateContent([in] IDirectManipulationFrameInfoProvider *frame, [in] REFCLSID clsid,
++                          [in] REFIID riid, [out, iid_is(riid), retval] void **obj);
++}
++
++[
++    local,
++    object,
++    uuid(b89962cb-3d89-442b-bb58-5098fa0f9f16),
++    pointer_default(unique)
++]
++interface IDirectManipulationContent : IUnknown
++{
++    HRESULT GetContentRect([out] RECT *size);
++
++    HRESULT SetContentRect([in] const RECT *size);
++
++    HRESULT GetViewport([in] REFIID riid, [out, iid_is(riid)] void **object);
++
++    HRESULT GetTag([in] REFIID riid, [out, iid_is(riid)] void **object, [out] UINT32 *id);
++
++    HRESULT SetTag([in, unique] IUnknown *object, [in] UINT32 id);
++
++    HRESULT GetOutputTransform([out] float *matrix, [in] DWORD count);
++
++    HRESULT GetContentTransform([out] float *matrix, [in] DWORD count);
++
++    HRESULT SyncContentTransform([in] const float *matrix, [in] DWORD count);
++}
++
++[
++    local,
++    object,
++    uuid(790b6337-64f8-4ff5-a269-b32bc2af27a7),
++    pointer_default(unique)
++]
++interface IDirectManipulationUpdateHandler : IUnknown
++{
++    HRESULT Update();
++}
++
++[
++    local,
++    object,
++    uuid(b0ae62fd-be34-46e7-9caa-d361facbb9cc),
++    pointer_default(unique)
++]
++interface IDirectManipulationUpdateManager : IUnknown
++{
++    HRESULT RegisterWaitHandleCallback([in] HANDLE handle, [in] IDirectManipulationUpdateHandler *handler,
++                                       [out] DWORD *cookie);
++
++    HRESULT UnregisterWaitHandleCallback([in] DWORD cookie);
++
++    HRESULT Update([in] IDirectManipulationFrameInfoProvider *provider);
++}
++
++[
++    local,
++    object,
++    uuid(537a0825-0387-4efa-b62f-71eb1f085a7e),
++    pointer_default(unique)
++]
++interface IDirectManipulationCompositor : IUnknown
++{
++    HRESULT AddContent([in] IDirectManipulationContent *content, [in] IUnknown *device,
++                       [in] IUnknown *parent, [in] IUnknown *child);
++
++    HRESULT RemoveContent([in] IDirectManipulationContent *content);
++
++    HRESULT SetUpdateManager([in] IDirectManipulationUpdateManager *manager);
++
++    HRESULT Flush();
++}
++
++[
++    local,
++    object,
++    uuid(28b85a3d-60a0-48bd-9ba1-5ce8d9ea3a6d),
++    pointer_default(unique)
++]
++interface IDirectManipulationViewport : IUnknown
++{
++    HRESULT Enable();
++
++    HRESULT Disable();
++
++    HRESULT SetContact([in] UINT32 id);
++
++    HRESULT ReleaseContact([in] UINT32 id);
++
++    HRESULT ReleaseAllContacts();
++
++    HRESULT GetStatus([out] DIRECTMANIPULATION_STATUS *status);
++
++    HRESULT GetTag([in] REFIID riid, [out, iid_is(riid)] void **object, [out] UINT32 *id);
++
++    HRESULT SetTag([in, unique] IUnknown *object, [in] UINT32 id);
++
++    HRESULT GetViewportRect([out, retval] RECT *viewport);
++
++    HRESULT SetViewportRect([in] const RECT *viewport);
++
++    HRESULT ZoomToRect([in] const float left, [in] const float top, [in] const float right,
++                        [in] const float bottom, [in] BOOL animate);
++
++    HRESULT SetViewportTransform([in] const float *matrix, [in] DWORD count);
++
++    HRESULT SyncDisplayTransform([in] const float *matrix, [in] DWORD count);
++
++    HRESULT GetPrimaryContent([in] REFIID riid, [out, iid_is(riid)] void **object);
++
++    HRESULT AddContent([in, unique] IDirectManipulationContent *content);
++
++    HRESULT RemoveContent([in, unique] IDirectManipulationContent *content);
++
++    HRESULT SetViewportOptions([in] DIRECTMANIPULATION_VIEWPORT_OPTIONS options);
++
++    HRESULT AddConfiguration([in] DIRECTMANIPULATION_CONFIGURATION configuration);
++
++    HRESULT RemoveConfiguration([in] DIRECTMANIPULATION_CONFIGURATION configuration);
++
++    HRESULT ActivateConfiguration([in] DIRECTMANIPULATION_CONFIGURATION configuration);
++
++    HRESULT SetManualGesture([in] DIRECTMANIPULATION_GESTURE_CONFIGURATION configuration);
++
++    HRESULT SetChaining([in] DIRECTMANIPULATION_MOTION_TYPES enabledTypes);
++
++    HRESULT AddEventHandler([in] HWND window, [in] IDirectManipulationViewportEventHandler *eventHandler,
++                        [out, retval] DWORD *cookie);
++
++    HRESULT RemoveEventHandler([in] DWORD cookie);
++
++    HRESULT SetInputMode([in] DIRECTMANIPULATION_INPUT_MODE mode);
++
++    HRESULT SetUpdateMode([in] DIRECTMANIPULATION_INPUT_MODE mode);
++
++    HRESULT Stop();
++
++    HRESULT Abandon();
++}
++
++[
++    local,
++    object,
++    uuid(923ccaac-61e1-4385-b726-017af189882a),
++    pointer_default(unique)
++]
++interface IDirectManipulationViewport2 : IDirectManipulationViewport
++{
++    HRESULT AddBehavior([in] IUnknown *behavior, [out, retval] DWORD *cookie);
++
++    HRESULT RemoveBehavior([in] DWORD cookie);
++
++    HRESULT RemoveAllBehaviors();
++}
++
++[
++    local,
++    object,
++    uuid(952121DA-D69F-45F9-B0F9-F23944321A6D),
++    pointer_default(unique)
++]
++interface IDirectManipulationViewportEventHandler : IUnknown
++{
++    HRESULT OnViewportStatusChanged([in] IDirectManipulationViewport *viewport, [in] DIRECTMANIPULATION_STATUS current,
++                                    [in] DIRECTMANIPULATION_STATUS previous);
++
++    HRESULT OnViewportUpdated([in] IDirectManipulationViewport *viewport);
++
++    HRESULT OnContentUpdated([in] IDirectManipulationViewport *viewport, [in] IDirectManipulationContent *content);
++}
++
++[
++    local,
++    object,
++    uuid(fa1005e9-3d16-484c-bfc9-62b61e56ec4e),
++    pointer_default(unique)
++]
++interface IDirectManipulationManager2 : IDirectManipulationManager
++{
++    HRESULT CreateBehavior([in] REFCLSID clsid, [in] REFIID riid, [out, iid_is(riid), retval] void **obj);
++}
++
++[
++    local,
++    object,
++    uuid(c12851e4-1698-4625-b9b1-7ca3ec18630b),
++    pointer_default(unique)
++]
++interface IDirectManipulationPrimaryContent : IUnknown
++{
++    HRESULT SetSnapInterval([in] DIRECTMANIPULATION_MOTION_TYPES motion, [in] float interval, [in] float offset);
++
++    HRESULT SetSnapPoints([in] DIRECTMANIPULATION_MOTION_TYPES motion, [in] const float *points, [in] DWORD count);
++
++    HRESULT SetSnapType([in] DIRECTMANIPULATION_MOTION_TYPES motion, [in] DIRECTMANIPULATION_SNAPPOINT_TYPE type);
++
++    HRESULT SetSnapCoordinate([in] DIRECTMANIPULATION_MOTION_TYPES motion, [in] DIRECTMANIPULATION_SNAPPOINT_COORDINATE coordinate,
++                              [in] float origin);
++
++    HRESULT SetZoomBoundaries([in] float minimum, [in] float maximum);
++
++    HRESULT SetHorizontalAlignment([in] DIRECTMANIPULATION_HORIZONTALALIGNMENT alignment);
++
++    HRESULT SetVerticalAlignment([in] DIRECTMANIPULATION_VERTICALALIGNMENT alignment);
++
++    HRESULT GetInertiaEndTransform([out] float *matrix, [in] DWORD count);
++
++    HRESULT GetCenterPoint([out] float *x, [out] float *y);
++}
++
++[
++    uuid(9fbedf98-f6d8-4e3b-b488-fa66dbf5e9f3),
++    version(1.0)
++]
++library DirectManipulation
++{
++    [
++        uuid(54e211b6-3650-4f75-8334-fa359598e1c5)
++    ]
++    coclass DirectManipulationManager
++    {
++        interface IDirectManipulationManager2;
++        [default] interface IDirectManipulationManager;
++    }
++
++    [
++        uuid(99793286-77cc-4b57-96db-3b354f6f9fb5)
++    ]
++    coclass DirectManipulationSharedManager
++    {
++        interface IDirectManipulationManager2;
++        [default] interface IDirectManipulationManager;
++    }
++
++    [
++        uuid(79dea627-a08a-43ac-8ef5-6900b9299126)
++    ]
++    coclass DCompManipulationCompositor
++    {
++        [default] interface IDirectManipulationCompositor;
++        interface IDirectManipulationFrameInfoProvider;
++    }
++
++    [
++        noncreatable,
++        hidden,
++        uuid(34e211b6-3650-4f75-8334-fa359598e1c5)
++    ]
++    coclass DirectManipulationViewport
++    {
++        interface IDirectManipulationViewport2;
++        [default] interface IDirectManipulationViewport;
++    }
++}
+
+-- 
+2.24.1
+
+
+

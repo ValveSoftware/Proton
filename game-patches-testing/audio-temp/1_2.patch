@@ -1,0 +1,30 @@
+From: Alistair Leslie-Hughes <leslie_alistair@hotmail.com>
+Subject: [PATCH] include: Add _Inout_updates_bytes_opt_ define
+Message-Id: <PS2P216MB041758E0061F00DB7F362010930D0@PS2P216MB0417.KORP216.PROD.OUTLOOK.COM>
+Date: Tue, 21 Jan 2020 23:43:58 +0000
+In-Reply-To: <20200121234342.367016-1-leslie_alistair@hotmail.com>
+References: <20200121234342.367016-1-leslie_alistair@hotmail.com>
+
+Signed-off-by: Alistair Leslie-Hughes <leslie_alistair@hotmail.com>
+---
+ include/sal.h | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/include/sal.h b/include/sal.h
+index 823361af17..81a828dd97 100644
+--- a/include/sal.h
++++ b/include/sal.h
+@@ -97,6 +97,7 @@
+ #define _Inout_updates_(count)
+ #define _Inout_updates_bytes_(count)
+ #define _Inout_updates_bytes_all_opt_(count)
++#define _Inout_updates_bytes_opt_(count)
+ #define _Inout_updates_opt_(count)
+ #define _Inout_updates_z_(count)
+ #define _Inout_updates_opt_z_(count)
+
+-- 
+2.24.1
+
+
+

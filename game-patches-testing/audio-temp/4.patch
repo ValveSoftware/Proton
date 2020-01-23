@@ -1,0 +1,47 @@
+From: Alistair Leslie-Hughes <leslie_alistair@hotmail.com>
+Subject: [PATCH] include: Add enum DBPROPFLAGSENUM
+Message-Id: <PS2P216MB0417C29B7D7F64A7BAB8862C930D0@PS2P216MB0417.KORP216.PROD.OUTLOOK.COM>
+Date: Tue, 21 Jan 2020 23:44:01 +0000
+In-Reply-To: <20200121234342.367016-1-leslie_alistair@hotmail.com>
+References: <20200121234342.367016-1-leslie_alistair@hotmail.com>
+
+Signed-off-by: Alistair Leslie-Hughes <leslie_alistair@hotmail.com>
+---
+ include/dbs.idl | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
+
+diff --git a/include/dbs.idl b/include/dbs.idl
+index d04aa09ff1..65fd5b1d36 100644
+--- a/include/dbs.idl
++++ b/include/dbs.idl
+@@ -95,6 +95,24 @@ typedef struct tagDBPROPSET {
+ 
+ typedef DWORD DBPROPFLAGS;
+ 
++enum DBPROPFLAGSENUM
++{
++    DBPROPFLAGS_NOTSUPPORTED     = 0x0000,
++    DBPROPFLAGS_COLUMN           = 0x0001,
++    DBPROPFLAGS_DATASOURCE       = 0x0002,
++    DBPROPFLAGS_DATASOURCECREATE = 0x0004,
++    DBPROPFLAGS_DATASOURCEINFO   = 0x0008,
++    DBPROPFLAGS_DBINIT           = 0x0010,
++    DBPROPFLAGS_INDEX            = 0x0020,
++    DBPROPFLAGS_ROWSET           = 0x0040,
++    DBPROPFLAGS_TABLE            = 0x0080,
++    DBPROPFLAGS_COLUMNOK         = 0x0100,
++    DBPROPFLAGS_READ             = 0x0200,
++    DBPROPFLAGS_WRITE            = 0x0400,
++    DBPROPFLAGS_REQUIRED         = 0x0800,
++    DBPROPFLAGS_SESSION          = 0x1000,
++};
++
+ typedef struct tagDBPROPINFO {
+     LPOLESTR pwszDescription;
+     DBPROPID dwPropertyID;
+
+-- 
+2.24.1
+
+
+
