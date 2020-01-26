@@ -1,9 +1,4 @@
 #!/bin/bash
-    # Steam Helper patch - currently broken
-    cd steam_helper
-    git checkout steam.cpp
-    #patch -Np1 < ../game-patches-testing/proton-hotfixes/steam-helper.patch
-    cd ..
 
     # VKD3D patches
     cd vkd3d
@@ -52,7 +47,10 @@
     -W user32-rawinput-nolegacy \
     -W user32-rawinput-mouse-experimental \
     -W user32-rawinput-hid \
-    -W winex11-key_translation
+    -W winex11-key_translation 
+
+    #wine hotfixes
+    patch -Np1 < ../game-patches-testing/wine-patches/xinput-impl_xinputgetkeystroke.patch
 
     #VKD3D-WINE
     #Don't apply these for now,they are part of the wow patches
@@ -67,14 +65,11 @@
     #WINE FAUDIO
     echo "applying faudio patches"
     patch -Np1 < ../game-patches-testing/faudio-patches/faudio-ffmpeg.patch
-    patch -Np1 < ../game-patches-testing/audio-temp/1.patch
-    patch -Np1 < ../game-patches-testing/audio-temp/2.patch
-    patch -Np1 < ../game-patches-testing/audio-temp/3.patch
-    patch -Np1 < ../game-patches-testing/audio-temp/4.patch
-    patch -Np1 < ../game-patches-testing/audio-temp/1_1.patch
-    patch -Np1 < ../game-patches-testing/audio-temp/1_2.patch
-    patch -Np1 < ../game-patches-testing/audio-temp/1_3.patch
-    patch -Np1 < ../game-patches-testing/audio-temp/1_4.patch
+    #patch -Np1 < ../game-patches-testing/audio-temp/1_0.patch
+    #patch -Np1 < ../game-patches-testing/audio-temp/1_1.patch
+    #patch -Np1 < ../game-patches-testing/audio-temp/1_2.patch
+    #patch -Np1 < ../game-patches-testing/audio-temp/1_3.patch
+    #patch -Np1 < ../game-patches-testing/audio-temp/1_4.patch
 
 
     #WINE GAME PATCHES
@@ -124,7 +119,7 @@
     echo "mk11 patch"
     patch -Np1 < ../game-patches-testing/game-patches/mk11.patch
 
-    echo "clock monotinic, amd ags, hide prefix update"
+    echo "clock monotonic, amd ags, hide prefix update"
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-use_clock_monotonic.patch
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-amd_ags.patch
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-hide_prefix_update_window.patch
@@ -162,7 +157,9 @@
     patch -Np1 < ../game-patches-testing/wine-patches/0001-Add-some-semi-stubs-in-user32.patch
 
     echo "Valve wined3d VR patches"
-    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-wined3d.patch
+    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-wined3d.patch 
+    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-wined3d_2.patch 
+    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-wined3d_3.patch
 
     #WINE CUSTOM PATCHES
     #add your own custom patch lines below

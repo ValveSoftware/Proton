@@ -18,7 +18,7 @@ from filelock import FileLock
 #To enable debug logging, copy "user_settings.sample.py" to "user_settings.py"
 #and edit it if needed.
 
-CURRENT_PREFIX_VERSION="5.0-rc5-GE-1"
+CURRENT_PREFIX_VERSION="5.0-GE-1"
 
 PFX="Proton: "
 ld_path_var = "LD_LIBRARY_PATH"
@@ -341,10 +341,20 @@ class CompatData:
 
             if "wined3d" in g_session.compat_config:
                 dxvkfiles = ["dxvk_config"]
-                wined3dfiles = ["d3d11", "d3d10", "d3d10core", "d3d10_1", "d3d9", "dxgi"]
+                wined3dfiles = ["d3d11", "d3d10", "d3d10core", "d3d10_1", "d3d9"]
             else:
-                dxvkfiles = ["dxvk_config", "d3d11", "d3d10", "d3d10core", "d3d10_1", "d3d9", "dxgi"]
+                dxvkfiles = ["dxvk_config", "d3d11", "d3d10", "d3d10core", "d3d10_1"]
                 wined3dfiles = []
+                if "d9vk" in g_session.compat_config:
+                    dxvkfiles.append("d3d9")
+                else:
+                    wined3dfiles.append("d3d9")
+
+            #if the user asked for dxvk's dxgi (dxgi=n), then copy it into place
+            if "WINEDLLOVERRIDES" in os.environ and "dxgi=n" in os.environ["WINEDLLOVERRIDES"]:
+                dxvkfiles.append("dxgi")
+            else:
+                wined3dfiles.append("dxgi")
 
             for f in wined3dfiles:
                 try_copy(g_proton.default_pfx_dir + "drive_c/windows/system32/" + f + ".dll",
@@ -748,3 +758,4 @@ if __name__ == "__main__":
 
 #pylint --disable=C0301,C0326,C0330,C0111,C0103,R0902,C1801,R0914,R0912,R0915
 # vim: set syntax=python:
+

@@ -1,35 +1,44 @@
 From: Alistair Leslie-Hughes <leslie_alistair@hotmail.com>
-Subject: [PATCH 1/4] include: Add xact.idl
-Message-Id: <PS2P216MB041738C0AC1C16A75FB7B0C2930C0@PS2P216MB0417.KORP216.PROD.OUTLOOK.COM>
-Date: Wed, 22 Jan 2020 00:12:10 +0000
+Subject: [PATCH v2 2/2] include: Add xact.idl
+Message-Id: <PS2P216MB04174A95007A6E63DE663A16930C0@PS2P216MB0417.KORP216.PROD.OUTLOOK.COM>
+Date: Wed, 22 Jan 2020 22:04:19 +0000
+In-Reply-To: <20200122220403.19789-1-leslie_alistair@hotmail.com>
+References: <20200122220403.19789-1-leslie_alistair@hotmail.com>
 
 From: Ethan Lee <elee@codeweavers.com>
+
+v2: Use a xact3wb.h for the structures that use :X syntax, which is the
+     same as windows.
+    #if 0 these structures and removed the union part with a equal size value.
+
+Windows only exposes the lastest IXACT3Engine, we'll have to use a
+private idl to define the other versions.
 
 Signed-off-by: Alistair Leslie-Hughes <leslie_alistair@hotmail.com>
 ---
  include/Makefile.in |   1 +
- include/xact3.idl   | 560 ++++++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 561 insertions(+)
+ include/xact3.idl   | 547 ++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 548 insertions(+)
  create mode 100644 include/xact3.idl
 
 diff --git a/include/Makefile.in b/include/Makefile.in
-index 8284d6fdf3..01fc25ebf8 100644
+index 5dac4e66d5..ee62a2ce70 100644
 --- a/include/Makefile.in
 +++ b/include/Makefile.in
-@@ -772,6 +772,7 @@ SOURCES = \
+@@ -771,6 +771,7 @@ SOURCES = \
  	wtypes.idl \
  	wuapi.idl \
  	x3daudio.h \
 +	xact3.idl \
+ 	xact3wb.h \
  	xapo.idl \
  	xapofx.h \
- 	xaudio2.idl \
 diff --git a/include/xact3.idl b/include/xact3.idl
 new file mode 100644
-index 0000000000..eaab56203c
+index 0000000000..85b18d0b9f
 --- /dev/null
 +++ b/include/xact3.idl
-@@ -0,0 +1,560 @@
+@@ -0,0 +1,547 @@
 +/*
 + * Copyright (c) 2018 Ethan Lee for CodeWeavers
 + *
@@ -50,6 +59,8 @@ index 0000000000..eaab56203c
 +
 +import "unknwn.idl";
 +import "xaudio2.idl";
++
++cpp_quote("#include \"xact3wb.h\"")
 +
 +[
 +    uuid(bcc782bc-6492-4c22-8c35-f5d72fe73c6e)
@@ -131,7 +142,8 @@ index 0000000000..eaab56203c
 +    WORD packetSize;
 +} XACT_STREAMING_PARAMETERS;
 +
-+cpp_quote("#include <pshpack1.h>")
++/* defined in xact3wb.h */
++cpp_quote("#if 0")
 +
 +typedef struct WAVEBANKREGION
 +{
@@ -147,34 +159,18 @@ index 0000000000..eaab56203c
 +
 +typedef union WAVEBANKMINIWAVEFORMAT
 +{
-+    union /* struct */
-+    {
-+        DWORD wFormatTag; /* : 2; */
-+        DWORD nChannels; /* : 3; */
-+        DWORD nSamplesPerSec; /* : 18; */
-+        DWORD wBlockAlign; /* : 8; */
-+        DWORD wBitsPerSample; /* : 1; */
-+    } NONAMELESSUNION;
 +    DWORD dwValue;
 +} WAVEBANKMINIWAVEFORMAT;
 +
 +typedef struct WAVEBANKENTRY
 +{
-+    union
-+    {
-+        union /* struct */
-+        {
-+            DWORD dwFlags; /* : 4; */
-+            DWORD Duration; /* : 28; */
-+        } NONAMELESSUNION;
-+        DWORD dwFlagsAndDuration;
-+    };
++    DWORD dwFlagsAndDuration;    /* Is a union */
 +    WAVEBANKMINIWAVEFORMAT Format;
 +    WAVEBANKREGION PlayRegion;
 +    WAVEBANKSAMPLEREGION LoopRegion;
 +} WAVEBANKENTRY;
 +
-+cpp_quote("#include <poppack.h>")
++cpp_quote("#endif")
 +
 +typedef struct XACT_WAVE_PROPERTIES
 +{
@@ -592,7 +588,7 @@ index 0000000000..eaab56203c
 +}
 
 -- 
-2.24.1
+2.17.1
 
 
 

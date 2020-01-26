@@ -1,0 +1,861 @@
+From 154d2f3e258875f339b368c6c707eeda6be8ef7c Mon Sep 17 00:00:00 2001
+From: Andrew Eikum <aeikum@codeweavers.com>
+Date: Tue, 10 Dec 2019 09:17:13 -0600
+Subject: [PATCH] wined3d: Use dxvk_config library to load DXVK options
+
+---
+ dlls/wined3d/Makefile.in               |   5 -
+ dlls/wined3d/directx.c                 |  68 +++--
+ dlls/wined3d/dxvk/config.cpp           | 332 -------------------------
+ dlls/wined3d/dxvk/config.h             | 172 -------------
+ dlls/wined3d/dxvk/dxvk.cpp             |  20 --
+ dlls/wined3d/dxvk/dxvk.h               |   9 -
+ dlls/wined3d/dxvk/dxvk_appdefaults.cpp | 153 ------------
+ 7 files changed, 50 insertions(+), 709 deletions(-)
+ delete mode 100644 dlls/wined3d/dxvk/config.cpp
+ delete mode 100644 dlls/wined3d/dxvk/config.h
+ delete mode 100644 dlls/wined3d/dxvk/dxvk.cpp
+ delete mode 100644 dlls/wined3d/dxvk/dxvk.h
+ delete mode 100644 dlls/wined3d/dxvk/dxvk_appdefaults.cpp
+
+diff --git a/dlls/wined3d/Makefile.in b/dlls/wined3d/Makefile.in
+index 4024f187948..7ebd0106502 100644
+--- a/dlls/wined3d/Makefile.in
++++ b/dlls/wined3d/Makefile.in
+@@ -1,7 +1,6 @@
+ MODULE    = wined3d.dll
+ IMPORTLIB = wined3d
+ IMPORTS   = opengl32 user32 gdi32 advapi32
+-EXTRALIBS = -lstdc++
+ 
+ C_SRCS = \
+ 	adapter_gl.c \
+@@ -33,8 +32,4 @@ C_SRCS = \
+ 	view.c \
+ 	wined3d_main.c
+ 
+-CPP_SRCS = \
+-	dxvk/config.cpp \
+-	dxvk/dxvk.cpp
+-
+ RC_SRCS = version.rc
+diff --git a/dlls/wined3d/directx.c b/dlls/wined3d/directx.c
+index 46b6d5949b5..8ee1b87a25e 100644
+--- a/dlls/wined3d/directx.c
++++ b/dlls/wined3d/directx.c
+@@ -27,8 +27,6 @@
+ #include "wined3d_private.h"
+ #include "winternl.h"
+ 
+-#include "dxvk/dxvk.h"
+-
+ WINE_DEFAULT_DEBUG_CHANNEL(d3d);
+ WINE_DECLARE_DEBUG_CHANNEL(winediag);
+ 
+@@ -1231,20 +1229,45 @@ HRESULT CDECL wined3d_set_adapter_display_mode(struct wined3d *wined3d,
+     return WINED3D_OK;
+ }
+ 
++/* from dxvk_config.h, not available at wine build time in Proton */
++struct DXVKOptions {
++    int32_t customVendorId;
++    int32_t customDeviceId;
++    int32_t nvapiHack;
++};
++static HRESULT (WINAPI *pDXVKGetOptions)(struct DXVKOptions *out_opts);
++static HMODULE dxvk_config_mod;
++
++static BOOL WINAPI load_dxvk_config(INIT_ONCE *once, void *param, void **context)
++{
++    dxvk_config_mod = LoadLibraryA("dxvk_config.dll");
++    if(!dxvk_config_mod)
++    {
++        ERR_(winediag)("Couldn't load dxvk_config.dll, won't apply default DXVK config options\n");
++        return TRUE;
++    }
++
++    pDXVKGetOptions = (void*)GetProcAddress(dxvk_config_mod, "DXVKGetOptions");
++    if(!pDXVKGetOptions)
++    {
++        ERR_(winediag)("dxvk_config doesn't have DXVKGetOptions?!\n");
++        return TRUE;
++    }
++
++    return TRUE;
++}
++
+ HRESULT CDECL wined3d_get_adapter_identifier(const struct wined3d *wined3d,
+         UINT adapter_idx, DWORD flags, struct wined3d_adapter_identifier *identifier)
+ {
+     const struct wined3d_adapter *adapter;
++    static INIT_ONCE init_once = INIT_ONCE_STATIC_INIT;
+     struct DXVKOptions dxvk_opts;
+ 
+     TRACE("wined3d %p, adapter_idx %u, flags %#x, identifier %p.\n",
+             wined3d, adapter_idx, flags, identifier);
+ 
+-    dxvk_get_options(&dxvk_opts);
+-    TRACE("got dxvk options:\n");
+-    TRACE("\tnvapiHack: %u\n", dxvk_opts.nvapiHack);
+-    TRACE("\tcustomVendorId: 0x%04x\n", dxvk_opts.customVendorId);
+-    TRACE("\tcustomDeviceId: 0x%04x\n", dxvk_opts.customDeviceId);
++    InitOnceExecuteOnce(&init_once, load_dxvk_config, NULL, NULL);
+ 
+     wined3d_mutex_lock();
+ 
+@@ -1272,19 +1295,28 @@ HRESULT CDECL wined3d_get_adapter_identifier(const struct wined3d *wined3d,
+     identifier->vendor_id = adapter->driver_info.vendor;
+     identifier->device_id = adapter->driver_info.device;
+ 
+-    /* logic from dxvk/src/dxgi/dxgi_adapter.cpp:DxgiAdapter::GetDesc2 */
+-    if (dxvk_opts.customVendorId >= 0)
+-        identifier->vendor_id = dxvk_opts.customVendorId;
++    if(pDXVKGetOptions && pDXVKGetOptions(&dxvk_opts) == S_OK)
++    {
++        TRACE("got dxvk options:\n");
++        TRACE("\tnvapiHack: %u\n", dxvk_opts.nvapiHack);
++        TRACE("\tcustomVendorId: 0x%04x\n", dxvk_opts.customVendorId);
++        TRACE("\tcustomDeviceId: 0x%04x\n", dxvk_opts.customDeviceId);
+ 
+-    if (dxvk_opts.customDeviceId >= 0)
+-        identifier->device_id = dxvk_opts.customDeviceId;
++        /* logic from dxvk/src/dxgi/dxgi_adapter.cpp:DxgiAdapter::GetDesc2 */
++        if (dxvk_opts.customVendorId >= 0)
++            identifier->vendor_id = dxvk_opts.customVendorId;
+ 
+-    if (dxvk_opts.customVendorId < 0 && dxvk_opts.customDeviceId < 0 &&
+-            dxvk_opts.nvapiHack && adapter->driver_info.vendor == HW_VENDOR_NVIDIA) {
+-        TRACE("NvAPI workaround enabled, reporting AMD GPU\n");
+-        identifier->vendor_id = HW_VENDOR_AMD;
+-        identifier->device_id = CARD_AMD_RADEON_RX_480;
+-    }
++        if (dxvk_opts.customDeviceId >= 0)
++            identifier->device_id = dxvk_opts.customDeviceId;
++
++        if (dxvk_opts.customVendorId < 0 && dxvk_opts.customDeviceId < 0 &&
++                dxvk_opts.nvapiHack && adapter->driver_info.vendor == HW_VENDOR_NVIDIA) {
++            TRACE("NvAPI workaround enabled, reporting AMD GPU\n");
++            identifier->vendor_id = HW_VENDOR_AMD;
++            identifier->device_id = CARD_AMD_RADEON_RX_480;
++        }
++    }else
++        WARN("failed to get DXVK options!\n");
+ 
+     identifier->subsystem_id = 0;
+     identifier->revision = 0;
+diff --git a/dlls/wined3d/dxvk/config.cpp b/dlls/wined3d/dxvk/config.cpp
+deleted file mode 100644
+index a819e25ebb7..00000000000
+--- a/dlls/wined3d/dxvk/config.cpp
++++ /dev/null
+@@ -1,332 +0,0 @@
+-/*
+-                  Copyright (c) 2017-2019 Philip Rebohle
+-
+-                          zlib/libpng license
+-
+-This software is provided 'as-is', without any express or implied
+-warranty. In no event will the authors be held liable for any damages
+-arising from the use of this software.
+-
+-Permission is granted to anyone to use this software for any purpose,
+-including commercial applications, and to alter it and redistribute it
+-freely, subject to the following restrictions:
+-
+-– The origin of this software must not be misrepresented; you must not
+-  claim that you wrote the original software. If you use this software
+-  in a product, an acknowledgment in the product documentation would be
+-  appreciated but is not required.
+-
+-– Altered source versions must be plainly marked as such, and must not
+-  be misrepresented as being the original software.
+-
+-– This notice may not be removed or altered from any source distribution.
+-*/
+-
+-#include <fstream>
+-#include <sstream>
+-#include <iostream>
+-#include <regex>
+-
+-#include "config.h"
+-
+-extern "C" {
+-#include <windows.h>
+-}
+-
+-namespace dxvk {
+-
+-  /* from dxvk::str */
+-  static std::string fromws(const WCHAR *ws) {
+-    size_t len = ::WideCharToMultiByte(CP_ACP,
+-      0, ws, -1, nullptr, 0, nullptr, nullptr);
+-
+-    if (len <= 1)
+-      return "";
+-
+-    len -= 1;
+-
+-    std::string result;
+-    result.resize(len);
+-    ::WideCharToMultiByte(CP_ACP, 0, ws, -1,
+-      &result.at(0), len, nullptr, nullptr);
+-    return result;
+-  }
+-
+-  /* from dxvk::env */
+-  static std::string getEnvVar(const char* name) {
+-    char* result = std::getenv(name);
+-    return (result)
+-      ? result
+-      : "";
+-  }
+-  
+-  
+-  std::string getExePath() {
+-    std::vector<WCHAR> exePath;
+-    exePath.resize(MAX_PATH + 1);
+-
+-    DWORD len = ::GetModuleFileNameW(NULL, exePath.data(), MAX_PATH);
+-    exePath.resize(len);
+-
+-    return fromws(exePath.data());
+-  }
+-
+-  static std::string getExeName() {
+-    std::string fullPath = getExePath();
+-    auto n = fullPath.find_last_of('\\');
+-    
+-    return (n != std::string::npos)
+-      ? fullPath.substr(n + 1)
+-      : fullPath;
+-  }
+-
+-#include "dxvk_appdefaults.cpp"
+-
+-  int32_t parsePciId(const std::string& str)
+-  {
+-    if (str.size() != 4)
+-      return -1;
+-    
+-    int32_t id = 0;
+-  
+-    for (size_t i = 0; i < str.size(); i++) {
+-      id *= 16;
+-  
+-      if (str[i] >= '0' && str[i] <= '9')
+-        id += str[i] - '0';
+-      else if (str[i] >= 'A' && str[i] <= 'F')
+-        id += str[i] - 'A' + 10;
+-      else if (str[i] >= 'a' && str[i] <= 'f')
+-        id += str[i] - 'a' + 10;
+-      else
+-        return -1;
+-    }
+-  
+-    return id;
+-  }
+-
+-  static bool isWhitespace(char ch) {
+-    return ch == ' ' || ch == '\x9' || ch == '\r';
+-  }
+-
+-  
+-  static bool isValidKeyChar(char ch) {
+-    return (ch >= '0' && ch <= '9')
+-        || (ch >= 'A' && ch <= 'Z')
+-        || (ch >= 'a' && ch <= 'z')
+-        || (ch == '.' || ch == '_');
+-  }
+-
+-
+-  static size_t skipWhitespace(const std::string& line, size_t n) {
+-    while (n < line.size() && isWhitespace(line[n]))
+-      n += 1;
+-    return n;
+-  }
+-
+-
+-  struct ConfigContext {
+-    bool active;
+-  };
+-
+-
+-  static void parseUserConfigLine(Config& config, ConfigContext& ctx, const std::string& line) {
+-    std::stringstream key;
+-    std::stringstream value;
+-
+-    // Extract the key
+-    size_t n = skipWhitespace(line, 0);
+-
+-    if (n < line.size() && line[n] == '[') {
+-      n += 1;
+-
+-      size_t e = line.size() - 1;
+-      while (e > n && line[e] != ']')
+-        e -= 1;
+-
+-      while (n < e)
+-        key << line[n++];
+-      
+-      ctx.active = key.str() == getExeName();
+-    } else {
+-      while (n < line.size() && isValidKeyChar(line[n]))
+-        key << line[n++];
+-      
+-      // Check whether the next char is a '='
+-      n = skipWhitespace(line, n);
+-      if (n >= line.size() || line[n] != '=')
+-        return;
+-
+-      // Extract the value
+-      n = skipWhitespace(line, n + 1);
+-      while (n < line.size() && !isWhitespace(line[n]))
+-        value << line[n++];
+-      
+-      if (ctx.active)
+-        config.setOption(key.str(), value.str());
+-    }
+-  }
+-
+-
+-  Config::Config() { }
+-  Config::~Config() { }
+-
+-
+-  Config::Config(OptionMap&& options)
+-  : m_options(std::move(options)) { }
+-
+-
+-  void Config::merge(const Config& other) {
+-    for (auto& pair : other.m_options)
+-      m_options.insert(pair);
+-  }
+-
+-
+-  void Config::setOption(const std::string& key, const std::string& value) {
+-    m_options[key] = value;
+-  }
+-
+-
+-  std::string Config::getOptionValue(const char* option) const {
+-    auto iter = m_options.find(option);
+-
+-    return iter != m_options.end()
+-      ? iter->second : std::string();
+-  }
+-
+-
+-  bool Config::parseOptionValue(
+-    const std::string&  value,
+-          std::string&  result) {
+-    result = value;
+-    return true;
+-  }
+-
+-
+-  bool Config::parseOptionValue(
+-    const std::string&  value,
+-          bool&         result) {
+-    if (value == "True") {
+-      result = true;
+-      return true;
+-    } else if (value == "False") {
+-      result = false;
+-      return true;
+-    } else {
+-      return false;
+-    }
+-  }
+-
+-
+-  bool Config::parseOptionValue(
+-    const std::string&  value,
+-          int32_t&      result) {
+-    if (value.size() == 0)
+-      return false;
+-    
+-    // Parse sign, don't allow '+'
+-    int32_t sign = 1;
+-    size_t start = 0;
+-
+-    if (value[0] == '-') {
+-      sign = -1;
+-      start = 1;
+-    }
+-
+-    // Parse absolute number
+-    int32_t intval = 0;
+-
+-    for (size_t i = start; i < value.size(); i++) {
+-      if (value[i] < '0' || value[i] > '9')
+-        return false;
+-      
+-      intval *= 10;
+-      intval += value[i] - '0';
+-    }
+-
+-    // Apply sign and return
+-    result = sign * intval;
+-    return true;
+-  }
+-  
+-  
+-  bool Config::parseOptionValue(
+-    const std::string&  value,
+-          Tristate&     result) {
+-    if (value == "True") {
+-      result = Tristate::True;
+-      return true;
+-    } else if (value == "False") {
+-      result = Tristate::False;
+-      return true;
+-    } else if (value == "Auto") {
+-      result = Tristate::Auto;
+-      return true;
+-    } else {
+-      return false;
+-    }
+-  }
+-
+-
+-  Config Config::getAppConfig(const std::string& appName) {
+-    auto appConfig = std::find_if(g_appDefaults.begin(), g_appDefaults.end(),
+-      [&appName] (const std::pair<const char*, Config>& pair) {
+-        std::regex expr(pair.first, std::regex::extended | std::regex::icase);
+-        return std::regex_search(appName, expr);
+-      });
+-    
+-    if (appConfig != g_appDefaults.end()) {
+-      // Inform the user that we loaded a default config
+-/*      Logger::info(str::format("Found built-in config:")); */
+-      return appConfig->second;
+-    }
+-
+-    return Config();
+-  }
+-
+-
+-  Config Config::getUserConfig() {
+-    Config config;
+-
+-    // Load either $DXVK_CONFIG_FILE or $PWD/dxvk.conf
+-    std::string filePath = getEnvVar("DXVK_CONFIG_FILE");
+-
+-    if (filePath == "")
+-      filePath = "dxvk.conf";
+-    
+-    // Open the file if it exists
+-    std::ifstream stream(filePath);
+-
+-    if (!stream)
+-      return config;
+-    
+-    // Inform the user that we loaded a file, might
+-    // help when debugging configuration issues
+-/*    Logger::info(str::format("Found config file: ", filePath)); */
+-
+-    // Initialize parser context
+-    ConfigContext ctx;
+-    ctx.active = true;
+-
+-    // Parse the file line by line
+-    std::string line;
+-
+-    while (std::getline(stream, line))
+-      parseUserConfigLine(config, ctx, line);
+-    
+-    return config;
+-  }
+-
+-
+-  void Config::logOptions() const {
+-/*
+-    if (!m_options.empty()) {
+-      Logger::info("Effective configuration:");
+-
+-      for (auto& pair : m_options)
+-        Logger::info(str::format("  ", pair.first, " = ", pair.second));
+-    }
+-*/
+-  }
+-
+-}
+diff --git a/dlls/wined3d/dxvk/config.h b/dlls/wined3d/dxvk/config.h
+deleted file mode 100644
+index 0f241dc97bc..00000000000
+--- a/dlls/wined3d/dxvk/config.h
++++ /dev/null
+@@ -1,172 +0,0 @@
+-/*
+-                  Copyright (c) 2017-2019 Philip Rebohle
+-
+-                          zlib/libpng license
+-
+-This software is provided 'as-is', without any express or implied
+-warranty. In no event will the authors be held liable for any damages
+-arising from the use of this software.
+-
+-Permission is granted to anyone to use this software for any purpose,
+-including commercial applications, and to alter it and redistribute it
+-freely, subject to the following restrictions:
+-
+-– The origin of this software must not be misrepresented; you must not
+-  claim that you wrote the original software. If you use this software
+-  in a product, an acknowledgment in the product documentation would be
+-  appreciated but is not required.
+-
+-– Altered source versions must be plainly marked as such, and must not
+-  be misrepresented as being the original software.
+-
+-– This notice may not be removed or altered from any source distribution.
+-*/
+-
+-#pragma once
+-
+-#include <string>
+-#include <unordered_map>
+-
+-namespace dxvk {
+-
+-  std::string getExePath();
+-  int32_t parsePciId(const std::string& str);
+-
+-  /**
+-   * \brief Tri-state
+-   * 
+-   * Used to conditionally override
+-   * booleans if desired.
+-   */
+-  enum class Tristate : int32_t {
+-    Auto  = -1,
+-    False =  0,
+-    True  =  1,
+-  };
+-
+-  /**
+-   * \brief Config option set
+-   * 
+-   * Stores configuration options
+-   * as a set of key-value pairs.
+-   */
+-  class Config {
+-    using OptionMap = std::unordered_map<std::string, std::string>;
+-  public:
+-
+-    Config();
+-    Config(OptionMap&& options);
+-    ~Config();
+-
+-    /**
+-     * \brief Merges two configuration sets
+-     * 
+-     * Options specified in this config object will
+-     * not be overridden if they are specified in
+-     * the second config object.
+-     * \param [in] other Config set to merge.
+-     */
+-    void merge(const Config& other);
+-
+-    /**
+-     * \brief Sets an option
+-     * 
+-     * \param [in] key Option name
+-     * \param [in] value Option value
+-     */
+-    void setOption(
+-      const std::string& key,
+-      const std::string& value);
+-
+-    /**
+-     * \brief Parses an option value
+-     *
+-     * Retrieves the option value as a string, and then
+-     * tries to convert that string to the given type.
+-     * If parsing the string fails because it is either
+-     * invalid or if the option is not defined, this
+-     * method will return a fallback value.
+-     * 
+-     * Currently, this supports the types \c bool,
+-     * \c int32_t, and \c std::string.
+-     * \tparam T Return value type
+-     * \param [in] option Option name
+-     * \param [in] fallback Fallback value
+-     * \returns Parsed option value
+-     * \returns The parsed option value
+-     */
+-    template<typename T>
+-    T getOption(const char* option, T fallback = T()) const {
+-      const std::string& value = getOptionValue(option);
+-
+-      T result = fallback;
+-      parseOptionValue(value, result);
+-      return result;
+-    }
+-
+-    /**
+-     * \brief Logs option values
+-     * 
+-     * Prints the effective configuration
+-     * to the log for debugging purposes. 
+-     */
+-    void logOptions() const;
+-
+-    /**
+-     * \brief Retrieves default options for an app
+-     * 
+-     * \param [in] appName Name of the application
+-     * \returns Default options for the application
+-     */
+-    static Config getAppConfig(const std::string& appName);
+-
+-    /**
+-     * \brief Retrieves user configuration
+-     * 
+-     * Reads options from the configuration file,
+-     * if it can be found, or an empty option set.
+-     * \returns User-defined configuration options
+-     */
+-    static Config getUserConfig();
+-
+-  private:
+-
+-    OptionMap m_options;
+-
+-    std::string getOptionValue(
+-      const char*         option) const;
+-
+-    static bool parseOptionValue(
+-      const std::string&  value,
+-            std::string&  result);
+-
+-    static bool parseOptionValue(
+-      const std::string&  value,
+-            bool&         result);
+-
+-    static bool parseOptionValue(
+-      const std::string&  value,
+-            int32_t&      result);
+-    
+-    static bool parseOptionValue(
+-      const std::string&  value,
+-            Tristate&     result);
+-
+-  };
+-
+-
+-  /**
+-   * \brief Applies tristate option
+-   * 
+-   * Overrides the given value if \c state is
+-   * \c True or \c False, and leaves it intact
+-   * otherwise.
+-   * \param [out] option The value to override
+-   * \param [in] state Tristate to apply
+-   */
+-  inline void applyTristate(bool& option, Tristate state) {
+-    option &= state != Tristate::False;
+-    option |= state == Tristate::True;
+-  }
+-
+-}
+diff --git a/dlls/wined3d/dxvk/dxvk.cpp b/dlls/wined3d/dxvk/dxvk.cpp
+deleted file mode 100644
+index 0101c7cc5a3..00000000000
+--- a/dlls/wined3d/dxvk/dxvk.cpp
++++ /dev/null
+@@ -1,20 +0,0 @@
+-/* C-lang interface to DXVK's C++ implementation */
+-
+-#include "config.h"
+-
+-extern "C" {
+-
+-#include "dxvk.h"
+-
+-void dxvk_get_options(struct DXVKOptions *opts)
+-{
+-    dxvk::Config config(dxvk::Config::getUserConfig());
+-
+-    config.merge(dxvk::Config::getAppConfig(dxvk::getExePath()));
+-
+-    opts->nvapiHack = config.getOption<bool>("dxgi.nvapiHack", true) ? 1 : 0;
+-    opts->customVendorId = dxvk::parsePciId(config.getOption<std::string>("dxgi.customVendorId"));
+-    opts->customDeviceId = dxvk::parsePciId(config.getOption<std::string>("dxgi.customDeviceId"));
+-}
+-
+-}
+diff --git a/dlls/wined3d/dxvk/dxvk.h b/dlls/wined3d/dxvk/dxvk.h
+deleted file mode 100644
+index 7f26f39b810..00000000000
+--- a/dlls/wined3d/dxvk/dxvk.h
++++ /dev/null
+@@ -1,9 +0,0 @@
+-/* C-lang interface to DXVK's C++ implementation */
+-
+-struct DXVKOptions {
+-    int32_t customVendorId;
+-    int32_t customDeviceId;
+-    int nvapiHack;
+-};
+-
+-void dxvk_get_options(struct DXVKOptions *);
+diff --git a/dlls/wined3d/dxvk/dxvk_appdefaults.cpp b/dlls/wined3d/dxvk/dxvk_appdefaults.cpp
+deleted file mode 100644
+index 9e302284941..00000000000
+--- a/dlls/wined3d/dxvk/dxvk_appdefaults.cpp
++++ /dev/null
+@@ -1,153 +0,0 @@
+-/*
+-                  Copyright (c) 2017-2019 Philip Rebohle
+-
+-                          zlib/libpng license
+-
+-This software is provided 'as-is', without any express or implied
+-warranty. In no event will the authors be held liable for any damages
+-arising from the use of this software.
+-
+-Permission is granted to anyone to use this software for any purpose,
+-including commercial applications, and to alter it and redistribute it
+-freely, subject to the following restrictions:
+-
+-– The origin of this software must not be misrepresented; you must not
+-  claim that you wrote the original software. If you use this software
+-  in a product, an acknowledgment in the product documentation would be
+-  appreciated but is not required.
+-
+-– Altered source versions must be plainly marked as such, and must not
+-  be misrepresented as being the original software.
+-
+-– This notice may not be removed or altered from any source distribution.
+-*/
+-
+-  const static std::vector<std::pair<const char*, Config>> g_appDefaults = {{
+-    /* Assassin's Creed Syndicate: amdags issues  */
+-    { R"(\\ACS\.exe$)", {{
+-      { "dxgi.customVendorId",              "10de" },
+-    }} },
+-    /* Dissidia Final Fantasy NT Free Edition */
+-    { R"(\\dffnt\.exe$)", {{
+-      { "dxgi.deferSurfaceCreation",        "True" },
+-    }} },
+-    /* Elite Dangerous: Compiles weird shaders    *
+-     * when running on AMD hardware               */
+-    { R"(\\EliteDangerous64\.exe$)", {{
+-      { "dxgi.customVendorId",              "10de" },
+-    }} },
+-    /* The Vanishing of Ethan Carter Redux        */
+-    { R"(\\EthanCarter-Win64-Shipping\.exe$)", {{
+-      { "dxgi.customVendorId",              "10de" },
+-    }} },
+-    /* The Evil Within: Submits command lists     * 
+-     * multiple times                             */
+-    { R"(\\EvilWithin(Demo)?\.exe$)", {{
+-      { "d3d11.dcSingleUseMode",            "False" },
+-    }} },
+-    /* Far Cry 3: Assumes clear(0.5) on an UNORM  *
+-     * format to result in 128 on AMD and 127 on  *
+-     * Nvidia. We assume that the Vulkan drivers  *
+-     * match the clear behaviour of D3D11.        */
+-    { R"(\\(farcry3|fc3_blooddragon)_d3d11\.exe$)", {{
+-      { "dxgi.nvapiHack",                   "False" },
+-    }} },
+-    /* Far Cry 4: Same as Far Cry 3               */
+-    { R"(\\FarCry4\.exe$)", {{
+-      { "dxgi.nvapiHack",                   "False" },
+-    }} },
+-    /* Far Cry Primal: Nvidia performance         */
+-    { R"(\\FCPrimal\.exe$)", {{
+-      { "dxgi.nvapiHack",                   "False" },
+-    } }},
+-    /* Frostpunk: Renders one frame with D3D9     *
+-     * after creating the DXGI swap chain         */
+-    { R"(\\Frostpunk\.exe$)", {{
+-      { "dxgi.deferSurfaceCreation",        "True" },
+-    }} },
+-    /* Nioh: See Frostpunk, apparently?           */
+-    { R"(\\nioh\.exe$)", {{
+-      { "dxgi.deferSurfaceCreation",        "True" },
+-    }} },
+-    /* Quantum Break: Mever initializes shared    *
+-     * memory in one of its compute shaders       */
+-    { R"(\\QuantumBreak\.exe$)", {{
+-      { "d3d11.zeroInitWorkgroupMemory",    "True" },
+-    }} },
+-    /* Anno 2205: Random crashes with state cache */
+-    { R"(\\anno2205\.exe$)", {{
+-      { "dxvk.enableStateCache",            "False" },
+-    }} },
+-    /* Fifa '19+: Binds typed buffer SRV to shader *
+-     * that expects raw/structured buffer SRV     */
+-    { R"(\\FIFA(19|[2-9][0-9])(_demo)?\.exe$)", {{
+-      { "dxvk.useRawSsbo",                  "True" },
+-    }} },
+-    /* Final Fantasy XIV: Fix random black blocks */
+-    { R"(\\ffxiv_dx11\.exe$)", {{
+-      { "d3d11.strictDivision",             "True" },
+-    }} },
+-    /* Resident Evil 2: Improve GPU performance   */
+-    { R"(\\re2\.exe$)", {{
+-      { "d3d11.relaxedBarriers",            "True" },
+-    }} },
+-    /* Resident Evil 7                            */
+-    { R"(\\re7\.exe$)", {{
+-      { "d3d11.relaxedBarriers",            "True" },
+-    }} },
+-    /* Devil May Cry 5                            */
+-    { R"(\\DevilMayCry5\.exe$)", {{
+-      { "d3d11.relaxedBarriers",            "True" },
+-    }} },
+-    /* Call of Duty WW2                           */
+-    { R"(\\s2_sp64_ship\.exe$)", {{
+-      { "dxgi.nvapiHack",                   "False" },
+-    }} },
+-    /* Need for Speed 2015                        */
+-    { R"(\\NFS16\.exe$)", {{
+-      { "dxgi.nvapiHack",                   "False" },
+-    }} },
+-    /* Mass Effect Andromeda                      */
+-    { R"(\\MassEffectAndromeda\.exe$)", {{
+-      { "dxgi.nvapiHack",                   "False" },
+-    }} },
+-    /* Mirror`s Edge Catalyst: Crashes on AMD     */
+-    { R"(\\MirrorsEdgeCatalyst(Trial)?\.exe$)", {{
+-      { "dxgi.customVendorId",              "10de" },
+-    }} },
+-    /* Star Wars Battlefront (2015)               */
+-    { R"(\\starwarsbattlefront(trial)?\.exe$)", {{
+-      { "dxgi.nvapiHack",                   "False" },
+-    }} },
+-    /* Dark Souls Remastered                      */
+-    { R"(\\DarkSoulsRemastered\.exe$)", {{
+-      { "d3d11.constantBufferRangeCheck",   "True" },
+-    }} },
+-    /* Grim Dawn                                  */
+-    { R"(\\Grim Dawn\.exe$)", {{
+-      { "d3d11.constantBufferRangeCheck",   "True" },
+-    }} },
+-    /* NieR:Automata                              */
+-    { R"(\\NieRAutomata\.exe$)", {{
+-      { "d3d11.constantBufferRangeCheck",   "True" },
+-    }} },
+-    /* SteamVR performance test                   */
+-    { R"(\\vr\.exe$)", {{
+-      { "d3d11.dcSingleUseMode",            "False" },
+-    }} },
+-    /* Overwatch                                  *
+-     * Broken for at least one user for unknown   *
+-     * reasons, seems to work for others. Just    *
+-     * disable DO_NOT_WAIT to be on the safe side */
+-     { R"(\\Overwatch\.exe$)", {{
+-      { "d3d11.allowMapFlagNoWait",         "False" },
+-     }} },
+-    /* Hitman 2 - requires AGS library            */
+-    { R"(\\HITMAN2\.exe$)", {{
+-      { "dxgi.customVendorId",              "10de" },
+-    }} },
+-    /* Modern Warfare Remastered                  */
+-    { R"(\\h1_[ms]p64_ship\.exe$)", {{
+-      { "dxgi.customVendorId",              "10de" },
+-    }} },
+-  }};

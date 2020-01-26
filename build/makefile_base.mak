@@ -377,7 +377,7 @@ DIST_TARGETS := $(DIST_COPY_TARGETS) $(DIST_OVR32) $(DIST_OVR64) \
                 $(DIST_GECKO32) $(DIST_GECKO64) $(DIST_WINEMONO) \
                 $(DIST_COMPAT_MANIFEST) $(DIST_LICENSE) $(DIST_OFL_LICENSE) $(DIST_FONTS)
 
-DEPLOY_COPY_TARGETS := $(DIST_COPY_TARGETS) $(DIST_VERSION) $(DIST_LICENSE)  $(DIST_OFL_LICENSE)
+DEPLOY_COPY_TARGETS := $(DIST_COPY_TARGETS) $(DIST_VERSION) $(DIST_LICENSE) $(DIST_OFL_LICENSE)
 REDIST_COPY_TARGETS := $(DEPLOY_COPY_TARGETS) $(DIST_COMPAT_MANIFEST)
 
 $(DIST_LICENSE): $(LICENSE)
@@ -798,7 +798,7 @@ steam_configure: $(STEAMEXE_CONFIGURE_FILES)
 
 steam: SHELL = $(CONTAINER_SHELL32)
 steam: $(STEAMEXE_CONFIGURE_FILES) | $(WINE_BUILDTOOLS32) $(filter $(MAKECMDGOALS),wine64 wine32 wine)
-	+env PATH="$(abspath $(TOOLS_DIR32))/bin:$(PATH)" LDFLAGS="-m32" CXXFLAGS="-m32 -std=c++17 -fpermissive -Wno-attributes $(COMMON_FLAGS) -g" CFLAGS="-m32 $(COMMON_FLAGS) -g" \
+	+env PATH="$(abspath $(TOOLS_DIR32))/bin:$(PATH)" LDFLAGS="-m32" CXXFLAGS="-m32 -Wno-attributes $(COMMON_FLAGS) -g" CFLAGS="-m32 $(COMMON_FLAGS) -g" \
 		$(MAKE) -C $(STEAMEXE_OBJ)
 	[ x"$(STRIP)" = x ] || $(STRIP) $(STEAMEXE_OBJ)/steam.exe.so
 	mkdir -pv $(DST_DIR)/lib/wine/
@@ -843,7 +843,7 @@ $(WINE_CONFIGURE_FILES64): $(MAKEFILE_DEP) | faudio64 vkd3d64 $(WINE_OBJ64) biso
 			STRIP=$(STRIP_QUOTED) \
 			BISON=$(abspath $(BISON_BIN64)) \
 			CFLAGS="-I$(abspath $(TOOLS_DIR64))/include -g $(COMMON_FLAGS)" \
-			CXXFLAGS="-I$(abspath $(TOOLS_DIR64))/include -g $(COMMON_FLAGS) -fno-gnu-unique -std=c++17" \
+			CXXFLAGS="-I$(abspath $(TOOLS_DIR64))/include -g $(COMMON_FLAGS) -std=c++17" \
 			LDFLAGS=-L$(abspath $(TOOLS_DIR64))/lib \
 			PKG_CONFIG_PATH=$(abspath $(TOOLS_DIR64))/lib/pkgconfig \
 			CC=$(CC_QUOTED) \
@@ -860,7 +860,7 @@ $(WINE_CONFIGURE_FILES32): $(MAKEFILE_DEP) | faudio32 vkd3d32 $(WINE_OBJ32) biso
 			STRIP=$(STRIP_QUOTED) \
 			BISON=$(abspath $(BISON_BIN32)) \
 			CFLAGS="-I$(abspath $(TOOLS_DIR32))/include -g $(COMMON_FLAGS)" \
-			CXXFLAGS="-I$(abspath $(TOOLS_DIR32))/include -g $(COMMON_FLAGS) -fno-gnu-unique -std=c++17" \
+			CXXFLAGS="-I$(abspath $(TOOLS_DIR32))/include -g $(COMMON_FLAGS) -std=c++17" \
 			LDFLAGS=-L$(abspath $(TOOLS_DIR32))/lib \
 			PKG_CONFIG_PATH=$(abspath $(TOOLS_DIR32))/lib/pkgconfig \
 			CC=$(CC_QUOTED) \
@@ -1207,7 +1207,7 @@ dxvk32: $(DXVK_CONFIGURE_FILES32)
 	cp "$(DXVK_OBJ32)"/bin/d3d10_1.dll "$(DST_DIR)"/lib/wine/dxvk/
 	cp "$(DXVK_OBJ32)"/bin/d3d10core.dll "$(DST_DIR)"/lib/wine/dxvk/
 	cp "$(DXVK_OBJ32)"/bin/d3d9.dll "$(DST_DIR)"/lib/wine/dxvk/
-	cp "$(DXVK_OBJ32)"/bin/dxvk_config.dll "$(DST_DIR)"/lib/wine/dxvk
+	cp "$(DXVK_OBJ32)"/bin/dxvk_config.dll "$(DST_DIR)"/lib/wine/dxvk/
 	if test -e $(SRCDIR)/.git; then ( cd $(SRCDIR) && git submodule status -- dxvk ) > "$(DST_DIR)"/lib/wine/dxvk/version; fi
 
 endif # NO_DXVK
@@ -1497,3 +1497,4 @@ all64_configure: $(GOAL_TARGETS_CONFIGURE64)
 	@echo ":: make $@ succeeded"
 
 endif # End of NESTED_MAKE from beginning
+

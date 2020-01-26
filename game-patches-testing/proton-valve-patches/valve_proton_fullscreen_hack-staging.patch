@@ -6291,3 +6291,26 @@ index fbc6716e94..1ca8c3ed0f 100644
      if (IS_OPTION_TRUE(*buf))
  	CheckDlgButton(dialog, IDC_FULLSCREEN_GRAB, BST_CHECKED);
      else
+From 0f5912efb26db4210f8474dc7d1a998d7a3afa8a Mon Sep 17 00:00:00 2001
+From: Andrew Eikum <aeikum@codeweavers.com>
+Date: Mon, 13 Jan 2020 13:51:42 -0600
+Subject: [PATCH] winex11.drv: Fix Mutter WM check
+
+---
+ dlls/winex11.drv/window.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/dlls/winex11.drv/window.c b/dlls/winex11.drv/window.c
+index 4f244e38e62..2d43f133c7a 100644
+--- a/dlls/winex11.drv/window.c
++++ b/dlls/winex11.drv/window.c
+@@ -125,7 +125,8 @@ BOOL wm_is_mutter(Display *display)
+                     TRACE("Got WM name %s\n", wm_name);
+                     cached = (strcmp(wm_name, "GNOME Shell") == 0) ||
+                         (strcmp(wm_name, "Mutter") == 0);
+-                }
++                }else
++                    cached = 0;
+                 XFree(wm_name);
+             }else
+                 cached = 0;
