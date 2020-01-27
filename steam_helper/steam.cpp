@@ -137,6 +137,11 @@ static WCHAR *find_quote(WCHAR *str)
     return NULL;
 }
 
+static BOOL WINAPI console_ctrl_handler(DWORD dwCtrlType)
+{
+    return TRUE;
+}
+
 static HANDLE run_process(void)
 {
     WCHAR *cmdline = GetCommandLineW();
@@ -242,6 +247,7 @@ static HANDLE run_process(void)
 run:
     WINE_TRACE("Running command %s\n", wine_dbgstr_w(cmdline));
 
+    SetConsoleCtrlHandler( console_ctrl_handler, TRUE );
     if (!CreateProcessW(NULL, cmdline, NULL, NULL, FALSE, flags, NULL, NULL, &si, &pi))
     {
         WINE_ERR("Failed to create process %s: %u\n", wine_dbgstr_w(cmdline), GetLastError());
