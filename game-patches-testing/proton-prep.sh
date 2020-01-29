@@ -49,9 +49,6 @@
     -W user32-rawinput-hid \
     -W winex11-key_translation 
 
-    #wine hotfixes
-    patch -Np1 < ../game-patches-testing/wine-patches/xinput-impl_xinputgetkeystroke.patch
-
     #VKD3D-WINE
     #Don't apply these for now,they are part of the wow patches
     #echo "applying vkd3d wine patches"
