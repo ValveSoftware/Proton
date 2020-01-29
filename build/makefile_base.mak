@@ -194,6 +194,22 @@ FFMPEG_OBJ64 := ./obj-ffmpeg64
 FFMPEG_CROSS_CFLAGS :=
 FFMPEG_CROSS_LDFLAGS :=
 
+GLIB := $(SRCDIR)/glib
+GLIB_OBJ32 := ./obj-glib32
+GLIB_OBJ64 := ./obj-glib64
+
+GSTREAMER := $(SRCDIR)/gstreamer
+GSTREAMER_OBJ32 := ./obj-gstreamer32
+GSTREAMER_OBJ64 := ./obj-gstreamer64
+
+GST_BASE := $(SRCDIR)/gst-plugins-base
+GST_BASE_OBJ32 := ./obj-gst-base32
+GST_BASE_OBJ64 := ./obj-gst-base64
+
+GST_GOOD := $(SRCDIR)/gst-plugins-good
+GST_GOOD_OBJ32 := ./obj-gst-good32
+GST_GOOD_OBJ64 := ./obj-gst-good64
+
 FAUDIO := $(SRCDIR)/FAudio
 FAUDIO_OBJ32 := ./obj-faudio32
 FAUDIO_OBJ64 := ./obj-faudio64
@@ -277,6 +293,10 @@ FONTS_OBJ := ./obj-fonts
 ## Object directories
 OBJ_DIRS := $(TOOLS_DIR32)        $(TOOLS_DIR64)        \
             $(FFMPEG_OBJ32)       $(FFMPEG_OBJ64)       \
+            $(GLIB_OBJ32)         $(GLIB_OBJ64)         \
+            $(GSTREAMER_OBJ32)    $(GSTREAMER_OBJ64)    \
+            $(GST_BASE_OBJ32)     $(GST_BASE_OBJ64)     \
+            $(GST_GOOD_OBJ32)     $(GST_GOOD_OBJ64)     \
             $(FAUDIO_OBJ32)       $(FAUDIO_OBJ64)       \
             $(LSTEAMCLIENT_OBJ32) $(LSTEAMCLIENT_OBJ64) \
             $(STEAMEXE_OBJ)                             \
@@ -448,7 +468,7 @@ $(DIST_FONTS): fonts
 ALL_TARGETS += dist
 GOAL_TARGETS += dist
 
-dist: $(DIST_TARGETS) wine vrclient lsteamclient steam dxvk | $(DST_DIR)
+dist: $(DIST_TARGETS) wine gst_good vrclient lsteamclient steam dxvk | $(DST_DIR)
 	echo `date '+%s'` `GIT_DIR=$(abspath $(SRCDIR)/.git) git describe --tags` > $(DIST_VERSION)
 	cp $(DIST_VERSION) $(DST_BASE)/
 	rm -rf $(abspath $(DIST_PREFIX)) && \
@@ -494,6 +514,338 @@ module64:
 	cd $(WINE_OBJ64)/dlls/$(module) && make
 
 module: module32 module64
+
+##
+## glib
+##
+
+GLIB_CONFIGURE_FILES32 := $(GLIB_OBJ32)/build.ninja
+GLIB_CONFIGURE_FILES64 := $(GLIB_OBJ64)/build.ninja
+
+GLIB_MESON_ARGS := -Dlibmount=false
+
+# 64-bit configure.  Remove coredata file if already configured (due to e.g. makefile changing)
+$(GLIB_CONFIGURE_FILES64): SHELL = $(CONTAINER_SHELL64)
+$(GLIB_CONFIGURE_FILES64): $(MAKEFILE_DEP) | $(GLIB_OBJ64)
+	if [ -e "$(abspath $(GLIB_OBJ64))"/build.ninja ]; then \
+		rm -f "$(abspath $(GLIB_OBJ64))"/meson-private/coredata.dat; \
+	fi
+	cd "$(abspath $(GLIB))" && \
+		meson --prefix="$(abspath $(TOOLS_DIR64))" --libdir="lib" $(GLIB_MESON_ARGS) $(MESON_STRIP_ARG) --buildtype=release "$(abspath $(GLIB_OBJ64))"
+
+# 32-bit configure.  Remove coredata file if already configured (due to e.g. makefile changing)
+$(GLIB_CONFIGURE_FILES32): SHELL = $(CONTAINER_SHELL32)
+$(GLIB_CONFIGURE_FILES32): $(MAKEFILE_DEP) | $(GLIB_OBJ32)
+	if [ -e "$(abspath $(GLIB_OBJ32))"/build.ninja ]; then \
+		rm -f "$(abspath $(GLIB_OBJ32))"/meson-private/coredata.dat; \
+	fi
+	cd "$(abspath $(GLIB))" && \
+		meson --prefix="$(abspath $(TOOLS_DIR32))" --libdir="lib" $(GLIB_MESON_ARGS) $(MESON_STRIP_ARG) --buildtype=release "$(abspath $(GLIB_OBJ32))"
+
+## glib goals
+GLIB_TARGETS = glib glib_configure glib32 glib64 glib_configure32 glib_configure64
+
+ALL_TARGETS += $(GLIB_TARGETS)
+GOAL_TARGETS_LIBS += glib
+
+.PHONY: $(GLIB_TARGETS)
+
+glib_configure: $(GLIB_CONFIGURE_FILES32) $(GLIB_CONFIGURE_FILES64)
+
+glib_configure64: $(GLIB_CONFIGURE_FILES64)
+
+glib_configure32: $(GLIB_CONFIGURE_FILES32)
+
+glib: glib32 glib64
+
+glib64: SHELL = $(CONTAINER_SHELL64)
+glib64: $(GLIB_CONFIGURE_FILES64)
+	ninja -C "$(GLIB_OBJ64)" install
+	mkdir -p $(DST_DIR)/lib64/ && \
+	cp -a $(TOOLS_DIR64)/lib/libgio* $(DST_DIR)/lib64/ && \
+	cp -a $(TOOLS_DIR64)/lib/libglib* $(DST_DIR)/lib64/ && \
+	cp -a $(TOOLS_DIR64)/lib/libgmodule* $(DST_DIR)/lib64/ && \
+	cp -a $(TOOLS_DIR64)/lib/libgobject* $(DST_DIR)/lib64/ && \
+	cp -a $(TOOLS_DIR64)/lib/libgthread* $(DST_DIR)/lib64/
+
+glib32: SHELL = $(CONTAINER_SHELL32)
+glib32: $(GLIB_CONFIGURE_FILES32)
+	ninja -C "$(GLIB_OBJ32)" install
+	mkdir -p $(DST_DIR)/lib/ && \
+	cp -a $(TOOLS_DIR32)/lib/libgio* $(DST_DIR)/lib/ && \
+	cp -a $(TOOLS_DIR32)/lib/libglib* $(DST_DIR)/lib/ && \
+	cp -a $(TOOLS_DIR32)/lib/libgmodule* $(DST_DIR)/lib/ && \
+	cp -a $(TOOLS_DIR32)/lib/libgobject* $(DST_DIR)/lib/ && \
+	cp -a $(TOOLS_DIR32)/lib/libgthread* $(DST_DIR)/lib/
+
+
+##
+## gstreamer
+##
+
+GST_COMMON_MESON_ARGS := \
+	-Dexamples=disabled \
+	-Dtests=disabled \
+	-Dtools=disabled \
+	-Dgtk_doc=disabled \
+	-Dintrospection=disabled \
+	-Dgobject-cast-checks=disabled \
+	-Dglib-asserts=disabled \
+	-Dglib-checks=disabled \
+	-Dnls=disabled
+
+GSTREAMER_MESON_ARGS := \
+	-Dgst_parse=false \
+	-Dbenchmarks=disabled \
+	$(GST_COMMON_MESON_ARGS)
+
+GSTREAMER_CONFIGURE_FILES32 := $(GSTREAMER_OBJ32)/build.ninja
+GSTREAMER_CONFIGURE_FILES64 := $(GSTREAMER_OBJ64)/build.ninja
+
+# 64-bit configure.  Remove coredata file if already configured (due to e.g. makefile changing)
+$(GSTREAMER_CONFIGURE_FILES64): SHELL = $(CONTAINER_SHELL64)
+$(GSTREAMER_CONFIGURE_FILES64): $(MAKEFILE_DEP) glib64 | $(GSTREAMER_OBJ64)
+	if [ -e "$(abspath $(GSTREAMER_OBJ64))"/build.ninja ]; then \
+		rm -f "$(abspath $(GSTREAMER_OBJ64))"/meson-private/coredata.dat; \
+	fi
+	cd "$(abspath $(GSTREAMER))" && \
+	PATH="$(abspath $(TOOLS_DIR64))/bin:$(PATH)" \
+		PKG_CONFIG_PATH=$(abspath $(TOOLS_DIR64))/lib/pkgconfig \
+		meson --prefix="$(abspath $(TOOLS_DIR64))" --libdir="lib" $(GSTREAMER_MESON_ARGS) $(MESON_STRIP_ARG) --buildtype=release "$(abspath $(GSTREAMER_OBJ64))"
+
+# 32-bit configure.  Remove coredata file if already configured (due to e.g. makefile changing)
+$(GSTREAMER_CONFIGURE_FILES32): SHELL = $(CONTAINER_SHELL32)
+$(GSTREAMER_CONFIGURE_FILES32): $(MAKEFILE_DEP) glib32 | $(GSTREAMER_OBJ32)
+	if [ -e "$(abspath $(GSTREAMER_OBJ32))"/build.ninja ]; then \
+		rm -f "$(abspath $(GSTREAMER_OBJ32))"/meson-private/coredata.dat; \
+	fi
+	cd "$(abspath $(GSTREAMER))" && \
+	PATH="$(abspath $(TOOLS_DIR32))/bin:$(PATH)" \
+		PKG_CONFIG_PATH=$(abspath $(TOOLS_DIR32))/lib/pkgconfig \
+		meson --prefix="$(abspath $(TOOLS_DIR32))" --libdir="lib" $(GSTREAMER_MESON_ARGS) $(MESON_STRIP_ARG) --buildtype=release "$(abspath $(GSTREAMER_OBJ32))"
+
+## gstreamer goals
+GSTREAMER_TARGETS = gstreamer gstreamer_configure gstreamer32 gstreamer64 gstreamer_configure32 gstreamer_configure64
+
+ALL_TARGETS += $(GSTREAMER_TARGETS)
+GOAL_TARGETS_LIBS += gstreamer
+
+.PHONY: $(GSTREAMER_TARGETS)
+
+gstreamer_configure: $(GSTREAMER_CONFIGURE_FILES32) $(GSTREAMER_CONFIGURE_FILES64)
+
+gstreamer_configure64: $(GSTREAMER_CONFIGURE_FILES64)
+
+gstreamer_configure32: $(GSTREAMER_CONFIGURE_FILES32)
+
+gstreamer: gstreamer32 gstreamer64
+
+gstreamer64: SHELL = $(CONTAINER_SHELL64)
+gstreamer64: $(GSTREAMER_CONFIGURE_FILES64)
+	PATH="$(abspath $(TOOLS_DIR64))/bin:$(PATH)" ninja -C "$(GSTREAMER_OBJ64)" install
+	cp -a $(TOOLS_DIR64)/lib/libgst* $(DST_DIR)/lib64/ && \
+	cp -a $(TOOLS_DIR64)/lib/gstreamer-1.0 $(DST_DIR)/lib64/
+
+gstreamer32: SHELL = $(CONTAINER_SHELL32)
+gstreamer32: $(GSTREAMER_CONFIGURE_FILES32)
+	PATH="$(abspath $(TOOLS_DIR32))/bin:$(PATH)" ninja -C "$(GSTREAMER_OBJ32)" install
+	cp -a $(TOOLS_DIR32)/lib/libgst* $(DST_DIR)/lib/ && \
+	cp -a $(TOOLS_DIR32)/lib/gstreamer-1.0 $(DST_DIR)/lib/
+
+
+##
+## gst-plugins-base
+##
+
+GST_BASE_MESON_ARGS := \
+	-Daddr=disabled \
+	-Dalsa=disabled \
+	-Daudiomixer=disabled \
+	-Daudiorate=disabled \
+	-Daudiotestsrc=disabled \
+	-Dcdparanoia=disabled \
+	-Dcompositor=disabled \
+	-Dencoding=disabled \
+	-Dgio=disabled \
+	-Dgl=disabled \
+	-Dlibvisual=disabled \
+	-Doverlaycomposition=disabled \
+	-Dpango=disabled \
+	-Drawparse=disabled \
+	-Dsubparse=disabled \
+	-Dtcp=disabled \
+	-Dtremor=disabled \
+	-Dvideorate=disabled \
+	-Dvideotestsrc=disabled \
+	-Dvolume=disabled \
+	-Dx11=disabled \
+	-Dxshm=disabled \
+	-Dxvideo=disabled \
+	$(GST_COMMON_MESON_ARGS)
+
+GST_BASE_CONFIGURE_FILES32 := $(GST_BASE_OBJ32)/build.ninja
+GST_BASE_CONFIGURE_FILES64 := $(GST_BASE_OBJ64)/build.ninja
+
+# 64-bit configure.  Remove coredata file if already configured (due to e.g. makefile changing)
+$(GST_BASE_CONFIGURE_FILES64): SHELL = $(CONTAINER_SHELL64)
+$(GST_BASE_CONFIGURE_FILES64): $(MAKEFILE_DEP) gstreamer64 | $(GST_BASE_OBJ64)
+	if [ -e "$(abspath $(GST_BASE_OBJ64))"/build.ninja ]; then \
+		rm -f "$(abspath $(GST_BASE_OBJ64))"/meson-private/coredata.dat; \
+	fi
+	cd "$(abspath $(GST_BASE))" && \
+	PATH="$(abspath $(TOOLS_DIR64))/bin:$(PATH)" \
+		PKG_CONFIG_PATH=$(abspath $(TOOLS_DIR64))/lib/pkgconfig \
+		meson --prefix="$(abspath $(TOOLS_DIR64))" --libdir="lib" $(GST_BASE_MESON_ARGS) $(MESON_STRIP_ARG) --buildtype=release "$(abspath $(GST_BASE_OBJ64))"
+
+# 32-bit configure.  Remove coredata file if already configured (due to e.g. makefile changing)
+$(GST_BASE_CONFIGURE_FILES32): SHELL = $(CONTAINER_SHELL32)
+$(GST_BASE_CONFIGURE_FILES32): $(MAKEFILE_DEP) gstreamer32 | $(GST_BASE_OBJ32)
+	if [ -e "$(abspath $(GST_BASE_OBJ32))"/build.ninja ]; then \
+		rm -f "$(abspath $(GST_BASE_OBJ32))"/meson-private/coredata.dat; \
+	fi
+	cd "$(abspath $(GST_BASE))" && \
+	PATH="$(abspath $(TOOLS_DIR32))/bin:$(PATH)" \
+		PKG_CONFIG_PATH=$(abspath $(TOOLS_DIR32))/lib/pkgconfig \
+		meson --prefix="$(abspath $(TOOLS_DIR32))" --libdir="lib" $(GST_BASE_MESON_ARGS) $(MESON_STRIP_ARG) --buildtype=release "$(abspath $(GST_BASE_OBJ32))"
+
+## gst_base goals
+GST_BASE_TARGETS = gst_base gst_base_configure gst_base32 gst_base64 gst_base_configure32 gst_base_configure64
+
+ALL_TARGETS += $(GST_BASE_TARGETS)
+GOAL_TARGETS_LIBS += gst_base
+
+.PHONY: $(GST_BASE_TARGETS)
+
+gst_base_configure: $(GST_BASE_CONFIGURE_FILES32) $(GST_BASE_CONFIGURE_FILES64)
+
+gst_base_configure64: $(GST_BASE_CONFIGURE_FILES64)
+
+gst_base_configure32: $(GST_BASE_CONFIGURE_FILES32)
+
+gst_base: gst_base32 gst_base64
+
+gst_base64: SHELL = $(CONTAINER_SHELL64)
+gst_base64: $(GST_BASE_CONFIGURE_FILES64)
+	PATH="$(abspath $(TOOLS_DIR64))/bin:$(PATH)" ninja -C "$(GST_BASE_OBJ64)" install
+	cp -a $(TOOLS_DIR64)/lib/libgst* $(DST_DIR)/lib64/ && \
+	cp -a $(TOOLS_DIR64)/lib/gstreamer-1.0 $(DST_DIR)/lib64/
+
+gst_base32: SHELL = $(CONTAINER_SHELL32)
+gst_base32: $(GST_BASE_CONFIGURE_FILES32)
+	PATH="$(abspath $(TOOLS_DIR32))/bin:$(PATH)" ninja -C "$(GST_BASE_OBJ32)" install
+	cp -a $(TOOLS_DIR32)/lib/libgst* $(DST_DIR)/lib/ && \
+	cp -a $(TOOLS_DIR32)/lib/gstreamer-1.0 $(DST_DIR)/lib/
+
+
+##
+## gst-plugins-good
+##
+
+GST_GOOD_MESON_ARGS := \
+	-Daalib=disabled \
+	-Dalpha=disabled \
+	-Dapetag=disabled \
+	-Daudiofx=disabled \
+	-Dauparse=disabled \
+	-Dcairo=disabled \
+	-Dcutter=disabled \
+	-Ddebugutils=disabled \
+	-Ddeinterlace=disabled \
+	-Ddtmf=disabled \
+	-Deffectv=disabled \
+	-Dequalizer=disabled \
+	-Dgdk-pixbuf=disabled \
+	-Dgtk3=disabled \
+	-Dgoom=disabled \
+	-Dgoom2k1=disabled \
+	-Dicydemux=disabled \
+	-Dimagefreeze=disabled \
+	-Dinterleave=disabled \
+	-Djack=disabled \
+	-Dlaw=disabled \
+	-Dlevel=disabled \
+	-Dlibcaca=disabled \
+	-Dmonoscope=disabled \
+	-Dmultifile=disabled \
+	-Dmultipart=disabled \
+	-Doss=disabled \
+	-Doss4=disabled \
+	-Dpng=disabled \
+	-Dpulse=disabled \
+	-Dqt5=disabled \
+	-Dreplaygain=disabled \
+	-Drtp=disabled \
+	-Drtpmanager=disabled \
+	-Drtsp=disabled \
+	-Dshapewipe=disabled \
+	-Dshout2=disabled \
+	-Dsmpte=disabled \
+	-Dsoup=disabled \
+	-Dspectrum=disabled \
+	-Dtaglib=disabled \
+	-Dudp=disabled \
+	-Dv4l2=disabled \
+	-Dvideobox=disabled \
+	-Dvideocrop=disabled \
+	-Dvideomixer=disabled \
+	-Dwavenc=disabled \
+	-Dximagesrc=disabled \
+	-Dy4m=disabled \
+	$(GST_COMMON_MESON_ARGS)
+
+GST_GOOD_CONFIGURE_FILES32 := $(GST_GOOD_OBJ32)/build.ninja
+GST_GOOD_CONFIGURE_FILES64 := $(GST_GOOD_OBJ64)/build.ninja
+
+# 64-bit configure.  Remove coredata file if already configured (due to e.g. makefile changing)
+$(GST_GOOD_CONFIGURE_FILES64): SHELL = $(CONTAINER_SHELL64)
+$(GST_GOOD_CONFIGURE_FILES64): $(MAKEFILE_DEP) gst_base64 | $(GST_GOOD_OBJ64)
+	if [ -e "$(abspath $(GST_GOOD_OBJ64))"/build.ninja ]; then \
+		rm -f "$(abspath $(GST_GOOD_OBJ64))"/meson-private/coredata.dat; \
+	fi
+	cd "$(abspath $(GST_GOOD))" && \
+	PATH="$(abspath $(TOOLS_DIR64))/bin:$(PATH)" \
+		PKG_CONFIG_PATH=$(abspath $(TOOLS_DIR64))/lib/pkgconfig \
+		meson --prefix="$(abspath $(TOOLS_DIR64))" --libdir="lib" $(GST_GOOD_MESON_ARGS) $(MESON_STRIP_ARG) --buildtype=release "$(abspath $(GST_GOOD_OBJ64))"
+
+# 32-bit configure.  Remove coredata file if already configured (due to e.g. makefile changing)
+$(GST_GOOD_CONFIGURE_FILES32): SHELL = $(CONTAINER_SHELL32)
+$(GST_GOOD_CONFIGURE_FILES32): $(MAKEFILE_DEP) gst_base32 | $(GST_GOOD_OBJ32)
+	if [ -e "$(abspath $(GST_GOOD_OBJ32))"/build.ninja ]; then \
+		rm -f "$(abspath $(GST_GOOD_OBJ32))"/meson-private/coredata.dat; \
+	fi
+	cd "$(abspath $(GST_GOOD))" && \
+	PATH="$(abspath $(TOOLS_DIR32))/bin:$(PATH)" \
+		PKG_CONFIG_PATH=$(abspath $(TOOLS_DIR32))/lib/pkgconfig \
+		meson --prefix="$(abspath $(TOOLS_DIR32))" --libdir="lib" $(GST_GOOD_MESON_ARGS) $(MESON_STRIP_ARG) --buildtype=release "$(abspath $(GST_GOOD_OBJ32))"
+
+## gst_good goals
+GST_GOOD_TARGETS = gst_good gst_good_configure gst_good32 gst_good64 gst_good_configure32 gst_good_configure64
+
+ALL_TARGETS += $(GST_GOOD_TARGETS)
+GOAL_TARGETS_LIBS += gst_good
+
+.PHONY: $(GST_GOOD_TARGETS)
+
+gst_good_configure: $(GST_GOOD_CONFIGURE_FILES32) $(GST_GOOD_CONFIGURE_FILES64)
+
+gst_good_configure64: $(GST_GOOD_CONFIGURE_FILES64)
+
+gst_good_configure32: $(GST_GOOD_CONFIGURE_FILES32)
+
+gst_good: gst_good32 gst_good64
+
+gst_good64: SHELL = $(CONTAINER_SHELL64)
+gst_good64: $(GST_GOOD_CONFIGURE_FILES64)
+	PATH="$(abspath $(TOOLS_DIR64))/bin:$(PATH)" ninja -C "$(GST_GOOD_OBJ64)" install
+	cp -a $(TOOLS_DIR64)/lib/libgst* $(DST_DIR)/lib64/ && \
+	cp -a $(TOOLS_DIR64)/lib/gstreamer-1.0 $(DST_DIR)/lib64/
+
+gst_good32: SHELL = $(CONTAINER_SHELL32)
+gst_good32: $(GST_GOOD_CONFIGURE_FILES32)
+	PATH="$(abspath $(TOOLS_DIR32))/bin:$(PATH)" ninja -C "$(GST_GOOD_OBJ32)" install
+	cp -a $(TOOLS_DIR32)/lib/libgst* $(DST_DIR)/lib/ && \
+	cp -a $(TOOLS_DIR32)/lib/gstreamer-1.0 $(DST_DIR)/lib/
+
 
 ##
 ## ffmpeg
@@ -831,7 +1183,7 @@ WINE32_MAKE_ARGS := \
 
 # 64bit-configure
 $(WINE_CONFIGURE_FILES64): SHELL = $(CONTAINER_SHELL64)
-$(WINE_CONFIGURE_FILES64): $(MAKEFILE_DEP) | faudio64 vkd3d64 $(WINE_OBJ64) bison64
+$(WINE_CONFIGURE_FILES64): $(MAKEFILE_DEP) | faudio64 vkd3d64 gst_base64 $(WINE_OBJ64) bison64
 	cd $(dir $@) && \
 		../$(WINE)/configure \
 			--without-curses \
@@ -849,7 +1201,7 @@ $(WINE_CONFIGURE_FILES64): $(MAKEFILE_DEP) | faudio64 vkd3d64 $(WINE_OBJ64) biso
 
 # 32-bit configure
 $(WINE_CONFIGURE_FILES32): SHELL = $(CONTAINER_SHELL32)
-$(WINE_CONFIGURE_FILES32): $(MAKEFILE_DEP) | faudio32 vkd3d32 $(WINE_OBJ32) bison32
+$(WINE_CONFIGURE_FILES32): $(MAKEFILE_DEP) | faudio32 vkd3d32 gst_base32 $(WINE_OBJ32) bison32
 	cd $(dir $@) && \
 		../$(WINE)/configure \
 			--without-curses \

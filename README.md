@@ -187,9 +187,8 @@ If you are building without the Steam runtime, then instead use:
 `make obj-wine64/Makefile obj-wine32/Makefile` and check the files
 `obj-wine64/config.log` and `obj-wine32/config.log` for missing packages.
 Search for `won't be supported`. A couple of missing packages are normal:
-`opencv`, `gstreamer`, `vkd3d`, `oss`. More than that may indicate a problem.
-Please see your distro's documentation to acquire the considerable build
-dependencies for Wine.
+`opencv`, `oss`. More than that may indicate a problem.  Please see your
+distro's documentation to acquire the considerable build dependencies for Wine.
 
 ---
 Build Proton
