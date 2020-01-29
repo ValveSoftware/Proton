@@ -28,3 +28,12 @@
 [submodule "Vulkan-Headers"]
 	path = Vulkan-Headers
 	url = https://github.com/KhronosGroup/Vulkan-Headers
+[submodule "gstreamer"]
+	path = gstreamer
+	url = https://gitlab.freedesktop.org/gstreamer/gstreamer.git
+[submodule "gst-plugins-base"]
+	path = gst-plugins-base
+	url = https://gitlab.freedesktop.org/gstreamer/gst-plugins-base.git
+[submodule "gst-plugins-good"]
+	path = gst-plugins-good
+	url = https://gitlab.freedesktop.org/gstreamer/gst-plugins-good.git
