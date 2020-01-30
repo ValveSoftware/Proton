@@ -130,10 +130,22 @@
     echo "raw input"
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-rawinput.patch
 
-    echo "applying key translation patches from staging post-rawinput"
+    echo "applying staging patches that need to be applied after proton rawinput and fullscreen hack"
+
+    # staging winex11-key_translation
     patch -Np1 < ../wine-staging/patches/winex11-key_translation/0001-winex11-Match-keyboard-in-Unicode.patch
     patch -Np1 < ../wine-staging/patches/winex11-key_translation/0002-winex11-Fix-more-key-translation.patch
     patch -Np1 < ../wine-staging/patches/winex11-key_translation/0003-winex11.drv-Fix-main-Russian-keyboard-layout.patch
+
+    # staging winex11-MWM_Decorations
+    patch -Np1 < ../game-patches-testing/proton-hotfixes/proton-staging_winex11-MWM_Decorations.patch
+
+    # staging winex11-_NET_ACTIVE_WINDOW
+    patch -Np1 < ../wine-staging/patches/winex11-_NET_ACTIVE_WINDOW/0001-winex11.drv-Add-support-for-_NET_ACTIVE_WINDOW.patch
+    patch -Np1 < ../game-patches-testing/proton-hotfixes/proton-staging_winex11-_NET_ACTIVE_WINDOW-0002.patch
+
+    # staging winex11-WM_WINDOWPOSCHANGING
+    patch -Np1 < ../game-patches-testing/proton-hotfixes/proton-staging_winex11-WM_WINDOWPOSCHANGING.patch
 
     echo "SDL Joystick"
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-sdl_joy.patch
@@ -150,7 +162,7 @@
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-apply_LargeAddressAware_fix_for_Bayonetta.patch
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-Set_amd_ags_x64_to_built_in_for_Wolfenstein_2.patch
 
-    echo "fix steep fullscreeni"
+    echo "fix steep fullscreen"
     patch -Np1 < ../game-patches-testing/wine-patches/0001-Add-some-semi-stubs-in-user32.patch
 
     echo "Valve wined3d VR patches"

@@ -1,0 +1,17 @@
+diff --git a/dlls/winex11.drv/window.c b/dlls/winex11.drv/window.c
+index 39d7818cfd..c013f5d546 100644
+--- a/dlls/winex11.drv/window.c
++++ b/dlls/winex11.drv/window.c
+@@ -353,12 +353,6 @@ static unsigned long get_mwm_decorations( struct x11drv_win_data *data,
+         if (style & WS_MINIMIZEBOX) ret |= MWM_DECOR_MINIMIZE;
+         if (style & WS_MAXIMIZEBOX) ret |= MWM_DECOR_MAXIMIZE;
+     }
+-    if (ex_style & WS_EX_DLGMODALFRAME) ret |= MWM_DECOR_BORDER;
+-    else if (style & WS_THICKFRAME){
+-        if((style & WS_CAPTION) == WS_CAPTION)
+-             ret |= MWM_DECOR_BORDER | MWM_DECOR_RESIZEH;
+-    }
+-    else if ((style & (WS_DLGFRAME|WS_BORDER)) == WS_DLGFRAME) ret |= MWM_DECOR_BORDER;
+     return ret;
+ }
+ 
