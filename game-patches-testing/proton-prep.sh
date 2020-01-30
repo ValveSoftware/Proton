@@ -137,15 +137,15 @@
     patch -Np1 < ../wine-staging/patches/winex11-key_translation/0002-winex11-Fix-more-key-translation.patch
     patch -Np1 < ../wine-staging/patches/winex11-key_translation/0003-winex11.drv-Fix-main-Russian-keyboard-layout.patch
 
+    # staging winex11.drv-mouse-coorrds
+    #patch -Np1 < ../game-patches-testing/proton-hotfixes/proton-staging_winex11.drv-mouse-coorrds.patch
+
     # staging winex11-MWM_Decorations
     patch -Np1 < ../game-patches-testing/proton-hotfixes/proton-staging_winex11-MWM_Decorations.patch
 
     # staging winex11-_NET_ACTIVE_WINDOW
     patch -Np1 < ../wine-staging/patches/winex11-_NET_ACTIVE_WINDOW/0001-winex11.drv-Add-support-for-_NET_ACTIVE_WINDOW.patch
     patch -Np1 < ../game-patches-testing/proton-hotfixes/proton-staging_winex11-_NET_ACTIVE_WINDOW-0002.patch
-
-    # staging winex11-WM_WINDOWPOSCHANGING
-    patch -Np1 < ../game-patches-testing/proton-hotfixes/proton-staging_winex11-WM_WINDOWPOSCHANGING.patch
 
     echo "SDL Joystick"
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-sdl_joy.patch
