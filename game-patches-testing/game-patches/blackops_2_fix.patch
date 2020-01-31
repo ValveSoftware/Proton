@@ -1,0 +1,17 @@
+From: https://bugs.winehq.org/show_bug.cgi?id=46472
+fixes the Unhandled Exception error on start up of Black Ops 2
+
+--- a/server/ptrace.c	2019-02-15 15:34:44.000000000 -0500
++++ a/server/ptrace.c	2019-02-22 18:49:02.432985853 -0500
+@@ -629,6 +629,11 @@ 
+     if (!suspend_for_ptrace( thread )) return;
+ 
+     /* force all breakpoint lengths to 1, workaround for kernel bug 200965 */
++    ptrace( PTRACE_POKEUSER, pid, DR_OFFSET(0), 0x00000000 );
++    ptrace( PTRACE_POKEUSER, pid, DR_OFFSET(1), 0x00000000 );
++    ptrace( PTRACE_POKEUSER, pid, DR_OFFSET(2), 0x00000000 );
++    ptrace( PTRACE_POKEUSER, pid, DR_OFFSET(3), 0x00000000 );
++    ptrace( PTRACE_POKEUSER, pid, DR_OFFSET(6), 0x00000000 );
+     ptrace( PTRACE_POKEUSER, pid, DR_OFFSET(7), 0x11110055 );
+ 
+     switch (context->cpu)

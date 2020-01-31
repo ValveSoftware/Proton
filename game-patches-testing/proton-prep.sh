@@ -95,6 +95,9 @@
     echo "monster hunter world fix"
     patch -Np1 < ../game-patches-testing/game-patches/mhw_fix.patch
 
+    echo "blackops 2 fix"
+    patch -Np1 < ../game-patches-testing/game-patches/blackops_2_fix.patch
+
     echo "bcrypt fix for honor, steep"
     patch -Np1 < ../game-patches-testing/game-patches/0001-bcrypt-Implement-BCryptSecretAgreement-with-libgcryp.patch
     patch -Np1 < ../game-patches-testing/game-patches/0002-bcrypt-Implement-BCryptSecretAgreement-with-libgcryp.patch
@@ -138,7 +141,7 @@
     patch -Np1 < ../wine-staging/patches/winex11-key_translation/0003-winex11.drv-Fix-main-Russian-keyboard-layout.patch
 
     # staging winex11.drv-mouse-coorrds
-    #patch -Np1 < ../game-patches-testing/proton-hotfixes/proton-staging_winex11.drv-mouse-coorrds.patch
+    patch -Np1 < ../game-patches-testing/proton-hotfixes/proton-staging_winex11.drv-mouse-coorrds.patch
 
     # staging winex11-MWM_Decorations
     patch -Np1 < ../game-patches-testing/proton-hotfixes/proton-staging_winex11-MWM_Decorations.patch
