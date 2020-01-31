@@ -48,7 +48,7 @@ index 2c7ef99685..8f15ebc3ee 100644
  
  /***********************************************************************
   *		send_mouse_input
-@@ -669,38 +707,20 @@ static void send_mouse_input( HWND hwnd, Window window, unsigned int state, INPU
+@@ -669,38 +669,17 @@ static void send_mouse_input( HWND hwnd, Window window, unsigned int state, INPU
          return;
      }
  
@@ -64,9 +64,9 @@ index 2c7ef99685..8f15ebc3ee 100644
      if(data->fs_hack)
          fs_hack_real_to_user(&pt);
  
-     input->u.mi.dx = pt.x;
-     input->u.mi.dy = pt.y;
- 
+-    input->u.mi.dx = pt.x;
+-    input->u.mi.dy = pt.y;
+-
 -    if (window == data->whole_window && !data->fs_hack)
 -    {
 -        pt.x += data->whole_rect.left - data->client_rect.left;
