@@ -49,8 +49,7 @@ def makedirs(path):
             return
         
         os.makedirs(path)
-    except OSError as err:
-        log("Error when creating directory {0}: {1}".format(path, err))
+    except FileExistsError:
         pass
 
 def try_copy(src, dst):
@@ -170,9 +169,9 @@ class CompatData:
                 try:
                     if not any(os.scandir(d)):
                         os.rmdir(d)
-                except OSError as err:
-                    log("Error deleting directory {0}: {1}".format(d, err))
-                    pass
+                except OSError as e:
+                    if e.errno != errno.ENOTEMPTY:
+                        raise
 
         os.remove(self.tracked_files_file)
         os.remove(self.version_file)
