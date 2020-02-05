@@ -343,12 +343,8 @@ class CompatData:
                 dxvkfiles = ["dxvk_config"]
                 wined3dfiles = ["d3d11", "d3d10", "d3d10core", "d3d10_1", "d3d9"]
             else:
-                dxvkfiles = ["dxvk_config", "d3d11", "d3d10", "d3d10core", "d3d10_1"]
+                dxvkfiles = ["dxvk_config", "d3d11", "d3d10", "d3d10core", "d3d10_1", "d3d9"]
                 wined3dfiles = []
-                if "d9vk" in g_session.compat_config:
-                    dxvkfiles.append("d3d9")
-                else:
-                    wined3dfiles.append("d3d9")
 
             #if the user asked for dxvk's dxgi (dxgi=n), then copy it into place
             if "WINEDLLOVERRIDES" in os.environ and "dxgi=n" in os.environ["WINEDLLOVERRIDES"]:
@@ -451,7 +447,6 @@ class Session:
 
         if not self.check_environment("PROTON_USE_WINED3D", "wined3d"):
             self.check_environment("PROTON_USE_WINED3D11", "wined3d")
-        self.check_environment("PROTON_USE_D9VK", "d9vk")
         self.check_environment("PROTON_NO_D3D11", "nod3d11")
         self.check_environment("PROTON_NO_D3D10", "nod3d10")
         self.check_environment("PROTON_NO_ESYNC", "noesync")
