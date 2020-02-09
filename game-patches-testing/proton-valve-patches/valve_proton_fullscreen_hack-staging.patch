@@ -4765,16 +4765,10 @@ diff --git a/dlls/winex11.drv/xinerama.c b/dlls/winex11.drv/xinerama.c
 index 61c422e835..2d6d7fa4f6 100644
 --- a/dlls/winex11.drv/xinerama.c
 +++ b/dlls/winex11.drv/xinerama.c
-@@ -143,6 +160,20 @@ static int query_screens(void)
+@@ -129,6 +129,15 @@ static int query_screens(void)
          }
  
          get_primary()->dwFlags |= MONITORINFOF_PRIMARY;
-+
-+        for (i = 0; i < nb_monitors; i++)
-+        {
-+            snprintfW( monitors[i].szDevice, sizeof(monitors[i].szDevice) / sizeof(WCHAR),
-+                       monitor_deviceW, (monitors[i].dwFlags & MONITORINFOF_PRIMARY) ? 1 : device++ );
-+        }
 +
 +        if(fs_hack_enabled()){
 +            POINT fs = fs_hack_current_mode();
@@ -4783,6 +4777,7 @@ index 61c422e835..2d6d7fa4f6 100644
 +            primary->rcMonitor.bottom = primary->rcMonitor.top + fs.y;
 +            primary->rcWork = primary->rcMonitor;
 +        }
++
      }
      else count = 0;
  
