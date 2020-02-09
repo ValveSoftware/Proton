@@ -1514,7 +1514,11 @@ index 68aecdf90c..cb3cd4b4fd 100644
  }
  
  #ifdef SONAME_LIBXCURSOR
-@@ -1533,12 +1491,6 @@ BOOL CDECL X11DRV_SetCursorPos( INT x, INT y )
+diff --git a/dlls/winex11.drv/mouse.c b/dlls/winex11.drv/mouse.c
+index 7f0edd9be6..21a8ea40d9 100644
+--- a/dlls/winex11.drv/mouse.c
++++ b/dlls/winex11.drv/mouse.c
+@@ -1469,21 +1469,6 @@ BOOL CDECL X11DRV_SetCursorPos( INT x, INT y )
      TRACE("real setting to %u, %u\n",
              pos.x, pos.y);
  
@@ -1524,9 +1528,18 @@ index 68aecdf90c..cb3cd4b4fd 100644
 -        return FALSE;
 -    }
 -
-     if (!clipping_cursor &&
-         XGrabPointer( data->display, root_window, False,
-                       PointerMotionMask | ButtonPressMask | ButtonReleaseMask,
+-    if (!clipping_cursor &&
+-        XGrabPointer( data->display, root_window, False,
+-                      PointerMotionMask | ButtonPressMask | ButtonReleaseMask,
+-                      GrabModeAsync, GrabModeAsync, None, None, CurrentTime ) != GrabSuccess)
+-    {
+-        WARN( "refusing to warp pointer to %u, %u without exclusive grab\n", pos.x, pos.y );
+-        return FALSE;
+-    }
+-
+     XWarpPointer( data->display, root_window, root_window, 0, 0, 0, 0, pos.x, pos.y );
+     data->warp_serial = NextRequest( data->display );
+ 
 @@ -1693,7 +1645,7 @@ void move_resize_window( HWND hwnd, int dir )
              input.u.mi.dwFlags     = button_up_flags[button - 1] | MOUSEEVENTF_ABSOLUTE | MOUSEEVENTF_MOVE;
              input.u.mi.time        = GetTickCount();

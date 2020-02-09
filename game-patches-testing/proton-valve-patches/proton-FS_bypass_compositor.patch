@@ -34,7 +34,7 @@ index 8256749a8d..ec29e875d2 100644
              new_state |= (1 << NET_WM_STATE_MAXIMIZED);
          else if (!(style & WS_MINIMIZE))
 +	{
-+            net_wm_bypass_compositor = 0;
++            net_wm_bypass_compositor = 1;
              new_state |= (1 << NET_WM_STATE_FULLSCREEN);
 +	}
      }

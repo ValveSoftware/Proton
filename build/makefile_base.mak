@@ -525,7 +525,7 @@ module: module32 module64
 GLIB_CONFIGURE_FILES32 := $(GLIB_OBJ32)/build.ninja
 GLIB_CONFIGURE_FILES64 := $(GLIB_OBJ64)/build.ninja
 
-GLIB_MESON_ARGS := -Dlibmount=false
+GLIB_MESON_ARGS := -Dlibmount=false -Denable_tests=no
 
 # 64-bit configure.  Remove coredata file if already configured (due to e.g. makefile changing)
 $(GLIB_CONFIGURE_FILES64): SHELL = $(CONTAINER_SHELL64)

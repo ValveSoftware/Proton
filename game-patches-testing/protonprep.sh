@@ -117,6 +117,9 @@
     patch -Np1 < ../game-patches-testing/proton-valve-patches/winegstreamer-HACK_try_harder_to_register_winegstreamer_filters.patch
     patch -Np1 < ../game-patches-testing/proton-valve-patches/winegstreamer-HACK_use_a_different_gst_registry_file_per_architecture.patch
 
+    echo "win10 prefix patch"
+    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-win10_default_prefix.patch
+
     echo "applying staging patches that need to be applied after proton rawinput and fullscreen hack"
 
     # staging winex11-key_translation

@@ -264,32 +264,6 @@ index f08474b3635..2f637f25537 100644
  
  /******************************************************************************
 
-From 134fa05a0e39b63bfec75d0823ebe49e4c9cae64 Mon Sep 17 00:00:00 2001
-From: Andrew Eikum <aeikum@codeweavers.com>
-Date: Thu, 7 Jun 2018 14:37:03 -0500
-Subject: [PATCH] HACK: winex11.drv: Disable XIM by default
-
-libx11 has a race condition that causes XIM to crash with "double free
-or corruption" errors, see winehq bug 35041. Disabling XIM works around
-this, though special input methods (CJK, etc.) will no longer work.
----
- dlls/winex11.drv/x11drv_main.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/dlls/winex11.drv/x11drv_main.c b/dlls/winex11.drv/x11drv_main.c
-index db87d188236..81a63a20689 100644
---- a/dlls/winex11.drv/x11drv_main.c
-+++ b/dlls/winex11.drv/x11drv_main.c
-@@ -93,7 +93,7 @@ static void *err_callback_arg;               /* error callback argument */
- static int err_callback_result;              /* error callback result */
- static unsigned long err_serial;             /* serial number of first request */
- static int (*old_error_handler)( Display *, XErrorEvent * );
--static BOOL use_xim = TRUE;
-+static BOOL use_xim = FALSE;
- static char input_style[20];
- 
- #define IS_OPTION_TRUE(ch) \
-
 From d012d137e4099d1b12079a49a8a5632d205e0a9f Mon Sep 17 00:00:00 2001
 From: Andrew Eikum <aeikum@codeweavers.com>
 Date: Mon, 24 Sep 2018 12:37:49 -0500
@@ -1203,61 +1177,6 @@ index 2b049eb91f8..e6948a73427 100644
  HKLM,"System\CurrentControlSet\Services\Eventlog\Application",,16
  HKLM,"System\CurrentControlSet\Services\Eventlog\System","Sources",0x10000,""
  HKLM,"System\CurrentControlSet\Services\Tcpip\Parameters","DataBasePath",2,"%11%\drivers"
-
-From aef0f1638ce13db03a4d3c0fe53972f44443c854 Mon Sep 17 00:00:00 2001
-From: Patryk Obara <dreamer.tan@gmail.com>
-Date: Fri, 26 Apr 2019 20:40:31 +0200
-Subject: [PATCH] winex11: Fill WM_CLASS based on Steam appid
-
-Some desktop environments (Gnome 3, Cinnamon) decide on an application
-icon in the following order:
-
- - If the first string in WM_CLASS property can be correlated to
-  a name or StartupWMClass key in a .desktop entry file, then
-  the associated icon will be used.
- - If the second string in WM_CLASS property can be correlated to
-  a name or StartupWMClass key in a .desktop entry file, then
-  the associated icon will be used.
- - If the application has indicated an icon resource through WM_HINTS
-  property, then the associated X window or pixmaps will be used.
-
-Upstream Wine usually deals with this by placing a .desktop file with
-StartupWMClass filled to match first string in WM_CLASS property
-(which is the name of exe file being run).
-
-Wine in Proton does not do it, but still puts "Wine" as second string,
-therefore desktop environment can't differentiate between Wine in
-Proton and Wine installed in OS.
-
-By replacing "Wine" with "steam_app_<appid>" we force DE to fallback
-to icon indicated by WM_HINTS (ico file embedded in exe file).
-Steam can override this behaviour by installing properly crafted
-.desktop entry file.  If SteamAppId environment variable is missing,
-then generic "steam_proton" name is used instead.
----
- dlls/winex11.drv/window.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
-
-diff --git a/dlls/winex11.drv/window.c b/dlls/winex11.drv/window.c
-index 1ec7c706511..9ae3da3d4a2 100644
---- a/dlls/winex11.drv/window.c
-+++ b/dlls/winex11.drv/window.c
-@@ -870,10 +870,13 @@ static void set_initial_wm_hints( Display *display, Window window )
-     /* class hints */
-     if ((class_hints = XAllocClassHint()))
-     {
--        static char wine[] = "Wine";
-+        static char steam_proton[] = "steam_proton";
-+        char proton_app_class[128];
-+        const char *app_id = getenv("SteamAppId");
- 
-+        snprintf(proton_app_class, sizeof(proton_app_class), "steam_app_%s", app_id);
-         class_hints->res_name = process_name;
--        class_hints->res_class = wine;
-+        class_hints->res_class = app_id ? proton_app_class : steam_proton;
-         XSetClassHint( display, window, class_hints );
-         XFree( class_hints );
-     }
 
 From 7e91b897e69854cb3afe761f48ef7c9b496ecf95 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?J=C3=B3zef=20Kucia?= <jkucia@codeweavers.com>
