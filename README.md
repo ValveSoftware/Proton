@@ -24,7 +24,7 @@ NOTES REGARDING SPECIFIC GAME QUIRKS:
 -Warframe on Nvidia you may need to disable GPU Particles in game otherwise the game can freeze randomly. On AMD they work fine  
 
 
-Full patches can be viewed in game-patches-testing/proton-prep.sh  
+Full patches can be viewed in game-patches-testing/protonprep.sh  
 
 How to install:
 
@@ -43,12 +43,12 @@ How to build:
 3. Clone this repo:  
 `git clone --recurse-submodules http://github.com/gloriouseggroll/proton-ge-custom`  
 
-4. Drop any custom patches into game-patches-testing/, then open game-patches-testing/proton-prep.sh and  
+4. Drop any custom patches into game-patches-testing/, then open game-patches-testing/protonprep.sh and  
  add a patch line for them under #WINE CUSTOM PATCHES in the same way the others are done. 
 
 5. Apply all of the patches in /game patches/testing by running:
 ```
-./game-patches-testing/proton-prep.sh &> patchlog.txt
+./game-patches-testing/protonprep.sh &> patchlog.txt
 ``` 
 in the main proton-ge-custom directory. Open patchlog.txt and search "fail" to make sure no patch failures occured.
 

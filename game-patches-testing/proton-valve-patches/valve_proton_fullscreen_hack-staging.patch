@@ -3600,7 +3600,7 @@ index 635c7d9f3b..5b5ebe2d6e 100644
          break;
      }
 diff --git a/dlls/winex11.drv/settings.c b/dlls/winex11.drv/settings.c
-index 781a55699e..85b2f10159 100644
+index 781a55699e..23e98ac891 100644
 --- a/dlls/winex11.drv/settings.c
 +++ b/dlls/winex11.drv/settings.c
 @@ -21,7 +21,9 @@
@@ -3748,7 +3748,7 @@ index 781a55699e..85b2f10159 100644
 +    }
 +
 +    qsort(dd_modes, dd_mode_count, sizeof(*dd_modes), sort_display_modes);
-+
+ 
 +    /* synthesize 60 FPS mode if needed */
 +    if(real_rate != 60)
 +    {
@@ -3757,7 +3757,7 @@ index 781a55699e..85b2f10159 100644
 +            X11DRV_Settings_AddOneMode(dd_modes[i].width, dd_modes[i].height, dwBpp, 60);
 +        }
 +    }
- 
++
 +    existing_modes = dd_mode_count;
      for (j=0; j<3; j++)
      {
@@ -3771,7 +3771,7 @@ index 781a55699e..85b2f10159 100644
  }
  
  /* return the number of modes that are initialized */
-@@ -131,19 +231,245 @@ unsigned int X11DRV_Settings_GetModeCount(void)
+@@ -131,19 +231,264 @@ unsigned int X11DRV_Settings_GetModeCount(void)
   * Default handlers if resolution switching is not enabled
   *
   */
@@ -3819,6 +3819,25 @@ index 781a55699e..85b2f10159 100644
 +        currentMode != realMode;
 +}
 +
++BOOL fs_hack_mapping_required(void)
++{
++    /* steamcompmgr does our mapping for us */
++    return !wm_is_steamcompmgr(NULL) &&
++        currentMode >= 0 &&
++        currentMode != realMode;
++}
++
++BOOL fs_hack_is_integer(void)
++{
++    static int is_int = -1;
++    if(is_int < 0)
++    {
++        const char *e = getenv("WINE_FULLSCREEN_INTEGER_SCALING");
++        is_int = e && strcmp(e, "0");
++    }
++    return is_int;
++}
++
 +BOOL fs_hack_matches_current_mode(int w, int h)
 +{
 +    return fs_hack_enabled() &&
@@ -3840,7 +3859,7 @@ index 781a55699e..85b2f10159 100644
 +
 +void fs_hack_scale_user_to_real(POINT *pos)
 +{
-+    if(fs_hack_enabled()){
++    if(fs_hack_mapping_required()){
 +        TRACE("from %d,%d\n", pos->x, pos->y);
 +        pos->x = lround(pos->x * fs_hack_user_to_real_w);
 +        pos->y = lround(pos->y * fs_hack_user_to_real_h);
@@ -3850,7 +3869,7 @@ index 781a55699e..85b2f10159 100644
 +
 +void fs_hack_scale_real_to_user(POINT *pos)
 +{
-+    if(fs_hack_enabled()){
++    if(fs_hack_mapping_required()){
 +        TRACE("from %d,%d\n", pos->x, pos->y);
 +        pos->x = lround(pos->x * fs_hack_real_to_user_w);
 +        pos->y = lround(pos->y * fs_hack_real_to_user_h);
@@ -3868,7 +3887,7 @@ index 781a55699e..85b2f10159 100644
 +
 +void fs_hack_user_to_real(POINT *pos)
 +{
-+    if(fs_hack_enabled()){
++    if(fs_hack_mapping_required()){
 +        TRACE("from %d,%d\n", pos->x, pos->y);
 +        fs_hack_scale_user_to_real(pos);
 +        pos->x += offs_x;
@@ -3879,7 +3898,7 @@ index 781a55699e..85b2f10159 100644
 +
 +void fs_hack_real_to_user(POINT *pos)
 +{
-+    if(fs_hack_enabled()){
++    if(fs_hack_mapping_required()){
 +        TRACE("from %d,%d\n", pos->x, pos->y);
 +
 +        if(pos->x <= offs_x)
@@ -3915,7 +3934,7 @@ index 781a55699e..85b2f10159 100644
 +    unsigned int i;
 +    XRectangle *xrect;
 +
-+    if (data && fs_hack_enabled())
++    if (data && fs_hack_mapping_required())
 +    {
 +        xrect = (XRectangle *)data->Buffer;
 +        for (i = 0; i < data->rdh.nCount; i++)
