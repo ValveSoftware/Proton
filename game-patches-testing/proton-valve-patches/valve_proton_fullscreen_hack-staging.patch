@@ -4348,20 +4348,16 @@ index 056ac64b7d..6f342036a9 100644
              xev.xclient.data.l[0] = (new_state & (1 << i)) ? _NET_WM_STATE_ADD : _NET_WM_STATE_REMOVE;
              xev.xclient.data.l[1] = X11DRV_Atoms[net_wm_state_atoms[i] - FIRST_XATOM];
              xev.xclient.data.l[2] = ((net_wm_state_atoms[i] == XATOM__NET_WM_STATE_MAXIMIZED_VERT) ?
-@@ -1010,6 +1191,13 @@ void update_net_wm_states( struct x11drv_win_data *data )
-         }
+@@ -1031,6 +1199,9 @@ void update_net_wm_states( struct x11drv_win_data *data )
      }
      data->net_wm_state = new_state;
-+
+ 
 +    if(new_state & (1 << NET_WM_STATE_FULLSCREEN))
 +        XSetInputFocus( data->display, data->whole_window, RevertToParent, CurrentTime );
 +
-+    XChangeProperty( data->display, data->whole_window, x11drv_atom(_NET_WM_BYPASS_COMPOSITOR), XA_CARDINAL,
-+                     32, PropModeReplace, (unsigned char *)&net_wm_bypass_compositor, 1 );
-+
- }
+     XChangeProperty( data->display, data->whole_window, x11drv_atom(_NET_WM_BYPASS_COMPOSITOR), XA_CARDINAL,
+                      32, PropModeReplace, (unsigned char *)&net_wm_bypass_compositor, 1 );
  
- /***********************************************************************
 @@ -1152,6 +1317,7 @@ static void unmap_window( HWND hwnd )
  
          data->mapped = FALSE;
