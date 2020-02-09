@@ -1098,12 +1098,13 @@ index f886ff8d4ac..ff6d4f42d78 100644
 --- a/dlls/winebus.sys/bus.h
 +++ b/dlls/winebus.sys/bus.h
 @@ -53,4 +53,6 @@ DEVICE_OBJECT* bus_enumerate_hid_devices(const platform_vtbl *vtbl, enum_func fu
- DWORD check_bus_option(const UNICODE_STRING *option, DWORD default_value) DECLSPEC_HIDDEN;
  BOOL is_xbox_gamepad(WORD vid, WORD pid) DECLSPEC_HIDDEN;
+ BOOL is_steam_controller(WORD vid, WORD pid) DECLSPEC_HIDDEN;
  
 +BOOL is_already_opened_by_hidraw(DWORD vid, DWORD pid) DECLSPEC_HIDDEN;
 +
- HANDLE driver_key DECLSPEC_HIDDEN;
+ extern HANDLE driver_key DECLSPEC_HIDDEN;
+ extern DEVICE_OBJECT *bus_pdo DECLSPEC_HIDDEN;
 diff --git a/dlls/winebus.sys/bus_sdl.c b/dlls/winebus.sys/bus_sdl.c
 index 1fa31b8cd9d..7423aa57fe4 100644
 --- a/dlls/winebus.sys/bus_sdl.c
@@ -1211,7 +1212,7 @@ diff --git a/dlls/winebus.sys/main.c b/dlls/winebus.sys/main.c
 index dd55655572c..dd767a59d19 100644
 --- a/dlls/winebus.sys/main.c
 +++ b/dlls/winebus.sys/main.c
-@@ -487,13 +487,12 @@ static NTSTATUS fdo_pnp_dispatch(DEVICE_OBJECT *device, IRP *irp)
+@@ -487,17 +487,18 @@ static NTSTATUS fdo_pnp_dispatch(DEVICE_OBJECT *device, IRP *irp)
          break;
      case IRP_MN_START_DEVICE:
          mouse_device_create();
@@ -1220,9 +1221,12 @@ index dd55655572c..dd767a59d19 100644
  
          if (check_bus_option(&SDL_enabled, 1))
          {
--            if (sdl_driver_init() == STATUS_SUCCESS)
--                return STATUS_SUCCESS;
 +            sdl_driver_init();
+             if (sdl_driver_init() == STATUS_SUCCESS)
+             {
+                 irp->IoStatus.u.Status = STATUS_SUCCESS;
+                 break;
+             }
          }
 -        udev_driver_init();
 -        iohid_driver_init();
@@ -1448,8 +1452,8 @@ index a3e38816636..91aca91c25c 100644
 @@ -1,6 +1,6 @@
  MODULE    = dinput.dll
  IMPORTLIB = dinput
--IMPORTS   = dxguid uuid comctl32 ole32 user32 advapi32
-+IMPORTS   = dxguid uuid comctl32 ole32 user32 advapi32 setupapi hid
+-IMPORTS   = dinput dxguid uuid comctl32 ole32 user32 advapi32
++IMPORTS   = dinput dxguid uuid comctl32 ole32 user32 advapi32 setupapi hid
  EXTRADEFS = -DDIRECTINPUT_VERSION=0x0700
  EXTRALIBS = $(IOKIT_LIBS) $(FORCEFEEDBACK_LIBS) $(SDL2_LIBS)
  EXTRAINCL = $(SDL2_CFLAGS)
@@ -1574,8 +1578,8 @@ index 9735fb55465..4e4ba0c064e 100644
 @@ -1,6 +1,6 @@
  MODULE    = dinput8.dll
  IMPORTLIB = dinput8
--IMPORTS   = dxguid uuid comctl32 ole32 user32 advapi32
-+IMPORTS   = dxguid uuid comctl32 ole32 user32 advapi32 setupapi hid
+-IMPORTS   = dinput8 dxguid uuid comctl32 ole32 user32 advapi32
++IMPORTS   = dinput8 dxguid uuid comctl32 ole32 user32 advapi32 setupapi hid
  EXTRADEFS = -DDIRECTINPUT_VERSION=0x0800
  EXTRALIBS = $(IOKIT_LIBS) $(FORCEFEEDBACK_LIBS) $(SDL2_LIBS)
  EXTRAINCL = $(SDL2_CFLAGS)

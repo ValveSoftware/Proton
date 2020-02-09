@@ -18,7 +18,7 @@ from filelock import FileLock
 #To enable debug logging, copy "user_settings.sample.py" to "user_settings.py"
 #and edit it if needed.
 
-CURRENT_PREFIX_VERSION="5.0-GE-1"
+CURRENT_PREFIX_VERSION="5.1-GE-1"
 
 PFX="Proton: "
 ld_path_var = "LD_LIBRARY_PATH"
@@ -396,6 +396,9 @@ class Session:
 
         self.env["WINEDLLPATH"] = g_proton.lib64_dir + "/wine:" + g_proton.lib_dir + "/wine"
 
+        self.env["GST_PLUGIN_SYSTEM_PATH_1_0"] = g_proton.lib64_dir + "gstreamer-1.0" + ":" + g_proton.lib_dir + "gstreamer-1.0"
+        self.env["WINE_GST_REGISTRY_DIR"] = g_compatdata.path("gstreamer-1.0/")
+
         if "PATH" in os.environ:
             self.env["PATH"] = g_proton.bin_dir + ":" + os.environ["PATH"]
         else:
@@ -448,7 +451,6 @@ class Session:
         self.check_environment("PROTON_NO_D3D10", "nod3d10")
         self.check_environment("PROTON_NO_D9VK",  "nod3d9")
         self.check_environment("PROTON_NO_ESYNC", "noesync")
-        self.check_environment("PROTON_USE_VKD3D", "vkd3d")
         self.check_environment("PROTON_NO_FSYNC", "nofsync")
         self.check_environment("PROTON_FORCE_LARGE_ADDRESS_AWARE", "forcelgadd")
         self.check_environment("PROTON_OLD_GL_STRING", "oldglstr")
@@ -502,9 +504,6 @@ class Session:
 
         if "nod3d9" in self.compat_config:
             self.dlloverrides["d3d9"] = ""
-
-        if "vkd3d" in self.compat_config:
-            self.dlloverrides["dxgi"] = "b"
 
         import protonfixes
 
@@ -754,4 +753,3 @@ if __name__ == "__main__":
 
 #pylint --disable=C0301,C0326,C0330,C0111,C0103,R0902,C1801,R0914,R0912,R0915
 # vim: set syntax=python:
-

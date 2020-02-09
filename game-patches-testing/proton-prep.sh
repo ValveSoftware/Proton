@@ -22,18 +22,6 @@
     git reset --hard HEAD
     git clean -xdf
 
-    #FS HACK REVERTS NECESSARY
-    git revert --no-commit 427152ec7b4ee85631617b693dbf1deea763c0ba
-    git revert --no-commit b7b4bacaf99661e07c2f07a0260680b4e8bed4f8
-    git revert --no-commit acf03ed9da0f7d3f94de9b47c44366be3ee47f8e
-    git revert --no-commit 914b5519b1cd96f9ae19f1eec226e94af96354b9
-    git revert --no-commit 99d047724e768822d6508573cd82a5c75b30bdcb
-    git revert --no-commit 413aad39135b0b0f8255500b85fcc05337a5f138
-    git revert --no-commit 9ae8da6bb4a8f66d55975fa0f14e5e413756d324
-    git revert --no-commit de94cfa775f9f41d1d65cbd8e7bf861cd7f9a871
-    git revert --no-commit 6dbb153ede48e77a87dddf37e5276276a701c5c3
-    git revert --no-commit 81f8b6e8c215dc04a19438e4369fcba8f7f4f333
-
     #WINE STAGING
     echo "applying staging patches"
     ../wine-staging/patches/patchinstall.sh DESTDIR="." --all \
@@ -47,6 +35,11 @@
     -W user32-rawinput-nolegacy \
     -W user32-rawinput-mouse-experimental \
     -W user32-rawinput-hid \
+    -W dinput-SetActionMap-genre \
+    -W dinput-axis-recalc \
+    -W dinput-joy-mappings \
+    -W dinput-reconnect-joystick \
+    -W dinput-remap-joystick \
     -W winex11-key_translation 
 
     #VKD3D-WINE
@@ -62,12 +55,6 @@
     #WINE FAUDIO
     echo "applying faudio patches"
     patch -Np1 < ../game-patches-testing/faudio-patches/faudio-ffmpeg.patch
-    #patch -Np1 < ../game-patches-testing/audio-temp/1_0.patch
-    #patch -Np1 < ../game-patches-testing/audio-temp/1_1.patch
-    #patch -Np1 < ../game-patches-testing/audio-temp/1_2.patch
-    #patch -Np1 < ../game-patches-testing/audio-temp/1_3.patch
-    #patch -Np1 < ../game-patches-testing/audio-temp/1_4.patch
-
 
     #WINE GAME PATCHES
 
@@ -89,9 +76,6 @@
     echo "origin downloads fix" - tested OK
     patch -Np1 < ../game-patches-testing/game-patches/origin-downloads_fix.patch
 
-    echo "gta v loading fix"
-    patch -Np1 < ../game-patches-testing/game-patches/gtav-load-fix.patch
-
     echo "monster hunter world fix"
     patch -Np1 < ../game-patches-testing/game-patches/mhw_fix.patch
 
@@ -101,9 +85,6 @@
     echo "bcrypt fix for honor, steep"
     patch -Np1 < ../game-patches-testing/game-patches/0001-bcrypt-Implement-BCryptSecretAgreement-with-libgcryp.patch
     patch -Np1 < ../game-patches-testing/game-patches/0002-bcrypt-Implement-BCryptSecretAgreement-with-libgcryp.patch
-
-    echo "bnet beta win10 crash fix"
-    patch -Np1 < ../game-patches-testing/game-patches/bnet-beta_win10_crash_fix.patch
 
     #WINE FSYNC
     echo "applying fsync patches"
@@ -141,34 +122,36 @@
     patch -Np1 < ../wine-staging/patches/winex11-key_translation/0003-winex11.drv-Fix-main-Russian-keyboard-layout.patch
 
     # staging winex11.drv-mouse-coorrds
-    #patch -Np1 < ../game-patches-testing/proton-hotfixes/proton-staging_winex11.drv-mouse-coorrds.patch
+    patch -Np1 < ../game-patches-testing/proton-hotfixes/proton-staging_winex11.drv-mouse-coorrds.patch
 
     # staging winex11-MWM_Decorations
     patch -Np1 < ../game-patches-testing/proton-hotfixes/proton-staging_winex11-MWM_Decorations.patch
 
     # staging winex11-_NET_ACTIVE_WINDOW
-    patch -Np1 < ../wine-staging/patches/winex11-_NET_ACTIVE_WINDOW/0001-winex11.drv-Add-support-for-_NET_ACTIVE_WINDOW.patch
-    patch -Np1 < ../game-patches-testing/proton-hotfixes/proton-staging_winex11-_NET_ACTIVE_WINDOW-0002.patch
+    #patch -Np1 < ../game-patches-testing/proton-hotfixes/proton-staging_winex11-_NET_ACTIVE_WINDOW.patch
 
     # staging winex11-WM_WINDOWPOSCHANGING
-    patch -Np1 < ../game-patches-testing/proton-hotfixes/proton-staging_winex11-WM_WINDOWPOSCHANGING.patch
+    #patch -Np1 < ../game-patches-testing/proton-hotfixes/proton-staging_winex11-WM_WINDOWPOSCHANGING.patch
 
     echo "SDL Joystick"
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-sdl_joy.patch
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-sdl_joy_2.patch
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-sdl_joy_3.patch
 
+    echo "proton gamepad additions"
+    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-gamepad_additions.patch
+
     echo "mf hacks"
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-mf_hacks.patch
 
-    #echo "msvcrt overrides" - disabled, breaks some games
-    #patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-msvcrt_nativebuiltin.patch
+    echo "msvcrt overrides"
+    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-msvcrt_nativebuiltin.patch
 
     echo "valve registry entries"
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-apply_LargeAddressAware_fix_for_Bayonetta.patch
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-Set_amd_ags_x64_to_built_in_for_Wolfenstein_2.patch
 
-    echo "fix steep fullscreen"
+    echo "fix steep and AC Odyssey fullscreen"
     patch -Np1 < ../game-patches-testing/wine-patches/0001-Add-some-semi-stubs-in-user32.patch
 
     echo "Valve wined3d VR patches"
@@ -178,6 +161,8 @@
 
     #WINE CUSTOM PATCHES
     #add your own custom patch lines below
+
+    patch -Np1 < ../game-patches-testing/wine-patches/plasma_systray_fix.patch
 
     ./tools/make_requests
     autoreconf -f

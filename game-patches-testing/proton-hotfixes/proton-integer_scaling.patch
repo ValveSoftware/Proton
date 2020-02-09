@@ -168,18 +168,6 @@ index 2e2ac8f0b40..2427fd697ff 100644
          fs_hack_user_to_real(&scaled_origin);
  
          if(real_sz){
-diff --git a/dlls/winex11.drv/x11drv.h b/dlls/winex11.drv/x11drv.h
-index 3457149dbd3..41a9aa23cd4 100644
---- a/dlls/winex11.drv/x11drv.h
-+++ b/dlls/winex11.drv/x11drv.h
-@@ -616,6 +616,7 @@ extern BOOL update_clipboard( HWND hwnd ) DECLSPEC_HIDDEN;
- 
- extern void set_wm_hints( struct x11drv_win_data *data ) DECLSPEC_HIDDEN;
- extern BOOL fs_hack_enabled(void) DECLSPEC_HIDDEN;
-+extern BOOL fs_hack_is_integer(void) DECLSPEC_HIDDEN;
- extern BOOL fs_hack_matches_current_mode(int w, int h) DECLSPEC_HIDDEN;
- extern BOOL fs_hack_matches_real_mode(int w, int h) DECLSPEC_HIDDEN;
- extern POINT fs_hack_current_mode(void) DECLSPEC_HIDDEN;
 diff --git a/include/wine/vulkan_driver.h b/include/wine/vulkan_driver.h
 index 40ff8c35dbd..0f2bae9b9ef 100644
 --- a/include/wine/vulkan_driver.h

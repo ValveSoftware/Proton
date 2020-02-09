@@ -1,0 +1,131 @@
+From fbc59ed1cbf67eabf6f69d6fca727f50c338adcb Mon Sep 17 00:00:00 2001
+From: Andrew Eikum <aeikum@codeweavers.com>
+Date: Thu, 23 Jan 2020 14:17:36 -0600
+Subject: [PATCH] winex11.drv: Repair fs hack for primary monitor
+
+---
+ dlls/winex11.drv/desktop.c  |  3 ++-
+ dlls/winex11.drv/settings.c | 15 +++++++++++++++
+ dlls/winex11.drv/window.c   |  3 ++-
+ dlls/winex11.drv/x11drv.h   |  1 +
+ dlls/winex11.drv/xrandr.c   | 27 +++++++++++++++++++++++++--
+ 5 files changed, 45 insertions(+), 4 deletions(-)
+
+diff --git a/dlls/winex11.drv/desktop.c b/dlls/winex11.drv/desktop.c
+index 07d0e515718..8f6de586665 100644
+--- a/dlls/winex11.drv/desktop.c
++++ b/dlls/winex11.drv/desktop.c
+@@ -444,7 +444,8 @@ void X11DRV_resize_desktop( unsigned int width, unsigned int height )
+ 
+     if (GetWindowThreadProcessId( hwnd, NULL ) != GetCurrentThreadId())
+     {
+-        SendMessageW( hwnd, WM_X11DRV_RESIZE_DESKTOP, 0, MAKELPARAM( width, height ) );
++        POINT new_mode = fs_hack_current_mode();
++        SendMessageW( hwnd, WM_X11DRV_RESIZE_DESKTOP, MAKEWPARAM(new_mode.x, new_mode.y), MAKELPARAM( width, height ) );
+     }
+     else
+     {
+diff --git a/dlls/winex11.drv/settings.c b/dlls/winex11.drv/settings.c
+index 37d0c560bee..7974596548c 100644
+--- a/dlls/winex11.drv/settings.c
++++ b/dlls/winex11.drv/settings.c
+@@ -466,6 +466,21 @@ static LONG X11DRV_nores_SetCurrentMode(int mode)
+     return DISP_CHANGE_SUCCESSFUL;
+ }
+ 
++void fs_hack_choose_mode(int w, int h)
++{
++    unsigned int i;
++
++    for(i = 0; i < dd_mode_count; ++i)
++    {
++        if(dd_modes[i].width == w &&
++                dd_modes[i].height == h)
++        {
++            X11DRV_nores_SetCurrentMode(i);
++            break;
++        }
++    }
++}
++
+ POINT fs_hack_current_mode(void)
+ {
+     POINT ret = { dd_modes[currentMode].width,
+diff --git a/dlls/winex11.drv/window.c b/dlls/winex11.drv/window.c
+index 6ee6aa5d0f0..77cf9f1d1b1 100644
+--- a/dlls/winex11.drv/window.c
++++ b/dlls/winex11.drv/window.c
+@@ -2970,7 +2970,8 @@ LRESULT CDECL X11DRV_WindowMessage( HWND hwnd, UINT msg, WPARAM wp, LPARAM lp )
+         }
+         return 0;
+     case WM_X11DRV_RESIZE_DESKTOP:
+-        X11DRV_resize_desktop( LOWORD(lp), HIWORD(lp) );
++        fs_hack_choose_mode(LOWORD(wp), HIWORD(wp));
++        //X11DRV_resize_desktop( LOWORD(lp), HIWORD(lp) );
+         return 0;
+     case WM_X11DRV_SET_CURSOR:
+         if ((data = get_win_data( hwnd )))
+diff --git a/dlls/winex11.drv/x11drv.h b/dlls/winex11.drv/x11drv.h
+index 99e5005afb4..3d1c2cbce01 100644
+--- a/dlls/winex11.drv/x11drv.h
++++ b/dlls/winex11.drv/x11drv.h
+@@ -638,6 +638,7 @@ extern void fs_hack_xrender_copy(Drawable src, Drawable dst) DECLSPEC_HIDDEN;
+ extern double fs_hack_user_to_real_w, fs_hack_user_to_real_h DECLSPEC_HIDDEN;
+ extern double fs_hack_real_to_user_w, fs_hack_real_to_user_h DECLSPEC_HIDDEN;
+ BOOL fs_hack_matches_last_mode(int w, int h) DECLSPEC_HIDDEN;
++void fs_hack_choose_mode(int w, int h) DECLSPEC_HIDDEN;
+ 
+ static inline void mirror_rect( const RECT *window_rect, RECT *rect )
+ {
+diff --git a/dlls/winex11.drv/xrandr.c b/dlls/winex11.drv/xrandr.c
+index e889e2294d0..fff1322d292 100644
+--- a/dlls/winex11.drv/xrandr.c
++++ b/dlls/winex11.drv/xrandr.c
+@@ -958,7 +958,7 @@ static BOOL xrandr14_get_monitors( ULONG_PTR adapter_id, struct x11drv_monitor *
+     XRRScreenResources *screen_resources = NULL;
+     XRROutputInfo *output_info = NULL, *enum_output_info = NULL;
+     XRRCrtcInfo *crtc_info = NULL, *enum_crtc_info;
+-    INT primary_index = 0, monitor_count = 0, capacity;
++    INT primary_index = -1, monitor_count = 0, capacity;
+     RECT work_rect, primary_rect;
+     BOOL ret = FALSE;
+     INT i;
+@@ -1057,7 +1057,7 @@ static BOOL xrandr14_get_monitors( ULONG_PTR adapter_id, struct x11drv_monitor *
+         }
+ 
+         /* Make sure the first monitor is the primary */
+-        if (primary_index)
++        if (primary_index > 0)
+         {
+             struct x11drv_monitor tmp = monitors[0];
+             monitors[0] = monitors[primary_index];
+@@ -1070,6 +1070,29 @@ static BOOL xrandr14_get_monitors( ULONG_PTR adapter_id, struct x11drv_monitor *
+             OffsetRect( &monitors[i].rc_monitor, -primary_rect.left, -primary_rect.top );
+             OffsetRect( &monitors[i].rc_work, -primary_rect.left, -primary_rect.top );
+         }
++
++        if (primary_index >= 0 && fs_hack_enabled())
++        {
++            /* apply fs hack to primary monitor */
++            POINT fs_hack = fs_hack_current_mode();
++
++            monitors[0].rc_monitor.right = monitors[0].rc_monitor.left + fs_hack.x;
++            monitors[0].rc_monitor.bottom = monitors[0].rc_monitor.top + fs_hack.y;
++
++            fs_hack.x = monitors[0].rc_work.left;
++            fs_hack.y = monitors[0].rc_work.top;
++            fs_hack_real_to_user(&fs_hack);
++            monitors[0].rc_work.left = fs_hack.x;
++            monitors[0].rc_work.top = fs_hack.y;
++
++            fs_hack.x = monitors[0].rc_work.right;
++            fs_hack.y = monitors[0].rc_work.bottom;
++            fs_hack_real_to_user(&fs_hack);
++            monitors[0].rc_work.right = fs_hack.x;
++            monitors[0].rc_work.bottom = fs_hack.y;
++
++            /* TODO adjust other monitor positions */
++        }
+     }
+ 
+     *new_monitors = monitors;

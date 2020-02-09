@@ -1165,15 +1165,16 @@ index dd1d0847ae..4c2bf3ada7 100644
      }
      else if (protocol == x11drv_atom(_NET_WM_PING))
      {
-@@ -775,30 +807,19 @@ static BOOL X11DRV_FocusIn( HWND hwnd, XEvent *xev )
+@@ -775,23 +775,19 @@ static BOOL X11DRV_FocusIn( HWND hwnd, XEvent *xev )
      if (event->detail == NotifyPointer) return FALSE;
      if (hwnd == GetDesktopWindow()) return FALSE;
  
 -    switch (event->mode)
 -    {
 -    case NotifyGrab:
--        WARN( "unexpected FocusIn event with NotifyGrab mode\n" );
--        break;
+-        /* these are received when moving undecorated managed windows on mutter */
+-        keyboard_grabbed = TRUE;
+-        return FALSE;
 -    case NotifyWhileGrabbed:
 -        keyboard_grabbed = TRUE;
 -        break;
@@ -1181,13 +1182,10 @@ index dd1d0847ae..4c2bf3ada7 100644
 -        keyboard_grabbed = FALSE;
 -        break;
 -    case NotifyUngrab:
--        /* Focus was just restored but it can be right after super was
--         * pressed and gnome-shell needs a bit of time to respond and
--         * toggle the activity view. If we grab the cursor right away
--         * it will cancel it and super key will do nothing.
--         */
--        if (wm_is_mutter(event->display))
--            Sleep(100);
+-        keyboard_grabbed = FALSE;
+-        retry_grab_clipping_window();
+-        return TRUE; /* ignore wm specific NotifyUngrab / NotifyGrab events w.r.t focus */
+-    }
 +    /* Focus was just restored but it can be right after super was
 +     * pressed and gnome-shell needs a bit of time to respond and
 +     * toggle the activity view. If we grab the cursor right away
@@ -1195,11 +1193,7 @@ index dd1d0847ae..4c2bf3ada7 100644
 +     */
 +    if (event->mode == NotifyUngrab && wm_is_mutter(event->display))
 +        Sleep(100);
- 
--        keyboard_grabbed = FALSE;
--        retry_grab_clipping_window();
--        return TRUE; /* ignore wm specific NotifyUngrab / NotifyGrab events w.r.t focus */
--    }
++
 +    /* ask the foreground window to re-apply the current ClipCursor rect */
 +    SendMessageW( GetForegroundWindow(), WM_X11DRV_CLIP_CURSOR, 0, 0 );
 +
@@ -1228,15 +1222,16 @@ index dd1d0847ae..4c2bf3ada7 100644
      return TRUE;
  }
  
-@@ -902,28 +931,10 @@ static BOOL X11DRV_FocusOut( HWND hwnd, XEvent *xev )
+@@ -877,29 +891,10 @@ static BOOL X11DRV_FocusOut( HWND hwnd, XEvent *xev )
      }
      if (!hwnd) return FALSE;
  
 -    switch (event->mode)
 -    {
 -    case NotifyUngrab:
--        WARN( "unexpected FocusOut event with NotifyUngrab mode\n" );
--        break;
+-        /* these are received when moving undecorated managed windows on mutter */
+-        keyboard_grabbed = FALSE;
+-        return FALSE;
 -    case NotifyNormal:
 -        keyboard_grabbed = FALSE;
 -        break;
@@ -1434,21 +1429,6 @@ index 68aecdf90c..cb3cd4b4fd 100644
  #endif
  }
  
-@@ -385,14 +385,10 @@ static BOOL grab_clipping_window( const RECT *clip )
- {
-     static const WCHAR messageW[] = {'M','e','s','s','a','g','e',0};
-     struct x11drv_thread_data *data = x11drv_thread_data();
--    static DWORD timeout = 5000;
--    static DWORD step = 100;
--    DWORD time = 0;
-     Window clip_window;
-     HWND msg_hwnd = 0;
-     POINT pos;
-     RECT real_clip;
--    INT ret;
- 
-     if (GetWindowThreadProcessId( GetDesktopWindow(), NULL ) == GetCurrentThreadId())
-         return TRUE;  /* don't clip in the desktop process */
 @@ -404,21 +400,8 @@ static BOOL grab_clipping_window( const RECT *clip )
                                      GetModuleHandleW(0), NULL )))
          return TRUE;
@@ -1472,36 +1452,20 @@ index 68aecdf90c..cb3cd4b4fd 100644
  
      if (data->xi2_state != xi_enabled)
      {
-@@ -460,25 +443,14 @@ static BOOL grab_clipping_window( const RECT *clip )
-         clip->right < clip_rect.right || clip->bottom < clip_rect.bottom)
-         data->warp_serial = NextRequest( data->display );
- 
--    /* Some windows managers temporarily grab the pointer during window transition. Retry grabbing. */
--    do
--    {
--        ret = XGrabPointer( data->display, clip_window, False, PointerMotionMask | ButtonPressMask | ButtonReleaseMask,
--                            GrabModeAsync, GrabModeAsync, clip_window, None, CurrentTime );
--        if (ret == AlreadyGrabbed || ret == GrabFrozen)
--        {
--            time += step;
--            Sleep(step);
--        }
--    } while ((ret == AlreadyGrabbed || ret == GrabFrozen) && time < timeout);
--
--    if (ret == GrabSuccess)
-+    if (!XGrabPointer( data->display, clip_window, False,
-+                       PointerMotionMask | ButtonPressMask | ButtonReleaseMask,
-+                       GrabModeAsync, GrabModeAsync, clip_window, None, CurrentTime ))
-         clipping_cursor = TRUE;
+@@ -439,11 +485,12 @@ static BOOL grab_clipping_window( const RECT *clip )
  
      if (!clipping_cursor)
      {
--        ERR("Failed to grab pointer\n");
 -        disable_xinput2();
 +        X11DRV_XInput2_Disable();
          DestroyWindow( msg_hwnd );
          return FALSE;
      }
+     clip_rect = *clip;
++    TRACE("new clip rect: %s\n", wine_dbgstr_rect(&clip_rect));
+     if (!data->clip_hwnd) sync_window_cursor( clip_window );
+     InterlockedExchangePointer( (void **)&cursor_window, msg_hwnd );
+     data->clip_hwnd = msg_hwnd;
 @@ -521,20 +493,6 @@ void reset_clipping_window(void)
      ClipCursor( NULL );  /* make sure the clip rectangle is reset too */
  }
