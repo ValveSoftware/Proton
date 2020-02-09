@@ -125,3 +125,71 @@ index ae6fa2678e6..85a85ca8b40 100644
  {
 
  
+diff --git a/dlls/winevulkan/vulkan.c b/dlls/winevulkan/vulkan.c
+index ddcb95cd422..8324cc7ee1c 100644
+--- a/dlls/winevulkan/vulkan.c
++++ b/dlls/winevulkan/vulkan.c
+@@ -1267,7 +1267,7 @@ VkResult WINAPI wine_vkGetPhysicalDeviceSurfaceCapabilitiesKHR(VkPhysicalDevice
+         capabilities->maxImageCount = 32;
+ 
+     if(vk_funcs->query_fs_hack &&
+-            vk_funcs->query_fs_hack(NULL, &user_res, NULL)){
++            vk_funcs->query_fs_hack(NULL, &user_res, NULL, NULL)){
+         capabilities->currentExtent = user_res;
+         capabilities->minImageExtent = user_res;
+         capabilities->maxImageExtent = user_res;
+@@ -1715,7 +1715,7 @@ VkResult WINAPI wine_vkCreateSwapchainKHR(VkDevice device, const VkSwapchainCrea
+         our_createinfo.oldSwapchain = ((struct VkSwapchainKHR_T *)(UINT_PTR)our_createinfo.oldSwapchain)->swapchain;
+ 
+     if(vk_funcs->query_fs_hack &&
+-            vk_funcs->query_fs_hack(&object->real_extent, &user_sz, &object->blit_dst) &&
++            vk_funcs->query_fs_hack(&object->real_extent, &user_sz, &object->blit_dst, &object->fs_hack_filter) &&
+             our_createinfo.imageExtent.width == user_sz.width &&
+             our_createinfo.imageExtent.height == user_sz.height)
+     {
+@@ -1946,8 +1946,8 @@ static VkResult init_blit_images(VkDevice device, struct VkSwapchainKHR_T *swapc
+     uint32_t blit_memory_type = -1, i;
+ 
+     samplerInfo.sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;
+-    samplerInfo.magFilter = VK_FILTER_LINEAR;
+-    samplerInfo.minFilter = VK_FILTER_LINEAR;
++    samplerInfo.magFilter = swapchain->fs_hack_filter;
++    samplerInfo.minFilter = swapchain->fs_hack_filter;
+     samplerInfo.addressModeU = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_BORDER;
+     samplerInfo.addressModeV = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_BORDER;
+     samplerInfo.addressModeW = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_BORDER;
+@@ -2494,7 +2494,7 @@ static VkResult record_graphics_cmd(VkDevice device, struct VkSwapchainKHR_T *sw
+     device->funcs.p_vkCmdBlitImage(hack->cmd,
+             hack->user_image, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
+             hack->swapchain_image, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+-            1, &blitregion, VK_FILTER_LINEAR /* CUBIC_IMG? */);
++            1, &blitregion, swapchain->fs_hack_filter);
+ 
+     /* transition user image from TRANSFER_SRC_OPTIMAL to GENERAL */
+     barriers[0].sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
+diff --git a/dlls/winevulkan/vulkan_private.h b/dlls/winevulkan/vulkan_private.h
+index 145635eea24..00626eff1e3 100644
+--- a/dlls/winevulkan/vulkan_private.h
++++ b/dlls/winevulkan/vulkan_private.h
+@@ -165,6 +165,7 @@ struct VkSwapchainKHR_T
+     VkDeviceMemory user_image_memory, blit_image_memory;
+     uint32_t n_images;
+     struct fs_hack_image *fs_hack_images; /* struct fs_hack_image[n_images] */
++    VkFilter fs_hack_filter;
+     VkSampler sampler;
+     VkDescriptorPool descriptor_pool;
+     VkDescriptorSetLayout descriptor_set_layout;
+diff --git a/include/wine/vulkan_driver.h b/include/wine/vulkan_driver.h
+index 40ff8c35dbd..0f2bae9b9ef 100644
+--- a/include/wine/vulkan_driver.h
++++ b/include/wine/vulkan_driver.h
+@@ -71,7 +71,7 @@ struct vulkan_funcs
+      * resolution; user_sz will contain the app's requested mode; and dst_blit
+      * will contain the area to blit the user image to in real coordinates.
+      * All parameters are optional. */
+-    VkBool32 (*query_fs_hack)(VkExtent2D *real_sz, VkExtent2D *user_sz, VkRect2D *dst_blit);
++    VkBool32 (*query_fs_hack)(VkExtent2D *real_sz, VkExtent2D *user_sz, VkRect2D *dst_blit, VkFilter *filter);
+ };
+ 
+ extern const struct vulkan_funcs * CDECL __wine_get_vulkan_driver(HDC hdc, UINT version);
+ 

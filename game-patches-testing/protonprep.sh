@@ -109,10 +109,13 @@
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-FS_bypass_compositor.patch
     patch -Np1 < ../game-patches-testing/proton-valve-patches/valve_proton_fullscreen_hack-staging.patch
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-vk_bits_4.5+.patch
-    patch -Np1 < ../game-patches-testing/proton-hotfixes/proton-integer_scaling.patch
 
     echo "raw input"
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-rawinput.patch
+
+    echo "gstreamer"
+    patch -Np1 < ../game-patches-testing/proton-valve-patches/winegstreamer-HACK_try_harder_to_register_winegstreamer_filters.patch
+    patch -Np1 < ../game-patches-testing/proton-valve-patches/winegstreamer-HACK_use_a_different_gst_registry_file_per_architecture.patch
 
     echo "applying staging patches that need to be applied after proton rawinput and fullscreen hack"
 
@@ -120,6 +123,9 @@
     patch -Np1 < ../wine-staging/patches/winex11-key_translation/0001-winex11-Match-keyboard-in-Unicode.patch
     patch -Np1 < ../wine-staging/patches/winex11-key_translation/0002-winex11-Fix-more-key-translation.patch
     patch -Np1 < ../wine-staging/patches/winex11-key_translation/0003-winex11.drv-Fix-main-Russian-keyboard-layout.patch
+
+    echo "user32 resize hack"
+    patch -Np1 < ../game-patches-testing/proton-valve-patches/user32-HACK_dont_resize_new_windows_to_fit_the_display.patch
 
     # staging winex11.drv-mouse-coorrds
     patch -Np1 < ../game-patches-testing/proton-hotfixes/proton-staging_winex11.drv-mouse-coorrds.patch
