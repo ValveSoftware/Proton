@@ -114,7 +114,7 @@ install: configure
 
 redist: configure
 	mkdir -p vagrant_share/$(DEPLOY_DIR)
-	vagrant ssh -c 'make -C $(BUILD_DIR)/ $(UNSTRIPPED) redist && cp -r $(BUILD_DIR)/redist/* /vagrant/$(DEPLOY_DIR) && cd /vagrant/ && tar -cvzf $(DEPLOY_DIR).tar.gz $(DEPLOY_DIR)'
+	vagrant ssh -c 'make -C $(BUILD_DIR)/ $(UNSTRIPPED) redist && cp -r $(BUILD_DIR)/redist/* /vagrant/$(DEPLOY_DIR) && cd /vagrant/ && tar -cvzf $(DEPLOY_DIR).tar.gz $(DEPLOY_DIR) && rm -R /home/vagrant/build*'
 	echo "Proton build available at vagrant_share/$(DEPLOY_DIR)"
 
 deploy: configure
