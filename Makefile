@@ -38,7 +38,6 @@ endif
 CONFIGURE_CMD := ../proton/configure.sh \
 	--steam-runtime64=docker:steam-proton-dev --steam-runtime32=docker:steam-proton-dev32 \
 	--steam-runtime="$$HOME"/steam-runtime/runtime/ \
-        --with-ffmpeg \
 	--build-name="$(_build_name)"
 
 # make doesn't handle spaces well... replace them with underscores in paths
