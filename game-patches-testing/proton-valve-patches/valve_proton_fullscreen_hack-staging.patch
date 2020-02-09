@@ -4237,7 +4237,7 @@ index 056ac64b7d..6f342036a9 100644
  
      if (data->hwnd == GetDesktopWindow())
      {
-@@ -735,19 +848,57 @@ static void set_mwm_hints( struct x11drv_win_data *data, DWORD style, DWORD ex_s
+@@ -719,19 +842,63 @@ static void set_mwm_hints( struct x11drv_win_data *data, DWORD style, DWORD ex_s
          {
              if (style & WS_MINIMIZEBOX) mwm_hints.functions |= MWM_FUNC_MINIMIZE;
              if (style & WS_MAXIMIZEBOX) mwm_hints.functions |= MWM_FUNC_MAXIMIZE;
@@ -4246,9 +4246,17 @@ index 056ac64b7d..6f342036a9 100644
          }
      }
  
++    mwm_hints.flags = MWM_HINTS_FUNCTIONS | MWM_HINTS_DECORATIONS;
++
++    if (data->prev_hints.flags == mwm_hints.flags &&
++        data->prev_hints.decorations == mwm_hints.decorations &&
++        data->prev_hints.functions == mwm_hints.functions)
++        return;
++
      TRACE( "%p setting mwm hints to %lx,%lx (style %x exstyle %x)\n",
             data->hwnd, mwm_hints.decorations, mwm_hints.functions, style, ex_style );
  
+-    mwm_hints.flags = MWM_HINTS_FUNCTIONS | MWM_HINTS_DECORATIONS;
 +    enable_mutter_workaround = wm_is_mutter(data->display) && GetFocus() == data->hwnd &&
 +                               !!data->prev_hints.decorations != !!mwm_hints.decorations &&
 +                               root_window == DefaultRootWindow(data->display);
@@ -4265,7 +4273,6 @@ index 056ac64b7d..6f342036a9 100644
 +            mapped = (attr.map_state != IsUnmapped);
 +    }
 +
-     mwm_hints.flags = MWM_HINTS_FUNCTIONS | MWM_HINTS_DECORATIONS;
      mwm_hints.input_mode = 0;
      mwm_hints.status = 0;
 +    data->unmapnotify_serial = NextRequest( data->display );
@@ -4328,7 +4335,7 @@ index 056ac64b7d..6f342036a9 100644
          new_state |= (1 << NET_WM_STATE_ABOVE);
      if (ex_style & (WS_EX_TOOLWINDOW | WS_EX_NOACTIVATE))
          new_state |= (1 << NET_WM_STATE_SKIP_TASKBAR) | (1 << NET_WM_STATE_SKIP_PAGER);
-@@ -1021,6 +1177,12 @@ void update_net_wm_states( struct x11drv_win_data *data )
+@@ -1001,6 +1176,12 @@ void update_net_wm_states( struct x11drv_win_data *data )
                     i, data->hwnd, data->whole_window,
                     (new_state & (1 << i)) != 0, (data->net_wm_state & (1 << i)) != 0 );
  
@@ -4341,12 +4348,16 @@ index 056ac64b7d..6f342036a9 100644
              xev.xclient.data.l[0] = (new_state & (1 << i)) ? _NET_WM_STATE_ADD : _NET_WM_STATE_REMOVE;
              xev.xclient.data.l[1] = X11DRV_Atoms[net_wm_state_atoms[i] - FIRST_XATOM];
              xev.xclient.data.l[2] = ((net_wm_state_atoms[i] == XATOM__NET_WM_STATE_MAXIMIZED_VERT) ?
-@@ -1034,6 +1196,9 @@ void update_net_wm_states( struct x11drv_win_data *data )
-     XChangeProperty( data->display, data->whole_window, x11drv_atom(_NET_WM_BYPASS_COMPOSITOR), XA_CARDINAL,
-                      32, PropModeReplace, (unsigned char *)&net_wm_bypass_compositor, 1 );
- 
+@@ -1010,6 +1191,13 @@ void update_net_wm_states( struct x11drv_win_data *data )
+         }
+     }
+     data->net_wm_state = new_state;
++
 +    if(new_state & (1 << NET_WM_STATE_FULLSCREEN))
 +        XSetInputFocus( data->display, data->whole_window, RevertToParent, CurrentTime );
++
++    XChangeProperty( data->display, data->whole_window, x11drv_atom(_NET_WM_BYPASS_COMPOSITOR), XA_CARDINAL,
++                     32, PropModeReplace, (unsigned char *)&net_wm_bypass_compositor, 1 );
 +
  }
  
@@ -4595,6 +4606,22 @@ index 6068a72065..e3eefefc29 100644
  };
  
  struct x11drv_thread_data
+@@ -424,6 +424,7 @@ enum x11drv_atoms
+     XATOM_TEXT,
+     XATOM_TIMESTAMP,
+     XATOM_UTF8_STRING,
++    XATOM_STRING,
+     XATOM_RAW_ASCENT,
+     XATOM_RAW_DESCENT,
+     XATOM_RAW_CAP_HEIGHT,
+@@ -431,6 +432,7 @@ enum x11drv_atoms
+     XATOM_Rel_Y,
+     XATOM_WM_PROTOCOLS,
+     XATOM_WM_DELETE_WINDOW,
++    XATOM_WM_NAME,
+     XATOM_WM_STATE,
+     XATOM_WM_TAKE_FOCUS,
+     XATOM_DndProtocol,
 @@ -441,6 +445,7 @@ enum x11drv_atoms
      XATOM__NET_STARTUP_INFO_BEGIN,
      XATOM__NET_STARTUP_INFO,
