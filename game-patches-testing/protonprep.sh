@@ -22,6 +22,9 @@
     git reset --hard HEAD
     git clean -xdf
 
+    echo "plasma systray fix"
+    patch -Np1 < ../game-patches-testing/wine-patches/plasma_systray_fix.patch
+
     #WINE STAGING
     echo "applying staging patches"
     ../wine-staging/patches/patchinstall.sh DESTDIR="." --all \
@@ -86,6 +89,9 @@
     patch -Np1 < ../game-patches-testing/game-patches/0001-bcrypt-Implement-BCryptSecretAgreement-with-libgcryp.patch
     patch -Np1 < ../game-patches-testing/game-patches/0002-bcrypt-Implement-BCryptSecretAgreement-with-libgcryp.patch
 
+    echo "fix steep and AC Odyssey fullscreen"
+    patch -Np1 < ../game-patches-testing/wine-patches/0001-Add-some-semi-stubs-in-user32.patch
+
     #WINE FSYNC
     echo "applying fsync patches"
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-fsync_staging.patch
@@ -103,7 +109,6 @@
     echo "clock monotonic, amd ags, hide prefix update"
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-use_clock_monotonic.patch
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-amd_ags.patch
-    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-hide_prefix_update_window.patch
 
     echo "fullscreen hack"
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-FS_bypass_compositor.patch
@@ -113,12 +118,28 @@
     echo "raw input"
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-rawinput.patch
 
-    echo "gstreamer"
-    patch -Np1 < ../game-patches-testing/proton-valve-patches/winegstreamer-HACK_try_harder_to_register_winegstreamer_filters.patch
-    patch -Np1 < ../game-patches-testing/proton-valve-patches/winegstreamer-HACK_use_a_different_gst_registry_file_per_architecture.patch
+    echo "SDL Joystick"
+    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-sdl_joy.patch
+    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-sdl_joy_2.patch
+    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-sdl_joy_3.patch
 
-    echo "win10 prefix patch"
-    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-win10_default_prefix.patch
+    echo "proton gamepad additions"
+    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-gamepad_additions.patch
+
+    echo "msvcrt overrides"
+    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-msvcrt_nativebuiltin.patch
+
+    echo "valve registry entries"
+    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-apply_LargeAddressAware_fix_for_Bayonetta.patch
+    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-Set_amd_ags_x64_to_built_in_for_Wolfenstein_2.patch
+
+    echo "Valve wined3d VR patches"
+    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-wined3d.patch 
+    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-wined3d_2.patch 
+    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-wined3d_3.patch
+
+    echo "mf hacks"
+    patch -Np1 < ../game-patches-testing/proton-hotfixes/proton-mf_hacks.patch
 
     echo "applying staging patches that need to be applied after proton rawinput and fullscreen hack"
 
@@ -126,9 +147,6 @@
     patch -Np1 < ../wine-staging/patches/winex11-key_translation/0001-winex11-Match-keyboard-in-Unicode.patch
     patch -Np1 < ../wine-staging/patches/winex11-key_translation/0002-winex11-Fix-more-key-translation.patch
     patch -Np1 < ../wine-staging/patches/winex11-key_translation/0003-winex11.drv-Fix-main-Russian-keyboard-layout.patch
-
-    echo "user32 resize hack"
-    patch -Np1 < ../game-patches-testing/proton-valve-patches/user32-HACK_dont_resize_new_windows_to_fit_the_display.patch
 
     # staging winex11.drv-mouse-coorrds
     patch -Np1 < ../game-patches-testing/proton-hotfixes/proton-staging_winex11.drv-mouse-coorrds.patch
@@ -142,36 +160,8 @@
     # staging winex11-WM_WINDOWPOSCHANGING
     #patch -Np1 < ../game-patches-testing/proton-hotfixes/proton-staging_winex11-WM_WINDOWPOSCHANGING.patch
 
-    echo "SDL Joystick"
-    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-sdl_joy.patch
-    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-sdl_joy_2.patch
-    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-sdl_joy_3.patch
-
-    echo "proton gamepad additions"
-    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-gamepad_additions.patch
-
-    echo "mf hacks"
-    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-mf_hacks.patch
-
-    echo "msvcrt overrides"
-    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-msvcrt_nativebuiltin.patch
-
-    echo "valve registry entries"
-    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-apply_LargeAddressAware_fix_for_Bayonetta.patch
-    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-Set_amd_ags_x64_to_built_in_for_Wolfenstein_2.patch
-
-    echo "fix steep and AC Odyssey fullscreen"
-    patch -Np1 < ../game-patches-testing/wine-patches/0001-Add-some-semi-stubs-in-user32.patch
-
-    echo "Valve wined3d VR patches"
-    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-wined3d.patch 
-    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-wined3d_2.patch 
-    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-wined3d_3.patch
-
     #WINE CUSTOM PATCHES
     #add your own custom patch lines below
-
-    patch -Np1 < ../game-patches-testing/wine-patches/plasma_systray_fix.patch
 
     ./tools/make_requests
     autoreconf -f

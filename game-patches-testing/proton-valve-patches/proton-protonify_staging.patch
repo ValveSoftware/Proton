@@ -3786,258 +3786,1322 @@ index 431c247a072..c9fcad79316 100644
      return status;
  }
  
-From a1ab7e1ccdb672d9bcc4c526f2b8402728f431c5 Mon Sep 17 00:00:00 2001
+From 4aa052e0c8ae276fc07afcd93d6e290a88214837 Mon Sep 17 00:00:00 2001
 From: Andrew Eikum <aeikum@codeweavers.com>
-Date: Thu, 9 Jan 2020 07:18:14 -0600
-Subject: [PATCH] xinput: Implement XInputGetKeystroke
+Date: Wed, 15 Jan 2020 10:17:23 -0600
+Subject: [PATCH] dsound: Initialize primary buffer with device's channel
+ layout
 
-For ELEX.
+Fixes surround sound in some games, like Borderlands GOTY and Dead
+Space.
 ---
- dlls/xinput1_3/xinput_main.c    | 216 ++++++++++++++++++++++++++++++--
- dlls/xinput1_3/xinput_private.h |   1 +
- 2 files changed, 209 insertions(+), 8 deletions(-)
+ dlls/dsound/dsound.c         | 77 +-----------------------------------
+ dlls/dsound/dsound_private.h |  1 -
+ dlls/dsound/primary.c        | 75 ++++++++++++++++++++++++++++++++++-
+ 3 files changed, 76 insertions(+), 77 deletions(-)
 
-diff --git a/dlls/xinput1_3/xinput_main.c b/dlls/xinput1_3/xinput_main.c
-index a663c021543..5542b6fef58 100644
---- a/dlls/xinput1_3/xinput_main.c
-+++ b/dlls/xinput1_3/xinput_main.c
-@@ -322,19 +322,219 @@ DWORD WINAPI DECLSPEC_HOTPATCH XInputGetStateEx(DWORD index, XINPUT_STATE* state
-     return xinput_get_state(index, state);
+diff --git a/dlls/dsound/dsound.c b/dlls/dsound/dsound.c
+index 8e2b839fe89..630d8c7e16a 100644
+--- a/dlls/dsound/dsound.c
++++ b/dlls/dsound/dsound.c
+@@ -23,7 +23,6 @@
+ #include <assert.h>
+ #include <stdarg.h>
+ #include <stdio.h>
+-#include <math.h>
+ 
+ #define COBJMACROS
+ 
+@@ -138,9 +137,9 @@ static HRESULT DirectSoundDevice_Create(DirectSoundDevice ** ppDevice)
+     device->ref            = 1;
+     device->priolevel      = DSSCL_NORMAL;
+     device->stopped        = 1;
+-    device->speaker_config = DSSPEAKER_COMBINED(DSSPEAKER_STEREO, DSSPEAKER_GEOMETRY_WIDE);
+ 
+-    DSOUND_ParseSpeakerConfig(device);
++    device->speaker_config = 0;
++    device->num_speakers = 0;
+ 
+     /* 3D listener initial parameters */
+     device->ds3dl.dwSize   = sizeof(DS3DLISTENER);
+@@ -1127,75 +1126,3 @@ HRESULT WINAPI DirectSoundCreate8(
+ 
+     return hr;
+ }
+-
+-void DSOUND_ParseSpeakerConfig(DirectSoundDevice *device)
+-{
+-    switch (DSSPEAKER_CONFIG(device->speaker_config)) {
+-        case DSSPEAKER_MONO:
+-            device->speaker_angles[0] = M_PI/180.0f * 0.0f;
+-            device->speaker_num[0] = 0;
+-            device->num_speakers = 1;
+-            device->lfe_channel = -1;
+-        break;
+-
+-        case DSSPEAKER_STEREO:
+-        case DSSPEAKER_HEADPHONE:
+-            device->speaker_angles[0] = M_PI/180.0f * -90.0f;
+-            device->speaker_angles[1] = M_PI/180.0f *  90.0f;
+-            device->speaker_num[0] = 0; /* Left */
+-            device->speaker_num[1] = 1; /* Right */
+-            device->num_speakers = 2;
+-            device->lfe_channel = -1;
+-        break;
+-
+-        case DSSPEAKER_QUAD:
+-            device->speaker_angles[0] = M_PI/180.0f * -135.0f;
+-            device->speaker_angles[1] = M_PI/180.0f *  -45.0f;
+-            device->speaker_angles[2] = M_PI/180.0f *   45.0f;
+-            device->speaker_angles[3] = M_PI/180.0f *  135.0f;
+-            device->speaker_num[0] = 2; /* Rear left */
+-            device->speaker_num[1] = 0; /* Front left */
+-            device->speaker_num[2] = 1; /* Front right */
+-            device->speaker_num[3] = 3; /* Rear right */
+-            device->num_speakers = 4;
+-            device->lfe_channel = -1;
+-        break;
+-
+-        case DSSPEAKER_5POINT1_BACK:
+-            device->speaker_angles[0] = M_PI/180.0f * -135.0f;
+-            device->speaker_angles[1] = M_PI/180.0f *  -45.0f;
+-            device->speaker_angles[2] = M_PI/180.0f *    0.0f;
+-            device->speaker_angles[3] = M_PI/180.0f *   45.0f;
+-            device->speaker_angles[4] = M_PI/180.0f *  135.0f;
+-            device->speaker_angles[5] = 9999.0f;
+-            device->speaker_num[0] = 4; /* Rear left */
+-            device->speaker_num[1] = 0; /* Front left */
+-            device->speaker_num[2] = 2; /* Front centre */
+-            device->speaker_num[3] = 1; /* Front right */
+-            device->speaker_num[4] = 5; /* Rear right */
+-            device->speaker_num[5] = 3; /* LFE */
+-            device->num_speakers = 6;
+-            device->lfe_channel = 3;
+-        break;
+-
+-        case DSSPEAKER_5POINT1_SURROUND:
+-            device->speaker_angles[0] = M_PI/180.0f *  -90.0f;
+-            device->speaker_angles[1] = M_PI/180.0f *  -30.0f;
+-            device->speaker_angles[2] = M_PI/180.0f *    0.0f;
+-            device->speaker_angles[3] = M_PI/180.0f *   30.0f;
+-            device->speaker_angles[4] = M_PI/180.0f *   90.0f;
+-            device->speaker_angles[5] = 9999.0f;
+-            device->speaker_num[0] = 4; /* Rear left */
+-            device->speaker_num[1] = 0; /* Front left */
+-            device->speaker_num[2] = 2; /* Front centre */
+-            device->speaker_num[3] = 1; /* Front right */
+-            device->speaker_num[4] = 5; /* Rear right */
+-            device->speaker_num[5] = 3; /* LFE */
+-            device->num_speakers = 6;
+-            device->lfe_channel = 3;
+-        break;
+-
+-        default:
+-            WARN("unknown speaker_config %u\n", device->speaker_config);
+-    }
+-}
+diff --git a/dlls/dsound/dsound_private.h b/dlls/dsound/dsound_private.h
+index 69c4a2f3902..1a3e88a0d29 100644
+--- a/dlls/dsound/dsound_private.h
++++ b/dlls/dsound/dsound_private.h
+@@ -202,7 +202,6 @@ HRESULT IKsPrivatePropertySetImpl_Create(REFIID riid, void **ppv) DECLSPEC_HIDDE
+ HRESULT DSOUND_Create(REFIID riid, void **ppv) DECLSPEC_HIDDEN;
+ HRESULT DSOUND_Create8(REFIID riid, void **ppv) DECLSPEC_HIDDEN;
+ HRESULT IDirectSoundImpl_Create(IUnknown *outer_unk, REFIID riid, void **ppv, BOOL has_ds8) DECLSPEC_HIDDEN;
+-void DSOUND_ParseSpeakerConfig(DirectSoundDevice *device) DECLSPEC_HIDDEN;
+ 
+ /* primary.c */
+ 
+diff --git a/dlls/dsound/primary.c b/dlls/dsound/primary.c
+index 852ec51b7ff..fdbbc00cd33 100644
+--- a/dlls/dsound/primary.c
++++ b/dlls/dsound/primary.c
+@@ -24,6 +24,7 @@
+  */
+ 
+ #include <stdarg.h>
++#include <math.h>
+ 
+ #define COBJMACROS
+ #define NONAMELESSUNION
+@@ -110,6 +111,78 @@ static DWORD DSOUND_FindSpeakerConfig(IMMDevice *mmdevice, int channels)
+     return def;
  }
  
--DWORD WINAPI DECLSPEC_HOTPATCH XInputGetKeystroke(DWORD index, DWORD reserved, PXINPUT_KEYSTROKE keystroke)
-+static const int JS_STATE_OFF = 0;
-+static const int JS_STATE_LOW = 1;
-+static const int JS_STATE_HIGH = 2;
++static void DSOUND_ParseSpeakerConfig(DirectSoundDevice *device)
++{
++    switch (DSSPEAKER_CONFIG(device->speaker_config)) {
++        case DSSPEAKER_MONO:
++            device->speaker_angles[0] = M_PI/180.0f * 0.0f;
++            device->speaker_num[0] = 0;
++            device->num_speakers = 1;
++            device->lfe_channel = -1;
++        break;
 +
-+static int joystick_state(const SHORT value)
++        case DSSPEAKER_STEREO:
++        case DSSPEAKER_HEADPHONE:
++            device->speaker_angles[0] = M_PI/180.0f * -90.0f;
++            device->speaker_angles[1] = M_PI/180.0f *  90.0f;
++            device->speaker_num[0] = 0; /* Left */
++            device->speaker_num[1] = 1; /* Right */
++            device->num_speakers = 2;
++            device->lfe_channel = -1;
++        break;
++
++        case DSSPEAKER_QUAD:
++            device->speaker_angles[0] = M_PI/180.0f * -135.0f;
++            device->speaker_angles[1] = M_PI/180.0f *  -45.0f;
++            device->speaker_angles[2] = M_PI/180.0f *   45.0f;
++            device->speaker_angles[3] = M_PI/180.0f *  135.0f;
++            device->speaker_num[0] = 2; /* Rear left */
++            device->speaker_num[1] = 0; /* Front left */
++            device->speaker_num[2] = 1; /* Front right */
++            device->speaker_num[3] = 3; /* Rear right */
++            device->num_speakers = 4;
++            device->lfe_channel = -1;
++        break;
++
++        case DSSPEAKER_5POINT1_BACK:
++            device->speaker_angles[0] = M_PI/180.0f * -135.0f;
++            device->speaker_angles[1] = M_PI/180.0f *  -45.0f;
++            device->speaker_angles[2] = M_PI/180.0f *    0.0f;
++            device->speaker_angles[3] = M_PI/180.0f *   45.0f;
++            device->speaker_angles[4] = M_PI/180.0f *  135.0f;
++            device->speaker_angles[5] = 9999.0f;
++            device->speaker_num[0] = 4; /* Rear left */
++            device->speaker_num[1] = 0; /* Front left */
++            device->speaker_num[2] = 2; /* Front centre */
++            device->speaker_num[3] = 1; /* Front right */
++            device->speaker_num[4] = 5; /* Rear right */
++            device->speaker_num[5] = 3; /* LFE */
++            device->num_speakers = 6;
++            device->lfe_channel = 3;
++        break;
++
++        case DSSPEAKER_5POINT1_SURROUND:
++            device->speaker_angles[0] = M_PI/180.0f *  -90.0f;
++            device->speaker_angles[1] = M_PI/180.0f *  -30.0f;
++            device->speaker_angles[2] = M_PI/180.0f *    0.0f;
++            device->speaker_angles[3] = M_PI/180.0f *   30.0f;
++            device->speaker_angles[4] = M_PI/180.0f *   90.0f;
++            device->speaker_angles[5] = 9999.0f;
++            device->speaker_num[0] = 4; /* Rear left */
++            device->speaker_num[1] = 0; /* Front left */
++            device->speaker_num[2] = 2; /* Front centre */
++            device->speaker_num[3] = 1; /* Front right */
++            device->speaker_num[4] = 5; /* Rear right */
++            device->speaker_num[5] = 3; /* LFE */
++            device->num_speakers = 6;
++            device->lfe_channel = 3;
++        break;
++
++        default:
++            WARN("unknown speaker_config %u\n", device->speaker_config);
++    }
++}
++
+ static HRESULT DSOUND_WaveFormat(DirectSoundDevice *device, IAudioClient *client,
+ 				 BOOL forcewave, WAVEFORMATEX **wfx)
  {
--    static int warn_once;
-+    if (value > 20000)
-+        return JS_STATE_HIGH;
-+    if (value < -20000)
-+        return JS_STATE_LOW;
-+    return JS_STATE_OFF;
-+}
+@@ -124,7 +197,7 @@ static HRESULT DSOUND_WaveFormat(DirectSoundDevice *device, IAudioClient *client
+         if (FAILED(hr))
+             return hr;
  
--    if (!warn_once++)
--        FIXME("(index %u, reserved %u, keystroke %p) Stub!\n", index, reserved, keystroke);
-+static WORD js_vk_offs(const int x, const int y)
-+{
-+    if (y == JS_STATE_OFF)
-+    {
-+      /*if (x == JS_STATE_OFF) shouldn't get here */
-+        if (x == JS_STATE_LOW) return 3; /* LEFT */
-+      /*if (x == JS_STATE_HIGH)*/ return 2; /* RIGHT */
-+    }
-+    if (y == JS_STATE_HIGH)
-+    {
-+        if (x == JS_STATE_OFF) return 0; /* UP */
-+        if (x == JS_STATE_LOW) return 4; /* UPLEFT */
-+      /*if (x == JS_STATE_HIGH)*/ return 5; /* UPRIGHT */
-+    }
-+  /*if (y == JS_STATE_LOW)*/
-+    {
-+        if (x == JS_STATE_OFF) return 1; /* DOWN */
-+        if (x == JS_STATE_LOW) return 7; /* DOWNLEFT */
-+      /*if (x == JS_STATE_HIGH)*/ return 6; /* DOWNRIGHT */
-+    }
-+}
+-        if (mixwfe->Format.nChannels < device->num_speakers) {
++        if (device->num_speakers == 0 || mixwfe->Format.nChannels < device->num_speakers) {
+             device->speaker_config = DSOUND_FindSpeakerConfig(device->mmdevice, mixwfe->Format.nChannels);
+             DSOUND_ParseSpeakerConfig(device);
+         } else if (mixwfe->Format.nChannels > device->num_speakers) {
+From 749bf5fcd5f41a39301428a7fccd1e4febcd6f90 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Gabriel=20Iv=C4=83ncescu?= <gabrielopcode@gmail.com>
+Date: Fri, 13 Dec 2019 15:54:28 +0200
+Subject: [PATCH] dwmapi: Improve DwmGetWindowAttribute stub.
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Gabriel Ivăncescu <gabrielopcode@gmail.com>
+---
+ dlls/dwmapi/dwmapi_main.c | 26 ++++++++++++++++++++++++--
+ 1 file changed, 24 insertions(+), 2 deletions(-)
+
+diff --git a/dlls/dwmapi/dwmapi_main.c b/dlls/dwmapi/dwmapi_main.c
+index 6378a091f0b..e976fda77f2 100644
+--- a/dlls/dwmapi/dwmapi_main.c
++++ b/dlls/dwmapi/dwmapi_main.c
+@@ -205,9 +205,31 @@ BOOL WINAPI DwmDefWindowProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam,
+  */
+ HRESULT WINAPI DwmGetWindowAttribute(HWND hwnd, DWORD attribute, PVOID pv_attribute, DWORD size)
+ {
+-    FIXME("(%p %d %p %d) stub\n", hwnd, attribute, pv_attribute, size);
++    if (!hwnd) return E_HANDLE;
++    if (!pv_attribute) return E_INVALIDARG;
  
--    if (index >= XUSER_MAX_COUNT)
--        return ERROR_BAD_ARGUMENTS;
--    if (!controllers[index].platform_private)
-+static DWORD check_joystick_keystroke(const DWORD index, XINPUT_KEYSTROKE *keystroke,
-+        const SHORT *cur_x, const SHORT *cur_y, SHORT *last_x, SHORT *last_y,
-+        const WORD base_vk)
-+{
-+    int cur_vk = 0, cur_x_st, cur_y_st;
-+    int last_vk = 0, last_x_st, last_y_st;
-+
-+    cur_x_st = joystick_state(*cur_x);
-+    cur_y_st = joystick_state(*cur_y);
-+    if (cur_x_st || cur_y_st)
-+        cur_vk = base_vk + js_vk_offs(cur_x_st, cur_y_st);
-+
-+    last_x_st = joystick_state(*last_x);
-+    last_y_st = joystick_state(*last_y);
-+    if (last_x_st || last_y_st)
-+        last_vk = base_vk + js_vk_offs(last_x_st, last_y_st);
-+
-+    if (cur_vk != last_vk)
+-    return E_NOTIMPL;
++    switch (attribute)
 +    {
-+        if (last_vk)
++    case DWMWA_NCRENDERING_ENABLED:
++        if (size < sizeof(BOOL)) return E_INVALIDARG;
++
++        WARN("DWMWA_NCRENDERING_ENABLED: always returning FALSE.\n");
++        *(BOOL*)(pv_attribute) = FALSE;
++        break;
++
++    case DWMWA_CLOAKED:
++        if (size < sizeof(DWORD)) return E_INVALIDARG;
++
++        WARN("DWMWA_CLOAKED: always returning 0.\n");
++        *(DWORD*)(pv_attribute) = 0;
++        break;
++
++    default:
++        FIXME("unimplemented attribute %d, size %u, for hwnd %p.\n", attribute, size, hwnd);
++        return E_INVALIDARG;
++    }
++
++    return S_OK;
+ }
+ 
+ /**********************************************************************
+From 60ac9b821daf372aac3bc85fa97b60f2b6d56c82 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Gabriel=20Iv=C4=83ncescu?= <gabrielopcode@gmail.com>
+Date: Fri, 13 Dec 2019 15:54:29 +0200
+Subject: [PATCH] dwmapi/tests: Add basic tests for DwmGetWindowAttribute.
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Gabriel Ivăncescu <gabrielopcode@gmail.com>
+---
+diff --git a/dlls/dwmapi/tests/Makefile.in b/dlls/dwmapi/tests/Makefile.in
+index f365f96c72..947e3312b5 100644
+--- a/dlls/dwmapi/tests/Makefile.in
++++ b/dlls/dwmapi/tests/Makefile.in
+@@ -1,5 +1,5 @@
+ TESTDLL   = dwmapi.dll
+-IMPORTS   = dwmapi
++IMPORTS   = dwmapi gdi32 user32
+ 
+ C_SRCS = \
+ 	dwmapi.c
+diff --git a/dlls/dwmapi/tests/dwmapi.c b/dlls/dwmapi/tests/dwmapi.c
+index 7c51e77c4a..68babd6eb2 100644
+--- a/dlls/dwmapi/tests/dwmapi.c
++++ b/dlls/dwmapi/tests/dwmapi.c
+@@ -19,13 +19,40 @@
+  *
+  */
+ 
++#include <windows.h>
+ #include "dwmapi.h"
+-
+ #include "wine/test.h"
+ 
+ static HRESULT (WINAPI *pDwmIsCompositionEnabled)(BOOL*);
+ static HRESULT (WINAPI *pDwmEnableComposition)(UINT);
+ static HRESULT (WINAPI *pDwmGetTransportAttributes)(BOOL*,BOOL*,DWORD*);
++static HWND test_wnd;
++static LRESULT WINAPI test_wndproc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
++{
++    return DefWindowProcA(hwnd, message, wParam, lParam);
++}
++
++static void test_DwmGetWindowAttribute(void)
++{
++    BOOL nc_rendering;
++    HRESULT hr;
++
++    hr = DwmGetWindowAttribute(NULL, DWMWA_NCRENDERING_ENABLED, &nc_rendering, sizeof(nc_rendering));
++    ok(hr == E_HANDLE || broken(hr == E_INVALIDARG) /* Vista */, "DwmGetWindowAttribute(DWMWA_NCRENDERING_ENABLED) returned 0x%08x.\n", hr);
++    hr = DwmGetWindowAttribute(test_wnd, DWMWA_NCRENDERING_ENABLED, NULL, sizeof(nc_rendering));
++    ok(hr == E_INVALIDARG, "DwmGetWindowAttribute(DWMWA_NCRENDERING_ENABLED) returned 0x%08x.\n", hr);
++    hr = DwmGetWindowAttribute(test_wnd, DWMWA_NCRENDERING_ENABLED, &nc_rendering, 0);
++    ok(hr == E_INVALIDARG, "DwmGetWindowAttribute(DWMWA_NCRENDERING_ENABLED) returned 0x%08x.\n", hr);
++    nc_rendering = FALSE;
++    hr = DwmGetWindowAttribute(test_wnd, 0xdeadbeef, &nc_rendering, sizeof(nc_rendering));
++    ok(hr == E_INVALIDARG, "DwmGetWindowAttribute(0xdeadbeef) returned 0x%08x.\n", hr);
++
++    nc_rendering = 0xdeadbeef;
++    hr = DwmGetWindowAttribute(test_wnd, DWMWA_NCRENDERING_ENABLED, &nc_rendering, sizeof(nc_rendering));
++    ok(hr == S_OK, "DwmGetWindowAttribute(DWMWA_NCRENDERING_ENABLED) failed 0x%08x.\n", hr);
++    ok(nc_rendering == FALSE || nc_rendering == TRUE, "non-boolean value 0x%x.\n", nc_rendering);
++}
++
+ 
+ BOOL dwmenabled;
+ 
+@@ -92,6 +119,21 @@ static void test_dwm_get_transport_attributes(void)
+ START_TEST(dwmapi)
+ {
+     HMODULE hmod = LoadLibraryA("dwmapi.dll");
++    HINSTANCE inst = GetModuleHandleA(NULL);
++    WNDCLASSA cls;
++
++    cls.style = 0;
++    cls.lpfnWndProc = test_wndproc;
++    cls.cbClsExtra = 0;
++    cls.cbWndExtra = 0;
++    cls.hInstance = inst;
++    cls.hIcon = 0;
++    cls.hCursor = LoadCursorA(0, (LPCSTR)IDC_ARROW);
++    cls.hbrBackground = GetStockObject(WHITE_BRUSH);
++    cls.lpszMenuName = NULL;
++    cls.lpszClassName = "Test";
++    RegisterClassA(&cls);
++
+ 
+     if (!hmod)
+     {
+@@ -105,4 +147,14 @@ START_TEST(dwmapi)
+ 
+     test_isdwmenabled();
+     test_dwm_get_transport_attributes();
++
++    test_wnd = CreateWindowExA(0, "Test", "Test Window", WS_OVERLAPPEDWINDOW | WS_VISIBLE,
++                               100, 100, 200, 200, 0, 0, 0, NULL);
++    ok(test_wnd != NULL, "Failed to create test window.\n");
++
++    test_DwmGetWindowAttribute();
++
++    DestroyWindow(test_wnd);
++    UnregisterClassA("Test", inst);
++
+ }
+From 1a2e600a9c35a9558b32e7986668d7dc81c8b5ae Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Gabriel=20Iv=C4=83ncescu?= <gabrielopcode@gmail.com>
+Date: Fri, 13 Dec 2019 15:54:30 +0200
+Subject: [PATCH] dwmapi: Add partial implementation of
+ DWMWA_EXTENDED_FRAME_BOUNDS.
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Gabriel Ivăncescu <gabrielopcode@gmail.com>
+---
+ dlls/dwmapi/Makefile.in    |  1 +
+ dlls/dwmapi/dwmapi_main.c  |  7 +++++++
+ dlls/dwmapi/tests/dwmapi.c | 14 ++++++++++++++
+ 3 files changed, 22 insertions(+)
+
+diff --git a/dlls/dwmapi/Makefile.in b/dlls/dwmapi/Makefile.in
+index 3a3691326f8..d273a22c8f3 100644
+--- a/dlls/dwmapi/Makefile.in
++++ b/dlls/dwmapi/Makefile.in
+@@ -1,5 +1,6 @@
+ MODULE    = dwmapi.dll
+ IMPORTLIB = dwmapi
++IMPORTS   = user32
+ 
+ EXTRADLLFLAGS = -mno-cygwin
+ 
+diff --git a/dlls/dwmapi/dwmapi_main.c b/dlls/dwmapi/dwmapi_main.c
+index e976fda77f2..212c88c5a02 100644
+--- a/dlls/dwmapi/dwmapi_main.c
++++ b/dlls/dwmapi/dwmapi_main.c
+@@ -217,6 +217,13 @@ HRESULT WINAPI DwmGetWindowAttribute(HWND hwnd, DWORD attribute, PVOID pv_attrib
+         *(BOOL*)(pv_attribute) = FALSE;
+         break;
+ 
++    case DWMWA_EXTENDED_FRAME_BOUNDS:
++        if (size < sizeof(RECT)) return HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER);
++
++        WARN("DWMWA_EXTENDED_FRAME_BOUNDS: returning window rect.\n");
++        GetWindowRect(hwnd, pv_attribute);
++        break;
++
+     case DWMWA_CLOAKED:
+         if (size < sizeof(DWORD)) return E_INVALIDARG;
+ 
+diff --git a/dlls/dwmapi/tests/dwmapi.c b/dlls/dwmapi/tests/dwmapi.c
+index 0fc8820b095..409f5c85876 100644
+--- a/dlls/dwmapi/tests/dwmapi.c
++++ b/dlls/dwmapi/tests/dwmapi.c
+@@ -29,6 +29,7 @@ static LRESULT WINAPI test_wndproc(HWND hwnd, UINT message, WPARAM wParam, LPARA
+ static void test_DwmGetWindowAttribute(void)
+ {
+     BOOL nc_rendering;
++    RECT rc, rc2;
+     HRESULT hr;
+ 
+     hr = DwmGetWindowAttribute(NULL, DWMWA_NCRENDERING_ENABLED, &nc_rendering, sizeof(nc_rendering));
+@@ -45,6 +46,19 @@ static void test_DwmGetWindowAttribute(void)
+     hr = DwmGetWindowAttribute(test_wnd, DWMWA_NCRENDERING_ENABLED, &nc_rendering, sizeof(nc_rendering));
+     ok(hr == S_OK, "DwmGetWindowAttribute(DWMWA_NCRENDERING_ENABLED) failed 0x%08x.\n", hr);
+     ok(nc_rendering == FALSE || nc_rendering == TRUE, "non-boolean value 0x%x.\n", nc_rendering);
++
++    hr = DwmGetWindowAttribute(test_wnd, DWMWA_EXTENDED_FRAME_BOUNDS, &rc, sizeof(rc) - 1);
++    ok(hr == HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER) || broken(hr == E_INVALIDARG) /* Vista */,
++       "DwmGetWindowAttribute(DWMWA_EXTENDED_FRAME_BOUNDS) returned 0x%08x.\n", hr);
++    hr = DwmGetWindowAttribute(test_wnd, DWMWA_EXTENDED_FRAME_BOUNDS, &rc, sizeof(rc));
++    if (hr != E_HANDLE && hr != DWM_E_COMPOSITIONDISABLED /* Vista */)  /* composition is on */
++    {
++        /* For top-level Windows, the returned rect is always at least as large as GetWindowRect */
++        GetWindowRect(test_wnd, &rc2);
++        ok(hr == S_OK, "DwmGetWindowAttribute(DWMWA_EXTENDED_FRAME_BOUNDS) failed 0x%08x.\n", hr);
++        ok(rc.left >= rc2.left && rc.right <= rc2.right && rc.top >= rc2.top && rc.bottom <= rc2.bottom,
++           "returned rect %s not enclosed in window rect %s.\n", wine_dbgstr_rect(&rc), wine_dbgstr_rect(&rc2));
++    }
+ }
+ 
+ START_TEST(dwmapi)
+From 4208548dbb789b3f3bd112a4dc1a19ebf0d1f307 Mon Sep 17 00:00:00 2001
+From: Andrew Eikum <aeikum@codeweavers.com>
+Date: Mon, 22 Jan 2018 14:35:51 -0600
+Subject: [PATCH] HACK: wineboot: Don't show "updating prefix" window
+
+---
+ programs/wineboot/wineboot.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/programs/wineboot/wineboot.c b/programs/wineboot/wineboot.c
+index b85a3b6b6ea..6dfc797313e 100644
+--- a/programs/wineboot/wineboot.c
++++ b/programs/wineboot/wineboot.c
+@@ -1035,6 +1035,7 @@ static INT_PTR CALLBACK wait_dlgproc( HWND hwnd, UINT msg, WPARAM wp, LPARAM lp
+     return 0;
+ }
+ 
++/*
+ static HWND show_wait_window(void)
+ {
+     const char *config_dir = wine_get_config_dir();
+@@ -1051,6 +1052,7 @@ static HWND show_wait_window(void)
+     HeapFree( GetProcessHeap(), 0, name );
+     return hwnd;
+ }
++*/
+ 
+ static HANDLE start_rundll32( const char *inf_path, BOOL wow64 )
+ {
+@@ -1127,7 +1129,7 @@ static void update_wineprefix( BOOL force )
+ 
+         if ((process = start_rundll32( inf_path, FALSE )))
+         {
+-            HWND hwnd = show_wait_window();
++/*            HWND hwnd = show_wait_window();*/
+             for (;;)
+             {
+                 MSG msg;
+@@ -1139,7 +1141,7 @@ static void update_wineprefix( BOOL force )
+                 }
+                 else while (PeekMessageW( &msg, 0, 0, 0, PM_REMOVE )) DispatchMessageW( &msg );
+             }
+-            DestroyWindow( hwnd );
++/*            DestroyWindow( hwnd );*/
+         }
+         WINE_MESSAGE( "wine: configuration in '%s' has been updated.\n", config_dir );
+     }
+ 
+From 982ed53412eb83693f4cedca4a051d8fddca354b Mon Sep 17 00:00:00 2001
+From: Andrew Eikum <aeikum@codeweavers.com>
+Date: Thu, 23 Jan 2020 09:14:56 -0600
+Subject: [PATCH] wine.inf: Set default Windows version to win10.
+
+---
+ dlls/ntdll/version.c           |  2 +-
+ loader/wine.inf.in             | 24 ++++++++++++------------
+ programs/winecfg/appdefaults.c |  2 +-
+ 3 files changed, 14 insertions(+), 14 deletions(-)
+
+diff --git a/dlls/ntdll/version.c b/dlls/ntdll/version.c
+index 61e48f6fbd0..875a33c5b2b 100644
+--- a/dlls/ntdll/version.c
++++ b/dlls/ntdll/version.c
+@@ -483,7 +483,7 @@ void version_init(void)
+     const WCHAR *p, *appname = NtCurrentTeb()->Peb->ProcessParameters->ImagePathName.Buffer;
+     WCHAR appversion[MAX_PATH+20];
+ 
+-    current_version = &VersionData[WIN7];
++    current_version = &VersionData[WIN10];
+ 
+     RtlOpenCurrentUser( KEY_ALL_ACCESS, &root );
+     attr.Length = sizeof(attr);
+diff --git a/loader/wine.inf.in b/loader/wine.inf.in
+index 1aa0a37338b..99a4844eabe 100644
+--- a/loader/wine.inf.in
++++ b/loader/wine.inf.in
+@@ -3767,10 +3767,10 @@ HKLM,"System\CurrentControlSet\Services\Winsock\Parameters",,16
+ HKLM,"System\CurrentControlSet\Services\Winsock2\Parameters\Protocol_Catalog9\Catalog_Entries",,16
+ 
+ [VersionInfo]
+-HKLM,%CurrentVersionNT%,"CurrentVersion",2,"6.1"
+-HKLM,%CurrentVersionNT%,"CSDVersion",2,"Service Pack 1"
+-HKLM,%CurrentVersionNT%,"CurrentBuild",2,"7601"
+-HKLM,%CurrentVersionNT%,"CurrentBuildNumber",2,"7601"
++HKLM,%CurrentVersionNT%,"CurrentVersion",2,"10.0"
++HKLM,%CurrentVersionNT%,"CSDVersion",2,""
++HKLM,%CurrentVersionNT%,"CurrentBuild",2,"17134"
++HKLM,%CurrentVersionNT%,"CurrentBuildNumber",2,"17134"
+ HKLM,%CurrentVersionNT%,"CurrentType",2,"Uniprocessor Free"
+ HKLM,%CurrentVersionNT%,"DigitalProductId",1,00,00,00,00,00,00,00,00,00,00,00,\
+ 00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,\
+@@ -3779,16 +3779,16 @@ HKLM,%CurrentVersionNT%,"DigitalProductId",1,00,00,00,00,00,00,00,00,00,00,00,\
+ 00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,\
+ 00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,\
+ 00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00
+-HKLM,%CurrentVersionNT%,"ProductName",2,"Microsoft Windows 7"
++HKLM,%CurrentVersionNT%,"ProductName",2,"Microsoft Windows 10"
+ HKLM,%Control%\ProductOptions,"ProductType",2,"WinNT"
+-HKLM,%Control%\Windows,"CSDVersion",0x10003,0x100
++HKLM,%Control%\Windows,"CSDVersion",0x10003,0x0
+ HKLM,%Control%\Session Manager\Environment,"OS",2,"Windows_NT"
+ 
+ [VersionInfo.ntamd64]
+-HKLM,%CurrentVersionNT%,"CurrentVersion",2,"6.1"
+-HKLM,%CurrentVersionNT%,"CSDVersion",2,"Service Pack 1"
+-HKLM,%CurrentVersionNT%,"CurrentBuild",2,"7601"
+-HKLM,%CurrentVersionNT%,"CurrentBuildNumber",2,"7601"
++HKLM,%CurrentVersionNT%,"CurrentVersion",2,"10.0"
++HKLM,%CurrentVersionNT%,"CSDVersion",2,""
++HKLM,%CurrentVersionNT%,"CurrentBuild",2,"17134"
++HKLM,%CurrentVersionNT%,"CurrentBuildNumber",2,"17134"
+ HKLM,%CurrentVersionNT%,"CurrentType",2,"Uniprocessor Free"
+ HKLM,%CurrentVersionNT%,"DigitalProductId",1,00,00,00,00,00,00,00,00,00,00,00,\
+ 00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,\
+@@ -3797,9 +3797,9 @@ HKLM,%CurrentVersionNT%,"DigitalProductId",1,00,00,00,00,00,00,00,00,00,00,00,\
+ 00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,\
+ 00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,\
+ 00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00
+-HKLM,%CurrentVersionNT%,"ProductName",2,"Microsoft Windows 7"
++HKLM,%CurrentVersionNT%,"ProductName",2,"Microsoft Windows 10"
+ HKLM,%Control%\ProductOptions,"ProductType",2,"WinNT"
+-HKLM,%Control%\Windows,"CSDVersion",0x10003,0x100
++HKLM,%Control%\Windows,"CSDVersion",0x10003,0x0
+ HKLM,%Control%\Session Manager\Environment,"OS",2,"Windows_NT"
+ 
+ [Wow64]
+diff --git a/programs/winecfg/appdefaults.c b/programs/winecfg/appdefaults.c
+index 6c4e6a49f26..1aea54adfb2 100644
+--- a/programs/winecfg/appdefaults.c
++++ b/programs/winecfg/appdefaults.c
+@@ -144,7 +144,7 @@ static void update_comboboxes(HWND dialog)
+             return;
+         }
+         if (ver != -1) winver = strdupA( win_versions[ver].szVersion );
+-        else winver = strdupA("win7");
++        else winver = strdupA("win10");
+     }
+     WINE_TRACE("winver is %s\n", winver);
+ 
+From 501b068024375386484c6a8616a406b21ab15406 Mon Sep 17 00:00:00 2001
+From: Andrew Eikum <aeikum@codeweavers.com>
+Date: Thu, 30 Jan 2020 14:44:00 -0600
+Subject: [PATCH] user32: HACK: Don't resize new windows to fit the display
+
+---
+ dlls/user32/win.c | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/dlls/user32/win.c b/dlls/user32/win.c
+index fa593a4a29a..803259b351f 100644
+--- a/dlls/user32/win.c
++++ b/dlls/user32/win.c
+@@ -1607,12 +1607,17 @@ HWND WIN_CreateWindowEx( CREATESTRUCTW *cs, LPCWSTR className, HINSTANCE module,
+ 
+     cx = cs->cx;
+     cy = cs->cy;
++#if 0
++    /* HACK: This code changes the window's size to fit the display. However,
++     * some games (Bayonetta, Dragon's Dogma) will then have the incorrect
++     * render size. So just let windows be too big to fit the display. */
+     if ((cs->style & WS_THICKFRAME) || !(cs->style & (WS_POPUP | WS_CHILD)))
+     {
+         MINMAXINFO info = WINPOS_GetMinMaxInfo( hwnd );
+         cx = max( min( cx, info.ptMaxTrackSize.x ), info.ptMinTrackSize.x );
+         cy = max( min( cy, info.ptMaxTrackSize.y ), info.ptMinTrackSize.y );
+     }
++#endif
+ 
+     if (cx < 0) cx = 0;
+     if (cy < 0) cy = 0;
+From c099ae745b3a63edee1677a2da01cab5aa5b8562 Mon Sep 17 00:00:00 2001
+From: Zebediah Figura <z.figura12@gmail.com>
+Date: Tue, 28 Jan 2020 14:30:43 -0600
+Subject: [PATCH] winegstreamer: HACK: Try harder to register winegstreamer
+ filters.
+
+The IDL declarations should actually be unnecessary with the quartz part, but there's a chance that an application will try to create filters before it creates the graph.
+---
+ dlls/quartz/filtergraph.c     | 17 +++++++++++++++++
+ dlls/winegstreamer/mfplat.idl | 21 +++++++++++++++++++++
+ 2 files changed, 38 insertions(+)
+
+diff --git a/dlls/quartz/filtergraph.c b/dlls/quartz/filtergraph.c
+index 1ed41bdcec5..0af6e1ded5f 100644
+--- a/dlls/quartz/filtergraph.c
++++ b/dlls/quartz/filtergraph.c
+@@ -5681,11 +5681,28 @@ static const IUnknownVtbl IInner_VTable =
+     FilterGraphInner_Release
+ };
+ 
++static BOOL CALLBACK register_winegstreamer_proc(INIT_ONCE *once, void *param, void **ctx)
++{
++    HMODULE mod = LoadLibraryW(L"winegstreamer.dll");
++    if (mod)
++    {
++        HRESULT (WINAPI *proc)(void) = (void *)GetProcAddress(mod, "DllRegisterServer");
++        proc();
++        FreeLibrary(mod);
++    }
++    return TRUE;
++}
++
+ static HRESULT filter_graph_common_create(IUnknown *outer, void **out, BOOL threaded)
+ {
++    static INIT_ONCE once = INIT_ONCE_STATIC_INIT;
+     IFilterGraphImpl *fimpl;
+     HRESULT hr;
+ 
++    /* HACK: our build system makes it difficult to load gstreamer on prefix
++     * creation, so it won't get registered. Do that here instead. */
++    InitOnceExecuteOnce(&once, register_winegstreamer_proc, NULL, NULL);
++
+     *out = NULL;
+ 
+     fimpl = CoTaskMemAlloc(sizeof(*fimpl));
+diff --git a/dlls/winegstreamer/mfplat.idl b/dlls/winegstreamer/mfplat.idl
+index 05a75bdb8ed..1195a0bd0f2 100644
+--- a/dlls/winegstreamer/mfplat.idl
++++ b/dlls/winegstreamer/mfplat.idl
+@@ -18,6 +18,27 @@
+ 
+ #pragma makedep register
+ 
++[
++    helpstring("AVI Splitter"),
++    threading(both),
++    uuid(1b544c20-fd0b-11ce-8c63-00aa0044b51e)
++]
++coclass AviSplitter {}
++
++[
++    helpstring("MPEG-I Stream Splitter"),
++    threading(both),
++    uuid(336475d0-942a-11ce-a870-00aa002feab5)
++]
++coclass MPEG1Splitter {}
++
++[
++    helpstring("Wave Parser"),
++    threading(both),
++    uuid(d51bd5a1-7548-11cf-a520-0080c77ef58a)
++]
++coclass WAVEParser {}
++
+ [
+     threading(both),
+     uuid(88753b26-5b24-49bd-b2e7-0c445c78c982)
+From aa6ab7464758508b3348b3ce390c1524c9ce32a2 Mon Sep 17 00:00:00 2001
+From: Andrew Eikum <aeikum@codeweavers.com>
+Date: Thu, 30 Jan 2020 10:16:19 -0600
+Subject: [PATCH] winegstreamer: HACK: Use a different gst registry file per
+ architecture
+
+---
+ dlls/winegstreamer/main.c | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
+
+diff --git a/dlls/winegstreamer/main.c b/dlls/winegstreamer/main.c
+index 379f54ab4ec..0fb6b0b5ad3 100644
+--- a/dlls/winegstreamer/main.c
++++ b/dlls/winegstreamer/main.c
+@@ -421,9 +421,25 @@ static BOOL CALLBACK init_gstreamer_proc(INIT_ONCE *once, void *param, void **ct
+     char **argv = args;
+     int argc = 2;
+     GError *err = NULL;
++    const char *e;
+ 
+     TRACE("Initializing...\n");
+ 
++    if ((e = getenv("WINE_GST_REGISTRY_DIR")))
++    {
++        char gst_reg[PATH_MAX];
++#if defined(__x86_64__)
++        const char *arch = "/registry.x86_64.bin";
++#elif defined(__i386__)
++        const char *arch = "/registry.i386.bin";
++#else
++#error Bad arch
++#endif
++        strcpy(gst_reg, e);
++        strcat(gst_reg, arch);
++        setenv("GST_REGISTRY_1_0", gst_reg, 1);
++    }
++
+     argv[0] = argv0;
+     argv[1] = argv1;
+     argv[2] = NULL;
+From a4310c0cf1e27f0a90f737c2e7cfe9cdbde07522 Mon Sep 17 00:00:00 2001
+From: Andrew Eikum <aeikum@codeweavers.com>
+Date: Mon, 20 Jan 2020 10:36:48 -0600
+Subject: [PATCH] xaudio2: Stop engine thread in IXAudio2::StopEngine
+
+---
+ dlls/xaudio2_7/xaudio_dll.c     | 60 ++++++++++++++++++++++++---------
+ dlls/xaudio2_7/xaudio_private.h |  1 +
+ 2 files changed, 45 insertions(+), 16 deletions(-)
+
+diff --git a/dlls/xaudio2_7/xaudio_dll.c b/dlls/xaudio2_7/xaudio_dll.c
+index 483e2b4138a..3a6ae546349 100644
+--- a/dlls/xaudio2_7/xaudio_dll.c
++++ b/dlls/xaudio2_7/xaudio_dll.c
+@@ -82,6 +82,8 @@ static HINSTANCE instance;
+ 
+ static XA2VoiceImpl *impl_from_IXAudio2Voice(IXAudio2Voice *iface);
+ 
++static void stop_engine_thread(XA2VoiceImpl *This);
++
+ BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD reason, void *pReserved)
+ {
+     TRACE("(%p, %d, %p)\n", hinstDLL, reason, pReserved);
+@@ -1305,13 +1307,7 @@ static void WINAPI XA2M_DestroyVoice(IXAudio2MasteringVoice *iface)
+     EnterCriticalSection(&This->lock);
+ 
+     destroy_voice(This);
+-    pthread_mutex_lock(&This->engine_lock);
+-    This->engine_params.proc = NULL;
+-    pthread_cond_broadcast(&This->engine_ready);
+-    pthread_mutex_unlock(&This->engine_lock);
+-
+-    WaitForSingleObject(This->engine_thread, INFINITE);
+-    This->engine_thread = NULL;
++    stop_engine_thread(This);
+ 
+     LeaveCriticalSection(&This->lock);
+ }
+@@ -1716,15 +1712,49 @@ DWORD WINAPI engine_thread(void *user)
+         if(This->engine_params.proc){
+             This->engine_params.proc(This->engine_params.faudio, This->engine_params.stream);
+             This->engine_params.proc = NULL;
+-            pthread_cond_broadcast(&This->engine_done);
+         }
+-    }while(This->in_use);
++
++        pthread_cond_broadcast(&This->engine_done);
++    }while(!This->stop_engine_thread);
+ 
+     pthread_mutex_unlock(&This->engine_lock);
+ 
+     return 0;
+ }
+ 
++static void start_engine_thread(XA2VoiceImpl *This)
++{
++    pthread_mutex_lock(&This->engine_lock);
++
++    if(!This->engine_thread){
++        This->stop_engine_thread = FALSE;
++
++        This->engine_thread = CreateThread(NULL, 0, &engine_thread, This, 0, NULL);
++
++        pthread_cond_wait(&This->engine_done, &This->engine_lock);
++    }
++
++    pthread_mutex_unlock(&This->engine_lock);
++}
++
++static void stop_engine_thread(XA2VoiceImpl *This)
++{
++    pthread_mutex_lock(&This->engine_lock);
++
++    if(This->engine_thread){
++        This->stop_engine_thread = TRUE;
++
++        pthread_cond_broadcast(&This->engine_ready);
++
++        pthread_cond_wait(&This->engine_done, &This->engine_lock);
++
++        WaitForSingleObject(This->engine_thread, INFINITE);
++        This->engine_thread = NULL;
++    }
++
++    pthread_mutex_unlock(&This->engine_lock);
++}
++
+ static HRESULT WINAPI IXAudio2Impl_CreateMasteringVoice(IXAudio2 *iface,
+         IXAudio2MasteringVoice **ppMasteringVoice, UINT32 inputChannels,
+         UINT32 inputSampleRate, UINT32 flags, const WCHAR *deviceId,
+@@ -1758,13 +1788,7 @@ static HRESULT WINAPI IXAudio2Impl_CreateMasteringVoice(IXAudio2 *iface,
+ 
+     This->mst.effect_chain = wrap_effect_chain(pEffectChain);
+ 
+-    pthread_mutex_lock(&This->mst.engine_lock);
+-
+-    This->mst.engine_thread = CreateThread(NULL, 0, &engine_thread, &This->mst, 0, NULL);
+-
+-    pthread_cond_wait(&This->mst.engine_done, &This->mst.engine_lock);
+-
+-    pthread_mutex_unlock(&This->mst.engine_lock);
++    start_engine_thread(&This->mst);
+ 
+     FAudio_SetEngineProcedureEXT(This->faudio, &engine_cb, &This->mst);
+ 
+@@ -1785,6 +1809,8 @@ static HRESULT WINAPI IXAudio2Impl_StartEngine(IXAudio2 *iface)
+ 
+     TRACE("(%p)->()\n", This);
+ 
++    start_engine_thread(&This->mst);
++
+     return FAudio_StartEngine(This->faudio);
+ }
+ 
+@@ -1795,6 +1821,8 @@ static void WINAPI IXAudio2Impl_StopEngine(IXAudio2 *iface)
+     TRACE("(%p)->()\n", This);
+ 
+     FAudio_StopEngine(This->faudio);
++
++    stop_engine_thread(&This->mst);
+ }
+ 
+ static HRESULT WINAPI IXAudio2Impl_CommitChanges(IXAudio2 *iface,
+diff --git a/dlls/xaudio2_7/xaudio_private.h b/dlls/xaudio2_7/xaudio_private.h
+index 46d842bf4c1..8a485ca7fd5 100644
+--- a/dlls/xaudio2_7/xaudio_private.h
++++ b/dlls/xaudio2_7/xaudio_private.h
+@@ -97,6 +97,7 @@ typedef struct _XA2VoiceImpl {
+         float *stream;
+     } engine_params;
+ 
++    BOOL stop_engine_thread;
+     HANDLE engine_thread;
+     pthread_cond_t engine_done, engine_ready;
+     pthread_mutex_t engine_lock;
+From d6b13c2d909c674b39fb260910b5ae945d2b42ce Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
+Date: Fri, 29 Nov 2019 21:05:02 +0100
+Subject: [PATCH] wineusd.sys: Add new service to update user shared data
+ continuously.
+
+This service is started at boot, and hopefully before any process that
+might rely on the timestamp update. If the service is not yet started,
+then the opening the device will fail and the process should continue
+and use its private user shared data instead.
+---
+ configure                         |   2 +
+ configure.ac                      |   1 +
+ dlls/wineusd.sys/Makefile.in      |   6 +
+ dlls/wineusd.sys/wineusd.sys.spec |   1 +
+ dlls/wineusd.sys/wineusd_main.c   | 274 ++++++++++++++++++++++++++++++
+ include/wine/usd.h                |  27 +++
+ loader/wine.inf.in                |  12 ++
+ 7 files changed, 323 insertions(+)
+ create mode 100644 dlls/wineusd.sys/Makefile.in
+ create mode 100644 dlls/wineusd.sys/wineusd.sys.spec
+ create mode 100644 dlls/wineusd.sys/wineusd_main.c
+ create mode 100644 include/wine/usd.h
+
+diff --git a/configure b/configure
+index a60f43902ab..d4a1fb46b3a 100755
+--- a/configure
++++ b/configure
+@@ -1642,6 +1642,7 @@ enable_wineoss_drv
+ enable_wineps_drv
+ enable_winepulse_drv
+ enable_wineqtdecoder
++enable_wineusd_sys
+ enable_winevulkan
+ enable_winex11_drv
+ enable_wing32
+@@ -21060,6 +21061,7 @@ wine_fn_config_makefile dlls/wineps.drv enable_wineps_drv
+ wine_fn_config_makefile dlls/wineps16.drv16 enable_win16
+ wine_fn_config_makefile dlls/winepulse.drv enable_winepulse_drv
+ wine_fn_config_makefile dlls/wineqtdecoder enable_wineqtdecoder
++wine_fn_config_makefile dlls/wineusd.sys enable_wineusd_sys
+ wine_fn_config_makefile dlls/winevulkan enable_winevulkan
+ wine_fn_config_makefile dlls/winex11.drv enable_winex11_drv
+ wine_fn_config_makefile dlls/wing.dll16 enable_win16
+diff --git a/configure.ac b/configure.ac
+index 82918edca83..41aabf2d2ea 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -3814,6 +3814,7 @@ WINE_CONFIG_MAKEFILE(dlls/wineps.drv)
+ WINE_CONFIG_MAKEFILE(dlls/wineps16.drv16,enable_win16)
+ WINE_CONFIG_MAKEFILE(dlls/winepulse.drv)
+ WINE_CONFIG_MAKEFILE(dlls/wineqtdecoder)
++WINE_CONFIG_MAKEFILE(dlls/wineusd.sys)
+ WINE_CONFIG_MAKEFILE(dlls/winevulkan)
+ WINE_CONFIG_MAKEFILE(dlls/winex11.drv)
+ WINE_CONFIG_MAKEFILE(dlls/wing.dll16,enable_win16)
+diff --git a/dlls/wineusd.sys/Makefile.in b/dlls/wineusd.sys/Makefile.in
+new file mode 100644
+index 00000000000..0792860c09b
+--- /dev/null
++++ b/dlls/wineusd.sys/Makefile.in
+@@ -0,0 +1,6 @@
++MODULE        = wineusd.sys
++IMPORTS       = ntoskrnl
++EXTRADLLFLAGS = -Wl,--subsystem,native -mno-cygwin
++
++C_SRCS = \
++	wineusd_main.c
+diff --git a/dlls/wineusd.sys/wineusd.sys.spec b/dlls/wineusd.sys/wineusd.sys.spec
+new file mode 100644
+index 00000000000..76421d7e35b
+--- /dev/null
++++ b/dlls/wineusd.sys/wineusd.sys.spec
+@@ -0,0 +1 @@
++# nothing to export
+diff --git a/dlls/wineusd.sys/wineusd_main.c b/dlls/wineusd.sys/wineusd_main.c
+new file mode 100644
+index 00000000000..f4f1132e24c
+--- /dev/null
++++ b/dlls/wineusd.sys/wineusd_main.c
+@@ -0,0 +1,274 @@
++/*
++ * User shared data update service
++ *
++ * Copyright 2019 Rémi Bernon for CodeWeavers
++ *
++ * This library is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU Lesser General Public
++ * License as published by the Free Software Foundation; either
++ * version 2.1 of the License, or (at your option) any later version.
++ *
++ * This library is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++ * Lesser General Public License for more details.
++ *
++ * You should have received a copy of the GNU Lesser General Public
++ * License along with this library; if not, write to the Free Software
++ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
++ */
++
++#include <assert.h>
++#include <stdarg.h>
++#include "ntstatus.h"
++#define WIN32_NO_STATUS
++#include "winternl.h"
++#include "winioctl.h"
++#include "ddk/wdm.h"
++#include "wine/debug.h"
++#include "wine/heap.h"
++#include "wine/usd.h"
++#include "wine/list.h"
++
++static DEVICE_OBJECT *device_obj;
++
++WINE_DEFAULT_DEBUG_CHANNEL(wineusd);
++
++#define DECLARE_CRITICAL_SECTION(cs) \
++    static CRITICAL_SECTION cs; \
++    static CRITICAL_SECTION_DEBUG cs##_debug = \
++    { 0, 0, &cs, { &cs##_debug.ProcessLocksList, &cs##_debug.ProcessLocksList }, \
++      0, 0, { (DWORD_PTR)(__FILE__ ": " # cs) }}; \
++    static CRITICAL_SECTION cs = { &cs##_debug, -1, 0, 0, 0, 0 };
++
++DECLARE_CRITICAL_SECTION(wineusd_cs);
++
++static struct list wineusd_entries = LIST_INIT(wineusd_entries);
++static HANDLE wineusd_thread, wineusd_thread_stop;
++
++struct wineusd_entry
++{
++    struct list link;
++    CLIENT_ID   cid;
++    HANDLE      process;
++    HANDLE      section;
++    void       *page;
++};
++
++static DWORD WINAPI wineusd_thread_proc(void *arg)
++{
++    struct wineusd_entry *entry;
++    ULARGE_INTEGER interrupt;
++    ULARGE_INTEGER tick;
++    LARGE_INTEGER now;
++
++    TRACE("Started user shared data thread.\n");
++
++    while (WaitForSingleObject(wineusd_thread_stop, 16) == WAIT_TIMEOUT)
++    {
++        EnterCriticalSection(&wineusd_cs);
++
++        NtQuerySystemTime(&now);
++        RtlQueryUnbiasedInterruptTime(&interrupt.QuadPart);
++
++        tick = interrupt;
++        tick.QuadPart /= 10000;
++
++        LIST_FOR_EACH_ENTRY(entry, &wineusd_entries, struct wineusd_entry, link)
 +        {
-+            /* joystick was set, and now different. send a KEYUP event, and set
-+             * last pos to centered, so the appropriate KEYDOWN event will be
-+             * sent on the next call. */
-+            keystroke->VirtualKey = last_vk;
-+            keystroke->Unicode = 0; /* unused */
-+            keystroke->Flags = XINPUT_KEYSTROKE_KEYUP;
-+            keystroke->UserIndex = index;
-+            keystroke->HidCode = 0;
++            KSHARED_USER_DATA *usd = entry->page;
 +
-+            *last_x = 0;
-+            *last_y = 0;
++            usd->SystemTime.High2Time = now.u.HighPart;
++            usd->SystemTime.LowPart   = now.u.LowPart;
++            usd->SystemTime.High1Time = now.u.HighPart;
 +
-+            return ERROR_SUCCESS;
++            usd->InterruptTime.High2Time = interrupt.HighPart;
++            usd->InterruptTime.LowPart   = interrupt.LowPart;
++            usd->InterruptTime.High1Time = interrupt.HighPart;
++
++            usd->TickCount.High2Time  = tick.HighPart;
++            usd->TickCount.LowPart    = tick.LowPart;
++            usd->TickCount.High1Time  = tick.HighPart;
++            usd->TickCountLowDeprecated = tick.LowPart;
++            usd->TickCountMultiplier    = 1 << 24;
 +        }
 +
-+        /* joystick was unset, send KEYDOWN. */
-+        keystroke->VirtualKey = cur_vk;
-+        keystroke->Unicode = 0; /* unused */
-+        keystroke->Flags = XINPUT_KEYSTROKE_KEYDOWN;
-+        keystroke->UserIndex = index;
-+        keystroke->HidCode = 0;
-+
-+        *last_x = *cur_x;
-+        *last_y = *cur_y;
-+
-+        return ERROR_SUCCESS;
++        LeaveCriticalSection(&wineusd_cs);
 +    }
 +
-+    *last_x = *cur_x;
-+    *last_y = *cur_y;
++    TRACE("Stopped user shared data thread.\n");
 +
-+    return ERROR_EMPTY;
++    return 0;
 +}
 +
-+static BOOL trigger_is_on(const BYTE value)
++static NTSTATUS wineusd_initialize(struct wineusd_entry *entry, IRP *irp)
 +{
-+    return value > 30;
++    const KSHARED_USER_DATA *init = irp->AssociatedIrp.SystemBuffer;
++    void *user_shared_data_address = (void *)0x7ffe0000;
++    NTSTATUS status = STATUS_SUCCESS;
++    LARGE_INTEGER section_size;
++    SIZE_T view_size;
++
++    entry->cid.UniqueProcess = PsGetCurrentProcessId();
++    entry->cid.UniqueThread = (HANDLE)0;
++    if ((status = NtOpenProcess(&entry->process, PROCESS_VM_OPERATION, NULL, &entry->cid)))
++    {
++        ERR("Failed to open target process, status: %x.\n", status);
++        return status;
++    }
++
++    section_size.HighPart = 0;
++    section_size.LowPart = 0x10000;
++    if ((status = NtCreateSection(&entry->section, SECTION_ALL_ACCESS, NULL, &section_size,
++                                  PAGE_READWRITE, SEC_COMMIT, NULL)))
++    {
++        ERR("Failed to create section, status: %x.\n", status);
++        return status;
++    }
++
++    view_size = 0;
++    if ((status = NtMapViewOfSection(entry->section, NtCurrentProcess(), &entry->page, 0, 0, 0,
++                                     &view_size, ViewShare, 0, PAGE_READWRITE)))
++    {
++        ERR("Failed to map section to driver memory, status: %x.\n", status);
++        return status;
++    }
++    memcpy(entry->page, init, sizeof(*init));
++
++    view_size = 0;
++    if ((status = NtMapViewOfSection(entry->section, entry->process, &user_shared_data_address, 0, 0, 0,
++                                     &view_size, ViewShare, 0, PAGE_READONLY)))
++    {
++        ERR("Failed to map user shared data to target process, status: %x.\n", status);
++        return status;
++    }
++
++    EnterCriticalSection(&wineusd_cs);
++    list_add_head(&wineusd_entries, &entry->link);
++    LeaveCriticalSection(&wineusd_cs);
++
++    TRACE("Initialized user shared data for process %04x.\n", HandleToULong(PsGetCurrentProcessId()));
++
++    return STATUS_SUCCESS;
 +}
 +
-+static DWORD check_for_keystroke(const DWORD index, XINPUT_KEYSTROKE *keystroke)
++static void wineusd_close(struct wineusd_entry *entry)
 +{
-+    xinput_controller *device = &controllers[index];
-+    const XINPUT_GAMEPAD *cur;
-+    DWORD ret = ERROR_EMPTY;
-+    int i;
++    void *user_shared_data_address = (void *)0x7ffe0000;
 +
-+    static const struct {
-+        int mask;
-+        WORD vk;
-+    } buttons[] = {
-+        { XINPUT_GAMEPAD_DPAD_UP, VK_PAD_DPAD_UP },
-+        { XINPUT_GAMEPAD_DPAD_DOWN, VK_PAD_DPAD_DOWN },
-+        { XINPUT_GAMEPAD_DPAD_LEFT, VK_PAD_DPAD_LEFT },
-+        { XINPUT_GAMEPAD_DPAD_RIGHT, VK_PAD_DPAD_RIGHT },
-+        { XINPUT_GAMEPAD_START, VK_PAD_START },
-+        { XINPUT_GAMEPAD_BACK, VK_PAD_BACK },
-+        { XINPUT_GAMEPAD_LEFT_THUMB, VK_PAD_LTHUMB_PRESS },
-+        { XINPUT_GAMEPAD_RIGHT_THUMB, VK_PAD_RTHUMB_PRESS },
-+        { XINPUT_GAMEPAD_LEFT_SHOULDER, VK_PAD_LSHOULDER },
-+        { XINPUT_GAMEPAD_RIGHT_SHOULDER, VK_PAD_RSHOULDER },
-+        { XINPUT_GAMEPAD_A, VK_PAD_A },
-+        { XINPUT_GAMEPAD_B, VK_PAD_B },
-+        { XINPUT_GAMEPAD_X, VK_PAD_X },
-+        { XINPUT_GAMEPAD_Y, VK_PAD_Y },
-+        /* note: guide button does not send an event */
-+    };
++    TRACE("Closing user shared data for process %04x.\n", HandleToULong(entry->cid.UniqueProcess));
 +
-+    if (!verify_and_lock_device(device))
-         return ERROR_DEVICE_NOT_CONNECTED;
- 
--    return ERROR_NOT_SUPPORTED;
-+    cur = &device->state.Gamepad;
++    EnterCriticalSection(&wineusd_cs);
++    list_remove(&entry->link);
++    LeaveCriticalSection(&wineusd_cs);
 +
-+    /*** buttons ***/
-+    for (i = 0; i < ARRAY_SIZE(buttons); ++i)
++    NtUnmapViewOfSection(entry->process, user_shared_data_address);
++    NtUnmapViewOfSection(NtCurrentProcess(), entry->page);
++
++    NtClose(entry->section);
++    NtClose(entry->process);
++    heap_free(entry);
++}
++
++static NTSTATUS WINAPI wineusd_dispatch_create(DEVICE_OBJECT *device, IRP *irp)
++{
++    IO_STACK_LOCATION *stack = IoGetCurrentIrpStackLocation(irp);
++    struct wineusd_entry *entry;
++    NTSTATUS status;
++
++    status = STATUS_NO_MEMORY;
++    if (!(entry = heap_alloc_zero(sizeof(*entry))))
 +    {
-+        if ((cur->wButtons & buttons[i].mask) ^ (device->last_keystroke.wButtons & buttons[i].mask))
-+        {
-+            keystroke->VirtualKey = buttons[i].vk;
-+            keystroke->Unicode = 0; /* unused */
-+            if (cur->wButtons & buttons[i].mask)
-+            {
-+                keystroke->Flags = XINPUT_KEYSTROKE_KEYDOWN;
-+                device->last_keystroke.wButtons |= buttons[i].mask;
-+            }
-+            else
-+            {
-+                keystroke->Flags = XINPUT_KEYSTROKE_KEYUP;
-+                device->last_keystroke.wButtons &= ~buttons[i].mask;
-+            }
-+            keystroke->UserIndex = index;
-+            keystroke->HidCode = 0;
-+            ret = ERROR_SUCCESS;
-+            goto done;
-+        }
-+    }
-+
-+    /*** triggers ***/
-+    if (trigger_is_on(cur->bLeftTrigger) ^ trigger_is_on(device->last_keystroke.bLeftTrigger))
-+    {
-+        keystroke->VirtualKey = VK_PAD_LTRIGGER;
-+        keystroke->Unicode = 0; /* unused */
-+        keystroke->Flags = trigger_is_on(cur->bLeftTrigger) ? XINPUT_KEYSTROKE_KEYDOWN : XINPUT_KEYSTROKE_KEYUP;
-+        keystroke->UserIndex = index;
-+        keystroke->HidCode = 0;
-+        device->last_keystroke.bLeftTrigger = cur->bLeftTrigger;
-+        ret = ERROR_SUCCESS;
++        ERR("Failed to allocate memory.\n");
 +        goto done;
 +    }
++    stack->FileObject->FsContext = entry;
 +
-+    if (trigger_is_on(cur->bRightTrigger) ^ trigger_is_on(device->last_keystroke.bRightTrigger))
-+    {
-+        keystroke->VirtualKey = VK_PAD_RTRIGGER;
-+        keystroke->Unicode = 0; /* unused */
-+        keystroke->Flags = trigger_is_on(cur->bRightTrigger) ? XINPUT_KEYSTROKE_KEYDOWN : XINPUT_KEYSTROKE_KEYUP;
-+        keystroke->UserIndex = index;
-+        keystroke->HidCode = 0;
-+        device->last_keystroke.bRightTrigger = cur->bRightTrigger;
-+        ret = ERROR_SUCCESS;
-+        goto done;
-+    }
++    list_init(&entry->link);
++    entry->process = INVALID_HANDLE_VALUE;
++    entry->section = INVALID_HANDLE_VALUE;
++    entry->page    = NULL;
 +
-+    /*** joysticks ***/
-+    ret = check_joystick_keystroke(index, keystroke, &cur->sThumbLX, &cur->sThumbLY,
-+            &device->last_keystroke.sThumbLX,
-+            &device->last_keystroke.sThumbLY, VK_PAD_LTHUMB_UP);
-+    if (ret == ERROR_SUCCESS)
-+        goto done;
-+
-+    ret = check_joystick_keystroke(index, keystroke, &cur->sThumbRX, &cur->sThumbRY,
-+            &device->last_keystroke.sThumbRX,
-+            &device->last_keystroke.sThumbRY, VK_PAD_RTHUMB_UP);
-+    if (ret == ERROR_SUCCESS)
-+        goto done;
++    TRACE("Created user shared data for process %04x.\n", HandleToULong(PsGetCurrentProcessId()));
 +
 +done:
-+    unlock_device(device);
++    irp->IoStatus.Status = status;
++    IoCompleteRequest(irp, IO_NO_INCREMENT);
++    return status;
++}
 +
++static NTSTATUS WINAPI wineusd_dispatch_close(DEVICE_OBJECT *device, IRP *irp)
++{
++    IO_STACK_LOCATION *stack = IoGetCurrentIrpStackLocation(irp);
++    struct wineusd_entry *entry = stack->FileObject->FsContext;
++
++    if (entry) wineusd_close(entry);
++
++    irp->IoStatus.Status = STATUS_SUCCESS;
++    IoCompleteRequest(irp, IO_NO_INCREMENT);
++    return STATUS_SUCCESS;
++}
++
++static NTSTATUS WINAPI wineusd_dispatch_ioctl(DEVICE_OBJECT *device, IRP *irp)
++{
++    IO_STACK_LOCATION *stack = IoGetCurrentIrpStackLocation(irp);
++    struct wineusd_entry *entry = stack->FileObject->FsContext;
++    NTSTATUS ret;
++
++    switch (stack->Parameters.DeviceIoControl.IoControlCode)
++    {
++    case IOCTL_WINEUSD_INITIALIZE:
++        ret = wineusd_initialize(entry, irp);
++        break;
++    default:
++        FIXME("Unhandled ioctl %#x.\n", stack->Parameters.DeviceIoControl.IoControlCode);
++        ret = STATUS_NOT_IMPLEMENTED;
++        break;
++    }
++
++    irp->IoStatus.Status = ret;
++    IoCompleteRequest(irp, IO_NO_INCREMENT);
 +    return ret;
 +}
 +
-+DWORD WINAPI DECLSPEC_HOTPATCH XInputGetKeystroke(DWORD index, DWORD reserved, PXINPUT_KEYSTROKE keystroke)
++static void WINAPI wineusd_unload(DRIVER_OBJECT *driver)
 +{
-+    TRACE("(index %u, reserved %u, keystroke %p)\n", index, reserved, keystroke);
++    struct wineusd_entry *entry, *cursor;
 +
-+    if (index >= XUSER_MAX_COUNT && index != XUSER_INDEX_ANY)
-+        return ERROR_BAD_ARGUMENTS;
++    SetEvent(wineusd_thread_stop);
++    WaitForSingleObject(wineusd_thread, INFINITE);
++    CloseHandle(wineusd_thread);
++    CloseHandle(wineusd_thread_stop);
 +
-+    if (index == XUSER_INDEX_ANY)
++    LIST_FOR_EACH_ENTRY_SAFE(entry, cursor, &wineusd_entries, struct wineusd_entry, link)
++        wineusd_close(entry);
++
++    IoDeleteDevice(device_obj);
++}
++
++NTSTATUS WINAPI DriverEntry(DRIVER_OBJECT *driver, UNICODE_STRING *path)
++{
++    static const WCHAR device_nameW[] = {'\\','D','e','v','i','c','e','\\','W','i','n','e','U','s','d',0};
++    OBJECT_ATTRIBUTES attr = {sizeof(attr)};
++    UNICODE_STRING string;
++    NTSTATUS ret;
++
++    TRACE("Driver %p, path %s.\n", driver, debugstr_w(path->Buffer));
++
++    RtlInitUnicodeString(&string, device_nameW);
++    if ((ret = IoCreateDevice(driver, 0, &string, FILE_DEVICE_UNKNOWN, 0, FALSE, &device_obj)))
 +    {
-+        int i;
-+        for (i = 0; i < XUSER_MAX_COUNT; ++i)
-+            if (check_for_keystroke(i, keystroke) == ERROR_SUCCESS)
-+                return ERROR_SUCCESS;
-+        return ERROR_EMPTY;
++        ERR("Failed to create user shared data device, status %#x.\n", ret);
++        return ret;
 +    }
 +
-+    return check_for_keystroke(index, keystroke);
- }
++    driver->MajorFunction[IRP_MJ_CREATE] = wineusd_dispatch_create;
++    driver->MajorFunction[IRP_MJ_CLOSE] = wineusd_dispatch_close;
++    driver->MajorFunction[IRP_MJ_DEVICE_CONTROL] = wineusd_dispatch_ioctl;
++    driver->DriverUnload = wineusd_unload;
++
++    wineusd_thread_stop = CreateEventW(NULL, FALSE, FALSE, NULL);
++    wineusd_thread = CreateThread(NULL, 0, wineusd_thread_proc, NULL, 0, NULL);
++
++    return STATUS_SUCCESS;
++}
+diff --git a/include/wine/usd.h b/include/wine/usd.h
+new file mode 100644
+index 00000000000..e92efa5e29e
+--- /dev/null
++++ b/include/wine/usd.h
+@@ -0,0 +1,27 @@
++/*
++ * Copyright 2019 Rémi Bernon for CodeWeavers
++ *
++ * This library is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU Lesser General Public
++ * License as published by the Free Software Foundation; either
++ * version 2.1 of the License, or (at your option) any later version.
++ *
++ * This library is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++ * Lesser General Public License for more details.
++ *
++ * You should have received a copy of the GNU Lesser General Public
++ * License along with this library; if not, write to the Free Software
++ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
++ */
++
++#ifndef __WINE_WINE_USD_H
++#define __WINE_WINE_USD_H
++
++#include <windef.h>
++#include <winioctl.h>
++
++#define IOCTL_WINEUSD_INITIALIZE CTL_CODE(FILE_DEVICE_UNKNOWN, 0x800, METHOD_BUFFERED, FILE_ANY_ACCESS)
++
++#endif /* __WINE_WINE_USD_H */
+diff --git a/loader/wine.inf.in b/loader/wine.inf.in
+index 4f5965de32b..1aa0a37338b 100644
+--- a/loader/wine.inf.in
++++ b/loader/wine.inf.in
+@@ -164,6 +164,7 @@ AddService=FontCache3.0.0.0,0,WPFFontCacheService
+ AddService=LanmanServer,0,LanmanServerService
+ AddService=FontCache,0,FontCacheService
+ AddService=Schedule,0,TaskSchedulerService
++AddService=WineUsd,0,WineUsdService
+ AddService=Winmgmt,0,WinmgmtService
+ AddService=wuauserv,0,wuauService
  
- DWORD WINAPI DECLSPEC_HOTPATCH XInputGetCapabilities(DWORD index, DWORD flags, XINPUT_CAPABILITIES* capabilities)
-diff --git a/dlls/xinput1_3/xinput_private.h b/dlls/xinput1_3/xinput_private.h
-index f3456cd8e7c..7de9a2a2e4d 100644
---- a/dlls/xinput1_3/xinput_private.h
-+++ b/dlls/xinput1_3/xinput_private.h
-@@ -23,6 +23,7 @@ typedef struct _xinput_controller
-     XINPUT_CAPABILITIES caps;
-     void *platform_private; /* non-NULL when device is valid; validity may be read without holding crit */
-     XINPUT_STATE state;
-+    XINPUT_GAMEPAD last_keystroke;
-     XINPUT_VIBRATION vibration;
- } xinput_controller;
+@@ -181,6 +182,7 @@ AddService=FontCache3.0.0.0,0,WPFFontCacheService
+ AddService=LanmanServer,0,LanmanServerService
+ AddService=FontCache,0,FontCacheService
+ AddService=Schedule,0,TaskSchedulerService
++AddService=WineUsd,0,WineUsdService
+ AddService=Winmgmt,0,WinmgmtService
+ AddService=wuauserv,0,wuauService
  
+@@ -198,6 +200,7 @@ AddService=FontCache3.0.0.0,0,WPFFontCacheService
+ AddService=LanmanServer,0,LanmanServerService
+ AddService=FontCache,0,FontCacheService
+ AddService=Schedule,0,TaskSchedulerService
++AddService=WineUsd,0,WineUsdService
+ AddService=Winmgmt,0,WinmgmtService
+ AddService=wuauserv,0,wuauService
+ 
+@@ -215,6 +218,7 @@ AddService=FontCache3.0.0.0,0,WPFFontCacheService
+ AddService=LanmanServer,0,LanmanServerService
+ AddService=FontCache,0,FontCacheService
+ AddService=Schedule,0,TaskSchedulerService
++AddService=WineUsd,0,WineUsdService
+ AddService=Winmgmt,0,WinmgmtService
+ AddService=wuauserv,0,wuauService
+ 
+@@ -3658,6 +3662,14 @@ ServiceType=32
+ StartType=3
+ ErrorControl=1
+ 
++[WineUsdService]
++Description="User shared data update service"
++DisplayName="Wine User Shared Data"
++ServiceBinary="%12%\WineUsd.sys"
++ServiceType=1
++StartType=0
++ErrorControl=1
++
+ [WinmgmtService]
+ Description="Provides access to Windows Management Instrumentation"
+ DisplayName="Windows Management Instrumentation Service"
