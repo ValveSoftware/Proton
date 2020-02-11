@@ -417,6 +417,19 @@ static WCHAR *strchrW(WCHAR *h, WCHAR n)
     return NULL;
 }
 
+int strncmpW(const WCHAR *l, const WCHAR *r, int n)
+{
+    if(n <= 0)
+        return 0;
+
+    while(--n > 0 && *l && *l == *r){
+        l++;
+        r++;
+    }
+
+    return *l - *r;
+}
+
 static WCHAR *find_quote(WCHAR *str)
 {
     WCHAR *end = strchrW(str, '"'), *ch;
@@ -442,12 +455,46 @@ static BOOL WINAPI console_ctrl_handler(DWORD dwCtrlType)
     return TRUE;
 }
 
-static HANDLE run_process(void)
+static BOOL should_use_shell_execute(const WCHAR *cmdline)
+{
+    BOOL use_shell_execute = TRUE;
+    BOOL quoted = FALSE;
+    const WCHAR *executable_name_end = cmdline;
+
+    /* find the end of the first arg...*/
+    while (*executable_name_end != '\0' &&
+           (*executable_name_end != ' ' || quoted) &&
+           (*executable_name_end != '"' || !quoted))
+    {
+        quoted ^= *executable_name_end == '"';
+
+        executable_name_end++;
+    }
+
+    /* backtrack to before the end of the arg
+     * and check if we end in .exe or not
+     * and determine whether to use ShellExecute
+     * based on that */
+    executable_name_end -= strlen(".exe");
+
+    if (executable_name_end >= cmdline)
+    {
+        static const WCHAR exeW[] = {'.','e','x','e',0};
+
+        if (!strncmpW(executable_name_end, exeW, wcslen(exeW)))
+            use_shell_execute = FALSE;
+    }
+
+    return use_shell_execute;
+}
+
+static HANDLE run_process(BOOL *should_await)
 {
     WCHAR *cmdline = GetCommandLineW();
     STARTUPINFOW si = { sizeof(si) };
     PROCESS_INFORMATION pi;
     DWORD flags = 0;
+    BOOL use_shell_execute = TRUE;
 
     /* skip argv[0] */
     if (*cmdline == '"')
@@ -531,8 +578,11 @@ static HANDLE run_process(void)
         CoInitialize(NULL);
 
         console = SHGetFileInfoW(dos, 0, &sfi, sizeof(sfi), SHGFI_EXETYPE);
-        if (console && !HIWORD(console))
-            flags |= CREATE_NEW_CONSOLE;
+        if (console)
+        {
+            if (!HIWORD(console))
+                flags |= CREATE_NEW_CONSOLE;
+        }
 
         new_cmdline = (WCHAR *)HeapAlloc(GetProcessHeap(), 0,
                 (lstrlenW(dos) + 3 + lstrlenW(remainder) + 1) * sizeof(WCHAR));
@@ -548,14 +598,37 @@ run:
     WINE_TRACE("Running command %s\n", wine_dbgstr_w(cmdline));
 
     SetConsoleCtrlHandler( console_ctrl_handler, TRUE );
-    if (!CreateProcessW(NULL, cmdline, NULL, NULL, FALSE, flags, NULL, NULL, &si, &pi))
+
+    use_shell_execute = should_use_shell_execute(cmdline);
+
+    /* only await the process finishing if we launch a process directly...
+     * Steam simply calls ShellExecuteA with the same parameters.
+     * this avoids the edge case where we could ShellExecute and
+     * then that process ends up ShellExecuting something as a throw away */
+    *should_await = !use_shell_execute;
+
+    WINE_TRACE("Executing via %s\n",
+        wine_dbgstr_a(use_shell_execute ? "ShellExecuteW" : "CreateProcessW"));
+
+    if (use_shell_execute)
     {
-        WINE_ERR("Failed to create process %s: %u\n", wine_dbgstr_w(cmdline), GetLastError());
+        static const WCHAR verb[] = { 'o', 'p', 'e', 'n', 0 };
+        ShellExecuteW(NULL, verb, cmdline, NULL, NULL, SW_SHOWNORMAL);
+
         return INVALID_HANDLE_VALUE;
     }
+    else
+    {
+        if (!CreateProcessW(NULL, cmdline, NULL, NULL, FALSE, flags, NULL, NULL, &si, &pi))
+        {
+            WINE_ERR("Failed to create process %s: %u\n", wine_dbgstr_w(cmdline), GetLastError());
+            return INVALID_HANDLE_VALUE;
+        }
 
-    CloseHandle(pi.hThread);
-    return pi.hProcess;
+        CloseHandle(pi.hThread);
+
+        return pi.hProcess;
+    }
 }
 
 int main(int argc, char *argv[])
@@ -581,21 +654,28 @@ int main(int argc, char *argv[])
     if (argc > 1)
     {
         HANDLE child;
+        BOOL should_await;
 
         setup_vrpaths();
 
-        child = run_process();
+        child = run_process(&should_await);
 
-        if (child == INVALID_HANDLE_VALUE)
-            return 1;
+        if (should_await)
+        {
+            if (child == INVALID_HANDLE_VALUE)
+                return 1;
 
-        if (wait_handle == INVALID_HANDLE_VALUE)
-            wait_handle = child;
-        else
-            CloseHandle(child);
+            if (wait_handle == INVALID_HANDLE_VALUE)
+                wait_handle = child;
+            else
+                CloseHandle(child);
+        }
     }
 
-    WaitForSingleObject(wait_handle, INFINITE);
+    if(wait_handle != INVALID_HANDLE_VALUE)
+    {
+        WaitForSingleObject(wait_handle, INFINITE);
+    }
 
     if (event != INVALID_HANDLE_VALUE)
         CloseHandle(event);
