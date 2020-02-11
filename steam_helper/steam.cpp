@@ -142,7 +142,45 @@ static BOOL WINAPI console_ctrl_handler(DWORD dwCtrlType)
     return TRUE;
 }
 
-static HANDLE run_process(void)
+static BOOL should_use_shell_execute(WCHAR* cmdline)
+{
+    BOOL use_shell_execute = TRUE;
+
+    BOOL quoted = FALSE;
+    WCHAR* executable_name_end = cmdline;
+    
+    /* find the end of the first arg...*/
+    while (*executable_name_end != '\0' &&
+           (*executable_name_end != ' ' || quoted) &&
+           (*executable_name_end != '"' || !quoted))
+    {
+        quoted ^= *executable_name_end == '"';
+
+        executable_name_end++;
+    }
+
+    /* backtrack to before the end of the arg
+     * and check if we end in .exe or not
+     * and determine whether to use ShellExecute
+     * based on that */
+    executable_name_end -= strlen(".exe");
+
+    if (executable_name_end >= cmdline)
+    {
+        static const WCHAR exeW[] = {'.','e','x','e',0};
+
+        WINE_TRACE("Command ends in %s, (quoted: %s) \n",
+            wine_dbgstr_w(executable_name_end),
+            wine_dbgstr_a(quoted ? "yes" : "no"));
+
+        if (!wcsncmp(executable_name_end, exeW, wcslen(exeW)))
+            use_shell_execute = FALSE;
+    }
+
+    return use_shell_execute;
+}
+
+static HANDLE run_process(BOOL* should_await)
 {
     WCHAR *cmdline = GetCommandLineW();
     STARTUPINFOW si = { sizeof(si) };
@@ -248,14 +286,37 @@ run:
     WINE_TRACE("Running command %s\n", wine_dbgstr_w(cmdline));
 
     SetConsoleCtrlHandler( console_ctrl_handler, TRUE );
-    if (!CreateProcessW(NULL, cmdline, NULL, NULL, FALSE, flags, NULL, NULL, &si, &pi))
+
+    BOOL use_shell_execute = should_use_shell_execute(cmdline);
+
+    /* only await the process finishing if we launch a process directly... 
+     * Steam simply calls ShellExecuteA with the same parameters.
+     * this avoids the edge case where we could ShellExecute and
+     * then that process ends up ShellExecuting something as a throw away */
+    *should_await = !use_shell_execute;
+
+    WINE_TRACE("Executing via %s\n",
+        wine_dbgstr_a(use_shell_execute ? "ShellExecuteW" : "CreateProcessW"));
+
+    if (use_shell_execute)
     {
-        WINE_ERR("Failed to create process %s: %u\n", wine_dbgstr_w(cmdline), GetLastError());
+        static const WCHAR verb[] = { 'o', 'p', 'e', 'n', 0 };
+        ShellExecuteW(NULL, verb, cmdline, NULL, NULL, SW_SHOWNORMAL);
+
         return INVALID_HANDLE_VALUE;
     }
+    else
+    {
+        if (!CreateProcessW(NULL, cmdline, NULL, NULL, FALSE, flags, NULL, NULL, &si, &pi))
+        {
+            WINE_ERR("Failed to create process %s: %u\n", wine_dbgstr_w(cmdline), GetLastError());
+            return INVALID_HANDLE_VALUE;
+        }
 
-    CloseHandle(pi.hThread);
-    return pi.hProcess;
+        CloseHandle(pi.hThread);
+
+        return pi.hProcess;
+    }
 }
 
 int main(int argc, char *argv[])
@@ -277,17 +338,22 @@ int main(int argc, char *argv[])
 
     if (argc > 1)
     {
-        HANDLE child;
+        BOOL should_await;
 
-        child = run_process();
+        HANDLE child = run_process(&should_await);
 
-        if (child == INVALID_HANDLE_VALUE)
-            return 1;
+        if (should_await)
+        {
+            if (child == INVALID_HANDLE_VALUE)
+                return 1;
 
-        if (wait_handle == INVALID_HANDLE_VALUE)
-            wait_handle = child;
-        else
-            CloseHandle(child);
+            if (wait_handle == INVALID_HANDLE_VALUE)
+                wait_handle = child;
+            else
+                CloseHandle(child);
+        }
+        else if (wait_handle == INVALID_HANDLE_VALUE)
+            wait_handle = __wine_make_process_system();
     }
 
     WaitForSingleObject(wait_handle, INFINITE);
