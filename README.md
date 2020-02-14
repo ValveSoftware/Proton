@@ -30,7 +30,7 @@ All patches include:
 Full patches can be viewed in [protonprep.sh](game-patches-testing/protonprep.sh).
 
 ## Installation
-1. Either follow the [build guide](#building), or download a release from the [Releases](https://github.com/GloriousEggroll/proton-ge-custom/releases) section and then proceed.
+1. Either follow the [build guide](#building), or download a release from the [Releases](https://github.com/GloriousEggroll/proton-ge-custom/releases) section and then proceed to the next step.
 2. - For regular Steam users, create a ``~/.steam/root/compatibilitytools.d`` directory.
    - For Flatpak Steam users, create a ``~/.var/app/com.valvesoftware.Steam/data/Steam/compatibilitytools.d/`` directory.
 3. - For regular Steam users, extract the release tarball into ``~/.steam/root/compatibilitytools.d/``.
