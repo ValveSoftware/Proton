@@ -1047,6 +1047,7 @@ $(LSTEAMCLIENT_CONFIGURE_FILES64): $(LSTEAMCLIENT64) $(MAKEFILE_DEP) | $(LSTEAMC
 			-I"../$(TOOLS_DIR64)"/include/ \
 			-I"../$(TOOLS_DIR64)"/include/wine/ \
 			-I"../$(TOOLS_DIR64)"/include/wine/windows/ \
+			-I"../$(WINE)"/include/ \
 			-L"../$(TOOLS_DIR64)"/lib64/ \
 			-L"../$(TOOLS_DIR64)"/lib64/wine/ \
 			--dll ../$(LSTEAMCLIENT64) && \
@@ -1065,6 +1066,7 @@ $(LSTEAMCLIENT_CONFIGURE_FILES32): $(LSTEAMCLIENT32) $(MAKEFILE_DEP) | $(LSTEAMC
 			-I"../$(TOOLS_DIR32)"/include/ \
 			-I"../$(TOOLS_DIR32)"/include/wine/ \
 			-I"../$(TOOLS_DIR32)"/include/wine/windows/ \
+			-I"../$(WINE)"/include/ \
 			-L"../$(TOOLS_DIR32)"/lib/ \
 			-L"../$(TOOLS_DIR32)"/lib/wine/ \
 			--dll ../$(LSTEAMCLIENT32) && \

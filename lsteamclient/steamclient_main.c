@@ -10,6 +10,7 @@
 #include "winnls.h"
 #include "wine/debug.h"
 #include "wine/library.h"
+#include "wine/list.h"
 #include "steam_defs.h"
 
 #ifdef __linux__
@@ -23,6 +24,8 @@ WINE_DEFAULT_DEBUG_CHANNEL(steamclient);
 char g_tmppath[PATH_MAX];
 
 static char *controller_glyphs[512]; /* at least k_EControllerActionOrigin_Count */
+
+static CRITICAL_SECTION steamclient_cs = { NULL, -1, 0, 0, 0, 0 };
 
 BOOL WINAPI DllMain(HINSTANCE instance, DWORD reason, void *reserved)
 {
@@ -355,23 +358,58 @@ static const struct {
 #include "win_constructors_table.dat"
 };
 
+struct steamclient_interface
+{
+    struct list entry;
+    const char *name;
+    void *linux_side;
+    void *interface;
+};
+
+static struct list steamclient_interfaces = LIST_INIT(steamclient_interfaces);
+
 void *create_win_interface(const char *name, void *linux_side)
 {
+    struct steamclient_interface *e;
+    void *ret = NULL;
     int i;
 
     TRACE("trying to create %s\n", name);
 
-    if(!linux_side)
+    if (!linux_side)
         return NULL;
 
-    for(i = 0; i < sizeof(constructors) / sizeof(*constructors); ++i){
-        if(!strcmp(name, constructors[i].iface_version))
-            return constructors[i].ctor(linux_side);
+    EnterCriticalSection(&steamclient_cs);
+
+    LIST_FOR_EACH_ENTRY(e, &steamclient_interfaces, struct steamclient_interface, entry)
+    {
+        if (e->linux_side == linux_side && !strcmp(e->name, name))
+        {
+            ret = e->interface;
+            TRACE("-> %p\n", ret);
+            goto done;
+        }
     }
 
-    ERR("Don't recognize interface name: %s\n", name);
+    for (i = 0; i < sizeof(constructors) / sizeof(*constructors); ++i)
+    {
+        if (!strcmp(name, constructors[i].iface_version))
+        {
+            e = HeapAlloc(GetProcessHeap(), 0, sizeof(*e));
+            e->name = constructors[i].iface_version;
+            e->linux_side = linux_side;
+            e->interface = constructors[i].ctor(linux_side);
+            list_add_tail(&steamclient_interfaces, &e->entry);
 
-    return NULL;
+            ret = e->interface;
+            break;
+        }
+    }
+
+done:
+    LeaveCriticalSection(&steamclient_cs);
+    if (!ret) ERR("Don't recognize interface name: %s\n", name);
+    return ret;
 }
 
 static void *steamclient_lib;
