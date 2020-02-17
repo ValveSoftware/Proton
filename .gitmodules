@@ -33,7 +33,7 @@
 	url = https://github.com/KhronosGroup/Vulkan-Headers
 [submodule "vkd3d"]
 	path = vkd3d
-	url = https://github.com/HansKristian-Work/vkd3d
+	url = https://github.com/gloriouseggroll/vkd3d
 [submodule "gstreamer"]
 	path = gstreamer
 	url = https://gitlab.freedesktop.org/gstreamer/gstreamer.git
