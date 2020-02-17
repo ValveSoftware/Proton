@@ -33,8 +33,6 @@
  * Windows version of Steam running. */
 
 #include <windows.h>
-#include <string.h>
-#include <stdio.h>
 
 #pragma push_macro("_WIN32")
 #pragma push_macro("__cdecl")
@@ -44,6 +42,7 @@
 #pragma pop_macro("_WIN32")
 #pragma pop_macro("__cdecl")
 
+#include "wine/unicode.h"
 #include "wine/debug.h"
 
 WINE_DEFAULT_DEBUG_CHANNEL(steam);
@@ -119,7 +118,7 @@ static void setup_steam_registry(void)
 
 static WCHAR *find_quote(WCHAR *str)
 {
-    WCHAR *end = wcschr(str, '"'), *ch;
+    WCHAR *end = strchrW(str, '"'), *ch;
     int odd;
     while (end)
     {
@@ -132,9 +131,14 @@ static WCHAR *find_quote(WCHAR *str)
         }
         if (!odd)
             return end;
-        end = wcschr(end + 1, '"');
+        end = strchrW(end + 1, '"');
     }
     return NULL;
+}
+
+static BOOL WINAPI console_ctrl_handler(DWORD dwCtrlType)
+{
+    return TRUE;
 }
 
 static HANDLE run_process(void)
@@ -152,7 +156,7 @@ static HANDLE run_process(void)
     }
     else
     {
-        cmdline = wcschr(cmdline, ' ');
+        cmdline = strchrW(cmdline, ' ');
     }
     if (!cmdline)
     {
@@ -191,9 +195,9 @@ static HANDLE run_process(void)
         else
         {
             start = cmdline;
-            end = wcschr(start, ' ');
+            end = strchrW(start, ' ');
             if (!end)
-                end = wcschr(start, '\0');
+                end = strchrW(start, '\0');
             remainder = end;
         }
 
@@ -230,11 +234,11 @@ static HANDLE run_process(void)
             flags |= CREATE_NEW_CONSOLE;
 
         new_cmdline = (WCHAR *)HeapAlloc(GetProcessHeap(), 0,
-                (lstrlenW(dos) + 3 + lstrlenW(remainder) + 1) * sizeof(WCHAR));
-        lstrcpyW(new_cmdline, dquoteW);
-        lstrcatW(new_cmdline, dos);
-        lstrcatW(new_cmdline, dquoteW);
-        lstrcatW(new_cmdline, remainder);
+                (strlenW(dos) + 3 + strlenW(remainder) + 1) * sizeof(WCHAR));
+        strcpyW(new_cmdline, dquoteW);
+        strcatW(new_cmdline, dos);
+        strcatW(new_cmdline, dquoteW);
+        strcatW(new_cmdline, remainder);
 
         cmdline = new_cmdline;
     }
@@ -242,6 +246,7 @@ static HANDLE run_process(void)
 run:
     WINE_TRACE("Running command %s\n", wine_dbgstr_w(cmdline));
 
+    SetConsoleCtrlHandler( console_ctrl_handler, TRUE );
     if (!CreateProcessW(NULL, cmdline, NULL, NULL, FALSE, flags, NULL, NULL, &si, &pi))
     {
         WINE_ERR("Failed to create process %s: %u\n", wine_dbgstr_w(cmdline), GetLastError());

@@ -1,12 +1,22 @@
 #!/bin/bash
+    # steam_helper patches
+    git checkout steam_helper
+    cd steam_helper
+    patch -Np1 < ../game-patches-testing/proton-hotfixes/proton-Use_ShellExecute_when_not_launching_exe.patch
+    cd ..
+
+    git checkout lsteamclient
+    cd lsteamclient
+    patch -Np1 < ../game-patches-testing/proton-hotfixes/proton-lsteamclient_disable_winISteamController_SteamController007_warframe.patch
+    cd ..
 
     # VKD3D patches
     cd vkd3d
     git reset --hard HEAD
     git clean -xdf
-    #Don't apply wow patches for now, they tend to crash other vkd3d games
-    #patch -Np1 < ../game-patches-testing/vkd3d-patches/Support_RS_1.0_Volatile.patch
+    #echo "WoW vkd3d patches"
     #patch -Np1 < ../game-patches-testing/vkd3d-patches/wow-flicker.patch
+    #patch -Np1 < ../game-patches-testing/vkd3d-patches/Support_RS_1.0_Volatile.patch
     cd ..
 
     # Valve DXVK patches
@@ -46,8 +56,7 @@
     -W winex11-key_translation 
 
     #VKD3D-WINE
-    #Don't apply these for now,they are part of the wow patches
-    #echo "applying vkd3d wine patches"
+    #echo "applying WoW vkd3d wine patches
     #patch -Np1 < ../game-patches-testing/wine-patches/D3D12SerializeVersionedRootSignature.patch
     #patch -Np1 < ../game-patches-testing/wine-patches/D3D12CreateVersionedRootSignatureDeserializer.patch
 
