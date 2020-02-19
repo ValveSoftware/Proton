@@ -1,11 +1,11 @@
-From 557253e2ecc61efb137198e88a7beb0276c7e22b Mon Sep 17 00:00:00 2001
+From 33529f06c4edd37e6061d70da1fb007f929931d4 Mon Sep 17 00:00:00 2001
 From: Tk-Glitch <ti3nou@gmail.com>
-Date: Mon, 4 Nov 2019 11:36:53 +0100
-Subject: Proton fs hack patchset, rebased
+Date: Mon, 10 Feb 2020 13:03:57 +0100
+Subject: Proton fs hack patchset, 5.0 rebased edition
 
 
 diff --git a/dlls/winevulkan/make_vulkan b/dlls/winevulkan/make_vulkan
-index 4f1c03cc7c..86fbf6229b 100755
+index 52ef25948c..36b1522001 100755
 --- a/dlls/winevulkan/make_vulkan
 +++ b/dlls/winevulkan/make_vulkan
 @@ -171,6 +171,7 @@ FUNCTION_OVERRIDES = {
@@ -296,7 +296,7 @@ index 4f1c03cc7c..86fbf6229b 100755
          # Export symbols for all Vulkan Core functions.
          for func in self.registry.funcs.values():
 diff --git a/dlls/winevulkan/vulkan.c b/dlls/winevulkan/vulkan.c
-index 725bdf019e..2fb4187d75 100644
+index 59472bcef8..3ade532f0c 100644
 --- a/dlls/winevulkan/vulkan.c
 +++ b/dlls/winevulkan/vulkan.c
 @@ -18,6 +18,7 @@
@@ -2161,7 +2161,7 @@ index fecf9ab502..e53154d1ef 100644
  {
      TRACE("%p, 0x%s\n", queue, wine_dbgstr_longlong(configuration));
 diff --git a/dlls/winevulkan/vulkan_thunks.h b/dlls/winevulkan/vulkan_thunks.h
-index d39cab76ac..10444d0bc9 100644
+index 01c1efb277..a262f01388 100644
 --- a/dlls/winevulkan/vulkan_thunks.h
 +++ b/dlls/winevulkan/vulkan_thunks.h
 @@ -41,13 +41,17 @@
@@ -2192,7 +2192,7 @@ index d39cab76ac..10444d0bc9 100644
  VkResult WINAPI wine_vkQueueSubmit(VkQueue queue, uint32_t submitCount, const VkSubmitInfo *pSubmits, VkFence fence);
  
  /* Private thunks */
-@@ -770,6 +777,10 @@ void free_VkDeviceCreateInfo_struct_chain(VkDeviceCreateInfo *s) DECLSPEC_HIDDEN
+@@ -824,6 +831,10 @@ void free_VkDeviceCreateInfo_struct_chain(VkDeviceCreateInfo *s) DECLSPEC_HIDDEN
  VkResult convert_VkInstanceCreateInfo_struct_chain(const void *pNext, VkInstanceCreateInfo *out_struct) DECLSPEC_HIDDEN;
  void free_VkInstanceCreateInfo_struct_chain(VkInstanceCreateInfo *s) DECLSPEC_HIDDEN;
  
@@ -2204,7 +2204,7 @@ index d39cab76ac..10444d0bc9 100644
  struct vulkan_device_funcs
  {
 diff --git a/dlls/winevulkan/winevulkan.spec b/dlls/winevulkan/winevulkan.spec
-index 57ee94abe2..f771ebbb88 100644
+index 8cdf387857..e5614b65d9 100644
 --- a/dlls/winevulkan/winevulkan.spec
 +++ b/dlls/winevulkan/winevulkan.spec
 @@ -37,6 +37,11 @@
@@ -2239,10 +2239,10 @@ index c51954f1bf..a37530fdbf 100644
      EmptyClipboard();
      is_clipboard_owner = TRUE;
 diff --git a/dlls/winex11.drv/desktop.c b/dlls/winex11.drv/desktop.c
-index fed8dd32e9..dad5f9e311 100644
+index bde4841ed4..06d90bc55c 100644
 --- a/dlls/winex11.drv/desktop.c
 +++ b/dlls/winex11.drv/desktop.c
-@@ -238,18 +235,52 @@ static BOOL CALLBACK update_windows_on_desktop_resize( HWND hwnd, LPARAM lparam
+@@ -328,16 +328,49 @@ static BOOL CALLBACK update_windows_on_desktop_resize( HWND hwnd, LPARAM lparam
  
      if (!(data = get_win_data( hwnd ))) return TRUE;
  
@@ -2264,13 +2264,10 @@ index fed8dd32e9..dad5f9e311 100644
 +            sync_gl_drawable(hwnd, FALSE);
 +            update_net_wm_states( data );
 +        }
-+    }else {
-+
++    } else {
 +        /* update the full screen state */
 +        update_net_wm_states( data );
  
--    if (resize_data->old_virtual_rect.left != resize_data->new_virtual_rect.left) mask |= CWX;
--    if (resize_data->old_virtual_rect.top != resize_data->new_virtual_rect.top) mask |= CWY;
 -    if (mask && data->whole_window)
 -    {
 -        POINT pos = virtual_screen_to_root( data->whole_rect.left, data->whole_rect.top );
@@ -2278,8 +2275,6 @@ index fed8dd32e9..dad5f9e311 100644
 -        changes.x = pos.x;
 -        changes.y = pos.y;
 -        XReconfigureWMWindow( data->display, data->whole_window, data->vis.screen, mask, &changes );
-+        if (resize_data->old_virtual_rect.left != resize_data->new_virtual_rect.left || data->fs_hack) mask |= CWX;
-+        if (resize_data->old_virtual_rect.top != resize_data->new_virtual_rect.top || data->fs_hack) mask |= CWY;
 +        if (mask && data->whole_window)
 +        {
 +            POINT pos = virtual_screen_to_root( data->whole_rect.left, data->whole_rect.top );
@@ -2306,7 +2301,7 @@ index fed8dd32e9..dad5f9e311 100644
      }
      release_win_data( data );
      if (hwnd == GetForegroundWindow()) clip_fullscreen_window( hwnd, TRUE );
-@@ -444,7 +444,8 @@ void X11DRV_resize_desktop( unsigned int width, unsigned int height )
+@@ -410,7 +444,8 @@ void X11DRV_resize_desktop( unsigned int width, unsigned int height )
  
      if (GetWindowThreadProcessId( hwnd, NULL ) != GetCurrentThreadId())
      {
@@ -2317,7 +2312,7 @@ index fed8dd32e9..dad5f9e311 100644
      else
      {
 diff --git a/dlls/winex11.drv/display.c b/dlls/winex11.drv/display.c
-index 7ad74c9b4e1..9b56727eb20 100644
+index 7ad74c9b4e..9b56727eb2 100644
 --- a/dlls/winex11.drv/display.c
 +++ b/dlls/winex11.drv/display.c
 @@ -30,6 +30,7 @@
@@ -2414,7 +2409,7 @@ index 7ad74c9b4e1..9b56727eb20 100644
      /* Write HardwareID registry property, REG_MULTI_SZ */
      written = sprintfW(bufferW, gpu_hardware_id_fmtW, gpu->vendor_id, gpu->device_id);
      bufferW[written + 1] = 0;
-@@ -420,6 +488,7 @@ static BOOL X11DRV_InitAdapter(HKEY video_hkey, INT video_index, INT gpu_index,
+@@ -420,6 +488,7 @@ done:
  static BOOL X11DRV_InitMonitor(HDEVINFO devinfo, const struct x11drv_monitor *monitor, int monitor_index,
                                 int video_index)
  {
@@ -2437,10 +2432,10 @@ index 7ad74c9b4e1..9b56727eb20 100644
      if (!SetupDiSetDeviceRegistryPropertyW(devinfo, &device_data, SPDRP_HARDWAREID,
                                             (const BYTE *)monitor_hardware_idW, sizeof(monitor_hardware_idW)))
 diff --git a/dlls/winex11.drv/event.c b/dlls/winex11.drv/event.c
-index 7e1d083823..dd1d0847ae 100644
+index 412635d4f5..1f7c09666c 100644
 --- a/dlls/winex11.drv/event.c
 +++ b/dlls/winex11.drv/event.c
-@@ -821,9 +828,27 @@ static void focus_out( Display *display , HWND hwnd )
+@@ -821,9 +821,27 @@ static void focus_out( Display *display , HWND hwnd )
      Window focus_win;
      int revert;
      XIC xic;
@@ -2468,7 +2463,7 @@ index 7e1d083823..dd1d0847ae 100644
      x11drv_thread_data()->last_focus = hwnd;
      if ((xic = X11DRV_get_ic( hwnd ))) XUnsetICFocus( xic );
  
-@@ -1124,6 +1148,12 @@ static BOOL X11DRV_ConfigureNotify( HWND hwnd, XEvent *xev )
+@@ -1124,6 +1142,12 @@ static BOOL X11DRV_ConfigureNotify( HWND hwnd, XEvent *xev )
                 event->serial, data->configure_serial );
          goto done;
      }
@@ -2481,7 +2476,7 @@ index 7e1d083823..dd1d0847ae 100644
  
      /* Get geometry */
  
-@@ -1145,8 +1175,16 @@ static BOOL X11DRV_ConfigureNotify( HWND hwnd, XEvent *xev )
+@@ -1145,8 +1169,16 @@ static BOOL X11DRV_ConfigureNotify( HWND hwnd, XEvent *xev )
      }
      else pos = root_to_virtual_screen( x, y );
  
@@ -2500,7 +2495,7 @@ index 7e1d083823..dd1d0847ae 100644
  
      TRACE( "win %p/%lx new X rect %d,%d,%dx%d (event %d,%d,%dx%d)\n",
             hwnd, data->whole_window, rect.left, rect.top, rect.right-rect.left, rect.bottom-rect.top,
-@@ -1154,6 +1192,19 @@ static BOOL X11DRV_ConfigureNotify( HWND hwnd, XEvent *xev )
+@@ -1154,6 +1186,19 @@ static BOOL X11DRV_ConfigureNotify( HWND hwnd, XEvent *xev )
  
      /* Compare what has changed */
  
@@ -2520,7 +2515,7 @@ index 7e1d083823..dd1d0847ae 100644
      x     = rect.left;
      y     = rect.top;
      cx    = rect.right - rect.left;
-@@ -1332,8 +1383,6 @@ static void handle_wm_state_notify( HWND hwnd, XPropertyEvent *event, BOOL updat
+@@ -1332,8 +1377,6 @@ static void handle_wm_state_notify( HWND hwnd, XPropertyEvent *event, BOOL updat
              {
                  TRACE( "restoring win %p/%lx\n", data->hwnd, data->whole_window );
                  release_win_data( data );
@@ -2529,7 +2524,7 @@ index 7e1d083823..dd1d0847ae 100644
                  SendMessageW( hwnd, WM_SYSCOMMAND, SC_RESTORE, 0 );
                  return;
              }
-@@ -1357,15 +1406,57 @@ done:
+@@ -1357,15 +1400,57 @@ done:
  }
  
  
@@ -2587,7 +2582,7 @@ index 7e1d083823..dd1d0847ae 100644
      return TRUE;
  }
  
-@@ -1512,6 +1603,7 @@ static void EVENT_DropFromOffiX( HWND hWnd, XClientMessageEvent *event )
+@@ -1512,6 +1597,7 @@ static void EVENT_DropFromOffiX( HWND hWnd, XClientMessageEvent *event )
      Window		win, w_aux_root, w_aux_child;
  
      if (!(data = get_win_data( hWnd ))) return;
@@ -2608,7 +2603,7 @@ index 77ca60ec44..979e7fddd3 100644
                              (XRectangle *)data->Buffer, data->rdh.nCount, YXBanded );
          HeapFree( GetProcessHeap(), 0, data );
 diff --git a/dlls/winex11.drv/mouse.c b/dlls/winex11.drv/mouse.c
-index 15e5c04a41..68aecdf90c 100644
+index 7f0edd9be6..8f8cc4a0a9 100644
 --- a/dlls/winex11.drv/mouse.c
 +++ b/dlls/winex11.drv/mouse.c
 @@ -260,6 +260,8 @@ static void update_relative_valuators(XIAnyClassInfo **valuators, int n_valuator
@@ -2629,7 +2624,7 @@ index 15e5c04a41..68aecdf90c 100644
      data->xi2_devices = NULL;
      data->xi2_core_pointer = 0;
      data->xi2_current_slave = 0;
-@@ -384,6 +384,7 @@ static BOOL grab_clipping_window( const RECT *clip )
+@@ -384,6 +388,7 @@ static BOOL grab_clipping_window( const RECT *clip )
      Window clip_window;
      HWND msg_hwnd = 0;
      POINT pos;
@@ -2637,7 +2632,7 @@ index 15e5c04a41..68aecdf90c 100644
  
      if (GetWindowThreadProcessId( GetDesktopWindow(), NULL ) == GetCurrentThreadId())
          return TRUE;  /* don't clip in the desktop process */
-@@ -422,9 +423,28 @@ static BOOL grab_clipping_window( const RECT *clip )
+@@ -422,9 +427,28 @@ static BOOL grab_clipping_window( const RECT *clip )
      TRACE( "clipping to %s win %lx\n", wine_dbgstr_rect(clip), clip_window );
  
      if (!data->clip_hwnd) XUnmapWindow( data->display, clip_window );
@@ -2668,7 +2663,7 @@ index 15e5c04a41..68aecdf90c 100644
      XMapWindow( data->display, clip_window );
  
      /* if the rectangle is shrinking we may get a pointer warp */
-@@ -565,8 +605,10 @@ BOOL clip_fullscreen_window( HWND hwnd, BOOL reset )
+@@ -565,8 +589,10 @@ BOOL clip_fullscreen_window( HWND hwnd, BOOL reset )
      release_win_data( data );
      if (!fullscreen) return FALSE;
      if (!(thread_data = x11drv_thread_data())) return FALSE;
@@ -2681,7 +2676,7 @@ index 15e5c04a41..68aecdf90c 100644
      rect = get_primary_monitor_rect();
      if (!grab_fullscreen)
      {
-@@ -618,8 +660,18 @@ static void send_mouse_input( HWND hwnd, Window window, unsigned int state, INPU
+@@ -618,8 +644,18 @@ static void send_mouse_input( HWND hwnd, Window window, unsigned int state, INPU
              sync_window_cursor( window );
              last_cursor_change = input->u.mi.time;
          }
@@ -2702,7 +2697,7 @@ index 15e5c04a41..68aecdf90c 100644
          __wine_send_input( hwnd, input );
          return;
      }
-@@ -633,7 +685,13 @@ static void send_mouse_input( HWND hwnd, Window window, unsigned int state, INPU
+@@ -633,7 +669,13 @@ static void send_mouse_input( HWND hwnd, Window window, unsigned int state, INPU
  
      if (!(data = get_win_data( hwnd ))) return;
  
@@ -2717,7 +2712,7 @@ index 15e5c04a41..68aecdf90c 100644
      {
          pt.x += data->whole_rect.left - data->client_rect.left;
          pt.y += data->whole_rect.top - data->client_rect.top;
-@@ -1467,7 +1525,13 @@ void CDECL X11DRV_SetCursor( HCURSOR handle )
+@@ -1467,7 +1509,13 @@ void CDECL X11DRV_SetCursor( HCURSOR handle )
  BOOL CDECL X11DRV_SetCursorPos( INT x, INT y )
  {
      struct x11drv_thread_data *data = x11drv_init_thread_data();
@@ -2732,7 +2727,7 @@ index 15e5c04a41..68aecdf90c 100644
  
      if (keyboard_grabbed)
      {
-@@ -1492,7 +1556,7 @@ BOOL CDECL X11DRV_SetCursorPos( INT x, INT y )
+@@ -1492,7 +1540,7 @@ BOOL CDECL X11DRV_SetCursorPos( INT x, INT y )
  
      XNoOp( data->display );
      XFlush( data->display ); /* avoids bad mouse lag in games that do their own mouse warping */
@@ -2741,7 +2736,7 @@ index 15e5c04a41..68aecdf90c 100644
      return TRUE;
  }
  
-@@ -1512,6 +1576,7 @@ BOOL CDECL X11DRV_GetCursorPos(LPPOINT pos)
+@@ -1512,6 +1560,7 @@ BOOL CDECL X11DRV_GetCursorPos(LPPOINT pos)
      {
          POINT old = *pos;
          *pos = root_to_virtual_screen( winX, winY );
@@ -2749,7 +2744,7 @@ index 15e5c04a41..68aecdf90c 100644
          TRACE( "pointer at %s server pos %s\n", wine_dbgstr_point(pos), wine_dbgstr_point(&old) );
      }
      return ret;
-@@ -1541,17 +1606,18 @@ BOOL CDECL X11DRV_ClipCursor( LPCRECT clip )
+@@ -1541,17 +1590,18 @@ BOOL CDECL X11DRV_ClipCursor( LPCRECT clip )
          }
  
          /* we are clipping if the clip rectangle is smaller than the screen */
@@ -2773,7 +2768,7 @@ index 15e5c04a41..68aecdf90c 100644
                      return TRUE;
              }
          }
-@@ -1784,6 +1850,7 @@ static BOOL X11DRV_RawMotion( XGenericEventCookie *xev )
+@@ -1784,6 +1834,7 @@ static BOOL X11DRV_RawMotion( XGenericEventCookie *xev )
      const double *values = event->valuators.values;
      RECT virtual_rect;
      INPUT input;
@@ -2781,7 +2776,7 @@ index 15e5c04a41..68aecdf90c 100644
      int i;
      double dx = 0, dy = 0, val;
      struct x11drv_thread_data *thread_data = x11drv_thread_data();
-@@ -1827,31 +1894,53 @@ static BOOL X11DRV_RawMotion( XGenericEventCookie *xev )
+@@ -1827,31 +1878,53 @@ static BOOL X11DRV_RawMotion( XGenericEventCookie *xev )
  
      for (i = 0; i <= max ( x_rel->number, y_rel->number ); i++)
      {
@@ -3720,7 +3715,7 @@ index 635c7d9f3b..5b5ebe2d6e 100644
          break;
      }
 diff --git a/dlls/winex11.drv/settings.c b/dlls/winex11.drv/settings.c
-index 781a55699e..34eb089fd6 100644
+index 781a55699e..1ab0807741 100644
 --- a/dlls/winex11.drv/settings.c
 +++ b/dlls/winex11.drv/settings.c
 @@ -21,7 +21,9 @@
@@ -3898,7 +3893,7 @@ index 781a55699e..34eb089fd6 100644
  }
  
  /* return the number of modes that are initialized */
-@@ -131,19 +231,277 @@ unsigned int X11DRV_Settings_GetModeCount(void)
+@@ -131,19 +231,253 @@ unsigned int X11DRV_Settings_GetModeCount(void)
   * Default handlers if resolution switching is not enabled
   *
   */
@@ -3952,17 +3947,6 @@ index 781a55699e..34eb089fd6 100644
 +    return !wm_is_steamcompmgr(NULL) &&
 +        currentMode >= 0 &&
 +        currentMode != realMode;
-+}
-+
-+BOOL fs_hack_is_integer(void)
-+{
-+    static int is_int = -1;
-+    if(is_int < 0)
-+    {
-+        const char *e = getenv("WINE_FULLSCREEN_INTEGER_SCALING");
-+        is_int = e && strcmp(e, "0");
-+    }
-+    return is_int;
 +}
 +
 +BOOL fs_hack_matches_current_mode(int w, int h)
@@ -4105,20 +4089,7 @@ index 781a55699e..34eb089fd6 100644
 +    }else{
 +        double w = dd_modes[currentMode].width;
 +        double h = dd_modes[currentMode].height;
-+
-+        if(fs_hack_is_integer()){
-+            unsigned int scaleFactor = min(dd_modes[realMode].width / w,
-+                                           dd_modes[realMode].height / h);
-+
-+            w *= scaleFactor;
-+            h *= scaleFactor;
-+
-+            offs_x = (dd_modes[realMode].width  - w) / 2;
-+            offs_y = (dd_modes[realMode].height - h) / 2;
-+
-+            fs_width  = dd_modes[realMode].width;
-+            fs_height = dd_modes[realMode].height;
-+        }else if(dd_modes[realMode].width / (double)dd_modes[realMode].height < w / h){ /* real mode is narrower than fake mode */
++        if(dd_modes[realMode].width / (double)dd_modes[realMode].height < w / h){ /* real mode is narrower than fake mode */
 +            /* scale to fit width */
 +            h = dd_modes[realMode].width * (h / w);
 +            w = dd_modes[realMode].width;
@@ -4185,21 +4156,18 @@ diff --git a/dlls/winex11.drv/vulkan.c b/dlls/winex11.drv/vulkan.c
 index b0bba86435..9eaeb49049 100644
 --- a/dlls/winex11.drv/vulkan.c
 +++ b/dlls/winex11.drv/vulkan.c
-@@ -554,6 +554,42 @@ static VkResult X11DRV_vkQueuePresentKHR(VkQueue queue, const VkPresentInfoKHR *
+@@ -596,6 +596,39 @@ static VkResult X11DRV_vkQueuePresentKHR(VkQueue queue, const VkPresentInfoKHR *
      return res;
  }
  
 +static VkBool32 X11DRV_query_fs_hack(VkExtent2D *real_sz, VkExtent2D *user_sz,
-+        VkRect2D *dst_blit, VkFilter *filter)
++        VkRect2D *dst_blit)
 +{
 +    if(fs_hack_enabled()){
 +        POINT real_res = fs_hack_real_mode();
 +        POINT user_res = fs_hack_current_mode();
 +        POINT scaled = fs_hack_get_scaled_screen_size();
 +        POINT scaled_origin = {0, 0};
-+
-+        if(filter)
-+            *filter = fs_hack_is_integer() ? VK_FILTER_NEAREST : VK_FILTER_LINEAR;
 +
 +        fs_hack_user_to_real(&scaled_origin);
 +
@@ -4237,7 +4205,7 @@ index b0bba86435..9eaeb49049 100644
  
  static void *X11DRV_get_vk_device_proc_addr(const char *name)
 diff --git a/dlls/winex11.drv/window.c b/dlls/winex11.drv/window.c
-index 056ac64b7d..ea466bab3f 100644
+index 46a3a8a14b..4ae09b8444 100644
 --- a/dlls/winex11.drv/window.c
 +++ b/dlls/winex11.drv/window.c
 @@ -46,7 +46,6 @@
@@ -4465,22 +4433,6 @@ index 056ac64b7d..ea466bab3f 100644
  }
  
  
-@@ -870,10 +870,13 @@ static void set_initial_wm_hints( Display *display, Window window )
-     /* class hints */
-     if ((class_hints = XAllocClassHint()))
-     {
--        static char wine[] = "Wine";
-+        static char steam_proton[] = "steam_proton";
-+        char proton_app_class[128];
-+        const char *app_id = getenv("SteamAppId");
- 
-+        snprintf(proton_app_class, sizeof(proton_app_class), "steam_app_%s", app_id);
-         class_hints->res_name = process_name;
--        class_hints->res_class = wine;
-+        class_hints->res_class = app_id ? proton_app_class : steam_proton;
-         XSetClassHint( display, window, class_hints );
-         XFree( class_hints );
-     }
 @@ -884,7 +1041,7 @@ static void make_owner_managed( HWND hwnd )
   *
   * Set all the window manager hints for a window.
@@ -4761,7 +4713,7 @@ index 056ac64b7d..ea466bab3f 100644
      case WM_X11DRV_SET_CURSOR:
          if ((data = get_win_data( hwnd )))
 diff --git a/dlls/winex11.drv/x11drv.h b/dlls/winex11.drv/x11drv.h
-index 6068a72065..e3eefefc29 100644
+index 1f6a37a7a5..e526cb300f 100644
 --- a/dlls/winex11.drv/x11drv.h
 +++ b/dlls/winex11.drv/x11drv.h
 @@ -59,6 +59,8 @@ typedef int Status;
@@ -4773,7 +4725,7 @@ index 6068a72065..e3eefefc29 100644
  #define MAX_DASHLEN 16
  
  #define WINE_XDND_VERSION 5
-@@ -310,6 +312,7 @@ struct x11drv_escape_flush_gl_drawable
+@@ -311,6 +313,7 @@ struct x11drv_escape_flush_gl_drawable
      enum x11drv_escape_codes code;         /* escape code (X11DRV_FLUSH_GL_DRAWABLE) */
      Drawable                 gl_drawable;  /* GL drawable */
      BOOL                     flush;        /* flush X11 before copying */
@@ -4781,7 +4733,7 @@ index 6068a72065..e3eefefc29 100644
  };
  
  /**************************************************************************
-@@ -321,6 +324,7 @@ struct x11drv_valuator_data
+@@ -322,6 +325,7 @@ struct x11drv_valuator_data
      double min;
      double max;
      int number;
@@ -4789,7 +4741,7 @@ index 6068a72065..e3eefefc29 100644
  };
  
  struct x11drv_thread_data
-@@ -424,6 +424,7 @@ enum x11drv_atoms
+@@ -426,6 +430,7 @@ enum x11drv_atoms
      XATOM_TEXT,
      XATOM_TIMESTAMP,
      XATOM_UTF8_STRING,
@@ -4797,7 +4749,7 @@ index 6068a72065..e3eefefc29 100644
      XATOM_RAW_ASCENT,
      XATOM_RAW_DESCENT,
      XATOM_RAW_CAP_HEIGHT,
-@@ -431,6 +432,7 @@ enum x11drv_atoms
+@@ -433,6 +438,7 @@ enum x11drv_atoms
      XATOM_Rel_Y,
      XATOM_WM_PROTOCOLS,
      XATOM_WM_DELETE_WINDOW,
@@ -4805,7 +4757,7 @@ index 6068a72065..e3eefefc29 100644
      XATOM_WM_STATE,
      XATOM_WM_TAKE_FOCUS,
      XATOM_DndProtocol,
-@@ -441,6 +445,7 @@ enum x11drv_atoms
+@@ -442,6 +448,7 @@ enum x11drv_atoms
      XATOM__NET_STARTUP_INFO_BEGIN,
      XATOM__NET_STARTUP_INFO,
      XATOM__NET_SUPPORTED,
@@ -4813,7 +4765,7 @@ index 6068a72065..e3eefefc29 100644
      XATOM__NET_SYSTEM_TRAY_OPCODE,
      XATOM__NET_SYSTEM_TRAY_S0,
      XATOM__NET_SYSTEM_TRAY_VISUAL,
-@@ -491,6 +496,7 @@ enum x11drv_atoms
+@@ -492,6 +499,7 @@ enum x11drv_atoms
      XATOM_WCF_SYLK,
      XATOM_WCF_TIFF,
      XATOM_WCF_WAVE,
@@ -4821,7 +4773,7 @@ index 6068a72065..e3eefefc29 100644
      XATOM_image_bmp,
      XATOM_image_gif,
      XATOM_image_jpeg,
-@@ -574,15 +579,20 @@ struct x11drv_win_data
+@@ -575,15 +583,20 @@ struct x11drv_win_data
      BOOL        shaped : 1;     /* is window using a custom region shape? */
      BOOL        layered : 1;    /* is window layered and with valid attributes? */
      BOOL        use_alpha : 1;  /* does window use an alpha channel? */
@@ -4842,7 +4794,7 @@ index 6068a72065..e3eefefc29 100644
  };
  
  extern struct x11drv_win_data *get_win_data( HWND hwnd ) DECLSPEC_HIDDEN;
-@@ -608,6 +608,30 @@ extern void change_systray_owner( Display *display, Window systray_window ) DECL
+@@ -608,6 +621,29 @@ extern void change_systray_owner( Display *display, Window systray_window ) DECL
  extern void update_systray_balloon_position(void) DECLSPEC_HIDDEN;
  extern HWND create_foreign_window( Display *display, Window window ) DECLSPEC_HIDDEN;
  extern BOOL update_clipboard( HWND hwnd ) DECLSPEC_HIDDEN;
@@ -4852,7 +4804,6 @@ index 6068a72065..e3eefefc29 100644
 +extern void set_wm_hints( struct x11drv_win_data *data ) DECLSPEC_HIDDEN;
 +extern BOOL fs_hack_enabled(void) DECLSPEC_HIDDEN;
 +extern BOOL fs_hack_mapping_required(void) DECLSPEC_HIDDEN;
-+extern BOOL fs_hack_is_integer(void) DECLSPEC_HIDDEN;
 +extern BOOL fs_hack_matches_current_mode(int w, int h) DECLSPEC_HIDDEN;
 +extern BOOL fs_hack_matches_real_mode(int w, int h) DECLSPEC_HIDDEN;
 +extern POINT fs_hack_current_mode(void) DECLSPEC_HIDDEN;
@@ -4873,7 +4824,7 @@ index 6068a72065..e3eefefc29 100644
  
  static inline void mirror_rect( const RECT *window_rect, RECT *rect )
  {
-@@ -662,7 +692,7 @@ extern void X11DRV_resize_desktop(unsigned int width, unsigned int height) DECLS
+@@ -665,7 +701,7 @@ extern BOOL is_virtual_desktop(void) DECLSPEC_HIDDEN;
  extern BOOL is_desktop_fullscreen(void) DECLSPEC_HIDDEN;
  extern BOOL create_desktop_win_data( Window win ) DECLSPEC_HIDDEN;
  extern void X11DRV_Settings_AddDepthModes(void) DECLSPEC_HIDDEN;
@@ -4882,7 +4833,7 @@ index 6068a72065..e3eefefc29 100644
  unsigned int X11DRV_Settings_GetModeCount(void) DECLSPEC_HIDDEN;
  void X11DRV_Settings_Init(void) DECLSPEC_HIDDEN;
  struct x11drv_mode_info *X11DRV_Settings_SetHandlers(const char *name,
-@@ -670,6 +700,7 @@ struct x11drv_mode_info *X11DRV_Settings_SetHandlers(const char *name,
+@@ -673,6 +709,7 @@ struct x11drv_mode_info *X11DRV_Settings_SetHandlers(const char *name,
                                                       LONG (*pNewSCM)(int),
                                                       unsigned int nmodes,
                                                       int reserve_depths) DECLSPEC_HIDDEN;
@@ -4891,7 +4842,7 @@ index 6068a72065..e3eefefc29 100644
  void X11DRV_XF86VM_Init(void) DECLSPEC_HIDDEN;
  void X11DRV_XRandR_Init(void) DECLSPEC_HIDDEN;
 diff --git a/dlls/winex11.drv/x11drv_main.c b/dlls/winex11.drv/x11drv_main.c
-index 968fff121c..820668b045 100644
+index 968fff121c..c994b2ca1a 100644
 --- a/dlls/winex11.drv/x11drv_main.c
 +++ b/dlls/winex11.drv/x11drv_main.c
 @@ -67,16 +67,16 @@ Colormap default_colormap = None;
@@ -4914,16 +4865,7 @@ index 968fff121c..820668b045 100644
  BOOL managed_mode = TRUE;
  BOOL decorated_mode = TRUE;
  BOOL private_color_map = FALSE;
-@@ -93,7 +93,7 @@ static void *err_callback_arg;               /* error callback argument */
- static int err_callback_result;              /* error callback result */
- static unsigned long err_serial;             /* serial number of first request */
- static int (*old_error_handler)( Display *, XErrorEvent * );
--static BOOL use_xim = TRUE;
-+static BOOL use_xim = FALSE;
- static char input_style[20];
- 
- #define IS_OPTION_TRUE(ch) \
-@@ -138,6 +138,7 @@ static const char * const atom_names[NB_XATOMS - FIRST_XATOM] =
+@@ -139,6 +139,7 @@ static const char * const atom_names[NB_XATOMS - FIRST_XATOM] =
      "TEXT",
      "TIMESTAMP",
      "UTF8_STRING",
@@ -4931,7 +4873,7 @@ index 968fff121c..820668b045 100644
      "RAW_ASCENT",
      "RAW_DESCENT",
      "RAW_CAP_HEIGHT",
-@@ -145,6 +146,7 @@ static const char * const atom_names[NB_XATOMS - FIRST_XATOM] =
+@@ -146,6 +147,7 @@ static const char * const atom_names[NB_XATOMS - FIRST_XATOM] =
      "Rel Y",
      "WM_PROTOCOLS",
      "WM_DELETE_WINDOW",
@@ -4939,7 +4881,7 @@ index 968fff121c..820668b045 100644
      "WM_STATE",
      "WM_TAKE_FOCUS",
      "DndProtocol",
-@@ -155,6 +155,7 @@ static const char * const atom_names[NB_XATOMS - FIRST_XATOM] =
+@@ -155,6 +157,7 @@ static const char * const atom_names[NB_XATOMS - FIRST_XATOM] =
      "_NET_STARTUP_INFO_BEGIN",
      "_NET_STARTUP_INFO",
      "_NET_SUPPORTED",
@@ -4947,7 +4889,7 @@ index 968fff121c..820668b045 100644
      "_NET_SYSTEM_TRAY_OPCODE",
      "_NET_SYSTEM_TRAY_S0",
      "_NET_SYSTEM_TRAY_VISUAL",
-@@ -205,6 +206,7 @@ static const char * const atom_names[NB_XATOMS - FIRST_XATOM] =
+@@ -205,6 +208,7 @@ static const char * const atom_names[NB_XATOMS - FIRST_XATOM] =
      "WCF_SYLK",
      "WCF_TIFF",
      "WCF_WAVE",
@@ -4955,7 +4897,7 @@ index 968fff121c..820668b045 100644
      "image/bmp",
      "image/gif",
      "image/jpeg",
-@@ -306,6 +308,9 @@ static int error_handler( Display *display, XErrorEvent *error_evt )
+@@ -306,6 +310,9 @@ static int error_handler( Display *display, XErrorEvent *error_evt )
               error_evt->serial, error_evt->request_code );
          DebugBreak();  /* force an entry in the debugger */
      }
@@ -4966,7 +4908,7 @@ index 968fff121c..820668b045 100644
      return 0;
  }
 diff --git a/dlls/winex11.drv/xinerama.c b/dlls/winex11.drv/xinerama.c
-index 61c422e835..2d6d7fa4f6 100644
+index 4903f52b23..e6e34013f2 100644
 --- a/dlls/winex11.drv/xinerama.c
 +++ b/dlls/winex11.drv/xinerama.c
 @@ -129,6 +129,15 @@ static int query_screens(void)
@@ -5372,4 +5314,3 @@ index fbc6716e94..1ca8c3ed0f 100644
      if (IS_OPTION_TRUE(*buf))
  	CheckDlgButton(dialog, IDC_FULLSCREEN_GRAB, BST_CHECKED);
      else
-

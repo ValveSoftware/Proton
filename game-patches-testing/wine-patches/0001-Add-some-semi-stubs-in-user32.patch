@@ -254,18 +254,5 @@ index 1f65959bc6..b135ea136f 100644
 +
 +    return ERROR_SUCCESS;
 +}
-diff --git a/include/wingdi.h b/include/wingdi.h
-index bed2c70798..ba74fc1e49 100644
---- a/include/wingdi.h
-+++ b/include/wingdi.h
-@@ -3409,7 +3409,7 @@ typedef enum
- 
- typedef enum
- {
--    DISPLAYCONFIG_OUTPUT_TECHNOLOGY_OTHER = -1,
-+    DISPLAYCONFIG_OUTPUT_TECHNOLOGY_OTHER = 0xffffffff,
-     DISPLAYCONFIG_OUTPUT_TECHNOLOGY_HD15 = 0,
-     DISPLAYCONFIG_OUTPUT_TECHNOLOGY_SVIDEO = 1,
-     DISPLAYCONFIG_OUTPUT_TECHNOLOGY_COMPOSITE_VIDEO = 2,
 -- 
 2.24.1

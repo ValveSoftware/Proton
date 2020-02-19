@@ -122,7 +122,8 @@
     echo "fullscreen hack"
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-FS_bypass_compositor.patch
     patch -Np1 < ../game-patches-testing/proton-valve-patches/valve_proton_fullscreen_hack-staging.patch
-    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-vk_bits_4.5+.patch
+    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-vk-bits-4.5.patch
+    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton_fs_hack_integer_scaling.patch
 
     echo "raw input"
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-rawinput.patch
@@ -133,7 +134,7 @@
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-sdl_joy_3.patch
 
     echo "proton gamepad additions"
-    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-gamepad_additions.patch
+    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-gamepad-additions.patch
 
     echo "msvcrt overrides"
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-msvcrt_nativebuiltin.patch
