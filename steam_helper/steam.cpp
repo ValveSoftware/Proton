@@ -261,12 +261,15 @@ run:
 int main(int argc, char *argv[])
 {
     HANDLE wait_handle = INVALID_HANDLE_VALUE;
+    HANDLE event = INVALID_HANDLE_VALUE;
 
     WINE_TRACE("\n");
 
     if (getenv("SteamGameId"))
     {
         /* do setup only for game process */
+        event = CreateEventA(NULL, FALSE, FALSE, "Steam3Master_SharedMemLock");
+
         CreateThread(NULL, 0, create_steam_window, NULL, 0, NULL);
 
         set_active_process_pid();
@@ -291,6 +294,9 @@ int main(int argc, char *argv[])
     }
 
     WaitForSingleObject(wait_handle, INFINITE);
+
+    if (event != INVALID_HANDLE_VALUE)
+        CloseHandle(event);
 
     return 0;
 }
