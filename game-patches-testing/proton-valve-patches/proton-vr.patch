@@ -1368,9 +1368,9 @@ index 519b0292483..7ded39f9db8 100644
  {
      LONG ref;
 @@ -3090,6 +3098,8 @@ struct wined3d_device
-     /* Context management */
      struct wined3d_context **contexts;
      UINT context_count;
+     struct wined3d_blend_state *blend_state_atoc_enabled;
 +
 +    struct wined3d_vr_gl_context vr_context;
  };
@@ -1610,3 +1610,4 @@ index bead68fc22..4e5efea8f1 100644
 -- 
 2.21.0
 
+ 

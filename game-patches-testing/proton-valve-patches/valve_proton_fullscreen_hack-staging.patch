@@ -1,7 +1,7 @@
 From 33529f06c4edd37e6061d70da1fb007f929931d4 Mon Sep 17 00:00:00 2001
 From: Tk-Glitch <ti3nou@gmail.com>
 Date: Mon, 10 Feb 2020 13:03:57 +0100
-Subject: Proton fs hack patchset, 5.0 rebased edition
+Subject: Proton fs hack patchset, 5.0 staging rebased edition
 
 
 diff --git a/dlls/winevulkan/make_vulkan b/dlls/winevulkan/make_vulkan
@@ -2239,10 +2239,10 @@ index c51954f1bf..a37530fdbf 100644
      EmptyClipboard();
      is_clipboard_owner = TRUE;
 diff --git a/dlls/winex11.drv/desktop.c b/dlls/winex11.drv/desktop.c
-index bde4841ed4..06d90bc55c 100644
+index bde4841ed4..2588563dab 100644
 --- a/dlls/winex11.drv/desktop.c
 +++ b/dlls/winex11.drv/desktop.c
-@@ -328,16 +328,49 @@ static BOOL CALLBACK update_windows_on_desktop_resize( HWND hwnd, LPARAM lparam
+@@ -328,16 +328,50 @@ static BOOL CALLBACK update_windows_on_desktop_resize( HWND hwnd, LPARAM lparam
  
      if (!(data = get_win_data( hwnd ))) return TRUE;
  
@@ -2264,9 +2264,7 @@ index bde4841ed4..06d90bc55c 100644
 +            sync_gl_drawable(hwnd, FALSE);
 +            update_net_wm_states( data );
 +        }
-+    } else {
-+        /* update the full screen state */
-+        update_net_wm_states( data );
++    }else {
  
 -    if (mask && data->whole_window)
 -    {
@@ -2275,6 +2273,9 @@ index bde4841ed4..06d90bc55c 100644
 -        changes.x = pos.x;
 -        changes.y = pos.y;
 -        XReconfigureWMWindow( data->display, data->whole_window, data->vis.screen, mask, &changes );
++        /* update the full screen state */
++        update_net_wm_states( data );
++
 +        if (mask && data->whole_window)
 +        {
 +            POINT pos = virtual_screen_to_root( data->whole_rect.left, data->whole_rect.top );
@@ -2301,7 +2302,26 @@ index bde4841ed4..06d90bc55c 100644
      }
      release_win_data( data );
      if (hwnd == GetForegroundWindow()) clip_fullscreen_window( hwnd, TRUE );
-@@ -410,7 +444,8 @@ void X11DRV_resize_desktop( unsigned int width, unsigned int height )
+@@ -389,6 +423,7 @@ static void update_desktop_fullscreen( unsigned int width, unsigned int height)
+  */
+ void X11DRV_resize_desktop( unsigned int width, unsigned int height )
+ {
++    struct x11drv_win_data *data;
+     RECT old_virtual_rect, new_virtual_rect;
+     HWND hwnd = GetDesktopWindow();
+     UINT mask = 0;
+@@ -399,12 +434,17 @@ void X11DRV_resize_desktop( unsigned int width, unsigned int height )
+     X11DRV_DisplayDevices_Init( TRUE );
+     new_virtual_rect = get_virtual_screen_rect();
+ 
+-    if (old_virtual_rect.left != new_virtual_rect.left) mask |= CWX;
+-    if (old_virtual_rect.top != new_virtual_rect.top) mask |= CWY;
++    if (!(data = get_win_data( hwnd ))) return TRUE;
++    /* update the full screen state */
++    update_net_wm_states( data );
++
++    if (old_virtual_rect.left != new_virtual_rect.left || data->fs_hack) mask |= CWX;
++    if (old_virtual_rect.top != new_virtual_rect.top || data->fs_hack) mask |= CWY;
  
      if (GetWindowThreadProcessId( hwnd, NULL ) != GetCurrentThreadId())
      {
@@ -2311,6 +2331,12 @@ index bde4841ed4..06d90bc55c 100644
      }
      else
      {
+@@ -419,4 +459,5 @@ void X11DRV_resize_desktop( unsigned int width, unsigned int height )
+     }
+ 
+     EnumWindows( update_windows_on_desktop_resize, (LPARAM)mask );
++    release_win_data( data );
+ }
 diff --git a/dlls/winex11.drv/display.c b/dlls/winex11.drv/display.c
 index 7ad74c9b4e..9b56727eb2 100644
 --- a/dlls/winex11.drv/display.c
@@ -5314,3 +5340,42 @@ index fbc6716e94..1ca8c3ed0f 100644
      if (IS_OPTION_TRUE(*buf))
  	CheckDlgButton(dialog, IDC_FULLSCREEN_GRAB, BST_CHECKED);
      else
+From a1e5640b60439f0df83fc24c8a69629cef2c6c67 Mon Sep 17 00:00:00 2001
+From: Andrew Eikum <aeikum@codeweavers.com>
+Date: Mon, 17 Feb 2020 13:23:52 -0600
+Subject: [PATCH] Revert "winex11.drv: Don't request window decoration changes
+ if not necessary."
+
+This reverts commit 1e56e5deed3d854da72f415c16c2594898e1a166.
+
+This breaks the ESO launcher.
+---
+ dlls/winex11.drv/window.c | 8 +-------
+ 1 file changed, 1 insertion(+), 7 deletions(-)
+
+diff --git a/dlls/winex11.drv/window.c b/dlls/winex11.drv/window.c
+index 1f1a2d59e2e..b2700164a3d 100644
+--- a/dlls/winex11.drv/window.c
++++ b/dlls/winex11.drv/window.c
+@@ -836,13 +836,6 @@ static void set_mwm_hints( struct x11drv_win_data *data, DWORD style, DWORD ex_s
+         }
+     }
+ 
+-    mwm_hints.flags = MWM_HINTS_FUNCTIONS | MWM_HINTS_DECORATIONS;
+-
+-    if (data->prev_hints.flags == mwm_hints.flags &&
+-        data->prev_hints.decorations == mwm_hints.decorations &&
+-        data->prev_hints.functions == mwm_hints.functions)
+-        return;
+-
+     TRACE( "%p setting mwm hints to %lx,%lx (style %x exstyle %x)\n",
+            data->hwnd, mwm_hints.decorations, mwm_hints.functions, style, ex_style );
+ 
+@@ -862,6 +855,7 @@ static void set_mwm_hints( struct x11drv_win_data *data, DWORD style, DWORD ex_s
+             mapped = (attr.map_state != IsUnmapped);
+     }
+ 
++    mwm_hints.flags = MWM_HINTS_FUNCTIONS | MWM_HINTS_DECORATIONS;
+     mwm_hints.input_mode = 0;
+     mwm_hints.status = 0;
+     data->unmapnotify_serial = NextRequest( data->display );

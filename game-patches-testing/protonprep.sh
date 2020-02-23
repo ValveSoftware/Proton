@@ -5,9 +5,16 @@
     patch -Np1 < ../game-patches-testing/proton-hotfixes/proton-Use_ShellExecute_when_not_launching_exe.patch
     cd ..
 
+    # warframe controller fix
     git checkout lsteamclient
     cd lsteamclient
     patch -Np1 < ../game-patches-testing/proton-hotfixes/proton-lsteamclient_disable_winISteamController_SteamController007_warframe.patch
+    cd ..
+
+    # disable glib tests to prevent random make errors
+    git checkout glib
+    cd glib
+    sed -i -e '/subdir.*tests/d' {.,gio,glib}/meson.build || die
     cd ..
 
     # VKD3D patches
@@ -122,34 +129,10 @@
     echo "fullscreen hack"
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-FS_bypass_compositor.patch
     patch -Np1 < ../game-patches-testing/proton-valve-patches/valve_proton_fullscreen_hack-staging.patch
-    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-vk-bits-4.5.patch
-    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton_fs_hack_integer_scaling.patch
+    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-hide_wine_prefix_update_window.patch
 
     echo "raw input"
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-rawinput.patch
-
-    echo "SDL Joystick"
-    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-sdl_joy.patch
-    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-sdl_joy_2.patch
-    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-sdl_joy_3.patch
-
-    echo "proton gamepad additions"
-    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-gamepad-additions.patch
-
-    echo "msvcrt overrides"
-    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-msvcrt_nativebuiltin.patch
-
-    echo "valve registry entries"
-    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-apply_LargeAddressAware_fix_for_Bayonetta.patch
-    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-Set_amd_ags_x64_to_built_in_for_Wolfenstein_2.patch
-
-    echo "Valve wined3d VR patches"
-    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-wined3d.patch 
-    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-wined3d_2.patch 
-    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-wined3d_3.patch
-
-    echo "mf hacks"
-    patch -Np1 < ../game-patches-testing/proton-hotfixes/proton-mf_hacks.patch
 
     echo "applying staging patches that need to be applied after proton rawinput and fullscreen hack"
 
@@ -169,6 +152,34 @@
 
     # staging winex11-WM_WINDOWPOSCHANGING
     #patch -Np1 < ../game-patches-testing/proton-hotfixes/proton-staging_winex11-WM_WINDOWPOSCHANGING.patch
+
+
+    #echo "Valve wined3d patches"
+    #patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-wined3d-additions.patch
+    echo "Valve VR patches"
+    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-vr.patch
+    echo "Valve vulkan patches"
+    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-vk-bits-4.5.patch
+    echo "FS Hack integer scaling"
+    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton_fs_hack_integer_scaling.patch
+
+    echo "SDL Joystick"
+    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-sdl_joy.patch
+    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-sdl_joy_2.patch
+    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-sdl_joy_3.patch
+
+    echo "proton gamepad additions"
+    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-gamepad-additions.patch
+
+    echo "msvcrt overrides"
+    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-msvcrt_nativebuiltin.patch
+
+    echo "valve registry entries"
+    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-apply_LargeAddressAware_fix_for_Bayonetta.patch
+    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-Set_amd_ags_x64_to_built_in_for_Wolfenstein_2.patch
+
+    echo "mf hacks"
+    patch -Np1 < ../game-patches-testing/proton-hotfixes/proton-mf_hacks.patch
 
     #WINE CUSTOM PATCHES
     #add your own custom patch lines below

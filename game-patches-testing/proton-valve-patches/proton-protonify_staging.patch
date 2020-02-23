@@ -202,22 +202,28 @@ Date: Mon, 22 Jan 2018 14:32:40 -0600
 Subject: [PATCH] HACK: shell32: Never create links to the user's home dirs
 
 ---
- dlls/shell32/shellpath.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ dlls/shell32/shellpath.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
 diff --git a/dlls/shell32/shellpath.c b/dlls/shell32/shellpath.c
 index f08474b3635..2f637f25537 100644
 --- a/dlls/shell32/shellpath.c
 +++ b/dlls/shell32/shellpath.c
-@@ -4424,6 +4424,7 @@ static void _SHCreateSymbolicLinks(void)
-     pszPersonal = wine_get_unix_file_name(wszTempPath);
+@@ -4118,10 +4118,11 @@ static void _SHCreateMyDocumentsSymbolicLink(const UINT * aidsMyStuff, const UIN
+ 
+     /* Get the unix path of 'My Documents'. */
+     pszPersonal = _SHGetFolderUnixPath(CSIDL_PERSONAL|CSIDL_FLAG_DONT_VERIFY);
      if (!pszPersonal) return;
  
 +#if 0
-     hr = XDG_UserDirLookup(xdg_dirs, num, &xdg_results);
-     if (FAILED(hr)) xdg_results = NULL;
+     _SHGetXDGUserDirs(xdg_dirs, num, &xdg_results);
  
-@@ -4477,6 +4478,7 @@ static void _SHCreateSymbolicLinks(void)
+     pszHome = getenv("HOME");
+     if (pszHome && !stat(pszHome, &statFolder) && S_ISDIR(statFolder.st_mode))
+     {
+@@ -4165,17 +4166,20 @@ static void _SHCreateMyDocumentsSymbolicLink(const UINT * aidsMyStuff, const UIN
+          * or symlink exists. */
+         symlink(szPersonalTarget, pszPersonal);
      }
      else
      {
@@ -225,41 +231,62 @@ index f08474b3635..2f637f25537 100644
          /* '$HOME' doesn't exist. Create subdirs for 'My Pictures', 'My Videos',
           * 'My Music' etc. in '%USERPROFILE%\My Documents' or fail silently if
           * they already exist. */
-@@ -4486,8 +4488,11 @@ static void _SHCreateSymbolicLinks(void)
-             if (_SHAppendToUnixPath(szMyStuffTarget, MAKEINTRESOURCEW(aidsMyStuff[i])))
-                 mkdir(szMyStuffTarget, 0777);
-         }
+         pszHome = NULL;
+         strcpy(szPersonalTarget, pszPersonal);
+         _SHCreateMyDocumentsSubDirs(aidsMyStuff, aids_num, szPersonalTarget);
 +#if 0
      }
 +#endif
  
+     heap_free(pszPersonal);
+ 
+     _SHFreeXDGUserDirs(num, xdg_results);
+ }
+@@ -4225,10 +4229,11 @@ static void _SHCreateMyStuffSymbolicLink(int nFolder)
+         int cLen = readlink(pszPersonal, szPersonalTarget, FILENAME_MAX-1);
+         if (cLen >= 0) szPersonalTarget[cLen] = '\0';
+     }
+     heap_free(pszPersonal);
+ 
 +#if 0
-     /* Create symbolic links for 'My Pictures', 'My Videos', 'My Music' etc. */
-     for (i=0; i < ARRAY_SIZE(aidsMyStuff); i++)
-     {
-@@ -4532,13 +4537,17 @@ static void _SHCreateSymbolicLinks(void)
+     _SHGetXDGUserDirs(xdg_dirs, num, &xdg_results);
+ 
+     pszHome = getenv("HOME");
+ 
+     while (1)
+@@ -4268,10 +4273,11 @@ static void _SHCreateMyStuffSymbolicLink(int nFolder)
+         }
          symlink(szMyStuffTarget, pszMyStuff);
          heap_free(pszMyStuff);
+         break;
      }
 +#endif
  
+     _SHFreeXDGUserDirs(num, xdg_results);
+ }
+ 
+ /******************************************************************************
+@@ -4293,10 +4299,11 @@ static void _SHCreateDesktopSymbolicLink(void)
+ 
+     /* Create all necessary profile sub-dirs up to 'My Documents' and get the unix path. */
+     pszPersonal = _SHGetFolderUnixPath(CSIDL_PERSONAL|CSIDL_FLAG_CREATE);
+     if (!pszPersonal) return;
+ 
 +#if 0
-     /* Last but not least, the Desktop folder */
+     _SHGetXDGUserDirs(xdg_dirs, num, &xdg_results);
+ 
+     pszHome = getenv("HOME");
+ 
      if (pszHome)
-         strcpy(szDesktopTarget, pszHome);
-     else
-         strcpy(szDesktopTarget, pszPersonal);
-+#endif
-     heap_free(pszPersonal);
-+#if 0
- 
-     xdg_desktop_dir = xdg_results ? xdg_results[num - 1] : NULL;
-     if (xdg_desktop_dir ||
-@@ -4565,6 +4574,7 @@ static void _SHCreateSymbolicLinks(void)
-             heap_free(xdg_results[i]);
-         heap_free(xdg_results);
+@@ -4318,10 +4325,11 @@ static void _SHCreateDesktopSymbolicLink(void)
+             else
+                 symlink(szDesktopTarget, pszDesktop);
+             heap_free(pszDesktop);
+         }
      }
 +#endif
+ 
+     _SHFreeXDGUserDirs(num, xdg_results);
  }
  
  /******************************************************************************
