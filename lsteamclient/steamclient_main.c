@@ -38,6 +38,43 @@ BOOL WINAPI DllMain(HINSTANCE instance, DWORD reason, void *reserved)
     return TRUE;
 }
 
+void sync_environment(void)
+{
+    static const char steamapi_envs[][21] =
+    {
+        "SteamAppId",
+        "IgnoreChildProcesses",
+    };
+
+    for (unsigned int i = 0; i < 2; i++)
+    {
+        char *value;
+        DWORD size;
+
+        if (!(size = GetEnvironmentVariableA(steamapi_envs[i], NULL, 0)))
+        {
+            if (GetLastError() == ERROR_ENVVAR_NOT_FOUND)
+            {
+                TRACE("unsetenv(\"%s\")\n", steamapi_envs[i]);
+                unsetenv(steamapi_envs[i]);
+            }
+            continue;
+        }
+
+        value = HeapAlloc(GetProcessHeap(), 0, size);
+
+        if (!(GetEnvironmentVariableA(steamapi_envs[i], value, size)))
+        {
+            HeapFree(GetProcessHeap(), 0, value);
+        }
+
+        TRACE("setenv(\"%s\", \"%s\", 1)\n", steamapi_envs[i], value);
+        setenv(steamapi_envs[i], value, 1);
+
+        HeapFree(GetProcessHeap(), 0, value);
+    }
+}
+
 /* returns the number of bytes written to dst, not including the NUL terminator */
 unsigned int steamclient_unix_path_to_dos_path(bool api_result, const char *src, char *dst, uint32 dst_bytes, int is_url)
 {
@@ -384,6 +421,8 @@ static void (*steamclient_ReleaseThreadLocalMemory)(int);
 static int load_steamclient(void)
 {
     char path[PATH_MAX], resolved_path[PATH_MAX];
+
+    sync_environment();
 
     if(steamclient_lib)
         return 1;
