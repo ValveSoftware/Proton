@@ -19,6 +19,8 @@
 
 #include "steamclient_private.h"
 
+#define ARRAY_SIZE(x) (sizeof(x) / sizeof((x)[0]))
+
 WINE_DEFAULT_DEBUG_CHANNEL(steamclient);
 
 char g_tmppath[PATH_MAX];
@@ -39,6 +41,33 @@ BOOL WINAPI DllMain(HINSTANCE instance, DWORD reason, void *reserved)
     }
 
     return TRUE;
+}
+
+void sync_environment(void)
+{
+    static const char *steamapi_envs[] =
+    {
+        "SteamAppId",
+        "IgnoreChildProcesses",
+    };
+
+    char value[32767];
+
+    for (unsigned int i = 0; i < ARRAY_SIZE(steamapi_envs); i++)
+    {
+        if (!GetEnvironmentVariableA(steamapi_envs[i], value, ARRAY_SIZE(value)))
+        {
+            if (GetLastError() == ERROR_ENVVAR_NOT_FOUND)
+            {
+                TRACE("unsetenv(\"%s\")\n", steamapi_envs[i]);
+                unsetenv(steamapi_envs[i]);
+            }
+            continue;
+        }
+
+        TRACE("setenv(\"%s\", \"%s\", 1)\n", steamapi_envs[i], value);
+        setenv(steamapi_envs[i], value, 1);
+    }
 }
 
 /* returns the number of bytes written to dst, not including the NUL terminator */
@@ -422,6 +451,8 @@ static void (*steamclient_ReleaseThreadLocalMemory)(int);
 static int load_steamclient(void)
 {
     char path[PATH_MAX], resolved_path[PATH_MAX];
+
+    sync_environment();
 
     if(steamclient_lib)
         return 1;
