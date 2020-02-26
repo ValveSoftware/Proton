@@ -43,6 +43,8 @@ typedef struct winRenderModel_t_1819 winRenderModel_t_1819;
 typedef struct winRenderModel_TextureMap_t_1819 winRenderModel_TextureMap_t_1819;
 #include "cppIVRRenderModels_IVRRenderModels_006.h"
 
+#define ARRAY_SIZE(x) (sizeof(x) / sizeof((x)[0]))
+
 WINE_DEFAULT_DEBUG_CHANNEL(vrclient);
 
 BOOL WINAPI DllMain(HINSTANCE instance, DWORD reason, void *reserved)
@@ -216,25 +218,47 @@ static void *(*vrclient_VRClientCoreFactory)(const char *name, int *return_code)
 
 static int load_vrclient(void)
 {
-    char path[PATH_MAX];
+    WCHAR pathW[PATH_MAX];
+    char *pathU;
+    DWORD sz;
+
+#ifdef _WIN64
+    static const char append_path[] = "/bin/linux64/vrclient.so";
+#else
+    static const char append_path[] = "/bin/vrclient.so";
+#endif
 
     if(vrclient_lib)
         return 1;
 
     /* PROTON_VR_RUNTIME is provided by the proton setup script */
-    if(!getenv("PROTON_VR_RUNTIME")){
+    if(!GetEnvironmentVariableW(L"PROTON_VR_RUNTIME", pathW, ARRAY_SIZE(pathW)))
+    {
         TRACE("Linux OpenVR runtime is not available\n");
         return 0;
     }
 
-#ifdef _WIN64
-    snprintf(path, PATH_MAX, "%s/bin/linux64/vrclient.so", getenv("PROTON_VR_RUNTIME"));
-#else
-    snprintf(path, PATH_MAX, "%s/bin/vrclient.so", getenv("PROTON_VR_RUNTIME"));
-#endif
-    TRACE("got openvr runtime path: %s\n", path);
+    sz = WideCharToMultiByte(CP_UNIXCP, 0, pathW, -1, NULL, 0, NULL, NULL);
+    if(!sz)
+    {
+        ERR("Can't convert path to unixcp! %s\n", wine_dbgstr_w(pathW));
+        return 0;
+    }
 
-    vrclient_lib = wine_dlopen(path, RTLD_NOW, NULL, 0);
+    pathU = HeapAlloc(GetProcessHeap(), 0, sz + sizeof(append_path));
+
+    sz = WideCharToMultiByte(CP_UNIXCP, 0, pathW, -1, pathU, sz, NULL, NULL);
+    if(!sz)
+    {
+        ERR("Can't convert path to unixcp! %s\n", wine_dbgstr_w(pathW));
+        return 0;
+    }
+
+    strcat(pathU, append_path);
+
+    TRACE("got openvr runtime path: %s\n", pathU);
+
+    vrclient_lib = wine_dlopen(pathU, RTLD_NOW, NULL, 0);
     if(!vrclient_lib){
         TRACE("unable to load vrclient.so\n");
         return 0;

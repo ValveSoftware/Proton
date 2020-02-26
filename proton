@@ -513,79 +513,6 @@ class Session:
         else:
             self.env["WINEDLLOVERRIDES"] = s
 
-    def setup_vr(self):
-        #parse linux openvr config and present it in win32 format to the app.
-        #logic from openvr's CVRPathRegistry_Public::GetPaths
-
-        #check environment for overrides
-        vr_runtime = None
-        if "VR_OVERRIDE" in self.env:
-            vr_runtime = self.env["VR_OVERRIDE"]
-            self.env.pop("VR_OVERRIDE")
-
-        vr_config = None
-        if "VR_CONFIG_PATH" in self.env:
-            vr_config = self.env["VR_CONFIG_PATH"]
-            self.env.pop("VR_CONFIG_PATH")
-
-        vr_log = None
-        if "VR_LOG_PATH" in self.env:
-            vr_log = self.env["VR_LOG_PATH"]
-            self.env.pop("VR_LOG_PATH")
-
-        #load from json if needed
-        if vr_runtime is None or \
-                vr_config is None or \
-                vr_log is None:
-            try:
-                path = os.environ.get("XDG_CONFIG_HOME", os.environ["HOME"] + "/.config")
-                path = path + "/openvr/openvrpaths.vrpath"
-
-                with open(path, "r") as jfile:
-                    j = json.load(jfile)
-
-                if vr_runtime is None:
-                    vr_runtime = j["runtime"][0]
-
-                if vr_config is None:
-                    vr_config = j["config"][0]
-
-                if vr_log is None:
-                    vr_log = j["log"][0]
-            except (TypeError, ValueError, OSError):
-                #log("Missing or invalid openvrpaths.vrpath file! " + str(sys.exc_info()[1]))
-                pass
-
-        makedirs(g_compatdata.prefix_dir + "/drive_c/users/steamuser/Local Settings/Application Data/openvr")
-
-        #remove existing file
-        vrpaths_name = g_compatdata.prefix_dir + "/drive_c/users/steamuser/Local Settings/Application Data/openvr/openvrpaths.vrpath"
-        if os.path.exists(vrpaths_name):
-            os.remove(vrpaths_name)
-
-        #dump new file
-        if not vr_runtime is None:
-            try:
-                self.env["PROTON_VR_RUNTIME"] = vr_runtime
-
-                j = { "runtime": [ "C:\\vrclient\\", "C:\\vrclient" ] }
-
-                if not vr_config is None:
-                    win_vr_config = subprocess.check_output([g_proton.wine_bin, "winepath", "-w", vr_config], env=self.env, stderr=self.log_file).decode("utf-8")
-                    j["config"] = [ win_vr_config.strip() ]
-
-                if not vr_log is None:
-                    win_vr_log = subprocess.check_output([g_proton.wine_bin, "winepath", "-w", vr_log], env=self.env, stderr=self.log_file).decode("utf-8")
-                    j["log"] = [ win_vr_log.strip() ]
-
-                j["version"] = 1
-                j["jsonid"] = "vrpathreg"
-
-                with open(vrpaths_name, "w") as vfile:
-                    json.dump(j, vfile, indent=2)
-            except (ValueError, OSError):
-                log("Unable to write VR config! " + str(sys.exc_info()[1]))
-
     def dump_dbg_env(self, f):
         f.write("PATH=\"" + self.env["PATH"] + "\" \\\n")
         f.write("\tTERM=\"xterm\" \\\n") #XXX
@@ -696,7 +623,6 @@ class Session:
         subprocess.call(args, env=local_env, stderr=self.log_file, stdout=self.log_file)
 
     def run(self):
-        self.setup_vr()
         if "PROTON_DUMP_DEBUG_COMMANDS" in self.env and nonzero(self.env["PROTON_DUMP_DEBUG_COMMANDS"]):
             try:
                 self.dump_dbg_scripts()
