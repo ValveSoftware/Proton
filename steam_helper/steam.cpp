@@ -117,9 +117,20 @@ static void setup_steam_registry(void)
     SteamAPI_Shutdown();
 }
 
+static WCHAR *strchrW(WCHAR *h, WCHAR n)
+{
+    do
+    {
+        if(*h == n)
+            return h;
+    } while (*h++);
+
+    return NULL;
+}
+
 static WCHAR *find_quote(WCHAR *str)
 {
-    WCHAR *end = wcschr(str, '"'), *ch;
+    WCHAR *end = strchrW(str, '"'), *ch;
     int odd;
     while (end)
     {
@@ -132,7 +143,7 @@ static WCHAR *find_quote(WCHAR *str)
         }
         if (!odd)
             return end;
-        end = wcschr(end + 1, '"');
+        end = strchrW(end + 1, '"');
     }
     return NULL;
 }
@@ -157,7 +168,7 @@ static HANDLE run_process(void)
     }
     else
     {
-        cmdline = wcschr(cmdline, ' ');
+        cmdline = strchrW(cmdline, ' ');
     }
     if (!cmdline)
     {
@@ -196,9 +207,9 @@ static HANDLE run_process(void)
         else
         {
             start = cmdline;
-            end = wcschr(start, ' ');
+            end = strchrW(start, ' ');
             if (!end)
-                end = wcschr(start, '\0');
+                end = strchrW(start, '\0');
             remainder = end;
         }
 
