@@ -1,0 +1,152 @@
+From 77b9303eabcd92ee86b3a2ae964a3339a9639fa6 Mon Sep 17 00:00:00 2001
+From: Georg Lehmann <dadschoorse@gmail.com>
+Date: Tue, 25 Feb 2020 13:15:42 +0100
+Subject: [PATCH] fshack: Create only one compute pipeline per swap chain
+
+There is no need to create one pipeline per swapchain image
+---
+ dlls/winevulkan/vulkan.c         | 46 ++++++++++++++++----------------
+ dlls/winevulkan/vulkan_private.h |  2 +-
+ 2 files changed, 24 insertions(+), 24 deletions(-)
+
+diff --git a/dlls/winevulkan/vulkan.c b/dlls/winevulkan/vulkan.c
+index 63665fb7a6f..36e2cc54d99 100644
+--- a/dlls/winevulkan/vulkan.c
++++ b/dlls/winevulkan/vulkan.c
+@@ -1428,7 +1428,7 @@ const uint32_t blit_comp_spv[] = {
+ 	0x000100fd,0x00010038
+ };
+ 
+-static VkResult create_pipeline(VkDevice device, struct VkSwapchainKHR_T *swapchain, struct fs_hack_image *hack, VkShaderModule shaderModule)
++static VkResult create_pipeline(VkDevice device, struct VkSwapchainKHR_T *swapchain, VkShaderModule shaderModule)
+ {
+     VkResult res;
+ #if defined(USE_STRUCT_CONVERSION)
+@@ -1446,7 +1446,7 @@ static VkResult create_pipeline(VkDevice device, struct VkSwapchainKHR_T *swapch
+     pipelineInfo.basePipelineHandle = VK_NULL_HANDLE;
+     pipelineInfo.basePipelineIndex = -1;
+ 
+-    res = device->funcs.p_vkCreateComputePipelines(device->device, VK_NULL_HANDLE, 1, &pipelineInfo, NULL, &hack->pipeline);
++    res = device->funcs.p_vkCreateComputePipelines(device->device, VK_NULL_HANDLE, 1, &pipelineInfo, NULL, &swapchain->pipeline);
+     if(res != VK_SUCCESS){
+         ERR("vkCreateComputePipelines: %d\n", res);
+         return res;
+@@ -1509,7 +1509,6 @@ static VkResult create_descriptor_set(VkDevice device, struct VkSwapchainKHR_T *
+ 
+ static void destroy_fs_hack_image(VkDevice device, struct VkSwapchainKHR_T *swapchain, struct fs_hack_image *hack)
+ {
+-    device->funcs.p_vkDestroyPipeline(device->device, hack->pipeline, NULL);
+     device->funcs.p_vkFreeDescriptorSets(device->device, swapchain->descriptor_pool, 1, &hack->descriptor_set);
+     device->funcs.p_vkDestroyImageView(device->device, hack->user_view, NULL);
+     device->funcs.p_vkDestroyImageView(device->device, hack->blit_view, NULL);
+@@ -1837,6 +1836,7 @@ void WINAPI wine_vkDestroySwapchainKHR(VkDevice device, VkSwapchainKHR swapchain
+             if(object->cmd_pools[i])
+                 device->funcs.p_vkDestroyCommandPool(device->device, object->cmd_pools[i], NULL);
+ 
++        device->funcs.p_vkDestroyPipeline(device->device, object->pipeline, NULL);
+         device->funcs.p_vkDestroyPipelineLayout(device->device, object->pipeline_layout, NULL);
+         device->funcs.p_vkDestroyDescriptorSetLayout(device->device, object->descriptor_set_layout, NULL);
+         device->funcs.p_vkDestroyDescriptorPool(device->device, object->descriptor_pool, NULL);
+@@ -2022,6 +2022,22 @@ static VkResult init_blit_images(VkDevice device, struct VkSwapchainKHR_T *swapc
+         ERR("vkCreatePipelineLayout: %d\n", res);
+         goto fail;
+     }
++    
++    shaderInfo.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
++    shaderInfo.codeSize = sizeof(blit_comp_spv);
++    shaderInfo.pCode = blit_comp_spv;
++
++    res = device->funcs.p_vkCreateShaderModule(device->device, &shaderInfo, NULL, &shaderModule);
++    if(res != VK_SUCCESS){
++        ERR("vkCreateShaderModule: %d\n", res);
++        goto fail;
++    }
++    
++    res = create_pipeline(device, swapchain, shaderModule);
++    if(res != VK_SUCCESS)
++        goto fail;
++
++    device->funcs.p_vkDestroyShaderModule(device->device, shaderModule, NULL);
+ 
+     if(!(swapchain->surface_usage & VK_IMAGE_USAGE_STORAGE_BIT)){
+         TRACE("using intermediate blit images\n");
+@@ -2107,16 +2123,6 @@ static VkResult init_blit_images(VkDevice device, struct VkSwapchainKHR_T *swapc
+     }else
+         TRACE("blitting directly to swapchain images\n");
+ 
+-    shaderInfo.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
+-    shaderInfo.codeSize = sizeof(blit_comp_spv);
+-    shaderInfo.pCode = blit_comp_spv;
+-
+-    res = device->funcs.p_vkCreateShaderModule(device->device, &shaderInfo, NULL, &shaderModule);
+-    if(res != VK_SUCCESS){
+-        ERR("vkCreateShaderModule: %d\n", res);
+-        goto fail;
+-    }
+-
+     /* create imageviews */
+     for(i = 0; i < swapchain->n_images; ++i){
+         struct fs_hack_image *hack = &swapchain->fs_hack_images[i];
+@@ -2140,23 +2146,14 @@ static VkResult init_blit_images(VkDevice device, struct VkSwapchainKHR_T *swapc
+         res = create_descriptor_set(device, swapchain, hack);
+         if(res != VK_SUCCESS)
+             goto fail;
+-
+-        res = create_pipeline(device, swapchain, hack, shaderModule);
+-        if(res != VK_SUCCESS)
+-            goto fail;
+     }
+ 
+-    device->funcs.p_vkDestroyShaderModule(device->device, shaderModule, NULL);
+-
+     return VK_SUCCESS;
+ 
+ fail:
+     for(i = 0; i < swapchain->n_images; ++i){
+         struct fs_hack_image *hack = &swapchain->fs_hack_images[i];
+ 
+-        device->funcs.p_vkDestroyPipeline(device->device, hack->pipeline, NULL);
+-        hack->pipeline = VK_NULL_HANDLE;
+-
+         device->funcs.p_vkFreeDescriptorSets(device->device, swapchain->descriptor_pool, 1, &hack->descriptor_set);
+         hack->descriptor_set = VK_NULL_HANDLE;
+ 
+@@ -2168,6 +2165,9 @@ static VkResult init_blit_images(VkDevice device, struct VkSwapchainKHR_T *swapc
+     }
+ 
+     device->funcs.p_vkDestroyShaderModule(device->device, shaderModule, NULL);
++    
++    device->funcs.p_vkDestroyPipeline(device->device, swapchain->pipeline, NULL);
++    swapchain->pipeline = VK_NULL_HANDLE;
+ 
+     device->funcs.p_vkDestroyPipelineLayout(device->device, swapchain->pipeline_layout, NULL);
+     swapchain->pipeline_layout = VK_NULL_HANDLE;
+@@ -2258,7 +2258,7 @@ static VkResult record_compute_cmd(VkDevice device, struct VkSwapchainKHR_T *swa
+ 
+     /* perform blit shader */
+     device->funcs.p_vkCmdBindPipeline(hack->cmd,
+-            VK_PIPELINE_BIND_POINT_COMPUTE, hack->pipeline);
++            VK_PIPELINE_BIND_POINT_COMPUTE, swapchain->pipeline);
+ 
+     device->funcs.p_vkCmdBindDescriptorSets(hack->cmd,
+             VK_PIPELINE_BIND_POINT_COMPUTE, swapchain->pipeline_layout,
+diff --git a/dlls/winevulkan/vulkan_private.h b/dlls/winevulkan/vulkan_private.h
+index 00626eff1e3..001ce85a1fd 100644
+--- a/dlls/winevulkan/vulkan_private.h
++++ b/dlls/winevulkan/vulkan_private.h
+@@ -147,7 +147,6 @@ struct fs_hack_image
+     VkSemaphore blit_finished;
+     VkImageView user_view, blit_view;
+     VkDescriptorSet descriptor_set;
+-    VkPipeline pipeline;
+ };
+ 
+ struct VkSwapchainKHR_T
+@@ -170,6 +169,7 @@ struct VkSwapchainKHR_T
+     VkDescriptorPool descriptor_pool;
+     VkDescriptorSetLayout descriptor_set_layout;
+     VkPipelineLayout pipeline_layout;
++    VkPipeline pipeline;
+ };
+ 
+ void *wine_vk_get_device_proc_addr(const char *name) DECLSPEC_HIDDEN;

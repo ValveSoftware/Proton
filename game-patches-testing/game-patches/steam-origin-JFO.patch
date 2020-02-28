@@ -1,0 +1,149 @@
+From a8675091927c01a0c28de349517c5010557f06a9 Mon Sep 17 00:00:00 2001
+From: Derek Lesho <dlesho at codeweavers.com>
+Date: Fri, 21 Feb 2020 14:47:36 -0600
+Subject: [PATCH] ntdll: Partially implement JobObjectBasicAccountingInformation.
+
+Signed-off-by: Derek Lesho <dlesho at codeweavers.com>
+---
+v2:
+  - Fix a typo breaking the patch.
+---
+ dlls/kernel32/tests/process.c |  9 +++++++++
+ dlls/ntdll/sync.c             | 20 +++++++++++++++++---
+ server/process.c              | 14 ++++++++++++++
+ server/protocol.def           |  8 ++++++++
+ 4 files changed, 48 insertions(+), 3 deletions(-)
+
+diff --git a/dlls/kernel32/tests/process.c b/dlls/kernel32/tests/process.c
+index 323f8092d7..421d030e63 100644
+--- a/dlls/kernel32/tests/process.c
++++ b/dlls/kernel32/tests/process.c
+@@ -2543,6 +2543,7 @@ static void test_QueryInformationJobObject(void)
+     PJOBOBJECT_BASIC_PROCESS_ID_LIST pid_list = (JOBOBJECT_BASIC_PROCESS_ID_LIST *)buf;
+     JOBOBJECT_EXTENDED_LIMIT_INFORMATION ext_limit_info;
+     JOBOBJECT_BASIC_LIMIT_INFORMATION *basic_limit_info = &ext_limit_info.BasicLimitInformation;
++    JOBOBJECT_BASIC_ACCOUNTING_INFORMATION basic_accounting_info;
+     DWORD dwret, ret_len;
+     PROCESS_INFORMATION pi[2];
+     HANDLE job;
+@@ -2647,6 +2648,14 @@ static void test_QueryInformationJobObject(void)
+     ok(ret_len == sizeof(ext_limit_info), "QueryInformationJobObject returned ret_len=%u\n", ret_len);
+     expect_eq_d(0, basic_limit_info->LimitFlags);
+ 
++    /* test JobObjectBasicAccountingInformation */
++    ret = pQueryInformationJobObject(job, JobObjectBasicAccountingInformation, &basic_accounting_info,
++                                     sizeof(basic_accounting_info), &ret_len);
++    ok(ret, "QueryInformationJobObject error %u\n", GetLastError());
++    ok(ret_len == sizeof(basic_accounting_info), "QueryInformationJobObject returned ret_len=%u\n", ret_len);
++    expect_eq_d(3, basic_accounting_info.TotalProcesses);
++    expect_eq_d(2, basic_accounting_info.ActiveProcesses);
++
+     TerminateProcess(pi[0].hProcess, 0);
+     CloseHandle(pi[0].hProcess);
+     CloseHandle(pi[0].hThread);
+diff --git a/dlls/ntdll/sync.c b/dlls/ntdll/sync.c
+index 2b5b6ce44a..69d6e60888 100644
+--- a/dlls/ntdll/sync.c
++++ b/dlls/ntdll/sync.c
+@@ -694,7 +694,9 @@ NTSTATUS WINAPI NtTerminateJobObject( HANDLE handle, NTSTATUS status )
+ NTSTATUS WINAPI NtQueryInformationJobObject( HANDLE handle, JOBOBJECTINFOCLASS class, PVOID info,
+                                              ULONG len, PULONG ret_len )
+ {
+-    FIXME( "stub: %p %u %p %u %p\n", handle, class, info, len, ret_len );
++    NTSTATUS ret;
++
++    TRACE( "semi-stub: %p %u %p %u %p\n", handle, class, info, len, ret_len );
+ 
+     if (class >= MaxJobObjectInfoClass)
+         return STATUS_INVALID_PARAMETER;
+@@ -708,9 +710,21 @@ NTSTATUS WINAPI NtQueryInformationJobObject( HANDLE handle, JOBOBJECTINFOCLASS c
+                 return STATUS_INFO_LENGTH_MISMATCH;
+ 
+             accounting = (JOBOBJECT_BASIC_ACCOUNTING_INFORMATION *)info;
+-            memset(accounting, 0, sizeof(*accounting));
++
++            SERVER_START_REQ(get_job_info)
++            {
++                req->handle = wine_server_obj_handle( handle );
++                if ((ret = wine_server_call( req )) == STATUS_SUCCESS)
++                {
++                    memset(accounting, 0, sizeof(*accounting));
++                    accounting->TotalProcesses = reply->total_processes;
++                    accounting->ActiveProcesses = reply->active_processes;
++                }
++            }
++            SERVER_END_REQ;
++
+             if (ret_len) *ret_len = sizeof(*accounting);
+-            return STATUS_SUCCESS;
++            return ret;
+         }
+ 
+     case JobObjectBasicProcessIdList:
+diff --git a/server/process.c b/server/process.c
+index 73984f363f..8a1edfeac9 100644
+--- a/server/process.c
++++ b/server/process.c
+@@ -156,6 +156,7 @@ struct job
+     struct object obj;             /* object header */
+     struct list process_list;      /* list of all processes */
+     int num_processes;             /* count of running processes */
++    int assign_counter;            /* Number of processes which have been assigned */
+     unsigned int limit_flags;      /* limit flags */
+     int terminating;               /* job is terminating */
+     int signaled;                  /* job is signaled */
+@@ -198,6 +199,7 @@ static struct job *create_job_object( struct object *root, const struct unicode_
+             /* initialize it if it didn't already exist */
+             list_init( &job->process_list );
+             job->num_processes = 0;
++            job->assign_counter = 0;
+             job->limit_flags = 0;
+             job->terminating = 0;
+             job->signaled = 0;
+@@ -240,6 +242,7 @@ static void add_job_process( struct job *job, struct process *process )
+     process->job = (struct job *)grab_object( job );
+     list_add_tail( &job->process_list, &process->job_entry );
+     job->num_processes++;
++    job->assign_counter++;
+ 
+     add_job_completion( job, JOB_OBJECT_MSG_NEW_PROCESS, get_process_id(process) );
+ }
+@@ -1715,6 +1718,17 @@ DECL_HANDLER(process_in_job)
+     release_object( process );
+ }
+ 
++/* retrieve information about a job */
++DECL_HANDLER(get_job_info)
++{
++    struct job *job = get_job_obj( current->process, req->handle, JOB_OBJECT_QUERY );
++
++    reply->total_processes = job->assign_counter;
++    reply->active_processes = job->num_processes;
++
++    release_object( job );
++}
++
+ /* terminate all processes associated with the job */
+ DECL_HANDLER(terminate_job)
+ {
+diff --git a/server/protocol.def b/server/protocol.def
+index 6c44b2b43f..3956a2815d 100644
+--- a/server/protocol.def
++++ b/server/protocol.def
+@@ -3938,6 +3938,14 @@ struct handle_info
+     client_ptr_t key;             /* key to send with completion messages */
+ @END
+ 
++/* Retrieve information about a job */
++@REQ(get_job_info)
++    obj_handle_t handle;
++@REPLY
++    unsigned int total_processes;
++    unsigned int active_processes;
++@END
++
+ 
+ /* Terminate all processes associated with the job  */
+ @REQ(terminate_job)
+-- 
+2.25.1

@@ -601,6 +601,8 @@ class Session:
         f.write("\tWINEPREFIX=\"" + self.env["WINEPREFIX"] + "\" \\\n")
         if "WINEESYNC" in self.env:
             f.write("\tWINEESYNC=\"" + self.env["WINEESYNC"] + "\" \\\n")
+        if "WINEFSYNC" in self.env:
+            f.write("\tWINEFSYNC=\"" + self.env["WINEFSYNC"] + "\" \\\n")
         if "SteamGameId" in self.env:
             f.write("\tSteamGameId=\"" + self.env["SteamGameId"] + "\" \\\n")
         if "SteamAppId" in self.env:

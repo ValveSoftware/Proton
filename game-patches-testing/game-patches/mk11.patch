@@ -18,17 +18,17 @@ index 96d1e0b850..423d47bd24 100644
  };
  static const struct column col_stdregprov[] =
  {
-@@ -922,6 +922,10 @@ static const WCHAR os_serialnumberW[] =
-     {'1','2','3','4','5','-','O','E','M','-','1','2','3','4','5','6','7','-','1','2','3','4','5',0};
- static const WCHAR physicalmedia_tagW[] =
-     {'\\','\\','.','\\','P','H','Y','S','I','C','A','L','D','R','I','V','E','0',0};
+@@ -933,6 +934,10 @@ static const WCHAR quickfixengineering_captionW[] =
+     {'h','t','t','p',':','/','/','w','i','n','e','h','q','.','o','r','g',0};
+ static const WCHAR quickfixengineering_hotfixidW[] =
+     {'K','B','1','2','3','4','5','6','7',0};
 +static const WCHAR physicalmemory_partnumberW[] =
 +    {'B','L','S','8','G','3','D','1','6','0','9','D','S','1','S','0','0','.',0};
 +static const WCHAR sounddevice_manufacturerW[] =
 +    {'T','h','e',' ','W','i','n','e',' ','P','r','o','j','e','c','t',0};
- static const WCHAR quickfixengineering_captionW[] =
-     {'h','t','t','p',':','/','/','w','i','n','e','h','q','.','o','r','g',0};
- static const WCHAR quickfixengineering_hotfixidW[] =
+ static const WCHAR sounddevice_productnameW[] =
+     {'W','i','n','e',' ','A','u','d','i','o',' ','D','e','v','i','c','e',0};
+ static const WCHAR systemenclosure_systemenclosureW[] =
 @@ -1272,6 +1277,7 @@ struct record_sounddevice
      const WCHAR *name;
      const WCHAR *productname;
@@ -46,13 +46,14 @@ index 96d1e0b850..423d47bd24 100644
  };
  static const struct record_stdregprov data_stdregprov[] =
  {
-@@ -3349,10 +3355,10 @@ static enum fill_status fill_physicalmemory( struct table *table, const struct e
+@@ -3349,11 +3355,11 @@ static enum fill_status fill_physicalmemory( struct table *table, const struct e
  
      rec = (struct record_physicalmemory *)table->data;
      rec->capacity             = get_total_physical_memory();
 -    rec->configuredclockspeed = 0;
 +    rec->configuredclockspeed = 1600;
      rec->devicelocator        = dimm0W;
+     rec->formfactor           = 8; /* DIMM */
      rec->memorytype           = 9; /* RAM */
 -    rec->partnumber           = NULL;
 +    rec->partnumber           = physicalmemory_partnumberW;
@@ -236,6 +237,7 @@ index 0000000000..457f234073
 +typedef void(CALLBACK *NVGSDK_EmptyCallback)(NVGSDK_RetCode ret, void *context);
 +
 +typedef void(CALLBACK *NVGSDK_GetUILanguageCallback)(NVGSDK_RetCode ret, NVGSDK_Language const *lang, void *context);
+
 From: Derek Lesho <dlesho@codeweavers.com>
 Subject: [PATCH] ntdll: Only call wine handlers if they're in the same stack.
 Message-Id: <20191002154547.878669-1-dlesho@codeweavers.com>
@@ -288,4 +290,3 @@ index 427a4a0e05..8d6f351f4b 100644
 
 -- 
 2.23.0
- 

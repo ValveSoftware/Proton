@@ -9,6 +9,7 @@
     git checkout lsteamclient
     cd lsteamclient
     patch -Np1 < ../game-patches-testing/proton-hotfixes/proton-lsteamclient_disable_winISteamController_SteamController007_warframe.patch
+    patch -Np1 < ../game-patches-testing/proton-hotfixes/proton-lsteamclient_sync_important_environment_variables_before_loading_steamclient.patch
     cd ..
 
     # disable glib tests to prevent random make errors
@@ -21,9 +22,6 @@
     cd vkd3d
     git reset --hard HEAD
     git clean -xdf
-    #echo "WoW vkd3d patches"
-    #patch -Np1 < ../game-patches-testing/vkd3d-patches/wow-flicker.patch
-    #patch -Np1 < ../game-patches-testing/vkd3d-patches/Support_RS_1.0_Volatile.patch
     cd ..
 
     # Valve DXVK patches
@@ -92,6 +90,9 @@
     echo "sword art online" - tested OK
     patch -Np1 < ../game-patches-testing/game-patches/sword-art-online-gnutls.patch
 
+    echo "Jedi Fallen Order steam + origin patch" - tested OK
+    patch -Np1 < ../game-patches-testing/game-patches/steam-origin-JFO.patch.patch
+
     echo "origin downloads fix" - tested OK
     patch -Np1 < ../game-patches-testing/game-patches/origin-downloads_fix.patch
 
@@ -101,9 +102,10 @@
     echo "blackops 2 fix"
     patch -Np1 < ../game-patches-testing/game-patches/blackops_2_fix.patch
 
-    echo "bcrypt fix for honor, steep"
+    echo "bcrypt fix for honor, steep, fc5"
     patch -Np1 < ../game-patches-testing/game-patches/0001-bcrypt-Implement-BCryptSecretAgreement-with-libgcryp.patch
     patch -Np1 < ../game-patches-testing/game-patches/0002-bcrypt-Implement-BCryptSecretAgreement-with-libgcryp.patch
+    patch -Np1 < ../game-patches-testing/game-patches/0003-bcrypt-Implement-BCryptSecretAgreement-with-libgcryp.patch
 
     echo "fix steep and AC Odyssey fullscreen"
     patch -Np1 < ../game-patches-testing/wine-patches/0001-Add-some-semi-stubs-in-user32.patch
@@ -153,7 +155,6 @@
     # staging winex11-WM_WINDOWPOSCHANGING
     #patch -Np1 < ../game-patches-testing/proton-hotfixes/proton-staging_winex11-WM_WINDOWPOSCHANGING.patch
 
-
     #echo "Valve wined3d patches"
     #patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-wined3d-additions.patch
     echo "Valve VR patches"
@@ -180,6 +181,10 @@
 
     echo "mf hacks"
     patch -Np1 < ../game-patches-testing/proton-hotfixes/proton-mf_hacks.patch
+
+    echo "fs hack improvement PRs"
+    patch -Np1 < ../game-patches-testing/wine-patches/winevulkan-cleanup_barriers_for_fs_hack.patch
+    patch -Np1 < ../game-patches-testing/wine-patches/fshack-create_only_one_compute_pipeline_per_swap_chain.patch
 
     #WINE CUSTOM PATCHES
     #add your own custom patch lines below
