@@ -26,6 +26,7 @@ else # (Rest of the file is the else)
 #   SRCDIR          - Path to source
 #   BUILD_NAME      - Name of the build for manifests etc.
 #   NO_DXVK         - 1 if skipping DXVK steps
+#   WITH_FFMPEG     - 1 if including ffmpeg steps
 #   STEAMRT64_MODE  - 'docker' or '' for automatic Steam Runtime container
 #   STEAMRT64_IMAGE - Name of the image if mode is set
 #   STEAMRT32_MODE  - Same as above for 32-bit container (can be different type)
@@ -525,7 +526,7 @@ module: module32 module64
 GLIB_CONFIGURE_FILES32 := $(GLIB_OBJ32)/build.ninja
 GLIB_CONFIGURE_FILES64 := $(GLIB_OBJ64)/build.ninja
 
-GLIB_MESON_ARGS := -Dlibmount=false -Denable_tests=no
+GLIB_MESON_ARGS := -Dlibmount=false
 
 # 64-bit configure.  Remove coredata file if already configured (due to e.g. makefile changing)
 $(GLIB_CONFIGURE_FILES64): SHELL = $(CONTAINER_SHELL64)
@@ -1123,7 +1124,6 @@ $(STEAMEXE_CONFIGURE_FILES): $(STEAMEXE_SYN) $(MAKEFILE_DEP) | $(STEAMEXE_OBJ) $
 			-I"../$(TOOLS_DIR32)"/include/ \
 			-I"../$(TOOLS_DIR32)"/include/wine/ \
 			-I"../$(TOOLS_DIR32)"/include/wine/windows/ \
-			-I"../$(TOOLS_DIR32)"/include/wine/msvcrt/ \
 			-I"../$(SRCDIR)"/lsteamclient/steamworks_sdk_142/ \
 			-L"../$(TOOLS_DIR32)"/lib/ \
 			-L"../$(TOOLS_DIR32)"/lib/wine/ \
