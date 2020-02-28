@@ -1,56 +1,65 @@
+# proton-ge-custom
+
+## Overview
+
 This is my build of Proton with the most recent release of vanilla wine, has ffmpeg enabled for faudio by default, and all of Proton's patches ported over to be applied to wine, as well as wine-staging and vkd3d.
 
-All patches:  
--Warframe screenshot F6 patch 
--FFXIV Launcher patch
--Mech Warrior online patch  
--Assetto Corsa HUD patch 
--Vulkan child window patch  
--sword art online gnutls patch  
--d9vk integration  
--vkd3d integration  
--protonfixes integration  
--FAudio with FFMpeg enabled (fixes audio/voices in multiple games)  
--All of Valve's wine proton patches. Yes. All of them.  
--wine staging patches  
--various wine hot fixes for wine functionality that fix regressions per version  
+All patches include:  
+ * Warframe screenshot F6 patch 
+ * FFXIV Launcher patch
+ * Mech Warrior online patch  
+ * Assetto Corsa HUD patch 
+ * Vulkan child window patch  
+ * Sword Art Online gnutls patch  
+ * d9vk integration  
+ * vkd3d integration  
+ * protonfixes integration  
+ * FAudio with FFMpeg enabled (fixes audio/voices in multiple games)  
+ * All of Valve's wine proton patches. Yes. All of them.  
+ * wine staging patches  
+ * various wine hot fixes for wine functionality that fix regressions per version  
 
+**NOTES REGARDING SPECIFIC GAME QUIRKS:**
 
-NOTES REGARDING SPECIFIC GAME QUIRKS:  
--Warframe does NOT need "WINEDLLOVERRIDES="xaudio2_7=n,b" - FAudio replaces xaudio2. Using this override WILL lead to game crashes.  
--Warframe needs xboxdrv running in the background as a service. This is an issue related to Steam only. If it does not detect a controller within 5 minutes the game will close.  
--Warframe is problematic with vsync. Turn it off or on in game, do not set Auto.  
--Warframe needs a set a frame limit in game. Unlimited framerate can cause slowdowns  
--Warframe on Nvidia you may need to disable GPU Particles in game otherwise the game can freeze randomly. On AMD they work fine  
+ * Warframe does NOT need `WINEDLLOVERRIDES="xaudio2_7=n,b"` — FAudio replaces xaudio2. Using this override WILL lead to game crashes.  
+ * Warframe needs xboxdrv running in the background as a service. This is an issue related to Steam only. If it does not detect a controller within 5 minutes the game will close.  
+ * Warframe is problematic with vsync. Turn it off or on in game, do not set Auto.  
+ * Warframe needs a set a frame limit in game. Unlimited framerate can cause slowdowns  
+ * Warframe on Nvidia you may need to disable GPU Particles in game otherwise the game can freeze randomly. On AMD they work fine  
 
+Full patches can be viewed in [protonprep.sh](game-patches-testing/protonprep.sh).
 
-Full patches can be viewed in game-patches-testing/protonprep.sh  
+## Installation
+1. Either follow the [build guide](#building), or download a release from the [Releases](https://github.com/GloriousEggroll/proton-ge-custom/releases) section and then proceed to the next step.
+2. - For regular Steam users, create a ``~/.steam/root/compatibilitytools.d`` directory.
+   - For Flatpak Steam users, create a ``~/.var/app/com.valvesoftware.Steam/data/Steam/compatibilitytools.d/`` directory.
+3. - For regular Steam users, extract the release tarball into ``~/.steam/root/compatibilitytools.d/``.
+   - For Flatpak Steam users, extract the release tarball into `~/.var/app/com.valvesoftware.Steam/data/Steam/compatibilitytools.d/`.
+4. Restart Steam.
+5. Right click any game in Steam and click `Properties`. 
+6. At the bottom of the General tab, Check `Force the use of a specific Steam Play compatibility tool`, then select the new Proton version.  
+7. Launch the game.  
 
-How to install:
+## Building
 
-1. Either follow the build guide below, or download a release from the Releases section of this git repo.
-2. Extract the release tarball into `~/.steam/root/compatibilitytools.d/`, and restart steam. You will have to create the compatibilitytools.d folder.  
-If using the flatpak version from flathub extract into `~/.var/app/com.valvesoftware.Steam/data/Steam/compatibilitytools.d/`.
-3. Restart Steam.  
-3. Right click any game in Steam and click Properties  
-4. At the bottom of the General tab, Check "Force the use of a specific Steam Play compatibility tool" then select the new Proton version.  
-5. Launch the game.  
+1. Install VirtualBox and its kernel modules. Make sure they are enabled at boot.
+2. Install Vagrant.
+3. Clone this repo by executing:
 
-How to build:  
-
-1. Install virtualbox and its kernel modules, make sure they are enabled at boot  
-2. Install vagrant  
-3. Clone this repo:  
-`git clone --recurse-submodules http://github.com/gloriouseggroll/proton-ge-custom`  
+````
+git clone --recurse-submodules http://github.com/gloriouseggroll/proton-ge-custom
+````
 
 4. Drop any custom patches into game-patches-testing/, then open game-patches-testing/protonprep.sh and  
  add a patch line for them under #WINE CUSTOM PATCHES in the same way the others are done. 
 
 5. Apply all of the patches in /game patches/testing by running:
+
 ```
 ./game-patches-testing/protonprep.sh &> patchlog.txt
-``` 
-in the main proton-ge-custom directory. Open patchlog.txt and search "fail" to make sure no patch failures occured.
+```
+
+in the main proton-ge-custom directory. Open `patchlog.txt` and search for "fail" to make sure no patch failures occured.
 
 6. Open proton-ge-custom a terminal and type the following:  
 
@@ -66,11 +75,9 @@ For future builds you only need to run:
 
 Builds will be placed in proton-ge-custom/vagrant_share/ as both the full folder and a .tar.gz of the folder.  
 
+## NOTE ON MODIFICATIONS
 
-NOTE ON MODIFICATIONS:  
 vagrant syncs the proton directory to any files in the cloned repo. So, if you want to make changes, close the VM with `vagrant halt`, make your changes, then launch vagrant again with `vagrant up`  
-
-
 
 Environment variable options:  
 
@@ -87,6 +94,7 @@ Environment variable options:
 | <tt>oldglstr</tt>     | <tt>PROTON_OLD_GL_STRING</tt>  | Set some driver overrides to limit the length of the GL extension string, for old games that crash on very long extension strings. |
 |                       | <tt>WINE_MEM_ALLOC_MOD</tt>  | Enables mem alloc mod. Fixes some games such as MK11 and the skyui status effect icons in skyrim se. Set to 1 to enable. |
 
+## Credits
 
 Credits to the proper people are deserved. Many people besides myself have contributed to various parts:
 
