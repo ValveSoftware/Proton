@@ -1,0 +1,41 @@
+From 1e4083027f980ebfda0a3796d8da45d9334016eb Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
+Date: Fri, 21 Feb 2020 16:56:09 +0100
+Subject: [PATCH] steam.exe: Create Steam for Windows named event.
+
+This event is sometimes checked for existence by Denuvo DRM, to decide
+whether the game is genuine. This the case in Just Cause 3, and not
+having it makes the game delete all saved progress.
+---
+ steam_helper/steam.cpp | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/steam.cpp b/steam.cpp
+index 7fd29a3..8e5b977 100644
+--- a/steam.cpp
++++ b/steam.cpp
+@@ -261,12 +261,15 @@ static HANDLE run_process(void)
+ int main(int argc, char *argv[])
+ {
+     HANDLE wait_handle = INVALID_HANDLE_VALUE;
++    HANDLE event = INVALID_HANDLE_VALUE;
+ 
+     WINE_TRACE("\n");
+ 
+     if (getenv("SteamGameId"))
+     {
+         /* do setup only for game process */
++        event = CreateEventA(NULL, FALSE, FALSE, "Steam3Master_SharedMemLock");
++
+         CreateThread(NULL, 0, create_steam_window, NULL, 0, NULL);
+ 
+         set_active_process_pid();
+@@ -292,5 +295,8 @@ int main(int argc, char *argv[])
+ 
+     WaitForSingleObject(wait_handle, INFINITE);
+ 
++    if (event != INVALID_HANDLE_VALUE)
++        CloseHandle(event);
++
+     return 0;
+ }

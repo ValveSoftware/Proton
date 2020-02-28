@@ -2,6 +2,10 @@
     # steam_helper patches
     git checkout steam_helper
     cd steam_helper
+    patch -Np1 < ../game-patches-testing/proton-hotfixes/proton-steam.exe_create_steam_for_windows_named_event.patch
+    patch -Np1 < ../game-patches-testing/proton-hotfixes/proton-steam_helper_import_jsoncpp.patch
+    patch -Np1 < ../game-patches-testing/proton-hotfixes/proton-steam_helper_dont_use_msvcrt.patch
+    patch -Np1 < ../game-patches-testing/proton-hotfixes/proton-steam_helper_set_up_vr_paths_in_steam.exe_not_proton.patch
     patch -Np1 < ../game-patches-testing/proton-hotfixes/proton-Use_ShellExecute_when_not_launching_exe.patch
     cd ..
 
@@ -10,6 +14,7 @@
     cd lsteamclient
     patch -Np1 < ../game-patches-testing/proton-hotfixes/proton-lsteamclient_disable_winISteamController_SteamController007_warframe.patch
     patch -Np1 < ../game-patches-testing/proton-hotfixes/proton-lsteamclient_sync_important_environment_variables_before_loading_steamclient.patch
+    patch -Np1 < ../game-patches-testing/proton-hotfixes/proton-lsteamclient_reallocate_new_interface_only_when_linux_side_changes.patch
     cd ..
 
     # disable glib tests to prevent random make errors
