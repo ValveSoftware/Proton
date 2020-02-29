@@ -66,6 +66,15 @@
     -W dinput-remap-joystick \
     -W winex11-key_translation 
 
+    #VKD3D-WINE
+    #echo "applying WoW vkd3d wine patches
+    #patch -Np1 < ../game-patches-testing/wine-patches/D3D12SerializeVersionedRootSignature.patch
+    #patch -Np1 < ../game-patches-testing/wine-patches/D3D12CreateVersionedRootSignatureDeserializer.patch
+
+    #WINE VULKAN
+    echo "applying winevulkan patches"
+    patch -Np1 < ../game-patches-testing/wine-patches/winevulkan-childwindow.patch
+
     #WINE FAUDIO
     echo "applying faudio patches"
     patch -Np1 < ../game-patches-testing/faudio-patches/faudio-ffmpeg.patch
@@ -99,11 +108,10 @@
     echo "blackops 2 fix"
     patch -Np1 < ../game-patches-testing/game-patches/blackops_2_fix.patch
 
-#    disabled for now, patch 1 and 2 are in staging, patch 3 was upstreamed
-#    echo "bcrypt fix for honor, steep, fc5"
-#    patch -Np1 < ../game-patches-testing/game-patches/0001-bcrypt-Implement-BCryptSecretAgreement-with-libgcryp.patch
-#    patch -Np1 < ../game-patches-testing/game-patches/0002-bcrypt-Implement-BCryptSecretAgreement-with-libgcryp.patch
-#    patch -Np1 < ../game-patches-testing/game-patches/0003-bcrypt-Implement-BCryptSecretAgreement-with-libgcryp.patch
+    echo "bcrypt fix for honor, steep, fc5"
+    patch -Np1 < ../game-patches-testing/game-patches/0001-bcrypt-Implement-BCryptSecretAgreement-with-libgcryp.patch
+    patch -Np1 < ../game-patches-testing/game-patches/0002-bcrypt-Implement-BCryptSecretAgreement-with-libgcryp.patch
+    patch -Np1 < ../game-patches-testing/game-patches/0003-bcrypt-Implement-BCryptSecretAgreement-with-libgcryp.patch
 
     echo "fix steep and AC Odyssey fullscreen"
     patch -Np1 < ../game-patches-testing/wine-patches/0001-Add-some-semi-stubs-in-user32.patch
@@ -147,38 +155,20 @@
     # staging winex11-MWM_Decorations
     patch -Np1 < ../game-patches-testing/proton-hotfixes/proton-staging_winex11-MWM_Decorations.patch
 
-    #disable for now - not working
     # staging winex11-_NET_ACTIVE_WINDOW
     #patch -Np1 < ../game-patches-testing/proton-hotfixes/proton-staging_winex11-_NET_ACTIVE_WINDOW.patch
 
-    #disable for now - not working
     # staging winex11-WM_WINDOWPOSCHANGING
     #patch -Np1 < ../game-patches-testing/proton-hotfixes/proton-staging_winex11-WM_WINDOWPOSCHANGING.patch
 
-    #disable for now in favor of staging patches
     #echo "Valve wined3d patches"
     #patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-wined3d-additions.patch
-
     echo "Valve VR patches"
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-vr.patch
     echo "Valve vulkan patches"
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-vk-bits-4.5.patch
-
-    #VKD3D-WINE
-    #echo "applying WoW vkd3d wine patches
-    #patch -Np1 < ../game-patches-testing/wine-patches/D3D12SerializeVersionedRootSignature.patch
-    #patch -Np1 < ../game-patches-testing/wine-patches/D3D12CreateVersionedRootSignatureDeserializer.patch
-
-    #WINE VULKAN
-    echo "applying winevulkan patches"
-    patch -Np1 < ../game-patches-testing/wine-patches/winevulkan-childwindow.patch
-
     echo "FS Hack integer scaling"
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton_fs_hack_integer_scaling.patch
-
-    echo "fs hack improvement PRs"
-    patch -Np1 < ../game-patches-testing/wine-patches/winevulkan-cleanup_barriers_for_fs_hack.patch
-    patch -Np1 < ../game-patches-testing/wine-patches/fshack-create_only_one_compute_pipeline_per_swap_chain.patch
 
     echo "SDL Joystick"
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-sdl_joy.patch
@@ -195,9 +185,13 @@
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-apply_LargeAddressAware_fix_for_Bayonetta.patch
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-Set_amd_ags_x64_to_built_in_for_Wolfenstein_2.patch
 
-    #disable mfhacks for now - a lot of work is being done with them in wine
+    #disable for now, there is a lot of mf work being done.
     #echo "mf hacks"
     #patch -Np1 < ../game-patches-testing/proton-hotfixes/proton-mf_hacks.patch
+
+    echo "fs hack improvement PRs"
+    patch -Np1 < ../game-patches-testing/wine-patches/winevulkan-cleanup_barriers_for_fs_hack.patch
+    patch -Np1 < ../game-patches-testing/wine-patches/fshack-create_only_one_compute_pipeline_per_swap_chain.patch
 
     #WINE CUSTOM PATCHES
     #add your own custom patch lines below
