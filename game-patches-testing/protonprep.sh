@@ -27,6 +27,7 @@
     cd vkd3d
     git reset --hard HEAD
     git clean -xdf
+    patch -Np1 < ../game-patches-testing/vkd3d-patches/wow-flicker.patch
     cd ..
 
     # Valve DXVK patches
@@ -107,10 +108,10 @@
     echo "blackops 2 fix"
     patch -Np1 < ../game-patches-testing/game-patches/blackops_2_fix.patch
 
-    echo "bcrypt fix for honor, steep, fc5"
-    patch -Np1 < ../game-patches-testing/game-patches/0001-bcrypt-Implement-BCryptSecretAgreement-with-libgcryp.patch
-    patch -Np1 < ../game-patches-testing/game-patches/0002-bcrypt-Implement-BCryptSecretAgreement-with-libgcryp.patch
-    patch -Np1 < ../game-patches-testing/game-patches/0003-bcrypt-Implement-BCryptSecretAgreement-with-libgcryp.patch
+#    echo "bcrypt fix for honor, steep, fc5"
+#    patch -Np1 < ../game-patches-testing/game-patches/0001-bcrypt-Implement-BCryptSecretAgreement-with-libgcryp.patch
+#    patch -Np1 < ../game-patches-testing/game-patches/0002-bcrypt-Implement-BCryptSecretAgreement-with-libgcryp.patch
+#    patch -Np1 < ../game-patches-testing/game-patches/0003-bcrypt-Implement-BCryptSecretAgreement-with-libgcryp.patch
 
     echo "fix steep and AC Odyssey fullscreen"
     patch -Np1 < ../game-patches-testing/wine-patches/0001-Add-some-semi-stubs-in-user32.patch
