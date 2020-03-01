@@ -154,7 +154,7 @@
     #WINE VULKAN - must be applied after fshack
     echo "applying winevulkan patches"
     patch -Np1 < ../game-patches-testing/wine-patches/winevulkan-childwindow.patch
-    echo "applying WoW vkd3d wine patches
+    echo "applying WoW vkd3d wine patches"
     patch -Np1 < ../game-patches-testing/wine-patches/D3D12SerializeVersionedRootSignature.patch
     patch -Np1 < ../game-patches-testing/wine-patches/D3D12CreateVersionedRootSignatureDeserializer.patch
 
