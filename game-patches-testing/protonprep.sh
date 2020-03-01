@@ -17,17 +17,12 @@
     patch -Np1 < ../game-patches-testing/proton-hotfixes/proton-lsteamclient_reallocate_new_interface_only_when_linux_side_changes.patch
     cd ..
 
-    # disable glib tests to prevent random make errors
-    git checkout glib
-    cd glib
-    sed -i -e '/subdir.*tests/d' {.,gio,glib}/meson.build || die
-    cd ..
-
     # VKD3D patches
     cd vkd3d
     git reset --hard HEAD
     git clean -xdf
-    patch -Np1 < ../game-patches-testing/vkd3d-patches/wow-flicker.patch
+    #WoW anti-flicker patch - disabled - causes metro exodus menu crash
+    #patch -Np1 < ../game-patches-testing/vkd3d-patches/wow-flicker.patch
     cd ..
 
     # Valve DXVK patches
@@ -66,40 +61,31 @@
     -W dinput-remap-joystick \
     -W winex11-key_translation 
 
-    #VKD3D-WINE
-    #echo "applying WoW vkd3d wine patches
-    #patch -Np1 < ../game-patches-testing/wine-patches/D3D12SerializeVersionedRootSignature.patch
-    #patch -Np1 < ../game-patches-testing/wine-patches/D3D12CreateVersionedRootSignatureDeserializer.patch
-
-    #WINE VULKAN
-    echo "applying winevulkan patches"
-    patch -Np1 < ../game-patches-testing/wine-patches/winevulkan-childwindow.patch
-
     #WINE FAUDIO
     echo "applying faudio patches"
     patch -Np1 < ../game-patches-testing/faudio-patches/faudio-ffmpeg.patch
 
     #WINE GAME PATCHES
 
-    echo "mech warrior online" - tested OK
+    echo "mech warrior online"
     patch -Np1 < ../game-patches-testing/game-patches/mwo.patch
 
-    echo "final fantasy XIV" - tested OK
+    echo "final fantasy XIV"
     patch -Np1 < ../game-patches-testing/game-patches/ffxiv-launcher.patch
 
-    echo "final fantasy XV" - tested OK
+    echo "final fantasy XV"
     patch -Np1 < ../game-patches-testing/game-patches/ffxv-steam-fix.patch
 
     echo "assetto corsa"
     patch -Np1 < ../game-patches-testing/game-patches/assettocorsa-hud.patch
 
-    echo "sword art online" - tested OK
+    echo "sword art online"
     patch -Np1 < ../game-patches-testing/game-patches/sword-art-online-gnutls.patch
 
-    echo "Jedi Fallen Order steam + origin patch" - tested OK
+    echo "Jedi Fallen Order steam + origin patch"
     patch -Np1 < ../game-patches-testing/game-patches/steam-origin-JFO.patch.patch
 
-    echo "origin downloads fix" - tested OK
+    echo "origin downloads fix" 
     patch -Np1 < ../game-patches-testing/game-patches/origin-downloads_fix.patch
 
     echo "monster hunter world fix"
@@ -107,11 +93,6 @@
 
     echo "blackops 2 fix"
     patch -Np1 < ../game-patches-testing/game-patches/blackops_2_fix.patch
-
-    echo "bcrypt fix for honor, steep, fc5"
-    patch -Np1 < ../game-patches-testing/game-patches/0001-bcrypt-Implement-BCryptSecretAgreement-with-libgcryp.patch
-    patch -Np1 < ../game-patches-testing/game-patches/0002-bcrypt-Implement-BCryptSecretAgreement-with-libgcryp.patch
-    patch -Np1 < ../game-patches-testing/game-patches/0003-bcrypt-Implement-BCryptSecretAgreement-with-libgcryp.patch
 
     echo "fix steep and AC Odyssey fullscreen"
     patch -Np1 < ../game-patches-testing/wine-patches/0001-Add-some-semi-stubs-in-user32.patch
@@ -155,10 +136,10 @@
     # staging winex11-MWM_Decorations
     patch -Np1 < ../game-patches-testing/proton-hotfixes/proton-staging_winex11-MWM_Decorations.patch
 
-    # staging winex11-_NET_ACTIVE_WINDOW
+    # staging winex11-_NET_ACTIVE_WINDOW - disabled, currently not working
     #patch -Np1 < ../game-patches-testing/proton-hotfixes/proton-staging_winex11-_NET_ACTIVE_WINDOW.patch
 
-    # staging winex11-WM_WINDOWPOSCHANGING
+    # staging winex11-WM_WINDOWPOSCHANGING - disabled, currently not working
     #patch -Np1 < ../game-patches-testing/proton-hotfixes/proton-staging_winex11-WM_WINDOWPOSCHANGING.patch
 
     #echo "Valve wined3d patches"
@@ -169,6 +150,13 @@
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-vk-bits-4.5.patch
     echo "FS Hack integer scaling"
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton_fs_hack_integer_scaling.patch
+
+    #WINE VULKAN - must be applied after fshack
+    echo "applying winevulkan patches"
+    patch -Np1 < ../game-patches-testing/wine-patches/winevulkan-childwindow.patch
+    echo "applying WoW vkd3d wine patches
+    patch -Np1 < ../game-patches-testing/wine-patches/D3D12SerializeVersionedRootSignature.patch
+    patch -Np1 < ../game-patches-testing/wine-patches/D3D12CreateVersionedRootSignatureDeserializer.patch
 
     echo "SDL Joystick"
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-sdl_joy.patch
@@ -192,6 +180,7 @@
     echo "fs hack improvement PRs"
     patch -Np1 < ../game-patches-testing/wine-patches/winevulkan-cleanup_barriers_for_fs_hack.patch
     patch -Np1 < ../game-patches-testing/wine-patches/fshack-create_only_one_compute_pipeline_per_swap_chain.patch
+    patch -Np1 < ../game-patches-testing/wine-patches/winevulkan_implement_Contrast_Adaptive_Sharpening_scaling_in_fshack.patch
 
     #WINE CUSTOM PATCHES
     #add your own custom patch lines below

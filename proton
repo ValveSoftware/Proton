@@ -438,6 +438,7 @@ class Session:
         self.env.setdefault("WINEDEBUG", "-all")
         self.env.setdefault("DXVK_LOG_LEVEL", "none")
         self.env.setdefault("VKD3D_DEBUG", "none")
+        self.env.setdefault("WINE_FULLSCREEN_CAS_SCALING", "1")
 
         #default wine-mono override for FNA games
         self.env.setdefault("WINE_MONO_OVERRIDES", "Microsoft.Xna.Framework.*,Gac=n")
