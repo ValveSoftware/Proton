@@ -75,8 +75,8 @@ index 63665fb7a6f..36e2cc54d99 100644
          TRACE("blitting directly to swapchain images\n");
  
 -    shaderInfo.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
--    shaderInfo.codeSize = sizeof(blit_comp_spv);
--    shaderInfo.pCode = blit_comp_spv;
+-    shaderInfo.codeSize = swapchain->fs_hack_cas ? sizeof(cas_comp_spv) : sizeof(blit_comp_spv);
+-    shaderInfo.pCode = swapchain->fs_hack_cas ? cas_comp_spv : blit_comp_spv;
 -
 -    res = device->funcs.p_vkCreateShaderModule(device->device, &shaderInfo, NULL, &shaderModule);
 -    if(res != VK_SUCCESS){

@@ -151,13 +151,6 @@
     echo "FS Hack integer scaling"
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton_fs_hack_integer_scaling.patch
 
-    #WINE VULKAN - must be applied after fshack
-    echo "applying winevulkan patches"
-    patch -Np1 < ../game-patches-testing/wine-patches/winevulkan-childwindow.patch
-    echo "applying WoW vkd3d wine patches"
-    patch -Np1 < ../game-patches-testing/wine-patches/D3D12SerializeVersionedRootSignature.patch
-    patch -Np1 < ../game-patches-testing/wine-patches/D3D12CreateVersionedRootSignatureDeserializer.patch
-
     echo "SDL Joystick"
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-sdl_joy.patch
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-sdl_joy_2.patch
@@ -179,8 +172,16 @@
 
     echo "fs hack improvement PRs"
     patch -Np1 < ../game-patches-testing/wine-patches/winevulkan-cleanup_barriers_for_fs_hack.patch
-    patch -Np1 < ../game-patches-testing/wine-patches/fshack-create_only_one_compute_pipeline_per_swap_chain.patch
     patch -Np1 < ../game-patches-testing/wine-patches/winevulkan_implement_Contrast_Adaptive_Sharpening_scaling_in_fshack.patch
+    patch -Np1 < ../game-patches-testing/wine-patches/fshack-create_only_one_compute_pipeline_per_swap_chain.patch
+
+    #WINE VULKAN - must be applied after fshack
+    echo "applying winevulkan patches"
+    patch -Np1 < ../game-patches-testing/wine-patches/winevulkan-childwindow.patch
+    echo "applying WoW vkd3d wine patches"
+    patch -Np1 < ../game-patches-testing/wine-patches/D3D12SerializeVersionedRootSignature.patch
+    patch -Np1 < ../game-patches-testing/wine-patches/D3D12CreateVersionedRootSignatureDeserializer.patch
+
 
     #WINE CUSTOM PATCHES
     #add your own custom patch lines below
