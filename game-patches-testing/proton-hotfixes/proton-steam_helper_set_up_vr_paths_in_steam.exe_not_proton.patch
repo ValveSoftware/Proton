@@ -1,13 +1,14 @@
-From b4b985cb7aea64db0802eb62a5244fae6caf2dcd Mon Sep 17 00:00:00 2001
+From a7bfc01190c671f3ae8016929758b8e6b0046248 Mon Sep 17 00:00:00 2001
 From: Andrew Eikum <aeikum@codeweavers.com>
 Date: Wed, 26 Feb 2020 10:50:10 -0600
 Subject: [PATCH] steam_helper: Set up VR paths in steam.exe, not proton
 
 This speeds up game launch times.
-diff --git a/steam.cpp b/steam.cpp
-index 37e7568..0454a14 100644
---- a/steam.cpp
-+++ b/steam.cpp
+---
+diff --git a/steam_helper/steam.cpp b/steam_helper/steam.cpp
+index 9dcc891..f4eb2cb 100644
+--- a/steam_helper/steam.cpp
++++ b/steam_helper/steam.cpp
 @@ -1,5 +1,5 @@
  /*
 - * Copyright (c) 2019, Valve Corporation
@@ -303,8 +304,8 @@ index 37e7568..0454a14 100644
 +
  static WCHAR *strchrW(WCHAR *h, WCHAR n)
  {
-     while(*h)
-@@ -292,6 +560,8 @@ int main(int argc, char *argv[])
+     do
+@@ -293,6 +561,8 @@ int main(int argc, char *argv[])
      {
          HANDLE child;
  

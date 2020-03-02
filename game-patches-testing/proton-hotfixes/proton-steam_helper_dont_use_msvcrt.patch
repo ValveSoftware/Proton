@@ -1,4 +1,4 @@
-From 03178b4ed8f42cc5e2d4c49440c72ebf937eff1d Mon Sep 17 00:00:00 2001
+From 4c95ad273e19cb2d2808060d237ce08e58e50711 Mon Sep 17 00:00:00 2001
 From: Andrew Eikum <aeikum@codeweavers.com>
 Date: Wed, 26 Feb 2020 11:08:35 -0600
 Subject: [PATCH] steam_helper: Don't use msvcrt
@@ -7,21 +7,44 @@ We need access to linux crt functions (like getenv()), so disallow use
 of msvcrt. Notably, linux crt wchar functions are _not_ compatible with
 Windows WCHAR strings.
 ---
-diff --git a/steam.cpp b/steam.cpp
-index 8e5b977..37e7568 100644
---- a/steam.cpp
-+++ b/steam.cpp
-@@ -117,9 +117,19 @@ static void setup_steam_registry(void)
+ build/makefile_base.mak |  3 +--
+ steam_helper/steam.cpp  | 21 ++++++++++++++++-----
+ 2 files changed, 17 insertions(+), 7 deletions(-)
+
+diff --git a/build/makefile_base.mak b/build/makefile_base.mak
+index 5ac0fef..15409ec 100644
+--- a/build/makefile_base.mak
++++ b/build/makefile_base.mak
+@@ -1127,12 +1127,11 @@ $(STEAMEXE_CONFIGURE_FILES): $(STEAMEXE_SYN) $(MAKEFILE_DEP) | $(STEAMEXE_OBJ) $
+ 			-I"../$(TOOLS_DIR32)"/include/ \
+ 			-I"../$(TOOLS_DIR32)"/include/wine/ \
+ 			-I"../$(TOOLS_DIR32)"/include/wine/windows/ \
+-			-I"../$(TOOLS_DIR32)"/include/wine/msvcrt/ \
+ 			-I"../$(SRCDIR)"/lsteamclient/steamworks_sdk_142/ \
+ 			-L"../$(TOOLS_DIR32)"/lib/ \
+ 			-L"../$(TOOLS_DIR32)"/lib/wine/ \
+ 			-L"../$(SRCDIR)"/steam_helper/ \
+-			--guiexe ../$(STEAMEXE_SYN) && \
++			--guiexe --nomsvcrt ../$(STEAMEXE_SYN) && \
+ 		cp ../$(STEAMEXE_SYN)/Makefile . && \
+ 		echo >> ./Makefile 'SRCDIR := ../$(STEAMEXE_SYN)' && \
+ 		echo >> ./Makefile 'vpath % $$(SRCDIR)' && \
+diff --git a/steam_helper/steam.cpp b/steam_helper/steam.cpp
+index 8e5b977..9dcc891 100644
+--- a/steam_helper/steam.cpp
++++ b/steam_helper/steam.cpp
+@@ -117,9 +117,20 @@ static void setup_steam_registry(void)
      SteamAPI_Shutdown();
  }
  
 +static WCHAR *strchrW(WCHAR *h, WCHAR n)
 +{
-+    while(*h)
++    do
 +    {
-+        if(*h == n) return h;
-+        ++h;
-+    }
++        if(*h == n)
++            return h;
++    } while (*h++);
++
 +    return NULL;
 +}
 +
@@ -32,7 +55,7 @@ index 8e5b977..37e7568 100644
      int odd;
      while (end)
      {
-@@ -132,7 +142,7 @@ static WCHAR *find_quote(WCHAR *str)
+@@ -132,7 +143,7 @@ static WCHAR *find_quote(WCHAR *str)
          }
          if (!odd)
              return end;
@@ -41,7 +64,7 @@ index 8e5b977..37e7568 100644
      }
      return NULL;
  }
-@@ -157,7 +167,7 @@ static HANDLE run_process(void)
+@@ -157,7 +168,7 @@ static HANDLE run_process(void)
      }
      else
      {
@@ -50,7 +73,7 @@ index 8e5b977..37e7568 100644
      }
      if (!cmdline)
      {
-@@ -196,9 +206,9 @@ static HANDLE run_process(void)
+@@ -196,9 +207,9 @@ static HANDLE run_process(void)
          else
          {
              start = cmdline;

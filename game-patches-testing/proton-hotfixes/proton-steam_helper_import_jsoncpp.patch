@@ -1,22 +1,22 @@
-From be7c4e4b17d1142591fd22add5cce79ccb030129 Mon Sep 17 00:00:00 2001
+From fd77c243637b5c787510c6edcc5ae35d38262f78 Mon Sep 17 00:00:00 2001
 From: Andrew Eikum <aeikum@codeweavers.com>
 Date: Wed, 26 Feb 2020 10:49:35 -0600
 Subject: [PATCH] steam_helper: Import jsoncpp
 
 ---
- json/json-forwards.h |  284 ++
- json/json.h          | 2077 ++++++++++++
- jsoncpp.cpp          | 5266 +++++++++++++++++++++++++++++
+ steam_helper/json/json-forwards.h |  284 ++
+ steam_helper/json/json.h          | 2077 ++++++++++++
+ steam_helper/jsoncpp.cpp          | 5266 +++++++++++++++++++++++++++++
  3 files changed, 7627 insertions(+)
- create mode 100644 json/json-forwards.h
- create mode 100644 json/json.h
- create mode 100644 jsoncpp.cpp
+ create mode 100644 steam_helper/json/json-forwards.h
+ create mode 100644 steam_helper/json/json.h
+ create mode 100644 steam_helper/jsoncpp.cpp
 
-diff --git a/json/json-forwards.h b/json/json-forwards.h
+diff --git a/steam_helper/json/json-forwards.h b/steam_helper/json/json-forwards.h
 new file mode 100644
 index 0000000..910c7de
 --- /dev/null
-+++ b/json/json-forwards.h
++++ b/steam_helper/json/json-forwards.h
 @@ -0,0 +1,284 @@
 +/// Json-cpp amalgated forward header (http://jsoncpp.sourceforge.net/).
 +/// It is intended to be used with #include "json/json-forwards.h"
@@ -302,11 +302,11 @@ index 0000000..910c7de
 +
 +
 +#endif //ifndef JSON_FORWARD_AMALGATED_H_INCLUDED
-diff --git a/json/json.h b/json/json.h
+diff --git a/steam_helper/json/json.h b/steam_helper/json/json.h
 new file mode 100644
 index 0000000..d27f65d
 --- /dev/null
-+++ b/json/json.h
++++ b/steam_helper/json/json.h
 @@ -0,0 +1,2077 @@
 +/// Json-cpp amalgated header (http://jsoncpp.sourceforge.net/).
 +/// It is intended to be used with #include "json/json.h"
@@ -2385,11 +2385,11 @@ index 0000000..d27f65d
 +
 +
 +#endif //ifndef JSON_AMALGATED_H_INCLUDED
-diff --git a/jsoncpp.cpp b/jsoncpp.cpp
+diff --git a/steam_helper/jsoncpp.cpp b/steam_helper/jsoncpp.cpp
 new file mode 100644
 index 0000000..e67d353
 --- /dev/null
-+++ b/jsoncpp.cpp
++++ b/steam_helper/jsoncpp.cpp
 @@ -0,0 +1,5266 @@
 +/// Json-cpp amalgated source (http://jsoncpp.sourceforge.net/).
 +/// It is intended to be used with #include "json/json.h"

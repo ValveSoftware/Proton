@@ -2,6 +2,7 @@
     # steam_helper patches
     git checkout steam_helper
     cd steam_helper
+    
     patch -Np1 < ../game-patches-testing/proton-hotfixes/proton-steam.exe_create_steam_for_windows_named_event.patch
     patch -Np1 < ../game-patches-testing/proton-hotfixes/proton-steam_helper_dont_use_msvcrt.patch
     patch -Np1 < ../game-patches-testing/proton-hotfixes/proton-steam_helper_import_jsoncpp.patch
@@ -108,8 +109,8 @@
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-protonify_staging.patch
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-LAA_staging.patch
 
-    echo "mk11 patch"
-    patch -Np1 < ../game-patches-testing/game-patches/mk11.patch
+    #echo "mk11 patch"
+    #patch -Np1 < ../game-patches-testing/game-patches/mk11.patch
 
     echo "clock monotonic, amd ags, hide prefix update"
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-use_clock_monotonic.patch
@@ -166,9 +167,8 @@
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-apply_LargeAddressAware_fix_for_Bayonetta.patch
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-Set_amd_ags_x64_to_built_in_for_Wolfenstein_2.patch
 
-    #disable for now, there is a lot of mf work being done.
-    #echo "mf hacks"
-    #patch -Np1 < ../game-patches-testing/proton-hotfixes/proton-mf_hacks.patch
+    echo "mf hacks"
+    patch -Np1 < ../game-patches-testing/proton-hotfixes/proton-mf_hacks.patch
 
     echo "fs hack improvement PRs"
     patch -Np1 < ../game-patches-testing/wine-patches/winevulkan-cleanup_barriers_for_fs_hack.patch
