@@ -4,19 +4,11 @@ Date: Wed, 26 Feb 2020 10:49:35 -0600
 Subject: [PATCH] steam_helper: Import jsoncpp
 
 ---
- steam_helper/json/json-forwards.h |  284 ++
- steam_helper/json/json.h          | 2077 ++++++++++++
- steam_helper/jsoncpp.cpp          | 5266 +++++++++++++++++++++++++++++
- 3 files changed, 7627 insertions(+)
- create mode 100644 steam_helper/json/json-forwards.h
- create mode 100644 steam_helper/json/json.h
- create mode 100644 steam_helper/jsoncpp.cpp
-
-diff --git a/steam_helper/json/json-forwards.h b/steam_helper/json/json-forwards.h
+diff --git a/json/json-forwards.h b/json/json-forwards.h
 new file mode 100644
 index 0000000..910c7de
 --- /dev/null
-+++ b/steam_helper/json/json-forwards.h
++++ b/json/json-forwards.h
 @@ -0,0 +1,284 @@
 +/// Json-cpp amalgated forward header (http://jsoncpp.sourceforge.net/).
 +/// It is intended to be used with #include "json/json-forwards.h"
@@ -302,11 +294,11 @@ index 0000000..910c7de
 +
 +
 +#endif //ifndef JSON_FORWARD_AMALGATED_H_INCLUDED
-diff --git a/steam_helper/json/json.h b/steam_helper/json/json.h
+diff --git a/json/json.h b/json/json.h
 new file mode 100644
 index 0000000..d27f65d
 --- /dev/null
-+++ b/steam_helper/json/json.h
++++ b/json/json.h
 @@ -0,0 +1,2077 @@
 +/// Json-cpp amalgated header (http://jsoncpp.sourceforge.net/).
 +/// It is intended to be used with #include "json/json.h"
@@ -2385,11 +2377,11 @@ index 0000000..d27f65d
 +
 +
 +#endif //ifndef JSON_AMALGATED_H_INCLUDED
-diff --git a/steam_helper/jsoncpp.cpp b/steam_helper/jsoncpp.cpp
+diff --git a/jsoncpp.cpp b/jsoncpp.cpp
 new file mode 100644
 index 0000000..e67d353
 --- /dev/null
-+++ b/steam_helper/jsoncpp.cpp
++++ b/jsoncpp.cpp
 @@ -0,0 +1,5266 @@
 +/// Json-cpp amalgated source (http://jsoncpp.sourceforge.net/).
 +/// It is intended to be used with #include "json/json.h"

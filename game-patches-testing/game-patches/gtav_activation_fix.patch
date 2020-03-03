@@ -1,0 +1,20 @@
+From 66e9185710015fa4eff0677a3cb0bba47f992d78 Mon Sep 17 00:00:00 2001
+From: Tk-Glitch <ti3nou@gmail.com>
+Date: Tue, 3 Mar 2020 01:20:46 +0100
+Subject: Prevent create_bios_key to run
+ Workaround for Grand Theft Auto 5 activation timeout since 68a01c8c
+
+
+diff --git a/programs/wineboot/wineboot.c b/programs/wineboot/wineboot.c
+--- a/programs/wineboot/wineboot.c
++++ b/programs/wineboot/wineboot.c
+@@ -679,9 +679,6 @@ static void create_hardware_registry_keys(void)
+             RegCloseKey( hkey );
+         }
+     }
+-
+-    create_bios_key( system_key );
+-
+     RegCloseKey( fpu_key );
+     RegCloseKey( cpu_key );
+     RegCloseKey( system_key );

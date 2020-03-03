@@ -5,10 +5,10 @@ Subject: [PATCH] steam_helper: Set up VR paths in steam.exe, not proton
 
 This speeds up game launch times.
 ---
-diff --git a/steam_helper/steam.cpp b/steam_helper/steam.cpp
+diff --git a/steam.cpp b/steam.cpp
 index 9dcc891..f4eb2cb 100644
---- a/steam_helper/steam.cpp
-+++ b/steam_helper/steam.cpp
+--- a/steam.cpp
++++ b/steam.cpp
 @@ -1,5 +1,5 @@
  /*
 - * Copyright (c) 2019, Valve Corporation

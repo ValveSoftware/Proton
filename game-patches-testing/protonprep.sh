@@ -22,8 +22,8 @@
     cd vkd3d
     git reset --hard HEAD
     git clean -xdf
-    #WoW anti-flicker patch - disabled - causes metro exodus menu crash
-    #patch -Np1 < ../game-patches-testing/vkd3d-patches/wow-flicker.patch
+    #WoW anti-flicker patch
+    patch -Np1 < ../game-patches-testing/vkd3d-patches/Support_RS_1.0_Volatile.patch
     cd ..
 
     # Valve DXVK patches
@@ -84,7 +84,13 @@
     patch -Np1 < ../game-patches-testing/game-patches/sword-art-online-gnutls.patch
 
     echo "Jedi Fallen Order steam + origin patch"
-    patch -Np1 < ../game-patches-testing/game-patches/steam-origin-JFO.patch.patch
+    patch -Np1 < ../game-patches-testing/game-patches/steam-origin-JFO.patch
+
+    echo "gta v activation fix"
+    patch -Np1 < ../game-patches-testing/game-patches/gtav_activation_fix.patch
+
+    echo "detroit become human patch"
+    patch -Np1 < ../game-patches-testing/game-patches/detroit_BH.patch
 
     echo "origin downloads fix" 
     patch -Np1 < ../game-patches-testing/game-patches/origin-downloads_fix.patch
