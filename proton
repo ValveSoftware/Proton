@@ -377,6 +377,7 @@ class Session:
             self.compat_config = set(os.environ["STEAM_COMPAT_CONFIG"].split(","))
         else:
             self.compat_config = set()
+        self.compat_config.add("forcelgadd")
 
     def init_wine(self):
         if "HOST_LC_ALL" in self.env and len(self.env["HOST_LC_ALL"]) > 0:
@@ -467,9 +468,6 @@ class Session:
             self.env["__GL_ExtensionStringVersion"] = "17700"
 
         if "forcelgadd" in self.compat_config:
-            #forcelgadd should be used just for testing whether a game is helped by
-            #setting LARGE_ADDRESS_AWARE. If it does, then add an AppDefault in the
-            #registry, so that it doesn't impact every executable in the prefix.
             self.env["WINE_LARGE_ADDRESS_AWARE"] = "1"
 
         if "SteamGameId" in self.env:
