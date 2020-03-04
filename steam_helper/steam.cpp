@@ -493,7 +493,7 @@ static HANDLE run_process(BOOL *should_await)
     WCHAR *cmdline = GetCommandLineW();
     STARTUPINFOW si = { sizeof(si) };
     PROCESS_INFORMATION pi;
-    DWORD flags = 0;
+    DWORD flags = CREATE_UNICODE_ENVIRONMENT;
     BOOL use_shell_execute = TRUE;
 
     /* skip argv[0] */
