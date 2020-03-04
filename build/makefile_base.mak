@@ -750,7 +750,6 @@ GST_GOOD_MESON_ARGS := \
 	-Dcairo=disabled \
 	-Dcutter=disabled \
 	-Ddebugutils=disabled \
-	-Ddeinterlace=disabled \
 	-Ddtmf=disabled \
 	-Deffectv=disabled \
 	-Dequalizer=disabled \
