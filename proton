@@ -377,7 +377,10 @@ class Session:
             self.compat_config = set(os.environ["STEAM_COMPAT_CONFIG"].split(","))
         else:
             self.compat_config = set()
-        self.compat_config.add("forcelgadd")
+
+        #turn forcelgadd on by default unless it is disabled in compat config
+        if not "noforcelgadd" in self.compat_config:
+            self.compat_config.add("forcelgadd")
 
     def init_wine(self):
         if "HOST_LC_ALL" in self.env and len(self.env["HOST_LC_ALL"]) > 0:
