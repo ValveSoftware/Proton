@@ -43,9 +43,11 @@ def file_is_wine_fake_dll(path):
 
 def makedirs(path):
     try:
+        if os.path.lexists(path):
+            return
+        
         os.makedirs(path)
-    except OSError:
-        #already exists
+    except FileExistsError:
         pass
 
 def try_copy(src, dst):
@@ -163,10 +165,11 @@ class CompatData:
                         dirs.append(path)
             for d in dirs:
                 try:
-                    os.rmdir(d)
-                except OSError:
-                    #not empty
-                    pass
+                    if not any(os.scandir(d)):
+                        os.rmdir(d)
+                except OSError as e:
+                    if e.errno != errno.ENOTEMPTY:
+                        raise
 
         os.remove(self.tracked_files_file)
         os.remove(self.version_file)
@@ -255,7 +258,7 @@ class CompatData:
                     rel_dir = rel_dir + "/"
                 dst_dir = src_dir.replace(g_proton.default_pfx_dir, self.prefix_dir, 1)
                 if not os.path.exists(dst_dir):
-                    os.makedirs(dst_dir)
+                    makedirs(dst_dir)
                     tracked_files.write(rel_dir + "\n")
                 for dir_ in dirs:
                     src_file = os.path.join(src_dir, dir_)
