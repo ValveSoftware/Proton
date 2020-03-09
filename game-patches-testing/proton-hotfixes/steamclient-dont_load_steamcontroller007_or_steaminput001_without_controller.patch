@@ -1,7 +1,7 @@
-diff --git a/lsteamclient/steamclient_main.c b/lsteamclient/steamclient_main.c
+diff --git a/steamclient_main.c b/steamclient_main.c
 index e0eac01..345e7cd 100644
---- a/lsteamclient/steamclient_main.c
-+++ b/lsteamclient/steamclient_main.c
+--- a/steamclient_main.c
++++ b/steamclient_main.c
 @@ -4,6 +4,7 @@
  #include <dlfcn.h>
  #include <limits.h>
