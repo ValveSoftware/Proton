@@ -3316,318 +3316,6 @@ index 639e032f629..dbd9577d6bc 100644
              interlocked_xchg( &wait_work_item->CallbackInProgress, FALSE );
  
              if (wait_work_item->Flags & WT_EXECUTEONLYONCE)
-From 30440e42234e781932bb436fa53394a465358829 Mon Sep 17 00:00:00 2001
-From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
-Date: Wed, 9 Oct 2019 09:47:09 +0200
-Subject: [PATCH] winegcc: Strip symbols before the make_wine_builtin call.
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-
-Wine-Bug: https://bugs.winehq.org/show_bug.cgi?id=47718
-Signed-off-by: Rémi Bernon <rbernon@codeweavers.com>
----
- tools/winegcc/winegcc.c | 27 ++++++++++++++++++++++-----
- 1 file changed, 22 insertions(+), 5 deletions(-)
-
-diff --git a/tools/winegcc/winegcc.c b/tools/winegcc/winegcc.c
-index 3d1817a36bb..899a3b3d5d9 100644
---- a/tools/winegcc/winegcc.c
-+++ b/tools/winegcc/winegcc.c
-@@ -1162,9 +1166,21 @@ static void build(struct options* opts)
- 
-     if (libgcc) strarray_add(link_args, libgcc);
- 
-+    if (opts->target_platform != PLATFORM_APPLE && !is_pe && opts->strip)
-+        strarray_add(link_args, "-s");
-+
-     spawn(opts->prefix, link_args, 0);
-     strarray_free (link_args);
- 
-+    if (opts->target_platform != PLATFORM_APPLE && is_pe && opts->strip)
-+    {
-+        strarray *strip_args = strarray_fromstring(build_tool_name(opts, "strip", "strip"), " ");
-+        strarray_add(strip_args, "--strip-all");
-+        strarray_add(strip_args, output_path);
-+        spawn(opts->prefix, strip_args, 1);
-+        strarray_free(strip_args);
-+    }
-+
-     if (is_pe && opts->wine_builtin) make_wine_builtin( opts, output_path );
- 
-     /* set the base address with prelink if linker support is not present */
-@@ -1555,12 +1571,8 @@ int main(int argc, char **argv)
- 			opts.shared = 1;
-                         raw_compiler_arg = raw_linker_arg = 0;
- 		    }
--                    else if (strcmp("-s", argv[i]) == 0 && opts.target_platform == PLATFORM_APPLE)
-+                    else if (strcmp("-s", argv[i]) == 0)
-                     {
--                        /* On Mac, change -s into -Wl,-x. ld's -s switch
--                         * is deprecated, and it doesn't work on Tiger with
--                         * MH_BUNDLEs anyway
--                         */
-                         opts.strip = 1;
-                         raw_linker_arg = 0;
-                     }
-@@ -1595,6 +1607,11 @@ int main(int argc, char **argv)
-                                 opts.wine_builtin = 1;
-                                 continue;
-                             }
-+                            if (!strcmp(Wl->base[j], "--strip-all") || !strcmp(Wl->base[j], "-s"))
-+                            {
-+                                opts.strip = 1;
-+                                continue;
-+                            }
-                             if (!strcmp(Wl->base[j], "--subsystem") && j < Wl->size - 1)
-                             {
-                                 opts.subsystem = strdup( Wl->base[++j] );
-From 9b984a81aa58135001a18e8cef387beebfcd2bbb Mon Sep 17 00:00:00 2001
-From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
-Date: Wed, 9 Oct 2019 09:47:10 +0200
-Subject: [PATCH] winegcc: Support -Wl, --strip-debug for stripping debug info
- only.
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-
-Signed-off-by: Rémi Bernon <rbernon@codeweavers.com>
----
- tools/winegcc/winegcc.c | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
-
-diff --git a/tools/winegcc/winegcc.c b/tools/winegcc/winegcc.c
-index 899a3b3d5d9..6e78b17e26c 100644
---- a/tools/winegcc/winegcc.c
-+++ b/tools/winegcc/winegcc.c
-@@ -208,6 +208,7 @@ struct options
-     int wine_builtin;
-     int unwind_tables;
-     int strip;
-+    int strip_debug;
-     int pic;
-     const char* wine_objdir;
-     const char* output_name;
-@@ -1168,6 +1169,8 @@ static void build(struct options* opts)
- 
-     if (opts->target_platform != PLATFORM_APPLE && !is_pe && opts->strip)
-         strarray_add(link_args, "-s");
-+    else if (!is_pe && opts->strip_debug)
-+        strarray_add(link_args, "-Wl,--strip-debug");
- 
-     spawn(opts->prefix, link_args, 0);
-     strarray_free (link_args);
-@@ -1180,6 +1183,14 @@ static void build(struct options* opts)
-         spawn(opts->prefix, strip_args, 1);
-         strarray_free(strip_args);
-     }
-+    else if (is_pe && opts->strip_debug)
-+    {
-+        strarray *strip_args = strarray_fromstring(build_tool_name(opts, "strip", "strip"), " ");
-+        strarray_add(strip_args, "--strip-debug");
-+        strarray_add(strip_args, output_path);
-+        spawn(opts->prefix, strip_args, 1);
-+        strarray_free(strip_args);
-+    }
- 
-     if (is_pe && opts->wine_builtin) make_wine_builtin( output_path );
- 
-@@ -1612,6 +1623,11 @@ int main(int argc, char **argv)
-                                 opts.strip = 1;
-                                 continue;
-                             }
-+                            if (!strcmp(Wl->base[j], "--strip-debug") || !strcmp(Wl->base[j], "-S"))
-+                            {
-+                                opts.strip_debug = 1;
-+                                continue;
-+                            }
-                             if (!strcmp(Wl->base[j], "--subsystem") && j < Wl->size - 1)
-                             {
-                                 opts.subsystem = strdup( Wl->base[++j] );
-From 9d912de1779a240f064c41b889d46a98982957e9 Mon Sep 17 00:00:00 2001
-From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
-Date: Wed, 9 Oct 2019 09:47:11 +0200
-Subject: [PATCH] winegcc: Add support for splitting PE debug sections to
- external ELF.
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-
-Linux perf tool cannot parse PE files for debug information, but it also
-looks for external debug info alongside to the binaries it detects.
-
-We can use this feature to provide DWARF information for PE files by
-splitting the sections to a separate ELF that perf will understand.
-
-This could also be used to support different debug information formats,
-or to support split-dwarf option on ELF binaries.
-
-Signed-off-by: Rémi Bernon <rbernon@codeweavers.com>
----
- tools/winegcc/utils.c        | 47 ++++++++++++++++++++++++++++++++----
- tools/winegcc/utils.h        |  3 +++
- tools/winegcc/winegcc.c      | 33 +++++++++++++++++++++++++
- tools/winegcc/winegcc.man.in |  4 +++
- 4 files changed, 82 insertions(+), 5 deletions(-)
-
-diff --git a/tools/winegcc/utils.c b/tools/winegcc/utils.c
-index a124ef2d342..0fc165d8cc0 100644
---- a/tools/winegcc/utils.c
-+++ b/tools/winegcc/utils.c
-@@ -179,15 +179,36 @@ char* strarray_tostring(const strarray* arr, const char* sep)
-     return str;
- }
- 
-+char* get_dirname(const char* file)
-+{
-+    char *dir_name, *p;
-+
-+    dir_name = xstrdup(file);
-+    if ((p = strrchr(dir_name, '/'))) *p = 0;
-+    else
-+    {
-+        free(dir_name);
-+        dir_name = xstrdup(".");
-+    }
-+
-+    return dir_name;
-+}
-+
-+char* get_filename(const char* file)
-+{
-+    const char *file_name;
-+
-+    if ((file_name = strrchr(file, '/'))) file_name++;
-+    else file_name = file;
-+
-+    return xstrdup(file_name);
-+}
-+
- char* get_basename(const char* file)
- {
--    const char* name;
-     char *base_name, *p;
- 
--    if ((name = strrchr(file, '/'))) name++;
--    else name = file;
--
--    base_name = strdup(name);
-+    base_name = get_filename(file);
-     if ((p = strrchr(base_name, '.'))) *p = 0;
- 
-     return base_name;
-@@ -208,6 +229,22 @@ void create_file(const char* name, int mode, const char* fmt, ...)
-     chmod(name, mode);
- }
- 
-+void create_dir( const char *dir )
-+{
-+    char *p, *path;
-+
-+    p = path = xstrdup( dir );
-+    while ((p = strchr( p, '/' )))
-+    {
-+        *p = 0;
-+        if (mkdir( path, 0755 ) == -1 && errno != EEXIST) error( "mkdir %s", path );
-+        *p++ = '/';
-+        while (*p == '/') p++;
-+    }
-+    if (mkdir( path, 0755 ) == -1 && errno != EEXIST) error( "mkdir %s", path );
-+    free( path );
-+}
-+
- file_type get_file_type(const char* filename)
- {
-     /* see tools/winebuild/res32.c: check_header for details */
-diff --git a/tools/winegcc/utils.h b/tools/winegcc/utils.h
-index 536fb2d2f97..c924a53627b 100644
---- a/tools/winegcc/utils.h
-+++ b/tools/winegcc/utils.h
-@@ -78,8 +78,11 @@ typedef enum {
-     file_arh, file_dll, file_so, file_def, file_spec
- } file_type;
- 
-+char* get_dirname(const char* file);
-+char* get_filename(const char* file);
- char* get_basename(const char* file);
- void create_file(const char* name, int mode, const char* fmt, ...);
-+void create_dir( const char *dir );
- file_type get_file_type(const char* filename);
- file_type get_lib_type(enum target_platform platform, strarray* path, const char *library,
-                        const char *suffix, char** file);
-diff --git a/tools/winegcc/winegcc.c b/tools/winegcc/winegcc.c
-index 6e78b17e26c..4fe1efa4e2b 100644
---- a/tools/winegcc/winegcc.c
-+++ b/tools/winegcc/winegcc.c
-@@ -209,6 +209,7 @@ struct options
-     int unwind_tables;
-     int strip;
-     int strip_debug;
-+    int split_dwarf;
-     int pic;
-     const char* wine_objdir;
-     const char* output_name;
-@@ -1175,6 +1176,31 @@ static void build(struct options* opts)
-     spawn(opts->prefix, link_args, 0);
-     strarray_free (link_args);
- 
-+    if (build_platform != PLATFORM_APPLE && is_pe && opts->split_dwarf)
-+    {
-+        char const *bfd_format = (opts->target_cpu == CPU_x86_64) ? "-Oelf64-x86-64" : "-Oelf32-i386";
-+        strarray *objcopy_args = strarray_fromstring(build_tool_name(opts, "objcopy", "objcopy"), " ");
-+        char *debug_path, *file_name;
-+
-+        file_name = get_filename(output_path);
-+        debug_path = get_dirname(output_path);
-+        debug_path = realloc(debug_path, strlen(debug_path) + strlen("/.debug/") + strlen(file_name) + 1);
-+
-+        strcat(debug_path, "/.debug/");
-+        create_dir(debug_path);
-+
-+        strcat(debug_path, file_name);
-+        free(file_name);
-+
-+        strarray_add(objcopy_args, bfd_format);
-+        strarray_add(objcopy_args, "--only-keep-debug");
-+        strarray_add(objcopy_args, output_path);
-+        strarray_add(objcopy_args, debug_path);
-+        spawn(opts->prefix, objcopy_args, 1);
-+        strarray_free(objcopy_args);
-+        free(debug_path);
-+    }
-+
-     if (opts->target_platform != PLATFORM_APPLE && is_pe && opts->strip)
-     {
-         strarray *strip_args = strarray_fromstring(build_tool_name(opts, "strip", "strip"), " ");
-@@ -1510,6 +1536,13 @@ int main(int argc, char **argv)
-                     else if (!strcmp("-fno-PIC", argv[i]) || !strcmp("-fno-pic", argv[i]))
-                         opts.pic = 0;
- 		    break;
-+        case 'g':
-+            if (strcmp("-gsplit-dwarf", argv[i]) == 0)
-+            {
-+                opts.split_dwarf = 1;
-+                raw_compiler_arg = 0;
-+            }
-+            break;
-                 case 'i':
-                     if (!strcmp( "-isysroot", argv[i] )) opts.isysroot = argv[i + 1];
-                     break;
-diff --git a/tools/winegcc/winegcc.man.in b/tools/winegcc/winegcc.man.in
-index 5bbb2fd58f7..c23a5c02d9c 100644
---- a/tools/winegcc/winegcc.man.in
-+++ b/tools/winegcc/winegcc.man.in
-@@ -39,6 +39,10 @@ to avoid the special behaviour.
- Override the underlying type for wchar_t to be the default for the 
- target, instead of using short unsigned int, which is the default 
- for Win32.
-+.IP \fB-gsplit-dwarf\fR
-+Split debug sections from PE files to a separate ELF binary. This can
-+be used to help tools like \fBperf\fR, that only support ELF parsing,
-+load the debug sections.
- .IP \fB-mconsole\fR
- This option passes '--subsystem console' to winebuild, to build
- console applications. It is the default.
 From 5cd65deffffad9073538acf4fd8e794ac07824a5 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
 Date: Wed, 9 Oct 2019 09:47:12 +0200
@@ -3656,133 +3344,6 @@ index 6079d1fe28b..18e7b8a913e 100644
      output( "\n" );
  
      if (spec_file && make->importlib)
-From a60f003992a889e5af7f2905f9acd9efd6a2263e Mon Sep 17 00:00:00 2001
-From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
-Date: Wed, 9 Oct 2019 09:47:13 +0200
-Subject: [PATCH] makedep: Split debug symbols on PE targets.
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-
-Signed-off-by: Rémi Bernon <rbernon@codeweavers.com>
----
- tools/makedep.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/tools/makedep.c b/tools/makedep.c
-index 18e7b8a913e..725b1bf4567 100644
---- a/tools/makedep.c
-+++ b/tools/makedep.c
-@@ -2328,6 +2328,7 @@ static void output_winegcc_command( struct makefile *make )
-         output_filename( "-b" );
-         output_filename( crosstarget );
-         output_filename( "--lib-suffix=.cross.a" );
-+        output_filename( "-gsplit-dwarf" );
-     }
-     else
-     {
-From 6c1088acb51fdfa20fcffd0ef4cf242c7af62cef Mon Sep 17 00:00:00 2001
-From: Andrew Eikum <aeikum@codeweavers.com>
-Date: Fri, 27 Sep 2019 14:08:07 -0500
-Subject: [PATCH] makedep: Add install-cross-debug target
-
-For installing ELF debug libraries.
----
- tools/makedep.c | 32 ++++++++++++++++++++++++++++----
- 1 file changed, 28 insertions(+), 4 deletions(-)
-
-diff --git a/tools/makedep.c b/tools/makedep.c
-index 725b1bf4567..dbce0b92639 100644
---- a/tools/makedep.c
-+++ b/tools/makedep.c
-@@ -126,7 +126,7 @@ static struct list files[HASH_SIZE];
- 
- static const struct strarray empty_strarray;
- 
--enum install_rules { INSTALL_LIB, INSTALL_DEV, NB_INSTALL_RULES };
-+enum install_rules { INSTALL_LIB, INSTALL_DEV, INSTALL_DEBUG, NB_INSTALL_RULES };
- 
- /* variables common to all makefiles */
- static struct strarray linguas;
-@@ -2233,8 +2233,16 @@ static void add_install_rule( struct makefile *make, const char *target,
-         strarray_exists( &top_install_lib, make->base_dir ) ||
-         strarray_exists( &top_install_lib, base_dir_path( make, target )))
-     {
--        strarray_add( &make->install_rules[INSTALL_LIB], file );
--        strarray_add( &make->install_rules[INSTALL_LIB], dest );
-+        if (*dest == 'C')
-+        {
-+            strarray_add( &make->install_rules[INSTALL_DEBUG], file );
-+            strarray_add( &make->install_rules[INSTALL_DEBUG], dest );
-+        }
-+        else
-+        {
-+            strarray_add( &make->install_rules[INSTALL_LIB], file );
-+            strarray_add( &make->install_rules[INSTALL_LIB], dest );
-+        }
-     }
-     else if (strarray_exists( &make->install_dev, target ) ||
-              strarray_exists( &top_install_dev, make->base_dir ) ||
-@@ -2385,6 +2393,10 @@ static void output_install_commands( struct makefile *make, const struct makefil
-             output( "\tSTRIPPROG=%s-strip %s -m 644 $(INSTALL_PROGRAM_FLAGS) %s %s\n",
-                     crosstarget, install_sh, obj_dir_path( make, file ), dest );
-             break;
-+        case 'C':  /* debug symbols for cross-compiled program */
-+            output( "\t%s -m 644 $(filter-out -s,$(INSTALL_PROGRAM_FLAGS)) %s %s\n",
-+                    install_sh, obj_dir_path( make, file ), dest );
-+            break;
-         case 'd':  /* data file */
-             output( "\t%s -m 644 $(INSTALL_DATA_FLAGS) %s %s\n",
-                     install_sh, obj_dir_path( make, file ), dest );
-@@ -2440,6 +2452,7 @@ static void output_install_rules( struct makefile *make, enum install_rules rule
-         switch (*files.str[i + 1])
-         {
-         case 'c':  /* cross-compiled program */
-+        case 'C':  /* debug symbols for cross-compiled program */
-         case 'd':  /* data file */
-         case 'p':  /* program file */
-         case 's':  /* script */
-@@ -2451,7 +2464,10 @@ static void output_install_rules( struct makefile *make, enum install_rules rule
-         }
-     }
- 
--    output( "install %s::", target );
-+    if (rules == INSTALL_DEBUG)
-+        output( "%s::", target );
-+    else
-+        output( "install %s::", target );
-     output_filenames( targets );
-     output( "\n" );
-     output_install_commands( make, NULL, files );
-@@ -3198,6 +3214,8 @@ static void output_module( struct makefile *make )
-         strarray_add( &make->all_targets, strmake( "%s", make->module ));
-         add_install_rule( make, make->module, strmake( "%s", make->module ),
-                           strmake( "c$(dlldir)/%s", make->module ));
-+        add_install_rule( make, make->module, strmake( ".debug/%s", make->module ),
-+                          strmake( "C$(dlldir)/.debug/%s", make->module ));
-         output( "%s:", module_path );
-     }
-     else
-@@ -3693,6 +3711,11 @@ static void output_subdirs( struct makefile *make )
-             output( "install install-lib:: %s\n", submake->base_dir );
-             output_install_commands( make, submake, submake->install_rules[INSTALL_LIB] );
-         }
-+        if (submake->install_rules[INSTALL_DEBUG].count)
-+        {
-+            output( "install-cross-debug:: %s\n", submake->base_dir );
-+            output_install_commands( make, submake, submake->install_rules[INSTALL_DEBUG] );
-+        }
-         if (submake->install_rules[INSTALL_DEV].count)
-         {
-             output( "install install-dev:: %s\n", submake->base_dir );
-@@ -3844,6 +3867,7 @@ static void output_sources( struct makefile *make )
-             output( "\n" );
-         }
-         output_install_rules( make, INSTALL_LIB, "install-lib" );
-+        output_install_rules( make, INSTALL_DEBUG, "install-cross-debug" );
-         output_install_rules( make, INSTALL_DEV, "install-dev" );
-         output_uninstall_rules( make );
-     }
 From 213905a322620eb326b655ab89fbca07316e6357 Mon Sep 17 00:00:00 2001
 From: Andrew Eikum <aeikum@codeweavers.com>
 Date: Tue, 19 Nov 2019 09:59:17 -0600
@@ -4726,3 +4287,148 @@ index 46d842bf4c1..8a485ca7fd5 100644
      HANDLE engine_thread;
      pthread_cond_t engine_done, engine_ready;
      pthread_mutex_t engine_lock;
+From ddb3e721daa73dc07079e7a15612e274f96f104b Mon Sep 17 00:00:00 2001
+From: Derek Lesho <dlesho@codeweavers.com>
+Date: Fri, 6 Dec 2019 11:48:10 -0600
+Subject: [PATCH] bcrypt: Allow importing private ECDSA keys.
+
+Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
+---
+ dlls/bcrypt/bcrypt_main.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/dlls/bcrypt/bcrypt_main.c b/dlls/bcrypt/bcrypt_main.c
+index 2ac36d3db01..1daaa8ab599 100644
+--- a/dlls/bcrypt/bcrypt_main.c
++++ b/dlls/bcrypt/bcrypt_main.c
+@@ -1175,6 +1175,10 @@ static NTSTATUS key_import_pair( struct algorithm *alg, const WCHAR *type, BCRYP
+             key_size = 32;
+             magic = BCRYPT_ECDH_PRIVATE_P256_MAGIC;
+             break;
++        case ALG_ID_ECDSA_P256:
++            key_size = 32;
++            magic = BCRYPT_ECDSA_PRIVATE_P256_MAGIC;
++            break;
+ 
+         default:
+             FIXME( "algorithm %u does not yet support importing blob of type %s\n", alg->id, debugstr_w(type) );
+From 52c36274080a6edc1f1420b08df1ecf0defa9ca3 Mon Sep 17 00:00:00 2001
+From: Derek Lesho <dlesho@codeweavers.com>
+Date: Thu, 5 Dec 2019 12:41:57 -0600
+Subject: [PATCH] bcrypt: Fallback to _gnutls_decode_ber_rs_raw if
+ gnutls_decode_rs_value is unavailable.
+
+This can be removed when the runtime ships gnutls >= 3.6
+---
+ dlls/bcrypt/gnutls.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/dlls/bcrypt/gnutls.c b/dlls/bcrypt/gnutls.c
+index 868f898bbbb..95f498123ea 100644
+--- a/dlls/bcrypt/gnutls.c
++++ b/dlls/bcrypt/gnutls.c
+@@ -267,8 +267,11 @@ BOOL gnutls_initialize(void)
+     }
+     if (!(pgnutls_decode_rs_value = wine_dlsym( libgnutls_handle, "gnutls_decode_rs_value", NULL, 0 )))
+     {
+-        WARN("gnutls_decode_rs_value not found\n");
+-        pgnutls_decode_rs_value = compat_gnutls_decode_rs_value;
++        if (!(pgnutls_decode_rs_value = wine_dlsym( libgnutls_handle, "_gnutls_decode_ber_rs_raw", NULL, 0)))
++        {
++            WARN("gnutls_decode_rs_value and legacy alternative _gnutls_decode_ber_rs_raw not found\n");
++            pgnutls_decode_rs_value = compat_gnutls_decode_rs_value;
++        }
+     }
+ 
+     if (TRACE_ON( bcrypt ))
+From 84d73a7fa55c13ed797b2b2f6cfb9071dceac800 Mon Sep 17 00:00:00 2001
+From: Andrew Eikum <aeikum@codeweavers.com>
+Date: Mon, 21 Oct 2019 15:30:33 -0500
+Subject: [PATCH] wined3d: Use dxvk_config library to load DXVK options
+
+---
+ dlls/wined3d/directx.c | 56 ++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 56 insertions(+)
+
+diff --git a/dlls/wined3d/directx.c b/dlls/wined3d/directx.c
+index 12b53f75774..6f132ea047a 100644
+--- a/dlls/wined3d/directx.c
++++ b/dlls/wined3d/directx.c
+@@ -1326,14 +1326,46 @@ HRESULT CDECL wined3d_set_adapter_display_mode(struct wined3d *wined3d,
+     return WINED3D_OK;
+ }
+ 
++/* from dxvk_config.h, not available at wine build time in Proton */
++struct DXVKOptions {
++    int32_t customVendorId;
++    int32_t customDeviceId;
++    int32_t nvapiHack;
++};
++static HRESULT (WINAPI *pDXVKGetOptions)(struct DXVKOptions *out_opts);
++static HMODULE dxvk_config_mod;
++
++static BOOL WINAPI load_dxvk_config(INIT_ONCE *once, void *param, void **context)
++{
++    dxvk_config_mod = LoadLibraryA("dxvk_config.dll");
++    if(!dxvk_config_mod)
++    {
++        ERR_(winediag)("Couldn't load dxvk_config.dll, won't apply default DXVK config options\n");
++        return TRUE;
++    }
++
++    pDXVKGetOptions = (void*)GetProcAddress(dxvk_config_mod, "DXVKGetOptions");
++    if(!pDXVKGetOptions)
++    {
++        ERR_(winediag)("dxvk_config doesn't have DXVKGetOptions?!\n");
++        return TRUE;
++    }
++
++    return TRUE;
++}
++
+ HRESULT CDECL wined3d_get_adapter_identifier(const struct wined3d *wined3d,
+         UINT adapter_idx, DWORD flags, struct wined3d_adapter_identifier *identifier)
+ {
+     const struct wined3d_adapter *adapter;
++    static INIT_ONCE init_once = INIT_ONCE_STATIC_INIT;
++    struct DXVKOptions dxvk_opts;
+ 
+     TRACE("wined3d %p, adapter_idx %u, flags %#x, identifier %p.\n",
+             wined3d, adapter_idx, flags, identifier);
+ 
++    InitOnceExecuteOnce(&init_once, load_dxvk_config, NULL, NULL);
++
+     wined3d_mutex_lock();
+ 
+     if (adapter_idx >= wined3d->adapter_count)
+@@ -1359,6 +1391,30 @@ HRESULT CDECL wined3d_get_adapter_identifier(const struct wined3d *wined3d,
+     identifier->driver_version.u.LowPart = adapter->driver_info.version_low;
+     identifier->vendor_id = adapter->driver_info.vendor;
+     identifier->device_id = adapter->driver_info.device;
++
++    if(pDXVKGetOptions && pDXVKGetOptions(&dxvk_opts) == S_OK)
++    {
++        TRACE("got dxvk options:\n");
++        TRACE("\tnvapiHack: %u\n", dxvk_opts.nvapiHack);
++        TRACE("\tcustomVendorId: 0x%04x\n", dxvk_opts.customVendorId);
++        TRACE("\tcustomDeviceId: 0x%04x\n", dxvk_opts.customDeviceId);
++
++        /* logic from dxvk/src/dxgi/dxgi_adapter.cpp:DxgiAdapter::GetDesc2 */
++        if (dxvk_opts.customVendorId >= 0)
++            identifier->vendor_id = dxvk_opts.customVendorId;
++
++        if (dxvk_opts.customDeviceId >= 0)
++            identifier->device_id = dxvk_opts.customDeviceId;
++
++        if (dxvk_opts.customVendorId < 0 && dxvk_opts.customDeviceId < 0 &&
++                dxvk_opts.nvapiHack && adapter->driver_info.vendor == HW_VENDOR_NVIDIA) {
++            TRACE("NvAPI workaround enabled, reporting AMD GPU\n");
++            identifier->vendor_id = HW_VENDOR_AMD;
++            identifier->device_id = CARD_AMD_RADEON_RX_480;
++        }
++    }else
++        WARN("failed to get DXVK options!\n");
++
+     identifier->subsystem_id = 0;
+     identifier->revision = 0;
+     identifier->device_identifier = IID_D3DDEVICE_D3DUID;

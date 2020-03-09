@@ -1,0 +1,30 @@
+diff --git a/lsteamclient/steamclient_main.c b/lsteamclient/steamclient_main.c
+index e0eac01..345e7cd 100644
+--- a/lsteamclient/steamclient_main.c
++++ b/lsteamclient/steamclient_main.c
+@@ -4,6 +4,7 @@
+ #include <dlfcn.h>
+ #include <limits.h>
+ #include <stdint.h>
++#include <fcntl.h>
+ 
+ #include "windef.h"
+ #include "winbase.h"
+@@ -408,6 +409,17 @@ void *create_win_interface(const char *name, void *linux_side)
+     if (!linux_side)
+         return NULL;
+ 
++    int fd = open ("/dev/input/js0", O_RDONLY);
++
++    if(fd < 0)
++    {
++        if(!strcmp(name,"SteamController007") || !strcmp(name,"SteamInput001"))
++        {
++            TRACE("No input devices detected, disabling: %s\n", name);
++            return NULL;
++        }
++    }
++
+     EnterCriticalSection(&steamclient_cs);
+ 
+     LIST_FOR_EACH_ENTRY(e, &steamclient_interfaces, struct steamclient_interface, entry)

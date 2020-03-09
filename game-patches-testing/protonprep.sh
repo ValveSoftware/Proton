@@ -13,17 +13,19 @@
     # warframe controller fix
     git checkout lsteamclient
     cd lsteamclient
-    patch -Np1 < ../game-patches-testing/proton-hotfixes/proton-lsteamclient_disable_winISteamController_SteamController007_warframe.patch
     patch -Np1 < ../game-patches-testing/proton-hotfixes/proton-lsteamclient_sync_important_environment_variables_before_loading_steamclient.patch
     patch -Np1 < ../game-patches-testing/proton-hotfixes/proton-lsteamclient_reallocate_new_interface_only_when_linux_side_changes.patch
+    patch -Np1 < ../game-patches-testing/proton-hotfixes/steamclient-dont_load_steamcontroller007_or_steaminput001_without_controller.patch
     cd ..
 
     # VKD3D patches
     cd vkd3d
     git reset --hard HEAD
     git clean -xdf
+    git revert --no-commit d45bc9baab4b9203ea974decfc45707ee64dbbb3
+    patch -Np1 < ../game-patches-testing/vkd3d-patches/vkd3d-Fix_DXIL_check_in_test_coverage.patch
     #WoW anti-flicker patch
-    patch -Np1 < ../game-patches-testing/vkd3d-patches/Support_RS_1.0_Volatile.patch
+    #patch -Np1 < ../game-patches-testing/vkd3d-patches/Support_RS_1.0_Volatile.patch
     cd ..
 
     # Valve DXVK patches
@@ -115,8 +117,8 @@
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-protonify_staging.patch
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-LAA_staging.patch
 
-    #echo "mk11 patch"
-    #patch -Np1 < ../game-patches-testing/game-patches/mk11.patch
+    echo "mk11 patch"
+    patch -Np1 < ../game-patches-testing/game-patches/mk11.patch
 
     echo "clock monotonic, amd ags, hide prefix update"
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-use_clock_monotonic.patch
@@ -158,6 +160,7 @@
     echo "FS Hack integer scaling"
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton_fs_hack_integer_scaling.patch
 
+
     echo "SDL Joystick"
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-sdl_joy.patch
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-sdl_joy_2.patch
@@ -177,17 +180,19 @@
     patch -Np1 < ../game-patches-testing/proton-hotfixes/proton-mf_hacks.patch
 
     echo "fs hack improvement PRs"
-    patch -Np1 < ../game-patches-testing/wine-patches/winevulkan-cleanup_barriers_for_fs_hack.patch
-    patch -Np1 < ../game-patches-testing/wine-patches/winevulkan_implement_Contrast_Adaptive_Sharpening_scaling_in_fshack.patch
-    patch -Np1 < ../game-patches-testing/wine-patches/fshack-create_only_one_compute_pipeline_per_swap_chain.patch
+    patch -Np1 < ../game-patches-testing/wine-patches/winevulkan_fshack_opts.patch
+    #patch -Np1 < ../game-patches-testing/wine-patches/winevulkan_implement_Contrast_Adaptive_Sharpening_scaling_in_fshack.patch
 
     #WINE VULKAN - must be applied after fshack
     echo "applying winevulkan patches"
     patch -Np1 < ../game-patches-testing/wine-patches/winevulkan-childwindow.patch
+
     echo "applying WoW vkd3d wine patches"
     patch -Np1 < ../game-patches-testing/wine-patches/D3D12SerializeVersionedRootSignature.patch
     patch -Np1 < ../game-patches-testing/wine-patches/D3D12CreateVersionedRootSignatureDeserializer.patch
 
+    echo "winex11 proton hotfix"
+    patch -Np1 < ../game-patches-testing/wine-patches/HACK-winex11-limits-resources-nmode.patch
 
     #WINE CUSTOM PATCHES
     #add your own custom patch lines below

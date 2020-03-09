@@ -198,3 +198,26 @@ index 40ff8c35dbd..0f2bae9b9ef 100644
  };
  
  extern const struct vulkan_funcs * CDECL __wine_get_vulkan_driver(HDC hdc, UINT version);
+From 0f22d04d80db76054302251d7eccc39414dbcab4 Mon Sep 17 00:00:00 2001
+From: Georg Lehmann <dadschoorse@gmail.com>
+Date: Wed, 4 Mar 2020 13:42:04 +0100
+Subject: [PATCH] winevulkan: fix missing VkFilter for fshack integer scaling
+ in vulkan_driver.h
+
+---
+ dlls/winevulkan/make_vulkan | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/dlls/winevulkan/make_vulkan b/dlls/winevulkan/make_vulkan
+index a49cd2409c9..10728785223 100755
+--- a/dlls/winevulkan/make_vulkan
++++ b/dlls/winevulkan/make_vulkan
+@@ -2512,7 +2512,7 @@ class VkGenerator(object):
+         f.write("     * resolution; user_sz will contain the app's requested mode; and dst_blit\n")
+         f.write("     * will contain the area to blit the user image to in real coordinates.\n")
+         f.write("     * All parameters are optional. */\n")
+-        f.write("    VkBool32 (*query_fs_hack)(VkExtent2D *real_sz, VkExtent2D *user_sz, VkRect2D *dst_blit);\n")
++        f.write("    VkBool32 (*query_fs_hack)(VkExtent2D *real_sz, VkExtent2D *user_sz, VkRect2D *dst_blit, VkFilter *filter);\n")
+ 
+         f.write("};\n\n")
+ 

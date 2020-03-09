@@ -5379,3 +5379,614 @@ index 1f1a2d59e2e..b2700164a3d 100644
      mwm_hints.input_mode = 0;
      mwm_hints.status = 0;
      data->unmapnotify_serial = NextRequest( data->display );
+From 013a9b234732a9fbbd77ca370a3d66cf587a9113 Mon Sep 17 00:00:00 2001
+From: Joshua Ashton <joshua@froggi.es>
+Date: Mon, 24 Feb 2020 17:36:49 +0000
+Subject: [PATCH 1/4] winevulkan: Cleanup barriers for fs hack
+
+Removes needless GENERAL transitions for graphics presentation.
+(we can be TRANSFER_SRC for vkCmdBlitImage, no need to disable DCC with GENERAL)
+Access masks were also incorrect for this, this fixes those. (VK_ACCESS_TRANSFER_READ_BIT was missing)
+
+Fixes some spec violations when presenting from compute queues:
+Previously, we were transitioning to PRESENT_SRC too early and copies were happening to PRESENT_SRC which is illegal.
+This patch will fix that by them being GENERAL (they are storage images anyway) at this point, then transitioning.
+Also fixes misc. access flag issues.
+---
+ dlls/winevulkan/vulkan.c | 123 ++++++++++++++++++++-------------------
+ 1 file changed, 63 insertions(+), 60 deletions(-)
+
+diff --git a/dlls/winevulkan/vulkan.c b/dlls/winevulkan/vulkan.c
+index 63665fb7a6f..15644e4901d 100644
+--- a/dlls/winevulkan/vulkan.c
++++ b/dlls/winevulkan/vulkan.c
+@@ -2216,9 +2216,10 @@ static VkResult record_compute_cmd(VkDevice device, struct VkSwapchainKHR_T *swa
+ 
+     device->funcs.p_vkBeginCommandBuffer(hack->cmd, &beginInfo);
+ 
+-    /* transition user image from GENERAL to SHADER_READ */
++    /* for the cs we run... */
++    /* transition user image from TRANSFER_SRC to SHADER_READ */
+     barriers[0].sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
+-    barriers[0].oldLayout = VK_IMAGE_LAYOUT_GENERAL;
++    barriers[0].oldLayout = VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL;
+     barriers[0].newLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+     barriers[0].srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+     barriers[0].dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+@@ -2228,9 +2229,10 @@ static VkResult record_compute_cmd(VkDevice device, struct VkSwapchainKHR_T *swa
+     barriers[0].subresourceRange.levelCount = 1;
+     barriers[0].subresourceRange.baseArrayLayer = 0;
+     barriers[0].subresourceRange.layerCount = 1;
+-    barriers[0].srcAccessMask = 0;
++    barriers[0].srcAccessMask = VK_ACCESS_TRANSFER_READ_BIT;
+     barriers[0].dstAccessMask = VK_ACCESS_SHADER_READ_BIT;
+ 
++    /* storage image... */
+     /* transition blit image from whatever to GENERAL */
+     barriers[1].sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
+     barriers[1].oldLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+@@ -2278,10 +2280,10 @@ static VkResult record_compute_cmd(VkDevice device, struct VkSwapchainKHR_T *swa
+     device->funcs.p_vkCmdDispatch(hack->cmd, ceil(swapchain->real_extent.width / 8.),
+             ceil(swapchain->real_extent.height / 8.), 1);
+ 
+-    /* transition user image from SHADER_READ to GENERAL */
++    /* transition user image from SHADER_READ back to TRANSFER_SRC */
+     barriers[0].sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
+     barriers[0].oldLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+-    barriers[0].newLayout = VK_IMAGE_LAYOUT_GENERAL;
++    barriers[0].newLayout = VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL;
+     barriers[0].srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+     barriers[0].dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+     barriers[0].image = hack->user_image;
+@@ -2291,7 +2293,7 @@ static VkResult record_compute_cmd(VkDevice device, struct VkSwapchainKHR_T *swa
+     barriers[0].subresourceRange.baseArrayLayer = 0;
+     barriers[0].subresourceRange.layerCount = 1;
+     barriers[0].srcAccessMask = VK_ACCESS_SHADER_READ_BIT;
+-    barriers[0].dstAccessMask = 0;
++    barriers[0].dstAccessMask = VK_ACCESS_TRANSFER_READ_BIT;
+ 
+     device->funcs.p_vkCmdPipelineBarrier(
+             hack->cmd,
+@@ -2304,11 +2306,11 @@ static VkResult record_compute_cmd(VkDevice device, struct VkSwapchainKHR_T *swa
+     );
+ 
+     if(hack->blit_image){
+-        /* transition blit image layout from GENERAL to TRANSFER_SRC
+-         * and access from SHADER_WRITE_BIT to TRANSFER_READ_BIT  */
++        /* for the copy... */
++        /* no transition, just a barrier for our access masks (w -> r) */
+         barriers[0].sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
+         barriers[0].oldLayout = VK_IMAGE_LAYOUT_GENERAL;
+-        barriers[0].newLayout = VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL;
++        barriers[0].newLayout = VK_IMAGE_LAYOUT_GENERAL;
+         barriers[0].srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+         barriers[0].dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+         barriers[0].image = hack->blit_image;
+@@ -2320,10 +2322,12 @@ static VkResult record_compute_cmd(VkDevice device, struct VkSwapchainKHR_T *swa
+         barriers[0].srcAccessMask = VK_ACCESS_SHADER_WRITE_BIT;
+         barriers[0].dstAccessMask = VK_ACCESS_TRANSFER_READ_BIT;
+ 
+-        /* transition swapchain image from whatever to PRESENT_SRC */
++        /* for the copy... */
++        /* transition swapchain image from whatever to TRANSFER_DST
++         * we don't care about the contents... */
+         barriers[1].sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
+         barriers[1].oldLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+-        barriers[1].newLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
++        barriers[1].newLayout = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL;
+         barriers[1].srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+         barriers[1].dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+         barriers[1].image = hack->swapchain_image;
+@@ -2361,9 +2365,34 @@ static VkResult record_compute_cmd(VkDevice device, struct VkSwapchainKHR_T *swa
+         region.extent.depth = 1;
+ 
+         device->funcs.p_vkCmdCopyImage(hack->cmd,
+-                hack->blit_image, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
+-                hack->swapchain_image, VK_IMAGE_LAYOUT_PRESENT_SRC_KHR,
++                hack->blit_image, VK_IMAGE_LAYOUT_GENERAL,
++                hack->swapchain_image, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+                 1, &region);
++
++        /* transition swapchain image from TRANSFER_DST_OPTIMAL to PRESENT_SRC */
++        barriers[0].sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
++        barriers[0].oldLayout = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL;
++        barriers[0].newLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
++        barriers[0].srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
++        barriers[0].dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
++        barriers[0].image = hack->swapchain_image;
++        barriers[0].subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
++        barriers[0].subresourceRange.baseMipLevel = 0;
++        barriers[0].subresourceRange.levelCount = 1;
++        barriers[0].subresourceRange.baseArrayLayer = 0;
++        barriers[0].subresourceRange.layerCount = 1;
++        barriers[0].srcAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
++        barriers[0].dstAccessMask = 0;        
++
++        device->funcs.p_vkCmdPipelineBarrier(
++                hack->cmd,
++                VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,
++                VK_PIPELINE_STAGE_TRANSFER_BIT,
++                0,
++                0, NULL,
++                0, NULL,
++                1, barriers
++        );
+     }else{
+         /* transition swapchain image from GENERAL to PRESENT_SRC */
+         barriers[0].sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
+@@ -2421,35 +2450,20 @@ static VkResult record_graphics_cmd(VkDevice device, struct VkSwapchainKHR_T *sw
+ 
+     device->funcs.p_vkBeginCommandBuffer(hack->cmd, &beginInfo);
+ 
+-    /* transition user image from GENERAL to TRANSFER_SRC_OPTIMAL */
++    /* transition real image from whatever to TRANSFER_DST_OPTIMAL */
+     barriers[0].sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
+-    barriers[0].oldLayout = VK_IMAGE_LAYOUT_GENERAL;
+-    barriers[0].newLayout = VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL;
++    barriers[0].oldLayout = VK_IMAGE_LAYOUT_UNDEFINED;
++    barriers[0].newLayout = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL;
+     barriers[0].srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+     barriers[0].dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+-    barriers[0].image = hack->user_image;
++    barriers[0].image = hack->swapchain_image;
+     barriers[0].subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+     barriers[0].subresourceRange.baseMipLevel = 0;
+     barriers[0].subresourceRange.levelCount = 1;
+     barriers[0].subresourceRange.baseArrayLayer = 0;
+     barriers[0].subresourceRange.layerCount = 1;
+     barriers[0].srcAccessMask = 0;
+-    barriers[0].dstAccessMask = VK_ACCESS_TRANSFER_READ_BIT;
+-
+-    /* transition real image from whatever to TRANSFER_DST_OPTIMAL */
+-    barriers[1].sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
+-    barriers[1].oldLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+-    barriers[1].newLayout = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL;
+-    barriers[1].srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+-    barriers[1].dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+-    barriers[1].image = hack->swapchain_image;
+-    barriers[1].subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+-    barriers[1].subresourceRange.baseMipLevel = 0;
+-    barriers[1].subresourceRange.levelCount = 1;
+-    barriers[1].subresourceRange.baseArrayLayer = 0;
+-    barriers[1].subresourceRange.layerCount = 1;
+-    barriers[1].srcAccessMask = 0;
+-    barriers[1].dstAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
++    barriers[0].dstAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
+ 
+     device->funcs.p_vkCmdPipelineBarrier(
+             hack->cmd,
+@@ -2458,7 +2472,7 @@ static VkResult record_graphics_cmd(VkDevice device, struct VkSwapchainKHR_T *sw
+             0,
+             0, NULL,
+             0, NULL,
+-            2, barriers
++            1, barriers
+     );
+ 
+     /* clear the image */
+@@ -2496,36 +2510,21 @@ static VkResult record_graphics_cmd(VkDevice device, struct VkSwapchainKHR_T *sw
+             hack->swapchain_image, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+             1, &blitregion, swapchain->fs_hack_filter);
+ 
+-    /* transition user image from TRANSFER_SRC_OPTIMAL to GENERAL */
++    /* transition real image from TRANSFER_DST to PRESENT_SRC */
+     barriers[0].sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
+-    barriers[0].oldLayout = VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL;
+-    barriers[0].newLayout = VK_IMAGE_LAYOUT_GENERAL;
++    barriers[0].oldLayout = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL;
++    barriers[0].newLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
+     barriers[0].srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+     barriers[0].dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+-    barriers[0].image = hack->user_image;
++    barriers[0].image = hack->swapchain_image;
+     barriers[0].subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+     barriers[0].subresourceRange.baseMipLevel = 0;
+     barriers[0].subresourceRange.levelCount = 1;
+     barriers[0].subresourceRange.baseArrayLayer = 0;
+     barriers[0].subresourceRange.layerCount = 1;
+-    barriers[0].srcAccessMask = VK_ACCESS_TRANSFER_READ_BIT;
++    barriers[0].srcAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
+     barriers[0].dstAccessMask = 0;
+ 
+-    /* transition real image from TRANSFER_DST to PRESENT_SRC */
+-    barriers[1].sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
+-    barriers[1].oldLayout = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL;
+-    barriers[1].newLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
+-    barriers[1].srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+-    barriers[1].dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+-    barriers[1].image = hack->swapchain_image;
+-    barriers[1].subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+-    barriers[1].subresourceRange.baseMipLevel = 0;
+-    barriers[1].subresourceRange.levelCount = 1;
+-    barriers[1].subresourceRange.baseArrayLayer = 0;
+-    barriers[1].subresourceRange.layerCount = 1;
+-    barriers[1].srcAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
+-    barriers[1].dstAccessMask = 0;
+-
+     device->funcs.p_vkCmdPipelineBarrier(
+             hack->cmd,
+             VK_PIPELINE_STAGE_TRANSFER_BIT,
+@@ -2533,7 +2532,7 @@ static VkResult record_graphics_cmd(VkDevice device, struct VkSwapchainKHR_T *sw
+             0,
+             0, NULL,
+             0, NULL,
+-            2, barriers
++            1, barriers
+     );
+ 
+     result = device->funcs.p_vkEndCommandBuffer(hack->cmd);
+@@ -2687,7 +2686,7 @@ void WINAPI wine_vkCmdPipelineBarrier(VkCommandBuffer commandBuffer,
+ #endif
+ 
+     /* if the client is trying to transition a user image to PRESENT_SRC,
+-     * transition it to GENERAL instead. */
++     * transition it to TRANSFER_SRC_OPTIMAL instead. */
+     EnterCriticalSection(&commandBuffer->device->swapchain_lock);
+     for(i = 0; i < imageMemoryBarrierCount; ++i){
+         old = pImageMemoryBarriers[i].oldLayout == VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
+@@ -2703,10 +2702,14 @@ void WINAPI wine_vkCmdPipelineBarrier(VkCommandBuffer commandBuffer,
+                             if(!pImageMemoryBarriers_host)
+                                 pImageMemoryBarriers_host = convert_VkImageMemoryBarrier_array_win_to_host(pImageMemoryBarriers, imageMemoryBarrierCount);
+ #endif
+-                            if(old)
+-                                pImageMemoryBarriers_host[i].oldLayout = VK_IMAGE_LAYOUT_GENERAL;
+-                            if(new)
+-                                pImageMemoryBarriers_host[i].newLayout = VK_IMAGE_LAYOUT_GENERAL;
++                            if(old) {
++                                pImageMemoryBarriers_host[i].oldLayout = VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL;
++                                pImageMemoryBarriers_host[i].srcAccessMask |= VK_ACCESS_TRANSFER_READ_BIT;
++                            }
++                            if(new) {
++                                pImageMemoryBarriers_host[i].newLayout = VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL;
++                                pImageMemoryBarriers_host[i].dstAccessMask |= VK_ACCESS_TRANSFER_READ_BIT;
++                            }
+                             goto next;
+                         }
+                     }
+
+From 459239da871d87c611644b4fefcdf91f6be1dae9 Mon Sep 17 00:00:00 2001
+From: Joshua Ashton <joshua@froggi.es>
+Date: Tue, 25 Feb 2020 19:03:31 +0000
+Subject: [PATCH 2/4] winevulkan: Fix warning due to implicit different ptr
+ size cast
+
+---
+ dlls/winevulkan/vulkan.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/dlls/winevulkan/vulkan.c b/dlls/winevulkan/vulkan.c
+index 15644e4901d..298fa72e014 100644
+--- a/dlls/winevulkan/vulkan.c
++++ b/dlls/winevulkan/vulkan.c
+@@ -1774,7 +1774,7 @@ VkResult WINAPI wine_vkCreateSwapchainKHR(VkDevice device, const VkSwapchainCrea
+         result = init_blit_images(device, object);
+         if(result != VK_SUCCESS){
+             ERR("creating blit images failed: %d\n", result);
+-            wine_vkDestroySwapchainKHR(device, (VkSwapchainKHR)object, NULL);
++            wine_vkDestroySwapchainKHR(device, (VkSwapchainKHR)(UINT_PTR)object, NULL);
+             return result;
+         }
+     }
+
+From e8d0dc7f9afd58d5927401067c3d8734360f64de Mon Sep 17 00:00:00 2001
+From: Georg Lehmann <dadschoorse@gmail.com>
+Date: Mon, 2 Mar 2020 14:53:35 +0100
+Subject: [PATCH 3/4] winevulkan: fshack: don't change the transitions to
+ PRESENT
+
+We can't be sure that the application transitions with barriers and not with render passes.
+So we let it transition to PRESENT and change our layout changes accordingly.
+
+Also fixes that the user image is created without VK_IMAGE_USAGE_TRANSFER_SRC_BIT.
+---
+ dlls/winevulkan/vulkan.c | 85 ++++++++++++++++++----------------------
+ 1 file changed, 39 insertions(+), 46 deletions(-)
+
+diff --git a/dlls/winevulkan/vulkan.c b/dlls/winevulkan/vulkan.c
+index 298fa72e014..0950c591d3f 100644
+--- a/dlls/winevulkan/vulkan.c
++++ b/dlls/winevulkan/vulkan.c
+@@ -1590,7 +1590,7 @@ static VkResult init_fs_hack_images(VkDevice device, struct VkSwapchainKHR_T *sw
+         imageInfo.format = createinfo->imageFormat;
+         imageInfo.tiling = VK_IMAGE_TILING_OPTIMAL;
+         imageInfo.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+-        imageInfo.usage = createinfo->imageUsage | VK_IMAGE_USAGE_SAMPLED_BIT;
++        imageInfo.usage = createinfo->imageUsage | VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT;
+         imageInfo.sharingMode = createinfo->imageSharingMode;
+         imageInfo.samples = VK_SAMPLE_COUNT_1_BIT;
+         imageInfo.queueFamilyIndexCount = createinfo->queueFamilyIndexCount;
+@@ -2217,9 +2217,9 @@ static VkResult record_compute_cmd(VkDevice device, struct VkSwapchainKHR_T *swa
+     device->funcs.p_vkBeginCommandBuffer(hack->cmd, &beginInfo);
+ 
+     /* for the cs we run... */
+-    /* transition user image from TRANSFER_SRC to SHADER_READ */
++    /* transition user image from PRESENT_SRC to SHADER_READ */
+     barriers[0].sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
+-    barriers[0].oldLayout = VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL;
++    barriers[0].oldLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
+     barriers[0].newLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+     barriers[0].srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+     barriers[0].dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+@@ -2229,7 +2229,7 @@ static VkResult record_compute_cmd(VkDevice device, struct VkSwapchainKHR_T *swa
+     barriers[0].subresourceRange.levelCount = 1;
+     barriers[0].subresourceRange.baseArrayLayer = 0;
+     barriers[0].subresourceRange.layerCount = 1;
+-    barriers[0].srcAccessMask = VK_ACCESS_TRANSFER_READ_BIT;
++    barriers[0].srcAccessMask = 0;
+     barriers[0].dstAccessMask = VK_ACCESS_SHADER_READ_BIT;
+ 
+     /* storage image... */
+@@ -2280,10 +2280,10 @@ static VkResult record_compute_cmd(VkDevice device, struct VkSwapchainKHR_T *swa
+     device->funcs.p_vkCmdDispatch(hack->cmd, ceil(swapchain->real_extent.width / 8.),
+             ceil(swapchain->real_extent.height / 8.), 1);
+ 
+-    /* transition user image from SHADER_READ back to TRANSFER_SRC */
++    /* transition user image from SHADER_READ back to PRESENT_SRC */
+     barriers[0].sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
+     barriers[0].oldLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+-    barriers[0].newLayout = VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL;
++    barriers[0].newLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
+     barriers[0].srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+     barriers[0].dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+     barriers[0].image = hack->user_image;
+@@ -2293,7 +2293,7 @@ static VkResult record_compute_cmd(VkDevice device, struct VkSwapchainKHR_T *swa
+     barriers[0].subresourceRange.baseArrayLayer = 0;
+     barriers[0].subresourceRange.layerCount = 1;
+     barriers[0].srcAccessMask = VK_ACCESS_SHADER_READ_BIT;
+-    barriers[0].dstAccessMask = VK_ACCESS_TRANSFER_READ_BIT;
++    barriers[0].dstAccessMask = 0;
+ 
+     device->funcs.p_vkCmdPipelineBarrier(
+             hack->cmd,
+@@ -2465,6 +2465,21 @@ static VkResult record_graphics_cmd(VkDevice device, struct VkSwapchainKHR_T *sw
+     barriers[0].srcAccessMask = 0;
+     barriers[0].dstAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
+ 
++    /* transition user image from PRESENT_SRC to TRANSFER_SRC_OPTIMAL */
++    barriers[1].sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
++    barriers[1].oldLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
++    barriers[1].newLayout = VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL;
++    barriers[1].srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
++    barriers[1].dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
++    barriers[1].image = hack->user_image;
++    barriers[1].subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
++    barriers[1].subresourceRange.baseMipLevel = 0;
++    barriers[1].subresourceRange.levelCount = 1;
++    barriers[1].subresourceRange.baseArrayLayer = 0;
++    barriers[1].subresourceRange.layerCount = 1;
++    barriers[1].srcAccessMask = 0;
++    barriers[1].dstAccessMask = VK_ACCESS_TRANSFER_READ_BIT;
++
+     device->funcs.p_vkCmdPipelineBarrier(
+             hack->cmd,
+             VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
+@@ -2472,7 +2487,7 @@ static VkResult record_graphics_cmd(VkDevice device, struct VkSwapchainKHR_T *sw
+             0,
+             0, NULL,
+             0, NULL,
+-            1, barriers
++            2, barriers
+     );
+ 
+     /* clear the image */
+@@ -2525,6 +2540,21 @@ static VkResult record_graphics_cmd(VkDevice device, struct VkSwapchainKHR_T *sw
+     barriers[0].srcAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
+     barriers[0].dstAccessMask = 0;
+ 
++    /* transition user image from TRANSFER_SRC_OPTIMAL to back to PRESENT_SRC */
++    barriers[1].sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
++    barriers[1].oldLayout = VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL;
++    barriers[1].newLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
++    barriers[1].srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
++    barriers[1].dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
++    barriers[1].image = hack->user_image;
++    barriers[1].subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
++    barriers[1].subresourceRange.baseMipLevel = 0;
++    barriers[1].subresourceRange.levelCount = 1;
++    barriers[1].subresourceRange.baseArrayLayer = 0;
++    barriers[1].subresourceRange.layerCount = 1;
++    barriers[1].srcAccessMask = VK_ACCESS_TRANSFER_READ_BIT;
++    barriers[1].dstAccessMask = 0;
++
+     device->funcs.p_vkCmdPipelineBarrier(
+             hack->cmd,
+             VK_PIPELINE_STAGE_TRANSFER_BIT,
+@@ -2532,7 +2562,7 @@ static VkResult record_graphics_cmd(VkDevice device, struct VkSwapchainKHR_T *sw
+             0,
+             0, NULL,
+             0, NULL,
+-            1, barriers
++            2, barriers
+     );
+ 
+     result = device->funcs.p_vkEndCommandBuffer(hack->cmd);
+@@ -2675,8 +2705,6 @@ void WINAPI wine_vkCmdPipelineBarrier(VkCommandBuffer commandBuffer,
+     VkBufferMemoryBarrier_host *pBufferMemoryBarriers_host;
+ #endif
+     VkImageMemoryBarrier_host *pImageMemoryBarriers_host = NULL;
+-    uint32_t i, j, k;
+-    int old, new;
+ 
+     TRACE("%p, %#x, %#x, %#x, %u, %p, %u, %p, %u, %p\n", commandBuffer, srcStageMask, dstStageMask, dependencyFlags, memoryBarrierCount, pMemoryBarriers, bufferMemoryBarrierCount, pBufferMemoryBarriers, imageMemoryBarrierCount, pImageMemoryBarriers);
+ 
+@@ -2685,41 +2713,6 @@ void WINAPI wine_vkCmdPipelineBarrier(VkCommandBuffer commandBuffer,
+     pImageMemoryBarriers_host = convert_VkImageMemoryBarrier_array_win_to_host(pImageMemoryBarriers, imageMemoryBarrierCount);
+ #endif
+ 
+-    /* if the client is trying to transition a user image to PRESENT_SRC,
+-     * transition it to TRANSFER_SRC_OPTIMAL instead. */
+-    EnterCriticalSection(&commandBuffer->device->swapchain_lock);
+-    for(i = 0; i < imageMemoryBarrierCount; ++i){
+-        old = pImageMemoryBarriers[i].oldLayout == VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
+-        new = pImageMemoryBarriers[i].newLayout == VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
+-        if(old || new){
+-            for(j = 0; j < commandBuffer->device->num_swapchains; ++j){
+-                struct VkSwapchainKHR_T *swapchain = commandBuffer->device->swapchains[j];
+-                if(swapchain->fs_hack_enabled){
+-                    for(k = 0; k < swapchain->n_images; ++k){
+-                        struct fs_hack_image *hack = &swapchain->fs_hack_images[k];
+-                        if(pImageMemoryBarriers[i].image == hack->user_image){
+-#if !defined(USE_STRUCT_CONVERSION)
+-                            if(!pImageMemoryBarriers_host)
+-                                pImageMemoryBarriers_host = convert_VkImageMemoryBarrier_array_win_to_host(pImageMemoryBarriers, imageMemoryBarrierCount);
+-#endif
+-                            if(old) {
+-                                pImageMemoryBarriers_host[i].oldLayout = VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL;
+-                                pImageMemoryBarriers_host[i].srcAccessMask |= VK_ACCESS_TRANSFER_READ_BIT;
+-                            }
+-                            if(new) {
+-                                pImageMemoryBarriers_host[i].newLayout = VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL;
+-                                pImageMemoryBarriers_host[i].dstAccessMask |= VK_ACCESS_TRANSFER_READ_BIT;
+-                            }
+-                            goto next;
+-                        }
+-                    }
+-                }
+-            }
+-        }
+-next:   ;
+-    }
+-    LeaveCriticalSection(&commandBuffer->device->swapchain_lock);
+-
+     commandBuffer->device->funcs.p_vkCmdPipelineBarrier(commandBuffer->command_buffer,
+             srcStageMask, dstStageMask, dependencyFlags, memoryBarrierCount,
+             pMemoryBarriers, bufferMemoryBarrierCount,
+
+From f76050cdaa3c5f803c1e2a99bb475c3850dd2568 Mon Sep 17 00:00:00 2001
+From: Georg Lehmann <dadschoorse@gmail.com>
+Date: Mon, 2 Mar 2020 18:07:15 +0100
+Subject: [PATCH 4/4] winevulkan: fshack: don't free invidual descriptor set
+
+They get destroyed when the pool gets destroyed anyway.
+---
+ dlls/winevulkan/vulkan.c | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/dlls/winevulkan/vulkan.c b/dlls/winevulkan/vulkan.c
+index 0950c591d3f..6408695f1f8 100644
+--- a/dlls/winevulkan/vulkan.c
++++ b/dlls/winevulkan/vulkan.c
+@@ -1510,7 +1510,6 @@ static VkResult create_descriptor_set(VkDevice device, struct VkSwapchainKHR_T *
+ static void destroy_fs_hack_image(VkDevice device, struct VkSwapchainKHR_T *swapchain, struct fs_hack_image *hack)
+ {
+     device->funcs.p_vkDestroyPipeline(device->device, hack->pipeline, NULL);
+-    device->funcs.p_vkFreeDescriptorSets(device->device, swapchain->descriptor_pool, 1, &hack->descriptor_set);
+     device->funcs.p_vkDestroyImageView(device->device, hack->user_view, NULL);
+     device->funcs.p_vkDestroyImageView(device->device, hack->blit_view, NULL);
+     device->funcs.p_vkDestroyImage(device->device, hack->user_image, NULL);
+From a4f4dd8c6578bb153a06487d071cbd790a83aa3a Mon Sep 17 00:00:00 2001
+From: Georg Lehmann <dadschoorse@gmail.com>
+Date: Wed, 4 Mar 2020 13:50:12 +0100
+Subject: [PATCH] winevulkan: generate wine_vkCmdPipelineBarrier again
+
+since we removed everything special from that function, we can generate it again
+---
+ dlls/winevulkan/make_vulkan     |  1 -
+ dlls/winevulkan/vulkan.c        | 38 ---------------------------------
+ dlls/winevulkan/vulkan_thunks.c | 19 +++++++++++++++++
+ dlls/winevulkan/vulkan_thunks.h |  1 -
+ 4 files changed, 19 insertions(+), 40 deletions(-)
+
+diff --git a/dlls/winevulkan/make_vulkan b/dlls/winevulkan/make_vulkan
+index 10728785223..b58ca9301cc 100755
+--- a/dlls/winevulkan/make_vulkan
++++ b/dlls/winevulkan/make_vulkan
+@@ -171,7 +171,6 @@ FUNCTION_OVERRIDES = {
+     "vkCmdExecuteCommands" : {"dispatch" : True, "driver" : False, "thunk" : False},
+     "vkCreateCommandPool" : {"dispatch": True, "driver" : False, "thunk" : False},
+     "vkDestroyCommandPool" : {"dispatch": True, "driver" : False, "thunk" : False},
+-    "vkCmdPipelineBarrier" : {"dispatch" : True, "driver" : False, "thunk" : False},
+     "vkDestroyDevice" : {"dispatch" : True, "driver" : False, "thunk" : False},
+     "vkFreeCommandBuffers" : {"dispatch" : True, "driver" : False, "thunk" : False},
+     "vkGetDeviceProcAddr" : {"dispatch" : False, "driver" : True, "thunk" : False},
+diff --git a/dlls/winevulkan/vulkan.c b/dlls/winevulkan/vulkan.c
+index bad31300df8..e2991c2dc47 100644
+--- a/dlls/winevulkan/vulkan.c
++++ b/dlls/winevulkan/vulkan.c
+@@ -2693,44 +2693,6 @@ VkResult WINAPI wine_vkQueuePresentKHR(VkQueue queue, const VkPresentInfoKHR *pP
+ 
+ }
+ 
+-void WINAPI wine_vkCmdPipelineBarrier(VkCommandBuffer commandBuffer,
+-        VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask,
+-        VkDependencyFlags dependencyFlags, uint32_t memoryBarrierCount,
+-        const VkMemoryBarrier *pMemoryBarriers, uint32_t bufferMemoryBarrierCount,
+-        const VkBufferMemoryBarrier *pBufferMemoryBarriers, uint32_t imageMemoryBarrierCount,
+-        const VkImageMemoryBarrier *pImageMemoryBarriers)
+-{
+-#if defined(USE_STRUCT_CONVERSION)
+-    VkBufferMemoryBarrier_host *pBufferMemoryBarriers_host;
+-#endif
+-    VkImageMemoryBarrier_host *pImageMemoryBarriers_host = NULL;
+-
+-    TRACE("%p, %#x, %#x, %#x, %u, %p, %u, %p, %u, %p\n", commandBuffer, srcStageMask, dstStageMask, dependencyFlags, memoryBarrierCount, pMemoryBarriers, bufferMemoryBarrierCount, pBufferMemoryBarriers, imageMemoryBarrierCount, pImageMemoryBarriers);
+-
+-#if defined(USE_STRUCT_CONVERSION)
+-    pBufferMemoryBarriers_host = convert_VkBufferMemoryBarrier_array_win_to_host(pBufferMemoryBarriers, bufferMemoryBarrierCount);
+-    pImageMemoryBarriers_host = convert_VkImageMemoryBarrier_array_win_to_host(pImageMemoryBarriers, imageMemoryBarrierCount);
+-#endif
+-
+-    commandBuffer->device->funcs.p_vkCmdPipelineBarrier(commandBuffer->command_buffer,
+-            srcStageMask, dstStageMask, dependencyFlags, memoryBarrierCount,
+-            pMemoryBarriers, bufferMemoryBarrierCount,
+-#if defined(USE_STRUCT_CONVERSION)
+-            pBufferMemoryBarriers_host, imageMemoryBarrierCount, pImageMemoryBarriers_host
+-#else
+-            pBufferMemoryBarriers, imageMemoryBarrierCount,
+-            pImageMemoryBarriers_host ? (VkImageMemoryBarrier*)pImageMemoryBarriers_host : pImageMemoryBarriers
+-#endif
+-            );
+-
+-#if defined(USE_STRUCT_CONVERSION)
+-    free_VkBufferMemoryBarrier_array(pBufferMemoryBarriers_host, bufferMemoryBarrierCount);
+-#else
+-    if(pImageMemoryBarriers_host)
+-#endif
+-        free_VkImageMemoryBarrier_array(pImageMemoryBarriers_host, imageMemoryBarrierCount);
+-}
+-
+ VkDevice WINAPI __wine_get_native_VkDevice(VkDevice device)
+ {
+     return device->device;
+diff --git a/dlls/winevulkan/vulkan_thunks.c b/dlls/winevulkan/vulkan_thunks.c
+index f073539bd53..ea9e8262d83 100644
+--- a/dlls/winevulkan/vulkan_thunks.c
++++ b/dlls/winevulkan/vulkan_thunks.c
+@@ -2895,6 +2895,25 @@ static void WINAPI wine_vkCmdNextSubpass2KHR(VkCommandBuffer commandBuffer, cons
+     commandBuffer->device->funcs.p_vkCmdNextSubpass2KHR(commandBuffer->command_buffer, pSubpassBeginInfo, pSubpassEndInfo);
+ }
+ 
++void WINAPI wine_vkCmdPipelineBarrier(VkCommandBuffer commandBuffer, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, VkDependencyFlags dependencyFlags, uint32_t memoryBarrierCount, const VkMemoryBarrier *pMemoryBarriers, uint32_t bufferMemoryBarrierCount, const VkBufferMemoryBarrier *pBufferMemoryBarriers, uint32_t imageMemoryBarrierCount, const VkImageMemoryBarrier *pImageMemoryBarriers)
++{
++#if defined(USE_STRUCT_CONVERSION)
++    VkBufferMemoryBarrier_host *pBufferMemoryBarriers_host;
++    VkImageMemoryBarrier_host *pImageMemoryBarriers_host;
++    TRACE("%p, %#x, %#x, %#x, %u, %p, %u, %p, %u, %p\n", commandBuffer, srcStageMask, dstStageMask, dependencyFlags, memoryBarrierCount, pMemoryBarriers, bufferMemoryBarrierCount, pBufferMemoryBarriers, imageMemoryBarrierCount, pImageMemoryBarriers);
++
++    pBufferMemoryBarriers_host = convert_VkBufferMemoryBarrier_array_win_to_host(pBufferMemoryBarriers, bufferMemoryBarrierCount);
++    pImageMemoryBarriers_host = convert_VkImageMemoryBarrier_array_win_to_host(pImageMemoryBarriers, imageMemoryBarrierCount);
++    commandBuffer->device->funcs.p_vkCmdPipelineBarrier(commandBuffer->command_buffer, srcStageMask, dstStageMask, dependencyFlags, memoryBarrierCount, pMemoryBarriers, bufferMemoryBarrierCount, pBufferMemoryBarriers_host, imageMemoryBarrierCount, pImageMemoryBarriers_host);
++
++    free_VkBufferMemoryBarrier_array(pBufferMemoryBarriers_host, bufferMemoryBarrierCount);
++    free_VkImageMemoryBarrier_array(pImageMemoryBarriers_host, imageMemoryBarrierCount);
++#else
++    TRACE("%p, %#x, %#x, %#x, %u, %p, %u, %p, %u, %p\n", commandBuffer, srcStageMask, dstStageMask, dependencyFlags, memoryBarrierCount, pMemoryBarriers, bufferMemoryBarrierCount, pBufferMemoryBarriers, imageMemoryBarrierCount, pImageMemoryBarriers);
++    commandBuffer->device->funcs.p_vkCmdPipelineBarrier(commandBuffer->command_buffer, srcStageMask, dstStageMask, dependencyFlags, memoryBarrierCount, pMemoryBarriers, bufferMemoryBarrierCount, pBufferMemoryBarriers, imageMemoryBarrierCount, pImageMemoryBarriers);
++#endif
++}
++
+ void WINAPI wine_vkCmdPushConstants(VkCommandBuffer commandBuffer, VkPipelineLayout layout, VkShaderStageFlags stageFlags, uint32_t offset, uint32_t size, const void *pValues)
+ {
+     TRACE("%p, 0x%s, %#x, %u, %u, %p\n", commandBuffer, wine_dbgstr_longlong(layout), stageFlags, offset, size, pValues);
+diff --git a/dlls/winevulkan/vulkan_thunks.h b/dlls/winevulkan/vulkan_thunks.h
+index 08ede0bd2af..82d0c3a0a5e 100644
+--- a/dlls/winevulkan/vulkan_thunks.h
++++ b/dlls/winevulkan/vulkan_thunks.h
+@@ -44,7 +44,6 @@
+ VkResult WINAPI wine_vkAcquireNextImageKHR(VkDevice device, VkSwapchainKHR swapchain, uint64_t timeout, VkSemaphore semaphore, VkFence fence, uint32_t *pImageIndex);
+ VkResult WINAPI wine_vkAllocateCommandBuffers(VkDevice device, const VkCommandBufferAllocateInfo *pAllocateInfo, VkCommandBuffer *pCommandBuffers);
+ void WINAPI wine_vkCmdExecuteCommands(VkCommandBuffer commandBuffer, uint32_t commandBufferCount, const VkCommandBuffer *pCommandBuffers);
+-void WINAPI wine_vkCmdPipelineBarrier(VkCommandBuffer commandBuffer, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, VkDependencyFlags dependencyFlags, uint32_t memoryBarrierCount, const VkMemoryBarrier *pMemoryBarriers, uint32_t bufferMemoryBarrierCount, const VkBufferMemoryBarrier *pBufferMemoryBarriers, uint32_t imageMemoryBarrierCount, const VkImageMemoryBarrier *pImageMemoryBarriers);
+ VkResult WINAPI wine_vkCreateCommandPool(VkDevice device, const VkCommandPoolCreateInfo *pCreateInfo, const VkAllocationCallbacks *pAllocator, VkCommandPool *pCommandPool);
+ VkResult WINAPI wine_vkCreateDevice(VkPhysicalDevice physicalDevice, const VkDeviceCreateInfo *pCreateInfo, const VkAllocationCallbacks *pAllocator, VkDevice *pDevice);
+ VkResult WINAPI wine_vkCreateSwapchainKHR(VkDevice device, const VkSwapchainCreateInfoKHR *pCreateInfo, const VkAllocationCallbacks *pAllocator, VkSwapchainKHR *pSwapchain);
