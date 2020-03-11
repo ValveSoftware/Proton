@@ -198,10 +198,6 @@ GECKO64_TARBALL := wine-gecko-$(GECKO_VER)-x86_64.tar.xz
 WINEMONO_VER := 6.1.1
 WINEMONO_TARBALL := wine-mono-$(WINEMONO_VER)-x86.tar.xz
 
-GST_BASE := $(SRCDIR)/gst-plugins-base
-GST_BASE_OBJ32 := ./obj-gst-base32
-GST_BASE_OBJ64 := ./obj-gst-base64
-
 GST_GOOD := $(SRCDIR)/gst-plugins-good
 GST_GOOD_OBJ32 := ./obj-gst-good32
 GST_GOOD_OBJ64 := ./obj-gst-good64
@@ -273,7 +269,6 @@ FONTS_OBJ := ./obj-fonts
 
 ## Object directories
 OBJ_DIRS := $(TOOLS_DIR32)        $(TOOLS_DIR64)        \
-            $(GST_BASE_OBJ32)     $(GST_BASE_OBJ64)     \
             $(GST_GOOD_OBJ32)     $(GST_GOOD_OBJ64)     \
             $(FAUDIO_OBJ32)       $(FAUDIO_OBJ64)       \
             $(JXRLIB_OBJ32)       $(JXRLIB_OBJ64)       \
@@ -547,6 +542,7 @@ $(OBJ)/.gstreamer-post-build32:
 	cp -a $(TOOLS_DIR32)/lib/gstreamer-1.0 $(DST_DIR)/lib/
 	touch $@
 
+
 ##
 ## gst-plugins-base
 ##
@@ -578,66 +574,21 @@ GST_BASE_MESON_ARGS := \
 	-Dtools=disabled \
 	$(GST_COMMON_MESON_ARGS)
 
-GST_BASE_CONFIGURE_FILES32 := $(GST_BASE_OBJ32)/build.ninja
-GST_BASE_CONFIGURE_FILES64 := $(GST_BASE_OBJ64)/build.ninja
+GST_BASE_DEPENDS = gst_orc gstreamer
 
-# 64-bit configure.  Remove coredata file if already configured (due to e.g. makefile changing)
-$(GST_BASE_CONFIGURE_FILES64): SHELL = $(CONTAINER_SHELL)
-$(GST_BASE_CONFIGURE_FILES64): $(MAKEFILE_DEP) gstreamer64 | $(GST_BASE_OBJ64)
-	if [ -e "$(abspath $(GST_BASE_OBJ64))"/build.ninja ]; then \
-		rm -f "$(abspath $(GST_BASE_OBJ64))"/meson-private/coredata.dat; \
-	fi
-	cd "$(abspath $(GST_BASE))" && \
-	PATH="$(abspath $(TOOLS_DIR64))/bin:$(PATH)" \
-		PKG_CONFIG_PATH=$(abspath $(TOOLS_DIR64))/lib/pkgconfig \
-		meson --prefix="$(abspath $(TOOLS_DIR64))" --libdir="lib" $(GST_BASE_MESON_ARGS) $(MESON_STRIP_ARG) --buildtype=release "$(abspath $(GST_BASE_OBJ64))"
+$(eval $(call rules-source,gst_base,$(SRCDIR)/gst-plugins-base))
+$(eval $(call rules-meson,gst_base,32))
+$(eval $(call rules-meson,gst_base,64))
 
-# 32-bit configure.  Remove coredata file if already configured (due to e.g. makefile changing)
-$(GST_BASE_CONFIGURE_FILES32): SHELL = $(CONTAINER_SHELL)
-$(GST_BASE_CONFIGURE_FILES32): $(MAKEFILE_DEP) gstreamer32 | $(GST_BASE_OBJ32)
-	if [ -e "$(abspath $(GST_BASE_OBJ32))"/build.ninja ]; then \
-		rm -f "$(abspath $(GST_BASE_OBJ32))"/meson-private/coredata.dat; \
-	fi
-	cd "$(abspath $(GST_BASE))" && \
-	PATH="$(abspath $(TOOLS_DIR32))/bin:$(PATH)" \
-		CC="$(CC32)" \
-		CXX="$(CXX32)" \
-		PKG_CONFIG="$(PKG_CONFIG32)" \
-		PKG_CONFIG_PATH=$(abspath $(TOOLS_DIR32))/lib/pkgconfig \
-		meson --prefix="$(abspath $(TOOLS_DIR32))" --libdir="lib" $(GST_BASE_MESON_ARGS) $(MESON_STRIP_ARG) --buildtype=release "$(abspath $(GST_BASE_OBJ32))"
+$(OBJ)/.gst_base-post-build64:
+	cp -a $(TOOLS_DIR64)/lib64/libgst* $(DST_DIR)/lib64/ && \
+	cp -a $(TOOLS_DIR64)/lib64/gstreamer-1.0 $(DST_DIR)/lib64/
+	touch $@
 
-## gst_base goals
-GST_BASE_TARGETS = gst_base gst_base_configure gst_base32 gst_base64 gst_base_configure32 gst_base_configure64
-
-ALL_TARGETS += $(GST_BASE_TARGETS)
-GOAL_TARGETS_LIBS += gst_base
-
-.PHONY: $(GST_BASE_TARGETS)
-
-gst_base_configure: $(GST_BASE_CONFIGURE_FILES32) $(GST_BASE_CONFIGURE_FILES64)
-
-gst_base_configure64: $(GST_BASE_CONFIGURE_FILES64)
-
-gst_base_configure32: $(GST_BASE_CONFIGURE_FILES32)
-
-gst_base: gst_base32 gst_base64
-
-gst_base64: SHELL = $(CONTAINER_SHELL)
-gst_base64: $(GST_BASE_CONFIGURE_FILES64)
-	PATH="$(abspath $(TOOLS_DIR64))/bin:$(PATH)" \
-	LD_LIBRARY_PATH="$(abspath $(TOOLS_DIR64))/lib:$(LD_LIBRARY_PATH)" \
-	ninja -C "$(GST_BASE_OBJ64)" install
-	cp -a $(TOOLS_DIR64)/lib/libgst* $(DST_DIR)/lib64/ && \
-	cp -a $(TOOLS_DIR64)/lib/gstreamer-1.0 $(DST_DIR)/lib64/
-
-gst_base32: SHELL = $(CONTAINER_SHELL)
-gst_base32: $(GST_BASE_CONFIGURE_FILES32)
-	PATH="$(abspath $(TOOLS_DIR32))/bin:$(PATH)" \
-	LD_LIBRARY_PATH="$(abspath $(TOOLS_DIR32))/lib:$(LD_LIBRARY_PATH)" \
-	ninja -C "$(GST_BASE_OBJ32)" install
+$(OBJ)/.gst_base-post-build32:
 	cp -a $(TOOLS_DIR32)/lib/libgst* $(DST_DIR)/lib/ && \
 	cp -a $(TOOLS_DIR32)/lib/gstreamer-1.0 $(DST_DIR)/lib/
-
+	touch $@
 
 ##
 ## gst-plugins-good
@@ -1136,7 +1087,7 @@ WINE32_MAKE_ARGS := \
 
 # 64bit-configure
 $(WINE_CONFIGURE_FILES64): SHELL = $(CONTAINER_SHELL)
-$(WINE_CONFIGURE_FILES64): $(MAKEFILE_DEP) | faudio64 jxrlib64 gst_base64 $(WINE_OBJ64)
+$(WINE_CONFIGURE_FILES64): $(MAKEFILE_DEP) gst_base64 | faudio64 jxrlib64 $(WINE_OBJ64)
 	cd $(dir $@) && \
 		../$(WINE)/configure \
 			--enable-win64 \
@@ -1156,7 +1107,7 @@ $(WINE_CONFIGURE_FILES64): $(MAKEFILE_DEP) | faudio64 jxrlib64 gst_base64 $(WINE
 
 # 32-bit configure
 $(WINE_CONFIGURE_FILES32): SHELL = $(CONTAINER_SHELL)
-$(WINE_CONFIGURE_FILES32): $(MAKEFILE_DEP) | faudio32 jxrlib32 gst_base32 $(WINE_OBJ32)
+$(WINE_CONFIGURE_FILES32): $(MAKEFILE_DEP) gst_base32 | faudio32 jxrlib32 $(WINE_OBJ32)
 	cd $(dir $@) && \
 		../$(WINE)/configure \
 			--disable-tests \
