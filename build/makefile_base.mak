@@ -216,11 +216,6 @@ STEAMEXE_SRC := $(SRCDIR)/steam_helper
 STEAMEXE_OBJ := ./obj-steam
 STEAMEXE_SYN := ./syn-steam/steam
 
-WINE := $(SRCDIR)/wine
-WINE_DST32 := ./dist-wine32
-WINE_OBJ32 := ./obj-wine32
-WINE_OBJ64 := ./obj-wine64
-
 # Wine outputs that need to exist for other steps (dist)
 WINE_OUT_BIN := $(DST_DIR)/bin/wine64
 WINE_OUT_SERVER := $(DST_DIR)/bin/wineserver
@@ -247,7 +242,6 @@ OBJ_DIRS := $(TOOLS_DIR32)        $(TOOLS_DIR64)        \
             $(LSTEAMCLIENT_OBJ32) $(LSTEAMCLIENT_OBJ64) \
             $(WINEOPENXR_OBJ64) \
             $(STEAMEXE_OBJ)                             \
-            $(WINE_OBJ32)         $(WINE_OBJ64)         \
             $(VRCLIENT_OBJ32)     $(VRCLIENT_OBJ64)     \
             $(DXVK_OBJ32)         $(DXVK_OBJ64)         \
             $(MEDIACONV_OBJ32)    $(MEDIACONV_OBJ64)
@@ -916,115 +910,47 @@ steam: $(STEAMEXE_CONFIGURE_FILES) wine32 | $(filter $(MAKECMDGOALS),wine64 wine
 ## wine
 ##
 
-## Create & configure object directory for wine
+WINE_SOURCE_ARGS = \
+  --exclude configure \
+  --exclude autom4te.cache \
+  --exclude include/config.h.in \
 
-WINE_CONFIGURE_FILES32 := $(WINE_OBJ32)/Makefile
-WINE_CONFIGURE_FILES64 := $(WINE_OBJ64)/Makefile
+WINE_CONFIGURE_ARGS = \
+  --with-mingw \
+  --disable-tests
 
-WINE_COMMON_MAKE_ARGS := \
-	STRIP="$(STRIP_QUOTED)" \
-	INSTALL_PROGRAM_FLAGS="$(INSTALL_PROGRAM_FLAGS)"
+WINE_CONFIGURE_ARGS64 = --enable-win64
 
-WINE64_MAKE_ARGS := \
-	$(WINE_COMMON_MAKE_ARGS) \
-	prefix="$(abspath $(TOOLS_DIR64))" \
-	libdir="$(abspath $(TOOLS_DIR64))/lib64" \
-	dlldir="$(abspath $(TOOLS_DIR64))/lib64/wine"
+WINE_DEPENDS = gst_orc gstreamer gst_base faudio jxrlib
 
-WINE32_MAKE_ARGS := \
-	$(WINE_COMMON_MAKE_ARGS) \
-	prefix="$(abspath $(TOOLS_DIR32))" \
-	libdir="$(abspath $(TOOLS_DIR32))/lib" \
-	dlldir="$(abspath $(TOOLS_DIR32))/lib/wine"
+$(eval $(call rules-source,wine,$(SRCDIR)/wine))
+$(eval $(call rules-autoconf,wine,32))
+$(eval $(call rules-autoconf,wine,64))
 
-# 64bit-configure
-$(WINE_CONFIGURE_FILES64): SHELL = $(CONTAINER_SHELL)
-$(WINE_CONFIGURE_FILES64): $(MAKEFILE_DEP) gst_base64 faudio64 | jxrlib64 $(WINE_OBJ64)
-	cd $(dir $@) && \
-		../$(WINE)/configure \
-			--enable-win64 \
-			--disable-tests \
-			--prefix=$(abspath $(DST_DIR)) \
-			LD_LIBRARY_PATH=$(abspath $(TOOLS_DIR64))/lib \
-			STRIP=$(STRIP_QUOTED) \
-			CFLAGS="-I$(abspath $(TOOLS_DIR64))/include -g $(COMMON_FLAGS)" \
-			CROSSCFLAGS="-g $(COMMON_FLAGS)" \
-			LDFLAGS=-L$(abspath $(TOOLS_DIR64))/lib \
-			PKG_CONFIG_PATH=$(abspath $(TOOLS_DIR64))/lib/pkgconfig \
-			JXRLIB_CFLAGS=-I$(abspath $(TOOLS_DIR64))/include/jxrlib \
-			CC=$(CC_QUOTED) \
-			CXX=$(CXX_QUOTED) \
-			CROSSCC=$(CROSSCC64_QUOTED) \
-			CROSSDEBUG=split-dwarf
+$(WINE_SRC)/configure: $(SRCDIR)/wine/configure.ac | $(OBJ)/.wine-source
+	cd $(WINE_SRC) && autoreconf -fi
+	touch $@
 
-# 32-bit configure
-$(WINE_CONFIGURE_FILES32): SHELL = $(CONTAINER_SHELL)
-$(WINE_CONFIGURE_FILES32): $(MAKEFILE_DEP) gst_base32 faudio32 | jxrlib32 $(WINE_OBJ32)
-	cd $(dir $@) && \
-		../$(WINE)/configure \
-			--disable-tests \
-			--prefix=$(abspath $(WINE_DST32)) \
-			LD_LIBRARY_PATH=$(abspath $(TOOLS_DIR32))/lib \
-			STRIP=$(STRIP_QUOTED) \
-			CFLAGS="-I$(abspath $(TOOLS_DIR32))/include -g $(COMMON_FLAGS)" \
-			CROSSCFLAGS="-g $(COMMON_FLAGS)" \
-			LDFLAGS=-L$(abspath $(TOOLS_DIR32))/lib \
-			PKG_CONFIG_PATH=$(abspath $(TOOLS_DIR32))/lib/pkgconfig \
-			JXRLIB_CFLAGS=-I$(abspath $(TOOLS_DIR32))/include/jxrlib \
-			CC=$(CC32_QUOTED) \
-			CXX=$(CXX32_QUOTED) \
-			CROSSCC=$(CROSSCC32_QUOTED) \
-			PKG_CONFIG="$(PKG_CONFIG32)" \
-			CROSSDEBUG=split-dwarf
+$(OBJ)/.wine-post-source: $(WINE_SRC)/configure
+	cd $(WINE_SRC) && tools/make_requests
+	touch $@
 
-## wine goals
-WINE_TARGETS = wine wine_configure wine32 wine64 wine_configure32 wine_configure64
+$(OBJ)/.wine-post-build64:
+	mkdir -p $(DST_DIR)/{lib64,bin,share}
+	cp -a $(TOOLS_DIR64)/lib64 $(DST_DIR)/
+	cp -a $(TOOLS_DIR64)/bin/wine64 $(DST_DIR)/bin/
+	cp -a $(TOOLS_DIR64)/bin/wine64-preloader $(DST_DIR)/bin/
+	cp -a $(TOOLS_DIR64)/bin/wineserver $(DST_DIR)/bin/
+	cp -a $(TOOLS_DIR64)/bin/msidb $(DST_DIR)/bin/
+	cp -a $(TOOLS_DIR64)/share/wine $(DST_DIR)/share/
+	touch $@
 
-ALL_TARGETS += $(WINE_TARGETS)
-GOAL_TARGETS += wine
-
-.PHONY: $(WINE_TARGETS)
-
-wine_configure: $(WINE_CONFIGURE_FILES32) $(WINE_CONFIGURE_FILES64)
-
-wine_configure64: $(WINE_CONFIGURE_FILES64)
-
-wine_configure32: $(WINE_CONFIGURE_FILES32)
-
-wine: wine32 wine64
-
-# WINE_OUT outputs needed by other rules, though we don't explicitly track all state here --
-# make all or make wine are needed to ensure all deps are up to date, this just ensures 'make dist' or 'make vrclient'
-# will drag in wine if you've never built wine.
-.INTERMEDIATE: wine64-intermediate wine32-intermediate
-
-$(WINE_OUT) wine64: wine64-intermediate
-
-wine64-intermediate: SHELL = $(CONTAINER_SHELL)
-wine64-intermediate: $(WINE_CONFIGURE_FILES64)
-	+$(MAKE) -C $(WINE_OBJ64) $(WINE_COMMON_MAKE_ARGS)
-	+$(MAKE) -C $(WINE_OBJ64) $(WINE_COMMON_MAKE_ARGS) install-lib
-	+$(MAKE) -C $(WINE_OBJ64) $(WINE64_MAKE_ARGS) install-lib install-dev
-	if [ "$(UNSTRIPPED_BUILD)" == "" ]; then rm -rf $(DST_DIR)/lib64/wine/.debug; fi
-	if [ "$(UNSTRIPPED_BUILD)" != "" ]; then make -C $(WINE_OBJ64) $(WINE64_MAKE_ARGS) install-cross-debug; cp -af $(TOOLS_DIR64)/lib64/wine/.debug $(DST_DIR)/lib64/wine/; fi
-	rm -f $(DST_DIR)/bin/{msiexec,notepad,regedit,regsvr32,wineboot,winecfg,wineconsole,winedbg,winefile,winemine,winepath}
-	rm -rf $(DST_DIR)/share/man/
-
-## This installs 32-bit stuff manually, see
-##   https://wiki.winehq.org/Packaging#WoW64_Workarounds
-wine32: wine32-intermediate
-
-wine32-intermediate: SHELL = $(CONTAINER_SHELL)
-wine32-intermediate: $(WINE_CONFIGURE_FILES32)
-	+$(MAKE) -C $(WINE_OBJ32) $(WINE_COMMON_MAKE_ARGS)
-	+$(MAKE) -C $(WINE_OBJ32) $(WINE_COMMON_MAKE_ARGS) install-lib
-	+$(MAKE) -C $(WINE_OBJ32) $(WINE32_MAKE_ARGS) install-lib install-dev
+$(OBJ)/.wine-post-build32:
 	mkdir -p $(DST_DIR)/{lib,bin}
-	cp -af $(WINE_DST32)/lib $(DST_DIR)/
-	cp -a $(WINE_DST32)/bin/wine $(DST_DIR)/bin/
-	cp -a $(WINE_DST32)/bin/wine-preloader $(DST_DIR)/bin/
-	if [ "$(UNSTRIPPED_BUILD)" == "" ]; then rm -rf $(DST_DIR)/lib/wine/.debug; fi
-	if [ "$(UNSTRIPPED_BUILD)" != "" ]; then make -C $(WINE_OBJ32) $(WINE32_MAKE_ARGS) install-cross-debug; cp -af $(TOOLS_DIR32)/lib/wine/.debug $(DST_DIR)/lib/wine/; fi
+	cp -a $(TOOLS_DIR32)/lib $(DST_DIR)/
+	cp -a $(TOOLS_DIR32)/bin/wine $(DST_DIR)/bin/
+	cp -a $(TOOLS_DIR32)/bin/wine-preloader $(DST_DIR)/bin/
+	touch $@
 
 ##
 ## vrclient
