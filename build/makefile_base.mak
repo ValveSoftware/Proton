@@ -198,10 +198,6 @@ GECKO64_TARBALL := wine-gecko-$(GECKO_VER)-x86_64.tar.xz
 WINEMONO_VER := 6.1.1
 WINEMONO_TARBALL := wine-mono-$(WINEMONO_VER)-x86.tar.xz
 
-GSTREAMER := $(SRCDIR)/gstreamer
-GSTREAMER_OBJ32 := ./obj-gstreamer32
-GSTREAMER_OBJ64 := ./obj-gstreamer64
-
 GST_BASE := $(SRCDIR)/gst-plugins-base
 GST_BASE_OBJ32 := ./obj-gst-base32
 GST_BASE_OBJ64 := ./obj-gst-base64
@@ -277,7 +273,6 @@ FONTS_OBJ := ./obj-fonts
 
 ## Object directories
 OBJ_DIRS := $(TOOLS_DIR32)        $(TOOLS_DIR64)        \
-            $(GSTREAMER_OBJ32)    $(GSTREAMER_OBJ64)    \
             $(GST_BASE_OBJ32)     $(GST_BASE_OBJ64)     \
             $(GST_GOOD_OBJ32)     $(GST_GOOD_OBJ64)     \
             $(FAUDIO_OBJ32)       $(FAUDIO_OBJ64)       \
@@ -524,6 +519,7 @@ $(eval $(call rules-source,gst_orc,$(SRCDIR)/gst-orc))
 $(eval $(call rules-meson,gst_orc,32))
 $(eval $(call rules-meson,gst_orc,64))
 
+
 ##
 ## gstreamer
 ##
@@ -535,66 +531,21 @@ GSTREAMER_MESON_ARGS := \
 	-Dbash-completion=disabled \
 	$(GST_COMMON_MESON_ARGS)
 
-GSTREAMER_CONFIGURE_FILES32 := $(GSTREAMER_OBJ32)/build.ninja
-GSTREAMER_CONFIGURE_FILES64 := $(GSTREAMER_OBJ64)/build.ninja
+GSTREAMER_DEPENDS = gst_orc
 
-# 64-bit configure.  Remove coredata file if already configured (due to e.g. makefile changing)
-$(GSTREAMER_CONFIGURE_FILES64): SHELL = $(CONTAINER_SHELL)
-$(GSTREAMER_CONFIGURE_FILES64): $(MAKEFILE_DEP) gst_orc64 | $(GSTREAMER_OBJ64)
-	if [ -e "$(abspath $(GSTREAMER_OBJ64))"/build.ninja ]; then \
-		rm -f "$(abspath $(GSTREAMER_OBJ64))"/meson-private/coredata.dat; \
-	fi
-	cd "$(abspath $(GSTREAMER))" && \
-	PATH="$(abspath $(TOOLS_DIR64))/bin:$(PATH)" \
-		PKG_CONFIG_PATH=$(abspath $(TOOLS_DIR64))/lib/pkgconfig \
-		meson --prefix="$(abspath $(TOOLS_DIR64))" --libdir="lib" $(GSTREAMER_MESON_ARGS) $(MESON_STRIP_ARG) --buildtype=release "$(abspath $(GSTREAMER_OBJ64))"
+$(eval $(call rules-source,gstreamer,$(SRCDIR)/gstreamer))
+$(eval $(call rules-meson,gstreamer,32))
+$(eval $(call rules-meson,gstreamer,64))
 
-# 32-bit configure.  Remove coredata file if already configured (due to e.g. makefile changing)
-$(GSTREAMER_CONFIGURE_FILES32): SHELL = $(CONTAINER_SHELL)
-$(GSTREAMER_CONFIGURE_FILES32): $(MAKEFILE_DEP) gst_orc32 | $(GSTREAMER_OBJ32)
-	if [ -e "$(abspath $(GSTREAMER_OBJ32))"/build.ninja ]; then \
-		rm -f "$(abspath $(GSTREAMER_OBJ32))"/meson-private/coredata.dat; \
-	fi
-	cd "$(abspath $(GSTREAMER))" && \
-	PATH="$(abspath $(TOOLS_DIR32))/bin:$(PATH)" \
-		CC="$(CC32)" \
-		CXX="$(CXX32)" \
-		PKG_CONFIG="$(PKG_CONFIG32)" \
-		PKG_CONFIG_PATH=$(abspath $(TOOLS_DIR32))/lib/pkgconfig \
-		meson --prefix="$(abspath $(TOOLS_DIR32))" --libdir="lib" $(GSTREAMER_MESON_ARGS) $(MESON_STRIP_ARG) --buildtype=release "$(abspath $(GSTREAMER_OBJ32))"
+$(OBJ)/.gstreamer-post-build64:
+	cp -a $(TOOLS_DIR64)/lib64/libgst* $(DST_DIR)/lib64/ && \
+	cp -a $(TOOLS_DIR64)/lib64/gstreamer-1.0 $(DST_DIR)/lib64/
+	touch $@
 
-## gstreamer goals
-GSTREAMER_TARGETS = gstreamer gstreamer_configure gstreamer32 gstreamer64 gstreamer_configure32 gstreamer_configure64
-
-ALL_TARGETS += $(GSTREAMER_TARGETS)
-GOAL_TARGETS_LIBS += gstreamer
-
-.PHONY: $(GSTREAMER_TARGETS)
-
-gstreamer_configure: $(GSTREAMER_CONFIGURE_FILES32) $(GSTREAMER_CONFIGURE_FILES64)
-
-gstreamer_configure64: $(GSTREAMER_CONFIGURE_FILES64)
-
-gstreamer_configure32: $(GSTREAMER_CONFIGURE_FILES32)
-
-gstreamer: gstreamer32 gstreamer64
-
-gstreamer64: SHELL = $(CONTAINER_SHELL)
-gstreamer64: $(GSTREAMER_CONFIGURE_FILES64)
-	PATH="$(abspath $(TOOLS_DIR64))/bin:$(PATH)" \
-	LD_LIBRARY_PATH="$(abspath $(TOOLS_DIR64))/lib:$(LD_LIBRARY_PATH)" \
-	ninja -C "$(GSTREAMER_OBJ64)" install
-	cp -a $(TOOLS_DIR64)/lib/libgst* $(DST_DIR)/lib64/ && \
-	cp -a $(TOOLS_DIR64)/lib/gstreamer-1.0 $(DST_DIR)/lib64/
-
-gstreamer32: SHELL = $(CONTAINER_SHELL)
-gstreamer32: $(GSTREAMER_CONFIGURE_FILES32)
-	PATH="$(abspath $(TOOLS_DIR32))/bin:$(PATH)" \
-	LD_LIBRARY_PATH="$(abspath $(TOOLS_DIR32))/lib:$(LD_LIBRARY_PATH)" \
-	ninja -C "$(GSTREAMER_OBJ32)" install
+$(OBJ)/.gstreamer-post-build32:
 	cp -a $(TOOLS_DIR32)/lib/libgst* $(DST_DIR)/lib/ && \
 	cp -a $(TOOLS_DIR32)/lib/gstreamer-1.0 $(DST_DIR)/lib/
-
+	touch $@
 
 ##
 ## gst-plugins-base
