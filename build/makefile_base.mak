@@ -201,12 +201,6 @@ GECKO64_TARBALL := wine-gecko-$(GECKO_VER)-x86_64.tar.xz
 WINEMONO_VER := 6.1.1
 WINEMONO_TARBALL := wine-mono-$(WINEMONO_VER)-x86.tar.xz
 
-LSTEAMCLIENT := $(SRCDIR)/lsteamclient
-LSTEAMCLIENT32 := ./syn-lsteamclient32/lsteamclient
-LSTEAMCLIENT64 := ./syn-lsteamclient64/lsteamclient
-LSTEAMCLIENT_OBJ32 := ./obj-lsteamclient32
-LSTEAMCLIENT_OBJ64 := ./obj-lsteamclient64
-
 STEAMEXE_SRC := $(SRCDIR)/steam_helper
 STEAMEXE_OBJ := ./obj-steam
 STEAMEXE_SYN := ./syn-steam/steam
@@ -230,7 +224,6 @@ FONTS_OBJ := ./obj-fonts
 
 ## Object directories
 OBJ_DIRS := $(TOOLS_DIR32)        $(TOOLS_DIR64)        \
-            $(LSTEAMCLIENT_OBJ32) $(LSTEAMCLIENT_OBJ64) \
             $(STEAMEXE_OBJ)                             \
             $(VRCLIENT_OBJ32)     $(VRCLIENT_OBJ64)     \
             $(MEDIACONV_OBJ32)    $(MEDIACONV_OBJ64)
@@ -666,99 +659,32 @@ $(OBJ)/.jxrlib-post-build64:
 ## lsteamclient
 ##
 
-# The source directory for lsteamclient is a synthetic symlink clone of the source directory, because we need to run
-# winemaker in tree and it can stomp itself in parallel builds.
-$(LSTEAMCLIENT64)/.created: $(LSTEAMCLIENT) $(MAKEFILE_DEP)
-	rm -rf ./$(LSTEAMCLIENT64)
-	mkdir -p $(LSTEAMCLIENT64)/
-	cd $(LSTEAMCLIENT64)/ && ln -sfv ../../$(LSTEAMCLIENT)/* .
-	touch $@
+LSTEAMCLIENT_CFLAGS = -Wno-attributes
+LSTEAMCLIENT_CXXFLAGS = -Wno-attributes
+LSTEAMCLIENT_LDFLAGS = -static-libgcc -static-libstdc++ -ldl
 
-$(LSTEAMCLIENT32)/.created: $(LSTEAMCLIENT) $(MAKEFILE_DEP)
-	rm -rf ./$(LSTEAMCLIENT32)
-	mkdir -p $(LSTEAMCLIENT32)/
-	cd $(LSTEAMCLIENT32)/ && ln -sfv ../../$(LSTEAMCLIENT)/* .
-	touch $@
+LSTEAMCLIENT_WINEMAKER_ARGS = \
+	-DSTEAM_API_EXPORTS \
+	-Dprivate=public \
+	-Dprotected=public
 
-$(LSTEAMCLIENT64): $(LSTEAMCLIENT64)/.created
-$(LSTEAMCLIENT32): $(LSTEAMCLIENT32)/.created
+LSTEAMCLIENT_DEPENDS = wine
 
-## Create & configure object directory for lsteamclient
+$(eval $(call rules-source,lsteamclient,$(SRCDIR)/lsteamclient))
+$(eval $(call rules-winemaker,lsteamclient,32,lsteamclient.dll))
+$(eval $(call rules-winemaker,lsteamclient,64,lsteamclient.dll))
 
-LSTEAMCLIENT_CONFIGURE_FILES32 := $(LSTEAMCLIENT_OBJ32)/Makefile
-LSTEAMCLIENT_CONFIGURE_FILES64 := $(LSTEAMCLIENT_OBJ64)/Makefile
-
-# 64bit-configure
-$(LSTEAMCLIENT_CONFIGURE_FILES64): SHELL = $(CONTAINER_SHELL)
-$(LSTEAMCLIENT_CONFIGURE_FILES64): $(LSTEAMCLIENT64) $(MAKEFILE_DEP) wine64 | $(LSTEAMCLIENT_OBJ64)
-	cd $(dir $@) && \
-	env PATH="$(abspath $(TOOLS_DIR64))/bin:$(PATH)" \
-		winemaker --nosource-fix --nolower-include --nodlls --nomsvcrt \
-			-DSTEAM_API_EXPORTS \
-			-Dprivate=public -Dprotected=public \
-			-I"../$(TOOLS_DIR64)"/include/ \
-			-I"../$(TOOLS_DIR64)"/include/wine/ \
-			-I"../$(TOOLS_DIR64)"/include/wine/windows/ \
-			-I"../$(WINE)"/include/ \
-			-L"../$(TOOLS_DIR64)"/lib64/ \
-			-L"../$(TOOLS_DIR64)"/lib64/wine/ \
-			--dll ../$(LSTEAMCLIENT64) && \
-		cp ../$(LSTEAMCLIENT64)/Makefile . && \
-		echo >> ./Makefile 'SRCDIR := ../$(LSTEAMCLIENT64)' && \
-		echo >> ./Makefile 'vpath % $$(SRCDIR)' && \
-		echo >> ./Makefile 'lsteamclient_dll_LDFLAGS := -ldl $$(patsubst %.spec,$$(SRCDIR)/%.spec,$$(lsteamclient_dll_LDFLAGS))'
-
-# 32-bit configure
-$(LSTEAMCLIENT_CONFIGURE_FILES32): SHELL = $(CONTAINER_SHELL)
-$(LSTEAMCLIENT_CONFIGURE_FILES32): $(LSTEAMCLIENT32) $(MAKEFILE_DEP) wine32 | $(LSTEAMCLIENT_OBJ32)
-	cd $(dir $@) && \
-	env PATH="$(abspath $(TOOLS_DIR32))/bin:$(PATH)" \
-		winemaker --nosource-fix --nolower-include --nodlls --nomsvcrt --wine32 \
-			-DSTEAM_API_EXPORTS \
-			-Dprivate=public -Dprotected=public \
-			-I"../$(TOOLS_DIR32)"/include/ \
-			-I"../$(TOOLS_DIR32)"/include/wine/ \
-			-I"../$(TOOLS_DIR32)"/include/wine/windows/ \
-			-I"../$(WINE)"/include/ \
-			-L"../$(TOOLS_DIR32)"/lib/ \
-			-L"../$(TOOLS_DIR32)"/lib/wine/ \
-			--dll ../$(LSTEAMCLIENT32) && \
-		cp ../$(LSTEAMCLIENT32)/Makefile . && \
-		echo >> ./Makefile 'SRCDIR := ../$(LSTEAMCLIENT32)' && \
-		echo >> ./Makefile 'vpath % $$(SRCDIR)' && \
-		echo >> ./Makefile 'lsteamclient_dll_LDFLAGS := -ldl -m32 $$(patsubst %.spec,$$(SRCDIR)/%.spec,$$(lsteamclient_dll_LDFLAGS))'
-
-## lsteamclient goals
-LSTEAMCLIENT_TARGETS = lsteamclient lsteamclient_configure lsteamclient32 lsteamclient64 lsteamclient_configure32 lsteamclient_configure64
-
-ALL_TARGETS += $(LSTEAMCLIENT_TARGETS)
-GOAL_TARGETS_LIBS += lsteamclient
-
-.PHONY: $(LSTEAMCLIENT_TARGETS)
-
-lsteamclient_configure: $(LSTEAMCLIENT_CONFIGURE_FILES32) $(LSTEAMCLIENT_CONFIGURE_FILES64)
-
-lsteamclient_configure64: $(LSTEAMCLIENT_CONFIGURE_FILES64)
-
-lsteamclient_configure32: $(LSTEAMCLIENT_CONFIGURE_FILES32)
-
-lsteamclient: lsteamclient32 lsteamclient64
-
-lsteamclient64: SHELL = $(CONTAINER_SHELL)
-lsteamclient64: $(LSTEAMCLIENT_CONFIGURE_FILES64) wine64 | $(filter $(MAKECMDGOALS),wine64 wine32 wine)
-	+env PATH="$(abspath $(TOOLS_DIR64))/bin:$(PATH)" CXXFLAGS="-Wno-attributes $(COMMON_FLAGS) -std=gnu++11 -g" CFLAGS="$(COMMON_FLAGS) -g" \
-		$(MAKE) -C $(LSTEAMCLIENT_OBJ64)
+$(OBJ)/.lsteamclient-post-build64:
 	[ x"$(STRIP)" = x ] || $(STRIP) $(LSTEAMCLIENT_OBJ64)/lsteamclient.dll.so
 	mkdir -pv $(DST_DIR)/lib64/wine/
 	cp -af $(LSTEAMCLIENT_OBJ64)/lsteamclient.dll.so $(DST_DIR)/lib64/wine/
+	touch $@
 
-lsteamclient32: SHELL = $(CONTAINER_SHELL)
-lsteamclient32: $(LSTEAMCLIENT_CONFIGURE_FILES32) wine32 | $(filter $(MAKECMDGOALS),wine64 wine32 wine)
-	+env CC="$(CC32)" CXX="$(CXX32)" PATH="$(abspath $(TOOLS_DIR32))/bin:$(PATH)" LDFLAGS="-m32" CXXFLAGS="-m32 -Wno-attributes $(COMMON_FLAGS) -std=gnu++11 -g" CFLAGS="-m32 $(COMMON_FLAGS) -g" \
-		$(MAKE) -C $(LSTEAMCLIENT_OBJ32)
+$(OBJ)/.lsteamclient-post-build32:
 	[ x"$(STRIP)" = x ] || $(STRIP) $(LSTEAMCLIENT_OBJ32)/lsteamclient.dll.so
 	mkdir -pv $(DST_DIR)/lib/wine/
 	cp -af $(LSTEAMCLIENT_OBJ32)/lsteamclient.dll.so $(DST_DIR)/lib/wine/
+	touch $@
 
 
 ##
