@@ -198,10 +198,6 @@ GECKO64_TARBALL := wine-gecko-$(GECKO_VER)-x86_64.tar.xz
 WINEMONO_VER := 6.1.1
 WINEMONO_TARBALL := wine-mono-$(WINEMONO_VER)-x86.tar.xz
 
-GST_GOOD := $(SRCDIR)/gst-plugins-good
-GST_GOOD_OBJ32 := ./obj-gst-good32
-GST_GOOD_OBJ64 := ./obj-gst-good64
-
 FAUDIO := $(SRCDIR)/FAudio
 FAUDIO_OBJ32 := ./obj-faudio32
 FAUDIO_OBJ64 := ./obj-faudio64
@@ -269,7 +265,6 @@ FONTS_OBJ := ./obj-fonts
 
 ## Object directories
 OBJ_DIRS := $(TOOLS_DIR32)        $(TOOLS_DIR64)        \
-            $(GST_GOOD_OBJ32)     $(GST_GOOD_OBJ64)     \
             $(FAUDIO_OBJ32)       $(FAUDIO_OBJ64)       \
             $(JXRLIB_OBJ32)       $(JXRLIB_OBJ64)       \
             $(LSTEAMCLIENT_OBJ32) $(LSTEAMCLIENT_OBJ64) \
@@ -590,6 +585,7 @@ $(OBJ)/.gst_base-post-build32:
 	cp -a $(TOOLS_DIR32)/lib/gstreamer-1.0 $(DST_DIR)/lib/
 	touch $@
 
+
 ##
 ## gst-plugins-good
 ##
@@ -645,66 +641,21 @@ GST_GOOD_MESON_ARGS := \
 	-Dtools=disabled \
 	$(GST_COMMON_MESON_ARGS)
 
-GST_GOOD_CONFIGURE_FILES32 := $(GST_GOOD_OBJ32)/build.ninja
-GST_GOOD_CONFIGURE_FILES64 := $(GST_GOOD_OBJ64)/build.ninja
+GST_GOOD_DEPENDS = gst_orc gstreamer gst_base
 
-# 64-bit configure.  Remove coredata file if already configured (due to e.g. makefile changing)
-$(GST_GOOD_CONFIGURE_FILES64): SHELL = $(CONTAINER_SHELL)
-$(GST_GOOD_CONFIGURE_FILES64): $(MAKEFILE_DEP) gst_base64 | $(GST_GOOD_OBJ64)
-	if [ -e "$(abspath $(GST_GOOD_OBJ64))"/build.ninja ]; then \
-		rm -f "$(abspath $(GST_GOOD_OBJ64))"/meson-private/coredata.dat; \
-	fi
-	cd "$(abspath $(GST_GOOD))" && \
-	PATH="$(abspath $(TOOLS_DIR64))/bin:$(PATH)" \
-		PKG_CONFIG_PATH=$(abspath $(TOOLS_DIR64))/lib/pkgconfig \
-		meson --prefix="$(abspath $(TOOLS_DIR64))" --libdir="lib" $(GST_GOOD_MESON_ARGS) $(MESON_STRIP_ARG) --buildtype=release "$(abspath $(GST_GOOD_OBJ64))"
+$(eval $(call rules-source,gst_good,$(SRCDIR)/gst-plugins-good))
+$(eval $(call rules-meson,gst_good,32))
+$(eval $(call rules-meson,gst_good,64))
 
-# 32-bit configure.  Remove coredata file if already configured (due to e.g. makefile changing)
-$(GST_GOOD_CONFIGURE_FILES32): SHELL = $(CONTAINER_SHELL)
-$(GST_GOOD_CONFIGURE_FILES32): $(MAKEFILE_DEP) gst_base32 | $(GST_GOOD_OBJ32)
-	if [ -e "$(abspath $(GST_GOOD_OBJ32))"/build.ninja ]; then \
-		rm -f "$(abspath $(GST_GOOD_OBJ32))"/meson-private/coredata.dat; \
-	fi
-	cd "$(abspath $(GST_GOOD))" && \
-	PATH="$(abspath $(TOOLS_DIR32))/bin:$(PATH)" \
-		CC="$(CC32)" \
-		CXX="$(CXX32)" \
-		PKG_CONFIG="$(PKG_CONFIG32)" \
-		PKG_CONFIG_PATH=$(abspath $(TOOLS_DIR32))/lib/pkgconfig \
-		meson --prefix="$(abspath $(TOOLS_DIR32))" --libdir="lib" $(GST_GOOD_MESON_ARGS) $(MESON_STRIP_ARG) --buildtype=release "$(abspath $(GST_GOOD_OBJ32))"
+$(OBJ)/.gst_good-post-build64:
+	cp -a $(TOOLS_DIR64)/lib64/libgst* $(DST_DIR)/lib64/ && \
+	cp -a $(TOOLS_DIR64)/lib64/gstreamer-1.0 $(DST_DIR)/lib64/
+	touch $@
 
-## gst_good goals
-GST_GOOD_TARGETS = gst_good gst_good_configure gst_good32 gst_good64 gst_good_configure32 gst_good_configure64
-
-ALL_TARGETS += $(GST_GOOD_TARGETS)
-GOAL_TARGETS_LIBS += gst_good
-
-.PHONY: $(GST_GOOD_TARGETS)
-
-gst_good_configure: $(GST_GOOD_CONFIGURE_FILES32) $(GST_GOOD_CONFIGURE_FILES64)
-
-gst_good_configure64: $(GST_GOOD_CONFIGURE_FILES64)
-
-gst_good_configure32: $(GST_GOOD_CONFIGURE_FILES32)
-
-gst_good: gst_good32 gst_good64
-
-gst_good64: SHELL = $(CONTAINER_SHELL)
-gst_good64: $(GST_GOOD_CONFIGURE_FILES64)
-	PATH="$(abspath $(TOOLS_DIR64))/bin:$(PATH)" \
-	LD_LIBRARY_PATH="$(abspath $(TOOLS_DIR64))/lib:$(LD_LIBRARY_PATH)" \
-	ninja -C "$(GST_GOOD_OBJ64)" install
-	cp -a $(TOOLS_DIR64)/lib/libgst* $(DST_DIR)/lib64/ && \
-	cp -a $(TOOLS_DIR64)/lib/gstreamer-1.0 $(DST_DIR)/lib64/
-
-gst_good32: SHELL = $(CONTAINER_SHELL)
-gst_good32: $(GST_GOOD_CONFIGURE_FILES32)
-	PATH="$(abspath $(TOOLS_DIR32))/bin:$(PATH)" \
-	LD_LIBRARY_PATH="$(abspath $(TOOLS_DIR32))/lib:$(LD_LIBRARY_PATH)" \
-	ninja -C "$(GST_GOOD_OBJ32)" install
+$(OBJ)/.gst_good-post-build32:
 	cp -a $(TOOLS_DIR32)/lib/libgst* $(DST_DIR)/lib/ && \
 	cp -a $(TOOLS_DIR32)/lib/gstreamer-1.0 $(DST_DIR)/lib/
-
+	touch $@
 
 ##
 ## FAudio
