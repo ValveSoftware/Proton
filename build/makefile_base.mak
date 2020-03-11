@@ -206,11 +206,6 @@ WINE_OUT_BIN := $(DST_DIR)/bin/wine64
 WINE_OUT_SERVER := $(DST_DIR)/bin/wineserver
 WINE_OUT := $(WINE_OUT_BIN) $(WINE_OUT_SERVER)
 
-VRCLIENT := $(SRCDIR)/vrclient_x64
-VRCLIENT32 := ./syn-vrclient32
-VRCLIENT_OBJ64 := ./obj-vrclient64
-VRCLIENT_OBJ32 := ./obj-vrclient32
-
 MEDIACONV := $(SRCDIR)/media-converter
 MEDIACONV_OBJ32 := ./obj-media-converter32
 MEDIACONV_OBJ64 := ./obj-media-converter64
@@ -220,7 +215,6 @@ FONTS_OBJ := ./obj-fonts
 
 ## Object directories
 OBJ_DIRS := $(TOOLS_DIR32)        $(TOOLS_DIR64)        \
-            $(VRCLIENT_OBJ32)     $(VRCLIENT_OBJ64)     \
             $(MEDIACONV_OBJ32)    $(MEDIACONV_OBJ64)
 
 $(OBJ_DIRS):
@@ -790,101 +784,43 @@ $(OBJ)/.wine-post-build32:
 	cp -a $(TOOLS_DIR32)/bin/wine-preloader $(DST_DIR)/bin/
 	touch $@
 
+
 ##
 ## vrclient
 ##
 
-## Create & configure object directory for vrclient
+VRCLIENT_CFLAGS = -Wno-attributes
+VRCLIENT_CXXFLAGS = -Wno-attributes
+VRCLIENT_LDFLAGS = -static-libgcc -static-libstdc++ -ldl
 
-VRCLIENT_CONFIGURE_FILES32 := $(VRCLIENT_OBJ32)/Makefile
-VRCLIENT_CONFIGURE_FILES64 := $(VRCLIENT_OBJ64)/Makefile
+VRCLIENT_WINEMAKER_ARGS = \
+	"-I$(VRCLIENT_SRC)/" \
+	"-I$(VRCLIENT_SRC)/vrclient_x64/"
 
-# The source directory for vrclient32 is a synthetic symlink clone of the oddly named vrclient_x64 with the spec files
-# renamed.
-$(VRCLIENT32): $(VRCLIENT) $(MAKEFILE_DEP)
-	rm -rf ./$(VRCLIENT32)
-	mkdir -p $(VRCLIENT32)/vrclient
-	cd $(VRCLIENT32)/vrclient && \
-		ln -sfv ../../$(VRCLIENT)/vrclient_x64/* .
-	mv $(VRCLIENT32)/vrclient/vrclient_x64.spec $(VRCLIENT32)/vrclient/vrclient.spec
+VRCLIENT_DEPENDS = wine
 
-# 64bit-configure
-$(VRCLIENT_CONFIGURE_FILES64): SHELL = $(CONTAINER_SHELL)
-$(VRCLIENT_CONFIGURE_FILES64): $(MAKEFILE_DEP) $(VRCLIENT) $(VRCLIENT)/vrclient_x64 wine64 | $(VRCLIENT_OBJ64)
-	cd $(VRCLIENT) && \
-	env PATH="$(abspath $(TOOLS_DIR64))/bin:$(PATH)" \
-		winemaker --nosource-fix --nolower-include --nodlls --nomsvcrt \
-			--nosource-fix --nolower-include --nodlls --nomsvcrt \
-			-I"$(abspath $(TOOLS_DIR64))"/include/ \
-			-I"$(abspath $(TOOLS_DIR64))"/include/wine/ \
-			-I"$(abspath $(TOOLS_DIR64))"/include/wine/windows/ \
-			-I"$(abspath $(VRCLIENT))" \
-			-L"$(abspath $(TOOLS_DIR64))"/lib64/ \
-			-L"$(abspath $(TOOLS_DIR64))"/lib64/wine/ \
-			--dll vrclient_x64 && \
-		cp ./vrclient_x64/Makefile $(abspath $(dir $@)) && \
-		echo >> $(abspath $(dir $@))/Makefile 'SRCDIR := ../$(VRCLIENT)/vrclient_x64' && \
-		echo >> $(abspath $(dir $@))/Makefile 'vpath % $$(SRCDIR)' && \
-		echo >> $(abspath $(dir $@))/Makefile 'vrclient_x64_dll_LDFLAGS := -ldl $$(patsubst %.spec,$$(SRCDIR)/%.spec,$$(vrclient_x64_dll_LDFLAGS))'
+$(eval $(call rules-source,vrclient,$(SRCDIR)/vrclient_x64))
+$(eval $(call rules-winemaker,vrclient,32,vrclient.dll))
+$(eval $(call rules-winemaker,vrclient,64,vrclient_x64.dll))
 
-# 32-bit configure
-$(VRCLIENT_CONFIGURE_FILES32): SHELL = $(CONTAINER_SHELL)
-$(VRCLIENT_CONFIGURE_FILES32): $(MAKEFILE_DEP) $(VRCLIENT32) wine32 | $(VRCLIENT_OBJ32)
-	env PATH="$(abspath $(TOOLS_DIR32))/bin:$(PATH)" \
-	winemaker --nosource-fix --nolower-include --nodlls --nomsvcrt \
-		--wine32 \
-		-I"$(abspath $(TOOLS_DIR32))"/include/ \
-		-I"$(abspath $(TOOLS_DIR32))"/include/wine/ \
-		-I"$(abspath $(TOOLS_DIR32))"/include/wine/windows/ \
-		-I"$(abspath $(VRCLIENT))" \
-		-L"$(abspath $(TOOLS_DIR32))"/lib/ \
-		-L"$(abspath $(TOOLS_DIR32))"/lib/wine/ \
-		--dll $(VRCLIENT32)/vrclient && \
-	cp $(VRCLIENT32)/vrclient/Makefile $(dir $@) && \
-	echo >> $(dir $@)/Makefile 'SRCDIR := ../$(VRCLIENT32)/vrclient' && \
-	echo >> $(dir $@)/Makefile 'vpath % $$(SRCDIR)' && \
-	echo >> $(dir $@)/Makefile 'vrclient_dll_LDFLAGS := -ldl -m32 $$(patsubst %.spec,$$(SRCDIR)/%.spec,$$(vrclient_dll_LDFLAGS))'
+$(OBJ)/.vrclient-post-source:
+	mkdir -p $(VRCLIENT_OBJ32) && cp -a $(VRCLIENT_SRC)/vrclient_x64/vrclient_x64.spec $(VRCLIENT_OBJ32)/vrclient.spec
+	mkdir -p $(VRCLIENT_OBJ64) && cp -a $(VRCLIENT_SRC)/vrclient_x64/vrclient_x64.spec $(VRCLIENT_OBJ64)/vrclient_x64.spec
+	touch $@
 
+$(OBJ)/.vrclient-post-build64:
+	[ x"$(STRIP)" = x ] || $(STRIP) $(VRCLIENT_OBJ64)/vrclient_x64.dll.so && \
+	mkdir -pv $(DST_DIR)/lib64/wine/fakedlls && \
+	cp -a $(VRCLIENT_OBJ64)/vrclient_x64.dll.so $(DST_DIR)/lib64/wine/ && \
+	cp -a $(VRCLIENT_OBJ64)/vrclient_x64.dll.fake $(DST_DIR)/lib64/wine/fakedlls/vrclient_x64.dll
+	touch $@
 
-## vrclient goals
-VRCLIENT_TARGETS = vrclient vrclient_configure vrclient32 vrclient64 vrclient_configure32 vrclient_configure64
-
-ALL_TARGETS += $(VRCLIENT_TARGETS)
-GOAL_TARGETS_LIBS += vrclient
-
-.PHONY: $(VRCLIENT_TARGETS)
-
-vrclient_configure: $(VRCLIENT_CONFIGURE_FILES32) $(VRCLIENT_CONFIGURE_FILES64)
-
-vrclient_configure32: $(VRCLIENT_CONFIGURE_FILES32)
-
-vrclient_configure64: $(VRCLIENT_CONFIGURE_FILES64)
-
-vrclient: vrclient32 vrclient64
-
-vrclient64: SHELL = $(CONTAINER_SHELL)
-vrclient64: $(VRCLIENT_CONFIGURE_FILES64) wine64 | $(filter $(MAKECMDGOALS),wine64 wine32 wine)
-	+env CXXFLAGS="-Wno-attributes -std=c++0x $(COMMON_FLAGS) -g" CFLAGS="$(COMMON_FLAGS) -g" PATH="$(abspath $(TOOLS_DIR64))/bin:$(PATH)" \
-		$(MAKE) -C $(VRCLIENT_OBJ64)
-	cd $(VRCLIENT_OBJ64) && \
-		PATH=$(abspath $(TOOLS_DIR64))/bin:$(PATH) \
-			winebuild --dll --fake-module -E ../$(VRCLIENT)/vrclient_x64/vrclient_x64.spec -o vrclient_x64.dll.fake && \
-		[ x"$(STRIP)" = x ] || $(STRIP) ../$(VRCLIENT_OBJ64)/vrclient_x64.dll.so && \
-		mkdir -pv ../$(DST_DIR)/lib64/wine/fakedlls && \
-		cp -af ../$(VRCLIENT_OBJ64)/vrclient_x64.dll.so ../$(DST_DIR)/lib64/wine/ && \
-		cp -af ../$(VRCLIENT_OBJ64)/vrclient_x64.dll.fake ../$(DST_DIR)/lib64/wine/fakedlls/vrclient_x64.dll
-
-vrclient32: SHELL = $(CONTAINER_SHELL)
-vrclient32: $(VRCLIENT_CONFIGURE_FILES32) wine32 | $(filter $(MAKECMDGOALS),wine64 wine32 wine)
-	+env CC="$(CC32)" CXX="$(CXX32)" LDFLAGS="-m32" CXXFLAGS="-m32 -Wno-attributes -std=c++0x $(COMMON_FLAGS) -g" CFLAGS="-m32 $(COMMON_FLAGS) -g" PATH="$(abspath $(TOOLS_DIR32))/bin:$(PATH)" \
-		$(MAKE) -C $(VRCLIENT_OBJ32)
-	cd $(VRCLIENT_OBJ32) && \
-		PATH=$(abspath $(TOOLS_DIR32))/bin:$(PATH) \
-			winebuild --dll --fake-module -E ../$(VRCLIENT32)/vrclient/vrclient.spec -o vrclient.dll.fake && \
-		[ x"$(STRIP)" = x ] || $(STRIP) ../$(VRCLIENT_OBJ32)/vrclient.dll.so && \
-		mkdir -pv ../$(DST_DIR)/lib/wine/fakedlls && \
-		cp -af ../$(VRCLIENT_OBJ32)/vrclient.dll.so ../$(DST_DIR)/lib/wine/ && \
-		cp -af ../$(VRCLIENT_OBJ32)/vrclient.dll.fake ../$(DST_DIR)/lib/wine/fakedlls/vrclient.dll
+$(OBJ)/.vrclient-post-build32:
+	[ x"$(STRIP)" = x ] || $(STRIP) $(VRCLIENT_OBJ32)/vrclient.dll.so && \
+	mkdir -pv $(DST_DIR)/lib/wine/fakedlls && \
+	cp -a $(VRCLIENT_OBJ32)/vrclient.dll.so $(DST_DIR)/lib/wine/ && \
+	cp -a $(VRCLIENT_OBJ32)/vrclient.dll.fake $(DST_DIR)/lib/wine/fakedlls/vrclient.dll
+	touch $@
 
 
 ##
@@ -968,9 +904,6 @@ $(OBJ)/.vkd3d-proton-post-build64:
 	rm -f "$(DST_DIR)"/lib64/wine/vkd3d-proton/version && if test -e $(SRCDIR)/.git; then ( cd $(SRCDIR) && git submodule status -- vkd3d-proton ) > "$(DST_DIR)"/lib64/wine/vkd3d-proton/version; fi
 	touch $@
 
-# TODO Tests
-#  build_vrclient64_tests
-#  build_vrclient32_tests
 
 mediaconv32: SHELL = $(CONTAINER_SHELL)
 mediaconv32: $(MAKEFILE_DEP) gstreamer32 | $(MEDIACONV_OBJ32)
