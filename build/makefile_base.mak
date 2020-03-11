@@ -199,10 +199,6 @@ GECKO64_TARBALL := wine-gecko-$(GECKO_VER)-x86_64.tar.xz
 WINEMONO_VER := 6.1.1
 WINEMONO_TARBALL := wine-mono-$(WINEMONO_VER)-x86.tar.xz
 
-FAUDIO := $(SRCDIR)/FAudio
-FAUDIO_OBJ32 := ./obj-faudio32
-FAUDIO_OBJ64 := ./obj-faudio64
-
 JXRLIB := $(SRCDIR)/jxrlib
 JXRLIB_OBJ32 := ./obj-jxrlib32
 JXRLIB_OBJ64 := ./obj-jxrlib64
@@ -259,7 +255,6 @@ FONTS_OBJ := ./obj-fonts
 
 ## Object directories
 OBJ_DIRS := $(TOOLS_DIR32)        $(TOOLS_DIR64)        \
-            $(FAUDIO_OBJ32)       $(FAUDIO_OBJ64)       \
             $(JXRLIB_OBJ32)       $(JXRLIB_OBJ64)       \
             $(LSTEAMCLIENT_OBJ32) $(LSTEAMCLIENT_OBJ64) \
             $(WINEOPENXR_OBJ64) \
@@ -649,59 +644,29 @@ $(OBJ)/.gst_good-post-build32:
 	cp -a $(TOOLS_DIR32)/lib/gstreamer-1.0 $(DST_DIR)/lib/
 	touch $@
 
+
 ##
 ## FAudio
 ##
 
-FAUDIO_CMAKE_FLAGS = -DGSTREAMER=ON -DCMAKE_BUILD_TYPE=Release -DFORCE_ENABLE_DEBUGCONFIGURATION=ON -DLOG_ASSERTIONS=ON -DCMAKE_INSTALL_LIBDIR="lib" -DXNASONG=OFF
+FAUDIO_CMAKE_ARGS = -DGSTREAMER=ON -DFORCE_ENABLE_DEBUGCONFIGURATION=ON -DLOG_ASSERTIONS=ON -DXNASONG=OFF
+FAUDIO_DEPENDS = gst_orc gstreamer gst_base
 
-FAUDIO_TARGETS = faudio faudio32 faudio64
+$(eval $(call rules-source,faudio,$(SRCDIR)/FAudio))
+$(eval $(call rules-cmake,faudio,32))
+$(eval $(call rules-cmake,faudio,64))
 
-ALL_TARGETS += $(FAUDIO_TARGETS)
-GOAL_TARGETS_LIBS += faudio
-
-.PHONY: faudio faudio32 faudio64
-
-faudio: faudio32 faudio64
-
-FAUDIO_CONFIGURE_FILES32 := $(FAUDIO_OBJ32)/Makefile
-FAUDIO_CONFIGURE_FILES64 := $(FAUDIO_OBJ64)/Makefile
-
-$(FAUDIO_CONFIGURE_FILES32): SHELL = $(CONTAINER_SHELL)
-$(FAUDIO_CONFIGURE_FILES32): $(FAUDIO)/CMakeLists.txt $(MAKEFILE_DEP) gst_base32 | $(FAUDIO_OBJ32)
-	cd $(dir $@) && \
-		PKG_CONFIG_PATH=$(abspath $(TOOLS_DIR32))/lib/pkgconfig \
-		CC="$(CC32)" \
-		CXX="$(CXX32)" \
-		PKG_CONFIG="$(PKG_CONFIG32)" \
-		cmake $(abspath $(FAUDIO)) \
-			-DCMAKE_INSTALL_PREFIX="$(abspath $(TOOLS_DIR32))" \
-			$(FAUDIO_CMAKE_FLAGS)
-
-$(FAUDIO_CONFIGURE_FILES64): SHELL = $(CONTAINER_SHELL)
-$(FAUDIO_CONFIGURE_FILES64): $(FAUDIO)/CMakeLists.txt $(MAKEFILE_DEP) gst_base64 | $(FAUDIO_OBJ64)
-	cd $(dir $@) && \
-		PKG_CONFIG_PATH=$(abspath $(TOOLS_DIR64))/lib/pkgconfig \
-		CFLAGS="$(OPTIMIZE_FLAGS)" \
-		cmake $(abspath $(FAUDIO)) \
-			-DCMAKE_INSTALL_PREFIX="$(abspath $(TOOLS_DIR64))" \
-			$(FAUDIO_CMAKE_FLAGS)
-
-faudio32: SHELL = $(CONTAINER_SHELL)
-faudio32: $(FAUDIO_CONFIGURE_FILES32)
-	+$(MAKE) -C $(FAUDIO_OBJ32) VERBOSE=1
-	+$(MAKE) -C $(FAUDIO_OBJ32) install VERBOSE=1
+$(OBJ)/.faudio-post-build32:
 	mkdir -p $(DST_DIR)/lib
 	cp -a $(TOOLS_DIR32)/lib/libFAudio* $(DST_DIR)/lib/
 	[ x"$(STRIP)" = x ] || $(STRIP) $(DST_DIR)/lib/libFAudio.so
+	touch $@
 
-faudio64: SHELL = $(CONTAINER_SHELL)
-faudio64: $(FAUDIO_CONFIGURE_FILES64)
-	+$(MAKE) -C $(FAUDIO_OBJ64) VERBOSE=1
-	+$(MAKE) -C $(FAUDIO_OBJ64) install VERBOSE=1
+$(OBJ)/.faudio-post-build64:
 	mkdir -p $(DST_DIR)/lib64
-	cp -a $(TOOLS_DIR64)/lib/libFAudio* $(DST_DIR)/lib64/
+	cp -a $(TOOLS_DIR64)/lib64/libFAudio* $(DST_DIR)/lib64/
 	[ x"$(STRIP)" = x ] || $(STRIP) $(DST_DIR)/lib64/libFAudio.so
+	touch $@
 
 ##
 ## jxrlib
@@ -1008,7 +973,7 @@ WINE32_MAKE_ARGS := \
 
 # 64bit-configure
 $(WINE_CONFIGURE_FILES64): SHELL = $(CONTAINER_SHELL)
-$(WINE_CONFIGURE_FILES64): $(MAKEFILE_DEP) gst_base64 | faudio64 jxrlib64 $(WINE_OBJ64)
+$(WINE_CONFIGURE_FILES64): $(MAKEFILE_DEP) gst_base64 faudio64 | jxrlib64 $(WINE_OBJ64)
 	cd $(dir $@) && \
 		../$(WINE)/configure \
 			--enable-win64 \
@@ -1028,7 +993,7 @@ $(WINE_CONFIGURE_FILES64): $(MAKEFILE_DEP) gst_base64 | faudio64 jxrlib64 $(WINE
 
 # 32-bit configure
 $(WINE_CONFIGURE_FILES32): SHELL = $(CONTAINER_SHELL)
-$(WINE_CONFIGURE_FILES32): $(MAKEFILE_DEP) gst_base32 | faudio32 jxrlib32 $(WINE_OBJ32)
+$(WINE_CONFIGURE_FILES32): $(MAKEFILE_DEP) gst_base32 faudio32 | jxrlib32 $(WINE_OBJ32)
 	cd $(dir $@) && \
 		../$(WINE)/configure \
 			--disable-tests \
