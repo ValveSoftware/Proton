@@ -252,10 +252,6 @@ DXVK := $(SRCDIR)/dxvk
 DXVK_OBJ32 := ./obj-dxvk32
 DXVK_OBJ64 := ./obj-dxvk64
 
-VKD3D := $(SRCDIR)/vkd3d-proton
-VKD3D_OBJ32 := ./obj-vkd3d32
-VKD3D_OBJ64 := ./obj-vkd3d64
-
 MEDIACONV := $(SRCDIR)/media-converter
 MEDIACONV_OBJ32 := ./obj-media-converter32
 MEDIACONV_OBJ64 := ./obj-media-converter64
@@ -274,8 +270,7 @@ OBJ_DIRS := $(TOOLS_DIR32)        $(TOOLS_DIR64)        \
             $(WINE_OBJ32)         $(WINE_OBJ64)         \
             $(VRCLIENT_OBJ32)     $(VRCLIENT_OBJ64)     \
             $(DXVK_OBJ32)         $(DXVK_OBJ64)         \
-            $(MEDIACONV_OBJ32)    $(MEDIACONV_OBJ64)    \
-            $(VKD3D_OBJ32)        $(VKD3D_OBJ64)
+            $(MEDIACONV_OBJ32)    $(MEDIACONV_OBJ64)
 
 $(OBJ_DIRS):
 	mkdir -p $@
@@ -1291,48 +1286,47 @@ dxvk32: $(DXVK_CONFIGURE_FILES32)
 	cp -f "$(DXVK_OBJ32)"/bin/dxvk_config.dll "$(DST_DIR)"/lib/wine/dxvk
 	rm -f "$(DST_DIR)"/lib/wine/dxvk/version && if test -e $(SRCDIR)/.git; then ( cd $(SRCDIR) && git submodule status -- dxvk ) > "$(DST_DIR)"/lib/wine/dxvk/version; fi
 
-# VKD3D
 
-VKD3D_CONFIGURE_FILES32 := $(VKD3D_OBJ32)/build.ninja
-VKD3D_CONFIGURE_FILES64 := $(VKD3D_OBJ64)/build.ninja
+##
+## vkd3d-proton
+##
 
-$(VKD3D_CONFIGURE_FILES32): SHELL = $(CONTAINER_SHELL)
-$(VKD3D_CONFIGURE_FILES32): $(VKD3D)/meson.build $(VKD3D)/build-win32.txt | $(VKD3D_OBJ32)
-	cd $(abspath $(VKD3D_OBJ32)) && \
-		PATH="$(abspath $(SRCDIR))/glslang/bin/:$(PATH)" \
-			meson --prefix="$(abspath $(VKD3D_OBJ32))" \
-				--cross-file "$(abspath $(VKD3D))/build-win32.txt" \
-				$(MESON_STRIP_ARG) \
-				--buildtype=release -Denable_standalone_d3d12=true \
-				"$(abspath $(VKD3D))"
+VKD3D_PROTON_SOURCE_ARGS = \
+  --exclude vkd3d_build.h.in \
+  --exclude vkd3d_version.h.in \
 
-vkd3d32: SHELL = $(CONTAINER_SHELL)
-vkd3d32: $(VKD3D_CONFIGURE_FILES32)
-	ninja -C "$(VKD3D_OBJ32)" install
+VKD3D_PROTON_MESON_ARGS = -Denable_standalone_d3d12=true
+VKD3D_PROTON_MESON_ARGS32 = \
+    --bindir=$(VKD3D_PROTON_DST32)/lib/wine/vkd3d-proton \
+    --cross-file=$(VKD3D_PROTON_OBJ32)/build-win32.txt
+VKD3D_PROTON_MESON_ARGS64 = \
+    --bindir=$(VKD3D_PROTON_DST64)/lib64/wine/vkd3d-proton \
+    --cross-file=$(VKD3D_PROTON_OBJ64)/build-win64.txt
+
+$(eval $(call rules-source,vkd3d-proton,$(SRCDIR)/vkd3d-proton))
+$(eval $(call rules-meson,vkd3d-proton,32))
+$(eval $(call rules-meson,vkd3d-proton,64))
+
+$(OBJ)/.vkd3d-proton-post-source:
+	sed -re 's#@VCS_TAG@#$(shell git -C $(SRCDIR)/vkd3d-proton describe --always --exclude=* --abbrev=15 --dirty=0)#' \
+	    $(SRCDIR)/vkd3d-proton/vkd3d_build.h.in > $(VKD3D_PROTON_SRC)/vkd3d_build.h.in
+	sed -re 's#@VCS_TAG@#$(shell git -C $(SRCDIR)/vkd3d-proton describe --always --tags --dirty=+)#' \
+	    $(SRCDIR)/vkd3d-proton/vkd3d_version.h.in > $(VKD3D_PROTON_SRC)/vkd3d_version.h.in
+	touch $@
+
+$(OBJ)/.vkd3d-proton-post-build32:
+	mkdir -p $(abspath $(DST_DIR))/lib/ && \
+	cp -af "$(VKD3D_PROTON_DST32)/bin/d3d12.dll" "$(DST_DIR)"/lib/wine/vkd3d-proton/
 	mkdir -p "$(DST_DIR)"/lib/wine/vkd3d-proton
-	cp -af "$(VKD3D_OBJ32)/bin/d3d12.dll" "$(DST_DIR)"/lib/wine/vkd3d-proton/
 	rm -f "$(DST_DIR)"/lib/wine/vkd3d-proton/version && if test -e $(SRCDIR)/.git; then ( cd $(SRCDIR) && git submodule status -- vkd3d-proton ) > "$(DST_DIR)"/lib/wine/vkd3d-proton/version; fi
+	touch $@
 
-$(VKD3D_CONFIGURE_FILES64): SHELL = $(CONTAINER_SHELL)
-$(VKD3D_CONFIGURE_FILES64): $(VKD3D)/meson.build $(VKD3D)/build-win64.txt | $(VKD3D_OBJ64)
-	cd $(abspath $(VKD3D_OBJ64)) && \
-		PATH="$(abspath $(SRCDIR))/glslang/bin/:$(PATH)" \
-			meson --prefix="$(abspath $(VKD3D_OBJ64))" \
-				--cross-file "$(abspath $(VKD3D))/build-win64.txt" \
-				$(MESON_STRIP_ARG) \
-				--buildtype=release -Denable_standalone_d3d12=true \
-				"$(abspath $(VKD3D))"
-
-vkd3d64: SHELL = $(CONTAINER_SHELL)
-vkd3d64: $(VKD3D_CONFIGURE_FILES64)
-	ninja -C "$(VKD3D_OBJ64)" install
+$(OBJ)/.vkd3d-proton-post-build64:
+	mkdir -p $(abspath $(DST_DIR))/lib64/ && \
+	cp -af "$(VKD3D_PROTON_DST64)/bin/d3d12.dll" "$(DST_DIR)"/lib64/wine/vkd3d-proton/
 	mkdir -p "$(DST_DIR)"/lib64/wine/vkd3d-proton
-	cp -af "$(VKD3D_OBJ64)/bin/d3d12.dll" "$(DST_DIR)"/lib64/wine/vkd3d-proton/
 	rm -f "$(DST_DIR)"/lib64/wine/vkd3d-proton/version && if test -e $(SRCDIR)/.git; then ( cd $(SRCDIR) && git submodule status -- vkd3d-proton ) > "$(DST_DIR)"/lib64/wine/vkd3d-proton/version; fi
-
-vkd3d: vkd3d-proton
-
-vkd3d-proton: vkd3d32 vkd3d64
+	touch $@
 
 # TODO Tests
 #  build_vrclient64_tests
