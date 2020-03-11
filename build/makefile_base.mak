@@ -36,6 +36,7 @@ ifeq ($(SRCDIR),)
 endif
 
 include $(SRC)/make/utility.mk
+include $(SRC)/make/rules-source.mk
 
 # If CC is coming from make's defaults or nowhere, use our own default.  Otherwise respect environment.
 ifeq ($(ENABLE_CCACHE),1)
@@ -489,12 +490,12 @@ redist: dist | $(filter-out dist deploy install redist,$(MAKECMDGOALS))
 
 .PHONY: module32 module64 module
 
-module32: SHELL = $(CONTAINER_SHELL)
-module32:
+module32: private SHELL := $(CONTAINER_SHELL)
+module32: all-source
 	+$(MAKE) -C $(WINE_OBJ32)/dlls/$(module)
 
-module64: SHELL = $(CONTAINER_SHELL)
-module64:
+module64: private SHELL := $(CONTAINER_SHELL)
+module64: all-source
 	+$(MAKE) -C $(WINE_OBJ64)/dlls/$(module)
 
 module: module32 module64
