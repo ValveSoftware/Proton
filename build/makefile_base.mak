@@ -32,6 +32,8 @@ ifeq ($(SRCDIR),)
 	foo := $(error SRCDIR not set, do not include makefile_base directly, run ./configure.sh to generate Makefile)
 endif
 
+include $(SRC)/make/utility.mk
+
 # If CC is coming from make's defaults or nowhere, use our own default.  Otherwise respect environment.
 ifeq ($(ENABLE_CCACHE),1)
 	CCACHE_BIN := ccache
@@ -136,13 +138,6 @@ OPTIMIZE_FLAGS := -O2 -march=nocona $(call cc-option,$(CC),-mtune=core-avx2,) -m
 SANITY_FLAGS   := -fwrapv -fno-strict-aliasing
 COMMON_FLAGS   := $(OPTIMIZE_FLAGS) $(SANITY_FLAGS)
 CARGO_BUILD_ARG := --release
-
-# Use $(call QUOTE,$(VAR)) to flatten a list to a single element (for feeding to a shell)
-
-# v-- This flattens a list when called. Don't look directly into it.
-QUOTE = $(subst $(eval) ,\ ,$(1))
-QUOTE_VARIABLE = $(eval $(1) := $$(call QUOTE,$$($(1))))
-QUOTE_VARIABLE_LIST = $(foreach a,$(1),$(call QUOTE_VARIABLE,$(a)))
 
 # These variables might need to be quoted, but might not
 #
