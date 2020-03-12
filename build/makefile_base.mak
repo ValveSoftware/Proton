@@ -221,10 +221,6 @@ VRCLIENT32 := ./syn-vrclient32
 VRCLIENT_OBJ64 := ./obj-vrclient64
 VRCLIENT_OBJ32 := ./obj-vrclient32
 
-DXVK := $(SRCDIR)/dxvk
-DXVK_OBJ32 := ./obj-dxvk32
-DXVK_OBJ64 := ./obj-dxvk64
-
 MEDIACONV := $(SRCDIR)/media-converter
 MEDIACONV_OBJ32 := ./obj-media-converter32
 MEDIACONV_OBJ64 := ./obj-media-converter64
@@ -237,7 +233,6 @@ OBJ_DIRS := $(TOOLS_DIR32)        $(TOOLS_DIR64)        \
             $(LSTEAMCLIENT_OBJ32) $(LSTEAMCLIENT_OBJ64) \
             $(STEAMEXE_OBJ)                             \
             $(VRCLIENT_OBJ32)     $(VRCLIENT_OBJ64)     \
-            $(DXVK_OBJ32)         $(DXVK_OBJ64)         \
             $(MEDIACONV_OBJ32)    $(MEDIACONV_OBJ64)
 
 $(OBJ_DIRS):
@@ -996,54 +991,23 @@ vrclient32: $(VRCLIENT_CONFIGURE_FILES32) wine32 | $(filter $(MAKECMDGOALS),wine
 		cp -af ../$(VRCLIENT_OBJ32)/vrclient.dll.so ../$(DST_DIR)/lib/wine/ && \
 		cp -af ../$(VRCLIENT_OBJ32)/vrclient.dll.fake ../$(DST_DIR)/lib/wine/fakedlls/vrclient.dll
 
+
 ##
 ## dxvk
 ##
 
-## Create & configure object directory for dxvk
+DXVK_MESON_ARGS32 = \
+    --bindir=$(DXVK_DST32)/lib/wine/dxvk \
+    --cross-file=$(DXVK_OBJ32)/build-win32.txt
+DXVK_MESON_ARGS64 = \
+    --bindir=$(DXVK_DST64)/lib64/wine/dxvk \
+    --cross-file=$(DXVK_OBJ64)/build-win64.txt
 
-DXVK_CONFIGURE_FILES32 := $(DXVK_OBJ32)/build.ninja
-DXVK_CONFIGURE_FILES64 := $(DXVK_OBJ64)/build.ninja
+$(eval $(call rules-source,dxvk,$(SRCDIR)/dxvk))
+$(eval $(call rules-meson,dxvk,32))
+$(eval $(call rules-meson,dxvk,64))
 
-# 64bit-configure.  Remove coredata file if already configured (due to e.g. makefile changing)
-$(DXVK_CONFIGURE_FILES64): SHELL = $(CONTAINER_SHELL)
-$(DXVK_CONFIGURE_FILES64): $(MAKEFILE_DEP) $(DXVK)/build-win64.txt wineopenxr64 | $(DXVK_OBJ64)
-	if [ -e "$(abspath $(DXVK_OBJ64))"/build.ninja ]; then \
-		rm -f "$(abspath $(DXVK_OBJ64))"/meson-private/coredata.dat; \
-	fi
-	cd "$(abspath $(DXVK))" && \
-	PATH="$(abspath $(SRCDIR))/glslang/bin/:$(PATH)" \
-		meson --prefix="$(abspath $(DXVK_OBJ64))" --cross-file "$(abspath $(DXVK))/build-win64.txt" $(MESON_STRIP_ARG) --buildtype=release "$(abspath $(DXVK_OBJ64))"
-
-# 32-bit configure.  Remove coredata file if already configured (due to e.g. makefile changing)
-$(DXVK_CONFIGURE_FILES32): SHELL = $(CONTAINER_SHELL)
-$(DXVK_CONFIGURE_FILES32): $(MAKEFILE_DEP) $(DXVK)/build-win32.txt | $(DXVK_OBJ32)
-	if [ -e "$(abspath $(DXVK_OBJ32))"/build.ninja ]; then \
-		rm -f "$(abspath $(DXVK_OBJ32))"/meson-private/coredata.dat; \
-	fi
-	cd "$(abspath $(DXVK))" && \
-	PATH="$(abspath $(SRCDIR))/glslang/bin/:$(PATH)" \
-		meson --prefix="$(abspath $(DXVK_OBJ32))" --cross-file "$(abspath $(DXVK))/build-win32.txt" $(MESON_STRIP_ARG) --buildtype=release "$(abspath $(DXVK_OBJ32))"
-
-## dxvk goals
-DXVK_TARGETS = dxvk dxvk_configure dxvk32 dxvk64 dxvk_configure32 dxvk_configure64
-
-ALL_TARGETS += $(DXVK_TARGETS)
-GOAL_TARGETS_LIBS += dxvk
-
-.PHONY: $(DXVK_TARGETS)
-
-dxvk_configure: $(DXVK_CONFIGURE_FILES32) $(DXVK_CONFIGURE_FILES64)
-
-dxvk_configure64: $(DXVK_CONFIGURE_FILES64)
-
-dxvk_configure32: $(DXVK_CONFIGURE_FILES32)
-
-dxvk: dxvk32 dxvk64
-
-dxvk64: SHELL = $(CONTAINER_SHELL)
-dxvk64: $(DXVK_CONFIGURE_FILES64)
-	env PATH="$(abspath $(SRCDIR))/glslang/bin/:$(PATH)" ninja -C "$(DXVK_OBJ64)" install
+$(OBJ)/.dxvk-post-build64:
 	mkdir -p "$(DST_DIR)/lib64/wine/dxvk"
 	cp -f "$(DXVK_OBJ64)"/bin/dxgi.dll "$(DST_DIR)"/lib64/wine/dxvk
 	cp -f "$(DXVK_OBJ64)"/bin/d3d11.dll "$(DST_DIR)"/lib64/wine/dxvk
@@ -1053,11 +1017,9 @@ dxvk64: $(DXVK_CONFIGURE_FILES64)
 	cp -f "$(DXVK_OBJ64)"/bin/d3d9.dll "$(DST_DIR)"/lib64/wine/dxvk
 	cp -f "$(DXVK_OBJ64)"/bin/dxvk_config.dll "$(DST_DIR)"/lib64/wine/dxvk
 	rm -f "$(DST_DIR)"/lib64/wine/dxvk/version && if test -e $(SRCDIR)/.git; then ( cd $(SRCDIR) && git submodule status -- dxvk ) > "$(DST_DIR)"/lib64/wine/dxvk/version; fi
+	touch $@
 
-
-dxvk32: SHELL = $(CONTAINER_SHELL)
-dxvk32: $(DXVK_CONFIGURE_FILES32)
-	env PATH="$(abspath $(SRCDIR))/glslang/bin/:$(PATH)" ninja -C "$(DXVK_OBJ32)" install
+$(OBJ)/.dxvk-post-build32:
 	mkdir -p "$(DST_DIR)"/lib/wine/dxvk
 	cp -f "$(DXVK_OBJ32)"/bin/dxgi.dll "$(DST_DIR)"/lib/wine/dxvk/
 	cp -f "$(DXVK_OBJ32)"/bin/d3d11.dll "$(DST_DIR)"/lib/wine/dxvk/
@@ -1067,6 +1029,7 @@ dxvk32: $(DXVK_CONFIGURE_FILES32)
 	cp -f "$(DXVK_OBJ32)"/bin/d3d9.dll "$(DST_DIR)"/lib/wine/dxvk/
 	cp -f "$(DXVK_OBJ32)"/bin/dxvk_config.dll "$(DST_DIR)"/lib/wine/dxvk
 	rm -f "$(DST_DIR)"/lib/wine/dxvk/version && if test -e $(SRCDIR)/.git; then ( cd $(SRCDIR) && git submodule status -- dxvk ) > "$(DST_DIR)"/lib/wine/dxvk/version; fi
+	touch $@
 
 
 ##
