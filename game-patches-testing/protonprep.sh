@@ -108,6 +108,8 @@
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-steamclient_swap.patch
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-protonify_staging_rpc.patch
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-protonify_staging.patch
+    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-win10_default.patch
+    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-dxvk_config.patch
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-steam-bits.patch
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-LAA_staging.patch
 
@@ -128,15 +130,12 @@
 
     echo "applying staging patches that need to be applied after proton rawinput and fullscreen hack"
 
-    # staging winex11-key_translation
+    echo "staging winex11-key_translation"
     patch -Np1 < ../wine-staging/patches/winex11-key_translation/0001-winex11-Match-keyboard-in-Unicode.patch
     patch -Np1 < ../wine-staging/patches/winex11-key_translation/0002-winex11-Fix-more-key-translation.patch
     patch -Np1 < ../wine-staging/patches/winex11-key_translation/0003-winex11.drv-Fix-main-Russian-keyboard-layout.patch
 
-    # staging winex11.drv-mouse-coorrds
-    patch -Np1 < ../game-patches-testing/proton-hotfixes/proton-staging_winex11.drv-mouse-coorrds.patch
-
-    # staging winex11-MWM_Decorations
+    echo "staging winex11-MWM_Decorations"
     patch -Np1 < ../game-patches-testing/proton-hotfixes/proton-staging_winex11-MWM_Decorations.patch
 
     # staging winex11-_NET_ACTIVE_WINDOW - disabled, currently not working
@@ -145,12 +144,12 @@
     # staging winex11-WM_WINDOWPOSCHANGING - disabled, currently not working
     #patch -Np1 < ../game-patches-testing/proton-hotfixes/proton-staging_winex11-WM_WINDOWPOSCHANGING.patch
 
-    #echo "Valve wined3d patches"
-    #patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-wined3d-additions.patch
     echo "Valve VR patches"
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-vr.patch
+
     echo "Valve vulkan patches"
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-vk-bits-4.5.patch
+
     echo "FS Hack integer scaling"
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton_fs_hack_integer_scaling.patch
 
@@ -173,11 +172,10 @@
     #replace this with Derek's patches
     #echo "mf hacks"
     #patch -Np1 < ../game-patches-testing/proton-hotfixes/proton-mf_hacks.patch
-    patch -Np1 < ../game-patches-testing/wine-patches/mfplat_base_work.patch
+    #patch -Np1 < ../game-patches-testing/wine-patches/mfplat_base_work.patch
 
     echo "fs hack improvement PRs"
     patch -Np1 < ../game-patches-testing/wine-patches/winevulkan_fshack_opts.patch
-    #patch -Np1 < ../game-patches-testing/wine-patches/winevulkan_implement_Contrast_Adaptive_Sharpening_scaling_in_fshack.patch
 
     #WINE VULKAN - must be applied after fshack
     echo "applying winevulkan patches"
@@ -189,7 +187,6 @@
 
     echo "winex11 proton hotfixes"
     patch -Np1 < ../game-patches-testing/wine-patches/HACK-winex11-limits-resources-nmode.patch
-    patch -Np1 < ../game-patches-testing/wine-patches/winevulkan-use_swapchain_format_for_fshack_image_+_view.patch
 
     #WINE CUSTOM PATCHES
     #add your own custom patch lines below
