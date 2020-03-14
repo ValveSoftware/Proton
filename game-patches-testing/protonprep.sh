@@ -173,6 +173,7 @@
     #replace this with Derek's patches
     #echo "mf hacks"
     #patch -Np1 < ../game-patches-testing/proton-hotfixes/proton-mf_hacks.patch
+    patch -Np1 < ../game-patches-testing/wine-patches/mfplat_base_work.patch
 
     echo "fs hack improvement PRs"
     patch -Np1 < ../game-patches-testing/wine-patches/winevulkan_fshack_opts.patch
@@ -186,8 +187,9 @@
     patch -Np1 < ../game-patches-testing/wine-patches/D3D12SerializeVersionedRootSignature.patch
     patch -Np1 < ../game-patches-testing/wine-patches/D3D12CreateVersionedRootSignatureDeserializer.patch
 
-    echo "winex11 proton hotfix"
+    echo "winex11 proton hotfixes"
     patch -Np1 < ../game-patches-testing/wine-patches/HACK-winex11-limits-resources-nmode.patch
+    patch -Np1 < ../game-patches-testing/wine-patches/winevulkan-use_swapchain_format_for_fshack_image_+_view.patch
 
     #WINE CUSTOM PATCHES
     #add your own custom patch lines below
