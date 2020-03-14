@@ -10,6 +10,7 @@
 #include "winnls.h"
 #include "wine/debug.h"
 #include "wine/library.h"
+#include "wine/list.h"
 #include "steam_defs.h"
 
 #ifdef __linux__
@@ -18,11 +19,15 @@
 
 #include "steamclient_private.h"
 
+#define ARRAY_SIZE(x) (sizeof(x) / sizeof((x)[0]))
+
 WINE_DEFAULT_DEBUG_CHANNEL(steamclient);
 
 char g_tmppath[PATH_MAX];
 
 static char *controller_glyphs[512]; /* at least k_EControllerActionOrigin_Count */
+
+static CRITICAL_SECTION steamclient_cs = { NULL, -1, 0, 0, 0, 0 };
 
 BOOL WINAPI DllMain(HINSTANCE instance, DWORD reason, void *reserved)
 {
@@ -36,6 +41,33 @@ BOOL WINAPI DllMain(HINSTANCE instance, DWORD reason, void *reserved)
     }
 
     return TRUE;
+}
+
+void sync_environment(void)
+{
+    static const char *steamapi_envs[] =
+    {
+        "SteamAppId",
+        "IgnoreChildProcesses",
+    };
+
+    char value[32767];
+
+    for (unsigned int i = 0; i < ARRAY_SIZE(steamapi_envs); i++)
+    {
+        if (!GetEnvironmentVariableA(steamapi_envs[i], value, ARRAY_SIZE(value)))
+        {
+            if (GetLastError() == ERROR_ENVVAR_NOT_FOUND)
+            {
+                TRACE("unsetenv(\"%s\")\n", steamapi_envs[i]);
+                unsetenv(steamapi_envs[i]);
+            }
+            continue;
+        }
+
+        TRACE("setenv(\"%s\", \"%s\", 1)\n", steamapi_envs[i], value);
+        setenv(steamapi_envs[i], value, 1);
+    }
 }
 
 /* returns the number of bytes written to dst, not including the NUL terminator */
@@ -355,23 +387,58 @@ static const struct {
 #include "win_constructors_table.dat"
 };
 
+struct steamclient_interface
+{
+    struct list entry;
+    const char *name;
+    void *linux_side;
+    void *interface;
+};
+
+static struct list steamclient_interfaces = LIST_INIT(steamclient_interfaces);
+
 void *create_win_interface(const char *name, void *linux_side)
 {
+    struct steamclient_interface *e;
+    void *ret = NULL;
     int i;
 
     TRACE("trying to create %s\n", name);
 
-    if(!linux_side)
+    if (!linux_side)
         return NULL;
 
-    for(i = 0; i < sizeof(constructors) / sizeof(*constructors); ++i){
-        if(!strcmp(name, constructors[i].iface_version))
-            return constructors[i].ctor(linux_side);
+    EnterCriticalSection(&steamclient_cs);
+
+    LIST_FOR_EACH_ENTRY(e, &steamclient_interfaces, struct steamclient_interface, entry)
+    {
+        if (e->linux_side == linux_side && !strcmp(e->name, name))
+        {
+            ret = e->interface;
+            TRACE("-> %p\n", ret);
+            goto done;
+        }
     }
 
-    ERR("Don't recognize interface name: %s\n", name);
+    for (i = 0; i < sizeof(constructors) / sizeof(*constructors); ++i)
+    {
+        if (!strcmp(name, constructors[i].iface_version))
+        {
+            e = HeapAlloc(GetProcessHeap(), 0, sizeof(*e));
+            e->name = constructors[i].iface_version;
+            e->linux_side = linux_side;
+            e->interface = constructors[i].ctor(linux_side);
+            list_add_tail(&steamclient_interfaces, &e->entry);
 
-    return NULL;
+            ret = e->interface;
+            break;
+        }
+    }
+
+done:
+    LeaveCriticalSection(&steamclient_cs);
+    if (!ret) ERR("Don't recognize interface name: %s\n", name);
+    return ret;
 }
 
 static void *steamclient_lib;
@@ -384,6 +451,8 @@ static void (*steamclient_ReleaseThreadLocalMemory)(int);
 static int load_steamclient(void)
 {
     char path[PATH_MAX], resolved_path[PATH_MAX];
+
+    sync_environment();
 
     if(steamclient_lib)
         return 1;

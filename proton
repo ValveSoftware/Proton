@@ -18,7 +18,7 @@ from filelock import FileLock
 #To enable debug logging, copy "user_settings.sample.py" to "user_settings.py"
 #and edit it if needed.
 
-CURRENT_PREFIX_VERSION="5.3-GE-1"
+CURRENT_PREFIX_VERSION="5.4-GE-1"
 
 PFX="Proton: "
 ld_path_var = "LD_LIBRARY_PATH"
@@ -378,6 +378,10 @@ class Session:
         else:
             self.compat_config = set()
 
+        #turn forcelgadd on by default unless it is disabled in compat config
+        if not "noforcelgadd" in self.compat_config:
+            self.compat_config.add("forcelgadd")
+
     def init_wine(self):
         if "HOST_LC_ALL" in self.env and len(self.env["HOST_LC_ALL"]) > 0:
             #steam sets LC_ALL=C to help some games, but Wine requires the real value
@@ -438,7 +442,6 @@ class Session:
         self.env.setdefault("WINEDEBUG", "-all")
         self.env.setdefault("DXVK_LOG_LEVEL", "none")
         self.env.setdefault("VKD3D_DEBUG", "none")
-        self.env.setdefault("WINE_FULLSCREEN_CAS_SCALING", "1")
 
         #default wine-mono override for FNA games
         self.env.setdefault("WINE_MONO_OVERRIDES", "Microsoft.Xna.Framework.*,Gac=n")
@@ -469,9 +472,6 @@ class Session:
             self.env["__GL_ExtensionStringVersion"] = "17700"
 
         if "forcelgadd" in self.compat_config:
-            #forcelgadd should be used just for testing whether a game is helped by
-            #setting LARGE_ADDRESS_AWARE. If it does, then add an AppDefault in the
-            #registry, so that it doesn't impact every executable in the prefix.
             self.env["WINE_LARGE_ADDRESS_AWARE"] = "1"
 
         if "SteamGameId" in self.env:
