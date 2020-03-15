@@ -5,12 +5,10 @@
     #cd ..
 
     # warframe controller fix
-    #git checkout lsteamclient
-    #cd lsteamclient
-    #patch -Np1 < ../game-patches-testing/proton-hotfixes/proton-lsteamclient_sync_important_environment_variables_before_loading_steamclient.patch
-    #patch -Np1 < ../game-patches-testing/proton-hotfixes/proton-lsteamclient_reallocate_new_interface_only_when_linux_side_changes.patch
-    #patch -Np1 < ../game-patches-testing/proton-hotfixes/steamclient-dont_load_steamcontroller007_or_steaminput001_without_controller.patch
-    #cd ..
+    git checkout lsteamclient
+    cd lsteamclient
+    patch -Np1 < ../game-patches-testing/proton-hotfixes/steamclient-disable_SteamController007_if_no_controller.patch
+    cd ..
 
     # VKD3D patches
     cd vkd3d
@@ -32,6 +30,9 @@
     cd wine
     git reset --hard HEAD
     git clean -xdf
+
+    # revert this fuckery because for some reason it causes controller axis to spin.
+    git revert --no-commit da7d60bf97fb8726828e57f852e8963aacde21e9
 
     echo "plasma systray fix"
     patch -Np1 < ../game-patches-testing/wine-patches/plasma_systray_fix.patch
@@ -83,9 +84,6 @@
     echo "origin downloads fix" 
     patch -Np1 < ../game-patches-testing/game-patches/origin-downloads_fix.patch
 
-    echo "monster hunter world fix"
-    patch -Np1 < ../game-patches-testing/game-patches/mhw_fix.patch
-
     echo "blackops 2 fix"
     patch -Np1 < ../game-patches-testing/game-patches/blackops_2_fix.patch
 
@@ -94,6 +92,9 @@
 
     echo "NFSW launcher fix"
     patch -Np1 < ../game-patches-testing/game-patches/NFSWLauncherfix.patch
+
+    echo "applying MHW ntdll patch"
+    patch -Np1 < ../game-patches-testing/game-patches/MHW-new.patch
 
     echo "fix steep and AC Odyssey fullscreen"
     patch -Np1 < ../game-patches-testing/wine-patches/0001-Add-some-semi-stubs-in-user32.patch
@@ -169,8 +170,8 @@
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-apply_LargeAddressAware_fix_for_Bayonetta.patch
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-Set_amd_ags_x64_to_built_in_for_Wolfenstein_2.patch
 
-    #replace this with Derek's patches
-    #echo "mf hacks"
+    #disabled for now.
+    #echo "mfplat alpha patches"
     #patch -Np1 < ../game-patches-testing/proton-hotfixes/proton-mf_hacks.patch
     #patch -Np1 < ../game-patches-testing/wine-patches/mfplat_base_work.patch
 
