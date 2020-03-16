@@ -14,8 +14,6 @@
     cd vkd3d
     git reset --hard HEAD
     git clean -xdf
-    git revert --no-commit d45bc9baab4b9203ea974decfc45707ee64dbbb3
-    patch -Np1 < ../game-patches-testing/vkd3d-patches/vkd3d-Fix_DXIL_check_in_test_coverage.patch
     cd ..
 
     # Valve DXVK patches
