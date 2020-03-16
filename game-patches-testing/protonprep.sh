@@ -91,9 +91,8 @@
     echo "NFSW launcher fix"
     patch -Np1 < ../game-patches-testing/game-patches/NFSWLauncherfix.patch
 
-    #disabled - not working
-    #echo "applying MHW ntdll patch"
-    #patch -Np1 < ../game-patches-testing/game-patches/MHW-new.patch
+    echo "applying MHW ntdll patch"
+    patch -Np1 < ../game-patches-testing/game-patches/MHW-new.patch
 
     echo "fix steep and AC Odyssey fullscreen"
     patch -Np1 < ../game-patches-testing/wine-patches/0001-Add-some-semi-stubs-in-user32.patch
@@ -113,9 +112,8 @@
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-steam-bits.patch
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-LAA_staging.patch
 
-    #disabled - not working
-    #echo "mk11 patch"
-    #patch -Np1 < ../game-patches-testing/game-patches/mk11.patch
+    echo "mk11 patch"
+    patch -Np1 < ../game-patches-testing/game-patches/mk11.patch
 
     echo "clock monotonic, amd ags, hide prefix update"
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-use_clock_monotonic.patch
