@@ -93,8 +93,9 @@
     echo "NFSW launcher fix"
     patch -Np1 < ../game-patches-testing/game-patches/NFSWLauncherfix.patch
 
-    echo "applying MHW ntdll patch"
-    patch -Np1 < ../game-patches-testing/game-patches/MHW-new.patch
+    #disabled - not working
+    #echo "applying MHW ntdll patch"
+    #patch -Np1 < ../game-patches-testing/game-patches/MHW-new.patch
 
     echo "fix steep and AC Odyssey fullscreen"
     patch -Np1 < ../game-patches-testing/wine-patches/0001-Add-some-semi-stubs-in-user32.patch
@@ -114,8 +115,9 @@
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-steam-bits.patch
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-LAA_staging.patch
 
-    echo "mk11 patch"
-    patch -Np1 < ../game-patches-testing/game-patches/mk11.patch
+    #disabled - not working
+    #echo "mk11 patch"
+    #patch -Np1 < ../game-patches-testing/game-patches/mk11.patch
 
     echo "clock monotonic, amd ags, hide prefix update"
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-use_clock_monotonic.patch
@@ -171,9 +173,7 @@
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-Set_amd_ags_x64_to_built_in_for_Wolfenstein_2.patch
 
     #disabled for now.
-    #echo "mfplat alpha patches"
     #patch -Np1 < ../game-patches-testing/proton-hotfixes/proton-mf_hacks.patch
-    #patch -Np1 < ../game-patches-testing/wine-patches/mfplat_base_work.patch
 
     echo "fs hack improvement PRs"
     patch -Np1 < ../game-patches-testing/wine-patches/winevulkan_fshack_opts.patch
