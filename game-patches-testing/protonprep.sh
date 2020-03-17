@@ -32,6 +32,10 @@
     # revert this fuckery because for some reason it causes controller axis to spin.
     git revert --no-commit da7d60bf97fb8726828e57f852e8963aacde21e9
 
+    # needed for mfplat alpha patches
+    cp ../game-patches-testing/wine-patches/test.mp4 dlls/mfplat/tests/
+    cp ../game-patches-testing/wine-patches/test.mp4 dlls/mfreadwrite/tests/
+
     echo "plasma systray fix"
     patch -Np1 < ../game-patches-testing/wine-patches/plasma_systray_fix.patch
 
@@ -53,6 +57,7 @@
     -W dinput-joy-mappings \
     -W dinput-reconnect-joystick \
     -W dinput-remap-joystick \
+    -W ntdll-ForceBottomUpAlloc \
     -W winex11-key_translation 
 
     #WINE FAUDIO
@@ -76,23 +81,21 @@
     echo "sword art online"
     patch -Np1 < ../game-patches-testing/game-patches/sword-art-online-gnutls.patch
 
-    echo "detroit become human patch"
-    patch -Np1 < ../game-patches-testing/game-patches/detroit_BH.patch
-
     echo "origin downloads fix" 
     patch -Np1 < ../game-patches-testing/game-patches/origin-downloads_fix.patch
 
     echo "blackops 2 fix"
     patch -Np1 < ../game-patches-testing/game-patches/blackops_2_fix.patch
 
-    echo "wolcen blobhead fix"
-    patch -Np1 < ../game-patches-testing/game-patches/wolcen_blobhead_workaround.patch
-
     echo "NFSW launcher fix"
     patch -Np1 < ../game-patches-testing/game-patches/NFSWLauncherfix.patch
 
-    echo "applying MHW ntdll patch"
-    patch -Np1 < ../game-patches-testing/game-patches/MHW-new.patch
+    #disabled for now - broken on wine 5.0+
+    #echo "applying MHW ntdll patch"
+    #patch -Np1 < ../game-patches-testing/game-patches/MHW-new.patch
+
+    echo "wolcen blobhead fix"
+    patch -Np1 < ../game-patches-testing/game-patches/wolcen_blobhead_workaround-proton.patch
 
     echo "fix steep and AC Odyssey fullscreen"
     patch -Np1 < ../game-patches-testing/wine-patches/0001-Add-some-semi-stubs-in-user32.patch
@@ -152,7 +155,6 @@
     echo "FS Hack integer scaling"
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton_fs_hack_integer_scaling.patch
 
-
     echo "SDL Joystick"
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-sdl_joy.patch
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-sdl_joy_2.patch
@@ -168,8 +170,8 @@
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-apply_LargeAddressAware_fix_for_Bayonetta.patch
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-Set_amd_ags_x64_to_built_in_for_Wolfenstein_2.patch
 
-    #disabled for now.
-    #patch -Np1 < ../game-patches-testing/proton-hotfixes/proton-mf_hacks.patch
+    echo "mfplat alpha testing patches"
+    patch -Np1 < ../game-patches-testing/wine-patches/mfplat_rebase_patchset.patch
 
     echo "fs hack improvement PRs"
     patch -Np1 < ../game-patches-testing/wine-patches/winevulkan_fshack_opts.patch

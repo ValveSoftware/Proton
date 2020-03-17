@@ -1,34 +1,43 @@
-From bad26eab9afd475b69fe3a9320583f90722216fb Mon Sep 17 00:00:00 2001
+From 9526fadbf4f5d72f1a2e72c1db675b21e9ac7907 Mon Sep 17 00:00:00 2001
 From: Paul Gofman <gofmanp@gmail.com>
-Date: Tue, 10 Mar 2020 20:01:51 +0300
+Date: Wed, 11 Mar 2020 16:57:26 +0300
 Subject: [PATCH] ntdll: Tweak heap arena size to help some use after free
- scenarios.
+ scenarious.
 
 ---
- dlls/ntdll/heap.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ dlls/ntdll/heap.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
 diff --git a/dlls/ntdll/heap.c b/dlls/ntdll/heap.c
-index d7232b47d6..5ca7ad8e21 100644
+index a553e4a0a6..ed52d8d5b3 100644
 --- a/dlls/ntdll/heap.c
 +++ b/dlls/ntdll/heap.c
-@@ -56,6 +56,7 @@ typedef struct tagARENA_INUSE
+@@ -56,8 +56,15 @@ typedef struct tagARENA_INUSE
      DWORD  size;                    /* Block size; must be the first field */
      DWORD  magic : 24;              /* Magic number */
      DWORD  unused_bytes : 8;        /* Number of bytes in the block not used by user data (max value is HEAP_MIN_DATA_SIZE+HEAP_MIN_SHRINK_SIZE) */
-+    char   reserved[16];
++#ifdef _WIN64
++    char reserved[8];
++#endif
  } ARENA_INUSE;
  
++#ifdef _WIN64
++C_ASSERT( sizeof(ARENA_INUSE) == 16 );
++#endif
++
  typedef struct tagARENA_FREE
-@@ -91,7 +92,7 @@ typedef struct
- #define ARENA_FREE_FILLER      0xfeeefeee
+ {
+     DWORD                 size;     /* Block size; must be the first field */
+@@ -111,8 +118,7 @@ C_ASSERT( sizeof(ARENA_LARGE) % LARGE_ALIGNMENT == 0 );
+ /* minimum size to start allocating large blocks */
+ #define HEAP_MIN_LARGE_BLOCK_SIZE  0x7f000
+ /* extra size to add at the end of block for tail checking */
+-#define HEAP_TAIL_EXTRA_SIZE(flags) \
+-    ((flags & HEAP_TAIL_CHECKING_ENABLED) || RUNNING_ON_VALGRIND ? ALIGNMENT : 0)
++#define HEAP_TAIL_EXTRA_SIZE(flags) ALIGNMENT
  
- /* everything is aligned on 8 byte boundaries (16 for Win64) */
--#define ALIGNMENT              (2*sizeof(void*))
-+#define ALIGNMENT              (32)
- #define LARGE_ALIGNMENT        16  /* large blocks have stricter alignment */
- #define ARENA_OFFSET           (ALIGNMENT - sizeof(ARENA_INUSE))
- 
+ /* There will be a free list bucket for every arena size up to and including this value */
+ #define HEAP_MAX_SMALL_FREE_LIST 0x100
 -- 
 2.24.1
 

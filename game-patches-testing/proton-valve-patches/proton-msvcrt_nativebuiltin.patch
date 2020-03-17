@@ -1,4 +1,4 @@
-From 0400502cb3bb695476003d1d986cf35bdea79f2f Mon Sep 17 00:00:00 2001
+From 9ab4f6a838eaefe8501eb8876a70ecf5f7792639 Mon Sep 17 00:00:00 2001
 From: Andrew Eikum <aeikum@codeweavers.com>
 Date: Thu, 29 Mar 2018 11:09:53 -0500
 Subject: [PATCH] HACK: wine.inf: Add native,builtin overrides for msvcrt DLLs
@@ -8,10 +8,10 @@ Subject: [PATCH] HACK: wine.inf: Add native,builtin overrides for msvcrt DLLs
  1 file changed, 54 insertions(+)
 
 diff --git a/loader/wine.inf.in b/loader/wine.inf.in
-index 37162036e6..cf8ff5a19a 100644
+index d32bd8d28eb..3ade58e7da6 100644
 --- a/loader/wine.inf.in
 +++ b/loader/wine.inf.in
-@@ -3687,6 +3687,33 @@ HKLM,Software\Wine\LicenseInformation,"Shell-PremiumInBoxGames-Chess-EnableGame"
+@@ -3877,6 +3877,33 @@ HKCU,Software\Valve\Steam,"SteamExe",,"%16422%\Steam\Steam.exe"
  HKCU,Software\Valve\Steam\ActiveProcess,"PID",0x10001,0x0000fffe
  HKCU,Software\Valve\Steam\ActiveProcess,"SteamClientDll",,"%16422%\Steam\steamclient.dll"
  HKCU,Software\Valve\Steam\ActiveProcess,"SteamPath",,"%16422%\Steam"
@@ -44,11 +44,11 @@ index 37162036e6..cf8ff5a19a 100644
 +HKCU,Software\Wine\DllOverrides,"vcruntime140",0x2,"native,builtin"
  
  [SteamClient.ntamd64]
- HKCU,Software\Valve\Steam\ActiveProcess,"PID",0x10001,0x0000fffe
-@@ -3694,6 +3721,33 @@ HKCU,Software\Valve\Steam\ActiveProcess,"SteamClientDll",,"%16426%\Steam\steamcl
+ HKCU,Software\Valve\Steam,"SteamPath",,"%16422%\Steam"
+@@ -4205,6 +4205,33 @@ HKCU,Software\Valve\Steam\ActiveProcess,"SteamClientDll",,"%16426%\Steam\steamcl
  HKCU,Software\Valve\Steam\ActiveProcess,"SteamClientDll64",,"%16426%\Steam\steamclient64.dll"
  HKCU,Software\Valve\Steam\ActiveProcess,"SteamPath",,"%16426%\Steam"
- HKLM,Software\Valve\Steam,"InstallPath",,"%16422%\Steam"
+ HKLM,Software\Wow6432Node\Valve\Steam,"InstallPath",,"%16422%\Steam"
 +;;Likely want *80 and *90 too, but those require removing Wine's manifest files.
 +HKCU,Software\Wine\DllOverrides,"atl100",0x2,"native,builtin"
 +HKCU,Software\Wine\DllOverrides,"msvcp100",0x2,"native,builtin"
@@ -77,5 +77,5 @@ index 37162036e6..cf8ff5a19a 100644
 +HKCU,Software\Wine\DllOverrides,"vcomp140",0x2,"native,builtin"
 +HKCU,Software\Wine\DllOverrides,"vcruntime140",0x2,"native,builtin"
  
- [DestinationDirs]
- l_intl_section = 11
+ [NlsFiles]
+ c_037.nls
