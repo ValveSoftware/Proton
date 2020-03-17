@@ -57,7 +57,6 @@
     -W dinput-joy-mappings \
     -W dinput-reconnect-joystick \
     -W dinput-remap-joystick \
-    -W ntdll-ForceBottomUpAlloc \
     -W winex11-key_translation 
 
     #WINE FAUDIO
