@@ -365,6 +365,14 @@ class CompatData:
                         self.prefix_dir + "drive_c/windows/syswow64/" + f + ".dll")
                 g_session.dlloverrides[f] = "n"
 
+def comma_escaped(s):
+    escaped = False
+    idx = -1
+    while s[idx] == '\\':
+        escaped = not escaped
+        idx = idx - 1
+    return escaped
+
 class Session:
     def __init__(self):
         self.log_file = None
@@ -373,10 +381,23 @@ class Session:
                 "steam.exe": "b", #always use our special built-in steam.exe
                 "mfplay": "n" #disable built-in mfplay
         }
+
+        self.compat_config = set()
+        self.cmdlineappend = []
+
         if "STEAM_COMPAT_CONFIG" in os.environ:
-            self.compat_config = set(os.environ["STEAM_COMPAT_CONFIG"].split(","))
-        else:
-            self.compat_config = set()
+            config = os.environ["STEAM_COMPAT_CONFIG"]
+
+            while config:
+                (cur, sep, config) = config.partition(',')
+                if cur.startswith("cmdlineappend:"):
+                    while comma_escaped(cur):
+                        (a, b, c) = config.partition(',')
+                        cur = cur[:-1] + ',' + a
+                        config = c
+                    self.cmdlineappend.append(cur[14:].replace('\\\\','\\'))
+                else:
+                    self.compat_config.add(cur)
 
         #turn forcelgadd on by default unless it is disabled in compat config
         if not "noforcelgadd" in self.compat_config:
@@ -483,7 +504,7 @@ class Session:
                 with open(g_proton.version_file, "r") as f:
                     self.log_file.write("Proton: " + f.readline().strip() + "\n")
                 self.log_file.write("SteamGameId: " + self.env["SteamGameId"] + "\n")
-                self.log_file.write("Command: " + str(sys.argv[2:]) + "\n")
+                self.log_file.write("Command: " + str(sys.argv[2:] + self.cmdlineappend) + "\n")
                 self.log_file.write("Options: " + str(self.compat_config) + "\n")
                 self.log_file.write("======================\n")
                 self.log_file.flush()
@@ -627,7 +648,7 @@ class Session:
                 self.dump_dbg_scripts()
             except OSError:
                 log("Unable to write debug scripts! " + str(sys.exc_info()[1]))
-        self.run_proc([g_proton.wine_bin, "steam"] + sys.argv[2:])
+        self.run_proc([g_proton.wine_bin, "steam"] + sys.argv[2:] + self.cmdlineappend)
 
 
 if __name__ == "__main__":
