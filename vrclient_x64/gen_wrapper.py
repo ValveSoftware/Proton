@@ -342,6 +342,10 @@ def ivrrendermodels_load_into_texture_d3d11_async(cppname, method):
     assert "005" in cppname or "006" in cppname
     return "ivrrendermodels_load_into_texture_d3d11_async"
 
+def ivrmailbox_undoc3(cppname, method):
+    assert "001" in cppname
+    return "ivrmailbox_undoc3"
+
 method_overrides = [
     ("IVRClientCore", "Init", ivrclientcore_init),
     ("IVRClientCore", "GetGenericInterface", ivrclientcore_get_generic_interface),
@@ -355,6 +359,7 @@ method_overrides = [
     ("IVRRenderModels", "LoadTextureD3D11_Async", ivrrendermodels_load_texture_d3d11_async),
     ("IVRRenderModels", "FreeTextureD3D11", ivrrendermodels_free_texture_d3d11),
     ("IVRRenderModels", "LoadIntoTextureD3D11_Async", ivrrendermodels_load_into_texture_d3d11_async),
+    ("IVRMailbox", "undoc3", ivrmailbox_undoc3),
 ]
 
 method_overrides_data = [

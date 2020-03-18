@@ -6,6 +6,16 @@
 #define VRCLIENT_HAVE_DXVK
 #endif
 
+#if __cplusplus
+extern "C" {
+#endif
+
+char *json_convert_paths(const char *input);
+
+#if __cplusplus
+}
+#endif
+
 /* TODO these should be generated */
 typedef struct __winISteamClient winISteamClient;
 typedef struct __winISteamUser winISteamUser;

@@ -43,7 +43,7 @@ DEFINE_THISCALL_WRAPPER(winIVRMailbox_IVRMailbox_001_undoc3, 20)
 vrmb_typeb __thiscall winIVRMailbox_IVRMailbox_001_undoc3(winIVRMailbox_IVRMailbox_001 *_this, vrmb_typea a, const char * b, const char * c)
 {
     TRACE("%p\n", _this);
-    return cppIVRMailbox_IVRMailbox_001_undoc3(_this->linux_side, a, b, c);
+    return ivrmailbox_undoc3(cppIVRMailbox_IVRMailbox_001_undoc3, _this->linux_side, a, b, c, 1);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRMailbox_IVRMailbox_001_undoc4, 24)

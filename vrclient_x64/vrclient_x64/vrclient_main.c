@@ -1270,6 +1270,20 @@ EVRRenderModelError ivrrendermodels_load_into_texture_d3d11_async(
     return error;
 }
 
+vrmb_typeb ivrmailbox_undoc3(
+        vrmb_typeb (*cpp_func)(void *, vrmb_typea, const char *, const char *),
+        void *linux_side, vrmb_typea a, const char *b, const char *c, unsigned int version)
+{
+    vrmb_typeb r;
+    char *converted = json_convert_paths(c);
+
+    r = cpp_func(linux_side, a, b, converted ? converted : c);
+
+    free(converted);
+
+    return r;
+}
+
 void destroy_compositor_data(struct compositor_data *data)
 {
     IWineD3D11Device *wined3d_device;
