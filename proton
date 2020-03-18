@@ -529,8 +529,6 @@ class Session:
             f.write("\tSteamGameId=\"" + self.env["SteamGameId"] + "\" \\\n")
         if "SteamAppId" in self.env:
             f.write("\tSteamAppId=\"" + self.env["SteamAppId"] + "\" \\\n")
-        if "PROTON_VR_RUNTIME" in self.env:
-            f.write("\tPROTON_VR_RUNTIME=\"" + self.env["PROTON_VR_RUNTIME"] + "\" \\\n")
         if "WINEDLLOVERRIDES" in self.env:
             f.write("\tWINEDLLOVERRIDES=\"" + self.env["WINEDLLOVERRIDES"] + "\" \\\n")
         if "STEAM_COMPAT_CLIENT_INSTALL_PATH" in self.env:
