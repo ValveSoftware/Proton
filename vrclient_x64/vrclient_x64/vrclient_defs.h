@@ -66,7 +66,10 @@ typedef int
         EVRSkeletalReferencePose,
         EVRSkeletalTrackingLevel,
         EVRSummaryType,
-        EVRSceneApplicationState;
+        EVRSceneApplicationState,
+        HeadsetViewMode_t,
+        EVRState,
+        vrmb_typeb;
 
 typedef uint32_t DriverId_t;
 typedef uint32_t TrackedDeviceIndex_t;
@@ -86,6 +89,8 @@ typedef uint64_t VRActionHandle_t;
 typedef uint64_t VRActionSetHandle_t;
 typedef uint64_t VRInputValueHandle_t;
 typedef int32_t BoneIndex_t;
+typedef uint64_t WebConsoleHandle_t;
+typedef uint64_t vrmb_typea;
 
 /* never dereferenced */
 typedef struct VROverlayIntersectionParams_t VROverlayIntersectionParams_t;
@@ -99,6 +104,7 @@ typedef struct VREvent_t VREvent_t;
 typedef struct Compositor_FrameTiming Compositor_FrameTiming;
 typedef struct Compositor_CumulativeStats Compositor_CumulativeStats;
 typedef struct Compositor_StageRenderSettings Compositor_StageRenderSettings;
+typedef struct Compositor_BenchmarkResults Compositor_BenchmarkResults;
 typedef struct AppOverrideKeys_t AppOverrideKeys_t;
 typedef struct VROverlayIntersectionMaskPrimitive_t VROverlayIntersectionMaskPrimitive_t;
 typedef struct NotificationBitmap_t NotificationBitmap_t;
@@ -125,6 +131,8 @@ typedef struct InputOriginInfo_t InputOriginInfo_t;
 typedef struct InputSkeletalActionData_t InputSkeletalActionData_t;
 typedef struct VRSkeletalSummaryData_t VRSkeletalSummaryData_t;
 typedef struct InputBindingInfo_t InputBindingInfo_t;
+typedef struct VRNativeDevice_t VRNativeDevice_t;
+typedef struct VROverlayView_t VROverlayView_t;
 
 /* dereferenced structs */
 typedef struct HmdMatrix34_t

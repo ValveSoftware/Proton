@@ -951,6 +951,7 @@ static const char * const IVRCompositor_Version = "IVRCompositor_005";
 namespace vr
 {
 
+#if 0
 class IVRControlPanel
 {
 public:
@@ -1029,6 +1030,7 @@ public:
 
 static const char * const IVRControlPanel_Version = "IVRControlPanel_001";
 
+#endif
 }// End
 
 #endif // _OPENVR_API

@@ -1804,6 +1804,8 @@ static const char * const IVRRenderModels_Version = "IVRRenderModels_001";
 namespace vr
 {
 
+    class IVRControlPanel;
+#if 0
 class IVRControlPanel
 {
 public:
@@ -1898,6 +1900,7 @@ public:
 };
 
 static const char * const IVRControlPanel_Version = "IVRControlPanel_001";
+#endif
 
 }// End
 
