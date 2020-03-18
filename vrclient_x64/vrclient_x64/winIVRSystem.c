@@ -241,14 +241,14 @@ const char * __thiscall winIVRSystem_IVRSystem_021_GetPropErrorNameFromEnum(winI
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRSystem_IVRSystem_021_PollNextEvent, 12)
-bool __thiscall winIVRSystem_IVRSystem_021_PollNextEvent(winIVRSystem_IVRSystem_021 *_this, winVREvent_t_1819 * pEvent, uint32_t uncbVREvent)
+bool __thiscall winIVRSystem_IVRSystem_021_PollNextEvent(winIVRSystem_IVRSystem_021 *_this, winVREvent_t_1916 * pEvent, uint32_t uncbVREvent)
 {
     TRACE("%p\n", _this);
     return cppIVRSystem_IVRSystem_021_PollNextEvent(_this->linux_side, pEvent, uncbVREvent);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRSystem_IVRSystem_021_PollNextEventWithPose, 20)
-bool __thiscall winIVRSystem_IVRSystem_021_PollNextEventWithPose(winIVRSystem_IVRSystem_021 *_this, ETrackingUniverseOrigin eOrigin, winVREvent_t_1819 * pEvent, uint32_t uncbVREvent, TrackedDevicePose_t * pTrackedDevicePose)
+bool __thiscall winIVRSystem_IVRSystem_021_PollNextEventWithPose(winIVRSystem_IVRSystem_021 *_this, ETrackingUniverseOrigin eOrigin, winVREvent_t_1916 * pEvent, uint32_t uncbVREvent, TrackedDevicePose_t * pTrackedDevicePose)
 {
     TRACE("%p\n", _this);
     return cppIVRSystem_IVRSystem_021_PollNextEventWithPose(_this->linux_side, eOrigin, pEvent, uncbVREvent, pTrackedDevicePose);
@@ -270,14 +270,14 @@ HiddenAreaMesh_t *__thiscall winIVRSystem_IVRSystem_021_GetHiddenAreaMesh(winIVR
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRSystem_IVRSystem_021_GetControllerState, 16)
-bool __thiscall winIVRSystem_IVRSystem_021_GetControllerState(winIVRSystem_IVRSystem_021 *_this, TrackedDeviceIndex_t unControllerDeviceIndex, winVRControllerState001_t_1819 * pControllerState, uint32_t unControllerStateSize)
+bool __thiscall winIVRSystem_IVRSystem_021_GetControllerState(winIVRSystem_IVRSystem_021 *_this, TrackedDeviceIndex_t unControllerDeviceIndex, winVRControllerState001_t_1916 * pControllerState, uint32_t unControllerStateSize)
 {
     TRACE("%p\n", _this);
     return cppIVRSystem_IVRSystem_021_GetControllerState(_this->linux_side, unControllerDeviceIndex, pControllerState, unControllerStateSize);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVRSystem_IVRSystem_021_GetControllerStateWithPose, 24)
-bool __thiscall winIVRSystem_IVRSystem_021_GetControllerStateWithPose(winIVRSystem_IVRSystem_021 *_this, ETrackingUniverseOrigin eOrigin, TrackedDeviceIndex_t unControllerDeviceIndex, winVRControllerState001_t_1819 * pControllerState, uint32_t unControllerStateSize, TrackedDevicePose_t * pTrackedDevicePose)
+bool __thiscall winIVRSystem_IVRSystem_021_GetControllerStateWithPose(winIVRSystem_IVRSystem_021 *_this, ETrackingUniverseOrigin eOrigin, TrackedDeviceIndex_t unControllerDeviceIndex, winVRControllerState001_t_1916 * pControllerState, uint32_t unControllerStateSize, TrackedDevicePose_t * pTrackedDevicePose)
 {
     TRACE("%p\n", _this);
     return cppIVRSystem_IVRSystem_021_GetControllerStateWithPose(_this->linux_side, eOrigin, unControllerDeviceIndex, pControllerState, unControllerStateSize, pTrackedDevicePose);

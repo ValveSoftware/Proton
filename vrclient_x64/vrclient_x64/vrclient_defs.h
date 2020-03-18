@@ -98,6 +98,7 @@ typedef struct TrackedDevicePose_t TrackedDevicePose_t;
 typedef struct VREvent_t VREvent_t;
 typedef struct Compositor_FrameTiming Compositor_FrameTiming;
 typedef struct Compositor_CumulativeStats Compositor_CumulativeStats;
+typedef struct Compositor_StageRenderSettings Compositor_StageRenderSettings;
 typedef struct AppOverrideKeys_t AppOverrideKeys_t;
 typedef struct VROverlayIntersectionMaskPrimitive_t VROverlayIntersectionMaskPrimitive_t;
 typedef struct NotificationBitmap_t NotificationBitmap_t;
