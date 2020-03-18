@@ -452,10 +452,10 @@ static int load_steamclient(void)
 {
     char path[PATH_MAX], resolved_path[PATH_MAX];
 
-    sync_environment();
-
     if(steamclient_lib)
         return 1;
+
+    sync_environment();
 
 #ifdef __APPLE__
     if(getenv("STEAM_COMPAT_CLIENT_INSTALL_PATH")){
