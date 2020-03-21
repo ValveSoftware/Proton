@@ -45,7 +45,7 @@ index d32bd8d28eb..3ade58e7da6 100644
  
  [SteamClient.ntamd64]
  HKCU,Software\Valve\Steam,"SteamPath",,"%16422%\Steam"
-@@ -4205,6 +4205,33 @@ HKCU,Software\Valve\Steam\ActiveProcess,"SteamClientDll",,"%16426%\Steam\steamcl
+@@ -3886,6 +3913,33 @@ HKCU,Software\Valve\Steam\ActiveProcess,"SteamClientDll",,"%16426%\Steam\steamcl
  HKCU,Software\Valve\Steam\ActiveProcess,"SteamClientDll64",,"%16426%\Steam\steamclient64.dll"
  HKCU,Software\Valve\Steam\ActiveProcess,"SteamPath",,"%16426%\Steam"
  HKLM,Software\Wow6432Node\Valve\Steam,"InstallPath",,"%16422%\Steam"

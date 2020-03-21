@@ -1517,7 +1517,7 @@ index a75ca9768d9..441238177a2 100644
 @@ -1,7 +1,7 @@
  MODULE    = ntoskrnl.exe
  IMPORTLIB = ntoskrnl
- IMPORTS   = advapi32 hal
+ IMPORTS   = advapi32 hal msvcrt
 -DELAYIMPORTS = setupapi user32
 +DELAYIMPORTS = setupapi user32 rpcrt4
  
@@ -3528,3 +3528,26 @@ index dbcbd52c6d6..90a790241a9 100644
          }
          else status = STATUS_NOT_COMMITTED;
      }
+From 5e8fedb161bae24ecf6d9425e90e3c595ec2505c Mon Sep 17 00:00:00 2001
+From: Piotr Caban <piotr@codeweavers.com>
+Date: Wed, 11 Mar 2020 09:17:05 -0500
+Subject: [PATCH] ntdll: Restore PAGE_GUARD flag
+
+On rebase, squash into 'HACK: ntdll: Mark first gta5.exe page as
+copied.'
+---
+ dlls/ntdll/virtual.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/dlls/ntdll/virtual.c b/dlls/ntdll/virtual.c
+index 90a790241a9..d0cd2639ee9 100644
+--- a/dlls/ntdll/virtual.c
++++ b/dlls/ntdll/virtual.c
+@@ -909,6 +909,7 @@ static DWORD VIRTUAL_GetWin32Prot( BYTE vprot, unsigned int map_prot )
+     if ((vprot & (VPROT_COPIED | VPROT_WRITECOPY)) == (VPROT_COPIED | VPROT_WRITECOPY))
+         vprot = (vprot & ~VPROT_WRITECOPY) | VPROT_WRITE;
+     ret = VIRTUAL_Win32Flags[vprot & 0x0f];
++    if (vprot & VPROT_GUARD) ret |= PAGE_GUARD;
+     if (map_prot & SEC_NOCACHE) ret |= PAGE_NOCACHE;
+     return ret;
+ }

@@ -41,10 +41,11 @@ index 5f9f61e2535..43cae2a2bc2 100644
  
  [Wow64Install.ntarm64]
  WineFakeDlls=FakeDllsWin32
-@@ -3892,6 +4163,22 @@ HKLM,Software\Wine\LicenseInformation,"Shell-PremiumInBoxGames-Chess-EnableGame"
+@@ -3867,6 +3870,22 @@ l_intl.nls
+ [inf_section]
  winebus.inf
  winehid.inf
- 
++
 +[SteamClient]
 +HKCU,Software\Valve\Steam,"SteamPath",,"%16422%\Steam"
 +HKCU,Software\Valve\Steam,"SteamExe",,"%16422%\Steam\Steam.exe"
@@ -60,10 +61,9 @@ index 5f9f61e2535..43cae2a2bc2 100644
 +HKCU,Software\Valve\Steam\ActiveProcess,"SteamClientDll64",,"%16426%\Steam\steamclient64.dll"
 +HKCU,Software\Valve\Steam\ActiveProcess,"SteamPath",,"%16426%\Steam"
 +HKLM,Software\Wow6432Node\Valve\Steam,"InstallPath",,"%16422%\Steam"
-+
+ 
  [NlsFiles]
  c_037.nls
- c_10000.nls
 
 From bc614834ee153ce33449c06e697b4a30748e9257 Mon Sep 17 00:00:00 2001
 From: Andrew Eikum <aeikum@codeweavers.com>

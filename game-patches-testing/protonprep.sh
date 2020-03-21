@@ -30,11 +30,11 @@
     git clean -xdf
 
     # revert this fuckery because for some reason it causes controller axis to spin.
-    git revert --no-commit da7d60bf97fb8726828e57f852e8963aacde21e9
+    #git revert --no-commit da7d60bf97fb8726828e57f852e8963aacde21e9
 
     # needed for mfplat alpha patches
-    cp ../game-patches-testing/wine-patches/test.mp4 dlls/mfplat/tests/
-    cp ../game-patches-testing/wine-patches/test.mp4 dlls/mfreadwrite/tests/
+    #cp ../game-patches-testing/wine-patches/test.mp4 dlls/mfplat/tests/
+    #cp ../game-patches-testing/wine-patches/test.mp4 dlls/mfreadwrite/tests/
 
     echo "plasma systray fix"
     patch -Np1 < ../game-patches-testing/wine-patches/plasma_systray_fix.patch
@@ -71,8 +71,9 @@
     echo "final fantasy XIV"
     patch -Np1 < ../game-patches-testing/game-patches/ffxiv-launcher.patch
 
-    echo "final fantasy XV"
-    patch -Np1 < ../game-patches-testing/game-patches/ffxv-steam-fix.patch
+    #disabled, not working
+    #echo "final fantasy XV"
+    #patch -Np1 < ../game-patches-testing/game-patches/ffxv-steam-fix.patch
 
     echo "assetto corsa"
     patch -Np1 < ../game-patches-testing/game-patches/assettocorsa-hud.patch
@@ -114,8 +115,9 @@
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-steam-bits.patch
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-LAA_staging.patch
 
-    echo "mk11 patch"
-    patch -Np1 < ../game-patches-testing/game-patches/mk11.patch
+    #disabled, not working
+    #echo "mk11 patch"
+    #patch -Np1 < ../game-patches-testing/game-patches/mk11.patch
 
     echo "clock monotonic, amd ags, hide prefix update"
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-use_clock_monotonic.patch
@@ -157,7 +159,6 @@
     echo "SDL Joystick"
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-sdl_joy.patch
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-sdl_joy_2.patch
-    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-sdl_joy_3.patch
 
     echo "proton gamepad additions"
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-gamepad-additions.patch
@@ -169,8 +170,8 @@
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-apply_LargeAddressAware_fix_for_Bayonetta.patch
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-Set_amd_ags_x64_to_built_in_for_Wolfenstein_2.patch
 
-    echo "mfplat alpha testing patches"
-    patch -Np1 < ../game-patches-testing/wine-patches/mfplat_rebase_patchset.patch
+    #echo "mfplat alpha testing patches"
+    #patch -Np1 < ../game-patches-testing/wine-patches/mfplat_rebase_patchset.patch
 
     echo "fs hack improvement PRs"
     patch -Np1 < ../game-patches-testing/wine-patches/winevulkan_fshack_opts.patch
@@ -188,6 +189,7 @@
 
     #WINE CUSTOM PATCHES
     #add your own custom patch lines below
+
 
     ./tools/make_requests
     autoreconf -f
