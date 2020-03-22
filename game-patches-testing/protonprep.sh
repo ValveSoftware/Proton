@@ -29,15 +29,9 @@
     git reset --hard HEAD
     git clean -xdf
 
-    # revert this fuckery because for some reason it causes controller axis to spin.
-    #git revert --no-commit da7d60bf97fb8726828e57f852e8963aacde21e9
-
     # needed for mfplat alpha patches
     #cp ../game-patches-testing/wine-patches/test.mp4 dlls/mfplat/tests/
     #cp ../game-patches-testing/wine-patches/test.mp4 dlls/mfreadwrite/tests/
-
-    echo "plasma systray fix"
-    patch -Np1 < ../game-patches-testing/wine-patches/plasma_systray_fix.patch
 
     #WINE STAGING
     echo "applying staging patches"
@@ -94,16 +88,13 @@
     #echo "applying MHW ntdll patch"
     #patch -Np1 < ../game-patches-testing/game-patches/MHW-new.patch
 
-    echo "wolcen blobhead fix"
-    patch -Np1 < ../game-patches-testing/game-patches/wolcen_blobhead_workaround-proton.patch
-
     echo "fix steep and AC Odyssey fullscreen"
     patch -Np1 < ../game-patches-testing/wine-patches/0001-Add-some-semi-stubs-in-user32.patch
 
     #WINE FSYNC
     echo "applying fsync patches"
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-fsync_staging.patch
-    patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-fsync-spincounts.patch
+    #patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-fsync-spincounts.patch
 
     #PROTON
     echo "applying proton patches"
@@ -183,9 +174,6 @@
     echo "applying WoW vkd3d wine patches"
     patch -Np1 < ../game-patches-testing/wine-patches/D3D12SerializeVersionedRootSignature.patch
     patch -Np1 < ../game-patches-testing/wine-patches/D3D12CreateVersionedRootSignatureDeserializer.patch
-
-    echo "winex11 proton hotfixes"
-    patch -Np1 < ../game-patches-testing/wine-patches/HACK-winex11-limits-resources-nmode.patch
 
     #WINE CUSTOM PATCHES
     #add your own custom patch lines below
