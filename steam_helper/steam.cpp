@@ -124,19 +124,21 @@ static std::string get_linux_vr_path(void)
 {
     const char *e;
 
+    static const char *openvr_path = "/openvr/openvrpaths.vrpath";
+
     e = getenv("VR_PATHREG_OVERRIDE");
     if(e && *e)
         return e;
 
     e = getenv("XDG_CONFIG_HOME");
+    if(e && *e)
+        return std::string(e) + openvr_path;
 
-    if(!e || !*e)
-        e = getenv("HOME");
+    e = getenv("HOME");
+    if(e && *e)
+        return std::string(e) + "/.config" + openvr_path;
 
-    if(!e || !*e)
-        return "";
-
-    return std::string(e) + "/.config/openvr/openvrpaths.vrpath";
+    return "";
 }
 
 static bool get_windows_vr_path(WCHAR *out_path, bool create)
