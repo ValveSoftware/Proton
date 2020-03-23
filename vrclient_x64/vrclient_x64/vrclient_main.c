@@ -39,9 +39,11 @@ typedef struct winRenderModel_TextureMap_t_1015 winRenderModel_TextureMap_t_1015
 
 /* this is cast to 1015 during load_linux_texture_map, so ensure they're
  * binary compatible before updating this number */
-typedef struct winRenderModel_t_1819 winRenderModel_t_1819;
-typedef struct winRenderModel_TextureMap_t_1819 winRenderModel_TextureMap_t_1819;
+typedef struct winRenderModel_t_11030 winRenderModel_t_11030;
+typedef struct winRenderModel_TextureMap_t_11030 winRenderModel_TextureMap_t_11030;
 #include "cppIVRRenderModels_IVRRenderModels_006.h"
+
+#define ARRAY_SIZE(x) (sizeof(x) / sizeof((x)[0]))
 
 WINE_DEFAULT_DEBUG_CHANNEL(vrclient);
 
@@ -216,25 +218,47 @@ static void *(*vrclient_VRClientCoreFactory)(const char *name, int *return_code)
 
 static int load_vrclient(void)
 {
-    char path[PATH_MAX];
+    WCHAR pathW[PATH_MAX];
+    char *pathU;
+    DWORD sz;
+
+#ifdef _WIN64
+    static const char append_path[] = "/bin/linux64/vrclient.so";
+#else
+    static const char append_path[] = "/bin/vrclient.so";
+#endif
 
     if(vrclient_lib)
         return 1;
 
     /* PROTON_VR_RUNTIME is provided by the proton setup script */
-    if(!getenv("PROTON_VR_RUNTIME")){
+    if(!GetEnvironmentVariableW(L"PROTON_VR_RUNTIME", pathW, ARRAY_SIZE(pathW)))
+    {
         TRACE("Linux OpenVR runtime is not available\n");
         return 0;
     }
 
-#ifdef _WIN64
-    snprintf(path, PATH_MAX, "%s/bin/linux64/vrclient.so", getenv("PROTON_VR_RUNTIME"));
-#else
-    snprintf(path, PATH_MAX, "%s/bin/vrclient.so", getenv("PROTON_VR_RUNTIME"));
-#endif
-    TRACE("got openvr runtime path: %s\n", path);
+    sz = WideCharToMultiByte(CP_UNIXCP, 0, pathW, -1, NULL, 0, NULL, NULL);
+    if(!sz)
+    {
+        ERR("Can't convert path to unixcp! %s\n", wine_dbgstr_w(pathW));
+        return 0;
+    }
 
-    vrclient_lib = wine_dlopen(path, RTLD_NOW, NULL, 0);
+    pathU = HeapAlloc(GetProcessHeap(), 0, sz + sizeof(append_path));
+
+    sz = WideCharToMultiByte(CP_UNIXCP, 0, pathW, -1, pathU, sz, NULL, NULL);
+    if(!sz)
+    {
+        ERR("Can't convert path to unixcp! %s\n", wine_dbgstr_w(pathW));
+        return 0;
+    }
+
+    strcat(pathU, append_path);
+
+    TRACE("got openvr runtime path: %s\n", pathU);
+
+    vrclient_lib = wine_dlopen(pathU, RTLD_NOW, NULL, 0);
     if(!vrclient_lib){
         TRACE("unable to load vrclient.so\n");
         return 0;
@@ -1113,7 +1137,7 @@ static EVRRenderModelError load_linux_texture_map(void *linux_side, TextureID_t 
     case 5:
         return cppIVRRenderModels_IVRRenderModels_005_LoadTexture_Async(linux_side, texture_id, texture_map);
     case 6:
-        return cppIVRRenderModels_IVRRenderModels_006_LoadTexture_Async(linux_side, texture_id, (struct winRenderModel_TextureMap_t_1819 **)texture_map);
+        return cppIVRRenderModels_IVRRenderModels_006_LoadTexture_Async(linux_side, texture_id, (struct winRenderModel_TextureMap_t_11030 **)texture_map);
     }
     FIXME("Unsupported IVRRenderModels version! %u\n", version);
     return VRRenderModelError_NotSupported;
@@ -1130,7 +1154,7 @@ static void free_linux_texture_map(void *linux_side,
         cppIVRRenderModels_IVRRenderModels_005_FreeTexture(linux_side, texture_map);
         break;
     case 6:
-        cppIVRRenderModels_IVRRenderModels_006_FreeTexture(linux_side, (struct winRenderModel_TextureMap_t_1819 *)texture_map);
+        cppIVRRenderModels_IVRRenderModels_006_FreeTexture(linux_side, (struct winRenderModel_TextureMap_t_11030 *)texture_map);
         break;
     default:
         FIXME("Unsupported IVRRenderModels version! %u\n", version);
@@ -1244,6 +1268,20 @@ EVRRenderModelError ivrrendermodels_load_into_texture_d3d11_async(
     free_linux_texture_map(linux_side, texture_map, version);
 
     return error;
+}
+
+vrmb_typeb ivrmailbox_undoc3(
+        vrmb_typeb (*cpp_func)(void *, vrmb_typea, const char *, const char *),
+        void *linux_side, vrmb_typea a, const char *b, const char *c, unsigned int version)
+{
+    vrmb_typeb r;
+    char *converted = json_convert_paths(c);
+
+    r = cpp_func(linux_side, a, b, converted ? converted : c);
+
+    free(converted);
+
+    return r;
 }
 
 void destroy_compositor_data(struct compositor_data *data)

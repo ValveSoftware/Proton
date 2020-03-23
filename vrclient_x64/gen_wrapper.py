@@ -14,6 +14,8 @@ import os
 import re
 
 sdk_versions = [
+    "v1.10.30",
+    "v1.9.16",
     "v1.8.19",
     "v1.7.15",
     "v1.6.10",
@@ -71,11 +73,13 @@ files = [
         "IVRChaperone",
         "IVRChaperoneSetup",
         "IVRCompositor",
+        "IVRControlPanel",
         "IVRDriverManager",
         "IVRExtendedDisplay",
         "IVRNotifications",
         "IVRInput",
         "IVRIOBuffer",
+        "IVRMailbox",
         "IVROverlay",
         "IVRRenderModels",
         "IVRResources",
@@ -83,6 +87,8 @@ files = [
         "IVRSettings",
         "IVRSystem",
         "IVRTrackedCamera",
+        "IVRHeadsetView",
+        "IVROverlayView",
         ], [ #vrclient-allocated structs
         "RenderModel_t",
         "RenderModel_TextureMap_t",
@@ -185,6 +191,31 @@ path_conversions = [
         "w2l_arrays": [],
         "return_is_size": True
     },
+    {
+        "parent_name": "undoc23",
+        "l2w_names":[],
+        "l2w_lens":[],
+        "w2l_names": ["a"],
+        "w2l_arrays": [False],
+        "return_is_size": False
+    },
+    {
+        "parent_name": "undoc27",
+        "l2w_names":[],
+        "l2w_lens":[],
+        "w2l_names": ["a"],
+        "w2l_arrays": [False],
+        "return_is_size": False
+    },
+    {
+        "parent_name": "SetStageOverride_Async",
+        "l2w_names":[],
+        "l2w_lens":[],
+        "w2l_names": ["pchRenderModelPath"],
+        "w2l_arrays": [False],
+        "return_is_size": False
+    },
+
 #    {#maybe?
 #        "parent_name": "GetRenderModelOriginalPath",
 #        "l2w_names":[pchOriginalPath],
@@ -311,6 +342,10 @@ def ivrrendermodels_load_into_texture_d3d11_async(cppname, method):
     assert "005" in cppname or "006" in cppname
     return "ivrrendermodels_load_into_texture_d3d11_async"
 
+def ivrmailbox_undoc3(cppname, method):
+    assert "001" in cppname
+    return "ivrmailbox_undoc3"
+
 method_overrides = [
     ("IVRClientCore", "Init", ivrclientcore_init),
     ("IVRClientCore", "GetGenericInterface", ivrclientcore_get_generic_interface),
@@ -324,6 +359,7 @@ method_overrides = [
     ("IVRRenderModels", "LoadTextureD3D11_Async", ivrrendermodels_load_texture_d3d11_async),
     ("IVRRenderModels", "FreeTextureD3D11", ivrrendermodels_free_texture_d3d11),
     ("IVRRenderModels", "LoadIntoTextureD3D11_Async", ivrrendermodels_load_into_texture_d3d11_async),
+    ("IVRMailbox", "undoc3", ivrmailbox_undoc3),
 ]
 
 method_overrides_data = [
@@ -459,11 +495,13 @@ def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, e
             cpp.write("    %s lin;\n" % do_lin_to_win[0])
         else:
             cpp.write("    %s lin;\n" % do_win_to_lin[0])
-        cpp.write("    %s _ret;\n" % method.result_type.spelling)
+        if not method.result_type.kind == clang.cindex.TypeKind.VOID:
+            cpp.write("    %s _ret;\n" % method.result_type.spelling)
 
     if do_wrap:
         cpp.write("    %s *lin;\n" % do_wrap[0])
-        cpp.write("    %s _ret;\n" % method.result_type.spelling)
+        if not method.result_type.kind == clang.cindex.TypeKind.VOID:
+            cpp.write("    %s _ret;\n" % method.result_type.spelling)
 
     cfile.write("    TRACE(\"%p\\n\", _this);\n")
 
@@ -581,11 +619,12 @@ def handle_method(cfile, classname, winclassname, cppname, method, cpp, cpp_h, e
         cpp.write("    if(%s)\n" % do_lin_to_win[1])
         cpp.write("        struct_%s_%s_lin_to_win(&lin, %s%s);\n" % (strip_ns(do_lin_to_win[0]), display_sdkver(sdkver), do_lin_to_win[1], convert_size_param))
     if do_lin_to_win or do_win_to_lin:
-        cpp.write("    return _ret;\n")
-    if do_wrap:
-        cpp.write("    if(_ret == 0)\n")
-        cpp.write("        *%s = struct_%s_%s_wrap(lin);\n" % (do_wrap[1], strip_ns(do_wrap[0]), display_sdkver(sdkver)))
-        cpp.write("    return _ret;\n")
+        if not method.result_type.kind == clang.cindex.TypeKind.VOID:
+            cpp.write("    return _ret;\n")
+    if do_wrap and not method.result_type.kind == clang.cindex.TypeKind.VOID:
+            cpp.write("    if(_ret == 0)\n")
+            cpp.write("        *%s = struct_%s_%s_wrap(lin);\n" % (do_wrap[1], strip_ns(do_wrap[0]), display_sdkver(sdkver)))
+            cpp.write("    return _ret;\n")
     cfile.write("}\n\n")
     cpp.write("}\n\n")
 

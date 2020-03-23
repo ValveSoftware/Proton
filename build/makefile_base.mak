@@ -1278,7 +1278,7 @@ $(VRCLIENT32): $(VRCLIENT) $(MAKEFILE_DEP)
 	rm -rf ./$(VRCLIENT32)
 	mkdir -p $(VRCLIENT32)/vrclient
 	cd $(VRCLIENT32)/vrclient && \
-		ln -sfv ../../$(VRCLIENT)/vrclient_x64/*.{c,cpp,dat,h,spec} .
+		ln -sfv ../../$(VRCLIENT)/vrclient_x64/* .
 	mv $(VRCLIENT32)/vrclient/vrclient_x64.spec $(VRCLIENT32)/vrclient/vrclient.spec
 
 # 64bit-configure
