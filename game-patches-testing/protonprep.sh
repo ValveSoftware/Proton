@@ -114,8 +114,8 @@
     patch -Np1 < ../game-patches-testing/game-patches/NFSWLauncherfix.patch
 
     #disabled for now - broken on wine 5.0+
-    #echo "applying MHW ntdll patch"
-    #patch -Np1 < ../game-patches-testing/game-patches/MHW-new.patch
+    echo "applying MHW ntdll patch"
+    patch -Np1 < ../game-patches-testing/game-patches/MHW-new.patch
 
     echo "fix steep and AC Odyssey fullscreen"
     patch -Np1 < ../game-patches-testing/wine-patches/0001-Add-some-semi-stubs-in-user32.patch
@@ -142,6 +142,9 @@
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-fsync_staging.patch
     patch -Np1 < ../game-patches-testing/proton-valve-patches/proton-fsync-spincounts.patch
     
+    echo "revert necessary for fshack"
+    patch -Np1 < ../game-patches-testing/proton-hotfixes/wine-winex11.drv_Calculate_mask_in_X11DRV_resize_desktop.patch
+
     echo "fullscreen hack"
     patch -Np1 < ../game-patches-testing/proton-valve-patches/valve_proton_fullscreen_hack-staging.patch
 

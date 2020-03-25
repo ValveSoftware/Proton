@@ -1138,8 +1138,8 @@ index ea9e8262d83..ae68cdeccc8 100644
      convert_VkMemoryRequirements_host_to_win(&in->memoryRequirements, &out->memoryRequirements);
  }
  
--static inline void convert_VkBufferDeviceAddressInfoKHR_win_to_host(const VkBufferDeviceAddressInfoKHR *in, VkBufferDeviceAddressInfoKHR_host *out)
-+static WINEVULKAN_FORCEINLINE void convert_VkBufferDeviceAddressInfoKHR_win_to_host(const VkBufferDeviceAddressInfoKHR *in, VkBufferDeviceAddressInfoKHR_host *out)
+-static inline void convert_VkBufferDeviceAddressInfo_win_to_host(const VkBufferDeviceAddressInfo *in, VkBufferDeviceAddressInfo_host *out)
++static WINEVULKAN_FORCEINLINE void convert_VkBufferDeviceAddressInfo_win_to_host(const VkBufferDeviceAddressInfo *in, VkBufferDeviceAddressInfo_host *out)
  {
      if (!in) return;
  
@@ -1488,8 +1488,8 @@ index ea9e8262d83..ae68cdeccc8 100644
 -    heap_free(in);
 -}
 -
--static inline void convert_VkSemaphoreSignalInfoKHR_win_to_host(const VkSemaphoreSignalInfoKHR *in, VkSemaphoreSignalInfoKHR_host *out)
-+static WINEVULKAN_FORCEINLINE void convert_VkSemaphoreSignalInfoKHR_win_to_host(const VkSemaphoreSignalInfoKHR *in, VkSemaphoreSignalInfoKHR_host *out)
+-static inline void convert_VkSemaphoreSignalInfo_win_to_host(const VkSemaphoreSignalInfo *in, VkSemaphoreSignalInfo_host *out)
++static WINEVULKAN_FORCEINLINE void convert_VkSemaphoreSignalInfo_win_to_host(const VkSemaphoreSignalInfo *in, VkSemaphoreSignalInfo_host *out)
  {
      if (!in) return;
  
@@ -2807,9 +2807,9 @@ index 7bf6a0a07f8..0f8de3d21c2 100644
  typedef enum VkResult
  {
 +    VK_ERROR_FULL_SCREEN_EXCLUSIVE_MODE_LOST_EXT = -1000255000,
-     VK_ERROR_INVALID_OPAQUE_CAPTURE_ADDRESS_KHR = -1000244000,
+     VK_ERROR_INVALID_OPAQUE_CAPTURE_ADDRESS = -1000257000,
      VK_ERROR_NOT_PERMITTED_EXT = -1000174001,
-     VK_ERROR_FRAGMENTATION_EXT = -1000161000,
+     VK_ERROR_FRAGMENTATION = -1000161000,
 @@ -2276,6 +2290,9 @@ typedef enum VkStructureType
      VK_STRUCTURE_TYPE_RENDER_PASS_INPUT_ATTACHMENT_ASPECT_CREATE_INFO = 1000117001,
      VK_STRUCTURE_TYPE_IMAGE_VIEW_USAGE_CREATE_INFO = 1000117002,
@@ -2823,14 +2823,42 @@ index 7bf6a0a07f8..0f8de3d21c2 100644
 @@ -2411,6 +2428,9 @@ typedef enum VkStructureType
      VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FRAGMENT_SHADER_INTERLOCK_FEATURES_EXT = 1000251000,
      VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_YCBCR_IMAGE_ARRAYS_FEATURES_EXT = 1000252000,
-     VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_UNIFORM_BUFFER_STANDARD_LAYOUT_FEATURES_KHR = 1000253000,
+     VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_UNIFORM_BUFFER_STANDARD_LAYOUT_FEATURES = 1000253000,
 +    VK_STRUCTURE_TYPE_SURFACE_FULL_SCREEN_EXCLUSIVE_INFO_EXT = 1000255000,
 +    VK_STRUCTURE_TYPE_SURFACE_FULL_SCREEN_EXCLUSIVE_WIN32_INFO_EXT = 1000255001,
 +    VK_STRUCTURE_TYPE_SURFACE_CAPABILITIES_FULL_SCREEN_EXCLUSIVE_EXT = 1000255002,
      VK_STRUCTURE_TYPE_HEADLESS_SURFACE_CREATE_INFO_EXT = 1000256000,
-     VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_LINE_RASTERIZATION_FEATURES_EXT = 1000259000,
-     VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_LINE_STATE_CREATE_INFO_EXT = 1000259001,
-@@ -3806,6 +3833,26 @@ typedef struct VkSubresourceLayout
+     VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_BUFFER_DEVICE_ADDRESS_FEATURES = 1000257000,
+     VK_STRUCTURE_TYPE_BUFFER_OPAQUE_CAPTURE_ADDRESS_CREATE_INFO = 1000257002,
+@@ -4477,6 +4497,13 @@ typedef struct VkPhysicalDeviceSubgroupSizeControlFeaturesEXT
+     VkBool32 computeFullSubgroups;
+ } VkPhysicalDeviceSubgroupSizeControlFeaturesEXT;
+ 
++typedef struct VkPhysicalDeviceSurfaceInfo2KHR
++{
++    VkStructureType sType;
++    const void *pNext;
++    VkSurfaceKHR WINE_VK_ALIGN(8) surface;
++} VkPhysicalDeviceSurfaceInfo2KHR;
++
+ typedef struct VkPhysicalDeviceTexelBufferAlignmentPropertiesEXT
+ {
+     VkStructureType sType;
+@@ -4546,6 +4543,13 @@ typedef struct VkVertexInputAttributeDescription
+     uint32_t offset;
+ } VkVertexInputAttributeDescription;
+ 
++typedef struct VkSurfaceFullScreenExclusiveInfoEXT
++{
++    VkStructureType sType;
++    void *pNext;
++    VkFullScreenExclusiveEXT fullScreenExclusive;
++} VkSurfaceFullScreenExclusiveInfoEXT;
++
+ typedef struct VkVertexInputBindingDivisorDescriptionEXT
+ {
+     uint32_t binding;
+@@ -5106,6 +5133,26 @@ typedef struct VkSubresourceLayout
      VkDeviceSize WINE_VK_ALIGN(8) depthPitch;
  } VkSubresourceLayout;
  
@@ -2857,7 +2885,27 @@ index 7bf6a0a07f8..0f8de3d21c2 100644
  typedef struct VkSurfaceCapabilitiesKHR
  {
      uint32_t minImageCount;
-@@ -4147,11 +5194,12 @@ typedef struct VkSubpassDescription
+@@ -5228,15 +5228,12 @@ typedef struct VkSwapchainCreateInfoKHR
+     VkSwapchainKHR WINE_VK_ALIGN(8) oldSwapchain;
+ } VkSwapchainCreateInfoKHR;
+ 
+-typedef struct VkTimelineSemaphoreSubmitInfo
++typedef struct VkSurfaceCapabilities2KHR
+ {
+     VkStructureType sType;
+-    const void *pNext;
+-    uint32_t waitSemaphoreValueCount;
+-    const uint64_t *pWaitSemaphoreValues;
+-    uint32_t signalSemaphoreValueCount;
+-    const uint64_t *pSignalSemaphoreValues;
+-} VkTimelineSemaphoreSubmitInfo;
++    void *pNext;
++    VkSurfaceCapabilitiesKHR surfaceCapabilities;
++} VkSurfaceCapabilities2KHR;
+ 
+ typedef struct VkWriteDescriptorSetInlineUniformBlockEXT
+ {
+@@ -5447,11 +6194,12 @@ typedef struct VkSubpassDescription
      VkBool32 fullScreenExclusiveSupported;
  } VkSurfaceCapabilitiesFullScreenExclusiveEXT;
  
@@ -2874,46 +2922,12 @@ index 7bf6a0a07f8..0f8de3d21c2 100644
  
  typedef struct VkSurfaceFullScreenExclusiveWin32InfoEXT
  {
-@@ -5028,15 +5028,12 @@ typedef struct VkSwapchainCreateInfoKHR
-     VkSwapchainKHR WINE_VK_ALIGN(8) oldSwapchain;
- } VkSwapchainCreateInfoKHR;
- 
--typedef struct VkTimelineSemaphoreSubmitInfoKHR
-+typedef struct VkSurfaceCapabilities2KHR
- {
-     VkStructureType sType;
--    const void *pNext;
--    uint32_t waitSemaphoreValueCount;
--    const uint64_t *pWaitSemaphoreValues;
--    uint32_t signalSemaphoreValueCount;
--    const uint64_t *pSignalSemaphoreValues;
--} VkTimelineSemaphoreSubmitInfoKHR;
-+    void *pNext;
-+    VkSurfaceCapabilitiesKHR surfaceCapabilities;
-+} VkSurfaceCapabilities2KHR;
- 
- typedef struct VkVertexInputAttributeDescription
- {
-@@ -5046,6 +5043,13 @@ typedef struct VkVertexInputAttributeDescription
-     uint32_t offset;
- } VkVertexInputAttributeDescription;
- 
-+typedef struct VkSurfaceFullScreenExclusiveInfoEXT
-+{
-+    VkStructureType sType;
-+    void *pNext;
-+    VkFullScreenExclusiveEXT fullScreenExclusive;
-+} VkSurfaceFullScreenExclusiveInfoEXT;
-+
- typedef struct VkViewport
- {
-     float x;
-@@ -5056,19 +5060,15 @@ typedef struct VkViewport
+@@ -6056,19 +6060,15 @@ typedef struct VkViewport
      float maxDepth;
  } VkViewport;
  
 -typedef struct VkWriteDescriptorSet
-+typedef struct VkTimelineSemaphoreSubmitInfoKHR
++typedef struct VkTimelineSemaphoreSubmitInfo
  {
      VkStructureType sType;
      const void *pNext;
@@ -2930,24 +2944,10 @@ index 7bf6a0a07f8..0f8de3d21c2 100644
 +    const uint64_t *pWaitSemaphoreValues;
 +    uint32_t signalSemaphoreValueCount;
 +    const uint64_t *pSignalSemaphoreValues;
-+} VkTimelineSemaphoreSubmitInfoKHR;
++} VkTimelineSemaphoreSubmitInfo;
  
  typedef struct VkAllocationCallbacks
  {
-@@ -5477,6 +5497,13 @@ typedef struct VkPhysicalDeviceSubgroupSizeControlFeaturesEXT
-     VkBool32 computeFullSubgroups;
- } VkPhysicalDeviceSubgroupSizeControlFeaturesEXT;
- 
-+typedef struct VkPhysicalDeviceSurfaceInfo2KHR
-+{
-+    VkStructureType sType;
-+    const void *pNext;
-+    VkSurfaceKHR WINE_VK_ALIGN(8) surface;
-+} VkPhysicalDeviceSurfaceInfo2KHR;
-+
- typedef struct VkPhysicalDeviceTexelBufferAlignmentPropertiesEXT
- {
-     VkStructureType sType;
 @@ -6966,6 +7014,20 @@ typedef struct VkRenderPassCreateInfo2KHR
      const uint32_t *pCorrelatedViewMasks;
  } VkRenderPassCreateInfo2KHR;
@@ -3195,3 +3195,138 @@ index 9bb33339af5..8f08ac19a2a 100644
  {
      X11DRV_vkCreateInstance,
      X11DRV_vkCreateSwapchainKHR,
+From 9c92a32fdd5c71e82e30fa3a85fd9f0c018915d3 Mon Sep 17 00:00:00 2001
+From: Joshua Ashton <joshua@froggi.es>
+Date: Tue, 24 Mar 2020 02:53:52 +0000
+Subject: [PATCH] winevulkan: Nuke unsupported pNexts from vkCreateSwapchainKHR
+
+Fixes RenderDoccing DXVK, and potential issues down the line in games using the fullscreen and other exts
+---
+ dlls/winevulkan/vulkan.c | 25 +++++++++++++++++++++++++
+ 1 file changed, 25 insertions(+)
+
+diff --git a/dlls/winevulkan/vulkan.c b/dlls/winevulkan/vulkan.c
+index f36315534b9..fdce58c9500 100644
+--- a/dlls/winevulkan/vulkan.c
++++ b/dlls/winevulkan/vulkan.c
+@@ -49,6 +49,15 @@ static void *wine_vk_find_struct_(void *s, VkStructureType t)
+     return NULL;
+ }
+ 
++#define wine_vk_exchange_pnext(a, b) wine_vk_exchange_pnext_((VkBaseOutStructure *)a, (VkBaseOutStructure *)b)
++static void wine_vk_exchange_pnext_(VkBaseOutStructure *a, VkBaseOutStructure *b)
++{
++    b->pNext = a->pNext;
++    a->pNext = b;
++}
++
++#define wine_vk_copy_pnext(a, ctype, stype, b) do { ctype* lookup = wine_vk_find_struct(a, stype); if (lookup) { b = *lookup; wine_vk_exchange_pnext(a, &b); } } while (0)
++
+ static void *wine_vk_get_global_proc_addr(const char *name);
+ 
+ static const struct vulkan_funcs *vk_funcs;
+@@ -1739,6 +1748,9 @@ VkResult WINAPI wine_vkCreateSwapchainKHR(VkDevice device, const VkSwapchainCrea
+ #else
+     VkSwapchainCreateInfoKHR our_createinfo;
+ #endif
++    VkDeviceGroupSwapchainCreateInfoKHR  our_device_group_swapchain_create_info;
++    VkImageFormatListCreateInfoKHR       our_image_format_list_create_info;
++
+     VkExtent2D user_sz;
+     struct VkSwapchainKHR_T *object;
+     uint32_t i;
+@@ -1754,6 +1766,19 @@ VkResult WINAPI wine_vkCreateSwapchainKHR(VkDevice device, const VkSwapchainCrea
+ 
+     convert_VkSwapchainCreateInfoKHR_win_to_host(pCreateInfo, &our_createinfo);
+ 
++    our_createinfo.pNext = NULL;
++
++    wine_vk_copy_pnext(&our_createinfo, VkDeviceGroupSwapchainCreateInfoKHR, DEVICE_GROUP_SWAPCHAIN_CREATE_INFO_KHR, our_device_group_swapchain_create_info);
++
++    wine_vk_copy_pnext(&our_createinfo, VkImageFormatListCreateInfoKHR, IMAGE_FORMAT_LIST_CREATE_INFO_KHR, our_image_format_list_create_info);
++
++    // VkSwapchainCounterCreateInfoEXT is not in our version of WineVulkan
++    // Come back to me when this gets into Proton Wine!
++
++    // Ignoring VkSurfaceFullScreenExclusiveInfoEXT and VkSurfaceFullScreenExclusiveWin32InfoEXT
++    // as we want to nuke those
++    // and VkSwapchainDisplayNativeHdrCreateInfoAMD (blacklisted for HDR for now)
++
+     if(our_createinfo.oldSwapchain)
+         our_createinfo.oldSwapchain = ((struct VkSwapchainKHR_T *)(UINT_PTR)our_createinfo.oldSwapchain)->swapchain;
+ 
+From: Liam Middlebrook <lmiddlebrook@nvidia.com>
+Subject: [PATCH v2] winevulkan: Generate typedefs for aliased structs
+Message-Id: <20200324211443.24520-1-lmiddlebrook@nvidia.com>
+Date: Tue, 24 Mar 2020 14:14:43 -0700
+
+Signed-off-by: Liam Middlebrook <lmiddlebrook@nvidia.com>
+Signed-off-by: James Jones <jajones@nvidia.com>
+---
+v2: Fix conversion struct handling
+---
+ dlls/winevulkan/make_vulkan | 21 +++++++++++++++++++--
+ 1 file changed, 19 insertions(+), 2 deletions(-)
+
+diff --git a/dlls/winevulkan/make_vulkan b/dlls/winevulkan/make_vulkan
+index a4ebb2c7e9..29d2f14d43 100755
+--- a/dlls/winevulkan/make_vulkan
++++ b/dlls/winevulkan/make_vulkan
+@@ -1571,6 +1571,7 @@ class VkStruct(Sequence):
+         self.union = union
+         self.type_info = None # To be set later.
+         self.struct_extensions = []
++        self.aliased_by = []
+ 
+     def __getitem__(self, i):
+         return self.members[i]
+@@ -1581,7 +1582,10 @@ class VkStruct(Sequence):
+     @staticmethod
+     def from_alias(struct, alias):
+         name = struct.attrib.get("name")
+-        return VkStruct(name, alias.members, alias.returnedonly, alias.structextends, alias=alias)
++        aliasee = VkStruct(name, alias.members, alias.returnedonly, alias.structextends, alias=alias)
++
++        alias.add_aliased_by(aliasee)
++        return aliasee
+ 
+     @staticmethod
+     def from_xml(struct):
+@@ -1666,6 +1670,10 @@ class VkStruct(Sequence):
+             postfix (str, optional): text to append to end of struct name, useful for struct renaming.
+         """
+ 
++        # Only define alias structs when doing conversions
++        if self.is_alias() and not conv:
++            return ""
++
+         if self.union:
+             text = "typedef union {0}".format(self.name)
+         else:
+@@ -1687,12 +1695,21 @@ class VkStruct(Sequence):
+         if postfix is not None:
+             text += "}} {0}{1};\n\n".format(self.name, postfix)
+         else:
+-            text += "}} {0};\n\n".format(self.name)
++            text += "}} {0};\n".format(self.name)
++
++        for aliasee in self.aliased_by:
++            text += "typedef {0} {1};\n".format(self.name, aliasee.name)
++
++        text += "\n"
++
+         return text
+ 
+     def is_alias(self):
+         return bool(self.alias)
+ 
++    def add_aliased_by(self, aliasee):
++        self.aliased_by.append(aliasee)
++
+     def needs_alignment(self):
+         """ Check if structure needs alignment for 64-bit data.
+         Various structures need alignment on 64-bit variables due
+
+-- 
+2.17.1
+

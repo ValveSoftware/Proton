@@ -3174,9 +3174,9 @@ index 89ad4175c7e..0489f4c285f 100644
      JOBOBJECT_EXTENDED_LIMIT_INFORMATION ext_limit_info;
      JOBOBJECT_BASIC_LIMIT_INFORMATION *basic_limit_info = &ext_limit_info.BasicLimitInformation;
 +    JOBOBJECT_BASIC_ACCOUNTING_INFORMATION basic_accounting_info;
-     DWORD dwret, ret_len;
+     DWORD ret_len;
      PROCESS_INFORMATION pi[2];
-     HANDLE job;
+     char buffer[50];
 @@ -2647,6 +2648,14 @@ static void test_QueryInformationJobObject(void)
      ok(ret_len == sizeof(ext_limit_info), "QueryInformationJobObject returned ret_len=%u\n", ret_len);
      expect_eq_d(0, basic_limit_info->LimitFlags);

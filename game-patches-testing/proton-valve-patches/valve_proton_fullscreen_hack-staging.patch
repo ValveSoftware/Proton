@@ -2242,7 +2242,7 @@ diff --git a/dlls/winex11.drv/desktop.c b/dlls/winex11.drv/desktop.c
 index d70b38b2b3..79ba54b584 100644
 --- a/dlls/winex11.drv/desktop.c
 +++ b/dlls/winex11.drv/desktop.c
-@@ -328,16 +328,50 @@ static BOOL CALLBACK update_windows_on_desktop_resize( HWND hwnd, LPARAM lparam
+@@ -336,18 +336,52 @@ static BOOL CALLBACK update_windows_on_desktop_resize( HWND hwnd, LPARAM lparam
  
      if (!(data = get_win_data( hwnd ))) return TRUE;
  
@@ -2266,6 +2266,8 @@ index d70b38b2b3..79ba54b584 100644
 +        }
 +    }else {
  
+-    if (resize_data->old_virtual_rect.left != resize_data->new_virtual_rect.left) mask |= CWX;
+-    if (resize_data->old_virtual_rect.top != resize_data->new_virtual_rect.top) mask |= CWY;
 -    if (mask && data->whole_window)
 -    {
 -        POINT pos = virtual_screen_to_root( data->whole_rect.left, data->whole_rect.top );
@@ -2276,6 +2278,8 @@ index d70b38b2b3..79ba54b584 100644
 +        /* update the full screen state */
 +        update_net_wm_states( data );
 +
++        if (resize_data->old_virtual_rect.left != resize_data->new_virtual_rect.left || data->fs_hack) mask |= CWX;
++        if (resize_data->old_virtual_rect.top != resize_data->new_virtual_rect.top || data->fs_hack) mask |= CWY;
 +        if (mask && data->whole_window)
 +        {
 +            POINT pos = virtual_screen_to_root( data->whole_rect.left, data->whole_rect.top );
@@ -6430,4 +6434,3 @@ index fff1322d292..cb73950e894 100644
          {
              XRRModeInfo *mode = &resources->modes[j];
  
-
