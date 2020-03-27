@@ -44,7 +44,7 @@ Vagrant.configure(2) do |config|
   config.vagrant.plugins = "vagrant-sshfs"
 
   config.vm.provider "virtualbox" do |v|
-    v.cpus = cpus
+    v.cpus = [cpus, 32].min     # virtualbox limit is 32 cpus
     v.memory = memory
   end
 
