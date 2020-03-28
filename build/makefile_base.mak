@@ -52,7 +52,7 @@ else
 endif
 
 DOCKER_BASE = docker run --rm -e HOME -e USER -e USERID=$(shell id -u) -u $(shell id -u):$(shell id -g) \
-                -v $(HOME):$(HOME) -v $(SRC):$(SRC) -v $(OBJ):$(OBJ) -w $(OBJ) \
+                -v $(HOME):$(HOME) -v $(SRC):$(SRC) -v $(OBJ):$(OBJ) -w $(OBJ) -e MAKEFLAGS \
                 $(DOCKER_OPTS) $(STEAMRT_IMAGE)
 
 STEAMRT_NAME ?= soldier
@@ -63,8 +63,6 @@ TOOLMANIFEST_VDF_SRC := toolmanifest_noruntime.vdf
 endif
 
 ifneq ($(STEAMRT_IMAGE),)
-SUBMAKE_JOBS ?= 36
-MAKE := make -j$(SUBMAKE_JOBS)
 CONTAINER_SHELL := $(DOCKER_BASE) /bin/bash
 STEAM_RUNTIME_RUNSH := $(DOCKER_BASE)
 else
@@ -86,9 +84,10 @@ all32 $(MAKECMDGOALS64):
 .PHONY: all64 $(MAKECMDGOALS64)
 
 ifeq ($(CONTAINER),)
+J := $(shell nproc)
 container-build: private SHELL := $(CONTAINER_SHELL)
 container-build:
-	+$(MAKE) -f $(firstword $(MAKEFILE_LIST)) $(MFLAGS) $(MAKEOVERRIDES) CONTAINER=1 $(MAKECMDGOALS32) $(MAKECMDGOALS64)
+	+$(MAKE) -j$(J) $(filter -j%,$(MAKEFLAGS)) -f $(firstword $(MAKEFILE_LIST)) $(MFLAGS) $(MAKEOVERRIDES) CONTAINER=1 $(MAKECMDGOALS32) $(MAKECMDGOALS64)
 .PHONY: container-build
 
 all32 $(MAKECMDGOALS32): container-build
