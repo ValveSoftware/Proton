@@ -1,0 +1,62 @@
+From: "Myah Caron" <qsniyg@mail.com>
+Subject: [PATCH v2] ntdll: Don't fail if LDR_MODULE.Flags is modified during load
+Date: Thu, 26 Mar 2020 20:19:23 +0100
+
+Wine-Bug: https://bugs.winehq.org/show_bug.cgi?id=48817
+Signed-off-by: Myah Caron <qsniyg@mail.com>
+---
+v2:
+
+ - Simplify the patch, it seems like only the flags are cached, but they're cached throughout the
+lifetime of the program, so copy them to WINE_MODREF instead.
+ - The patch should apply now
+
+---
+ dlls/ntdll/loader.c | 24 +++++++++++++++---------
+ 1 file changed, 15 insertions(+), 9 deletions(-)
+
+diff --git a/dlls/ntdll/loader.c b/dlls/ntdll/loader.c
+index 1b641f1b9d..a8f3470962 100644
+--- a/dlls/ntdll/loader.c
++++ b/dlls/ntdll/loader.c
+@@ -119,6 +119,7 @@ static const WCHAR dllW[] = {'.','d','l','l',0};
+ typedef struct _wine_modref
+ {
+     LDR_MODULE            ldr;
++    ULONG                 initial_flags;
+     dev_t                 dev;
+     ino_t                 ino;
+     int                   alloc_deps;
+@@ -1201,6 +1202,8 @@ static WINE_MODREF *alloc_module( HMODULE hModule, const UNICODE_STRING *nt_name
+             wm->ldr.EntryPoint = (char *)hModule + nt->OptionalHeader.AddressOfEntryPoint;
+     }
+ 
++    wm->initial_flags = wm->ldr.Flags;
++
+     InsertTailList(&NtCurrentTeb()->Peb->LdrData->InLoadOrderModuleList,
+                    &wm->ldr.InLoadOrderModuleList);
+     InsertTailList(&NtCurrentTeb()->Peb->LdrData->InMemoryOrderModuleList,
+@@ -1311,9 +1314,9 @@ static NTSTATUS MODULE_InitDLL( WINE_MODREF *wm, UINT reason, LPVOID lpReserved
+ 
+     /* Skip calls for modules loaded with special load flags */
+ 
+-    if (wm->ldr.Flags & LDR_DONT_RESOLVE_REFS) return STATUS_SUCCESS;
++    if (wm->initial_flags & LDR_DONT_RESOLVE_REFS) return STATUS_SUCCESS;
+     if (wm->ldr.TlsIndex != -1) call_tls_callbacks( wm->ldr.BaseAddress, reason );
+-    if (!entry || !(wm->ldr.Flags & LDR_IMAGE_IS_DLL)) return STATUS_SUCCESS;
++    if (!entry || !(wm->initial_flags & LDR_IMAGE_IS_DLL)) return STATUS_SUCCESS;
+ 
+     if (TRACE_ON(relay))
+     {
+@@ -1404,7 +1407,9 @@ static NTSTATUS process_attach( WINE_MODREF *wm, LPVOID lpReserved )
+     if (lpReserved) wm->ldr.LoadCount = -1;  /* pin it if imported by the main exe */
+     if (wm->ldr.ActivationContext) RtlActivateActivationContext( 0, wm->ldr.ActivationContext, &cookie );
+ 
++    /* The flags can be modified by DLL dependencies  */
++    wm->initial_flags = wm->ldr.Flags;
++
+     /* Recursively attach all DLLs this one depends on */
+     for ( i = 0; i < wm->nDeps; i++ )
+     {
+-- 
+2.25.1
