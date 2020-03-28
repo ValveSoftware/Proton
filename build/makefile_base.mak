@@ -41,6 +41,7 @@ include $(SRC)/make/rules-common.mk
 include $(SRC)/make/rules-meson.mk
 include $(SRC)/make/rules-cmake.mk
 include $(SRC)/make/rules-autoconf.mk
+include $(SRC)/make/rules-winemaker.mk
 
 # If CC is coming from make's defaults or nowhere, use our own default.  Otherwise respect environment.
 ifeq ($(ENABLE_CCACHE),1)
