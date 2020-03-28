@@ -38,6 +38,7 @@ endif
 include $(SRC)/make/utility.mk
 include $(SRC)/make/rules-source.mk
 include $(SRC)/make/rules-common.mk
+include $(SRC)/make/rules-meson.mk
 
 # If CC is coming from make's defaults or nowhere, use our own default.  Otherwise respect environment.
 ifeq ($(ENABLE_CCACHE),1)
