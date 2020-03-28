@@ -37,6 +37,7 @@ endif
 
 include $(SRC)/make/utility.mk
 include $(SRC)/make/rules-source.mk
+include $(SRC)/make/rules-common.mk
 
 # If CC is coming from make's defaults or nowhere, use our own default.  Otherwise respect environment.
 ifeq ($(ENABLE_CCACHE),1)
@@ -162,9 +163,11 @@ else
     MESON_STRIP_ARG := --strip
 endif
 
+CROSSLDFLAGS   += -Wl,--file-alignment,4096
 OPTIMIZE_FLAGS := -O2 -march=nocona $(call cc-option,$(CC),-mtune=core-avx2,) -mfpmath=sse
 SANITY_FLAGS   := -fwrapv -fno-strict-aliasing
-COMMON_FLAGS   := $(OPTIMIZE_FLAGS) $(SANITY_FLAGS)
+COMMON_FLAGS    = $(OPTIMIZE_FLAGS) $(SANITY_FLAGS) -ffile-prefix-map=$(CCACHE_BASEDIR)=.
+COMMON_FLAGS32 := -mstackrealign
 CARGO_BUILD_ARG := --release
 
 # These variables might need to be quoted, but might not
