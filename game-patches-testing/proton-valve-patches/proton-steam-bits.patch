@@ -667,3 +667,58 @@ index 1ec7c706511..9ae3da3d4a2 100644
          XSetClassHint( display, window, class_hints );
          XFree( class_hints );
      }
+From d012d137e4099d1b12079a49a8a5632d205e0a9f Mon Sep 17 00:00:00 2001
+From: Andrew Eikum <aeikum@codeweavers.com>
+Date: Mon, 24 Sep 2018 12:37:49 -0500
+Subject: [PATCH] HACK: dbghelp: Disable DWARF parsing
+
+Patch by Zeb. Our DWARF parser has been known to crash winedbg in some
+cases. Since probably no concerned parties are going to be using plain
+winedbg, just don't bother parsing anything.
+---
+ dlls/dbghelp/dwarf.c | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/dlls/dbghelp/dwarf.c b/dlls/dbghelp/dwarf.c
+index 31c008abb8f..ce689dbe6cf 100644
+--- a/dlls/dbghelp/dwarf.c
++++ b/dlls/dbghelp/dwarf.c
+@@ -3516,6 +3516,11 @@ BOOL dwarf2_parse(struct module* module, unsigned long load_offset,
+     BOOL                ret = TRUE;
+     struct module_format* dwarf2_modfmt;
+ 
++/* Our DWARF parser has been known to crash winedbg in some cases. Since
++ * probably no concerned parties are going to be using plain winedbg, just don't
++ * bother parsing anything. */
++return FALSE;
++
+     if (!dwarf2_init_section(&eh_frame,                fmap, ".eh_frame",     NULL,             &eh_frame_sect))
+         /* lld produces .eh_fram to avoid generating a long name */
+         dwarf2_init_section(&eh_frame,                fmap, ".eh_fram",      NULL,             &eh_frame_sect);
+
+From a13270aea50af90aa6c721080b956870d67d81c2 Mon Sep 17 00:00:00 2001
+From: Andrew Eikum <aeikum@codeweavers.com>
+Date: Fri, 30 Mar 2018 10:40:43 -0500
+Subject: [PATCH] winedbg: When crash dialog is not shown, dump crash info to
+ stderr
+
+This way the backtrace and such will appear in the log file instead of
+going to stdout, which we don't capture.
+---
+ programs/winedbg/tgt_active.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/programs/winedbg/tgt_active.c b/programs/winedbg/tgt_active.c
+index f632ca0414d..72e63327831 100644
+--- a/programs/winedbg/tgt_active.c
++++ b/programs/winedbg/tgt_active.c
+@@ -874,6 +874,9 @@ enum dbg_start dbg_active_auto(int argc, char* argv[])
+         if (event) thread = display_crash_details( event );
+         if (thread) dbg_houtput = output = create_temp_file();
+         break;
++    case TRUE:
++        dbg_houtput = GetStdHandle(STD_ERROR_HANDLE);
++        break;
+     }
+ 
+     input = parser_generate_command_file("echo Modules:", "info share",
