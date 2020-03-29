@@ -48,7 +48,7 @@ index 1b641f1b9d..a8f3470962 100644
  
      if (TRACE_ON(relay))
      {
-@@ -1404,7 +1407,9 @@ static NTSTATUS process_attach( WINE_MODREF *wm, LPVOID lpReserved )
+@@ -1401,6 +1481,9 @@ static NTSTATUS process_attach( WINE_MODREF *wm, LPVOID lpReserved )
      if (lpReserved) wm->ldr.LoadCount = -1;  /* pin it if imported by the main exe */
      if (wm->ldr.ActivationContext) RtlActivateActivationContext( 0, wm->ldr.ActivationContext, &cookie );
  
