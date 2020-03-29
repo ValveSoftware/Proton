@@ -16,6 +16,7 @@ All patches included:
  * Monster Hunter World patch  
  * Sunset Overdrive patch  
  * Steep and AC Odyssey screen fix patch  
+ * World of Warcraft DX12 compatibility patch  
  * d9vk integration  
  * vkd3d integration  
  * protonfixes integration  
