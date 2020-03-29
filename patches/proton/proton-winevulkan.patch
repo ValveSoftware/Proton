@@ -2885,7 +2885,7 @@ index 7bf6a0a07f8..0f8de3d21c2 100644
  typedef struct VkSurfaceCapabilitiesKHR
  {
      uint32_t minImageCount;
-@@ -5228,15 +5228,12 @@ typedef struct VkSwapchainCreateInfoKHR
+@@ -5228,15 +5228,11 @@ typedef struct VkSwapchainCreateInfoKHR
      VkSwapchainKHR WINE_VK_ALIGN(8) oldSwapchain;
  } VkSwapchainCreateInfoKHR;
  
@@ -2902,6 +2902,7 @@ index 7bf6a0a07f8..0f8de3d21c2 100644
 +    void *pNext;
 +    VkSurfaceCapabilitiesKHR surfaceCapabilities;
 +} VkSurfaceCapabilities2KHR;
+-typedef VkTimelineSemaphoreSubmitInfo VkTimelineSemaphoreSubmitInfoKHR;
  
  typedef struct VkWriteDescriptorSetInlineUniformBlockEXT
  {
