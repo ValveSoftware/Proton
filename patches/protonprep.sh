@@ -118,9 +118,8 @@
     echo "NFSW launcher fix"
     patch -Np1 < ../patches/game-patches/NFSWLauncherfix.patch
 
-    #disabled for now - broken on wine 5.0+
-    echo "applying MHW ntdll patch"
-    patch -Np1 < ../patches/game-patches/MHW-new.patch
+    echo "warframe launcher fix"
+    patch -Np1 < ../patches/game-patches/warframe-launcher-fix.patch
 
     #Wine-Bug: https://bugs.winehq.org/show_bug.cgi?id=48817
     echo "applying sunset overdrive patch"
