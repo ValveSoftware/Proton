@@ -122,8 +122,8 @@
     patch -Np1 < ../patches/game-patches/warframe-launcher-fix.patch
 
     #Wine-Bug: https://bugs.winehq.org/show_bug.cgi?id=48817
-    echo "applying sunset overdrive patch"
-    patch -Np1 < ../patches/game-patches/Do_not_fail_if_LDR_MODULE_Flags_is_modified.patch
+    #echo "applying sunset overdrive patch"
+    #patch -Np1 < ../patches/game-patches/Do_not_fail_if_LDR_MODULE_Flags_is_modified.patch
 
     echo "fix steep and AC Odyssey fullscreen"
     patch -Np1 < ../patches/wine-hotfixes/0001-Add-some-semi-stubs-in-user32.patch
