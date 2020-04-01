@@ -414,6 +414,10 @@ class Session:
 
         self.env.pop("WINEARCH", "")
 
+        if 'ORIG_'+ld_path_var not in os.environ:
+            # Allow wine to restore this when calling an external app.
+            self.env['ORIG_'+ld_path_var] = os.environ.get(ld_path_var, '')
+
         if ld_path_var in os.environ:
             self.env[ld_path_var] = g_proton.lib64_dir + ":" + g_proton.lib_dir + ":" + os.environ[ld_path_var]
         else:
