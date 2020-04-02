@@ -210,7 +210,7 @@
     echo "FS Hack integer scaling"
     patch -Np1 < ../patches/proton/proton_fs_hack_integer_scaling.patch
     
-    #echo "proton winevulkan"
+    echo "proton winevulkan"
     patch -Np1 < ../patches/proton/proton-winevulkan.patch
     
     echo "msvcrt overrides"
