@@ -482,12 +482,16 @@ class Session:
         self.check_environment("PROTON_NO_FSYNC", "nofsync")
         self.check_environment("PROTON_FORCE_LARGE_ADDRESS_AWARE", "forcelgadd")
         self.check_environment("PROTON_OLD_GL_STRING", "oldglstr")
+        self.check_environment("PROTON_USE_SECCOMP", "seccomp")
 
         if not "noesync" in self.compat_config:
             self.env["WINEESYNC"] = "1"
 
         if not "nofsync" in self.compat_config:
             self.env["WINEFSYNC"] = "1"
+
+        if "seccomp" in self.compat_config:
+            self.env["WINESECCOMP"] = "1"
 
         if "oldglstr" in self.compat_config:
             #mesa override
