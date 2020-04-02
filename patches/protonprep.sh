@@ -126,6 +126,9 @@
     echo "fix steep and AC Odyssey fullscreen"
     patch -Np1 < ../patches/wine-hotfixes/0001-Add-some-semi-stubs-in-user32.patch
 
+    echo "gta4 input patch"
+    patch -Np1 < ../patches/game-patches/gta4_gamepad_workaround.patch
+
 
     ### END GAME PATCH SECTION ###
     
