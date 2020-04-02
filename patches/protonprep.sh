@@ -57,11 +57,18 @@
     git reset --hard HEAD
     git clean -xdf
 
-    # needed for mfplat alpha patches
-    #cp ../patches/wine-hotfixes/test.mp4 dlls/mfplat/tests/
-    #cp ../patches/wine-hotfixes/test.mp4 dlls/mfreadwrite/tests/
-
     #WINE STAGING
+
+# Enable these for now in favor over proton gamepad additions
+#    -W dinput-SetActionMap-genre \
+#    -W dinput-axis-recalc \
+#    -W dinput-joy-mappings \
+#    -W dinput-reconnect-joystick \
+#    -W dinput-remap-joystick \
+
+# this needs to be disabled as it breaks warframes launcher.
+#    -W ntdll-avoid-fstatat
+
     echo "applying staging patches"
     ../wine-staging/patches/patchinstall.sh DESTDIR="." --all \
     -W server-Desktop_Refcount \
@@ -79,14 +86,8 @@
     -W dinput-axis-recalc \
     -W dinput-joy-mappings \
     -W dinput-reconnect-joystick \
-    -W dinput-remap-joystick
-
-# Enable these for now in favor over proton gamepad additions
-#    -W dinput-SetActionMap-genre \
-#    -W dinput-axis-recalc \
-#    -W dinput-joy-mappings \
-#    -W dinput-reconnect-joystick \
-#    -W dinput-remap-joystick \
+    -W dinput-remap-joystick \
+    -W ntdll-avoid-fstatat
 
     #WINE FAUDIO
     echo "applying faudio patches"
@@ -118,15 +119,13 @@
     echo "NFSW launcher fix"
     patch -Np1 < ../patches/game-patches/NFSWLauncherfix.patch
 
-    echo "warframe launcher fix"
-    patch -Np1 < ../patches/game-patches/warframe-launcher-fix.patch
-
     #Wine-Bug: https://bugs.winehq.org/show_bug.cgi?id=48817
     #echo "applying sunset overdrive patch"
     #patch -Np1 < ../patches/game-patches/Do_not_fail_if_LDR_MODULE_Flags_is_modified.patch
 
     echo "fix steep and AC Odyssey fullscreen"
     patch -Np1 < ../patches/wine-hotfixes/0001-Add-some-semi-stubs-in-user32.patch
+
 
     ### END GAME PATCH SECTION ###
     
@@ -208,7 +207,7 @@
     echo "FS Hack integer scaling"
     patch -Np1 < ../patches/proton/proton_fs_hack_integer_scaling.patch
     
-    echo "proton winevulkan"
+    #echo "proton winevulkan"
     patch -Np1 < ../patches/proton/proton-winevulkan.patch
     
     echo "msvcrt overrides"
