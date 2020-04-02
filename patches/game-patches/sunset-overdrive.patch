@@ -1,0 +1,34 @@
+diff --git a/dlls/ntdll/loader.c b/dlls/ntdll/loader.c
+index b946416734..cf904f21e3 100644
+--- a/dlls/ntdll/loader.c
++++ b/dlls/ntdll/loader.c
+@@ -123,6 +123,7 @@ typedef struct _wine_modref
+     int                   alloc_deps;
+     int                   nDeps;
+     struct _wine_modref **deps;
++    BOOL                  is_dll;
+ } WINE_MODREF;
+ 
+ /* info about the current builtin dll load */
+@@ -1197,6 +1198,9 @@ static WINE_MODREF *alloc_module( HMODULE hModule, const UNICODE_STRING *nt_name
+             wm->ldr.EntryPoint = (char *)hModule + nt->OptionalHeader.AddressOfEntryPoint;
+     }
+ 
++    /* The flags can be modified later */
++    wm->is_dll = !!(wm->ldr.Flags & LDR_IMAGE_IS_DLL);
++
+     InsertTailList(&NtCurrentTeb()->Peb->LdrData->InLoadOrderModuleList,
+                    &wm->ldr.InLoadOrderModuleList);
+     InsertTailList(&NtCurrentTeb()->Peb->LdrData->InMemoryOrderModuleList,
+@@ -1309,7 +1313,7 @@ static NTSTATUS MODULE_InitDLL( WINE_MODREF *wm, UINT reason, LPVOID lpReserved
+ 
+     if (wm->ldr.Flags & LDR_DONT_RESOLVE_REFS) return STATUS_SUCCESS;
+     if (wm->ldr.TlsIndex != -1) call_tls_callbacks( wm->ldr.BaseAddress, reason );
+-    if (!entry || !(wm->ldr.Flags & LDR_IMAGE_IS_DLL)) return STATUS_SUCCESS;
++    if (!entry || !(wm->is_dll)) return STATUS_SUCCESS;
+ 
+     if (TRACE_ON(relay))
+     {
+-- 
+2.26.0
+
