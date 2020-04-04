@@ -75,7 +75,7 @@ cat patchlog.txt | grep -i error
 
 `vagrant up` (On the first run choose yes, it will ask you to run vagrant up again)  
 `vagrant up` (this will take a while on the first run, as it prepares everything)  
-`build_name=some_custom_build_name make redist` (this will start the build)  
+`build_name=some_custom_build_name make redist | tee buildlog.txt` (this will start the build and log everything to buildlog.txt so that you can review the log if something fails)  
 `vagrant halt` (this will shut down the build afterwards)  
 
 For future builds you only need to run:  
