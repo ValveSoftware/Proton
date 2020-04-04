@@ -109,7 +109,9 @@ Environment variable options:
 As many of you may or may not already know, there is a credits section in the README of my git repository. My proton-ge project contains some of my personal tweaks to proton, but also very largely contains patches, rebases, and fixes from numerous people, not just myself. While I tend to get credit for my builds, there is a lot of work that goes into it from other people as well, that gets imported. I'd like to take some time to point a few of these people out for recognition.  In future builds - I plan to make more informative and clear git commits, as well as attempt to give these people further crediting, as the README may not be sufficient in doing so.  
 
 
-TKG (Etienne Juvigny) - https://www.patreon.com/tkglitch/posts  
+TKG (Etienne Juvigny):  
+https://www.patreon.com/tkglitch  
+https://github.com/Frogging-Family/wine-tkg-git  
 
 I and many others owe TKG. In regards to both WINE and proton, he has dedicated a lot of time (2+ years at least) to rebasing wine and proton patches, as well as making his own contributions. Before he came along, I did some rebasing work, and mainly only released things for Arch. These days he almost always beats me to rebasing, and it saves myself and others a -lot- of work.  
 
