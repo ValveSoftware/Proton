@@ -1,7 +1,7 @@
 From 2c97e468fe5c1a46641f550f82e8e0c57cfe8905 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Wed, 25 Mar 2020 10:43:03 -0500
-Subject: [PATCH 17/36] winegstreamer: Implement IMFMediaStream::RequestSample.
+Subject: [PATCH 17/40] winegstreamer: Implement IMFMediaStream::RequestSample.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
 ---

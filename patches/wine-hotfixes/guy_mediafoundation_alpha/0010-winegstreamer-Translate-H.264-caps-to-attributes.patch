@@ -1,7 +1,7 @@
 From 38c6852c22b1b08c4e7df303f913e26998381539 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Tue, 24 Mar 2020 16:00:26 -0500
-Subject: [PATCH 10/36] winegstreamer: Translate H.264 caps to attributes.
+Subject: [PATCH 10/40] winegstreamer: Translate H.264 caps to attributes.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
 ---

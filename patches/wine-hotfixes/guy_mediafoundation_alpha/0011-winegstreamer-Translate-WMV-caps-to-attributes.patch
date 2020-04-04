@@ -1,7 +1,7 @@
 From d26395dd9f93c68e1b3cabf7e8dbbd22e7f29626 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Tue, 24 Mar 2020 16:01:20 -0500
-Subject: [PATCH 11/36] winegstreamer: Translate WMV caps to attributes.
+Subject: [PATCH 11/40] winegstreamer: Translate WMV caps to attributes.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
 ---

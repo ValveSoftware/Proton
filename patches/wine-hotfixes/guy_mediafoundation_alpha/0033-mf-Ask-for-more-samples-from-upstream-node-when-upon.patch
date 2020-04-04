@@ -1,7 +1,7 @@
 From 0acf403755e643e61366ce1071c89b2f6fc1ed0e Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Thu, 2 Apr 2020 15:42:18 -0500
-Subject: [PATCH 33/36] mf: Ask for more samples from upstream node when upon
+Subject: [PATCH 33/40] mf: Ask for more samples from upstream node when upon
  MF_E_TRANSFORM_NEED_MORE_INPUT
 
 ---

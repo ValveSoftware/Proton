@@ -2,7 +2,7 @@ From 881cba634f3d5a378677c14fdb3c7369fb10adcb Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Sergio=20G=C3=B3mez=20Del=20Real?=
  <sdelreal@codeweavers.com>
 Date: Wed, 1 Apr 2020 16:11:05 -0500
-Subject: [PATCH 01/36] mf/tests: Sink objects are stream sinks, not media
+Subject: [PATCH 01/40] mf/tests: Sink objects are stream sinks, not media
  sinks.
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8

@@ -1,7 +1,7 @@
 From de3e447f88b740b2867dce9bd10f6b04f49845cf Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Tue, 31 Mar 2020 11:21:21 -0500
-Subject: [PATCH 14/36] winegstreamer: Implement
+Subject: [PATCH 14/40] winegstreamer: Implement
  IMFMediaSource::CreatePresentationDescriptor.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>

@@ -1,7 +1,7 @@
 From 4d72fd7a555a3f00dde0814e85cd536aee907ccf Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Mon, 16 Mar 2020 15:27:27 -0500
-Subject: [PATCH 29/36] Miscellaneous
+Subject: [PATCH 29/40] Miscellaneous
 
 ---
  dlls/mfplat/main.c                |   5 +-

@@ -1,7 +1,7 @@
 From a4a9cb29d460d656b3635234ab801d27cb96dca6 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Tue, 24 Mar 2020 16:15:35 -0500
-Subject: [PATCH 22/36] winegstreamer: Introduce IMFMediaType -> GstCaps
+Subject: [PATCH 22/40] winegstreamer: Introduce IMFMediaType -> GstCaps
  converter.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>

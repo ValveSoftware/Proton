@@ -1,7 +1,7 @@
 From d8358a2782d277057860b8cfdd598f98f2654fb9 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Wed, 25 Mar 2020 13:36:19 -0500
-Subject: [PATCH 13/36] winegstreamer: Add video/mpeg recognition.
+Subject: [PATCH 13/40] winegstreamer: Add video/mpeg recognition.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
 ---

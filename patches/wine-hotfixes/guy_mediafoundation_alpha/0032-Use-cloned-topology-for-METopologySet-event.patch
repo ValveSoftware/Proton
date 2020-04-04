@@ -1,7 +1,7 @@
 From 97bb40c902fc6638273b472c3edb975ff09fad32 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Thu, 2 Apr 2020 15:40:28 -0500
-Subject: [PATCH 32/36] Use cloned topology for METopologySet event.
+Subject: [PATCH 32/40] Use cloned topology for METopologySet event.
 
 ---
  dlls/mf/session.c | 4 ++--

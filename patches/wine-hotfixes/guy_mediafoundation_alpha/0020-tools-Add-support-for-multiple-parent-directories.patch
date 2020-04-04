@@ -1,7 +1,7 @@
 From c496d17a3abfaf01a9ffe8ba5fed07cbb12c96b1 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Wed, 29 Jan 2020 15:37:39 -0600
-Subject: [PATCH 20/36] tools: Add support for multiple parent directories.
+Subject: [PATCH 20/40] tools: Add support for multiple parent directories.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
 ---

@@ -1,7 +1,7 @@
 From ef8a1104f4b6e8d80e71b7f6d801a8152d4ec13d Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Tue, 24 Mar 2020 16:24:27 -0500
-Subject: [PATCH 25/36] winegstreamer: Translate AAC attributes to caps.
+Subject: [PATCH 25/40] winegstreamer: Translate AAC attributes to caps.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
 ---

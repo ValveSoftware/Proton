@@ -1,7 +1,7 @@
 From 3c79ba00839aae981e7947104ef5df03c416c7cd Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Wed, 25 Mar 2020 10:43:27 -0500
-Subject: [PATCH 26/36] Introduce IMFSample -> GstBuffer converter.
+Subject: [PATCH 26/40] Introduce IMFSample -> GstBuffer converter.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
 ---

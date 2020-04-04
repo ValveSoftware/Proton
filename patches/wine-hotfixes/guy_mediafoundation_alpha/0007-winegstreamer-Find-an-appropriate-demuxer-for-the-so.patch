@@ -1,7 +1,7 @@
 From 8ff0b7ec2aa1b0f7df60b6f35227aa239083e86f Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Tue, 31 Mar 2020 13:34:57 -0500
-Subject: [PATCH 07/36] winegstreamer: Find an appropriate demuxer for the
+Subject: [PATCH 07/40] winegstreamer: Find an appropriate demuxer for the
  source.
 
 We can add a path later which uses decodebin as the demuxer, for use with formats not supported on windows.  (like Theora)

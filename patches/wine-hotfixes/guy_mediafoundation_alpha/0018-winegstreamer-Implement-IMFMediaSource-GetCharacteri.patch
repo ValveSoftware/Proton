@@ -1,7 +1,7 @@
 From 7404eeb694d0a96520214bb85617d84339a562a5 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Tue, 31 Mar 2020 15:15:07 -0500
-Subject: [PATCH 18/36] winegstreamer: Implement
+Subject: [PATCH 18/40] winegstreamer: Implement
  IMFMediaSource::GetCharacteristics.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>

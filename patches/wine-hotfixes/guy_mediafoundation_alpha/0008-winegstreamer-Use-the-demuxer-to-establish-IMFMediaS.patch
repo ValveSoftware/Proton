@@ -1,7 +1,7 @@
 From 96d49a1da22e16746cc6dddfe5f316a30b6cd08f Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Tue, 31 Mar 2020 13:19:36 -0500
-Subject: [PATCH 08/36] winegstreamer: Use the demuxer to establish
+Subject: [PATCH 08/40] winegstreamer: Use the demuxer to establish
  IMFMediaStreams.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>

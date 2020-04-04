@@ -1,7 +1,7 @@
 From 9b1b7ce57fcf42315ace4d1251a8ced53b0d1334 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Thu, 2 Apr 2020 15:39:16 -0500
-Subject: [PATCH 31/36] mf: Make samplegrabber's media type handler more
+Subject: [PATCH 31/40] mf: Make samplegrabber's media type handler more
  restrictive.
 
 ---

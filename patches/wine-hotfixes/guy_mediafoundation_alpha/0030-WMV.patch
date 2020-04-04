@@ -1,7 +1,7 @@
 From dea5f579abdcad9edf0d799c98a22eaf9e9b1e33 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Wed, 25 Mar 2020 19:07:11 -0500
-Subject: [PATCH 30/36] WMV
+Subject: [PATCH 30/40] WMV
 
 ---
  dlls/winegstreamer/gst_private.h             |  2 +

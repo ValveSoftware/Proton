@@ -1,7 +1,7 @@
 From b91ed09ad2a13add8303df6ceb83263cb20294f7 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Wed, 25 Mar 2020 10:03:52 -0500
-Subject: [PATCH 04/36] Implement stub bytestream handler and source.
+Subject: [PATCH 04/40] Implement stub bytestream handler and source.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
 ---

@@ -1,7 +1,7 @@
 From f29471756e81795f64fc020f21a038b30ca872cb Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Mon, 16 Mar 2020 12:09:39 -0500
-Subject: [PATCH 27/36] winegstreamer: Implement decoder MFT on gstreamer.
+Subject: [PATCH 27/40] winegstreamer: Implement decoder MFT on gstreamer.
 
 ---
  dlls/winegstreamer/Makefile.in               |    1 +

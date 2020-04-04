@@ -1,7 +1,7 @@
 From f703e773fc84380f240aafdf56192c1b75792ab1 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Mon, 30 Mar 2020 15:19:01 -0500
-Subject: [PATCH 05/36] winegstreamer: Implement IMFMediaSource::Shutdown.
+Subject: [PATCH 05/40] winegstreamer: Implement IMFMediaSource::Shutdown.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
 ---

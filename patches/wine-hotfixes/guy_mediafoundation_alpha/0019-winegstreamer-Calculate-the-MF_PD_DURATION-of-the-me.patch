@@ -1,7 +1,7 @@
 From e215f963c06db1c20d6621b8481d9bbbf07bbfc8 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Tue, 31 Mar 2020 15:15:50 -0500
-Subject: [PATCH 19/36] winegstreamer: Calculate the MF_PD_DURATION of the
+Subject: [PATCH 19/40] winegstreamer: Calculate the MF_PD_DURATION of the
  media source's PD.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>

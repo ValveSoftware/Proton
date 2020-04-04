@@ -1,7 +1,7 @@
 From 18edc2674a2ede9f6c682e6399c2d241ad9b33cc Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Tue, 31 Mar 2020 15:11:31 -0500
-Subject: [PATCH 16/36] winegstreamer: Insert parser into pipeline to rectify
+Subject: [PATCH 16/40] winegstreamer: Insert parser into pipeline to rectify
  type differences.
 
 It's probably better to use caps negotiation here, but this seemed simpler for now.

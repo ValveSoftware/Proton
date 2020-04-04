@@ -1,7 +1,7 @@
 From 4ecb6fe9c1c474dc1c1544bf493fffe1b491fdfd Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Thu, 2 Apr 2020 15:43:52 -0500
-Subject: [PATCH 34/36] mf: Miscelaneous fixes to topology resolution.
+Subject: [PATCH 34/40] mf: Miscelaneous fixes to topology resolution.
 
 ---
  dlls/mf/topology.c | 16 +++++++++-------

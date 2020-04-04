@@ -1,7 +1,7 @@
 From 08cb8d2963196f84f002a082f794ffa99ccadf02 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Tue, 31 Mar 2020 15:10:03 -0500
-Subject: [PATCH 15/36] winegstreamer: Implement IMFMediaSource::Start.
+Subject: [PATCH 15/40] winegstreamer: Implement IMFMediaSource::Start.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
 ---

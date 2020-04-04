@@ -1,7 +1,7 @@
 From b45cb1c4b50a165a2332712bbb64622e2fb810a3 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Wed, 29 Jan 2020 15:30:49 -0600
-Subject: [PATCH 21/36] mf: Introduce handler helper.
+Subject: [PATCH 21/40] mf: Introduce handler helper.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
 ---

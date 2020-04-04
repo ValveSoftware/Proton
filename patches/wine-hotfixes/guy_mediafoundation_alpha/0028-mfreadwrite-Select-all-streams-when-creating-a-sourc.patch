@@ -1,7 +1,7 @@
 From 083b5a6b53adacf3f6ebd1fbbfacfa105891e435 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Mon, 23 Mar 2020 11:55:41 -0500
-Subject: [PATCH 28/36] mfreadwrite: Select all streams when creating a source
+Subject: [PATCH 28/40] mfreadwrite: Select all streams when creating a source
  reader.
 
 ---

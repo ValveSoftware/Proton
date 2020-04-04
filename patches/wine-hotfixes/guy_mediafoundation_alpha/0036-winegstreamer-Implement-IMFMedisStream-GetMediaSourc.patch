@@ -1,7 +1,7 @@
 From 3f3765f1dbc5b2cd3d23420a1b303ef66157ec5e Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Thu, 2 Apr 2020 15:46:25 -0500
-Subject: [PATCH 36/36] winegstreamer:  Implement
+Subject: [PATCH 36/40] winegstreamer:  Implement
  IMFMedisStream::GetMediaSource.
 
 ---

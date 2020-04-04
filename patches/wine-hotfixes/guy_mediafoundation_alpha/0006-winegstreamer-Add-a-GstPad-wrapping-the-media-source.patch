@@ -1,7 +1,7 @@
 From e0c0498ea037a1927bdd41ca7bda9b689d7111da Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Mon, 30 Mar 2020 14:19:35 -0500
-Subject: [PATCH 06/36] winegstreamer: Add a GstPad wrapping the media source's
+Subject: [PATCH 06/40] winegstreamer: Add a GstPad wrapping the media source's
  bytestream.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>

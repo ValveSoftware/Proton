@@ -1,7 +1,7 @@
 From eb2df6da4d855f5fa4a59fdbc385d8955a45bab5 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Tue, 31 Mar 2020 11:11:05 -0500
-Subject: [PATCH 09/36] winegstreamer: Implement
+Subject: [PATCH 09/40] winegstreamer: Implement
  IMFMediaStream::GetStreamDescriptor.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
