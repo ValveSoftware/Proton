@@ -1,0 +1,35 @@
+From 3f3765f1dbc5b2cd3d23420a1b303ef66157ec5e Mon Sep 17 00:00:00 2001
+From: Derek Lesho <dlesho@codeweavers.com>
+Date: Thu, 2 Apr 2020 15:46:25 -0500
+Subject: [PATCH 36/36] winegstreamer:  Implement
+ IMFMedisStream::GetMediaSource.
+
+---
+ dlls/winegstreamer/media_source.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/dlls/winegstreamer/media_source.c b/dlls/winegstreamer/media_source.c
+index 469b4c34c9..171b8a7d7e 100644
+--- a/dlls/winegstreamer/media_source.c
++++ b/dlls/winegstreamer/media_source.c
+@@ -288,12 +288,15 @@ static HRESULT WINAPI media_stream_GetMediaSource(IMFMediaStream *iface, IMFMedi
+ {
+     struct media_stream *This = impl_from_IMFMediaStream(iface);
+ 
+-    FIXME("stub (%p)->(%p)\n", This, source);
++    TRACE("(%p)->(%p)\n", This, source);
+ 
+     if (This->state == STREAM_SHUTDOWN)
+         return MF_E_SHUTDOWN;
+ 
+-    return E_NOTIMPL;
++    IMFMediaSource_AddRef(&This->parent_source->IMFMediaSource_iface);
++    *source = &This->parent_source->IMFMediaSource_iface;
++
++    return S_OK;
+ }
+ 
+ static HRESULT WINAPI media_stream_GetStreamDescriptor(IMFMediaStream* iface, IMFStreamDescriptor **descriptor)
+-- 
+2.25.1
+

@@ -1,0 +1,103 @@
+From 18edc2674a2ede9f6c682e6399c2d241ad9b33cc Mon Sep 17 00:00:00 2001
+From: Derek Lesho <dlesho@codeweavers.com>
+Date: Tue, 31 Mar 2020 15:11:31 -0500
+Subject: [PATCH 16/36] winegstreamer: Insert parser into pipeline to rectify
+ type differences.
+
+It's probably better to use caps negotiation here, but this seemed simpler for now.
+
+Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
+---
+ dlls/winegstreamer/media_source.c | 51 +++++++++++++++++++++++++++++--
+ 1 file changed, 49 insertions(+), 2 deletions(-)
+
+diff --git a/dlls/winegstreamer/media_source.c b/dlls/winegstreamer/media_source.c
+index 2b330a442e..dc1b5dca85 100644
+--- a/dlls/winegstreamer/media_source.c
++++ b/dlls/winegstreamer/media_source.c
+@@ -41,7 +41,7 @@ struct media_stream
+     struct media_source *parent_source;
+     IMFMediaEventQueue *event_queue;
+     IMFStreamDescriptor *descriptor;
+-    GstElement *appsink;
++    GstElement *parser, *appsink;
+     GstPad *their_src, *my_sink;
+     /* usually reflects state of source */
+     enum
+@@ -337,18 +337,63 @@ static HRESULT media_stream_constructor(struct media_source *source, GstPad *pad
+         g_free(caps_str);
+         g_free(compatible_caps_str);
+     }
++
++    if (!(gst_caps_is_equal(caps, compatible_caps)))
++    {
++        GList *parser_list_one, *parser_list_two;
++        GstElementFactory *parser_factory;
++
++        parser_list_one = gst_element_factory_list_get_elements(GST_ELEMENT_FACTORY_TYPE_PARSER, 1);
++
++        parser_list_two = gst_element_factory_list_filter(parser_list_one, caps, GST_PAD_SINK, 0);
++        gst_plugin_feature_list_free(parser_list_one);
++        parser_list_one = parser_list_two;
++
++        parser_list_two = gst_element_factory_list_filter(parser_list_one, compatible_caps, GST_PAD_SRC, 0);
++        gst_plugin_feature_list_free(parser_list_one);
++        parser_list_one = parser_list_two;
++
++        if (!(g_list_length(parser_list_one)))
++        {
++            gst_plugin_feature_list_free(parser_list_one);
++            ERR("Failed to find parser for stream\n");
++            hr = E_FAIL;
++            goto fail;
++        }
++
++        parser_factory = g_list_first(parser_list_one)->data;
++        TRACE("Found parser %s.\n", GST_ELEMENT_NAME(parser_factory));
++
++        if (!(This->parser = gst_element_factory_create(parser_factory, NULL)))
++        {
++            hr = E_FAIL;
++            goto fail;
++        }
++        gst_bin_add(GST_BIN(This->parent_source->container), This->parser);
++        if (!(gst_element_link(This->parser, This->appsink)))
++        {
++            hr = E_FAIL;
++            goto fail;
++        }
++
++        g_object_set(This->appsink, "caps", compatible_caps, NULL);
++
++        gst_plugin_feature_list_free(parser_list_one);
++    }
+     gst_caps_unref(caps);
+     caps = NULL;
+     gst_caps_unref(compatible_caps);
+     compatible_caps = NULL;
+ 
+     This->their_src = pad;
+-    This->my_sink = gst_element_get_static_pad(This->appsink, "sink");
++    This->my_sink = gst_element_get_static_pad(This->parser ? This->parser : This->appsink, "sink");
+     gst_pad_set_element_private(pad, This);
+ 
+     gst_pad_link(This->their_src, This->my_sink);
+ 
+     gst_element_sync_state_with_parent(This->appsink);
++    if (This->parser)
++        gst_element_sync_state_with_parent(This->parser);
+ 
+     This->IMFMediaStream_iface.lpVtbl = &media_stream_vtbl;
+     This->ref = 1;
+@@ -877,6 +922,8 @@ static void source_stream_added(GstElement *element, GstPad *pad, gpointer user)
+                 ERR("Error linking demuxer to stream %p, err = %d\n", existing_stream, ret);
+             }
+             gst_element_sync_state_with_parent(existing_stream->appsink);
++            if (existing_stream->parser)
++                gst_element_sync_state_with_parent(existing_stream->parser);
+ 
+             goto leave;
+         }
+-- 
+2.25.1
+

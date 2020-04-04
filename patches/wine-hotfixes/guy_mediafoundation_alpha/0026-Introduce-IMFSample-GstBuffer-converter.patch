@@ -1,0 +1,110 @@
+From 3c79ba00839aae981e7947104ef5df03c416c7cd Mon Sep 17 00:00:00 2001
+From: Derek Lesho <dlesho@codeweavers.com>
+Date: Wed, 25 Mar 2020 10:43:27 -0500
+Subject: [PATCH 26/36] Introduce IMFSample -> GstBuffer converter.
+
+Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
+---
+ dlls/winegstreamer/gst_private.h |  1 +
+ dlls/winegstreamer/mfplat.c      | 74 ++++++++++++++++++++++++++++++++
+ 2 files changed, 75 insertions(+)
+
+diff --git a/dlls/winegstreamer/gst_private.h b/dlls/winegstreamer/gst_private.h
+index 20d3beef02..258df0d040 100644
+--- a/dlls/winegstreamer/gst_private.h
++++ b/dlls/winegstreamer/gst_private.h
+@@ -59,6 +59,7 @@ GstCaps *make_mf_compatible_caps(GstCaps *caps);
+ IMFMediaType *mf_media_type_from_caps(GstCaps *caps);
+ GstCaps *caps_from_mf_media_type(IMFMediaType *type);
+ IMFSample *mf_sample_from_gst_buffer(GstBuffer *in);
++GstBuffer *gst_buffer_from_mf_sample(IMFSample *in);
+ 
+ enum source_type
+ {
+diff --git a/dlls/winegstreamer/mfplat.c b/dlls/winegstreamer/mfplat.c
+index 76e975db58..213614b904 100644
+--- a/dlls/winegstreamer/mfplat.c
++++ b/dlls/winegstreamer/mfplat.c
+@@ -1222,4 +1222,78 @@ IMFSample* mf_sample_from_gst_buffer(GstBuffer *gst_buffer)
+     ERR("Failed to copy IMFSample to GstBuffer, hr = %#x\n", hr);
+     IMFSample_Release(out);
+     return NULL;
++}
++
++GstBuffer* gst_buffer_from_mf_sample(IMFSample *mf_sample)
++{
++    GstBuffer *out = gst_buffer_new();
++    IMFMediaBuffer *mf_buffer = NULL;
++    LONGLONG duration, time;
++    DWORD buffer_count;
++    HRESULT hr;
++
++    if (FAILED(hr = IMFSample_GetSampleDuration(mf_sample, &duration)))
++        goto fail;
++
++    if (FAILED(hr = IMFSample_GetSampleTime(mf_sample, &time)))
++        goto fail;
++
++    GST_BUFFER_DURATION(out) = duration;
++    GST_BUFFER_PTS(out) = time * 100;
++
++    if (FAILED(hr = IMFSample_GetBufferCount(mf_sample, &buffer_count)))
++        goto fail;
++
++    for (unsigned int i = 0; i < buffer_count; i++)
++    {
++        DWORD buffer_max_size, buffer_size;
++        GstMapInfo map_info;
++        GstMemory *memory;
++        BYTE *buf_data;
++
++        if (FAILED(hr = IMFSample_GetBufferByIndex(mf_sample, i, &mf_buffer)))
++            goto fail;
++
++        if (FAILED(hr = IMFMediaBuffer_GetMaxLength(mf_buffer, &buffer_max_size)))
++            goto fail;
++
++        if (FAILED(hr = IMFMediaBuffer_GetCurrentLength(mf_buffer, &buffer_size)))
++            goto fail;
++
++        memory = gst_allocator_alloc(NULL, buffer_size, NULL);
++        gst_memory_resize(memory, 0, buffer_size);
++
++        if (!(gst_memory_map(memory, &map_info, GST_MAP_WRITE)))
++        {
++            hr = E_FAIL;
++            goto fail;
++        }
++
++        if (FAILED(hr = IMFMediaBuffer_Lock(mf_buffer, &buf_data, NULL, NULL)))
++            goto fail;
++
++        memcpy(map_info.data, buf_data, buffer_size);
++
++        if (FAILED(hr = IMFMediaBuffer_Unlock(mf_buffer)))
++            goto fail;
++
++        if (FAILED(hr = IMFMediaBuffer_SetCurrentLength(mf_buffer, buffer_size)))
++            goto fail;
++
++        gst_memory_unmap(memory, &map_info);
++
++        gst_buffer_append_memory(out, memory);
++
++        IMFMediaBuffer_Release(mf_buffer);
++        mf_buffer = NULL;
++    }
++
++    return out;
++
++    fail:
++    ERR("Failed to copy IMFSample to GstBuffer, hr = %#x\n", hr);
++    if (mf_buffer)
++        IMFMediaBuffer_Release(mf_buffer);
++    gst_buffer_unref(out);
++    return NULL;
+ }
+\ No newline at end of file
+-- 
+2.25.1
+

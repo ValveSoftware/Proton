@@ -1,0 +1,174 @@
+From c496d17a3abfaf01a9ffe8ba5fed07cbb12c96b1 Mon Sep 17 00:00:00 2001
+From: Derek Lesho <dlesho@codeweavers.com>
+Date: Wed, 29 Jan 2020 15:37:39 -0600
+Subject: [PATCH 20/36] tools: Add support for multiple parent directories.
+
+Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
+---
+ tools/make_makefiles | 45 +++++++++++++++++++++++++++-----------------
+ tools/makedep.c      | 30 ++++++++++++++++++++---------
+ 2 files changed, 49 insertions(+), 26 deletions(-)
+
+diff --git a/tools/make_makefiles b/tools/make_makefiles
+index c18fa90e2d..1e34a280a4 100755
+--- a/tools/make_makefiles
++++ b/tools/make_makefiles
+@@ -231,14 +231,14 @@ sub parse_makefile($)
+         {
+             die "Configure substitution is not allowed in $file" unless $file eq "Makefile";
+         }
+-        if (/^\s*(MODULE|IMPORTLIB|TESTDLL|PARENTSRC|APPMODE|EXTRADLLFLAGS)\s*=\s*(.*)/)
++        if (/^\s*(MODULE|IMPORTLIB|TESTDLL|APPMODE|EXTRADLLFLAGS)\s*=\s*(.*)/)
+         {
+             my $var = $1;
+             $make{$var} = $2;
+             next;
+         }
+         my $source_vars_regexp = join "|", @source_vars;
+-        if (/^\s*($source_vars_regexp|PROGRAMS|EXTRA_TARGETS|EXTRA_OBJS|INSTALL_LIB|INSTALL_DEV)\s*=\s*(.*)/)
++        if (/^\s*($source_vars_regexp|PROGRAMS|EXTRA_TARGETS|EXTRA_OBJS|INSTALL_LIB|INSTALL_DEV|PARENTSRC)\s*=\s*(.*)/)
+         {
+             my $var = $1;
+             my @list = split(/\s+/, $2);
+@@ -293,19 +293,27 @@ sub get_makedep_flags($)
+     return %flags;
+ }
+ 
+-sub get_parent_makefile($)
++sub get_parent_makefiles($)
+ {
+     my $file = shift;
+     my %make = %{$makefiles{$file}};
+-    my $reldir = $make{"PARENTSRC"} || "";
+-    return "" unless $reldir;
+-    (my $path = $file) =~ s/\/Makefile$/\//;
+-    while ($reldir =~ /^\.\.\//)
++    my $pointer = $make{"PARENTSRC"} || ();
++    return () unless $pointer;
++    my @reldirs = @{$pointer};
++    my @makefiles = ();
++    foreach my $reldir (@reldirs)
+     {
+-        $reldir =~ s/^\.\.\///;
+-        $path =~ s/[^\/]+\/$//;
++        my $length = @reldirs;
++        (my $path = $file) =~ s/\/Makefile$/\//;
++        while ($reldir =~ /^\.\.\//)
++        {
++            $reldir =~ s/^\.\.\///;
++            $path =~ s/[^\/]+\/$//;
++        }
++        push @makefiles, "$path$reldir/Makefile";
+     }
+-    return "$path$reldir/Makefile";
++
++    return @makefiles
+ }
+ 
+ # preserve shared source files that are listed in the existing makefile
+@@ -410,13 +418,16 @@ sub assign_sources_to_makefiles(@)
+     foreach my $file (@makefiles)
+     {
+         my $make = $makefiles{$file};
+-        my $parent = get_parent_makefile( $file );
+-        next unless $parent;
+-        preserve_shared_source_files( $makefiles{$file}, $makefiles{$parent}, "C_SRCS" );
+-        preserve_shared_source_files( $makefiles{$file}, $makefiles{$parent}, "RC_SRCS" );
+-        preserve_shared_source_files( $makefiles{$file}, $makefiles{$parent}, "IDL_SRCS" );
+-        preserve_shared_source_files( $makefiles{$file}, $makefiles{$parent}, "LEX_SRCS" );
+-        preserve_shared_source_files( $makefiles{$file}, $makefiles{$parent}, "BISON_SRCS" );
++        my @parents = get_parent_makefiles( $file );
++        next unless @parents;
++        foreach my $parent (@parents)
++        {
++            preserve_shared_source_files( $makefiles{$file}, $makefiles{$parent}, "C_SRCS" );
++            preserve_shared_source_files( $makefiles{$file}, $makefiles{$parent}, "RC_SRCS" );
++            preserve_shared_source_files( $makefiles{$file}, $makefiles{$parent}, "IDL_SRCS" );
++            preserve_shared_source_files( $makefiles{$file}, $makefiles{$parent}, "LEX_SRCS" );
++            preserve_shared_source_files( $makefiles{$file}, $makefiles{$parent}, "BISON_SRCS" );
++        }
+     }
+ }
+ 
+diff --git a/tools/makedep.c b/tools/makedep.c
+index 9b64f0fed4..d243d54ada 100644
+--- a/tools/makedep.c
++++ b/tools/makedep.c
+@@ -182,6 +182,7 @@ struct makefile
+     struct strarray install_lib;
+     struct strarray install_dev;
+     struct strarray extra_targets;
++    struct strarray parent_dirs;
+     struct list     sources;
+     struct list     includes;
+     const char     *base_dir;
+@@ -189,7 +190,6 @@ struct makefile
+     const char     *obj_dir;
+     const char     *top_src_dir;
+     const char     *top_obj_dir;
+-    const char     *parent_dir;
+     const char     *module;
+     const char     *testdll;
+     const char     *sharedlib;
+@@ -1373,15 +1373,24 @@ static struct file *open_local_file( const struct makefile *make, const char *pa
+ {
+     char *src_path = root_dir_path( base_dir_path( make, path ));
+     struct file *ret = load_file( src_path );
++    unsigned int i;
+ 
+-    /* if not found, try parent dir */
+-    if (!ret && make->parent_dir)
++    /* if not found, try parent dirs */
++    for (i = 0; !ret && i < make->parent_dirs.count; i++)
+     {
++        char *new_path;
++
+         free( src_path );
+-        path = strmake( "%s/%s", make->parent_dir, path );
+-        src_path = root_dir_path( base_dir_path( make, path ));
++        new_path = strmake( "%s/%s", make->parent_dirs.str[i], path );
++        src_path = root_dir_path( base_dir_path( make, new_path ));
+         ret = load_file( src_path );
+-        if (ret) ret->flags |= FLAG_PARENTDIR;
++        if (ret)
++        {
++            ret->flags |= FLAG_PARENTDIR;
++            path = new_path;
++        }
++        else
++            free(new_path);
+     }
+ 
+     if (ret) *filename = src_dir_path( make, path );
+@@ -4186,13 +4195,13 @@ static void load_sources( struct makefile *make )
+     strarray_set_value( &make->vars, "top_srcdir", top_src_dir_path( make, "" ));
+     strarray_set_value( &make->vars, "srcdir", src_dir_path( make, "" ));
+ 
+-    make->parent_dir    = get_expanded_make_variable( make, "PARENTSRC" );
+     make->module        = get_expanded_make_variable( make, "MODULE" );
+     make->testdll       = get_expanded_make_variable( make, "TESTDLL" );
+     make->sharedlib     = get_expanded_make_variable( make, "SHAREDLIB" );
+     make->staticlib     = get_expanded_make_variable( make, "STATICLIB" );
+     make->importlib     = get_expanded_make_variable( make, "IMPORTLIB" );
+ 
++    make->parent_dirs   = get_expanded_make_var_array( make, "PARENTSRC" );
+     make->programs      = get_expanded_make_var_array( make, "PROGRAMS" );
+     make->scripts       = get_expanded_make_var_array( make, "SCRIPTS" );
+     make->imports       = get_expanded_make_var_array( make, "IMPORTS" );
+@@ -4237,8 +4246,11 @@ static void load_sources( struct makefile *make )
+     strarray_add( &make->include_args, strmake( "-I%s", obj_dir_path( make, "" )));
+     if (make->src_dir)
+         strarray_add( &make->include_args, strmake( "-I%s", make->src_dir ));
+-    if (make->parent_dir)
+-        strarray_add( &make->include_args, strmake( "-I%s", src_dir_path( make, make->parent_dir )));
++    if (make->parent_dirs.count)
++    {
++        for (i = 0; i < make->parent_dirs.count; i++)
++            strarray_add( &make->include_args, strmake( "-I%s", src_dir_path( make, make->parent_dirs.str[i] )));
++    }
+     strarray_add( &make->include_args, strmake( "-I%s", top_obj_dir_path( make, "include" )));
+     if (make->top_src_dir)
+         strarray_add( &make->include_args, strmake( "-I%s", top_src_dir_path( make, "include" )));
+-- 
+2.25.1
+

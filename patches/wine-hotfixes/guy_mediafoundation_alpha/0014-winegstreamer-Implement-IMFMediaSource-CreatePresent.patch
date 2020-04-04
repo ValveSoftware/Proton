@@ -1,0 +1,139 @@
+From de3e447f88b740b2867dce9bd10f6b04f49845cf Mon Sep 17 00:00:00 2001
+From: Derek Lesho <dlesho@codeweavers.com>
+Date: Tue, 31 Mar 2020 11:21:21 -0500
+Subject: [PATCH 14/36] winegstreamer: Implement
+ IMFMediaSource::CreatePresentationDescriptor.
+
+Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
+---
+ dlls/mfplat/tests/mfplat.c        |  8 +++----
+ dlls/winegstreamer/media_source.c | 37 +++++++++++++++++++++++++++++--
+ 2 files changed, 39 insertions(+), 6 deletions(-)
+
+diff --git a/dlls/mfplat/tests/mfplat.c b/dlls/mfplat/tests/mfplat.c
+index d2d7db1b29..bde6684515 100644
+--- a/dlls/mfplat/tests/mfplat.c
++++ b/dlls/mfplat/tests/mfplat.c
+@@ -491,10 +491,7 @@ static void test_source_resolver(void)
+     ok(obj_type == MF_OBJECT_MEDIASOURCE, "got %d\n", obj_type);
+ 
+     hr = IMFMediaSource_CreatePresentationDescriptor(mediasource, &descriptor);
+-todo_wine
+     ok(hr == S_OK, "Failed to get presentation descriptor, hr %#x.\n", hr);
+-    if (FAILED(hr))
+-        goto skip_source_tests;
+     ok(descriptor != NULL, "got %p\n", descriptor);
+ 
+     hr = IMFPresentationDescriptor_GetStreamDescriptorByIndex(descriptor, 0, &selected, &sd);
+@@ -522,7 +519,10 @@ todo_wine
+ 
+     var.vt = VT_EMPTY;
+     hr = IMFMediaSource_Start(mediasource, descriptor, &GUID_NULL, &var);
++todo_wine
+     ok(hr == S_OK, "Failed to start media source, hr %#x.\n", hr);
++    if (FAILED(hr))
++        goto skip_source_tests;
+ 
+     get_event((IMFMediaEventGenerator *)mediasource, MENewStream, &var);
+     ok(var.vt == VT_UNKNOWN, "Unexpected value type %u from MENewStream event.\n", var.vt);
+@@ -585,10 +585,10 @@ todo_wine
+ 
+     get_event((IMFMediaEventGenerator *)mediasource, MEEndOfPresentation, NULL);
+ 
++skip_source_tests:
+     IMFMediaTypeHandler_Release(handler);
+     IMFPresentationDescriptor_Release(descriptor);
+ 
+-skip_source_tests:
+     hr = IMFMediaSource_Shutdown(mediasource);
+     ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
+ 
+diff --git a/dlls/winegstreamer/media_source.c b/dlls/winegstreamer/media_source.c
+index 080d2c43ca..fcaba45cd9 100644
+--- a/dlls/winegstreamer/media_source.c
++++ b/dlls/winegstreamer/media_source.c
+@@ -63,6 +63,7 @@ struct media_source
+     IMFByteStream *byte_stream;
+     struct media_stream **streams;
+     ULONG stream_count;
++    IMFPresentationDescriptor *pres_desc;
+     GstBus *bus;
+     GstElement *container;
+     GstElement *demuxer;
+@@ -493,12 +494,19 @@ static HRESULT WINAPI media_source_CreatePresentationDescriptor(IMFMediaSource *
+ {
+     struct media_source *This = impl_from_IMFMediaSource(iface);
+ 
+-    FIXME("(%p)->(%p): stub\n", This, descriptor);
++    TRACE("(%p)->(%p)\n", This, descriptor);
+ 
+     if (This->state == SOURCE_SHUTDOWN)
+         return MF_E_SHUTDOWN;
+ 
+-    return E_NOTIMPL;
++    if (!(This->pres_desc))
++    {
++        return MF_E_NOT_INITIALIZED;
++    }
++
++    IMFPresentationDescriptor_Clone(This->pres_desc, descriptor);
++
++    return S_OK;
+ }
+ 
+ static HRESULT WINAPI media_source_Start(IMFMediaSource *iface, IMFPresentationDescriptor *descriptor,
+@@ -549,6 +557,8 @@ static HRESULT media_source_teardown(struct media_source *This)
+         gst_element_set_state(This->container, GST_STATE_NULL);
+         gst_object_unref(GST_OBJECT(This->container));
+     }
++    if (This->pres_desc)
++        IMFPresentationDescriptor_Release(This->pres_desc);
+     if (This->event_queue)
+         IMFMediaEventQueue_Release(This->event_queue);
+     if (This->byte_stream)
+@@ -862,12 +872,30 @@ static void source_stream_removed(GstElement *element, GstPad *pad, gpointer use
+ 
+ static void source_all_streams(GstElement *element, gpointer user)
+ {
++    IMFStreamDescriptor **descriptors;
+     struct media_source *source = (struct media_source *) user;
+ 
+     EnterCriticalSection(&source->streams_cs);
+     if (source->state != SOURCE_OPENING)
+         goto leave;
+ 
++    /* Init presentation descriptor */
++
++    descriptors = heap_alloc(source->stream_count * sizeof(IMFStreamDescriptor*));
++    for (unsigned int i = 0; i < source->stream_count; i++)
++    {
++        IMFMediaStream_GetStreamDescriptor(&source->streams[i]->IMFMediaStream_iface, &descriptors[i]);
++    }
++
++    if (FAILED(MFCreatePresentationDescriptor(source->stream_count, descriptors, &source->pres_desc)))
++        goto leave;
++
++    for (unsigned int i = 0; i < source->stream_count; i++)
++    {
++        IMFStreamDescriptor_Release(descriptors[i]);
++    }
++    heap_free(descriptors);
++
+     SetEvent(source->init_complete_event);
+ 
+     leave:
+@@ -978,6 +1006,11 @@ static HRESULT media_source_constructor(IMFByteStream *bytestream, enum source_t
+     This->init_complete_event = NULL;
+ 
+     gst_element_set_state(This->container, GST_STATE_READY);
++    if (!(This->pres_desc))
++    {
++        hr = E_FAIL;
++        goto fail;
++    }
+ 
+     This->state = SOURCE_STOPPED;
+ 
+-- 
+2.25.1
+

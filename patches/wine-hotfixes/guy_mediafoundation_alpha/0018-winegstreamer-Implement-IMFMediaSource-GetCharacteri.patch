@@ -1,0 +1,35 @@
+From 7404eeb694d0a96520214bb85617d84339a562a5 Mon Sep 17 00:00:00 2001
+From: Derek Lesho <dlesho@codeweavers.com>
+Date: Tue, 31 Mar 2020 15:15:07 -0500
+Subject: [PATCH 18/36] winegstreamer: Implement
+ IMFMediaSource::GetCharacteristics.
+
+Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
+---
+ dlls/winegstreamer/media_source.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/dlls/winegstreamer/media_source.c b/dlls/winegstreamer/media_source.c
+index b0f0cf4162..e6effa0429 100644
+--- a/dlls/winegstreamer/media_source.c
++++ b/dlls/winegstreamer/media_source.c
+@@ -665,12 +665,14 @@ static HRESULT WINAPI media_source_GetCharacteristics(IMFMediaSource *iface, DWO
+ {
+     struct media_source *This = impl_from_IMFMediaSource(iface);
+ 
+-    FIXME("(%p)->(%p): stub\n", This, characteristics);
++    TRACE("(%p)->(%p)\n", This, characteristics);
+ 
+     if (This->state == SOURCE_SHUTDOWN)
+         return MF_E_SHUTDOWN;
+ 
+-    return E_NOTIMPL;
++    *characteristics = 0;
++
++    return S_OK;
+ }
+ 
+ static HRESULT WINAPI media_source_CreatePresentationDescriptor(IMFMediaSource *iface, IMFPresentationDescriptor **descriptor)
+-- 
+2.25.1
+

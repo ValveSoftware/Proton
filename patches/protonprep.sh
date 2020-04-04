@@ -57,6 +57,10 @@
     git reset --hard HEAD
     git clean -xdf
 
+# warframe launcher fix 1
+    git revert --no-commit bae4776c571cf975be1689594f4caf93ad23e0ca
+    git revert --no-commit 5e218fe758fe6beed5c7ad73405eccf33c307e6d
+
     #WINE STAGING
 
 # Enable these for now in favor over proton gamepad additions
@@ -66,7 +70,7 @@
 #    -W dinput-reconnect-joystick \
 #    -W dinput-remap-joystick \
 
-# this needs to be disabled as it breaks warframes launcher.
+# warframe launcher fix 2
 #    -W ntdll-avoid-fstatat
 
     echo "applying staging patches"
@@ -166,9 +170,6 @@
     patch -Np1 < ../wine-staging/patches/winex11-key_translation/0002-winex11-Fix-more-key-translation.patch
     patch -Np1 < ../wine-staging/patches/winex11-key_translation/0003-winex11.drv-Fix-main-Russian-keyboard-layout.patch
     
-    #echo "mfplat alpha testing patches"
-    #patch -Np1 < ../patches/wine-hotfixes/mfplat_rebase_patchset.patch
-
     echo "LAA"
     patch -Np1 < ../patches/proton/proton-LAA_staging.patch
 
@@ -232,6 +233,12 @@
     echo "applying WoW vkd3d wine patches"
     patch -Np1 < ../patches/wine-hotfixes/D3D12SerializeVersionedRootSignature.patch
     patch -Np1 < ../patches/wine-hotfixes/D3D12CreateVersionedRootSignatureDeserializer.patch
+
+    echo "guy's media foundation alpha patches"
+    # apply esync patches
+    for _f in ../patches/wine-hotfixes/guy_mediafoundation_alpha/*.patch; do
+        patch -Np1 < "${_f}"
+    done
 
     #WINE CUSTOM PATCHES
     #add your own custom patch lines below

@@ -378,8 +378,7 @@ class Session:
         self.log_file = None
         self.env = dict(os.environ)
         self.dlloverrides = {
-                "steam.exe": "b", #always use our special built-in steam.exe
-                "mfplay": "n" #disable built-in mfplay
+                "steam.exe": "b" #always use our special built-in steam.exe
         }
 
         self.compat_config = set()

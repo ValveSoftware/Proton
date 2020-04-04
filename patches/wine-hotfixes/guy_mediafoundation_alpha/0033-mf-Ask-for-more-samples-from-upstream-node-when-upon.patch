@@ -1,0 +1,50 @@
+From 0acf403755e643e61366ce1071c89b2f6fc1ed0e Mon Sep 17 00:00:00 2001
+From: Derek Lesho <dlesho@codeweavers.com>
+Date: Thu, 2 Apr 2020 15:42:18 -0500
+Subject: [PATCH 33/36] mf: Ask for more samples from upstream node when upon
+ MF_E_TRANSFORM_NEED_MORE_INPUT
+
+---
+ dlls/mf/session.c | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
+
+diff --git a/dlls/mf/session.c b/dlls/mf/session.c
+index c3e9f59635..f0ff5a15c3 100644
+--- a/dlls/mf/session.c
++++ b/dlls/mf/session.c
+@@ -2331,6 +2331,8 @@ exit:
+     return hr;
+ }
+ 
++static HRESULT session_request_sample_from_node(struct media_session *session, IMFTopologyNode *node, DWORD output);
++
+ static void session_deliver_sample_to_node(struct media_session *session, IMFTopologyNode *node, DWORD input,
+         IMFSample *sample)
+ {
+@@ -2377,7 +2379,7 @@ static void session_deliver_sample_to_node(struct media_session *session, IMFTop
+                         continue;
+ 
+                     sample = NULL;
+-                    transform_node_get_sample(topo_node, i, &sample);
++                    hr = transform_node_get_sample(topo_node, i, &sample);
+                     if (sample)
+                     {
+                         if (SUCCEEDED(hr = IMFTopologyNode_GetOutput(node, i, &downstream_node, &downstream_input)))
+@@ -2388,6 +2390,14 @@ static void session_deliver_sample_to_node(struct media_session *session, IMFTop
+                         }
+                         IMFSample_Release(sample);
+                     }
++                    else if (hr == MF_E_TRANSFORM_NEED_MORE_INPUT)
++                    {
++                        IMFTopologyNode *upstream_node;
++                        DWORD upstream_output;
++
++                        if (SUCCEEDED(IMFTopologyNode_GetInput(node, input, &upstream_node, &upstream_output)))
++                            session_request_sample_from_node(session, upstream_node, upstream_output);
++                    }
+                 }
+             }
+             else
+-- 
+2.25.1
+

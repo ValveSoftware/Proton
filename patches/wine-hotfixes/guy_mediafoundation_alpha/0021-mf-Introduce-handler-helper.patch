@@ -1,0 +1,1367 @@
+From b45cb1c4b50a165a2332712bbb64622e2fb810a3 Mon Sep 17 00:00:00 2001
+From: Derek Lesho <dlesho@codeweavers.com>
+Date: Wed, 29 Jan 2020 15:30:49 -0600
+Subject: [PATCH 21/36] mf: Introduce handler helper.
+
+Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
+---
+ dlls/mf/Makefile.in               |   1 +
+ dlls/mf/handler.c                 | 360 ++++++++++++++++++++++++++++
+ dlls/mf/handler.h                 |  30 +++
+ dlls/mf/main.c                    | 373 ++++--------------------------
+ dlls/winegstreamer/Makefile.in    |   3 +-
+ dlls/winegstreamer/media_source.c | 332 ++------------------------
+ 6 files changed, 447 insertions(+), 652 deletions(-)
+ create mode 100644 dlls/mf/handler.c
+ create mode 100644 dlls/mf/handler.h
+
+diff --git a/dlls/mf/Makefile.in b/dlls/mf/Makefile.in
+index fe156e43ab..5c69ac38e5 100644
+--- a/dlls/mf/Makefile.in
++++ b/dlls/mf/Makefile.in
+@@ -5,6 +5,7 @@ IMPORTS   = advapi32 mfplat ole32 uuid mfuuid
+ EXTRADLLFLAGS = -mno-cygwin
+ 
+ C_SRCS = \
++	handler.c \
+ 	main.c \
+ 	samplegrabber.c \
+ 	sar.c \
+diff --git a/dlls/mf/handler.c b/dlls/mf/handler.c
+new file mode 100644
+index 0000000000..da40049377
+--- /dev/null
++++ b/dlls/mf/handler.c
+@@ -0,0 +1,360 @@
++#include <stdarg.h>
++
++#define COBJMACROS
++
++#include "windef.h"
++#include "winbase.h"
++#include "mfidl.h"
++
++#include "mfapi.h"
++#include "mferror.h"
++
++#include "handler.h"
++
++#include "wine/debug.h"
++#include "wine/heap.h"
++#include "wine/list.h"
++
++WINE_DEFAULT_DEBUG_CHANNEL(mfplat);
++
++struct create_object_context
++{
++    IUnknown IUnknown_iface;
++    LONG refcount;
++
++    IPropertyStore *props;
++    IMFByteStream *stream;
++    WCHAR *url;
++    DWORD flags;
++};
++
++struct handler_result
++{
++    struct list entry;
++    IMFAsyncResult *result;
++    MF_OBJECT_TYPE obj_type;
++    IUnknown *object;
++};
++
++static struct create_object_context *impl_from_IUnknown(IUnknown *iface)
++{
++    return CONTAINING_RECORD(iface, struct create_object_context, IUnknown_iface);
++}
++
++static HRESULT WINAPI create_object_context_QueryInterface(IUnknown *iface, REFIID riid, void **obj)
++{
++    TRACE("%p, %s, %p.\n", iface, debugstr_guid(riid), obj);
++
++    if (IsEqualIID(riid, &IID_IUnknown))
++    {
++        *obj = iface;
++        IUnknown_AddRef(iface);
++        return S_OK;
++    }
++
++    WARN("Unsupported %s.\n", debugstr_guid(riid));
++    *obj = NULL;
++    return E_NOINTERFACE;
++}
++
++static ULONG WINAPI create_object_context_AddRef(IUnknown *iface)
++{
++    struct create_object_context *context = impl_from_IUnknown(iface);
++    ULONG refcount = InterlockedIncrement(&context->refcount);
++
++    TRACE("%p, refcount %u.\n", iface, refcount);
++
++    return refcount;
++}
++
++static ULONG WINAPI create_object_context_Release(IUnknown *iface)
++{
++    struct create_object_context *context = impl_from_IUnknown(iface);
++    ULONG refcount = InterlockedDecrement(&context->refcount);
++
++    TRACE("%p, refcount %u.\n", iface, refcount);
++
++    if (!refcount)
++    {
++        if (context->props)
++            IPropertyStore_Release(context->props);
++        if (context->stream)
++            IMFByteStream_Release(context->stream);
++        if (context->url)
++            heap_free(context->url);
++        heap_free(context);
++    }
++
++    return refcount;
++}
++
++static const IUnknownVtbl create_object_context_vtbl =
++{
++    create_object_context_QueryInterface,
++    create_object_context_AddRef,
++    create_object_context_Release,
++};
++
++/* Start async methods */
++static struct handler *impl_from_IMFAsyncCallback(IMFAsyncCallback *iface)
++{
++    return CONTAINING_RECORD(iface, struct handler, IMFAsyncCallback_iface);
++}
++
++static HRESULT WINAPI handler_callback_QueryInterface(IMFAsyncCallback *iface, REFIID riid, void **obj)
++{
++    if (IsEqualIID(riid, &IID_IMFAsyncCallback) ||
++            IsEqualIID(riid, &IID_IUnknown))
++    {
++        *obj = iface;
++        IMFAsyncCallback_AddRef(iface);
++        return S_OK;
++    }
++
++    WARN("Unsupported %s.\n", debugstr_guid(riid));
++    *obj = NULL;
++    return E_NOINTERFACE;
++}
++
++/* lifetime not managed with COM */
++static ULONG WINAPI handler_callback_AddRef(IMFAsyncCallback *iface)
++{
++    return 2;
++}
++
++static ULONG WINAPI handler_callback_Release(IMFAsyncCallback *iface)
++{
++    return 1;
++}
++
++static HRESULT WINAPI handler_callback_GetParameters(IMFAsyncCallback *iface, DWORD *flags, DWORD *queue)
++{
++    return E_NOTIMPL;
++}
++
++static HRESULT WINAPI handler_callback_Invoke(IMFAsyncCallback *iface, IMFAsyncResult *result)
++{
++    struct handler *handler = impl_from_IMFAsyncCallback(iface);
++    struct handler_result *handler_result;
++    MF_OBJECT_TYPE obj_type = MF_OBJECT_INVALID;
++    IUnknown *object = NULL, *context_object;
++    struct create_object_context *context;
++    IMFAsyncResult *caller;
++    HRESULT hr;
++
++    caller = (IMFAsyncResult *)IMFAsyncResult_GetStateNoAddRef(result);
++
++    if (FAILED(hr = IMFAsyncResult_GetObject(result, &context_object)))
++    {
++        WARN("Expected context set for callee result.\n");
++        return hr;
++    }
++
++    context = impl_from_IUnknown(context_object);
++
++    hr = handler->create_object(handler, context->url, context->stream, context->flags, context->props, &object, &obj_type);
++
++    handler_result = heap_alloc(sizeof(*handler_result));
++    if (handler_result)
++    {
++        handler_result->result = caller;
++        IMFAsyncResult_AddRef(handler_result->result);
++        handler_result->obj_type = obj_type;
++        handler_result->object = object;
++
++        EnterCriticalSection(&handler->cs);
++        list_add_tail(&handler->results, &handler_result->entry);
++        LeaveCriticalSection(&handler->cs);
++    }
++    else
++    {
++        if (object)
++            IUnknown_Release(object);
++        hr = E_OUTOFMEMORY;
++    }
++
++    IUnknown_Release(&context->IUnknown_iface);
++
++    IMFAsyncResult_SetStatus(caller, hr);
++    MFInvokeCallback(caller);
++
++    return S_OK;
++}
++
++static const IMFAsyncCallbackVtbl handler_callback_vtbl =
++{
++    handler_callback_QueryInterface,
++    handler_callback_AddRef,
++    handler_callback_Release,
++    handler_callback_GetParameters,
++    handler_callback_Invoke,
++};
++
++/* Start handler helpers */
++
++static WCHAR *heap_strdupW(const WCHAR *str)
++{
++    WCHAR *ret = NULL;
++
++    if (str)
++    {
++        unsigned int size;
++
++        size = (lstrlenW(str) + 1) * sizeof(WCHAR);
++        ret = heap_alloc(size);
++        if (ret)
++            memcpy(ret, str, size);
++    }
++
++    return ret;
++}
++
++HRESULT handler_begin_create_object(struct handler *handler, IMFByteStream *stream,
++        const WCHAR *url, DWORD flags, IPropertyStore *props, IUnknown **cancel_cookie,
++        IMFAsyncCallback *callback, IUnknown *state)
++{
++    struct create_object_context *context;
++    IMFAsyncResult *caller, *item;
++    HRESULT hr;
++
++    if (cancel_cookie)
++        *cancel_cookie = NULL;
++
++    if (FAILED(hr = MFCreateAsyncResult(NULL, callback, state, &caller)))
++        return hr;
++
++    context = heap_alloc(sizeof(*context));
++    if (!context)
++    {
++        IMFAsyncResult_Release(caller);
++        return E_OUTOFMEMORY;
++    }
++
++    context->IUnknown_iface.lpVtbl = &create_object_context_vtbl;
++    context->refcount = 1;
++    context->props = props;
++    if (context->props)
++        IPropertyStore_AddRef(context->props);
++    context->flags = flags;
++    context->stream = stream;
++    if (context->stream)
++        IMFByteStream_AddRef(context->stream);
++    if (url)
++        context->url = heap_strdupW(url);
++    if (!context->url && !context->stream)
++    {
++        IMFAsyncResult_Release(caller);
++        IUnknown_Release(&context->IUnknown_iface);
++        return E_OUTOFMEMORY;
++    }
++
++    hr = MFCreateAsyncResult(&context->IUnknown_iface, &handler->IMFAsyncCallback_iface, (IUnknown *)caller, &item);
++    IUnknown_Release(&context->IUnknown_iface);
++    if (SUCCEEDED(hr))
++    {
++        if (SUCCEEDED(hr = MFPutWorkItemEx(MFASYNC_CALLBACK_QUEUE_IO, item)))
++        {
++            if (cancel_cookie)
++            {
++                *cancel_cookie = (IUnknown *)caller;
++                IUnknown_AddRef(*cancel_cookie);
++            }
++        }
++
++        IMFAsyncResult_Release(item);
++    }
++    IMFAsyncResult_Release(caller);
++
++    return hr;
++}
++
++HRESULT handler_end_create_object(struct handler *handler, IMFAsyncResult *result,
++        MF_OBJECT_TYPE *obj_type, IUnknown **object)
++{
++    struct handler_result *found = NULL, *cur;
++    HRESULT hr;
++
++    EnterCriticalSection(&handler->cs);
++
++    LIST_FOR_EACH_ENTRY(cur, &handler->results, struct handler_result, entry)
++    {
++        if (result == cur->result)
++        {
++            list_remove(&cur->entry);
++            found = cur;
++            break;
++        }
++    }
++
++    LeaveCriticalSection(&handler->cs);
++
++    if (found)
++    {
++        *obj_type = found->obj_type;
++        *object = found->object;
++        hr = IMFAsyncResult_GetStatus(found->result);
++        IMFAsyncResult_Release(found->result);
++        heap_free(found);
++    }
++    else
++    {
++        *obj_type = MF_OBJECT_INVALID;
++        *object = NULL;
++        hr = MF_E_UNEXPECTED;
++    }
++
++    return hr;
++}
++
++HRESULT handler_cancel_object_creation(struct handler *handler, IUnknown *cancel_cookie)
++{
++    struct handler_result *found = NULL, *cur;
++
++    EnterCriticalSection(&handler->cs);
++
++    LIST_FOR_EACH_ENTRY(cur, &handler->results, struct handler_result, entry)
++    {
++        if (cancel_cookie == (IUnknown *)cur->result)
++        {
++            list_remove(&cur->entry);
++            found = cur;
++            break;
++        }
++    }
++
++    LeaveCriticalSection(&handler->cs);
++
++    if (found)
++    {
++        IMFAsyncResult_Release(found->result);
++        if (found->object)
++            IUnknown_Release(found->object);
++        heap_free(found);
++    }
++
++    return found ? S_OK : MF_E_UNEXPECTED;
++}
++
++void handler_construct(struct handler *handler, p_create_object_callback create_object_callback)
++{
++    handler->IMFAsyncCallback_iface.lpVtbl = &handler_callback_vtbl;
++    handler->create_object = create_object_callback;
++
++    list_init(&handler->results);
++    InitializeCriticalSection(&handler->cs);
++}
++
++void handler_destruct(struct handler *handler)
++{
++    struct handler_result *result, *next;
++
++    LIST_FOR_EACH_ENTRY_SAFE(result, next, &handler->results, struct handler_result, entry)
++    {
++        list_remove(&result->entry);
++        IMFAsyncResult_Release(result->result);
++        if (result->object)
++            IUnknown_Release(result->object);
++        heap_free(result);
++    }
++    DeleteCriticalSection(&handler->cs);
++}
+\ No newline at end of file
+diff --git a/dlls/mf/handler.h b/dlls/mf/handler.h
+new file mode 100644
+index 0000000000..fbebd26e8d
+--- /dev/null
++++ b/dlls/mf/handler.h
+@@ -0,0 +1,30 @@
++#include "windef.h"
++
++#include "mfidl.h"
++#include "mfapi.h"
++#include "mfobjects.h"
++
++#include "wine/list.h"
++
++/* helper sub-object that handles ansyncronous nature of handlers */
++
++struct handler;
++typedef HRESULT (*p_create_object_callback)(struct handler *handler, WCHAR *url, IMFByteStream *stream, DWORD flags, IPropertyStore *props,
++                                            IUnknown **out_object, MF_OBJECT_TYPE *out_obj_type);
++
++struct handler
++{
++    IMFAsyncCallback IMFAsyncCallback_iface;
++    struct list results;
++    CRITICAL_SECTION cs;
++    p_create_object_callback create_object;
++};
++
++void handler_construct(struct handler *handler, p_create_object_callback create_object_callback);
++void handler_destruct(struct handler *handler);
++HRESULT handler_begin_create_object(struct handler *handler, IMFByteStream *stream,
++        const WCHAR *url, DWORD flags, IPropertyStore *props, IUnknown **cancel_cookie,
++        IMFAsyncCallback *callback, IUnknown *state);
++HRESULT handler_end_create_object(struct handler *handler, IMFAsyncResult *result,
++        MF_OBJECT_TYPE *obj_type, IUnknown **object);
++HRESULT handler_cancel_object_creation(struct handler *handler, IUnknown *cancel_cookie);
+\ No newline at end of file
+diff --git a/dlls/mf/main.c b/dlls/mf/main.c
+index 01fe17866c..b1b8f3430c 100644
+--- a/dlls/mf/main.c
++++ b/dlls/mf/main.c
+@@ -35,6 +35,7 @@
+ #include "mferror.h"
+ 
+ #include "mf_private.h"
++#include "handler.h"
+ 
+ #include "wine/debug.h"
+ #include "wine/heap.h"
+@@ -556,22 +557,12 @@ static const IClassFactoryVtbl class_factory_vtbl =
+     class_factory_LockServer,
+ };
+ 
+-struct file_scheme_handler_result
+-{
+-    struct list entry;
+-    IMFAsyncResult *result;
+-    MF_OBJECT_TYPE obj_type;
+-    IUnknown *object;
+-};
+-
+ struct file_scheme_handler
+ {
+     IMFSchemeHandler IMFSchemeHandler_iface;
+-    IMFAsyncCallback IMFAsyncCallback_iface;
+     LONG refcount;
+     IMFSourceResolver *resolver;
+-    struct list results;
+-    CRITICAL_SECTION cs;
++    struct handler handler;
+ };
+ 
+ static struct file_scheme_handler *impl_from_IMFSchemeHandler(IMFSchemeHandler *iface)
+@@ -579,11 +570,6 @@ static struct file_scheme_handler *impl_from_IMFSchemeHandler(IMFSchemeHandler *
+     return CONTAINING_RECORD(iface, struct file_scheme_handler, IMFSchemeHandler_iface);
+ }
+ 
+-static struct file_scheme_handler *impl_from_IMFAsyncCallback(IMFAsyncCallback *iface)
+-{
+-    return CONTAINING_RECORD(iface, struct file_scheme_handler, IMFAsyncCallback_iface);
+-}
+-
+ static HRESULT WINAPI file_scheme_handler_QueryInterface(IMFSchemeHandler *iface, REFIID riid, void **obj)
+ {
+     TRACE("%p, %s, %p.\n", iface, debugstr_guid(riid), obj);
+@@ -613,242 +599,45 @@ static ULONG WINAPI file_scheme_handler_AddRef(IMFSchemeHandler *iface)
+ 
+ static ULONG WINAPI file_scheme_handler_Release(IMFSchemeHandler *iface)
+ {
+-    struct file_scheme_handler *handler = impl_from_IMFSchemeHandler(iface);
+-    ULONG refcount = InterlockedDecrement(&handler->refcount);
+-    struct file_scheme_handler_result *result, *next;
++    struct file_scheme_handler *this = impl_from_IMFSchemeHandler(iface);
++    ULONG refcount = InterlockedDecrement(&this->refcount);
+ 
+     TRACE("%p, refcount %u.\n", iface, refcount);
+ 
+     if (!refcount)
+     {
+-        LIST_FOR_EACH_ENTRY_SAFE(result, next, &handler->results, struct file_scheme_handler_result, entry)
+-        {
+-            list_remove(&result->entry);
+-            IMFAsyncResult_Release(result->result);
+-            if (result->object)
+-                IUnknown_Release(result->object);
+-            heap_free(result);
+-        }
+-        DeleteCriticalSection(&handler->cs);
+-        if (handler->resolver)
+-            IMFSourceResolver_Release(handler->resolver);
+-        heap_free(handler);
++        if (this->resolver)
++            IMFSourceResolver_Release(this->resolver);
++        handler_destruct(&this->handler);
+     }
+ 
+     return refcount;
+ }
+ 
+-struct create_object_context
+-{
+-    IUnknown IUnknown_iface;
+-    LONG refcount;
+-
+-    IPropertyStore *props;
+-    WCHAR *url;
+-    DWORD flags;
+-};
+-
+-static struct create_object_context *impl_from_IUnknown(IUnknown *iface)
+-{
+-    return CONTAINING_RECORD(iface, struct create_object_context, IUnknown_iface);
+-}
+-
+-static HRESULT WINAPI create_object_context_QueryInterface(IUnknown *iface, REFIID riid, void **obj)
+-{
+-    TRACE("%p, %s, %p.\n", iface, debugstr_guid(riid), obj);
+-
+-    if (IsEqualIID(riid, &IID_IUnknown))
+-    {
+-        *obj = iface;
+-        IUnknown_AddRef(iface);
+-        return S_OK;
+-    }
+-
+-    WARN("Unsupported %s.\n", debugstr_guid(riid));
+-    *obj = NULL;
+-    return E_NOINTERFACE;
+-}
+-
+-static ULONG WINAPI create_object_context_AddRef(IUnknown *iface)
+-{
+-    struct create_object_context *context = impl_from_IUnknown(iface);
+-    ULONG refcount = InterlockedIncrement(&context->refcount);
+-
+-    TRACE("%p, refcount %u.\n", iface, refcount);
+-
+-    return refcount;
+-}
+-
+-static ULONG WINAPI create_object_context_Release(IUnknown *iface)
+-{
+-    struct create_object_context *context = impl_from_IUnknown(iface);
+-    ULONG refcount = InterlockedDecrement(&context->refcount);
+-
+-    TRACE("%p, refcount %u.\n", iface, refcount);
+-
+-    if (!refcount)
+-    {
+-        if (context->props)
+-            IPropertyStore_Release(context->props);
+-        heap_free(context->url);
+-        heap_free(context);
+-    }
+-
+-    return refcount;
+-}
+-
+-static const IUnknownVtbl create_object_context_vtbl =
+-{
+-    create_object_context_QueryInterface,
+-    create_object_context_AddRef,
+-    create_object_context_Release,
+-};
+-
+-static WCHAR *heap_strdupW(const WCHAR *str)
+-{
+-    WCHAR *ret = NULL;
+-
+-    if (str)
+-    {
+-        unsigned int size;
+-
+-        size = (lstrlenW(str) + 1) * sizeof(WCHAR);
+-        ret = heap_alloc(size);
+-        if (ret)
+-            memcpy(ret, str, size);
+-    }
+-
+-    return ret;
+-}
+-
+ static HRESULT WINAPI file_scheme_handler_BeginCreateObject(IMFSchemeHandler *iface, const WCHAR *url, DWORD flags,
+         IPropertyStore *props, IUnknown **cancel_cookie, IMFAsyncCallback *callback, IUnknown *state)
+ {
+-    struct file_scheme_handler *handler = impl_from_IMFSchemeHandler(iface);
+-    struct create_object_context *context;
+-    IMFAsyncResult *caller, *item;
+-    HRESULT hr;
++    struct file_scheme_handler *this = impl_from_IMFSchemeHandler(iface);
+ 
+     TRACE("%p, %s, %#x, %p, %p, %p, %p.\n", iface, debugstr_w(url), flags, props, cancel_cookie, callback, state);
+-
+-    if (cancel_cookie)
+-        *cancel_cookie = NULL;
+-
+-    if (FAILED(hr = MFCreateAsyncResult(NULL, callback, state, &caller)))
+-        return hr;
+-
+-    context = heap_alloc(sizeof(*context));
+-    if (!context)
+-    {
+-        IMFAsyncResult_Release(caller);
+-        return E_OUTOFMEMORY;
+-    }
+-
+-    context->IUnknown_iface.lpVtbl = &create_object_context_vtbl;
+-    context->refcount = 1;
+-    context->props = props;
+-    if (context->props)
+-        IPropertyStore_AddRef(context->props);
+-    context->flags = flags;
+-    context->url = heap_strdupW(url);
+-    if (!context->url)
+-    {
+-        IMFAsyncResult_Release(caller);
+-        IUnknown_Release(&context->IUnknown_iface);
+-        return E_OUTOFMEMORY;
+-    }
+-
+-    hr = MFCreateAsyncResult(&context->IUnknown_iface, &handler->IMFAsyncCallback_iface, (IUnknown *)caller, &item);
+-    IUnknown_Release(&context->IUnknown_iface);
+-    if (SUCCEEDED(hr))
+-    {
+-        if (SUCCEEDED(hr = MFPutWorkItemEx(MFASYNC_CALLBACK_QUEUE_IO, item)))
+-        {
+-            if (cancel_cookie)
+-            {
+-                *cancel_cookie = (IUnknown *)caller;
+-                IUnknown_AddRef(*cancel_cookie);
+-            }
+-        }
+-
+-        IMFAsyncResult_Release(item);
+-    }
+-    IMFAsyncResult_Release(caller);
+-
+-    return hr;
++    return handler_begin_create_object(&this->handler, NULL, url, flags, props, cancel_cookie, callback, state);
+ }
+ 
+ static HRESULT WINAPI file_scheme_handler_EndCreateObject(IMFSchemeHandler *iface, IMFAsyncResult *result,
+         MF_OBJECT_TYPE *obj_type, IUnknown **object)
+ {
+-    struct file_scheme_handler *handler = impl_from_IMFSchemeHandler(iface);
+-    struct file_scheme_handler_result *found = NULL, *cur;
+-    HRESULT hr;
++    struct file_scheme_handler *this = impl_from_IMFSchemeHandler(iface);
+ 
+     TRACE("%p, %p, %p, %p.\n", iface, result, obj_type, object);
+-
+-    EnterCriticalSection(&handler->cs);
+-
+-    LIST_FOR_EACH_ENTRY(cur, &handler->results, struct file_scheme_handler_result, entry)
+-    {
+-        if (result == cur->result)
+-        {
+-            list_remove(&cur->entry);
+-            found = cur;
+-            break;
+-        }
+-    }
+-
+-    LeaveCriticalSection(&handler->cs);
+-
+-    if (found)
+-    {
+-        *obj_type = found->obj_type;
+-        *object = found->object;
+-        hr = IMFAsyncResult_GetStatus(found->result);
+-        IMFAsyncResult_Release(found->result);
+-        heap_free(found);
+-    }
+-    else
+-    {
+-        *obj_type = MF_OBJECT_INVALID;
+-        *object = NULL;
+-        hr = MF_E_UNEXPECTED;
+-    }
+-
+-    return hr;
++    return handler_end_create_object(&this->handler, result, obj_type, object);
+ }
+ 
+ static HRESULT WINAPI file_scheme_handler_CancelObjectCreation(IMFSchemeHandler *iface, IUnknown *cancel_cookie)
+ {
+-    struct file_scheme_handler *handler = impl_from_IMFSchemeHandler(iface);
+-    struct file_scheme_handler_result *found = NULL, *cur;
++    struct file_scheme_handler *this = impl_from_IMFSchemeHandler(iface);
+ 
+     TRACE("%p, %p.\n", iface, cancel_cookie);
+-
+-    EnterCriticalSection(&handler->cs);
+-
+-    LIST_FOR_EACH_ENTRY(cur, &handler->results, struct file_scheme_handler_result, entry)
+-    {
+-        if (cancel_cookie == (IUnknown *)cur->result)
+-        {
+-            list_remove(&cur->entry);
+-            found = cur;
+-            break;
+-        }
+-    }
+-
+-    LeaveCriticalSection(&handler->cs);
+-
+-    if (found)
+-    {
+-        IMFAsyncResult_Release(found->result);
+-        if (found->object)
+-            IUnknown_Release(found->object);
+-        heap_free(found);
+-    }
+-
+-    return found ? S_OK : MF_E_UNEXPECTED;
++    return handler_cancel_object_creation(&this->handler, cancel_cookie);
+ }
+ 
+ static const IMFSchemeHandlerVtbl file_scheme_handler_vtbl =
+@@ -861,38 +650,6 @@ static const IMFSchemeHandlerVtbl file_scheme_handler_vtbl =
+     file_scheme_handler_CancelObjectCreation,
+ };
+ 
+-static HRESULT WINAPI file_scheme_handler_callback_QueryInterface(IMFAsyncCallback *iface, REFIID riid, void **obj)
+-{
+-    if (IsEqualIID(riid, &IID_IMFAsyncCallback) ||
+-            IsEqualIID(riid, &IID_IUnknown))
+-    {
+-        *obj = iface;
+-        IMFAsyncCallback_AddRef(iface);
+-        return S_OK;
+-    }
+-
+-    WARN("Unsupported %s.\n", debugstr_guid(riid));
+-    *obj = NULL;
+-    return E_NOINTERFACE;
+-}
+-
+-static ULONG WINAPI file_scheme_handler_callback_AddRef(IMFAsyncCallback *iface)
+-{
+-    struct file_scheme_handler *handler = impl_from_IMFAsyncCallback(iface);
+-    return IMFSchemeHandler_AddRef(&handler->IMFSchemeHandler_iface);
+-}
+-
+-static ULONG WINAPI file_scheme_handler_callback_Release(IMFAsyncCallback *iface)
+-{
+-    struct file_scheme_handler *handler = impl_from_IMFAsyncCallback(iface);
+-    return IMFSchemeHandler_Release(&handler->IMFSchemeHandler_iface);
+-}
+-
+-static HRESULT WINAPI file_scheme_handler_callback_GetParameters(IMFAsyncCallback *iface, DWORD *flags, DWORD *queue)
+-{
+-    return E_NOTIMPL;
+-}
+-
+ static HRESULT file_scheme_handler_get_resolver(struct file_scheme_handler *handler, IMFSourceResolver **resolver)
+ {
+     HRESULT hr;
+@@ -914,111 +671,63 @@ static HRESULT file_scheme_handler_get_resolver(struct file_scheme_handler *hand
+     return S_OK;
+ }
+ 
+-static HRESULT WINAPI file_scheme_handler_callback_Invoke(IMFAsyncCallback *iface, IMFAsyncResult *result)
++static HRESULT file_scheme_handler_create_object(struct handler *handler, WCHAR *url, IMFByteStream *stream, DWORD flags,
++                                         IPropertyStore *props, IUnknown **out_object, MF_OBJECT_TYPE *out_obj_type)
+ {
+     static const WCHAR schemeW[] = {'f','i','l','e',':','/','/'};
+-    struct file_scheme_handler *handler = impl_from_IMFAsyncCallback(iface);
+-    struct file_scheme_handler_result *handler_result;
+-    MF_OBJECT_TYPE obj_type = MF_OBJECT_INVALID;
+-    IUnknown *object = NULL, *context_object;
+-    struct create_object_context *context;
++    HRESULT hr = S_OK;
++    WCHAR *path;
++    IMFByteStream *file_byte_stream;
++    struct file_scheme_handler *this = CONTAINING_RECORD(handler, struct file_scheme_handler, handler);
+     IMFSourceResolver *resolver;
+-    IMFAsyncResult *caller;
+-    IMFByteStream *stream;
+-    const WCHAR *url;
+-    HRESULT hr;
+-
+-    caller = (IMFAsyncResult *)IMFAsyncResult_GetStateNoAddRef(result);
+-
+-    if (FAILED(hr = IMFAsyncResult_GetObject(result, &context_object)))
+-    {
+-        WARN("Expected context set for callee result.\n");
+-        return hr;
+-    }
+-
+-    context = impl_from_IUnknown(context_object);
+ 
+     /* Strip from scheme, MFCreateFile() won't be expecting it. */
+-    url = context->url;
+-    if (!wcsnicmp(context->url, schemeW, ARRAY_SIZE(schemeW)))
+-        url += ARRAY_SIZE(schemeW);
++    path = url;
++    if (!wcsnicmp(url, schemeW, ARRAY_SIZE(schemeW)))
++        path += ARRAY_SIZE(schemeW);
+ 
+-    hr = MFCreateFile(context->flags & MF_RESOLUTION_WRITE ? MF_ACCESSMODE_READWRITE : MF_ACCESSMODE_READ,
+-            MF_OPENMODE_FAIL_IF_NOT_EXIST, MF_FILEFLAGS_NONE, url, &stream);
++    hr = MFCreateFile(flags & MF_RESOLUTION_WRITE ? MF_ACCESSMODE_READWRITE : MF_ACCESSMODE_READ,
++            MF_OPENMODE_FAIL_IF_NOT_EXIST, MF_FILEFLAGS_NONE, path, &file_byte_stream);
+     if (SUCCEEDED(hr))
+     {
+-        if (context->flags & MF_RESOLUTION_MEDIASOURCE)
++        if (flags & MF_RESOLUTION_MEDIASOURCE)
+         {
+-            if (SUCCEEDED(hr = file_scheme_handler_get_resolver(handler, &resolver)))
++            if (SUCCEEDED(hr = file_scheme_handler_get_resolver(this, &resolver)))
+             {
+-                hr = IMFSourceResolver_CreateObjectFromByteStream(resolver, stream, context->url, context->flags,
+-                        context->props, &obj_type, &object);
++                hr = IMFSourceResolver_CreateObjectFromByteStream(resolver, file_byte_stream, url, flags,
++                        props, out_obj_type, out_object);
+                 IMFSourceResolver_Release(resolver);
+-                IMFByteStream_Release(stream);
++                IMFByteStream_Release(file_byte_stream);
+             }
+         }
+         else
+         {
+-            object = (IUnknown *)stream;
+-            obj_type = MF_OBJECT_BYTESTREAM;
++            *out_object = (IUnknown *)file_byte_stream;
++            *out_obj_type = MF_OBJECT_BYTESTREAM;
+         }
+     }
+ 
+-    handler_result = heap_alloc(sizeof(*handler_result));
+-    if (handler_result)
+-    {
+-        handler_result->result = caller;
+-        IMFAsyncResult_AddRef(handler_result->result);
+-        handler_result->obj_type = obj_type;
+-        handler_result->object = object;
+-
+-        EnterCriticalSection(&handler->cs);
+-        list_add_tail(&handler->results, &handler_result->entry);
+-        LeaveCriticalSection(&handler->cs);
+-    }
+-    else
+-    {
+-        if (object)
+-            IUnknown_Release(object);
+-        hr = E_OUTOFMEMORY;
+-    }
+-
+-    IUnknown_Release(&context->IUnknown_iface);
+-
+-    IMFAsyncResult_SetStatus(caller, hr);
+-    MFInvokeCallback(caller);
+-
+-    return S_OK;
++    return hr;
+ }
+ 
+-static const IMFAsyncCallbackVtbl file_scheme_handler_callback_vtbl =
+-{
+-    file_scheme_handler_callback_QueryInterface,
+-    file_scheme_handler_callback_AddRef,
+-    file_scheme_handler_callback_Release,
+-    file_scheme_handler_callback_GetParameters,
+-    file_scheme_handler_callback_Invoke,
+-};
+-
+ static HRESULT file_scheme_handler_construct(REFIID riid, void **obj)
+ {
+-    struct file_scheme_handler *handler;
++    struct file_scheme_handler *this;
+     HRESULT hr;
+ 
+     TRACE("%s, %p.\n", debugstr_guid(riid), obj);
+ 
+-    handler = heap_alloc_zero(sizeof(*handler));
+-    if (!handler)
++    this = heap_alloc_zero(sizeof(*this));
++    if (!this)
+         return E_OUTOFMEMORY;
+ 
+-    handler->IMFSchemeHandler_iface.lpVtbl = &file_scheme_handler_vtbl;
+-    handler->IMFAsyncCallback_iface.lpVtbl = &file_scheme_handler_callback_vtbl;
+-    handler->refcount = 1;
+-    list_init(&handler->results);
+-    InitializeCriticalSection(&handler->cs);
++    handler_construct(&this->handler, file_scheme_handler_create_object);
++
++    this->IMFSchemeHandler_iface.lpVtbl = &file_scheme_handler_vtbl;
++    this->refcount = 1;
+ 
+-    hr = IMFSchemeHandler_QueryInterface(&handler->IMFSchemeHandler_iface, riid, obj);
+-    IMFSchemeHandler_Release(&handler->IMFSchemeHandler_iface);
++    hr = IMFSchemeHandler_QueryInterface(&this->IMFSchemeHandler_iface, riid, obj);
++    IMFSchemeHandler_Release(&this->IMFSchemeHandler_iface);
+ 
+     return hr;
+ }
+diff --git a/dlls/winegstreamer/Makefile.in b/dlls/winegstreamer/Makefile.in
+index f4f72c6e96..61789884b8 100644
+--- a/dlls/winegstreamer/Makefile.in
++++ b/dlls/winegstreamer/Makefile.in
+@@ -2,12 +2,13 @@ MODULE    = winegstreamer.dll
+ IMPORTS   = strmiids uuid winmm msacm32 msvfw32 ole32 oleaut32 user32 gdi32 advapi32 mfplat mfuuid
+ EXTRAINCL = $(GSTREAMER_CFLAGS)
+ EXTRALIBS = $(GSTREAMER_LIBS) $(PTHREAD_LIBS)
+-PARENTSRC = ../strmbase
++PARENTSRC = ../strmbase ../mf
+ 
+ C_SRCS = \
+ 	filter.c \
+ 	gst_cbs.c \
+ 	gstdemux.c \
++	handler.c \
+ 	main.c \
+ 	media_source.c \
+ 	mediatype.c \
+diff --git a/dlls/winegstreamer/media_source.c b/dlls/winegstreamer/media_source.c
+index 4e87546f13..bca3decc3a 100644
+--- a/dlls/winegstreamer/media_source.c
++++ b/dlls/winegstreamer/media_source.c
+@@ -4,6 +4,7 @@
+ 
+ #include "gst_private.h"
+ #include "gst_cbs.h"
++#include "handler.h"
+ 
+ #include <assert.h>
+ #include <stdarg.h>
+@@ -1329,22 +1330,12 @@ static HRESULT media_source_constructor(IMFByteStream *bytestream, enum source_t
+ 
+ /* IMFByteStreamHandler */
+ 
+-struct container_stream_handler_result
+-{
+-    struct list entry;
+-    IMFAsyncResult *result;
+-    MF_OBJECT_TYPE obj_type;
+-    IUnknown *object;
+-};
+-
+ struct container_stream_handler
+ {
+     IMFByteStreamHandler IMFByteStreamHandler_iface;
+-    IMFAsyncCallback IMFAsyncCallback_iface;
+     LONG refcount;
+     enum source_type type;
+-    struct list results;
+-    CRITICAL_SECTION cs;
++    struct handler handler;
+ };
+ 
+ static struct container_stream_handler *impl_from_IMFByteStreamHandler(IMFByteStreamHandler *iface)
+@@ -1352,11 +1343,6 @@ static struct container_stream_handler *impl_from_IMFByteStreamHandler(IMFByteSt
+     return CONTAINING_RECORD(iface, struct container_stream_handler, IMFByteStreamHandler_iface);
+ }
+ 
+-static struct container_stream_handler *impl_from_IMFAsyncCallback(IMFAsyncCallback *iface)
+-{
+-    return CONTAINING_RECORD(iface, struct container_stream_handler, IMFAsyncCallback_iface);
+-}
+-
+ static HRESULT WINAPI container_stream_handler_QueryInterface(IMFByteStreamHandler *iface, REFIID riid, void **obj)
+ {
+     TRACE("%p, %s, %p.\n", iface, debugstr_guid(riid), obj);
+@@ -1386,245 +1372,44 @@ static ULONG WINAPI container_stream_handler_AddRef(IMFByteStreamHandler *iface)
+ 
+ static ULONG WINAPI container_stream_handler_Release(IMFByteStreamHandler *iface)
+ {
+-    struct container_stream_handler *handler = impl_from_IMFByteStreamHandler(iface);
+-    ULONG refcount = InterlockedDecrement(&handler->refcount);
+-    struct container_stream_handler_result *result, *next;
+-
+-    TRACE("%p, refcount %u.\n", iface, refcount);
+-
+-    if (!refcount)
+-    {
+-        LIST_FOR_EACH_ENTRY_SAFE(result, next, &handler->results, struct container_stream_handler_result, entry)
+-        {
+-            list_remove(&result->entry);
+-            IMFAsyncResult_Release(result->result);
+-            if (result->object)
+-                IUnknown_Release(result->object);
+-            heap_free(result);
+-        }
+-        DeleteCriticalSection(&handler->cs);
+-        heap_free(handler);
+-    }
+-
+-    return refcount;
+-}
+-
+-struct create_object_context
+-{
+-    IUnknown IUnknown_iface;
+-    LONG refcount;
+-
+-    IPropertyStore *props;
+-    IMFByteStream *stream;
+-    WCHAR *url;
+-    DWORD flags;
+-};
+-
+-static struct create_object_context *impl_from_IUnknown(IUnknown *iface)
+-{
+-    return CONTAINING_RECORD(iface, struct create_object_context, IUnknown_iface);
+-}
+-
+-static HRESULT WINAPI create_object_context_QueryInterface(IUnknown *iface, REFIID riid, void **obj)
+-{
+-    TRACE("%p, %s, %p.\n", iface, debugstr_guid(riid), obj);
+-
+-    if (IsEqualIID(riid, &IID_IUnknown))
+-    {
+-        *obj = iface;
+-        IUnknown_AddRef(iface);
+-        return S_OK;
+-    }
+-
+-    WARN("Unsupported %s.\n", debugstr_guid(riid));
+-    *obj = NULL;
+-    return E_NOINTERFACE;
+-}
+-
+-static ULONG WINAPI create_object_context_AddRef(IUnknown *iface)
+-{
+-    struct create_object_context *context = impl_from_IUnknown(iface);
+-    ULONG refcount = InterlockedIncrement(&context->refcount);
+-
+-    TRACE("%p, refcount %u.\n", iface, refcount);
+-
+-    return refcount;
+-}
+-
+-static ULONG WINAPI create_object_context_Release(IUnknown *iface)
+-{
+-    struct create_object_context *context = impl_from_IUnknown(iface);
+-    ULONG refcount = InterlockedDecrement(&context->refcount);
++    struct container_stream_handler *this = impl_from_IMFByteStreamHandler(iface);
++    ULONG refcount = InterlockedDecrement(&this->refcount);
+ 
+     TRACE("%p, refcount %u.\n", iface, refcount);
+ 
+     if (!refcount)
+     {
+-        if (context->props)
+-            IPropertyStore_Release(context->props);
+-        if (context->stream)
+-            IMFByteStream_Release(context->stream);
+-        if (context->url)
+-            heap_free(context->url);
+-        heap_free(context);
++        handler_destruct(&this->handler);
++        heap_free(this);
+     }
+ 
+     return refcount;
+ }
+ 
+-static const IUnknownVtbl create_object_context_vtbl =
+-{
+-    create_object_context_QueryInterface,
+-    create_object_context_AddRef,
+-    create_object_context_Release,
+-};
+-
+-static WCHAR *heap_strdupW(const WCHAR *str)
+-{
+-    WCHAR *ret = NULL;
+-
+-    if (str)
+-    {
+-        unsigned int size;
+-
+-        size = (lstrlenW(str) + 1) * sizeof(WCHAR);
+-        ret = heap_alloc(size);
+-        if (ret)
+-            memcpy(ret, str, size);
+-    }
+-
+-    return ret;
+-}
+-
+ static HRESULT WINAPI container_stream_handler_BeginCreateObject(IMFByteStreamHandler *iface, IMFByteStream *stream, const WCHAR *url, DWORD flags,
+         IPropertyStore *props, IUnknown **cancel_cookie, IMFAsyncCallback *callback, IUnknown *state)
+ {
+     struct container_stream_handler *this = impl_from_IMFByteStreamHandler(iface);
+-    struct create_object_context *context;
+-    IMFAsyncResult *caller, *item;
+-    HRESULT hr;
+ 
+     TRACE("%p, %s, %#x, %p, %p, %p, %p.\n", iface, debugstr_w(url), flags, props, cancel_cookie, callback, state);
+-
+-    if (cancel_cookie)
+-        *cancel_cookie = NULL;
+-
+-    if (FAILED(hr = MFCreateAsyncResult(NULL, callback, state, &caller)))
+-        return hr;
+-
+-    context = heap_alloc(sizeof(*context));
+-    if (!context)
+-    {
+-        IMFAsyncResult_Release(caller);
+-        return E_OUTOFMEMORY;
+-    }
+-
+-    context->IUnknown_iface.lpVtbl = &create_object_context_vtbl;
+-    context->refcount = 1;
+-    context->props = props;
+-    if (context->props)
+-        IPropertyStore_AddRef(context->props);
+-    context->flags = flags;
+-    context->stream = stream;
+-    if (context->stream)
+-        IMFByteStream_AddRef(context->stream);
+-    if (url)
+-        context->url = heap_strdupW(url);
+-    if (!context->stream)
+-    {
+-        IMFAsyncResult_Release(caller);
+-        IUnknown_Release(&context->IUnknown_iface);
+-        return E_OUTOFMEMORY;
+-    }
+-
+-    hr = MFCreateAsyncResult(&context->IUnknown_iface, &this->IMFAsyncCallback_iface, (IUnknown *)caller, &item);
+-    IUnknown_Release(&context->IUnknown_iface);
+-    IMFAsyncResult_Release(caller);
+-    if (SUCCEEDED(hr))
+-    {
+-        if (SUCCEEDED(hr = MFPutWorkItemEx(MFASYNC_CALLBACK_QUEUE_IO, item)))
+-        {
+-            if (cancel_cookie)
+-                IMFAsyncResult_GetState(item, cancel_cookie);
+-        }
+-
+-        IMFAsyncResult_Release(item);
+-    }
+-
+-    return hr;
++    return handler_begin_create_object(&this->handler, stream, url, flags, props, cancel_cookie, callback, state);
+ }
+ 
+ static HRESULT WINAPI container_stream_handler_EndCreateObject(IMFByteStreamHandler *iface, IMFAsyncResult *result,
+         MF_OBJECT_TYPE *obj_type, IUnknown **object)
+ {
+     struct container_stream_handler *this = impl_from_IMFByteStreamHandler(iface);
+-    struct container_stream_handler_result *found = NULL, *cur;
+-    HRESULT hr;
+ 
+     TRACE("%p, %p, %p, %p.\n", iface, result, obj_type, object);
+-
+-    EnterCriticalSection(&this->cs);
+-
+-    LIST_FOR_EACH_ENTRY(cur, &this->results, struct container_stream_handler_result, entry)
+-    {
+-        if (result == cur->result)
+-        {
+-            list_remove(&cur->entry);
+-            found = cur;
+-            break;
+-        }
+-    }
+-
+-    LeaveCriticalSection(&this->cs);
+-
+-    if (found)
+-    {
+-        *obj_type = found->obj_type;
+-        *object = found->object;
+-        hr = IMFAsyncResult_GetStatus(found->result);
+-        IMFAsyncResult_Release(found->result);
+-        heap_free(found);
+-    }
+-    else
+-    {
+-        *obj_type = MF_OBJECT_INVALID;
+-        *object = NULL;
+-        hr = MF_E_UNEXPECTED;
+-    }
+-
+-    return hr;
++    return handler_end_create_object(&this->handler, result, obj_type, object);
+ }
+ 
+ static HRESULT WINAPI container_stream_handler_CancelObjectCreation(IMFByteStreamHandler *iface, IUnknown *cancel_cookie)
+ {
+     struct container_stream_handler *this = impl_from_IMFByteStreamHandler(iface);
+-    struct container_stream_handler_result *found = NULL, *cur;
+ 
+     TRACE("%p, %p.\n", iface, cancel_cookie);
+-
+-    EnterCriticalSection(&this->cs);
+-
+-    LIST_FOR_EACH_ENTRY(cur, &this->results, struct container_stream_handler_result, entry)
+-    {
+-        if (cancel_cookie == (IUnknown *)cur->result)
+-        {
+-            list_remove(&cur->entry);
+-            found = cur;
+-            break;
+-        }
+-    }
+-
+-    LeaveCriticalSection(&this->cs);
+-
+-    if (found)
+-    {
+-        IMFAsyncResult_Release(found->result);
+-        if (found->object)
+-            IUnknown_Release(found->object);
+-        heap_free(found);
+-    }
+-
+-    return found ? S_OK : MF_E_UNEXPECTED;
++    return handler_cancel_object_creation(&this->handler, cancel_cookie);
+ }
+ 
+ static HRESULT WINAPI container_stream_handler_GetMaxNumberOfBytesRequiredForResolution(IMFByteStreamHandler *iface, QWORD *bytes)
+@@ -1644,47 +1429,16 @@ static const IMFByteStreamHandlerVtbl container_stream_handler_vtbl =
+     container_stream_handler_GetMaxNumberOfBytesRequiredForResolution,
+ };
+ 
+-static HRESULT WINAPI container_stream_handler_callback_QueryInterface(IMFAsyncCallback *iface, REFIID riid, void **obj)
+-{
+-    if (IsEqualIID(riid, &IID_IMFAsyncCallback) ||
+-            IsEqualIID(riid, &IID_IUnknown))
+-    {
+-        *obj = iface;
+-        IMFAsyncCallback_AddRef(iface);
+-        return S_OK;
+-    }
+-
+-    WARN("Unsupported %s.\n", debugstr_guid(riid));
+-    *obj = NULL;
+-    return E_NOINTERFACE;
+-}
+-
+-static ULONG WINAPI container_stream_handler_callback_AddRef(IMFAsyncCallback *iface)
+-{
+-    struct container_stream_handler *handler = impl_from_IMFAsyncCallback(iface);
+-    return IMFByteStreamHandler_AddRef(&handler->IMFByteStreamHandler_iface);
+-}
+-
+-static ULONG WINAPI container_stream_handler_callback_Release(IMFAsyncCallback *iface)
+-{
+-    struct container_stream_handler *handler = impl_from_IMFAsyncCallback(iface);
+-    return IMFByteStreamHandler_Release(&handler->IMFByteStreamHandler_iface);
+-}
+-
+-static HRESULT WINAPI container_stream_handler_callback_GetParameters(IMFAsyncCallback *iface, DWORD *flags, DWORD *queue)
+-{
+-    return E_NOTIMPL;
+-}
+-
+-static HRESULT container_stream_handler_create_object(struct container_stream_handler *This, WCHAR *url, IMFByteStream *stream, DWORD flags,
++static HRESULT container_stream_handler_create_object(struct handler *handler, WCHAR *url, IMFByteStream *stream, DWORD flags,
+                                             IPropertyStore *props, IUnknown **out_object, MF_OBJECT_TYPE *out_obj_type)
+ {
+-    TRACE("(%p %s %p %u %p %p %p)\n", This, debugstr_w(url), stream, flags, props, out_object, out_obj_type);
++    TRACE("(%p %s %p %u %p %p %p)\n", handler, debugstr_w(url), stream, flags, props, out_object, out_obj_type);
+ 
+     if (flags & MF_RESOLUTION_MEDIASOURCE)
+     {
+         HRESULT hr;
+         struct media_source *new_source;
++        struct container_stream_handler *This = CONTAINING_RECORD(handler, struct container_stream_handler, handler);
+ 
+         if (FAILED(hr = media_source_constructor(stream, This->type, &new_source)))
+             return hr;
+@@ -1703,64 +1457,6 @@ static HRESULT container_stream_handler_create_object(struct container_stream_ha
+     }
+ }
+ 
+-static HRESULT WINAPI container_stream_handler_callback_Invoke(IMFAsyncCallback *iface, IMFAsyncResult *result)
+-{
+-    struct container_stream_handler *handler = impl_from_IMFAsyncCallback(iface);
+-    struct container_stream_handler_result *handler_result;
+-    MF_OBJECT_TYPE obj_type = MF_OBJECT_INVALID;
+-    IUnknown *object = NULL, *context_object;
+-    struct create_object_context *context;
+-    IMFAsyncResult *caller;
+-    HRESULT hr;
+-
+-    caller = (IMFAsyncResult *)IMFAsyncResult_GetStateNoAddRef(result);
+-
+-    if (FAILED(hr = IMFAsyncResult_GetObject(result, &context_object)))
+-    {
+-        WARN("Expected context set for callee result.\n");
+-        return hr;
+-    }
+-
+-    context = impl_from_IUnknown(context_object);
+-
+-    hr = container_stream_handler_create_object(handler, context->url, context->stream, context->flags, context->props, &object, &obj_type);
+-
+-    handler_result = heap_alloc(sizeof(*handler_result));
+-    if (handler_result)
+-    {
+-        handler_result->result = caller;
+-        IMFAsyncResult_AddRef(handler_result->result);
+-        handler_result->obj_type = obj_type;
+-        handler_result->object = object;
+-
+-        EnterCriticalSection(&handler->cs);
+-        list_add_tail(&handler->results, &handler_result->entry);
+-        LeaveCriticalSection(&handler->cs);
+-    }
+-    else
+-    {
+-        if (object)
+-            IUnknown_Release(object);
+-        hr = E_OUTOFMEMORY;
+-    }
+-
+-    IUnknown_Release(&context->IUnknown_iface);
+-
+-    IMFAsyncResult_SetStatus(caller, hr);
+-    MFInvokeCallback(caller);
+-
+-    return S_OK;
+-}
+-
+-static const IMFAsyncCallbackVtbl container_stream_handler_callback_vtbl =
+-{
+-    container_stream_handler_callback_QueryInterface,
+-    container_stream_handler_callback_AddRef,
+-    container_stream_handler_callback_Release,
+-    container_stream_handler_callback_GetParameters,
+-    container_stream_handler_callback_Invoke,
+-};
+-
+ HRESULT container_stream_handler_construct(REFIID riid, void **obj, enum source_type type)
+ {
+     struct container_stream_handler *this;
+@@ -1772,12 +1468,10 @@ HRESULT container_stream_handler_construct(REFIID riid, void **obj, enum source_
+     if (!this)
+         return E_OUTOFMEMORY;
+ 
+-    list_init(&this->results);
+-    InitializeCriticalSection(&this->cs);
++    handler_construct(&this->handler, container_stream_handler_create_object);
+ 
+     this->type = type;
+     this->IMFByteStreamHandler_iface.lpVtbl = &container_stream_handler_vtbl;
+-    this->IMFAsyncCallback_iface.lpVtbl = &container_stream_handler_callback_vtbl;
+     this->refcount = 1;
+ 
+     hr = IMFByteStreamHandler_QueryInterface(&this->IMFByteStreamHandler_iface, riid, obj);
+-- 
+2.25.1
+
