@@ -49,3 +49,6 @@
 [submodule "glib"]
 	path = glib
 	url = https://gitlab.gnome.org/GNOME/glib.git
+[submodule "gst-plugins-libav"]
+	path = gst-plugins-libav
+	url = https://gitlab.freedesktop.org/gstreamer/gst-libav

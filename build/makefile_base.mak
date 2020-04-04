@@ -214,6 +214,10 @@ GST_BAD := $(SRCDIR)/gst-plugins-bad
 GST_BAD_OBJ32 := ./obj-gst-bad32
 GST_BAD_OBJ64 := ./obj-gst-bad64
 
+GST_LIBAV := $(SRCDIR)/gst-plugins-libav
+GST_LIBAV_OBJ32 := ./obj-gst-libav32
+GST_LIBAV_OBJ64 := ./obj-gst-libav64
+
 FAUDIO := $(SRCDIR)/FAudio
 FAUDIO_OBJ32 := ./obj-faudio32
 FAUDIO_OBJ64 := ./obj-faudio64
@@ -302,6 +306,7 @@ OBJ_DIRS := $(TOOLS_DIR32)        $(TOOLS_DIR64)        \
             $(GST_BASE_OBJ32)     $(GST_BASE_OBJ64)     \
             $(GST_GOOD_OBJ32)     $(GST_GOOD_OBJ64)     \
             $(GST_BAD_OBJ32)      $(GST_BAD_OBJ64)      \
+            $(GST_LIBAV_OBJ32)    $(GST_LIBAV_OBJ64)    \
             $(FAUDIO_OBJ32)       $(FAUDIO_OBJ64)       \
             $(LSTEAMCLIENT_OBJ32) $(LSTEAMCLIENT_OBJ64) \
             $(STEAMEXE_OBJ)                             \
@@ -477,7 +482,7 @@ $(DIST_FONTS): fonts
 ALL_TARGETS += dist
 GOAL_TARGETS += dist
 
-dist: $(DIST_TARGETS) wine gst_good gst_bad vrclient lsteamclient steam dxvk | $(DST_DIR)
+dist: $(DIST_TARGETS) wine gst_good gst_bad gst_libav vrclient lsteamclient steam dxvk | $(DST_DIR)
 	echo `date '+%s'` `GIT_DIR=$(abspath $(SRCDIR)/.git) git describe --tags` > $(DIST_VERSION)
 	cp $(DIST_VERSION) $(DST_BASE)/
 	rm -rf $(abspath $(DIST_PREFIX)) && \
@@ -908,7 +913,7 @@ $(GST_BAD_CONFIGURE_FILES32): $(MAKEFILE_DEP) gst_base32 | $(GST_BAD_OBJ32)
 GST_BAD_TARGETS = gst_bad gst_bad_configure gst_bad32 gst_bad64 gst_bad_configure32 gst_bad_configure64
 
 ALL_TARGETS += $(GST_BAD_TARGETS)
-GOAL_TARGETS_LIBS += gst_BAD
+GOAL_TARGETS_LIBS += gst_bad
 
 .PHONY: $(GST_BAD_TARGETS)
 
@@ -933,6 +938,68 @@ gst_bad32: $(GST_BAD_CONFIGURE_FILES32)
 	cp -a $(TOOLS_DIR32)/lib/gstreamer-1.0 $(DST_DIR)/lib/
 
 ##
+## gst-plugins-libav
+##
+
+GST_LIBAV_MESON_ARGS := \
+        -Ddoc=disabled \
+	$(GST_COMMON_MESON_ARGS)
+
+GST_LIBAV_CONFIGURE_FILES32 := $(GST_LIBAV_OBJ32)/build.ninja
+GST_LIBAV_CONFIGURE_FILES64 := $(GST_LIBAV_OBJ64)/build.ninja
+
+# 64-bit configure.  Remove coredata file if already configured (due to e.g. makefile changing)
+$(GST_LIBAV_CONFIGURE_FILES64): SHELL = $(CONTAINER_SHELL64)
+$(GST_LIBAV_CONFIGURE_FILES64): $(MAKEFILE_DEP) gst_base64 | ffmpeg64 $(GST_LIBAV_OBJ64)
+	if [ -e "$(abspath $(GST_LIBAV_OBJ64))"/build.ninja ]; then \
+		rm -f "$(abspath $(GST_LIBAV_OBJ64))"/meson-private/coredata.dat; \
+	fi
+	cd "$(abspath $(GST_LIBAV))" && \
+	PATH="$(abspath $(TOOLS_DIR64))/bin:$(PATH)" \
+		PKG_CONFIG_PATH=$(abspath $(TOOLS_DIR64))/lib/pkgconfig \
+		meson --prefix="$(abspath $(TOOLS_DIR64))" --libdir="lib" $(GST_LIBAV_MESON_ARGS) $(MESON_STRIP_ARG) --buildtype=release "$(abspath $(GST_LIBAV_OBJ64))"
+
+# 32-bit configure.  Remove coredata file if already configured (due to e.g. makefile changing)
+$(GST_LIBAV_CONFIGURE_FILES32): SHELL = $(CONTAINER_SHELL32)
+$(GST_LIBAV_CONFIGURE_FILES32): $(MAKEFILE_DEP) gst_base32 | ffmpeg32 $(GST_LIBAV_OBJ32)
+	if [ -e "$(abspath $(GST_LIBAV_OBJ32))"/build.ninja ]; then \
+		rm -f "$(abspath $(GST_LIBAV_OBJ32))"/meson-private/coredata.dat; \
+	fi
+	cd "$(abspath $(GST_LIBAV))" && \
+	PATH="$(abspath $(TOOLS_DIR32))/bin:$(PATH)" \
+		PKG_CONFIG_PATH=$(abspath $(TOOLS_DIR32))/lib/pkgconfig \
+		meson --prefix="$(abspath $(TOOLS_DIR32))" --libdir="lib" $(GST_LIBAV_MESON_ARGS) $(MESON_STRIP_ARG) --buildtype=release "$(abspath $(GST_LIBAV_OBJ32))"
+
+## gst_bad goals
+GST_LIBAV_TARGETS = gst_libav gst_libav_configure gst_libav32 gst_libav64 gst_libav_configure32 gst_libav_configure64
+
+ALL_TARGETS += $(GST_LIBAV_TARGETS)
+GOAL_TARGETS_LIBS += gst_libav
+
+.PHONY: $(GST_LIBAV_TARGETS)
+
+gst_libav_configure: $(GST_LIBAV_CONFIGURE_FILES32) $(GST_LIBAV_CONFIGURE_FILES64)
+
+gst_libav_configure64: $(GST_LIBAV_CONFIGURE_FILES64)
+
+gst_libav_configure32: $(GST_LIBAV_CONFIGURE_FILES32)
+
+gst_libav: gst_libav32 gst_libav64
+
+gst_libav64: SHELL = $(CONTAINER_SHELL64)
+gst_libav64: $(GST_LIBAV_CONFIGURE_FILES64)
+	PATH="$(abspath $(TOOLS_DIR64))/bin:$(PATH)" ninja -C "$(GST_LIBAV_OBJ64)" install
+	cp -a $(TOOLS_DIR64)/lib/libgst* $(DST_DIR)/lib64/ && \
+	cp -a $(TOOLS_DIR64)/lib/gstreamer-1.0 $(DST_DIR)/lib64/
+
+gst_libav32: SHELL = $(CONTAINER_SHELL32)
+gst_libav32: $(GST_LIBAV_CONFIGURE_FILES32)
+	PATH="$(abspath $(TOOLS_DIR32))/bin:$(PATH)" ninja -C "$(GST_LIBAV_OBJ32)" install
+	cp -a $(TOOLS_DIR32)/lib/libgst* $(DST_DIR)/lib/ && \
+	cp -a $(TOOLS_DIR32)/lib/gstreamer-1.0 $(DST_DIR)/lib/
+
+
+##
 ## ffmpeg
 ##
 
@@ -951,10 +1018,8 @@ $(FFMPEG_CONFIGURE_FILES64): $(FFMPEG)/configure $(MAKEFILE_DEP) | $(FFMPEG_OBJ6
 			--disable-programs \
 			--disable-doc \
 			--disable-avdevice \
-			--disable-avformat \
 			--disable-swscale \
 			--disable-postproc \
-			--disable-avfilter \
 			--disable-alsa \
 			--disable-iconv \
 			--disable-libxcb_shape \
@@ -986,10 +1051,8 @@ $(FFMPEG_CONFIGURE_FILES32): $(FFMPEG)/configure $(MAKEFILE_DEP) | $(FFMPEG_OBJ3
 			--disable-programs \
 			--disable-doc \
 			--disable-avdevice \
-			--disable-avformat \
 			--disable-swscale \
 			--disable-postproc \
-			--disable-avfilter \
 			--disable-alsa \
 			--disable-iconv \
 			--disable-libxcb_shape \
@@ -1029,14 +1092,14 @@ ffmpeg64: $(FFMPEG_CONFIGURE_FILES64)
 	+$(MAKE) -C $(FFMPEG_OBJ64)
 	+$(MAKE) -C $(FFMPEG_OBJ64) install
 	mkdir -pv $(DST_DIR)/lib64
-	cp -a $(TOOLS_DIR64)/lib/{libavcodec,libavutil,libswresample}* $(DST_DIR)/lib64
+	cp -a $(TOOLS_DIR64)/lib/{libavcodec,libavfilter,libavformat,libavutil,libswresample}* $(DST_DIR)/lib64
 
 ffmpeg32: SHELL = $(CONTAINER_SHELL32)
 ffmpeg32: $(FFMPEG_CONFIGURE_FILES32)
 	+$(MAKE) -C $(FFMPEG_OBJ32)
 	+$(MAKE) -C $(FFMPEG_OBJ32) install
 	mkdir -pv $(DST_DIR)/lib
-	cp -a $(TOOLS_DIR32)/lib/{libavcodec,libavutil,libswresample}* $(DST_DIR)/lib
+	cp -a $(TOOLS_DIR32)/lib/{libavcodec,libavfilter,libavformat,libavutil,libswresample}* $(DST_DIR)/lib
 
 ##
 ## FAudio
