@@ -223,29 +223,6 @@ index f85381079a2..ffe048de8c0 100644
      context_to_server( &server_context, context );
  
      SERVER_START_REQ( queue_exception_event )
-
-From a7542e9e279970c2ab3ac9c6c986b300135286a0 Mon Sep 17 00:00:00 2001
-From: Andrew Eikum <aeikum@codeweavers.com>
-Date: Wed, 28 Mar 2018 09:17:30 -0500
-Subject: [PATCH] wine.inf: Don't show crash dialog by default
-
----
- loader/wine.inf.in | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/loader/wine.inf.in b/loader/wine.inf.in
-index 7fe2f49dcd9..e72d0dcaba1 100644
---- a/loader/wine.inf.in
-+++ b/loader/wine.inf.in
-@@ -540,6 +540,7 @@ HKLM,%CurrentVersionNT%\AeDebug,"Debugger",2,"winedbg --auto %ld %ld"
- HKLM,%CurrentVersionNT%\AeDebug,"Auto",2,"1"
- HKCU,Software\Wine\Debug,"RelayExclude",2,"ntdll.RtlEnterCriticalSection;ntdll.RtlTryEnterCriticalSection;ntdll.RtlLeaveCriticalSection;kernel32.48;kernel32.49;kernel32.94;kernel32.95;kernel32.96;kernel32.97;kernel32.98;kernel32.TlsGetValue;kernel32.TlsSetValue;kernel32.FlsGetValue;kernel32.FlsSetValue;kernel32.SetLastError"
- HKCU,Software\Wine\Debug,"RelayFromExclude",2,"winex11.drv;winemac.drv;user32;gdi32;advapi32;kernel32"
-+HKCU,Software\Wine\WineDbg,"ShowCrashDialog",0x00010003,0x00000000
- 
- [DirectX]
- HKLM,Software\Microsoft\DirectX,"Version",,"4.09.00.0904"
-
 From 7e91b897e69854cb3afe761f48ef7c9b496ecf95 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?J=C3=B3zef=20Kucia?= <jkucia@codeweavers.com>
 Date: Wed, 1 May 2019 12:28:12 +0200
@@ -3064,34 +3041,6 @@ index 868f898bbbb..95f498123ea 100644
      }
  
      if (TRACE_ON( bcrypt ))
-From 7906adc92f6ab16cf6a64055e28bc4bcb2a46afa Mon Sep 17 00:00:00 2001
-From: Nikolay Sivov <nsivov@codeweavers.com>
-Date: Mon, 24 Feb 2020 09:19:47 -0600
-Subject: [PATCH] mfreadwrite: Don't try to free NULL source
-
----
- dlls/mfreadwrite/reader.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
-
-diff --git a/dlls/mfreadwrite/reader.c b/dlls/mfreadwrite/reader.c
-index 9ae7e33deeb..303553db246 100644
---- a/dlls/mfreadwrite/reader.c
-+++ b/dlls/mfreadwrite/reader.c
-@@ -565,11 +565,12 @@ static ULONG WINAPI src_reader_Release(IMFSourceReader *iface)
-     {
-         if (reader->async_callback)
-             IMFSourceReaderCallback_Release(reader->async_callback);
--        if (reader->shutdown_on_release)
-+        if (reader->source && reader->shutdown_on_release)
-             IMFMediaSource_Shutdown(reader->source);
-         if (reader->descriptor)
-             IMFPresentationDescriptor_Release(reader->descriptor);
--        IMFMediaSource_Release(reader->source);
-+        if (reader->source)
-+            IMFMediaSource_Release(reader->source);
- 
-         for (i = 0; i < reader->stream_count; ++i)
-         {
 From f70d26ade963aab370f80ca33744ca258f839b25 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Mon, 24 Feb 2020 13:32:38 -0600
