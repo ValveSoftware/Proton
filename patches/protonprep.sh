@@ -26,6 +26,12 @@
 #1411 win10
 #1417 dxvk_config
 
+    # hack to make glib compile using python3 instead of python2.7 without changing make script.
+    cd glib
+    git reset --hard HEAD
+    git clean -xdf
+    patch -Np1 < ../patches/glib/glib_python3_hack.patch
+    cd ..
 
     # steam_helper patches
     #git checkout steam_helper
