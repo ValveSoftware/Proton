@@ -1033,6 +1033,8 @@ $(FFMPEG_CONFIGURE_FILES64): $(FFMPEG)/configure $(MAKEFILE_DEP) | $(FFMPEG_OBJ6
 			--disable-vaapi \
 			--disable-vdpau \
 			--disable-everything \
+			--enable-decoder=h264 \
+			--enable-decoder=aac \
 			--enable-decoder=wmav2 \
 			--enable-decoder=adpcm_ms && \
 		[ ! -f ./Makefile ] || touch ./Makefile
@@ -1066,6 +1068,8 @@ $(FFMPEG_CONFIGURE_FILES32): $(FFMPEG)/configure $(MAKEFILE_DEP) | $(FFMPEG_OBJ3
 			--disable-vaapi \
 			--disable-vdpau \
 			--disable-everything \
+			--enable-decoder=h264 \
+			--enable-decoder=aac \
 			--enable-decoder=wmav2 \
 			--enable-decoder=adpcm_ms && \
 		[ ! -f ./Makefile ] || touch ./Makefile

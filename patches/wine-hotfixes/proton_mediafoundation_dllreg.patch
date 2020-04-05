@@ -1,0 +1,68 @@
+diff --git a/dlls/mfplat/main.c b/dlls/mfplat/main.c
+index db6d4f194a..04c1e38baa 100644
+--- a/dlls/mfplat/main.c
++++ b/dlls/mfplat/main.c
+@@ -1473,6 +1473,20 @@ HRESULT WINAPI MFTUnregister(CLSID clsid)
+     return S_OK;
+ }
+ 
++
++/* Proton build system = 💩💩💩 */
++static BOOL CALLBACK register_winegstreamer_proc(INIT_ONCE *once, void *param, void **ctx)
++{
++    HMODULE mod = LoadLibraryW(L"winegstreamer.dll");
++    if (mod)
++    {
++        HRESULT (WINAPI *proc)(void) = (void *)GetProcAddress(mod, "DllRegisterServer");
++        proc();
++        FreeLibrary(mod);
++    }
++    return TRUE;
++}
++
+ /***********************************************************************
+  *      MFStartup (mfplat.@)
+  */
+@@ -1480,9 +1494,12 @@ HRESULT WINAPI MFStartup(ULONG version, DWORD flags)
+ {
+ #define MF_VERSION_XP   MAKELONG( MF_API_VERSION, 1 )
+ #define MF_VERSION_WIN7 MAKELONG( MF_API_VERSION, 2 )
++    static INIT_ONCE once = INIT_ONCE_STATIC_INIT;
+ 
+     TRACE("%#x, %#x.\n", version, flags);
+ 
++    InitOnceExecuteOnce(&once, register_winegstreamer_proc, NULL, NULL);
++
+     if (version != MF_VERSION_XP && version != MF_VERSION_WIN7)
+         return MF_E_BAD_STARTUP_VERSION;
+ 
+@@ -8874,4 +8891,4 @@ HRESULT WINAPI MFCreateDXGIDeviceManager(UINT *token, IMFDXGIDeviceManager **man
+     *manager = &object->IMFDXGIDeviceManager_iface;
+ 
+     return S_OK;
+-}
+\ No newline at end of file
++}
+diff --git a/dlls/winegstreamer/main.c b/dlls/winegstreamer/main.c
+index 12ca11fa6c..921768963e 100644
+--- a/dlls/winegstreamer/main.c
++++ b/dlls/winegstreamer/main.c
+@@ -351,6 +351,9 @@ HRESULT WINAPI DllRegisterServer(void)
+ 
+     TRACE(".\n");
+ 
++    if (FAILED(mfplat_DllRegisterServer()))
++        return hr;
++
+     if (FAILED(hr = __wine_register_resources(winegstreamer_instance)))
+         return hr;
+ 
+@@ -366,7 +369,7 @@ HRESULT WINAPI DllRegisterServer(void)
+ 
+     IFilterMapper2_Release(mapper);
+ 
+-    return mfplat_DllRegisterServer();
++    return hr;
+ }
+ 
+ HRESULT WINAPI DllUnregisterServer(void)
