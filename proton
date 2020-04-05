@@ -456,6 +456,8 @@ class Session:
                 log("%s" % sys.exc_info()[1])
                 log("************************************************")
 
+        import protonfixes
+
         if "PROTON_LOG" in self.env and nonzero(self.env["PROTON_LOG"]):
             self.env.setdefault("WINEDEBUG", "+timestamp,+pid,+tid,+seh,+debugstr,+loaddll,+mscoree")
             self.env.setdefault("DXVK_LOG_LEVEL", "info")
@@ -490,7 +492,7 @@ class Session:
         if not "nofsync" in self.compat_config:
             self.env["WINEFSYNC"] = "1" if "SteamGameId" in self.env else "0"
 
-       if "seccomp" in self.compat_config:
+        if "seccomp" in self.compat_config:
             self.env["WINESECCOMP"] = "1"
 
         if "oldglstr" in self.compat_config:
@@ -533,8 +535,6 @@ class Session:
 
         if "nod3d9" in self.compat_config:
             self.dlloverrides["d3d9"] = ""
-
-        import protonfixes
 
         s = ""
         for dll in self.dlloverrides:
