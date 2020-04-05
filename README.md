@@ -68,8 +68,9 @@ git clone --recurse-submodules http://github.com/gloriouseggroll/proton-ge-custo
 ```
 
 in the main proton-ge-custom directory. Open `patchlog.txt` and search for "fail" to make sure no patch failures occured. An easy way to do this is like so:  
-cat patchlog.txt | grep -i fail  
-cat patchlog.txt | grep -i error  
+
+grep -i fail patchlog.txt
+grep -i error patchlog.txt 
 
 6. Open proton-ge-custom a terminal and type the following:  
 
