@@ -1,0 +1,31 @@
+From 8dcfe3073f04551eb3ab51b162ba750741fd7d53 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
+Date: Thu, 2 Apr 2020 20:41:43 +0200
+Subject: [PATCH] ntdll: Guard seccomp with WINESECCOMP env var.
+
+---
+ dlls/ntdll/signal_x86_64.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
+diff --git a/dlls/ntdll/signal_x86_64.c b/dlls/ntdll/signal_x86_64.c
+index c2bdf0d3a9a..3266a504c9c 100644
+--- a/dlls/ntdll/signal_x86_64.c
++++ b/dlls/ntdll/signal_x86_64.c
+@@ -3315,6 +3315,16 @@ void signal_init_thread( TEB *teb )
+ 
+ static void install_bpf(struct sigaction *sig_act)
+ {
++    static int enable_seccomp = -1;
++
++    if (enable_seccomp == -1)
++        enable_seccomp = getenv("WINESECCOMP") && atoi(getenv("WINESECCOMP"));
++
++    if (!enable_seccomp)
++        return;
++
++    MESSAGE("wine: enabling seccomp syscall filters.\n");
++
+ #ifdef HAVE_SECCOMP
+     static struct sock_filter filter[] =
+     {
+ 

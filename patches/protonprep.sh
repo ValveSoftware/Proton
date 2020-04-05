@@ -200,6 +200,9 @@
     echo "steam bits"
     patch -Np1 < ../patches/proton/proton-steam-bits.patch
 
+    echo "seccomp"
+    patch -Np1 < ../patches/proton/proton-seccomp-envvar.patch
+
     echo "SDL Joystick"
     patch -Np1 < ../patches/proton/proton-sdl_joy.patch
     patch -Np1 < ../patches/proton/proton-sdl_joy_2.patch
