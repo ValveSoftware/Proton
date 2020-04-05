@@ -3441,3 +3441,342 @@ index 04f3854388c..9752c3889b6 100644
  
      if (!self)
      {
+From 8fd9d6bd3d567893f933b7d55615446476745654 Mon Sep 17 00:00:00 2001
+From: Vincent Povirk <vincent@codeweavers.com>
+Date: Wed, 1 Apr 2020 11:47:05 -0500
+Subject: [PATCH] winebrowser: Restore original LD_LIBRARY_PATH before calling
+ to system
+
+---
+ programs/winebrowser/main.c | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
+
+diff --git a/programs/winebrowser/main.c b/programs/winebrowser/main.c
+index 9cd6812d032..9e5fe2f3129 100644
+--- a/programs/winebrowser/main.c
++++ b/programs/winebrowser/main.c
+@@ -69,6 +69,17 @@ static char *strdup_unixcp( const WCHAR *str )
+     return ret;
+ }
+ 
++static void restore_system_environment(void)
++{
++    const char* orig_ld_path = getenv("ORIG_LD_LIBRARY_PATH");
++
++    if (orig_ld_path)
++    {
++        setenv("LD_LIBRARY_PATH", orig_ld_path, 1);
++        unsetenv("ORIG_LD_LIBRARY_PATH");
++    }
++}
++
+ /* try to launch a unix app from a comma separated string of app names */
+ static int launch_app( const WCHAR *candidates, const WCHAR *argv1 )
+ {
+@@ -78,6 +89,11 @@ static int launch_app( const WCHAR *candidates, const WCHAR *argv1 )
+ 
+     if (!(cmdline = strdup_unixcp( argv1 ))) return 1;
+ 
++    /* PROTON HACK: Restore ORIG_LD_LIBRARY_PATH to LD_LIBRARY_PATH.
++     * System programs may not work correctly with our libraries, in
++     * particular gio on Ubuntu 19.04 is broken by our libgio. */
++    restore_system_environment();
++
+     while (*candidates)
+     {
+         WCHAR **args = CommandLineToArgvW( candidates, &count );
+From 4ab9453691e6edba7fd7b32dd883abe608d2be87 Mon Sep 17 00:00:00 2001
+From: Hans-Kristian Arntzen <post@arntzen-software.no>
+Date: Tue, 31 Mar 2020 13:19:41 +0200
+Subject: [PATCH] dlls/dxgi: Implement IDXGIFactory5::CheckFeatureSupport.
+
+Enables certain D3D12 games to use sync off, since they gate their use
+of swap_interval == 0 on this feature being present.
+
+Signed-off-by: Hans-Kristian Arntzen <post@arntzen-software.no>
+---
+ dlls/dxgi/factory.c | 15 +++++++++++++--
+ 1 file changed, 13 insertions(+), 2 deletions(-)
+
+diff --git a/dlls/dxgi/factory.c b/dlls/dxgi/factory.c
+index a0038b4fe77..83dddfe5f8b 100644
+--- a/dlls/dxgi/factory.c
++++ b/dlls/dxgi/factory.c
+@@ -442,10 +442,21 @@ static HRESULT STDMETHODCALLTYPE dxgi_factory_EnumWarpAdapter(IWineDXGIFactory *
+ static HRESULT STDMETHODCALLTYPE dxgi_factory_CheckFeatureSupport(IWineDXGIFactory *iface,
+         DXGI_FEATURE feature, void *feature_data, UINT data_size)
+ {
+-    FIXME("iface %p, feature %#x, feature_data %p, data_size %u stub!\n",
++    TRACE("iface %p, feature %#x, feature_data %p, data_size %u.\n",
+             iface, feature, feature_data, data_size);
+ 
+-    return E_NOTIMPL;
++    if (feature == DXGI_FEATURE_PRESENT_ALLOW_TEARING)
++    {
++        if (data_size == sizeof(BOOL))
++        {
++            *(BOOL *)feature_data = TRUE;
++            return S_OK;
++        }
++        else
++            return DXGI_ERROR_INVALID_CALL;
++    }
++    else
++        return DXGI_ERROR_UNSUPPORTED;
+ }
+ 
+ static const struct IWineDXGIFactoryVtbl dxgi_factory_vtbl =
+From f53d131b499a303ae3f68d20265117b84b175802 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
+Date: Tue, 10 Mar 2020 20:47:33 +0100
+Subject: [PATCH] fixup! user32: HACK: Don't resize new windows to fit the
+ display
+
+This code changes the window's size to fit the display. However,
+some games (Bayonetta, Dragon's Dogma) will then have the incorrect
+render size. So just let windows be too big to fit the display.
+---
+ dlls/user32/win.c    | 9 ++-------
+ dlls/user32/winpos.c | 2 --
+ 2 files changed, 2 insertions(+), 9 deletions(-)
+
+diff --git a/dlls/user32/win.c b/dlls/user32/win.c
+index 803259b351f..8a04f611ce5 100644
+--- a/dlls/user32/win.c
++++ b/dlls/user32/win.c
+@@ -1607,17 +1607,12 @@ HWND WIN_CreateWindowEx( CREATESTRUCTW *cs, LPCWSTR className, HINSTANCE module,
+ 
+     cx = cs->cx;
+     cy = cs->cy;
+-#if 0
+-    /* HACK: This code changes the window's size to fit the display. However,
+-     * some games (Bayonetta, Dragon's Dogma) will then have the incorrect
+-     * render size. So just let windows be too big to fit the display. */
+     if ((cs->style & WS_THICKFRAME) || !(cs->style & (WS_POPUP | WS_CHILD)))
+     {
+         MINMAXINFO info = WINPOS_GetMinMaxInfo( hwnd );
+-        cx = max( min( cx, info.ptMaxTrackSize.x ), info.ptMinTrackSize.x );
+-        cy = max( min( cy, info.ptMaxTrackSize.y ), info.ptMinTrackSize.y );
++        cx = max( cx, info.ptMinTrackSize.x );
++        cy = max( cy, info.ptMinTrackSize.y );
+     }
+-#endif
+ 
+     if (cx < 0) cx = 0;
+     if (cy < 0) cy = 0;
+diff --git a/dlls/user32/winpos.c b/dlls/user32/winpos.c
+index f759bd10f94..7974060acf0 100644
+--- a/dlls/user32/winpos.c
++++ b/dlls/user32/winpos.c
+@@ -1589,8 +1589,6 @@ LONG WINPOS_HandleWindowPosChanging( HWND hwnd, WINDOWPOS *winpos )
+     if ((style & WS_THICKFRAME) || ((style & (WS_POPUP | WS_CHILD)) == 0))
+     {
+ 	MINMAXINFO info = WINPOS_GetMinMaxInfo( hwnd );
+-        winpos->cx = min( winpos->cx, info.ptMaxTrackSize.x );
+-        winpos->cy = min( winpos->cy, info.ptMaxTrackSize.y );
+ 	if (!(style & WS_MINIMIZE))
+ 	{
+             winpos->cx = max( winpos->cx, info.ptMinTrackSize.x );
+
+From 6c6117644e303b376f9a3717e858e76d75532ae5 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
+Date: Thu, 12 Mar 2020 15:53:07 +0100
+Subject: [PATCH] HACK: user32: Export window manager info from user driver.
+
+---
+ dlls/user32/win.c         | 10 ++++++++++
+ dlls/user32/winpos.c      | 10 ++++++++++
+ dlls/winex11.drv/window.c | 24 ++++++++++++------------
+ include/wine/gdi_driver.h | 18 ++++++++++++++++++
+ 4 files changed, 50 insertions(+), 12 deletions(-)
+
+diff --git a/dlls/user32/win.c b/dlls/user32/win.c
+index 8a04f611ce5..aca0a347844 100644
+--- a/dlls/user32/win.c
++++ b/dlls/user32/win.c
+@@ -1610,6 +1610,16 @@ HWND WIN_CreateWindowEx( CREATESTRUCTW *cs, LPCWSTR className, HINSTANCE module,
+     if ((cs->style & WS_THICKFRAME) || !(cs->style & (WS_POPUP | WS_CHILD)))
+     {
+         MINMAXINFO info = WINPOS_GetMinMaxInfo( hwnd );
++
++        /* HACK: This code changes the window's size to fit the display. However,
++         * some games (Bayonetta, Dragon's Dogma) will then have the incorrect
++         * render size. So just let windows be too big to fit the display. */
++        if (__wine_get_window_manager() != WINE_WM_X11_STEAMCOMPMGR)
++        {
++            cx = min( cx, info.ptMaxTrackSize.x );
++            cy = min( cy, info.ptMaxTrackSize.y );
++        }
++
+         cx = max( cx, info.ptMinTrackSize.x );
+         cy = max( cy, info.ptMinTrackSize.y );
+     }
+diff --git a/dlls/user32/winpos.c b/dlls/user32/winpos.c
+index 7974060acf0..f917146d91c 100644
+--- a/dlls/user32/winpos.c
++++ b/dlls/user32/winpos.c
+@@ -1589,6 +1589,16 @@ LONG WINPOS_HandleWindowPosChanging( HWND hwnd, WINDOWPOS *winpos )
+     if ((style & WS_THICKFRAME) || ((style & (WS_POPUP | WS_CHILD)) == 0))
+     {
+ 	MINMAXINFO info = WINPOS_GetMinMaxInfo( hwnd );
++
++        /* HACK: This code changes the window's size to fit the display. However,
++         * some games (Bayonetta, Dragon's Dogma) will then have the incorrect
++         * render size. So just let windows be too big to fit the display. */
++        if (__wine_get_window_manager() != WINE_WM_X11_STEAMCOMPMGR)
++        {
++            winpos->cx = min( winpos->cx, info.ptMaxTrackSize.x );
++            winpos->cy = min( winpos->cy, info.ptMaxTrackSize.y );
++        }
++
+ 	if (!(style & WS_MINIMIZE))
+ 	{
+             winpos->cx = max( winpos->cx, info.ptMinTrackSize.x );
+diff --git a/dlls/winex11.drv/window.c b/dlls/winex11.drv/window.c
+index b2700164a3d..47cbced56e2 100644
+--- a/dlls/winex11.drv/window.c
++++ b/dlls/winex11.drv/window.c
+@@ -102,10 +102,6 @@ static CRITICAL_SECTION_DEBUG critsect_debug =
+ };
+ static CRITICAL_SECTION win_data_section = { &critsect_debug, -1, 0, 0, 0, 0 };
+ 
+-static const int WM_UNKNOWN = 0;
+-static const int WM_MUTTER = 1;
+-static const int WM_STEAMCOMPMGR = 2;
+-
+ /* enable workarounds for mutter bugs */
+ static int detect_wm(Display *dpy)
+ {
+@@ -142,23 +138,25 @@ static int detect_wm(Display *dpy)
+ 
+                     if((strcmp(wm_name, "GNOME Shell") == 0) ||
+                             (strcmp(wm_name, "Mutter") == 0))
+-                        cached = WM_MUTTER;
++                        cached = WINE_WM_X11_MUTTER;
+                     else if(strcmp(wm_name, "steamcompmgr") == 0)
+-                        cached = WM_STEAMCOMPMGR;
++                        cached = WINE_WM_X11_STEAMCOMPMGR;
+                     else
+-                        cached = WM_UNKNOWN;
++                        cached = WINE_WM_UNKNOWN;
+ 
+                     XFree(wm_name);
+                 }else{
+                     TRACE("WM did not set _NET_WM_NAME or WM_NAME\n");
+-                    cached = WM_UNKNOWN;
++                    cached = WINE_WM_UNKNOWN;
+                 }
+             }else
+-                cached = WM_UNKNOWN;
++                cached = WINE_WM_UNKNOWN;
+ 
+             XFree(wm_check);
+         }else
+-            cached = WM_UNKNOWN;
++            cached = WINE_WM_UNKNOWN;
++
++        __wine_set_window_manager(cached);
+     }
+ 
+     return cached;
+@@ -166,12 +164,12 @@ static int detect_wm(Display *dpy)
+ 
+ BOOL wm_is_mutter(Display *display)
+ {
+-    return detect_wm(display) == WM_MUTTER;
++    return detect_wm(display) == WINE_WM_X11_MUTTER;
+ }
+ 
+ BOOL wm_is_steamcompmgr(Display *display)
+ {
+-    return detect_wm(display) == WM_STEAMCOMPMGR;
++    return detect_wm(display) == WINE_WM_X11_STEAMCOMPMGR;
+ }
+ 
+ /***********************************************************************
+@@ -1959,6 +1957,8 @@ BOOL CDECL X11DRV_CreateDesktopWindow( HWND hwnd )
+ {
+     unsigned int width, height;
+ 
++    detect_wm( gdi_display );
++
+     /* retrieve the real size of the desktop */
+     SERVER_START_REQ( get_window_rectangles )
+     {
+diff --git a/include/wine/gdi_driver.h b/include/wine/gdi_driver.h
+index 971618e19ac..aa8052f1844 100644
+--- a/include/wine/gdi_driver.h
++++ b/include/wine/gdi_driver.h
+@@ -22,6 +22,7 @@
+ #define __WINE_WINE_GDI_DRIVER_H
+ 
+ #include "winternl.h"
++#include "winuser.h"
+ #include "ddk/d3dkmthk.h"
+ #include "wine/list.h"
+ 
+@@ -289,4 +290,21 @@ extern void CDECL __wine_set_display_driver( HMODULE module );
+ extern struct opengl_funcs * CDECL __wine_get_wgl_driver( HDC hdc, UINT version );
+ extern const struct vulkan_funcs * CDECL __wine_get_vulkan_driver( HDC hdc, UINT version );
+ 
++/* HACK: We use some WM specific hacks in user32 and we need the user
++ * driver to export that information. */
++
++#define WINE_WM_UNKNOWN          0
++#define WINE_WM_X11_MUTTER       1
++#define WINE_WM_X11_STEAMCOMPMGR 2
++
++static inline LONG_PTR __wine_get_window_manager(void)
++{
++    return (LONG_PTR)GetPropA(GetDesktopWindow(), "__wine_window_manager");
++}
++
++static inline void __wine_set_window_manager(LONG_PTR window_manager)
++{
++    SetPropA(GetDesktopWindow(), "__wine_window_manager", (HANDLE)window_manager);
++}
++
+ #endif /* __WINE_WINE_GDI_DRIVER_H */
+
+From 2f5e0756621332a39d7119553a69cc26f77dfc9b Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
+Date: Mon, 16 Mar 2020 19:52:52 +0100
+Subject: [PATCH] HACK: user: Pretend that windows are all undecorated with
+ gamescope.
+
+---
+ dlls/user32/nonclient.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/dlls/user32/nonclient.c b/dlls/user32/nonclient.c
+index 0aee13787af..c9156e73578 100644
+--- a/dlls/user32/nonclient.c
++++ b/dlls/user32/nonclient.c
+@@ -30,6 +30,7 @@
+ #include "user_private.h"
+ #include "controls.h"
+ #include "wine/debug.h"
++#include "wine/gdi_driver.h"
+ 
+ WINE_DEFAULT_DEBUG_CHANNEL(nonclient);
+ 
+@@ -62,6 +63,9 @@ static void adjust_window_rect( RECT *rect, DWORD style, BOOL menu, DWORD exStyl
+ {
+     int adjust = 0;
+ 
++    if (__wine_get_window_manager() == WINE_WM_X11_STEAMCOMPMGR)
++        return;
++
+     if ((exStyle & (WS_EX_STATICEDGE|WS_EX_DLGMODALFRAME)) == WS_EX_STATICEDGE)
+         adjust = 1; /* for the outer frame always present */
+     else if ((exStyle & WS_EX_DLGMODALFRAME) || (style & (WS_THICKFRAME|WS_DLGFRAME)))
+@@ -359,6 +363,9 @@ LRESULT NC_HandleNCCalcSize( HWND hwnd, WPARAM wparam, RECT *winRect )
+     if (winRect == NULL)
+         return 0;
+ 
++    if (__wine_get_window_manager() == WINE_WM_X11_STEAMCOMPMGR)
++        return 0;
++
+     if (cls_style & CS_VREDRAW) result |= WVR_VREDRAW;
+     if (cls_style & CS_HREDRAW) result |= WVR_HREDRAW;
+ 
