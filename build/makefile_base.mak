@@ -521,11 +521,11 @@ redist: dist | $(filter-out dist deploy install redist,$(MAKECMDGOALS))
 
 module32: SHELL = $(CONTAINER_SHELL32)
 module32:
-	cd $(WINE_OBJ32)/dlls/$(module) && make
+	+$(MAKE) -C $(WINE_OBJ32)/dlls/$(module)
 
 module64: SHELL = $(CONTAINER_SHELL64)
 module64:
-	cd $(WINE_OBJ64)/dlls/$(module) && make
+	+$(MAKE) -C $(WINE_OBJ64)/dlls/$(module)
 
 module: module32 module64
 
