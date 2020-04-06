@@ -2611,24 +2611,6 @@ diff --git a/dlls/winex11.drv/mouse.c b/dlls/winex11.drv/mouse.c
 index 7f0edd9be6..8f8cc4a0a9 100644
 --- a/dlls/winex11.drv/mouse.c
 +++ b/dlls/winex11.drv/mouse.c
-@@ -260,6 +260,8 @@ static void update_relative_valuators(XIAnyClassInfo **valuators, int n_valuator
- 
-     thread_data->x_rel_valuator.number = -1;
-     thread_data->y_rel_valuator.number = -1;
-+    thread_data->x_rel_valuator.accum = 0;
-+    thread_data->y_rel_valuator.accum = 0;
- 
-     for (i = 0; i < n_valuators; i++)
-     {
-@@ -365,6 +367,8 @@ static void disable_xinput2(void)
-     pXIFreeDeviceInfo( data->xi2_devices );
-     data->x_rel_valuator.number = -1;
-     data->y_rel_valuator.number = -1;
-+    data->x_rel_valuator.accum = 0;
-+    data->y_rel_valuator.accum = 0;
-     data->xi2_devices = NULL;
-     data->xi2_core_pointer = 0;
-     data->xi2_current_slave = 0;
 @@ -384,6 +388,7 @@ static BOOL grab_clipping_window( const RECT *clip )
      Window clip_window;
      HWND msg_hwnd = 0;
@@ -2681,7 +2663,26 @@ index 7f0edd9be6..8f8cc4a0a9 100644
      rect = get_primary_monitor_rect();
      if (!grab_fullscreen)
      {
-@@ -618,8 +644,18 @@ static void send_mouse_input( HWND hwnd, Window window, unsigned int state, INPU
+@@ -719,6 +719,10 @@ static POINT map_event_coords(const XButtonEvent *event, HWND hwnd)
+ 
+     if ((data = get_win_data(hwnd)))
+     {
++
++        if(data->fs_hack)
++            fs_hack_real_to_user(&pt);
++
+         if (event->window == data->whole_window)
+         {
+             pt.x += data->whole_rect.left - data->client_rect.left;
+@@ -756,6 +756,7 @@ static POINT map_event_coords(const XButtonEvent *event, HWND hwnd)
+ static void send_mouse_input( HWND hwnd, Window window, unsigned int state, INPUT *input )
+ {
+     struct x11drv_win_data *data;
++    POINT pt;
+ 
+     input->type = INPUT_MOUSE;
+ 
+@@ -772,8 +773,18 @@ static void send_mouse_input( HWND hwnd, Window window, unsigned int state, INPU
              sync_window_cursor( window );
              last_cursor_change = input->u.mi.time;
          }
@@ -2699,24 +2700,9 @@ index 7f0edd9be6..8f8cc4a0a9 100644
 +        input->u.mi.dx = pt.x;
 +        input->u.mi.dy = pt.y;
 +
-         __wine_send_input( hwnd, input );
+         __wine_send_input( hwnd, input, SEND_HWMSG_WINDOW );
          return;
      }
-@@ -633,7 +669,13 @@ static void send_mouse_input( HWND hwnd, Window window, unsigned int state, INPU
- 
-     if (!(data = get_win_data( hwnd ))) return;
- 
--    if (window == data->whole_window)
-+    if(data->fs_hack)
-+        fs_hack_real_to_user(&pt);
-+
-+    input->u.mi.dx = pt.x;
-+    input->u.mi.dy = pt.y;
-+
-+    if (window == data->whole_window && !data->fs_hack)
-     {
-         pt.x += data->whole_rect.left - data->client_rect.left;
-         pt.y += data->whole_rect.top - data->client_rect.top;
 @@ -1467,7 +1509,13 @@ void CDECL X11DRV_SetCursor( HCURSOR handle )
  BOOL CDECL X11DRV_SetCursorPos( INT x, INT y )
  {
@@ -2781,68 +2767,30 @@ index 7f0edd9be6..8f8cc4a0a9 100644
      int i;
      double dx = 0, dy = 0, val;
      struct x11drv_thread_data *thread_data = x11drv_thread_data();
-@@ -1827,31 +1878,53 @@ static BOOL X11DRV_RawMotion( XGenericEventCookie *xev )
+@@ -1980,7 +1998,8 @@ static BOOL X11DRV_RawMotion( XGenericEventCookie *xev )
  
-     for (i = 0; i <= max ( x_rel->number, y_rel->number ); i++)
+     for (i = 0; i <= max( x_pos->number, y_pos->number ); i++)
      {
 -        if (!XIMaskIsSet( event->valuators.mask, i )) continue;
 +        if (!XIMaskIsSet( event->valuators.mask, i ))
 +            continue;
          val = *values++;
-         if (i == x_rel->number)
-         {
--            input.u.mi.dx = dx = val;
-+            dx = val;
-             if (x_rel->min < x_rel->max)
--                input.u.mi.dx = val * (virtual_rect.right - virtual_rect.left)
--                                    / (x_rel->max - x_rel->min);
-+                dx = val * (virtual_rect.right - virtual_rect.left)
-+                         / (x_rel->max - x_rel->min);
-         }
-         if (i == y_rel->number)
-         {
--            input.u.mi.dy = dy = val;
-+            dy = val;
-             if (y_rel->min < y_rel->max)
--                input.u.mi.dy = val * (virtual_rect.bottom - virtual_rect.top)
--                                    / (y_rel->max - y_rel->min);
-+                dy = val * (virtual_rect.bottom - virtual_rect.top)
-+                         / (y_rel->max - y_rel->min);
-         }
-     }
- 
-+    /* Accumulate the *double* dx/dy motions so sub-pixel motions wont be lost
-+     * when sent/cast to *LONG* input.u.mi.dx/dy.
-+     */
-+    x_rel->accum += dx;
-+    y_rel->accum += dy;
-+    if (fabs(x_rel->accum) < 1.0 && fabs(y_rel->accum) < 1.0)
-+    {
-+        TRACE( "accumulating raw motion (event %f,%f, accum %f,%f)\n", dx, dy, x_rel->accum, y_rel->accum );
-+        return TRUE;
-+    }
-+    input.u.mi.dx = x_rel->accum;
-+    input.u.mi.dy = y_rel->accum;
-+    x_rel->accum -= input.u.mi.dx;
-+    y_rel->accum -= input.u.mi.dy;
-+
-     if (broken_rawevents && is_old_motion_event( xev->serial ))
+         raw_val = *raw_values++;
+         if (i == x_pos->number)
+@@ -2044,6 +2065,13 @@ static BOOL X11DRV_RawMotion( XGenericEventCookie *xev )
      {
-         TRACE( "pos %d,%d old serial %lu, ignoring\n", input.u.mi.dx, input.u.mi.dy, xev->serial );
-         return FALSE;
-     }
- 
--    TRACE( "pos %d,%d (event %f,%f)\n", input.u.mi.dx, input.u.mi.dy, dx, dy );
-+    pt.x = input.u.mi.dx;
-+    pt.y = input.u.mi.dy;
-+    fs_hack_scale_real_to_user(&pt);
-+    input.u.mi.dx = pt.x;
-+    input.u.mi.dy = pt.y;
+         input.u.mi.dx = raw_dx;
+         input.u.mi.dy = raw_dy;
 +
-+    TRACE( "pos %d,%d (event %f,%f, accum %f,%f)\n", input.u.mi.dx, input.u.mi.dy, dx, dy, x_rel->accum, y_rel->accum );
- 
-     input.type = INPUT_MOUSE;
-     __wine_send_input( 0, &input );
++        pt.x = input.u.mi.dx;
++        pt.y = input.u.mi.dy;
++        fs_hack_scale_real_to_user(&pt);
++        input.u.mi.dx = pt.x;
++        input.u.mi.dy = pt.y;
++
+         TRACE( "raw pos %d,%d (event %f,%f)\n", input.u.mi.dx, input.u.mi.dy, raw_dx, raw_dy );
+         __wine_send_input( 0, &input, SEND_HWMSG_RAWINPUT );
+     }
 diff --git a/dlls/winex11.drv/opengl.c b/dlls/winex11.drv/opengl.c
 index 635c7d9f3b..5b5ebe2d6e 100644
 --- a/dlls/winex11.drv/opengl.c
@@ -4730,22 +4678,6 @@ index 1f6a37a7a5..e526cb300f 100644
  #define MAX_DASHLEN 16
  
  #define WINE_XDND_VERSION 5
-@@ -311,6 +313,7 @@ struct x11drv_escape_flush_gl_drawable
-     enum x11drv_escape_codes code;         /* escape code (X11DRV_FLUSH_GL_DRAWABLE) */
-     Drawable                 gl_drawable;  /* GL drawable */
-     BOOL                     flush;        /* flush X11 before copying */
-+    BOOL                     fs_hack;
- };
- 
- /**************************************************************************
-@@ -322,6 +325,7 @@ struct x11drv_valuator_data
-     double min;
-     double max;
-     int number;
-+    double accum;
- };
- 
- struct x11drv_thread_data
 @@ -426,6 +430,7 @@ enum x11drv_atoms
      XATOM_TEXT,
      XATOM_TIMESTAMP,

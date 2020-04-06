@@ -90,20 +90,10 @@
     ../wine-staging/patches/patchinstall.sh DESTDIR="." --all \
     -W server-Desktop_Refcount \
     -W ws2_32-TransmitFile \
-    -W winex11.drv-mouse-coorrds \
     -W winex11-MWM_Decorations \
     -W winex11-_NET_ACTIVE_WINDOW \
     -W winex11-WM_WINDOWPOSCHANGING \
-    -W user32-rawinput-mouse \
-    -W user32-rawinput-nolegacy \
-    -W user32-rawinput-mouse-experimental \
-    -W user32-rawinput-hid \
     -W winex11-key_translation \
-    -W dinput-SetActionMap-genre \
-    -W dinput-axis-recalc \
-    -W dinput-joy-mappings \
-    -W dinput-reconnect-joystick \
-    -W dinput-remap-joystick \
     -W ntdll-avoid-fstatat
 
     #WINE FAUDIO
@@ -174,9 +164,6 @@
 
     echo "fullscreen hack"
     patch -Np1 < ../patches/proton/valve_proton_fullscreen_hack-staging.patch
-
-    echo "raw input"
-    patch -Np1 < ../patches/proton/proton-rawinput.patch
     
     echo "staging winex11-key_translation"
     patch -Np1 < ../wine-staging/patches/winex11-key_translation/0001-winex11-Match-keyboard-in-Unicode.patch
