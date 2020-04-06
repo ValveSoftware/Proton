@@ -33,6 +33,13 @@
     patch -Np1 < ../patches/glib/glib_python3_hack.patch
     cd ..
 
+    cd gst-plugins-ugly
+    git reset --hard HEAD
+    git clean -xdf
+    echo "add Guy's patch to fix wmv playback in gst-plugins-ugly"
+    patch -Np1 < ../patches/gstreamer/asfdemux-always_re-initialize_metadata_and_global_metadata.patch
+    cd ..
+
     # steam_helper patches
     #git checkout steam_helper
     #cd steam_helper

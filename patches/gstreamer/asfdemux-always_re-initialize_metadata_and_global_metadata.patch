@@ -1,0 +1,39 @@
+From 6025606c4aa0ba218dde77795020039ae655977b Mon Sep 17 00:00:00 2001
+From: Derek Lesho <dlesho@codeweavers.com>
+Date: Fri, 3 Apr 2020 14:24:46 -0500
+Subject: [PATCH] asfdemux: Always re-initialize metadata and global_metadata.
+
+---
+ gst/asfdemux/gstasfdemux.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/gst/asfdemux/gstasfdemux.c b/gst/asfdemux/gstasfdemux.c
+index 58c3019d..2acb8162 100644
+--- a/gst/asfdemux/gstasfdemux.c
++++ b/gst/asfdemux/gstasfdemux.c
+@@ -216,10 +216,12 @@ gst_asf_demux_reset (GstASFDemux * demux, gboolean chain_reset)
+     gst_caps_unref (demux->metadata);
+     demux->metadata = NULL;
+   }
++  demux->metadata = gst_caps_new_empty ();
+   if (demux->global_metadata) {
+     gst_structure_free (demux->global_metadata);
+     demux->global_metadata = NULL;
+   }
++  demux->global_metadata = gst_structure_new_empty ("metadata");
+   if (demux->mut_ex_streams) {
+     g_slist_free (demux->mut_ex_streams);
+     demux->mut_ex_streams = NULL;
+@@ -291,8 +293,6 @@ gst_asf_demux_reset (GstASFDemux * demux, gboolean chain_reset)
+     demux->segment_running = FALSE;
+     demux->keyunit_sync = FALSE;
+     demux->accurate = FALSE;
+-    demux->metadata = gst_caps_new_empty ();
+-    demux->global_metadata = gst_structure_new_empty ("metadata");
+     demux->data_size = 0;
+     demux->data_offset = 0;
+     demux->index_offset = 0;
+-- 
+2.24.1
+
+

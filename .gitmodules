@@ -45,10 +45,13 @@
 	url = https://gitlab.freedesktop.org/gstreamer/gst-plugins-good.git
 [submodule "gst-plugins-bad"]
         path = gst-plugins-bad
-        url = https://gitlab.freedesktop.org/gstreamer/gst-plugins-bad.git
+	url = https://gitlab.freedesktop.org/gstreamer/gst-plugins-bad.git
+[submodule "gst-plugins-ugly"]
+        path = gst-plugins-ugly
+        url = https://gitlab.freedesktop.org/gstreamer/gst-plugins-ugly.git
+[submodule "gst-plugins-libav"]
+        path = gst-plugins-libav
+        url = https://gitlab.freedesktop.org/gstreamer/gst-libav.git
 [submodule "glib"]
 	path = glib
 	url = https://gitlab.gnome.org/GNOME/glib.git
-[submodule "gst-plugins-libav"]
-	path = gst-plugins-libav
-	url = https://gitlab.freedesktop.org/gstreamer/gst-libav

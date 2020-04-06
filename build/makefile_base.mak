@@ -214,6 +214,10 @@ GST_BAD := $(SRCDIR)/gst-plugins-bad
 GST_BAD_OBJ32 := ./obj-gst-bad32
 GST_BAD_OBJ64 := ./obj-gst-bad64
 
+GST_UGLY := $(SRCDIR)/gst-plugins-ugly
+GST_UGLY_OBJ32 := ./obj-gst-ugly32
+GST_UGLY_OBJ64 := ./obj-gst-ugly64
+
 GST_LIBAV := $(SRCDIR)/gst-plugins-libav
 GST_LIBAV_OBJ32 := ./obj-gst-libav32
 GST_LIBAV_OBJ64 := ./obj-gst-libav64
@@ -306,6 +310,7 @@ OBJ_DIRS := $(TOOLS_DIR32)        $(TOOLS_DIR64)        \
             $(GST_BASE_OBJ32)     $(GST_BASE_OBJ64)     \
             $(GST_GOOD_OBJ32)     $(GST_GOOD_OBJ64)     \
             $(GST_BAD_OBJ32)      $(GST_BAD_OBJ64)      \
+            $(GST_UGLY_OBJ32)     $(GST_UGLY_OBJ64)     \
             $(GST_LIBAV_OBJ32)    $(GST_LIBAV_OBJ64)    \
             $(FAUDIO_OBJ32)       $(FAUDIO_OBJ64)       \
             $(LSTEAMCLIENT_OBJ32) $(LSTEAMCLIENT_OBJ64) \
@@ -482,7 +487,7 @@ $(DIST_FONTS): fonts
 ALL_TARGETS += dist
 GOAL_TARGETS += dist
 
-dist: $(DIST_TARGETS) wine gst_good gst_bad gst_libav vrclient lsteamclient steam dxvk | $(DST_DIR)
+dist: $(DIST_TARGETS) wine gst_good gst_bad gst_ugly gst_libav vrclient lsteamclient steam dxvk | $(DST_DIR)
 	echo `date '+%s'` `GIT_DIR=$(abspath $(SRCDIR)/.git) git describe --tags` > $(DIST_VERSION)
 	cp $(DIST_VERSION) $(DST_BASE)/
 	rm -rf $(abspath $(DIST_PREFIX)) && \
@@ -938,6 +943,70 @@ gst_bad32: $(GST_BAD_CONFIGURE_FILES32)
 	cp -a $(TOOLS_DIR32)/lib/gstreamer-1.0 $(DST_DIR)/lib/
 
 ##
+## gst-plugins-ugly
+##
+
+GST_UGLY_MESON_ARGS := \
+        -Dgobject-cast-checks='disabled' \
+        -Dglib-asserts='disabled' \
+        -Dglib-checks='disabled' \
+        -Ddoc='disabled' \
+	$(GST_COMMON_MESON_ARGS)
+
+GST_UGLY_CONFIGURE_FILES32 := $(GST_UGLY_OBJ32)/build.ninja
+GST_UGLY_CONFIGURE_FILES64 := $(GST_UGLY_OBJ64)/build.ninja
+
+# 64-bit configure.  Remove coredata file if already configured (due to e.g. makefile changing)
+$(GST_UGLY_CONFIGURE_FILES64): SHELL = $(CONTAINER_SHELL64)
+$(GST_UGLY_CONFIGURE_FILES64): $(MAKEFILE_DEP) gst_base64 | $(GST_UGLY_OBJ64)
+	if [ -e "$(abspath $(GST_UGLY_OBJ64))"/build.ninja ]; then \
+		rm -f "$(abspath $(GST_UGLY_OBJ64))"/meson-private/coredata.dat; \
+	fi
+	cd "$(abspath $(GST_UGLY))" && \
+	PATH="$(abspath $(TOOLS_DIR64))/bin:$(PATH)" \
+		PKG_CONFIG_PATH=$(abspath $(TOOLS_DIR64))/lib/pkgconfig \
+		meson --prefix="$(abspath $(TOOLS_DIR64))" --libdir="lib" $(GST_UGLY_MESON_ARGS) $(MESON_STRIP_ARG) --buildtype=release "$(abspath $(GST_UGLY_OBJ64))"
+
+# 32-bit configure.  Remove coredata file if already configured (due to e.g. makefile changing)
+$(GST_UGLY_CONFIGURE_FILES32): SHELL = $(CONTAINER_SHELL32)
+$(GST_UGLY_CONFIGURE_FILES32): $(MAKEFILE_DEP) gst_base32 | $(GST_UGLY_OBJ32)
+	if [ -e "$(abspath $(GST_UGLY_OBJ32))"/build.ninja ]; then \
+		rm -f "$(abspath $(GST_UGLY_OBJ32))"/meson-private/coredata.dat; \
+	fi
+	cd "$(abspath $(GST_UGLY))" && \
+	PATH="$(abspath $(TOOLS_DIR32))/bin:$(PATH)" \
+		PKG_CONFIG_PATH=$(abspath $(TOOLS_DIR32))/lib/pkgconfig \
+		meson --prefix="$(abspath $(TOOLS_DIR32))" --libdir="lib" $(GST_UGLY_MESON_ARGS) $(MESON_STRIP_ARG) --buildtype=release "$(abspath $(GST_UGLY_OBJ32))"
+
+## gst_ugly goals
+GST_UGLY_TARGETS = gst_ugly gst_ugly_configure gst_ugly32 gst_ugly64 gst_ugly_configure32 gst_ugly_configure64
+
+ALL_TARGETS += $(GST_UGLY_TARGETS)
+GOAL_TARGETS_LIBS += gst_ugly
+
+.PHONY: $(GST_UGLY_TARGETS)
+
+gst_ugly_configure: $(GST_UGLY_CONFIGURE_FILES32) $(GST_UGLY_CONFIGURE_FILES64)
+
+gst_ugly_configure64: $(GST_UGLY_CONFIGURE_FILES64)
+
+gst_ugly_configure32: $(GST_UGLY_CONFIGURE_FILES32)
+
+gst_ugly: gst_ugly32 gst_ugly64
+
+gst_ugly64: SHELL = $(CONTAINER_SHELL64)
+gst_ugly64: $(GST_UGLY_CONFIGURE_FILES64)
+	PATH="$(abspath $(TOOLS_DIR64))/bin:$(PATH)" ninja -C "$(GST_UGLY_OBJ64)" install
+	cp -a $(TOOLS_DIR64)/lib/libgst* $(DST_DIR)/lib64/ && \
+	cp -a $(TOOLS_DIR64)/lib/gstreamer-1.0 $(DST_DIR)/lib64/
+
+gst_ugly32: SHELL = $(CONTAINER_SHELL32)
+gst_ugly32: $(GST_UGLY_CONFIGURE_FILES32)
+	PATH="$(abspath $(TOOLS_DIR32))/bin:$(PATH)" ninja -C "$(GST_UGLY_OBJ32)" install
+	cp -a $(TOOLS_DIR32)/lib/libgst* $(DST_DIR)/lib/ && \
+	cp -a $(TOOLS_DIR32)/lib/gstreamer-1.0 $(DST_DIR)/lib/
+
+##
 ## gst-plugins-libav
 ##
 
@@ -1033,9 +1102,25 @@ $(FFMPEG_CONFIGURE_FILES64): $(FFMPEG)/configure $(MAKEFILE_DEP) | $(FFMPEG_OBJ6
 			--disable-vaapi \
 			--disable-vdpau \
 			--disable-everything \
+			--enable-parser=h264 \
 			--enable-decoder=h264 \
+			--enable-parser=bmp \
+			--enable-decoder=bmp \
+			--enable-parser=png \
+			--enable-decoder=png \
+			--enable-decoder=bink \
+			--enable-decoder=binkaudio_dct \
+			--enable-decoder=binkaudio_rdft \
+			--enable-decoder=wmv1 \
+			--enable-decoder=wmv2 \
+			--enable-decoder=wmv3 \
+			--enable-decoder=wmv3image \
 			--enable-decoder=aac \
+			--enable-decoder=wmalossless \
+			--enable-decoder=wmapro \
+			--enable-decoder=wmav1 \
 			--enable-decoder=wmav2 \
+			--enable-decoder=wmavoice \
 			--enable-decoder=adpcm_ms && \
 		[ ! -f ./Makefile ] || touch ./Makefile
 # ^ ffmpeg's configure script doesn't update the timestamp on this guy in the case of a no-op
@@ -1068,9 +1153,25 @@ $(FFMPEG_CONFIGURE_FILES32): $(FFMPEG)/configure $(MAKEFILE_DEP) | $(FFMPEG_OBJ3
 			--disable-vaapi \
 			--disable-vdpau \
 			--disable-everything \
+			--enable-parser=h264 \
 			--enable-decoder=h264 \
+			--enable-parser=bmp \
+			--enable-decoder=bmp \
+			--enable-parser=png \
+			--enable-decoder=png \
+			--enable-decoder=bink \
+			--enable-decoder=binkaudio_dct \
+			--enable-decoder=binkaudio_rdft \
+			--enable-decoder=wmv1 \
+			--enable-decoder=wmv2 \
+			--enable-decoder=wmv3 \
+			--enable-decoder=wmv3image \
 			--enable-decoder=aac \
+			--enable-decoder=wmalossless \
+			--enable-decoder=wmapro \
+			--enable-decoder=wmav1 \
 			--enable-decoder=wmav2 \
+			--enable-decoder=wmavoice \
 			--enable-decoder=adpcm_ms && \
 		[ ! -f ./Makefile ] || touch ./Makefile
 # ^ ffmpeg's configure script doesn't update the timestamp on this guy in the case of a no-op
