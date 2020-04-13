@@ -42,17 +42,6 @@ diff --git a/dlls/mfreadwrite/reader.c b/dlls/mfreadwrite/reader.c
 index 975acf6fc0..985a90e364 100644
 --- a/dlls/mfreadwrite/reader.c
 +++ b/dlls/mfreadwrite/reader.c
-@@ -967,7 +967,9 @@ static HRESULT source_reader_get_stream_read_index(struct source_reader *reader,
-             else
-             {
-                 FIXME("Non-specific requests are not supported.\n");
--                return E_NOTIMPL;
-+                *stream_index = reader->first_video_stream_index;
-+                break;
-+                //return E_NOTIMPL;
-             }
-         default:
-             *stream_index = index;
 @@ -1495,6 +1497,7 @@ static HRESULT source_reader_create_decoder_for_stream(struct source_reader *rea
  {
      MFT_REGISTER_TYPE_INFO in_type, out_type;
@@ -84,6 +73,15 @@ index 975acf6fc0..985a90e364 100644
  }
  
  static HRESULT WINAPI src_reader_SetCurrentMediaType(IMFSourceReader *iface, DWORD index, DWORD *reserved,
+@@ -1671,7 +1689,7 @@ static HRESULT WINAPI src_reader_SetCurrentPosition(IMFSourceReader *iface, REFG
+         return hr;
+ 
+     if (!(flags & MFMEDIASOURCE_CAN_SEEK))
+-        return MF_E_INVALIDREQUEST;
++        return S_OK;
+ 
+     EnterCriticalSection(&reader->cs);
+ 
 diff --git a/dlls/winegstreamer/gst_cbs.c b/dlls/winegstreamer/gst_cbs.c
 index 10194067c5..28676e2e39 100644
 --- a/dlls/winegstreamer/gst_cbs.c
