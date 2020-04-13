@@ -1,0 +1,43 @@
+From 802436bbef59b1d5ff17a8fbd4d5fc0294cb3525 Mon Sep 17 00:00:00 2001
+From: Tk-Glitch <ti3nou@gmail.com>
+Date: Wed, 8 Apr 2020 05:33:48 +0200
+Subject: vrclient: Use standard dlopen() instead of the libwine wrappers
+
+Following b87256cd1db21a59484248a193b6ad12ca2853ca
+
+
+diff --git a/vrclient_x64/vrclient_main.c b/vrclient_x64/vrclient_main.c
+index ea8e375..cf5888f 100644
+--- a/vrclient_x64/vrclient_main.c
++++ b/vrclient_x64/vrclient_main.c
+@@ -9,7 +9,6 @@
+ #include "winbase.h"
+ #include "winnls.h"
+ #include "wine/debug.h"
+-#include "wine/library.h"
+ 
+ #include "vrclient_defs.h"
+ #include "vrclient_private.h"
+@@ -258,19 +257,19 @@ static int load_vrclient(void)
+ 
+     TRACE("got openvr runtime path: %s\n", pathU);
+ 
+-    vrclient_lib = wine_dlopen(pathU, RTLD_NOW, NULL, 0);
++    vrclient_lib = dlopen(pathU, RTLD_NOW);
+     if(!vrclient_lib){
+         TRACE("unable to load vrclient.so\n");
+         return 0;
+     }
+ 
+-    vrclient_HmdSystemFactory = wine_dlsym(vrclient_lib, "HmdSystemFactory", NULL, 0);
++    vrclient_HmdSystemFactory = dlsym(vrclient_lib, "HmdSystemFactory");
+     if(!vrclient_HmdSystemFactory){
+         ERR("unable to load HmdSystemFactory method\n");
+         return 0;
+     }
+ 
+-    vrclient_VRClientCoreFactory = wine_dlsym(vrclient_lib, "VRClientCoreFactory", NULL, 0);
++    vrclient_VRClientCoreFactory = dlsym(vrclient_lib, "VRClientCoreFactory");
+     if(!vrclient_VRClientCoreFactory){
+         ERR("unable to load VRClientCoreFactory method\n");
+         return 0;
