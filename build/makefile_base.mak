@@ -390,7 +390,10 @@ $(USER_SETTINGS_PY_TARGET): $(addprefix $(SRCDIR)/,user_settings.sample.py)
 PROTONFIXES_TARGET := $(addprefix $(DST_BASE)/,protonfixes)
 $(PROTONFIXES_TARGET): $(addprefix $(SRCDIR)/,protonfixes)
 
-DIST_COPY_TARGETS := $(TOOLMANIFEST_TARGET) $(FILELOCK_TARGET) $(PROTON_PY_TARGET) \
+DST_DIR_TARGET := $(addprefix $(DST_BASE)/,dist)
+$(DST_DIR_TARGET): $(addprefix $(SRCDIR)/,dist)
+
+DIST_COPY_TARGETS := $(DST_DIR_TARGET) $(TOOLMANIFEST_TARGET) $(FILELOCK_TARGET) $(PROTON_PY_TARGET) \
                      $(PROTON37_TRACKED_FILES_TARGET) $(USER_SETTINGS_PY_TARGET) \
                      $(PROTONFIXES_TARGET)
 
@@ -519,8 +522,7 @@ install: dist | $(filter-out dist deploy install redist,$(MAKECMDGOALS))
 redist: dist | $(filter-out dist deploy install redist,$(MAKECMDGOALS))
 	mkdir -p $(REDIST_DIR)
 	cp -a $(REDIST_COPY_TARGETS) $(REDIST_DIR)
-	tar -C $(DST_DIR) -c . | gzip -c -1 > $(REDIST_DIR)/proton_dist.tar.gz
-	@echo "Created redistribution tarball at "$(REDIST_DIR)"/proton_dist.tar.gz"
+	@echo "Created redistribution at "$(REDIST_DIR)
 
 .PHONY: module32 module64 module
 
@@ -769,7 +771,6 @@ GST_GOOD_MESON_ARGS := \
 	-Dcairo=disabled \
 	-Dcutter=disabled \
 	-Ddebugutils=disabled \
-	-Ddeinterlace=disabled \
 	-Ddtmf=disabled \
 	-Deffectv=disabled \
 	-Dequalizer=disabled \
@@ -1296,6 +1297,7 @@ $(LSTEAMCLIENT_CONFIGURE_FILES64): $(LSTEAMCLIENT64) $(MAKEFILE_DEP) | $(LSTEAMC
 			-I"../$(WINE)"/include/ \
 			-L"../$(TOOLS_DIR64)"/lib64/ \
 			-L"../$(TOOLS_DIR64)"/lib64/wine/ \
+			-ldl \
 			--dll ../$(LSTEAMCLIENT64) && \
 		cp ../$(LSTEAMCLIENT64)/Makefile . && \
 		echo >> ./Makefile 'SRCDIR := ../$(LSTEAMCLIENT64)' && \
@@ -1315,6 +1317,7 @@ $(LSTEAMCLIENT_CONFIGURE_FILES32): $(LSTEAMCLIENT32) $(MAKEFILE_DEP) | $(LSTEAMC
 			-I"../$(WINE)"/include/ \
 			-L"../$(TOOLS_DIR32)"/lib/ \
 			-L"../$(TOOLS_DIR32)"/lib/wine/ \
+			-ldl \
 			--dll ../$(LSTEAMCLIENT32) && \
 		cp ../$(LSTEAMCLIENT32)/Makefile . && \
 		echo >> ./Makefile 'SRCDIR := ../$(LSTEAMCLIENT32)' && \
@@ -1377,6 +1380,7 @@ $(STEAMEXE_CONFIGURE_FILES): $(STEAMEXE_SYN) $(MAKEFILE_DEP) | $(STEAMEXE_OBJ) $
 			-L"../$(TOOLS_DIR32)"/lib/ \
 			-L"../$(TOOLS_DIR32)"/lib/wine/ \
 			-L"../$(SRCDIR)"/steam_helper/ \
+			-ldl \
 			--guiexe --nomsvcrt ../$(STEAMEXE_SYN) && \
 		cp ../$(STEAMEXE_SYN)/Makefile . && \
 		echo >> ./Makefile 'SRCDIR := ../$(STEAMEXE_SYN)' && \
@@ -1542,6 +1546,7 @@ $(VRCLIENT_CONFIGURE_FILES64): $(MAKEFILE_DEP) $(VRCLIENT) $(VRCLIENT)/vrclient_
 			-I"$(abspath $(VRCLIENT))" \
 			-L"$(abspath $(TOOLS_DIR64))"/lib64/ \
 			-L"$(abspath $(TOOLS_DIR64))"/lib64/wine/ \
+			-ldl \
 			--dll vrclient_x64 && \
 		cp ./vrclient_x64/Makefile $(abspath $(dir $@)) && \
 		echo >> $(abspath $(dir $@))/Makefile 'SRCDIR := ../$(VRCLIENT)/vrclient_x64' && \
@@ -1559,6 +1564,7 @@ $(VRCLIENT_CONFIGURE_FILES32): $(MAKEFILE_DEP) $(VRCLIENT32) | $(VRCLIENT_OBJ32)
 		-I"$(abspath $(VRCLIENT))" \
 		-L"$(abspath $(TOOLS_DIR32))"/lib/ \
 		-L"$(abspath $(TOOLS_DIR32))"/lib/wine/ \
+		-ldl \
 		--dll $(VRCLIENT32)/vrclient && \
 	cp $(VRCLIENT32)/vrclient/Makefile $(dir $@) && \
 	echo >> $(dir $@)/Makefile 'SRCDIR := ../$(VRCLIENT32)/vrclient' && \
