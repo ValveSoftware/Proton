@@ -237,39 +237,6 @@ index 0000000000..457f234073
 +typedef void(CALLBACK *NVGSDK_EmptyCallback)(NVGSDK_RetCode ret, void *context);
 +
 +typedef void(CALLBACK *NVGSDK_GetUILanguageCallback)(NVGSDK_RetCode ret, NVGSDK_Language const *lang, void *context);
-diff --git a/dlls/ntdll/virtual.c b/dlls/ntdll/virtual.c
-index 7bc4d89184..9b57956183 100644
---- a/dlls/ntdll/virtual.c
-+++ b/dlls/ntdll/virtual.c
-@@ -1932,6 +1932,7 @@ static int alloc_virtual_heap( void *base, size_t size, void *arg )
- void virtual_init(void)
- {
-     const char *preload;
-+    const char *wine_mem_alloc_mod = getenv("WINE_MEM_ALLOC_MOD");
-     struct alloc_virtual_heap alloc_views;
-     size_t size;
- 
-@@ -1962,6 +1963,10 @@ void virtual_init(void)
-         }
-     }
- 
-+    if (wine_mem_alloc_mod) {
-+        user_space_limit    = (void *)0x7ffffff0000;
-+    }
-+
-     /* try to find space in a reserved area for the views and pages protection table */
- #ifdef _WIN64
-     pages_vprot_size = ((size_t)address_space_limit >> page_shift >> pages_vprot_shift) + 1;
-@@ -2681,6 +2686,7 @@ void virtual_set_large_address_space(BOOL force_large_address)
- {
-     IMAGE_NT_HEADERS *nt = RtlImageNtHeader( NtCurrentTeb()->Peb->ImageBaseAddress );
- 
-+    if (is_win64) return;
-     if (!(nt->FileHeader.Characteristics & IMAGE_FILE_LARGE_ADDRESS_AWARE) && !force_large_address) return;
- 
-     /* no large address space on win9x */
--- 
-2.23.0
 
 From: Derek Lesho <dlesho@codeweavers.com>
 Subject: [PATCH] ntdll: Only call wine handlers if they're in the same stack.
