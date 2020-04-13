@@ -1,17 +1,3 @@
-diff --git a/programs/winecfg/appdefaults.c b/programs/winecfg/appdefaults.c
-index 6c4e6a49f26..1aea54adfb2 100644
---- a/programs/winecfg/appdefaults.c
-+++ b/programs/winecfg/appdefaults.c
-@@ -144,7 +144,7 @@ static void update_comboboxes(HWND dialog)
-             return;
-         }
-         if (ver != -1) winver = strdupA( win_versions[ver].szVersion );
--        else winver = strdupA("win7");
-+        else winver = strdupA("win10");
-     }
-     WINE_TRACE("winver is %s\n", winver);
- 
- 
 From 84d73a7fa55c13ed797b2b2f6cfb9071dceac800 Mon Sep 17 00:00:00 2001
 From: Andrew Eikum <aeikum@codeweavers.com>
 Date: Mon, 21 Oct 2019 15:30:33 -0500
