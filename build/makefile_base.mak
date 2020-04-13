@@ -390,10 +390,7 @@ $(USER_SETTINGS_PY_TARGET): $(addprefix $(SRCDIR)/,user_settings.sample.py)
 PROTONFIXES_TARGET := $(addprefix $(DST_BASE)/,protonfixes)
 $(PROTONFIXES_TARGET): $(addprefix $(SRCDIR)/,protonfixes)
 
-DST_DIR_TARGET := $(addprefix $(DST_BASE)/,dist)
-$(DST_DIR_TARGET): $(addprefix $(SRCDIR)/,dist)
-
-DIST_COPY_TARGETS := $(DST_DIR_TARGET) $(TOOLMANIFEST_TARGET) $(FILELOCK_TARGET) $(PROTON_PY_TARGET) \
+DIST_COPY_TARGETS := $(TOOLMANIFEST_TARGET) $(FILELOCK_TARGET) $(PROTON_PY_TARGET) \
                      $(PROTON37_TRACKED_FILES_TARGET) $(USER_SETTINGS_PY_TARGET) \
                      $(PROTONFIXES_TARGET)
 
@@ -522,6 +519,7 @@ install: dist | $(filter-out dist deploy install redist,$(MAKECMDGOALS))
 redist: dist | $(filter-out dist deploy install redist,$(MAKECMDGOALS))
 	mkdir -p $(REDIST_DIR)
 	cp -a $(REDIST_COPY_TARGETS) $(REDIST_DIR)
+	cp -a $(DST_BASE)/dist $(REDIST_DIR)
 	@echo "Created redistribution at "$(REDIST_DIR)
 
 .PHONY: module32 module64 module
