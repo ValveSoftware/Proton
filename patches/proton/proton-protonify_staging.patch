@@ -2686,37 +2686,6 @@ index 0fc8820b095..409f5c85876 100644
  }
  
  START_TEST(dwmapi)
-From 501b068024375386484c6a8616a406b21ab15406 Mon Sep 17 00:00:00 2001
-From: Andrew Eikum <aeikum@codeweavers.com>
-Date: Thu, 30 Jan 2020 14:44:00 -0600
-Subject: [PATCH] user32: HACK: Don't resize new windows to fit the display
-
----
- dlls/user32/win.c | 5 +++++
- 1 file changed, 5 insertions(+)
-
-diff --git a/dlls/user32/win.c b/dlls/user32/win.c
-index fa593a4a29a..803259b351f 100644
---- a/dlls/user32/win.c
-+++ b/dlls/user32/win.c
-@@ -1607,12 +1607,17 @@ HWND WIN_CreateWindowEx( CREATESTRUCTW *cs, LPCWSTR className, HINSTANCE module,
- 
-     cx = cs->cx;
-     cy = cs->cy;
-+#if 0
-+    /* HACK: This code changes the window's size to fit the display. However,
-+     * some games (Bayonetta, Dragon's Dogma) will then have the incorrect
-+     * render size. So just let windows be too big to fit the display. */
-     if ((cs->style & WS_THICKFRAME) || !(cs->style & (WS_POPUP | WS_CHILD)))
-     {
-         MINMAXINFO info = WINPOS_GetMinMaxInfo( hwnd );
-         cx = max( min( cx, info.ptMaxTrackSize.x ), info.ptMinTrackSize.x );
-         cy = max( min( cy, info.ptMaxTrackSize.y ), info.ptMinTrackSize.y );
-     }
-+#endif
- 
-     if (cx < 0) cx = 0;
-     if (cy < 0) cy = 0;
 From c099ae745b3a63edee1677a2da01cab5aa5b8562 Mon Sep 17 00:00:00 2001
 From: Zebediah Figura <z.figura12@gmail.com>
 Date: Tue, 28 Jan 2020 14:30:43 -0600
@@ -2979,11 +2948,11 @@ index 868f898bbbb..95f498123ea 100644
 +++ b/dlls/bcrypt/gnutls.c
 @@ -267,8 +267,11 @@ BOOL gnutls_initialize(void)
      }
-     if (!(pgnutls_decode_rs_value = wine_dlsym( libgnutls_handle, "gnutls_decode_rs_value", NULL, 0 )))
+     if (!(pgnutls_decode_rs_value = dlsym( libgnutls_handle, "gnutls_decode_rs_value" )))
      {
 -        WARN("gnutls_decode_rs_value not found\n");
 -        pgnutls_decode_rs_value = compat_gnutls_decode_rs_value;
-+        if (!(pgnutls_decode_rs_value = wine_dlsym( libgnutls_handle, "_gnutls_decode_ber_rs_raw", NULL, 0)))
++        if (!(pgnutls_decode_rs_value = dlsym( libgnutls_handle, "_gnutls_decode_ber_rs_raw" )))
 +        {
 +            WARN("gnutls_decode_rs_value and legacy alternative _gnutls_decode_ber_rs_raw not found\n");
 +            pgnutls_decode_rs_value = compat_gnutls_decode_rs_value;
@@ -3485,298 +3454,283 @@ index 9cd6812d032..9e5fe2f3129 100644
      while (*candidates)
      {
          WCHAR **args = CommandLineToArgvW( candidates, &count );
-From 4ab9453691e6edba7fd7b32dd883abe608d2be87 Mon Sep 17 00:00:00 2001
-From: Hans-Kristian Arntzen <post@arntzen-software.no>
-Date: Tue, 31 Mar 2020 13:19:41 +0200
-Subject: [PATCH] dlls/dxgi: Implement IDXGIFactory5::CheckFeatureSupport.
+From 3082a724542ba7527fa52eaac3611ed97ff91cac Mon Sep 17 00:00:00 2001
+From: Andrew Eikum <aeikum@codeweavers.com>
+Date: Mon, 10 Dec 2018 12:48:41 -0600
+Subject: [PATCH] xaudio2: Set PulseAudio application name property in the
+ environment
 
-Enables certain D3D12 games to use sync off, since they gate their use
-of swap_interval == 0 on this feature being present.
-
-Signed-off-by: Hans-Kristian Arntzen <post@arntzen-software.no>
+So PA doesn't present all Wine applications as "wine-preloader", and
+allows PA to store per-application settings.
 ---
- dlls/dxgi/factory.c | 15 +++++++++++++--
- 1 file changed, 13 insertions(+), 2 deletions(-)
+ dlls/winepulse.drv/mmdevdrv.c |  1 +
+ dlls/xaudio2_7/xaudio_dll.c   | 21 +++++++++++++++++++++
+ 2 files changed, 22 insertions(+)
 
-diff --git a/dlls/dxgi/factory.c b/dlls/dxgi/factory.c
-index a0038b4fe77..83dddfe5f8b 100644
---- a/dlls/dxgi/factory.c
-+++ b/dlls/dxgi/factory.c
-@@ -442,10 +442,21 @@ static HRESULT STDMETHODCALLTYPE dxgi_factory_EnumWarpAdapter(IWineDXGIFactory *
- static HRESULT STDMETHODCALLTYPE dxgi_factory_CheckFeatureSupport(IWineDXGIFactory *iface,
-         DXGI_FEATURE feature, void *feature_data, UINT data_size)
+diff --git a/dlls/winepulse.drv/mmdevdrv.c b/dlls/winepulse.drv/mmdevdrv.c
+index c80ea4f9d04..6a2906761a7 100644
+--- a/dlls/winepulse.drv/mmdevdrv.c
++++ b/dlls/winepulse.drv/mmdevdrv.c
+@@ -571,6 +571,7 @@ static HRESULT pulse_connect(void)
+     WideCharToMultiByte(CP_UNIXCP, 0, name, -1, str, len, NULL, NULL);
+     TRACE("Name: %s\n", str);
+     pulse_ctx = pa_context_new(pa_mainloop_get_api(pulse_ml), str);
++    setenv("PULSE_PROP_application.name", str, 1);
+     pa_xfree(str);
+     if (!pulse_ctx) {
+         ERR("Failed to create context\n");
+diff --git a/dlls/xaudio2_7/xaudio_dll.c b/dlls/xaudio2_7/xaudio_dll.c
+index 4ca04198b6e..483e2b4138a 100644
+--- a/dlls/xaudio2_7/xaudio_dll.c
++++ b/dlls/xaudio2_7/xaudio_dll.c
+@@ -38,6 +38,7 @@
+ #include "wine/asm.h"
+ #include "wine/debug.h"
+ #include "wine/heap.h"
++#include "wine/unicode.h"
+ 
+ WINE_DEFAULT_DEBUG_CHANNEL(xaudio2);
+ 
+@@ -1948,6 +1949,26 @@ static HRESULT WINAPI XAudio2CF_CreateInstance(IClassFactory *iface, IUnknown *p
+     pthread_cond_init(&object->mst.engine_done, NULL);
+     pthread_cond_init(&object->mst.engine_ready, NULL);
+ 
++    /* set PulseAudio's application.name in the environment since FAudio and
++     * SDL provide no way to pass this in */
++    {
++        WCHAR path[MAX_PATH], *name;
++        char *str;
++        DWORD len;
++
++        GetModuleFileNameW(NULL, path, ARRAY_SIZE(path));
++        name = strrchrW(path, '\\');
++        if (!name)
++            name = path;
++        else
++            name++;
++        len = WideCharToMultiByte(CP_UNIXCP, 0, name, -1, NULL, 0, NULL, NULL);
++        str = HeapAlloc(GetProcessHeap(), 0, len);
++        WideCharToMultiByte(CP_UNIXCP, 0, name, -1, str, len, NULL, NULL);
++        setenv("PULSE_PROP_application.name", str, 1);
++        HeapFree(GetProcessHeap(), 0, str);
++    }
++
+     FAudioCOMConstructWithCustomAllocatorEXT(
+         &object->faudio,
+         XAUDIO2_VER,
+From 9180fdea2d446513bdae681431cb4d872f9214cb Mon Sep 17 00:00:00 2001
+From: Andrew Eikum <aeikum@codeweavers.com>
+Date: Tue, 7 Apr 2020 11:05:47 -0500
+Subject: [PATCH] winepulse: Add stub IAudioClockAdjustment implementation
+
+---
+ dlls/winepulse.drv/mmdevdrv.c | 47 +++++++++++++++++++++++++++++++++++
+ 1 file changed, 47 insertions(+)
+
+diff --git a/dlls/winepulse.drv/mmdevdrv.c b/dlls/winepulse.drv/mmdevdrv.c
+index 6a2906761a7..c5f12301c2e 100644
+--- a/dlls/winepulse.drv/mmdevdrv.c
++++ b/dlls/winepulse.drv/mmdevdrv.c
+@@ -162,6 +162,7 @@ struct ACImpl {
+     IAudioCaptureClient IAudioCaptureClient_iface;
+     IAudioClock IAudioClock_iface;
+     IAudioClock2 IAudioClock2_iface;
++    IAudioClockAdjustment IAudioClockAdjustment_iface;
+     IAudioStreamVolume IAudioStreamVolume_iface;
+     IUnknown *marshal;
+     IMMDevice *parent;
+@@ -206,6 +207,7 @@ static const ISimpleAudioVolumeVtbl SimpleAudioVolume_Vtbl;
+ static const IChannelAudioVolumeVtbl ChannelAudioVolume_Vtbl;
+ static const IAudioClockVtbl AudioClock_Vtbl;
+ static const IAudioClock2Vtbl AudioClock2_Vtbl;
++static const IAudioClockAdjustmentVtbl AudioClockAdjustment_Vtbl;
+ static const IAudioStreamVolumeVtbl AudioStreamVolume_Vtbl;
+ 
+ static AudioSessionWrapper *AudioSessionWrapper_Create(ACImpl *client);
+@@ -250,6 +252,11 @@ static inline ACImpl *impl_from_IAudioClock2(IAudioClock2 *iface)
+     return CONTAINING_RECORD(iface, ACImpl, IAudioClock2_iface);
+ }
+ 
++static inline ACImpl *impl_from_IAudioClockAdjustment(IAudioClockAdjustment *iface)
++{
++    return CONTAINING_RECORD(iface, ACImpl, IAudioClockAdjustment_iface);
++}
++
+ static inline ACImpl *impl_from_IAudioStreamVolume(IAudioStreamVolume *iface)
  {
--    FIXME("iface %p, feature %#x, feature_data %p, data_size %u stub!\n",
-+    TRACE("iface %p, feature %#x, feature_data %p, data_size %u.\n",
-             iface, feature, feature_data, data_size);
+     return CONTAINING_RECORD(iface, ACImpl, IAudioStreamVolume_iface);
+@@ -1246,6 +1253,7 @@ HRESULT WINAPI AUDDRV_GetAudioEndpoint(GUID *guid, IMMDevice *dev, IAudioClient
+     This->IAudioCaptureClient_iface.lpVtbl = &AudioCaptureClient_Vtbl;
+     This->IAudioClock_iface.lpVtbl = &AudioClock_Vtbl;
+     This->IAudioClock2_iface.lpVtbl = &AudioClock2_Vtbl;
++    This->IAudioClockAdjustment_iface.lpVtbl = &AudioClockAdjustment_Vtbl;
+     This->IAudioStreamVolume_iface.lpVtbl = &AudioStreamVolume_Vtbl;
+     This->dataflow = dataflow;
+     This->parent = dev;
+@@ -1278,6 +1286,8 @@ static HRESULT WINAPI AudioClient_QueryInterface(IAudioClient *iface,
+     *ppv = NULL;
+     if (IsEqualIID(riid, &IID_IUnknown) || IsEqualIID(riid, &IID_IAudioClient))
+         *ppv = iface;
++    else if (IsEqualIID(riid, &IID_IAudioClockAdjustment))
++        *ppv = &This->IAudioClockAdjustment_iface;
+     if (*ppv) {
+         IUnknown_AddRef((IUnknown*)*ppv);
+         return S_OK;
+@@ -2728,6 +2738,43 @@ static const IAudioClock2Vtbl AudioClock2_Vtbl =
+     AudioClock2_GetDevicePosition
+ };
+ 
++static HRESULT WINAPI AudioClockAdjustment_QueryInterface(IAudioClockAdjustment *iface,
++        REFIID riid, void **ppv)
++{
++    ACImpl *This = impl_from_IAudioClockAdjustment(iface);
++    return IAudioClock_QueryInterface(&This->IAudioClock_iface, riid, ppv);
++}
++
++static ULONG WINAPI AudioClockAdjustment_AddRef(IAudioClockAdjustment *iface)
++{
++    ACImpl *This = impl_from_IAudioClockAdjustment(iface);
++    return IAudioClient_AddRef(&This->IAudioClient_iface);
++}
++
++static ULONG WINAPI AudioClockAdjustment_Release(IAudioClockAdjustment *iface)
++{
++    ACImpl *This = impl_from_IAudioClockAdjustment(iface);
++    return IAudioClient_Release(&This->IAudioClient_iface);
++}
++
++static HRESULT WINAPI AudioClockAdjustment_SetSampleRate(IAudioClockAdjustment *iface,
++        float new_rate)
++{
++    ACImpl *This = impl_from_IAudioClockAdjustment(iface);
++
++    TRACE("(%p)->(%f)\n", This, new_rate);
++
++    return E_NOTIMPL;
++}
++
++static const IAudioClockAdjustmentVtbl AudioClockAdjustment_Vtbl =
++{
++    AudioClockAdjustment_QueryInterface,
++    AudioClockAdjustment_AddRef,
++    AudioClockAdjustment_Release,
++    AudioClockAdjustment_SetSampleRate
++};
++
+ static HRESULT WINAPI AudioStreamVolume_QueryInterface(
+         IAudioStreamVolume *iface, REFIID riid, void **ppv)
+ {
+From 21888ad1af89c449b78d3fc5aaa71e9608d50e42 Mon Sep 17 00:00:00 2001
+From: Andrew Eikum <aeikum@codeweavers.com>
+Date: Tue, 7 Apr 2020 14:01:02 -0500
+Subject: [PATCH] winepulse: Implement IAudioClockAdjustment::SetSampleRate
+
+---
+ dlls/winepulse.drv/mmdevdrv.c | 73 +++++++++++++++++++++++++++++++++--
+ 1 file changed, 70 insertions(+), 3 deletions(-)
+
+diff --git a/dlls/winepulse.drv/mmdevdrv.c b/dlls/winepulse.drv/mmdevdrv.c
+index c5f12301c2e..eeb153f78b1 100644
+--- a/dlls/winepulse.drv/mmdevdrv.c
++++ b/dlls/winepulse.drv/mmdevdrv.c
+@@ -493,7 +493,7 @@ static void pulse_probe_settings(int render, WAVEFORMATEXTENSIBLE *fmt) {
+         ret = -1;
+     else if (render)
+         ret = pa_stream_connect_playback(stream, NULL, &attr,
+-        PA_STREAM_START_CORKED|PA_STREAM_FIX_RATE|PA_STREAM_FIX_CHANNELS|PA_STREAM_EARLY_REQUESTS, NULL, NULL);
++        PA_STREAM_START_CORKED|PA_STREAM_FIX_RATE|PA_STREAM_FIX_CHANNELS|PA_STREAM_EARLY_REQUESTS|PA_STREAM_VARIABLE_RATE, NULL, NULL);
+     else
+         ret = pa_stream_connect_record(stream, NULL, &attr, PA_STREAM_START_CORKED|PA_STREAM_FIX_RATE|PA_STREAM_FIX_CHANNELS|PA_STREAM_EARLY_REQUESTS);
+     if (ret >= 0) {
+@@ -1163,7 +1163,7 @@ static HRESULT pulse_stream_connect(ACImpl *This, UINT32 period_bytes) {
+     dump_attr(&attr);
+     if (This->dataflow == eRender)
+         ret = pa_stream_connect_playback(This->stream, NULL, &attr,
+-        PA_STREAM_START_CORKED|PA_STREAM_START_UNMUTED|PA_STREAM_ADJUST_LATENCY|moving, NULL, NULL);
++        PA_STREAM_START_CORKED|PA_STREAM_START_UNMUTED|PA_STREAM_ADJUST_LATENCY|PA_STREAM_VARIABLE_RATE|moving, NULL, NULL);
+     else
+         ret = pa_stream_connect_record(This->stream, NULL, &attr,
+         PA_STREAM_START_CORKED|PA_STREAM_START_UNMUTED|PA_STREAM_ADJUST_LATENCY|moving);
+@@ -2757,14 +2757,81 @@ static ULONG WINAPI AudioClockAdjustment_Release(IAudioClockAdjustment *iface)
+     return IAudioClient_Release(&This->IAudioClient_iface);
+ }
+ 
++static BOOL pulse_update_sample_rate(ACImpl *This, uint32_t new_rate)
++{
++    pa_operation *o;
++    int success;
++
++    o = pa_stream_update_sample_rate(This->stream, new_rate, pulse_op_cb, &success);
++    if (o)
++    {
++        while (pa_operation_get_state(o) == PA_OPERATION_RUNNING)
++            pthread_cond_wait(&pulse_cond, &pulse_lock);
++        pa_operation_unref(o);
++    } else
++        success = 0;
++
++    return success != 0;
++}
++
+ static HRESULT WINAPI AudioClockAdjustment_SetSampleRate(IAudioClockAdjustment *iface,
+         float new_rate)
+ {
+     ACImpl *This = impl_from_IAudioClockAdjustment(iface);
++    int success;
++    uint32_t old_rate;
++    pa_operation *o;
++    HRESULT hr;
++    pa_buffer_attr attr;
+ 
+     TRACE("(%p)->(%f)\n", This, new_rate);
  
 -    return E_NOTIMPL;
-+    if (feature == DXGI_FEATURE_PRESENT_ALLOW_TEARING)
-+    {
-+        if (data_size == sizeof(BOOL))
-+        {
-+            *(BOOL *)feature_data = TRUE;
-+            return S_OK;
-+        }
-+        else
-+            return DXGI_ERROR_INVALID_CALL;
++    pthread_mutex_lock(&pulse_lock);
++    hr = pulse_stream_valid(This);
++    if (FAILED(hr)) {
++        pthread_mutex_unlock(&pulse_lock);
++        return hr;
 +    }
-+    else
-+        return DXGI_ERROR_UNSUPPORTED;
- }
- 
- static const struct IWineDXGIFactoryVtbl dxgi_factory_vtbl =
-From f53d131b499a303ae3f68d20265117b84b175802 Mon Sep 17 00:00:00 2001
-From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
-Date: Tue, 10 Mar 2020 20:47:33 +0100
-Subject: [PATCH] fixup! user32: HACK: Don't resize new windows to fit the
- display
-
-This code changes the window's size to fit the display. However,
-some games (Bayonetta, Dragon's Dogma) will then have the incorrect
-render size. So just let windows be too big to fit the display.
----
- dlls/user32/win.c    | 9 ++-------
- dlls/user32/winpos.c | 2 --
- 2 files changed, 2 insertions(+), 9 deletions(-)
-
-diff --git a/dlls/user32/win.c b/dlls/user32/win.c
-index 803259b351f..8a04f611ce5 100644
---- a/dlls/user32/win.c
-+++ b/dlls/user32/win.c
-@@ -1607,17 +1607,12 @@ HWND WIN_CreateWindowEx( CREATESTRUCTW *cs, LPCWSTR className, HINSTANCE module,
- 
-     cx = cs->cx;
-     cy = cs->cy;
--#if 0
--    /* HACK: This code changes the window's size to fit the display. However,
--     * some games (Bayonetta, Dragon's Dogma) will then have the incorrect
--     * render size. So just let windows be too big to fit the display. */
-     if ((cs->style & WS_THICKFRAME) || !(cs->style & (WS_POPUP | WS_CHILD)))
-     {
-         MINMAXINFO info = WINPOS_GetMinMaxInfo( hwnd );
--        cx = max( min( cx, info.ptMaxTrackSize.x ), info.ptMinTrackSize.x );
--        cy = max( min( cy, info.ptMaxTrackSize.y ), info.ptMinTrackSize.y );
-+        cx = max( cx, info.ptMinTrackSize.x );
-+        cy = max( cy, info.ptMinTrackSize.y );
-     }
--#endif
- 
-     if (cx < 0) cx = 0;
-     if (cy < 0) cy = 0;
-diff --git a/dlls/user32/winpos.c b/dlls/user32/winpos.c
-index f759bd10f94..7974060acf0 100644
---- a/dlls/user32/winpos.c
-+++ b/dlls/user32/winpos.c
-@@ -1589,8 +1589,6 @@ LONG WINPOS_HandleWindowPosChanging( HWND hwnd, WINDOWPOS *winpos )
-     if ((style & WS_THICKFRAME) || ((style & (WS_POPUP | WS_CHILD)) == 0))
-     {
- 	MINMAXINFO info = WINPOS_GetMinMaxInfo( hwnd );
--        winpos->cx = min( winpos->cx, info.ptMaxTrackSize.x );
--        winpos->cy = min( winpos->cy, info.ptMaxTrackSize.y );
- 	if (!(style & WS_MINIMIZE))
- 	{
-             winpos->cx = max( winpos->cx, info.ptMinTrackSize.x );
-
-From 6c6117644e303b376f9a3717e858e76d75532ae5 Mon Sep 17 00:00:00 2001
-From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
-Date: Thu, 12 Mar 2020 15:53:07 +0100
-Subject: [PATCH] HACK: user32: Export window manager info from user driver.
-
----
- dlls/user32/win.c         | 10 ++++++++++
- dlls/user32/winpos.c      | 10 ++++++++++
- dlls/winex11.drv/window.c | 24 ++++++++++++------------
- include/wine/gdi_driver.h | 18 ++++++++++++++++++
- 4 files changed, 50 insertions(+), 12 deletions(-)
-
-diff --git a/dlls/user32/win.c b/dlls/user32/win.c
-index 8a04f611ce5..aca0a347844 100644
---- a/dlls/user32/win.c
-+++ b/dlls/user32/win.c
-@@ -1610,6 +1610,16 @@ HWND WIN_CreateWindowEx( CREATESTRUCTW *cs, LPCWSTR className, HINSTANCE module,
-     if ((cs->style & WS_THICKFRAME) || !(cs->style & (WS_POPUP | WS_CHILD)))
-     {
-         MINMAXINFO info = WINPOS_GetMinMaxInfo( hwnd );
 +
-+        /* HACK: This code changes the window's size to fit the display. However,
-+         * some games (Bayonetta, Dragon's Dogma) will then have the incorrect
-+         * render size. So just let windows be too big to fit the display. */
-+        if (__wine_get_window_manager() != WINE_WM_X11_STEAMCOMPMGR)
-+        {
-+            cx = min( cx, info.ptMaxTrackSize.x );
-+            cy = min( cy, info.ptMaxTrackSize.y );
++    if(!pulse_update_sample_rate(This, new_rate)){
++        WARN("Something went wrong during update_sample_rate\n");
++        pthread_mutex_unlock(&pulse_lock);
++        return E_FAIL;
++    }
++
++    old_rate = This->ss.rate;
++    This->ss.rate = new_rate;
++    This->period_bytes = pa_frame_size(&This->ss) * MulDiv(This->mmdev_period_usec, This->ss.rate, 1000000);
++
++    attr.minreq = attr.fragsize = This->period_bytes;
++    attr.tlength = This->period_bytes * 3;
++    attr.maxlength = This->bufsize_frames * pa_frame_size(&This->ss);
++    attr.prebuf = pa_frame_size(&This->ss);
++
++    o = pa_stream_set_buffer_attr(This->stream, &attr, pulse_op_cb, &success);
++    if (o)
++    {
++        while (pa_operation_get_state(o) == PA_OPERATION_RUNNING)
++            pthread_cond_wait(&pulse_cond, &pulse_lock);
++        pa_operation_unref(o);
++    } else
++        success = 0;
++
++    if(!success){
++        WARN("Something went wrong during set_buffer_attr\n");
++        if(pulse_update_sample_rate(This, old_rate)){
++            This->ss.rate = old_rate;
++            This->period_bytes = pa_frame_size(&This->ss) * MulDiv(This->mmdev_period_usec, This->ss.rate, 1000000);
 +        }
++        pthread_mutex_unlock(&pulse_lock);
++        return E_FAIL;
++    }
 +
-         cx = max( cx, info.ptMinTrackSize.x );
-         cy = max( cy, info.ptMinTrackSize.y );
-     }
-diff --git a/dlls/user32/winpos.c b/dlls/user32/winpos.c
-index 7974060acf0..f917146d91c 100644
---- a/dlls/user32/winpos.c
-+++ b/dlls/user32/winpos.c
-@@ -1589,6 +1589,16 @@ LONG WINPOS_HandleWindowPosChanging( HWND hwnd, WINDOWPOS *winpos )
-     if ((style & WS_THICKFRAME) || ((style & (WS_POPUP | WS_CHILD)) == 0))
-     {
- 	MINMAXINFO info = WINPOS_GetMinMaxInfo( hwnd );
++    TRACE("period_bytes now: %u\n", This->period_bytes);
 +
-+        /* HACK: This code changes the window's size to fit the display. However,
-+         * some games (Bayonetta, Dragon's Dogma) will then have the incorrect
-+         * render size. So just let windows be too big to fit the display. */
-+        if (__wine_get_window_manager() != WINE_WM_X11_STEAMCOMPMGR)
-+        {
-+            winpos->cx = min( winpos->cx, info.ptMaxTrackSize.x );
-+            winpos->cy = min( winpos->cy, info.ptMaxTrackSize.y );
-+        }
++    pthread_mutex_unlock(&pulse_lock);
 +
- 	if (!(style & WS_MINIMIZE))
- 	{
-             winpos->cx = max( winpos->cx, info.ptMinTrackSize.x );
-diff --git a/dlls/winex11.drv/window.c b/dlls/winex11.drv/window.c
-index b2700164a3d..47cbced56e2 100644
---- a/dlls/winex11.drv/window.c
-+++ b/dlls/winex11.drv/window.c
-@@ -102,10 +102,6 @@ static CRITICAL_SECTION_DEBUG critsect_debug =
- };
- static CRITICAL_SECTION win_data_section = { &critsect_debug, -1, 0, 0, 0, 0 };
- 
--static const int WM_UNKNOWN = 0;
--static const int WM_MUTTER = 1;
--static const int WM_STEAMCOMPMGR = 2;
--
- /* enable workarounds for mutter bugs */
- static int detect_wm(Display *dpy)
- {
-@@ -142,23 +138,25 @@ static int detect_wm(Display *dpy)
- 
-                     if((strcmp(wm_name, "GNOME Shell") == 0) ||
-                             (strcmp(wm_name, "Mutter") == 0))
--                        cached = WM_MUTTER;
-+                        cached = WINE_WM_X11_MUTTER;
-                     else if(strcmp(wm_name, "steamcompmgr") == 0)
--                        cached = WM_STEAMCOMPMGR;
-+                        cached = WINE_WM_X11_STEAMCOMPMGR;
-                     else
--                        cached = WM_UNKNOWN;
-+                        cached = WINE_WM_UNKNOWN;
- 
-                     XFree(wm_name);
-                 }else{
-                     TRACE("WM did not set _NET_WM_NAME or WM_NAME\n");
--                    cached = WM_UNKNOWN;
-+                    cached = WINE_WM_UNKNOWN;
-                 }
-             }else
--                cached = WM_UNKNOWN;
-+                cached = WINE_WM_UNKNOWN;
- 
-             XFree(wm_check);
-         }else
--            cached = WM_UNKNOWN;
-+            cached = WINE_WM_UNKNOWN;
-+
-+        __wine_set_window_manager(cached);
-     }
- 
-     return cached;
-@@ -166,12 +164,12 @@ static int detect_wm(Display *dpy)
- 
- BOOL wm_is_mutter(Display *display)
- {
--    return detect_wm(display) == WM_MUTTER;
-+    return detect_wm(display) == WINE_WM_X11_MUTTER;
++    return S_OK;
  }
  
- BOOL wm_is_steamcompmgr(Display *display)
- {
--    return detect_wm(display) == WM_STEAMCOMPMGR;
-+    return detect_wm(display) == WINE_WM_X11_STEAMCOMPMGR;
- }
- 
- /***********************************************************************
-@@ -1959,6 +1957,8 @@ BOOL CDECL X11DRV_CreateDesktopWindow( HWND hwnd )
- {
-     unsigned int width, height;
- 
-+    detect_wm( gdi_display );
-+
-     /* retrieve the real size of the desktop */
-     SERVER_START_REQ( get_window_rectangles )
-     {
-diff --git a/include/wine/gdi_driver.h b/include/wine/gdi_driver.h
-index 971618e19ac..aa8052f1844 100644
---- a/include/wine/gdi_driver.h
-+++ b/include/wine/gdi_driver.h
-@@ -22,6 +22,7 @@
- #define __WINE_WINE_GDI_DRIVER_H
- 
- #include "winternl.h"
-+#include "winuser.h"
- #include "ddk/d3dkmthk.h"
- #include "wine/list.h"
- 
-@@ -289,4 +290,21 @@ extern void CDECL __wine_set_display_driver( HMODULE module );
- extern struct opengl_funcs * CDECL __wine_get_wgl_driver( HDC hdc, UINT version );
- extern const struct vulkan_funcs * CDECL __wine_get_vulkan_driver( HDC hdc, UINT version );
- 
-+/* HACK: We use some WM specific hacks in user32 and we need the user
-+ * driver to export that information. */
-+
-+#define WINE_WM_UNKNOWN          0
-+#define WINE_WM_X11_MUTTER       1
-+#define WINE_WM_X11_STEAMCOMPMGR 2
-+
-+static inline LONG_PTR __wine_get_window_manager(void)
-+{
-+    return (LONG_PTR)GetPropA(GetDesktopWindow(), "__wine_window_manager");
-+}
-+
-+static inline void __wine_set_window_manager(LONG_PTR window_manager)
-+{
-+    SetPropA(GetDesktopWindow(), "__wine_window_manager", (HANDLE)window_manager);
-+}
-+
- #endif /* __WINE_WINE_GDI_DRIVER_H */
-
-From 2f5e0756621332a39d7119553a69cc26f77dfc9b Mon Sep 17 00:00:00 2001
-From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
-Date: Mon, 16 Mar 2020 19:52:52 +0100
-Subject: [PATCH] HACK: user: Pretend that windows are all undecorated with
- gamescope.
-
----
- dlls/user32/nonclient.c | 7 +++++++
- 1 file changed, 7 insertions(+)
-
-diff --git a/dlls/user32/nonclient.c b/dlls/user32/nonclient.c
-index 0aee13787af..c9156e73578 100644
---- a/dlls/user32/nonclient.c
-+++ b/dlls/user32/nonclient.c
-@@ -30,6 +30,7 @@
- #include "user_private.h"
- #include "controls.h"
- #include "wine/debug.h"
-+#include "wine/gdi_driver.h"
- 
- WINE_DEFAULT_DEBUG_CHANNEL(nonclient);
- 
-@@ -62,6 +63,9 @@ static void adjust_window_rect( RECT *rect, DWORD style, BOOL menu, DWORD exStyl
- {
-     int adjust = 0;
- 
-+    if (__wine_get_window_manager() == WINE_WM_X11_STEAMCOMPMGR)
-+        return;
-+
-     if ((exStyle & (WS_EX_STATICEDGE|WS_EX_DLGMODALFRAME)) == WS_EX_STATICEDGE)
-         adjust = 1; /* for the outer frame always present */
-     else if ((exStyle & WS_EX_DLGMODALFRAME) || (style & (WS_THICKFRAME|WS_DLGFRAME)))
-@@ -359,6 +363,9 @@ LRESULT NC_HandleNCCalcSize( HWND hwnd, WPARAM wparam, RECT *winRect )
-     if (winRect == NULL)
-         return 0;
- 
-+    if (__wine_get_window_manager() == WINE_WM_X11_STEAMCOMPMGR)
-+        return 0;
-+
-     if (cls_style & CS_VREDRAW) result |= WVR_VREDRAW;
-     if (cls_style & CS_HREDRAW) result |= WVR_HREDRAW;
- 
+ static const IAudioClockAdjustmentVtbl AudioClockAdjustment_Vtbl =
