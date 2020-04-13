@@ -26,13 +26,6 @@
 #1411 win10
 #1417 dxvk_config
 
-    # hack to make glib compile using python3 instead of python2.7 without changing make script.
-    cd glib
-    git reset --hard HEAD
-    git clean -xdf
-    patch -Np1 < ../patches/glib/glib_python3_hack.patch
-    cd ..
-
     cd gst-plugins-ugly
     git reset --hard HEAD
     git clean -xdf
@@ -49,6 +42,13 @@
     git checkout lsteamclient
     cd lsteamclient
     patch -Np1 < ../patches/proton-hotfixes/steamclient-disable_SteamController007_if_no_controller.patch
+    patch -Np1 < ../patches/proton-hotfixes/steamclient-use_standard_dlopen_instead_of_the_libwine_wrappers.patch
+    cd ..
+
+    # vrclient
+    git checkout vrclient_x64
+    cd vrclient_x64
+    patch -Np1 < ../patches/proton-hotfixes/vrclient-use_standard_dlopen_instead_of_the_libwine_wrappers.patch
     cd ..
 
     # VKD3D patches
@@ -70,9 +70,11 @@
     git reset --hard HEAD
     git clean -xdf
 
-# warframe launcher fix 1
-    git revert --no-commit bae4776c571cf975be1689594f4caf93ad23e0ca
-    git revert --no-commit 5e218fe758fe6beed5c7ad73405eccf33c307e6d
+    # winepath was broken with this commit
+    git revert --no-commit e22bcac706be3afac67f4faac3aca79fd67c3d6f
+
+    # causes mp4 playback to break
+    git revert --no-commit 387bf24376ac7da9c72c22e1724a03f546a2d0c6
 
     #WINE STAGING
 
@@ -83,7 +85,7 @@
 #    -W dinput-reconnect-joystick \
 #    -W dinput-remap-joystick \
 
-# warframe launcher fix 2
+# warframe launcher fix 0.0mb hang fix
 #    -W ntdll-avoid-fstatat
 
     echo "applying staging patches"
@@ -96,21 +98,20 @@
     -W winex11-key_translation \
     -W ntdll-avoid-fstatat
 
+
     #WINE FAUDIO
     echo "applying faudio patches"
     patch -Np1 < ../patches/faudio/faudio-ffmpeg.patch
+
 
     ### GAME PATCH SECTION ###
     echo "mech warrior online"
     patch -Np1 < ../patches/game-patches/mwo.patch
 
-    echo "final fantasy XIV"
-    patch -Np1 < ../patches/game-patches/ffxiv-launcher.patch
+    echo "final fantasy XV"
+    patch -Np1 < ../patches/game-patches/ffxv-steam-fix.patch
 
-    #disabled, not working
-    #echo "final fantasy XV"
-    #patch -Np1 < ../patches/game-patches/ffxv-steam-fix.patch
-
+#   TODO: Check on this - don't own game. Need to validate
     echo "assetto corsa"
     patch -Np1 < ../patches/game-patches/assettocorsa-hud.patch
 
@@ -120,21 +121,20 @@
     echo "origin downloads fix" 
     patch -Np1 < ../patches/game-patches/origin-downloads_fix.patch
 
+#   TODO: Check on this - don't own game. Need to validate
     echo "blackops 2 fix"
     patch -Np1 < ../patches/game-patches/blackops_2_fix.patch
 
+#   TODO: Check on this - don't own game. Need to validate
     echo "NFSW launcher fix"
     patch -Np1 < ../patches/game-patches/NFSWLauncherfix.patch
-
-    #Wine-Bug: https://bugs.winehq.org/show_bug.cgi?id=48817
-    echo "applying sunset overdrive patch"
-    patch -Np1 < ../patches/game-patches/sunset-overdrive.patch
 
     echo "fix steep and AC Odyssey fullscreen"
     patch -Np1 < ../patches/wine-hotfixes/0001-Add-some-semi-stubs-in-user32.patch
 
-    echo "gta4 input patch"
-    patch -Np1 < ../patches/game-patches/gta4_gamepad_workaround.patch
+#   TODO: Check on this - don't own game. Need to validate. Unknown if necessary outside of proton specific gamepad patches. Seems to cause input issues in FFXV
+#    echo "gta4 input patch"
+#    patch -Np1 < ../patches/game-patches/gta4_gamepad_workaround.patch
 
 
     ### END GAME PATCH SECTION ###
@@ -144,9 +144,8 @@
     patch -Np1 < ../patches/proton/proton-amd_ags.patch
 
     #PROTON
-    #disabled, not working
-    #echo "mk11 patch"
-    #patch -Np1 < ../patches/game-patches/mk11.patch
+    echo "mk11 patch"
+    patch -Np1 < ../patches/game-patches/mk11.patch
     
     echo "bypass compositor"
     patch -Np1 < ../patches/proton/proton-FS_bypass_compositor.patch
@@ -157,11 +156,8 @@
     #WINE FSYNC
     echo "applying fsync patches"
     patch -Np1 < ../patches/proton/proton-fsync_staging.patch
-    patch -Np1 < ../patches/proton/proton-fsync-spincounts.patch
+#    patch -Np1 < ../patches/proton/proton-fsync-spincounts.patch
     
-    echo "revert necessary for fshack"
-    patch -Np1 < ../patches/proton-hotfixes/wine-winex11.drv_Calculate_mask_in_X11DRV_resize_desktop.patch
-
     echo "fullscreen hack"
     patch -Np1 < ../patches/proton/valve_proton_fullscreen_hack-staging.patch
     
@@ -176,9 +172,11 @@
     echo "staging winex11-MWM_Decorations"
     patch -Np1 < ../patches/proton-hotfixes/proton-staging_winex11-MWM_Decorations.patch
     
+#   TODO: Fix this
     # staging winex11-_NET_ACTIVE_WINDOW - disabled, currently not working
     #patch -Np1 < ../patches/proton-hotfixes/proton-staging_winex11-_NET_ACTIVE_WINDOW.patch
 
+#   TODO: Fix this
     # staging winex11-WM_WINDOWPOSCHANGING - disabled, currently not working
     #patch -Np1 < ../patches/proton-hotfixes/proton-staging_winex11-WM_WINDOWPOSCHANGING.patch
 
@@ -244,6 +242,30 @@
 
     echo "proton-specific manual mfplat dll register patch"
     patch -Np1 < ../patches/wine-hotfixes/proton_mediafoundation_dllreg.patch
+
+
+# the patch below reverts the following commits:
+
+# f64e34b01456de26e5a8f60e8494cbe839964071
+# de47a5969be3d78d2043abb75b7659241b8e434a
+# d01b177bee7da2fa4a924e4b3bb4481cb31748df
+# b87256cd1db21a59484248a193b6ad12ca2853ca
+
+# because they cause wineboot to error on creating a default prefix after compiling:
+
+# obj-wine64$ WINEPREFIX=$PWD/test ./wine64 wineboot
+# wine: created the configuration directory '/home/vagrant/build-Proton-5.5-GE-2/obj-wine64/test'
+# wine: could not load kernel32.dll, status c000007b
+
+# the reason is because of outdated glibc used in steam runtime:
+
+# <rbernon> GloriousEggroll zf: the issue comes from steamrt eglibc that incorrectly adds a leaf attribute to dlopen, which makes gcc assume the 
+# call have no side effects on the current translation unit and, and makes it optimize some global assignments around it that are normally used by wine to track the outcome of the load
+# <rbernon> other / more recent glibc do not have leaf attributes on dlopen, so it's probably an eglibc bug, but it's still a bit hard to workaround
+
+    echo "ntdll revert for proton wineboot fix"
+    patch -Np1 < ../patches/wine-hotfixes/0001-ntdll-re-enable_wine_dl_functions_to_fix_wineboot_in.patch
+
 
     #WINE CUSTOM PATCHES
     #add your own custom patch lines below
