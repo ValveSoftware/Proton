@@ -2511,10 +2511,10 @@ index 147e680d17a..f7031524d13 100644
      SDL_Init(SDL_INIT_JOYSTICK|SDL_INIT_HAPTIC);
      SDL_JoystickEventState(SDL_ENABLE);
  
-+    sdl_handle = wine_dlopen(SONAME_LIBSDL2, RTLD_NOW, NULL, 0);
++    sdl_handle = dlopen(SONAME_LIBSDL2, RTLD_NOW);
 +    if (sdl_handle) {
-+        pSDL_JoystickGetProduct = wine_dlsym(sdl_handle, "SDL_JoystickGetProduct", NULL, 0);
-+        pSDL_JoystickGetVendor = wine_dlsym(sdl_handle, "SDL_JoystickGetVendor", NULL, 0);
++        pSDL_JoystickGetProduct = dlsym(sdl_handle, "SDL_JoystickGetProduct");
++        pSDL_JoystickGetVendor = dlsym(sdl_handle, "SDL_JoystickGetVendor");
 +    }
 +
 +    if(!pSDL_JoystickGetVendor){
@@ -2554,9 +2554,9 @@ index 55891138c87..8b6f0269965 100644
 --- a/dlls/winebus.sys/bus_sdl.c
 +++ b/dlls/winebus.sys/bus_sdl.c
 @@ -973,6 +973,9 @@ NTSTATUS WINAPI sdl_driver_init(DRIVER_OBJECT *driver, UNICODE_STRING *registry_
-         pSDL_JoystickGetProduct = wine_dlsym(sdl_handle, "SDL_JoystickGetProduct", NULL, 0);
-         pSDL_JoystickGetProductVersion = wine_dlsym(sdl_handle, "SDL_JoystickGetProductVersion", NULL, 0);
-         pSDL_JoystickGetVendor = wine_dlsym(sdl_handle, "SDL_JoystickGetVendor", NULL, 0);
+         pSDL_JoystickGetProduct = dlsym(sdl_handle, "SDL_JoystickGetProduct");
+         pSDL_JoystickGetProductVersion = dlsym(sdl_handle, "SDL_JoystickGetProductVersion");
+         pSDL_JoystickGetVendor = dlsym(sdl_handle, "SDL_JoystickGetVendor");
 +        if(!pSDL_JoystickGetVendor){
 +            ERR("SDL installation is old! Please upgrade to >=2.0.6 to get accurate joystick information.\n");
 +        }
