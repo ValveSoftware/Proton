@@ -156,7 +156,7 @@
     #WINE FSYNC
     echo "applying fsync patches"
     patch -Np1 < ../patches/proton/proton-fsync_staging.patch
-#    patch -Np1 < ../patches/proton/proton-fsync-spincounts.patch
+    patch -Np1 < ../patches/proton/proton-fsync-spincounts.patch
     
     echo "fullscreen hack"
     patch -Np1 < ../patches/proton/valve_proton_fullscreen_hack-staging.patch
