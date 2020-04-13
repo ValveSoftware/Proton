@@ -2122,7 +2122,7 @@ index fecf9ab502..e53154d1ef 100644
  {
      TRACE("%p, 0x%s, %p\n", device, wine_dbgstr_longlong(validationCache), pAllocator);
 @@ -4348,12 +4276,6 @@ static VkResult WINAPI wine_vkGetPhysicalDeviceSupportedFramebufferMixedSamplesC
-     return physicalDevice->instance->funcs.p_vkGetPhysicalDeviceSupportedFramebufferMixedSamplesCombinationsNV(physicalDevice->phys_dev, pCombinationCount, pCombinations);
+ #endif
  }
  
 -VkResult WINAPI wine_vkGetPhysicalDeviceSurfaceCapabilitiesKHR(VkPhysicalDevice physicalDevice, VkSurfaceKHR surface, VkSurfaceCapabilitiesKHR *pSurfaceCapabilities)
@@ -2131,9 +2131,9 @@ index fecf9ab502..e53154d1ef 100644
 -    return physicalDevice->instance->funcs.p_vkGetPhysicalDeviceSurfaceCapabilitiesKHR(physicalDevice->phys_dev, surface, pSurfaceCapabilities);
 -}
 -
- VkResult WINAPI wine_vkGetPhysicalDeviceSurfaceFormatsKHR(VkPhysicalDevice physicalDevice, VkSurfaceKHR surface, uint32_t *pSurfaceFormatCount, VkSurfaceFormatKHR *pSurfaceFormats)
+ static VkResult WINAPI wine_vkGetPhysicalDeviceSurfaceFormats2KHR(VkPhysicalDevice physicalDevice, const VkPhysicalDeviceSurfaceInfo2KHR *pSurfaceInfo, uint32_t *pSurfaceFormatCount, VkSurfaceFormat2KHR *pSurfaceFormats)
  {
-     TRACE("%p, 0x%s, %p, %p\n", physicalDevice, wine_dbgstr_longlong(surface), pSurfaceFormatCount, pSurfaceFormats);
+ #if defined(USE_STRUCT_CONVERSION)
 @@ -4477,12 +4399,6 @@ static VkResult WINAPI wine_vkGetShaderInfoAMD(VkDevice device, VkPipeline pipel
      return device->funcs.p_vkGetShaderInfoAMD(device->device, pipeline, shaderStage, infoType, pInfoSize, pInfo);
  }
@@ -2239,10 +2239,10 @@ index c51954f1bf..a37530fdbf 100644
      EmptyClipboard();
      is_clipboard_owner = TRUE;
 diff --git a/dlls/winex11.drv/desktop.c b/dlls/winex11.drv/desktop.c
-index d70b38b2b3..79ba54b584 100644
+index d2a257daa2..d782148cd5 100644
 --- a/dlls/winex11.drv/desktop.c
 +++ b/dlls/winex11.drv/desktop.c
-@@ -336,18 +336,52 @@ static BOOL CALLBACK update_windows_on_desktop_resize( HWND hwnd, LPARAM lparam
+@@ -328,16 +328,50 @@ static BOOL CALLBACK update_windows_on_desktop_resize( HWND hwnd, LPARAM lparam
  
      if (!(data = get_win_data( hwnd ))) return TRUE;
  
@@ -2264,10 +2264,8 @@ index d70b38b2b3..79ba54b584 100644
 +            sync_gl_drawable(hwnd, FALSE);
 +            update_net_wm_states( data );
 +        }
-+    }else {
++    } else {
  
--    if (resize_data->old_virtual_rect.left != resize_data->new_virtual_rect.left) mask |= CWX;
--    if (resize_data->old_virtual_rect.top != resize_data->new_virtual_rect.top) mask |= CWY;
 -    if (mask && data->whole_window)
 -    {
 -        POINT pos = virtual_screen_to_root( data->whole_rect.left, data->whole_rect.top );
@@ -2278,8 +2276,6 @@ index d70b38b2b3..79ba54b584 100644
 +        /* update the full screen state */
 +        update_net_wm_states( data );
 +
-+        if (resize_data->old_virtual_rect.left != resize_data->new_virtual_rect.left || data->fs_hack) mask |= CWX;
-+        if (resize_data->old_virtual_rect.top != resize_data->new_virtual_rect.top || data->fs_hack) mask |= CWY;
 +        if (mask && data->whole_window)
 +        {
 +            POINT pos = virtual_screen_to_root( data->whole_rect.left, data->whole_rect.top );
@@ -2880,7 +2876,7 @@ index 635c7d9f3b..5b5ebe2d6e 100644
 +    REDIRECT( glReadBuffer );
  #undef REDIRECT
  
-     pglXGetProcAddressARB = wine_dlsym(opengl_handle, "glXGetProcAddressARB", NULL, 0);
+     pglXGetProcAddressARB = dlsym(opengl_handle, "glXGetProcAddressARB", NULL, 0);
 @@ -583,6 +624,22 @@ static BOOL WINAPI init_opengl( INIT_ONCE *once, void *param, void **context )
          goto failed;
      }
@@ -4678,6 +4674,14 @@ index 1f6a37a7a5..e526cb300f 100644
  #define MAX_DASHLEN 16
  
  #define WINE_XDND_VERSION 5
+@@ -311,6 +313,7 @@ struct x11drv_escape_flush_gl_drawable
+     enum x11drv_escape_codes code;         /* escape code (X11DRV_FLUSH_GL_DRAWABLE) */
+     Drawable                 gl_drawable;  /* GL drawable */
+     BOOL                     flush;        /* flush X11 before copying */
++    BOOL                     fs_hack;
+ };
+ 
+ /**************************************************************************
 @@ -426,6 +430,7 @@ enum x11drv_atoms
      XATOM_TEXT,
      XATOM_TIMESTAMP,
@@ -6366,3 +6370,288 @@ index fff1322d292..cb73950e894 100644
          {
              XRRModeInfo *mode = &resources->modes[j];
  
+From 501b068024375386484c6a8616a406b21ab15406 Mon Sep 17 00:00:00 2001
+From: Andrew Eikum <aeikum@codeweavers.com>
+Date: Thu, 30 Jan 2020 14:44:00 -0600
+Subject: [PATCH] user32: HACK: Don't resize new windows to fit the display
+
+---
+ dlls/user32/win.c | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/dlls/user32/win.c b/dlls/user32/win.c
+index fa593a4a29a..803259b351f 100644
+--- a/dlls/user32/win.c
++++ b/dlls/user32/win.c
+@@ -1607,12 +1607,17 @@ HWND WIN_CreateWindowEx( CREATESTRUCTW *cs, LPCWSTR className, HINSTANCE module,
+ 
+     cx = cs->cx;
+     cy = cs->cy;
++#if 0
++    /* HACK: This code changes the window's size to fit the display. However,
++     * some games (Bayonetta, Dragon's Dogma) will then have the incorrect
++     * render size. So just let windows be too big to fit the display. */
+     if ((cs->style & WS_THICKFRAME) || !(cs->style & (WS_POPUP | WS_CHILD)))
+     {
+         MINMAXINFO info = WINPOS_GetMinMaxInfo( hwnd );
+         cx = max( min( cx, info.ptMaxTrackSize.x ), info.ptMinTrackSize.x );
+         cy = max( min( cy, info.ptMaxTrackSize.y ), info.ptMinTrackSize.y );
+     }
++#endif
+ 
+     if (cx < 0) cx = 0;
+     if (cy < 0) cy = 0;
+From f53d131b499a303ae3f68d20265117b84b175802 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
+Date: Tue, 10 Mar 2020 20:47:33 +0100
+Subject: [PATCH] fixup! user32: HACK: Don't resize new windows to fit the
+ display
+
+This code changes the window's size to fit the display. However,
+some games (Bayonetta, Dragon's Dogma) will then have the incorrect
+render size. So just let windows be too big to fit the display.
+---
+ dlls/user32/win.c    | 9 ++-------
+ dlls/user32/winpos.c | 2 --
+ 2 files changed, 2 insertions(+), 9 deletions(-)
+
+diff --git a/dlls/user32/win.c b/dlls/user32/win.c
+index 803259b351f..8a04f611ce5 100644
+--- a/dlls/user32/win.c
++++ b/dlls/user32/win.c
+@@ -1607,17 +1607,12 @@ HWND WIN_CreateWindowEx( CREATESTRUCTW *cs, LPCWSTR className, HINSTANCE module,
+ 
+     cx = cs->cx;
+     cy = cs->cy;
+-#if 0
+-    /* HACK: This code changes the window's size to fit the display. However,
+-     * some games (Bayonetta, Dragon's Dogma) will then have the incorrect
+-     * render size. So just let windows be too big to fit the display. */
+     if ((cs->style & WS_THICKFRAME) || !(cs->style & (WS_POPUP | WS_CHILD)))
+     {
+         MINMAXINFO info = WINPOS_GetMinMaxInfo( hwnd );
+-        cx = max( min( cx, info.ptMaxTrackSize.x ), info.ptMinTrackSize.x );
+-        cy = max( min( cy, info.ptMaxTrackSize.y ), info.ptMinTrackSize.y );
++        cx = max( cx, info.ptMinTrackSize.x );
++        cy = max( cy, info.ptMinTrackSize.y );
+     }
+-#endif
+ 
+     if (cx < 0) cx = 0;
+     if (cy < 0) cy = 0;
+diff --git a/dlls/user32/winpos.c b/dlls/user32/winpos.c
+index f759bd10f94..7974060acf0 100644
+--- a/dlls/user32/winpos.c
++++ b/dlls/user32/winpos.c
+@@ -1589,8 +1589,6 @@ LONG WINPOS_HandleWindowPosChanging( HWND hwnd, WINDOWPOS *winpos )
+     if ((style & WS_THICKFRAME) || ((style & (WS_POPUP | WS_CHILD)) == 0))
+     {
+ 	MINMAXINFO info = WINPOS_GetMinMaxInfo( hwnd );
+-        winpos->cx = min( winpos->cx, info.ptMaxTrackSize.x );
+-        winpos->cy = min( winpos->cy, info.ptMaxTrackSize.y );
+ 	if (!(style & WS_MINIMIZE))
+ 	{
+             winpos->cx = max( winpos->cx, info.ptMinTrackSize.x );
+From 6c6117644e303b376f9a3717e858e76d75532ae5 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
+Date: Thu, 12 Mar 2020 15:53:07 +0100
+Subject: [PATCH] HACK: user32: Export window manager info from user driver.
+
+---
+ dlls/user32/win.c         | 10 ++++++++++
+ dlls/user32/winpos.c      | 10 ++++++++++
+ dlls/winex11.drv/window.c | 24 ++++++++++++------------
+ include/wine/gdi_driver.h | 18 ++++++++++++++++++
+ 4 files changed, 50 insertions(+), 12 deletions(-)
+
+diff --git a/dlls/user32/win.c b/dlls/user32/win.c
+index 8a04f611ce5..aca0a347844 100644
+--- a/dlls/user32/win.c
++++ b/dlls/user32/win.c
+@@ -1610,6 +1610,16 @@ HWND WIN_CreateWindowEx( CREATESTRUCTW *cs, LPCWSTR className, HINSTANCE module,
+     if ((cs->style & WS_THICKFRAME) || !(cs->style & (WS_POPUP | WS_CHILD)))
+     {
+         MINMAXINFO info = WINPOS_GetMinMaxInfo( hwnd );
++
++        /* HACK: This code changes the window's size to fit the display. However,
++         * some games (Bayonetta, Dragon's Dogma) will then have the incorrect
++         * render size. So just let windows be too big to fit the display. */
++        if (__wine_get_window_manager() != WINE_WM_X11_STEAMCOMPMGR)
++        {
++            cx = min( cx, info.ptMaxTrackSize.x );
++            cy = min( cy, info.ptMaxTrackSize.y );
++        }
++
+         cx = max( cx, info.ptMinTrackSize.x );
+         cy = max( cy, info.ptMinTrackSize.y );
+     }
+diff --git a/dlls/user32/winpos.c b/dlls/user32/winpos.c
+index 7974060acf0..f917146d91c 100644
+--- a/dlls/user32/winpos.c
++++ b/dlls/user32/winpos.c
+@@ -1589,6 +1589,16 @@ LONG WINPOS_HandleWindowPosChanging( HWND hwnd, WINDOWPOS *winpos )
+     if ((style & WS_THICKFRAME) || ((style & (WS_POPUP | WS_CHILD)) == 0))
+     {
+ 	MINMAXINFO info = WINPOS_GetMinMaxInfo( hwnd );
++
++        /* HACK: This code changes the window's size to fit the display. However,
++         * some games (Bayonetta, Dragon's Dogma) will then have the incorrect
++         * render size. So just let windows be too big to fit the display. */
++        if (__wine_get_window_manager() != WINE_WM_X11_STEAMCOMPMGR)
++        {
++            winpos->cx = min( winpos->cx, info.ptMaxTrackSize.x );
++            winpos->cy = min( winpos->cy, info.ptMaxTrackSize.y );
++        }
++
+ 	if (!(style & WS_MINIMIZE))
+ 	{
+             winpos->cx = max( winpos->cx, info.ptMinTrackSize.x );
+diff --git a/dlls/winex11.drv/window.c b/dlls/winex11.drv/window.c
+index b2700164a3d..47cbced56e2 100644
+--- a/dlls/winex11.drv/window.c
++++ b/dlls/winex11.drv/window.c
+@@ -102,10 +102,6 @@ static CRITICAL_SECTION_DEBUG critsect_debug =
+ };
+ static CRITICAL_SECTION win_data_section = { &critsect_debug, -1, 0, 0, 0, 0 };
+ 
+-static const int WM_UNKNOWN = 0;
+-static const int WM_MUTTER = 1;
+-static const int WM_STEAMCOMPMGR = 2;
+-
+ /* enable workarounds for mutter bugs */
+ static int detect_wm(Display *dpy)
+ {
+@@ -142,23 +138,25 @@ static int detect_wm(Display *dpy)
+ 
+                     if((strcmp(wm_name, "GNOME Shell") == 0) ||
+                             (strcmp(wm_name, "Mutter") == 0))
+-                        cached = WM_MUTTER;
++                        cached = WINE_WM_X11_MUTTER;
+                     else if(strcmp(wm_name, "steamcompmgr") == 0)
+-                        cached = WM_STEAMCOMPMGR;
++                        cached = WINE_WM_X11_STEAMCOMPMGR;
+                     else
+-                        cached = WM_UNKNOWN;
++                        cached = WINE_WM_UNKNOWN;
+ 
+                     XFree(wm_name);
+                 }else{
+                     TRACE("WM did not set _NET_WM_NAME or WM_NAME\n");
+-                    cached = WM_UNKNOWN;
++                    cached = WINE_WM_UNKNOWN;
+                 }
+             }else
+-                cached = WM_UNKNOWN;
++                cached = WINE_WM_UNKNOWN;
+ 
+             XFree(wm_check);
+         }else
+-            cached = WM_UNKNOWN;
++            cached = WINE_WM_UNKNOWN;
++
++        __wine_set_window_manager(cached);
+     }
+ 
+     return cached;
+@@ -166,12 +164,12 @@ static int detect_wm(Display *dpy)
+ 
+ BOOL wm_is_mutter(Display *display)
+ {
+-    return detect_wm(display) == WM_MUTTER;
++    return detect_wm(display) == WINE_WM_X11_MUTTER;
+ }
+ 
+ BOOL wm_is_steamcompmgr(Display *display)
+ {
+-    return detect_wm(display) == WM_STEAMCOMPMGR;
++    return detect_wm(display) == WINE_WM_X11_STEAMCOMPMGR;
+ }
+ 
+ /***********************************************************************
+@@ -1959,6 +1957,8 @@ BOOL CDECL X11DRV_CreateDesktopWindow( HWND hwnd )
+ {
+     unsigned int width, height;
+ 
++    detect_wm( gdi_display );
++
+     /* retrieve the real size of the desktop */
+     SERVER_START_REQ( get_window_rectangles )
+     {
+diff --git a/include/wine/gdi_driver.h b/include/wine/gdi_driver.h
+index 971618e19ac..aa8052f1844 100644
+--- a/include/wine/gdi_driver.h
++++ b/include/wine/gdi_driver.h
+@@ -22,6 +22,7 @@
+ #define __WINE_WINE_GDI_DRIVER_H
+ 
+ #include "winternl.h"
++#include "winuser.h"
+ #include "ddk/d3dkmthk.h"
+ #include "wine/list.h"
+ 
+@@ -289,4 +290,21 @@ extern void CDECL __wine_set_display_driver( HMODULE module );
+ extern struct opengl_funcs * CDECL __wine_get_wgl_driver( HDC hdc, UINT version );
+ extern const struct vulkan_funcs * CDECL __wine_get_vulkan_driver( HDC hdc, UINT version );
+ 
++/* HACK: We use some WM specific hacks in user32 and we need the user
++ * driver to export that information. */
++
++#define WINE_WM_UNKNOWN          0
++#define WINE_WM_X11_MUTTER       1
++#define WINE_WM_X11_STEAMCOMPMGR 2
++
++static inline LONG_PTR __wine_get_window_manager(void)
++{
++    return (LONG_PTR)GetPropA(GetDesktopWindow(), "__wine_window_manager");
++}
++
++static inline void __wine_set_window_manager(LONG_PTR window_manager)
++{
++    SetPropA(GetDesktopWindow(), "__wine_window_manager", (HANDLE)window_manager);
++}
++
+ #endif /* __WINE_WINE_GDI_DRIVER_H */
+
+From 2f5e0756621332a39d7119553a69cc26f77dfc9b Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
+Date: Mon, 16 Mar 2020 19:52:52 +0100
+Subject: [PATCH] HACK: user: Pretend that windows are all undecorated with
+ gamescope.
+
+---
+ dlls/user32/nonclient.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/dlls/user32/nonclient.c b/dlls/user32/nonclient.c
+index 0aee13787af..c9156e73578 100644
+--- a/dlls/user32/nonclient.c
++++ b/dlls/user32/nonclient.c
+@@ -30,6 +30,7 @@
+ #include "user_private.h"
+ #include "controls.h"
+ #include "wine/debug.h"
++#include "wine/gdi_driver.h"
+ 
+ WINE_DEFAULT_DEBUG_CHANNEL(nonclient);
+ 
+@@ -62,6 +63,9 @@ static void adjust_window_rect( RECT *rect, DWORD style, BOOL menu, DWORD exStyl
+ {
+     int adjust = 0;
+ 
++    if (__wine_get_window_manager() == WINE_WM_X11_STEAMCOMPMGR)
++        return;
++
+     if ((exStyle & (WS_EX_STATICEDGE|WS_EX_DLGMODALFRAME)) == WS_EX_STATICEDGE)
+         adjust = 1; /* for the outer frame always present */
+     else if ((exStyle & WS_EX_DLGMODALFRAME) || (style & (WS_THICKFRAME|WS_DLGFRAME)))
+@@ -359,6 +363,9 @@ LRESULT NC_HandleNCCalcSize( HWND hwnd, WPARAM wparam, RECT *winRect )
+     if (winRect == NULL)
+         return 0;
+ 
++    if (__wine_get_window_manager() == WINE_WM_X11_STEAMCOMPMGR)
++        return 0;
++
+     if (cls_style & CS_VREDRAW) result |= WVR_VREDRAW;
+     if (cls_style & CS_HREDRAW) result |= WVR_HREDRAW;
+ 
+
