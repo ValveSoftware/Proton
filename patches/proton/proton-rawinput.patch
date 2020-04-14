@@ -646,26 +646,26 @@ diff --git a/dlls/user32/rawinput.c b/dlls/user32/rawinput.c
 index 85ff0c5e80..c6af2faa2a 100644
 --- a/dlls/user32/rawinput.c
 +++ b/dlls/user32/rawinput.c
-@@ -43,6 +43,7 @@ struct hid_device
+@@ -43,6 +43,7 @@ struct device
  {
      WCHAR *path;
      HANDLE file;
 +    HANDLE handle;
-     RID_DEVICE_INFO_HID info;
+     RID_DEVICE_INFO info;
      PHIDP_PREPARSED_DATA data;
  };
-@@ -138,41 +139,63 @@ static struct hid_device *add_device(HDEVINFO set, SP_DEVICE_INTERFACE_DATA *ifa
-     device = &hid_devices[hid_devices_count++];
+@@ -144,41 +144,63 @@ static struct device *add_device(HDEVINFO set, SP_DEVICE_INTERFACE_DATA *iface)
      device->path = path;
      device->file = file;
+     device->info.cbSize = sizeof(RID_DEVICE_INFO);
 +    device->handle = INVALID_HANDLE_VALUE;
  
      return device;
  }
  
--static void find_hid_devices(void)
+-static void find_devices(void)
 +extern DWORD WINAPI GetFinalPathNameByHandleW(HANDLE file, LPWSTR path, DWORD charcount, DWORD flags);
-+static void find_hid_devices(BOOL);
++static void find_devices(BOOL);
 +
 +HANDLE rawinput_handle_from_device_handle(HANDLE device, BOOL rescan)
  {
@@ -674,41 +674,41 @@ index 85ff0c5e80..c6af2faa2a 100644
 +    OBJECT_NAME_INFORMATION *info = (OBJECT_NAME_INFORMATION*)&buffer;
 +    ULONG dummy;
 +    unsigned int i;
- 
-+    for (i = 0; i < hid_devices_count; ++i)
++ 
++    for (i = 0; i < rawinput_devices_count; ++i)
 +    {
-+        if (hid_devices[i].handle == device)
-+            return &hid_devices[i];
++        if (rawinput_devices[i].handle == device)
++            return &rawinput_devices[i];
 +    }
 +
 +    if (NtQueryObject( device, ObjectNameInformation, &buffer, sizeof(buffer) - sizeof(WCHAR), &dummy ) || !info->Name.Buffer)
 +        return NULL;
 +
-+    /* replace \??\ with \\?\ to match hid_devices paths */
++    /* replace \??\ with \\?\ to match rawinput_devices paths */
 +    if (info->Name.Length > 1 && info->Name.Buffer[0] == '\\' && info->Name.Buffer[1] == '?')
 +        info->Name.Buffer[1] = '\\';
 +
-+    for (i = 0; i < hid_devices_count; ++i)
++    for (i = 0; i < rawinput_devices_count; ++i)
 +    {
-+        if (strcmpW(hid_devices[i].path, info->Name.Buffer) == 0)
++        if (strcmpW(rawinput_devices[i].path, info->Name.Buffer) == 0)
 +        {
-+            hid_devices[i].handle = device;
-+            return &hid_devices[i];
++            rawinput_devices[i].handle = device;
++            return &rawinput_devices[i];
 +        }
 +    }
 +
 +    if (!rescan)
 +        return NULL;
 +
-+    find_hid_devices(TRUE);
++    find_devices(TRUE);
 +
 +    return rawinput_handle_from_device_handle(device, FALSE);
 +}
-+
-+static void find_hid_devices_by_guid(const GUID *guid)
+ 
++static void find_devices_by_guid(const GUID *guid)
 +{
      SP_DEVICE_INTERFACE_DATA iface = { sizeof(iface) };
-     struct hid_device *device;
+     struct device *device;
      HIDD_ATTRIBUTES attr;
      HIDP_CAPS caps;
 -    GUID hid_guid;
@@ -718,36 +718,35 @@ index 85ff0c5e80..c6af2faa2a 100644
 -    if (GetTickCount64() - last_check < 2000)
 -        return;
 -    last_check = GetTickCount64();
-+    set = SetupDiGetClassDevsW(guid, NULL, NULL, DIGCF_DEVICEINTERFACE | DIGCF_PRESENT);
- 
+-
 -    HidD_GetHidGuid(&hid_guid);
 -
--    set = SetupDiGetClassDevsW(&hid_guid, NULL, NULL, DIGCF_DEVICEINTERFACE | DIGCF_PRESENT);
--
--    EnterCriticalSection(&hid_devices_cs);
+-    EnterCriticalSection(&rawinput_devices_cs);
 -
 -    /* destroy previous list */
--    for (idx = 0; idx < hid_devices_count; ++idx)
+-    for (idx = 0; idx < rawinput_devices_count; ++idx)
 -    {
--        CloseHandle(hid_devices[idx].file);
--        heap_free(hid_devices[idx].path);
+-        CloseHandle(rawinput_devices[idx].file);
+-        heap_free(rawinput_devices[idx].path);
 -    }
+-    rawinput_devices_count = 0;
 -
--    hid_devices_count = 0;
+-    set = SetupDiGetClassDevsW(&hid_guid, NULL, NULL, DIGCF_DEVICEINTERFACE | DIGCF_PRESENT);
++    set = SetupDiGetClassDevsW(guid, NULL, NULL, DIGCF_DEVICEINTERFACE | DIGCF_PRESENT);
+ 
 -    for (idx = 0; SetupDiEnumDeviceInterfaces(set, NULL, &hid_guid, idx, &iface); ++idx)
 +    for (idx = 0; SetupDiEnumDeviceInterfaces(set, NULL, guid, idx, &iface); ++idx)
      {
          if (!(device = add_device(set, &iface)))
              continue;
-@@ -194,10 +217,49 @@ static void find_hid_devices(void)
-         device->info.usUsage = caps.Usage;
-     }
+@@ -194,9 +194,48 @@ static void find_devices(void)
  
--    LeaveCriticalSection(&hid_devices_cs);
      SetupDiDestroyDeviceInfoList(set);
+ 
+-    LeaveCriticalSection(&rawinput_devices_cs);
  }
  
-+static void find_hid_devices(BOOL force)
++static void find_devices(BOOL force)
 +{
 +    static ULONGLONG last_check;
 +
@@ -759,32 +758,32 @@ index 85ff0c5e80..c6af2faa2a 100644
 +
 +    HidD_GetHidGuid(&hid_guid);
 +
-+    EnterCriticalSection(&hid_devices_cs);
++    EnterCriticalSection(&rawinput_devices_cs);
 +
 +    if (!force && GetTickCount64() - last_check < 2000)
 +    {
-+        LeaveCriticalSection(&hid_devices_cs);
++        LeaveCriticalSection(&rawinput_devices_cs);
 +        return;
 +    }
 +
 +    last_check = GetTickCount64();
 +
 +    /* destroy previous list */
-+    for (idx = 0; idx < hid_devices_count; ++idx)
++    for (idx = 0; idx < rawinput_devices_count; ++idx)
 +    {
-+        CloseHandle(hid_devices[idx].file);
-+        heap_free(hid_devices[idx].path);
++        CloseHandle(rawinput_devices[idx].file);
++        heap_free(rawinput_devices[idx].path);
 +    }
 +
-+    hid_devices_count = 0;
++    rawinput_devices_count = 0;
 +
-+    find_hid_devices_by_guid(&hid_guid);
++    find_devices_by_guid(&hid_guid);
 +
 +    /* HACK: also look up the xinput-specific devices */
 +    hid_guid.Data4[7]++;
-+    find_hid_devices_by_guid(&hid_guid);
++    find_devices_by_guid(&hid_guid);
 +
-+    LeaveCriticalSection(&hid_devices_cs);
++    LeaveCriticalSection(&rawinput_devices_cs);
 +}
 +
  /***********************************************************************
@@ -794,12 +793,12 @@ index 85ff0c5e80..c6af2faa2a 100644
          return ~0U;
      }
  
--    find_hid_devices();
-+    find_hid_devices(FALSE);
+-    find_devices();
++    find_devices(FALSE);
  
      if (!devices)
      {
-@@ -415,6 +477,7 @@ UINT WINAPI GetRawInputDeviceInfoW(HANDLE device, UINT command, void *data, UINT
+@@ -415,6 +477,7 @@ UINT WINAPI GetRawInputDeviceInfoW(HANDLE handle, UINT command, void *data, UINT
              device, command, data, data_size);
  
      if (!data_size) return ~0U;
@@ -807,7 +806,7 @@ index 85ff0c5e80..c6af2faa2a 100644
  
      /* each case below must set:
       *     *data_size: length (meaning defined by command) of data we want to copy
-@@ -501,14 +564,65 @@ UINT WINAPI GetRawInputDeviceInfoW(HANDLE device, UINT command, void *data, UINT
+@@ -501,14 +564,65 @@ UINT WINAPI GetRawInputDeviceInfoW(HANDLE handle, UINT command, void *data, UINT
      return *data_size;
  }
  
@@ -3523,3 +3522,172 @@ index 4a9be550bdc..6eaf812e8d8 100644
 +
 +    test_RegisterDeviceNotification();
  }
+From 5406b7b15cae43cbe023492f518436c6990871f5 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
+Date: Fri, 27 Mar 2020 16:25:14 +0100
+Subject: [PATCH] server: Also update the key state if RIDEV_NOLEGACY is used.
+
+---
+ server/queue.c | 40 ++++++++++++++++++++++++++++++++--------
+ 1 file changed, 32 insertions(+), 8 deletions(-)
+
+diff --git a/server/queue.c b/server/queue.c
+index 7262d6201f4..5621e393dd8 100644
+--- a/server/queue.c
++++ b/server/queue.c
+@@ -1310,12 +1310,12 @@ static void set_input_key_state( unsigned char *keystate, unsigned char key, int
+ 
+ /* update the key state for a keyboard message */
+ static void update_key_state( struct desktop *desktop, unsigned char *keystate,
+-                              const struct message *msg )
++                              unsigned int msg, lparam_t wparam )
+ {
+     unsigned char key;
+     int down = 0;
+ 
+-    switch (msg->msg)
++    switch (msg)
+     {
+     case WM_LBUTTONDOWN:
+         down = (keystate == desktop->keystate) ? 0xc0 : 0x80;
+@@ -1339,8 +1339,8 @@ static void update_key_state( struct desktop *desktop, unsigned char *keystate,
+         down = (keystate == desktop->keystate) ? 0xc0 : 0x80;
+         /* fall through */
+     case WM_XBUTTONUP:
+-        if (msg->wparam >> 16 == XBUTTON1) set_input_key_state( keystate, VK_XBUTTON1, down );
+-        else if (msg->wparam >> 16 == XBUTTON2) set_input_key_state( keystate, VK_XBUTTON2, down );
++        if (wparam >> 16 == XBUTTON1) set_input_key_state( keystate, VK_XBUTTON1, down );
++        else if (wparam >> 16 == XBUTTON2) set_input_key_state( keystate, VK_XBUTTON2, down );
+         break;
+     case WM_KEYDOWN:
+     case WM_SYSKEYDOWN:
+@@ -1348,7 +1348,7 @@ static void update_key_state( struct desktop *desktop, unsigned char *keystate,
+         /* fall through */
+     case WM_KEYUP:
+     case WM_SYSKEYUP:
+-        key = (unsigned char)msg->wparam;
++        key = (unsigned char)wparam;
+         set_input_key_state( keystate, key, down );
+         switch(key)
+         {
+@@ -1392,11 +1392,35 @@ static void synchronize_input_key_state( struct thread_input *input )
+     }
+ }
+ 
++/* update the desktop key state according to a mouse message flags */
++static void update_desktop_mouse_state( struct desktop *desktop, unsigned int flags,
++                                        int x, int y, lparam_t wparam )
++{
++    if (flags & MOUSEEVENTF_MOVE)
++        update_desktop_cursor_pos( desktop, x, y );
++    if (flags & MOUSEEVENTF_LEFTDOWN)
++        update_key_state( desktop, desktop->keystate, WM_LBUTTONDOWN, wparam );
++    if (flags & MOUSEEVENTF_LEFTUP)
++        update_key_state( desktop, desktop->keystate, WM_LBUTTONUP, wparam );
++    if (flags & MOUSEEVENTF_RIGHTDOWN)
++        update_key_state( desktop, desktop->keystate, WM_RBUTTONDOWN, wparam );
++    if (flags & MOUSEEVENTF_RIGHTUP)
++        update_key_state( desktop, desktop->keystate, WM_RBUTTONUP, wparam );
++    if (flags & MOUSEEVENTF_MIDDLEDOWN)
++        update_key_state( desktop, desktop->keystate, WM_MBUTTONDOWN, wparam );
++    if (flags & MOUSEEVENTF_MIDDLEUP)
++        update_key_state( desktop, desktop->keystate, WM_MBUTTONUP, wparam );
++    if (flags & MOUSEEVENTF_XDOWN)
++        update_key_state( desktop, desktop->keystate, WM_XBUTTONDOWN, wparam );
++    if (flags & MOUSEEVENTF_XUP)
++        update_key_state( desktop, desktop->keystate, WM_XBUTTONUP, wparam );
++}
++
+ /* update the thread input key state for a keyboard message */
+ static void update_input_key_state( struct thread_input *input, const struct message *msg )
+ {
+     synchronize_input_key_state( input );
+-    update_key_state( input->desktop, input->keystate, msg );
++    update_key_state( input->desktop, input->keystate, msg->msg, msg->wparam );
+ }
+ 
+ /* release the hardware message currently being processed by the given thread */
+@@ -1548,7 +1572,7 @@ static void queue_hardware_message( struct desktop *desktop, struct message *msg
+     struct thread_input *input;
+     unsigned int msg_code;
+ 
+-    update_key_state( desktop, desktop->keystate, msg );
++    update_key_state( desktop, desktop->keystate, msg->msg, msg->wparam );
+     last_input_time = get_tick_count();
+     if (msg->msg != WM_MOUSEMOVE) always_queue = 1;
+ 
+@@ -1796,7 +1820,7 @@ static int queue_mouse_message( struct desktop *desktop, user_handle_t win, cons
+         return 0;
+     if ((device = current->process->rawinput_mouse) && (device->flags & RIDEV_NOLEGACY))
+     {
+-        if (flags & MOUSEEVENTF_MOVE) update_desktop_cursor_pos( desktop, x, y );
++        update_desktop_mouse_state( desktop, flags, x, y, input->mouse.data << 16 );
+         return 0;
+     }
+ 
+-- 
+2.26.0
+
+From bc5c3fdd603688460b74c007a1172004a2c8ff30 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
+Date: Wed, 8 Apr 2020 15:35:32 +0200
+Subject: [PATCH] dinput: Fix rawinput events sequence number.
+
+---
+ dlls/dinput/mouse.c | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
+
+diff --git a/dlls/dinput/mouse.c b/dlls/dinput/mouse.c
+index 5a624949867..6480a5adac6 100644
+--- a/dlls/dinput/mouse.c
++++ b/dlls/dinput/mouse.c
+@@ -333,6 +333,7 @@ static int dinput_mouse_hook( LPDIRECTINPUTDEVICE8A iface, WPARAM wparam, LPARAM
+         RAWINPUT raw_input;
+         UINT size;
+         POINT rel, pt;
++        DWORD seq;
+ 
+         static const USHORT mouse_button_flags[] =
+         {
+@@ -374,6 +375,7 @@ static int dinput_mouse_hook( LPDIRECTINPUTDEVICE8A iface, WPARAM wparam, LPARAM
+             FIXME( "Unimplemented MOUSE_ATTRIBUTES_CHANGED flag\n" );
+ 
+         EnterCriticalSection(&This->base.crit);
++        seq = This->base.dinput->evsequence++;
+ 
+         rel.x = raw_input.data.mouse.lLastX;
+         rel.y = raw_input.data.mouse.lLastY;
+@@ -399,11 +401,11 @@ static int dinput_mouse_hook( LPDIRECTINPUTDEVICE8A iface, WPARAM wparam, LPARAM
+ 
+         if (rel.x)
+             queue_event(iface, DIDFT_MAKEINSTANCE(WINE_MOUSE_X_AXIS_INSTANCE) | DIDFT_RELAXIS,
+-                        pt.x, GetCurrentTime(), This->base.dinput->evsequence);
++                        pt.x, GetCurrentTime(), seq);
+ 
+         if (rel.y)
+             queue_event(iface, DIDFT_MAKEINSTANCE(WINE_MOUSE_Y_AXIS_INSTANCE) | DIDFT_RELAXIS,
+-                        pt.y, GetCurrentTime(), This->base.dinput->evsequence);
++                        pt.y, GetCurrentTime(), seq);
+ 
+         if (rel.x || rel.y)
+         {
+@@ -416,7 +418,7 @@ static int dinput_mouse_hook( LPDIRECTINPUTDEVICE8A iface, WPARAM wparam, LPARAM
+         {
+             This->m_state.lZ += (wdata = (SHORT)raw_input.data.mouse.usButtonData);
+             queue_event(iface, DIDFT_MAKEINSTANCE(WINE_MOUSE_Z_AXIS_INSTANCE) | DIDFT_RELAXIS,
+-                        wdata, GetCurrentTime(), This->base.dinput->evsequence);
++                        wdata, GetCurrentTime(), seq);
+             ret = This->clipped;
+         }
+ 
+@@ -426,7 +428,7 @@ static int dinput_mouse_hook( LPDIRECTINPUTDEVICE8A iface, WPARAM wparam, LPARAM
+             {
+                 This->m_state.rgbButtons[i / 2] = 0x80 - (i % 2) * 0x80;
+                 queue_event(iface, DIDFT_MAKEINSTANCE(WINE_MOUSE_BUTTONS_INSTANCE + (i / 2)) | DIDFT_PSHBUTTON,
+-                            This->m_state.rgbButtons[i / 2], GetCurrentTime(), This->base.dinput->evsequence);
++                            This->m_state.rgbButtons[i / 2], GetCurrentTime(), seq);
+             }
+         }
+ 
+-- 
+2.26.0

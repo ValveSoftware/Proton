@@ -65,6 +65,13 @@
     patch -Np1 < ../patches/dxvk/proton-add_new_dxvk_config_library.patch
     cd ..
 
+    #WINE STAGING
+    cd wine-staging
+    git reset --hard HEAD
+    git clean -xdf
+    patch -Np1 < ../patches/wine-hotfixes/staging-44d1a45-localreverts.patch
+    cd ..
+
     #WINE
     cd wine
     git reset --hard HEAD
@@ -72,11 +79,6 @@
 
     # winepath was broken with this commit
     git revert --no-commit e22bcac706be3afac67f4faac3aca79fd67c3d6f
-
-    # causes mp4 playback to break
-    git revert --no-commit 387bf24376ac7da9c72c22e1724a03f546a2d0c6
-
-    #WINE STAGING
 
 # Enable these for now in favor over proton gamepad additions
 #    -W dinput-SetActionMap-genre \
@@ -92,9 +94,14 @@
     ../wine-staging/patches/patchinstall.sh DESTDIR="." --all \
     -W server-Desktop_Refcount \
     -W ws2_32-TransmitFile \
+    -W winex11.drv-mouse-coorrds \
     -W winex11-MWM_Decorations \
     -W winex11-_NET_ACTIVE_WINDOW \
     -W winex11-WM_WINDOWPOSCHANGING \
+    -W user32-rawinput-mouse \
+    -W user32-rawinput-nolegacy \
+    -W user32-rawinput-mouse-experimental \
+    -W user32-rawinput-hid \
     -W winex11-key_translation \
     -W ntdll-avoid-fstatat
 
@@ -157,9 +164,15 @@
     echo "applying fsync patches"
     patch -Np1 < ../patches/proton/proton-fsync_staging.patch
     patch -Np1 < ../patches/proton/proton-fsync-spincounts.patch
+
+    echo "revert necessary for fshack"
+    patch -Np1 < ../patches/proton-hotfixes/wine-winex11.drv_Calculate_mask_in_X11DRV_resize_desktop.patch
     
     echo "fullscreen hack"
     patch -Np1 < ../patches/proton/valve_proton_fullscreen_hack-staging.patch
+
+    echo "raw input"
+    patch -Np1 < ../patches/proton/proton-rawinput.patch
     
     echo "staging winex11-key_translation"
     patch -Np1 < ../wine-staging/patches/winex11-key_translation/0001-winex11-Match-keyboard-in-Unicode.patch
@@ -236,9 +249,7 @@
     patch -Np1 < ../patches/wine-hotfixes/D3D12CreateVersionedRootSignatureDeserializer.patch
 
     echo "guy's media foundation alpha patches"
-    for _f in ../patches/wine-hotfixes/guy_mediafoundation_alpha/*.patch; do
-        patch -Np1 < "${_f}"
-    done
+    patch -Np1 < ../patches/wine-hotfixes/media_foundation_alpha.patch
 
     echo "proton-specific manual mfplat dll register patch"
     patch -Np1 < ../patches/wine-hotfixes/proton_mediafoundation_dllreg.patch
