@@ -9,7 +9,7 @@
 	url = https://github.com/doitsujin/dxvk/
 [submodule "ffmpeg"]
 	path = ffmpeg
-	url = https://git.ffmpeg.org/ffmpeg.git
+	url = https://github.com/FFmpeg/FFmpeg/
 [submodule "openvr"]
 	path = openvr
 	url = https://github.com/ValveSoftware/openvr/
@@ -54,4 +54,4 @@
         url = https://github.com/GStreamer/gst-libav/
 [submodule "glib"]
 	path = glib
-	url = https://gitlab.gnome.org/GNOME/glib.git
+	url = https://github.com/GNOME/glib/
