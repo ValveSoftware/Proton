@@ -218,7 +218,7 @@ GST_UGLY := $(SRCDIR)/gst-plugins-ugly
 GST_UGLY_OBJ32 := ./obj-gst-ugly32
 GST_UGLY_OBJ64 := ./obj-gst-ugly64
 
-GST_LIBAV := $(SRCDIR)/gst-plugins-libav
+GST_LIBAV := $(SRCDIR)/gst-libav
 GST_LIBAV_OBJ32 := ./obj-gst-libav32
 GST_LIBAV_OBJ64 := ./obj-gst-libav64
 
@@ -1006,7 +1006,7 @@ gst_ugly32: $(GST_UGLY_CONFIGURE_FILES32)
 	cp -a $(TOOLS_DIR32)/lib/gstreamer-1.0 $(DST_DIR)/lib/
 
 ##
-## gst-plugins-libav
+## gst-libav
 ##
 
 GST_LIBAV_MESON_ARGS := \

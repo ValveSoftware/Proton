@@ -1,6 +1,6 @@
 [submodule "wine"]
 	path = wine
-	url = git://source.winehq.org/git/wine
+	url = https://github.com/wine-mirror/wine/
 [submodule "wine-staging"]
 	path = wine-staging
 	url = https://github.com/wine-staging/wine-staging/
@@ -12,46 +12,46 @@
 	url = https://git.ffmpeg.org/ffmpeg.git
 [submodule "openvr"]
 	path = openvr
-	url = https://github.com/ValveSoftware/openvr
+	url = https://github.com/ValveSoftware/openvr/
 [submodule "cmake"]
 	path = cmake
-	url = https://github.com/Kitware/CMake
+	url = https://github.com/Kitware/CMake/
 [submodule "fonts/liberation-fonts"]
 	path = fonts/liberation-fonts
-	url = https://github.com/liberationfonts/liberation-fonts
+	url = https://github.com/liberationfonts/liberation-fonts/
 [submodule "FAudio"]
 	path = FAudio
 	url = https://github.com/FNA-XNA/FAudio/
 [submodule "protonfixes"]
         path = protonfixes
-	url = https://github.com/gloriouseggroll/protonfixes
+	url = https://github.com/gloriouseggroll/protonfixes/
 [submodule "SPIRV-Headers"]
 	path = SPIRV-Headers
-	url = https://github.com/KhronosGroup/SPIRV-Headers
+	url = https://github.com/KhronosGroup/SPIRV-Headers/
 [submodule "Vulkan-Headers"]
 	path = Vulkan-Headers
-	url = https://github.com/KhronosGroup/Vulkan-Headers
+	url = https://github.com/KhronosGroup/Vulkan-Headers/
 [submodule "vkd3d"]
 	path = vkd3d
-	url = https://github.com/doitsujin/vkd3d
+	url = https://github.com/HansKristien-Work/vkd3d/
 [submodule "gstreamer"]
 	path = gstreamer
-	url = https://gitlab.freedesktop.org/gstreamer/gstreamer.git
+	url = https://github.com/GStreamer/gstreamer/
 [submodule "gst-plugins-base"]
 	path = gst-plugins-base
-	url = https://gitlab.freedesktop.org/gstreamer/gst-plugins-base.git
+	url = https://github.com/GStreamer/gst-plugins-base/
 [submodule "gst-plugins-good"]
 	path = gst-plugins-good
-	url = https://gitlab.freedesktop.org/gstreamer/gst-plugins-good.git
+	url = https://github.com/GStreamer/gst-plugins-good/
 [submodule "gst-plugins-bad"]
         path = gst-plugins-bad
-	url = https://gitlab.freedesktop.org/gstreamer/gst-plugins-bad.git
+	url = https://github.com/GStreamer/gst-plugins-bad/
 [submodule "gst-plugins-ugly"]
         path = gst-plugins-ugly
-        url = https://gitlab.freedesktop.org/gstreamer/gst-plugins-ugly.git
-[submodule "gst-plugins-libav"]
-        path = gst-plugins-libav
-        url = https://gitlab.freedesktop.org/gstreamer/gst-libav.git
+        url = https://github.com/GStreamer/gst-plugins-ugly/
+[submodule "gst-libav"]
+        path = gst-libav
+        url = https://github.com/GStreamer/gst-libav/
 [submodule "glib"]
 	path = glib
 	url = https://gitlab.gnome.org/GNOME/glib.git
