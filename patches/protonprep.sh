@@ -33,11 +33,6 @@
     patch -Np1 < ../patches/gstreamer/asfdemux-always_re-initialize_metadata_and_global_metadata.patch
     cd ..
 
-    # steam_helper patches
-    #git checkout steam_helper
-    #cd steam_helper
-    #cd ..
-
     # warframe controller fix
     git checkout lsteamclient
     cd lsteamclient
@@ -55,6 +50,7 @@
     cd vkd3d
     git reset --hard HEAD
     git clean -xdf
+    patch -Np1 < ../patches/vkd3d/mhw-vkd3d.patch
     cd ..
 
     # Valve DXVK patches
@@ -80,12 +76,8 @@
     # winepath was broken with this commit
     git revert --no-commit e22bcac706be3afac67f4faac3aca79fd67c3d6f
 
-# Enable these for now in favor over proton gamepad additions
-#    -W dinput-SetActionMap-genre \
-#    -W dinput-axis-recalc \
-#    -W dinput-joy-mappings \
-#    -W dinput-reconnect-joystick \
-#    -W dinput-remap-joystick \
+    # this conflicts with proton's gamepad changes and causes camera spinning
+    git revert --no-commit da7d60bf97fb8726828e57f852e8963aacde21e9
 
 # warframe launcher fix 0.0mb hang fix
 #    -W ntdll-avoid-fstatat
@@ -102,6 +94,11 @@
     -W user32-rawinput-nolegacy \
     -W user32-rawinput-mouse-experimental \
     -W user32-rawinput-hid \
+    -W dinput-SetActionMap-genre \
+    -W dinput-axis-recalc \
+    -W dinput-joy-mappings \
+    -W dinput-reconnect-joystick \
+    -W dinput-remap-joystick \
     -W winex11-key_translation \
     -W ntdll-avoid-fstatat
 
@@ -128,31 +125,33 @@
     echo "origin downloads fix" 
     patch -Np1 < ../patches/game-patches/origin-downloads_fix.patch
 
-#   TODO: Check on this - don't own game. Need to validate
-    echo "blackops 2 fix"
-    patch -Np1 < ../patches/game-patches/blackops_2_fix.patch
+    echo "fix steep"
+    patch -Np1 < ../patches/wine-hotfixes/0001-Add-some-semi-stubs-in-user32.patch
 
 #   TODO: Check on this - don't own game. Need to validate
     echo "NFSW launcher fix"
     patch -Np1 < ../patches/game-patches/NFSWLauncherfix.patch
 
-    echo "fix steep and AC Odyssey fullscreen"
-    patch -Np1 < ../patches/wine-hotfixes/0001-Add-some-semi-stubs-in-user32.patch
-
 #   TODO: Check on this - don't own game. Need to validate. Unknown if necessary outside of proton specific gamepad patches. Seems to cause input issues in FFXV
-#    echo "gta4 input patch"
-#    patch -Np1 < ../patches/game-patches/gta4_gamepad_workaround.patch
+    echo "gta4 input patch"
+    patch -Np1 < ../patches/game-patches/gta4_gamepad_workaround.patch
 
+
+# Currently applied but not working:
+
+    echo "mk11 patch"
+    patch -Np1 < ../patches/game-patches/mk11.patch
+
+    echo "blackops 2 fix"
+    patch -Np1 < ../patches/game-patches/blackops_2_fix.patch
 
     ### END GAME PATCH SECTION ###
     
+    #PROTON
+
     echo "clock monotonic, amd ags"
     patch -Np1 < ../patches/proton/proton-use_clock_monotonic.patch
     patch -Np1 < ../patches/proton/proton-amd_ags.patch
-
-    #PROTON
-    echo "mk11 patch"
-    patch -Np1 < ../patches/game-patches/mk11.patch
     
     echo "bypass compositor"
     patch -Np1 < ../patches/proton/proton-FS_bypass_compositor.patch
@@ -212,9 +211,8 @@
     patch -Np1 < ../patches/proton/proton-sdl_joy.patch
     patch -Np1 < ../patches/proton/proton-sdl_joy_2.patch
     
-    #disable for now
-    #echo "proton gamepad additions"
-    #patch -Np1 < ../patches/proton/proton-gamepad-additions.patch
+    echo "proton gamepad additions"
+    patch -Np1 < ../patches/proton/proton-gamepad-additions.patch
 
     echo "Valve VR patches"
     patch -Np1 < ../patches/proton/proton-vr.patch
@@ -248,6 +246,9 @@
     patch -Np1 < ../patches/wine-hotfixes/D3D12SerializeVersionedRootSignature.patch
     patch -Np1 < ../patches/wine-hotfixes/D3D12CreateVersionedRootSignatureDeserializer.patch
 
+    echo "applying MHW vkd3d wine patches"
+    patch -Np1 < ../patches/wine-hotfixes/mhw-dxgi-fixes.patch
+
     echo "guy's media foundation alpha patches"
     patch -Np1 < ../patches/wine-hotfixes/media_foundation_alpha.patch
 
@@ -276,7 +277,6 @@
 
     echo "ntdll revert for proton wineboot fix"
     patch -Np1 < ../patches/wine-hotfixes/0001-ntdll-re-enable_wine_dl_functions_to_fix_wineboot_in.patch
-
 
     #WINE CUSTOM PATCHES
     #add your own custom patch lines below
