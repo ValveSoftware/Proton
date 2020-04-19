@@ -1,0 +1,47 @@
+From: "Myah Caron" <qsniyg@mail.com>
+Subject: [PATCH] winex11: Don't unmap the clip window more than once
+Message-Id: <trinity-9a9ba9f0-9e9d-4988-a22a-d89f68786539-1584548641136@3c-app-mailcom-lxa01>
+Date: Wed, 18 Mar 2020 17:24:01 +0100
+
+Wine-Bug: https://bugs.winehq.org/show_bug.cgi?id=48772
+Signed-off-by: Myah Caron <qsniyg@mail.com>
+---
+ dlls/winex11.drv/mouse.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/dlls/winex11.drv/mouse.c b/dlls/winex11.drv/mouse.c
+index 7f0edd9be6..28c4296784 100644
+--- a/dlls/winex11.drv/mouse.c
++++ b/dlls/winex11.drv/mouse.c
+@@ -129,6 +129,7 @@ static RECT last_clip_rect;
+ static HWND last_clip_foreground_window;
+ static BOOL last_clip_refused;
+ static RECT clip_rect;
++static BOOL clip_window_mapped = FALSE;
+ static Cursor create_cursor( HANDLE handle );
+
+ #ifdef HAVE_X11_EXTENSIONS_XINPUT2_H
+@@ -426,6 +427,7 @@ static BOOL grab_clipping_window( const RECT *clip )
+     XMoveResizeWindow( data->display, clip_window, pos.x, pos.y,
+                        max( 1, clip->right - clip->left ), max( 1, clip->bottom - clip->top ) );
+     XMapWindow( data->display, clip_window );
++    clip_window_mapped = TRUE;
+
+     /* if the rectangle is shrinking we may get a pointer warp */
+     if (!data->clip_hwnd || clip->left > clip_rect.left || clip->top > clip_rect.top ||
+@@ -464,7 +466,8 @@ void ungrab_clipping_window(void)
+     if (!clip_window) return;
+
+     TRACE( "no longer clipping\n" );
+-    XUnmapWindow( display, clip_window );
++    if (clip_window_mapped) XUnmapWindow( display, clip_window );
++    clip_window_mapped = FALSE;
+     if (clipping_cursor) XUngrabPointer( display, CurrentTime );
+     clipping_cursor = FALSE;
+     SendMessageW( GetDesktopWindow(), WM_X11DRV_CLIP_CURSOR, 0, 0 );
+--
+2.25.1
+
+
+
+

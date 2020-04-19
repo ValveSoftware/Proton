@@ -280,6 +280,11 @@
     echo "ntdll revert for proton wineboot fix"
     patch -Np1 < ../patches/wine-hotfixes/0001-ntdll-re-enable_wine_dl_functions_to_fix_wineboot_in.patch
 
+# Hotfixes pending in the wine patch list
+    patch -Np1 < ../patches/wine-hotfixes/winex11-Dont_unmap_the_clip_window_more_than_once.patch
+    patch -Np1 < ../patches/wine-hotfixes/user32-Set_PAINTSTRUCT_fErase_field_depending_on_the_last_WM_ERASEBKGND_result.patch
+    patch -Np1 < ../patches/wine-hotfixes/ntdll-Use_the_free_ranges_in_find_reserved_free_area.patch
+
     #WINE CUSTOM PATCHES
     #add your own custom patch lines below
 
