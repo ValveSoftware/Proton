@@ -31,6 +31,8 @@
     git clean -xdf
     echo "add Guy's patch to fix wmv playback in gst-plugins-ugly"
     patch -Np1 < ../patches/gstreamer/asfdemux-always_re-initialize_metadata_and_global_metadata.patch
+    patch -Np1 < ../patches/gstreamer/asfdemux-Re-initialize_demux-adapter_in_gst_asf_demux_reset.patch
+    patch -Np1 < ../patches/gstreamer/asfdemux-Only_forward_SEEK_event_when_in_push_mode.patch
     cd ..
 
     # warframe controller fix
