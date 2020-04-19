@@ -237,6 +237,52 @@ index 0000000000..457f234073
 +typedef void(CALLBACK *NVGSDK_EmptyCallback)(NVGSDK_RetCode ret, void *context);
 +
 +typedef void(CALLBACK *NVGSDK_GetUILanguageCallback)(NVGSDK_RetCode ret, NVGSDK_Language const *lang, void *context);
+-- 
+2.23.0
+
+diff --git a/dlls/ntdll/virtual.c b/dlls/ntdll/virtual.c
+index c702fd9c05..981699d854 100644
+--- a/dlls/ntdll/virtual.c
++++ b/dlls/ntdll/virtual.c
+@@ -2031,6 +2031,27 @@ static int remove_reserved_area_from_free( void *base, size_t size, void *arg )
+     return 0;
+ }
+ 
++#define MK11_STEAM_ID	"976310"
++#define MK11_CHECK_TODO	(-2)
++#define MK11_CHECK_YES	(1)
++#define MK11_CHECK_NO	(0)
++#define MK11_UNLIKELY(x)	__builtin_expect(!!(x),0)
++
++static int is_MK11_running(void) {
++	static int MK11_running_flag = MK11_CHECK_TODO;
++
++	/* don't care if we execute the below
++	 * spuriously */
++	if(MK11_UNLIKELY(MK11_running_flag == MK11_CHECK_TODO)) {
++		const char*	p_gameid = getenv("SteamGameId");
++		const int  	is_running = (!p_gameid || strcmp(p_gameid, MK11_STEAM_ID)) ? MK11_CHECK_NO : MK11_CHECK_YES;
++		/* atomic CAS */
++		__sync_bool_compare_and_swap(&MK11_running_flag, MK11_CHECK_TODO, is_running);
++	}
++
++	return MK11_running_flag == MK11_CHECK_YES;
++}
++
+ /***********************************************************************
+  *           virtual_init
+  */
+@@ -2067,6 +2088,10 @@ void virtual_init(void)
+         }
+     }
+ 
++    if (is_MK11_running()) {
++        user_space_limit = (void *)0x7ffffff0000;
++    }
++
+     /* try to find space in a reserved area for the views and pages protection table */
+ #ifdef _WIN64
+     pages_vprot_size = ((size_t)address_space_limit >> page_shift >> pages_vprot_shift) + 1;
 
 From: Derek Lesho <dlesho@codeweavers.com>
 Subject: [PATCH] ntdll: Only call wine handlers if they're in the same stack.
