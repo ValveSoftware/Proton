@@ -214,10 +214,10 @@ index cf0d50de720..0acf2784669 100644
                                              SECTION_IMAGE_INFORMATION *info ) DECLSPEC_HIDDEN;
  extern struct _KUSER_SHARED_DATA *user_shared_data DECLSPEC_HIDDEN;
 diff --git a/dlls/ntdll/virtual.c b/dlls/ntdll/virtual.c
-index c008db78066..6163761a466 100644
+index 6ad2d21e01..e171b76950 100644
 --- a/dlls/ntdll/virtual.c
 +++ b/dlls/ntdll/virtual.c
-@@ -2442,11 +2442,12 @@ void virtual_release_address_space(void)
+@@ -2651,11 +2651,13 @@ void virtual_release_address_space(void)
   *
   * Enable use of a large address space when allowed by the application.
   */
@@ -227,6 +227,7 @@ index c008db78066..6163761a466 100644
      IMAGE_NT_HEADERS *nt = RtlImageNtHeader( NtCurrentTeb()->Peb->ImageBaseAddress );
  
 -    if (!(nt->FileHeader.Characteristics & IMAGE_FILE_LARGE_ADDRESS_AWARE)) return;
++    if (is_win64) return;
 +    if (!(nt->FileHeader.Characteristics & IMAGE_FILE_LARGE_ADDRESS_AWARE) && !force_large_address) return;
 +
      /* no large address space on win9x */
