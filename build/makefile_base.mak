@@ -1537,7 +1537,6 @@ $(VRCLIENT_CONFIGURE_FILES64): SHELL = $(CONTAINER_SHELL64)
 $(VRCLIENT_CONFIGURE_FILES64): $(MAKEFILE_DEP) $(VRCLIENT) $(VRCLIENT)/vrclient_x64 | $(VRCLIENT_OBJ64) $(WINEMAKER)
 	cd $(VRCLIENT) && \
 		$(WINEMAKER) --nosource-fix --nolower-include --nodlls --nomsvcrt \
-			--nosource-fix --nolower-include --nodlls --nomsvcrt \
 			-I"$(abspath $(TOOLS_DIR64))"/include/ \
 			-I"$(abspath $(TOOLS_DIR64))"/include/wine/ \
 			-I"$(abspath $(TOOLS_DIR64))"/include/wine/windows/ \
