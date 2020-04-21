@@ -35,6 +35,7 @@ else
   memory = 1024
   puts "Vagrant launched from unsupported platform."
 end
+memory = [memory, 4096].max
 puts "Platform: " + cpus.to_s + " CPUs, " + memory.to_s + " MB memory"
 
 Vagrant.configure(2) do |config|
