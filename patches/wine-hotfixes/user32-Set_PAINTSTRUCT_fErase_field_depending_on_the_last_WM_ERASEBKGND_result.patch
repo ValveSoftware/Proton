@@ -181,10 +181,10 @@ index 1f51fd6331..eecfa20eea 100644
 --- a/dlls/user32/win.h
 +++ b/dlls/user32/win.h
 @@ -79,6 +79,7 @@ typedef struct tagWND
- #define WIN_NEEDS_SHOW_OWNEDPOPUP 0x0020 /* WM_SHOWWINDOW:SC_SHOW must be sent in the next ShowOwnedPopup call */
  #define WIN_CHILDREN_MOVED        0x0040 /* children may have moved, ignore stored positions */
  #define WIN_HAS_IME_WIN           0x0080 /* the window has been registered with imm32 */
-+#define WIN_PS_NEED_ERASE_BKGND   0x0100 /* Need to set fErase in PAINTSTRUCT */
+ #define WIN_IS_IN_ACTIVATION      0x0100 /* the window is in an activation process */
++#define WIN_PS_NEED_ERASE_BKGND   0x0200 /* Need to set fErase in PAINTSTRUCT */
  
    /* Window functions */
  extern HWND get_hwnd_message_parent(void) DECLSPEC_HIDDEN;

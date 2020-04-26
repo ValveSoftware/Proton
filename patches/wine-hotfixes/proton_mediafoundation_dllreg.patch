@@ -36,13 +36,6 @@ index db6d4f194a..04c1e38baa 100644
      if (version != MF_VERSION_XP && version != MF_VERSION_WIN7)
          return MF_E_BAD_STARTUP_VERSION;
  
-@@ -8874,4 +8891,4 @@ HRESULT WINAPI MFCreateDXGIDeviceManager(UINT *token, IMFDXGIDeviceManager **man
-     *manager = &object->IMFDXGIDeviceManager_iface;
- 
-     return S_OK;
--}
-\ No newline at end of file
-+}
 diff --git a/dlls/winegstreamer/main.c b/dlls/winegstreamer/main.c
 index 12ca11fa6c..921768963e 100644
 --- a/dlls/winegstreamer/main.c
@@ -57,12 +50,3 @@ index 12ca11fa6c..921768963e 100644
      if (FAILED(hr = __wine_register_resources(winegstreamer_instance)))
          return hr;
  
-@@ -366,7 +369,7 @@ HRESULT WINAPI DllRegisterServer(void)
- 
-     IFilterMapper2_Release(mapper);
- 
--    return mfplat_DllRegisterServer();
-+    return hr;
- }
- 
- HRESULT WINAPI DllUnregisterServer(void)

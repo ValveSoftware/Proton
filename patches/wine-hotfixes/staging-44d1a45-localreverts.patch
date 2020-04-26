@@ -63,7 +63,7 @@ index a22615aae..b3e73dd89 100644
   
       if (!(msg = mem_alloc( sizeof(*msg) ))) return 0;
   
--@@ -3383,3 +3393,14 @@ DECL_HANDLER(get_rawinput_devices)
+-@@ -3432,3 +3442,14 @@ DECL_HANDLER(get_rawinput_devices)
 - 
 -     set_reply_data_ptr( devices, device_count * sizeof (*devices) );
 +@@ -3289,3 +3299,14 @@ DECL_HANDLER(update_rawinput_devices)
