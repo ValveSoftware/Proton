@@ -143,9 +143,9 @@ index 4d2d4afe10..9e3b9f4825 100644
 +            WARN( "Unable to (un)register raw device %x:%x\n", dev->raw_device.usUsagePage, dev->raw_device.usUsage );
 +    }
 +
-     PostThreadMessageW( hook_thread_id, WM_USER+0x10, 1, 0 );
- 
-     LeaveCriticalSection(&dinput_hook_crit);
+     if (acquired)
+         hook_change_finished_event = CreateEventW( NULL, FALSE, FALSE, NULL );
+     PostThreadMessageW( hook_thread_id, WM_USER+0x10, 1, (LPARAM)hook_change_finished_event );
 @@ -1919,9 +1999,11 @@ BOOL WINAPI DllMain( HINSTANCE inst, DWORD reason, LPVOID reserved)
        case DLL_PROCESS_ATTACH:
          DisableThreadLibraryCalls(inst);
@@ -1878,25 +1878,25 @@ index f0c8f88732..1df698df4c 100644
      REQ_set_cursor,
      REQ_update_rawinput_devices,
 +    REQ_get_rawinput_devices,
-     REQ_get_suspend_context,
-     REQ_set_suspend_context,
      REQ_create_job,
+     REQ_open_job,
+     REQ_assign_job,
 @@ -6792,6 +6828,7 @@ union generic_request
      struct free_user_handle_request free_user_handle_request;
      struct set_cursor_request set_cursor_request;
      struct update_rawinput_devices_request update_rawinput_devices_request;
 +    struct get_rawinput_devices_request get_rawinput_devices_request;
-     struct get_suspend_context_request get_suspend_context_request;
-     struct set_suspend_context_request set_suspend_context_request;
      struct create_job_request create_job_request;
+     struct open_job_request open_job_request;
+     struct assign_job_request assign_job_request;
 @@ -7117,6 +7154,7 @@ union generic_reply
      struct free_user_handle_reply free_user_handle_reply;
      struct set_cursor_reply set_cursor_reply;
      struct update_rawinput_devices_reply update_rawinput_devices_reply;
 +    struct get_rawinput_devices_reply get_rawinput_devices_reply;
-     struct get_suspend_context_reply get_suspend_context_reply;
-     struct set_suspend_context_reply set_suspend_context_reply;
      struct create_job_reply create_job_reply;
+     struct open_job_reply open_job_reply;
+     struct assign_job_reply assign_job_reply;
 diff --git a/include/winuser.h b/include/winuser.h
 index 51c73d25c2..10cebfa97d 100644
 --- a/include/winuser.h
@@ -1989,8 +1989,8 @@ index ccbb57e8ad..610efa8cb8 100644
  
  /* Get a message from the current queue */
 @@ -3985,6 +4007,12 @@ struct handle_info
-     VARARG(devices,rawinput_devices);
- @END
+ #define SET_CURSOR_CLIP   0x08
+ #define SET_CURSOR_NOCLIP 0x10
  
 +/* Retrieve the list of registered rawinput devices */
 +@REQ(get_rawinput_devices)
@@ -1999,8 +1999,8 @@ index ccbb57e8ad..610efa8cb8 100644
 +    VARARG(devices,rawinput_devices);
 +@END
  
- /* Retrieve the suspended context of a thread */
- @REQ(get_suspend_context)
+ /* Modify the list of registered rawinput devices */
+ @REQ(update_rawinput_devices)
 diff --git a/server/queue.c b/server/queue.c
 index 2bc11789b2..848089dca7 100644
 --- a/server/queue.c
@@ -2083,7 +2083,7 @@ index 2bc11789b2..848089dca7 100644
      {
          unsigned short vkey = input->kbd.vkey;
          if (input->kbd.flags & KEYEVENTF_UNICODE) vkey = VK_PACKET;
-@@ -1758,12 +1758,79 @@ static int send_hook_ll_message( struct desktop *desktop, struct message *hardwa
+@@ -1758,12 +1758,82 @@ static int send_hook_ll_message( struct desktop *desktop, struct message *hardwa
      return 1;
  }
  
@@ -2121,6 +2121,9 @@ index 2bc11789b2..848089dca7 100644
 +
 +    if (!(desktop = get_desktop_obj( process, process->desktop, 0 )) ||
 +        (raw_msg->desktop && desktop != raw_msg->desktop))
++        goto done;
++
++    if (!device->target && !desktop->foreground_input)
 +        goto done;
 +
 +    if (!(thread = get_window_thread( device->target ? device->target : desktop->foreground_input->active )) ||
@@ -2391,17 +2394,17 @@ index 24fdd761e3..8cc1a9b38c 100644
  DECL_HANDLER(set_cursor);
  DECL_HANDLER(update_rawinput_devices);
 +DECL_HANDLER(get_rawinput_devices);
- DECL_HANDLER(get_suspend_context);
- DECL_HANDLER(set_suspend_context);
  DECL_HANDLER(create_job);
+ DECL_HANDLER(open_job);
+ DECL_HANDLER(assign_job);
 @@ -737,6 +738,7 @@ static const req_handler req_handlers[REQ_NB_REQUESTS] =
      (req_handler)req_free_user_handle,
      (req_handler)req_set_cursor,
      (req_handler)req_update_rawinput_devices,
 +    (req_handler)req_get_rawinput_devices,
-     (req_handler)req_get_suspend_context,
-     (req_handler)req_set_suspend_context,
      (req_handler)req_create_job,
+     (req_handler)req_open_job,
+     (req_handler)req_assign_job,
 @@ -2507,6 +2509,9 @@ C_ASSERT( FIELD_OFFSET(struct set_cursor_reply, new_clip) == 32 );
  C_ASSERT( FIELD_OFFSET(struct set_cursor_reply, last_change) == 48 );
  C_ASSERT( sizeof(struct set_cursor_reply) == 56 );
@@ -2409,9 +2412,9 @@ index 24fdd761e3..8cc1a9b38c 100644
 +C_ASSERT( sizeof(struct get_rawinput_devices_request) == 16 );
 +C_ASSERT( FIELD_OFFSET(struct get_rawinput_devices_reply, device_count) == 8 );
 +C_ASSERT( sizeof(struct get_rawinput_devices_reply) == 16 );
- C_ASSERT( sizeof(struct get_suspend_context_request) == 16 );
- C_ASSERT( sizeof(struct get_suspend_context_reply) == 8 );
- C_ASSERT( sizeof(struct set_suspend_context_request) == 16 );
+ C_ASSERT( FIELD_OFFSET(struct create_job_request, access) == 12 );
+ C_ASSERT( sizeof(struct create_job_request) == 16 );
+ C_ASSERT( FIELD_OFFSET(struct create_job_reply, handle) == 8 );
 diff --git a/server/trace.c b/server/trace.c
 index 524a989401..f3150b607a 100644
 --- a/server/trace.c
@@ -2470,33 +2473,33 @@ index 524a989401..f3150b607a 100644
 +    dump_varargs_rawinput_devices( ", devices=", cur_size );
 +}
 +
- static void dump_get_suspend_context_request( const struct get_suspend_context_request *req )
+ static void dump_create_job_request( const struct create_job_request *req )
  {
- }
+     fprintf( stderr, " access=%08x", req->access );
 @@ -5134,6 +5149,7 @@ static const dump_func req_dumpers[REQ_NB_REQUESTS] = {
      (dump_func)dump_free_user_handle_request,
      (dump_func)dump_set_cursor_request,
      (dump_func)dump_update_rawinput_devices_request,
 +    (dump_func)dump_get_rawinput_devices_request,
-     (dump_func)dump_get_suspend_context_request,
-     (dump_func)dump_set_suspend_context_request,
      (dump_func)dump_create_job_request,
+     (dump_func)dump_open_job_request,
+     (dump_func)dump_assign_job_request,
 @@ -5457,6 +5473,7 @@ static const dump_func reply_dumpers[REQ_NB_REQUESTS] = {
      NULL,
      (dump_func)dump_set_cursor_reply,
      NULL,
 +    (dump_func)dump_get_rawinput_devices_reply,
-     (dump_func)dump_get_suspend_context_reply,
-     NULL,
      (dump_func)dump_create_job_reply,
+     (dump_func)dump_open_job_reply,
+     NULL,
 @@ -5780,6 +5797,7 @@ static const char * const req_names[REQ_NB_REQUESTS] = {
      "free_user_handle",
      "set_cursor",
      "update_rawinput_devices",
 +    "get_rawinput_devices",
-     "get_suspend_context",
-     "set_suspend_context",
      "create_job",
+     "open_job",
+     "assign_job",
 From e356bcaf352618618e15d1ded10183852a59c7bf Mon Sep 17 00:00:00 2001
 From: Andrew Eikum <aeikum@codeweavers.com>
 Date: Tue, 17 Dec 2019 08:19:04 -0600

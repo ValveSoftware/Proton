@@ -42,9 +42,9 @@ index 5f9f61e2535..43cae2a2bc2 100644
  [Wow64Install.ntarm64]
  WineFakeDlls=FakeDllsWin32
 @@ -3867,6 +3870,22 @@ l_intl.nls
- [inf_section]
  winebus.inf
  winehid.inf
+ wineusb.inf
 +
 +[SteamClient]
 +HKCU,Software\Valve\Steam,"SteamPath",,"%16422%\Steam"
@@ -116,28 +116,31 @@ index cc7bf6900b..28bbb26f79 100644
  
  static const WCHAR dotW[] = {'.',0};
  
-From 819b923a3b761944b094f5f20b881c501a522f20 Mon Sep 17 00:00:00 2001
-From: Andrew Eikum <aeikum@codeweavers.com>
-Date: Fri, 19 Jan 2018 14:01:07 -0600
-Subject: [PATCH] HACK: advapi32: Use steamuser as Wine username
+From f319dc029be11156c22429c8e0892b4c0e3d0657 Mon Sep 17 00:00:00 2001
+From: Tk-Glitch <ti3nou@gmail.com>
+Date: Sat, 18 Apr 2020 5:53:14 +0200
+Subject: [PATCH] HACK: ntdll: Use steamuser as Wine username
+
+This replaces Andrew's previous patch:
+https://github.com/ValveSoftware/wine/commit/2e2a874cb3a44b2856561c0630037ea587177350
 
 ---
- dlls/advapi32/advapi.c | 2 +-
+ dlls/ntdll/env.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/dlls/advapi32/advapi.c b/dlls/advapi32/advapi.c
-index 1c528ef7419..87792f4fbc9 100644
---- a/dlls/advapi32/advapi.c
-+++ b/dlls/advapi32/advapi.c
+diff --git a/dlls/ntdll/env.c b/dlls/ntdll/env.c
+index be3586d..75e2e93 100644
+--- a/dlls/ntdll/env.c
++++ b/dlls/ntdll/env.c
 @@ -84,7 +84,7 @@ GetUserNameA( LPSTR lpszName, LPDWORD lpSize )
- BOOL WINAPI
- GetUserNameW( LPWSTR lpszName, LPDWORD lpSize )
- {
--    const char *name = wine_get_user_name();
-+    const char *name = "steamuser"/*wine_get_user_name()*/;
-     DWORD i, len = MultiByteToWideChar( CP_UNIXCP, 0, name, -1, NULL, 0 );
-     LPWSTR backslash;
  
+     /* set user name */
+ 
+-    name = wine_get_user_name();
++    name = "steamuser"/*wine_get_user_name()*/;
+     if ((p = strrchr( name, '/' ))) name = p + 1;
+     if ((p = strrchr( name, '\\' ))) name = p + 1;
+     ntdll_umbstowcs( name, strlen(name) + 1, buf, ARRAY_SIZE(buf) );
 From ec9e7190ea7045012b6e33e5ee64cd678bec68c9 Mon Sep 17 00:00:00 2001
 From: Andrew Eikum <aeikum@codeweavers.com>
 Date: Mon, 22 Jan 2018 14:32:40 -0600
@@ -651,18 +654,17 @@ diff --git a/dlls/winex11.drv/window.c b/dlls/winex11.drv/window.c
 index 1ec7c706511..9ae3da3d4a2 100644
 --- a/dlls/winex11.drv/window.c
 +++ b/dlls/winex11.drv/window.c
-@@ -870,10 +870,13 @@ static void set_initial_wm_hints( Display *display, Window window )
+@@ -870,8 +870,13 @@ static void set_initial_wm_hints( Display *display, Window window )
      /* class hints */
      if ((class_hints = XAllocClassHint()))
      {
--        static char wine[] = "Wine";
 +        static char steam_proton[] = "steam_proton";
 +        char proton_app_class[128];
 +        const char *app_id = getenv("SteamAppId");
- 
++
 +        snprintf(proton_app_class, sizeof(proton_app_class), "steam_app_%s", app_id);
          class_hints->res_name = process_name;
--        class_hints->res_class = wine;
+-        class_hints->res_class = process_name;
 +        class_hints->res_class = app_id ? proton_app_class : steam_proton;
          XSetClassHint( display, window, class_hints );
          XFree( class_hints );
@@ -722,3 +724,49 @@ index f632ca0414d..72e63327831 100644
      }
  
      input = parser_generate_command_file("echo Modules:", "info share",
+From a7542e9e279970c2ab3ac9c6c986b300135286a0 Mon Sep 17 00:00:00 2001
+From: Andrew Eikum <aeikum@codeweavers.com>
+Date: Wed, 28 Mar 2018 09:17:30 -0500
+Subject: [PATCH] wine.inf: Don't show crash dialog by default
+
+---
+ loader/wine.inf.in | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/loader/wine.inf.in b/loader/wine.inf.in
+index 7fe2f49dcd9..e72d0dcaba1 100644
+--- a/loader/wine.inf.in
++++ b/loader/wine.inf.in
+@@ -540,6 +540,7 @@ HKLM,%CurrentVersionNT%\AeDebug,"Debugger",2,"winedbg --auto %ld %ld"
+ HKLM,%CurrentVersionNT%\AeDebug,"Auto",2,"1"
+ HKCU,Software\Wine\Debug,"RelayExclude",2,"ntdll.RtlEnterCriticalSection;ntdll.RtlTryEnterCriticalSection;ntdll.RtlLeaveCriticalSection;kernel32.48;kernel32.49;kernel32.94;kernel32.95;kernel32.96;kernel32.97;kernel32.98;kernel32.TlsGetValue;kernel32.TlsSetValue;kernel32.FlsGetValue;kernel32.FlsSetValue;kernel32.SetLastError"
+ HKCU,Software\Wine\Debug,"RelayFromExclude",2,"winex11.drv;winemac.drv;user32;gdi32;advapi32;kernel32"
++HKCU,Software\Wine\WineDbg,"ShowCrashDialog",0x00010003,0x00000000
+ 
+ [DirectX]
+ HKLM,Software\Microsoft\DirectX,"Version",,"4.09.00.0904"
+From aa7fa7ce94bd4e49e3843a8ea398d29882518e43 Mon Sep 17 00:00:00 2001
+From: Andrew Eikum <aeikum@codeweavers.com>
+Date: Mon, 6 Aug 2018 08:06:03 -0500
+Subject: [PATCH] server: Set default timeout to 0
+
+The Steam client will be waiting for the wineserver to exit to set up
+some environment variables, so make it wait as short as possible.
+---
+ server/main.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/server/main.c b/server/main.c
+index 20d3c48c4d9..aca8738c4c0 100644
+--- a/server/main.c
++++ b/server/main.c
+@@ -42,7 +42,7 @@
+ /* command-line options */
+ int debug_level = 0;
+ int foreground = 0;
+-timeout_t master_socket_timeout = 3 * -TICKS_PER_SEC;  /* master socket timeout, default is 3 seconds */
++timeout_t master_socket_timeout = 0; /* master socket timeout, default is 3 seconds */
+ const char *server_argv0;
+ 
+ /* parse-line args */
+

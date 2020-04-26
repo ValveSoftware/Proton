@@ -559,10 +559,10 @@ index ea9e8262d83..ae68cdeccc8 100644
 -    free_VkCommandBufferInheritanceInfo_array((VkCommandBufferInheritanceInfo_host *)in->pInheritanceInfo, 1);
 -}
 -
--static inline VkBindAccelerationStructureMemoryInfoNV_host *convert_VkBindAccelerationStructureMemoryInfoNV_array_win_to_host(const VkBindAccelerationStructureMemoryInfoNV *in, uint32_t count)
-+static WINEVULKAN_FORCEINLINE VkBindAccelerationStructureMemoryInfoNV_host *convert_VkBindAccelerationStructureMemoryInfoNV_array_win_to_host(const VkBindAccelerationStructureMemoryInfoNV *in, uint32_t count)
+-static inline VkBindAccelerationStructureMemoryInfoKHR_host *convert_VkBindAccelerationStructureMemoryInfoKHR_array_win_to_host(const VkBindAccelerationStructureMemoryInfoKHR *in, uint32_t count)
++static WINEVULKAN_FORCEINLINE VkBindAccelerationStructureMemoryInfoKHR_host *convert_VkBindAccelerationStructureMemoryInfoKHR_array_win_to_host(const VkBindAccelerationStructureMemoryInfoKHR *in, uint32_t count)
  {
-     VkBindAccelerationStructureMemoryInfoNV_host *out;
+     VkBindAccelerationStructureMemoryInfoKHR_host *out;
      unsigned int i;
  
      if (!in) return NULL;
@@ -572,11 +572,11 @@ index ea9e8262d83..ae68cdeccc8 100644
      for (i = 0; i < count; i++)
      {
          out[i].sType = in[i].sType;
-@@ -144,21 +132,14 @@ static inline VkBindAccelerationStructureMemoryInfoNV_host *convert_VkBindAccele
+@@ -144,21 +132,14 @@ static inline VkBindAccelerationStructureMemoryInfoKHR_host *convert_VkBindAccele
      return out;
  }
  
--static inline void free_VkBindAccelerationStructureMemoryInfoNV_array(VkBindAccelerationStructureMemoryInfoNV_host *in, uint32_t count)
+-static inline void free_VkBindAccelerationStructureMemoryInfoKHR_array(VkBindAccelerationStructureMemoryInfoKHR_host *in, uint32_t count)
 -{
 -    if (!in) return;
 -
@@ -751,7 +751,7 @@ index ea9e8262d83..ae68cdeccc8 100644
      for (i = 0; i < count; i++)
      {
          out[i].bufferOffset = in[i].bufferOffset;
-@@ -359,46 +307,81 @@ static inline VkBufferImageCopy_host *convert_VkBufferImageCopy_array_win_to_hos
+@@ -299,11 +299,28 @@ static inline VkBufferImageCopy_host *convert_VkBufferImageCopy_array_win_to_hos
      return out;
  }
  
@@ -780,6 +780,11 @@ index ea9e8262d83..ae68cdeccc8 100644
  
 -    heap_free(in);
 +    return out;
+ }
+ 
+ static inline VkIndirectCommandsStreamNV_host *convert_VkIndirectCommandsStreamNV_array_win_to_host(const VkIndirectCommandsStreamNV *in, uint32_t count)
+@@ -359,39 +359,57 @@ static inline VkBufferImageCopy_host *convert_VkBufferImageCopy_array_win_to_hos
+     free_VkIndirectCommandsStreamNV_array((VkIndirectCommandsStreamNV_host *)in->pStreams, in->streamCount);
  }
  
 -static inline VkDescriptorImageInfo_host *convert_VkDescriptorImageInfo_array_win_to_host(const VkDescriptorImageInfo *in, uint32_t count)
@@ -1606,7 +1611,7 @@ index ea9e8262d83..ae68cdeccc8 100644
      pBindInfos_host = convert_VkBindAccelerationStructureMemoryInfoNV_array_win_to_host(pBindInfos, bindInfoCount);
      result = device->funcs.p_vkBindAccelerationStructureMemoryNV(device->device, bindInfoCount, pBindInfos_host);
  
--    free_VkBindAccelerationStructureMemoryInfoNV_array(pBindInfos_host, bindInfoCount);
+-    free_VkBindAccelerationStructureMemoryInfoKHR_array(pBindInfos_host, bindInfoCount);
      return result;
  #else
      TRACE("%p, %u, %p\n", device, bindInfoCount, pBindInfos);
@@ -2543,9 +2548,9 @@ index 7bf6a0a07f8..0f8de3d21c2 100644
 +    VK_FULL_SCREEN_EXCLUSIVE_EXT_MAX_ENUM = 0x7fffffff,
 +} VkFullScreenExclusiveEXT;
 +
- typedef enum VkGeometryFlagBitsNV
+ typedef enum VkGeometryFlagBitsKHR
  {
-     VK_GEOMETRY_OPAQUE_BIT_NV = 0x00000001,
+     VK_GEOMETRY_OPAQUE_BIT_KHR = 0x00000001,
 @@ -1909,6 +1922,7 @@ typedef enum VkResolveModeFlagBitsKHR
  
  typedef enum VkResult

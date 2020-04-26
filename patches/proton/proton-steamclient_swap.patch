@@ -320,6 +320,7 @@ index 00000000000..2b6e52e032b
 +54 stub hid_send_feature_report
 +55 stub hid_set_nonblocking
 +56 stub hid_write
+
 From f1a778c4f1c854be135b8bd9e320dde98fcca78a Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Tue, 12 Nov 2019 11:44:07 -0600
@@ -490,7 +491,7 @@ index 8dfabde44c3..b25c48b52ca 100644
 @@ -3953,6 +4047,7 @@ PVOID WINAPI RtlPcToFileHeader( PVOID pc, PVOID *address )
  
      RtlEnterCriticalSection( &loader_section );
-     if (!LdrFindEntryForAddress( pc, &module )) ret = module->BaseAddress;
+     if (!LdrFindEntryForAddress( pc, &module )) ret = module->DllBase;
 +    swap_builtin_to_native_steamclient_hack((HMODULE*)&ret);
      RtlLeaveCriticalSection( &loader_section );
      *address = ret;

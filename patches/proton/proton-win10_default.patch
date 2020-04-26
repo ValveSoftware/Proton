@@ -26,11 +26,13 @@ diff --git a/loader/wine.inf.in b/loader/wine.inf.in
 index 1aa0a37338b..99a4844eabe 100644
 --- a/loader/wine.inf.in
 +++ b/loader/wine.inf.in
-@@ -3767,10 +3767,10 @@ HKLM,"System\CurrentControlSet\Services\Winsock\Parameters",,16
+@@ -3767,12 +3767,10 @@ HKLM,"System\CurrentControlSet\Services\Winsock\Parameters",,16
  HKLM,"System\CurrentControlSet\Services\Winsock2\Parameters\Protocol_Catalog9\Catalog_Entries",,16
  
  [VersionInfo]
 -HKLM,%CurrentVersionNT%,"CurrentVersion",2,"6.1"
+-HKLM,%CurrentVersionNT%,"CurrentMajorVersionNumber",0x10001,6
+-HKLM,%CurrentVersionNT%,"CurrentMinorVersionNumber",0x10001,1
 -HKLM,%CurrentVersionNT%,"CSDVersion",2,"Service Pack 1"
 -HKLM,%CurrentVersionNT%,"CurrentBuild",2,"7601"
 -HKLM,%CurrentVersionNT%,"CurrentBuildNumber",2,"7601"
@@ -76,3 +78,17 @@ index 1aa0a37338b..99a4844eabe 100644
  HKLM,%Control%\Session Manager\Environment,"OS",2,"Windows_NT"
  
  [Wow64]
+diff --git a/programs/winecfg/appdefaults.c b/programs/winecfg/appdefaults.c
+index 6c4e6a49f26..1aea54adfb2 100644
+--- a/programs/winecfg/appdefaults.c
++++ b/programs/winecfg/appdefaults.c
+@@ -144,7 +144,7 @@ static void update_comboboxes(HWND dialog)
+             return;
+         }
+         if (ver != -1) winver = strdupA( win_versions[ver].szVersion );
+-        else winver = strdupA("win7");
++        else winver = strdupA("win10");
+     }
+     WINE_TRACE("winver is %s\n", winver);
+ 
+ 

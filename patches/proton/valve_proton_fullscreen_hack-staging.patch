@@ -1875,7 +1875,7 @@ index fecf9ab502..e53154d1ef 100644
 --- a/dlls/winevulkan/vulkan_thunks.c
 +++ b/dlls/winevulkan/vulkan_thunks.c
 @@ -376,69 +376,6 @@ static inline void free_VkBufferImageCopy_array(VkBufferImageCopy_host *in, uint
-     heap_free(in);
+     free_VkIndirectCommandsStreamNV_array((VkIndirectCommandsStreamNV_host *)in->pStreams, in->streamCount);
  }
  
 -static inline VkBufferMemoryBarrier_host *convert_VkBufferMemoryBarrier_array_win_to_host(const VkBufferMemoryBarrier *in, uint32_t count)
@@ -2081,9 +2081,9 @@ index fecf9ab502..e53154d1ef 100644
 -#endif
 -}
 -
- void WINAPI wine_vkCmdPushConstants(VkCommandBuffer commandBuffer, VkPipelineLayout layout, VkShaderStageFlags stageFlags, uint32_t offset, uint32_t size, const void *pValues)
+ static void WINAPI wine_vkCmdPreprocessGeneratedCommandsNV(VkCommandBuffer commandBuffer, const VkGeneratedCommandsInfoNV *pGeneratedCommandsInfo)
  {
-     TRACE("%p, 0x%s, %#x, %u, %u, %p\n", commandBuffer, wine_dbgstr_longlong(layout), stageFlags, offset, size, pValues);
+ #if defined(USE_STRUCT_CONVERSION)
 @@ -3561,23 +3512,6 @@ VkResult WINAPI wine_vkCreateShaderModule(VkDevice device, const VkShaderModuleC
      return device->funcs.p_vkCreateShaderModule(device->device, pCreateInfo, NULL, pShaderModule);
  }
@@ -3460,7 +3460,7 @@ index 635c7d9f3b..5b5ebe2d6e 100644
  /***********************************************************************
   *		glxdrv_wglMakeCurrent
   */
- static BOOL glxdrv_wglMakeCurrent(HDC hdc, struct wgl_context *ctx)
+ static BOOL WINAPI glxdrv_wglMakeCurrent(HDC hdc, struct wgl_context *ctx)
  {
 -    BOOL ret = FALSE;
 +    BOOL ret = FALSE, setup_fs_hack = FALSE;
@@ -5012,12 +5012,11 @@ index 930e0282be..2d17ff4d4f 100644
      xrandr_mode_count = 0;
      for (i = 0; i < output_info->nmode; ++i)
      {
-@@ -536,12 +573,22 @@ static int xrandr12_init_modes(void)
+@@ -536,11 +573,22 @@ static int xrandr12_init_modes(void)
  
              if (mode->id == output_info->modes[i])
              {
--                unsigned int dots = mode->hTotal * mode->vTotal;
--                unsigned int refresh = dots ? (mode->dotClock + dots / 2) / dots : 0;
+-                unsigned int refresh = get_frequency( mode );
 +                XRRModeInfo rotated_mode = *mode;
 +                if((crtc_info->rotation & RR_Rotate_90) ||
 +                        (crtc_info->rotation & RR_Rotate_270))
@@ -6399,41 +6398,6 @@ index 514cf6753f4..b86831d7d95 100644
  
  struct user_key_state_info
  {
-From 1d6a9c4db01123b6dfd7de0848fe4b3d1870cf8c Mon Sep 17 00:00:00 2001
-From: yuiiio <atbjyk@protonmail.com>
-Date: Sun, 1 Mar 2020 17:26:58 +0900
-Subject: [PATCH] HACK:winex11: limits resources->nmode
-
-fix https://github.com/ValveSoftware/Proton/issues/2929
----
- dlls/winex11.drv/xrandr.c | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
-
-diff --git a/dlls/winex11.drv/xrandr.c b/dlls/winex11.drv/xrandr.c
-index fff1322d292..cb73950e894 100644
---- a/dlls/winex11.drv/xrandr.c
-+++ b/dlls/winex11.drv/xrandr.c
-@@ -564,10 +564,19 @@ static int xrandr12_init_modes(void)
-         primary_height = tmp;
-     }
- 
-+    int limit = 53; // required by nier_automata (55), sekiro (53), dark_souls3 (53)
-+    int capped_resources_nmode = 1;
-+
-+    if (resources->nmode > limit) {
-+        capped_resources_nmode = limit;
-+    } else {
-+        capped_resources_nmode = resources->nmode;
-+    }
-+    
-     xrandr_mode_count = 0;
-     for (i = 0; i < output_info->nmode; ++i)
-     {
--        for (j = 0; j < resources->nmode; ++j)
-+        for (j = 0; j < capped_resources_nmode; ++j)
-         {
-             XRRModeInfo *mode = &resources->modes[j];
- 
 From 501b068024375386484c6a8616a406b21ab15406 Mon Sep 17 00:00:00 2001
 From: Andrew Eikum <aeikum@codeweavers.com>
 Date: Thu, 30 Jan 2020 14:44:00 -0600

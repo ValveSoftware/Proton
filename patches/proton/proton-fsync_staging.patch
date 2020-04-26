@@ -1197,8 +1197,8 @@ index 0000000000..970316777a
 +    TRACE("Woken up by user APC.\n");
 +
 +    /* We have to make a server call anyway to get the APC to execute, so just
-+     * delegate down to server_select(). */
-+    ret = server_select( NULL, 0, SELECT_INTERRUPTIBLE | SELECT_ALERTABLE, &zero );
++     * delegate down to server_wait(). */
++    ret = server_wait( NULL, 0, SELECT_INTERRUPTIBLE | SELECT_ALERTABLE, &zero );
 +
 +    /* This can happen if we received a system APC, and the APC fd was woken up
 +     * before we got SIGUSR1. poll() doesn't return EINTR in that case. The
@@ -3470,6 +3470,14 @@ index 6d51ca8774..88b5ce2792 100644
      thread_apc_signaled,        /* signaled */
      NULL,                       /* get_esync_fd */
 +    NULL,                       /* get_fsync_idx */
+     no_satisfied,               /* satisfied */
+     no_signal,                  /* signal */
+     no_get_fd,                  /* get_fd */
+@@ -126,6 +127,7 @@ static const struct object_ops context_ops =
+     remove_queue,               /* remove_queue */
+     context_signaled,           /* signaled */
+     NULL,                       /* get_esync_fd */
++    NULL,                       /* get_fsync_fd */
      no_satisfied,               /* satisfied */
      no_signal,                  /* signal */
      no_get_fd,                  /* get_fd */
