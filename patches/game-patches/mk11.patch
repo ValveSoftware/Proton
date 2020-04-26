@@ -1,88 +1,49 @@
-commit 585b6f89affa3482caee9bf17f20dad77dc82d07
-Author: Derek Lesho <dlesho@codeweavers.com>
-Date:   Wed Oct 2 09:10:26 2019 -0500
+From e8f6ed261e213ced6c0c762988b6fc3446ef510a Mon Sep 17 00:00:00 2001
+From: Derek Lesho <dlesho@codeweavers.com>
+Date: Wed, 22 Apr 2020 10:45:46 -0500
+Subject: [PATCH 1/8] mk11_base
 
-    Vincent's Changes
+---
+ configure                  |  2 ++
+ configure.ac               |  1 +
+ dlls/gfesdk/Makefile.in    |  7 ++++
+ dlls/gfesdk/gfesdk.spec    | 16 +++++++++
+ dlls/gfesdk/gfesdk_main.c  | 70 ++++++++++++++++++++++++++++++++++++++
+ dlls/gfesdk/nvgsdk.h       | 30 ++++++++++++++++
+ dlls/ntdll/signal_x86_64.c | 11 +++++-
+ dlls/wbemprox/builtin.c    |  8 +++--
+ dlls/ws2_32/Makefile.in    |  1 +
+ 9 files changed, 148 insertions(+), 22 deletions(-)
+ create mode 100644 dlls/gfesdk/Makefile.in
+ create mode 100644 dlls/gfesdk/gfesdk.spec
+ create mode 100644 dlls/gfesdk/gfesdk_main.c
+ create mode 100644 dlls/gfesdk/nvgsdk.h
 
-diff --git a/dlls/wbemprox/builtin.c b/dlls/wbemprox/builtin.c
-index 96d1e0b850..423d47bd24 100644
---- a/dlls/wbemprox/builtin.c
-+++ b/dlls/wbemprox/builtin.c
-@@ -792,7 +792,8 @@ static const struct column col_sounddevice[] =
- {
-     { prop_nameW,        CIM_STRING },
-     { prop_productnameW, CIM_STRING },
--    { prop_statusinfoW,  CIM_UINT16 }
-+    { prop_statusinfoW,  CIM_UINT16 },
-+    { prop_manufacturerW,       CIM_STRING }
- };
- static const struct column col_stdregprov[] =
- {
-@@ -933,6 +934,10 @@ static const WCHAR quickfixengineering_captionW[] =
-     {'h','t','t','p',':','/','/','w','i','n','e','h','q','.','o','r','g',0};
- static const WCHAR quickfixengineering_hotfixidW[] =
-     {'K','B','1','2','3','4','5','6','7',0};
-+static const WCHAR physicalmemory_partnumberW[] =
-+    {'B','L','S','8','G','3','D','1','6','0','9','D','S','1','S','0','0','.',0};
-+static const WCHAR sounddevice_manufacturerW[] =
-+    {'T','h','e',' ','W','i','n','e',' ','P','r','o','j','e','c','t',0};
- static const WCHAR sounddevice_productnameW[] =
-     {'W','i','n','e',' ','A','u','d','i','o',' ','D','e','v','i','c','e',0};
- static const WCHAR systemenclosure_systemenclosureW[] =
-@@ -1272,6 +1277,7 @@ struct record_sounddevice
-     const WCHAR *name;
-     const WCHAR *productname;
-     UINT16       statusinfo;
-+    const WCHAR *manufacturer;
- };
- struct record_stdregprov
- {
-@@ -1388,7 +1394,7 @@ static const struct record_quickfixengineering data_quickfixengineering[] =
- };
- static const struct record_sounddevice data_sounddevice[] =
- {
--    { sounddevice_productnameW, sounddevice_productnameW, 3 /* enabled */ }
-+    { sounddevice_productnameW, sounddevice_productnameW, 3 /* enabled */, sounddevice_manufacturerW }
- };
- static const struct record_stdregprov data_stdregprov[] =
- {
-@@ -3349,11 +3355,11 @@ static enum fill_status fill_physicalmemory( struct table *table, const struct e
- 
-     rec = (struct record_physicalmemory *)table->data;
-     rec->capacity             = get_total_physical_memory();
--    rec->configuredclockspeed = 0;
-+    rec->configuredclockspeed = 1600;
-     rec->devicelocator        = dimm0W;
-     rec->formfactor           = 8; /* DIMM */
-     rec->memorytype           = 9; /* RAM */
--    rec->partnumber           = NULL;
-+    rec->partnumber           = physicalmemory_partnumberW;
-     if (!match_row( table, row, cond, &status )) free_row_values( table, row );
-     else row++;
- 
-diff --git a/dlls/ws2_32/Makefile.in b/dlls/ws2_32/Makefile.in
-index 9d7dfafeb3..c7f24168da 100644
---- a/dlls/ws2_32/Makefile.in
-+++ b/dlls/ws2_32/Makefile.in
-@@ -1,6 +1,7 @@
- EXTRADEFS = -DUSE_WS_PREFIX
- MODULE    = ws2_32.dll
- IMPORTLIB = ws2_32
-+IMPORTS = kernelbase
- DELAYIMPORTS = iphlpapi user32
- EXTRALIBS = $(POLL_LIBS)
- 
-commit f4d63311736e7a5db2e9c327a3fbbc21d8cf9c7c
-Author: Derek Lesho <dlesho@codeweavers.com>
-Date:   Wed Oct 2 09:11:03 2019 -0500
-
-    gfesdk stub
-
+diff --git a/configure b/configure
+index 6c4a5f21b5d..0483ccfeda8 100755
+--- a/configure
++++ b/configure
+@@ -1343,6 +1342,7 @@ enable_fwpuclnt
+ enable_gameux
+ enable_gdi32
+ enable_gdiplus
++enable_gfesdk
+ enable_glu32
+ enable_gphoto2_ds
+ enable_gpkcsp
+@@ -20623,6 +20612,7 @@ wine_fn_config_makefile dlls/gdi32 enable_gdi32
+ wine_fn_config_makefile dlls/gdi32/tests enable_tests
+ wine_fn_config_makefile dlls/gdiplus enable_gdiplus
+ wine_fn_config_makefile dlls/gdiplus/tests enable_tests
++wine_fn_config_makefile dlls/gfesdk enable_gfesdk
+ wine_fn_config_makefile dlls/glu32 enable_glu32
+ wine_fn_config_makefile dlls/gphoto2.ds enable_gphoto2_ds
+ wine_fn_config_makefile dlls/gpkcsp enable_gpkcsp
 diff --git a/configure.ac b/configure.ac
-index b9339b90aa..81995b05a4 100644
+index 37e3445a342..7700e998067 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -3330,6 +3330,7 @@ WINE_CONFIG_MAKEFILE(dlls/gdi32)
+@@ -3313,6 +3313,7 @@ WINE_CONFIG_MAKEFILE(dlls/gdi32)
  WINE_CONFIG_MAKEFILE(dlls/gdi32/tests)
  WINE_CONFIG_MAKEFILE(dlls/gdiplus)
  WINE_CONFIG_MAKEFILE(dlls/gdiplus/tests)
@@ -92,7 +53,7 @@ index b9339b90aa..81995b05a4 100644
  WINE_CONFIG_MAKEFILE(dlls/gpkcsp)
 diff --git a/dlls/gfesdk/Makefile.in b/dlls/gfesdk/Makefile.in
 new file mode 100644
-index 0000000000..339ccfd7e7
+index 00000000000..339ccfd7e71
 --- /dev/null
 +++ b/dlls/gfesdk/Makefile.in
 @@ -0,0 +1,7 @@
@@ -105,7 +66,7 @@ index 0000000000..339ccfd7e7
 +    gfesdk_main.c
 diff --git a/dlls/gfesdk/gfesdk.spec b/dlls/gfesdk/gfesdk.spec
 new file mode 100644
-index 0000000000..816f5bc8aa
+index 00000000000..816f5bc8aa3
 --- /dev/null
 +++ b/dlls/gfesdk/gfesdk.spec
 @@ -0,0 +1,16 @@
@@ -127,7 +88,7 @@ index 0000000000..816f5bc8aa
 +@ cdecl NVGSDK_SetLogLevel(long)
 diff --git a/dlls/gfesdk/gfesdk_main.c b/dlls/gfesdk/gfesdk_main.c
 new file mode 100644
-index 0000000000..f0af7e7568
+index 00000000000..f0af7e7568d
 --- /dev/null
 +++ b/dlls/gfesdk/gfesdk_main.c
 @@ -0,0 +1,70 @@
@@ -203,7 +164,7 @@ index 0000000000..f0af7e7568
 +}
 diff --git a/dlls/gfesdk/nvgsdk.h b/dlls/gfesdk/nvgsdk.h
 new file mode 100644
-index 0000000000..457f234073
+index 00000000000..457f2340738
 --- /dev/null
 +++ b/dlls/gfesdk/nvgsdk.h
 @@ -0,0 +1,30 @@
@@ -237,72 +198,11 @@ index 0000000000..457f234073
 +typedef void(CALLBACK *NVGSDK_EmptyCallback)(NVGSDK_RetCode ret, void *context);
 +
 +typedef void(CALLBACK *NVGSDK_GetUILanguageCallback)(NVGSDK_RetCode ret, NVGSDK_Language const *lang, void *context);
--- 
-2.23.0
-
-diff --git a/dlls/ntdll/virtual.c b/dlls/ntdll/virtual.c
-index c702fd9c05..981699d854 100644
---- a/dlls/ntdll/virtual.c
-+++ b/dlls/ntdll/virtual.c
-@@ -2031,6 +2031,27 @@ static int remove_reserved_area_from_free( void *base, size_t size, void *arg )
-     return 0;
- }
- 
-+#define MK11_STEAM_ID	"976310"
-+#define MK11_CHECK_TODO	(-2)
-+#define MK11_CHECK_YES	(1)
-+#define MK11_CHECK_NO	(0)
-+#define MK11_UNLIKELY(x)	__builtin_expect(!!(x),0)
-+
-+static int is_MK11_running(void) {
-+	static int MK11_running_flag = MK11_CHECK_TODO;
-+
-+	/* don't care if we execute the below
-+	 * spuriously */
-+	if(MK11_UNLIKELY(MK11_running_flag == MK11_CHECK_TODO)) {
-+		const char*	p_gameid = getenv("SteamGameId");
-+		const int  	is_running = (!p_gameid || strcmp(p_gameid, MK11_STEAM_ID)) ? MK11_CHECK_NO : MK11_CHECK_YES;
-+		/* atomic CAS */
-+		__sync_bool_compare_and_swap(&MK11_running_flag, MK11_CHECK_TODO, is_running);
-+	}
-+
-+	return MK11_running_flag == MK11_CHECK_YES;
-+}
-+
- /***********************************************************************
-  *           virtual_init
-  */
-@@ -2067,6 +2088,10 @@ void virtual_init(void)
-         }
-     }
- 
-+    if (is_MK11_running()) {
-+        user_space_limit = (void *)0x7ffffff0000;
-+    }
-+
-     /* try to find space in a reserved area for the views and pages protection table */
- #ifdef _WIN64
-     pages_vprot_size = ((size_t)address_space_limit >> page_shift >> pages_vprot_shift) + 1;
-
-From: Derek Lesho <dlesho@codeweavers.com>
-Subject: [PATCH] ntdll: Only call wine handlers if they're in the same stack.
-Message-Id: <20191002154547.878669-1-dlesho@codeweavers.com>
-Date: Wed,  2 Oct 2019 10:45:47 -0500
-
-In Mortal Kombat 11, the game creates its own stack, with an address higher
-than the default wine stack.  Because of this, when we unwind a C++ exception,
-we assume we are inside a wine frame, and we crash trying to unwind to it.
-
-Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
----
- dlls/ntdll/signal_x86_64.c | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
-
 diff --git a/dlls/ntdll/signal_x86_64.c b/dlls/ntdll/signal_x86_64.c
-index 427a4a0e05..8d6f351f4b 100644
+index 89caca9f30f..6fb16333397 100644
 --- a/dlls/ntdll/signal_x86_64.c
 +++ b/dlls/ntdll/signal_x86_64.c
-@@ -2427,12 +2427,21 @@ static NTSTATUS call_stack_handlers( EXCEPTION_RECORD *rec, CONTEXT *orig_contex
+@@ -2431,12 +2431,21 @@ static NTSTATUS call_stack_handlers( EXCEPTION_RECORD *rec, CONTEXT *orig_contex
      UNWIND_HISTORY_TABLE table;
      DISPATCHER_CONTEXT dispatch;
      CONTEXT context;
@@ -324,7 +224,7 @@ index 427a4a0e05..8d6f351f4b 100644
      for (;;)
      {
          status = virtual_unwind( UNW_FLAG_EHANDLER, &dispatch, &context );
-@@ -2478,7 +2487,7 @@ static NTSTATUS call_stack_handlers( EXCEPTION_RECORD *rec, CONTEXT *orig_contex
+@@ -2482,7 +2491,7 @@ static NTSTATUS call_stack_handlers( EXCEPTION_RECORD *rec, CONTEXT *orig_contex
              }
          }
          /* hack: call wine handlers registered in the tib list */
@@ -333,6 +233,58 @@ index 427a4a0e05..8d6f351f4b 100644
          {
              TRACE( "found wine frame %p rsp %lx handler %p\n",
                      teb_frame, context.Rsp, teb_frame->Handler );
-
--- 
-2.23.0
+diff --git a/dlls/wbemprox/builtin.c b/dlls/wbemprox/builtin.c
+index 24badb7bf92..e5d8b2400aa 100644
+--- a/dlls/wbemprox/builtin.c
++++ b/dlls/wbemprox/builtin.c
+@@ -374,6 +374,7 @@ static const struct column col_sounddevice[] =
+     { L"Name",        CIM_STRING },
+     { L"ProductName", CIM_STRING },
+     { L"StatusInfo",  CIM_UINT16 },
++    { L"Manufacturer", CIM_STRING },
+ };
+ static const struct column col_stdregprov[] =
+ {
+@@ -759,6 +760,7 @@ struct record_sounddevice
+     const WCHAR *name;
+     const WCHAR *productname;
+     UINT16       statusinfo;
++    const WCHAR *manufacturer;
+ };
+ struct record_stdregprov
+ {
+@@ -876,7 +878,7 @@ static const struct record_quickfixengineering data_quickfixengineering[] =
+ };
+ static const struct record_sounddevice data_sounddevice[] =
+ {
+-    { L"Wine Audio Device", L"Wine Audio Device", 3 /* enabled */ }
++    { L"Wine Audio Device", L"Wine Audio Device", 3 /* enabled */, L"The Wine Project" }
+ };
+ static const struct record_stdregprov data_stdregprov[] =
+ {
+@@ -2868,11 +2870,11 @@ static enum fill_status fill_physicalmemory( struct table *table, const struct e
+ 
+     rec = (struct record_physicalmemory *)table->data;
+     rec->capacity             = get_total_physical_memory();
+-    rec->configuredclockspeed = 0;
++    rec->configuredclockspeed = 1600;
+     rec->devicelocator        = L"DIMM 0";
+     rec->formfactor           = 8; /* DIMM */
+     rec->memorytype           = 9; /* RAM */
+-    rec->partnumber           = NULL;
++    rec->partnumber           = L"BLS8G3D1609DS1S00";
+     if (!match_row( table, row, cond, &status )) free_row_values( table, row );
+     else row++;
+ 
+diff --git a/dlls/ws2_32/Makefile.in b/dlls/ws2_32/Makefile.in
+index 9d7dfafeb3c..c7f24168dac 100644
+--- a/dlls/ws2_32/Makefile.in
++++ b/dlls/ws2_32/Makefile.in
+@@ -1,6 +1,7 @@
+ EXTRADEFS = -DUSE_WS_PREFIX
+ MODULE    = ws2_32.dll
+ IMPORTLIB = ws2_32
++IMPORTS = kernelbase
+ DELAYIMPORTS = iphlpapi user32
+ EXTRALIBS = $(POLL_LIBS)
+ 
