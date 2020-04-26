@@ -7,7 +7,7 @@
 #718 vulkan childwindow
 #1044 fsync staging
 #1066 fsync spincount
-#1078 - fs hack
+#1078 fs hack
 #1125 rawinput
 #1207 LAA
 #1221 winex11-MWM
@@ -52,7 +52,6 @@
     cd vkd3d
     git reset --hard HEAD
     git clean -xdf
-    patch -Np1 < ../patches/vkd3d/mhw-vkd3d.patch
     cd ..
 
     # Valve DXVK patches
@@ -67,7 +66,9 @@
     cd wine-staging
     git reset --hard HEAD
     git clean -xdf
-    patch -Np1 < ../patches/wine-hotfixes/staging-44d1a45-localreverts.patch
+
+    # fixes patching without rawinput
+    patch -Np1 < ../patches/wine-hotfixes/staging-44d1a45-localreverts.patch    
     cd ..
 
     #WINE
@@ -75,14 +76,21 @@
     git reset --hard HEAD
     git clean -xdf
 
-    # winepath was broken with this commit
-    git revert --no-commit e22bcac706be3afac67f4faac3aca79fd67c3d6f
-
     # this conflicts with proton's gamepad changes and causes camera spinning
     git revert --no-commit da7d60bf97fb8726828e57f852e8963aacde21e9
 
+    # media foundation fixes
+    git revert --no-commit 7948b2519250f7b6eb732ff2fa1d9526cc28696e
+    
 # warframe launcher fix 0.0mb hang fix
 #    -W ntdll-avoid-fstatat
+
+# disable these when using proton's gamepad patches
+#    -W dinput-SetActionMap-genre \
+#    -W dinput-axis-recalc \
+#    -W dinput-joy-mappings \
+#    -W dinput-reconnect-joystick \
+#    -W dinput-remap-joystick \
 
     echo "applying staging patches"
     ../wine-staging/patches/patchinstall.sh DESTDIR="." --all \
@@ -92,6 +100,7 @@
     -W winex11-MWM_Decorations \
     -W winex11-_NET_ACTIVE_WINDOW \
     -W winex11-WM_WINDOWPOSCHANGING \
+    -W winex11-key_translation \
     -W user32-rawinput-mouse \
     -W user32-rawinput-nolegacy \
     -W user32-rawinput-mouse-experimental \
@@ -101,7 +110,6 @@
     -W dinput-joy-mappings \
     -W dinput-reconnect-joystick \
     -W dinput-remap-joystick \
-    -W winex11-key_translation \
     -W ntdll-avoid-fstatat
 
 
@@ -114,10 +122,11 @@
     echo "mech warrior online"
     patch -Np1 < ../patches/game-patches/mwo.patch
 
+#   TODO: Add game-specific check
     echo "final fantasy XV"
     patch -Np1 < ../patches/game-patches/ffxv-steam-fix.patch
 
-#   TODO: Check on this - don't own game. Need to validate
+#   TODO: Add game-specific check
     echo "assetto corsa"
     patch -Np1 < ../patches/game-patches/assettocorsa-hud.patch
 
@@ -131,10 +140,12 @@
     patch -Np1 < ../patches/wine-hotfixes/0001-Add-some-semi-stubs-in-user32.patch
 
 #   TODO: Check on this - don't own game. Need to validate
+#   TODO: Add game-specific check
     echo "NFSW launcher fix"
     patch -Np1 < ../patches/game-patches/NFSWLauncherfix.patch
 
-#   TODO: Check on this - don't own game. Need to validate. Unknown if necessary outside of proton specific gamepad patches. Seems to cause input issues in FFXV
+#   TODO: Check on this - don't own game. Need to validate.
+#   TODO: Add game-specific check
     echo "gta4 input patch"
     patch -Np1 < ../patches/game-patches/gta4_gamepad_workaround.patch
 
@@ -202,6 +213,9 @@
 
     echo "protonify"
     patch -Np1 < ../patches/proton/proton-protonify_staging.patch
+
+    echo "protonify-audio"
+    patch -Np1 < ../patches/proton/proton-pa-staging.patch
     
     echo "steam bits"
     patch -Np1 < ../patches/proton/proton-steam-bits.patch
@@ -248,8 +262,12 @@
     patch -Np1 < ../patches/wine-hotfixes/D3D12SerializeVersionedRootSignature.patch
     patch -Np1 < ../patches/wine-hotfixes/D3D12CreateVersionedRootSignatureDeserializer.patch
 
-    echo "applying MHW vkd3d wine patches"
-    patch -Np1 < ../patches/wine-hotfixes/mhw-dxgi-fixes.patch
+
+# Here choose one or the other - either Guy's patches for media foundation testing, 
+# or mf_hacks for proton's default current functionality around media foundation, not both
+
+#    echo "proton MF hacks"
+#    patch -Np1 < ../patches/proton/proton-mf_hacks.patch
 
     echo "guy's media foundation alpha patches"
     patch -Np1 < ../patches/wine-hotfixes/media_foundation_alpha.patch
@@ -257,36 +275,13 @@
     echo "proton-specific manual mfplat dll register patch"
     patch -Np1 < ../patches/wine-hotfixes/proton_mediafoundation_dllreg.patch
 
-
-# the patch below reverts the following commits:
-
-# f64e34b01456de26e5a8f60e8494cbe839964071
-# de47a5969be3d78d2043abb75b7659241b8e434a
-# d01b177bee7da2fa4a924e4b3bb4481cb31748df
-# b87256cd1db21a59484248a193b6ad12ca2853ca
-
-# because they cause wineboot to error on creating a default prefix after compiling:
-
-# obj-wine64$ WINEPREFIX=$PWD/test ./wine64 wineboot
-# wine: created the configuration directory '/home/vagrant/build-Proton-5.5-GE-2/obj-wine64/test'
-# wine: could not load kernel32.dll, status c000007b
-
-# the reason is because of outdated glibc used in steam runtime:
-
-# <rbernon> GloriousEggroll zf: the issue comes from steamrt eglibc that incorrectly adds a leaf attribute to dlopen, which makes gcc assume the 
-# call have no side effects on the current translation unit and, and makes it optimize some global assignments around it that are normally used by wine to track the outcome of the load
-# <rbernon> other / more recent glibc do not have leaf attributes on dlopen, so it's probably an eglibc bug, but it's still a bit hard to workaround
-
-    echo "ntdll revert for proton wineboot fix"
-    patch -Np1 < ../patches/wine-hotfixes/0001-ntdll-re-enable_wine_dl_functions_to_fix_wineboot_in.patch
-
-# Hotfixes pending in the wine patch list
-    patch -Np1 < ../patches/wine-hotfixes/winex11-Dont_unmap_the_clip_window_more_than_once.patch
-    patch -Np1 < ../patches/wine-hotfixes/user32-Set_PAINTSTRUCT_fErase_field_depending_on_the_last_WM_ERASEBKGND_result.patch
+    # WINE HOTFIXES
     patch -Np1 < ../patches/wine-hotfixes/ntdll-Use_the_free_ranges_in_find_reserved_free_area.patch
 
     #WINE CUSTOM PATCHES
     #add your own custom patch lines below
+    patch -Np1 < ../patches/wine-hotfixes/user32-Set_PAINTSTRUCT_fErase_field_depending_on_the_last_WM_ERASEBKGND_result.patch
+    patch -Np1 < ../patches/wine-hotfixes/ntdll-Use_the_free_ranges_in_find_reserved_free_area.patch
 
     ./dlls/winevulkan/make_vulkan
     ./tools/make_requests
