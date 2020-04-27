@@ -78,9 +78,6 @@
 
     # this conflicts with proton's gamepad changes and causes camera spinning
     git revert --no-commit da7d60bf97fb8726828e57f852e8963aacde21e9
-
-#    # media foundation fixes
-#    git revert --no-commit 7948b2519250f7b6eb732ff2fa1d9526cc28696e
     
 # warframe launcher fix 0.0mb hang fix
 #    -W ntdll-avoid-fstatat
@@ -270,14 +267,14 @@
 # Here choose one or the other - either Guy's patches for media foundation testing, 
 # or mf_hacks for proton's default current functionality around media foundation, not both
 
-    echo "proton MF hacks"
-    patch -Np1 < ../patches/proton/proton-mf_hacks.patch
+#    echo "proton MF hacks"
+#    patch -Np1 < ../patches/proton/proton-mf_hacks.patch
 
-#    echo "guy's media foundation alpha patches"
-#    patch -Np1 < ../patches/wine-hotfixes/media_foundation_alpha.patch
+    echo "guy's media foundation alpha patches"
+    patch -Np1 < ../patches/wine-hotfixes/media_foundation_alpha.patch
 
-#    echo "proton-specific manual mfplat dll register patch"
-#    patch -Np1 < ../patches/wine-hotfixes/proton_mediafoundation_dllreg.patch
+    echo "proton-specific manual mfplat dll register patch"
+    patch -Np1 < ../patches/wine-hotfixes/proton_mediafoundation_dllreg.patch
 
     # WINE HOTFIXES
     patch -Np1 < ../patches/wine-hotfixes/server-fix_setting_context_flags_in_get_thread_context.patch

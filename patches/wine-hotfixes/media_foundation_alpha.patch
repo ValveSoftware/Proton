@@ -1,8 +1,8 @@
-From dd814cdf041ce6f64e6828e70dab41c8ec040b2e Mon Sep 17 00:00:00 2001
+From 37d71c8533aabbecc75d90b45b4a1b0a48267ce1 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Sergio=20G=C3=B3mez=20Del=20Real?=
  <sdelreal@codeweavers.com>
 Date: Wed, 1 Apr 2020 16:11:05 -0500
-Subject: [PATCH 01/42] mf/tests: Sink objects are stream sinks, not media
+Subject: [PATCH 01/40] mf/tests: Sink objects are stream sinks, not media
  sinks.
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -14,7 +14,7 @@ Signed-off-by: Sergio Gómez Del Real <sdelreal@codeweavers.com>
  1 file changed, 5 insertions(+), 2 deletions(-)
 
 diff --git a/dlls/mf/tests/mf.c b/dlls/mf/tests/mf.c
-index ae9f58a4bcc..66c2990438f 100644
+index bf14ccf0fe..3a0164c851 100644
 --- a/dlls/mf/tests/mf.c
 +++ b/dlls/mf/tests/mf.c
 @@ -1311,6 +1311,7 @@ static void test_topology_loader(void)
@@ -45,12 +45,14 @@ index ae9f58a4bcc..66c2990438f 100644
      ok(hr == S_OK, "Failed to resolve topology, hr %#x.\n", hr);
      ok(full_topology != topology, "Unexpected instance.\n");
  
+-- 
+2.25.3
 
-From 4fac7e8d502e58f5877cc7dfa57010855577c509 Mon Sep 17 00:00:00 2001
+From 454472cc64be187515937c6f607da7a609b6dce1 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Sergio=20G=C3=B3mez=20Del=20Real?=
  <sdelreal@codeweavers.com>
 Date: Wed, 1 Apr 2020 16:11:06 -0500
-Subject: [PATCH 02/42] mf/tests: Add tests for the topology loader.
+Subject: [PATCH 02/40] mf/tests: Add tests for the topology loader.
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -61,7 +63,7 @@ Signed-off-by: Sergio Gómez Del Real <sdelreal@codeweavers.com>
  1 file changed, 433 insertions(+), 2 deletions(-)
 
 diff --git a/dlls/mf/tests/mf.c b/dlls/mf/tests/mf.c
-index 66c2990438f..d4e98725205 100644
+index 3a0164c851..3ce94862c7 100644
 --- a/dlls/mf/tests/mf.c
 +++ b/dlls/mf/tests/mf.c
 @@ -1303,26 +1303,169 @@ static const IMFSampleGrabberSinkCallbackVtbl test_grabber_callback_vtbl =
@@ -542,12 +544,14 @@ index 66c2990438f..d4e98725205 100644
      IMFTopoLoader_Release(loader);
  
      hr = MFShutdown();
+-- 
+2.25.3
 
-From 14d99873a7986f23104810da94713fee84beccf4 Mon Sep 17 00:00:00 2001
+From 02de878b58d7ef8acec5a23a6cc9dc59132253c8 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Sergio=20G=C3=B3mez=20Del=20Real?=
  <sdelreal@codeweavers.com>
 Date: Wed, 1 Apr 2020 16:11:07 -0500
-Subject: [PATCH 03/42] mf: Partially implement the topology loader.
+Subject: [PATCH 03/40] mf: Partially implement the topology loader.
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -559,7 +563,7 @@ Signed-off-by: Sergio Gómez Del Real <sdelreal@codeweavers.com>
  2 files changed, 321 insertions(+), 19 deletions(-)
 
 diff --git a/dlls/mf/tests/mf.c b/dlls/mf/tests/mf.c
-index d4e98725205..184c14c0c5a 100644
+index 3ce94862c7..46f1dc3c6a 100644
 --- a/dlls/mf/tests/mf.c
 +++ b/dlls/mf/tests/mf.c
 @@ -1483,7 +1483,6 @@ static void test_topology_loader(void)
@@ -587,7 +591,7 @@ index d4e98725205..184c14c0c5a 100644
  
      hr = IMFTopologyNode_ConnectOutput(src_node, 0, sink_node, 0);
 diff --git a/dlls/mf/topology.c b/dlls/mf/topology.c
-index 0b4d7344422..7a4c95bea07 100644
+index 0b4d734442..7a4c95bea0 100644
 --- a/dlls/mf/topology.c
 +++ b/dlls/mf/topology.c
 @@ -1913,47 +1913,352 @@ static ULONG WINAPI topology_loader_Release(IMFTopoLoader *iface)
@@ -959,11 +963,13 @@ index 0b4d7344422..7a4c95bea07 100644
  }
  
  static const IMFTopoLoaderVtbl topologyloadervtbl =
+-- 
+2.25.3
 
-From 87bd915635e2b0808f50734255e90b199f81b6b1 Mon Sep 17 00:00:00 2001
+From ead38c91199278caa58ebc9425e2f10cba8a818a Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Wed, 25 Mar 2020 10:03:52 -0500
-Subject: [PATCH 04/42] Implement stub bytestream handler and source.
+Subject: [PATCH 04/40] Implement stub bytestream handler and source.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
 ---
@@ -979,7 +985,7 @@ Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
  create mode 100644 dlls/winegstreamer/media_source.c
 
 diff --git a/dlls/mfplat/tests/mfplat.c b/dlls/mfplat/tests/mfplat.c
-index 007db891c1f..f7b2a190764 100644
+index 007db891c1..f7b2a19076 100644
 --- a/dlls/mfplat/tests/mfplat.c
 +++ b/dlls/mfplat/tests/mfplat.c
 @@ -493,7 +493,10 @@ static void test_source_resolver(void)
@@ -1022,7 +1028,7 @@ index 007db891c1f..f7b2a190764 100644
      IMFByteStream_Release(stream);
  
 diff --git a/dlls/winegstreamer/Makefile.in b/dlls/winegstreamer/Makefile.in
-index 337c1086e6b..e578d194f7f 100644
+index 337c1086e6..e578d194f7 100644
 --- a/dlls/winegstreamer/Makefile.in
 +++ b/dlls/winegstreamer/Makefile.in
 @@ -10,6 +10,7 @@ C_SRCS = \
@@ -1034,7 +1040,7 @@ index 337c1086e6b..e578d194f7f 100644
  	mfplat.c \
  	pin.c \
 diff --git a/dlls/winegstreamer/gst_private.h b/dlls/winegstreamer/gst_private.h
-index e6fb841fc87..71ca4290885 100644
+index e6fb841fc8..71ca429088 100644
 --- a/dlls/winegstreamer/gst_private.h
 +++ b/dlls/winegstreamer/gst_private.h
 @@ -54,4 +54,10 @@ void start_dispatch_thread(void) DECLSPEC_HIDDEN;
@@ -1050,7 +1056,7 @@ index e6fb841fc87..71ca4290885 100644
  #endif /* __GST_PRIVATE_INCLUDED__ */
 diff --git a/dlls/winegstreamer/media_source.c b/dlls/winegstreamer/media_source.c
 new file mode 100644
-index 00000000000..df28f54444d
+index 0000000000..df28f54444
 --- /dev/null
 +++ b/dlls/winegstreamer/media_source.c
 @@ -0,0 +1,680 @@
@@ -1736,10 +1742,10 @@ index 00000000000..df28f54444d
 +}
 \ No newline at end of file
 diff --git a/dlls/winegstreamer/mfplat.c b/dlls/winegstreamer/mfplat.c
-index 55b9b088765..16e55247de1 100644
+index 55b9b08876..16e55247de 100644
 --- a/dlls/winegstreamer/mfplat.c
 +++ b/dlls/winegstreamer/mfplat.c
-@@ -398,6 +398,11 @@ static HRESULT video_processor_create(REFIID riid, void **ret)
+@@ -398,6 +398,11 @@ failed:
      return hr;
  }
  
@@ -1770,7 +1776,7 @@ index 55b9b088765..16e55247de1 100644
      {
          if (IsEqualGUID(class_objects[i].clsid, rclsid))
 diff --git a/dlls/winegstreamer/winegstreamer.rgs b/dlls/winegstreamer/winegstreamer.rgs
-index 923ba673f8c..0bc26761e9d 100644
+index 923ba673f8..0bc26761e9 100644
 --- a/dlls/winegstreamer/winegstreamer.rgs
 +++ b/dlls/winegstreamer/winegstreamer.rgs
 @@ -12,3 +12,35 @@ HKCR
@@ -1811,7 +1817,7 @@ index 923ba673f8c..0bc26761e9d 100644
 +}
 \ No newline at end of file
 diff --git a/dlls/winegstreamer/winegstreamer_classes.idl b/dlls/winegstreamer/winegstreamer_classes.idl
-index fa0e1784057..997a28b052f 100644
+index fa0e178405..997a28b052 100644
 --- a/dlls/winegstreamer/winegstreamer_classes.idl
 +++ b/dlls/winegstreamer/winegstreamer_classes.idl
 @@ -54,3 +54,10 @@ coclass Gstreamer_Splitter {}
@@ -1826,7 +1832,7 @@ index fa0e1784057..997a28b052f 100644
 +]
 +coclass MPEG4ByteStreamHandler {}
 diff --git a/include/mfidl.idl b/include/mfidl.idl
-index 4e7a43f5fff..c61ccb788ce 100644
+index 4e7a43f5ff..c61ccb788c 100644
 --- a/include/mfidl.idl
 +++ b/include/mfidl.idl
 @@ -1128,3 +1128,4 @@ cpp_quote("EXTERN_GUID(MF_AUDIO_RENDERER_ATTRIBUTE_ENDPOINT_ROLE, 0x6ba644ff, 0x
@@ -1835,11 +1841,13 @@ index 4e7a43f5fff..c61ccb788ce 100644
  cpp_quote("EXTERN_GUID(CLSID_VideoProcessorMFT, 0x88753b26, 0x5b24, 0x49bd, 0xb2, 0xe7, 0xc, 0x44, 0x5c, 0x78, 0xc9, 0x82);")
 +cpp_quote("EXTERN_GUID(CLSID_MPEG4ByteStreamHandler, 0x271c3902, 0x6095, 0x4c45, 0xa2, 0x2f, 0x20, 0x09, 0x18, 0x16, 0xee, 0x9e);")
 \ No newline at end of file
+-- 
+2.25.3
 
-From 2324d989b4cf7ee65d9b2e0b16aec2f5a7fa56c2 Mon Sep 17 00:00:00 2001
+From 234d902496990fdaf85c85ba8b4ed6cb643d2f0c Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Mon, 30 Mar 2020 15:19:01 -0500
-Subject: [PATCH 05/42] winegstreamer: Implement IMFMediaSource::Shutdown.
+Subject: [PATCH 05/40] winegstreamer: Implement IMFMediaSource::Shutdown.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
 ---
@@ -1848,7 +1856,7 @@ Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
  2 files changed, 38 insertions(+), 3 deletions(-)
 
 diff --git a/dlls/mfplat/tests/mfplat.c b/dlls/mfplat/tests/mfplat.c
-index f7b2a190764..7f2e4c991f2 100644
+index f7b2a19076..7f2e4c991f 100644
 --- a/dlls/mfplat/tests/mfplat.c
 +++ b/dlls/mfplat/tests/mfplat.c
 @@ -590,13 +590,13 @@ todo_wine
@@ -1867,7 +1875,7 @@ index f7b2a190764..7f2e4c991f2 100644
      IMFByteStream_Release(stream);
  
 diff --git a/dlls/winegstreamer/media_source.c b/dlls/winegstreamer/media_source.c
-index df28f54444d..09a40a06208 100644
+index df28f54444..09a40a0620 100644
 --- a/dlls/winegstreamer/media_source.c
 +++ b/dlls/winegstreamer/media_source.c
 @@ -20,6 +20,14 @@ struct media_source
@@ -1987,11 +1995,13 @@ index df28f54444d..09a40a06208 100644
      object->IMFMediaSource_iface.lpVtbl = &IMFMediaSource_vtbl;
      object->ref = 1;
  
+-- 
+2.25.3
 
-From 653a36585e00df1c649d67e9058f7eb9d19e7d78 Mon Sep 17 00:00:00 2001
+From 14907682d19493258ca472b2dc72ffcf3b0f045c Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Mon, 30 Mar 2020 14:19:35 -0500
-Subject: [PATCH 06/42] winegstreamer: Add a GstPad wrapping the media source's
+Subject: [PATCH 06/40] winegstreamer: Add a GstPad wrapping the media source's
  bytestream.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
@@ -2002,7 +2012,7 @@ Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
  3 files changed, 302 insertions(+), 5 deletions(-)
 
 diff --git a/dlls/winegstreamer/gst_cbs.c b/dlls/winegstreamer/gst_cbs.c
-index bf7103b1606..141ab3c6116 100644
+index bf7103b160..141ab3c611 100644
 --- a/dlls/winegstreamer/gst_cbs.c
 +++ b/dlls/winegstreamer/gst_cbs.c
 @@ -49,6 +49,8 @@ static void CALLBACK perform_cb(TP_CALLBACK_INSTANCE *instance, void *user)
@@ -2076,7 +2086,7 @@ index bf7103b1606..141ab3c6116 100644
 +}
 \ No newline at end of file
 diff --git a/dlls/winegstreamer/gst_cbs.h b/dlls/winegstreamer/gst_cbs.h
-index 4725f23ad1a..10e999feea7 100644
+index 4725f23ad1..10e999feea 100644
 --- a/dlls/winegstreamer/gst_cbs.h
 +++ b/dlls/winegstreamer/gst_cbs.h
 @@ -43,7 +43,12 @@ enum CB_TYPE {
@@ -2112,7 +2122,7 @@ index 4725f23ad1a..10e999feea7 100644
  
  #endif
 diff --git a/dlls/winegstreamer/media_source.c b/dlls/winegstreamer/media_source.c
-index 09a40a06208..48119e4a89d 100644
+index 09a40a0620..48119e4a89 100644
 --- a/dlls/winegstreamer/media_source.c
 +++ b/dlls/winegstreamer/media_source.c
 @@ -1,4 +1,9 @@
@@ -2426,11 +2436,13 @@ index 09a40a06208..48119e4a89d 100644
 +        }
 +    }
 +}
+-- 
+2.25.3
 
-From ab95d21907689e23eca6cf81cfa56908f270a9be Mon Sep 17 00:00:00 2001
+From e9e5dde5bbf7d6d0a605c389697ca8a359d38489 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Tue, 31 Mar 2020 13:34:57 -0500
-Subject: [PATCH 07/42] winegstreamer: Find an appropriate demuxer for the
+Subject: [PATCH 07/40] winegstreamer: Find an appropriate demuxer for the
  source.
 
 We can add a path later which uses decodebin as the demuxer, for use with formats not supported on windows.  (like Theora)
@@ -2443,7 +2455,7 @@ Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
  3 files changed, 114 insertions(+), 2 deletions(-)
 
 diff --git a/dlls/winegstreamer/gst_cbs.c b/dlls/winegstreamer/gst_cbs.c
-index 141ab3c6116..51b017ded65 100644
+index 141ab3c611..51b017ded6 100644
 --- a/dlls/winegstreamer/gst_cbs.c
 +++ b/dlls/winegstreamer/gst_cbs.c
 @@ -358,4 +358,17 @@ gboolean process_bytestream_pad_event_wrapper(GstPad *pad, GstObject *parent, Gs
@@ -2467,7 +2479,7 @@ index 141ab3c6116..51b017ded65 100644
 +    return cbdata.u.watch_bus_data.ret;
 +}
 diff --git a/dlls/winegstreamer/gst_cbs.h b/dlls/winegstreamer/gst_cbs.h
-index 10e999feea7..0d7acaf0b86 100644
+index 10e999feea..0d7acaf0b8 100644
 --- a/dlls/winegstreamer/gst_cbs.h
 +++ b/dlls/winegstreamer/gst_cbs.h
 @@ -48,6 +48,7 @@ enum CB_TYPE {
@@ -2486,7 +2498,7 @@ index 10e999feea7..0d7acaf0b86 100644
  
  #endif
 diff --git a/dlls/winegstreamer/media_source.c b/dlls/winegstreamer/media_source.c
-index 48119e4a89d..e1f5c773758 100644
+index 48119e4a89..e1f5c77375 100644
 --- a/dlls/winegstreamer/media_source.c
 +++ b/dlls/winegstreamer/media_source.c
 @@ -38,7 +38,12 @@ struct media_source
@@ -2645,11 +2657,13 @@ index 48119e4a89d..e1f5c773758 100644
      default:
          {
              ERR("Wrong callback forwarder called\n");
+-- 
+2.25.3
 
-From bf5fd19bed6764bd83cedc73d1e3cca43d6a3a43 Mon Sep 17 00:00:00 2001
+From 5c50d3e6a2fde49e9a30fcfea031c1ac6e6b9b16 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Mon, 20 Apr 2020 13:02:23 -0500
-Subject: [PATCH 08/42] winegstreamer: Use the demuxer to establish
+Subject: [PATCH 08/40] winegstreamer: Use the demuxer to establish
  IMFMediaStreams.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
@@ -2660,7 +2674,7 @@ Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
  3 files changed, 461 insertions(+)
 
 diff --git a/dlls/winegstreamer/gst_cbs.c b/dlls/winegstreamer/gst_cbs.c
-index 51b017ded65..808c9f7ad22 100644
+index 51b017ded6..808c9f7ad2 100644
 --- a/dlls/winegstreamer/gst_cbs.c
 +++ b/dlls/winegstreamer/gst_cbs.c
 @@ -372,3 +372,47 @@ GstBusSyncReply watch_source_bus_wrapper(GstBus *bus, GstMessage *message, gpoin
@@ -2713,7 +2727,7 @@ index 51b017ded65..808c9f7ad22 100644
 +}
 \ No newline at end of file
 diff --git a/dlls/winegstreamer/gst_cbs.h b/dlls/winegstreamer/gst_cbs.h
-index 0d7acaf0b86..106368a0641 100644
+index 0d7acaf0b8..106368a064 100644
 --- a/dlls/winegstreamer/gst_cbs.h
 +++ b/dlls/winegstreamer/gst_cbs.h
 @@ -49,6 +49,10 @@ enum CB_TYPE {
@@ -2750,7 +2764,7 @@ index 0d7acaf0b86..106368a0641 100644
  
  #endif
 diff --git a/dlls/winegstreamer/media_source.c b/dlls/winegstreamer/media_source.c
-index e1f5c773758..8335c64338d 100644
+index e1f5c77375..8335c64338 100644
 --- a/dlls/winegstreamer/media_source.c
 +++ b/dlls/winegstreamer/media_source.c
 @@ -5,6 +5,7 @@
@@ -3227,11 +3241,13 @@ index e1f5c773758..8335c64338d 100644
      default:
          {
              ERR("Wrong callback forwarder called\n");
+-- 
+2.25.3
 
-From ef0134e30f770b871da9c53c464c4abcdd5a5a15 Mon Sep 17 00:00:00 2001
+From 17198ddee20575026892c271cf95a1ba413e901d Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Tue, 31 Mar 2020 11:11:05 -0500
-Subject: [PATCH 09/42] winegstreamer: Implement
+Subject: [PATCH 09/40] winegstreamer: Implement
  IMFMediaStream::GetStreamDescriptor.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
@@ -3242,7 +3258,7 @@ Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
  3 files changed, 234 insertions(+), 1 deletion(-)
 
 diff --git a/dlls/winegstreamer/gst_private.h b/dlls/winegstreamer/gst_private.h
-index 71ca4290885..780cf1b02fa 100644
+index 71ca429088..780cf1b02f 100644
 --- a/dlls/winegstreamer/gst_private.h
 +++ b/dlls/winegstreamer/gst_private.h
 @@ -36,6 +36,7 @@
@@ -3264,7 +3280,7 @@ index 71ca4290885..780cf1b02fa 100644
  {
      SOURCE_TYPE_MPEG_4,
 diff --git a/dlls/winegstreamer/media_source.c b/dlls/winegstreamer/media_source.c
-index 8335c64338d..a654d555bc1 100644
+index 8335c64338..a654d555bc 100644
 --- a/dlls/winegstreamer/media_source.c
 +++ b/dlls/winegstreamer/media_source.c
 @@ -507,7 +507,10 @@ static HRESULT WINAPI media_stream_GetStreamDescriptor(IMFMediaStream* iface, IM
@@ -3341,7 +3357,7 @@ index 8335c64338d..a654d555bc1 100644
      return hr;
  }
 diff --git a/dlls/winegstreamer/mfplat.c b/dlls/winegstreamer/mfplat.c
-index 16e55247de1..09266ffab41 100644
+index 16e55247de..09266ffab4 100644
 --- a/dlls/winegstreamer/mfplat.c
 +++ b/dlls/winegstreamer/mfplat.c
 @@ -16,6 +16,11 @@
@@ -3542,11 +3558,13 @@ index 16e55247de1..09266ffab41 100644
 +    return ret;
 +}
 \ No newline at end of file
+-- 
+2.25.3
 
-From fb8cd0be1360bd2c7b3adda93d870d4ee173577b Mon Sep 17 00:00:00 2001
+From 6630020cbfa722d1767c8427dbbc96b9786e743d Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Tue, 24 Mar 2020 16:00:26 -0500
-Subject: [PATCH 10/42] winegstreamer: Translate H.264 caps to attributes.
+Subject: [PATCH 10/40] winegstreamer: Translate H.264 caps to attributes.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
 ---
@@ -3554,7 +3572,7 @@ Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
  1 file changed, 67 insertions(+)
 
 diff --git a/dlls/winegstreamer/mfplat.c b/dlls/winegstreamer/mfplat.c
-index 09266ffab41..b76714c4829 100644
+index 09266ffab4..b76714c482 100644
 --- a/dlls/winegstreamer/mfplat.c
 +++ b/dlls/winegstreamer/mfplat.c
 @@ -26,6 +26,7 @@
@@ -3638,11 +3656,13 @@ index 09266ffab41..b76714c4829 100644
          else
              FIXME("Unrecognized video format %s\n", mime_type);
      }
+-- 
+2.25.3
 
-From f2cab32fa74ba2752513fd03129ddbe2a1d99c73 Mon Sep 17 00:00:00 2001
+From 4153798848fb770f4f304710589ba33889e92d19 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Tue, 24 Mar 2020 16:01:20 -0500
-Subject: [PATCH 11/42] winegstreamer: Translate WMV caps to attributes.
+Subject: [PATCH 11/40] winegstreamer: Translate WMV caps to attributes.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
 ---
@@ -3650,7 +3670,7 @@ Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
  1 file changed, 44 insertions(+)
 
 diff --git a/dlls/winegstreamer/mfplat.c b/dlls/winegstreamer/mfplat.c
-index b76714c4829..1b0f562dbb5 100644
+index b76714c482..1b0f562dbb 100644
 --- a/dlls/winegstreamer/mfplat.c
 +++ b/dlls/winegstreamer/mfplat.c
 @@ -592,6 +592,50 @@ static IMFMediaType* transform_to_media_type(GstCaps *caps)
@@ -3704,11 +3724,13 @@ index b76714c4829..1b0f562dbb5 100644
          else
              FIXME("Unrecognized video format %s\n", mime_type);
      }
+-- 
+2.25.3
 
-From b8643ca005f12057338963b3bf3bdfc4cf58f97c Mon Sep 17 00:00:00 2001
+From 8261f58adc0a905bde26954bee68e4d17db7cf3e Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Tue, 24 Mar 2020 16:02:27 -0500
-Subject: [PATCH 12/42] winegstreamer: Translate AAC caps to attributes.
+Subject: [PATCH 12/40] winegstreamer: Translate AAC caps to attributes.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
 ---
@@ -3716,7 +3738,7 @@ Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
  1 file changed, 118 insertions(+)
 
 diff --git a/dlls/winegstreamer/mfplat.c b/dlls/winegstreamer/mfplat.c
-index 1b0f562dbb5..4a97bf0c70b 100644
+index 1b0f562dbb..4a97bf0c70 100644
 --- a/dlls/winegstreamer/mfplat.c
 +++ b/dlls/winegstreamer/mfplat.c
 @@ -463,6 +463,15 @@ uncompressed_formats[] =
@@ -3851,11 +3873,13 @@ index 1b0f562dbb5..4a97bf0c70b 100644
          else
              FIXME("Unrecognized audio format %s\n", mime_type);
      }
+-- 
+2.25.3
 
-From 3e68e1f732fb143c8ad2527a4c5c80e9a218de33 Mon Sep 17 00:00:00 2001
+From 32b7bfeaffedf79deed5859e4c26dc8aa2e6cc50 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Wed, 25 Mar 2020 13:36:19 -0500
-Subject: [PATCH 13/42] winegstreamer: Add video/mpeg recognition.
+Subject: [PATCH 13/40] winegstreamer: Add video/mpeg recognition.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
 ---
@@ -3863,7 +3887,7 @@ Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
  1 file changed, 15 insertions(+)
 
 diff --git a/dlls/winegstreamer/mfplat.c b/dlls/winegstreamer/mfplat.c
-index 4a97bf0c70b..02912ac3b60 100644
+index 4a97bf0c70..02912ac3b6 100644
 --- a/dlls/winegstreamer/mfplat.c
 +++ b/dlls/winegstreamer/mfplat.c
 @@ -645,6 +645,21 @@ static IMFMediaType* transform_to_media_type(GstCaps *caps)
@@ -3888,11 +3912,13 @@ index 4a97bf0c70b..02912ac3b60 100644
          else
              FIXME("Unrecognized video format %s\n", mime_type);
      }
+-- 
+2.25.3
 
-From d045537dc75f9990881290200003cd505c3a61ea Mon Sep 17 00:00:00 2001
+From 8c397ca0e9a31ef40116840c6434d56581cd8f46 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Tue, 31 Mar 2020 11:21:21 -0500
-Subject: [PATCH 14/42] winegstreamer: Implement
+Subject: [PATCH 14/40] winegstreamer: Implement
  IMFMediaSource::CreatePresentationDescriptor.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
@@ -3902,7 +3928,7 @@ Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
  2 files changed, 38 insertions(+), 6 deletions(-)
 
 diff --git a/dlls/mfplat/tests/mfplat.c b/dlls/mfplat/tests/mfplat.c
-index 7f2e4c991f2..0a1234d1a50 100644
+index 7f2e4c991f..0a1234d1a5 100644
 --- a/dlls/mfplat/tests/mfplat.c
 +++ b/dlls/mfplat/tests/mfplat.c
 @@ -493,10 +493,7 @@ static void test_source_resolver(void)
@@ -3940,7 +3966,7 @@ index 7f2e4c991f2..0a1234d1a50 100644
      ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
  
 diff --git a/dlls/winegstreamer/media_source.c b/dlls/winegstreamer/media_source.c
-index a654d555bc1..04b3b9f6c71 100644
+index a654d555bc..04b3b9f6c7 100644
 --- a/dlls/winegstreamer/media_source.c
 +++ b/dlls/winegstreamer/media_source.c
 @@ -61,6 +61,7 @@ struct media_source
@@ -4025,11 +4051,13 @@ index a654d555bc1..04b3b9f6c71 100644
      media_source_teardown(object);
      heap_free(object);
      *out_media_source = NULL;
+-- 
+2.25.3
 
-From c685e271a08f9cb20a47e8573eab5589d0432d21 Mon Sep 17 00:00:00 2001
+From c594c6dbfa6c3b5e2e1fd7064fbb660b92e5768f Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Tue, 31 Mar 2020 15:10:03 -0500
-Subject: [PATCH 15/42] winegstreamer: Implement IMFMediaSource::Start.
+Subject: [PATCH 15/40] winegstreamer: Implement IMFMediaSource::Start.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
 ---
@@ -4038,7 +4066,7 @@ Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
  2 files changed, 284 insertions(+), 7 deletions(-)
 
 diff --git a/dlls/mfplat/tests/mfplat.c b/dlls/mfplat/tests/mfplat.c
-index 0a1234d1a50..8e7a836b3fb 100644
+index 0a1234d1a5..8e7a836b3f 100644
 --- a/dlls/mfplat/tests/mfplat.c
 +++ b/dlls/mfplat/tests/mfplat.c
 @@ -521,10 +521,7 @@ static void test_source_resolver(void)
@@ -4080,7 +4108,7 @@ index 0a1234d1a50..8e7a836b3fb 100644
      IMFPresentationDescriptor_Release(descriptor);
  
 diff --git a/dlls/winegstreamer/media_source.c b/dlls/winegstreamer/media_source.c
-index 04b3b9f6c71..abf0cfd56fa 100644
+index 04b3b9f6c7..abf0cfd56f 100644
 --- a/dlls/winegstreamer/media_source.c
 +++ b/dlls/winegstreamer/media_source.c
 @@ -50,12 +50,36 @@ struct media_stream
@@ -4421,11 +4449,13 @@ index 04b3b9f6c71..abf0cfd56fa 100644
      object->container = gst_bin_new(NULL);
      object->bus = gst_bus_new();
      gst_bus_set_sync_handler(object->bus, watch_source_bus_wrapper, object, NULL);
+-- 
+2.25.3
 
-From a89c1d88115278df29f804b46ddb190197176247 Mon Sep 17 00:00:00 2001
+From 2095ce7cb63af2aa7debb866eb3645c7c7b737ae Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Tue, 31 Mar 2020 15:11:31 -0500
-Subject: [PATCH 16/42] winegstreamer: Insert parser into pipeline to rectify
+Subject: [PATCH 16/40] winegstreamer: Insert parser into pipeline to rectify
  type differences.
 
 It's probably better to use caps negotiation here, but this seemed simpler for now.
@@ -4436,7 +4466,7 @@ Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
  1 file changed, 91 insertions(+), 23 deletions(-)
 
 diff --git a/dlls/winegstreamer/media_source.c b/dlls/winegstreamer/media_source.c
-index abf0cfd56fa..cb247adcef1 100644
+index abf0cfd56f..cb247adcef 100644
 --- a/dlls/winegstreamer/media_source.c
 +++ b/dlls/winegstreamer/media_source.c
 @@ -578,7 +578,6 @@ static void source_stream_added(GstElement *element, GstPad *pad, gpointer user)
@@ -4598,11 +4628,13 @@ index abf0cfd56fa..cb247adcef1 100644
      if (stream_type)
          IMFMediaType_Release(stream_type);
      if (type_handler)
+-- 
+2.25.3
 
-From aa7f69702aac9a928d481ebabf30794ca64eb2f5 Mon Sep 17 00:00:00 2001
+From d72b1d3ca531c0792d4797bedc9a473fbefb8a14 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Wed, 25 Mar 2020 10:43:03 -0500
-Subject: [PATCH 17/42] winegstreamer: Implement IMFMediaStream::RequestSample.
+Subject: [PATCH 17/40] winegstreamer: Implement IMFMediaStream::RequestSample.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
 ---
@@ -4613,7 +4645,7 @@ Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
  4 files changed, 214 insertions(+), 9 deletions(-)
 
 diff --git a/dlls/mfplat/tests/mfplat.c b/dlls/mfplat/tests/mfplat.c
-index 8e7a836b3fb..51193641243 100644
+index 8e7a836b3f..5119364124 100644
 --- a/dlls/mfplat/tests/mfplat.c
 +++ b/dlls/mfplat/tests/mfplat.c
 @@ -539,13 +539,10 @@ static void test_source_resolver(void)
@@ -4639,7 +4671,7 @@ index 8e7a836b3fb..51193641243 100644
      IMFMediaTypeHandler_Release(handler);
      IMFPresentationDescriptor_Release(descriptor);
 diff --git a/dlls/winegstreamer/gst_private.h b/dlls/winegstreamer/gst_private.h
-index 780cf1b02fa..823e023f52c 100644
+index 780cf1b02f..823e023f52 100644
 --- a/dlls/winegstreamer/gst_private.h
 +++ b/dlls/winegstreamer/gst_private.h
 @@ -57,6 +57,7 @@ extern HRESULT mfplat_get_class_object(REFCLSID rclsid, REFIID riid, void **obj)
@@ -4651,7 +4683,7 @@ index 780cf1b02fa..823e023f52c 100644
  enum source_type
  {
 diff --git a/dlls/winegstreamer/media_source.c b/dlls/winegstreamer/media_source.c
-index cb247adcef1..61f3bf1a8b9 100644
+index cb247adcef..61f3bf1a8b 100644
 --- a/dlls/winegstreamer/media_source.c
 +++ b/dlls/winegstreamer/media_source.c
 @@ -51,11 +51,13 @@ struct media_stream
@@ -4852,7 +4884,7 @@ index cb247adcef1..61f3bf1a8b9 100644
      if (FAILED(hr = MFCreateEventQueue(&object->event_queue)))
          goto fail;
 diff --git a/dlls/winegstreamer/mfplat.c b/dlls/winegstreamer/mfplat.c
-index 02912ac3b60..8bb030f0185 100644
+index 02912ac3b6..8bb030f018 100644
 --- a/dlls/winegstreamer/mfplat.c
 +++ b/dlls/winegstreamer/mfplat.c
 @@ -871,4 +871,94 @@ GstCaps *make_mf_compatible_caps(GstCaps *caps)
@@ -4951,11 +4983,13 @@ index 02912ac3b60..8bb030f0185 100644
 +    return NULL;
  }
 \ No newline at end of file
+-- 
+2.25.3
 
-From 3d6cdea020a5d0b669c55f7f116142e3b14c6658 Mon Sep 17 00:00:00 2001
+From c0750b5f3656824cebde006650d731892296ef03 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Tue, 31 Mar 2020 15:15:07 -0500
-Subject: [PATCH 18/42] winegstreamer: Implement
+Subject: [PATCH 18/40] winegstreamer: Implement
  IMFMediaSource::GetCharacteristics.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
@@ -4964,7 +4998,7 @@ Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
  1 file changed, 4 insertions(+), 2 deletions(-)
 
 diff --git a/dlls/winegstreamer/media_source.c b/dlls/winegstreamer/media_source.c
-index 61f3bf1a8b9..b4672450074 100644
+index 61f3bf1a8b..b467245007 100644
 --- a/dlls/winegstreamer/media_source.c
 +++ b/dlls/winegstreamer/media_source.c
 @@ -1171,12 +1171,14 @@ static HRESULT WINAPI media_source_GetCharacteristics(IMFMediaSource *iface, DWO
@@ -4984,11 +5018,13 @@ index 61f3bf1a8b9..b4672450074 100644
  }
  
  static HRESULT WINAPI media_source_CreatePresentationDescriptor(IMFMediaSource *iface, IMFPresentationDescriptor **descriptor)
+-- 
+2.25.3
 
-From eaf5833cd16a35bac6bc55cb48d35ae005eee12c Mon Sep 17 00:00:00 2001
+From 7c9549ea7ed5831f6f9be4b1ded5032c86832e33 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Tue, 31 Mar 2020 15:15:50 -0500
-Subject: [PATCH 19/42] winegstreamer: Calculate the MF_PD_DURATION of the
+Subject: [PATCH 19/40] winegstreamer: Calculate the MF_PD_DURATION of the
  media source's PD.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
@@ -4997,7 +5033,7 @@ Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
  1 file changed, 40 insertions(+)
 
 diff --git a/dlls/winegstreamer/media_source.c b/dlls/winegstreamer/media_source.c
-index b4672450074..454d06c761b 100644
+index b467245007..454d06c761 100644
 --- a/dlls/winegstreamer/media_source.c
 +++ b/dlls/winegstreamer/media_source.c
 @@ -1434,6 +1434,46 @@ static HRESULT media_source_constructor(IMFByteStream *bytestream, enum source_t
@@ -5047,11 +5083,13 @@ index b4672450074..454d06c761b 100644
      gst_element_set_state(object->container, GST_STATE_READY);
  
      object->state = SOURCE_STOPPED;
+-- 
+2.25.3
 
-From 44b5f61ae39436d4553e5437850be0ee481b5a8e Mon Sep 17 00:00:00 2001
+From d5a3b09cea0a3d1c6b26a0e1e3aa6c320e476605 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Wed, 29 Jan 2020 15:37:39 -0600
-Subject: [PATCH 20/42] tools: Add support for multiple parent directories.
+Subject: [PATCH 20/40] tools: Add support for multiple parent directories.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
 ---
@@ -5060,7 +5098,7 @@ Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
  2 files changed, 49 insertions(+), 26 deletions(-)
 
 diff --git a/tools/make_makefiles b/tools/make_makefiles
-index c18fa90e2d3..1e34a280a40 100755
+index c18fa90e2d..1e34a280a4 100755
 --- a/tools/make_makefiles
 +++ b/tools/make_makefiles
 @@ -231,14 +231,14 @@ sub parse_makefile($)
@@ -5141,7 +5179,7 @@ index c18fa90e2d3..1e34a280a40 100755
  }
  
 diff --git a/tools/makedep.c b/tools/makedep.c
-index fb2e145ced2..c505d26f431 100644
+index fb2e145ced..c505d26f43 100644
 --- a/tools/makedep.c
 +++ b/tools/makedep.c
 @@ -182,6 +182,7 @@ struct makefile
@@ -5219,11 +5257,13 @@ index fb2e145ced2..c505d26f431 100644
      strarray_add( &make->include_args, strmake( "-I%s", top_obj_dir_path( make, "include" )));
      if (make->top_src_dir)
          strarray_add( &make->include_args, strmake( "-I%s", top_src_dir_path( make, "include" )));
+-- 
+2.25.3
 
-From 822cec890ad707d6decc9cf2fded634efa663b57 Mon Sep 17 00:00:00 2001
+From ec1640839eece7195a0ebdfc2d4967ebe1f3abce Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Wed, 29 Jan 2020 15:30:49 -0600
-Subject: [PATCH 21/42] mf: Introduce handler helper.
+Subject: [PATCH 21/40] mf: Introduce handler helper.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
 ---
@@ -5238,7 +5278,7 @@ Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
  create mode 100644 dlls/mf/handler.h
 
 diff --git a/dlls/mf/Makefile.in b/dlls/mf/Makefile.in
-index fe156e43abf..5c69ac38e5f 100644
+index fe156e43ab..5c69ac38e5 100644
 --- a/dlls/mf/Makefile.in
 +++ b/dlls/mf/Makefile.in
 @@ -5,6 +5,7 @@ IMPORTS   = advapi32 mfplat ole32 uuid mfuuid
@@ -5251,7 +5291,7 @@ index fe156e43abf..5c69ac38e5f 100644
  	sar.c \
 diff --git a/dlls/mf/handler.c b/dlls/mf/handler.c
 new file mode 100644
-index 00000000000..da40049377e
+index 0000000000..da40049377
 --- /dev/null
 +++ b/dlls/mf/handler.c
 @@ -0,0 +1,360 @@
@@ -5618,7 +5658,7 @@ index 00000000000..da40049377e
 \ No newline at end of file
 diff --git a/dlls/mf/handler.h b/dlls/mf/handler.h
 new file mode 100644
-index 00000000000..fbebd26e8d0
+index 0000000000..fbebd26e8d
 --- /dev/null
 +++ b/dlls/mf/handler.h
 @@ -0,0 +1,30 @@
@@ -5654,7 +5694,7 @@ index 00000000000..fbebd26e8d0
 +HRESULT handler_cancel_object_creation(struct handler *handler, IUnknown *cancel_cookie);
 \ No newline at end of file
 diff --git a/dlls/mf/main.c b/dlls/mf/main.c
-index 01fe17866c3..b1b8f3430ca 100644
+index 01fe17866c..b1b8f3430c 100644
 --- a/dlls/mf/main.c
 +++ b/dlls/mf/main.c
 @@ -35,6 +35,7 @@
@@ -6135,7 +6175,7 @@ index 01fe17866c3..b1b8f3430ca 100644
      return hr;
  }
 diff --git a/dlls/winegstreamer/Makefile.in b/dlls/winegstreamer/Makefile.in
-index e578d194f7f..f2e87494459 100644
+index e578d194f7..f2e8749445 100644
 --- a/dlls/winegstreamer/Makefile.in
 +++ b/dlls/winegstreamer/Makefile.in
 @@ -3,12 +3,13 @@ IMPORTS   = strmiids uuid ole32 mfuuid
@@ -6154,7 +6194,7 @@ index e578d194f7f..f2e87494459 100644
  	media_source.c \
  	mediatype.c \
 diff --git a/dlls/winegstreamer/media_source.c b/dlls/winegstreamer/media_source.c
-index 454d06c761b..fcfa6443f8e 100644
+index 454d06c761..fcfa6443f8 100644
 --- a/dlls/winegstreamer/media_source.c
 +++ b/dlls/winegstreamer/media_source.c
 @@ -4,6 +4,7 @@
@@ -6587,11 +6627,13 @@ index 454d06c761b..fcfa6443f8e 100644
      this->refcount = 1;
  
      hr = IMFByteStreamHandler_QueryInterface(&this->IMFByteStreamHandler_iface, riid, obj);
+-- 
+2.25.3
 
-From 4426a7fcbb4cf6236dcd2cfa5597b73d44c2bb21 Mon Sep 17 00:00:00 2001
+From 5e9f825039be4d7e99e93818a3fa84809657f839 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Tue, 24 Mar 2020 16:15:35 -0500
-Subject: [PATCH 22/42] winegstreamer: Introduce IMFMediaType -> GstCaps
+Subject: [PATCH 22/40] winegstreamer: Introduce IMFMediaType -> GstCaps
  converter.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
@@ -6601,7 +6643,7 @@ Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
  2 files changed, 143 insertions(+)
 
 diff --git a/dlls/winegstreamer/gst_private.h b/dlls/winegstreamer/gst_private.h
-index 823e023f52c..20d3beef028 100644
+index 823e023f52..20d3beef02 100644
 --- a/dlls/winegstreamer/gst_private.h
 +++ b/dlls/winegstreamer/gst_private.h
 @@ -57,6 +57,7 @@ extern HRESULT mfplat_get_class_object(REFCLSID rclsid, REFIID riid, void **obj)
@@ -6613,7 +6655,7 @@ index 823e023f52c..20d3beef028 100644
  
  enum source_type
 diff --git a/dlls/winegstreamer/mfplat.c b/dlls/winegstreamer/mfplat.c
-index 8bb030f0185..5a795fed4f2 100644
+index 8bb030f018..5a795fed4f 100644
 --- a/dlls/winegstreamer/mfplat.c
 +++ b/dlls/winegstreamer/mfplat.c
 @@ -873,6 +873,148 @@ GstCaps *make_mf_compatible_caps(GstCaps *caps)
@@ -6765,11 +6807,13 @@ index 8bb030f0185..5a795fed4f2 100644
  /* IMFSample = GstBuffer
     IMFBuffer = GstMemory */
  
+-- 
+2.25.3
 
-From 901366db9542a6ef3aa1904e5081f7a9787d036f Mon Sep 17 00:00:00 2001
+From 4219e5883ca8245b3d221dd3e150cc136cd9f6f0 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Tue, 24 Mar 2020 16:18:40 -0500
-Subject: [PATCH 23/42] winegstreamer: Translate H.264 attributes to caps.
+Subject: [PATCH 23/40] winegstreamer: Translate H.264 attributes to caps.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
 ---
@@ -6777,7 +6821,7 @@ Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
  1 file changed, 48 insertions(+)
 
 diff --git a/dlls/winegstreamer/mfplat.c b/dlls/winegstreamer/mfplat.c
-index 5a795fed4f2..c57a345117b 100644
+index 5a795fed4f..c57a345117 100644
 --- a/dlls/winegstreamer/mfplat.c
 +++ b/dlls/winegstreamer/mfplat.c
 @@ -945,6 +945,54 @@ GstCaps *caps_from_mf_media_type(IMFMediaType *type)
@@ -6835,11 +6879,13 @@ index 5a795fed4f2..c57a345117b 100644
          else {
              FIXME("Unrecognized subtype %s\n", debugstr_guid(&subtype));
              return NULL;
+-- 
+2.25.3
 
-From a1807c9eb7849e8adf101b4e0ed707e86c2373c2 Mon Sep 17 00:00:00 2001
+From ac804705b322e7fb49c361005f74399c8ef904b2 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Tue, 24 Mar 2020 16:20:17 -0500
-Subject: [PATCH 24/42] winegstreamer: Translate WMV attributes to caps.
+Subject: [PATCH 24/40] winegstreamer: Translate WMV attributes to caps.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
 ---
@@ -6847,7 +6893,7 @@ Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
  1 file changed, 18 insertions(+)
 
 diff --git a/dlls/winegstreamer/mfplat.c b/dlls/winegstreamer/mfplat.c
-index c57a345117b..90938e4699e 100644
+index c57a345117..90938e4699 100644
 --- a/dlls/winegstreamer/mfplat.c
 +++ b/dlls/winegstreamer/mfplat.c
 @@ -993,6 +993,24 @@ GstCaps *caps_from_mf_media_type(IMFMediaType *type)
@@ -6875,11 +6921,13 @@ index c57a345117b..90938e4699e 100644
          else {
              FIXME("Unrecognized subtype %s\n", debugstr_guid(&subtype));
              return NULL;
+-- 
+2.25.3
 
-From bb33f9c1250a7691dbcd384a7fa56158cbacd982 Mon Sep 17 00:00:00 2001
+From 31ff461ccc773f4348a7cb7ae5be594e82406479 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Tue, 21 Apr 2020 10:31:02 -0500
-Subject: [PATCH 25/42] winegstreamer: Translate AAC attributes to caps.
+Subject: [PATCH 25/40] winegstreamer: Translate AAC attributes to caps.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
 ---
@@ -6887,7 +6935,7 @@ Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
  1 file changed, 66 insertions(+)
 
 diff --git a/dlls/winegstreamer/mfplat.c b/dlls/winegstreamer/mfplat.c
-index 90938e4699e..39b8e1ce7da 100644
+index 90938e4699..39b8e1ce7d 100644
 --- a/dlls/winegstreamer/mfplat.c
 +++ b/dlls/winegstreamer/mfplat.c
 @@ -1059,6 +1059,72 @@ GstCaps *caps_from_mf_media_type(IMFMediaType *type)
@@ -6963,11 +7011,13 @@ index 90938e4699e..39b8e1ce7da 100644
          else
          {
              FIXME("Unrecognized subtype %s\n", debugstr_guid(&subtype));
+-- 
+2.25.3
 
-From 3ecf9e7176980cb76af3201809553c6ef21bc816 Mon Sep 17 00:00:00 2001
+From 175f192d8735e8d20db86f9a8d07c583a6233a6d Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Wed, 25 Mar 2020 10:43:27 -0500
-Subject: [PATCH 26/42] Introduce IMFSample -> GstBuffer converter.
+Subject: [PATCH 26/40] Introduce IMFSample -> GstBuffer converter.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
 ---
@@ -6976,7 +7026,7 @@ Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
  2 files changed, 75 insertions(+)
 
 diff --git a/dlls/winegstreamer/gst_private.h b/dlls/winegstreamer/gst_private.h
-index 20d3beef028..258df0d0405 100644
+index 20d3beef02..258df0d040 100644
 --- a/dlls/winegstreamer/gst_private.h
 +++ b/dlls/winegstreamer/gst_private.h
 @@ -59,6 +59,7 @@ GstCaps *make_mf_compatible_caps(GstCaps *caps);
@@ -6988,7 +7038,7 @@ index 20d3beef028..258df0d0405 100644
  enum source_type
  {
 diff --git a/dlls/winegstreamer/mfplat.c b/dlls/winegstreamer/mfplat.c
-index 39b8e1ce7da..46854bc67db 100644
+index 39b8e1ce7d..46854bc67d 100644
 --- a/dlls/winegstreamer/mfplat.c
 +++ b/dlls/winegstreamer/mfplat.c
 @@ -1235,4 +1235,78 @@ IMFSample* mf_sample_from_gst_buffer(GstBuffer *gst_buffer)
@@ -7071,11 +7121,13 @@ index 39b8e1ce7da..46854bc67db 100644
 +    return NULL;
  }
 \ No newline at end of file
+-- 
+2.25.3
 
-From 2b33561f83c0f54e7a931a7e4d14d927f2672214 Mon Sep 17 00:00:00 2001
+From 4a01c9298dc8b0ea24a49529ecf667e3db60dbbd Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Mon, 16 Mar 2020 12:09:39 -0500
-Subject: [PATCH 27/42] winegstreamer: Implement decoder MFT on gstreamer.
+Subject: [PATCH 27/40] winegstreamer: Implement decoder MFT on gstreamer.
 
 ---
  dlls/winegstreamer/Makefile.in               |    1 +
@@ -7091,7 +7143,7 @@ Subject: [PATCH 27/42] winegstreamer: Implement decoder MFT on gstreamer.
  create mode 100644 dlls/winegstreamer/mf_decode.c
 
 diff --git a/dlls/winegstreamer/Makefile.in b/dlls/winegstreamer/Makefile.in
-index f2e87494459..e2af4085827 100644
+index f2e8749445..e2af408582 100644
 --- a/dlls/winegstreamer/Makefile.in
 +++ b/dlls/winegstreamer/Makefile.in
 @@ -13,6 +13,7 @@ C_SRCS = \
@@ -7103,7 +7155,7 @@ index f2e87494459..e2af4085827 100644
  	pin.c \
  	qualitycontrol.c \
 diff --git a/dlls/winegstreamer/gst_cbs.c b/dlls/winegstreamer/gst_cbs.c
-index 808c9f7ad22..64dddaf47c4 100644
+index 808c9f7ad2..64dddaf47c 100644
 --- a/dlls/winegstreamer/gst_cbs.c
 +++ b/dlls/winegstreamer/gst_cbs.c
 @@ -51,6 +51,8 @@ static void CALLBACK perform_cb(TP_CALLBACK_INSTANCE *instance, void *user)
@@ -7186,7 +7238,7 @@ index 808c9f7ad22..64dddaf47c4 100644
  }
 \ No newline at end of file
 diff --git a/dlls/winegstreamer/gst_cbs.h b/dlls/winegstreamer/gst_cbs.h
-index 106368a0641..a35d6d88306 100644
+index 106368a064..a35d6d8830 100644
 --- a/dlls/winegstreamer/gst_cbs.h
 +++ b/dlls/winegstreamer/gst_cbs.h
 @@ -54,6 +54,12 @@ enum CB_TYPE {
@@ -7235,7 +7287,7 @@ index 106368a0641..a35d6d88306 100644
  
  #endif
 diff --git a/dlls/winegstreamer/gst_private.h b/dlls/winegstreamer/gst_private.h
-index 258df0d0405..6e25b895ff4 100644
+index 258df0d040..6e25b895ff 100644
 --- a/dlls/winegstreamer/gst_private.h
 +++ b/dlls/winegstreamer/gst_private.h
 @@ -53,6 +53,7 @@ BOOL init_gstreamer(void) DECLSPEC_HIDDEN;
@@ -7260,7 +7312,7 @@ index 258df0d0405..6e25b895ff4 100644
  {
      SOURCE_TYPE_MPEG_4,
 diff --git a/dlls/winegstreamer/main.c b/dlls/winegstreamer/main.c
-index 2872710b3e2..12ca11fa6cd 100644
+index 2872710b3e..12ca11fa6c 100644
 --- a/dlls/winegstreamer/main.c
 +++ b/dlls/winegstreamer/main.c
 @@ -365,7 +365,8 @@ HRESULT WINAPI DllRegisterServer(void)
@@ -7275,7 +7327,7 @@ index 2872710b3e2..12ca11fa6cd 100644
  HRESULT WINAPI DllUnregisterServer(void)
 diff --git a/dlls/winegstreamer/mf_decode.c b/dlls/winegstreamer/mf_decode.c
 new file mode 100644
-index 00000000000..7fc009513c6
+index 0000000000..7fc009513c
 --- /dev/null
 +++ b/dlls/winegstreamer/mf_decode.c
 @@ -0,0 +1,1318 @@
@@ -8599,10 +8651,10 @@ index 00000000000..7fc009513c6
 +}
 \ No newline at end of file
 diff --git a/dlls/winegstreamer/mfplat.c b/dlls/winegstreamer/mfplat.c
-index 46854bc67db..f150615c39c 100644
+index 46854bc67d..f150615c39 100644
 --- a/dlls/winegstreamer/mfplat.c
 +++ b/dlls/winegstreamer/mfplat.c
-@@ -404,6 +404,16 @@ static HRESULT video_processor_create(REFIID riid, void **ret)
+@@ -404,6 +404,16 @@ failed:
      return hr;
  }
  
@@ -8774,7 +8826,7 @@ index 46854bc67db..f150615c39c 100644
    /* audio-specific-config is stored here */
  };
 diff --git a/dlls/winegstreamer/winegstreamer_classes.idl b/dlls/winegstreamer/winegstreamer_classes.idl
-index 997a28b052f..ee8090cf4a7 100644
+index 997a28b052..ee8090cf4a 100644
 --- a/dlls/winegstreamer/winegstreamer_classes.idl
 +++ b/dlls/winegstreamer/winegstreamer_classes.idl
 @@ -61,3 +61,15 @@ coclass VideoProcessorMFT {}
@@ -8794,7 +8846,7 @@ index 997a28b052f..ee8090cf4a7 100644
 +]
 +coclass CMSAACDecMFT { }
 diff --git a/include/mfidl.idl b/include/mfidl.idl
-index c61ccb788ce..8e198594c57 100644
+index c61ccb788c..8e198594c5 100644
 --- a/include/mfidl.idl
 +++ b/include/mfidl.idl
 @@ -1128,4 +1128,6 @@ cpp_quote("EXTERN_GUID(MF_AUDIO_RENDERER_ATTRIBUTE_ENDPOINT_ROLE, 0x6ba644ff, 0x
@@ -8806,11 +8858,13 @@ index c61ccb788ce..8e198594c57 100644
 +cpp_quote("EXTERN_GUID(CLSID_MPEG4ByteStreamHandler, 0x271c3902, 0x6095, 0x4c45, 0xa2, 0x2f, 0x20, 0x09, 0x18, 0x16, 0xee, 0x9e);")
 +cpp_quote("EXTERN_GUID(CLSID_CMSH264DecoderMFT, 0x62ce7e72, 0x4c71, 0x4d20, 0xb1, 0x5d, 0x45, 0x28, 0x31, 0xa8, 0x7d, 0x9d);")
 +cpp_quote("EXTERN_GUID(CLSID_CMSAACDecMFT, 0x32d186a7, 0x218f, 0x4c75, 0x88, 0x76, 0xdd, 0x77, 0x27, 0x3a, 0x89, 0x99);")
+-- 
+2.25.3
 
-From 509fddc250b6c61e7105772dabbacfc6e06183bc Mon Sep 17 00:00:00 2001
+From 3a7d851bd191dd55ca4f176c37b48a0021e1390a Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Mon, 23 Mar 2020 11:55:41 -0500
-Subject: [PATCH 28/42] mfreadwrite: Select all streams when creating a source
+Subject: [PATCH 28/40] mfreadwrite: Select all streams when creating a source
  reader.
 
 ---
@@ -8818,7 +8872,7 @@ Subject: [PATCH 28/42] mfreadwrite: Select all streams when creating a source
  1 file changed, 4 insertions(+)
 
 diff --git a/dlls/mfreadwrite/reader.c b/dlls/mfreadwrite/reader.c
-index eaf52ce31e3..a7291ff1ae4 100644
+index eaf52ce31e..a7291ff1ae 100644
 --- a/dlls/mfreadwrite/reader.c
 +++ b/dlls/mfreadwrite/reader.c
 @@ -2094,6 +2094,10 @@ static HRESULT create_source_reader_from_source(IMFMediaSource *source, IMFAttri
@@ -8832,11 +8886,13 @@ index eaf52ce31e3..a7291ff1ae4 100644
      }
  
      if (FAILED(hr))
+-- 
+2.25.3
 
-From de25f0f59f3735f4708c30cfa60e26b2cf87eccb Mon Sep 17 00:00:00 2001
+From 1fefe538779fbd18331c32c95a5b837972ac65c4 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Mon, 16 Mar 2020 15:27:27 -0500
-Subject: [PATCH 29/42] Miscellaneous
+Subject: [PATCH 29/40] Miscellaneous
 
 ---
  dlls/mfplat/main.c                |   5 +-
@@ -8846,7 +8902,7 @@ Subject: [PATCH 29/42] Miscellaneous
  4 files changed, 134 insertions(+), 7 deletions(-)
 
 diff --git a/dlls/mfplat/main.c b/dlls/mfplat/main.c
-index 923905399b5..8c955a7c2d8 100644
+index 923905399b..8c955a7c2d 100644
 --- a/dlls/mfplat/main.c
 +++ b/dlls/mfplat/main.c
 @@ -5911,7 +5911,6 @@ static HRESULT resolver_handler_end_create(struct source_resolver *resolver, enu
@@ -8874,7 +8930,7 @@ index 923905399b5..8c955a7c2d8 100644
 +}
 \ No newline at end of file
 diff --git a/dlls/mfreadwrite/reader.c b/dlls/mfreadwrite/reader.c
-index a7291ff1ae4..25b0050256a 100644
+index a7291ff1ae..25b0050256 100644
 --- a/dlls/mfreadwrite/reader.c
 +++ b/dlls/mfreadwrite/reader.c
 @@ -1570,6 +1570,7 @@ static HRESULT source_reader_create_decoder_for_stream(struct source_reader *rea
@@ -8909,7 +8965,7 @@ index a7291ff1ae4..25b0050256a 100644
  
  static HRESULT WINAPI src_reader_SetCurrentMediaType(IMFSourceReader *iface, DWORD index, DWORD *reserved,
 diff --git a/dlls/winegstreamer/gst_cbs.c b/dlls/winegstreamer/gst_cbs.c
-index 64dddaf47c4..098ad4b09de 100644
+index 64dddaf47c..098ad4b09d 100644
 --- a/dlls/winegstreamer/gst_cbs.c
 +++ b/dlls/winegstreamer/gst_cbs.c
 @@ -18,6 +18,9 @@
@@ -8936,7 +8992,7 @@ index 64dddaf47c4..098ad4b09de 100644
      pthread_mutex_lock(&cbdata->lock);
      cbdata->finished = 1;
 diff --git a/dlls/winegstreamer/media_source.c b/dlls/winegstreamer/media_source.c
-index fcfa6443f8e..fae4eb02c79 100644
+index fcfa6443f8..fae4eb02c7 100644
 --- a/dlls/winegstreamer/media_source.c
 +++ b/dlls/winegstreamer/media_source.c
 @@ -85,6 +85,8 @@ struct source_async_command
@@ -9110,11 +9166,13 @@ index fcfa6443f8e..fae4eb02c79 100644
          for (unsigned int i = 0; i < object->stream_count; i++)
          {
              GstQuery *query = gst_query_new_duration(GST_FORMAT_TIME);
+-- 
+2.25.3
 
-From d6ac32c1e8cd483e9b218ae7f0b3e37d08b611dd Mon Sep 17 00:00:00 2001
+From 991a900b39b76c3094589c36dbf9276456d28b07 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Wed, 25 Mar 2020 19:07:11 -0500
-Subject: [PATCH 30/42] WMV
+Subject: [PATCH 30/40] WMV
 
 ---
  dlls/winegstreamer/gst_private.h             |  2 +
@@ -9127,7 +9185,7 @@ Subject: [PATCH 30/42] WMV
  7 files changed, 126 insertions(+)
 
 diff --git a/dlls/winegstreamer/gst_private.h b/dlls/winegstreamer/gst_private.h
-index 6e25b895ff4..0b61bc9e3ce 100644
+index 6e25b895ff..0b61bc9e3c 100644
 --- a/dlls/winegstreamer/gst_private.h
 +++ b/dlls/winegstreamer/gst_private.h
 @@ -66,11 +66,13 @@ enum decoder_type
@@ -9145,7 +9203,7 @@ index 6e25b895ff4..0b61bc9e3ce 100644
  HRESULT container_stream_handler_construct(REFIID riid, void **obj, enum source_type);
  
 diff --git a/dlls/winegstreamer/media_source.c b/dlls/winegstreamer/media_source.c
-index fae4eb02c79..ba27bf64a11 100644
+index fae4eb02c7..ba27bf64a1 100644
 --- a/dlls/winegstreamer/media_source.c
 +++ b/dlls/winegstreamer/media_source.c
 @@ -30,6 +30,9 @@ static struct source_desc
@@ -9159,7 +9217,7 @@ index fae4eb02c79..ba27bf64a11 100644
  };
  
 diff --git a/dlls/winegstreamer/mf_decode.c b/dlls/winegstreamer/mf_decode.c
-index 7fc009513c6..57a732c4f68 100644
+index 7fc009513c..57a732c4f6 100644
 --- a/dlls/winegstreamer/mf_decode.c
 +++ b/dlls/winegstreamer/mf_decode.c
 @@ -26,6 +26,9 @@ const GUID *h264_output_types[] = {&MFVideoFormat_I420, &MFVideoFormat_IYUV, &MF
@@ -9187,7 +9245,7 @@ index 7fc009513c6..57a732c4f68 100644
  };
  
 diff --git a/dlls/winegstreamer/mfplat.c b/dlls/winegstreamer/mfplat.c
-index f150615c39c..5ebee3e7b6e 100644
+index f150615c39..5ebee3e7b6 100644
 --- a/dlls/winegstreamer/mfplat.c
 +++ b/dlls/winegstreamer/mfplat.c
 @@ -414,11 +414,21 @@ static HRESULT aac_decoder_create(REFIID riid, void **ret)
@@ -9310,7 +9368,7 @@ index f150615c39c..5ebee3e7b6e 100644
  };
  
 diff --git a/dlls/winegstreamer/winegstreamer.rgs b/dlls/winegstreamer/winegstreamer.rgs
-index 0bc26761e9d..9dbbca1c805 100644
+index 0bc26761e9..9dbbca1c80 100644
 --- a/dlls/winegstreamer/winegstreamer.rgs
 +++ b/dlls/winegstreamer/winegstreamer.rgs
 @@ -23,6 +23,10 @@ HKLM
@@ -9340,7 +9398,7 @@ index 0bc26761e9d..9dbbca1c805 100644
                      {
                          val '{271C3902-6095-4c45-A22F-20091816EE9E}' = s 'MPEG4 Byte Stream Handler'
 diff --git a/dlls/winegstreamer/winegstreamer_classes.idl b/dlls/winegstreamer/winegstreamer_classes.idl
-index ee8090cf4a7..376e08c418b 100644
+index ee8090cf4a..376e08c418 100644
 --- a/dlls/winegstreamer/winegstreamer_classes.idl
 +++ b/dlls/winegstreamer/winegstreamer_classes.idl
 @@ -73,3 +73,15 @@ coclass CMSH264DecoderMFT { }
@@ -9361,7 +9419,7 @@ index ee8090cf4a7..376e08c418b 100644
 +coclass CLSID_CWMVDecMediaObject {}
 \ No newline at end of file
 diff --git a/include/mfidl.idl b/include/mfidl.idl
-index 8e198594c57..3f994854425 100644
+index 8e198594c5..3f99485442 100644
 --- a/include/mfidl.idl
 +++ b/include/mfidl.idl
 @@ -1131,3 +1131,5 @@ cpp_quote("EXTERN_GUID(CLSID_VideoProcessorMFT, 0x88753b26, 0x5b24, 0x49bd, 0xb2
@@ -9371,11 +9429,13 @@ index 8e198594c57..3f994854425 100644
 +cpp_quote("EXTERN_GUID(CLSID_ASFByteStreamHandler, 0x41457294, 0x644c, 0x4298, 0xa2, 0x8a, 0xbd, 0x69, 0xf2, 0xc0, 0xcf, 0x3b);")
 +cpp_quote("EXTERN_GUID(CLSID_CWMVDecMediaObject, 0x82d353df, 0x90bd, 0x4382, 0x8b, 0xc2, 0x3f, 0x61, 0x92, 0xb7, 0x6e, 0x34);")
 \ No newline at end of file
+-- 
+2.25.3
 
-From 74e9f4b8ae67b387a9b5023267994143b95a5ecd Mon Sep 17 00:00:00 2001
+From 7234e9962397d86bd32ff55dbceee9f8dfcaf773 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Thu, 2 Apr 2020 15:42:18 -0500
-Subject: [PATCH 31/42] mf: Ask for more samples from upstream node when upon
+Subject: [PATCH 31/40] mf: Ask for more samples from upstream node when upon
  MF_E_TRANSFORM_NEED_MORE_INPUT
 
 ---
@@ -9383,7 +9443,7 @@ Subject: [PATCH 31/42] mf: Ask for more samples from upstream node when upon
  1 file changed, 10 insertions(+), 1 deletion(-)
 
 diff --git a/dlls/mf/session.c b/dlls/mf/session.c
-index 75ef600a4df..e6d257e7879 100644
+index 75ef600a4d..e6d257e787 100644
 --- a/dlls/mf/session.c
 +++ b/dlls/mf/session.c
 @@ -2437,6 +2437,8 @@ static HRESULT transform_node_pull_samples(struct topo_node *node)
@@ -9411,18 +9471,20 @@ index 75ef600a4df..e6d257e7879 100644
  
              /* Remaining unprocessed input has been discarded, now queue markers for every output. */
              if (drain)
+-- 
+2.25.3
 
-From 770ea2a8f4e59cbcb0bc74478352abd0115c8cc8 Mon Sep 17 00:00:00 2001
+From ca6f8b72091cfc20bef8f97fe8a6254555db1145 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Thu, 2 Apr 2020 15:43:52 -0500
-Subject: [PATCH 32/42] mf: Miscelaneous fixes to topology resolution.
+Subject: [PATCH 32/40] mf: Miscelaneous fixes to topology resolution.
 
 ---
  dlls/mf/topology.c | 16 +++++++++-------
  1 file changed, 9 insertions(+), 7 deletions(-)
 
 diff --git a/dlls/mf/topology.c b/dlls/mf/topology.c
-index 7a4c95bea07..ce706a9ff7f 100644
+index 7a4c95bea0..ce706a9ff7 100644
 --- a/dlls/mf/topology.c
 +++ b/dlls/mf/topology.c
 @@ -2006,7 +2006,7 @@ static HRESULT topology_loader_resolve_branch(IMFTopologyNode *src, IMFMediaType
@@ -9455,11 +9517,13 @@ index 7a4c95bea07..ce706a9ff7f 100644
      }
  
      heap_free(src_mediatypes);
+-- 
+2.25.3
 
-From 0442579dd004f25ebc6c7560fdffd0c99cca90d8 Mon Sep 17 00:00:00 2001
+From 4655f7b264bf35c02281d4b952d1dbe1cedcfffa Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Thu, 2 Apr 2020 15:45:52 -0500
-Subject: [PATCH 33/42] HACK: Set output type of found decoder, this should
+Subject: [PATCH 33/40] HACK: Set output type of found decoder, this should
  probably happen somewhere else.
 
 ---
@@ -9467,7 +9531,7 @@ Subject: [PATCH 33/42] HACK: Set output type of found decoder, this should
  1 file changed, 1 insertion(+)
 
 diff --git a/dlls/mf/topology.c b/dlls/mf/topology.c
-index ce706a9ff7f..65f562d7f1c 100644
+index ce706a9ff7..65f562d7f1 100644
 --- a/dlls/mf/topology.c
 +++ b/dlls/mf/topology.c
 @@ -2005,6 +2005,7 @@ static HRESULT topology_loader_resolve_branch(IMFTopologyNode *src, IMFMediaType
@@ -9478,11 +9542,13 @@ index ce706a9ff7f..65f562d7f1c 100644
  
                          IMFActivate_ShutdownObject(activates_decs[i]);
                          return S_OK;
+-- 
+2.25.3
 
-From c113756862f8665c35867000f7e2093936ed1a5b Mon Sep 17 00:00:00 2001
+From be91b7535313274644a88b5595468477cba5fce3 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Thu, 2 Apr 2020 15:46:25 -0500
-Subject: [PATCH 34/42] winegstreamer:  Implement
+Subject: [PATCH 34/40] winegstreamer:  Implement
  IMFMedisStream::GetMediaSource.
 
 ---
@@ -9490,7 +9556,7 @@ Subject: [PATCH 34/42] winegstreamer:  Implement
  1 file changed, 5 insertions(+), 2 deletions(-)
 
 diff --git a/dlls/winegstreamer/media_source.c b/dlls/winegstreamer/media_source.c
-index ba27bf64a11..371a2973817 100644
+index ba27bf64a1..371a297381 100644
 --- a/dlls/winegstreamer/media_source.c
 +++ b/dlls/winegstreamer/media_source.c
 @@ -852,12 +852,15 @@ static HRESULT WINAPI media_stream_GetMediaSource(IMFMediaStream *iface, IMFMedi
@@ -9511,11 +9577,13 @@ index ba27bf64a11..371a2973817 100644
  }
  
  static HRESULT WINAPI media_stream_GetStreamDescriptor(IMFMediaStream* iface, IMFStreamDescriptor **descriptor)
+-- 
+2.25.3
 
-From 7b2d7f520cc210ea694f6f2bb40457a6e38dd041 Mon Sep 17 00:00:00 2001
+From c40297ba9b685c2b9dbaaea4d49a402d040c96f8 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Fri, 3 Apr 2020 11:12:33 -0500
-Subject: [PATCH 35/42] Expose PCM output type on AAC decoder.
+Subject: [PATCH 35/40] Expose PCM output type on AAC decoder.
 
 ---
  dlls/winegstreamer/mf_decode.c | 2 +-
@@ -9523,7 +9591,7 @@ Subject: [PATCH 35/42] Expose PCM output type on AAC decoder.
  2 files changed, 5 insertions(+), 1 deletion(-)
 
 diff --git a/dlls/winegstreamer/mf_decode.c b/dlls/winegstreamer/mf_decode.c
-index 57a732c4f68..ba258848a5a 100644
+index 57a732c4f6..ba258848a5 100644
 --- a/dlls/winegstreamer/mf_decode.c
 +++ b/dlls/winegstreamer/mf_decode.c
 @@ -24,7 +24,7 @@ const GUID *h264_input_types[] = {&MFVideoFormat_H264};
@@ -9536,7 +9604,7 @@ index 57a732c4f68..ba258848a5a 100644
  const GUID *wmv_input_types[] = {&MFVideoFormat_WMV3, &MFVideoFormat_WVC1};
  const GUID *wmv_output_types[] = {&MFVideoFormat_NV12, &MFVideoFormat_YV12, &MFVideoFormat_YUY2, &MFVideoFormat_UYVY, &MFVideoFormat_YVYU, &MFVideoFormat_NV11, &MFVideoFormat_RGB32, &MFVideoFormat_RGB24, &MFVideoFormat_RGB555, &MFVideoFormat_RGB8};
 diff --git a/dlls/winegstreamer/mfplat.c b/dlls/winegstreamer/mfplat.c
-index 5ebee3e7b6e..de1071c5eba 100644
+index 5ebee3e7b6..de1071c5eb 100644
 --- a/dlls/winegstreamer/mfplat.c
 +++ b/dlls/winegstreamer/mfplat.c
 @@ -525,6 +525,10 @@ const struct register_type_info aac_decoder_output_types[] =
@@ -9550,47 +9618,20 @@ index 5ebee3e7b6e..de1071c5eba 100644
      }
  };
  
+-- 
+2.25.3
 
-From be2926dedc9e56ab333827b7accdba2d7607ddd7 Mon Sep 17 00:00:00 2001
-From: Derek Lesho <dlesho@codeweavers.com>
-Date: Fri, 3 Apr 2020 13:09:11 -0500
-Subject: [PATCH 36/42] Always request another sammple.
-
----
- dlls/mf/samplegrabber.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/dlls/mf/samplegrabber.c b/dlls/mf/samplegrabber.c
-index 1919ce62208..e49929c5bf0 100644
---- a/dlls/mf/samplegrabber.c
-+++ b/dlls/mf/samplegrabber.c
-@@ -736,12 +736,13 @@ static HRESULT WINAPI sample_grabber_stream_timer_callback_Invoke(IMFAsyncCallba
-                     if (FAILED(hr = sample_grabber_report_sample(grabber, item->u.sample, &sample_delivered)))
-                         WARN("Failed to report a sample, hr %#x.\n", hr);
-                     stream_release_pending_item(item);
-+                    if (sample_delivered)
-+                        sample_grabber_stream_request_sample(grabber);
-                     item = stream_get_next_item(grabber);
-                     if (item && item->type == ITEM_TYPE_SAMPLE)
-                     {
-                         if (FAILED(hr = stream_schedule_sample(grabber, item)))
-                             WARN("Failed to schedule a sample, hr %#x.\n", hr);
--                        sample_grabber_stream_request_sample(grabber);
-                         item = NULL;
-                     }
-                     break;
-
-From 3bd92d33dd150bc11b063d26b5bda75b311059d0 Mon Sep 17 00:00:00 2001
+From f375a6ff6e238b9c1904e0e079d69870a78f4afc Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Fri, 3 Apr 2020 13:09:30 -0500
-Subject: [PATCH 37/42] Set BPS on AAC.
+Subject: [PATCH 36/40] Set BPS on AAC.
 
 ---
  dlls/winegstreamer/mfplat.c | 1 +
  1 file changed, 1 insertion(+)
 
 diff --git a/dlls/winegstreamer/mfplat.c b/dlls/winegstreamer/mfplat.c
-index de1071c5eba..ed3c4a1254b 100644
+index de1071c5eb..ed3c4a1254 100644
 --- a/dlls/winegstreamer/mfplat.c
 +++ b/dlls/winegstreamer/mfplat.c
 @@ -965,6 +965,7 @@ static IMFMediaType* transform_to_media_type(GstCaps *caps)
@@ -9601,1220 +9642,95 @@ index de1071c5eba..ed3c4a1254b 100644
  
                      codec_data = gst_structure_get_value(info, "codec_data");
                      if (codec_data)
+-- 
+2.25.3
 
-From 27dfca986dd351b6e330515a9408dcc3a2f9af37 Mon Sep 17 00:00:00 2001
-From: Derek Lesho <dlesho@codeweavers.com>
-Date: Mon, 9 Mar 2020 11:59:17 -0500
-Subject: [PATCH 38/42] Improve tests
+From 12874ba05ab0336e11a3bd863dac92bcf3e9c938 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Michael=20M=C3=BCller?= <michael@fds-team.de>
+Date: Mon, 27 May 2019 09:19:56 +1000
+Subject: [PATCH 39/40] libwine: Add process specific debug channels.
 
 ---
- dlls/mfplat/tests/mfplat.c         | 244 +++++++++++++++++++++++++++--
- dlls/mfplat/tests/test.mp4         | Bin 1554 -> 121550 bytes
- dlls/mfreadwrite/tests/mfplat.c    | 116 ++++++++------
- dlls/mfreadwrite/tests/resource.rc |   4 +-
- dlls/mfreadwrite/tests/test.mp4    | Bin 0 -> 121550 bytes
- 5 files changed, 302 insertions(+), 62 deletions(-)
- create mode 100644 dlls/mfreadwrite/tests/test.mp4
+ dlls/ntdll/debugtools.c | 28 ++++++++++++++++++++++++++--
+ 1 file changed, 26 insertions(+), 2 deletions(-)
 
-diff --git a/dlls/mfplat/tests/mfplat.c b/dlls/mfplat/tests/mfplat.c
-index 51193641243..ed7fdbf1988 100644
---- a/dlls/mfplat/tests/mfplat.c
-+++ b/dlls/mfplat/tests/mfplat.c
-@@ -401,6 +401,9 @@ static BOOL get_event(IMFMediaEventGenerator *generator, MediaEventType expected
-     return TRUE;
+diff --git a/dlls/ntdll/debugtools.c b/dlls/ntdll/debugtools.c
+index 546d527323..df872f52ef 100644
+--- a/dlls/ntdll/debugtools.c
++++ b/dlls/ntdll/debugtools.c
+@@ -30,6 +30,7 @@
+ #endif
+ 
+ #include "wine/debug.h"
++#include "wine/library.h"
+ #include "ntdll_misc.h"
+ 
+ WINE_DECLARE_DEBUG_CHANNEL(pid);
+@@ -103,10 +104,22 @@ static void add_option( const char *name, unsigned char set, unsigned char clear
+     nb_debug_options++;
  }
  
-+static IMFSample *retrieved_h264_samples[60];
-+static IMFMediaType *compressed_h264_type;
-+
- static void test_source_resolver(void)
- {
-     struct test_callback callback = { { &test_create_from_url_callback_vtbl } };
-@@ -424,6 +427,7 @@ static void test_source_resolver(void)
-     PROPVARIANT var;
-     HRESULT hr;
-     GUID guid;
-+    UINT64 frame_size, frame_rate;
- 
-     if (!pMFCreateSourceResolver)
-     {
-@@ -513,12 +517,27 @@ static void test_source_resolver(void)
-     ok(hr == S_OK, "Failed to get current media type, hr %#x.\n", hr);
-     hr = IMFMediaType_GetGUID(media_type, &MF_MT_SUBTYPE, &guid);
-     ok(hr == S_OK, "Failed to get media sub type, hr %#x.\n", hr);
--    ok(IsEqualGUID(&guid, &MFVideoFormat_M4S2), "Unexpected sub type %s.\n", debugstr_guid(&guid));
--    IMFMediaType_Release(media_type);
-+    ok(IsEqualGUID(&guid, &MFVideoFormat_H264), "Unexpected sub type %s.\n", debugstr_guid(&guid));
-+
-+    hr = IMFMediaType_GetUINT64(media_type, &MF_MT_FRAME_SIZE, &frame_size);
-+    ok(hr == S_OK, "Failed to get frame size, hr %#x.\n", hr);
-+
-+    ok((frame_size >> 32) == 320, "Unexpected width %u.\n", (DWORD)(frame_size >> 32));
-+    ok((frame_size & 0xffffffff) == 240, "Unexpected height %u.\n", (DWORD)(frame_size & 0xffffffff));
-+
-+    hr = IMFMediaType_GetUINT64(media_type, &MF_MT_FRAME_RATE, &frame_rate);
-+    ok(hr == S_OK, "Failed to get frame rate, hr %#x.\n", hr);
-+
-+    ok((frame_rate >> 32) / (frame_rate & 0xffffffff) == 30, "Unexpected framerate %u/%u\n",
-+        (DWORD)(frame_rate >> 32), (DWORD)(frame_rate & 0xffffffff));
- 
-     hr = IMFPresentationDescriptor_SelectStream(descriptor, 0);
-     ok(hr == S_OK, "Failed to select video stream, hr %#x.\n", hr);
- 
-+    compressed_h264_type = media_type;
-+    IMFMediaTypeHandler_Release(handler);
-+    IMFStreamDescriptor_Release(sd);
-+
-     var.vt = VT_EMPTY;
-     hr = IMFMediaSource_Start(mediasource, descriptor, &GUID_NULL, &var);
-     ok(hr == S_OK, "Failed to start media source, hr %#x.\n", hr);
-@@ -529,9 +548,9 @@ static void test_source_resolver(void)
- 
-     get_event((IMFMediaEventGenerator *)mediasource, MESourceStarted, NULL);
- 
--    /* Request samples, our file is 10 frames at 25fps */
-+    /* Request samples, our file is 60 frames at 30fps */
-     get_event((IMFMediaEventGenerator *)video_stream, MEStreamStarted, NULL);
--    sample_count = 10;
-+    sample_count = 60;
- 
-     /* Request one beyond EOS, otherwise EndOfStream isn't queued. */
-     for (i = 0; i <= sample_count; ++i)
-@@ -547,9 +566,14 @@ static void test_source_resolver(void)
-     for (i = 0; i < sample_count; ++i)
-     {
-         static const LONGLONG MILLI_TO_100_NANO = 10000;
--        LONGLONG duration, time;
-+        static int once = 0;
-+        LONGLONG duration;
-         DWORD buffer_count;
-         IMFSample *sample;
-+        IMFMediaBuffer *buffer;
-+        BYTE *buffer_data;
-+        DWORD buffer_len;
-+        BYTE nal_type = 0x00;
-         BOOL ret;
- 
-         ret = get_event((IMFMediaEventGenerator *)video_stream, MEMediaSample, &var);
-@@ -560,19 +584,38 @@ static void test_source_resolver(void)
-         ok(var.vt == VT_UNKNOWN, "Unexpected value type %u from MEMediaSample event.\n", var.vt);
-         sample = (IMFSample *)var.punkVal;
- 
--        hr = IMFSample_GetBufferCount(sample, &buffer_count);
--        ok(hr == S_OK, "Failed to get buffer count, hr %#x.\n", hr);
--        ok(buffer_count == 1, "Unexpected buffer count %u.\n", buffer_count);
--
-         hr = IMFSample_GetSampleDuration(sample, &duration);
-         ok(hr == S_OK, "Failed to get sample duration, hr %#x.\n", hr);
--        ok(duration == 40 * MILLI_TO_100_NANO, "Unexpected duration %s.\n", wine_dbgstr_longlong(duration));
-+        ok(duration > 33 * MILLI_TO_100_NANO && duration < 34 *MILLI_TO_100_NANO,
-+            "Unexpected duration %lu.\n", duration);
- 
--        hr = IMFSample_GetSampleTime(sample, &time);
--        ok(hr == S_OK, "Failed to get sample time, hr %#x.\n", hr);
--        ok(time == i * 40 * MILLI_TO_100_NANO, "Unexpected time %s.\n", wine_dbgstr_longlong(time));
-+        hr = IMFSample_GetBufferCount(sample, &buffer_count);
-+        ok(hr == S_OK, "Failed to get buffer count, hr %#x.\n", hr);
-+        ok(buffer_count > 0, "Unexpected buffer count %u.\n", buffer_count);
-+
-+        hr = IMFSample_GetBufferByIndex(sample, 0, &buffer);
-+        ok (hr == S_OK, "Failed to get buffer from sample, hr %#x.\n", hr);
-+        hr = IMFMediaBuffer_Lock(buffer, &buffer_data, NULL, &buffer_len);
-+        ok (hr == S_OK, "Failed to lock buffer, hr %#x.\n", hr);
-+        ok (buffer_len >= 4, "Size of first sample buffer < 4 bytes %u\n", buffer_len);
-+        for (unsigned int k = 0; k < 5; k++)
-+        {
-+            ok (buffer_data[k] == 0x00 || buffer_data[k] == 0x01, "Invalid start prefix\n");
-+            if (buffer_data[k] == 0x01)
-+            {
-+                nal_type = buffer_data[k+1];
-+                break;
-+            }
-+        }
-+        if (!once)
-+            todo_wine ok(nal_type != 0x09, "Access Unit Delimeter NAL not expected.\n");
-+        if (nal_type == 0x09)
-+            once = 1;
-+        hr = IMFMediaBuffer_Unlock(buffer);
-+        ok (hr == S_OK, "Failed to unlock buffer.\n");
-+        IMFMediaBuffer_Release(buffer);
- 
--        IMFSample_Release(sample);
-+        retrieved_h264_samples[i] = sample;
-     }
- 
-     if (i == sample_count)
-@@ -656,6 +699,178 @@ static void test_source_resolver(void)
-     CloseHandle(callback.event);
- }
- 
-+static void test_decoder(void)
++/* get name of the current process */
++static const char *get_process_name( void )
 +{
-+    IMFTransform *decoder;
-+    DWORD in_min, in_max, out_min, out_max;
-+    IMFMediaType *output_type = NULL;
-+    MFT_INPUT_STREAM_INFO input_stream_info;
-+    MFT_OUTPUT_STREAM_INFO output_stream_info;
-+    DWORD input_counter, output_counter;
-+    UINT64 frame_size, frame_rate;
-+    LONGLONG last_sample_time = 0;
-+    HRESULT hr;
-+
-+    if (FAILED(CoCreateInstance(&CLSID_CMSH264DecoderMFT, NULL, CLSCTX_INPROC_SERVER, &IID_IMFTransform, (void**)&decoder)))
-+    {
-+        skip("Skipping decoder tests.\n");
-+        return;
-+    }
-+
-+    hr = IMFTransform_GetStreamLimits(decoder, &in_min, &in_max, &out_min, &out_max);
-+    ok (hr == S_OK, "Failed to get stream limits, hr %#x\n", hr);
-+    ok (in_min == 1 && in_max == 1 && out_min == 1 && out_max == 1, "Unexpected stream limits.\n");
-+
-+    hr = IMFTransform_GetStreamCount(decoder, &in_min, &out_min);
-+    ok (hr == S_OK, "hr %#x\n", hr);
-+
-+    for (unsigned int i = 0;;i++)
-+    {
-+        IMFMediaType *available_input_type = NULL;
-+        GUID subtype;
-+
-+        if (FAILED(hr = IMFTransform_GetInputAvailableType(decoder, 0, i, &available_input_type)))
-+            break;
-+
-+        if (FAILED(hr = IMFMediaType_GetGUID(available_input_type, &MF_MT_SUBTYPE, &subtype)))
-+        {
-+            IMFMediaType_Release(available_input_type);
-+            break;
-+        }
-+
-+        if (IsEqualGUID(&subtype, &MFVideoFormat_H264))
-+        {
-+            IMFMediaType_Release(available_input_type);
-+            break;
-+        }
-+
-+        IMFMediaType_Release(available_input_type);
-+    }
-+    ok (hr == S_OK, "Didn't find MFVideoFormat_H264 as an input type.\n");
-+
-+    hr = IMFTransform_SetInputType(decoder, 0, compressed_h264_type, 0);
-+    ok (hr == S_OK, "Failed to set input type, hr %#x.\n", hr);
-+
-+    for (unsigned int i = 0;;i++)
-+    {
-+        IMFMediaType *available_output_type;
-+        GUID subtype;
-+
-+        if (FAILED(hr = IMFTransform_GetOutputAvailableType(decoder, 0, i, &available_output_type)))
-+            break;
-+
-+        if (FAILED(hr = IMFMediaType_GetGUID(available_output_type, &MF_MT_SUBTYPE, &subtype)))
-+        {
-+            IMFMediaType_Release(available_output_type);
-+            break;
-+        }
-+
-+        if (IsEqualGUID(&subtype, &MFVideoFormat_NV12))
-+        {
-+            output_type = available_output_type;
-+            break;
-+        }
-+
-+        IMFMediaType_Release(available_output_type);
-+    }
-+    ok (hr == S_OK, "Didn't find MFVideoFormat_NV12 as an output type, hr %#x\n", hr);
-+
-+    hr = IMFMediaType_GetUINT64(output_type, &MF_MT_FRAME_SIZE, &frame_size);
-+    ok (hr == S_OK, "Failed to get output frame size, hr %#x.\n", hr);
-+
-+    ok(frame_size >> 32 == 320, "Unexpected width %u.\n", (DWORD)(frame_size >> 32));
-+    ok((frame_size & 0xffffffff) == 240, "Unexpected height %u.\n", (DWORD)(frame_size & 0xffffffff));
-+
-+    hr = IMFMediaType_GetUINT64(output_type, &MF_MT_FRAME_RATE, &frame_rate);
-+    ok (hr == S_OK, "Failed to get output frame rate, hr %#x.\n", hr);
-+
-+    ok((frame_rate >> 32) / (frame_rate & 0xffffffff) == 30, "Unexpected framerate %u/%u\n",
-+        (DWORD)(frame_rate >> 32), (DWORD)(frame_rate & 0xffffffff));
-+
-+    hr = IMFTransform_SetOutputType(decoder, 0, output_type, 0);
-+    ok (hr == S_OK, "Failed to set output type, hr %#x.\n", hr);
-+
-+    hr = IMFTransform_GetInputStreamInfo(decoder, 0, &input_stream_info);
-+    ok (hr == S_OK, "hr %#x.\n");
-+
-+    hr = IMFTransform_GetOutputStreamInfo(decoder, 0, &output_stream_info);
-+    ok (hr == S_OK, "hr = %#x.\n");
-+
-+    input_counter = 0;
-+    output_counter = 0;
-+
-+    hr = IMFTransform_ProcessMessage(decoder, MFT_MESSAGE_NOTIFY_BEGIN_STREAMING, 0);
-+    ok (hr == S_OK, "hr %#x\n");
-+
-+    while (output_counter < 60 && input_counter < 60)
-+    {
-+        while (input_counter < 60)
-+        {
-+            IMFSample *sample = retrieved_h264_samples[input_counter];
-+            DWORD output_status;
-+
-+            hr = IMFTransform_ProcessInput(decoder, 0, sample, 0);
-+            ok (hr == S_OK || hr == MF_E_NOTACCEPTING, "Failed to input sample %u, hr %#x.\n", input_counter, hr);
-+            if (hr == MF_E_NOTACCEPTING)
-+                break;
-+            input_counter++;
-+            hr = IMFTransform_GetOutputStatus(decoder, &output_status);
-+            ok(hr == S_OK, "hr %#x\n", hr);
-+            if (output_status & MFT_OUTPUT_STATUS_SAMPLE_READY)
-+                break;
-+        }
-+        if (input_counter == 60)
-+        {
-+            hr = IMFTransform_ProcessMessage(decoder, MFT_MESSAGE_COMMAND_DRAIN, 0);
-+            ok (hr == S_OK, "hr %#x\n", hr);
-+        }
-+        while (output_counter < 60)
-+        {
-+            DWORD output_status = 0;
-+            MFT_OUTPUT_DATA_BUFFER out_buffers[1];
-+            LONGLONG sample_time;
-+
-+            out_buffers[0].dwStreamID = 0;
-+            out_buffers[0].pSample = 0;
-+            out_buffers[0].dwStatus = 0;
-+            out_buffers[0].pEvents = NULL;
-+
-+            if (!(output_stream_info.dwFlags & MFT_OUTPUT_STREAM_PROVIDES_SAMPLES))
-+            {
-+                IMFMediaBuffer *buffer;
-+                IMFSample *sample;
-+                hr = MFCreateMemoryBuffer(output_stream_info.cbSize, &buffer);
-+                ok(hr == S_OK, "hr %#x\n");
-+                hr = MFCreateSample(&sample);
-+                ok(hr == S_OK, "hr %#x\n");
-+                hr = IMFSample_AddBuffer(sample, buffer);
-+                ok(hr == S_OK, "hr %#x\n");
-+                out_buffers[0].pSample = sample;
-+            }
-+
-+            hr = IMFTransform_ProcessOutput(decoder, 0, 1, out_buffers, &output_status);
-+            ok (out_buffers[0].pEvents == NULL, "Unexpected events.\n");
-+            ok (hr == S_OK || hr == MF_E_TRANSFORM_NEED_MORE_INPUT, "Failed to process output, sample %u, hr %#x.\n", output_counter, hr);
-+            if (hr == MF_E_TRANSFORM_NEED_MORE_INPUT) break;
-+            ok (out_buffers[0].dwStatus == S_OK, "hr %#x\n", out_buffers[0].dwStatus);
-+            hr = IMFSample_GetSampleTime(out_buffers[0].pSample, &sample_time);
-+            ok (hr == S_OK, "hr %#x\n", hr);
-+            if (last_sample_time)
-+            {
-+                ok ((sample_time - last_sample_time - 333333) < 10, "Unexpected sample time progression (%lu)->(%lu)\n", last_sample_time, sample_time);
-+            }
-+            last_sample_time = sample_time;
-+            IMFSample_Release(out_buffers[0].pSample);
-+            output_counter++;
-+        }
-+    }
-+    ok (output_counter == 60, "Expected 60 output samples, got %u\n", output_counter);
-+
-+    IMFMediaType_Release(output_type);
-+    IMFMediaType_Release(compressed_h264_type);
-+    IMFTransform_Release(decoder);
++    const char *ret, *tmp;
++    if (__wine_main_argc < 2) return NULL;
++    ret = __wine_main_argv[1];
++    if ((tmp = strrchr(ret, '/'))) ret = ++tmp;
++    if ((tmp = strrchr(ret, '\\'))) ret = ++tmp;
++    return ret;
 +}
 +
- static void init_functions(void)
+ /* parse a set of debugging option specifications and add them to the option list */
+ static void parse_options( const char *str )
  {
-     HMODULE mod = GetModuleHandleA("mfplat.dll");
-@@ -5258,6 +5473,7 @@ START_TEST(mfplat)
-     test_MFCreateMFByteStreamOnStream();
-     test_system_memory_buffer();
-     test_source_resolver();
-+    test_decoder();
-     test_MFCreateAsyncResult();
-     test_allocate_queue();
-     test_MFCopyImage();
-diff --git a/dlls/mfreadwrite/tests/mfplat.c b/dlls/mfreadwrite/tests/mfplat.c
-index 8ed94289703..5e289d8d5bc 100644
---- a/dlls/mfreadwrite/tests/mfplat.c
-+++ b/dlls/mfreadwrite/tests/mfplat.c
-@@ -622,10 +622,15 @@ static void test_source_reader(void)
-         return;
-     }
+-    char *opt, *next, *options;
++    char *opt, *next, *popt, *options;
++    const char *process = get_process_name();
+     unsigned int i;
  
--    stream = get_resource_stream("test.wav");
-+    stream = get_resource_stream("test.mp4");
+     if (!(options = strdup(str))) return;
+@@ -117,6 +130,17 @@ static void parse_options( const char *str )
+ 
+         if ((next = strchr( opt, ',' ))) *next++ = 0;
+ 
++        if ((popt = strchr( opt, ':' )))
++        {
++            unsigned int inv = 0;
++            *popt = 0;
++            if (!process) continue;
++            if (*opt == '-' || *opt == '+')
++                inv = (*opt++ == '-');
++            if (inv == !strcmp( opt, process )) continue;
++            opt = ++popt;
++        }
 +
-+    hr = IMFByteStream_QueryInterface(stream, &IID_IMFAttributes, (void **)&attributes);
-+    ok(hr == S_OK, "got 0x%08x\n", hr);
-+    hr = IMFAttributes_SetString(attributes, &MF_BYTESTREAM_CONTENT_TYPE, L"video/mp4");
-+    ok(hr == S_OK, "Failed to set string value, hr %#x.\n", hr);
-+    IMFAttributes_Release(attributes);
+         p = opt + strcspn( opt, "+-" );
+         if (!p[0]) p = opt;  /* assume it's a debug channel name */
  
-     hr = MFCreateSourceReaderFromByteStream(stream, NULL, &reader);
--todo_wine
-     ok(hr == S_OK, "Failed to create source reader, hr %#x.\n", hr);
- 
-     if (FAILED(hr))
-@@ -641,14 +646,14 @@ todo_wine
-     IMFMediaSource_Release(source);
- 
-     /* Stream selection. */
--    hr = IMFSourceReader_GetStreamSelection(reader, MF_SOURCE_READER_FIRST_VIDEO_STREAM, &selected);
-+    hr = IMFSourceReader_GetStreamSelection(reader, MF_SOURCE_READER_FIRST_AUDIO_STREAM, &selected);
-     ok(hr == MF_E_INVALIDSTREAMNUMBER, "Unexpected hr %#x.\n", hr);
- 
-     hr = IMFSourceReader_GetStreamSelection(reader, 100, &selected);
-     ok(hr == MF_E_INVALIDSTREAMNUMBER, "Unexpected hr %#x.\n", hr);
- 
-     selected = FALSE;
--    hr = IMFSourceReader_GetStreamSelection(reader, MF_SOURCE_READER_FIRST_AUDIO_STREAM, &selected);
-+    hr = IMFSourceReader_GetStreamSelection(reader, MF_SOURCE_READER_FIRST_VIDEO_STREAM, &selected);
-     ok(hr == S_OK, "Failed to get stream selection, hr %#x.\n", hr);
-     ok(selected, "Unexpected selection.\n");
- 
-@@ -657,17 +662,17 @@ todo_wine
-     ok(hr == S_OK, "Failed to get stream selection, hr %#x.\n", hr);
-     ok(selected, "Unexpected selection.\n");
- 
--    hr = IMFSourceReader_SetStreamSelection(reader, MF_SOURCE_READER_FIRST_VIDEO_STREAM, TRUE);
-+    hr = IMFSourceReader_SetStreamSelection(reader, MF_SOURCE_READER_FIRST_AUDIO_STREAM, TRUE);
-     ok(hr == MF_E_INVALIDSTREAMNUMBER, "Unexpected hr %#x.\n", hr);
- 
-     hr = IMFSourceReader_SetStreamSelection(reader, 100, TRUE);
-     ok(hr == MF_E_INVALIDSTREAMNUMBER, "Unexpected hr %#x.\n", hr);
- 
--    hr = IMFSourceReader_SetStreamSelection(reader, MF_SOURCE_READER_FIRST_AUDIO_STREAM, FALSE);
-+    hr = IMFSourceReader_SetStreamSelection(reader, MF_SOURCE_READER_FIRST_VIDEO_STREAM, FALSE);
-     ok(hr == S_OK, "Failed to deselect a stream, hr %#x.\n", hr);
- 
-     selected = TRUE;
--    hr = IMFSourceReader_GetStreamSelection(reader, MF_SOURCE_READER_FIRST_AUDIO_STREAM, &selected);
-+    hr = IMFSourceReader_GetStreamSelection(reader, MF_SOURCE_READER_FIRST_VIDEO_STREAM, &selected);
-     ok(hr == S_OK, "Failed to get stream selection, hr %#x.\n", hr);
-     ok(!selected, "Unexpected selection.\n");
- 
-@@ -675,43 +680,43 @@ todo_wine
-     ok(hr == S_OK, "Failed to deselect a stream, hr %#x.\n", hr);
- 
-     selected = FALSE;
--    hr = IMFSourceReader_GetStreamSelection(reader, MF_SOURCE_READER_FIRST_AUDIO_STREAM, &selected);
-+    hr = IMFSourceReader_GetStreamSelection(reader, MF_SOURCE_READER_FIRST_VIDEO_STREAM, &selected);
-     ok(hr == S_OK, "Failed to get stream selection, hr %#x.\n", hr);
-     ok(selected, "Unexpected selection.\n");
- 
-     /* Native media type. */
--    hr = IMFSourceReader_GetNativeMediaType(reader, MF_SOURCE_READER_FIRST_VIDEO_STREAM, 0, &mediatype);
-+    hr = IMFSourceReader_GetNativeMediaType(reader, MF_SOURCE_READER_FIRST_AUDIO_STREAM, 0, &mediatype);
-     ok(hr == MF_E_INVALIDSTREAMNUMBER, "Unexpected hr %#x.\n", hr);
- 
-     hr = IMFSourceReader_GetNativeMediaType(reader, 100, 0, &mediatype);
-     ok(hr == MF_E_INVALIDSTREAMNUMBER, "Unexpected hr %#x.\n", hr);
- 
--    hr = IMFSourceReader_GetNativeMediaType(reader, MF_SOURCE_READER_FIRST_AUDIO_STREAM, 0, &mediatype);
-+    hr = IMFSourceReader_GetNativeMediaType(reader, MF_SOURCE_READER_FIRST_VIDEO_STREAM, 0, &mediatype);
-     ok(hr == S_OK, "Failed to get native mediatype, hr %#x.\n", hr);
--    hr = IMFSourceReader_GetNativeMediaType(reader, MF_SOURCE_READER_FIRST_AUDIO_STREAM, 0, &mediatype2);
-+    hr = IMFSourceReader_GetNativeMediaType(reader, MF_SOURCE_READER_FIRST_VIDEO_STREAM, 0, &mediatype2);
-     ok(hr == S_OK, "Failed to get native mediatype, hr %#x.\n", hr);
-     ok(mediatype != mediatype2, "Unexpected media type instance.\n");
-     IMFMediaType_Release(mediatype2);
-     IMFMediaType_Release(mediatype);
- 
-     /* MF_SOURCE_READER_CURRENT_TYPE_INDEX is Win8+ */
--    hr = IMFSourceReader_GetNativeMediaType(reader, MF_SOURCE_READER_FIRST_AUDIO_STREAM,
-+    hr = IMFSourceReader_GetNativeMediaType(reader, MF_SOURCE_READER_FIRST_VIDEO_STREAM,
-             MF_SOURCE_READER_CURRENT_TYPE_INDEX, &mediatype);
-     ok(hr == S_OK || broken(hr == MF_E_NO_MORE_TYPES), "Failed to get native mediatype, hr %#x.\n", hr);
-     if (SUCCEEDED(hr))
-         IMFMediaType_Release(mediatype);
- 
--    hr = IMFSourceReader_GetNativeMediaType(reader, MF_SOURCE_READER_FIRST_AUDIO_STREAM, 1, &mediatype);
-+    hr = IMFSourceReader_GetNativeMediaType(reader, MF_SOURCE_READER_FIRST_VIDEO_STREAM, 1, &mediatype);
-     ok(hr == MF_E_NO_MORE_TYPES, "Unexpected hr %#x.\n", hr);
- 
-     /* Current media type. */
--    hr = IMFSourceReader_GetCurrentMediaType(reader, MF_SOURCE_READER_FIRST_VIDEO_STREAM, &mediatype);
-+    hr = IMFSourceReader_GetCurrentMediaType(reader, MF_SOURCE_READER_FIRST_AUDIO_STREAM, &mediatype);
-     ok(hr == MF_E_INVALIDSTREAMNUMBER, "Unexpected hr %#x.\n", hr);
- 
-     hr = IMFSourceReader_GetCurrentMediaType(reader, 100, &mediatype);
-     ok(hr == MF_E_INVALIDSTREAMNUMBER, "Unexpected hr %#x.\n", hr);
- 
--    hr = IMFSourceReader_GetCurrentMediaType(reader, MF_SOURCE_READER_FIRST_AUDIO_STREAM, &mediatype);
-+    hr = IMFSourceReader_GetCurrentMediaType(reader, MF_SOURCE_READER_FIRST_VIDEO_STREAM, &mediatype);
-     ok(hr == S_OK, "Failed to get current media type, hr %#x.\n", hr);
-     IMFMediaType_Release(mediatype);
- 
-@@ -719,56 +724,70 @@ todo_wine
-     ok(hr == S_OK, "Failed to get current media type, hr %#x.\n", hr);
-     IMFMediaType_Release(mediatype);
- 
--    hr = IMFSourceReader_ReadSample(reader, MF_SOURCE_READER_FIRST_AUDIO_STREAM, 0, &actual_index, &stream_flags,
--            &timestamp, &sample);
--    ok(hr == S_OK, "Failed to get a sample, hr %#x.\n", hr);
--    ok(actual_index == 0, "Unexpected stream index %u\n", actual_index);
--    ok(!stream_flags, "Unexpected stream flags %#x.\n", stream_flags);
--    IMFSample_Release(sample);
-+    hr = MFCreateMediaType(&mediatype);
-+    ok (hr == S_OK, "Unexpected hr %#x.\n");
-+    hr = IMFMediaType_SetGUID(mediatype, &MF_MT_MAJOR_TYPE, &MFMediaType_Video);
-+    ok(hr == S_OK, "Failed to set attribute, hr %#x.\n", hr);
-+    hr = IMFMediaType_SetGUID(mediatype, &MF_MT_SUBTYPE, &MFVideoFormat_NV12);
-+    ok(hr == S_OK, "Failed to set attribute, hr %#x.\n", hr);
- 
--    /* There is no video stream. */
--    hr = IMFSourceReader_ReadSample(reader, MF_SOURCE_READER_FIRST_VIDEO_STREAM, 0, &actual_index, &stream_flags,
-+    hr = IMFSourceReader_SetCurrentMediaType(reader, MF_SOURCE_READER_FIRST_VIDEO_STREAM, NULL, mediatype);
-+
-+    IMFMediaType_Release(mediatype);
-+
-+    for (unsigned int i = 0; i < 60; i++)
-+    {
-+        hr = IMFSourceReader_ReadSample(reader, MF_SOURCE_READER_FIRST_VIDEO_STREAM, 0, &actual_index, &stream_flags,
-+                &timestamp, &sample);
-+        ok(hr == S_OK, "Failed to get a sample, hr %#x.\n", hr);
-+        ok(actual_index == 0, "Unexpected stream index %u\n", actual_index);
-+        ok(!stream_flags, "Unexpected stream flags %#x.\n", stream_flags);
-+        IMFSample_Release(sample);
-+    }
-+
-+    /* There is no audio stream. */
-+    hr = IMFSourceReader_ReadSample(reader, MF_SOURCE_READER_FIRST_AUDIO_STREAM, 0, &actual_index, &stream_flags,
-             &timestamp, &sample);
-     ok(hr == MF_E_INVALIDSTREAMNUMBER, "Unexpected hr %#x.\n", hr);
--    ok(actual_index == MF_SOURCE_READER_FIRST_VIDEO_STREAM, "Unexpected stream index %u\n", actual_index);
-+    ok(actual_index == MF_SOURCE_READER_FIRST_AUDIO_STREAM, "Unexpected stream index %u\n", actual_index);
-     ok(stream_flags == MF_SOURCE_READERF_ERROR, "Unexpected stream flags %#x.\n", stream_flags);
- 
--    hr = IMFSourceReader_ReadSample(reader, MF_SOURCE_READER_FIRST_VIDEO_STREAM, 0, NULL, &stream_flags, &timestamp,
-+    hr = IMFSourceReader_ReadSample(reader, MF_SOURCE_READER_FIRST_AUDIO_STREAM, 0, NULL, &stream_flags, &timestamp,
-             &sample);
-     ok(hr == MF_E_INVALIDSTREAMNUMBER, "Unexpected hr %#x.\n", hr);
- 
--    hr = IMFSourceReader_ReadSample(reader, MF_SOURCE_READER_FIRST_VIDEO_STREAM, 0, NULL, NULL, &timestamp, &sample);
-+    hr = IMFSourceReader_ReadSample(reader, MF_SOURCE_READER_FIRST_AUDIO_STREAM, 0, NULL, NULL, &timestamp, &sample);
-     ok(hr == E_POINTER, "Unexpected hr %#x.\n", hr);
- 
--    hr = IMFSourceReader_ReadSample(reader, MF_SOURCE_READER_FIRST_AUDIO_STREAM, 0, &actual_index, &stream_flags,
-+    hr = IMFSourceReader_ReadSample(reader, MF_SOURCE_READER_FIRST_VIDEO_STREAM, 0, &actual_index, &stream_flags,
-             &timestamp, &sample);
-     ok(hr == S_OK, "Failed to get a sample, hr %#x.\n", hr);
-     ok(actual_index == 0, "Unexpected stream index %u\n", actual_index);
-     ok(stream_flags == MF_SOURCE_READERF_ENDOFSTREAM, "Unexpected stream flags %#x.\n", stream_flags);
-     ok(!sample, "Unexpected sample object.\n");
- 
--    hr = IMFSourceReader_ReadSample(reader, MF_SOURCE_READER_FIRST_AUDIO_STREAM, MF_SOURCE_READER_CONTROLF_DRAIN,
-+    hr = IMFSourceReader_ReadSample(reader, MF_SOURCE_READER_FIRST_VIDEO_STREAM, MF_SOURCE_READER_CONTROLF_DRAIN,
-             &actual_index, &stream_flags, &timestamp, &sample);
-     ok(hr == S_OK, "Failed to get a sample, hr %#x.\n", hr);
-     ok(actual_index == 0, "Unexpected stream index %u\n", actual_index);
-     ok(stream_flags == MF_SOURCE_READERF_ENDOFSTREAM, "Unexpected stream flags %#x.\n", stream_flags);
-     ok(!sample, "Unexpected sample object.\n");
- 
--    hr = IMFSourceReader_ReadSample(reader, MF_SOURCE_READER_FIRST_AUDIO_STREAM, MF_SOURCE_READER_CONTROLF_DRAIN,
-+    hr = IMFSourceReader_ReadSample(reader, MF_SOURCE_READER_FIRST_VIDEO_STREAM, MF_SOURCE_READER_CONTROLF_DRAIN,
-             &actual_index, &stream_flags, &timestamp, NULL);
-     ok(hr == E_POINTER, "Unexpected hr %#x.\n", hr);
- 
--    hr = IMFSourceReader_ReadSample(reader, MF_SOURCE_READER_FIRST_AUDIO_STREAM, MF_SOURCE_READER_CONTROLF_DRAIN,
-+    hr = IMFSourceReader_ReadSample(reader, MF_SOURCE_READER_FIRST_VIDEO_STREAM, MF_SOURCE_READER_CONTROLF_DRAIN,
-             &actual_index, NULL, &timestamp, &sample);
-     ok(hr == E_POINTER, "Unexpected hr %#x.\n", hr);
- 
--    hr = IMFSourceReader_ReadSample(reader, MF_SOURCE_READER_FIRST_AUDIO_STREAM, MF_SOURCE_READER_CONTROLF_DRAIN,
-+    hr = IMFSourceReader_ReadSample(reader, MF_SOURCE_READER_FIRST_VIDEO_STREAM, MF_SOURCE_READER_CONTROLF_DRAIN,
-             NULL, &stream_flags, &timestamp, &sample);
-     ok(hr == S_OK, "Failed to get a sample, hr %#x.\n", hr);
-     ok(stream_flags == MF_SOURCE_READERF_ENDOFSTREAM, "Unexpected stream flags %#x.\n", stream_flags);
-     ok(!sample, "Unexpected sample object.\n");
- 
--    hr = IMFSourceReader_ReadSample(reader, MF_SOURCE_READER_FIRST_AUDIO_STREAM, MF_SOURCE_READER_CONTROLF_DRAIN,
-+    hr = IMFSourceReader_ReadSample(reader, MF_SOURCE_READER_FIRST_VIDEO_STREAM, MF_SOURCE_READER_CONTROLF_DRAIN,
-             &actual_index, &stream_flags, NULL, &sample);
-     ok(hr == S_OK, "Failed to get a sample, hr %#x.\n", hr);
-     ok(actual_index == 0, "Unexpected stream index %u\n", actual_index);
-@@ -777,26 +796,31 @@ todo_wine
- 
-     hr = IMFSourceReader_ReadSample(reader, MF_SOURCE_READER_ANY_STREAM, MF_SOURCE_READER_CONTROLF_DRAIN,
-             &actual_index, &stream_flags, NULL, &sample);
--    ok(hr == S_OK, "Failed to get a sample, hr %#x.\n", hr);
--    ok(actual_index == 0, "Unexpected stream index %u\n", actual_index);
--    ok(stream_flags == MF_SOURCE_READERF_ENDOFSTREAM, "Unexpected stream flags %#x.\n", stream_flags);
--    ok(!sample, "Unexpected sample object.\n");
-+    todo_wine ok(hr == S_OK, "Failed to get a sample, hr %#x.\n", hr);
-+    if (hr == S_OK)
-+    {
-+        ok(actual_index == 0, "Unexpected stream index %u\n", actual_index);
-+        ok(stream_flags == MF_SOURCE_READERF_ENDOFSTREAM, "Unexpected stream flags %#x.\n", stream_flags);
-+        ok(!sample, "Unexpected sample object.\n");
-+    }
- 
-     /* Flush. */
-     hr = IMFSourceReader_Flush(reader, MF_SOURCE_READER_FIRST_VIDEO_STREAM);
--    ok(hr == MF_E_INVALIDSTREAMNUMBER, "Unexpected hr %#x.\n", hr);
--
--    hr = IMFSourceReader_Flush(reader, 100);
--    ok(hr == MF_E_INVALIDSTREAMNUMBER, "Unexpected hr %#x.\n", hr);
-+    todo_wine ok(hr == S_OK, "Failed to flush stream, hr %#x.\n", hr);
-+    if (hr == S_OK)
-+    {
-+        hr = IMFSourceReader_Flush(reader, MF_SOURCE_READER_FIRST_VIDEO_STREAM);
-+        ok(hr == S_OK, "Failed to flush stream, hr %#x.\n", hr);
- 
--    hr = IMFSourceReader_Flush(reader, MF_SOURCE_READER_FIRST_AUDIO_STREAM);
--    ok(hr == S_OK, "Failed to flush stream, hr %#x.\n", hr);
-+        hr = IMFSourceReader_Flush(reader, MF_SOURCE_READER_ALL_STREAMS);
-+        ok(hr == S_OK, "Failed to flush all streams, hr %#x.\n", hr);
- 
--    hr = IMFSourceReader_Flush(reader, MF_SOURCE_READER_FIRST_AUDIO_STREAM);
--    ok(hr == S_OK, "Failed to flush stream, hr %#x.\n", hr);
-+        hr = IMFSourceReader_Flush(reader, MF_SOURCE_READER_FIRST_AUDIO_STREAM);
-+        ok(hr == MF_E_INVALIDSTREAMNUMBER, "Unexpected hr %#x.\n", hr);
- 
--    hr = IMFSourceReader_Flush(reader, MF_SOURCE_READER_ALL_STREAMS);
--    ok(hr == S_OK, "Failed to flush all streams, hr %#x.\n", hr);
-+        hr = IMFSourceReader_Flush(reader, 100);
-+        ok(hr == MF_E_INVALIDSTREAMNUMBER, "Unexpected hr %#x.\n", hr);
-+    }
- 
-     IMFSourceReader_Release(reader);
- 
-diff --git a/dlls/mfreadwrite/tests/resource.rc b/dlls/mfreadwrite/tests/resource.rc
-index f54212a8c8f..5edf5254906 100644
---- a/dlls/mfreadwrite/tests/resource.rc
-+++ b/dlls/mfreadwrite/tests/resource.rc
-@@ -18,5 +18,5 @@
- 
- #include "windef.h"
- 
--/* @makedep: test.wav */
--test.wav RCDATA test.wav
-+/* @makedep: test.mp4 */
-+test.mp4 RCDATA test.mp4
-From 61672bbecf77f8c0a0a8b9094b5b0a68977a4533 Mon Sep 17 00:00:00 2001
-From: Derek Lesho <dlesho@codeweavers.com>
-Date: Wed, 25 Mar 2020 13:58:36 -0500
-Subject: [PATCH 39/42] Revert "Improve tests"
-
-This reverts commit 603b1717a2b511a66d3be99ab5761d49cd5ef34d.
----
- dlls/mfplat/tests/mfplat.c         | 244 ++---------------------------
- dlls/mfplat/tests/test.mp4         | Bin 121550 -> 1554 bytes
- dlls/mfreadwrite/tests/mfplat.c    | 116 ++++++--------
- dlls/mfreadwrite/tests/resource.rc |   4 +-
- dlls/mfreadwrite/tests/test.mp4    | Bin 121550 -> 0 bytes
- 5 files changed, 62 insertions(+), 302 deletions(-)
- delete mode 100644 dlls/mfreadwrite/tests/test.mp4
-
-diff --git a/dlls/mfplat/tests/mfplat.c b/dlls/mfplat/tests/mfplat.c
-index ed7fdbf1988..51193641243 100644
---- a/dlls/mfplat/tests/mfplat.c
-+++ b/dlls/mfplat/tests/mfplat.c
-@@ -401,9 +401,6 @@ static BOOL get_event(IMFMediaEventGenerator *generator, MediaEventType expected
-     return TRUE;
- }
- 
--static IMFSample *retrieved_h264_samples[60];
--static IMFMediaType *compressed_h264_type;
--
- static void test_source_resolver(void)
+@@ -157,7 +181,7 @@ static void debug_usage(void)
  {
-     struct test_callback callback = { { &test_create_from_url_callback_vtbl } };
-@@ -427,7 +424,6 @@ static void test_source_resolver(void)
-     PROPVARIANT var;
-     HRESULT hr;
-     GUID guid;
--    UINT64 frame_size, frame_rate;
- 
-     if (!pMFCreateSourceResolver)
-     {
-@@ -517,27 +513,12 @@ static void test_source_resolver(void)
-     ok(hr == S_OK, "Failed to get current media type, hr %#x.\n", hr);
-     hr = IMFMediaType_GetGUID(media_type, &MF_MT_SUBTYPE, &guid);
-     ok(hr == S_OK, "Failed to get media sub type, hr %#x.\n", hr);
--    ok(IsEqualGUID(&guid, &MFVideoFormat_H264), "Unexpected sub type %s.\n", debugstr_guid(&guid));
--
--    hr = IMFMediaType_GetUINT64(media_type, &MF_MT_FRAME_SIZE, &frame_size);
--    ok(hr == S_OK, "Failed to get frame size, hr %#x.\n", hr);
--
--    ok((frame_size >> 32) == 320, "Unexpected width %u.\n", (DWORD)(frame_size >> 32));
--    ok((frame_size & 0xffffffff) == 240, "Unexpected height %u.\n", (DWORD)(frame_size & 0xffffffff));
--
--    hr = IMFMediaType_GetUINT64(media_type, &MF_MT_FRAME_RATE, &frame_rate);
--    ok(hr == S_OK, "Failed to get frame rate, hr %#x.\n", hr);
--
--    ok((frame_rate >> 32) / (frame_rate & 0xffffffff) == 30, "Unexpected framerate %u/%u\n",
--        (DWORD)(frame_rate >> 32), (DWORD)(frame_rate & 0xffffffff));
-+    ok(IsEqualGUID(&guid, &MFVideoFormat_M4S2), "Unexpected sub type %s.\n", debugstr_guid(&guid));
-+    IMFMediaType_Release(media_type);
- 
-     hr = IMFPresentationDescriptor_SelectStream(descriptor, 0);
-     ok(hr == S_OK, "Failed to select video stream, hr %#x.\n", hr);
- 
--    compressed_h264_type = media_type;
--    IMFMediaTypeHandler_Release(handler);
--    IMFStreamDescriptor_Release(sd);
--
-     var.vt = VT_EMPTY;
-     hr = IMFMediaSource_Start(mediasource, descriptor, &GUID_NULL, &var);
-     ok(hr == S_OK, "Failed to start media source, hr %#x.\n", hr);
-@@ -548,9 +529,9 @@ static void test_source_resolver(void)
- 
-     get_event((IMFMediaEventGenerator *)mediasource, MESourceStarted, NULL);
- 
--    /* Request samples, our file is 60 frames at 30fps */
-+    /* Request samples, our file is 10 frames at 25fps */
-     get_event((IMFMediaEventGenerator *)video_stream, MEStreamStarted, NULL);
--    sample_count = 60;
-+    sample_count = 10;
- 
-     /* Request one beyond EOS, otherwise EndOfStream isn't queued. */
-     for (i = 0; i <= sample_count; ++i)
-@@ -566,14 +547,9 @@ static void test_source_resolver(void)
-     for (i = 0; i < sample_count; ++i)
-     {
-         static const LONGLONG MILLI_TO_100_NANO = 10000;
--        static int once = 0;
--        LONGLONG duration;
-+        LONGLONG duration, time;
-         DWORD buffer_count;
-         IMFSample *sample;
--        IMFMediaBuffer *buffer;
--        BYTE *buffer_data;
--        DWORD buffer_len;
--        BYTE nal_type = 0x00;
-         BOOL ret;
- 
-         ret = get_event((IMFMediaEventGenerator *)video_stream, MEMediaSample, &var);
-@@ -584,38 +560,19 @@ static void test_source_resolver(void)
-         ok(var.vt == VT_UNKNOWN, "Unexpected value type %u from MEMediaSample event.\n", var.vt);
-         sample = (IMFSample *)var.punkVal;
- 
-+        hr = IMFSample_GetBufferCount(sample, &buffer_count);
-+        ok(hr == S_OK, "Failed to get buffer count, hr %#x.\n", hr);
-+        ok(buffer_count == 1, "Unexpected buffer count %u.\n", buffer_count);
-+
-         hr = IMFSample_GetSampleDuration(sample, &duration);
-         ok(hr == S_OK, "Failed to get sample duration, hr %#x.\n", hr);
--        ok(duration > 33 * MILLI_TO_100_NANO && duration < 34 *MILLI_TO_100_NANO,
--            "Unexpected duration %lu.\n", duration);
-+        ok(duration == 40 * MILLI_TO_100_NANO, "Unexpected duration %s.\n", wine_dbgstr_longlong(duration));
- 
--        hr = IMFSample_GetBufferCount(sample, &buffer_count);
--        ok(hr == S_OK, "Failed to get buffer count, hr %#x.\n", hr);
--        ok(buffer_count > 0, "Unexpected buffer count %u.\n", buffer_count);
--
--        hr = IMFSample_GetBufferByIndex(sample, 0, &buffer);
--        ok (hr == S_OK, "Failed to get buffer from sample, hr %#x.\n", hr);
--        hr = IMFMediaBuffer_Lock(buffer, &buffer_data, NULL, &buffer_len);
--        ok (hr == S_OK, "Failed to lock buffer, hr %#x.\n", hr);
--        ok (buffer_len >= 4, "Size of first sample buffer < 4 bytes %u\n", buffer_len);
--        for (unsigned int k = 0; k < 5; k++)
--        {
--            ok (buffer_data[k] == 0x00 || buffer_data[k] == 0x01, "Invalid start prefix\n");
--            if (buffer_data[k] == 0x01)
--            {
--                nal_type = buffer_data[k+1];
--                break;
--            }
--        }
--        if (!once)
--            todo_wine ok(nal_type != 0x09, "Access Unit Delimeter NAL not expected.\n");
--        if (nal_type == 0x09)
--            once = 1;
--        hr = IMFMediaBuffer_Unlock(buffer);
--        ok (hr == S_OK, "Failed to unlock buffer.\n");
--        IMFMediaBuffer_Release(buffer);
-+        hr = IMFSample_GetSampleTime(sample, &time);
-+        ok(hr == S_OK, "Failed to get sample time, hr %#x.\n", hr);
-+        ok(time == i * 40 * MILLI_TO_100_NANO, "Unexpected time %s.\n", wine_dbgstr_longlong(time));
- 
--        retrieved_h264_samples[i] = sample;
-+        IMFSample_Release(sample);
-     }
- 
-     if (i == sample_count)
-@@ -699,178 +656,6 @@ static void test_source_resolver(void)
-     CloseHandle(callback.event);
- }
- 
--static void test_decoder(void)
--{
--    IMFTransform *decoder;
--    DWORD in_min, in_max, out_min, out_max;
--    IMFMediaType *output_type = NULL;
--    MFT_INPUT_STREAM_INFO input_stream_info;
--    MFT_OUTPUT_STREAM_INFO output_stream_info;
--    DWORD input_counter, output_counter;
--    UINT64 frame_size, frame_rate;
--    LONGLONG last_sample_time = 0;
--    HRESULT hr;
--
--    if (FAILED(CoCreateInstance(&CLSID_CMSH264DecoderMFT, NULL, CLSCTX_INPROC_SERVER, &IID_IMFTransform, (void**)&decoder)))
--    {
--        skip("Skipping decoder tests.\n");
--        return;
--    }
--
--    hr = IMFTransform_GetStreamLimits(decoder, &in_min, &in_max, &out_min, &out_max);
--    ok (hr == S_OK, "Failed to get stream limits, hr %#x\n", hr);
--    ok (in_min == 1 && in_max == 1 && out_min == 1 && out_max == 1, "Unexpected stream limits.\n");
--
--    hr = IMFTransform_GetStreamCount(decoder, &in_min, &out_min);
--    ok (hr == S_OK, "hr %#x\n", hr);
--
--    for (unsigned int i = 0;;i++)
--    {
--        IMFMediaType *available_input_type = NULL;
--        GUID subtype;
--
--        if (FAILED(hr = IMFTransform_GetInputAvailableType(decoder, 0, i, &available_input_type)))
--            break;
--
--        if (FAILED(hr = IMFMediaType_GetGUID(available_input_type, &MF_MT_SUBTYPE, &subtype)))
--        {
--            IMFMediaType_Release(available_input_type);
--            break;
--        }
--
--        if (IsEqualGUID(&subtype, &MFVideoFormat_H264))
--        {
--            IMFMediaType_Release(available_input_type);
--            break;
--        }
--
--        IMFMediaType_Release(available_input_type);
--    }
--    ok (hr == S_OK, "Didn't find MFVideoFormat_H264 as an input type.\n");
--
--    hr = IMFTransform_SetInputType(decoder, 0, compressed_h264_type, 0);
--    ok (hr == S_OK, "Failed to set input type, hr %#x.\n", hr);
--
--    for (unsigned int i = 0;;i++)
--    {
--        IMFMediaType *available_output_type;
--        GUID subtype;
--
--        if (FAILED(hr = IMFTransform_GetOutputAvailableType(decoder, 0, i, &available_output_type)))
--            break;
--
--        if (FAILED(hr = IMFMediaType_GetGUID(available_output_type, &MF_MT_SUBTYPE, &subtype)))
--        {
--            IMFMediaType_Release(available_output_type);
--            break;
--        }
--
--        if (IsEqualGUID(&subtype, &MFVideoFormat_NV12))
--        {
--            output_type = available_output_type;
--            break;
--        }
--
--        IMFMediaType_Release(available_output_type);
--    }
--    ok (hr == S_OK, "Didn't find MFVideoFormat_NV12 as an output type, hr %#x\n", hr);
--
--    hr = IMFMediaType_GetUINT64(output_type, &MF_MT_FRAME_SIZE, &frame_size);
--    ok (hr == S_OK, "Failed to get output frame size, hr %#x.\n", hr);
--
--    ok(frame_size >> 32 == 320, "Unexpected width %u.\n", (DWORD)(frame_size >> 32));
--    ok((frame_size & 0xffffffff) == 240, "Unexpected height %u.\n", (DWORD)(frame_size & 0xffffffff));
--
--    hr = IMFMediaType_GetUINT64(output_type, &MF_MT_FRAME_RATE, &frame_rate);
--    ok (hr == S_OK, "Failed to get output frame rate, hr %#x.\n", hr);
--
--    ok((frame_rate >> 32) / (frame_rate & 0xffffffff) == 30, "Unexpected framerate %u/%u\n",
--        (DWORD)(frame_rate >> 32), (DWORD)(frame_rate & 0xffffffff));
--
--    hr = IMFTransform_SetOutputType(decoder, 0, output_type, 0);
--    ok (hr == S_OK, "Failed to set output type, hr %#x.\n", hr);
--
--    hr = IMFTransform_GetInputStreamInfo(decoder, 0, &input_stream_info);
--    ok (hr == S_OK, "hr %#x.\n");
--
--    hr = IMFTransform_GetOutputStreamInfo(decoder, 0, &output_stream_info);
--    ok (hr == S_OK, "hr = %#x.\n");
--
--    input_counter = 0;
--    output_counter = 0;
--
--    hr = IMFTransform_ProcessMessage(decoder, MFT_MESSAGE_NOTIFY_BEGIN_STREAMING, 0);
--    ok (hr == S_OK, "hr %#x\n");
--
--    while (output_counter < 60 && input_counter < 60)
--    {
--        while (input_counter < 60)
--        {
--            IMFSample *sample = retrieved_h264_samples[input_counter];
--            DWORD output_status;
--
--            hr = IMFTransform_ProcessInput(decoder, 0, sample, 0);
--            ok (hr == S_OK || hr == MF_E_NOTACCEPTING, "Failed to input sample %u, hr %#x.\n", input_counter, hr);
--            if (hr == MF_E_NOTACCEPTING)
--                break;
--            input_counter++;
--            hr = IMFTransform_GetOutputStatus(decoder, &output_status);
--            ok(hr == S_OK, "hr %#x\n", hr);
--            if (output_status & MFT_OUTPUT_STATUS_SAMPLE_READY)
--                break;
--        }
--        if (input_counter == 60)
--        {
--            hr = IMFTransform_ProcessMessage(decoder, MFT_MESSAGE_COMMAND_DRAIN, 0);
--            ok (hr == S_OK, "hr %#x\n", hr);
--        }
--        while (output_counter < 60)
--        {
--            DWORD output_status = 0;
--            MFT_OUTPUT_DATA_BUFFER out_buffers[1];
--            LONGLONG sample_time;
--
--            out_buffers[0].dwStreamID = 0;
--            out_buffers[0].pSample = 0;
--            out_buffers[0].dwStatus = 0;
--            out_buffers[0].pEvents = NULL;
--
--            if (!(output_stream_info.dwFlags & MFT_OUTPUT_STREAM_PROVIDES_SAMPLES))
--            {
--                IMFMediaBuffer *buffer;
--                IMFSample *sample;
--                hr = MFCreateMemoryBuffer(output_stream_info.cbSize, &buffer);
--                ok(hr == S_OK, "hr %#x\n");
--                hr = MFCreateSample(&sample);
--                ok(hr == S_OK, "hr %#x\n");
--                hr = IMFSample_AddBuffer(sample, buffer);
--                ok(hr == S_OK, "hr %#x\n");
--                out_buffers[0].pSample = sample;
--            }
--
--            hr = IMFTransform_ProcessOutput(decoder, 0, 1, out_buffers, &output_status);
--            ok (out_buffers[0].pEvents == NULL, "Unexpected events.\n");
--            ok (hr == S_OK || hr == MF_E_TRANSFORM_NEED_MORE_INPUT, "Failed to process output, sample %u, hr %#x.\n", output_counter, hr);
--            if (hr == MF_E_TRANSFORM_NEED_MORE_INPUT) break;
--            ok (out_buffers[0].dwStatus == S_OK, "hr %#x\n", out_buffers[0].dwStatus);
--            hr = IMFSample_GetSampleTime(out_buffers[0].pSample, &sample_time);
--            ok (hr == S_OK, "hr %#x\n", hr);
--            if (last_sample_time)
--            {
--                ok ((sample_time - last_sample_time - 333333) < 10, "Unexpected sample time progression (%lu)->(%lu)\n", last_sample_time, sample_time);
--            }
--            last_sample_time = sample_time;
--            IMFSample_Release(out_buffers[0].pSample);
--            output_counter++;
--        }
--    }
--    ok (output_counter == 60, "Expected 60 output samples, got %u\n", output_counter);
--
--    IMFMediaType_Release(output_type);
--    IMFMediaType_Release(compressed_h264_type);
--    IMFTransform_Release(decoder);
--}
--
- static void init_functions(void)
- {
-     HMODULE mod = GetModuleHandleA("mfplat.dll");
-@@ -5473,7 +5258,6 @@ START_TEST(mfplat)
-     test_MFCreateMFByteStreamOnStream();
-     test_system_memory_buffer();
-     test_source_resolver();
--    test_decoder();
-     test_MFCreateAsyncResult();
-     test_allocate_queue();
-     test_MFCopyImage();
-diff --git a/dlls/mfreadwrite/tests/mfplat.c b/dlls/mfreadwrite/tests/mfplat.c
-index 5e289d8d5bc..8ed94289703 100644
---- a/dlls/mfreadwrite/tests/mfplat.c
-+++ b/dlls/mfreadwrite/tests/mfplat.c
-@@ -622,15 +622,10 @@ static void test_source_reader(void)
-         return;
-     }
- 
--    stream = get_resource_stream("test.mp4");
--
--    hr = IMFByteStream_QueryInterface(stream, &IID_IMFAttributes, (void **)&attributes);
--    ok(hr == S_OK, "got 0x%08x\n", hr);
--    hr = IMFAttributes_SetString(attributes, &MF_BYTESTREAM_CONTENT_TYPE, L"video/mp4");
--    ok(hr == S_OK, "Failed to set string value, hr %#x.\n", hr);
--    IMFAttributes_Release(attributes);
-+    stream = get_resource_stream("test.wav");
- 
-     hr = MFCreateSourceReaderFromByteStream(stream, NULL, &reader);
-+todo_wine
-     ok(hr == S_OK, "Failed to create source reader, hr %#x.\n", hr);
- 
-     if (FAILED(hr))
-@@ -646,14 +641,14 @@ static void test_source_reader(void)
-     IMFMediaSource_Release(source);
- 
-     /* Stream selection. */
--    hr = IMFSourceReader_GetStreamSelection(reader, MF_SOURCE_READER_FIRST_AUDIO_STREAM, &selected);
-+    hr = IMFSourceReader_GetStreamSelection(reader, MF_SOURCE_READER_FIRST_VIDEO_STREAM, &selected);
-     ok(hr == MF_E_INVALIDSTREAMNUMBER, "Unexpected hr %#x.\n", hr);
- 
-     hr = IMFSourceReader_GetStreamSelection(reader, 100, &selected);
-     ok(hr == MF_E_INVALIDSTREAMNUMBER, "Unexpected hr %#x.\n", hr);
- 
-     selected = FALSE;
--    hr = IMFSourceReader_GetStreamSelection(reader, MF_SOURCE_READER_FIRST_VIDEO_STREAM, &selected);
-+    hr = IMFSourceReader_GetStreamSelection(reader, MF_SOURCE_READER_FIRST_AUDIO_STREAM, &selected);
-     ok(hr == S_OK, "Failed to get stream selection, hr %#x.\n", hr);
-     ok(selected, "Unexpected selection.\n");
- 
-@@ -662,17 +657,17 @@ static void test_source_reader(void)
-     ok(hr == S_OK, "Failed to get stream selection, hr %#x.\n", hr);
-     ok(selected, "Unexpected selection.\n");
- 
--    hr = IMFSourceReader_SetStreamSelection(reader, MF_SOURCE_READER_FIRST_AUDIO_STREAM, TRUE);
-+    hr = IMFSourceReader_SetStreamSelection(reader, MF_SOURCE_READER_FIRST_VIDEO_STREAM, TRUE);
-     ok(hr == MF_E_INVALIDSTREAMNUMBER, "Unexpected hr %#x.\n", hr);
- 
-     hr = IMFSourceReader_SetStreamSelection(reader, 100, TRUE);
-     ok(hr == MF_E_INVALIDSTREAMNUMBER, "Unexpected hr %#x.\n", hr);
- 
--    hr = IMFSourceReader_SetStreamSelection(reader, MF_SOURCE_READER_FIRST_VIDEO_STREAM, FALSE);
-+    hr = IMFSourceReader_SetStreamSelection(reader, MF_SOURCE_READER_FIRST_AUDIO_STREAM, FALSE);
-     ok(hr == S_OK, "Failed to deselect a stream, hr %#x.\n", hr);
- 
-     selected = TRUE;
--    hr = IMFSourceReader_GetStreamSelection(reader, MF_SOURCE_READER_FIRST_VIDEO_STREAM, &selected);
-+    hr = IMFSourceReader_GetStreamSelection(reader, MF_SOURCE_READER_FIRST_AUDIO_STREAM, &selected);
-     ok(hr == S_OK, "Failed to get stream selection, hr %#x.\n", hr);
-     ok(!selected, "Unexpected selection.\n");
- 
-@@ -680,43 +675,43 @@ static void test_source_reader(void)
-     ok(hr == S_OK, "Failed to deselect a stream, hr %#x.\n", hr);
- 
-     selected = FALSE;
--    hr = IMFSourceReader_GetStreamSelection(reader, MF_SOURCE_READER_FIRST_VIDEO_STREAM, &selected);
-+    hr = IMFSourceReader_GetStreamSelection(reader, MF_SOURCE_READER_FIRST_AUDIO_STREAM, &selected);
-     ok(hr == S_OK, "Failed to get stream selection, hr %#x.\n", hr);
-     ok(selected, "Unexpected selection.\n");
- 
-     /* Native media type. */
--    hr = IMFSourceReader_GetNativeMediaType(reader, MF_SOURCE_READER_FIRST_AUDIO_STREAM, 0, &mediatype);
-+    hr = IMFSourceReader_GetNativeMediaType(reader, MF_SOURCE_READER_FIRST_VIDEO_STREAM, 0, &mediatype);
-     ok(hr == MF_E_INVALIDSTREAMNUMBER, "Unexpected hr %#x.\n", hr);
- 
-     hr = IMFSourceReader_GetNativeMediaType(reader, 100, 0, &mediatype);
-     ok(hr == MF_E_INVALIDSTREAMNUMBER, "Unexpected hr %#x.\n", hr);
- 
--    hr = IMFSourceReader_GetNativeMediaType(reader, MF_SOURCE_READER_FIRST_VIDEO_STREAM, 0, &mediatype);
-+    hr = IMFSourceReader_GetNativeMediaType(reader, MF_SOURCE_READER_FIRST_AUDIO_STREAM, 0, &mediatype);
-     ok(hr == S_OK, "Failed to get native mediatype, hr %#x.\n", hr);
--    hr = IMFSourceReader_GetNativeMediaType(reader, MF_SOURCE_READER_FIRST_VIDEO_STREAM, 0, &mediatype2);
-+    hr = IMFSourceReader_GetNativeMediaType(reader, MF_SOURCE_READER_FIRST_AUDIO_STREAM, 0, &mediatype2);
-     ok(hr == S_OK, "Failed to get native mediatype, hr %#x.\n", hr);
-     ok(mediatype != mediatype2, "Unexpected media type instance.\n");
-     IMFMediaType_Release(mediatype2);
-     IMFMediaType_Release(mediatype);
- 
-     /* MF_SOURCE_READER_CURRENT_TYPE_INDEX is Win8+ */
--    hr = IMFSourceReader_GetNativeMediaType(reader, MF_SOURCE_READER_FIRST_VIDEO_STREAM,
-+    hr = IMFSourceReader_GetNativeMediaType(reader, MF_SOURCE_READER_FIRST_AUDIO_STREAM,
-             MF_SOURCE_READER_CURRENT_TYPE_INDEX, &mediatype);
-     ok(hr == S_OK || broken(hr == MF_E_NO_MORE_TYPES), "Failed to get native mediatype, hr %#x.\n", hr);
-     if (SUCCEEDED(hr))
-         IMFMediaType_Release(mediatype);
- 
--    hr = IMFSourceReader_GetNativeMediaType(reader, MF_SOURCE_READER_FIRST_VIDEO_STREAM, 1, &mediatype);
-+    hr = IMFSourceReader_GetNativeMediaType(reader, MF_SOURCE_READER_FIRST_AUDIO_STREAM, 1, &mediatype);
-     ok(hr == MF_E_NO_MORE_TYPES, "Unexpected hr %#x.\n", hr);
- 
-     /* Current media type. */
--    hr = IMFSourceReader_GetCurrentMediaType(reader, MF_SOURCE_READER_FIRST_AUDIO_STREAM, &mediatype);
-+    hr = IMFSourceReader_GetCurrentMediaType(reader, MF_SOURCE_READER_FIRST_VIDEO_STREAM, &mediatype);
-     ok(hr == MF_E_INVALIDSTREAMNUMBER, "Unexpected hr %#x.\n", hr);
- 
-     hr = IMFSourceReader_GetCurrentMediaType(reader, 100, &mediatype);
-     ok(hr == MF_E_INVALIDSTREAMNUMBER, "Unexpected hr %#x.\n", hr);
- 
--    hr = IMFSourceReader_GetCurrentMediaType(reader, MF_SOURCE_READER_FIRST_VIDEO_STREAM, &mediatype);
-+    hr = IMFSourceReader_GetCurrentMediaType(reader, MF_SOURCE_READER_FIRST_AUDIO_STREAM, &mediatype);
-     ok(hr == S_OK, "Failed to get current media type, hr %#x.\n", hr);
-     IMFMediaType_Release(mediatype);
- 
-@@ -724,70 +719,56 @@ static void test_source_reader(void)
-     ok(hr == S_OK, "Failed to get current media type, hr %#x.\n", hr);
-     IMFMediaType_Release(mediatype);
- 
--    hr = MFCreateMediaType(&mediatype);
--    ok (hr == S_OK, "Unexpected hr %#x.\n");
--    hr = IMFMediaType_SetGUID(mediatype, &MF_MT_MAJOR_TYPE, &MFMediaType_Video);
--    ok(hr == S_OK, "Failed to set attribute, hr %#x.\n", hr);
--    hr = IMFMediaType_SetGUID(mediatype, &MF_MT_SUBTYPE, &MFVideoFormat_NV12);
--    ok(hr == S_OK, "Failed to set attribute, hr %#x.\n", hr);
--
--    hr = IMFSourceReader_SetCurrentMediaType(reader, MF_SOURCE_READER_FIRST_VIDEO_STREAM, NULL, mediatype);
--
--    IMFMediaType_Release(mediatype);
--
--    for (unsigned int i = 0; i < 60; i++)
--    {
--        hr = IMFSourceReader_ReadSample(reader, MF_SOURCE_READER_FIRST_VIDEO_STREAM, 0, &actual_index, &stream_flags,
--                &timestamp, &sample);
--        ok(hr == S_OK, "Failed to get a sample, hr %#x.\n", hr);
--        ok(actual_index == 0, "Unexpected stream index %u\n", actual_index);
--        ok(!stream_flags, "Unexpected stream flags %#x.\n", stream_flags);
--        IMFSample_Release(sample);
--    }
--
--    /* There is no audio stream. */
-     hr = IMFSourceReader_ReadSample(reader, MF_SOURCE_READER_FIRST_AUDIO_STREAM, 0, &actual_index, &stream_flags,
-             &timestamp, &sample);
-+    ok(hr == S_OK, "Failed to get a sample, hr %#x.\n", hr);
-+    ok(actual_index == 0, "Unexpected stream index %u\n", actual_index);
-+    ok(!stream_flags, "Unexpected stream flags %#x.\n", stream_flags);
-+    IMFSample_Release(sample);
-+
-+    /* There is no video stream. */
-+    hr = IMFSourceReader_ReadSample(reader, MF_SOURCE_READER_FIRST_VIDEO_STREAM, 0, &actual_index, &stream_flags,
-+            &timestamp, &sample);
-     ok(hr == MF_E_INVALIDSTREAMNUMBER, "Unexpected hr %#x.\n", hr);
--    ok(actual_index == MF_SOURCE_READER_FIRST_AUDIO_STREAM, "Unexpected stream index %u\n", actual_index);
-+    ok(actual_index == MF_SOURCE_READER_FIRST_VIDEO_STREAM, "Unexpected stream index %u\n", actual_index);
-     ok(stream_flags == MF_SOURCE_READERF_ERROR, "Unexpected stream flags %#x.\n", stream_flags);
- 
--    hr = IMFSourceReader_ReadSample(reader, MF_SOURCE_READER_FIRST_AUDIO_STREAM, 0, NULL, &stream_flags, &timestamp,
-+    hr = IMFSourceReader_ReadSample(reader, MF_SOURCE_READER_FIRST_VIDEO_STREAM, 0, NULL, &stream_flags, &timestamp,
-             &sample);
-     ok(hr == MF_E_INVALIDSTREAMNUMBER, "Unexpected hr %#x.\n", hr);
- 
--    hr = IMFSourceReader_ReadSample(reader, MF_SOURCE_READER_FIRST_AUDIO_STREAM, 0, NULL, NULL, &timestamp, &sample);
-+    hr = IMFSourceReader_ReadSample(reader, MF_SOURCE_READER_FIRST_VIDEO_STREAM, 0, NULL, NULL, &timestamp, &sample);
-     ok(hr == E_POINTER, "Unexpected hr %#x.\n", hr);
- 
--    hr = IMFSourceReader_ReadSample(reader, MF_SOURCE_READER_FIRST_VIDEO_STREAM, 0, &actual_index, &stream_flags,
-+    hr = IMFSourceReader_ReadSample(reader, MF_SOURCE_READER_FIRST_AUDIO_STREAM, 0, &actual_index, &stream_flags,
-             &timestamp, &sample);
-     ok(hr == S_OK, "Failed to get a sample, hr %#x.\n", hr);
-     ok(actual_index == 0, "Unexpected stream index %u\n", actual_index);
-     ok(stream_flags == MF_SOURCE_READERF_ENDOFSTREAM, "Unexpected stream flags %#x.\n", stream_flags);
-     ok(!sample, "Unexpected sample object.\n");
- 
--    hr = IMFSourceReader_ReadSample(reader, MF_SOURCE_READER_FIRST_VIDEO_STREAM, MF_SOURCE_READER_CONTROLF_DRAIN,
-+    hr = IMFSourceReader_ReadSample(reader, MF_SOURCE_READER_FIRST_AUDIO_STREAM, MF_SOURCE_READER_CONTROLF_DRAIN,
-             &actual_index, &stream_flags, &timestamp, &sample);
-     ok(hr == S_OK, "Failed to get a sample, hr %#x.\n", hr);
-     ok(actual_index == 0, "Unexpected stream index %u\n", actual_index);
-     ok(stream_flags == MF_SOURCE_READERF_ENDOFSTREAM, "Unexpected stream flags %#x.\n", stream_flags);
-     ok(!sample, "Unexpected sample object.\n");
- 
--    hr = IMFSourceReader_ReadSample(reader, MF_SOURCE_READER_FIRST_VIDEO_STREAM, MF_SOURCE_READER_CONTROLF_DRAIN,
-+    hr = IMFSourceReader_ReadSample(reader, MF_SOURCE_READER_FIRST_AUDIO_STREAM, MF_SOURCE_READER_CONTROLF_DRAIN,
-             &actual_index, &stream_flags, &timestamp, NULL);
-     ok(hr == E_POINTER, "Unexpected hr %#x.\n", hr);
- 
--    hr = IMFSourceReader_ReadSample(reader, MF_SOURCE_READER_FIRST_VIDEO_STREAM, MF_SOURCE_READER_CONTROLF_DRAIN,
-+    hr = IMFSourceReader_ReadSample(reader, MF_SOURCE_READER_FIRST_AUDIO_STREAM, MF_SOURCE_READER_CONTROLF_DRAIN,
-             &actual_index, NULL, &timestamp, &sample);
-     ok(hr == E_POINTER, "Unexpected hr %#x.\n", hr);
- 
--    hr = IMFSourceReader_ReadSample(reader, MF_SOURCE_READER_FIRST_VIDEO_STREAM, MF_SOURCE_READER_CONTROLF_DRAIN,
-+    hr = IMFSourceReader_ReadSample(reader, MF_SOURCE_READER_FIRST_AUDIO_STREAM, MF_SOURCE_READER_CONTROLF_DRAIN,
-             NULL, &stream_flags, &timestamp, &sample);
-     ok(hr == S_OK, "Failed to get a sample, hr %#x.\n", hr);
-     ok(stream_flags == MF_SOURCE_READERF_ENDOFSTREAM, "Unexpected stream flags %#x.\n", stream_flags);
-     ok(!sample, "Unexpected sample object.\n");
- 
--    hr = IMFSourceReader_ReadSample(reader, MF_SOURCE_READER_FIRST_VIDEO_STREAM, MF_SOURCE_READER_CONTROLF_DRAIN,
-+    hr = IMFSourceReader_ReadSample(reader, MF_SOURCE_READER_FIRST_AUDIO_STREAM, MF_SOURCE_READER_CONTROLF_DRAIN,
-             &actual_index, &stream_flags, NULL, &sample);
-     ok(hr == S_OK, "Failed to get a sample, hr %#x.\n", hr);
-     ok(actual_index == 0, "Unexpected stream index %u\n", actual_index);
-@@ -796,31 +777,26 @@ static void test_source_reader(void)
- 
-     hr = IMFSourceReader_ReadSample(reader, MF_SOURCE_READER_ANY_STREAM, MF_SOURCE_READER_CONTROLF_DRAIN,
-             &actual_index, &stream_flags, NULL, &sample);
--    todo_wine ok(hr == S_OK, "Failed to get a sample, hr %#x.\n", hr);
--    if (hr == S_OK)
--    {
--        ok(actual_index == 0, "Unexpected stream index %u\n", actual_index);
--        ok(stream_flags == MF_SOURCE_READERF_ENDOFSTREAM, "Unexpected stream flags %#x.\n", stream_flags);
--        ok(!sample, "Unexpected sample object.\n");
--    }
-+    ok(hr == S_OK, "Failed to get a sample, hr %#x.\n", hr);
-+    ok(actual_index == 0, "Unexpected stream index %u\n", actual_index);
-+    ok(stream_flags == MF_SOURCE_READERF_ENDOFSTREAM, "Unexpected stream flags %#x.\n", stream_flags);
-+    ok(!sample, "Unexpected sample object.\n");
- 
-     /* Flush. */
-     hr = IMFSourceReader_Flush(reader, MF_SOURCE_READER_FIRST_VIDEO_STREAM);
--    todo_wine ok(hr == S_OK, "Failed to flush stream, hr %#x.\n", hr);
--    if (hr == S_OK)
--    {
--        hr = IMFSourceReader_Flush(reader, MF_SOURCE_READER_FIRST_VIDEO_STREAM);
--        ok(hr == S_OK, "Failed to flush stream, hr %#x.\n", hr);
-+    ok(hr == MF_E_INVALIDSTREAMNUMBER, "Unexpected hr %#x.\n", hr);
- 
--        hr = IMFSourceReader_Flush(reader, MF_SOURCE_READER_ALL_STREAMS);
--        ok(hr == S_OK, "Failed to flush all streams, hr %#x.\n", hr);
-+    hr = IMFSourceReader_Flush(reader, 100);
-+    ok(hr == MF_E_INVALIDSTREAMNUMBER, "Unexpected hr %#x.\n", hr);
- 
--        hr = IMFSourceReader_Flush(reader, MF_SOURCE_READER_FIRST_AUDIO_STREAM);
--        ok(hr == MF_E_INVALIDSTREAMNUMBER, "Unexpected hr %#x.\n", hr);
-+    hr = IMFSourceReader_Flush(reader, MF_SOURCE_READER_FIRST_AUDIO_STREAM);
-+    ok(hr == S_OK, "Failed to flush stream, hr %#x.\n", hr);
- 
--        hr = IMFSourceReader_Flush(reader, 100);
--        ok(hr == MF_E_INVALIDSTREAMNUMBER, "Unexpected hr %#x.\n", hr);
--    }
-+    hr = IMFSourceReader_Flush(reader, MF_SOURCE_READER_FIRST_AUDIO_STREAM);
-+    ok(hr == S_OK, "Failed to flush stream, hr %#x.\n", hr);
-+
-+    hr = IMFSourceReader_Flush(reader, MF_SOURCE_READER_ALL_STREAMS);
-+    ok(hr == S_OK, "Failed to flush all streams, hr %#x.\n", hr);
- 
-     IMFSourceReader_Release(reader);
- 
-diff --git a/dlls/mfreadwrite/tests/resource.rc b/dlls/mfreadwrite/tests/resource.rc
-index 5edf5254906..f54212a8c8f 100644
---- a/dlls/mfreadwrite/tests/resource.rc
-+++ b/dlls/mfreadwrite/tests/resource.rc
-@@ -18,5 +18,5 @@
- 
- #include "windef.h"
- 
--/* @makedep: test.mp4 */
--test.mp4 RCDATA test.mp4
-+/* @makedep: test.wav */
-+test.wav RCDATA test.wav
-From 1f4c2d47a65f14d2d69f67cbdc7864f07e62e838 Mon Sep 17 00:00:00 2001
-From: Derek Lesho <dlesho@codeweavers.com>
-Date: Tue, 21 Apr 2020 11:33:52 -0500
-Subject: [PATCH 41/42] mf: Allow marker without context.
+     static const char usage[] =
+         "Syntax of the WINEDEBUG variable:\n"
+-        "  WINEDEBUG=[class]+xxx,[class]-yyy,...\n\n"
++        "  WINEDEBUG=[+process:][class]+xxx,[-process:][class]-yyy,...\n\n"
+         "Example: WINEDEBUG=+relay,warn-heap\n"
+         "    turns on relay traces, disable heap warnings\n"
+         "Available message classes: err, warn, fixme, trace\n";
+-- 
+2.25.3
 
----
- dlls/mf/samplegrabber.c | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/dlls/mf/samplegrabber.c b/dlls/mf/samplegrabber.c
-index e49929c5bf0..21355a3714c 100644
---- a/dlls/mf/samplegrabber.c
-+++ b/dlls/mf/samplegrabber.c
-@@ -445,8 +445,12 @@ static HRESULT stream_place_marker(struct sample_grabber *grabber, MFSTREAMSINK_
-         const PROPVARIANT *context_value)
- {
-     struct scheduled_item *item;
-+    PROPVARIANT empty_prop = {.vt = VT_EMPTY};
-     HRESULT hr = S_OK;
- 
-+    if (!context_value)
-+        context_value = &empty_prop;
-+
-     if (list_empty(&grabber->items))
-     {
-         sample_grabber_stream_report_marker(grabber, context_value, S_OK);
-
-From d540379fc1d6ff715ce7b4715a2864e576a7b108 Mon Sep 17 00:00:00 2001
+From e8716c269c45f086284c623a2fec3d031b0000da Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Wed, 22 Apr 2020 09:21:58 -0500
-Subject: [PATCH 42/42] Use dedicated queue for drain message.
+Subject: [PATCH 40/40] Use dedicated queue for drain message.
 
 ---
  dlls/winegstreamer/mf_decode.c | 6 +++++-
  1 file changed, 5 insertions(+), 1 deletion(-)
 
 diff --git a/dlls/winegstreamer/mf_decode.c b/dlls/winegstreamer/mf_decode.c
-index ba258848a5a..eef664efa18 100644
+index ba258848a5..eef664efa1 100644
 --- a/dlls/winegstreamer/mf_decode.c
 +++ b/dlls/winegstreamer/mf_decode.c
 @@ -78,6 +78,7 @@ struct mf_decoder
@@ -10851,3 +9767,6 @@ index ba258848a5a..eef664efa18 100644
  
      InitializeCriticalSection(&This->state_cs);
      InitializeConditionVariable(&This->state_cv);
+-- 
+2.25.3
+

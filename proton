@@ -18,7 +18,7 @@ from filelock import FileLock
 #To enable debug logging, copy "user_settings.sample.py" to "user_settings.py"
 #and edit it if needed.
 
-CURRENT_PREFIX_VERSION="5.7-GE-1"
+CURRENT_PREFIX_VERSION="5.7-GE-1-MF"
 
 PFX="Proton: "
 ld_path_var = "LD_LIBRARY_PATH"
@@ -378,8 +378,7 @@ class Session:
         self.log_file = None
         self.env = dict(os.environ)
         self.dlloverrides = {
-                "steam.exe": "b", #always use our special built-in steam.exe
-                "mfplay": "n" #disable built-in mfplay
+                "steam.exe": "b" #always use our special built-in steam.exe
         }
 
         self.compat_config = set()
