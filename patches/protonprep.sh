@@ -263,13 +263,6 @@
     patch -Np1 < ../patches/wine-hotfixes/D3D12SerializeVersionedRootSignature.patch
     patch -Np1 < ../patches/wine-hotfixes/D3D12CreateVersionedRootSignatureDeserializer.patch
 
-
-# Here choose one or the other - either Guy's patches for media foundation testing, 
-# or mf_hacks for proton's default current functionality around media foundation, not both
-
-#    echo "proton MF hacks"
-#    patch -Np1 < ../patches/proton/proton-mf_hacks.patch
-
     echo "guy's media foundation alpha patches"
     patch -Np1 < ../patches/wine-hotfixes/media_foundation_alpha.patch
 
