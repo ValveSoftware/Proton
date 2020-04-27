@@ -41,9 +41,9 @@ index b6a65a4207..e068797ff5 100644
     test_SetThreadContext();
     test_GetThreadSelectorEntry();
 +   test_GetThreadContext();
+    test_NtSetLdtEntries();
  #endif
     test_QueueUserWorkItem();
-    test_RegisterWaitForSingleObject();
 diff --git a/server/thread.c b/server/thread.c
 index cfdf42c756..7c1c1108eb 100644
 --- a/server/thread.c
