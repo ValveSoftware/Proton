@@ -467,8 +467,8 @@ index 0000000000..970316777a
 +        return;
 +    }
 +
-+    if (stat( wine_get_config_dir(), &st ) == -1)
-+        ERR("Cannot stat %s\n", wine_get_config_dir());
++    if (stat( config_dir, &st ) == -1)
++        ERR("Cannot stat %s\n", config_dir);
 +
 +    if (st.st_ino != (unsigned long)st.st_ino)
 +        sprintf( shm_name, "/wine-%lx%08lx-fsync", (unsigned long)((unsigned long long)st.st_ino >> 32), (unsigned long)st.st_ino );

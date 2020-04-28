@@ -209,9 +209,6 @@
     echo "steamclient swap"
     patch -Np1 < ../patches/proton/proton-steamclient_swap.patch
 
-    echo "protonify rpc"
-    patch -Np1 < ../patches/proton/proton-protonify_staging_rpc.patch
-
     echo "protonify"
     patch -Np1 < ../patches/proton/proton-protonify_staging.patch
 

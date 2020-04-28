@@ -136,7 +136,7 @@ index be3586d..75e2e93 100644
  
      /* set user name */
  
--    name = wine_get_user_name();
+-    if (!name) name = "wine";
 +    name = "steamuser"/*wine_get_user_name()*/;
      if ((p = strrchr( name, '/' ))) name = p + 1;
      if ((p = strrchr( name, '\\' ))) name = p + 1;
@@ -745,28 +745,3 @@ index 7fe2f49dcd9..e72d0dcaba1 100644
  
  [DirectX]
  HKLM,Software\Microsoft\DirectX,"Version",,"4.09.00.0904"
-From aa7fa7ce94bd4e49e3843a8ea398d29882518e43 Mon Sep 17 00:00:00 2001
-From: Andrew Eikum <aeikum@codeweavers.com>
-Date: Mon, 6 Aug 2018 08:06:03 -0500
-Subject: [PATCH] server: Set default timeout to 0
-
-The Steam client will be waiting for the wineserver to exit to set up
-some environment variables, so make it wait as short as possible.
----
- server/main.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/server/main.c b/server/main.c
-index 20d3c48c4d9..aca8738c4c0 100644
---- a/server/main.c
-+++ b/server/main.c
-@@ -42,7 +42,7 @@
- /* command-line options */
- int debug_level = 0;
- int foreground = 0;
--timeout_t master_socket_timeout = 3 * -TICKS_PER_SEC;  /* master socket timeout, default is 3 seconds */
-+timeout_t master_socket_timeout = 0; /* master socket timeout, default is 3 seconds */
- const char *server_argv0;
- 
- /* parse-line args */
-
