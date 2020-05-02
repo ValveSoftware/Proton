@@ -4,45 +4,20 @@ Date: Fri, 25 Jan 2019 02:27:36 +0100
 Subject: mechwarrior online fix -
  https://mwomercs.com/forums/topic/268847-running-the-game-on-ubuntu-steam-play/page__st__20__p__6195387#entry6195387
 
+
 diff --git a/dlls/ntdll/path.c b/dlls/ntdll/path.c
-index 32e1f951af..112e56a7fd 100644
+index 11483fabba..a5439542ae 100644
 --- a/dlls/ntdll/path.c
 +++ b/dlls/ntdll/path.c
-@@ -623,6 +623,27 @@ static const WCHAR *skip_unc_prefix( const WCHAR *ptr )
- }
- 
- 
-+#define MWO_STEAM_ID	"342200"
-+#define MWO_CHECK_TODO	(-2)
-+#define MWO_CHECK_YES	(1)
-+#define MWO_CHECK_NO	(0)
-+#define MWO_UNLIKELY(x)	__builtin_expect(!!(x),0)
-+
-+static int is_MWO_running(void) {
-+	static int MWO_running_flag = MWO_CHECK_TODO;
-+
-+	/* don't care if we execute the below
-+	 * spuriously */
-+	if(MWO_UNLIKELY(MWO_running_flag == MWO_CHECK_TODO)) {
-+		const char*	p_gameid = getenv("SteamGameId");
-+		const int  	is_running = (!p_gameid || strcmp(p_gameid, MWO_STEAM_ID)) ? MWO_CHECK_NO : MWO_CHECK_YES;
-+		/* atomic CAS */
-+		__sync_bool_compare_and_swap(&MWO_running_flag, MWO_CHECK_TODO, is_running);
-+	}
-+
-+	return MWO_running_flag == MWO_CHECK_YES;
-+}
-+
- /******************************************************************
-  *		get_full_path_helper
-  *
-@@ -643,7 +664,7 @@ static ULONG get_full_path_helper(LPCWSTR name, LPWSTR buffer, ULONG size)
+@@ -648,10 +648,7 @@ static ULONG get_full_path_helper(LPCWSTR name, LPWSTR buffer, ULONG size)
  
      RtlAcquirePebLock();
  
 -    if (NtCurrentTeb()->Tib.SubSystemTib)  /* FIXME: hack */
-+    if (NtCurrentTeb()->Tib.SubSystemTib && !is_MWO_running())  /* FIXME: hack */
-         cd = &((WIN16_SUBSYSTEM_TIB *)NtCurrentTeb()->Tib.SubSystemTib)->curdir.DosPath;
-     else
-         cd = &NtCurrentTeb()->Peb->ProcessParameters->CurrentDirectory.DosPath;
-
+-        cd = &((WIN16_SUBSYSTEM_TIB *)NtCurrentTeb()->Tib.SubSystemTib)->curdir.DosPath;
+-    else
+-        cd = &NtCurrentTeb()->Peb->ProcessParameters->CurrentDirectory.DosPath;
++    cd = &NtCurrentTeb()->Peb->ProcessParameters->CurrentDirectory.DosPath;
+ 
+     switch (RtlDetermineDosPathNameType_U(name))
+     {

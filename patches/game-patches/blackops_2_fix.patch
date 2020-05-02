@@ -1,47 +1,17 @@
 From: https://bugs.winehq.org/show_bug.cgi?id=46472
 fixes the Unhandled Exception error on start up of Black Ops 2
 
---- a/server/ptrace.c
-+++ b/server/ptrace.c
-@@ -618,6 +618,27 @@ done:
-     resume_after_ptrace( thread );
- }
- 
-+#define BO2_STEAM_ID	"202970"
-+#define BO2_CHECK_TODO	(-2)
-+#define BO2_CHECK_YES	(1)
-+#define BO2_CHECK_NO	(0)
-+#define BO2_UNLIKELY(x)	__builtin_expect(!!(x),0)
-+
-+static int is_BO2_running(void) {
-+	static int BO2_running_flag = BO2_CHECK_TODO;
-+
-+	/* don't care if we execute the below
-+	 * spuriously */
-+	if(BO2_UNLIKELY(BO2_running_flag == BO2_CHECK_TODO)) {
-+		const char*	p_gameid = getenv("SteamGameId");
-+		const int  	is_running = (!p_gameid || strcmp(p_gameid, BO2_STEAM_ID)) ? BO2_CHECK_NO : BO2_CHECK_YES;
-+		/* atomic CAS */
-+		__sync_bool_compare_and_swap(&BO2_running_flag, BO2_CHECK_TODO, is_running);
-+	}
-+
-+	return BO2_running_flag == BO2_CHECK_YES;
-+}
-+
- /* set the thread x86 registers */
- void set_thread_context( struct thread *thread, const context_t *context, unsigned int flags )
- {
-@@ -629,6 +650,13 @@ void set_thread_context( struct thread *thread, const context_t *context, unsign
+--- a/server/ptrace.c	2019-02-15 15:34:44.000000000 -0500
++++ a/server/ptrace.c	2019-02-22 18:49:02.432985853 -0500
+@@ -629,6 +629,11 @@ 
      if (!suspend_for_ptrace( thread )) return;
  
      /* force all breakpoint lengths to 1, workaround for kernel bug 200965 */
-+    if (is_BO2_running()) {
-+        ptrace( PTRACE_POKEUSER, pid, DR_OFFSET(0), 0x00000000 );
-+        ptrace( PTRACE_POKEUSER, pid, DR_OFFSET(1), 0x00000000 );
-+        ptrace( PTRACE_POKEUSER, pid, DR_OFFSET(2), 0x00000000 );
-+        ptrace( PTRACE_POKEUSER, pid, DR_OFFSET(3), 0x00000000 );
-+        ptrace( PTRACE_POKEUSER, pid, DR_OFFSET(6), 0x00000000 );
-+    }
++    ptrace( PTRACE_POKEUSER, pid, DR_OFFSET(0), 0x00000000 );
++    ptrace( PTRACE_POKEUSER, pid, DR_OFFSET(1), 0x00000000 );
++    ptrace( PTRACE_POKEUSER, pid, DR_OFFSET(2), 0x00000000 );
++    ptrace( PTRACE_POKEUSER, pid, DR_OFFSET(3), 0x00000000 );
++    ptrace( PTRACE_POKEUSER, pid, DR_OFFSET(6), 0x00000000 );
      ptrace( PTRACE_POKEUSER, pid, DR_OFFSET(7), 0x11110055 );
  
      switch (context->cpu)
