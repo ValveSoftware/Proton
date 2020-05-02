@@ -78,7 +78,7 @@
 
     # this conflicts with proton's gamepad changes and causes camera spinning
     git revert --no-commit da7d60bf97fb8726828e57f852e8963aacde21e9
-    
+
 # warframe launcher fix 0.0mb hang fix
 #    -W ntdll-avoid-fstatat
 
@@ -144,12 +144,6 @@
 #   TODO: Add game-specific check
     echo "NFSW launcher fix"
     patch -Np1 < ../patches/game-patches/NFSWLauncherfix.patch
-
-#   TODO: Check on this - don't own game. Need to validate.
-#   TODO: Add game-specific check
-    echo "gta4 input patch"
-    patch -Np1 < ../patches/game-patches/gta4_gamepad_workaround.patch
-
 
 # Currently applied but not working:
 
@@ -266,13 +260,11 @@
     echo "proton-specific manual mfplat dll register patch"
     patch -Np1 < ../patches/wine-hotfixes/proton_mediafoundation_dllreg.patch
 
-    # WINE HOTFIXES
-    patch -Np1 < ../patches/wine-hotfixes/server-fix_setting_context_flags_in_get_thread_context.patch
-
     #WINE CUSTOM PATCHES
     #add your own custom patch lines below
     patch -Np1 < ../patches/wine-hotfixes/user32-Set_PAINTSTRUCT_fErase_field_depending_on_the_last_WM_ERASEBKGND_result.patch
-    patch -Np1 < ../patches/wine-hotfixes/ntdll-Use_the_free_ranges_in_find_reserved_free_area.patch
+#    patch -Np1 < ../patches/wine-hotfixes/ntdll-Use_the_free_ranges_in_find_reserved_free_area.patch
+    patch -Np1 < ../patches/wine-hotfixes/dll_loader_fix.patch
 
     ./dlls/winevulkan/make_vulkan
     ./tools/make_requests

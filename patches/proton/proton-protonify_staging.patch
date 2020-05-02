@@ -710,6 +710,117 @@ index 6079d1fe28b..18e7b8a913e 100644
      output( "\n" );
  
      if (spec_file && make->importlib)
+From 213905a322620eb326b655ab89fbca07316e6357 Mon Sep 17 00:00:00 2001
+From: Andrew Eikum <aeikum@codeweavers.com>
+Date: Tue, 19 Nov 2019 09:59:17 -0600
+Subject: [PATCH] HACK: dxgi: Return empty GPU string for Crazy Machines 3
+
+If the GPU string is long enough, the game will crash trying to
+dereference part of it. Probably this is due to missing Media Foundation
+support. Try to remove this hack after the game's videos successfully
+play back.
+---
+ dlls/dxgi/adapter.c | 20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
+
+diff --git a/dlls/dxgi/adapter.c b/dlls/dxgi/adapter.c
+index d2fc629c843..5a97590dbce 100644
+--- a/dlls/dxgi/adapter.c
++++ b/dlls/dxgi/adapter.c
+@@ -161,12 +161,32 @@ static HRESULT dxgi_adapter_get_desc(struct dxgi_adapter *adapter, DXGI_ADAPTER_
+     if (FAILED(hr = wined3d_get_adapter_identifier(adapter->factory->wined3d, adapter->ordinal, 0, &adapter_id)))
+         return hr;
+ 
++    {
++        /* HACK for Proton issue #3204
++         *
++         * Due to reading uninitialized memory, the game tries to dereference
++         * part of the GPU Description string if it is long enough. So return
++         * an empty string instead.
++         *
++         * See the bug report for the full description, but we may be able to
++         * remove this hack after implementing enough of Media Foundation for
++         * this game's videos to play back.
++         */
++        const char *sgi = getenv("SteamGameId");
++        if(sgi && !strcmp(sgi, "351920"))
++        {
++            desc->Description[0] = 0;
++            goto skip_description;
++        }
++    }
++
+     if (!MultiByteToWideChar(CP_ACP, 0, description, -1, desc->Description, ARRAY_SIZE(description)))
+     {
+         DWORD err = GetLastError();
+         ERR("Failed to translate description %s (%#x).\n", debugstr_a(description), err);
+         hr = E_FAIL;
+     }
++skip_description:
+ 
+     desc->VendorId = adapter_id.vendor_id;
+     desc->DeviceId = adapter_id.device_id;
+From 304683886016ec940a9b331ce33fcbaf47e893c3 Mon Sep 17 00:00:00 2001
+From: Sven Baars <sbaars@codeweavers.com>
+Date: Thu, 5 Dec 2019 13:48:38 +0100
+Subject: [PATCH] HACK: ntdll: Return a handle to kernel32 when being asked for
+ mfc42.
+
+For some applications mfc42 is loaded, but never actually used. We can
+add Steam game IDs when we find more of such applications.
+---
+ dlls/ntdll/loader.c | 31 +++++++++++++++++++++++++++++++
+ 1 file changed, 31 insertions(+)
+
+diff --git a/dlls/ntdll/loader.c b/dlls/ntdll/loader.c
+index 431c247a072..c9fcad79316 100644
+--- a/dlls/ntdll/loader.c
++++ b/dlls/ntdll/loader.c
+@@ -159,6 +159,18 @@ static inline void ascii_to_unicode( WCHAR *dst, const char *src, size_t len )
+     while (len--) *dst++ = (unsigned char)*src++;
+ }
+ 
++static WCHAR *strcasestrW( const WCHAR *str, const WCHAR *sub )
++{
++    while (*str)
++    {
++        const WCHAR *p1 = str, *p2 = sub;
++        while (*p1 && *p2 && tolowerW(*p1) == tolowerW(*p2)) { p1++; p2++; }
++        if (!*p2) return (WCHAR *)str;
++        str++;
++    }
++    return NULL;
++}
++
+ #define RTL_UNLOAD_EVENT_TRACE_NUMBER 64
+ 
+ typedef struct _RTL_UNLOAD_EVENT_TRACE
+@@ -2869,6 +2881,25 @@ static NTSTATUS find_dll_file( const WCHAR *load_path, const WCHAR *libname,
+ done:
+     RtlFreeHeap( GetProcessHeap(), 0, dllname );
+     if (wow64_old_value) RtlWow64EnableFsRedirectionEx( 1, &wow64_old_value );
++
++    if (status != STATUS_SUCCESS)
++    {
++        /* HACK for Proton issue #17
++         *
++         * Some games try to load mfc42.dll, but then proceed to not use it.
++         * Just return a handle to kernel32 in that case.
++         */
++        static const WCHAR mfc42W[] = {'m','f','c','4','2',0};
++        static const WCHAR kernel32W[] = {'k','e','r','n','e','l','3','2','.','d','l','l',0};
++        const char *sgi = getenv( "SteamGameId" );
++        if (sgi &&
++            !strcmp( sgi, "105450" ) && /* AoE3 */
++            strcasestrW( libname, mfc42W ))
++        {
++            WARN_(loaddll)( "Using a fake mfc42 handle\n" );
++            status = find_dll_file( load_path, kernel32W, nt_name, pwm, mfc42W, module, image_info, st );
++        }
++    }
+     return status;
+ }
+ 
 From 4aa052e0c8ae276fc07afcd93d6e290a88214837 Mon Sep 17 00:00:00 2001
 From: Andrew Eikum <aeikum@codeweavers.com>
 Date: Wed, 15 Jan 2020 10:17:23 -0600
@@ -1743,107 +1854,6 @@ index a5235b69a8d..4b2c9bd41ae 100644
          /* forward request to the foreground window if it's in a different thread */
          tid = GetWindowThreadProcessId( foreground, &pid );
          if (tid && tid != GetCurrentThreadId() && pid == GetCurrentProcessId())
-From 02951753970f5b2a0dafe41aee9fe96bc1a24301 Mon Sep 17 00:00:00 2001
-From: Piotr Caban <piotr@codeweavers.com>
-Date: Wed, 4 Mar 2020 18:49:37 +0100
-Subject: [PATCH] HACK: ntdll: Mark first gta5.exe page as copied.
-
----
- dlls/ntdll/virtual.c | 30 +++++++++++++++++++++++++++---
- 1 file changed, 27 insertions(+), 3 deletions(-)
-
-diff --git a/dlls/ntdll/virtual.c b/dlls/ntdll/virtual.c
-index dbcbd52c6d6..90a790241a9 100644
---- a/dlls/ntdll/virtual.c
-+++ b/dlls/ntdll/virtual.c
-@@ -58,6 +58,7 @@
- #include "wine/exception.h"
- #include "wine/rbtree.h"
- #include "wine/debug.h"
-+#include "wine/unicode.h"
- #include "ntdll_misc.h"
- 
- WINE_DEFAULT_DEBUG_CHANNEL(virtual);
-@@ -84,6 +85,7 @@ struct file_view
- #define VPROT_GUARD      0x10
- #define VPROT_COMMITTED  0x20
- #define VPROT_WRITEWATCH 0x40
-+#define VPROT_COPIED     0x80
- /* per-mapping protection flags */
- #define VPROT_SYSTEM     0x0200  /* system view (underlying mmap not under our control) */
- 
-@@ -304,7 +306,8 @@ static const char *VIRTUAL_GetProtStr( BYTE prot )
-     buffer[0] = (prot & VPROT_COMMITTED) ? 'c' : '-';
-     buffer[1] = (prot & VPROT_GUARD) ? 'g' : ((prot & VPROT_WRITEWATCH) ? 'H' : '-');
-     buffer[2] = (prot & VPROT_READ) ? 'r' : '-';
--    buffer[3] = (prot & VPROT_WRITECOPY) ? 'W' : ((prot & VPROT_WRITE) ? 'w' : '-');
-+    buffer[3] = (prot & VPROT_WRITECOPY) ? (prot & VPROT_COPIED ? 'w' : 'W')
-+        : ((prot & VPROT_WRITE) ? 'w' : '-');
-     buffer[4] = (prot & VPROT_EXEC) ? 'x' : '-';
-     buffer[5] = 0;
-     return buffer;
-@@ -901,8 +904,11 @@ static NTSTATUS create_view( struct file_view **view_ret, void *base, size_t siz
-  */
- static DWORD VIRTUAL_GetWin32Prot( BYTE vprot, unsigned int map_prot )
- {
--    DWORD ret = VIRTUAL_Win32Flags[vprot & 0x0f];
--    if (vprot & VPROT_GUARD) ret |= PAGE_GUARD;
-+    DWORD ret;
-+
-+    if ((vprot & (VPROT_COPIED | VPROT_WRITECOPY)) == (VPROT_COPIED | VPROT_WRITECOPY))
-+        vprot = (vprot & ~VPROT_WRITECOPY) | VPROT_WRITE;
-+    ret = VIRTUAL_Win32Flags[vprot & 0x0f];
-     if (map_prot & SEC_NOCACHE) ret |= PAGE_NOCACHE;
-     return ret;
- }
-@@ -2957,6 +2963,24 @@ NTSTATUS WINAPI DECLSPEC_HOTPATCH NtProtectVirtualMemory( HANDLE process, PVOID
-         {
-             old = VIRTUAL_GetWin32Prot( vprot, view->protect );
-             status = set_protection( view, base, size, new_prot );
-+
-+            /* GTA5 HACK: Mark first page as copied. */
-+            if (status == STATUS_SUCCESS && (view->protect & SEC_IMAGE) &&
-+                    base == (void*)NtCurrentTeb()->Peb->ImageBaseAddress)
-+            {
-+                const WCHAR gta5W[] = { 'g','t','a','5','.','e','x','e',0 };
-+                WCHAR *name, *p;
-+
-+                name = NtCurrentTeb()->Peb->ProcessParameters->ImagePathName.Buffer;
-+                p = strrchrW(name, '\\');
-+                p = p ? p+1 : name;
-+
-+                if(!strcmpiW(p, gta5W))
-+                {
-+                    FIXME("HACK: changing GTA5.exe vprot\n");
-+                    set_page_vprot_bits(base, page_size, VPROT_COPIED, 0);
-+                }
-+            }
-         }
-         else status = STATUS_NOT_COMMITTED;
-     }
-From 5e8fedb161bae24ecf6d9425e90e3c595ec2505c Mon Sep 17 00:00:00 2001
-From: Piotr Caban <piotr@codeweavers.com>
-Date: Wed, 11 Mar 2020 09:17:05 -0500
-Subject: [PATCH] ntdll: Restore PAGE_GUARD flag
-
-On rebase, squash into 'HACK: ntdll: Mark first gta5.exe page as
-copied.'
----
- dlls/ntdll/virtual.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/dlls/ntdll/virtual.c b/dlls/ntdll/virtual.c
-index 90a790241a9..d0cd2639ee9 100644
---- a/dlls/ntdll/virtual.c
-+++ b/dlls/ntdll/virtual.c
-@@ -909,6 +909,7 @@ static DWORD VIRTUAL_GetWin32Prot( BYTE vprot, unsigned int map_prot )
-     if ((vprot & (VPROT_COPIED | VPROT_WRITECOPY)) == (VPROT_COPIED | VPROT_WRITECOPY))
-         vprot = (vprot & ~VPROT_WRITECOPY) | VPROT_WRITE;
-     ret = VIRTUAL_Win32Flags[vprot & 0x0f];
-+    if (vprot & VPROT_GUARD) ret |= PAGE_GUARD;
-     if (map_prot & SEC_NOCACHE) ret |= PAGE_NOCACHE;
-     return ret;
- }
 From 24a8f709ec8fcf8fa4fcc349a7885c02cc184d74 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Wed, 26 Feb 2020 13:09:48 -0600
@@ -2000,3 +2010,213 @@ index 4ca04198b6e..483e2b4138a 100644
      FAudioCOMConstructWithCustomAllocatorEXT(
          &object->faudio,
          XAUDIO2_VER,
+From b739d48093cce805b7b4f48fdbd9d0bb62bc8013 Mon Sep 17 00:00:00 2001
+From: Brendan Shanks <bshanks@codeweavers.com>
+Date: Mon, 13 Apr 2020 16:25:47 -0700
+Subject: [PATCH] HACK: dxgi: Swap around memory sizes for GTA IV
+
+GTA IV ends up using its "Intel integrated" codepath for determining
+VRAM size (since nvapi/atiadlxx fail), but this requires that
+DedicatedVideoMemory is a very small dummy value, and SharedSystemMemory
+is the actual VRAM size.
+Swap the memory values around so this works.
+---
+ dlls/dxgi/adapter.c | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
+
+diff --git a/dlls/dxgi/adapter.c b/dlls/dxgi/adapter.c
+index 5a97590dbce..a5563498cdd 100644
+--- a/dlls/dxgi/adapter.c
++++ b/dlls/dxgi/adapter.c
+@@ -200,6 +200,25 @@ static HRESULT dxgi_adapter_get_desc(struct dxgi_adapter *adapter, DXGI_ADAPTER_
+     desc->GraphicsPreemptionGranularity = 0; /* FIXME */
+     desc->ComputePreemptionGranularity = 0; /* FIXME */
+ 
++    {
++        /* HACK
++         *
++         * Grand Theft Auto IV first tries to get VRAM size using nvapi/atiadlxx,
++         * after that fails it falls back to the Intel integrated codepath which
++         * uses DXGI.
++         *
++         * DedicatedVideoMemory must be a dummy value less than 200 MB, then
++         * SharedSystemMemory will be used as the VRAM size.
++         * In case of failure, the game will just use 512 MB as VRAM size.
++         */
++        const char *sgi = getenv("SteamGameId");
++        if(sgi && !strcmp(sgi, "12210"))
++        {
++            desc->SharedSystemMemory = adapter_id.video_memory;
++            desc->DedicatedVideoMemory = 32 * 1024 * 1024;
++        }
++    }
++
+     return hr;
+ }
+ 
+From 9d1f0ead53a7f0ecf4120db6828f6008e605f4b8 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
+Date: Wed, 22 Apr 2020 15:04:43 +0200
+Subject: [PATCH] server: Make sure pids/tids are multiples of four.
+
+See: https://devblogs.microsoft.com/oldnewthing/?p=23283
+
+Street Fighter V unpacker relies on it when validating other processes
+for its anti-debug checks, it uses (PID&0xfffffffc)>>2 as an array index
+and then checks back indexes against PIDs, and terminates early if some
+PIDs do not match.
+---
+ server/process.c | 31 ++++++++++++++++++-------------
+ 1 file changed, 18 insertions(+), 13 deletions(-)
+
+diff --git a/server/process.c b/server/process.c
+index dacca025572..e8f801891f6 100644
+--- a/server/process.c
++++ b/server/process.c
+@@ -352,21 +352,24 @@ static void kill_all_processes(void);
+ 
+ #define PTID_OFFSET 8  /* offset for first ptid value */
+ 
++static unsigned int index_from_ptid(unsigned int id) { return id / 4; }
++static unsigned int ptid_from_index(unsigned int index) { return index * 4; }
++
+ /* allocate a new process or thread id */
+ unsigned int alloc_ptid( void *ptr )
+ {
+     struct ptid_entry *entry;
+-    unsigned int id;
++    unsigned int index;
+ 
+     if (used_ptid_entries < alloc_ptid_entries)
+     {
+-        id = used_ptid_entries + PTID_OFFSET;
++        index = used_ptid_entries + PTID_OFFSET;
+         entry = &ptid_entries[used_ptid_entries++];
+     }
+     else if (next_free_ptid && num_free_ptids >= 256)
+     {
+-        id = next_free_ptid;
+-        entry = &ptid_entries[id - PTID_OFFSET];
++        index = next_free_ptid;
++        entry = &ptid_entries[index - PTID_OFFSET];
+         if (!(next_free_ptid = entry->next)) last_free_ptid = 0;
+         num_free_ptids--;
+     }
+@@ -381,35 +384,37 @@ unsigned int alloc_ptid( void *ptr )
+         }
+         ptid_entries = entry;
+         alloc_ptid_entries = count;
+-        id = used_ptid_entries + PTID_OFFSET;
++        index = used_ptid_entries + PTID_OFFSET;
+         entry = &ptid_entries[used_ptid_entries++];
+     }
+ 
+     entry->ptr = ptr;
+-    return id;
++    return ptid_from_index( index );
+ }
+ 
+ /* free a process or thread id */
+ void free_ptid( unsigned int id )
+ {
+-    struct ptid_entry *entry = &ptid_entries[id - PTID_OFFSET];
++    unsigned int index = index_from_ptid( id );
++    struct ptid_entry *entry = &ptid_entries[index - PTID_OFFSET];
+ 
+     entry->ptr  = NULL;
+     entry->next = 0;
+ 
+     /* append to end of free list so that we don't reuse it too early */
+-    if (last_free_ptid) ptid_entries[last_free_ptid - PTID_OFFSET].next = id;
+-    else next_free_ptid = id;
+-    last_free_ptid = id;
++    if (last_free_ptid) ptid_entries[last_free_ptid - PTID_OFFSET].next = index;
++    else next_free_ptid = index;
++    last_free_ptid = index;
+     num_free_ptids++;
+ }
+ 
+ /* retrieve the pointer corresponding to a process or thread id */
+ void *get_ptid_entry( unsigned int id )
+ {
+-    if (id < PTID_OFFSET) return NULL;
+-    if (id - PTID_OFFSET >= used_ptid_entries) return NULL;
+-    return ptid_entries[id - PTID_OFFSET].ptr;
++    unsigned int index = index_from_ptid( id );
++    if (index < PTID_OFFSET) return NULL;
++    if (index - PTID_OFFSET >= used_ptid_entries) return NULL;
++    return ptid_entries[index - PTID_OFFSET].ptr;
+ }
+ 
+ /* return the main thread of the process */
+From 89537dedfba439efc6f89c9977b50bd7adb76fc7 Mon Sep 17 00:00:00 2001
+From: Brendan Shanks <bshanks@codeweavers.com>
+Date: Fri, 17 Apr 2020 11:35:07 -0700
+Subject: [PATCH] dinput: Fix DInput8 keyboard behavior for injected events
+ with scancode=0.
+
+Grand Theft Auto IV injects VK_F8 and scancode=0, and expects DirectInput not
+to report that F8 is pressed.
+
+Signed-off-by: Brendan Shanks <bshanks@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+(cherry picked from commit f65cfbfe9b20e38537c7cb8608e7f411c9e8b725)
+---
+ dlls/dinput/keyboard.c      | 8 ++++----
+ dlls/dinput8/tests/device.c | 2 --
+ 2 files changed, 4 insertions(+), 6 deletions(-)
+
+diff --git a/dlls/dinput/keyboard.c b/dlls/dinput/keyboard.c
+index 47f28cac52a..f842f1ca42e 100644
+--- a/dlls/dinput/keyboard.c
++++ b/dlls/dinput/keyboard.c
+@@ -68,9 +68,9 @@ static inline IDirectInputDevice8W *IDirectInputDevice8W_from_impl(SysKeyboardIm
+     return &This->base.IDirectInputDevice8W_iface;
+ }
+ 
+-static BYTE map_dik_code(DWORD scanCode, DWORD vkCode, DWORD subType)
++static BYTE map_dik_code(DWORD scanCode, DWORD vkCode, DWORD subType, DWORD version)
+ {
+-    if (!scanCode)
++    if (!scanCode && version < 0x0800)
+         scanCode = MapVirtualKeyW(vkCode, MAPVK_VK_TO_VSC);
+ 
+     if (subType == DIDEVTYPEKEYBOARD_JAPAN106)
+@@ -125,7 +125,7 @@ static int KeyboardCallback( LPDIRECTINPUTDEVICE8A iface, WPARAM wparam, LPARAM
+         case VK_NUMLOCK : dik_code = DIK_NUMLOCK; break;
+         case VK_SUBTRACT: dik_code = DIK_SUBTRACT; break;
+         default:
+-            dik_code = map_dik_code(hook->scanCode & 0xff, hook->vkCode, This->subtype);
++            dik_code = map_dik_code(hook->scanCode & 0xff, hook->vkCode, This->subtype, This->base.dinput->dwVersion);
+             if (hook->flags & LLKHF_EXTENDED) dik_code |= 0x80;
+     }
+     new_diks = hook->flags & LLKHF_UP ? 0 : 0x80;
+@@ -282,7 +282,7 @@ static SysKeyboardImpl *alloc_device(REFGUID rguid, IDirectInputImpl *dinput)
+         if (!GetKeyNameTextA(((i & 0x7f) << 16) | ((i & 0x80) << 17), buf, sizeof(buf)))
+             continue;
+ 
+-        dik_code = map_dik_code(i, 0, newDevice->subtype);
++        dik_code = map_dik_code(i, 0, newDevice->subtype, dinput->dwVersion);
+         memcpy(&df->rgodf[idx], &c_dfDIKeyboard.rgodf[dik_code], df->dwObjSize);
+         df->rgodf[idx++].dwType = DIDFT_MAKEINSTANCE(dik_code) | DIDFT_PSHBUTTON;
+     }
+diff --git a/dlls/dinput8/tests/device.c b/dlls/dinput8/tests/device.c
+index 665812e59f4..4440835284c 100644
+--- a/dlls/dinput8/tests/device.c
++++ b/dlls/dinput8/tests/device.c
+@@ -825,7 +825,6 @@ static void test_keyboard_events(void)
+     data_size = ARRAY_SIZE(obj_data);
+     hr = IDirectInputDevice8_GetDeviceData(di_keyboard, sizeof(DIDEVICEOBJECTDATA), obj_data, &data_size, 0);
+     ok(SUCCEEDED(hr), "Failed to get data hr=%08x\n", hr);
+-    todo_wine
+     ok(data_size == 0, "Expected 0 elements, received %d\n", data_size);
+ 
+     hr = IDirectInputDevice8_GetDeviceState(di_keyboard, sizeof(kbdata), kbdata);
+@@ -839,7 +838,6 @@ static void test_keyboard_events(void)
+     data_size = ARRAY_SIZE(obj_data);
+     hr = IDirectInputDevice8_GetDeviceData(di_keyboard, sizeof(DIDEVICEOBJECTDATA), obj_data, &data_size, 0);
+     ok(SUCCEEDED(hr), "Failed to get data hr=%08x\n", hr);
+-    todo_wine
+     ok(data_size == 0, "Expected 0 elements, received %d\n", data_size);
+ 
+     hr = IDirectInputDevice8_Unacquire(di_keyboard);
