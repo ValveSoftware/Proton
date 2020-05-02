@@ -616,7 +616,6 @@ GST_COMMON_MESON_ARGS := \
 GSTREAMER_MESON_ARGS := \
 	-Dgst_parse=false \
 	-Dbenchmarks=disabled \
-	-Ddbghelp=disabled \
 	$(GST_COMMON_MESON_ARGS)
 
 GSTREAMER_CONFIGURE_FILES32 := $(GSTREAMER_OBJ32)/build.ninja
@@ -678,7 +677,29 @@ gstreamer32: $(GSTREAMER_CONFIGURE_FILES32)
 ##
 
 GST_BASE_MESON_ARGS := \
-	-D tremor=disabled \
+	-Daddr=disabled \
+	-Dalsa=disabled \
+	-Daudiomixer=disabled \
+	-Daudiorate=disabled \
+	-Daudiotestsrc=disabled \
+	-Dcdparanoia=disabled \
+	-Dcompositor=disabled \
+	-Dencoding=disabled \
+	-Dgio=disabled \
+	-Dgl=disabled \
+	-Dlibvisual=disabled \
+	-Doverlaycomposition=disabled \
+	-Dpango=disabled \
+	-Drawparse=disabled \
+	-Dsubparse=disabled \
+	-Dtcp=disabled \
+	-Dtremor=disabled \
+	-Dvideorate=disabled \
+	-Dvideotestsrc=disabled \
+	-Dvolume=disabled \
+	-Dx11=disabled \
+	-Dxshm=disabled \
+	-Dxvideo=disabled \
 	$(GST_COMMON_MESON_ARGS)
 
 GST_BASE_CONFIGURE_FILES32 := $(GST_BASE_OBJ32)/build.ninja
@@ -740,7 +761,53 @@ gst_base32: $(GST_BASE_CONFIGURE_FILES32)
 ##
 
 GST_GOOD_MESON_ARGS := \
+	-Daalib=disabled \
+	-Dalpha=disabled \
+	-Dapetag=disabled \
+	-Daudiofx=disabled \
+	-Dauparse=disabled \
+	-Dcairo=disabled \
+	-Dcutter=disabled \
+	-Ddebugutils=disabled \
+	-Ddtmf=disabled \
+	-Deffectv=disabled \
+	-Dequalizer=disabled \
+	-Dgdk-pixbuf=disabled \
+	-Dgtk3=disabled \
+	-Dgoom=disabled \
+	-Dgoom2k1=disabled \
+	-Dicydemux=disabled \
+	-Dimagefreeze=disabled \
+	-Dinterleave=disabled \
+	-Djack=disabled \
+	-Dlaw=disabled \
+	-Dlevel=disabled \
+	-Dlibcaca=disabled \
+	-Dmonoscope=disabled \
+	-Dmultifile=disabled \
+	-Dmultipart=disabled \
+	-Doss=disabled \
+	-Doss4=disabled \
+	-Dpng=disabled \
+	-Dpulse=disabled \
+	-Dqt5=disabled \
+	-Dreplaygain=disabled \
+	-Drtp=disabled \
+	-Drtpmanager=disabled \
+	-Drtsp=disabled \
+	-Dshapewipe=disabled \
+	-Dshout2=disabled \
+	-Dsmpte=disabled \
+	-Dsoup=disabled \
+	-Dspectrum=disabled \
+	-Dtaglib=disabled \
+	-Dudp=disabled \
 	-Dv4l2=disabled \
+	-Dvideocrop=disabled \
+	-Dvideomixer=disabled \
+	-Dwavenc=disabled \
+	-Dximagesrc=disabled \
+	-Dy4m=disabled \
 	$(GST_COMMON_MESON_ARGS)
 
 GST_GOOD_CONFIGURE_FILES32 := $(GST_GOOD_OBJ32)/build.ninja
@@ -801,24 +868,23 @@ gst_good32: $(GST_GOOD_CONFIGURE_FILES32)
 ##
 
 GST_BAD_MESON_ARGS := \
-	-Ddirectfb=disabled \
+	-Dfbdev=disabled \
+	-Ddecklink=disabled \
+	-Dlinksys=disabled \
+	-Dstatic=disabled \
+	-Ddts=disabled \
+	-Dfaac=disabled \
+	-Dfaad=disabled \
+	-Dlibmms=disabled \
+	-Dmpeg2enc=disabled \
+	-Dmplex=disabled \
+	-Dneon=disabled \
+	-Drtmp=disabled \
 	-Dflite=disabled \
-	-Dgsm=disabled \
-	-Diqa=disabled \
-	-Dmsdk=disabled \
-	-Dnvdec=disabled \
-	-Dnvenc=disabled \
+	-Dsbc=disabled \
 	-Dopencv=disabled \
-	-Dopenh264=disabled \
-	-Dopenmpt=disabled \
-	-Dopenni2=disabled \
-	-Dopensles=disabled \
-	-Dsctp=disabled \
-	-Dtinyalsa=disabled \
-	-Dvoaacenc=disabled \
 	-Dvoamrwbenc=disabled \
-	-Dwasapi=disabled \
-	-Dwpe=disabled \
+	-Dx265=disabled \
 	$(GST_COMMON_MESON_ARGS)
 
 GST_BAD_CONFIGURE_FILES32 := $(GST_BAD_OBJ32)/build.ninja
@@ -879,6 +945,10 @@ gst_bad32: $(GST_BAD_CONFIGURE_FILES32)
 ##
 
 GST_UGLY_MESON_ARGS := \
+        -Dgobject-cast-checks='disabled' \
+        -Dglib-asserts='disabled' \
+        -Dglib-checks='disabled' \
+        -Ddoc='disabled' \
 	$(GST_COMMON_MESON_ARGS)
 
 GST_UGLY_CONFIGURE_FILES32 := $(GST_UGLY_OBJ32)/build.ninja
@@ -1010,25 +1080,46 @@ $(FFMPEG_CONFIGURE_FILES64): $(FFMPEG)/configure $(MAKEFILE_DEP) | $(FFMPEG_OBJ6
 		$(abspath $(FFMPEG))/configure \
 			--cc=$(CC_QUOTED) --cxx=$(CXX_QUOTED) \
 			--prefix=$(abspath $(TOOLS_DIR64)) \
-			--disable-debug \
 			--disable-static \
+			--enable-shared \
 			--disable-programs \
 			--disable-doc \
 			--disable-avdevice \
-			--enable-shared \
-			--enable-fontconfig \
-			--enable-gnutls \
-			--enable-libdrm \
-			--enable-libfreetype \
-			--enable-libgsm \
-			--enable-libjack \
-			--enable-libopus \
-			--enable-libpulse \
-			--enable-libspeex \
-			--enable-libtheora \
-			--enable-libvorbis \
-			--enable-libxcb \
-			--enable-libxml2 && \
+			--disable-swscale \
+			--disable-postproc \
+			--disable-alsa \
+			--disable-iconv \
+			--disable-libxcb_shape \
+			--disable-libxcb_shm \
+			--disable-libxcb_xfixes \
+			--disable-sdl2 \
+			--disable-xlib \
+			--disable-zlib \
+			--disable-bzlib \
+			--disable-libxcb \
+			--disable-vaapi \
+			--disable-vdpau \
+			--disable-everything \
+			--enable-parser=h264 \
+			--enable-decoder=h264 \
+			--enable-parser=bmp \
+			--enable-decoder=bmp \
+			--enable-parser=png \
+			--enable-decoder=png \
+			--enable-decoder=bink \
+			--enable-decoder=binkaudio_dct \
+			--enable-decoder=binkaudio_rdft \
+			--enable-decoder=wmv1 \
+			--enable-decoder=wmv2 \
+			--enable-decoder=wmv3 \
+			--enable-decoder=wmv3image \
+			--enable-decoder=aac \
+			--enable-decoder=wmalossless \
+			--enable-decoder=wmapro \
+			--enable-decoder=wmav1 \
+			--enable-decoder=wmav2 \
+			--enable-decoder=wmavoice \
+			--enable-decoder=adpcm_ms && \
 		[ ! -f ./Makefile ] || touch ./Makefile
 # ^ ffmpeg's configure script doesn't update the timestamp on this guy in the case of a no-op
 
@@ -1040,25 +1131,46 @@ $(FFMPEG_CONFIGURE_FILES32): $(FFMPEG)/configure $(MAKEFILE_DEP) | $(FFMPEG_OBJ3
 			--cc=$(CC_QUOTED) --cxx=$(CXX_QUOTED) \
 			--prefix=$(abspath $(TOOLS_DIR32)) \
 			--extra-cflags=$(FFMPEG_CROSS_CFLAGS) --extra-ldflags=$(FFMPEG_CROSS_LDFLAGS) \
-			--disable-debug \
 			--disable-static \
+			--enable-shared \
 			--disable-programs \
 			--disable-doc \
 			--disable-avdevice \
-			--enable-shared \
-			--enable-fontconfig \
-			--enable-gnutls \
-			--enable-libdrm \
-			--enable-libfreetype \
-			--enable-libgsm \
-			--enable-libjack \
-			--enable-libopus \
-			--enable-libpulse \
-			--enable-libspeex \
-			--enable-libtheora \
-			--enable-libvorbis \
-			--enable-libxcb \
-			--enable-libxml2 && \
+			--disable-swscale \
+			--disable-postproc \
+			--disable-alsa \
+			--disable-iconv \
+			--disable-libxcb_shape \
+			--disable-libxcb_shm \
+			--disable-libxcb_xfixes \
+			--disable-sdl2 \
+			--disable-xlib \
+			--disable-zlib \
+			--disable-bzlib \
+			--disable-libxcb \
+			--disable-vaapi \
+			--disable-vdpau \
+			--disable-everything \
+			--enable-parser=h264 \
+			--enable-decoder=h264 \
+			--enable-parser=bmp \
+			--enable-decoder=bmp \
+			--enable-parser=png \
+			--enable-decoder=png \
+			--enable-decoder=bink \
+			--enable-decoder=binkaudio_dct \
+			--enable-decoder=binkaudio_rdft \
+			--enable-decoder=wmv1 \
+			--enable-decoder=wmv2 \
+			--enable-decoder=wmv3 \
+			--enable-decoder=wmv3image \
+			--enable-decoder=aac \
+			--enable-decoder=wmalossless \
+			--enable-decoder=wmapro \
+			--enable-decoder=wmav1 \
+			--enable-decoder=wmav2 \
+			--enable-decoder=wmavoice \
+			--enable-decoder=adpcm_ms && \
 		[ ! -f ./Makefile ] || touch ./Makefile
 # ^ ffmpeg's configure script doesn't update the timestamp on this guy in the case of a no-op
 
@@ -1083,14 +1195,14 @@ ffmpeg64: $(FFMPEG_CONFIGURE_FILES64)
 	+$(MAKE) -C $(FFMPEG_OBJ64)
 	+$(MAKE) -C $(FFMPEG_OBJ64) install
 	mkdir -pv $(DST_DIR)/lib64
-	cp -a $(TOOLS_DIR64)/lib/* $(DST_DIR)/lib64
+	cp -a $(TOOLS_DIR64)/lib/{libavcodec,libavfilter,libavformat,libavutil,libswresample}* $(DST_DIR)/lib64
 
 ffmpeg32: SHELL = $(CONTAINER_SHELL32)
 ffmpeg32: $(FFMPEG_CONFIGURE_FILES32)
 	+$(MAKE) -C $(FFMPEG_OBJ32)
 	+$(MAKE) -C $(FFMPEG_OBJ32) install
 	mkdir -pv $(DST_DIR)/lib
-	cp -a $(TOOLS_DIR32)/lib/* $(DST_DIR)/lib
+	cp -a $(TOOLS_DIR32)/lib/{libavcodec,libavfilter,libavformat,libavutil,libswresample}* $(DST_DIR)/lib
 
 ##
 ## FAudio
