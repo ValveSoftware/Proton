@@ -486,10 +486,14 @@ class Session:
         self.check_environment("PROTON_OLD_GL_STRING", "oldglstr")
         self.check_environment("PROTON_USE_SECCOMP", "seccomp")
 
-        if not "noesync" in self.compat_config:
+        if "noesync" in self.compat_config:
+            self.env.pop("WINEESYNC", "")
+        else:
             self.env["WINEESYNC"] = "1" if "SteamGameId" in self.env else "0"
 
-        if not "nofsync" in self.compat_config:
+        if "nofsync" in self.compat_config:
+            self.env.pop("WINEFSYNC", "")
+        else:
             self.env["WINEFSYNC"] = "1" if "SteamGameId" in self.env else "0"
 
         if "seccomp" in self.compat_config:
