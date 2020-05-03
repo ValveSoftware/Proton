@@ -60,6 +60,7 @@
     git clean -xdf
     patch -Np1 < ../patches/dxvk/valve-dxvk-avoid-spamming-log-with-requests-for-IWineD3D11Texture2D.patch
     patch -Np1 < ../patches/dxvk/proton-add_new_dxvk_config_library.patch
+    patch -Np1 < ../patches/dxvk/dxvk-async.patch
     cd ..
 
     #WINE STAGING
