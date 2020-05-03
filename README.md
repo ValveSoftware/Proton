@@ -176,6 +176,11 @@ https://github.com/simons-public/protonfixes
 -creator of the original protonfixes  
 the portions of protonfixes I've imported are what allow customizations to be made to prefixes for various proton games. without proton fixes many games would still be broken and/or require manual prefix modification. Huge thanks to Chris.  
 
+Sporif (Amine Hassane)
+https://github.com/Sporif/dxvk-async
+-current maintainer of dxvk-async
+This is a feature that was originally removed from dxvk as it happened around the same time a few overwatch bans happened. It was thought, but never confirmed whether or not this feature caused the bans, so the feature was removed as a safety precaution. It is still safe to use in many single player games, and games that do not have competitive anti-cheats. It has also been confirmed to work safely in Warframe and Path of Exile.
+
 
 I also of course need to thank my fellow wine-staging maintainers:  
 Alistair Leslie-Highes, Zebediah Figura, Paul Gofman - as they have contributed MANY patches to staging, far beyond what I have done, as well as kept up with regular rebasing. A lot of times when bug reports come to me, if it has to do with staging I end up testing and relaying information to these guys in order to get issues resolved.  
