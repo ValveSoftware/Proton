@@ -40,3 +40,6 @@
 [submodule "glib"]
 	path = glib
 	url = https://gitlab.gnome.org/GNOME/glib.git
+[submodule "gst-orc"]
+	path = gst-orc
+	url = https://gitlab.freedesktop.org/gstreamer/orc.git
