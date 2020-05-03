@@ -51,7 +51,10 @@
         url = https://github.com/GStreamer/gst-plugins-ugly/
 [submodule "gst-libav"]
         path = gst-libav
-        url = https://github.com/GStreamer/gst-libav/
+	url = https://github.com/GStreamer/gst-libav/
+[submodule "gst-orc"]
+        path = gst-libav
+        url = https://github.com/GStreamer/orc/
 [submodule "glib"]
 	path = glib
 	url = https://github.com/GNOME/glib/
