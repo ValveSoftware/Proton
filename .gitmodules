@@ -53,7 +53,7 @@
         path = gst-libav
 	url = https://github.com/GStreamer/gst-libav/
 [submodule "gst-orc"]
-        path = gst-libav
+        path = gst-orc
         url = https://github.com/GStreamer/orc/
 [submodule "glib"]
 	path = glib
