@@ -2569,21 +2569,7 @@ index 7bf6a0a07f8..0f8de3d21c2 100644
      VK_STRUCTURE_TYPE_HEADLESS_SURFACE_CREATE_INFO_EXT = 1000256000,
      VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_BUFFER_DEVICE_ADDRESS_FEATURES = 1000257000,
      VK_STRUCTURE_TYPE_BUFFER_OPAQUE_CAPTURE_ADDRESS_CREATE_INFO = 1000257002,
-@@ -4546,6 +4543,13 @@ typedef struct VkVertexInputAttributeDescription
-     uint32_t offset;
- } VkVertexInputAttributeDescription;
- 
-+typedef struct VkSurfaceFullScreenExclusiveInfoEXT
-+{
-+    VkStructureType sType;
-+    void *pNext;
-+    VkFullScreenExclusiveEXT fullScreenExclusive;
-+} VkSurfaceFullScreenExclusiveInfoEXT;
-+
- typedef struct VkVertexInputBindingDivisorDescriptionEXT
- {
-     uint32_t binding;
-@@ -5106,6 +5133,20 @@ typedef struct VkSubresourceLayout
+@@ -4546,6 +4543,20 @@ typedef struct VkSubresourceLayout
      VkDeviceSize WINE_VK_ALIGN(8) depthPitch;
  } VkSubresourceLayout;
  
@@ -2601,9 +2587,23 @@ index 7bf6a0a07f8..0f8de3d21c2 100644
 +    HMONITOR hmonitor;
 +} VkSurfaceFullScreenExclusiveWin32InfoEXT;
 +
- typedef struct VkSurfaceCapabilitiesKHR
+ typedef struct VkSurfaceFormatKHR
  {
-     uint32_t minImageCount;
+     VkFormat format;
+@@ -5106,6 +5133,13 @@ typedef struct VkVertexInputAttributeDescription
+     uint32_t offset;
+ } VkVertexInputAttributeDescription;
+ 
++typedef struct VkSurfaceFullScreenExclusiveInfoEXT
++{
++    VkStructureType sType;
++    void *pNext;
++    VkFullScreenExclusiveEXT fullScreenExclusive;
++} VkSurfaceFullScreenExclusiveInfoEXT;
++
+ typedef struct VkVertexInputBindingDivisorDescriptionEXT
+ {
+     uint32_t binding;
 @@ -7057,6 +7119,7 @@ typedef struct VkBindSparseInfo
      const VkSemaphore *pSignalSemaphores;
  } VkBindSparseInfo;

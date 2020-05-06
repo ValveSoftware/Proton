@@ -67,6 +67,9 @@
     cd wine-staging
     git reset --hard HEAD
     git clean -xdf
+    
+#    # fixes RE3 loading crash
+    git patch -Np1 < /patches/wine-hotfixes/ntdll-WRITECOPY-revert.patch
 
     # fixes patching without rawinput
     patch -Np1 < ../patches/wine-hotfixes/staging-44d1a45-localreverts.patch    
@@ -79,7 +82,7 @@
 
     # this conflicts with proton's gamepad changes and causes camera spinning
     git revert --no-commit da7d60bf97fb8726828e57f852e8963aacde21e9
-
+    
 # warframe launcher fix 0.0mb hang fix
 #    -W ntdll-avoid-fstatat
 
@@ -138,8 +141,8 @@
     echo "origin downloads fix" 
     patch -Np1 < ../patches/game-patches/origin-downloads_fix.patch
 
-    echo "fix steep"
-    patch -Np1 < ../patches/wine-hotfixes/0001-Add-some-semi-stubs-in-user32.patch
+#    echo "fix steep"
+#    patch -Np1 < ../patches/wine-hotfixes/0001-Add-some-semi-stubs-in-user32.patch
 
 #   TODO: Check on this - don't own game. Need to validate
 #   TODO: Add game-specific check

@@ -14,39 +14,18 @@ index 1322eaa..de54021 100644
  
  #include "windef.h"
  #include "winbase.h"
-@@ -397,6 +402,27 @@ struct steamclient_interface
- 
- static struct list steamclient_interfaces = LIST_INIT(steamclient_interfaces);
- 
-+#define WF_STEAM_ID	"230410"
-+#define WF_CHECK_TODO	(-2)
-+#define WF_CHECK_YES	(1)
-+#define WF_CHECK_NO	(0)
-+#define WF_UNLIKELY(x)	__builtin_expect(!!(x),0)
-+
-+static int is_wf_running(void) {
-+	static int wf_running_flag = WF_CHECK_TODO;
-+
-+	/* don't care if we execute the below
-+	 * spuriously */
-+	if(WF_UNLIKELY(wf_running_flag == WF_CHECK_TODO)) {
-+		const char*	p_gameid = getenv("SteamGameId");
-+		const int  	is_running = (!p_gameid || strcmp(p_gameid, WF_STEAM_ID)) ? WF_CHECK_NO : WF_CHECK_YES;
-+		/* atomic CAS */
-+		__sync_bool_compare_and_swap(&wf_running_flag, WF_CHECK_TODO, is_running);
-+	}
-+
-+	return wf_running_flag == WF_CHECK_YES;
-+}
-+
- void *create_win_interface(const char *name, void *linux_side)
- {
+@@ -402,11 +406,66 @@ void *create_win_interface(const char *name, void *linux_side)
      struct steamclient_interface *e;
-@@ -408,6 +434,60 @@ void *create_win_interface(const char *name, void *linux_side)
+     void *ret = NULL;
+     int i;
++    const char *sgi = getenv("SteamGameId");
+ 
+     TRACE("trying to create %s\n", name);
+ 
      if (!linux_side)
          return NULL;
- 
-+    if(is_wf_running() && (!strcmp(name,"SteamController007") || !strcmp(name,"SteamInput001")))
++    
++    if(sgi && !strcmp(sgi, "230410") && (!strcmp(name,"SteamController007") || !strcmp(name,"SteamInput001")))
 +    {
 +        DIR *d;
 +        struct dirent *dir;
@@ -99,7 +78,6 @@ index 1322eaa..de54021 100644
 +        }
 +    }
 +
-+
+ 
      EnterCriticalSection(&steamclient_cs);
  
-     LIST_FOR_EACH_ENTRY(e, &steamclient_interfaces, struct steamclient_interface, entry)
