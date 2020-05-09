@@ -68,8 +68,6 @@
     git reset --hard HEAD
     git clean -xdf
     
-#    # fixes RE3 loading crash
-    git patch -Np1 < /patches/wine-hotfixes/ntdll-WRITECOPY-revert.patch
 
     # fixes patching without rawinput
     patch -Np1 < ../patches/wine-hotfixes/staging-44d1a45-localreverts.patch    
@@ -115,8 +113,8 @@
 
 
     #WINE FAUDIO
-    echo "applying faudio patches"
-    patch -Np1 < ../patches/faudio/faudio-ffmpeg.patch
+    #echo "applying faudio patches"
+    #patch -Np1 < ../patches/faudio/faudio-ffmpeg.patch
 
 
     ### GAME PATCH SECTION ###
