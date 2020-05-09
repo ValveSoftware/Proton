@@ -4,173 +4,52 @@ Date: Fri, 10 Jan 2020 15:34:45 -0600
 Subject: [PATCH] Add some semi-stubs in user32.
 
 ---
- dlls/user32/misc.c      |  26 ------
- dlls/user32/sysparams.c | 181 +++++++++++++++++++++++++++++++++++++++-
- include/wingdi.h        |   2 +-
- 3 files changed, 180 insertions(+), 29 deletions(-)
-
-diff --git a/dlls/user32/misc.c b/dlls/user32/misc.c
-index bed5812a47..6e1f60612b 100644
---- a/dlls/user32/misc.c
-+++ b/dlls/user32/misc.c
-@@ -240,17 +240,6 @@ DWORD WINAPI SetLogonNotifyWindow(HWINSTA hwinsta,HWND hwnd)
-     return 1;
+diff --git a/dlls/user32/sysparams.c b/dlls/user32/sysparams.c
+index 10f17bb4c3..345f3946bc 100644
+--- a/dlls/user32/sysparams.c
++++ b/dlls/user32/sysparams.c
+@@ -4487,39 +4544,112 @@ BOOL WINAPI PhysicalToLogicalPoint( HWND hwnd, POINT *point )
  }
  
--/***********************************************************************
-- *              QueryDisplayConfig (USER32.@)
-- */
--LONG WINAPI QueryDisplayConfig(UINT32 flags, UINT32 *numpathelements, DISPLAYCONFIG_PATH_INFO *pathinfo,
--                               UINT32 *numinfoelements, DISPLAYCONFIG_MODE_INFO *modeinfo,
--                               DISPLAYCONFIG_TOPOLOGY_ID *topologyid)
--{
--   FIXME("(%08x %p %p %p %p %p)\n", flags, numpathelements, pathinfo, numinfoelements, modeinfo, topologyid);
--   return ERROR_CALL_NOT_IMPLEMENTED;
--}
--
- /***********************************************************************
-  *		RegisterSystemThread (USER32.@)
+ /**********************************************************************
+- *              GetDisplayConfigBufferSizes (USER32.@)
++ * GetDisplayConfigBufferSizes [USER32.@]
   */
-@@ -545,21 +534,6 @@ BOOL WINAPI IsWindowRedirectedForPrint( HWND hwnd )
-     return FALSE;
- }
- 
--/**********************************************************************
-- * GetDisplayConfigBufferSizes [USER32.@]
-- */
--LONG WINAPI GetDisplayConfigBufferSizes(UINT32 flags, UINT32 *num_path_info, UINT32 *num_mode_info)
--{
+ LONG WINAPI GetDisplayConfigBufferSizes(UINT32 flags, UINT32 *num_path_info, UINT32 *num_mode_info)
+ {
 -    FIXME("(0x%x %p %p): stub\n", flags, num_path_info, num_mode_info);
--
--    if (!num_path_info || !num_mode_info)
--        return ERROR_INVALID_PARAMETER;
--
++    TRACE("0x%x %p %p\n", flags, num_path_info, num_mode_info);
+ 
+     if (!num_path_info || !num_mode_info)
+         return ERROR_INVALID_PARAMETER;
+ 
 -    *num_path_info = 0;
 -    *num_mode_info = 0;
 -    return ERROR_NOT_SUPPORTED;
--}
--
- /**********************************************************************
-  * RegisterPointerDeviceNotifications [USER32.@]
-  */
-diff --git a/dlls/user32/sysparams.c b/dlls/user32/sysparams.c
-index 1f65959bc6..b135ea136f 100644
---- a/dlls/user32/sysparams.c
-+++ b/dlls/user32/sysparams.c
-@@ -3268,13 +3268,78 @@ LONG WINAPI ChangeDisplaySettingsExW( LPCWSTR devname, LPDEVMODEW devmode, HWND
- }
- 
- 
-+typedef struct DISPLAYCONFIG_SOURCE_DEVICE_NAME {
-+  DISPLAYCONFIG_DEVICE_INFO_HEADER header;
-+  WCHAR                            viewGdiDeviceName[CCHDEVICENAME];
-+} DISPLAYCONFIG_SOURCE_DEVICE_NAME;
-+
-+typedef struct DISPLAYCONFIG_TARGET_DEVICE_NAME_FLAGS {
-+  union {
-+    struct {
-+      UINT32 friendlyNameFromEdid : 1;
-+      UINT32 friendlyNameForced : 1;
-+      UINT32 edidIdsValid : 1;
-+      UINT32 reserved : 29;
-+    } DUMMYSTRUCTNAME;
-+    UINT32 value;
-+  } DUMMYUNIONNAME;
-+} DISPLAYCONFIG_TARGET_DEVICE_NAME_FLAGS;
-+
-+typedef struct DISPLAYCONFIG_TARGET_DEVICE_NAME {
-+  DISPLAYCONFIG_DEVICE_INFO_HEADER       header;
-+  DISPLAYCONFIG_TARGET_DEVICE_NAME_FLAGS flags;
-+  DISPLAYCONFIG_VIDEO_OUTPUT_TECHNOLOGY  outputTechnology;
-+  UINT16                                 edidManufactureId;
-+  UINT16                                 edidProductCodeId;
-+  UINT32                                 connectorInstance;
-+  WCHAR                                  monitorFriendlyDeviceName[64];
-+  WCHAR                                  monitorDevicePath[128];
-+} DISPLAYCONFIG_TARGET_DEVICE_NAME;
-+
- /***********************************************************************
-  *              DisplayConfigGetDeviceInfo (USER32.@)
-  */
- LONG WINAPI DisplayConfigGetDeviceInfo(DISPLAYCONFIG_DEVICE_INFO_HEADER *packet)
- {
--    FIXME("stub: %p\n", packet);
--    return ERROR_NOT_SUPPORTED;
-+    static const WCHAR testW[] = {'t','e','s','t',0};
-+
-+    TRACE("packet type: %u\n", packet->type);
-+
-+    switch(packet->type)
-+    {
-+        case DISPLAYCONFIG_DEVICE_INFO_GET_SOURCE_NAME:
-+        {
-+            DISPLAYCONFIG_SOURCE_DEVICE_NAME *src_device_name = (DISPLAYCONFIG_SOURCE_DEVICE_NAME*) packet;
-+            if (packet->size < sizeof(*src_device_name))
-+            {
-+                return ERROR_INSUFFICIENT_BUFFER;
-+            }
-+
-+            memcpy(src_device_name->viewGdiDeviceName, testW, sizeof(testW));
-+
-+            return ERROR_SUCCESS;
-+        }
-+        case DISPLAYCONFIG_DEVICE_INFO_GET_TARGET_NAME:
-+        {
-+            DISPLAYCONFIG_TARGET_DEVICE_NAME *dst_device_name = (DISPLAYCONFIG_TARGET_DEVICE_NAME*) packet;
-+            if (packet->size < sizeof(*dst_device_name))
-+            {
-+                TRACE("%u, %lu\n", packet->size, sizeof(*dst_device_name));
-+                return ERROR_INSUFFICIENT_BUFFER;
-+            }
-+
-+            dst_device_name->flags.DUMMYUNIONNAME.value = 0;
-+            dst_device_name->outputTechnology = DISPLAYCONFIG_OUTPUT_TECHNOLOGY_HDMI;
-+            dst_device_name->connectorInstance = 0;
-+
-+            memcpy(dst_device_name->monitorFriendlyDeviceName, testW, sizeof(testW));
-+            memcpy(dst_device_name->monitorDevicePath, testW, sizeof(testW));
-+
-+            return ERROR_SUCCESS;
-+        }
-+        default:
-+            return ERROR_NOT_SUPPORTED;
-+    }
- }
- 
- /***********************************************************************
-@@ -4389,3 +4454,115 @@ BOOL WINAPI PhysicalToLogicalPoint( HWND hwnd, POINT *point )
- {
-     return TRUE;
- }
-+
-+/**********************************************************************
-+ * GetDisplayConfigBufferSizes [USER32.@]
-+ */
-+LONG WINAPI GetDisplayConfigBufferSizes(UINT32 flags, UINT32 *num_path_info, UINT32 *num_mode_info)
-+{
-+    TRACE("0x%x %p %p\n", flags, num_path_info, num_mode_info);
-+
-+    if (!num_path_info || !num_mode_info)
-+        return ERROR_INVALID_PARAMETER;
-+
 +    *num_path_info = 1;
 +    *num_mode_info = 2;
 +    return ERROR_SUCCESS;
-+}
-+
+ }
+ 
 +#define D3DKMDT_VSS_NTSC_M          0x6
-+#define DISPLAYCONFIG_SOURCE_IN_USE 0x1
-+#define DISPLAYCONFIG_TARGET_IN_USE 0x1
-+#define DISPLAYCONFIG_PATH_ACTIVE   0x1
 +
-+/***********************************************************************
-+ *              QueryDisplayConfig (USER32.@)
-+ * TODO: support multiple monitors
-+ */
-+LONG WINAPI QueryDisplayConfig(UINT32 flags, UINT32 *numpathelements, DISPLAYCONFIG_PATH_INFO *pathinfo,
-+                               UINT32 *numinfoelements, DISPLAYCONFIG_MODE_INFO *modeinfo,
-+                               DISPLAYCONFIG_TOPOLOGY_ID *topologyid)
-+{
+ /***********************************************************************
+- *              QueryDisplayConfig (USER32.@)
+- */
+++ *              QueryDisplayConfig (USER32.@)
+++ * TODO: support multiple monitors
+++ */
+ LONG WINAPI QueryDisplayConfig(UINT32 flags, UINT32 *numpathelements, DISPLAYCONFIG_PATH_INFO *pathinfo,
+                                UINT32 *numinfoelements, DISPLAYCONFIG_MODE_INFO *modeinfo,
+                                DISPLAYCONFIG_TOPOLOGY_ID *topologyid)
+ {
+-    FIXME("(%08x %p %p %p %p %p)\n", flags, numpathelements, pathinfo, numinfoelements, modeinfo, topologyid);
+-
+-    if (!numpathelements || !numinfoelements)
+-        return ERROR_INVALID_PARAMETER;
+-
+-    if (!*numpathelements || !*numinfoelements)
+-        return ERROR_INVALID_PARAMETER;
 +    LUID adapter_id;
 +    POINT origin;
 +    HMONITOR monitor;
@@ -198,7 +77,9 @@ index 1f65959bc6..b135ea136f 100644
 +    {
 +        return ERROR_GEN_FAILURE;
 +    }
-+
+ 
+-    if (!flags)
+-        return ERROR_INVALID_PARAMETER;
 +    AllocateLocallyUniqueId(&adapter_id);
 +
 +    source_mode->width = mode.dmPelsWidth;
@@ -251,8 +132,82 @@ index 1f65959bc6..b135ea136f 100644
 +    {
 +        *topologyid = DISPLAYCONFIG_TOPOLOGY_INTERNAL;
 +    }
-+
+ 
+-    return ERROR_NOT_SUPPORTED;
 +    return ERROR_SUCCESS;
-+}
+ }
+ 
+ /***********************************************************************
+@@ -4527,7 +4657,7 @@ LONG WINAPI QueryDisplayConfig(UINT32 flags, UINT32 *numpathelements, DISPLAYCON
+  */
+ LONG WINAPI DisplayConfigGetDeviceInfo(DISPLAYCONFIG_DEVICE_INFO_HEADER *packet)
+ {
+-    FIXME("stub: %p\n", packet);
++    static const WCHAR testW[] = {'t','e','s','t',0};
+ 
+     if (!packet || packet->size < sizeof(*packet))
+         return ERROR_GEN_FAILURE;
+@@ -4538,34 +4668,34 @@ LONG WINAPI DisplayConfigGetDeviceInfo(DISPLAYCONFIG_DEVICE_INFO_HEADER *packet)
+     {
+         DISPLAYCONFIG_SOURCE_DEVICE_NAME *source_name = (DISPLAYCONFIG_SOURCE_DEVICE_NAME *)packet;
+         if (packet->size < sizeof(*source_name))
+-            return ERROR_INVALID_PARAMETER;
++        {
++            return ERROR_INSUFFICIENT_BUFFER;
++        }
++
++        memcpy(source_name->viewGdiDeviceName, testW, sizeof(testW));
+ 
+-        return ERROR_NOT_SUPPORTED;
++        return ERROR_SUCCESS;
+     }
+     case DISPLAYCONFIG_DEVICE_INFO_GET_TARGET_NAME:
+     {
+         DISPLAYCONFIG_TARGET_DEVICE_NAME *target_name = (DISPLAYCONFIG_TARGET_DEVICE_NAME *)packet;
+         if (packet->size < sizeof(*target_name))
+-            return ERROR_INVALID_PARAMETER;
++        {
++            TRACE("%u, %lu\n", packet->size, sizeof(*target_name));
++            return ERROR_INSUFFICIENT_BUFFER;
++        }
+ 
+-        return ERROR_NOT_SUPPORTED;
+-    }
+-    case DISPLAYCONFIG_DEVICE_INFO_GET_TARGET_PREFERRED_MODE:
+-    {
+-        DISPLAYCONFIG_TARGET_PREFERRED_MODE *preferred_mode = (DISPLAYCONFIG_TARGET_PREFERRED_MODE *)packet;
+-        if (packet->size < sizeof(*preferred_mode))
+-            return ERROR_INVALID_PARAMETER;
++        target_name->flags.DUMMYUNIONNAME.value = 0;
++        target_name->outputTechnology = DISPLAYCONFIG_OUTPUT_TECHNOLOGY_HDMI;
++        target_name->connectorInstance = 0;
+ 
+-        return ERROR_NOT_SUPPORTED;
+-    }
+-    case DISPLAYCONFIG_DEVICE_INFO_GET_ADAPTER_NAME:
+-    {
+-        DISPLAYCONFIG_ADAPTER_NAME *adapter_name = (DISPLAYCONFIG_ADAPTER_NAME *)packet;
+-        if (packet->size < sizeof(*adapter_name))
+-            return ERROR_INVALID_PARAMETER;
++        memcpy(target_name->monitorFriendlyDeviceName, testW, sizeof(testW));
++        memcpy(target_name->monitorDevicePath, testW, sizeof(testW));
+ 
+-        return ERROR_NOT_SUPPORTED;
++        return ERROR_SUCCESS;
+     }
++    case DISPLAYCONFIG_DEVICE_INFO_GET_TARGET_PREFERRED_MODE:
++    case DISPLAYCONFIG_DEVICE_INFO_GET_ADAPTER_NAME:
+     case DISPLAYCONFIG_DEVICE_INFO_SET_TARGET_PERSISTENCE:
+     case DISPLAYCONFIG_DEVICE_INFO_GET_TARGET_BASE_TYPE:
+     case DISPLAYCONFIG_DEVICE_INFO_GET_SUPPORT_VIRTUAL_RESOLUTION:
+@@ -4574,7 +4704,6 @@ LONG WINAPI DisplayConfigGetDeviceInfo(DISPLAYCONFIG_DEVICE_INFO_HEADER *packet)
+     case DISPLAYCONFIG_DEVICE_INFO_SET_ADVANCED_COLOR_STATE:
+     case DISPLAYCONFIG_DEVICE_INFO_GET_SDR_WHITE_LEVEL:
+     default:
+-        FIXME("Unimplemented packet type: %u\n", packet->type);
+-        return ERROR_INVALID_PARAMETER;
++            return ERROR_NOT_SUPPORTED;
+     }
+ }
 -- 
 2.24.1
