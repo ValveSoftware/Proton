@@ -1,0 +1,38 @@
+From 1d6a9c4db01123b6dfd7de0848fe4b3d1870cf8c Mon Sep 17 00:00:00 2001
+From: yuiiio <atbjyk@protonmail.com>
+Date: Sun, 1 Mar 2020 17:26:58 +0900
+Subject: [PATCH] HACK:winex11: limits resources->nmode
+
+fix https://github.com/ValveSoftware/Proton/issues/2929
+---
+ dlls/winex11.drv/xrandr.c | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
+
+diff --git a/dlls/winex11.drv/xrandr.c b/dlls/winex11.drv/xrandr.c
+index 93e3130cc8..f1acd3c743 100644
+--- a/dlls/winex11.drv/xrandr.c
++++ b/dlls/winex11.drv/xrandr.c
+@@ -582,11 +582,22 @@ static int xrandr12_init_modes(void)
+         primary_width = primary_height;
+         primary_height = tmp;
+     }
++    
++    int limit = 53; // required by nier_automata (55), sekiro (53), dark_souls3 (53)
++    int capped_resources_nmode = resources->nmode;
++    const char *sgi = getenv("SteamGameId");
++
++    if (sgi && (!strcmp(sgi, "374320") | !strcmp(sgi, "524220") | !strcmp(sgi, "814380")))
++    {
++        if (resources->nmode > limit) {
++            capped_resources_nmode = limit;
++        }
++    }
+ 
+     xrandr_mode_count = 0;
+     for (i = 0; i < output_info->nmode; ++i)
+     {
+-        for (j = 0; j < resources->nmode; ++j)
++        for (j = 0; j < capped_resources_nmode; ++j)
+         {
+             XRRModeInfo *mode = &resources->modes[j];
+ 

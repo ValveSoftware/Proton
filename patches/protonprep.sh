@@ -139,8 +139,8 @@
     echo "origin downloads fix" 
     patch -Np1 < ../patches/game-patches/origin-downloads_fix.patch
 
-#    echo "fix steep"
-#    patch -Np1 < ../patches/wine-hotfixes/0001-Add-some-semi-stubs-in-user32.patch
+    echo "fix steep"
+    patch -Np1 < ../patches/wine-hotfixes/0001-Add-some-semi-stubs-in-user32.patch
 
 #   TODO: Check on this - don't own game. Need to validate
 #   TODO: Add game-specific check
@@ -179,6 +179,9 @@
     
     echo "fullscreen hack"
     patch -Np1 < ../patches/proton/valve_proton_fullscreen_hack-staging.patch
+    
+    echo "fix for Dark Souls III, Sekiro, Nier" 
+    patch -Np1 < ../patches/game-patches/winex11_limit_resources-nmode.patch
 
     echo "raw input"
     patch -Np1 < ../patches/proton/proton-rawinput.patch
