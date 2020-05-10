@@ -1879,13 +1879,13 @@ LIBFFI_CONFIGURE_FILES64 := $(LIBFFI_OBJ64)/Makefile
 $(LIBFFI_CONFIGURE_FILES64): SHELL = $(CONTAINER_SHELL64)
 $(LIBFFI_CONFIGURE_FILES64): $(MAKEFILE_DEP) $(LIBFFI) | $(LIBFFI_OBJ64)
 	cd "$(LIBFFI_OBJ64)" && \
-		../$(LIBFFI)/configure --prefix=$(abspath $(TOOLS_DIR64)) --disable-static --enable-pax_emutramp
+		../$(LIBFFI)/configure --prefix=$(abspath $(TOOLS_DIR64)) --disable-static
 
 # 32-bit configure
 $(LIBFFI_CONFIGURE_FILES32): SHELL = $(CONTAINER_SHELL32)
 $(LIBFFI_CONFIGURE_FILES32): $(MAKEFILE_DEP) $(LIBFFI) | $(LIBFFI_OBJ32)
 	cd "$(LIBFFI_OBJ32)" && \
-		../$(LIBFFI)/configure --prefix=$(abspath $(TOOLS_DIR32)) --disable-static --enable-pax_emutramp
+		../$(LIBFFI)/configure --prefix=$(abspath $(TOOLS_DIR32)) --disable-static
 
 ## libffi goals
 LIBFFI_TARGETS = libffi libffi_configure libffi32 libffi64 libffi_configure32 libffi_configure64
