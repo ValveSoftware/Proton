@@ -1224,9 +1224,7 @@ $(FFMPEG_CONFIGURE_FILES64): $(FFMPEG)/configure $(MAKEFILE_DEP) | $(FFMPEG_OBJ6
 			--enable-decoder=bmp \
 			--enable-parser=png \
 			--enable-decoder=png \
-			--enable-decoder=bink \
-			--enable-decoder=binkaudio_dct \
-			--enable-decoder=binkaudio_rdft \
+			--enable-decoder=mpegvideo \
 			--enable-decoder=wmv1 \
 			--enable-decoder=wmv2 \
 			--enable-decoder=wmv3 \
@@ -1275,9 +1273,7 @@ $(FFMPEG_CONFIGURE_FILES32): $(FFMPEG)/configure $(MAKEFILE_DEP) | $(FFMPEG_OBJ3
 			--enable-decoder=bmp \
 			--enable-parser=png \
 			--enable-decoder=png \
-			--enable-decoder=bink \
-			--enable-decoder=binkaudio_dct \
-			--enable-decoder=binkaudio_rdft \
+			--enable-decoder=mpegvideo \
 			--enable-decoder=wmv1 \
 			--enable-decoder=wmv2 \
 			--enable-decoder=wmv3 \
