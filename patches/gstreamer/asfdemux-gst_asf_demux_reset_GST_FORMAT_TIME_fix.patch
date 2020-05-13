@@ -1,0 +1,15 @@
+
+diff --git a/gst/asfdemux/gstasfdemux.c b/gst/asfdemux/gstasfdemux.c
+index 7444fc14..30dfc20e 100644
+--- a/gst/asfdemux/gstasfdemux.c
++++ b/gst/asfdemux/gstasfdemux.c
+@@ -206,7 +206,7 @@ gst_asf_demux_reset (GstASFDemux * demux, gboolean chain_reset)
+ {
+   GST_LOG_OBJECT (demux, "resetting");
+ 
+-  gst_segment_init (&demux->segment, GST_FORMAT_UNDEFINED);
++  gst_segment_init (&demux->segment, GST_FORMAT_TIME);
+   demux->segment_running = FALSE;
+   if (!chain_reset) {
+     if (demux->adapter)
+
