@@ -81,6 +81,10 @@
     # this conflicts with proton's gamepad changes and causes camera spinning
     git revert --no-commit da7d60bf97fb8726828e57f852e8963aacde21e9
     
+    # temporary fshack revers
+    git revert --no-commit 26b26a2e0efcb776e7b0115f15580d2507b10400
+    git revert --no-commit fd6f50c0d3e96947846ca82ed0c9bd79fd8e5b80
+    
 # warframe launcher fix 0.0mb hang fix
 #    -W ntdll-avoid-fstatat
 
