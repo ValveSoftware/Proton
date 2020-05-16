@@ -28,6 +28,7 @@ extern void *create_winISteamGameServerStats_SteamGameServerStats001(void *);
 extern void *create_winISteamGameCoordinator_SteamGameCoordinator001(void *);
 extern void *create_winISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001(void *);
 extern void *create_winISteamNetworkingSockets_SteamNetworkingSockets006(void *);
+extern void *create_winISteamNetworkingSockets_SteamNetworkingSockets008(void *);
 extern void *create_winISteamNetworkingUtils_SteamNetworkingUtils003(void *);
 extern void *create_winISteamClient_SteamClient019(void *);
 extern void *create_winISteamNetworking_SteamNetworking005(void *);

@@ -1,3 +1,24 @@
+#if defined(SDKVER_148a) || !defined(__cplusplus)
+#pragma pack( push, 8 )
+struct winSteamNetworkingMessage_t_148a {
+    void * m_pData;
+    int m_cbSize;
+    HSteamNetConnection m_conn;
+    SteamNetworkingIdentity m_identityPeer __attribute__((aligned(1)));
+    int64 m_nConnUserData;
+    SteamNetworkingMicroseconds m_usecTimeReceived;
+    int64 m_nMessageNumber;
+    void *m_pfnFreeData; /*fn pointer*/
+    void *m_pfnRelease; /*fn pointer*/
+    int m_nChannel;
+    int m_nFlags;
+    int64 m_nUserData;
+}  __attribute__ ((ms_struct));
+#pragma pack( pop )
+typedef struct winSteamNetworkingMessage_t_148a winSteamNetworkingMessage_t_148a;
+struct SteamNetworkingMessage_t;
+#endif
+
 #if defined(SDKVER_147) || !defined(__cplusplus)
 #pragma pack( push, 8 )
 struct winSteamPartyBeaconLocation_t_147 {

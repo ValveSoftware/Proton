@@ -284,6 +284,10 @@ typedef uint32 HSteamListenSocket;
 typedef uint32 SteamNetworkingPOPID;
 typedef uint32 RemotePlaySessionID_t;
 
+//sdk148
+typedef char SteamNetworkingErrMsg[1024];
+typedef uint32 HSteamNetPollGroup;
+
 #pragma pack( push, 4 )
 typedef struct CallbackMsg_t
 {

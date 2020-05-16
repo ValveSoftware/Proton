@@ -15,6 +15,7 @@ import re
 import math
 
 sdk_versions = [
+    "148a",
     "147",
     "146",
     "145",
@@ -183,6 +184,11 @@ manually_handled_methods = {
             "ReceiveMessagesOnListenSocket"
         ],
         "cppISteamNetworkingSockets_SteamNetworkingSockets006": [
+            "ReceiveMessagesOnConnection",
+            "ReceiveMessagesOnListenSocket",
+            "SendMessages"
+        ],
+        "cppISteamNetworkingSockets_SteamNetworkingSockets008": [
             "ReceiveMessagesOnConnection",
             "ReceiveMessagesOnListenSocket",
             "SendMessages"
