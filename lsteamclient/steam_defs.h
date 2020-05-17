@@ -96,7 +96,8 @@ typedef uint32_t EUserUGCList,
         ESteamNetworkingAvailability,
         ESteamDeviceFormFactor,
         ESteamIPv6ConnectivityState,
-        ESteamIPv6ConnectivityProtocol
+        ESteamIPv6ConnectivityProtocol,
+        ESteamTVRegionBehavior
 ;
 
 /* XXX NO */
@@ -157,6 +158,13 @@ typedef struct InputMotionData_t
 	float rotVelY;
 	float rotVelZ;
 } InputMotionData_t;
+
+typedef struct SteamTVRegion_t {
+	uint32 unMinX;
+	uint32 unMinY;
+	uint32 unMaxX;
+	uint32 unMaxY;
+} SteamTVRegion_t;
 
 typedef struct SteamNetworkingIPAddr
 {
@@ -219,6 +227,7 @@ typedef struct SteamNetAuthenticationStatus_t SteamNetAuthenticationStatus_t;
 typedef struct SteamDatagramGameCoordinatorServerLogin SteamDatagramGameCoordinatorServerLogin;
 typedef struct SteamRelayNetworkStatus_t SteamRelayNetworkStatus_t;
 typedef struct SteamIPAddress_t SteamIPAddress_t;
+typedef struct SteamNetworkingConfigValue_t SteamNetworkingConfigValue_t;
 typedef struct SteamNetworkingConfigValue_t SteamNetworkingConfigValue_t;
 typedef struct SteamNetworkingMessage_t SteamNetworkingMessage_t;
 

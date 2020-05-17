@@ -41,6 +41,7 @@ typedef struct __winISteamMusicRemote winISteamMusicRemote;
 typedef struct __winISteamHTMLSurface winISteamHTMLSurface;
 typedef struct __winISteamInventory winISteamInventory;
 typedef struct __winISteamVideo winISteamVideo;
+typedef struct __winISteamTV winISteamTV;
 typedef struct __winISteamMasterServerUpdater winISteamMasterServerUpdater;
 typedef struct __winISteamContentServer winISteamContentServer;
 typedef struct __winX winX;
