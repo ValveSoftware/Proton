@@ -1,3 +1,5 @@
+extern void *create_winISteamClient_SteamClient021(void *);
+extern void *create_winISteamUser_SteamUser021(void *);
 extern void *create_winISteamClient_SteamClient020(void *);
 extern void *create_winISteamUser_SteamUser020(void *);
 extern void *create_winISteamFriends_SteamFriends017(void *);
