@@ -182,6 +182,10 @@ manually_handled_methods = {
             "ReceiveMessagesOnConnection",
             "ReceiveMessagesOnListenSocket"
         ],
+        "cppISteamNetworkingSockets_SteamNetworkingSockets004": [
+            "ReceiveMessagesOnConnection",
+            "ReceiveMessagesOnListenSocket"
+        ],
         "cppISteamNetworkingSockets_SteamNetworkingSockets006": [
             "ReceiveMessagesOnConnection",
             "ReceiveMessagesOnListenSocket",

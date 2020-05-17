@@ -33,6 +33,7 @@
     {"SteamNetworking005", &create_winISteamNetworking_SteamNetworking005},
     {"STEAMUGC_INTERFACE_VERSION013", &create_winISteamUGC_STEAMUGC_INTERFACE_VERSION013},
     {"SteamGameServer012", &create_winISteamGameServer_SteamGameServer012},
+    {"SteamNetworkingSockets004", &create_winISteamNetworkingSockets_SteamNetworkingSockets004},
     {"SteamNetworkingSockets003", &create_winISteamNetworkingSockets_SteamNetworkingSockets003},
     {"SteamNetworkingUtils002", &create_winISteamNetworkingUtils_SteamNetworkingUtils002},
     {"SteamClient018", &create_winISteamClient_SteamClient018},

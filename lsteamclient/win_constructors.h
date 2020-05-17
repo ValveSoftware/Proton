@@ -33,6 +33,7 @@ extern void *create_winISteamClient_SteamClient019(void *);
 extern void *create_winISteamNetworking_SteamNetworking005(void *);
 extern void *create_winISteamUGC_STEAMUGC_INTERFACE_VERSION013(void *);
 extern void *create_winISteamGameServer_SteamGameServer012(void *);
+extern void *create_winISteamNetworkingSockets_SteamNetworkingSockets004(void *);
 extern void *create_winISteamNetworkingSockets_SteamNetworkingSockets003(void *);
 extern void *create_winISteamNetworkingUtils_SteamNetworkingUtils002(void *);
 extern void *create_winISteamClient_SteamClient018(void *);

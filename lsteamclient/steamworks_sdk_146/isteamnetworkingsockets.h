@@ -494,6 +494,9 @@ protected:
 };
 #define STEAMNETWORKINGSOCKETS_INTERFACE_VERSION "SteamNetworkingSockets003"
 
+// SDK 146 contains 004, and method signatures appear to be identical.
+#define STEAMNETWORKINGSOCKETS_INTERFACE_VERSION_2 "SteamNetworkingSockets004"
+
 extern "C" {
 
 // Global accessor.
@@ -513,11 +516,13 @@ extern "C" {
 
 #else
 
-	// Steamworks SDK
+	// Steamworks SDK - with 003 and 004
 	inline ISteamNetworkingSockets *SteamNetworkingSockets();
 	STEAM_DEFINE_USER_INTERFACE_ACCESSOR( ISteamNetworkingSockets *, SteamNetworkingSockets, STEAMNETWORKINGSOCKETS_INTERFACE_VERSION );
+	STEAM_DEFINE_USER_INTERFACE_ACCESSOR( ISteamNetworkingSockets *, SteamNetworkingSockets, STEAMNETWORKINGSOCKETS_INTERFACE_VERSION_2 );
 	inline ISteamNetworkingSockets *SteamGameServerNetworkingSockets();
 	STEAM_DEFINE_GAMESERVER_INTERFACE_ACCESSOR( ISteamNetworkingSockets *, SteamGameServerNetworkingSockets, STEAMNETWORKINGSOCKETS_INTERFACE_VERSION );
+	STEAM_DEFINE_GAMESERVER_INTERFACE_ACCESSOR( ISteamNetworkingSockets *, SteamGameServerNetworkingSockets, STEAMNETWORKINGSOCKETS_INTERFACE_VERSION_2 );
 #endif
 
 }
