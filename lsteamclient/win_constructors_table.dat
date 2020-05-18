@@ -1,3 +1,7 @@
+    {"SteamNetworkingSocketsSerialized004", &create_winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized004},
+    {"STEAMTV_INTERFACE_V001", &create_winISteamTV_STEAMTV_INTERFACE_V001},
+    {"SteamClient021", &create_winISteamClient_SteamClient021},
+    {"SteamUser021", &create_winISteamUser_SteamUser021},
     {"SteamClient020", &create_winISteamClient_SteamClient020},
     {"SteamUser020", &create_winISteamUser_SteamUser020},
     {"SteamFriends017", &create_winISteamFriends_SteamFriends017},

@@ -15,6 +15,7 @@ import re
 import math
 
 sdk_versions = [
+    "149_scaffold",
     "147",
     "146",
     "145",
@@ -111,6 +112,7 @@ files = [
         "ISteamRemotePlay",
         "ISteamRemoteStorage",
         "ISteamScreenshots",
+        "ISteamTV",
         "ISteamUGC",
         "ISteamUnifiedMessages",
         "ISteamUser",
