@@ -15,6 +15,97 @@
 
 WINE_DEFAULT_DEBUG_CHANNEL(steamclient);
 
+#include "cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized004.h"
+
+typedef struct __winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized004 {
+    vtable_ptr *vtable;
+    void *linux_side;
+} winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized004;
+
+DEFINE_THISCALL_WRAPPER(winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized004_SendP2PRendezvous, 24)
+void __thiscall winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized004_SendP2PRendezvous(winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized004 *_this, CSteamID steamIDRemote, uint32 unConnectionIDSrc, const void * pMsgRendezvous, uint32 cbRendezvous)
+{
+    TRACE("%p\n", _this);
+    cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized004_SendP2PRendezvous(_this->linux_side, steamIDRemote, unConnectionIDSrc, pMsgRendezvous, cbRendezvous);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized004_SendP2PConnectionFailure, 24)
+void __thiscall winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized004_SendP2PConnectionFailure(winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized004 *_this, CSteamID steamIDRemote, uint32 unConnectionIDDest, uint32 nReason, const char * pszReason)
+{
+    TRACE("%p\n", _this);
+    cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized004_SendP2PConnectionFailure(_this->linux_side, steamIDRemote, unConnectionIDDest, nReason, pszReason);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized004_GetCertAsync, 4)
+SteamAPICall_t __thiscall winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized004_GetCertAsync(winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized004 *_this)
+{
+    TRACE("%p\n", _this);
+    return cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized004_GetCertAsync(_this->linux_side);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized004_GetNetworkConfigJSON, 16)
+int __thiscall winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized004_GetNetworkConfigJSON(winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized004 *_this, void * buf, uint32 cbBuf, const char * pszLauncherPartner)
+{
+    TRACE("%p\n", _this);
+    return cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized004_GetNetworkConfigJSON(_this->linux_side, buf, cbBuf, pszLauncherPartner);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized004_CacheRelayTicket, 12)
+void __thiscall winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized004_CacheRelayTicket(winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized004 *_this, const void * pTicket, uint32 cbTicket)
+{
+    TRACE("%p\n", _this);
+    cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized004_CacheRelayTicket(_this->linux_side, pTicket, cbTicket);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized004_GetCachedRelayTicketCount, 4)
+uint32 __thiscall winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized004_GetCachedRelayTicketCount(winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized004 *_this)
+{
+    TRACE("%p\n", _this);
+    return cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized004_GetCachedRelayTicketCount(_this->linux_side);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized004_GetCachedRelayTicket, 16)
+int __thiscall winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized004_GetCachedRelayTicket(winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized004 *_this, uint32 idxTicket, void * buf, uint32 cbBuf)
+{
+    TRACE("%p\n", _this);
+    return cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized004_GetCachedRelayTicket(_this->linux_side, idxTicket, buf, cbBuf);
+}
+
+DEFINE_THISCALL_WRAPPER(winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized004_PostConnectionStateMsg, 12)
+void __thiscall winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized004_PostConnectionStateMsg(winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized004 *_this, const void * pMsg, uint32 cbMsg)
+{
+    TRACE("%p\n", _this);
+    cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized004_PostConnectionStateMsg(_this->linux_side, pMsg, cbMsg);
+}
+
+extern vtable_ptr winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized004_vtable;
+
+#ifndef __GNUC__
+void __asm_dummy_vtables(void) {
+#endif
+    __ASM_VTABLE(winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized004,
+        VTABLE_ADD_FUNC(winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized004_SendP2PRendezvous)
+        VTABLE_ADD_FUNC(winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized004_SendP2PConnectionFailure)
+        VTABLE_ADD_FUNC(winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized004_GetCertAsync)
+        VTABLE_ADD_FUNC(winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized004_GetNetworkConfigJSON)
+        VTABLE_ADD_FUNC(winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized004_CacheRelayTicket)
+        VTABLE_ADD_FUNC(winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized004_GetCachedRelayTicketCount)
+        VTABLE_ADD_FUNC(winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized004_GetCachedRelayTicket)
+        VTABLE_ADD_FUNC(winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized004_PostConnectionStateMsg)
+    );
+#ifndef __GNUC__
+}
+#endif
+
+winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized004 *create_winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized004(void *linux_side)
+{
+    winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized004 *r = HeapAlloc(GetProcessHeap(), 0, sizeof(winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized004));
+    TRACE("-> %p\n", r);
+    r->vtable = &winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized004_vtable;
+    r->linux_side = linux_side;
+    return r;
+}
+
 #include "cppISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized003.h"
 
 typedef struct __winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized003 {
