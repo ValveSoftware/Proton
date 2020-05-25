@@ -1,0 +1,90 @@
+From 962c160b302a38e12aaddfcb47f59b8188f5e7a0 Mon Sep 17 00:00:00 2001
+From: Derek Lesho <dlesho@codeweavers.com>
+Date: Tue, 21 Apr 2020 10:31:02 -0500
+Subject: [PATCH 28/53] winegstreamer: Translate AAC attributes to caps.
+
+Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
+---
+ dlls/winegstreamer/mfplat.c | 66 +++++++++++++++++++++++++++++++++++++
+ 1 file changed, 66 insertions(+)
+
+diff --git a/dlls/winegstreamer/mfplat.c b/dlls/winegstreamer/mfplat.c
+index f5b44f9214..7e96e6af20 100644
+--- a/dlls/winegstreamer/mfplat.c
++++ b/dlls/winegstreamer/mfplat.c
+@@ -1094,6 +1094,72 @@ GstCaps *caps_from_mf_media_type(IMFMediaType *type)
+                 return NULL;
+             }
+         }
++        else if (IsEqualGUID(&subtype, &MFAudioFormat_AAC))
++        {
++            DWORD payload_type, indication;
++            struct aac_user_data *user_data;
++            UINT32 user_data_size;
++            output = gst_caps_new_empty_simple("audio/mpeg");
++
++            /* Unsure of how to differentiate between mpegversion 2 and 4 */
++            gst_caps_set_simple(output, "mpegversion", G_TYPE_INT, 4, NULL);
++
++            if (SUCCEEDED(IMFMediaType_GetUINT32(type, &MF_MT_AAC_PAYLOAD_TYPE, &payload_type)))
++            {
++                switch (payload_type)
++                {
++                    case 0:
++                        gst_caps_set_simple(output, "stream-format", G_TYPE_STRING, "raw", NULL);
++                        break;
++                    case 1:
++                        gst_caps_set_simple(output, "stream-format", G_TYPE_STRING, "adts", NULL);
++                        break;
++                    case 2:
++                        gst_caps_set_simple(output, "stream-format", G_TYPE_STRING, "adif", NULL);
++                        break;
++                    case 3:
++                        gst_caps_set_simple(output, "stream-format", G_TYPE_STRING, "loas", NULL);
++                        break;
++                    default:
++                        gst_caps_set_simple(output, "stream-format", G_TYPE_STRING, "raw", NULL);
++                }
++            }
++            else
++                gst_caps_set_simple(output, "stream-format", G_TYPE_STRING, "raw", NULL);
++
++            if (SUCCEEDED(IMFMediaType_GetUINT32(type, &MF_MT_AAC_AUDIO_PROFILE_LEVEL_INDICATION, &indication)))
++            {
++                const char *profile, *level;
++                switch (indication)
++                {
++                    case 0x29: profile = "lc"; level = "2";  break;
++                    case 0x2A: profile = "lc"; level = "4"; break;
++                    case 0x2B: profile = "lc"; level = "5"; break;
++                    default:
++                    {
++                        profile = level = NULL;
++                        FIXME("Unrecognized profile-level-indication %u\n", indication);
++                    }
++                }
++                if (profile)
++                    gst_caps_set_simple(output, "profile", G_TYPE_STRING, profile, NULL);
++                if (level)
++                    gst_caps_set_simple(output, "level", G_TYPE_STRING, level, NULL);
++            }
++
++            if (SUCCEEDED(IMFMediaType_GetAllocatedBlob(type, &MF_MT_USER_DATA, (BYTE **) &user_data, &user_data_size)))
++            {
++                if (user_data_size > sizeof(*user_data))
++                {
++                    GstBuffer *audio_specific_config = gst_buffer_new_allocate(NULL, user_data_size - sizeof(*user_data), NULL);
++                    gst_buffer_fill(audio_specific_config, 0, user_data + 1, user_data_size - sizeof(*user_data));
++
++                    gst_caps_set_simple(output, "codec_data", GST_TYPE_BUFFER, audio_specific_config, NULL);
++                    gst_buffer_unref(audio_specific_config);
++                }
++                CoTaskMemFree(user_data);
++            }
++        }
+         else
+         {
+             FIXME("Unrecognized subtype %s\n", debugstr_guid(&subtype));
+-- 
+2.26.2
+

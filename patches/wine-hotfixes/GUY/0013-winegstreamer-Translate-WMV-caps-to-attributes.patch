@@ -1,0 +1,82 @@
+From 0efb1b142cca371403620a66d4c2ddda22b9cf4d Mon Sep 17 00:00:00 2001
+From: Derek Lesho <dlesho@codeweavers.com>
+Date: Tue, 24 Mar 2020 16:01:20 -0500
+Subject: [PATCH 13/53] winegstreamer: Translate WMV caps to attributes.
+
+Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
+---
+ dlls/winegstreamer/mfplat.c | 51 +++++++++++++++++++++++++++++++++++++
+ 1 file changed, 51 insertions(+)
+
+diff --git a/dlls/winegstreamer/mfplat.c b/dlls/winegstreamer/mfplat.c
+index 1b37e1cc90..96195c887c 100644
+--- a/dlls/winegstreamer/mfplat.c
++++ b/dlls/winegstreamer/mfplat.c
+@@ -463,6 +463,24 @@ uncompressed_formats[] =
+     {&MFVideoFormat_RGB555,  GST_VIDEO_FORMAT_BGR15},
+ };
+ 
++static void codec_data_to_user_data(GstStructure *structure, IMFMediaType *type)
++{
++    const GValue *codec_data;
++
++    if ((codec_data = gst_structure_get_value(structure, "codec_data")))
++    {
++        GstBuffer *codec_data_buffer = gst_value_get_buffer(codec_data);
++        if (codec_data_buffer)
++        {
++            gsize codec_data_size = gst_buffer_get_size(codec_data_buffer);
++            gpointer codec_data_raw = heap_alloc(codec_data_size);
++            gst_buffer_extract(codec_data_buffer, 0, codec_data_raw, codec_data_size);
++            IMFMediaType_SetBlob(type, &MF_MT_USER_DATA, codec_data_raw, codec_data_size);
++            heap_free(codec_data_raw);
++        }
++    }
++}
++
+ /* caps will be modified to represent the exact type needed for the format */
+ static IMFMediaType* transform_to_media_type(GstCaps *caps)
+ {
+@@ -592,6 +610,39 @@ static IMFMediaType* transform_to_media_type(GstCaps *caps)
+                 gst_structure_remove_field(structure, "codec_data");
+             }
+         }
++        else if (!(strcmp(mime_type, "video/x-wmv")))
++        {
++            gint wmv_version;
++            const char *format;
++
++            if (gst_structure_get_int(info, "wmvversion", &wmv_version))
++            {
++                switch (wmv_version)
++                {
++                    case 1:
++                        IMFMediaType_SetGUID(media_type, &MF_MT_SUBTYPE, &MFVideoFormat_WMV1);
++                        break;
++                    case 2:
++                        IMFMediaType_SetGUID(media_type, &MF_MT_SUBTYPE, &MFVideoFormat_WMV2);
++                        break;
++                    case 3:
++                        IMFMediaType_SetGUID(media_type, &MF_MT_SUBTYPE, &MFVideoFormat_WMV3);
++                        break;
++                    default:
++                        FIXME("Unrecognized wmvversion %d\n", wmv_version);
++                }
++            }
++
++            if ((format = gst_structure_get_string(info, "format")))
++            {
++                if (!(strcmp(format, "WVC1")))
++                    IMFMediaType_SetGUID(media_type, &MF_MT_SUBTYPE, &MFVideoFormat_WVC1);
++                else
++                    FIXME("Unrecognized format %s\n", format);
++            }
++
++            codec_data_to_user_data(info, media_type);
++        }
+         else
+             FIXME("Unrecognized video format %s\n", mime_type);
+     }
+-- 
+2.26.2
+

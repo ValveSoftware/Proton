@@ -1,0 +1,3713 @@
+From 52f1b39a09e8d006e4214c19d6bcc58a0e4da24e Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Fri, 15 May 2020 15:56:05 +0300
+Subject: [PATCH 01/44] netio.sys: Add driver stub.
+
+---
+ configure.ac                  |  1 +
+ dlls/netio.sys/Makefile.in    |  6 +++++
+ dlls/netio.sys/netio.c        | 47 +++++++++++++++++++++++++++++++++++
+ dlls/netio.sys/netio.sys.spec |  1 +
+ 4 files changed, 55 insertions(+)
+ create mode 100644 dlls/netio.sys/Makefile.in
+ create mode 100644 dlls/netio.sys/netio.c
+ create mode 100644 dlls/netio.sys/netio.sys.spec
+
+diff --git a/configure.ac b/configure.ac
+index 5a1f31e3857a..7a4e260df909 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -3671,6 +3671,7 @@ WINE_CONFIG_MAKEFILE(dlls/netapi32)
+ WINE_CONFIG_MAKEFILE(dlls/netapi32/tests)
+ WINE_CONFIG_MAKEFILE(dlls/netcfgx)
+ WINE_CONFIG_MAKEFILE(dlls/netcfgx/tests)
++WINE_CONFIG_MAKEFILE(dlls/netio.sys)
+ WINE_CONFIG_MAKEFILE(dlls/netprofm)
+ WINE_CONFIG_MAKEFILE(dlls/netprofm/tests)
+ WINE_CONFIG_MAKEFILE(dlls/newdev)
+diff --git a/dlls/netio.sys/Makefile.in b/dlls/netio.sys/Makefile.in
+new file mode 100644
+index 000000000000..45bccc797199
+--- /dev/null
++++ b/dlls/netio.sys/Makefile.in
+@@ -0,0 +1,6 @@
++MODULE    = netio.sys
++IMPORTS   = ntoskrnl
++EXTRADLLFLAGS = -mno-cygwin -Wl,--subsystem,native
++
++C_SRCS = \
++	netio.c
+diff --git a/dlls/netio.sys/netio.c b/dlls/netio.sys/netio.c
+new file mode 100644
+index 000000000000..069ac874a226
+--- /dev/null
++++ b/dlls/netio.sys/netio.c
+@@ -0,0 +1,47 @@
++/*
++ * NETIO driver stub.
++ *
++ * Copyright 2020 Paul Gofman <pgofman@codeweavers.com> for Codeweavers
++ *
++ * This library is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU Lesser General Public
++ * License as published by the Free Software Foundation; either
++ * version 2.1 of the License, or (at your option) any later version.
++ *
++ * This library is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++ * Lesser General Public License for more details.
++ *
++ * You should have received a copy of the GNU Lesser General Public
++ * License along with this library; if not, write to the Free Software
++ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
++ */
++
++#include <assert.h>
++#include <stdarg.h>
++#include <stdlib.h>
++
++#include "ntstatus.h"
++#define WIN32_NO_STATUS
++#include "windef.h"
++#include "winioctl.h"
++#include "winternl.h"
++#include "ddk/wdm.h"
++#include "wine/debug.h"
++
++WINE_DEFAULT_DEBUG_CHANNEL(netio);
++
++static void WINAPI driver_unload(DRIVER_OBJECT *driver)
++{
++}
++
++NTSTATUS WINAPI DriverEntry(DRIVER_OBJECT *driver, UNICODE_STRING *path)
++{
++    TRACE("driver %p, path %s.\n", driver, debugstr_w(path->Buffer));
++
++    driver->DriverUnload = driver_unload;
++
++    return STATUS_SUCCESS;
++}
++
+diff --git a/dlls/netio.sys/netio.sys.spec b/dlls/netio.sys/netio.sys.spec
+new file mode 100644
+index 000000000000..792d6005489e
+--- /dev/null
++++ b/dlls/netio.sys/netio.sys.spec
+@@ -0,0 +1 @@
++#
+-- 
+2.26.2
+
+From 955966dc5688f06ff875b0a7b85586afad87d8f9 Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Fri, 15 May 2020 16:30:27 +0300
+Subject: [PATCH 02/44] netio.sys: Add some stubs.
+
+---
+ dlls/netio.sys/netio.c        | 171 ++++++++++++++++++++++++++++++++++
+ dlls/netio.sys/netio.sys.spec |   4 +
+ 2 files changed, 175 insertions(+)
+
+diff --git a/dlls/netio.sys/netio.c b/dlls/netio.sys/netio.c
+index 069ac874a226..f8603623692a 100644
+--- a/dlls/netio.sys/netio.c
++++ b/dlls/netio.sys/netio.c
+@@ -27,13 +27,184 @@
+ #include "windef.h"
+ #include "winioctl.h"
+ #include "winternl.h"
++#include "winsock2.h"
+ #include "ddk/wdm.h"
+ #include "wine/debug.h"
+ 
+ WINE_DEFAULT_DEBUG_CHANNEL(netio);
+ 
++typedef NTSTATUS (* WINAPI PFN_WSK_CLIENT_EVENT)(PVOID ClientContext, ULONG EventType, PVOID Information, SIZE_T InformationLength);
++
++typedef PVOID PWSK_CLIENT;
++
++typedef struct _WSK_CLIENT_DISPATCH {
++  USHORT               Version;
++  USHORT               Reserved;
++  PFN_WSK_CLIENT_EVENT WskClientEvent;
++} WSK_CLIENT_DISPATCH, *PWSK_CLIENT_DISPATCH;
++
++typedef struct _WSK_CLIENT_NPI {
++  PVOID                     ClientContext;
++  const WSK_CLIENT_DISPATCH *Dispatch;
++} WSK_CLIENT_NPI, *PWSK_CLIENT_NPI;
++
++typedef struct _WSK_REGISTRATION {
++  ULONGLONG  ReservedRegistrationState;
++  PVOID      ReservedRegistrationContext;
++  KSPIN_LOCK ReservedRegistrationLock;
++} WSK_REGISTRATION, *PWSK_REGISTRATION;
++
++typedef struct _WSK_BUF {
++  PMDL   Mdl;
++  ULONG  Offset;
++  SIZE_T Length;
++} WSK_BUF, *PWSK_BUF;
++
++typedef struct _WSK_DATA_INDICATION {
++  struct _WSK_DATA_INDICATION *Next;
++  WSK_BUF                     Buffer;
++} WSK_DATA_INDICATION, *PWSK_DATA_INDICATION;
++
++typedef NTSTATUS (* WINAPI PFN_WSK_RECEIVE_EVENT)(
++  PVOID SocketContext,
++  ULONG Flags,
++  PWSK_DATA_INDICATION DataIndication,
++  SIZE_T BytesIndicated,
++  SIZE_T *BytesAccepted
++);
++
++typedef NTSTATUS (* WINAPI PFN_WSK_DISCONNECT_EVENT)(
++  PVOID SocketContext,
++  ULONG Flags
++);
++
++typedef NTSTATUS (* WINAPI PFN_WSK_SEND_BACKLOG_EVENT)(
++  PVOID SocketContext,
++  SIZE_T IdealBacklogSize
++);
++
++typedef struct _WSK_CLIENT_CONNECTION_DISPATCH {
++  PFN_WSK_RECEIVE_EVENT      WskReceiveEvent;
++  PFN_WSK_DISCONNECT_EVENT   WskDisconnectEvent;
++  PFN_WSK_SEND_BACKLOG_EVENT WskSendBacklogEvent;
++} WSK_CLIENT_CONNECTION_DISPATCH, *PWSK_CLIENT_CONNECTION_DISPATCH;
++
++typedef NTSTATUS (* WINAPI PFN_WSK_SOCKET)(
++  PWSK_CLIENT Client,
++  ADDRESS_FAMILY AddressFamily,
++  USHORT SocketType,
++  ULONG Protocol,
++  ULONG Flags,
++  PVOID SocketContext,
++  const VOID *Dispatch,
++  PEPROCESS OwningProcess,
++  PETHREAD OwningThread,
++  PSECURITY_DESCRIPTOR SecurityDescriptor,
++  PIRP Irp
++);
++
++typedef NTSTATUS (* WINAPI PFN_WSK_SOCKET_CONNECT)(
++  PWSK_CLIENT Client,
++  USHORT SocketType,
++  ULONG Protocol,
++  PSOCKADDR LocalAddress,
++  PSOCKADDR RemoteAddress,
++  ULONG Flags,
++  PVOID SocketContext,
++  const WSK_CLIENT_CONNECTION_DISPATCH *Dispatch,
++  PEPROCESS OwningProcess,
++  PETHREAD OwningThread,
++  PSECURITY_DESCRIPTOR SecurityDescriptor,
++  PIRP Irp
++);
++
++typedef NTSTATUS (* WINAPI PFN_WSK_CONTROL_CLIENT)(
++  PWSK_CLIENT Client,
++  ULONG ControlCode,
++  SIZE_T InputSize,
++  PVOID InputBuffer,
++  SIZE_T OutputSize,
++  PVOID OutputBuffer,
++  SIZE_T *OutputSizeReturned,
++  PIRP Irp
++);
++
++typedef NTSTATUS (* WINAPI PFN_WSK_GET_ADDRESS_INFO)(
++  PWSK_CLIENT Client,
++  PUNICODE_STRING NodeName,
++  PUNICODE_STRING ServiceName,
++  ULONG NameSpace,
++  GUID *Provider,
++  PADDRINFOEXW Hints,
++  PADDRINFOEXW *Result,
++  PEPROCESS OwningProcess,
++  PETHREAD OwningThread,
++  PIRP Irp
++);
++
++typedef void (* WINAPI PFN_WSK_FREE_ADDRESS_INFO)(
++  PWSK_CLIENT Client,
++  PADDRINFOEXW AddrInfo
++);
++
++typedef NTSTATUS (* WINAPI PFN_WSK_GET_NAME_INFO)(
++  PWSK_CLIENT Client,
++  PSOCKADDR SockAddr,
++  ULONG SockAddrLength,
++  PUNICODE_STRING NodeName,
++  PUNICODE_STRING ServiceName,
++  ULONG Flags,
++  PEPROCESS OwningProcess,
++  PETHREAD OwningThread,
++  PIRP Irp
++);
++
++typedef struct _WSK_PROVIDER_DISPATCH {
++  USHORT                    Version;
++  USHORT                    Reserved;
++  PFN_WSK_SOCKET            WskSocket;
++  PFN_WSK_SOCKET_CONNECT    WskSocketConnect;
++  PFN_WSK_CONTROL_CLIENT    WskControlClient;
++  PFN_WSK_GET_ADDRESS_INFO  WskGetAddressInfo;
++  PFN_WSK_FREE_ADDRESS_INFO WskFreeAddressInfo;
++  PFN_WSK_GET_NAME_INFO     WskGetNameInfo;
++} WSK_PROVIDER_DISPATCH, *PWSK_PROVIDER_DISPATCH;
++
++typedef struct _WSK_PROVIDER_NPI {
++  PWSK_CLIENT                 Client;
++  const WSK_PROVIDER_DISPATCH *Dispatch;
++} WSK_PROVIDER_NPI, *PWSK_PROVIDER_NPI;
++
++
+ static void WINAPI driver_unload(DRIVER_OBJECT *driver)
+ {
++    TRACE("driver %p.\n", driver);
++}
++
++NTSTATUS WINAPI WskCaptureProviderNPI(PWSK_REGISTRATION WskRegistration, ULONG WaitTimeout,
++        PWSK_PROVIDER_NPI WskProviderNpi)
++{
++    FIXME("WskRegistration %p, WaitTimeout %u, WskProviderNpi %p stub.\n",
++            WskRegistration, WaitTimeout, WskProviderNpi);
++
++    return STATUS_NOT_IMPLEMENTED;
++}
++
++void WINAPI WskReleaseProviderNPI(PWSK_REGISTRATION WskRegistration)
++{
++    FIXME("WskRegistration %p stub.\n", WskRegistration);
++}
++
++NTSTATUS WINAPI WskRegister(PWSK_CLIENT_NPI WskClientNpi, PWSK_REGISTRATION WskRegistration)
++{
++    FIXME("WskClientNpi %p, WskRegistration %p stub.\n", WskClientNpi, WskRegistration);
++
++    return STATUS_NOT_IMPLEMENTED;
++}
++
++void WINAPI WskDeregister(PWSK_REGISTRATION WskRegistration)
++{
++    FIXME("WskRegistration %p stub.\n", WskRegistration);
+ }
+ 
+ NTSTATUS WINAPI DriverEntry(DRIVER_OBJECT *driver, UNICODE_STRING *path)
+diff --git a/dlls/netio.sys/netio.sys.spec b/dlls/netio.sys/netio.sys.spec
+index 792d6005489e..64d8d73951ef 100644
+--- a/dlls/netio.sys/netio.sys.spec
++++ b/dlls/netio.sys/netio.sys.spec
+@@ -1 +1,5 @@
+ #
++@ stdcall WskRegister(ptr ptr)
++@ stdcall WskDeregister(ptr)
++@ stdcall WskCaptureProviderNPI(ptr long ptr)
++@ stdcall WskReleaseProviderNPI(ptr)
+-- 
+2.26.2
+
+From 8cd06e46d11a6248079fae03b24e10f991490b92 Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Fri, 15 May 2020 17:13:50 +0300
+Subject: [PATCH 03/44] wdfldr.sys: Add driver stub.
+
+---
+ configure.ac                    |  1 +
+ dlls/wdfldr.sys/Makefile.in     |  6 +++
+ dlls/wdfldr.sys/wdfldr.c        | 75 +++++++++++++++++++++++++++++++++
+ dlls/wdfldr.sys/wdfldr.sys.spec |  4 ++
+ 4 files changed, 86 insertions(+)
+ create mode 100644 dlls/wdfldr.sys/Makefile.in
+ create mode 100644 dlls/wdfldr.sys/wdfldr.c
+ create mode 100644 dlls/wdfldr.sys/wdfldr.sys.spec
+
+diff --git a/configure.ac b/configure.ac
+index 7a4e260df909..7b5f766264ec 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -3915,6 +3915,7 @@ WINE_CONFIG_MAKEFILE(dlls/wbemdisp/tests)
+ WINE_CONFIG_MAKEFILE(dlls/wbemprox)
+ WINE_CONFIG_MAKEFILE(dlls/wbemprox/tests)
+ WINE_CONFIG_MAKEFILE(dlls/wbemuuid)
++WINE_CONFIG_MAKEFILE(dlls/wdfldr.sys)
+ WINE_CONFIG_MAKEFILE(dlls/wdscore)
+ WINE_CONFIG_MAKEFILE(dlls/webservices)
+ WINE_CONFIG_MAKEFILE(dlls/webservices/tests)
+diff --git a/dlls/wdfldr.sys/Makefile.in b/dlls/wdfldr.sys/Makefile.in
+new file mode 100644
+index 000000000000..515a64768c67
+--- /dev/null
++++ b/dlls/wdfldr.sys/Makefile.in
+@@ -0,0 +1,6 @@
++MODULE    = wdfldr.sys
++IMPORTS   = ntoskrnl
++EXTRADLLFLAGS = -mno-cygwin -Wl,--subsystem,native
++
++C_SRCS = \
++	wdfldr.c
+diff --git a/dlls/wdfldr.sys/wdfldr.c b/dlls/wdfldr.sys/wdfldr.c
+new file mode 100644
+index 000000000000..ed94835e57b2
+--- /dev/null
++++ b/dlls/wdfldr.sys/wdfldr.c
+@@ -0,0 +1,75 @@
++/*
++ * WDFLDR driver stub.
++ *
++ * Copyright 2020 Paul Gofman <pgofman@codeweavers.com> for Codeweavers
++ *
++ * This library is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU Lesser General Public
++ * License as published by the Free Software Foundation; either
++ * version 2.1 of the License, or (at your option) any later version.
++ *
++ * This library is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++ * Lesser General Public License for more details.
++ *
++ * You should have received a copy of the GNU Lesser General Public
++ * License along with this library; if not, write to the Free Software
++ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
++ */
++
++#include <assert.h>
++#include <stdarg.h>
++#include <stdlib.h>
++
++#include "ntstatus.h"
++#define WIN32_NO_STATUS
++#include "windef.h"
++#include "winioctl.h"
++#include "winternl.h"
++#include "ddk/wdm.h"
++#include "wine/debug.h"
++
++WINE_DEFAULT_DEBUG_CHANNEL(wdfldr);
++
++static void WINAPI driver_unload(DRIVER_OBJECT *driver)
++{
++    TRACE("driver %p.\n", driver);
++}
++
++typedef void *WDF_BIND_INFO, *PWDF_BIND_INFO;
++typedef void *WDF_COMPONENT_GLOBALS, *PWDF_COMPONENT_GLOBALS;
++
++NTSTATUS WINAPI WdfVersionBind(
++    PDRIVER_OBJECT DriverObject,
++    PUNICODE_STRING RegistryPath,
++    PWDF_BIND_INFO BindInfo,
++    PWDF_COMPONENT_GLOBALS* ComponentGlobals
++    )
++{
++    FIXME("DriverObject %p, RegistryPath %s, BindInfo %p, ComponentGlobals %p.\n",
++            DriverObject, debugstr_w(RegistryPath->Buffer), BindInfo, ComponentGlobals);
++
++    return STATUS_SUCCESS;
++}
++
++NTSTATUS WINAPI WdfVersionUnbind(
++    PUNICODE_STRING RegistryPath,
++    PWDF_BIND_INFO BindInfo,
++    PWDF_COMPONENT_GLOBALS ComponentGlobals
++    )
++{
++    FIXME("RegistryPath %s, BindInfo %p, ComponentGlobals %p.\n",
++            debugstr_w(RegistryPath->Buffer), BindInfo, ComponentGlobals);
++
++    return STATUS_SUCCESS;
++}
++
++NTSTATUS WINAPI DriverEntry(DRIVER_OBJECT *driver, UNICODE_STRING *path)
++{
++    TRACE("driver %p, path %s.\n", driver, debugstr_w(path->Buffer));
++
++    driver->DriverUnload = driver_unload;
++
++    return STATUS_SUCCESS;
++}
+diff --git a/dlls/wdfldr.sys/wdfldr.sys.spec b/dlls/wdfldr.sys/wdfldr.sys.spec
+new file mode 100644
+index 000000000000..085413b67bba
+--- /dev/null
++++ b/dlls/wdfldr.sys/wdfldr.sys.spec
+@@ -0,0 +1,4 @@
++@ stdcall WdfVersionBind(ptr ptr ptr ptr)
++@ stub WdfVersionBindClass
++@ stdcall WdfVersionUnbind(ptr ptr ptr)
++@ stub WdfVersionUnbindClass
+-- 
+2.26.2
+
+From 33588eba362bded7bc59a009684ade077c6ec9bb Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Fri, 15 May 2020 19:45:59 +0300
+Subject: [PATCH 04/44] ntoskrnl.exe: Add KdRefreshDebuggerNotPresent()
+ function.
+
+---
+ dlls/ntoskrnl.exe/ntoskrnl.c        | 7 +++++++
+ dlls/ntoskrnl.exe/ntoskrnl.exe.spec | 1 +
+ 2 files changed, 8 insertions(+)
+
+diff --git a/dlls/ntoskrnl.exe/ntoskrnl.c b/dlls/ntoskrnl.exe/ntoskrnl.c
+index 77d6ccd38ab5..c5c8a46f3dfb 100644
+--- a/dlls/ntoskrnl.exe/ntoskrnl.c
++++ b/dlls/ntoskrnl.exe/ntoskrnl.c
+@@ -3977,3 +3977,10 @@ BOOLEAN WINAPI RtlIsNtDdiVersionAvailable(ULONG version)
+     FIXME("stub: %d\n", version);
+     return FALSE;
+ }
++
++BOOLEAN WINAPI KdRefreshDebuggerNotPresent(void)
++{
++    TRACE(".\n");
++
++    return !KdDebuggerEnabled;
++}
+diff --git a/dlls/ntoskrnl.exe/ntoskrnl.exe.spec b/dlls/ntoskrnl.exe/ntoskrnl.exe.spec
+index 651fe4852b93..5f084425df54 100644
+--- a/dlls/ntoskrnl.exe/ntoskrnl.exe.spec
++++ b/dlls/ntoskrnl.exe/ntoskrnl.exe.spec
+@@ -517,6 +517,7 @@
+ @ stub KdEnteredDebugger
+ @ stub KdPollBreakIn
+ @ stub KdPowerTransition
++@ stdcall KdRefreshDebuggerNotPresent()
+ @ stub Ke386CallBios
+ @ stdcall Ke386IoSetAccessProcess(ptr long)
+ @ stub Ke386QueryIoAccessMap
+-- 
+2.26.2
+
+From 097bf62f5deb06e3f19201e02d1ffec07f9eeabb Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Fri, 22 May 2020 16:35:51 +0300
+Subject: [PATCH 05/44] include/ddk: Add prototype for
+ KeQueryActiveProcessors().
+
+---
+ include/ddk/wdm.h | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/include/ddk/wdm.h b/include/ddk/wdm.h
+index 707eca0b32f5..5b1f19e4f1a1 100644
+--- a/include/ddk/wdm.h
++++ b/include/ddk/wdm.h
+@@ -1696,6 +1696,7 @@ void      WINAPI KeInitializeSpinLock(KSPIN_LOCK*);
+ void      WINAPI KeInitializeTimerEx(PKTIMER,TIMER_TYPE);
+ void      WINAPI KeInitializeTimer(KTIMER*);
+ void      WINAPI KeLeaveCriticalRegion(void);
++KAFFINITY WINAPI KeQueryActiveProcessors(void);
+ void      WINAPI KeQuerySystemTime(LARGE_INTEGER*);
+ void      WINAPI KeQueryTickCount(LARGE_INTEGER*);
+ ULONG     WINAPI KeQueryTimeIncrement(void);
+-- 
+2.26.2
+
+From 799c55e625319d66b6e549945b96a6798e46b39e Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Fri, 15 May 2020 19:51:53 +0300
+Subject: [PATCH 06/44] ntoskrnl.exe: Add KeQueryActiveProcessorCountEx()
+ function.
+
+---
+ dlls/ntoskrnl.exe/ntoskrnl.c        | 12 +++++++++++
+ dlls/ntoskrnl.exe/ntoskrnl.exe.spec |  1 +
+ dlls/ntoskrnl.exe/tests/driver.c    | 31 +++++++++++++++++++++++++++++
+ include/ddk/wdm.h                   |  1 +
+ 4 files changed, 45 insertions(+)
+
+diff --git a/dlls/ntoskrnl.exe/ntoskrnl.c b/dlls/ntoskrnl.exe/ntoskrnl.c
+index c5c8a46f3dfb..22b1b6a14e08 100644
+--- a/dlls/ntoskrnl.exe/ntoskrnl.c
++++ b/dlls/ntoskrnl.exe/ntoskrnl.c
+@@ -2395,6 +2395,18 @@ KAFFINITY WINAPI KeQueryActiveProcessors( void )
+     return AffinityMask;
+ }
+ 
++ULONG WINAPI KeQueryActiveProcessorCountEx(USHORT group_number)
++{
++    TRACE("group_number %u.\n", group_number);
++
++    if (group_number && group_number != ALL_PROCESSOR_GROUPS)
++    {
++        FIXME("group_number %u not supported.\n", group_number);
++        return 0;
++    }
++
++    return NtCurrentTeb()->Peb->NumberOfProcessors;
++}
+ 
+ /**********************************************************************
+  *           KeQueryInterruptTime   (NTOSKRNL.EXE.@)
+diff --git a/dlls/ntoskrnl.exe/ntoskrnl.exe.spec b/dlls/ntoskrnl.exe/ntoskrnl.exe.spec
+index 5f084425df54..d07c7b7f57b0 100644
+--- a/dlls/ntoskrnl.exe/ntoskrnl.exe.spec
++++ b/dlls/ntoskrnl.exe/ntoskrnl.exe.spec
+@@ -587,6 +587,7 @@
+ @ stub KeProfileInterruptWithSource
+ @ stub KePulseEvent
+ @ stdcall KeQueryActiveProcessors()
++@ stdcall KeQueryActiveProcessorCountEx(long)
+ @ stdcall KeQueryInterruptTime()
+ @ stub KeQueryPriorityThread
+ @ stub KeQueryRuntimeThread
+diff --git a/dlls/ntoskrnl.exe/tests/driver.c b/dlls/ntoskrnl.exe/tests/driver.c
+index 63c81d64e8fe..7d28de01934b 100644
+--- a/dlls/ntoskrnl.exe/tests/driver.c
++++ b/dlls/ntoskrnl.exe/tests/driver.c
+@@ -1758,6 +1758,36 @@ static void test_default_modules(void)
+     ok(dxgmms1, "Failed to find dxgmms1.sys\n");
+ }
+ 
++static void test_affinity(void)
++{
++    ULONG (WINAPI *pKeQueryActiveProcessorCountEx)(USHORT);
++    KAFFINITY (WINAPI *pKeQueryActiveProcessors)(void);
++    ULONG cpu_count, count;
++    KAFFINITY mask;
++
++    pKeQueryActiveProcessorCountEx = get_proc_address("KeQueryActiveProcessorCountEx");
++    if (!pKeQueryActiveProcessorCountEx)
++    {
++        win_skip("KeQueryActiveProcessorCountEx is not available.\n");
++        return;
++    }
++
++    pKeQueryActiveProcessors = get_proc_address("KeQueryActiveProcessors");
++    ok(!!pKeQueryActiveProcessors, "KeQueryActiveProcessors is not available.\n");
++
++    count = pKeQueryActiveProcessorCountEx(1);
++    ok(!count, "Got unexpected count %u.\n", count);
++
++    cpu_count = pKeQueryActiveProcessorCountEx(0);
++    ok(cpu_count, "Got unexpected cpu_count %u.\n", cpu_count);
++
++    count = pKeQueryActiveProcessorCountEx(ALL_PROCESSOR_GROUPS);
++    ok(count == cpu_count, "Got unexpected count %u.\n", count);
++
++    mask = pKeQueryActiveProcessors();
++    ok(mask == ~((~0u) << cpu_count), "Got unexpected mask %#lx.\n", mask);
++}
++
+ static NTSTATUS main_test(DEVICE_OBJECT *device, IRP *irp, IO_STACK_LOCATION *stack)
+ {
+     ULONG length = stack->Parameters.DeviceIoControl.OutputBufferLength;
+@@ -1812,6 +1842,7 @@ static NTSTATUS main_test(DEVICE_OBJECT *device, IRP *irp, IO_STACK_LOCATION *st
+ #if defined(__i386__) || defined(__x86_64__)
+     test_executable_pool();
+ #endif
++    test_affinity();
+ 
+     if (main_test_work_item) return STATUS_UNEXPECTED_IO_ERROR;
+ 
+diff --git a/include/ddk/wdm.h b/include/ddk/wdm.h
+index 5b1f19e4f1a1..790d1a12477e 100644
+--- a/include/ddk/wdm.h
++++ b/include/ddk/wdm.h
+@@ -1696,6 +1696,7 @@ void      WINAPI KeInitializeSpinLock(KSPIN_LOCK*);
+ void      WINAPI KeInitializeTimerEx(PKTIMER,TIMER_TYPE);
+ void      WINAPI KeInitializeTimer(KTIMER*);
+ void      WINAPI KeLeaveCriticalRegion(void);
++ULONG     WINAPI KeQueryActiveProcessorCountEx(USHORT);
+ KAFFINITY WINAPI KeQueryActiveProcessors(void);
+ void      WINAPI KeQuerySystemTime(LARGE_INTEGER*);
+ void      WINAPI KeQueryTickCount(LARGE_INTEGER*);
+-- 
+2.26.2
+
+From 5ef1d45162127630a70b9b8504540060db8ee621 Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Fri, 15 May 2020 20:01:47 +0300
+Subject: [PATCH 07/44] ntoskrnl: Add KeSetSystemAffinityThreadEx() stub.
+
+---
+ dlls/ntoskrnl.exe/ntoskrnl.c        | 23 +++++++++++++++++++++++
+ dlls/ntoskrnl.exe/ntoskrnl.exe.spec |  1 +
+ 2 files changed, 24 insertions(+)
+
+diff --git a/dlls/ntoskrnl.exe/ntoskrnl.c b/dlls/ntoskrnl.exe/ntoskrnl.c
+index 22b1b6a14e08..6c25eddcf050 100644
+--- a/dlls/ntoskrnl.exe/ntoskrnl.c
++++ b/dlls/ntoskrnl.exe/ntoskrnl.c
+@@ -2471,6 +2471,29 @@ VOID WINAPI KeSetSystemAffinityThread(KAFFINITY Affinity)
+     FIXME("(%lx) stub\n", Affinity);
+ }
+ 
++KAFFINITY WINAPI KeSetSystemAffinityThreadEx(KAFFINITY Affinity)
++{
++    GROUP_AFFINITY old, new;
++    NTSTATUS status;
++
++    FIXME("(%#lx) semi-stub\n", Affinity);
++
++    status = NtQueryInformationThread( GetCurrentThread(), ThreadGroupInformation,
++                                                   &old, sizeof(old), NULL );
++    if (status)
++        FIXME("Get affinity, status %#x.\n", status);
++
++    memset(&new, 0, sizeof(new));
++    new.Mask = Affinity;
++
++    status = NtSetInformationThread( GetCurrentThread(), ThreadGroupInformation, &new, sizeof(new) );
++    if (status)
++        FIXME("Set affinity, status %#x.\n", status);
++
++    FIXME("old.Group %#x, old.Mask %#lx.\n", old.Group, old.Mask);
++    return old.Mask;
++}
++
+ 
+ /***********************************************************************
+  *           KeRevertToUserAffinityThread   (NTOSKRNL.EXE.@)
+diff --git a/dlls/ntoskrnl.exe/ntoskrnl.exe.spec b/dlls/ntoskrnl.exe/ntoskrnl.exe.spec
+index d07c7b7f57b0..dff32aebf9e7 100644
+--- a/dlls/ntoskrnl.exe/ntoskrnl.exe.spec
++++ b/dlls/ntoskrnl.exe/ntoskrnl.exe.spec
+@@ -634,6 +634,7 @@
+ @ stdcall KeSetPriorityThread(ptr long)
+ @ stub KeSetProfileIrql
+ @ stdcall KeSetSystemAffinityThread(long)
++@ stdcall KeSetSystemAffinityThreadEx(long)
+ @ stdcall KeSetTargetProcessorDpc(ptr long)
+ @ stub KeSetTimeIncrement
+ @ stub KeSetTimer
+-- 
+2.26.2
+
+From bbe656f543c4f56c77af9d8155ae1b3a1e1f9898 Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Fri, 15 May 2020 20:41:14 +0300
+Subject: [PATCH 08/44] ntoskrnl: Return 0 for unknown msr registers.
+
+---
+ dlls/ntoskrnl.exe/instr.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
+
+diff --git a/dlls/ntoskrnl.exe/instr.c b/dlls/ntoskrnl.exe/instr.c
+index 68140c09ef7b..c1c08aba5e37 100644
+--- a/dlls/ntoskrnl.exe/instr.c
++++ b/dlls/ntoskrnl.exe/instr.c
+@@ -627,7 +627,7 @@ static BYTE *INSTR_GetOperandAddr( CONTEXT *context, BYTE *instr, int addl_instr
+ 
+ static void fake_syscall_function(void)
+ {
+-    TRACE("() stub\n");
++    FIXME("() stub\n");
+ }
+ 
+ 
+@@ -815,7 +815,11 @@ static DWORD emulate_instruction( EXCEPTION_RECORD *rec, CONTEXT *context )
+                 context->Rax = (ULONG)syscall_address;
+                 break;
+             }
+-            default: return ExceptionContinueSearch;
++            default:
++                FIXME("reg %#x returning 0.\n");
++                context->Rdx = 0;
++                context->Rax = 0;
++                break;
+             }
+             context->Rip += prefixlen + 2;
+             return ExceptionContinueExecution;
+-- 
+2.26.2
+
+From aeecb6d74de16083567d2fa04418dd6b664b70b1 Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Fri, 15 May 2020 20:47:40 +0300
+Subject: [PATCH 09/44] ntoskrnl: Add stub for KeRevertToUserAffinityThreadEx()
+ function.
+
+---
+ dlls/ntoskrnl.exe/ntoskrnl.c        | 14 ++++++++++++++
+ dlls/ntoskrnl.exe/ntoskrnl.exe.spec |  1 +
+ dlls/wdfldr.sys/wdfldr.c            |  9 +++++++--
+ 3 files changed, 22 insertions(+), 2 deletions(-)
+
+diff --git a/dlls/ntoskrnl.exe/ntoskrnl.c b/dlls/ntoskrnl.exe/ntoskrnl.c
+index 6c25eddcf050..0440694832ac 100644
+--- a/dlls/ntoskrnl.exe/ntoskrnl.c
++++ b/dlls/ntoskrnl.exe/ntoskrnl.c
+@@ -2503,6 +2503,20 @@ void WINAPI KeRevertToUserAffinityThread(void)
+     FIXME("() stub\n");
+ }
+ 
++void WINAPI KeRevertToUserAffinityThreadEx(KAFFINITY Affinity)
++{
++    GROUP_AFFINITY new;
++    NTSTATUS status;
++
++    FIXME("Affinity %#lx stub.\n", Affinity);
++
++    memset(&new, 0, sizeof(new));
++    new.Mask = Affinity;
++
++    status = NtSetInformationThread( GetCurrentThread(), ThreadGroupInformation, &new, sizeof(new) );
++    if (status)
++        FIXME("Set affinity, status %#x.\n", status);
++}
+ 
+ /***********************************************************************
+  *           IoRegisterFileSystem   (NTOSKRNL.EXE.@)
+diff --git a/dlls/ntoskrnl.exe/ntoskrnl.exe.spec b/dlls/ntoskrnl.exe/ntoskrnl.exe.spec
+index dff32aebf9e7..88b21000614f 100644
+--- a/dlls/ntoskrnl.exe/ntoskrnl.exe.spec
++++ b/dlls/ntoskrnl.exe/ntoskrnl.exe.spec
+@@ -619,6 +619,7 @@
+ @ stdcall KeResetEvent(ptr)
+ @ stub KeRestoreFloatingPointState
+ @ stdcall KeRevertToUserAffinityThread()
++@ stdcall KeRevertToUserAffinityThreadEx(long)
+ @ stub KeRundownQueue
+ @ stub KeSaveFloatingPointState
+ @ stub KeSaveStateForHibernate
+diff --git a/dlls/wdfldr.sys/wdfldr.c b/dlls/wdfldr.sys/wdfldr.c
+index ed94835e57b2..2555b85cc606 100644
+--- a/dlls/wdfldr.sys/wdfldr.c
++++ b/dlls/wdfldr.sys/wdfldr.c
+@@ -37,8 +37,10 @@ static void WINAPI driver_unload(DRIVER_OBJECT *driver)
+     TRACE("driver %p.\n", driver);
+ }
+ 
+-typedef void *WDF_BIND_INFO, *PWDF_BIND_INFO;
+-typedef void *WDF_COMPONENT_GLOBALS, *PWDF_COMPONENT_GLOBALS;
++typedef void *WDF_BIND_INFO;
++typedef WDF_BIND_INFO *PWDF_BIND_INFO;
++typedef void *WDF_COMPONENT_GLOBALS;
++typedef WDF_COMPONENT_GLOBALS *PWDF_COMPONENT_GLOBALS;
+ 
+ NTSTATUS WINAPI WdfVersionBind(
+     PDRIVER_OBJECT DriverObject,
+@@ -50,6 +52,9 @@ NTSTATUS WINAPI WdfVersionBind(
+     FIXME("DriverObject %p, RegistryPath %s, BindInfo %p, ComponentGlobals %p.\n",
+             DriverObject, debugstr_w(RegistryPath->Buffer), BindInfo, ComponentGlobals);
+ 
++    *BindInfo = NULL;
++    *ComponentGlobals = NULL;
++
+     return STATUS_SUCCESS;
+ }
+ 
+-- 
+2.26.2
+
+From 0ee8da4c4110d43081e978a4847fc3c84030a414 Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Fri, 15 May 2020 21:12:30 +0300
+Subject: [PATCH 10/44] ntoskrnl: Add KeGenericCallDpc() semi-stub.
+
+---
+ dlls/ntoskrnl.exe/ntoskrnl.c        | 20 ++++++++++++++++++++
+ dlls/ntoskrnl.exe/ntoskrnl.exe.spec |  1 +
+ 2 files changed, 21 insertions(+)
+
+diff --git a/dlls/ntoskrnl.exe/ntoskrnl.c b/dlls/ntoskrnl.exe/ntoskrnl.c
+index 0440694832ac..16346ea7156b 100644
+--- a/dlls/ntoskrnl.exe/ntoskrnl.c
++++ b/dlls/ntoskrnl.exe/ntoskrnl.c
+@@ -4033,3 +4033,23 @@ BOOLEAN WINAPI KdRefreshDebuggerNotPresent(void)
+ 
+     return !KdDebuggerEnabled;
+ }
++
++typedef struct _DEFERRED_REVERSE_BARRIER
++{
++    ULONG Barrier;
++    ULONG TotalProcessors;
++}
++DEFERRED_REVERSE_BARRIER;
++
++VOID WINAPI KeGenericCallDpc(IN PKDEFERRED_ROUTINE Routine, IN PVOID Context)
++{
++    ULONG ncpus = KeQueryActiveProcessorCountEx(ALL_PROCESSOR_GROUPS);
++    DEFERRED_REVERSE_BARRIER ReverseBarrier;
++
++    FIXME("Routine %p, Context %p sem-stub.\n", Routine, Context);
++
++    ReverseBarrier.Barrier = ncpus;
++    ReverseBarrier.TotalProcessors = ncpus;
++
++    Routine((PKDPC)0xdeadbeef, Context, &ncpus, &ReverseBarrier);
++}
+diff --git a/dlls/ntoskrnl.exe/ntoskrnl.exe.spec b/dlls/ntoskrnl.exe/ntoskrnl.exe.spec
+index 88b21000614f..c855ec36587c 100644
+--- a/dlls/ntoskrnl.exe/ntoskrnl.exe.spec
++++ b/dlls/ntoskrnl.exe/ntoskrnl.exe.spec
+@@ -59,6 +59,7 @@
+ @ stub KeSetTimeUpdateNotifyRoutine
+ @ stub KefAcquireSpinLockAtDpcLevel
+ @ stub KefReleaseSpinLockFromDpcLevel
++@ stdcall KeGenericCallDpc(ptr ptr)
+ @ stub KiAcquireSpinLock
+ @ stub KiReleaseSpinLock
+ @ stdcall -fastcall ObfDereferenceObject(ptr)
+-- 
+2.26.2
+
+From 56bdae4b1d31346e0b26af0a1515f024f8e21e2f Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Fri, 15 May 2020 21:16:32 +0300
+Subject: [PATCH 11/44] ntoskrnl: Add KeSignalCallDpcSynchronize() stub.
+
+---
+ dlls/ntoskrnl.exe/ntoskrnl.c        | 7 +++++++
+ dlls/ntoskrnl.exe/ntoskrnl.exe.spec | 1 +
+ 2 files changed, 8 insertions(+)
+
+diff --git a/dlls/ntoskrnl.exe/ntoskrnl.c b/dlls/ntoskrnl.exe/ntoskrnl.c
+index 16346ea7156b..b3dd71045c80 100644
+--- a/dlls/ntoskrnl.exe/ntoskrnl.c
++++ b/dlls/ntoskrnl.exe/ntoskrnl.c
+@@ -4053,3 +4053,10 @@ VOID WINAPI KeGenericCallDpc(IN PKDEFERRED_ROUTINE Routine, IN PVOID Context)
+ 
+     Routine((PKDPC)0xdeadbeef, Context, &ncpus, &ReverseBarrier);
+ }
++
++
++BOOLEAN NTAPI KeSignalCallDpcSynchronize(PVOID barrier)
++{
++    FIXME("barrier %p stub.\n", barrier);
++    return TRUE;
++}
+diff --git a/dlls/ntoskrnl.exe/ntoskrnl.exe.spec b/dlls/ntoskrnl.exe/ntoskrnl.exe.spec
+index c855ec36587c..ed3f5bc16a65 100644
+--- a/dlls/ntoskrnl.exe/ntoskrnl.exe.spec
++++ b/dlls/ntoskrnl.exe/ntoskrnl.exe.spec
+@@ -60,6 +60,7 @@
+ @ stub KefAcquireSpinLockAtDpcLevel
+ @ stub KefReleaseSpinLockFromDpcLevel
+ @ stdcall KeGenericCallDpc(ptr ptr)
++@ stdcall KeSignalCallDpcSynchronize(ptr)
+ @ stub KiAcquireSpinLock
+ @ stub KiReleaseSpinLock
+ @ stdcall -fastcall ObfDereferenceObject(ptr)
+-- 
+2.26.2
+
+From 1ceb4958266898483f1d0a97ed4a133ed3aa465e Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Fri, 15 May 2020 21:19:52 +0300
+Subject: [PATCH 12/44] ntoskrnl: KeSignalCallDpcDone() stub.
+
+---
+ dlls/ntoskrnl.exe/ntoskrnl.c        | 5 +++++
+ dlls/ntoskrnl.exe/ntoskrnl.exe.spec | 1 +
+ 2 files changed, 6 insertions(+)
+
+diff --git a/dlls/ntoskrnl.exe/ntoskrnl.c b/dlls/ntoskrnl.exe/ntoskrnl.c
+index b3dd71045c80..a6a16644b753 100644
+--- a/dlls/ntoskrnl.exe/ntoskrnl.c
++++ b/dlls/ntoskrnl.exe/ntoskrnl.c
+@@ -4060,3 +4060,8 @@ BOOLEAN NTAPI KeSignalCallDpcSynchronize(PVOID barrier)
+     FIXME("barrier %p stub.\n", barrier);
+     return TRUE;
+ }
++
++VOID WINAPI KeSignalCallDpcDone(IN PVOID barrier)
++{
++    InterlockedDecrement((PLONG)barrier);
++}
+diff --git a/dlls/ntoskrnl.exe/ntoskrnl.exe.spec b/dlls/ntoskrnl.exe/ntoskrnl.exe.spec
+index ed3f5bc16a65..4f9179ef9e5f 100644
+--- a/dlls/ntoskrnl.exe/ntoskrnl.exe.spec
++++ b/dlls/ntoskrnl.exe/ntoskrnl.exe.spec
+@@ -61,6 +61,7 @@
+ @ stub KefReleaseSpinLockFromDpcLevel
+ @ stdcall KeGenericCallDpc(ptr ptr)
+ @ stdcall KeSignalCallDpcSynchronize(ptr)
++@ stdcall KeSignalCallDpcDone(ptr)
+ @ stub KiAcquireSpinLock
+ @ stub KiReleaseSpinLock
+ @ stdcall -fastcall ObfDereferenceObject(ptr)
+-- 
+2.26.2
+
+From b72c3f3ad1bcc12d3884ed9c56160b6f7ca7fba2 Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Fri, 15 May 2020 21:53:42 +0300
+Subject: [PATCH 13/44] ntoskrnl: Add RtlQueryRegistryValuesEx() function
+ alias.
+
+---
+ dlls/ntoskrnl.exe/ntoskrnl.exe.spec | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/dlls/ntoskrnl.exe/ntoskrnl.exe.spec b/dlls/ntoskrnl.exe/ntoskrnl.exe.spec
+index 4f9179ef9e5f..054ce0c5ec55 100644
+--- a/dlls/ntoskrnl.exe/ntoskrnl.exe.spec
++++ b/dlls/ntoskrnl.exe/ntoskrnl.exe.spec
+@@ -1201,6 +1201,7 @@
+ @ stdcall RtlQueryInformationAcl(ptr ptr long long)
+ @ stdcall RtlQueryPackageIdentity(long ptr ptr ptr ptr ptr)
+ @ stdcall RtlQueryRegistryValues(long ptr ptr ptr ptr)
++@ stdcall RtlQueryRegistryValuesEx(long ptr ptr ptr ptr) RtlQueryRegistryValues
+ @ stdcall RtlQueryTimeZoneInformation(ptr)
+ @ stdcall -norelay RtlRaiseException(ptr)
+ @ stdcall RtlRaiseStatus(long)
+-- 
+2.26.2
+
+From 4e3a64c8fa0e64912c64105d432fe2e5fbe58950 Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Fri, 15 May 2020 22:59:20 +0300
+Subject: [PATCH 14/44] winex11.drv: Add some registry values.
+
+---
+ dlls/winex11.drv/display.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/dlls/winex11.drv/display.c b/dlls/winex11.drv/display.c
+index daea434dabf3..b3f0f02eb0ed 100644
+--- a/dlls/winex11.drv/display.c
++++ b/dlls/winex11.drv/display.c
+@@ -433,6 +433,15 @@ static BOOL X11DRV_InitAdapter(HKEY video_hkey, INT video_index, INT gpu_index,
+     if (RegSetValueExW(video_hkey, key_nameW, 0, REG_SZ, (const BYTE *)bufferW, (strlenW(bufferW) + 1) * sizeof(WCHAR)))
+         goto done;
+ 
++    i = 1;
++    if (RegSetValueExW(video_hkey, u"MaxObjectNumber", 0, REG_DWORD, (const BYTE *)&i, sizeof(i)))
++        goto done;
++
++    i = 0;
++    if (RegSetValueExW(video_hkey, u"ObjectNumberList", 0, REG_BINARY, (const BYTE *)&i, sizeof(i)))
++        goto done;
++
++
+     /* Create HKLM\System\CurrentControlSet\Control\Video\{GPU GUID}\{Adapter Index} link to GPU driver */
+     ls = RegCreateKeyExW(HKEY_LOCAL_MACHINE, adapter_keyW, 0, NULL, REG_OPTION_VOLATILE | REG_OPTION_CREATE_LINK,
+                          KEY_ALL_ACCESS, NULL, &hkey, NULL);
+-- 
+2.26.2
+
+From 7b32712c631b12d9e87042f8ba7b71a8c9c30749 Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Sat, 16 May 2020 00:21:28 +0300
+Subject: [PATCH 15/44] ntdll: Add SystemMemoryUsageInformation class to
+ NtQuerySystemInformation().
+
+---
+ dlls/ntdll/nt.c    | 32 ++++++++++++++++++++++++++++++++
+ include/winternl.h | 12 ++++++++++++
+ 2 files changed, 44 insertions(+)
+
+diff --git a/dlls/ntdll/nt.c b/dlls/ntdll/nt.c
+index 52161a3abc28..4d0ee6e01db0 100644
+--- a/dlls/ntdll/nt.c
++++ b/dlls/ntdll/nt.c
+@@ -3338,6 +3338,38 @@ NTSTATUS WINAPI NtQuerySystemInformation(
+         info->CodeIntegrityOptions = CODEINTEGRITY_OPTION_ENABLED;
+         break;
+     }
++    case SystemMemoryUsageInformation:
++    {
++        SYSTEM_PERFORMANCE_INFORMATION perf_info;
++        SYSTEM_BASIC_INFORMATION basic_info;
++        SYSTEM_MEMORY_USAGE_INFORMATION smu;
++
++        FIXME("SystemMemoryUsageInformation semi-stub.\n");
++
++        memset(&smu, 0, sizeof(smu));
++        virtual_get_system_info( &basic_info );
++        get_performance_info( &perf_info );
++
++        smu.TotalPhysicalBytes = (ULONG64)perf_info.TotalCommitLimit * basic_info.PageSize;
++        smu.AvailableBytes = (ULONG64)perf_info.AvailablePages * basic_info.PageSize;
++        smu.ResidentAvailableBytes = smu.AvailableBytes;
++        smu.CommittedBytes = (ULONG64)perf_info.TotalCommittedPages * basic_info.PageSize;
++        smu.SharedCommittedBytes = smu.CommittedBytes / 2;
++        smu.CommitLimitBytes = (ULONG64)perf_info.TotalCommitLimit * basic_info.PageSize;
++        smu.PeakCommitmentBytes = smu.CommittedBytes;
++
++        if ( Length == sizeof(smu) )
++        {
++            if (!SystemInformation) ret = STATUS_ACCESS_VIOLATION;
++            else memcpy( SystemInformation, &smu, sizeof(smu) );
++        }
++        else
++        {
++            FIXME("SystemMemoryUsageInformation incorrect length %#x.\n", Length);
++            ret = STATUS_INFO_LENGTH_MISMATCH;
++        }
++        break;
++    }
+     default:
+ 	FIXME("(0x%08x,%p,0x%08x,%p) stub\n",
+ 	      SystemInformationClass,SystemInformation,Length,ResultLength);
+diff --git a/include/winternl.h b/include/winternl.h
+index e6d66fc0dc8d..76c5b1bd7a17 100644
+--- a/include/winternl.h
++++ b/include/winternl.h
+@@ -974,6 +974,7 @@ typedef enum _SYSTEM_INFORMATION_CLASS {
+     SystemFileCacheInformationEx = 81,
+     SystemCodeIntegrityInformation = 103,
+     SystemLogicalProcessorInformationEx = 107,
++    SystemMemoryUsageInformation = 182,
+     SystemInformationClassMax
+ } SYSTEM_INFORMATION_CLASS, *PSYSTEM_INFORMATION_CLASS;
+ 
+@@ -1826,6 +1827,17 @@ typedef struct _PORT_MESSAGE_HEADER {
+   ULONG SectionSize;
+ } PORT_MESSAGE_HEADER, *PPORT_MESSAGE_HEADER, PORT_MESSAGE, *PPORT_MESSAGE;
+ 
++typedef struct _SYSTEM_MEMORY_USAGE_INFORMATION
++{
++    ULONG64 TotalPhysicalBytes;
++    ULONG64 AvailableBytes;
++    LONG64 ResidentAvailableBytes;
++    ULONG64 CommittedBytes;
++    ULONG64 SharedCommittedBytes;
++    ULONG64 CommitLimitBytes;
++    ULONG64 PeakCommitmentBytes;
++} SYSTEM_MEMORY_USAGE_INFORMATION;
++
+ typedef unsigned short RTL_ATOM, *PRTL_ATOM;
+ 
+ /* Wine doesn't implement atom table as NT does:
+-- 
+2.26.2
+
+From b7b99fd5d817106b04f5e0bf7d8b353d7ef6656b Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Mon, 18 May 2020 17:52:26 +0300
+Subject: [PATCH 16/44] ntdll: Fill more USD fields.
+
+---
+ dlls/ntdll/nt.c     |  1 -
+ dlls/ntdll/thread.c | 30 ++++++++++++++++++++++++++++++
+ server/mapping.c    |  2 ++
+ 3 files changed, 32 insertions(+), 1 deletion(-)
+
+diff --git a/dlls/ntdll/nt.c b/dlls/ntdll/nt.c
+index 4d0ee6e01db0..b6f7b8297932 100644
+--- a/dlls/ntdll/nt.c
++++ b/dlls/ntdll/nt.c
+@@ -1460,7 +1460,6 @@ void fill_cpu_info(void)
+     FIXME("Detecting the number of processors is not supported.\n");
+ #endif
+     NtCurrentTeb()->Peb->NumberOfProcessors = num;
+-
+     get_cpuinfo(&cpu_info);
+ 
+     TRACE("<- CPU arch %d, level %d, rev %d, features 0x%x\n",
+diff --git a/dlls/ntdll/thread.c b/dlls/ntdll/thread.c
+index 6161bdd09318..2b294617bd48 100644
+--- a/dlls/ntdll/thread.c
++++ b/dlls/ntdll/thread.c
+@@ -294,6 +294,36 @@ static void fill_user_shared_data( struct _KUSER_SHARED_DATA *data )
+         features[PF_ARM_V8_CRYPTO_INSTRUCTIONS_AVAILABLE] = !!(sci.FeatureSet & CPU_FEATURE_ARM_V8_CRYPTO);
+         break;
+     }
++    data->ActiveProcessorCount = NtCurrentTeb()->Peb->NumberOfProcessors;
++    data->ActiveGroupCount = 1;
++    data->NXSupportPolicy = 0x2;
++    data->VirtualizationFlags = 0x29;
++    data->TestRetInstruction = 0xc3;
++    data->DismountCount = 4;
++
++    data->Reserved1 = 0x7ffeffff;
++    data->Reserved3 = 0x80000000;
++    data->TraceLogging = 0xe;
++    data->ConsoleSessionForegroundProcessId = 0x4;
++    data->ComPlusPackage = 0xffffffff;
++    data->ActiveConsoleId = 0x1;
++    data->Cookie = 0x195ac68c;
++
++    data->XState.Size = 7;
++    data->XState.Features[0].Offset = 0x340;
++    data->XState.Features[0].Size = 0xfffff800;
++    data->XState.Features[1].Offset = 0;
++    data->XState.Features[1].Size = 0xa0;
++    data->XState.Features[2].Offset = 0xa0;
++    data->XState.Features[2].Size = 0x100;
++    data->XState.Features[3].Offset = 0x240;
++    data->XState.Features[3].Size = 0x100;
++    data->XState.Features[5].Offset = 1;
++    data->XState.Features[5].Size = 0;
++
++    data->ImageNumberLow = 0x8664;
++    data->ImageNumberHigh = 0x8664;
++    data->LangGenerationCount = 0x1;
+ }
+ 
+ HANDLE user_shared_data_init_done(void)
+diff --git a/server/mapping.c b/server/mapping.c
+index 0221c02060e2..650d8bcde7f9 100644
+--- a/server/mapping.c
++++ b/server/mapping.c
+@@ -1056,6 +1056,8 @@ static void kusd_set_current_time( void *private )
+     ptr->TickCount.LowPart = tick_count_low;
+     ptr->TickCount.High1Time = tick_count_high;
+     *(volatile ULONG *)&ptr->TickCountLowDeprecated = tick_count_low;
++
++    ptr->LastSystemRITEventTickCount = tick_count_low;
+ #else
+     __atomic_store_n(&ptr->SystemTime.High2Time, system_time_high, __ATOMIC_SEQ_CST);
+     __atomic_store_n(&ptr->SystemTime.LowPart, system_time_low, __ATOMIC_SEQ_CST);
+-- 
+2.26.2
+
+From 50a05a5b82213eab67743efa356eb7221a21ecf6 Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Mon, 18 May 2020 23:09:18 +0300
+Subject: [PATCH 17/44] wdfldr.sys: Return a valid pointer for ComponentsGlobal
+ from WdfVersionBind().
+
+---
+ dlls/wdfldr.sys/wdfldr.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
+
+diff --git a/dlls/wdfldr.sys/wdfldr.c b/dlls/wdfldr.sys/wdfldr.c
+index 2555b85cc606..4e1329710690 100644
+--- a/dlls/wdfldr.sys/wdfldr.c
++++ b/dlls/wdfldr.sys/wdfldr.c
+@@ -46,14 +46,16 @@ NTSTATUS WINAPI WdfVersionBind(
+     PDRIVER_OBJECT DriverObject,
+     PUNICODE_STRING RegistryPath,
+     PWDF_BIND_INFO BindInfo,
+-    PWDF_COMPONENT_GLOBALS* ComponentGlobals
++    PWDF_COMPONENT_GLOBALS *ComponentGlobals
+     )
+ {
++    static UINT64 wdf_ldr_data[256];
++    static PWDF_COMPONENT_GLOBALS pwdf_ldr_data = (void *)wdf_ldr_data;
++
+     FIXME("DriverObject %p, RegistryPath %s, BindInfo %p, ComponentGlobals %p.\n",
+             DriverObject, debugstr_w(RegistryPath->Buffer), BindInfo, ComponentGlobals);
+ 
+-    *BindInfo = NULL;
+-    *ComponentGlobals = NULL;
++    *ComponentGlobals = pwdf_ldr_data;
+ 
+     return STATUS_SUCCESS;
+ }
+-- 
+2.26.2
+
+From 30f5b1cbfb25db79e5308c2e5848665dba504776 Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Mon, 18 May 2020 23:35:23 +0300
+Subject: [PATCH 18/44] ntoskrnl: Add KeSetTimer() function.
+
+---
+ dlls/ntoskrnl.exe/ntoskrnl.c        | 5 ++++-
+ dlls/ntoskrnl.exe/ntoskrnl.exe.spec | 2 +-
+ dlls/ntoskrnl.exe/sync.c            | 7 +++++++
+ 3 files changed, 12 insertions(+), 2 deletions(-)
+
+diff --git a/dlls/ntoskrnl.exe/ntoskrnl.c b/dlls/ntoskrnl.exe/ntoskrnl.c
+index a6a16644b753..b8386f387361 100644
+--- a/dlls/ntoskrnl.exe/ntoskrnl.c
++++ b/dlls/ntoskrnl.exe/ntoskrnl.c
+@@ -3098,7 +3098,10 @@ MM_SYSTEMSIZE WINAPI MmQuerySystemSize(void)
+  */
+ VOID WINAPI KeInitializeDpc(PRKDPC Dpc, PKDEFERRED_ROUTINE DeferredRoutine, PVOID DeferredContext)
+ {
+-    FIXME("stub\n");
++    FIXME("Dpc %p, DeferredRoutine %p, DeferredContext %p, Dpc->DeferredRoutine %p stub\n", Dpc, DeferredRoutine, DeferredContext, Dpc->DeferredRoutine);
++
++    Dpc->DeferredRoutine = DeferredRoutine;
++    Dpc->DeferredContext = DeferredContext;
+ }
+ 
+ /***********************************************************************
+diff --git a/dlls/ntoskrnl.exe/ntoskrnl.exe.spec b/dlls/ntoskrnl.exe/ntoskrnl.exe.spec
+index 054ce0c5ec55..28711dd2f3c7 100644
+--- a/dlls/ntoskrnl.exe/ntoskrnl.exe.spec
++++ b/dlls/ntoskrnl.exe/ntoskrnl.exe.spec
+@@ -641,7 +641,7 @@
+ @ stdcall KeSetSystemAffinityThreadEx(long)
+ @ stdcall KeSetTargetProcessorDpc(ptr long)
+ @ stub KeSetTimeIncrement
+-@ stub KeSetTimer
++@ stdcall KeSetTimer(ptr int64 ptr)
+ @ stdcall KeSetTimerEx(ptr int64 long ptr)
+ @ stub KeStackAttachProcess
+ @ stub KeSynchronizeExecution
+diff --git a/dlls/ntoskrnl.exe/sync.c b/dlls/ntoskrnl.exe/sync.c
+index 647d427ee5df..a554f62b8c07 100644
+--- a/dlls/ntoskrnl.exe/sync.c
++++ b/dlls/ntoskrnl.exe/sync.c
+@@ -1258,3 +1258,10 @@ void WINAPI IoReleaseRemoveLockAndWaitEx( IO_REMOVE_LOCK *lock, void *tag, ULONG
+     else if (count > 0)
+         KeWaitForSingleObject( &lock->Common.RemoveEvent, Executive, KernelMode, FALSE, NULL );
+ }
++
++BOOLEAN WINAPI KeSetTimer(PKTIMER Timer, LARGE_INTEGER DueTime, PKDPC Dpc)
++{
++    TRACE("Timer %p, DueTime %I64x, Dpc %p.\n", Timer, DueTime.QuadPart, Dpc);
++
++    return KeSetTimerEx( Timer, DueTime, 0, Dpc );
++}
+-- 
+2.26.2
+
+From 84fe01b708d8d5e60070336acd26dd93af1fcac1 Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Tue, 19 May 2020 00:19:03 +0300
+Subject: [PATCH 19/44] ntoskrnl: Support DPC call on KeSetTimerEx().
+
+---
+ dlls/ntoskrnl.exe/ntoskrnl.c |  7 ++++-
+ dlls/ntoskrnl.exe/sync.c     | 51 +++++++++++++++++++++++++++++++-----
+ 2 files changed, 50 insertions(+), 8 deletions(-)
+
+diff --git a/dlls/ntoskrnl.exe/ntoskrnl.c b/dlls/ntoskrnl.exe/ntoskrnl.c
+index b8386f387361..48b3b41df262 100644
+--- a/dlls/ntoskrnl.exe/ntoskrnl.c
++++ b/dlls/ntoskrnl.exe/ntoskrnl.c
+@@ -1079,7 +1079,11 @@ PMDL WINAPI IoAllocateMdl( PVOID va, ULONG length, BOOLEAN secondary, BOOLEAN ch
+ 
+     MmInitializeMdl( mdl, va, length );
+ 
+-    if (!irp) return mdl;
++    if (!irp)
++    {
++        TRACE("returning mdl %p.\n", mdl);
++        return mdl;
++    }
+ 
+     if (secondary)  /* add it at the end */
+     {
+@@ -1092,6 +1096,7 @@ PMDL WINAPI IoAllocateMdl( PVOID va, ULONG length, BOOLEAN secondary, BOOLEAN ch
+         mdl->Next = irp->MdlAddress;
+         irp->MdlAddress = mdl;
+     }
++    TRACE("returning mdl %p.\n", mdl);
+     return mdl;
+ }
+ 
+diff --git a/dlls/ntoskrnl.exe/sync.c b/dlls/ntoskrnl.exe/sync.c
+index a554f62b8c07..5f1c60f295f9 100644
+--- a/dlls/ntoskrnl.exe/sync.c
++++ b/dlls/ntoskrnl.exe/sync.c
+@@ -411,6 +411,33 @@ void WINAPI KeInitializeTimer( KTIMER *timer )
+     KeInitializeTimerEx(timer, NotificationTimer);
+ }
+ 
++/*static void WINAPI ke_timer_complete_proc(LPVOID _dpc, DWORD timer_low, DWORD timer_high)
++{
++    KDPC *dpc = _dpc;
++
++    TRACE("dpc %p, timer_low %#x, timer_high %p.\n", dpc, timer_low, timer_high);
++
++    if (dpc && dpc->DeferredRoutine)
++    {
++        TRACE("Calling dpc->DeferredRoutine %p.\n", dpc->DeferredRoutine);
++        dpc->DeferredRoutine(dpc, dpc->DeferredContext, dpc->SystemArgument1, dpc->SystemArgument2);
++    }
++}*/
++
++VOID CALLBACK ke_timer_complete_proc(PTP_CALLBACK_INSTANCE Instance,  PVOID _dpc, PTP_TIMER Timer)
++{
++    KDPC *dpc = _dpc;
++
++    TRACE("Instance %p, dpc %p, Timer %p.\n", Instance, dpc, Timer);
++
++    if (dpc && dpc->DeferredRoutine)
++    {
++        TRACE("Calling dpc->DeferredRoutine %p, dpc->DeferredContext %p.\n", dpc->DeferredRoutine, dpc->DeferredContext);
++        dpc->DeferredRoutine(dpc, dpc->DeferredContext, dpc->SystemArgument1, dpc->SystemArgument2);
++    }
++    CloseThreadpoolTimer(Timer);
++}
++
+ /***********************************************************************
+  *           KeSetTimerEx (NTOSKRNL.EXE.@)
+  */
+@@ -421,18 +448,28 @@ BOOLEAN WINAPI KeSetTimerEx( KTIMER *timer, LARGE_INTEGER duetime, LONG period,
+     TRACE("timer %p, duetime %s, period %d, dpc %p.\n",
+         timer, wine_dbgstr_longlong(duetime.QuadPart), period, dpc);
+ 
+-    if (dpc)
+-    {
+-        FIXME("Unhandled DPC %p.\n", dpc);
+-        return FALSE;
+-    }
+-
+     EnterCriticalSection( &sync_cs );
+ 
+     ret = timer->Header.Inserted;
+     timer->Header.Inserted = TRUE;
+     timer->Header.WaitListHead.Blink = CreateWaitableTimerW( NULL, timer->Header.Type == TYPE_MANUAL_TIMER, NULL );
+-    SetWaitableTimer( timer->Header.WaitListHead.Blink, &duetime, period, NULL, NULL, FALSE );
++    if (!timer->Header.WaitListHead.Blink)
++        ERR("Could not create waitable timer, GetLastError() %u.\n", GetLastError());
++
++
++    if (!SetWaitableTimer( timer->Header.WaitListHead.Blink, &duetime, period, NULL, NULL, FALSE ))
++        ERR("Could not set waitable timer, GetLastError() %u.\n", GetLastError());
++
++    if (dpc)
++    {
++        PTP_TIMER ptp;
++
++        ptp = CreateThreadpoolTimer(ke_timer_complete_proc, dpc, NULL);
++        if (!ptp)
++            ERR("CreateThreadpoolTimer() failed, GetLastError() %u.\n", GetLastError());
++
++        SetThreadpoolTimer(ptp, (FILETIME *)&duetime, period, 0);
++    }
+ 
+     LeaveCriticalSection( &sync_cs );
+ 
+-- 
+2.26.2
+
+From 4312029ad1cd4a24826c04968242457924b863a4 Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Tue, 19 May 2020 13:13:32 +0300
+Subject: [PATCH 20/44] ntoskrnl: Fix ObRegisterCallbacks() prototype.
+
+---
+ dlls/ntoskrnl.exe/ntoskrnl.c | 10 +++++++++-
+ include/ddk/wdm.h            |  2 +-
+ 2 files changed, 10 insertions(+), 2 deletions(-)
+
+diff --git a/dlls/ntoskrnl.exe/ntoskrnl.c b/dlls/ntoskrnl.exe/ntoskrnl.c
+index 48b3b41df262..90effced4bf2 100644
+--- a/dlls/ntoskrnl.exe/ntoskrnl.c
++++ b/dlls/ntoskrnl.exe/ntoskrnl.c
+@@ -2068,6 +2068,7 @@ NTSTATUS WINAPI ExCreateCallback(PCALLBACK_OBJECT *obj, POBJECT_ATTRIBUTES attr,
+                                  BOOLEAN create, BOOLEAN allow_multiple)
+ {
+     FIXME("(%p, %p, %u, %u): stub\n", obj, attr, create, allow_multiple);
++    FIXME("name %s, RootDirectory %p.\n", debugstr_w(attr->ObjectName->Buffer), attr->RootDirectory);
+ 
+     return STATUS_NOT_IMPLEMENTED;
+ }
+@@ -2829,10 +2830,17 @@ void FASTCALL ObfDereferenceObject( void *obj )
+ /***********************************************************************
+  *           ObRegisterCallbacks (NTOSKRNL.EXE.@)
+  */
+-NTSTATUS WINAPI ObRegisterCallbacks(POB_CALLBACK_REGISTRATION *callBack, void **handle)
++NTSTATUS WINAPI ObRegisterCallbacks(POB_CALLBACK_REGISTRATION callBack, void **handle)
+ {
++    unsigned int i;
++
+     FIXME( "stub: %p %p\n", callBack, handle );
+ 
++    for (i = 0; i < callBack->OperationRegistrationCount; ++i)
++    {
++        TRACE("i %u, type name %s.\n", i, debugstr_w((*callBack->OperationRegistration[i].ObjectType)->name));
++    }
++
+     if(handle)
+         *handle = UlongToHandle(0xdeadbeaf);
+ 
+diff --git a/include/ddk/wdm.h b/include/ddk/wdm.h
+index 790d1a12477e..c8625e5c638c 100644
+--- a/include/ddk/wdm.h
++++ b/include/ddk/wdm.h
+@@ -1737,7 +1737,7 @@ static inline void *MmGetSystemAddressForMdlSafe(MDL *mdl, ULONG priority)
+ void    FASTCALL ObfReferenceObject(void*);
+ void      WINAPI ObDereferenceObject(void*);
+ USHORT    WINAPI ObGetFilterVersion(void);
+-NTSTATUS  WINAPI ObRegisterCallbacks(POB_CALLBACK_REGISTRATION*, void**);
++NTSTATUS  WINAPI ObRegisterCallbacks(POB_CALLBACK_REGISTRATION, void**);
+ NTSTATUS  WINAPI ObReferenceObjectByHandle(HANDLE,ACCESS_MASK,POBJECT_TYPE,KPROCESSOR_MODE,PVOID*,POBJECT_HANDLE_INFORMATION);
+ NTSTATUS  WINAPI ObReferenceObjectByName(UNICODE_STRING*,ULONG,ACCESS_STATE*,ACCESS_MASK,POBJECT_TYPE,KPROCESSOR_MODE,void*,void**);
+ NTSTATUS  WINAPI ObReferenceObjectByPointer(void*,ACCESS_MASK,POBJECT_TYPE,KPROCESSOR_MODE);
+-- 
+2.26.2
+
+From fe50d62f53fc466dc01c323440d0869e607b5a2a Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Tue, 19 May 2020 15:12:17 +0300
+Subject: [PATCH 21/44] ntoskrnl: Add stub for ExRegisterCallback().
+
+---
+ dlls/ntoskrnl.exe/ntoskrnl.c        | 15 +++++++++++++--
+ dlls/ntoskrnl.exe/ntoskrnl.exe.spec |  2 +-
+ 2 files changed, 14 insertions(+), 3 deletions(-)
+
+diff --git a/dlls/ntoskrnl.exe/ntoskrnl.c b/dlls/ntoskrnl.exe/ntoskrnl.c
+index 90effced4bf2..b43b7718bd3c 100644
+--- a/dlls/ntoskrnl.exe/ntoskrnl.c
++++ b/dlls/ntoskrnl.exe/ntoskrnl.c
+@@ -2070,9 +2070,18 @@ NTSTATUS WINAPI ExCreateCallback(PCALLBACK_OBJECT *obj, POBJECT_ATTRIBUTES attr,
+     FIXME("(%p, %p, %u, %u): stub\n", obj, attr, create, allow_multiple);
+     FIXME("name %s, RootDirectory %p.\n", debugstr_w(attr->ObjectName->Buffer), attr->RootDirectory);
+ 
+-    return STATUS_NOT_IMPLEMENTED;
++    return STATUS_SUCCESS;
+ }
+ 
++typedef VOID WINAPI (*PCALLBACK_FUNCTION )(IN PVOID CallbackContext, IN PVOID Argument1, IN PVOID Argument2);
++
++
++PVOID WINAPI ExRegisterCallback(PCALLBACK_OBJECT CallbackObject, PCALLBACK_FUNCTION CallbackFunction, PVOID CallbackContext)
++{
++    FIXME("CallbackObject %p, CallbackFunction %p, CallbackContext %p.\n", CallbackObject, CallbackFunction, CallbackContext);
++
++    return (void *)0xdeadbeef;
++}
+ 
+ /***********************************************************************
+  *           ExFreePool   (NTOSKRNL.EXE.@)
+@@ -2838,7 +2847,8 @@ NTSTATUS WINAPI ObRegisterCallbacks(POB_CALLBACK_REGISTRATION callBack, void **h
+ 
+     for (i = 0; i < callBack->OperationRegistrationCount; ++i)
+     {
+-        TRACE("i %u, type name %s.\n", i, debugstr_w((*callBack->OperationRegistration[i].ObjectType)->name));
++        TRACE("i %u, type name %s, PreOperation %p, PostOperation %p.\n", i, debugstr_w((*callBack->OperationRegistration[i].ObjectType)->name),
++                callBack->OperationRegistration[i].PreOperation, callBack->OperationRegistration[i].PostOperation);
+     }
+ 
+     if(handle)
+@@ -3076,6 +3086,7 @@ PVOID WINAPI MmGetSystemRoutineAddress(PUNICODE_STRING SystemRoutineName)
+         if (!pFunc)
+         {
+            hMod = GetModuleHandleW( halW );
++
+            if (hMod) pFunc = GetProcAddress( hMod, routineNameA.Buffer );
+         }
+         RtlFreeAnsiString( &routineNameA );
+diff --git a/dlls/ntoskrnl.exe/ntoskrnl.exe.spec b/dlls/ntoskrnl.exe/ntoskrnl.exe.spec
+index 28711dd2f3c7..9046c6236134 100644
+--- a/dlls/ntoskrnl.exe/ntoskrnl.exe.spec
++++ b/dlls/ntoskrnl.exe/ntoskrnl.exe.spec
+@@ -183,7 +183,7 @@
+ @ stub ExRaiseException
+ @ stub ExRaiseHardError
+ @ stub ExRaiseStatus
+-@ stub ExRegisterCallback
++@ stdcall ExRegisterCallback(ptr ptr ptr)
+ @ stub ExReinitializeResourceLite
+ @ stdcall ExReleaseResourceForThreadLite(ptr long)
+ @ extern ExSemaphoreObjectType
+-- 
+2.26.2
+
+From c91efd117218bc6bec773e1176fd6af890aa31d9 Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Tue, 19 May 2020 15:19:20 +0300
+Subject: [PATCH 22/44] ntoskrnl: Implement IoReuseIrp() function.
+
+---
+ dlls/netio.sys/netio.c              |  6 ++++--
+ dlls/ntoskrnl.exe/ntoskrnl.c        | 11 +++++++++++
+ dlls/ntoskrnl.exe/ntoskrnl.exe.spec |  2 +-
+ 3 files changed, 16 insertions(+), 3 deletions(-)
+
+diff --git a/dlls/netio.sys/netio.c b/dlls/netio.sys/netio.c
+index f8603623692a..930b1cded25d 100644
+--- a/dlls/netio.sys/netio.c
++++ b/dlls/netio.sys/netio.c
+@@ -187,7 +187,8 @@ NTSTATUS WINAPI WskCaptureProviderNPI(PWSK_REGISTRATION WskRegistration, ULONG W
+     FIXME("WskRegistration %p, WaitTimeout %u, WskProviderNpi %p stub.\n",
+             WskRegistration, WaitTimeout, WskProviderNpi);
+ 
+-    return STATUS_NOT_IMPLEMENTED;
++    //return STATUS_NOT_IMPLEMENTED;
++    return STATUS_SUCCESS;
+ }
+ 
+ void WINAPI WskReleaseProviderNPI(PWSK_REGISTRATION WskRegistration)
+@@ -199,7 +200,8 @@ NTSTATUS WINAPI WskRegister(PWSK_CLIENT_NPI WskClientNpi, PWSK_REGISTRATION WskR
+ {
+     FIXME("WskClientNpi %p, WskRegistration %p stub.\n", WskClientNpi, WskRegistration);
+ 
+-    return STATUS_NOT_IMPLEMENTED;
++    //return STATUS_NOT_IMPLEMENTED;
++    return STATUS_SUCCESS;
+ }
+ 
+ void WINAPI WskDeregister(PWSK_REGISTRATION WskRegistration)
+diff --git a/dlls/ntoskrnl.exe/ntoskrnl.c b/dlls/ntoskrnl.exe/ntoskrnl.c
+index b43b7718bd3c..5c0b03a9eaa0 100644
+--- a/dlls/ntoskrnl.exe/ntoskrnl.c
++++ b/dlls/ntoskrnl.exe/ntoskrnl.c
+@@ -970,6 +970,17 @@ void WINAPI IoInitializeIrp( IRP *irp, USHORT size, CCHAR stack_size )
+             (PIO_STACK_LOCATION)(irp + 1) + stack_size;
+ }
+ 
++void WINAPI IoReuseIrp(PIRP irp, NTSTATUS Iostatus)
++{
++    UCHAR AllocationFlags;
++
++    TRACE("irp %p, Iostatus %#x.\n", irp, Iostatus);
++
++    AllocationFlags = irp->AllocationFlags;
++    IoInitializeIrp(irp, irp->Size, irp->StackCount);
++    irp->AllocationFlags = AllocationFlags;
++    irp->IoStatus.u.Status = Iostatus;
++}
+ 
+ /***********************************************************************
+  *           IoInitializeTimer   (NTOSKRNL.EXE.@)
+diff --git a/dlls/ntoskrnl.exe/ntoskrnl.exe.spec b/dlls/ntoskrnl.exe/ntoskrnl.exe.spec
+index 9046c6236134..8d6c5d9f83ce 100644
+--- a/dlls/ntoskrnl.exe/ntoskrnl.exe.spec
++++ b/dlls/ntoskrnl.exe/ntoskrnl.exe.spec
+@@ -462,7 +462,7 @@
+ @ stub IoReportTargetDeviceChange
+ @ stub IoReportTargetDeviceChangeAsynchronous
+ @ stub IoRequestDeviceEject
+-@ stub IoReuseIrp
++@ stdcall IoReuseIrp(ptr long)
+ @ stub IoSetCompletionRoutineEx
+ @ stdcall IoSetDeviceInterfaceState(ptr long)
+ @ stub IoSetDeviceToVerify
+-- 
+2.26.2
+
+From b0c92fec5ebddb006bc8c2f57060b687ec189b28 Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Tue, 19 May 2020 16:06:04 +0300
+Subject: [PATCH 23/44] netio.sys: Add WSK provider stub interface.
+
+---
+ dlls/netio.sys/netio.c | 113 +++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 113 insertions(+)
+
+diff --git a/dlls/netio.sys/netio.c b/dlls/netio.sys/netio.c
+index 930b1cded25d..89410557a4c4 100644
+--- a/dlls/netio.sys/netio.c
++++ b/dlls/netio.sys/netio.c
+@@ -181,6 +181,118 @@ static void WINAPI driver_unload(DRIVER_OBJECT *driver)
+     TRACE("driver %p.\n", driver);
+ }
+ 
++NTSTATUS WINAPI wsk_socket(
++  PWSK_CLIENT Client,
++  ADDRESS_FAMILY AddressFamily,
++  USHORT SocketType,
++  ULONG Protocol,
++  ULONG Flags,
++  PVOID SocketContext,
++  const VOID *Dispatch,
++  PEPROCESS OwningProcess,
++  PETHREAD OwningThread,
++  PSECURITY_DESCRIPTOR SecurityDescriptor,
++  PIRP Irp
++)
++{
++    FIXME("Client %p, AddressFamily %#x, SocketType %#x, Protocol %#x, Flags %#x, SocketContext %p, Dispatch %p,"
++            "OwningProcess %p, OwningThread %p, SecurityDescriptor %p, Irp %p.\n",
++            Client, AddressFamily, SocketType, Protocol, Flags, SocketContext, Dispatch, OwningProcess,
++            OwningThread, SecurityDescriptor, Irp);
++
++    return STATUS_NOT_IMPLEMENTED;
++}
++
++NTSTATUS WINAPI wsk_socket_connect(
++  PWSK_CLIENT Client,
++  USHORT SocketType,
++  ULONG Protocol,
++  PSOCKADDR LocalAddress,
++  PSOCKADDR RemoteAddress,
++  ULONG Flags,
++  PVOID SocketContext,
++  const WSK_CLIENT_CONNECTION_DISPATCH *Dispatch,
++  PEPROCESS OwningProcess,
++  PETHREAD OwningThread,
++  PSECURITY_DESCRIPTOR SecurityDescriptor,
++  PIRP Irp
++)
++{
++    FIXME("stub.\n");
++
++    return STATUS_NOT_IMPLEMENTED;
++}
++
++NTSTATUS WINAPI wsk_control_client(
++  PWSK_CLIENT Client,
++  ULONG ControlCode,
++  SIZE_T InputSize,
++  PVOID InputBuffer,
++  SIZE_T OutputSize,
++  PVOID OutputBuffer,
++  SIZE_T *OutputSizeReturned,
++  PIRP Irp
++)
++{
++    FIXME("stub.\n");
++
++    return STATUS_NOT_IMPLEMENTED;
++}
++
++NTSTATUS WINAPI wsk_get_address_info(
++  PWSK_CLIENT Client,
++  PUNICODE_STRING NodeName,
++  PUNICODE_STRING ServiceName,
++  ULONG NameSpace,
++  GUID *Provider,
++  PADDRINFOEXW Hints,
++  PADDRINFOEXW *Result,
++  PEPROCESS OwningProcess,
++  PETHREAD OwningThread,
++  PIRP Irp
++)
++{
++    FIXME("stub.\n");
++
++    return STATUS_NOT_IMPLEMENTED;
++}
++
++void WINAPI wsk_free_address_info(
++  PWSK_CLIENT Client,
++  PADDRINFOEXW AddrInfo
++)
++{
++    FIXME("stub.\n");
++}
++
++NTSTATUS WINAPI wsk_get_name_info(
++  PWSK_CLIENT Client,
++  PSOCKADDR SockAddr,
++  ULONG SockAddrLength,
++  PUNICODE_STRING NodeName,
++  PUNICODE_STRING ServiceName,
++  ULONG Flags,
++  PEPROCESS OwningProcess,
++  PETHREAD OwningThread,
++  PIRP Irp
++)
++{
++    FIXME("stub.\n");
++
++    return STATUS_NOT_IMPLEMENTED;
++}
++
++static const WSK_PROVIDER_DISPATCH wsk_dispatch =
++{
++    0x100, 0,
++    wsk_socket,
++    wsk_socket_connect,
++    wsk_control_client,
++    wsk_get_address_info,
++    wsk_free_address_info,
++    wsk_get_name_info,
++};
++
+ NTSTATUS WINAPI WskCaptureProviderNPI(PWSK_REGISTRATION WskRegistration, ULONG WaitTimeout,
+         PWSK_PROVIDER_NPI WskProviderNpi)
+ {
+@@ -188,6 +300,7 @@ NTSTATUS WINAPI WskCaptureProviderNPI(PWSK_REGISTRATION WskRegistration, ULONG W
+             WskRegistration, WaitTimeout, WskProviderNpi);
+ 
+     //return STATUS_NOT_IMPLEMENTED;
++    WskProviderNpi->Dispatch = &wsk_dispatch;
+     return STATUS_SUCCESS;
+ }
+ 
+-- 
+2.26.2
+
+From d3c133a8e4fc31f940077f5c24508bc9d34c923d Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Tue, 19 May 2020 16:50:40 +0300
+Subject: [PATCH 24/44] ntoskrnl: Add stub for ExUnregisterCallback().
+
+---
+ dlls/ntoskrnl.exe/ntoskrnl.c        | 5 +++++
+ dlls/ntoskrnl.exe/ntoskrnl.exe.spec | 2 +-
+ 2 files changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/dlls/ntoskrnl.exe/ntoskrnl.c b/dlls/ntoskrnl.exe/ntoskrnl.c
+index 5c0b03a9eaa0..0304e72a7e92 100644
+--- a/dlls/ntoskrnl.exe/ntoskrnl.c
++++ b/dlls/ntoskrnl.exe/ntoskrnl.c
+@@ -2094,6 +2094,11 @@ PVOID WINAPI ExRegisterCallback(PCALLBACK_OBJECT CallbackObject, PCALLBACK_FUNCT
+     return (void *)0xdeadbeef;
+ }
+ 
++void WINAPI ExUnregisterCallback(PVOID CallbackRegistration)
++{
++    FIXME("CallbackRegistration %p stub.\n", CallbackRegistration);
++}
++
+ /***********************************************************************
+  *           ExFreePool   (NTOSKRNL.EXE.@)
+  */
+diff --git a/dlls/ntoskrnl.exe/ntoskrnl.exe.spec b/dlls/ntoskrnl.exe/ntoskrnl.exe.spec
+index 8d6c5d9f83ce..ac461d75ea9a 100644
+--- a/dlls/ntoskrnl.exe/ntoskrnl.exe.spec
++++ b/dlls/ntoskrnl.exe/ntoskrnl.exe.spec
+@@ -191,7 +191,7 @@
+ @ stdcall ExSetTimerResolution(long long)
+ @ stub ExSystemExceptionFilter
+ @ stdcall ExSystemTimeToLocalTime(ptr ptr) RtlSystemTimeToLocalTime
+-@ stub ExUnregisterCallback
++@ stdcall ExUnregisterCallback(ptr)
+ @ stdcall ExUuidCreate(ptr)
+ @ stub ExVerifySuite
+ @ stub ExWindowStationObjectType
+-- 
+2.26.2
+
+From 74c13e8b0d1552b1da09d8ac00c2669fe6c8d72d Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Tue, 19 May 2020 21:16:05 +0300
+Subject: [PATCH 25/44] netio.sys: Implement WSK_GET_ADDRESS_INFO() function.
+
+---
+ dlls/netio.sys/Makefile.in |  2 +-
+ dlls/netio.sys/netio.c     | 85 +++++++++++++++++++++++++++++++++++---
+ 2 files changed, 81 insertions(+), 6 deletions(-)
+
+diff --git a/dlls/netio.sys/Makefile.in b/dlls/netio.sys/Makefile.in
+index 45bccc797199..a78a0e20550b 100644
+--- a/dlls/netio.sys/Makefile.in
++++ b/dlls/netio.sys/Makefile.in
+@@ -1,5 +1,5 @@
+ MODULE    = netio.sys
+-IMPORTS   = ntoskrnl
++IMPORTS   = ntoskrnl ws2_32
+ EXTRADLLFLAGS = -mno-cygwin -Wl,--subsystem,native
+ 
+ C_SRCS = \
+diff --git a/dlls/netio.sys/netio.c b/dlls/netio.sys/netio.c
+index 89410557a4c4..9e8605560c3d 100644
+--- a/dlls/netio.sys/netio.c
++++ b/dlls/netio.sys/netio.c
+@@ -22,6 +22,9 @@
+ #include <stdarg.h>
+ #include <stdlib.h>
+ 
++#define NONAMELESSUNION
++#define NONAMELESSSTRUCT
++
+ #include "ntstatus.h"
+ #define WIN32_NO_STATUS
+ #include "windef.h"
+@@ -30,6 +33,8 @@
+ #include "winsock2.h"
+ #include "ddk/wdm.h"
+ #include "wine/debug.h"
++#include "winsock2.h"
++#include "ws2tcpip.h"
+ 
+ WINE_DEFAULT_DEBUG_CHANNEL(netio);
+ 
+@@ -181,6 +186,45 @@ static void WINAPI driver_unload(DRIVER_OBJECT *driver)
+     TRACE("driver %p.\n", driver);
+ }
+ 
++static NTSTATUS sock_error_to_ntstatus( DWORD err )
++{
++    switch (err)
++    {
++    case 0:                    return STATUS_SUCCESS;
++    case WSAEBADF:             return STATUS_INVALID_HANDLE;
++    case WSAEACCES:            return STATUS_ACCESS_DENIED;
++    case WSAEFAULT:            return STATUS_NO_MEMORY;
++    case WSAEINVAL:            return STATUS_INVALID_PARAMETER;
++    case WSAEMFILE:            return STATUS_TOO_MANY_OPENED_FILES;
++    case WSAEWOULDBLOCK:       return STATUS_CANT_WAIT;
++    case WSAEINPROGRESS:       return STATUS_PENDING;
++    case WSAEALREADY:          return STATUS_NETWORK_BUSY;
++    case WSAENOTSOCK:          return STATUS_OBJECT_TYPE_MISMATCH;
++    case WSAEDESTADDRREQ:      return STATUS_INVALID_PARAMETER;
++    case WSAEMSGSIZE:          return STATUS_BUFFER_OVERFLOW;
++    case WSAEPROTONOSUPPORT:
++    case WSAESOCKTNOSUPPORT:
++    case WSAEPFNOSUPPORT:
++    case WSAEAFNOSUPPORT:
++    case WSAEPROTOTYPE:        return STATUS_NOT_SUPPORTED;
++    case WSAENOPROTOOPT:       return STATUS_INVALID_PARAMETER;
++    case WSAEOPNOTSUPP:        return STATUS_NOT_SUPPORTED;
++    case WSAEADDRINUSE:        return STATUS_ADDRESS_ALREADY_ASSOCIATED;
++    case WSAEADDRNOTAVAIL:     return STATUS_INVALID_PARAMETER;
++    case WSAECONNREFUSED:      return STATUS_CONNECTION_REFUSED;
++    case WSAESHUTDOWN:         return STATUS_PIPE_DISCONNECTED;
++    case WSAENOTCONN:          return STATUS_CONNECTION_DISCONNECTED;
++    case WSAETIMEDOUT:         return STATUS_IO_TIMEOUT;
++    case WSAENETUNREACH:       return STATUS_NETWORK_UNREACHABLE;
++    case WSAENETDOWN:          return STATUS_NETWORK_BUSY;
++    case WSAECONNRESET:        return STATUS_CONNECTION_RESET;
++    case WSAECONNABORTED:      return STATUS_CONNECTION_ABORTED;
++    default:
++        FIXME("unmapped error %u\n", err);
++        return STATUS_UNSUCCESSFUL;
++    }
++}
++
+ NTSTATUS WINAPI wsk_socket(
+   PWSK_CLIENT Client,
+   ADDRESS_FAMILY AddressFamily,
+@@ -252,9 +296,32 @@ NTSTATUS WINAPI wsk_get_address_info(
+   PIRP Irp
+ )
+ {
+-    FIXME("stub.\n");
+-
+-    return STATUS_NOT_IMPLEMENTED;
++    WSK_CLIENT_NPI *client = Client;
++    NTSTATUS status;
++    INT ret;
++
++    FIXME("Client %p, NodeName %s, ServiceName %s, Result %p, Irp %p, ret %p stub.\n", Client,
++            debugstr_w(NodeName ? NodeName->Buffer : NULL), debugstr_w(ServiceName ? ServiceName->Buffer : NULL),
++            Result, Irp, __builtin_return_address (0));
++
++    ret = GetAddrInfoExW(NodeName ? NodeName->Buffer : NULL, ServiceName ? ServiceName->Buffer : NULL, NameSpace,
++            Provider, Hints, Result, NULL, NULL, NULL, NULL);
++
++    status = sock_error_to_ntstatus(ret);
++    if (Irp)
++    {
++        Irp->IoStatus.Information = status;
++        Irp->IoStatus.u.Status = status;
++        TRACE("irp->CurrentLocation %u, irp->Tail.Overlay.s.u2.CurrentStackLocation %u.\n", Irp->CurrentLocation, Irp->Tail.Overlay.s.u2.CurrentStackLocation);
++        --Irp->CurrentLocation;
++        --Irp->Tail.Overlay.s.u2.CurrentStackLocation;
++        IoCompleteRequest(Irp, IO_NO_INCREMENT);
++    }
++
++    if (client && client->Dispatch && client->Dispatch->WskClientEvent)
++        FIXME("WskClientEvent %p.\n", client->Dispatch->WskClientEvent);
++
++    return status;
+ }
+ 
+ void WINAPI wsk_free_address_info(
+@@ -299,8 +366,8 @@ NTSTATUS WINAPI WskCaptureProviderNPI(PWSK_REGISTRATION WskRegistration, ULONG W
+     FIXME("WskRegistration %p, WaitTimeout %u, WskProviderNpi %p stub.\n",
+             WskRegistration, WaitTimeout, WskProviderNpi);
+ 
+-    //return STATUS_NOT_IMPLEMENTED;
+     WskProviderNpi->Dispatch = &wsk_dispatch;
++    WskProviderNpi->Client = WskRegistration->ReservedRegistrationContext;
+     return STATUS_SUCCESS;
+ }
+ 
+@@ -311,9 +378,17 @@ void WINAPI WskReleaseProviderNPI(PWSK_REGISTRATION WskRegistration)
+ 
+ NTSTATUS WINAPI WskRegister(PWSK_CLIENT_NPI WskClientNpi, PWSK_REGISTRATION WskRegistration)
+ {
++    WORD version = MAKEWORD( 2, 2 );
++    WSADATA data;
++
+     FIXME("WskClientNpi %p, WskRegistration %p stub.\n", WskClientNpi, WskRegistration);
++    TRACE("WskClientNpi->Dispatch %p, WskClientNpi->Dispatch->WskClientEvent %p.\n", WskClientNpi->Dispatch, WskClientNpi->Dispatch->WskClientEvent);
++
++    if (WSAStartup(version, &data))
++        return STATUS_INTERNAL_ERROR;
++
++    WskRegistration->ReservedRegistrationContext = WskClientNpi;
+ 
+-    //return STATUS_NOT_IMPLEMENTED;
+     return STATUS_SUCCESS;
+ }
+ 
+-- 
+2.26.2
+
+From 8811820d65dc84994f960be0a6e72cd3637a9af6 Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Wed, 20 May 2020 00:15:31 +0300
+Subject: [PATCH 26/44] netio.sys: Partially implement wsk_socket() function.
+
+---
+ dlls/netio.sys/netio.c | 354 ++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 346 insertions(+), 8 deletions(-)
+
+diff --git a/dlls/netio.sys/netio.c b/dlls/netio.sys/netio.c
+index 9e8605560c3d..55ae12e2b89e 100644
+--- a/dlls/netio.sys/netio.c
++++ b/dlls/netio.sys/netio.c
+@@ -35,6 +35,7 @@
+ #include "wine/debug.h"
+ #include "winsock2.h"
+ #include "ws2tcpip.h"
++#include "wine/heap.h"
+ 
+ WINE_DEFAULT_DEBUG_CHANNEL(netio);
+ 
+@@ -164,6 +165,201 @@ typedef NTSTATUS (* WINAPI PFN_WSK_GET_NAME_INFO)(
+   PIRP Irp
+ );
+ 
++typedef struct _WSK_SOCKET {
++    const VOID *Dispatch;
++    SOCKET s;
++    void *socket_client_context;
++} WSK_SOCKET, *PWSK_SOCKET;
++
++
++typedef enum _WSK_CONTROL_SOCKET_TYPE
++{
++     WskSetOption,
++     WskGetOption,
++     WskIoctl,
++} WSK_CONTROL_SOCKET_TYPE;
++
++typedef NTSTATUS (* WINAPI PFN_WSK_CONTROL_SOCKET)(
++  PWSK_SOCKET Socket,
++  WSK_CONTROL_SOCKET_TYPE RequestType,
++  ULONG ControlCode,
++  ULONG Level,
++  SIZE_T InputSize,
++  PVOID InputBuffer,
++  SIZE_T OutputSize,
++  PVOID OutputBuffer,
++  SIZE_T *OutputSizeReturned,
++  PIRP Irp
++);
++
++typedef NTSTATUS (* WINAPI PFN_WSK_CLOSE_SOCKET)(
++  PWSK_SOCKET Socket,
++  PIRP Irp
++);
++
++typedef NTSTATUS (* WINAPI PFN_WSK_BIND)(
++  PWSK_SOCKET Socket,
++  PSOCKADDR LocalAddress,
++  ULONG Flags,
++  PIRP Irp
++);
++
++typedef NTSTATUS (* WINAPI PFN_WSK_ACCEPT)(
++  PWSK_SOCKET ListenSocket,
++  ULONG Flags,
++  PVOID AcceptSocketContext,
++  const WSK_CLIENT_CONNECTION_DISPATCH *AcceptSocketDispatch,
++  PSOCKADDR LocalAddress,
++  PSOCKADDR RemoteAddress,
++  PIRP Irp
++);
++
++typedef NTSTATUS (* WINAPI PFN_WSK_CONNECT)(
++  PWSK_SOCKET Socket,
++  PSOCKADDR RemoteAddress,
++  ULONG Flags,
++  PIRP Irp
++);
++
++typedef NTSTATUS (* WINAPI PFN_WSK_LISTEN)(
++  PWSK_SOCKET Socket,
++  PIRP Irp
++);
++
++typedef NTSTATUS (* WINAPI PFN_WSK_SEND)(
++  PWSK_SOCKET Socket,
++  PWSK_BUF Buffer,
++  ULONG Flags,
++  PIRP Irp
++);
++
++typedef NTSTATUS (* WINAPI PFN_WSK_RECEIVE)(
++  PWSK_SOCKET Socket,
++  PWSK_BUF Buffer,
++  ULONG Flags,
++  PIRP Irp
++);
++
++typedef NTSTATUS (* WINAPI PFN_WSK_DISCONNECT)(
++  PWSK_SOCKET Socket,
++  PWSK_BUF Buffer,
++  ULONG Flags,
++  PIRP Irp
++);
++
++typedef NTSTATUS (* WINAPI PFN_WSK_GET_LOCAL_ADDRESS)(
++  PWSK_SOCKET Socket,
++  PSOCKADDR LocalAddress,
++  PIRP Irp
++);
++
++
++typedef NTSTATUS (* WINAPI PFN_WSK_GET_REMOTE_ADDRESS)(
++  PWSK_SOCKET Socket,
++  PSOCKADDR RemoteAddress,
++  PIRP Irp
++);
++
++typedef NTSTATUS (* WINAPI PFN_WSK_CONNECT_EX)(
++  PWSK_SOCKET Socket,
++  PSOCKADDR RemoteAddress,
++  PWSK_BUF Buffer,
++  ULONG Flags,
++  PIRP Irp
++);
++
++typedef void *PFN_WSK_SEND_EX;
++typedef void *PFN_WSK_RECEIVE_EX;
++
++typedef NTSTATUS (* WINAPI PFN_WSK_RELEASE_DATA_INDICATION_LIST)(
++  PWSK_SOCKET          Socket,
++  PWSK_DATA_INDICATION DataIndication
++);
++
++typedef struct _WSACMSGHDR {
++  SIZE_T cmsg_len;
++  INT    cmsg_level;
++  INT    cmsg_type;
++} WSACMSGHDR, *PWSACMSGHDR, *LPWSACMSGHDR;
++
++typedef WSACMSGHDR PCMSGHDR;
++
++typedef NTSTATUS (* WINAPI PFN_WSK_SEND_TO)(
++  PWSK_SOCKET Socket,
++  PWSK_BUF Buffer,
++  ULONG Flags,
++  PSOCKADDR RemoteAddress,
++  ULONG ControlInfoLength,
++  PCMSGHDR ControlInfo,
++  PIRP Irp
++);
++
++typedef NTSTATUS (* WINAPI PFN_WSK_RECEIVE_FROM)(
++  PWSK_SOCKET Socket,
++  PWSK_BUF Buffer,
++  ULONG Flags,
++  PSOCKADDR RemoteAddress,
++  PULONG ControlLength,
++  PCMSGHDR ControlInfo,
++  PULONG ControlFlags,
++  PIRP Irp
++);
++
++typedef struct _WSK_DATAGRAM_INDICATION {
++  struct _WSK_DATAGRAM_INDICATION *Next;
++  WSK_BUF                         Buffer;
++  PCMSGHDR                        ControlInfo;
++  ULONG                           ControlInfoLength;
++  PSOCKADDR                       RemoteAddress;
++} WSK_DATAGRAM_INDICATION, *PWSK_DATAGRAM_INDICATION;
++
++typedef NTSTATUS (* WINAPI PFN_WSK_RELEASE_DATAGRAM_INDICATION_LIST)(
++  PWSK_SOCKET Socket,
++  PWSK_DATAGRAM_INDICATION DatagramIndication
++);
++
++typedef void *PFN_WSK_SEND_MESSAGES;
++
++typedef struct _WSK_INSPECT_ID {
++  ULONG_PTR Key;
++  ULONG     SerialNumber;
++} WSK_INSPECT_ID, *PWSK_INSPECT_ID;
++
++typedef enum _WSK_INSPECT_ACTION
++{
++    WskInspectReject,
++    WskInspectAccept,
++} WSK_INSPECT_ACTION;
++
++typedef NTSTATUS (* WINAPI PFN_WSK_INSPECT_COMPLETE)(
++  PWSK_SOCKET ListenSocket,
++  PWSK_INSPECT_ID InspectID,
++  WSK_INSPECT_ACTION Action,
++  PIRP Irp
++);
++
++typedef struct _WSK_PROVIDER_BASIC_DISPATCH {
++  PFN_WSK_CONTROL_SOCKET WskControlSocket;
++  PFN_WSK_CLOSE_SOCKET   WskCloseSocket;
++} WSK_PROVIDER_BASIC_DISPATCH, *PWSK_PROVIDER_BASIC_DISPATCH;
++
++typedef struct _WSK_PROVIDER_STREAM_DISPATCH {
++  WSK_PROVIDER_BASIC_DISPATCH          Basic;
++  PFN_WSK_BIND                         WskBind;
++  PFN_WSK_ACCEPT                       WskAccept;
++  PFN_WSK_CONNECT                      WskConnect;
++  PFN_WSK_LISTEN                       WskListen;
++  PFN_WSK_SEND                         WskSend;
++  PFN_WSK_RECEIVE                      WskReceive;
++  PFN_WSK_DISCONNECT                   WskDisconnect;
++  PFN_WSK_RELEASE_DATA_INDICATION_LIST WskRelease;
++  PFN_WSK_GET_LOCAL_ADDRESS            WskGetLocalAddress;
++  PFN_WSK_GET_REMOTE_ADDRESS           WskGetRemoteAddress;
++  PFN_WSK_CONNECT_EX                   WskConnectEx;
++  PFN_WSK_SEND_EX                      WskSendEx;
++  PFN_WSK_RECEIVE_EX                   WskReceiveEx;
++} WSK_PROVIDER_STREAM_DISPATCH, *PWSK_PROVIDER_STREAM_DISPATCH;
++
+ typedef struct _WSK_PROVIDER_DISPATCH {
+   USHORT                    Version;
+   USHORT                    Reserved;
+@@ -175,6 +371,21 @@ typedef struct _WSK_PROVIDER_DISPATCH {
+   PFN_WSK_GET_NAME_INFO     WskGetNameInfo;
+ } WSK_PROVIDER_DISPATCH, *PWSK_PROVIDER_DISPATCH;
+ 
++typedef struct _WSK_PROVIDER_CONNECTION_DISPATCH {
++  WSK_PROVIDER_BASIC_DISPATCH          Basic;
++  PFN_WSK_BIND                         WskBind;
++  PFN_WSK_CONNECT                      WskConnect;
++  PFN_WSK_GET_LOCAL_ADDRESS            WskGetLocalAddress;
++  PFN_WSK_GET_REMOTE_ADDRESS           WskGetRemoteAddress;
++  PFN_WSK_SEND                         WskSend;
++  PFN_WSK_RECEIVE                      WskReceive;
++  PFN_WSK_DISCONNECT                   WskDisconnect;
++  PFN_WSK_RELEASE_DATA_INDICATION_LIST WskRelease;
++  PFN_WSK_CONNECT_EX                   WskConnectEx;
++  PFN_WSK_SEND_EX                      WskSendEx;
++  PFN_WSK_RECEIVE_EX                   WskReceiveEx;
++} WSK_PROVIDER_CONNECTION_DISPATCH, *PWSK_PROVIDER_CONNECTION_DISPATCH;
++
+ typedef struct _WSK_PROVIDER_NPI {
+   PWSK_CLIENT                 Client;
+   const WSK_PROVIDER_DISPATCH *Dispatch;
+@@ -225,6 +436,97 @@ static NTSTATUS sock_error_to_ntstatus( DWORD err )
+     }
+ }
+ 
++typedef struct _WSK_PROVIDER_DATAGRAM_DISPATCH {
++  WSK_PROVIDER_BASIC_DISPATCH              Basic;
++  PFN_WSK_BIND                             WskBind;
++  PFN_WSK_SEND_TO                          WskSendTo;
++  PFN_WSK_RECEIVE_FROM                     WskReceiveFrom;
++  PFN_WSK_RELEASE_DATAGRAM_INDICATION_LIST WskRelease;
++  PFN_WSK_GET_LOCAL_ADDRESS                WskGetLocalAddress;
++  PFN_WSK_SEND_MESSAGES                    WskSendMessages;
++} WSK_PROVIDER_DATAGRAM_DISPATCH, *PWSK_PROVIDER_DATAGRAM_DISPATCH;
++
++typedef struct _WSK_PROVIDER_LISTEN_DISPATCH {
++  WSK_PROVIDER_BASIC_DISPATCH Basic;
++  PFN_WSK_BIND                WskBind;
++  PFN_WSK_ACCEPT              WskAccept;
++  PFN_WSK_INSPECT_COMPLETE    WskInspectComplete;
++  PFN_WSK_GET_LOCAL_ADDRESS   WskGetLocalAddress;
++} WSK_PROVIDER_LISTEN_DISPATCH, *PWSK_PROVIDER_LISTEN_DISPATCH;
++
++#define WSK_FLAG_BASIC_SOCKET      0x00000000
++#define WSK_FLAG_LISTEN_SOCKET     0x00000001
++#define WSK_FLAG_CONNECTION_SOCKET 0x00000002
++#define WSK_FLAG_DATAGRAM_SOCKET   0x00000004
++#define WSK_FLAG_STREAM_SOCKET     0x00000008
++
++static void dispatch_irp(IRP *irp, NTSTATUS status)
++{
++    irp->IoStatus.u.Status = status;
++    --irp->CurrentLocation;
++    --irp->Tail.Overlay.s.u2.CurrentStackLocation;
++    IoCompleteRequest(irp, IO_NO_INCREMENT);
++}
++
++static NTSTATUS WINAPI wsk_control_socket(PWSK_SOCKET Socket, WSK_CONTROL_SOCKET_TYPE RequestType,
++        ULONG ControlCode, ULONG Level, SIZE_T InputSize, PVOID InputBuffer, SIZE_T OutputSize,
++        PVOID OutputBuffer, SIZE_T *OutputSizeReturned, PIRP Irp)
++{
++    FIXME("stub.\n");
++
++    return STATUS_NOT_IMPLEMENTED;
++}
++
++static NTSTATUS WINAPI wsk_close_socket(PWSK_SOCKET Socket, PIRP Irp)
++{
++    FIXME("stub.\n");
++
++    return STATUS_NOT_IMPLEMENTED;
++}
++
++static NTSTATUS WINAPI wsk_bind(PWSK_SOCKET Socket, PSOCKADDR LocalAddress, ULONG Flags, PIRP Irp)
++{
++    FIXME("stub.\n");
++
++    return STATUS_NOT_IMPLEMENTED;
++}
++
++static NTSTATUS WINAPI wsk_accept(PWSK_SOCKET ListenSocket, ULONG Flags, PVOID AcceptSocketContext,
++        const WSK_CLIENT_CONNECTION_DISPATCH *AcceptSocketDispatch,
++        PSOCKADDR LocalAddress, PSOCKADDR RemoteAddress, PIRP Irp)
++{
++    FIXME("stub.\n");
++
++    return STATUS_NOT_IMPLEMENTED;
++}
++
++static NTSTATUS WINAPI wsk_inspect_complete(PWSK_SOCKET ListenSocket, PWSK_INSPECT_ID InspectID,
++        WSK_INSPECT_ACTION Action, PIRP Irp)
++{
++    FIXME("stub.\n");
++
++    return STATUS_NOT_IMPLEMENTED;
++}
++
++NTSTATUS WINAPI wsk_get_local_address(PWSK_SOCKET Socket, PSOCKADDR LocalAddress, PIRP Irp)
++{
++    FIXME("stub.\n");
++
++    return STATUS_NOT_IMPLEMENTED;
++}
++
++static const WSK_PROVIDER_LISTEN_DISPATCH wsk_provider_listen_dispatch =
++{
++    {
++        wsk_control_socket,
++        wsk_close_socket,
++    },
++    wsk_bind,
++    wsk_accept,
++    wsk_inspect_complete,
++    wsk_get_local_address,
++};
++
+ NTSTATUS WINAPI wsk_socket(
+   PWSK_CLIENT Client,
+   ADDRESS_FAMILY AddressFamily,
+@@ -236,15 +538,54 @@ NTSTATUS WINAPI wsk_socket(
+   PEPROCESS OwningProcess,
+   PETHREAD OwningThread,
+   PSECURITY_DESCRIPTOR SecurityDescriptor,
+-  PIRP Irp
++  PIRP irp
+ )
+ {
++    WSK_SOCKET *socket;
++    NTSTATUS status;
++    SOCKET s;
++
+     FIXME("Client %p, AddressFamily %#x, SocketType %#x, Protocol %#x, Flags %#x, SocketContext %p, Dispatch %p,"
+             "OwningProcess %p, OwningThread %p, SecurityDescriptor %p, Irp %p.\n",
+             Client, AddressFamily, SocketType, Protocol, Flags, SocketContext, Dispatch, OwningProcess,
+-            OwningThread, SecurityDescriptor, Irp);
++            OwningThread, SecurityDescriptor, irp);
+ 
+-    return STATUS_NOT_IMPLEMENTED;
++    if ((s = WSASocketW(AddressFamily, SocketType, Protocol, NULL, 0, 0)) == INVALID_SOCKET)
++    {
++        status = sock_error_to_ntstatus(WSAGetLastError());
++        goto done;
++    }
++
++    socket = heap_alloc(sizeof(*socket));
++    if (!socket)
++    {
++        status = STATUS_NO_MEMORY;
++        closesocket(s);
++        goto done;
++    }
++    socket->s = s;
++    socket->socket_client_context = SocketContext;
++
++    switch (Flags)
++    {
++        case WSK_FLAG_LISTEN_SOCKET:
++            socket->Dispatch = &wsk_provider_listen_dispatch;
++            break;
++
++        default:
++            FIXME("Flags %#x not implemented.\n", Flags);
++            closesocket(s);
++            heap_free(socket);
++            status = STATUS_NOT_IMPLEMENTED;
++            goto done;
++    }
++
++    irp->IoStatus.Information = (ULONG_PTR)socket;
++    status = STATUS_SUCCESS;
++
++done:
++    dispatch_irp(irp, status);
++    return status;
+ }
+ 
+ NTSTATUS WINAPI wsk_socket_connect(
+@@ -308,14 +649,11 @@ NTSTATUS WINAPI wsk_get_address_info(
+             Provider, Hints, Result, NULL, NULL, NULL, NULL);
+ 
+     status = sock_error_to_ntstatus(ret);
++
+     if (Irp)
+     {
+         Irp->IoStatus.Information = status;
+-        Irp->IoStatus.u.Status = status;
+-        TRACE("irp->CurrentLocation %u, irp->Tail.Overlay.s.u2.CurrentStackLocation %u.\n", Irp->CurrentLocation, Irp->Tail.Overlay.s.u2.CurrentStackLocation);
+-        --Irp->CurrentLocation;
+-        --Irp->Tail.Overlay.s.u2.CurrentStackLocation;
+-        IoCompleteRequest(Irp, IO_NO_INCREMENT);
++        dispatch_irp(Irp, status);
+     }
+ 
+     if (client && client->Dispatch && client->Dispatch->WskClientEvent)
+-- 
+2.26.2
+
+From 834997e7ca93f221821600e5469011aa74c18dee Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Wed, 20 May 2020 00:15:58 +0300
+Subject: [PATCH 27/44] netio.sys: Implement wsk_bind() function.
+
+---
+ dlls/netio.sys/netio.c | 17 ++++++++++++++---
+ 1 file changed, 14 insertions(+), 3 deletions(-)
+
+diff --git a/dlls/netio.sys/netio.c b/dlls/netio.sys/netio.c
+index 55ae12e2b89e..75a38b0fc632 100644
+--- a/dlls/netio.sys/netio.c
++++ b/dlls/netio.sys/netio.c
+@@ -484,11 +484,22 @@ static NTSTATUS WINAPI wsk_close_socket(PWSK_SOCKET Socket, PIRP Irp)
+     return STATUS_NOT_IMPLEMENTED;
+ }
+ 
+-static NTSTATUS WINAPI wsk_bind(PWSK_SOCKET Socket, PSOCKADDR LocalAddress, ULONG Flags, PIRP Irp)
++static NTSTATUS WINAPI wsk_bind(PWSK_SOCKET socket, PSOCKADDR local_address, ULONG flags, PIRP irp)
+ {
+-    FIXME("stub.\n");
++    NTSTATUS status;
+ 
+-    return STATUS_NOT_IMPLEMENTED;
++    TRACE("socket %p, local_address %p, flags %p, irp %p.\n",
++            socket, local_address, flags, irp);
++
++    if (bind(socket->s, local_address, sizeof(*local_address)))
++        status = sock_error_to_ntstatus(WSAGetLastError());
++    else
++        status = STATUS_SUCCESS;
++
++    TRACE("status %#x.\n", status);
++    irp->IoStatus.Information = status;
++    dispatch_irp(irp, status);
++    return status;
+ }
+ 
+ static NTSTATUS WINAPI wsk_accept(PWSK_SOCKET ListenSocket, ULONG Flags, PVOID AcceptSocketContext,
+-- 
+2.26.2
+
+From 02345f538339ad75a778b20f57095a4f18b5976a Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Wed, 20 May 2020 00:46:32 +0300
+Subject: [PATCH 28/44] netio.sys: Implement wsk_free_address_info() function.
+
+---
+ dlls/netio.sys/netio.c | 13 ++++++++++---
+ 1 file changed, 10 insertions(+), 3 deletions(-)
+
+diff --git a/dlls/netio.sys/netio.c b/dlls/netio.sys/netio.c
+index 75a38b0fc632..468d502248cc 100644
+--- a/dlls/netio.sys/netio.c
++++ b/dlls/netio.sys/netio.c
+@@ -674,11 +674,18 @@ NTSTATUS WINAPI wsk_get_address_info(
+ }
+ 
+ void WINAPI wsk_free_address_info(
+-  PWSK_CLIENT Client,
+-  PADDRINFOEXW AddrInfo
++  PWSK_CLIENT client_,
++  PADDRINFOEXW addr_info
+ )
+ {
+-    FIXME("stub.\n");
++    WSK_CLIENT_NPI *client = client_;
++
++    TRACE("client %p, addr_info %p.\n", client, addr_info);
++
++    FreeAddrInfoExW(addr_info);
++
++    if (client && client->Dispatch && client->Dispatch->WskClientEvent)
++        FIXME("WskClientEvent %p.\n", client->Dispatch->WskClientEvent);
+ }
+ 
+ NTSTATUS WINAPI wsk_get_name_info(
+-- 
+2.26.2
+
+From 2ef770c63aa2dc55f010748702d7569ff5277b1b Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Wed, 20 May 2020 00:54:36 +0300
+Subject: [PATCH 29/44] netio.sys: Implement wsl_close_socket() function.
+
+---
+ dlls/netio.sys/netio.c | 17 +++++++++++++----
+ 1 file changed, 13 insertions(+), 4 deletions(-)
+
+diff --git a/dlls/netio.sys/netio.c b/dlls/netio.sys/netio.c
+index 468d502248cc..3e2c8e342240 100644
+--- a/dlls/netio.sys/netio.c
++++ b/dlls/netio.sys/netio.c
+@@ -477,11 +477,21 @@ static NTSTATUS WINAPI wsk_control_socket(PWSK_SOCKET Socket, WSK_CONTROL_SOCKET
+     return STATUS_NOT_IMPLEMENTED;
+ }
+ 
+-static NTSTATUS WINAPI wsk_close_socket(PWSK_SOCKET Socket, PIRP Irp)
++static NTSTATUS WINAPI wsk_close_socket(PWSK_SOCKET socket, PIRP irp)
+ {
+-    FIXME("stub.\n");
++    NTSTATUS status;
+ 
+-    return STATUS_NOT_IMPLEMENTED;
++    TRACE("socket %p, irp %p.\n", socket, irp);
++
++    if (closesocket(socket->s))
++        status = sock_error_to_ntstatus(WSAGetLastError());
++    else
++        status = STATUS_SUCCESS;
++
++    heap_free(socket);
++
++    dispatch_irp(irp, status);
++    return status;
+ }
+ 
+ static NTSTATUS WINAPI wsk_bind(PWSK_SOCKET socket, PSOCKADDR local_address, ULONG flags, PIRP irp)
+@@ -660,7 +670,6 @@ NTSTATUS WINAPI wsk_get_address_info(
+             Provider, Hints, Result, NULL, NULL, NULL, NULL);
+ 
+     status = sock_error_to_ntstatus(ret);
+-
+     if (Irp)
+     {
+         Irp->IoStatus.Information = status;
+-- 
+2.26.2
+
+From cff6c3099f29e470c5e0f240f2a874f852e55849 Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Wed, 20 May 2020 15:08:06 +0300
+Subject: [PATCH 30/44] wdldr.sys: Add WDF_BIND_INFO structure definition.
+
+---
+ dlls/wdfldr.sys/wdfldr.c | 36 ++++++++++++++++++++++++++++++++++--
+ 1 file changed, 34 insertions(+), 2 deletions(-)
+
+diff --git a/dlls/wdfldr.sys/wdfldr.c b/dlls/wdfldr.sys/wdfldr.c
+index 4e1329710690..c7a321dd55dd 100644
+--- a/dlls/wdfldr.sys/wdfldr.c
++++ b/dlls/wdfldr.sys/wdfldr.c
+@@ -37,11 +37,33 @@ static void WINAPI driver_unload(DRIVER_OBJECT *driver)
+     TRACE("driver %p.\n", driver);
+ }
+ 
+-typedef void *WDF_BIND_INFO;
+-typedef WDF_BIND_INFO *PWDF_BIND_INFO;
+ typedef void *WDF_COMPONENT_GLOBALS;
+ typedef WDF_COMPONENT_GLOBALS *PWDF_COMPONENT_GLOBALS;
+ 
++typedef VOID (* WINAPI WDFFUNC)(VOID);
++
++typedef ULONG WDF_MAJOR_VERSION;
++typedef ULONG WDF_MINOR_VERSION;
++typedef ULONG WDF_BUILD_NUMBER;
++
++typedef struct _WDF_VERSION
++{
++    WDF_MAJOR_VERSION  Major;
++    WDF_MINOR_VERSION  Minor;
++    WDF_BUILD_NUMBER   Build;
++} WDF_VERSION;
++
++typedef struct _WDF_BIND_INFO
++{
++    ULONG              Size;
++    PWCHAR             Component;
++    WDF_VERSION        Version;
++    ULONG              FuncCount;
++    WDFFUNC *FuncTable;
++
++    PVOID              Module;
++} WDF_BIND_INFO, * PWDF_BIND_INFO;
++
+ NTSTATUS WINAPI WdfVersionBind(
+     PDRIVER_OBJECT DriverObject,
+     PUNICODE_STRING RegistryPath,
+@@ -54,9 +76,19 @@ NTSTATUS WINAPI WdfVersionBind(
+ 
+     FIXME("DriverObject %p, RegistryPath %s, BindInfo %p, ComponentGlobals %p.\n",
+             DriverObject, debugstr_w(RegistryPath->Buffer), BindInfo, ComponentGlobals);
++    FIXME("BindInfo Size %#lx, Component %s, Version %u.%u.%u, FuncCount %u, f[0] %p.\n", BindInfo->Size, debugstr_w(BindInfo->Component),
++            BindInfo->Version.Major, BindInfo->Version.Minor, BindInfo->Version.Build, BindInfo->FuncCount, BindInfo->FuncTable[0]);
++
++    /*{
++        unsigned int i;
++
++        for (i = 0; i < BindInfo->FuncCount; ++i)
++            BindInfo->FuncTable[i] = (void *)0xfeeddeadbeef;
++    }*/
+ 
+     *ComponentGlobals = pwdf_ldr_data;
+ 
++
+     return STATUS_SUCCESS;
+ }
+ 
+-- 
+2.26.2
+
+From df0678f0c0604643bf62a9f15cf3ac15a5a4ae80 Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Wed, 20 May 2020 16:09:32 +0300
+Subject: [PATCH 31/44] ntoskrnl: Close TP timer in KeCancelTimer().
+
+---
+ dlls/ntoskrnl.exe/sync.c | 14 +++++++++++++-
+ 1 file changed, 13 insertions(+), 1 deletion(-)
+
+diff --git a/dlls/ntoskrnl.exe/sync.c b/dlls/ntoskrnl.exe/sync.c
+index 5f1c60f295f9..a81ebb6886d8 100644
+--- a/dlls/ntoskrnl.exe/sync.c
++++ b/dlls/ntoskrnl.exe/sync.c
+@@ -430,11 +430,15 @@ VOID CALLBACK ke_timer_complete_proc(PTP_CALLBACK_INSTANCE Instance,  PVOID _dpc
+ 
+     TRACE("Instance %p, dpc %p, Timer %p.\n", Instance, dpc, Timer);
+ 
++    if (dpc)
++        dpc->SystemArgument1 = NULL;
++
+     if (dpc && dpc->DeferredRoutine)
+     {
+         TRACE("Calling dpc->DeferredRoutine %p, dpc->DeferredContext %p.\n", dpc->DeferredRoutine, dpc->DeferredContext);
+         dpc->DeferredRoutine(dpc, dpc->DeferredContext, dpc->SystemArgument1, dpc->SystemArgument2);
+     }
++
+     CloseThreadpoolTimer(Timer);
+ }
+ 
+@@ -464,7 +468,9 @@ BOOLEAN WINAPI KeSetTimerEx( KTIMER *timer, LARGE_INTEGER duetime, LONG period,
+     {
+         PTP_TIMER ptp;
+ 
+-        ptp = CreateThreadpoolTimer(ke_timer_complete_proc, dpc, NULL);
++        dpc->SystemArgument1 = ptp = CreateThreadpoolTimer(ke_timer_complete_proc, dpc, NULL);
++        timer->Dpc = dpc;
++
+         if (!ptp)
+             ERR("CreateThreadpoolTimer() failed, GetLastError() %u.\n", GetLastError());
+ 
+@@ -483,6 +489,12 @@ BOOLEAN WINAPI KeCancelTimer( KTIMER *timer )
+     TRACE("timer %p.\n", timer);
+ 
+     EnterCriticalSection( &sync_cs );
++    if (timer->Dpc && timer->Dpc->SystemArgument1)
++    {
++        CloseThreadpoolTimer(timer->Dpc->SystemArgument1);
++        timer->Dpc->SystemArgument1 = NULL;
++    }
++
+     ret = timer->Header.Inserted;
+     timer->Header.Inserted = FALSE;
+     CloseHandle(timer->Header.WaitListHead.Blink);
+-- 
+2.26.2
+
+From 7565638df2379c0b5b4b664fbff0db7e2617277d Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Wed, 20 May 2020 16:56:20 +0300
+Subject: [PATCH 32/44] netio.sys: Add stub for
+ WskQueryProviderCharacteristics().
+
+---
+ dlls/netio.sys/netio.c        | 26 +++++++++++++++++++++-----
+ dlls/netio.sys/netio.sys.spec |  1 +
+ 2 files changed, 22 insertions(+), 5 deletions(-)
+
+diff --git a/dlls/netio.sys/netio.c b/dlls/netio.sys/netio.c
+index 3e2c8e342240..95d348879d90 100644
+--- a/dlls/netio.sys/netio.c
++++ b/dlls/netio.sys/netio.c
+@@ -498,8 +498,8 @@ static NTSTATUS WINAPI wsk_bind(PWSK_SOCKET socket, PSOCKADDR local_address, ULO
+ {
+     NTSTATUS status;
+ 
+-    TRACE("socket %p, local_address %p, flags %p, irp %p.\n",
+-            socket, local_address, flags, irp);
++    TRACE("socket %p, local_address %p, flags %#x, irp %p, ret %p.\n",
++            socket, local_address, flags, irp, __builtin_return_address(0));
+ 
+     if (bind(socket->s, local_address, sizeof(*local_address)))
+         status = sock_error_to_ntstatus(WSAGetLastError());
+@@ -567,9 +567,9 @@ NTSTATUS WINAPI wsk_socket(
+     SOCKET s;
+ 
+     FIXME("Client %p, AddressFamily %#x, SocketType %#x, Protocol %#x, Flags %#x, SocketContext %p, Dispatch %p,"
+-            "OwningProcess %p, OwningThread %p, SecurityDescriptor %p, Irp %p.\n",
++            "OwningProcess %p, OwningThread %p, SecurityDescriptor %p, Irp %p, ret %p.\n",
+             Client, AddressFamily, SocketType, Protocol, Flags, SocketContext, Dispatch, OwningProcess,
+-            OwningThread, SecurityDescriptor, irp);
++            OwningThread, SecurityDescriptor, irp, __builtin_return_address(0));
+ 
+     if ((s = WSASocketW(AddressFamily, SocketType, Protocol, NULL, 0, 0)) == INVALID_SOCKET)
+     {
+@@ -747,7 +747,8 @@ NTSTATUS WINAPI WskRegister(PWSK_CLIENT_NPI WskClientNpi, PWSK_REGISTRATION WskR
+     WSADATA data;
+ 
+     FIXME("WskClientNpi %p, WskRegistration %p stub.\n", WskClientNpi, WskRegistration);
+-    TRACE("WskClientNpi->Dispatch %p, WskClientNpi->Dispatch->WskClientEvent %p.\n", WskClientNpi->Dispatch, WskClientNpi->Dispatch->WskClientEvent);
++    TRACE("WskClientNpi->Dispatch %p, version %#x, WskClientNpi->Dispatch->WskClientEvent %p.\n",
++            WskClientNpi->Dispatch, WskClientNpi->Dispatch->Version, WskClientNpi->Dispatch->WskClientEvent);
+ 
+     if (WSAStartup(version, &data))
+         return STATUS_INTERNAL_ERROR;
+@@ -762,6 +763,21 @@ void WINAPI WskDeregister(PWSK_REGISTRATION WskRegistration)
+     FIXME("WskRegistration %p stub.\n", WskRegistration);
+ }
+ 
++typedef struct _WSK_PROVIDER_CHARACTERISTICS {
++  USHORT HighestVersion;
++  USHORT LowestVersion;
++} WSK_PROVIDER_CHARACTERISTICS, *PWSK_PROVIDER_CHARACTERISTICS;
++
++NTSTATUS WskQueryProviderCharacteristics(
++  PWSK_REGISTRATION             WskRegistration,
++  PWSK_PROVIDER_CHARACTERISTICS WskProviderCharacteristics
++)
++{
++    FIXME("stub.\n");
++
++    return STATUS_NOT_IMPLEMENTED;
++}
++
+ NTSTATUS WINAPI DriverEntry(DRIVER_OBJECT *driver, UNICODE_STRING *path)
+ {
+     TRACE("driver %p, path %s.\n", driver, debugstr_w(path->Buffer));
+diff --git a/dlls/netio.sys/netio.sys.spec b/dlls/netio.sys/netio.sys.spec
+index 64d8d73951ef..3c92789d466c 100644
+--- a/dlls/netio.sys/netio.sys.spec
++++ b/dlls/netio.sys/netio.sys.spec
+@@ -3,3 +3,4 @@
+ @ stdcall WskDeregister(ptr)
+ @ stdcall WskCaptureProviderNPI(ptr long ptr)
+ @ stdcall WskReleaseProviderNPI(ptr)
++@ stdcall WskQueryProviderCharacteristics(ptr ptr)
+-- 
+2.26.2
+
+From a8ddadb77b269989c7752bddb5e32cf60e010bab Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Wed, 20 May 2020 21:18:20 +0300
+Subject: [PATCH 33/44] netio.sys: Implement wsk_accept() function.
+
+---
+ dlls/netio.sys/netio.c | 176 +++++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 170 insertions(+), 6 deletions(-)
+
+diff --git a/dlls/netio.sys/netio.c b/dlls/netio.sys/netio.c
+index 95d348879d90..b8d1c1e73f12 100644
+--- a/dlls/netio.sys/netio.c
++++ b/dlls/netio.sys/netio.c
+@@ -169,6 +169,8 @@ typedef struct _WSK_SOCKET {
+     const VOID *Dispatch;
+     SOCKET s;
+     void *socket_client_context;
++    int socket_type;
++    ULONG flags;
+ } WSK_SOCKET, *PWSK_SOCKET;
+ 
+ 
+@@ -460,6 +462,8 @@ typedef struct _WSK_PROVIDER_LISTEN_DISPATCH {
+ #define WSK_FLAG_DATAGRAM_SOCKET   0x00000004
+ #define WSK_FLAG_STREAM_SOCKET     0x00000008
+ 
++static const WSK_PROVIDER_CONNECTION_DISPATCH wsk_provider_connection_dispatch;
++
+ static void dispatch_irp(IRP *irp, NTSTATUS status)
+ {
+     irp->IoStatus.u.Status = status;
+@@ -503,6 +507,8 @@ static NTSTATUS WINAPI wsk_bind(PWSK_SOCKET socket, PSOCKADDR local_address, ULO
+ 
+     if (bind(socket->s, local_address, sizeof(*local_address)))
+         status = sock_error_to_ntstatus(WSAGetLastError());
++    else if (socket->flags & WSK_FLAG_LISTEN_SOCKET && listen(socket->s, 10))
++        status = sock_error_to_ntstatus(WSAGetLastError());
+     else
+         status = STATUS_SUCCESS;
+ 
+@@ -512,13 +518,86 @@ static NTSTATUS WINAPI wsk_bind(PWSK_SOCKET socket, PSOCKADDR local_address, ULO
+     return status;
+ }
+ 
+-static NTSTATUS WINAPI wsk_accept(PWSK_SOCKET ListenSocket, ULONG Flags, PVOID AcceptSocketContext,
+-        const WSK_CLIENT_CONNECTION_DISPATCH *AcceptSocketDispatch,
+-        PSOCKADDR LocalAddress, PSOCKADDR RemoteAddress, PIRP Irp)
++struct socket_callback_context
+ {
+-    FIXME("stub.\n");
++    WSK_SOCKET *socket;
++    IRP *irp;
++    PSOCKADDR remote_address;
++    void *accept_socket_client_context;
++};
+ 
+-    return STATUS_NOT_IMPLEMENTED;
++static void WINAPI accept_callback(TP_CALLBACK_INSTANCE *instance, void *context_)
++{
++    struct socket_callback_context *context = context_;
++    WSK_SOCKET *accept_socket;
++    NTSTATUS status;
++    SOCKET s;
++
++    TRACE("instance %p, context %p.\n", instance, context);
++
++    if ((s = accept(context->socket->s, context->remote_address, NULL)) == INVALID_SOCKET)
++    {
++        status = sock_error_to_ntstatus(WSAGetLastError());
++    }
++    else if (!(accept_socket = heap_alloc_zero(sizeof(*accept_socket))))
++    {
++        ERR("No memory.\n");
++        status = STATUS_NO_MEMORY;
++    }
++    else
++    {
++        TRACE("accept_socket %p.\n", accept_socket);
++        accept_socket->s = s;
++        accept_socket->socket_client_context = context->accept_socket_client_context;
++        accept_socket->Dispatch = &wsk_provider_connection_dispatch;
++        accept_socket->socket_type = context->socket->socket_type;
++        accept_socket->flags = WSK_FLAG_CONNECTION_SOCKET;
++
++        context->irp->IoStatus.Information = (ULONG_PTR)accept_socket;
++        status = STATUS_SUCCESS;
++    }
++
++    TRACE("status %#x.\n", status);
++    dispatch_irp(context->irp, status);
++    heap_free(context);
++}
++
++static NTSTATUS WINAPI wsk_accept(PWSK_SOCKET listen_socket, ULONG flags, PVOID accept_socket_context,
++        const WSK_CLIENT_CONNECTION_DISPATCH *accept_socker_dispatch,
++        PSOCKADDR local_address, PSOCKADDR remote_address, PIRP irp)
++{
++    struct socket_callback_context *context;
++    NTSTATUS status;
++
++    TRACE("listen_socket %p, flags %#x, accept_socket_context %p, accept_socker_dispatch %p,"
++            " local_address %p, remote_address %p, irp %p.\n",
++            listen_socket, flags, accept_socket_context, accept_socker_dispatch, local_address, remote_address, irp);
++
++    if (!(context = heap_alloc(sizeof(*context))))
++    {
++        ERR("No memory.\n");
++        status = STATUS_NO_MEMORY;
++        dispatch_irp(irp, status);
++        return status;
++    }
++
++    context->socket = listen_socket;
++    context->irp = irp;
++    context->remote_address = remote_address;
++    context->accept_socket_client_context = accept_socket_context;
++
++    if (!TrySubmitThreadpoolCallback(accept_callback, context, NULL))
++    {
++        ERR("Could not submit thread pool callback.\n");
++        status = STATUS_UNSUCCESSFUL;
++        dispatch_irp(irp, status);
++        heap_free(context);
++        return status;
++    }
++
++    TRACE("Submitted threadpool callback, context %p.\n", context);
++
++    return STATUS_PENDING;
+ }
+ 
+ static NTSTATUS WINAPI wsk_inspect_complete(PWSK_SOCKET ListenSocket, PWSK_INSPECT_ID InspectID,
+@@ -529,7 +608,7 @@ static NTSTATUS WINAPI wsk_inspect_complete(PWSK_SOCKET ListenSocket, PWSK_INSPE
+     return STATUS_NOT_IMPLEMENTED;
+ }
+ 
+-NTSTATUS WINAPI wsk_get_local_address(PWSK_SOCKET Socket, PSOCKADDR LocalAddress, PIRP Irp)
++static NTSTATUS WINAPI wsk_get_local_address(PWSK_SOCKET Socket, PSOCKADDR LocalAddress, PIRP Irp)
+ {
+     FIXME("stub.\n");
+ 
+@@ -548,6 +627,89 @@ static const WSK_PROVIDER_LISTEN_DISPATCH wsk_provider_listen_dispatch =
+     wsk_get_local_address,
+ };
+ 
++static NTSTATUS WINAPI wsk_connect(PWSK_SOCKET socket, PSOCKADDR remote_address, ULONG flags, PIRP irp)
++{
++    FIXME("Stub.\n");
++
++    return STATUS_NOT_IMPLEMENTED;
++}
++
++static NTSTATUS WINAPI wsk_get_remote_address(PWSK_SOCKET socket, PSOCKADDR remote_address, PIRP irp)
++{
++    FIXME("Stub.\n");
++
++    return STATUS_NOT_IMPLEMENTED;
++}
++
++static NTSTATUS WINAPI wsk_send(PWSK_SOCKET socket, PWSK_BUF buffer, ULONG flags, PIRP irp)
++{
++    FIXME("Stub.\n");
++
++    return STATUS_NOT_IMPLEMENTED;
++}
++
++static NTSTATUS WINAPI wsk_receive(PWSK_SOCKET socket, PWSK_BUF buffer, ULONG flags, PIRP irp)
++{
++    FIXME("Stub.\n");
++
++    return STATUS_NOT_IMPLEMENTED;
++}
++
++static NTSTATUS WINAPI wsk_disconnect(PWSK_SOCKET Socket, PWSK_BUF Buffer, ULONG Flags, PIRP Irp)
++{
++    FIXME("Stub.\n");
++
++    return STATUS_NOT_IMPLEMENTED;
++}
++
++static NTSTATUS WINAPI wsk_release(PWSK_SOCKET socket, PWSK_DATA_INDICATION data_indication)
++{
++    FIXME("Stub.\n");
++
++    return STATUS_NOT_IMPLEMENTED;
++}
++
++static NTSTATUS WINAPI wsk_connext_ex(PWSK_SOCKET Socket, PSOCKADDR remote_address, PWSK_BUF buffer,
++        ULONG flags, PIRP irp)
++{
++    FIXME("Stub.\n");
++
++    return STATUS_NOT_IMPLEMENTED;
++}
++
++static NTSTATUS WINAPI wsk_send_ex(void)
++{
++    FIXME("Stub (no prototype, will crash).\n");
++
++    return STATUS_NOT_IMPLEMENTED;
++}
++
++static NTSTATUS WINAPI wsk_receive_ex(void)
++{
++    FIXME("Stub (no prototype, will crash).\n");
++
++    return STATUS_NOT_IMPLEMENTED;
++}
++
++static const WSK_PROVIDER_CONNECTION_DISPATCH wsk_provider_connection_dispatch =
++{
++    {
++        wsk_control_socket,
++        wsk_close_socket,
++    },
++    wsk_bind,
++    wsk_connect,
++    wsk_get_local_address,
++    wsk_get_remote_address,
++    wsk_send,
++    wsk_receive,
++    wsk_disconnect,
++    wsk_release,
++    wsk_connext_ex,
++    wsk_send_ex,
++    wsk_receive_ex,
++};
++
+ NTSTATUS WINAPI wsk_socket(
+   PWSK_CLIENT Client,
+   ADDRESS_FAMILY AddressFamily,
+@@ -586,6 +748,8 @@ NTSTATUS WINAPI wsk_socket(
+     }
+     socket->s = s;
+     socket->socket_client_context = SocketContext;
++    socket->socket_type = SocketType;
++    socket->flags = Flags;
+ 
+     switch (Flags)
+     {
+-- 
+2.26.2
+
+From 362ab9fdf9fafd094acd1a35ad242fe8f71b73c9 Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Wed, 20 May 2020 22:02:09 +0300
+Subject: [PATCH 34/44] netio.sys: Support connection sockets.
+
+---
+ dlls/netio.sys/netio.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/dlls/netio.sys/netio.c b/dlls/netio.sys/netio.c
+index b8d1c1e73f12..91cd232b3440 100644
+--- a/dlls/netio.sys/netio.c
++++ b/dlls/netio.sys/netio.c
+@@ -757,6 +757,10 @@ NTSTATUS WINAPI wsk_socket(
+             socket->Dispatch = &wsk_provider_listen_dispatch;
+             break;
+ 
++        case WSK_FLAG_CONNECTION_SOCKET:
++            socket->Dispatch = &wsk_provider_connection_dispatch;
++            break;
++
+         default:
+             FIXME("Flags %#x not implemented.\n", Flags);
+             closesocket(s);
+-- 
+2.26.2
+
+From 8d3a5a5e4c26af48435ddb02a878e06a296f635c Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Wed, 20 May 2020 22:13:31 +0300
+Subject: [PATCH 35/44] netio.sys: Implement wsk_connect() function.
+
+---
+ dlls/netio.sys/netio.c | 48 ++++++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 46 insertions(+), 2 deletions(-)
+
+diff --git a/dlls/netio.sys/netio.c b/dlls/netio.sys/netio.c
+index 91cd232b3440..68ea0c1c5664 100644
+--- a/dlls/netio.sys/netio.c
++++ b/dlls/netio.sys/netio.c
+@@ -627,11 +627,55 @@ static const WSK_PROVIDER_LISTEN_DISPATCH wsk_provider_listen_dispatch =
+     wsk_get_local_address,
+ };
+ 
++static void WINAPI connect_callback(TP_CALLBACK_INSTANCE *instance, void *context_)
++{
++    struct socket_callback_context *context = context_;
++    NTSTATUS status;
++
++    TRACE("instance %p, context %p.\n", instance, context);
++
++    if (connect(context->socket->s, context->remote_address, sizeof(*context->remote_address)))
++        status = sock_error_to_ntstatus(WSAGetLastError());
++    else
++        status = STATUS_SUCCESS;
++
++    TRACE("status %#x.\n", status);
++    dispatch_irp(context->irp, status);
++    heap_free(context);
++}
++
+ static NTSTATUS WINAPI wsk_connect(PWSK_SOCKET socket, PSOCKADDR remote_address, ULONG flags, PIRP irp)
+ {
+-    FIXME("Stub.\n");
++    struct socket_callback_context *context;
++    NTSTATUS status;
+ 
+-    return STATUS_NOT_IMPLEMENTED;
++    TRACE("socket %p, remote_address %p, flags %#x, irp %p.\n",
++            socket, remote_address, flags, irp);
++
++    if (!(context = heap_alloc_zero(sizeof(*context))))
++    {
++        ERR("No memory.\n");
++        status = STATUS_NO_MEMORY;
++        dispatch_irp(irp, status);
++        return status;
++    }
++
++    context->socket = socket;
++    context->irp = irp;
++    context->remote_address = remote_address;
++
++    if (!TrySubmitThreadpoolCallback(connect_callback, context, NULL))
++    {
++        ERR("Could not submit thread pool callback.\n");
++        status = STATUS_UNSUCCESSFUL;
++        dispatch_irp(irp, status);
++        heap_free(context);
++        return status;
++    }
++
++    TRACE("Submitted threadpool callback, context %p.\n", context);
++
++    return STATUS_PENDING;
+ }
+ 
+ static NTSTATUS WINAPI wsk_get_remote_address(PWSK_SOCKET socket, PSOCKADDR remote_address, PIRP irp)
+-- 
+2.26.2
+
+From 8eac058d1bd39d89dad7d8a3ccb612505c140993 Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Thu, 21 May 2020 00:58:41 +0300
+Subject: [PATCH 36/44] ntoskrnl: Implement load image notify routine for
+ drivers.
+
+---
+ dlls/ntoskrnl.exe/ntoskrnl.c | 60 +++++++++++++++++++++++++++++++++---
+ include/ddk/ntddk.h          |  6 +++-
+ 2 files changed, 61 insertions(+), 5 deletions(-)
+
+diff --git a/dlls/ntoskrnl.exe/ntoskrnl.c b/dlls/ntoskrnl.exe/ntoskrnl.c
+index 0304e72a7e92..35cb6586a9bb 100644
+--- a/dlls/ntoskrnl.exe/ntoskrnl.c
++++ b/dlls/ntoskrnl.exe/ntoskrnl.c
+@@ -80,6 +80,11 @@ static DWORD client_tid;
+ 
+ static HANDLE ntoskrnl_heap;
+ 
++static PLOAD_IMAGE_NOTIFY_ROUTINE load_image_notify_routines[8];
++static unsigned int load_image_notify_routine_count;
++
++#define IMAGE_ADDRESSING_MODE_32BIT 3
++
+ struct wine_driver
+ {
+     DRIVER_OBJECT driver_obj;
+@@ -3033,10 +3038,20 @@ NTSTATUS WINAPI PsRemoveCreateThreadNotifyRoutine( PCREATE_THREAD_NOTIFY_ROUTINE
+ /***********************************************************************
+  *           PsRemoveLoadImageNotifyRoutine  (NTOSKRNL.EXE.@)
+  */
+- NTSTATUS WINAPI PsRemoveLoadImageNotifyRoutine(PLOAD_IMAGE_NOTIFY_ROUTINE NotifyRoutine)
++ NTSTATUS WINAPI PsRemoveLoadImageNotifyRoutine(PLOAD_IMAGE_NOTIFY_ROUTINE routine)
+  {
+-    FIXME( "stub: %p\n", NotifyRoutine );
+-    return STATUS_SUCCESS;
++    unsigned int i;
++
++    TRACE("routine %p.\n", routine);
++
++    for (i = 0; i < load_image_notify_routine_count; ++i)
++        if (load_image_notify_routines[i] == routine)
++        {
++            memmove(&load_image_notify_routines[i], &load_image_notify_routines[i + 1],
++                    sizeof(*load_image_notify_routines) * (load_image_notify_routine_count - i - 1));
++            return STATUS_SUCCESS;
++        }
++    return STATUS_PROCEDURE_NOT_FOUND;
+  }
+ 
+ 
+@@ -3191,7 +3206,19 @@ NTSTATUS WINAPI IoWMIOpenBlock(LPCGUID guid, ULONG desired_access, PVOID *data_b
+  */
+ NTSTATUS WINAPI PsSetLoadImageNotifyRoutine(PLOAD_IMAGE_NOTIFY_ROUTINE routine)
+ {
+-    FIXME("(%p) stub\n", routine);
++    unsigned int i;
++
++    TRACE("routine %p.\n", routine);
++
++    for (i = 0; i < load_image_notify_routine_count; ++i)
++        if (load_image_notify_routines[i] == routine)
++            return STATUS_SUCCESS;
++
++    if (load_image_notify_routine_count == ARRAY_SIZE(load_image_notify_routines))
++        return STATUS_INSUFFICIENT_RESOURCES;
++
++    load_image_notify_routines[load_image_notify_routine_count++] = routine;
++
+     return STATUS_SUCCESS;
+ }
+ 
+@@ -3679,6 +3706,31 @@ static HMODULE load_driver( const WCHAR *driver_name, const UNICODE_STRING *keyn
+     TRACE( "loading driver %s\n", wine_dbgstr_w(str) );
+ 
+     module = load_driver_module( str );
++
++    if (module && load_image_notify_routine_count)
++    {
++        UNICODE_STRING module_name;
++        IMAGE_NT_HEADERS *nt;
++        IMAGE_INFO info;
++        unsigned int i;
++
++        RtlInitUnicodeString(&module_name, str);
++        nt = RtlImageNtHeader(module);
++        memset(&info, 0, sizeof(info));
++        info.u.s.ImageAddressingMode = IMAGE_ADDRESSING_MODE_32BIT;
++        info.u.s.SystemModeImage = TRUE;
++        info.ImageSize = nt->OptionalHeader.SizeOfImage;
++        info.ImageBase = module;
++
++        for (i = 0; i < load_image_notify_routine_count; ++i)
++        {
++            TRACE("Calling image load notify %p.\n", load_image_notify_routines[i]);
++            load_image_notify_routines[i](&module_name, NULL, &info);
++            TRACE("Called image load notify %p.\n", load_image_notify_routines[i]);
++        }
++        RtlFreeUnicodeString(&module_name);
++    }
++
+     HeapFree( GetProcessHeap(), 0, path );
+     return module;
+ }
+diff --git a/include/ddk/ntddk.h b/include/ddk/ntddk.h
+index 36f69cdf9a21..c2698f4c5502 100644
+--- a/include/ddk/ntddk.h
++++ b/include/ddk/ntddk.h
+@@ -118,7 +118,11 @@ typedef struct _IMAGE_INFO
+             ULONG SystemModeImage      : 1;
+             ULONG ImageMappedToAllPids : 1;
+             ULONG ExtendedInfoPresent  : 1;
+-            ULONG Reserved             : 21;
++            ULONG MachineTypeMismatch : 1;
++            ULONG ImageSignatureLevel : 4;
++            ULONG ImageSignatureType : 3;
++            ULONG ImagePartialMap : 1;
++            ULONG Reserved : 12;
+         } DUMMYSTRUCTNAME;
+     } DUMMYUNIONNAME;
+     PVOID  ImageBase;
+-- 
+2.26.2
+
+From 17587d53b94663f21239b9cdaa8ef882206018e3 Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Thu, 21 May 2020 01:48:10 +0300
+Subject: [PATCH 37/44] netio.sys: Implement async wsk_get_address_info().
+
+---
+ dlls/netio.sys/netio.c | 69 +++++++++++++++++++++++++++++++++++++-----
+ 1 file changed, 62 insertions(+), 7 deletions(-)
+
+diff --git a/dlls/netio.sys/netio.c b/dlls/netio.sys/netio.c
+index 68ea0c1c5664..46d2fd7b2912 100644
+--- a/dlls/netio.sys/netio.c
++++ b/dlls/netio.sys/netio.c
+@@ -857,6 +857,36 @@ NTSTATUS WINAPI wsk_control_client(
+     return STATUS_NOT_IMPLEMENTED;
+ }
+ 
++struct wsk_get_address_info_context
++{
++    UNICODE_STRING *node_name;
++    UNICODE_STRING *service_name;
++    ULONG namespace;
++    GUID *provider;
++    ADDRINFOEXW *hints;
++    ADDRINFOEXW **result;
++    IRP *irp;
++};
++
++static void WINAPI get_address_info_callback(TP_CALLBACK_INSTANCE *instance, void *context_)
++{
++    struct wsk_get_address_info_context *context = context_;
++    NTSTATUS status;
++    INT ret;
++
++    TRACE("instance %p, context %p.\n", instance, context);
++
++    ret = GetAddrInfoExW( context->node_name ? context->node_name->Buffer : NULL,
++            context->service_name ? context->service_name->Buffer : NULL, context->namespace,
++            context->provider, context->hints, context->result, NULL, NULL, NULL, NULL);
++
++    status = sock_error_to_ntstatus(ret);
++
++    TRACE("status %#x.\n", status);
++    dispatch_irp(context->irp, status);
++    heap_free(context);
++}
++
+ NTSTATUS WINAPI wsk_get_address_info(
+   PWSK_CLIENT Client,
+   PUNICODE_STRING NodeName,
+@@ -870,6 +900,7 @@ NTSTATUS WINAPI wsk_get_address_info(
+   PIRP Irp
+ )
+ {
++    struct wsk_get_address_info_context *context;
+     WSK_CLIENT_NPI *client = Client;
+     NTSTATUS status;
+     INT ret;
+@@ -878,18 +909,42 @@ NTSTATUS WINAPI wsk_get_address_info(
+             debugstr_w(NodeName ? NodeName->Buffer : NULL), debugstr_w(ServiceName ? ServiceName->Buffer : NULL),
+             Result, Irp, __builtin_return_address (0));
+ 
+-    ret = GetAddrInfoExW(NodeName ? NodeName->Buffer : NULL, ServiceName ? ServiceName->Buffer : NULL, NameSpace,
+-            Provider, Hints, Result, NULL, NULL, NULL, NULL);
++    if (client && client->Dispatch && client->Dispatch->WskClientEvent)
++        FIXME("WskClientEvent %p.\n", client->Dispatch->WskClientEvent);
+ 
+-    status = sock_error_to_ntstatus(ret);
+     if (Irp)
+     {
+-        Irp->IoStatus.Information = status;
+-        dispatch_irp(Irp, status);
++        if (!(context = heap_alloc(sizeof(*context))))
++        {
++            ERR("No memory.\n");
++            status = STATUS_NO_MEMORY;
++            dispatch_irp(Irp, status);
++            return status;
++        }
++
++        context->node_name = NodeName;
++        context->service_name = ServiceName;
++        context->namespace = NameSpace;
++        context->provider = Provider;
++        context->hints = Hints;
++        context->result = Result;
++        context->irp = Irp;
++
++        if (!TrySubmitThreadpoolCallback(get_address_info_callback, context, NULL))
++        {
++            ERR("Could not submit thread pool callback.\n");
++            status = STATUS_UNSUCCESSFUL;
++            dispatch_irp(Irp, status);
++            heap_free(context);
++            return status;
++        }
++        TRACE("Submitted threadpool callback, context %p.\n", context);
++        return STATUS_PENDING;
+     }
+ 
+-    if (client && client->Dispatch && client->Dispatch->WskClientEvent)
+-        FIXME("WskClientEvent %p.\n", client->Dispatch->WskClientEvent);
++    ret = GetAddrInfoExW(NodeName ? NodeName->Buffer : NULL, ServiceName ? ServiceName->Buffer : NULL, NameSpace,
++            Provider, Hints, Result, NULL, NULL, NULL, NULL);
++    status = sock_error_to_ntstatus(ret);
+ 
+     return status;
+ }
+-- 
+2.26.2
+
+From 6a1b5e7cb97693c8b938697cff8f28b9a7224b90 Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Thu, 21 May 2020 02:56:18 +0300
+Subject: [PATCH 38/44] netio.sys: Implement send / receive.
+
+---
+ dlls/netio.sys/netio.c | 102 +++++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 97 insertions(+), 5 deletions(-)
+
+diff --git a/dlls/netio.sys/netio.c b/dlls/netio.sys/netio.c
+index 46d2fd7b2912..76e47a37d882 100644
+--- a/dlls/netio.sys/netio.c
++++ b/dlls/netio.sys/netio.c
+@@ -685,18 +685,110 @@ static NTSTATUS WINAPI wsk_get_remote_address(PWSK_SOCKET socket, PSOCKADDR remo
+     return STATUS_NOT_IMPLEMENTED;
+ }
+ 
+-static NTSTATUS WINAPI wsk_send(PWSK_SOCKET socket, PWSK_BUF buffer, ULONG flags, PIRP irp)
++struct send_receive_context
+ {
+-    FIXME("Stub.\n");
++    BOOL is_send;
++    WSK_SOCKET *socket;
++    WSK_BUF *buffer;
++    ULONG flags;
++    IRP *irp;
++};
+ 
+-    return STATUS_NOT_IMPLEMENTED;
++static void WINAPI send_receive_callback(TP_CALLBACK_INSTANCE *instance, void *context_)
++{
++    struct send_receive_context *context = context_;
++    int buffer_length;
++    NTSTATUS status;
++    int length = 0;
++    void *buffer;
++
++    TRACE("instance %p, context %p, mdl %p, offset %u, length %lu.\n",
++            instance, context, context->buffer->Mdl, context->buffer->Offset, context->buffer->Length);
++
++    buffer_length = (int)context->buffer->Length;
++
++    if (!context->buffer->Mdl && buffer_length)
++    {
++        status = STATUS_INVALID_PARAMETER;
++        goto done;
++    }
++
++    if (context->buffer->Mdl)
++    {
++        /* FIXME */
++        buffer = (BYTE *)context->buffer->Mdl->StartVa + context->buffer->Mdl->ByteOffset + context->buffer->Offset;
++    }
++    else
++    {
++        buffer = NULL;
++    }
++
++    if ((context->is_send && (length = send(context->socket->s, buffer, buffer_length, 0)) == SOCKET_ERROR)
++            || (!context->is_send && (length = recv(context->socket->s, buffer, buffer_length, 0)) == SOCKET_ERROR))
++    {
++        status = sock_error_to_ntstatus(WSAGetLastError());
++    }
++    else
++    {
++        status = STATUS_SUCCESS;
++        context->irp->IoStatus.Information = length;
++    }
++
++done:
++    TRACE("status %#x, length %d.\n", status, length);
++    dispatch_irp(context->irp, status);
++    heap_free(context);
++}
++
++static NTSTATUS WINAPI do_send_receive(PWSK_SOCKET socket, PWSK_BUF buffer, ULONG flags, PIRP irp, BOOL is_send)
++{
++    struct send_receive_context *context;
++    NTSTATUS status;
++
++    TRACE("socket %p, buffer %p, flags %#x, irp %p, is_send %#x.\n",
++            socket, buffer, flags, irp, is_send);
++
++    if (flags)
++        FIXME("flags %#x not implemented.\n", flags);
++
++    if (!(context = heap_alloc_zero(sizeof(*context))))
++    {
++        ERR("No memory.\n");
++        status = STATUS_NO_MEMORY;
++        dispatch_irp(irp, status);
++        return status;
++    }
++
++    context->is_send = is_send;
++    context->socket = socket;
++    context->buffer = buffer;
++    context->flags = flags;
++    context->irp = irp;
++
++    if (!TrySubmitThreadpoolCallback(send_receive_callback, context, NULL))
++    {
++        ERR("Could not submit thread pool callback.\n");
++        status = STATUS_UNSUCCESSFUL;
++        dispatch_irp(irp, status);
++        heap_free(context);
++        return status;
++    }
++
++    TRACE("Submitted threadpool callback, context %p.\n", context);
++
++    return STATUS_PENDING;
++}
++
++static NTSTATUS WINAPI wsk_send(PWSK_SOCKET socket, PWSK_BUF buffer, ULONG flags, PIRP irp)
++{
++    TRACE(".\n");
++    return do_send_receive(socket, buffer, flags, irp, TRUE);
+ }
+ 
+ static NTSTATUS WINAPI wsk_receive(PWSK_SOCKET socket, PWSK_BUF buffer, ULONG flags, PIRP irp)
+ {
+-    FIXME("Stub.\n");
+ 
+-    return STATUS_NOT_IMPLEMENTED;
++    return do_send_receive(socket, buffer, flags, irp, FALSE);
+ }
+ 
+ static NTSTATUS WINAPI wsk_disconnect(PWSK_SOCKET Socket, PWSK_BUF Buffer, ULONG Flags, PIRP Irp)
+-- 
+2.26.2
+
+From 154546b56e1da007d35f7e49a5b7fa9ca80b01c5 Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Thu, 21 May 2020 13:24:48 +0300
+Subject: [PATCH 39/44] ntoskrnl: Implement PsGetProcessSectionBaseAddress()
+ function.
+
+---
+ dlls/ntoskrnl.exe/ntoskrnl.c        | 33 +++++++++++++++++++++++++++++
+ dlls/ntoskrnl.exe/ntoskrnl.exe.spec |  2 +-
+ 2 files changed, 34 insertions(+), 1 deletion(-)
+
+diff --git a/dlls/ntoskrnl.exe/ntoskrnl.c b/dlls/ntoskrnl.exe/ntoskrnl.c
+index 35cb6586a9bb..142eadd60a08 100644
+--- a/dlls/ntoskrnl.exe/ntoskrnl.c
++++ b/dlls/ntoskrnl.exe/ntoskrnl.c
+@@ -4160,3 +4160,36 @@ VOID WINAPI KeSignalCallDpcDone(IN PVOID barrier)
+ {
+     InterlockedDecrement((PLONG)barrier);
+ }
++
++PVOID WINAPI PsGetProcessSectionBaseAddress(PEPROCESS process)
++{
++    void *image_base;
++    SIZE_T size;
++    HANDLE h;
++    BOOL ret;
++
++    TRACE("process %p, id 0x%04lx.\n", process, process ? process->info.UniqueProcessId : 0);
++
++    if (!process)
++        return NULL;
++
++    if (!(h = OpenProcess( PROCESS_ALL_ACCESS, FALSE, process->info.UniqueProcessId)))
++    {
++        WARN("Could not open process %#04lx.\n", process->info.UniqueProcessId);
++        return NULL;
++    }
++
++    size = 0;
++    ret = ReadProcessMemory(h, &process->info.PebBaseAddress->ImageBaseAddress, &image_base,
++            sizeof(image_base), &size);
++
++    NtClose(h);
++
++    if (!ret || size != sizeof(image_base))
++    {
++        WARN("Error reading process memory, ret %#x, size %lu, GetLastError() %u.\n", ret, size, GetLastError());
++        return NULL;
++    }
++    TRACE("returning %p.\n", image_base);
++    return image_base;
++}
+diff --git a/dlls/ntoskrnl.exe/ntoskrnl.exe.spec b/dlls/ntoskrnl.exe/ntoskrnl.exe.spec
+index ac461d75ea9a..14bc7c1bb79a 100644
+--- a/dlls/ntoskrnl.exe/ntoskrnl.exe.spec
++++ b/dlls/ntoskrnl.exe/ntoskrnl.exe.spec
+@@ -903,7 +903,7 @@
+ @ stub PsGetProcessJob
+ @ stub PsGetProcessPeb
+ @ stub PsGetProcessPriorityClass
+-@ stub PsGetProcessSectionBaseAddress
++@ stdcall PsGetProcessSectionBaseAddress(ptr)
+ @ stub PsGetProcessSecurityPort
+ @ stub PsGetProcessSessionId
+ @ stub PsGetProcessWin32Process
+-- 
+2.26.2
+
+From 89d30960fdeb7eb4ecc3a440ae5542830b42133a Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Thu, 21 May 2020 14:35:14 +0300
+Subject: [PATCH 40/44] ntoskrnl: Implement MmCopyVirtualMemory() function.
+
+---
+ dlls/ntoskrnl.exe/ntoskrnl.c | 83 +++++++++++++++++++++++++++++++++++-
+ 1 file changed, 81 insertions(+), 2 deletions(-)
+
+diff --git a/dlls/ntoskrnl.exe/ntoskrnl.c b/dlls/ntoskrnl.exe/ntoskrnl.c
+index 142eadd60a08..712a249caf67 100644
+--- a/dlls/ntoskrnl.exe/ntoskrnl.c
++++ b/dlls/ntoskrnl.exe/ntoskrnl.c
+@@ -4023,8 +4023,87 @@ NTSTATUS WINAPI MmCopyVirtualMemory(PEPROCESS fromprocess, PVOID fromaddress, PE
+                                     PVOID toaddress, SIZE_T bufsize, KPROCESSOR_MODE mode,
+                                     PSIZE_T copied)
+ {
+-    FIXME("stub: %p %p %p %p %lu %d %p\n", fromprocess, fromaddress, toprocess, toaddress, bufsize, mode, copied);
+-    return STATUS_NOT_IMPLEMENTED;
++    NTSTATUS status = STATUS_UNSUCCESSFUL;
++    HANDLE handle_from, handle_to;
++    void *buffer = NULL;
++
++    TRACE("fromprocess %p, fromaddress %p, toprocess %p, toaddress %p, bufsize %lu, mode %d, copied %p.\n",
++            fromprocess, fromaddress, toprocess, toaddress, bufsize, mode, copied);
++
++    if (!fromprocess || !toprocess)
++    {
++        WARN("NULL process.\n");
++        return STATUS_INVALID_PARAMETER;
++    }
++
++    handle_from = handle_to = NULL;
++
++    if (fromprocess != IoGetCurrentProcess()
++            && !(handle_from = OpenProcess(PROCESS_ALL_ACCESS, FALSE, fromprocess->info.UniqueProcessId)))
++    {
++        WARN("Could not open process %#04lx.\n", fromprocess->info.UniqueProcessId);
++        status = STATUS_INVALID_PARAMETER;
++        goto done;
++    }
++
++    if (toprocess != IoGetCurrentProcess()
++            && !(handle_to = OpenProcess(PROCESS_ALL_ACCESS, FALSE, toprocess->info.UniqueProcessId)))
++    {
++        WARN("Could not open process %#04lx.\n", toprocess->info.UniqueProcessId);
++        status = STATUS_INVALID_PARAMETER;
++        goto done;
++    }
++
++    TRACE("handle_from %p, handle_to %p.\n", handle_from, handle_to);
++
++    if (!handle_from && !handle_to)
++    {
++        memcpy(toaddress, fromaddress, bufsize);
++        *copied = bufsize;
++        return STATUS_SUCCESS;
++    }
++
++    if (handle_from && handle_to)
++    {
++        if (!(buffer = heap_alloc(bufsize)))
++        {
++            ERR("No memory.\n");
++            status = STATUS_NO_MEMORY;
++            goto done;
++        }
++    }
++    else if (handle_from)
++    {
++        buffer = toaddress;
++    }
++    else
++    {
++        buffer = fromaddress;
++    }
++
++    if (handle_from)
++    {
++        if ((status = NtReadVirtualMemory(handle_from, fromaddress, buffer, bufsize, copied)))
++            goto done;
++
++        bufsize = min(bufsize, *copied);
++    }
++
++    if (handle_to)
++        status = NtWriteVirtualMemory(handle_to, toaddress, buffer, bufsize, copied);
++
++done:
++    if (handle_from && handle_to)
++        heap_free(buffer);
++
++    if (handle_from)
++        NtClose(handle_from);
++
++    if (handle_to)
++        NtClose(handle_to);
++
++    TRACE("status %#x.\n", status);
++    return status;
+ }
+ 
+ /*********************************************************************
+-- 
+2.26.2
+
+From a016fad16bdea4767fc3aae4f40c5a86733d7678 Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Thu, 21 May 2020 15:36:36 +0300
+Subject: [PATCH 41/44] ntoskrnl: Add stub for KeStackAttachProcess().
+
+---
+ dlls/ntoskrnl.exe/ntoskrnl.c        | 14 ++++++++++++++
+ dlls/ntoskrnl.exe/ntoskrnl.exe.spec |  2 +-
+ 2 files changed, 15 insertions(+), 1 deletion(-)
+
+diff --git a/dlls/ntoskrnl.exe/ntoskrnl.c b/dlls/ntoskrnl.exe/ntoskrnl.c
+index 712a249caf67..a7e67b36d53a 100644
+--- a/dlls/ntoskrnl.exe/ntoskrnl.c
++++ b/dlls/ntoskrnl.exe/ntoskrnl.c
+@@ -4272,3 +4272,17 @@ PVOID WINAPI PsGetProcessSectionBaseAddress(PEPROCESS process)
+     TRACE("returning %p.\n", image_base);
+     return image_base;
+ }
++
++typedef struct _KAPC_STATE
++{
++     LIST_ENTRY ApcListHead[2];
++     PEPROCESS Process;
++     UCHAR KernelApcInProgress;
++     UCHAR KernelApcPending;
++     UCHAR UserApcPending;
++} KAPC_STATE, *PKAPC_STATE;
++
++void WINAPI KeStackAttachProcess(PEPROCESS PROCESS, PKAPC_STATE ApcState)
++{
++    FIXME("Stub.\n");
++}
+diff --git a/dlls/ntoskrnl.exe/ntoskrnl.exe.spec b/dlls/ntoskrnl.exe/ntoskrnl.exe.spec
+index 14bc7c1bb79a..28abc435285b 100644
+--- a/dlls/ntoskrnl.exe/ntoskrnl.exe.spec
++++ b/dlls/ntoskrnl.exe/ntoskrnl.exe.spec
+@@ -643,7 +643,7 @@
+ @ stub KeSetTimeIncrement
+ @ stdcall KeSetTimer(ptr int64 ptr)
+ @ stdcall KeSetTimerEx(ptr int64 long ptr)
+-@ stub KeStackAttachProcess
++@ stdcall KeStackAttachProcess(ptr ptr)
+ @ stub KeSynchronizeExecution
+ @ stub KeTerminateThread
+ @ extern KeTickCount
+-- 
+2.26.2
+
+From 0cd1ebb348d35057884fa5da8cd9bcc5897081a7 Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Thu, 21 May 2020 15:46:20 +0300
+Subject: [PATCH 42/44] ntoskrnl: Add stub for KeUnstackDetachProcess().
+
+---
+ dlls/ntoskrnl.exe/ntoskrnl.c        | 5 +++++
+ dlls/ntoskrnl.exe/ntoskrnl.exe.spec | 2 +-
+ 2 files changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/dlls/ntoskrnl.exe/ntoskrnl.c b/dlls/ntoskrnl.exe/ntoskrnl.c
+index a7e67b36d53a..8264a4bf003c 100644
+--- a/dlls/ntoskrnl.exe/ntoskrnl.c
++++ b/dlls/ntoskrnl.exe/ntoskrnl.c
+@@ -4286,3 +4286,8 @@ void WINAPI KeStackAttachProcess(PEPROCESS PROCESS, PKAPC_STATE ApcState)
+ {
+     FIXME("Stub.\n");
+ }
++
++void WINAPI KeUnstackDetachProcess(PKAPC_STATE ApcState)
++{
++    FIXME("Stub.\n");
++}
+diff --git a/dlls/ntoskrnl.exe/ntoskrnl.exe.spec b/dlls/ntoskrnl.exe/ntoskrnl.exe.spec
+index 28abc435285b..e998ecb5cf44 100644
+--- a/dlls/ntoskrnl.exe/ntoskrnl.exe.spec
++++ b/dlls/ntoskrnl.exe/ntoskrnl.exe.spec
+@@ -647,7 +647,7 @@
+ @ stub KeSynchronizeExecution
+ @ stub KeTerminateThread
+ @ extern KeTickCount
+-@ stub KeUnstackDetachProcess
++@ stdcall KeUnstackDetachProcess(ptr)
+ @ stub KeUpdateRunTime
+ @ stub KeUpdateSystemTime
+ @ stub KeUserModeCallback
+-- 
+2.26.2
+
+From ab28241e6be31bf79fd9e70c8974750765d572eb Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Thu, 21 May 2020 23:33:15 +0300
+Subject: [PATCH 43/44] ntoskrnl: HACK: return STATUS_INVALID_IMAGE_HASH.
+
+Signed-off-by: Paul Gofman <gofmanp@gmail.com>
+---
+ dlls/ntoskrnl.exe/ntoskrnl.c | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/dlls/ntoskrnl.exe/ntoskrnl.c b/dlls/ntoskrnl.exe/ntoskrnl.c
+index 8264a4bf003c..f05df12b2d2d 100644
+--- a/dlls/ntoskrnl.exe/ntoskrnl.c
++++ b/dlls/ntoskrnl.exe/ntoskrnl.c
+@@ -3431,6 +3431,11 @@ static NTSTATUS open_driver( const UNICODE_STRING *service_name, SC_HANDLE *serv
+     DWORD config_size = 0;
+     WCHAR *name;
+ 
++    if (wcsstr(service_name->Buffer, u"denuvo-anti-cheat-dse-check"))
++    {
++        return STATUS_INVALID_IMAGE_HASH;
++    }
++
+     if (!(name = RtlAllocateHeap( GetProcessHeap(), 0, service_name->Length + sizeof(WCHAR) )))
+         return STATUS_NO_MEMORY;
+ 
+-- 
+2.26.2
+
+From c55c122136dff93cdc9c478fb326ae1f3c226a2a Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Sat, 23 May 2020 16:45:00 +0300
+Subject: [PATCH 44/44] reconf.
+
+---
+ configure | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/configure b/configure
+index 19d807119df6..f7574185b618 100755
+--- a/configure
++++ b/configure
+@@ -1500,6 +1500,7 @@ enable_nddeapi
+ enable_ndis_sys
+ enable_netapi32
+ enable_netcfgx
++enable_netio_sys
+ enable_netprofm
+ enable_newdev
+ enable_ninput
+@@ -1643,6 +1644,7 @@ enable_vulkan_1
+ enable_wbemdisp
+ enable_wbemprox
+ enable_wbemuuid
++enable_wdfldr_sys
+ enable_wdscore
+ enable_webservices
+ enable_wer
+@@ -21788,6 +21790,7 @@ wine_fn_config_makefile dlls/netapi32 enable_netapi32
+ wine_fn_config_makefile dlls/netapi32/tests enable_tests
+ wine_fn_config_makefile dlls/netcfgx enable_netcfgx
+ wine_fn_config_makefile dlls/netcfgx/tests enable_tests
++wine_fn_config_makefile dlls/netio.sys enable_netio_sys
+ wine_fn_config_makefile dlls/netprofm enable_netprofm
+ wine_fn_config_makefile dlls/netprofm/tests enable_tests
+ wine_fn_config_makefile dlls/newdev enable_newdev
+@@ -22031,6 +22034,7 @@ wine_fn_config_makefile dlls/wbemdisp/tests enable_tests
+ wine_fn_config_makefile dlls/wbemprox enable_wbemprox
+ wine_fn_config_makefile dlls/wbemprox/tests enable_tests
+ wine_fn_config_makefile dlls/wbemuuid enable_wbemuuid
++wine_fn_config_makefile dlls/wdfldr.sys enable_wdfldr_sys
+ wine_fn_config_makefile dlls/wdscore enable_wdscore
+ wine_fn_config_makefile dlls/webservices enable_webservices
+ wine_fn_config_makefile dlls/webservices/tests enable_tests
+-- 
+2.26.2
+

@@ -1,0 +1,327 @@
+From c6925514c74abe331d2bc11adf984d2a57923442 Mon Sep 17 00:00:00 2001
+From: Derek Lesho <dlesho@codeweavers.com>
+Date: Tue, 31 Mar 2020 11:11:05 -0500
+Subject: [PATCH 11/53] winegstreamer: Implement
+ IMFMediaStream::GetStreamDescriptor.
+
+Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
+---
+ dlls/winegstreamer/gst_private.h  |   4 +
+ dlls/winegstreamer/media_source.c |  45 ++++++-
+ dlls/winegstreamer/mfplat.c       | 196 ++++++++++++++++++++++++++++++
+ 3 files changed, 244 insertions(+), 1 deletion(-)
+
+diff --git a/dlls/winegstreamer/gst_private.h b/dlls/winegstreamer/gst_private.h
+index 71ca429088..780cf1b02f 100644
+--- a/dlls/winegstreamer/gst_private.h
++++ b/dlls/winegstreamer/gst_private.h
+@@ -36,6 +36,7 @@
+ #include "winuser.h"
+ #include "dshow.h"
+ #include "strmif.h"
++#include "mfobjects.h"
+ #include "wine/heap.h"
+ #include "wine/strmbase.h"
+ 
+@@ -54,6 +55,9 @@ void start_dispatch_thread(void) DECLSPEC_HIDDEN;
+ 
+ extern HRESULT mfplat_get_class_object(REFCLSID rclsid, REFIID riid, void **obj) DECLSPEC_HIDDEN;
+ 
++GstCaps *make_mf_compatible_caps(GstCaps *caps);
++IMFMediaType *mf_media_type_from_caps(GstCaps *caps);
++
+ enum source_type
+ {
+     SOURCE_TYPE_MPEG_4,
+diff --git a/dlls/winegstreamer/media_source.c b/dlls/winegstreamer/media_source.c
+index 8335c64338..a654d555bc 100644
+--- a/dlls/winegstreamer/media_source.c
++++ b/dlls/winegstreamer/media_source.c
+@@ -507,7 +507,10 @@ static HRESULT WINAPI media_stream_GetStreamDescriptor(IMFMediaStream* iface, IM
+     if (stream->state == STREAM_SHUTDOWN)
+         return MF_E_SHUTDOWN;
+ 
+-    return E_NOTIMPL;
++    IMFStreamDescriptor_AddRef(stream->descriptor);
++    *descriptor = stream->descriptor;
++
++    return S_OK;
+ }
+ 
+ static HRESULT WINAPI media_stream_RequestSample(IMFMediaStream *iface, IUnknown *token)
+@@ -539,6 +542,9 @@ static const IMFMediaStreamVtbl media_stream_vtbl =
+ static HRESULT media_stream_constructor(struct media_source *source, GstPad *pad, DWORD stream_id, struct media_stream **out_stream)
+ {
+     struct media_stream *object = heap_alloc_zero(sizeof(*object));
++    IMFMediaTypeHandler *type_handler = NULL;
++    IMFMediaType *stream_type = NULL;
++    GstCaps *caps = NULL;
+     HRESULT hr;
+ 
+     TRACE("(%p %p)->(%p)\n", source, pad, out_stream);
+@@ -567,6 +573,36 @@ static HRESULT media_stream_constructor(struct media_source *source, GstPad *pad
+     g_object_set(object->appsink, "async", FALSE, NULL); /* <- This allows us interact with the bin w/o prerolling */
+     g_signal_connect(object->appsink, "new-sample", G_CALLBACK(stream_new_sample_wrapper), object);
+ 
++    if (!(caps = gst_pad_query_caps(pad, NULL)))
++        goto fail;
++
++    if (TRACE_ON(mfplat))
++    {
++        gchar *caps_str = gst_caps_to_string(caps);
++        TRACE("caps %s\n", debugstr_a(caps_str));
++        g_free(caps_str);
++    }
++
++    if (!(stream_type = mf_media_type_from_caps(caps)))
++        goto fail;
++
++    gst_caps_unref(caps);
++    caps = NULL;
++
++    if (FAILED(hr = MFCreateStreamDescriptor(stream_id, 1, &stream_type, &object->descriptor)))
++        goto fail;
++
++    if (FAILED(hr = IMFStreamDescriptor_GetMediaTypeHandler(object->descriptor, &type_handler)))
++        goto fail;
++
++    if (FAILED(hr = IMFMediaTypeHandler_SetCurrentMediaType(type_handler, stream_type)))
++        goto fail;
++
++    IMFMediaTypeHandler_Release(type_handler);
++    type_handler = NULL;
++    IMFMediaType_Release(stream_type);
++    stream_type = NULL;
++
+     object->my_sink = gst_element_get_static_pad(object->appsink, "sink");
+     gst_pad_set_element_private(pad, object);
+ 
+@@ -582,6 +618,13 @@ static HRESULT media_stream_constructor(struct media_source *source, GstPad *pad
+     fail:
+     WARN("Failed to construct media stream, hr %#x.\n", hr);
+ 
++    if (caps)
++        gst_caps_unref(caps);
++    if (stream_type)
++        IMFMediaType_Release(stream_type);
++    if (type_handler)
++        IMFMediaTypeHandler_Release(type_handler);
++
+     IMFMediaStream_Release(&object->IMFMediaStream_iface);
+     return hr;
+ }
+diff --git a/dlls/winegstreamer/mfplat.c b/dlls/winegstreamer/mfplat.c
+index 16e55247de..90eb583c4a 100644
+--- a/dlls/winegstreamer/mfplat.c
++++ b/dlls/winegstreamer/mfplat.c
+@@ -16,6 +16,11 @@
+  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
+  */
+ 
++#include "config.h"
++#include <gst/gst.h>
++
++#include "gst_private.h"
++
+ #include <stdarg.h>
+ 
+ #include "gst_private.h"
+@@ -442,3 +447,194 @@ HRESULT mfplat_get_class_object(REFCLSID rclsid, REFIID riid, void **obj)
+ 
+     return CLASS_E_CLASSNOTAVAILABLE;
+ }
++
++const static struct
++{
++    const GUID *subtype;
++    GstVideoFormat format;
++}
++uncompressed_formats[] =
++{
++    {&MFVideoFormat_ARGB32,  GST_VIDEO_FORMAT_BGRA},
++    {&MFVideoFormat_RGB32,   GST_VIDEO_FORMAT_BGRx},
++    {&MFVideoFormat_RGB24,   GST_VIDEO_FORMAT_BGR},
++    {&MFVideoFormat_RGB565,  GST_VIDEO_FORMAT_BGR16},
++    {&MFVideoFormat_RGB555,  GST_VIDEO_FORMAT_BGR15},
++};
++
++/* caps will be modified to represent the exact type needed for the format */
++static IMFMediaType* transform_to_media_type(GstCaps *caps)
++{
++    IMFMediaType *media_type;
++    GstStructure *info;
++    const char *mime_type;
++
++    if (TRACE_ON(mfplat))
++    {
++        gchar *human_readable = gst_caps_to_string(caps);
++        TRACE("caps = %s\n", debugstr_a(human_readable));
++        g_free(human_readable);
++    }
++
++    if (FAILED(MFCreateMediaType(&media_type)))
++    {
++        return NULL;
++    }
++
++    info = gst_caps_get_structure(caps, 0);
++    mime_type = gst_structure_get_name(info);
++
++    if (!(strncmp(mime_type, "video", 5)))
++    {
++        GstVideoInfo video_info;
++
++        if (!(gst_video_info_from_caps(&video_info, caps)))
++        {
++            return NULL;
++        }
++
++        IMFMediaType_SetGUID(media_type, &MF_MT_MAJOR_TYPE, &MFMediaType_Video);
++
++        IMFMediaType_SetUINT64(media_type, &MF_MT_FRAME_SIZE, ((UINT64)video_info.width << 32) | video_info.height);
++
++        IMFMediaType_SetUINT64(media_type, &MF_MT_FRAME_RATE, ((UINT64)video_info.fps_n << 32) | video_info.fps_d);
++
++        if (!(strcmp(mime_type, "video/x-raw")))
++        {
++            GUID fourcc_subtype = MFVideoFormat_Base;
++            unsigned int i;
++
++            IMFMediaType_SetUINT32(media_type, &MF_MT_COMPRESSED, FALSE);
++
++            /* First try FOURCC */
++            if ((fourcc_subtype.Data1 = gst_video_format_to_fourcc(video_info.finfo->format)))
++            {
++                IMFMediaType_SetGUID(media_type, &MF_MT_SUBTYPE, &fourcc_subtype);
++            }
++            else
++            {
++                for (i = 0; i < ARRAY_SIZE(uncompressed_formats); i++)
++                {
++                    if (uncompressed_formats[i].format == video_info.finfo->format)
++                    {
++                        IMFMediaType_SetGUID(media_type, &MF_MT_SUBTYPE, uncompressed_formats[i].subtype);
++                        break;
++                    }
++                }
++                if (i == ARRAY_SIZE(uncompressed_formats))
++                    FIXME("Unrecognized format.\n");
++            }
++        }
++        else
++            FIXME("Unrecognized video format %s\n", mime_type);
++    }
++    else if (!(strncmp(mime_type, "audio", 5)))
++    {
++        gint rate, channels, bitrate;
++        IMFMediaType_SetGUID(media_type, &MF_MT_MAJOR_TYPE, &MFMediaType_Audio);
++
++        if (gst_structure_get_int(info, "rate", &rate))
++            IMFMediaType_SetUINT32(media_type, &MF_MT_AUDIO_SAMPLES_PER_SECOND, rate);
++
++        if (gst_structure_get_int(info, "channels", &channels))
++            IMFMediaType_SetUINT32(media_type, &MF_MT_AUDIO_NUM_CHANNELS, channels);
++
++        if (gst_structure_get_int(info, "bitrate", &bitrate))
++            IMFMediaType_SetUINT32(media_type, &MF_MT_AVG_BITRATE, bitrate);
++
++        if (!(strcmp(mime_type, "audio/x-raw")))
++        {
++            const char *format;
++            if ((format = gst_structure_get_string(info, "format")))
++            {
++                char type;
++                unsigned int bits_per_sample;
++                char endian[2];
++                char new_format[6];
++                if ((strlen(format) > 5) || (sscanf(format, "%c%u%2c", &type, &bits_per_sample, endian) < 2))
++                {
++                    FIXME("Unhandled audio format %s\n", format);
++                    IMFMediaType_Release(media_type);
++                    return NULL;
++                }
++
++                if (type == 'F')
++                {
++                    IMFMediaType_SetGUID(media_type, &MF_MT_SUBTYPE, &MFAudioFormat_Float);
++                }
++                else if (type == 'U' || type == 'S')
++                {
++                    IMFMediaType_SetGUID(media_type, &MF_MT_SUBTYPE, &MFAudioFormat_PCM);
++                    if (bits_per_sample == 8)
++                        type = 'U';
++                    else
++                        type = 'S';
++                }
++                else
++                {
++                    FIXME("Unrecognized audio format: %s\n", format);
++                    IMFMediaType_Release(media_type);
++                    return NULL;
++                }
++
++                IMFMediaType_SetUINT32(media_type, &MF_MT_AUDIO_BITS_PER_SAMPLE, bits_per_sample);
++
++                if (endian[0] == 'B')
++                    endian[0] = 'L';
++
++                sprintf(new_format, "%c%u%.2s", type, bits_per_sample, bits_per_sample > 8 ? endian : 0);
++                gst_caps_set_simple(caps, "format", G_TYPE_STRING, new_format, NULL);
++            }
++            else
++            {
++                ERR("Failed to get audio format\n");
++            }
++        }
++        else
++            FIXME("Unrecognized audio format %s\n", mime_type);
++    }
++    else
++    {
++        IMFMediaType_Release(media_type);
++        return NULL;
++    }
++
++    return media_type;
++}
++
++/* returns NULL if doesn't match exactly */
++IMFMediaType *mf_media_type_from_caps(GstCaps *caps)
++{
++    GstCaps *writeable_caps;
++    IMFMediaType *ret;
++
++    writeable_caps = gst_caps_copy(caps);
++    ret = transform_to_media_type(writeable_caps);
++
++    if (!(gst_caps_is_equal(caps, writeable_caps)))
++    {
++        IMFMediaType_Release(ret);
++        ret = NULL;
++    }
++    gst_caps_unref(writeable_caps);
++    return ret;
++}
++
++GstCaps *make_mf_compatible_caps(GstCaps *caps)
++{
++    GstCaps *ret;
++    IMFMediaType *media_type;
++
++    ret = gst_caps_copy(caps);
++
++    if ((media_type = transform_to_media_type(ret)))
++        IMFMediaType_Release(media_type);
++
++    if (!media_type)
++    {
++        gst_caps_unref(ret);
++        return NULL;
++    }
++
++    return ret;
++}
+\ No newline at end of file
+-- 
+2.26.2
+

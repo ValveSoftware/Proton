@@ -1,0 +1,62 @@
+From 5ad2ca1a32256794e519434e6d8bdc28e7e857a7 Mon Sep 17 00:00:00 2001
+From: Derek Lesho <dlesho@codeweavers.com>
+Date: Tue, 5 May 2020 15:35:16 -0500
+Subject: [PATCH 48/53] Report streams backwards and only select one of each
+ stream type.
+
+---
+ dlls/winegstreamer/media_source.c | 24 ++++++++++++++++++++++--
+ 1 file changed, 22 insertions(+), 2 deletions(-)
+
+diff --git a/dlls/winegstreamer/media_source.c b/dlls/winegstreamer/media_source.c
+index 1ce9b06b8c..3052c0393a 100644
+--- a/dlls/winegstreamer/media_source.c
++++ b/dlls/winegstreamer/media_source.c
+@@ -1431,6 +1431,7 @@ static HRESULT media_source_constructor(IMFByteStream *bytestream, enum source_t
+         source_descs[type].bytestream_caps);
+ 
+     struct media_source *object = heap_alloc_zero(sizeof(*object));
++    BOOL video_selected = FALSE, audio_selected = FALSE;
+     GList *demuxer_list_one, *demuxer_list_two;
+     GstElementFactory *demuxer_factory = NULL;
+     IMFStreamDescriptor **descriptors = NULL;
+@@ -1528,15 +1529,34 @@ static HRESULT media_source_constructor(IMFByteStream *bytestream, enum source_t
+     descriptors = heap_alloc(object->stream_count * sizeof(IMFStreamDescriptor*));
+     for (unsigned int i = 0; i < object->stream_count; i++)
+     {
+-        IMFMediaStream_GetStreamDescriptor(&object->streams[i]->IMFMediaStream_iface, &descriptors[i]);
++        IMFMediaStream_GetStreamDescriptor(&object->streams[i]->IMFMediaStream_iface, &descriptors[object->stream_count - 1 - i]);
+     }
+ 
+     if (FAILED(MFCreatePresentationDescriptor(object->stream_count, descriptors, &object->pres_desc)))
+         goto fail;
+ 
++    /* Select one of each major type. */
+     for (unsigned int i = 0; i < object->stream_count; i++)
+     {
+-        IMFPresentationDescriptor_SelectStream(object->pres_desc, i);
++        IMFMediaTypeHandler *handler;
++        GUID major_type;
++        BOOL select_stream = FALSE;
++
++        IMFStreamDescriptor_GetMediaTypeHandler(descriptors[i], &handler);
++        IMFMediaTypeHandler_GetMajorType(handler, &major_type);
++        if (IsEqualGUID(&major_type, &MFMediaType_Video) && !video_selected)
++        {
++            select_stream = TRUE;
++            video_selected = TRUE;
++        }
++        if (IsEqualGUID(&major_type, &MFMediaType_Audio) && !audio_selected)
++        {
++            select_stream = TRUE;
++            audio_selected = TRUE;
++        }
++        if (select_stream)
++            IMFPresentationDescriptor_SelectStream(object->pres_desc, i);
++        IMFMediaTypeHandler_Release(handler);
+         IMFStreamDescriptor_Release(descriptors[i]);
+     }
+     heap_free(descriptors);
+-- 
+2.26.2
+

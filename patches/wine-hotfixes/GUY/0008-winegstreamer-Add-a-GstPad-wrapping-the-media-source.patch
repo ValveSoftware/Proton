@@ -1,0 +1,441 @@
+From dfee9d660e6370ac72ee07011730bfab5db0dce2 Mon Sep 17 00:00:00 2001
+From: Derek Lesho <dlesho@codeweavers.com>
+Date: Mon, 30 Mar 2020 14:19:35 -0500
+Subject: [PATCH 08/53] winegstreamer: Add a GstPad wrapping the media source's
+ bytestream.
+
+Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
+---
+ dlls/winegstreamer/gst_cbs.c      |  58 ++++++++
+ dlls/winegstreamer/gst_cbs.h      |  12 +-
+ dlls/winegstreamer/media_source.c | 237 +++++++++++++++++++++++++++++-
+ 3 files changed, 302 insertions(+), 5 deletions(-)
+
+diff --git a/dlls/winegstreamer/gst_cbs.c b/dlls/winegstreamer/gst_cbs.c
+index bf7103b160..dfe33dd627 100644
+--- a/dlls/winegstreamer/gst_cbs.c
++++ b/dlls/winegstreamer/gst_cbs.c
+@@ -49,6 +49,8 @@ static void CALLBACK perform_cb(TP_CALLBACK_INSTANCE *instance, void *user)
+ 
+     if (cbdata->type < GSTDEMUX_MAX)
+         perform_cb_gstdemux(cbdata);
++    else if (cbdata->type < MEDIA_SOURCE_MAX)
++        perform_cb_media_source(cbdata);
+ 
+     pthread_mutex_lock(&cbdata->lock);
+     cbdata->finished = 1;
+@@ -301,3 +303,59 @@ gboolean query_sink_wrapper(GstPad *pad, GstObject *parent, GstQuery *query)
+ 
+     return cbdata.u.query_sink_data.ret;
+ }
++
++GstFlowReturn pull_from_bytestream_wrapper(GstPad *pad, GstObject *parent, guint64 ofs, guint len,
++        GstBuffer **buf)
++{
++    struct cb_data cbdata = { PULL_FROM_BYTESTREAM };
++
++    cbdata.u.getrange_data.pad = pad;
++    cbdata.u.getrange_data.parent = parent;
++    cbdata.u.getrange_data.ofs = ofs;
++    cbdata.u.getrange_data.len = len;
++    cbdata.u.getrange_data.buf = buf;
++
++    call_cb(&cbdata);
++
++    return cbdata.u.getrange_data.ret;
++}
++
++gboolean query_bytestream_wrapper(GstPad *pad, GstObject *parent, GstQuery *query)
++{
++    struct cb_data cbdata = { QUERY_BYTESTREAM };
++
++    cbdata.u.query_function_data.pad = pad;
++    cbdata.u.query_function_data.parent = parent;
++    cbdata.u.query_function_data.query = query;
++
++    call_cb(&cbdata);
++
++    return cbdata.u.query_function_data.ret;
++}
++
++gboolean activate_bytestream_pad_mode_wrapper(GstPad *pad, GstObject *parent, GstPadMode mode, gboolean activate)
++{
++    struct cb_data cbdata = { ACTIVATE_BYTESTREAM_PAD_MODE };
++
++    cbdata.u.activate_mode_data.pad = pad;
++    cbdata.u.activate_mode_data.parent = parent;
++    cbdata.u.activate_mode_data.mode = mode;
++    cbdata.u.activate_mode_data.activate = activate;
++
++    call_cb(&cbdata);
++
++    return cbdata.u.activate_mode_data.ret;
++}
++
++gboolean process_bytestream_pad_event_wrapper(GstPad *pad, GstObject *parent, GstEvent *event)
++{
++    struct cb_data cbdata = { PROCESS_BYTESTREAM_PAD_EVENT };
++
++    cbdata.u.event_src_data.pad = pad;
++    cbdata.u.event_src_data.parent = parent;
++    cbdata.u.event_src_data.event = event;
++
++    call_cb(&cbdata);
++
++    return cbdata.u.event_src_data.ret;
++}
+\ No newline at end of file
+diff --git a/dlls/winegstreamer/gst_cbs.h b/dlls/winegstreamer/gst_cbs.h
+index 4725f23ad1..10e999feea 100644
+--- a/dlls/winegstreamer/gst_cbs.h
++++ b/dlls/winegstreamer/gst_cbs.h
+@@ -43,7 +43,12 @@ enum CB_TYPE {
+     AUTOPLUG_BLACKLIST,
+     UNKNOWN_TYPE,
+     QUERY_SINK,
+-    GSTDEMUX_MAX
++    GSTDEMUX_MAX,
++    PULL_FROM_BYTESTREAM,
++    QUERY_BYTESTREAM,
++    ACTIVATE_BYTESTREAM_PAD_MODE,
++    PROCESS_BYTESTREAM_PAD_EVENT,
++    MEDIA_SOURCE_MAX,
+ };
+ 
+ struct cb_data {
+@@ -138,6 +143,7 @@ struct cb_data {
+ 
+ void mark_wine_thread(void) DECLSPEC_HIDDEN;
+ void perform_cb_gstdemux(struct cb_data *data) DECLSPEC_HIDDEN;
++void perform_cb_media_source(struct cb_data *data) DECLSPEC_HIDDEN;
+ 
+ GstBusSyncReply watch_bus_wrapper(GstBus *bus, GstMessage *msg, gpointer user) DECLSPEC_HIDDEN;
+ void existing_new_pad_wrapper(GstElement *bin, GstPad *pad, gpointer user) DECLSPEC_HIDDEN;
+@@ -154,5 +160,9 @@ GstAutoplugSelectResult autoplug_blacklist_wrapper(GstElement *bin, GstPad *pad,
+ void unknown_type_wrapper(GstElement *bin, GstPad *pad, GstCaps *caps, gpointer user) DECLSPEC_HIDDEN;
+ void Gstreamer_transform_pad_added_wrapper(GstElement *filter, GstPad *pad, gpointer user) DECLSPEC_HIDDEN;
+ gboolean query_sink_wrapper(GstPad *pad, GstObject *parent, GstQuery *query) DECLSPEC_HIDDEN;
++GstFlowReturn pull_from_bytestream_wrapper(GstPad *pad, GstObject *parent, guint64 ofs, guint len, GstBuffer **buf) DECLSPEC_HIDDEN;
++gboolean query_bytestream_wrapper(GstPad *pad, GstObject *parent, GstQuery *query) DECLSPEC_HIDDEN;
++gboolean activate_bytestream_pad_mode_wrapper(GstPad *pad, GstObject *parent, GstPadMode mode, gboolean activate) DECLSPEC_HIDDEN;
++gboolean process_bytestream_pad_event_wrapper(GstPad *pad, GstObject *parent, GstEvent *event) DECLSPEC_HIDDEN;
+ 
+ #endif
+diff --git a/dlls/winegstreamer/media_source.c b/dlls/winegstreamer/media_source.c
+index 09a40a0620..48119e4a89 100644
+--- a/dlls/winegstreamer/media_source.c
++++ b/dlls/winegstreamer/media_source.c
+@@ -1,4 +1,9 @@
++#include "config.h"
++
++#include <gst/gst.h>
++
+ #include "gst_private.h"
++#include "gst_cbs.h"
+ 
+ #include <stdarg.h>
+ 
+@@ -8,6 +13,7 @@
+ #include "mfapi.h"
+ #include "mferror.h"
+ #include "mfidl.h"
++#include "mfobjects.h"
+ 
+ #include "wine/debug.h"
+ #include "wine/heap.h"
+@@ -15,11 +21,24 @@
+ 
+ WINE_DEFAULT_DEBUG_CHANNEL(mfplat);
+ 
++static struct source_desc
++{
++    GstStaticCaps bytestream_caps;
++} source_descs[] =
++{
++    {/*SOURCE_TYPE_MPEG_4*/
++        GST_STATIC_CAPS("video/quicktime"),
++    }
++};
++
+ struct media_source
+ {
+     IMFMediaSource IMFMediaSource_iface;
+     LONG ref;
++    enum source_type type;
+     IMFMediaEventQueue *event_queue;
++    IMFByteStream *byte_stream;
++    GstPad *my_src;
+     enum
+     {
+         SOURCE_OPENING,
+@@ -35,6 +54,154 @@ static inline struct media_source *impl_from_IMFMediaSource(IMFMediaSource *ifac
+     return CONTAINING_RECORD(iface, struct media_source, IMFMediaSource_iface);
+ }
+ 
++GstFlowReturn pull_from_bytestream(GstPad *pad, GstObject *parent, guint64 ofs, guint len,
++        GstBuffer **buf)
++{
++    struct media_source *source = gst_pad_get_element_private(pad);
++    IMFByteStream *byte_stream = source->byte_stream;
++    ULONG bytes_read;
++    GstMapInfo info;
++    BOOL is_eof;
++    HRESULT hr;
++
++    TRACE("gstreamer requesting %u bytes at %s from source %p into buffer %p\n", len, wine_dbgstr_longlong(ofs), source, buf);
++
++    if (ofs != GST_BUFFER_OFFSET_NONE)
++    {
++        if (FAILED(IMFByteStream_SetCurrentPosition(byte_stream, ofs)))
++            return GST_FLOW_ERROR;
++    }
++
++    if (FAILED(IMFByteStream_IsEndOfStream(byte_stream, &is_eof)))
++        return GST_FLOW_ERROR;
++    if (is_eof)
++        return GST_FLOW_EOS;
++
++    if (!(*buf))
++        *buf = gst_buffer_new_and_alloc(len);
++    gst_buffer_map(*buf, &info, GST_MAP_WRITE);
++    hr = IMFByteStream_Read(byte_stream, info.data, len, &bytes_read);
++    gst_buffer_unmap(*buf, &info);
++
++    gst_buffer_set_size(*buf, bytes_read);
++
++    if (FAILED(hr))
++    {
++        return GST_FLOW_ERROR;
++    }
++    GST_BUFFER_OFFSET(*buf) = ofs;
++    return GST_FLOW_OK;
++}
++
++static gboolean query_bytestream(GstPad *pad, GstObject *parent, GstQuery *query)
++{
++    struct media_source *source = gst_pad_get_element_private(pad);
++    GstFormat format;
++    QWORD bytestream_len;
++
++    TRACE("GStreamer queries source %p for %s\n", source, GST_QUERY_TYPE_NAME(query));
++
++    if (FAILED(IMFByteStream_GetLength(source->byte_stream, &bytestream_len)))
++        return FALSE;
++
++    switch (GST_QUERY_TYPE(query))
++    {
++        case GST_QUERY_DURATION:
++        {
++            gst_query_parse_duration (query, &format, NULL);
++            if (format == GST_FORMAT_PERCENT) {
++                gst_query_set_duration (query, GST_FORMAT_PERCENT, GST_FORMAT_PERCENT_MAX);
++                return TRUE;
++            }
++            else if (format == GST_FORMAT_BYTES)
++            {
++                QWORD length;
++                IMFByteStream_GetLength(source->byte_stream, &length);
++                gst_query_set_duration (query, GST_FORMAT_BYTES, length);
++                return TRUE;
++            }
++            return FALSE;
++        }
++        case GST_QUERY_SEEKING:
++        {
++            gst_query_parse_seeking (query, &format, NULL, NULL, NULL);
++            if (format != GST_FORMAT_BYTES)
++            {
++                WARN("Cannot seek using format \"%s\".\n", gst_format_get_name(format));
++                return FALSE;
++            }
++            gst_query_set_seeking(query, GST_FORMAT_BYTES, 1, 0, bytestream_len);
++            return TRUE;
++        }
++        case GST_QUERY_SCHEDULING:
++        {
++            gst_query_set_scheduling(query, GST_SCHEDULING_FLAG_SEEKABLE, 1, -1, 0);
++            gst_query_add_scheduling_mode(query, GST_PAD_MODE_PULL);
++            return TRUE;
++        }
++        case GST_QUERY_CAPS:
++        {
++            GstCaps *caps, *filter;
++
++            gst_query_parse_caps(query, &filter);
++
++            caps = gst_static_caps_get(&source_descs[source->type].bytestream_caps);
++
++            if (filter) {
++                GstCaps* filtered;
++                filtered = gst_caps_intersect_full(
++                        filter, caps, GST_CAPS_INTERSECT_FIRST);
++                gst_caps_unref(caps);
++                caps = filtered;
++            }
++            gst_query_set_caps_result(query, caps);
++            gst_caps_unref(caps);
++            return TRUE;
++        }
++        default:
++        {
++            WARN("Unhandled query type %s\n", GST_QUERY_TYPE_NAME(query));
++            return FALSE;
++        }
++    }
++}
++
++static gboolean activate_bytestream_pad_mode(GstPad *pad, GstObject *parent, GstPadMode mode, gboolean activate)
++{
++    struct media_source *source = gst_pad_get_element_private(pad);
++
++    TRACE("%s source pad for mediasource %p in %s mode.\n",
++            activate ? "Activating" : "Deactivating", source, gst_pad_mode_get_name(mode));
++
++    switch (mode) {
++      case GST_PAD_MODE_PULL:
++        return TRUE;
++      default:
++        return FALSE;
++    }
++    return FALSE;
++}
++
++static gboolean process_bytestream_pad_event(GstPad *pad, GstObject *parent, GstEvent *event)
++{
++    struct media_source *source = gst_pad_get_element_private(pad);
++
++    TRACE("source %p, type \"%s\".\n", source, GST_EVENT_TYPE_NAME(event));
++
++    switch (event->type) {
++        /* the seek event should fail in pull mode */
++        case GST_EVENT_SEEK:
++            return FALSE;
++        default:
++            WARN("Ignoring \"%s\" event.\n", GST_EVENT_TYPE_NAME(event));
++        case GST_EVENT_TAG:
++        case GST_EVENT_QOS:
++        case GST_EVENT_RECONFIGURE:
++            return gst_pad_event_default(pad, parent, event);
++    }
++    return TRUE;
++}
++
+ static HRESULT WINAPI media_source_QueryInterface(IMFMediaSource *iface, REFIID riid, void **out)
+ {
+     struct media_source *source = impl_from_IMFMediaSource(iface);
+@@ -187,13 +354,20 @@ static HRESULT WINAPI media_source_Pause(IMFMediaSource *iface)
+ 
+     FIXME("(%p): stub\n", source);
+ 
++    if (source->state == SOURCE_SHUTDOWN)
++        return MF_E_SHUTDOWN;
++
+     return E_NOTIMPL;
+ }
+ 
+ static HRESULT media_source_teardown(struct media_source *source)
+ {
++    if (source->my_src)
++        gst_object_unref(GST_OBJECT(source->my_src));
+     if (source->event_queue)
+         IMFMediaEventQueue_Release(source->event_queue);
++    if (source->byte_stream)
++        IMFByteStream_Release(source->byte_stream);
+ 
+     return S_OK;
+ }
+@@ -227,19 +401,35 @@ static const IMFMediaSourceVtbl IMFMediaSource_vtbl =
+ 
+ static HRESULT media_source_constructor(IMFByteStream *bytestream, enum source_type type, struct media_source **out_media_source)
+ {
++    GstStaticPadTemplate src_template = GST_STATIC_PAD_TEMPLATE(
++        "mf_src",
++        GST_PAD_SRC,
++        GST_PAD_ALWAYS,
++        source_descs[type].bytestream_caps);
++
+     struct media_source *object = heap_alloc_zero(sizeof(*object));
+     HRESULT hr;
+ 
+     if (!object)
+         return E_OUTOFMEMORY;
+ 
++    object->IMFMediaSource_iface.lpVtbl = &IMFMediaSource_vtbl;
++    object->ref = 1;
++    object->type = type;
++    object->byte_stream = bytestream;
++    IMFByteStream_AddRef(bytestream);
++
+     if (FAILED(hr = MFCreateEventQueue(&object->event_queue)))
+         goto fail;
+ 
+-    object->state = SOURCE_STOPPED;
++    object->my_src = gst_pad_new_from_static_template(&src_template, "mf-src");
++    gst_pad_set_element_private(object->my_src, object);
++    gst_pad_set_getrange_function(object->my_src, pull_from_bytestream_wrapper);
++    gst_pad_set_query_function(object->my_src, query_bytestream_wrapper);
++    gst_pad_set_activatemode_function(object->my_src, activate_bytestream_pad_mode_wrapper);
++    gst_pad_set_event_function(object->my_src, process_bytestream_pad_event_wrapper);
+ 
+-    object->IMFMediaSource_iface.lpVtbl = &IMFMediaSource_vtbl;
+-    object->ref = 1;
++    object->state = SOURCE_STOPPED;
+ 
+     *out_media_source = object;
+     return S_OK;
+@@ -249,6 +439,7 @@ static HRESULT media_source_constructor(IMFByteStream *bytestream, enum source_t
+ 
+     media_source_teardown(object);
+     heap_free(object);
++    *out_media_source = NULL;
+     return hr;
+ }
+ 
+@@ -712,4 +903,42 @@ HRESULT container_stream_handler_construct(REFIID riid, void **obj, enum source_
+     IMFByteStreamHandler_Release(&this->IMFByteStreamHandler_iface);
+ 
+     return hr;
+-}
+\ No newline at end of file
++}
++
++/* helper for callback forwarding */
++void perform_cb_media_source(struct cb_data *cbdata)
++{
++    switch(cbdata->type)
++    {
++    case PULL_FROM_BYTESTREAM:
++        {
++            struct getrange_data *data = &cbdata->u.getrange_data;
++            cbdata->u.getrange_data.ret = pull_from_bytestream(data->pad, data->parent,
++                    data->ofs, data->len, data->buf);
++            break;
++        }
++    case QUERY_BYTESTREAM:
++        {
++            struct query_function_data *data = &cbdata->u.query_function_data;
++            cbdata->u.query_function_data.ret = query_bytestream(data->pad, data->parent, data->query);
++            break;
++        }
++    case ACTIVATE_BYTESTREAM_PAD_MODE:
++        {
++            struct activate_mode_data *data = &cbdata->u.activate_mode_data;
++            cbdata->u.activate_mode_data.ret = activate_bytestream_pad_mode(data->pad, data->parent, data->mode, data->activate);
++            break;
++        }
++    case PROCESS_BYTESTREAM_PAD_EVENT:
++        {
++            struct event_src_data *data = &cbdata->u.event_src_data;
++            cbdata->u.event_src_data.ret = process_bytestream_pad_event(data->pad, data->parent, data->event);
++            break;
++        }
++    default:
++        {
++            ERR("Wrong callback forwarder called\n");
++            return;
++        }
++    }
++}
+-- 
+2.26.2
+

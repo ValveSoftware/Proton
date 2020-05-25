@@ -1,5 +1,5 @@
 diff --git a/steamclient_main.c b/steamclient_main.c
-index 1322eaa..de54021 100644
+index 1322eaa..3e2b86e 100644
 --- a/steamclient_main.c
 +++ b/steamclient_main.c
 @@ -4,6 +4,11 @@
@@ -14,7 +14,7 @@ index 1322eaa..de54021 100644
  
  #include "windef.h"
  #include "winbase.h"
-@@ -402,11 +406,66 @@ void *create_win_interface(const char *name, void *linux_side)
+@@ -402,11 +406,65 @@ void *create_win_interface(const char *name, void *linux_side)
      struct steamclient_interface *e;
      void *ret = NULL;
      int i;
@@ -49,7 +49,7 @@ index 1322eaa..de54021 100644
 +                    if(fd>0)
 +                    {
 +                        TRACE("%s successfully read, checking for device name\n", jsdevice);
-+                        char jsname[128];
++                        char jsname[512];
 +
 +                        if (ioctl(fd, JSIOCGNAME(sizeof(jsname)), jsname) < 0)
 +                        {
@@ -57,11 +57,10 @@ index 1322eaa..de54021 100644
 +                        }
 +
 +                        TRACE("Verifying if %s is joystick\n", jsname);
-+                        if (!strcasestr(jsname,"mouse") && !strcasestr(jsname,"keyboard") )
++                        if (!strcasestr(jsname,"mouse") || !strcasestr(jsname,"keyboard") )
 +                        {
 +                            TRACE("Joystick device verified, loading %s\n", name);
 +                            js++;
-+                            close(fd);
 +                            break;
 +                        }
 +                    }

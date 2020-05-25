@@ -72,6 +72,14 @@
 
     # fixes patching without rawinput
     patch -Np1 < ../patches/wine-hotfixes/staging-44d1a45-localreverts.patch    
+
+    # revert necessary to apply cleanly after reverting time issue introduced in 5.9 commits:
+    # 7cc9ccbd22511d71d23ee298cd9718da1e448dbc
+    # 79e3c21c3cca822efedff3092df42f9044da10fe
+    # 75e2f79b684f70e7184592db16d819b778d575ae
+    # 4ccc3e52852447198a8b81fc91472bfa3b614914
+    patch -Np1 < ../patches/wine-hotfixes/time_hotfix.patch    
+
     cd ..
 
     #WINE
@@ -82,13 +90,17 @@
     # this conflicts with proton's gamepad changes and causes camera spinning
     git revert --no-commit da7d60bf97fb8726828e57f852e8963aacde21e9
     
-    # temporary fshack revers
+    # temporary fshack reverts
     git revert --no-commit 26b26a2e0efcb776e7b0115f15580d2507b10400
     git revert --no-commit fd6f50c0d3e96947846ca82ed0c9bd79fd8e5b80
-    
-# warframe launcher fix 0.0mb hang fix
-#    -W ntdll-avoid-fstatat
 
+    # these broke time keeping
+    git revert --no-commit 7cc9ccbd22511d71d23ee298cd9718da1e448dbc
+    git revert --no-commit 79e3c21c3cca822efedff3092df42f9044da10fe
+    git revert --no-commit 75e2f79b684f70e7184592db16d819b778d575ae
+    git revert --no-commit 4ccc3e52852447198a8b81fc91472bfa3b614914
+
+    
 # disable these when using proton's gamepad patches
 #    -W dinput-SetActionMap-genre \
 #    -W dinput-axis-recalc \
@@ -113,9 +125,7 @@
     -W dinput-axis-recalc \
     -W dinput-joy-mappings \
     -W dinput-reconnect-joystick \
-    -W dinput-remap-joystick \
-    -W ntdll-avoid-fstatat
-
+    -W dinput-remap-joystick
 
     #WINE FAUDIO
     #echo "applying faudio patches"
@@ -123,18 +133,17 @@
 
 
     ### GAME PATCH SECTION ###
+
+    #fix this
     echo "mech warrior online"
     patch -Np1 < ../patches/game-patches/mwo.patch
 
-#   TODO: Add game-specific check
     echo "final fantasy XV denuvo fix"
     patch -Np1 < ../patches/game-patches/ffxv-steam-fix.patch
     
-#   TODO: Add game-specific check
     echo "final fantasy XIV old launcher render fix"
     patch -Np1 < ../patches/game-patches/ffxiv-launcher.patch
 
-#   TODO: Add game-specific check
     echo "assetto corsa"
     patch -Np1 < ../patches/game-patches/assettocorsa-hud.patch
 
@@ -147,18 +156,18 @@
     echo "fix steep"
     patch -Np1 < ../patches/wine-hotfixes/0001-Add-some-semi-stubs-in-user32.patch
 
-#   TODO: Check on this - don't own game. Need to validate
-#   TODO: Add game-specific check
-    echo "NFSW launcher fix"
-    patch -Np1 < ../patches/game-patches/NFSWLauncherfix.patch
+    echo "Denuvo anti-cheat DOOM Eternal hotfix"
+    patch -Np1 < ../patches/game-patches/gofman_dac.patch
 
 # Currently applied but not working:
 
+#  TODO: Add game-specific check
     echo "mk11 patch"
     patch -Np1 < ../patches/game-patches/mk11.patch
 
-    echo "blackops 2 fix"
-    patch -Np1 < ../patches/game-patches/blackops_2_fix.patch
+#    Disabled for now. The game uses CEG which does not work in proton.    
+#    echo "blackops 2 fix"
+#    patch -Np1 < ../patches/game-patches/blackops_2_fix.patch
 
     ### END GAME PATCH SECTION ###
     
@@ -269,12 +278,10 @@
 
     echo "proton-specific manual mfplat dll register patch"
     patch -Np1 < ../patches/wine-hotfixes/proton_mediafoundation_dllreg.patch
-
+    
     #WINE CUSTOM PATCHES
     #add your own custom patch lines below
     patch -Np1 < ../patches/wine-hotfixes/user32-Set_PAINTSTRUCT_fErase_field_depending_on_the_last_WM_ERASEBKGND_result.patch
-#    patch -Np1 < ../patches/wine-hotfixes/ntdll-Use_the_free_ranges_in_find_reserved_free_area.patch
-    patch -Np1 < ../patches/wine-hotfixes/dll_loader_fix.patch
 
     ./dlls/winevulkan/make_vulkan
     ./tools/make_requests

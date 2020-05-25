@@ -14,7 +14,7 @@ Signed-off-by: Sergio Gómez Del Real <sdelreal@codeweavers.com>
  1 file changed, 5 insertions(+), 2 deletions(-)
 
 diff --git a/dlls/mf/tests/mf.c b/dlls/mf/tests/mf.c
-index bf14ccf0feb..3a0164c8511 100644
+index bf14ccf0fe..3a0164c851 100644
 --- a/dlls/mf/tests/mf.c
 +++ b/dlls/mf/tests/mf.c
 @@ -1311,6 +1311,7 @@ static void test_topology_loader(void)
@@ -63,7 +63,7 @@ Signed-off-by: Sergio Gómez Del Real <sdelreal@codeweavers.com>
  1 file changed, 433 insertions(+), 2 deletions(-)
 
 diff --git a/dlls/mf/tests/mf.c b/dlls/mf/tests/mf.c
-index 3a0164c8511..3ce94862c70 100644
+index 3a0164c851..3ce94862c7 100644
 --- a/dlls/mf/tests/mf.c
 +++ b/dlls/mf/tests/mf.c
 @@ -1303,26 +1303,169 @@ static const IMFSampleGrabberSinkCallbackVtbl test_grabber_callback_vtbl =
@@ -563,7 +563,7 @@ Signed-off-by: Sergio Gómez Del Real <sdelreal@codeweavers.com>
  2 files changed, 321 insertions(+), 19 deletions(-)
 
 diff --git a/dlls/mf/tests/mf.c b/dlls/mf/tests/mf.c
-index 3ce94862c70..46f1dc3c6a4 100644
+index 3ce94862c7..46f1dc3c6a 100644
 --- a/dlls/mf/tests/mf.c
 +++ b/dlls/mf/tests/mf.c
 @@ -1483,7 +1483,6 @@ static void test_topology_loader(void)
@@ -591,7 +591,7 @@ index 3ce94862c70..46f1dc3c6a4 100644
  
      hr = IMFTopologyNode_ConnectOutput(src_node, 0, sink_node, 0);
 diff --git a/dlls/mf/topology.c b/dlls/mf/topology.c
-index 0b4d7344422..7a4c95bea07 100644
+index 0b4d734442..7a4c95bea0 100644
 --- a/dlls/mf/topology.c
 +++ b/dlls/mf/topology.c
 @@ -1913,47 +1913,352 @@ static ULONG WINAPI topology_loader_Release(IMFTopoLoader *iface)
@@ -985,7 +985,7 @@ Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
  create mode 100644 dlls/winegstreamer/media_source.c
 
 diff --git a/dlls/mfplat/tests/mfplat.c b/dlls/mfplat/tests/mfplat.c
-index 8a52279a081..55a27a8437e 100644
+index 8a52279a08..55a27a8437 100644
 --- a/dlls/mfplat/tests/mfplat.c
 +++ b/dlls/mfplat/tests/mfplat.c
 @@ -494,7 +494,10 @@ static void test_source_resolver(void)
@@ -1028,7 +1028,7 @@ index 8a52279a081..55a27a8437e 100644
      IMFByteStream_Release(stream);
  
 diff --git a/dlls/winegstreamer/Makefile.in b/dlls/winegstreamer/Makefile.in
-index 337c1086e6b..e578d194f7f 100644
+index 337c1086e6..e578d194f7 100644
 --- a/dlls/winegstreamer/Makefile.in
 +++ b/dlls/winegstreamer/Makefile.in
 @@ -10,6 +10,7 @@ C_SRCS = \
@@ -1040,7 +1040,7 @@ index 337c1086e6b..e578d194f7f 100644
  	mfplat.c \
  	pin.c \
 diff --git a/dlls/winegstreamer/gst_private.h b/dlls/winegstreamer/gst_private.h
-index e6fb841fc87..71ca4290885 100644
+index e6fb841fc8..71ca429088 100644
 --- a/dlls/winegstreamer/gst_private.h
 +++ b/dlls/winegstreamer/gst_private.h
 @@ -54,4 +54,10 @@ void start_dispatch_thread(void) DECLSPEC_HIDDEN;
@@ -1056,7 +1056,7 @@ index e6fb841fc87..71ca4290885 100644
  #endif /* __GST_PRIVATE_INCLUDED__ */
 diff --git a/dlls/winegstreamer/media_source.c b/dlls/winegstreamer/media_source.c
 new file mode 100644
-index 00000000000..df28f54444d
+index 0000000000..df28f54444
 --- /dev/null
 +++ b/dlls/winegstreamer/media_source.c
 @@ -0,0 +1,680 @@
@@ -1742,10 +1742,10 @@ index 00000000000..df28f54444d
 +}
 \ No newline at end of file
 diff --git a/dlls/winegstreamer/mfplat.c b/dlls/winegstreamer/mfplat.c
-index 55b9b088765..16e55247de1 100644
+index 55b9b08876..16e55247de 100644
 --- a/dlls/winegstreamer/mfplat.c
 +++ b/dlls/winegstreamer/mfplat.c
-@@ -398,6 +398,11 @@ static HRESULT video_processor_create(REFIID riid, void **ret)
+@@ -398,6 +398,11 @@ failed:
      return hr;
  }
  
@@ -1776,7 +1776,7 @@ index 55b9b088765..16e55247de1 100644
      {
          if (IsEqualGUID(class_objects[i].clsid, rclsid))
 diff --git a/dlls/winegstreamer/winegstreamer.rgs b/dlls/winegstreamer/winegstreamer.rgs
-index 923ba673f8c..0bc26761e9d 100644
+index 923ba673f8..0bc26761e9 100644
 --- a/dlls/winegstreamer/winegstreamer.rgs
 +++ b/dlls/winegstreamer/winegstreamer.rgs
 @@ -12,3 +12,35 @@ HKCR
@@ -1817,7 +1817,7 @@ index 923ba673f8c..0bc26761e9d 100644
 +}
 \ No newline at end of file
 diff --git a/dlls/winegstreamer/winegstreamer_classes.idl b/dlls/winegstreamer/winegstreamer_classes.idl
-index fa0e1784057..997a28b052f 100644
+index fa0e178405..997a28b052 100644
 --- a/dlls/winegstreamer/winegstreamer_classes.idl
 +++ b/dlls/winegstreamer/winegstreamer_classes.idl
 @@ -54,3 +54,10 @@ coclass Gstreamer_Splitter {}
@@ -1832,7 +1832,7 @@ index fa0e1784057..997a28b052f 100644
 +]
 +coclass MPEG4ByteStreamHandler {}
 diff --git a/include/mfidl.idl b/include/mfidl.idl
-index 4e7a43f5fff..c61ccb788ce 100644
+index 4e7a43f5ff..c61ccb788c 100644
 --- a/include/mfidl.idl
 +++ b/include/mfidl.idl
 @@ -1128,3 +1128,4 @@ cpp_quote("EXTERN_GUID(MF_AUDIO_RENDERER_ATTRIBUTE_ENDPOINT_ROLE, 0x6ba644ff, 0x
@@ -1856,7 +1856,7 @@ Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
  2 files changed, 38 insertions(+), 3 deletions(-)
 
 diff --git a/dlls/mfplat/tests/mfplat.c b/dlls/mfplat/tests/mfplat.c
-index 55a27a8437e..06b4817f99e 100644
+index 55a27a8437..06b4817f99 100644
 --- a/dlls/mfplat/tests/mfplat.c
 +++ b/dlls/mfplat/tests/mfplat.c
 @@ -591,13 +591,13 @@ todo_wine
@@ -1875,7 +1875,7 @@ index 55a27a8437e..06b4817f99e 100644
      IMFByteStream_Release(stream);
  
 diff --git a/dlls/winegstreamer/media_source.c b/dlls/winegstreamer/media_source.c
-index df28f54444d..09a40a06208 100644
+index df28f54444..09a40a0620 100644
 --- a/dlls/winegstreamer/media_source.c
 +++ b/dlls/winegstreamer/media_source.c
 @@ -20,6 +20,14 @@ struct media_source
@@ -2012,7 +2012,7 @@ Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
  3 files changed, 302 insertions(+), 5 deletions(-)
 
 diff --git a/dlls/winegstreamer/gst_cbs.c b/dlls/winegstreamer/gst_cbs.c
-index bf7103b1606..dfe33dd6277 100644
+index bf7103b160..dfe33dd627 100644
 --- a/dlls/winegstreamer/gst_cbs.c
 +++ b/dlls/winegstreamer/gst_cbs.c
 @@ -49,6 +49,8 @@ static void CALLBACK perform_cb(TP_CALLBACK_INSTANCE *instance, void *user)
@@ -2086,7 +2086,7 @@ index bf7103b1606..dfe33dd6277 100644
 +}
 \ No newline at end of file
 diff --git a/dlls/winegstreamer/gst_cbs.h b/dlls/winegstreamer/gst_cbs.h
-index 4725f23ad1a..10e999feea7 100644
+index 4725f23ad1..10e999feea 100644
 --- a/dlls/winegstreamer/gst_cbs.h
 +++ b/dlls/winegstreamer/gst_cbs.h
 @@ -43,7 +43,12 @@ enum CB_TYPE {
@@ -2122,7 +2122,7 @@ index 4725f23ad1a..10e999feea7 100644
  
  #endif
 diff --git a/dlls/winegstreamer/media_source.c b/dlls/winegstreamer/media_source.c
-index 09a40a06208..48119e4a89d 100644
+index 09a40a0620..48119e4a89 100644
 --- a/dlls/winegstreamer/media_source.c
 +++ b/dlls/winegstreamer/media_source.c
 @@ -1,4 +1,9 @@
@@ -2455,7 +2455,7 @@ Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
  3 files changed, 114 insertions(+), 2 deletions(-)
 
 diff --git a/dlls/winegstreamer/gst_cbs.c b/dlls/winegstreamer/gst_cbs.c
-index dfe33dd6277..cf49745f1de 100644
+index dfe33dd627..cf49745f1d 100644
 --- a/dlls/winegstreamer/gst_cbs.c
 +++ b/dlls/winegstreamer/gst_cbs.c
 @@ -358,4 +358,17 @@ gboolean process_bytestream_pad_event_wrapper(GstPad *pad, GstObject *parent, Gs
@@ -2479,7 +2479,7 @@ index dfe33dd6277..cf49745f1de 100644
 +    return cbdata.u.watch_bus_data.ret;
 +}
 diff --git a/dlls/winegstreamer/gst_cbs.h b/dlls/winegstreamer/gst_cbs.h
-index 10e999feea7..0d7acaf0b86 100644
+index 10e999feea..0d7acaf0b8 100644
 --- a/dlls/winegstreamer/gst_cbs.h
 +++ b/dlls/winegstreamer/gst_cbs.h
 @@ -48,6 +48,7 @@ enum CB_TYPE {
@@ -2498,7 +2498,7 @@ index 10e999feea7..0d7acaf0b86 100644
  
  #endif
 diff --git a/dlls/winegstreamer/media_source.c b/dlls/winegstreamer/media_source.c
-index 48119e4a89d..e1f5c773758 100644
+index 48119e4a89..e1f5c77375 100644
 --- a/dlls/winegstreamer/media_source.c
 +++ b/dlls/winegstreamer/media_source.c
 @@ -38,7 +38,12 @@ struct media_source
@@ -2674,7 +2674,7 @@ Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
  3 files changed, 461 insertions(+)
 
 diff --git a/dlls/winegstreamer/gst_cbs.c b/dlls/winegstreamer/gst_cbs.c
-index cf49745f1de..d2d36aeb86b 100644
+index cf49745f1d..d2d36aeb86 100644
 --- a/dlls/winegstreamer/gst_cbs.c
 +++ b/dlls/winegstreamer/gst_cbs.c
 @@ -372,3 +372,47 @@ GstBusSyncReply watch_source_bus_wrapper(GstBus *bus, GstMessage *message, gpoin
@@ -2727,7 +2727,7 @@ index cf49745f1de..d2d36aeb86b 100644
 +}
 \ No newline at end of file
 diff --git a/dlls/winegstreamer/gst_cbs.h b/dlls/winegstreamer/gst_cbs.h
-index 0d7acaf0b86..106368a0641 100644
+index 0d7acaf0b8..106368a064 100644
 --- a/dlls/winegstreamer/gst_cbs.h
 +++ b/dlls/winegstreamer/gst_cbs.h
 @@ -49,6 +49,10 @@ enum CB_TYPE {
@@ -2764,7 +2764,7 @@ index 0d7acaf0b86..106368a0641 100644
  
  #endif
 diff --git a/dlls/winegstreamer/media_source.c b/dlls/winegstreamer/media_source.c
-index e1f5c773758..8335c64338d 100644
+index e1f5c77375..8335c64338 100644
 --- a/dlls/winegstreamer/media_source.c
 +++ b/dlls/winegstreamer/media_source.c
 @@ -5,6 +5,7 @@
@@ -3258,7 +3258,7 @@ Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
  3 files changed, 244 insertions(+), 1 deletion(-)
 
 diff --git a/dlls/winegstreamer/gst_private.h b/dlls/winegstreamer/gst_private.h
-index 71ca4290885..780cf1b02fa 100644
+index 71ca429088..780cf1b02f 100644
 --- a/dlls/winegstreamer/gst_private.h
 +++ b/dlls/winegstreamer/gst_private.h
 @@ -36,6 +36,7 @@
@@ -3280,7 +3280,7 @@ index 71ca4290885..780cf1b02fa 100644
  {
      SOURCE_TYPE_MPEG_4,
 diff --git a/dlls/winegstreamer/media_source.c b/dlls/winegstreamer/media_source.c
-index 8335c64338d..a654d555bc1 100644
+index 8335c64338..a654d555bc 100644
 --- a/dlls/winegstreamer/media_source.c
 +++ b/dlls/winegstreamer/media_source.c
 @@ -507,7 +507,10 @@ static HRESULT WINAPI media_stream_GetStreamDescriptor(IMFMediaStream* iface, IM
@@ -3357,7 +3357,7 @@ index 8335c64338d..a654d555bc1 100644
      return hr;
  }
 diff --git a/dlls/winegstreamer/mfplat.c b/dlls/winegstreamer/mfplat.c
-index 16e55247de1..90eb583c4a0 100644
+index 16e55247de..90eb583c4a 100644
 --- a/dlls/winegstreamer/mfplat.c
 +++ b/dlls/winegstreamer/mfplat.c
 @@ -16,6 +16,11 @@
@@ -3582,7 +3582,7 @@ Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
  1 file changed, 67 insertions(+)
 
 diff --git a/dlls/winegstreamer/mfplat.c b/dlls/winegstreamer/mfplat.c
-index 90eb583c4a0..1b37e1cc901 100644
+index 90eb583c4a..1b37e1cc90 100644
 --- a/dlls/winegstreamer/mfplat.c
 +++ b/dlls/winegstreamer/mfplat.c
 @@ -26,6 +26,7 @@
@@ -3680,7 +3680,7 @@ Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
  1 file changed, 51 insertions(+)
 
 diff --git a/dlls/winegstreamer/mfplat.c b/dlls/winegstreamer/mfplat.c
-index 1b37e1cc901..96195c887c3 100644
+index 1b37e1cc90..96195c887c 100644
 --- a/dlls/winegstreamer/mfplat.c
 +++ b/dlls/winegstreamer/mfplat.c
 @@ -463,6 +463,24 @@ uncompressed_formats[] =
@@ -3762,7 +3762,7 @@ Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
  1 file changed, 107 insertions(+)
 
 diff --git a/dlls/winegstreamer/mfplat.c b/dlls/winegstreamer/mfplat.c
-index 96195c887c3..ecb5de8b884 100644
+index 96195c887c..ecb5de8b88 100644
 --- a/dlls/winegstreamer/mfplat.c
 +++ b/dlls/winegstreamer/mfplat.c
 @@ -463,6 +463,15 @@ uncompressed_formats[] =
@@ -3901,7 +3901,7 @@ Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
  1 file changed, 16 insertions(+)
 
 diff --git a/dlls/winegstreamer/mfplat.c b/dlls/winegstreamer/mfplat.c
-index ecb5de8b884..c45cfacc08b 100644
+index ecb5de8b88..c45cfacc08 100644
 --- a/dlls/winegstreamer/mfplat.c
 +++ b/dlls/winegstreamer/mfplat.c
 @@ -652,6 +652,22 @@ static IMFMediaType* transform_to_media_type(GstCaps *caps)
@@ -3941,7 +3941,7 @@ Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
  1 file changed, 24 insertions(+)
 
 diff --git a/dlls/winegstreamer/mfplat.c b/dlls/winegstreamer/mfplat.c
-index c45cfacc08b..fe187e6cd11 100644
+index c45cfacc08..fe187e6cd1 100644
 --- a/dlls/winegstreamer/mfplat.c
 +++ b/dlls/winegstreamer/mfplat.c
 @@ -831,6 +831,30 @@ static IMFMediaType* transform_to_media_type(GstCaps *caps)
@@ -3991,7 +3991,7 @@ Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
  2 files changed, 38 insertions(+), 6 deletions(-)
 
 diff --git a/dlls/mfplat/tests/mfplat.c b/dlls/mfplat/tests/mfplat.c
-index 06b4817f99e..e2609f34ee3 100644
+index 06b4817f99..e2609f34ee 100644
 --- a/dlls/mfplat/tests/mfplat.c
 +++ b/dlls/mfplat/tests/mfplat.c
 @@ -494,10 +494,7 @@ static void test_source_resolver(void)
@@ -4029,7 +4029,7 @@ index 06b4817f99e..e2609f34ee3 100644
      ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
  
 diff --git a/dlls/winegstreamer/media_source.c b/dlls/winegstreamer/media_source.c
-index a654d555bc1..04b3b9f6c71 100644
+index a654d555bc..04b3b9f6c7 100644
 --- a/dlls/winegstreamer/media_source.c
 +++ b/dlls/winegstreamer/media_source.c
 @@ -61,6 +61,7 @@ struct media_source
@@ -4129,7 +4129,7 @@ Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
  2 files changed, 284 insertions(+), 7 deletions(-)
 
 diff --git a/dlls/mfplat/tests/mfplat.c b/dlls/mfplat/tests/mfplat.c
-index e2609f34ee3..1929c0e519e 100644
+index e2609f34ee..1929c0e519 100644
 --- a/dlls/mfplat/tests/mfplat.c
 +++ b/dlls/mfplat/tests/mfplat.c
 @@ -522,10 +522,7 @@ static void test_source_resolver(void)
@@ -4171,7 +4171,7 @@ index e2609f34ee3..1929c0e519e 100644
      IMFPresentationDescriptor_Release(descriptor);
  
 diff --git a/dlls/winegstreamer/media_source.c b/dlls/winegstreamer/media_source.c
-index 04b3b9f6c71..abf0cfd56fa 100644
+index 04b3b9f6c7..abf0cfd56f 100644
 --- a/dlls/winegstreamer/media_source.c
 +++ b/dlls/winegstreamer/media_source.c
 @@ -50,12 +50,36 @@ struct media_stream
@@ -4529,7 +4529,7 @@ Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
  1 file changed, 91 insertions(+), 23 deletions(-)
 
 diff --git a/dlls/winegstreamer/media_source.c b/dlls/winegstreamer/media_source.c
-index abf0cfd56fa..cb247adcef1 100644
+index abf0cfd56f..cb247adcef 100644
 --- a/dlls/winegstreamer/media_source.c
 +++ b/dlls/winegstreamer/media_source.c
 @@ -578,7 +578,6 @@ static void source_stream_added(GstElement *element, GstPad *pad, gpointer user)
@@ -4708,7 +4708,7 @@ Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
  4 files changed, 202 insertions(+), 9 deletions(-)
 
 diff --git a/dlls/mfplat/tests/mfplat.c b/dlls/mfplat/tests/mfplat.c
-index 1929c0e519e..0ae58b24cab 100644
+index 1929c0e519..0ae58b24ca 100644
 --- a/dlls/mfplat/tests/mfplat.c
 +++ b/dlls/mfplat/tests/mfplat.c
 @@ -540,13 +540,10 @@ static void test_source_resolver(void)
@@ -4734,7 +4734,7 @@ index 1929c0e519e..0ae58b24cab 100644
      IMFMediaTypeHandler_Release(handler);
      IMFPresentationDescriptor_Release(descriptor);
 diff --git a/dlls/winegstreamer/gst_private.h b/dlls/winegstreamer/gst_private.h
-index 780cf1b02fa..823e023f52c 100644
+index 780cf1b02f..823e023f52 100644
 --- a/dlls/winegstreamer/gst_private.h
 +++ b/dlls/winegstreamer/gst_private.h
 @@ -57,6 +57,7 @@ extern HRESULT mfplat_get_class_object(REFCLSID rclsid, REFIID riid, void **obj)
@@ -4746,7 +4746,7 @@ index 780cf1b02fa..823e023f52c 100644
  enum source_type
  {
 diff --git a/dlls/winegstreamer/media_source.c b/dlls/winegstreamer/media_source.c
-index cb247adcef1..0e53fbf4247 100644
+index cb247adcef..0e53fbf424 100644
 --- a/dlls/winegstreamer/media_source.c
 +++ b/dlls/winegstreamer/media_source.c
 @@ -56,6 +56,7 @@ struct media_stream
@@ -4769,7 +4769,7 @@ index cb247adcef1..0e53fbf4247 100644
      } u;
  };
  
-@@ -304,6 +310,77 @@ static HRESULT start_pipeline(struct media_source *source, struct source_async_c
+@@ -304,6 +310,76 @@ static HRESULT start_pipeline(struct media_source *source, struct source_async_c
      return S_OK;
  }
  
@@ -4798,39 +4798,6 @@ index cb247adcef1..0e53fbf4247 100644
 +
 +    TRACE("%p, %p\n", stream, token);
 +
-+    g_signal_emit_by_name(stream->appsink, "pull-sample", &gst_sample);
-+    if (gst_sample)
-+    {
-+        buffer = gst_sample_get_buffer(gst_sample);
-+
-+        if (TRACE_ON(mfplat))
-+        {
-+            const GstCaps *sample_caps = gst_sample_get_caps(gst_sample);
-+            const GstStructure *sample_info = gst_sample_get_info(gst_sample);
-+            if (sample_caps)
-+            {
-+                gchar *sample_caps_str = gst_caps_to_string(sample_caps);
-+                TRACE("sample caps %s\n", debugstr_a(sample_caps_str));
-+                g_free(sample_caps_str);
-+            }
-+            if (sample_info)
-+            {
-+                gchar *sample_info_str = gst_structure_to_string(sample_info);
-+                TRACE("sample info %s\n", debugstr_a(sample_info_str));
-+                g_free(sample_info_str);
-+            }
-+            TRACE("PTS = %lu DTS = %lu\n", GST_BUFFER_PTS(buffer), GST_BUFFER_DTS(buffer));
-+        }
-+
-+        sample = mf_sample_from_gst_buffer(buffer);
-+        gst_sample_unref(gst_sample);
-+
-+        if (token)
-+            IMFSample_SetUnknown(sample, &MFSampleExtension_Token, token);
-+
-+        IMFMediaEventQueue_QueueEventParamUnk(stream->event_queue, MEMediaSample, &GUID_NULL, S_OK, (IUnknown *)sample);
-+    }
-+
 +    g_object_get(stream->appsink, "eos", &stream->eos, NULL);
 +    if (stream->eos)
 +    {
@@ -4840,6 +4807,38 @@ index cb247adcef1..0e53fbf4247 100644
 +        dispatch_end_of_presentation(stream->parent_source);
 +        return S_OK;
 +    }
++
++    g_signal_emit_by_name(stream->appsink, "pull-sample", &gst_sample);
++    assert(gst_sample);
++
++    buffer = gst_sample_get_buffer(gst_sample);
++
++    if (TRACE_ON(mfplat))
++    {
++        const GstCaps *sample_caps = gst_sample_get_caps(gst_sample);
++        const GstStructure *sample_info = gst_sample_get_info(gst_sample);
++        if (sample_caps)
++        {
++            gchar *sample_caps_str = gst_caps_to_string(sample_caps);
++            TRACE("sample caps %s\n", debugstr_a(sample_caps_str));
++            g_free(sample_caps_str);
++        }
++        if (sample_info)
++        {
++            gchar *sample_info_str = gst_structure_to_string(sample_info);
++            TRACE("sample info %s\n", debugstr_a(sample_info_str));
++            g_free(sample_info_str);
++        }
++        TRACE("PTS = %lu DTS = %lu\n", GST_BUFFER_PTS(buffer), GST_BUFFER_DTS(buffer));
++    }
++
++    sample = mf_sample_from_gst_buffer(buffer);
++    gst_sample_unref(gst_sample);
++
++    if (token)
++        IMFSample_SetUnknown(sample, &MFSampleExtension_Token, token);
++
++    IMFMediaEventQueue_QueueEventParamUnk(stream->event_queue, MEMediaSample, &GUID_NULL, S_OK, (IUnknown *)sample);
 +
 +    return S_OK;
 +}
@@ -4924,7 +4923,7 @@ index cb247adcef1..0e53fbf4247 100644
      if (FAILED(hr = MFCreateEventQueue(&object->event_queue)))
          goto fail;
 diff --git a/dlls/winegstreamer/mfplat.c b/dlls/winegstreamer/mfplat.c
-index fe187e6cd11..e09309fd4da 100644
+index fe187e6cd1..e09309fd4d 100644
 --- a/dlls/winegstreamer/mfplat.c
 +++ b/dlls/winegstreamer/mfplat.c
 @@ -902,4 +902,94 @@ GstCaps *make_mf_compatible_caps(GstCaps *caps)
@@ -5038,7 +5037,7 @@ Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
  1 file changed, 4 insertions(+), 2 deletions(-)
 
 diff --git a/dlls/winegstreamer/media_source.c b/dlls/winegstreamer/media_source.c
-index 0e53fbf4247..78865259e6f 100644
+index 0e53fbf424..78865259e6 100644
 --- a/dlls/winegstreamer/media_source.c
 +++ b/dlls/winegstreamer/media_source.c
 @@ -1159,12 +1159,14 @@ static HRESULT WINAPI media_source_GetCharacteristics(IMFMediaSource *iface, DWO
@@ -5073,7 +5072,7 @@ Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
  1 file changed, 40 insertions(+)
 
 diff --git a/dlls/winegstreamer/media_source.c b/dlls/winegstreamer/media_source.c
-index 78865259e6f..b88f794d86a 100644
+index 78865259e6..b88f794d86 100644
 --- a/dlls/winegstreamer/media_source.c
 +++ b/dlls/winegstreamer/media_source.c
 @@ -1422,6 +1422,46 @@ static HRESULT media_source_constructor(IMFByteStream *bytestream, enum source_t
@@ -5138,7 +5137,7 @@ Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
  2 files changed, 49 insertions(+), 26 deletions(-)
 
 diff --git a/tools/make_makefiles b/tools/make_makefiles
-index c18fa90e2d3..1e34a280a40 100755
+index c18fa90e2d..1e34a280a4 100755
 --- a/tools/make_makefiles
 +++ b/tools/make_makefiles
 @@ -231,14 +231,14 @@ sub parse_makefile($)
@@ -5219,7 +5218,7 @@ index c18fa90e2d3..1e34a280a40 100755
  }
  
 diff --git a/tools/makedep.c b/tools/makedep.c
-index fb2e145ced2..c505d26f431 100644
+index fb2e145ced..c505d26f43 100644
 --- a/tools/makedep.c
 +++ b/tools/makedep.c
 @@ -182,6 +182,7 @@ struct makefile
@@ -5318,7 +5317,7 @@ Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
  create mode 100644 dlls/mf/handler.h
 
 diff --git a/dlls/mf/Makefile.in b/dlls/mf/Makefile.in
-index fe156e43abf..5c69ac38e5f 100644
+index fe156e43ab..5c69ac38e5 100644
 --- a/dlls/mf/Makefile.in
 +++ b/dlls/mf/Makefile.in
 @@ -5,6 +5,7 @@ IMPORTS   = advapi32 mfplat ole32 uuid mfuuid
@@ -5331,7 +5330,7 @@ index fe156e43abf..5c69ac38e5f 100644
  	sar.c \
 diff --git a/dlls/mf/handler.c b/dlls/mf/handler.c
 new file mode 100644
-index 00000000000..da40049377e
+index 0000000000..da40049377
 --- /dev/null
 +++ b/dlls/mf/handler.c
 @@ -0,0 +1,360 @@
@@ -5698,7 +5697,7 @@ index 00000000000..da40049377e
 \ No newline at end of file
 diff --git a/dlls/mf/handler.h b/dlls/mf/handler.h
 new file mode 100644
-index 00000000000..fbebd26e8d0
+index 0000000000..fbebd26e8d
 --- /dev/null
 +++ b/dlls/mf/handler.h
 @@ -0,0 +1,30 @@
@@ -5734,7 +5733,7 @@ index 00000000000..fbebd26e8d0
 +HRESULT handler_cancel_object_creation(struct handler *handler, IUnknown *cancel_cookie);
 \ No newline at end of file
 diff --git a/dlls/mf/main.c b/dlls/mf/main.c
-index 15c9e5e3c9a..fe50dbac5ae 100644
+index 15c9e5e3c9..fe50dbac5a 100644
 --- a/dlls/mf/main.c
 +++ b/dlls/mf/main.c
 @@ -30,6 +30,7 @@
@@ -6215,7 +6214,7 @@ index 15c9e5e3c9a..fe50dbac5ae 100644
      return hr;
  }
 diff --git a/dlls/winegstreamer/Makefile.in b/dlls/winegstreamer/Makefile.in
-index e578d194f7f..f2e87494459 100644
+index e578d194f7..f2e8749445 100644
 --- a/dlls/winegstreamer/Makefile.in
 +++ b/dlls/winegstreamer/Makefile.in
 @@ -3,12 +3,13 @@ IMPORTS   = strmiids uuid ole32 mfuuid
@@ -6234,7 +6233,7 @@ index e578d194f7f..f2e87494459 100644
  	media_source.c \
  	mediatype.c \
 diff --git a/dlls/winegstreamer/media_source.c b/dlls/winegstreamer/media_source.c
-index b88f794d86a..ebb88d2b8a5 100644
+index b88f794d86..ebb88d2b8a 100644
 --- a/dlls/winegstreamer/media_source.c
 +++ b/dlls/winegstreamer/media_source.c
 @@ -4,6 +4,7 @@
@@ -6683,7 +6682,7 @@ Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
  2 files changed, 146 insertions(+)
 
 diff --git a/dlls/winegstreamer/gst_private.h b/dlls/winegstreamer/gst_private.h
-index 823e023f52c..20d3beef028 100644
+index 823e023f52..20d3beef02 100644
 --- a/dlls/winegstreamer/gst_private.h
 +++ b/dlls/winegstreamer/gst_private.h
 @@ -57,6 +57,7 @@ extern HRESULT mfplat_get_class_object(REFCLSID rclsid, REFIID riid, void **obj)
@@ -6695,7 +6694,7 @@ index 823e023f52c..20d3beef028 100644
  
  enum source_type
 diff --git a/dlls/winegstreamer/mfplat.c b/dlls/winegstreamer/mfplat.c
-index e09309fd4da..ba2a32e6108 100644
+index e09309fd4d..ba2a32e610 100644
 --- a/dlls/winegstreamer/mfplat.c
 +++ b/dlls/winegstreamer/mfplat.c
 @@ -904,6 +904,151 @@ GstCaps *make_mf_compatible_caps(GstCaps *caps)
@@ -6864,7 +6863,7 @@ Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
  1 file changed, 48 insertions(+)
 
 diff --git a/dlls/winegstreamer/mfplat.c b/dlls/winegstreamer/mfplat.c
-index ba2a32e6108..26ad75584d6 100644
+index ba2a32e610..26ad75584d 100644
 --- a/dlls/winegstreamer/mfplat.c
 +++ b/dlls/winegstreamer/mfplat.c
 @@ -973,6 +973,54 @@ GstCaps *caps_from_mf_media_type(IMFMediaType *type)
@@ -6936,7 +6935,7 @@ Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
  1 file changed, 24 insertions(+)
 
 diff --git a/dlls/winegstreamer/mfplat.c b/dlls/winegstreamer/mfplat.c
-index 26ad75584d6..f5b44f9214e 100644
+index 26ad75584d..f5b44f9214 100644
 --- a/dlls/winegstreamer/mfplat.c
 +++ b/dlls/winegstreamer/mfplat.c
 @@ -904,6 +904,21 @@ GstCaps *make_mf_compatible_caps(GstCaps *caps)
@@ -6991,7 +6990,7 @@ Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
  1 file changed, 66 insertions(+)
 
 diff --git a/dlls/winegstreamer/mfplat.c b/dlls/winegstreamer/mfplat.c
-index f5b44f9214e..7e96e6af203 100644
+index f5b44f9214..7e96e6af20 100644
 --- a/dlls/winegstreamer/mfplat.c
 +++ b/dlls/winegstreamer/mfplat.c
 @@ -1094,6 +1094,72 @@ GstCaps *caps_from_mf_media_type(IMFMediaType *type)
@@ -7082,7 +7081,7 @@ Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
  1 file changed, 7 insertions(+)
 
 diff --git a/dlls/winegstreamer/mfplat.c b/dlls/winegstreamer/mfplat.c
-index 7e96e6af203..c7d6e4806a2 100644
+index 7e96e6af20..c7d6e4806a 100644
 --- a/dlls/winegstreamer/mfplat.c
 +++ b/dlls/winegstreamer/mfplat.c
 @@ -1045,6 +1045,13 @@ GstCaps *caps_from_mf_media_type(IMFMediaType *type)
@@ -7113,7 +7112,7 @@ Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
  1 file changed, 15 insertions(+)
 
 diff --git a/dlls/winegstreamer/mfplat.c b/dlls/winegstreamer/mfplat.c
-index c7d6e4806a2..86f0f796300 100644
+index c7d6e4806a..86f0f79630 100644
 --- a/dlls/winegstreamer/mfplat.c
 +++ b/dlls/winegstreamer/mfplat.c
 @@ -1167,6 +1167,21 @@ GstCaps *caps_from_mf_media_type(IMFMediaType *type)
@@ -7153,7 +7152,7 @@ Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
  2 files changed, 75 insertions(+)
 
 diff --git a/dlls/winegstreamer/gst_private.h b/dlls/winegstreamer/gst_private.h
-index 20d3beef028..258df0d0405 100644
+index 20d3beef02..258df0d040 100644
 --- a/dlls/winegstreamer/gst_private.h
 +++ b/dlls/winegstreamer/gst_private.h
 @@ -59,6 +59,7 @@ GstCaps *make_mf_compatible_caps(GstCaps *caps);
@@ -7165,7 +7164,7 @@ index 20d3beef028..258df0d0405 100644
  enum source_type
  {
 diff --git a/dlls/winegstreamer/mfplat.c b/dlls/winegstreamer/mfplat.c
-index 86f0f796300..6499c39a8f9 100644
+index 86f0f79630..6499c39a8f 100644
 --- a/dlls/winegstreamer/mfplat.c
 +++ b/dlls/winegstreamer/mfplat.c
 @@ -1297,4 +1297,78 @@ IMFSample* mf_sample_from_gst_buffer(GstBuffer *gst_buffer)
@@ -7270,7 +7269,7 @@ Subject: [PATCH 30/53] winegstreamer: Implement decoder MFT on gstreamer.
  create mode 100644 dlls/winegstreamer/mf_decode.c
 
 diff --git a/dlls/winegstreamer/Makefile.in b/dlls/winegstreamer/Makefile.in
-index f2e87494459..e2af4085827 100644
+index f2e8749445..e2af408582 100644
 --- a/dlls/winegstreamer/Makefile.in
 +++ b/dlls/winegstreamer/Makefile.in
 @@ -13,6 +13,7 @@ C_SRCS = \
@@ -7282,7 +7281,7 @@ index f2e87494459..e2af4085827 100644
  	pin.c \
  	qualitycontrol.c \
 diff --git a/dlls/winegstreamer/gst_cbs.c b/dlls/winegstreamer/gst_cbs.c
-index d2d36aeb86b..e392f4526ff 100644
+index d2d36aeb86..e392f4526f 100644
 --- a/dlls/winegstreamer/gst_cbs.c
 +++ b/dlls/winegstreamer/gst_cbs.c
 @@ -51,6 +51,8 @@ static void CALLBACK perform_cb(TP_CALLBACK_INSTANCE *instance, void *user)
@@ -7365,7 +7364,7 @@ index d2d36aeb86b..e392f4526ff 100644
  }
 \ No newline at end of file
 diff --git a/dlls/winegstreamer/gst_cbs.h b/dlls/winegstreamer/gst_cbs.h
-index 106368a0641..a35d6d88306 100644
+index 106368a064..a35d6d8830 100644
 --- a/dlls/winegstreamer/gst_cbs.h
 +++ b/dlls/winegstreamer/gst_cbs.h
 @@ -54,6 +54,12 @@ enum CB_TYPE {
@@ -7414,7 +7413,7 @@ index 106368a0641..a35d6d88306 100644
  
  #endif
 diff --git a/dlls/winegstreamer/gst_private.h b/dlls/winegstreamer/gst_private.h
-index 258df0d0405..6e25b895ff4 100644
+index 258df0d040..6e25b895ff 100644
 --- a/dlls/winegstreamer/gst_private.h
 +++ b/dlls/winegstreamer/gst_private.h
 @@ -53,6 +53,7 @@ BOOL init_gstreamer(void) DECLSPEC_HIDDEN;
@@ -7439,7 +7438,7 @@ index 258df0d0405..6e25b895ff4 100644
  {
      SOURCE_TYPE_MPEG_4,
 diff --git a/dlls/winegstreamer/main.c b/dlls/winegstreamer/main.c
-index 2872710b3e2..12ca11fa6cd 100644
+index 2872710b3e..12ca11fa6c 100644
 --- a/dlls/winegstreamer/main.c
 +++ b/dlls/winegstreamer/main.c
 @@ -365,7 +365,8 @@ HRESULT WINAPI DllRegisterServer(void)
@@ -7454,7 +7453,7 @@ index 2872710b3e2..12ca11fa6cd 100644
  HRESULT WINAPI DllUnregisterServer(void)
 diff --git a/dlls/winegstreamer/mf_decode.c b/dlls/winegstreamer/mf_decode.c
 new file mode 100644
-index 00000000000..f5d9a83cd43
+index 0000000000..f5d9a83cd4
 --- /dev/null
 +++ b/dlls/winegstreamer/mf_decode.c
 @@ -0,0 +1,1320 @@
@@ -8780,10 +8779,10 @@ index 00000000000..f5d9a83cd43
 +}
 \ No newline at end of file
 diff --git a/dlls/winegstreamer/mfplat.c b/dlls/winegstreamer/mfplat.c
-index 6499c39a8f9..aaef966a5bc 100644
+index 6499c39a8f..aaef966a5b 100644
 --- a/dlls/winegstreamer/mfplat.c
 +++ b/dlls/winegstreamer/mfplat.c
-@@ -404,6 +404,16 @@ static HRESULT video_processor_create(REFIID riid, void **ret)
+@@ -404,6 +404,16 @@ failed:
      return hr;
  }
  
@@ -8930,7 +8929,7 @@ index 6499c39a8f9..aaef966a5bc 100644
    /* audio-specific-config is stored here */
  };
 diff --git a/dlls/winegstreamer/winegstreamer_classes.idl b/dlls/winegstreamer/winegstreamer_classes.idl
-index 997a28b052f..ee8090cf4a7 100644
+index 997a28b052..ee8090cf4a 100644
 --- a/dlls/winegstreamer/winegstreamer_classes.idl
 +++ b/dlls/winegstreamer/winegstreamer_classes.idl
 @@ -61,3 +61,15 @@ coclass VideoProcessorMFT {}
@@ -8950,7 +8949,7 @@ index 997a28b052f..ee8090cf4a7 100644
 +]
 +coclass CMSAACDecMFT { }
 diff --git a/include/mfidl.idl b/include/mfidl.idl
-index c61ccb788ce..8e198594c57 100644
+index c61ccb788c..8e198594c5 100644
 --- a/include/mfidl.idl
 +++ b/include/mfidl.idl
 @@ -1128,4 +1128,6 @@ cpp_quote("EXTERN_GUID(MF_AUDIO_RENDERER_ATTRIBUTE_ENDPOINT_ROLE, 0x6ba644ff, 0x
@@ -8976,7 +8975,7 @@ Subject: [PATCH 31/53] mfreadwrite: Select all streams when creating a source
  1 file changed, 4 insertions(+)
 
 diff --git a/dlls/mfreadwrite/reader.c b/dlls/mfreadwrite/reader.c
-index eaf52ce31e3..a7291ff1ae4 100644
+index eaf52ce31e..a7291ff1ae 100644
 --- a/dlls/mfreadwrite/reader.c
 +++ b/dlls/mfreadwrite/reader.c
 @@ -2094,6 +2094,10 @@ static HRESULT create_source_reader_from_source(IMFMediaSource *source, IMFAttri
@@ -9005,7 +9004,7 @@ Subject: [PATCH 32/53] Miscellaneous
  3 files changed, 133 insertions(+), 3 deletions(-)
 
 diff --git a/dlls/mfreadwrite/reader.c b/dlls/mfreadwrite/reader.c
-index a7291ff1ae4..25b0050256a 100644
+index a7291ff1ae..25b0050256 100644
 --- a/dlls/mfreadwrite/reader.c
 +++ b/dlls/mfreadwrite/reader.c
 @@ -1570,6 +1570,7 @@ static HRESULT source_reader_create_decoder_for_stream(struct source_reader *rea
@@ -9040,7 +9039,7 @@ index a7291ff1ae4..25b0050256a 100644
  
  static HRESULT WINAPI src_reader_SetCurrentMediaType(IMFSourceReader *iface, DWORD index, DWORD *reserved,
 diff --git a/dlls/winegstreamer/gst_cbs.c b/dlls/winegstreamer/gst_cbs.c
-index e392f4526ff..598cd85c1e2 100644
+index e392f4526f..598cd85c1e 100644
 --- a/dlls/winegstreamer/gst_cbs.c
 +++ b/dlls/winegstreamer/gst_cbs.c
 @@ -18,6 +18,9 @@
@@ -9067,7 +9066,7 @@ index e392f4526ff..598cd85c1e2 100644
      pthread_mutex_lock(&cbdata->lock);
      cbdata->finished = 1;
 diff --git a/dlls/winegstreamer/media_source.c b/dlls/winegstreamer/media_source.c
-index ebb88d2b8a5..8e204e983cb 100644
+index ebb88d2b8a..8e204e983c 100644
 --- a/dlls/winegstreamer/media_source.c
 +++ b/dlls/winegstreamer/media_source.c
 @@ -84,6 +84,8 @@ struct source_async_command
@@ -9260,7 +9259,7 @@ Subject: [PATCH 33/53] WMV
  7 files changed, 88 insertions(+)
 
 diff --git a/dlls/winegstreamer/gst_private.h b/dlls/winegstreamer/gst_private.h
-index 6e25b895ff4..0b61bc9e3ce 100644
+index 6e25b895ff..0b61bc9e3c 100644
 --- a/dlls/winegstreamer/gst_private.h
 +++ b/dlls/winegstreamer/gst_private.h
 @@ -66,11 +66,13 @@ enum decoder_type
@@ -9278,7 +9277,7 @@ index 6e25b895ff4..0b61bc9e3ce 100644
  HRESULT container_stream_handler_construct(REFIID riid, void **obj, enum source_type);
  
 diff --git a/dlls/winegstreamer/media_source.c b/dlls/winegstreamer/media_source.c
-index 8e204e983cb..19b5b4346b2 100644
+index 8e204e983c..19b5b4346b 100644
 --- a/dlls/winegstreamer/media_source.c
 +++ b/dlls/winegstreamer/media_source.c
 @@ -30,6 +30,9 @@ static struct source_desc
@@ -9292,7 +9291,7 @@ index 8e204e983cb..19b5b4346b2 100644
  };
  
 diff --git a/dlls/winegstreamer/mf_decode.c b/dlls/winegstreamer/mf_decode.c
-index f5d9a83cd43..21b310a9967 100644
+index f5d9a83cd4..21b310a996 100644
 --- a/dlls/winegstreamer/mf_decode.c
 +++ b/dlls/winegstreamer/mf_decode.c
 @@ -28,6 +28,9 @@ const GUID *h264_output_types[] = {&MFVideoFormat_I420, &MFVideoFormat_IYUV, &MF
@@ -9320,7 +9319,7 @@ index f5d9a83cd43..21b310a9967 100644
  };
  
 diff --git a/dlls/winegstreamer/mfplat.c b/dlls/winegstreamer/mfplat.c
-index aaef966a5bc..e1735a5f82f 100644
+index aaef966a5b..e1735a5f82 100644
 --- a/dlls/winegstreamer/mfplat.c
 +++ b/dlls/winegstreamer/mfplat.c
 @@ -414,11 +414,21 @@ static HRESULT aac_decoder_create(REFIID riid, void **ret)
@@ -9405,7 +9404,7 @@ index aaef966a5bc..e1735a5f82f 100644
  };
  
 diff --git a/dlls/winegstreamer/winegstreamer.rgs b/dlls/winegstreamer/winegstreamer.rgs
-index 0bc26761e9d..9dbbca1c805 100644
+index 0bc26761e9..9dbbca1c80 100644
 --- a/dlls/winegstreamer/winegstreamer.rgs
 +++ b/dlls/winegstreamer/winegstreamer.rgs
 @@ -23,6 +23,10 @@ HKLM
@@ -9435,7 +9434,7 @@ index 0bc26761e9d..9dbbca1c805 100644
                      {
                          val '{271C3902-6095-4c45-A22F-20091816EE9E}' = s 'MPEG4 Byte Stream Handler'
 diff --git a/dlls/winegstreamer/winegstreamer_classes.idl b/dlls/winegstreamer/winegstreamer_classes.idl
-index ee8090cf4a7..376e08c418b 100644
+index ee8090cf4a..376e08c418 100644
 --- a/dlls/winegstreamer/winegstreamer_classes.idl
 +++ b/dlls/winegstreamer/winegstreamer_classes.idl
 @@ -73,3 +73,15 @@ coclass CMSH264DecoderMFT { }
@@ -9456,7 +9455,7 @@ index ee8090cf4a7..376e08c418b 100644
 +coclass CLSID_CWMVDecMediaObject {}
 \ No newline at end of file
 diff --git a/include/mfidl.idl b/include/mfidl.idl
-index 8e198594c57..3f994854425 100644
+index 8e198594c5..3f99485442 100644
 --- a/include/mfidl.idl
 +++ b/include/mfidl.idl
 @@ -1131,3 +1131,5 @@ cpp_quote("EXTERN_GUID(CLSID_VideoProcessorMFT, 0x88753b26, 0x5b24, 0x49bd, 0xb2
@@ -9480,7 +9479,7 @@ Subject: [PATCH 34/53] mf: Ask for more samples from upstream node when upon
  1 file changed, 10 insertions(+), 1 deletion(-)
 
 diff --git a/dlls/mf/session.c b/dlls/mf/session.c
-index ba30733fe5c..ce3d7e3018d 100644
+index ba30733fe5..ce3d7e3018 100644
 --- a/dlls/mf/session.c
 +++ b/dlls/mf/session.c
 @@ -2453,6 +2453,8 @@ static HRESULT transform_node_pull_samples(struct topo_node *node)
@@ -9521,7 +9520,7 @@ Subject: [PATCH 35/53] mf: Miscelaneous fixes to topology resolution.
  1 file changed, 9 insertions(+), 7 deletions(-)
 
 diff --git a/dlls/mf/topology.c b/dlls/mf/topology.c
-index 7a4c95bea07..ce706a9ff7f 100644
+index 7a4c95bea0..ce706a9ff7 100644
 --- a/dlls/mf/topology.c
 +++ b/dlls/mf/topology.c
 @@ -2006,7 +2006,7 @@ static HRESULT topology_loader_resolve_branch(IMFTopologyNode *src, IMFMediaType
@@ -9568,7 +9567,7 @@ and a HACK: Set output type of found decoder, this should probably happen somewh
  1 file changed, 171 insertions(+), 108 deletions(-)
 
 diff --git a/dlls/mf/topology.c b/dlls/mf/topology.c
-index ce706a9ff7f..337bf38081b 100644
+index ce706a9ff7..337bf38081 100644
 --- a/dlls/mf/topology.c
 +++ b/dlls/mf/topology.c
 @@ -1928,135 +1928,194 @@ static void topology_loader_add_branch(struct topology *topology, IMFTopologyNod
@@ -9931,7 +9930,7 @@ Subject: [PATCH 37/53] winegstreamer:  Implement
  1 file changed, 5 insertions(+), 2 deletions(-)
 
 diff --git a/dlls/winegstreamer/media_source.c b/dlls/winegstreamer/media_source.c
-index 19b5b4346b2..5c01346987b 100644
+index 19b5b4346b..5c01346987 100644
 --- a/dlls/winegstreamer/media_source.c
 +++ b/dlls/winegstreamer/media_source.c
 @@ -841,12 +841,15 @@ static HRESULT WINAPI media_stream_GetMediaSource(IMFMediaStream *iface, IMFMedi
@@ -9965,7 +9964,7 @@ Subject: [PATCH 38/53] Expose PCM output type on AAC decoder.
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/dlls/winegstreamer/mf_decode.c b/dlls/winegstreamer/mf_decode.c
-index 21b310a9967..7fe216d67d9 100644
+index 21b310a996..7fe216d67d 100644
 --- a/dlls/winegstreamer/mf_decode.c
 +++ b/dlls/winegstreamer/mf_decode.c
 @@ -26,7 +26,7 @@ const GUID *h264_input_types[] = {&MFVideoFormat_H264};
@@ -9990,7 +9989,7 @@ Subject: [PATCH 39/53] Set BPS on AAC.
  1 file changed, 1 insertion(+)
 
 diff --git a/dlls/winegstreamer/mfplat.c b/dlls/winegstreamer/mfplat.c
-index e1735a5f82f..780008face5 100644
+index e1735a5f82..780008face 100644
 --- a/dlls/winegstreamer/mfplat.c
 +++ b/dlls/winegstreamer/mfplat.c
 @@ -916,6 +916,7 @@ static IMFMediaType* transform_to_media_type(GstCaps *caps)
@@ -10015,7 +10014,7 @@ Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
  1 file changed, 1 insertion(+)
 
 diff --git a/dlls/mfplat/mediatype.c b/dlls/mfplat/mediatype.c
-index f92577a9cbc..d3c08f52c71 100644
+index f92577a9cb..d3c08f52c7 100644
 --- a/dlls/mfplat/mediatype.c
 +++ b/dlls/mfplat/mediatype.c
 @@ -1790,6 +1790,7 @@ static const struct uncompressed_video_format video_formats[] =
@@ -10045,7 +10044,7 @@ Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
  create mode 100644 dlls/winegstreamer/colorconvert.c
 
 diff --git a/dlls/winegstreamer/Makefile.in b/dlls/winegstreamer/Makefile.in
-index e2af4085827..a266b0a95e4 100644
+index e2af408582..a266b0a95e 100644
 --- a/dlls/winegstreamer/Makefile.in
 +++ b/dlls/winegstreamer/Makefile.in
 @@ -6,6 +6,7 @@ EXTRALIBS = $(GSTREAMER_LIBS) $(PTHREAD_LIBS)
@@ -10058,7 +10057,7 @@ index e2af4085827..a266b0a95e4 100644
  	gstdemux.c \
 diff --git a/dlls/winegstreamer/colorconvert.c b/dlls/winegstreamer/colorconvert.c
 new file mode 100644
-index 00000000000..f149ab553f9
+index 0000000000..f149ab553f
 --- /dev/null
 +++ b/dlls/winegstreamer/colorconvert.c
 @@ -0,0 +1,704 @@
@@ -10768,7 +10767,7 @@ index 00000000000..f149ab553f9
 +}
 \ No newline at end of file
 diff --git a/dlls/winegstreamer/gst_private.h b/dlls/winegstreamer/gst_private.h
-index 0b61bc9e3ce..b855d650dc3 100644
+index 0b61bc9e3c..b855d650dc 100644
 --- a/dlls/winegstreamer/gst_private.h
 +++ b/dlls/winegstreamer/gst_private.h
 @@ -76,4 +76,6 @@ enum source_type
@@ -10779,7 +10778,7 @@ index 0b61bc9e3ce..b855d650dc3 100644
 +
  #endif /* __GST_PRIVATE_INCLUDED__ */
 diff --git a/dlls/winegstreamer/mfplat.c b/dlls/winegstreamer/mfplat.c
-index 780008face5..161c8032a7a 100644
+index 780008face..161c8032a7 100644
 --- a/dlls/winegstreamer/mfplat.c
 +++ b/dlls/winegstreamer/mfplat.c
 @@ -429,6 +429,8 @@ static HRESULT asf_stream_handler_create(REFIID riid, void **ret)
@@ -10846,7 +10845,7 @@ index 780008face5..161c8032a7a 100644
          &CLSID_CMSH264DecoderMFT,
          &MFT_CATEGORY_VIDEO_DECODER,
 diff --git a/dlls/winegstreamer/winegstreamer_classes.idl b/dlls/winegstreamer/winegstreamer_classes.idl
-index 376e08c418b..d933d40cfd3 100644
+index 376e08c418..d933d40cfd 100644
 --- a/dlls/winegstreamer/winegstreamer_classes.idl
 +++ b/dlls/winegstreamer/winegstreamer_classes.idl
 @@ -84,4 +84,10 @@ coclass ASFByteStreamHandler {}
@@ -10876,7 +10875,7 @@ Subject: [PATCH 42/53] HACK: Set BPS to 16 for output template.
  1 file changed, 5 insertions(+)
 
 diff --git a/dlls/winegstreamer/mf_decode.c b/dlls/winegstreamer/mf_decode.c
-index 7fe216d67d9..c7e1bfb1a97 100644
+index 7fe216d67d..c7e1bfb1a9 100644
 --- a/dlls/winegstreamer/mf_decode.c
 +++ b/dlls/winegstreamer/mf_decode.c
 @@ -321,6 +321,11 @@ static HRESULT WINAPI mf_decoder_GetOutputAvailableType(IMFTransform *iface, DWO
@@ -10905,7 +10904,7 @@ Subject: [PATCH 43/53] Set "wait-on-eos" to allow other streams to continue
  1 file changed, 1 insertion(+)
 
 diff --git a/dlls/winegstreamer/media_source.c b/dlls/winegstreamer/media_source.c
-index 5c01346987b..5a8537970ab 100644
+index 5c01346987..5a8537970a 100644
 --- a/dlls/winegstreamer/media_source.c
 +++ b/dlls/winegstreamer/media_source.c
 @@ -1037,6 +1037,7 @@ static HRESULT media_stream_constructor(struct media_source *source, GstPad *pad
@@ -10916,6 +10915,66 @@ index 5c01346987b..5a8537970ab 100644
      g_signal_connect(object->appsink, "new-sample", G_CALLBACK(stream_new_sample_wrapper), object);
  
      if (FAILED(hr = media_stream_align_with_mf(object, &stream_type)))
+-- 
+2.26.2
+
+From e366449eb776994e15e188beef2dce5ca6705e18 Mon Sep 17 00:00:00 2001
+From: Derek Lesho <dlesho@codeweavers.com>
+Date: Mon, 4 May 2020 12:42:09 -0500
+Subject: [PATCH 44/53] Stub out enough of the SAR to prevent the session from
+ stalling.
+
+---
+ dlls/mf/sar.c | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
+
+diff --git a/dlls/mf/sar.c b/dlls/mf/sar.c
+index f883163bde..d5998cb1f3 100644
+--- a/dlls/mf/sar.c
++++ b/dlls/mf/sar.c
+@@ -553,6 +553,7 @@ static HRESULT WINAPI audio_renderer_clock_sink_OnClockStart(IMFClockStateSink *
+             if (FAILED(hr = IAudioClient_Start(renderer->audio_client)))
+                 WARN("Failed to start audio client, hr %#x.\n", hr);
+             renderer->state = STREAM_STATE_RUNNING;
++            IMFStreamSink_QueueEvent(&renderer->IMFStreamSink_iface, MEStreamSinkRequestSample, &GUID_NULL, S_OK, NULL);
+         }
+     }
+     else
+@@ -1239,16 +1240,34 @@ static HRESULT WINAPI audio_renderer_stream_GetMediaTypeHandler(IMFStreamSink *i
+ 
+ static HRESULT WINAPI audio_renderer_stream_ProcessSample(IMFStreamSink *iface, IMFSample *sample)
+ {
++    struct audio_renderer *renderer = impl_from_IMFStreamSink(iface);
++
+     FIXME("%p, %p.\n", iface, sample);
+ 
++    EnterCriticalSection(&renderer->cs);
++
++    if (renderer->state == STREAM_STATE_RUNNING && sample)
++        IMFStreamSink_QueueEvent(&renderer->IMFStreamSink_iface, MEStreamSinkRequestSample, &GUID_NULL, S_OK, NULL);
++
++    LeaveCriticalSection(&renderer->cs);
++
+     return E_NOTIMPL;
+ }
+ 
+ static HRESULT WINAPI audio_renderer_stream_PlaceMarker(IMFStreamSink *iface, MFSTREAMSINK_MARKER_TYPE marker_type,
+         const PROPVARIANT *marker_value, const PROPVARIANT *context_value)
+ {
++    struct audio_renderer *renderer = impl_from_IMFStreamSink(iface);
++
+     FIXME("%p, %d, %p, %p.\n", iface, marker_type, marker_value, context_value);
+ 
++    EnterCriticalSection(&renderer->cs);
++
++    if (renderer->state == STREAM_STATE_RUNNING)
++        IMFStreamSink_QueueEvent(&renderer->IMFStreamSink_iface, MEStreamSinkMarker, &GUID_NULL, S_OK, context_value);
++
++    LeaveCriticalSection(&renderer->cs);
++
+     return E_NOTIMPL;
+ }
+ 
 -- 
 2.26.2
 
@@ -10930,7 +10989,7 @@ Subject: [PATCH 47/53] Report streams backwards and only select one of each
  1 file changed, 22 insertions(+), 2 deletions(-)
 
 diff --git a/dlls/winegstreamer/media_source.c b/dlls/winegstreamer/media_source.c
-index 5a8537970ab..f62fb6716be 100644
+index 5a8537970a..f62fb6716b 100644
 --- a/dlls/winegstreamer/media_source.c
 +++ b/dlls/winegstreamer/media_source.c
 @@ -1430,6 +1430,7 @@ static HRESULT media_source_constructor(IMFByteStream *bytestream, enum source_t
@@ -10992,7 +11051,7 @@ Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
  1 file changed, 28 insertions(+), 2 deletions(-)
 
 diff --git a/dlls/winegstreamer/media_source.c b/dlls/winegstreamer/media_source.c
-index f62fb6716be..15ea9520c89 100644
+index f62fb6716b..15ea9520c8 100644
 --- a/dlls/winegstreamer/media_source.c
 +++ b/dlls/winegstreamer/media_source.c
 @@ -60,6 +60,7 @@ struct media_stream
@@ -11061,6 +11120,38 @@ index f62fb6716be..15ea9520c89 100644
 -- 
 2.26.2
 
+From ca6bb91783d8d892f5305437d3297c032e4ccfb0 Mon Sep 17 00:00:00 2001
+From: Derek Lesho <dlesho@codeweavers.com>
+Date: Mon, 11 May 2020 09:20:11 -0500
+Subject: [PATCH] mfreadwrite: Add recognition of ftypemp42 mp4 header.
+
+Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
+---
+ dlls/mfreadwrite/reader.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/dlls/mfreadwrite/reader.c b/dlls/mfreadwrite/reader.c
+index 25b0050256a..2fdc1e28922 100644
+--- a/dlls/mfreadwrite/reader.c
++++ b/dlls/mfreadwrite/reader.c
+@@ -2150,6 +2150,7 @@ static HRESULT bytestream_get_url_hint(IMFByteStream *stream, WCHAR const **url)
+     static const unsigned char wavmagic[]  = { 'R', 'I', 'F', 'F',0x00,0x00,0x00,0x00, 'W', 'A', 'V', 'E', 'f', 'm', 't', ' '};
+     static const unsigned char wavmask[]   = {0xff,0xff,0xff,0xff,0x00,0x00,0x00,0x00,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff};
+     static const unsigned char isommagic[] = {0x00,0x00,0x00,0x00, 'f', 't', 'y', 'p', 'i', 's', 'o', 'm',0x00,0x00,0x00,0x00};
++    static const unsigned char mp42magic[] = {0x00,0x00,0x00,0x00, 'f', 't', 'y', 'p', 'm', 'p', '4', '2',0x00,0x00,0x00,0x00};
+     static const unsigned char mp4mask[]   = {0x00,0x00,0x00,0x00,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0x00,0x00,0x00,0x00};
+     static const struct stream_content_url_hint
+     {
+@@ -2162,6 +2163,7 @@ static HRESULT bytestream_get_url_hint(IMFByteStream *stream, WCHAR const **url)
+         { asfmagic,  L".asf" },
+         { wavmagic,  L".wav", wavmask },
+         { isommagic, L".mp4", mp4mask },
++        { mp42magic, L".mp4", mp4mask },
+     };
+     unsigned char buffer[4 * sizeof(unsigned int)], pattern[4 * sizeof(unsigned int)];
+     unsigned int i, j, length = 0, caps = 0;
+
+
 From efa3b757fc02785474bfb4ea26cf33df19387454 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Mon, 11 May 2020 16:05:50 -0500
@@ -11077,7 +11168,7 @@ Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
  5 files changed, 52 insertions(+)
 
 diff --git a/dlls/winegstreamer/gst_private.h b/dlls/winegstreamer/gst_private.h
-index b855d650dc3..6dc90e28810 100644
+index b855d650dc..6dc90e2881 100644
 --- a/dlls/winegstreamer/gst_private.h
 +++ b/dlls/winegstreamer/gst_private.h
 @@ -67,6 +67,7 @@ enum decoder_type
@@ -11089,7 +11180,7 @@ index b855d650dc3..6dc90e28810 100644
  HRESULT generic_decoder_construct(REFIID riid, void **obj, enum decoder_type);
  enum source_type
 diff --git a/dlls/winegstreamer/mf_decode.c b/dlls/winegstreamer/mf_decode.c
-index c7e1bfb1a97..633a468ed32 100644
+index c7e1bfb1a9..633a468ed3 100644
 --- a/dlls/winegstreamer/mf_decode.c
 +++ b/dlls/winegstreamer/mf_decode.c
 @@ -31,6 +31,9 @@ const GUID *aac_output_types[] = {&MFAudioFormat_Float, &MFAudioFormat_PCM};
@@ -11117,7 +11208,7 @@ index c7e1bfb1a97..633a468ed32 100644
  };
  
 diff --git a/dlls/winegstreamer/mfplat.c b/dlls/winegstreamer/mfplat.c
-index 161c8032a7a..e0da02074e9 100644
+index 161c8032a7..e0da02074e 100644
 --- a/dlls/winegstreamer/mfplat.c
 +++ b/dlls/winegstreamer/mfplat.c
 @@ -419,6 +419,11 @@ static HRESULT wmv_decoder_create(REFIID riid, void **ret)
@@ -11183,7 +11274,7 @@ index 161c8032a7a..e0da02074e9 100644
  };
  
 diff --git a/dlls/winegstreamer/winegstreamer_classes.idl b/dlls/winegstreamer/winegstreamer_classes.idl
-index d933d40cfd3..3a3daad3ab6 100644
+index d933d40cfd..3a3daad3ab 100644
 --- a/dlls/winegstreamer/winegstreamer_classes.idl
 +++ b/dlls/winegstreamer/winegstreamer_classes.idl
 @@ -74,6 +74,12 @@ coclass CMSH264DecoderMFT { }
@@ -11200,7 +11291,7 @@ index d933d40cfd3..3a3daad3ab6 100644
      threading(both),
      uuid(41457294-644c-4298-a28a-BD69F2C0CF3B)
 diff --git a/include/mfidl.idl b/include/mfidl.idl
-index 3f994854425..a66962dd270 100644
+index 3f99485442..a66962dd27 100644
 --- a/include/mfidl.idl
 +++ b/include/mfidl.idl
 @@ -1131,5 +1131,6 @@ cpp_quote("EXTERN_GUID(CLSID_VideoProcessorMFT, 0x88753b26, 0x5b24, 0x49bd, 0xb2
@@ -11211,6 +11302,56 @@ index 3f994854425..a66962dd270 100644
  cpp_quote("EXTERN_GUID(CLSID_ASFByteStreamHandler, 0x41457294, 0x644c, 0x4298, 0xa2, 0x8a, 0xbd, 0x69, 0xf2, 0xc0, 0xcf, 0x3b);")
  cpp_quote("EXTERN_GUID(CLSID_CWMVDecMediaObject, 0x82d353df, 0x90bd, 0x4382, 0x8b, 0xc2, 0x3f, 0x61, 0x92, 0xb7, 0x6e, 0x34);")
 \ No newline at end of file
+-- 
+2.26.2
+
+From f4cec58bd2981e1218aadecd04b2b4343c0d542d Mon Sep 17 00:00:00 2001
+From: Derek Lesho <dlesho@codeweavers.com>
+Date: Tue, 12 May 2020 10:08:20 -0500
+Subject: [PATCH 51/53] mf: Attach markers to previously queued sample, not the
+ next.
+
+Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
+---
+ dlls/mf/samplegrabber.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
+
+diff --git a/dlls/mf/samplegrabber.c b/dlls/mf/samplegrabber.c
+index 7d9fa78732..d0c789a8fd 100644
+--- a/dlls/mf/samplegrabber.c
++++ b/dlls/mf/samplegrabber.c
+@@ -722,7 +722,7 @@ static struct scheduled_item *stream_get_next_item(struct sample_grabber *grabbe
+ static HRESULT WINAPI sample_grabber_stream_timer_callback_Invoke(IMFAsyncCallback *iface, IMFAsyncResult *result)
+ {
+     struct sample_grabber *grabber = impl_from_IMFAsyncCallback(iface);
+-    struct scheduled_item *item;
++    struct scheduled_item *item, *cursor2;
+     BOOL sample_delivered;
+     HRESULT hr;
+ 
+@@ -741,8 +741,13 @@ static HRESULT WINAPI sample_grabber_stream_timer_callback_Invoke(IMFAsyncCallba
+                     stream_release_pending_item(item);
+ 
+                     /* Schedule next sample, skipping markers. */
+-                    LIST_FOR_EACH_ENTRY(item, &grabber->items, struct scheduled_item, entry)
++                    LIST_FOR_EACH_ENTRY_SAFE(item, cursor2, &grabber->items, struct scheduled_item, entry)
+                     {
++                        if (item->type == ITEM_TYPE_MARKER)
++                        {
++                            sample_grabber_stream_report_marker(grabber, &item->u.marker.context, S_OK);
++                            stream_release_pending_item(item);
++                        }
+                         if (item->type == ITEM_TYPE_SAMPLE)
+                         {
+                             if (FAILED(hr = stream_schedule_sample(grabber, item)))
+@@ -756,6 +761,7 @@ static HRESULT WINAPI sample_grabber_stream_timer_callback_Invoke(IMFAsyncCallba
+ 
+                     item = NULL;
+                     break;
++                /* just in case */
+                 case ITEM_TYPE_MARKER:
+                     sample_grabber_stream_report_marker(grabber, &item->u.marker.context, S_OK);
+                     stream_release_pending_item(item);
 -- 
 2.26.2
 
@@ -11225,7 +11366,7 @@ Subject: [PATCH 52/53] HACK: Switch between all selection streams on
  1 file changed, 23 insertions(+), 1 deletion(-)
 
 diff --git a/dlls/mfreadwrite/reader.c b/dlls/mfreadwrite/reader.c
-index 2fdc1e28922..3225efcab27 100644
+index 2fdc1e2892..3225efcab2 100644
 --- a/dlls/mfreadwrite/reader.c
 +++ b/dlls/mfreadwrite/reader.c
 @@ -1019,7 +1019,29 @@ static HRESULT source_reader_get_stream_read_index(struct source_reader *reader,
@@ -11277,7 +11418,7 @@ Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
  5 files changed, 51 insertions(+), 1 deletion(-)
 
 diff --git a/dlls/winegstreamer/gst_private.h b/dlls/winegstreamer/gst_private.h
-index 6dc90e28810..af2134078a6 100644
+index 6dc90e2881..af2134078a 100644
 --- a/dlls/winegstreamer/gst_private.h
 +++ b/dlls/winegstreamer/gst_private.h
 @@ -67,6 +67,7 @@ enum decoder_type
@@ -11289,7 +11430,7 @@ index 6dc90e28810..af2134078a6 100644
  };
  HRESULT generic_decoder_construct(REFIID riid, void **obj, enum decoder_type);
 diff --git a/dlls/winegstreamer/mf_decode.c b/dlls/winegstreamer/mf_decode.c
-index 633a468ed32..3d314eaab43 100644
+index 633a468ed3..3d314eaab4 100644
 --- a/dlls/winegstreamer/mf_decode.c
 +++ b/dlls/winegstreamer/mf_decode.c
 @@ -31,6 +31,9 @@ const GUID *aac_output_types[] = {&MFAudioFormat_Float, &MFAudioFormat_PCM};
@@ -11317,7 +11458,7 @@ index 633a468ed32..3d314eaab43 100644
          &MFMediaType_Video,
          m4s2_input_types,
 diff --git a/dlls/winegstreamer/mfplat.c b/dlls/winegstreamer/mfplat.c
-index e0da02074e9..bcfcd398ec4 100644
+index e0da02074e..bcfcd398ec 100644
 --- a/dlls/winegstreamer/mfplat.c
 +++ b/dlls/winegstreamer/mfplat.c
 @@ -419,6 +419,11 @@ static HRESULT wmv_decoder_create(REFIID riid, void **ret)
@@ -11381,7 +11522,7 @@ index e0da02074e9..bcfcd398ec4 100644
          &CLSID_CMpeg4sDecMFT,
          &MFT_CATEGORY_VIDEO_DECODER,
 diff --git a/dlls/winegstreamer/winegstreamer_classes.idl b/dlls/winegstreamer/winegstreamer_classes.idl
-index 3a3daad3ab6..9f210fbbf72 100644
+index 3a3daad3ab..9f210fbbf7 100644
 --- a/dlls/winegstreamer/winegstreamer_classes.idl
 +++ b/dlls/winegstreamer/winegstreamer_classes.idl
 @@ -92,6 +92,12 @@ coclass ASFByteStreamHandler {}
@@ -11398,7 +11539,7 @@ index 3a3daad3ab6..9f210fbbf72 100644
      threading(both),
      uuid(98230571-0087-4204-b020-3282538e57d3)
 diff --git a/include/mfidl.idl b/include/mfidl.idl
-index a66962dd270..383abe3ad22 100644
+index a66962dd27..383abe3ad2 100644
 --- a/include/mfidl.idl
 +++ b/include/mfidl.idl
 @@ -1133,4 +1133,5 @@ cpp_quote("EXTERN_GUID(CLSID_CMSH264DecoderMFT, 0x62ce7e72, 0x4c71, 0x4d20, 0xb1
@@ -11412,5 +11553,4 @@ index a66962dd270..383abe3ad22 100644
 \ No newline at end of file
 -- 
 2.26.2
-
 

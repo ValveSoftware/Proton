@@ -1,0 +1,28 @@
+From 3d651cf90dc7bf72861905bc53518146a0aa2079 Mon Sep 17 00:00:00 2001
+From: Derek Lesho <dlesho@codeweavers.com>
+Date: Fri, 1 May 2020 22:36:02 -0500
+Subject: [PATCH 44/53] HACK: Set BPS to 16 for output template.
+
+---
+ dlls/winegstreamer/mf_decode.c | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/dlls/winegstreamer/mf_decode.c b/dlls/winegstreamer/mf_decode.c
+index 7fe216d67d..c7e1bfb1a9 100644
+--- a/dlls/winegstreamer/mf_decode.c
++++ b/dlls/winegstreamer/mf_decode.c
+@@ -321,6 +321,11 @@ static HRESULT WINAPI mf_decoder_GetOutputAvailableType(IMFTransform *iface, DWO
+         return hr;
+     }
+ 
++    if (IsEqualGUID(decoder_descs[decoder->type].output_types[index], &MFAudioFormat_PCM))
++    {
++        IMFMediaType_SetUINT32(output_type, &MF_MT_AUDIO_BITS_PER_SAMPLE, 16);
++    }
++
+     *type = output_type;
+ 
+     return S_OK;
+-- 
+2.26.2
+

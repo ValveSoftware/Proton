@@ -1,0 +1,25 @@
+From 49645d8b03e968b80b681fea4ffcdf1e46364580 Mon Sep 17 00:00:00 2001
+From: Derek Lesho <dlesho@codeweavers.com>
+Date: Mon, 4 May 2020 12:40:56 -0500
+Subject: [PATCH 45/53] Set "wait-on-eos" to allow other streams to continue
+ while appsink buffers.
+
+---
+ dlls/winegstreamer/media_source.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/dlls/winegstreamer/media_source.c b/dlls/winegstreamer/media_source.c
+index 11b28176fd..1ce9b06b8c 100644
+--- a/dlls/winegstreamer/media_source.c
++++ b/dlls/winegstreamer/media_source.c
+@@ -1038,6 +1038,7 @@ static HRESULT media_stream_constructor(struct media_source *source, GstPad *pad
+     g_object_set(object->appsink, "emit-signals", TRUE, NULL);
+     g_object_set(object->appsink, "sync", FALSE, NULL);
+     g_object_set(object->appsink, "async", FALSE, NULL); /* <- This allows us interact with the bin w/o prerolling */
++    g_object_set(object->appsink, "wait-on-eos", FALSE, NULL);
+     g_signal_connect(object->appsink, "new-sample", G_CALLBACK(stream_new_sample_wrapper), object);
+ 
+     if (FAILED(hr = media_stream_align_with_mf(object, &stream_type)))
+-- 
+2.26.2
+

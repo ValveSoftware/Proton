@@ -1,0 +1,332 @@
+From 9c36b35bf949176c3d725a678c40c06a6d79d532 Mon Sep 17 00:00:00 2001
+From: Derek Lesho <dlesho@codeweavers.com>
+Date: Wed, 25 Mar 2020 10:43:03 -0500
+Subject: [PATCH 20/53] winegstreamer: Implement IMFMediaStream::RequestSample.
+
+Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
+---
+ dlls/mfplat/tests/mfplat.c        |   4 -
+ dlls/winegstreamer/gst_private.h  |   1 +
+ dlls/winegstreamer/media_source.c | 117 ++++++++++++++++++++++++++++--
+ dlls/winegstreamer/mfplat.c       |  90 +++++++++++++++++++++++
+ 4 files changed, 203 insertions(+), 9 deletions(-)
+
+diff --git a/dlls/mfplat/tests/mfplat.c b/dlls/mfplat/tests/mfplat.c
+index 1929c0e519..0ae58b24ca 100644
+--- a/dlls/mfplat/tests/mfplat.c
++++ b/dlls/mfplat/tests/mfplat.c
+@@ -540,13 +540,10 @@ static void test_source_resolver(void)
+         hr = IMFMediaStream_RequestSample(video_stream, NULL);
+         if (i == sample_count)
+             break;
+-todo_wine
+         ok(hr == S_OK, "Failed to request sample %u, hr %#x.\n", i + 1, hr);
+         if (hr != S_OK)
+             break;
+     }
+-    if (FAILED(hr))
+-        goto skip_source_tests;
+ 
+     for (i = 0; i < sample_count; ++i)
+     {
+@@ -587,7 +584,6 @@ todo_wine
+ 
+     get_event((IMFMediaEventGenerator *)mediasource, MEEndOfPresentation, NULL);
+ 
+-skip_source_tests:
+     IMFMediaStream_Release(video_stream);
+     IMFMediaTypeHandler_Release(handler);
+     IMFPresentationDescriptor_Release(descriptor);
+diff --git a/dlls/winegstreamer/gst_private.h b/dlls/winegstreamer/gst_private.h
+index 780cf1b02f..823e023f52 100644
+--- a/dlls/winegstreamer/gst_private.h
++++ b/dlls/winegstreamer/gst_private.h
+@@ -57,6 +57,7 @@ extern HRESULT mfplat_get_class_object(REFCLSID rclsid, REFIID riid, void **obj)
+ 
+ GstCaps *make_mf_compatible_caps(GstCaps *caps);
+ IMFMediaType *mf_media_type_from_caps(GstCaps *caps);
++IMFSample *mf_sample_from_gst_buffer(GstBuffer *in);
+ 
+ enum source_type
+ {
+diff --git a/dlls/winegstreamer/media_source.c b/dlls/winegstreamer/media_source.c
+index cb247adcef..b6f2fcc8fa 100644
+--- a/dlls/winegstreamer/media_source.c
++++ b/dlls/winegstreamer/media_source.c
+@@ -56,6 +56,7 @@ struct media_stream
+ enum source_async_op
+ {
+     SOURCE_ASYNC_START,
++    SOURCE_ASYNC_REQUEST_SAMPLE,
+ };
+ 
+ struct source_async_command
+@@ -71,6 +72,11 @@ struct source_async_command
+             GUID format;
+             PROPVARIANT position;
+         } start;
++        struct
++        {
++            struct media_stream *stream;
++            IUnknown *token;
++        } request_sample;
+     } u;
+ };
+ 
+@@ -304,6 +310,77 @@ static HRESULT start_pipeline(struct media_source *source, struct source_async_c
+     return S_OK;
+ }
+ 
++static void dispatch_end_of_presentation(struct media_source *source)
++{
++    PROPVARIANT empty = {.vt = VT_EMPTY};
++
++    /* A stream has ended, check whether all have */
++    for (unsigned int i = 0; i < source->stream_count; i++)
++    {
++        struct media_stream *stream = source->streams[i];
++
++        if (stream->state != STREAM_INACTIVE && !stream->eos)
++            return;
++    }
++
++    IMFMediaEventQueue_QueueEventParamVar(source->event_queue, MEEndOfPresentation, &GUID_NULL, S_OK, &empty);
++}
++
++static HRESULT wait_on_sample(struct media_stream *stream, IUnknown *token)
++{
++    PROPVARIANT empty_var = {.vt = VT_EMPTY};
++    GstSample *gst_sample;
++    GstBuffer *buffer;
++    IMFSample *sample;
++
++    TRACE("%p, %p\n", stream, token);
++
++    g_signal_emit_by_name(stream->appsink, "pull-sample", &gst_sample);
++    if (gst_sample)
++    {
++        buffer = gst_sample_get_buffer(gst_sample);
++
++        if (TRACE_ON(mfplat))
++        {
++            const GstCaps *sample_caps = gst_sample_get_caps(gst_sample);
++            const GstStructure *sample_info = gst_sample_get_info(gst_sample);
++            if (sample_caps)
++            {
++                gchar *sample_caps_str = gst_caps_to_string(sample_caps);
++                TRACE("sample caps %s\n", debugstr_a(sample_caps_str));
++                g_free(sample_caps_str);
++            }
++            if (sample_info)
++            {
++                gchar *sample_info_str = gst_structure_to_string(sample_info);
++                TRACE("sample info %s\n", debugstr_a(sample_info_str));
++                g_free(sample_info_str);
++            }
++            TRACE("PTS = %lu DTS = %lu\n", GST_BUFFER_PTS(buffer), GST_BUFFER_DTS(buffer));
++        }
++
++        sample = mf_sample_from_gst_buffer(buffer);
++        gst_sample_unref(gst_sample);
++
++        if (token)
++            IMFSample_SetUnknown(sample, &MFSampleExtension_Token, token);
++
++        IMFMediaEventQueue_QueueEventParamUnk(stream->event_queue, MEMediaSample, &GUID_NULL, S_OK, (IUnknown *)sample);
++    }
++
++    g_object_get(stream->appsink, "eos", &stream->eos, NULL);
++    if (stream->eos)
++    {
++        if (token)
++            IUnknown_Release(token);
++        IMFMediaEventQueue_QueueEventParamVar(stream->event_queue, MEEndOfStream, &GUID_NULL, S_OK, &empty_var);
++        dispatch_end_of_presentation(stream->parent_source);
++        return S_OK;
++    }
++
++    return S_OK;
++}
++
+ static HRESULT WINAPI source_async_commands_Invoke(IMFAsyncCallback *iface, IMFAsyncResult *result)
+ {
+     struct media_source *source = impl_from_async_commands_callback_IMFAsyncCallback(iface);
+@@ -323,6 +400,9 @@ static HRESULT WINAPI source_async_commands_Invoke(IMFAsyncCallback *iface, IMFA
+         case SOURCE_ASYNC_START:
+             start_pipeline(source, command);
+             break;
++        case SOURCE_ASYNC_REQUEST_SAMPLE:
++            wait_on_sample(command->u.request_sample.stream, command->u.request_sample.token);
++            break;
+         default:
+             ;
+     }
+@@ -345,12 +425,14 @@ static const IMFAsyncCallbackVtbl source_async_commands_callback_vtbl =
+ static GstFlowReturn stream_new_sample(GstElement *appsink, gpointer user)
+ {
+     struct media_stream *stream = (struct media_stream *) user;
+-    GstSample *discard_sample;
+ 
+-    TRACE("(%p) got sample\n", stream);
++    if (stream->state == STREAM_INACTIVE)
++    {
++        GstSample *discard_sample;
++        g_signal_emit_by_name(stream->appsink, "pull-sample", &discard_sample);
++        gst_sample_unref(discard_sample);
++    }
+ 
+-    g_signal_emit_by_name(stream->appsink, "pull-sample", &discard_sample);
+-    gst_sample_unref(discard_sample);
+     return GST_FLOW_OK;
+ }
+ 
+@@ -770,13 +852,37 @@ static HRESULT WINAPI media_stream_GetStreamDescriptor(IMFMediaStream* iface, IM
+ static HRESULT WINAPI media_stream_RequestSample(IMFMediaStream *iface, IUnknown *token)
+ {
+     struct media_stream *stream = impl_from_IMFMediaStream(iface);
++    struct source_async_command *command;
++    HRESULT hr;
+ 
+     TRACE("(%p)->(%p)\n", iface, token);
+ 
+     if (stream->state == STREAM_SHUTDOWN)
+         return MF_E_SHUTDOWN;
+ 
+-    return E_NOTIMPL;
++    if (stream->state == STREAM_INACTIVE || stream->state == STREAM_ENABLED)
++    {
++        WARN("Stream isn't active\n");
++        return MF_E_MEDIA_SOURCE_WRONGSTATE;
++    }
++
++    if (stream->eos)
++    {
++        return MF_E_END_OF_STREAM;
++    }
++
++    if (SUCCEEDED(hr = source_create_async_op(SOURCE_ASYNC_REQUEST_SAMPLE, &command)))
++    {
++        command->u.request_sample.stream = stream;
++        if (token)
++            IUnknown_AddRef(token);
++        command->u.request_sample.token = token;
++
++        /* Once pause support is added, this will need to into a stream queue, and synchronization will need to be added*/
++        hr = MFPutWorkItem(stream->parent_source->async_commands_queue, &stream->parent_source->async_commands_callback, &command->IUnknown_iface);
++    }
++
++    return hr;
+ }
+ 
+ static const IMFMediaStreamVtbl media_stream_vtbl =
+@@ -898,6 +1004,7 @@ static HRESULT media_stream_constructor(struct media_source *source, GstPad *pad
+     object->their_src = pad;
+ 
+     object->state = STREAM_INACTIVE;
++    object->eos = FALSE;
+ 
+     if (FAILED(hr = MFCreateEventQueue(&object->event_queue)))
+         goto fail;
+diff --git a/dlls/winegstreamer/mfplat.c b/dlls/winegstreamer/mfplat.c
+index fe187e6cd1..e09309fd4d 100644
+--- a/dlls/winegstreamer/mfplat.c
++++ b/dlls/winegstreamer/mfplat.c
+@@ -902,4 +902,94 @@ GstCaps *make_mf_compatible_caps(GstCaps *caps)
+     }
+ 
+     return ret;
++}
++
++/* IMFSample = GstBuffer
++   IMFBuffer = GstMemory */
++
++/* TODO: Future optimization could be to create a custom
++   IMFMediaBuffer wrapper around GstMemory, and to utilize
++   gst_memory_new_wrapped on IMFMediaBuffer data.  However,
++   this wouldn't work if we allow the callers to allocate
++   the buffers. */
++
++IMFSample* mf_sample_from_gst_buffer(GstBuffer *gst_buffer)
++{
++    IMFSample *out = NULL;
++    LONGLONG duration, time;
++    int buffer_count;
++    HRESULT hr;
++
++    if (FAILED(hr = MFCreateSample(&out)))
++        goto fail;
++
++    duration = GST_BUFFER_DURATION(gst_buffer);
++    time = GST_BUFFER_PTS(gst_buffer);
++
++    if (FAILED(IMFSample_SetSampleDuration(out, duration / 100)))
++        goto fail;
++
++    if (FAILED(IMFSample_SetSampleTime(out, time / 100)))
++        goto fail;
++
++    buffer_count = gst_buffer_n_memory(gst_buffer);
++
++    for (unsigned int i = 0; i < buffer_count; i++)
++    {
++        GstMemory *memory = gst_buffer_get_memory(gst_buffer, i);
++        IMFMediaBuffer *mf_buffer = NULL;
++        GstMapInfo map_info;
++        BYTE *buf_data;
++
++        if (!memory)
++        {
++            hr = E_FAIL;
++            goto loop_done;
++        }
++
++        if (!(gst_memory_map(memory, &map_info, GST_MAP_READ)))
++        {
++            hr = E_FAIL;
++            goto loop_done;
++        }
++
++        if (FAILED(hr = MFCreateMemoryBuffer(map_info.maxsize, &mf_buffer)))
++        {
++            gst_memory_unmap(memory, &map_info);
++            goto loop_done;
++        }
++
++        if (FAILED(hr = IMFMediaBuffer_Lock(mf_buffer, &buf_data, NULL, NULL)))
++        {
++            gst_memory_unmap(memory, &map_info);
++            goto loop_done;
++        }
++
++        memcpy(buf_data, map_info.data, map_info.size);
++
++        gst_memory_unmap(memory, &map_info);
++
++        if (FAILED(hr = IMFMediaBuffer_Unlock(mf_buffer)))
++            goto loop_done;
++
++        if (FAILED(hr = IMFMediaBuffer_SetCurrentLength(mf_buffer, map_info.size)))
++            goto loop_done;
++
++        if (FAILED(hr = IMFSample_AddBuffer(out, mf_buffer)))
++            goto loop_done;
++
++        loop_done:
++        if (mf_buffer)
++            IMFMediaBuffer_Release(mf_buffer);
++        if (memory)
++            gst_memory_unref(memory);
++        if (FAILED(hr))
++            goto fail;
++    }
++
++    return out;
++    fail:
++    ERR("Failed to copy IMFSample to GstBuffer, hr = %#x\n", hr);
++    IMFSample_Release(out);
++    return NULL;
+ }
+\ No newline at end of file
+-- 
+2.26.2
+

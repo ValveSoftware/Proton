@@ -1,0 +1,101 @@
+From e0f00252dd4d28f80c2950f5bd61bf922a14a530 Mon Sep 17 00:00:00 2001
+From: Derek Lesho <dlesho@codeweavers.com>
+Date: Tue, 12 May 2020 10:08:20 -0500
+Subject: [PATCH 05/53] mf: Attach markers to previously queued sample, not the
+ next.
+
+Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
+---
+ dlls/mf/samplegrabber.c | 59 +++++++++++++++--------------------------
+ 1 file changed, 21 insertions(+), 38 deletions(-)
+
+diff --git a/dlls/mf/samplegrabber.c b/dlls/mf/samplegrabber.c
+index 7d9fa78732..da6fee4506 100644
+--- a/dlls/mf/samplegrabber.c
++++ b/dlls/mf/samplegrabber.c
+@@ -708,61 +708,44 @@ static HRESULT WINAPI sample_grabber_stream_timer_callback_GetParameters(IMFAsyn
+     return E_NOTIMPL;
+ }
+ 
+-static struct scheduled_item *stream_get_next_item(struct sample_grabber *grabber)
+-{
+-    struct scheduled_item *item = NULL;
+-    struct list *e;
+-
+-    if ((e = list_head(&grabber->items)))
+-        item = LIST_ENTRY(e, struct scheduled_item, entry);
+-
+-    return item;
+-}
+-
+ static HRESULT WINAPI sample_grabber_stream_timer_callback_Invoke(IMFAsyncCallback *iface, IMFAsyncResult *result)
+ {
+     struct sample_grabber *grabber = impl_from_IMFAsyncCallback(iface);
+-    struct scheduled_item *item;
+-    BOOL sample_delivered;
++    struct scheduled_item *item, *cursor2;
++    BOOL sample_reported = FALSE, sample_delivered;
+     HRESULT hr;
+ 
+     EnterCriticalSection(&grabber->cs);
+ 
+     /* Report and schedule next. */
+-    if (!grabber->is_shut_down && (item = stream_get_next_item(grabber)))
++    if (!grabber->is_shut_down)
+     {
+-        while (item)
++        LIST_FOR_EACH_ENTRY_SAFE(item, cursor2, &grabber->items, struct scheduled_item, entry)
+         {
+-            switch (item->type)
++            if (item->type == ITEM_TYPE_MARKER)
++            {
++                sample_grabber_stream_report_marker(grabber, &item->u.marker.context, S_OK);
++                stream_release_pending_item(item);
++            }
++            if (item->type == ITEM_TYPE_SAMPLE)
+             {
+-                case ITEM_TYPE_SAMPLE:
++                if (!sample_reported)
++                {
+                     if (FAILED(hr = sample_grabber_report_sample(grabber, item->u.sample, &sample_delivered)))
+                         WARN("Failed to report a sample, hr %#x.\n", hr);
+                     stream_release_pending_item(item);
+-
+-                    /* Schedule next sample, skipping markers. */
+-                    LIST_FOR_EACH_ENTRY(item, &grabber->items, struct scheduled_item, entry)
+-                    {
+-                        if (item->type == ITEM_TYPE_SAMPLE)
+-                        {
+-                            if (FAILED(hr = stream_schedule_sample(grabber, item)))
+-                                WARN("Failed to schedule a sample, hr %#x.\n", hr);
+-                            break;
+-                        }
+-                    }
+-
+-                    if (sample_delivered)
+-                        sample_grabber_stream_request_sample(grabber);
+-
+-                    item = NULL;
+-                    break;
+-                case ITEM_TYPE_MARKER:
+-                    sample_grabber_stream_report_marker(grabber, &item->u.marker.context, S_OK);
+-                    stream_release_pending_item(item);
+-                    item = stream_get_next_item(grabber);
++                    sample_reported = TRUE;
++                }
++                else
++                {
++                    if (FAILED(hr = stream_schedule_sample(grabber, item)))
++                        WARN("Failed to schedule a sample, hr %#x.\n", hr);
+                     break;
++                }
+             }
+         }
++        if (sample_delivered)
++        sample_grabber_stream_request_sample(grabber);
+     }
+ 
+     LeaveCriticalSection(&grabber->cs);
+-- 
+2.26.2
+

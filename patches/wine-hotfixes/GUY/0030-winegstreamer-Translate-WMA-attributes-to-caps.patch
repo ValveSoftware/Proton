@@ -1,0 +1,39 @@
+From 8470547b6719467a21f7cdee31b02c940b59be2c Mon Sep 17 00:00:00 2001
+From: Derek Lesho <dlesho@codeweavers.com>
+Date: Tue, 12 May 2020 17:05:59 -0500
+Subject: [PATCH 30/53] winegstreamer: Translate WMA attributes to caps.
+
+Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
+---
+ dlls/winegstreamer/mfplat.c | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
+
+diff --git a/dlls/winegstreamer/mfplat.c b/dlls/winegstreamer/mfplat.c
+index c7d6e4806a..86f0f79630 100644
+--- a/dlls/winegstreamer/mfplat.c
++++ b/dlls/winegstreamer/mfplat.c
+@@ -1167,6 +1167,21 @@ GstCaps *caps_from_mf_media_type(IMFMediaType *type)
+                 CoTaskMemFree(user_data);
+             }
+         }
++        else if (IsEqualGUID(&subtype, &MFAudioFormat_WMAudioV9) ||
++                 IsEqualGUID(&subtype, &MFAudioFormat_WMAudioV8))
++        {
++            DWORD block_align;
++
++            output = gst_caps_new_empty_simple("audio/x-wma");
++
++            gst_caps_set_simple(output, "wmaversion", G_TYPE_INT,
++                IsEqualGUID(&subtype, &MFAudioFormat_WMAudioV9) ? 3 : 2, NULL);
++
++            if (SUCCEEDED(IMFMediaType_GetUINT32(type, &MF_MT_AUDIO_BLOCK_ALIGNMENT, &block_align)))
++                gst_caps_set_simple(output, "block_align", G_TYPE_INT, block_align, NULL);
++
++            user_data_to_codec_data(type, output);
++        }
+         else
+         {
+             FIXME("Unrecognized subtype %s\n", debugstr_guid(&subtype));
+-- 
+2.26.2
+

@@ -1,0 +1,24 @@
+From 340238cfb0f6c3d098e518981a41c90f701aed14 Mon Sep 17 00:00:00 2001
+From: Derek Lesho <dlesho@codeweavers.com>
+Date: Fri, 3 Apr 2020 13:09:30 -0500
+Subject: [PATCH 41/53] Set BPS on AAC.
+
+---
+ dlls/winegstreamer/mfplat.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/dlls/winegstreamer/mfplat.c b/dlls/winegstreamer/mfplat.c
+index e1735a5f82..780008face 100644
+--- a/dlls/winegstreamer/mfplat.c
++++ b/dlls/winegstreamer/mfplat.c
+@@ -916,6 +916,7 @@ static IMFMediaType* transform_to_media_type(GstCaps *caps)
+                     struct aac_user_data *user_data = NULL;
+ 
+                     IMFMediaType_SetGUID(media_type, &MF_MT_SUBTYPE, &MFAudioFormat_AAC);
++                    IMFMediaType_SetUINT32(media_type, &MF_MT_AUDIO_BITS_PER_SAMPLE, 16);
+ 
+                     codec_data = gst_structure_get_value(info, "codec_data");
+                     if (codec_data)
+-- 
+2.26.2
+

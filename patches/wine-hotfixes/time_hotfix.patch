@@ -1,0 +1,24 @@
+diff --git a/patches/ntdll-NtQueryVirtualMemory/0005-ntdll-tests-Add-test-to-ensure-section-name-is-full-.patch b/patches/ntdll-NtQueryVirtualMemory/0005-ntdll-tests-Add-test-to-ensure-section-name-is-full-.patch
+index e66c6e88..bd4515ff 100644
+--- a/patches/ntdll-NtQueryVirtualMemory/0005-ntdll-tests-Add-test-to-ensure-section-name-is-full-.patch
++++ b/patches/ntdll-NtQueryVirtualMemory/0005-ntdll-tests-Add-test-to-ensure-section-name-is-full-.patch
+@@ -17,16 +17,16 @@ index 766ca086c76..c953740d050 100644
+  
+ +static NTSTATUS (WINAPI * pRtlDowncaseUnicodeString)(UNICODE_STRING *, const UNICODE_STRING *, BOOLEAN);
+  static NTSTATUS (WINAPI * pNtQuerySystemInformation)(SYSTEM_INFORMATION_CLASS, PVOID, ULONG, PULONG);
+- static NTSTATUS (WINAPI * pNtSetSystemInformation)(SYSTEM_INFORMATION_CLASS, PVOID, ULONG);
+  static NTSTATUS (WINAPI * pRtlGetNativeSystemInformation)(SYSTEM_INFORMATION_CLASS, PVOID, ULONG, PULONG);
+-@@ -76,6 +77,7 @@ static BOOL InitFunctionPtrs(void)
++ static NTSTATUS (WINAPI * pNtQuerySystemInformationEx)(SYSTEM_INFORMATION_CLASS, void*, ULONG, void*, ULONG, ULONG*);
++@@ -75,6 +76,7 @@ static BOOL InitFunctionPtrs(void)
+          return FALSE;
+      }
+  
+ +    NTDLL_GET_PROC(RtlDowncaseUnicodeString);
+      NTDLL_GET_PROC(NtQuerySystemInformation);
+-     NTDLL_GET_PROC(NtSetSystemInformation);
+      NTDLL_GET_PROC(RtlGetNativeSystemInformation);
++     NTDLL_GET_PROC(NtPowerInformation);
+ @@ -2211,6 +2213,7 @@ static void test_queryvirtualmemory(void)
+  {
+      NTSTATUS status;
