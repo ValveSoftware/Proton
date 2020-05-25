@@ -283,6 +283,8 @@
     #add your own custom patch lines below
     patch -Np1 < ../patches/wine-hotfixes/user32-Set_PAINTSTRUCT_fErase_field_depending_on_the_last_WM_ERASEBKGND_result.patch
 
+    patch -Np1 < ../patches/wine-hotfixes/winemono-update_to_5.0.1.patch
+
     ./dlls/winevulkan/make_vulkan
     ./tools/make_requests
     autoreconf -f
