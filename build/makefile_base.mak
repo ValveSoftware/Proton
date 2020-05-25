@@ -185,8 +185,8 @@ GECKO_VER := 2.47.1
 GECKO32_TARBALL := wine-gecko-$(GECKO_VER)-x86.tar.bz2
 GECKO64_TARBALL := wine-gecko-$(GECKO_VER)-x86_64.tar.bz2
 
-WINEMONO_VER := 4.9.4
-WINEMONO_TARBALL := wine-mono-bin-$(WINEMONO_VER).tar.gz
+WINEMONO_VER := 5.0.1
+WINEMONO_TARBALL := wine-mono-$(WINEMONO_VER)-x86.tar.xz
 
 FFMPEG := $(SRCDIR)/ffmpeg
 FFMPEG_OBJ32 := ./obj-ffmpeg32
@@ -302,14 +302,6 @@ BISON_OBJ64 := ./obj-bison64
 BISON_BIN32 := $(BISON_OBJ32)/built/bin/bison
 BISON_BIN64 := $(BISON_OBJ64)/built/bin/bison
 
-LIBFFI_VER = 3.3
-LIBFFI_TARBALL := libffi-$(LIBFFI_VER).tar.gz
-LIBFFI := $(SRCDIR)/contrib/libffi-$(LIBFFI_VER)
-LIBFFI_OBJ32 := ./obj-libffi32
-LIBFFI_OBJ64 := ./obj-libffi64
-
-
-
 FONTS := $(SRCDIR)/fonts
 FONTS_OBJ := ./obj-fonts
 
@@ -317,7 +309,6 @@ FONTS_OBJ := ./obj-fonts
 OBJ_DIRS := $(TOOLS_DIR32)        $(TOOLS_DIR64)        \
             $(FFMPEG_OBJ32)       $(FFMPEG_OBJ64)       \
             $(GLIB_OBJ32)         $(GLIB_OBJ64)         \
-            $(LIBFFI_OBJ32)         $(LIBFFI_OBJ64)         \
             $(GST_ORC_OBJ32)    $(GST_ORC_OBJ64)    \
             $(GSTREAMER_OBJ32)    $(GSTREAMER_OBJ64)    \
             $(GST_BASE_OBJ32)     $(GST_BASE_OBJ64)     \
@@ -349,13 +340,11 @@ $(OBJ_DIRS):
 .PHONY: downloads
 
 BISON_TARBALL_URL := https://ftpmirror.gnu.org/bison/$(BISON_TARBALL)
-LIBFFI_TARBALL_URL := https://sourceware.org/pub/libffi/$(LIBFFI_TARBALL)
 GECKO64_TARBALL_URL := https://dl.winehq.org/wine/wine-gecko/$(GECKO_VER)/$(GECKO64_TARBALL)
 GECKO32_TARBALL_URL := https://dl.winehq.org/wine/wine-gecko/$(GECKO_VER)/$(GECKO32_TARBALL)
 MONO_TARBALL_URL := https://github.com/madewokherd/wine-mono/releases/download/wine-mono-$(WINEMONO_VER)/$(WINEMONO_TARBALL)
 
 SHARED_BISON_TARBALL := $(SRCDIR)/../bison/$(BISON_TARBALL)
-SHARED_LIBFFI_TARBALL := $(SRCDIR)/../libffi/$(LIBFFI_TARBALL)
 SHARED_GECKO64_TARBALL := $(SRCDIR)/../gecko/$(GECKO64_TARBALL)
 SHARED_GECKO32_TARBALL := $(SRCDIR)/../gecko/$(GECKO32_TARBALL)
 SHARED_MONO_TARBALL := $(SRCDIR)/../mono/$(WINEMONO_TARBALL)
@@ -364,9 +353,6 @@ $(SHARED_BISON_TARBALL):
 	mkdir -p $(dir $@)
 	wget -O "$@" "$(BISON_TARBALL_URL)"
 	
-$(SHARED_LIBFFI_TARBALL):
-	mkdir -p $(dir $@)
-	wget -O "$@" "$(LIBFFI_TARBALL_URL)"
 
 $(SHARED_GECKO64_TARBALL):
 	mkdir -p $(dir $@)
@@ -380,7 +366,7 @@ $(SHARED_MONO_TARBALL):
 	mkdir -p $(dir $@)
 	wget -O "$@" "$(MONO_TARBALL_URL)"
 
-downloads: $(SHARED_BISON_TARBALL) $(SHARED_LIBFFI_TARBALL) $(SHARED_GECKO64_TARBALL) $(SHARED_GECKO32_TARBALL) $(SHARED_MONO_TARBALL)
+downloads: $(SHARED_BISON_TARBALL) $(SHARED_GECKO64_TARBALL) $(SHARED_GECKO32_TARBALL) $(SHARED_MONO_TARBALL)
 
 ##
 ## dist/install -- steps to finalize the install
@@ -506,7 +492,7 @@ $(DIST_FONTS): fonts
 ALL_TARGETS += dist
 GOAL_TARGETS += dist
 
-dist: $(DIST_TARGETS) libffi gst_orc wine gst_good gst_bad gst_ugly gst_libav vrclient lsteamclient steam dxvk | $(DST_DIR)
+dist: $(DIST_TARGETS) gst_orc wine gst_good gst_bad gst_ugly gst_libav vrclient lsteamclient steam dxvk | $(DST_DIR)
 	echo `date '+%s'` `GIT_DIR=$(abspath $(SRCDIR)/.git) git describe --tags` > $(DIST_VERSION)
 	cp $(DIST_VERSION) $(DST_BASE)/
 	rm -rf $(abspath $(DIST_PREFIX)) && \
@@ -1224,7 +1210,12 @@ $(FFMPEG_CONFIGURE_FILES64): $(FFMPEG)/configure $(MAKEFILE_DEP) | $(FFMPEG_OBJ6
 			--enable-decoder=bmp \
 			--enable-parser=png \
 			--enable-decoder=png \
+			--enable-parser=mpegvideo \
+			--enable-parser=mpeg4video \
+			--enable-parser=mpegaudio \
 			--enable-decoder=mpegvideo \
+			--enable-decoder=mpegaudio \
+			--enable-decoder=h263 \
 			--enable-decoder=wmv1 \
 			--enable-decoder=wmv2 \
 			--enable-decoder=wmv3 \
@@ -1273,7 +1264,12 @@ $(FFMPEG_CONFIGURE_FILES32): $(FFMPEG)/configure $(MAKEFILE_DEP) | $(FFMPEG_OBJ3
 			--enable-decoder=bmp \
 			--enable-parser=png \
 			--enable-decoder=png \
+			--enable-parser=mpegvideo \
+			--enable-parser=mpeg4video \
+			--enable-parser=mpegaudio \
 			--enable-decoder=mpegvideo \
+			--enable-decoder=mpegaudio \
+			--enable-decoder=h263 \
 			--enable-decoder=wmv1 \
 			--enable-decoder=wmv2 \
 			--enable-decoder=wmv3 \
@@ -1851,69 +1847,6 @@ bison32-intermediate: $(BISON_CONFIGURE_FILES32) $(filter $(MAKECMDGOALS),bison3
 	+$(MAKE) -C $(BISON_OBJ32) install
 	touch $(BISON_BIN32)
 	
-##
-## libffi
-##
-
-$(LIBFFI):
-	if [ -e "$(SRCDIR)/../libffi/$(LIBFFI_TARBALL)" ]; then \
-		mkdir -p $(dir $@); \
-		tar -xf "$(SRCDIR)/../libffi/$(LIBFFI_TARBALL)" -C "$(dir $@)"; \
-	else \
-		mkdir -p $(SRCDIR)/contrib/; \
-		if [ ! -e "$(SRCDIR)/contrib/$(LIBFFI_TARBALL)" ]; then \
-			echo ">>>> Downloading libffi. To avoid this in future, put it here: $(SRCDIR)/../libffi/$(LIBFFI_TARBALL)"; \
-			wget -O "$(SRCDIR)/contrib/$(LIBFFI_TARBALL)" "$(LIBFFI_TARBALL_URL)"; \
-		fi; \
-		tar -xf "$(SRCDIR)/contrib/$(LIBFFI_TARBALL)" -C "$(dir $@)"; \
-	fi
-
-LIBFFI_CONFIGURE_FILES32 := $(LIBFFI_OBJ32)/Makefile
-LIBFFI_CONFIGURE_FILES64 := $(LIBFFI_OBJ64)/Makefile
-
-# 64bit-configure
-$(LIBFFI_CONFIGURE_FILES64): SHELL = $(CONTAINER_SHELL64)
-$(LIBFFI_CONFIGURE_FILES64): $(MAKEFILE_DEP) $(LIBFFI) | $(LIBFFI_OBJ64)
-	cd "$(LIBFFI_OBJ64)" && \
-		../$(LIBFFI)/configure --prefix=$(abspath $(TOOLS_DIR64)) --disable-static
-
-# 32-bit configure
-$(LIBFFI_CONFIGURE_FILES32): SHELL = $(CONTAINER_SHELL32)
-$(LIBFFI_CONFIGURE_FILES32): $(MAKEFILE_DEP) $(LIBFFI) | $(LIBFFI_OBJ32)
-	cd "$(LIBFFI_OBJ32)" && \
-		../$(LIBFFI)/configure --prefix=$(abspath $(TOOLS_DIR32)) --disable-static
-
-## libffi goals
-LIBFFI_TARGETS = libffi libffi_configure libffi32 libffi64 libffi_configure32 libffi_configure64
-
-ALL_TARGETS += $(LIBFFI_TARGETS)
-GOAL_TARGETS_LIBS += libffi
-
-.PHONY: $(LIBFFI_TARGETS)
-
-libffi_configure: $(LIBFFI_CONFIGURE_FILES32) $(LIBFFI_CONFIGURE_FILES64)
-
-libffi_configure64: $(LIBFFI_CONFIGURE_FILES64)
-
-libffi_configure32: $(LIBFFI_CONFIGURE_FILES32)
-
-libffi: libffi32 libffi64
-
-libffi64: SHELL = $(CONTAINER_SHELL64)
-libffi64: $(LIBFFI_CONFIGURE_FILES64)
-	+$(MAKE) -C $(LIBFFI_OBJ64)
-	+$(MAKE) -C $(LIBFFI_OBJ64) install
-	mkdir -pv $(DST_DIR)/lib64
-	cp -a $(TOOLS_DIR64)/lib/libffi* $(DST_DIR)/lib64
-
-libffi32: SHELL = $(CONTAINER_SHELL32)
-libffi32: $(LIBFFI_CONFIGURE_FILES32)
-	+$(MAKE) -C $(LIBFFI_OBJ32)
-	+$(MAKE) -C $(LIBFFI_OBJ32) install
-	mkdir -pv $(DST_DIR)/lib
-	cp -a $(TOOLS_DIR32)/lib/libffi* $(DST_DIR)/lib
-
-
 ##
 ## dxvk
 ##
