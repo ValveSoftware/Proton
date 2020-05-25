@@ -25,11 +25,11 @@ end
 if OS.linux?
   cpus = `nproc`.to_i
   # meminfo shows KB and we need to convert to MB
-  memory = `grep 'MemTotal' /proc/meminfo | sed -e 's/MemTotal://' -e 's/ kB//'`.to_i / 1024 / 8
+  memory = `grep 'MemTotal' /proc/meminfo | sed -e 's/MemTotal://' -e 's/ kB//'`.to_i / 1024 / 4
 elsif OS.mac?
   cpus = `sysctl -n hw.physicalcpu`.to_i
   # sysctl shows bytes and we need to convert to MB
-  memory = `sysctl hw.memsize | sed -e 's/hw.memsize: //'`.to_i / 1024 / 1024 / 8
+  memory = `sysctl hw.memsize | sed -e 's/hw.memsize: //'`.to_i / 1024 / 1024 / 4
 else
   cpus = 1
   memory = 1024
