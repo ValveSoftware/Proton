@@ -1210,6 +1210,7 @@ $(FFMPEG_CONFIGURE_FILES64): $(FFMPEG)/configure $(MAKEFILE_DEP) | $(FFMPEG_OBJ6
 			--enable-decoder=bmp \
 			--enable-parser=png \
 			--enable-decoder=png \
+			--enable-decoder=mpeg4 \
 			--enable-parser=mpegvideo \
 			--enable-parser=mpeg4video \
 			--enable-parser=mpegaudio \
@@ -1264,6 +1265,7 @@ $(FFMPEG_CONFIGURE_FILES32): $(FFMPEG)/configure $(MAKEFILE_DEP) | $(FFMPEG_OBJ3
 			--enable-decoder=bmp \
 			--enable-parser=png \
 			--enable-decoder=png \
+			--enable-decoder=mpeg4 \
 			--enable-parser=mpegvideo \
 			--enable-parser=mpeg4video \
 			--enable-parser=mpegaudio \
