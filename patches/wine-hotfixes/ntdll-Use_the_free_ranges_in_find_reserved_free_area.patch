@@ -1,7 +1,7 @@
 From: "Rémi Bernon" <rbernon@codeweavers.com>
-Subject: [PATCH 1/2] ntdll: Introduce free_ranges indexing sequence.
-Message-Id: <20200410095538.324097-1-rbernon@codeweavers.com>
-Date: Fri, 10 Apr 2020 11:55:37 +0200
+Subject: [PATCH v3 1/2] ntdll: Introduce free_ranges indexing sequence.
+Message-Id: <20200525141547.1486891-1-rbernon@codeweavers.com>
+Date: Mon, 25 May 2020 16:15:45 +0200
 
 This is an ordered range sequence used to keep track of free address
 ranges.
@@ -29,17 +29,21 @@ when reaching the limit, although we could possibly grow the sequence.
 Signed-off-by: Rémi Bernon <rbernon@codeweavers.com>
 ---
 
-Notes:
+v2: Move the fragmentation mitigations code after the free ranges are
+    actually used. Before that we have to use the same range alignment
+    as the rbtree based code.
+
+v3: Use the new granularity_mask introduced in Wine 5.8, remove the
+    notes about alignment that have been fixed upstream. Use the
+    unix_funcs pointers for mmap_is_in_reserved_area calls.
+
+Original notes:
 
 Tracking free ranges over the whole address space can increase the
 free range count significantly, if pages are getting allocated outside
 of the reserved areas, because of the mmap/VirtualAlloc alignment
 adjustments. We don't use the free ranges outside of the reserved areas
 for now so we just skip these instead.
-
-We also reduce fragmentation by aligning free ranges boundaries to 64k,
-as it is the default view alignment. I'm not sure if that has other
-implications aside from wasting a bit of address space. [1]
 
 In We Happy Few, the maximum number of unique free ranges after starting
 a new game, for a maximum of ~=17k allocated views of which ~=9k are in
@@ -60,61 +64,14 @@ has roughly the same performance gain. Even with the high fragmentation,
 the cache locality is good enough to mitigate the performance hit and to
 be better than the tree traversal.
 
-[1] It looks like most allocations are done with the default 64k align,
-but some others aren't and are using the internal virtual_alloc_aligned.
-
-The TEBs and signal stacks doesn't seem too much of a waste, but the
-heap large blocks, allocated with a 16b align - internally converted to
-4k align - may be impacted.
-
- dlls/ntdll/virtual.c | 170 ++++++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 167 insertions(+), 3 deletions(-)
+ dlls/ntdll/virtual.c | 167 ++++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 164 insertions(+), 3 deletions(-)
 
 diff --git a/dlls/ntdll/virtual.c b/dlls/ntdll/virtual.c
-index 6ad2d21e01e..3740d1a4457 100644
+index f678b2387a31..4ac496efc71c 100644
 --- a/dlls/ntdll/virtual.c
 +++ b/dlls/ntdll/virtual.c
-@@ -122,6 +122,7 @@ static RTL_CRITICAL_SECTION csVirtual = { &critsect_debug, -1, 0, 0, 0, 0 };
- #ifdef __i386__
- static const UINT page_shift = 12;
- static const UINT_PTR page_mask = 0xfff;
-+static const UINT_PTR free_ranges_mask = 0xffff;
- /* Note: these are Windows limits, you cannot change them. */
- static void *address_space_limit = (void *)0xc0000000;  /* top of the total available address space */
- static void *user_space_limit    = (void *)0x7fff0000;  /* top of the user address space */
-@@ -130,6 +131,7 @@ static void *address_space_start = (void *)0x110000;    /* keep DOS area clear *
- #elif defined(__x86_64__)
- static const UINT page_shift = 12;
- static const UINT_PTR page_mask = 0xfff;
-+static const UINT_PTR free_ranges_mask = 0xffff;
- static void *address_space_limit = (void *)0x7fffffff0000;
- static void *user_space_limit    = (void *)0x7fffffff0000;
- static void *working_set_limit   = (void *)0x7fffffff0000;
-@@ -137,6 +139,7 @@ static void *address_space_start = (void *)0x10000;
- #elif defined(__arm__)
- static const UINT page_shift = 12;
- static const UINT_PTR page_mask = 0xfff;
-+static const UINT_PTR free_ranges_mask = 0xffff;
- static void *address_space_limit = (void *)0xc0000000;
- static void *user_space_limit    = (void *)0x7fff0000;
- static void *working_set_limit   = (void *)0x7fff0000;
-@@ -144,6 +147,7 @@ static void *address_space_start = (void *)0x10000;
- #elif defined(__aarch64__)
- static const UINT page_shift = 12;
- static const UINT_PTR page_mask = 0xfff;
-+static const UINT_PTR free_ranges_mask = 0xffff;
- static void *address_space_limit = (void *)0xffffffff0000;
- static void *user_space_limit    = (void *)0x7fffffff0000;
- static void *working_set_limit   = (void *)0x7fffffff0000;
-@@ -152,6 +156,7 @@ static void *address_space_start = (void *)0x10000;
- UINT_PTR page_size = 0;
- static UINT page_shift;
- static UINT_PTR page_mask;
-+static UINT_PTR free_ranges_mask;
- static void *address_space_limit;
- static void *user_space_limit;
- static void *working_set_limit;
-@@ -184,6 +189,156 @@ static void *preload_reserve_end;
+@@ -195,6 +195,158 @@ static void *preload_reserve_end;
  static BOOL use_locks;
  static BOOL force_exec_prot;  /* whether to force PROT_EXEC on all PROT_READ mmaps */
  
@@ -159,8 +116,8 @@ index 6ad2d21e01e..3740d1a4457 100644
 + */
 +static void free_ranges_insert_view( struct file_view *view )
 +{
-+    void *view_base = ROUND_ADDR( view->base, free_ranges_mask );
-+    void *view_end = ROUND_ADDR( (char *)view->base + view->size + free_ranges_mask, free_ranges_mask );
++    void *view_base = ROUND_ADDR( view->base, granularity_mask );
++    void *view_end = ROUND_ADDR( (char *)view->base + view->size + granularity_mask, granularity_mask );
 +    struct range_entry *range = free_ranges_lower_bound( view_base );
 +    struct range_entry *next = range + 1;
 +
@@ -172,6 +129,8 @@ index 6ad2d21e01e..3740d1a4457 100644
 +    if ((range->end > view_base && range->base >= view_end) ||
 +        (range->end == view_base && next->base >= view_end))
 +    {
++        /* but assert that it's correctly aligned so we're not going to be into trouble later */
++        assert( view->base == view_base );
 +        WARN( "range %p - %p is already mapped\n", view_base, view_end );
 +        return;
 +    }
@@ -219,8 +178,8 @@ index 6ad2d21e01e..3740d1a4457 100644
 + */
 +static void free_ranges_remove_view( struct file_view *view )
 +{
-+    void *view_base = ROUND_ADDR( view->base, free_ranges_mask );
-+    void *view_end = ROUND_ADDR( (char *)view->base + view->size + free_ranges_mask, free_ranges_mask );
++    void *view_base = ROUND_ADDR( view->base, granularity_mask );
++    void *view_end = ROUND_ADDR( (char *)view->base + view->size + granularity_mask, granularity_mask );
 +    struct range_entry *range = free_ranges_lower_bound( view_base );
 +    struct range_entry *next = range + 1;
 +
@@ -271,25 +230,25 @@ index 6ad2d21e01e..3740d1a4457 100644
  static inline int is_view_valloc( const struct file_view *view )
  {
      return !(view->protect & (SEC_FILE | SEC_RESERVE | SEC_COMMIT));
-@@ -835,6 +990,8 @@ static void delete_view( struct file_view *view ) /* [in] View */
+@@ -833,6 +985,8 @@ static void delete_view( struct file_view *view ) /* [in] View */
  {
      if (!(view->protect & VPROT_SYSTEM)) unmap_area( view->base, view->size );
      set_page_vprot( view->base, view->size, 0 );
-+    if (wine_mmap_is_in_reserved_area( view->base, view->size ))
++    if (unix_funcs->mmap_is_in_reserved_area( view->base, view->size ))
 +        free_ranges_remove_view( view );
      wine_rb_remove( &views_tree, &view->entry );
      *(struct file_view **)view = next_free_view;
      next_free_view = view;
-@@ -882,6 +1039,8 @@ static NTSTATUS create_view( struct file_view **view_ret, void *base, size_t siz
+@@ -880,6 +1034,8 @@ static NTSTATUS create_view( struct file_view **view_ret, void *base, size_t siz
      set_page_vprot( base, size, vprot );
  
      wine_rb_put( &views_tree, view->base, &view->entry );
-+    if (wine_mmap_is_in_reserved_area( view->base, view->size ))
++    if (unix_funcs->mmap_is_in_reserved_area( view->base, view->size ))
 +        free_ranges_insert_view( view );
  
      *view_ret = view;
  
-@@ -1977,9 +2136,9 @@ void virtual_init(void)
+@@ -1981,9 +2137,9 @@ void virtual_init(void)
      /* try to find space in a reserved area for the views and pages protection table */
  #ifdef _WIN64
      pages_vprot_size = ((size_t)address_space_limit >> page_shift >> pages_vprot_shift) + 1;
@@ -299,9 +258,9 @@ index 6ad2d21e01e..3740d1a4457 100644
 -    alloc_views.size = view_block_size + (1U << (32 - page_shift));
 +    alloc_views.size = 2 * view_block_size + (1U << (32 - page_shift));
  #endif
-     if (wine_mmap_enum_reserved_areas( alloc_virtual_heap, &alloc_views, 1 ))
-         wine_mmap_remove_reserved_area( alloc_views.base, alloc_views.size, 0 );
-@@ -1989,9 +2148,14 @@ void virtual_init(void)
+     if (unix_funcs->mmap_enum_reserved_areas( alloc_virtual_heap, &alloc_views, 1 ))
+         unix_funcs->mmap_remove_reserved_area( alloc_views.base, alloc_views.size );
+@@ -1993,9 +2149,14 @@ void virtual_init(void)
      assert( alloc_views.base != (void *)-1 );
      view_block_start = alloc_views.base;
      view_block_end = view_block_start + view_block_size / sizeof(*view_block_start);
@@ -316,17 +275,17 @@ index 6ad2d21e01e..3740d1a4457 100644
 +
      /* make the DOS area accessible (except the low 64K) to hide bugs in broken apps like Excel 2003 */
      size = (char *)address_space_start - (char *)0x10000;
-     if (size && wine_mmap_is_in_reserved_area( (void*)0x10000, size ) == 1)
+     if (size && unix_funcs->mmap_is_in_reserved_area( (void*)0x10000, size ) == 1)
 
 -- 
-2.26.0
+2.26.1
 
 From: "Rémi Bernon" <rbernon@codeweavers.com>
-Subject: [PATCH 2/2] ntdll: Use the free ranges in find_reserved_free_area.
-Message-Id: <20200410095538.324097-2-rbernon@codeweavers.com>
-Date: Fri, 10 Apr 2020 11:55:38 +0200
-In-Reply-To: <20200410095538.324097-1-rbernon@codeweavers.com>
-References: <20200410095538.324097-1-rbernon@codeweavers.com>
+Subject: [PATCH v3 2/2] ntdll: Use the free ranges in find_reserved_free_area.
+Message-Id: <20200525141547.1486891-2-rbernon@codeweavers.com>
+Date: Mon, 25 May 2020 16:15:46 +0200
+In-Reply-To: <20200525141547.1486891-1-rbernon@codeweavers.com>
+References: <20200525141547.1486891-1-rbernon@codeweavers.com>
 
 Instead of the view rbtree.
 
@@ -339,69 +298,69 @@ Signed-off-by: Rémi Bernon <rbernon@codeweavers.com>
  1 file changed, 24 insertions(+), 21 deletions(-)
 
 diff --git a/dlls/ntdll/virtual.c b/dlls/ntdll/virtual.c
-index 3740d1a4457..851b8f17ff0 100644
+index 4ac496efc71c..b5cd094839a5 100644
 --- a/dlls/ntdll/virtual.c
 +++ b/dlls/ntdll/virtual.c
-@@ -783,40 +783,43 @@ static void *map_free_area( void *base, void *end, size_t size, size_t mask, int
+@@ -778,40 +778,43 @@ static void *map_free_area( void *base, void *end, size_t size, int top_down, in
   */
- static void *find_reserved_free_area( void *base, void *end, size_t size, size_t mask, int top_down )
+ static void *find_reserved_free_area( void *base, void *end, size_t size, int top_down )
  {
 -    struct wine_rb_entry *first = find_view_inside_range( &base, &end, top_down );
 +    struct range_entry *range;
      void *start;
  
-+    base = ROUND_ADDR( (char *)base + mask, mask );
-+    end = (char *)ROUND_ADDR( (char *)end - size, mask ) + size;
++    base = ROUND_ADDR( (char *)base + granularity_mask, granularity_mask );
++    end = (char *)ROUND_ADDR( (char *)end - size, granularity_mask ) + size;
 +
      if (top_down)
      {
--        start = ROUND_ADDR( (char *)end - size, mask );
+-        start = ROUND_ADDR( (char *)end - size, granularity_mask );
 -        if (start >= end || start < base) return NULL;
 +        start = (char *)end - size;
 +        range = free_ranges_lower_bound( start );
 +        assert(range != free_ranges_end && range->end >= start);
  
 -        while (first)
-+        if ((char *)range->end - (char *)start < size) start = ROUND_ADDR( (char *)range->end - size, mask );
++        if ((char *)range->end - (char *)start < size) start = ROUND_ADDR( (char *)range->end - size, granularity_mask );
 +        do
          {
 -            struct file_view *view = WINE_RB_ENTRY_VALUE( first, struct file_view, entry );
 -
 -            if ((char *)view->base + view->size <= (char *)start) break;
--            start = ROUND_ADDR( (char *)view->base - size, mask );
+-            start = ROUND_ADDR( (char *)view->base - size, granularity_mask );
 -            /* stop if remaining space is not large enough */
 -            if (!start || start >= end || start < base) return NULL;
 -            first = wine_rb_prev( first );
 +            if (start >= end || start < base || (char *)end - (char *)start < size) return NULL;
 +            if (start < range->end && start >= range->base && (char *)range->end - (char *)start >= size) break;
 +            if (--range < free_ranges) return NULL;
-+            start = ROUND_ADDR( (char *)range->end - size, mask );
++            start = ROUND_ADDR( (char *)range->end - size, granularity_mask );
          }
 +        while (1);
      }
      else
      {
--        start = ROUND_ADDR( (char *)base + mask, mask );
+-        start = ROUND_ADDR( (char *)base + granularity_mask, granularity_mask );
 -        if (!start || start >= end || (char *)end - (char *)start < size) return NULL;
 +        start = base;
 +        range = free_ranges_lower_bound( start );
 +        assert(range != free_ranges_end && range->end >= start);
  
 -        while (first)
-+        if (start < range->base) start = ROUND_ADDR( (char *)range->base + mask, mask );
++        if (start < range->base) start = ROUND_ADDR( (char *)range->base + granularity_mask, granularity_mask );
 +        do
          {
 -            struct file_view *view = WINE_RB_ENTRY_VALUE( first, struct file_view, entry );
 -
 -            if ((char *)view->base >= (char *)start + size) break;
--            start = ROUND_ADDR( (char *)view->base + view->size + mask, mask );
+-            start = ROUND_ADDR( (char *)view->base + view->size + granularity_mask, granularity_mask );
 -            /* stop if remaining space is not large enough */
 -            if (!start || start >= end || (char *)end - (char *)start < size) return NULL;
 -            first = wine_rb_next( first );
 +            if (start >= end || start < base || (char *)end - (char *)start < size) return NULL;
 +            if (start < range->end && start >= range->base && (char *)range->end - (char *)start >= size) break;
 +            if (++range == free_ranges_end) return NULL;
-+            start = ROUND_ADDR( (char *)range->base + mask, mask );
++            start = ROUND_ADDR( (char *)range->base + granularity_mask, granularity_mask );
          }
 +        while (1);
      }
@@ -409,5 +368,5 @@ index 3740d1a4457..851b8f17ff0 100644
  }
 
 -- 
-2.26.0
+2.26.1
 
