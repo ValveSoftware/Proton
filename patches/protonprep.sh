@@ -72,14 +72,6 @@
 
     # fixes patching without rawinput
     patch -Np1 < ../patches/wine-hotfixes/staging-44d1a45-localreverts.patch    
-
-    # revert necessary to apply cleanly after reverting time issue introduced in 5.9 commits:
-    # 7cc9ccbd22511d71d23ee298cd9718da1e448dbc
-    # 79e3c21c3cca822efedff3092df42f9044da10fe
-    # 75e2f79b684f70e7184592db16d819b778d575ae
-    # 4ccc3e52852447198a8b81fc91472bfa3b614914
-    patch -Np1 < ../patches/wine-hotfixes/time_hotfix.patch    
-
     cd ..
 
     #WINE
@@ -91,14 +83,8 @@
     git revert --no-commit da7d60bf97fb8726828e57f852e8963aacde21e9
     
     # temporary fshack reverts
-    git revert --no-commit 26b26a2e0efcb776e7b0115f15580d2507b10400
-    git revert --no-commit fd6f50c0d3e96947846ca82ed0c9bd79fd8e5b80
-
-    # these broke time keeping
-    git revert --no-commit 7cc9ccbd22511d71d23ee298cd9718da1e448dbc
-    git revert --no-commit 79e3c21c3cca822efedff3092df42f9044da10fe
-    git revert --no-commit 75e2f79b684f70e7184592db16d819b778d575ae
-    git revert --no-commit 4ccc3e52852447198a8b81fc91472bfa3b614914
+#    git revert --no-commit 26b26a2e0efcb776e7b0115f15580d2507b10400
+#    git revert --no-commit fd6f50c0d3e96947846ca82ed0c9bd79fd8e5b80
 
     
 # disable these when using proton's gamepad patches
@@ -188,17 +174,17 @@
     patch -Np1 < ../patches/proton/proton-fsync_staging.patch
     patch -Np1 < ../patches/proton/proton-fsync-spincounts.patch
 
-    echo "revert necessary for fshack"
-    patch -Np1 < ../patches/proton-hotfixes/wine-winex11.drv_Calculate_mask_in_X11DRV_resize_desktop.patch
+#    echo "revert necessary for fshack"
+#    patch -Np1 < ../patches/proton-hotfixes/wine-winex11.drv_Calculate_mask_in_X11DRV_resize_desktop.patch
     
-    echo "fullscreen hack"
-    patch -Np1 < ../patches/proton/valve_proton_fullscreen_hack-staging.patch
+#    echo "fullscreen hack"
+#    patch -Np1 < ../patches/proton/valve_proton_fullscreen_hack-staging.patch
     
-    echo "fix for Dark Souls III, Sekiro, Nier" 
-    patch -Np1 < ../patches/game-patches/winex11_limit_resources-nmode.patch
+#    echo "fix for Dark Souls III, Sekiro, Nier" 
+#    patch -Np1 < ../patches/game-patches/winex11_limit_resources-nmode.patch
 
-    echo "raw input"
-    patch -Np1 < ../patches/proton/proton-rawinput.patch
+#    echo "raw input"
+#    patch -Np1 < ../patches/proton/proton-rawinput.patch
     
     echo "staging winex11-key_translation"
     patch -Np1 < ../wine-staging/patches/winex11-key_translation/0001-winex11-Match-keyboard-in-Unicode.patch
@@ -208,8 +194,8 @@
     echo "LAA"
     patch -Np1 < ../patches/proton/proton-LAA_staging.patch
 
-    echo "staging winex11-MWM_Decorations"
-    patch -Np1 < ../patches/proton-hotfixes/proton-staging_winex11-MWM_Decorations.patch
+#    echo "staging winex11-MWM_Decorations"
+#    patch -Np1 < ../patches/proton-hotfixes/proton-staging_winex11-MWM_Decorations.patch
     
 #   TODO: Fix this
     # staging winex11-_NET_ACTIVE_WINDOW - disabled, currently not working
@@ -244,14 +230,14 @@
     echo "Valve VR patches"
     patch -Np1 < ../patches/proton/proton-vr.patch
 
-    echo "Valve vulkan patches"
-    patch -Np1 < ../patches/proton/proton-vk-bits-4.5.patch
+#    echo "Valve vulkan patches"
+#    patch -Np1 < ../patches/proton/proton-vk-bits-4.5.patch
 
-    echo "FS Hack integer scaling"
-    patch -Np1 < ../patches/proton/proton_fs_hack_integer_scaling.patch
+#    echo "FS Hack integer scaling"
+#    patch -Np1 < ../patches/proton/proton_fs_hack_integer_scaling.patch
     
-    echo "proton winevulkan"
-    patch -Np1 < ../patches/proton/proton-winevulkan.patch
+#    echo "proton winevulkan"
+#    patch -Np1 < ../patches/proton/proton-winevulkan.patch
     
     echo "msvcrt overrides"
     patch -Np1 < ../patches/proton/proton-msvcrt_nativebuiltin.patch
@@ -273,16 +259,30 @@
     patch -Np1 < ../patches/wine-hotfixes/D3D12SerializeVersionedRootSignature.patch
     patch -Np1 < ../patches/wine-hotfixes/D3D12CreateVersionedRootSignatureDeserializer.patch
 
+    echo "nikolay's media foundation pending patches"
+    patch -Np1 < ../patches/wine-hotfixes/include-Add_IMFMediaEngineEx_definition.patch
+    patch -Np1 < ../patches/wine-hotfixes/mfplat-Add_Media_Engine_attributes_to_tracing.patch
+        
     echo "guy's media foundation alpha patches"
     patch -Np1 < ../patches/wine-hotfixes/media_foundation_alpha.patch
-
+    
     echo "proton-specific manual mfplat dll register patch"
     patch -Np1 < ../patches/wine-hotfixes/proton_mediafoundation_dllreg.patch
     
     #WINE CUSTOM PATCHES
     #add your own custom patch lines below
+    
+    echo "Paul's Diablo 1 menu fix"
     patch -Np1 < ../patches/wine-hotfixes/user32-Set_PAINTSTRUCT_fErase_field_depending_on_the_last_WM_ERASEBKGND_result.patch
+    
+    echo "revert commit fd7992972b252ed262d33ef604e9e1235d2108c5 as it currently breaks a lot of games"
+    patch -Np1 -R < ../patches/wine-hotfixes/fd7992972b252ed262d33ef604e9e1235d2108c5.patch
 
+    echo "Remi's memory performance fixes"    
+    patch -Np1 < ../patches/wine-hotfixes/ntdll-Use_the_free_ranges_in_find_reserved_free_area.patch
+    patch -Np1 < ../patches/wine-hotfixes/makedep-Align_PE_sections_so_they_can_be_mmapped.patch
+
+    echo "Update winemono for proton"    
     patch -Np1 < ../patches/wine-hotfixes/winemono-update_to_5.0.1.patch
 
     ./dlls/winevulkan/make_vulkan
