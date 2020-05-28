@@ -42,6 +42,7 @@ include $(SRC)/make/rules-meson.mk
 include $(SRC)/make/rules-cmake.mk
 include $(SRC)/make/rules-autoconf.mk
 include $(SRC)/make/rules-winemaker.mk
+include $(SRC)/make/rules-cargo.mk
 
 # If CC is coming from make's defaults or nowhere, use our own default.  Otherwise respect environment.
 ifeq ($(ENABLE_CCACHE),1)
@@ -206,16 +207,11 @@ WINE_OUT_BIN := $(DST_DIR)/bin/wine64
 WINE_OUT_SERVER := $(DST_DIR)/bin/wineserver
 WINE_OUT := $(WINE_OUT_BIN) $(WINE_OUT_SERVER)
 
-MEDIACONV := $(SRCDIR)/media-converter
-MEDIACONV_OBJ32 := ./obj-media-converter32
-MEDIACONV_OBJ64 := ./obj-media-converter64
-
 FONTS := $(SRCDIR)/fonts
 FONTS_OBJ := ./obj-fonts
 
 ## Object directories
-OBJ_DIRS := $(TOOLS_DIR32)        $(TOOLS_DIR64)        \
-            $(MEDIACONV_OBJ32)    $(MEDIACONV_OBJ64)
+OBJ_DIRS := $(TOOLS_DIR32)        $(TOOLS_DIR64)
 
 $(OBJ_DIRS):
 	mkdir -p $@
@@ -905,23 +901,30 @@ $(OBJ)/.vkd3d-proton-post-build64:
 	touch $@
 
 
-mediaconv32: SHELL = $(CONTAINER_SHELL)
-mediaconv32: $(MAKEFILE_DEP) gstreamer32 | $(MEDIACONV_OBJ32)
-	cd $(abspath $(MEDIACONV)) && \
-		CARGO_TARGET_I686_UNKNOWN_LINUX_GNU_LINKER="i686-linux-gnu-gcc" \
-		PKG_CONFIG_ALLOW_CROSS=1 \
-		PKG_CONFIG_PATH=$(abspath $(TOOLS_DIR32))/lib/pkgconfig \
-		cargo build --target i686-unknown-linux-gnu --target-dir $(abspath $(MEDIACONV_OBJ32)) $(CARGO_BUILD_ARG)
-	cp -a $(abspath $(MEDIACONV_OBJ32))/i686-unknown-linux-gnu/release/libprotonmediaconverter.so $(abspath $(DST_DIR))/lib/gstreamer-1.0/
 
-mediaconv64: SHELL = $(CONTAINER_SHELL)
-mediaconv64: $(MAKEFILE_DEP) gstreamer64 | $(MEDIACONV_OBJ64)
-	cd $(abspath $(MEDIACONV)) && \
-		PKG_CONFIG_PATH=$(abspath $(TOOLS_DIR64))/lib/pkgconfig \
-		cargo build --target x86_64-unknown-linux-gnu --target-dir $(abspath $(MEDIACONV_OBJ64)) $(CARGO_BUILD_ARG)
-	cp -a $(abspath $(MEDIACONV_OBJ64))/x86_64-unknown-linux-gnu/release/libprotonmediaconverter.so $(abspath $(DST_DIR))/lib64/gstreamer-1.0/
+##
+## mediaconv
+##
 
-mediaconv: mediaconv32 mediaconv64
+MEDIACONV_SOURCE_ARGS = \
+    --exclude Cargo.lock \
+
+MEDIACONV_DEPENDS = gst_orc gstreamer gst_base
+
+$(eval $(call rules-source,mediaconv,$(SRCDIR)/media-converter))
+$(eval $(call rules-cargo,mediaconv,32))
+$(eval $(call rules-cargo,mediaconv,64))
+
+$(OBJ)/.mediaconv-post-build64:
+	mkdir -p $(MEDIACONV_DST64)/lib64/gstreamer-1.0/
+	cp -a $(MEDIACONV_OBJ64)/x86_64-unknown-linux-gnu/release/libprotonmediaconverter.so $(MEDIACONV_DST64)/lib64/gstreamer-1.0/
+	touch $@
+
+$(OBJ)/.mediaconv-post-build32:
+	mkdir -p $(MEDIACONV_DST32)/lib/gstreamer-1.0/
+	cp -a $(MEDIACONV_OBJ32)/i686-unknown-linux-gnu/release/libprotonmediaconverter.so $(MEDIACONV_DST32)/lib/gstreamer-1.0/
+	touch $@
+
 
 ifeq ($(CONTAINER),)
 ALL_TARGETS += fonts

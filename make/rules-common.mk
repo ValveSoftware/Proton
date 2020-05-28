@@ -57,6 +57,8 @@ all: $(1)
 
 
 $(2)_ENV$(3) = \
+    CARGO_HOME=$$(OBJ)/.cargo \
+    CARGO_TARGET_$$(call toupper,$$(ARCH$(3))-unknown-linux-gnu)_LINKER="$$(ARCH$(3))-linux-gnu-gcc" \
     CCACHE_BASEDIR="$$(CCACHE_BASEDIR)" \
     STRIP="$$(STRIP)" \
     CC="$$(CCACHE_BIN) $$(ARCH$(3))-linux-gnu-gcc" \
