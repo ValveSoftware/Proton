@@ -288,3 +288,55 @@ index 9d7dfafeb3c..c7f24168dac 100644
  DELAYIMPORTS = iphlpapi user32
  EXTRALIBS = $(POLL_LIBS)
  
+From f445a9f05e4ad097c55d690f08fd5f1e71940d79 Mon Sep 17 00:00:00 2001
+From: Pnevmoslon <psn8402@gmail.com>
+Date: Wed, 27 May 2020 12:23:59 +0300
+Subject: [PATCH] mk11 gamepad fix
+
+---
+ dlls/wbemprox/class.c | 23 +++++++++++++----------
+ 1 file changed, 13 insertions(+), 10 deletions(-)
+
+diff --git a/dlls/wbemprox/class.c b/dlls/wbemprox/class.c
+index ba7720b098..6cc439c6fb 100644
+--- a/dlls/wbemprox/class.c
++++ b/dlls/wbemprox/class.c
+@@ -116,6 +116,7 @@ static HRESULT WINAPI enum_class_object_Next(
+     struct table *table;
+     static int once = 0;
+     HRESULT hr;
++    ULONG i;
+ 
+     TRACE("%p, %d, %u, %p, %p\n", iface, lTimeout, uCount, apObjects, puReturned);
+ 
+@@ -124,16 +125,18 @@ static HRESULT WINAPI enum_class_object_Next(
+     if (lTimeout != WBEM_INFINITE && !once++) FIXME("timeout not supported\n");
+ 
+     *puReturned = 0;
+-    if (ec->index >= view->result_count) return WBEM_S_FALSE;
+-
+-    table = get_view_table( view, ec->index );
+-    hr = create_class_object( table->name, iface, ec->index, NULL, apObjects );
+-    if (hr != S_OK) return hr;
+-
+-    ec->index++;
+-    *puReturned = 1;
+-    if (ec->index == view->result_count && uCount > 1) return WBEM_S_FALSE;
+-    if (uCount > 1) return WBEM_S_TIMEDOUT;
++    
++    for (i=0; i<uCount; ++i)
++    {
++        if (ec->index >= view->result_count) return WBEM_S_FALSE;
++        table = get_view_table( view, ec->index );
++        hr = create_class_object( table->name, iface, ec->index, NULL, apObjects );
++        if (hr != S_OK) return hr;
++
++        apObjects++;
++        ec->index++;
++        ++*puReturned;
++    }
+     return WBEM_S_NO_ERROR;
+ }
+ 
+-- 
+2.26.2
