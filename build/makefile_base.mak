@@ -185,8 +185,8 @@ GECKO_VER := 2.47.1
 GECKO32_TARBALL := wine-gecko-$(GECKO_VER)-x86.tar.bz2
 GECKO64_TARBALL := wine-gecko-$(GECKO_VER)-x86_64.tar.bz2
 
-WINEMONO_VER := 4.9.4
-WINEMONO_TARBALL := wine-mono-bin-$(WINEMONO_VER).tar.gz
+WINEMONO_VER := 5.0.1
+WINEMONO_TARBALL := wine-mono-$(WINEMONO_VER)-x86.tar.xz
 
 FFMPEG := $(SRCDIR)/ffmpeg
 FFMPEG_OBJ32 := ./obj-ffmpeg32
