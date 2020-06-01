@@ -491,6 +491,7 @@ class Session:
         self.check_environment("PROTON_FORCE_LARGE_ADDRESS_AWARE", "forcelgadd")
         self.check_environment("PROTON_OLD_GL_STRING", "oldglstr")
         self.check_environment("PROTON_USE_SECCOMP", "seccomp")
+        self.check_environment("PROTON_NO_WRITE_WATCH", "nowritewatch")
 
         if "noesync" in self.compat_config:
             self.env.pop("WINEESYNC", "")
@@ -504,6 +505,9 @@ class Session:
 
         if "seccomp" in self.compat_config:
             self.env["WINESECCOMP"] = "1"
+
+        if "nowritewatch" in self.compat_config:
+            self.env["WINE_DISABLE_WRITE_WATCH"] = "1"
 
         if "oldglstr" in self.compat_config:
             #mesa override
