@@ -5,7 +5,7 @@
 
 from __future__ import print_function
 
-CLANG_PATH='/usr/lib/clang/9.0.0'
+CLANG_PATH='/usr/lib/clang/10.0.0'
 
 import pprint
 import sys
@@ -15,6 +15,7 @@ import re
 import math
 
 sdk_versions = [
+    "148a",
     "147",
     "146",
     "145",
@@ -152,11 +153,14 @@ files = [
 
 aliases = {
     #these interfaces are undocumented and binary compatible
+    #"target interface": ["alias 1", "alias 2"],
     "SteamUtils004":["SteamUtils003"],
     "SteamUtils002":["SteamUtils001"],
     "SteamGameServer008":["SteamGameServer007","SteamGameServer006"],
     "SteamNetworkingSocketsSerialized002":["SteamNetworkingSocketsSerialized001"],
     "STEAMAPPS_INTERFACE_VERSION001":["SteamApps001"],
+    "STEAMAPPS_INTERFACE_VERSION001":["SteamApps001"],
+    "SteamNetworkingSockets002":["SteamNetworkingSockets003"],
 }
 
 # these structs are manually confirmed to be equivalent
@@ -174,17 +178,26 @@ manually_handled_structs = [
 ]
 
 manually_handled_methods = {
+        #TODO: 001
         "cppISteamNetworkingSockets_SteamNetworkingSockets002": [
             "ReceiveMessagesOnConnection",
             "ReceiveMessagesOnListenSocket"
         ],
-        "cppISteamNetworkingSockets_SteamNetworkingSockets003": [
+        # 003 never appeared in a public SDK, but is an alias for 002 (the version in SDK 1.45 is actually 004 but incorrectly versioned as 003)
+        "cppISteamNetworkingSockets_SteamNetworkingSockets004": [
             "ReceiveMessagesOnConnection",
-            "ReceiveMessagesOnListenSocket"
+            "ReceiveMessagesOnListenSocket",
         ],
+        #TODO: 005
         "cppISteamNetworkingSockets_SteamNetworkingSockets006": [
             "ReceiveMessagesOnConnection",
             "ReceiveMessagesOnListenSocket",
+            "SendMessages"
+        ],
+        #TODO: 007
+        "cppISteamNetworkingSockets_SteamNetworkingSockets008": [
+            "ReceiveMessagesOnConnection",
+            "ReceiveMessagesOnPollGroup",
             "SendMessages"
         ],
         "cppISteamNetworkingUtils_SteamNetworkingUtils003": [

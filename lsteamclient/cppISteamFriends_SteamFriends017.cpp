@@ -1,14 +1,14 @@
 #include "steam_defs.h"
 #pragma push_macro("__cdecl")
 #undef __cdecl
-#include "steamworks_sdk_147/steam_api.h"
-#include "steamworks_sdk_147/steamnetworkingtypes.h"
+#include "steamworks_sdk_148a/steam_api.h"
+#include "steamworks_sdk_148a/steamnetworkingtypes.h"
 #pragma pop_macro("__cdecl")
 #include "steamclient_private.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
-#define SDKVER_147
+#define SDKVER_148a
 #include "struct_converters.h"
 #include "cppISteamFriends_SteamFriends017.h"
 const char * cppISteamFriends_SteamFriends017_GetPersonaName(void *linux_side)
@@ -374,6 +374,11 @@ bool cppISteamFriends_SteamFriends017_IsClanOfficialGameGroup(void *linux_side, 
 int cppISteamFriends_SteamFriends017_GetNumChatsWithUnreadPriorityMessages(void *linux_side)
 {
     return ((ISteamFriends*)linux_side)->GetNumChatsWithUnreadPriorityMessages();
+}
+
+void cppISteamFriends_SteamFriends017_ActivateGameOverlayRemotePlayTogetherInviteDialog(void *linux_side, CSteamID steamIDLobby)
+{
+    ((ISteamFriends*)linux_side)->ActivateGameOverlayRemotePlayTogetherInviteDialog((CSteamID)steamIDLobby);
 }
 
 #ifdef __cplusplus

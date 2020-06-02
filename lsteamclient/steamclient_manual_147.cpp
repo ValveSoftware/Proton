@@ -198,15 +198,4 @@ void cppISteamNetworkingSockets_SteamNetworkingSockets006_SendMessages(
     }
 }
 
-SteamNetworkingMessage_t *cppISteamNetworkingUtils_SteamNetworkingUtils003_AllocateMessage(
-        void *linux_side, int cbAllocateBuffer)
-{
-    struct msg_wrapper *msg;
-    SteamNetworkingMessage_t *retval = ((ISteamNetworkingUtils*)linux_side)->AllocateMessage(cbAllocateBuffer);
-
-    msg = clone_msg(retval);
-
-    return (SteamNetworkingMessage_t*)&msg->win_msg;
-}
-
 }

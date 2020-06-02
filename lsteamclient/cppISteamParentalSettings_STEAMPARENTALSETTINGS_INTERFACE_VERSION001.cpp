@@ -1,15 +1,15 @@
 #include "steam_defs.h"
 #pragma push_macro("__cdecl")
 #undef __cdecl
-#include "steamworks_sdk_147/steam_api.h"
-#include "steamworks_sdk_147/steamnetworkingtypes.h"
-#include "steamworks_sdk_147/isteamparentalsettings.h"
+#include "steamworks_sdk_148a/steam_api.h"
+#include "steamworks_sdk_148a/steamnetworkingtypes.h"
+#include "steamworks_sdk_148a/isteamparentalsettings.h"
 #pragma pop_macro("__cdecl")
 #include "steamclient_private.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
-#define SDKVER_147
+#define SDKVER_148a
 #include "struct_converters.h"
 #include "cppISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001.h"
 bool cppISteamParentalSettings_STEAMPARENTALSETTINGS_INTERFACE_VERSION001_BIsParentalLockEnabled(void *linux_side)
