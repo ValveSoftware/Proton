@@ -281,8 +281,10 @@ typedef uint64 InputAnalogActionHandle_t;
 typedef uint32 HSteamNetConnection;
 typedef int64 SteamNetworkingMicroseconds;
 typedef uint32 HSteamListenSocket;
+typedef uint32 HSteamNetPollGroup;
 typedef uint32 SteamNetworkingPOPID;
 typedef uint32 RemotePlaySessionID_t;
+typedef char* SteamNetworkingErrMsg;
 
 #pragma pack( push, 4 )
 typedef struct CallbackMsg_t
