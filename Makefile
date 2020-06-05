@@ -95,6 +95,7 @@ help:
 vagrant:
 	vagrant up
 	vagrant rsync debian10
+	./resize-vagrant-disk.sh
 
 clean: vagrant
 	vagrant ssh -c 'rm -rf $(BUILD_DIR)/'
