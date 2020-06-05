@@ -43,6 +43,7 @@ Vagrant.configure(2) do |config|
   #This is not needed for virtualbox, but I couldn't find a way to use a
   #different synced folder type per provider, so we always use it.
   config.vagrant.plugins = "vagrant-sshfs"
+  config.disksize.size = '120GB'
 
   config.vm.provider "virtualbox" do |v|
     v.cpus = [cpus, 32].min     # virtualbox limit is 32 cpus
