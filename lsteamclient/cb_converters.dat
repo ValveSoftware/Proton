@@ -127,8 +127,8 @@ case 0x000811ad: win_msg->m_cubParam = 8; win_msg->m_pubParam = HeapAlloc(GetPro
 case 0x000c11ad: win_msg->m_cubParam = 16; win_msg->m_pubParam = HeapAlloc(GetProcessHeap(), 0, win_msg->m_cubParam); cb_HTML_UpdateToolTip_t_16((void*)lin_msg.m_pubParam, (void*)win_msg->m_pubParam); break;
 #endif
 case 0x00141260: win_msg->m_cubParam = 24; win_msg->m_pubParam = HeapAlloc(GetProcessHeap(), 0, win_msg->m_cubParam); cb_SteamInventoryStartPurchaseResult_t_24((void*)lin_msg.m_pubParam, (void*)win_msg->m_pubParam); break;
-case 0x002000d1: win_msg->m_cubParam = 40; win_msg->m_pubParam = HeapAlloc(GetProcessHeap(), 0, win_msg->m_cubParam); cb_GSReputation_t_40((void*)lin_msg.m_pubParam, (void*)win_msg->m_pubParam); break;
 case 0x02c004c5: win_msg->m_cubParam = 712; win_msg->m_pubParam = HeapAlloc(GetProcessHeap(), 0, win_msg->m_cubParam); cb_SteamNetConnectionStatusChangedCallback_t_712((void*)lin_msg.m_pubParam, (void*)win_msg->m_pubParam); break;
+case 0x002000d1: win_msg->m_cubParam = 40; win_msg->m_pubParam = HeapAlloc(GetProcessHeap(), 0, win_msg->m_cubParam); cb_GSReputation_t_40((void*)lin_msg.m_pubParam, (void*)win_msg->m_pubParam); break;
 case 0x00140835: win_msg->m_cubParam = 24; win_msg->m_pubParam = HeapAlloc(GetProcessHeap(), 0, win_msg->m_cubParam); cb_HTTPRequestCompleted_t_24((void*)lin_msg.m_pubParam, (void*)win_msg->m_pubParam); break;
 #ifdef __i386__
 case 0x001011a5: win_msg->m_cubParam = 16; win_msg->m_pubParam = HeapAlloc(GetProcessHeap(), 0, win_msg->m_cubParam); cb_HTML_ComboNeedsPaint_t_16((void*)lin_msg.m_pubParam, (void*)win_msg->m_pubParam); break;

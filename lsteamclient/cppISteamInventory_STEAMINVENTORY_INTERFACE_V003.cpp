@@ -1,14 +1,14 @@
 #include "steam_defs.h"
 #pragma push_macro("__cdecl")
 #undef __cdecl
-#include "steamworks_sdk_147/steam_api.h"
-#include "steamworks_sdk_147/steamnetworkingtypes.h"
+#include "steamworks_sdk_148a/steam_api.h"
+#include "steamworks_sdk_148a/steamnetworkingtypes.h"
 #pragma pop_macro("__cdecl")
 #include "steamclient_private.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
-#define SDKVER_147
+#define SDKVER_148a
 #include "struct_converters.h"
 #include "cppISteamInventory_STEAMINVENTORY_INTERFACE_V003.h"
 EResult cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_GetResultStatus(void *linux_side, SteamInventoryResult_t resultHandle)
