@@ -11413,4 +11413,100 @@ index a66962dd270..383abe3ad22 100644
 -- 
 2.26.2
 
+From 63e2397b61cd9b16144bbe271eeea6044d31359a Mon Sep 17 00:00:00 2001
+From: Victor Hermann Chiletto <v@hnn.net.br>
+Date: Tue, 9 Jun 2020 01:35:53 -0300
+Subject: [PATCH 1/2] winegstreamer: Fix unrecognized format errors when
+ transforming caps to media type
+
+Probably not needed, but it's nice to get this out of the way
+---
+ dlls/winegstreamer/mfplat.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/dlls/winegstreamer/mfplat.c b/dlls/winegstreamer/mfplat.c
+index bcfcd398ec..39b98f3eba 100644
+--- a/dlls/winegstreamer/mfplat.c
++++ b/dlls/winegstreamer/mfplat.c
+@@ -910,6 +910,8 @@ static IMFMediaType* transform_to_media_type(GstCaps *caps)
+             {
+                 if (!(strcmp(format, "WVC1")))
+                     IMFMediaType_SetGUID(media_type, &MF_MT_SUBTYPE, &MFVideoFormat_WVC1);
++                else if (!(strcmp(format, "WMV3")))
++                    IMFMediaType_SetGUID(media_type, &MF_MT_SUBTYPE, &MFVideoFormat_WMV3);
+                 else
+                     FIXME("Unrecognized format %s\n", format);
+             }
+-- 
+2.27.0
+
+From 63e2397b61cd9b16144bbe271eeea6044d31359a Mon Sep 17 00:00:00 2001
+From: Victor Hermann Chiletto <v@hnn.net.br>
+Date: Tue, 9 Jun 2020 01:35:53 -0300
+Subject: [PATCH 1/2] winegstreamer: Fix unrecognized format errors when
+ transforming caps to media type
+
+Probably not needed, but it's nice to get this out of the way
+---
+ dlls/winegstreamer/mfplat.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/dlls/winegstreamer/mfplat.c b/dlls/winegstreamer/mfplat.c
+index bcfcd398ec..39b98f3eba 100644
+--- a/dlls/winegstreamer/mfplat.c
++++ b/dlls/winegstreamer/mfplat.c
+@@ -910,6 +910,8 @@ static IMFMediaType* transform_to_media_type(GstCaps *caps)
+             {
+                 if (!(strcmp(format, "WVC1")))
+                     IMFMediaType_SetGUID(media_type, &MF_MT_SUBTYPE, &MFVideoFormat_WVC1);
++                else if (!(strcmp(format, "WMV3")))
++                    IMFMediaType_SetGUID(media_type, &MF_MT_SUBTYPE, &MFVideoFormat_WMV3);
+                 else
+                     FIXME("Unrecognized format %s\n", format);
+             }
+-- 
+2.27.0
+
+
+From de3fffa1be1a8e2ede11b7d8607e3ea9e879b446 Mon Sep 17 00:00:00 2001
+From: Victor Hermann Chiletto <v@hnn.net.br>
+Date: Wed, 10 Jun 2020 01:10:57 -0300
+Subject: [PATCH] winegstreamer: expose NV12 as the first color space in
+ IMFTransform::GetOutputAvailableType
+
+---
+ dlls/winegstreamer/mf_decode.c | 2 +-
+ dlls/winegstreamer/mfplat.c    | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/dlls/winegstreamer/mf_decode.c b/dlls/winegstreamer/mf_decode.c
+index 3d314eaab4..6e41838fdc 100644
+--- a/dlls/winegstreamer/mf_decode.c
++++ b/dlls/winegstreamer/mf_decode.c
+@@ -23,7 +23,7 @@ WINE_DEFAULT_DEBUG_CHANNEL(mfplat);
+ /* keep in sync with mfplat.c's mft registrations */
+ 
+ const GUID *h264_input_types[] = {&MFVideoFormat_H264};
+-const GUID *h264_output_types[] = {&MFVideoFormat_I420, &MFVideoFormat_IYUV, &MFVideoFormat_NV12, &MFVideoFormat_YUY2, &MFVideoFormat_YV12};
++const GUID *h264_output_types[] = {&MFVideoFormat_NV12, &MFVideoFormat_I420, &MFVideoFormat_IYUV, &MFVideoFormat_YUY2, &MFVideoFormat_YV12};
+ 
+ const GUID *aac_input_types[] = {&MFAudioFormat_AAC};
+ const GUID *aac_output_types[] = {&MFAudioFormat_Float, &MFAudioFormat_PCM};
+diff --git a/dlls/winegstreamer/mfplat.c b/dlls/winegstreamer/mfplat.c
+index 042c02c486..94e6ca534f 100644
+--- a/dlls/winegstreamer/mfplat.c
++++ b/dlls/winegstreamer/mfplat.c
+@@ -516,9 +516,9 @@ const GUID *h264_decoder_input_types[] =
+ };
+ const GUID *h264_decoder_output_types[] =
+ {
++    &MFVideoFormat_NV12,
+     &MFVideoFormat_I420,
+     &MFVideoFormat_IYUV,
+-    &MFVideoFormat_NV12,
+     &MFVideoFormat_YUY2,
+     &MFVideoFormat_YV12,
+ };
+-- 
+2.27.0
 

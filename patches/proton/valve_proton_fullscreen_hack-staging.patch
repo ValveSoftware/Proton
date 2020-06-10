@@ -6682,3 +6682,239 @@ index 0aee13787af..c9156e73578 100644
      if (cls_style & CS_VREDRAW) result |= WVR_VREDRAW;
      if (cls_style & CS_HREDRAW) result |= WVR_HREDRAW;
  
+From 8cd6245b7633abccd68f73928544ae4de6f76d52 Mon Sep 17 00:00:00 2001
+From: Brendan Shanks <bshanks@codeweavers.com>
+Date: Thu, 28 May 2020 18:09:16 +0800
+Subject: [PATCH] winex11.drv: Set GPU LUID property for monitors.
+
+Signed-off-by: Brendan Shanks <bshanks@codeweavers.com>
+Signed-off-by: Zhiyi Zhang <zzhang@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/winex11.drv/display.c | 19 ++++++++++++++-----
+ 1 file changed, 14 insertions(+), 5 deletions(-)
+
+diff --git a/dlls/winex11.drv/display.c b/dlls/winex11.drv/display.c
+index daea434dabf..55533255f36 100644
+--- a/dlls/winex11.drv/display.c
++++ b/dlls/winex11.drv/display.c
+@@ -40,6 +40,7 @@
+ WINE_DEFAULT_DEBUG_CHANNEL(x11drv);
+ 
+ DEFINE_DEVPROPKEY(DEVPROPKEY_GPU_LUID, 0x60b193cb, 0x5276, 0x4d0f, 0x96, 0xfc, 0xf1, 0x73, 0xab, 0xad, 0x3e, 0xc6, 2);
++DEFINE_DEVPROPKEY(DEVPROPKEY_MONITOR_GPU_LUID, 0xca085853, 0x16ce, 0x48aa, 0xb1, 0x14, 0xde, 0x9c, 0x72, 0x33, 0x42, 0x23, 1);
+ 
+ /* Wine specific monitor properties */
+ DEFINE_DEVPROPKEY(WINE_DEVPROPKEY_MONITOR_STATEFLAGS, 0x233a9ef3, 0xafc4, 0x4abd, 0xb5, 0x64, 0xc3, 0x2f, 0x21, 0xf1, 0x53, 0x5b, 2);
+@@ -317,9 +318,10 @@ void X11DRV_DisplayDevices_Update(BOOL send_display_change)
+     EnumWindows(update_windows_on_display_change, (LPARAM)mask);
+ }
+ 
+-/* Initialize a GPU instance and return its GUID string in guid_string and driver value in driver parameter */
++/* Initialize a GPU instance.
++ * Return its GUID string in guid_string, driver value in driver parameter and LUID in gpu_luid */
+ static BOOL X11DRV_InitGpu(HDEVINFO devinfo, const struct x11drv_gpu *gpu, INT gpu_index, WCHAR *guid_string,
+-                           WCHAR *driver)
++                           WCHAR *driver, LUID *gpu_luid)
+ {
+     static const BOOL present = TRUE;
+     SP_DEVINFO_DATA device_data = {sizeof(device_data)};
+@@ -365,6 +367,7 @@ static BOOL X11DRV_InitGpu(HDEVINFO devinfo, const struct x11drv_gpu *gpu, INT g
+                                        DEVPROP_TYPE_UINT64, (const BYTE *)&luid, sizeof(luid), 0))
+             goto done;
+     }
++    *gpu_luid = luid;
+     TRACE("GPU id:0x%s name:%s LUID:%08x:%08x.\n", wine_dbgstr_longlong(gpu->id),
+           wine_dbgstr_w(gpu->name), luid.HighPart, luid.LowPart);
+ 
+@@ -480,7 +483,7 @@ static BOOL X11DRV_InitAdapter(HKEY video_hkey, INT video_index, INT gpu_index,
+ }
+ 
+ static BOOL X11DRV_InitMonitor(HDEVINFO devinfo, const struct x11drv_monitor *monitor, int monitor_index,
+-                               int video_index)
++                               int video_index, const LUID *gpu_luid)
+ {
+     SP_DEVINFO_DATA device_data = {sizeof(SP_DEVINFO_DATA)};
+     WCHAR bufferW[MAX_PATH];
+@@ -498,6 +501,11 @@ static BOOL X11DRV_InitMonitor(HDEVINFO devinfo, const struct x11drv_monitor *mo
+                                            (const BYTE *)monitor_hardware_idW, sizeof(monitor_hardware_idW)))
+         goto done;
+ 
++    /* Write DEVPROPKEY_MONITOR_GPU_LUID */
++    if (!SetupDiSetDevicePropertyW(devinfo, &device_data, &DEVPROPKEY_MONITOR_GPU_LUID,
++                                   DEVPROP_TYPE_INT64, (const BYTE *)gpu_luid, sizeof(*gpu_luid), 0))
++        goto done;
++
+     /* Create driver key */
+     hkey = SetupDiCreateDevRegKeyW(devinfo, &device_data, DICS_FLAG_GLOBAL, 0, DIREG_DRV, NULL, NULL);
+     RegCloseKey(hkey);
+@@ -599,6 +607,7 @@ void X11DRV_DisplayDevices_Init(BOOL force)
+     DWORD disposition = 0;
+     WCHAR guidW[40];
+     WCHAR driverW[1024];
++    LUID gpu_luid;
+ 
+     mutex = get_display_device_init_mutex();
+ 
+@@ -627,7 +636,7 @@ void X11DRV_DisplayDevices_Init(BOOL force)
+ 
+     for (gpu = 0; gpu < gpu_count; gpu++)
+     {
+-        if (!X11DRV_InitGpu(gpu_devinfo, &gpus[gpu], gpu, guidW, driverW))
++        if (!X11DRV_InitGpu(gpu_devinfo, &gpus[gpu], gpu, guidW, driverW, &gpu_luid))
+             goto done;
+ 
+         /* Initialize adapters */
+@@ -649,7 +658,7 @@ void X11DRV_DisplayDevices_Init(BOOL force)
+             for (monitor = 0; monitor < monitor_count; monitor++)
+             {
+                 TRACE("monitor: %#x %s\n", monitor, wine_dbgstr_w(monitors[monitor].name));
+-                if (!X11DRV_InitMonitor(monitor_devinfo, &monitors[monitor], monitor, video_index))
++                if (!X11DRV_InitMonitor(monitor_devinfo, &monitors[monitor], monitor, video_index, &gpu_luid))
+                     goto done;
+             }
+ 
+From 707fcb99a60015fcbb20c83e9031bc5be7a58618 Mon Sep 17 00:00:00 2001
+From: Brendan Shanks <bshanks@codeweavers.com>
+Date: Thu, 28 May 2020 18:09:30 +0800
+Subject: [PATCH] winex11.drv: Set output id property for monitors.
+
+Signed-off-by: Brendan Shanks <bshanks@codeweavers.com>
+Signed-off-by: Zhiyi Zhang <zzhang@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/winex11.drv/display.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/dlls/winex11.drv/display.c b/dlls/winex11.drv/display.c
+index 55533255f36..cf661f9f06f 100644
+--- a/dlls/winex11.drv/display.c
++++ b/dlls/winex11.drv/display.c
+@@ -41,6 +41,7 @@ WINE_DEFAULT_DEBUG_CHANNEL(x11drv);
+ 
+ DEFINE_DEVPROPKEY(DEVPROPKEY_GPU_LUID, 0x60b193cb, 0x5276, 0x4d0f, 0x96, 0xfc, 0xf1, 0x73, 0xab, 0xad, 0x3e, 0xc6, 2);
+ DEFINE_DEVPROPKEY(DEVPROPKEY_MONITOR_GPU_LUID, 0xca085853, 0x16ce, 0x48aa, 0xb1, 0x14, 0xde, 0x9c, 0x72, 0x33, 0x42, 0x23, 1);
++DEFINE_DEVPROPKEY(DEVPROPKEY_MONITOR_OUTPUT_ID, 0xca085853, 0x16ce, 0x48aa, 0xb1, 0x14, 0xde, 0x9c, 0x72, 0x33, 0x42, 0x23, 2);
+ 
+ /* Wine specific monitor properties */
+ DEFINE_DEVPROPKEY(WINE_DEVPROPKEY_MONITOR_STATEFLAGS, 0x233a9ef3, 0xafc4, 0x4abd, 0xb5, 0x64, 0xc3, 0x2f, 0x21, 0xf1, 0x53, 0x5b, 2);
+@@ -506,6 +507,11 @@ static BOOL X11DRV_InitMonitor(HDEVINFO devinfo, const struct x11drv_monitor *mo
+                                    DEVPROP_TYPE_INT64, (const BYTE *)gpu_luid, sizeof(*gpu_luid), 0))
+         goto done;
+ 
++    /* Write DEVPROPKEY_MONITOR_OUTPUT_ID */
++    if (!SetupDiSetDevicePropertyW(devinfo, &device_data, &DEVPROPKEY_MONITOR_OUTPUT_ID,
++                                   DEVPROP_TYPE_UINT32, (const BYTE *)&video_index, sizeof(video_index), 0))
++        goto done;
++
+     /* Create driver key */
+     hkey = SetupDiCreateDevRegKeyW(devinfo, &device_data, DICS_FLAG_GLOBAL, 0, DIREG_DRV, NULL, NULL);
+     RegCloseKey(hkey);
+
+From 41022f9151475da15ec64a2ac64fd4830253e3f5 Mon Sep 17 00:00:00 2001
+From: Andrew Eikum <aeikum@codeweavers.com>
+Date: Mon, 1 Jun 2020 09:18:35 -0500
+Subject: [PATCH] winex11.drv: Don't set ABOVE for fullscreen windows on KDE
+
+---
+ dlls/winex11.drv/window.c | 16 +++++++++++++++-
+ include/wine/gdi_driver.h |  1 +
+ 2 files changed, 16 insertions(+), 1 deletion(-)
+
+diff --git a/dlls/winex11.drv/window.c b/dlls/winex11.drv/window.c
+index 6b32a033e22..3a7dfe5f4a2 100644
+--- a/dlls/winex11.drv/window.c
++++ b/dlls/winex11.drv/window.c
+@@ -141,6 +141,8 @@ static int detect_wm(Display *dpy)
+                         cached = WINE_WM_X11_MUTTER;
+                     else if(strcmp(wm_name, "steamcompmgr") == 0)
+                         cached = WINE_WM_X11_STEAMCOMPMGR;
++                    else if(strcmp(wm_name, "KWin") == 0)
++                        cached = WINE_WM_X11_KDE;
+                     else
+                         cached = WINE_WM_UNKNOWN;
+ 
+@@ -167,6 +169,11 @@ BOOL wm_is_mutter(Display *display)
+     return detect_wm(display) == WINE_WM_X11_MUTTER;
+ }
+ 
++BOOL wm_is_kde(Display *display)
++{
++    return detect_wm(display) == WINE_WM_X11_KDE;
++}
++
+ BOOL wm_is_steamcompmgr(Display *display)
+ {
+     return detect_wm(display) == WINE_WM_X11_STEAMCOMPMGR;
+@@ -1121,7 +1128,14 @@ void update_net_wm_states( struct x11drv_win_data *data )
+              * minimized will incorrectly show a black window.  this workaround
+              * should be removed when the fix is widely distributed.  see
+              * mutter issue #306. */
+-            !(wm_is_mutter(data->display) && (new_state & (1 << NET_WM_STATE_FULLSCREEN))))
++            !(wm_is_mutter(data->display) && (new_state & (1 << NET_WM_STATE_FULLSCREEN))) &&
++
++            /* KDE refuses to allow alt-tabbing out of fullscreen+above
++             * windows. Other WMs (XFCE) don't make fullscreen (without above)
++             * windows appear above their panels. KDE still does the right
++             * thing with fullscreen-only windows, so let's comprimise by not
++             * setting above on KDE. */
++            !wm_is_kde(data->display))
+         new_state |= (1 << NET_WM_STATE_ABOVE);
+     if (ex_style & (WS_EX_TOOLWINDOW | WS_EX_NOACTIVATE))
+         new_state |= (1 << NET_WM_STATE_SKIP_TASKBAR) | (1 << NET_WM_STATE_SKIP_PAGER);
+diff --git a/include/wine/gdi_driver.h b/include/wine/gdi_driver.h
+index aa8052f1844..5bf8fde1d1b 100644
+--- a/include/wine/gdi_driver.h
++++ b/include/wine/gdi_driver.h
+@@ -296,6 +296,7 @@ extern const struct vulkan_funcs * CDECL __wine_get_vulkan_driver( HDC hdc, UINT
+ #define WINE_WM_UNKNOWN          0
+ #define WINE_WM_X11_MUTTER       1
+ #define WINE_WM_X11_STEAMCOMPMGR 2
++#define WINE_WM_X11_KDE          3
+ 
+ static inline LONG_PTR __wine_get_window_manager(void)
+ {
+
+From ed6f7cf45b2017703564dbeaaa4d128f82405fab Mon Sep 17 00:00:00 2001
+From: Andrew Eikum <aeikum@codeweavers.com>
+Date: Mon, 1 Jun 2020 11:00:06 -0500
+Subject: [PATCH] winex11.drv: Don't report modes smaller than 800x600 for
+ Titan Souls
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Work around a game bug investigated by Rémi.
+---
+ dlls/winex11.drv/settings.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
+diff --git a/dlls/winex11.drv/settings.c b/dlls/winex11.drv/settings.c
+index b9cefa45bae..784517b26b8 100644
+--- a/dlls/winex11.drv/settings.c
++++ b/dlls/winex11.drv/settings.c
+@@ -121,6 +121,7 @@ BOOL X11DRV_Settings_AddOneMode(unsigned int width, unsigned int height, unsigne
+     unsigned int i;
+     struct x11drv_mode_info *info = &dd_modes[dd_mode_count];
+     DWORD dwBpp = screen_bpp;
++    const char *appid;
+     if (dd_mode_count >= dd_max_modes)
+     {
+         ERR("Maximum modes (%d) exceeded\n", dd_max_modes);
+@@ -128,6 +129,15 @@ BOOL X11DRV_Settings_AddOneMode(unsigned int width, unsigned int height, unsigne
+     }
+     if (bpp == 0) bpp = dwBpp;
+ 
++    if ((appid = getenv("SteamAppId")) && !strcmp(appid, "297130"))
++    {
++        /* Titan Souls renders incorrectly if we report modes smaller than 800x600 */
++        if (height <= 600 && !(height == 600 && width == 800))
++        {
++            return FALSE;
++        }
++    }
++
+     for(i = 0; i < dd_mode_count; ++i)
+     {
+         if(dd_modes[i].width == width &&
+

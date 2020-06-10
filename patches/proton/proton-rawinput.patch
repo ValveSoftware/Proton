@@ -3414,117 +3414,7 @@ index 9a20df7767d..a5235b69a8d 100644
      input.u.mi.mouseData   = 0;
      input.u.mi.dwFlags     = MOUSEEVENTF_MOVE | MOUSEEVENTF_ABSOLUTE;
      input.u.mi.time        = EVENT_x11_time_to_win32_time( event->time );
-From 5211a69e640010b6c151ef9b3a004af20ff9da74 Mon Sep 17 00:00:00 2001
-From: Micah N Gorrell <mgorrell@codeweavers.com>
-Date: Thu, 12 Sep 2019 12:03:19 -0600
-Subject: [PATCH] user32/tests: Add test for RegisterDeviceNotification()
 
-Add test for API usage of RegisterDeviceNotification() and
-UnregisterDeviceNotification(). Unfortunately an automated way of
-triggering the actual notifications has not been found, so this test is
-not complete.
-
-Signed-off-by: Micah N Gorrell <mgorrell@codeweavers.com>
----
- dlls/user32/tests/input.c | 70 ++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 69 insertions(+), 1 deletion(-)
-
-diff --git a/dlls/user32/tests/input.c b/dlls/user32/tests/input.c
-index 4a9be550bdc..6eaf812e8d8 100644
---- a/dlls/user32/tests/input.c
-+++ b/dlls/user32/tests/input.c
-@@ -54,6 +54,9 @@
- #include "wingdi.h"
- #include "winnls.h"
- #include "ddk/hidsdi.h"
-+#include "dbt.h"
-+#include "initguid.h"
-+#include "ddk/hidclass.h"
- 
- #include "wine/test.h"
- 
-@@ -2827,10 +2830,73 @@ static void test_GetPointerType(void)
-     ok(type == PT_MOUSE, " type %d\n", type );
- }
- 
-+static void test_RegisterDeviceNotification(void)
-+{
-+    static const WCHAR mainwindowclassW[] = {'M','a','i','n','W','i','n','d','o','w','C','l','a','s','s',0};
-+    static const WCHAR message_windowW[] = {'m','e','s','s','a','g','e',' ','w','i','n','d','o','w',0};
-+
-+    HDEVNOTIFY hnotify1, hnotify2;
-+    DEV_BROADCAST_DEVICEINTERFACE_W dbh;
-+    HWND hwnd;
-+    WNDCLASSEXW cls;
-+    BOOL ret;
-+
-+    memset(&cls, 0, sizeof(cls));
-+    cls.cbSize = sizeof(cls);
-+    cls.hInstance = 0;
-+    cls.lpszClassName = mainwindowclassW;
-+    cls.lpfnWndProc = DefWindowProcW;
-+
-+    RegisterClassExW(&cls);
-+
-+    hwnd = CreateWindowExW(0, mainwindowclassW, message_windowW, 0,
-+                           0, 0, 0, 0, HWND_MESSAGE, 0, 0, NULL);
-+    ok(hwnd != 0, "CreateWindowExW with parent HWND_MESSAGE failed\n");
-+
-+    memset(&dbh, 0, sizeof(dbh));
-+
-+    dbh.dbcc_size = sizeof(dbh);
-+    dbh.dbcc_devicetype = DBT_DEVTYP_DEVICEINTERFACE;
-+    dbh.dbcc_classguid = GUID_DEVINTERFACE_HID;
-+
-+    /* Test RegisterDeviceNotification behavior */
-+
-+    /* Prior to Windows 8 a NULL recipient handle caused a failure, but more
-+     * recent versions of windows allow it.
-+     */
-+    hnotify1 = RegisterDeviceNotificationW(NULL, &dbh, DEVICE_NOTIFY_WINDOW_HANDLE);
-+    /* ok(hnotify1 != 0, "RegisterDeviceNotificationW failed when called with a NULL recipient window handle\n"); */
-+    if (hnotify1 != 0)
-+    {
-+        ret = UnregisterDeviceNotification(hnotify1);
-+        ok(ret, "UnregisterDeviceNotification failed with a valid handle\n");
-+    }
-+
-+    hnotify1 = RegisterDeviceNotificationW(hwnd, &dbh, DEVICE_NOTIFY_WINDOW_HANDLE);
-+    ok(hnotify1 != 0, "RegisterDeviceNotificationW failed when called with a message only window as recipient\n");
-+
-+    hnotify2 = RegisterDeviceNotificationW(hwnd, &dbh, DEVICE_NOTIFY_WINDOW_HANDLE);
-+    ok(hnotify2 != 0, "RegisterDeviceNotificationW failed when called with a window that has already been registered as a recipient\n");
-+
-+    ret = UnregisterDeviceNotification(hnotify1);
-+    ok(ret, "UnregisterDeviceNotification failed with a valid handle\n");
-+    ret = UnregisterDeviceNotification(hnotify2);
-+    ok(ret, "UnregisterDeviceNotification failed with a valid handle\n");
-+    ret = UnregisterDeviceNotification(hnotify1);
-+    ok(!ret, "UnregisterDeviceNotification succeeded with an already released handle\n");
-+    ret = UnregisterDeviceNotification(NULL);
-+    ok(!ret, "UnregisterDeviceNotification succeeded with NULL handle\n");
-+
-+    hnotify1 = RegisterDeviceNotificationW(hwnd, &dbh, 0xffff);
-+    ok(hnotify1 == 0, "RegisterDeviceNotificationW accepted invalid flags\n");
-+
-+    /* FIXME: Find a way to trigger a device notification for testing */
-+    DestroyWindow(hwnd);
-+}
-+
- START_TEST(input)
- {
-     POINT pos;
--
-     init_function_pointers();
-     GetCursorPos( &pos );
- 
-@@ -2877,4 +2943,6 @@ START_TEST(input)
-         test_GetPointerType();
-     else
-         win_skip("GetPointerType is not available\n");
-+
-+    test_RegisterDeviceNotification();
- }
 From 5406b7b15cae43cbe023492f518436c6990871f5 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
 Date: Fri, 27 Mar 2020 16:25:14 +0100
@@ -3694,3 +3584,119 @@ index 5a624949867..6480a5adac6 100644
  
 -- 
 2.26.0
+From be998a8963167be7607aa4151d15e00013c3c3ab Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
+Date: Fri, 27 Mar 2020 16:25:14 +0100
+Subject: [PATCH] server: Also update the key state if RIDEV_NOLEGACY is used.
+
+This fixes mouse buttons not responding in Mass Effect Andromeda and
+several other Bioware games.
+---
+ server/queue.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/server/queue.c b/server/queue.c
+index 90bfbf67025..65a1743368e 100644
+--- a/server/queue.c
++++ b/server/queue.c
+@@ -1833,7 +1833,7 @@ static int queue_mouse_message( struct desktop *desktop, user_handle_t win, cons
+         return 0;
+     if ((device = current->process->rawinput_mouse) && (device->flags & RIDEV_NOLEGACY))
+     {
+-        if (flags & MOUSEEVENTF_MOVE) update_desktop_cursor_pos( desktop, x, y );
++        update_desktop_mouse_state( desktop, flags, x, y, input->mouse.data << 16 );
+         return 0;
+     }
+ 
+From 51c0460371cd2a5f392fe2bfd09bb549ae55df0a Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
+Date: Wed, 15 Apr 2020 15:42:06 +0200
+Subject: [PATCH] server: Check foreground_input before accessing it.
+
+---
+ server/queue.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/server/queue.c b/server/queue.c
+index 65a1743368e..a52b9cb074c 100644
+--- a/server/queue.c
++++ b/server/queue.c
+@@ -1720,12 +1720,15 @@ static int queue_rawinput_message( struct process* process, void* user )
+         (raw_msg->desktop && desktop != raw_msg->desktop))
+         goto done;
+ 
++    if (!device->target && !desktop->foreground_input)
++        goto done;
++
+     if (!(thread = get_window_thread( device->target ? device->target : desktop->foreground_input->active )) ||
+         process != thread->process)
+         goto done;
+ 
+     /* FIXME: Implement RIDEV_INPUTSINK */
+-    if (!(foreground = get_window_thread( desktop->foreground_input->active )) ||
++    if (!desktop->foreground_input || !(foreground = get_window_thread( desktop->foreground_input->active )) ||
+         thread->process != foreground->process)
+         goto done;
+ 
+From d22faa12e8e025eded77764ddb059ca8f2f6c57c Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
+Date: Wed, 8 Apr 2020 15:35:32 +0200
+Subject: [PATCH] dinput: Fix rawinput events sequence number.
+
+This fixes some stuttering in Battlefield 2.
+---
+ dlls/dinput/mouse.c | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
+
+diff --git a/dlls/dinput/mouse.c b/dlls/dinput/mouse.c
+index 5a624949867..6480a5adac6 100644
+--- a/dlls/dinput/mouse.c
++++ b/dlls/dinput/mouse.c
+@@ -333,6 +333,7 @@ static int dinput_mouse_hook( LPDIRECTINPUTDEVICE8A iface, WPARAM wparam, LPARAM
+         RAWINPUT raw_input;
+         UINT size;
+         POINT rel, pt;
++        DWORD seq;
+ 
+         static const USHORT mouse_button_flags[] =
+         {
+@@ -374,6 +375,7 @@ static int dinput_mouse_hook( LPDIRECTINPUTDEVICE8A iface, WPARAM wparam, LPARAM
+             FIXME( "Unimplemented MOUSE_ATTRIBUTES_CHANGED flag\n" );
+ 
+         EnterCriticalSection(&This->base.crit);
++        seq = This->base.dinput->evsequence++;
+ 
+         rel.x = raw_input.data.mouse.lLastX;
+         rel.y = raw_input.data.mouse.lLastY;
+@@ -399,11 +401,11 @@ static int dinput_mouse_hook( LPDIRECTINPUTDEVICE8A iface, WPARAM wparam, LPARAM
+ 
+         if (rel.x)
+             queue_event(iface, DIDFT_MAKEINSTANCE(WINE_MOUSE_X_AXIS_INSTANCE) | DIDFT_RELAXIS,
+-                        pt.x, GetCurrentTime(), This->base.dinput->evsequence);
++                        pt.x, GetCurrentTime(), seq);
+ 
+         if (rel.y)
+             queue_event(iface, DIDFT_MAKEINSTANCE(WINE_MOUSE_Y_AXIS_INSTANCE) | DIDFT_RELAXIS,
+-                        pt.y, GetCurrentTime(), This->base.dinput->evsequence);
++                        pt.y, GetCurrentTime(), seq);
+ 
+         if (rel.x || rel.y)
+         {
+@@ -416,7 +418,7 @@ static int dinput_mouse_hook( LPDIRECTINPUTDEVICE8A iface, WPARAM wparam, LPARAM
+         {
+             This->m_state.lZ += (wdata = (SHORT)raw_input.data.mouse.usButtonData);
+             queue_event(iface, DIDFT_MAKEINSTANCE(WINE_MOUSE_Z_AXIS_INSTANCE) | DIDFT_RELAXIS,
+-                        wdata, GetCurrentTime(), This->base.dinput->evsequence);
++                        wdata, GetCurrentTime(), seq);
+             ret = This->clipped;
+         }
+ 
+@@ -426,7 +428,7 @@ static int dinput_mouse_hook( LPDIRECTINPUTDEVICE8A iface, WPARAM wparam, LPARAM
+             {
+                 This->m_state.rgbButtons[i / 2] = 0x80 - (i % 2) * 0x80;
+                 queue_event(iface, DIDFT_MAKEINSTANCE(WINE_MOUSE_BUTTONS_INSTANCE + (i / 2)) | DIDFT_PSHBUTTON,
+-                            This->m_state.rgbButtons[i / 2], GetCurrentTime(), This->base.dinput->evsequence);
++                            This->m_state.rgbButtons[i / 2], GetCurrentTime(), seq);
+             }
+         }
+ 

@@ -1,0 +1,3331 @@
+From 38aeedcc80b53d98ac52b5a8ecf225025f82bb5e Mon Sep 17 00:00:00 2001
+From: Nikolay Sivov <nsivov@codeweavers.com>
+Date: Mon, 25 May 2020 21:57:47 +0300
+Subject: [PATCH] include: Add IMFMediaEngineEx definition.
+
+Signed-off-by: Nikolay Sivov <nsivov@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ include/mfmediaengine.idl | 73 +++++++++++++++++++++++++++++++++++++++
+ include/mftransform.idl   |  6 ++++
+ 2 files changed, 79 insertions(+)
+
+diff --git a/include/mfmediaengine.idl b/include/mfmediaengine.idl
+index 556d2fba2ba..e5d91a57322 100644
+--- a/include/mfmediaengine.idl
++++ b/include/mfmediaengine.idl
+@@ -194,6 +194,79 @@ interface IMFMediaEngine : IUnknown
+     HRESULT OnVideoStreamTick([out] LONGLONG *time);
+ }
+ 
++typedef enum MF_MEDIA_ENGINE_STATISTIC
++{
++    MF_MEDIA_ENGINE_STATISTIC_FRAMES_RENDERED,
++    MF_MEDIA_ENGINE_STATISTIC_FRAMES_DROPPED,
++    MF_MEDIA_ENGINE_STATISTIC_BYTES_DOWNLOADED,
++    MF_MEDIA_ENGINE_STATISTIC_BUFFER_PROGRESS,
++    MF_MEDIA_ENGINE_STATISTIC_FRAMES_PER_SECOND,
++    MF_MEDIA_ENGINE_STATISTIC_PLAYBACK_JITTER,
++    MF_MEDIA_ENGINE_STATISTIC_FRAMES_CORRUPTED,
++    MF_MEDIA_ENGINE_STATISTIC_TOTAL_FRAME_DELAY,
++} MF_MEDIA_ENGINE_STATISTIC;
++
++typedef enum MF_MEDIA_ENGINE_S3D_PACKING_MODE
++{
++    MF_MEDIA_ENGINE_S3D_PACKING_MODE_NONE,
++    MF_MEDIA_ENGINE_S3D_PACKING_MODE_SIDE_BY_SIDE,
++    MF_MEDIA_ENGINE_S3D_PACKING_MODE_TOP_BOTTOM
++} MF_MEDIA_ENGINE_S3D_PACKING_MODE;
++
++typedef enum MF_MEDIA_ENGINE_SEEK_MODE
++{
++    MF_MEDIA_ENGINE_SEEK_MODE_NORMAL,
++    MF_MEDIA_ENGINE_SEEK_MODE_APPROXIMATE,
++} MF_MEDIA_ENGINE_SEEK_MODE;
++
++[
++    object,
++    uuid(83015ead-b1e6-40d0-a98a-37145ffe1ad1),
++    local,
++    pointer_default(unique)
++]
++interface IMFMediaEngineEx : IMFMediaEngine
++{
++    HRESULT SetSourceFromByteStream([in] IMFByteStream *bytestream, [in] BSTR url);
++    HRESULT GetStatistics([in] MF_MEDIA_ENGINE_STATISTIC stat_id, [out] PROPVARIANT *stat);
++    HRESULT UpdateVideoStream([in] const MFVideoNormalizedRect *src,
++            [in] const RECT *dst, [in] const MFARGB *border_color);
++    double GetBalance();
++    HRESULT SetBalance([in] double balance);
++    BOOL IsPlaybackRateSupported([in] double rate);
++    HRESULT FrameStep([in] BOOL forward);
++    HRESULT GetResourceCharacteristics([out] DWORD *flags);
++    HRESULT GetPresentationAttribute([in] REFGUID attribute, [out] PROPVARIANT *value);
++    HRESULT GetNumberOfStreams([out] DWORD *stream_count);
++    HRESULT GetStreamAttribute([in] DWORD stream_index, [in] REFGUID attribute, [out] PROPVARIANT *value);
++    HRESULT GetStreamSelection([in] DWORD stream_index, [out] BOOL *enabled);
++    HRESULT SetStreamSelection([in] DWORD stream_index, [in] BOOL enabled);
++    HRESULT ApplyStreamSelections();
++    HRESULT IsProtected([out] BOOL *protected);
++    HRESULT InsertVideoEffect([in] IUnknown *effect, [in] BOOL is_optional);
++    HRESULT InsertAudioEffect([in] IUnknown *effect, [in] BOOL is_optional);
++    HRESULT RemoveAllEffects();
++    HRESULT SetTimelineMarkerTimer([in] double timeout);
++    HRESULT GetTimelineMarkerTimer([out] double *timeout);
++    HRESULT CancelTimelineMarkerTimer();
++    BOOL IsStereo3D();
++    HRESULT GetStereo3DFramePackingMode([out] MF_MEDIA_ENGINE_S3D_PACKING_MODE *mode);
++    HRESULT SetStereo3DFramePackingMode([in] MF_MEDIA_ENGINE_S3D_PACKING_MODE mode);
++    HRESULT GetStereo3DRenderMode([out] MF3DVideoOutputType *output_type);
++    HRESULT SetStereo3DRenderMode([in] MF3DVideoOutputType output_type);
++    HRESULT EnableWindowlessSwapchainMode([in] BOOL enable);
++    HRESULT GetVideoSwapchainHandle([out] HANDLE *swapchain);
++    HRESULT EnableHorizontalMirrorMode([in] BOOL enable);
++    HRESULT GetAudioStreamCategory([out] UINT32 *category);
++    HRESULT SetAudioStreamCategory([in] UINT32 category);
++    HRESULT GetAudioEndpointRole([out] UINT32 *role);
++    HRESULT SetAudioEndpointRole([in] UINT32 role);
++    HRESULT GetRealTimeMode([out] BOOL *enabled);
++    HRESULT SetRealTimeMode([in] BOOL enable);
++    HRESULT SetCurrentTimeEx([in] double seektime, [in] MF_MEDIA_ENGINE_SEEK_MODE mode);
++    HRESULT EnableTimeUpdateTimer([in] BOOL enable);
++}
++
+ [
+     object,
+     uuid(4d645ace-26aa-4688-9be1-df3516990b93),
+diff --git a/include/mftransform.idl b/include/mftransform.idl
+index 6b9c79572aa..1b402a5cc77 100644
+--- a/include/mftransform.idl
++++ b/include/mftransform.idl
+@@ -107,6 +107,12 @@ enum _MFT_DRAIN_TYPE
+     MFT_DRAIN_NO_TAILS      = 0x00000001
+ };
+ 
++typedef enum _MF3DVideoOutputType
++{
++    MF3DVideoOutputType_BaseView,
++    MF3DVideoOutputType_Stereo
++} MF3DVideoOutputType;
++
+ typedef struct _MFT_INPUT_STREAM_INFO
+ {
+     LONGLONG hnsMaxLatency;
+From ba920246e502afe7bc664c1881d528a27e980101 Mon Sep 17 00:00:00 2001
+From: Nikolay Sivov <nsivov@codeweavers.com>
+Date: Mon, 25 May 2020 22:14:23 +0300
+Subject: [PATCH] mfplat: Add Media Engine attributes to tracing.
+
+Signed-off-by: Nikolay Sivov <nsivov@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/mfplat/main.c | 32 +++++++++++++++++++++++++++++++-
+ 1 file changed, 31 insertions(+), 1 deletion(-)
+
+diff --git a/dlls/mfplat/main.c b/dlls/mfplat/main.c
+index 0a5958acb2d..ea6a0659c5c 100644
+--- a/dlls/mfplat/main.c
++++ b/dlls/mfplat/main.c
+@@ -39,6 +39,7 @@
+ 
+ #include "mfplat_private.h"
+ #include "mfreadwrite.h"
++#include "mfmediaengine.h"
+ #include "propvarutil.h"
+ #include "strsafe.h"
+ 
+@@ -1559,6 +1560,7 @@ const char *debugstr_attr(const GUID *guid)
+         X(MF_MT_MPEG2_TIMECODE),
+         X(MF_PMP_SERVER_CONTEXT),
+         X(MFT_SUPPORT_DYNAMIC_FORMAT_CHANGE),
++        X(MF_MEDIA_ENGINE_TRACK_ID),
+         X(MF_MT_CUSTOM_VIDEO_PRIMARIES),
+         X(MF_MT_TIMESTAMP_CAN_BE_DTS),
+         X(MFT_CODEC_MERIT_Attribute),
+@@ -1566,10 +1568,12 @@ const char *debugstr_attr(const GUID *guid)
+         X(MF_LOW_LATENCY),
+         X(MF_READWRITE_ENABLE_HARDWARE_TRANSFORMS),
+         X(MF_MT_MPEG2_FLAGS),
++        X(MF_MEDIA_ENGINE_AUDIO_CATEGORY),
+         X(MF_MT_PIXEL_ASPECT_RATIO),
+         X(MF_TOPOLOGY_ENABLE_XVP_FOR_PLAYBACK),
+         X(MFT_CONNECTED_STREAM_ATTRIBUTE),
+         X(MF_MT_REALTIME_CONTENT),
++        X(MF_MEDIA_ENGINE_CONTENT_PROTECTION_FLAGS),
+         X(MF_MT_WRAPPED_TYPE),
+         X(MF_MT_DRM_FLAGS),
+         X(MF_MT_AVG_BITRATE),
+@@ -1583,6 +1587,7 @@ const char *debugstr_attr(const GUID *guid)
+         X(MF_SOURCE_READER_ENABLE_ADVANCED_VIDEO_PROCESSING),
+         X(MF_MT_AM_FORMAT_TYPE),
+         X(MF_SESSION_APPROX_EVENT_OCCURRENCE_TIME),
++        X(MF_MEDIA_ENGINE_SYNCHRONOUS_CLOSE),
+         X(MF_MT_H264_MAX_MB_PER_SEC),
+         X(MF_DEVSOURCE_ATTRIBUTE_SOURCE_TYPE_VIDCAP_MAX_BUFFERS),
+         X(MF_MT_AUDIO_BLOCK_ALIGNMENT),
+@@ -1597,10 +1602,13 @@ const char *debugstr_attr(const GUID *guid)
+         X(MF_MT_H264_SUPPORTED_SLICE_MODES),
+         X(MF_PD_LAST_MODIFIED_TIME),
+         X(MF_PD_PLAYBACK_ELEMENT_ID),
++        X(MF_MEDIA_ENGINE_BROWSER_COMPATIBILITY_MODE_IE9),
+         X(MF_MT_ALL_SAMPLES_INDEPENDENT),
+         X(MF_PD_PREFERRED_LANGUAGE),
+         X(MF_PD_PLAYBACK_BOUNDARY_TIME),
++        X(MF_MEDIA_ENGINE_TELEMETRY_APPLICATION_ID),
+         X(MF_ACTIVATE_MFT_LOCKED),
++        X(MF_MEDIA_ENGINE_VIDEO_OUTPUT_FORMAT),
+         X(MF_SOURCE_READER_ENABLE_VIDEO_PROCESSING),
+         X(MF_MT_FRAME_SIZE),
+         X(MF_MT_H264_SIMULCAST_SUPPORT),
+@@ -1612,9 +1620,13 @@ const char *debugstr_attr(const GUID *guid)
+         X(MF_MT_PALETTE),
+         X(MF_DEVSOURCE_ATTRIBUTE_SOURCE_TYPE_VIDCAP_PROVIDER_DEVICE_ID),
+         X(MF_TOPOLOGY_STATIC_PLAYBACK_OPTIMIZATIONS),
++        X(MF_MEDIA_ENGINE_NEEDKEY_CALLBACK),
+         X(MF_MT_GEOMETRIC_APERTURE),
+         X(MF_MT_ORIGINAL_WAVE_FORMAT_TAG),
+         X(MF_MT_DV_AAUX_SRC_PACK_1),
++        X(MF_MEDIA_ENGINE_STREAM_CONTAINS_ALPHA_CHANNEL),
++        X(MF_MEDIA_ENGINE_MEDIA_PLAYER_MODE),
++        X(MF_MEDIA_ENGINE_EXTENSION),
+         X(MF_MT_DEFAULT_STRIDE),
+         X(MF_MT_ARBITRARY_FORMAT),
+         X(MF_TRANSFORM_CATEGORY_Attribute),
+@@ -1632,12 +1644,14 @@ const char *debugstr_attr(const GUID *guid)
+         X(MF_DEVSOURCE_ATTRIBUTE_FRIENDLY_NAME),
+         X(MF_MT_VIDEO_ROTATION),
+         X(MF_DEVSOURCE_ATTRIBUTE_SOURCE_TYPE_AUDCAP_SYMBOLIC_LINK),
++        X(MF_MEDIA_ENGINE_BROWSER_COMPATIBILITY_MODE_IE11),
+         X(MF_MT_USER_DATA),
+         X(MF_MT_MIN_MASTERING_LUMINANCE),
+         X(MF_EVENT_STREAM_METADATA_SYSTEMID),
+         X(MF_MT_AUDIO_CHANNEL_MASK),
+         X(MF_SOURCE_READER_DISCONNECT_MEDIASOURCE_ON_SHUTDOWN),
+         X(MF_READWRITE_DISABLE_CONVERTERS),
++        X(MF_MEDIA_ENGINE_BROWSER_COMPATIBILITY_MODE_IE_EDGE),
+         X(MF_MT_MINIMUM_DISPLAY_APERTURE),
+         X(MFSampleExtension_Token),
+         X(MF_DEVSOURCE_ATTRIBUTE_SOURCE_TYPE_VIDCAP_CATEGORY),
+@@ -1646,12 +1660,13 @@ const char *debugstr_attr(const GUID *guid)
+         X(MF_DISABLE_FRAME_CORRUPTION_INFO),
+         X(MF_TOPOLOGY_ENUMERATE_SOURCE_TYPES),
+         X(MF_MT_VIDEO_NO_FRAME_ORDERING),
++        X(MF_MEDIA_ENGINE_PLAYBACK_VISUAL),
+         X(MF_MT_VIDEO_CHROMA_SITING),
+         X(MF_AUDIO_RENDERER_ATTRIBUTE_STREAM_CATEGORY),
+         X(MFSampleExtension_3DVideo_SampleFormat),
+         X(MF_MT_H264_RESOLUTION_SCALING),
+-        X(MF_MT_MPEG2_LEVEL),
+         X(MF_MT_VIDEO_LEVEL),
++        X(MF_MT_MPEG2_LEVEL),
+         X(MF_SAMPLEGRABBERSINK_SAMPLE_TIME_OFFSET),
+         X(MF_MT_SAMPLE_SIZE),
+         X(MF_MT_AAC_PAYLOAD_TYPE),
+@@ -1682,6 +1697,7 @@ const char *debugstr_attr(const GUID *guid)
+         X(MF_BYTESTREAM_ORIGIN_NAME),
+         X(MF_BYTESTREAM_CONTENT_TYPE),
+         X(MF_MT_DEPTH_MEASUREMENT),
++        X(MF_MEDIA_ENGINE_COMPATIBILITY_MODE_WIN10),
+         X(MF_MT_VIDEO_3D_NUM_VIEWS),
+         X(MF_BYTESTREAM_DURATION),
+         X(MF_SD_SAMI_LANGUAGE),
+@@ -1701,6 +1717,8 @@ const char *debugstr_attr(const GUID *guid)
+         X(MF_MT_VIDEO_3D_FIRST_IS_LEFT),
+         X(MFT_DECODER_FINAL_VIDEO_RESOLUTION_HINT),
+         X(MF_PD_ADAPTIVE_STREAMING),
++        X(MF_MEDIA_ENGINE_SOURCE_RESOLVER_CONFIG_STORE),
++        X(MF_MEDIA_ENGINE_COMPATIBILITY_MODE_WWA_EDGE),
+         X(MF_MT_H264_SUPPORTED_USAGES),
+         X(MFT_PREFERRED_OUTPUTTYPE_Attribute),
+         X(MFSampleExtension_Timestamp),
+@@ -1708,6 +1726,7 @@ const char *debugstr_attr(const GUID *guid)
+         X(MF_MT_SUBTYPE),
+         X(MF_TRANSFORM_ASYNC),
+         X(MF_TOPONODE_STREAMID),
++        X(MF_MEDIA_ENGINE_PLAYBACK_HWND),
+         X(MF_TOPONODE_NOSHUTDOWN_ON_REMOVE),
+         X(MF_MT_VIDEO_LIGHTING),
+         X(MF_SD_MUTUALLY_EXCLUSIVE),
+@@ -1722,9 +1741,11 @@ const char *debugstr_attr(const GUID *guid)
+         X(MF_SINK_WRITER_D3D_MANAGER),
+         X(MFSampleExtension_3DVideo),
+         X(MF_MT_H264_USAGE),
++        X(MF_MEDIA_ENGINE_EME_CALLBACK),
+         X(MF_EVENT_SOURCE_FAKE_START),
+         X(MF_EVENT_SOURCE_PROJECTSTART),
+         X(MF_EVENT_SOURCE_ACTUAL_START),
++        X(MF_MEDIA_ENGINE_CONTENT_PROTECTION_MANAGER),
+         X(MF_MT_AUDIO_SAMPLES_PER_BLOCK),
+         X(MFT_ENUM_HARDWARE_URL_Attribute),
+         X(MF_SOURCE_READER_ASYNC_CALLBACK),
+@@ -1741,6 +1762,7 @@ const char *debugstr_attr(const GUID *guid)
+         X(MF_MT_SPATIAL_AUDIO_MAX_METADATA_ITEMS),
+         X(MF_MT_MPEG2_ONE_FRAME_PER_PACKET),
+         X(MF_MT_INTERLACE_MODE),
++        X(MF_MEDIA_ENGINE_CALLBACK),
+         X(MF_MT_VIDEO_RENDERER_EXTENSION_PROFILE),
+         X(MF_DEVSOURCE_ATTRIBUTE_SOURCE_TYPE_VIDCAP_HW_SOURCE),
+         X(MF_MT_AUDIO_PREFER_WAVEFORMATEX),
+@@ -1767,9 +1789,11 @@ const char *debugstr_attr(const GUID *guid)
+         X(MF_EVENT_START_PRESENTATION_TIME),
+         X(MF_EVENT_SESSIONCAPS),
+         X(MF_EVENT_PRESENTATION_TIME_OFFSET),
++        X(MF_MEDIA_ENGINE_AUDIO_ENDPOINT_ROLE),
+         X(MF_EVENT_SESSIONCAPS_DELTA),
+         X(MF_EVENT_START_PRESENTATION_TIME_AT_OUTPUT),
+         X(MFSampleExtension_DecodeTimestamp),
++        X(MF_MEDIA_ENGINE_COMPATIBILITY_MODE),
+         X(MF_MT_VIDEO_H264_NO_FMOASO),
+         X(MF_MT_AVG_BIT_ERROR_RATE),
+         X(MF_MT_VIDEO_PRIMARIES),
+@@ -1777,7 +1801,9 @@ const char *debugstr_attr(const GUID *guid)
+         X(MF_MT_H264_RATE_CONTROL_MODES),
+         X(MF_DEVSOURCE_ATTRIBUTE_SOURCE_TYPE_VIDCAP_SYMBOLIC_LINK),
+         X(MF_READWRITE_D3D_OPTIONAL),
++        X(MF_MEDIA_ENGINE_DXGI_MANAGER),
+         X(MF_READWRITE_MMCSS_CLASS_AUDIO),
++        X(MF_MEDIA_ENGINE_COREWINDOW),
+         X(MF_SOURCE_READER_DISABLE_CAMERA_PLUGINS),
+         X(MF_MT_MPEG4_TRACK_TYPE),
+         X(MF_MT_PAN_SCAN_APERTURE),
+@@ -1785,6 +1811,7 @@ const char *debugstr_attr(const GUID *guid)
+         X(MF_MT_ORIGINAL_4CC),
+         X(MF_PD_AUDIO_ISVARIABLEBITRATE),
+         X(MF_AUDIO_RENDERER_ATTRIBUTE_FLAGS),
++        X(MF_MEDIA_ENGINE_BROWSER_COMPATIBILITY_MODE),
+         X(MF_AUDIO_RENDERER_ATTRIBUTE_SESSION_ID),
+         X(MF_MT_MPEG2_CONTENT_PACKET),
+         X(MFT_PROCESS_LOCAL_Attribute),
+@@ -1793,6 +1820,7 @@ const char *debugstr_attr(const GUID *guid)
+         X(MF_MT_VIDEO_NOMINAL_RANGE),
+         X(MF_MT_AAC_AUDIO_PROFILE_LEVEL_INDICATION),
+         X(MF_MT_MPEG_SEQUENCE_HEADER),
++        X(MF_MEDIA_ENGINE_OPM_HWND),
+         X(MF_MT_AUDIO_SAMPLES_PER_SECOND),
+         X(MF_MT_SPATIAL_AUDIO_DATA_PRESENT),
+         X(MF_MT_FRAME_RATE),
+@@ -1822,6 +1850,7 @@ const char *debugstr_attr(const GUID *guid)
+         X(MF_TOPOLOGY_DXVA_MODE),
+         X(MF_TOPONODE_LOCKED),
+         X(MF_TOPONODE_WORKQUEUE_ID),
++        X(MF_MEDIA_ENGINE_CONTINUE_ON_CODEC_ERROR),
+         X(MF_TOPONODE_WORKQUEUE_MMCSS_CLASS),
+         X(MF_TOPONODE_DECRYPTOR),
+         X(MF_EVENT_DO_THINNING),
+@@ -1829,6 +1858,7 @@ const char *debugstr_attr(const GUID *guid)
+         X(MF_TOPOLOGY_HARDWARE_MODE),
+         X(MF_SOURCE_READER_DISABLE_DXVA),
+         X(MF_MT_FORWARD_CUSTOM_NALU),
++        X(MF_MEDIA_ENGINE_BROWSER_COMPATIBILITY_MODE_IE10),
+         X(MF_TOPONODE_ERROR_MAJORTYPE),
+         X(MF_MT_SECURE),
+         X(MFT_FIELDOFUSE_UNLOCK_Attribute),
+From d45d34cdf5c2fc4b73aa6c07ff04079cdb9fe752 Mon Sep 17 00:00:00 2001
+From: Nikolay Sivov <nsivov@codeweavers.com>
+Date: Tue, 26 May 2020 01:58:46 +0300
+Subject: [PATCH] include: Add CResamplerMediaObject class id.
+
+Signed-off-by: Nikolay Sivov <nsivov@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ include/wmcodecdsp.idl | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/include/wmcodecdsp.idl b/include/wmcodecdsp.idl
+index d4547cd8816..61381bee6d4 100644
+--- a/include/wmcodecdsp.idl
++++ b/include/wmcodecdsp.idl
+@@ -25,3 +25,8 @@ cpp_quote("DEFINE_GUID(MEDIASUBTYPE_I420,0x30323449,0x0000,0x0010,0x80,0x00,0x00
+     uuid(bbeea841-0a63-4f52-a7ab-a9b3a84ed38a)
+ ]
+ coclass CMP3DecMediaObject {}
++
++[
++    uuid(f447b69e-1884-4a7e-8055-346f74d6edb3)
++]
++coclass CResamplerMediaObject {}
+From e2c681a8976bb31378fd946497da485e5ef73fad Mon Sep 17 00:00:00 2001
+From: Nikolay Sivov <nsivov@codeweavers.com>
+Date: Thu, 28 May 2020 18:54:16 +0300
+Subject: [PATCH] include: Add Media Engine events constants.
+
+Signed-off-by: Nikolay Sivov <nsivov@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ include/mfmediaengine.idl | 43 +++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 43 insertions(+)
+
+diff --git a/include/mfmediaengine.idl b/include/mfmediaengine.idl
+index e5d91a57322..4ea3d834cf2 100644
+--- a/include/mfmediaengine.idl
++++ b/include/mfmediaengine.idl
+@@ -94,6 +94,49 @@ typedef enum MF_MEDIA_ENGINE_CREATEFLAGS
+     MF_MEDIA_ENGINE_CREATEFLAGS_MASK = 0x1f
+ } MF_MEDIA_ENGINE_CREATEFLAGS;
+ 
++typedef enum MF_MEDIA_ENGINE_EVENT
++{
++    MF_MEDIA_ENGINE_EVENT_LOADSTART = 1,
++    MF_MEDIA_ENGINE_EVENT_PROGRESS = 2,
++    MF_MEDIA_ENGINE_EVENT_SUSPEND = 3,
++    MF_MEDIA_ENGINE_EVENT_ABORT = 4,
++    MF_MEDIA_ENGINE_EVENT_ERROR = 5,
++    MF_MEDIA_ENGINE_EVENT_EMPTIED = 6,
++    MF_MEDIA_ENGINE_EVENT_STALLED = 7,
++    MF_MEDIA_ENGINE_EVENT_PLAY = 8,
++    MF_MEDIA_ENGINE_EVENT_PAUSE = 9,
++    MF_MEDIA_ENGINE_EVENT_LOADEDMETADATA = 10,
++    MF_MEDIA_ENGINE_EVENT_LOADEDDATA = 11,
++    MF_MEDIA_ENGINE_EVENT_WAITING = 12,
++    MF_MEDIA_ENGINE_EVENT_PLAYING = 13,
++    MF_MEDIA_ENGINE_EVENT_CANPLAY = 14,
++    MF_MEDIA_ENGINE_EVENT_CANPLAYTHROUGH = 15,
++    MF_MEDIA_ENGINE_EVENT_SEEKING = 16,
++    MF_MEDIA_ENGINE_EVENT_SEEKED = 17,
++    MF_MEDIA_ENGINE_EVENT_TIMEUPDATE = 18,
++    MF_MEDIA_ENGINE_EVENT_ENDED = 19,
++    MF_MEDIA_ENGINE_EVENT_RATECHANGE = 20,
++    MF_MEDIA_ENGINE_EVENT_DURATIONCHANGE = 21,
++    MF_MEDIA_ENGINE_EVENT_VOLUMECHANGE = 22,
++    MF_MEDIA_ENGINE_EVENT_FORMATCHANGE = 1000,
++    MF_MEDIA_ENGINE_EVENT_PURGEQUEUEDEVENTS  = 1001,
++    MF_MEDIA_ENGINE_EVENT_TIMELINE_MARKER = 1002,
++    MF_MEDIA_ENGINE_EVENT_BALANCECHANGE = 1003,
++    MF_MEDIA_ENGINE_EVENT_DOWNLOADCOMPLETE = 1004,
++    MF_MEDIA_ENGINE_EVENT_BUFFERINGSTARTED = 1005,
++    MF_MEDIA_ENGINE_EVENT_BUFFERINGENDED = 1006,
++    MF_MEDIA_ENGINE_EVENT_FRAMESTEPCOMPLETED = 1007,
++    MF_MEDIA_ENGINE_EVENT_NOTIFYSTABLESTATE = 1008,
++    MF_MEDIA_ENGINE_EVENT_FIRSTFRAMEREADY = 1009,
++    MF_MEDIA_ENGINE_EVENT_TRACKSCHANGE = 1010,
++    MF_MEDIA_ENGINE_EVENT_OPMINFO = 1011,
++    MF_MEDIA_ENGINE_EVENT_RESOURCELOST = 1012,
++    MF_MEDIA_ENGINE_EVENT_DELAYLOADEVENT_CHANGED = 1013,
++    MF_MEDIA_ENGINE_EVENT_STREAMRENDERINGERROR = 1014,
++    MF_MEDIA_ENGINE_EVENT_SUPPORTEDRATES_CHANGED = 1015,
++    MF_MEDIA_ENGINE_EVENT_AUDIOENDPOINTCHANGE = 1016,
++} MF_MEDIA_ENGINE_EVENT;
++
+ [
+     object,
+     uuid(fc0e10d2-ab2a-4501-a951-06bb1075184c),
+From 9de7895e4e4707b2c8fb164887a40bfe915ed580 Mon Sep 17 00:00:00 2001
+From: Nikolay Sivov <nsivov@codeweavers.com>
+Date: Thu, 28 May 2020 18:54:17 +0300
+Subject: [PATCH] mfmediaengine/tests: Use global factory instance.
+
+Signed-off-by: Nikolay Sivov <nsivov@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/mfmediaengine/tests/mfmediaengine.c | 85 +++++++++++++++++++-----
+ 1 file changed, 69 insertions(+), 16 deletions(-)
+
+diff --git a/dlls/mfmediaengine/tests/mfmediaengine.c b/dlls/mfmediaengine/tests/mfmediaengine.c
+index 2bbc79fb6c8..14d9eed453e 100644
+--- a/dlls/mfmediaengine/tests/mfmediaengine.c
++++ b/dlls/mfmediaengine/tests/mfmediaengine.c
+@@ -35,6 +35,8 @@
+ 
+ static HRESULT (WINAPI *pMFCreateDXGIDeviceManager)(UINT *token, IMFDXGIDeviceManager **manager);
+ 
++static IMFMediaEngineClassFactory *factory;
++
+ #define EXPECT_REF(obj,ref) _expect_ref((IUnknown*)obj, ref, __LINE__)
+ static void _expect_ref(IUnknown *obj, ULONG ref, int line)
+ {
+@@ -114,25 +116,20 @@ static void test_factory(void)
+     UINT token;
+     HRESULT hr;
+ 
+-    CoInitialize(NULL);
+-
+-    hr = CoCreateInstance(&CLSID_MFMediaEngineClassFactory, NULL, CLSCTX_INPROC_SERVER,
+-                          &IID_IMFMediaEngineClassFactory, (void **)&factory);
+-    ok(hr == S_OK || broken(hr == REGDB_E_CLASSNOTREG) /* pre-win8 */,
+-       "Failed to create class factory, hr %#x.\n", hr);
+-
+-    hr = CoCreateInstance(&CLSID_MFMediaEngineClassFactory, (IUnknown *)factory, CLSCTX_INPROC_SERVER,
+-                          &IID_IMFMediaEngineClassFactory, (void **)&factory2);
+-    ok(hr == CLASS_E_NOAGGREGATION || broken(hr == REGDB_E_CLASSNOTREG) /* pre-win8 */,
+-       "Unexpected hr %#x.\n", hr);
+-
+-    if (!factory)
++    hr = CoCreateInstance(&CLSID_MFMediaEngineClassFactory, NULL, CLSCTX_INPROC_SERVER, &IID_IMFMediaEngineClassFactory,
++            (void **)&factory);
++    ok(hr == S_OK || broken(hr == REGDB_E_CLASSNOTREG) /* pre-win8 */, "Failed to create class factory, hr %#x.\n", hr);
++    if (FAILED(hr))
+     {
+-        win_skip("Not IMFMediaEngineClassFactory support.\n");
+-        CoUninitialize();
++        win_skip("Media Engine is not supported.\n");
+         return;
+     }
+ 
++    /* Aggregation is not supported. */
++    hr = CoCreateInstance(&CLSID_MFMediaEngineClassFactory, (IUnknown *)factory, CLSCTX_INPROC_SERVER,
++            &IID_IMFMediaEngineClassFactory, (void **)&factory2);
++    ok(hr == CLASS_E_NOAGGREGATION, "Unexpected hr %#x.\n", hr);
++
+     hr = pMFCreateDXGIDeviceManager(&token, &manager);
+     ok(hr == S_OK, "MFCreateDXGIDeviceManager failed: %#x.\n", hr);
+     hr = MFCreateAttributes(&attributes, 3);
+@@ -163,20 +160,76 @@ static void test_factory(void)
+     IMFAttributes_Release(attributes);
+     IMFDXGIDeviceManager_Release(manager);
+     IMFMediaEngineClassFactory_Release(factory);
++}
+ 
+-    CoUninitialize();
++static void test_CreateInstance(void)
++{
++    struct media_engine_notify notify_impl = {{&media_engine_notify_vtbl}, 1};
++    IMFMediaEngineNotify *notify = &notify_impl.IMFMediaEngineNotify_iface;
++    IMFDXGIDeviceManager *manager;
++    IMFMediaEngine *media_engine;
++    IMFAttributes *attributes;
++    UINT token;
++    HRESULT hr;
++
++    hr = pMFCreateDXGIDeviceManager(&token, &manager);
++    ok(hr == S_OK, "Failed to create dxgi device manager, hr %#x.\n", hr);
++
++    hr = MFCreateAttributes(&attributes, 3);
++    ok(hr == S_OK, "Failed to create attributes, hr %#x.\n", hr);
++
++    hr = IMFMediaEngineClassFactory_CreateInstance(factory, MF_MEDIA_ENGINE_WAITFORSTABLE_STATE,
++            attributes, &media_engine);
++    ok(hr == MF_E_ATTRIBUTENOTFOUND, "Unexpected hr %#x.\n", hr);
++
++    hr = IMFAttributes_SetUnknown(attributes, &MF_MEDIA_ENGINE_OPM_HWND, NULL);
++    ok(hr == S_OK, "Failed to set attribute, hr %#x.\n", hr);
++
++    hr = IMFMediaEngineClassFactory_CreateInstance(factory, MF_MEDIA_ENGINE_WAITFORSTABLE_STATE,
++            attributes, &media_engine);
++    ok(hr == MF_E_ATTRIBUTENOTFOUND, "Unexpected hr %#x.\n", hr);
++
++    IMFAttributes_DeleteAllItems(attributes);
++
++    hr = IMFAttributes_SetUnknown(attributes, &MF_MEDIA_ENGINE_CALLBACK, (IUnknown *)notify);
++    ok(hr == S_OK, "Failed to set attribute, hr %#x.\n", hr);
++    hr = IMFAttributes_SetUINT32(attributes, &MF_MEDIA_ENGINE_VIDEO_OUTPUT_FORMAT, DXGI_FORMAT_UNKNOWN);
++    ok(hr == S_OK, "Failed to set attribute, hr %#x.\n", hr);
++
++    hr = IMFMediaEngineClassFactory_CreateInstance(factory, MF_MEDIA_ENGINE_WAITFORSTABLE_STATE, attributes, &media_engine);
++    ok(hr == S_OK, "Failed to create media engine, hr %#x.\n", hr);
++
++    IMFMediaEngine_Release(media_engine);
++    IMFAttributes_Release(attributes);
++    IMFDXGIDeviceManager_Release(manager);
+ }
+ 
+ START_TEST(mfmediaengine)
+ {
+     HRESULT hr;
+ 
++    CoInitialize(NULL);
++
++    hr = CoCreateInstance(&CLSID_MFMediaEngineClassFactory, NULL, CLSCTX_INPROC_SERVER, &IID_IMFMediaEngineClassFactory,
++            (void **)&factory);
++    if (FAILED(hr))
++    {
++        win_skip("Media Engine is not supported.\n");
++        CoUninitialize();
++        return;
++    }
++
+     init_functions();
+ 
+     hr = MFStartup(MF_VERSION, MFSTARTUP_FULL);
+     ok(hr == S_OK, "MFStartup failed: %#x.\n", hr);
+ 
+     test_factory();
++    test_CreateInstance();
++
++    IMFMediaEngineClassFactory_Release(factory);
++
++    CoUninitialize();
+ 
+     MFShutdown();
+ }
+From a8ee0575fdb38c8f5724a4a3448d331c61514acf Mon Sep 17 00:00:00 2001
+From: Nikolay Sivov <nsivov@codeweavers.com>
+Date: Thu, 28 May 2020 18:54:18 +0300
+Subject: [PATCH] mfmediaengine/tests: Add some tests for shutdown state.
+
+Signed-off-by: Nikolay Sivov <nsivov@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/mfmediaengine/tests/Makefile.in     |   2 +-
+ dlls/mfmediaengine/tests/mfmediaengine.c | 196 +++++++++++++++++++++++
+ 2 files changed, 197 insertions(+), 1 deletion(-)
+
+diff --git a/dlls/mfmediaengine/tests/Makefile.in b/dlls/mfmediaengine/tests/Makefile.in
+index d508db9f6f5..88758f7a613 100644
+--- a/dlls/mfmediaengine/tests/Makefile.in
++++ b/dlls/mfmediaengine/tests/Makefile.in
+@@ -1,5 +1,5 @@
+ TESTDLL   = mfmediaengine.dll
+-IMPORTS   = ole32 mfplat mfmediaengine mfuuid uuid
++IMPORTS   = ole32 mfplat mfmediaengine oleaut32 mfuuid uuid
+ 
+ C_SRCS = \
+ 	mfmediaengine.c
+diff --git a/dlls/mfmediaengine/tests/mfmediaengine.c b/dlls/mfmediaengine/tests/mfmediaengine.c
+index 14d9eed453e..07bd8c81e67 100644
+--- a/dlls/mfmediaengine/tests/mfmediaengine.c
++++ b/dlls/mfmediaengine/tests/mfmediaengine.c
+@@ -105,6 +105,34 @@ static IMFMediaEngineNotifyVtbl media_engine_notify_vtbl =
+     media_engine_notify_EventNotify,
+ };
+ 
++static IMFMediaEngine *create_media_engine(IMFMediaEngineNotify *callback)
++{
++    IMFDXGIDeviceManager *manager;
++    IMFMediaEngine *media_engine;
++    IMFAttributes *attributes;
++    UINT token;
++    HRESULT hr;
++
++    hr = pMFCreateDXGIDeviceManager(&token, &manager);
++    ok(hr == S_OK, "Failed to create dxgi device manager, hr %#x.\n", hr);
++
++    hr = MFCreateAttributes(&attributes, 3);
++    ok(hr == S_OK, "Failed to create attributes, hr %#x.\n", hr);
++
++    hr = IMFAttributes_SetUnknown(attributes, &MF_MEDIA_ENGINE_CALLBACK, (IUnknown *)callback);
++    ok(hr == S_OK, "Failed to set attribute, hr %#x.\n", hr);
++    hr = IMFAttributes_SetUINT32(attributes, &MF_MEDIA_ENGINE_VIDEO_OUTPUT_FORMAT, DXGI_FORMAT_UNKNOWN);
++    ok(hr == S_OK, "Failed to set attribute, hr %#x.\n", hr);
++
++    hr = IMFMediaEngineClassFactory_CreateInstance(factory, 0, attributes, &media_engine);
++    ok(hr == S_OK, "Failed to create media engine, hr %#x.\n", hr);
++
++    IMFAttributes_Release(attributes);
++    IMFDXGIDeviceManager_Release(manager);
++
++    return media_engine;
++}
++
+ static void test_factory(void)
+ {
+     struct media_engine_notify notify_impl = {{&media_engine_notify_vtbl}, 1};
+@@ -204,6 +232,173 @@ static void test_CreateInstance(void)
+     IMFDXGIDeviceManager_Release(manager);
+ }
+ 
++static void test_Shutdown(void)
++{
++    struct media_engine_notify notify_impl = {{&media_engine_notify_vtbl}, 1};
++    IMFMediaEngineNotify *callback = &notify_impl.IMFMediaEngineNotify_iface;
++    IMFMediaTimeRange *time_range;
++    IMFMediaEngine *media_engine;
++    unsigned int state;
++    DWORD cx, cy;
++    double val;
++    HRESULT hr;
++    BSTR str;
++
++    media_engine = create_media_engine(callback);
++
++    hr = IMFMediaEngine_Shutdown(media_engine);
++todo_wine
++    ok(hr == S_OK, "Failed to shut down, hr %#x.\n", hr);
++
++    hr = IMFMediaEngine_Shutdown(media_engine);
++todo_wine
++    ok(hr == MF_E_SHUTDOWN || broken(hr == S_OK) /* before win10 */, "Unexpected hr %#x.\n", hr);
++
++    hr = IMFMediaEngine_SetSource(media_engine, NULL);
++todo_wine
++    ok(hr == MF_E_SHUTDOWN, "Unexpected hr %#x.\n", hr);
++
++    hr = IMFMediaEngine_GetCurrentSource(media_engine, &str);
++todo_wine
++    ok(hr == MF_E_SHUTDOWN, "Unexpected hr %#x.\n", hr);
++
++    state = IMFMediaEngine_GetNetworkState(media_engine);
++    ok(!state, "Unexpected state %d.\n", state);
++
++    /* Preload mode is still accessible. */
++    state = IMFMediaEngine_GetPreload(media_engine);
++todo_wine
++    ok(!state, "Unexpected state %d.\n", state);
++
++    hr = IMFMediaEngine_SetPreload(media_engine, MF_MEDIA_ENGINE_PRELOAD_AUTOMATIC);
++todo_wine
++    ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++
++    state = IMFMediaEngine_GetPreload(media_engine);
++todo_wine
++    ok(state == MF_MEDIA_ENGINE_PRELOAD_AUTOMATIC, "Unexpected state %d.\n", state);
++
++    hr = IMFMediaEngine_GetBuffered(media_engine, &time_range);
++todo_wine
++    ok(hr == MF_E_SHUTDOWN, "Unexpected hr %#x.\n", hr);
++
++    hr = IMFMediaEngine_Load(media_engine);
++todo_wine
++    ok(hr == MF_E_SHUTDOWN, "Unexpected hr %#x.\n", hr);
++
++    str = SysAllocString(L"video/mp4");
++    hr = IMFMediaEngine_CanPlayType(media_engine, str, &state);
++todo_wine
++    ok(hr == MF_E_SHUTDOWN, "Unexpected hr %#x.\n", hr);
++    SysFreeString(str);
++
++    state = IMFMediaEngine_GetReadyState(media_engine);
++    ok(!state, "Unexpected state %d.\n", state);
++
++    state = IMFMediaEngine_IsSeeking(media_engine);
++    ok(!state, "Unexpected state %d.\n", state);
++
++    val = IMFMediaEngine_GetCurrentTime(media_engine);
++    ok(val == 0.0, "Unexpected time %f.\n", val);
++
++    hr = IMFMediaEngine_SetCurrentTime(media_engine, 1.0);
++todo_wine
++    ok(hr == MF_E_SHUTDOWN, "Unexpected hr %#x.\n", hr);
++
++    val = IMFMediaEngine_GetStartTime(media_engine);
++    ok(val == 0.0, "Unexpected time %f.\n", val);
++
++    state = IMFMediaEngine_IsPaused(media_engine);
++todo_wine
++    ok(!!state, "Unexpected state %d.\n", state);
++
++    val = IMFMediaEngine_GetDefaultPlaybackRate(media_engine);
++todo_wine
++    ok(val == 1.0, "Unexpected rate %f.\n", val);
++
++    hr = IMFMediaEngine_SetDefaultPlaybackRate(media_engine, 2.0);
++todo_wine
++    ok(hr == MF_E_SHUTDOWN, "Unexpected hr %#x.\n", hr);
++
++    val = IMFMediaEngine_GetPlaybackRate(media_engine);
++todo_wine
++    ok(val == 1.0, "Unexpected rate %f.\n", val);
++
++    hr = IMFMediaEngine_GetPlayed(media_engine, &time_range);
++todo_wine
++    ok(hr == MF_E_SHUTDOWN, "Unexpected hr %#x.\n", hr);
++
++    hr = IMFMediaEngine_GetSeekable(media_engine, &time_range);
++todo_wine
++    ok(hr == MF_E_SHUTDOWN, "Unexpected hr %#x.\n", hr);
++
++    state = IMFMediaEngine_IsEnded(media_engine);
++    ok(!state, "Unexpected state %d.\n", state);
++
++    /* Autoplay mode is still accessible. */
++    state = IMFMediaEngine_GetAutoPlay(media_engine);
++    ok(!state, "Unexpected state.\n");
++
++    hr = IMFMediaEngine_SetAutoPlay(media_engine, TRUE);
++todo_wine
++    ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++
++    state = IMFMediaEngine_GetAutoPlay(media_engine);
++todo_wine
++    ok(!!state, "Unexpected state.\n");
++
++    /* Loop mode is still accessible. */
++    state = IMFMediaEngine_GetLoop(media_engine);
++    ok(!state, "Unexpected state.\n");
++
++    hr = IMFMediaEngine_SetLoop(media_engine, TRUE);
++todo_wine
++    ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++
++    state = IMFMediaEngine_GetLoop(media_engine);
++todo_wine
++    ok(!!state, "Unexpected state.\n");
++
++    hr = IMFMediaEngine_Play(media_engine);
++todo_wine
++    ok(hr == MF_E_SHUTDOWN, "Unexpected hr %#x.\n", hr);
++
++    hr = IMFMediaEngine_Pause(media_engine);
++todo_wine
++    ok(hr == MF_E_SHUTDOWN, "Unexpected hr %#x.\n", hr);
++
++    state = IMFMediaEngine_GetMuted(media_engine);
++    ok(!state, "Unexpected state.\n");
++
++    hr = IMFMediaEngine_SetMuted(media_engine, TRUE);
++todo_wine
++    ok(hr == MF_E_SHUTDOWN, "Unexpected hr %#x.\n", hr);
++
++    val = IMFMediaEngine_GetVolume(media_engine);
++todo_wine
++    ok(val == 1.0, "Unexpected value %f.\n", val);
++
++    val = IMFMediaEngine_SetVolume(media_engine, 2.0);
++todo_wine
++    ok(hr == MF_E_SHUTDOWN, "Unexpected hr %#x.\n", hr);
++
++    state = IMFMediaEngine_HasVideo(media_engine);
++    ok(!state, "Unexpected state.\n");
++
++    state = IMFMediaEngine_HasAudio(media_engine);
++    ok(!state, "Unexpected state.\n");
++
++    hr = IMFMediaEngine_GetNativeVideoSize(media_engine, &cx, &cy);
++todo_wine
++    ok(hr == MF_E_SHUTDOWN, "Unexpected hr %#x.\n", hr);
++
++    hr = IMFMediaEngine_GetVideoAspectRatio(media_engine, &cx, &cy);
++todo_wine
++    ok(hr == MF_E_SHUTDOWN, "Unexpected hr %#x.\n", hr);
++
++    IMFMediaEngine_Release(media_engine);
++}
++
+ START_TEST(mfmediaengine)
+ {
+     HRESULT hr;
+@@ -226,6 +421,7 @@ START_TEST(mfmediaengine)
+ 
+     test_factory();
+     test_CreateInstance();
++    test_Shutdown();
+ 
+     IMFMediaEngineClassFactory_Release(factory);
+ 
+From 5007c2bd365a62db4d804738b214bffbd84fd5cc Mon Sep 17 00:00:00 2001
+From: Nikolay Sivov <nsivov@codeweavers.com>
+Date: Thu, 28 May 2020 18:54:19 +0300
+Subject: [PATCH] mfmediaengine: Add shut down state.
+
+Signed-off-by: Nikolay Sivov <nsivov@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/mfmediaengine/main.c                | 38 ++++++++++++++++++------
+ dlls/mfmediaengine/tests/mfmediaengine.c |  2 --
+ 2 files changed, 29 insertions(+), 11 deletions(-)
+
+diff --git a/dlls/mfmediaengine/main.c b/dlls/mfmediaengine/main.c
+index 050743e7e33..0c082a87f5f 100644
+--- a/dlls/mfmediaengine/main.c
++++ b/dlls/mfmediaengine/main.c
+@@ -54,16 +54,24 @@ enum media_engine_mode
+     MEDIA_ENGINE_FRAME_SERVER_MODE,
+ };
+ 
++/* Used with create flags. */
++enum media_engine_flags
++{
++    /* MF_MEDIA_ENGINE_CREATEFLAGS_MASK is 0x1f. */
++    FLAGS_ENGINE_SHUT_DOWN = 0x20,
++};
++
+ struct media_engine
+ {
+     IMFMediaEngine IMFMediaEngine_iface;
+     LONG refcount;
+-    DWORD flags;
+     IMFMediaEngineNotify *callback;
+     UINT64 playback_hwnd;
+     DXGI_FORMAT output_format;
+     IMFDXGIDeviceManager *dxgi_manager;
+     enum media_engine_mode mode;
++    unsigned int flags;
++    CRITICAL_SECTION cs;
+ };
+ 
+ static inline struct media_engine *impl_from_IMFMediaEngine(IMFMediaEngine *iface)
+@@ -104,6 +112,7 @@ static void free_media_engine(struct media_engine *engine)
+         IMFMediaEngineNotify_Release(engine->callback);
+     if (engine->dxgi_manager)
+         IMFDXGIDeviceManager_Release(engine->dxgi_manager);
++    DeleteCriticalSection(&engine->cs);
+     heap_free(engine);
+ }
+ 
+@@ -395,9 +404,19 @@ static HRESULT WINAPI media_engine_GetVideoAspectRatio(IMFMediaEngine *iface, DW
+ 
+ static HRESULT WINAPI media_engine_Shutdown(IMFMediaEngine *iface)
+ {
++    struct media_engine *engine = impl_from_IMFMediaEngine(iface);
++    HRESULT hr = S_OK;
++
+     FIXME("(%p): stub.\n", iface);
+ 
+-    return E_NOTIMPL;
++    EnterCriticalSection(&engine->cs);
++    if (engine->flags & FLAGS_ENGINE_SHUT_DOWN)
++        hr = MF_E_SHUTDOWN;
++    else
++        engine->flags |= FLAGS_ENGINE_SHUT_DOWN;
++    LeaveCriticalSection(&engine->cs);
++
++    return hr;
+ }
+ 
+ static HRESULT WINAPI media_engine_TransferVideoFrame(IMFMediaEngine *iface, IUnknown *surface,
+@@ -490,10 +509,15 @@ static ULONG WINAPI media_engine_factory_Release(IMFMediaEngineClassFactory *ifa
+     return 1;
+ }
+ 
+-static HRESULT init_media_engine(IMFAttributes *attributes, struct media_engine *engine)
++static HRESULT init_media_engine(DWORD flags, IMFAttributes *attributes, struct media_engine *engine)
+ {
+     HRESULT hr;
+ 
++    engine->IMFMediaEngine_iface.lpVtbl = &media_engine_vtbl;
++    engine->refcount = 1;
++    engine->flags = flags & MF_MEDIA_ENGINE_CREATEFLAGS_MASK;
++    InitializeCriticalSection(&engine->cs);
++
+     hr = IMFAttributes_GetUnknown(attributes, &MF_MEDIA_ENGINE_CALLBACK, &IID_IMFMediaEngineNotify,
+                                   (void **)&engine->callback);
+     if (FAILED(hr))
+@@ -522,7 +546,7 @@ static HRESULT WINAPI media_engine_factory_CreateInstance(IMFMediaEngineClassFac
+     struct media_engine *object;
+     HRESULT hr;
+ 
+-    TRACE("(%p, %#x, %p, %p).\n", iface, flags, attributes, engine);
++    TRACE("%p, %#x, %p, %p.\n", iface, flags, attributes, engine);
+ 
+     if (!attributes || !engine)
+         return E_POINTER;
+@@ -531,17 +555,13 @@ static HRESULT WINAPI media_engine_factory_CreateInstance(IMFMediaEngineClassFac
+     if (!object)
+         return E_OUTOFMEMORY;
+ 
+-    hr = init_media_engine(attributes, object);
++    hr = init_media_engine(flags, attributes, object);
+     if (FAILED(hr))
+     {
+         free_media_engine(object);
+         return hr;
+     }
+ 
+-    object->IMFMediaEngine_iface.lpVtbl = &media_engine_vtbl;
+-    object->refcount = 1;
+-    object->flags = flags;
+-
+     *engine = &object->IMFMediaEngine_iface;
+ 
+     return S_OK;
+diff --git a/dlls/mfmediaengine/tests/mfmediaengine.c b/dlls/mfmediaengine/tests/mfmediaengine.c
+index 07bd8c81e67..d3c15566a43 100644
+--- a/dlls/mfmediaengine/tests/mfmediaengine.c
++++ b/dlls/mfmediaengine/tests/mfmediaengine.c
+@@ -247,11 +247,9 @@ static void test_Shutdown(void)
+     media_engine = create_media_engine(callback);
+ 
+     hr = IMFMediaEngine_Shutdown(media_engine);
+-todo_wine
+     ok(hr == S_OK, "Failed to shut down, hr %#x.\n", hr);
+ 
+     hr = IMFMediaEngine_Shutdown(media_engine);
+-todo_wine
+     ok(hr == MF_E_SHUTDOWN || broken(hr == S_OK) /* before win10 */, "Unexpected hr %#x.\n", hr);
+ 
+     hr = IMFMediaEngine_SetSource(media_engine, NULL);
+From e5b25e874e0c572ed78f4ce423bd6d4d59f51a6e Mon Sep 17 00:00:00 2001
+From: Nikolay Sivov <nsivov@codeweavers.com>
+Date: Thu, 28 May 2020 18:54:20 +0300
+Subject: [PATCH] mfmediaengine: Keep auto-play flag.
+
+Signed-off-by: Nikolay Sivov <nsivov@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/mfmediaengine/main.c                | 28 +++++++++++++++++++++---
+ dlls/mfmediaengine/tests/mfmediaengine.c |  1 -
+ 2 files changed, 25 insertions(+), 4 deletions(-)
+
+diff --git a/dlls/mfmediaengine/main.c b/dlls/mfmediaengine/main.c
+index 0c082a87f5f..7053a3afea3 100644
+--- a/dlls/mfmediaengine/main.c
++++ b/dlls/mfmediaengine/main.c
+@@ -59,6 +59,7 @@ enum media_engine_flags
+ {
+     /* MF_MEDIA_ENGINE_CREATEFLAGS_MASK is 0x1f. */
+     FLAGS_ENGINE_SHUT_DOWN = 0x20,
++    FLAGS_ENGINE_AUTO_PLAY = 0x40,
+ };
+ 
+ struct media_engine
+@@ -74,6 +75,14 @@ struct media_engine
+     CRITICAL_SECTION cs;
+ };
+ 
++static void media_engine_set_flag(struct media_engine *engine, unsigned int mask, BOOL value)
++{
++    if (value)
++        engine->flags |= mask;
++    else
++        engine->flags &= ~mask;
++}
++
+ static inline struct media_engine *impl_from_IMFMediaEngine(IMFMediaEngine *iface)
+ {
+     return CONTAINING_RECORD(iface, struct media_engine, IMFMediaEngine_iface);
+@@ -306,16 +315,29 @@ static BOOL WINAPI media_engine_IsEnded(IMFMediaEngine *iface)
+ 
+ static BOOL WINAPI media_engine_GetAutoPlay(IMFMediaEngine *iface)
+ {
+-    FIXME("(%p): stub.\n", iface);
++    struct media_engine *engine = impl_from_IMFMediaEngine(iface);
++    BOOL value;
+ 
+-    return FALSE;
++    TRACE("%p.\n", iface);
++
++    EnterCriticalSection(&engine->cs);
++    value = !!(engine->flags & FLAGS_ENGINE_AUTO_PLAY);
++    LeaveCriticalSection(&engine->cs);
++
++    return value;
+ }
+ 
+ static HRESULT WINAPI media_engine_SetAutoPlay(IMFMediaEngine *iface, BOOL autoplay)
+ {
++    struct media_engine *engine = impl_from_IMFMediaEngine(iface);
++
+     FIXME("(%p, %d): stub.\n", iface, autoplay);
+ 
+-    return E_NOTIMPL;
++    EnterCriticalSection(&engine->cs);
++    media_engine_set_flag(engine, FLAGS_ENGINE_AUTO_PLAY, autoplay);
++    LeaveCriticalSection(&engine->cs);
++
++    return S_OK;
+ }
+ 
+ static BOOL WINAPI media_engine_GetLoop(IMFMediaEngine *iface)
+diff --git a/dlls/mfmediaengine/tests/mfmediaengine.c b/dlls/mfmediaengine/tests/mfmediaengine.c
+index d3c15566a43..8f6c4ca75bb 100644
+--- a/dlls/mfmediaengine/tests/mfmediaengine.c
++++ b/dlls/mfmediaengine/tests/mfmediaengine.c
+@@ -338,7 +338,6 @@ todo_wine
+     ok(!state, "Unexpected state.\n");
+ 
+     hr = IMFMediaEngine_SetAutoPlay(media_engine, TRUE);
+-todo_wine
+     ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
+ 
+     state = IMFMediaEngine_GetAutoPlay(media_engine);
+From 8805f0429e598e71c5a4b6519d11415282675ae8 Mon Sep 17 00:00:00 2001
+From: Nikolay Sivov <nsivov@codeweavers.com>
+Date: Thu, 28 May 2020 18:54:21 +0300
+Subject: [PATCH] mfmediaengine: Keep loop flag.
+
+Signed-off-by: Nikolay Sivov <nsivov@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/mfmediaengine/main.c                | 20 +++++++++++++++++---
+ dlls/mfmediaengine/tests/mfmediaengine.c |  3 ---
+ 2 files changed, 17 insertions(+), 6 deletions(-)
+
+diff --git a/dlls/mfmediaengine/main.c b/dlls/mfmediaengine/main.c
+index 7053a3afea3..eef485e315b 100644
+--- a/dlls/mfmediaengine/main.c
++++ b/dlls/mfmediaengine/main.c
+@@ -60,6 +60,7 @@ enum media_engine_flags
+     /* MF_MEDIA_ENGINE_CREATEFLAGS_MASK is 0x1f. */
+     FLAGS_ENGINE_SHUT_DOWN = 0x20,
+     FLAGS_ENGINE_AUTO_PLAY = 0x40,
++    FLAGS_ENGINE_LOOP = 0x80,
+ };
+ 
+ struct media_engine
+@@ -342,16 +343,29 @@ static HRESULT WINAPI media_engine_SetAutoPlay(IMFMediaEngine *iface, BOOL autop
+ 
+ static BOOL WINAPI media_engine_GetLoop(IMFMediaEngine *iface)
+ {
+-    FIXME("(%p): stub.\n", iface);
++    struct media_engine *engine = impl_from_IMFMediaEngine(iface);
++    BOOL value;
+ 
+-    return FALSE;
++    TRACE("%p.\n", iface);
++
++    EnterCriticalSection(&engine->cs);
++    value = !!(engine->flags & FLAGS_ENGINE_LOOP);
++    LeaveCriticalSection(&engine->cs);
++
++    return value;
+ }
+ 
+ static HRESULT WINAPI media_engine_SetLoop(IMFMediaEngine *iface, BOOL loop)
+ {
++    struct media_engine *engine = impl_from_IMFMediaEngine(iface);
++
+     FIXME("(%p, %d): stub.\n", iface, loop);
+ 
+-    return E_NOTIMPL;
++    EnterCriticalSection(&engine->cs);
++    media_engine_set_flag(engine, FLAGS_ENGINE_LOOP, loop);
++    LeaveCriticalSection(&engine->cs);
++
++    return S_OK;
+ }
+ 
+ static HRESULT WINAPI media_engine_Play(IMFMediaEngine *iface)
+diff --git a/dlls/mfmediaengine/tests/mfmediaengine.c b/dlls/mfmediaengine/tests/mfmediaengine.c
+index 8f6c4ca75bb..504464b5272 100644
+--- a/dlls/mfmediaengine/tests/mfmediaengine.c
++++ b/dlls/mfmediaengine/tests/mfmediaengine.c
+@@ -341,7 +341,6 @@ todo_wine
+     ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
+ 
+     state = IMFMediaEngine_GetAutoPlay(media_engine);
+-todo_wine
+     ok(!!state, "Unexpected state.\n");
+ 
+     /* Loop mode is still accessible. */
+@@ -349,11 +348,9 @@ todo_wine
+     ok(!state, "Unexpected state.\n");
+ 
+     hr = IMFMediaEngine_SetLoop(media_engine, TRUE);
+-todo_wine
+     ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
+ 
+     state = IMFMediaEngine_GetLoop(media_engine);
+-todo_wine
+     ok(!!state, "Unexpected state.\n");
+ 
+     hr = IMFMediaEngine_Play(media_engine);
+From f465187f411b2d0b83fee25051d6b4d2c17e4ff8 Mon Sep 17 00:00:00 2001
+From: Nikolay Sivov <nsivov@codeweavers.com>
+Date: Fri, 29 May 2020 21:28:38 +0300
+Subject: [PATCH] mfmediaengine: Create media session instance.
+
+Signed-off-by: Nikolay Sivov <nsivov@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/mfmediaengine/Makefile.in |  2 +-
+ dlls/mfmediaengine/main.c      | 78 ++++++++++++++++++++++++++++++++++
+ 2 files changed, 79 insertions(+), 1 deletion(-)
+
+diff --git a/dlls/mfmediaengine/Makefile.in b/dlls/mfmediaengine/Makefile.in
+index 292baa8001e..2278e87a645 100644
+--- a/dlls/mfmediaengine/Makefile.in
++++ b/dlls/mfmediaengine/Makefile.in
+@@ -1,6 +1,6 @@
+ MODULE    = mfmediaengine.dll
+ IMPORTLIB = mfmediaengine
+-IMPORTS = mfuuid uuid
++IMPORTS = mf mfuuid uuid
+ 
+ EXTRADLLFLAGS = -mno-cygwin
+ 
+diff --git a/dlls/mfmediaengine/main.c b/dlls/mfmediaengine/main.c
+index eef485e315b..77466e99931 100644
+--- a/dlls/mfmediaengine/main.c
++++ b/dlls/mfmediaengine/main.c
+@@ -66,6 +66,7 @@ enum media_engine_flags
+ struct media_engine
+ {
+     IMFMediaEngine IMFMediaEngine_iface;
++    IMFAsyncCallback session_events;
+     LONG refcount;
+     IMFMediaEngineNotify *callback;
+     UINT64 playback_hwnd;
+@@ -73,6 +74,7 @@ struct media_engine
+     IMFDXGIDeviceManager *dxgi_manager;
+     enum media_engine_mode mode;
+     unsigned int flags;
++    IMFMediaSession *session;
+     CRITICAL_SECTION cs;
+ };
+ 
+@@ -89,6 +91,70 @@ static inline struct media_engine *impl_from_IMFMediaEngine(IMFMediaEngine *ifac
+     return CONTAINING_RECORD(iface, struct media_engine, IMFMediaEngine_iface);
+ }
+ 
++static struct media_engine *impl_from_session_events_IMFAsyncCallback(IMFAsyncCallback *iface)
++{
++    return CONTAINING_RECORD(iface, struct media_engine, session_events);
++}
++
++static HRESULT WINAPI media_engine_session_events_QueryInterface(IMFAsyncCallback *iface, REFIID riid, void **obj)
++{
++    if (IsEqualIID(riid, &IID_IMFAsyncCallback) ||
++            IsEqualIID(riid, &IID_IUnknown))
++    {
++        *obj = iface;
++        IMFAsyncCallback_AddRef(iface);
++        return S_OK;
++    }
++
++    WARN("Unsupported interface %s.\n", debugstr_guid(riid));
++    *obj = NULL;
++    return E_NOINTERFACE;
++}
++
++static ULONG WINAPI media_engine_session_events_AddRef(IMFAsyncCallback *iface)
++{
++    struct media_engine *engine = impl_from_session_events_IMFAsyncCallback(iface);
++    return IMFMediaEngine_AddRef(&engine->IMFMediaEngine_iface);
++}
++
++static ULONG WINAPI media_engine_session_events_Release(IMFAsyncCallback *iface)
++{
++    struct media_engine *engine = impl_from_session_events_IMFAsyncCallback(iface);
++    return IMFMediaEngine_Release(&engine->IMFMediaEngine_iface);
++}
++
++static HRESULT WINAPI media_engine_session_events_GetParameters(IMFAsyncCallback *iface, DWORD *flags, DWORD *queue)
++{
++    return E_NOTIMPL;
++}
++
++static HRESULT WINAPI media_engine_session_events_Invoke(IMFAsyncCallback *iface, IMFAsyncResult *result)
++{
++    struct media_engine *engine = impl_from_session_events_IMFAsyncCallback(iface);
++    IMFMediaEvent *event = NULL;
++    HRESULT hr;
++
++    if (FAILED(hr = IMFMediaSession_EndGetEvent(engine->session, result, &event)))
++        WARN("Failed to get session event, hr %#x.\n", hr);
++
++    if (event)
++        IMFMediaEvent_Release(event);
++
++    if (FAILED(hr = IMFMediaSession_BeginGetEvent(engine->session, iface, NULL)))
++        WARN("Failed to subscribe to session events, hr %#x.\n", hr);
++
++    return S_OK;
++}
++
++static const IMFAsyncCallbackVtbl media_engine_session_events_vtbl =
++{
++    media_engine_session_events_QueryInterface,
++    media_engine_session_events_AddRef,
++    media_engine_session_events_Release,
++    media_engine_session_events_GetParameters,
++    media_engine_session_events_Invoke,
++};
++
+ static HRESULT WINAPI media_engine_QueryInterface(IMFMediaEngine *iface, REFIID riid, void **obj)
+ {
+     TRACE("(%p, %s, %p).\n", iface, debugstr_guid(riid), obj);
+@@ -122,6 +188,8 @@ static void free_media_engine(struct media_engine *engine)
+         IMFMediaEngineNotify_Release(engine->callback);
+     if (engine->dxgi_manager)
+         IMFDXGIDeviceManager_Release(engine->dxgi_manager);
++    if (engine->session)
++        IMFMediaSession_Release(engine->session);
+     DeleteCriticalSection(&engine->cs);
+     heap_free(engine);
+ }
+@@ -449,7 +517,10 @@ static HRESULT WINAPI media_engine_Shutdown(IMFMediaEngine *iface)
+     if (engine->flags & FLAGS_ENGINE_SHUT_DOWN)
+         hr = MF_E_SHUTDOWN;
+     else
++    {
+         engine->flags |= FLAGS_ENGINE_SHUT_DOWN;
++        IMFMediaSession_Shutdown(engine->session);
++    }
+     LeaveCriticalSection(&engine->cs);
+ 
+     return hr;
+@@ -550,6 +621,7 @@ static HRESULT init_media_engine(DWORD flags, IMFAttributes *attributes, struct
+     HRESULT hr;
+ 
+     engine->IMFMediaEngine_iface.lpVtbl = &media_engine_vtbl;
++    engine->session_events.lpVtbl = &media_engine_session_events_vtbl;
+     engine->refcount = 1;
+     engine->flags = flags & MF_MEDIA_ENGINE_CREATEFLAGS_MASK;
+     InitializeCriticalSection(&engine->cs);
+@@ -559,6 +631,12 @@ static HRESULT init_media_engine(DWORD flags, IMFAttributes *attributes, struct
+     if (FAILED(hr))
+         return MF_E_ATTRIBUTENOTFOUND;
+ 
++    if (FAILED(hr = MFCreateMediaSession(NULL, &engine->session)))
++        return hr;
++
++    if (FAILED(hr = IMFMediaSession_BeginGetEvent(engine->session, &engine->session_events, NULL)))
++        return hr;
++
+     IMFAttributes_GetUINT64(attributes, &MF_MEDIA_ENGINE_PLAYBACK_HWND, &engine->playback_hwnd);
+     IMFAttributes_GetUnknown(attributes, &MF_MEDIA_ENGINE_DXGI_MANAGER, &IID_IMFDXGIDeviceManager,
+                              (void **)&engine->dxgi_manager);
+From 41af1d1e710b0895f5aee04b178cdb59a283a40d Mon Sep 17 00:00:00 2001
+From: Nikolay Sivov <nsivov@codeweavers.com>
+Date: Fri, 29 May 2020 21:28:39 +0300
+Subject: [PATCH] mfmediaengine: Send "play" event on Play().
+
+Signed-off-by: Nikolay Sivov <nsivov@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/mfmediaengine/main.c                | 41 +++++++++++++++++++++---
+ dlls/mfmediaengine/tests/mfmediaengine.c | 33 ++++++++++++++++++-
+ 2 files changed, 68 insertions(+), 6 deletions(-)
+
+diff --git a/dlls/mfmediaengine/main.c b/dlls/mfmediaengine/main.c
+index 77466e99931..13cbeb4b8db 100644
+--- a/dlls/mfmediaengine/main.c
++++ b/dlls/mfmediaengine/main.c
+@@ -61,6 +61,8 @@ enum media_engine_flags
+     FLAGS_ENGINE_SHUT_DOWN = 0x20,
+     FLAGS_ENGINE_AUTO_PLAY = 0x40,
+     FLAGS_ENGINE_LOOP = 0x80,
++    FLAGS_ENGINE_PAUSED = 0x100,
++    FLAGS_ENGINE_WAITING = 0x200,
+ };
+ 
+ struct media_engine
+@@ -328,9 +330,16 @@ static double WINAPI media_engine_GetDuration(IMFMediaEngine *iface)
+ 
+ static BOOL WINAPI media_engine_IsPaused(IMFMediaEngine *iface)
+ {
+-    FIXME("(%p): stub.\n", iface);
++    struct media_engine *engine = impl_from_IMFMediaEngine(iface);
++    BOOL value;
+ 
+-    return FALSE;
++    TRACE("%p.\n", iface);
++
++    EnterCriticalSection(&engine->cs);
++    value = !!(engine->flags & FLAGS_ENGINE_PAUSED);
++    LeaveCriticalSection(&engine->cs);
++
++    return value;
+ }
+ 
+ static double WINAPI media_engine_GetDefaultPlaybackRate(IMFMediaEngine *iface)
+@@ -438,9 +447,31 @@ static HRESULT WINAPI media_engine_SetLoop(IMFMediaEngine *iface, BOOL loop)
+ 
+ static HRESULT WINAPI media_engine_Play(IMFMediaEngine *iface)
+ {
+-    FIXME("(%p): stub.\n", iface);
++    struct media_engine *engine = impl_from_IMFMediaEngine(iface);
++    PROPVARIANT var;
+ 
+-    return E_NOTIMPL;
++    TRACE("%p.\n", iface);
++
++    EnterCriticalSection(&engine->cs);
++
++    IMFMediaEngineNotify_EventNotify(engine->callback, MF_MEDIA_ENGINE_EVENT_PURGEQUEUEDEVENTS, 0, 0);
++
++    if (!(engine->flags & FLAGS_ENGINE_WAITING))
++    {
++        engine->flags &= ~FLAGS_ENGINE_PAUSED;
++        IMFMediaEngineNotify_EventNotify(engine->callback, MF_MEDIA_ENGINE_EVENT_PLAY, 0, 0);
++
++        var.vt = VT_EMPTY;
++        IMFMediaSession_Start(engine->session, &GUID_NULL, &var);
++
++        engine->flags |= FLAGS_ENGINE_WAITING;
++    }
++
++    IMFMediaEngineNotify_EventNotify(engine->callback, MF_MEDIA_ENGINE_EVENT_WAITING, 0, 0);
++
++    LeaveCriticalSection(&engine->cs);
++
++    return S_OK;
+ }
+ 
+ static HRESULT WINAPI media_engine_Pause(IMFMediaEngine *iface)
+@@ -623,7 +654,7 @@ static HRESULT init_media_engine(DWORD flags, IMFAttributes *attributes, struct
+     engine->IMFMediaEngine_iface.lpVtbl = &media_engine_vtbl;
+     engine->session_events.lpVtbl = &media_engine_session_events_vtbl;
+     engine->refcount = 1;
+-    engine->flags = flags & MF_MEDIA_ENGINE_CREATEFLAGS_MASK;
++    engine->flags = (flags & MF_MEDIA_ENGINE_CREATEFLAGS_MASK) | FLAGS_ENGINE_PAUSED;
+     InitializeCriticalSection(&engine->cs);
+ 
+     hr = IMFAttributes_GetUnknown(attributes, &MF_MEDIA_ENGINE_CALLBACK, &IID_IMFMediaEngineNotify,
+diff --git a/dlls/mfmediaengine/tests/mfmediaengine.c b/dlls/mfmediaengine/tests/mfmediaengine.c
+index 504464b5272..e7cb6432b92 100644
+--- a/dlls/mfmediaengine/tests/mfmediaengine.c
++++ b/dlls/mfmediaengine/tests/mfmediaengine.c
+@@ -307,7 +307,6 @@ todo_wine
+     ok(val == 0.0, "Unexpected time %f.\n", val);
+ 
+     state = IMFMediaEngine_IsPaused(media_engine);
+-todo_wine
+     ok(!!state, "Unexpected state %d.\n", state);
+ 
+     val = IMFMediaEngine_GetDefaultPlaybackRate(media_engine);
+@@ -393,6 +392,37 @@ todo_wine
+     IMFMediaEngine_Release(media_engine);
+ }
+ 
++static void test_Play(void)
++{
++    struct media_engine_notify notify_impl = {{&media_engine_notify_vtbl}, 1};
++    IMFMediaEngineNotify *callback = &notify_impl.IMFMediaEngineNotify_iface;
++    IMFMediaEngine *media_engine;
++    HRESULT hr;
++    BOOL ret;
++
++    media_engine = create_media_engine(callback);
++
++    ret = IMFMediaEngine_IsPaused(media_engine);
++    ok(ret, "Unexpected state %d.\n", ret);
++
++    hr = IMFMediaEngine_Play(media_engine);
++    ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++
++    ret = IMFMediaEngine_IsPaused(media_engine);
++    ok(!ret, "Unexpected state %d.\n", ret);
++
++    hr = IMFMediaEngine_Play(media_engine);
++    ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++
++    hr = IMFMediaEngine_Shutdown(media_engine);
++    ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++
++    ret = IMFMediaEngine_IsPaused(media_engine);
++    ok(!ret, "Unexpected state %d.\n", ret);
++
++    IMFMediaEngine_Release(media_engine);
++}
++
+ START_TEST(mfmediaengine)
+ {
+     HRESULT hr;
+@@ -416,6 +446,7 @@ START_TEST(mfmediaengine)
+     test_factory();
+     test_CreateInstance();
+     test_Shutdown();
++    test_Play();
+ 
+     IMFMediaEngineClassFactory_Release(factory);
+ 
+From 58f468038013db22ba1905d57df0eb58caad5dbb Mon Sep 17 00:00:00 2001
+From: Nikolay Sivov <nsivov@codeweavers.com>
+Date: Fri, 29 May 2020 21:28:40 +0300
+Subject: [PATCH] mfmediaengine: Send "pause" event on Pause().
+
+Signed-off-by: Nikolay Sivov <nsivov@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/mfmediaengine/main.c                | 21 +++++++++++++++++++--
+ dlls/mfmediaengine/tests/mfmediaengine.c | 17 +++++++++++++++++
+ 2 files changed, 36 insertions(+), 2 deletions(-)
+
+diff --git a/dlls/mfmediaengine/main.c b/dlls/mfmediaengine/main.c
+index 13cbeb4b8db..fcef1be048f 100644
+--- a/dlls/mfmediaengine/main.c
++++ b/dlls/mfmediaengine/main.c
+@@ -476,9 +476,26 @@ static HRESULT WINAPI media_engine_Play(IMFMediaEngine *iface)
+ 
+ static HRESULT WINAPI media_engine_Pause(IMFMediaEngine *iface)
+ {
+-    FIXME("(%p): stub.\n", iface);
++    struct media_engine *engine = impl_from_IMFMediaEngine(iface);
+ 
+-    return E_NOTIMPL;
++    TRACE("%p.\n", iface);
++
++    EnterCriticalSection(&engine->cs);
++
++    if (!(engine->flags & FLAGS_ENGINE_PAUSED))
++    {
++        engine->flags &= ~FLAGS_ENGINE_WAITING;
++        engine->flags |= FLAGS_ENGINE_PAUSED;
++
++        IMFMediaEngineNotify_EventNotify(engine->callback, MF_MEDIA_ENGINE_EVENT_TIMEUPDATE, 0, 0);
++        IMFMediaEngineNotify_EventNotify(engine->callback, MF_MEDIA_ENGINE_EVENT_PAUSE, 0, 0);
++    }
++
++    IMFMediaEngineNotify_EventNotify(engine->callback, MF_MEDIA_ENGINE_EVENT_PURGEQUEUEDEVENTS, 0, 0);
++
++    LeaveCriticalSection(&engine->cs);
++
++    return S_OK;
+ }
+ 
+ static BOOL WINAPI media_engine_GetMuted(IMFMediaEngine *iface)
+diff --git a/dlls/mfmediaengine/tests/mfmediaengine.c b/dlls/mfmediaengine/tests/mfmediaengine.c
+index e7cb6432b92..a3db611e9fc 100644
+--- a/dlls/mfmediaengine/tests/mfmediaengine.c
++++ b/dlls/mfmediaengine/tests/mfmediaengine.c
+@@ -421,6 +421,23 @@ static void test_Play(void)
+     ok(!ret, "Unexpected state %d.\n", ret);
+ 
+     IMFMediaEngine_Release(media_engine);
++
++    /* Play -> Pause */
++    media_engine = create_media_engine(callback);
++
++    hr = IMFMediaEngine_Play(media_engine);
++    ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++
++    ret = IMFMediaEngine_IsPaused(media_engine);
++    ok(!ret, "Unexpected state %d.\n", ret);
++
++    hr = IMFMediaEngine_Pause(media_engine);
++    ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++
++    ret = IMFMediaEngine_IsPaused(media_engine);
++    ok(!!ret, "Unexpected state %d.\n", ret);
++
++    IMFMediaEngine_Release(media_engine);
+ }
+ 
+ START_TEST(mfmediaengine)
+From 6fa8ff69300d167b34a4c4b079ae6d5924ba1fc4 Mon Sep 17 00:00:00 2001
+From: Nikolay Sivov <nsivov@codeweavers.com>
+Date: Tue, 2 Jun 2020 11:41:04 +0300
+Subject: [PATCH] mfmediaengine: Send "ratechange" event for both default and
+ playback rate changes.
+
+Signed-off-by: Nikolay Sivov <nsivov@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/mfmediaengine/main.c                | 60 ++++++++++++++++++++----
+ dlls/mfmediaengine/tests/mfmediaengine.c | 32 +++++++++++--
+ 2 files changed, 81 insertions(+), 11 deletions(-)
+
+diff --git a/dlls/mfmediaengine/main.c b/dlls/mfmediaengine/main.c
+index fcef1be048f..b9bf3c7027b 100644
+--- a/dlls/mfmediaengine/main.c
++++ b/dlls/mfmediaengine/main.c
+@@ -76,6 +76,8 @@ struct media_engine
+     IMFDXGIDeviceManager *dxgi_manager;
+     enum media_engine_mode mode;
+     unsigned int flags;
++    double playback_rate;
++    double default_playback_rate;
+     IMFMediaSession *session;
+     CRITICAL_SECTION cs;
+ };
+@@ -344,30 +346,70 @@ static BOOL WINAPI media_engine_IsPaused(IMFMediaEngine *iface)
+ 
+ static double WINAPI media_engine_GetDefaultPlaybackRate(IMFMediaEngine *iface)
+ {
+-    FIXME("(%p): stub.\n", iface);
++    struct media_engine *engine = impl_from_IMFMediaEngine(iface);
++    double rate;
+ 
+-    return 0.0;
++    TRACE("%p.\n", iface);
++
++    EnterCriticalSection(&engine->cs);
++    rate = engine->default_playback_rate;
++    LeaveCriticalSection(&engine->cs);
++
++    return rate;
+ }
+ 
+ static HRESULT WINAPI media_engine_SetDefaultPlaybackRate(IMFMediaEngine *iface, double rate)
+ {
+-    FIXME("(%p, %f): stub.\n", iface, rate);
++    struct media_engine *engine = impl_from_IMFMediaEngine(iface);
++    HRESULT hr = S_OK;
+ 
+-    return E_NOTIMPL;
++    TRACE("%p, %f.\n", iface, rate);
++
++    EnterCriticalSection(&engine->cs);
++    if (engine->flags & FLAGS_ENGINE_SHUT_DOWN)
++        hr = MF_E_SHUTDOWN;
++    else if (engine->default_playback_rate != rate)
++    {
++        engine->default_playback_rate = rate;
++        IMFMediaEngineNotify_EventNotify(engine->callback, MF_MEDIA_ENGINE_EVENT_RATECHANGE, 0, 0);
++    }
++    LeaveCriticalSection(&engine->cs);
++
++    return hr;
+ }
+ 
+ static double WINAPI media_engine_GetPlaybackRate(IMFMediaEngine *iface)
+ {
+-    FIXME("(%p): stub.\n", iface);
++    struct media_engine *engine = impl_from_IMFMediaEngine(iface);
++    double rate;
+ 
+-    return 0.0;
++    TRACE("%p.\n", iface);
++
++    EnterCriticalSection(&engine->cs);
++    rate = engine->playback_rate;
++    LeaveCriticalSection(&engine->cs);
++
++    return rate;
+ }
+ 
+ static HRESULT WINAPI media_engine_SetPlaybackRate(IMFMediaEngine *iface, double rate)
+ {
+-    FIXME("(%p, %f): stub.\n", iface, rate);
++    struct media_engine *engine = impl_from_IMFMediaEngine(iface);
++    HRESULT hr = S_OK;
+ 
+-    return E_NOTIMPL;
++    TRACE("%p, %f.\n", iface, rate);
++
++    EnterCriticalSection(&engine->cs);
++    if (engine->flags & FLAGS_ENGINE_SHUT_DOWN)
++        hr = MF_E_SHUTDOWN;
++    else if (engine->playback_rate != rate)
++    {
++        engine->playback_rate = rate;
++        IMFMediaEngineNotify_EventNotify(engine->callback, MF_MEDIA_ENGINE_EVENT_RATECHANGE, 0, 0);
++    }
++    LeaveCriticalSection(&engine->cs);
++
++    return hr;
+ }
+ 
+ static HRESULT WINAPI media_engine_GetPlayed(IMFMediaEngine *iface, IMFMediaTimeRange **played)
+@@ -672,6 +714,8 @@ static HRESULT init_media_engine(DWORD flags, IMFAttributes *attributes, struct
+     engine->session_events.lpVtbl = &media_engine_session_events_vtbl;
+     engine->refcount = 1;
+     engine->flags = (flags & MF_MEDIA_ENGINE_CREATEFLAGS_MASK) | FLAGS_ENGINE_PAUSED;
++    engine->default_playback_rate = 1.0;
++    engine->playback_rate = 1.0;
+     InitializeCriticalSection(&engine->cs);
+ 
+     hr = IMFAttributes_GetUnknown(attributes, &MF_MEDIA_ENGINE_CALLBACK, &IID_IMFMediaEngineNotify,
+diff --git a/dlls/mfmediaengine/tests/mfmediaengine.c b/dlls/mfmediaengine/tests/mfmediaengine.c
+index a3db611e9fc..4079e9aa70f 100644
+--- a/dlls/mfmediaengine/tests/mfmediaengine.c
++++ b/dlls/mfmediaengine/tests/mfmediaengine.c
+@@ -310,15 +310,12 @@ todo_wine
+     ok(!!state, "Unexpected state %d.\n", state);
+ 
+     val = IMFMediaEngine_GetDefaultPlaybackRate(media_engine);
+-todo_wine
+     ok(val == 1.0, "Unexpected rate %f.\n", val);
+ 
+     hr = IMFMediaEngine_SetDefaultPlaybackRate(media_engine, 2.0);
+-todo_wine
+     ok(hr == MF_E_SHUTDOWN, "Unexpected hr %#x.\n", hr);
+ 
+     val = IMFMediaEngine_GetPlaybackRate(media_engine);
+-todo_wine
+     ok(val == 1.0, "Unexpected rate %f.\n", val);
+ 
+     hr = IMFMediaEngine_GetPlayed(media_engine, &time_range);
+@@ -440,6 +437,34 @@ static void test_Play(void)
+     IMFMediaEngine_Release(media_engine);
+ }
+ 
++static void test_playback_rate(void)
++{
++    struct media_engine_notify notify_impl = {{&media_engine_notify_vtbl}, 1};
++    IMFMediaEngineNotify *callback = &notify_impl.IMFMediaEngineNotify_iface;
++    IMFMediaEngine *media_engine;
++    double rate;
++    HRESULT hr;
++
++    media_engine = create_media_engine(callback);
++
++    rate = IMFMediaEngine_GetDefaultPlaybackRate(media_engine);
++    ok(rate == 1.0, "Unexpected default rate.\n");
++
++    rate = IMFMediaEngine_GetPlaybackRate(media_engine);
++    ok(rate == 1.0, "Unexpected default rate.\n");
++
++    hr = IMFMediaEngine_SetPlaybackRate(media_engine, 0.0);
++    ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++
++    rate = IMFMediaEngine_GetPlaybackRate(media_engine);
++    ok(rate == 0.0, "Unexpected default rate.\n");
++
++    hr = IMFMediaEngine_SetDefaultPlaybackRate(media_engine, 0.0);
++    ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++
++    IMFMediaEngine_Release(media_engine);
++}
++
+ START_TEST(mfmediaengine)
+ {
+     HRESULT hr;
+@@ -464,6 +489,7 @@ START_TEST(mfmediaengine)
+     test_CreateInstance();
+     test_Shutdown();
+     test_Play();
++    test_playback_rate();
+ 
+     IMFMediaEngineClassFactory_Release(factory);
+ 
+From daa119581a5a7f739242764c158944bfabc680ce Mon Sep 17 00:00:00 2001
+From: Nikolay Sivov <nsivov@codeweavers.com>
+Date: Tue, 2 Jun 2020 11:41:05 +0300
+Subject: [PATCH] mfmediaengine: Send "volumechange" event on muted state
+ change.
+
+Signed-off-by: Nikolay Sivov <nsivov@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/mfmediaengine/main.c                | 29 ++++++++++++++++++---
+ dlls/mfmediaengine/tests/mfmediaengine.c | 32 ++++++++++++++++++++++--
+ 2 files changed, 55 insertions(+), 6 deletions(-)
+
+diff --git a/dlls/mfmediaengine/main.c b/dlls/mfmediaengine/main.c
+index b9bf3c7027b..731bccb581d 100644
+--- a/dlls/mfmediaengine/main.c
++++ b/dlls/mfmediaengine/main.c
+@@ -63,6 +63,7 @@ enum media_engine_flags
+     FLAGS_ENGINE_LOOP = 0x80,
+     FLAGS_ENGINE_PAUSED = 0x100,
+     FLAGS_ENGINE_WAITING = 0x200,
++    FLAGS_ENGINE_MUTED = 0x400,
+ };
+ 
+ struct media_engine
+@@ -542,16 +543,36 @@ static HRESULT WINAPI media_engine_Pause(IMFMediaEngine *iface)
+ 
+ static BOOL WINAPI media_engine_GetMuted(IMFMediaEngine *iface)
+ {
+-    FIXME("(%p): stub.\n", iface);
++    struct media_engine *engine = impl_from_IMFMediaEngine(iface);
++    BOOL ret;
+ 
+-    return FALSE;
++    TRACE("%p.\n", iface);
++
++    EnterCriticalSection(&engine->cs);
++    ret = !!(engine->flags & FLAGS_ENGINE_MUTED);
++    LeaveCriticalSection(&engine->cs);
++
++    return ret;
+ }
+ 
+ static HRESULT WINAPI media_engine_SetMuted(IMFMediaEngine *iface, BOOL muted)
+ {
+-    FIXME("(%p, %d): stub.\n", iface, muted);
++    struct media_engine *engine = impl_from_IMFMediaEngine(iface);
++    HRESULT hr = S_OK;
+ 
+-    return E_NOTIMPL;
++    TRACE("%p, %d.\n", iface, muted);
++
++    EnterCriticalSection(&engine->cs);
++    if (engine->flags & FLAGS_ENGINE_SHUT_DOWN)
++        hr = MF_E_SHUTDOWN;
++    else if (!!(engine->flags & FLAGS_ENGINE_MUTED) ^ !!muted)
++    {
++        media_engine_set_flag(engine, FLAGS_ENGINE_MUTED, muted);
++        IMFMediaEngineNotify_EventNotify(engine->callback, MF_MEDIA_ENGINE_EVENT_VOLUMECHANGE, 0, 0);
++    }
++    LeaveCriticalSection(&engine->cs);
++
++    return hr;
+ }
+ 
+ static double WINAPI media_engine_GetVolume(IMFMediaEngine *iface)
+diff --git a/dlls/mfmediaengine/tests/mfmediaengine.c b/dlls/mfmediaengine/tests/mfmediaengine.c
+index 4079e9aa70f..0839d1d4451 100644
+--- a/dlls/mfmediaengine/tests/mfmediaengine.c
++++ b/dlls/mfmediaengine/tests/mfmediaengine.c
+@@ -361,14 +361,13 @@ todo_wine
+     ok(!state, "Unexpected state.\n");
+ 
+     hr = IMFMediaEngine_SetMuted(media_engine, TRUE);
+-todo_wine
+     ok(hr == MF_E_SHUTDOWN, "Unexpected hr %#x.\n", hr);
+ 
+     val = IMFMediaEngine_GetVolume(media_engine);
+ todo_wine
+     ok(val == 1.0, "Unexpected value %f.\n", val);
+ 
+-    val = IMFMediaEngine_SetVolume(media_engine, 2.0);
++    hr = IMFMediaEngine_SetVolume(media_engine, 2.0);
+ todo_wine
+     ok(hr == MF_E_SHUTDOWN, "Unexpected hr %#x.\n", hr);
+ 
+@@ -465,6 +464,34 @@ static void test_playback_rate(void)
+     IMFMediaEngine_Release(media_engine);
+ }
+ 
++static void test_mute(void)
++{
++    struct media_engine_notify notify_impl = {{&media_engine_notify_vtbl}, 1};
++    IMFMediaEngineNotify *callback = &notify_impl.IMFMediaEngineNotify_iface;
++    IMFMediaEngine *media_engine;
++    HRESULT hr;
++    BOOL ret;
++
++    media_engine = create_media_engine(callback);
++
++    ret = IMFMediaEngine_GetMuted(media_engine);
++    ok(!ret, "Unexpected state.\n");
++
++    hr = IMFMediaEngine_SetMuted(media_engine, TRUE);
++    ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++
++    ret = IMFMediaEngine_GetMuted(media_engine);
++    ok(ret, "Unexpected state.\n");
++
++    hr = IMFMediaEngine_Shutdown(media_engine);
++    ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++
++    ret = IMFMediaEngine_GetMuted(media_engine);
++    ok(ret, "Unexpected state.\n");
++
++    IMFMediaEngine_Release(media_engine);
++}
++
+ START_TEST(mfmediaengine)
+ {
+     HRESULT hr;
+@@ -490,6 +517,7 @@ START_TEST(mfmediaengine)
+     test_Shutdown();
+     test_Play();
+     test_playback_rate();
++    test_mute();
+ 
+     IMFMediaEngineClassFactory_Release(factory);
+ 
+From e9cc1d58b4e5aa6c19a5d15f2da1675b635f95a4 Mon Sep 17 00:00:00 2001
+From: Nikolay Sivov <nsivov@codeweavers.com>
+Date: Tue, 2 Jun 2020 11:41:06 +0300
+Subject: [PATCH] mfmediaengine: Send "volumechange" event on volume change.
+
+Signed-off-by: Nikolay Sivov <nsivov@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/mfmediaengine/main.c                | 30 ++++++++++++++++++++----
+ dlls/mfmediaengine/tests/mfmediaengine.c |  2 --
+ 2 files changed, 26 insertions(+), 6 deletions(-)
+
+diff --git a/dlls/mfmediaengine/main.c b/dlls/mfmediaengine/main.c
+index 731bccb581d..59006e64ca7 100644
+--- a/dlls/mfmediaengine/main.c
++++ b/dlls/mfmediaengine/main.c
+@@ -79,6 +79,7 @@ struct media_engine
+     unsigned int flags;
+     double playback_rate;
+     double default_playback_rate;
++    double volume;
+     IMFMediaSession *session;
+     CRITICAL_SECTION cs;
+ };
+@@ -577,16 +578,36 @@ static HRESULT WINAPI media_engine_SetMuted(IMFMediaEngine *iface, BOOL muted)
+ 
+ static double WINAPI media_engine_GetVolume(IMFMediaEngine *iface)
+ {
+-    FIXME("(%p): stub.\n", iface);
++    struct media_engine *engine = impl_from_IMFMediaEngine(iface);
++    double volume;
+ 
+-    return 0.0;
++    TRACE("%p.\n", iface);
++
++    EnterCriticalSection(&engine->cs);
++    volume = engine->volume;
++    LeaveCriticalSection(&engine->cs);
++
++    return volume;
+ }
+ 
+ static HRESULT WINAPI media_engine_SetVolume(IMFMediaEngine *iface, double volume)
+ {
+-    FIXME("(%p, %f): stub.\n", iface, volume);
++    struct media_engine *engine = impl_from_IMFMediaEngine(iface);
++    HRESULT hr = S_OK;
+ 
+-    return E_NOTIMPL;
++    TRACE("%p, %f.\n", iface, volume);
++
++    EnterCriticalSection(&engine->cs);
++    if (engine->flags & FLAGS_ENGINE_SHUT_DOWN)
++        hr = MF_E_SHUTDOWN;
++    else if (volume != engine->volume)
++    {
++        engine->volume = volume;
++        IMFMediaEngineNotify_EventNotify(engine->callback, MF_MEDIA_ENGINE_EVENT_VOLUMECHANGE, 0, 0);
++    }
++    LeaveCriticalSection(&engine->cs);
++
++    return hr;
+ }
+ 
+ static BOOL WINAPI media_engine_HasVideo(IMFMediaEngine *iface)
+@@ -737,6 +758,7 @@ static HRESULT init_media_engine(DWORD flags, IMFAttributes *attributes, struct
+     engine->flags = (flags & MF_MEDIA_ENGINE_CREATEFLAGS_MASK) | FLAGS_ENGINE_PAUSED;
+     engine->default_playback_rate = 1.0;
+     engine->playback_rate = 1.0;
++    engine->volume = 1.0;
+     InitializeCriticalSection(&engine->cs);
+ 
+     hr = IMFAttributes_GetUnknown(attributes, &MF_MEDIA_ENGINE_CALLBACK, &IID_IMFMediaEngineNotify,
+diff --git a/dlls/mfmediaengine/tests/mfmediaengine.c b/dlls/mfmediaengine/tests/mfmediaengine.c
+index 0839d1d4451..a5b80ef25f4 100644
+--- a/dlls/mfmediaengine/tests/mfmediaengine.c
++++ b/dlls/mfmediaengine/tests/mfmediaengine.c
+@@ -364,11 +364,9 @@ todo_wine
+     ok(hr == MF_E_SHUTDOWN, "Unexpected hr %#x.\n", hr);
+ 
+     val = IMFMediaEngine_GetVolume(media_engine);
+-todo_wine
+     ok(val == 1.0, "Unexpected value %f.\n", val);
+ 
+     hr = IMFMediaEngine_SetVolume(media_engine, 2.0);
+-todo_wine
+     ok(hr == MF_E_SHUTDOWN, "Unexpected hr %#x.\n", hr);
+ 
+     state = IMFMediaEngine_HasVideo(media_engine);
+From 13aafb43a3fcdb00b74eb8bbd0cb7722aa5cba99 Mon Sep 17 00:00:00 2001
+From: Nikolay Sivov <nsivov@codeweavers.com>
+Date: Tue, 2 Jun 2020 11:41:07 +0300
+Subject: [PATCH] mfmediaengine: Propagate error out on missing callback
+ attribute.
+
+Signed-off-by: Nikolay Sivov <nsivov@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/mfmediaengine/main.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/dlls/mfmediaengine/main.c b/dlls/mfmediaengine/main.c
+index 59006e64ca7..5ec179614d0 100644
+--- a/dlls/mfmediaengine/main.c
++++ b/dlls/mfmediaengine/main.c
+@@ -762,9 +762,9 @@ static HRESULT init_media_engine(DWORD flags, IMFAttributes *attributes, struct
+     InitializeCriticalSection(&engine->cs);
+ 
+     hr = IMFAttributes_GetUnknown(attributes, &MF_MEDIA_ENGINE_CALLBACK, &IID_IMFMediaEngineNotify,
+-                                  (void **)&engine->callback);
++            (void **)&engine->callback);
+     if (FAILED(hr))
+-        return MF_E_ATTRIBUTENOTFOUND;
++        return hr;
+ 
+     if (FAILED(hr = MFCreateMediaSession(NULL, &engine->session)))
+         return hr;
+From 4bbb7b664934fff53add6141753d69c937bc2ce5 Mon Sep 17 00:00:00 2001
+From: Nikolay Sivov <nsivov@codeweavers.com>
+Date: Tue, 2 Jun 2020 12:35:13 +0300
+Subject: [PATCH] mfmediaengine: Duplicate configuration attributes.
+
+Signed-off-by: Nikolay Sivov <nsivov@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/mfmediaengine/Makefile.in |  2 +-
+ dlls/mfmediaengine/main.c      | 25 +++++++++++++++----------
+ 2 files changed, 16 insertions(+), 11 deletions(-)
+
+diff --git a/dlls/mfmediaengine/Makefile.in b/dlls/mfmediaengine/Makefile.in
+index 2278e87a645..cb593cb7edf 100644
+--- a/dlls/mfmediaengine/Makefile.in
++++ b/dlls/mfmediaengine/Makefile.in
+@@ -1,6 +1,6 @@
+ MODULE    = mfmediaengine.dll
+ IMPORTLIB = mfmediaengine
+-IMPORTS = mf mfuuid uuid
++IMPORTS = mfplat mf mfuuid uuid
+ 
+ EXTRADLLFLAGS = -mno-cygwin
+ 
+diff --git a/dlls/mfmediaengine/main.c b/dlls/mfmediaengine/main.c
+index 5ec179614d0..d698b53c38b 100644
+--- a/dlls/mfmediaengine/main.c
++++ b/dlls/mfmediaengine/main.c
+@@ -23,6 +23,7 @@
+ #include "windef.h"
+ #include "winbase.h"
+ 
++#include "mfapi.h"
+ #include "mfmediaengine.h"
+ #include "mferror.h"
+ #include "dxgi.h"
+@@ -72,9 +73,7 @@ struct media_engine
+     IMFAsyncCallback session_events;
+     LONG refcount;
+     IMFMediaEngineNotify *callback;
+-    UINT64 playback_hwnd;
+-    DXGI_FORMAT output_format;
+-    IMFDXGIDeviceManager *dxgi_manager;
++    IMFAttributes *attributes;
+     enum media_engine_mode mode;
+     unsigned int flags;
+     double playback_rate;
+@@ -192,10 +191,10 @@ static void free_media_engine(struct media_engine *engine)
+ {
+     if (engine->callback)
+         IMFMediaEngineNotify_Release(engine->callback);
+-    if (engine->dxgi_manager)
+-        IMFDXGIDeviceManager_Release(engine->dxgi_manager);
+     if (engine->session)
+         IMFMediaSession_Release(engine->session);
++    if (engine->attributes)
++        IMFAttributes_Release(engine->attributes);
+     DeleteCriticalSection(&engine->cs);
+     heap_free(engine);
+ }
+@@ -750,6 +749,8 @@ static ULONG WINAPI media_engine_factory_Release(IMFMediaEngineClassFactory *ifa
+ 
+ static HRESULT init_media_engine(DWORD flags, IMFAttributes *attributes, struct media_engine *engine)
+ {
++    DXGI_FORMAT output_format;
++    UINT64 playback_hwnd;
+     HRESULT hr;
+ 
+     engine->IMFMediaEngine_iface.lpVtbl = &media_engine_vtbl;
+@@ -772,11 +773,15 @@ static HRESULT init_media_engine(DWORD flags, IMFAttributes *attributes, struct
+     if (FAILED(hr = IMFMediaSession_BeginGetEvent(engine->session, &engine->session_events, NULL)))
+         return hr;
+ 
+-    IMFAttributes_GetUINT64(attributes, &MF_MEDIA_ENGINE_PLAYBACK_HWND, &engine->playback_hwnd);
+-    IMFAttributes_GetUnknown(attributes, &MF_MEDIA_ENGINE_DXGI_MANAGER, &IID_IMFDXGIDeviceManager,
+-                             (void **)&engine->dxgi_manager);
+-    hr = IMFAttributes_GetUINT32(attributes, &MF_MEDIA_ENGINE_VIDEO_OUTPUT_FORMAT, &engine->output_format);
+-    if (engine->playback_hwnd) /* FIXME: handle MF_MEDIA_ENGINE_PLAYBACK_VISUAL */
++    if (FAILED(hr = MFCreateAttributes(&engine->attributes, 0)))
++        return hr;
++
++    if (FAILED(hr = IMFAttributes_CopyAllItems(attributes, engine->attributes)))
++        return hr;
++
++    IMFAttributes_GetUINT64(attributes, &MF_MEDIA_ENGINE_PLAYBACK_HWND, &playback_hwnd);
++    hr = IMFAttributes_GetUINT32(attributes, &MF_MEDIA_ENGINE_VIDEO_OUTPUT_FORMAT, &output_format);
++    if (playback_hwnd) /* FIXME: handle MF_MEDIA_ENGINE_PLAYBACK_VISUAL */
+         engine->mode = MEDIA_ENGINE_RENDERING_MODE;
+     else
+     {
+From f151550e56df5e1b93b42844d66073f99c58b0d6 Mon Sep 17 00:00:00 2001
+From: Nikolay Sivov <nsivov@codeweavers.com>
+Date: Tue, 2 Jun 2020 11:41:09 +0300
+Subject: [PATCH] mfmediaengine: Forward buffering events to user callback.
+
+Signed-off-by: Nikolay Sivov <nsivov@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/mfmediaengine/main.c | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
+
+diff --git a/dlls/mfmediaengine/main.c b/dlls/mfmediaengine/main.c
+index d698b53c38b..b9a5fb46d6f 100644
+--- a/dlls/mfmediaengine/main.c
++++ b/dlls/mfmediaengine/main.c
+@@ -137,10 +137,32 @@ static HRESULT WINAPI media_engine_session_events_Invoke(IMFAsyncCallback *iface
+ {
+     struct media_engine *engine = impl_from_session_events_IMFAsyncCallback(iface);
+     IMFMediaEvent *event = NULL;
++    MediaEventType event_type;
+     HRESULT hr;
+ 
+     if (FAILED(hr = IMFMediaSession_EndGetEvent(engine->session, result, &event)))
++    {
+         WARN("Failed to get session event, hr %#x.\n", hr);
++        goto failed;
++    }
++
++    if (FAILED(hr = IMFMediaEvent_GetType(event, &event_type)))
++    {
++        WARN("Failed to get event type, hr %#x.\n", hr);
++        goto failed;
++    }
++
++    switch (event_type)
++    {
++        case MEBufferingStarted:
++        case MEBufferingStopped:
++
++            IMFMediaEngineNotify_EventNotify(engine->callback, event_type == MEBufferingStarted ?
++                    MF_MEDIA_ENGINE_EVENT_BUFFERINGSTARTED : MF_MEDIA_ENGINE_EVENT_BUFFERINGENDED, 0, 0);
++            break;
++    }
++
++failed:
+ 
+     if (event)
+         IMFMediaEvent_Release(event);
+From 68b5a0574c8ad6d1df27b3641f6be7ecbb6d4f4d Mon Sep 17 00:00:00 2001
+From: Nikolay Sivov <nsivov@codeweavers.com>
+Date: Tue, 2 Jun 2020 11:43:42 +0300
+Subject: [PATCH] mf/session: Handle source buffering events.
+
+Signed-off-by: Nikolay Sivov <nsivov@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/mf/session.c | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
+
+diff --git a/dlls/mf/session.c b/dlls/mf/session.c
+index ba30733fe5c..39b5e1a5377 100644
+--- a/dlls/mf/session.c
++++ b/dlls/mf/session.c
+@@ -2867,6 +2867,23 @@ static HRESULT WINAPI session_events_callback_Invoke(IMFAsyncCallback *iface, IM
+             LeaveCriticalSection(&session->cs);
+ 
+             break;
++
++        case MEBufferingStarted:
++        case MEBufferingStopped:
++
++            EnterCriticalSection(&session->cs);
++            if (session_get_media_source(session, (IMFMediaSource *)event_source))
++            {
++                if (event_type == MEBufferingStarted)
++                    IMFPresentationClock_Pause(session->clock);
++                else
++                    IMFPresentationClock_Start(session->clock, PRESENTATION_CURRENT_POSITION);
++
++                IMFMediaEventQueue_QueueEvent(session->event_queue, event);
++            }
++            LeaveCriticalSection(&session->cs);
++            break;
++
+         case MENewStream:
+             stream = (IMFMediaStream *)value.punkVal;
+ 
+From 04c2df85cb766d535f1522e162f2780043d305ac Mon Sep 17 00:00:00 2001
+From: Nikolay Sivov <nsivov@codeweavers.com>
+Date: Wed, 3 Jun 2020 20:08:37 +0300
+Subject: [PATCH] include: Add more Media Foundation error codes.
+
+Signed-off-by: Nikolay Sivov <nsivov@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ include/mferror.h | 24 ++++++++++++++++++++++++
+ 1 file changed, 24 insertions(+)
+
+diff --git a/include/mferror.h b/include/mferror.h
+index 523800d7f02..28910d25682 100644
+--- a/include/mferror.h
++++ b/include/mferror.h
+@@ -77,12 +77,28 @@
+ #define MF_E_DISABLED_IN_SAFEMODE                     _HRESULT_TYPEDEF_(0xc00d36ef)
+ #define MF_E_CANNOT_PARSE_BYTESTREAM                  _HRESULT_TYPEDEF_(0xc00d36f0)
+ #define MF_E_SOURCERESOLVER_MUTUALLY_EXCLUSIVE_FLAGS  _HRESULT_TYPEDEF_(0xc00d36f1)
++#define MF_E_CANNOT_CREATE_SINK                       _HRESULT_TYPEDEF_(0xc00d36fa)
+ #define MF_E_BYTESTREAM_UNKNOWN_LENGTH                _HRESULT_TYPEDEF_(0xc00d36fb)
++#define MF_E_SESSION_PAUSEWHILESTOPPED                _HRESULT_TYPEDEF_(0xc00d36fc)
++#define MF_S_ACTIVATE_REPLACED                        _HRESULT_TYPEDEF_(0x000d36fd)
++#define MF_E_FORMAT_CHANGE_NOT_SUPPORTED              _HRESULT_TYPEDEF_(0xc00d36fe)
+ #define MF_E_INVALID_WORKQUEUE                        _HRESULT_TYPEDEF_(0xc00d36ff)
++#define MF_E_DRM_UNSUPPORTED                          _HRESULT_TYPEDEF_(0xc00d3700)
++#define MF_E_UNAUTHORIZED                             _HRESULT_TYPEDEF_(0xc00d3701)
++#define MF_E_OUT_OF_RANGE                             _HRESULT_TYPEDEF_(0xc00d3702)
++#define MF_E_INVALID_CODEC_MERIT                      _HRESULT_TYPEDEF_(0xc00d3703)
++#define MF_E_HW_MFT_FAILED_START_STREAMING            _HRESULT_TYPEDEF_(0xc00d3704)
++#define MF_E_OPERATION_IN_PROGRESS                    _HRESULT_TYPEDEF_(0xc00d3705)
++#define MF_E_HARDWARE_DRM_UNSUPPORTED                 _HRESULT_TYPEDEF_(0xc00d3706)
++#define MF_E_DURATION_TOO_LONG                        _HRESULT_TYPEDEF_(0xc00d3707)
+ #define MF_E_NO_EVENTS_AVAILABLE                      _HRESULT_TYPEDEF_(0xc00d3e80)
+ #define MF_E_INVALID_STATE_TRANSITION                 _HRESULT_TYPEDEF_(0xc00d3e82)
+ #define MF_E_END_OF_STREAM                            _HRESULT_TYPEDEF_(0xc00d3e84)
+ #define MF_E_SHUTDOWN                                 _HRESULT_TYPEDEF_(0xc00d3e85)
++#define MF_E_MP3_NOT_FOUND                            _HRESULT_TYPEDEF_(0xc00d3e86)
++#define MF_E_MP3_OUT_OF_DATA                          _HRESULT_TYPEDEF_(0xc00d3e87)
++#define MF_E_MP3_NOTMP3                               _HRESULT_TYPEDEF_(0xc00d3e88)
++#define MF_E_MP3_NOTSUPPORTED                         _HRESULT_TYPEDEF_(0xc00d3e89)
+ #define MF_E_NO_DURATION                              _HRESULT_TYPEDEF_(0xc00d3e8a)
+ #define MF_E_INVALID_FORMAT                           _HRESULT_TYPEDEF_(0xc00d3e8c)
+ #define MF_E_PROPERTY_NOT_FOUND                       _HRESULT_TYPEDEF_(0xc00d3e8d)
+@@ -90,9 +106,17 @@
+ #define MF_E_PROPERTY_NOT_ALLOWED                     _HRESULT_TYPEDEF_(0xc00d3e8f)
+ #define MF_E_MEDIA_SOURCE_NOT_STARTED                 _HRESULT_TYPEDEF_(0xc00d3e91)
+ #define MF_E_UNSUPPORTED_FORMAT                       _HRESULT_TYPEDEF_(0xc00d3e98)
++#define MF_E_MP3_BAD_CRC                              _HRESULT_TYPEDEF_(0xc00d3e99)
++#define MF_E_NOT_PROTECTED                            _HRESULT_TYPEDEF_(0xc00d3e9a)
+ #define MF_E_MEDIA_SOURCE_WRONGSTATE                  _HRESULT_TYPEDEF_(0xc00d3e9b)
+ #define MF_E_MEDIA_SOURCE_NO_STREAMS_SELECTED         _HRESULT_TYPEDEF_(0xc00d3e9c)
++#define MF_E_CANNOT_FIND_KEYFRAME_SAMPLE              _HRESULT_TYPEDEF_(0xc00d3e9d)
+ #define MF_E_UNSUPPORTED_CHARACTERISTICS              _HRESULT_TYPEDEF_(0xc00d3e9e)
++#define MF_E_NO_AUDIO_RECORDING_DEVICE                _HRESULT_TYPEDEF_(0xc00d3e9f)
++#define MF_E_AUDIO_RECORDING_DEVICE_IN_USE            _HRESULT_TYPEDEF_(0xc00d3ea0)
++#define MF_E_AUDIO_RECORDING_DEVICE_INVALIDATED       _HRESULT_TYPEDEF_(0xc00d3ea1)
++#define MF_E_VIDEO_RECORDING_DEVICE_INVALIDATED       _HRESULT_TYPEDEF_(0xc00d3ea2)
++#define MF_E_VIDEO_RECORDING_DEVICE_PREEMPTED         _HRESULT_TYPEDEF_(0xc00d3ea3)
+ 
+ #define MF_E_STREAMSINK_REMOVED                       _HRESULT_TYPEDEF_(0xc00d4a38)
+ #define MF_E_STREAMSINKS_OUT_OF_SYNC                  _HRESULT_TYPEDEF_(0xc00d4a3a)
+From c1a12f10b34c7f78e7f5f50a78a80f7db5a74ddd Mon Sep 17 00:00:00 2001
+From: Nikolay Sivov <nsivov@codeweavers.com>
+Date: Wed, 3 Jun 2020 20:08:38 +0300
+Subject: [PATCH] mfmediaengine: Set media type flags on source resolution.
+
+Signed-off-by: Nikolay Sivov <nsivov@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/mfmediaengine/main.c | 203 ++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 193 insertions(+), 10 deletions(-)
+
+diff --git a/dlls/mfmediaengine/main.c b/dlls/mfmediaengine/main.c
+index b9a5fb46d6f..4136382566d 100644
+--- a/dlls/mfmediaengine/main.c
++++ b/dlls/mfmediaengine/main.c
+@@ -65,12 +65,15 @@ enum media_engine_flags
+     FLAGS_ENGINE_PAUSED = 0x100,
+     FLAGS_ENGINE_WAITING = 0x200,
+     FLAGS_ENGINE_MUTED = 0x400,
++    FLAGS_ENGINE_HAS_AUDIO = 0x800,
++    FLAGS_ENGINE_HAS_VIDEO = 0x1000,
+ };
+ 
+ struct media_engine
+ {
+     IMFMediaEngine IMFMediaEngine_iface;
+     IMFAsyncCallback session_events;
++    IMFAsyncCallback load_handler;
+     LONG refcount;
+     IMFMediaEngineNotify *callback;
+     IMFAttributes *attributes;
+@@ -80,6 +83,7 @@ struct media_engine
+     double default_playback_rate;
+     double volume;
+     IMFMediaSession *session;
++    IMFSourceResolver *resolver;
+     CRITICAL_SECTION cs;
+ };
+ 
+@@ -101,7 +105,12 @@ static struct media_engine *impl_from_session_events_IMFAsyncCallback(IMFAsyncCa
+     return CONTAINING_RECORD(iface, struct media_engine, session_events);
+ }
+ 
+-static HRESULT WINAPI media_engine_session_events_QueryInterface(IMFAsyncCallback *iface, REFIID riid, void **obj)
++static struct media_engine *impl_from_load_handler_IMFAsyncCallback(IMFAsyncCallback *iface)
++{
++    return CONTAINING_RECORD(iface, struct media_engine, load_handler);
++}
++
++static HRESULT WINAPI media_engine_callback_QueryInterface(IMFAsyncCallback *iface, REFIID riid, void **obj)
+ {
+     if (IsEqualIID(riid, &IID_IMFAsyncCallback) ||
+             IsEqualIID(riid, &IID_IUnknown))
+@@ -128,7 +137,7 @@ static ULONG WINAPI media_engine_session_events_Release(IMFAsyncCallback *iface)
+     return IMFMediaEngine_Release(&engine->IMFMediaEngine_iface);
+ }
+ 
+-static HRESULT WINAPI media_engine_session_events_GetParameters(IMFAsyncCallback *iface, DWORD *flags, DWORD *queue)
++static HRESULT WINAPI media_engine_callback_GetParameters(IMFAsyncCallback *iface, DWORD *flags, DWORD *queue)
+ {
+     return E_NOTIMPL;
+ }
+@@ -175,13 +184,142 @@ static HRESULT WINAPI media_engine_session_events_Invoke(IMFAsyncCallback *iface
+ 
+ static const IMFAsyncCallbackVtbl media_engine_session_events_vtbl =
+ {
+-    media_engine_session_events_QueryInterface,
++    media_engine_callback_QueryInterface,
+     media_engine_session_events_AddRef,
+     media_engine_session_events_Release,
+-    media_engine_session_events_GetParameters,
++    media_engine_callback_GetParameters,
+     media_engine_session_events_Invoke,
+ };
+ 
++static ULONG WINAPI media_engine_load_handler_AddRef(IMFAsyncCallback *iface)
++{
++    struct media_engine *engine = impl_from_load_handler_IMFAsyncCallback(iface);
++    return IMFMediaEngine_AddRef(&engine->IMFMediaEngine_iface);
++}
++
++static ULONG WINAPI media_engine_load_handler_Release(IMFAsyncCallback *iface)
++{
++    struct media_engine *engine = impl_from_load_handler_IMFAsyncCallback(iface);
++    return IMFMediaEngine_Release(&engine->IMFMediaEngine_iface);
++}
++
++static HRESULT media_engine_create_topology(struct media_engine *engine, IMFMediaSource *source)
++{
++    IMFStreamDescriptor *sd_audio = NULL, *sd_video = NULL;
++    unsigned int stream_count = 0, i;
++    IMFPresentationDescriptor *pd;
++    HRESULT hr;
++
++    if (FAILED(hr = IMFMediaSource_CreatePresentationDescriptor(source, &pd)))
++        return hr;
++
++    if (FAILED(hr = IMFPresentationDescriptor_GetStreamDescriptorCount(pd, &stream_count)))
++        WARN("Failed to get stream count, hr %#x.\n", hr);
++
++    /* Enable first video stream and first audio stream. */
++
++    for (i = 0; i < stream_count; ++i)
++    {
++        IMFMediaTypeHandler *type_handler;
++        IMFStreamDescriptor *sd;
++        BOOL selected;
++
++        IMFPresentationDescriptor_DeselectStream(pd, i);
++
++        if (sd_audio && sd_video)
++            continue;
++
++        IMFPresentationDescriptor_GetStreamDescriptorByIndex(pd, i, &selected, &sd);
++
++        if (SUCCEEDED(IMFStreamDescriptor_GetMediaTypeHandler(sd, &type_handler)))
++        {
++            GUID major = { 0 };
++
++            IMFMediaTypeHandler_GetMajorType(type_handler, &major);
++
++            if (IsEqualGUID(&major, &MFMediaType_Audio) && !sd_audio)
++            {
++                sd_audio = sd;
++                IMFStreamDescriptor_AddRef(sd_audio);
++                IMFPresentationDescriptor_SelectStream(pd, i);
++            }
++            else if (IsEqualGUID(&major, &MFMediaType_Video) && !sd_video && !(engine->flags & MF_MEDIA_ENGINE_AUDIOONLY))
++            {
++                sd_video = sd;
++                IMFStreamDescriptor_AddRef(sd_video);
++                IMFPresentationDescriptor_SelectStream(pd, i);
++            }
++
++            IMFMediaTypeHandler_Release(type_handler);
++        }
++    }
++
++    if (!sd_video && !sd_audio)
++    {
++        IMFPresentationDescriptor_Release(pd);
++        return E_UNEXPECTED;
++    }
++
++    if (sd_video)
++        engine->flags |= FLAGS_ENGINE_HAS_VIDEO;
++    if (sd_audio)
++        engine->flags |= FLAGS_ENGINE_HAS_AUDIO;
++
++    /* TODO: set duration */
++
++    if (sd_video)
++        IMFStreamDescriptor_Release(sd_video);
++    if (sd_audio)
++        IMFStreamDescriptor_Release(sd_audio);
++
++    IMFPresentationDescriptor_Release(pd);
++
++    return S_OK;
++}
++
++static HRESULT WINAPI media_engine_load_handler_Invoke(IMFAsyncCallback *iface, IMFAsyncResult *result)
++{
++    struct media_engine *engine = impl_from_load_handler_IMFAsyncCallback(iface);
++    MF_OBJECT_TYPE obj_type;
++    IMFMediaSource *source;
++    IUnknown *object = NULL;
++    HRESULT hr;
++
++    EnterCriticalSection(&engine->cs);
++
++    IMFMediaEngineNotify_EventNotify(engine->callback, MF_MEDIA_ENGINE_EVENT_LOADSTART, 0, 0);
++
++    if (FAILED(hr = IMFSourceResolver_EndCreateObjectFromURL(engine->resolver, result, &obj_type, &object)))
++        WARN("Failed to create source object, hr %#x.\n", hr);
++
++    if (object)
++    {
++        if (SUCCEEDED(hr = IUnknown_QueryInterface(object, &IID_IMFMediaSource, (void **)&source)))
++        {
++            hr = media_engine_create_topology(engine, source);
++            IMFMediaSource_Release(source);
++        }
++        IUnknown_Release(object);
++    }
++
++    if (FAILED(hr))
++        IMFMediaEngineNotify_EventNotify(engine->callback, MF_MEDIA_ENGINE_EVENT_ERROR,
++            MF_MEDIA_ENGINE_ERR_SRC_NOT_SUPPORTED, hr);
++
++    LeaveCriticalSection(&engine->cs);
++
++    return S_OK;
++}
++
++static const IMFAsyncCallbackVtbl media_engine_load_handler_vtbl =
++{
++    media_engine_callback_QueryInterface,
++    media_engine_load_handler_AddRef,
++    media_engine_load_handler_Release,
++    media_engine_callback_GetParameters,
++    media_engine_load_handler_Invoke,
++};
++
+ static HRESULT WINAPI media_engine_QueryInterface(IMFMediaEngine *iface, REFIID riid, void **obj)
+ {
+     TRACE("(%p, %s, %p).\n", iface, debugstr_guid(riid), obj);
+@@ -217,6 +355,8 @@ static void free_media_engine(struct media_engine *engine)
+         IMFMediaSession_Release(engine->session);
+     if (engine->attributes)
+         IMFAttributes_Release(engine->attributes);
++    if (engine->resolver)
++        IMFSourceResolver_Release(engine->resolver);
+     DeleteCriticalSection(&engine->cs);
+     heap_free(engine);
+ }
+@@ -257,9 +397,34 @@ static HRESULT WINAPI media_engine_SetSourceElements(IMFMediaEngine *iface, IMFM
+ 
+ static HRESULT WINAPI media_engine_SetSource(IMFMediaEngine *iface, BSTR url)
+ {
+-    FIXME("(%p, %s): stub.\n", iface, debugstr_w(url));
++    struct media_engine *engine = impl_from_IMFMediaEngine(iface);
++    HRESULT hr = S_OK;
+ 
+-    return E_NOTIMPL;
++    TRACE("%p, %s.\n", iface, debugstr_w(url));
++
++    EnterCriticalSection(&engine->cs);
++
++    IMFMediaEngineNotify_EventNotify(engine->callback, MF_MEDIA_ENGINE_EVENT_PURGEQUEUEDEVENTS, 0, 0);
++
++    if (url)
++    {
++        IPropertyStore *props = NULL;
++        unsigned int flags;
++
++        flags = MF_RESOLUTION_MEDIASOURCE;
++        if (engine->flags & MF_MEDIA_ENGINE_DISABLE_LOCAL_PLUGINS)
++            flags |= MF_RESOLUTION_DISABLE_LOCAL_PLUGINS;
++
++        IMFAttributes_GetUnknown(engine->attributes, &MF_MEDIA_ENGINE_SOURCE_RESOLVER_CONFIG_STORE,
++                &IID_IPropertyStore, (void **)&props);
++        hr = IMFSourceResolver_BeginCreateObjectFromURL(engine->resolver, url, flags, props, NULL, &engine->load_handler, NULL);
++        if (props)
++            IPropertyStore_Release(props);
++    }
++
++    LeaveCriticalSection(&engine->cs);
++
++    return hr;
+ }
+ 
+ static HRESULT WINAPI media_engine_GetCurrentSource(IMFMediaEngine *iface, BSTR *url)
+@@ -633,16 +798,30 @@ static HRESULT WINAPI media_engine_SetVolume(IMFMediaEngine *iface, double volum
+ 
+ static BOOL WINAPI media_engine_HasVideo(IMFMediaEngine *iface)
+ {
+-    FIXME("(%p): stub.\n", iface);
++    struct media_engine *engine = impl_from_IMFMediaEngine(iface);
++    BOOL value;
+ 
+-    return FALSE;
++    TRACE("%p.\n", iface);
++
++    EnterCriticalSection(&engine->cs);
++    value = !!(engine->flags & FLAGS_ENGINE_HAS_VIDEO);
++    LeaveCriticalSection(&engine->cs);
++
++    return value;
+ }
+ 
+ static BOOL WINAPI media_engine_HasAudio(IMFMediaEngine *iface)
+ {
+-    FIXME("(%p): stub.\n", iface);
++    struct media_engine *engine = impl_from_IMFMediaEngine(iface);
++    BOOL value;
+ 
+-    return FALSE;
++    TRACE("%p.\n", iface);
++
++    EnterCriticalSection(&engine->cs);
++    value = !!(engine->flags & FLAGS_ENGINE_HAS_AUDIO);
++    LeaveCriticalSection(&engine->cs);
++
++    return value;
+ }
+ 
+ static HRESULT WINAPI media_engine_GetNativeVideoSize(IMFMediaEngine *iface, DWORD *cx, DWORD *cy)
+@@ -777,6 +956,7 @@ static HRESULT init_media_engine(DWORD flags, IMFAttributes *attributes, struct
+ 
+     engine->IMFMediaEngine_iface.lpVtbl = &media_engine_vtbl;
+     engine->session_events.lpVtbl = &media_engine_session_events_vtbl;
++    engine->load_handler.lpVtbl = &media_engine_load_handler_vtbl;
+     engine->refcount = 1;
+     engine->flags = (flags & MF_MEDIA_ENGINE_CREATEFLAGS_MASK) | FLAGS_ENGINE_PAUSED;
+     engine->default_playback_rate = 1.0;
+@@ -795,6 +975,9 @@ static HRESULT init_media_engine(DWORD flags, IMFAttributes *attributes, struct
+     if (FAILED(hr = IMFMediaSession_BeginGetEvent(engine->session, &engine->session_events, NULL)))
+         return hr;
+ 
++    if (FAILED(hr = MFCreateSourceResolver(&engine->resolver)))
++        return hr;
++
+     if (FAILED(hr = MFCreateAttributes(&engine->attributes, 0)))
+         return hr;
+ 
+From 3e784ab4a63dbf7029bf16bb14a24672b8b66008 Mon Sep 17 00:00:00 2001
+From: Nikolay Sivov <nsivov@codeweavers.com>
+Date: Wed, 3 Jun 2020 20:08:39 +0300
+Subject: [PATCH] mfmediaengine: Set presentation duration attribute.
+
+Signed-off-by: Nikolay Sivov <nsivov@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/mfmediaengine/main.c | 30 +++++++++++++++++++++++++++---
+ 1 file changed, 27 insertions(+), 3 deletions(-)
+
+diff --git a/dlls/mfmediaengine/main.c b/dlls/mfmediaengine/main.c
+index 4136382566d..e39009b30b4 100644
+--- a/dlls/mfmediaengine/main.c
++++ b/dlls/mfmediaengine/main.c
+@@ -18,6 +18,7 @@
+ 
+ #define COBJMACROS
+ 
++#include <math.h>
+ #include <stdarg.h>
+ 
+ #include "windef.h"
+@@ -82,6 +83,7 @@ struct media_engine
+     double playback_rate;
+     double default_playback_rate;
+     double volume;
++    double duration;
+     IMFMediaSession *session;
+     IMFSourceResolver *resolver;
+     CRITICAL_SECTION cs;
+@@ -208,6 +210,7 @@ static HRESULT media_engine_create_topology(struct media_engine *engine, IMFMedi
+     IMFStreamDescriptor *sd_audio = NULL, *sd_video = NULL;
+     unsigned int stream_count = 0, i;
+     IMFPresentationDescriptor *pd;
++    UINT64 duration;
+     HRESULT hr;
+ 
+     if (FAILED(hr = IMFMediaSource_CreatePresentationDescriptor(source, &pd)))
+@@ -265,7 +268,20 @@ static HRESULT media_engine_create_topology(struct media_engine *engine, IMFMedi
+     if (sd_audio)
+         engine->flags |= FLAGS_ENGINE_HAS_AUDIO;
+ 
+-    /* TODO: set duration */
++    /* Assume live source if duration was not provided. */
++    if (SUCCEEDED(IMFPresentationDescriptor_GetUINT64(pd, &MF_PD_DURATION, &duration)))
++    {
++        /* Convert 100ns to seconds. */
++        engine->duration = duration / 10000000;
++    }
++    else
++        engine->duration = INFINITY;
++
++    IMFMediaEngineNotify_EventNotify(engine->callback, MF_MEDIA_ENGINE_EVENT_DURATIONCHANGE, 0, 0);
++    IMFMediaEngineNotify_EventNotify(engine->callback, MF_MEDIA_ENGINE_EVENT_LOADEDMETADATA, 0, 0);
++    IMFMediaEngineNotify_EventNotify(engine->callback, MF_MEDIA_ENGINE_EVENT_LOADEDDATA, 0, 0);
++
++    /* TODO: set up topology nodes */
+ 
+     if (sd_video)
+         IMFStreamDescriptor_Release(sd_video);
+@@ -513,9 +529,16 @@ static double WINAPI media_engine_GetStartTime(IMFMediaEngine *iface)
+ 
+ static double WINAPI media_engine_GetDuration(IMFMediaEngine *iface)
+ {
+-    FIXME("(%p): stub.\n", iface);
++    struct media_engine *engine = impl_from_IMFMediaEngine(iface);
++    double value;
+ 
+-    return 0.0;
++    TRACE("%p.\n", iface);
++
++    EnterCriticalSection(&engine->cs);
++    value = engine->duration;
++    LeaveCriticalSection(&engine->cs);
++
++    return value;
+ }
+ 
+ static BOOL WINAPI media_engine_IsPaused(IMFMediaEngine *iface)
+@@ -962,6 +985,7 @@ static HRESULT init_media_engine(DWORD flags, IMFAttributes *attributes, struct
+     engine->default_playback_rate = 1.0;
+     engine->playback_rate = 1.0;
+     engine->volume = 1.0;
++    engine->duration = NAN;
+     InitializeCriticalSection(&engine->cs);
+ 
+     hr = IMFAttributes_GetUnknown(attributes, &MF_MEDIA_ENGINE_CALLBACK, &IID_IMFMediaEngineNotify,
+From 63d8cfa8f98181754c893655734cdbd69778ea5d Mon Sep 17 00:00:00 2001
+From: Nikolay Sivov <nsivov@codeweavers.com>
+Date: Wed, 3 Jun 2020 20:08:40 +0300
+Subject: [PATCH] mfmediaengine/tests: Add some tests for error property.
+
+Signed-off-by: Nikolay Sivov <nsivov@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/mfmediaengine/tests/mfmediaengine.c | 55 ++++++++++++++++++++++++
+ 1 file changed, 55 insertions(+)
+
+diff --git a/dlls/mfmediaengine/tests/mfmediaengine.c b/dlls/mfmediaengine/tests/mfmediaengine.c
+index a5b80ef25f4..59154c8d4f0 100644
+--- a/dlls/mfmediaengine/tests/mfmediaengine.c
++++ b/dlls/mfmediaengine/tests/mfmediaengine.c
+@@ -490,6 +490,60 @@ static void test_mute(void)
+     IMFMediaEngine_Release(media_engine);
+ }
+ 
++static void test_error(void)
++{
++    struct media_engine_notify notify_impl = {{&media_engine_notify_vtbl}, 1};
++    IMFMediaEngineNotify *callback = &notify_impl.IMFMediaEngineNotify_iface;
++    IMFMediaEngine *media_engine;
++    IMFMediaError *eo, *eo2;
++    HRESULT hr;
++
++    media_engine = create_media_engine(callback);
++
++    eo = (void *)0xdeadbeef;
++    hr = IMFMediaEngine_GetError(media_engine, &eo);
++todo_wine {
++    ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++    ok(!eo, "Unexpected instance.\n");
++}
++    hr = IMFMediaEngine_SetErrorCode(media_engine, MF_MEDIA_ENGINE_ERR_ENCRYPTED + 1);
++todo_wine
++    ok(hr == E_INVALIDARG, "Unexpected hr %#x.\n", hr);
++
++    hr = IMFMediaEngine_SetErrorCode(media_engine, MF_MEDIA_ENGINE_ERR_ABORTED);
++todo_wine
++    ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++
++    eo = NULL;
++    hr = IMFMediaEngine_GetError(media_engine, &eo);
++todo_wine {
++    ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++    ok(!!eo, "Unexpected instance.\n");
++}
++    eo2 = NULL;
++    hr = IMFMediaEngine_GetError(media_engine, &eo2);
++todo_wine {
++    ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++    ok(eo2 != eo, "Unexpected instance.\n");
++}
++    if (eo2)
++        IMFMediaError_Release(eo2);
++    if (eo)
++        IMFMediaError_Release(eo);
++
++    hr = IMFMediaEngine_SetErrorCode(media_engine, MF_MEDIA_ENGINE_ERR_NOERROR);
++todo_wine
++    ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++
++    eo = (void *)0xdeadbeef;
++    hr = IMFMediaEngine_GetError(media_engine, &eo);
++todo_wine {
++    ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++    ok(!eo, "Unexpected instance.\n");
++}
++    IMFMediaEngine_Release(media_engine);
++}
++
+ START_TEST(mfmediaengine)
+ {
+     HRESULT hr;
+@@ -516,6 +570,7 @@ START_TEST(mfmediaengine)
+     test_Play();
+     test_playback_rate();
+     test_mute();
++    test_error();
+ 
+     IMFMediaEngineClassFactory_Release(factory);
+ 
+From 48c3a30650354f2ee5079533353a297850b6ec58 Mon Sep 17 00:00:00 2001
+From: Nikolay Sivov <nsivov@codeweavers.com>
+Date: Wed, 3 Jun 2020 20:08:41 +0300
+Subject: [PATCH] mfmediaengine: Implement error object.
+
+Signed-off-by: Nikolay Sivov <nsivov@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/mfmediaengine/main.c                | 124 ++++++++++++++++++++++-
+ dlls/mfmediaengine/tests/mfmediaengine.c |  28 +++++
+ 2 files changed, 150 insertions(+), 2 deletions(-)
+
+diff --git a/dlls/mfmediaengine/main.c b/dlls/mfmediaengine/main.c
+index e39009b30b4..d77b1e4afee 100644
+--- a/dlls/mfmediaengine/main.c
++++ b/dlls/mfmediaengine/main.c
+@@ -89,6 +89,126 @@ struct media_engine
+     CRITICAL_SECTION cs;
+ };
+ 
++struct media_error
++{
++    IMFMediaError IMFMediaError_iface;
++    LONG refcount;
++    unsigned int code;
++    HRESULT extended_code;
++};
++
++static struct media_error *impl_from_IMFMediaError(IMFMediaError *iface)
++{
++    return CONTAINING_RECORD(iface, struct media_error, IMFMediaError_iface);
++}
++
++static HRESULT WINAPI media_error_QueryInterface(IMFMediaError *iface, REFIID riid, void **obj)
++{
++    TRACE("%p, %s, %p.\n", iface, debugstr_guid(riid), obj);
++
++    if (IsEqualIID(riid, &IID_IMFMediaError) ||
++            IsEqualIID(riid, &IID_IUnknown))
++    {
++        *obj = iface;
++        IMFMediaError_AddRef(iface);
++        return S_OK;
++    }
++
++    WARN("Unsupported interface %s.\n", debugstr_guid(riid));
++    *obj = NULL;
++    return E_NOINTERFACE;
++}
++
++static ULONG WINAPI media_error_AddRef(IMFMediaError *iface)
++{
++    struct media_error *me = impl_from_IMFMediaError(iface);
++    ULONG refcount = InterlockedIncrement(&me->refcount);
++
++    TRACE("%p, refcount %u.\n", iface, refcount);
++
++    return refcount;
++}
++
++static ULONG WINAPI media_error_Release(IMFMediaError *iface)
++{
++    struct media_error *me = impl_from_IMFMediaError(iface);
++    ULONG refcount = InterlockedDecrement(&me->refcount);
++
++    TRACE("%p, refcount %u.\n", iface, refcount);
++
++    if (!refcount)
++        heap_free(me);
++
++    return refcount;
++}
++
++static USHORT WINAPI media_error_GetErrorCode(IMFMediaError *iface)
++{
++    struct media_error *me = impl_from_IMFMediaError(iface);
++    TRACE("%p.\n", iface);
++    return me->code;
++}
++
++static HRESULT WINAPI media_error_GetExtendedErrorCode(IMFMediaError *iface)
++{
++    struct media_error *me = impl_from_IMFMediaError(iface);
++    TRACE("%p.\n", iface);
++    return me->extended_code;
++}
++
++static HRESULT WINAPI media_error_SetErrorCode(IMFMediaError *iface, MF_MEDIA_ENGINE_ERR code)
++{
++    struct media_error *me = impl_from_IMFMediaError(iface);
++
++    TRACE("%p, %u.\n", iface, code);
++
++    if ((unsigned int)code > MF_MEDIA_ENGINE_ERR_ENCRYPTED)
++        return E_INVALIDARG;
++
++    me->code = code;
++
++    return S_OK;
++}
++
++static HRESULT WINAPI media_error_SetExtendedErrorCode(IMFMediaError *iface, HRESULT code)
++{
++    struct media_error *me = impl_from_IMFMediaError(iface);
++
++    TRACE("%p, %#x.\n", iface, code);
++
++    me->extended_code = code;
++
++    return S_OK;
++}
++
++static const IMFMediaErrorVtbl media_error_vtbl =
++{
++    media_error_QueryInterface,
++    media_error_AddRef,
++    media_error_Release,
++    media_error_GetErrorCode,
++    media_error_GetExtendedErrorCode,
++    media_error_SetErrorCode,
++    media_error_SetExtendedErrorCode,
++};
++
++static HRESULT create_media_error(IMFMediaError **ret)
++{
++    struct media_error *object;
++
++    *ret = NULL;
++
++    if (!(object = heap_alloc_zero(sizeof(*object))))
++        return E_OUTOFMEMORY;
++
++    object->IMFMediaError_iface.lpVtbl = &media_error_vtbl;
++    object->refcount = 1;
++
++    *ret = &object->IMFMediaError_iface;
++
++    return S_OK;
++}
++
+ static void media_engine_set_flag(struct media_engine *engine, unsigned int mask, BOOL value)
+ {
+     if (value)
+@@ -1060,9 +1180,9 @@ static HRESULT WINAPI media_engine_factory_CreateTimeRange(IMFMediaEngineClassFa
+ 
+ static HRESULT WINAPI media_engine_factory_CreateError(IMFMediaEngineClassFactory *iface, IMFMediaError **error)
+ {
+-    FIXME("(%p, %p): stub.\n", iface, error);
++    TRACE("%p, %p.\n", iface, error);
+ 
+-    return E_NOTIMPL;
++    return create_media_error(error);
+ }
+ 
+ static const IMFMediaEngineClassFactoryVtbl media_engine_factory_vtbl =
+diff --git a/dlls/mfmediaengine/tests/mfmediaengine.c b/dlls/mfmediaengine/tests/mfmediaengine.c
+index 59154c8d4f0..2f114db7e9e 100644
+--- a/dlls/mfmediaengine/tests/mfmediaengine.c
++++ b/dlls/mfmediaengine/tests/mfmediaengine.c
+@@ -496,6 +496,7 @@ static void test_error(void)
+     IMFMediaEngineNotify *callback = &notify_impl.IMFMediaEngineNotify_iface;
+     IMFMediaEngine *media_engine;
+     IMFMediaError *eo, *eo2;
++    unsigned int code;
+     HRESULT hr;
+ 
+     media_engine = create_media_engine(callback);
+@@ -542,6 +543,33 @@ todo_wine {
+     ok(!eo, "Unexpected instance.\n");
+ }
+     IMFMediaEngine_Release(media_engine);
++
++    /* Error object. */
++    hr = IMFMediaEngineClassFactory_CreateError(factory, &eo);
++    ok(hr == S_OK, "Failed to create error object, hr %#x.\n", hr);
++
++    code = IMFMediaError_GetErrorCode(eo);
++    ok(code == MF_MEDIA_ENGINE_ERR_NOERROR, "Unexpected code %u.\n", code);
++
++    hr = IMFMediaError_GetExtendedErrorCode(eo);
++    ok(hr == S_OK, "Unexpected code %#x.\n", hr);
++
++    hr = IMFMediaError_SetErrorCode(eo, MF_MEDIA_ENGINE_ERR_ENCRYPTED + 1);
++    ok(hr == E_INVALIDARG, "Unexpected hr %#x.\n", hr);
++
++    hr = IMFMediaError_SetErrorCode(eo, MF_MEDIA_ENGINE_ERR_ABORTED);
++    ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++
++    code = IMFMediaError_GetErrorCode(eo);
++    ok(code == MF_MEDIA_ENGINE_ERR_ABORTED, "Unexpected code %u.\n", code);
++
++    hr = IMFMediaError_SetExtendedErrorCode(eo, E_FAIL);
++    ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++
++    hr = IMFMediaError_GetExtendedErrorCode(eo);
++    ok(hr == E_FAIL, "Unexpected code %#x.\n", hr);
++
++    IMFMediaError_Release(eo);
+ }
+ 
+ START_TEST(mfmediaengine)
+From 4d56ed9d02bafd0fd4f7438c5dd78714a00b1e9f Mon Sep 17 00:00:00 2001
+From: Nikolay Sivov <nsivov@codeweavers.com>
+Date: Thu, 4 Jun 2020 13:41:45 +0300
+Subject: [PATCH] mfmediaengine: Implement error property.
+
+Signed-off-by: Nikolay Sivov <nsivov@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/mfmediaengine/main.c                | 39 +++++++++++++++++++++---
+ dlls/mfmediaengine/tests/mfmediaengine.c | 32 ++++++++++---------
+ 2 files changed, 51 insertions(+), 20 deletions(-)
+
+diff --git a/dlls/mfmediaengine/main.c b/dlls/mfmediaengine/main.c
+index d77b1e4afee..dba55bb937d 100644
+--- a/dlls/mfmediaengine/main.c
++++ b/dlls/mfmediaengine/main.c
+@@ -84,6 +84,7 @@ struct media_engine
+     double default_playback_rate;
+     double volume;
+     double duration;
++    MF_MEDIA_ENGINE_ERR error_code;
+     IMFMediaSession *session;
+     IMFSourceResolver *resolver;
+     CRITICAL_SECTION cs;
+@@ -512,16 +513,44 @@ static ULONG WINAPI media_engine_Release(IMFMediaEngine *iface)
+ 
+ static HRESULT WINAPI media_engine_GetError(IMFMediaEngine *iface, IMFMediaError **error)
+ {
+-    FIXME("(%p, %p): stub.\n", iface, error);
++    struct media_engine *engine = impl_from_IMFMediaEngine(iface);
++    HRESULT hr = S_OK;
+ 
+-    return E_NOTIMPL;
++    TRACE("%p, %p.\n", iface, error);
++
++    *error = NULL;
++
++    EnterCriticalSection(&engine->cs);
++    if (engine->flags & FLAGS_ENGINE_SHUT_DOWN)
++        hr = MF_E_SHUTDOWN;
++    else if (engine->error_code)
++    {
++        if (SUCCEEDED(hr = create_media_error(error)))
++            IMFMediaError_SetErrorCode(*error, engine->error_code);
++    }
++    LeaveCriticalSection(&engine->cs);
++
++    return hr;
+ }
+ 
+-static HRESULT WINAPI media_engine_SetErrorCode(IMFMediaEngine *iface, MF_MEDIA_ENGINE_ERR error)
++static HRESULT WINAPI media_engine_SetErrorCode(IMFMediaEngine *iface, MF_MEDIA_ENGINE_ERR code)
+ {
+-    FIXME("(%p, %d): stub.\n", iface, error);
++    struct media_engine *engine = impl_from_IMFMediaEngine(iface);
++    HRESULT hr = S_OK;
+ 
+-    return E_NOTIMPL;
++    TRACE("%p, %u.\n", iface, code);
++
++    if ((unsigned int)code > MF_MEDIA_ENGINE_ERR_ENCRYPTED)
++        return E_INVALIDARG;
++
++    EnterCriticalSection(&engine->cs);
++    if (engine->flags & FLAGS_ENGINE_SHUT_DOWN)
++        hr = MF_E_SHUTDOWN;
++    else
++        engine->error_code = code;
++    LeaveCriticalSection(&engine->cs);
++
++    return hr;
+ }
+ 
+ static HRESULT WINAPI media_engine_SetSourceElements(IMFMediaEngine *iface, IMFMediaEngineSrcElements *elements)
+diff --git a/dlls/mfmediaengine/tests/mfmediaengine.c b/dlls/mfmediaengine/tests/mfmediaengine.c
+index 2f114db7e9e..660e5b95331 100644
+--- a/dlls/mfmediaengine/tests/mfmediaengine.c
++++ b/dlls/mfmediaengine/tests/mfmediaengine.c
+@@ -503,45 +503,47 @@ static void test_error(void)
+ 
+     eo = (void *)0xdeadbeef;
+     hr = IMFMediaEngine_GetError(media_engine, &eo);
+-todo_wine {
+     ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
+     ok(!eo, "Unexpected instance.\n");
+-}
++
+     hr = IMFMediaEngine_SetErrorCode(media_engine, MF_MEDIA_ENGINE_ERR_ENCRYPTED + 1);
+-todo_wine
+     ok(hr == E_INVALIDARG, "Unexpected hr %#x.\n", hr);
+ 
+     hr = IMFMediaEngine_SetErrorCode(media_engine, MF_MEDIA_ENGINE_ERR_ABORTED);
+-todo_wine
+     ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
+ 
+     eo = NULL;
+     hr = IMFMediaEngine_GetError(media_engine, &eo);
+-todo_wine {
+     ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
+     ok(!!eo, "Unexpected instance.\n");
+-}
++
+     eo2 = NULL;
+     hr = IMFMediaEngine_GetError(media_engine, &eo2);
+-todo_wine {
+     ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
+     ok(eo2 != eo, "Unexpected instance.\n");
+-}
+-    if (eo2)
+-        IMFMediaError_Release(eo2);
+-    if (eo)
+-        IMFMediaError_Release(eo);
++
++    IMFMediaError_Release(eo2);
++    IMFMediaError_Release(eo);
+ 
+     hr = IMFMediaEngine_SetErrorCode(media_engine, MF_MEDIA_ENGINE_ERR_NOERROR);
+-todo_wine
+     ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
+ 
+     eo = (void *)0xdeadbeef;
+     hr = IMFMediaEngine_GetError(media_engine, &eo);
+-todo_wine {
+     ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
+     ok(!eo, "Unexpected instance.\n");
+-}
++
++    hr = IMFMediaEngine_Shutdown(media_engine);
++    ok(hr == S_OK, "Failed to shut down, hr %#x.\n", hr);
++
++    eo = (void *)0xdeadbeef;
++    hr = IMFMediaEngine_GetError(media_engine, &eo);
++    ok(hr == MF_E_SHUTDOWN, "Unexpected hr %#x.\n", hr);
++    ok(!eo, "Unexpected instance.\n");
++
++    hr = IMFMediaEngine_SetErrorCode(media_engine, MF_MEDIA_ENGINE_ERR_NOERROR);
++    ok(hr == MF_E_SHUTDOWN, "Unexpected hr %#x.\n", hr);
++
+     IMFMediaEngine_Release(media_engine);
+ 
+     /* Error object. */
+From fae575cee92ed98b5084f64ed27fd5519e4d65bf Mon Sep 17 00:00:00 2001
+From: Nikolay Sivov <nsivov@codeweavers.com>
+Date: Thu, 4 Jun 2020 13:41:46 +0300
+Subject: [PATCH] mfmediaengine: Fully initialize error state.
+
+Signed-off-by: Nikolay Sivov <nsivov@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/mfmediaengine/main.c | 12 ++++++++++--
+ 1 file changed, 10 insertions(+), 2 deletions(-)
+
+diff --git a/dlls/mfmediaengine/main.c b/dlls/mfmediaengine/main.c
+index dba55bb937d..7693205238a 100644
+--- a/dlls/mfmediaengine/main.c
++++ b/dlls/mfmediaengine/main.c
+@@ -85,6 +85,7 @@ struct media_engine
+     double volume;
+     double duration;
+     MF_MEDIA_ENGINE_ERR error_code;
++    HRESULT extended_code;
+     IMFMediaSession *session;
+     IMFSourceResolver *resolver;
+     CRITICAL_SECTION cs;
+@@ -440,8 +441,12 @@ static HRESULT WINAPI media_engine_load_handler_Invoke(IMFAsyncCallback *iface,
+     }
+ 
+     if (FAILED(hr))
+-        IMFMediaEngineNotify_EventNotify(engine->callback, MF_MEDIA_ENGINE_EVENT_ERROR,
+-            MF_MEDIA_ENGINE_ERR_SRC_NOT_SUPPORTED, hr);
++    {
++        engine->error_code = MF_MEDIA_ENGINE_ERR_SRC_NOT_SUPPORTED;
++        engine->extended_code = hr;
++        IMFMediaEngineNotify_EventNotify(engine->callback, MF_MEDIA_ENGINE_EVENT_ERROR, engine->error_code,
++                engine->extended_code);
++    }
+ 
+     LeaveCriticalSection(&engine->cs);
+ 
+@@ -526,7 +531,10 @@ static HRESULT WINAPI media_engine_GetError(IMFMediaEngine *iface, IMFMediaError
+     else if (engine->error_code)
+     {
+         if (SUCCEEDED(hr = create_media_error(error)))
++        {
+             IMFMediaError_SetErrorCode(*error, engine->error_code);
++            IMFMediaError_SetExtendedErrorCode(*error, engine->extended_code);
++        }
+     }
+     LeaveCriticalSection(&engine->cs);
+ 
+From 496a7035accadee1924f14ae609b3b8fd39c3cfd Mon Sep 17 00:00:00 2001
+From: Nikolay Sivov <nsivov@codeweavers.com>
+Date: Thu, 4 Jun 2020 13:41:47 +0300
+Subject: [PATCH] mfmediaengine: Implement GetCurrentSource().
+
+Signed-off-by: Nikolay Sivov <nsivov@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/mfmediaengine/Makefile.in |  2 +-
+ dlls/mfmediaengine/main.c      | 24 ++++++++++++++++++++++--
+ 2 files changed, 23 insertions(+), 3 deletions(-)
+
+diff --git a/dlls/mfmediaengine/Makefile.in b/dlls/mfmediaengine/Makefile.in
+index cb593cb7edf..b97e9eec331 100644
+--- a/dlls/mfmediaengine/Makefile.in
++++ b/dlls/mfmediaengine/Makefile.in
+@@ -1,6 +1,6 @@
+ MODULE    = mfmediaengine.dll
+ IMPORTLIB = mfmediaengine
+-IMPORTS = mfplat mf mfuuid uuid
++IMPORTS = oleaut32 mfplat mf mfuuid uuid
+ 
+ EXTRADLLFLAGS = -mno-cygwin
+ 
+diff --git a/dlls/mfmediaengine/main.c b/dlls/mfmediaengine/main.c
+index 7693205238a..2f4a38936c4 100644
+--- a/dlls/mfmediaengine/main.c
++++ b/dlls/mfmediaengine/main.c
+@@ -88,6 +88,7 @@ struct media_engine
+     HRESULT extended_code;
+     IMFMediaSession *session;
+     IMFSourceResolver *resolver;
++    BSTR current_source;
+     CRITICAL_SECTION cs;
+ };
+ 
+@@ -499,6 +500,7 @@ static void free_media_engine(struct media_engine *engine)
+         IMFAttributes_Release(engine->attributes);
+     if (engine->resolver)
+         IMFSourceResolver_Release(engine->resolver);
++    SysFreeString(engine->current_source);
+     DeleteCriticalSection(&engine->cs);
+     heap_free(engine);
+ }
+@@ -577,6 +579,11 @@ static HRESULT WINAPI media_engine_SetSource(IMFMediaEngine *iface, BSTR url)
+ 
+     EnterCriticalSection(&engine->cs);
+ 
++    SysFreeString(engine->current_source);
++    engine->current_source = NULL;
++    if (url)
++        engine->current_source = SysAllocString(url);
++
+     IMFMediaEngineNotify_EventNotify(engine->callback, MF_MEDIA_ENGINE_EVENT_PURGEQUEUEDEVENTS, 0, 0);
+ 
+     if (url)
+@@ -602,9 +609,22 @@ static HRESULT WINAPI media_engine_SetSource(IMFMediaEngine *iface, BSTR url)
+ 
+ static HRESULT WINAPI media_engine_GetCurrentSource(IMFMediaEngine *iface, BSTR *url)
+ {
+-    FIXME("(%p, %p): stub.\n", iface, url);
++    struct media_engine *engine = impl_from_IMFMediaEngine(iface);
++    HRESULT hr = S_OK;
+ 
+-    return E_NOTIMPL;
++    TRACE("%p, %p.\n", iface, url);
++
++    *url = NULL;
++
++    EnterCriticalSection(&engine->cs);
++    if (engine->current_source)
++    {
++        if (!(*url = SysAllocString(engine->current_source)))
++            hr = E_OUTOFMEMORY;
++    }
++    LeaveCriticalSection(&engine->cs);
++
++    return hr;
+ }
+ 
+ static USHORT WINAPI media_engine_GetNetworkState(IMFMediaEngine *iface)
+From b643cefdc0fccba846c545e73d342394be6d798f Mon Sep 17 00:00:00 2001
+From: Nikolay Sivov <nsivov@codeweavers.com>
+Date: Thu, 4 Jun 2020 13:41:48 +0300
+Subject: [PATCH] mfmediaengine: Update ready state property during resolution.
+
+Signed-off-by: Nikolay Sivov <nsivov@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/mfmediaengine/main.c | 19 +++++++++++++++++--
+ include/mfmediaengine.idl |  9 +++++++++
+ 2 files changed, 26 insertions(+), 2 deletions(-)
+
+diff --git a/dlls/mfmediaengine/main.c b/dlls/mfmediaengine/main.c
+index 2f4a38936c4..fee5f6338d5 100644
+--- a/dlls/mfmediaengine/main.c
++++ b/dlls/mfmediaengine/main.c
+@@ -86,6 +86,7 @@ struct media_engine
+     double duration;
+     MF_MEDIA_ENGINE_ERR error_code;
+     HRESULT extended_code;
++    MF_MEDIA_ENGINE_READY ready_state;
+     IMFMediaSession *session;
+     IMFSourceResolver *resolver;
+     BSTR current_source;
+@@ -400,8 +401,13 @@ static HRESULT media_engine_create_topology(struct media_engine *engine, IMFMedi
+     else
+         engine->duration = INFINITY;
+ 
++    engine->ready_state = MF_MEDIA_ENGINE_READY_HAVE_METADATA;
++
+     IMFMediaEngineNotify_EventNotify(engine->callback, MF_MEDIA_ENGINE_EVENT_DURATIONCHANGE, 0, 0);
+     IMFMediaEngineNotify_EventNotify(engine->callback, MF_MEDIA_ENGINE_EVENT_LOADEDMETADATA, 0, 0);
++
++    engine->ready_state = MF_MEDIA_ENGINE_READY_HAVE_ENOUGH_DATA;
++
+     IMFMediaEngineNotify_EventNotify(engine->callback, MF_MEDIA_ENGINE_EVENT_LOADEDDATA, 0, 0);
+ 
+     /* TODO: set up topology nodes */
+@@ -584,6 +590,8 @@ static HRESULT WINAPI media_engine_SetSource(IMFMediaEngine *iface, BSTR url)
+     if (url)
+         engine->current_source = SysAllocString(url);
+ 
++    engine->ready_state = MF_MEDIA_ENGINE_READY_HAVE_NOTHING;
++
+     IMFMediaEngineNotify_EventNotify(engine->callback, MF_MEDIA_ENGINE_EVENT_PURGEQUEUEDEVENTS, 0, 0);
+ 
+     if (url)
+@@ -671,9 +679,16 @@ static HRESULT WINAPI media_engine_CanPlayType(IMFMediaEngine *iface, BSTR type,
+ 
+ static USHORT WINAPI media_engine_GetReadyState(IMFMediaEngine *iface)
+ {
+-    FIXME("(%p): stub.\n", iface);
++    struct media_engine *engine = impl_from_IMFMediaEngine(iface);
++    unsigned short state;
+ 
+-    return 0;
++    TRACE("%p.\n", iface);
++
++    EnterCriticalSection(&engine->cs);
++    state = engine->ready_state;
++    LeaveCriticalSection(&engine->cs);
++
++    return state;
+ }
+ 
+ static BOOL WINAPI media_engine_IsSeeking(IMFMediaEngine *iface)
+diff --git a/include/mfmediaengine.idl b/include/mfmediaengine.idl
+index 4ea3d834cf2..b914cb3600b 100644
+--- a/include/mfmediaengine.idl
++++ b/include/mfmediaengine.idl
+@@ -137,6 +137,15 @@ typedef enum MF_MEDIA_ENGINE_EVENT
+     MF_MEDIA_ENGINE_EVENT_AUDIOENDPOINTCHANGE = 1016,
+ } MF_MEDIA_ENGINE_EVENT;
+ 
++typedef enum MF_MEDIA_ENGINE_READY
++{
++    MF_MEDIA_ENGINE_READY_HAVE_NOTHING,
++    MF_MEDIA_ENGINE_READY_HAVE_METADATA,
++    MF_MEDIA_ENGINE_READY_HAVE_CURRENT_DATA,
++    MF_MEDIA_ENGINE_READY_HAVE_FUTURE_DATA,
++    MF_MEDIA_ENGINE_READY_HAVE_ENOUGH_DATA,
++} MF_MEDIA_ENGINE_READY;
++
+ [
+     object,
+     uuid(fc0e10d2-ab2a-4501-a951-06bb1075184c),
+From a82fa9207d6875a096c0cbf2694d45cc98a201d8 Mon Sep 17 00:00:00 2001
+From: Nikolay Sivov <nsivov@codeweavers.com>
+Date: Thu, 4 Jun 2020 13:41:49 +0300
+Subject: [PATCH] mfmediaengine: Set up audio output branch.
+
+Signed-off-by: Nikolay Sivov <nsivov@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/mfmediaengine/main.c | 77 ++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 75 insertions(+), 2 deletions(-)
+
+diff --git a/dlls/mfmediaengine/main.c b/dlls/mfmediaengine/main.c
+index fee5f6338d5..d93e2b2f38c 100644
+--- a/dlls/mfmediaengine/main.c
++++ b/dlls/mfmediaengine/main.c
+@@ -329,11 +329,55 @@ static ULONG WINAPI media_engine_load_handler_Release(IMFAsyncCallback *iface)
+     return IMFMediaEngine_Release(&engine->IMFMediaEngine_iface);
+ }
+ 
++static HRESULT media_engine_create_source_node(IMFMediaSource *source, IMFPresentationDescriptor *pd, IMFStreamDescriptor *sd,
++        IMFTopologyNode **node)
++{
++    HRESULT hr;
++
++    if (FAILED(hr = MFCreateTopologyNode(MF_TOPOLOGY_SOURCESTREAM_NODE, node)))
++        return hr;
++
++    IMFTopologyNode_SetUnknown(*node, &MF_TOPONODE_SOURCE, (IUnknown *)source);
++    IMFTopologyNode_SetUnknown(*node, &MF_TOPONODE_PRESENTATION_DESCRIPTOR, (IUnknown *)pd);
++    IMFTopologyNode_SetUnknown(*node, &MF_TOPONODE_STREAM_DESCRIPTOR, (IUnknown *)sd);
++
++    return S_OK;
++}
++
++static HRESULT media_engine_create_audio_renderer(struct media_engine *engine, IMFTopologyNode **node)
++{
++    unsigned int category, role;
++    IMFActivate *sar_activate;
++    HRESULT hr;
++
++    *node = NULL;
++
++    if (FAILED(hr = MFCreateAudioRendererActivate(&sar_activate)))
++        return hr;
++
++    /* Configuration attributes keys differ between Engine and SAR. */
++    if (SUCCEEDED(IMFAttributes_GetUINT32(engine->attributes, &MF_MEDIA_ENGINE_AUDIO_CATEGORY, &category)))
++        IMFActivate_SetUINT32(sar_activate, &MF_AUDIO_RENDERER_ATTRIBUTE_STREAM_CATEGORY, category);
++    if (SUCCEEDED(IMFAttributes_GetUINT32(engine->attributes, &MF_MEDIA_ENGINE_AUDIO_ENDPOINT_ROLE, &role)))
++        IMFActivate_SetUINT32(sar_activate, &MF_AUDIO_RENDERER_ATTRIBUTE_ENDPOINT_ROLE, role);
++
++    if (SUCCEEDED(hr = MFCreateTopologyNode(MF_TOPOLOGY_OUTPUT_NODE, node)))
++    {
++        IMFTopologyNode_SetObject(*node, (IUnknown *)sar_activate);
++        IMFTopologyNode_SetUINT32(*node, &MF_TOPONODE_NOSHUTDOWN_ON_REMOVE, FALSE);
++    }
++
++    IMFActivate_Release(sar_activate);
++
++    return hr;
++}
++
+ static HRESULT media_engine_create_topology(struct media_engine *engine, IMFMediaSource *source)
+ {
+     IMFStreamDescriptor *sd_audio = NULL, *sd_video = NULL;
+     unsigned int stream_count = 0, i;
+     IMFPresentationDescriptor *pd;
++    IMFTopology *topology;
+     UINT64 duration;
+     HRESULT hr;
+ 
+@@ -410,7 +454,36 @@ static HRESULT media_engine_create_topology(struct media_engine *engine, IMFMedi
+ 
+     IMFMediaEngineNotify_EventNotify(engine->callback, MF_MEDIA_ENGINE_EVENT_LOADEDDATA, 0, 0);
+ 
+-    /* TODO: set up topology nodes */
++    /* TODO: set up video stream nodes */
++
++    if (SUCCEEDED(hr = MFCreateTopology(&topology)))
++    {
++        IMFTopologyNode *sar_node = NULL, *audio_src = NULL;
++
++        if (sd_audio)
++        {
++            if (FAILED(hr = media_engine_create_source_node(source, pd, sd_audio, &audio_src)))
++                WARN("Failed to create audio source node, hr %#x.\n", hr);
++
++            if (FAILED(hr = media_engine_create_audio_renderer(engine, &sar_node)))
++                WARN("Failed to create audio renderer node, hr %#x.\n", hr);
++
++            if (sar_node && audio_src)
++            {
++                IMFTopology_AddNode(topology, audio_src);
++                IMFTopology_AddNode(topology, sar_node);
++                IMFTopologyNode_ConnectOutput(audio_src, 0, sar_node, 0);
++            }
++
++            if (sar_node)
++                IMFTopologyNode_Release(sar_node);
++            if (audio_src)
++                IMFTopologyNode_Release(audio_src);
++        }
++    }
++
++    if (topology)
++        IMFTopology_Release(topology);
+ 
+     if (sd_video)
+         IMFStreamDescriptor_Release(sd_video);
+@@ -419,7 +492,7 @@ static HRESULT media_engine_create_topology(struct media_engine *engine, IMFMedi
+ 
+     IMFPresentationDescriptor_Release(pd);
+ 
+-    return S_OK;
++    return hr;
+ }
+ 
+ static HRESULT WINAPI media_engine_load_handler_Invoke(IMFAsyncCallback *iface, IMFAsyncResult *result)
+
+From: Anton Baskanov <baskanov@gmail.com>
+Subject: [PATCH 4/4] winegstreamer: Commit allocator before pausing the stream.
+Message-Id: <20200608180055.29454-4-baskanov@gmail.com>
+Date: Tue,  9 Jun 2020 01:00:55 +0700
+In-Reply-To: <20200608180055.29454-1-baskanov@gmail.com>
+References: <20200608180055.29454-1-baskanov@gmail.com>
+
+Signed-off-by: Anton Baskanov <baskanov@gmail.com>
+---
+Otherwise the streaming thread sometimes fails to allocate a sample.
+---
+ dlls/winegstreamer/gstdemux.c | 14 +++++++++-----
+ 1 file changed, 9 insertions(+), 5 deletions(-)
+
+diff --git a/dlls/winegstreamer/gstdemux.c b/dlls/winegstreamer/gstdemux.c
+index 299a7ddf56..7c38e421f9 100644
+--- a/dlls/winegstreamer/gstdemux.c
++++ b/dlls/winegstreamer/gstdemux.c
+@@ -1391,6 +1391,15 @@ static HRESULT gstdemux_init_stream(struct strmbase_filter *iface)
+     if (!filter->container)
+         return VFW_E_NOT_CONNECTED;
+ 
++    for (i = 0; i < filter->source_count; ++i)
++    {
++        if (SUCCEEDED(pin_hr = BaseOutputPinImpl_Active(&filter->sources[i]->pin)))
++            hr = pin_hr;
++    }
++
++    if (FAILED(hr))
++        return hr;
++
+     if (filter->no_more_pads_event)
+         ResetEvent(filter->no_more_pads_event);
+ 
+@@ -1422,11 +1431,6 @@ static HRESULT gstdemux_init_stream(struct strmbase_filter *iface)
+                 stop_type, seeking->llStop * 100));
+     }
+ 
+-    for (i = 0; i < filter->source_count; ++i)
+-    {
+-        if (SUCCEEDED(pin_hr = BaseOutputPinImpl_Active(&filter->sources[i]->pin)))
+-            hr = pin_hr;
+-    }
+     return hr;
+ }
+ 
+
+-- 
+2.17.1
+

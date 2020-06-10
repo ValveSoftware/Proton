@@ -65,8 +65,8 @@ index d7dbe573a4f..e03335a2709 100644
 +    const WCHAR *ptr;
 +
 +    if (name[0] && name[1] == ':') name += 2;  /* strip drive specification */
-+    if ((ptr = strrchrW( name, '\\' ))) name = ptr + 1;
-+    if ((ptr = strrchrW( name, '/' ))) name = ptr + 1;
++    if ((ptr = wcsrchr( name, '\\' ))) name = ptr + 1;
++    if ((ptr = wcsrchr( name, '/' ))) name = ptr + 1;
 +    return name;
 +}
 +

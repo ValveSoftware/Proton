@@ -785,7 +785,7 @@ index 431c247a072..c9fcad79316 100644
 +    while (*str)
 +    {
 +        const WCHAR *p1 = str, *p2 = sub;
-+        while (*p1 && *p2 && tolowerW(*p1) == tolowerW(*p2)) { p1++; p2++; }
++        while (*p1 && *p2 && RtlDowncaseUnicodeChar(*p1) == RtlDowncaseUnicodeChar(*p2)) { p1++; p2++; }
 +        if (!*p2) return (WCHAR *)str;
 +        str++;
 +    }
@@ -1854,106 +1854,6 @@ index a5235b69a8d..4b2c9bd41ae 100644
          /* forward request to the foreground window if it's in a different thread */
          tid = GetWindowThreadProcessId( foreground, &pid );
          if (tid && tid != GetCurrentThreadId() && pid == GetCurrentProcessId())
-From 02951753970f5b2a0dafe41aee9fe96bc1a24301 Mon Sep 17 00:00:00 2001
-From: Piotr Caban <piotr@codeweavers.com>
-Date: Wed, 4 Mar 2020 18:49:37 +0100
-Subject: [PATCH] HACK: ntdll: Mark first gta5.exe page as copied.
-
----
- dlls/ntdll/virtual.c | 30 +++++++++++++++++++++++++++---
- 1 file changed, 27 insertions(+), 3 deletions(-)
-
-diff --git a/dlls/ntdll/virtual.c b/dlls/ntdll/virtual.c
-index dbcbd52c6d6..90a790241a9 100644
---- a/dlls/ntdll/virtual.c
-+++ b/dlls/ntdll/virtual.c
-@@ -58,6 +58,7 @@
- #include "wine/exception.h"
- #include "wine/rbtree.h"
- #include "wine/debug.h"
-+#include "wine/unicode.h"
- #include "ntdll_misc.h"
-
- WINE_DEFAULT_DEBUG_CHANNEL(virtual);
-@@ -84,6 +85,7 @@ struct file_view
- #define VPROT_COMMITTED  0x20
- #define VPROT_WRITEWATCH 0x40
- #define VPROT_WRITTEN    0x80
-+#define VPROT_COPIED     0x100
- /* per-mapping protection flags */
- #define VPROT_SYSTEM     0x0200  /* system view (underlying mmap not under our control) */
-
-@@ -304,7 +306,8 @@ static const char *VIRTUAL_GetProtStr( BYTE prot )
-     buffer[0] = (prot & VPROT_COMMITTED) ? 'c' : '-';
-     buffer[1] = (prot & VPROT_GUARD) ? 'g' : ((prot & VPROT_WRITEWATCH) ? 'H' : '-');
-     buffer[2] = (prot & VPROT_READ) ? 'r' : '-';
--    buffer[3] = (prot & VPROT_WRITECOPY) ? 'W' : ((prot & VPROT_WRITE) ? 'w' : '-');
-+    buffer[3] = (prot & VPROT_WRITECOPY) ? (prot & VPROT_COPIED ? 'w' : 'W')
-+        : ((prot & VPROT_WRITE) ? 'w' : '-');
-     buffer[4] = (prot & VPROT_EXEC) ? 'x' : '-';
-     buffer[5] = 0;
-     return buffer;
-@@ -907,10 +907,9 @@ static DWORD VIRTUAL_GetWin32Prot( BYTE vprot, unsigned int map_prot )
- {
-     DWORD ret;
- 
--    if ((vprot & VPROT_WRITECOPY) && (vprot & VPROT_WRITTEN))
-+    if ((vprot & (VPROT_COPIED | VPROT_WRITECOPY)) == (VPROT_COPIED | VPROT_WRITECOPY))
-         vprot = (vprot & ~VPROT_WRITECOPY) | VPROT_WRITE;
-     ret = VIRTUAL_Win32Flags[vprot & 0x0f];
--    if (vprot & VPROT_GUARD) ret |= PAGE_GUARD;
-     if (map_prot & SEC_NOCACHE) ret |= PAGE_NOCACHE;
-     return ret;
- }
-@@ -2957,6 +2963,24 @@ NTSTATUS WINAPI DECLSPEC_HOTPATCH NtProtectVirtualMemory( HANDLE process, PVOID
-         {
-             old = VIRTUAL_GetWin32Prot( vprot, view->protect );
-             status = set_protection( view, base, size, new_prot );
-+
-+            /* GTA5 HACK: Mark first page as copied. */
-+            if (status == STATUS_SUCCESS && (view->protect & SEC_IMAGE) &&
-+                    base == (void*)NtCurrentTeb()->Peb->ImageBaseAddress)
-+            {
-+                const WCHAR gta5W[] = { 'g','t','a','5','.','e','x','e',0 };
-+                WCHAR *name, *p;
-+
-+                name = NtCurrentTeb()->Peb->ProcessParameters->ImagePathName.Buffer;
-+                p = strrchrW(name, '\\');
-+                p = p ? p+1 : name;
-+
-+                if(!strcmpiW(p, gta5W))
-+                {
-+                    FIXME("HACK: changing GTA5.exe vprot\n");
-+                    set_page_vprot_bits(base, page_size, VPROT_COPIED, 0);
-+                }
-+            }
-         }
-         else status = STATUS_NOT_COMMITTED;
-     }
-From 5e8fedb161bae24ecf6d9425e90e3c595ec2505c Mon Sep 17 00:00:00 2001
-From: Piotr Caban <piotr@codeweavers.com>
-Date: Wed, 11 Mar 2020 09:17:05 -0500
-Subject: [PATCH] ntdll: Restore PAGE_GUARD flag
-
-On rebase, squash into 'HACK: ntdll: Mark first gta5.exe page as
-copied.'
----
- dlls/ntdll/virtual.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/dlls/ntdll/virtual.c b/dlls/ntdll/virtual.c
-index 90a790241a9..d0cd2639ee9 100644
---- a/dlls/ntdll/virtual.c
-+++ b/dlls/ntdll/virtual.c
-@@ -909,6 +909,7 @@ static DWORD VIRTUAL_GetWin32Prot( BYTE vprot, unsigned int map_prot )
-     if ((vprot & (VPROT_COPIED | VPROT_WRITECOPY)) == (VPROT_COPIED | VPROT_WRITECOPY))
-         vprot = (vprot & ~VPROT_WRITECOPY) | VPROT_WRITE;
-     ret = VIRTUAL_Win32Flags[vprot & 0x0f];
-+    if (vprot & VPROT_GUARD) ret |= PAGE_GUARD;
-     if (map_prot & SEC_NOCACHE) ret |= PAGE_NOCACHE;
-     return ret;
- }
-
 From 24a8f709ec8fcf8fa4fcc349a7885c02cc184d74 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Wed, 26 Feb 2020 13:09:48 -0600
@@ -2154,169 +2054,280 @@ index 5a97590dbce..a5563498cdd 100644
      return hr;
  }
  
-From 9d1f0ead53a7f0ecf4120db6828f6008e605f4b8 Mon Sep 17 00:00:00 2001
-From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
-Date: Wed, 22 Apr 2020 15:04:43 +0200
-Subject: [PATCH] server: Make sure pids/tids are multiples of four.
+From c619409f235cf660cdd4fd3295d5e04ec628daa1 Mon Sep 17 00:00:00 2001
+From: Alexey Prokhin <alexey@prokhin.ru>
+Date: Thu, 23 Apr 2020 12:29:55 +0300
+Subject: [PATCH] kernelbase: Set the proper error code in
+ GetQueuedCompletionStatus{Ex} when the handle is closed.
 
-See: https://devblogs.microsoft.com/oldnewthing/?p=23283
-
-Street Fighter V unpacker relies on it when validating other processes
-for its anti-debug checks, it uses (PID&0xfffffffc)>>2 as an array index
-and then checks back indexes against PIDs, and terminates early if some
-PIDs do not match.
+Planet Zoo relies on it being ERROR_ABANDONED_WAIT_0.
 ---
- server/process.c | 31 ++++++++++++++++++-------------
- 1 file changed, 18 insertions(+), 13 deletions(-)
+ dlls/kernelbase/sync.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/server/process.c b/server/process.c
-index dacca025572..e8f801891f6 100644
---- a/server/process.c
-+++ b/server/process.c
-@@ -352,21 +352,24 @@ static void kill_all_processes(void);
+diff --git a/dlls/kernelbase/sync.c b/dlls/kernelbase/sync.c
+index 0ae3aadde92..e95ede8aed5 100644
+--- a/dlls/kernelbase/sync.c
++++ b/dlls/kernelbase/sync.c
+@@ -960,6 +960,7 @@ BOOL WINAPI DECLSPEC_HOTPATCH GetQueuedCompletionStatus( HANDLE port, LPDWORD co
+     }
  
- #define PTID_OFFSET 8  /* offset for first ptid value */
+     if (status == STATUS_TIMEOUT) SetLastError( WAIT_TIMEOUT );
++    else if (status == ERROR_WAIT_NO_CHILDREN) SetLastError( ERROR_ABANDONED_WAIT_0 );
+     else SetLastError( RtlNtStatusToDosError(status) );
+     return FALSE;
+ }
+@@ -981,6 +982,7 @@ BOOL WINAPI DECLSPEC_HOTPATCH GetQueuedCompletionStatusEx( HANDLE port, OVERLAPP
+     if (ret == STATUS_SUCCESS) return TRUE;
+     else if (ret == STATUS_TIMEOUT) SetLastError( WAIT_TIMEOUT );
+     else if (ret == STATUS_USER_APC) SetLastError( WAIT_IO_COMPLETION );
++    else if (ret == ERROR_WAIT_NO_CHILDREN) SetLastError( ERROR_ABANDONED_WAIT_0 );
+     else SetLastError( RtlNtStatusToDosError(ret) );
+     return FALSE;
+ }
+
+From 9cffda4856b5e5057008d165dd38ec971b9af712 Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Fri, 24 Apr 2020 19:48:20 +0300
+Subject: [PATCH] ntdll: Handle NULL object name buffer in
+ nt_to_unix_file_name_attr().
+
+Signed-off-by: Paul Gofman <pgofman@codeweavers.com>
+Signed-off-by: Paul Gofman <gofmanp@gmail.com>
+---
+ dlls/ntdll/directory.c  |  8 ++++++++
+ dlls/ntdll/tests/file.c | 22 +++++++++++++++++++++-
+ 2 files changed, 29 insertions(+), 1 deletion(-)
+
+diff --git a/dlls/ntdll/directory.c b/dlls/ntdll/directory.c
+index 784e720edf8..56f9be0f06e 100644
+--- a/dlls/ntdll/directory.c
++++ b/dlls/ntdll/directory.c
+@@ -2701,8 +2701,16 @@ NTSTATUS nt_to_unix_file_name_attr( const OBJECT_ATTRIBUTES *attr, ANSI_STRING *
+     NTSTATUS status;
+     BOOLEAN check_case = !(attr->Attributes & OBJ_CASE_INSENSITIVE);
  
-+static unsigned int index_from_ptid(unsigned int id) { return id / 4; }
-+static unsigned int ptid_from_index(unsigned int index) { return index * 4; }
++    if (!attr->ObjectName->Buffer && attr->ObjectName->Length)
++        return STATUS_ACCESS_VIOLATION;
 +
- /* allocate a new process or thread id */
- unsigned int alloc_ptid( void *ptr )
- {
-     struct ptid_entry *entry;
--    unsigned int id;
-+    unsigned int index;
+     if (!attr->RootDirectory)  /* without root dir fall back to normal lookup */
++    {
++        if (!attr->ObjectName->Buffer)
++            return STATUS_OBJECT_PATH_SYNTAX_BAD;
++
+         return wine_nt_to_unix_file_name( attr->ObjectName, unix_name_ret, disposition, check_case );
++    }
  
-     if (used_ptid_entries < alloc_ptid_entries)
-     {
--        id = used_ptid_entries + PTID_OFFSET;
-+        index = used_ptid_entries + PTID_OFFSET;
-         entry = &ptid_entries[used_ptid_entries++];
-     }
-     else if (next_free_ptid && num_free_ptids >= 256)
-     {
--        id = next_free_ptid;
--        entry = &ptid_entries[id - PTID_OFFSET];
-+        index = next_free_ptid;
-+        entry = &ptid_entries[index - PTID_OFFSET];
-         if (!(next_free_ptid = entry->next)) last_free_ptid = 0;
-         num_free_ptids--;
-     }
-@@ -381,35 +384,37 @@ unsigned int alloc_ptid( void *ptr )
-         }
-         ptid_entries = entry;
-         alloc_ptid_entries = count;
--        id = used_ptid_entries + PTID_OFFSET;
-+        index = used_ptid_entries + PTID_OFFSET;
-         entry = &ptid_entries[used_ptid_entries++];
-     }
- 
-     entry->ptr = ptr;
--    return id;
-+    return ptid_from_index( index );
- }
- 
- /* free a process or thread id */
- void free_ptid( unsigned int id )
- {
--    struct ptid_entry *entry = &ptid_entries[id - PTID_OFFSET];
-+    unsigned int index = index_from_ptid( id );
-+    struct ptid_entry *entry = &ptid_entries[index - PTID_OFFSET];
- 
-     entry->ptr  = NULL;
-     entry->next = 0;
- 
-     /* append to end of free list so that we don't reuse it too early */
--    if (last_free_ptid) ptid_entries[last_free_ptid - PTID_OFFSET].next = id;
--    else next_free_ptid = id;
--    last_free_ptid = id;
-+    if (last_free_ptid) ptid_entries[last_free_ptid - PTID_OFFSET].next = index;
-+    else next_free_ptid = index;
-+    last_free_ptid = index;
-     num_free_ptids++;
- }
- 
- /* retrieve the pointer corresponding to a process or thread id */
- void *get_ptid_entry( unsigned int id )
- {
--    if (id < PTID_OFFSET) return NULL;
--    if (id - PTID_OFFSET >= used_ptid_entries) return NULL;
--    return ptid_entries[id - PTID_OFFSET].ptr;
-+    unsigned int index = index_from_ptid( id );
-+    if (index < PTID_OFFSET) return NULL;
-+    if (index - PTID_OFFSET >= used_ptid_entries) return NULL;
-+    return ptid_entries[index - PTID_OFFSET].ptr;
- }
- 
- /* return the main thread of the process */
-From 89537dedfba439efc6f89c9977b50bd7adb76fc7 Mon Sep 17 00:00:00 2001
-From: Brendan Shanks <bshanks@codeweavers.com>
-Date: Fri, 17 Apr 2020 11:35:07 -0700
-Subject: [PATCH] dinput: Fix DInput8 keyboard behavior for injected events
- with scancode=0.
+     name     = attr->ObjectName->Buffer;
+     name_len = attr->ObjectName->Length / sizeof(WCHAR);
 
-Grand Theft Auto IV injects VK_F8 and scancode=0, and expects DirectInput not
-to report that F8 is pressed.
+From cb427c70056654bf12fb0d7d6dcb13386d193ff4 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Gabriel=20Iv=C4=83ncescu?= <gabrielopcode@gmail.com>
+Date: Fri, 24 Apr 2020 14:37:58 +0300
+Subject: [PATCH] server: Try to retrieve the unix name on handles created from
+ file descriptors.
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Signed-off-by: Brendan Shanks <bshanks@codeweavers.com>
-Signed-off-by: Alexandre Julliard <julliard@winehq.org>
-(cherry picked from commit f65cfbfe9b20e38537c7cb8608e7f411c9e8b725)
+Wine-Bug: https://bugs.winehq.org/show_bug.cgi?id=46070
+Signed-off-by: Gabriel Ivăncescu <gabrielopcode@gmail.com>
+
+Fixes Unity of Command II, and possibly other games that use
+Python38.dll.
 ---
- dlls/dinput/keyboard.c      | 8 ++++----
- dlls/dinput8/tests/device.c | 2 --
- 2 files changed, 4 insertions(+), 6 deletions(-)
+ server/fd.c   | 39 +++++++++++++++++++++++++++++++++++++++
+ server/file.c |  1 +
+ server/file.h |  2 ++
+ 3 files changed, 42 insertions(+)
 
-diff --git a/dlls/dinput/keyboard.c b/dlls/dinput/keyboard.c
-index 47f28cac52a..f842f1ca42e 100644
---- a/dlls/dinput/keyboard.c
-+++ b/dlls/dinput/keyboard.c
-@@ -68,9 +68,9 @@ static inline IDirectInputDevice8W *IDirectInputDevice8W_from_impl(SysKeyboardIm
-     return &This->base.IDirectInputDevice8W_iface;
+diff --git a/server/fd.c b/server/fd.c
+index 904c99029ca..990a1a708a0 100644
+--- a/server/fd.c
++++ b/server/fd.c
+@@ -2079,6 +2079,45 @@ struct fd *create_anonymous_fd( const struct fd_ops *fd_user_ops, int unix_fd, s
+     return NULL;
  }
  
--static BYTE map_dik_code(DWORD scanCode, DWORD vkCode, DWORD subType)
-+static BYTE map_dik_code(DWORD scanCode, DWORD vkCode, DWORD subType, DWORD version)
++void set_unix_name_of_fd( struct fd *fd, const struct stat *fd_st )
++{
++#ifdef __linux__
++    static const char procfs_fmt[] = "/proc/self/fd/%d";
++
++    char path[PATH_MAX], procfs_path[sizeof(procfs_fmt) - 2 /* %d */ + 11];
++    struct stat path_st;
++    ssize_t len;
++
++    sprintf( procfs_path, procfs_fmt, fd->unix_fd );
++    len = readlink( procfs_path, path, sizeof(path) );
++    if (len == -1 || len >= sizeof(path) )
++        return;
++    path[len] = '\0';
++
++    /* Make sure it's an absolute path, has at least one hardlink, and the same inode */
++    if (path[0] != '/' || stat( path, &path_st ) || path_st.st_nlink < 1 ||
++        path_st.st_dev != fd_st->st_dev || path_st.st_ino != fd_st->st_ino)
++        return;
++
++    if (!(fd->unix_name = mem_alloc( len + 1 )))
++        return;
++    memcpy( fd->unix_name, path, len + 1 );
++
++#elif defined(F_GETPATH)
++    char path[PATH_MAX];
++    size_t size;
++
++    if (fcntl( fd->unix_fd, F_GETPATH, path ) == -1 || path[0] != '/')
++        return;
++
++    size = strlen(path) + 1;
++    if (!(fd->unix_name = mem_alloc( size )))
++        return;
++    memcpy( fd->unix_name, path, size );
++
++#endif
++}
++
+ /* retrieve the object that is using an fd */
+ void *get_fd_user( struct fd *fd )
  {
--    if (!scanCode)
-+    if (!scanCode && version < 0x0800)
-         scanCode = MapVirtualKeyW(vkCode, MAPVK_VK_TO_VSC);
- 
-     if (subType == DIDEVTYPEKEYBOARD_JAPAN106)
-@@ -125,7 +125,7 @@ static int KeyboardCallback( LPDIRECTINPUTDEVICE8A iface, WPARAM wparam, LPARAM
-         case VK_NUMLOCK : dik_code = DIK_NUMLOCK; break;
-         case VK_SUBTRACT: dik_code = DIK_SUBTRACT; break;
-         default:
--            dik_code = map_dik_code(hook->scanCode & 0xff, hook->vkCode, This->subtype);
-+            dik_code = map_dik_code(hook->scanCode & 0xff, hook->vkCode, This->subtype, This->base.dinput->dwVersion);
-             if (hook->flags & LLKHF_EXTENDED) dik_code |= 0x80;
+diff --git a/server/file.c b/server/file.c
+index e5e367478ce..e469341c746 100644
+--- a/server/file.c
++++ b/server/file.c
+@@ -147,6 +147,7 @@ struct file *create_file_for_fd( int fd, unsigned int access, unsigned int shari
+         release_object( file );
+         return NULL;
      }
-     new_diks = hook->flags & LLKHF_UP ? 0 : 0x80;
-@@ -282,7 +282,7 @@ static SysKeyboardImpl *alloc_device(REFGUID rguid, IDirectInputImpl *dinput)
-         if (!GetKeyNameTextA(((i & 0x7f) << 16) | ((i & 0x80) << 17), buf, sizeof(buf)))
-             continue;
++    set_unix_name_of_fd( file->fd, &st );
+     allow_fd_caching( file->fd );
+     return file;
+ }
+diff --git a/server/file.h b/server/file.h
+index 0e43a8170df..7d614569a16 100644
+--- a/server/file.h
++++ b/server/file.h
+@@ -22,6 +22,7 @@
+ #define __WINE_SERVER_FILE_H
  
--        dik_code = map_dik_code(i, 0, newDevice->subtype);
-+        dik_code = map_dik_code(i, 0, newDevice->subtype, dinput->dwVersion);
-         memcpy(&df->rgodf[idx], &c_dfDIKeyboard.rgodf[dik_code], df->dwObjSize);
-         df->rgodf[idx++].dwType = DIDFT_MAKEINSTANCE(dik_code) | DIDFT_PSHBUTTON;
-     }
-diff --git a/dlls/dinput8/tests/device.c b/dlls/dinput8/tests/device.c
-index 665812e59f4..4440835284c 100644
---- a/dlls/dinput8/tests/device.c
-+++ b/dlls/dinput8/tests/device.c
-@@ -825,7 +825,6 @@ static void test_keyboard_events(void)
-     data_size = ARRAY_SIZE(obj_data);
-     hr = IDirectInputDevice8_GetDeviceData(di_keyboard, sizeof(DIDEVICEOBJECTDATA), obj_data, &data_size, 0);
-     ok(SUCCEEDED(hr), "Failed to get data hr=%08x\n", hr);
--    todo_wine
-     ok(data_size == 0, "Expected 0 elements, received %d\n", data_size);
+ #include <sys/types.h>
++#include <sys/stat.h>
  
-     hr = IDirectInputDevice8_GetDeviceState(di_keyboard, sizeof(kbdata), kbdata);
-@@ -839,7 +838,6 @@ static void test_keyboard_events(void)
-     data_size = ARRAY_SIZE(obj_data);
-     hr = IDirectInputDevice8_GetDeviceData(di_keyboard, sizeof(DIDEVICEOBJECTDATA), obj_data, &data_size, 0);
-     ok(SUCCEEDED(hr), "Failed to get data hr=%08x\n", hr);
--    todo_wine
-     ok(data_size == 0, "Expected 0 elements, received %d\n", data_size);
+ #include "object.h"
  
-     hr = IDirectInputDevice8_Unacquire(di_keyboard);
+@@ -82,6 +83,7 @@ extern struct fd *open_fd( struct fd *root, const char *name, int flags, mode_t
+                            unsigned int access, unsigned int sharing, unsigned int options );
+ extern struct fd *create_anonymous_fd( const struct fd_ops *fd_user_ops,
+                                        int unix_fd, struct object *user, unsigned int options );
++extern void set_unix_name_of_fd( struct fd *fd, const struct stat *fd_st );
+ extern struct fd *dup_fd_object( struct fd *orig, unsigned int access, unsigned int sharing,
+                                  unsigned int options );
+ extern struct fd *get_fd_object_for_mapping( struct fd *fd, unsigned int access, unsigned int sharing );
+
+From aa34cb2167da7685bc550f2073ebc4c610f28eda Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Wed, 13 May 2020 13:55:55 +0300
+Subject: [PATCH] ntdll: Add WINE_DISABLE_WRITE_WATCH env var to disable write
+ watch support.
+
+Massively improves performance for corert games (Streets of Rage 4).
+Could be fixed properly with Linux kernel changes.
+---
+ dlls/ntdll/virtual.c | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
+
+diff --git a/dlls/ntdll/virtual.c b/dlls/ntdll/virtual.c
+index d0cd2639ee9..d2eb7bcc341 100644
+--- a/dlls/ntdll/virtual.c
++++ b/dlls/ntdll/virtual.c
+@@ -2684,6 +2684,22 @@ NTSTATUS WINAPI NtAllocateVirtualMemory( HANDLE process, PVOID *ret, ULONG_PTR z
+ 
+     TRACE("%p %p %08lx %x %08x\n", process, *ret, size, type, protect );
+ 
++    if (type & MEM_WRITE_WATCH)
++    {
++        static int disable = -1;
++
++        if (disable == -1)
++        {
++            const char *env_var;
++
++            if ((disable = (env_var = getenv("WINE_DISABLE_WRITE_WATCH")) && atoi(env_var)))
++                FIXME("Disabling write watch support.\n");
++        }
++
++        if (disable)
++            return STATUS_NOT_SUPPORTED;
++    }
++
+     if (!size) return STATUS_INVALID_PARAMETER;
+     if (zero_bits > 21 && zero_bits < 32) return STATUS_INVALID_PARAMETER_3;
+     if (!is_win64 && !is_wow64 && zero_bits >= 32) return STATUS_INVALID_PARAMETER_3;
+
+From 912701cb515acdc8e0ff263552f656cd49f60714 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
+Date: Fri, 15 May 2020 13:01:26 +0200
+Subject: [PATCH] d3d10core: Implement D3D10CoreRegisterLayers.
+
+---
+ dlls/d3d10core/d3d10core_main.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/dlls/d3d10core/d3d10core_main.c b/dlls/d3d10core/d3d10core_main.c
+index d364be90d6d..5a9a4a211c1 100644
+--- a/dlls/d3d10core/d3d10core_main.c
++++ b/dlls/d3d10core/d3d10core_main.c
+@@ -29,11 +29,13 @@ WINE_DEFAULT_DEBUG_CHANNEL(d3d10core);
+ HRESULT WINAPI D3D11CoreCreateDevice(IDXGIFactory *factory, IDXGIAdapter *adapter, unsigned int flags,
+         const D3D_FEATURE_LEVEL *feature_levels, unsigned int level_count, ID3D11Device **device);
+ 
++HRESULT WINAPI D3D11CoreRegisterLayers(void);
++
+ HRESULT WINAPI D3D10CoreRegisterLayers(void)
+ {
+     TRACE("\n");
+ 
+-    return E_NOTIMPL;
++    return D3D11CoreRegisterLayers();
+ }
+ 
+ HRESULT WINAPI D3D10CoreCreateDevice(IDXGIFactory *factory, IDXGIAdapter *adapter,
+
+From 376a037ce1391e071835a0bf30ebf1fcec43c367 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
+Date: Fri, 15 May 2020 12:59:44 +0200
+Subject: [PATCH] dxgi: Add fallback to D3D10CoreRegisterLayers.
+
+If D3D11CoreRegisterLayers is not found in module.
+---
+ dlls/dxgi/dxgi_main.c | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
+
+diff --git a/dlls/dxgi/dxgi_main.c b/dlls/dxgi/dxgi_main.c
+index 83c3f3734a7..006ab370844 100644
+--- a/dlls/dxgi/dxgi_main.c
++++ b/dlls/dxgi/dxgi_main.c
+@@ -106,8 +106,8 @@ static HRESULT register_d3d10core_layers(HMODULE d3d10core)
+ 
+     if (!dxgi_main.d3d10core)
+     {
+-        HRESULT hr;
+-        HRESULT (WINAPI *d3d11core_register_layers)(void);
++        HRESULT hr = E_FAIL;
++        HRESULT (WINAPI *register_layers)(void);
+         HMODULE mod;
+         BOOL ret;
+ 
+@@ -117,8 +117,10 @@ static HRESULT register_d3d10core_layers(HMODULE d3d10core)
+             return E_FAIL;
+         }
+ 
+-        d3d11core_register_layers = (void *)GetProcAddress(mod, "D3D11CoreRegisterLayers");
+-        hr = d3d11core_register_layers();
++        if ((register_layers = (void *)GetProcAddress(mod, "D3D11CoreRegisterLayers")) ||
++            (register_layers = (void *)GetProcAddress(mod, "D3D10CoreRegisterLayers")))
++            hr = register_layers();
++
+         if (FAILED(hr))
+         {
+             ERR("Failed to register d3d11 layers, returning %#x.\n", hr);
