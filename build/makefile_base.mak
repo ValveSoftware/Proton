@@ -185,8 +185,8 @@ GECKO_VER := 2.47.1
 GECKO32_TARBALL := wine-gecko-$(GECKO_VER)-x86.tar.bz2
 GECKO64_TARBALL := wine-gecko-$(GECKO_VER)-x86_64.tar.bz2
 
-WINEMONO_VER := 5.0.1
-WINEMONO_TARBALL := wine-mono-$(WINEMONO_VER)-x86.tar.xz
+WINEMONO_VER := 4.9.4
+WINEMONO_TARBALL := wine-mono-bin-$(WINEMONO_VER).tar.gz
 
 FFMPEG := $(SRCDIR)/ffmpeg
 FFMPEG_OBJ32 := ./obj-ffmpeg32
@@ -302,6 +302,7 @@ BISON_OBJ64 := ./obj-bison64
 BISON_BIN32 := $(BISON_OBJ32)/built/bin/bison
 BISON_BIN64 := $(BISON_OBJ64)/built/bin/bison
 
+
 FONTS := $(SRCDIR)/fonts
 FONTS_OBJ := ./obj-fonts
 
@@ -309,7 +310,7 @@ FONTS_OBJ := ./obj-fonts
 OBJ_DIRS := $(TOOLS_DIR32)        $(TOOLS_DIR64)        \
             $(FFMPEG_OBJ32)       $(FFMPEG_OBJ64)       \
             $(GLIB_OBJ32)         $(GLIB_OBJ64)         \
-            $(GST_ORC_OBJ32)    $(GST_ORC_OBJ64)    \
+            $(GST_ORC_OBJ32)      $(GST_ORC_OBJ64)       \
             $(GSTREAMER_OBJ32)    $(GSTREAMER_OBJ64)    \
             $(GST_BASE_OBJ32)     $(GST_BASE_OBJ64)     \
             $(GST_GOOD_OBJ32)     $(GST_GOOD_OBJ64)     \
@@ -352,7 +353,6 @@ SHARED_MONO_TARBALL := $(SRCDIR)/../mono/$(WINEMONO_TARBALL)
 $(SHARED_BISON_TARBALL):
 	mkdir -p $(dir $@)
 	wget -O "$@" "$(BISON_TARBALL_URL)"
-	
 
 $(SHARED_GECKO64_TARBALL):
 	mkdir -p $(dir $@)
@@ -492,7 +492,7 @@ $(DIST_FONTS): fonts
 ALL_TARGETS += dist
 GOAL_TARGETS += dist
 
-dist: $(DIST_TARGETS) gst_orc wine gst_good gst_bad gst_ugly gst_libav vrclient lsteamclient steam dxvk | $(DST_DIR)
+dist: $(DIST_TARGETS) wine gst_good gst_bad gst_ugly gst_libav vrclient lsteamclient steam dxvk | $(DST_DIR)
 	echo `date '+%s'` `GIT_DIR=$(abspath $(SRCDIR)/.git) git describe --tags` > $(DIST_VERSION)
 	cp $(DIST_VERSION) $(DST_BASE)/
 	rm -rf $(abspath $(DIST_PREFIX)) && \
@@ -601,16 +601,11 @@ glib32: $(GLIB_CONFIGURE_FILES32)
 	cp -a $(TOOLS_DIR32)/lib/libgmodule* $(DST_DIR)/lib/ && \
 	cp -a $(TOOLS_DIR32)/lib/libgobject* $(DST_DIR)/lib/ && \
 	cp -a $(TOOLS_DIR32)/lib/libgthread* $(DST_DIR)/lib/
-	
-	
-##
-## gstreamer common meson args
-## 
+
 
 GST_COMMON_MESON_ARGS := \
 	-Dexamples=disabled \
 	-Dtests=disabled \
-	-Dtools=disabled \
 	-Dgtk_doc=disabled \
 	-Dintrospection=disabled \
 	-Dgobject-cast-checks=disabled \
@@ -624,16 +619,9 @@ GST_COMMON_MESON_ARGS := \
 ##
 
 GST_ORC_MESON_ARGS := \
-	-Dorc-test=disabled \
-	-Dexamples=disabled \
-	-Dtests=disabled \
-	-Dgtk_doc=disabled \
-	-Dintrospection=disabled \
-	-Dgobject-cast-checks=disabled \
-	-Dglib-asserts=disabled \
-	-Dglib-checks=disabled \
-	-Dnls=disabled \
-	-Dbenchmarks=disabled
+	$(GST_COMMON_MESON_ARGS) \
+	-Dorc-test=disabled
+
 
 GST_ORC_CONFIGURE_FILES32 := $(GST_ORC_OBJ32)/build.ninja
 GST_ORC_CONFIGURE_FILES64 := $(GST_ORC_OBJ64)/build.ninja
@@ -681,12 +669,14 @@ gst_orc64: $(GST_ORC_CONFIGURE_FILES64)
 	PATH="$(abspath $(TOOLS_DIR64))/bin:$(PATH)" \
 	LD_LIBRARY_PATH="$(abspath $(TOOLS_DIR64))/lib:$(LD_LIBRARY_PATH)" \
 	ninja -C "$(GST_ORC_OBJ64)" install
+	cp -a $(TOOLS_DIR64)/lib/liborc* $(DST_DIR)/lib64/
 
 gst_orc32: SHELL = $(CONTAINER_SHELL32)
 gst_orc32: $(GST_ORC_CONFIGURE_FILES32)
 	PATH="$(abspath $(TOOLS_DIR32))/bin:$(PATH)" \
 	LD_LIBRARY_PATH="$(abspath $(TOOLS_DIR32))/lib:$(LD_LIBRARY_PATH)" \
 	ninja -C "$(GST_ORC_OBJ32)" install
+	cp -a $(TOOLS_DIR32)/lib/liborc* $(DST_DIR)/lib/
 
 ##
 ## gstreamer
@@ -695,6 +685,7 @@ gst_orc32: $(GST_ORC_CONFIGURE_FILES32)
 GSTREAMER_MESON_ARGS := \
 	-Dgst_parse=false \
 	-Dbenchmarks=disabled \
+	-Dtools=disabled \
 	$(GST_COMMON_MESON_ARGS)
 
 GSTREAMER_CONFIGURE_FILES32 := $(GSTREAMER_OBJ32)/build.ninja
@@ -702,7 +693,7 @@ GSTREAMER_CONFIGURE_FILES64 := $(GSTREAMER_OBJ64)/build.ninja
 
 # 64-bit configure.  Remove coredata file if already configured (due to e.g. makefile changing)
 $(GSTREAMER_CONFIGURE_FILES64): SHELL = $(CONTAINER_SHELL64)
-$(GSTREAMER_CONFIGURE_FILES64): $(MAKEFILE_DEP) glib64 | $(GSTREAMER_OBJ64)
+$(GSTREAMER_CONFIGURE_FILES64): $(MAKEFILE_DEP) gst_orc64 | $(GSTREAMER_OBJ64)
 	if [ -e "$(abspath $(GSTREAMER_OBJ64))"/build.ninja ]; then \
 		rm -f "$(abspath $(GSTREAMER_OBJ64))"/meson-private/coredata.dat; \
 	fi
@@ -713,7 +704,7 @@ $(GSTREAMER_CONFIGURE_FILES64): $(MAKEFILE_DEP) glib64 | $(GSTREAMER_OBJ64)
 
 # 32-bit configure.  Remove coredata file if already configured (due to e.g. makefile changing)
 $(GSTREAMER_CONFIGURE_FILES32): SHELL = $(CONTAINER_SHELL32)
-$(GSTREAMER_CONFIGURE_FILES32): $(MAKEFILE_DEP) glib32 | $(GSTREAMER_OBJ32)
+$(GSTREAMER_CONFIGURE_FILES32): $(MAKEFILE_DEP) gst_orc32 | $(GSTREAMER_OBJ32)
 	if [ -e "$(abspath $(GSTREAMER_OBJ32))"/build.ninja ]; then \
 		rm -f "$(abspath $(GSTREAMER_OBJ32))"/meson-private/coredata.dat; \
 	fi
@@ -760,6 +751,7 @@ gstreamer32: $(GSTREAMER_CONFIGURE_FILES32)
 ##
 
 GST_BASE_MESON_ARGS := \
+	-Daddr=disabled \
 	-Dalsa=disabled \
 	-Daudiomixer=disabled \
 	-Daudiorate=disabled \
@@ -940,7 +932,7 @@ gst_good: gst_good32 gst_good64
 gst_good64: SHELL = $(CONTAINER_SHELL64)
 gst_good64: $(GST_GOOD_CONFIGURE_FILES64)
 	PATH="$(abspath $(TOOLS_DIR64))/bin:$(PATH)" \
-    LD_LIBRARY_PATH="$(abspath $(TOOLS_DIR64))/lib:$(LD_LIBRARY_PATH)" \
+	LD_LIBRARY_PATH="$(abspath $(TOOLS_DIR64))/lib:$(LD_LIBRARY_PATH)" \
 	ninja -C "$(GST_GOOD_OBJ64)" install
 	cp -a $(TOOLS_DIR64)/lib/libgst* $(DST_DIR)/lib64/ && \
 	cp -a $(TOOLS_DIR64)/lib/gstreamer-1.0 $(DST_DIR)/lib64/
@@ -952,6 +944,7 @@ gst_good32: $(GST_GOOD_CONFIGURE_FILES32)
 	ninja -C "$(GST_GOOD_OBJ32)" install
 	cp -a $(TOOLS_DIR32)/lib/libgst* $(DST_DIR)/lib/ && \
 	cp -a $(TOOLS_DIR32)/lib/gstreamer-1.0 $(DST_DIR)/lib/
+
 
 ##
 ## gst-plugins-bad
@@ -1206,10 +1199,6 @@ $(FFMPEG_CONFIGURE_FILES64): $(FFMPEG)/configure $(MAKEFILE_DEP) | $(FFMPEG_OBJ6
 			--disable-everything \
 			--enable-parser=h264 \
 			--enable-decoder=h264 \
-			--enable-parser=bmp \
-			--enable-decoder=bmp \
-			--enable-parser=png \
-			--enable-decoder=png \
 			--enable-decoder=mpeg4 \
 			--enable-parser=mpegvideo \
 			--enable-parser=mpeg4video \
@@ -1261,10 +1250,6 @@ $(FFMPEG_CONFIGURE_FILES32): $(FFMPEG)/configure $(MAKEFILE_DEP) | $(FFMPEG_OBJ3
 			--disable-everything \
 			--enable-parser=h264 \
 			--enable-decoder=h264 \
-			--enable-parser=bmp \
-			--enable-decoder=bmp \
-			--enable-parser=png \
-			--enable-decoder=png \
 			--enable-decoder=mpeg4 \
 			--enable-parser=mpegvideo \
 			--enable-parser=mpeg4video \
@@ -1848,7 +1833,7 @@ bison32-intermediate: $(BISON_CONFIGURE_FILES32) $(filter $(MAKECMDGOALS),bison3
 	+$(MAKE) -C $(BISON_OBJ32)
 	+$(MAKE) -C $(BISON_OBJ32) install
 	touch $(BISON_BIN32)
-	
+
 ##
 ## dxvk
 ##
