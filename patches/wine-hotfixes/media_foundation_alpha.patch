@@ -11440,33 +11440,37 @@ index bcfcd398ec..39b98f3eba 100644
 -- 
 2.27.0
 
-From 63e2397b61cd9b16144bbe271eeea6044d31359a Mon Sep 17 00:00:00 2001
+From 44d2f8aa34b5d060096019195347466514cbcc43 Mon Sep 17 00:00:00 2001
 From: Victor Hermann Chiletto <v@hnn.net.br>
-Date: Tue, 9 Jun 2020 01:35:53 -0300
-Subject: [PATCH 1/2] winegstreamer: Fix unrecognized format errors when
- transforming caps to media type
+Date: Tue, 9 Jun 2020 01:36:53 -0300
+Subject: [PATCH 2/2] winegstreamer: Translate WMV3 attributes to caps
 
-Probably not needed, but it's nice to get this out of the way
 ---
- dlls/winegstreamer/mfplat.c | 2 ++
- 1 file changed, 2 insertions(+)
+ dlls/winegstreamer/mfplat.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
 diff --git a/dlls/winegstreamer/mfplat.c b/dlls/winegstreamer/mfplat.c
-index bcfcd398ec..39b98f3eba 100644
+index 39b98f3eba..042c02c486 100644
 --- a/dlls/winegstreamer/mfplat.c
 +++ b/dlls/winegstreamer/mfplat.c
-@@ -910,6 +910,8 @@ static IMFMediaType* transform_to_media_type(GstCaps *caps)
-             {
-                 if (!(strcmp(format, "WVC1")))
-                     IMFMediaType_SetGUID(media_type, &MF_MT_SUBTYPE, &MFVideoFormat_WVC1);
-+                else if (!(strcmp(format, "WMV3")))
-+                    IMFMediaType_SetGUID(media_type, &MF_MT_SUBTYPE, &MFVideoFormat_WMV3);
-                 else
-                     FIXME("Unrecognized format %s\n", format);
-             }
+@@ -1319,6 +1319,15 @@ GstCaps *caps_from_mf_media_type(IMFMediaType *type)
+ 
+             user_data_to_codec_data(type, output);
+         }
++        else if (IsEqualGUID(&subtype, &MFVideoFormat_WMV3))
++        {
++            output = gst_caps_new_empty_simple("video/x-wmv");
++            gst_caps_set_simple(output, "format", G_TYPE_STRING, "WMV3", NULL);
++
++            gst_caps_set_simple(output, "wmvversion", G_TYPE_INT, 3, NULL);
++
++            user_data_to_codec_data(type, output);
++        }
+         else {
+             FIXME("Unrecognized subtype %s\n", debugstr_guid(&subtype));
+             return NULL;
 -- 
 2.27.0
-
 
 From de3fffa1be1a8e2ede11b7d8607e3ea9e879b446 Mon Sep 17 00:00:00 2001
 From: Victor Hermann Chiletto <v@hnn.net.br>
