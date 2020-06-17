@@ -90,7 +90,7 @@
     git revert --no-commit a46d359e91e299142a27570bb202d8141b9625da
     git revert --no-commit 0a90d0431d8d6d2f4913cdc6640edeb1ade833c0
     git revert --no-commit 93aea5d86fe2eb50a9bb0829533ca5da627908f6
-        
+            
     echo "esync/fsync unfuck"
     git revert --no-commit 7e9ccbe68fe5215df9bd8e424195e1abf56f7286 
     git revert --no-commit f6bfb4ce00d27c4bc11615a5426065749e72b70a 
@@ -183,6 +183,8 @@
     echo "wine unfuck d8d6a6b2e639d2e29e166a3faf988b81388ae191"
     patch -Np1 < ../patches/wine-hotfixes/updates/wine/d8d6a6b2e639d2e29e166a3faf988b81388ae191.patch
 
+    echo "origin unfuck"
+    patch -Np1 -R < ../patches/wine-hotfixes/reverts/wine/3078f10d43d834b0498358fe0accb565191b7020.patch
 
     #WINE FAUDIO
     #echo "applying faudio patches"
@@ -320,9 +322,6 @@
     echo "Paul's Diablo 1 menu fix"
     patch -Np1 < ../patches/game-patches/diablo_1_menu.patch
     
-    # reverts: 
-    # this breaks origin
-#    git revert --no-commit 3078f10d43d834b0498358fe0accb565191b7020
     
     ./dlls/winevulkan/make_vulkan
     ./tools/make_requests
