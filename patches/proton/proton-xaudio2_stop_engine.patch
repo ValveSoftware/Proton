@@ -1,0 +1,135 @@
+From a4310c0cf1e27f0a90f737c2e7cfe9cdbde07522 Mon Sep 17 00:00:00 2001
+From: Andrew Eikum <aeikum@codeweavers.com>
+Date: Mon, 20 Jan 2020 10:36:48 -0600
+Subject: [PATCH] xaudio2: Stop engine thread in IXAudio2::StopEngine
+
+---
+ dlls/xaudio2_7/xaudio_dll.c     | 60 ++++++++++++++++++++++++---------
+ dlls/xaudio2_7/xaudio_private.h |  1 +
+ 2 files changed, 45 insertions(+), 16 deletions(-)
+
+diff --git a/dlls/xaudio2_7/xaudio_dll.c b/dlls/xaudio2_7/xaudio_dll.c
+index 483e2b4138a..3a6ae546349 100644
+--- a/dlls/xaudio2_7/xaudio_dll.c
++++ b/dlls/xaudio2_7/xaudio_dll.c
+@@ -82,6 +82,8 @@ static HINSTANCE instance;
+ 
+ static XA2VoiceImpl *impl_from_IXAudio2Voice(IXAudio2Voice *iface);
+ 
++static void stop_engine_thread(XA2VoiceImpl *This);
++
+ BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD reason, void *pReserved)
+ {
+     TRACE("(%p, %d, %p)\n", hinstDLL, reason, pReserved);
+@@ -1305,13 +1307,7 @@ static void WINAPI XA2M_DestroyVoice(IXAudio2MasteringVoice *iface)
+     EnterCriticalSection(&This->lock);
+ 
+     destroy_voice(This);
+-    pthread_mutex_lock(&This->engine_lock);
+-    This->engine_params.proc = NULL;
+-    pthread_cond_broadcast(&This->engine_ready);
+-    pthread_mutex_unlock(&This->engine_lock);
+-
+-    WaitForSingleObject(This->engine_thread, INFINITE);
+-    This->engine_thread = NULL;
++    stop_engine_thread(This);
+ 
+     LeaveCriticalSection(&This->lock);
+ }
+@@ -1716,15 +1712,49 @@ DWORD WINAPI engine_thread(void *user)
+         if(This->engine_params.proc){
+             This->engine_params.proc(This->engine_params.faudio, This->engine_params.stream);
+             This->engine_params.proc = NULL;
+-            pthread_cond_broadcast(&This->engine_done);
+         }
+-    }while(This->in_use);
++
++        pthread_cond_broadcast(&This->engine_done);
++    }while(!This->stop_engine_thread);
+ 
+     pthread_mutex_unlock(&This->engine_lock);
+ 
+     return 0;
+ }
+ 
++static void start_engine_thread(XA2VoiceImpl *This)
++{
++    pthread_mutex_lock(&This->engine_lock);
++
++    if(!This->engine_thread){
++        This->stop_engine_thread = FALSE;
++
++        This->engine_thread = CreateThread(NULL, 0, &engine_thread, This, 0, NULL);
++
++        pthread_cond_wait(&This->engine_done, &This->engine_lock);
++    }
++
++    pthread_mutex_unlock(&This->engine_lock);
++}
++
++static void stop_engine_thread(XA2VoiceImpl *This)
++{
++    pthread_mutex_lock(&This->engine_lock);
++
++    if(This->engine_thread){
++        This->stop_engine_thread = TRUE;
++
++        pthread_cond_broadcast(&This->engine_ready);
++
++        pthread_cond_wait(&This->engine_done, &This->engine_lock);
++
++        WaitForSingleObject(This->engine_thread, INFINITE);
++        This->engine_thread = NULL;
++    }
++
++    pthread_mutex_unlock(&This->engine_lock);
++}
++
+ static HRESULT WINAPI IXAudio2Impl_CreateMasteringVoice(IXAudio2 *iface,
+         IXAudio2MasteringVoice **ppMasteringVoice, UINT32 inputChannels,
+         UINT32 inputSampleRate, UINT32 flags, const WCHAR *deviceId,
+@@ -1758,13 +1788,7 @@ static HRESULT WINAPI IXAudio2Impl_CreateMasteringVoice(IXAudio2 *iface,
+ 
+     This->mst.effect_chain = wrap_effect_chain(pEffectChain);
+ 
+-    pthread_mutex_lock(&This->mst.engine_lock);
+-
+-    This->mst.engine_thread = CreateThread(NULL, 0, &engine_thread, &This->mst, 0, NULL);
+-
+-    pthread_cond_wait(&This->mst.engine_done, &This->mst.engine_lock);
+-
+-    pthread_mutex_unlock(&This->mst.engine_lock);
++    start_engine_thread(&This->mst);
+ 
+     FAudio_SetEngineProcedureEXT(This->faudio, &engine_cb, &This->mst);
+ 
+@@ -1785,6 +1809,8 @@ static HRESULT WINAPI IXAudio2Impl_StartEngine(IXAudio2 *iface)
+ 
+     TRACE("(%p)->()\n", This);
+ 
++    start_engine_thread(&This->mst);
++
+     return FAudio_StartEngine(This->faudio);
+ }
+ 
+@@ -1795,6 +1821,8 @@ static void WINAPI IXAudio2Impl_StopEngine(IXAudio2 *iface)
+     TRACE("(%p)->()\n", This);
+ 
+     FAudio_StopEngine(This->faudio);
++
++    stop_engine_thread(&This->mst);
+ }
+ 
+ static HRESULT WINAPI IXAudio2Impl_CommitChanges(IXAudio2 *iface,
+diff --git a/dlls/xaudio2_7/xaudio_private.h b/dlls/xaudio2_7/xaudio_private.h
+index 46d842bf4c1..8a485ca7fd5 100644
+--- a/dlls/xaudio2_7/xaudio_private.h
++++ b/dlls/xaudio2_7/xaudio_private.h
+@@ -97,6 +97,7 @@ typedef struct _XA2VoiceImpl {
+         float *stream;
+     } engine_params;
+ 
++    BOOL stop_engine_thread;
+     HANDLE engine_thread;
+     pthread_cond_t engine_done, engine_ready;
+     pthread_mutex_t engine_lock; 

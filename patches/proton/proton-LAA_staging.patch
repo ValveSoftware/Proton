@@ -132,13 +132,13 @@ index d7dbe573a4f..e03335a2709 100644
 +
 +    exename = get_basename(exename);
 +
-+    if (app_key != (HANDLE)-1) return FALSE;
++    if (app_key != (HANDLE)-1) return TRUE;
 +
 +    str = RtlAllocateHeap( GetProcessHeap(), 0,
-+                           sizeof(AppDefaultsW) + strlenW(exename) * sizeof(WCHAR) );
++                           sizeof(AppDefaultsW) + wcslen(exename) * sizeof(WCHAR) );
 +    if (!str) return FALSE;
-+    strcpyW( str, AppDefaultsW );
-+    strcatW( str, exename );
++    wcscpy( str, AppDefaultsW );
++    wcscat( str, exename );
 +
 +    RtlOpenCurrentUser( KEY_ALL_ACCESS, &root );
 +    attr.Length = sizeof(attr);
@@ -150,7 +150,7 @@ index d7dbe573a4f..e03335a2709 100644
 +    RtlInitUnicodeString( &nameW, str );
 +    RtlInitUnicodeString( &valueNameW, LargeAddressAwareW );
 +
-+    result = FALSE;
++    result = TRUE;
 +
 +    /* @@ Wine registry key: HKCU\Software\Wine\AppDefaults\app.exe */
 +    if (!NtOpenKey( &app_key, KEY_ALL_ACCESS, &attr ))
@@ -159,8 +159,8 @@ index d7dbe573a4f..e03335a2709 100644
 +        {
 +            if (info->DataLength >= sizeof(DWORD))
 +            {
-+                if ((*(DWORD *)info->Data) != 0)
-+                    result = TRUE;
++                if ((*(DWORD *)info->Data) == 0)
++                    result = FALSE;
 +            }
 +        }
 +        NtClose( app_key );
@@ -214,10 +214,10 @@ index cf0d50de720..0acf2784669 100644
                                              SECTION_IMAGE_INFORMATION *info ) DECLSPEC_HIDDEN;
  extern struct _KUSER_SHARED_DATA *user_shared_data DECLSPEC_HIDDEN;
 diff --git a/dlls/ntdll/virtual.c b/dlls/ntdll/virtual.c
-index 6ad2d21e01..e171b76950 100644
+index c008db78066..6163761a466 100644
 --- a/dlls/ntdll/virtual.c
 +++ b/dlls/ntdll/virtual.c
-@@ -2651,11 +2651,13 @@ void virtual_release_address_space(void)
+@@ -2442,11 +2442,12 @@ void virtual_release_address_space(void)
   *
   * Enable use of a large address space when allowed by the application.
   */
@@ -227,7 +227,6 @@ index 6ad2d21e01..e171b76950 100644
      IMAGE_NT_HEADERS *nt = RtlImageNtHeader( NtCurrentTeb()->Peb->ImageBaseAddress );
  
 -    if (!(nt->FileHeader.Characteristics & IMAGE_FILE_LARGE_ADDRESS_AWARE)) return;
-+    if (is_win64) return;
 +    if (!(nt->FileHeader.Characteristics & IMAGE_FILE_LARGE_ADDRESS_AWARE) && !force_large_address) return;
 +
      /* no large address space on win9x */

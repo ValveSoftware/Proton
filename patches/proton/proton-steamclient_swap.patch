@@ -543,3 +543,36 @@ index 2979061a5e2..360b43dc382 100644
      {
          *hModule = get_builtin_steamclient_mod(TRUE);
          swap_builtin_to_native_steamclient_hack(hModule);
+diff --git a/dlls/ntdll/loader.c b/dlls/ntdll/loader.c
+index 73c55884c6..54138d3a88 100644
+--- a/dlls/ntdll/loader.c
++++ b/dlls/ntdll/loader.c
+@@ -1758,13 +1758,15 @@ static WCHAR builtin_steamclient_w[] = {'C',':','\\','w','i','n','d','o','w','s'
+                                         's','t','e','a','m','c','l','i','e','n','t','6','4','.','d','l','l',0};
+ static WCHAR native_steamclient_w[] = {'C',':','\\','P','r','o','g','r','a','m',' ','F','i','l','e','s',' ','(','x','8','6',')','\\','S','t','e','a','m','\\',
+                                        's','t','e','a','m','c','l','i','e','n','t','6','4','.','d','l','l',0};
+-static WCHAR steamclient_w[] = {'s','t','e','a','m','c','l','i','e','n','t','6','4','.','d','l','l',0};
++static WCHAR steamclient_w[] = {'s','t','e','a','m','c','l','i','e','n','t','6','4',0};
++static WCHAR steamclient_dll_w[] = {'s','t','e','a','m','c','l','i','e','n','t','6','4','.','d','l','l',0};
+ #else
+ static WCHAR builtin_steamclient_w[] = {'C',':','\\','w','i','n','d','o','w','s','\\','s','y','s','t','e','m','3','2','\\',
+                                         's','t','e','a','m','c','l','i','e','n','t','.','d','l','l',0};
+ static WCHAR native_steamclient_w[] = {'C',':','\\','P','r','o','g','r','a','m',' ','F','i','l','e','s',' ','(','x','8','6',')','\\','S','t','e','a','m','\\',
+                                        's','t','e','a','m','c','l','i','e','n','t','.','d','l','l',0};
+-static WCHAR steamclient_w[] = {'s','t','e','a','m','c','l','i','e','n','t','.','d','l','l',0};
++static WCHAR steamclient_w[] = {'s','t','e','a','m','c','l','i','e','n','t',0};
++static WCHAR steamclient_dll_w[] = {'s','t','e','a','m','c','l','i','e','n','t','.','d','l','l',0};
+ #endif
+ 
+ static WCHAR *strstriW( const WCHAR *str, const WCHAR *sub )
+@@ -3615,8 +3617,8 @@ NTSTATUS WINAPI DECLSPEC_HOTPATCH LdrLoadDll(LPCWSTR path_name, DWORD flags,
+     RtlEnterCriticalSection( &loader_section );
+ 
+     if (!(flags & LDR_STEAM_INTERNAL) && (basename = get_basename(libname->Buffer)) &&
+-        !RtlCompareUnicodeStrings(steamclient_w, wcslen(steamclient_w),
+-                                  basename, wcslen(basename), TRUE))
++        (!RtlCompareUnicodeStrings(steamclient_w, wcslen(steamclient_w), basename, wcslen(basename), TRUE)) ||
++        (!RtlCompareUnicodeStrings(steamclient_dll_w, wcslen(steamclient_dll_w), basename, wcslen(basename), TRUE)))
+     {
+         *hModule = get_builtin_steamclient_mod(TRUE);
+         swap_builtin_to_native_steamclient_hack(hModule);

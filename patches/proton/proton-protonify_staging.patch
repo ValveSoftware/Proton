@@ -1364,141 +1364,6 @@ index 379f54ab4ec..0fb6b0b5ad3 100644
      argv[0] = argv0;
      argv[1] = argv1;
      argv[2] = NULL;
-From a4310c0cf1e27f0a90f737c2e7cfe9cdbde07522 Mon Sep 17 00:00:00 2001
-From: Andrew Eikum <aeikum@codeweavers.com>
-Date: Mon, 20 Jan 2020 10:36:48 -0600
-Subject: [PATCH] xaudio2: Stop engine thread in IXAudio2::StopEngine
-
----
- dlls/xaudio2_7/xaudio_dll.c     | 60 ++++++++++++++++++++++++---------
- dlls/xaudio2_7/xaudio_private.h |  1 +
- 2 files changed, 45 insertions(+), 16 deletions(-)
-
-diff --git a/dlls/xaudio2_7/xaudio_dll.c b/dlls/xaudio2_7/xaudio_dll.c
-index 483e2b4138a..3a6ae546349 100644
---- a/dlls/xaudio2_7/xaudio_dll.c
-+++ b/dlls/xaudio2_7/xaudio_dll.c
-@@ -82,6 +82,8 @@ static HINSTANCE instance;
- 
- static XA2VoiceImpl *impl_from_IXAudio2Voice(IXAudio2Voice *iface);
- 
-+static void stop_engine_thread(XA2VoiceImpl *This);
-+
- BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD reason, void *pReserved)
- {
-     TRACE("(%p, %d, %p)\n", hinstDLL, reason, pReserved);
-@@ -1305,13 +1307,7 @@ static void WINAPI XA2M_DestroyVoice(IXAudio2MasteringVoice *iface)
-     EnterCriticalSection(&This->lock);
- 
-     destroy_voice(This);
--    pthread_mutex_lock(&This->engine_lock);
--    This->engine_params.proc = NULL;
--    pthread_cond_broadcast(&This->engine_ready);
--    pthread_mutex_unlock(&This->engine_lock);
--
--    WaitForSingleObject(This->engine_thread, INFINITE);
--    This->engine_thread = NULL;
-+    stop_engine_thread(This);
- 
-     LeaveCriticalSection(&This->lock);
- }
-@@ -1716,15 +1712,49 @@ DWORD WINAPI engine_thread(void *user)
-         if(This->engine_params.proc){
-             This->engine_params.proc(This->engine_params.faudio, This->engine_params.stream);
-             This->engine_params.proc = NULL;
--            pthread_cond_broadcast(&This->engine_done);
-         }
--    }while(This->in_use);
-+
-+        pthread_cond_broadcast(&This->engine_done);
-+    }while(!This->stop_engine_thread);
- 
-     pthread_mutex_unlock(&This->engine_lock);
- 
-     return 0;
- }
- 
-+static void start_engine_thread(XA2VoiceImpl *This)
-+{
-+    pthread_mutex_lock(&This->engine_lock);
-+
-+    if(!This->engine_thread){
-+        This->stop_engine_thread = FALSE;
-+
-+        This->engine_thread = CreateThread(NULL, 0, &engine_thread, This, 0, NULL);
-+
-+        pthread_cond_wait(&This->engine_done, &This->engine_lock);
-+    }
-+
-+    pthread_mutex_unlock(&This->engine_lock);
-+}
-+
-+static void stop_engine_thread(XA2VoiceImpl *This)
-+{
-+    pthread_mutex_lock(&This->engine_lock);
-+
-+    if(This->engine_thread){
-+        This->stop_engine_thread = TRUE;
-+
-+        pthread_cond_broadcast(&This->engine_ready);
-+
-+        pthread_cond_wait(&This->engine_done, &This->engine_lock);
-+
-+        WaitForSingleObject(This->engine_thread, INFINITE);
-+        This->engine_thread = NULL;
-+    }
-+
-+    pthread_mutex_unlock(&This->engine_lock);
-+}
-+
- static HRESULT WINAPI IXAudio2Impl_CreateMasteringVoice(IXAudio2 *iface,
-         IXAudio2MasteringVoice **ppMasteringVoice, UINT32 inputChannels,
-         UINT32 inputSampleRate, UINT32 flags, const WCHAR *deviceId,
-@@ -1758,13 +1788,7 @@ static HRESULT WINAPI IXAudio2Impl_CreateMasteringVoice(IXAudio2 *iface,
- 
-     This->mst.effect_chain = wrap_effect_chain(pEffectChain);
- 
--    pthread_mutex_lock(&This->mst.engine_lock);
--
--    This->mst.engine_thread = CreateThread(NULL, 0, &engine_thread, &This->mst, 0, NULL);
--
--    pthread_cond_wait(&This->mst.engine_done, &This->mst.engine_lock);
--
--    pthread_mutex_unlock(&This->mst.engine_lock);
-+    start_engine_thread(&This->mst);
- 
-     FAudio_SetEngineProcedureEXT(This->faudio, &engine_cb, &This->mst);
- 
-@@ -1785,6 +1809,8 @@ static HRESULT WINAPI IXAudio2Impl_StartEngine(IXAudio2 *iface)
- 
-     TRACE("(%p)->()\n", This);
- 
-+    start_engine_thread(&This->mst);
-+
-     return FAudio_StartEngine(This->faudio);
- }
- 
-@@ -1795,6 +1821,8 @@ static void WINAPI IXAudio2Impl_StopEngine(IXAudio2 *iface)
-     TRACE("(%p)->()\n", This);
- 
-     FAudio_StopEngine(This->faudio);
-+
-+    stop_engine_thread(&This->mst);
- }
- 
- static HRESULT WINAPI IXAudio2Impl_CommitChanges(IXAudio2 *iface,
-diff --git a/dlls/xaudio2_7/xaudio_private.h b/dlls/xaudio2_7/xaudio_private.h
-index 46d842bf4c1..8a485ca7fd5 100644
---- a/dlls/xaudio2_7/xaudio_private.h
-+++ b/dlls/xaudio2_7/xaudio_private.h
-@@ -97,6 +97,7 @@ typedef struct _XA2VoiceImpl {
-         float *stream;
-     } engine_params;
- 
-+    BOOL stop_engine_thread;
-     HANDLE engine_thread;
-     pthread_cond_t engine_done, engine_ready;
-     pthread_mutex_t engine_lock;
 From ddb3e721daa73dc07079e7a15612e274f96f104b Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Fri, 6 Dec 2019 11:48:10 -0600
@@ -1553,279 +1418,6 @@ index 868f898bbbb..95f498123ea 100644
      }
  
      if (TRACE_ON( bcrypt ))
-From f70d26ade963aab370f80ca33744ca258f839b25 Mon Sep 17 00:00:00 2001
-From: Derek Lesho <dlesho@codeweavers.com>
-Date: Mon, 24 Feb 2020 13:32:38 -0600
-Subject: [PATCH] ntdll: Partially implement
- JobObjectBasicAccountingInformation.
-
----
- dlls/kernel32/tests/process.c  |  9 +++++++++
- dlls/ntdll/sync.c              | 20 +++++++++++++++++---
- include/wine/server_protocol.h | 18 +++++++++++++++++-
- server/process.c               | 14 ++++++++++++++
- server/protocol.def            |  8 ++++++++
- server/request.h               |  7 +++++++
- server/trace.c                 | 14 ++++++++++++++
- 7 files changed, 86 insertions(+), 4 deletions(-)
-
-diff --git a/dlls/kernel32/tests/process.c b/dlls/kernel32/tests/process.c
-index 89ad4175c7e..0489f4c285f 100644
---- a/dlls/kernel32/tests/process.c
-+++ b/dlls/kernel32/tests/process.c
-@@ -2543,6 +2543,7 @@ static void test_QueryInformationJobObject(void)
-     PJOBOBJECT_BASIC_PROCESS_ID_LIST pid_list = (JOBOBJECT_BASIC_PROCESS_ID_LIST *)buf;
-     JOBOBJECT_EXTENDED_LIMIT_INFORMATION ext_limit_info;
-     JOBOBJECT_BASIC_LIMIT_INFORMATION *basic_limit_info = &ext_limit_info.BasicLimitInformation;
-+    JOBOBJECT_BASIC_ACCOUNTING_INFORMATION basic_accounting_info;
-     DWORD ret_len;
-     PROCESS_INFORMATION pi[2];
-     char buffer[50];
-@@ -2647,6 +2648,14 @@ static void test_QueryInformationJobObject(void)
-     ok(ret_len == sizeof(ext_limit_info), "QueryInformationJobObject returned ret_len=%u\n", ret_len);
-     expect_eq_d(0, basic_limit_info->LimitFlags);
- 
-+    /* test JobObjectBasicAccountingInformation */
-+    ret = pQueryInformationJobObject(job, JobObjectBasicAccountingInformation, &basic_accounting_info,
-+                                     sizeof(basic_accounting_info), &ret_len);
-+    ok(ret, "QueryInformationJobObject error %u\n", GetLastError());
-+    ok(ret_len == sizeof(basic_accounting_info), "QueryInformationJobObject returned ret_len=%u\n", ret_len);
-+    expect_eq_d(3, basic_accounting_info.TotalProcesses);
-+    expect_eq_d(2, basic_accounting_info.ActiveProcesses);
-+
-     TerminateProcess(pi[0].hProcess, 0);
-     CloseHandle(pi[0].hProcess);
-     CloseHandle(pi[0].hThread);
-diff --git a/dlls/ntdll/sync.c b/dlls/ntdll/sync.c
-index 0265ff96661..a6fe27d00ec 100644
---- a/dlls/ntdll/sync.c
-+++ b/dlls/ntdll/sync.c
-@@ -784,7 +784,9 @@ NTSTATUS WINAPI NtTerminateJobObject( HANDLE handle, NTSTATUS status )
- NTSTATUS WINAPI NtQueryInformationJobObject( HANDLE handle, JOBOBJECTINFOCLASS class, PVOID info,
-                                              ULONG len, PULONG ret_len )
- {
--    FIXME( "stub: %p %u %p %u %p\n", handle, class, info, len, ret_len );
-+    NTSTATUS ret;
-+
-+    TRACE( "semi-stub: %p %u %p %u %p\n", handle, class, info, len, ret_len );
- 
-     if (class >= MaxJobObjectInfoClass)
-         return STATUS_INVALID_PARAMETER;
-@@ -798,9 +800,21 @@ NTSTATUS WINAPI NtQueryInformationJobObject( HANDLE handle, JOBOBJECTINFOCLASS c
-                 return STATUS_INFO_LENGTH_MISMATCH;
- 
-             accounting = (JOBOBJECT_BASIC_ACCOUNTING_INFORMATION *)info;
--            memset(accounting, 0, sizeof(*accounting));
-+
-+            SERVER_START_REQ(get_job_info)
-+            {
-+                req->handle = wine_server_obj_handle( handle );
-+                if ((ret = wine_server_call( req )) == STATUS_SUCCESS)
-+                {
-+                    memset(accounting, 0, sizeof(*accounting));
-+                    accounting->TotalProcesses = reply->total_processes;
-+                    accounting->ActiveProcesses = reply->active_processes;
-+                }
-+            }
-+            SERVER_END_REQ;
-+
-             if (ret_len) *ret_len = sizeof(*accounting);
--            return STATUS_SUCCESS;
-+            return ret;
-         }
- 
-     case JobObjectBasicProcessIdList:
-diff --git a/include/wine/server_protocol.h b/include/wine/server_protocol.h
-index 82d58f0f32b..5b8774a6aed 100644
---- a/include/wine/server_protocol.h
-+++ b/include/wine/server_protocol.h
-@@ -5794,6 +5794,19 @@ struct set_job_completion_port_reply
- };
- 
- 
-+struct get_job_info_request
-+{
-+    struct request_header __header;
-+    obj_handle_t handle;
-+};
-+struct get_job_info_reply
-+{
-+    struct reply_header __header;
-+    unsigned int total_processes;
-+    unsigned int active_processes;
-+};
-+
-+
- 
- struct terminate_job_request
- {
-@@ -6301,6 +6314,7 @@ enum request
-     REQ_process_in_job,
-     REQ_set_job_limits,
-     REQ_set_job_completion_port,
-+    REQ_get_job_info,
-     REQ_terminate_job,
-     REQ_suspend_process,
-     REQ_resume_process,
-@@ -6616,6 +6630,7 @@ union generic_request
-     struct process_in_job_request process_in_job_request;
-     struct set_job_limits_request set_job_limits_request;
-     struct set_job_completion_port_request set_job_completion_port_request;
-+    struct get_job_info_request get_job_info_request;
-     struct terminate_job_request terminate_job_request;
-     struct suspend_process_request suspend_process_request;
-     struct resume_process_request resume_process_request;
-@@ -6929,6 +6944,7 @@ union generic_reply
-     struct process_in_job_reply process_in_job_reply;
-     struct set_job_limits_reply set_job_limits_reply;
-     struct set_job_completion_port_reply set_job_completion_port_reply;
-+    struct get_job_info_reply get_job_info_reply;
-     struct terminate_job_reply terminate_job_reply;
-     struct suspend_process_reply suspend_process_reply;
-     struct resume_process_reply resume_process_reply;
-diff --git a/server/process.c b/server/process.c
-index f43f96cda08..dacca025572 100644
---- a/server/process.c
-+++ b/server/process.c
-@@ -164,6 +164,7 @@ struct job
-     struct object obj;             /* object header */
-     struct list process_list;      /* list of all processes */
-     int num_processes;             /* count of running processes */
-+    int assign_counter;            /* Number of processes which have been assigned */
-     unsigned int limit_flags;      /* limit flags */
-     int terminating;               /* job is terminating */
-     int signaled;                  /* job is signaled */
-@@ -208,6 +209,7 @@ static struct job *create_job_object( struct object *root, const struct unicode_
-             /* initialize it if it didn't already exist */
-             list_init( &job->process_list );
-             job->num_processes = 0;
-+            job->assign_counter = 0;
-             job->limit_flags = 0;
-             job->terminating = 0;
-             job->signaled = 0;
-@@ -250,6 +252,7 @@ static void add_job_process( struct job *job, struct process *process )
-     process->job = (struct job *)grab_object( job );
-     list_add_tail( &job->process_list, &process->job_entry );
-     job->num_processes++;
-+    job->assign_counter++;
- 
-     add_job_completion( job, JOB_OBJECT_MSG_NEW_PROCESS, get_process_id(process) );
- }
-@@ -1750,6 +1753,17 @@ DECL_HANDLER(process_in_job)
-     release_object( process );
- }
- 
-+/* retrieve information about a job */
-+DECL_HANDLER(get_job_info)
-+{
-+    struct job *job = get_job_obj( current->process, req->handle, JOB_OBJECT_QUERY );
-+
-+    reply->total_processes = job->assign_counter;
-+    reply->active_processes = job->num_processes;
-+
-+    release_object( job );
-+}
-+
- /* terminate all processes associated with the job */
- DECL_HANDLER(terminate_job)
- {
-diff --git a/server/protocol.def b/server/protocol.def
-index 1dc9d81a2f5..932c67b1b00 100644
---- a/server/protocol.def
-+++ b/server/protocol.def
-@@ -3966,6 +3966,14 @@ struct handle_info
-     client_ptr_t key;             /* key to send with completion messages */
- @END
- 
-+/* Retrieve information about a job */
-+@REQ(get_job_info)
-+    obj_handle_t handle;
-+@REPLY
-+    unsigned int total_processes;
-+    unsigned int active_processes;
-+@END
-+
- 
- /* Terminate all processes associated with the job  */
- @REQ(terminate_job)
-diff --git a/server/request.h b/server/request.h
-index 57d71403d0c..8521cc955e8 100644
---- a/server/request.h
-+++ b/server/request.h
-@@ -408,6 +408,7 @@ DECL_HANDLER(assign_job);
- DECL_HANDLER(process_in_job);
- DECL_HANDLER(set_job_limits);
- DECL_HANDLER(set_job_completion_port);
-+DECL_HANDLER(get_job_info);
- DECL_HANDLER(terminate_job);
- DECL_HANDLER(suspend_process);
- DECL_HANDLER(resume_process);
-@@ -722,6 +723,7 @@ static const req_handler req_handlers[REQ_NB_REQUESTS] =
-     (req_handler)req_process_in_job,
-     (req_handler)req_set_job_limits,
-     (req_handler)req_set_job_completion_port,
-+    (req_handler)req_get_job_info,
-     (req_handler)req_terminate_job,
-     (req_handler)req_suspend_process,
-     (req_handler)req_resume_process,
-@@ -2463,6 +2465,11 @@ C_ASSERT( FIELD_OFFSET(struct set_job_completion_port_request, job) == 12 );
- C_ASSERT( FIELD_OFFSET(struct set_job_completion_port_request, port) == 16 );
- C_ASSERT( FIELD_OFFSET(struct set_job_completion_port_request, key) == 24 );
- C_ASSERT( sizeof(struct set_job_completion_port_request) == 32 );
-+C_ASSERT( FIELD_OFFSET(struct get_job_info_request, handle) == 12 );
-+C_ASSERT( sizeof(struct get_job_info_request) == 16 );
-+C_ASSERT( FIELD_OFFSET(struct get_job_info_reply, total_processes) == 8 );
-+C_ASSERT( FIELD_OFFSET(struct get_job_info_reply, active_processes) == 12 );
-+C_ASSERT( sizeof(struct get_job_info_reply) == 16 );
- C_ASSERT( FIELD_OFFSET(struct terminate_job_request, handle) == 12 );
- C_ASSERT( FIELD_OFFSET(struct terminate_job_request, status) == 16 );
- C_ASSERT( sizeof(struct terminate_job_request) == 24 );
-diff --git a/server/trace.c b/server/trace.c
-index f9d13167eb2..b407a7c478e 100644
---- a/server/trace.c
-+++ b/server/trace.c
-@@ -4607,6 +4607,17 @@ static void dump_set_job_completion_port_request( const struct set_job_completio
-     dump_uint64( ", key=", &req->key );
- }
- 
-+static void dump_get_job_info_request( const struct get_job_info_request *req )
-+{
-+    fprintf( stderr, " handle=%04x", req->handle );
-+}
-+
-+static void dump_get_job_info_reply( const struct get_job_info_reply *req )
-+{
-+    fprintf( stderr, " total_processes=%08x", req->total_processes );
-+    fprintf( stderr, ", active_processes=%08x", req->active_processes );
-+}
-+
- static void dump_terminate_job_request( const struct terminate_job_request *req )
- {
-     fprintf( stderr, " handle=%04x", req->handle );
-@@ -5028,6 +5039,7 @@ static const dump_func req_dumpers[REQ_NB_REQUESTS] = {
-     (dump_func)dump_process_in_job_request,
-     (dump_func)dump_set_job_limits_request,
-     (dump_func)dump_set_job_completion_port_request,
-+    (dump_func)dump_get_job_info_request,
-     (dump_func)dump_terminate_job_request,
-     (dump_func)dump_suspend_process_request,
-     (dump_func)dump_resume_process_request,
-@@ -5339,6 +5351,7 @@ static const dump_func reply_dumpers[REQ_NB_REQUESTS] = {
-     NULL,
-     NULL,
-     NULL,
-+    (dump_func)dump_get_job_info_reply,
-     NULL,
-     NULL,
-     NULL,
-@@ -5650,6 +5663,7 @@ static const char * const req_names[REQ_NB_REQUESTS] = {
-     "process_in_job",
-     "set_job_limits",
-     "set_job_completion_port",
-+    "get_job_info",
-     "terminate_job",
-     "suspend_process",
-     "resume_process",
 From 2f720e9aa8ded781ff457bdfab96f3651017299c Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
 Date: Tue, 21 Jan 2020 21:05:05 +0100
@@ -2331,3 +1923,204 @@ index 83c3f3734a7..006ab370844 100644
          if (FAILED(hr))
          {
              ERR("Failed to register d3d11 layers, returning %#x.\n", hr);
+
+From 5b00ca69a1927e1d0df4cf26160228e460568c51 Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Tue, 9 Jun 2020 14:16:22 +0300
+Subject: [PATCH] kernelbase: HACK Add an option to blacklist files.
+
+---
+ dlls/kernelbase/file.c | 76 +++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 75 insertions(+), 1 deletion(-)
+
+diff --git a/dlls/kernelbase/file.c b/dlls/kernelbase/file.c
+index eb2ef57c7d6..c7881fe4516 100644
+--- a/dlls/kernelbase/file.c
++++ b/dlls/kernelbase/file.c
+@@ -41,6 +41,8 @@
+ #include "wine/exception.h"
+ #include "wine/debug.h"
+ 
++#include "wine/heap.h"
++
+ WINE_DEFAULT_DEBUG_CHANNEL(file);
+ 
+ /* info structure for FindFirstFile handle */
+@@ -432,6 +434,72 @@ HANDLE WINAPI DECLSPEC_HOTPATCH CreateFileA( LPCSTR name, DWORD access, DWORD sh
+     return CreateFileW( nameW, access, sharing, sa, creation, attributes, template );
+ }
+ 
++#define MAX_BLACKLISTED_FILENAMES 32
++
++static struct
++{
++    const WCHAR *name;
++    size_t name_len;
++}
++blacklist_filenames[MAX_BLACKLISTED_FILENAMES];
++
++static unsigned int blacklist_filename_count;
++
++static BOOL CALLBACK init_file_blacklist(PINIT_ONCE init_once, PVOID parameter, PVOID *context)
++{
++    const WCHAR separators[] = L",; ";
++    WCHAR *buffer, *token;
++    DWORD size;
++
++    if (!(size = GetEnvironmentVariableW(L"WINE_BLACKLIST_FILES", NULL, 0)))
++        return TRUE;
++
++    if (!(buffer = heap_alloc(sizeof(*buffer) * size)))
++    {
++        ERR("No memory.\n");
++        return FALSE;
++    }
++
++    if (GetEnvironmentVariableW(L"WINE_BLACKLIST_FILES", buffer, size) != size - 1)
++    {
++        ERR("Error getting WINE_BLACKLIST_FILES env variable.\n");
++        return FALSE;
++    }
++
++    blacklist_filename_count = 0;
++    token = wcstok(buffer, separators);
++    while (token && blacklist_filename_count < MAX_BLACKLISTED_FILENAMES)
++    {
++        FIXME("Blacklisting %s file.\n", debugstr_w(token));
++        blacklist_filenames[blacklist_filename_count].name = token;
++        blacklist_filenames[blacklist_filename_count++].name_len = wcslen(token);
++        token = wcstok(NULL, separators);
++    }
++
++    if (token && blacklist_filename_count == MAX_BLACKLISTED_FILENAMES)
++        ERR("File black list is too long.\n");
++
++    return TRUE;
++}
++
++static BOOL is_file_blacklisted(LPCWSTR filename)
++{
++    static INIT_ONCE init_once = INIT_ONCE_STATIC_INIT;
++    unsigned int i;
++    size_t len;
++
++    if (!InitOnceExecuteOnce(&init_once, init_file_blacklist, NULL, NULL))
++        return FALSE;
++
++    len = wcslen(filename);
++
++    for (i = 0; i < blacklist_filename_count; ++i)
++        if (blacklist_filenames[i].name_len <= len
++                && !wcsicmp(blacklist_filenames[i].name, filename + len - blacklist_filenames[i].name_len))
++            return TRUE;
++
++    return FALSE;
++}
+ 
+ /*************************************************************************
+  *	CreateFileW   (kernelbase.@)
+@@ -460,7 +528,6 @@ HANDLE WINAPI DECLSPEC_HOTPATCH CreateFileW( LPCWSTR filename, DWORD access, DWO
+         FILE_OVERWRITE      /* TRUNCATE_EXISTING */
+     };
+ 
+-
+     /* sanity checks */
+ 
+     if (!filename || !filename[0])
+@@ -479,6 +546,13 @@ HANDLE WINAPI DECLSPEC_HOTPATCH CreateFileW( LPCWSTR filename, DWORD access, DWO
+            (sharing & FILE_SHARE_DELETE) ? "FILE_SHARE_DELETE " : "",
+            creation, attributes);
+ 
++    if (is_file_blacklisted(filename))
++    {
++        FIXME("\"%s\" is blacklisted.\n", debugstr_w(filename));
++        SetLastError( ERROR_FILE_NOT_FOUND );
++        return INVALID_HANDLE_VALUE;
++    }
++
+     /* Open a console for CONIN$ or CONOUT$ */
+ 
+     if (!wcsicmp( filename, L"CONIN$" ))
+
+From 2409bd1f74be116172688a25df725290637c255a Mon Sep 17 00:00:00 2001
+From: Andrew Eikum <aeikum@codeweavers.com>
+Date: Wed, 10 Jun 2020 16:18:29 -0500
+Subject: [PATCH] kernelbase: Apply blacklist automatically to Origin
+ executables
+
+---
+ dlls/kernelbase/file.c | 54 ++++++++++++++++++++++++++++++++++--------
+ 1 file changed, 44 insertions(+), 10 deletions(-)
+
+diff --git a/dlls/kernelbase/file.c b/dlls/kernelbase/file.c
+index c7881fe4516..bb4be45da5d 100644
+--- a/dlls/kernelbase/file.c
++++ b/dlls/kernelbase/file.c
+@@ -447,23 +447,57 @@ static unsigned int blacklist_filename_count;
+ 
+ static BOOL CALLBACK init_file_blacklist(PINIT_ONCE init_once, PVOID parameter, PVOID *context)
+ {
++    static WCHAR origin_blacklist[] = L"kernel32.dll;user32.dll";
++
+     const WCHAR separators[] = L",; ";
+     WCHAR *buffer, *token;
+     DWORD size;
+ 
+-    if (!(size = GetEnvironmentVariableW(L"WINE_BLACKLIST_FILES", NULL, 0)))
+-        return TRUE;
+-
+-    if (!(buffer = heap_alloc(sizeof(*buffer) * size)))
++    if ((size = GetEnvironmentVariableW(L"WINE_BLACKLIST_FILES", NULL, 0)))
+     {
+-        ERR("No memory.\n");
+-        return FALSE;
+-    }
++        if (!(buffer = heap_alloc(sizeof(*buffer) * size)))
++        {
++            ERR("No memory.\n");
++            return FALSE;
++        }
+ 
+-    if (GetEnvironmentVariableW(L"WINE_BLACKLIST_FILES", buffer, size) != size - 1)
++        if (GetEnvironmentVariableW(L"WINE_BLACKLIST_FILES", buffer, size) != size - 1)
++        {
++            ERR("Error getting WINE_BLACKLIST_FILES env variable.\n");
++            return FALSE;
++        }
++    }
++    else
+     {
+-        ERR("Error getting WINE_BLACKLIST_FILES env variable.\n");
+-        return FALSE;
++        static const WCHAR *origin_names[] = {
++            L"igoproxy64.exe",
++            L"igoproxy.exe",
++            L"origin.exe",
++            L"easteamproxy.exe"
++        };
++
++        WCHAR cur_exe[MAX_PATH];
++        DWORD cur_exe_len, i;
++
++        if (!(cur_exe_len = GetModuleFileNameW(NULL, cur_exe, ARRAY_SIZE(cur_exe))))
++            return TRUE;
++
++        buffer = NULL;
++
++        for (i = 0; i < ARRAY_SIZE(origin_names); ++i)
++        {
++            DWORD origin_name_len = wcslen(origin_names[i]);
++            if (cur_exe_len >= origin_name_len &&
++                    wcsicmp(cur_exe + cur_exe_len - origin_name_len, origin_names[i]) == 0)
++            {
++                FIXME("using origin file blacklist for %s\n", debugstr_w(cur_exe));
++                buffer = origin_blacklist;
++                break;
++            }
++        }
++
++        if (!buffer)
++            return TRUE;
+     }
+ 
+     blacklist_filename_count = 0;
