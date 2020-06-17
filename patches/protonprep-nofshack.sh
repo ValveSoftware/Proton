@@ -68,6 +68,13 @@
     cd wine-staging
     git reset --hard HEAD
     git clean -xdf
+    
+    echo "staging unfuck 1"
+    patch -Np1 -R < ../patches/wine-hotfixes/reverts/staging/06877e55b1100cc49d3726e9a70f31c4dfbe66f8.patch
+    echo "staging unfuck 2"
+    patch -Np1 < ../patches/wine-hotfixes/reverts/staging/934a09585a15e8491e422b43624ffe632b02bd3c.patch
+    echo "staging unfuck 3"
+    patch -Np1 < ../patches/wine-hotfixes/updates/staging/ntdll-ForceBottomUpAlloc-044cb93.patch
     cd ..
 
     #WINE
@@ -75,9 +82,82 @@
     git reset --hard HEAD
     git clean -xdf
 
-    # this conflicts with proton's gamepad changes and causes camera spinning
+    echo "proton gamepad unfuck"
     git revert --no-commit da7d60bf97fb8726828e57f852e8963aacde21e9
-    
+
+    echo "sea of thieves patch unfuck"
+    # these commits will eventually replace the sea of thieves patch, but are currently incomplete
+    git revert --no-commit a46d359e91e299142a27570bb202d8141b9625da
+    git revert --no-commit 0a90d0431d8d6d2f4913cdc6640edeb1ade833c0
+    git revert --no-commit 93aea5d86fe2eb50a9bb0829533ca5da627908f6
+        
+    echo "esync/fsync unfuck"
+    git revert --no-commit 7e9ccbe68fe5215df9bd8e424195e1abf56f7286 
+    git revert --no-commit f6bfb4ce00d27c4bc11615a5426065749e72b70a 
+    git revert --no-commit 888d66a2376f0da076ec312ef5ca2d93fee0e2f9 
+    git revert --no-commit e9e5c95058df1f409debeb6b05aa222b476d79f6 
+    git revert --no-commit c4c3b06e83ce8f7f18e77a101656ba983fb0d0e3 
+    git revert --no-commit a20b997b3430bd7dc94ffd587cd299efa467420e 
+    git revert --no-commit 98eab245d3c3377af0c3da6880bb8ede80cb0925 
+    git revert --no-commit c3e2013b615dd449113fe8fce0700319aa082020 
+    git revert --no-commit 07248fc5002fb109de8fc8e51e9d05329e0cd8cc 
+    git revert --no-commit 06fa3d32a73d59c7fec59a8682e3750150f84554 
+    git revert --no-commit 9ed951266244ad75454cfdb63ee0e872ca9ac43b 
+    git revert --no-commit e0fca9451146908402a8fbc770ff189aba636213 
+    git revert --no-commit 573be7e6023e73d736c341bdca1ee49594f56ee4 
+    git revert --no-commit 412555e0cdcd16439db56f6bd6ea56cedcda0883 
+    git revert --no-commit d4c2b61c48cdd35275684e75427d2cf0d8d928de 
+    git revert --no-commit b86dc3926bfe5cd92400aa96c89b0255eba1d447 
+    git revert --no-commit ee5c842e5303c70e88a1c68390c46db1f1689f19 
+    git revert --no-commit a4ce2f652d76d033a79434416ff585cd15356a87 
+    git revert --no-commit 84d25135b3b2f9a30619f741d166fa1daa8298e5 
+    git revert --no-commit df513b95ec24d279a10fbe358973662ce2c9c385 
+    git revert --no-commit d8d6a6b2e639d2e29e166a3faf988b81388ae191 
+    git revert --no-commit ff19f21913c508f5827df0e7e4c3a351c36711a0 
+    git revert --no-commit 552bc8aa4703b674747df36c591038da17c0c858 
+    git revert --no-commit 509ad75adbca85d606a3bd8bba727abf0751cebc 
+    git revert --no-commit 246dedaa091308f140a3cac41845f5e978492e37 
+    git revert --no-commit 4d70266274c1102c385dd00303d312d94453d19b 
+    git revert --no-commit 2333099c52566c6cf3d3f981588a26d4ff408155 
+    git revert --no-commit 0c14b1a962573ee125940f2008c646befe597226 
+    git revert --no-commit 683583faf2f4b00874f702429393b127aca8eef4 
+    git revert --no-commit 20c91c5e803090bd40fe3045a0d9fea0a68913e4 
+    git revert --no-commit 7f28a1c521341399da1f3559358f2abf876d34be 
+    git revert --no-commit 95e2d05e5d6b92a2f6b28e00f36064b7bf6b249a 
+    git revert --no-commit e561ce4b9259071f79d219dddf62f05cdd8dd07b 
+    git revert --no-commit 8e5d3042786917c04d3065755d81e7f8a751e529 
+    git revert --no-commit 245efd04e1456a71a6962acbb8ebc279481e9ffa 
+    git revert --no-commit 33c750f50ff8b6f1eae63140e8287c49a5130a60 
+    git revert --no-commit 39e7f25e0918d23e5b9ef5fc5049948b6f56525e 
+    git revert --no-commit ca3ca7b046ae94a152b1367ca982774345887e55 
+    git revert --no-commit cdfc45859c299aa629482ee06614c9819346b444 
+    git revert --no-commit f1276b25ae72e81cf044134bae92db6ef73be3a1 
+    git revert --no-commit 65edacf93484faf1dc3d11e555081d69556ccbc3 
+    git revert --no-commit 8b87d6b81408e5d6fe34f9e9fda1df2f4f2e5cd0 
+    git revert --no-commit efd59e378c2ba8cae98fa664ae98521027e96b81 
+    git revert --no-commit 39915c9bc42f17619b1d2c46e6b3aea485c471a0 
+    git revert --no-commit a18444984171ee86503d1250094965fb50a198ee 
+    git revert --no-commit 4ffe39573b537d638e4b39c9b5990c6566d62b09 
+    git revert --no-commit cd0c5988020acc92ff98260e3304967bf31e4e87 
+    git revert --no-commit f1d40d4824b568389cbc328cebb5734430b52e44 
+    git revert --no-commit 35b063a404457fdf956d1913738a3c8a66266cb4 
+    git revert --no-commit be0eb9c92eb7a4fcd9d0d48568c8ed5e8326ef0b 
+    git revert --no-commit 9fe61171e515e7c77720675ecbe69731219b549c 
+    git revert --no-commit c96ef78b6d6d9184d8ec4cd18924a3049d388583 
+    git revert --no-commit 7c32b2dd9368137eca3cf0202360bbe0db62efbf 
+    git revert --no-commit ac90898f72b02bbc226a95deb40555c1fb8ac3a3 
+    git revert --no-commit 87fa906a84621295a76035d73dd6305c9cd2ea4a 
+    git revert --no-commit c0319e0eabbad87a3e153c23f2461c881153b984 
+    git revert --no-commit b925dd78b813decf386139a15aa7bc6863ee7ae5 
+    git revert --no-commit 3e9f8c87e5a2acaa80f8bbb1d50fa82147942143 
+    git revert --no-commit 704975f58d7947721f530d202022721c16df466a 
+    git revert --no-commit 04f41e87a369828a698f62c32cabad34ed34a3e7 
+    git revert --no-commit 01150d7f8d27ad5efdb824da938c4a9fa562a036 
+    git revert --no-commit 1a743c9af39d0224b65ae504ae7e24d9fad56c2b 
+    git revert --no-commit 8a63b688ac49f19c259066fd100407edf3747f95 
+    git revert --no-commit e6e2f2325a0a4eb14f10dd6df319b068761e9600 
+    git revert --no-commit e854ea34cc481658ec61f4603d0438e075608c98
+            
 
 # disable these when using proton's gamepad patches
 #    -W dinput-SetActionMap-genre \
@@ -94,7 +174,15 @@
     -W dinput-axis-recalc \
     -W dinput-joy-mappings \
     -W dinput-reconnect-joystick \
-    -W dinput-remap-joystick
+    -W dinput-remap-joystick \
+    -W user32-window-activation
+    
+    echo "wine unfuck fd7992972b252ed262d33ef604e9e1235d2108c5"
+    patch -Np1 -R < ../patches/wine-hotfixes/reverts/wine/fd7992972b252ed262d33ef604e9e1235d2108c5.patch
+    
+    echo "wine unfuck d8d6a6b2e639d2e29e166a3faf988b81388ae191"
+    patch -Np1 < ../patches/wine-hotfixes/updates/wine/d8d6a6b2e639d2e29e166a3faf988b81388ae191.patch
+
 
     #WINE FAUDIO
     #echo "applying faudio patches"
@@ -108,7 +196,7 @@
 
     echo "final fantasy XV denuvo fix"
     patch -Np1 < ../patches/game-patches/ffxv-steam-fix.patch
-    
+
     echo "final fantasy XIV old launcher render fix"
     patch -Np1 < ../patches/game-patches/ffxiv-launcher.patch
 
@@ -125,12 +213,7 @@
     patch -Np1 < ../patches/game-patches/sea-of-thieves-websockets.patch
 
     echo "fix steep"
-    patch -Np1 < ../patches/wine-hotfixes/0001-Add-some-semi-stubs-in-user32.patch
-
-    echo "Denuvo anti-cheat DOOM Eternal hotfix"
-    patch -Np1 < ../patches/game-patches/gofman_dac.patch
-
-# Currently applied but not working:
+    patch -Np1 < ../patches/game-patches/steep_fix.patch
 
 #  TODO: Add game-specific check
     echo "mk11 patch"
@@ -144,8 +227,10 @@
     
     #PROTON
 
-    echo "clock monotonic, amd ags"
+    echo "clock monotonic"
     patch -Np1 < ../patches/proton/proton-use_clock_monotonic.patch
+
+    echo "amd ags"
     patch -Np1 < ../patches/proton/proton-amd_ags.patch
     
     echo "bypass compositor"
@@ -160,14 +245,18 @@
     patch -Np1 < ../patches/proton/proton-fsync-spincounts.patch
 
     echo "fix for Dark Souls III, Sekiro, Nier" 
-    patch -Np1 < ../patches/game-patches/winex11_limit_resources-nofshack.patch
-    
+    patch -Np1 < ../patches/game-patches/nier-nofshack.patch
+
     echo "LAA"
     patch -Np1 < ../patches/proton/proton-LAA_staging.patch
 
     echo "steamclient swap"
     patch -Np1 < ../patches/proton/proton-steamclient_swap.patch
 
+#    disabled for now -- was breaking Catherine Classic in 5.9
+#    echo "audio patch test"
+#    patch -Np1 < ../patches/proton/proton-xaudio2_stop_engine.patch
+    
     echo "protonify"
     patch -Np1 < ../patches/proton/proton-protonify_staging.patch
 
@@ -216,36 +305,24 @@
     patch -Np1 < ../patches/proton/proton-hide_wine_prefix_update_window.patch
 
     echo "applying WoW vkd3d wine patches"
-    patch -Np1 < ../patches/wine-hotfixes/D3D12SerializeVersionedRootSignature.patch
-    patch -Np1 < ../patches/wine-hotfixes/D3D12CreateVersionedRootSignatureDeserializer.patch
-
-    echo "nikolay's media foundation 5.10 backports"
-    patch -Np1 < ../patches/wine-hotfixes/mf-5.10-backports.patch
+    patch -Np1 < ../patches/wine-hotfixes/vkd3d/D3D12SerializeVersionedRootSignature.patch
+    patch -Np1 < ../patches/wine-hotfixes/vkd3d/D3D12CreateVersionedRootSignatureDeserializer.patch
         
     echo "guy's media foundation alpha patches"
-    patch -Np1 < ../patches/wine-hotfixes/media_foundation_alpha.patch
+    patch -Np1 < ../patches/wine-hotfixes/media_foundation/media_foundation_alpha.patch
     
     echo "proton-specific manual mfplat dll register patch"
-    patch -Np1 < ../patches/wine-hotfixes/proton_mediafoundation_dllreg.patch
+    patch -Np1 < ../patches/wine-hotfixes/media_foundation/proton_mediafoundation_dllreg.patch
     
     #WINE CUSTOM PATCHES
     #add your own custom patch lines below
     
     echo "Paul's Diablo 1 menu fix"
-    patch -Np1 < ../patches/wine-hotfixes/user32-Set_PAINTSTRUCT_fErase_field_depending_on_the_last_WM_ERASEBKGND_result.patch
+    patch -Np1 < ../patches/game-patches/diablo_1_menu.patch
     
-    echo "revert commit fd7992972b252ed262d33ef604e9e1235d2108c5 as it currently breaks a lot of games"
-    patch -Np1 -R < ../patches/wine-hotfixes/fd7992972b252ed262d33ef604e9e1235d2108c5.patch
-
-    echo "Remi's memory performance fixes"    
-    patch -Np1 < ../patches/wine-hotfixes/ntdll-Use_the_free_ranges_in_find_reserved_free_area.patch
-    patch -Np1 < ../patches/wine-hotfixes/makedep-Align_PE_sections_so_they_can_be_mmapped.patch
-    
-    echo "5.10 backports"
-    patch -Np1 < ../patches/wine-hotfixes/1ae10889647c1c84c36660749508a42e99e64a5e.patch
-    patch -Np1 < ../patches/wine-hotfixes/25e9e91c3a4f6c1c134d96a5c11517178e31f111.patch
-    patch -Np1 < ../patches/wine-hotfixes/b4310a19e96283e114fad13f7565f912a39640de.patch
-    patch -Np1 < ../patches/wine-hotfixes/ea9b507380b4415cf9edd3643d9bcea7ab934fbd.patch
+    # reverts: 
+    # this breaks origin
+#    git revert --no-commit 3078f10d43d834b0498358fe0accb565191b7020
     
     ./dlls/winevulkan/make_vulkan
     ./tools/make_requests
