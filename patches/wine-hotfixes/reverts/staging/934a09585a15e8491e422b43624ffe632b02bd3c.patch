@@ -1,0 +1,52 @@
+diff --git a/patches/winebuild-Fake_Dlls/0010-tools-winebuild-Add-syscall-thunks-for-64-bit.patch b/patches/winebuild-Fake_Dlls/0010-tools-winebuild-Add-syscall-thunks-for-64-bit.patch
+--- a/patches/winebuild-Fake_Dlls/0010-tools-winebuild-Add-syscall-thunks-for-64-bit.patch
++++ b/patches/winebuild-Fake_Dlls/0010-tools-winebuild-Add-syscall-thunks-for-64-bit.patch
+@@ -119,8 +119,8 @@ index 0941dd87c05..002f3215af2 100644
+ --- a/server/mapping.c
+ +++ b/server/mapping.c
+ @@ -964,7 +964,11 @@ struct object *create_user_data_mapping( struct object *root, const struct unico
+-     if (!(mapping = create_mapping( root, name, OBJ_OPENIF, sizeof(KSHARED_USER_DATA),
+-                                     SEC_COMMIT, 0, FILE_READ_DATA | FILE_WRITE_DATA, NULL ))) return NULL;
++     grab_object( mapping );
++     make_object_static( &mapping->obj );
+      ptr = mmap( NULL, mapping->size, PROT_WRITE, MAP_SHARED, get_unix_fd( mapping->fd ), 0 );
+ -    if (ptr != MAP_FAILED) user_shared_data = ptr;
+ +    if (ptr != MAP_FAILED)
+@@ -128,9 +128,9 @@ +    {
+ +        user_shared_data = ptr;
+ +        user_shared_data->SystemCallPad[0] = 1;
+ +    }
+-     return &mapping->obj;
+  }
+  
++ /* create a file mapping */
+ diff --git a/tools/winebuild/parser.c b/tools/winebuild/parser.c
+ index 74216f8bb6e..820516329a4 100644
+ --- a/tools/winebuild/parser.c
+
+diff --git a/patches/ntdll-Fix_Alignment/0001-ntdll-Move-NtProtectVirtualMemory-and-NtCreateSectio.patch b/patches/ntdll-Fix_Alignment/0001-ntdll-Move-NtProtectVirtualMemory-and-NtCreateSectio.patch
+index aa940f9de..270c82fdd 100644
+--- a/patches/ntdll-Fix_Alignment/0001-ntdll-Move-NtProtectVirtualMemory-and-NtCreateSectio.patch
++++ b/patches/ntdll-Fix_Alignment/0001-ntdll-Move-NtProtectVirtualMemory-and-NtCreateSectio.patch
+@@ -7,16 +7,16 @@ Subject: ntdll: Move NtProtectVirtualMemory and NtCreateSection to separate
+ ---
+  dlls/ntdll/virtual.c | 8 ++++++++
+  1 file changed, 8 insertions(+)
+ 
+ diff --git a/dlls/ntdll/virtual.c b/dlls/ntdll/virtual.c
+-index ce2469829b0..eb2dbe8a2cd 100644
++index cfe30bbe710..6173846cfb4 100644
+ --- a/dlls/ntdll/virtual.c
+ +++ b/dlls/ntdll/virtual.c
+-@@ -168,6 +168,14 @@ static void *preload_reserve_end;
+- static BOOL use_locks;
+- static BOOL force_exec_prot;  /* whether to force PROT_EXEC on all PROT_READ mmaps */
++@@ -366,6 +366,14 @@ static void free_ranges_remove_view( struct file_view *view )
++ }
++ 
+  
+ +#if defined(__i386__)
+ +NTSTATUS WINAPI NtProtectVirtualMemory( HANDLE process, PVOID *addr_ptr, SIZE_T *size_ptr,
+ +                                        ULONG new_prot, ULONG *old_prot ) DECLSPEC_ALIGN(4096);
+ +NTSTATUS WINAPI NtCreateSection( HANDLE *handle, ACCESS_MASK access, const OBJECT_ATTRIBUTES *attr,
+ 

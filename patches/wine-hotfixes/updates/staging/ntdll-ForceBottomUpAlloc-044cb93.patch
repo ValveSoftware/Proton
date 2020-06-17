@@ -1,0 +1,234 @@
+From 4e1a3143e051ea0eda4fa208a1c18abb368d6e77 Mon Sep 17 00:00:00 2001
+From: Tk-Glitch <ti3nou@gmail.com>
+Date: Mon, 8 Jun 2020 16:53:46 +0200
+Subject: ntdll-ForceBottomUpAlloc fixups for 01150d7f esync support unbreak hotfixes (wine/proton-tkg)
+
+diff --git a/patches/ntdll-ForceBottomUpAlloc/0001-ntdll-Stop-search-on-mmap-error-in-try_map_free_area.patch b/patches/ntdll-ForceBottomUpAlloc/0001-ntdll-Stop-search-on-mmap-error-in-try_map_free_area.patch
+index ecf750c5..ffb28a17 100644
+--- a/patches/ntdll-ForceBottomUpAlloc/0001-ntdll-Stop-search-on-mmap-error-in-try_map_free_area.patch
++++ b/patches/ntdll-ForceBottomUpAlloc/0001-ntdll-Stop-search-on-mmap-error-in-try_map_free_area.patch
+@@ -7,13 +7,13 @@ Subject: [PATCH 1/6] ntdll: Stop search on mmap() error in
+ The anon mmap errors do not depend on start address hint. Ignoring them
+ makes the search take incredible time until it fails.
+ ---
+- dlls/ntdll/unix/virtual.c | 10 ++++++++--
++ dlls/ntdll/virtual.c | 10 ++++++++--
+  1 file changed, 8 insertions(+), 2 deletions(-)
+ 
+-diff --git a/dlls/ntdll/unix/virtual.c b/dlls/ntdll/unix/virtual.c
++diff --git a/dlls/ntdll/virtual.c b/dlls/ntdll/virtual.c
+ index b2725e3ae9a..5c2ecfab398 100644
+---- a/dlls/ntdll/unix/virtual.c
+-+++ b/dlls/ntdll/unix/virtual.c
++--- a/dlls/ntdll/virtual.c
+++++ b/dlls/ntdll/virtual.c
+ @@ -1063,8 +1063,14 @@ static void* try_map_free_area( void *base, void *end, ptrdiff_t step,
+              return start;
+          TRACE( "Found free area is already mapped, start %p.\n", start );
+diff --git a/patches/ntdll-ForceBottomUpAlloc/0002-ntdll-Use-MAP_FIXED_NOREPLACE-flag-in-try_map_free_a.patch b/patches/ntdll-ForceBottomUpAlloc/0002-ntdll-Use-MAP_FIXED_NOREPLACE-flag-in-try_map_free_a.patch
+index 81bdde5a..b95fb0c9 100644
+--- a/patches/ntdll-ForceBottomUpAlloc/0002-ntdll-Use-MAP_FIXED_NOREPLACE-flag-in-try_map_free_a.patch
++++ b/patches/ntdll-ForceBottomUpAlloc/0002-ntdll-Use-MAP_FIXED_NOREPLACE-flag-in-try_map_free_a.patch
+@@ -7,13 +7,13 @@ Subject: [PATCH 2/6] ntdll: Use MAP_FIXED_NOREPLACE flag in
+ Avoids actual mapping followed by unmapping back if the memory range is
+ already mapped.
+ ---
+- dlls/ntdll/unix/virtual.c | 12 +++++++++---
++ dlls/ntdll/virtual.c | 12 +++++++++---
+  1 file changed, 9 insertions(+), 3 deletions(-)
+ 
+-diff --git a/dlls/ntdll/unix/virtual.c b/dlls/ntdll/unix/virtual.c
++diff --git a/dlls/ntdll/virtual.c b/dlls/ntdll/virtual.c
+ index 5c2ecfab398..93b5d99dadd 100644
+---- a/dlls/ntdll/unix/virtual.c
+-+++ b/dlls/ntdll/unix/virtual.c
++--- a/dlls/ntdll/virtual.c
+++++ b/dlls/ntdll/virtual.c
+ @@ -1055,22 +1055,28 @@ static struct wine_rb_entry *find_view_inside_range( void **base_ptr, void **end
+  static void* try_map_free_area( void *base, void *end, ptrdiff_t step,
+                                  void *start, size_t size, int unix_prot )
+diff --git a/patches/ntdll-ForceBottomUpAlloc/0003-ntdll-Force-bottom-up-allocation-order-for-64-bit-ar.patch b/patches/ntdll-ForceBottomUpAlloc/0003-ntdll-Force-bottom-up-allocation-order-for-64-bit-ar.patch
+index 279c8e3c..4963c67b 100644
+--- a/patches/ntdll-ForceBottomUpAlloc/0003-ntdll-Force-bottom-up-allocation-order-for-64-bit-ar.patch
++++ b/patches/ntdll-ForceBottomUpAlloc/0003-ntdll-Force-bottom-up-allocation-order-for-64-bit-ar.patch
+@@ -7,13 +7,13 @@ Subject: [PATCH 3/6] ntdll: Force bottom up allocation order for 64 bit arch
+ Wine-Bug: https://bugs.winehq.org/show_bug.cgi?id=48175
+ Wine-Bug: https://bugs.winehq.org/show_bug.cgi?id=46568
+ ---
+- dlls/ntdll/unix/virtual.c | 12 ++++++++++--
++ dlls/ntdll/virtual.c | 12 ++++++++++--
+  1 file changed, 10 insertions(+), 2 deletions(-)
+ 
+-diff --git a/dlls/ntdll/unix/virtual.c b/dlls/ntdll/unix/virtual.c
++diff --git a/dlls/ntdll/virtual.c b/dlls/ntdll/virtual.c
+ index 93b5d99dadd..87b33016b72 100644
+---- a/dlls/ntdll/unix/virtual.c
+-+++ b/dlls/ntdll/unix/virtual.c
++--- a/dlls/ntdll/virtual.c
+++++ b/dlls/ntdll/virtual.c
+ @@ -1775,13 +1775,19 @@ static NTSTATUS map_view( struct file_view **view_ret, void *base, size_t size,
+      }
+      else
+@@ -32,7 +32,7 @@ index 93b5d99dadd..87b33016b72 100644
+ +            alloc.limit = min(alloc.limit, (void *)0x7ffffe000000);
+ +        }
+ +
+-         if (mmap_enum_reserved_areas( alloc_reserved_area_callback, &alloc, top_down ))
++         if (unix_funcs->mmap_enum_reserved_areas( alloc_reserved_area_callback, &alloc, top_down ))
+          {
+              ptr = alloc.result;
+ @@ -1791,7 +1797,7 @@ static NTSTATUS map_view( struct file_view **view_ret, void *base, size_t size,
+@@ -43,7 +43,7 @@ index 93b5d99dadd..87b33016b72 100644
+ +        if (is_win64 || zero_bits_64)
+          {
+              if (!(ptr = map_free_area( address_space_start, alloc.limit, size,
+-                                        top_down, get_unix_prot(vprot) )))
++                                        top_down, VIRTUAL_GetUnixProt(vprot) )))
+ @@ -1800,6 +1806,8 @@ static NTSTATUS map_view( struct file_view **view_ret, void *base, size_t size,
+              goto done;
+          }
+@@ -52,7 +52,7 @@ index 93b5d99dadd..87b33016b72 100644
+ +
+          for (;;)
+          {
+-             if ((ptr = wine_anon_mmap( NULL, view_size, get_unix_prot(vprot), 0 )) == (void *)-1)
++             if ((ptr = wine_anon_mmap( NULL, view_size, VIRTUAL_GetUnixProt(vprot), 0 )) == (void *)-1)
+ -- 
+ 2.26.2
+ 
+diff --git a/patches/ntdll-ForceBottomUpAlloc/0004-ntdll-Increase-step-after-failed-map-attempt-in-try_.patch b/patches/ntdll-ForceBottomUpAlloc/0004-ntdll-Increase-step-after-failed-map-attempt-in-try_.patch
+index 0b5c7618..14fee0ca 100644
+--- a/patches/ntdll-ForceBottomUpAlloc/0004-ntdll-Increase-step-after-failed-map-attempt-in-try_.patch
++++ b/patches/ntdll-ForceBottomUpAlloc/0004-ntdll-Increase-step-after-failed-map-attempt-in-try_.patch
+@@ -5,13 +5,13 @@ Subject: [PATCH 4/6] ntdll: Increase step after failed map attempt in
+  try_map_free_area().
+ 
+ ---
+- dlls/ntdll/unix/virtual.c | 1 +
++ dlls/ntdll/virtual.c | 1 +
+  1 file changed, 1 insertion(+)
+ 
+-diff --git a/dlls/ntdll/unix/virtual.c b/dlls/ntdll/unix/virtual.c
++diff --git a/dlls/ntdll/virtual.c b/dlls/ntdll/virtual.c
+ index 87b33016b72..5e79faaf6fc 100644
+---- a/dlls/ntdll/unix/virtual.c
+-+++ b/dlls/ntdll/unix/virtual.c
++--- a/dlls/ntdll/virtual.c
+++++ b/dlls/ntdll/virtual.c
+ @@ -1083,6 +1083,7 @@ static void* try_map_free_area( void *base, void *end, ptrdiff_t step,
+              step == 0)
+              break;
+diff --git a/patches/ntdll-ForceBottomUpAlloc/0005-ntdll-Use-free-area-list-for-virtual-memory-allocati.patch b/patches/ntdll-ForceBottomUpAlloc/0005-ntdll-Use-free-area-list-for-virtual-memory-allocati.patch
+index 1f712ba1..38feabe2 100644
+--- a/patches/ntdll-ForceBottomUpAlloc/0005-ntdll-Use-free-area-list-for-virtual-memory-allocati.patch
++++ b/patches/ntdll-ForceBottomUpAlloc/0005-ntdll-Use-free-area-list-for-virtual-memory-allocati.patch
+@@ -4,13 +4,13 @@ Date: Tue, 14 Jan 2020 21:42:21 +0300
+ Subject: [PATCH 5/6] ntdll: Use free area list for virtual memory allocation.
+ 
+ ---
+- dlls/ntdll/unix/virtual.c | 348 +++++++++++++++++++++++++-------------
++ dlls/ntdll/virtual.c | 348 +++++++++++++++++++++++++-------------
+  1 file changed, 234 insertions(+), 114 deletions(-)
+ 
+-diff --git a/dlls/ntdll/unix/virtual.c b/dlls/ntdll/unix/virtual.c
++diff --git a/dlls/ntdll/virtual.c b/dlls/ntdll/virtual.c
+ index 5e79faaf6fc..7f194effcaa 100644
+---- a/dlls/ntdll/unix/virtual.c
+-+++ b/dlls/ntdll/unix/virtual.c
++--- a/dlls/ntdll/virtual.c
+++++ b/dlls/ntdll/virtual.c
+ @@ -195,7 +195,11 @@ static BYTE *pages_vprot;
+  #endif
+  
+@@ -185,7 +185,7 @@ index 5e79faaf6fc..7f194effcaa 100644
+  {
+      if (!(view->protect & VPROT_SYSTEM)) unmap_area( view->base, view->size );
+      set_page_vprot( view->base, view->size, 0 );
+--    if (mmap_is_in_reserved_area( view->base, view->size ))
++-    if (unix_funcs->mmap_is_in_reserved_area( view->base, view->size ))
+ -        free_ranges_remove_view( view );
+ +    free_ranges_remove_view( view );
+      wine_rb_remove( &views_tree, &view->entry );
+@@ -195,7 +195,7 @@ index 5e79faaf6fc..7f194effcaa 100644
+      set_page_vprot( base, size, vprot );
+  
+      wine_rb_put( &views_tree, view->base, &view->entry );
+--    if (mmap_is_in_reserved_area( view->base, view->size ))
++-    if (unix_funcs->mmap_is_in_reserved_area( view->base, view->size ))
+ -        free_ranges_insert_view( view );
+ +    free_ranges_insert_view( view );
+  
+@@ -328,7 +328,7 @@ index 5e79faaf6fc..7f194effcaa 100644
+ +            return NULL;
+ +    }
+ +
+-+    mmap_enum_reserved_areas( alloc_area_in_reserved_or_between_callback, area, top_down );
+++    unix_funcs->mmap_enum_reserved_areas( alloc_area_in_reserved_or_between_callback, area, top_down );
+ +    if (area->result)
+ +        return area->result;
+ +
+@@ -426,7 +426,7 @@ index 5e79faaf6fc..7f194effcaa 100644
+          alloc.size = size;
+          alloc.top_down = top_down;
+          alloc.limit = (void*)(get_zero_bits_64_mask( zero_bits_64 ) & (UINT_PTR)user_space_limit);
+-+        alloc.unix_prot = get_unix_prot( vprot );
+++        alloc.unix_prot = VIRTUAL_GetUnixProt(vprot);
+  
+ -        if (is_win64 && !top_down)
+ +        if (is_win64 || zero_bits_64)
+@@ -440,7 +440,7 @@ index 5e79faaf6fc..7f194effcaa 100644
+ +            goto done;
+          }
+  
+-         if (mmap_enum_reserved_areas( alloc_reserved_area_callback, &alloc, top_down ))
++         if (unix_funcs->mmap_enum_reserved_areas( alloc_reserved_area_callback, &alloc, top_down ))
+ @@ -1798,15 +1926,6 @@ static NTSTATUS map_view( struct file_view **view_ret, void *base, size_t size,
+              goto done;
+          }
+@@ -448,7 +448,7 @@ index 5e79faaf6fc..7f194effcaa 100644
+ -        if (is_win64 || zero_bits_64)
+ -        {
+ -            if (!(ptr = map_free_area( address_space_start, alloc.limit, size,
+--                                       top_down, get_unix_prot(vprot) )))
++-                                       top_down, VIRTUAL_GetUnixProt(vprot) )))
+ -                return STATUS_NO_MEMORY;
+ -            TRACE( "got mem with map_free_area %p-%p\n", ptr, (char *)ptr + size );
+ -            goto done;
+diff --git a/patches/ntdll-ForceBottomUpAlloc/0006-ntdll-Permanently-exclude-natively-mapped-areas-from.patch b/patches/ntdll-ForceBottomUpAlloc/0006-ntdll-Permanently-exclude-natively-mapped-areas-from.patch
+index 9bb16bdf..43c36c34 100644
+--- a/patches/ntdll-ForceBottomUpAlloc/0006-ntdll-Permanently-exclude-natively-mapped-areas-from.patch
++++ b/patches/ntdll-ForceBottomUpAlloc/0006-ntdll-Permanently-exclude-natively-mapped-areas-from.patch
+@@ -5,13 +5,13 @@ Subject: [PATCH 6/6] ntdll: Permanently exclude natively mapped areas from
+  free areas list.
+ 
+ ---
+- dlls/ntdll/unix/virtual.c | 25 +++++++++++++++++++++++++
++ dlls/ntdll/virtual.c | 25 +++++++++++++++++++++++++
+  1 file changed, 25 insertions(+)
+ 
+-diff --git a/dlls/ntdll/unix/virtual.c b/dlls/ntdll/unix/virtual.c
++diff --git a/dlls/ntdll/virtual.c b/dlls/ntdll/virtual.c
+ index 7f194effcaa..0e2e20396f3 100644
+---- a/dlls/ntdll/unix/virtual.c
+-+++ b/dlls/ntdll/unix/virtual.c
++--- a/dlls/ntdll/virtual.c
+++++ b/dlls/ntdll/virtual.c
+ @@ -124,6 +124,9 @@ static const BYTE VIRTUAL_Win32Flags[16] =
+  
+  static struct wine_rb_tree views_tree;
+
+diff --git a/patches/ntdll-NtQueryVirtualMemory/0008-ntdll-Resolve-drive-symlinks-before-returning-sectio.patch b/patches/ntdll-NtQueryVirtualMemory/0008-ntdll-Resolve-drive-symlinks-before-returning-sectio.patch
+index d66484ff..65e385ce 100644
+--- a/patches/ntdll-NtQueryVirtualMemory/0008-ntdll-Resolve-drive-symlinks-before-returning-sectio.patch
++++ b/patches/ntdll-NtQueryVirtualMemory/0008-ntdll-Resolve-drive-symlinks-before-returning-sectio.patch
+@@ -46,8 +46,8 @@ index fb9a1a57729..89ed3bb3f0b 100644
+ +#define MAX_DIR_ENTRY_LEN 255  /* max length of a directory entry in chars */
+ +
+  static struct file_view *view_block_start, *view_block_end, *next_free_view;
+- static const size_t view_block_size = 0x100000;
+- static void *preload_reserve_start;
++ #ifdef _WIN64
++ static const size_t view_block_size = 0x200000;
+ @@ -3471,12 +3473,15 @@ static NTSTATUS get_section_name( HANDLE process, LPCVOID addr,
+                                    MEMORY_SECTION_NAME *info,
+                                    SIZE_T len, SIZE_T *res_len )

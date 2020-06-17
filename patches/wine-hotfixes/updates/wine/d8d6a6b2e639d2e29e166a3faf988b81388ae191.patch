@@ -1,0 +1,278 @@
+From d8d6a6b2e639d2e29e166a3faf988b81388ae191 Mon Sep 17 00:00:00 2001
+From: Derek Lesho <dlesho@codeweavers.com>
+Date: Mon, 18 May 2020 08:20:37 -0500
+Subject: [PATCH] server: Partially implement
+ JobObjectBasicAccountingInformation.
+
+Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/kernel32/tests/process.c  |  9 +++++++++
+ dlls/ntdll/sync.c              | 20 +++++++++++++++++---
+ include/wine/server_protocol.h | 19 ++++++++++++++++++-
+ server/process.c               | 15 +++++++++++++++
+ server/protocol.def            |  9 +++++++++
+ server/request.h               |  7 +++++++
+ server/trace.c                 | 14 ++++++++++++++
+ 7 files changed, 89 insertions(+), 4 deletions(-)
+
+diff --git a/dlls/kernel32/tests/process.c b/dlls/kernel32/tests/process.c
+index 32818042337..8454e642653 100644
+--- a/dlls/kernel32/tests/process.c
++++ b/dlls/kernel32/tests/process.c
+@@ -2513,6 +2513,7 @@ static void test_QueryInformationJobObject(void)
+     PJOBOBJECT_BASIC_PROCESS_ID_LIST pid_list = (JOBOBJECT_BASIC_PROCESS_ID_LIST *)buf;
+     JOBOBJECT_EXTENDED_LIMIT_INFORMATION ext_limit_info;
+     JOBOBJECT_BASIC_LIMIT_INFORMATION *basic_limit_info = &ext_limit_info.BasicLimitInformation;
++    JOBOBJECT_BASIC_ACCOUNTING_INFORMATION basic_accounting_info;
+     DWORD ret_len;
+     PROCESS_INFORMATION pi[2];
+     char buffer[50];
+@@ -2620,6 +2621,14 @@ static void test_QueryInformationJobObject(void)
+     ok(ret_len == sizeof(ext_limit_info), "QueryInformationJobObject returned ret_len=%u\n", ret_len);
+     expect_eq_d(0, basic_limit_info->LimitFlags);
+ 
++    /* test JobObjectBasicAccountingInformation */
++    ret = pQueryInformationJobObject(job, JobObjectBasicAccountingInformation, &basic_accounting_info,
++                                     sizeof(basic_accounting_info), &ret_len);
++    ok(ret, "QueryInformationJobObject error %u\n", GetLastError());
++    ok(ret_len == sizeof(basic_accounting_info), "QueryInformationJobObject returned ret_len=%u\n", ret_len);
++    expect_eq_d(3, basic_accounting_info.TotalProcesses);
++    expect_eq_d(2, basic_accounting_info.ActiveProcesses);
++
+     TerminateProcess(pi[0].hProcess, 0);
+     CloseHandle(pi[0].hProcess);
+     CloseHandle(pi[0].hThread);
+diff --git a/dlls/ntdll/sync.c b/dlls/ntdll/sync.c
+index 4d4fdb6d7cf..b8f53b300b8 100644
+--- a/dlls/ntdll/sync.c
++++ b/dlls/ntdll/sync.c
+@@ -392,7 +392,9 @@ NTSTATUS WINAPI NtTerminateJobObject( HANDLE handle, NTSTATUS status )
+ NTSTATUS WINAPI NtQueryInformationJobObject( HANDLE handle, JOBOBJECTINFOCLASS class, PVOID info,
+                                              ULONG len, PULONG ret_len )
+ {
+-    FIXME( "stub: %p %u %p %u %p\n", handle, class, info, len, ret_len );
++    NTSTATUS ret;
++
++    TRACE( "semi-stub: %p %u %p %u %p\n", handle, class, info, len, ret_len );
+ 
+     if (class >= MaxJobObjectInfoClass)
+         return STATUS_INVALID_PARAMETER;
+@@ -406,9 +408,21 @@ NTSTATUS WINAPI NtQueryInformationJobObject( HANDLE handle, JOBOBJECTINFOCLASS c
+                 return STATUS_INFO_LENGTH_MISMATCH;
+ 
+             accounting = (JOBOBJECT_BASIC_ACCOUNTING_INFORMATION *)info;
+-            memset(accounting, 0, sizeof(*accounting));
++
++            SERVER_START_REQ(get_job_info)
++            {
++                req->handle = wine_server_obj_handle( handle );
++                if ((ret = wine_server_call( req )) == STATUS_SUCCESS)
++                {
++                    memset(accounting, 0, sizeof(*accounting));
++                    accounting->TotalProcesses = reply->total_processes;
++                    accounting->ActiveProcesses = reply->active_processes;
++                }
++            }
++            SERVER_END_REQ;
++
+             if (ret_len) *ret_len = sizeof(*accounting);
+-            return STATUS_SUCCESS;
++            return ret;
+         }
+ 
+     case JobObjectBasicProcessIdList:
+diff --git a/include/wine/server_protocol.h b/include/wine/server_protocol.h
+index 4b40ba77720..24bebb8f106 100644
+--- a/include/wine/server_protocol.h
++++ b/include/wine/server_protocol.h
+@@ -5744,6 +5744,20 @@ struct set_job_completion_port_reply
+ 
+ 
+ 
++struct get_job_info_request
++{
++    struct request_header __header;
++    obj_handle_t handle;
++};
++struct get_job_info_reply
++{
++    struct reply_header __header;
++    int total_processes;
++    int active_processes;
++};
++
++
++
+ struct terminate_job_request
+ {
+     struct request_header __header;
+@@ -6075,6 +6089,7 @@ enum request
+     REQ_process_in_job,
+     REQ_set_job_limits,
+     REQ_set_job_completion_port,
++    REQ_get_job_info,
+     REQ_terminate_job,
+     REQ_suspend_process,
+     REQ_resume_process,
+@@ -6377,6 +6392,7 @@ union generic_request
+     struct process_in_job_request process_in_job_request;
+     struct set_job_limits_request set_job_limits_request;
+     struct set_job_completion_port_request set_job_completion_port_request;
++    struct get_job_info_request get_job_info_request;
+     struct terminate_job_request terminate_job_request;
+     struct suspend_process_request suspend_process_request;
+     struct resume_process_request resume_process_request;
+@@ -6677,6 +6693,7 @@ union generic_reply
+     struct process_in_job_reply process_in_job_reply;
+     struct set_job_limits_reply set_job_limits_reply;
+     struct set_job_completion_port_reply set_job_completion_port_reply;
++    struct get_job_info_reply get_job_info_reply;
+     struct terminate_job_reply terminate_job_reply;
+     struct suspend_process_reply suspend_process_reply;
+     struct resume_process_reply resume_process_reply;
+diff --git a/server/process.c b/server/process.c
+index 76bb6faa91a..283edc09c5e 100644
+--- a/server/process.c
++++ b/server/process.c
+@@ -156,6 +156,7 @@ struct job
+     struct object obj;             /* object header */
+     struct list process_list;      /* list of all processes */
+     int num_processes;             /* count of running processes */
++    int total_processes;           /* count of processes which have been assigned */
+     unsigned int limit_flags;      /* limit flags */
+     int terminating;               /* job is terminating */
+     int signaled;                  /* job is signaled */
+@@ -198,6 +199,7 @@ static struct job *create_job_object( struct object *root, const struct unicode_
+             /* initialize it if it didn't already exist */
+             list_init( &job->process_list );
+             job->num_processes = 0;
++            job->total_processes = 0;
+             job->limit_flags = 0;
+             job->terminating = 0;
+             job->signaled = 0;
+@@ -240,6 +242,7 @@ static void add_job_process( struct job *job, struct process *process )
+     process->job = (struct job *)grab_object( job );
+     list_add_tail( &job->process_list, &process->job_entry );
+     job->num_processes++;
++    job->total_processes++;
+ 
+     add_job_completion( job, JOB_OBJECT_MSG_NEW_PROCESS, get_process_id(process) );
+ }
+@@ -1727,6 +1730,18 @@ DECL_HANDLER(process_in_job)
+     release_object( process );
+ }
+ 
++/* retrieve information about a job */
++DECL_HANDLER(get_job_info)
++{
++    struct job *job = get_job_obj( current->process, req->handle, JOB_OBJECT_QUERY );
++
++    if (!job) return;
++
++    reply->total_processes = job->total_processes;
++    reply->active_processes = job->num_processes;
++    release_object( job );
++}
++
+ /* terminate all processes associated with the job */
+ DECL_HANDLER(terminate_job)
+ {
+diff --git a/server/protocol.def b/server/protocol.def
+index 95a3021ee8f..c3442c06e9b 100644
+--- a/server/protocol.def
++++ b/server/protocol.def
+@@ -3935,6 +3935,15 @@ struct handle_info
+ @END
+ 
+ 
++/* Retrieve information about a job */
++@REQ(get_job_info)
++    obj_handle_t handle;          /* handle to the job */
++@REPLY
++    int total_processes;          /* total count of processes */
++    int active_processes;         /* count of running processes */
++@END
++
++
+ /* Terminate all processes associated with the job  */
+ @REQ(terminate_job)
+     obj_handle_t handle;          /* handle to the job */
+diff --git a/server/request.h b/server/request.h
+index 74389e39092..7c7c0fd92f4 100644
+--- a/server/request.h
++++ b/server/request.h
+@@ -411,6 +411,7 @@ DECL_HANDLER(assign_job);
+ DECL_HANDLER(process_in_job);
+ DECL_HANDLER(set_job_limits);
+ DECL_HANDLER(set_job_completion_port);
++DECL_HANDLER(get_job_info);
+ DECL_HANDLER(terminate_job);
+ DECL_HANDLER(suspend_process);
+ DECL_HANDLER(resume_process);
+@@ -712,6 +713,7 @@ static const req_handler req_handlers[REQ_NB_REQUESTS] =
+     (req_handler)req_process_in_job,
+     (req_handler)req_set_job_limits,
+     (req_handler)req_set_job_completion_port,
++    (req_handler)req_get_job_info,
+     (req_handler)req_terminate_job,
+     (req_handler)req_suspend_process,
+     (req_handler)req_resume_process,
+@@ -2436,6 +2438,11 @@ C_ASSERT( FIELD_OFFSET(struct set_job_completion_port_request, job) == 12 );
+ C_ASSERT( FIELD_OFFSET(struct set_job_completion_port_request, port) == 16 );
+ C_ASSERT( FIELD_OFFSET(struct set_job_completion_port_request, key) == 24 );
+ C_ASSERT( sizeof(struct set_job_completion_port_request) == 32 );
++C_ASSERT( FIELD_OFFSET(struct get_job_info_request, handle) == 12 );
++C_ASSERT( sizeof(struct get_job_info_request) == 16 );
++C_ASSERT( FIELD_OFFSET(struct get_job_info_reply, total_processes) == 8 );
++C_ASSERT( FIELD_OFFSET(struct get_job_info_reply, active_processes) == 12 );
++C_ASSERT( sizeof(struct get_job_info_reply) == 16 );
+ C_ASSERT( FIELD_OFFSET(struct terminate_job_request, handle) == 12 );
+ C_ASSERT( FIELD_OFFSET(struct terminate_job_request, status) == 16 );
+ C_ASSERT( sizeof(struct terminate_job_request) == 24 );
+diff --git a/server/trace.c b/server/trace.c
+index 83db655d3ea..6c7f3251db6 100644
+--- a/server/trace.c
++++ b/server/trace.c
+@@ -4578,6 +4578,17 @@ static void dump_set_job_completion_port_request( const struct set_job_completio
+     dump_uint64( ", key=", &req->key );
+ }
+ 
++static void dump_get_job_info_request( const struct get_job_info_request *req )
++{
++    fprintf( stderr, " handle=%04x", req->handle );
++}
++
++static void dump_get_job_info_reply( const struct get_job_info_reply *req )
++{
++    fprintf( stderr, " total_processes=%d", req->total_processes );
++    fprintf( stderr, ", active_processes=%d", req->active_processes );
++}
++
+ static void dump_terminate_job_request( const struct terminate_job_request *req )
+ {
+     fprintf( stderr, " handle=%04x", req->handle );
+@@ -4887,6 +4898,7 @@ static const dump_func req_dumpers[REQ_NB_REQUESTS] = {
+     (dump_func)dump_process_in_job_request,
+     (dump_func)dump_set_job_limits_request,
+     (dump_func)dump_set_job_completion_port_request,
++    (dump_func)dump_get_job_info_request,
+     (dump_func)dump_terminate_job_request,
+     (dump_func)dump_suspend_process_request,
+     (dump_func)dump_resume_process_request,
+@@ -5185,6 +5197,7 @@ static const dump_func reply_dumpers[REQ_NB_REQUESTS] = {
+     NULL,
+     NULL,
+     NULL,
++    (dump_func)dump_get_job_info_reply,
+     NULL,
+     NULL,
+     NULL,
+@@ -5483,6 +5496,7 @@ static const char * const req_names[REQ_NB_REQUESTS] = {
+     "process_in_job",
+     "set_job_limits",
+     "set_job_completion_port",
++    "get_job_info",
+     "terminate_job",
+     "suspend_process",
+     "resume_process",
