@@ -54,12 +54,15 @@ Vagrant.configure(2) do |config|
     v.memory = memory
     v.random_hostname = true
     v.default_prefix = ENV['USER'].to_s.dup.concat('_').concat(File.basename(Dir.pwd))
+    v.management_network_name = "default"
   end
 
-  #deiban10-based build VM
+
+  #debian10-based build VM
   config.vm.define "debian10", primary: true do |debian10|
 
     debian10.vm.box = "generic/debian10"
+    debian10.vm.box_version = "3.0.10"
 
     debian10.vm.synced_folder "./vagrant_share/", "/vagrant/", create: true, type: "sshfs", sshfs_opts_append: "-o cache=no"
     debian10.vm.synced_folder ".", "/home/vagrant/proton", id: "proton", type: "rsync", rsync__exclude: ["vagrant_share"]
