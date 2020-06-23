@@ -1,0 +1,13 @@
+diff --git a/dlls/ntdll/unix/file.c b/dlls/ntdll/unix/file.c
+index 76203874ff33..32024874f39d 100644
+--- a/dlls/ntdll/unix/file.c
++++ b/dlls/ntdll/unix/file.c
+@@ -6400,7 +6400,7 @@ NTSTATUS WINAPI NtFlushBuffersFile( HANDLE handle, IO_STATUS_BLOCK *io )
+     if (ret == STATUS_ACCESS_DENIED)
+         ret = server_get_unix_fd( handle, FILE_APPEND_DATA, &fd, &needs_close, &type, NULL );
+ 
+-    if (!ret && (type == FD_TYPE_FILE || type == FD_TYPE_DIR))
++    if (!ret && (type == FD_TYPE_FILE || type == FD_TYPE_DIR || type == FD_TYPE_CHAR))
+     {
+         if (fsync(fd)) ret = errno_to_status( errno );
+         io->u.Status    = ret;
