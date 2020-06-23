@@ -117,27 +117,28 @@ Subject: [PATCH] ntdll: Notice THREADNAME_INFO exceptions and set thread name
 
 Patch by Zeb.
 ---
- dlls/ntdll/exception.c | 28 ++++++++++++++++++++++++++++
+ dlls/ntdll/unix/thread.c | 28 ++++++++++++++++++++++++++++
  1 file changed, 28 insertions(+)
 
-diff --git a/dlls/ntdll/exception.c b/dlls/ntdll/exception.c
-index f85381079a2..ffe048de8c0 100644
---- a/dlls/ntdll/exception.c
-+++ b/dlls/ntdll/exception.c
-@@ -26,6 +26,9 @@
+diff --git a/dlls/ntdll/unix/thread.c b/dlls/ntdll/unix/thread.c
+index d26e0a98ca..ed17b497e6 100644
+--- a/dlls/ntdll/unix/thread.c
++++ b/dlls/ntdll/unix/thread.c
+@@ -29,6 +29,9 @@
  #include <errno.h>
- #include <signal.h>
+ #include <limits.h>
  #include <stdarg.h>
 +#ifdef HAVE_PRCTL
 +#include <sys/prctl.h>
 +#endif
- 
- #include "ntstatus.h"
- #define WIN32_NO_STATUS
-@@ -143,6 +146,16 @@ void wait_suspend( CONTEXT *context )
+ #include <pthread.h>
+ #include <signal.h>
+ #include <sys/types.h>
+@@ -380,7 +397,15 @@ void wait_suspend( CONTEXT *context )
+     errno = saved_errno;
  }
  
- 
+-
 +/* "How to: Set a Thread Name in Native Code"
 + * https://msdn.microsoft.com/en-us/library/xcb2z8hs.aspx */
 +typedef struct tagTHREADNAME_INFO
@@ -147,14 +148,14 @@ index f85381079a2..ffe048de8c0 100644
 +   DWORD   dwThreadID; /* Thread ID (-1 = caller thread) */
 +   DWORD   dwFlags;    /* Reserved for future use.  Must be zero. */
 +} THREADNAME_INFO;
-+
  /**********************************************************************
   *           send_debug_event
   *
-@@ -162,6 +175,21 @@ NTSTATUS send_debug_event( EXCEPTION_RECORD *rec, int first_chance, CONTEXT *con
+@@ -402,6 +427,21 @@ NTSTATUS send_debug_event( EXCEPTION_RECORD *rec, CONTEXT *context, BOOL first_c
+ 
      for (i = 0; i < min( rec->NumberParameters, EXCEPTION_MAXIMUM_PARAMETERS ); i++)
          params[i] = rec->ExceptionInformation[i];
- 
++    
 +    if (rec->ExceptionCode == 0x406d1388)
 +    {
 +        const THREADNAME_INFO *threadname = (const THREADNAME_INFO *)rec->ExceptionInformation;
@@ -169,10 +170,9 @@ index f85381079a2..ffe048de8c0 100644
 +#endif
 +        }
 +    }
-+
+ 
      SERVER_START_REQ( queue_exception_event )
      {
-         req->first   = first_chance;
 From 7e91b897e69854cb3afe761f48ef7c9b496ecf95 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?J=C3=B3zef=20Kucia?= <jkucia@codeweavers.com>
 Date: Wed, 1 May 2019 12:28:12 +0200
@@ -1454,19 +1454,19 @@ Subject: [PATCH] ntdll: Don't support reading/writing debug registers
 Monster Hunter World continually retrieves these registers, so fast-path
 this code. This will break setting debug registers on other threads.
 ---
- dlls/ntdll/signal_x86_64.c | 14 +++++++++++---
+ dlls/ntdll/unix/signal_x86_64.c | 14 +++++++++++---
  1 file changed, 11 insertions(+), 3 deletions(-)
 
-diff --git a/dlls/ntdll/signal_x86_64.c b/dlls/ntdll/signal_x86_64.c
-index 04f3854388c..9752c3889b6 100644
---- a/dlls/ntdll/signal_x86_64.c
-+++ b/dlls/ntdll/signal_x86_64.c
-@@ -2115,13 +2115,13 @@ NTSTATUS WINAPI NtSetContextThread( HANDLE handle, const CONTEXT *context )
+diff --git a/dlls/ntdll/unix/signal_x86_64.c b/dlls/ntdll/unix/signal_x86_64.c
+index 88ee18461a..b71c7c7e2b 100644
+--- a/dlls/ntdll/unix/signal_x86_64.c
++++ b/dlls/ntdll/unix/signal_x86_64.c
+@@ -675,13 +684,13 @@ NTSTATUS WINAPI NtSetContextThread( HANDLE handle, const CONTEXT *context )
      BOOL self = (handle == GetCurrentThread());
  
      /* debug registers require a server call */
--    if (self && (context->ContextFlags & (CONTEXT_DEBUG_REGISTERS & ~CONTEXT_AMD64)))
-+    /*if (self && (context->ContextFlags & (CONTEXT_DEBUG_REGISTERS & ~CONTEXT_AMD64)))
+-    if (self && (flags & CONTEXT_DEBUG_REGISTERS))
++    /*if (self && (flags & CONTEXT_DEBUG_REGISTERS))
          self = (amd64_thread_data()->dr0 == context->Dr0 &&
                  amd64_thread_data()->dr1 == context->Dr1 &&
                  amd64_thread_data()->dr2 == context->Dr2 &&
@@ -1477,7 +1477,7 @@ index 04f3854388c..9752c3889b6 100644
  
      if (!self)
      {
-@@ -2149,7 +2149,15 @@ NTSTATUS WINAPI NtGetContextThread( HANDLE handle, CONTEXT *context )
+@@ -727,7 +736,15 @@ NTSTATUS WINAPI NtGetContextThread( HANDLE handle, CONTEXT *context )
      needed_flags = context->ContextFlags;
  
      /* debug registers require a server call */
@@ -1687,15 +1687,14 @@ Subject: [PATCH] ntdll: Handle NULL object name buffer in
 Signed-off-by: Paul Gofman <pgofman@codeweavers.com>
 Signed-off-by: Paul Gofman <gofmanp@gmail.com>
 ---
- dlls/ntdll/directory.c  |  8 ++++++++
- dlls/ntdll/tests/file.c | 22 +++++++++++++++++++++-
- 2 files changed, 29 insertions(+), 1 deletion(-)
+ dlls/ntdll/unix/file.c  |  8 ++++++++
+ 1 files changed, 8 insertions(+)
 
-diff --git a/dlls/ntdll/directory.c b/dlls/ntdll/directory.c
-index 784e720edf8..56f9be0f06e 100644
---- a/dlls/ntdll/directory.c
-+++ b/dlls/ntdll/directory.c
-@@ -2701,8 +2701,16 @@ NTSTATUS nt_to_unix_file_name_attr( const OBJECT_ATTRIBUTES *attr, ANSI_STRING *
+diff --git a/dlls/ntdll/unix/file.c b/dlls/ntdll/unix/file.c
+index ca6899b50f..778f5d8928 100644
+--- a/dlls/ntdll/unix/file.c
++++ b/dlls/ntdll/unix/file.c
+@@ -3250,8 +3330,16 @@ static NTSTATUS nt_to_unix_file_name_attr( const OBJECT_ATTRIBUTES *attr, ANSI_S
      NTSTATUS status;
      BOOLEAN check_case = !(attr->Attributes & OBJ_CASE_INSENSITIVE);
  
@@ -1706,8 +1705,8 @@ index 784e720edf8..56f9be0f06e 100644
 +    {
 +        if (!attr->ObjectName->Buffer)
 +            return STATUS_OBJECT_PATH_SYNTAX_BAD;
-+
-         return wine_nt_to_unix_file_name( attr->ObjectName, unix_name_ret, disposition, check_case );
++        
+         return nt_to_unix_file_name( attr->ObjectName, unix_name_ret, disposition, check_case );
 +    }
  
      name     = attr->ObjectName->Buffer;
@@ -1825,14 +1824,14 @@ Subject: [PATCH] ntdll: Add WINE_DISABLE_WRITE_WATCH env var to disable write
 Massively improves performance for corert games (Streets of Rage 4).
 Could be fixed properly with Linux kernel changes.
 ---
- dlls/ntdll/virtual.c | 16 ++++++++++++++++
+ dlls/ntdll/unix/virtual.c | 16 ++++++++++++++++
  1 file changed, 16 insertions(+)
 
-diff --git a/dlls/ntdll/virtual.c b/dlls/ntdll/virtual.c
-index d0cd2639ee9..d2eb7bcc341 100644
---- a/dlls/ntdll/virtual.c
-+++ b/dlls/ntdll/virtual.c
-@@ -2684,6 +2684,22 @@ NTSTATUS WINAPI NtAllocateVirtualMemory( HANDLE process, PVOID *ret, ULONG_PTR z
+diff --git a/dlls/ntdll/unix/virtual.c b/dlls/ntdll/unix/virtual.c
+index 6166507871..09b340e607 100644
+--- a/dlls/ntdll/unix/virtual.c
++++ b/dlls/ntdll/unix/virtual.c
+@@ -3346,6 +3615,22 @@ NTSTATUS WINAPI NtAllocateVirtualMemory( HANDLE process, PVOID *ret, ULONG_PTR z
  
      TRACE("%p %p %08lx %x %08x\n", process, *ret, size, type, protect );
  

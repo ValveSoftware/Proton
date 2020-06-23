@@ -5,14 +5,14 @@ Subject: [PATCH] ntdll,server: Never use CLOCK_MONOTONIC_RAW
 
 Using CLOCK_MONOTONIC avoids a kernel call.
 ---
- dlls/ntdll/time.c | 2 +-
+ dlls/ntdll/unix/sync.c | 2 +-
  server/request.c  | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/dlls/ntdll/time.c b/dlls/ntdll/time.c
+diff --git a/dlls/ntdll/unix/sync.c b/dlls/ntdll/unix/sync.c
 index e2cd770af0..05c9fa8b26 100644
---- a/dlls/ntdll/time.c
-+++ b/dlls/ntdll/time.c
+--- a/dlls/ntdll/unix/sync.c
++++ b/dlls/ntdll/unix/sync.c
 @@ -114,7 +114,7 @@ static ULONGLONG monotonic_counter(void)
      return mach_absolute_time() * timebase.numer / timebase.denom / 100;
  #elif defined(HAVE_CLOCK_GETTIME)
@@ -45,10 +45,10 @@ This is an addition for 13e11d3 to Andrew Eikum's patch for ntdll and server
 
 Signed-off-by: Tk-Glitch <ti3nou@gmail.com>
 
-diff --git a/dlls/kernel32/time.c b/dlls/kernel32/time.c
+diff --git a/dlls/ntdll/unix/sync.c b/dlls/ntdll/unix/sync.c
 index 737affcb38..f82d33c876 100644
---- a/dlls/kernel32/time.c
-+++ b/dlls/kernel32/time.c
+--- a/dlls/ntdll/unix/sync.c
++++ b/dlls/ntdll/unix/sync.c
 @@ -82,7 +82,7 @@ static inline ULONGLONG monotonic_counter(void)
      return mach_absolute_time() * timebase.numer / timebase.denom / 100;
  #elif defined(HAVE_CLOCK_GETTIME)
