@@ -17,8 +17,8 @@ diff -urN a/dlls/ntdll/ntdll.spec a/dlls/ntdll/ntdll.spec
 +++ a/dlls/ntdll/ntdll.spec	2019-04-24 18:48:37 +0900
 @@ -1537,6 +1537,8 @@
  
- # signal handling
- @ cdecl __wine_set_signal_handler(long ptr)
+ # Codepages
+ @ cdecl __wine_get_unix_codepage()
 +
 +@ cdecl IsTransgaming()
  
