@@ -20,7 +20,7 @@ index e1593f7729..2a69c2a436 100644
 -        IDWriteFontFileStream_Release(stream);
 +        const char *sgi = getenv("SteamGameId");
 +
-+        if (!sgi | strcmp(sgi, "244210")) {
++        if ((!sgi) | (sgi && strcmp(sgi, "244210"))) {
 +            IDWriteFontFileStream_Release(stream);
 +        }
      }

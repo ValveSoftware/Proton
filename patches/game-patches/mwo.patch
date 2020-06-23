@@ -2,7 +2,7 @@ diff --git a/dlls/ntdll/path.c b/dlls/ntdll/path.c
 index 32e1f951af..b3cd74ecf7 100644
 --- a/dlls/ntdll/path.c
 +++ b/dlls/ntdll/path.c
-@@ -636,6 +636,7 @@ static ULONG get_full_path_helper(LPCWSTR name, LPWSTR buffer, ULONG size)
+@@ -545,6 +545,7 @@ static ULONG get_full_path_helper(LPCWSTR name, LPWSTR buffer, ULONG size)
      LPCWSTR                     ptr;
      const UNICODE_STRING*       cd;
      WCHAR                       tmp[4];
@@ -10,12 +10,21 @@ index 32e1f951af..b3cd74ecf7 100644
  
      /* return error if name only consists of spaces */
      for (ptr = name; *ptr; ptr++) if (*ptr != ' ') break;
-@@ -643,7 +644,7 @@ static ULONG get_full_path_helper(LPCWSTR name, LPWSTR buffer, ULONG size)
+@@ -552,10 +553,13 @@ static ULONG get_full_path_helper(LPCWSTR name, LPWSTR buffer, ULONG size)
  
      RtlAcquirePebLock();
  
 -    if (NtCurrentTeb()->Tib.SubSystemTib)  /* FIXME: hack */
-+    if (NtCurrentTeb()->Tib.SubSystemTib && (!sgi | strcmp(sgi, "342200")))  /* FIXME: hack */
-         cd = &((WIN16_SUBSYSTEM_TIB *)NtCurrentTeb()->Tib.SubSystemTib)->curdir.DosPath;
-     else
-         cd = &NtCurrentTeb()->Peb->ProcessParameters->CurrentDirectory.DosPath;
+-        cd = &((WIN16_SUBSYSTEM_TIB *)NtCurrentTeb()->Tib.SubSystemTib)->curdir.DosPath;
+-    else
+-        cd = &NtCurrentTeb()->Peb->ProcessParameters->CurrentDirectory.DosPath;
++    cd = &NtCurrentTeb()->Peb->ProcessParameters->CurrentDirectory.DosPath;
++    
++    if (NtCurrentTeb()->Tib.SubSystemTib) {      /* FIXME: hack */
++        if ((!sgi) | (sgi && strcmp(sgi, "342200"))) {
++            cd = &((WIN16_SUBSYSTEM_TIB *)NtCurrentTeb()->Tib.SubSystemTib)->curdir.DosPath;
++        }
++    }
+ 
+     switch (RtlDetermineDosPathNameType_U(name))
+     {
