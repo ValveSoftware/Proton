@@ -2189,9 +2189,9 @@ index 01c1efb277..a262f01388 100644
 +VkResult WINAPI wine_vkGetPhysicalDeviceSurfaceCapabilitiesKHR(VkPhysicalDevice physicalDevice, VkSurfaceKHR surface, VkSurfaceCapabilitiesKHR *pSurfaceCapabilities);
 +VkResult WINAPI wine_vkGetSwapchainImagesKHR(VkDevice device, VkSwapchainKHR swapchain, uint32_t *pSwapchainImageCount, VkImage *pSwapchainImages);
 +VkResult WINAPI wine_vkQueuePresentKHR(VkQueue queue, const VkPresentInfoKHR *pPresentInfo);
+ void WINAPI wine_vkGetPhysicalDeviceProperties2(VkPhysicalDevice physicalDevice, VkPhysicalDeviceProperties2 *pProperties);
+ void WINAPI wine_vkGetPhysicalDeviceProperties2KHR(VkPhysicalDevice physicalDevice, VkPhysicalDeviceProperties2 *pProperties) DECLSPEC_HIDDEN;
  VkResult WINAPI wine_vkQueueSubmit(VkQueue queue, uint32_t submitCount, const VkSubmitInfo *pSubmits, VkFence fence);
- 
- /* Private thunks */
 @@ -824,6 +831,10 @@ void free_VkDeviceCreateInfo_struct_chain(VkDeviceCreateInfo *s) DECLSPEC_HIDDEN
  VkResult convert_VkInstanceCreateInfo_struct_chain(const void *pNext, VkInstanceCreateInfo *out_struct) DECLSPEC_HIDDEN;
  void free_VkInstanceCreateInfo_struct_chain(VkInstanceCreateInfo *s) DECLSPEC_HIDDEN;
@@ -3723,12 +3723,11 @@ diff --git a/dlls/winex11.drv/settings.c b/dlls/winex11.drv/settings.c
 index 781a55699e..1ab0807741 100644
 --- a/dlls/winex11.drv/settings.c
 +++ b/dlls/winex11.drv/settings.c
-@@ -21,7 +21,9 @@
+@@ -21,6 +21,8 @@
+  */
+ 
  #include "config.h"
- #include <string.h>
- #include <stdio.h>
 +#include <stdlib.h>
- #include <assert.h>
 +#include <math.h>
  
  #define NONAMELESSUNION
@@ -6918,3 +6917,54 @@ index b9cefa45bae..784517b26b8 100644
      {
          if(dd_modes[i].width == width &&
 
+From e3eb89d5ebb759e975698b97ed8b547a9de3853f Mon Sep 17 00:00:00 2001
+From: Brendan Shanks <bshanks@codeweavers.com>
+Date: Tue, 2 Jun 2020 17:45:25 -0700
+Subject: [PATCH] winex11.drv: Ensure output IDs are unique for mirrored
+ displays.
+
+Signed-off-by: Brendan Shanks <bshanks@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/winex11.drv/display.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/dlls/winex11.drv/display.c b/dlls/winex11.drv/display.c
+index cf661f9f06f..4acd7299624 100644
+--- a/dlls/winex11.drv/display.c
++++ b/dlls/winex11.drv/display.c
+@@ -484,7 +484,7 @@ static BOOL X11DRV_InitAdapter(HKEY video_hkey, INT video_index, INT gpu_index,
+ }
+ 
+ static BOOL X11DRV_InitMonitor(HDEVINFO devinfo, const struct x11drv_monitor *monitor, int monitor_index,
+-                               int video_index, const LUID *gpu_luid)
++                               int video_index, const LUID *gpu_luid, UINT output_id)
+ {
+     SP_DEVICE_INTERFACE_DATA iface_data = {sizeof(iface_data)};
+     SP_DEVINFO_DATA device_data = {sizeof(SP_DEVINFO_DATA)};
+@@ -509,7 +509,7 @@ static BOOL X11DRV_InitMonitor(HDEVINFO devinfo, const struct x11drv_monitor *mo
+ 
+     /* Write DEVPROPKEY_MONITOR_OUTPUT_ID */
+     if (!SetupDiSetDevicePropertyW(devinfo, &device_data, &DEVPROPKEY_MONITOR_OUTPUT_ID,
+-                                   DEVPROP_TYPE_UINT32, (const BYTE *)&video_index, sizeof(video_index), 0))
++                                   DEVPROP_TYPE_UINT32, (const BYTE *)&output_id, sizeof(output_id), 0))
+         goto done;
+ 
+     /* Create driver key */
+@@ -614,6 +614,7 @@ void X11DRV_DisplayDevices_Init(BOOL force)
+     WCHAR guidW[40];
+     WCHAR driverW[1024];
+     LUID gpu_luid;
++    UINT output_id = 0;
+ 
+     mutex = get_display_device_init_mutex();
+ 
+@@ -664,7 +665,7 @@ void X11DRV_DisplayDevices_Init(BOOL force)
+             for (monitor = 0; monitor < monitor_count; monitor++)
+             {
+                 TRACE("monitor: %#x %s\n", monitor, wine_dbgstr_w(monitors[monitor].name));
+-                if (!X11DRV_InitMonitor(monitor_devinfo, &monitors[monitor], monitor, video_index, &gpu_luid))
++                if (!X11DRV_InitMonitor(monitor_devinfo, &monitors[monitor], monitor, video_index, &gpu_luid, output_id++))
+                     goto done;
+             }
+ 

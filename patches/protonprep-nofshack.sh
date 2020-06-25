@@ -68,13 +68,6 @@
     cd wine-staging
     git reset --hard HEAD
     git clean -xdf
-    
-#    echo "staging unfuck 1"
-#    patch -Np1 -R < ../patches/wine-hotfixes/reverts/staging/06877e55b1100cc49d3726e9a70f31c4dfbe66f8.patch
-#    echo "staging unfuck 2"
-#    patch -Np1 < ../patches/wine-hotfixes/reverts/staging/934a09585a15e8491e422b43624ffe632b02bd3c.patch
-#    echo "staging unfuck 3"
-#    patch -Np1 < ../patches/wine-hotfixes/updates/staging/ntdll-ForceBottomUpAlloc-044cb93.patch
     cd ..
 
     #WINE
@@ -85,20 +78,17 @@
     echo "proton gamepad conflict fix"
     git revert --no-commit da7d60bf97fb8726828e57f852e8963aacde21e9
 
-    echo "sea of thieves patch fix"
-#    # these commits will eventually replace the sea of thieves patch, but are currently incomplete
-    git revert --no-commit 0b48050da58be2ee72bcc5c4848822d6853d857c
-    git revert --no-commit a6de059eef5e0aa4aa688885c1d91497c588576f
-    git revert --no-commit a46d359e91e299142a27570bb202d8141b9625da
-    git revert --no-commit 0a90d0431d8d6d2f4913cdc6640edeb1ade833c0
-    git revert --no-commit 93aea5d86fe2eb50a9bb0829533ca5da627908f6
-
 # disable these when using proton's gamepad patches
 #    -W dinput-SetActionMap-genre \
 #    -W dinput-axis-recalc \
 #    -W dinput-joy-mappings \
 #    -W dinput-reconnect-joystick \
 #    -W dinput-remap-joystick \
+
+# disable if using remi's fakedll rework:
+#    -W winebuild-Fake_Dlls \
+#    -W ntdll-Syscall_Emulation \
+#    -W ntdll-ThreadHideFromDebugger \
 
     echo "applying staging patches"
     ../wine-staging/patches/patchinstall.sh DESTDIR="." --all \
@@ -111,18 +101,10 @@
     -W dinput-remap-joystick \
     -W user32-window-activation
     
-    echo "SC, DOS2, PoE revert fix"
-    # StarCitizen freezes on start
-    # https://bugs.winehq.org/show_bug.cgi?id=49007
-    # Divinity: Original Sin 2 (GOG): Doesn't start since 5.7
-    # https://bugs.winehq.org/show_bug.cgi?id=49098
-    # Path of Exile flickers with multithreaded renderer
-    # https://bugs.winehq.org/show_bug.cgi?id=49041
-    patch -Np1 < ../patches/wine-hotfixes/reverts/wine/fd7992972b252ed262d33ef604e9e1235d2108c5.patch
-
-    echo "origin 5.11 login hang fix"
-    patch -Np1 < ../patches/game-patches/origin-login-hang-fix.patch
-
+#    echo "remi's fakedll rework patches"
+#    ntdll-Syscall_Emulation is included in remi's rework
+#    patch -Np1 < ../patches/wine-hotfixes/fakedll.patch
+    
     #WINE FAUDIO
     #echo "applying faudio patches"
     #patch -Np1 < ../patches/faudio/faudio-ffmpeg.patch
@@ -147,16 +129,6 @@
 
     echo "origin downloads fix" 
     patch -Np1 < ../patches/game-patches/origin-downloads_fix.patch
-
-    echo "sea of thieves winhttp patches"
-    patch -Np1 < ../patches/game-patches/sea-of-thieves-websockets.patch
-#    patch -Np1 < ../patches/game-patches/0001-winhttp-Don-t-close-child-handles-on-release.patch
-#    patch -Np1 < ../patches/game-patches/0002-winhttp-WinHttpWebSocketCompleteUpgrade-use-WINHTTP_.patch
-#    patch -Np1 < ../patches/game-patches/0003-winhttp-Pass-length-in-WINHTTP_CALLBACK_STATUS_CONNE.patch
-#    patch -Np1 < ../patches/game-patches/0004-winhttp-Implement-WinHttpWebSocketSend.patch
-#    patch -Np1 < ../patches/game-patches/0005-winhttp-Implement-WinHttpWebSocketClose.patch
-#    patch -Np1 < ../patches/game-patches/0006-winhttp-Convert-winsock-error-to-internet-error.patch
-
 
     echo "fix steep"
     patch -Np1 < ../patches/game-patches/steep_fix.patch
@@ -224,10 +196,8 @@
     patch -Np1 < ../patches/proton/proton-gamepad-additions.patch
 
     echo "Valve VR patches"
+    # disable if using remi's fakedll rework
     patch -Np1 < ../patches/proton/proton-vr.patch
-
-    echo "Valve vulkan patches"
-    patch -Np1 < ../patches/proton/proton-vk-bits-4.5-nofshack.patch
 
 #    echo "FS Hack integer scaling"
 #    patch -Np1 < ../patches/proton/proton_fs_hack_integer_scaling.patch
@@ -254,10 +224,7 @@
     echo "applying WoW vkd3d wine patches"
     patch -Np1 < ../patches/wine-hotfixes/vkd3d/D3D12SerializeVersionedRootSignature.patch
     patch -Np1 < ../patches/wine-hotfixes/vkd3d/D3D12CreateVersionedRootSignatureDeserializer.patch
-    
-    echo "media foundation upstream pending"
-    patch -Np1 < ../patches/wine-hotfixes/media_foundation/media_foundation_wine_pending.patch
-        
+            
     echo "guy's media foundation alpha patches"
     patch -Np1 < ../patches/wine-hotfixes/media_foundation/media_foundation_alpha.patch
     

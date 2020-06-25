@@ -2357,34 +2357,6 @@ index 2bc11789b2..848089dca7 100644
      current->process->rawinput_kbd   = e ? &e->device : NULL;
  }
  
-@@ -3360,3 +3475,27 @@ DECL_HANDLER(fsync_msgwait)
-     if (queue->fd)
-         set_fd_events( queue->fd, req->in_msgwait ? POLLIN : 0 );
- }
-+
-+DECL_HANDLER(get_rawinput_devices)
-+{
-+    unsigned int device_count = list_count(&current->process->rawinput_devices);
-+    struct rawinput_device *devices;
-+    struct rawinput_device_entry *e;
-+    unsigned int i;
-+
-+    reply->device_count = device_count;
-+    if (get_reply_max_size() / sizeof (*devices) < device_count)
-+        return;
-+
-+    if (!(devices = mem_alloc( device_count * sizeof (*devices) )))
-+    {
-+        set_error( STATUS_NO_MEMORY );
-+        return;
-+    }
-+
-+    i = 0;
-+    LIST_FOR_EACH_ENTRY( e, &current->process->rawinput_devices, struct rawinput_device_entry, entry )
-+        devices[i++] = e->device;
-+
-+    set_reply_data_ptr( devices, device_count * sizeof (*devices) );
-+}
 diff --git a/server/request.h b/server/request.h
 index 24fdd761e3..8cc1a9b38c 100644
 --- a/server/request.h
@@ -2766,24 +2738,6 @@ index b8282532855..110edc8ce75 100644
  
      xinput2_available = XQueryExtension( gdi_display, "XInputExtension", &xinput2_opcode, &event, &error );
 
-diff --git a/dlls/user32/message.c b/dlls/user32/message.c
-index b6adddc99b..ce0fd78d75 100644
---- a/dlls/user32/message.c
-+++ b/dlls/user32/message.c
-@@ -2318,7 +2318,12 @@ static BOOL process_rawinput_message( MSG *msg, const struct hardware_msg_data *
-         rawinput->header.hDevice = WINE_MOUSE_HANDLE;
-         rawinput->header.wParam  = 0;
- 
--        rawinput->data.mouse.usFlags           = MOUSE_MOVE_RELATIVE;
-+        if (msg_data->flags & MOUSEEVENTF_ABSOLUTE)
-+            rawinput->data.mouse.usFlags = MOUSE_MOVE_ABSOLUTE;
-+        else
-+            rawinput->data.mouse.usFlags = MOUSE_MOVE_RELATIVE;
-+        if (msg_data->flags & MOUSEEVENTF_VIRTUALDESK)
-+            rawinput->data.mouse.usFlags |= MOUSE_VIRTUAL_DESKTOP;
-         rawinput->data.mouse.u.s.usButtonFlags = 0;
-         rawinput->data.mouse.u.s.usButtonData  = 0;
-         for (i = 1; i < ARRAY_SIZE(button_flags); ++i)
 diff --git a/dlls/user32/rawinput.c b/dlls/user32/rawinput.c
 index c6af2faa2a..850028ed2b 100644
 --- a/dlls/user32/rawinput.c
@@ -2797,296 +2751,6 @@ index c6af2faa2a..850028ed2b 100644
              FIXME("Unhandled flags %#x for device %u.\n", devices[i].dwFlags, i);
  
          d[i].usage_page = devices[i].usUsagePage;
-diff --git a/dlls/winex11.drv/mouse.c b/dlls/winex11.drv/mouse.c
-index 110edc8ce7..aea6cc8b92 100644
---- a/dlls/winex11.drv/mouse.c
-+++ b/dlls/winex11.drv/mouse.c
-@@ -283,34 +283,43 @@ static void update_relative_valuators(XIAnyClassInfo **valuators, int n_valuator
-     struct x11drv_thread_data *thread_data = x11drv_thread_data();
-     int i;
- 
--    thread_data->x_rel_valuator.number = -1;
--    thread_data->y_rel_valuator.number = -1;
--    thread_data->x_rel_valuator.accum = 0;
--    thread_data->y_rel_valuator.accum = 0;
-+    thread_data->x_pos_valuator.number = -1;
-+    thread_data->y_pos_valuator.number = -1;
- 
-     for (i = 0; i < n_valuators; i++)
-     {
-         XIValuatorClassInfo *class = (XIValuatorClassInfo *)valuators[i];
--        struct x11drv_valuator_data *valuator_data = NULL;
- 
--        if (valuators[i]->type != XIValuatorClass) continue;
--        if (class->label == x11drv_atom( Rel_X ) ||
--            (!class->label && class->number == 0 && class->mode == XIModeRelative))
--        {
--            valuator_data = &thread_data->x_rel_valuator;
--        }
-+        if (valuators[i]->type != XIValuatorClass)
-+            continue;
-+        else if (class->label == x11drv_atom( Rel_X ) ||
-+                 class->label == x11drv_atom( Abs_X ) ||
-+                 (!class->label && class->number == 0))
-+            thread_data->x_pos_valuator = *class;
-         else if (class->label == x11drv_atom( Rel_Y ) ||
--                 (!class->label && class->number == 1 && class->mode == XIModeRelative))
--        {
--            valuator_data = &thread_data->y_rel_valuator;
--        }
-+                 class->label == x11drv_atom( Abs_Y ) ||
-+                 (!class->label && class->number == 1))
-+            thread_data->y_pos_valuator = *class;
-+    }
- 
--        if (valuator_data) {
--            valuator_data->number = class->number;
--            valuator_data->min = class->min;
--            valuator_data->max = class->max;
--        }
-+    if (thread_data->x_pos_valuator.number < 0 || thread_data->y_pos_valuator.number < 0)
-+    {
-+        WARN("Only one X/Y axis found, ignoring RawMotion events\n");
-     }
-+    else if (thread_data->x_pos_valuator.mode != thread_data->y_pos_valuator.mode)
-+    {
-+        WARN("Relative/Absolute mismatch between X/Y axis, ignoring RawMotion events\n");
-+        thread_data->y_pos_valuator.number = -1;
-+        thread_data->y_pos_valuator.number = -1;
-+    }
-+
-+    if (thread_data->x_pos_valuator.min >= thread_data->x_pos_valuator.max)
-+        thread_data->x_pos_valuator.min = thread_data->x_pos_valuator.max = 0;
-+    if (thread_data->y_pos_valuator.min >= thread_data->y_pos_valuator.max)
-+        thread_data->y_pos_valuator.min = thread_data->y_pos_valuator.max = 0;
-+
-+    thread_data->x_pos_valuator.value = 0;
-+    thread_data->y_pos_valuator.value = 0;
- }
- #endif
- 
-@@ -395,10 +404,8 @@ void X11DRV_XInput2_Disable(void)
-     mask.deviceid = XIAllMasterDevices;
- 
-     pXISelectEvents( data->display, DefaultRootWindow( data->display ), &mask, 1 );
--    data->x_rel_valuator.number = -1;
--    data->y_rel_valuator.number = -1;
--    data->x_rel_valuator.accum = 0;
--    data->y_rel_valuator.accum = 0;
-+    data->x_pos_valuator.number = -1;
-+    data->y_pos_valuator.number = -1;
-     data->xi2_core_pointer = 0;
- #endif
- }
-@@ -1827,21 +1834,28 @@ static BOOL X11DRV_RawMotion( XGenericEventCookie *xev )
- {
-     XIRawEvent *event = xev->data;
-     const double *values = event->valuators.values;
-+    const double *raw_values = event->raw_values;
-     RECT virtual_rect;
-     INPUT input;
-     POINT pt;
-     int i;
-     double dx = 0, dy = 0, val;
-+    double raw_dx = 0, raw_dy = 0, raw_val;
-+    double x_scale = 1, y_scale = 1;
-+    double x_accum = 0, y_accum = 0;
-     struct x11drv_thread_data *thread_data = x11drv_thread_data();
--    struct x11drv_valuator_data *x_rel, *y_rel;
-+    XIValuatorClassInfo *x_pos, *y_pos;
- 
--    if (thread_data->x_rel_valuator.number < 0 || thread_data->y_rel_valuator.number < 0) return FALSE;
-+    if (thread_data->x_pos_valuator.number < 0 || thread_data->y_pos_valuator.number < 0) return FALSE;
-     if (!event->valuators.mask_len) return FALSE;
-     if (thread_data->xi2_state != xi_enabled) return FALSE;
-     if (event->deviceid != thread_data->xi2_core_pointer) return FALSE;
- 
--    x_rel = &thread_data->x_rel_valuator;
--    y_rel = &thread_data->y_rel_valuator;
-+    x_pos = &thread_data->x_pos_valuator;
-+    y_pos = &thread_data->y_pos_valuator;
-+
-+    x_accum = x_pos->value;
-+    y_accum = y_pos->value;
- 
-     input.type             = INPUT_MOUSE;
-     input.u.mi.mouseData   = 0;
-@@ -1852,42 +1866,48 @@ static BOOL X11DRV_RawMotion( XGenericEventCookie *xev )
-     input.u.mi.dy          = 0;
- 
-     virtual_rect = get_virtual_screen_rect();
-+    if (x_pos->min < x_pos->max)
-+        x_scale = (virtual_rect.right - virtual_rect.left) / (x_pos->max - x_pos->min);
-+    if (y_pos->min < y_pos->max)
-+        y_scale = (virtual_rect.bottom - virtual_rect.top) / (y_pos->max - y_pos->min);
- 
--    for (i = 0; i <= max ( x_rel->number, y_rel->number ); i++)
-+    for (i = 0; i <= max( x_pos->number, y_pos->number ); i++)
-     {
--        if (!XIMaskIsSet( event->valuators.mask, i ))
--            continue;
-+        if (!XIMaskIsSet( event->valuators.mask, i )) continue;
-         val = *values++;
--        if (i == x_rel->number)
-+        raw_val = *raw_values++;
-+        if (i == x_pos->number)
-         {
-             dx = val;
--            if (x_rel->min < x_rel->max)
--                dx = val * (virtual_rect.right - virtual_rect.left)
--                         / (x_rel->max - x_rel->min);
-+            raw_dx = raw_val;
-+            input.u.mi.dwFlags |= (x_pos->min < x_pos->max ? MOUSEEVENTF_VIRTUALDESK : 0) |
-+                                  (x_pos->mode == XIModeAbsolute ? MOUSEEVENTF_ABSOLUTE : 0);
-+            if (x_pos->mode == XIModeAbsolute)
-+                x_accum = virtual_rect.left + (dx - x_pos->min) * x_scale;
-+            else
-+                x_accum += dx * x_scale;
-         }
--        if (i == y_rel->number)
-+        if (i == y_pos->number)
-         {
-             dy = val;
--            if (y_rel->min < y_rel->max)
--                dy = val * (virtual_rect.bottom - virtual_rect.top)
--                         / (y_rel->max - y_rel->min);
-+            raw_dy = raw_val;
-+            input.u.mi.dwFlags |= (y_pos->min < y_pos->max ? MOUSEEVENTF_VIRTUALDESK : 0) |
-+                                  (y_pos->mode == XIModeAbsolute ? MOUSEEVENTF_ABSOLUTE : 0);
-+            if (y_pos->mode == XIModeAbsolute)
-+                y_accum = virtual_rect.top + (dy - y_pos->min) * y_scale;
-+            else
-+                y_accum += dy * y_scale;
-         }
-     }
- 
--    /* Accumulate the *double* dx/dy motions so sub-pixel motions wont be lost
--     * when sent/cast to *LONG* input.u.mi.dx/dy.
-+    /* Accumulate the fractional parts so they aren't lost after casting
-+     * successive motion values to integral fields.
-+     *
-+     * Note: It looks like raw_dx, raw_dy are already
-+     * integral values but that may be wrong.
-      */
--    x_rel->accum += dx;
--    y_rel->accum += dy;
--    if (fabs(x_rel->accum) < 1.0 && fabs(y_rel->accum) < 1.0)
--    {
--        TRACE( "accumulating raw motion (event %f,%f, accum %f,%f)\n", dx, dy, x_rel->accum, y_rel->accum );
--        return TRUE;
--    }
--    input.u.mi.dx = x_rel->accum;
--    input.u.mi.dy = y_rel->accum;
--    x_rel->accum -= input.u.mi.dx;
--    y_rel->accum -= input.u.mi.dy;
-+    input.u.mi.dx = (LONG)x_accum;
-+    input.u.mi.dy = (LONG)y_accum;
- 
-     if (broken_rawevents && is_old_motion_event( xev->serial ))
-     {
-@@ -1901,14 +1921,31 @@ static BOOL X11DRV_RawMotion( XGenericEventCookie *xev )
-     input.u.mi.dx = pt.x;
-     input.u.mi.dy = pt.y;
- 
--    if (!thread_data->xi2_rawinput_only)
-+    x_pos->value = x_accum - input.u.mi.dx;
-+    y_pos->value = y_accum - input.u.mi.dy;
-+
-+    if (x_pos->mode == XIModeAbsolute)
-+    {
-+        TRACE( "pos %d,%d (event %f,%f)\n", input.u.mi.dx, input.u.mi.dy, dx, dy );
-+        __wine_send_input( 0, &input, SEND_HWMSG_RAWINPUT );
-+    }
-+    else if (!thread_data->xi2_rawinput_only)
-     {
--        TRACE( "pos %d,%d (event %f,%f, accum %f,%f)\n", input.u.mi.dx, input.u.mi.dy, dx, dy, x_rel->accum, y_rel->accum );
--        __wine_send_input( 0, &input, SEND_HWMSG_WINDOW );
-+        if ((dy || dy) && !(input.u.mi.dx || input.u.mi.dy))
-+        {
-+            TRACE( "accumulating raw motion (event %f,%f accum %f,%f)\n", dx, dy, x_pos->value, y_pos->value );
-+        }
-+        else
-+        {
-+            TRACE( "pos %d,%d (event %f,%f)\n", input.u.mi.dx, input.u.mi.dy, dx, dy );
-+            __wine_send_input( 0, &input, SEND_HWMSG_WINDOW );
-+        }
-     }
-     else
-     {
--        TRACE( "raw pos %d,%d (event %f,%f, accum %f,%f)\n", input.u.mi.dx, input.u.mi.dy, dx, dy, x_rel->accum, y_rel->accum );
-+        input.u.mi.dx = raw_dx;
-+        input.u.mi.dy = raw_dy;
-+        TRACE( "raw pos %d,%d (event %f,%f)\n", input.u.mi.dx, input.u.mi.dy, raw_dx, raw_dy );
-         __wine_send_input( 0, &input, SEND_HWMSG_RAWINPUT );
-     }
-     return TRUE;
-diff --git a/dlls/winex11.drv/x11drv.h b/dlls/winex11.drv/x11drv.h
-index f1ce5696df..d2412ed4a4 100644
---- a/dlls/winex11.drv/x11drv.h
-+++ b/dlls/winex11.drv/x11drv.h
-@@ -32,6 +32,9 @@
- #include <X11/Xresource.h>
- #include <X11/Xutil.h>
- #include <X11/Xatom.h>
-+#ifdef HAVE_X11_EXTENSIONS_XINPUT2_H
-+#include <X11/extensions/XInput2.h>
-+#endif
- 
- #define BOOL X_BOOL
- #define BYTE X_BYTE
-@@ -322,14 +325,6 @@ struct x11drv_escape_flush_gl_drawable
-  * X11 USER driver
-  */
- 
--struct x11drv_valuator_data
--{
--    double min;
--    double max;
--    int number;
--    double accum;
--};
--
- struct x11drv_thread_data
- {
-     Display *display;
-@@ -345,11 +340,13 @@ struct x11drv_thread_data
-     HWND     clip_hwnd;            /* message window stored in desktop while clipping is active */
-     DWORD    clip_reset;           /* time when clipping was last reset */
-     HKL      kbd_layout;           /* active keyboard layout */
-+#ifdef HAVE_X11_EXTENSIONS_XINPUT2_H
-     enum { xi_unavailable = -1, xi_unknown, xi_disabled, xi_enabled } xi2_state; /* XInput2 state */
--    struct x11drv_valuator_data x_rel_valuator;
--    struct x11drv_valuator_data y_rel_valuator;
-+    XIValuatorClassInfo x_pos_valuator;
-+    XIValuatorClassInfo y_pos_valuator;
-     int      xi2_core_pointer;     /* XInput2 core pointer id */
-     int      xi2_rawinput_only;
-+#endif
- };
- 
- extern struct x11drv_thread_data *x11drv_init_thread_data(void) DECLSPEC_HIDDEN;
-@@ -434,6 +431,8 @@ enum x11drv_atoms
-     XATOM_RAW_CAP_HEIGHT,
-     XATOM_Rel_X,
-     XATOM_Rel_Y,
-+    XATOM_Abs_X,
-+    XATOM_Abs_Y,
-     XATOM_WM_PROTOCOLS,
-     XATOM_WM_DELETE_WINDOW,
-     XATOM_WM_STATE,
-diff --git a/dlls/winex11.drv/x11drv_main.c b/dlls/winex11.drv/x11drv_main.c
-index 8908e84458..1e2f7f2d36 100644
---- a/dlls/winex11.drv/x11drv_main.c
-+++ b/dlls/winex11.drv/x11drv_main.c
-@@ -144,6 +144,8 @@ static const char * const atom_names[NB_XATOMS - FIRST_XATOM] =
-     "RAW_CAP_HEIGHT",
-     "Rel X",
-     "Rel Y",
-+    "Abs X",
-+    "Abs Y",
-     "WM_PROTOCOLS",
-     "WM_DELETE_WINDOW",
-     "WM_STATE",
 diff --git a/server/queue.c b/server/queue.c
 index 848089dca7..c0094379da 100644
 --- a/server/queue.c
@@ -3584,119 +3248,1481 @@ index 5a624949867..6480a5adac6 100644
  
 -- 
 2.26.0
-From be998a8963167be7607aa4151d15e00013c3c3ab Mon Sep 17 00:00:00 2001
-From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
-Date: Fri, 27 Mar 2020 16:25:14 +0100
-Subject: [PATCH] server: Also update the key state if RIDEV_NOLEGACY is used.
 
-This fixes mouse buttons not responding in Mass Effect Andromeda and
-several other Bioware games.
----
- server/queue.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/server/queue.c b/server/queue.c
-index 90bfbf67025..65a1743368e 100644
---- a/server/queue.c
-+++ b/server/queue.c
-@@ -1833,7 +1833,7 @@ static int queue_mouse_message( struct desktop *desktop, user_handle_t win, cons
-         return 0;
-     if ((device = current->process->rawinput_mouse) && (device->flags & RIDEV_NOLEGACY))
+diff --git a/dlls/dinput/device.c b/dlls/dinput/device.c
+index 8c5aa31883..199ba398a7 100644
+--- a/dlls/dinput/device.c
++++ b/dlls/dinput/device.c
+@@ -994,9 +994,8 @@ HRESULT WINAPI IDirectInputDevice2WImpl_Acquire(LPDIRECTINPUTDEVICE8W iface)
+     EnterCriticalSection(&This->crit);
+     res = This->acquired ? S_FALSE : DI_OK;
+     This->acquired = 1;
++    This->inputlost = 0;
+     LeaveCriticalSection(&This->crit);
+-    if (res == DI_OK)
+-        check_dinput_hooks(iface, TRUE);
+ 
+     return res;
+ }
+@@ -1022,9 +1021,8 @@ HRESULT WINAPI IDirectInputDevice2WImpl_Unacquire(LPDIRECTINPUTDEVICE8W iface)
+     EnterCriticalSection(&This->crit);
+     res = !This->acquired ? DI_NOEFFECT : DI_OK;
+     This->acquired = 0;
++    This->inputlost = 0;
+     LeaveCriticalSection(&This->crit);
+-    if (res == DI_OK)
+-        check_dinput_hooks(iface, FALSE);
+ 
+     return res;
+ }
+@@ -1158,10 +1156,6 @@ ULONG WINAPI IDirectInputDevice2WImpl_Release(LPDIRECTINPUTDEVICE8W iface)
+     /* Free action mapping */
+     HeapFree(GetProcessHeap(), 0, This->action_map);
+ 
+-    EnterCriticalSection( &This->dinput->crit );
+-    list_remove( &This->entry );
+-    LeaveCriticalSection( &This->dinput->crit );
+-
+     IDirectInput_Release(&This->dinput->IDirectInput7A_iface);
+     This->crit.DebugInfo->Spare[0] = 0;
+     DeleteCriticalSection(&This->crit);
+@@ -1752,9 +1746,7 @@ HRESULT WINAPI IDirectInputDevice2WImpl_Poll(LPDIRECTINPUTDEVICE8W iface)
+     IDirectInputDeviceImpl *This = impl_from_IDirectInputDevice8W(iface);
+ 
+     if (!This->acquired) return DIERR_NOTACQUIRED;
+-
+-    check_dinput_events();
+-    return DI_OK;
++    return DI_NOEFFECT;
+ }
+ 
+ HRESULT WINAPI IDirectInputDevice2AImpl_Poll(LPDIRECTINPUTDEVICE8A iface)
+diff --git a/dlls/dinput/device_private.h b/dlls/dinput/device_private.h
+index f0ac86b4f7..5c4543af02 100644
+--- a/dlls/dinput/device_private.h
++++ b/dlls/dinput/device_private.h
+@@ -68,7 +68,7 @@ struct IDirectInputDeviceImpl
+     DWORD                       dwCoopLevel;
+     HWND                        win;
+     int                         acquired;
+-    DI_EVENT_PROC               event_proc;  /* function to receive mouse & keyboard events */
++    int                         inputlost;
+ 
+     BOOL                        use_raw_input; /* use raw input instead of low-level messages */
+     RAWINPUTDEVICE              raw_device;    /* raw device to (un)register */
+diff --git a/dlls/dinput/dinput_main.c b/dlls/dinput/dinput_main.c
+index 79efbad7cc..5cd527c6b2 100644
+--- a/dlls/dinput/dinput_main.c
++++ b/dlls/dinput/dinput_main.c
+@@ -102,10 +102,42 @@ static HWND        di_em_win;
+ static BOOL check_hook_thread(void);
+ static CRITICAL_SECTION dinput_hook_crit;
+ static struct list direct_input_list = LIST_INIT( direct_input_list );
++static struct list dinput_mouse_list = LIST_INIT( dinput_mouse_list );
++static struct list dinput_mouse_rawinput_list = LIST_INIT( dinput_mouse_rawinput_list );
++static struct list dinput_keyboard_list = LIST_INIT( dinput_keyboard_list );
++static struct list dinput_keyboard_rawinput_list = LIST_INIT( dinput_keyboard_rawinput_list );
+ 
+ static HRESULT initialize_directinput_instance(IDirectInputImpl *This, DWORD dwVersion);
+ static void uninitialize_directinput_instance(IDirectInputImpl *This);
+ 
++void dinput_hooks_insert_mouse(struct IDirectInputDeviceImpl *device, BOOL rawinput)
++{
++    EnterCriticalSection( &dinput_hook_crit );
++    list_add_tail(rawinput ? &dinput_mouse_rawinput_list : &dinput_mouse_list, &device->entry);
++    LeaveCriticalSection( &dinput_hook_crit );
++}
++
++void dinput_hooks_remove_mouse(struct IDirectInputDeviceImpl *device, BOOL rawinput)
++{
++    EnterCriticalSection( &dinput_hook_crit );
++    list_remove( &device->entry );
++    LeaveCriticalSection( &dinput_hook_crit );
++}
++
++void dinput_hooks_insert_keyboard(struct IDirectInputDeviceImpl *device, BOOL rawinput)
++{
++    EnterCriticalSection( &dinput_hook_crit );
++    list_add_tail(rawinput ? &dinput_keyboard_rawinput_list : &dinput_keyboard_list, &device->entry);
++    LeaveCriticalSection( &dinput_hook_crit );
++}
++
++void dinput_hooks_remove_keyboard(struct IDirectInputDeviceImpl *device, BOOL rawinput)
++{
++    EnterCriticalSection( &dinput_hook_crit );
++    list_remove( &device->entry );
++    LeaveCriticalSection( &dinput_hook_crit );
++}
++
+ static HRESULT create_directinput_instance(REFIID riid, LPVOID *ppDI, IDirectInputImpl **out)
+ {
+     IDirectInputImpl *This = HeapAlloc( GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(IDirectInputImpl) );
+@@ -629,29 +661,30 @@ static HRESULT WINAPI IDirectInputWImpl_QueryInterface(LPDIRECTINPUT7W iface, RE
+ 
+ static LRESULT WINAPI di_em_win_wndproc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
+ {
+-    IDirectInputImpl *dinput;
++    IDirectInputDeviceImpl *dev;
++    RAWINPUT ri;
++    UINT size = sizeof(ri);
+ 
+     TRACE( "%p %d %lx %lx\n", hwnd, msg, wparam, lparam );
+ 
+-    if (msg == WM_INPUT)
++    if (msg == WM_INPUT && (GET_RAWINPUT_CODE_WPARAM(wparam) == RIM_INPUT || GET_RAWINPUT_CODE_WPARAM(wparam) == RIM_INPUTSINK))
      {
--        if (flags & MOUSEEVENTF_MOVE) update_desktop_cursor_pos( desktop, x, y );
-+        update_desktop_mouse_state( desktop, flags, x, y, input->mouse.data << 16 );
-         return 0;
+-        EnterCriticalSection( &dinput_hook_crit );
+-        LIST_FOR_EACH_ENTRY( dinput, &direct_input_list, IDirectInputImpl, entry )
++        if (GetRawInputData( (HRAWINPUT)lparam, RID_INPUT, &ri, &size, sizeof(RAWINPUTHEADER) ) > sizeof(ri))
++            WARN( "Unable to read raw input data\n" );
++        else if (ri.header.dwType == RIM_TYPEMOUSE)
+         {
+-            IDirectInputDeviceImpl *dev;
+-
+-            EnterCriticalSection( &dinput->crit );
+-            LIST_FOR_EACH_ENTRY( dev, &dinput->devices_list, IDirectInputDeviceImpl, entry )
+-            {
+-                if (dev->acquired && dev->event_proc && dev->use_raw_input)
+-                {
+-                    TRACE("calling %p->%p (%lx %lx)\n", dev, dev->event_proc, wparam, lparam);
+-                    dev->event_proc( &dev->IDirectInputDevice8A_iface, GET_RAWINPUT_CODE_WPARAM(wparam), lparam );
+-                }
+-            }
+-            LeaveCriticalSection( &dinput->crit );
++            EnterCriticalSection( &dinput_hook_crit );
++            LIST_FOR_EACH_ENTRY( dev, &dinput_mouse_rawinput_list, IDirectInputDeviceImpl, entry )
++                dinput_mouse_rawinput_hook( &dev->IDirectInputDevice8A_iface, wparam, lparam, &ri );
++            LeaveCriticalSection( &dinput_hook_crit );
++        }
++        else if (ri.header.dwType == RIM_TYPEKEYBOARD)
++        {
++            EnterCriticalSection( &dinput_hook_crit );
++            LIST_FOR_EACH_ENTRY( dev, &dinput_keyboard_rawinput_list, IDirectInputDeviceImpl, entry )
++                dinput_keyboard_rawinput_hook( &dev->IDirectInputDevice8A_iface, wparam, lparam, &ri );
++            LeaveCriticalSection( &dinput_hook_crit );
+         }
+-        LeaveCriticalSection( &dinput_hook_crit );
      }
  
-From 51c0460371cd2a5f392fe2bfd09bb549ae55df0a Mon Sep 17 00:00:00 2001
-From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
-Date: Wed, 15 Apr 2020 15:42:06 +0200
-Subject: [PATCH] server: Check foreground_input before accessing it.
-
----
- server/queue.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
-
+     return DefWindowProcW(hwnd, msg, wparam, lparam);
+@@ -687,10 +720,6 @@ static HRESULT initialize_directinput_instance(IDirectInputImpl *This, DWORD dwV
+         This->dwVersion = dwVersion;
+         This->evsequence = 1;
+ 
+-        InitializeCriticalSection( &This->crit );
+-        This->crit.DebugInfo->Spare[0] = (DWORD_PTR)(__FILE__ ": IDirectInputImpl*->crit");
+-
+-        list_init( &This->devices_list );
+         list_init( &This->device_players );
+ 
+         /* Add self to the list of the IDirectInputs */
+@@ -726,9 +755,6 @@ static void uninitialize_directinput_instance(IDirectInputImpl *This)
+ 
+         check_hook_thread();
+ 
+-        This->crit.DebugInfo->Spare[0] = 0;
+-        DeleteCriticalSection( &This->crit );
+-
+         This->initialized = FALSE;
+     }
+ }
+@@ -1716,25 +1742,24 @@ HRESULT WINAPI DllUnregisterServer(void)
+ 
+ static LRESULT CALLBACK LL_hook_proc( int code, WPARAM wparam, LPARAM lparam )
+ {
+-    IDirectInputImpl *dinput;
++    IDirectInputDeviceImpl *dev;
+     int skip = 0;
+ 
+     if (code != HC_ACTION) return CallNextHookEx( 0, code, wparam, lparam );
+ 
+     EnterCriticalSection( &dinput_hook_crit );
+-    LIST_FOR_EACH_ENTRY( dinput, &direct_input_list, IDirectInputImpl, entry )
+-    {
+-        IDirectInputDeviceImpl *dev;
+-
+-        EnterCriticalSection( &dinput->crit );
+-        LIST_FOR_EACH_ENTRY( dev, &dinput->devices_list, IDirectInputDeviceImpl, entry )
+-            if (dev->acquired && dev->event_proc && !dev->use_raw_input)
+-            {
+-                TRACE("calling %p->%p (%lx %lx)\n", dev, dev->event_proc, wparam, lparam);
+-                skip |= dev->event_proc( &dev->IDirectInputDevice8A_iface, wparam, lparam );
+-            }
+-        LeaveCriticalSection( &dinput->crit );
+-    }
++    LIST_FOR_EACH_ENTRY( dev, &dinput_keyboard_list, IDirectInputDeviceImpl, entry )
++        if (!dev->use_raw_input)
++        {
++            TRACE("calling dinput_keyboard_hook(%p %lx %lx)\n", dev, wparam, lparam);
++            skip |= dinput_keyboard_hook( &dev->IDirectInputDevice8A_iface, wparam, lparam );
++        }
++    LIST_FOR_EACH_ENTRY( dev, &dinput_mouse_list, IDirectInputDeviceImpl, entry )
++        if (!dev->use_raw_input)
++        {
++            TRACE("calling dinput_mouse_hook(%p %lx %lx)\n", dev, wparam, lparam);
++            skip |= dinput_mouse_hook( &dev->IDirectInputDevice8A_iface, wparam, lparam );
++        }
+     LeaveCriticalSection( &dinput_hook_crit );
+ 
+     return skip ? 1 : CallNextHookEx( 0, code, wparam, lparam );
+@@ -1743,7 +1768,7 @@ static LRESULT CALLBACK LL_hook_proc( int code, WPARAM wparam, LPARAM lparam )
+ static LRESULT CALLBACK callwndproc_proc( int code, WPARAM wparam, LPARAM lparam )
+ {
+     CWPSTRUCT *msg = (CWPSTRUCT *)lparam;
+-    IDirectInputImpl *dinput;
++    IDirectInputDeviceImpl *dev;
+     HWND foreground;
+ 
+     if (code != HC_ACTION || (msg->message != WM_KILLFOCUS &&
+@@ -1753,23 +1778,37 @@ static LRESULT CALLBACK callwndproc_proc( int code, WPARAM wparam, LPARAM lparam
+     foreground = GetForegroundWindow();
+ 
+     EnterCriticalSection( &dinput_hook_crit );
+-
+-    LIST_FOR_EACH_ENTRY( dinput, &direct_input_list, IDirectInputImpl, entry )
++    LIST_FOR_EACH_ENTRY( dev, &dinput_keyboard_list, IDirectInputDeviceImpl, entry )
+     {
+-        IDirectInputDeviceImpl *dev;
+-
+-        EnterCriticalSection( &dinput->crit );
+-        LIST_FOR_EACH_ENTRY( dev, &dinput->devices_list, IDirectInputDeviceImpl, entry )
++        if (msg->hwnd == dev->win && msg->hwnd != foreground)
+         {
+-            if (!dev->acquired) continue;
+-
+-            if (msg->hwnd == dev->win && msg->hwnd != foreground)
+-            {
+-                TRACE( "%p window is not foreground - unacquiring %p\n", dev->win, dev );
+-                IDirectInputDevice_Unacquire( &dev->IDirectInputDevice8A_iface );
+-            }
++            TRACE( "%p window is not foreground - unacquiring %p\n", dev->win, dev );
++            IDirectInputDevice_Unacquire( &dev->IDirectInputDevice8A_iface );
++        }
++    }
++    LIST_FOR_EACH_ENTRY( dev, &dinput_mouse_list, IDirectInputDeviceImpl, entry )
++    {
++        if (msg->hwnd == dev->win && msg->hwnd != foreground)
++        {
++            TRACE( "%p window is not foreground - unacquiring %p\n", dev->win, dev );
++            IDirectInputDevice_Unacquire( &dev->IDirectInputDevice8A_iface );
++        }
++    }
++    LIST_FOR_EACH_ENTRY( dev, &dinput_keyboard_rawinput_list, IDirectInputDeviceImpl, entry )
++    {
++        if (msg->hwnd == dev->win && msg->hwnd != foreground)
++        {
++            TRACE( "%p window is not foreground - unacquiring %p\n", dev->win, dev );
++            IDirectInputDevice_Unacquire( &dev->IDirectInputDevice8A_iface );
++        }
++    }
++    LIST_FOR_EACH_ENTRY( dev, &dinput_mouse_rawinput_list, IDirectInputDeviceImpl, entry )
++    {
++        if (msg->hwnd == dev->win && msg->hwnd != foreground)
++        {
++            TRACE( "%p window is not foreground - unacquiring %p\n", dev->win, dev );
++            IDirectInputDevice_Unacquire( &dev->IDirectInputDevice8A_iface );
+         }
+-        LeaveCriticalSection( &dinput->crit );
+     }
+     LeaveCriticalSection( &dinput_hook_crit );
+ 
+@@ -1794,7 +1833,6 @@ static DWORD WINAPI hook_thread_proc(void *param)
+ 
+         if (msg.message == WM_USER+0x10)
+         {
+-            IDirectInputImpl *dinput;
+             HANDLE finished_event = (HANDLE)msg.lParam;
+             TRACE( "Processing hook change notification lp:%ld\n", msg.lParam );
+ 
+@@ -1807,25 +1844,8 @@ static DWORD WINAPI hook_thread_proc(void *param)
+             }
+ 
+             EnterCriticalSection( &dinput_hook_crit );
+-
+-            /* Count acquired keyboards and mice*/
+-            LIST_FOR_EACH_ENTRY( dinput, &direct_input_list, IDirectInputImpl, entry )
+-            {
+-                IDirectInputDeviceImpl *dev;
+-
+-                EnterCriticalSection( &dinput->crit );
+-                LIST_FOR_EACH_ENTRY( dev, &dinput->devices_list, IDirectInputDeviceImpl, entry )
+-                {
+-                    if (!dev->acquired || !dev->event_proc) continue;
+-
+-                    if (IsEqualGUID( &dev->guid, &GUID_SysKeyboard ))
+-                        kbd_cnt++;
+-                    else
+-                        if (IsEqualGUID( &dev->guid, &GUID_SysMouse ))
+-                            mice_cnt++;
+-                }
+-                LeaveCriticalSection( &dinput->crit );
+-            }
++            kbd_cnt = list_count( &dinput_keyboard_list );
++            mice_cnt = list_count( &dinput_mouse_list );
+             LeaveCriticalSection( &dinput_hook_crit );
+ 
+             if (kbd_cnt && !kbd_hook)
+diff --git a/dlls/dinput/dinput_private.h b/dlls/dinput/dinput_private.h
+index 633b729c62..a1b1d898cf 100644
+--- a/dlls/dinput/dinput_private.h
++++ b/dlls/dinput/dinput_private.h
+@@ -42,12 +42,10 @@ struct IDirectInputImpl
+     LONG                        ref;
+ 
+     BOOL                        initialized;
+-    CRITICAL_SECTION            crit;
+     struct list                 entry;          /* entry into list of all IDirectInputs */
+ 
+     DWORD                       evsequence;     /* unique sequence number for events */
+     DWORD                       dwVersion;      /* direct input version number */
+-    struct list                 devices_list;   /* list of all created dinput devices */
+     struct list                 device_players; /* device instance guid to player name */
+ };
+ 
+@@ -72,9 +70,19 @@ extern const struct dinput_device joystick_linuxinput_device DECLSPEC_HIDDEN;
+ extern const struct dinput_device joystick_osx_device DECLSPEC_HIDDEN;
+ extern const struct dinput_device joystick_sdl_device DECLSPEC_HIDDEN;
+ 
++struct IDirectInputDeviceImpl;
++extern void dinput_hooks_insert_mouse(struct IDirectInputDeviceImpl *device, BOOL rawinput);
++extern void dinput_hooks_remove_mouse(struct IDirectInputDeviceImpl *device, BOOL rawinput);
++extern int dinput_mouse_hook( LPDIRECTINPUTDEVICE8A iface, WPARAM wparam, LPARAM lparam );
++extern void dinput_mouse_rawinput_hook( LPDIRECTINPUTDEVICE8A iface, WPARAM wparam, LPARAM lparam, RAWINPUT *raw );
++
++extern void dinput_hooks_insert_keyboard(struct IDirectInputDeviceImpl *device, BOOL rawinput);
++extern void dinput_hooks_remove_keyboard(struct IDirectInputDeviceImpl *device, BOOL rawinput);
++extern int dinput_keyboard_hook( LPDIRECTINPUTDEVICE8A iface, WPARAM wparam, LPARAM lparam );
++extern void dinput_keyboard_rawinput_hook( LPDIRECTINPUTDEVICE8A iface, WPARAM wparam, LPARAM lparam, RAWINPUT *raw );
++
+ extern void check_dinput_hooks(LPDIRECTINPUTDEVICE8W, BOOL) DECLSPEC_HIDDEN;
+ extern void check_dinput_events(void) DECLSPEC_HIDDEN;
+-typedef int (*DI_EVENT_PROC)(LPDIRECTINPUTDEVICE8A, WPARAM, LPARAM);
+ 
+ extern void _copy_diactionformatAtoW(LPDIACTIONFORMATW, LPDIACTIONFORMATA) DECLSPEC_HIDDEN;
+ extern void _copy_diactionformatWtoA(LPDIACTIONFORMATA, LPDIACTIONFORMATW) DECLSPEC_HIDDEN;
+diff --git a/dlls/dinput/joystick_linux.c b/dlls/dinput/joystick_linux.c
+index 80b7b11b2a..4229f3ee64 100644
+--- a/dlls/dinput/joystick_linux.c
++++ b/dlls/dinput/joystick_linux.c
+@@ -554,10 +554,6 @@ static HRESULT alloc_device(REFGUID rguid, IDirectInputImpl *dinput,
+ 
+     IDirectInput_AddRef(&newDevice->generic.base.dinput->IDirectInput7A_iface);
+ 
+-    EnterCriticalSection(&dinput->crit);
+-    list_add_tail(&dinput->devices_list, &newDevice->generic.base.entry);
+-    LeaveCriticalSection(&dinput->crit);
+-
+     newDevice->generic.devcaps.dwSize = sizeof(newDevice->generic.devcaps);
+     newDevice->generic.devcaps.dwFlags = DIDC_ATTACHED;
+ 
+diff --git a/dlls/dinput/joystick_linuxinput.c b/dlls/dinput/joystick_linuxinput.c
+index 681c8667d7..d1fef7f7dc 100644
+--- a/dlls/dinput/joystick_linuxinput.c
++++ b/dlls/dinput/joystick_linuxinput.c
+@@ -595,10 +595,6 @@ static JoystickImpl *alloc_device(REFGUID rguid, IDirectInputImpl *dinput, unsig
+ 
+     IDirectInput_AddRef(&newDevice->generic.base.dinput->IDirectInput7A_iface);
+ 
+-    EnterCriticalSection(&dinput->crit);
+-    list_add_tail(&dinput->devices_list, &newDevice->generic.base.entry);
+-    LeaveCriticalSection(&dinput->crit);
+-
+     return newDevice;
+ 
+ failed:
+diff --git a/dlls/dinput/keyboard.c b/dlls/dinput/keyboard.c
+index f842f1ca42..248c910039 100644
+--- a/dlls/dinput/keyboard.c
++++ b/dlls/dinput/keyboard.c
+@@ -103,21 +103,16 @@ static BYTE map_dik_code(DWORD scanCode, DWORD vkCode, DWORD subType, DWORD vers
+     return scanCode;
+ }
+ 
+-static int KeyboardCallback( LPDIRECTINPUTDEVICE8A iface, WPARAM wparam, LPARAM lparam )
++static void dinput_keyboard_handle_key_event( LPDIRECTINPUTDEVICE8A iface, DWORD vkey_code,
++                                              DWORD scan_code, BOOL is_key_ext, BOOL is_key_up )
+ {
+     SysKeyboardImpl *This = impl_from_IDirectInputDevice8A(iface);
+-    int dik_code, ret = This->base.dwCoopLevel & DISCL_EXCLUSIVE;
+-    KBDLLHOOKSTRUCT *hook = (KBDLLHOOKSTRUCT *)lparam;
++    int dik_code;
+     BYTE new_diks;
+ 
+-    if (wparam != WM_KEYDOWN && wparam != WM_KEYUP &&
+-        wparam != WM_SYSKEYDOWN && wparam != WM_SYSKEYUP)
+-        return 0;
+-
+-    TRACE("(%p) wp %08lx, lp %08lx, vk %02x, scan %02x\n",
+-          iface, wparam, lparam, hook->vkCode, hook->scanCode);
++    TRACE("(%p) vk %02x, scan %02x\n", iface, vkey_code, scan_code);
+ 
+-    switch (hook->vkCode)
++    switch (vkey_code)
+     {
+         /* R-Shift is special - it is an extended key with separate scan code */
+         case VK_RSHIFT  : dik_code = DIK_RSHIFT; break;
+@@ -125,14 +120,14 @@ static int KeyboardCallback( LPDIRECTINPUTDEVICE8A iface, WPARAM wparam, LPARAM
+         case VK_NUMLOCK : dik_code = DIK_NUMLOCK; break;
+         case VK_SUBTRACT: dik_code = DIK_SUBTRACT; break;
+         default:
+-            dik_code = map_dik_code(hook->scanCode & 0xff, hook->vkCode, This->subtype, This->base.dinput->dwVersion);
+-            if (hook->flags & LLKHF_EXTENDED) dik_code |= 0x80;
++            dik_code = map_dik_code(scan_code & 0xff, vkey_code, This->subtype, This->base.dinput->dwVersion);
++            if (is_key_ext) dik_code |= 0x80;
+     }
+-    new_diks = hook->flags & LLKHF_UP ? 0 : 0x80;
++    new_diks = is_key_up ? 0 : 0x80;
+ 
+     /* returns now if key event already known */
+     if (new_diks == This->DInputKeyState[dik_code])
+-        return ret;
++        return;
+ 
+     This->DInputKeyState[dik_code] = new_diks;
+     TRACE(" setting %02X to %02X\n", dik_code, This->DInputKeyState[dik_code]);
+@@ -141,6 +136,41 @@ static int KeyboardCallback( LPDIRECTINPUTDEVICE8A iface, WPARAM wparam, LPARAM
+     queue_event(iface, DIDFT_MAKEINSTANCE(dik_code) | DIDFT_PSHBUTTON,
+                 new_diks, GetCurrentTime(), This->base.dinput->evsequence++);
+     LeaveCriticalSection(&This->base.crit);
++}
++
++void dinput_keyboard_rawinput_hook( LPDIRECTINPUTDEVICE8A iface, WPARAM wparam, LPARAM lparam, RAWINPUT *ri )
++{
++    DWORD vkey_code, scan_code;
++    BOOL is_key_ext, is_key_up;
++
++    TRACE("(%p) wp %08lx, lp %08lx\n", iface, wparam, lparam);
++
++    vkey_code = ri->data.keyboard.VKey;
++    scan_code = ri->data.keyboard.MakeCode;
++    is_key_ext = (ri->data.keyboard.Flags & RI_KEY_E0);
++    is_key_up = (ri->data.keyboard.Flags & RI_KEY_BREAK);
++
++    dinput_keyboard_handle_key_event(iface, vkey_code, scan_code, is_key_ext, is_key_up);
++}
++
++int dinput_keyboard_hook( LPDIRECTINPUTDEVICE8A iface, WPARAM wparam, LPARAM lparam )
++{
++    SysKeyboardImpl *This = impl_from_IDirectInputDevice8A(iface);
++    int ret = This->base.dwCoopLevel & DISCL_EXCLUSIVE;
++    DWORD vkey_code, scan_code;
++    BOOL is_key_ext, is_key_up;
++    KBDLLHOOKSTRUCT *hook = (KBDLLHOOKSTRUCT *)lparam;
++
++    if (wparam != WM_KEYDOWN && wparam != WM_KEYUP &&
++        wparam != WM_SYSKEYDOWN && wparam != WM_SYSKEYUP)
++        return 0;
++
++    vkey_code = hook->vkCode;
++    scan_code = hook->scanCode;
++    is_key_ext = (hook->flags & LLKHF_EXTENDED);
++    is_key_up = (hook->flags & LLKHF_UP);
++
++    dinput_keyboard_handle_key_event(iface, vkey_code, scan_code, is_key_ext, is_key_up);
+ 
+     return ret;
+ }
+@@ -264,7 +294,6 @@ static SysKeyboardImpl *alloc_device(REFGUID rguid, IDirectInputImpl *dinput)
+     newDevice->base.ref = 1;
+     memcpy(&newDevice->base.guid, rguid, sizeof(*rguid));
+     newDevice->base.dinput = dinput;
+-    newDevice->base.event_proc = KeyboardCallback;
+     InitializeCriticalSection(&newDevice->base.crit);
+     newDevice->base.crit.DebugInfo->Spare[0] = (DWORD_PTR)(__FILE__ ": SysKeyboardImpl*->base.crit");
+     newDevice->subtype = get_keyboard_subtype();
+@@ -291,9 +320,12 @@ static SysKeyboardImpl *alloc_device(REFGUID rguid, IDirectInputImpl *dinput)
+     newDevice->base.data_format.wine_df = df;
+     IDirectInput_AddRef(&newDevice->base.dinput->IDirectInput7A_iface);
+ 
+-    EnterCriticalSection(&dinput->crit);
+-    list_add_tail(&dinput->devices_list, &newDevice->base.entry);
+-    LeaveCriticalSection(&dinput->crit);
++    if (dinput->dwVersion >= 0x800)
++    {
++        newDevice->base.use_raw_input = TRUE;
++        newDevice->base.raw_device.usUsagePage = 1; /* HID generic device page */
++        newDevice->base.raw_device.usUsage = 6; /* HID generic keyboard */
++    }
+ 
+     return newDevice;
+ 
+@@ -371,6 +403,12 @@ static HRESULT WINAPI SysKeyboardWImpl_GetDeviceState(LPDIRECTINPUTDEVICE8W ifac
+ 
+     check_dinput_events();
+ 
++    if ((This->base.dwCoopLevel & DISCL_FOREGROUND) && This->base.win != GetForegroundWindow())
++    {
++        This->base.acquired = 0;
++        return DIERR_INPUTLOST;
++    }
++
+     EnterCriticalSection(&This->base.crit);
+ 
+     if (TRACE_ON(dinput)) {
+@@ -603,6 +641,9 @@ static HRESULT WINAPI SysKeyboardWImpl_Acquire(LPDIRECTINPUTDEVICE8W iface)
+     res = IDirectInputDevice2WImpl_Acquire(iface);
+     if (res == DI_OK)
+     {
++        dinput_hooks_insert_keyboard(&This->base, This->base.use_raw_input);
++        check_dinput_hooks(iface, TRUE);
++
+         TRACE("clearing keystate\n");
+         memset(This->DInputKeyState, 0, sizeof(This->DInputKeyState));
+     }
+@@ -616,6 +657,29 @@ static HRESULT WINAPI SysKeyboardAImpl_Acquire(LPDIRECTINPUTDEVICE8A iface)
+     return SysKeyboardWImpl_Acquire(IDirectInputDevice8W_from_impl(This));
+ }
+ 
++static HRESULT WINAPI SysKeyboardWImpl_Unacquire(LPDIRECTINPUTDEVICE8W iface)
++{
++    SysKeyboardImpl *This = impl_from_IDirectInputDevice8W(iface);
++    HRESULT res;
++
++    TRACE("(%p)\n", This);
++
++    res = IDirectInputDevice2WImpl_Unacquire(iface);
++    if (res == DI_OK)
++    {
++        dinput_hooks_remove_keyboard(&This->base, This->base.use_raw_input);
++        check_dinput_hooks(iface, FALSE);
++    }
++
++    return res;
++}
++
++static HRESULT WINAPI SysKeyboardAImpl_Unacquire(LPDIRECTINPUTDEVICE8A iface)
++{
++    SysKeyboardImpl *This = impl_from_IDirectInputDevice8A(iface);
++    return SysKeyboardWImpl_Unacquire(IDirectInputDevice8W_from_impl(This));
++}
++
+ static HRESULT WINAPI SysKeyboardWImpl_BuildActionMap(LPDIRECTINPUTDEVICE8W iface,
+                                                       LPDIACTIONFORMATW lpdiaf,
+                                                       LPCWSTR lpszUserName,
+@@ -707,7 +771,7 @@ static const IDirectInputDevice8AVtbl SysKeyboardAvt =
+     SysKeyboardAImpl_GetProperty,
+     IDirectInputDevice2AImpl_SetProperty,
+     SysKeyboardAImpl_Acquire,
+-    IDirectInputDevice2AImpl_Unacquire,
++    SysKeyboardAImpl_Unacquire,
+     SysKeyboardAImpl_GetDeviceState,
+     IDirectInputDevice2AImpl_GetDeviceData,
+     IDirectInputDevice2AImpl_SetDataFormat,
+@@ -743,7 +807,7 @@ static const IDirectInputDevice8WVtbl SysKeyboardWvt =
+     SysKeyboardWImpl_GetProperty,
+     IDirectInputDevice2WImpl_SetProperty,
+     SysKeyboardWImpl_Acquire,
+-    IDirectInputDevice2WImpl_Unacquire,
++    SysKeyboardWImpl_Unacquire,
+     SysKeyboardWImpl_GetDeviceState,
+     IDirectInputDevice2WImpl_GetDeviceData,
+     IDirectInputDevice2WImpl_SetDataFormat,
+diff --git a/dlls/dinput/mouse.c b/dlls/dinput/mouse.c
+index 6480a5adac..11d27af250 100644
+--- a/dlls/dinput/mouse.c
++++ b/dlls/dinput/mouse.c
+@@ -92,8 +92,6 @@ static inline IDirectInputDevice8W *IDirectInputDevice8W_from_impl(SysMouseImpl
+     return &This->base.IDirectInputDevice8W_iface;
+ }
+ 
+-static int dinput_mouse_hook( LPDIRECTINPUTDEVICE8A iface, WPARAM wparam, LPARAM lparam );
+-
+ static void _dump_mouse_state(const DIMOUSESTATE2 *m_state)
+ {
+     int i;
+@@ -213,7 +211,6 @@ static SysMouseImpl *alloc_device(REFGUID rguid, IDirectInputImpl *dinput)
+     InitializeCriticalSection(&newDevice->base.crit);
+     newDevice->base.crit.DebugInfo->Spare[0] = (DWORD_PTR)(__FILE__ ": SysMouseImpl*->base.crit");
+     newDevice->base.dinput = dinput;
+-    newDevice->base.event_proc = dinput_mouse_hook;
+ 
+     get_app_key(&hkey, &appkey);
+     if (!get_config_key(hkey, appkey, "MouseWarpOverride", buffer, sizeof(buffer)))
+@@ -242,10 +239,6 @@ static SysMouseImpl *alloc_device(REFGUID rguid, IDirectInputImpl *dinput)
+     newDevice->base.data_format.wine_df = df;
+     IDirectInput_AddRef(&newDevice->base.dinput->IDirectInput7A_iface);
+ 
+-    EnterCriticalSection(&dinput->crit);
+-    list_add_tail(&dinput->devices_list, &newDevice->base.entry);
+-    LeaveCriticalSection(&dinput->crit);
+-
+     if (dinput->dwVersion >= 0x0800)
+     {
+         newDevice->base.use_raw_input = TRUE;
+@@ -321,121 +314,94 @@ const struct dinput_device mouse_device = {
+  */
+ 
+ /* low-level mouse hook */
+-static int dinput_mouse_hook( LPDIRECTINPUTDEVICE8A iface, WPARAM wparam, LPARAM lparam )
++void dinput_mouse_rawinput_hook( LPDIRECTINPUTDEVICE8A iface, WPARAM wparam, LPARAM lparam, RAWINPUT *ri )
+ {
+-    MSLLHOOKSTRUCT *hook = (MSLLHOOKSTRUCT *)lparam;
+     SysMouseImpl* This = impl_from_IDirectInputDevice8A(iface);
+-    int wdata = 0, inst_id = -1, ret = 0, i;
++    POINT rel, pt;
++    DWORD seq;
++    int i, wdata = 0;
+ 
+-    if (wparam == RIM_INPUT || wparam == RIM_INPUTSINK)
++    static const USHORT mouse_button_flags[] =
+     {
+-        RAWINPUTHEADER raw_header;
+-        RAWINPUT raw_input;
+-        UINT size;
+-        POINT rel, pt;
+-        DWORD seq;
+-
+-        static const USHORT mouse_button_flags[] =
+-        {
+-            RI_MOUSE_BUTTON_1_DOWN, RI_MOUSE_BUTTON_1_UP,
+-            RI_MOUSE_BUTTON_2_DOWN, RI_MOUSE_BUTTON_2_UP,
+-            RI_MOUSE_BUTTON_3_DOWN, RI_MOUSE_BUTTON_3_UP,
+-            RI_MOUSE_BUTTON_4_DOWN, RI_MOUSE_BUTTON_4_UP,
+-            RI_MOUSE_BUTTON_5_DOWN, RI_MOUSE_BUTTON_5_UP
+-        };
+-
+-        TRACE("(%p) wp %08lx, lp %08lx\n", iface, wparam, lparam);
+-
+-        size = sizeof(raw_header);
+-        if (GetRawInputData( (HRAWINPUT)lparam, RID_HEADER, &raw_header, &size, sizeof(RAWINPUTHEADER) ) != sizeof(raw_header))
+-        {
+-            WARN( "Unable to read raw input data header\n" );
+-            return 0;
+-        }
++        RI_MOUSE_BUTTON_1_DOWN, RI_MOUSE_BUTTON_1_UP,
++        RI_MOUSE_BUTTON_2_DOWN, RI_MOUSE_BUTTON_2_UP,
++        RI_MOUSE_BUTTON_3_DOWN, RI_MOUSE_BUTTON_3_UP,
++        RI_MOUSE_BUTTON_4_DOWN, RI_MOUSE_BUTTON_4_UP,
++        RI_MOUSE_BUTTON_5_DOWN, RI_MOUSE_BUTTON_5_UP
++    };
+ 
+-        if (raw_header.dwType != RIM_TYPEMOUSE)
+-            return 0;
+-
+-        if (raw_header.dwSize > sizeof(raw_input))
+-        {
+-            WARN( "Unexpected size for mouse raw input data\n" );
+-            return 0;
+-        }
+-
+-        size = raw_header.dwSize;
+-        if (GetRawInputData( (HRAWINPUT)lparam, RID_INPUT, &raw_input, &size, sizeof(RAWINPUTHEADER) ) != raw_header.dwSize )
+-        {
+-            WARN( "Unable to read raw input data\n" );
+-            return 0;
+-        }
++    TRACE("(%p) wp %08lx, lp %08lx\n", iface, wparam, lparam);
+ 
+-        if (raw_input.data.mouse.usFlags & MOUSE_VIRTUAL_DESKTOP)
+-            FIXME( "Unimplemented MOUSE_VIRTUAL_DESKTOP flag\n" );
+-        if (raw_input.data.mouse.usFlags & MOUSE_ATTRIBUTES_CHANGED)
+-            FIXME( "Unimplemented MOUSE_ATTRIBUTES_CHANGED flag\n" );
++    if (ri->data.mouse.usFlags & MOUSE_VIRTUAL_DESKTOP)
++        FIXME( "Unimplemented MOUSE_VIRTUAL_DESKTOP flag\n" );
++    if (ri->data.mouse.usFlags & MOUSE_ATTRIBUTES_CHANGED)
++        FIXME( "Unimplemented MOUSE_ATTRIBUTES_CHANGED flag\n" );
+ 
+-        EnterCriticalSection(&This->base.crit);
+-        seq = This->base.dinput->evsequence++;
++    EnterCriticalSection(&This->base.crit);
++    seq = This->base.dinput->evsequence++;
+ 
+-        rel.x = raw_input.data.mouse.lLastX;
+-        rel.y = raw_input.data.mouse.lLastY;
+-        if (raw_input.data.mouse.usFlags & MOUSE_MOVE_ABSOLUTE)
+-        {
+-            GetCursorPos(&pt);
+-            rel.x -= pt.x;
+-            rel.y -= pt.y;
+-        }
++    rel.x = ri->data.mouse.lLastX;
++    rel.y = ri->data.mouse.lLastY;
++    if (ri->data.mouse.usFlags & MOUSE_MOVE_ABSOLUTE)
++    {
++        GetCursorPos(&pt);
++        rel.x -= pt.x;
++        rel.y -= pt.y;
++    }
+ 
+-        This->m_state.lX += rel.x;
+-        This->m_state.lY += rel.y;
++    This->m_state.lX += rel.x;
++    This->m_state.lY += rel.y;
+ 
+-        if (This->base.data_format.user_df->dwFlags & DIDF_ABSAXIS)
+-        {
+-            pt.x = This->m_state.lX;
+-            pt.y = This->m_state.lY;
+-        }
+-        else
+-        {
+-            pt = rel;
+-        }
++    if (This->base.data_format.user_df->dwFlags & DIDF_ABSAXIS)
++    {
++        pt.x = This->m_state.lX;
++        pt.y = This->m_state.lY;
++    }
++    else
++    {
++        pt = rel;
++    }
+ 
+-        if (rel.x)
+-            queue_event(iface, DIDFT_MAKEINSTANCE(WINE_MOUSE_X_AXIS_INSTANCE) | DIDFT_RELAXIS,
+-                        pt.x, GetCurrentTime(), seq);
++    if (rel.x)
++        queue_event(iface, DIDFT_MAKEINSTANCE(WINE_MOUSE_X_AXIS_INSTANCE) | DIDFT_RELAXIS,
++                    pt.x, GetCurrentTime(), seq);
+ 
+-        if (rel.y)
+-            queue_event(iface, DIDFT_MAKEINSTANCE(WINE_MOUSE_Y_AXIS_INSTANCE) | DIDFT_RELAXIS,
+-                        pt.y, GetCurrentTime(), seq);
++    if (rel.y)
++        queue_event(iface, DIDFT_MAKEINSTANCE(WINE_MOUSE_Y_AXIS_INSTANCE) | DIDFT_RELAXIS,
++                    pt.y, GetCurrentTime(), seq);
+ 
+-        if (rel.x || rel.y)
+-        {
+-            if ((This->warp_override == WARP_FORCE_ON) ||
+-                (This->warp_override != WARP_DISABLE && (This->base.dwCoopLevel & DISCL_EXCLUSIVE)))
+-                This->need_warp = TRUE;
+-        }
++    if (rel.x || rel.y)
++    {
++        if ((This->warp_override == WARP_FORCE_ON) ||
++            (This->warp_override != WARP_DISABLE && (This->base.dwCoopLevel & DISCL_EXCLUSIVE)))
++            This->need_warp = TRUE;
++    }
+ 
+-        if (raw_input.data.mouse.usButtonFlags & RI_MOUSE_WHEEL)
+-        {
+-            This->m_state.lZ += (wdata = (SHORT)raw_input.data.mouse.usButtonData);
+-            queue_event(iface, DIDFT_MAKEINSTANCE(WINE_MOUSE_Z_AXIS_INSTANCE) | DIDFT_RELAXIS,
+-                        wdata, GetCurrentTime(), seq);
+-            ret = This->clipped;
+-        }
++    if (ri->data.mouse.usButtonFlags & RI_MOUSE_WHEEL)
++    {
++        This->m_state.lZ += (wdata = (SHORT)ri->data.mouse.usButtonData);
++        queue_event(iface, DIDFT_MAKEINSTANCE(WINE_MOUSE_Z_AXIS_INSTANCE) | DIDFT_RELAXIS,
++                    wdata, GetCurrentTime(), seq);
++    }
+ 
+-        for (i = 0; i < ARRAY_SIZE(mouse_button_flags); ++i)
++    for (i = 0; i < ARRAY_SIZE(mouse_button_flags); ++i)
++    {
++        if (ri->data.mouse.usButtonFlags & mouse_button_flags[i])
+         {
+-            if (raw_input.data.mouse.usButtonFlags & mouse_button_flags[i])
+-            {
+-                This->m_state.rgbButtons[i / 2] = 0x80 - (i % 2) * 0x80;
+-                queue_event(iface, DIDFT_MAKEINSTANCE(WINE_MOUSE_BUTTONS_INSTANCE + (i / 2)) | DIDFT_PSHBUTTON,
+-                            This->m_state.rgbButtons[i / 2], GetCurrentTime(), seq);
+-            }
++            This->m_state.rgbButtons[i / 2] = 0x80 - (i % 2) * 0x80;
++            queue_event(iface, DIDFT_MAKEINSTANCE(WINE_MOUSE_BUTTONS_INSTANCE + (i / 2)) | DIDFT_PSHBUTTON,
++                        This->m_state.rgbButtons[i / 2], GetCurrentTime(), seq);
+         }
++    }
+ 
+-        LeaveCriticalSection(&This->base.crit);
++    LeaveCriticalSection(&This->base.crit);
++}
+ 
+-        return ret;
+-    }
++int dinput_mouse_hook( LPDIRECTINPUTDEVICE8A iface, WPARAM wparam, LPARAM lparam )
++{
++    MSLLHOOKSTRUCT *hook = (MSLLHOOKSTRUCT *)lparam;
++    SysMouseImpl* This = impl_from_IDirectInputDevice8A(iface);
++    int wdata = 0, inst_id = -1, ret = 0;
+ 
+     TRACE("msg %lx @ (%d %d)\n", wparam, hook->pt.x, hook->pt.y);
+ 
+@@ -582,6 +548,9 @@ static HRESULT WINAPI SysMouseWImpl_Acquire(LPDIRECTINPUTDEVICE8W iface)
+ 
+     if ((res = IDirectInputDevice2WImpl_Acquire(iface)) != DI_OK) return res;
+ 
++    dinput_hooks_insert_mouse(&This->base, This->base.use_raw_input);
++    check_dinput_hooks(iface, TRUE);
++
+     /* Init the mouse state */
+     GetCursorPos( &point );
+     if (This->base.data_format.user_df->dwFlags & DIDF_ABSAXIS)
+@@ -636,6 +605,9 @@ static HRESULT WINAPI SysMouseWImpl_Unacquire(LPDIRECTINPUTDEVICE8W iface)
+ 
+     if ((res = IDirectInputDevice2WImpl_Unacquire(iface)) != DI_OK) return res;
+ 
++    dinput_hooks_remove_mouse(&This->base, This->base.use_raw_input);
++    check_dinput_hooks(iface, FALSE);
++
+     if (This->base.dwCoopLevel & DISCL_EXCLUSIVE)
+     {
+         ClipCursor(NULL);
+@@ -674,6 +646,12 @@ static HRESULT WINAPI SysMouseWImpl_GetDeviceState(LPDIRECTINPUTDEVICE8W iface,
+ 
+     check_dinput_events();
+ 
++    if ((This->base.dwCoopLevel & DISCL_FOREGROUND) && This->base.win != GetForegroundWindow())
++    {
++        This->base.acquired = 0;
++        return DIERR_INPUTLOST;
++    }
++
+     EnterCriticalSection(&This->base.crit);
+     _dump_mouse_state(&This->m_state);
+ 
+diff --git a/dlls/dinput8/tests/device.c b/dlls/dinput8/tests/device.c
+index 4440835284..1e7066f06f 100644
+--- a/dlls/dinput8/tests/device.c
++++ b/dlls/dinput8/tests/device.c
+@@ -609,15 +609,10 @@ static void test_mouse_keyboard(void)
+     raw_devices_count = ARRAY_SIZE(raw_devices);
+     memset(raw_devices, 0, sizeof(raw_devices));
+     hr = GetRegisteredRawInputDevices(raw_devices, &raw_devices_count, sizeof(RAWINPUTDEVICE));
+-    todo_wine
+     ok(hr == 1, "GetRegisteredRawInputDevices returned %d, raw_devices_count: %d\n", hr, raw_devices_count);
+-    todo_wine
+     ok(raw_devices[0].usUsagePage == 1, "Unexpected raw device usage page: %x\n", raw_devices[0].usUsagePage);
+-    todo_wine
+     ok(raw_devices[0].usUsage == 6, "Unexpected raw device usage: %x\n", raw_devices[0].usUsage);
+-    todo_wine
+     ok(raw_devices[0].dwFlags == RIDEV_INPUTSINK, "Unexpected raw device flags: %x\n", raw_devices[0].dwFlags);
+-    todo_wine
+     ok(raw_devices[0].hwndTarget != NULL, "Unexpected raw device target: %p\n", raw_devices[0].hwndTarget);
+     hr = IDirectInputDevice8_Unacquire(di_keyboard);
+     ok(SUCCEEDED(hr), "IDirectInputDevice8_Acquire failed: %08x\n", hr);
+@@ -696,9 +691,7 @@ static void test_mouse_keyboard(void)
+     ok(raw_devices[1].hwndTarget == hwnd, "Unexpected raw device target: %p\n", raw_devices[1].hwndTarget);
+     ok(raw_devices[2].usUsagePage == 1, "Unexpected raw device usage page: %x\n", raw_devices[1].usUsagePage);
+     ok(raw_devices[2].usUsage == 6, "Unexpected raw device usage: %x\n", raw_devices[1].usUsage);
+-    todo_wine
+     ok(raw_devices[2].dwFlags == RIDEV_INPUTSINK, "Unexpected raw device flags: %x\n", raw_devices[1].dwFlags);
+-    todo_wine
+     ok(raw_devices[2].hwndTarget == di_hwnd, "Unexpected raw device target: %p\n", raw_devices[1].hwndTarget);
+     hr = IDirectInputDevice8_Unacquire(di_keyboard);
+     ok(SUCCEEDED(hr), "IDirectInputDevice8_Acquire failed: %08x\n", hr);
+diff --git a/dlls/user32/message.c b/dlls/user32/message.c
+index 93931a9416..f0e3450181 100644
+--- a/dlls/user32/message.c
++++ b/dlls/user32/message.c
+@@ -2318,7 +2318,12 @@ static BOOL process_rawinput_message( MSG *msg, const struct hardware_msg_data *
+         rawinput->header.hDevice = WINE_MOUSE_HANDLE;
+         rawinput->header.wParam  = 0;
+ 
+-        rawinput->data.mouse.usFlags           = MOUSE_MOVE_RELATIVE;
++        if (msg_data->flags & MOUSEEVENTF_ABSOLUTE)
++            rawinput->data.mouse.usFlags = MOUSE_MOVE_ABSOLUTE;
++        else
++            rawinput->data.mouse.usFlags = MOUSE_MOVE_RELATIVE;
++        if (msg_data->flags & MOUSEEVENTF_VIRTUALDESK)
++            rawinput->data.mouse.usFlags |= MOUSE_VIRTUAL_DESKTOP;
+         rawinput->data.mouse.u.s.usButtonFlags = 0;
+         rawinput->data.mouse.u.s.usButtonData  = 0;
+         for (i = 1; i < ARRAY_SIZE(button_flags); ++i)
+diff --git a/dlls/user32/rawinput.c b/dlls/user32/rawinput.c
+index 42061bd18a..975a68da53 100644
+--- a/dlls/user32/rawinput.c
++++ b/dlls/user32/rawinput.c
+@@ -354,6 +354,13 @@ BOOL WINAPI DECLSPEC_HOTPATCH RegisterRawInputDevices(RAWINPUTDEVICE *devices, U
+ 
+     for (i = 0; i < device_count; ++i)
+     {
++        if ((devices[i].dwFlags & RIDEV_INPUTSINK) &&
++            (devices[i].hwndTarget == NULL))
++        {
++            SetLastError(ERROR_INVALID_PARAMETER);
++            return FALSE;
++        }
++
+         if ((devices[i].dwFlags & RIDEV_REMOVE) &&
+             (devices[i].hwndTarget != NULL))
+         {
+@@ -369,7 +376,7 @@ BOOL WINAPI DECLSPEC_HOTPATCH RegisterRawInputDevices(RAWINPUTDEVICE *devices, U
+         TRACE("device %u: page %#x, usage %#x, flags %#x, target %p.\n",
+                 i, devices[i].usUsagePage, devices[i].usUsage,
+                 devices[i].dwFlags, devices[i].hwndTarget);
+-        if (devices[i].dwFlags & ~(RIDEV_REMOVE|RIDEV_NOLEGACY))
++        if (devices[i].dwFlags & ~(RIDEV_REMOVE|RIDEV_NOLEGACY|RIDEV_INPUTSINK))
+             FIXME("Unhandled flags %#x for device %u.\n", devices[i].dwFlags, i);
+ 
+         d[i].usage_page = devices[i].usUsagePage;
+diff --git a/dlls/user32/tests/input.c b/dlls/user32/tests/input.c
+index 3e115ce758..fe3034d08e 100644
+--- a/dlls/user32/tests/input.c
++++ b/dlls/user32/tests/input.c
+@@ -1811,9 +1811,7 @@ static void test_RegisterRawInputDevices(void)
+ 
+     SetLastError(0xdeadbeef);
+     res = RegisterRawInputDevices(raw_devices, ARRAY_SIZE(raw_devices), sizeof(RAWINPUTDEVICE));
+-    todo_wine
+     ok(res == FALSE, "RegisterRawInputDevices failed\n");
+-    todo_wine
+     ok(GetLastError() == ERROR_INVALID_PARAMETER, "RegisterRawInputDevices returned %08x\n", GetLastError());
+ 
+     raw_devices[0].hwndTarget = hwnd;
+diff --git a/dlls/winex11.drv/keyboard.c b/dlls/winex11.drv/keyboard.c
+index 37c96c926f..d801577052 100644
+--- a/dlls/winex11.drv/keyboard.c
++++ b/dlls/winex11.drv/keyboard.c
+@@ -33,6 +33,9 @@
+ #ifdef HAVE_X11_XKBLIB_H
+ #include <X11/XKBlib.h>
+ #endif
++#ifdef HAVE_X11_EXTENSIONS_XINPUT2_H
++#include <X11/extensions/XInput2.h>
++#endif
+ 
+ #include <ctype.h>
+ #include <stdarg.h>
+@@ -1148,7 +1151,7 @@ static void X11DRV_send_keyboard_input( HWND hwnd, WORD vkey, WORD scan, DWORD f
+     input.u.ki.time        = time;
+     input.u.ki.dwExtraInfo = 0;
+ 
+-    __wine_send_input( hwnd, &input, SEND_HWMSG_RAWINPUT|SEND_HWMSG_WINDOW );
++    __wine_send_input( hwnd, &input, SEND_HWMSG_WINDOW );
+ }
+ 
+ 
+@@ -1417,6 +1420,43 @@ BOOL X11DRV_KeyEvent( HWND hwnd, XEvent *xev )
+     return TRUE;
+ }
+ 
++
++#ifdef HAVE_X11_EXTENSIONS_XINPUT2_H
++/***********************************************************************
++ *           X11DRV_KeyEvent
++ *
++ * Handle a raw XInput2 key event for background windows
++ */
++BOOL X11DRV_RawKeyEvent( XGenericEventCookie *cookie )
++{
++    XIRawEvent *event = cookie->data;
++    DWORD flags;
++    WORD vkey, scan;
++    INPUT input;
++
++    vkey = keyc2vkey[event->detail];
++    scan = keyc2scan[event->detail];
++
++    flags = 0;
++    if ( event->evtype == XI_RawKeyRelease ) flags |= KEYEVENTF_KEYUP;
++    if ( vkey & 0x100 ) flags |= KEYEVENTF_EXTENDEDKEY;
++
++    TRACE_(key)( "vkey=%04x scan=%04x flags=%04x\n", vkey, scan, flags );
++
++    input.type             = INPUT_KEYBOARD;
++    input.u.ki.wVk         = vkey & 0xff;
++    input.u.ki.wScan       = scan & 0xff;
++    input.u.ki.dwFlags     = flags;
++    input.u.ki.time        = EVENT_x11_time_to_win32_time(event->time);
++    input.u.ki.dwExtraInfo = 0;
++
++    __wine_send_input( 0, &input, SEND_HWMSG_RAWINPUT );
++
++    return TRUE;
++}
++#endif
++
++
+ /**********************************************************************
+  *		X11DRV_KEYBOARD_DetectLayout
+  *
+diff --git a/dlls/winex11.drv/mouse.c b/dlls/winex11.drv/mouse.c
+index 4b2c9bd41a..947dc19624 100644
+--- a/dlls/winex11.drv/mouse.c
++++ b/dlls/winex11.drv/mouse.c
+@@ -330,34 +330,43 @@ static void update_relative_valuators(XIAnyClassInfo **valuators, int n_valuator
+     struct x11drv_thread_data *thread_data = x11drv_thread_data();
+     int i;
+ 
+-    thread_data->x_rel_valuator.number = -1;
+-    thread_data->y_rel_valuator.number = -1;
+-    thread_data->x_rel_valuator.accum = 0;
+-    thread_data->y_rel_valuator.accum = 0;
++    thread_data->x_pos_valuator.number = -1;
++    thread_data->y_pos_valuator.number = -1;
+ 
+     for (i = 0; i < n_valuators; i++)
+     {
+         XIValuatorClassInfo *class = (XIValuatorClassInfo *)valuators[i];
+-        struct x11drv_valuator_data *valuator_data = NULL;
+ 
+-        if (valuators[i]->type != XIValuatorClass) continue;
+-        if (class->label == x11drv_atom( Rel_X ) ||
+-            (!class->label && class->number == 0 && class->mode == XIModeRelative))
+-        {
+-            valuator_data = &thread_data->x_rel_valuator;
+-        }
++        if (valuators[i]->type != XIValuatorClass)
++            continue;
++        else if (class->label == x11drv_atom( Rel_X ) ||
++                 class->label == x11drv_atom( Abs_X ) ||
++                 (!class->label && class->number == 0))
++            thread_data->x_pos_valuator = *class;
+         else if (class->label == x11drv_atom( Rel_Y ) ||
+-                 (!class->label && class->number == 1 && class->mode == XIModeRelative))
+-        {
+-            valuator_data = &thread_data->y_rel_valuator;
+-        }
++                 class->label == x11drv_atom( Abs_Y ) ||
++                 (!class->label && class->number == 1))
++            thread_data->y_pos_valuator = *class;
++    }
+ 
+-        if (valuator_data) {
+-            valuator_data->number = class->number;
+-            valuator_data->min = class->min;
+-            valuator_data->max = class->max;
+-        }
++    if (thread_data->x_pos_valuator.number < 0 || thread_data->y_pos_valuator.number < 0)
++    {
++        WARN("Only one X/Y axis found, ignoring RawMotion events\n");
+     }
++    else if (thread_data->x_pos_valuator.mode != thread_data->y_pos_valuator.mode)
++    {
++        WARN("Relative/Absolute mismatch between X/Y axis, ignoring RawMotion events\n");
++        thread_data->y_pos_valuator.number = -1;
++        thread_data->y_pos_valuator.number = -1;
++    }
++
++    if (thread_data->x_pos_valuator.min >= thread_data->x_pos_valuator.max)
++        thread_data->x_pos_valuator.min = thread_data->x_pos_valuator.max = 0;
++    if (thread_data->y_pos_valuator.min >= thread_data->y_pos_valuator.max)
++        thread_data->y_pos_valuator.min = thread_data->y_pos_valuator.max = 0;
++
++    thread_data->x_pos_valuator.value = 0;
++    thread_data->y_pos_valuator.value = 0;
+ }
+ #endif
+ 
+@@ -405,6 +414,8 @@ void X11DRV_XInput2_Enable(void)
+     {
+         XISetMask( mask_bits, XI_RawButtonPress );
+         XISetMask( mask_bits, XI_RawButtonRelease );
++        XISetMask( mask_bits, XI_RawKeyPress );
++        XISetMask( mask_bits, XI_RawKeyRelease );
+         data->xi2_rawinput_only = TRUE;
+     }
+     else
+@@ -442,10 +453,8 @@ void X11DRV_XInput2_Disable(void)
+     mask.deviceid = XIAllMasterDevices;
+ 
+     pXISelectEvents( data->display, DefaultRootWindow( data->display ), &mask, 1 );
+-    data->x_rel_valuator.number = -1;
+-    data->y_rel_valuator.number = -1;
+-    data->x_rel_valuator.accum = 0;
+-    data->y_rel_valuator.accum = 0;
++    data->x_pos_valuator.number = -1;
++    data->y_pos_valuator.number = -1;
+     data->xi2_core_pointer = 0;
+ #endif
+ }
+@@ -1897,21 +1906,28 @@ static BOOL X11DRV_RawMotion( XGenericEventCookie *xev )
+ {
+     XIRawEvent *event = xev->data;
+     const double *values = event->valuators.values;
++    const double *raw_values = event->raw_values;
+     RECT virtual_rect;
+     INPUT input;
+     POINT pt;
+     int i;
+     double dx = 0, dy = 0, val;
++    double raw_dx = 0, raw_dy = 0, raw_val;
++    double x_scale = 1, y_scale = 1;
++    double x_accum = 0, y_accum = 0;
+     struct x11drv_thread_data *thread_data = x11drv_thread_data();
+-    struct x11drv_valuator_data *x_rel, *y_rel;
++    XIValuatorClassInfo *x_pos, *y_pos;
+ 
+-    if (thread_data->x_rel_valuator.number < 0 || thread_data->y_rel_valuator.number < 0) return FALSE;
++    if (thread_data->x_pos_valuator.number < 0 || thread_data->y_pos_valuator.number < 0) return FALSE;
+     if (!event->valuators.mask_len) return FALSE;
+     if (thread_data->xi2_state != xi_enabled) return FALSE;
+     if (event->deviceid != thread_data->xi2_core_pointer) return FALSE;
+ 
+-    x_rel = &thread_data->x_rel_valuator;
+-    y_rel = &thread_data->y_rel_valuator;
++    x_pos = &thread_data->x_pos_valuator;
++    y_pos = &thread_data->y_pos_valuator;
++
++    x_accum = x_pos->value;
++    y_accum = y_pos->value;
+ 
+     input.type             = INPUT_MOUSE;
+     input.u.mi.mouseData   = 0;
+@@ -1922,42 +1938,48 @@ static BOOL X11DRV_RawMotion( XGenericEventCookie *xev )
+     input.u.mi.dy          = 0;
+ 
+     virtual_rect = get_virtual_screen_rect();
+-
+-    for (i = 0; i <= max ( x_rel->number, y_rel->number ); i++)
++    if (x_pos->min < x_pos->max)
++        x_scale = (x_pos->mode == XIModeAbsolute ? 65535 : (virtual_rect.right - virtual_rect.left)) /
++                  (x_pos->max - x_pos->min);
++    if (y_pos->min < y_pos->max)
++        y_scale = (y_pos->mode == XIModeAbsolute ? 65535 : (virtual_rect.bottom - virtual_rect.top)) /
++                  (y_pos->max - y_pos->min);
++
++    for (i = 0; i <= max( x_pos->number, y_pos->number ); i++)
+     {
+-        if (!XIMaskIsSet( event->valuators.mask, i ))
+-            continue;
++        if (!XIMaskIsSet( event->valuators.mask, i )) continue;
+         val = *values++;
+-        if (i == x_rel->number)
++        raw_val = *raw_values++;
++        if (i == x_pos->number)
+         {
+             dx = val;
+-            if (x_rel->min < x_rel->max)
+-                dx = val * (virtual_rect.right - virtual_rect.left)
+-                         / (x_rel->max - x_rel->min);
++            raw_dx = raw_val;
++            input.u.mi.dwFlags |= (x_pos->mode == XIModeAbsolute ? MOUSEEVENTF_ABSOLUTE : 0);
++            if (x_pos->mode == XIModeAbsolute)
++                x_accum = (dx - x_pos->min) * x_scale;
++            else
++                x_accum += dx * x_scale;
+         }
+-        if (i == y_rel->number)
++        if (i == y_pos->number)
+         {
+             dy = val;
+-            if (y_rel->min < y_rel->max)
+-                dy = val * (virtual_rect.bottom - virtual_rect.top)
+-                         / (y_rel->max - y_rel->min);
++            raw_dy = raw_val;
++            input.u.mi.dwFlags |= (y_pos->mode == XIModeAbsolute ? MOUSEEVENTF_ABSOLUTE : 0);
++            if (y_pos->mode == XIModeAbsolute)
++                y_accum = (dy - y_pos->min) * y_scale;
++            else
++                y_accum += dy * y_scale;
+         }
+     }
+ 
+-    /* Accumulate the *double* dx/dy motions so sub-pixel motions wont be lost
+-     * when sent/cast to *LONG* input.u.mi.dx/dy.
++    /* Accumulate the fractional parts so they aren't lost after casting
++     * successive motion values to integral fields.
++     *
++     * Note: It looks like raw_dx, raw_dy are already
++     * integral values but that may be wrong.
+      */
+-    x_rel->accum += dx;
+-    y_rel->accum += dy;
+-    if (fabs(x_rel->accum) < 1.0 && fabs(y_rel->accum) < 1.0)
+-    {
+-        TRACE( "accumulating raw motion (event %f,%f, accum %f,%f)\n", dx, dy, x_rel->accum, y_rel->accum );
+-        return TRUE;
+-    }
+-    input.u.mi.dx = x_rel->accum;
+-    input.u.mi.dy = y_rel->accum;
+-    x_rel->accum -= input.u.mi.dx;
+-    y_rel->accum -= input.u.mi.dy;
++    input.u.mi.dx = (LONG)x_accum;
++    input.u.mi.dy = (LONG)y_accum;
+ 
+     if (broken_rawevents && is_old_motion_event( xev->serial ))
+     {
+@@ -1965,20 +1987,37 @@ static BOOL X11DRV_RawMotion( XGenericEventCookie *xev )
+         return FALSE;
+     }
+ 
++    x_pos->value = x_accum - input.u.mi.dx;
++    y_pos->value = y_accum - input.u.mi.dy;
++
+     pt.x = input.u.mi.dx;
+     pt.y = input.u.mi.dy;
+     fs_hack_scale_real_to_user(&pt);
+     input.u.mi.dx = pt.x;
+     input.u.mi.dy = pt.y;
+ 
+-    if (!thread_data->xi2_rawinput_only)
++    if (x_pos->mode == XIModeAbsolute)
+     {
+-        TRACE( "pos %d,%d (event %f,%f, accum %f,%f)\n", input.u.mi.dx, input.u.mi.dy, dx, dy, x_rel->accum, y_rel->accum );
+-        __wine_send_input( 0, &input, SEND_HWMSG_WINDOW );
++        TRACE( "pos %d,%d (event %f,%f)\n", input.u.mi.dx, input.u.mi.dy, dx, dy );
++        __wine_send_input( 0, &input, SEND_HWMSG_RAWINPUT );
++    }
++    else if (!thread_data->xi2_rawinput_only)
++    {
++        if ((dy || dy) && !(input.u.mi.dx || input.u.mi.dy))
++        {
++            TRACE( "accumulating raw motion (event %f,%f accum %f,%f)\n", dx, dy, x_pos->value, y_pos->value );
++        }
++        else
++        {
++            TRACE( "pos %d,%d (event %f,%f)\n", input.u.mi.dx, input.u.mi.dy, dx, dy );
++            __wine_send_input( 0, &input, SEND_HWMSG_WINDOW );
++        }
+     }
+     else
+     {
+-        TRACE( "raw pos %d,%d (event %f,%f, accum %f,%f)\n", input.u.mi.dx, input.u.mi.dy, dx, dy, x_rel->accum, y_rel->accum );
++        input.u.mi.dx = raw_dx;
++        input.u.mi.dy = raw_dy;
++        TRACE( "raw pos %d,%d (event %f,%f)\n", input.u.mi.dx, input.u.mi.dy, raw_dx, raw_dy );
+         __wine_send_input( 0, &input, SEND_HWMSG_RAWINPUT );
+     }
+     return TRUE;
+@@ -2097,6 +2136,10 @@ BOOL X11DRV_GenericEvent( HWND hwnd, XEvent *xev )
+     case XI_RawButtonRelease:
+         ret = X11DRV_RawButtonEvent( event );
+         break;
++    case XI_RawKeyPress:
++    case XI_RawKeyRelease:
++        ret = X11DRV_RawKeyEvent( event );
++        break;
+ 
+     default:
+         TRACE( "Unhandled event %#x\n", event->evtype );
+diff --git a/dlls/winex11.drv/x11drv.h b/dlls/winex11.drv/x11drv.h
+index bd50805fb6..dac38f1644 100644
+--- a/dlls/winex11.drv/x11drv.h
++++ b/dlls/winex11.drv/x11drv.h
+@@ -32,6 +32,9 @@
+ #include <X11/Xresource.h>
+ #include <X11/Xutil.h>
+ #include <X11/Xatom.h>
++#ifdef HAVE_X11_EXTENSIONS_XINPUT2_H
++#include <X11/extensions/XInput2.h>
++#endif
+ 
+ #define BOOL X_BOOL
+ #define BYTE X_BYTE
+@@ -321,14 +324,6 @@ struct x11drv_escape_flush_gl_drawable
+  * X11 USER driver
+  */
+ 
+-struct x11drv_valuator_data
+-{
+-    double min;
+-    double max;
+-    int number;
+-    double accum;
+-};
+-
+ struct x11drv_thread_data
+ {
+     Display *display;
+@@ -344,11 +339,13 @@ struct x11drv_thread_data
+     HWND     clip_hwnd;            /* message window stored in desktop while clipping is active */
+     DWORD    clip_reset;           /* time when clipping was last reset */
+     HKL      kbd_layout;           /* active keyboard layout */
++#ifdef HAVE_X11_EXTENSIONS_XINPUT2_H
+     enum { xi_unavailable = -1, xi_unknown, xi_disabled, xi_enabled } xi2_state; /* XInput2 state */
+-    struct x11drv_valuator_data x_rel_valuator;
+-    struct x11drv_valuator_data y_rel_valuator;
++    XIValuatorClassInfo x_pos_valuator;
++    XIValuatorClassInfo y_pos_valuator;
+     int      xi2_core_pointer;     /* XInput2 core pointer id */
+     int      xi2_rawinput_only;
++#endif
+ };
+ 
+ extern struct x11drv_thread_data *x11drv_init_thread_data(void) DECLSPEC_HIDDEN;
+@@ -433,6 +430,8 @@ enum x11drv_atoms
+     XATOM_RAW_CAP_HEIGHT,
+     XATOM_Rel_X,
+     XATOM_Rel_Y,
++    XATOM_Abs_X,
++    XATOM_Abs_Y,
+     XATOM_WM_PROTOCOLS,
+     XATOM_WM_DELETE_WINDOW,
+     XATOM_WM_NAME,
+@@ -525,6 +524,7 @@ extern BOOL X11DRV_ButtonRelease( HWND hwnd, XEvent *event ) DECLSPEC_HIDDEN;
+ extern BOOL X11DRV_MotionNotify( HWND hwnd, XEvent *event ) DECLSPEC_HIDDEN;
+ extern BOOL X11DRV_EnterNotify( HWND hwnd, XEvent *event ) DECLSPEC_HIDDEN;
+ extern BOOL X11DRV_KeyEvent( HWND hwnd, XEvent *event ) DECLSPEC_HIDDEN;
++extern BOOL X11DRV_RawKeyEvent( XGenericEventCookie *cookie ) DECLSPEC_HIDDEN;
+ extern BOOL X11DRV_KeymapNotify( HWND hwnd, XEvent *event ) DECLSPEC_HIDDEN;
+ extern BOOL X11DRV_DestroyNotify( HWND hwnd, XEvent *event ) DECLSPEC_HIDDEN;
+ extern BOOL X11DRV_SelectionRequest( HWND hWnd, XEvent *event ) DECLSPEC_HIDDEN;
+diff --git a/dlls/winex11.drv/x11drv_main.c b/dlls/winex11.drv/x11drv_main.c
+index a67acbbc43..355971fc2e 100644
+--- a/dlls/winex11.drv/x11drv_main.c
++++ b/dlls/winex11.drv/x11drv_main.c
+@@ -144,6 +144,8 @@ static const char * const atom_names[NB_XATOMS - FIRST_XATOM] =
+     "RAW_CAP_HEIGHT",
+     "Rel X",
+     "Rel Y",
++    "Abs X",
++    "Abs Y",
+     "WM_PROTOCOLS",
+     "WM_DELETE_WINDOW",
+     "WM_NAME",
+diff --git a/server/hook.c b/server/hook.c
+index c2e4e9e492..472acfa96f 100644
+--- a/server/hook.c
++++ b/server/hook.c
+@@ -294,7 +294,7 @@ static void hook_table_destroy( struct object *obj )
+ }
+ 
+ /* remove a hook, freeing it if the chain is not in use */
+-static void remove_hook( struct hook *hook )
++void remove_hook( struct hook *hook )
+ {
+     if (hook->table->counts[hook->index])
+         hook->proc = 0; /* chain is in use, just mark it and return */
+@@ -302,6 +302,12 @@ static void remove_hook( struct hook *hook )
+         free_hook( hook );
+ }
+ 
++/* get the owner thread from a hook */
++extern struct thread *get_hook_thread( struct hook *hook )
++{
++    return hook->owner;
++}
++
+ /* release a hook chain, removing deleted hooks if the use count drops to 0 */
+ static void release_hook_chain( struct hook_table *table, int index )
+ {
+@@ -374,14 +380,14 @@ unsigned int get_active_hooks(void)
+ }
+ 
+ /* return the thread that owns the first global hook */
+-struct thread *get_first_global_hook( int id )
++struct hook *get_first_global_hook( int id )
+ {
+     struct hook *hook;
+     struct hook_table *global_hooks = get_global_hooks( current );
+ 
+     if (!global_hooks) return NULL;
+     if (!(hook = get_first_valid_hook( global_hooks, id - WH_MINHOOK, EVENT_MIN, 0, 0, 0 ))) return NULL;
+-    return hook->owner;
++    return hook;
+ }
+ 
+ /* set a window hook */
 diff --git a/server/queue.c b/server/queue.c
-index 65a1743368e..a52b9cb074c 100644
+index a52b9cb074..5b005c11c9 100644
 --- a/server/queue.c
 +++ b/server/queue.c
-@@ -1720,12 +1720,15 @@ static int queue_rawinput_message( struct process* process, void* user )
-         (raw_msg->desktop && desktop != raw_msg->desktop))
-         goto done;
+@@ -69,6 +69,7 @@ struct message_result
+     void                  *data;          /* message reply data */
+     unsigned int           data_size;     /* size of message reply data */
+     struct timeout_user   *timeout;       /* result timeout */
++    struct hook           *hook;          /* target hook of the message */
+ };
  
-+    if (!device->target && !desktop->foreground_input)
-+        goto done;
+ struct message
+@@ -709,6 +710,13 @@ static void result_timeout( void *private )
+     {
+         struct message *msg = result->msg;
+ 
++        /* hook timed out, remove it */
++        if (msg->type == MSG_HOOK_LL && result->hook)
++        {
++            fprintf(stderr, "wineserver: hook %x timeout, removing it\n", result->hook);
++            remove_hook( result->hook );
++        }
 +
-     if (!(thread = get_window_thread( device->target ? device->target : desktop->foreground_input->active )) ||
+         result->msg = NULL;
+         msg->result = NULL;
+         remove_queue_message( result->receiver, msg, SEND_MESSAGE );
+@@ -1641,13 +1649,15 @@ static void queue_hardware_message( struct desktop *desktop, struct message *msg
+ static int send_hook_ll_message( struct desktop *desktop, struct message *hardware_msg,
+                                  const hw_input_t *input, struct msg_queue *sender )
+ {
++    struct hook *hook;
+     struct thread *hook_thread;
+     struct msg_queue *queue;
+     struct message *msg;
+     timeout_t timeout = 2000 * -10000;  /* FIXME: load from registry */
+     int id = (input->type == HW_INPUT_MOUSE) ? WH_MOUSE_LL : WH_KEYBOARD_LL;
+ 
+-    if (!(hook_thread = get_first_global_hook( id ))) return 0;
++    if (!(hook = get_first_global_hook( id ))) return 0;
++    if (!(hook_thread = get_hook_thread( hook ))) return 0;
+     if (!(queue = hook_thread->queue)) return 0;
+     if (is_queue_hung( queue )) return 0;
+ 
+@@ -1679,6 +1689,7 @@ static int send_hook_ll_message( struct desktop *desktop, struct message *hardwa
+     }
+     msg->result->hardware_msg = hardware_msg;
+     msg->result->desktop = (struct desktop *)grab_object( desktop );
++    msg->result->hook = hook;
+     list_add_tail( &queue->msg_list[SEND_MESSAGE], &msg->entry );
+     set_queue_bits( queue, QS_SENDMESSAGE );
+     return 1;
+@@ -1705,6 +1716,7 @@ static int queue_rawinput_message( struct process* process, void* user )
+     struct thread *thread = NULL, *foreground = NULL;
+     struct message *msg;
+     struct hardware_msg_data *msg_data;
++    int wparam = RIM_INPUT;
+ 
+     if (raw_msg->data.rawinput.type == RIM_TYPEMOUSE)
+         device = process->rawinput_mouse;
+@@ -1727,10 +1739,12 @@ static int queue_rawinput_message( struct process* process, void* user )
          process != thread->process)
          goto done;
  
-     /* FIXME: Implement RIDEV_INPUTSINK */
--    if (!(foreground = get_window_thread( desktop->foreground_input->active )) ||
-+    if (!desktop->foreground_input || !(foreground = get_window_thread( desktop->foreground_input->active )) ||
+-    /* FIXME: Implement RIDEV_INPUTSINK */
+     if (!desktop->foreground_input || !(foreground = get_window_thread( desktop->foreground_input->active )) ||
          thread->process != foreground->process)
+-        goto done;
++    {
++        if (!(device->flags & RIDEV_INPUTSINK)) goto done;
++        wparam = RIM_INPUTSINK;
++    }
+ 
+     if (!(msg = alloc_hardware_message( raw_msg->data.info, raw_msg->source, raw_msg->time, raw_msg->extra_len )))
          goto done;
+@@ -1738,7 +1752,7 @@ static int queue_rawinput_message( struct process* process, void* user )
  
-From d22faa12e8e025eded77764ddb059ca8f2f6c57c Mon Sep 17 00:00:00 2001
-From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
-Date: Wed, 8 Apr 2020 15:35:32 +0200
-Subject: [PATCH] dinput: Fix rawinput events sequence number.
-
-This fixes some stuttering in Battlefield 2.
----
- dlls/dinput/mouse.c | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
-
-diff --git a/dlls/dinput/mouse.c b/dlls/dinput/mouse.c
-index 5a624949867..6480a5adac6 100644
---- a/dlls/dinput/mouse.c
-+++ b/dlls/dinput/mouse.c
-@@ -333,6 +333,7 @@ static int dinput_mouse_hook( LPDIRECTINPUTDEVICE8A iface, WPARAM wparam, LPARAM
-         RAWINPUT raw_input;
-         UINT size;
-         POINT rel, pt;
-+        DWORD seq;
+     msg->win    = device->target;
+     msg->msg    = WM_INPUT;
+-    msg->wparam = RIM_INPUT;
++    msg->wparam = wparam;
+     msg->lparam = 0;
  
-         static const USHORT mouse_button_flags[] =
-         {
-@@ -374,6 +375,7 @@ static int dinput_mouse_hook( LPDIRECTINPUTDEVICE8A iface, WPARAM wparam, LPARAM
-             FIXME( "Unimplemented MOUSE_ATTRIBUTES_CHANGED flag\n" );
+     memcpy( msg_data, &raw_msg->data, sizeof(*msg_data) );
+@@ -3405,3 +3405,27 @@ DECL_HANDLER(update_rawinput_devices)
+     e = find_rawinput_device( current->process, 1, 6 );
+     current->process->rawinput_kbd   = e ? &e->device : NULL;
+ }
++
++DECL_HANDLER(get_rawinput_devices)
++{
++    unsigned int device_count = list_count(&current->process->rawinput_devices);
++    struct rawinput_device *devices;
++    struct rawinput_device_entry *e;
++    unsigned int i;
++
++    reply->device_count = device_count;
++    if (get_reply_max_size() / sizeof (*devices) < device_count)
++        return;
++
++    if (!(devices = mem_alloc( device_count * sizeof (*devices) )))
++    {
++        set_error( STATUS_NO_MEMORY );
++        return;
++    }
++
++    i = 0;
++    LIST_FOR_EACH_ENTRY( e, &current->process->rawinput_devices, struct rawinput_device_entry, entry )
++        devices[i++] = e->device;
++
++    set_reply_data_ptr( devices, device_count * sizeof (*devices) );
++}
+diff --git a/server/user.h b/server/user.h
+index 6267f3e288..68261eb168 100644
+--- a/server/user.h
++++ b/server/user.h
+@@ -96,9 +96,12 @@ extern void cleanup_clipboard_thread( struct thread *thread );
  
-         EnterCriticalSection(&This->base.crit);
-+        seq = This->base.dinput->evsequence++;
+ /* hook functions */
  
-         rel.x = raw_input.data.mouse.lLastX;
-         rel.y = raw_input.data.mouse.lLastY;
-@@ -399,11 +401,11 @@ static int dinput_mouse_hook( LPDIRECTINPUTDEVICE8A iface, WPARAM wparam, LPARAM
++struct hook;
++extern void remove_hook( struct hook *hook );
+ extern void remove_thread_hooks( struct thread *thread );
+ extern unsigned int get_active_hooks(void);
+-extern struct thread *get_first_global_hook( int id );
++extern struct hook *get_first_global_hook( int id );
++extern struct thread *get_hook_thread( struct hook *hook );
  
-         if (rel.x)
-             queue_event(iface, DIDFT_MAKEINSTANCE(WINE_MOUSE_X_AXIS_INSTANCE) | DIDFT_RELAXIS,
--                        pt.x, GetCurrentTime(), This->base.dinput->evsequence);
-+                        pt.x, GetCurrentTime(), seq);
- 
-         if (rel.y)
-             queue_event(iface, DIDFT_MAKEINSTANCE(WINE_MOUSE_Y_AXIS_INSTANCE) | DIDFT_RELAXIS,
--                        pt.y, GetCurrentTime(), This->base.dinput->evsequence);
-+                        pt.y, GetCurrentTime(), seq);
- 
-         if (rel.x || rel.y)
-         {
-@@ -416,7 +418,7 @@ static int dinput_mouse_hook( LPDIRECTINPUTDEVICE8A iface, WPARAM wparam, LPARAM
-         {
-             This->m_state.lZ += (wdata = (SHORT)raw_input.data.mouse.usButtonData);
-             queue_event(iface, DIDFT_MAKEINSTANCE(WINE_MOUSE_Z_AXIS_INSTANCE) | DIDFT_RELAXIS,
--                        wdata, GetCurrentTime(), This->base.dinput->evsequence);
-+                        wdata, GetCurrentTime(), seq);
-             ret = This->clipped;
-         }
- 
-@@ -426,7 +428,7 @@ static int dinput_mouse_hook( LPDIRECTINPUTDEVICE8A iface, WPARAM wparam, LPARAM
-             {
-                 This->m_state.rgbButtons[i / 2] = 0x80 - (i % 2) * 0x80;
-                 queue_event(iface, DIDFT_MAKEINSTANCE(WINE_MOUSE_BUTTONS_INSTANCE + (i / 2)) | DIDFT_PSHBUTTON,
--                            This->m_state.rgbButtons[i / 2], GetCurrentTime(), This->base.dinput->evsequence);
-+                            This->m_state.rgbButtons[i / 2], GetCurrentTime(), seq);
-             }
-         }
+ /* queue functions */
  

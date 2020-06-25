@@ -125,22 +125,22 @@ This replaces Andrew's previous patch:
 https://github.com/ValveSoftware/wine/commit/2e2a874cb3a44b2856561c0630037ea587177350
 
 ---
- dlls/ntdll/env.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ dlls/dlls/ntdll/unix/env.c | 2 +
+ 1 file changed, 2 insertion(+)
 
-diff --git a/dlls/ntdll/env.c b/dlls/ntdll/env.c
-index be3586d..75e2e93 100644
---- a/dlls/ntdll/env.c
-+++ b/dlls/ntdll/env.c
-@@ -84,7 +84,7 @@ GetUserNameA( LPSTR lpszName, LPDWORD lpSize )
- 
-     /* set user name */
- 
--    if (!name) name = "wine";
-+    name = "steamuser"/*wine_get_user_name()*/;
-     if ((p = strrchr( name, '/' ))) name = p + 1;
-     if ((p = strrchr( name, '\\' ))) name = p + 1;
-     ntdll_umbstowcs( name, strlen(name) + 1, buf, ARRAY_SIZE(buf) );
+diff --git a/dlls/ntdll/unix/env.c b/dlls/ntdll/unix/env.c
+index d90990c092..a16e152086 100644
+--- a/dlls/ntdll/unix/env.c
++++ b/dlls/ntdll/unix/env.c
+@@ -908,6 +909,8 @@ NTSTATUS CDECL get_dynamic_environment( WCHAR *env, SIZE_T *size )
+     }
+     sprintf( dlldir, "WINEDLLDIR%u", i );
+     append_env( buffer, &pos, dlldir, NULL );
++    const char *sgi = getenv("SteamGameId");
++    if ((sgi)) user_name = "steamuser"/*set user to steamuser if running steam game*/;
+     ntdll_umbstowcs( user_name, strlen(user_name) + 1, buf, ARRAY_SIZE(buf) );
+     append_env( buffer, &pos, "WINEUSERNAME", buf );
+     assert( pos <= alloc );
 From ec9e7190ea7045012b6e33e5ee64cd678bec68c9 Mon Sep 17 00:00:00 2001
 From: Andrew Eikum <aeikum@codeweavers.com>
 Date: Mon, 22 Jan 2018 14:32:40 -0600
@@ -321,21 +321,22 @@ Date: Tue, 15 Jan 2019 10:10:47 -0600
 Subject: [PATCH] ntdll: Don't pass SDL_AUDIODRIVER from Linux environment
 
 ---
- dlls/ntdll/env.c | 1 +
+ dlls/ntdll/unix/env.c | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/dlls/ntdll/env.c b/dlls/ntdll/env.c
-index 9c957f02c06..e14b514ccc1 100644
---- a/dlls/ntdll/env.c
-+++ b/dlls/ntdll/env.c
-@@ -137,6 +137,7 @@ static inline BOOL is_special_env_var( const char *var )
+diff --git a/dlls/ntdll/unix/env.c b/dlls/ntdll/unix/env.c
+index d90990c092..96b0c271ce 100644
+--- a/dlls/ntdll/unix/env.c
++++ b/dlls/ntdll/unix/env.c
+@@ -416,6 +416,7 @@ static inline BOOL is_special_env_var( const char *var )
+             !strncmp( var, "HOME=", sizeof("HOME=")-1 ) ||
              !strncmp( var, "TEMP=", sizeof("TEMP=")-1 ) ||
              !strncmp( var, "TMP=", sizeof("TMP=")-1 ) ||
-             !strncmp( var, "QT_", sizeof("QT_")-1 ) ||
 +            !strncmp( var, "SDL_AUDIODRIVER=", sizeof("SDL_AUDIODRIVER=")-1 ) ||
+             !strncmp( var, "QT_", sizeof("QT_")-1 ) ||
              !strncmp( var, "VK_", sizeof("VK_")-1 ));
  }
- From 8a781a3ab721a14fed0a8c1aaccd357cdd71d0ac Mon Sep 17 00:00:00 2001
+From 8a781a3ab721a14fed0a8c1aaccd357cdd71d0ac Mon Sep 17 00:00:00 2001
 From: Jactry Zeng <jzeng@codeweavers.com>
 Date: Thu, 13 Dec 2018 22:21:34 +0800
 Subject: [PATCH] gdi32: Add CJK font replacements.

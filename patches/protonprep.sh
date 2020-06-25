@@ -68,10 +68,6 @@
     cd wine-staging
     git reset --hard HEAD
     git clean -xdf
-    
-
-    # fixes patching without rawinput
-    patch -Np1 < ../patches/wine-hotfixes/staging-44d1a45-localreverts.patch    
     cd ..
 
     #WINE
@@ -79,13 +75,22 @@
     git reset --hard HEAD
     git clean -xdf
 
-    # this conflicts with proton's gamepad changes and causes camera spinning
+    echo "proton gamepad conflict fix"
     git revert --no-commit da7d60bf97fb8726828e57f852e8963aacde21e9
     
-    # temporary fshack reverts
+    echo "fshack reverts"
+    git revert --no-commit 6f9d20806e821ab07c8adf81ae6630fae94b00ef
+    git revert --no-commit 145cfce1135a7e59cc4c89cd05b572403f188161
+    git revert --no-commit e3eb89d5ebb759e975698b97ed8b547a9de3853f
+    git revert --no-commit 707fcb99a60015fcbb20c83e9031bc5be7a58618
+    git revert --no-commit 8cd6245b7633abccd68f73928544ae4de6f76d52
     git revert --no-commit 26b26a2e0efcb776e7b0115f15580d2507b10400
     git revert --no-commit fd6f50c0d3e96947846ca82ed0c9bd79fd8e5b80
-
+    git revert --no-commit 2538b0100fbbe1223e7c18a52bade5cfe5f8d3e3
+    
+    echo "rawinput reverts"
+    git revert --no-commit 306c40e67319cae8e4c448ec8fc8d3996f87943f
+    git revert --no-commit 26c1131201f8fd9918a01231a7eb6f1989400858
     
 # disable these when using proton's gamepad patches
 #    -W dinput-SetActionMap-genre \
@@ -93,6 +98,23 @@
 #    -W dinput-joy-mappings \
 #    -W dinput-reconnect-joystick \
 #    -W dinput-remap-joystick \
+
+# disable if using remi's fakedll rework:
+#    -W winebuild-Fake_Dlls \
+#    -W ntdll-Syscall_Emulation \
+#    -W ntdll-ThreadHideFromDebugger \
+
+# disable if using fullscreenhack + proton rawinput
+#    -W winex11.drv-mouse-coorrds \
+#    -W winex11-MWM_Decorations \
+#    -W winex11-_NET_ACTIVE_WINDOW \
+#    -W winex11-WM_WINDOWPOSCHANGING \
+#    -W winex11-key_translation \
+#    -W user32-rawinput-mouse \
+#    -W user32-rawinput-nolegacy \
+#    -W user32-rawinput-mouse-experimental \
+#    -W user32-rawinput-hid \
+#    -W winevulkan-vkGetPhysicalDeviceSurfaceCapabilitiesKHR \
 
     echo "applying staging patches"
     ../wine-staging/patches/patchinstall.sh DESTDIR="." --all \
@@ -107,17 +129,22 @@
     -W user32-rawinput-nolegacy \
     -W user32-rawinput-mouse-experimental \
     -W user32-rawinput-hid \
+    -W winevulkan-vkGetPhysicalDeviceSurfaceCapabilitiesKHR \
     -W dinput-SetActionMap-genre \
     -W dinput-axis-recalc \
     -W dinput-joy-mappings \
     -W dinput-reconnect-joystick \
-    -W dinput-remap-joystick
-
+    -W dinput-remap-joystick \
+    -W user32-window-activation
+    
+#    echo "remi's fakedll rework patches"
+#    ntdll-Syscall_Emulation is included in remi's rework
+#    patch -Np1 < ../patches/wine-hotfixes/fakedll.patch
+    
     #WINE FAUDIO
     #echo "applying faudio patches"
     #patch -Np1 < ../patches/faudio/faudio-ffmpeg.patch
-
-
+    
     ### GAME PATCH SECTION ###
 
     #fix this
@@ -126,7 +153,7 @@
 
     echo "final fantasy XV denuvo fix"
     patch -Np1 < ../patches/game-patches/ffxv-steam-fix.patch
-    
+
     echo "final fantasy XIV old launcher render fix"
     patch -Np1 < ../patches/game-patches/ffxiv-launcher.patch
 
@@ -140,15 +167,7 @@
     patch -Np1 < ../patches/game-patches/origin-downloads_fix.patch
 
     echo "fix steep"
-    patch -Np1 < ../patches/wine-hotfixes/0001-Add-some-semi-stubs-in-user32.patch
-
-    echo "sea of thieves winhttp patch"
-    patch -Np1 < ../patches/game-patches/sea-of-thieves-websockets.patch
-
-    echo "Denuvo anti-cheat DOOM Eternal hotfix"
-    patch -Np1 < ../patches/game-patches/gofman_dac.patch
-
-# Currently applied but not working:
+    patch -Np1 < ../patches/game-patches/steep_fix.patch
 
 #  TODO: Add game-specific check
     echo "mk11 patch"
@@ -161,31 +180,32 @@
     ### END GAME PATCH SECTION ###
     
     #PROTON
-
-    echo "clock monotonic, amd ags"
+    
+    echo "clock monotonic"
     patch -Np1 < ../patches/proton/proton-use_clock_monotonic.patch
+
+    echo "amd ags"
     patch -Np1 < ../patches/proton/proton-amd_ags.patch
     
-    echo "bypass compositor"
-    patch -Np1 < ../patches/proton/proton-FS_bypass_compositor.patch
-
     echo "applying winevulkan childwindow"
     patch -Np1 < ../patches/wine-hotfixes/winevulkan-childwindow.patch
 
-    #WINE FSYNC
-    echo "applying fsync patches"
-    patch -Np1 < ../patches/proton/proton-fsync_staging.patch
-    patch -Np1 < ../patches/proton/proton-fsync-spincounts.patch
+    echo "bypass compositor"
+    patch -Np1 < ../patches/proton/proton-FS_bypass_compositor.patch
 
-    echo "revert necessary for fshack"
-    patch -Np1 < ../patches/proton-hotfixes/wine-winex11.drv_Calculate_mask_in_X11DRV_resize_desktop.patch
-    
+#  TODO: Esync and Fsync compatibility was broken and disabled in 5.10.
+#    #WINE FSYNC
+#    echo "applying fsync patches"
+#    patch -Np1 < ../patches/proton/proton-fsync_staging.patch
+#    patch -Np1 < ../patches/proton/proton-fsync-spincounts.patch
+
     echo "fullscreen hack"
     patch -Np1 < ../patches/proton/valve_proton_fullscreen_hack-staging.patch
- 
-    echo "fix for Dark Souls III, Sekiro, Nier" 
-    patch -Np1 < ../patches/game-patches/winex11_limit_resources-nmode.patch
 
+    echo "fix for Dark Souls III, Sekiro, Nier" 
+    patch -Np1 < ../patches/game-patches/nier.patch
+
+#  TODO: Restore path
     echo "raw input"
     patch -Np1 < ../patches/proton/proton-rawinput.patch
     
@@ -211,6 +231,10 @@
     echo "steamclient swap"
     patch -Np1 < ../patches/proton/proton-steamclient_swap.patch
 
+#    disabled for now -- was breaking Catherine Classic in 5.9
+#    echo "audio patch test"
+#    patch -Np1 < ../patches/proton/proton-xaudio2_stop_engine.patch
+
     echo "protonify"
     patch -Np1 < ../patches/proton/proton-protonify_staging.patch
 
@@ -231,6 +255,7 @@
     patch -Np1 < ../patches/proton/proton-gamepad-additions.patch
 
     echo "Valve VR patches"
+    # disable if using remi's fakedll rework
     patch -Np1 < ../patches/proton/proton-vr.patch
 
     echo "Valve vulkan patches"
@@ -259,38 +284,23 @@
     patch -Np1 < ../patches/proton/proton-hide_wine_prefix_update_window.patch
 
     echo "applying WoW vkd3d wine patches"
-    patch -Np1 < ../patches/wine-hotfixes/D3D12SerializeVersionedRootSignature.patch
-    patch -Np1 < ../patches/wine-hotfixes/D3D12CreateVersionedRootSignatureDeserializer.patch
-
-    echo "nikolay's media foundation 5.10 backports"
-    patch -Np1 < ../patches/wine-hotfixes/mf-5.10-backports.patch
-        
+    patch -Np1 < ../patches/wine-hotfixes/vkd3d/D3D12SerializeVersionedRootSignature.patch
+    patch -Np1 < ../patches/wine-hotfixes/vkd3d/D3D12CreateVersionedRootSignatureDeserializer.patch
+            
     echo "guy's media foundation alpha patches"
-    patch -Np1 < ../patches/wine-hotfixes/media_foundation_alpha.patch
+    patch -Np1 < ../patches/wine-hotfixes/media_foundation/media_foundation_alpha.patch
     
     echo "proton-specific manual mfplat dll register patch"
-    patch -Np1 < ../patches/wine-hotfixes/proton_mediafoundation_dllreg.patch
+    patch -Np1 < ../patches/wine-hotfixes/media_foundation/proton_mediafoundation_dllreg.patch
     
     #WINE CUSTOM PATCHES
     #add your own custom patch lines below
     
     echo "Paul's Diablo 1 menu fix"
-    patch -Np1 < ../patches/wine-hotfixes/user32-Set_PAINTSTRUCT_fErase_field_depending_on_the_last_WM_ERASEBKGND_result.patch
+    patch -Np1 < ../patches/game-patches/diablo_1_menu.patch
     
-    echo "revert commit fd7992972b252ed262d33ef604e9e1235d2108c5 as it currently breaks a lot of games"
-    patch -Np1 -R < ../patches/wine-hotfixes/fd7992972b252ed262d33ef604e9e1235d2108c5.patch
-
-#    echo "Remi's memory performance fixes"    
-#    patch -Np1 < ../patches/wine-hotfixes/ntdll-Use_the_free_ranges_in_find_reserved_free_area.patch
-#    patch -Np1 < ../patches/wine-hotfixes/makedep-Align_PE_sections_so_they_can_be_mmapped.patch
     
-    echo "5.10 backports"
-    patch -Np1 < ../patches/wine-hotfixes/1ae10889647c1c84c36660749508a42e99e64a5e.patch
-    patch -Np1 < ../patches/wine-hotfixes/25e9e91c3a4f6c1c134d96a5c11517178e31f111.patch
-    patch -Np1 < ../patches/wine-hotfixes/b4310a19e96283e114fad13f7565f912a39640de.patch
-    patch -Np1 < ../patches/wine-hotfixes/ea9b507380b4415cf9edd3643d9bcea7ab934fbd.patch
-
-
+    ./dlls/winevulkan/make_vulkan
     ./tools/make_requests
     autoreconf -f
 

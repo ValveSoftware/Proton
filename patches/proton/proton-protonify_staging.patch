@@ -815,7 +815,7 @@ index 431c247a072..c9fcad79316 100644
 +            strcasestrW( libname, mfc42W ))
 +        {
 +            WARN_(loaddll)( "Using a fake mfc42 handle\n" );
-+            status = find_dll_file( load_path, kernel32W, nt_name, pwm, mfc42W, module, image_info, st );
++            status = find_dll_file( load_path, kernel32W, nt_name, pwm, mfc42W, module, image_info, id );
 +        }
 +    }
      return status;
