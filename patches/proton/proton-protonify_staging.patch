@@ -1678,40 +1678,6 @@ index 0ae3aadde92..e95ede8aed5 100644
      return FALSE;
  }
 
-From 9cffda4856b5e5057008d165dd38ec971b9af712 Mon Sep 17 00:00:00 2001
-From: Paul Gofman <pgofman@codeweavers.com>
-Date: Fri, 24 Apr 2020 19:48:20 +0300
-Subject: [PATCH] ntdll: Handle NULL object name buffer in
- nt_to_unix_file_name_attr().
-
-Signed-off-by: Paul Gofman <pgofman@codeweavers.com>
-Signed-off-by: Paul Gofman <gofmanp@gmail.com>
----
- dlls/ntdll/unix/file.c  |  8 ++++++++
- 1 files changed, 8 insertions(+)
-
-diff --git a/dlls/ntdll/unix/file.c b/dlls/ntdll/unix/file.c
-index ca6899b50f..778f5d8928 100644
---- a/dlls/ntdll/unix/file.c
-+++ b/dlls/ntdll/unix/file.c
-@@ -3250,8 +3330,16 @@ static NTSTATUS nt_to_unix_file_name_attr( const OBJECT_ATTRIBUTES *attr, ANSI_S
-     NTSTATUS status;
-     BOOLEAN check_case = !(attr->Attributes & OBJ_CASE_INSENSITIVE);
- 
-+    if (!attr->ObjectName->Buffer && attr->ObjectName->Length)
-+        return STATUS_ACCESS_VIOLATION;
-+
-     if (!attr->RootDirectory)  /* without root dir fall back to normal lookup */
-+    {
-+        if (!attr->ObjectName->Buffer)
-+            return STATUS_OBJECT_PATH_SYNTAX_BAD;
-+        
-         return nt_to_unix_file_name( attr->ObjectName, unix_name_ret, disposition, check_case );
-+    }
- 
-     name     = attr->ObjectName->Buffer;
-     name_len = attr->ObjectName->Length / sizeof(WCHAR);
-
 From cb427c70056654bf12fb0d7d6dcb13386d193ff4 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Gabriel=20Iv=C4=83ncescu?= <gabrielopcode@gmail.com>
 Date: Fri, 24 Apr 2020 14:37:58 +0300
@@ -2026,20 +1992,20 @@ index eb2ef57c7d6..c7881fe4516 100644
      /* sanity checks */
  
      if (!filename || !filename[0])
-@@ -479,6 +546,13 @@ HANDLE WINAPI DECLSPEC_HOTPATCH CreateFileW( LPCWSTR filename, DWORD access, DWO
+@@ -905,6 +905,13 @@ HANDLE WINAPI DECLSPEC_HOTPATCH CreateFileW( LPCWSTR filename, DWORD access, DWO
+            (sharing & FILE_SHARE_WRITE) ? "FILE_SHARE_WRITE " : "",
             (sharing & FILE_SHARE_DELETE) ? "FILE_SHARE_DELETE " : "",
             creation, attributes);
- 
++    
 +    if (is_file_blacklisted(filename))
 +    {
 +        FIXME("\"%s\" is blacklisted.\n", debugstr_w(filename));
 +        SetLastError( ERROR_FILE_NOT_FOUND );
 +        return INVALID_HANDLE_VALUE;
 +    }
-+
-     /* Open a console for CONIN$ or CONOUT$ */
  
-     if (!wcsicmp( filename, L"CONIN$" ))
+     if (!wcsncmp( filename, L"\\\\.\\", 4 ))
+     {
 
 From 2409bd1f74be116172688a25df725290637c255a Mon Sep 17 00:00:00 2001
 From: Andrew Eikum <aeikum@codeweavers.com>

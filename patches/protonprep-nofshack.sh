@@ -101,15 +101,15 @@
     -W dinput-remap-joystick \
     -W user32-window-activation
     
-#    echo "remi's fakedll rework patches"
-#    ntdll-Syscall_Emulation is included in remi's rework
-#    patch -Np1 < ../patches/wine-hotfixes/fakedll.patch
-    
+
     #WINE FAUDIO
     #echo "applying faudio patches"
     #patch -Np1 < ../patches/faudio/faudio-ffmpeg.patch
     
     ### GAME PATCH SECTION ###
+    
+    echo "planet zoo/jurassic world fix"
+    patch -Np1 < ../patches/wine-hotfixes/pending/planet-zoo-jurassic-world-pending-upstream.patch
 
     #fix this
     echo "mech warrior online"
@@ -132,7 +132,7 @@
 
     echo "fix steep"
     patch -Np1 < ../patches/game-patches/steep_fix.patch
-
+    
 #  TODO: Add game-specific check
     echo "mk11 patch"
     patch -Np1 < ../patches/game-patches/mk11.patch
@@ -168,6 +168,9 @@
 
     echo "LAA"
     patch -Np1 < ../patches/proton/proton-LAA_staging.patch
+
+    echo "proton overlay mouse lag fix"
+    patch -Np1 < ../patches/proton/proton-staging-rawinput-overlay.patch
 
     echo "steamclient swap"
     patch -Np1 < ../patches/proton/proton-steamclient_swap.patch
