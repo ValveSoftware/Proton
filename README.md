@@ -125,86 +125,96 @@ Environment variable options:
 
 ## Credits
 
-As many of you may or may not already know, there is a credits section in the README of my git repository. My proton-ge project contains some of my personal tweaks to proton, but also very largely contains patches, rebases, and fixes from numerous people, not just myself. While I tend to get credit for my builds, there is a lot of work that goes into it from other people as well, that gets imported. I'd like to take some time to point a few of these people out for recognition.  In future builds - I plan to make more informative and clear git commits, as well as attempt to give these people further crediting, as the README may not be sufficient in doing so.  
+As many of you may or may not already know, there is a Credits section in the README for this Git repository. My proton-ge project contains some of my personal tweaks to Proton, but a large amount of the patches, rebases and fixes come from numerous people's projects. While I tend to get credited for my builds, a lot of the work that goes into it are from other people as well. I'd like to take some time to point a few of these people out of recognition. In future builds, I plan to make clearer and more informative Git commits, as well as attempt to give these people further crediting, as my README may not be sufficient in doing so.
 
+### TKG (Etienne Juvigny)
 
-TKG (Etienne Juvigny):  
-https://www.patreon.com/tkglitch  
-https://github.com/Frogging-Family/wine-tkg-git  
+- https://www.patreon.com/tkglitch
+- https://github.com/Frogging-Family/wine-tkg-git
 
-I and many others owe TKG. In regards to both WINE and proton, he has dedicated a lot of time (2+ years at least) to rebasing wine and proton patches, as well as making his own contributions. Before he came along, I did some rebasing work, and mainly only released things for Arch. These days he almost always beats me to rebasing, and it saves myself and others a -lot- of work.  
+I and many others owe TKG. In regards to both WINE and Proton. He has dedicated a lot of time (2+ years at least) to rebasing WINE and Proton patches, as well as making his own contributions. Before he came along, I did some rebasing work, and mainly only released things for Arch. These days he almost always beats me to rebasing, and it saves myself and others a **lot** of work.
 
-Regularly his rebases can be found in my patch list:  
+Regularly his rebases can be found in my [patches](patches/proton) list:
 
-proton-fsync_staging.patch  
-proton-fsync-spincounts.patch  
-proton-FS_bypass_compositor.patch  
-valve_proton_fullscreen_hack-staging.patch  
-proton-rawinput.patch  
-proton-steamclient_swap.patch  
-proton-protonify_staging_rpc.patch  
-proton-protonify_staging.patch  
-proton-steam-bits.patch  
-proton-sdl_joy.patch  
-proton-sdl_joy_2.patch  
-proton-gamepad-additions.patch  
-proton-vk-bits-4.5.patch  
-proton-winevulkan.patch  
+- [`proton-fsync_staging.patch`](patches/proton/proton-fsync_staging.patch)
+- [`proton-fsync-spincounts.patch`](patches/proton/proton-fsync-spincounts.patch)
+- [`proton-FS_bypass_compositor.patch`](patches/proton/proton-FS_bypass_compositor.patch)
+- [`valve_proton_fullscreen_hack-staging.patch`](patches/proton/valve_proton_fullscreen_hack-staging.patch)
+- [`proton-rawinput.patch`](patches/proton/proton-rawinput.patch)
+- [`proton-steamclient_swap.patch`](patches/proton/proton-steamclient_swap.patch)
+- [`proton-protonify_staging_rpc.patch`](patches/proton/proton-protonify_staging_rpc.patch)
+- [`proton-protonify_staging.patch`](patches/proton/proton-protonify_staging.patch)
+- [`proton-steam-bits.patch`](patches/proton/proton-steam-bits.patch)
+- [`proton-sdl_joy.patch`](patches/proton/proton-sdl_joy.patch)
+- [`proton-sdl_joy_2.patch`](patches/proton/proton-sdl_joy_2.patch)
+- [`proton-gamepad-additions.patch`](patches/proton/proton-gamepad-additions.patch)
+- [`proton-vk-bits-4.5.patch`](patches/proton/proton-vk-bits-4.5.patch)
+- [`proton-winevulkan.patch`](patches/proton/proton-winevulkan.patch)
 
-Within these patches are proton rebases - many of them I've done on my own before he did them, however as he regularly rebases, many of my older patches have been replaced with his rebase patches. He deserves a huge amount of recognition for this.  
+Within these patches are Proton rebases. Many of them I've done on my own before he did them, however as he regularly rebases, many of my older patches have been replaced with his rebase patches. He deserves a huge amount of recognition for this.
 
-Beyond TKG, there are also quite a few developers that deserve recognition:  
+### Guy1524 (Derek Lesho)
 
-Guy1524 (Derek Lesho):  https://github.com/Guy1524  
--Derek was responsible for the original rawinput patches  
--As well as -several- various game fixes in the past, just to name a few -- MK11, FFXV, MHW, Steep, AC Odyssey FS fix.  
--He has also done a massive amount of work on media foundation/mfplat, which should be hopefully working very soon.  
+https://github.com/Guy1524
 
-Joshie (Joshua Ashton): https://github.com/Joshua-Ashton/d9vk  
--creator of d9vk  
--also creater of much of the dx10->dxvk work  
--also known for recent DOOM Eternal wine fixes  
--also added -many- of the vulkan tweaks and fixes used such as fs hack integer scaling  
+Derek was responsible for the original rawinput patches, as well as several various game fixes in the past, just to name a few: MK11, FFXV, MHW, Steep, AC Odyssey FS fix. He has also done a massive amount of work on media foundation/mfplat, which should be hopefully working very soon.  
 
-doitsujin/ドイツ人 (Philip Rebohle):  
+### Joshie (Joshua Ashton)
+
+https://github.com/Joshua-Ashton/d9vk  
+
+Joshua is the creator of D9VK and also a huge contributor of DXVK. He is also known for his recent DOOM Eternal WINE fixes and also many of the Vulkan tweaks and fixes used, such as FS hack interger scaling.
+
+### doitsujin/ドイツ人 (Philip Rebohle)
+
 https://github.com/doitsujin/dxvk  
-https://github.com/doitsujin/vkd3d  
--creator of dxvk  
--heavy contributor to vkd3d  
--put up with a lot of my bug reporting for warframe years ago when dxvk started  
 
-HansKristian/themaister (Hans-Kristian Arntzen):  
-https://github.com/HansKristian-Work/vkd3d  
--also heavy contributor to vkd3d  
--also created wine patches that allow WoW to work  
+Philip is the creator of DXVK and a heavy contributor of VKD3D. He also put up a lot of my bug reporting for Warfram years ago, when DXVK started.
 
-flibitijibibo (Ethan Lee):  
-https://github.com/sponsors/flibitijibibo  
-https://fna-xna.github.io/  
-https://github.com/fna-xna/faudio  
--creator of FAudio  
--also listened to my warframe bug reports years ago  
+### HansKristian/themaister (Hans-Kristian Arntzen)
 
-simmons-public (Chris Simmons):  
-https://github.com/simons-public/protonfixes  
--creator of the original protonfixes  
-the portions of protonfixes I've imported are what allow customizations to be made to prefixes for various proton games. without proton fixes many games would still be broken and/or require manual prefix modification. Huge thanks to Chris.  
+https://github.com/HansKristian-Work
 
-Sporif (Amine Hassane)
-https://github.com/Sporif/dxvk-async
--current maintainer of dxvk-async
-This is a feature that was originally removed from dxvk as it happened around the same time a few overwatch bans happened. It was thought, but never confirmed whether or not this feature caused the bans, so the feature was removed as a safety precaution. It is still safe to use in many single player games, and games that do not have competitive anti-cheats. It has also been confirmed to work safely in Warframe and Path of Exile.
+Hans-Kristian is a heavy contributor of VKD3D and he also created a lot of WINE patches that allowed WoW to work.
 
+### flibitijibibo (Ethan Lee)
 
-I also of course need to thank my fellow wine-staging maintainers:  
-Alistair Leslie-Highes, Zebediah Figura, Paul Gofman - as they have contributed MANY patches to staging, far beyond what I have done, as well as kept up with regular rebasing. A lot of times when bug reports come to me, if it has to do with staging I end up testing and relaying information to these guys in order to get issues resolved.  
+https://github.com/sponsors/flibitijibibo
 
-Additionally, a thank you is owed to Andrew Aeikum (aeikum), and kisak (kisak-valve) for regularly keeping me in the loop with proton and fsync patches, as well as accepting PRs I've made to fix proton build system issues, or listening to bug reports on early proton patches before they reach proton release.  
+https://fna-xna.github.io/
 
-And finally - To all of my patrons that have supported me, thank you so much. It's because of you that I've been able to keep this project going, getting bug fixes reported, getting proton/wine issues fixed, getting various hardware and/or game fixes handled, and so on.  Because of you, I have been able to use the spare budget in order to both help support the other people that make my project possible, as well as get things necessary for testing such as new game releases or specific hardware that hits odd issues. It's had a huge effect not just for this project, but a large trickle down effect.  
+Ethan is the creator of FAudio, and he also listened to my Warframe bug reports years ago.
 
-My wine-staging co-maintainers are often able to ask me for testing games, or testing on different hardware if they don't have access to it. This also trickles into both proton bug reporting AND Lutris bug reporting, as I'm able to provide bug testing and feedback and custom builds and upgrades to them as well. I'm also able to test driver related issues for things such as mesa and getting things reported + patched. This in turn leads to early patches for mesa, the kernel, vkd3d, and other packages on my copr repos as well. The trickle down effect is just one gigantic awesome rabbit hole for getting things fixed. Thank you once again.  
+### simmons-public (Chris Simmons)
 
-For anyone else interested, my pareon can be found here:  
+https://github.com/simons-public
 
-https://www.patreon.com/gloriouseggroll  
+Chris is the creator of the original Protonfixes project. The portions of Protonfixes I've imported are what allow customizations to be made to prefixes for various proton games. without proton fixes many games would still be broken and/or require manual prefix modification. Huge thanks to Chris.
+
+### Sporif (Amine Hassane)
+
+https://github.com/Sporif
+
+Amine is the current maintainer of dxvk-async. This is a feature that was originally removed from dxvk as it happened around the same time a few overwatch bans happened. It was thought, but never confirmed whether or not this feature caused the bans, so the feature was removed as a safety precaution. It is still safe to use in many single player games, and games that do not have competitive anti-cheats. It has also been confirmed to work safely in Warframe and Path of Exile.
+
+### wine-staging maintainers
+
+I also of course need to thank my fellow wine-staging maintainers: Alistair Leslie-Highes, Zebediah Figura and Paul Gofman
+
+They have contributed MANY patches to staging, far beyond what I have done, as well as kept up with regular rebasing. A lot of times when bug reports come to me, if it has to do with staging I end up testing and relaying information to these guys in order to get issues resolved.
+
+### Reporters
+
+Additionally, a thank you is owed to Andrew Aeikum (aeikum), and kisak (kisak-valve) for regularly keeping me in the loop with Proton and fsync patches, as well as accepting PRs I've made to fix proton build system issues, or listening to bug reports on early Proton patches before they reach Proton release.
+
+### Patrons
+
+And finally - To all of my patrons that have supported me, thank you so much. It's because of you that I've been able to keep this project going, getting bug fixes reported, getting Proton/WINE issues fixed, getting various hardware and/or game fixes handled, and so on. Thanks to you, I have been able to use the spare budget in order to both help support the other people that make my project possible, as well as get things necessary for testing such as new game releases or specific hardware that hits odd issues. It's had a huge effect not just for this project, but a large trickle down effect.
+
+My wine-staging co-maintainers are often able to ask me for testing games, or testing on different hardware if they don't have access to it. This also trickles into both Proton bug reporting AND Lutris bug reporting, as I'm able to provide bug testing and feedback and custom builds and upgrades to them as well. I'm also able to test driver related issues for things such as mesa and getting things reported + patched. This in turn leads to early patches for Mesa, the kernel, VKD3D, and other packages on my copr repos as well. The trickle down effect is just one gigantic awesome rabbit hole for getting things fixed. Thank you once again.
+
+## Donations
+
+For anyone else interested, my Patreon can be found here:
+
+https://www.patreon.com/gloriouseggroll
