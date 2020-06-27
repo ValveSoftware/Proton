@@ -100,7 +100,7 @@ Builds will be placed in proton-ge-custom/vagrant_share/ as both the full folder
 2. At the bottom of the `General` tab, Check `Force the use of a specific Steam Play compatibility tool`, then select the desired Proton version.
 3. Launch the game.
 
-## NOTE ON MODIFICATIONS
+## Modification
 
 vagrant syncs the proton directory to any files in the cloned repo. So, if you want to make changes, close the VM with `vagrant halt`, make your changes, then launch vagrant again with `vagrant up`  
 
