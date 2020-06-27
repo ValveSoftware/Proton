@@ -38,15 +38,26 @@ All patches included:
 Full patches can be viewed in [protonprep.sh](game-patches-testing/protonprep.sh).
 
 ## Installation
-1. Either follow the [build guide](#building), or download a release from the [Releases](https://github.com/GloriousEggroll/proton-ge-custom/releases) section and then proceed to the next step.
-2. - For regular Steam users, create a ``~/.steam/root/compatibilitytools.d`` directory.
-   - For Flatpak Steam users, create a ``~/.var/app/com.valvesoftware.Steam/data/Steam/compatibilitytools.d/`` directory.
-3. - For regular Steam users, extract the release tarball into ``~/.steam/root/compatibilitytools.d/``.
-   - For Flatpak Steam users, extract the release tarball into `~/.var/app/com.valvesoftware.Steam/data/Steam/compatibilitytools.d/`.
+
+### Native
+
+1. Download a release from the [Releases](https://github.com/GloriousEggroll/proton-ge-custom/releases) page.
+2. Create a `~/.steam/root/compatibilitytools.d` directory if it does not exist.
+3. Extract the release tarball into `~/.steam/root/compatibilitytools.d/`.
 4. Restart Steam.
-5. Right click any game in Steam and click `Properties`. 
-6. At the bottom of the General tab, Check `Force the use of a specific Steam Play compatibility tool`, then select the new Proton version.  
-7. Launch the game.  
+5. Right click any game in Steam and click `Properties`.
+6. At the bottom of the `General` tab, Check `Force the use of a specific Steam Play compatibility tool`, then select the desired Proton version.
+7. Launch the game.
+
+### Flatpak
+
+1. Download a release from the [Releases](https://github.com/GloriousEggroll/proton-ge-custom/releases) page.
+2. Create a `~/.var/app/com.valvesoftware.Steam/data/Steam/compatibilitytools.d/` directory if it does not exist.
+3. Extract the release tarball into `~/.var/app/com.valvesoftware.Steam/data/Steam/compatibilitytools.d/`.
+4. Restart Steam.
+5. Right click any game in Steam and click `Properties`.
+6. At the bottom of the `General` tab, Check `Force the use of a specific Steam Play compatibility tool`, then select the desired Proton version.
+7. Launch the game.
 
 ## Building
 
