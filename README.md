@@ -45,9 +45,7 @@ Full patches can be viewed in [protonprep.sh](game-patches-testing/protonprep.sh
 2. Create a `~/.steam/root/compatibilitytools.d` directory if it does not exist.
 3. Extract the release tarball into `~/.steam/root/compatibilitytools.d/`.
 4. Restart Steam.
-5. Right click any game in Steam and click `Properties`.
-6. At the bottom of the `General` tab, Check `Force the use of a specific Steam Play compatibility tool`, then select the desired Proton version.
-7. Launch the game.
+5. [Enable proton-ge-custom](#enabling).
 
 ### Flatpak
 
@@ -55,9 +53,7 @@ Full patches can be viewed in [protonprep.sh](game-patches-testing/protonprep.sh
 2. Create a `~/.var/app/com.valvesoftware.Steam/data/Steam/compatibilitytools.d/` directory if it does not exist.
 3. Extract the release tarball into `~/.var/app/com.valvesoftware.Steam/data/Steam/compatibilitytools.d/`.
 4. Restart Steam.
-5. Right click any game in Steam and click `Properties`.
-6. At the bottom of the `General` tab, Check `Force the use of a specific Steam Play compatibility tool`, then select the desired Proton version.
-7. Launch the game.
+5. [Enable proton-ge-custom](#enabling).
 
 ## Building
 
@@ -96,6 +92,12 @@ For future builds you only need to run:
 `vagrant halt`  
 
 Builds will be placed in proton-ge-custom/vagrant_share/ as both the full folder and a .tar.gz of the folder.  
+
+## Enabling
+
+1. Right click any game in Steam and click `Properties`.
+2. At the bottom of the `General` tab, Check `Force the use of a specific Steam Play compatibility tool`, then select the desired Proton version.
+3. Launch the game.
 
 ## NOTE ON MODIFICATIONS
 
