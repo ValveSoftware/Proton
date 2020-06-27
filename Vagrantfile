@@ -54,7 +54,6 @@ Vagrant.configure(2) do |config|
     v.memory = memory
     v.random_hostname = true
     v.default_prefix = ENV['USER'].to_s.dup.concat('_').concat(File.basename(Dir.pwd))
-    v.management_network_name = "default"
   end
 
 
