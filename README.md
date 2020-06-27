@@ -2,40 +2,41 @@
 
 ## Overview
 
-This is my build of Proton with the most recent release of vanilla wine, has ffmpeg enabled for faudio by default, and all of Proton's patches ported over to be applied to wine, as well as wine-staging and vkd3d.
+This is my build of Proton with the most recent releases of vanilla WINE. It has FFmpeg enabled for FAudio by default, and all of Proton's patches ported over to be applied to WINE, as well as Wine-staging and VKD3D.
 
-All patches included:  
- * FFXIV Launcher patch
- * Mech Warrior online patch  
- * Assetto Corsa HUD patch 
- * Vulkan child window patch  
- * Sword Art Online gnutls patch  
- * ORIGIN downloads fix patch  
- * CODBlack Ops 2 launch patch  
- * NFSW launcher patch  
- * Monster Hunter World patch  
- * Sunset Overdrive patch  
- * Steep and AC Odyssey screen fix patch  
- * World of Warcraft DX12 compatibility patch  
- * d9vk integration  
- * vkd3d integration  
- * protonfixes integration  
- * FAudio with FFMpeg enabled (fixes audio/voices in multiple games)  
- * All of Valve's wine proton patches.  
- * Multiple pending pull requests from Proton.  
- * wine staging patches  
- * various wine hotfixes for wine functionality that fix regressions per version  
- * various proton hotfixes for proton functionality that fix regressions per version  
+### Patches
 
-**NOTES REGARDING SPECIFIC GAME QUIRKS:**
+- FFXIV Launcher
+- Mech Warrior online
+- Assetto Corsa HUD
+- Vulkan child window
+- Sword Art Online gnutls
+- ORIGIN downloads fix
+- C.O.D. Black Ops 2 launch
+- NFSW launcher
+- Monster Hunter World
+- Sunset Overdrive
+- Steep and AC Odyssey screen fix
+- World of Warcraft DX12 compatibility
+- D9VK integration
+- VKD3D integration
+- Protonfixes integration
+- FAudio with FFmpeg enabled (fixes audio/voices in multiple games)
+- All of Valve's WINE Proton patches
+- Multiple pending pull requests from Proton
+- Wine-staging patches
+- Various WINE hotfixes for WINE functionality that fix regressions per version
+- Various Proton hotfixes for Proton functionality that fix regressions per version
 
- * Warframe does NOT need `WINEDLLOVERRIDES="xaudio2_7=n,b"` — FAudio replaces xaudio2. Using this override WILL lead to game crashes.  
- * Warframe is problematic with vsync. Turn it off or on in game, do not set Auto.  
- * Warframe needs a set a frame limit in game. Unlimited framerate can cause slowdowns  
- * Warframe on Nvidia you may need to disable GPU Particles in game otherwise the game can freeze randomly. On AMD they work fine  
- * DOOM Eternal currently does -not- work with ACO on mesa. You will need to set RADV_PERFTEST=llvm %command% in the launch options.   
+### NOTES REGARDING SPECIFIC GAME QUIRKS
 
-Full patches can be viewed in [protonprep.sh](game-patches-testing/protonprep.sh).
+- Warframe does **not** need `WINEDLLOVERRIDES="xaudio2_7=n,b"` — FAudio replaces xaudio2. Using this override WILL lead to game crashes
+- Warframe is problematic with VSync. Turn it off or on in game, do not set to `Auto`
+- Warframe needs a set a frame limit in game. Unlimited framerate can cause slowdowns
+- Warframe on Nvidia: you may need to disable GPU Particles in game otherwise the game can freeze randomly. On AMD they work fine
+- DOOM Eternal currently does **not** work with ACO on Mesa. You will need to set `RADV_PERFTEST=llvm %command%` in the launch options
+
+Full patches can be viewed in [protonprep.sh](patches/protonprep.sh).
 
 ## Installation
 
