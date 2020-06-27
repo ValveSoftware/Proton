@@ -102,7 +102,7 @@ Builds will be placed in proton-ge-custom/vagrant_share/ as both the full folder
 
 ## Modification
 
-vagrant syncs the proton directory to any files in the cloned repo. So, if you want to make changes, close the VM with `vagrant halt`, make your changes, then launch vagrant again with `vagrant up`  
+vagrant syncs the Proton directory to any files in the cloned repo. So, if you want to make changes, close the VM with `vagrant halt`, make your changes, then launch vagrant again with `vagrant up`  
 
 Environment variable options:  
 
@@ -189,7 +189,7 @@ Ethan is the creator of FAudio, and he also listened to my Warframe bug reports 
 
 https://github.com/simons-public
 
-Chris is the creator of the original Protonfixes project. The portions of Protonfixes I've imported are what allow customizations to be made to prefixes for various proton games. without proton fixes many games would still be broken and/or require manual prefix modification. Huge thanks to Chris.
+Chris is the creator of the original Protonfixes project. The portions of Protonfixes I've imported are what allow customizations to be made to prefixes for various Proton games. without Proton fixes many games would still be broken and/or require manual prefix modification. Huge thanks to Chris.
 
 ### Sporif (Amine Hassane)
 
@@ -205,7 +205,7 @@ They have contributed MANY patches to staging, far beyond what I have done, as w
 
 ### Reporters
 
-Additionally, a thank you is owed to Andrew Aeikum (aeikum), and kisak (kisak-valve) for regularly keeping me in the loop with Proton and fsync patches, as well as accepting PRs I've made to fix proton build system issues, or listening to bug reports on early Proton patches before they reach Proton release.
+Additionally, a thank you is owed to Andrew Aeikum (aeikum), and kisak (kisak-valve) for regularly keeping me in the loop with Proton and fsync patches, as well as accepting PRs I've made to fix Proton build system issues, or listening to bug reports on early Proton patches before they reach Proton release.
 
 ### Patrons
 
