@@ -54,9 +54,9 @@ Full patches can be viewed in [protonprep.sh](game-patches-testing/protonprep.sh
 2. Install Vagrant.
 3. Clone this repo by executing:
 
-````
+```
 git clone --recurse-submodules http://github.com/gloriouseggroll/proton-ge-custom
-````
+```
 
 4. Drop any custom patches into patches/, then open patches/protonprep.sh and  
  add a patch line for them under #WINE CUSTOM PATCHES in the same way the others are done. 
