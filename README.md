@@ -6,8 +6,10 @@
 	- [Patches](#patches)
 	- [Notes](#notes)
 - [Installation](#installation)
-	- [Native](#native)
-	- [Flatpak](#flatpak)
+	- [Manual](#manual)
+		- [Native](#native)
+		- [Flatpak](#flatpak)
+	- [Automatic](#automatic)
 - [Building](#building)
 - [Enabling](#enabling)
 - [Modification](#modification)
@@ -65,7 +67,9 @@ Full patches can be viewed in [protonprep.sh](patches/protonprep.sh).
 
 ## Installation
 
-### Native
+### Manual
+
+#### Native
 
 This section is for those that use the native version of Steam.
 
@@ -75,7 +79,7 @@ This section is for those that use the native version of Steam.
 4. Restart Steam.
 5. [Enable proton-ge-custom](#enabling).
 
-### Flatpak
+#### Flatpak
 
 This section is for those that use the Flatpak'd version of Steam.
 
@@ -84,6 +88,17 @@ This section is for those that use the Flatpak'd version of Steam.
 3. Extract the release tarball into `~/.var/app/com.valvesoftware.Steam/data/Steam/compatibilitytools.d/`.
 4. Restart Steam.
 5. [Enable proton-ge-custom](#enabling).
+
+### Automatic
+
+There is a custom script made by [patrickm32](https://github.com/patrickm32) to download and install proton-ge as native and as Flatpak:
+
+```bash
+git clone https://github.com/patrickm32/proton-ge-custom-updater.git
+cd proton-ge-custom-updater
+chmod +x proton-ge-custom-updater
+./proton-ge-custom-updater
+```
 
 ## Building
 
