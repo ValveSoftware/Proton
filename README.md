@@ -1,5 +1,30 @@
 # proton-ge-custom
 
+## Table of contents
+
+- [Overview](#overview)
+	- [Patches](#patches)
+	- [Notes](#notes)
+- [Installation](#installation)
+	- [Native](#native)
+	- [Flatpak](#flatpak)
+- [Building](#building)
+- [Enabling](#enabling)
+- [Modification](#modification)
+- [Credits](#credits)
+	- [TKG (Etienne Juvigny)](#tkg-etienne-juvigny)
+	- [Guy1524 (Derek Lesho)](#guy1524-derek-lesho)
+	- [Joshie (Joshua Ashton)](#joshie-joshua-ashton)
+	- [doitsujin/ドイツ人 (Philip Rebohle)](#doitsujinドイツ人-philip-rebohle)
+	- [HansKristian/themaister (Hans-Kristian Arntzen)](#hanskristianthemaister-hans-kristian-arntzen)
+	- [flibitijibibo (Ethan Lee)](#flibitijibibo-ethan-lee)
+	- [simmons-public (Chris Simmons)](#simmons-public-chris-simmons)
+	- [Sporif (Amine Hassane)](#sporif-amine-hassane)
+	- [wine-staging maintainers](#wine-staging-maintainers)
+	- [Reporters](#reporters)
+	- [Patrons](#patrons)
+- [Donations](#donations)
+
 ## Overview
 
 This is my build of Proton with the most recent releases of vanilla WINE. It has FFmpeg enabled for FAudio by default, and all of Proton's patches ported over to be applied to WINE, as well as Wine-staging and VKD3D.
