@@ -67,6 +67,8 @@ Full patches can be viewed in [protonprep.sh](patches/protonprep.sh).
 
 ### Native
 
+This section is for those that use the native version of Steam.
+
 1. Download a release from the [Releases](https://github.com/GloriousEggroll/proton-ge-custom/releases) page.
 2. Create a `~/.steam/root/compatibilitytools.d` directory if it does not exist.
 3. Extract the release tarball into `~/.steam/root/compatibilitytools.d/`.
@@ -74,6 +76,8 @@ Full patches can be viewed in [protonprep.sh](patches/protonprep.sh).
 5. [Enable proton-ge-custom](#enabling).
 
 ### Flatpak
+
+This section is for those that use the Flatpak'd version of Steam.
 
 1. Download a release from the [Releases](https://github.com/GloriousEggroll/proton-ge-custom/releases) page.
 2. Create a `~/.var/app/com.valvesoftware.Steam/data/Steam/compatibilitytools.d/` directory if it does not exist.
