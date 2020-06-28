@@ -28,7 +28,7 @@ This is my build of Proton with the most recent releases of vanilla WINE. It has
 - Various WINE hotfixes for WINE functionality that fix regressions per version
 - Various Proton hotfixes for Proton functionality that fix regressions per version
 
-### NOTES REGARDING SPECIFIC GAME QUIRKS
+### Notes
 
 - Warframe does **not** need `WINEDLLOVERRIDES="xaudio2_7=n,b"` — FAudio replaces xaudio2. Using this override WILL lead to game crashes
 - Warframe is problematic with VSync. Turn it off or on in game, do not set to `Auto`
