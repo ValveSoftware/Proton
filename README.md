@@ -91,8 +91,7 @@ Full patches can be viewed in [protonprep.sh](patches/protonprep.sh).
 git clone --recurse-submodules http://github.com/gloriouseggroll/proton-ge-custom
 ```
 
-4. Drop any custom patches into patches/, then open patches/protonprep.sh and  
- add a patch line for them under #WINE CUSTOM PATCHES in the same way the others are done. 
+4. Drop any custom patches into patches/, then open patches/protonprep.sh and add a patch line for them under #WINE CUSTOM PATCHES in the same way the others are done. 
 
 5. Apply all of the patches in patches/ by running:
 
@@ -100,12 +99,12 @@ git clone --recurse-submodules http://github.com/gloriouseggroll/proton-ge-custo
 ./patches/protonprep.sh &> patchlog.txt
 ```
 
-in the main proton-ge-custom directory. Open `patchlog.txt` and search for "fail" to make sure no patch failures occured. An easy way to do this is like so:  
+in the main proton-ge-custom directory. Open `patchlog.txt` and search for "fail" to make sure no patch failures occured. An easy way to do this is like so:
 
 grep -i fail patchlog.txt
 grep -i error patchlog.txt 
 
-6. Open proton-ge-custom a terminal and type the following:  
+6. Open proton-ge-custom a terminal and type the following:
 
 `vagrant up` (On the first run choose yes, it will ask you to run vagrant up again)  
 `vagrant up` (this will take a while on the first run, as it prepares everything)  
@@ -117,7 +116,7 @@ For future builds you only need to run:
 `build_name=some_custom_build_name make redist`  
 `vagrant halt`  
 
-Builds will be placed in proton-ge-custom/vagrant_share/ as both the full folder and a .tar.gz of the folder.  
+Builds will be placed in proton-ge-custom/vagrant_share/ as both the full folder and a .tar.gz of the folder.
 
 ## Enabling
 
@@ -127,9 +126,9 @@ Builds will be placed in proton-ge-custom/vagrant_share/ as both the full folder
 
 ## Modification
 
-vagrant syncs the Proton directory to any files in the cloned repo. So, if you want to make changes, close the VM with `vagrant halt`, make your changes, then launch vagrant again with `vagrant up`  
+vagrant syncs the Proton directory to any files in the cloned repo. So, if you want to make changes, close the VM with `vagrant halt`, make your changes, then launch vagrant again with `vagrant up`
 
-Environment variable options:  
+Environment variable options:
 
 | Compat config string  | Environment Variable           | Description  |
 | :-------------------- | :----------------------------- | :----------- |
@@ -182,17 +181,17 @@ Within these patches are Proton rebases. Many of them I've done on my own before
 
 https://github.com/Guy1524
 
-Derek was responsible for the original rawinput patches, as well as several various game fixes in the past, just to name a few: MK11, FFXV, MHW, Steep, AC Odyssey FS fix. He has also done a massive amount of work on media foundation/mfplat, which should be hopefully working very soon.  
+Derek was responsible for the original rawinput patches, as well as several various game fixes in the past, just to name a few: MK11, FFXV, MHW, Steep, AC Odyssey FS fix. He has also done a massive amount of work on media foundation/mfplat, which should be hopefully working very soon.
 
 ### Joshie (Joshua Ashton)
 
-https://github.com/Joshua-Ashton/d9vk  
+https://github.com/Joshua-Ashton/d9vk
 
 Joshua is the creator of D9VK and also a huge contributor of DXVK. He is also known for his recent DOOM Eternal WINE fixes and also many of the Vulkan tweaks and fixes used, such as FS hack interger scaling.
 
 ### doitsujin/ドイツ人 (Philip Rebohle)
 
-https://github.com/doitsujin/dxvk  
+https://github.com/doitsujin/dxvk
 
 Philip is the creator of DXVK and a heavy contributor of VKD3D. He also put up a lot of my bug reporting for Warfram years ago, when DXVK started.
 
