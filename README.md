@@ -198,45 +198,44 @@ Within these patches are Proton rebases. Many of them I've done on my own before
 
 ### Guy1524 (Derek Lesho)
 
-https://github.com/Guy1524
+- https://github.com/Guy1524
 
 Derek was responsible for the original rawinput patches, as well as several various game fixes in the past, just to name a few: MK11, FFXV, MHW, Steep, AC Odyssey FS fix. He has also done a massive amount of work on media foundation/mfplat, which should be hopefully working very soon.
 
 ### Joshie (Joshua Ashton)
 
-https://github.com/Joshua-Ashton/d9vk
+- https://github.com/Joshua-Ashton/d9vk
 
 Joshua is the creator of D9VK and also a huge contributor of DXVK. He is also known for his recent DOOM Eternal WINE fixes and also many of the Vulkan tweaks and fixes used, such as FS hack interger scaling.
 
 ### doitsujin/ドイツ人 (Philip Rebohle)
 
-https://github.com/doitsujin/dxvk
+- https://github.com/doitsujin/dxvk
 
 Philip is the creator of DXVK and a heavy contributor of VKD3D. He also put up a lot of my bug reporting for Warfram years ago, when DXVK started.
 
 ### HansKristian/themaister (Hans-Kristian Arntzen)
 
-https://github.com/HansKristian-Work
+- https://github.com/HansKristian-Work
 
 Hans-Kristian is a heavy contributor of VKD3D and he also created a lot of WINE patches that allowed WoW to work.
 
 ### flibitijibibo (Ethan Lee)
 
-https://github.com/sponsors/flibitijibibo
-
-https://fna-xna.github.io/
+- https://github.com/sponsors/flibitijibibo
+- https://fna-xna.github.io/
 
 Ethan is the creator of FAudio, and he also listened to my Warframe bug reports years ago.
 
 ### simmons-public (Chris Simmons)
 
-https://github.com/simons-public
+- https://github.com/simons-public
 
 Chris is the creator of the original Protonfixes project. The portions of Protonfixes I've imported are what allow customizations to be made to prefixes for various Proton games. without Proton fixes many games would still be broken and/or require manual prefix modification. Huge thanks to Chris.
 
 ### Sporif (Amine Hassane)
 
-https://github.com/Sporif
+- https://github.com/Sporif
 
 Amine is the current maintainer of dxvk-async. This is a feature that was originally removed from dxvk as it happened around the same time a few overwatch bans happened. It was thought, but never confirmed whether or not this feature caused the bans, so the feature was removed as a safety precaution. It is still safe to use in many single player games, and games that do not have competitive anti-cheats. It has also been confirmed to work safely in Warframe and Path of Exile.
 
