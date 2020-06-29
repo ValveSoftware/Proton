@@ -1,0 +1,1069 @@
+From: "Rémi Bernon" <rbernon@codeweavers.com>
+Subject: [PATCH 1/5] user32/tests: Add GetRawInputBuffer tests.
+Message-Id: <20200625170844.1849440-1-rbernon@codeweavers.com>
+Date: Thu, 25 Jun 2020 19:08:40 +0200
+
+Signed-off-by: Rémi Bernon <rbernon@codeweavers.com>
+---
+
+This should apply and work independently from the other server rawinput
+patch series..
+
+ dlls/user32/tests/input.c | 247 ++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 247 insertions(+)
+
+diff --git a/dlls/user32/tests/input.c b/dlls/user32/tests/input.c
+index 3dde3ce3c08..8b98c3f5c57 100644
+--- a/dlls/user32/tests/input.c
++++ b/dlls/user32/tests/input.c
+@@ -82,6 +82,7 @@ static int (WINAPI *pGetMouseMovePointsEx) (UINT, LPMOUSEMOVEPOINT, LPMOUSEMOVEP
+ static UINT (WINAPI *pGetRawInputDeviceList) (PRAWINPUTDEVICELIST, PUINT, UINT);
+ static UINT (WINAPI *pGetRawInputDeviceInfoW) (HANDLE, UINT, void *, UINT *);
+ static UINT (WINAPI *pGetRawInputDeviceInfoA) (HANDLE, UINT, void *, UINT *);
++static BOOL (WINAPI *pIsWow64Process)(HANDLE, PBOOL);
+ 
+ #define MAXKEYEVENTS 12
+ #define MAXKEYMESSAGES MAXKEYEVENTS /* assuming a key event generates one
+@@ -144,6 +145,7 @@ static BYTE InputKeyStateTable[256];
+ static BYTE AsyncKeyStateTable[256];
+ static BYTE TrackSysKey = 0; /* determine whether ALT key up will cause a WM_SYSKEYUP
+                          or a WM_KEYUP message */
++static BOOL is_wow64;
+ 
+ static void init_function_pointers(void)
+ {
+@@ -159,7 +161,13 @@ static void init_function_pointers(void)
+     GET_PROC(GetRawInputDeviceList);
+     GET_PROC(GetRawInputDeviceInfoW);
+     GET_PROC(GetRawInputDeviceInfoA);
++
++    hdll = GetModuleHandleA("kernel32");
++    GET_PROC(IsWow64Process);
+ #undef GET_PROC
++
++    if (!pIsWow64Process || !pIsWow64Process( GetCurrentProcess(), &is_wow64 ))
++        is_wow64 = FALSE;
+ }
+ 
+ static int KbdMessage( KEV kev, WPARAM *pwParam, LPARAM *plParam )
+@@ -1819,6 +1827,244 @@ static void test_RegisterRawInputDevices(void)
+     DestroyWindow(hwnd);
+ }
+ 
++static int rawinputbuffer_wndproc_count;
++
++#ifdef _WIN64
++typedef RAWINPUT RAWINPUT64;
++#else
++typedef struct
++{
++    RAWINPUTHEADER header;
++    char pad[8];
++    union {
++        RAWMOUSE    mouse;
++        RAWKEYBOARD keyboard;
++        RAWHID      hid;
++    } data;
++} RAWINPUT64;
++#endif
++
++static int rawinput_buffer_mouse_x(void *buffer, size_t index)
++{
++    if (is_wow64) return ((RAWINPUT64 *)buffer)[index].data.mouse.lLastX;
++    return ((RAWINPUT *)buffer)[index].data.mouse.lLastX;
++}
++
++static LRESULT CALLBACK rawinputbuffer_wndproc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
++{
++    RAWINPUT ri;
++    char buffer[16 * sizeof(RAWINPUT64)];
++    UINT size, count, rawinput_size, iteration = rawinputbuffer_wndproc_count++;
++    MSG message;
++
++    if (is_wow64) rawinput_size = sizeof(RAWINPUT64);
++    else rawinput_size = sizeof(RAWINPUT);
++
++    if (msg == WM_INPUT)
++    {
++        count = GetRawInputBuffer(NULL, NULL, sizeof(RAWINPUTHEADER));
++        todo_wine
++        ok(count == ~0U, "GetRawInputBuffer succeeded\n");
++
++        size = sizeof(buffer);
++        count = GetRawInputBuffer(NULL, &size, sizeof(RAWINPUTHEADER));
++        ok(count == 0, "GetRawInputBuffer returned %u\n", count);
++        todo_wine
++        ok(size == rawinput_size, "GetRawInputBuffer returned unexpected size: %u\n", size);
++
++        size = sizeof(buffer);
++        memset(buffer, 0, sizeof(buffer));
++        count = GetRawInputBuffer((RAWINPUT*)buffer, &size, sizeof(RAWINPUTHEADER));
++        todo_wine
++        ok(count == 3, "GetRawInputBuffer returned %u\n", count);
++        ok(size == sizeof(buffer), "GetRawInputBuffer returned unexpected size: %u\n", size);
++        todo_wine
++        ok(rawinput_buffer_mouse_x(buffer, 0) == 2, "Unexpected rawinput data: %d\n", rawinput_buffer_mouse_x(buffer, 0));
++        todo_wine
++        ok(rawinput_buffer_mouse_x(buffer, 1) == 3, "Unexpected rawinput data: %d\n", rawinput_buffer_mouse_x(buffer, 1));
++        todo_wine
++        ok(rawinput_buffer_mouse_x(buffer, 2) == 4, "Unexpected rawinput data: %d\n", rawinput_buffer_mouse_x(buffer, 2));
++
++        /* the first event should be removed by the next GetRawInputBuffer call
++         * and the others should do another round through the message loop but not more */
++        if (iteration == 0)
++        {
++            mouse_event(MOUSEEVENTF_MOVE, 5, 0, 0, 0);
++            mouse_event(MOUSEEVENTF_MOVE, 6, 0, 0, 0);
++            mouse_event(MOUSEEVENTF_MOVE, 2, 0, 0, 0);
++            mouse_event(MOUSEEVENTF_MOVE, 3, 0, 0, 0);
++            mouse_event(MOUSEEVENTF_MOVE, 4, 0, 0, 0);
++
++            /* even though rawinput_size is the minimum required size,
++             * it needs one more byte to return success */
++            size = rawinput_size + 1;
++            memset(buffer, 0, sizeof(buffer));
++            count = GetRawInputBuffer((RAWINPUT*)buffer, &size, sizeof(RAWINPUTHEADER));
++            todo_wine
++            ok(count == 1, "GetRawInputBuffer returned %u\n", count);
++            todo_wine
++            ok(rawinput_buffer_mouse_x(buffer, 0) == 5, "Unexpected rawinput data: %d\n", rawinput_buffer_mouse_x(buffer, 0));
++
++            /* peek the messages now, they should still arrive in the correct order */
++            while (PeekMessageA(&message, 0, WM_INPUT, WM_INPUT, PM_REMOVE)) DispatchMessageA(&message);
++        }
++
++        /* reading the message data now should fail on the second iteration, the data
++         * from the first message has been overwritten. */
++        size = sizeof(ri);
++        memset(&ri, 0, sizeof(ri));
++        count = GetRawInputData((HRAWINPUT)lparam, RID_INPUT, &ri, &size, sizeof(RAWINPUTHEADER));
++        if (iteration == 1)
++        {
++            ok(count == sizeof(ri), "GetRawInputData failed\n");
++            todo_wine
++            ok(ri.data.mouse.lLastX == 6, "Unexpected rawinput data: %d\n", ri.data.mouse.lLastX);
++        }
++        else
++        {
++            todo_wine
++            ok(count == ~0U, "GetRawInputData succeeded\n");
++        }
++    }
++
++    return DefWindowProcA(hwnd, msg, wparam, lparam);
++}
++
++static void test_GetRawInputBuffer(void)
++{
++    RAWINPUTDEVICE raw_devices[1];
++    char buffer[16 * sizeof(RAWINPUT64)];
++    UINT size, count, rawinput_size;
++    HWND hwnd;
++    BOOL ret;
++
++    if (is_wow64) rawinput_size = sizeof(RAWINPUT64);
++    else rawinput_size = sizeof(RAWINPUT);
++
++    hwnd = CreateWindowA("static", "static", WS_VISIBLE | WS_POPUP,
++                         100, 100, 100, 100, 0, NULL, NULL, NULL);
++    SetWindowLongPtrA(hwnd, GWLP_WNDPROC, (LONG_PTR)rawinputbuffer_wndproc);
++    ok(hwnd != 0, "CreateWindow failed\n");
++    empty_message_queue();
++
++    raw_devices[0].usUsagePage = 0x01;
++    raw_devices[0].usUsage = 0x02;
++    raw_devices[0].dwFlags = RIDEV_INPUTSINK;
++    raw_devices[0].hwndTarget = hwnd;
++
++    SetLastError(0xdeadbeef);
++    ret = RegisterRawInputDevices(raw_devices, ARRAY_SIZE(raw_devices), sizeof(RAWINPUTDEVICE));
++    ok(ret, "RegisterRawInputDevices failed\n");
++    ok(GetLastError() == 0xdeadbeef, "RegisterRawInputDevices returned %08x\n", GetLastError());
++
++    SetLastError(0xdeadbeef);
++    count = GetRawInputBuffer(NULL, NULL, sizeof(RAWINPUTHEADER));
++    todo_wine
++    ok(count == ~0U, "GetRawInputBuffer succeeded\n");
++    todo_wine
++    ok(GetLastError() == ERROR_INVALID_PARAMETER, "GetRawInputBuffer returned %08x\n", GetLastError());
++
++    size = sizeof(buffer);
++    count = GetRawInputBuffer(NULL, &size, sizeof(RAWINPUTHEADER));
++    ok(count == 0U, "GetRawInputBuffer returned %u\n", count);
++    todo_wine
++    ok(size == 0U, "GetRawInputBuffer returned unexpected size: %u\n", size);
++
++    size = 0;
++    count = GetRawInputBuffer((RAWINPUT*)buffer, &size, sizeof(RAWINPUTHEADER));
++    ok(count == 0U, "GetRawInputBuffer returned %u\n", count);
++    ok(size == 0U, "GetRawInputBuffer returned unexpected size: %u\n", size);
++
++    SetLastError(0xdeadbeef);
++    size = sizeof(buffer);
++    count = GetRawInputBuffer((RAWINPUT*)buffer, &size, 0);
++    todo_wine
++    ok(count == ~0U, "GetRawInputBuffer succeeded\n");
++    todo_wine
++    ok(GetLastError() == ERROR_INVALID_PARAMETER, "GetRawInputBuffer returned %08x\n", GetLastError());
++
++    size = sizeof(buffer);
++    count = GetRawInputBuffer((RAWINPUT*)buffer, &size, sizeof(RAWINPUTHEADER));
++    ok(count == 0U, "GetRawInputBuffer returned %u\n", count);
++    todo_wine
++    ok(size == 0U, "GetRawInputBuffer returned unexpected size: %u\n", size);
++
++    mouse_event(MOUSEEVENTF_MOVE, 5, 0, 0, 0);
++
++    SetLastError(0xdeadbeef);
++    size = 0;
++    count = GetRawInputBuffer((RAWINPUT*)buffer, &size, sizeof(RAWINPUTHEADER));
++    todo_wine
++    ok(count == ~0U, "GetRawInputBuffer succeeded\n");
++    todo_wine
++    ok(size == rawinput_size, "GetRawInputBuffer returned unexpected size: %u\n", size);
++    todo_wine
++    ok(GetLastError() == ERROR_INSUFFICIENT_BUFFER, "GetRawInputBuffer returned %08x\n", GetLastError());
++
++    size = 0;
++    count = GetRawInputBuffer(NULL, &size, sizeof(RAWINPUTHEADER));
++    ok(count == 0, "GetRawInputBuffer returned %u\n", count);
++    todo_wine
++    ok(size == rawinput_size, "GetRawInputBuffer returned unexpected size: %u\n", size);
++
++    SetLastError(0xdeadbeef);
++    size = sizeof(buffer);
++    count = GetRawInputBuffer((RAWINPUT*)buffer, &size, 0);
++    todo_wine
++    ok(count == ~0U, "GetRawInputBuffer succeeded\n");
++    todo_wine
++    ok(GetLastError() == ERROR_INVALID_PARAMETER, "GetRawInputBuffer returned %08x\n", GetLastError());
++
++    size = sizeof(buffer);
++    memset(buffer, 0, sizeof(buffer));
++    count = GetRawInputBuffer((RAWINPUT*)buffer, &size, sizeof(RAWINPUTHEADER));
++    todo_wine
++    ok(count == 1U, "GetRawInputBuffer returned %u\n", count);
++    ok(size == sizeof(buffer), "GetRawInputBuffer returned unexpected size: %u\n", size);
++    todo_wine
++    ok(rawinput_buffer_mouse_x(buffer, 0) == 5, "Unexpected rawinput data: %d\n", rawinput_buffer_mouse_x(buffer, 0));
++
++
++    /* NOTE: calling with size == rawinput_size returns an error, */
++    /* BUT it fills the buffer nonetheless and empties the internal buffer (!!) */
++    mouse_event(MOUSEEVENTF_MOVE, 5, 0, 0, 0);
++
++    SetLastError(0xdeadbeef);
++    size = rawinput_size;
++    memset(buffer, 0, sizeof(buffer));
++    count = GetRawInputBuffer((RAWINPUT*)buffer, &size, sizeof(RAWINPUTHEADER));
++    todo_wine
++    ok(count == ~0U, "GetRawInputBuffer succeeded\n");
++    todo_wine
++    ok(GetLastError() == ERROR_INSUFFICIENT_BUFFER, "GetRawInputBuffer returned %08x\n", GetLastError());
++    todo_wine
++    ok(rawinput_buffer_mouse_x(buffer, 0) == 5, "Unexpected rawinput data: %d\n", rawinput_buffer_mouse_x(buffer, 0));
++
++    size = sizeof(buffer);
++    count = GetRawInputBuffer((RAWINPUT*)buffer, &size, sizeof(RAWINPUTHEADER));
++    ok(count == 0U, "GetRawInputBuffer returned %u\n", count);
++
++
++    rawinputbuffer_wndproc_count = 0;
++    mouse_event(MOUSEEVENTF_MOVE, 1, 0, 0, 0);
++    mouse_event(MOUSEEVENTF_MOVE, 2, 0, 0, 0);
++    mouse_event(MOUSEEVENTF_MOVE, 3, 0, 0, 0);
++    mouse_event(MOUSEEVENTF_MOVE, 4, 0, 0, 0);
++    empty_message_queue();
++    todo_wine
++    ok(rawinputbuffer_wndproc_count == 2, "Spurious WM_INPUT messages\n");
++
++    raw_devices[0].dwFlags = RIDEV_REMOVE;
++    raw_devices[0].hwndTarget = 0;
++
++    SetLastError(0xdeadbeef);
++    ret = RegisterRawInputDevices(raw_devices, ARRAY_SIZE(raw_devices), sizeof(RAWINPUTDEVICE));
++    ok(ret, "RegisterRawInputDevices failed\n");
++    ok(GetLastError() == 0xdeadbeef, "RegisterRawInputDevices returned %08x\n", GetLastError());
++
++    DestroyWindow(hwnd);
++}
++
+ static BOOL rawinput_test_received_legacy;
+ static BOOL rawinput_test_received_raw;
+ static BOOL rawinput_test_received_rawfg;
+@@ -3417,6 +3663,7 @@ START_TEST(input)
+     test_GetKeyState();
+     test_OemKeyScan();
+     test_GetRawInputData();
++    test_GetRawInputBuffer();
+     test_RegisterRawInputDevices();
+     test_rawinput(argv[0]);
+ 
+
+-- 
+2.27.0
+
+From: "Rémi Bernon" <rbernon@codeweavers.com>
+Subject: [PATCH 2/5] user32: Introduce rawinput_from_hardware_message helper.
+Message-Id: <20200625170844.1849440-2-rbernon@codeweavers.com>
+Date: Thu, 25 Jun 2020 19:08:41 +0200
+In-Reply-To: <20200625170844.1849440-1-rbernon@codeweavers.com>
+References: <20200625170844.1849440-1-rbernon@codeweavers.com>
+
+Signed-off-by: Rémi Bernon <rbernon@codeweavers.com>
+---
+ dlls/user32/message.c      |  96 +--------------------------------
+ dlls/user32/rawinput.c     | 105 +++++++++++++++++++++++++++++++++++++
+ dlls/user32/user_private.h |   3 ++
+ 3 files changed, 109 insertions(+), 95 deletions(-)
+
+diff --git a/dlls/user32/message.c b/dlls/user32/message.c
+index 45fc07bbff3..89ffa07f700 100644
+--- a/dlls/user32/message.c
++++ b/dlls/user32/message.c
+@@ -2295,102 +2295,8 @@ static BOOL process_rawinput_message( MSG *msg, const struct hardware_msg_data *
+         if (!(rawinput = thread_info->rawinput)) return FALSE;
+     }
+ 
+-    rawinput->header.dwType = msg_data->rawinput.type;
+-    if (msg_data->rawinput.type == RIM_TYPEMOUSE)
+-    {
+-        static const unsigned int button_flags[] =
+-        {
+-            0,                              /* MOUSEEVENTF_MOVE */
+-            RI_MOUSE_LEFT_BUTTON_DOWN,      /* MOUSEEVENTF_LEFTDOWN */
+-            RI_MOUSE_LEFT_BUTTON_UP,        /* MOUSEEVENTF_LEFTUP */
+-            RI_MOUSE_RIGHT_BUTTON_DOWN,     /* MOUSEEVENTF_RIGHTDOWN */
+-            RI_MOUSE_RIGHT_BUTTON_UP,       /* MOUSEEVENTF_RIGHTUP */
+-            RI_MOUSE_MIDDLE_BUTTON_DOWN,    /* MOUSEEVENTF_MIDDLEDOWN */
+-            RI_MOUSE_MIDDLE_BUTTON_UP,      /* MOUSEEVENTF_MIDDLEUP */
+-        };
+-        unsigned int i;
+-
+-        rawinput->header.dwSize  = FIELD_OFFSET(RAWINPUT, data) + sizeof(RAWMOUSE);
+-        rawinput->header.hDevice = WINE_MOUSE_HANDLE;
+-        rawinput->header.wParam  = 0;
+-
+-        rawinput->data.mouse.usFlags           = MOUSE_MOVE_RELATIVE;
+-        rawinput->data.mouse.u.s.usButtonFlags = 0;
+-        rawinput->data.mouse.u.s.usButtonData  = 0;
+-        for (i = 1; i < ARRAY_SIZE(button_flags); ++i)
+-        {
+-            if (msg_data->flags & (1 << i))
+-                rawinput->data.mouse.u.s.usButtonFlags |= button_flags[i];
+-        }
+-        if (msg_data->flags & MOUSEEVENTF_WHEEL)
+-        {
+-            rawinput->data.mouse.u.s.usButtonFlags |= RI_MOUSE_WHEEL;
+-            rawinput->data.mouse.u.s.usButtonData   = msg_data->rawinput.mouse.data;
+-        }
+-        if (msg_data->flags & MOUSEEVENTF_HWHEEL)
+-        {
+-            rawinput->data.mouse.u.s.usButtonFlags |= RI_MOUSE_HORIZONTAL_WHEEL;
+-            rawinput->data.mouse.u.s.usButtonData   = msg_data->rawinput.mouse.data;
+-        }
+-        if (msg_data->flags & MOUSEEVENTF_XDOWN)
+-        {
+-            if (msg_data->rawinput.mouse.data == XBUTTON1)
+-                rawinput->data.mouse.u.s.usButtonFlags |= RI_MOUSE_BUTTON_4_DOWN;
+-            else if (msg_data->rawinput.mouse.data == XBUTTON2)
+-                rawinput->data.mouse.u.s.usButtonFlags |= RI_MOUSE_BUTTON_5_DOWN;
+-        }
+-        if (msg_data->flags & MOUSEEVENTF_XUP)
+-        {
+-            if (msg_data->rawinput.mouse.data == XBUTTON1)
+-                rawinput->data.mouse.u.s.usButtonFlags |= RI_MOUSE_BUTTON_4_UP;
+-            else if (msg_data->rawinput.mouse.data == XBUTTON2)
+-                rawinput->data.mouse.u.s.usButtonFlags |= RI_MOUSE_BUTTON_5_UP;
+-        }
+-
+-        rawinput->data.mouse.ulRawButtons       = 0;
+-        rawinput->data.mouse.lLastX             = msg_data->rawinput.mouse.x;
+-        rawinput->data.mouse.lLastY             = msg_data->rawinput.mouse.y;
+-        rawinput->data.mouse.ulExtraInformation = msg_data->info;
+-    }
+-    else if (msg_data->rawinput.type == RIM_TYPEKEYBOARD)
+-    {
+-        rawinput->header.dwSize  = FIELD_OFFSET(RAWINPUT, data) + sizeof(RAWKEYBOARD);
+-        rawinput->header.hDevice = WINE_KEYBOARD_HANDLE;
+-        rawinput->header.wParam  = 0;
+-
+-        rawinput->data.keyboard.MakeCode = msg_data->rawinput.kbd.scan;
+-        rawinput->data.keyboard.Flags    = msg_data->flags & KEYEVENTF_KEYUP ? RI_KEY_BREAK : RI_KEY_MAKE;
+-        if (msg_data->flags & KEYEVENTF_EXTENDEDKEY) rawinput->data.keyboard.Flags |= RI_KEY_E0;
+-        rawinput->data.keyboard.Reserved = 0;
+-
+-        switch (msg_data->rawinput.kbd.vkey)
+-        {
+-        case VK_LSHIFT:
+-        case VK_RSHIFT:
+-            rawinput->data.keyboard.VKey   = VK_SHIFT;
+-            rawinput->data.keyboard.Flags &= ~RI_KEY_E0;
+-            break;
+-        case VK_LCONTROL:
+-        case VK_RCONTROL:
+-            rawinput->data.keyboard.VKey = VK_CONTROL;
+-            break;
+-        case VK_LMENU:
+-        case VK_RMENU:
+-            rawinput->data.keyboard.VKey = VK_MENU;
+-            break;
+-        default:
+-            rawinput->data.keyboard.VKey = msg_data->rawinput.kbd.vkey;
+-            break;
+-        }
+-
+-        rawinput->data.keyboard.Message          = msg_data->rawinput.kbd.message;
+-        rawinput->data.keyboard.ExtraInformation = msg_data->info;
+-    }
+-    else
+-    {
+-        FIXME("Unhandled rawinput type %#x.\n", msg_data->rawinput.type);
++    if (!rawinput_from_hardware_message(rawinput, msg_data))
+         return FALSE;
+-    }
+ 
+     msg->lParam = (LPARAM)rawinput;
+     msg->pt = point_phys_to_win_dpi( msg->hwnd, msg->pt );
+diff --git a/dlls/user32/rawinput.c b/dlls/user32/rawinput.c
+index dd2ac2e208b..af15f5f6b49 100644
+--- a/dlls/user32/rawinput.c
++++ b/dlls/user32/rawinput.c
+@@ -23,6 +23,7 @@
+ #include <stdarg.h>
+ 
+ #define NONAMELESSUNION
++#define NONAMELESSSTRUCT
+ #include "windef.h"
+ #include "winbase.h"
+ #include "wingdi.h"
+@@ -221,6 +222,110 @@ static void find_devices(void)
+     LeaveCriticalSection(&rawinput_devices_cs);
+ }
+ 
++
++BOOL rawinput_from_hardware_message(RAWINPUT *rawinput, const struct hardware_msg_data *msg_data)
++{
++    rawinput->header.dwType = msg_data->rawinput.type;
++    if (msg_data->rawinput.type == RIM_TYPEMOUSE)
++    {
++        static const unsigned int button_flags[] =
++        {
++            0,                              /* MOUSEEVENTF_MOVE */
++            RI_MOUSE_LEFT_BUTTON_DOWN,      /* MOUSEEVENTF_LEFTDOWN */
++            RI_MOUSE_LEFT_BUTTON_UP,        /* MOUSEEVENTF_LEFTUP */
++            RI_MOUSE_RIGHT_BUTTON_DOWN,     /* MOUSEEVENTF_RIGHTDOWN */
++            RI_MOUSE_RIGHT_BUTTON_UP,       /* MOUSEEVENTF_RIGHTUP */
++            RI_MOUSE_MIDDLE_BUTTON_DOWN,    /* MOUSEEVENTF_MIDDLEDOWN */
++            RI_MOUSE_MIDDLE_BUTTON_UP,      /* MOUSEEVENTF_MIDDLEUP */
++        };
++        unsigned int i;
++
++        rawinput->header.dwSize  = FIELD_OFFSET(RAWINPUT, data) + sizeof(RAWMOUSE);
++        rawinput->header.hDevice = WINE_MOUSE_HANDLE;
++        rawinput->header.wParam  = 0;
++
++        rawinput->data.mouse.usFlags           = MOUSE_MOVE_RELATIVE;
++        rawinput->data.mouse.u.s.usButtonFlags = 0;
++        rawinput->data.mouse.u.s.usButtonData  = 0;
++        for (i = 1; i < ARRAY_SIZE(button_flags); ++i)
++        {
++            if (msg_data->flags & (1 << i))
++                rawinput->data.mouse.u.s.usButtonFlags |= button_flags[i];
++        }
++        if (msg_data->flags & MOUSEEVENTF_WHEEL)
++        {
++            rawinput->data.mouse.u.s.usButtonFlags |= RI_MOUSE_WHEEL;
++            rawinput->data.mouse.u.s.usButtonData   = msg_data->rawinput.mouse.data;
++        }
++        if (msg_data->flags & MOUSEEVENTF_HWHEEL)
++        {
++            rawinput->data.mouse.u.s.usButtonFlags |= RI_MOUSE_HORIZONTAL_WHEEL;
++            rawinput->data.mouse.u.s.usButtonData   = msg_data->rawinput.mouse.data;
++        }
++        if (msg_data->flags & MOUSEEVENTF_XDOWN)
++        {
++            if (msg_data->rawinput.mouse.data == XBUTTON1)
++                rawinput->data.mouse.u.s.usButtonFlags |= RI_MOUSE_BUTTON_4_DOWN;
++            else if (msg_data->rawinput.mouse.data == XBUTTON2)
++                rawinput->data.mouse.u.s.usButtonFlags |= RI_MOUSE_BUTTON_5_DOWN;
++        }
++        if (msg_data->flags & MOUSEEVENTF_XUP)
++        {
++            if (msg_data->rawinput.mouse.data == XBUTTON1)
++                rawinput->data.mouse.u.s.usButtonFlags |= RI_MOUSE_BUTTON_4_UP;
++            else if (msg_data->rawinput.mouse.data == XBUTTON2)
++                rawinput->data.mouse.u.s.usButtonFlags |= RI_MOUSE_BUTTON_5_UP;
++        }
++
++        rawinput->data.mouse.ulRawButtons       = 0;
++        rawinput->data.mouse.lLastX             = msg_data->rawinput.mouse.x;
++        rawinput->data.mouse.lLastY             = msg_data->rawinput.mouse.y;
++        rawinput->data.mouse.ulExtraInformation = msg_data->info;
++    }
++    else if (msg_data->rawinput.type == RIM_TYPEKEYBOARD)
++    {
++        rawinput->header.dwSize  = FIELD_OFFSET(RAWINPUT, data) + sizeof(RAWKEYBOARD);
++        rawinput->header.hDevice = WINE_KEYBOARD_HANDLE;
++        rawinput->header.wParam  = 0;
++
++        rawinput->data.keyboard.MakeCode = msg_data->rawinput.kbd.scan;
++        rawinput->data.keyboard.Flags    = msg_data->flags & KEYEVENTF_KEYUP ? RI_KEY_BREAK : RI_KEY_MAKE;
++        if (msg_data->flags & KEYEVENTF_EXTENDEDKEY) rawinput->data.keyboard.Flags |= RI_KEY_E0;
++        rawinput->data.keyboard.Reserved = 0;
++
++        switch (msg_data->rawinput.kbd.vkey)
++        {
++        case VK_LSHIFT:
++        case VK_RSHIFT:
++            rawinput->data.keyboard.VKey   = VK_SHIFT;
++            rawinput->data.keyboard.Flags &= ~RI_KEY_E0;
++            break;
++        case VK_LCONTROL:
++        case VK_RCONTROL:
++            rawinput->data.keyboard.VKey = VK_CONTROL;
++            break;
++        case VK_LMENU:
++        case VK_RMENU:
++            rawinput->data.keyboard.VKey = VK_MENU;
++            break;
++        default:
++            rawinput->data.keyboard.VKey = msg_data->rawinput.kbd.vkey;
++            break;
++        }
++
++        rawinput->data.keyboard.Message          = msg_data->rawinput.kbd.message;
++        rawinput->data.keyboard.ExtraInformation = msg_data->info;
++    }
++    else
++    {
++        FIXME("Unhandled rawinput type %#x.\n", msg_data->rawinput.type);
++        return FALSE;
++    }
++
++    return TRUE;
++}
++
++
+ /***********************************************************************
+  *              GetRawInputDeviceList   (USER32.@)
+  */
+diff --git a/dlls/user32/user_private.h b/dlls/user32/user_private.h
+index 0230dd45001..25bbeba6f0c 100644
+--- a/dlls/user32/user_private.h
++++ b/dlls/user32/user_private.h
+@@ -230,6 +230,9 @@ extern HMODULE user32_module DECLSPEC_HIDDEN;
+ struct dce;
+ struct tagWND;
+ 
++struct hardware_msg_data;
++extern BOOL rawinput_from_hardware_message(RAWINPUT *rawinput, const struct hardware_msg_data *msg_data);
++
+ extern void CLIPBOARD_ReleaseOwner( HWND hwnd ) DECLSPEC_HIDDEN;
+ extern BOOL FOCUS_MouseActivate( HWND hwnd ) DECLSPEC_HIDDEN;
+ extern BOOL set_capture_window( HWND hwnd, UINT gui_flags, HWND *prev_ret ) DECLSPEC_HIDDEN;
+
+-- 
+2.27.0
+
+From: "Rémi Bernon" <rbernon@codeweavers.com>
+Subject: [PATCH 3/5] user32: Introduce rawinput_thread_data helper.
+Message-Id: <20200625170844.1849440-3-rbernon@codeweavers.com>
+Date: Thu, 25 Jun 2020 19:08:42 +0200
+In-Reply-To: <20200625170844.1849440-1-rbernon@codeweavers.com>
+References: <20200625170844.1849440-1-rbernon@codeweavers.com>
+
+Signed-off-by: Rémi Bernon <rbernon@codeweavers.com>
+---
+ dlls/user32/message.c      | 10 +---------
+ dlls/user32/rawinput.c     |  9 +++++++++
+ dlls/user32/user_private.h |  7 ++++++-
+ 3 files changed, 16 insertions(+), 10 deletions(-)
+
+diff --git a/dlls/user32/message.c b/dlls/user32/message.c
+index 89ffa07f700..c5c7db667cf 100644
+--- a/dlls/user32/message.c
++++ b/dlls/user32/message.c
+@@ -2286,15 +2286,7 @@ static void accept_hardware_message( UINT hw_id, BOOL remove )
+ 
+ static BOOL process_rawinput_message( MSG *msg, const struct hardware_msg_data *msg_data )
+ {
+-    struct user_thread_info *thread_info = get_user_thread_info();
+-    RAWINPUT *rawinput = thread_info->rawinput;
+-
+-    if (!rawinput)
+-    {
+-        thread_info->rawinput = HeapAlloc( GetProcessHeap(), 0, sizeof(*rawinput) );
+-        if (!(rawinput = thread_info->rawinput)) return FALSE;
+-    }
+-
++    RAWINPUT *rawinput = rawinput_thread_data();
+     if (!rawinput_from_hardware_message(rawinput, msg_data))
+         return FALSE;
+ 
+diff --git a/dlls/user32/rawinput.c b/dlls/user32/rawinput.c
+index af15f5f6b49..7092c01c659 100644
+--- a/dlls/user32/rawinput.c
++++ b/dlls/user32/rawinput.c
+@@ -223,6 +223,15 @@ static void find_devices(void)
+ }
+ 
+ 
++RAWINPUT *rawinput_thread_data(void)
++{
++    struct user_thread_info *thread_info = get_user_thread_info();
++    RAWINPUT *rawinput = thread_info->rawinput;
++    if (!rawinput) rawinput = thread_info->rawinput = HeapAlloc( GetProcessHeap(), 0, RAWINPUT_BUFFER_SIZE );
++    return rawinput;
++}
++
++
+ BOOL rawinput_from_hardware_message(RAWINPUT *rawinput, const struct hardware_msg_data *msg_data)
+ {
+     rawinput->header.dwType = msg_data->rawinput.type;
+diff --git a/dlls/user32/user_private.h b/dlls/user32/user_private.h
+index 25bbeba6f0c..d7f4741ebe6 100644
+--- a/dlls/user32/user_private.h
++++ b/dlls/user32/user_private.h
+@@ -169,6 +169,10 @@ struct wm_char_mapping_data
+     MSG  get_msg;
+ };
+ 
++/* on windows the buffer capacity is quite large as well, enough to */
++/* hold up to 10s of 1kHz mouse rawinput events */
++#define RAWINPUT_BUFFER_SIZE (512*1024)
++
+ /* this is the structure stored in TEB->Win32ClientInfo */
+ /* no attempt is made to keep the layout compatible with the Windows one */
+ struct user_thread_info
+@@ -192,7 +196,7 @@ struct user_thread_info
+     struct user_key_state_info   *key_state;              /* Cache of global key state */
+     HWND                          top_window;             /* Desktop window */
+     HWND                          msg_window;             /* HWND_MESSAGE parent window */
+-    RAWINPUT                     *rawinput;
++    RAWINPUT                     *rawinput;               /* Rawinput buffer */
+ };
+ 
+ C_ASSERT( sizeof(struct user_thread_info) <= sizeof(((TEB *)0)->Win32ClientInfo) );
+@@ -232,6 +236,7 @@ struct tagWND;
+ 
+ struct hardware_msg_data;
+ extern BOOL rawinput_from_hardware_message(RAWINPUT *rawinput, const struct hardware_msg_data *msg_data);
++extern RAWINPUT *rawinput_thread_data(void);
+ 
+ extern void CLIPBOARD_ReleaseOwner( HWND hwnd ) DECLSPEC_HIDDEN;
+ extern BOOL FOCUS_MouseActivate( HWND hwnd ) DECLSPEC_HIDDEN;
+
+-- 
+2.27.0
+
+From: "Rémi Bernon" <rbernon@codeweavers.com>
+Subject: [PATCH 4/5] user32: Implement GetRawInputBuffer.
+Message-Id: <20200625170844.1849440-4-rbernon@codeweavers.com>
+Date: Thu, 25 Jun 2020 19:08:43 +0200
+In-Reply-To: <20200625170844.1849440-1-rbernon@codeweavers.com>
+References: <20200625170844.1849440-1-rbernon@codeweavers.com>
+
+CoD: WWII uses it to read mouse motion instead of listening to WM_INPUT
+messages.
+
+Signed-off-by: Rémi Bernon <rbernon@codeweavers.com>
+---
+
+I first tried to implement it without a new request, but it was much
+more complicated, and this is way simpler. It also avoid messing with
+message processing, and only removes WM_INPUT messages from the queues
+
+ dlls/user32/rawinput.c     | 91 +++++++++++++++++++++++++++++++++++++-
+ dlls/user32/tests/input.c  | 27 -----------
+ dlls/user32/user_private.h |  2 +-
+ server/protocol.def        | 10 +++++
+ server/queue.c             | 40 +++++++++++++++++
+ 5 files changed, 140 insertions(+), 30 deletions(-)
+
+diff --git a/dlls/user32/rawinput.c b/dlls/user32/rawinput.c
+index 7092c01c659..fa0c5070b03 100644
+--- a/dlls/user32/rawinput.c
++++ b/dlls/user32/rawinput.c
+@@ -484,14 +484,101 @@ UINT WINAPI GetRawInputData(HRAWINPUT rawinput, UINT command, void *data, UINT *
+     return s;
+ }
+ 
++#ifdef _WIN64
++typedef RAWINPUT RAWINPUT64;
++#else
++typedef struct
++{
++    RAWINPUTHEADER header;
++    char pad[8];
++    union {
++        RAWMOUSE    mouse;
++        RAWKEYBOARD keyboard;
++        RAWHID      hid;
++    } data;
++} RAWINPUT64;
++#endif
++
+ /***********************************************************************
+  *              GetRawInputBuffer   (USER32.@)
+  */
+ UINT WINAPI DECLSPEC_HOTPATCH GetRawInputBuffer(RAWINPUT *data, UINT *data_size, UINT header_size)
+ {
+-    FIXME("data %p, data_size %p, header_size %u stub!\n", data, data_size, header_size);
++    struct hardware_msg_data *msg_data;
++    RAWINPUT *rawinput;
++    UINT count = 0, rawinput_size, next_size, overhead;
++    BOOL is_wow64;
++    int i;
++
++    if (IsWow64Process( GetCurrentProcess(), &is_wow64 ) && is_wow64)
++        rawinput_size = sizeof(RAWINPUT64);
++    else
++        rawinput_size = sizeof(RAWINPUT);
++    overhead = rawinput_size - sizeof(RAWINPUT);
+ 
+-    return 0;
++    if (header_size != sizeof(RAWINPUTHEADER))
++    {
++        WARN("Invalid structure size %u.\n", header_size);
++        SetLastError(ERROR_INVALID_PARAMETER);
++        return ~0U;
++    }
++
++    if (!data_size)
++    {
++        SetLastError(ERROR_INVALID_PARAMETER);
++        return ~0U;
++    }
++
++    if (!data)
++    {
++        TRACE("data %p, data_size %p (%u), header_size %u\n", data, data_size, *data_size, header_size);
++        SERVER_START_REQ( get_rawinput_buffer )
++        {
++            req->rawinput_size = rawinput_size;
++            req->buffer_size = 0;
++            if (wine_server_call( req )) return ~0U;
++            *data_size = reply->next_size;
++        }
++        SERVER_END_REQ;
++        return 0;
++    }
++
++    if (!(rawinput = rawinput_thread_data())) return ~0U;
++
++    msg_data = (struct hardware_msg_data *)NEXTRAWINPUTBLOCK(rawinput);
++    SERVER_START_REQ( get_rawinput_buffer )
++    {
++        req->rawinput_size = rawinput_size;
++        req->buffer_size = *data_size;
++        wine_server_set_reply( req, msg_data, RAWINPUT_BUFFER_SIZE - rawinput->header.dwSize );
++        if (wine_server_call( req )) return ~0U;
++        next_size = reply->next_size;
++        count = reply->count;
++    }
++    SERVER_END_REQ;
++
++    for (i = 0; i < count; ++i)
++    {
++        rawinput_from_hardware_message(data, msg_data);
++        if (overhead) memmove((char *)&data->data + overhead, &data->data,
++                              data->header.dwSize - sizeof(RAWINPUTHEADER));
++        data->header.dwSize += overhead;
++        data = NEXTRAWINPUTBLOCK(data);
++        msg_data++;
++    }
++
++    if (count == 0 && next_size == 0) *data_size = 0;
++    else if (next_size == 0) next_size = rawinput_size;
++
++    if (next_size && *data_size <= next_size)
++    {
++        SetLastError(ERROR_INSUFFICIENT_BUFFER);
++        *data_size = next_size;
++        count = ~0U;
++    }
++
++    if (count) TRACE("data %p, data_size %p (%u), header_size %u, count %u\n", data, data_size, *data_size, header_size, count);
++    return count;
+ }
+ 
+ /***********************************************************************
+diff --git a/dlls/user32/tests/input.c b/dlls/user32/tests/input.c
+index 8b98c3f5c57..9c35b1e36bd 100644
+--- a/dlls/user32/tests/input.c
++++ b/dlls/user32/tests/input.c
+@@ -1863,26 +1863,20 @@ static LRESULT CALLBACK rawinputbuffer_wndproc(HWND hwnd, UINT msg, WPARAM wpara
+     if (msg == WM_INPUT)
+     {
+         count = GetRawInputBuffer(NULL, NULL, sizeof(RAWINPUTHEADER));
+-        todo_wine
+         ok(count == ~0U, "GetRawInputBuffer succeeded\n");
+ 
+         size = sizeof(buffer);
+         count = GetRawInputBuffer(NULL, &size, sizeof(RAWINPUTHEADER));
+         ok(count == 0, "GetRawInputBuffer returned %u\n", count);
+-        todo_wine
+         ok(size == rawinput_size, "GetRawInputBuffer returned unexpected size: %u\n", size);
+ 
+         size = sizeof(buffer);
+         memset(buffer, 0, sizeof(buffer));
+         count = GetRawInputBuffer((RAWINPUT*)buffer, &size, sizeof(RAWINPUTHEADER));
+-        todo_wine
+         ok(count == 3, "GetRawInputBuffer returned %u\n", count);
+         ok(size == sizeof(buffer), "GetRawInputBuffer returned unexpected size: %u\n", size);
+-        todo_wine
+         ok(rawinput_buffer_mouse_x(buffer, 0) == 2, "Unexpected rawinput data: %d\n", rawinput_buffer_mouse_x(buffer, 0));
+-        todo_wine
+         ok(rawinput_buffer_mouse_x(buffer, 1) == 3, "Unexpected rawinput data: %d\n", rawinput_buffer_mouse_x(buffer, 1));
+-        todo_wine
+         ok(rawinput_buffer_mouse_x(buffer, 2) == 4, "Unexpected rawinput data: %d\n", rawinput_buffer_mouse_x(buffer, 2));
+ 
+         /* the first event should be removed by the next GetRawInputBuffer call
+@@ -1900,9 +1894,7 @@ static LRESULT CALLBACK rawinputbuffer_wndproc(HWND hwnd, UINT msg, WPARAM wpara
+             size = rawinput_size + 1;
+             memset(buffer, 0, sizeof(buffer));
+             count = GetRawInputBuffer((RAWINPUT*)buffer, &size, sizeof(RAWINPUTHEADER));
+-            todo_wine
+             ok(count == 1, "GetRawInputBuffer returned %u\n", count);
+-            todo_wine
+             ok(rawinput_buffer_mouse_x(buffer, 0) == 5, "Unexpected rawinput data: %d\n", rawinput_buffer_mouse_x(buffer, 0));
+ 
+             /* peek the messages now, they should still arrive in the correct order */
+@@ -1917,7 +1909,6 @@ static LRESULT CALLBACK rawinputbuffer_wndproc(HWND hwnd, UINT msg, WPARAM wpara
+         if (iteration == 1)
+         {
+             ok(count == sizeof(ri), "GetRawInputData failed\n");
+-            todo_wine
+             ok(ri.data.mouse.lLastX == 6, "Unexpected rawinput data: %d\n", ri.data.mouse.lLastX);
+         }
+         else
+@@ -1959,15 +1950,12 @@ static void test_GetRawInputBuffer(void)
+ 
+     SetLastError(0xdeadbeef);
+     count = GetRawInputBuffer(NULL, NULL, sizeof(RAWINPUTHEADER));
+-    todo_wine
+     ok(count == ~0U, "GetRawInputBuffer succeeded\n");
+-    todo_wine
+     ok(GetLastError() == ERROR_INVALID_PARAMETER, "GetRawInputBuffer returned %08x\n", GetLastError());
+ 
+     size = sizeof(buffer);
+     count = GetRawInputBuffer(NULL, &size, sizeof(RAWINPUTHEADER));
+     ok(count == 0U, "GetRawInputBuffer returned %u\n", count);
+-    todo_wine
+     ok(size == 0U, "GetRawInputBuffer returned unexpected size: %u\n", size);
+ 
+     size = 0;
+@@ -1978,15 +1966,12 @@ static void test_GetRawInputBuffer(void)
+     SetLastError(0xdeadbeef);
+     size = sizeof(buffer);
+     count = GetRawInputBuffer((RAWINPUT*)buffer, &size, 0);
+-    todo_wine
+     ok(count == ~0U, "GetRawInputBuffer succeeded\n");
+-    todo_wine
+     ok(GetLastError() == ERROR_INVALID_PARAMETER, "GetRawInputBuffer returned %08x\n", GetLastError());
+ 
+     size = sizeof(buffer);
+     count = GetRawInputBuffer((RAWINPUT*)buffer, &size, sizeof(RAWINPUTHEADER));
+     ok(count == 0U, "GetRawInputBuffer returned %u\n", count);
+-    todo_wine
+     ok(size == 0U, "GetRawInputBuffer returned unexpected size: %u\n", size);
+ 
+     mouse_event(MOUSEEVENTF_MOVE, 5, 0, 0, 0);
+@@ -1994,34 +1979,26 @@ static void test_GetRawInputBuffer(void)
+     SetLastError(0xdeadbeef);
+     size = 0;
+     count = GetRawInputBuffer((RAWINPUT*)buffer, &size, sizeof(RAWINPUTHEADER));
+-    todo_wine
+     ok(count == ~0U, "GetRawInputBuffer succeeded\n");
+-    todo_wine
+     ok(size == rawinput_size, "GetRawInputBuffer returned unexpected size: %u\n", size);
+-    todo_wine
+     ok(GetLastError() == ERROR_INSUFFICIENT_BUFFER, "GetRawInputBuffer returned %08x\n", GetLastError());
+ 
+     size = 0;
+     count = GetRawInputBuffer(NULL, &size, sizeof(RAWINPUTHEADER));
+     ok(count == 0, "GetRawInputBuffer returned %u\n", count);
+-    todo_wine
+     ok(size == rawinput_size, "GetRawInputBuffer returned unexpected size: %u\n", size);
+ 
+     SetLastError(0xdeadbeef);
+     size = sizeof(buffer);
+     count = GetRawInputBuffer((RAWINPUT*)buffer, &size, 0);
+-    todo_wine
+     ok(count == ~0U, "GetRawInputBuffer succeeded\n");
+-    todo_wine
+     ok(GetLastError() == ERROR_INVALID_PARAMETER, "GetRawInputBuffer returned %08x\n", GetLastError());
+ 
+     size = sizeof(buffer);
+     memset(buffer, 0, sizeof(buffer));
+     count = GetRawInputBuffer((RAWINPUT*)buffer, &size, sizeof(RAWINPUTHEADER));
+-    todo_wine
+     ok(count == 1U, "GetRawInputBuffer returned %u\n", count);
+     ok(size == sizeof(buffer), "GetRawInputBuffer returned unexpected size: %u\n", size);
+-    todo_wine
+     ok(rawinput_buffer_mouse_x(buffer, 0) == 5, "Unexpected rawinput data: %d\n", rawinput_buffer_mouse_x(buffer, 0));
+ 
+ 
+@@ -2033,11 +2010,8 @@ static void test_GetRawInputBuffer(void)
+     size = rawinput_size;
+     memset(buffer, 0, sizeof(buffer));
+     count = GetRawInputBuffer((RAWINPUT*)buffer, &size, sizeof(RAWINPUTHEADER));
+-    todo_wine
+     ok(count == ~0U, "GetRawInputBuffer succeeded\n");
+-    todo_wine
+     ok(GetLastError() == ERROR_INSUFFICIENT_BUFFER, "GetRawInputBuffer returned %08x\n", GetLastError());
+-    todo_wine
+     ok(rawinput_buffer_mouse_x(buffer, 0) == 5, "Unexpected rawinput data: %d\n", rawinput_buffer_mouse_x(buffer, 0));
+ 
+     size = sizeof(buffer);
+@@ -2051,7 +2025,6 @@ static void test_GetRawInputBuffer(void)
+     mouse_event(MOUSEEVENTF_MOVE, 3, 0, 0, 0);
+     mouse_event(MOUSEEVENTF_MOVE, 4, 0, 0, 0);
+     empty_message_queue();
+-    todo_wine
+     ok(rawinputbuffer_wndproc_count == 2, "Spurious WM_INPUT messages\n");
+ 
+     raw_devices[0].dwFlags = RIDEV_REMOVE;
+diff --git a/dlls/user32/user_private.h b/dlls/user32/user_private.h
+index d7f4741ebe6..eb828203597 100644
+--- a/dlls/user32/user_private.h
++++ b/dlls/user32/user_private.h
+@@ -196,7 +196,7 @@ struct user_thread_info
+     struct user_key_state_info   *key_state;              /* Cache of global key state */
+     HWND                          top_window;             /* Desktop window */
+     HWND                          msg_window;             /* HWND_MESSAGE parent window */
+-    RAWINPUT                     *rawinput;               /* Rawinput buffer */
++    RAWINPUT                     *rawinput;
+ };
+ 
+ C_ASSERT( sizeof(struct user_thread_info) <= sizeof(((TEB *)0)->Win32ClientInfo) );
+diff --git a/server/protocol.def b/server/protocol.def
+index c3442c06e9b..d1f20497e1d 100644
+--- a/server/protocol.def
++++ b/server/protocol.def
+@@ -3880,6 +3880,16 @@ struct handle_info
+ #define SET_CURSOR_NOCLIP 0x10
+ 
+ 
++/* Batch read rawinput message data */
++@REQ(get_rawinput_buffer)
++    data_size_t rawinput_size; /* size of RAWINPUT structure */
++    data_size_t buffer_size;   /* size of output buffer */
++@REPLY
++    data_size_t next_size; /* minimum size to get next message data */
++    unsigned int count;
++    VARARG(data,bytes);
++@END
++
+ /* Modify the list of registered rawinput devices */
+ @REQ(update_rawinput_devices)
+     VARARG(devices,rawinput_devices);
+diff --git a/server/queue.c b/server/queue.c
+index 84ee0f9a4ea..88fc415bfaa 100644
+--- a/server/queue.c
++++ b/server/queue.c
+@@ -3112,6 +3112,46 @@ DECL_HANDLER(set_cursor)
+     reply->last_change = input->desktop->cursor.last_change;
+ }
+ 
++DECL_HANDLER(get_rawinput_buffer)
++{
++    struct thread_input *input = current->queue->input;
++    data_size_t size = 0, next_size = 0;
++    struct list *ptr;
++    char *buf, *cur;
++    int count = 0;
++
++    if (!req->buffer_size) buf = NULL;
++    else if (!(buf = mem_alloc( get_reply_max_size() )))
++        return;
++
++    cur = buf;
++    ptr = list_head( &input->msg_list );
++    while (ptr)
++    {
++        struct message *msg = LIST_ENTRY( ptr, struct message, entry );
++        struct hardware_msg_data *data = msg->data;
++
++        ptr = list_next( &input->msg_list, ptr );
++        if (msg->msg != WM_INPUT) continue;
++
++        next_size = req->rawinput_size;
++        if (size + next_size > req->buffer_size) break;
++        if (cur + sizeof(*data) > buf + get_reply_max_size()) break;
++
++        memcpy(cur, data, sizeof(*data));
++        list_remove( &msg->entry );
++        free_message( msg );
++
++        size += next_size;
++        cur += sizeof(*data);
++        count++;
++    }
++
++    reply->next_size = next_size;
++    reply->count = count;
++    set_reply_data_ptr( buf, cur - buf );
++}
++
+ DECL_HANDLER(update_rawinput_devices)
+ {
+     const struct rawinput_device *devices = get_req_data();
+
+-- 
+2.27.0
+
+From: "Rémi Bernon" <rbernon@codeweavers.com>
+Subject: [PATCH 5/5] user32: Return failure when rawinput has been overwritten.
+Message-Id: <20200625170844.1849440-5-rbernon@codeweavers.com>
+Date: Thu, 25 Jun 2020 19:08:44 +0200
+In-Reply-To: <20200625170844.1849440-1-rbernon@codeweavers.com>
+References: <20200625170844.1849440-1-rbernon@codeweavers.com>
+
+Signed-off-by: Rémi Bernon <rbernon@codeweavers.com>
+---
+ dlls/user32/rawinput.c    | 3 ++-
+ dlls/user32/tests/input.c | 3 ---
+ 2 files changed, 2 insertions(+), 4 deletions(-)
+
+diff --git a/dlls/user32/rawinput.c b/dlls/user32/rawinput.c
+index fa0c5070b03..45f990b9726 100644
+--- a/dlls/user32/rawinput.c
++++ b/dlls/user32/rawinput.c
+@@ -452,7 +452,7 @@ UINT WINAPI GetRawInputData(HRAWINPUT rawinput, UINT command, void *data, UINT *
+     TRACE("rawinput %p, command %#x, data %p, data_size %p, header_size %u.\n",
+             rawinput, command, data, data_size, header_size);
+ 
+-    if (!ri)
++    if (!ri || !ri->header.dwSize)
+         return ~0U;
+ 
+     if (header_size != sizeof(RAWINPUTHEADER))
+@@ -481,6 +481,7 @@ UINT WINAPI GetRawInputData(HRAWINPUT rawinput, UINT command, void *data, UINT *
+ 
+     if (*data_size < s) return ~0U;
+     memcpy(data, ri, s);
++    ri->header.dwSize = 0;
+     return s;
+ }
+ 
+diff --git a/dlls/user32/tests/input.c b/dlls/user32/tests/input.c
+index 9c35b1e36bd..2db0e5ee515 100644
+--- a/dlls/user32/tests/input.c
++++ b/dlls/user32/tests/input.c
+@@ -1912,10 +1912,7 @@ static LRESULT CALLBACK rawinputbuffer_wndproc(HWND hwnd, UINT msg, WPARAM wpara
+             ok(ri.data.mouse.lLastX == 6, "Unexpected rawinput data: %d\n", ri.data.mouse.lLastX);
+         }
+         else
+-        {
+-            todo_wine
+             ok(count == ~0U, "GetRawInputData succeeded\n");
+-        }
+     }
+ 
+     return DefWindowProcA(hwnd, msg, wparam, lparam);
+
+-- 
+2.27.0
+
