@@ -50,6 +50,10 @@ endif
 export CC
 export CXX
 
+CC32 := gcc -m32 -mstackrealign
+CXX32 := g++ -m32 -mstackrealign
+PKG_CONFIG32 := i686-linux-gnu-pkg-config
+
 cc-option = $(shell if test -z "`echo 'void*p=1;' | \
               $(1) $(2) -S -o /dev/null -xc - 2>&1 | grep -- $(2) -`"; \
               then echo "$(2)"; else echo "$(3)"; fi ;)
@@ -78,9 +82,11 @@ else ifneq ($(STEAMRT32_MODE),)
 endif
 
 ifneq ($(STEAMRT_PATH),)
-	STEAM_RUNTIME_RUNSH := $(STEAMRT_PATH)/run.sh
+	STEAM_RUNTIME_RUNSH := $(STEAMRT_PATH)/run-in-soldier --
+	STEAM_RUNTIME_LIB_PATH := $(shell $(STEAM_RUNTIME_RUNSH) env | grep LD_LIBRARY_PATH | cut -d= -f2-)
 else
 	STEAM_RUNTIME_RUNSH :=
+	STEAM_RUNTIME_LIB_PATH :=
 endif
 
 SELECT_DOCKER_IMAGE :=
@@ -262,21 +268,6 @@ VKD3D := $(SRCDIR)/vkd3d-proton
 VKD3D_OBJ32 := ./obj-vkd3d32
 VKD3D_OBJ64 := ./obj-vkd3d64
 
-CMAKE := $(SRCDIR)/cmake
-CMAKE_OBJ32 := ./obj-cmake32
-CMAKE_OBJ64 := ./obj-cmake64
-CMAKE_BIN32 := $(CMAKE_OBJ32)/built/bin/cmake
-CMAKE_BIN64 := $(CMAKE_OBJ64)/built/bin/cmake
-
-BISON_VER = 3.3.2
-BISON_TARBALL := bison-$(BISON_VER).tar.xz
-BISON := $(SRCDIR)/contrib/bison-$(BISON_VER)
-BISON_OBJ32 := ./obj-bison32
-BISON_OBJ64 := ./obj-bison64
-BISON_BIN32 := $(BISON_OBJ32)/built/bin/bison
-BISON_BIN64 := $(BISON_OBJ64)/built/bin/bison
-
-
 FONTS := $(SRCDIR)/fonts
 FONTS_OBJ := ./obj-fonts
 
@@ -294,10 +285,8 @@ OBJ_DIRS := $(TOOLS_DIR32)        $(TOOLS_DIR64)        \
             $(WINE_OBJ32)         $(WINE_OBJ64)         \
             $(VRCLIENT_OBJ32)     $(VRCLIENT_OBJ64)     \
             $(DXVK_OBJ32)         $(DXVK_OBJ64)         \
-            $(BISON_OBJ32)        $(BISON_OBJ64)        \
             $(WINEWIDL_OBJ32)     $(WINEWIDL_OBJ64)     \
-            $(VKD3D_OBJ32)        $(VKD3D_OBJ64)        \
-            $(CMAKE_OBJ32)        $(CMAKE_OBJ64)
+            $(VKD3D_OBJ32)        $(VKD3D_OBJ64)
 
 $(OBJ_DIRS):
 	mkdir -p $@
@@ -309,19 +298,13 @@ $(OBJ_DIRS):
 
 .PHONY: downloads
 
-BISON_TARBALL_URL := https://ftpmirror.gnu.org/bison/$(BISON_TARBALL)
 GECKO64_TARBALL_URL := https://dl.winehq.org/wine/wine-gecko/$(GECKO_VER)/$(GECKO64_TARBALL)
 GECKO32_TARBALL_URL := https://dl.winehq.org/wine/wine-gecko/$(GECKO_VER)/$(GECKO32_TARBALL)
 MONO_TARBALL_URL := https://github.com/madewokherd/wine-mono/releases/download/wine-mono-$(WINEMONO_VER)/$(WINEMONO_TARBALL)
 
-SHARED_BISON_TARBALL := $(SRCDIR)/../bison/$(BISON_TARBALL)
 SHARED_GECKO64_TARBALL := $(SRCDIR)/../gecko/$(GECKO64_TARBALL)
 SHARED_GECKO32_TARBALL := $(SRCDIR)/../gecko/$(GECKO32_TARBALL)
 SHARED_MONO_TARBALL := $(SRCDIR)/../mono/$(WINEMONO_TARBALL)
-
-$(SHARED_BISON_TARBALL):
-	mkdir -p $(dir $@)
-	wget -O "$@" "$(BISON_TARBALL_URL)"
 
 $(SHARED_GECKO64_TARBALL):
 	mkdir -p $(dir $@)
@@ -335,7 +318,7 @@ $(SHARED_MONO_TARBALL):
 	mkdir -p $(dir $@)
 	wget -O "$@" "$(MONO_TARBALL_URL)"
 
-downloads: $(SHARED_BISON_TARBALL) $(SHARED_GECKO64_TARBALL) $(SHARED_GECKO32_TARBALL) $(SHARED_MONO_TARBALL)
+downloads: $(SHARED_GECKO64_TARBALL) $(SHARED_GECKO32_TARBALL) $(SHARED_MONO_TARBALL)
 
 ##
 ## dist/install -- steps to finalize the install
@@ -460,14 +443,20 @@ GOAL_TARGETS += dist
 dist: $(DIST_TARGETS) wine gst_good vrclient lsteamclient steam dxvk vkd3d-proton | $(DST_DIR)
 	echo `date '+%s'` `GIT_DIR=$(abspath $(SRCDIR)/.git) git describe --tags` > $(DIST_VERSION)
 	cp $(DIST_VERSION) $(DST_BASE)/
-	rm -rf $(abspath $(DIST_PREFIX)) && \
-	WINEPREFIX=$(abspath $(DIST_PREFIX)) $(STEAM_RUNTIME_RUNSH) $(WINE_OUT_BIN) wineboot && \
-		WINEPREFIX=$(abspath $(DIST_PREFIX)) $(STEAM_RUNTIME_RUNSH) $(WINE_OUT_SERVER) -w && \
-		ln -s $(FONTLINKPATH)/LiberationSans-Regular.ttf $(abspath $(DIST_PREFIX))/drive_c/windows/Fonts/arial.ttf && \
-		ln -s $(FONTLINKPATH)/LiberationSans-Bold.ttf $(abspath $(DIST_PREFIX))/drive_c/windows/Fonts/arialbd.ttf && \
-		ln -s $(FONTLINKPATH)/LiberationSerif-Regular.ttf $(abspath $(DIST_PREFIX))/drive_c/windows/Fonts/times.ttf && \
-		ln -s $(FONTLINKPATH)/LiberationMono-Regular.ttf $(abspath $(DIST_PREFIX))/drive_c/windows/Fonts/cour.ttf && \
-		ln -s $(FONTLINKPATH)/SourceHanSansSCRegular.otf $(abspath $(DIST_PREFIX))/drive_c/windows/Fonts/msyh.ttf
+	rm -rf $(abspath $(DIST_PREFIX))
+	$(STEAM_RUNTIME_RUNSH) env \
+		WINEPREFIX=$(abspath $(DIST_PREFIX)) \
+		LD_LIBRARY_PATH=$(abspath $(DST_DIR)/lib64):$(abspath $(DST_DIR)/lib):$(STEAM_RUNTIME_LIB_PATH) \
+		$(WINE_OUT_BIN) wineboot
+	$(STEAM_RUNTIME_RUNSH) env \
+		WINEPREFIX=$(abspath $(DIST_PREFIX)) \
+		LD_LIBRARY_PATH=$(abspath $(DST_DIR)/lib64):$(abspath $(DST_DIR)/lib):$(STEAM_RUNTIME_LIB_PATH) \
+		$(WINE_OUT_SERVER) -w
+	ln -s $(FONTLINKPATH)/LiberationSans-Regular.ttf $(abspath $(DIST_PREFIX))/drive_c/windows/Fonts/arial.ttf
+	ln -s $(FONTLINKPATH)/LiberationSans-Bold.ttf $(abspath $(DIST_PREFIX))/drive_c/windows/Fonts/arialbd.ttf
+	ln -s $(FONTLINKPATH)/LiberationSerif-Regular.ttf $(abspath $(DIST_PREFIX))/drive_c/windows/Fonts/times.ttf
+	ln -s $(FONTLINKPATH)/LiberationMono-Regular.ttf $(abspath $(DIST_PREFIX))/drive_c/windows/Fonts/cour.ttf
+	ln -s $(FONTLINKPATH)/SourceHanSansSCRegular.otf $(abspath $(DIST_PREFIX))/drive_c/windows/Fonts/msyh.ttf
 #The use of "arial" here is for compatibility with programs that require that exact string. These links do not point to Arial.
 #The use of "times" here is for compatibility with programs that require that exact string. This link does not point to Times New Roman.
 #The use of "cour" here is for compatibility with programs that require that exact string. This link does not point to Courier New.
@@ -529,6 +518,9 @@ $(GLIB_CONFIGURE_FILES32): $(MAKEFILE_DEP) | $(GLIB_OBJ32)
 		rm -f "$(abspath $(GLIB_OBJ32))"/meson-private/coredata.dat; \
 	fi
 	cd "$(abspath $(GLIB))" && \
+		CC="$(CC32)" \
+		CXX="$(CXX32)" \
+		PKG_CONFIG="$(PKG_CONFIG32)" \
 		meson --prefix="$(abspath $(TOOLS_DIR32))" --libdir="lib" $(GLIB_MESON_ARGS) $(MESON_STRIP_ARG) --buildtype=release "$(abspath $(GLIB_OBJ32))"
 
 ## glib goals
@@ -610,6 +602,9 @@ $(GST_ORC_CONFIGURE_FILES32): $(MAKEFILE_DEP) glib32 | $(GST_ORC_OBJ32)
 	fi
 	cd "$(abspath $(GST_ORC))" && \
 	PATH="$(abspath $(TOOLS_DIR32))/bin:$(PATH)" \
+		CC="$(CC32)" \
+		CXX="$(CXX32)" \
+		PKG_CONFIG="$(PKG_CONFIG32)" \
 		PKG_CONFIG_PATH=$(abspath $(TOOLS_DIR32))/lib/pkgconfig \
 		meson --prefix="$(abspath $(TOOLS_DIR32))" --libdir="lib" $(GST_ORC_MESON_ARGS) $(MESON_STRIP_ARG) "$(abspath $(GST_ORC_OBJ32))"
 
@@ -675,6 +670,9 @@ $(GSTREAMER_CONFIGURE_FILES32): $(MAKEFILE_DEP) gst_orc32 | $(GSTREAMER_OBJ32)
 	fi
 	cd "$(abspath $(GSTREAMER))" && \
 	PATH="$(abspath $(TOOLS_DIR32))/bin:$(PATH)" \
+		CC="$(CC32)" \
+		CXX="$(CXX32)" \
+		PKG_CONFIG="$(PKG_CONFIG32)" \
 		PKG_CONFIG_PATH=$(abspath $(TOOLS_DIR32))/lib/pkgconfig \
 		meson --prefix="$(abspath $(TOOLS_DIR32))" --libdir="lib" $(GSTREAMER_MESON_ARGS) $(MESON_STRIP_ARG) --buildtype=release "$(abspath $(GSTREAMER_OBJ32))"
 
@@ -764,6 +762,9 @@ $(GST_BASE_CONFIGURE_FILES32): $(MAKEFILE_DEP) gstreamer32 | $(GST_BASE_OBJ32)
 	fi
 	cd "$(abspath $(GST_BASE))" && \
 	PATH="$(abspath $(TOOLS_DIR32))/bin:$(PATH)" \
+		CC="$(CC32)" \
+		CXX="$(CXX32)" \
+		PKG_CONFIG="$(PKG_CONFIG32)" \
 		PKG_CONFIG_PATH=$(abspath $(TOOLS_DIR32))/lib/pkgconfig \
 		meson --prefix="$(abspath $(TOOLS_DIR32))" --libdir="lib" $(GST_BASE_MESON_ARGS) $(MESON_STRIP_ARG) --buildtype=release "$(abspath $(GST_BASE_OBJ32))"
 
@@ -878,6 +879,9 @@ $(GST_GOOD_CONFIGURE_FILES32): $(MAKEFILE_DEP) gst_base32 | $(GST_GOOD_OBJ32)
 	fi
 	cd "$(abspath $(GST_GOOD))" && \
 	PATH="$(abspath $(TOOLS_DIR32))/bin:$(PATH)" \
+		CC="$(CC32)" \
+		CXX="$(CXX32)" \
+		PKG_CONFIG="$(PKG_CONFIG32)" \
 		PKG_CONFIG_PATH=$(abspath $(TOOLS_DIR32))/lib/pkgconfig \
 		meson --prefix="$(abspath $(TOOLS_DIR32))" --libdir="lib" $(GST_GOOD_MESON_ARGS) $(MESON_STRIP_ARG) --buildtype=release "$(abspath $(GST_GOOD_OBJ32))"
 
@@ -1048,17 +1052,20 @@ FAUDIO_CONFIGURE_FILES32 := $(FAUDIO_OBJ32)/Makefile
 FAUDIO_CONFIGURE_FILES64 := $(FAUDIO_OBJ64)/Makefile
 
 $(FAUDIO_CONFIGURE_FILES32): SHELL = $(CONTAINER_SHELL32)
-$(FAUDIO_CONFIGURE_FILES32): $(FAUDIO)/CMakeLists.txt $(MAKEFILE_DEP) $(CMAKE_BIN32) | $(FAUDIO_OBJ32)
+$(FAUDIO_CONFIGURE_FILES32): $(FAUDIO)/CMakeLists.txt $(MAKEFILE_DEP) | $(FAUDIO_OBJ32)
 	cd $(dir $@) && \
-		../$(CMAKE_BIN32) $(abspath $(FAUDIO)) \
+		PKG_CONFIG_PATH=$(abspath $(TOOLS_DIR32))/lib/pkgconfig \
+		CC="$(CC32)" \
+		CXX="$(CXX32)" \
+		PKG_CONFIG="$(PKG_CONFIG32)" \
+		cmake $(abspath $(FAUDIO)) \
 			-DCMAKE_INSTALL_PREFIX="$(abspath $(TOOLS_DIR32))" \
-			$(FAUDIO_CMAKE_FLAGS) \
-			-DCMAKE_C_FLAGS="-m32" -DCMAKE_CXX_FLAGS="-m32"
+			$(FAUDIO_CMAKE_FLAGS)
 
 $(FAUDIO_CONFIGURE_FILES64): SHELL = $(CONTAINER_SHELL64)
-$(FAUDIO_CONFIGURE_FILES64): $(FAUDIO)/CMakeLists.txt $(MAKEFILE_DEP) $(CMAKE_BIN64) | $(FAUDIO_OBJ64)
+$(FAUDIO_CONFIGURE_FILES64): $(FAUDIO)/CMakeLists.txt $(MAKEFILE_DEP) | $(FAUDIO_OBJ64)
 	cd $(dir $@) && \
-		../$(CMAKE_BIN64) $(abspath $(FAUDIO)) \
+		cmake $(abspath $(FAUDIO)) \
 			-DCMAKE_INSTALL_PREFIX="$(abspath $(TOOLS_DIR64))" \
 			$(FAUDIO_CMAKE_FLAGS)
 
@@ -1251,7 +1258,7 @@ WINE32_MAKE_ARGS := \
 
 # 64bit-configure
 $(WINE_CONFIGURE_FILES64): SHELL = $(CONTAINER_SHELL64)
-$(WINE_CONFIGURE_FILES64): $(MAKEFILE_DEP) | faudio64 gst_base64 $(WINE_OBJ64) bison64
+$(WINE_CONFIGURE_FILES64): $(MAKEFILE_DEP) | faudio64 gst_base64 $(WINE_OBJ64)
 	cd $(dir $@) && \
 		../$(WINE)/configure \
 			--without-curses \
@@ -1259,28 +1266,28 @@ $(WINE_CONFIGURE_FILES64): $(MAKEFILE_DEP) | faudio64 gst_base64 $(WINE_OBJ64) b
 			--disable-tests \
 			--prefix=$(abspath $(DST_DIR)) \
 			STRIP=$(STRIP_QUOTED) \
-			BISON=$(abspath $(BISON_BIN64)) \
 			CFLAGS="-I$(abspath $(TOOLS_DIR64))/include -g $(COMMON_FLAGS)" \
 			CXXFLAGS="-I$(abspath $(TOOLS_DIR64))/include -g $(COMMON_FLAGS) -std=c++17" \
 			LDFLAGS=-L$(abspath $(TOOLS_DIR64))/lib \
 			PKG_CONFIG_PATH=$(abspath $(TOOLS_DIR64))/lib/pkgconfig \
+			LD_LIBRARY_PATH=$(abspath $(TOOLS_DIR64))/lib \
 			CC=$(CC_QUOTED) \
 			CXX=$(CXX_QUOTED)
 
 # 32-bit configure
 $(WINE_CONFIGURE_FILES32): SHELL = $(CONTAINER_SHELL32)
-$(WINE_CONFIGURE_FILES32): $(MAKEFILE_DEP) | faudio32 gst_base32 $(WINE_OBJ32) bison32
+$(WINE_CONFIGURE_FILES32): $(MAKEFILE_DEP) | faudio32 gst_base32 $(WINE_OBJ32)
 	cd $(dir $@) && \
 		../$(WINE)/configure \
 			--without-curses \
 			--disable-tests \
 			--prefix=$(abspath $(WINE_DST32)) \
 			STRIP=$(STRIP_QUOTED) \
-			BISON=$(abspath $(BISON_BIN32)) \
 			CFLAGS="-I$(abspath $(TOOLS_DIR32))/include -g $(COMMON_FLAGS)" \
 			CXXFLAGS="-I$(abspath $(TOOLS_DIR32))/include -g $(COMMON_FLAGS) -std=c++17" \
 			LDFLAGS=-L$(abspath $(TOOLS_DIR32))/lib \
 			PKG_CONFIG_PATH=$(abspath $(TOOLS_DIR32))/lib/pkgconfig \
+			LD_LIBRARY_PATH=$(abspath $(TOOLS_DIR32))/lib \
 			CC=$(CC_QUOTED) \
 			CXX=$(CXX_QUOTED)
 
@@ -1428,139 +1435,8 @@ vrclient32: $(VRCLIENT_CONFIGURE_FILES32) | $(WINE_BUILDTOOLS32) $(filter $(MAKE
 		cp -a ../$(VRCLIENT_OBJ32)/vrclient.dll.fake ../$(DST_DIR)/lib/wine/fakedlls/vrclient.dll
 
 ##
-## cmake -- necessary for FAudio, not part of steam runtime
-##
-
-# TODO Don't bother with this in native mode
-
-## Create & configure object directory for cmake
-
-CMAKE_CONFIGURE_FILES32 := $(CMAKE_OBJ32)/Makefile
-CMAKE_CONFIGURE_FILES64 := $(CMAKE_OBJ64)/Makefile
-
-# 64-bit configure
-$(CMAKE_CONFIGURE_FILES64): SHELL = $(CONTAINER_SHELL64)
-$(CMAKE_CONFIGURE_FILES64): $(MAKEFILE_DEP) | $(CMAKE_OBJ64)
-	cd "$(CMAKE_OBJ64)" && \
-		../$(CMAKE)/configure --parallel=$(SUBMAKE_JOBS) --prefix=$(abspath $(CMAKE_OBJ64))/built
-
-# 32-bit configure
-$(CMAKE_CONFIGURE_FILES32): SHELL = $(CONTAINER_SHELL32)
-$(CMAKE_CONFIGURE_FILES32): $(MAKEFILE_DEP) | $(CMAKE_OBJ32)
-	cd "$(CMAKE_OBJ32)" && \
-		../$(CMAKE)/configure --parallel=$(SUBMAKE_JOBS) --prefix=$(abspath $(CMAKE_OBJ32))/built
-
-
-## cmake goals
-CMAKE_TARGETS = cmake cmake_configure cmake32 cmake64 cmake_configure32 cmake_configure64
-
-ALL_TARGETS += $(CMAKE_TARGETS)
-
-.PHONY: $(CMAKE_TARGETS)
-
-cmake_configure: $(CMAKE_CONFIGURE_FILES32) $(CMAKE_CONFIGURE_FILES64)
-
-cmake_configure32: $(CMAKE_CONFIGURE_FILES32)
-
-cmake_configure64: $(CMAKE_CONFIGURE_FILES64)
-
-cmake: cmake32 cmake64
-
-# These have multiple targets that come from one invocation.  The way to do that is to have both targets on a single
-# intermediate.
-.INTERMEDIATE: cmake64-intermediate cmake32-intermediate
-
-$(CMAKE_BIN64) cmake64: cmake64-intermediate
-
-cmake64-intermediate: SHELL = $(CONTAINER_SHELL64)
-cmake64-intermediate: $(CMAKE_CONFIGURE_FILES64) $(filter $(MAKECMDGOALS),cmake64)
-	+$(MAKE) -C $(CMAKE_OBJ64)
-	+$(MAKE) -C $(CMAKE_OBJ64) install
-	touch $(CMAKE_BIN64)
-
-$(CMAKE_BIN32) cmake32: cmake32-intermediate
-
-cmake32-intermediate: SHELL = $(CONTAINER_SHELL32)
-cmake32-intermediate: $(CMAKE_CONFIGURE_FILES32) $(filter $(MAKECMDGOALS),cmake32)
-	+$(MAKE) -C $(CMAKE_OBJ32)
-	+$(MAKE) -C $(CMAKE_OBJ32) install
-	touch $(CMAKE_BIN32)
-
-##
-## bison -- necessary for wine, steam runtime version too old
-##
-
-# TODO Don't bother with this in native mode
-
-$(BISON):
-	if [ -e "$(SRCDIR)/../bison/$(BISON_TARBALL)" ]; then \
-		mkdir -p $(dir $@); \
-		tar -xf "$(SRCDIR)/../bison/$(BISON_TARBALL)" -C "$(dir $@)"; \
-	else \
-		mkdir -p $(SRCDIR)/contrib/; \
-		if [ ! -e "$(SRCDIR)/contrib/$(BISON_TARBALL)" ]; then \
-			echo ">>>> Downloading bison. To avoid this in future, put it here: $(SRCDIR)/../bison/$(BISON_TARBALL)"; \
-			wget -O "$(SRCDIR)/contrib/$(BISON_TARBALL)" "$(BISON_TARBALL_URL)"; \
-		fi; \
-		tar -xf "$(SRCDIR)/contrib/$(BISON_TARBALL)" -C "$(dir $@)"; \
-	fi
-
-BISON_CONFIGURE_FILES32 := $(BISON_OBJ32)/Makefile
-BISON_CONFIGURE_FILES64 := $(BISON_OBJ64)/Makefile
-
-# 64-bit configure
-$(BISON_CONFIGURE_FILES64): SHELL = $(CONTAINER_SHELL64)
-$(BISON_CONFIGURE_FILES64): $(MAKEFILE_DEP) $(BISON) | $(BISON_OBJ64)
-	cd "$(BISON_OBJ64)" && \
-		../$(BISON)/configure --prefix=$(abspath $(BISON_OBJ64))/built LIBS='-lrt'
-
-# 32-bit configure
-$(BISON_CONFIGURE_FILES32): SHELL = $(CONTAINER_SHELL32)
-$(BISON_CONFIGURE_FILES32): $(MAKEFILE_DEP) $(BISON) | $(BISON_OBJ32)
-	cd "$(BISON_OBJ32)" && \
-		../$(BISON)/configure --prefix=$(abspath $(BISON_OBJ32))/built LIBS='-lrt'
-
-
-## bison goals
-BISON_TARGETS = bison bison_configure bison32 bison64 bison_configure32 bison_configure64
-
-ALL_TARGETS += $(BISON_TARGETS)
-
-.PHONY: $(BISON_TARGETS)
-
-bison_configure: $(BISON_CONFIGURE_FILES32) $(BISON_CONFIGURE_FILES64)
-
-bison_configure32: $(BISON_CONFIGURE_FILES32)
-
-bison_configure64: $(BISON_CONFIGURE_FILES64)
-
-bison: bison32 bison64
-
-# These have multiple targets that come from one invocation.  The way to do that is to have both targets on a single
-# intermediate.
-.INTERMEDIATE: bison64-intermediate bison32-intermediate
-
-$(BISON_BIN64) bison64: bison64-intermediate
-
-bison64-intermediate: SHELL = $(CONTAINER_SHELL64)
-bison64-intermediate: $(BISON_CONFIGURE_FILES64) $(filter $(MAKECMDGOALS),bison64)
-	+$(MAKE) -C $(BISON_OBJ64)
-	+$(MAKE) -C $(BISON_OBJ64) install
-	touch $(BISON_BIN64)
-
-$(BISON_BIN32) bison32: bison32-intermediate
-
-bison32-intermediate: SHELL = $(CONTAINER_SHELL32)
-bison32-intermediate: $(BISON_CONFIGURE_FILES32) $(filter $(MAKECMDGOALS),bison32)
-	+$(MAKE) -C $(BISON_OBJ32)
-	+$(MAKE) -C $(BISON_OBJ32) install
-	touch $(BISON_BIN32)
-
-##
 ## dxvk
 ##
-
-# TODO Builds outside container, could simplify a lot if it did not.
 
 ## Create & configure object directory for dxvk
 
@@ -1636,13 +1512,12 @@ WINEWIDL_CONFIGURE_FILES64 := $(WINEWIDL_OBJ64)/Makefile
 WINEWIDL_CONFIGURE_FILES32 := $(WINEWIDL_OBJ32)/Makefile
 
 $(WINEWIDL_CONFIGURE_FILES32): SHELL = $(CONTAINER_SHELL32)
-$(WINEWIDL_CONFIGURE_FILES32): $(MAKEFILE_DEP) | $(WINEWIDL_OBJ32) bison32
+$(WINEWIDL_CONFIGURE_FILES32): $(MAKEFILE_DEP) | $(WINEWIDL_OBJ32)
 	cd $(dir $@) && \
 		../$(WINE)/configure \
 			--without-curses \
 			--disable-tests \
 			STRIP=$(STRIP_QUOTED) \
-			BISON=$(abspath $(BISON_BIN32)) \
 			CFLAGS=-I$(abspath $(TOOLS_DIR64))"/include -g $(COMMON_FLAGS)" \
 			LDFLAGS=-L$(abspath $(TOOLS_DIR32))/lib \
 			PKG_CONFIG_PATH=$(abspath $(TOOLS_DIR32))/lib/pkgconfig \
@@ -1655,14 +1530,13 @@ $(WINEWIDL32): $(WINEWIDL_CONFIGURE_FILES32)
 	make tools/widl
 
 $(WINEWIDL_CONFIGURE_FILES64): SHELL = $(CONTAINER_SHELL64)
-$(WINEWIDL_CONFIGURE_FILES64): $(MAKEFILE_DEP) | $(WINEWIDL_OBJ64) bison64
+$(WINEWIDL_CONFIGURE_FILES64): $(MAKEFILE_DEP) | $(WINEWIDL_OBJ64)
 	cd $(dir $@) && \
 		../$(WINE)/configure \
 			--without-curses \
 			--enable-win64 \
 			--disable-tests \
 			STRIP=$(STRIP_QUOTED) \
-			BISON=$(abspath $(BISON_BIN64)) \
 			CFLAGS=-I$(abspath $(TOOLS_DIR64))"/include -g $(COMMON_FLAGS)" \
 			LDFLAGS=-L$(abspath $(TOOLS_DIR64))/lib \
 			PKG_CONFIG_PATH=$(abspath $(TOOLS_DIR64))/lib/pkgconfig \

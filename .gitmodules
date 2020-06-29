@@ -10,9 +10,6 @@
 [submodule "openvr"]
 	path = openvr
 	url = https://github.com/ValveSoftware/openvr
-[submodule "cmake"]
-	path = cmake
-	url = https://github.com/Kitware/CMake
 [submodule "fonts/liberation-fonts"]
 	path = fonts/liberation-fonts
 	url = https://github.com/liberationfonts/liberation-fonts
