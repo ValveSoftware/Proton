@@ -68,6 +68,10 @@
     cd wine-staging
     git reset --hard HEAD
     git clean -xdf
+    
+    echo "rawinput staging rebase"
+    patch -Np1 < ../patches/wine-hotfixes/0001-rawinput-staging-rebase.patch
+    #patch -Np1 < ../patches/wine-hotfixes/0001-rawinput-staging-rebase-include-keyboard.patch
     cd ..
 
     #WINE
@@ -90,6 +94,12 @@
 #    -W ntdll-Syscall_Emulation \
 #    -W ntdll-ThreadHideFromDebugger \
 
+    echo "winevulkan hotfixes pending"
+    patch -Np1 < ../patches/wine-hotfixes/pending/winevulkan-dont_initialize_vulkan_driver_in_dllmain.patch
+    
+    echo "rawinput pending"
+    patch -Np1 < ../patches/wine-hotfixes/pending/rawinput-pending-upstream.patch
+
     echo "applying staging patches"
     ../wine-staging/patches/patchinstall.sh DESTDIR="." --all \
     -W server-Desktop_Refcount \
@@ -101,16 +111,15 @@
     -W dinput-remap-joystick \
     -W user32-window-activation
     
-
+    echo "planet zoo/jurassic world hotfixes pending"
+    patch -Np1 < ../patches/wine-hotfixes/pending/planet-zoo-jurassic-world-pending-upstream-staging.patch
+        
     #WINE FAUDIO
     #echo "applying faudio patches"
     #patch -Np1 < ../patches/faudio/faudio-ffmpeg.patch
     
     ### GAME PATCH SECTION ###
     
-    echo "planet zoo/jurassic world fix"
-    patch -Np1 < ../patches/wine-hotfixes/pending/planet-zoo-jurassic-world-pending-upstream.patch
-
     #fix this
     echo "mech warrior online"
     patch -Np1 < ../patches/game-patches/mwo.patch
@@ -171,6 +180,9 @@
 
     echo "proton overlay mouse lag fix"
     patch -Np1 < ../patches/proton/proton-staging-rawinput-overlay.patch
+    
+    echo "proton force mouse fullscreen grab"
+    patch -Np1 < ../patches/proton/proton-nofshack-force-fullscreen-grab-mouse.patch
 
     echo "steamclient swap"
     patch -Np1 < ../patches/proton/proton-steamclient_swap.patch

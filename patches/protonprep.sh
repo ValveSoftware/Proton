@@ -77,7 +77,7 @@
 
     echo "proton gamepad conflict fix"
     git revert --no-commit da7d60bf97fb8726828e57f852e8963aacde21e9
-    
+            
     echo "fshack reverts"
     git revert --no-commit 6f9d20806e821ab07c8adf81ae6630fae94b00ef
     git revert --no-commit 145cfce1135a7e59cc4c89cd05b572403f188161
@@ -136,10 +136,15 @@
     -W dinput-reconnect-joystick \
     -W dinput-remap-joystick \
     -W user32-window-activation
+
+    echo "ashes of the benchmark fix"
+    patch -Np1 < ../patches/wine-hotfixes/pending/ashes-of-the-singularity-hotfix.patch
+
+    echo "planet zoo/jurassic world fix"
+    patch -Np1 < ../patches/wine-hotfixes/pending/planet-zoo-jurassic-world-pending-upstream-staging.patch
     
-#    echo "remi's fakedll rework patches"
-#    ntdll-Syscall_Emulation is included in remi's rework
-#    patch -Np1 < ../patches/wine-hotfixes/fakedll.patch
+    echo "winevulkan hotfixes"
+    patch -Np1 < ../patches/wine-hotfixes/pending/winevulkan-dont_initialize_vulkan_driver_in_dllmain.patch
     
     #WINE FAUDIO
     #echo "applying faudio patches"
@@ -187,11 +192,11 @@
     echo "amd ags"
     patch -Np1 < ../patches/proton/proton-amd_ags.patch
     
-    echo "applying winevulkan childwindow"
-    patch -Np1 < ../patches/wine-hotfixes/winevulkan-childwindow.patch
-
     echo "bypass compositor"
     patch -Np1 < ../patches/proton/proton-FS_bypass_compositor.patch
+
+    echo "applying winevulkan childwindow"
+    patch -Np1 < ../patches/wine-hotfixes/winevulkan-childwindow.patch
 
 #  TODO: Esync and Fsync compatibility was broken and disabled in 5.10.
 #    #WINE FSYNC
