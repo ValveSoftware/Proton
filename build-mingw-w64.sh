@@ -30,12 +30,12 @@ fi
 
 DST_DIR="$1"
 
-BINUTILS_VER=2.32
+BINUTILS_VER=2.34
 BINUTILS_SRCTARBALL=binutils-$BINUTILS_VER.tar.xz
 BINUTILS_URL="https://ftp.gnu.org/gnu/binutils/$BINUTILS_SRCTARBALL"
 BINUTILS_SRCDIR=binutils-$BINUTILS_VER
 
-GCC_VER=9.2.0
+GCC_VER=9.3.0
 GCC_SRCTARBALL=gcc-$GCC_VER.tar.xz
 GCC_URL="https://ftp.gnu.org/gnu/gcc/gcc-$GCC_VER/$GCC_SRCTARBALL"
 GCC_SRCDIR=gcc-$GCC_VER
@@ -44,7 +44,7 @@ MINGW_W64_GITVER=v7.0.0
 MINGW_W64_GITURL="git://git.code.sf.net/p/mingw-w64/mingw-w64"
 MINGW_W64_SRCDIR=mingw-w64-git
 
-ISL_VER=0.21
+ISL_VER=0.22.1
 ISL_SRCTARBALL=isl-$ISL_VER.tar.bz2
 ISL_URL="http://isl.gforge.inria.fr/isl-$ISL_VER.tar.bz2"
 ISL_SRCDIR=isl-$ISL_VER

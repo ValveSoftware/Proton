@@ -76,7 +76,7 @@ Vagrant.configure(2) do |config|
 
       #install host build-time dependencies
       apt-get update
-      apt-get install -y gpgv2 gnupg2 git docker-ce docker-ce-cli containerd.io \
+      apt-get install -y texinfo gpgv2 gnupg2 git docker-ce docker-ce-cli containerd.io \
           fontforge-nox python-debian python-pip meson libmpc-dev libmpc-dev:i386 \
           gcc g++ gcc-i686-linux-gnu g++-i686-linux-gnu binutils-i686-linux-gnu \
           gcc-mingw-w64-i686 gcc-mingw-w64-x86-64 \
