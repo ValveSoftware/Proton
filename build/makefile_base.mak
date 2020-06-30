@@ -246,9 +246,7 @@ WINEGCC64 := $(TOOLS_DIR64)/bin/winegcc
 WINEBUILD64 := $(TOOLS_DIR64)/bin/winebuild
 WINE_BUILDTOOLS64 := $(WINEGCC64) $(WINEBUILD64)
 
-WINEWIDL_OBJ32 := ./obj-widl32
 WINEWIDL_OBJ64 := ./obj-widl64
-WINEWIDL32 := $(WINEWIDL_OBJ32)/tools/widl/widl
 WINEWIDL64 := $(WINEWIDL_OBJ64)/tools/widl/widl
 
 VRCLIENT := $(SRCDIR)/vrclient_x64
@@ -280,7 +278,7 @@ OBJ_DIRS := $(TOOLS_DIR32)        $(TOOLS_DIR64)        \
             $(WINE_OBJ32)         $(WINE_OBJ64)         \
             $(VRCLIENT_OBJ32)     $(VRCLIENT_OBJ64)     \
             $(DXVK_OBJ32)         $(DXVK_OBJ64)         \
-            $(WINEWIDL_OBJ32)     $(WINEWIDL_OBJ64)     \
+            $(WINEWIDL_OBJ64)     \
             $(VKD3D_OBJ32)        $(VKD3D_OBJ64)
 
 $(OBJ_DIRS):
@@ -1438,25 +1436,6 @@ endif # NO_DXVK
 # widl; required for vkd3d, which is built before wine
 
 WINEWIDL_CONFIGURE_FILES64 := $(WINEWIDL_OBJ64)/Makefile
-WINEWIDL_CONFIGURE_FILES32 := $(WINEWIDL_OBJ32)/Makefile
-
-$(WINEWIDL_CONFIGURE_FILES32): SHELL = $(CONTAINER_SHELL32)
-$(WINEWIDL_CONFIGURE_FILES32): $(MAKEFILE_DEP) | $(WINEWIDL_OBJ32)
-	cd $(dir $@) && \
-		../$(WINE)/configure \
-			--without-curses \
-			--disable-tests \
-			STRIP=$(STRIP_QUOTED) \
-			CFLAGS=-I$(abspath $(TOOLS_DIR64))"/include -g $(COMMON_FLAGS)" \
-			LDFLAGS=-L$(abspath $(TOOLS_DIR32))/lib \
-			PKG_CONFIG_PATH=$(abspath $(TOOLS_DIR32))/lib/pkgconfig \
-			CC=$(CC_QUOTED) \
-			CXX=$(CXX_QUOTED)
-
-$(WINEWIDL32): SHELL = $(CONTAINER_SHELL32)
-$(WINEWIDL32): $(WINEWIDL_CONFIGURE_FILES32)
-	cd $(WINEWIDL_OBJ32) && \
-	make tools/widl
 
 $(WINEWIDL_CONFIGURE_FILES64): SHELL = $(CONTAINER_SHELL64)
 $(WINEWIDL_CONFIGURE_FILES64): $(MAKEFILE_DEP) | $(WINEWIDL_OBJ64)
@@ -1483,9 +1462,9 @@ VKD3D_CONFIGURE_FILES32 := $(VKD3D_OBJ32)/build.ninja
 VKD3D_CONFIGURE_FILES64 := $(VKD3D_OBJ64)/build.ninja
 
 $(VKD3D_CONFIGURE_FILES32): SHELL = $(CONTAINER_SHELL32)
-$(VKD3D_CONFIGURE_FILES32): $(VKD3D)/meson.build $(VKD3D)/build-win32.txt $(WINEWIDL32) | $(VKD3D_OBJ32)
+$(VKD3D_CONFIGURE_FILES32): $(VKD3D)/meson.build $(VKD3D)/build-win32.txt $(WINEWIDL64) | $(VKD3D_OBJ32)
 	cd $(abspath $(VKD3D_OBJ32)) && \
-		PATH="$(abspath $(SRCDIR))/glslang/bin/:$(abspath $(WINEWIDL_OBJ32))/tools/widl:$(PATH)" \
+		PATH="$(abspath $(SRCDIR))/glslang/bin/:$(abspath $(WINEWIDL_OBJ64))/tools/widl:$(PATH)" \
 			meson --prefix="$(abspath $(VKD3D_OBJ32))" \
 				--cross-file "$(abspath $(VKD3D))/build-win32.txt" \
 				$(MESON_STRIP_ARG) \
