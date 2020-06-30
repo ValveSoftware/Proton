@@ -25,9 +25,6 @@
 [submodule "gst-plugins-good"]
 	path = gst-plugins-good
 	url = https://gitlab.freedesktop.org/gstreamer/gst-plugins-good.git
-[submodule "glib"]
-	path = glib
-	url = https://gitlab.gnome.org/GNOME/glib.git
 [submodule "gst-orc"]
 	path = gst-orc
 	url = https://gitlab.freedesktop.org/gstreamer/orc.git

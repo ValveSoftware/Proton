@@ -198,10 +198,6 @@ FFMPEG_OBJ64 := ./obj-ffmpeg64
 FFMPEG_CROSS_CFLAGS :=
 FFMPEG_CROSS_LDFLAGS :=
 
-GLIB := $(SRCDIR)/glib
-GLIB_OBJ32 := ./obj-glib32
-GLIB_OBJ64 := ./obj-glib64
-
 GST_ORC := $(SRCDIR)/gst-orc
 GST_ORC_OBJ32 := ./obj-gst-orc32
 GST_ORC_OBJ64 := ./obj-gst-orc64
@@ -274,7 +270,6 @@ FONTS_OBJ := ./obj-fonts
 ## Object directories
 OBJ_DIRS := $(TOOLS_DIR32)        $(TOOLS_DIR64)        \
             $(FFMPEG_OBJ32)       $(FFMPEG_OBJ64)       \
-            $(GLIB_OBJ32)         $(GLIB_OBJ64)         \
             $(GST_ORC_OBJ32)      $(GST_ORC_OBJ64)       \
             $(GSTREAMER_OBJ32)    $(GSTREAMER_OBJ64)    \
             $(GST_BASE_OBJ32)     $(GST_BASE_OBJ64)     \
@@ -493,73 +488,6 @@ module64:
 
 module: module32 module64
 
-##
-## glib
-##
-
-GLIB_CONFIGURE_FILES32 := $(GLIB_OBJ32)/build.ninja
-GLIB_CONFIGURE_FILES64 := $(GLIB_OBJ64)/build.ninja
-
-GLIB_MESON_ARGS := -Dlibmount=false
-
-# 64-bit configure.  Remove coredata file if already configured (due to e.g. makefile changing)
-$(GLIB_CONFIGURE_FILES64): SHELL = $(CONTAINER_SHELL64)
-$(GLIB_CONFIGURE_FILES64): $(MAKEFILE_DEP) | $(GLIB_OBJ64)
-	if [ -e "$(abspath $(GLIB_OBJ64))"/build.ninja ]; then \
-		rm -f "$(abspath $(GLIB_OBJ64))"/meson-private/coredata.dat; \
-	fi
-	cd "$(abspath $(GLIB))" && \
-		meson --prefix="$(abspath $(TOOLS_DIR64))" --libdir="lib" $(GLIB_MESON_ARGS) $(MESON_STRIP_ARG) --buildtype=release "$(abspath $(GLIB_OBJ64))"
-
-# 32-bit configure.  Remove coredata file if already configured (due to e.g. makefile changing)
-$(GLIB_CONFIGURE_FILES32): SHELL = $(CONTAINER_SHELL32)
-$(GLIB_CONFIGURE_FILES32): $(MAKEFILE_DEP) | $(GLIB_OBJ32)
-	if [ -e "$(abspath $(GLIB_OBJ32))"/build.ninja ]; then \
-		rm -f "$(abspath $(GLIB_OBJ32))"/meson-private/coredata.dat; \
-	fi
-	cd "$(abspath $(GLIB))" && \
-		CC="$(CC32)" \
-		CXX="$(CXX32)" \
-		PKG_CONFIG="$(PKG_CONFIG32)" \
-		meson --prefix="$(abspath $(TOOLS_DIR32))" --libdir="lib" $(GLIB_MESON_ARGS) $(MESON_STRIP_ARG) --buildtype=release "$(abspath $(GLIB_OBJ32))"
-
-## glib goals
-GLIB_TARGETS = glib glib_configure glib32 glib64 glib_configure32 glib_configure64
-
-ALL_TARGETS += $(GLIB_TARGETS)
-GOAL_TARGETS_LIBS += glib
-
-.PHONY: $(GLIB_TARGETS)
-
-glib_configure: $(GLIB_CONFIGURE_FILES32) $(GLIB_CONFIGURE_FILES64)
-
-glib_configure64: $(GLIB_CONFIGURE_FILES64)
-
-glib_configure32: $(GLIB_CONFIGURE_FILES32)
-
-glib: glib32 glib64
-
-glib64: SHELL = $(CONTAINER_SHELL64)
-glib64: $(GLIB_CONFIGURE_FILES64)
-	ninja -C "$(GLIB_OBJ64)" install
-	mkdir -p $(DST_DIR)/lib64/ && \
-	cp -a $(TOOLS_DIR64)/lib/libgio* $(DST_DIR)/lib64/ && \
-	cp -a $(TOOLS_DIR64)/lib/libglib* $(DST_DIR)/lib64/ && \
-	cp -a $(TOOLS_DIR64)/lib/libgmodule* $(DST_DIR)/lib64/ && \
-	cp -a $(TOOLS_DIR64)/lib/libgobject* $(DST_DIR)/lib64/ && \
-	cp -a $(TOOLS_DIR64)/lib/libgthread* $(DST_DIR)/lib64/
-
-glib32: SHELL = $(CONTAINER_SHELL32)
-glib32: $(GLIB_CONFIGURE_FILES32)
-	ninja -C "$(GLIB_OBJ32)" install
-	mkdir -p $(DST_DIR)/lib/ && \
-	cp -a $(TOOLS_DIR32)/lib/libgio* $(DST_DIR)/lib/ && \
-	cp -a $(TOOLS_DIR32)/lib/libglib* $(DST_DIR)/lib/ && \
-	cp -a $(TOOLS_DIR32)/lib/libgmodule* $(DST_DIR)/lib/ && \
-	cp -a $(TOOLS_DIR32)/lib/libgobject* $(DST_DIR)/lib/ && \
-	cp -a $(TOOLS_DIR32)/lib/libgthread* $(DST_DIR)/lib/
-
-
 GST_COMMON_MESON_ARGS := \
 	-Dexamples=disabled \
 	-Dtests=disabled \
@@ -585,7 +513,7 @@ GST_ORC_CONFIGURE_FILES64 := $(GST_ORC_OBJ64)/build.ninja
 
 # 64-bit configure.  Remove coredata file if already configured (due to e.g. makefile changing)
 $(GST_ORC_CONFIGURE_FILES64): SHELL = $(CONTAINER_SHELL64)
-$(GST_ORC_CONFIGURE_FILES64): $(MAKEFILE_DEP) glib64 | $(GST_ORC_OBJ64)
+$(GST_ORC_CONFIGURE_FILES64): $(MAKEFILE_DEP) | $(GST_ORC_OBJ64)
 	if [ -e "$(abspath $(GST_ORC_OBJ64))"/build.ninja ]; then \
 		rm -f "$(abspath $(GST_ORC_OBJ64))"/meson-private/coredata.dat; \
 	fi
@@ -596,7 +524,7 @@ $(GST_ORC_CONFIGURE_FILES64): $(MAKEFILE_DEP) glib64 | $(GST_ORC_OBJ64)
 
 # 32-bit configure.  Remove coredata file if already configured (due to e.g. makefile changing)
 $(GST_ORC_CONFIGURE_FILES32): SHELL = $(CONTAINER_SHELL32)
-$(GST_ORC_CONFIGURE_FILES32): $(MAKEFILE_DEP) glib32 | $(GST_ORC_OBJ32)
+$(GST_ORC_CONFIGURE_FILES32): $(MAKEFILE_DEP) | $(GST_ORC_OBJ32)
 	if [ -e "$(abspath $(GST_ORC_OBJ32))"/build.ninja ]; then \
 		rm -f "$(abspath $(GST_ORC_OBJ32))"/meson-private/coredata.dat; \
 	fi
@@ -1289,7 +1217,8 @@ $(WINE_CONFIGURE_FILES32): $(MAKEFILE_DEP) | faudio32 gst_base32 $(WINE_OBJ32)
 			PKG_CONFIG_PATH=$(abspath $(TOOLS_DIR32))/lib/pkgconfig \
 			LD_LIBRARY_PATH=$(abspath $(TOOLS_DIR32))/lib \
 			CC=$(CC_QUOTED) \
-			CXX=$(CXX_QUOTED)
+			CXX=$(CXX_QUOTED) \
+			PKG_CONFIG="$(PKG_CONFIG32)"
 
 ## wine goals
 WINE_TARGETS = wine wine_configure wine32 wine64 wine_configure32 wine_configure64
