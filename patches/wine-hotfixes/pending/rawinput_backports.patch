@@ -1,0 +1,2058 @@
+From 847b93c7400f82225057e8b71938eb8ccd5d23be Mon Sep 17 00:00:00 2001
+From: Sebastian Lackner <sebastian@fds-team.de>
+Date: Sun, 28 Jun 2020 20:43:17 -0500
+Subject: [PATCH] ntdll: Implement NtQueryInformationThread(ThreadTimes) using
+ procfs.
+
+Based on a patch by Ray Hinchliffe <ray@pobox.co.uk>.
+
+Wine-Bug: https://bugs.winehq.org/show_bug.cgi?id=20230
+Signed-off-by: Zebediah Figura <z.figura12@gmail.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/ntdll/unix/thread.c       | 82 +++++++++++++++++++++++++++-------
+ include/wine/server_protocol.h |  4 +-
+ server/protocol.def            |  2 +
+ server/request.h               |  4 +-
+ server/thread.c                |  2 +
+ server/trace.c                 |  2 +
+ 6 files changed, 77 insertions(+), 19 deletions(-)
+
+diff --git a/dlls/ntdll/unix/thread.c b/dlls/ntdll/unix/thread.c
+index f3dddd2b02a..54483e1f994 100644
+--- a/dlls/ntdll/unix/thread.c
++++ b/dlls/ntdll/unix/thread.c
+@@ -29,6 +29,8 @@
+ #include <errno.h>
+ #include <limits.h>
+ #include <stdarg.h>
++#include <stdio.h>
++#include <string.h>
+ #include <pthread.h>
+ #include <signal.h>
+ #include <sys/types.h>
+@@ -821,6 +823,59 @@ static void wow64_context_to_server( context_t *to, const WOW64_CONTEXT *from )
+ 
+ #endif /* __x86_64__ */
+ 
++#ifdef linux
++static BOOL get_thread_times(int unix_pid, int unix_tid, LARGE_INTEGER *kernel_time, LARGE_INTEGER *user_time)
++{
++    unsigned long clocks_per_sec = sysconf( _SC_CLK_TCK );
++    unsigned long usr, sys;
++    const char *pos;
++    char buf[512];
++    FILE *f;
++    int i;
++
++    sprintf( buf, "/proc/%u/task/%u/stat", unix_pid, unix_tid );
++    if (!(f = fopen( buf, "r" )))
++    {
++        ERR("Failed to open %s: %s\n", buf, strerror(errno));
++        return FALSE;
++    }
++
++    pos = fgets( buf, sizeof(buf), f );
++    fclose( f );
++
++    /* the process name is printed unescaped, so we have to skip to the last ')'
++     * to avoid misinterpreting the string */
++    if (pos) pos = strrchr( pos, ')' );
++    if (pos) pos = strchr( pos + 1, ' ' );
++    if (pos) pos++;
++
++    /* skip over the following fields: state, ppid, pgid, sid, tty_nr, tty_pgrp,
++     * task->flags, min_flt, cmin_flt, maj_flt, cmaj_flt */
++    for (i = 0; i < 11 && pos; i++)
++    {
++        pos = strchr( pos + 1, ' ' );
++        if (pos) pos++;
++    }
++
++    /* the next two values are user and system time */
++    if (pos && (sscanf( pos, "%lu %lu", &usr, &sys ) == 2))
++    {
++        kernel_time->QuadPart = (ULONGLONG)sys * 10000000 / clocks_per_sec;
++        user_time->QuadPart = (ULONGLONG)usr * 10000000 / clocks_per_sec;
++        return TRUE;
++    }
++
++    ERR("Failed to parse %s\n", debugstr_a(buf));
++    return FALSE;
++}
++#else
++static BOOL get_thread_times(int unix_pid, int unix_tid, LARGE_INTEGER *kernel_time, LARGE_INTEGER *user_time)
++{
++    static int once;
++    if (!once++) FIXME("not implemented on this platform\n");
++    return FALSE;
++}
++#endif
+ 
+ /******************************************************************************
+  *              NtQueryInformationThread  (NTDLL.@)
+@@ -886,6 +941,7 @@ NTSTATUS WINAPI NtQueryInformationThread( HANDLE handle, THREADINFOCLASS class,
+     case ThreadTimes:
+     {
+         KERNEL_USER_TIMES kusrt;
++        int unix_pid, unix_tid;
+ 
+         SERVER_START_REQ( get_thread_times )
+         {
+@@ -895,15 +951,21 @@ NTSTATUS WINAPI NtQueryInformationThread( HANDLE handle, THREADINFOCLASS class,
+             {
+                 kusrt.CreateTime.QuadPart = reply->creation_time;
+                 kusrt.ExitTime.QuadPart = reply->exit_time;
++                unix_pid = reply->unix_pid;
++                unix_tid = reply->unix_tid;
+             }
+         }
+         SERVER_END_REQ;
+         if (status == STATUS_SUCCESS)
+         {
+-            /* We call times(2) for kernel time or user time */
+-            /* We can only (portably) do this for the current thread */
+-            if (handle == GetCurrentThread())
++            BOOL ret = FALSE;
++
++            kusrt.KernelTime.QuadPart = kusrt.UserTime.QuadPart = 0;
++            if (unix_pid != -1 && unix_tid != -1)
++                ret = get_thread_times( unix_pid, unix_tid, &kusrt.KernelTime, &kusrt.UserTime );
++            if (!ret && handle == GetCurrentThread())
+             {
++                /* fall back to process times */
+                 struct tms time_buf;
+                 long clocks_per_sec = sysconf(_SC_CLK_TCK);
+ 
+@@ -911,20 +973,6 @@ NTSTATUS WINAPI NtQueryInformationThread( HANDLE handle, THREADINFOCLASS class,
+                 kusrt.KernelTime.QuadPart = (ULONGLONG)time_buf.tms_stime * 10000000 / clocks_per_sec;
+                 kusrt.UserTime.QuadPart = (ULONGLONG)time_buf.tms_utime * 10000000 / clocks_per_sec;
+             }
+-            else
+-            {
+-                static BOOL reported = FALSE;
+-
+-                kusrt.KernelTime.QuadPart = 0;
+-                kusrt.UserTime.QuadPart = 0;
+-                if (reported)
+-                    TRACE("Cannot get kerneltime or usertime of other threads\n");
+-                else
+-                {
+-                    FIXME("Cannot get kerneltime or usertime of other threads\n");
+-                    reported = TRUE;
+-                }
+-            }
+             if (data) memcpy( data, &kusrt, min( length, sizeof(kusrt) ));
+             if (ret_len) *ret_len = min( length, sizeof(kusrt) );
+         }
+diff --git a/include/wine/server_protocol.h b/include/wine/server_protocol.h
+index 1acaded199c..0473c6a64a9 100644
+--- a/include/wine/server_protocol.h
++++ b/include/wine/server_protocol.h
+@@ -1037,6 +1037,8 @@ struct get_thread_times_reply
+     struct reply_header __header;
+     timeout_t    creation_time;
+     timeout_t    exit_time;
++    int          unix_pid;
++    int          unix_tid;
+ };
+ 
+ 
+@@ -6700,7 +6702,7 @@ union generic_reply
+ 
+ /* ### protocol_version begin ### */
+ 
+-#define SERVER_PROTOCOL_VERSION 609
++#define SERVER_PROTOCOL_VERSION 610
+ 
+ /* ### protocol_version end ### */
+ 
+diff --git a/server/protocol.def b/server/protocol.def
+index d412889518a..ed8ca3c478d 100644
+--- a/server/protocol.def
++++ b/server/protocol.def
+@@ -967,6 +967,8 @@ struct rawinput_device
+ @REPLY
+     timeout_t    creation_time; /* thread creation time */
+     timeout_t    exit_time;     /* thread exit time */
++    int          unix_pid;      /* thread native pid */
++    int          unix_tid;      /* thread native pid */
+ @END
+ 
+ 
+diff --git a/server/request.h b/server/request.h
+index 7c7c0fd92f4..2a646438488 100644
+--- a/server/request.h
++++ b/server/request.h
+@@ -862,7 +862,9 @@ C_ASSERT( FIELD_OFFSET(struct get_thread_times_request, handle) == 12 );
+ C_ASSERT( sizeof(struct get_thread_times_request) == 16 );
+ C_ASSERT( FIELD_OFFSET(struct get_thread_times_reply, creation_time) == 8 );
+ C_ASSERT( FIELD_OFFSET(struct get_thread_times_reply, exit_time) == 16 );
+-C_ASSERT( sizeof(struct get_thread_times_reply) == 24 );
++C_ASSERT( FIELD_OFFSET(struct get_thread_times_reply, unix_pid) == 24 );
++C_ASSERT( FIELD_OFFSET(struct get_thread_times_reply, unix_tid) == 28 );
++C_ASSERT( sizeof(struct get_thread_times_reply) == 32 );
+ C_ASSERT( FIELD_OFFSET(struct set_thread_info_request, handle) == 12 );
+ C_ASSERT( FIELD_OFFSET(struct set_thread_info_request, mask) == 16 );
+ C_ASSERT( FIELD_OFFSET(struct set_thread_info_request, priority) == 20 );
+diff --git a/server/thread.c b/server/thread.c
+index e2bfa50c7ba..3cf447b1a0d 100644
+--- a/server/thread.c
++++ b/server/thread.c
+@@ -1554,6 +1554,8 @@ DECL_HANDLER(get_thread_times)
+     {
+         reply->creation_time  = thread->creation_time;
+         reply->exit_time      = thread->exit_time;
++        reply->unix_pid       = thread->unix_pid;
++        reply->unix_tid       = thread->unix_tid;
+ 
+         release_object( thread );
+     }
+diff --git a/server/trace.c b/server/trace.c
+index 6c7f3251db6..2b22dc52075 100644
+--- a/server/trace.c
++++ b/server/trace.c
+@@ -1442,6 +1442,8 @@ static void dump_get_thread_times_reply( const struct get_thread_times_reply *re
+ {
+     dump_timeout( " creation_time=", &req->creation_time );
+     dump_timeout( ", exit_time=", &req->exit_time );
++    fprintf( stderr, ", unix_pid=%d", req->unix_pid );
++    fprintf( stderr, ", unix_tid=%d", req->unix_tid );
+ }
+ 
+ static void dump_set_thread_info_request( const struct set_thread_info_request *req )
+From 69e9651c1ae0542e52f5ea924b9e286584446607 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Michael=20M=C3=BCller?= <michael@fds-team.de>
+Date: Sun, 28 Jun 2020 20:43:18 -0500
+Subject: [PATCH] ntdll: Return thread times in
+ NtQuerySystemInformation(SystemProcessInformation).
+
+Signed-off-by: Zebediah Figura <z.figura12@gmail.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/ntdll/unix/system.c       | 40 +++++++++++++++++++++-------------
+ dlls/ntdll/unix/thread.c       |  4 ++--
+ dlls/ntdll/unix/unix_private.h |  2 ++
+ include/wine/server_protocol.h |  4 ++--
+ server/protocol.def            |  1 +
+ server/request.h               |  1 +
+ server/snapshot.c              |  1 +
+ server/trace.c                 |  1 +
+ 8 files changed, 35 insertions(+), 19 deletions(-)
+
+diff --git a/dlls/ntdll/unix/system.c b/dlls/ntdll/unix/system.c
+index 5e2e763445c..fd86ab874ab 100644
+--- a/dlls/ntdll/unix/system.c
++++ b/dlls/ntdll/unix/system.c
+@@ -2101,6 +2101,7 @@ NTSTATUS WINAPI NtQuerySystemInformation( SYSTEM_INFORMATION_CLASS class,
+         len = 0;
+         while (ret == STATUS_SUCCESS)
+         {
++            int unix_pid = -1;
+             SERVER_START_REQ( next_process )
+             {
+                 req->handle = wine_server_obj_handle( handle );
+@@ -2108,6 +2109,8 @@ NTSTATUS WINAPI NtQuerySystemInformation( SYSTEM_INFORMATION_CLASS class,
+                 wine_server_set_reply( req, procname, sizeof(procname) - sizeof(WCHAR) );
+                 if (!(ret = wine_server_call( req )))
+                 {
++                    unix_pid = reply->unix_pid;
++
+                     /* Make sure procname is 0 terminated */
+                     procname[wine_server_reply_size(reply) / sizeof(WCHAR)] = 0;
+ 
+@@ -2156,31 +2159,38 @@ NTSTATUS WINAPI NtQuerySystemInformation( SYSTEM_INFORMATION_CLASS class,
+                 i = j = 0;
+                 while (ret == STATUS_SUCCESS)
+                 {
++                    int unix_tid, pid, tid, base_pri, delta_pri;
+                     SERVER_START_REQ( next_thread )
+                     {
+                         req->handle = wine_server_obj_handle( handle );
+                         req->reset = (j == 0);
+                         if (!(ret = wine_server_call( req )))
+                         {
++                            unix_tid = reply->unix_tid;
++                            pid = reply->pid;
++                            tid = reply->tid;
++                            base_pri = reply->base_pri;
++                            delta_pri = reply->delta_pri;
+                             j++;
+-                            if (UlongToHandle(reply->pid) == spi->UniqueProcessId)
+-                            {
+-                                /* ftKernelTime, ftUserTime, ftCreateTime;
+-                                 * dwTickCount, dwStartAddress
+-                                 */
+-
+-                                memset(&spi->ti[i], 0, sizeof(spi->ti));
+-
+-                                spi->ti[i].CreateTime.QuadPart = 0xdeadbeef;
+-                                spi->ti[i].ClientId.UniqueProcess = UlongToHandle(reply->pid);
+-                                spi->ti[i].ClientId.UniqueThread  = UlongToHandle(reply->tid);
+-                                spi->ti[i].dwCurrentPriority = reply->base_pri + reply->delta_pri;
+-                                spi->ti[i].dwBasePriority = reply->base_pri;
+-                                i++;
+-                            }
+                         }
+                     }
+                     SERVER_END_REQ;
++
++                    if (!ret)
++                    {
++                        if (UlongToHandle(pid) == spi->UniqueProcessId)
++                        {
++                            memset(&spi->ti[i], 0, sizeof(spi->ti));
++
++                            spi->ti[i].CreateTime.QuadPart = 0xdeadbeef;
++                            spi->ti[i].ClientId.UniqueProcess = UlongToHandle(pid);
++                            spi->ti[i].ClientId.UniqueThread  = UlongToHandle(tid);
++                            spi->ti[i].dwCurrentPriority = base_pri + delta_pri;
++                            spi->ti[i].dwBasePriority = base_pri;
++                            get_thread_times(unix_pid, unix_tid, &spi->ti[i].KernelTime, &spi->ti[i].UserTime);
++                            i++;
++                        }
++                    }
+                 }
+                 if (ret == STATUS_NO_MORE_FILES) ret = STATUS_SUCCESS;
+ 
+diff --git a/dlls/ntdll/unix/thread.c b/dlls/ntdll/unix/thread.c
+index 54483e1f994..3655adf2db9 100644
+--- a/dlls/ntdll/unix/thread.c
++++ b/dlls/ntdll/unix/thread.c
+@@ -824,7 +824,7 @@ static void wow64_context_to_server( context_t *to, const WOW64_CONTEXT *from )
+ #endif /* __x86_64__ */
+ 
+ #ifdef linux
+-static BOOL get_thread_times(int unix_pid, int unix_tid, LARGE_INTEGER *kernel_time, LARGE_INTEGER *user_time)
++BOOL get_thread_times(int unix_pid, int unix_tid, LARGE_INTEGER *kernel_time, LARGE_INTEGER *user_time)
+ {
+     unsigned long clocks_per_sec = sysconf( _SC_CLK_TCK );
+     unsigned long usr, sys;
+@@ -869,7 +869,7 @@ static BOOL get_thread_times(int unix_pid, int unix_tid, LARGE_INTEGER *kernel_t
+     return FALSE;
+ }
+ #else
+-static BOOL get_thread_times(int unix_pid, int unix_tid, LARGE_INTEGER *kernel_time, LARGE_INTEGER *user_time)
++BOOL get_thread_times(int unix_pid, int unix_tid, LARGE_INTEGER *kernel_time, LARGE_INTEGER *user_time)
+ {
+     static int once;
+     if (!once++) FIXME("not implemented on this platform\n");
+diff --git a/dlls/ntdll/unix/unix_private.h b/dlls/ntdll/unix/unix_private.h
+index ee6caaec8f5..fe63606ed83 100644
+--- a/dlls/ntdll/unix/unix_private.h
++++ b/dlls/ntdll/unix/unix_private.h
+@@ -209,6 +209,8 @@ extern void virtual_fill_image_information( const pe_image_info_t *pe_info,
+                                             SECTION_IMAGE_INFORMATION *info ) DECLSPEC_HIDDEN;
+ 
+ extern NTSTATUS get_thread_ldt_entry( HANDLE handle, void *data, ULONG len, ULONG *ret_len ) DECLSPEC_HIDDEN;
++extern BOOL get_thread_times( int unix_pid, int unix_tid, LARGE_INTEGER *kernel_time,
++                              LARGE_INTEGER *user_time ) DECLSPEC_HIDDEN;
+ extern void signal_init_threading(void) DECLSPEC_HIDDEN;
+ extern NTSTATUS signal_alloc_thread( TEB *teb ) DECLSPEC_HIDDEN;
+ extern void signal_free_thread( TEB *teb ) DECLSPEC_HIDDEN;
+diff --git a/include/wine/server_protocol.h b/include/wine/server_protocol.h
+index 0473c6a64a9..13da55adedb 100644
+--- a/include/wine/server_protocol.h
++++ b/include/wine/server_protocol.h
+@@ -2493,7 +2493,7 @@ struct next_thread_reply
+     thread_id_t  tid;
+     int          base_pri;
+     int          delta_pri;
+-    char __pad_28[4];
++    int          unix_tid;
+ };
+ 
+ 
+@@ -6702,7 +6702,7 @@ union generic_reply
+ 
+ /* ### protocol_version begin ### */
+ 
+-#define SERVER_PROTOCOL_VERSION 610
++#define SERVER_PROTOCOL_VERSION 611
+ 
+ /* ### protocol_version end ### */
+ 
+diff --git a/server/protocol.def b/server/protocol.def
+index ed8ca3c478d..38079f23daf 100644
+--- a/server/protocol.def
++++ b/server/protocol.def
+@@ -1913,6 +1913,7 @@ enum char_info_mode
+     thread_id_t  tid;           /* thread id */
+     int          base_pri;      /* base priority */
+     int          delta_pri;     /* delta priority */
++    int          unix_tid;      /* thread native pid */
+ @END
+ 
+ 
+diff --git a/server/request.h b/server/request.h
+index 2a646438488..3b7db3997b5 100644
+--- a/server/request.h
++++ b/server/request.h
+@@ -1362,6 +1362,7 @@ C_ASSERT( FIELD_OFFSET(struct next_thread_reply, pid) == 12 );
+ C_ASSERT( FIELD_OFFSET(struct next_thread_reply, tid) == 16 );
+ C_ASSERT( FIELD_OFFSET(struct next_thread_reply, base_pri) == 20 );
+ C_ASSERT( FIELD_OFFSET(struct next_thread_reply, delta_pri) == 24 );
++C_ASSERT( FIELD_OFFSET(struct next_thread_reply, unix_tid) == 28 );
+ C_ASSERT( sizeof(struct next_thread_reply) == 32 );
+ C_ASSERT( FIELD_OFFSET(struct wait_debug_event_request, get_handle) == 12 );
+ C_ASSERT( sizeof(struct wait_debug_event_request) == 16 );
+diff --git a/server/snapshot.c b/server/snapshot.c
+index a0f2ea17a3e..bdceaef5302 100644
+--- a/server/snapshot.c
++++ b/server/snapshot.c
+@@ -150,6 +150,7 @@ static int snapshot_next_thread( struct snapshot *snapshot, struct next_thread_r
+     reply->tid       = get_thread_id( ptr->thread );
+     reply->base_pri  = ptr->priority;
+     reply->delta_pri = 0;  /* FIXME */
++    reply->unix_tid  = ptr->thread->unix_tid;
+     return 1;
+ }
+ 
+diff --git a/server/trace.c b/server/trace.c
+index 2b22dc52075..951ac44d9d2 100644
+--- a/server/trace.c
++++ b/server/trace.c
+@@ -2412,6 +2412,7 @@ static void dump_next_thread_reply( const struct next_thread_reply *req )
+     fprintf( stderr, ", tid=%04x", req->tid );
+     fprintf( stderr, ", base_pri=%d", req->base_pri );
+     fprintf( stderr, ", delta_pri=%d", req->delta_pri );
++    fprintf( stderr, ", unix_tid=%d", req->unix_tid );
+ }
+ 
+ static void dump_wait_debug_event_request( const struct wait_debug_event_request *req )
+From ed566a87232fddde73481efe2dfcefceca5e49e4 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Michael=20M=C3=BCller?= <michael@fds-team.de>
+Date: Sun, 28 Jun 2020 20:43:19 -0500
+Subject: [PATCH] ntdll: Return process times in
+ NtQuerySystemInformation(SystemProcessInformation).
+
+Signed-off-by: Zebediah Figura <z.figura12@gmail.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/ntdll/unix/system.c | 2 ++
+ dlls/ntdll/unix/thread.c | 5 ++++-
+ 2 files changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/dlls/ntdll/unix/system.c b/dlls/ntdll/unix/system.c
+index fd86ab874ab..7045bc1550b 100644
+--- a/dlls/ntdll/unix/system.c
++++ b/dlls/ntdll/unix/system.c
+@@ -2155,6 +2155,8 @@ NTSTATUS WINAPI NtQuerySystemInformation( SYSTEM_INFORMATION_CLASS class,
+             {
+                 int     i, j;
+ 
++                get_thread_times(unix_pid, -1, &spi->KernelTime, &spi->UserTime);
++
+                 /* set thread info */
+                 i = j = 0;
+                 while (ret == STATUS_SUCCESS)
+diff --git a/dlls/ntdll/unix/thread.c b/dlls/ntdll/unix/thread.c
+index 3655adf2db9..c583a08c058 100644
+--- a/dlls/ntdll/unix/thread.c
++++ b/dlls/ntdll/unix/thread.c
+@@ -833,7 +833,10 @@ BOOL get_thread_times(int unix_pid, int unix_tid, LARGE_INTEGER *kernel_time, LA
+     FILE *f;
+     int i;
+ 
+-    sprintf( buf, "/proc/%u/task/%u/stat", unix_pid, unix_tid );
++    if (unix_tid == -1)
++        sprintf( buf, "/proc/%u/stat", unix_pid );
++    else
++        sprintf( buf, "/proc/%u/task/%u/stat", unix_pid, unix_tid );
+     if (!(f = fopen( buf, "r" )))
+     {
+         ERR("Failed to open %s: %s\n", buf, strerror(errno));
+
+From eef527723f02abcdb301b02cae059b123f277d26 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
+Date: Fri, 26 Jun 2020 11:27:28 +0200
+Subject: [PATCH] ntdll/tests: Add more HideFromDebugger tests.
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Rémi Bernon <rbernon@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/ntdll/tests/info.c | 46 ++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 45 insertions(+), 1 deletion(-)
+
+diff --git a/dlls/ntdll/tests/info.c b/dlls/ntdll/tests/info.c
+index 4de562b9941..5ac57536b22 100644
+--- a/dlls/ntdll/tests/info.c
++++ b/dlls/ntdll/tests/info.c
+@@ -2346,7 +2346,6 @@ static void test_affinity(void)
+     DWORD_PTR proc_affinity, thread_affinity;
+     THREAD_BASIC_INFORMATION tbi;
+     SYSTEM_INFO si;
+-    ULONG dummy;
+ 
+     GetSystemInfo(&si);
+     status = pNtQueryInformationProcess( GetCurrentProcess(), ProcessBasicInformation, &pbi, sizeof(pbi), NULL );
+@@ -2451,6 +2450,20 @@ static void test_affinity(void)
+     ok( status == STATUS_SUCCESS, "Expected STATUS_SUCCESS, got %08x\n", status);
+     ok( tbi.AffinityMask == (1 << si.dwNumberOfProcessors) - 1,
+         "Unexpected thread affinity\n" );
++}
++
++static DWORD WINAPI hide_from_debugger_thread(void *arg)
++{
++    HANDLE stop_event = arg;
++    WaitForSingleObject( stop_event, INFINITE );
++    return 0;
++}
++
++static void test_HideFromDebugger(void)
++{
++    NTSTATUS status;
++    HANDLE thread, stop_event;
++    ULONG dummy;
+ 
+     dummy = 0;
+     status = pNtSetInformationThread( GetCurrentThread(), ThreadHideFromDebugger, &dummy, sizeof(ULONG) );
+@@ -2477,6 +2490,34 @@ static void test_affinity(void)
+         ok( status == STATUS_SUCCESS, "Expected STATUS_SUCCESS, got %08x\n", status );
+         if (status == STATUS_SUCCESS) ok( dummy == 1, "Expected dummy == 1, got %08x\n", dummy );
+     }
++
++    stop_event = CreateEventA( NULL, FALSE, FALSE, NULL );
++    ok( stop_event != NULL, "CreateEvent failed\n" );
++    thread = CreateThread( NULL, 0, hide_from_debugger_thread, stop_event, 0, NULL );
++    ok( thread != INVALID_HANDLE_VALUE, "CreateThread failed with %d\n", GetLastError() );
++
++    dummy = 0;
++    status = NtQueryInformationThread( thread, ThreadHideFromDebugger, &dummy, 1, NULL );
++    todo_wine
++    ok( status == STATUS_SUCCESS || status == STATUS_INVALID_INFO_CLASS,
++        "Expected STATUS_SUCCESS, got %08x\n", status );
++    if (status == STATUS_SUCCESS) ok( dummy == 0, "Expected dummy == 0, got %08x\n", dummy );
++
++    status = pNtSetInformationThread( thread, ThreadHideFromDebugger, NULL, 0 );
++    todo_wine
++    ok( status == STATUS_SUCCESS, "Expected STATUS_SUCCESS, got %08x\n", status );
++
++    dummy = 0;
++    status = NtQueryInformationThread( thread, ThreadHideFromDebugger, &dummy, 1, NULL );
++    todo_wine
++    ok( status == STATUS_SUCCESS || status == STATUS_INVALID_INFO_CLASS,
++        "Expected STATUS_SUCCESS, got %08x\n", status );
++    if (status == STATUS_SUCCESS) ok( dummy == 1, "Expected dummy == 1, got %08x\n", dummy );
++
++    SetEvent( stop_event );
++    WaitForSingleObject( thread, INFINITE );
++    CloseHandle( thread );
++    CloseHandle( stop_event );
+ }
+ 
+ static void test_NtGetCurrentProcessorNumber(void)
+@@ -2847,6 +2888,9 @@ START_TEST(info)
+     trace("Starting test_affinity()\n");
+     test_affinity();
+ 
++    trace("Starting test_HideFromDebugger()\n");
++    test_HideFromDebugger();
++
+     trace("Starting test_NtGetCurrentProcessorNumber()\n");
+     test_NtGetCurrentProcessorNumber();
+ 
+From e1e34cdc375baf2d1d5a2266ae0faa885987ab37 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
+Date: Fri, 26 Jun 2020 11:27:29 +0200
+Subject: [PATCH] ntdll: Correctly implement ThreadHideFromDebugger.
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+At least, store the thread information, instead of pretending and
+failing to correctly validate handles and access rights.
+
+Signed-off-by: Rémi Bernon <rbernon@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/ntdll/tests/info.c        |  3 ---
+ dlls/ntdll/unix/thread.c       | 27 ++++++++++++++++-----------
+ include/wine/server_protocol.h |  7 ++++---
+ server/protocol.def            |  4 +++-
+ server/request.h               |  5 +++--
+ server/thread.c                | 11 +++++++----
+ server/thread.h                |  1 +
+ server/trace.c                 |  3 ++-
+ 8 files changed, 36 insertions(+), 25 deletions(-)
+
+diff --git a/dlls/ntdll/tests/info.c b/dlls/ntdll/tests/info.c
+index 5ac57536b22..7475fcf56ee 100644
+--- a/dlls/ntdll/tests/info.c
++++ b/dlls/ntdll/tests/info.c
+@@ -2498,18 +2498,15 @@ static void test_HideFromDebugger(void)
+ 
+     dummy = 0;
+     status = NtQueryInformationThread( thread, ThreadHideFromDebugger, &dummy, 1, NULL );
+-    todo_wine
+     ok( status == STATUS_SUCCESS || status == STATUS_INVALID_INFO_CLASS,
+         "Expected STATUS_SUCCESS, got %08x\n", status );
+     if (status == STATUS_SUCCESS) ok( dummy == 0, "Expected dummy == 0, got %08x\n", dummy );
+ 
+     status = pNtSetInformationThread( thread, ThreadHideFromDebugger, NULL, 0 );
+-    todo_wine
+     ok( status == STATUS_SUCCESS, "Expected STATUS_SUCCESS, got %08x\n", status );
+ 
+     dummy = 0;
+     status = NtQueryInformationThread( thread, ThreadHideFromDebugger, &dummy, 1, NULL );
+-    todo_wine
+     ok( status == STATUS_SUCCESS || status == STATUS_INVALID_INFO_CLASS,
+         "Expected STATUS_SUCCESS, got %08x\n", status );
+     if (status == STATUS_SUCCESS) ok( dummy == 1, "Expected dummy == 1, got %08x\n", dummy );
+diff --git a/dlls/ntdll/unix/thread.c b/dlls/ntdll/unix/thread.c
+index b4c79521dab..cee288b3e11 100644
+--- a/dlls/ntdll/unix/thread.c
++++ b/dlls/ntdll/unix/thread.c
+@@ -867,7 +867,6 @@ NTSTATUS WINAPI NtQueryInformationThread( HANDLE handle, THREADINFOCLASS class,
+         SERVER_START_REQ( get_thread_info )
+         {
+             req->handle = wine_server_obj_handle( handle );
+-            req->tid_in = 0;
+             if (!(status = wine_server_call( req )))
+             {
+                 info.ExitStatus             = reply->exit_code;
+@@ -896,7 +895,6 @@ NTSTATUS WINAPI NtQueryInformationThread( HANDLE handle, THREADINFOCLASS class,
+         SERVER_START_REQ( get_thread_info )
+         {
+             req->handle = wine_server_obj_handle( handle );
+-            req->tid_in = 0;
+             if (!(status = wine_server_call( req ))) affinity = reply->affinity & affinity_mask;
+         }
+         SERVER_END_REQ;
+@@ -958,7 +956,6 @@ NTSTATUS WINAPI NtQueryInformationThread( HANDLE handle, THREADINFOCLASS class,
+         SERVER_START_REQ( get_thread_info )
+         {
+             req->handle = wine_server_obj_handle( handle );
+-            req->tid_in = 0;
+             status = wine_server_call( req );
+             if (status == STATUS_SUCCESS)
+             {
+@@ -976,7 +973,6 @@ NTSTATUS WINAPI NtQueryInformationThread( HANDLE handle, THREADINFOCLASS class,
+         SERVER_START_REQ( get_thread_info )
+         {
+             req->handle = wine_server_obj_handle( handle );
+-            req->tid_in = 0;
+             status = wine_server_call( req );
+             if (status == STATUS_SUCCESS)
+             {
+@@ -1000,7 +996,6 @@ NTSTATUS WINAPI NtQueryInformationThread( HANDLE handle, THREADINFOCLASS class,
+         SERVER_START_REQ( get_thread_info )
+         {
+             req->handle = wine_server_obj_handle( handle );
+-            req->tid_in = 0;
+             if (!(status = wine_server_call( req ))) affinity.Mask = reply->affinity & affinity_mask;
+         }
+         SERVER_END_REQ;
+@@ -1027,7 +1022,6 @@ NTSTATUS WINAPI NtQueryInformationThread( HANDLE handle, THREADINFOCLASS class,
+         SERVER_START_REQ( get_thread_info )
+         {
+             req->handle = wine_server_obj_handle( handle );
+-            req->tid_in = 0;
+             if (!(status = wine_server_call( req ))) *(ULONG *)data = reply->suspend_count;
+         }
+         SERVER_END_REQ;
+@@ -1086,8 +1080,14 @@ NTSTATUS WINAPI NtQueryInformationThread( HANDLE handle, THREADINFOCLASS class,
+     case ThreadHideFromDebugger:
+         if (length != sizeof(BOOLEAN)) return STATUS_INFO_LENGTH_MISMATCH;
+         if (!data) return STATUS_ACCESS_VIOLATION;
+-        if (handle != GetCurrentThread()) return STATUS_ACCESS_DENIED;
+-        *(BOOLEAN*)data = TRUE;
++        SERVER_START_REQ( get_thread_info )
++        {
++            req->handle = wine_server_obj_handle( handle );
++            req->access = THREAD_QUERY_INFORMATION;
++            if ((status = wine_server_call( req ))) return status;
++            *(BOOLEAN*)data = reply->dbg_hidden;
++        }
++        SERVER_END_REQ;
+         if (ret_len) *ret_len = sizeof(BOOLEAN);
+         return STATUS_SUCCESS;
+ 
+@@ -1183,9 +1183,14 @@ NTSTATUS WINAPI NtSetInformationThread( HANDLE handle, THREADINFOCLASS class,
+ 
+     case ThreadHideFromDebugger:
+         if (length) return STATUS_INFO_LENGTH_MISMATCH;
+-        if (handle != GetCurrentThread()) return STATUS_INVALID_HANDLE;
+-        /* pretend the call succeeded to satisfy some code protectors */
+-        return STATUS_SUCCESS;
++        SERVER_START_REQ( set_thread_info )
++        {
++            req->handle = wine_server_obj_handle( handle );
++            req->mask   = SET_THREAD_INFO_DBG_HIDDEN;
++            status = wine_server_call( req );
++        }
++        SERVER_END_REQ;
++        return status;
+ 
+     case ThreadQuerySetWin32StartAddress:
+     {
+diff --git a/include/wine/server_protocol.h b/include/wine/server_protocol.h
+index 13da55adedb..b22aac93041 100644
+--- a/include/wine/server_protocol.h
++++ b/include/wine/server_protocol.h
+@@ -1005,7 +1005,7 @@ struct get_thread_info_request
+ {
+     struct request_header __header;
+     obj_handle_t handle;
+-    thread_id_t  tid_in;
++    unsigned int access;
+     char __pad_20[4];
+ };
+ struct get_thread_info_reply
+@@ -1020,9 +1020,9 @@ struct get_thread_info_reply
+     int          priority;
+     int          last;
+     int          suspend_count;
++    int          dbg_hidden;
+     data_size_t  desc_len;
+     /* VARARG(desc,unicode_str); */
+-    char __pad_60[4];
+ };
+ 
+ 
+@@ -1064,6 +1064,7 @@ struct set_thread_info_reply
+ #define SET_THREAD_INFO_TOKEN       0x04
+ #define SET_THREAD_INFO_ENTRYPOINT  0x08
+ #define SET_THREAD_INFO_DESCRIPTION 0x10
++#define SET_THREAD_INFO_DBG_HIDDEN  0x20
+ 
+ 
+ 
+@@ -6702,7 +6703,7 @@ union generic_reply
+ 
+ /* ### protocol_version begin ### */
+ 
+-#define SERVER_PROTOCOL_VERSION 611
++#define SERVER_PROTOCOL_VERSION 612
+ 
+ /* ### protocol_version end ### */
+ 
+diff --git a/server/protocol.def b/server/protocol.def
+index 38079f23daf..a4b91b6ab62 100644
+--- a/server/protocol.def
++++ b/server/protocol.def
+@@ -945,7 +945,7 @@ struct rawinput_device
+ /* Retrieve information about a thread */
+ @REQ(get_thread_info)
+     obj_handle_t handle;        /* thread handle */
+-    thread_id_t  tid_in;        /* thread id (optional) */
++    unsigned int access;        /* required access rights */
+ @REPLY
+     process_id_t pid;           /* server process id */
+     thread_id_t  tid;           /* server thread id */
+@@ -956,6 +956,7 @@ struct rawinput_device
+     int          priority;      /* thread priority level */
+     int          last;          /* last thread in process */
+     int          suspend_count; /* thread suspend count */
++    int          dbg_hidden;    /* thread hidden from debugger */
+     data_size_t  desc_len;      /* description length in bytes */
+     VARARG(desc,unicode_str);   /* description string */
+ @END
+@@ -987,6 +988,7 @@ struct rawinput_device
+ #define SET_THREAD_INFO_TOKEN       0x04
+ #define SET_THREAD_INFO_ENTRYPOINT  0x08
+ #define SET_THREAD_INFO_DESCRIPTION 0x10
++#define SET_THREAD_INFO_DBG_HIDDEN  0x20
+ 
+ 
+ /* Retrieve information about a module */
+diff --git a/server/request.h b/server/request.h
+index 3b7db3997b5..80f7e1923fd 100644
+--- a/server/request.h
++++ b/server/request.h
+@@ -845,7 +845,7 @@ C_ASSERT( FIELD_OFFSET(struct set_process_info_request, priority) == 20 );
+ C_ASSERT( FIELD_OFFSET(struct set_process_info_request, affinity) == 24 );
+ C_ASSERT( sizeof(struct set_process_info_request) == 32 );
+ C_ASSERT( FIELD_OFFSET(struct get_thread_info_request, handle) == 12 );
+-C_ASSERT( FIELD_OFFSET(struct get_thread_info_request, tid_in) == 16 );
++C_ASSERT( FIELD_OFFSET(struct get_thread_info_request, access) == 16 );
+ C_ASSERT( sizeof(struct get_thread_info_request) == 24 );
+ C_ASSERT( FIELD_OFFSET(struct get_thread_info_reply, pid) == 8 );
+ C_ASSERT( FIELD_OFFSET(struct get_thread_info_reply, tid) == 12 );
+@@ -856,7 +856,8 @@ C_ASSERT( FIELD_OFFSET(struct get_thread_info_reply, exit_code) == 40 );
+ C_ASSERT( FIELD_OFFSET(struct get_thread_info_reply, priority) == 44 );
+ C_ASSERT( FIELD_OFFSET(struct get_thread_info_reply, last) == 48 );
+ C_ASSERT( FIELD_OFFSET(struct get_thread_info_reply, suspend_count) == 52 );
+-C_ASSERT( FIELD_OFFSET(struct get_thread_info_reply, desc_len) == 56 );
++C_ASSERT( FIELD_OFFSET(struct get_thread_info_reply, dbg_hidden) == 56 );
++C_ASSERT( FIELD_OFFSET(struct get_thread_info_reply, desc_len) == 60 );
+ C_ASSERT( sizeof(struct get_thread_info_reply) == 64 );
+ C_ASSERT( FIELD_OFFSET(struct get_thread_times_request, handle) == 12 );
+ C_ASSERT( sizeof(struct get_thread_times_request) == 16 );
+diff --git a/server/thread.c b/server/thread.c
+index 23c0538150f..b656cd37a1b 100644
+--- a/server/thread.c
++++ b/server/thread.c
+@@ -234,6 +234,7 @@ static inline void init_thread_structure( struct thread *thread )
+     thread->exit_code       = 0;
+     thread->priority        = 0;
+     thread->suspend         = 0;
++    thread->dbg_hidden      = 0;
+     thread->desktop_users   = 0;
+     thread->token           = NULL;
+     thread->desc            = NULL;
+@@ -624,6 +625,8 @@ static void set_thread_info( struct thread *thread,
+         security_set_thread_token( thread, req->token );
+     if (req->mask & SET_THREAD_INFO_ENTRYPOINT)
+         thread->entry_point = req->entry_point;
++    if (req->mask & SET_THREAD_INFO_DBG_HIDDEN)
++        thread->dbg_hidden = 1;
+     if (req->mask & SET_THREAD_INFO_DESCRIPTION)
+     {
+         WCHAR *desc;
+@@ -1515,11 +1518,10 @@ DECL_HANDLER(open_thread)
+ DECL_HANDLER(get_thread_info)
+ {
+     struct thread *thread;
+-    obj_handle_t handle = req->handle;
+-
+-    if (!handle) thread = get_thread_from_id( req->tid_in );
+-    else thread = get_thread_from_handle( req->handle, THREAD_QUERY_LIMITED_INFORMATION );
++    unsigned int access = req->access & (THREAD_QUERY_INFORMATION | THREAD_QUERY_LIMITED_INFORMATION);
+ 
++    if (!access) access = THREAD_QUERY_LIMITED_INFORMATION;
++    thread = get_thread_from_handle( req->handle, access );
+     if (thread)
+     {
+         reply->pid            = get_process_id( thread->process );
+@@ -1531,6 +1533,7 @@ DECL_HANDLER(get_thread_info)
+         reply->affinity       = thread->affinity;
+         reply->last           = thread->process->running_threads == 1;
+         reply->suspend_count  = thread->suspend;
++        reply->dbg_hidden     = thread->dbg_hidden;
+         reply->desc_len       = thread->desc_len;
+ 
+         if (thread->desc && get_reply_max_size())
+diff --git a/server/thread.h b/server/thread.h
+index 5d12d24dd89..183f6baa0f2 100644
+--- a/server/thread.h
++++ b/server/thread.h
+@@ -82,6 +82,7 @@ struct thread
+     affinity_t             affinity;      /* affinity mask */
+     int                    priority;      /* priority level */
+     int                    suspend;       /* suspend count */
++    int                    dbg_hidden;    /* hidden from debugger */
+     obj_handle_t           desktop;       /* desktop handle */
+     int                    desktop_users; /* number of objects using the thread desktop */
+     timeout_t              creation_time; /* Thread creation time */
+diff --git a/server/trace.c b/server/trace.c
+index 951ac44d9d2..94757bf4557 100644
+--- a/server/trace.c
++++ b/server/trace.c
+@@ -1415,7 +1415,7 @@ static void dump_set_process_info_request( const struct set_process_info_request
+ static void dump_get_thread_info_request( const struct get_thread_info_request *req )
+ {
+     fprintf( stderr, " handle=%04x", req->handle );
+-    fprintf( stderr, ", tid_in=%04x", req->tid_in );
++    fprintf( stderr, ", access=%08x", req->access );
+ }
+ 
+ static void dump_get_thread_info_reply( const struct get_thread_info_reply *req )
+@@ -1429,6 +1429,7 @@ static void dump_get_thread_info_reply( const struct get_thread_info_reply *req
+     fprintf( stderr, ", priority=%d", req->priority );
+     fprintf( stderr, ", last=%d", req->last );
+     fprintf( stderr, ", suspend_count=%d", req->suspend_count );
++    fprintf( stderr, ", dbg_hidden=%d", req->dbg_hidden );
+     fprintf( stderr, ", desc_len=%u", req->desc_len );
+     dump_varargs_unicode_str( ", desc=", cur_size );
+ }
+
+From 083cb5c783c361f7c271a60cb8e87ac1f609dd70 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
+Date: Thu, 25 Jun 2020 19:08:40 +0200
+Subject: [PATCH] user32/tests: Add GetRawInputBuffer tests.
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Rémi Bernon <rbernon@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/user32/tests/input.c | 247 ++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 247 insertions(+)
+
+diff --git a/dlls/user32/tests/input.c b/dlls/user32/tests/input.c
+index 3130f3987e3..979471551ff 100644
+--- a/dlls/user32/tests/input.c
++++ b/dlls/user32/tests/input.c
+@@ -85,6 +85,7 @@ static int (WINAPI *pGetMouseMovePointsEx) (UINT, LPMOUSEMOVEPOINT, LPMOUSEMOVEP
+ static UINT (WINAPI *pGetRawInputDeviceList) (PRAWINPUTDEVICELIST, PUINT, UINT);
+ static UINT (WINAPI *pGetRawInputDeviceInfoW) (HANDLE, UINT, void *, UINT *);
+ static UINT (WINAPI *pGetRawInputDeviceInfoA) (HANDLE, UINT, void *, UINT *);
++static BOOL (WINAPI *pIsWow64Process)(HANDLE, PBOOL);
+ 
+ #define MAXKEYEVENTS 12
+ #define MAXKEYMESSAGES MAXKEYEVENTS /* assuming a key event generates one
+@@ -147,6 +148,7 @@ static BYTE InputKeyStateTable[256];
+ static BYTE AsyncKeyStateTable[256];
+ static BYTE TrackSysKey = 0; /* determine whether ALT key up will cause a WM_SYSKEYUP
+                          or a WM_KEYUP message */
++static BOOL is_wow64;
+ 
+ static void init_function_pointers(void)
+ {
+@@ -162,7 +164,13 @@ static void init_function_pointers(void)
+     GET_PROC(GetRawInputDeviceList);
+     GET_PROC(GetRawInputDeviceInfoW);
+     GET_PROC(GetRawInputDeviceInfoA);
++
++    hdll = GetModuleHandleA("kernel32");
++    GET_PROC(IsWow64Process);
+ #undef GET_PROC
++
++    if (!pIsWow64Process || !pIsWow64Process( GetCurrentProcess(), &is_wow64 ))
++        is_wow64 = FALSE;
+ }
+ 
+ static int KbdMessage( KEV kev, WPARAM *pwParam, LPARAM *plParam )
+@@ -1820,6 +1828,244 @@ static void test_RegisterRawInputDevices(void)
+     DestroyWindow(hwnd);
+ }
+ 
++static int rawinputbuffer_wndproc_count;
++
++#ifdef _WIN64
++typedef RAWINPUT RAWINPUT64;
++#else
++typedef struct
++{
++    RAWINPUTHEADER header;
++    char pad[8];
++    union {
++        RAWMOUSE    mouse;
++        RAWKEYBOARD keyboard;
++        RAWHID      hid;
++    } data;
++} RAWINPUT64;
++#endif
++
++static int rawinput_buffer_mouse_x(void *buffer, size_t index)
++{
++    if (is_wow64) return ((RAWINPUT64 *)buffer)[index].data.mouse.lLastX;
++    return ((RAWINPUT *)buffer)[index].data.mouse.lLastX;
++}
++
++static LRESULT CALLBACK rawinputbuffer_wndproc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
++{
++    RAWINPUT ri;
++    char buffer[16 * sizeof(RAWINPUT64)];
++    UINT size, count, rawinput_size, iteration = rawinputbuffer_wndproc_count++;
++    MSG message;
++
++    if (is_wow64) rawinput_size = sizeof(RAWINPUT64);
++    else rawinput_size = sizeof(RAWINPUT);
++
++    if (msg == WM_INPUT)
++    {
++        count = GetRawInputBuffer(NULL, NULL, sizeof(RAWINPUTHEADER));
++        todo_wine
++        ok(count == ~0U, "GetRawInputBuffer succeeded\n");
++
++        size = sizeof(buffer);
++        count = GetRawInputBuffer(NULL, &size, sizeof(RAWINPUTHEADER));
++        ok(count == 0, "GetRawInputBuffer returned %u\n", count);
++        todo_wine
++        ok(size == rawinput_size, "GetRawInputBuffer returned unexpected size: %u\n", size);
++
++        size = sizeof(buffer);
++        memset(buffer, 0, sizeof(buffer));
++        count = GetRawInputBuffer((RAWINPUT*)buffer, &size, sizeof(RAWINPUTHEADER));
++        todo_wine
++        ok(count == 3, "GetRawInputBuffer returned %u\n", count);
++        ok(size == sizeof(buffer), "GetRawInputBuffer returned unexpected size: %u\n", size);
++        todo_wine
++        ok(rawinput_buffer_mouse_x(buffer, 0) == 2, "Unexpected rawinput data: %d\n", rawinput_buffer_mouse_x(buffer, 0));
++        todo_wine
++        ok(rawinput_buffer_mouse_x(buffer, 1) == 3, "Unexpected rawinput data: %d\n", rawinput_buffer_mouse_x(buffer, 1));
++        todo_wine
++        ok(rawinput_buffer_mouse_x(buffer, 2) == 4, "Unexpected rawinput data: %d\n", rawinput_buffer_mouse_x(buffer, 2));
++
++        /* the first event should be removed by the next GetRawInputBuffer call
++         * and the others should do another round through the message loop but not more */
++        if (iteration == 0)
++        {
++            mouse_event(MOUSEEVENTF_MOVE, 5, 0, 0, 0);
++            mouse_event(MOUSEEVENTF_MOVE, 6, 0, 0, 0);
++            mouse_event(MOUSEEVENTF_MOVE, 2, 0, 0, 0);
++            mouse_event(MOUSEEVENTF_MOVE, 3, 0, 0, 0);
++            mouse_event(MOUSEEVENTF_MOVE, 4, 0, 0, 0);
++
++            /* even though rawinput_size is the minimum required size,
++             * it needs one more byte to return success */
++            size = rawinput_size + 1;
++            memset(buffer, 0, sizeof(buffer));
++            count = GetRawInputBuffer((RAWINPUT*)buffer, &size, sizeof(RAWINPUTHEADER));
++            todo_wine
++            ok(count == 1, "GetRawInputBuffer returned %u\n", count);
++            todo_wine
++            ok(rawinput_buffer_mouse_x(buffer, 0) == 5, "Unexpected rawinput data: %d\n", rawinput_buffer_mouse_x(buffer, 0));
++
++            /* peek the messages now, they should still arrive in the correct order */
++            while (PeekMessageA(&message, 0, WM_INPUT, WM_INPUT, PM_REMOVE)) DispatchMessageA(&message);
++        }
++
++        /* reading the message data now should fail on the second iteration, the data
++         * from the first message has been overwritten. */
++        size = sizeof(ri);
++        memset(&ri, 0, sizeof(ri));
++        count = GetRawInputData((HRAWINPUT)lparam, RID_INPUT, &ri, &size, sizeof(RAWINPUTHEADER));
++        if (iteration == 1)
++        {
++            ok(count == sizeof(ri), "GetRawInputData failed\n");
++            todo_wine
++            ok(ri.data.mouse.lLastX == 6, "Unexpected rawinput data: %d\n", ri.data.mouse.lLastX);
++        }
++        else
++        {
++            todo_wine
++            ok(count == ~0U, "GetRawInputData succeeded\n");
++        }
++    }
++
++    return DefWindowProcA(hwnd, msg, wparam, lparam);
++}
++
++static void test_GetRawInputBuffer(void)
++{
++    RAWINPUTDEVICE raw_devices[1];
++    char buffer[16 * sizeof(RAWINPUT64)];
++    UINT size, count, rawinput_size;
++    HWND hwnd;
++    BOOL ret;
++
++    if (is_wow64) rawinput_size = sizeof(RAWINPUT64);
++    else rawinput_size = sizeof(RAWINPUT);
++
++    hwnd = CreateWindowA("static", "static", WS_VISIBLE | WS_POPUP,
++                         100, 100, 100, 100, 0, NULL, NULL, NULL);
++    SetWindowLongPtrA(hwnd, GWLP_WNDPROC, (LONG_PTR)rawinputbuffer_wndproc);
++    ok(hwnd != 0, "CreateWindow failed\n");
++    empty_message_queue();
++
++    raw_devices[0].usUsagePage = 0x01;
++    raw_devices[0].usUsage = 0x02;
++    raw_devices[0].dwFlags = RIDEV_INPUTSINK;
++    raw_devices[0].hwndTarget = hwnd;
++
++    SetLastError(0xdeadbeef);
++    ret = RegisterRawInputDevices(raw_devices, ARRAY_SIZE(raw_devices), sizeof(RAWINPUTDEVICE));
++    ok(ret, "RegisterRawInputDevices failed\n");
++    ok(GetLastError() == 0xdeadbeef, "RegisterRawInputDevices returned %08x\n", GetLastError());
++
++    SetLastError(0xdeadbeef);
++    count = GetRawInputBuffer(NULL, NULL, sizeof(RAWINPUTHEADER));
++    todo_wine
++    ok(count == ~0U, "GetRawInputBuffer succeeded\n");
++    todo_wine
++    ok(GetLastError() == ERROR_INVALID_PARAMETER, "GetRawInputBuffer returned %08x\n", GetLastError());
++
++    size = sizeof(buffer);
++    count = GetRawInputBuffer(NULL, &size, sizeof(RAWINPUTHEADER));
++    ok(count == 0U, "GetRawInputBuffer returned %u\n", count);
++    todo_wine
++    ok(size == 0U, "GetRawInputBuffer returned unexpected size: %u\n", size);
++
++    size = 0;
++    count = GetRawInputBuffer((RAWINPUT*)buffer, &size, sizeof(RAWINPUTHEADER));
++    ok(count == 0U, "GetRawInputBuffer returned %u\n", count);
++    ok(size == 0U, "GetRawInputBuffer returned unexpected size: %u\n", size);
++
++    SetLastError(0xdeadbeef);
++    size = sizeof(buffer);
++    count = GetRawInputBuffer((RAWINPUT*)buffer, &size, 0);
++    todo_wine
++    ok(count == ~0U, "GetRawInputBuffer succeeded\n");
++    todo_wine
++    ok(GetLastError() == ERROR_INVALID_PARAMETER, "GetRawInputBuffer returned %08x\n", GetLastError());
++
++    size = sizeof(buffer);
++    count = GetRawInputBuffer((RAWINPUT*)buffer, &size, sizeof(RAWINPUTHEADER));
++    ok(count == 0U, "GetRawInputBuffer returned %u\n", count);
++    todo_wine
++    ok(size == 0U, "GetRawInputBuffer returned unexpected size: %u\n", size);
++
++    mouse_event(MOUSEEVENTF_MOVE, 5, 0, 0, 0);
++
++    SetLastError(0xdeadbeef);
++    size = 0;
++    count = GetRawInputBuffer((RAWINPUT*)buffer, &size, sizeof(RAWINPUTHEADER));
++    todo_wine
++    ok(count == ~0U, "GetRawInputBuffer succeeded\n");
++    todo_wine
++    ok(size == rawinput_size, "GetRawInputBuffer returned unexpected size: %u\n", size);
++    todo_wine
++    ok(GetLastError() == ERROR_INSUFFICIENT_BUFFER, "GetRawInputBuffer returned %08x\n", GetLastError());
++
++    size = 0;
++    count = GetRawInputBuffer(NULL, &size, sizeof(RAWINPUTHEADER));
++    ok(count == 0, "GetRawInputBuffer returned %u\n", count);
++    todo_wine
++    ok(size == rawinput_size, "GetRawInputBuffer returned unexpected size: %u\n", size);
++
++    SetLastError(0xdeadbeef);
++    size = sizeof(buffer);
++    count = GetRawInputBuffer((RAWINPUT*)buffer, &size, 0);
++    todo_wine
++    ok(count == ~0U, "GetRawInputBuffer succeeded\n");
++    todo_wine
++    ok(GetLastError() == ERROR_INVALID_PARAMETER, "GetRawInputBuffer returned %08x\n", GetLastError());
++
++    size = sizeof(buffer);
++    memset(buffer, 0, sizeof(buffer));
++    count = GetRawInputBuffer((RAWINPUT*)buffer, &size, sizeof(RAWINPUTHEADER));
++    todo_wine
++    ok(count == 1U, "GetRawInputBuffer returned %u\n", count);
++    ok(size == sizeof(buffer), "GetRawInputBuffer returned unexpected size: %u\n", size);
++    todo_wine
++    ok(rawinput_buffer_mouse_x(buffer, 0) == 5, "Unexpected rawinput data: %d\n", rawinput_buffer_mouse_x(buffer, 0));
++
++
++    /* NOTE: calling with size == rawinput_size returns an error, */
++    /* BUT it fills the buffer nonetheless and empties the internal buffer (!!) */
++    mouse_event(MOUSEEVENTF_MOVE, 5, 0, 0, 0);
++
++    SetLastError(0xdeadbeef);
++    size = rawinput_size;
++    memset(buffer, 0, sizeof(buffer));
++    count = GetRawInputBuffer((RAWINPUT*)buffer, &size, sizeof(RAWINPUTHEADER));
++    todo_wine
++    ok(count == ~0U, "GetRawInputBuffer succeeded\n");
++    todo_wine
++    ok(GetLastError() == ERROR_INSUFFICIENT_BUFFER, "GetRawInputBuffer returned %08x\n", GetLastError());
++    todo_wine
++    ok(rawinput_buffer_mouse_x(buffer, 0) == 5, "Unexpected rawinput data: %d\n", rawinput_buffer_mouse_x(buffer, 0));
++
++    size = sizeof(buffer);
++    count = GetRawInputBuffer((RAWINPUT*)buffer, &size, sizeof(RAWINPUTHEADER));
++    ok(count == 0U, "GetRawInputBuffer returned %u\n", count);
++
++
++    rawinputbuffer_wndproc_count = 0;
++    mouse_event(MOUSEEVENTF_MOVE, 1, 0, 0, 0);
++    mouse_event(MOUSEEVENTF_MOVE, 2, 0, 0, 0);
++    mouse_event(MOUSEEVENTF_MOVE, 3, 0, 0, 0);
++    mouse_event(MOUSEEVENTF_MOVE, 4, 0, 0, 0);
++    empty_message_queue();
++    todo_wine
++    ok(rawinputbuffer_wndproc_count == 2, "Spurious WM_INPUT messages\n");
++
++    raw_devices[0].dwFlags = RIDEV_REMOVE;
++    raw_devices[0].hwndTarget = 0;
++
++    SetLastError(0xdeadbeef);
++    ret = RegisterRawInputDevices(raw_devices, ARRAY_SIZE(raw_devices), sizeof(RAWINPUTDEVICE));
++    ok(ret, "RegisterRawInputDevices failed\n");
++    ok(GetLastError() == 0xdeadbeef, "RegisterRawInputDevices returned %08x\n", GetLastError());
++
++    DestroyWindow(hwnd);
++}
++
+ static BOOL rawinput_test_received_legacy;
+ static BOOL rawinput_test_received_raw;
+ static BOOL rawinput_test_received_rawfg;
+@@ -3522,6 +3768,7 @@ START_TEST(input)
+     test_GetKeyState();
+     test_OemKeyScan();
+     test_GetRawInputData();
++    test_GetRawInputBuffer();
+     test_RegisterRawInputDevices();
+     test_rawinput(argv[0]);
+ 
+From 262ad90d3fb871c38ed3b95c63aa9eaf5d57b28d Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
+Date: Thu, 25 Jun 2020 19:08:41 +0200
+Subject: [PATCH] user32: Introduce rawinput_from_hardware_message helper.
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Rémi Bernon <rbernon@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/user32/message.c      |  96 +--------------------------------
+ dlls/user32/rawinput.c     | 105 +++++++++++++++++++++++++++++++++++++
+ dlls/user32/user_private.h |   3 ++
+ 3 files changed, 109 insertions(+), 95 deletions(-)
+
+diff --git a/dlls/user32/message.c b/dlls/user32/message.c
+index 45fc07bbff3..89ffa07f700 100644
+--- a/dlls/user32/message.c
++++ b/dlls/user32/message.c
+@@ -2295,102 +2295,8 @@ static BOOL process_rawinput_message( MSG *msg, const struct hardware_msg_data *
+         if (!(rawinput = thread_info->rawinput)) return FALSE;
+     }
+ 
+-    rawinput->header.dwType = msg_data->rawinput.type;
+-    if (msg_data->rawinput.type == RIM_TYPEMOUSE)
+-    {
+-        static const unsigned int button_flags[] =
+-        {
+-            0,                              /* MOUSEEVENTF_MOVE */
+-            RI_MOUSE_LEFT_BUTTON_DOWN,      /* MOUSEEVENTF_LEFTDOWN */
+-            RI_MOUSE_LEFT_BUTTON_UP,        /* MOUSEEVENTF_LEFTUP */
+-            RI_MOUSE_RIGHT_BUTTON_DOWN,     /* MOUSEEVENTF_RIGHTDOWN */
+-            RI_MOUSE_RIGHT_BUTTON_UP,       /* MOUSEEVENTF_RIGHTUP */
+-            RI_MOUSE_MIDDLE_BUTTON_DOWN,    /* MOUSEEVENTF_MIDDLEDOWN */
+-            RI_MOUSE_MIDDLE_BUTTON_UP,      /* MOUSEEVENTF_MIDDLEUP */
+-        };
+-        unsigned int i;
+-
+-        rawinput->header.dwSize  = FIELD_OFFSET(RAWINPUT, data) + sizeof(RAWMOUSE);
+-        rawinput->header.hDevice = WINE_MOUSE_HANDLE;
+-        rawinput->header.wParam  = 0;
+-
+-        rawinput->data.mouse.usFlags           = MOUSE_MOVE_RELATIVE;
+-        rawinput->data.mouse.u.s.usButtonFlags = 0;
+-        rawinput->data.mouse.u.s.usButtonData  = 0;
+-        for (i = 1; i < ARRAY_SIZE(button_flags); ++i)
+-        {
+-            if (msg_data->flags & (1 << i))
+-                rawinput->data.mouse.u.s.usButtonFlags |= button_flags[i];
+-        }
+-        if (msg_data->flags & MOUSEEVENTF_WHEEL)
+-        {
+-            rawinput->data.mouse.u.s.usButtonFlags |= RI_MOUSE_WHEEL;
+-            rawinput->data.mouse.u.s.usButtonData   = msg_data->rawinput.mouse.data;
+-        }
+-        if (msg_data->flags & MOUSEEVENTF_HWHEEL)
+-        {
+-            rawinput->data.mouse.u.s.usButtonFlags |= RI_MOUSE_HORIZONTAL_WHEEL;
+-            rawinput->data.mouse.u.s.usButtonData   = msg_data->rawinput.mouse.data;
+-        }
+-        if (msg_data->flags & MOUSEEVENTF_XDOWN)
+-        {
+-            if (msg_data->rawinput.mouse.data == XBUTTON1)
+-                rawinput->data.mouse.u.s.usButtonFlags |= RI_MOUSE_BUTTON_4_DOWN;
+-            else if (msg_data->rawinput.mouse.data == XBUTTON2)
+-                rawinput->data.mouse.u.s.usButtonFlags |= RI_MOUSE_BUTTON_5_DOWN;
+-        }
+-        if (msg_data->flags & MOUSEEVENTF_XUP)
+-        {
+-            if (msg_data->rawinput.mouse.data == XBUTTON1)
+-                rawinput->data.mouse.u.s.usButtonFlags |= RI_MOUSE_BUTTON_4_UP;
+-            else if (msg_data->rawinput.mouse.data == XBUTTON2)
+-                rawinput->data.mouse.u.s.usButtonFlags |= RI_MOUSE_BUTTON_5_UP;
+-        }
+-
+-        rawinput->data.mouse.ulRawButtons       = 0;
+-        rawinput->data.mouse.lLastX             = msg_data->rawinput.mouse.x;
+-        rawinput->data.mouse.lLastY             = msg_data->rawinput.mouse.y;
+-        rawinput->data.mouse.ulExtraInformation = msg_data->info;
+-    }
+-    else if (msg_data->rawinput.type == RIM_TYPEKEYBOARD)
+-    {
+-        rawinput->header.dwSize  = FIELD_OFFSET(RAWINPUT, data) + sizeof(RAWKEYBOARD);
+-        rawinput->header.hDevice = WINE_KEYBOARD_HANDLE;
+-        rawinput->header.wParam  = 0;
+-
+-        rawinput->data.keyboard.MakeCode = msg_data->rawinput.kbd.scan;
+-        rawinput->data.keyboard.Flags    = msg_data->flags & KEYEVENTF_KEYUP ? RI_KEY_BREAK : RI_KEY_MAKE;
+-        if (msg_data->flags & KEYEVENTF_EXTENDEDKEY) rawinput->data.keyboard.Flags |= RI_KEY_E0;
+-        rawinput->data.keyboard.Reserved = 0;
+-
+-        switch (msg_data->rawinput.kbd.vkey)
+-        {
+-        case VK_LSHIFT:
+-        case VK_RSHIFT:
+-            rawinput->data.keyboard.VKey   = VK_SHIFT;
+-            rawinput->data.keyboard.Flags &= ~RI_KEY_E0;
+-            break;
+-        case VK_LCONTROL:
+-        case VK_RCONTROL:
+-            rawinput->data.keyboard.VKey = VK_CONTROL;
+-            break;
+-        case VK_LMENU:
+-        case VK_RMENU:
+-            rawinput->data.keyboard.VKey = VK_MENU;
+-            break;
+-        default:
+-            rawinput->data.keyboard.VKey = msg_data->rawinput.kbd.vkey;
+-            break;
+-        }
+-
+-        rawinput->data.keyboard.Message          = msg_data->rawinput.kbd.message;
+-        rawinput->data.keyboard.ExtraInformation = msg_data->info;
+-    }
+-    else
+-    {
+-        FIXME("Unhandled rawinput type %#x.\n", msg_data->rawinput.type);
++    if (!rawinput_from_hardware_message(rawinput, msg_data))
+         return FALSE;
+-    }
+ 
+     msg->lParam = (LPARAM)rawinput;
+     msg->pt = point_phys_to_win_dpi( msg->hwnd, msg->pt );
+diff --git a/dlls/user32/rawinput.c b/dlls/user32/rawinput.c
+index 103835e0e33..56efc09179d 100644
+--- a/dlls/user32/rawinput.c
++++ b/dlls/user32/rawinput.c
+@@ -23,6 +23,7 @@
+ #include <stdarg.h>
+ 
+ #define NONAMELESSUNION
++#define NONAMELESSSTRUCT
+ #include "windef.h"
+ #include "winbase.h"
+ #include "wingdi.h"
+@@ -221,6 +222,110 @@ static void find_devices(void)
+     LeaveCriticalSection(&rawinput_devices_cs);
+ }
+ 
++
++BOOL rawinput_from_hardware_message(RAWINPUT *rawinput, const struct hardware_msg_data *msg_data)
++{
++    rawinput->header.dwType = msg_data->rawinput.type;
++    if (msg_data->rawinput.type == RIM_TYPEMOUSE)
++    {
++        static const unsigned int button_flags[] =
++        {
++            0,                              /* MOUSEEVENTF_MOVE */
++            RI_MOUSE_LEFT_BUTTON_DOWN,      /* MOUSEEVENTF_LEFTDOWN */
++            RI_MOUSE_LEFT_BUTTON_UP,        /* MOUSEEVENTF_LEFTUP */
++            RI_MOUSE_RIGHT_BUTTON_DOWN,     /* MOUSEEVENTF_RIGHTDOWN */
++            RI_MOUSE_RIGHT_BUTTON_UP,       /* MOUSEEVENTF_RIGHTUP */
++            RI_MOUSE_MIDDLE_BUTTON_DOWN,    /* MOUSEEVENTF_MIDDLEDOWN */
++            RI_MOUSE_MIDDLE_BUTTON_UP,      /* MOUSEEVENTF_MIDDLEUP */
++        };
++        unsigned int i;
++
++        rawinput->header.dwSize  = FIELD_OFFSET(RAWINPUT, data) + sizeof(RAWMOUSE);
++        rawinput->header.hDevice = WINE_MOUSE_HANDLE;
++        rawinput->header.wParam  = 0;
++
++        rawinput->data.mouse.usFlags           = MOUSE_MOVE_RELATIVE;
++        rawinput->data.mouse.u.s.usButtonFlags = 0;
++        rawinput->data.mouse.u.s.usButtonData  = 0;
++        for (i = 1; i < ARRAY_SIZE(button_flags); ++i)
++        {
++            if (msg_data->flags & (1 << i))
++                rawinput->data.mouse.u.s.usButtonFlags |= button_flags[i];
++        }
++        if (msg_data->flags & MOUSEEVENTF_WHEEL)
++        {
++            rawinput->data.mouse.u.s.usButtonFlags |= RI_MOUSE_WHEEL;
++            rawinput->data.mouse.u.s.usButtonData   = msg_data->rawinput.mouse.data;
++        }
++        if (msg_data->flags & MOUSEEVENTF_HWHEEL)
++        {
++            rawinput->data.mouse.u.s.usButtonFlags |= RI_MOUSE_HORIZONTAL_WHEEL;
++            rawinput->data.mouse.u.s.usButtonData   = msg_data->rawinput.mouse.data;
++        }
++        if (msg_data->flags & MOUSEEVENTF_XDOWN)
++        {
++            if (msg_data->rawinput.mouse.data == XBUTTON1)
++                rawinput->data.mouse.u.s.usButtonFlags |= RI_MOUSE_BUTTON_4_DOWN;
++            else if (msg_data->rawinput.mouse.data == XBUTTON2)
++                rawinput->data.mouse.u.s.usButtonFlags |= RI_MOUSE_BUTTON_5_DOWN;
++        }
++        if (msg_data->flags & MOUSEEVENTF_XUP)
++        {
++            if (msg_data->rawinput.mouse.data == XBUTTON1)
++                rawinput->data.mouse.u.s.usButtonFlags |= RI_MOUSE_BUTTON_4_UP;
++            else if (msg_data->rawinput.mouse.data == XBUTTON2)
++                rawinput->data.mouse.u.s.usButtonFlags |= RI_MOUSE_BUTTON_5_UP;
++        }
++
++        rawinput->data.mouse.ulRawButtons       = 0;
++        rawinput->data.mouse.lLastX             = msg_data->rawinput.mouse.x;
++        rawinput->data.mouse.lLastY             = msg_data->rawinput.mouse.y;
++        rawinput->data.mouse.ulExtraInformation = msg_data->info;
++    }
++    else if (msg_data->rawinput.type == RIM_TYPEKEYBOARD)
++    {
++        rawinput->header.dwSize  = FIELD_OFFSET(RAWINPUT, data) + sizeof(RAWKEYBOARD);
++        rawinput->header.hDevice = WINE_KEYBOARD_HANDLE;
++        rawinput->header.wParam  = 0;
++
++        rawinput->data.keyboard.MakeCode = msg_data->rawinput.kbd.scan;
++        rawinput->data.keyboard.Flags    = msg_data->flags & KEYEVENTF_KEYUP ? RI_KEY_BREAK : RI_KEY_MAKE;
++        if (msg_data->flags & KEYEVENTF_EXTENDEDKEY) rawinput->data.keyboard.Flags |= RI_KEY_E0;
++        rawinput->data.keyboard.Reserved = 0;
++
++        switch (msg_data->rawinput.kbd.vkey)
++        {
++        case VK_LSHIFT:
++        case VK_RSHIFT:
++            rawinput->data.keyboard.VKey   = VK_SHIFT;
++            rawinput->data.keyboard.Flags &= ~RI_KEY_E0;
++            break;
++        case VK_LCONTROL:
++        case VK_RCONTROL:
++            rawinput->data.keyboard.VKey = VK_CONTROL;
++            break;
++        case VK_LMENU:
++        case VK_RMENU:
++            rawinput->data.keyboard.VKey = VK_MENU;
++            break;
++        default:
++            rawinput->data.keyboard.VKey = msg_data->rawinput.kbd.vkey;
++            break;
++        }
++
++        rawinput->data.keyboard.Message          = msg_data->rawinput.kbd.message;
++        rawinput->data.keyboard.ExtraInformation = msg_data->info;
++    }
++    else
++    {
++        FIXME("Unhandled rawinput type %#x.\n", msg_data->rawinput.type);
++        return FALSE;
++    }
++
++    return TRUE;
++}
++
++
+ /***********************************************************************
+  *              GetRawInputDeviceList   (USER32.@)
+  */
+diff --git a/dlls/user32/user_private.h b/dlls/user32/user_private.h
+index 0230dd45001..25bbeba6f0c 100644
+--- a/dlls/user32/user_private.h
++++ b/dlls/user32/user_private.h
+@@ -230,6 +230,9 @@ extern HMODULE user32_module DECLSPEC_HIDDEN;
+ struct dce;
+ struct tagWND;
+ 
++struct hardware_msg_data;
++extern BOOL rawinput_from_hardware_message(RAWINPUT *rawinput, const struct hardware_msg_data *msg_data);
++
+ extern void CLIPBOARD_ReleaseOwner( HWND hwnd ) DECLSPEC_HIDDEN;
+ extern BOOL FOCUS_MouseActivate( HWND hwnd ) DECLSPEC_HIDDEN;
+ extern BOOL set_capture_window( HWND hwnd, UINT gui_flags, HWND *prev_ret ) DECLSPEC_HIDDEN;
+From b269354f456b6abde1d01d304f158c0fd924c181 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
+Date: Thu, 25 Jun 2020 19:08:42 +0200
+Subject: [PATCH] user32: Introduce rawinput_thread_data helper.
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Rémi Bernon <rbernon@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/user32/message.c      | 10 +---------
+ dlls/user32/rawinput.c     |  9 +++++++++
+ dlls/user32/user_private.h |  7 ++++++-
+ 3 files changed, 16 insertions(+), 10 deletions(-)
+
+diff --git a/dlls/user32/message.c b/dlls/user32/message.c
+index 89ffa07f700..c5c7db667cf 100644
+--- a/dlls/user32/message.c
++++ b/dlls/user32/message.c
+@@ -2286,15 +2286,7 @@ static void accept_hardware_message( UINT hw_id, BOOL remove )
+ 
+ static BOOL process_rawinput_message( MSG *msg, const struct hardware_msg_data *msg_data )
+ {
+-    struct user_thread_info *thread_info = get_user_thread_info();
+-    RAWINPUT *rawinput = thread_info->rawinput;
+-
+-    if (!rawinput)
+-    {
+-        thread_info->rawinput = HeapAlloc( GetProcessHeap(), 0, sizeof(*rawinput) );
+-        if (!(rawinput = thread_info->rawinput)) return FALSE;
+-    }
+-
++    RAWINPUT *rawinput = rawinput_thread_data();
+     if (!rawinput_from_hardware_message(rawinput, msg_data))
+         return FALSE;
+ 
+diff --git a/dlls/user32/rawinput.c b/dlls/user32/rawinput.c
+index 56efc09179d..1ec6c7bd236 100644
+--- a/dlls/user32/rawinput.c
++++ b/dlls/user32/rawinput.c
+@@ -223,6 +223,15 @@ static void find_devices(void)
+ }
+ 
+ 
++RAWINPUT *rawinput_thread_data(void)
++{
++    struct user_thread_info *thread_info = get_user_thread_info();
++    RAWINPUT *rawinput = thread_info->rawinput;
++    if (!rawinput) rawinput = thread_info->rawinput = HeapAlloc( GetProcessHeap(), 0, RAWINPUT_BUFFER_SIZE );
++    return rawinput;
++}
++
++
+ BOOL rawinput_from_hardware_message(RAWINPUT *rawinput, const struct hardware_msg_data *msg_data)
+ {
+     rawinput->header.dwType = msg_data->rawinput.type;
+diff --git a/dlls/user32/user_private.h b/dlls/user32/user_private.h
+index 25bbeba6f0c..d7f4741ebe6 100644
+--- a/dlls/user32/user_private.h
++++ b/dlls/user32/user_private.h
+@@ -169,6 +169,10 @@ struct wm_char_mapping_data
+     MSG  get_msg;
+ };
+ 
++/* on windows the buffer capacity is quite large as well, enough to */
++/* hold up to 10s of 1kHz mouse rawinput events */
++#define RAWINPUT_BUFFER_SIZE (512*1024)
++
+ /* this is the structure stored in TEB->Win32ClientInfo */
+ /* no attempt is made to keep the layout compatible with the Windows one */
+ struct user_thread_info
+@@ -192,7 +196,7 @@ struct user_thread_info
+     struct user_key_state_info   *key_state;              /* Cache of global key state */
+     HWND                          top_window;             /* Desktop window */
+     HWND                          msg_window;             /* HWND_MESSAGE parent window */
+-    RAWINPUT                     *rawinput;
++    RAWINPUT                     *rawinput;               /* Rawinput buffer */
+ };
+ 
+ C_ASSERT( sizeof(struct user_thread_info) <= sizeof(((TEB *)0)->Win32ClientInfo) );
+@@ -232,6 +236,7 @@ struct tagWND;
+ 
+ struct hardware_msg_data;
+ extern BOOL rawinput_from_hardware_message(RAWINPUT *rawinput, const struct hardware_msg_data *msg_data);
++extern RAWINPUT *rawinput_thread_data(void);
+ 
+ extern void CLIPBOARD_ReleaseOwner( HWND hwnd ) DECLSPEC_HIDDEN;
+ extern BOOL FOCUS_MouseActivate( HWND hwnd ) DECLSPEC_HIDDEN;
+From 3a9edf9aad43c3e8ba724571da5381f821f1dc56 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
+Date: Thu, 25 Jun 2020 19:08:43 +0200
+Subject: [PATCH] user32: Implement GetRawInputBuffer.
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+CoD: WWII uses it to read mouse motion instead of listening to WM_INPUT
+messages.
+
+Signed-off-by: Rémi Bernon <rbernon@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/user32/rawinput.c         | 91 +++++++++++++++++++++++++++++++++-
+ dlls/user32/tests/input.c      | 27 ----------
+ dlls/user32/user_private.h     |  2 +-
+ include/wine/server_protocol.h | 21 +++++++-
+ server/protocol.def            | 10 ++++
+ server/queue.c                 | 40 +++++++++++++++
+ server/request.h               |  8 +++
+ server/trace.c                 | 16 ++++++
+ 8 files changed, 184 insertions(+), 31 deletions(-)
+
+diff --git a/dlls/user32/rawinput.c b/dlls/user32/rawinput.c
+index 1ec6c7bd236..775b066e673 100644
+--- a/dlls/user32/rawinput.c
++++ b/dlls/user32/rawinput.c
+@@ -491,14 +491,101 @@ UINT WINAPI GetRawInputData(HRAWINPUT rawinput, UINT command, void *data, UINT *
+     return s;
+ }
+ 
++#ifdef _WIN64
++typedef RAWINPUT RAWINPUT64;
++#else
++typedef struct
++{
++    RAWINPUTHEADER header;
++    char pad[8];
++    union {
++        RAWMOUSE    mouse;
++        RAWKEYBOARD keyboard;
++        RAWHID      hid;
++    } data;
++} RAWINPUT64;
++#endif
++
+ /***********************************************************************
+  *              GetRawInputBuffer   (USER32.@)
+  */
+ UINT WINAPI DECLSPEC_HOTPATCH GetRawInputBuffer(RAWINPUT *data, UINT *data_size, UINT header_size)
+ {
+-    FIXME("data %p, data_size %p, header_size %u stub!\n", data, data_size, header_size);
++    struct hardware_msg_data *msg_data;
++    RAWINPUT *rawinput;
++    UINT count = 0, rawinput_size, next_size, overhead;
++    BOOL is_wow64;
++    int i;
++
++    if (IsWow64Process( GetCurrentProcess(), &is_wow64 ) && is_wow64)
++        rawinput_size = sizeof(RAWINPUT64);
++    else
++        rawinput_size = sizeof(RAWINPUT);
++    overhead = rawinput_size - sizeof(RAWINPUT);
+ 
+-    return 0;
++    if (header_size != sizeof(RAWINPUTHEADER))
++    {
++        WARN("Invalid structure size %u.\n", header_size);
++        SetLastError(ERROR_INVALID_PARAMETER);
++        return ~0U;
++    }
++
++    if (!data_size)
++    {
++        SetLastError(ERROR_INVALID_PARAMETER);
++        return ~0U;
++    }
++
++    if (!data)
++    {
++        TRACE("data %p, data_size %p (%u), header_size %u\n", data, data_size, *data_size, header_size);
++        SERVER_START_REQ( get_rawinput_buffer )
++        {
++            req->rawinput_size = rawinput_size;
++            req->buffer_size = 0;
++            if (wine_server_call( req )) return ~0U;
++            *data_size = reply->next_size;
++        }
++        SERVER_END_REQ;
++        return 0;
++    }
++
++    if (!(rawinput = rawinput_thread_data())) return ~0U;
++
++    msg_data = (struct hardware_msg_data *)NEXTRAWINPUTBLOCK(rawinput);
++    SERVER_START_REQ( get_rawinput_buffer )
++    {
++        req->rawinput_size = rawinput_size;
++        req->buffer_size = *data_size;
++        wine_server_set_reply( req, msg_data, RAWINPUT_BUFFER_SIZE - rawinput->header.dwSize );
++        if (wine_server_call( req )) return ~0U;
++        next_size = reply->next_size;
++        count = reply->count;
++    }
++    SERVER_END_REQ;
++
++    for (i = 0; i < count; ++i)
++    {
++        rawinput_from_hardware_message(data, msg_data);
++        if (overhead) memmove((char *)&data->data + overhead, &data->data,
++                              data->header.dwSize - sizeof(RAWINPUTHEADER));
++        data->header.dwSize += overhead;
++        data = NEXTRAWINPUTBLOCK(data);
++        msg_data++;
++    }
++
++    if (count == 0 && next_size == 0) *data_size = 0;
++    else if (next_size == 0) next_size = rawinput_size;
++
++    if (next_size && *data_size <= next_size)
++    {
++        SetLastError(ERROR_INSUFFICIENT_BUFFER);
++        *data_size = next_size;
++        count = ~0U;
++    }
++
++    if (count) TRACE("data %p, data_size %p (%u), header_size %u, count %u\n", data, data_size, *data_size, header_size, count);
++    return count;
+ }
+ 
+ /***********************************************************************
+diff --git a/dlls/user32/tests/input.c b/dlls/user32/tests/input.c
+index 979471551ff..5c589908125 100644
+--- a/dlls/user32/tests/input.c
++++ b/dlls/user32/tests/input.c
+@@ -1864,26 +1864,20 @@ static LRESULT CALLBACK rawinputbuffer_wndproc(HWND hwnd, UINT msg, WPARAM wpara
+     if (msg == WM_INPUT)
+     {
+         count = GetRawInputBuffer(NULL, NULL, sizeof(RAWINPUTHEADER));
+-        todo_wine
+         ok(count == ~0U, "GetRawInputBuffer succeeded\n");
+ 
+         size = sizeof(buffer);
+         count = GetRawInputBuffer(NULL, &size, sizeof(RAWINPUTHEADER));
+         ok(count == 0, "GetRawInputBuffer returned %u\n", count);
+-        todo_wine
+         ok(size == rawinput_size, "GetRawInputBuffer returned unexpected size: %u\n", size);
+ 
+         size = sizeof(buffer);
+         memset(buffer, 0, sizeof(buffer));
+         count = GetRawInputBuffer((RAWINPUT*)buffer, &size, sizeof(RAWINPUTHEADER));
+-        todo_wine
+         ok(count == 3, "GetRawInputBuffer returned %u\n", count);
+         ok(size == sizeof(buffer), "GetRawInputBuffer returned unexpected size: %u\n", size);
+-        todo_wine
+         ok(rawinput_buffer_mouse_x(buffer, 0) == 2, "Unexpected rawinput data: %d\n", rawinput_buffer_mouse_x(buffer, 0));
+-        todo_wine
+         ok(rawinput_buffer_mouse_x(buffer, 1) == 3, "Unexpected rawinput data: %d\n", rawinput_buffer_mouse_x(buffer, 1));
+-        todo_wine
+         ok(rawinput_buffer_mouse_x(buffer, 2) == 4, "Unexpected rawinput data: %d\n", rawinput_buffer_mouse_x(buffer, 2));
+ 
+         /* the first event should be removed by the next GetRawInputBuffer call
+@@ -1901,9 +1895,7 @@ static LRESULT CALLBACK rawinputbuffer_wndproc(HWND hwnd, UINT msg, WPARAM wpara
+             size = rawinput_size + 1;
+             memset(buffer, 0, sizeof(buffer));
+             count = GetRawInputBuffer((RAWINPUT*)buffer, &size, sizeof(RAWINPUTHEADER));
+-            todo_wine
+             ok(count == 1, "GetRawInputBuffer returned %u\n", count);
+-            todo_wine
+             ok(rawinput_buffer_mouse_x(buffer, 0) == 5, "Unexpected rawinput data: %d\n", rawinput_buffer_mouse_x(buffer, 0));
+ 
+             /* peek the messages now, they should still arrive in the correct order */
+@@ -1918,7 +1910,6 @@ static LRESULT CALLBACK rawinputbuffer_wndproc(HWND hwnd, UINT msg, WPARAM wpara
+         if (iteration == 1)
+         {
+             ok(count == sizeof(ri), "GetRawInputData failed\n");
+-            todo_wine
+             ok(ri.data.mouse.lLastX == 6, "Unexpected rawinput data: %d\n", ri.data.mouse.lLastX);
+         }
+         else
+@@ -1960,15 +1951,12 @@ static void test_GetRawInputBuffer(void)
+ 
+     SetLastError(0xdeadbeef);
+     count = GetRawInputBuffer(NULL, NULL, sizeof(RAWINPUTHEADER));
+-    todo_wine
+     ok(count == ~0U, "GetRawInputBuffer succeeded\n");
+-    todo_wine
+     ok(GetLastError() == ERROR_INVALID_PARAMETER, "GetRawInputBuffer returned %08x\n", GetLastError());
+ 
+     size = sizeof(buffer);
+     count = GetRawInputBuffer(NULL, &size, sizeof(RAWINPUTHEADER));
+     ok(count == 0U, "GetRawInputBuffer returned %u\n", count);
+-    todo_wine
+     ok(size == 0U, "GetRawInputBuffer returned unexpected size: %u\n", size);
+ 
+     size = 0;
+@@ -1979,15 +1967,12 @@ static void test_GetRawInputBuffer(void)
+     SetLastError(0xdeadbeef);
+     size = sizeof(buffer);
+     count = GetRawInputBuffer((RAWINPUT*)buffer, &size, 0);
+-    todo_wine
+     ok(count == ~0U, "GetRawInputBuffer succeeded\n");
+-    todo_wine
+     ok(GetLastError() == ERROR_INVALID_PARAMETER, "GetRawInputBuffer returned %08x\n", GetLastError());
+ 
+     size = sizeof(buffer);
+     count = GetRawInputBuffer((RAWINPUT*)buffer, &size, sizeof(RAWINPUTHEADER));
+     ok(count == 0U, "GetRawInputBuffer returned %u\n", count);
+-    todo_wine
+     ok(size == 0U, "GetRawInputBuffer returned unexpected size: %u\n", size);
+ 
+     mouse_event(MOUSEEVENTF_MOVE, 5, 0, 0, 0);
+@@ -1995,34 +1980,26 @@ static void test_GetRawInputBuffer(void)
+     SetLastError(0xdeadbeef);
+     size = 0;
+     count = GetRawInputBuffer((RAWINPUT*)buffer, &size, sizeof(RAWINPUTHEADER));
+-    todo_wine
+     ok(count == ~0U, "GetRawInputBuffer succeeded\n");
+-    todo_wine
+     ok(size == rawinput_size, "GetRawInputBuffer returned unexpected size: %u\n", size);
+-    todo_wine
+     ok(GetLastError() == ERROR_INSUFFICIENT_BUFFER, "GetRawInputBuffer returned %08x\n", GetLastError());
+ 
+     size = 0;
+     count = GetRawInputBuffer(NULL, &size, sizeof(RAWINPUTHEADER));
+     ok(count == 0, "GetRawInputBuffer returned %u\n", count);
+-    todo_wine
+     ok(size == rawinput_size, "GetRawInputBuffer returned unexpected size: %u\n", size);
+ 
+     SetLastError(0xdeadbeef);
+     size = sizeof(buffer);
+     count = GetRawInputBuffer((RAWINPUT*)buffer, &size, 0);
+-    todo_wine
+     ok(count == ~0U, "GetRawInputBuffer succeeded\n");
+-    todo_wine
+     ok(GetLastError() == ERROR_INVALID_PARAMETER, "GetRawInputBuffer returned %08x\n", GetLastError());
+ 
+     size = sizeof(buffer);
+     memset(buffer, 0, sizeof(buffer));
+     count = GetRawInputBuffer((RAWINPUT*)buffer, &size, sizeof(RAWINPUTHEADER));
+-    todo_wine
+     ok(count == 1U, "GetRawInputBuffer returned %u\n", count);
+     ok(size == sizeof(buffer), "GetRawInputBuffer returned unexpected size: %u\n", size);
+-    todo_wine
+     ok(rawinput_buffer_mouse_x(buffer, 0) == 5, "Unexpected rawinput data: %d\n", rawinput_buffer_mouse_x(buffer, 0));
+ 
+ 
+@@ -2034,11 +2011,8 @@ static void test_GetRawInputBuffer(void)
+     size = rawinput_size;
+     memset(buffer, 0, sizeof(buffer));
+     count = GetRawInputBuffer((RAWINPUT*)buffer, &size, sizeof(RAWINPUTHEADER));
+-    todo_wine
+     ok(count == ~0U, "GetRawInputBuffer succeeded\n");
+-    todo_wine
+     ok(GetLastError() == ERROR_INSUFFICIENT_BUFFER, "GetRawInputBuffer returned %08x\n", GetLastError());
+-    todo_wine
+     ok(rawinput_buffer_mouse_x(buffer, 0) == 5, "Unexpected rawinput data: %d\n", rawinput_buffer_mouse_x(buffer, 0));
+ 
+     size = sizeof(buffer);
+@@ -2052,7 +2026,6 @@ static void test_GetRawInputBuffer(void)
+     mouse_event(MOUSEEVENTF_MOVE, 3, 0, 0, 0);
+     mouse_event(MOUSEEVENTF_MOVE, 4, 0, 0, 0);
+     empty_message_queue();
+-    todo_wine
+     ok(rawinputbuffer_wndproc_count == 2, "Spurious WM_INPUT messages\n");
+ 
+     raw_devices[0].dwFlags = RIDEV_REMOVE;
+diff --git a/dlls/user32/user_private.h b/dlls/user32/user_private.h
+index d7f4741ebe6..eb828203597 100644
+--- a/dlls/user32/user_private.h
++++ b/dlls/user32/user_private.h
+@@ -196,7 +196,7 @@ struct user_thread_info
+     struct user_key_state_info   *key_state;              /* Cache of global key state */
+     HWND                          top_window;             /* Desktop window */
+     HWND                          msg_window;             /* HWND_MESSAGE parent window */
+-    RAWINPUT                     *rawinput;               /* Rawinput buffer */
++    RAWINPUT                     *rawinput;
+ };
+ 
+ C_ASSERT( sizeof(struct user_thread_info) <= sizeof(((TEB *)0)->Win32ClientInfo) );
+diff --git a/include/wine/server_protocol.h b/include/wine/server_protocol.h
+index b22aac93041..331bab86879 100644
+--- a/include/wine/server_protocol.h
++++ b/include/wine/server_protocol.h
+@@ -5644,6 +5644,22 @@ struct set_cursor_reply
+ 
+ 
+ 
++struct get_rawinput_buffer_request
++{
++    struct request_header __header;
++    data_size_t rawinput_size;
++    data_size_t buffer_size;
++    char __pad_20[4];
++};
++struct get_rawinput_buffer_reply
++{
++    struct reply_header __header;
++    data_size_t next_size;
++    unsigned int count;
++    /* VARARG(data,bytes); */
++};
++
++
+ struct update_rawinput_devices_request
+ {
+     struct request_header __header;
+@@ -6084,6 +6100,7 @@ enum request
+     REQ_alloc_user_handle,
+     REQ_free_user_handle,
+     REQ_set_cursor,
++    REQ_get_rawinput_buffer,
+     REQ_update_rawinput_devices,
+     REQ_create_job,
+     REQ_open_job,
+@@ -6387,6 +6404,7 @@ union generic_request
+     struct alloc_user_handle_request alloc_user_handle_request;
+     struct free_user_handle_request free_user_handle_request;
+     struct set_cursor_request set_cursor_request;
++    struct get_rawinput_buffer_request get_rawinput_buffer_request;
+     struct update_rawinput_devices_request update_rawinput_devices_request;
+     struct create_job_request create_job_request;
+     struct open_job_request open_job_request;
+@@ -6688,6 +6706,7 @@ union generic_reply
+     struct alloc_user_handle_reply alloc_user_handle_reply;
+     struct free_user_handle_reply free_user_handle_reply;
+     struct set_cursor_reply set_cursor_reply;
++    struct get_rawinput_buffer_reply get_rawinput_buffer_reply;
+     struct update_rawinput_devices_reply update_rawinput_devices_reply;
+     struct create_job_reply create_job_reply;
+     struct open_job_reply open_job_reply;
+@@ -6703,7 +6722,7 @@ union generic_reply
+ 
+ /* ### protocol_version begin ### */
+ 
+-#define SERVER_PROTOCOL_VERSION 612
++#define SERVER_PROTOCOL_VERSION 613
+ 
+ /* ### protocol_version end ### */
+ 
+diff --git a/server/protocol.def b/server/protocol.def
+index a4b91b6ab62..6416306c0a1 100644
+--- a/server/protocol.def
++++ b/server/protocol.def
+@@ -3884,6 +3884,16 @@ struct handle_info
+ #define SET_CURSOR_NOCLIP 0x10
+ 
+ 
++/* Batch read rawinput message data */
++@REQ(get_rawinput_buffer)
++    data_size_t rawinput_size; /* size of RAWINPUT structure */
++    data_size_t buffer_size;   /* size of output buffer */
++@REPLY
++    data_size_t next_size; /* minimum size to get next message data */
++    unsigned int count;
++    VARARG(data,bytes);
++@END
++
+ /* Modify the list of registered rawinput devices */
+ @REQ(update_rawinput_devices)
+     VARARG(devices,rawinput_devices);
+diff --git a/server/queue.c b/server/queue.c
+index c3925dd6646..432885f9e4c 100644
+--- a/server/queue.c
++++ b/server/queue.c
+@@ -3226,6 +3226,46 @@ DECL_HANDLER(set_cursor)
+     reply->last_change = input->desktop->cursor.last_change;
+ }
+ 
++DECL_HANDLER(get_rawinput_buffer)
++{
++    struct thread_input *input = current->queue->input;
++    data_size_t size = 0, next_size = 0;
++    struct list *ptr;
++    char *buf, *cur;
++    int count = 0;
++
++    if (!req->buffer_size) buf = NULL;
++    else if (!(buf = mem_alloc( get_reply_max_size() )))
++        return;
++
++    cur = buf;
++    ptr = list_head( &input->msg_list );
++    while (ptr)
++    {
++        struct message *msg = LIST_ENTRY( ptr, struct message, entry );
++        struct hardware_msg_data *data = msg->data;
++
++        ptr = list_next( &input->msg_list, ptr );
++        if (msg->msg != WM_INPUT) continue;
++
++        next_size = req->rawinput_size;
++        if (size + next_size > req->buffer_size) break;
++        if (cur + sizeof(*data) > buf + get_reply_max_size()) break;
++
++        memcpy(cur, data, sizeof(*data));
++        list_remove( &msg->entry );
++        free_message( msg );
++
++        size += next_size;
++        cur += sizeof(*data);
++        count++;
++    }
++
++    reply->next_size = next_size;
++    reply->count = count;
++    set_reply_data_ptr( buf, cur - buf );
++}
++
+ DECL_HANDLER(update_rawinput_devices)
+ {
+     const struct rawinput_device *devices = get_req_data();
+diff --git a/server/request.h b/server/request.h
+index 80f7e1923fd..62937d9a5a9 100644
+--- a/server/request.h
++++ b/server/request.h
+@@ -404,6 +404,7 @@ DECL_HANDLER(set_window_layered_info);
+ DECL_HANDLER(alloc_user_handle);
+ DECL_HANDLER(free_user_handle);
+ DECL_HANDLER(set_cursor);
++DECL_HANDLER(get_rawinput_buffer);
+ DECL_HANDLER(update_rawinput_devices);
+ DECL_HANDLER(create_job);
+ DECL_HANDLER(open_job);
+@@ -706,6 +707,7 @@ static const req_handler req_handlers[REQ_NB_REQUESTS] =
+     (req_handler)req_alloc_user_handle,
+     (req_handler)req_free_user_handle,
+     (req_handler)req_set_cursor,
++    (req_handler)req_get_rawinput_buffer,
+     (req_handler)req_update_rawinput_devices,
+     (req_handler)req_create_job,
+     (req_handler)req_open_job,
+@@ -2418,6 +2420,12 @@ C_ASSERT( FIELD_OFFSET(struct set_cursor_reply, new_y) == 28 );
+ C_ASSERT( FIELD_OFFSET(struct set_cursor_reply, new_clip) == 32 );
+ C_ASSERT( FIELD_OFFSET(struct set_cursor_reply, last_change) == 48 );
+ C_ASSERT( sizeof(struct set_cursor_reply) == 56 );
++C_ASSERT( FIELD_OFFSET(struct get_rawinput_buffer_request, rawinput_size) == 12 );
++C_ASSERT( FIELD_OFFSET(struct get_rawinput_buffer_request, buffer_size) == 16 );
++C_ASSERT( sizeof(struct get_rawinput_buffer_request) == 24 );
++C_ASSERT( FIELD_OFFSET(struct get_rawinput_buffer_reply, next_size) == 8 );
++C_ASSERT( FIELD_OFFSET(struct get_rawinput_buffer_reply, count) == 12 );
++C_ASSERT( sizeof(struct get_rawinput_buffer_reply) == 16 );
+ C_ASSERT( sizeof(struct update_rawinput_devices_request) == 16 );
+ C_ASSERT( FIELD_OFFSET(struct create_job_request, access) == 12 );
+ C_ASSERT( sizeof(struct create_job_request) == 16 );
+diff --git a/server/trace.c b/server/trace.c
+index c8ccd304b0a..2fb5afd5ef1 100644
+--- a/server/trace.c
++++ b/server/trace.c
+@@ -4528,6 +4528,19 @@ static void dump_set_cursor_reply( const struct set_cursor_reply *req )
+     fprintf( stderr, ", last_change=%08x", req->last_change );
+ }
+ 
++static void dump_get_rawinput_buffer_request( const struct get_rawinput_buffer_request *req )
++{
++    fprintf( stderr, " rawinput_size=%u", req->rawinput_size );
++    fprintf( stderr, ", buffer_size=%u", req->buffer_size );
++}
++
++static void dump_get_rawinput_buffer_reply( const struct get_rawinput_buffer_reply *req )
++{
++    fprintf( stderr, " next_size=%u", req->next_size );
++    fprintf( stderr, ", count=%08x", req->count );
++    dump_varargs_bytes( ", data=", cur_size );
++}
++
+ static void dump_update_rawinput_devices_request( const struct update_rawinput_devices_request *req )
+ {
+     dump_varargs_rawinput_devices( " devices=", cur_size );
+@@ -4895,6 +4908,7 @@ static const dump_func req_dumpers[REQ_NB_REQUESTS] = {
+     (dump_func)dump_alloc_user_handle_request,
+     (dump_func)dump_free_user_handle_request,
+     (dump_func)dump_set_cursor_request,
++    (dump_func)dump_get_rawinput_buffer_request,
+     (dump_func)dump_update_rawinput_devices_request,
+     (dump_func)dump_create_job_request,
+     (dump_func)dump_open_job_request,
+@@ -5194,6 +5208,7 @@ static const dump_func reply_dumpers[REQ_NB_REQUESTS] = {
+     (dump_func)dump_alloc_user_handle_reply,
+     NULL,
+     (dump_func)dump_set_cursor_reply,
++    (dump_func)dump_get_rawinput_buffer_reply,
+     NULL,
+     (dump_func)dump_create_job_reply,
+     (dump_func)dump_open_job_reply,
+@@ -5493,6 +5508,7 @@ static const char * const req_names[REQ_NB_REQUESTS] = {
+     "alloc_user_handle",
+     "free_user_handle",
+     "set_cursor",
++    "get_rawinput_buffer",
+     "update_rawinput_devices",
+     "create_job",
+     "open_job",
+From 359ee2ecc21b08e4118f0f77b3a208e4b5e1e63d Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
+Date: Thu, 25 Jun 2020 19:08:44 +0200
+Subject: [PATCH] user32: Return failure when rawinput has been overwritten.
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Rémi Bernon <rbernon@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/user32/rawinput.c    | 3 ++-
+ dlls/user32/tests/input.c | 3 ---
+ 2 files changed, 2 insertions(+), 4 deletions(-)
+
+diff --git a/dlls/user32/rawinput.c b/dlls/user32/rawinput.c
+index 775b066e673..b5af008e885 100644
+--- a/dlls/user32/rawinput.c
++++ b/dlls/user32/rawinput.c
+@@ -459,7 +459,7 @@ UINT WINAPI GetRawInputData(HRAWINPUT rawinput, UINT command, void *data, UINT *
+     TRACE("rawinput %p, command %#x, data %p, data_size %p, header_size %u.\n",
+             rawinput, command, data, data_size, header_size);
+ 
+-    if (!ri)
++    if (!ri || !ri->header.dwSize)
+         return ~0U;
+ 
+     if (header_size != sizeof(RAWINPUTHEADER))
+@@ -488,6 +488,7 @@ UINT WINAPI GetRawInputData(HRAWINPUT rawinput, UINT command, void *data, UINT *
+ 
+     if (*data_size < s) return ~0U;
+     memcpy(data, ri, s);
++    ri->header.dwSize = 0;
+     return s;
+ }
+ 
+diff --git a/dlls/user32/tests/input.c b/dlls/user32/tests/input.c
+index 5c589908125..bab0fd97536 100644
+--- a/dlls/user32/tests/input.c
++++ b/dlls/user32/tests/input.c
+@@ -1913,10 +1913,7 @@ static LRESULT CALLBACK rawinputbuffer_wndproc(HWND hwnd, UINT msg, WPARAM wpara
+             ok(ri.data.mouse.lLastX == 6, "Unexpected rawinput data: %d\n", ri.data.mouse.lLastX);
+         }
+         else
+-        {
+-            todo_wine
+             ok(count == ~0U, "GetRawInputData succeeded\n");
+-        }
+     }
+ 
+     return DefWindowProcA(hwnd, msg, wparam, lparam);
