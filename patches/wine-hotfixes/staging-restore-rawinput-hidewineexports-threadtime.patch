@@ -1,7 +1,8 @@
-From 350346ffb215806db2f25892344ba29c6cf885e0 Mon Sep 17 00:00:00 2001
+From af178ded0046ac62c3b7ea3ad05355f6f9328889 Mon Sep 17 00:00:00 2001
 From: Thomas Crider <gloriouseggroll@gmail.com>
-Date: Thu, 2 Jul 2020 23:44:10 -0600
-Subject: [PATCH] restore rawinput, hidewineexports, threadtime
+Date: Fri, 3 Jul 2020 23:09:58 -0600
+Subject: [PATCH] staging - restore rawinput, FakeDLLs, ThreadTime,
+ HideWineExports
 
 ---
  ...user32-Improve-GetKeyboardLayoutList.patch |  16 +-
@@ -14,7 +15,7 @@ Subject: [PATCH] restore rawinput, hidewineexports, threadtime
  ...-thread-times-in-process-enumeration.patch |  82 ------
  patches/ntdll-ThreadTime/definition           |   3 -
  ...s-virtual-memory-counters-in-NtQuer.patch} |   0
- patches/patchinstall.sh                       | 266 ++++++++++++++++--
+ patches/patchinstall.sh                       | 267 ++++++++++++++++--
  ...-a-helper-function-to-update-the-thr.patch | 120 ++++++++
  ...-locking-and-synchronization-of-keys.patch | 162 +++++++++++
  patches/server-Key_State/definition           |   5 +
@@ -60,7 +61,7 @@ Subject: [PATCH] restore rawinput, hidewineexports, threadtime
  ...sktop-cursor-pos-even-if-RIDEV_NOLEG.patch |  76 -----
  ...te-the-key-state-if-RIDEV_NOLEGACY-i.patch | 106 -------
  patches/user32-rawinput-nolegacy/definition   |   2 -
- 56 files changed, 1658 insertions(+), 2056 deletions(-)
+ 56 files changed, 1659 insertions(+), 2056 deletions(-)
  delete mode 100644 patches/ntdll-ThreadTime/0001-ntdll-Return-correct-values-in-GetThreadTimes-for-al.patch
  delete mode 100644 patches/ntdll-ThreadTime/0003-ntdll-Fill-process-kernel-and-user-time.patch
  delete mode 100644 patches/ntdll-ThreadTime/0005-ntdll-Fill-out-thread-times-in-process-enumeration.patch
@@ -141,7 +142,7 @@ index 200cbbe9..8c23b8a3 100644
  2.27.0
  
 diff --git a/patches/ntdll-Hide_Wine_Exports/0001-ntdll-Add-support-for-hiding-wine-version-informatio.patch b/patches/ntdll-Hide_Wine_Exports/0001-ntdll-Add-support-for-hiding-wine-version-informatio.patch
-index 91aec80f..bf2a2240 100644
+index 91aec80f..ce52f245 100644
 --- a/patches/ntdll-Hide_Wine_Exports/0001-ntdll-Add-support-for-hiding-wine-version-informatio.patch
 +++ b/patches/ntdll-Hide_Wine_Exports/0001-ntdll-Add-support-for-hiding-wine-version-informatio.patch
 @@ -1,4 +1,4 @@
@@ -217,7 +218,7 @@ index 91aec80f..bf2a2240 100644
  --- a/dlls/ntdll/ntdll_misc.h
  +++ b/dlls/ntdll/ntdll_misc.h
 -@@ -283,6 +283,11 @@ void     WINAPI LdrInitializeThunk(CONTEXT*,void**,ULONG_PTR,ULONG_PTR);
-+@@ -153,6 +153,11 @@ void     WINAPI LdrInitializeThunk(CONTEXT*,void**,ULONG_PTR,ULONG_PTR);
++@@ -151,6 +193,11 @@ void     WINAPI LdrInitializeThunk(CONTEXT*,void**,ULONG_PTR,ULONG_PTR);
   #define InterlockedCompareExchange64(dest,xchg,cmp) RtlInterlockedCompareExchange64(dest,xchg,cmp)
   #endif
   
@@ -229,8 +230,8 @@ index 91aec80f..bf2a2240 100644
 - extern BOOL read_process_time(int unix_pid, int unix_tid, unsigned long clk_tck,
 -                               LARGE_INTEGER *kernel, LARGE_INTEGER *user) DECLSPEC_HIDDEN;
 + /* string functions */
-+ void * __cdecl NTDLL_memchr( const void *ptr, int c, size_t n );
-+ char * __cdecl NTDLL_strcat( char *dst, const char *src );
++ int    __cdecl NTDLL_tolower( int c );
++ int    __cdecl _stricmp( LPCSTR str1, LPCSTR str2 );
  -- 
 -2.26.2
 +2.27.0
@@ -878,7 +879,7 @@ similarity index 100%
 rename from patches/ntdll-ThreadTime/0006-ntdll-Fill-process-virtual-memory-counters-in-NtQuer.patch
 rename to patches/ntdll-ThreadTime/xxx6-ntdll-Fill-process-virtual-memory-counters-in-NtQuer.patch
 diff --git a/patches/patchinstall.sh b/patches/patchinstall.sh
-index 99376f3d..1b4bdfb7 100755
+index 99376f3d..97a5b2a4 100755
 --- a/patches/patchinstall.sh
 +++ b/patches/patchinstall.sh
 @@ -176,6 +176,7 @@ patch_enable_all ()
@@ -1273,10 +1274,11 @@ index 99376f3d..1b4bdfb7 100755
  # Patchset wininet-Cleanup
  # |
  # | Modified files:
-@@ -6309,3 +6514,4 @@ if test "$enable_autoconf" -eq 1; then
+@@ -6309,3 +6514,5 @@ if test "$enable_autoconf" -eq 1; then
  fi
  # Success
  exit 0
++
 +
 diff --git a/patches/server-Key_State/0001-server-Introduce-a-helper-function-to-update-the-thr.patch b/patches/server-Key_State/0001-server-Introduce-a-helper-function-to-update-the-thr.patch
 new file mode 100644
@@ -5398,27 +5400,3 @@ index a596cd9c..00000000
 -- 
 2.26.2
 
-diff --git a/patches/ntdll-Hide_Wine_Exports/0001-ntdll-Add-support-for-hiding-wine-version-informatio.patch b/patches/ntdll-Hide_Wine_Exports/0001-ntdll-Add-support-for-hiding-wine-version-informatio.patch
-index bf2a2240..ce52f245 100644
---- a/patches/ntdll-Hide_Wine_Exports/0001-ntdll-Add-support-for-hiding-wine-version-informatio.patch
-+++ b/patches/ntdll-Hide_Wine_Exports/0001-ntdll-Add-support-for-hiding-wine-version-informatio.patch
-@@ -159,7 +159,7 @@ diff --git a/dlls/ntdll/ntdll_misc.h b/dlls/ntdll/ntdll_misc.h
- index 1afda71c3ad..d489b850963 100644
- --- a/dlls/ntdll/ntdll_misc.h
- +++ b/dlls/ntdll/ntdll_misc.h
--@@ -153,6 +153,11 @@ void     WINAPI LdrInitializeThunk(CONTEXT*,void**,ULONG_PTR,ULONG_PTR);
-+@@ -151,6 +193,11 @@ void     WINAPI LdrInitializeThunk(CONTEXT*,void**,ULONG_PTR,ULONG_PTR);
-  #define InterlockedCompareExchange64(dest,xchg,cmp) RtlInterlockedCompareExchange64(dest,xchg,cmp)
-  #endif
-  
-@@ -169,8 +169,8 @@ index 1afda71c3ad..d489b850963 100644
- +extern void CDECL NTDLL_wine_get_host_version( const char **sysname, const char **release );
- +
-  /* string functions */
-- void * __cdecl NTDLL_memchr( const void *ptr, int c, size_t n );
-- char * __cdecl NTDLL_strcat( char *dst, const char *src );
-+ int    __cdecl NTDLL_tolower( int c );
-+ int    __cdecl _stricmp( LPCSTR str1, LPCSTR str2 );
- -- 
- 2.27.0
- 
