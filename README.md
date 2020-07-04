@@ -35,7 +35,7 @@ All patches included:
  * Warframe on Nvidia you may need to disable GPU Particles in game otherwise the game can freeze randomly. On AMD they work fine  
  * DOOM Eternal currently does -not- work with ACO on mesa. You will need to set RADV_PERFTEST=llvm %command% in the launch options.   
 
-Full patches can be viewed in [protonprep.sh](game-patches-testing/protonprep.sh).
+Full patches can be viewed in [protonprep-nofshack.sh](game-patches-testing/protonprep-nofshack.sh).
 
 ## Installation
 1. Either follow the [build guide](#building), or download a release from the [Releases](https://github.com/GloriousEggroll/proton-ge-custom/releases) section and then proceed to the next step.
@@ -58,13 +58,13 @@ Full patches can be viewed in [protonprep.sh](game-patches-testing/protonprep.sh
 git clone --recurse-submodules http://github.com/gloriouseggroll/proton-ge-custom
 ````
 
-4. Drop any custom patches into patches/, then open patches/protonprep.sh and  
+4. Drop any custom patches into patches/, then open patches/protonprep-nofshack.sh and  
  add a patch line for them under #WINE CUSTOM PATCHES in the same way the others are done. 
 
 5. Apply all of the patches in patches/ by running:
 
 ```
-./patches/protonprep.sh &> patchlog.txt
+./patches/protonprep-nofshack.sh &> patchlog.txt
 ```
 
 in the main proton-ge-custom directory. Open `patchlog.txt` and search for "fail" to make sure no patch failures occured. An easy way to do this is like so:  
