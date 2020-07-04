@@ -1,0 +1,76 @@
+From 625a473504e0f55cc62db6dad96bf09c4c7e59cf Mon Sep 17 00:00:00 2001
+From: Andrew Eikum <aeikum@codeweavers.com>
+Date: Wed, 27 Jun 2018 10:06:48 -0500
+Subject: [PATCH] HACK: winex11: Let the WM focus our windows by default
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+This should fix game windows not being in focus when first started
+and when exiting, which can cause surprising keyboard behavior (e.g.
+accidentally Alt-F4ing Steam itself, which is in the background).
+
+This may break modal dialogs in some WMs (fvwm2?) which do not respect
+our responses to WM_TAKE_FOCUS. For games that show that issue, we can
+re-enable UseTakeFocus.
+
+From Zeb:
+
+"""
+The basic problem, if I understand it correctly, is that Wine uses the
+"globally active" focus model by default. This means that the window
+manager won't focus our windows unless we respond in the affirmative to
+a WM_TAKE_FOCUS event. Since the GUI thread isn't processing messages,
+this doesn't happen.
+
+Luckily, there is a very easy workaround: create the registry key
+HKCU\Software\Wine\X11 Driver and set the somewhat inaptly named value
+"UseTakeFocus" to "N" (i.e. No). This causes Wine to use the "locally
+active" model instead, which means that the window manager will focus
+our windows when it sees fit—i.e. when the user clicks on them, or when
+they are created.
+"""
+---
+ dlls/winex11.drv/x11drv_main.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/dlls/winex11.drv/x11drv_main.c b/dlls/winex11.drv/x11drv_main.c
+index 9456caba088..af2094a96f0 100644
+--- a/dlls/winex11.drv/x11drv_main.c
++++ b/dlls/winex11.drv/x11drv_main.c
+@@ -71,7 +71,7 @@ BOOL usexvidmode = FALSE;
+ BOOL usexrandr = FALSE;
+ BOOL usexcomposite = TRUE;
+ BOOL use_xkb = TRUE;
+-BOOL use_take_focus = TRUE;
++BOOL use_take_focus = FALSE;
+ BOOL use_primary_selection = FALSE;
+ BOOL use_system_cursors = TRUE;
+ BOOL show_systray = TRUE;
+ 
+From a58fde69e0ac1945d2e2733d9506cfe4bfe145e7 Mon Sep 17 00:00:00 2001
+From: Andrew Eikum <aeikum@codeweavers.com>
+Date: Wed, 26 Jun 2019 08:09:27 -0500
+Subject: [PATCH] Revert "winex11.drv: Activate window when restoring from
+ iconic state."
+
+This reverts commit 82c6ec3a32f44e8b3e0cc88b7f10e0c0d7fa1b89.
+
+Causes alt-tab problems with several games.
+---
+ dlls/winex11.drv/event.c | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/dlls/winex11.drv/event.c b/dlls/winex11.drv/event.c
+index 236c9f862af..d1c15b1de94 100644
+--- a/dlls/winex11.drv/event.c
++++ b/dlls/winex11.drv/event.c
+@@ -1342,8 +1342,6 @@ static void handle_wm_state_notify( HWND hwnd, XPropertyEvent *event, BOOL updat
+             {
+                 TRACE( "restoring win %p/%lx\n", data->hwnd, data->whole_window );
+                 release_win_data( data );
+-                if ((style & (WS_MINIMIZE | WS_VISIBLE)) == (WS_MINIMIZE | WS_VISIBLE))
+-                    SetActiveWindow( hwnd );
+                 SendMessageW( hwnd, WM_SYSCOMMAND, SC_RESTORE, 0 );
+                 return;
+             }

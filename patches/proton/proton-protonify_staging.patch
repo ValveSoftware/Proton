@@ -131,9 +131,9 @@ index d26e0a98ca..ed17b497e6 100644
 +#ifdef HAVE_PRCTL
 +#include <sys/prctl.h>
 +#endif
+ #include <stdio.h>
+ #include <string.h>
  #include <pthread.h>
- #include <signal.h>
- #include <sys/types.h>
 @@ -380,7 +397,15 @@ void wait_suspend( CONTEXT *context )
      errno = saved_errno;
  }

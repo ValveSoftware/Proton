@@ -1,0 +1,166 @@
+From b6722aa7527abc71cb46ab75e4b875c288408d52 Mon Sep 17 00:00:00 2001
+From: Gijs Vermeulen <gijsvrm@gmail.com>
+Date: Tue, 30 Jun 2020 16:44:54 +0200
+Subject: [PATCH] ntdll: Don't use WCHAR in unix_to_win_locale().
+
+Signed-off-by: Gijs Vermeulen <gijsvrm@gmail.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/ntdll/unix/env.c | 49 +++++++++++++++++--------------------------
+ 1 file changed, 19 insertions(+), 30 deletions(-)
+
+diff --git a/dlls/ntdll/unix/env.c b/dlls/ntdll/unix/env.c
+index e260e5c3385..e57b6256890 100644
+--- a/dlls/ntdll/unix/env.c
++++ b/dlls/ntdll/unix/env.c
+@@ -74,8 +74,8 @@ char **main_envp = NULL;
+ static WCHAR **main_wargv;
+ 
+ static CPTABLEINFO unix_table;
+-static WCHAR system_locale[LOCALE_NAME_MAX_LENGTH];
+-static WCHAR user_locale[LOCALE_NAME_MAX_LENGTH];
++static char system_locale[LOCALE_NAME_MAX_LENGTH];
++static char user_locale[LOCALE_NAME_MAX_LENGTH];
+ 
+ static void *read_nls_file( const char *name )
+ {
+@@ -649,18 +649,11 @@ static WCHAR **build_wargv( char **argv )
+ 
+ /* Unix format is: lang[_country][.charset][@modifier]
+  * Windows format is: lang[-script][-country][_modifier] */
+-static BOOL unix_to_win_locale( const char *unix_name, WCHAR *win_name )
++static BOOL unix_to_win_locale( const char *unix_name, char *win_name )
+ {
+-    static const WCHAR sepW[] = {'_','.','@',0};
+-    static const WCHAR posixW[] = {'P','O','S','I','X',0};
+-    static const WCHAR cW[] = {'C',0};
+-    static const WCHAR euroW[] = {'e','u','r','o',0};
+-    static const WCHAR latinW[] = {'l','a','t','i','n',0};
+-    static const WCHAR latnW[] = {'-','L','a','t','n',0};
+-    static const WCHAR enUSW[] = {'e','n','-','U','S',0};
+-    WCHAR buffer[LOCALE_NAME_MAX_LENGTH];
+-    WCHAR *p, *country = NULL, *modifier = NULL;
+-    DWORD len;
++    static const char sep[] = "_.@";
++    char buffer[LOCALE_NAME_MAX_LENGTH];
++    char *p, *country = NULL, *modifier = NULL;
+ 
+     if (!unix_name || !unix_name[0] || !strcmp( unix_name, "C" ))
+     {
+@@ -668,16 +661,12 @@ static BOOL unix_to_win_locale( const char *unix_name, WCHAR *win_name )
+         if (!unix_name || !unix_name[0]) return FALSE;
+     }
+ 
+-    len = ntdll_umbstowcs( unix_name, strlen(unix_name), buffer, ARRAY_SIZE(buffer) );
+-    if (len == ARRAY_SIZE(buffer)) return FALSE;
+-    buffer[len] = 0;
+-
+-    if (!(p = wcspbrk( buffer, sepW )))
++    if (!(p = strpbrk( buffer, sep )))
+     {
+-        if (!wcscmp( buffer, posixW ) || !wcscmp( buffer, cW ))
+-            wcscpy( win_name, enUSW );
++        if (!strcmp( buffer, "POSIX" ) || !strcmp( buffer, "C" ))
++            strcpy( win_name, "en-US" );
+         else
+-            wcscpy( win_name, buffer );
++            strcpy( win_name, buffer );
+         return TRUE;
+     }
+ 
+@@ -685,13 +674,13 @@ static BOOL unix_to_win_locale( const char *unix_name, WCHAR *win_name )
+     {
+         *p++ = 0;
+         country = p;
+-        p = wcspbrk( p, sepW + 1 );
++        p = strpbrk( p, sep + 1 );
+     }
+     if (p && *p == '.')
+     {
+         *p++ = 0;
+         /* charset, ignore */
+-        p = wcschr( p, '@' );
++        p = strchr( p, '@' );
+     }
+     if (p)
+     {
+@@ -701,18 +690,18 @@ static BOOL unix_to_win_locale( const char *unix_name, WCHAR *win_name )
+ 
+     /* rebuild a Windows name */
+ 
+-    wcscpy( win_name, buffer );
++    strcpy( win_name, buffer );
+     if (modifier)
+     {
+-        if (!wcscmp( modifier, latinW )) wcscat( win_name, latnW );
+-        else if (!wcscmp( modifier, euroW )) {} /* ignore */
++        if (!strcmp( modifier, "latin" )) strcat( win_name, "-Latn" );
++        else if (!strcmp( modifier, "euro" )) {} /* ignore */
+         else return FALSE;
+     }
+     if (country)
+     {
+-        p = win_name + wcslen(win_name);
++        p = win_name + strlen(win_name);
+         *p++ = '-';
+-        wcscpy( p, country );
++        strcpy( p, country );
+     }
+     return TRUE;
+ }
+@@ -1083,6 +1072,6 @@ void CDECL get_unix_codepage( CPTABLEINFO *table )
+  */
+ void CDECL get_locales( WCHAR *sys, WCHAR *user )
+ {
+-    wcscpy( sys, system_locale );
+-    wcscpy( user, user_locale );
++    ntdll_umbstowcs( system_locale, ARRAY_SIZE(system_locale), sys, LOCALE_NAME_MAX_LENGTH * sizeof(WCHAR) );
++    ntdll_umbstowcs( user_locale, ARRAY_SIZE(user_locale), user, LOCALE_NAME_MAX_LENGTH * sizeof(WCHAR) );
+ }
+
+From 21f1fa82a8c7bd1b077f0289141972ed619c5a5f Mon Sep 17 00:00:00 2001
+From: Alexandre Julliard <julliard@winehq.org>
+Date: Wed, 1 Jul 2020 13:32:09 +0200
+Subject: [PATCH] ntdll: Fix uninitialized buffer in locale initialization.
+
+Wine-Bug: https://bugs.winehq.org/show_bug.cgi?id=49494
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/ntdll/unix/env.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/dlls/ntdll/unix/env.c b/dlls/ntdll/unix/env.c
+index e285bbbef0..789a398405 100644
+--- a/dlls/ntdll/unix/env.c
++++ b/dlls/ntdll/unix/env.c
+@@ -836,6 +836,8 @@ static BOOL unix_to_win_locale( const char *unix_name, char *win_name )
+         if (!unix_name || !unix_name[0]) return FALSE;
+     }
+ 
++    if (strlen( unix_name ) >= LOCALE_NAME_MAX_LENGTH) return FALSE;
++    strcpy( buffer, unix_name );
+     if (!(p = strpbrk( buffer, sep )))
+     {
+         if (!strcmp( buffer, "POSIX" ) || !strcmp( buffer, "C" ))
+@@ -1247,6 +1249,6 @@ USHORT * CDECL get_unix_codepage_data(void)
+  */
+ void CDECL get_locales( WCHAR *sys, WCHAR *user )
+ {
+-    ntdll_umbstowcs( system_locale, ARRAY_SIZE(system_locale), sys, LOCALE_NAME_MAX_LENGTH * sizeof(WCHAR) );
+-    ntdll_umbstowcs( user_locale, ARRAY_SIZE(user_locale), user, LOCALE_NAME_MAX_LENGTH * sizeof(WCHAR) );
++    ntdll_umbstowcs( system_locale, strlen(system_locale) + 1, sys, LOCALE_NAME_MAX_LENGTH );
++    ntdll_umbstowcs( user_locale, strlen(user_locale) + 1, user, LOCALE_NAME_MAX_LENGTH );
+ }
+-- 
+2.20.1
+
+--- a/dlls/ntdll/unix/env.c	
++++ a/dlls/ntdll/unix/env.c	
+@@ -766,6 +766,7 @@ static void init_locale(void)
+         if (preferred_langs) CFRelease( preferred_langs );
+     }
+ #endif
++    setlocale( LC_NUMERIC, "C" );  /* FIXME: oleaut32 depends on this */
+ }
+ 
+ 

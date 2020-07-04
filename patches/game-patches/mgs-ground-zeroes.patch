@@ -1,0 +1,102 @@
+From ceeb11d2a6545ae9db0c6825fb8d26b5cfe71889 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
+Date: Fri, 3 Jul 2020 10:13:30 +0200
+Subject: [PATCH] kernel32: Catch process creation breakpoint exceptions.
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Metal Gear Solid V: Ground Zeroes attaches itself and continues this
+specific breakpoint with DBG_EXCEPTION_NOT_HANDLED. It crashes the
+child process and the game terminates.
+
+It is correct for old Windows versions, but more recent versions are
+apparently catching exceptions here, and the process should continue.
+
+Wine-Bug: https://bugs.winehq.org/show_bug.cgi?id=44127
+Signed-off-by: Rémi Bernon <rbernon@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/kernel32/process.c        |  9 +++++++++
+ dlls/kernel32/tests/debugger.c | 32 ++++++++++++++++++++++++++++++++
+ 2 files changed, 41 insertions(+)
+
+diff --git a/dlls/kernel32/process.c b/dlls/kernel32/process.c
+index 8f506fcf132..cfc11c867ae 100644
+--- a/dlls/kernel32/process.c
++++ b/dlls/kernel32/process.c
+@@ -155,6 +155,15 @@ void CDECL __wine_start_process( LPTHREAD_START_ROUTINE entry, PEB *peb )
+ 
+         SetLastError( 0 );  /* clear error code */
+         if (being_debugged) DbgBreakPoint();
++    }
++    __EXCEPT_ALL
++    {
++        /* do nothing */
++    }
++    __ENDTRY
++
++    __TRY
++    {
+         ExitThread( call_process_entry( peb, entry ));
+     }
+     __EXCEPT(UnhandledExceptionFilter)
+diff --git a/dlls/kernel32/tests/debugger.c b/dlls/kernel32/tests/debugger.c
+index 33e18d82e62..0a43fe91e64 100644
+--- a/dlls/kernel32/tests/debugger.c
++++ b/dlls/kernel32/tests/debugger.c
+@@ -1062,15 +1062,46 @@ static void test_debug_children(const char *name, DWORD flag, BOOL debug_child,
+ 
+     if (flag)
+     {
++        DWORD last_thread;
++
+         next_event(&ctx, WAIT_EVENT_TIMEOUT);
+         ok(ctx.ev.dwDebugEventCode == CREATE_PROCESS_DEBUG_EVENT, "dwDebugEventCode = %d\n", ctx.ev.dwDebugEventCode);
+         ok(ctx.pid == pi.dwProcessId, "unexpected dwProcessId %x\n", ctx.ev.dwProcessId == ctx.pid);
+ 
+         next_event(&ctx, WAIT_EVENT_TIMEOUT);
+         ok(ctx.ev.dwDebugEventCode == LOAD_DLL_DEBUG_EVENT, "dwDebugEventCode = %d\n", ctx.ev.dwDebugEventCode);
++        last_thread = ctx.ev.dwThreadId;
+ 
+         wait_for_breakpoint(&ctx);
+         ok(ctx.dll_cnt > 2, "dll_cnt = %d\n", ctx.dll_cnt);
++
++        ok(ctx.ev.dwDebugEventCode == EXCEPTION_DEBUG_EVENT, "dwDebugEventCode = %d\n", ctx.ev.dwDebugEventCode);
++        ok(ctx.ev.dwThreadId == last_thread, "unexpected thread\n");
++        ok(ctx.ev.u.Exception.ExceptionRecord.ExceptionCode == EXCEPTION_BREAKPOINT, "ExceptionCode = %x\n",
++           ctx.ev.u.Exception.ExceptionRecord.ExceptionCode);
++
++        /* Except for wxppro and w2008, the initial breakpoint is now somewhere else, possibly within LdrInitShimEngineDynamic,
++         * It's also catching exceptions and ContinueDebugEvent(DBG_EXCEPTION_NOT_HANDLED) should not crash the child now */
++        if (broken(ctx.ev.u.Exception.ExceptionRecord.ExceptionAddress == pDbgBreakPoint))
++        {
++            win_skip("Ignoring initial breakpoint address check\n");
++            pass_exception = FALSE;
++        }
++        else
++        {
++            todo_wine
++            ok(ctx.ev.u.Exception.ExceptionRecord.ExceptionAddress != pDbgBreakPoint, "ExceptionAddress == pDbgBreakPoint\n");
++        }
++
++        if (pass_exception)
++        {
++            ret = ContinueDebugEvent(ctx.ev.dwProcessId, ctx.ev.dwThreadId, DBG_EXCEPTION_NOT_HANDLED);
++            ok(ret, "ContinueDebugEvent failed, last error %d.\n", GetLastError());
++            ctx.ev.dwDebugEventCode = -1;
++
++            next_event(&ctx, WAIT_EVENT_TIMEOUT);
++            ok(ctx.ev.dwDebugEventCode != EXCEPTION_DEBUG_EVENT, "dwDebugEventCode = %d\n", ctx.ev.dwDebugEventCode);
++        }
+     }
+     else
+     {
+@@ -1713,6 +1744,7 @@ START_TEST(debugger)
+         test_debug_children(myARGV[0], DEBUG_PROCESS|DEBUG_ONLY_THIS_PROCESS, FALSE, FALSE);
+         test_debug_children(myARGV[0], 0, FALSE, FALSE);
+         test_debug_children(myARGV[0], 0, FALSE, TRUE);
++        test_debug_children(myARGV[0], DEBUG_ONLY_THIS_PROCESS, FALSE, TRUE);
+         test_debugger(myARGV[0]);
+     }
+ }

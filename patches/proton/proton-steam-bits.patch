@@ -132,12 +132,13 @@ diff --git a/dlls/ntdll/unix/env.c b/dlls/ntdll/unix/env.c
 index d90990c092..a16e152086 100644
 --- a/dlls/ntdll/unix/env.c
 +++ b/dlls/ntdll/unix/env.c
-@@ -940,6 +940,8 @@ NTSTATUS CDECL get_dynamic_environment( WCHAR *env, SIZE_T *size )
+@@ -939,6 +940,9 @@ NTSTATUS CDECL get_dynamic_environment( WCHAR *env, SIZE_T *size )
      }
      sprintf( dlldir, "WINEDLLDIR%u", i );
      append_envW( buffer, &pos, dlldir, NULL );
-+    const char *sgi = getenv("SteamGameId");
-+    if ((sgi)) user_name = "steamuser"/*set user to steamuser if running steam game*/;
++    user_name = "steamuser";
++    const char *sgi = getenv("WINEUSERNAME");
++    if ((sgi)) user_name = sgi /*set user to steamuser if running steam game*/;
      append_envA( buffer, &pos, "WINEUSERNAME", user_name );
      append_envA( buffer, &pos, "WINEDLLOVERRIDES", overrides );
      assert( pos <= alloc );

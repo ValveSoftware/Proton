@@ -68,6 +68,9 @@
     cd wine-staging
     git reset --hard HEAD
     git clean -xdf
+    
+    echo "rawinput staging rebase"
+    patch -Np1 < ../patches/wine-hotfixes/staging-restore-rawinput-hidewineexports-threadtime.patch
     cd ..
 
     #WINE
@@ -90,6 +93,12 @@
 #    -W ntdll-Syscall_Emulation \
 #    -W ntdll-ThreadHideFromDebugger \
 
+    echo "winevulkan hotfixes pending"
+    patch -Np1 < ../patches/wine-hotfixes/pending/winevulkan-dont_initialize_vulkan_driver_in_dllmain.patch
+    
+    echo "rawinput backports"
+    patch -Np1 < ../patches/wine-hotfixes/pending/rawinput_backports.patch
+    
     echo "applying staging patches"
     ../wine-staging/patches/patchinstall.sh DESTDIR="." --all \
     -W server-Desktop_Refcount \
@@ -101,16 +110,27 @@
     -W dinput-remap-joystick \
     -W user32-window-activation
     
+    echo "planet zoo/jurassic world hotfixes pending"
+    patch -Np1 < ../patches/wine-hotfixes/pending/planet-zoo-jurassic-world-pending-upstream-staging.patch
 
+    echo "nvidia locale backports"
+    patch -Np1 < ../patches/wine-hotfixes/pending/nvidia_locale_fix.patch
+
+    echo "evr/mf/quartz backports"
+    patch -Np1 < ../patches/wine-hotfixes/pending/evr_mf_quartz_pending.patch
+    
+    echo "winhttp backports"
+    patch -Np1 < ../patches/wine-hotfixes/pending/winhttp_backports.patch
+
+    echo "Indiana Jones and the Emperor's Tomb pending"
+    patch -Np1 < ../patches/wine-hotfixes/pending/indiana_jones_fix.patch
+        
     #WINE FAUDIO
     #echo "applying faudio patches"
     #patch -Np1 < ../patches/faudio/faudio-ffmpeg.patch
     
     ### GAME PATCH SECTION ###
     
-    echo "planet zoo/jurassic world fix"
-    patch -Np1 < ../patches/wine-hotfixes/pending/planet-zoo-jurassic-world-pending-upstream.patch
-
     #fix this
     echo "mech warrior online"
     patch -Np1 < ../patches/game-patches/mwo.patch
@@ -133,13 +153,24 @@
     echo "fix steep"
     patch -Np1 < ../patches/game-patches/steep_fix.patch
     
+    echo "rawinput virtual desktop fix"
+    #https://bugs.winehq.org/show_bug.cgi?id=48419
+    #https://bugs.winehq.org/show_bug.cgi?id=48462
+    patch -Np1 < ../patches/game-patches/rawinput_v_desktop.patch
+    
+    echo "gta v key input fix"
+    patch -Np1 < ../patches/game-patches/gta_v_keyboard_input.patch
+    
+    echo "mgs ground zeroes fix"
+    patch -Np1 < ../patches/game-patches/mgs-ground-zeroes.patch
+    
 #  TODO: Add game-specific check
     echo "mk11 patch"
     patch -Np1 < ../patches/game-patches/mk11.patch
 
-#    Disabled for now. The game uses CEG which does not work in proton.    
-#    echo "blackops 2 fix"
-#    patch -Np1 < ../patches/game-patches/blackops_2_fix.patch
+#   The game uses CEG which does not work in proton.    
+    echo "blackops 2 fix"
+    patch -Np1 < ../patches/game-patches/blackops_2_fix.patch
 
     ### END GAME PATCH SECTION ###
     
@@ -171,6 +202,12 @@
 
     echo "proton overlay mouse lag fix"
     patch -Np1 < ../patches/proton/proton-staging-rawinput-overlay.patch
+    
+    echo "proton force mouse fullscreen grab"
+    patch -Np1 < ../patches/proton/proton-nofshack-force-fullscreen-grab-mouse.patch
+    
+    echo "proton alt-tab hotfixes"
+    patch -Np1 < ../patches/proton/proton-alt-tab-focus-hotfixes.patch
 
     echo "steamclient swap"
     patch -Np1 < ../patches/proton/proton-steamclient_swap.patch

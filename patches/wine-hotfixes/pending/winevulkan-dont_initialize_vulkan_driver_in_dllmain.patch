@@ -1,0 +1,117 @@
+From: Brendan Shanks <bshanks@codeweavers.com>
+Subject: [PATCH] winevulkan: Don't initialize the Vulkan driver in DllMain().
+Message-Id: <20200626232152.6582-1-bshanks@codeweavers.com>
+Date: Fri, 26 Jun 2020 16:21:54 -0700
+
+Fixes an issue where winevulkan would not be registered if no Vulkan
+driver was present during prefix creation (such as in a build VM).
+
+Signed-off-by: Brendan Shanks <bshanks@codeweavers.com>
+---
+
+As a side benefit, this also better matches the official Vulkan loader's
+behavior (it never returns FALSE from DllMain:
+https://github.com/KhronosGroup/Vulkan-Loader/blob/master/loader/loader.c#L7605)
+
+VK_ERROR_INITIALIZATION_FAILED is what the official Windows loader
+returns for vkCreateInstance() and vkEnumerateInstanceExtensionProperties()
+when no ICDs are present.
+
+Note that for vkEnumerateInstanceExtensionProperties(), VK_ERROR_INITIALIZATION_FAILED
+is not listed in the spec as a possible return code.
+I've opened an issue for the loader to get clarification:
+https://github.com/KhronosGroup/Vulkan-Loader/issues/421
+
+ dlls/winevulkan/vulkan.c | 29 ++++++++++++++++++++++-------
+ 1 file changed, 22 insertions(+), 7 deletions(-)
+
+diff --git a/dlls/winevulkan/vulkan.c b/dlls/winevulkan/vulkan.c
+index eb22e72ae36..d2da92cfa26 100644
+--- a/dlls/winevulkan/vulkan.c
++++ b/dlls/winevulkan/vulkan.c
+@@ -306,7 +306,7 @@ static void wine_vk_device_free(struct VkDevice_T *device)
+     heap_free(device);
+ }
+ 
+-static BOOL wine_vk_init(void)
++static BOOL WINAPI wine_vk_init(INIT_ONCE *once, void *param, void **context)
+ {
+     HDC hdc;
+ 
+@@ -314,16 +314,20 @@ static BOOL wine_vk_init(void)
+     vk_funcs = __wine_get_vulkan_driver(hdc, WINE_VULKAN_DRIVER_VERSION);
+     ReleaseDC(0, hdc);
+     if (!vk_funcs)
+-    {
+         ERR("Failed to load Wine graphics driver supporting Vulkan.\n");
+-        return FALSE;
+-    }
+-
+-    p_vkEnumerateInstanceVersion = vk_funcs->p_vkGetInstanceProcAddr(NULL, "vkEnumerateInstanceVersion");
++    else
++        p_vkEnumerateInstanceVersion = vk_funcs->p_vkGetInstanceProcAddr(NULL, "vkEnumerateInstanceVersion");
+ 
+     return TRUE;
+ }
+ 
++static void wine_vk_init_once(void)
++{
++    static INIT_ONCE init_once = INIT_ONCE_STATIC_INIT;
++
++    InitOnceExecuteOnce(&init_once, wine_vk_init, NULL, NULL);
++}
++
+ /* Helper function for converting between win32 and host compatible VkInstanceCreateInfo.
+  * This function takes care of extensions handled at winevulkan layer, a Wine graphics
+  * driver is responsible for handling e.g. surface extensions.
+@@ -653,6 +657,10 @@ VkResult WINAPI wine_vkCreateInstance(const VkInstanceCreateInfo *create_info,
+ 
+     TRACE("create_info %p, allocator %p, instance %p\n", create_info, allocator, instance);
+ 
++    wine_vk_init_once();
++    if (!vk_funcs)
++        return VK_ERROR_INITIALIZATION_FAILED;
++
+     if (allocator)
+         FIXME("Support for allocation callbacks not implemented yet\n");
+ 
+@@ -779,6 +787,10 @@ VkResult WINAPI wine_vkEnumerateInstanceExtensionProperties(const char *layer_na
+         return VK_ERROR_LAYER_NOT_PRESENT;
+     }
+ 
++    wine_vk_init_once();
++    if (!vk_funcs)
++        return VK_ERROR_INITIALIZATION_FAILED;
++
+     res = vk_funcs->p_vkEnumerateInstanceExtensionProperties(NULL, &num_host_properties, NULL);
+     if (res != VK_SUCCESS)
+         return res;
+@@ -847,6 +859,8 @@ VkResult WINAPI wine_vkEnumerateInstanceVersion(uint32_t *version)
+ 
+     TRACE("%p\n", version);
+ 
++    wine_vk_init_once();
++
+     if (p_vkEnumerateInstanceVersion)
+     {
+         res = p_vkEnumerateInstanceVersion(version);
+@@ -1367,13 +1381,14 @@ BOOL WINAPI DllMain(HINSTANCE hinst, DWORD reason, void *reserved)
+         case DLL_PROCESS_ATTACH:
+             hinstance = hinst;
+             DisableThreadLibraryCalls(hinst);
+-            return wine_vk_init();
++            break;
+     }
+     return TRUE;
+ }
+ 
+ static const struct vulkan_func vk_global_dispatch_table[] =
+ {
++    /* These functions must call wine_vk_init_once() before accessing vk_funcs. */
+     {"vkCreateInstance", &wine_vkCreateInstance},
+     {"vkEnumerateInstanceExtensionProperties", &wine_vkEnumerateInstanceExtensionProperties},
+     {"vkEnumerateInstanceLayerProperties", &wine_vkEnumerateInstanceLayerProperties},
+
+-- 
+2.26.2
+
