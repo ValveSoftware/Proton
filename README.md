@@ -31,29 +31,63 @@
 
 This is my build of Proton with the most recent releases of vanilla WINE. It has FFmpeg enabled for FAudio by default, and all of Proton's patches ported over to be applied to WINE, as well as Wine-staging and VKD3D.
 
-### Patches
+### Steam game patches/fixes
 
 - FFXIV Launcher
+- FFXV Steam
 - Mech Warrior online
 - Assetto Corsa HUD
-- Vulkan child window
 - Sword Art Online gnutls
 - ORIGIN downloads fix
-- C.O.D. Black Ops 2 launch
-- NFSW launcher
 - Monster Hunter World
-- Sunset Overdrive
-- Steep and AC Odyssey screen fix
-- World of Warcraft DX12 compatibility
-- D9VK integration
-- VKD3D integration
-- Protonfixes integration
-- FAudio with FFmpeg enabled (fixes audio/voices in multiple games)
-- All of Valve's WINE Proton patches
-- Multiple pending pull requests from Proton
-- Wine-staging patches
+- Mortal Kombat 11
+- GTA V Keyboard input fix
+- Steep fix
+- AC Odyssey black bars fix
 - Various WINE hotfixes for WINE functionality that fix regressions per version
 - Various Proton hotfixes for Proton functionality that fix regressions per version
+- Screen fixes for Nier: Automata, Sekiro, Dark Souls
+- Path of Exile vulkan renderer fixed
+- Mount and Blade Warband
+- Divinity Original Sin 2
+- Persona 4
+- Sea of Thieves
+
+### Non-Steam or winesteam game patches
+
+- World of Warcraft DX12 compatibility
+- Diablo 1 Menu fix
+- COD: Blackops II launch fix (requires running from steam in wine --"winesteam", does not work in proton)
+
+### Quality of Life patches
+
+- All of Valve's WINE Proton patches
+- Wine-staging patches
+- Vulkan child window patch
+- Protonfixes integration (has various scripts to run winetricks on games that need them)
+- FAudio with FFmpeg enabled (fixes audio/voices in multiple games)
+- Various WINE hotfixes for WINE functionality that fix regressions per version
+- Various Proton hotfixes for Proton functionality that fix regressions per version
+- DXVK is compiled with async for faster shader compiling. See environment variables section for more information pm usage.
+
+### Media Foundation fixes (Fully working or playable)
+
+- Spyro Reignited Trilogy
+- Mortal Kombat 11
+- Injustice 2
+- Power Rangers: Battle for the Grid
+- Darksiders: Warmastered Edition
+- Borderlands 3
+- Resident Evil 2 Remastered
+- Resident Evil 3 Remastered
+- Resident Evil 7
+- PC Building Simulator
+- Dangonronpa V3
+- Super Lucky's Tale
+- Remnant: From the Ashes
+- BlazBlue Centralfiction
+- Bloodstained: Ritual of the Night
+- Crazy Machines 3
 
 ### Notes
 
@@ -61,7 +95,8 @@ This is my build of Proton with the most recent releases of vanilla WINE. It has
 - Warframe is problematic with VSync. Turn it off or on in game, do not set to `Auto`
 - Warframe needs a set a frame limit in game. Unlimited framerate can cause slowdowns
 - Warframe on Nvidia: you may need to disable GPU Particles in game otherwise the game can freeze randomly. On AMD they work fine
-- DOOM Eternal currently does **not** work with ACO on Mesa. You will need to set `RADV_PERFTEST=llvm %command%` in the launch options
+- Borderlands 3 Marcus game intro audio does not work correctly, can skip it. Rest of the game is playable and videos work
+- Injustice 2 and MK11 are missing cutscene audio
 
 Full patches can be viewed in [protonprep.sh](patches/protonprep.sh).
 
