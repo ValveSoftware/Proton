@@ -3121,3 +3121,789 @@ index 5697d2c0e0c..e6f00842df5 100644
          pin->post_src = gst_element_get_static_pad(flip, "src");
          pin->flip = flip;
      }
+From: Nikolay Sivov <nsivov@codeweavers.com>
+Subject: [PATCH 1/2] evr: Add a stub for sample allocator.
+Message-Id: <20200703162216.421777-1-nsivov@codeweavers.com>
+Date: Fri,  3 Jul 2020 19:22:15 +0300
+
+Signed-off-by: Nikolay Sivov <nsivov@codeweavers.com>
+---
+ dlls/evr/Makefile.in |   3 +-
+ dlls/evr/evr.spec    |   2 +-
+ dlls/evr/sample.c    | 199 +++++++++++++++++++++++++++++++++++++++++++
+ dlls/evr/tests/evr.c |  19 +++++
+ include/evr.idl      |   1 +
+ include/mfidl.idl    |  57 +++++++++++++
+ 6 files changed, 279 insertions(+), 2 deletions(-)
+ create mode 100644 dlls/evr/sample.c
+
+diff --git a/dlls/evr/Makefile.in b/dlls/evr/Makefile.in
+index daaf9cc872a..c8178297dab 100644
+--- a/dlls/evr/Makefile.in
++++ b/dlls/evr/Makefile.in
+@@ -9,6 +9,7 @@ C_SRCS = \
+ 	evr.c \
+ 	main.c \
+ 	mixer.c \
+-	presenter.c
++	presenter.c \
++	sample.c
+ 
+ IDL_SRCS = evr_classes.idl
+diff --git a/dlls/evr/evr.spec b/dlls/evr/evr.spec
+index 73cbf05b461..aa839295658 100644
+--- a/dlls/evr/evr.spec
++++ b/dlls/evr/evr.spec
+@@ -18,7 +18,7 @@
+ @ stub MFCreateVideoOTA
+ @ stub MFCreateVideoPresenter2
+ @ stdcall MFCreateVideoPresenter(ptr ptr ptr ptr)
+-@ stub MFCreateVideoSampleAllocator
++@ stdcall MFCreateVideoSampleAllocator(ptr ptr)
+ @ stdcall MFCreateVideoSampleFromSurface(ptr ptr)
+ @ stub MFGetPlaneSize
+ @ stub MFGetStrideForBitmapInfoHeader
+diff --git a/dlls/evr/sample.c b/dlls/evr/sample.c
+new file mode 100644
+index 00000000000..f371d920762
+--- /dev/null
++++ b/dlls/evr/sample.c
+@@ -0,0 +1,199 @@
++/*
++ * Copyright 2020 Nikolay Sivov
++ *
++ * This library is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU Lesser General Public
++ * License as published by the Free Software Foundation; either
++ * version 2.1 of the License, or (at your option) any later version.
++ *
++ * This library is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++ * Lesser General Public License for more details.
++ *
++ * You should have received a copy of the GNU Lesser General Public
++ * License along with this library; if not, write to the Free Software
++ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
++ */
++
++#define COBJMACROS
++
++#include "evr.h"
++
++#include "wine/debug.h"
++#include "wine/heap.h"
++
++WINE_DEFAULT_DEBUG_CHANNEL(evr);
++
++struct sample_allocator
++{
++    IMFVideoSampleAllocator IMFVideoSampleAllocator_iface;
++    IMFVideoSampleAllocatorCallback IMFVideoSampleAllocatorCallback_iface;
++    LONG refcount;
++};
++
++static struct sample_allocator *impl_from_IMFVideoSampleAllocator(IMFVideoSampleAllocator *iface)
++{
++    return CONTAINING_RECORD(iface, struct sample_allocator, IMFVideoSampleAllocator_iface);
++}
++
++static struct sample_allocator *impl_from_IMFVideoSampleAllocatorCallback(IMFVideoSampleAllocatorCallback *iface)
++{
++    return CONTAINING_RECORD(iface, struct sample_allocator, IMFVideoSampleAllocatorCallback_iface);
++}
++
++static HRESULT WINAPI sample_allocator_QueryInterface(IMFVideoSampleAllocator *iface, REFIID riid, void **obj)
++{
++    struct sample_allocator *allocator = impl_from_IMFVideoSampleAllocator(iface);
++
++    TRACE("%p, %s, %p.\n", iface, debugstr_guid(riid), obj);
++
++    if (IsEqualIID(riid, &IID_IMFVideoSampleAllocator) ||
++            IsEqualIID(riid, &IID_IUnknown))
++    {
++        *obj = &allocator->IMFVideoSampleAllocator_iface;
++    }
++    else if (IsEqualIID(riid, &IID_IMFVideoSampleAllocatorCallback))
++    {
++        *obj = &allocator->IMFVideoSampleAllocatorCallback_iface;
++    }
++    else
++    {
++        WARN("Unsupported interface %s.\n", debugstr_guid(riid));
++        *obj = NULL;
++        return E_NOINTERFACE;
++    }
++
++    IUnknown_AddRef((IUnknown *)*obj);
++    return S_OK;
++}
++
++static ULONG WINAPI sample_allocator_AddRef(IMFVideoSampleAllocator *iface)
++{
++    struct sample_allocator *allocator = impl_from_IMFVideoSampleAllocator(iface);
++    ULONG refcount = InterlockedIncrement(&allocator->refcount);
++
++    TRACE("%p, refcount %u.\n", iface, refcount);
++
++    return refcount;
++}
++
++static ULONG WINAPI sample_allocator_Release(IMFVideoSampleAllocator *iface)
++{
++    struct sample_allocator *allocator = impl_from_IMFVideoSampleAllocator(iface);
++    ULONG refcount = InterlockedDecrement(&allocator->refcount);
++
++    TRACE("%p, refcount %u.\n", iface, refcount);
++
++    if (!refcount)
++    {
++        heap_free(allocator);
++    }
++
++    return refcount;
++}
++
++static HRESULT WINAPI sample_allocator_SetDirectXManager(IMFVideoSampleAllocator *iface,
++        IUnknown *manager)
++{
++    FIXME("%p, %p.\n", iface, manager);
++
++    return E_NOTIMPL;
++}
++
++static HRESULT WINAPI sample_allocator_UninitializeSampleAllocator(IMFVideoSampleAllocator *iface)
++{
++    FIXME("%p.\n", iface);
++
++    return E_NOTIMPL;
++}
++
++static HRESULT WINAPI sample_allocator_InitializeSampleAllocator(IMFVideoSampleAllocator *iface,
++        DWORD sample_count, IMFMediaType *media_type)
++{
++    FIXME("%p, %u, %p.\n", iface, sample_count, media_type);
++
++    return E_NOTIMPL;
++}
++
++static HRESULT WINAPI sample_allocator_AllocateSample(IMFVideoSampleAllocator *iface, IMFSample **sample)
++{
++    FIXME("%p, %p.\n", iface, sample);
++
++    return E_NOTIMPL;
++}
++
++static const IMFVideoSampleAllocatorVtbl sample_allocator_vtbl =
++{
++    sample_allocator_QueryInterface,
++    sample_allocator_AddRef,
++    sample_allocator_Release,
++    sample_allocator_SetDirectXManager,
++    sample_allocator_UninitializeSampleAllocator,
++    sample_allocator_InitializeSampleAllocator,
++    sample_allocator_AllocateSample,
++};
++
++static HRESULT WINAPI sample_allocator_callback_QueryInterface(IMFVideoSampleAllocatorCallback *iface,
++        REFIID riid, void **obj)
++{
++    struct sample_allocator *allocator = impl_from_IMFVideoSampleAllocatorCallback(iface);
++    return IMFVideoSampleAllocator_QueryInterface(&allocator->IMFVideoSampleAllocator_iface, riid, obj);
++}
++
++static ULONG WINAPI sample_allocator_callback_AddRef(IMFVideoSampleAllocatorCallback *iface)
++{
++    struct sample_allocator *allocator = impl_from_IMFVideoSampleAllocatorCallback(iface);
++    return IMFVideoSampleAllocator_AddRef(&allocator->IMFVideoSampleAllocator_iface);
++}
++
++static ULONG WINAPI sample_allocator_callback_Release(IMFVideoSampleAllocatorCallback *iface)
++{
++    struct sample_allocator *allocator = impl_from_IMFVideoSampleAllocatorCallback(iface);
++    return IMFVideoSampleAllocator_Release(&allocator->IMFVideoSampleAllocator_iface);
++}
++
++static HRESULT WINAPI sample_allocator_callback_SetCallback(IMFVideoSampleAllocatorCallback *iface,
++        IMFVideoSampleAllocatorNotify *callback)
++{
++    FIXME("%p, %p.\n", iface, callback);
++
++    return E_NOTIMPL;
++}
++
++static HRESULT WINAPI sample_allocator_callback_GetFreeSampleCount(IMFVideoSampleAllocatorCallback *iface,
++        LONG *count)
++{
++    FIXME("%p, %p.\n", iface, count);
++
++    return E_NOTIMPL;
++}
++
++static const IMFVideoSampleAllocatorCallbackVtbl sample_allocator_callback_vtbl =
++{
++    sample_allocator_callback_QueryInterface,
++    sample_allocator_callback_AddRef,
++    sample_allocator_callback_Release,
++    sample_allocator_callback_SetCallback,
++    sample_allocator_callback_GetFreeSampleCount,
++};
++
++HRESULT WINAPI MFCreateVideoSampleAllocator(REFIID riid, void **obj)
++{
++    struct sample_allocator *object;
++    HRESULT hr;
++
++    TRACE("%s, %p.\n", debugstr_guid(riid), obj);
++
++    if (!(object = heap_alloc_zero(sizeof(*object))))
++        return E_OUTOFMEMORY;
++
++    object->IMFVideoSampleAllocator_iface.lpVtbl = &sample_allocator_vtbl;
++    object->IMFVideoSampleAllocatorCallback_iface.lpVtbl = &sample_allocator_callback_vtbl;
++    object->refcount = 1;
++
++    hr = IMFVideoSampleAllocator_QueryInterface(&object->IMFVideoSampleAllocator_iface, riid, obj);
++    IMFVideoSampleAllocator_Release(&object->IMFVideoSampleAllocator_iface);
++
++    return hr;
++}
+diff --git a/dlls/evr/tests/evr.c b/dlls/evr/tests/evr.c
+index b9f86eb2529..5773fedd226 100644
+--- a/dlls/evr/tests/evr.c
++++ b/dlls/evr/tests/evr.c
+@@ -962,6 +962,24 @@ static void test_MFCreateVideoMixerAndPresenter(void)
+     IUnknown_Release(presenter);
+ }
+ 
++static void test_MFCreateVideoSampleAllocator(void)
++{
++    IUnknown *unk;
++    HRESULT hr;
++
++    hr = MFCreateVideoSampleAllocator(&IID_IUnknown, (void **)&unk);
++    ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++    IUnknown_Release(unk);
++
++    hr = MFCreateVideoSampleAllocator(&IID_IMFVideoSampleAllocator, (void **)&unk);
++    ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++    IUnknown_Release(unk);
++
++    hr = MFCreateVideoSampleAllocator(&IID_IMFVideoSampleAllocatorCallback, (void **)&unk);
++    ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++    IUnknown_Release(unk);
++}
++
+ START_TEST(evr)
+ {
+     CoInitialize(NULL);
+@@ -978,6 +996,7 @@ START_TEST(evr)
+     test_surface_sample();
+     test_default_presenter();
+     test_MFCreateVideoMixerAndPresenter();
++    test_MFCreateVideoSampleAllocator();
+ 
+     CoUninitialize();
+ }
+diff --git a/include/evr.idl b/include/evr.idl
+index 8628e111a31..6369a39b2f3 100644
+--- a/include/evr.idl
++++ b/include/evr.idl
+@@ -303,4 +303,5 @@ cpp_quote("HRESULT WINAPI MFCreateVideoMixer(IUnknown *owner, REFIID riid_device
+ cpp_quote("HRESULT WINAPI MFCreateVideoMixerAndPresenter(IUnknown *mixer_outer, IUnknown *presenter_outer, ")
+ cpp_quote("        REFIID riid_mixer, void **mixer, REFIID riid_presenter, void **presenter);")
+ cpp_quote("HRESULT WINAPI MFCreateVideoPresenter(IUnknown *owner, REFIID riid_device, REFIID riid, void **obj);")
++cpp_quote("HRESULT WINAPI MFCreateVideoSampleAllocator(REFIID riid, void **allocator);")
+ cpp_quote("HRESULT WINAPI MFCreateVideoSampleFromSurface(IUnknown *surface, IMFSample **sample);")
+diff --git a/include/mfidl.idl b/include/mfidl.idl
+index 35419756b5c..1f5fc06dd1e 100644
+--- a/include/mfidl.idl
++++ b/include/mfidl.idl
+@@ -1040,6 +1040,63 @@ interface IMFAudioPolicy : IUnknown
+     HRESULT GetIconPath([out] LPWSTR *path);
+ }
+ 
++[
++    object,
++    uuid(86cbc910-e533-4751-8e3b-f19b5b806a03),
++    local
++]
++interface IMFVideoSampleAllocator : IUnknown
++{
++    HRESULT SetDirectXManager(
++        [in, unique] IUnknown *manager
++    );
++    HRESULT UninitializeSampleAllocator();
++    HRESULT InitializeSampleAllocator(
++        [in] DWORD sample_count,
++        [in] IMFMediaType *media_type
++    );
++
++    HRESULT AllocateSample(
++        [out] IMFSample **sample
++    );
++}
++
++[
++    object,
++    uuid(a792cdbe-c374-4e89-8335-278e7b9956a4),
++    local
++]
++interface IMFVideoSampleAllocatorNotify : IUnknown
++{
++    HRESULT NotifyRelease();
++}
++
++[
++    object,
++    uuid(3978aa1a-6d5b-4b7f-a340-90899189ae34),
++    local
++]
++interface IMFVideoSampleAllocatorNotifyEx : IMFVideoSampleAllocatorNotify
++{
++    HRESULT NotifyPrune(IMFSample *sample);
++}
++
++[
++    object,
++    uuid(992388b4-3372-4f67-8b6f-c84c071f4751),
++    local
++]
++interface IMFVideoSampleAllocatorCallback : IUnknown
++{
++    HRESULT SetCallback(
++        [in, unique] IMFVideoSampleAllocatorNotify *callback
++    );
++
++    HRESULT GetFreeSampleCount(
++        [out] LONG *count
++    );
++}
++
+ enum
+ {
+     MF_ACTIVATE_CUSTOM_MIXER_ALLOWFAIL = 0x00000001,
+
+-- 
+2.27.0
+
+From: Nikolay Sivov <nsivov@codeweavers.com>
+Subject: [PATCH 2/2] evr/tests: Add some tests for sample allocator.
+Message-Id: <20200703162216.421777-2-nsivov@codeweavers.com>
+Date: Fri,  3 Jul 2020 19:22:16 +0300
+In-Reply-To: <20200703162216.421777-1-nsivov@codeweavers.com>
+References: <20200703162216.421777-1-nsivov@codeweavers.com>
+
+Signed-off-by: Nikolay Sivov <nsivov@codeweavers.com>
+---
+ dlls/evr/tests/evr.c | 127 +++++++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 123 insertions(+), 4 deletions(-)
+
+diff --git a/dlls/evr/tests/evr.c b/dlls/evr/tests/evr.c
+index 5773fedd226..db9b3a80e04 100644
+--- a/dlls/evr/tests/evr.c
++++ b/dlls/evr/tests/evr.c
+@@ -623,6 +623,7 @@ todo_wine
+ static void test_surface_sample(void)
+ {
+     IDirect3DSurface9 *backbuffer = NULL;
++    IMFDesiredSample *desired_sample;
+     IMFMediaBuffer *buffer, *buffer2;
+     IDirect3DSwapChain9 *swapchain;
+     IDirect3DDevice9 *device;
+@@ -662,9 +663,20 @@ todo_wine
+     ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
+     IUnknown_Release(unk);
+ 
+-    hr = IMFSample_QueryInterface(sample, &IID_IMFDesiredSample, (void **)&unk);
++    hr = IMFSample_QueryInterface(sample, &IID_IMFDesiredSample, (void **)&desired_sample);
+     ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
+-    IUnknown_Release(unk);
++
++    hr = IMFSample_GetCount(sample, &count);
++    ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++    ok(!count, "Unexpected attribute count %u.\n", count);
++
++    IMFDesiredSample_SetDesiredSampleTimeAndDuration(desired_sample, 123, 456);
++
++    hr = IMFSample_GetCount(sample, &count);
++    ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++    ok(!count, "Unexpected attribute count %u.\n", count);
++
++    IMFDesiredSample_Release(desired_sample);
+ 
+     hr = IMFSample_GetCount(sample, &count);
+     ok(hr == S_OK, "Failed to get attribute count, hr %#x.\n", hr);
+@@ -964,16 +976,123 @@ static void test_MFCreateVideoMixerAndPresenter(void)
+ 
+ static void test_MFCreateVideoSampleAllocator(void)
+ {
++    IMFVideoSampleAllocatorCallback *allocator_cb;
++    IMFVideoSampleAllocator *allocator;
++    IMFVideoMediaType *video_type;
++    IMFSample *sample, *sample2;
++    IDirect3DSurface9 *surface;
++    IMFMediaType *media_type;
++    IMFMediaBuffer *buffer;
++    IMFGetService *gs;
+     IUnknown *unk;
+     HRESULT hr;
++    LONG count;
+ 
+     hr = MFCreateVideoSampleAllocator(&IID_IUnknown, (void **)&unk);
+     ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
+     IUnknown_Release(unk);
+ 
+-    hr = MFCreateVideoSampleAllocator(&IID_IMFVideoSampleAllocator, (void **)&unk);
++    hr = MFCreateVideoSampleAllocator(&IID_IMFVideoSampleAllocator, (void **)&allocator);
+     ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
+-    IUnknown_Release(unk);
++
++    hr = IMFVideoSampleAllocator_QueryInterface(allocator, &IID_IMFVideoSampleAllocatorCallback, (void **)&allocator_cb);
++    ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++
++    count = 10;
++    hr = IMFVideoSampleAllocatorCallback_GetFreeSampleCount(allocator_cb, &count);
++todo_wine {
++    ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++    ok(!count, "Unexpected count %d.\n", count);
++}
++    hr = IMFVideoSampleAllocator_UninitializeSampleAllocator(allocator);
++todo_wine
++    ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++
++    hr = IMFVideoSampleAllocator_AllocateSample(allocator, &sample);
++todo_wine
++    ok(hr == MF_E_NOT_INITIALIZED, "Unexpected hr %#x.\n", hr);
++
++    hr = MFCreateMediaType(&media_type);
++    ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++
++    /* It expects IMFVideoMediaType. */
++    hr = IMFVideoSampleAllocator_InitializeSampleAllocator(allocator, 2, media_type);
++todo_wine
++    ok(hr == E_NOINTERFACE, "Unexpected hr %#x.\n", hr);
++
++    hr = MFCreateVideoMediaTypeFromSubtype(&MFVideoFormat_RGB32, &video_type);
++    ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++
++    hr = IMFVideoSampleAllocator_InitializeSampleAllocator(allocator, 2, (IMFMediaType *)video_type);
++todo_wine
++    ok(hr == MF_E_INVALIDMEDIATYPE, "Unexpected hr %#x.\n", hr);
++
++    /* Frame size is required. */
++    hr = IMFVideoMediaType_SetUINT64(video_type, &MF_MT_FRAME_SIZE, (UINT64) 320 << 32 | 240);
++    ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++    hr = IMFVideoSampleAllocator_InitializeSampleAllocator(allocator, 0, (IMFMediaType *)video_type);
++todo_wine
++    ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++
++    hr = IMFVideoSampleAllocatorCallback_GetFreeSampleCount(allocator_cb, &count);
++todo_wine {
++    ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++    ok(count == 1, "Unexpected count %d.\n", count);
++}
++    sample = NULL;
++    hr = IMFVideoSampleAllocator_AllocateSample(allocator, &sample);
++todo_wine
++    ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++    if (SUCCEEDED(hr))
++        ok(get_refcount(sample) == 3, "Unexpected refcount %u.\n", get_refcount(sample));
++
++    hr = IMFVideoSampleAllocator_AllocateSample(allocator, &sample2);
++todo_wine
++    ok(hr == MF_E_SAMPLEALLOCATOR_EMPTY, "Unexpected hr %#x.\n", hr);
++
++    /* Reinitialize with active sample. */
++    hr = IMFVideoSampleAllocator_InitializeSampleAllocator(allocator, 4, (IMFMediaType *)video_type);
++todo_wine
++    ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++    if (sample)
++        ok(get_refcount(sample) == 3, "Unexpected refcount %u.\n", get_refcount(sample));
++
++    hr = IMFVideoSampleAllocatorCallback_GetFreeSampleCount(allocator_cb, &count);
++todo_wine {
++    ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++    ok(count == 4, "Unexpected count %d.\n", count);
++}
++    if (sample)
++    {
++        hr = IMFSample_QueryInterface(sample, &IID_IMFDesiredSample, (void **)&unk);
++        ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++        IUnknown_Release(unk);
++
++        hr = IMFSample_QueryInterface(sample, &IID_IMFTrackedSample, (void **)&unk);
++        ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++        IUnknown_Release(unk);
++
++        hr = IMFSample_GetBufferByIndex(sample, 0, &buffer);
++        ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++
++        hr = IMFMediaBuffer_QueryInterface(buffer, &IID_IMFGetService, (void **)&gs);
++        ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++
++        /* Device manager wasn't set, sample get regular memory buffers. */
++        hr = IMFGetService_GetService(gs, &MR_BUFFER_SERVICE, &IID_IDirect3DSurface9, (void **)&surface);
++        ok(hr == E_NOTIMPL, "Unexpected hr %#x.\n", hr);
++
++        IMFMediaBuffer_Release(buffer);
++
++        IMFGetService_Release(gs);
++        IMFSample_Release(sample);
++    }
++
++    IMFVideoSampleAllocatorCallback_Release(allocator_cb);
++
++    IMFMediaType_Release(media_type);
++
++    IMFVideoSampleAllocator_Release(allocator);
+ 
+     hr = MFCreateVideoSampleAllocator(&IID_IMFVideoSampleAllocatorCallback, (void **)&unk);
+     ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
+
+-- 
+2.27.0
+
+From: Nikolay Sivov <nsivov@codeweavers.com>
+Subject: [PATCH] mfplat: Add tracked sample stub.
+Message-Id: <20200703162509.421917-1-nsivov@codeweavers.com>
+Date: Fri,  3 Jul 2020 19:25:09 +0300
+
+Signed-off-by: Nikolay Sivov <nsivov@codeweavers.com>
+---
+ dlls/mfplat/buffer.c       | 89 +++++++++++++++++++++++++++++++++++---
+ dlls/mfplat/mfplat.spec    |  1 +
+ dlls/mfplat/tests/mfplat.c | 37 ++++++++++++++++
+ include/mfidl.idl          |  1 +
+ 4 files changed, 122 insertions(+), 6 deletions(-)
+
+diff --git a/dlls/mfplat/buffer.c b/dlls/mfplat/buffer.c
+index 1a31299d244..67c60663b33 100644
+--- a/dlls/mfplat/buffer.c
++++ b/dlls/mfplat/buffer.c
+@@ -62,6 +62,7 @@ struct sample
+ {
+     struct attributes attributes;
+     IMFSample IMFSample_iface;
++    IMFTrackedSample IMFTrackedSample_iface;
+ 
+     IMFMediaBuffer **buffers;
+     size_t buffer_count;
+@@ -87,6 +88,11 @@ static inline struct sample *impl_from_IMFSample(IMFSample *iface)
+     return CONTAINING_RECORD(iface, struct sample, IMFSample_iface);
+ }
+ 
++static struct sample *impl_from_IMFTrackedSample(IMFTrackedSample *iface)
++{
++    return CONTAINING_RECORD(iface, struct sample, IMFTrackedSample_iface);
++}
++
+ static HRESULT WINAPI memory_buffer_QueryInterface(IMFMediaBuffer *iface, REFIID riid, void **out)
+ {
+     struct memory_buffer *buffer = impl_from_IMFMediaBuffer(iface);
+@@ -711,20 +717,29 @@ HRESULT WINAPI MFCreateMediaBufferFromMediaType(IMFMediaType *media_type, LONGLO
+ 
+ static HRESULT WINAPI sample_QueryInterface(IMFSample *iface, REFIID riid, void **out)
+ {
++    struct sample *sample = impl_from_IMFSample(iface);
++
+     TRACE("%p, %s, %p.\n", iface, debugstr_guid(riid), out);
+ 
+     if (IsEqualIID(riid, &IID_IMFSample) ||
+             IsEqualIID(riid, &IID_IMFAttributes) ||
+             IsEqualIID(riid, &IID_IUnknown))
+     {
+-        *out = iface;
+-        IMFSample_AddRef(iface);
+-        return S_OK;
++        *out = &sample->IMFSample_iface;
++    }
++    else if (sample->IMFTrackedSample_iface.lpVtbl && IsEqualIID(riid, &IID_IMFTrackedSample))
++    {
++        *out = &sample->IMFTrackedSample_iface;
++    }
++    else
++    {
++        WARN("Unsupported %s.\n", debugstr_guid(riid));
++        *out = NULL;
++        return E_NOINTERFACE;
+     }
+ 
+-    WARN("Unsupported %s.\n", debugstr_guid(riid));
+-    *out = NULL;
+-    return E_NOINTERFACE;
++    IUnknown_AddRef((IUnknown *)*out);
++    return S_OK;
+ }
+ 
+ static ULONG WINAPI sample_AddRef(IMFSample *iface)
+@@ -1448,6 +1463,40 @@ static const IMFSampleVtbl samplevtbl =
+     sample_CopyToBuffer,
+ };
+ 
++static HRESULT WINAPI tracked_sample_QueryInterface(IMFTrackedSample *iface, REFIID riid, void **obj)
++{
++    struct sample *sample = impl_from_IMFTrackedSample(iface);
++    return IMFSample_QueryInterface(&sample->IMFSample_iface, riid, obj);
++}
++
++static ULONG WINAPI tracked_sample_AddRef(IMFTrackedSample *iface)
++{
++    struct sample *sample = impl_from_IMFTrackedSample(iface);
++    return IMFSample_AddRef(&sample->IMFSample_iface);
++}
++
++static ULONG WINAPI tracked_sample_Release(IMFTrackedSample *iface)
++{
++    struct sample *sample = impl_from_IMFTrackedSample(iface);
++    return IMFSample_Release(&sample->IMFSample_iface);
++}
++
++static HRESULT WINAPI tracked_sample_SetAllocator(IMFTrackedSample *iface,
++        IMFAsyncCallback *sample_allocator, IUnknown *state)
++{
++    FIXME("%p, %p, %p.\n", iface, sample_allocator, state);
++
++    return E_NOTIMPL;
++}
++
++static const IMFTrackedSampleVtbl tracked_sample_vtbl =
++{
++    tracked_sample_QueryInterface,
++    tracked_sample_AddRef,
++    tracked_sample_Release,
++    tracked_sample_SetAllocator,
++};
++
+ /***********************************************************************
+  *      MFCreateSample (mfplat.@)
+  */
+@@ -1476,3 +1525,31 @@ HRESULT WINAPI MFCreateSample(IMFSample **sample)
+ 
+     return S_OK;
+ }
++
++/***********************************************************************
++ *      MFCreateTrackedSample (mfplat.@)
++ */
++HRESULT WINAPI MFCreateTrackedSample(IMFTrackedSample **sample)
++{
++    struct sample *object;
++    HRESULT hr;
++
++    TRACE("%p.\n", sample);
++
++    object = heap_alloc_zero(sizeof(*object));
++    if (!object)
++        return E_OUTOFMEMORY;
++
++    if (FAILED(hr = init_attributes_object(&object->attributes, 0)))
++    {
++        heap_free(object);
++        return hr;
++    }
++
++    object->IMFSample_iface.lpVtbl = &samplevtbl;
++    object->IMFTrackedSample_iface.lpVtbl = &tracked_sample_vtbl;
++
++    *sample = &object->IMFTrackedSample_iface;
++
++    return S_OK;
++}
+diff --git a/dlls/mfplat/mfplat.spec b/dlls/mfplat/mfplat.spec
+index 16be972e5bd..f55a8237d35 100644
+--- a/dlls/mfplat/mfplat.spec
++++ b/dlls/mfplat/mfplat.spec
+@@ -70,6 +70,7 @@
+ @ stdcall MFCreateSystemTimeSource(ptr)
+ @ stub MFCreateSystemUnderlyingClock
+ @ stub MFCreateTempFile
++@ stdcall MFCreateTrackedSample(ptr)
+ @ stdcall MFCreateTransformActivate(ptr)
+ @ stub MFCreateURLFromPath
+ @ stub MFCreateUdpSockets
+diff --git a/dlls/mfplat/tests/mfplat.c b/dlls/mfplat/tests/mfplat.c
+index 8b4012f8087..01749dd9ef8 100644
+--- a/dlls/mfplat/tests/mfplat.c
++++ b/dlls/mfplat/tests/mfplat.c
+@@ -107,6 +107,7 @@ static HRESULT (WINAPI *pMFCreate2DMediaBuffer)(DWORD width, DWORD height, DWORD
+ static HRESULT (WINAPI *pMFCreateMediaBufferFromMediaType)(IMFMediaType *media_type, LONGLONG duration, DWORD min_length,
+         DWORD min_alignment, IMFMediaBuffer **buffer);
+ static HRESULT (WINAPI *pMFCreateDXSurfaceBuffer)(REFIID riid, IUnknown *surface, BOOL bottom_up, IMFMediaBuffer **buffer);
++static HRESULT (WINAPI *pMFCreateTrackedSample)(IMFTrackedSample **sample);
+ 
+ static HWND create_window(void)
+ {
+@@ -715,6 +716,7 @@ static void init_functions(void)
+     X(MFCreateSourceResolver);
+     X(MFCreateMediaBufferFromMediaType);
+     X(MFCreateMFByteStreamOnStream);
++    X(MFCreateTrackedSample);
+     X(MFCreateTransformActivate);
+     X(MFGetPlaneSize);
+     X(MFGetStrideForBitmapInfoHeader);
+@@ -5465,6 +5467,40 @@ done:
+     DestroyWindow(window);
+ }
+ 
++static void test_MFCreateTrackedSample(void)
++{
++    IMFTrackedSample *tracked_sample;
++    IMFDesiredSample *desired_sample;
++    IMFSample *sample;
++    IUnknown *unk;
++    HRESULT hr;
++
++    if (!pMFCreateTrackedSample)
++    {
++        win_skip("MFCreateTrackedSample() is not available.\n");
++        return;
++    }
++
++    hr = pMFCreateTrackedSample(&tracked_sample);
++    ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++
++    /* It's actually a sample. */
++    hr = IMFTrackedSample_QueryInterface(tracked_sample, &IID_IMFSample, (void **)&sample);
++    ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++
++    hr = IMFTrackedSample_QueryInterface(tracked_sample, &IID_IUnknown, (void **)&unk);
++    ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++    ok(unk == (IUnknown *)sample, "Unexpected pointer.\n");
++    IUnknown_Release(unk);
++
++    IMFSample_Release(sample);
++
++    hr = IMFTrackedSample_QueryInterface(tracked_sample, &IID_IMFDesiredSample, (void **)&desired_sample);
++    ok(hr == E_NOINTERFACE, "Unexpected hr %#x.\n", hr);
++
++    IMFTrackedSample_Release(tracked_sample);
++}
++
+ START_TEST(mfplat)
+ {
+     char **argv;
+@@ -5522,6 +5558,7 @@ START_TEST(mfplat)
+     test_MFInitMediaTypeFromWaveFormatEx();
+     test_MFCreateMFVideoFormatFromMFMediaType();
+     test_MFCreateDXSurfaceBuffer();
++    test_MFCreateTrackedSample();
+ 
+     CoUninitialize();
+ }
+diff --git a/include/mfidl.idl b/include/mfidl.idl
+index 1f5fc06dd1e..4ceeb707bd0 100644
+--- a/include/mfidl.idl
++++ b/include/mfidl.idl
+@@ -648,6 +648,7 @@ cpp_quote("HRESULT WINAPI MFGetService(IUnknown *object, REFGUID service, REFIID
+ cpp_quote("MFTIME  WINAPI MFGetSystemTime(void);")
+ cpp_quote("HRESULT WINAPI MFGetTopoNodeCurrentType(IMFTopologyNode *node, DWORD stream, BOOL output, IMFMediaType **type);")
+ cpp_quote("HRESULT WINAPI MFShutdownObject(IUnknown *object);")
++cpp_quote("HRESULT WINAPI MFCreateTrackedSample(IMFTrackedSample **sample);")
+ 
+ typedef enum _MFMEDIASOURCE_CHARACTERISTICS
+ {
+
+-- 
+2.27.0
+

@@ -1148,3 +1148,218 @@ index 9d0b9c308ab..23aba00780e 100644
  
  void netconn_close( struct netconn * ) DECLSPEC_HIDDEN;
  DWORD netconn_create( struct hostdata *, const struct sockaddr_storage *, int, struct netconn ** ) DECLSPEC_HIDDEN;
+
+From: Owen Rudge <orudge@codeweavers.com>
+Subject: [PATCH 1/2] winhttp/tests: Add tests for WINHTTP_OPTION_MAX_HTTP_AUTOMATIC_REDIRECTS.
+Message-Id: <184c7832-c2a6-7ff2-8333-bd25662597df@codeweavers.com>
+Date: Fri, 3 Jul 2020 10:21:37 +0100
+
+Signed-off-by: Owen Rudge <orudge@codeweavers.com>
+---
+  dlls/winhttp/tests/winhttp.c | 52 ++++++++++++++++++++++++++++++++++++
+  1 file changed, 52 insertions(+)
+
+diff --git a/dlls/winhttp/tests/winhttp.c b/dlls/winhttp/tests/winhttp.c
+index 84063fdc82a..79d700d4a12 100644
+--- a/dlls/winhttp/tests/winhttp.c
++++ b/dlls/winhttp/tests/winhttp.c
+@@ -5076,6 +5076,57 @@ done:
+     if (ses) WinHttpCloseHandle( ses );
+ }
+ 
++static void test_max_http_automatic_redirects (void)
++{
++    HINTERNET session, request, connection;
++    DWORD max_redirects, err;
++    BOOL ret;
++
++    session = WinHttpOpen(L"winetest", WINHTTP_ACCESS_TYPE_DEFAULT_PROXY,
++        WINHTTP_NO_PROXY_NAME, WINHTTP_NO_PROXY_BYPASS, 0);
++    ok(session != NULL, "WinHttpOpen failed to open session.\n");
++
++    connection = WinHttpConnect (session, L"test.winehq.org", INTERNET_DEFAULT_HTTP_PORT, 0);
++    ok(connection != NULL, "WinHttpConnect failed to open a connection, error: %u.\n", GetLastError());
++
++    /* Test with 2 redirects (page will try to redirect 3 times) */
++    request = WinHttpOpenRequest(connection, L"GET", L"tests/redirecttest.php?max=3", NULL, WINHTTP_NO_REFERER,
++        WINHTTP_DEFAULT_ACCEPT_TYPES, WINHTTP_FLAG_BYPASS_PROXY_CACHE);
++    if (request == NULL && GetLastError() == ERROR_WINHTTP_NAME_NOT_RESOLVED)
++    {
++        skip("Network unreachable, skipping.\n");
++        goto done;
++    }
++    ok(request != NULL, "WinHttpOpenRequest failed to open a request, error: %u.\n", GetLastError());
++    if (!request) goto done;
++
++    max_redirects = 2;
++    ret = WinHttpSetOption(request, WINHTTP_OPTION_MAX_HTTP_AUTOMATIC_REDIRECTS, &max_redirects, sizeof(max_redirects));
++    todo_wine ok(ret, "WinHttpSetOption failed: %u\n", GetLastError());
++
++    ret = WinHttpSendRequest(request, WINHTTP_NO_ADDITIONAL_HEADERS, 0, WINHTTP_NO_REQUEST_DATA, 0, 0, 0);
++    err = GetLastError();
++    if (!ret && (err == ERROR_WINHTTP_CANNOT_CONNECT || err == ERROR_WINHTTP_TIMEOUT))
++    {
++        skip("connection failed, skipping\n");
++        goto done;
++    }
++    ok(ret == TRUE, "WinHttpSendRequest failed: %u\n", GetLastError());
++
++    SetLastError(0xdeadbeef);
++    ret = WinHttpReceiveResponse(request, NULL);
++    todo_wine ok(!ret, "WinHttpReceiveResponse succeeded, expected failure\n");
++    todo_wine ok(GetLastError() == ERROR_WINHTTP_REDIRECT_FAILED, "Expected ERROR_WINHTTP_REDIRECT_FAILED, got %u.\n", GetLastError());
++
++ done:
++    ret = WinHttpCloseHandle(request);
++    ok(ret == TRUE, "WinHttpCloseHandle failed on closing request, got %d.\n", ret);
++    ret = WinHttpCloseHandle(connection);
++    ok(ret == TRUE, "WinHttpCloseHandle failed on closing connection, got %d.\n", ret);
++    ret = WinHttpCloseHandle(session);
++    ok(ret == TRUE, "WinHttpCloseHandle failed on closing session, got %d.\n", ret);
++}
++
+ START_TEST (winhttp)
+ {
+     struct server_info si;
+@@ -5108,6 +5159,7 @@ START_TEST (winhttp)
+     test_WinHttpGetIEProxyConfigForCurrentUser();
+     test_WinHttpGetProxyForUrl();
+     test_chunked_read();
++    test_max_http_automatic_redirects();
+ 
+     si.event = CreateEventW(NULL, 0, 0, NULL);
+     si.port = 7532;
+
+From: Owen Rudge <orudge@codeweavers.com>
+Subject: [PATCH 2/2] winhttp: Implement WINHTTP_OPTION_MAX_HTTP_AUTOMATIC_REDIRECTS.
+Message-Id: <a7511ce1-a6ad-f0b4-f8b6-a719cb518ef9@codeweavers.com>
+Date: Fri, 3 Jul 2020 10:21:40 +0100
+
+Signed-off-by: Owen Rudge <orudge@codeweavers.com>
+---
+  dlls/winhttp/request.c         |  2 ++
+  dlls/winhttp/session.c         | 17 +++++++++++++++++
+  dlls/winhttp/tests/winhttp.c   |  6 +++---
+  dlls/winhttp/winhttp_private.h |  2 ++
+  4 files changed, 24 insertions(+), 3 deletions(-)
+
+diff --git a/dlls/winhttp/request.c b/dlls/winhttp/request.c
+index e31803ccfed..31296cd02ba 100644
+--- a/dlls/winhttp/request.c
++++ b/dlls/winhttp/request.c
+@@ -2720,6 +2720,8 @@ static DWORD receive_response( struct request *request, BOOL async )
+             if (request->hdr.disable_flags & WINHTTP_DISABLE_REDIRECTS ||
+                 request->hdr.redirect_policy == WINHTTP_OPTION_REDIRECT_POLICY_NEVER) break;
+ 
++            if (++request->redirect_count > request->max_redirects) return ERROR_WINHTTP_REDIRECT_FAILED;
++
+             if ((ret = handle_redirect( request, status ))) break;
+ 
+             /* recurse synchronously */
+diff --git a/dlls/winhttp/session.c b/dlls/winhttp/session.c
+index 080837eb1ed..319066db55b 100644
+--- a/dlls/winhttp/session.c
++++ b/dlls/winhttp/session.c
+@@ -820,6 +820,11 @@ static BOOL request_query_option( struct object_header *hdr, DWORD option, void
+         str_to_buffer( buffer, request->connect->session->proxy_password, buflen );
+         return TRUE;
+ 
++    case WINHTTP_OPTION_MAX_HTTP_AUTOMATIC_REDIRECTS:
++        *(DWORD *)buffer = request->max_redirects;
++        *buflen = sizeof(DWORD);
++        return TRUE;
++
+     default:
+         FIXME("unimplemented option %u\n", option);
+         SetLastError( ERROR_INVALID_PARAMETER );
+@@ -1028,6 +1033,17 @@ static BOOL request_set_option( struct object_header *hdr, DWORD option, void *b
+         FIXME("WINHTTP_OPTION_CONNECT_RETRIES\n");
+         return TRUE;
+ 
++    case WINHTTP_OPTION_MAX_HTTP_AUTOMATIC_REDIRECTS:
++        if (buflen == sizeof(DWORD))
++        {
++            request->max_redirects = *(DWORD *)buffer;
++            SetLastError(NO_ERROR);
++            return TRUE;
++        }
++
++        SetLastError(ERROR_INVALID_PARAMETER);
++        return FALSE;
++
+     default:
+         FIXME("unimplemented option %u\n", option);
+         SetLastError( ERROR_WINHTTP_INVALID_OPTION );
+@@ -1121,6 +1137,7 @@ HINTERNET WINAPI WinHttpOpenRequest( HINTERNET hconnect, LPCWSTR verb, LPCWSTR o
+     request->send_timeout = connect->session->send_timeout;
+     request->receive_timeout = connect->session->receive_timeout;
+     request->receive_response_timeout = connect->session->receive_response_timeout;
++    request->max_redirects = 10;
+ 
+     if (!verb || !verb[0]) verb = L"GET";
+     if (!(request->verb = strdupW( verb ))) goto end;
+diff --git a/dlls/winhttp/tests/winhttp.c b/dlls/winhttp/tests/winhttp.c
+index 79d700d4a12..5379640d5fc 100644
+--- a/dlls/winhttp/tests/winhttp.c
++++ b/dlls/winhttp/tests/winhttp.c
+@@ -5102,7 +5102,7 @@ static void test_max_http_automatic_redirects (void)
+ 
+     max_redirects = 2;
+     ret = WinHttpSetOption(request, WINHTTP_OPTION_MAX_HTTP_AUTOMATIC_REDIRECTS, &max_redirects, sizeof(max_redirects));
+-    todo_wine ok(ret, "WinHttpSetOption failed: %u\n", GetLastError());
++    ok(ret, "WinHttpSetOption failed: %u\n", GetLastError());
+ 
+     ret = WinHttpSendRequest(request, WINHTTP_NO_ADDITIONAL_HEADERS, 0, WINHTTP_NO_REQUEST_DATA, 0, 0, 0);
+     err = GetLastError();
+@@ -5115,8 +5115,8 @@ static void test_max_http_automatic_redirects (void)
+ 
+     SetLastError(0xdeadbeef);
+     ret = WinHttpReceiveResponse(request, NULL);
+-    todo_wine ok(!ret, "WinHttpReceiveResponse succeeded, expected failure\n");
+-    todo_wine ok(GetLastError() == ERROR_WINHTTP_REDIRECT_FAILED, "Expected ERROR_WINHTTP_REDIRECT_FAILED, got %u.\n", GetLastError());
++    ok(!ret, "WinHttpReceiveResponse succeeded, expected failure\n");
++    ok(GetLastError() == ERROR_WINHTTP_REDIRECT_FAILED, "Expected ERROR_WINHTTP_REDIRECT_FAILED, got %u.\n", GetLastError());
+ 
+  done:
+     ret = WinHttpCloseHandle(request);
+diff --git a/dlls/winhttp/winhttp_private.h b/dlls/winhttp/winhttp_private.h
+index 23aba00780e..e279e58a5fe 100644
+--- a/dlls/winhttp/winhttp_private.h
++++ b/dlls/winhttp/winhttp_private.h
+@@ -189,6 +189,8 @@ struct request
+     int send_timeout;
+     int receive_timeout;
+     int receive_response_timeout;
++    DWORD max_redirects;
++    DWORD redirect_count; /* total number of redirects during this request */
+     WCHAR *status_text;
+     DWORD content_length; /* total number of bytes to be read */
+     DWORD content_read;   /* bytes read so far */
+
+From: Serge Gautherie <winehq-git_serge_180711@gautherie.fr>
+Subject: [PATCH] wininet: Increase user size to 'UNLEN + 1' in create_cookie_url().
+Message-Id: <20200701143418.2768-1-winehq-git_serge_180711@gautherie.fr>
+Date: Wed,  1 Jul 2020 16:34:18 +0200
+
+Signed-off-by: Serge Gautherie <winehq-git_serge_180711@gautherie.fr>
+---
+ dlls/wininet/cookie.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/dlls/wininet/cookie.c b/dlls/wininet/cookie.c
+index b5f779b..4d0967b 100644
+--- a/dlls/wininet/cookie.c
++++ b/dlls/wininet/cookie.c
+@@ -147,7 +147,7 @@ static cookie_domain_t *get_cookie_domain(substr_t domain, BOOL create)
+ 
+ static WCHAR *create_cookie_url(substr_t domain, substr_t path, substr_t *ret_path)
+ {
+-    WCHAR user[UNLEN], *p, *url;
++    WCHAR user[UNLEN + 1], *p, *url;
+     DWORD len, user_len, i;
+ 
+     static const WCHAR cookie_prefix[] = {'C','o','o','k','i','e',':'};
+
+-- 
+2.10.0.windows.1
+

@@ -154,3 +154,13 @@ index e285bbbef0..789a398405 100644
 -- 
 2.20.1
 
+--- a/dlls/ntdll/unix/env.c	
++++ a/dlls/ntdll/unix/env.c	
+@@ -766,6 +766,7 @@ static void init_locale(void)
+         if (preferred_langs) CFRelease( preferred_langs );
+     }
+ #endif
++    setlocale( LC_NUMERIC, "C" );  /* FIXME: oleaut32 depends on this */
+ }
+ 
+ 
