@@ -153,6 +153,17 @@
     echo "fix steep"
     patch -Np1 < ../patches/game-patches/steep_fix.patch
     
+    echo "rawinput virtual desktop fix"
+    #https://bugs.winehq.org/show_bug.cgi?id=48419
+    #https://bugs.winehq.org/show_bug.cgi?id=48462
+    patch -Np1 < ../patches/game-patches/rawinput_v_desktop.patch
+    
+    echo "gta v key input fix"
+    patch -Np1 < ../patches/game-patches/gta_v_keyboard_input.patch
+    
+    echo "mgs ground zeroes fix"
+    patch -Np1 < ../patches/game-patches/mgs-ground-zeroes.patch
+    
 #  TODO: Add game-specific check
     echo "mk11 patch"
     patch -Np1 < ../patches/game-patches/mk11.patch
@@ -194,6 +205,9 @@
     
     echo "proton force mouse fullscreen grab"
     patch -Np1 < ../patches/proton/proton-nofshack-force-fullscreen-grab-mouse.patch
+    
+    echo "proton alt-tab hotfixes"
+    patch -Np1 < ../patches/proton/proton-alt-tab-focus-hotfixes.patch
 
     echo "steamclient swap"
     patch -Np1 < ../patches/proton/proton-steamclient_swap.patch
