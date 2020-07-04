@@ -89,17 +89,6 @@ This section is for those that use the Flatpak'd version of Steam.
 4. Restart Steam.
 5. [Enable proton-ge-custom](#enabling).
 
-### Automatic
-
-There is a custom script made by [patrickm32](https://github.com/patrickm32) to download and install proton-ge as native and as Flatpak:
-
-```bash
-git clone https://github.com/patrickm32/proton-ge-custom-updater.git
-cd proton-ge-custom-updater
-chmod +x proton-ge-custom-updater
-./proton-ge-custom-updater
-```
-
 ## Building
 
 1. Install VirtualBox and its kernel modules. Make sure they are enabled at boot.
