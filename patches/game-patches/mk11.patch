@@ -1,19 +1,151 @@
-From e8f6ed261e213ced6c0c762988b6fc3446ef510a Mon Sep 17 00:00:00 2001
+From fb7cc99f8a8c5a1594cfa780807d5e75f4b9539e Mon Sep 17 00:00:00 2001
+From: Alistair Leslie-Hughes <leslie_alistair@hotmail.com>
+Date: Tue, 7 Jul 2020 17:54:22 +1000
+Subject: [PATCH] wbemprox: Add more Win32_PhysicalMemory properties.
+
+Signed-off-by: Alistair Leslie-Hughes <leslie_alistair@hotmail.com>
+Signed-off-by: Hans Leidekker <hans@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/wbemprox/builtin.c     | 11 ++++++++++-
+ dlls/wbemprox/tests/query.c |  4 ++++
+ 2 files changed, 14 insertions(+), 1 deletion(-)
+
+diff --git a/dlls/wbemprox/builtin.c b/dlls/wbemprox/builtin.c
+index 2ff3131936d..a94d41bfc45 100644
+--- a/dlls/wbemprox/builtin.c
++++ b/dlls/wbemprox/builtin.c
+@@ -270,12 +270,15 @@ static const struct column col_physicalmedia[] =
+ };
+ static const struct column col_physicalmemory[] =
+ {
++    { L"BankLabel",            CIM_STRING },
+     { L"Capacity",             CIM_UINT64 },
++    { L"Caption",              CIM_STRING },
+     { L"ConfiguredClockSpeed", CIM_UINT32 },
+     { L"DeviceLocator",        CIM_STRING },
+     { L"FormFactor",           CIM_UINT16 },
+     { L"MemoryType",           CIM_UINT16 },
+     { L"PartNumber",           CIM_STRING },
++    { L"SerialNumber",         CIM_STRING },
+ };
+ static const struct column col_pnpentity[] =
+ {
+@@ -655,12 +658,15 @@ struct record_physicalmedia
+ };
+ struct record_physicalmemory
+ {
++    const WCHAR *banklabel;
+     UINT64       capacity;
++    const WCHAR *caption;
+     UINT32       configuredclockspeed;
+     const WCHAR *devicelocator;
+     UINT16       formfactor;
+     UINT16       memorytype;
+     const WCHAR *partnumber;
++    const WCHAR *serial;
+ };
+ struct record_pnpentity
+ {
+@@ -2905,12 +2911,15 @@ static enum fill_status fill_physicalmemory( struct table *table, const struct e
+     if (!resize_table( table, 1, sizeof(*rec) )) return FILL_STATUS_FAILED;
+ 
+     rec = (struct record_physicalmemory *)table->data;
++    rec->banklabel            = L"BANK 0";
+     rec->capacity             = get_total_physical_memory();
+-    rec->configuredclockspeed = 0;
++    rec->caption              = L"Physical Memory";
++    rec->configuredclockspeed = 1600;
+     rec->devicelocator        = L"DIMM 0";
+     rec->formfactor           = 8; /* DIMM */
+     rec->memorytype           = 9; /* RAM */
+     rec->partnumber           = NULL;
++    rec->serial               = NULL;
+     if (!match_row( table, row, cond, &status )) free_row_values( table, row );
+     else row++;
+ 
+diff --git a/dlls/wbemprox/tests/query.c b/dlls/wbemprox/tests/query.c
+index 578e9308df7..7dcfd35e938 100644
+--- a/dlls/wbemprox/tests/query.c
++++ b/dlls/wbemprox/tests/query.c
+@@ -1159,10 +1159,14 @@ static void test_Win32_PhysicalMemory( IWbemServices *services )
+ 
+     if (count > 0)
+     {
++        check_property( obj, L"BankLabel", VT_BSTR, CIM_STRING );
+         check_property( obj, L"Capacity", VT_BSTR, CIM_UINT64 );
++        check_property( obj, L"Caption", VT_BSTR, CIM_STRING );
+         check_property( obj, L"DeviceLocator", VT_BSTR, CIM_STRING );
+         check_property( obj, L"FormFactor", VT_I4, CIM_UINT16 );
+         check_property( obj, L"MemoryType", VT_I4, CIM_UINT16 );
++        check_property( obj, L"PartNumber", VT_NULL, CIM_STRING );
++        check_property( obj, L"SerialNumber", VT_NULL, CIM_STRING );
+         IWbemClassObject_Release( obj );
+     }
+     IEnumWbemClassObject_Release( result );
+From 2ea3e40465f0530ad71c31e77c9727c00673d91f Mon Sep 17 00:00:00 2001
+From: Esme Povirk <esme@codeweavers.com>
+Date: Wed, 8 Jul 2020 12:26:01 +0200
+Subject: [PATCH] wbemprox: Implement Win32_SoundDevice.Manufacturer.
+
+Signed-off-by: Gijs Vermeulen <gijsvrm@gmail.com>
+Signed-off-by: Hans Leidekker <hans@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/wbemprox/builtin.c | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
+
+diff --git a/dlls/wbemprox/builtin.c b/dlls/wbemprox/builtin.c
+index a94d41bfc45..f055547a6b9 100644
+--- a/dlls/wbemprox/builtin.c
++++ b/dlls/wbemprox/builtin.c
+@@ -376,9 +376,10 @@ static const struct column col_sid[] =
+ };
+ static const struct column col_sounddevice[] =
+ {
+-    { L"Name",        CIM_STRING },
+-    { L"ProductName", CIM_STRING },
+-    { L"StatusInfo",  CIM_UINT16 },
++    { L"Manufacturer", CIM_STRING },
++    { L"Name",         CIM_STRING },
++    { L"ProductName",  CIM_STRING },
++    { L"StatusInfo",   CIM_UINT16 },
+ };
+ static const struct column col_stdregprov[] =
+ {
+@@ -764,6 +765,7 @@ struct record_sid
+ };
+ struct record_sounddevice
+ {
++    const WCHAR *manufacturer;
+     const WCHAR *name;
+     const WCHAR *productname;
+     UINT16       statusinfo;
+@@ -884,7 +886,7 @@ static const struct record_quickfixengineering data_quickfixengineering[] =
+ };
+ static const struct record_sounddevice data_sounddevice[] =
+ {
+-    { L"Wine Audio Device", L"Wine Audio Device", 3 /* enabled */ }
++    { L"The Wine Project", L"Wine Audio Device", L"Wine Audio Device", 3 /* enabled */ }
+ };
+ static const struct record_stdregprov data_stdregprov[] =
+ {
+
+From ee68f3e97e1b3711936b7703b6765fd526c859f1 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Wed, 22 Apr 2020 10:45:46 -0500
-Subject: [PATCH 1/8] mk11_base
+Subject: [PATCH 52/53] mk11_base
 
 ---
- dlls/ntdll/signal_x86_64.c | 11 +++++-
- dlls/wbemprox/builtin.c    |  8 +++--
+ dlls/ntdll/signal_x86_64.c | 11 ++++++++++-
  dlls/ws2_32/Makefile.in    |  1 +
- 3 files changed, 20 insertions(+), 22 deletions(-)
+ 2 files changed, 11 insertions(+), 1 deletion(-)
 
 diff --git a/dlls/ntdll/signal_x86_64.c b/dlls/ntdll/signal_x86_64.c
-index 89caca9f30f..6fb16333397 100644
+index c7c8b964056..d42d998a702 100644
 --- a/dlls/ntdll/signal_x86_64.c
 +++ b/dlls/ntdll/signal_x86_64.c
-@@ -2431,12 +2431,21 @@ static NTSTATUS call_stack_handlers( EXCEPTION_RECORD *rec, CONTEXT *orig_contex
+@@ -441,12 +441,21 @@ static NTSTATUS call_stack_handlers( EXCEPTION_RECORD *rec, CONTEXT *orig_contex
      UNWIND_HISTORY_TABLE table;
      DISPATCHER_CONTEXT dispatch;
      CONTEXT context;
@@ -35,7 +167,7 @@ index 89caca9f30f..6fb16333397 100644
      for (;;)
      {
          status = virtual_unwind( UNW_FLAG_EHANDLER, &dispatch, &context );
-@@ -2482,7 +2491,7 @@ static NTSTATUS call_stack_handlers( EXCEPTION_RECORD *rec, CONTEXT *orig_contex
+@@ -492,7 +501,7 @@ static NTSTATUS call_stack_handlers( EXCEPTION_RECORD *rec, CONTEXT *orig_contex
              }
          }
          /* hack: call wine handlers registered in the tib list */
@@ -44,49 +176,6 @@ index 89caca9f30f..6fb16333397 100644
          {
              TRACE( "found wine frame %p rsp %lx handler %p\n",
                      teb_frame, context.Rsp, teb_frame->Handler );
-diff --git a/dlls/wbemprox/builtin.c b/dlls/wbemprox/builtin.c
-index 24badb7bf92..e5d8b2400aa 100644
---- a/dlls/wbemprox/builtin.c
-+++ b/dlls/wbemprox/builtin.c
-@@ -374,6 +374,7 @@ static const struct column col_sounddevice[] =
-     { L"Name",        CIM_STRING },
-     { L"ProductName", CIM_STRING },
-     { L"StatusInfo",  CIM_UINT16 },
-+    { L"Manufacturer", CIM_STRING },
- };
- static const struct column col_stdregprov[] =
- {
-@@ -759,6 +760,7 @@ struct record_sounddevice
-     const WCHAR *name;
-     const WCHAR *productname;
-     UINT16       statusinfo;
-+    const WCHAR *manufacturer;
- };
- struct record_stdregprov
- {
-@@ -876,7 +878,7 @@ static const struct record_quickfixengineering data_quickfixengineering[] =
- };
- static const struct record_sounddevice data_sounddevice[] =
- {
--    { L"Wine Audio Device", L"Wine Audio Device", 3 /* enabled */ }
-+    { L"Wine Audio Device", L"Wine Audio Device", 3 /* enabled */, L"The Wine Project" }
- };
- static const struct record_stdregprov data_stdregprov[] =
- {
-@@ -2868,11 +2870,11 @@ static enum fill_status fill_physicalmemory( struct table *table, const struct e
- 
-     rec = (struct record_physicalmemory *)table->data;
-     rec->capacity             = get_total_physical_memory();
--    rec->configuredclockspeed = 0;
-+    rec->configuredclockspeed = 1600;
-     rec->devicelocator        = L"DIMM 0";
-     rec->formfactor           = 8; /* DIMM */
-     rec->memorytype           = 9; /* RAM */
--    rec->partnumber           = NULL;
-+    rec->partnumber           = L"BLS8G3D1609DS1S00";
-     if (!match_row( table, row, cond, &status )) free_row_values( table, row );
-     else row++;
- 
 diff --git a/dlls/ws2_32/Makefile.in b/dlls/ws2_32/Makefile.in
 index 9d7dfafeb3c..c7f24168dac 100644
 --- a/dlls/ws2_32/Makefile.in
@@ -99,17 +188,20 @@ index 9d7dfafeb3c..c7f24168dac 100644
  DELAYIMPORTS = iphlpapi user32
  EXTRALIBS = $(POLL_LIBS)
  
-From f445a9f05e4ad097c55d690f08fd5f1e71940d79 Mon Sep 17 00:00:00 2001
+-- 
+2.27.0
+
+From 7bcaf094432a5eaf7bb47b6145e9f418ed164012 Mon Sep 17 00:00:00 2001
 From: Pnevmoslon <psn8402@gmail.com>
 Date: Wed, 27 May 2020 12:23:59 +0300
-Subject: [PATCH] mk11 gamepad fix
+Subject: [PATCH 53/53] mk11 gamepad fix
 
 ---
  dlls/wbemprox/class.c | 23 +++++++++++++----------
  1 file changed, 13 insertions(+), 10 deletions(-)
 
 diff --git a/dlls/wbemprox/class.c b/dlls/wbemprox/class.c
-index ba7720b098..6cc439c6fb 100644
+index ba7720b098d..6cc439c6fbc 100644
 --- a/dlls/wbemprox/class.c
 +++ b/dlls/wbemprox/class.c
 @@ -116,6 +116,7 @@ static HRESULT WINAPI enum_class_object_Next(
@@ -150,4 +242,5 @@ index ba7720b098..6cc439c6fb 100644
  }
  
 -- 
-2.26.2
+2.27.0
+
