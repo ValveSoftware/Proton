@@ -30,14 +30,19 @@ def log(msg):
     sys.stderr.write(PFX + msg + os.linesep)
     sys.stderr.flush()
 
-def file_is_wine_fake_dll(path):
+def file_is_wine_builtin_dll(path):
+    if os.path.islink(path):
+        contents = os.readlink(path)
+        if os.path.dirname(contents).endswith(('/lib/wine', '/lib/wine/fakedlls', '/lib64/wine', '/lib64/wine/fakedlls')):
+            # This may be a broken link to a dll in a removed Proton install
+            return True
     if not os.path.exists(path):
         return False
     try:
         sfile = open(path, "rb")
         sfile.seek(0x40)
         tag = sfile.read(20)
-        return tag == b"Wine placeholder DLL"
+        return tag.startswith((b"Wine placeholder DLL", b"Wine builtin DLL"))
     except IOError:
         return False
 
@@ -63,12 +68,6 @@ def try_copy(src, dst):
             log('Error while copying to \"' + dst + '\": ' + e.strerror)
         else:
             raise
-
-def real_copy(src, dst):
-    if os.path.islink(src):
-        os.symlink(os.readlink(src), dst)
-    else:
-        try_copy(src, dst)
 
 EXT2_IOC_GETFLAGS = 0x80086601
 EXT2_IOC_SETFLAGS = 0x40086602
@@ -219,7 +218,7 @@ class CompatData:
 
             #replace broken .NET installations with wine-mono support
             if os.path.exists(self.prefix_dir + "/drive_c/windows/Microsoft.NET/NETFXRepair.exe") and \
-                    file_is_wine_fake_dll(self.prefix_dir + "/drive_c/windows/system32/mscoree.dll"):
+                    file_is_wine_builtin_dll(self.prefix_dir + "/drive_c/windows/system32/mscoree.dll"):
                 log("Broken .NET installation detected, switching to wine-mono.")
                 #deleting this directory allows wine-mono to work
                 shutil.rmtree(self.prefix_dir + "/drive_c/windows/Microsoft.NET")
@@ -250,10 +249,23 @@ class CompatData:
                     log("Unable to write new registry file to " + self.prefix_dir + "system.reg")
                     pass
 
+            self.update_builtin_libs()
+
         except ValueError:
             log("Prefix has an invalid version?! You may want to back up user files and delete this prefix.")
             #Just let the Wine upgrade happen and hope it works...
             return
+
+    def real_copy(self, src, dst):
+        if os.path.islink(src):
+            contents = os.readlink(src)
+            if os.path.dirname(contents).endswith(('/lib/wine', '/lib/wine/fakedlls', '/lib64/wine', '/lib64/wine/fakedlls')):
+                # wine builtin dll
+                # make the destination an absolute symlink
+                contents = os.path.normpath(os.path.join(os.path.dirname(src), contents))
+            os.symlink(contents, dst)
+        else:
+            try_copy(src, dst)
 
     def copy_pfx(self):
         with open(self.tracked_files_file, "w") as tracked_files:
@@ -269,13 +281,45 @@ class CompatData:
                     src_file = os.path.join(src_dir, dir_)
                     dst_file = os.path.join(dst_dir, dir_)
                     if os.path.islink(src_file) and not os.path.exists(dst_file):
-                        real_copy(src_file, dst_file)
+                        self.real_copy(src_file, dst_file)
                 for file_ in files:
                     src_file = os.path.join(src_dir, file_)
                     dst_file = os.path.join(dst_dir, file_)
                     if not os.path.exists(dst_file):
-                        real_copy(src_file, dst_file)
+                        self.real_copy(src_file, dst_file)
                         tracked_files.write(rel_dir + file_ + "\n")
+
+    def update_builtin_libs(self):
+        prev_tracked_files = set()
+        with open(self.tracked_files_file, "r") as tracked_files:
+            for line in tracked_files:
+                prev_tracked_files.add(line.strip())
+        with open(self.tracked_files_file, "a") as tracked_files:
+            for src_dir, dirs, files in os.walk(g_proton.default_pfx_dir):
+                rel_dir = src_dir.replace(g_proton.default_pfx_dir, "", 1).lstrip('/')
+                if len(rel_dir) > 0:
+                    rel_dir = rel_dir + "/"
+                dst_dir = src_dir.replace(g_proton.default_pfx_dir, self.prefix_dir, 1)
+                if not os.path.exists(dst_dir):
+                    os.makedirs(dst_dir)
+                    tracked_files.write(rel_dir + "\n")
+                for file_ in files:
+                    src_file = os.path.join(src_dir, file_)
+                    dst_file = os.path.join(dst_dir, file_)
+                    if not file_is_wine_builtin_dll(src_file):
+                        # Not a builtin library
+                        continue
+                    if file_is_wine_builtin_dll(dst_file):
+                        os.unlink(dst_file)
+                    elif os.path.lexists(dst_file):
+                        # builtin library was replaced
+                        continue
+                    else:
+                        os.makedirs(dst_dir, exist_ok=True)
+                    self.real_copy(src_file, dst_file)
+                    tracked_name = rel_dir + file_
+                    if tracked_name not in prev_tracked_files:
+                        tracked_files.write(tracked_name + "\n")
 
     def create_fonts_symlinks(self):
         fontsmap = [
