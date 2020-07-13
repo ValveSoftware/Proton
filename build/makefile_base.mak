@@ -82,10 +82,8 @@ endif
 
 ifneq ($(STEAMRT_PATH),)
 	STEAM_RUNTIME_RUNSH := $(STEAMRT_PATH)/run-in-soldier --
-	STEAM_RUNTIME_LIB_PATH := $(shell $(STEAM_RUNTIME_RUNSH) env | grep LD_LIBRARY_PATH | cut -d= -f2-)
 else
 	STEAM_RUNTIME_RUNSH :=
-	STEAM_RUNTIME_LIB_PATH :=
 endif
 
 SELECT_DOCKER_IMAGE :=
@@ -435,23 +433,7 @@ dist: $(DIST_TARGETS) wine gst_good vrclient lsteamclient steam dxvk vkd3d-proto
 	echo `date '+%s'` `GIT_DIR=$(abspath $(SRCDIR)/.git) git describe --tags` > $(DIST_VERSION)
 	cp $(DIST_VERSION) $(DST_BASE)/
 	rm -rf $(abspath $(DIST_PREFIX))
-	$(STEAM_RUNTIME_RUNSH) env \
-		WINEPREFIX=$(abspath $(DIST_PREFIX)) \
-		LD_LIBRARY_PATH=$(abspath $(DST_DIR)/lib64):$(abspath $(DST_DIR)/lib):$(STEAM_RUNTIME_LIB_PATH) \
-		$(WINE_OUT_BIN) wineboot
-	$(STEAM_RUNTIME_RUNSH) env \
-		WINEPREFIX=$(abspath $(DIST_PREFIX)) \
-		LD_LIBRARY_PATH=$(abspath $(DST_DIR)/lib64):$(abspath $(DST_DIR)/lib):$(STEAM_RUNTIME_LIB_PATH) \
-		$(WINE_OUT_SERVER) -w
-	ln -s $(FONTLINKPATH)/LiberationSans-Regular.ttf $(abspath $(DIST_PREFIX))/drive_c/windows/Fonts/arial.ttf
-	ln -s $(FONTLINKPATH)/LiberationSans-Bold.ttf $(abspath $(DIST_PREFIX))/drive_c/windows/Fonts/arialbd.ttf
-	ln -s $(FONTLINKPATH)/LiberationSerif-Regular.ttf $(abspath $(DIST_PREFIX))/drive_c/windows/Fonts/times.ttf
-	ln -s $(FONTLINKPATH)/LiberationMono-Regular.ttf $(abspath $(DIST_PREFIX))/drive_c/windows/Fonts/cour.ttf
-	ln -s $(FONTLINKPATH)/SourceHanSansSCRegular.otf $(abspath $(DIST_PREFIX))/drive_c/windows/Fonts/msyh.ttf
-#The use of "arial" here is for compatibility with programs that require that exact string. These links do not point to Arial.
-#The use of "times" here is for compatibility with programs that require that exact string. This link does not point to Times New Roman.
-#The use of "cour" here is for compatibility with programs that require that exact string. This link does not point to Courier New.
-#The use of "msyh" here is for compatibility with programs that require that exact string. This link does not point to Microsoft YaHei.
+	python3 $(SRCDIR)/default_pfx.py $(abspath $(DIST_PREFIX)) $(abspath $(DST_DIR)) $(STEAM_RUNTIME_RUNSH)
 
 deploy: dist | $(filter-out dist deploy install redist,$(MAKECMDGOALS))
 	mkdir -p $(DEPLOY_DIR) && \
