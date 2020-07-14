@@ -189,8 +189,8 @@ GECKO_VER := 2.47.1
 GECKO32_TARBALL := wine-gecko-$(GECKO_VER)-x86.tar.bz2
 GECKO64_TARBALL := wine-gecko-$(GECKO_VER)-x86_64.tar.bz2
 
-WINEMONO_VER := 4.9.4
-WINEMONO_TARBALL := wine-mono-bin-$(WINEMONO_VER).tar.gz
+WINEMONO_VER := 5.1.0
+WINEMONO_TARBALL := wine-mono-$(WINEMONO_VER)-x86.tar.xz
 
 FFMPEG := $(SRCDIR)/ffmpeg
 FFMPEG_OBJ32 := ./obj-ffmpeg32
@@ -1054,7 +1054,7 @@ $(LSTEAMCLIENT_CONFIGURE_FILES64): $(LSTEAMCLIENT64) $(MAKEFILE_DEP) | $(LSTEAMC
 		cp ../$(LSTEAMCLIENT64)/Makefile . && \
 		echo >> ./Makefile 'SRCDIR := ../$(LSTEAMCLIENT64)' && \
 		echo >> ./Makefile 'vpath % $$(SRCDIR)' && \
-		echo >> ./Makefile 'lsteamclient_dll_LDFLAGS := $$(patsubst %.spec,$$(SRCDIR)/%.spec,$$(lsteamclient_dll_LDFLAGS))'
+		echo >> ./Makefile 'lsteamclient_dll_LDFLAGS := -ldl $$(patsubst %.spec,$$(SRCDIR)/%.spec,$$(lsteamclient_dll_LDFLAGS))'
 
 # 32-bit configure
 $(LSTEAMCLIENT_CONFIGURE_FILES32): SHELL = $(CONTAINER_SHELL32)
@@ -1073,7 +1073,7 @@ $(LSTEAMCLIENT_CONFIGURE_FILES32): $(LSTEAMCLIENT32) $(MAKEFILE_DEP) | $(LSTEAMC
 		cp ../$(LSTEAMCLIENT32)/Makefile . && \
 		echo >> ./Makefile 'SRCDIR := ../$(LSTEAMCLIENT32)' && \
 		echo >> ./Makefile 'vpath % $$(SRCDIR)' && \
-		echo >> ./Makefile 'lsteamclient_dll_LDFLAGS := -m32 $$(patsubst %.spec,$$(SRCDIR)/%.spec,$$(lsteamclient_dll_LDFLAGS))'
+		echo >> ./Makefile 'lsteamclient_dll_LDFLAGS := -ldl -m32 $$(patsubst %.spec,$$(SRCDIR)/%.spec,$$(lsteamclient_dll_LDFLAGS))'
 
 ## lsteamclient goals
 LSTEAMCLIENT_TARGETS = lsteamclient lsteamclient_configure lsteamclient32 lsteamclient64 lsteamclient_configure32 lsteamclient_configure64
@@ -1198,7 +1198,8 @@ $(WINE_CONFIGURE_FILES64): $(MAKEFILE_DEP) | faudio64 gst_base64 $(WINE_OBJ64)
 			PKG_CONFIG_PATH=$(abspath $(TOOLS_DIR64))/lib/pkgconfig \
 			LD_LIBRARY_PATH=$(abspath $(TOOLS_DIR64))/lib \
 			CC=$(CC_QUOTED) \
-			CXX=$(CXX_QUOTED)
+			CXX=$(CXX_QUOTED) \
+			CROSSDEBUG=split-dwarf
 
 # 32-bit configure
 $(WINE_CONFIGURE_FILES32): SHELL = $(CONTAINER_SHELL32)
@@ -1216,7 +1217,8 @@ $(WINE_CONFIGURE_FILES32): $(MAKEFILE_DEP) | faudio32 gst_base32 $(WINE_OBJ32)
 			LD_LIBRARY_PATH=$(abspath $(TOOLS_DIR32))/lib \
 			CC=$(CC_QUOTED) \
 			CXX=$(CXX_QUOTED) \
-			PKG_CONFIG="$(PKG_CONFIG32)"
+			PKG_CONFIG="$(PKG_CONFIG32)" \
+			CROSSDEBUG=split-dwarf
 
 ## wine goals
 WINE_TARGETS = wine wine_configure wine32 wine64 wine_configure32 wine_configure64
@@ -1301,7 +1303,7 @@ $(VRCLIENT_CONFIGURE_FILES64): $(MAKEFILE_DEP) $(VRCLIENT) $(VRCLIENT)/vrclient_
 		cp ./vrclient_x64/Makefile $(abspath $(dir $@)) && \
 		echo >> $(abspath $(dir $@))/Makefile 'SRCDIR := ../$(VRCLIENT)/vrclient_x64' && \
 		echo >> $(abspath $(dir $@))/Makefile 'vpath % $$(SRCDIR)' && \
-		echo >> $(abspath $(dir $@))/Makefile 'vrclient_x64_dll_LDFLAGS := $$(patsubst %.spec,$$(SRCDIR)/%.spec,$$(vrclient_x64_dll_LDFLAGS))'
+		echo >> $(abspath $(dir $@))/Makefile 'vrclient_x64_dll_LDFLAGS := -ldl $$(patsubst %.spec,$$(SRCDIR)/%.spec,$$(vrclient_x64_dll_LDFLAGS))'
 
 # 32-bit configure
 $(VRCLIENT_CONFIGURE_FILES32): SHELL = $(CONTAINER_SHELL32)
@@ -1318,7 +1320,7 @@ $(VRCLIENT_CONFIGURE_FILES32): $(MAKEFILE_DEP) $(VRCLIENT32) | $(VRCLIENT_OBJ32)
 	cp $(VRCLIENT32)/vrclient/Makefile $(dir $@) && \
 	echo >> $(dir $@)/Makefile 'SRCDIR := ../$(VRCLIENT32)/vrclient' && \
 	echo >> $(dir $@)/Makefile 'vpath % $$(SRCDIR)' && \
-	echo >> $(dir $@)/Makefile 'vrclient_dll_LDFLAGS := -m32 $$(patsubst %.spec,$$(SRCDIR)/%.spec,$$(vrclient_dll_LDFLAGS))'
+	echo >> $(dir $@)/Makefile 'vrclient_dll_LDFLAGS := -ldl -m32 $$(patsubst %.spec,$$(SRCDIR)/%.spec,$$(vrclient_dll_LDFLAGS))'
 
 
 ## vrclient goals

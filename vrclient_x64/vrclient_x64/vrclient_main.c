@@ -258,19 +258,19 @@ static int load_vrclient(void)
 
     TRACE("got openvr runtime path: %s\n", pathU);
 
-    vrclient_lib = wine_dlopen(pathU, RTLD_NOW, NULL, 0);
+    vrclient_lib = dlopen(pathU, RTLD_NOW);
     if(!vrclient_lib){
         TRACE("unable to load vrclient.so\n");
         return 0;
     }
 
-    vrclient_HmdSystemFactory = wine_dlsym(vrclient_lib, "HmdSystemFactory", NULL, 0);
+    vrclient_HmdSystemFactory = dlsym(vrclient_lib, "HmdSystemFactory");
     if(!vrclient_HmdSystemFactory){
         ERR("unable to load HmdSystemFactory method\n");
         return 0;
     }
 
-    vrclient_VRClientCoreFactory = wine_dlsym(vrclient_lib, "VRClientCoreFactory", NULL, 0);
+    vrclient_VRClientCoreFactory = dlsym(vrclient_lib, "VRClientCoreFactory");
     if(!vrclient_VRClientCoreFactory){
         ERR("unable to load VRClientCoreFactory method\n");
         return 0;

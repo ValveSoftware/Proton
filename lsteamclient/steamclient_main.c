@@ -475,37 +475,37 @@ static int load_steamclient(void)
         path[PATH_MAX - 1] = 0;
     }
 #endif
-    steamclient_lib = wine_dlopen(path, RTLD_NOW, NULL, 0);
+    steamclient_lib = dlopen(path, RTLD_NOW);
     if(!steamclient_lib){
         ERR("unable to load native steamclient library\n");
         return 0;
     }
 
-    steamclient_CreateInterface = wine_dlsym(steamclient_lib, "CreateInterface", NULL, 0);
+    steamclient_CreateInterface = dlsym(steamclient_lib, "CreateInterface");
     if(!steamclient_CreateInterface){
         ERR("unable to load CreateInterface method\n");
         return 0;
     }
 
-    steamclient_BGetCallback = wine_dlsym(steamclient_lib, "Steam_BGetCallback", NULL, 0);
+    steamclient_BGetCallback = dlsym(steamclient_lib, "Steam_BGetCallback");
     if(!steamclient_BGetCallback){
         ERR("unable to load BGetCallback method\n");
         return 0;
     }
 
-    steamclient_GetAPICallResult = wine_dlsym(steamclient_lib, "Steam_GetAPICallResult", NULL, 0);
+    steamclient_GetAPICallResult = dlsym(steamclient_lib, "Steam_GetAPICallResult");
     if(!steamclient_GetAPICallResult){
         ERR("unable to load GetAPICallResult method\n");
         return 0;
     }
 
-    steamclient_FreeLastCallback = wine_dlsym(steamclient_lib, "Steam_FreeLastCallback", NULL, 0);
+    steamclient_FreeLastCallback = dlsym(steamclient_lib, "Steam_FreeLastCallback");
     if(!steamclient_FreeLastCallback){
         ERR("unable to load FreeLastCallback method\n");
         return 0;
     }
 
-    steamclient_ReleaseThreadLocalMemory = wine_dlsym(steamclient_lib, "Steam_ReleaseThreadLocalMemory", NULL, 0);
+    steamclient_ReleaseThreadLocalMemory = dlsym(steamclient_lib, "Steam_ReleaseThreadLocalMemory");
     if(!steamclient_ReleaseThreadLocalMemory){
         ERR("unable to load ReleaseThreadLocalMemory method\n");
         return 0;
