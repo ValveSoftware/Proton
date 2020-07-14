@@ -1267,7 +1267,7 @@ WINE32_MAKE_ARGS := \
 
 # 64bit-configure
 $(WINE_CONFIGURE_FILES64): SHELL = $(CONTAINER_SHELL64)
-$(WINE_CONFIGURE_FILES64): $(MAKEFILE_DEP) | faudio64 vkd3d64 gst_base64 $(WINE_OBJ64) bison64
+$(WINE_CONFIGURE_FILES64): $(MAKEFILE_DEP) | faudio64 gst_base64 $(WINE_OBJ64) bison64
 	cd $(dir $@) && \
 		../$(WINE)/configure \
 			--without-curses \
@@ -1285,7 +1285,7 @@ $(WINE_CONFIGURE_FILES64): $(MAKEFILE_DEP) | faudio64 vkd3d64 gst_base64 $(WINE_
 
 # 32-bit configure
 $(WINE_CONFIGURE_FILES32): SHELL = $(CONTAINER_SHELL32)
-$(WINE_CONFIGURE_FILES32): $(MAKEFILE_DEP) | faudio32 vkd3d32 gst_base32 $(WINE_OBJ32) bison32
+$(WINE_CONFIGURE_FILES32): $(MAKEFILE_DEP) | faudio32 gst_base32 $(WINE_OBJ32) bison32
 	cd $(dir $@) && \
 		../$(WINE)/configure \
 			--without-curses \
@@ -1742,47 +1742,36 @@ $(WINEWIDL64): $(WINEWIDL_CONFIGURE_FILES64)
 
 # VKD3D
 
-VKD3D_CONFIGURE_FILES32 := $(VKD3D_OBJ32)/Makefile
-VKD3D_CONFIGURE_FILES64 := $(VKD3D_OBJ64)/Makefile
-
-#use host autotools to generate configure script
-$(VKD3D)/configure: SHELL = /bin/bash
-$(VKD3D)/configure: $(MAKEFILE_DEP) $(VKD3D)/configure.ac
-	cd $(abspath $(VKD3D)) && ./autogen.sh
+VKD3D_CONFIGURE_FILES32 := $(VKD3D_OBJ32)/build.ninja
+VKD3D_CONFIGURE_FILES64 := $(VKD3D_OBJ64)/build.ninja
 
 $(VKD3D_CONFIGURE_FILES32): SHELL = $(CONTAINER_SHELL32)
-$(VKD3D_CONFIGURE_FILES32): $(MAKEFILE_DEP) $(VULKAN_H32) $(SPIRV_H32) $(VKD3D)/configure $(WINEWIDL32) | $(VKD3D_OBJ32)
-	cd $(abspath $(VKD3D_OBJ32)) && \
-		$(abspath $(VKD3D))/configure \
-			--disable-tests \
-			--prefix=$(abspath $(TOOLS_DIR32)) \
-			CFLAGS="-I$(abspath $(TOOLS_DIR32))/include -g $(COMMON_FLAGS) -DNDEBUG" \
-			LDFLAGS=-L$(abspath $(TOOLS_DIR32))/lib \
-			WIDL="$(abspath $(WINEWIDL32))"
+$(VKD3D_CONFIGURE_FILES32): $(VKD3D)/meson.build $(VKD3D)/build-win32.txt $(WINEWIDL32) | $(VKD3D_OBJ32)
+	(cd $(abspath $(VKD3D)) && git submodule update --init --recursive) && \
+		cd $(abspath $(VKD3D_OBJ32)) && \
+			PATH="$(abspath $(SRCDIR))/glslang/bin/:$(abspath $(WINEWIDL_OBJ32))/tools/widl:$(PATH)" \
+				meson --prefix="$(abspath $(VKD3D_OBJ32))" --cross-file "$(abspath $(VKD3D))/build-win32.txt" $(MESON_STRIP_ARG) --buildtype=release -Denable_standalone_d3d12=true "$(abspath $(VKD3D))"
 
 vkd3d32: SHELL = $(CONTAINER_SHELL32)
 vkd3d32: $(VKD3D_CONFIGURE_FILES32)
-	cd $(abspath $(VKD3D_OBJ32)) && \
-	make V=1 && make $(VKD3D_INSTALL_TARGET) && \
-	mkdir -p $(abspath $(DST_DIR))/lib/ && \
-	cp -a $(abspath $(TOOLS_DIR32))/lib/libvkd3d*.so* $(abspath $(DST_DIR))/lib/
+	(cd $(abspath $(VKD3D)) && git submodule update --init --recursive) && \
+		ninja -C "$(VKD3D_OBJ32)" install && \
+			mkdir -p "$(DST_DIR)"/lib/wine/vkd3d && \
+				cp "$(VKD3D_OBJ32)/bin/d3d12.dll" "$(DST_DIR)"/lib/wine/vkd3d
 
 $(VKD3D_CONFIGURE_FILES64): SHELL = $(CONTAINER_SHELL64)
-$(VKD3D_CONFIGURE_FILES64): $(MAKEFILE_DEP) $(VULKAN_H64) $(SPIRV_H64) $(VKD3D)/configure $(WINEWIDL64) | $(VKD3D_OBJ64)
-	cd $(abspath $(VKD3D_OBJ64)) && \
-		$(abspath $(VKD3D))/configure \
-			--disable-tests \
-			--prefix=$(abspath $(TOOLS_DIR64)) \
-			CFLAGS="-I$(abspath $(TOOLS_DIR64))/include -g $(COMMON_FLAGS) -DNDEBUG" \
-			LDFLAGS=-L$(abspath $(TOOLS_DIR64))/lib \
-			WIDL="$(abspath $(WINEWIDL64))"
+$(VKD3D_CONFIGURE_FILES64): $(VKD3D)/meson.build $(VKD3D)/build-win64.txt $(WINEWIDL64) | $(VKD3D_OBJ64)
+	(cd $(abspath $(VKD3D)) && git submodule update --init --recursive) && \
+		cd $(abspath $(VKD3D_OBJ64)) && \
+			PATH="$(abspath $(SRCDIR))/glslang/bin/:$(abspath $(WINEWIDL_OBJ64))/tools/widl:$(PATH)" \
+				meson --prefix="$(abspath $(VKD3D_OBJ64))" --cross-file "$(abspath $(VKD3D))/build-win64.txt" $(MESON_STRIP_ARG) --buildtype=release -Denable_standalone_d3d12=true "$(abspath $(VKD3D))"
 
 vkd3d64: SHELL = $(CONTAINER_SHELL64)
 vkd3d64: $(VKD3D_CONFIGURE_FILES64)
-	cd $(abspath $(VKD3D_OBJ64)) && \
-	make V=1 && make $(VKD3D_INSTALL_TARGET) && \
-	mkdir -p $(abspath $(DST_DIR))/lib64/ && \
-	cp -a $(abspath $(TOOLS_DIR64))/lib/libvkd3d*.so* $(abspath $(DST_DIR))/lib64/
+	(cd $(abspath $(VKD3D)) && git submodule update --init --recursive) && \
+		ninja -C "$(VKD3D_OBJ64)" install && \
+			mkdir -p "$(DST_DIR)"/lib64/wine/vkd3d && \
+				cp "$(VKD3D_OBJ64)/bin/d3d12.dll" "$(DST_DIR)"/lib64/wine/vkd3d
 
 vkd3d: vkd3d32 vkd3d64
 
