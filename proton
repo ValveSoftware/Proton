@@ -523,6 +523,10 @@ class Session:
         if "forcelgadd" in self.compat_config:
             self.env["WINE_LARGE_ADDRESS_AWARE"] = "1"
 
+        if "vkd3dfl12" in self.compat_config:
+            if not "VKD3D_FEATURE_LEVEL" in self.env:
+                self.env["VKD3D_FEATURE_LEVEL"] = "12_0"
+
         if "SteamGameId" in self.env:
             if self.env["WINEDEBUG"] != "-all":
                 lfile_path = os.environ["HOME"] + "/steam-" + os.environ["SteamGameId"] + ".log"
