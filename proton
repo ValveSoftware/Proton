@@ -373,6 +373,11 @@ class CompatData:
                         self.prefix_dir + "drive_c/windows/syswow64/" + f + ".dll")
                 g_session.dlloverrides[f] = "n"
 
+            try_copy(g_proton.lib64_dir + "wine/vkd3d-proton/d3d12.dll",
+                    self.prefix_dir + "drive_c/windows/system32/d3d12.dll")
+            try_copy(g_proton.lib_dir + "wine/vkd3d-proton/d3d12.dll",
+                    self.prefix_dir + "drive_c/windows/syswow64/d3d12.dll")
+
 def comma_escaped(s):
     escaped = False
     idx = -1

@@ -19,15 +19,6 @@
 [submodule "FAudio"]
 	path = FAudio
 	url = https://github.com/FNA-XNA/FAudio/
-[submodule "vkd3d"]
-	path = vkd3d
-	url = https://github.com/ValveSoftware/vkd3d/
-[submodule "SPIRV-Headers"]
-	path = SPIRV-Headers
-	url = https://github.com/KhronosGroup/SPIRV-Headers
-[submodule "Vulkan-Headers"]
-	path = Vulkan-Headers
-	url = https://github.com/KhronosGroup/Vulkan-Headers
 [submodule "gstreamer"]
 	path = gstreamer
 	url = https://gitlab.freedesktop.org/gstreamer/gstreamer.git
@@ -43,3 +34,6 @@
 [submodule "gst-orc"]
 	path = gst-orc
 	url = https://gitlab.freedesktop.org/gstreamer/orc.git
+[submodule "vkd3d-proton"]
+	path = vkd3d-proton
+	url = https://github.com/HansKristian-Work/vkd3d-proton
