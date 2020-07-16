@@ -101,6 +101,12 @@
     -W dinput-remap-joystick \
     -W user32-window-activation
     
+    echo "guy's media foundation alpha patches"
+    patch -Np1 < ../patches/wine-hotfixes/media_foundation/media_foundation_alpha.patch
+    
+    echo "proton-specific manual mfplat dll register patch"
+    patch -Np1 < ../patches/wine-hotfixes/media_foundation/proton_mediafoundation_dllreg.patch
+
 #    echo "planet zoo/jurassic world hotfixes pending"
 #    patch -Np1 < ../patches/wine-hotfixes/pending/planet-zoo-jurassic-world-pending-upstream-staging.patch
 
@@ -222,8 +228,8 @@
 #    echo "FS Hack integer scaling"
 #    patch -Np1 < ../patches/proton/proton_fs_hack_integer_scaling.patch
     
-    echo "proton winevulkan"
-    patch -Np1 < ../patches/proton/proton-winevulkan-nofshack.patch
+#    echo "proton winevulkan"
+#    patch -Np1 < ../patches/proton/proton-winevulkan-nofshack.patch
     
     echo "msvcrt overrides"
     patch -Np1 < ../patches/proton/proton-msvcrt_nativebuiltin.patch
@@ -244,13 +250,7 @@
     echo "applying WoW vkd3d wine patches"
     patch -Np1 < ../patches/wine-hotfixes/vkd3d/D3D12SerializeVersionedRootSignature.patch
     patch -Np1 < ../patches/wine-hotfixes/vkd3d/D3D12CreateVersionedRootSignatureDeserializer.patch
-            
-    echo "guy's media foundation alpha patches"
-    patch -Np1 < ../patches/wine-hotfixes/media_foundation/media_foundation_alpha.patch
-    
-    echo "proton-specific manual mfplat dll register patch"
-    patch -Np1 < ../patches/wine-hotfixes/media_foundation/proton_mediafoundation_dllreg.patch
-    
+                
     #WINE CUSTOM PATCHES
     #add your own custom patch lines below
     
