@@ -1232,10 +1232,10 @@ The IDL declarations should actually be unnecessary with the quartz part, but th
  2 files changed, 38 insertions(+)
 
 diff --git a/dlls/quartz/filtergraph.c b/dlls/quartz/filtergraph.c
-index 1ed41bdcec5..0af6e1ded5f 100644
+index 22d7f7b445..9475467dd5 100644
 --- a/dlls/quartz/filtergraph.c
 +++ b/dlls/quartz/filtergraph.c
-@@ -5681,11 +5681,28 @@ static const IUnknownVtbl IInner_VTable =
+@@ -5566,10 +5566,27 @@ static const IUnknownVtbl IInner_VTable =
      FilterGraphInner_Release
  };
  
@@ -1254,16 +1254,15 @@ index 1ed41bdcec5..0af6e1ded5f 100644
  static HRESULT filter_graph_common_create(IUnknown *outer, IUnknown **out, BOOL threaded)
  {
 +    static INIT_ONCE once = INIT_ONCE_STATIC_INIT;
-     IFilterGraphImpl *fimpl;
+     struct filter_graph *object;
      HRESULT hr;
- 
++    
 +    /* HACK: our build system makes it difficult to load gstreamer on prefix
 +     * creation, so it won't get registered. Do that here instead. */
 +    InitOnceExecuteOnce(&once, register_winegstreamer_proc, NULL, NULL);
-+
+ 
      *out = NULL;
  
-     fimpl = CoTaskMemAlloc(sizeof(*fimpl));
 From aa6ab7464758508b3348b3ce390c1524c9ce32a2 Mon Sep 17 00:00:00 2001
 From: Andrew Eikum <aeikum@codeweavers.com>
 Date: Thu, 30 Jan 2020 10:16:19 -0600
