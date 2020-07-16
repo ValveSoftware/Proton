@@ -397,7 +397,16 @@ static bool convert_linux_vrpaths(void)
 
 static void setup_vrpaths(void)
 {
-    if(!convert_linux_vrpaths())
+    bool success = false;
+
+    try{
+        success = convert_linux_vrpaths();
+    }catch(std::exception e){
+        WINE_ERR("got error parsing vrpaths file\n");
+        success = false;
+    }
+
+    if(!success)
     {
         /* delete the windows file only if the linux conversion fails */
         WCHAR windows_vrpaths[MAX_PATH];
