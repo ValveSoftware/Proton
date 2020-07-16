@@ -143,12 +143,12 @@ d9vk: configure
 		cp $(BUILD_DIR)/dist/dist/lib/wine/dxvk/*.dll /vagrant/d9vk/lib/wine/dxvk/ && \
 		cp $(BUILD_DIR)/dist/dist/lib64/wine/dxvk/*.dll /vagrant/d9vk/lib64/wine/dxvk/'
 
-vkd3d: configure
-	mkdir -p vagrant_share/vkd3d/lib/
-	mkdir -p vagrant_share/vkd3d/lib64/
-	vagrant ssh -c 'make -C $(BUILD_DIR)/ $(UNSTRIPPED) vkd3d && \
-		cp $(BUILD_DIR)/dist/dist/lib/*vkd3d* /vagrant/vkd3d/lib/ && \
-		cp $(BUILD_DIR)/dist/dist/lib64/*vkd3d* /vagrant/vkd3d/lib64/'
+vkd3d-proton: configure
+	mkdir -p vagrant_share/vkd3d-proton/lib/wine/vkd3d-proton/
+	mkdir -p vagrant_share/vkd3d-proton/lib64/wine/vkd3d-proton/
+	vagrant ssh -c 'make -C $(BUILD_DIR)/ $(UNSTRIPPED) vkd3d-proton && \
+		cp $(BUILD_DIR)/dist/dist/lib/wine/vkd3d-proton/*.dll /vagrant/vkd3d-proton/lib/wine/vkd3d-proton/ && \
+		cp $(BUILD_DIR)/dist/dist/lib64/wine/vkd3d-proton/*.dll /vagrant/vkd3d-proton/lib64/wine/vkd3d-proton/'
 
 lsteamclient: configure
 	mkdir -p vagrant_share/lsteamclient/lib/wine

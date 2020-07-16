@@ -146,12 +146,10 @@ ifneq ($(UNSTRIPPED_BUILD),)
     STRIP :=
     INSTALL_PROGRAM_FLAGS :=
     MESON_STRIP_ARG :=
-    VKD3D_INSTALL_TARGET := install
 else
     STRIP := strip
     INSTALL_PROGRAM_FLAGS := -s
     MESON_STRIP_ARG := --strip
-    VKD3D_INSTALL_TARGET := install-strip
 endif
 
 OPTIMIZE_FLAGS := -O2 -march=nocona $(call cc-option,$(CC),-mtune=core-avx2,) -mfpmath=sse
@@ -272,19 +270,7 @@ DXVK := $(SRCDIR)/dxvk
 DXVK_OBJ32 := ./obj-dxvk32
 DXVK_OBJ64 := ./obj-dxvk64
 
-VULKAN_HEADERS := $(SRCDIR)/Vulkan-Headers
-VULKAN_H_OBJ32 := ./obj-vulkan-headers32
-VULKAN_H_OBJ64 := ./obj-vulkan-headers64
-VULKAN_H32 := $(TOOLS_DIR32)/include/vulkan/vulkan.h
-VULKAN_H64 := $(TOOLS_DIR64)/include/vulkan/vulkan.h
-
-SPIRV_HEADERS := $(SRCDIR)/SPIRV-Headers
-SPIRV_H_OBJ32 := ./obj-spirv-headers32
-SPIRV_H_OBJ64 := ./obj-spirv-headers64
-SPIRV_H32 := $(TOOLS_DIR32)/include/spirv/spirv.h
-SPIRV_H64 := $(TOOLS_DIR64)/include/spirv/spirv.h
-
-VKD3D := $(SRCDIR)/vkd3d
+VKD3D := $(SRCDIR)/vkd3d-proton
 VKD3D_OBJ32 := ./obj-vkd3d32
 VKD3D_OBJ64 := ./obj-vkd3d64
 
@@ -332,8 +318,6 @@ OBJ_DIRS := $(TOOLS_DIR32)        $(TOOLS_DIR64)        \
             $(VRCLIENT_OBJ32)     $(VRCLIENT_OBJ64)     \
             $(DXVK_OBJ32)         $(DXVK_OBJ64)         \
             $(BISON_OBJ32)        $(BISON_OBJ64)        \
-            $(VULKAN_H_OBJ32)     $(VULKAN_H_OBJ64)     \
-            $(SPIRV_H_OBJ32)      $(SPIRV_H_OBJ64)      \
             $(WINEWIDL_OBJ32)     $(WINEWIDL_OBJ64)     \
             $(VKD3D_OBJ32)        $(VKD3D_OBJ64)        \
             $(CMAKE_OBJ32)        $(CMAKE_OBJ64)
@@ -506,7 +490,7 @@ $(DIST_FONTS): fonts
 ALL_TARGETS += dist
 GOAL_TARGETS += dist
 
-dist: $(DIST_TARGETS) wine gst_good gst_bad gst_ugly gst_libav vrclient lsteamclient steam dxvk | $(DST_DIR)
+dist: $(DIST_TARGETS) wine gst_good gst_bad gst_ugly gst_libav vrclient lsteamclient steam dxvk vkd3d-proton | $(DST_DIR)
 	echo `date '+%s'` `GIT_DIR=$(abspath $(SRCDIR)/.git) git describe --tags` > $(DIST_VERSION)
 	cp $(DIST_VERSION) $(DST_BASE)/
 	rm -rf $(abspath $(DIST_PREFIX)) && \
@@ -1222,7 +1206,6 @@ $(FFMPEG_CONFIGURE_FILES64): $(FFMPEG)/configure $(MAKEFILE_DEP) | $(FFMPEG_OBJ6
 			--enable-parser=mpeg4video \
 			--enable-parser=mpegaudio \
 			--enable-decoder=mpegvideo \
-			--enable-decoder=mpegaudio \
 			--enable-decoder=h263 \
 			--enable-decoder=wmv1 \
 			--enable-decoder=wmv2 \
@@ -1273,7 +1256,6 @@ $(FFMPEG_CONFIGURE_FILES32): $(FFMPEG)/configure $(MAKEFILE_DEP) | $(FFMPEG_OBJ3
 			--enable-parser=mpeg4video \
 			--enable-parser=mpegaudio \
 			--enable-decoder=mpegvideo \
-			--enable-decoder=mpegaudio \
 			--enable-decoder=h263 \
 			--enable-decoder=wmv1 \
 			--enable-decoder=wmv2 \
@@ -1546,10 +1528,11 @@ WINE32_MAKE_ARGS := \
 
 # 64bit-configure
 $(WINE_CONFIGURE_FILES64): SHELL = $(CONTAINER_SHELL64)
-$(WINE_CONFIGURE_FILES64): $(MAKEFILE_DEP) | faudio64 vkd3d64 gst_base64 $(WINE_OBJ64) bison64
+$(WINE_CONFIGURE_FILES64): $(MAKEFILE_DEP) | faudio64 gst_base64 $(WINE_OBJ64) bison64
 	cd $(dir $@) && \
 		../$(WINE)/configure \
 			--without-curses \
+			--with-mingw \
 			--enable-win64 \
 			--disable-tests \
 			--prefix=$(abspath $(DST_DIR)) \
@@ -1564,10 +1547,11 @@ $(WINE_CONFIGURE_FILES64): $(MAKEFILE_DEP) | faudio64 vkd3d64 gst_base64 $(WINE_
 
 # 32-bit configure
 $(WINE_CONFIGURE_FILES32): SHELL = $(CONTAINER_SHELL32)
-$(WINE_CONFIGURE_FILES32): $(MAKEFILE_DEP) | faudio32 vkd3d32 gst_base32 $(WINE_OBJ32) bison32
+$(WINE_CONFIGURE_FILES32): $(MAKEFILE_DEP) | faudio32 gst_base32 $(WINE_OBJ32) bison32
 	cd $(dir $@) && \
 		../$(WINE)/configure \
 			--without-curses \
+			--with-mingw \
 			--disable-tests \
 			--prefix=$(abspath $(WINE_DST32)) \
 			STRIP=$(STRIP_QUOTED) \
@@ -1995,56 +1979,6 @@ dxvk32: $(DXVK_CONFIGURE_FILES32)
 
 endif # NO_DXVK
 
-# Vulkan-Headers
-
-VULKAN_H_CONFIGURE_FILES32 := $(VULKAN_H_OBJ32)/Makefile
-VULKAN_H_CONFIGURE_FILES64 := $(VULKAN_H_OBJ64)/Makefile
-
-$(VULKAN_H_CONFIGURE_FILES32): SHELL = $(CONTAINER_SHELL32)
-$(VULKAN_H_CONFIGURE_FILES32): $(MAKEFILE_DEP) $(CMAKE_BIN32) $(VULKAN_HEADERS)/CMakeLists.txt | $(VULKAN_H_OBJ32)
-	cd $(abspath $(VULKAN_H_OBJ32)) && \
-	../$(CMAKE_BIN32) -DCMAKE_INSTALL_PREFIX=$(abspath $(TOOLS_DIR32)) $(abspath $(VULKAN_HEADERS))
-
-$(VULKAN_H_CONFIGURE_FILES64): SHELL = $(CONTAINER_SHELL64)
-$(VULKAN_H_CONFIGURE_FILES64): $(MAKEFILE_DEP) $(CMAKE_BIN64) $(VULKAN_HEADERS)/CMakeLists.txt | $(VULKAN_H_OBJ64)
-	cd $(abspath $(VULKAN_H_OBJ64)) && \
-	../$(CMAKE_BIN64) -DCMAKE_INSTALL_PREFIX=$(abspath $(TOOLS_DIR64)) $(abspath $(VULKAN_HEADERS))
-
-$(VULKAN_H32): SHELL = $(CONTAINER_SHELL32)
-$(VULKAN_H32): $(VULKAN_H_CONFIGURE_FILES32) | $(VULKAN_H_OBJ32)
-	cd $(abspath $(VULKAN_H_OBJ32)) && \
-	../$(CMAKE_BIN32) --build . --target install
-
-$(VULKAN_H64): SHELL = $(CONTAINER_SHELL64)
-$(VULKAN_H64): $(VULKAN_H_CONFIGURE_FILES64) | $(VULKAN_H_OBJ64)
-	cd $(abspath $(VULKAN_H_OBJ64)) && \
-	../$(CMAKE_BIN64) --build . --target install
-
-# SPIRV-Headers
-
-SPIRV_H_CONFIGURE_FILES32 := $(SPIRV_H_OBJ32)/Makefile
-SPIRV_H_CONFIGURE_FILES64 := $(SPIRV_H_OBJ64)/Makefile
-
-$(SPIRV_H_CONFIGURE_FILES32): SHELL = $(CONTAINER_SHELL32)
-$(SPIRV_H_CONFIGURE_FILES32): $(MAKEFILE_DEP) $(CMAKE_BIN32) $(SPIRV_HEADERS)/CMakeLists.txt | $(SPIRV_H_OBJ32)
-	cd $(abspath $(SPIRV_H_OBJ32)) && \
-	../$(CMAKE_BIN32) -DCMAKE_INSTALL_PREFIX=$(abspath $(TOOLS_DIR32)) $(abspath $(SPIRV_HEADERS))
-
-$(SPIRV_H_CONFIGURE_FILES64): SHELL = $(CONTAINER_SHELL64)
-$(SPIRV_H_CONFIGURE_FILES64): $(MAKEFILE_DEP) $(CMAKE_BIN64) $(SPIRV_HEADERS)/CMakeLists.txt | $(SPIRV_H_OBJ64)
-	cd $(abspath $(SPIRV_H_OBJ64)) && \
-	../$(CMAKE_BIN64) -DCMAKE_INSTALL_PREFIX=$(abspath $(TOOLS_DIR64)) $(abspath $(SPIRV_HEADERS))
-
-$(SPIRV_H32): SHELL = $(CONTAINER_SHELL32)
-$(SPIRV_H32): $(SPIRV_H_CONFIGURE_FILES32)
-	cd $(abspath $(SPIRV_H_OBJ32)) && \
-	../$(CMAKE_BIN32) --build . --target install
-
-$(SPIRV_H64): SHELL = $(CONTAINER_SHELL64)
-$(SPIRV_H64): $(SPIRV_H_CONFIGURE_FILES64)
-	cd $(abspath $(SPIRV_H_OBJ64)) && \
-	../$(CMAKE_BIN64) --build . --target install
-
 # widl; required for vkd3d, which is built before wine
 
 WINEWIDL_CONFIGURE_FILES64 := $(WINEWIDL_OBJ64)/Makefile
@@ -2091,49 +2025,46 @@ $(WINEWIDL64): $(WINEWIDL_CONFIGURE_FILES64)
 
 # VKD3D
 
-VKD3D_CONFIGURE_FILES32 := $(VKD3D_OBJ32)/Makefile
-VKD3D_CONFIGURE_FILES64 := $(VKD3D_OBJ64)/Makefile
-
-#use host autotools to generate configure script
-$(VKD3D)/configure: SHELL = /bin/bash
-$(VKD3D)/configure: $(MAKEFILE_DEP) $(VKD3D)/configure.ac
-	cd $(abspath $(VKD3D)) && ./autogen.sh
+VKD3D_CONFIGURE_FILES32 := $(VKD3D_OBJ32)/build.ninja
+VKD3D_CONFIGURE_FILES64 := $(VKD3D_OBJ64)/build.ninja
 
 $(VKD3D_CONFIGURE_FILES32): SHELL = $(CONTAINER_SHELL32)
-$(VKD3D_CONFIGURE_FILES32): $(MAKEFILE_DEP) $(VULKAN_H32) $(SPIRV_H32) $(VKD3D)/configure $(WINEWIDL32) | $(VKD3D_OBJ32)
+$(VKD3D_CONFIGURE_FILES32): $(VKD3D)/meson.build $(VKD3D)/build-win32.txt $(WINEWIDL32) | $(VKD3D_OBJ32)
 	cd $(abspath $(VKD3D_OBJ32)) && \
-		$(abspath $(VKD3D))/configure \
-			--disable-tests \
-			--prefix=$(abspath $(TOOLS_DIR32)) \
-			CFLAGS="-I$(abspath $(TOOLS_DIR32))/include -g $(COMMON_FLAGS) -DNDEBUG" \
-			LDFLAGS=-L$(abspath $(TOOLS_DIR32))/lib \
-			WIDL="$(abspath $(WINEWIDL32))"
+		PATH="$(abspath $(SRCDIR))/glslang/bin/:$(abspath $(WINEWIDL_OBJ32))/tools/widl:$(PATH)" \
+			meson --prefix="$(abspath $(VKD3D_OBJ32))" \
+				--cross-file "$(abspath $(VKD3D))/build-win32.txt" \
+				$(MESON_STRIP_ARG) \
+				--buildtype=release -Denable_standalone_d3d12=true \
+				"$(abspath $(VKD3D))"
 
 vkd3d32: SHELL = $(CONTAINER_SHELL32)
 vkd3d32: $(VKD3D_CONFIGURE_FILES32)
-	cd $(abspath $(VKD3D_OBJ32)) && \
-	make V=1 && make $(VKD3D_INSTALL_TARGET) && \
-	mkdir -p $(abspath $(DST_DIR))/lib/ && \
-	cp -a $(abspath $(TOOLS_DIR32))/lib/libvkd3d*.so* $(abspath $(DST_DIR))/lib/
+	ninja -C "$(VKD3D_OBJ32)" install
+	mkdir -p "$(DST_DIR)"/lib/wine/vkd3d-proton
+	cp "$(VKD3D_OBJ32)/bin/d3d12.dll" "$(DST_DIR)"/lib/wine/vkd3d-proton/
+	if test -e $(SRCDIR)/.git; then ( cd $(SRCDIR) && git submodule status -- vkd3d-proton ) > "$(DST_DIR)"/lib/wine/vkd3d-proton/version; fi
 
 $(VKD3D_CONFIGURE_FILES64): SHELL = $(CONTAINER_SHELL64)
-$(VKD3D_CONFIGURE_FILES64): $(MAKEFILE_DEP) $(VULKAN_H64) $(SPIRV_H64) $(VKD3D)/configure $(WINEWIDL64) | $(VKD3D_OBJ64)
+$(VKD3D_CONFIGURE_FILES64): $(VKD3D)/meson.build $(VKD3D)/build-win64.txt $(WINEWIDL64) | $(VKD3D_OBJ64)
 	cd $(abspath $(VKD3D_OBJ64)) && \
-		$(abspath $(VKD3D))/configure \
-			--disable-tests \
-			--prefix=$(abspath $(TOOLS_DIR64)) \
-			CFLAGS="-I$(abspath $(TOOLS_DIR64))/include -g $(COMMON_FLAGS) -DNDEBUG" \
-			LDFLAGS=-L$(abspath $(TOOLS_DIR64))/lib \
-			WIDL="$(abspath $(WINEWIDL64))"
+		PATH="$(abspath $(SRCDIR))/glslang/bin/:$(abspath $(WINEWIDL_OBJ64))/tools/widl:$(PATH)" \
+			meson --prefix="$(abspath $(VKD3D_OBJ64))" \
+				--cross-file "$(abspath $(VKD3D))/build-win64.txt" \
+				$(MESON_STRIP_ARG) \
+				--buildtype=release -Denable_standalone_d3d12=true \
+				"$(abspath $(VKD3D))"
 
 vkd3d64: SHELL = $(CONTAINER_SHELL64)
 vkd3d64: $(VKD3D_CONFIGURE_FILES64)
-	cd $(abspath $(VKD3D_OBJ64)) && \
-	make V=1 && make $(VKD3D_INSTALL_TARGET) && \
-	mkdir -p $(abspath $(DST_DIR))/lib64/ && \
-	cp -a $(abspath $(TOOLS_DIR64))/lib/libvkd3d*.so* $(abspath $(DST_DIR))/lib64/
+	ninja -C "$(VKD3D_OBJ64)" install
+	mkdir -p "$(DST_DIR)"/lib64/wine/vkd3d-proton
+	cp "$(VKD3D_OBJ64)/bin/d3d12.dll" "$(DST_DIR)"/lib64/wine/vkd3d-proton/
+	if test -e $(SRCDIR)/.git; then ( cd $(SRCDIR) && git submodule status -- vkd3d-proton ) > "$(DST_DIR)"/lib64/wine/vkd3d-proton/version; fi
 
-vkd3d: vkd3d32 vkd3d64
+vkd3d: vkd3d-proton
+
+vkd3d-proton: vkd3d32 vkd3d64
 
 # TODO Tests
 #  build_vrclient64_tests

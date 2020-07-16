@@ -25,15 +25,9 @@
 [submodule "protonfixes"]
         path = protonfixes
 	url = https://github.com/gloriouseggroll/protonfixes/
-[submodule "SPIRV-Headers"]
-	path = SPIRV-Headers
-	url = https://github.com/KhronosGroup/SPIRV-Headers/
-[submodule "Vulkan-Headers"]
-	path = Vulkan-Headers
-	url = https://github.com/KhronosGroup/Vulkan-Headers/
-[submodule "vkd3d"]
-	path = vkd3d
-	url = https://github.com/HansKristian-Work/vkd3d/
+[submodule "vkd3d-proton"]
+	path = vkd3d-proton
+	url = https://github.com/HansKristian-Work/vkd3d-proton/
 [submodule "gstreamer"]
 	path = gstreamer
 	url = https://github.com/GStreamer/gstreamer/
