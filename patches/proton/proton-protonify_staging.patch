@@ -761,6 +761,59 @@ index d2fc629c843..5a97590dbce 100644
      desc->VendorId = adapter_id.vendor_id;
      desc->DeviceId = adapter_id.device_id;
  
+From 304683886016ec940a9b331ce33fcbaf47e893c3 Mon Sep 17 00:00:00 2001
+From: Sven Baars <sbaars@codeweavers.com>
+Date: Thu, 5 Dec 2019 13:48:38 +0100
+Subject: [PATCH] HACK: ntdll: Return a handle to kernel32 when being asked for
+ mfc42.
+
+For some applications mfc42 is loaded, but never actually used. We can
+add Steam game IDs when we find more of such applications.
+---
+ dlls/ntdll/loader.c | 31 +++++++++++++++++++++++++++++++
+ 1 file changed, 31 insertions(+)
+
+diff --git a/dlls/ntdll/loader.c b/dlls/ntdll/loader.c
+index 431c247a072..c9fcad79316 100644
+--- a/dlls/ntdll/loader.c
++++ b/dlls/ntdll/loader.c
+@@ -2604,6 +3015,36 @@ static NTSTATUS find_dll_file( const WCHAR *load_path, const WCHAR *libname, con
+ done:
+     RtlFreeHeap( GetProcessHeap(), 0, dllname );
+     if (wow64_old_value) RtlWow64EnableFsRedirectionEx( 1, &wow64_old_value );
++    
++    if (status != STATUS_SUCCESS)
++    {
++        /* HACK for Proton issue #17
++         *
++         * Some games try to load mfc42.dll, but then proceed to not use it.
++         * Just return a handle to kernel32 in that case.
++         */
++        static const WCHAR mfc42W[] = {'m','f','c','4','2',0};
++        static const WCHAR kernel32W[] = {'k','e','r','n','e','l','3','2','.','d','l','l',0};
++        static const WCHAR envvarW[] = {'S','t','e','a','m','G','a','m','e','I','d',0};
++        static const WCHAR aoeW[] = {'1','0','5','4','5','0',0}; /* AoE3 */
++
++        WCHAR *value;
++        SIZE_T len = 1024;
++        value = RtlAllocateHeap( GetProcessHeap(), 0, len * sizeof(WCHAR) );
++        if (NT_SUCCESS(RtlQueryEnvironmentVariable( NULL, envvarW, wcslen(envvarW), value, len - 1, &len )))
++        {
++            value[len] = '\0';
++
++            if ((wcscmp(value, aoeW) == 0) && strstriW(libname, mfc42W))
++            {
++                WARN_(loaddll)( "Using a fake mfc42 handle\n" );
++                status = find_dll_file( load_path, kernel32W, nt_name, pwm, mfc42W, module, image_info, id );
++            }
++        }
++
++        RtlFreeHeap( GetProcessHeap(), 0, value );
++    }
++
+     return status;
+ }
+ 
 From 4aa052e0c8ae276fc07afcd93d6e290a88214837 Mon Sep 17 00:00:00 2001
 From: Andrew Eikum <aeikum@codeweavers.com>
 Date: Wed, 15 Jan 2020 10:17:23 -0600
