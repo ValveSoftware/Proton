@@ -68,9 +68,6 @@
     cd wine-staging
     git reset --hard HEAD
     git clean -xdf
-    
-    echo "rawinput staging rebase"
-    patch -Np1 < ../patches/wine-hotfixes/staging-restore-rawinput-hidewineexports-threadtime.patch
     cd ..
 
     #WINE
@@ -92,12 +89,6 @@
 #    -W winebuild-Fake_Dlls \
 #    -W ntdll-Syscall_Emulation \
 #    -W ntdll-ThreadHideFromDebugger \
-
-    echo "winevulkan hotfixes pending"
-    patch -Np1 < ../patches/wine-hotfixes/pending/winevulkan-dont_initialize_vulkan_driver_in_dllmain.patch
-    
-    echo "rawinput backports"
-    patch -Np1 < ../patches/wine-hotfixes/pending/rawinput_backports.patch
     
     echo "applying staging patches"
     ../wine-staging/patches/patchinstall.sh DESTDIR="." --all \
@@ -110,17 +101,8 @@
     -W dinput-remap-joystick \
     -W user32-window-activation
     
-    echo "planet zoo/jurassic world hotfixes pending"
-    patch -Np1 < ../patches/wine-hotfixes/pending/planet-zoo-jurassic-world-pending-upstream-staging.patch
-
-    echo "nvidia locale backports"
-    patch -Np1 < ../patches/wine-hotfixes/pending/nvidia_locale_fix.patch
-
-    echo "evr/mf/quartz backports"
-    patch -Np1 < ../patches/wine-hotfixes/pending/evr_mf_quartz_pending.patch
-    
-    echo "winhttp backports"
-    patch -Np1 < ../patches/wine-hotfixes/pending/winhttp_backports.patch
+#    echo "planet zoo/jurassic world hotfixes pending"
+#    patch -Np1 < ../patches/wine-hotfixes/pending/planet-zoo-jurassic-world-pending-upstream-staging.patch
 
     echo "Indiana Jones and the Emperor's Tomb pending"
     patch -Np1 < ../patches/wine-hotfixes/pending/indiana_jones_fix.patch
@@ -144,14 +126,15 @@
     echo "assetto corsa"
     patch -Np1 < ../patches/game-patches/assettocorsa-hud.patch
 
-    echo "sword art online"
-    patch -Np1 < ../patches/game-patches/sword-art-online-gnutls.patch
+#    disable, breaks paladins
+#    echo "sword art online"
+#    patch -Np1 < ../patches/game-patches/sword-art-online-gnutls.patch
 
     echo "origin downloads fix" 
     patch -Np1 < ../patches/game-patches/origin-downloads_fix.patch
 
-    echo "fix steep"
-    patch -Np1 < ../patches/game-patches/steep_fix.patch
+#    echo "fix steep"
+#    patch -Np1 < ../patches/game-patches/steep_fix.patch
     
     echo "rawinput virtual desktop fix"
     #https://bugs.winehq.org/show_bug.cgi?id=48419
@@ -160,10 +143,7 @@
     
     echo "gta v key input fix"
     patch -Np1 < ../patches/game-patches/gta_v_keyboard_input.patch
-    
-    echo "mgs ground zeroes fix"
-    patch -Np1 < ../patches/game-patches/mgs-ground-zeroes.patch
-    
+        
 #  TODO: Add game-specific check
     echo "mk11 patch"
     patch -Np1 < ../patches/game-patches/mk11.patch
