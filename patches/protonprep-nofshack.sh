@@ -50,7 +50,7 @@
     cd ..
 
     # VKD3D patches
-    cd vkd3d
+    cd vkd3d-proton
     git reset --hard HEAD
     git clean -xdf
     cd ..
