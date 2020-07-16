@@ -114,8 +114,8 @@
     patch -Np1 < ../patches/wine-hotfixes/pending/indiana_jones_fix.patch
         
     #WINE FAUDIO
-    #echo "applying faudio patches"
-    #patch -Np1 < ../patches/faudio/faudio-ffmpeg.patch
+    echo "applying faudio patches"
+    patch -Np1 < ../patches/faudio/faudio-ffmpeg.patch
     
     ### GAME PATCH SECTION ###
     
@@ -228,8 +228,8 @@
 #    echo "FS Hack integer scaling"
 #    patch -Np1 < ../patches/proton/proton_fs_hack_integer_scaling.patch
     
-#    echo "proton winevulkan"
-#    patch -Np1 < ../patches/proton/proton-winevulkan-nofshack.patch
+    echo "proton winevulkan"
+    patch -Np1 < ../patches/proton/proton-winevulkan-nofshack.patch
     
     echo "msvcrt overrides"
     patch -Np1 < ../patches/proton/proton-msvcrt_nativebuiltin.patch
@@ -256,7 +256,6 @@
     
     echo "Paul's Diablo 1 menu fix"
     patch -Np1 < ../patches/game-patches/diablo_1_menu.patch
-    
     
     ./dlls/winevulkan/make_vulkan
     ./tools/make_requests
