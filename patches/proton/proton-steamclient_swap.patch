@@ -362,7 +362,7 @@ index 8dfabde44c3..b25c48b52ca 100644
 +    while (*str)
 +    {
 +        const WCHAR *p1 = str, *p2 = sub;
-+        while (*p1 && *p2 && tolowerW(*p1) == tolowerW(*p2)) { p1++; p2++; }
++        while (*p1 && *p2 && RtlDowncaseUnicodeChar(*p1) == RtlDowncaseUnicodeChar(*p2)) { p1++; p2++; }
 +        if (!*p2) return (WCHAR *)str;
 +        str++;
 +    }
