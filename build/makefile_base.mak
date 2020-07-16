@@ -1532,7 +1532,6 @@ $(WINE_CONFIGURE_FILES64): $(MAKEFILE_DEP) | faudio64 gst_base64 $(WINE_OBJ64) b
 	cd $(dir $@) && \
 		../$(WINE)/configure \
 			--without-curses \
-			--with-mingw \
 			--enable-win64 \
 			--disable-tests \
 			--prefix=$(abspath $(DST_DIR)) \
@@ -1540,7 +1539,7 @@ $(WINE_CONFIGURE_FILES64): $(MAKEFILE_DEP) | faudio64 gst_base64 $(WINE_OBJ64) b
 			BISON=$(abspath $(BISON_BIN64)) \
 			CFLAGS="-I$(abspath $(TOOLS_DIR64))/include -g $(COMMON_FLAGS)" \
 			CXXFLAGS="-I$(abspath $(TOOLS_DIR64))/include -g $(COMMON_FLAGS) -std=c++17" \
-			LDFLAGS="-L$(abspath $(TOOLS_DIR64))/lib -Wl,-rpath-link,$(abspath $(TOOLS_DIR64))/lib" \
+			LDFLAGS=-L$(abspath $(TOOLS_DIR64))/lib \
 			PKG_CONFIG_PATH=$(abspath $(TOOLS_DIR64))/lib/pkgconfig \
 			CC=$(CC_QUOTED) \
 			CXX=$(CXX_QUOTED)
@@ -1551,14 +1550,13 @@ $(WINE_CONFIGURE_FILES32): $(MAKEFILE_DEP) | faudio32 gst_base32 $(WINE_OBJ32) b
 	cd $(dir $@) && \
 		../$(WINE)/configure \
 			--without-curses \
-			--with-mingw \
 			--disable-tests \
 			--prefix=$(abspath $(WINE_DST32)) \
 			STRIP=$(STRIP_QUOTED) \
 			BISON=$(abspath $(BISON_BIN32)) \
 			CFLAGS="-I$(abspath $(TOOLS_DIR32))/include -g $(COMMON_FLAGS)" \
 			CXXFLAGS="-I$(abspath $(TOOLS_DIR32))/include -g $(COMMON_FLAGS) -std=c++17" \
-			LDFLAGS="-L$(abspath $(TOOLS_DIR32))/lib -Wl,-rpath-link,$(abspath $(TOOLS_DIR32))/lib" \
+			LDFLAGS=-L$(abspath $(TOOLS_DIR32))/lib \
 			PKG_CONFIG_PATH=$(abspath $(TOOLS_DIR32))/lib/pkgconfig \
 			CC=$(CC_QUOTED) \
 			CXX=$(CXX_QUOTED)
