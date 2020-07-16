@@ -772,37 +772,6 @@ index d74fd82487b..579bd586abd 100755
      "vkGetPhysicalDeviceSurfaceFormatsKHR" : {"dispatch" : True, "driver" : True, "thunk" : True},
      "vkGetPhysicalDeviceSurfacePresentModesKHR" : {"dispatch" : True, "driver" : True, "thunk" : True},
  
-diff --git a/dlls/winevulkan/vulkan.c b/dlls/winevulkan/vulkan.c
-index eb22e72ae3..b872580f88 100644
---- a/dlls/winevulkan/vulkan.c
-+++ b/dlls/winevulkan/vulkan.c
-@@ -1358,6 +1437,26 @@ void WINAPI wine_vkGetPhysicalDeviceExternalSemaphorePropertiesKHR(VkPhysicalDev
-     properties->externalSemaphoreFeatures = 0;
- }
- 
-+VkResult WINAPI wine_vkGetPhysicalDeviceSurfaceCapabilitiesKHR(VkPhysicalDevice phys_dev,
-+        VkSurfaceKHR surface, VkSurfaceCapabilitiesKHR *capabilities)
-+{
-+    VkResult res;
-+    VkExtent2D user_res;
-+
-+    TRACE("%p, 0x%s, %p\n", phys_dev, wine_dbgstr_longlong(surface), capabilities);
-+
-+    res = thunk_vkGetPhysicalDeviceSurfaceCapabilitiesKHR(phys_dev, surface, capabilities);
-+
-+    /* HACK: It happened more than once that a Windows game didn't expect that maxImageCount can be
-+     * set to 0. A value of 0 means that there is no limit on the number of images. */
-+    if (res == VK_SUCCESS && capabilities->minImageCount && !capabilities->maxImageCount)
-+    {
-+        capabilities->maxImageCount = 16;
-+    }
-+
-+    return res;
-+}
-+
- BOOL WINAPI DllMain(HINSTANCE hinst, DWORD reason, void *reserved)
- {
-     TRACE("%p, %u, %p\n", hinst, reason, reserved);
 diff --git a/dlls/winevulkan/vulkan_thunks.c b/dlls/winevulkan/vulkan_thunks.c
 index 3853ec45eaf..2c9b3396465 100644
 --- a/dlls/winevulkan/vulkan_thunks.c
