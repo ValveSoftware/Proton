@@ -1,8 +1,58 @@
-From 29f58fdeb24a1f49e9b741df97f1f9f86a4fec51 Mon Sep 17 00:00:00 2001
+From 306a3ad98bb6575300293c65481e87d41395e225 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Sergio=20G=C3=B3mez=20Del=20Real?=
+ <sdelreal@codeweavers.com>
+Date: Wed, 1 Apr 2020 16:11:05 -0500
+Subject: [PATCH 01/53] mf/tests: Sink objects are stream sinks, not media
+ sinks.
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Sergio Gómez Del Real <sdelreal@codeweavers.com>
+---
+ dlls/mf/tests/mf.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/dlls/mf/tests/mf.c b/dlls/mf/tests/mf.c
+index bf14ccf0feb..3a0164c8511 100644
+--- a/dlls/mf/tests/mf.c
++++ b/dlls/mf/tests/mf.c
+@@ -1311,6 +1311,7 @@ static void test_topology_loader(void)
+     IMFPresentationDescriptor *pd;
+     IMFSourceResolver *resolver;
+     IMFActivate *sink_activate;
++    IMFStreamSink *stream_sink;
+     unsigned int count, value;
+     IMFMediaType *media_type;
+     IMFStreamDescriptor *sd;
+@@ -1423,7 +1424,10 @@ todo_wine
+     hr = IMFActivate_ActivateObject(sink_activate, &IID_IMFMediaSink, (void **)&sink);
+     ok(hr == S_OK, "Failed to activate, hr %#x.\n", hr);
+ 
+-    hr = IMFTopologyNode_SetObject(sink_node, (IUnknown *)sink);
++    hr = IMFMediaSink_GetStreamSinkByIndex(sink, 0, &stream_sink);
++    ok(hr == S_OK, "Failed to get stream sink, hr %#x.\n", hr);
++
++    hr = IMFTopologyNode_SetObject(sink_node, (IUnknown *)stream_sink);
+     ok(hr == S_OK, "Failed to set object, hr %#x.\n", hr);
+ 
+     hr = IMFTopology_GetCount(topology, &count);
+@@ -1431,7 +1435,6 @@ todo_wine
+     ok(count == 0, "Unexpected count %u.\n", count);
+ 
+     hr = IMFTopoLoader_Load(loader, topology, &full_topology, NULL);
+-todo_wine
+     ok(hr == S_OK, "Failed to resolve topology, hr %#x.\n", hr);
+     ok(full_topology != topology, "Unexpected instance.\n");
+ 
+-- 
+2.26.2
+
+From 96219a4eacca24949017c7b9147bc9d0284c0ccd Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Sergio=20G=C3=B3mez=20Del=20Real?=
  <sdelreal@codeweavers.com>
 Date: Wed, 1 Apr 2020 16:11:06 -0500
-Subject: [PATCH 01/49] mf/tests: Add tests for the topology loader.
+Subject: [PATCH 02/53] mf/tests: Add tests for the topology loader.
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -13,10 +63,10 @@ Signed-off-by: Sergio Gómez Del Real <sdelreal@codeweavers.com>
  1 file changed, 433 insertions(+), 2 deletions(-)
 
 diff --git a/dlls/mf/tests/mf.c b/dlls/mf/tests/mf.c
-index f01385cc46c..940102560e1 100644
+index 3a0164c8511..3ce94862c70 100644
 --- a/dlls/mf/tests/mf.c
 +++ b/dlls/mf/tests/mf.c
-@@ -1392,26 +1392,169 @@ static const IMFSampleGrabberSinkCallbackVtbl test_grabber_callback_vtbl =
+@@ -1303,26 +1303,169 @@ static const IMFSampleGrabberSinkCallbackVtbl test_grabber_callback_vtbl =
      test_grabber_callback_OnShutdown,
  };
  
@@ -187,7 +237,7 @@ index f01385cc46c..940102560e1 100644
      HRESULT hr;
      GUID guid;
  
-@@ -1529,6 +1672,9 @@ todo_wine
+@@ -1438,6 +1581,9 @@ todo_wine
      ok(hr == S_OK, "Failed to resolve topology, hr %#x.\n", hr);
      ok(full_topology != topology, "Unexpected instance.\n");
  
@@ -197,13 +247,13 @@ index f01385cc46c..940102560e1 100644
      hr = IMFTopology_GetCount(topology, &count);
      ok(hr == S_OK, "Failed to get attribute count, hr %#x.\n", hr);
      ok(count == 0, "Unexpected count %u.\n", count);
-@@ -1555,10 +1701,295 @@ todo_wine {
+@@ -1464,10 +1610,295 @@ todo_wine {
  
      IMFTopology_Release(topology2);
      IMFTopology_Release(full_topology);
 +    IMFByteStream_Release(stream);
 +    IMFStreamDescriptor_Release(sd);
-+
+ 
 +    /* test with stream deselected */
 +    IMFPresentationDescriptor_GetStreamDescriptorCount(pd, &count);
 +    ok(count == 1, "Unexpected stream descriptor count.\n");
@@ -221,7 +271,7 @@ index f01385cc46c..940102560e1 100644
 +    IMFPresentationDescriptor_GetStreamDescriptorByIndex(pd, 0, &selected, &sd);
 +    ok(hr == S_OK, "Failed to get stream descriptor, hr %#x.\n", hr);
 +    ok(!selected, "Stream should not be selected\n.");
- 
++
 +    IMFPresentationDescriptor_Release(pd);
 +    IMFTopologyNode_Release(src_node);
 +    IMFTopology_Release(full_topology);
@@ -495,12 +545,431 @@ index f01385cc46c..940102560e1 100644
  
      hr = MFShutdown();
 -- 
-2.27.0
+2.26.2
 
-From f33670b63785c148934603ded1f59a705e94ab50 Mon Sep 17 00:00:00 2001
+From 3801accce876e5f051974bc084d5887cc235d53c Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Sergio=20G=C3=B3mez=20Del=20Real?=
+ <sdelreal@codeweavers.com>
+Date: Wed, 1 Apr 2020 16:11:07 -0500
+Subject: [PATCH 03/53] mf: Partially implement the topology loader.
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Sergio Gómez Del Real <sdelreal@codeweavers.com>
+---
+ dlls/mf/tests/mf.c |   3 -
+ dlls/mf/topology.c | 337 ++++++++++++++++++++++++++++++++++++++++++---
+ 2 files changed, 321 insertions(+), 19 deletions(-)
+
+diff --git a/dlls/mf/tests/mf.c b/dlls/mf/tests/mf.c
+index 3ce94862c70..46f1dc3c6a4 100644
+--- a/dlls/mf/tests/mf.c
++++ b/dlls/mf/tests/mf.c
+@@ -1483,7 +1483,6 @@ static void test_topology_loader(void)
+ 
+     /* Empty topology */
+     hr = IMFTopoLoader_Load(loader, topology, &full_topology, NULL);
+-todo_wine
+     ok(hr == MF_E_TOPO_UNSUPPORTED, "Unexpected hr %#x.\n", hr);
+ 
+     hr = MFCreateSourceResolver(&resolver);
+@@ -1528,7 +1527,6 @@ todo_wine
+ 
+     /* Source node only. */
+     hr = IMFTopoLoader_Load(loader, topology, &full_topology, NULL);
+-todo_wine
+     ok(hr == MF_E_TOPO_UNSUPPORTED, "Unexpected hr %#x.\n", hr);
+ 
+     /* Add grabber sink. */
+@@ -1554,7 +1552,6 @@ todo_wine
+     ok(hr == S_OK, "Failed to add sink node, hr %#x.\n", hr);
+ 
+     hr = IMFTopoLoader_Load(loader, topology, &full_topology, NULL);
+-todo_wine
+     ok(hr == MF_E_TOPO_UNSUPPORTED, "Unexpected hr %#x.\n", hr);
+ 
+     hr = IMFTopologyNode_ConnectOutput(src_node, 0, sink_node, 0);
+diff --git a/dlls/mf/topology.c b/dlls/mf/topology.c
+index 0b4d7344422..7a4c95bea07 100644
+--- a/dlls/mf/topology.c
++++ b/dlls/mf/topology.c
+@@ -1913,47 +1913,352 @@ static ULONG WINAPI topology_loader_Release(IMFTopoLoader *iface)
+     return refcount;
+ }
+ 
++static void topology_loader_add_branch(struct topology *topology, IMFTopologyNode *first, IMFTopologyNode *last)
++{
++    IMFTopology *full_topo = &topology->IMFTopology_iface;
++    IMFTopologyNode *in, *out;
++    DWORD index;
++
++    in = first;
++    IMFTopology_AddNode(full_topo, in);
++    while (SUCCEEDED(IMFTopologyNode_GetOutput(in, 0, &out, &index)))
++    {
++        IMFTopology_AddNode(full_topo, out);
++        in = out;
++    }
++}
++
++static HRESULT topology_loader_resolve_branch(IMFTopologyNode *src, IMFMediaType *mediatype, IMFTopologyNode *sink, MF_CONNECT_METHOD method)
++{
++    IMFStreamSink *streamsink;
++    IMFMediaTypeHandler *mth;
++    HRESULT hr;
++
++    IMFTopologyNode_GetObject(sink, (IUnknown **)&streamsink);
++    IMFStreamSink_GetMediaTypeHandler(streamsink, &mth);
++    if (method == MF_CONNECT_DIRECT)
++    {
++        if (FAILED(hr = IMFMediaTypeHandler_SetCurrentMediaType(mth, mediatype)))
++            return hr;
++        hr = IMFTopologyNode_ConnectOutput(src, 0, sink, 0);
++        return hr;
++    }
++    else
++    {
++        IMFTopologyNode *node_dec, *node_conv;
++        GUID major_type, subtype, mft_category;
++        MFT_REGISTER_TYPE_INFO mft_typeinfo;
++        UINT32 flags = MFT_ENUM_FLAG_ALL;
++        IMFActivate **activates_decs;
++        UINT32 num_activates_decs;
++        int i, j;
++
++        IMFMediaType_GetGUID(mediatype, &MF_MT_MAJOR_TYPE, &major_type);
++        if (IsEqualGUID(&major_type, &MFMediaType_Audio))
++            mft_category = MFT_CATEGORY_AUDIO_DECODER;
++        else if (IsEqualGUID(&major_type, &MFMediaType_Video))
++            mft_category = MFT_CATEGORY_VIDEO_DECODER;
++        else
++            return MF_E_INVALIDMEDIATYPE;
++
++        IMFMediaType_GetGUID(mediatype, &MF_MT_SUBTYPE, &subtype);
++        mft_typeinfo.guidMajorType = major_type;
++        mft_typeinfo.guidSubtype = subtype;
++        MFTEnumEx(mft_category, flags, &mft_typeinfo, NULL, &activates_decs, &num_activates_decs);
++
++        /* for getting converters later on */
++        if (IsEqualGUID(&major_type, &MFMediaType_Audio))
++            mft_category = MFT_CATEGORY_AUDIO_EFFECT;
++        else if (IsEqualGUID(&major_type, &MFMediaType_Video))
++            mft_category = MFT_CATEGORY_VIDEO_EFFECT;
++
++        /*
++         * Iterate over number of decoders.
++         * Try to set input type on decoder with source's output media type.
++         * If succeeds, iterate over decoder's output media types.
++         * Try to set input type on sink with decoder's output media type.
++         * If fails, iterate over number of converters.
++         * Try to set input type on converter with decoder's output media type.
++         * If succeeds, iterate over converters output media types.
++         * Try to set input type on sink with converter's output media type.
++         */
++        for (i = 0; i < num_activates_decs; i++)
++        {
++            IMFTransform *decoder;
++
++            IMFActivate_ActivateObject(activates_decs[i], &IID_IMFTransform, (void **)&decoder);
++            if (SUCCEEDED(hr = IMFTransform_SetInputType(decoder, 0, mediatype, 0)))
++            {
++                UINT32 num_activates_convs;
++                IMFActivate **activates_convs;
++                IMFMediaType *decoder_mtype;
++
++                int count = 0;
++                while (SUCCEEDED(IMFTransform_GetOutputAvailableType(decoder, 0, count++, &decoder_mtype)))
++                {
++                    IMFTransform *converter;
++
++                    /* succeeded with source -> decoder -> sink */
++                    if (SUCCEEDED(IMFMediaTypeHandler_SetCurrentMediaType(mth, decoder_mtype)))
++                    {
++                        MFCreateTopologyNode(MF_TOPOLOGY_TRANSFORM_NODE, &node_dec);
++                        IMFTopologyNode_SetObject(node_dec, (IUnknown *)decoder);
++                        IMFTopologyNode_ConnectOutput(src, 0, node_dec, 0);
++                        IMFTopologyNode_ConnectOutput(node_dec, 0, sink, 0);
++
++                        IMFActivate_ShutdownObject(activates_convs[i]);
++                        return S_OK;
++                    }
++
++                    IMFMediaType_GetGUID(decoder_mtype, &MF_MT_SUBTYPE, &subtype);
++                    mft_typeinfo.guidSubtype = subtype;
++                    MFTEnumEx(mft_category, flags, &mft_typeinfo, NULL, &activates_convs, &num_activates_convs);
++                    for (j = 0; j < num_activates_convs; j++)
++                    {
++                        IMFMediaType *converter_mtype;
++
++                        IMFActivate_ActivateObject(activates_convs[j], &IID_IMFTransform, (void **)&converter);
++                        if (SUCCEEDED(IMFTransform_SetInputType(converter, 0, decoder_mtype, 0)))
++                        {
++                            int count = 0;
++                            while (SUCCEEDED(IMFTransform_GetOutputAvailableType(converter, 0, count++, &converter_mtype)))
++                            {
++                                /* succeeded with source -> decoder -> converter -> sink */
++                                if (SUCCEEDED(IMFMediaTypeHandler_SetCurrentMediaType(mth, converter_mtype)))
++                                {
++                                    MFCreateTopologyNode(MF_TOPOLOGY_TRANSFORM_NODE, &node_dec);
++                                    IMFTopologyNode_SetObject(node_dec, (IUnknown *)decoder);
++                                    MFCreateTopologyNode(MF_TOPOLOGY_TRANSFORM_NODE, &node_conv);
++                                    IMFTopologyNode_SetObject(node_conv, (IUnknown *)converter);
++                                    IMFTopologyNode_ConnectOutput(src, 0, node_dec, 0);
++                                    IMFTopologyNode_ConnectOutput(node_dec, 0, node_conv, 0);
++                                    IMFTopologyNode_ConnectOutput(node_conv, 0, sink, 0);
++
++                                    IMFActivate_ShutdownObject(activates_convs[j]);
++                                    IMFActivate_ShutdownObject(activates_decs[i]);
++                                    return S_OK;
++                                }
++                            }
++                        }
++                        IMFActivate_ShutdownObject(activates_convs[j]);
++                    }
++                }
++            }
++            IMFActivate_ShutdownObject(activates_decs[i]);
++        }
++    }
++    return E_FAIL;
++}
++
++static HRESULT topology_loader_resolve_partial_topology(struct topology_node *src, struct topology_node *sink, struct topology *topology, struct topology **full_topology)
++{
++    IMFMediaTypeHandler *mth_src, *mth_sink;
++    IMFTopologyNode *clone_src, *clone_sink;
++    UINT32 method, enum_src_types, streamid;
++    IMFMediaType **src_mediatypes;
++    IMFStreamDescriptor *desc;
++    IMFAttributes *attrs_src;
++    IMFStreamSink *strm_sink;
++    IMFMediaType *mtype_src;
++    DWORD num_media_types;
++    HRESULT hr;
++    int i;
++
++    attrs_src = src->attributes;
++    if (FAILED(hr = IMFAttributes_GetUnknown(attrs_src, &MF_TOPONODE_STREAM_DESCRIPTOR, &IID_IMFStreamDescriptor, (void **)&desc)))
++        return hr;
++    strm_sink = (IMFStreamSink *)sink->object;
++
++    if (FAILED(hr = IMFStreamDescriptor_GetMediaTypeHandler(desc, &mth_src)))
++    {
++        IMFStreamDescriptor_Release(desc);
++        return hr;
++    }
++    if (FAILED(hr = IMFStreamSink_GetMediaTypeHandler(strm_sink, &mth_sink)))
++    {
++        IMFStreamDescriptor_Release(desc);
++        IMFMediaTypeHandler_Release(mth_src);
++        return hr;
++    }
++
++    hr = IMFTopology_GetUINT32(&topology->IMFTopology_iface, &MF_TOPOLOGY_ENUMERATE_SOURCE_TYPES, &enum_src_types);
++
++    mtype_src = NULL;
++    if (FAILED(hr) || !enum_src_types)
++    {
++        num_media_types = 1;
++        enum_src_types = 0;
++        if (FAILED(hr = IMFMediaTypeHandler_GetCurrentMediaType(mth_src, &mtype_src)))
++            if (FAILED(hr = IMFMediaTypeHandler_GetMediaTypeByIndex(mth_src, 0, &mtype_src)))
++            {
++                IMFMediaTypeHandler_Release(mth_src);
++                IMFMediaTypeHandler_Release(mth_sink);
++                IMFStreamDescriptor_Release(desc);
++                return hr;
++            }
++    }
++    else
++        IMFMediaTypeHandler_GetMediaTypeCount(mth_src, &num_media_types);
++
++    src_mediatypes = heap_alloc(sizeof(IMFMediaType *) * num_media_types);
++
++    if (mtype_src)
++        src_mediatypes[0] = mtype_src;
++    else
++        for (i = 0; i < num_media_types; i++)
++            IMFMediaTypeHandler_GetMediaTypeByIndex(mth_src, i, &src_mediatypes[i]);
++
++
++    MFCreateTopologyNode(MF_TOPOLOGY_SOURCESTREAM_NODE, &clone_src);
++    MFCreateTopologyNode(MF_TOPOLOGY_OUTPUT_NODE, &clone_sink);
++    IMFTopologyNode_CloneFrom(clone_src, &src->IMFTopologyNode_iface);
++    IMFTopologyNode_CloneFrom(clone_sink, &sink->IMFTopologyNode_iface);
++
++    if (FAILED(IMFTopologyNode_GetUINT32(clone_sink, &MF_TOPONODE_STREAMID, &streamid)))
++        IMFTopologyNode_SetUINT32(clone_sink, &MF_TOPONODE_STREAMID, 0);
++
++    if (enum_src_types)
++    {
++        hr = IMFAttributes_GetUINT32(attrs_src, &MF_TOPONODE_CONNECT_METHOD, &method);
++        if (hr == S_OK && method != MF_CONNECT_RESOLVE_INDEPENDENT_OUTPUTTYPES)
++        {
++            for (method = MF_CONNECT_DIRECT; method < MF_CONNECT_RESOLVE_INDEPENDENT_OUTPUTTYPES; method++)
++                for (i = 0; i < num_media_types; i++)
++                    if (SUCCEEDED(topology_loader_resolve_branch(clone_src, src_mediatypes[i], clone_sink, method)))
++                    {
++                        topology_loader_add_branch(*full_topology, clone_src, clone_sink);
++                        heap_free(src_mediatypes);
++                        return S_OK;
++                    }
++        }
++        else
++        {
++            for (i = 0; i < num_media_types; i++)
++                for (method = MF_CONNECT_DIRECT; method < MF_CONNECT_RESOLVE_INDEPENDENT_OUTPUTTYPES; method++)
++                    if (SUCCEEDED(topology_loader_resolve_branch(clone_src, src_mediatypes[i], clone_sink, method)))
++                    {
++                        topology_loader_add_branch(*full_topology, clone_src, clone_sink);
++                        heap_free(src_mediatypes);
++                        return S_OK;
++                    }
++        }
++    }
++    else
++    {
++        if (SUCCEEDED(topology_loader_resolve_branch(clone_src, src_mediatypes[0], clone_sink, MF_CONNECT_DIRECT)))
++        {
++            topology_loader_add_branch(*full_topology, clone_src, clone_sink);
++            heap_free(src_mediatypes);
++            return S_OK;
++        }
++    }
++
++    heap_free(src_mediatypes);
++    return MF_E_TOPO_UNSUPPORTED;
++}
++
+ static HRESULT WINAPI topology_loader_Load(IMFTopoLoader *iface, IMFTopology *input_topology,
+         IMFTopology **output_topology, IMFTopology *current_topology)
+ {
+     struct topology *topology = unsafe_impl_from_IMFTopology(input_topology);
++    struct topology_node *(*node_pairs)[2];
++    int num_connections;
+     IMFStreamSink *sink;
+     HRESULT hr;
+-    size_t i;
++    int i, idx;
+ 
+     FIXME("%p, %p, %p, %p.\n", iface, input_topology, output_topology, current_topology);
+ 
+     if (current_topology)
+         FIXME("Current topology instance is ignored.\n");
+ 
++    if (!topology || topology->nodes.count < 2)
++        return MF_E_TOPO_UNSUPPORTED;
++
++    num_connections = 0;
++    for (i = 0; i < topology->nodes.count; i++)
++    {
++        struct topology_node *node = topology->nodes.nodes[i];
++
++        if (node->node_type == MF_TOPOLOGY_SOURCESTREAM_NODE)
++        {
++            if (node->outputs.count && node->outputs.streams->connection)
++                num_connections++;
++        }
++    }
++
++    if (!num_connections)
++        return MF_E_TOPO_UNSUPPORTED;
++
++    node_pairs = heap_alloc_zero(sizeof(struct topology_node *[2]) * num_connections);
++
++    idx = 0;
+     for (i = 0; i < topology->nodes.count; ++i)
+     {
+         struct topology_node *node = topology->nodes.nodes[i];
+ 
+-        switch (node->node_type)
++        if (node->node_type == MF_TOPOLOGY_SOURCESTREAM_NODE)
+         {
+-            case MF_TOPOLOGY_OUTPUT_NODE:
+-                if (node->object)
++            if (node->outputs.count && node->outputs.streams->connection)
++            {
++                node_pairs[idx][0] = node;
++                if (node->outputs.streams->connection->node_type == MF_TOPOLOGY_TRANSFORM_NODE)
+                 {
+-                    /* Sinks must be bound beforehand. */
+-                    if (FAILED(IUnknown_QueryInterface(node->object, &IID_IMFStreamSink, (void **)&sink)))
+-                        return MF_E_TOPO_SINK_ACTIVATES_UNSUPPORTED;
+-                    IMFStreamSink_Release(sink);
++                    struct topology_node *sink = node->outputs.streams->connection;
++
++                    while (sink && sink->node_type != MF_TOPOLOGY_OUTPUT_NODE && sink->outputs.count)
++                        sink = sink->outputs.streams->connection;
++                    if (!sink || !sink->outputs.count)
++                    {
++                        FIXME("Check for MF_CONNECT_AS_OPTIONAL and MF_CONNECT_AS_OPTIONAL_BRANCH flags.\n");
++                        heap_free(node_pairs);
++                        return MF_E_TOPO_UNSUPPORTED;
++                    }
++                    node_pairs[idx][1] = sink;
+                 }
+-                break;
+-            case MF_TOPOLOGY_SOURCESTREAM_NODE:
+-                if (FAILED(hr = IMFAttributes_GetItem(node->attributes, &MF_TOPONODE_STREAM_DESCRIPTOR, NULL)))
+-                    return hr;
+-                break;
+-            default:
+-                ;
++                else if (node->outputs.streams->connection->node_type == MF_TOPOLOGY_OUTPUT_NODE)
++                    node_pairs[idx][1] = node->outputs.streams->connection;
++                else {
++                    FIXME("Tee nodes currently unhandled.\n");
++                    heap_free(node_pairs);
++                    return MF_E_TOPO_UNSUPPORTED;
++                }
++                idx++;
++            }
+         }
+     }
+ 
++    /* all sinks must be activated */
++    for (i = 0; i < num_connections; i++)
++    {
++        if (FAILED(IUnknown_QueryInterface(node_pairs[i][1]->object, &IID_IMFStreamSink, (void **)&sink)))
++        {
++            FIXME("Check for MF_CONNECT_AS_OPTIONAL and MF_CONNECT_AS_OPTIONAL_BRANCH flags.\n");
++            heap_free(node_pairs);
++            return MF_E_TOPO_SINK_ACTIVATES_UNSUPPORTED;
++        }
++        IMFStreamSink_Release(sink);
++    }
++
+     if (FAILED(hr = MFCreateTopology(output_topology)))
+         return hr;
+ 
+-    return IMFTopology_CloneFrom(*output_topology, input_topology);
++    /* resolve each branch */
++    for (i = 0; i < num_connections; i++)
++    {
++        struct topology_node *src = node_pairs[i][0];
++        struct topology_node *sink = node_pairs[i][1];
++        struct topology *full_topology = unsafe_impl_from_IMFTopology(*output_topology);
++
++        if (FAILED(hr = topology_loader_resolve_partial_topology(src, sink, topology, &full_topology)))
++        {
++            heap_free(node_pairs);
++            return hr;
++        }
++    }
++
++    heap_free(node_pairs);
++    return S_OK;
+ }
+ 
+ static const IMFTopoLoaderVtbl topologyloadervtbl =
+-- 
+2.26.2
+
+From bc6c11e38014f711f19e51bbf880a8c385ea993b Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Wed, 25 Mar 2020 10:03:52 -0500
-Subject: [PATCH 02/49] Implement stub bytestream handler and source.
+Subject: [PATCH 04/53] Implement stub bytestream handler and source.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
 ---
@@ -516,10 +985,10 @@ Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
  create mode 100644 dlls/winegstreamer/media_source.c
 
 diff --git a/dlls/mfplat/tests/mfplat.c b/dlls/mfplat/tests/mfplat.c
-index 01749dd9ef8..c9548c6b18f 100644
+index 8a52279a081..55a27a8437e 100644
 --- a/dlls/mfplat/tests/mfplat.c
 +++ b/dlls/mfplat/tests/mfplat.c
-@@ -529,7 +529,10 @@ static void test_source_resolver(void)
+@@ -494,7 +494,10 @@ static void test_source_resolver(void)
      ok(obj_type == MF_OBJECT_MEDIASOURCE, "got %d\n", obj_type);
  
      hr = IMFMediaSource_CreatePresentationDescriptor(mediasource, &descriptor);
@@ -530,7 +999,7 @@ index 01749dd9ef8..c9548c6b18f 100644
      ok(descriptor != NULL, "got %p\n", descriptor);
  
      hr = IMFPresentationDescriptor_GetStreamDescriptorByIndex(descriptor, 0, &selected, &sd);
-@@ -540,10 +543,7 @@ static void test_source_resolver(void)
+@@ -505,10 +508,7 @@ static void test_source_resolver(void)
      IMFStreamDescriptor_Release(sd);
  
      hr = IMFMediaTypeHandler_GetMajorType(handler, &guid);
@@ -541,7 +1010,7 @@ index 01749dd9ef8..c9548c6b18f 100644
  
      /* Check major/minor type for the test media. */
      ok(IsEqualGUID(&guid, &MFMediaType_Video), "Unexpected major type %s.\n", debugstr_guid(&guid));
-@@ -624,6 +624,7 @@ todo_wine
+@@ -589,6 +589,7 @@ todo_wine
      get_event((IMFMediaEventGenerator *)mediasource, MEEndOfPresentation, NULL);
  
      IMFMediaTypeHandler_Release(handler);
@@ -549,7 +1018,7 @@ index 01749dd9ef8..c9548c6b18f 100644
  
      hr = IMFMediaSource_Shutdown(mediasource);
      ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
-@@ -632,8 +633,6 @@ todo_wine
+@@ -597,8 +598,6 @@ todo_wine
      ok(hr == MF_E_SHUTDOWN, "Unexpected hr %#x.\n", hr);
  
  skip_source_tests:
@@ -1276,7 +1745,7 @@ diff --git a/dlls/winegstreamer/mfplat.c b/dlls/winegstreamer/mfplat.c
 index 55b9b088765..16e55247de1 100644
 --- a/dlls/winegstreamer/mfplat.c
 +++ b/dlls/winegstreamer/mfplat.c
-@@ -398,6 +398,11 @@ failed:
+@@ -398,6 +398,11 @@ static HRESULT video_processor_create(REFIID riid, void **ret)
      return hr;
  }
  
@@ -1363,22 +1832,22 @@ index fa0e1784057..997a28b052f 100644
 +]
 +coclass MPEG4ByteStreamHandler {}
 diff --git a/include/mfidl.idl b/include/mfidl.idl
-index 4ceeb707bd0..fc13dfba7a1 100644
+index 4e7a43f5fff..c61ccb788ce 100644
 --- a/include/mfidl.idl
 +++ b/include/mfidl.idl
-@@ -1241,3 +1241,4 @@ cpp_quote("EXTERN_GUID(MF_ACTIVATE_CUSTOM_VIDEO_PRESENTER_ACTIVATE, 0xba491365,
- cpp_quote("EXTERN_GUID(MF_ACTIVATE_CUSTOM_VIDEO_PRESENTER_FLAGS, 0xba491366, 0xbe50, 0x451e, 0x95, 0xab, 0x6d, 0x4a, 0xcc, 0xc7, 0xda, 0xd8);")
+@@ -1128,3 +1128,4 @@ cpp_quote("EXTERN_GUID(MF_AUDIO_RENDERER_ATTRIBUTE_ENDPOINT_ROLE, 0x6ba644ff, 0x
+ cpp_quote("EXTERN_GUID(MF_AUDIO_RENDERER_ATTRIBUTE_STREAM_CATEGORY, 0xa9770471, 0x92ec, 0x4df4, 0x94, 0xfe, 0x81, 0xc3, 0x6f, 0x0c, 0x3a, 0x7a);")
  
  cpp_quote("EXTERN_GUID(CLSID_VideoProcessorMFT, 0x88753b26, 0x5b24, 0x49bd, 0xb2, 0xe7, 0xc, 0x44, 0x5c, 0x78, 0xc9, 0x82);")
 +cpp_quote("EXTERN_GUID(CLSID_MPEG4ByteStreamHandler, 0x271c3902, 0x6095, 0x4c45, 0xa2, 0x2f, 0x20, 0x09, 0x18, 0x16, 0xee, 0x9e);")
 \ No newline at end of file
 -- 
-2.27.0
+2.26.2
 
-From 6124d1399fb28167c8d5b6cd079a3b0217fa756f Mon Sep 17 00:00:00 2001
+From 387636802d1e88c7c7f18983ecd85db6d532b24f Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Mon, 30 Mar 2020 15:19:01 -0500
-Subject: [PATCH 03/49] winegstreamer: Implement IMFMediaSource::Shutdown.
+Subject: [PATCH 05/53] winegstreamer: Implement IMFMediaSource::Shutdown.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
 ---
@@ -1387,10 +1856,10 @@ Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
  2 files changed, 38 insertions(+), 3 deletions(-)
 
 diff --git a/dlls/mfplat/tests/mfplat.c b/dlls/mfplat/tests/mfplat.c
-index c9548c6b18f..af7e0d04594 100644
+index 55a27a8437e..06b4817f99e 100644
 --- a/dlls/mfplat/tests/mfplat.c
 +++ b/dlls/mfplat/tests/mfplat.c
-@@ -626,13 +626,13 @@ todo_wine
+@@ -591,13 +591,13 @@ todo_wine
      IMFMediaTypeHandler_Release(handler);
      IMFPresentationDescriptor_Release(descriptor);
  
@@ -1527,12 +1996,12 @@ index df28f54444d..09a40a06208 100644
      object->ref = 1;
  
 -- 
-2.27.0
+2.26.2
 
-From d21361d761a7249c4385e77253a1e9a6d59235be Mon Sep 17 00:00:00 2001
+From 9083916dfdba7e44dc033482b7f3fa95803cf95b Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Mon, 30 Mar 2020 14:19:35 -0500
-Subject: [PATCH 04/49] winegstreamer: Add a GstPad wrapping the media source's
+Subject: [PATCH 06/53] winegstreamer: Add a GstPad wrapping the media source's
  bytestream.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
@@ -1968,12 +2437,12 @@ index 09a40a06208..48119e4a89d 100644
 +    }
 +}
 -- 
-2.27.0
+2.26.2
 
-From a96c3ca21ec1f3925467793beeccae869e61151b Mon Sep 17 00:00:00 2001
+From cd7e2ed0b35bdb17d7bb5e859322876c56f23a03 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Tue, 31 Mar 2020 13:34:57 -0500
-Subject: [PATCH 05/49] winegstreamer: Find an appropriate demuxer for the
+Subject: [PATCH 07/53] winegstreamer: Find an appropriate demuxer for the
  source.
 
 We can add a path later which uses decodebin as the demuxer, for use with formats not supported on windows.  (like Theora)
@@ -2189,12 +2658,12 @@ index 48119e4a89d..e1f5c773758 100644
          {
              ERR("Wrong callback forwarder called\n");
 -- 
-2.27.0
+2.26.2
 
-From 800cca41016aab7ab7e73c4f016eef3b89a5ef60 Mon Sep 17 00:00:00 2001
+From d3bccadd91849c0f765027b505b24d924b16a70c Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Mon, 20 Apr 2020 13:02:23 -0500
-Subject: [PATCH 06/49] winegstreamer: Use the demuxer to establish
+Subject: [PATCH 08/53] winegstreamer: Use the demuxer to establish
  IMFMediaStreams.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
@@ -2773,12 +3242,12 @@ index e1f5c773758..8335c64338d 100644
          {
              ERR("Wrong callback forwarder called\n");
 -- 
-2.27.0
+2.26.2
 
-From bf659ae0a75d0eaa9531433536629444bd2ad980 Mon Sep 17 00:00:00 2001
+From a467e5647196458bd8f506bac949a5f335b9d37c Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Tue, 31 Mar 2020 11:11:05 -0500
-Subject: [PATCH 07/49] winegstreamer: Implement
+Subject: [PATCH 09/53] winegstreamer: Implement
  IMFMediaStream::GetStreamDescriptor.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
@@ -3100,12 +3569,12 @@ index 16e55247de1..90eb583c4a0 100644
 +}
 \ No newline at end of file
 -- 
-2.27.0
+2.26.2
 
-From a8d569555128d85db87d1dd67de77d0ab51ef2a3 Mon Sep 17 00:00:00 2001
+From 47131e56be156062ae1af9308d2794110e3724a8 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Tue, 24 Mar 2020 16:00:26 -0500
-Subject: [PATCH 08/49] winegstreamer: Translate H.264 caps to attributes.
+Subject: [PATCH 10/53] winegstreamer: Translate H.264 caps to attributes.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
 ---
@@ -3198,12 +3667,12 @@ index 90eb583c4a0..1b37e1cc901 100644
              FIXME("Unrecognized video format %s\n", mime_type);
      }
 -- 
-2.27.0
+2.26.2
 
-From fea6a58328799c6e142ab69fb996fbb48a86ae13 Mon Sep 17 00:00:00 2001
+From 5edb9411d43f9c72c823bda284650b990b7c0bdf Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Tue, 24 Mar 2020 16:01:20 -0500
-Subject: [PATCH 09/49] winegstreamer: Translate WMV caps to attributes.
+Subject: [PATCH 11/53] winegstreamer: Translate WMV caps to attributes.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
 ---
@@ -3280,12 +3749,12 @@ index 1b37e1cc901..96195c887c3 100644
              FIXME("Unrecognized video format %s\n", mime_type);
      }
 -- 
-2.27.0
+2.26.2
 
-From 7b66d97bae2f8bc9b31c9687c27553e663e914cb Mon Sep 17 00:00:00 2001
+From f15af0950ab78bfff839681d8a39e337a04e68a0 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Tue, 24 Mar 2020 16:02:27 -0500
-Subject: [PATCH 10/49] winegstreamer: Translate AAC caps to attributes.
+Subject: [PATCH 12/53] winegstreamer: Translate AAC caps to attributes.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
 ---
@@ -3418,12 +3887,12 @@ index 96195c887c3..ecb5de8b884 100644
              FIXME("Unrecognized audio format %s\n", mime_type);
      }
 -- 
-2.27.0
+2.26.2
 
-From 9516a61758fee78967389ae5724190ab67d414a2 Mon Sep 17 00:00:00 2001
+From bef057b77212c9e020bf9ebf1d4ca6d2cc6968f8 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Wed, 25 Mar 2020 13:36:19 -0500
-Subject: [PATCH 11/49] winegstreamer: Translate MPEG-4 Section-2 caps to
+Subject: [PATCH 13/53] winegstreamer: Translate MPEG-4 Section-2 caps to
  attributes.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
@@ -3459,12 +3928,12 @@ index ecb5de8b884..c45cfacc08b 100644
              FIXME("Unrecognized video format %s\n", mime_type);
      }
 -- 
-2.27.0
+2.26.2
 
-From 1d40f42fcae587f51a328b3900c40ccced6ff5e4 Mon Sep 17 00:00:00 2001
+From 6637fcdb67d40cb710c6726cfaa366dd870e26c8 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Tue, 12 May 2020 17:05:41 -0500
-Subject: [PATCH 12/49] winegstreamer: Translate WMA caps to attributes.
+Subject: [PATCH 14/53] winegstreamer: Translate WMA caps to attributes.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
 ---
@@ -3507,12 +3976,12 @@ index c45cfacc08b..fe187e6cd11 100644
              FIXME("Unrecognized audio format %s\n", mime_type);
      }
 -- 
-2.27.0
+2.26.2
 
-From 6248387204ebbfe7248fa711dabd75542f9bdbf2 Mon Sep 17 00:00:00 2001
+From 377f77488c8b0a1d1046a273a47d544a35e97956 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Tue, 31 Mar 2020 11:21:21 -0500
-Subject: [PATCH 13/49] winegstreamer: Implement
+Subject: [PATCH 15/53] winegstreamer: Implement
  IMFMediaSource::CreatePresentationDescriptor.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
@@ -3522,10 +3991,10 @@ Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
  2 files changed, 38 insertions(+), 6 deletions(-)
 
 diff --git a/dlls/mfplat/tests/mfplat.c b/dlls/mfplat/tests/mfplat.c
-index af7e0d04594..8fef44181c7 100644
+index 06b4817f99e..e2609f34ee3 100644
 --- a/dlls/mfplat/tests/mfplat.c
 +++ b/dlls/mfplat/tests/mfplat.c
-@@ -529,10 +529,7 @@ static void test_source_resolver(void)
+@@ -494,10 +494,7 @@ static void test_source_resolver(void)
      ok(obj_type == MF_OBJECT_MEDIASOURCE, "got %d\n", obj_type);
  
      hr = IMFMediaSource_CreatePresentationDescriptor(mediasource, &descriptor);
@@ -3536,7 +4005,7 @@ index af7e0d04594..8fef44181c7 100644
      ok(descriptor != NULL, "got %p\n", descriptor);
  
      hr = IMFPresentationDescriptor_GetStreamDescriptorByIndex(descriptor, 0, &selected, &sd);
-@@ -560,7 +557,10 @@ todo_wine
+@@ -525,7 +522,10 @@ todo_wine
  
      var.vt = VT_EMPTY;
      hr = IMFMediaSource_Start(mediasource, descriptor, &GUID_NULL, &var);
@@ -3547,7 +4016,7 @@ index af7e0d04594..8fef44181c7 100644
  
      get_event((IMFMediaEventGenerator *)mediasource, MENewStream, &var);
      ok(var.vt == VT_UNKNOWN, "Unexpected value type %u from MENewStream event.\n", var.vt);
-@@ -623,10 +623,10 @@ todo_wine
+@@ -588,10 +588,10 @@ todo_wine
  
      get_event((IMFMediaEventGenerator *)mediasource, MEEndOfPresentation, NULL);
  
@@ -3646,12 +4115,12 @@ index a654d555bc1..04b3b9f6c71 100644
      heap_free(object);
      *out_media_source = NULL;
 -- 
-2.27.0
+2.26.2
 
-From 689faecf1026086c1023b4a3d6c2c3cde27e61cc Mon Sep 17 00:00:00 2001
+From 0d329df6c272ec6ebc052e64f19f6dd892cbc40f Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Tue, 31 Mar 2020 15:10:03 -0500
-Subject: [PATCH 14/49] winegstreamer: Implement IMFMediaSource::Start.
+Subject: [PATCH 16/53] winegstreamer: Implement IMFMediaSource::Start.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
 ---
@@ -3660,10 +4129,10 @@ Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
  2 files changed, 284 insertions(+), 7 deletions(-)
 
 diff --git a/dlls/mfplat/tests/mfplat.c b/dlls/mfplat/tests/mfplat.c
-index 8fef44181c7..c26c40d531a 100644
+index e2609f34ee3..1929c0e519e 100644
 --- a/dlls/mfplat/tests/mfplat.c
 +++ b/dlls/mfplat/tests/mfplat.c
-@@ -557,10 +557,7 @@ static void test_source_resolver(void)
+@@ -522,10 +522,7 @@ static void test_source_resolver(void)
  
      var.vt = VT_EMPTY;
      hr = IMFMediaSource_Start(mediasource, descriptor, &GUID_NULL, &var);
@@ -3674,7 +4143,7 @@ index 8fef44181c7..c26c40d531a 100644
  
      get_event((IMFMediaEventGenerator *)mediasource, MENewStream, &var);
      ok(var.vt == VT_UNKNOWN, "Unexpected value type %u from MENewStream event.\n", var.vt);
-@@ -578,10 +575,13 @@ todo_wine
+@@ -543,10 +540,13 @@ todo_wine
          hr = IMFMediaStream_RequestSample(video_stream, NULL);
          if (i == sample_count)
              break;
@@ -3688,7 +4157,7 @@ index 8fef44181c7..c26c40d531a 100644
  
      for (i = 0; i < sample_count; ++i)
      {
-@@ -619,11 +619,11 @@ todo_wine
+@@ -584,11 +584,11 @@ todo_wine
  
      hr = IMFMediaStream_RequestSample(video_stream, NULL);
      ok(hr == MF_E_END_OF_STREAM, "Unexpected hr %#x.\n", hr);
@@ -4044,12 +4513,12 @@ index 04b3b9f6c71..abf0cfd56fa 100644
      object->bus = gst_bus_new();
      gst_bus_set_sync_handler(object->bus, watch_source_bus_wrapper, object, NULL);
 -- 
-2.27.0
+2.26.2
 
-From d72dd36d8840072227f6bd3dc9a6fd660545c140 Mon Sep 17 00:00:00 2001
+From ca6d10aa5c99cc1f329bd11481ccc022a5f79b61 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Tue, 31 Mar 2020 15:11:31 -0500
-Subject: [PATCH 15/49] winegstreamer: Insert parser into pipeline to rectify
+Subject: [PATCH 17/53] winegstreamer: Insert parser into pipeline to rectify
  type differences.
 
 It's probably better to use caps negotiation here, but this seemed simpler for now.
@@ -4223,26 +4692,26 @@ index abf0cfd56fa..cb247adcef1 100644
          IMFMediaType_Release(stream_type);
      if (type_handler)
 -- 
-2.27.0
+2.26.2
 
-From e62d97632a4c64daff86a8b3c55d6580eb5b17c3 Mon Sep 17 00:00:00 2001
+From 2fc8bdc20414aee0daa006d5215e1776b3958c86 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Wed, 25 Mar 2020 10:43:03 -0500
-Subject: [PATCH 16/49] winegstreamer: Implement IMFMediaStream::RequestSample.
+Subject: [PATCH 18/53] winegstreamer: Implement IMFMediaStream::RequestSample.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
 ---
- dlls/mfplat/tests/mfplat.c        |   4 -
+ dlls/mfplat/tests/mfplat.c        |   4 --
  dlls/winegstreamer/gst_private.h  |   1 +
- dlls/winegstreamer/media_source.c | 117 ++++++++++++++++++++++++++++--
+ dlls/winegstreamer/media_source.c | 116 ++++++++++++++++++++++++++++--
  dlls/winegstreamer/mfplat.c       |  90 +++++++++++++++++++++++
- 4 files changed, 203 insertions(+), 9 deletions(-)
+ 4 files changed, 202 insertions(+), 9 deletions(-)
 
 diff --git a/dlls/mfplat/tests/mfplat.c b/dlls/mfplat/tests/mfplat.c
-index c26c40d531a..a9408c998ce 100644
+index 1929c0e519e..0ae58b24cab 100644
 --- a/dlls/mfplat/tests/mfplat.c
 +++ b/dlls/mfplat/tests/mfplat.c
-@@ -575,13 +575,10 @@ static void test_source_resolver(void)
+@@ -540,13 +540,10 @@ static void test_source_resolver(void)
          hr = IMFMediaStream_RequestSample(video_stream, NULL);
          if (i == sample_count)
              break;
@@ -4256,7 +4725,7 @@ index c26c40d531a..a9408c998ce 100644
  
      for (i = 0; i < sample_count; ++i)
      {
-@@ -622,7 +619,6 @@ todo_wine
+@@ -587,7 +584,6 @@ todo_wine
  
      get_event((IMFMediaEventGenerator *)mediasource, MEEndOfPresentation, NULL);
  
@@ -4277,7 +4746,7 @@ index 780cf1b02fa..823e023f52c 100644
  enum source_type
  {
 diff --git a/dlls/winegstreamer/media_source.c b/dlls/winegstreamer/media_source.c
-index cb247adcef1..b6f2fcc8fae 100644
+index cb247adcef1..0e53fbf4247 100644
 --- a/dlls/winegstreamer/media_source.c
 +++ b/dlls/winegstreamer/media_source.c
 @@ -56,6 +56,7 @@ struct media_stream
@@ -4378,7 +4847,7 @@ index cb247adcef1..b6f2fcc8fae 100644
  static HRESULT WINAPI source_async_commands_Invoke(IMFAsyncCallback *iface, IMFAsyncResult *result)
  {
      struct media_source *source = impl_from_async_commands_callback_IMFAsyncCallback(iface);
-@@ -323,6 +400,9 @@ static HRESULT WINAPI source_async_commands_Invoke(IMFAsyncCallback *iface, IMFA
+@@ -323,6 +399,9 @@ static HRESULT WINAPI source_async_commands_Invoke(IMFAsyncCallback *iface, IMFA
          case SOURCE_ASYNC_START:
              start_pipeline(source, command);
              break;
@@ -4388,7 +4857,7 @@ index cb247adcef1..b6f2fcc8fae 100644
          default:
              ;
      }
-@@ -345,12 +425,14 @@ static const IMFAsyncCallbackVtbl source_async_commands_callback_vtbl =
+@@ -345,12 +424,14 @@ static const IMFAsyncCallbackVtbl source_async_commands_callback_vtbl =
  static GstFlowReturn stream_new_sample(GstElement *appsink, gpointer user)
  {
      struct media_stream *stream = (struct media_stream *) user;
@@ -4407,7 +4876,7 @@ index cb247adcef1..b6f2fcc8fae 100644
      return GST_FLOW_OK;
  }
  
-@@ -770,13 +852,37 @@ static HRESULT WINAPI media_stream_GetStreamDescriptor(IMFMediaStream* iface, IM
+@@ -770,13 +851,37 @@ static HRESULT WINAPI media_stream_GetStreamDescriptor(IMFMediaStream* iface, IM
  static HRESULT WINAPI media_stream_RequestSample(IMFMediaStream *iface, IUnknown *token)
  {
      struct media_stream *stream = impl_from_IMFMediaStream(iface);
@@ -4446,7 +4915,7 @@ index cb247adcef1..b6f2fcc8fae 100644
  }
  
  static const IMFMediaStreamVtbl media_stream_vtbl =
-@@ -898,6 +1004,7 @@ static HRESULT media_stream_constructor(struct media_source *source, GstPad *pad
+@@ -898,6 +1003,7 @@ static HRESULT media_stream_constructor(struct media_source *source, GstPad *pad
      object->their_src = pad;
  
      object->state = STREAM_INACTIVE;
@@ -4555,12 +5024,12 @@ index fe187e6cd11..e09309fd4da 100644
  }
 \ No newline at end of file
 -- 
-2.27.0
+2.26.2
 
-From 0cf5acecbe7895775413f7a273fb2ca620c07152 Mon Sep 17 00:00:00 2001
+From eac20d40c3abdb0aa9b1766ecb63e60f4355ad33 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Tue, 31 Mar 2020 15:15:07 -0500
-Subject: [PATCH 17/49] winegstreamer: Implement
+Subject: [PATCH 19/53] winegstreamer: Implement
  IMFMediaSource::GetCharacteristics.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
@@ -4569,10 +5038,10 @@ Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
  1 file changed, 4 insertions(+), 2 deletions(-)
 
 diff --git a/dlls/winegstreamer/media_source.c b/dlls/winegstreamer/media_source.c
-index b6f2fcc8fae..675ee9bd204 100644
+index 0e53fbf4247..78865259e6f 100644
 --- a/dlls/winegstreamer/media_source.c
 +++ b/dlls/winegstreamer/media_source.c
-@@ -1160,12 +1160,14 @@ static HRESULT WINAPI media_source_GetCharacteristics(IMFMediaSource *iface, DWO
+@@ -1159,12 +1159,14 @@ static HRESULT WINAPI media_source_GetCharacteristics(IMFMediaSource *iface, DWO
  {
      struct media_source *source = impl_from_IMFMediaSource(iface);
  
@@ -4590,12 +5059,12 @@ index b6f2fcc8fae..675ee9bd204 100644
  
  static HRESULT WINAPI media_source_CreatePresentationDescriptor(IMFMediaSource *iface, IMFPresentationDescriptor **descriptor)
 -- 
-2.27.0
+2.26.2
 
-From 9ff052f47c0cb8d11192cd7aaa1ccd2b3515dcc4 Mon Sep 17 00:00:00 2001
+From 005c408884c65505ca32c5319da1d2cfddab1ebc Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Tue, 31 Mar 2020 15:15:50 -0500
-Subject: [PATCH 18/49] winegstreamer: Calculate the MF_PD_DURATION of the
+Subject: [PATCH 20/53] winegstreamer: Calculate the MF_PD_DURATION of the
  media source's PD.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
@@ -4604,10 +5073,10 @@ Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
  1 file changed, 40 insertions(+)
 
 diff --git a/dlls/winegstreamer/media_source.c b/dlls/winegstreamer/media_source.c
-index 675ee9bd204..5811baf0c09 100644
+index 78865259e6f..b88f794d86a 100644
 --- a/dlls/winegstreamer/media_source.c
 +++ b/dlls/winegstreamer/media_source.c
-@@ -1423,6 +1423,46 @@ static HRESULT media_source_constructor(IMFByteStream *bytestream, enum source_t
+@@ -1422,6 +1422,46 @@ static HRESULT media_source_constructor(IMFByteStream *bytestream, enum source_t
      heap_free(descriptors);
      descriptors = NULL;
  
@@ -4655,12 +5124,12 @@ index 675ee9bd204..5811baf0c09 100644
  
      object->state = SOURCE_STOPPED;
 -- 
-2.27.0
+2.26.2
 
-From df6f161c4cdb43f6295c674f99525eddff63b5a8 Mon Sep 17 00:00:00 2001
+From 6d9e720058743c3e72804efc373562be2d0899a0 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Wed, 29 Jan 2020 15:37:39 -0600
-Subject: [PATCH 19/49] tools: Add support for multiple parent directories.
+Subject: [PATCH 21/53] tools: Add support for multiple parent directories.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
 ---
@@ -4750,10 +5219,10 @@ index c18fa90e2d3..1e34a280a40 100755
  }
  
 diff --git a/tools/makedep.c b/tools/makedep.c
-index 55b55ce344c..0f497d9e232 100644
+index fb2e145ced2..c505d26f431 100644
 --- a/tools/makedep.c
 +++ b/tools/makedep.c
-@@ -184,6 +184,7 @@ struct makefile
+@@ -182,6 +182,7 @@ struct makefile
      struct strarray install_lib;
      struct strarray install_dev;
      struct strarray extra_targets;
@@ -4761,7 +5230,7 @@ index 55b55ce344c..0f497d9e232 100644
      struct strarray extra_imports;
      struct list     sources;
      struct list     includes;
-@@ -192,7 +193,6 @@ struct makefile
+@@ -189,7 +190,6 @@ struct makefile
      const char     *obj_dir;
      const char     *top_src_dir;
      const char     *top_obj_dir;
@@ -4769,7 +5238,7 @@ index 55b55ce344c..0f497d9e232 100644
      const char     *module;
      const char     *testdll;
      const char     *sharedlib;
-@@ -1377,15 +1377,24 @@ static struct file *open_local_file( const struct makefile *make, const char *pa
+@@ -1373,15 +1373,24 @@ static struct file *open_local_file( const struct makefile *make, const char *pa
  {
      char *src_path = root_dir_path( base_dir_path( make, path ));
      struct file *ret = load_file( src_path );
@@ -4799,7 +5268,7 @@ index 55b55ce344c..0f497d9e232 100644
      }
  
      if (ret) *filename = src_dir_path( make, path );
-@@ -4273,13 +4282,13 @@ static void load_sources( struct makefile *make )
+@@ -4189,13 +4198,13 @@ static void load_sources( struct makefile *make )
      strarray_set_value( &make->vars, "top_srcdir", top_src_dir_path( make, "" ));
      strarray_set_value( &make->vars, "srcdir", src_dir_path( make, "" ));
  
@@ -4814,7 +5283,7 @@ index 55b55ce344c..0f497d9e232 100644
      make->programs      = get_expanded_make_var_array( make, "PROGRAMS" );
      make->scripts       = get_expanded_make_var_array( make, "SCRIPTS" );
      make->imports       = get_expanded_make_var_array( make, "IMPORTS" );
-@@ -4325,8 +4334,11 @@ static void load_sources( struct makefile *make )
+@@ -4240,8 +4249,11 @@ static void load_sources( struct makefile *make )
      strarray_add( &make->include_args, strmake( "-I%s", obj_dir_path( make, "" )));
      if (make->src_dir)
          strarray_add( &make->include_args, strmake( "-I%s", make->src_dir ));
@@ -4829,12 +5298,12 @@ index 55b55ce344c..0f497d9e232 100644
      if (make->top_src_dir)
          strarray_add( &make->include_args, strmake( "-I%s", top_src_dir_path( make, "include" )));
 -- 
-2.27.0
+2.26.2
 
-From 4ab32d902bff9580130ec2312cdb7a11466cbe05 Mon Sep 17 00:00:00 2001
+From d63650815af94ab717657a17e2a395f230e2fcad Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Wed, 29 Jan 2020 15:30:49 -0600
-Subject: [PATCH 20/49] mf: Introduce handler helper.
+Subject: [PATCH 22/53] mf: Introduce handler helper.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
 ---
@@ -4849,13 +5318,13 @@ Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
  create mode 100644 dlls/mf/handler.h
 
 diff --git a/dlls/mf/Makefile.in b/dlls/mf/Makefile.in
-index b64cdb4a64d..c0a4a876e0b 100644
+index fe156e43abf..5c69ac38e5f 100644
 --- a/dlls/mf/Makefile.in
 +++ b/dlls/mf/Makefile.in
-@@ -6,6 +6,7 @@ EXTRADLLFLAGS = -mno-cygwin
+@@ -5,6 +5,7 @@ IMPORTS   = advapi32 mfplat ole32 uuid mfuuid
+ EXTRADLLFLAGS = -mno-cygwin
  
  C_SRCS = \
- 	evr.c \
 +	handler.c \
  	main.c \
  	samplegrabber.c \
@@ -5265,18 +5734,18 @@ index 00000000000..fbebd26e8d0
 +HRESULT handler_cancel_object_creation(struct handler *handler, IUnknown *cancel_cookie);
 \ No newline at end of file
 diff --git a/dlls/mf/main.c b/dlls/mf/main.c
-index 53264258137..ebcaef4cad3 100644
+index 15c9e5e3c9a..fe50dbac5ae 100644
 --- a/dlls/mf/main.c
 +++ b/dlls/mf/main.c
-@@ -27,6 +27,7 @@
- #include "rpcproxy.h"
+@@ -30,6 +30,7 @@
+ #include "mferror.h"
  
  #include "mf_private.h"
 +#include "handler.h"
  
  #include "wine/debug.h"
  #include "wine/heap.h"
-@@ -550,22 +551,12 @@ static const IClassFactoryVtbl class_factory_vtbl =
+@@ -552,22 +553,12 @@ static const IClassFactoryVtbl class_factory_vtbl =
      class_factory_LockServer,
  };
  
@@ -5300,7 +5769,7 @@ index 53264258137..ebcaef4cad3 100644
  };
  
  static struct file_scheme_handler *impl_from_IMFSchemeHandler(IMFSchemeHandler *iface)
-@@ -573,11 +564,6 @@ static struct file_scheme_handler *impl_from_IMFSchemeHandler(IMFSchemeHandler *
+@@ -575,11 +566,6 @@ static struct file_scheme_handler *impl_from_IMFSchemeHandler(IMFSchemeHandler *
      return CONTAINING_RECORD(iface, struct file_scheme_handler, IMFSchemeHandler_iface);
  }
  
@@ -5312,7 +5781,7 @@ index 53264258137..ebcaef4cad3 100644
  static HRESULT WINAPI file_scheme_handler_QueryInterface(IMFSchemeHandler *iface, REFIID riid, void **obj)
  {
      TRACE("%p, %s, %p.\n", iface, debugstr_guid(riid), obj);
-@@ -607,242 +593,45 @@ static ULONG WINAPI file_scheme_handler_AddRef(IMFSchemeHandler *iface)
+@@ -609,242 +595,45 @@ static ULONG WINAPI file_scheme_handler_AddRef(IMFSchemeHandler *iface)
  
  static ULONG WINAPI file_scheme_handler_Release(IMFSchemeHandler *iface)
  {
@@ -5566,7 +6035,7 @@ index 53264258137..ebcaef4cad3 100644
  }
  
  static const IMFSchemeHandlerVtbl file_scheme_handler_vtbl =
-@@ -855,38 +644,6 @@ static const IMFSchemeHandlerVtbl file_scheme_handler_vtbl =
+@@ -857,38 +646,6 @@ static const IMFSchemeHandlerVtbl file_scheme_handler_vtbl =
      file_scheme_handler_CancelObjectCreation,
  };
  
@@ -5605,7 +6074,7 @@ index 53264258137..ebcaef4cad3 100644
  static HRESULT file_scheme_handler_get_resolver(struct file_scheme_handler *handler, IMFSourceResolver **resolver)
  {
      HRESULT hr;
-@@ -908,111 +665,63 @@ static HRESULT file_scheme_handler_get_resolver(struct file_scheme_handler *hand
+@@ -910,111 +667,63 @@ static HRESULT file_scheme_handler_get_resolver(struct file_scheme_handler *hand
      return S_OK;
  }
  
@@ -5765,7 +6234,7 @@ index e578d194f7f..f2e87494459 100644
  	media_source.c \
  	mediatype.c \
 diff --git a/dlls/winegstreamer/media_source.c b/dlls/winegstreamer/media_source.c
-index 5811baf0c09..c30b5e9ef00 100644
+index b88f794d86a..ebb88d2b8a5 100644
 --- a/dlls/winegstreamer/media_source.c
 +++ b/dlls/winegstreamer/media_source.c
 @@ -4,6 +4,7 @@
@@ -5776,7 +6245,7 @@ index 5811baf0c09..c30b5e9ef00 100644
  
  #include <assert.h>
  #include <stdarg.h>
-@@ -1485,22 +1486,12 @@ static HRESULT media_source_constructor(IMFByteStream *bytestream, enum source_t
+@@ -1484,22 +1485,12 @@ static HRESULT media_source_constructor(IMFByteStream *bytestream, enum source_t
  
  /* IMFByteStreamHandler */
  
@@ -5800,7 +6269,7 @@ index 5811baf0c09..c30b5e9ef00 100644
  };
  
  static struct container_stream_handler *impl_from_IMFByteStreamHandler(IMFByteStreamHandler *iface)
-@@ -1508,11 +1499,6 @@ static struct container_stream_handler *impl_from_IMFByteStreamHandler(IMFByteSt
+@@ -1507,11 +1498,6 @@ static struct container_stream_handler *impl_from_IMFByteStreamHandler(IMFByteSt
      return CONTAINING_RECORD(iface, struct container_stream_handler, IMFByteStreamHandler_iface);
  }
  
@@ -5812,7 +6281,7 @@ index 5811baf0c09..c30b5e9ef00 100644
  static HRESULT WINAPI container_stream_handler_QueryInterface(IMFByteStreamHandler *iface, REFIID riid, void **obj)
  {
      TRACE("%p, %s, %p.\n", iface, debugstr_guid(riid), obj);
-@@ -1542,248 +1528,44 @@ static ULONG WINAPI container_stream_handler_AddRef(IMFByteStreamHandler *iface)
+@@ -1541,248 +1527,44 @@ static ULONG WINAPI container_stream_handler_AddRef(IMFByteStreamHandler *iface)
  
  static ULONG WINAPI container_stream_handler_Release(IMFByteStreamHandler *iface)
  {
@@ -6068,7 +6537,7 @@ index 5811baf0c09..c30b5e9ef00 100644
  }
  
  static HRESULT WINAPI container_stream_handler_GetMaxNumberOfBytesRequiredForResolution(IMFByteStreamHandler *iface, QWORD *bytes)
-@@ -1803,47 +1585,16 @@ static const IMFByteStreamHandlerVtbl container_stream_handler_vtbl =
+@@ -1802,47 +1584,16 @@ static const IMFByteStreamHandlerVtbl container_stream_handler_vtbl =
      container_stream_handler_GetMaxNumberOfBytesRequiredForResolution,
  };
  
@@ -6119,7 +6588,7 @@ index 5811baf0c09..c30b5e9ef00 100644
  
          if (FAILED(hr = media_source_constructor(stream, This->type, &new_source)))
              return hr;
-@@ -1862,64 +1613,6 @@ static HRESULT container_stream_handler_create_object(struct container_stream_ha
+@@ -1861,64 +1612,6 @@ static HRESULT container_stream_handler_create_object(struct container_stream_ha
      }
  }
  
@@ -6184,7 +6653,7 @@ index 5811baf0c09..c30b5e9ef00 100644
  HRESULT container_stream_handler_construct(REFIID riid, void **obj, enum source_type type)
  {
      struct container_stream_handler *this;
-@@ -1931,12 +1624,10 @@ HRESULT container_stream_handler_construct(REFIID riid, void **obj, enum source_
+@@ -1930,12 +1623,10 @@ HRESULT container_stream_handler_construct(REFIID riid, void **obj, enum source_
      if (!this)
          return E_OUTOFMEMORY;
  
@@ -6199,12 +6668,12 @@ index 5811baf0c09..c30b5e9ef00 100644
  
      hr = IMFByteStreamHandler_QueryInterface(&this->IMFByteStreamHandler_iface, riid, obj);
 -- 
-2.27.0
+2.26.2
 
-From 530b04f3e60469459136a908ddaab76895044352 Mon Sep 17 00:00:00 2001
+From 3312f8e09c690ab22d5054dc80f63fa358e79ef6 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Tue, 24 Mar 2020 16:15:35 -0500
-Subject: [PATCH 21/49] winegstreamer: Introduce IMFMediaType -> GstCaps
+Subject: [PATCH 23/53] winegstreamer: Introduce IMFMediaType -> GstCaps
  converter.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
@@ -6382,12 +6851,12 @@ index e09309fd4da..ba2a32e6108 100644
     IMFBuffer = GstMemory */
  
 -- 
-2.27.0
+2.26.2
 
-From ca2e1cc3f6bf507c576c3e4c6932cea6c9390fd8 Mon Sep 17 00:00:00 2001
+From a4b2715f605a05aa3d0be8035c887a72ef8af6fe Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Tue, 24 Mar 2020 16:18:40 -0500
-Subject: [PATCH 22/49] winegstreamer: Translate H.264 attributes to caps.
+Subject: [PATCH 24/53] winegstreamer: Translate H.264 attributes to caps.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
 ---
@@ -6454,12 +6923,12 @@ index ba2a32e6108..26ad75584d6 100644
              FIXME("Unrecognized subtype %s\n", debugstr_guid(&subtype));
              return NULL;
 -- 
-2.27.0
+2.26.2
 
-From ffe47b5a98a213610ca48371ec6dcc57532de358 Mon Sep 17 00:00:00 2001
+From 31d68e31e798f546936b69b71121a69e8ddd72d3 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Tue, 24 Mar 2020 16:20:17 -0500
-Subject: [PATCH 23/49] winegstreamer: Translate WMV attributes to caps.
+Subject: [PATCH 25/53] winegstreamer: Translate WMV attributes to caps.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
 ---
@@ -6509,12 +6978,12 @@ index 26ad75584d6..f5b44f9214e 100644
              FIXME("Unrecognized subtype %s\n", debugstr_guid(&subtype));
              return NULL;
 -- 
-2.27.0
+2.26.2
 
-From 5454c9c2b724218127144686afa5030f7c4e40d3 Mon Sep 17 00:00:00 2001
+From 0e94b2f9699550a4f3b777a7727ec7360e14de8e Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Tue, 21 Apr 2020 10:31:02 -0500
-Subject: [PATCH 24/49] winegstreamer: Translate AAC attributes to caps.
+Subject: [PATCH 26/53] winegstreamer: Translate AAC attributes to caps.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
 ---
@@ -6599,12 +7068,12 @@ index f5b44f9214e..7e96e6af203 100644
          {
              FIXME("Unrecognized subtype %s\n", debugstr_guid(&subtype));
 -- 
-2.27.0
+2.26.2
 
-From 3fa4d4d0823f0c8e859110fffc5afd8cd70a9a60 Mon Sep 17 00:00:00 2001
+From 1dd39a8e93f696208afd601daa4ab25e5dd41818 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Mon, 11 May 2020 16:03:09 -0500
-Subject: [PATCH 25/49] winegstreamer: Translate MPEG-4 Section-2 attributes to
+Subject: [PATCH 27/53] winegstreamer: Translate MPEG-4 Section-2 attributes to
  caps.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
@@ -6631,12 +7100,12 @@ index 7e96e6af203..c7d6e4806a2 100644
              FIXME("Unrecognized subtype %s\n", debugstr_guid(&subtype));
              return NULL;
 -- 
-2.27.0
+2.26.2
 
-From d82eca55cde7b9229b898db00b4842ac40dcfae1 Mon Sep 17 00:00:00 2001
+From 7cdabee428d1ea455652ef652a95d143ddef5092 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Tue, 12 May 2020 17:05:59 -0500
-Subject: [PATCH 26/49] winegstreamer: Translate WMA attributes to caps.
+Subject: [PATCH 28/53] winegstreamer: Translate WMA attributes to caps.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
 ---
@@ -6670,12 +7139,12 @@ index c7d6e4806a2..86f0f796300 100644
          {
              FIXME("Unrecognized subtype %s\n", debugstr_guid(&subtype));
 -- 
-2.27.0
+2.26.2
 
-From d9298d6ecb975389b39cd70d25a514aad73225a4 Mon Sep 17 00:00:00 2001
+From 0d0bc8c9dd0e87c3075221fac61c56e3f2f3eaca Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Wed, 25 Mar 2020 10:43:27 -0500
-Subject: [PATCH 27/49] Introduce IMFSample -> GstBuffer converter.
+Subject: [PATCH 29/53] Introduce IMFSample -> GstBuffer converter.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
 ---
@@ -6780,12 +7249,12 @@ index 86f0f796300..6499c39a8f9 100644
  }
 \ No newline at end of file
 -- 
-2.27.0
+2.26.2
 
-From 3601cea793bb7223c9bd6b56f8d945d167d7cd8c Mon Sep 17 00:00:00 2001
+From e040e1cd36a7117e4710b99f0d1c2cb7736bc878 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Mon, 16 Mar 2020 12:09:39 -0500
-Subject: [PATCH 28/49] winegstreamer: Implement decoder MFT on gstreamer.
+Subject: [PATCH 30/53] winegstreamer: Implement decoder MFT on gstreamer.
 
 ---
  dlls/winegstreamer/Makefile.in               |    1 +
@@ -8314,7 +8783,7 @@ diff --git a/dlls/winegstreamer/mfplat.c b/dlls/winegstreamer/mfplat.c
 index 6499c39a8f9..aaef966a5bc 100644
 --- a/dlls/winegstreamer/mfplat.c
 +++ b/dlls/winegstreamer/mfplat.c
-@@ -404,6 +404,16 @@ failed:
+@@ -404,6 +404,16 @@ static HRESULT video_processor_create(REFIID riid, void **ret)
      return hr;
  }
  
@@ -8481,11 +8950,11 @@ index 997a28b052f..ee8090cf4a7 100644
 +]
 +coclass CMSAACDecMFT { }
 diff --git a/include/mfidl.idl b/include/mfidl.idl
-index fc13dfba7a1..f7092dfa6c4 100644
+index c61ccb788ce..8e198594c57 100644
 --- a/include/mfidl.idl
 +++ b/include/mfidl.idl
-@@ -1241,4 +1241,6 @@ cpp_quote("EXTERN_GUID(MF_ACTIVATE_CUSTOM_VIDEO_PRESENTER_ACTIVATE, 0xba491365,
- cpp_quote("EXTERN_GUID(MF_ACTIVATE_CUSTOM_VIDEO_PRESENTER_FLAGS, 0xba491366, 0xbe50, 0x451e, 0x95, 0xab, 0x6d, 0x4a, 0xcc, 0xc7, 0xda, 0xd8);")
+@@ -1128,4 +1128,6 @@ cpp_quote("EXTERN_GUID(MF_AUDIO_RENDERER_ATTRIBUTE_ENDPOINT_ROLE, 0x6ba644ff, 0x
+ cpp_quote("EXTERN_GUID(MF_AUDIO_RENDERER_ATTRIBUTE_STREAM_CATEGORY, 0xa9770471, 0x92ec, 0x4df4, 0x94, 0xfe, 0x81, 0xc3, 0x6f, 0x0c, 0x3a, 0x7a);")
  
  cpp_quote("EXTERN_GUID(CLSID_VideoProcessorMFT, 0x88753b26, 0x5b24, 0x49bd, 0xb2, 0xe7, 0xc, 0x44, 0x5c, 0x78, 0xc9, 0x82);")
 -cpp_quote("EXTERN_GUID(CLSID_MPEG4ByteStreamHandler, 0x271c3902, 0x6095, 0x4c45, 0xa2, 0x2f, 0x20, 0x09, 0x18, 0x16, 0xee, 0x9e);")
@@ -8494,12 +8963,12 @@ index fc13dfba7a1..f7092dfa6c4 100644
 +cpp_quote("EXTERN_GUID(CLSID_CMSH264DecoderMFT, 0x62ce7e72, 0x4c71, 0x4d20, 0xb1, 0x5d, 0x45, 0x28, 0x31, 0xa8, 0x7d, 0x9d);")
 +cpp_quote("EXTERN_GUID(CLSID_CMSAACDecMFT, 0x32d186a7, 0x218f, 0x4c75, 0x88, 0x76, 0xdd, 0x77, 0x27, 0x3a, 0x89, 0x99);")
 -- 
-2.27.0
+2.26.2
 
-From e0b29b1a1d9ffababa52cd53c654c055c938771f Mon Sep 17 00:00:00 2001
+From c8823dd1b27386d6789e819ffa47ce7b07592ee8 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Mon, 23 Mar 2020 11:55:41 -0500
-Subject: [PATCH 29/49] mfreadwrite: Select all streams when creating a source
+Subject: [PATCH 31/53] mfreadwrite: Select all streams when creating a source
  reader.
 
 ---
@@ -8507,10 +8976,10 @@ Subject: [PATCH 29/49] mfreadwrite: Select all streams when creating a source
  1 file changed, 4 insertions(+)
 
 diff --git a/dlls/mfreadwrite/reader.c b/dlls/mfreadwrite/reader.c
-index 96a82b798ab..3b1dcbb9636 100644
+index eaf52ce31e3..a7291ff1ae4 100644
 --- a/dlls/mfreadwrite/reader.c
 +++ b/dlls/mfreadwrite/reader.c
-@@ -2120,6 +2120,10 @@ static HRESULT create_source_reader_from_source(IMFMediaSource *source, IMFAttri
+@@ -2094,6 +2094,10 @@ static HRESULT create_source_reader_from_source(IMFMediaSource *source, IMFAttri
              break;
  
          object->streams[i].index = i;
@@ -8522,12 +8991,12 @@ index 96a82b798ab..3b1dcbb9636 100644
  
      if (FAILED(hr))
 -- 
-2.27.0
+2.26.2
 
-From 749a12991e48659f9f030864b4d8c4addb4410a4 Mon Sep 17 00:00:00 2001
+From 504618554e26b3d6c95cd8fd6586cd75ffd05d4f Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Mon, 16 Mar 2020 15:27:27 -0500
-Subject: [PATCH 30/49] Miscellaneous
+Subject: [PATCH 32/53] Miscellaneous
 
 ---
  dlls/mfreadwrite/reader.c         |  12 +++-
@@ -8536,10 +9005,10 @@ Subject: [PATCH 30/49] Miscellaneous
  3 files changed, 133 insertions(+), 3 deletions(-)
 
 diff --git a/dlls/mfreadwrite/reader.c b/dlls/mfreadwrite/reader.c
-index 3b1dcbb9636..f8c03e62d35 100644
+index a7291ff1ae4..25b0050256a 100644
 --- a/dlls/mfreadwrite/reader.c
 +++ b/dlls/mfreadwrite/reader.c
-@@ -1596,6 +1596,7 @@ static HRESULT source_reader_create_decoder_for_stream(struct source_reader *rea
+@@ -1570,6 +1570,7 @@ static HRESULT source_reader_create_decoder_for_stream(struct source_reader *rea
  {
      MFT_REGISTER_TYPE_INFO in_type, out_type;
      CLSID *clsids, mft_clsid, category;
@@ -8547,7 +9016,7 @@ index 3b1dcbb9636..f8c03e62d35 100644
      unsigned int i = 0, count;
      IMFMediaType *input_type;
      HRESULT hr;
-@@ -1642,12 +1643,21 @@ static HRESULT source_reader_create_decoder_for_stream(struct source_reader *rea
+@@ -1616,12 +1617,21 @@ static HRESULT source_reader_create_decoder_for_stream(struct source_reader *rea
                  }
  
              }
@@ -8598,7 +9067,7 @@ index e392f4526ff..598cd85c1e2 100644
      pthread_mutex_lock(&cbdata->lock);
      cbdata->finished = 1;
 diff --git a/dlls/winegstreamer/media_source.c b/dlls/winegstreamer/media_source.c
-index c30b5e9ef00..308b98c5e6d 100644
+index ebb88d2b8a5..8e204e983cb 100644
 --- a/dlls/winegstreamer/media_source.c
 +++ b/dlls/winegstreamer/media_source.c
 @@ -84,6 +84,8 @@ struct source_async_command
@@ -8627,7 +9096,7 @@ index c30b5e9ef00..308b98c5e6d 100644
  static inline struct media_source *impl_from_async_commands_callback_IMFAsyncCallback(IMFAsyncCallback *iface)
  {
      return CONTAINING_RECORD(iface, struct media_source, async_commands_callback);
-@@ -1072,6 +1084,10 @@ static HRESULT WINAPI media_source_QueryInterface(IMFMediaSource *iface, REFIID
+@@ -1071,6 +1083,10 @@ static HRESULT WINAPI media_source_QueryInterface(IMFMediaSource *iface, REFIID
      {
          *out = &source->IMFMediaSource_iface;
      }
@@ -8638,7 +9107,7 @@ index c30b5e9ef00..308b98c5e6d 100644
      else
      {
          FIXME("(%s, %p)\n", debugstr_guid(riid), out);
-@@ -1166,7 +1182,7 @@ static HRESULT WINAPI media_source_GetCharacteristics(IMFMediaSource *iface, DWO
+@@ -1165,7 +1181,7 @@ static HRESULT WINAPI media_source_GetCharacteristics(IMFMediaSource *iface, DWO
      if (source->state == SOURCE_SHUTDOWN)
          return MF_E_SHUTDOWN;
  
@@ -8647,7 +9116,7 @@ index c30b5e9ef00..308b98c5e6d 100644
  
      return S_OK;
  }
-@@ -1306,6 +1322,99 @@ static const IMFMediaSourceVtbl IMFMediaSource_vtbl =
+@@ -1305,6 +1321,99 @@ static const IMFMediaSourceVtbl IMFMediaSource_vtbl =
      media_source_Shutdown,
  };
  
@@ -8747,7 +9216,7 @@ index c30b5e9ef00..308b98c5e6d 100644
  static HRESULT media_source_constructor(IMFByteStream *bytestream, enum source_type type, struct media_source **out_media_source)
  {
      GstStaticPadTemplate src_template = GST_STATIC_PAD_TEMPLATE(
-@@ -1325,6 +1434,8 @@ static HRESULT media_source_constructor(IMFByteStream *bytestream, enum source_t
+@@ -1324,6 +1433,8 @@ static HRESULT media_source_constructor(IMFByteStream *bytestream, enum source_t
          return E_OUTOFMEMORY;
  
      object->IMFMediaSource_iface.lpVtbl = &IMFMediaSource_vtbl;
@@ -8756,7 +9225,7 @@ index c30b5e9ef00..308b98c5e6d 100644
      object->async_commands_callback.lpVtbl = &source_async_commands_callback_vtbl;
      object->ref = 1;
      object->type = type;
-@@ -1424,7 +1535,6 @@ static HRESULT media_source_constructor(IMFByteStream *bytestream, enum source_t
+@@ -1423,7 +1534,6 @@ static HRESULT media_source_constructor(IMFByteStream *bytestream, enum source_t
      heap_free(descriptors);
      descriptors = NULL;
  
@@ -8764,7 +9233,7 @@ index c30b5e9ef00..308b98c5e6d 100644
      {
          IMFAttributes *byte_stream_attributes;
          gint64 total_pres_time = 0;
-@@ -1441,6 +1551,7 @@ static HRESULT media_source_constructor(IMFByteStream *bytestream, enum source_t
+@@ -1440,6 +1550,7 @@ static HRESULT media_source_constructor(IMFByteStream *bytestream, enum source_t
              IMFAttributes_Release(byte_stream_attributes);
          }
  
@@ -8773,12 +9242,12 @@ index c30b5e9ef00..308b98c5e6d 100644
          {
              GstQuery *query = gst_query_new_duration(GST_FORMAT_TIME);
 -- 
-2.27.0
+2.26.2
 
-From b190b2cba3aca24a14894d1e6d8d7e179536388d Mon Sep 17 00:00:00 2001
+From e3ab01bb68ed94c73ecb7d95131e6264deb972c7 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Wed, 25 Mar 2020 19:07:11 -0500
-Subject: [PATCH 31/49] WMV
+Subject: [PATCH 33/53] WMV
 
 ---
  dlls/winegstreamer/gst_private.h             |  2 +
@@ -8809,7 +9278,7 @@ index 6e25b895ff4..0b61bc9e3ce 100644
  HRESULT container_stream_handler_construct(REFIID riid, void **obj, enum source_type);
  
 diff --git a/dlls/winegstreamer/media_source.c b/dlls/winegstreamer/media_source.c
-index 308b98c5e6d..c66e211fafa 100644
+index 8e204e983cb..19b5b4346b2 100644
 --- a/dlls/winegstreamer/media_source.c
 +++ b/dlls/winegstreamer/media_source.c
 @@ -30,6 +30,9 @@ static struct source_desc
@@ -8987,10 +9456,10 @@ index ee8090cf4a7..376e08c418b 100644
 +coclass CLSID_CWMVDecMediaObject {}
 \ No newline at end of file
 diff --git a/include/mfidl.idl b/include/mfidl.idl
-index f7092dfa6c4..ce3707ba500 100644
+index 8e198594c57..3f994854425 100644
 --- a/include/mfidl.idl
 +++ b/include/mfidl.idl
-@@ -1244,3 +1244,5 @@ cpp_quote("EXTERN_GUID(CLSID_VideoProcessorMFT, 0x88753b26, 0x5b24, 0x49bd, 0xb2
+@@ -1131,3 +1131,5 @@ cpp_quote("EXTERN_GUID(CLSID_VideoProcessorMFT, 0x88753b26, 0x5b24, 0x49bd, 0xb2
  cpp_quote("EXTERN_GUID(CLSID_MPEG4ByteStreamHandler, 0x271c3902, 0x6095, 0x4c45, 0xa2, 0x2f, 0x20, 0x09, 0x18, 0x16, 0xee, 0x9e);")
  cpp_quote("EXTERN_GUID(CLSID_CMSH264DecoderMFT, 0x62ce7e72, 0x4c71, 0x4d20, 0xb1, 0x5d, 0x45, 0x28, 0x31, 0xa8, 0x7d, 0x9d);")
  cpp_quote("EXTERN_GUID(CLSID_CMSAACDecMFT, 0x32d186a7, 0x218f, 0x4c75, 0x88, 0x76, 0xdd, 0x77, 0x27, 0x3a, 0x89, 0x99);")
@@ -8998,12 +9467,12 @@ index f7092dfa6c4..ce3707ba500 100644
 +cpp_quote("EXTERN_GUID(CLSID_CWMVDecMediaObject, 0x82d353df, 0x90bd, 0x4382, 0x8b, 0xc2, 0x3f, 0x61, 0x92, 0xb7, 0x6e, 0x34);")
 \ No newline at end of file
 -- 
-2.27.0
+2.26.2
 
-From 1b0828228caf1e8a878fab9b3eb75d0162796a66 Mon Sep 17 00:00:00 2001
+From e0bfe4e7e9c052d02bd2195e0073077b05609267 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Thu, 2 Apr 2020 15:42:18 -0500
-Subject: [PATCH 32/49] mf: Ask for more samples from upstream node when upon
+Subject: [PATCH 34/53] mf: Ask for more samples from upstream node when upon
  MF_E_TRANSFORM_NEED_MORE_INPUT
 
 ---
@@ -9011,10 +9480,10 @@ Subject: [PATCH 32/49] mf: Ask for more samples from upstream node when upon
  1 file changed, 10 insertions(+), 1 deletion(-)
 
 diff --git a/dlls/mf/session.c b/dlls/mf/session.c
-index e2a6b868caf..748df396d79 100644
+index ba30733fe5c..ce3d7e3018d 100644
 --- a/dlls/mf/session.c
 +++ b/dlls/mf/session.c
-@@ -2451,6 +2451,8 @@ static HRESULT transform_node_pull_samples(struct topo_node *node)
+@@ -2453,6 +2453,8 @@ static HRESULT transform_node_pull_samples(struct topo_node *node)
      return hr;
  }
  
@@ -9023,7 +9492,7 @@ index e2a6b868caf..748df396d79 100644
  static void session_deliver_sample_to_node(struct media_session *session, IMFTopologyNode *node, unsigned int input,
          IMFSample *sample)
  {
-@@ -2523,7 +2525,14 @@ static void session_deliver_sample_to_node(struct media_session *session, IMFTop
+@@ -2525,7 +2527,14 @@ static void session_deliver_sample_to_node(struct media_session *session, IMFTop
                      WARN("Drain command failed for transform, hr %#x.\n", hr);
              }
  
@@ -9040,12 +9509,421 @@ index e2a6b868caf..748df396d79 100644
              /* Remaining unprocessed input has been discarded, now queue markers for every output. */
              if (drain)
 -- 
-2.27.0
+2.26.2
 
-From 285d40aee39e58fb5cdf2bf86cad7c1d554aa2e1 Mon Sep 17 00:00:00 2001
+From cf61f3a65ee793cafe2bebef5b4b1e4bb5eb120c Mon Sep 17 00:00:00 2001
+From: Derek Lesho <dlesho@codeweavers.com>
+Date: Thu, 2 Apr 2020 15:43:52 -0500
+Subject: [PATCH 35/53] mf: Miscelaneous fixes to topology resolution.
+
+---
+ dlls/mf/topology.c | 16 +++++++++-------
+ 1 file changed, 9 insertions(+), 7 deletions(-)
+
+diff --git a/dlls/mf/topology.c b/dlls/mf/topology.c
+index 7a4c95bea07..ce706a9ff7f 100644
+--- a/dlls/mf/topology.c
++++ b/dlls/mf/topology.c
+@@ -2006,7 +2006,7 @@ static HRESULT topology_loader_resolve_branch(IMFTopologyNode *src, IMFMediaType
+                         IMFTopologyNode_ConnectOutput(src, 0, node_dec, 0);
+                         IMFTopologyNode_ConnectOutput(node_dec, 0, sink, 0);
+ 
+-                        IMFActivate_ShutdownObject(activates_convs[i]);
++                        IMFActivate_ShutdownObject(activates_decs[i]);
+                         return S_OK;
+                     }
+ 
+@@ -2145,12 +2145,14 @@ static HRESULT topology_loader_resolve_partial_topology(struct topology_node *sr
+     }
+     else
+     {
+-        if (SUCCEEDED(topology_loader_resolve_branch(clone_src, src_mediatypes[0], clone_sink, MF_CONNECT_DIRECT)))
+-        {
+-            topology_loader_add_branch(*full_topology, clone_src, clone_sink);
+-            heap_free(src_mediatypes);
+-            return S_OK;
+-        }
++        for (method = MF_CONNECT_DIRECT; method < MF_CONNECT_RESOLVE_INDEPENDENT_OUTPUTTYPES; method++)
++            if (SUCCEEDED(topology_loader_resolve_branch(clone_src, src_mediatypes[0], clone_sink, method)))
++            {
++                TRACE("Successfully connected nodes with method %u\n", method);
++                topology_loader_add_branch(*full_topology, clone_src, clone_sink);
++                heap_free(src_mediatypes);
++                return S_OK;
++            }
+     }
+ 
+     heap_free(src_mediatypes);
+-- 
+2.26.2
+
+From 45ac508994651681893962f0d3038fa26601740b Mon Sep 17 00:00:00 2001
+From: Derek Lesho <dlesho@codeweavers.com>
+Date: Thu, 2 Apr 2020 15:45:52 -0500
+Subject: [PATCH 36/53] Rewrite branch resolver.
+
+and a HACK: Set output type of found decoder, this should probably happen somewhere else.
+---
+ dlls/mf/topology.c | 279 +++++++++++++++++++++++++++------------------
+ 1 file changed, 171 insertions(+), 108 deletions(-)
+
+diff --git a/dlls/mf/topology.c b/dlls/mf/topology.c
+index ce706a9ff7f..337bf38081b 100644
+--- a/dlls/mf/topology.c
++++ b/dlls/mf/topology.c
+@@ -1928,135 +1928,194 @@ static void topology_loader_add_branch(struct topology *topology, IMFTopologyNod
+     }
+ }
+ 
++struct available_output_type
++{
++    IMFMediaType *type;
++    IMFTransform *transform;
++};
++
++static HRESULT topology_loader_enumerate_output_types(GUID *category, IMFMediaType *input_type, HRESULT (*new_type)(struct available_output_type *, void *), void *context)
++{
++    MFT_REGISTER_TYPE_INFO mft_typeinfo;
++    GUID major_type, subtype;
++    IMFActivate **activates;
++    UINT32 num_activates;
++    HRESULT hr;
++
++    if (FAILED(hr = IMFMediaType_GetMajorType(input_type, &major_type)))
++        return hr;
++
++    if (FAILED(hr = IMFMediaType_GetGUID(input_type, &MF_MT_SUBTYPE, &subtype)))
++        return hr;
++
++    mft_typeinfo.guidMajorType = major_type;
++    mft_typeinfo.guidSubtype = subtype;
++
++    if (FAILED(hr = MFTEnumEx(*category, MFT_ENUM_FLAG_ALL, &mft_typeinfo, NULL, &activates, &num_activates)))
++        return hr;
++
++    hr = E_FAIL;
++
++    for (unsigned int i = 0; i < num_activates; i++)
++    {
++        IMFTransform *mft;
++
++        IMFActivate_ActivateObject(activates[i], &IID_IMFTransform, (void**) &mft);
++
++        if (SUCCEEDED(hr = IMFTransform_SetInputType(mft, 0, input_type, 0)))
++        {
++            struct available_output_type avail = {.transform = mft};
++            unsigned int output_count = 0;
++
++            while (SUCCEEDED(IMFTransform_GetOutputAvailableType(mft, 0, output_count++, &avail.type)))
++            {
++                if (SUCCEEDED(hr = new_type(&avail, context)))
++                {
++                    IMFActivate_ShutdownObject(activates[i]);
++                    return hr;
++                }
++            }
++        }
++
++        IMFActivate_ShutdownObject(activates[i]);
++    }
++
++    return hr;
++}
++
++struct connect_to_sink_context
++{
++    IMFTopologyNode *src, *sink;
++    IMFMediaTypeHandler *sink_mth;
++};
++
++HRESULT connect_to_sink(struct available_output_type *type, void *context)
++{
++    IMFTopologyNode *node;
++    struct connect_to_sink_context *ctx = context;
++
++    if (SUCCEEDED(IMFMediaTypeHandler_SetCurrentMediaType(ctx->sink_mth, type->type)))
++    {
++        MFCreateTopologyNode(MF_TOPOLOGY_TRANSFORM_NODE, &node);
++        IMFTopologyNode_SetObject(node, (IUnknown *) type->transform);
++        IMFTopologyNode_ConnectOutput(ctx->src, 0, node, 0);
++        IMFTopologyNode_ConnectOutput(node, 0, ctx->sink, 0);
++
++        IMFTransform_SetOutputType(type->transform, 0, type->type, 0);
++
++        return S_OK;
++    }
++    return E_FAIL;
++}
++
++struct connect_to_converter_context
++{
++    struct connect_to_sink_context sink_ctx;
++    GUID *converter_category;
++};
++
++HRESULT connect_to_converter(struct available_output_type *type, void *context)
++{
++    struct connect_to_converter_context *ctx = context;
++    struct connect_to_sink_context sink_ctx;
++    IMFTopologyNode *node;
++
++    MFCreateTopologyNode(MF_TOPOLOGY_TRANSFORM_NODE, &node);
++    IMFTopologyNode_SetObject(node, (IUnknown *) type->transform);
++
++    sink_ctx = ctx->sink_ctx;
++    sink_ctx.src = node;
++    if (SUCCEEDED(topology_loader_enumerate_output_types(ctx->converter_category, type->type, connect_to_sink, &sink_ctx)))
++    {
++        IMFTopologyNode_ConnectOutput(ctx->sink_ctx.src, 0, node, 0);
++
++        IMFTransform_SetOutputType(type->transform, 0, type->type, 0);
++
++        return S_OK;
++    }
++    IMFTopologyNode_Release(node);
++    return E_FAIL;
++}
++
+ static HRESULT topology_loader_resolve_branch(IMFTopologyNode *src, IMFMediaType *mediatype, IMFTopologyNode *sink, MF_CONNECT_METHOD method)
+ {
++    struct connect_to_converter_context convert_ctx;
++    struct connect_to_sink_context sink_ctx;
++    GUID major_type, decode_cat, convert_cat;
+     IMFStreamSink *streamsink;
+     IMFMediaTypeHandler *mth;
+     HRESULT hr;
+ 
++    TRACE("method %u\n", method);
++
+     IMFTopologyNode_GetObject(sink, (IUnknown **)&streamsink);
+     IMFStreamSink_GetMediaTypeHandler(streamsink, &mth);
+-    if (method == MF_CONNECT_DIRECT)
++
++    if (SUCCEEDED(hr = IMFMediaTypeHandler_SetCurrentMediaType(mth, mediatype)))
+     {
+-        if (FAILED(hr = IMFMediaTypeHandler_SetCurrentMediaType(mth, mediatype)))
+-            return hr;
+-        hr = IMFTopologyNode_ConnectOutput(src, 0, sink, 0);
++        return IMFTopologyNode_ConnectOutput(src, 0, sink, 0);
++    }
++
++    if (FAILED(hr = IMFMediaType_GetMajorType(mediatype, &major_type)))
+         return hr;
++
++    if (IsEqualGUID(&major_type, &MFMediaType_Audio))
++    {
++        decode_cat = MFT_CATEGORY_AUDIO_DECODER;
++        convert_cat = MFT_CATEGORY_AUDIO_EFFECT;
+     }
+-    else
++    else if (IsEqualGUID(&major_type, &MFMediaType_Video))
+     {
+-        IMFTopologyNode *node_dec, *node_conv;
+-        GUID major_type, subtype, mft_category;
+-        MFT_REGISTER_TYPE_INFO mft_typeinfo;
+-        UINT32 flags = MFT_ENUM_FLAG_ALL;
+-        IMFActivate **activates_decs;
+-        UINT32 num_activates_decs;
+-        int i, j;
+-
+-        IMFMediaType_GetGUID(mediatype, &MF_MT_MAJOR_TYPE, &major_type);
+-        if (IsEqualGUID(&major_type, &MFMediaType_Audio))
+-            mft_category = MFT_CATEGORY_AUDIO_DECODER;
+-        else if (IsEqualGUID(&major_type, &MFMediaType_Video))
+-            mft_category = MFT_CATEGORY_VIDEO_DECODER;
+-        else
+-            return MF_E_INVALIDMEDIATYPE;
+-
+-        IMFMediaType_GetGUID(mediatype, &MF_MT_SUBTYPE, &subtype);
+-        mft_typeinfo.guidMajorType = major_type;
+-        mft_typeinfo.guidSubtype = subtype;
+-        MFTEnumEx(mft_category, flags, &mft_typeinfo, NULL, &activates_decs, &num_activates_decs);
+-
+-        /* for getting converters later on */
+-        if (IsEqualGUID(&major_type, &MFMediaType_Audio))
+-            mft_category = MFT_CATEGORY_AUDIO_EFFECT;
+-        else if (IsEqualGUID(&major_type, &MFMediaType_Video))
+-            mft_category = MFT_CATEGORY_VIDEO_EFFECT;
+-
+-        /*
+-         * Iterate over number of decoders.
+-         * Try to set input type on decoder with source's output media type.
+-         * If succeeds, iterate over decoder's output media types.
+-         * Try to set input type on sink with decoder's output media type.
+-         * If fails, iterate over number of converters.
+-         * Try to set input type on converter with decoder's output media type.
+-         * If succeeds, iterate over converters output media types.
+-         * Try to set input type on sink with converter's output media type.
+-         */
+-        for (i = 0; i < num_activates_decs; i++)
+-        {
+-            IMFTransform *decoder;
++        decode_cat = MFT_CATEGORY_VIDEO_DECODER;
++        convert_cat = MFT_CATEGORY_VIDEO_EFFECT;
++    }
++    else
++        return E_FAIL;
+ 
+-            IMFActivate_ActivateObject(activates_decs[i], &IID_IMFTransform, (void **)&decoder);
+-            if (SUCCEEDED(hr = IMFTransform_SetInputType(decoder, 0, mediatype, 0)))
+-            {
+-                UINT32 num_activates_convs;
+-                IMFActivate **activates_convs;
+-                IMFMediaType *decoder_mtype;
++    sink_ctx.src = src;
++    sink_ctx.sink = sink;
++    sink_ctx.sink_mth = mth;
+ 
+-                int count = 0;
+-                while (SUCCEEDED(IMFTransform_GetOutputAvailableType(decoder, 0, count++, &decoder_mtype)))
+-                {
+-                    IMFTransform *converter;
++    convert_ctx.sink_ctx = sink_ctx;
++    convert_ctx.converter_category = &convert_cat;
+ 
+-                    /* succeeded with source -> decoder -> sink */
+-                    if (SUCCEEDED(IMFMediaTypeHandler_SetCurrentMediaType(mth, decoder_mtype)))
+-                    {
+-                        MFCreateTopologyNode(MF_TOPOLOGY_TRANSFORM_NODE, &node_dec);
+-                        IMFTopologyNode_SetObject(node_dec, (IUnknown *)decoder);
+-                        IMFTopologyNode_ConnectOutput(src, 0, node_dec, 0);
+-                        IMFTopologyNode_ConnectOutput(node_dec, 0, sink, 0);
++    hr = E_FAIL;
+ 
+-                        IMFActivate_ShutdownObject(activates_decs[i]);
+-                        return S_OK;
+-                    }
++    if (method & MF_CONNECT_ALLOW_CONVERTER)
++    {
++        if (SUCCEEDED(hr = topology_loader_enumerate_output_types(&convert_cat, mediatype, connect_to_sink, &sink_ctx)))
++            goto done;
++    }
+ 
+-                    IMFMediaType_GetGUID(decoder_mtype, &MF_MT_SUBTYPE, &subtype);
+-                    mft_typeinfo.guidSubtype = subtype;
+-                    MFTEnumEx(mft_category, flags, &mft_typeinfo, NULL, &activates_convs, &num_activates_convs);
+-                    for (j = 0; j < num_activates_convs; j++)
+-                    {
+-                        IMFMediaType *converter_mtype;
+-
+-                        IMFActivate_ActivateObject(activates_convs[j], &IID_IMFTransform, (void **)&converter);
+-                        if (SUCCEEDED(IMFTransform_SetInputType(converter, 0, decoder_mtype, 0)))
+-                        {
+-                            int count = 0;
+-                            while (SUCCEEDED(IMFTransform_GetOutputAvailableType(converter, 0, count++, &converter_mtype)))
+-                            {
+-                                /* succeeded with source -> decoder -> converter -> sink */
+-                                if (SUCCEEDED(IMFMediaTypeHandler_SetCurrentMediaType(mth, converter_mtype)))
+-                                {
+-                                    MFCreateTopologyNode(MF_TOPOLOGY_TRANSFORM_NODE, &node_dec);
+-                                    IMFTopologyNode_SetObject(node_dec, (IUnknown *)decoder);
+-                                    MFCreateTopologyNode(MF_TOPOLOGY_TRANSFORM_NODE, &node_conv);
+-                                    IMFTopologyNode_SetObject(node_conv, (IUnknown *)converter);
+-                                    IMFTopologyNode_ConnectOutput(src, 0, node_dec, 0);
+-                                    IMFTopologyNode_ConnectOutput(node_dec, 0, node_conv, 0);
+-                                    IMFTopologyNode_ConnectOutput(node_conv, 0, sink, 0);
+-
+-                                    IMFActivate_ShutdownObject(activates_convs[j]);
+-                                    IMFActivate_ShutdownObject(activates_decs[i]);
+-                                    return S_OK;
+-                                }
+-                            }
+-                        }
+-                        IMFActivate_ShutdownObject(activates_convs[j]);
+-                    }
+-                }
+-            }
+-            IMFActivate_ShutdownObject(activates_decs[i]);
++    /* 2 = decoder flag */
++    if (method & 2)
++    {
++        if (method & MF_CONNECT_ALLOW_CONVERTER)
++        {
++            if (SUCCEEDED(hr = topology_loader_enumerate_output_types(&decode_cat, mediatype, connect_to_converter, &convert_ctx)))
++                goto done;
++        }
++        else
++        {
++            if (SUCCEEDED(hr = topology_loader_enumerate_output_types(&decode_cat, mediatype, connect_to_sink, &sink_ctx)))
++                goto done;
+         }
+     }
+-    return E_FAIL;
++
++    done:
++    IMFMediaTypeHandler_Release(mth);
++    IMFStreamSink_Release(streamsink);
++    return hr;
+ }
+ 
+ static HRESULT topology_loader_resolve_partial_topology(struct topology_node *src, struct topology_node *sink, struct topology *topology, struct topology **full_topology)
+ {
++    UINT32 method, src_method, sink_method, enum_src_types, streamid;
+     IMFMediaTypeHandler *mth_src, *mth_sink;
+     IMFTopologyNode *clone_src, *clone_sink;
+-    UINT32 method, enum_src_types, streamid;
+     IMFMediaType **src_mediatypes;
+     IMFStreamDescriptor *desc;
++    IMFAttributes *attrs_sink;
+     IMFAttributes *attrs_src;
+     IMFStreamSink *strm_sink;
+     IMFMediaType *mtype_src;
+@@ -2064,6 +2123,7 @@ static HRESULT topology_loader_resolve_partial_topology(struct topology_node *sr
+     HRESULT hr;
+     int i;
+ 
++    attrs_sink = sink->attributes;
+     attrs_src = src->attributes;
+     if (FAILED(hr = IMFAttributes_GetUnknown(attrs_src, &MF_TOPONODE_STREAM_DESCRIPTOR, &IID_IMFStreamDescriptor, (void **)&desc)))
+         return hr;
+@@ -2117,12 +2177,15 @@ static HRESULT topology_loader_resolve_partial_topology(struct topology_node *sr
+     if (FAILED(IMFTopologyNode_GetUINT32(clone_sink, &MF_TOPONODE_STREAMID, &streamid)))
+         IMFTopologyNode_SetUINT32(clone_sink, &MF_TOPONODE_STREAMID, 0);
+ 
++    if (FAILED(IMFAttributes_GetUINT32(attrs_sink, &MF_TOPONODE_CONNECT_METHOD, &sink_method)))
++        sink_method = MF_CONNECT_ALLOW_DECODER;
++
+     if (enum_src_types)
+     {
+-        hr = IMFAttributes_GetUINT32(attrs_src, &MF_TOPONODE_CONNECT_METHOD, &method);
+-        if (hr == S_OK && method != MF_CONNECT_RESOLVE_INDEPENDENT_OUTPUTTYPES)
++        hr = IMFAttributes_GetUINT32(attrs_src, &MF_TOPONODE_CONNECT_METHOD, &src_method);
++        if (hr == S_OK && src_method != MF_CONNECT_RESOLVE_INDEPENDENT_OUTPUTTYPES)
+         {
+-            for (method = MF_CONNECT_DIRECT; method < MF_CONNECT_RESOLVE_INDEPENDENT_OUTPUTTYPES; method++)
++            for (method = MF_CONNECT_DIRECT; method <= sink_method; method++)
+                 for (i = 0; i < num_media_types; i++)
+                     if (SUCCEEDED(topology_loader_resolve_branch(clone_src, src_mediatypes[i], clone_sink, method)))
+                     {
+@@ -2134,7 +2197,7 @@ static HRESULT topology_loader_resolve_partial_topology(struct topology_node *sr
+         else
+         {
+             for (i = 0; i < num_media_types; i++)
+-                for (method = MF_CONNECT_DIRECT; method < MF_CONNECT_RESOLVE_INDEPENDENT_OUTPUTTYPES; method++)
++                for (method = MF_CONNECT_DIRECT; method <= sink_method; method++)
+                     if (SUCCEEDED(topology_loader_resolve_branch(clone_src, src_mediatypes[i], clone_sink, method)))
+                     {
+                         topology_loader_add_branch(*full_topology, clone_src, clone_sink);
+@@ -2145,10 +2208,10 @@ static HRESULT topology_loader_resolve_partial_topology(struct topology_node *sr
+     }
+     else
+     {
+-        for (method = MF_CONNECT_DIRECT; method < MF_CONNECT_RESOLVE_INDEPENDENT_OUTPUTTYPES; method++)
++        for (method = MF_CONNECT_DIRECT; method <= sink_method; method++)
+             if (SUCCEEDED(topology_loader_resolve_branch(clone_src, src_mediatypes[0], clone_sink, method)))
+             {
+-                TRACE("Successfully connected nodes with method %u\n", method);
++                TRACE("Successfully connected nodes with method %u\n", src_method);
+                 topology_loader_add_branch(*full_topology, clone_src, clone_sink);
+                 heap_free(src_mediatypes);
+                 return S_OK;
+-- 
+2.26.2
+
+From eb9a7ed757654cf84912215dd4787cc0da3b0f0e Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Thu, 2 Apr 2020 15:46:25 -0500
-Subject: [PATCH 33/49] winegstreamer: Implement
+Subject: [PATCH 37/53] winegstreamer:  Implement
  IMFMedisStream::GetMediaSource.
 
 ---
@@ -9053,10 +9931,10 @@ Subject: [PATCH 33/49] winegstreamer: Implement
  1 file changed, 5 insertions(+), 2 deletions(-)
 
 diff --git a/dlls/winegstreamer/media_source.c b/dlls/winegstreamer/media_source.c
-index c66e211fafa..11b28176fdf 100644
+index 19b5b4346b2..5c01346987b 100644
 --- a/dlls/winegstreamer/media_source.c
 +++ b/dlls/winegstreamer/media_source.c
-@@ -842,12 +842,15 @@ static HRESULT WINAPI media_stream_GetMediaSource(IMFMediaStream *iface, IMFMedi
+@@ -841,12 +841,15 @@ static HRESULT WINAPI media_stream_GetMediaSource(IMFMediaStream *iface, IMFMedi
  {
      struct media_stream *stream = impl_from_IMFMediaStream(iface);
  
@@ -9075,12 +9953,12 @@ index c66e211fafa..11b28176fdf 100644
  
  static HRESULT WINAPI media_stream_GetStreamDescriptor(IMFMediaStream* iface, IMFStreamDescriptor **descriptor)
 -- 
-2.27.0
+2.26.2
 
-From 83805a6f4760806ebd1087bd161fb9b26e94a2c6 Mon Sep 17 00:00:00 2001
+From b9a73adf20be5d18645ccab51557559d2714b6e0 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Fri, 3 Apr 2020 11:12:33 -0500
-Subject: [PATCH 34/49] Expose PCM output type on AAC decoder.
+Subject: [PATCH 38/53] Expose PCM output type on AAC decoder.
 
 ---
  dlls/winegstreamer/mf_decode.c | 2 +-
@@ -9100,12 +9978,12 @@ index 21b310a9967..7fe216d67d9 100644
  const GUID *wmv_input_types[] = {&MFVideoFormat_WMV3, &MFVideoFormat_WVC1};
  const GUID *wmv_output_types[] = {&MFVideoFormat_NV12, &MFVideoFormat_YV12, &MFVideoFormat_YUY2, &MFVideoFormat_UYVY, &MFVideoFormat_YVYU, &MFVideoFormat_NV11, &MFVideoFormat_RGB32, &MFVideoFormat_RGB24, &MFVideoFormat_RGB555, &MFVideoFormat_RGB8};
 -- 
-2.27.0
+2.26.2
 
-From bbf8e7a7c1a99ccd8ca09173424349427a453fb2 Mon Sep 17 00:00:00 2001
+From 0bbb2fe11224d5991241d0071c00d8df4cec264c Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Fri, 3 Apr 2020 13:09:30 -0500
-Subject: [PATCH 35/49] Set BPS on AAC.
+Subject: [PATCH 39/53] Set BPS on AAC.
 
 ---
  dlls/winegstreamer/mfplat.c | 1 +
@@ -9124,12 +10002,12 @@ index e1735a5f82f..780008face5 100644
                      codec_data = gst_structure_get_value(info, "codec_data");
                      if (codec_data)
 -- 
-2.27.0
+2.26.2
 
-From 79adf9482318c97effe5da5927af592b8f3759fe Mon Sep 17 00:00:00 2001
+From afcb5a8918eb68a3fbf943a564c7f03f8cb47d65 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Fri, 1 May 2020 11:46:26 -0500
-Subject: [PATCH 36/49] mfplat: Add I420 format information.
+Subject: [PATCH 40/53] mfplat: Add I420 format information.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
 ---
@@ -9137,10 +10015,10 @@ Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
  1 file changed, 1 insertion(+)
 
 diff --git a/dlls/mfplat/mediatype.c b/dlls/mfplat/mediatype.c
-index 5eaa4fdd08d..db789c4f8e0 100644
+index f92577a9cbc..d3c08f52c71 100644
 --- a/dlls/mfplat/mediatype.c
 +++ b/dlls/mfplat/mediatype.c
-@@ -2238,6 +2238,7 @@ static const struct uncompressed_video_format video_formats[] =
+@@ -1790,6 +1790,7 @@ static const struct uncompressed_video_format video_formats[] =
      { &MFVideoFormat_A2R10G10B10,   4, 3, 1, 0 },
      { &MFVideoFormat_RGB8,          1, 3, 1, 0 },
      { &MFVideoFormat_L8,            1, 3, 1, 0 },
@@ -9149,12 +10027,12 @@ index 5eaa4fdd08d..db789c4f8e0 100644
      { &MFVideoFormat_I420,          1, 0, 0, 1 },
      { &MFVideoFormat_IMC1,          2, 3, 0, 1 },
 -- 
-2.27.0
+2.26.2
 
-From 82c5febdcb059d41230c4329bc061a136fe9ac9d Mon Sep 17 00:00:00 2001
+From bdd300f7b7e68d259932c9fd5f1de4099b14853d Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Fri, 1 May 2020 13:20:49 -0500
-Subject: [PATCH 37/49] winegstreamer: Implement Color Converter MFT.
+Subject: [PATCH 41/53] winegstreamer: Implement Color Converter MFT.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
 ---
@@ -9986,12 +10864,12 @@ index 376e08c418b..d933d40cfd3 100644
 +coclass CColorConvertDMO { }
 \ No newline at end of file
 -- 
-2.27.0
+2.26.2
 
-From 49c9cb09b81ca643b2219f9c9884481d7a9a7932 Mon Sep 17 00:00:00 2001
+From cbe77959b16e191247a350fd68a3ff4b88ba5bc9 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Fri, 1 May 2020 22:36:02 -0500
-Subject: [PATCH 38/49] HACK: Set BPS to 16 for output template.
+Subject: [PATCH 42/53] HACK: Set BPS to 16 for output template.
 
 ---
  dlls/winegstreamer/mf_decode.c | 5 +++++
@@ -10014,12 +10892,12 @@ index 7fe216d67d9..c7e1bfb1a97 100644
  
      return S_OK;
 -- 
-2.27.0
+2.26.2
 
-From 3e2ce92b768b7bda171b2f8d0a93ea51d42cc063 Mon Sep 17 00:00:00 2001
+From e05932dd462f9df0e9e61f24a3bbd298d6fa5f7a Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Mon, 4 May 2020 12:40:56 -0500
-Subject: [PATCH 39/49] Set "wait-on-eos" to allow other streams to continue
+Subject: [PATCH 43/53] Set "wait-on-eos" to allow other streams to continue
  while appsink buffers.
 
 ---
@@ -10027,10 +10905,10 @@ Subject: [PATCH 39/49] Set "wait-on-eos" to allow other streams to continue
  1 file changed, 1 insertion(+)
 
 diff --git a/dlls/winegstreamer/media_source.c b/dlls/winegstreamer/media_source.c
-index 11b28176fdf..1ce9b06b8c1 100644
+index 5c01346987b..5a8537970ab 100644
 --- a/dlls/winegstreamer/media_source.c
 +++ b/dlls/winegstreamer/media_source.c
-@@ -1038,6 +1038,7 @@ static HRESULT media_stream_constructor(struct media_source *source, GstPad *pad
+@@ -1037,6 +1037,7 @@ static HRESULT media_stream_constructor(struct media_source *source, GstPad *pad
      g_object_set(object->appsink, "emit-signals", TRUE, NULL);
      g_object_set(object->appsink, "sync", FALSE, NULL);
      g_object_set(object->appsink, "async", FALSE, NULL); /* <- This allows us interact with the bin w/o prerolling */
@@ -10039,12 +10917,12 @@ index 11b28176fdf..1ce9b06b8c1 100644
  
      if (FAILED(hr = media_stream_align_with_mf(object, &stream_type)))
 -- 
-2.27.0
+2.26.2
 
-From 6b126f452eb3c58a4eacb9a0ffe22eab715f3009 Mon Sep 17 00:00:00 2001
+From c8440dd2600dd82f42fc065055ac83e8442f743c Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Tue, 5 May 2020 15:35:16 -0500
-Subject: [PATCH 40/49] Report streams backwards and only select one of each
+Subject: [PATCH 47/53] Report streams backwards and only select one of each
  stream type.
 
 ---
@@ -10052,10 +10930,10 @@ Subject: [PATCH 40/49] Report streams backwards and only select one of each
  1 file changed, 22 insertions(+), 2 deletions(-)
 
 diff --git a/dlls/winegstreamer/media_source.c b/dlls/winegstreamer/media_source.c
-index 1ce9b06b8c1..3052c0393ae 100644
+index 5a8537970ab..f62fb6716be 100644
 --- a/dlls/winegstreamer/media_source.c
 +++ b/dlls/winegstreamer/media_source.c
-@@ -1431,6 +1431,7 @@ static HRESULT media_source_constructor(IMFByteStream *bytestream, enum source_t
+@@ -1430,6 +1430,7 @@ static HRESULT media_source_constructor(IMFByteStream *bytestream, enum source_t
          source_descs[type].bytestream_caps);
  
      struct media_source *object = heap_alloc_zero(sizeof(*object));
@@ -10063,7 +10941,7 @@ index 1ce9b06b8c1..3052c0393ae 100644
      GList *demuxer_list_one, *demuxer_list_two;
      GstElementFactory *demuxer_factory = NULL;
      IMFStreamDescriptor **descriptors = NULL;
-@@ -1528,15 +1529,34 @@ static HRESULT media_source_constructor(IMFByteStream *bytestream, enum source_t
+@@ -1527,15 +1528,34 @@ static HRESULT media_source_constructor(IMFByteStream *bytestream, enum source_t
      descriptors = heap_alloc(object->stream_count * sizeof(IMFStreamDescriptor*));
      for (unsigned int i = 0; i < object->stream_count; i++)
      {
@@ -10101,12 +10979,12 @@ index 1ce9b06b8c1..3052c0393ae 100644
      }
      heap_free(descriptors);
 -- 
-2.27.0
+2.26.2
 
-From ddab1cfaf1bc0fde0508e96241ed4c1c07acc391 Mon Sep 17 00:00:00 2001
+From b2ea86ab68d0563bcb906276c1843cff1f0c87c9 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Thu, 7 May 2020 13:09:47 -0500
-Subject: [PATCH 41/49] winegstreamer: Implement IMFMediaSource::Stop.
+Subject: [PATCH 48/53] winegstreamer: Implement IMFMediaSource::Stop.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
 ---
@@ -10114,7 +10992,7 @@ Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
  1 file changed, 28 insertions(+), 2 deletions(-)
 
 diff --git a/dlls/winegstreamer/media_source.c b/dlls/winegstreamer/media_source.c
-index 3052c0393ae..78395f9dcd4 100644
+index f62fb6716be..15ea9520c89 100644
 --- a/dlls/winegstreamer/media_source.c
 +++ b/dlls/winegstreamer/media_source.c
 @@ -60,6 +60,7 @@ struct media_stream
@@ -10149,7 +11027,7 @@ index 3052c0393ae..78395f9dcd4 100644
  static void dispatch_end_of_presentation(struct media_source *source)
  {
      PROPVARIANT empty = {.vt = VT_EMPTY};
-@@ -416,6 +434,9 @@ static HRESULT WINAPI source_async_commands_Invoke(IMFAsyncCallback *iface, IMFA
+@@ -415,6 +433,9 @@ static HRESULT WINAPI source_async_commands_Invoke(IMFAsyncCallback *iface, IMFA
          case SOURCE_ASYNC_START:
              start_pipeline(source, command);
              break;
@@ -10159,7 +11037,7 @@ index 3052c0393ae..78395f9dcd4 100644
          case SOURCE_ASYNC_REQUEST_SAMPLE:
              wait_on_sample(command->u.request_sample.stream, command->u.request_sample.token);
              break;
-@@ -1245,13 +1266,18 @@ static HRESULT WINAPI media_source_Start(IMFMediaSource *iface, IMFPresentationD
+@@ -1244,13 +1265,18 @@ static HRESULT WINAPI media_source_Start(IMFMediaSource *iface, IMFPresentationD
  static HRESULT WINAPI media_source_Stop(IMFMediaSource *iface)
  {
      struct media_source *source = impl_from_IMFMediaSource(iface);
@@ -10181,12 +11059,12 @@ index 3052c0393ae..78395f9dcd4 100644
  
  static HRESULT WINAPI media_source_Pause(IMFMediaSource *iface)
 -- 
-2.27.0
+2.26.2
 
-From df912b52e796cee31662e52597e469f8ef516bb0 Mon Sep 17 00:00:00 2001
+From efa3b757fc02785474bfb4ea26cf33df19387454 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Mon, 11 May 2020 16:05:50 -0500
-Subject: [PATCH 42/49] winegstreamer: Introduce MPEG-4 Section-2 video
+Subject: [PATCH 50/53] winegstreamer: Introduce MPEG-4 Section-2 video
  decoder.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
@@ -10322,10 +11200,10 @@ index d933d40cfd3..3a3daad3ab6 100644
      threading(both),
      uuid(41457294-644c-4298-a28a-BD69F2C0CF3B)
 diff --git a/include/mfidl.idl b/include/mfidl.idl
-index ce3707ba500..35dd4c2f96c 100644
+index 3f994854425..a66962dd270 100644
 --- a/include/mfidl.idl
 +++ b/include/mfidl.idl
-@@ -1244,5 +1244,6 @@ cpp_quote("EXTERN_GUID(CLSID_VideoProcessorMFT, 0x88753b26, 0x5b24, 0x49bd, 0xb2
+@@ -1131,5 +1131,6 @@ cpp_quote("EXTERN_GUID(CLSID_VideoProcessorMFT, 0x88753b26, 0x5b24, 0x49bd, 0xb2
  cpp_quote("EXTERN_GUID(CLSID_MPEG4ByteStreamHandler, 0x271c3902, 0x6095, 0x4c45, 0xa2, 0x2f, 0x20, 0x09, 0x18, 0x16, 0xee, 0x9e);")
  cpp_quote("EXTERN_GUID(CLSID_CMSH264DecoderMFT, 0x62ce7e72, 0x4c71, 0x4d20, 0xb1, 0x5d, 0x45, 0x28, 0x31, 0xa8, 0x7d, 0x9d);")
  cpp_quote("EXTERN_GUID(CLSID_CMSAACDecMFT, 0x32d186a7, 0x218f, 0x4c75, 0x88, 0x76, 0xdd, 0x77, 0x27, 0x3a, 0x89, 0x99);")
@@ -10334,12 +11212,12 @@ index ce3707ba500..35dd4c2f96c 100644
  cpp_quote("EXTERN_GUID(CLSID_CWMVDecMediaObject, 0x82d353df, 0x90bd, 0x4382, 0x8b, 0xc2, 0x3f, 0x61, 0x92, 0xb7, 0x6e, 0x34);")
 \ No newline at end of file
 -- 
-2.27.0
+2.26.2
 
-From b964980f1f9773fba4ea0d0a15c30de5b195f6a3 Mon Sep 17 00:00:00 2001
+From c056ea67b9d2ff31ccea0f555739b8a886f78efd Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Tue, 12 May 2020 16:48:52 -0500
-Subject: [PATCH 43/49] HACK: Switch between all selection streams on
+Subject: [PATCH 52/53] HACK: Switch between all selection streams on
  MF_SOURCE_READER_ANY_STREAM.
 
 ---
@@ -10347,10 +11225,10 @@ Subject: [PATCH 43/49] HACK: Switch between all selection streams on
  1 file changed, 23 insertions(+), 1 deletion(-)
 
 diff --git a/dlls/mfreadwrite/reader.c b/dlls/mfreadwrite/reader.c
-index f8c03e62d35..423250e3cb7 100644
+index 2fdc1e28922..3225efcab27 100644
 --- a/dlls/mfreadwrite/reader.c
 +++ b/dlls/mfreadwrite/reader.c
-@@ -1045,7 +1045,29 @@ static HRESULT source_reader_get_stream_read_index(struct source_reader *reader,
+@@ -1019,7 +1019,29 @@ static HRESULT source_reader_get_stream_read_index(struct source_reader *reader,
              {
                  /* Cycle through all selected streams once, next pick first selected. */
                  if (FAILED(hr = source_reader_get_first_selected_stream(reader, STREAM_FLAG_REQUESTED_ONCE, stream_index)))
@@ -10382,12 +11260,12 @@ index f8c03e62d35..423250e3cb7 100644
              return hr;
          default:
 -- 
-2.27.0
+2.26.2
 
-From d02fd5502a03147a75d4458e3921816937d42587 Mon Sep 17 00:00:00 2001
+From c39cfacf915201ca38c76d580b1887292f3878ab Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Tue, 12 May 2020 16:50:41 -0500
-Subject: [PATCH 44/49] winegstreamer: Introduce WMA audio decoder.
+Subject: [PATCH 53/53] winegstreamer: Introduce WMA audio decoder.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
 ---
@@ -10520,10 +11398,10 @@ index 3a3daad3ab6..9f210fbbf72 100644
      threading(both),
      uuid(98230571-0087-4204-b020-3282538e57d3)
 diff --git a/include/mfidl.idl b/include/mfidl.idl
-index 35dd4c2f96c..3c11402931a 100644
+index a66962dd270..383abe3ad22 100644
 --- a/include/mfidl.idl
 +++ b/include/mfidl.idl
-@@ -1246,4 +1246,5 @@ cpp_quote("EXTERN_GUID(CLSID_CMSH264DecoderMFT, 0x62ce7e72, 0x4c71, 0x4d20, 0xb1
+@@ -1133,4 +1133,5 @@ cpp_quote("EXTERN_GUID(CLSID_CMSH264DecoderMFT, 0x62ce7e72, 0x4c71, 0x4d20, 0xb1
  cpp_quote("EXTERN_GUID(CLSID_CMSAACDecMFT, 0x32d186a7, 0x218f, 0x4c75, 0x88, 0x76, 0xdd, 0x77, 0x27, 0x3a, 0x89, 0x99);")
  cpp_quote("EXTERN_GUID(CLSID_CMpeg4sDecMFT, 0x5686a0d9, 0xfe39, 0x409f, 0x9d, 0xff, 0x3f, 0xdb, 0xc8, 0x49, 0xf9, 0xf5);")
  cpp_quote("EXTERN_GUID(CLSID_ASFByteStreamHandler, 0x41457294, 0x644c, 0x4298, 0xa2, 0x8a, 0xbd, 0x69, 0xf2, 0xc0, 0xcf, 0x3b);")
@@ -10533,12 +11411,12 @@ index 35dd4c2f96c..3c11402931a 100644
 +cpp_quote("EXTERN_GUID(CLSID_CWMADecMediaObject, 0x2eeb4adf, 0x4578, 0x4d10, 0xbc, 0xa7, 0xbb, 0x95, 0x5f, 0x56, 0x32, 0x0a);")
 \ No newline at end of file
 -- 
-2.27.0
+2.26.2
 
-From 9468c14317db8387f8254fc05c758c57d34f6d2e Mon Sep 17 00:00:00 2001
+From 63e2397b61cd9b16144bbe271eeea6044d31359a Mon Sep 17 00:00:00 2001
 From: Victor Hermann Chiletto <v@hnn.net.br>
 Date: Tue, 9 Jun 2020 01:35:53 -0300
-Subject: [PATCH 45/49] winegstreamer: Fix unrecognized format errors when
+Subject: [PATCH 1/2] winegstreamer: Fix unrecognized format errors when
  transforming caps to media type
 
 Probably not needed, but it's nice to get this out of the way
@@ -10547,7 +11425,7 @@ Probably not needed, but it's nice to get this out of the way
  1 file changed, 2 insertions(+)
 
 diff --git a/dlls/winegstreamer/mfplat.c b/dlls/winegstreamer/mfplat.c
-index bcfcd398ec4..39b98f3eba2 100644
+index bcfcd398ec..39b98f3eba 100644
 --- a/dlls/winegstreamer/mfplat.c
 +++ b/dlls/winegstreamer/mfplat.c
 @@ -910,6 +910,8 @@ static IMFMediaType* transform_to_media_type(GstCaps *caps)
@@ -10562,17 +11440,17 @@ index bcfcd398ec4..39b98f3eba2 100644
 -- 
 2.27.0
 
-From 4b46abcf4a7b1aecfd0a07134654b938091ead7f Mon Sep 17 00:00:00 2001
+From 44d2f8aa34b5d060096019195347466514cbcc43 Mon Sep 17 00:00:00 2001
 From: Victor Hermann Chiletto <v@hnn.net.br>
 Date: Tue, 9 Jun 2020 01:36:53 -0300
-Subject: [PATCH 46/49] winegstreamer: Translate WMV3 attributes to caps
+Subject: [PATCH 2/2] winegstreamer: Translate WMV3 attributes to caps
 
 ---
  dlls/winegstreamer/mfplat.c | 9 +++++++++
  1 file changed, 9 insertions(+)
 
 diff --git a/dlls/winegstreamer/mfplat.c b/dlls/winegstreamer/mfplat.c
-index 39b98f3eba2..042c02c4862 100644
+index 39b98f3eba..042c02c486 100644
 --- a/dlls/winegstreamer/mfplat.c
 +++ b/dlls/winegstreamer/mfplat.c
 @@ -1319,6 +1319,15 @@ GstCaps *caps_from_mf_media_type(IMFMediaType *type)
@@ -10594,10 +11472,10 @@ index 39b98f3eba2..042c02c4862 100644
 -- 
 2.27.0
 
-From b51cbf4507b514dbe2f7d72034695c2547218577 Mon Sep 17 00:00:00 2001
+From de3fffa1be1a8e2ede11b7d8607e3ea9e879b446 Mon Sep 17 00:00:00 2001
 From: Victor Hermann Chiletto <v@hnn.net.br>
 Date: Wed, 10 Jun 2020 01:10:57 -0300
-Subject: [PATCH 47/49] winegstreamer: expose NV12 as the first color space in
+Subject: [PATCH] winegstreamer: expose NV12 as the first color space in
  IMFTransform::GetOutputAvailableType
 
 ---
@@ -10606,7 +11484,7 @@ Subject: [PATCH 47/49] winegstreamer: expose NV12 as the first color space in
  2 files changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/dlls/winegstreamer/mf_decode.c b/dlls/winegstreamer/mf_decode.c
-index 3d314eaab43..6e41838fdc1 100644
+index 3d314eaab4..6e41838fdc 100644
 --- a/dlls/winegstreamer/mf_decode.c
 +++ b/dlls/winegstreamer/mf_decode.c
 @@ -23,7 +23,7 @@ WINE_DEFAULT_DEBUG_CHANNEL(mfplat);
@@ -10619,7 +11497,7 @@ index 3d314eaab43..6e41838fdc1 100644
  const GUID *aac_input_types[] = {&MFAudioFormat_AAC};
  const GUID *aac_output_types[] = {&MFAudioFormat_Float, &MFAudioFormat_PCM};
 diff --git a/dlls/winegstreamer/mfplat.c b/dlls/winegstreamer/mfplat.c
-index 042c02c4862..94e6ca534fc 100644
+index 042c02c486..94e6ca534f 100644
 --- a/dlls/winegstreamer/mfplat.c
 +++ b/dlls/winegstreamer/mfplat.c
 @@ -516,9 +516,9 @@ const GUID *h264_decoder_input_types[] =
