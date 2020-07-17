@@ -5,6 +5,7 @@
 import fcntl
 import array
 import filecmp
+import fnmatch
 import json
 import os
 import shutil
@@ -262,14 +263,17 @@ class CompatData:
             #Just let the Wine upgrade happen and hope it works...
             return
 
-    def real_copy(self, src, dst):
+    def real_copy(self, src, dst, dll_copy=False):
         if os.path.islink(src):
             contents = os.readlink(src)
             if os.path.dirname(contents).endswith(('/lib/wine', '/lib/wine/fakedlls', '/lib64/wine', '/lib64/wine/fakedlls')):
                 # wine builtin dll
                 # make the destination an absolute symlink
                 contents = os.path.normpath(os.path.join(os.path.dirname(src), contents))
-            os.symlink(contents, dst)
+            if dll_copy:
+                try_copy(src, dst)
+            else:
+                os.symlink(contents, dst)
         else:
             try_copy(src, dst)
 
@@ -295,7 +299,8 @@ class CompatData:
                         self.real_copy(src_file, dst_file)
                         tracked_files.write(rel_dir + file_ + "\n")
 
-    def update_builtin_libs(self):
+    def update_builtin_libs(self, dll_copy_patterns):
+        dll_copy_patterns = dll_copy_patterns.split(',')
         prev_tracked_files = set()
         with open(self.tracked_files_file, "r") as tracked_files:
             for line in tracked_files:
@@ -322,7 +327,8 @@ class CompatData:
                         continue
                     else:
                         os.makedirs(dst_dir, exist_ok=True)
-                    self.real_copy(src_file, dst_file)
+                    dll_copy = any(fnmatch.fnmatch(file_, pattern) for pattern in dll_copy_patterns)
+                    self.real_copy(src_file, dst_file, dll_copy)
                     tracked_name = rel_dir + file_
                     if tracked_name not in prev_tracked_files:
                         tracked_files.write(tracked_name + "\n")
@@ -376,6 +382,8 @@ class CompatData:
             use_wined3d = "wined3d" in g_session.compat_config
             use_dxvk_dxgi = "WINEDLLOVERRIDES" in os.environ and "dxgi=n" in os.environ["WINEDLLOVERRIDES"]
 
+            builtin_dll_copy = os.environ.get("PROTON_DLL_COPY", "d3dcompiler_*.dll,d3dx*.dll")
+
             # If any of this info changes, we must rerun the tasks below
             prefix_info = '\n'.join((
                 CURRENT_PREFIX_VERSION,
@@ -390,6 +398,7 @@ class CompatData:
                 getmtimestr(g_proton.default_pfx_dir, 'system.reg'),
                 str(use_wined3d),
                 str(use_dxvk_dxgi),
+                builtin_dll_copy,
             ))
 
             if old_ver == CURRENT_PREFIX_VERSION:
@@ -413,7 +422,7 @@ class CompatData:
             self.create_fonts_symlinks()
 
             # update builtin dll symlinks or copies
-            self.update_builtin_libs()
+            self.update_builtin_libs(builtin_dll_copy)
 
             #copy steam files into place
             dst = self.prefix_dir + "/drive_c/Program Files (x86)/"
