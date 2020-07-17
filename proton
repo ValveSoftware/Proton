@@ -69,6 +69,13 @@ def try_copy(src, dst):
         else:
             raise
 
+def getmtimestr(*path_fragments):
+    path = os.path.join(*path_fragments)
+    try:
+        return str(os.path.getmtime(path))
+    except IOError:
+        return "0"
+
 EXT2_IOC_GETFLAGS = 0x80086601
 EXT2_IOC_SETFLAGS = 0x40086602
 
@@ -148,6 +155,7 @@ class CompatData:
         self.base_dir = compatdata + "/"
         self.prefix_dir = self.path("pfx/")
         self.version_file = self.path("version")
+        self.config_info_file = self.path("config_info")
         self.tracked_files_file = self.path("tracked_files")
         self.prefix_lock = FileLock(self.path("pfx.lock"), timeout=-1)
 
@@ -249,8 +257,6 @@ class CompatData:
                     log("Unable to write new registry file to " + self.prefix_dir + "system.reg")
                     pass
 
-            self.update_builtin_libs()
-
         except ValueError:
             log("Prefix has an invalid version?! You may want to back up user files and delete this prefix.")
             #Just let the Wine upgrade happen and hope it works...
@@ -346,9 +352,11 @@ class CompatData:
         with self.prefix_lock:
             if os.path.exists(self.version_file):
                 with open(self.version_file, "r") as f:
-                    self.upgrade_pfx(f.readline().strip())
+                    old_ver = f.readline().strip()
             else:
-                self.upgrade_pfx(None)
+                old_ver = None
+
+            self.upgrade_pfx(old_ver)
 
             if not os.path.exists(self.prefix_dir):
                 makedirs(self.prefix_dir + "/drive_c")
@@ -357,19 +365,57 @@ class CompatData:
             if not os.path.exists(self.prefix_dir + "/user.reg"):
                 self.copy_pfx()
 
-            with open(self.version_file, "w") as f:
-                f.write(CURRENT_PREFIX_VERSION + "\n")
-
-            #create font files symlinks
-            self.create_fonts_symlinks()
-
-            #copy steam files into place
+            # collect configuration info
             if "STEAM_COMPAT_CLIENT_INSTALL_PATH" in os.environ:
                 #modern steam client sets this
                 steamdir = os.environ["STEAM_COMPAT_CLIENT_INSTALL_PATH"]
             else:
                 #linux-only fallback, really shouldn't get here
                 steamdir = os.environ["HOME"] + ".steam/root/"
+
+            use_wined3d = "wined3d" in g_session.compat_config
+            use_dxvk_dxgi = "WINEDLLOVERRIDES" in os.environ and "dxgi=n" in os.environ["WINEDLLOVERRIDES"]
+
+            # If any of this info changes, we must rerun the tasks below
+            prefix_info = '\n'.join((
+                CURRENT_PREFIX_VERSION,
+                g_proton.fonts_dir,
+                g_proton.lib_dir,
+                g_proton.lib64_dir,
+                steamdir,
+                getmtimestr(steamdir, 'legacycompat', 'steamclient.dll'),
+                getmtimestr(steamdir, 'legacycompat', 'steamclient64.dll'),
+                getmtimestr(steamdir, 'legacycompat', 'Steam.dll'),
+                g_proton.default_pfx_dir,
+                getmtimestr(g_proton.default_pfx_dir, 'system.reg'),
+                str(use_wined3d),
+                str(use_dxvk_dxgi),
+            ))
+
+            if old_ver == CURRENT_PREFIX_VERSION:
+                # check whether any prefix config has changed
+                try:
+                    with open(self.config_info_file, "r") as f:
+                        old_prefix_info = f.read()
+                except IOError:
+                    old_prefix_info = ""
+
+                if old_prefix_info == prefix_info:
+                    return
+
+            with open(self.config_info_file, "w") as f:
+                f.write(prefix_info)
+
+            with open(self.version_file, "w") as f:
+                f.write(CURRENT_PREFIX_VERSION + "\n")
+
+            #create font files symlinks
+            self.create_fonts_symlinks()
+
+            # update builtin dll symlinks or copies
+            self.update_builtin_libs()
+
+            #copy steam files into place
             dst = self.prefix_dir + "/drive_c/Program Files (x86)/"
             makedirs(dst + "Steam")
             filestocopy = ["steamclient.dll",
@@ -391,7 +437,7 @@ class CompatData:
             try_copy(g_proton.lib_dir + "wine/dxvk/openvr_api_dxvk.dll", self.prefix_dir + "/drive_c/windows/syswow64/")
             try_copy(g_proton.lib64_dir + "wine/dxvk/openvr_api_dxvk.dll", self.prefix_dir + "/drive_c/windows/system32/")
 
-            if "wined3d" in g_session.compat_config:
+            if use_wined3d:
                 dxvkfiles = ["dxvk_config"]
                 wined3dfiles = ["d3d11", "d3d10", "d3d10core", "d3d10_1", "d3d9"]
             else:
@@ -399,7 +445,7 @@ class CompatData:
                 wined3dfiles = []
 
             #if the user asked for dxvk's dxgi (dxgi=n), then copy it into place
-            if "WINEDLLOVERRIDES" in os.environ and "dxgi=n" in os.environ["WINEDLLOVERRIDES"]:
+            if use_dxvk_dxgi:
                 dxvkfiles.append("dxgi")
             else:
                 wined3dfiles.append("dxgi")
