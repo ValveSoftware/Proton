@@ -49,7 +49,7 @@ index 1322eaa..3e2b86e 100644
 +                    if(fd>0)
 +                    {
 +                        TRACE("%s successfully read, checking for device name\n", jsdevice);
-+                        char jsname[512];
++                        char jsname[128];
 +
 +                        if (ioctl(fd, JSIOCGNAME(sizeof(jsname)), jsname) < 0)
 +                        {
@@ -61,6 +61,7 @@ index 1322eaa..3e2b86e 100644
 +                        {
 +                            TRACE("Joystick device verified, loading %s\n", name);
 +                            js++;
++                            close(fd);
 +                            break;
 +                        }
 +                    }
