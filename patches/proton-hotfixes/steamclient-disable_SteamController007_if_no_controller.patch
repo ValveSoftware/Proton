@@ -14,7 +14,7 @@ index 1322eaa..3e2b86e 100644
  
  #include "windef.h"
  #include "winbase.h"
-@@ -402,11 +406,65 @@ void *create_win_interface(const char *name, void *linux_side)
+@@ -402,12 +401,66 @@ void *create_win_interface(const char *name, void *linux_side)
      struct steamclient_interface *e;
      void *ret = NULL;
      int i;
@@ -24,7 +24,7 @@ index 1322eaa..3e2b86e 100644
  
      if (!linux_side)
          return NULL;
-+    
+ 
 +    if(sgi && !strcmp(sgi, "230410") && (!strcmp(name,"SteamController007") || !strcmp(name,"SteamInput001")))
 +    {
 +        DIR *d;
@@ -78,6 +78,6 @@ index 1322eaa..3e2b86e 100644
 +        }
 +    }
 +
- 
      EnterCriticalSection(&steamclient_cs);
  
+     LIST_FOR_EACH_ENTRY(e, &steamclient_interfaces, struct steamclient_interface, entry)
