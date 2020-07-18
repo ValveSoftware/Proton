@@ -78,6 +78,11 @@
     echo "proton gamepad conflict fix"
     git revert --no-commit da7d60bf97fb8726828e57f852e8963aacde21e9
 
+    echo "proton mf topology fixes"
+    git revert --no-commit e308d81a617632fe0fedd243952f79e8d9ec05b4
+    git revert --no-commit 16d44b61d15193905ef40661bc1547cb45e7b019
+    git revert --no-commit 8e343024b577892bd4908304ded34b758579698d
+
 # disable these when using proton's gamepad patches
 #    -W dinput-SetActionMap-genre \
 #    -W dinput-axis-recalc \
@@ -106,9 +111,6 @@
     
     echo "proton-specific manual mfplat dll register patch"
     patch -Np1 < ../patches/wine-hotfixes/media_foundation/proton_mediafoundation_dllreg.patch
-
-#    echo "planet zoo/jurassic world hotfixes pending"
-#    patch -Np1 < ../patches/wine-hotfixes/pending/planet-zoo-jurassic-world-pending-upstream-staging.patch
 
     echo "Indiana Jones and the Emperor's Tomb pending"
     patch -Np1 < ../patches/wine-hotfixes/pending/indiana_jones_fix.patch
@@ -139,8 +141,8 @@
     echo "origin downloads fix" 
     patch -Np1 < ../patches/game-patches/origin-downloads_fix.patch
 
-#    echo "fix steep"
-#    patch -Np1 < ../patches/game-patches/steep_fix.patch
+    echo "fix ac odyssey"
+    patch -Np1 < ../patches/game-patches/ac_odyssey.patch
     
     echo "rawinput virtual desktop fix"
     #https://bugs.winehq.org/show_bug.cgi?id=48419
