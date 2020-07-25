@@ -68,6 +68,7 @@
     cd wine-staging
     git reset --hard HEAD
     git clean -xdf
+    patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/staging/8402c959617111ac13a2025c3eb7c7156a2520f8.patch
     cd ..
 
     #WINE
@@ -123,10 +124,16 @@
     
     echo "planet zoo/jurassic world hotfixes pending"
     patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/planet-zoo-jurassic-world-pending-upstream-staging.patch
+    
+    echo "assetto stutter fix backport"
+    patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/assetto_backport.patch
+    
+    echo "rfactor2 backport"
+    patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/rfactor2_backport.patch
 
     echo "Indiana Jones and the Emperor's Tomb pending"
     patch -Np1 < ../patches/wine-hotfixes/pending/indiana_jones_fix.patch
-
+    
     #WINE FAUDIO
     #echo "applying faudio patches"
     #patch -Np1 < ../patches/faudio/faudio-ffmpeg.patch
