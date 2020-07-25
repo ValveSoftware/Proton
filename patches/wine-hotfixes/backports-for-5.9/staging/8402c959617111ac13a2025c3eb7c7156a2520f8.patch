@@ -1,0 +1,347 @@
+From 8402c959617111ac13a2025c3eb7c7156a2520f8 Mon Sep 17 00:00:00 2001
+From: Paul Gofman <gofmanp@gmail.com>
+Date: Tue, 23 Jun 2020 13:08:51 +0300
+Subject: [PATCH] Updated server-Stored_ACLs patchset.
+
+Do not turn file type into FD_TYPE_CHAR when setting
+security descriptor.
+---
+ ...ly-store-the-full-security-descripto.patch | 34 +++++++++----------
+ ...e-security-attributes-with-extended-.patch | 16 ++++-----
+ ...eturn-of-file-security-masks-with-ge.patch | 20 +++++------
+ ...file-security-attributes-with-extend.patch | 18 +++++-----
+ 4 files changed, 44 insertions(+), 44 deletions(-)
+
+diff --git a/patches/server-Stored_ACLs/0004-server-Temporarily-store-the-full-security-descripto.patch b/patches/server-Stored_ACLs/0004-server-Temporarily-store-the-full-security-descripto.patch
+index 362958d27..6bf15de8a 100644
+--- a/patches/server-Stored_ACLs/0004-server-Temporarily-store-the-full-security-descripto.patch
++++ b/patches/server-Stored_ACLs/0004-server-Temporarily-store-the-full-security-descripto.patch
+@@ -1,4 +1,4 @@
+-From 3ee769ef72de483a2d4af47a50d17c78a8e1a322 Mon Sep 17 00:00:00 2001
++From 20d2c00b311c73821ed572a53c1c586d7eb413dc Mon Sep 17 00:00:00 2001
+ From: Sebastian Lackner <sebastian@fds-team.de>
+ Date: Mon, 30 Mar 2015 12:50:21 +0200
+ Subject: [PATCH] server: Temporarily store the full security descriptor for
+@@ -12,10 +12,10 @@ Subject: [PATCH] server: Temporarily store the full security descriptor for
+  4 files changed, 74 insertions(+), 41 deletions(-)
+ 
+ diff --git a/dlls/advapi32/tests/security.c b/dlls/advapi32/tests/security.c
+-index 88e7ca9e878..1b11f95ada3 100644
++index 73a7684d995e..7e8f2443cd33 100644
+ --- a/dlls/advapi32/tests/security.c
+ +++ b/dlls/advapi32/tests/security.c
+-@@ -3702,7 +3702,6 @@ static void test_CreateDirectoryA(void)
++@@ -3685,7 +3685,6 @@ static void test_CreateDirectoryA(void)
+      ok(error == ERROR_SUCCESS, "GetNamedSecurityInfo failed with error %d\n", error);
+      bret = GetAclInformation(pDacl, &acl_size, sizeof(acl_size), AclSizeInformation);
+      ok(bret, "GetAclInformation failed\n");
+@@ -23,7 +23,7 @@ index 88e7ca9e878..1b11f95ada3 100644
+      ok(acl_size.AceCount == 0, "GetAclInformation returned unexpected entry count (%d != 0).\n",
+                                 acl_size.AceCount);
+      LocalFree(pSD);
+-@@ -3713,7 +3712,6 @@ static void test_CreateDirectoryA(void)
++@@ -3696,7 +3695,6 @@ static void test_CreateDirectoryA(void)
+      ok(error == ERROR_SUCCESS, "GetNamedSecurityInfo failed with error %d\n", error);
+      bret = GetAclInformation(pDacl, &acl_size, sizeof(acl_size), AclSizeInformation);
+      ok(bret, "GetAclInformation failed\n");
+@@ -31,7 +31,7 @@ index 88e7ca9e878..1b11f95ada3 100644
+      ok(acl_size.AceCount == 0, "GetAclInformation returned unexpected entry count (%d != 0).\n",
+                                 acl_size.AceCount);
+      LocalFree(pSD);
+-@@ -3836,7 +3834,6 @@ static void test_CreateDirectoryA(void)
++@@ -3819,7 +3817,6 @@ static void test_CreateDirectoryA(void)
+      ok(error == ERROR_SUCCESS, "GetNamedSecurityInfo failed with error %d\n", error);
+      bret = GetAclInformation(pDacl, &acl_size, sizeof(acl_size), AclSizeInformation);
+      ok(bret, "GetAclInformation failed\n");
+@@ -39,7 +39,7 @@ index 88e7ca9e878..1b11f95ada3 100644
+      ok(acl_size.AceCount == 0, "GetAclInformation returned unexpected entry count (%d != 0).\n",
+                                 acl_size.AceCount);
+      LocalFree(pSD);
+-@@ -4942,23 +4939,22 @@ static void test_GetSecurityInfo(void)
++@@ -4913,23 +4910,22 @@ static void test_GetSecurityInfo(void)
+          bret = GetAce(pDacl, 0, (VOID **)&ace);
+          ok(bret, "Failed to get Current User ACE.\n");
+          bret = EqualSid(&ace->SidStart, user_sid);
+@@ -70,7 +70,7 @@ index 88e7ca9e878..1b11f95ada3 100644
+      LocalFree(pSD);
+      CloseHandle(obj);
+ diff --git a/server/change.c b/server/change.c
+-index 77c9ff8bc2d..dd45aa9667e 100644
++index d236573634ad..dd7197c07f17 100644
+ --- a/server/change.c
+ +++ b/server/change.c
+ @@ -1077,7 +1077,8 @@ static int dir_add_to_existing_notify( struct dir *dir )
+@@ -96,10 +96,10 @@ index 77c9ff8bc2d..dd45aa9667e 100644
+  
+      return &dir->obj;
+ diff --git a/server/file.c b/server/file.c
+-index 1ca9fc81fe6..4373e6eacd4 100644
++index f34bd305a9ef..9c94f9ba2bba 100644
+ --- a/server/file.c
+ +++ b/server/file.c
+-@@ -178,7 +178,8 @@ struct file *create_file_for_fd_obj( struct fd *fd, unsigned int access, unsigne
++@@ -176,7 +176,8 @@ struct file *create_file_for_fd_obj( struct fd *fd, unsigned int access, unsigne
+      return file;
+  }
+  
+@@ -109,7 +109,7 @@ index 1ca9fc81fe6..4373e6eacd4 100644
+  {
+      struct file *file = alloc_object( &file_ops );
+  
+-@@ -190,6 +191,12 @@ static struct object *create_file_obj( struct fd *fd, unsigned int access, mode_
++@@ -188,6 +189,12 @@ static struct object *create_file_obj( struct fd *fd, unsigned int access, mode_
+      list_init( &file->kernel_object );
+      grab_object( fd );
+      set_fd_user( fd, &file_fd_ops, &file->obj );
+@@ -122,7 +122,7 @@ index 1ca9fc81fe6..4373e6eacd4 100644
+      return &file->obj;
+  }
+  
+-@@ -256,11 +263,11 @@ static struct object *create_file( struct fd *root, const char *nameptr, data_si
++@@ -259,11 +266,11 @@ static struct object *create_file( struct fd *root, const char *nameptr, data_si
+      if (!fd) goto done;
+  
+      if (S_ISDIR(mode))
+@@ -136,7 +136,7 @@ index 1ca9fc81fe6..4373e6eacd4 100644
+  
+      release_object( fd );
+  
+-@@ -570,46 +577,66 @@ mode_t sd_to_mode( const struct security_descriptor *sd, const SID *owner )
++@@ -562,46 +569,66 @@ mode_t sd_to_mode( const struct security_descriptor *sd, const SID *owner )
+  int set_file_sd( struct object *obj, struct fd *fd, mode_t *mode, uid_t *uid,
+                   const struct security_descriptor *sd, unsigned int set_info )
+  {
+@@ -215,7 +215,7 @@ index 1ca9fc81fe6..4373e6eacd4 100644
+ +                return 0;
+ +            }
+ +
+-+            *mode = new_mode;
+++            *mode = (*mode & S_IFMT) | new_mode;
+          }
+ +
+ +        free( obj->sd );
+@@ -228,7 +228,7 @@ index 1ca9fc81fe6..4373e6eacd4 100644
+  }
+  
+  static struct object *file_lookup_name( struct object *obj, struct unicode_str *name, unsigned int attr )
+-@@ -753,7 +780,10 @@ DECL_HANDLER(create_file)
++@@ -745,7 +772,10 @@ DECL_HANDLER(create_file)
+      if ((file = create_file( root_fd, name, name_len, req->access, req->sharing,
+                               req->create, req->options, req->attrs, sd )))
+      {
+@@ -241,10 +241,10 @@ index 1ca9fc81fe6..4373e6eacd4 100644
+      }
+      if (root_fd) release_object( root_fd );
+ diff --git a/server/file.h b/server/file.h
+-index 5d938f5ed57..abac370d680 100644
++index 73f83d08d251..aa0c7eab4a01 100644
+ --- a/server/file.h
+ +++ b/server/file.h
+-@@ -183,7 +183,8 @@ extern int          shmglobal_fd;
++@@ -190,7 +190,8 @@ extern struct object *create_unix_device( struct object *root, const struct unic
+  
+  extern void do_change_notify( int unix_fd );
+  extern void sigio_callback(void);
+@@ -255,5 +255,5 @@ index 5d938f5ed57..abac370d680 100644
+  
+  /* completion */
+ -- 
+-2.17.1
++2.26.2
+ 
+diff --git a/patches/server-Stored_ACLs/0005-server-Store-file-security-attributes-with-extended-.patch b/patches/server-Stored_ACLs/0005-server-Store-file-security-attributes-with-extended-.patch
+index 6807200d9..ab2fe924d 100644
+--- a/patches/server-Stored_ACLs/0005-server-Store-file-security-attributes-with-extended-.patch
++++ b/patches/server-Stored_ACLs/0005-server-Store-file-security-attributes-with-extended-.patch
+@@ -1,4 +1,4 @@
+-From da342d0e5f8dc030eb819102f7aea264fc13b91c Mon Sep 17 00:00:00 2001
++From f574af9e0d14b048ff0b410831f226cf764c5d05 Mon Sep 17 00:00:00 2001
+ From: "Erich E. Hoover" <erich.e.hoover@gmail.com>
+ Date: Mon, 30 Mar 2015 13:04:23 +0200
+ Subject: [PATCH] server: Store file security attributes with extended file
+@@ -10,10 +10,10 @@ Subject: [PATCH] server: Store file security attributes with extended file
+  2 files changed, 37 insertions(+)
+ 
+ diff --git a/include/wine/port.h b/include/wine/port.h
+-index 49dd8cca67a..fdcc7b5fa0f 100644
++index 7d2c73887073..145f78bebdba 100644
+ --- a/include/wine/port.h
+ +++ b/include/wine/port.h
+-@@ -361,6 +361,9 @@ extern int mkstemps(char *template, int suffix_len);
++@@ -366,6 +366,9 @@ extern int mkstemps(char *template, int suffix_len);
+  #ifndef XATTR_USER_PREFIX
+  # define XATTR_USER_PREFIX "user."
+  #endif
+@@ -24,7 +24,7 @@ index 49dd8cca67a..fdcc7b5fa0f 100644
+  extern int xattr_fget( int filedes, const char *name, void *value, size_t size );
+  extern int xattr_fremove( int filedes, const char *name );
+ diff --git a/server/file.c b/server/file.c
+-index 0fabb0cd04a..2b21b3dcab6 100644
++index 9c94f9ba2bba..5e542b62e77e 100644
+ --- a/server/file.c
+ +++ b/server/file.c
+ @@ -32,6 +32,7 @@
+@@ -50,7 +50,7 @@ index 0fabb0cd04a..2b21b3dcab6 100644
+  struct file
+  {
+      struct object       obj;            /* object header */
+-@@ -206,6 +215,28 @@ int is_file_executable( const char *name )
++@@ -204,6 +213,28 @@ int is_file_executable( const char *name )
+      return len >= 4 && (!strcasecmp( name + len - 4, ".exe") || !strcasecmp( name + len - 4, ".com" ));
+  }
+  
+@@ -79,8 +79,8 @@ index 0fabb0cd04a..2b21b3dcab6 100644
+  static struct object *create_file( struct fd *root, const char *nameptr, data_size_t len,
+                                     unsigned int access, unsigned int sharing, int create,
+                                     unsigned int options, unsigned int attrs,
+-@@ -636,6 +667,9 @@ int set_file_sd( struct object *obj, struct fd *fd, mode_t *mode, uid_t *uid,
+-             *mode = new_mode;
++@@ -623,6 +654,9 @@ int set_file_sd( struct object *obj, struct fd *fd, mode_t *mode, uid_t *uid,
++             *mode = (*mode & S_IFMT) | new_mode;
+          }
+  
+ +        /* extended attributes are set after the file mode, to ensure it stays in sync */
+@@ -90,5 +90,5 @@ index 0fabb0cd04a..2b21b3dcab6 100644
+          obj->sd = new_sd;
+          return 1;
+ -- 
+-2.17.1
++2.26.2
+ 
+diff --git a/patches/server-Stored_ACLs/0006-server-Convert-return-of-file-security-masks-with-ge.patch b/patches/server-Stored_ACLs/0006-server-Convert-return-of-file-security-masks-with-ge.patch
+index 43e5a495d..9cfec810d 100644
+--- a/patches/server-Stored_ACLs/0006-server-Convert-return-of-file-security-masks-with-ge.patch
++++ b/patches/server-Stored_ACLs/0006-server-Convert-return-of-file-security-masks-with-ge.patch
+@@ -1,8 +1,8 @@
+-From 93fd1bb452f2d64ee0827b3d53221040cdb4b6b5 Mon Sep 17 00:00:00 2001
++From 3a62e2af870b66bb3b57721a48d30dec87fb3d0e Mon Sep 17 00:00:00 2001
+ From: "Erich E. Hoover" <erich.e.hoover@gmail.com>
+ Date: Fri, 18 Apr 2014 14:05:32 -0600
+-Subject: server: Convert return of file security masks with generic access
+- mappings. (try 7)
++Subject: [PATCH] server: Convert return of file security masks with generic
++ access mappings. (try 7)
+ 
+ ---
+  dlls/advapi32/tests/security.c |  6 +++---
+@@ -10,10 +10,10 @@ Subject: server: Convert return of file security masks with generic access
+  2 files changed, 26 insertions(+), 3 deletions(-)
+ 
+ diff --git a/dlls/advapi32/tests/security.c b/dlls/advapi32/tests/security.c
+-index b149ea4..f4238c7 100644
++index 7e8f2443cd33..a27cd41cde81 100644
+ --- a/dlls/advapi32/tests/security.c
+ +++ b/dlls/advapi32/tests/security.c
+-@@ -4552,8 +4552,8 @@ static void test_GetSecurityInfo(void)
++@@ -4913,8 +4913,8 @@ static void test_GetSecurityInfo(void)
+          ok(bret, "Current User ACE (%s) != Current User SID (%s).\n", debugstr_sid(&ace->SidStart), debugstr_sid(user_sid));
+          ok(((ACE_HEADER *)ace)->AceFlags == 0,
+             "Current User ACE has unexpected flags (0x%x != 0x0)\n", ((ACE_HEADER *)ace)->AceFlags);
+@@ -24,7 +24,7 @@ index b149ea4..f4238c7 100644
+      }
+      if (acl_size.AceCount > 1)
+      {
+-@@ -4563,7 +4563,7 @@ static void test_GetSecurityInfo(void)
++@@ -4924,7 +4924,7 @@ static void test_GetSecurityInfo(void)
+          ok(bret, "Administators Group ACE (%s) != Administators Group SID (%s).\n", debugstr_sid(&ace->SidStart), debugstr_sid(admin_sid));
+          ok(((ACE_HEADER *)ace)->AceFlags == 0,
+             "Administators Group ACE has unexpected flags (0x%x != 0x0)\n", ((ACE_HEADER *)ace)->AceFlags);
+@@ -34,10 +34,10 @@ index b149ea4..f4238c7 100644
+      }
+      LocalFree(pSD);
+ diff --git a/server/file.c b/server/file.c
+-index 55551bc..703479f 100644
++index 5e542b62e77e..818bd42af76a 100644
+ --- a/server/file.c
+ +++ b/server/file.c
+-@@ -479,6 +479,26 @@ struct security_descriptor *mode_to_sd( mode_t mode, const SID *user, const SID
++@@ -475,6 +475,26 @@ struct security_descriptor *mode_to_sd( mode_t mode, const SID *user, const SID
+      return sd;
+  }
+  
+@@ -64,7 +64,7 @@ index 55551bc..703479f 100644
+  struct security_descriptor *get_file_sd( struct object *obj, struct fd *fd, mode_t *mode,
+                                           uid_t *uid )
+  {
+-@@ -621,6 +641,9 @@ int set_file_sd( struct object *obj, struct fd *fd, mode_t *mode, uid_t *uid,
++@@ -613,6 +633,9 @@ int set_file_sd( struct object *obj, struct fd *fd, mode_t *mode, uid_t *uid,
+      new_sd = set_sd_from_token_internal( sd, obj->sd, set_info, current->process->token );
+      if (new_sd)
+      {
+@@ -75,5 +75,5 @@ index 55551bc..703479f 100644
+          {
+              owner = sd_get_owner( new_sd );
+ -- 
+-2.7.0
++2.26.2
+ 
+diff --git a/patches/server-Stored_ACLs/0007-server-Retrieve-file-security-attributes-with-extend.patch b/patches/server-Stored_ACLs/0007-server-Retrieve-file-security-attributes-with-extend.patch
+index 59e74d843..5aedd2d6b 100644
+--- a/patches/server-Stored_ACLs/0007-server-Retrieve-file-security-attributes-with-extend.patch
++++ b/patches/server-Stored_ACLs/0007-server-Retrieve-file-security-attributes-with-extend.patch
+@@ -1,4 +1,4 @@
+-From 269bac57db6c5f1f00b0f93ad89d64a93e89af25 Mon Sep 17 00:00:00 2001
++From 025a3715592c3f4fe8a3300422e6387f82f38792 Mon Sep 17 00:00:00 2001
+ From: "Erich E. Hoover" <erich.e.hoover@gmail.com>
+ Date: Fri, 18 Apr 2014 14:01:35 -0600
+ Subject: [PATCH] server: Retrieve file security attributes with extended file
+@@ -10,10 +10,10 @@ Subject: [PATCH] server: Retrieve file security attributes with extended file
+  2 files changed, 36 insertions(+), 13 deletions(-)
+ 
+ diff --git a/dlls/advapi32/tests/security.c b/dlls/advapi32/tests/security.c
+-index bfb76b83134..8a5d41988ac 100644
++index a27cd41cde81..6968c9a3d2ac 100644
+ --- a/dlls/advapi32/tests/security.c
+ +++ b/dlls/advapi32/tests/security.c
+-@@ -3656,7 +3656,7 @@ static void test_CreateDirectoryA(void)
++@@ -3639,7 +3639,7 @@ static void test_CreateDirectoryA(void)
+      }
+      ok(!error, "GetNamedSecurityInfo failed with error %d\n", error);
+      test_inherited_dacl(pDacl, admin_sid, user_sid, OBJECT_INHERIT_ACE|CONTAINER_INHERIT_ACE,
+@@ -22,7 +22,7 @@ index bfb76b83134..8a5d41988ac 100644
+      LocalFree(pSD);
+  
+      /* Test inheritance of ACLs in CreateFile without security descriptor */
+-@@ -4110,21 +4110,20 @@ static void test_GetNamedSecurityInfoA(void)
++@@ -4093,21 +4093,20 @@ static void test_GetNamedSecurityInfoA(void)
+          bret = GetAce(pDacl, 0, (VOID **)&ace);
+          ok(bret, "Failed to get Current User ACE.\n");
+          bret = EqualSid(&ace->SidStart, user_sid);
+@@ -50,7 +50,7 @@ index bfb76b83134..8a5d41988ac 100644
+          ok(((ACE_HEADER *)ace)->AceFlags == 0,
+             "Administators Group ACE has unexpected flags (0x%x != 0x0)\n", ((ACE_HEADER *)ace)->AceFlags);
+          ok(ace->Mask == 0x1f01ff || broken(ace->Mask == GENERIC_ALL) /* win2k */,
+-@@ -4151,8 +4150,8 @@ static void test_GetNamedSecurityInfoA(void)
++@@ -4134,8 +4133,8 @@ static void test_GetNamedSecurityInfoA(void)
+      {
+          bret = GetAce(pDacl, 0, (VOID **)&ace);
+          ok(bret, "Failed to get ACE.\n");
+@@ -62,10 +62,10 @@ index bfb76b83134..8a5d41988ac 100644
+      LocalFree(pSD);
+  
+ diff --git a/server/file.c b/server/file.c
+-index 4f046adf3f4..563e198a160 100644
++index 818bd42af76a..53d59d3e8e2a 100644
+ --- a/server/file.c
+ +++ b/server/file.c
+-@@ -503,6 +503,29 @@ static void convert_generic_sd( struct security_descriptor *sd )
++@@ -495,6 +495,29 @@ static void convert_generic_sd( struct security_descriptor *sd )
+      }
+  }
+  
+@@ -95,7 +95,7 @@ index 4f046adf3f4..563e198a160 100644
+  struct security_descriptor *get_file_sd( struct object *obj, struct fd *fd, mode_t *mode,
+                                           uid_t *uid )
+  {
+-@@ -518,9 +541,10 @@ struct security_descriptor *get_file_sd( struct object *obj, struct fd *fd, mode
++@@ -510,9 +533,10 @@ struct security_descriptor *get_file_sd( struct object *obj, struct fd *fd, mode
+          (st.st_uid == *uid))
+          return obj->sd;
+  
+@@ -110,5 +110,5 @@ index 4f046adf3f4..563e198a160 100644
+  
+      *mode = st.st_mode;
+ -- 
+-2.17.1
++2.26.2
+ 
