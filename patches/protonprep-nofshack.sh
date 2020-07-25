@@ -140,9 +140,6 @@
 
     echo "origin downloads fix" 
     patch -Np1 < ../patches/game-patches/origin-downloads_fix.patch
-
-    echo "fix ac odyssey"
-    patch -Np1 < ../patches/game-patches/ac_odyssey.patch
     
     echo "rawinput virtual desktop fix"
     #https://bugs.winehq.org/show_bug.cgi?id=48419
