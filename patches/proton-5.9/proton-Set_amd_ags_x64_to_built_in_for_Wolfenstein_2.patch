@@ -1,0 +1,21 @@
+From 3c9b9d5a290cff5ebf2ad56e09fbb6c857b9f775 Mon Sep 17 00:00:00 2001
+From: Andrew Eikum <aeikum@codeweavers.com>
+Date: Tue, 24 Jul 2018 13:33:15 -0500
+Subject: [PATCH] wine.inf: Set amd_ags_x64 to built-in for Wolfenstein 2
+
+---
+ loader/wine.inf.in | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/loader/wine.inf.in b/loader/wine.inf.in
+index 2f389d3af7..b197622b97 100644
+--- a/loader/wine.inf.in
++++ b/loader/wine.inf.in
+@@ -3966,6 +3966,7 @@ HKCU,Software\Valve\Steam\ActiveProcess,"SteamClientDll64",,"%16426%\Steam\steam
+ HKCU,Software\Wine\DllOverrides,"vcomp140",0x2,"native,builtin"
+ HKCU,Software\Wine\DllOverrides,"vcruntime140",0x2,"native,builtin"
+ HKCU,Software\Wine\AppDefaults\Bayonetta.exe,"LargeAddressAware",0x10003,1
++HKCU,Software\Wine\AppDefaults\NewColossus_x64vk.exe\DllOverrides,"amd_ags_x64",0x2,"builtin,native"
+ 
+ [DestinationDirs]
+ l_intl_section = 11

@@ -1,0 +1,104 @@
+From b4310a19e96283e114fad13f7565f912a39640de Mon Sep 17 00:00:00 2001
+From: Liam Middlebrook <lmiddlebrook@nvidia.com>
+Date: Mon, 1 Jun 2020 12:19:58 -0700
+Subject: [PATCH] winevulkan: Update to VK spec version 1.2.142.
+
+Signed-off-by: Liam Middlebrook <lmiddlebrook@nvidia.com>
+Signed-off-by: Andy Ritger <aritger@nvidia.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/winevulkan/make_vulkan     |  2 +-
+ dlls/winevulkan/vulkan_thunks.c | 16 ++++++++++++++++
+ dlls/winevulkan/winevulkan.json |  2 +-
+ include/wine/vulkan.h           |  6 ++++--
+ 4 files changed, 22 insertions(+), 4 deletions(-)
+
+diff --git a/dlls/winevulkan/make_vulkan b/dlls/winevulkan/make_vulkan
+index 241686122c5..1dee769836f 100755
+--- a/dlls/winevulkan/make_vulkan
++++ b/dlls/winevulkan/make_vulkan
+@@ -64,7 +64,7 @@ from enum import Enum
+ LOGGER = logging.Logger("vulkan")
+ LOGGER.addHandler(logging.StreamHandler())
+ 
+-VK_XML_VERSION = "1.2.140"
++VK_XML_VERSION = "1.2.142"
+ WINE_VK_VERSION = (1, 2)
+ 
+ # Filenames to create.
+diff --git a/dlls/winevulkan/vulkan_thunks.c b/dlls/winevulkan/vulkan_thunks.c
+index a7480bf2da4..8811fbbb8a5 100644
+--- a/dlls/winevulkan/vulkan_thunks.c
++++ b/dlls/winevulkan/vulkan_thunks.c
+@@ -1569,6 +1569,22 @@ VkResult convert_VkDeviceCreateInfo_struct_chain(const void *pNext, VkDeviceCrea
+             break;
+         }
+ 
++        case VK_STRUCTURE_TYPE_DEVICE_PRIVATE_DATA_CREATE_INFO_EXT:
++        {
++            const VkDevicePrivateDataCreateInfoEXT *in = (const VkDevicePrivateDataCreateInfoEXT *)in_header;
++            VkDevicePrivateDataCreateInfoEXT *out;
++
++            if (!(out = heap_alloc(sizeof(*out)))) goto out_of_memory;
++
++            out->sType = in->sType;
++            out->pNext = NULL;
++            out->privateDataSlotRequestCount = in->privateDataSlotRequestCount;
++
++            out_header->pNext = (VkBaseOutStructure *)out;
++            out_header = out_header->pNext;
++            break;
++        }
++
+         case VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FEATURES_2:
+         {
+             const VkPhysicalDeviceFeatures2 *in = (const VkPhysicalDeviceFeatures2 *)in_header;
+diff --git a/dlls/winevulkan/winevulkan.json b/dlls/winevulkan/winevulkan.json
+index 60f2a2fac9c..84b47bb6104 100644
+--- a/dlls/winevulkan/winevulkan.json
++++ b/dlls/winevulkan/winevulkan.json
+@@ -2,6 +2,6 @@
+     "file_format_version": "1.0.0",
+     "ICD": {
+         "library_path": ".\\winevulkan.dll",
+-        "api_version": "1.2.140"
++        "api_version": "1.2.142"
+     }
+ }
+diff --git a/include/wine/vulkan.h b/include/wine/vulkan.h
+index 513b5ffa859..d419d3f8e4b 100644
+--- a/include/wine/vulkan.h
++++ b/include/wine/vulkan.h
+@@ -399,14 +399,14 @@
+ #define VK_QCOM_render_pass_store_ops_EXTENSION_NAME "VK_QCOM_render_pass_store_ops"
+ 
+ #define VK_MAKE_VERSION(major, minor, patch) \
+-    (((major) << 22) | ((minor) << 12) | (patch))
++    ((((uint32_t)(major)) << 22) | (((uint32_t)(minor)) << 12) | ((uint32_t)(patch)))
+ #define VK_VERSION_MAJOR(version) ((uint32_t)(version) >> 22)
+ #define VK_VERSION_MINOR(version) (((uint32_t)(version) >> 12) & 0x3ff)
+ #define VK_VERSION_PATCH(version) ((uint32_t)(version) & 0xfff)
+ #define VK_API_VERSION_1_0 VK_MAKE_VERSION(1, 0, 0)
+ #define VK_API_VERSION_1_1 VK_MAKE_VERSION(1, 1, 0)
+ #define VK_API_VERSION_1_2 VK_MAKE_VERSION(1, 2, 0)
+-#define VK_HEADER_VERSION 140
++#define VK_HEADER_VERSION 142
+ #define VK_HEADER_VERSION_COMPLETE VK_MAKE_VERSION(1, 2, VK_HEADER_VERSION)
+ #define VK_DEFINE_HANDLE(object) typedef struct object##_T* object;
+ #define VK_DEFINE_NON_DISPATCHABLE_HANDLE(object) typedef uint64_t object;
+@@ -1135,6 +1135,7 @@ typedef enum VkDriverId
+     VK_DRIVER_ID_GOOGLE_SWIFTSHADER = 10,
+     VK_DRIVER_ID_GGP_PROPRIETARY = 11,
+     VK_DRIVER_ID_BROADCOM_PROPRIETARY = 12,
++    VK_DRIVER_ID_MESA_LLVMPIPE = 13,
+     VK_DRIVER_ID_AMD_PROPRIETARY_KHR = VK_DRIVER_ID_AMD_PROPRIETARY,
+     VK_DRIVER_ID_AMD_OPEN_SOURCE_KHR = VK_DRIVER_ID_AMD_OPEN_SOURCE,
+     VK_DRIVER_ID_MESA_RADV_KHR = VK_DRIVER_ID_MESA_RADV,
+@@ -3087,6 +3088,7 @@ typedef enum VkVendorId
+     VK_VENDOR_ID_VSI = 0x00010002,
+     VK_VENDOR_ID_KAZAN = 0x00010003,
+     VK_VENDOR_ID_CODEPLAY = 0x00010004,
++    VK_VENDOR_ID_MESA = 0x00010005,
+     VK_VENDOR_ID_MAX_ENUM = 0x7fffffff,
+ } VkVendorId;
+ 

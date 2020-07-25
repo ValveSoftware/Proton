@@ -1,0 +1,158 @@
+From 8007d19c2792b5b177bd7200dc3567df4677dc0c Mon Sep 17 00:00:00 2001
+From: Zhiyi Zhang <zzhang@codeweavers.com>
+Date: Wed, 17 Jun 2020 20:02:26 +0800
+Subject: [PATCH] winevulkan: Fill Vulkan device LUID property.
+
+Signed-off-by: Zhiyi Zhang <zzhang@codeweavers.com>
+Signed-off-by: Liam Middlebrook <lmiddlebrook@nvidia.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/vulkan-1/tests/vulkan.c |  6 ++-
+ dlls/winevulkan/Makefile.in  |  2 +-
+ dlls/winevulkan/vulkan.c     | 79 ++++++++++++++++++++++++++++++++++++
+ 3 files changed, 85 insertions(+), 2 deletions(-)
+
+diff --git a/dlls/vulkan-1/tests/vulkan.c b/dlls/vulkan-1/tests/vulkan.c
+index 63fd48b33d3..6f9e9f115c0 100644
+--- a/dlls/vulkan-1/tests/vulkan.c
++++ b/dlls/vulkan-1/tests/vulkan.c
+@@ -212,7 +212,11 @@ static void test_enumerate_physical_device2(void)
+             trace("Device '%s', device UUID: %s, driver UUID: %s, device LUID: %08x:%08x.\n",
+                   properties2.properties.deviceName, wine_dbgstr_guid((const GUID *)id.deviceUUID),
+                   wine_dbgstr_guid((const GUID *)id.driverUUID), luid->HighPart, luid->LowPart);
+-            todo_wine ok(id.deviceLUIDValid == VK_TRUE, "Expected valid device LUID.\n");
++            ok(id.deviceLUIDValid == VK_TRUE, "Expected valid device LUID.\n");
++            /* If deviceLUIDValid is VK_TRUE, deviceNodeMask must contain exactly one bit according
++             * to the Vulkan specification */
++            ok(id.deviceNodeMask && !(id.deviceNodeMask & (id.deviceNodeMask - 1)),
++               "Expect deviceNodeMask to have only one bit set, got %#x.\n", id.deviceNodeMask);
+         }
+     }
+ 
+diff --git a/dlls/winevulkan/Makefile.in b/dlls/winevulkan/Makefile.in
+index 251de5c68e5..f95a1e3113a 100644
+--- a/dlls/winevulkan/Makefile.in
++++ b/dlls/winevulkan/Makefile.in
+@@ -1,6 +1,6 @@
+ MODULE    = winevulkan.dll
+ IMPORTLIB = winevulkan
+-IMPORTS   = user32 gdi32 advapi32
++IMPORTS   = user32 gdi32 advapi32 setupapi
+ 
+ C_SRCS = \
+ 	vulkan.c \
+diff --git a/dlls/winevulkan/vulkan.c b/dlls/winevulkan/vulkan.c
+index e67c398f604..eb22e72ae36 100644
+--- a/dlls/winevulkan/vulkan.c
++++ b/dlls/winevulkan/vulkan.c
+@@ -23,11 +23,17 @@
+ #include "winbase.h"
+ #include "winreg.h"
+ #include "winuser.h"
++#include "initguid.h"
++#include "devguid.h"
++#include "setupapi.h"
+ 
+ #include "vulkan_private.h"
+ 
+ WINE_DEFAULT_DEBUG_CHANNEL(vulkan);
+ 
++DEFINE_DEVPROPKEY(DEVPROPKEY_GPU_LUID, 0x60b193cb, 0x5276, 0x4d0f, 0x96, 0xfc, 0xf1, 0x73, 0xab, 0xad, 0x3e, 0xc6, 2);
++DEFINE_DEVPROPKEY(WINE_DEVPROPKEY_GPU_VULKAN_UUID, 0x233a9ef3, 0xafc4, 0x4abd, 0xb5, 0x64, 0xc3, 0x2f, 0x21, 0xf1, 0x53, 0x5c, 2);
++
+ /* For now default to 4 as it felt like a reasonable version feature wise to support.
+  * Don't support the optional vk_icdGetPhysicalDeviceProcAddr introduced in this version
+  * as it is unlikely we will implement physical device extensions, which the loader is not
+@@ -1245,12 +1251,84 @@ VkResult WINAPI wine_vkGetPhysicalDeviceImageFormatProperties2KHR(VkPhysicalDevi
+     return res;
+ }
+ 
++static HANDLE get_display_device_init_mutex(void)
++{
++    static const WCHAR init_mutexW[] = {'d','i','s','p','l','a','y','_','d','e','v','i','c','e','_','i','n','i','t',0};
++    HANDLE mutex = CreateMutexW(NULL, FALSE, init_mutexW);
++
++    WaitForSingleObject(mutex, INFINITE);
++    return mutex;
++}
++
++static void release_display_device_init_mutex(HANDLE mutex)
++{
++    ReleaseMutex(mutex);
++    CloseHandle(mutex);
++}
++
++/* Wait until graphics driver is loaded by explorer */
++static void wait_graphics_driver_ready(void)
++{
++    static BOOL ready = FALSE;
++
++    if (!ready)
++    {
++        SendMessageW(GetDesktopWindow(), WM_NULL, 0, 0);
++        ready = TRUE;
++    }
++}
++
++static void fill_luid_property(VkPhysicalDeviceProperties2 *properties2)
++{
++    static const WCHAR pci[] = {'P','C','I',0};
++    VkPhysicalDeviceIDProperties *id;
++    SP_DEVINFO_DATA device_data;
++    DWORD type, device_idx = 0;
++    HDEVINFO devinfo;
++    HANDLE mutex;
++    GUID uuid;
++    LUID luid;
++
++    if (!(id = wine_vk_find_struct(properties2, PHYSICAL_DEVICE_ID_PROPERTIES)))
++        return;
++
++    wait_graphics_driver_ready();
++    mutex = get_display_device_init_mutex();
++    devinfo = SetupDiGetClassDevsW(&GUID_DEVCLASS_DISPLAY, pci, NULL, 0);
++    device_data.cbSize = sizeof(device_data);
++    while (SetupDiEnumDeviceInfo(devinfo, device_idx++, &device_data))
++    {
++        if (!SetupDiGetDevicePropertyW(devinfo, &device_data, &WINE_DEVPROPKEY_GPU_VULKAN_UUID,
++                &type, (BYTE *)&uuid, sizeof(uuid), NULL, 0))
++            continue;
++
++        if (!IsEqualGUID(&uuid, id->deviceUUID))
++            continue;
++
++        if (SetupDiGetDevicePropertyW(devinfo, &device_data, &DEVPROPKEY_GPU_LUID, &type,
++                (BYTE *)&luid, sizeof(luid), NULL, 0))
++        {
++            memcpy(&id->deviceLUID, &luid, sizeof(id->deviceLUID));
++            id->deviceLUIDValid = VK_TRUE;
++            id->deviceNodeMask = 1;
++            break;
++        }
++    }
++    SetupDiDestroyDeviceInfoList(devinfo);
++    release_display_device_init_mutex(mutex);
++
++    TRACE("deviceName:%s deviceLUIDValid:%d LUID:%08x:%08x deviceNodeMask:%#x.\n",
++            properties2->properties.deviceName, id->deviceLUIDValid, luid.HighPart, luid.LowPart,
++            id->deviceNodeMask);
++}
++
+ void WINAPI wine_vkGetPhysicalDeviceProperties2(VkPhysicalDevice phys_dev,
+         VkPhysicalDeviceProperties2 *properties2)
+ {
+     TRACE("%p, %p\n", phys_dev, properties2);
+ 
+     thunk_vkGetPhysicalDeviceProperties2(phys_dev, properties2);
++    fill_luid_property(properties2);
+ }
+ 
+ void WINAPI wine_vkGetPhysicalDeviceProperties2KHR(VkPhysicalDevice phys_dev,
+@@ -1259,6 +1337,7 @@ void WINAPI wine_vkGetPhysicalDeviceProperties2KHR(VkPhysicalDevice phys_dev,
+     TRACE("%p, %p\n", phys_dev, properties2);
+ 
+     thunk_vkGetPhysicalDeviceProperties2KHR(phys_dev, properties2);
++    fill_luid_property(properties2);
+ }
+ 
+ void WINAPI wine_vkGetPhysicalDeviceExternalSemaphoreProperties(VkPhysicalDevice phys_dev,

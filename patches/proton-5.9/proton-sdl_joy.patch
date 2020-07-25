@@ -1,0 +1,2588 @@
+From 881abc8ac09f7076cdd765c04d6c1d05600296d9 Mon Sep 17 00:00:00 2001
+From: Aric Stewart <aric@codeweavers.com>
+Date: Thu, 28 Dec 2017 12:43:32 -0600
+Subject: [PATCH] dinput: Add SDL support
+
+v2: Include comments from Andrew including opening and closing devices more cleanly
+Signed-off-by: Aric Stewart <aric@codeweavers.com>
+---
+ dlls/dinput/Makefile.in      |   4 +-
+ dlls/dinput/dinput_main.c    |  21 ++
+ dlls/dinput/dinput_private.h |   1 +
+ dlls/dinput/joystick_sdl.c   | 707 +++++++++++++++++++++++++++++++++++
+ dlls/dinput8/Makefile.in     |   5 +-
+ 5 files changed, 736 insertions(+), 2 deletions(-)
+ create mode 100644 dlls/dinput/joystick_sdl.c
+
+diff --git a/dlls/dinput/Makefile.in b/dlls/dinput/Makefile.in
+index 3b046d61d44..f968dbbcc32 100644
+--- a/dlls/dinput/Makefile.in
++++ b/dlls/dinput/Makefile.in
+@@ -2,7 +2,8 @@ MODULE    = dinput.dll
+ IMPORTLIB = dinput
+ IMPORTS   = dxguid uuid comctl32 ole32 user32 advapi32
+ EXTRADEFS = -DDIRECTINPUT_VERSION=0x0700
+-EXTRALIBS = $(IOKIT_LIBS) $(FORCEFEEDBACK_LIBS)
++EXTRALIBS = $(IOKIT_LIBS) $(FORCEFEEDBACK_LIBS) $(SDL2_LIBS)
++EXTRAINCL = $(SDL2_CFLAGS)
+ 
+ C_SRCS = \
+ 	config.c \
+@@ -14,6 +15,7 @@ C_SRCS = \
+ 	joystick_linux.c \
+ 	joystick_linuxinput.c \
+ 	joystick_osx.c \
++	joystick_sdl.c \
+ 	keyboard.c \
+ 	mouse.c
+ 
+diff --git a/dlls/dinput/dinput_main.c b/dlls/dinput/dinput_main.c
+index 54777da2d96..ad3619abcaf 100644
+--- a/dlls/dinput/dinput_main.c
++++ b/dlls/dinput/dinput_main.c
+@@ -88,6 +88,7 @@ static const struct dinput_device *dinput_devices[] =
+ {
+     &mouse_device,
+     &keyboard_device,
++    &joystick_sdl_device,
+     &joystick_linuxinput_device,
+     &joystick_linux_device,
+     &joystick_osx_device
+@@ -451,6 +452,7 @@ static HRESULT WINAPI IDirectInputAImpl_EnumDevices(
+     unsigned int i;
+     int j;
+     HRESULT r;
++    BOOL found_device = FALSE;
+ 
+     TRACE("(this=%p,0x%04x '%s',%p,%p,0x%04x)\n",
+ 	  This, dwDevType, _dump_DIDEVTYPE_value(dwDevType, This->dwVersion),
+@@ -472,9 +474,15 @@ static HRESULT WINAPI IDirectInputAImpl_EnumDevices(
+             TRACE("  - checking device %u ('%s')\n", i, dinput_devices[i]->name);
+             r = dinput_devices[i]->enum_deviceA(dwDevType, dwFlags, &devInstance, This->dwVersion, j);
+             if (r == S_OK)
++            {
++                found_device = TRUE;
+                 if (enum_callback_wrapper(lpCallback, &devInstance, pvRef) == DIENUM_STOP)
+                     return S_OK;
++            }
+         }
++        /* If we have found devices after SDL stop enumeration */
++        if (dinput_devices[i] == &joystick_sdl_device && found_device)
++            return S_OK;
+     }
+ 
+     return S_OK;
+@@ -491,6 +499,7 @@ static HRESULT WINAPI IDirectInputWImpl_EnumDevices(
+     unsigned int i;
+     int j;
+     HRESULT r;
++    BOOL found_device = FALSE;
+ 
+     TRACE("(this=%p,0x%04x '%s',%p,%p,0x%04x)\n",
+ 	  This, dwDevType, _dump_DIDEVTYPE_value(dwDevType, This->dwVersion),
+@@ -512,9 +521,15 @@ static HRESULT WINAPI IDirectInputWImpl_EnumDevices(
+             TRACE("  - checking device %u ('%s')\n", i, dinput_devices[i]->name);
+             r = dinput_devices[i]->enum_deviceW(dwDevType, dwFlags, &devInstance, This->dwVersion, j);
+             if (r == S_OK)
++            {
++                found_device = TRUE;
+                 if (enum_callback_wrapper(lpCallback, &devInstance, pvRef) == DIENUM_STOP)
+                     return S_OK;
++            }
+         }
++        /* If we have found devices after SDL stop enumeration */
++        if (dinput_devices[i] == &joystick_sdl_device && found_device)
++            return S_OK;
+     }
+ 
+     return S_OK;
+@@ -1084,6 +1099,9 @@ static HRESULT WINAPI IDirectInput8AImpl_EnumDevicesBySemantics(
+                 didevis[device_count-1] = didevi;
+             }
+         }
++        /* If we have found devices after SDL stop enumeration */
++        if (dinput_devices[i] == &joystick_sdl_device && device_count)
++            return S_OK;
+     }
+ 
+     remain = device_count;
+@@ -1189,6 +1207,9 @@ static HRESULT WINAPI IDirectInput8WImpl_EnumDevicesBySemantics(
+                 didevis[device_count-1] = didevi;
+             }
+         }
++        /* If we have found devices after SDL stop enumeration */
++        if (dinput_devices[i] == &joystick_sdl_device && device_count)
++            return S_OK;
+     }
+ 
+     remain = device_count;
+diff --git a/dlls/dinput/dinput_private.h b/dlls/dinput/dinput_private.h
+index abdfbeb2531..1d87999ff50 100644
+--- a/dlls/dinput/dinput_private.h
++++ b/dlls/dinput/dinput_private.h
+@@ -70,6 +70,7 @@ extern const struct dinput_device keyboard_device DECLSPEC_HIDDEN;
+ extern const struct dinput_device joystick_linux_device DECLSPEC_HIDDEN;
+ extern const struct dinput_device joystick_linuxinput_device DECLSPEC_HIDDEN;
+ extern const struct dinput_device joystick_osx_device DECLSPEC_HIDDEN;
++extern const struct dinput_device joystick_sdl_device DECLSPEC_HIDDEN;
+ 
+ extern void check_dinput_hooks(LPDIRECTINPUTDEVICE8W) DECLSPEC_HIDDEN;
+ extern void check_dinput_events(void) DECLSPEC_HIDDEN;
+diff --git a/dlls/dinput/joystick_sdl.c b/dlls/dinput/joystick_sdl.c
+new file mode 100644
+index 00000000000..de54add9b6e
+--- /dev/null
++++ b/dlls/dinput/joystick_sdl.c
+@@ -0,0 +1,707 @@
++/*  DirectInput Joystick device from SDL
++ *
++ * Copyright 1998,2000 Marcus Meissner
++ * Copyright 1998,1999 Lionel Ulmer
++ * Copyright 2000-2001 TransGaming Technologies Inc.
++ * Copyright 2005 Daniel Remenak
++ * Copyright 2017 CodeWeavers, Aric Stewart
++ *
++ * This library is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU Lesser General Public
++ * License as published by the Free Software Foundation; either
++ * version 2.1 of the License, or (at your option) any later version.
++ *
++ * This library is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++ * Lesser General Public License for more details.
++ *
++ * You should have received a copy of the GNU Lesser General Public
++ * License along with this library; if not, write to the Free Software
++ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
++ */
++
++#include "config.h"
++#include "wine/port.h"
++
++#include <assert.h>
++#include <stdarg.h>
++#include <stdio.h>
++#include <string.h>
++#include <time.h>
++#ifdef HAVE_UNISTD_H
++# include <unistd.h>
++#endif
++#ifdef HAVE_SDL2_SDL_H
++# include <SDL2/SDL.h>
++#endif
++#include <errno.h>
++
++#include "wine/debug.h"
++#include "wine/unicode.h"
++#include "wine/list.h"
++#include "windef.h"
++#include "winbase.h"
++#include "winerror.h"
++#include "winreg.h"
++#include "dinput.h"
++
++#include "dinput_private.h"
++#include "device_private.h"
++#include "joystick_private.h"
++
++#ifdef HAVE_SDL2_SDL_H
++
++WINE_DEFAULT_DEBUG_CHANNEL(dinput);
++
++typedef struct JoystickImpl JoystickImpl;
++static const IDirectInputDevice8AVtbl JoystickAvt;
++static const IDirectInputDevice8WVtbl JoystickWvt;
++
++struct SDLDev {
++    int id;
++    WORD vendor_id;
++    WORD product_id;
++    CHAR *name;
++
++    BOOL has_ff;
++};
++
++struct JoystickImpl
++{
++    struct JoystickGenericImpl generic;
++    struct SDLDev              *sdldev;
++
++    SDL_Joystick *device;
++};
++
++static inline JoystickImpl *impl_from_IDirectInputDevice8A(IDirectInputDevice8A *iface)
++{
++    return CONTAINING_RECORD(CONTAINING_RECORD(CONTAINING_RECORD(iface, IDirectInputDeviceImpl, IDirectInputDevice8A_iface),
++           JoystickGenericImpl, base), JoystickImpl, generic);
++}
++static inline JoystickImpl *impl_from_IDirectInputDevice8W(IDirectInputDevice8W *iface)
++{
++    return CONTAINING_RECORD(CONTAINING_RECORD(CONTAINING_RECORD(iface, IDirectInputDeviceImpl, IDirectInputDevice8W_iface),
++           JoystickGenericImpl, base), JoystickImpl, generic);
++}
++
++static inline IDirectInputDevice8W *IDirectInputDevice8W_from_impl(JoystickImpl *This)
++{
++    return &This->generic.base.IDirectInputDevice8W_iface;
++}
++
++static const GUID DInput_Wine_SDL_Joystick_GUID = { /* 001E36B7-5DBA-4C4F-A8C9-CFC8689DB403 */
++  0x001E36B7, 0x5DBA, 0x4C4F, {0xA8, 0xC9, 0xCF, 0xC8, 0x68, 0x9D, 0xB4, 0x03}
++};
++
++static int have_sdldevs = -1;
++static struct SDLDev *sdldevs = NULL;
++
++static void find_sdldevs(void)
++{
++    int i;
++
++    if (InterlockedCompareExchange(&have_sdldevs, 0, -1) != -1)
++        /* Someone beat us to it */
++        return;
++
++    SDL_Init(SDL_INIT_JOYSTICK|SDL_INIT_HAPTIC);
++    SDL_JoystickEventState(SDL_ENABLE);
++
++    for (i = 0; i < SDL_NumJoysticks(); i++)
++    {
++        struct SDLDev sdldev = {0};
++        struct SDLDev *new_sdldevs;
++        SDL_Joystick *device;
++        const CHAR* name;
++
++        sdldev.id = i;
++        device = SDL_JoystickOpen(i);
++
++        name = SDL_JoystickName(device);
++        sdldev.name = HeapAlloc(GetProcessHeap(), 0, strlen(name) + 1);
++        strcpy(sdldev.name, name);
++
++        if (device_disabled_registry(sdldev.name)) {
++            SDL_JoystickClose(device);
++            continue;
++        }
++
++        TRACE("Found a joystick (%i) on %p: %s\n", have_sdldevs, device, sdldev.name);
++
++        sdldev.vendor_id = SDL_JoystickGetVendor(device);
++        sdldev.product_id = SDL_JoystickGetProduct(device);
++
++        if (!have_sdldevs)
++            new_sdldevs = HeapAlloc(GetProcessHeap(), 0, sizeof(struct SDLDev));
++        else
++            new_sdldevs = HeapReAlloc(GetProcessHeap(), 0, sdldevs, (1 + have_sdldevs) * sizeof(struct SDLDev));
++
++        SDL_JoystickClose(device);
++        if (!new_sdldevs)
++        {
++            continue;
++        }
++        sdldevs = new_sdldevs;
++        sdldevs[have_sdldevs] = sdldev;
++        have_sdldevs++;
++    }
++}
++
++static void fill_joystick_dideviceinstanceW(LPDIDEVICEINSTANCEW lpddi, DWORD version, int id)
++{
++    DWORD dwSize = lpddi->dwSize;
++
++    TRACE("%d %p\n", dwSize, lpddi);
++    memset(lpddi, 0, dwSize);
++
++    lpddi->dwSize       = dwSize;
++    lpddi->guidInstance = DInput_Wine_SDL_Joystick_GUID;
++    lpddi->guidInstance.Data3 = id;
++    lpddi->guidProduct = DInput_Wine_SDL_Joystick_GUID;
++    lpddi->guidFFDriver = GUID_NULL;
++
++    if (version >= 0x0800)
++        lpddi->dwDevType = DI8DEVTYPE_JOYSTICK | (DI8DEVTYPEJOYSTICK_STANDARD << 8);
++    else
++        lpddi->dwDevType = DIDEVTYPE_JOYSTICK | (DIDEVTYPEJOYSTICK_TRADITIONAL << 8);
++
++    /* Assume the joystick as HID if it is attached to USB bus and has a valid VID/PID */
++    if ( sdldevs[id].vendor_id && sdldevs[id].product_id)
++    {
++        lpddi->dwDevType |= DIDEVTYPE_HID;
++        lpddi->wUsagePage = 0x01; /* Desktop */
++        if (lpddi->dwDevType == DI8DEVTYPE_JOYSTICK || lpddi->dwDevType == DIDEVTYPE_JOYSTICK)
++            lpddi->wUsage = 0x04; /* Joystick */
++        else
++            lpddi->wUsage = 0x05; /* Game Pad */
++    }
++
++    MultiByteToWideChar(CP_ACP, 0, sdldevs[id].name, -1, lpddi->tszInstanceName, MAX_PATH);
++    MultiByteToWideChar(CP_ACP, 0, sdldevs[id].name, -1, lpddi->tszProductName, MAX_PATH);
++}
++
++static void fill_joystick_dideviceinstanceA(LPDIDEVICEINSTANCEA lpddi, DWORD version, int id)
++{
++    DIDEVICEINSTANCEW lpddiW;
++    DWORD dwSize = lpddi->dwSize;
++
++    lpddiW.dwSize = sizeof(lpddiW);
++    fill_joystick_dideviceinstanceW(&lpddiW, version, id);
++
++    TRACE("%d %p\n", dwSize, lpddi);
++    memset(lpddi, 0, dwSize);
++
++    /* Convert W->A */
++    lpddi->dwSize = dwSize;
++    lpddi->guidInstance = lpddiW.guidInstance;
++    lpddi->guidProduct = lpddiW.guidProduct;
++    lpddi->dwDevType = lpddiW.dwDevType;
++    strcpy(lpddi->tszInstanceName, sdldevs[id].name);
++    strcpy(lpddi->tszProductName,  sdldevs[id].name);
++    lpddi->guidFFDriver = lpddiW.guidFFDriver;
++    lpddi->wUsagePage = lpddiW.wUsagePage;
++    lpddi->wUsage = lpddiW.wUsage;
++}
++
++static HRESULT sdl_enum_deviceA(DWORD dwDevType, DWORD dwFlags, LPDIDEVICEINSTANCEA lpddi, DWORD version, int id)
++{
++  find_sdldevs();
++
++  if (id >= have_sdldevs) {
++    return E_FAIL;
++  }
++
++  if (!((dwDevType == 0) ||
++        ((dwDevType == DIDEVTYPE_JOYSTICK) && (version > 0x0300 && version < 0x0800)) ||
++        (((dwDevType == DI8DEVCLASS_GAMECTRL) || (dwDevType == DI8DEVTYPE_JOYSTICK)) && (version >= 0x0800))))
++    return S_FALSE;
++
++  if (!(dwFlags & DIEDFL_FORCEFEEDBACK) || sdldevs[id].has_ff) {
++    fill_joystick_dideviceinstanceA(lpddi, version, id);
++    return S_OK;
++  }
++  return S_FALSE;
++}
++
++static HRESULT sdl_enum_deviceW(DWORD dwDevType, DWORD dwFlags, LPDIDEVICEINSTANCEW lpddi, DWORD version, int id)
++{
++  find_sdldevs();
++
++  if (id >= have_sdldevs) {
++    return E_FAIL;
++  }
++
++  if (!((dwDevType == 0) ||
++        ((dwDevType == DIDEVTYPE_JOYSTICK) && (version > 0x0300 && version < 0x0800)) ||
++        (((dwDevType == DI8DEVCLASS_GAMECTRL) || (dwDevType == DI8DEVTYPE_JOYSTICK)) && (version >= 0x0800))))
++    return S_FALSE;
++
++  if (!(dwFlags & DIEDFL_FORCEFEEDBACK) || sdldevs[id].has_ff) {
++    fill_joystick_dideviceinstanceW(lpddi, version, id);
++    return S_OK;
++  }
++  return S_FALSE;
++}
++
++static void poll_sdl_device_state(LPDIRECTINPUTDEVICE8A iface)
++{
++    JoystickImpl *This = impl_from_IDirectInputDevice8A(iface);
++    int i;
++    int inst_id = 0;
++    int newVal = 0;
++
++    SDL_JoystickUpdate();
++
++    for (i = 0; i < SDL_JoystickNumButtons(This->device); i++)
++    {
++        int val = SDL_JoystickGetButton(This->device, i);
++        int oldVal = This->generic.js.rgbButtons[i];
++        newVal = val ? 0x80 : 0x0;
++        This->generic.js.rgbButtons[i] = newVal;
++        if (oldVal != newVal)
++        {
++            TRACE("Button: %i val %d oldVal %d newVal %d\n",  i, val, oldVal, newVal);
++            inst_id = DIDFT_MAKEINSTANCE(i) | DIDFT_PSHBUTTON;
++            queue_event(iface, inst_id, newVal, GetCurrentTime(), This->generic.base.dinput->evsequence++);
++        }
++    }
++    for (i = 0; i < SDL_JoystickNumAxes(This->device); i++)
++    {
++        int oldVal;
++        newVal = SDL_JoystickGetAxis(This->device, i);
++        newVal = joystick_map_axis(&This->generic.props[i], newVal);
++        switch (i)
++        {
++            case 0: oldVal = This->generic.js.lX;
++                    This->generic.js.lX  = newVal; break;
++            case 1: oldVal = This->generic.js.lY;
++                    This->generic.js.lY  = newVal; break;
++            case 2: oldVal = This->generic.js.lZ;
++                    This->generic.js.lZ  = newVal; break;
++            case 3: oldVal = This->generic.js.lRx;
++                    This->generic.js.lRx = newVal; break;
++            case 4: oldVal = This->generic.js.lRy;
++                    This->generic.js.lRy = newVal; break;
++            case 5: oldVal = This->generic.js.lRz;
++                    This->generic.js.lRz = newVal; break;
++            case 6: oldVal = This->generic.js.rglSlider[0];
++                    This->generic.js.rglSlider[0] = newVal; break;
++            case 7: oldVal = This->generic.js.rglSlider[1];
++                    This->generic.js.rglSlider[1] = newVal; break;
++        }
++        if (oldVal != newVal)
++        {
++            TRACE("Axis: %i oldVal %d newVal %d\n",  i, oldVal, newVal);
++            inst_id = DIDFT_MAKEINSTANCE(i) | DIDFT_ABSAXIS;
++            queue_event(iface, inst_id, newVal, GetCurrentTime(), This->generic.base.dinput->evsequence++);
++        }
++    }
++    for (i = 0; i < SDL_JoystickNumHats(This->device); i++)
++    {
++        int oldVal = This->generic.js.rgdwPOV[i];
++        newVal = SDL_JoystickGetHat(This->device, i);
++        switch (newVal)
++        {
++            case SDL_HAT_CENTERED: newVal = -1; break;
++            case SDL_HAT_UP: newVal = 0; break;
++            case SDL_HAT_RIGHTUP:newVal = 4500; break;
++            case SDL_HAT_RIGHT: newVal = 9000; break;
++            case SDL_HAT_RIGHTDOWN: newVal = 13500; break;
++            case SDL_HAT_DOWN: newVal = 18000; break;
++            case SDL_HAT_LEFTDOWN: newVal = 22500; break;
++            case SDL_HAT_LEFT: newVal = 27000; break;
++            case SDL_HAT_LEFTUP: newVal = 31500; break;
++        }
++        if (oldVal != newVal)
++        {
++            TRACE("Hat : %i oldVal %d newVal %d\n",  i, oldVal, newVal);
++            This->generic.js.rgdwPOV[i] = newVal;
++            inst_id = DIDFT_MAKEINSTANCE(i) | DIDFT_POV;
++            queue_event(iface, inst_id, newVal, GetCurrentTime(), This->generic.base.dinput->evsequence++);
++        }
++    }
++}
++
++static JoystickImpl *alloc_device(REFGUID rguid, IDirectInputImpl *dinput, unsigned short index)
++{
++    JoystickImpl* newDevice;
++    LPDIDATAFORMAT df = NULL;
++    DIDEVICEINSTANCEW ddi;
++    int i,idx = 0;
++
++    newDevice = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(JoystickImpl));
++    if (!newDevice) return NULL;
++
++    newDevice->generic.guidInstance = DInput_Wine_SDL_Joystick_GUID;
++    newDevice->generic.guidInstance.Data3 = index;
++    newDevice->generic.guidProduct = DInput_Wine_SDL_Joystick_GUID;
++    newDevice->generic.joy_polldev = poll_sdl_device_state;
++
++    newDevice->generic.base.IDirectInputDevice8A_iface.lpVtbl = &JoystickAvt;
++    newDevice->generic.base.IDirectInputDevice8W_iface.lpVtbl = &JoystickWvt;
++    newDevice->generic.base.ref    = 1;
++    newDevice->generic.base.guid   = *rguid;
++    newDevice->generic.base.dinput = dinput;
++    newDevice->sdldev              = &sdldevs[index];
++    newDevice->generic.name        = (char*)newDevice->sdldev->name;
++
++    InitializeCriticalSection(&newDevice->generic.base.crit);
++    newDevice->generic.base.crit.DebugInfo->Spare[0] = (DWORD_PTR)(__FILE__ ": JoystickImpl*->base.crit");
++
++    /* Open Device */
++    newDevice->device = SDL_JoystickOpen(newDevice->sdldev->id);
++
++    /* Count number of available axes - supported Axis & POVs */
++    newDevice->generic.devcaps.dwAxes = SDL_JoystickNumAxes(newDevice->device);
++
++    if (newDevice->generic.devcaps.dwAxes > 8 )
++    {
++        WARN("Can't support %d axis. Clamping down to 8\n", newDevice->generic.devcaps.dwAxes);
++        newDevice->generic.devcaps.dwAxes = 8;
++    }
++
++    for (i = 0; i < newDevice->generic.devcaps.dwAxes; i++)
++    {
++        newDevice->generic.props[i].lDevMin = -32768;
++        newDevice->generic.props[i].lDevMax = 32767;
++        newDevice->generic.props[i].lMin =  0;
++        newDevice->generic.props[i].lMax =  0xffff;
++        newDevice->generic.props[i].lDeadZone = 0;
++        newDevice->generic.props[i].lSaturation = 0;
++    }
++
++    newDevice->generic.devcaps.dwPOVs = SDL_JoystickNumHats(newDevice->device);
++    if (newDevice->generic.devcaps.dwPOVs > 4)
++    {
++        WARN("Can't support %d POV. Clamping down to 4\n", newDevice->generic.devcaps.dwPOVs);
++        newDevice->generic.devcaps.dwPOVs = 4;
++    }
++
++    newDevice->generic.devcaps.dwButtons = SDL_JoystickNumButtons(newDevice->device);
++    if (newDevice->generic.devcaps.dwButtons > 128)
++    {
++        WARN("Can't support %d buttons. Clamping down to 128\n", newDevice->generic.devcaps.dwButtons);
++        newDevice->generic.devcaps.dwButtons = 128;
++    }
++
++    TRACE("axes %u povs %u buttons %u\n", newDevice->generic.devcaps.dwAxes, newDevice->generic.devcaps.dwPOVs, newDevice->generic.devcaps.dwButtons);
++
++    /* Create copy of default data format */
++    if (!(df = HeapAlloc(GetProcessHeap(), 0, c_dfDIJoystick2.dwSize))) goto failed;
++    memcpy(df, &c_dfDIJoystick2, c_dfDIJoystick2.dwSize);
++
++    df->dwNumObjs = newDevice->generic.devcaps.dwAxes + newDevice->generic.devcaps.dwPOVs + newDevice->generic.devcaps.dwButtons;
++    if (!(df->rgodf = HeapAlloc(GetProcessHeap(), 0, df->dwNumObjs * df->dwObjSize))) goto failed;
++
++    for (i = 0; i < newDevice->generic.devcaps.dwAxes; i++)
++    {
++        memcpy(&df->rgodf[idx], &c_dfDIJoystick2.rgodf[idx], df->dwObjSize);
++        df->rgodf[idx].dwType = DIDFT_MAKEINSTANCE(idx) | DIDFT_ABSAXIS;
++        ++idx;
++    }
++
++    for (i = 0; i < newDevice->generic.devcaps.dwPOVs; i++)
++    {
++        memcpy(&df->rgodf[idx], &c_dfDIJoystick2.rgodf[i + 8], df->dwObjSize);
++        df->rgodf[idx++].dwType = DIDFT_MAKEINSTANCE(i) | DIDFT_POV;
++    }
++
++    for (i = 0; i < newDevice->generic.devcaps.dwButtons; i++)
++    {
++        memcpy(&df->rgodf[idx], &c_dfDIJoystick2.rgodf[i + 12], df->dwObjSize);
++        df->rgodf[idx].pguid = &GUID_Button;
++        df->rgodf[idx++].dwType = DIDFT_MAKEINSTANCE(i) | DIDFT_PSHBUTTON;
++    }
++    newDevice->generic.base.data_format.wine_df = df;
++
++    /* Fill the caps */
++    newDevice->generic.devcaps.dwSize = sizeof(newDevice->generic.devcaps);
++    newDevice->generic.devcaps.dwFlags = DIDC_ATTACHED;
++
++    ddi.dwSize = sizeof(ddi);
++    fill_joystick_dideviceinstanceW(&ddi, newDevice->generic.base.dinput->dwVersion, index);
++    newDevice->generic.devcaps.dwDevType = ddi.dwDevType;
++
++    if (newDevice->sdldev->has_ff)
++        newDevice->generic.devcaps.dwFlags |= DIDC_FORCEFEEDBACK;
++
++    IDirectInput_AddRef(&newDevice->generic.base.dinput->IDirectInput7A_iface);
++
++    EnterCriticalSection(&dinput->crit);
++    list_add_tail(&dinput->devices_list, &newDevice->generic.base.entry);
++    LeaveCriticalSection(&dinput->crit);
++
++    return newDevice;
++
++failed:
++    if (df) HeapFree(GetProcessHeap(), 0, df->rgodf);
++    HeapFree(GetProcessHeap(), 0, df);
++    HeapFree(GetProcessHeap(), 0, newDevice);
++    return NULL;
++}
++
++/******************************************************************************
++  *     get_joystick_index : Get the joystick index from a given GUID
++  */
++static unsigned short get_joystick_index(REFGUID guid)
++{
++    GUID wine_joystick = DInput_Wine_SDL_Joystick_GUID;
++    GUID dev_guid = *guid;
++
++    wine_joystick.Data3 = 0;
++    dev_guid.Data3 = 0;
++
++    /* for the standard joystick GUID use index 0 */
++    if(IsEqualGUID(&GUID_Joystick,guid)) return 0;
++
++    /* for the wine joystick GUIDs use the index stored in Data3 */
++    if(IsEqualGUID(&wine_joystick, &dev_guid)) return guid->Data3;
++
++    return 0xffff;
++}
++
++static HRESULT sdl_create_device(IDirectInputImpl *dinput, REFGUID rguid, REFIID riid, LPVOID *pdev, int unicode)
++{
++    unsigned short index;
++
++    TRACE("%p %s %s %p %i\n", dinput, debugstr_guid(rguid), debugstr_guid(riid), pdev, unicode);
++
++    find_sdldevs();
++    *pdev = NULL;
++
++    if ((index = get_joystick_index(rguid)) < 0xffff &&
++        have_sdldevs && index < have_sdldevs)
++    {
++        JoystickImpl *This;
++
++        if (riid == NULL)
++            ;/* nothing */
++        else if (IsEqualGUID(&IID_IDirectInputDeviceA,  riid) ||
++                 IsEqualGUID(&IID_IDirectInputDevice2A, riid) ||
++                 IsEqualGUID(&IID_IDirectInputDevice7A, riid) ||
++                 IsEqualGUID(&IID_IDirectInputDevice8A, riid))
++        {
++            unicode = 0;
++        }
++        else if (IsEqualGUID(&IID_IDirectInputDeviceW,  riid) ||
++                 IsEqualGUID(&IID_IDirectInputDevice2W, riid) ||
++                 IsEqualGUID(&IID_IDirectInputDevice7W, riid) ||
++                 IsEqualGUID(&IID_IDirectInputDevice8W, riid))
++        {
++            unicode = 1;
++        }
++        else
++        {
++            WARN("no interface\n");
++            return DIERR_NOINTERFACE;
++        }
++
++        This = alloc_device(rguid, dinput, index);
++        TRACE("Created a Joystick device (%p)\n", This);
++
++        if (!This) return DIERR_OUTOFMEMORY;
++
++        if (unicode)
++            *pdev = &This->generic.base.IDirectInputDevice8W_iface;
++        else
++            *pdev = &This->generic.base.IDirectInputDevice8A_iface;
++
++        return DI_OK;
++    }
++
++    return DIERR_DEVICENOTREG;
++}
++
++const struct dinput_device joystick_sdl_device = {
++  "Wine SDL joystick driver",
++  sdl_enum_deviceA,
++  sdl_enum_deviceW,
++  sdl_create_device
++};
++
++static ULONG WINAPI JoystickWImpl_Release(LPDIRECTINPUTDEVICE8W iface)
++{
++    JoystickImpl *This = impl_from_IDirectInputDevice8W(iface);
++    TRACE("(this=%p)\n", iface);
++    if (This->generic.base.ref == 1 && This->device >= 0)
++    {
++        TRACE("Closing Joystick: %p\n",This);
++        SDL_JoystickClose(This->device);
++        This->device = NULL;
++    }
++    return IDirectInputDevice2WImpl_Release(iface);
++}
++
++static ULONG WINAPI JoystickAImpl_Release(LPDIRECTINPUTDEVICE8A iface)
++{
++    JoystickImpl *This = impl_from_IDirectInputDevice8A(iface);
++    return JoystickWImpl_Release(IDirectInputDevice8W_from_impl(This));
++}
++
++/******************************************************************************
++  *     GetProperty : get input device properties
++  */
++static HRESULT WINAPI JoystickWImpl_GetProperty(LPDIRECTINPUTDEVICE8W iface, REFGUID rguid, LPDIPROPHEADER pdiph)
++{
++    JoystickImpl *This = impl_from_IDirectInputDevice8W(iface);
++
++    TRACE("(this=%p,%s,%p)\n", iface, debugstr_guid(rguid), pdiph);
++    _dump_DIPROPHEADER(pdiph);
++
++    if (!IS_DIPROP(rguid)) return DI_OK;
++
++    switch (LOWORD(rguid)) {
++
++        case (DWORD_PTR) DIPROP_VIDPID:
++        {
++            LPDIPROPDWORD pd = (LPDIPROPDWORD)pdiph;
++
++            if (!This->sdldev->product_id || !This->sdldev->vendor_id)
++                return DIERR_UNSUPPORTED;
++            pd->dwData = MAKELONG(This->sdldev->vendor_id, This->sdldev->product_id);
++            TRACE("DIPROP_VIDPID(%08x)\n", pd->dwData);
++            break;
++        }
++        case (DWORD_PTR) DIPROP_JOYSTICKID:
++        {
++            LPDIPROPDWORD pd = (LPDIPROPDWORD)pdiph;
++
++            pd->dwData = This->sdldev->id;
++            TRACE("DIPROP_JOYSTICKID(%d)\n", pd->dwData);
++            break;
++        }
++
++    default:
++        return JoystickWGenericImpl_GetProperty(iface, rguid, pdiph);
++    }
++
++    return DI_OK;
++}
++
++static HRESULT WINAPI JoystickAImpl_GetProperty(LPDIRECTINPUTDEVICE8A iface, REFGUID rguid, LPDIPROPHEADER pdiph)
++{
++    JoystickImpl *This = impl_from_IDirectInputDevice8A(iface);
++    return JoystickWImpl_GetProperty(IDirectInputDevice8W_from_impl(This), rguid, pdiph);
++}
++
++/******************************************************************************
++  *     GetDeviceInfo : get information about a device's identity
++  */
++static HRESULT WINAPI JoystickAImpl_GetDeviceInfo(LPDIRECTINPUTDEVICE8A iface,
++                                                  LPDIDEVICEINSTANCEA pdidi)
++{
++    JoystickImpl *This = impl_from_IDirectInputDevice8A(iface);
++
++    TRACE("(%p) %p\n", This, pdidi);
++
++    if (pdidi == NULL) return E_POINTER;
++    if ((pdidi->dwSize != sizeof(DIDEVICEINSTANCE_DX3A)) &&
++        (pdidi->dwSize != sizeof(DIDEVICEINSTANCEA)))
++        return DIERR_INVALIDPARAM;
++
++    fill_joystick_dideviceinstanceA(pdidi, This->generic.base.dinput->dwVersion,
++                                    get_joystick_index(&This->generic.base.guid));
++    return DI_OK;
++}
++
++static HRESULT WINAPI JoystickWImpl_GetDeviceInfo(LPDIRECTINPUTDEVICE8W iface,
++                                                  LPDIDEVICEINSTANCEW pdidi)
++{
++    JoystickImpl *This = impl_from_IDirectInputDevice8W(iface);
++
++    TRACE("(%p) %p\n", This, pdidi);
++
++    if (pdidi == NULL) return E_POINTER;
++    if ((pdidi->dwSize != sizeof(DIDEVICEINSTANCE_DX3W)) &&
++        (pdidi->dwSize != sizeof(DIDEVICEINSTANCEW)))
++        return DIERR_INVALIDPARAM;
++
++    fill_joystick_dideviceinstanceW(pdidi, This->generic.base.dinput->dwVersion,
++                                    get_joystick_index(&This->generic.base.guid));
++    return DI_OK;
++}
++
++static const IDirectInputDevice8AVtbl JoystickAvt =
++{
++    IDirectInputDevice2AImpl_QueryInterface,
++    IDirectInputDevice2AImpl_AddRef,
++    JoystickAImpl_Release,
++    JoystickAGenericImpl_GetCapabilities,
++    IDirectInputDevice2AImpl_EnumObjects,
++    JoystickAImpl_GetProperty,
++    JoystickAGenericImpl_SetProperty,
++    IDirectInputDevice2AImpl_Acquire,
++    IDirectInputDevice2AImpl_Unacquire,
++    JoystickAGenericImpl_GetDeviceState,
++    IDirectInputDevice2AImpl_GetDeviceData,
++    IDirectInputDevice2AImpl_SetDataFormat,
++    IDirectInputDevice2AImpl_SetEventNotification,
++    IDirectInputDevice2AImpl_SetCooperativeLevel,
++    JoystickAGenericImpl_GetObjectInfo,
++    JoystickAImpl_GetDeviceInfo,
++    IDirectInputDevice2AImpl_RunControlPanel,
++    IDirectInputDevice2AImpl_Initialize,
++    IDirectInputDevice2AImpl_CreateEffect,
++    IDirectInputDevice2AImpl_EnumEffects,
++    IDirectInputDevice2AImpl_GetEffectInfo,
++    IDirectInputDevice2AImpl_GetForceFeedbackState,
++    IDirectInputDevice2AImpl_SendForceFeedbackCommand,
++    IDirectInputDevice2AImpl_EnumCreatedEffectObjects,
++    IDirectInputDevice2AImpl_Escape,
++    JoystickAGenericImpl_Poll,
++    IDirectInputDevice2AImpl_SendDeviceData,
++    IDirectInputDevice7AImpl_EnumEffectsInFile,
++    IDirectInputDevice7AImpl_WriteEffectToFile,
++    JoystickAGenericImpl_BuildActionMap,
++    JoystickAGenericImpl_SetActionMap,
++    IDirectInputDevice8AImpl_GetImageInfo
++};
++
++static const IDirectInputDevice8WVtbl JoystickWvt =
++{
++    IDirectInputDevice2WImpl_QueryInterface,
++    IDirectInputDevice2WImpl_AddRef,
++    JoystickWImpl_Release,
++    JoystickWGenericImpl_GetCapabilities,
++    IDirectInputDevice2WImpl_EnumObjects,
++    JoystickWImpl_GetProperty,
++    JoystickWGenericImpl_SetProperty,
++    IDirectInputDevice2WImpl_Acquire,
++    IDirectInputDevice2WImpl_Unacquire,
++    JoystickWGenericImpl_GetDeviceState,
++    IDirectInputDevice2WImpl_GetDeviceData,
++    IDirectInputDevice2WImpl_SetDataFormat,
++    IDirectInputDevice2WImpl_SetEventNotification,
++    IDirectInputDevice2WImpl_SetCooperativeLevel,
++    JoystickWGenericImpl_GetObjectInfo,
++    JoystickWImpl_GetDeviceInfo,
++    IDirectInputDevice2WImpl_RunControlPanel,
++    IDirectInputDevice2WImpl_Initialize,
++    IDirectInputDevice2WImpl_CreateEffect,
++    IDirectInputDevice2WImpl_EnumEffects,
++    IDirectInputDevice2WImpl_GetEffectInfo,
++    IDirectInputDevice2WImpl_GetForceFeedbackState,
++    IDirectInputDevice2WImpl_SendForceFeedbackCommand,
++    IDirectInputDevice2WImpl_EnumCreatedEffectObjects,
++    IDirectInputDevice2WImpl_Escape,
++    JoystickWGenericImpl_Poll,
++    IDirectInputDevice2WImpl_SendDeviceData,
++    IDirectInputDevice7WImpl_EnumEffectsInFile,
++    IDirectInputDevice7WImpl_WriteEffectToFile,
++    JoystickWGenericImpl_BuildActionMap,
++    JoystickWGenericImpl_SetActionMap,
++    IDirectInputDevice8WImpl_GetImageInfo
++};
++
++#else
++
++const struct dinput_device joystick_sdl_device = {
++  "Wine SDL joystick driver",
++  NULL,
++  NULL,
++  NULL
++};
++
++#endif
+diff --git a/dlls/dinput8/Makefile.in b/dlls/dinput8/Makefile.in
+index 0ede9f0fb16..9735fb55465 100644
+--- a/dlls/dinput8/Makefile.in
++++ b/dlls/dinput8/Makefile.in
+@@ -2,7 +2,8 @@ MODULE    = dinput8.dll
+ IMPORTLIB = dinput8
+ IMPORTS   = dxguid uuid comctl32 ole32 user32 advapi32
+ EXTRADEFS = -DDIRECTINPUT_VERSION=0x0800
+-EXTRALIBS = $(IOKIT_LIBS) $(FORCEFEEDBACK_LIBS)
++EXTRALIBS = $(IOKIT_LIBS) $(FORCEFEEDBACK_LIBS) $(SDL2_LIBS)
++EXTRAINCL = $(SDL2_CFLAGS)
+ PARENTSRC = ../dinput
+ 
+ C_SRCS = \
+@@ -11,9 +12,11 @@ C_SRCS = \
+ 	device.c \
+ 	dinput_main.c \
+ 	effect_linuxinput.c \
++	effect_sdl.c \
+ 	joystick.c \
+ 	joystick_linux.c \
+ 	joystick_linuxinput.c \
++	joystick_sdl.c \
+ 	joystick_osx.c \
+ 	keyboard.c \
+ 	mouse.c
+From 69287b9bd2fb18738811fc2e4fa988ada69de10c Mon Sep 17 00:00:00 2001
+From: Aric Stewart <aric@codeweavers.com>
+Date: Thu, 28 Dec 2017 13:44:29 -0600
+Subject: [PATCH] dinput: Begin SDL haptic implemeting Get/SetProperty
+
+Signed-off-by: Aric Stewart <aric@codeweavers.com>
+---
+ dlls/dinput/joystick_sdl.c | 106 ++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 104 insertions(+), 2 deletions(-)
+
+diff --git a/dlls/dinput/joystick_sdl.c b/dlls/dinput/joystick_sdl.c
+index de54add9b6e..48608015105 100644
+--- a/dlls/dinput/joystick_sdl.c
++++ b/dlls/dinput/joystick_sdl.c
+@@ -65,6 +65,8 @@ struct SDLDev {
+     CHAR *name;
+ 
+     BOOL has_ff;
++    int autocenter;
++    int gain;
+ };
+ 
+ struct JoystickImpl
+@@ -73,6 +75,7 @@ struct JoystickImpl
+     struct SDLDev              *sdldev;
+ 
+     SDL_Joystick *device;
++    SDL_Haptic *haptic;
+ };
+ 
+ static inline JoystickImpl *impl_from_IDirectInputDevice8A(IDirectInputDevice8A *iface)
+@@ -130,6 +133,17 @@ static void find_sdldevs(void)
+ 
+         TRACE("Found a joystick (%i) on %p: %s\n", have_sdldevs, device, sdldev.name);
+ 
++        if (SDL_JoystickIsHaptic(device))
++        {
++            SDL_Haptic *haptic = SDL_HapticOpenFromJoystick(device);
++            if (haptic)
++            {
++                TRACE(" ... with force feedback\n");
++                sdldev.has_ff = TRUE;
++                SDL_HapticClose(haptic);
++            }
++        }
++
+         sdldev.vendor_id = SDL_JoystickGetVendor(device);
+         sdldev.product_id = SDL_JoystickGetProduct(device);
+ 
+@@ -352,6 +366,7 @@ static JoystickImpl *alloc_device(REFGUID rguid, IDirectInputImpl *dinput, unsig
+ 
+     /* Open Device */
+     newDevice->device = SDL_JoystickOpen(newDevice->sdldev->id);
++    newDevice->haptic = SDL_HapticOpenFromJoystick(newDevice->device);
+ 
+     /* Count number of available axes - supported Axis & POVs */
+     newDevice->generic.devcaps.dwAxes = SDL_JoystickNumAxes(newDevice->device);
+@@ -399,6 +414,8 @@ static JoystickImpl *alloc_device(REFGUID rguid, IDirectInputImpl *dinput, unsig
+     {
+         memcpy(&df->rgodf[idx], &c_dfDIJoystick2.rgodf[idx], df->dwObjSize);
+         df->rgodf[idx].dwType = DIDFT_MAKEINSTANCE(idx) | DIDFT_ABSAXIS;
++        if (newDevice->sdldev->has_ff && i < 2)
++             df->rgodf[idx].dwFlags |= DIDOI_FFACTUATOR;
+         ++idx;
+     }
+ 
+@@ -414,6 +431,10 @@ static JoystickImpl *alloc_device(REFGUID rguid, IDirectInputImpl *dinput, unsig
+         df->rgodf[idx].pguid = &GUID_Button;
+         df->rgodf[idx++].dwType = DIDFT_MAKEINSTANCE(i) | DIDFT_PSHBUTTON;
+     }
++
++    if (newDevice->sdldev->has_ff)
++        newDevice->generic.devcaps.dwFlags |= DIDC_FORCEFEEDBACK;
++
+     newDevice->generic.base.data_format.wine_df = df;
+ 
+     /* Fill the caps */
+@@ -528,6 +549,8 @@ static ULONG WINAPI JoystickWImpl_Release(LPDIRECTINPUTDEVICE8W iface)
+     if (This->generic.base.ref == 1 && This->device >= 0)
+     {
+         TRACE("Closing Joystick: %p\n",This);
++        if (This->sdldev->has_ff)
++            SDL_HapticClose(This->haptic);
+         SDL_JoystickClose(This->device);
+         This->device = NULL;
+     }
+@@ -553,7 +576,22 @@ static HRESULT WINAPI JoystickWImpl_GetProperty(LPDIRECTINPUTDEVICE8W iface, REF
+     if (!IS_DIPROP(rguid)) return DI_OK;
+ 
+     switch (LOWORD(rguid)) {
++        case (DWORD_PTR) DIPROP_AUTOCENTER:
++        {
++            LPDIPROPDWORD pd = (LPDIPROPDWORD)pdiph;
+ 
++            pd->dwData = This->sdldev->autocenter ? DIPROPAUTOCENTER_ON : DIPROPAUTOCENTER_OFF;
++            TRACE("autocenter(%d)\n", pd->dwData);
++            break;
++        }
++        case (DWORD_PTR) DIPROP_FFGAIN:
++        {
++            LPDIPROPDWORD pd = (LPDIPROPDWORD)pdiph;
++
++            pd->dwData = This->sdldev->gain;
++            TRACE("DIPROP_FFGAIN(%d)\n", pd->dwData);
++            break;
++        }
+         case (DWORD_PTR) DIPROP_VIDPID:
+         {
+             LPDIPROPDWORD pd = (LPDIPROPDWORD)pdiph;
+@@ -586,6 +624,70 @@ static HRESULT WINAPI JoystickAImpl_GetProperty(LPDIRECTINPUTDEVICE8A iface, REF
+     return JoystickWImpl_GetProperty(IDirectInputDevice8W_from_impl(This), rguid, pdiph);
+ }
+ 
++static BOOL _SetProperty(JoystickImpl *This, const GUID *prop, const DIPROPHEADER *header)
++{
++    int rc;
++
++    switch(LOWORD(prop))
++    {
++        case (DWORD_PTR)DIPROP_AUTOCENTER:
++        {
++            LPCDIPROPDWORD pd = (LPCDIPROPDWORD)header;
++
++            This->sdldev->autocenter = pd->dwData == DIPROPAUTOCENTER_ON;
++
++            rc = SDL_HapticSetAutocenter(This->haptic, This->sdldev->autocenter * 100);
++            if (rc != 0)
++                ERR("SDL_HapticSetAutocenter failed: %s\n", SDL_GetError());
++            break;
++        }
++        case (DWORD_PTR)DIPROP_FFGAIN:
++        {
++            LPCDIPROPDWORD pd = (LPCDIPROPDWORD)header;
++            int sdl_gain = MulDiv(This->sdldev->gain, 100, 10000);
++
++            TRACE("DIPROP_FFGAIN(%d)\n", pd->dwData);
++
++            This->sdldev->gain = pd->dwData;
++
++            rc = SDL_HapticSetGain(This->haptic, sdl_gain);
++            if (rc != 0)
++                ERR("SDL_HapticSetGain (%i -> %i) failed: %s\n", pd->dwData, sdl_gain, SDL_GetError());
++            break;
++        }
++        default:
++            return FALSE;
++    }
++
++    return TRUE;
++}
++
++static HRESULT WINAPI JoystickWImpl_SetProperty(IDirectInputDevice8W *iface,
++        const GUID *prop, const DIPROPHEADER *header)
++{
++    JoystickImpl *This = impl_from_IDirectInputDevice8W(iface);
++
++    TRACE("%p %s %p\n", This, debugstr_guid(prop), header);
++
++    if (_SetProperty(This, prop, header))
++        return DI_OK;
++    else
++        return JoystickWGenericImpl_SetProperty(iface, prop, header);
++}
++
++static HRESULT WINAPI JoystickAImpl_SetProperty(IDirectInputDevice8A *iface,
++        const GUID *prop, const DIPROPHEADER *header)
++{
++    JoystickImpl *This = impl_from_IDirectInputDevice8A(iface);
++
++    TRACE("%p %s %p\n", This, debugstr_guid(prop), header);
++
++    if (_SetProperty(This, prop, header))
++        return DI_OK;
++    else
++        return JoystickAGenericImpl_SetProperty(iface, prop, header);
++}
++
+ /******************************************************************************
+   *     GetDeviceInfo : get information about a device's identity
+   */
+@@ -631,7 +733,7 @@ static const IDirectInputDevice8AVtbl JoystickAvt =
+     JoystickAGenericImpl_GetCapabilities,
+     IDirectInputDevice2AImpl_EnumObjects,
+     JoystickAImpl_GetProperty,
+-    JoystickAGenericImpl_SetProperty,
++    JoystickAImpl_SetProperty,
+     IDirectInputDevice2AImpl_Acquire,
+     IDirectInputDevice2AImpl_Unacquire,
+     JoystickAGenericImpl_GetDeviceState,
+@@ -667,7 +769,7 @@ static const IDirectInputDevice8WVtbl JoystickWvt =
+     JoystickWGenericImpl_GetCapabilities,
+     IDirectInputDevice2WImpl_EnumObjects,
+     JoystickWImpl_GetProperty,
+-    JoystickWGenericImpl_SetProperty,
++    JoystickWImpl_SetProperty,
+     IDirectInputDevice2WImpl_Acquire,
+     IDirectInputDevice2WImpl_Unacquire,
+     JoystickWGenericImpl_GetDeviceState,
+From e00826b6efa849c61f802f51ba4ab250c53111bf Mon Sep 17 00:00:00 2001
+From: Aric Stewart <aric@codeweavers.com>
+Date: Wed, 3 Jan 2018 12:50:21 -0600
+Subject: [PATCH] dinput: Implement GetEffectInfo, SendForceFeedbackCommand and
+ EnumCreatedEffectObjects
+
+Signed-off-by: Aric Stewart <aric@codeweavers.com>
+---
+ dlls/dinput/joystick_sdl.c | 259 ++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 253 insertions(+), 6 deletions(-)
+
+diff --git a/dlls/dinput/joystick_sdl.c b/dlls/dinput/joystick_sdl.c
+index 48608015105..2b1c9176242 100644
+--- a/dlls/dinput/joystick_sdl.c
++++ b/dlls/dinput/joystick_sdl.c
+@@ -67,6 +67,7 @@ struct SDLDev {
+     BOOL has_ff;
+     int autocenter;
+     int gain;
++    struct list effects;
+ };
+ 
+ struct JoystickImpl
+@@ -360,6 +361,9 @@ static JoystickImpl *alloc_device(REFGUID rguid, IDirectInputImpl *dinput, unsig
+     newDevice->generic.base.dinput = dinput;
+     newDevice->sdldev              = &sdldevs[index];
+     newDevice->generic.name        = (char*)newDevice->sdldev->name;
++    list_init(&newDevice->sdldev->effects);
++    newDevice->sdldev->autocenter = 1;
++    newDevice->sdldev->gain = 100;
+ 
+     InitializeCriticalSection(&newDevice->generic.base.crit);
+     newDevice->generic.base.crit.DebugInfo->Spare[0] = (DWORD_PTR)(__FILE__ ": JoystickImpl*->base.crit");
+@@ -725,6 +729,249 @@ static HRESULT WINAPI JoystickWImpl_GetDeviceInfo(LPDIRECTINPUTDEVICE8W iface,
+     return DI_OK;
+ }
+ 
++static HRESULT WINAPI JoystickWImpl_EnumEffects(LPDIRECTINPUTDEVICE8W iface,
++                                                LPDIENUMEFFECTSCALLBACKW lpCallback,
++                                                LPVOID pvRef,
++                                                DWORD dwEffType)
++{
++    DIEFFECTINFOW dei;
++    DWORD type = DIEFT_GETTYPE(dwEffType);
++    JoystickImpl* This = impl_from_IDirectInputDevice8W(iface);
++    unsigned int query;
++
++    TRACE("(this=%p,%p,%d) type=%d\n", This, pvRef, dwEffType, type);
++
++    dei.dwSize = sizeof(DIEFFECTINFOW);
++    query = SDL_HapticQuery(This->haptic);
++    TRACE("Effects 0x%x\n",query);
++
++    if ((type == DIEFT_ALL || type == DIEFT_CONSTANTFORCE)
++        && (query & SDL_HAPTIC_CONSTANT))
++    {
++        IDirectInputDevice8_GetEffectInfo(iface, &dei, &GUID_ConstantForce);
++        (*lpCallback)(&dei, pvRef);
++    }
++
++    if ((type == DIEFT_ALL || type == DIEFT_RAMPFORCE) &&
++        (query & SDL_HAPTIC_RAMP))
++    {
++        IDirectInputDevice8_GetEffectInfo(iface, &dei, &GUID_RampForce);
++        (*lpCallback)(&dei, pvRef);
++    }
++
++    if (type == DIEFT_ALL || type == DIEFT_PERIODIC)
++    {
++        if (query & SDL_HAPTIC_SINE)
++        {
++            IDirectInputDevice8_GetEffectInfo(iface, &dei, &GUID_Sine);
++            (*lpCallback)(&dei, pvRef);
++        }
++        if (query & SDL_HAPTIC_TRIANGLE)
++        {
++            IDirectInputDevice8_GetEffectInfo(iface, &dei, &GUID_Triangle);
++            (*lpCallback)(&dei, pvRef);
++        }
++        if (query & SDL_HAPTIC_SAWTOOTHUP)
++        {
++            IDirectInputDevice8_GetEffectInfo(iface, &dei, &GUID_SawtoothUp);
++            (*lpCallback)(&dei, pvRef);
++        }
++        if (query & SDL_HAPTIC_SAWTOOTHDOWN)
++        {
++            IDirectInputDevice8_GetEffectInfo(iface, &dei, &GUID_SawtoothDown);
++            (*lpCallback)(&dei, pvRef);
++        }
++    }
++
++    if (type == DIEFT_ALL || type == DIEFT_CONDITION)
++    {
++        if (query & SDL_HAPTIC_SPRING)
++        {
++            IDirectInputDevice8_GetEffectInfo(iface, &dei, &GUID_Spring);
++            (*lpCallback)(&dei, pvRef);
++        }
++        if (query & SDL_HAPTIC_DAMPER)
++        {
++            IDirectInputDevice8_GetEffectInfo(iface, &dei, &GUID_Damper);
++            (*lpCallback)(&dei, pvRef);
++        }
++        if (query & SDL_HAPTIC_INERTIA)
++        {
++            IDirectInputDevice8_GetEffectInfo(iface, &dei, &GUID_Inertia);
++            (*lpCallback)(&dei, pvRef);
++        }
++        if (query & SDL_HAPTIC_FRICTION)
++        {
++            IDirectInputDevice8_GetEffectInfo(iface, &dei, &GUID_Friction);
++            (*lpCallback)(&dei, pvRef);
++        }
++    }
++
++    return DI_OK;
++}
++
++static HRESULT WINAPI JoystickAImpl_EnumEffects(LPDIRECTINPUTDEVICE8A iface,
++                                                LPDIENUMEFFECTSCALLBACKA lpCallback,
++                                                LPVOID pvRef,
++                                                DWORD dwEffType)
++{
++    DIEFFECTINFOA dei;
++    DWORD type = DIEFT_GETTYPE(dwEffType);
++    JoystickImpl* This = impl_from_IDirectInputDevice8A(iface);
++    unsigned int query;
++
++    TRACE("(this=%p,%p,%d) type=%d\n", This, pvRef, dwEffType, type);
++
++    dei.dwSize = sizeof(DIEFFECTINFOA);
++    query = SDL_HapticQuery(This->haptic);
++    TRACE("Effects 0x%x\n",query);
++
++    if ((type == DIEFT_ALL || type == DIEFT_CONSTANTFORCE)
++        && (query & SDL_HAPTIC_CONSTANT))
++    {
++        IDirectInputDevice8_GetEffectInfo(iface, &dei, &GUID_ConstantForce);
++        (*lpCallback)(&dei, pvRef);
++    }
++
++    if ((type == DIEFT_ALL || type == DIEFT_RAMPFORCE) &&
++        (query & SDL_HAPTIC_RAMP))
++    {
++        IDirectInputDevice8_GetEffectInfo(iface, &dei, &GUID_RampForce);
++        (*lpCallback)(&dei, pvRef);
++    }
++
++    if (type == DIEFT_ALL || type == DIEFT_PERIODIC)
++    {
++        if (query & SDL_HAPTIC_SINE)
++        {
++            IDirectInputDevice8_GetEffectInfo(iface, &dei, &GUID_Sine);
++            (*lpCallback)(&dei, pvRef);
++        }
++        if (query & SDL_HAPTIC_TRIANGLE)
++        {
++            IDirectInputDevice8_GetEffectInfo(iface, &dei, &GUID_Triangle);
++            (*lpCallback)(&dei, pvRef);
++        }
++        if (query & SDL_HAPTIC_SAWTOOTHUP)
++        {
++            IDirectInputDevice8_GetEffectInfo(iface, &dei, &GUID_SawtoothUp);
++            (*lpCallback)(&dei, pvRef);
++        }
++        if (query & SDL_HAPTIC_SAWTOOTHDOWN)
++        {
++            IDirectInputDevice8_GetEffectInfo(iface, &dei, &GUID_SawtoothDown);
++            (*lpCallback)(&dei, pvRef);
++        }
++    }
++
++    if (type == DIEFT_ALL || type == DIEFT_CONDITION)
++    {
++        if (query & SDL_HAPTIC_SPRING)
++        {
++            IDirectInputDevice8_GetEffectInfo(iface, &dei, &GUID_Spring);
++            (*lpCallback)(&dei, pvRef);
++        }
++        if (query & SDL_HAPTIC_DAMPER)
++        {
++            IDirectInputDevice8_GetEffectInfo(iface, &dei, &GUID_Damper);
++            (*lpCallback)(&dei, pvRef);
++        }
++        if (query & SDL_HAPTIC_INERTIA)
++        {
++            IDirectInputDevice8_GetEffectInfo(iface, &dei, &GUID_Inertia);
++            (*lpCallback)(&dei, pvRef);
++        }
++        if (query & SDL_HAPTIC_FRICTION)
++        {
++            IDirectInputDevice8_GetEffectInfo(iface, &dei, &GUID_Friction);
++            (*lpCallback)(&dei, pvRef);
++        }
++    }
++
++    return DI_OK;
++}
++
++static HRESULT WINAPI JoystickWImpl_SendForceFeedbackCommand(LPDIRECTINPUTDEVICE8W iface, DWORD dwFlags)
++{
++    JoystickImpl* This = impl_from_IDirectInputDevice8W(iface);
++    TRACE("(this=%p,%d)\n", This, dwFlags);
++
++    switch (dwFlags)
++    {
++    case DISFFC_STOPALL:
++    {
++        effect_list_item *itr;
++
++        /* Stop all effects */
++        LIST_FOR_EACH_ENTRY(itr, &This->sdldev->effects, effect_list_item, entry)
++            IDirectInputEffect_Stop(itr->ref);
++        break;
++    }
++
++    case DISFFC_RESET:
++    {
++        effect_list_item *itr;
++
++        /* Stop and unload all effects. It is not true that effects are released */
++        LIST_FOR_EACH_ENTRY(itr, &This->sdldev->effects, effect_list_item, entry)
++        {
++            IDirectInputEffect_Stop(itr->ref);
++            IDirectInputEffect_Unload(itr->ref);
++        }
++        break;
++    }
++    case DISFFC_PAUSE:
++    case DISFFC_CONTINUE:
++        FIXME("No support for Pause or Continue in sdl\n");
++        break;
++
++    case DISFFC_SETACTUATORSOFF:
++    case DISFFC_SETACTUATORSON:
++        FIXME("No direct actuator control in sdl\n");
++        break;
++
++    default:
++        WARN("Unknown Force Feedback Command %u!\n", dwFlags);
++        return DIERR_INVALIDPARAM;
++    }
++    return DI_OK;
++}
++
++static HRESULT WINAPI JoystickAImpl_SendForceFeedbackCommand(LPDIRECTINPUTDEVICE8A iface, DWORD dwFlags)
++{
++    JoystickImpl *This = impl_from_IDirectInputDevice8A(iface);
++    return JoystickWImpl_SendForceFeedbackCommand(IDirectInputDevice8W_from_impl(This), dwFlags);
++}
++
++static HRESULT WINAPI JoystickWImpl_EnumCreatedEffectObjects(LPDIRECTINPUTDEVICE8W iface,
++                                                             LPDIENUMCREATEDEFFECTOBJECTSCALLBACK lpCallback,
++                                                             LPVOID pvRef, DWORD dwFlags)
++{
++    JoystickImpl* This = impl_from_IDirectInputDevice8W(iface);
++    effect_list_item *itr, *ptr;
++
++    TRACE("(this=%p,%p,%p,%d)\n", This, lpCallback, pvRef, dwFlags);
++
++    if (!lpCallback)
++        return DIERR_INVALIDPARAM;
++
++    if (dwFlags != 0)
++        FIXME("Flags specified, but no flags exist yet (DX9)!\n");
++
++    LIST_FOR_EACH_ENTRY_SAFE(itr, ptr, &This->sdldev->effects, effect_list_item, entry)
++        (*lpCallback)(itr->ref, pvRef);
++
++    return DI_OK;
++}
++
++static HRESULT WINAPI JoystickAImpl_EnumCreatedEffectObjects(LPDIRECTINPUTDEVICE8A iface,
++                                                             LPDIENUMCREATEDEFFECTOBJECTSCALLBACK lpCallback,
++                                                             LPVOID pvRef, DWORD dwFlags)
++{
++    JoystickImpl *This = impl_from_IDirectInputDevice8A(iface);
++    return JoystickWImpl_EnumCreatedEffectObjects(IDirectInputDevice8W_from_impl(This), lpCallback, pvRef, dwFlags);
++}
++
+ static const IDirectInputDevice8AVtbl JoystickAvt =
+ {
+     IDirectInputDevice2AImpl_QueryInterface,
+@@ -746,11 +993,11 @@ static const IDirectInputDevice8AVtbl JoystickAvt =
+     IDirectInputDevice2AImpl_RunControlPanel,
+     IDirectInputDevice2AImpl_Initialize,
+     IDirectInputDevice2AImpl_CreateEffect,
+-    IDirectInputDevice2AImpl_EnumEffects,
++    JoystickAImpl_EnumEffects,
+     IDirectInputDevice2AImpl_GetEffectInfo,
+     IDirectInputDevice2AImpl_GetForceFeedbackState,
+-    IDirectInputDevice2AImpl_SendForceFeedbackCommand,
+-    IDirectInputDevice2AImpl_EnumCreatedEffectObjects,
++    JoystickAImpl_SendForceFeedbackCommand,
++    JoystickAImpl_EnumCreatedEffectObjects,
+     IDirectInputDevice2AImpl_Escape,
+     JoystickAGenericImpl_Poll,
+     IDirectInputDevice2AImpl_SendDeviceData,
+@@ -782,11 +1029,11 @@ static const IDirectInputDevice8WVtbl JoystickWvt =
+     IDirectInputDevice2WImpl_RunControlPanel,
+     IDirectInputDevice2WImpl_Initialize,
+     IDirectInputDevice2WImpl_CreateEffect,
+-    IDirectInputDevice2WImpl_EnumEffects,
++    JoystickWImpl_EnumEffects,
+     IDirectInputDevice2WImpl_GetEffectInfo,
+     IDirectInputDevice2WImpl_GetForceFeedbackState,
+-    IDirectInputDevice2WImpl_SendForceFeedbackCommand,
+-    IDirectInputDevice2WImpl_EnumCreatedEffectObjects,
++    JoystickWImpl_SendForceFeedbackCommand,
++    JoystickWImpl_EnumCreatedEffectObjects,
+     IDirectInputDevice2WImpl_Escape,
+     JoystickWGenericImpl_Poll,
+     IDirectInputDevice2WImpl_SendDeviceData,
+From 1c01af59094cb675890e7736c84087db516dd48b Mon Sep 17 00:00:00 2001
+From: Aric Stewart <aric@codeweavers.com>
+Date: Wed, 3 Jan 2018 13:26:27 -0600
+Subject: [PATCH] dinput: Implement FF effects for SDL joysticks
+
+Signed-off-by: Aric Stewart <aric@codeweavers.com>
+---
+ dlls/dinput/Makefile.in    |   1 +
+ dlls/dinput/effect_sdl.c   | 848 +++++++++++++++++++++++++++++++++++++
+ dlls/dinput/joystick_sdl.c |  93 +++-
+ 3 files changed, 938 insertions(+), 4 deletions(-)
+ create mode 100644 dlls/dinput/effect_sdl.c
+
+diff --git a/dlls/dinput/Makefile.in b/dlls/dinput/Makefile.in
+index f968dbbcc32..a3e38816636 100644
+--- a/dlls/dinput/Makefile.in
++++ b/dlls/dinput/Makefile.in
+@@ -11,6 +11,7 @@ C_SRCS = \
+ 	device.c \
+ 	dinput_main.c \
+ 	effect_linuxinput.c \
++	effect_sdl.c \
+ 	joystick.c \
+ 	joystick_linux.c \
+ 	joystick_linuxinput.c \
+diff --git a/dlls/dinput/effect_sdl.c b/dlls/dinput/effect_sdl.c
+new file mode 100644
+index 00000000000..8055785cc02
+--- /dev/null
++++ b/dlls/dinput/effect_sdl.c
+@@ -0,0 +1,848 @@
++/*  DirectInput Joystick device from SDL
++ *
++ * Copyright 2017 CodeWeavers, Aric Stewart
++ *
++ * This library is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU Lesser General Public
++ * License as published by the Free Software Foundation; either
++ * version 2.1 of the License, or (at your option) any later version.
++ *
++ * This library is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++ * Lesser General Public License for more details.
++ *
++ * You should have received a copy of the GNU Lesser General Public
++ * License along with this library; if not, write to the Free Software
++ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
++ */
++
++#include "config.h"
++#include "wine/port.h"
++
++#include <assert.h>
++#include <stdarg.h>
++#include <stdio.h>
++#include <string.h>
++#include <time.h>
++#ifdef HAVE_UNISTD_H
++# include <unistd.h>
++#endif
++#ifdef HAVE_SDL2_SDL_H
++# include <SDL2/SDL.h>
++#endif
++#include <errno.h>
++
++#include "wine/debug.h"
++#include "wine/unicode.h"
++#include "wine/list.h"
++#include "windef.h"
++#include "winbase.h"
++#include "winerror.h"
++#include "winreg.h"
++#include "dinput.h"
++
++#include "dinput_private.h"
++#include "device_private.h"
++#include "joystick_private.h"
++
++#ifdef HAVE_SDL2_SDL_H
++
++WINE_DEFAULT_DEBUG_CHANNEL(dinput);
++
++typedef struct _SDLInputEffectImpl {
++    IDirectInputEffect IDirectInputEffect_iface;
++    LONG ref;
++
++    SDL_Haptic *haptic;
++    GUID guid;
++
++    SDL_HapticEffect effect;
++    int effect_id;
++    BOOL first_axis_is_x;
++
++    struct list *entry;
++} SDLInputEffectImpl;
++
++static SDLInputEffectImpl *impl_from_IDirectInputEffect(IDirectInputEffect *iface)
++{
++    return CONTAINING_RECORD(iface, SDLInputEffectImpl, IDirectInputEffect_iface);
++}
++
++static const IDirectInputEffectVtbl EffectVtbl;
++
++
++static HRESULT WINAPI effect_QueryInterface(IDirectInputEffect *iface,
++        const GUID *guid, void **out)
++{
++    SDLInputEffectImpl *This = impl_from_IDirectInputEffect(iface);
++
++    TRACE("%p %s %p\n", This, debugstr_guid(guid), out);
++
++    if(IsEqualIID(guid, &IID_IUnknown) || IsEqualIID(guid, &IID_IDirectInputEffect)){
++        *out = iface;
++        IDirectInputEffect_AddRef(iface);
++        return DI_OK;
++    }
++
++    return E_NOINTERFACE;
++}
++
++static ULONG WINAPI effect_AddRef(IDirectInputEffect *iface)
++{
++    SDLInputEffectImpl *This = impl_from_IDirectInputEffect(iface);
++    ULONG ref = InterlockedIncrement(&This->ref);
++    TRACE("%p, ref is now: %u\n", This, ref);
++    return ref;
++}
++
++static ULONG WINAPI effect_Release(IDirectInputEffect *iface)
++{
++    SDLInputEffectImpl *This = impl_from_IDirectInputEffect(iface);
++    ULONG ref = InterlockedDecrement(&This->ref);
++    TRACE("%p, ref is now: %u\n", This, ref);
++
++    if (!ref)
++    {
++        list_remove(This->entry);
++        if (This->effect_id >= 0)
++            SDL_HapticDestroyEffect(This->haptic, This->effect_id);
++        HeapFree(GetProcessHeap(), 0, LIST_ENTRY(This->entry, effect_list_item, entry));
++        HeapFree(GetProcessHeap(), 0, This);
++    }
++
++    return ref;
++}
++
++static HRESULT WINAPI effect_Initialize(IDirectInputEffect *iface, HINSTANCE hinst,
++        DWORD version, const GUID *guid)
++{
++    SDLInputEffectImpl *This = impl_from_IDirectInputEffect(iface);
++    TRACE("%p %p 0x%x, %s\n", This, hinst, version, debugstr_guid(guid));
++    return DI_OK;
++}
++
++static HRESULT WINAPI effect_GetEffectGuid(IDirectInputEffect *iface, GUID *out)
++{
++    SDLInputEffectImpl *This = impl_from_IDirectInputEffect(iface);
++    TRACE("%p %p\n", This, out);
++    *out = This->guid;
++    return DI_OK;
++}
++
++
++#define GET_BASE_EFFECT_FIELD(target, field, value) {\
++    if (target.type == SDL_HAPTIC_SINE || \
++        target.type == SDL_HAPTIC_TRIANGLE || \
++        target.type == SDL_HAPTIC_SAWTOOTHUP || \
++        target.type == SDL_HAPTIC_SAWTOOTHDOWN) \
++        value = (target.periodic.field); \
++    else if (target.type == SDL_HAPTIC_CONSTANT) \
++        value = (target.constant.field); \
++    else if (target.type == SDL_HAPTIC_RAMP) \
++        value = (target.ramp.field); \
++    else if (target.type == SDL_HAPTIC_SPRING || \
++             target.type == SDL_HAPTIC_DAMPER || \
++             target.type == SDL_HAPTIC_INERTIA || \
++             target.type == SDL_HAPTIC_FRICTION) \
++        value = (target.condition.field); \
++    else if (target.type == SDL_HAPTIC_CUSTOM) \
++        value = (target.custom.field); \
++    }
++
++#define GET_EXTENDED_EFFECT_FIELD(target, field, value) {\
++    if (target.type == SDL_HAPTIC_SINE || \
++        target.type == SDL_HAPTIC_TRIANGLE || \
++        target.type == SDL_HAPTIC_SAWTOOTHUP || \
++        target.type == SDL_HAPTIC_SAWTOOTHDOWN) \
++        value = (target.periodic.field); \
++    else if (target.type == SDL_HAPTIC_CONSTANT) \
++        value = (target.constant.field); \
++    else if (target.type == SDL_HAPTIC_RAMP) \
++        value = (target.ramp.field); \
++    else if (target.type == SDL_HAPTIC_SPRING || \
++             target.type == SDL_HAPTIC_DAMPER || \
++             target.type == SDL_HAPTIC_INERTIA || \
++             target.type == SDL_HAPTIC_FRICTION); \
++        /* Ignored because extended fields are not preset in these effects */ \
++    else if (target.type == SDL_HAPTIC_CUSTOM) \
++        value = (target.custom.field); \
++    }
++
++#define SCALE(type, target_range, target_min, value, source_range, source_min) \
++    (type)((((target_range)*(value + source_min))/source_range)-target_min)
++
++static HRESULT WINAPI effect_GetParameters(IDirectInputEffect *iface,
++        DIEFFECT *effect, DWORD flags)
++{
++    HRESULT hr = DI_OK;
++    SDLInputEffectImpl *This = impl_from_IDirectInputEffect(iface);
++    TRACE("%p %p 0x%x\n", This, effect, flags);
++
++    if (flags & DIEP_AXES)
++    {
++        if (effect->cAxes < 2)
++            hr = DIERR_MOREDATA;
++        effect->cAxes = 2;
++        if (hr)
++            return hr;
++        else
++        {
++            effect->rgdwAxes[0] = DIJOFS_X;
++            effect->rgdwAxes[1] = DIJOFS_Y;
++        }
++    }
++
++    if (flags & DIEP_DIRECTION)
++    {
++        if (effect->cAxes < 2)
++            hr = DIERR_MOREDATA;
++        effect->cAxes = 2;
++        if (hr)
++            return hr;
++        else
++        {
++            if (effect->dwFlags & DIEFF_CARTESIAN)
++            {
++                GET_BASE_EFFECT_FIELD(This->effect, direction.dir[0], effect->rglDirection[0]);
++                GET_BASE_EFFECT_FIELD(This->effect, direction.dir[1], effect->rglDirection[1]);
++            }
++        else
++            {
++                /* Polar and spherical coordinates */
++                GET_BASE_EFFECT_FIELD(This->effect, direction.dir[0], effect->rglDirection[0]);
++            }
++        }
++    }
++
++    if (flags & DIEP_DURATION)
++    {
++        int sdl_length = 0;
++        GET_BASE_EFFECT_FIELD(This->effect, length, sdl_length);
++        if (sdl_length == SDL_HAPTIC_INFINITY)
++            effect->dwDuration = INFINITE;
++        else
++            effect->dwDuration = (DWORD)sdl_length * 1000;
++    }
++
++    if (flags & DIEP_ENVELOPE)
++    {
++        int sdl_attack_length = 0;
++        int sdl_attack_level = 0;
++        int sdl_fade_length = 0;
++        int sdl_fade_level = 0;
++
++        GET_EXTENDED_EFFECT_FIELD(This->effect, attack_length, sdl_attack_length);
++        GET_EXTENDED_EFFECT_FIELD(This->effect, attack_level, sdl_attack_level);
++        GET_EXTENDED_EFFECT_FIELD(This->effect, fade_length, sdl_fade_length);
++        GET_EXTENDED_EFFECT_FIELD(This->effect, fade_level, sdl_fade_level);
++
++        if (sdl_attack_length == 0 && sdl_attack_level == 0 && sdl_fade_length == 0 && sdl_fade_level == 0)
++        {
++            effect->lpEnvelope = NULL;
++        }
++        else if (effect->lpEnvelope == NULL)
++        {
++            return DIERR_INVALIDPARAM;
++        }
++        else
++        {
++            effect->lpEnvelope->dwAttackLevel = sdl_attack_level;
++            effect->lpEnvelope->dwAttackTime = sdl_attack_length * 1000;
++            effect->lpEnvelope->dwFadeLevel = sdl_fade_level;
++            effect->lpEnvelope->dwFadeTime = sdl_fade_length * 1000;
++        }
++    }
++
++    if (flags & DIEP_GAIN)
++        effect->dwGain = 0;
++
++    if (flags & DIEP_SAMPLEPERIOD)
++        effect->dwSamplePeriod = 0;
++
++    if (flags & DIEP_STARTDELAY && effect->dwSize > sizeof(DIEFFECT_DX5))
++    {
++        GET_BASE_EFFECT_FIELD(This->effect, delay, effect->dwStartDelay);
++        effect->dwStartDelay *= 1000;
++    }
++
++    if (flags & DIEP_TRIGGERBUTTON)
++    {
++        int trigger = 0;
++        GET_BASE_EFFECT_FIELD(This->effect, button, trigger);
++        effect->dwTriggerButton = DIJOFS_BUTTON(trigger);
++    }
++
++    if (flags & DIEP_TRIGGERREPEATINTERVAL)
++    {
++        GET_BASE_EFFECT_FIELD(This->effect, interval, effect->dwTriggerRepeatInterval);
++        effect->dwTriggerRepeatInterval *= 1000;
++    }
++
++    if (flags & DIEP_TYPESPECIFICPARAMS)
++    {
++        if (This->effect.type == SDL_HAPTIC_SINE ||
++            This->effect.type == SDL_HAPTIC_TRIANGLE ||
++            This->effect.type == SDL_HAPTIC_SAWTOOTHUP ||
++            This->effect.type == SDL_HAPTIC_SAWTOOTHDOWN)
++        {
++            DIPERIODIC *tsp = effect->lpvTypeSpecificParams;
++
++            tsp->dwMagnitude = MulDiv(This->effect.periodic.magnitude, 10000, 32767);
++            tsp->lOffset = This->effect.periodic.offset;
++            tsp->dwPhase = This->effect.periodic.phase;
++            tsp->dwPeriod = This->effect.periodic.period * 1000;
++        }
++        else if (This->effect.type == SDL_HAPTIC_CONSTANT)
++        {
++            LPDICONSTANTFORCE tsp = effect->lpvTypeSpecificParams;
++            tsp->lMagnitude = SCALE(LONG, 20000, -10000, This->effect.constant.level, 0xffff, -32767);
++        }
++        else if (This->effect.type == SDL_HAPTIC_RAMP)
++        {
++            DIRAMPFORCE *tsp = effect->lpvTypeSpecificParams;
++
++            tsp->lStart = SCALE(Sint16, 20000, -10000, This->effect.ramp.start, 0xffff, -32767);
++            tsp->lEnd = SCALE(Sint16, 20000, -10000, This->effect.ramp.end, 0xffff, -32767);
++        }
++        else if (This->effect.type == SDL_HAPTIC_SPRING ||
++                 This->effect.type == SDL_HAPTIC_DAMPER ||
++                 This->effect.type == SDL_HAPTIC_INERTIA ||
++                 This->effect.type == SDL_HAPTIC_FRICTION)
++        {
++            int i;
++            DICONDITION *tsp = effect->lpvTypeSpecificParams;
++            for (i = 0; i < 2; i++)
++            {
++                tsp[i].lOffset = SCALE(LONG, 20000, -10000, This->effect.condition.center[i], 0xffff, -32767);
++                tsp[i].lPositiveCoefficient = SCALE(LONG, 20000, -10000, This->effect.condition.right_coeff[i], 0xffff, -32767);
++                tsp[i].lNegativeCoefficient = SCALE(LONG, 10000, -20000, This->effect.condition.left_coeff[i], 0xffff, -32767);
++                tsp[i].dwPositiveSaturation = SCALE(DWORD, 10000, 0, This->effect.condition.right_sat[i], 0xffff, 0);
++                tsp[i].dwNegativeSaturation = SCALE(DWORD, 10000, 0, This->effect.condition.left_sat[i], 0xffff, 0);
++                tsp[i].lDeadBand = SCALE(LONG, 20000, -10000, This->effect.condition.deadband[i], 0xffff, -32767);
++            }
++        }
++        else if (This->effect.type == SDL_HAPTIC_CUSTOM)
++        {
++            DICUSTOMFORCE *tsp = effect->lpvTypeSpecificParams;
++
++            tsp->cChannels = This->effect.custom.channels;
++            tsp->dwSamplePeriod = This->effect.custom.period * 1000;
++            tsp->cSamples = This->effect.custom.samples;
++            tsp->rglForceData = (LONG*)This->effect.custom.data;
++        }
++    }
++
++    return hr;
++}
++
++static HRESULT WINAPI effect_Download(IDirectInputEffect *iface)
++{
++    SDLInputEffectImpl *This = impl_from_IDirectInputEffect(iface);
++    TRACE("%p\n", This);
++
++    if (This->effect_id < 0)
++    {
++        This->effect_id = SDL_HapticNewEffect(This->haptic, &This->effect);
++        if(This->effect_id < 0)
++        {
++            ERR("SDL_HapticNewEffect failed (Effect type %i): %s\n", This->effect.type, SDL_GetError());
++            return E_FAIL;
++        }
++    }
++
++    return DI_OK;
++}
++
++static HRESULT WINAPI effect_Start(IDirectInputEffect *iface, DWORD iterations,
++        DWORD flags)
++{
++    SDLInputEffectImpl *This = impl_from_IDirectInputEffect(iface);
++
++    TRACE("%p 0x%x 0x%x\n", This, iterations, flags);
++
++    if (!(flags & DIES_NODOWNLOAD))
++    {
++        if (This->effect_id == -1)
++        {
++            HRESULT res = effect_Download(iface);
++            if (res != DI_OK)
++                return res;
++        }
++    }
++
++    if (iterations == INFINITE) iterations = SDL_HAPTIC_INFINITY;
++
++    if (SDL_HapticRunEffect(This->haptic, This->effect_id, iterations) < 0)
++    {
++        ERR("SDL_HapticRunEffect failed: %s\n", SDL_GetError());
++        return E_FAIL;
++    }
++    return DI_OK;
++}
++
++#define SET_BASE_EFFECT_FIELD(target, field, value) {\
++    if (target.type == SDL_HAPTIC_SINE || \
++        target.type == SDL_HAPTIC_TRIANGLE || \
++        target.type == SDL_HAPTIC_SAWTOOTHUP || \
++        target.type == SDL_HAPTIC_SAWTOOTHDOWN) \
++        (target.periodic.field) = value; \
++    else if (target.type == SDL_HAPTIC_CONSTANT) \
++        (target.constant.field) = value; \
++    else if (target.type == SDL_HAPTIC_RAMP) \
++        (target.ramp.field) = value; \
++    else if (target.type == SDL_HAPTIC_SPRING || \
++             target.type == SDL_HAPTIC_DAMPER || \
++             target.type == SDL_HAPTIC_INERTIA || \
++             target.type == SDL_HAPTIC_FRICTION) \
++        (target.condition.field) = value; \
++    else if (target.type == SDL_HAPTIC_CUSTOM) \
++        (target.custom.field) = value; \
++    }
++
++#define SET_EXTENDED_EFFECT_FIELD(target, field, value) {\
++    if (target.type == SDL_HAPTIC_SINE || \
++        target.type == SDL_HAPTIC_TRIANGLE || \
++        target.type == SDL_HAPTIC_SAWTOOTHUP || \
++        target.type == SDL_HAPTIC_SAWTOOTHDOWN) \
++        (target.periodic.field) = value; \
++    else if (target.type == SDL_HAPTIC_CONSTANT) \
++        (target.constant.field) = value; \
++    else if (target.type == SDL_HAPTIC_RAMP) \
++        (target.ramp.field) = value; \
++    else if (target.type == SDL_HAPTIC_SPRING || \
++             target.type == SDL_HAPTIC_DAMPER || \
++             target.type == SDL_HAPTIC_INERTIA || \
++             target.type == SDL_HAPTIC_FRICTION); \
++        /* Ignored because extended fields are not preset in these effects */ \
++    else if (target.type == SDL_HAPTIC_CUSTOM) \
++        (target.custom.field) = value; \
++    }
++
++static HRESULT WINAPI effect_SetParameters(IDirectInputEffect *iface,
++        const DIEFFECT *effect, DWORD flags)
++{
++    SDLInputEffectImpl *This = impl_from_IDirectInputEffect(iface);
++    HRESULT retval = DI_OK;
++
++    TRACE("%p %p 0x%x\n", This, effect, flags);
++
++    dump_DIEFFECT(effect, &This->guid, flags);
++
++    if (IsEqualGUID(&This->guid, &GUID_Sine))
++        This->effect.type = SDL_HAPTIC_SINE;
++    else if (IsEqualGUID(&This->guid, &GUID_Triangle))
++        This->effect.type = SDL_HAPTIC_TRIANGLE;
++    else if (IsEqualGUID(&This->guid, &GUID_SawtoothUp))
++        This->effect.type = SDL_HAPTIC_SAWTOOTHUP;
++    else if (IsEqualGUID(&This->guid, &GUID_SawtoothDown))
++        This->effect.type = SDL_HAPTIC_SAWTOOTHDOWN;
++    else if (IsEqualGUID(&This->guid, &GUID_ConstantForce))
++        This->effect.type = SDL_HAPTIC_CONSTANT;
++    else if (IsEqualGUID(&This->guid, &GUID_RampForce))
++        This->effect.type = SDL_HAPTIC_RAMP;
++    else if (IsEqualGUID(&This->guid, &GUID_Spring))
++        This->effect.type = SDL_HAPTIC_SPRING;
++    else if (IsEqualGUID(&This->guid, &GUID_Damper))
++        This->effect.type = SDL_HAPTIC_DAMPER;
++    else if (IsEqualGUID(&This->guid, &GUID_Inertia))
++        This->effect.type = SDL_HAPTIC_INERTIA;
++    else if (IsEqualGUID(&This->guid, &GUID_Friction))
++        This->effect.type = SDL_HAPTIC_FRICTION;
++    else if (IsEqualGUID(&This->guid, &GUID_CustomForce))
++        This->effect.type = SDL_HAPTIC_CUSTOM;
++
++    if ((flags & ~DIEP_NORESTART & ~DIEP_NODOWNLOAD & ~DIEP_START) == 0)
++    {
++        /* set everything */
++        flags = DIEP_AXES | DIEP_DIRECTION | DIEP_DURATION | DIEP_ENVELOPE |
++                DIEP_GAIN | DIEP_SAMPLEPERIOD | DIEP_STARTDELAY | DIEP_TRIGGERBUTTON |
++                DIEP_TRIGGERREPEATINTERVAL | DIEP_TYPESPECIFICPARAMS;
++    }
++
++    if (flags & DIEP_AXES)
++    {
++        if (effect->cAxes > 2)
++            return DIERR_INVALIDPARAM;
++        else if (effect->cAxes < 1)
++            return DIERR_INCOMPLETEEFFECT;
++        This->first_axis_is_x = effect->rgdwAxes[0] == DIJOFS_X;
++    }
++
++    if (flags & DIEP_DIRECTION)
++    {
++        if (effect->cAxes == 1)
++        {
++            if (effect->dwFlags & DIEFF_CARTESIAN)
++            {
++               SET_BASE_EFFECT_FIELD(This->effect, direction.type, SDL_HAPTIC_CARTESIAN);
++                if (flags & DIEP_AXES)
++                {
++                    SET_BASE_EFFECT_FIELD(This->effect, direction.dir[0], effect->rglDirection[0]);
++                    SET_BASE_EFFECT_FIELD(This->effect, direction.dir[1], effect->rglDirection[1]);
++                }
++            } else {
++                /* one-axis effects must use cartesian coords */
++                return DIERR_INVALIDPARAM;
++            }
++        }
++        /* two axes */
++        else
++        {
++            if (effect->dwFlags & DIEFF_CARTESIAN)
++            {
++                LONG x, y;
++
++                SET_BASE_EFFECT_FIELD(This->effect, direction.type, SDL_HAPTIC_CARTESIAN);
++
++                if (This->first_axis_is_x)
++                {
++                    x = effect->rglDirection[0];
++                    y = effect->rglDirection[1];
++                }
++                else
++                {
++                    x = effect->rglDirection[1];
++                    y = effect->rglDirection[0];
++                }
++                SET_BASE_EFFECT_FIELD(This->effect, direction.dir[0], x);
++                SET_BASE_EFFECT_FIELD(This->effect, direction.dir[1], y);
++            }
++            else
++            {
++                if (effect->dwFlags & DIEFF_POLAR)
++                {
++                    SET_BASE_EFFECT_FIELD(This->effect, direction.type, SDL_HAPTIC_POLAR);
++                }
++                if (effect->dwFlags & DIEFF_SPHERICAL)
++                {
++                    SET_BASE_EFFECT_FIELD(This->effect, direction.type, SDL_HAPTIC_SPHERICAL);
++                }
++                SET_BASE_EFFECT_FIELD(This->effect, direction.dir[0], effect->rglDirection[0]);
++            }
++        }
++    }
++
++    if (flags & DIEP_DURATION)
++    {
++        if (effect->dwDuration == INFINITE)
++        {
++            SET_BASE_EFFECT_FIELD(This->effect, length, SDL_HAPTIC_INFINITY);
++        }
++        else if(effect->dwDuration > 1000)
++        {
++            SET_BASE_EFFECT_FIELD(This->effect, length, effect->dwDuration / 1000);
++        }
++        else
++        {
++            SET_BASE_EFFECT_FIELD(This->effect, length, 1);
++        }
++    }
++
++    if (flags & DIEP_STARTDELAY && effect->dwSize > sizeof(DIEFFECT_DX5))
++    {
++        SET_BASE_EFFECT_FIELD(This->effect, delay, effect->dwStartDelay / 1000);
++    }
++
++    if (flags & DIEP_TRIGGERBUTTON)
++    {
++        SET_BASE_EFFECT_FIELD(This->effect, button, effect->dwTriggerButton);
++    }
++
++    if (flags & DIEP_TRIGGERREPEATINTERVAL)
++    {
++        SET_BASE_EFFECT_FIELD(This->effect, interval, effect->dwTriggerRepeatInterval / 1000);
++    }
++
++    if (flags & DIEP_TYPESPECIFICPARAMS)
++    {
++        if (IsEqualGUID(&This->guid, &GUID_Sine) ||
++            IsEqualGUID(&This->guid, &GUID_Triangle) ||
++            IsEqualGUID(&This->guid, &GUID_SawtoothUp) ||
++            IsEqualGUID(&This->guid, &GUID_SawtoothDown))
++        {
++            DIPERIODIC *tsp;
++            if (effect->cbTypeSpecificParams != sizeof(DIPERIODIC))
++                return DIERR_INVALIDPARAM;
++            tsp = effect->lpvTypeSpecificParams;
++
++            This->effect.periodic.magnitude = MulDiv(tsp->dwMagnitude, 32767, 10000);
++            This->effect.periodic.offset = tsp->lOffset;
++            This->effect.periodic.phase = tsp->dwPhase;
++            if (tsp->dwPeriod <= 1000)
++                This->effect.periodic.period = 1;
++            else
++                This->effect.periodic.period = tsp->dwPeriod / 1000;
++        }
++        else if (IsEqualGUID(&This->guid, &GUID_ConstantForce))
++        {
++            DICONSTANTFORCE *tsp = effect->lpvTypeSpecificParams;
++
++            if (effect->cbTypeSpecificParams != sizeof(DICONSTANTFORCE))
++                return DIERR_INVALIDPARAM;
++            tsp = effect->lpvTypeSpecificParams;
++            This->effect.constant.level = SCALE(Sint16, 0xffff, -32767, tsp->lMagnitude, 20000, -10000);
++        }
++        else if (IsEqualGUID(&This->guid, &GUID_RampForce))
++        {
++            DIRAMPFORCE *tsp = effect->lpvTypeSpecificParams;
++
++            if (effect->cbTypeSpecificParams != sizeof(DIRAMPFORCE))
++                return DIERR_INVALIDPARAM;
++            tsp = effect->lpvTypeSpecificParams;
++            This->effect.ramp.start = SCALE(Sint16, 0xffff, -32767, tsp->lStart, 20000, -10000);
++            This->effect.ramp.end = SCALE(Sint16, 0xffff, -32767, tsp->lEnd, 20000, -10000);
++        }
++        else if (IsEqualGUID(&This->guid, &GUID_Spring) ||
++            IsEqualGUID(&This->guid, &GUID_Damper) ||
++            IsEqualGUID(&This->guid, &GUID_Inertia) ||
++            IsEqualGUID(&This->guid, &GUID_Friction))
++        {
++            int sources;
++            int i,j;
++            DICONDITION *tsp = effect->lpvTypeSpecificParams;
++
++            if (effect->cbTypeSpecificParams == sizeof(DICONDITION))
++                sources = 1;
++            else if (effect->cbTypeSpecificParams == 2 * sizeof(DICONDITION))
++                sources = 2;
++            else if (effect->cbTypeSpecificParams == 3 * sizeof(DICONDITION))
++                sources = 3;
++            else
++                return DIERR_INVALIDPARAM;
++
++            for (i = j = 0; i < 3; ++i)
++            {
++                This->effect.condition.right_sat[i] = SCALE(Uint16, 0xffff, 0, tsp[j].dwPositiveSaturation, 10000, 0);
++                This->effect.condition.left_sat[i] = SCALE(Uint16, 0xffff, 0, tsp[j].dwNegativeSaturation, 10000, 0);
++                This->effect.condition.right_coeff[i] = SCALE(Sint16, 0xffff, -32767, tsp[j].lPositiveCoefficient, 20000, -10000);
++                This->effect.condition.left_coeff[i] = SCALE(Sint16, 0xffff, -32767, tsp[j].lNegativeCoefficient, 20000, -10000);
++                This->effect.condition.deadband[i] = SCALE(Uint16, 0xffff, 0, tsp[j].lDeadBand, 10000, 0);
++                This->effect.condition.center[i] = SCALE(Sint16, 0xffff, -32767, tsp[j].lOffset, 20000, -10000);
++               if (sources-1 > j)
++                j++;
++            }
++        }
++        else if (IsEqualGUID(&This->guid, &GUID_CustomForce))
++        {
++            DICUSTOMFORCE *tsp = effect->lpvTypeSpecificParams;
++
++            if (effect->cbTypeSpecificParams != sizeof(DICUSTOMFORCE))
++                return DIERR_INVALIDPARAM;
++
++            This->effect.custom.channels = tsp->cChannels;
++            This->effect.custom.period = tsp->dwSamplePeriod / 1000;
++            This->effect.custom.samples = tsp->cSamples;
++            This->effect.custom.data = (Uint16*)tsp->rglForceData;
++        }
++        else
++        {
++            FIXME("Specific effect params for type %s no implemented.\n", debugstr_guid(&This->guid));
++        }
++    }
++
++    if (flags & DIEP_ENVELOPE)
++    {
++        if (effect->lpEnvelope)
++        {
++            SET_EXTENDED_EFFECT_FIELD(This->effect, attack_length, effect->lpEnvelope->dwAttackTime / 1000);
++            SET_EXTENDED_EFFECT_FIELD(This->effect, attack_level, effect->lpEnvelope->dwAttackLevel);
++            SET_EXTENDED_EFFECT_FIELD(This->effect, fade_length, effect->lpEnvelope->dwFadeTime / 1000);
++            SET_EXTENDED_EFFECT_FIELD(This->effect, fade_level, effect->lpEnvelope->dwFadeLevel);
++        }
++        else
++        {
++            SET_EXTENDED_EFFECT_FIELD(This->effect, attack_length, 0);
++            SET_EXTENDED_EFFECT_FIELD(This->effect, attack_level, 0);
++            SET_EXTENDED_EFFECT_FIELD(This->effect, fade_length, 0);
++            SET_EXTENDED_EFFECT_FIELD(This->effect, fade_level, 0);
++        }
++    }
++
++    if (flags & DIEP_GAIN)
++        TRACE("Effect gain requested but no effect gain functionality present.\n");
++
++    if (flags & DIEP_SAMPLEPERIOD)
++        TRACE("Sample period requested but no sample period functionality present.\n");
++
++    if (This->effect_id >= 0)
++    {
++        if (SDL_HapticUpdateEffect(This->haptic, This->effect_id, &This->effect) < 0)
++        {
++            ERR("SDL_HapticUpdateEffect failed: %s\n",SDL_GetError());
++            return E_FAIL;
++        }
++
++    }
++
++    if (!(flags & DIEP_NODOWNLOAD))
++        retval = effect_Download(iface);
++    if (retval != DI_OK)
++        return DI_DOWNLOADSKIPPED;
++
++    if (flags & DIEP_START)
++        retval = effect_Start(iface, 1, 0);
++
++    return DI_OK;
++}
++
++static HRESULT WINAPI effect_Stop(IDirectInputEffect *iface)
++{
++    SDLInputEffectImpl *This = impl_from_IDirectInputEffect(iface);
++    TRACE("%p\n", This);
++    if (SDL_HapticStopEffect(This->haptic, This->effect_id) < 0)
++    {
++        ERR("SDL_HapticStopEffect failed: %s\n", SDL_GetError());
++        return E_FAIL;
++    }
++    return DI_OK;
++}
++
++static HRESULT WINAPI effect_GetEffectStatus(IDirectInputEffect *iface, DWORD *flags)
++{
++    int rc;
++    SDLInputEffectImpl *This = impl_from_IDirectInputEffect(iface);
++    TRACE("%p %p %p %i\n", This, flags, This->haptic, This->effect_id);
++
++    if (!flags)
++        return E_POINTER;
++
++    if (This->effect_id == -1)
++        return DIERR_NOTDOWNLOADED;
++
++    rc = SDL_HapticGetEffectStatus(This->haptic, This->effect_id);
++    switch (rc)
++    {
++        case 0: *flags = 0; break;
++        case 1: *flags = DIEGES_PLAYING; break;
++        default:
++            ERR("SDL_HapticGetEffectStatus failed: %s\n", SDL_GetError());
++    }
++    return DI_OK;
++}
++
++static HRESULT WINAPI effect_Unload(IDirectInputEffect *iface)
++{
++    SDLInputEffectImpl *This = impl_from_IDirectInputEffect(iface);
++    TRACE("%p\n", This);
++    if (This->effect_id >= 0)
++        SDL_HapticDestroyEffect(This->haptic, This->effect_id);
++    This->effect_id = -1;
++    return DI_OK;
++}
++
++static HRESULT WINAPI effect_Escape(IDirectInputEffect *iface, DIEFFESCAPE *escape)
++{
++    SDLInputEffectImpl *This = impl_from_IDirectInputEffect(iface);
++    TRACE("%p %p\n", This, escape);
++    return E_NOTIMPL;
++}
++
++static const IDirectInputEffectVtbl EffectVtbl = {
++    effect_QueryInterface,
++    effect_AddRef,
++    effect_Release,
++    effect_Initialize,
++    effect_GetEffectGuid,
++    effect_GetParameters,
++    effect_SetParameters,
++    effect_Start,
++    effect_Stop,
++    effect_GetEffectStatus,
++    effect_Download,
++    effect_Unload,
++    effect_Escape
++};
++
++/******************************************************************************
++ *      SDLInputEffect
++ */
++
++DECLSPEC_HIDDEN HRESULT sdl_create_effect(SDL_Haptic *device, REFGUID rguid, struct list *parent_list_entry, LPDIRECTINPUTEFFECT* peff)
++{
++    SDLInputEffectImpl *effect;
++
++    effect = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(SDLInputEffectImpl));
++
++    effect->IDirectInputEffect_iface.lpVtbl = &EffectVtbl;
++    effect->ref = 1;
++    effect->guid = *rguid;
++    effect->haptic = device;
++    effect->effect_id = -1;
++
++    effect->entry = parent_list_entry;
++    *peff = &effect->IDirectInputEffect_iface;
++
++    return DI_OK;
++}
++
++DECLSPEC_HIDDEN HRESULT sdl_input_get_info_A(
++        SDL_Joystick *dev,
++        REFGUID rguid,
++        LPDIEFFECTINFOA info)
++{
++    DWORD type = typeFromGUID(rguid);
++
++    TRACE("(%p, %s, %p) type=%d\n", dev, _dump_dinput_GUID(rguid), info, type);
++
++    if (!info) return E_POINTER;
++
++    if (info->dwSize != sizeof(DIEFFECTINFOA)) return DIERR_INVALIDPARAM;
++
++    info->guid = *rguid;
++
++    info->dwEffType = type;
++    /* the event device API does not support querying for all these things
++     * therefore we assume that we have support for them
++     * that's not as dangerous as it sounds, since drivers are allowed to
++     * ignore parameters they claim to support anyway */
++    info->dwEffType |= DIEFT_DEADBAND | DIEFT_FFATTACK | DIEFT_FFFADE
++                    | DIEFT_POSNEGCOEFFICIENTS | DIEFT_POSNEGSATURATION
++                    | DIEFT_SATURATION | DIEFT_STARTDELAY;
++
++    /* again, assume we have support for everything */
++    info->dwStaticParams = DIEP_ALLPARAMS;
++    info->dwDynamicParams = info->dwStaticParams;
++
++    /* yes, this is windows behavior (print the GUID_Name for name) */
++    strcpy(info->tszName, _dump_dinput_GUID(rguid));
++
++    return DI_OK;
++}
++
++DECLSPEC_HIDDEN HRESULT sdl_input_get_info_W(
++        SDL_Joystick *dev,
++        REFGUID rguid,
++        LPDIEFFECTINFOW info)
++{
++    DWORD type = typeFromGUID(rguid);
++
++    TRACE("(%p, %s, %p) type=%d\n", dev, _dump_dinput_GUID(rguid), info, type);
++
++    if (!info) return E_POINTER;
++
++    if (info->dwSize != sizeof(DIEFFECTINFOW)) return DIERR_INVALIDPARAM;
++
++    info->guid = *rguid;
++
++    info->dwEffType = type;
++    /* the event device API does not support querying for all these things
++     * therefore we assume that we have support for them
++     * that's not as dangerous as it sounds, since drivers are allowed to
++     * ignore parameters they claim to support anyway */
++    info->dwEffType |= DIEFT_DEADBAND | DIEFT_FFATTACK | DIEFT_FFFADE
++                    | DIEFT_POSNEGCOEFFICIENTS | DIEFT_POSNEGSATURATION
++                    | DIEFT_SATURATION | DIEFT_STARTDELAY;
++
++    /* again, assume we have support for everything */
++    info->dwStaticParams = DIEP_ALLPARAMS;
++    info->dwDynamicParams = info->dwStaticParams;
++
++    /* yes, this is windows behavior (print the GUID_Name for name) */
++    MultiByteToWideChar(CP_ACP, 0, _dump_dinput_GUID(rguid), -1,
++                        info->tszName, MAX_PATH);
++
++    return DI_OK;
++}
++
++#endif
+diff --git a/dlls/dinput/joystick_sdl.c b/dlls/dinput/joystick_sdl.c
+index 2b1c9176242..64572f27142 100644
+--- a/dlls/dinput/joystick_sdl.c
++++ b/dlls/dinput/joystick_sdl.c
+@@ -58,6 +58,12 @@ typedef struct JoystickImpl JoystickImpl;
+ static const IDirectInputDevice8AVtbl JoystickAvt;
+ static const IDirectInputDevice8WVtbl JoystickWvt;
+ 
++/* implemented in effect_sdl.c */
++HRESULT sdl_create_effect(SDL_Haptic *haptic, REFGUID rguid, struct list *parent_list_entry, LPDIRECTINPUTEFFECT* peff);
++HRESULT sdl_input_get_info_A(SDL_Joystick *dev, REFGUID rguid, LPDIEFFECTINFOA info);
++HRESULT sdl_input_get_info_W(SDL_Joystick *dev, REFGUID rguid, LPDIEFFECTINFOW info);
++
++
+ struct SDLDev {
+     int id;
+     WORD vendor_id;
+@@ -729,6 +735,67 @@ static HRESULT WINAPI JoystickWImpl_GetDeviceInfo(LPDIRECTINPUTDEVICE8W iface,
+     return DI_OK;
+ }
+ 
++static HRESULT WINAPI JoystickWImpl_CreateEffect(IDirectInputDevice8W *iface,
++        const GUID *rguid, const DIEFFECT *lpeff, IDirectInputEffect **ppdef,
++        IUnknown *pUnkOuter)
++{
++    JoystickImpl *This = impl_from_IDirectInputDevice8W(iface);
++    HRESULT retval = DI_OK;
++    effect_list_item* new_effect = NULL;
++
++    TRACE("%p %s %p %p %p\n", iface, debugstr_guid(rguid), lpeff, ppdef, pUnkOuter);
++    dump_DIEFFECT(lpeff, rguid, 0);
++
++    if(!This->sdldev->has_ff){
++        TRACE("No force feedback support\n");
++        *ppdef = NULL;
++        return DIERR_UNSUPPORTED;
++    }
++
++    if (pUnkOuter)
++        WARN("aggregation not implemented\n");
++
++    if (!(new_effect = HeapAlloc(GetProcessHeap(), 0, sizeof(*new_effect))))
++    return DIERR_OUTOFMEMORY;
++
++    retval = sdl_create_effect(This->haptic, rguid, &new_effect->entry, &new_effect->ref);
++    if (retval != DI_OK)
++    {
++        HeapFree(GetProcessHeap(), 0, new_effect);
++        return retval;
++    }
++
++    if (lpeff != NULL)
++    {
++        retval = IDirectInputEffect_SetParameters(new_effect->ref, lpeff, 0);
++
++        if (retval != DI_OK && retval != DI_DOWNLOADSKIPPED)
++        {
++            HeapFree(GetProcessHeap(), 0, new_effect);
++            return retval;
++        }
++    }
++
++    list_add_tail(&This->sdldev->effects, &new_effect->entry);
++    *ppdef = new_effect->ref;
++
++    TRACE("allocated effect: %p\n", new_effect);
++
++    return DI_OK;
++}
++
++static HRESULT WINAPI JoystickAImpl_CreateEffect(IDirectInputDevice8A *iface,
++        const GUID *type, const DIEFFECT *params, IDirectInputEffect **out,
++        IUnknown *outer)
++{
++    JoystickImpl *This = impl_from_IDirectInputDevice8A(iface);
++
++    TRACE("%p %s %p %p %p\n", iface, debugstr_guid(type), params, out, outer);
++
++    return JoystickWImpl_CreateEffect(&This->generic.base.IDirectInputDevice8W_iface,
++            type, params, out, outer);
++}
++
+ static HRESULT WINAPI JoystickWImpl_EnumEffects(LPDIRECTINPUTDEVICE8W iface,
+                                                 LPDIENUMEFFECTSCALLBACKW lpCallback,
+                                                 LPVOID pvRef,
+@@ -891,6 +958,24 @@ static HRESULT WINAPI JoystickAImpl_EnumEffects(LPDIRECTINPUTDEVICE8A iface,
+     return DI_OK;
+ }
+ 
++static HRESULT WINAPI JoystickWImpl_GetEffectInfo(LPDIRECTINPUTDEVICE8W iface,
++                                                  LPDIEFFECTINFOW pdei,
++                                                  REFGUID guid)
++{
++    JoystickImpl* This = impl_from_IDirectInputDevice8W(iface);
++    TRACE("(this=%p,%p,%s)\n", This, pdei, _dump_dinput_GUID(guid));
++    return sdl_input_get_info_W(This->device, guid, pdei);
++}
++
++static HRESULT WINAPI JoystickAImpl_GetEffectInfo(LPDIRECTINPUTDEVICE8A iface,
++                          LPDIEFFECTINFOA pdei,
++                          REFGUID guid)
++{
++    JoystickImpl* This = impl_from_IDirectInputDevice8A(iface);
++    TRACE("(this=%p,%p,%s)\n", This, pdei, _dump_dinput_GUID(guid));
++    return sdl_input_get_info_A(This->device, guid, pdei);
++}
++
+ static HRESULT WINAPI JoystickWImpl_SendForceFeedbackCommand(LPDIRECTINPUTDEVICE8W iface, DWORD dwFlags)
+ {
+     JoystickImpl* This = impl_from_IDirectInputDevice8W(iface);
+@@ -992,9 +1077,9 @@ static const IDirectInputDevice8AVtbl JoystickAvt =
+     JoystickAImpl_GetDeviceInfo,
+     IDirectInputDevice2AImpl_RunControlPanel,
+     IDirectInputDevice2AImpl_Initialize,
+-    IDirectInputDevice2AImpl_CreateEffect,
++    JoystickAImpl_CreateEffect,
+     JoystickAImpl_EnumEffects,
+-    IDirectInputDevice2AImpl_GetEffectInfo,
++    JoystickAImpl_GetEffectInfo,
+     IDirectInputDevice2AImpl_GetForceFeedbackState,
+     JoystickAImpl_SendForceFeedbackCommand,
+     JoystickAImpl_EnumCreatedEffectObjects,
+@@ -1028,9 +1113,9 @@ static const IDirectInputDevice8WVtbl JoystickWvt =
+     JoystickWImpl_GetDeviceInfo,
+     IDirectInputDevice2WImpl_RunControlPanel,
+     IDirectInputDevice2WImpl_Initialize,
+-    IDirectInputDevice2WImpl_CreateEffect,
++    JoystickWImpl_CreateEffect,
+     JoystickWImpl_EnumEffects,
+-    IDirectInputDevice2WImpl_GetEffectInfo,
++    JoystickWImpl_GetEffectInfo,
+     IDirectInputDevice2WImpl_GetForceFeedbackState,
+     JoystickWImpl_SendForceFeedbackCommand,
+     JoystickWImpl_EnumCreatedEffectObjects,
+From ff517137c35d61635b55209343545b9cc0a8b4d3 Mon Sep 17 00:00:00 2001
+From: Aric Stewart <aric@codeweavers.com>
+Date: Mon, 8 Jan 2018 07:48:06 -0600
+Subject: [PATCH] dinput: implement DISFFC_PAUSE/DISFFC_CONTINUE for SDL
+
+Signed-off-by: Aric Stewart <aric@codeweavers.com>
+---
+ dlls/dinput/joystick_sdl.c | 15 ++++++++++++++-
+ 1 file changed, 14 insertions(+), 1 deletion(-)
+
+diff --git a/dlls/dinput/joystick_sdl.c b/dlls/dinput/joystick_sdl.c
+index 64572f27142..a0073b2a9ed 100644
+--- a/dlls/dinput/joystick_sdl.c
++++ b/dlls/dinput/joystick_sdl.c
+@@ -83,6 +83,7 @@ struct JoystickImpl
+ 
+     SDL_Joystick *device;
+     SDL_Haptic *haptic;
++    BOOL ff_paused;
+ };
+ 
+ static inline JoystickImpl *impl_from_IDirectInputDevice8A(IDirectInputDevice8A *iface)
+@@ -755,6 +756,12 @@ static HRESULT WINAPI JoystickWImpl_CreateEffect(IDirectInputDevice8W *iface,
+     if (pUnkOuter)
+         WARN("aggregation not implemented\n");
+ 
++    if (This->ff_paused)
++    {
++        FIXME("Cannot add new effects to a paused SDL device\n");
++        return DIERR_GENERIC;
++    }
++
+     if (!(new_effect = HeapAlloc(GetProcessHeap(), 0, sizeof(*new_effect))))
+     return DIERR_OUTOFMEMORY;
+ 
+@@ -1006,8 +1013,14 @@ static HRESULT WINAPI JoystickWImpl_SendForceFeedbackCommand(LPDIRECTINPUTDEVICE
+         break;
+     }
+     case DISFFC_PAUSE:
++        This->ff_paused = TRUE;
++        if (SDL_HapticPause(This->haptic) != 0)
++            ERR("SDL_HapticPause failed: %s\n",SDL_GetError());
++        break;
+     case DISFFC_CONTINUE:
+-        FIXME("No support for Pause or Continue in sdl\n");
++        This->ff_paused = FALSE;
++        if (SDL_HapticUnpause(This->haptic) != 0)
++            ERR("SDL_HapticUnpause failed: %s\n",SDL_GetError());
+         break;
+ 
+     case DISFFC_SETACTUATORSOFF:
+From 74a3817e14dd06d7677246d50b1062bf29c3fa2b Mon Sep 17 00:00:00 2001
+From: Andrew Eikum <aeikum@codeweavers.com>
+Date: Fri, 3 Aug 2018 12:37:34 -0500
+Subject: [PATCH] dinput: Use the VID/PID for the first chunk of the device
+ product GUID
+
+This is documented on MSDN:
+
+    "XInput and DirectInput"
+    https://docs.microsoft.com/en-us/windows/desktop/xinput/xinput-and-directinput
+---
+ dlls/dinput/joystick_sdl.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/dlls/dinput/joystick_sdl.c b/dlls/dinput/joystick_sdl.c
+index a0073b2a9ed..147e680d17a 100644
+--- a/dlls/dinput/joystick_sdl.c
++++ b/dlls/dinput/joystick_sdl.c
+@@ -182,6 +182,7 @@ static void fill_joystick_dideviceinstanceW(LPDIDEVICEINSTANCEW lpddi, DWORD ver
+     lpddi->guidInstance = DInput_Wine_SDL_Joystick_GUID;
+     lpddi->guidInstance.Data3 = id;
+     lpddi->guidProduct = DInput_Wine_SDL_Joystick_GUID;
++    lpddi->guidProduct.Data1 = MAKELONG(sdldevs[id].vendor_id, sdldevs[id].product_id);
+     lpddi->guidFFDriver = GUID_NULL;
+ 
+     if (version >= 0x0800)
+@@ -359,6 +360,7 @@ static JoystickImpl *alloc_device(REFGUID rguid, IDirectInputImpl *dinput, unsig
+     newDevice->generic.guidInstance = DInput_Wine_SDL_Joystick_GUID;
+     newDevice->generic.guidInstance.Data3 = index;
+     newDevice->generic.guidProduct = DInput_Wine_SDL_Joystick_GUID;
++    newDevice->generic.guidProduct.Data1 = MAKELONG(sdldevs[index].vendor_id, sdldevs[index].product_id);
+     newDevice->generic.joy_polldev = poll_sdl_device_state;
+ 
+     newDevice->generic.base.IDirectInputDevice8A_iface.lpVtbl = &JoystickAvt;
+From d798c1d2714dc12f65e522c6ebfef2036294bc44 Mon Sep 17 00:00:00 2001
+From: Andrew Eikum <aeikum@codeweavers.com>
+Date: Tue, 28 Aug 2018 10:35:08 -0500
+Subject: [PATCH] dinput: Don't fail to load on old SDL
+
+---
+ dlls/dinput/joystick_sdl.c | 23 +++++++++++++++++++++--
+ 1 file changed, 21 insertions(+), 2 deletions(-)
+
+diff --git a/dlls/dinput/joystick_sdl.c b/dlls/dinput/joystick_sdl.c
+index 147e680d17a..f7031524d13 100644
+--- a/dlls/dinput/joystick_sdl.c
++++ b/dlls/dinput/joystick_sdl.c
+@@ -39,6 +39,7 @@
+ 
+ #include "wine/debug.h"
+ #include "wine/unicode.h"
++#include "wine/library.h"
+ #include "wine/list.h"
+ #include "windef.h"
+ #include "winbase.h"
+@@ -112,6 +113,9 @@ static struct SDLDev *sdldevs = NULL;
+ static void find_sdldevs(void)
+ {
+     int i;
++    Uint16 (*pSDL_JoystickGetProduct)(SDL_Joystick * joystick) = NULL;
++    Uint16 (*pSDL_JoystickGetVendor)(SDL_Joystick * joystick) = NULL;
++    void *sdl_handle = NULL;
+ 
+     if (InterlockedCompareExchange(&have_sdldevs, 0, -1) != -1)
+         /* Someone beat us to it */
+@@ -120,6 +124,16 @@ static void find_sdldevs(void)
+     SDL_Init(SDL_INIT_JOYSTICK|SDL_INIT_HAPTIC);
+     SDL_JoystickEventState(SDL_ENABLE);
+ 
++    sdl_handle = dlopen(SONAME_LIBSDL2, RTLD_NOW);
++    if (sdl_handle) {
++        pSDL_JoystickGetProduct = dlsym(sdl_handle, "SDL_JoystickGetProduct");
++        pSDL_JoystickGetVendor = dlsym(sdl_handle, "SDL_JoystickGetVendor");
++    }
++
++    if(!pSDL_JoystickGetVendor){
++        ERR("SDL installation is old! Please upgrade to >=2.0.6 to get accurate joystick information.\n");
++    }
++
+     for (i = 0; i < SDL_NumJoysticks(); i++)
+     {
+         struct SDLDev sdldev = {0};
+@@ -152,8 +166,13 @@ static void find_sdldevs(void)
+             }
+         }
+ 
+-        sdldev.vendor_id = SDL_JoystickGetVendor(device);
+-        sdldev.product_id = SDL_JoystickGetProduct(device);
++        if(pSDL_JoystickGetVendor){
++            sdldev.vendor_id = pSDL_JoystickGetVendor(device);
++            sdldev.product_id = pSDL_JoystickGetProduct(device);
++        }else{
++            sdldev.vendor_id = 0x01;
++            sdldev.product_id = SDL_JoystickInstanceID(device) + 1;
++        }
+ 
+         if (!have_sdldevs)
+             new_sdldevs = HeapAlloc(GetProcessHeap(), 0, sizeof(struct SDLDev));
+From aafd9a6a7fc58b609f1fc5ee17d33aa49cbbe250 Mon Sep 17 00:00:00 2001
+From: Andrew Eikum <aeikum@codeweavers.com>
+Date: Tue, 28 Aug 2018 10:35:19 -0500
+Subject: [PATCH] winebus: Show an ERR on old SDL
+
+---
+ dlls/winebus.sys/bus_sdl.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/dlls/winebus.sys/bus_sdl.c b/dlls/winebus.sys/bus_sdl.c
+index 55891138c87..8b6f0269965 100644
+--- a/dlls/winebus.sys/bus_sdl.c
++++ b/dlls/winebus.sys/bus_sdl.c
+@@ -973,6 +973,9 @@ NTSTATUS WINAPI sdl_driver_init(DRIVER_OBJECT *driver, UNICODE_STRING *registry_
+         pSDL_JoystickGetProduct = dlsym(sdl_handle, "SDL_JoystickGetProduct");
+         pSDL_JoystickGetProductVersion = dlsym(sdl_handle, "SDL_JoystickGetProductVersion");
+         pSDL_JoystickGetVendor = dlsym(sdl_handle, "SDL_JoystickGetVendor");
++        if(!pSDL_JoystickGetVendor){
++            ERR("SDL installation is old! Please upgrade to >=2.0.6 to get accurate joystick information.\n");
++        }
+     }
+ 
+     sdl_driver_obj = driver;
+From c6ec16ae9643fc34f0d47881d90ff629990dc4a0 Mon Sep 17 00:00:00 2001
+From: Huw Davies <huw@codeweavers.com>
+Date: Mon, 22 Oct 2018 14:14:29 +0100
+Subject: [PATCH] dinput: Don't dump a NULL effect.
+
+Signed-off-by: Huw Davies <huw@codeweavers.com>
+---
+ dlls/dinput/joystick_sdl.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/dlls/dinput/joystick_sdl.c b/dlls/dinput/joystick_sdl.c
+index f7031524d13..909c63078bb 100644
+--- a/dlls/dinput/joystick_sdl.c
++++ b/dlls/dinput/joystick_sdl.c
+@@ -766,7 +766,7 @@ static HRESULT WINAPI JoystickWImpl_CreateEffect(IDirectInputDevice8W *iface,
+     effect_list_item* new_effect = NULL;
+ 
+     TRACE("%p %s %p %p %p\n", iface, debugstr_guid(rguid), lpeff, ppdef, pUnkOuter);
+-    dump_DIEFFECT(lpeff, rguid, 0);
++    if (lpeff) dump_DIEFFECT(lpeff, rguid, 0);
+ 
+     if(!This->sdldev->has_ff){
+         TRACE("No force feedback support\n");

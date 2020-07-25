@@ -1,0 +1,117 @@
+From 408a5a86ec30e293bf9e6eec4890d552073a82e8 Mon Sep 17 00:00:00 2001
+From: Zhiyi Zhang <zzhang@codeweavers.com>
+Date: Wed, 17 Jun 2020 20:02:15 +0800
+Subject: [PATCH] winevulkan: Thunk vkGetPhysicalDeviceProperties2 and
+ vkGetPhysicalDeviceProperties2KHR.
+
+Signed-off-by: Zhiyi Zhang <zzhang@codeweavers.com>
+Signed-off-by: Liam Middlebrook <lmiddlebrook@nvidia.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/winevulkan/make_vulkan     |  2 ++
+ dlls/winevulkan/vulkan.c        | 16 ++++++++++++++++
+ dlls/winevulkan/vulkan_thunks.c | 10 ++--------
+ dlls/winevulkan/vulkan_thunks.h |  4 ++++
+ 4 files changed, 24 insertions(+), 8 deletions(-)
+
+diff --git a/dlls/winevulkan/make_vulkan b/dlls/winevulkan/make_vulkan
+index 7459b8f024c..d027b9eaa79 100755
+--- a/dlls/winevulkan/make_vulkan
++++ b/dlls/winevulkan/make_vulkan
+@@ -165,6 +165,8 @@ FUNCTION_OVERRIDES = {
+     "vkGetPhysicalDeviceExternalFenceProperties" : {"dispatch" : False, "driver" : False, "thunk" : False},
+     "vkGetPhysicalDeviceExternalSemaphoreProperties" : {"dispatch" : False, "driver" : False, "thunk" : False},
+     "vkGetPhysicalDeviceImageFormatProperties2" : {"dispatch" : True, "driver" : False, "thunk" : True, "private_thunk" : True},
++    "vkGetPhysicalDeviceProperties2" : {"dispatch" : True, "driver" : False, "thunk" : True, "private_thunk" : True},
++    "vkGetPhysicalDeviceProperties2KHR" : {"dispatch" : True, "driver" : False, "thunk" : True, "private_thunk" : True},
+ 
+     # Device functions
+     "vkAllocateCommandBuffers" : {"dispatch" : True, "driver" : False, "thunk" : False},
+diff --git a/dlls/winevulkan/vulkan.c b/dlls/winevulkan/vulkan.c
+index 2779f626a17..e67c398f604 100644
+--- a/dlls/winevulkan/vulkan.c
++++ b/dlls/winevulkan/vulkan.c
+@@ -1245,6 +1245,22 @@ VkResult WINAPI wine_vkGetPhysicalDeviceImageFormatProperties2KHR(VkPhysicalDevi
+     return res;
+ }
+ 
++void WINAPI wine_vkGetPhysicalDeviceProperties2(VkPhysicalDevice phys_dev,
++        VkPhysicalDeviceProperties2 *properties2)
++{
++    TRACE("%p, %p\n", phys_dev, properties2);
++
++    thunk_vkGetPhysicalDeviceProperties2(phys_dev, properties2);
++}
++
++void WINAPI wine_vkGetPhysicalDeviceProperties2KHR(VkPhysicalDevice phys_dev,
++        VkPhysicalDeviceProperties2 *properties2)
++{
++    TRACE("%p, %p\n", phys_dev, properties2);
++
++    thunk_vkGetPhysicalDeviceProperties2KHR(phys_dev, properties2);
++}
++
+ void WINAPI wine_vkGetPhysicalDeviceExternalSemaphoreProperties(VkPhysicalDevice phys_dev,
+         const VkPhysicalDeviceExternalSemaphoreInfo *semaphore_info, VkExternalSemaphoreProperties *properties)
+ {
+diff --git a/dlls/winevulkan/vulkan_thunks.c b/dlls/winevulkan/vulkan_thunks.c
+index 8811fbbb8a5..f1d24086cec 100644
+--- a/dlls/winevulkan/vulkan_thunks.c
++++ b/dlls/winevulkan/vulkan_thunks.c
+@@ -4787,34 +4787,28 @@ void WINAPI wine_vkGetPhysicalDeviceProperties(VkPhysicalDevice physicalDevice,
+ #endif
+ }
+ 
+-void WINAPI wine_vkGetPhysicalDeviceProperties2(VkPhysicalDevice physicalDevice, VkPhysicalDeviceProperties2 *pProperties)
++void thunk_vkGetPhysicalDeviceProperties2(VkPhysicalDevice physicalDevice, VkPhysicalDeviceProperties2 *pProperties)
+ {
+ #if defined(USE_STRUCT_CONVERSION)
+     VkPhysicalDeviceProperties2_host pProperties_host;
+-    TRACE("%p, %p\n", physicalDevice, pProperties);
+-
+     convert_VkPhysicalDeviceProperties2_win_to_host(pProperties, &pProperties_host);
+     physicalDevice->instance->funcs.p_vkGetPhysicalDeviceProperties2(physicalDevice->phys_dev, &pProperties_host);
+ 
+     convert_VkPhysicalDeviceProperties2_host_to_win(&pProperties_host, pProperties);
+ #else
+-    TRACE("%p, %p\n", physicalDevice, pProperties);
+     physicalDevice->instance->funcs.p_vkGetPhysicalDeviceProperties2(physicalDevice->phys_dev, pProperties);
+ #endif
+ }
+ 
+-static void WINAPI wine_vkGetPhysicalDeviceProperties2KHR(VkPhysicalDevice physicalDevice, VkPhysicalDeviceProperties2 *pProperties)
++void thunk_vkGetPhysicalDeviceProperties2KHR(VkPhysicalDevice physicalDevice, VkPhysicalDeviceProperties2 *pProperties)
+ {
+ #if defined(USE_STRUCT_CONVERSION)
+     VkPhysicalDeviceProperties2_host pProperties_host;
+-    TRACE("%p, %p\n", physicalDevice, pProperties);
+-
+     convert_VkPhysicalDeviceProperties2_win_to_host(pProperties, &pProperties_host);
+     physicalDevice->instance->funcs.p_vkGetPhysicalDeviceProperties2KHR(physicalDevice->phys_dev, &pProperties_host);
+ 
+     convert_VkPhysicalDeviceProperties2_host_to_win(&pProperties_host, pProperties);
+ #else
+-    TRACE("%p, %p\n", physicalDevice, pProperties);
+     physicalDevice->instance->funcs.p_vkGetPhysicalDeviceProperties2KHR(physicalDevice->phys_dev, pProperties);
+ #endif
+ }
+diff --git a/dlls/winevulkan/vulkan_thunks.h b/dlls/winevulkan/vulkan_thunks.h
+index b977cca3e34..60d3676f32b 100644
+--- a/dlls/winevulkan/vulkan_thunks.h
++++ b/dlls/winevulkan/vulkan_thunks.h
+@@ -64,11 +64,15 @@ void WINAPI wine_vkGetPhysicalDeviceExternalSemaphoreProperties(VkPhysicalDevice
+ void WINAPI wine_vkGetPhysicalDeviceExternalSemaphorePropertiesKHR(VkPhysicalDevice physicalDevice, const VkPhysicalDeviceExternalSemaphoreInfo *pExternalSemaphoreInfo, VkExternalSemaphoreProperties *pExternalSemaphoreProperties) DECLSPEC_HIDDEN;
+ VkResult WINAPI wine_vkGetPhysicalDeviceImageFormatProperties2(VkPhysicalDevice physicalDevice, const VkPhysicalDeviceImageFormatInfo2 *pImageFormatInfo, VkImageFormatProperties2 *pImageFormatProperties);
+ VkResult WINAPI wine_vkGetPhysicalDeviceImageFormatProperties2KHR(VkPhysicalDevice physicalDevice, const VkPhysicalDeviceImageFormatInfo2 *pImageFormatInfo, VkImageFormatProperties2 *pImageFormatProperties) DECLSPEC_HIDDEN;
++void WINAPI wine_vkGetPhysicalDeviceProperties2(VkPhysicalDevice physicalDevice, VkPhysicalDeviceProperties2 *pProperties);
++void WINAPI wine_vkGetPhysicalDeviceProperties2KHR(VkPhysicalDevice physicalDevice, VkPhysicalDeviceProperties2 *pProperties) DECLSPEC_HIDDEN;
+ VkResult WINAPI wine_vkQueueSubmit(VkQueue queue, uint32_t submitCount, const VkSubmitInfo *pSubmits, VkFence fence);
+ 
+ /* Private thunks */
+ VkResult thunk_vkGetPhysicalDeviceImageFormatProperties2(VkPhysicalDevice physicalDevice, const VkPhysicalDeviceImageFormatInfo2 *pImageFormatInfo, VkImageFormatProperties2 *pImageFormatProperties) DECLSPEC_HIDDEN;
+ VkResult thunk_vkGetPhysicalDeviceImageFormatProperties2KHR(VkPhysicalDevice physicalDevice, const VkPhysicalDeviceImageFormatInfo2 *pImageFormatInfo, VkImageFormatProperties2 *pImageFormatProperties) DECLSPEC_HIDDEN;
++void thunk_vkGetPhysicalDeviceProperties2(VkPhysicalDevice physicalDevice, VkPhysicalDeviceProperties2 *pProperties) DECLSPEC_HIDDEN;
++void thunk_vkGetPhysicalDeviceProperties2KHR(VkPhysicalDevice physicalDevice, VkPhysicalDeviceProperties2 *pProperties) DECLSPEC_HIDDEN;
+ 
+ typedef struct VkAcquireNextImageInfoKHR_host
+ {

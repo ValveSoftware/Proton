@@ -1,0 +1,49 @@
+From 4208548dbb789b3f3bd112a4dc1a19ebf0d1f307 Mon Sep 17 00:00:00 2001
+From: Andrew Eikum <aeikum@codeweavers.com>
+Date: Mon, 22 Jan 2018 14:35:51 -0600
+Subject: [PATCH] HACK: wineboot: Don't show "updating prefix" window
+
+---
+ programs/wineboot/wineboot.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/programs/wineboot/wineboot.c b/programs/wineboot/wineboot.c
+index b85a3b6b6ea..6dfc797313e 100644
+--- a/programs/wineboot/wineboot.c
++++ b/programs/wineboot/wineboot.c
+@@ -1035,6 +1035,7 @@ static INT_PTR CALLBACK wait_dlgproc( HWND hwnd, UINT msg, WPARAM wp, LPARAM lp
+     return 0;
+ }
+ 
++/*
+ static HWND show_wait_window(void)
+ {
+     const char *config_dir = wine_get_config_dir();
+@@ -1051,6 +1052,7 @@ static HWND show_wait_window(void)
+     HeapFree( GetProcessHeap(), 0, name );
+     return hwnd;
+ }
++*/
+ 
+ static HANDLE start_rundll32( const char *inf_path, BOOL wow64 )
+ {
+@@ -1127,7 +1129,7 @@ static void update_wineprefix( BOOL force )
+ 
+         if ((process = start_rundll32( inf_path, FALSE )))
+         {
+-            HWND hwnd = show_wait_window();
++/*            HWND hwnd = show_wait_window();*/
+             for (;;)
+             {
+                 MSG msg;
+@@ -1139,7 +1141,7 @@ static void update_wineprefix( BOOL force )
+                 }
+                 else while (PeekMessageW( &msg, 0, 0, 0, PM_REMOVE )) DispatchMessageW( &msg );
+             }
+-            DestroyWindow( hwnd );
++/*            DestroyWindow( hwnd );*/
+         }
+         WINE_MESSAGE( "wine: configuration in '%s' has been updated.\n", config_dir );
+     }
+ 
+ 

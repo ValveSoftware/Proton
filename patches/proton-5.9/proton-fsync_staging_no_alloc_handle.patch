@@ -1,0 +1,17 @@
+From: Tk-Glitch <ti3nou@gmail.com>
+Date: Thu, 08 Aug 2019 17:27:31 +0100
+Subject: Add no_alloc_handle object method to fsync for staging compat
+
+diff --git a/server/fsync.c b/server/fsync.c
+index a0745a2306..b712867e4b 100644
+--- a/server/fsync.c
++++ b/server/fsync.c
+@@ -136,6 +136,7 @@ const struct object_ops esync_ops =
+     default_unlink_name,       /* unlink_name */
+     no_open_file,              /* open_file */
+     no_kernel_obj_list,        /* get_kernel_obj_list */
++    no_alloc_handle,           /* alloc_handle */
+     no_close_handle,           /* close_handle */
+     fsync_destroy              /* destroy */
+ };
+ 

@@ -1,0 +1,372 @@
+From: "Rémi Bernon" <rbernon@codeweavers.com>
+Subject: [PATCH v3 1/2] ntdll: Introduce free_ranges indexing sequence.
+Message-Id: <20200525141547.1486891-1-rbernon@codeweavers.com>
+Date: Mon, 25 May 2020 16:15:45 +0200
+
+This is an ordered range sequence used to keep track of free address
+ranges.
+
+The sequence contains an entry for every free address range, with base
+pointing to the first free address and end pointing to the next first
+used address. It is initialized to [0, ~0] for convenience, so that
+there's always a range before or after a view.
+
+In the worst case scenario, where memory is entirely fragmented, there's
+going to be one more range than allocated views, but in general there's
+much less. In any case, because of cache locality, iterating in the
+contiguous sequence is much faster than traversing the view rbtree.
+
+In theory there can be a performance hit when allocating or deleting a
+view, as we may have to move the end of the sequence when a range is
+split or merged. But in practice and given the usually low number of
+ranges, this is not an issue.
+
+The default and maximum sequence size can hold up to 65536 ranges, which
+is much more than enough in general, and performance is probably going
+to be bad before reaching the limit anyway. The code currently asserts
+when reaching the limit, although we could possibly grow the sequence.
+
+Signed-off-by: Rémi Bernon <rbernon@codeweavers.com>
+---
+
+v2: Move the fragmentation mitigations code after the free ranges are
+    actually used. Before that we have to use the same range alignment
+    as the rbtree based code.
+
+v3: Use the new granularity_mask introduced in Wine 5.8, remove the
+    notes about alignment that have been fixed upstream. Use the
+    unix_funcs pointers for mmap_is_in_reserved_area calls.
+
+Original notes:
+
+Tracking free ranges over the whole address space can increase the
+free range count significantly, if pages are getting allocated outside
+of the reserved areas, because of the mmap/VirtualAlloc alignment
+adjustments. We don't use the free ranges outside of the reserved areas
+for now so we just skip these instead.
+
+In We Happy Few, the maximum number of unique free ranges after starting
+a new game, for a maximum of ~=17k allocated views of which ~=9k are in
+reserved memory:
+* Tracking the whole memory: ~=8k ranges
+* Tracking reserved memory: ~=600 ranges
+* Tracking reserved memory and align to 64k: ~=400 ranges
+
+By comparison, although it varies from a game to another, in other games
+the number of allocated views is usually within 500-2k, and the number
+of ranges roughly follows the number of views. Tracking only reserved
+areas makes it follow the number of views there instead, but it is the
+most common case. Aligning free ranges to 64k then reduces the ranges
+count to ~=50.
+
+In any case performance doesn't seem to differ a lot and every scenario
+has roughly the same performance gain. Even with the high fragmentation,
+the cache locality is good enough to mitigate the performance hit and to
+be better than the tree traversal.
+
+ dlls/ntdll/virtual.c | 167 ++++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 164 insertions(+), 3 deletions(-)
+
+diff --git a/dlls/ntdll/virtual.c b/dlls/ntdll/virtual.c
+index f678b2387a31..4ac496efc71c 100644
+--- a/dlls/ntdll/virtual.c
++++ b/dlls/ntdll/virtual.c
+@@ -195,6 +195,158 @@ static void *preload_reserve_end;
+ static BOOL use_locks;
+ static BOOL force_exec_prot;  /* whether to force PROT_EXEC on all PROT_READ mmaps */
+ 
++struct range_entry
++{
++    void *base;
++    void *end;
++};
++
++static struct range_entry *free_ranges;
++static struct range_entry *free_ranges_end;
++
++
++/***********************************************************************
++ *           free_ranges_lower_bound
++ *
++ * Returns the first range whose end is not less than addr, or end if there's none.
++ */
++static struct range_entry *free_ranges_lower_bound( void *addr )
++{
++    struct range_entry *begin = free_ranges;
++    struct range_entry *end = free_ranges_end;
++    struct range_entry *mid;
++
++    while (begin < end)
++    {
++        mid = begin + (end - begin) / 2;
++        if (mid->end < addr)
++            begin = mid + 1;
++        else
++            end = mid;
++    }
++
++    return begin;
++}
++
++
++/***********************************************************************
++ *           free_ranges_insert_view
++ *
++ * Updates the free_ranges after a new view has been created.
++ */
++static void free_ranges_insert_view( struct file_view *view )
++{
++    void *view_base = ROUND_ADDR( view->base, granularity_mask );
++    void *view_end = ROUND_ADDR( (char *)view->base + view->size + granularity_mask, granularity_mask );
++    struct range_entry *range = free_ranges_lower_bound( view_base );
++    struct range_entry *next = range + 1;
++
++    /* free_ranges initial value is such that the view is either inside range or before another one. */
++    assert( range != free_ranges_end );
++    assert( range->end > view_base || next != free_ranges_end );
++
++    /* this happens because virtual_alloc_thread_stack shrinks a view, then creates another one on top */
++    if ((range->end > view_base && range->base >= view_end) ||
++        (range->end == view_base && next->base >= view_end))
++    {
++        /* but assert that it's correctly aligned so we're not going to be into trouble later */
++        assert( view->base == view_base );
++        WARN( "range %p - %p is already mapped\n", view_base, view_end );
++        return;
++    }
++
++    /* this should never happen */
++    if (range->base > view_base || range->end < view_end)
++        ERR( "range %p - %p is already partially mapped\n", view_base, view_end );
++    assert( range->base <= view_base && range->end >= view_end );
++
++    /* need to split the range in two */
++    if (range->base < view_base && range->end > view_end)
++    {
++        memmove( next + 1, next, (free_ranges_end - next) * sizeof(struct range_entry) );
++        free_ranges_end += 1;
++        if ((char *)free_ranges_end - (char *)free_ranges > view_block_size)
++            MESSAGE( "Free range sequence is full, trouble ahead!\n" );
++        assert( (char *)free_ranges_end - (char *)free_ranges <= view_block_size );
++
++        next->base = view_end;
++        next->end = range->end;
++        range->end = view_base;
++    }
++    else
++    {
++        /* otherwise we just have to shrink it */
++        if (range->base < view_base)
++            range->end = view_base;
++        else
++            range->base = view_end;
++
++        if (range->base < range->end) return;
++
++        /* and possibly remove it if it's now empty */
++        memmove( range, next, (free_ranges_end - next) * sizeof(struct range_entry) );
++        free_ranges_end -= 1;
++        assert( free_ranges_end - free_ranges > 0 );
++    }
++}
++
++
++/***********************************************************************
++ *           free_ranges_remove_view
++ *
++ * Updates the free_ranges after a view has been destroyed.
++ */
++static void free_ranges_remove_view( struct file_view *view )
++{
++    void *view_base = ROUND_ADDR( view->base, granularity_mask );
++    void *view_end = ROUND_ADDR( (char *)view->base + view->size + granularity_mask, granularity_mask );
++    struct range_entry *range = free_ranges_lower_bound( view_base );
++    struct range_entry *next = range + 1;
++
++    /* free_ranges initial value is such that the view is either inside range or before another one. */
++    assert( range != free_ranges_end );
++    assert( range->end > view_base || next != free_ranges_end );
++
++    /* this should never happen, but we can safely ignore it */
++    if (range->base <= view_base && range->end >= view_end)
++    {
++        WARN( "range %p - %p is already unmapped\n", view_base, view_end );
++        return;
++    }
++
++    /* this should never happen */
++    if (range->base < view_end && range->end > view_base)
++        ERR( "range %p - %p is already partially unmapped\n", view_base, view_end );
++    assert( range->end <= view_base || range->base >= view_end );
++
++    /* merge with next if possible */
++    if (range->end == view_base && next->base == view_end)
++    {
++        range->end = next->end;
++        memmove( next, next + 1, (free_ranges_end - next - 1) * sizeof(struct range_entry) );
++        free_ranges_end -= 1;
++        assert( free_ranges_end - free_ranges > 0 );
++    }
++    /* or try growing the range */
++    else if (range->end == view_base)
++        range->end = view_end;
++    else if (range->base == view_end)
++        range->base = view_base;
++    /* otherwise create a new one */
++    else
++    {
++        memmove( range + 1, range, (free_ranges_end - range) * sizeof(struct range_entry) );
++        free_ranges_end += 1;
++        if ((char *)free_ranges_end - (char *)free_ranges > view_block_size)
++            MESSAGE( "Free range sequence is full, trouble ahead!\n" );
++        assert( (char *)free_ranges_end - (char *)free_ranges <= view_block_size );
++
++        range->base = view_base;
++        range->end = view_end;
++    }
++}
++
++
+ static inline int is_view_valloc( const struct file_view *view )
+ {
+     return !(view->protect & (SEC_FILE | SEC_RESERVE | SEC_COMMIT));
+@@ -833,6 +985,8 @@ static void delete_view( struct file_view *view ) /* [in] View */
+ {
+     if (!(view->protect & VPROT_SYSTEM)) unmap_area( view->base, view->size );
+     set_page_vprot( view->base, view->size, 0 );
++    if (unix_funcs->mmap_is_in_reserved_area( view->base, view->size ))
++        free_ranges_remove_view( view );
+     wine_rb_remove( &views_tree, &view->entry );
+     *(struct file_view **)view = next_free_view;
+     next_free_view = view;
+@@ -880,6 +1034,8 @@ static NTSTATUS create_view( struct file_view **view_ret, void *base, size_t siz
+     set_page_vprot( base, size, vprot );
+ 
+     wine_rb_put( &views_tree, view->base, &view->entry );
++    if (unix_funcs->mmap_is_in_reserved_area( view->base, view->size ))
++        free_ranges_insert_view( view );
+ 
+     *view_ret = view;
+ 
+@@ -1981,9 +2137,9 @@ void virtual_init(void)
+     /* try to find space in a reserved area for the views and pages protection table */
+ #ifdef _WIN64
+     pages_vprot_size = ((size_t)address_space_limit >> page_shift >> pages_vprot_shift) + 1;
+-    alloc_views.size = view_block_size + pages_vprot_size * sizeof(*pages_vprot);
++    alloc_views.size = 2 * view_block_size + pages_vprot_size * sizeof(*pages_vprot);
+ #else
+-    alloc_views.size = view_block_size + (1U << (32 - page_shift));
++    alloc_views.size = 2 * view_block_size + (1U << (32 - page_shift));
+ #endif
+     if (unix_funcs->mmap_enum_reserved_areas( alloc_virtual_heap, &alloc_views, 1 ))
+         unix_funcs->mmap_remove_reserved_area( alloc_views.base, alloc_views.size );
+@@ -1993,9 +2149,14 @@ void virtual_init(void)
+     assert( alloc_views.base != (void *)-1 );
+     view_block_start = alloc_views.base;
+     view_block_end = view_block_start + view_block_size / sizeof(*view_block_start);
+-    pages_vprot = (void *)((char *)alloc_views.base + view_block_size);
++    free_ranges = (void *)((char *)alloc_views.base + view_block_size);
++    pages_vprot = (void *)((char *)alloc_views.base + 2 * view_block_size);
+     wine_rb_init( &views_tree, compare_view );
+ 
++    free_ranges[0].base = (void *)0;
++    free_ranges[0].end = (void *)~0;
++    free_ranges_end = free_ranges + 1;
++
+     /* make the DOS area accessible (except the low 64K) to hide bugs in broken apps like Excel 2003 */
+     size = (char *)address_space_start - (char *)0x10000;
+     if (size && unix_funcs->mmap_is_in_reserved_area( (void*)0x10000, size ) == 1)
+
+-- 
+2.26.1
+
+From: "Rémi Bernon" <rbernon@codeweavers.com>
+Subject: [PATCH v3 2/2] ntdll: Use the free ranges in find_reserved_free_area.
+Message-Id: <20200525141547.1486891-2-rbernon@codeweavers.com>
+Date: Mon, 25 May 2020 16:15:46 +0200
+In-Reply-To: <20200525141547.1486891-1-rbernon@codeweavers.com>
+References: <20200525141547.1486891-1-rbernon@codeweavers.com>
+
+Instead of the view rbtree.
+
+Testing shows a 20% FPS increase in We Happy Few, from 80-100fps to
+100-120fps right after starting a new game.
+
+Signed-off-by: Rémi Bernon <rbernon@codeweavers.com>
+---
+ dlls/ntdll/virtual.c | 45 +++++++++++++++++++++++---------------------
+ 1 file changed, 24 insertions(+), 21 deletions(-)
+
+diff --git a/dlls/ntdll/virtual.c b/dlls/ntdll/virtual.c
+index 4ac496efc71c..b5cd094839a5 100644
+--- a/dlls/ntdll/virtual.c
++++ b/dlls/ntdll/virtual.c
+@@ -778,40 +778,43 @@ static void *map_free_area( void *base, void *end, size_t size, int top_down, in
+  */
+ static void *find_reserved_free_area( void *base, void *end, size_t size, int top_down )
+ {
+-    struct wine_rb_entry *first = find_view_inside_range( &base, &end, top_down );
++    struct range_entry *range;
+     void *start;
+ 
++    base = ROUND_ADDR( (char *)base + granularity_mask, granularity_mask );
++    end = (char *)ROUND_ADDR( (char *)end - size, granularity_mask ) + size;
++
+     if (top_down)
+     {
+-        start = ROUND_ADDR( (char *)end - size, granularity_mask );
+-        if (start >= end || start < base) return NULL;
++        start = (char *)end - size;
++        range = free_ranges_lower_bound( start );
++        assert(range != free_ranges_end && range->end >= start);
+ 
+-        while (first)
++        if ((char *)range->end - (char *)start < size) start = ROUND_ADDR( (char *)range->end - size, granularity_mask );
++        do
+         {
+-            struct file_view *view = WINE_RB_ENTRY_VALUE( first, struct file_view, entry );
+-
+-            if ((char *)view->base + view->size <= (char *)start) break;
+-            start = ROUND_ADDR( (char *)view->base - size, granularity_mask );
+-            /* stop if remaining space is not large enough */
+-            if (!start || start >= end || start < base) return NULL;
+-            first = wine_rb_prev( first );
++            if (start >= end || start < base || (char *)end - (char *)start < size) return NULL;
++            if (start < range->end && start >= range->base && (char *)range->end - (char *)start >= size) break;
++            if (--range < free_ranges) return NULL;
++            start = ROUND_ADDR( (char *)range->end - size, granularity_mask );
+         }
++        while (1);
+     }
+     else
+     {
+-        start = ROUND_ADDR( (char *)base + granularity_mask, granularity_mask );
+-        if (!start || start >= end || (char *)end - (char *)start < size) return NULL;
++        start = base;
++        range = free_ranges_lower_bound( start );
++        assert(range != free_ranges_end && range->end >= start);
+ 
+-        while (first)
++        if (start < range->base) start = ROUND_ADDR( (char *)range->base + granularity_mask, granularity_mask );
++        do
+         {
+-            struct file_view *view = WINE_RB_ENTRY_VALUE( first, struct file_view, entry );
+-
+-            if ((char *)view->base >= (char *)start + size) break;
+-            start = ROUND_ADDR( (char *)view->base + view->size + granularity_mask, granularity_mask );
+-            /* stop if remaining space is not large enough */
+-            if (!start || start >= end || (char *)end - (char *)start < size) return NULL;
+-            first = wine_rb_next( first );
++            if (start >= end || start < base || (char *)end - (char *)start < size) return NULL;
++            if (start < range->end && start >= range->base && (char *)range->end - (char *)start >= size) break;
++            if (++range == free_ranges_end) return NULL;
++            start = ROUND_ADDR( (char *)range->base + granularity_mask, granularity_mask );
+         }
++        while (1);
+     }
+     return start;
+ }
+
+-- 
+2.26.1
+

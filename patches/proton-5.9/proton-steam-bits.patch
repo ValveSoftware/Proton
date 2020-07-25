@@ -1,0 +1,770 @@
+From 60365fa2e1f55e51b44788d5eac68c6ddce77266 Mon Sep 17 00:00:00 2001
+From: Andrew Eikum <aeikum@codeweavers.com>
+Date: Wed, 27 Dec 2017 13:31:59 -0600
+Subject: [PATCH] HACK: steam: wine.inf: Add required Steam registry entries.
+
+---
+ loader/wine.inf.in | 25 ++++++++++++++++++++++---
+ 1 file changed, 22 insertions(+), 3 deletions(-)
+
+diff --git a/loader/wine.inf.in b/loader/wine.inf.in
+index 5f9f61e2535..43cae2a2bc2 100644
+--- a/loader/wine.inf.in
++++ b/loader/wine.inf.in
+@@ -73,7 +73,8 @@ AddReg=\
+     Tapi,\
+     Timezones,\
+     VersionInfo,\
+-    LicenseInformation
++    LicenseInformation, \
++    SteamClient
+ 
+ [DefaultInstall.ntamd64]
+ RegisterDlls=RegisterDllsSection
+@@ -100,7 +101,8 @@ AddReg=\
+     Tapi,\
+     Timezones,\
+     VersionInfo.ntamd64,\
+-    LicenseInformation
++    LicenseInformation, \
++    SteamClient.ntamd64
+ 
+ [DefaultInstall.ntarm64]
+ RegisterDlls=RegisterDllsSection
+@@ -142,7 +144,8 @@ AddReg=\
+     Misc,\
+     Tapi,\
+     VersionInfo.ntamd64,\
+-    LicenseInformation
++    LicenseInformation, \
++    SteamClient.ntamd64
+ 
+ [Wow64Install.ntarm64]
+ WineFakeDlls=FakeDllsWin32
+@@ -3867,6 +3870,22 @@ l_intl.nls
+ winebus.inf
+ winehid.inf
+ wineusb.inf
++
++[SteamClient]
++HKCU,Software\Valve\Steam,"SteamPath",,"%16422%\Steam"
++HKCU,Software\Valve\Steam,"SteamExe",,"%16422%\Steam\Steam.exe"
++HKCU,Software\Valve\Steam\ActiveProcess,"PID",0x10001,0x0000fffe
++HKCU,Software\Valve\Steam\ActiveProcess,"SteamClientDll",,"%16422%\Steam\steamclient.dll"
++HKCU,Software\Valve\Steam\ActiveProcess,"SteamPath",,"%16422%\Steam"
++
++[SteamClient.ntamd64]
++HKCU,Software\Valve\Steam,"SteamPath",,"%16422%\Steam"
++HKCU,Software\Valve\Steam,"SteamExe",,"%16422%\Steam\Steam.exe"
++HKCU,Software\Valve\Steam\ActiveProcess,"PID",0x10001,0x0000fffe
++HKCU,Software\Valve\Steam\ActiveProcess,"SteamClientDll",,"%16426%\Steam\steamclient.dll"
++HKCU,Software\Valve\Steam\ActiveProcess,"SteamClientDll64",,"%16426%\Steam\steamclient64.dll"
++HKCU,Software\Valve\Steam\ActiveProcess,"SteamPath",,"%16426%\Steam"
++HKLM,Software\Wow6432Node\Valve\Steam,"InstallPath",,"%16422%\Steam"
+ 
+ [NlsFiles]
+ c_037.nls
+
+From bc614834ee153ce33449c06e697b4a30748e9257 Mon Sep 17 00:00:00 2001
+From: Andrew Eikum <aeikum@codeweavers.com>
+Date: Thu, 27 Apr 2017 13:25:04 -0500
+Subject: [PATCH] HACK kernelbase: Substitute the current pid for the Steam
+ client pid
+
+---
+ dlls/kernelbase/process.c | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
+
+diff --git a/dlls/kernelbase/process.c b/dlls/kernelbase/process.c
+index 85e0042024c..9c957f02c06 100644
+--- a/dlls/kernelbase/process.c
++++ b/dlls/kernelbase/process.c
+@@ -220,6 +220,22 @@ HANDLE WINAPI DECLSPEC_HOTPATCH OpenProcess( DWORD access, BOOL inherit, DWORD id )
+     attr.SecurityDescriptor = NULL;
+     attr.SecurityQualityOfService = NULL;
+ 
++    if(id == 0xfffe)
++        /* STEAMOS HACK:
++         * On Windows, the Steam client puts its process ID into the registry
++         * at:
++         *
++         *   [HKCU\Software\Valve\Steam\ActiveProcess]
++         *   PID=dword:00000008
++         *
++         * Games get that pid from the registry and then query it with
++         * OpenProcess to ensure Steam is running. Since we aren't running the
++         * Windows Steam in Wine, instead we hack this magic number into the
++         * registry and then substitute the game's process itself in its place
++         * so it can query a valid process.
++         */
++        id = GetCurrentProcessId();
++
+     cid.UniqueProcess = ULongToHandle(id);
+     cid.UniqueThread  = 0;
+ 
+diff --git a/dlls/ntdll/loader.c b/dlls/ntdll/loader.c
+index cc7bf6900b..28bbb26f79 100644
+--- a/dlls/ntdll/loader.c
++++ b/dlls/ntdll/loader.c
+@@ -74,7 +74,8 @@ const WCHAR syswow64_dir[] = {'C',':','\\','w','i','n','d','o','w','s','\\',
+ static const WCHAR system_path[] =
+     {'C',':','\\','w','i','n','d','o','w','s','\\','s','y','s','t','e','m','3','2',';',
+      'C',':','\\','w','i','n','d','o','w','s','\\','s','y','s','t','e','m',';',
+-     'C',':','\\','w','i','n','d','o','w','s',0};
++     'C',':','\\','w','i','n','d','o','w','s',';',
++     'C',':','\\','P','r','o','g','r','a','m',' ','F','i','l','e','s',' ','(','x','8','6',')','\\','S','t','e','a','m',0};
+ 
+ static const WCHAR dotW[] = {'.',0};
+ 
+From f319dc029be11156c22429c8e0892b4c0e3d0657 Mon Sep 17 00:00:00 2001
+From: Tk-Glitch <ti3nou@gmail.com>
+Date: Sat, 18 Apr 2020 5:53:14 +0200
+Subject: [PATCH] HACK: ntdll: Use steamuser as Wine username
+
+This replaces Andrew's previous patch:
+https://github.com/ValveSoftware/wine/commit/2e2a874cb3a44b2856561c0630037ea587177350
+
+---
+ dlls/ntdll/env.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/dlls/ntdll/env.c b/dlls/ntdll/env.c
+index be3586d..75e2e93 100644
+--- a/dlls/ntdll/env.c
++++ b/dlls/ntdll/env.c
+@@ -415,7 +416,9 @@ static void set_wow64_environment( WCHAR **env )
+ 
+     /* set user name */
+ 
+-    if (!name) name = "wine";
++    name = "steamuser"; /*set steamuser as default user name*/
++    const char *wineusername = getenv("WINEUSERNAME");
++    if ((wineusername)) name = wineusername; /*set user name to WINEUSERNAME value if defined and not steam game*/
+     if ((p = strrchr( name, '/' ))) name = p + 1;
+     if ((p = strrchr( name, '\\' ))) name = p + 1;
+     ntdll_umbstowcs( name, strlen(name) + 1, buf, ARRAY_SIZE(buf) );
+From ec9e7190ea7045012b6e33e5ee64cd678bec68c9 Mon Sep 17 00:00:00 2001
+From: Andrew Eikum <aeikum@codeweavers.com>
+Date: Mon, 22 Jan 2018 14:32:40 -0600
+Subject: [PATCH] HACK: shell32: Never create links to the user's home dirs
+
+---
+ dlls/shell32/shellpath.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/dlls/shell32/shellpath.c b/dlls/shell32/shellpath.c
+index f08474b3635..2f637f25537 100644
+--- a/dlls/shell32/shellpath.c
++++ b/dlls/shell32/shellpath.c
+@@ -4118,10 +4118,11 @@ static void _SHCreateMyDocumentsSymbolicLink(const UINT * aidsMyStuff, const UIN
+ 
+     /* Get the unix path of 'My Documents'. */
+     pszPersonal = _SHGetFolderUnixPath(CSIDL_PERSONAL|CSIDL_FLAG_DONT_VERIFY);
+     if (!pszPersonal) return;
+ 
++#if 0
+     _SHGetXDGUserDirs(xdg_dirs, num, &xdg_results);
+ 
+     pszHome = getenv("HOME");
+     if (pszHome && !stat(pszHome, &statFolder) && S_ISDIR(statFolder.st_mode))
+     {
+@@ -4165,17 +4166,20 @@ static void _SHCreateMyDocumentsSymbolicLink(const UINT * aidsMyStuff, const UIN
+          * or symlink exists. */
+         symlink(szPersonalTarget, pszPersonal);
+     }
+     else
+     {
++#endif
+         /* '$HOME' doesn't exist. Create subdirs for 'My Pictures', 'My Videos',
+          * 'My Music' etc. in '%USERPROFILE%\My Documents' or fail silently if
+          * they already exist. */
+         pszHome = NULL;
+         strcpy(szPersonalTarget, pszPersonal);
+         _SHCreateMyDocumentsSubDirs(aidsMyStuff, aids_num, szPersonalTarget);
++#if 0
+     }
++#endif
+ 
+     heap_free(pszPersonal);
+ 
+     _SHFreeXDGUserDirs(num, xdg_results);
+ }
+@@ -4225,10 +4229,11 @@ static void _SHCreateMyStuffSymbolicLink(int nFolder)
+         int cLen = readlink(pszPersonal, szPersonalTarget, FILENAME_MAX-1);
+         if (cLen >= 0) szPersonalTarget[cLen] = '\0';
+     }
+     heap_free(pszPersonal);
+ 
++#if 0
+     _SHGetXDGUserDirs(xdg_dirs, num, &xdg_results);
+ 
+     pszHome = getenv("HOME");
+ 
+     while (1)
+@@ -4268,10 +4273,11 @@ static void _SHCreateMyStuffSymbolicLink(int nFolder)
+         }
+         symlink(szMyStuffTarget, pszMyStuff);
+         heap_free(pszMyStuff);
+         break;
+     }
++#endif
+ 
+     _SHFreeXDGUserDirs(num, xdg_results);
+ }
+ 
+ /******************************************************************************
+@@ -4293,10 +4299,11 @@ static void _SHCreateDesktopSymbolicLink(void)
+ 
+     /* Create all necessary profile sub-dirs up to 'My Documents' and get the unix path. */
+     pszPersonal = _SHGetFolderUnixPath(CSIDL_PERSONAL|CSIDL_FLAG_CREATE);
+     if (!pszPersonal) return;
+ 
++#if 0
+     _SHGetXDGUserDirs(xdg_dirs, num, &xdg_results);
+ 
+     pszHome = getenv("HOME");
+ 
+     if (pszHome)
+@@ -4318,10 +4325,11 @@ static void _SHCreateDesktopSymbolicLink(void)
+             else
+                 symlink(szDesktopTarget, pszDesktop);
+             heap_free(pszDesktop);
+         }
+     }
++#endif
+ 
+     _SHFreeXDGUserDirs(num, xdg_results);
+ }
+ 
+ /******************************************************************************
+From 63f934962cb97d69ed71604985716e7479f822b1 Mon Sep 17 00:00:00 2001
+From: Nikolay Sivov <nsivov@codeweavers.com>
+Date: Tue, 23 Oct 2018 16:18:20 +0300
+Subject: [PATCH] wine.inf: Add font registry entries.
+
+---
+ loader/wine.inf.in | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/loader/wine.inf.in b/loader/wine.inf.in
+index 1f94c38d0c6..df2b43d9106 100644
+--- a/loader/wine.inf.in
++++ b/loader/wine.inf.in
+@@ -181,6 +181,7 @@ CurrentVersion="Software\Microsoft\Windows\CurrentVersion"
+ CurrentVersionNT="Software\Microsoft\Windows NT\CurrentVersion"
+ FontSubStr="Software\Microsoft\Windows NT\CurrentVersion\FontSubstitutes"
+ Control="System\CurrentControlSet\Control"
++FontsNT="Software\Microsoft\Windows NT\CurrentVersion\Fonts"
+ 
+ [Classes]
+ HKCR,.chm,,2,"chm.file"
+@@ -614,6 +615,10 @@ HKLM,%FontSubStr%,"Times New Roman CYR,204",,"Times New Roman,204"
+ HKLM,%FontSubStr%,"Times New Roman Greek,161",,"Times New Roman,161"
+ HKLM,%FontSubStr%,"Times New Roman TUR,162",,"Times New Roman,162"
+ HKLM,System\CurrentControlSet\Hardware Profiles\Current\Software\Fonts,"LogPixels",0x10003,0x00000060
++HKLM,%FontsNT%,"Arial (TrueType)",,"arial.ttf"
++HKLM,%FontsNT%,"Arial Bold (TrueType)",,"arialbd.ttf"
++HKLM,%FontsNT%,"Times New Roman (TrueType)",,"times.ttf"
++HKLM,%FontsNT%,"Courier New (TrueType)",,"cour.ttf"
+ 
+ [MCI]
+ HKLM,%Mci32Str%,"AVIVideo",,"mciavi32.dll"
+     
+From 174d487bf8ef5bec22c3663f50a276ae59d0a931 Mon Sep 17 00:00:00 2001
+From: Andrew Eikum <aeikum@codeweavers.com>
+Date: Tue, 30 Oct 2018 13:04:06 -0500
+Subject: [PATCH] wine.inf: Substitute Times New Roman for Palatino Linotype
+
+For AOE2HD launcher.
+---
+ loader/wine.inf.in | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/loader/wine.inf.in b/loader/wine.inf.in
+index df2b43d9106..44ce3cd6639 100644
+--- a/loader/wine.inf.in
++++ b/loader/wine.inf.in
+@@ -619,6 +619,7 @@ HKLM,%FontsNT%,"Arial (TrueType)",,"arial.ttf"
+ HKLM,%FontsNT%,"Arial Bold (TrueType)",,"arialbd.ttf"
+ HKLM,%FontsNT%,"Times New Roman (TrueType)",,"times.ttf"
+ HKLM,%FontsNT%,"Courier New (TrueType)",,"cour.ttf"
++HKCU,Software\Wine\Fonts\Replacements,"Palatino Linotype",,"Times New Roman"
+ 
+ [MCI]
+ HKLM,%Mci32Str%,"AVIVideo",,"mciavi32.dll"
+
+From 059a15a1d521a6ba79273b2ade923822b1532205 Mon Sep 17 00:00:00 2001
+From: Andrew Eikum <aeikum@codeweavers.com>
+Date: Fri, 13 Jul 2018 10:40:27 -0500
+Subject: [PATCH] HACK: mshtml: Don't install wine-gecko on prefix creation
+
+We only want to install this on demand.
+---
+ dlls/mshtml/main.c | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/dlls/mshtml/main.c b/dlls/mshtml/main.c
+index 6ce8198aee5..f84d92cc860 100644
+--- a/dlls/mshtml/main.c
++++ b/dlls/mshtml/main.c
+@@ -530,8 +530,6 @@ HRESULT WINAPI DllRegisterServer(void)
+     hres = __wine_register_resources( hInst );
+     if(SUCCEEDED(hres))
+         hres = register_server(TRUE);
+-    if(SUCCEEDED(hres))
+-        load_gecko();
+ 
+     return hres;
+ }
+
+From 1ef83da3b15171782dc009bb6649665769122aa5 Mon Sep 17 00:00:00 2001
+From: Andrew Eikum <aeikum@codeweavers.com>
+Date: Tue, 15 Jan 2019 10:10:47 -0600
+Subject: [PATCH] ntdll: Don't pass SDL_AUDIODRIVER from Linux environment
+
+---
+ dlls/ntdll/env.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/dlls/ntdll/env.c b/dlls/ntdll/env.c
+index 9c957f02c06..e14b514ccc1 100644
+--- a/dlls/ntdll/env.c
++++ b/dlls/ntdll/env.c
+@@ -137,6 +137,7 @@ static inline BOOL is_special_env_var( const char *var )
+             !strncmp( var, "TEMP=", sizeof("TEMP=")-1 ) ||
+             !strncmp( var, "TMP=", sizeof("TMP=")-1 ) ||
+             !strncmp( var, "QT_", sizeof("QT_")-1 ) ||
++            !strncmp( var, "SDL_AUDIODRIVER=", sizeof("SDL_AUDIODRIVER=")-1 ) ||
+             !strncmp( var, "VK_", sizeof("VK_")-1 ));
+ }
+ From 8a781a3ab721a14fed0a8c1aaccd357cdd71d0ac Mon Sep 17 00:00:00 2001
+From: Jactry Zeng <jzeng@codeweavers.com>
+Date: Thu, 13 Dec 2018 22:21:34 +0800
+Subject: [PATCH] gdi32: Add CJK font replacements.
+
+---
+ dlls/gdi32/freetype.c | 172 +++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 171 insertions(+), 1 deletion(-)
+
+diff --git a/dlls/gdi32/freetype.c b/dlls/gdi32/freetype.c
+index 0fc41f39021..1d721f50760 100644
+--- a/dlls/gdi32/freetype.c
++++ b/dlls/gdi32/freetype.c
+@@ -513,11 +513,22 @@ static const WCHAR external_fonts_reg_key[] = {'S','o','f','t','w','a','r','e','
+ static const WCHAR Lucida_Sans_Unicode[] = {'L','u','c','i','d','a',' ','S','a','n','s',' ','U','n','i','c','o','d','e',0};
+ static const WCHAR Microsoft_Sans_Serif[] = {'M','i','c','r','o','s','o','f','t',' ','S','a','n','s',' ','S','e','r','i','f',0 };
+ static const WCHAR Tahoma[] = {'T','a','h','o','m','a',0};
++/* Japanese fonts */
+ static const WCHAR MS_UI_Gothic[] = {'M','S',' ','U','I',' ','G','o','t','h','i','c',0};
++static const WCHAR atMS_UI_Gothic[] = {'@','M','S',' ','U','I',' ','G','o','t','h','i','c',0};
++static const WCHAR MS_PGothic_cp932[]= {0x30fb,0xff6d,0x30fb,0xff73,' ',0x30fb,0xff70,0x7e67,0xff74,0x7e67,0xff77,0x7e5d,0x30fb,0x3051,0};
++/* Simplified Chinese fonts */
+ static const WCHAR SimSun[] = {'S','i','m','S','u','n',0};
+-static const WCHAR Gulim[] = {'G','u','l','i','m',0};
++static const WCHAR atSimSun[] = {'@','S','i','m','S','u','n',0};
++static const WCHAR Microsoft_YaHei[] = {'M','i','c','r','o','s','o','f','t',' ','Y','a','H','e','i',0};
++static const WCHAR LiSu[] = {'L','i','S','u',0};
++/* Traditional Chinese fonts */
+ static const WCHAR PMingLiU[] = {'P','M','i','n','g','L','i','U',0};
++static const WCHAR atPMingLiU[] = {'@','P','M','i','n','g','L','i','U',0};
++/* Korean fonts */
+ static const WCHAR Batang[] = {'B','a','t','a','n','g',0};
++static const WCHAR Gulim[] = {'G','u','l','i','m',0};
++static const WCHAR atGulim[] = {'@','G','u','l','i','m',0};
+ 
+ static const WCHAR arial[] = {'A','r','i','a','l',0};
+ static const WCHAR bitstream_vera_sans[] = {'B','i','t','s','t','r','e','a','m',' ','V','e','r','a',' ','S','a','n','s',0};
+@@ -2365,6 +2376,113 @@ static BOOL map_font_family(const WCHAR *orig, const WCHAR *repl)
+     return FALSE;
+ }
+ 
++static const WCHAR new_sc_fonts[] = {
++    /* Ubuntu 16.04 or later, Mint 19, Fedora 29 */
++    'N','o','t','o',' ','S','a','n','s',' ','C','J','K',' ','S','C',' ','R','e','g','u','l','a','r',0,
++    /* Manjaro 18 */
++    'N','o','t','o',' ','S','a','n','s',' ','C','J','K',' ','S','C',0,
++    /* Popular open source Chinese font */
++    'W','e','n','Q','u','a','n','Y','i',' ','M','i','c','r','o',' ','H','e','i',0,
++    0
++};
++
++static const WCHAR vertical_new_sc_fonts[] = {
++    /* Ubuntu 16.04 or later, Mint 19, Fedora 29 */
++    '@','N','o','t','o',' ','S','a','n','s',' ','C','J','K',' ','S','C',' ','R','e','g','u','l','a','r',0,
++    /* Manjaro 18 */
++    '@','N','o','t','o',' ','S','a','n','s',' ','C','J','K',' ','S','C',0,
++    /* popular open source Chinese font */
++    '@','W','e','n','Q','u','a','n','Y','i',' ','M','i','c','r','o',' ','H','e','i',0,
++    0
++};
++
++static const WCHAR new_tc_fonts[] = {
++    /* Ubuntu 16.04 or later, Mint 19, Fedora 29 */
++    'N','o','t','o',' ','S','a','n','s',' ','C','J','K',' ','T','C',' ','R','e','g','u','l','a','r',0,
++    /* Manjaro 18 */
++    'N','o','t','o',' ','S','a','n','s',' ','C','J','K',' ','T','C',0,
++    /* popular open source Chinese font */
++    'W','e','n','Q','u','a','n','Y','i',' ','M','i','c','r','o',' ','H','e','i',0,
++    0
++};
++
++static const WCHAR vertical_new_tc_fonts[] = {
++    /* Ubuntu 16.04 or later */
++    '@','N','o','t','o',' ','S','a','n','s',' ','C','J','K',' ','T','C',' ','R','e','g','u','l','a','r',0,
++    /* Manjaro 18 */
++    '@','N','o','t','o',' ','S','a','n','s',' ','C','J','K',' ','T','C',0,
++    /* popular open source Chinese font */
++    '@','W','e','n','Q','u','a','n','Y','i',' ','M','i','c','r','o',' ','H','e','i',0,
++    0
++};
++
++static const WCHAR new_jp_fonts[] = {
++    /* Ubuntu 16.04 or later */
++    'N','o','t','o',' ','S','a','n','s',' ','C','J','K',' ','J','P',' ','R','e','g','u','l','a','r',0,
++    /* Manjaro 18 */
++    'N','o','t','o',' ','S','a','n','s',' ','C','J','K',' ','J','P',0,
++    0
++};
++
++static const WCHAR vertical_new_jp_fonts[] = {
++    /* Ubuntu 16.04 or later */
++    '@','N','o','t','o',' ','S','a','n','s',' ','C','J','K',' ','J','P',' ','R','e','g','u','l','a','r',0,
++    /* Manjaro 18 */
++    '@','N','o','t','o',' ','S','a','n','s',' ','C','J','K',' ','J','P',0,
++    0
++};
++
++static const WCHAR new_kr_fonts[] = {
++    /* Ubuntu 16.04 or later */
++    'N','o','t','o',' ','S','a','n','s',' ','C','J','K',' ','K','R',' ','R','e','g','u','l','a','r',0,
++    /* Manjaro 18 */
++    'N','o','t','o',' ','S','a','n','s',' ','C','J','K',' ','K','R',0,
++    0
++};
++
++static const WCHAR vertical_new_kr_fonts[] = {
++    /* Ubuntu 16.04 or later */
++    '@','N','o','t','o',' ','S','a','n','s',' ','C','J','K',' ','K','R',' ','R','e','g','u','l','a','r',0,
++    /* Manjaro 18 */
++    '@','N','o','t','o',' ','S','a','n','s',' ','C','J','K',' ','K','R',0,
++    0
++};
++
++static struct font_replacements
++{
++    const WCHAR *replacements[4];
++    const int count;
++    const WCHAR *new_fonts;
++    const WCHAR *vertical_new_fonts;
++    BOOL *font_seen;
++} font_replacements_list[] =
++{
++    /* Simplified Chinese */
++    {
++        {
++            SimSun, atSimSun, Microsoft_YaHei, LiSu
++        }, 4, new_sc_fonts, vertical_new_sc_fonts, NULL
++    },
++    /* Traditional Chinese */
++    {
++        {
++            PMingLiU, atPMingLiU
++        }, 2, new_tc_fonts, vertical_new_tc_fonts, NULL
++    },
++    /* Japanese */
++    {
++        {
++            MS_UI_Gothic, atMS_UI_Gothic, MS_PGothic_cp932
++        }, 3, new_jp_fonts, vertical_new_jp_fonts, NULL
++    },
++    /* Korean */
++    {
++        {
++            Gulim, atGulim
++        }, 2, new_kr_fonts, vertical_new_kr_fonts, NULL
++    }
++};
++
+ /***********************************************************
+  * The replacement list is a way to map an entire font
+  * family onto another family.  For example adding
+@@ -2383,6 +2501,7 @@ static void LoadReplaceList(void)
+     DWORD valuelen, datalen, i = 0, type, dlen, vlen;
+     LPWSTR value;
+     LPVOID data;
++    int replacement_count = sizeof(font_replacements_list)/sizeof(font_replacements_list[0]);
+ 
+     /* @@ Wine registry key: HKCU\Software\Wine\Fonts\Replacements */
+     if(RegOpenKeyA(HKEY_CURRENT_USER, "Software\\Wine\\Fonts\\Replacements", &hkey) == ERROR_SUCCESS)
+@@ -2401,6 +2520,25 @@ static void LoadReplaceList(void)
+             /* "NewName"="Oldname" */
+             if(!find_family_from_any_name(value))
+             {
++                int j;
++
++                for (j = 0; j < replacement_count; j++)
++                {
++                    int k;
++
++                    struct font_replacements *replacement = &font_replacements_list[j];
++
++                    replacement->font_seen = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY,
++                                                       replacement->count * sizeof(BOOL));
++                    for (k = 0; k < replacement->count; k++)
++                    {
++                        if (!replacement->font_seen[k] && !lstrcmpW(value, replacement->replacements[k]))
++                        {
++                            replacement->font_seen[k] = TRUE;
++                            break;
++                        }
++                    }
++                }
+                 if (type == REG_MULTI_SZ)
+                 {
+                     WCHAR *replace = data;
+@@ -2421,6 +2559,38 @@ static void LoadReplaceList(void)
+ 	    dlen = datalen;
+ 	    vlen = valuelen;
+ 	}
++
++        for (i = 0; i < replacement_count; i++)
++        {
++            int j;
++            struct font_replacements *replacement = &font_replacements_list[i];
++
++            for (j = 0; j < replacement->count; j++)
++            {
++                if (!replacement->font_seen ||
++                    (!replacement->font_seen[j] && !find_family_from_any_name(replacement->replacements[j])))
++                {
++                    const WCHAR *replace;
++
++                    if (replacement->replacements[j][0] == '@')
++                        replace = replacement->vertical_new_fonts;
++                    else
++                        replace = replacement->new_fonts;
++
++                    while (*replace)
++                    {
++                        if (map_font_family(replacement->replacements[j], replace))
++                        {
++                            TRACE("Replace %s with %s\n", wine_dbgstr_w(replacement->replacements[j]),
++                                  wine_dbgstr_w(replace));
++                            break;
++                        }
++                        replace += strlenW(replace) + 1;
++                    }
++                }
++            }
++            HeapFree(GetProcessHeap(), 0, replacement->font_seen);
++        }
+ 	HeapFree(GetProcessHeap(), 0, data);
+ 	HeapFree(GetProcessHeap(), 0, value);
+ 	RegCloseKey(hkey);
+
+From 17d19e1b23bce6fc6ff5b4e61131c9c58fd57ae5 Mon Sep 17 00:00:00 2001
+From: Andrew Eikum <aeikum@codeweavers.com>
+Date: Wed, 28 Mar 2018 09:21:41 -0500
+Subject: [PATCH] HACK: Don't build winemenubuilder
+
+---
+ configure          | 2 --
+ configure.ac       | 1 -
+ loader/wine.inf.in | 1 -
+ 3 files changed, 4 deletions(-)
+
+diff --git a/configure b/configure
+index 649a8917f54..4581015d576 100755
+--- a/configure
++++ b/configure
+@@ -1746,7 +1746,6 @@ enable_wineconsole
+ enable_winedbg
+ enable_winedevice
+ enable_winefile
+-enable_winemenubuilder
+ enable_winemine
+ enable_winemsibuilder
+ enable_winepath
+@@ -20315,7 +20314,6 @@ wine_fn_config_makefile programs/wineconsole enable_wineconsole
+ wine_fn_config_makefile programs/winedbg enable_winedbg
+ wine_fn_config_makefile programs/winedevice enable_winedevice
+ wine_fn_config_makefile programs/winefile enable_winefile
+-wine_fn_config_makefile programs/winemenubuilder enable_winemenubuilder
+ wine_fn_config_makefile programs/winemine enable_winemine
+ wine_fn_config_makefile programs/winemsibuilder enable_winemsibuilder
+ wine_fn_config_makefile programs/winepath enable_winepath
+diff --git a/configure.ac b/configure.ac
+index 704da15f404..d4168e410bc 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -3998,7 +3998,6 @@ WINE_CONFIG_MAKEFILE(programs/wineconsole)
+ WINE_CONFIG_MAKEFILE(programs/winedbg)
+ WINE_CONFIG_MAKEFILE(programs/winedevice)
+ WINE_CONFIG_MAKEFILE(programs/winefile)
+-WINE_CONFIG_MAKEFILE(programs/winemenubuilder)
+ WINE_CONFIG_MAKEFILE(programs/winemine)
+ WINE_CONFIG_MAKEFILE(programs/winemsibuilder)
+ WINE_CONFIG_MAKEFILE(programs/winepath)
+diff --git a/loader/wine.inf.in b/loader/wine.inf.in
+index 2b049eb91f8..e6948a73427 100644
+--- a/loader/wine.inf.in
++++ b/loader/wine.inf.in
+@@ -3598,7 +3598,6 @@ HKR,Parameters,"ServiceDll",,"%11%\schedsvc.dll"
+ HKLM,%CurrentVersionNT%\SvcHost,"netsvcs",0x00010008,"Schedule"
+ 
+ [Services]
+-HKLM,%CurrentVersion%\RunServices,"winemenubuilder",2,"%11%\winemenubuilder.exe -a -r"
+ HKLM,"System\CurrentControlSet\Services\Eventlog\Application",,16
+ HKLM,"System\CurrentControlSet\Services\Eventlog\System","Sources",0x10000,""
+ HKLM,"System\CurrentControlSet\Services\Tcpip\Parameters","DataBasePath",2,"%11%\drivers"
+
+From aef0f1638ce13db03a4d3c0fe53972f44443c854 Mon Sep 17 00:00:00 2001
+From: Patryk Obara <dreamer.tan@gmail.com>
+Date: Fri, 26 Apr 2019 20:40:31 +0200
+Subject: [PATCH] winex11: Fill WM_CLASS based on Steam appid
+
+Some desktop environments (Gnome 3, Cinnamon) decide on an application
+icon in the following order:
+
+ - If the first string in WM_CLASS property can be correlated to
+  a name or StartupWMClass key in a .desktop entry file, then
+  the associated icon will be used.
+ - If the second string in WM_CLASS property can be correlated to
+  a name or StartupWMClass key in a .desktop entry file, then
+  the associated icon will be used.
+ - If the application has indicated an icon resource through WM_HINTS
+  property, then the associated X window or pixmaps will be used.
+
+Upstream Wine usually deals with this by placing a .desktop file with
+StartupWMClass filled to match first string in WM_CLASS property
+(which is the name of exe file being run).
+
+Wine in Proton does not do it, but still puts "Wine" as second string,
+therefore desktop environment can't differentiate between Wine in
+Proton and Wine installed in OS.
+
+By replacing "Wine" with "steam_app_<appid>" we force DE to fallback
+to icon indicated by WM_HINTS (ico file embedded in exe file).
+Steam can override this behaviour by installing properly crafted
+.desktop entry file.  If SteamAppId environment variable is missing,
+then generic "steam_proton" name is used instead.
+---
+ dlls/winex11.drv/window.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/dlls/winex11.drv/window.c b/dlls/winex11.drv/window.c
+index 1ec7c706511..9ae3da3d4a2 100644
+--- a/dlls/winex11.drv/window.c
++++ b/dlls/winex11.drv/window.c
+@@ -870,8 +870,13 @@ static void set_initial_wm_hints( Display *display, Window window )
+     /* class hints */
+     if ((class_hints = XAllocClassHint()))
+     {
++        static char steam_proton[] = "steam_proton";
++        char proton_app_class[128];
++        const char *app_id = getenv("SteamAppId");
++
++        snprintf(proton_app_class, sizeof(proton_app_class), "steam_app_%s", app_id);
+         class_hints->res_name = process_name;
+-        class_hints->res_class = process_name;
++        class_hints->res_class = app_id ? proton_app_class : steam_proton;
+         XSetClassHint( display, window, class_hints );
+         XFree( class_hints );
+     }
+From d012d137e4099d1b12079a49a8a5632d205e0a9f Mon Sep 17 00:00:00 2001
+From: Andrew Eikum <aeikum@codeweavers.com>
+Date: Mon, 24 Sep 2018 12:37:49 -0500
+Subject: [PATCH] HACK: dbghelp: Disable DWARF parsing
+
+Patch by Zeb. Our DWARF parser has been known to crash winedbg in some
+cases. Since probably no concerned parties are going to be using plain
+winedbg, just don't bother parsing anything.
+---
+ dlls/dbghelp/dwarf.c | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/dlls/dbghelp/dwarf.c b/dlls/dbghelp/dwarf.c
+index 31c008abb8f..ce689dbe6cf 100644
+--- a/dlls/dbghelp/dwarf.c
++++ b/dlls/dbghelp/dwarf.c
+@@ -3516,6 +3516,11 @@ BOOL dwarf2_parse(struct module* module, unsigned long load_offset,
+     BOOL                ret = TRUE;
+     struct module_format* dwarf2_modfmt;
+ 
++/* Our DWARF parser has been known to crash winedbg in some cases. Since
++ * probably no concerned parties are going to be using plain winedbg, just don't
++ * bother parsing anything. */
++return FALSE;
++
+     if (!dwarf2_init_section(&eh_frame,                fmap, ".eh_frame",     NULL,             &eh_frame_sect))
+         /* lld produces .eh_fram to avoid generating a long name */
+         dwarf2_init_section(&eh_frame,                fmap, ".eh_fram",      NULL,             &eh_frame_sect);
+
+From a13270aea50af90aa6c721080b956870d67d81c2 Mon Sep 17 00:00:00 2001
+From: Andrew Eikum <aeikum@codeweavers.com>
+Date: Fri, 30 Mar 2018 10:40:43 -0500
+Subject: [PATCH] winedbg: When crash dialog is not shown, dump crash info to
+ stderr
+
+This way the backtrace and such will appear in the log file instead of
+going to stdout, which we don't capture.
+---
+ programs/winedbg/tgt_active.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/programs/winedbg/tgt_active.c b/programs/winedbg/tgt_active.c
+index f632ca0414d..72e63327831 100644
+--- a/programs/winedbg/tgt_active.c
++++ b/programs/winedbg/tgt_active.c
+@@ -874,6 +874,9 @@ enum dbg_start dbg_active_auto(int argc, char* argv[])
+         if (event) thread = display_crash_details( event );
+         if (thread) dbg_houtput = output = create_temp_file();
+         break;
++    case TRUE:
++        dbg_houtput = GetStdHandle(STD_ERROR_HANDLE);
++        break;
+     }
+ 
+     input = parser_generate_command_file("echo Modules:", "info share",
+From a7542e9e279970c2ab3ac9c6c986b300135286a0 Mon Sep 17 00:00:00 2001
+From: Andrew Eikum <aeikum@codeweavers.com>
+Date: Wed, 28 Mar 2018 09:17:30 -0500
+Subject: [PATCH] wine.inf: Don't show crash dialog by default
+
+---
+ loader/wine.inf.in | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/loader/wine.inf.in b/loader/wine.inf.in
+index 7fe2f49dcd9..e72d0dcaba1 100644
+--- a/loader/wine.inf.in
++++ b/loader/wine.inf.in
+@@ -540,6 +540,7 @@ HKLM,%CurrentVersionNT%\AeDebug,"Debugger",2,"winedbg --auto %ld %ld"
+ HKLM,%CurrentVersionNT%\AeDebug,"Auto",2,"1"
+ HKCU,Software\Wine\Debug,"RelayExclude",2,"ntdll.RtlEnterCriticalSection;ntdll.RtlTryEnterCriticalSection;ntdll.RtlLeaveCriticalSection;kernel32.48;kernel32.49;kernel32.94;kernel32.95;kernel32.96;kernel32.97;kernel32.98;kernel32.TlsGetValue;kernel32.TlsSetValue;kernel32.FlsGetValue;kernel32.FlsSetValue;kernel32.SetLastError"
+ HKCU,Software\Wine\Debug,"RelayFromExclude",2,"winex11.drv;winemac.drv;user32;gdi32;advapi32;kernel32"
++HKCU,Software\Wine\WineDbg,"ShowCrashDialog",0x00010003,0x00000000
+ 
+ [DirectX]
+ HKLM,Software\Microsoft\DirectX,"Version",,"4.09.00.0904"
+From a1cef95cf1500f6d94cf68d8bf6ae32b2883cb75 Mon Sep 17 00:00:00 2001
+From: Zebediah Figura <z.figura12@gmail.com>
+Date: Mon, 18 May 2020 14:20:30 -0500
+Subject: [PATCH] wine.inf: Associate the "steam" protocol with winebrowser.
+
+---
+ loader/wine.inf.in | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/loader/wine.inf.in b/loader/wine.inf.in
+index 247eb906422..0b014dce63c 100644
+--- a/loader/wine.inf.in
++++ b/loader/wine.inf.in
+@@ -317,6 +317,7 @@ HKCR,https\shell\open\ddeexec,"NoActivateHandler",2,""
+ HKCR,https\shell\open\ddeexec\Application,,2,"IExplore"
+ HKCR,https\shell\open\ddeexec\Topic,,2,"WWW_OpenURL"
+ HKCR,mailto\shell\open\command,,2,"%11%\winebrowser %1"
++HKCR,steam\shell\open\command,,2,"""%11%\winebrowser"" ""%1"""
+ 
+ HKCR,MIME\Database\Charset\_iso-2022-jp$ESC,"Codepage",0x10003,932
+ HKCR,MIME\Database\Charset\_iso-2022-jp$ESC,"InternetEncoding",0x10003,50221

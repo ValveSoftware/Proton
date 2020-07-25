@@ -1,0 +1,290 @@
+From 4ed26b63ca0305ba750c4f38002cf1eb674f688c Mon Sep 17 00:00:00 2001
+From: Hans Leidekker <hans@codeweavers.com>
+Date: Tue, 26 May 2020 10:18:42 +0200
+Subject: [PATCH] mountmgr: Return the disk serial from
+ IOCTL_STORAGE_QUERY_PROPERTY(StorageDeviceProperty).
+
+Signed-off-by: Hans Leidekker <hans@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/mountmgr.sys/dbus.c     | 13 ++++---
+ dlls/mountmgr.sys/device.c   | 69 +++++++++++++++++++++++++++++-------
+ dlls/mountmgr.sys/diskarb.c  |  2 +-
+ dlls/mountmgr.sys/mountmgr.h |  2 +-
+ 4 files changed, 66 insertions(+), 20 deletions(-)
+
+diff --git a/dlls/mountmgr.sys/dbus.c b/dlls/mountmgr.sys/dbus.c
+index 27b35acd9ca..98b2a47ba6d 100644
+--- a/dlls/mountmgr.sys/dbus.c
++++ b/dlls/mountmgr.sys/dbus.c
+@@ -317,7 +317,7 @@ static void udisks_new_device( const char *udi )
+     if (device)
+     {
+         if (removable) add_dos_device( -1, udi, device, mount_point, drive_type, guid_ptr, NULL );
+-        else if (guid_ptr) add_volume( udi, device, mount_point, DEVICE_HARDDISK_VOL, guid_ptr );
++        else if (guid_ptr) add_volume( udi, device, mount_point, DEVICE_HARDDISK_VOL, guid_ptr, NULL );
+     }
+ 
+     p_dbus_message_unref( reply );
+@@ -385,7 +385,7 @@ static const char *udisks2_string_from_array( DBusMessageIter *iter )
+ 
+ /* find the drive entry in the dictionary and get its parameters */
+ static void udisks2_get_drive_info( const char *drive_name, DBusMessageIter *dict,
+-                                    enum device_type *drive_type, int *removable )
++                                    enum device_type *drive_type, int *removable, const char **serial )
+ {
+     DBusMessageIter iter, drive, variant;
+     const char *name;
+@@ -403,6 +403,8 @@ static void udisks2_get_drive_info( const char *drive_name, DBusMessageIter *dic
+                     p_dbus_message_iter_get_basic( &variant, removable );
+                 else if (!strcmp( name, "MediaCompatibility" ))
+                     *drive_type = udisks_parse_media_compatibility( &variant );
++                else if (!strcmp( name, "Id" ))
++                    p_dbus_message_iter_get_basic( &variant, serial );
+             }
+         }
+     }
+@@ -415,6 +417,7 @@ static void udisks2_add_device( const char *udi, DBusMessageIter *dict, DBusMess
+     const char *mount_point = NULL;
+     const char *type = NULL;
+     const char *drive = NULL;
++    const char *id = NULL;
+     GUID guid, *guid_ptr = NULL;
+     const char *iface, *name;
+     int removable = FALSE;
+@@ -448,7 +451,7 @@ static void udisks2_add_device( const char *udi, DBusMessageIter *dict, DBusMess
+                 else if (!strcmp( name, "Drive" ))
+                 {
+                     p_dbus_message_iter_get_basic( &variant, &drive );
+-                    udisks2_get_drive_info( drive, dict, &drive_type, &removable );
++                    udisks2_get_drive_info( drive, dict, &drive_type, &removable, &id );
+                 }
+                 else if (!strcmp( name, "IdUUID" ))
+                 {
+@@ -483,7 +486,7 @@ static void udisks2_add_device( const char *udi, DBusMessageIter *dict, DBusMess
+     if (device)
+     {
+         if (removable) add_dos_device( -1, udi, device, mount_point, drive_type, guid_ptr, NULL );
+-        else if (guid_ptr) add_volume( udi, device, mount_point, DEVICE_HARDDISK_VOL, guid_ptr );
++        else if (guid_ptr) add_volume( udi, device, mount_point, DEVICE_HARDDISK_VOL, guid_ptr, id );
+     }
+ }
+ 
+@@ -799,7 +802,7 @@ static void hal_new_device( LibHalContext *ctx, const char *udi )
+         /* add property watch for mount point */
+         p_libhal_device_add_property_watch( ctx, udi, &error );
+     }
+-    else if (guid_ptr) add_volume( udi, device, mount_point, DEVICE_HARDDISK_VOL, guid_ptr );
++    else if (guid_ptr) add_volume( udi, device, mount_point, DEVICE_HARDDISK_VOL, guid_ptr, NULL );
+ 
+ done:
+     if (type) p_libhal_free_string( type );
+diff --git a/dlls/mountmgr.sys/device.c b/dlls/mountmgr.sys/device.c
+index a6794fa6ac4..c29ce9f9248 100644
+--- a/dlls/mountmgr.sys/device.c
++++ b/dlls/mountmgr.sys/device.c
+@@ -89,6 +89,7 @@ struct disk_device
+     STORAGE_DEVICE_NUMBER devnum;      /* device number info */
+     char                 *unix_device; /* unix device path */
+     char                 *unix_mount;  /* unix mount point path */
++    char                 *serial;      /* disk serial number */
+ };
+ 
+ struct volume
+@@ -873,6 +874,7 @@ static void delete_disk_device( struct disk_device *device )
+     }
+     RtlFreeHeap( GetProcessHeap(), 0, device->unix_device );
+     RtlFreeHeap( GetProcessHeap(), 0, device->unix_mount );
++    RtlFreeHeap( GetProcessHeap(), 0, device->serial );
+     RtlFreeUnicodeString( &device->name );
+     IoDeleteDevice( device->dev_obj );
+ }
+@@ -1078,9 +1080,40 @@ static BOOL get_volume_device_info( struct volume *volume )
+     return TRUE;
+ }
+ 
++/* set disk serial for dos devices that reside on a given Unix device */
++static void set_dos_devices_disk_serial( struct disk_device *device )
++{
++    struct dos_drive *drive;
++    struct stat dev_st, drive_st;
++    char *path, *p;
++
++    if (!device->serial || !device->unix_mount || stat( device->unix_mount, &dev_st ) == -1) return;
++
++    if (!(path = get_dosdevices_path( &p ))) return;
++    p[2] = 0;
++
++    LIST_FOR_EACH_ENTRY( drive, &drives_list, struct dos_drive, entry )
++    {
++        /* drives mapped to Unix devices already have serial set, if available */
++        if (drive->volume->device->unix_device) continue;
++
++        p[0] = 'a' + drive->drive;
++
++        /* copy serial if drive resides on this Unix device */
++        if (stat( path, &drive_st ) != -1 && drive_st.st_rdev == dev_st.st_rdev)
++        {
++            HeapFree( GetProcessHeap(), 0, drive->volume->device->serial );
++            drive->volume->device->serial = strdupA( device->serial );
++        }
++    }
++
++    HeapFree( GetProcessHeap(), 0, path );
++}
++
+ /* change the information for an existing volume */
+ static NTSTATUS set_volume_info( struct volume *volume, struct dos_drive *drive, const char *device,
+-                                 const char *mount_point, enum device_type type, const GUID *guid )
++                                 const char *mount_point, enum device_type type, const GUID *guid,
++                                 const char *disk_serial )
+ {
+     void *id = NULL;
+     unsigned int id_len = 0;
+@@ -1107,9 +1140,12 @@ static NTSTATUS set_volume_info( struct volume *volume, struct dos_drive *drive,
+     {
+         RtlFreeHeap( GetProcessHeap(), 0, disk_device->unix_device );
+         RtlFreeHeap( GetProcessHeap(), 0, disk_device->unix_mount );
++        RtlFreeHeap( GetProcessHeap(), 0, disk_device->serial );
+     }
+     disk_device->unix_device = strdupA( device );
+     disk_device->unix_mount = strdupA( mount_point );
++    disk_device->serial = strdupA( disk_serial );
++    set_dos_devices_disk_serial( disk_device );
+ 
+     if (!get_volume_device_info( volume ))
+     {
+@@ -1306,7 +1342,7 @@ static void create_drive_devices(void)
+         {
+             /* don't reset uuid if we used an existing volume */
+             const GUID *guid = volume ? NULL : get_default_uuid(i);
+-            set_volume_info( drive->volume, drive, device, link, drive_type, guid );
++            set_volume_info( drive->volume, drive, device, link, drive_type, guid, NULL );
+         }
+         else
+         {
+@@ -1459,7 +1495,7 @@ void set_scsi_device_name( SCSI_ADDRESS *scsi_addr, const UNICODE_STRING *dev )
+ 
+ /* create a new disk volume */
+ NTSTATUS add_volume( const char *udi, const char *device, const char *mount_point,
+-                     enum device_type type, const GUID *guid )
++                     enum device_type type, const GUID *guid, const char *disk_serial )
+ {
+     struct volume *volume;
+     NTSTATUS status = STATUS_SUCCESS;
+@@ -1480,13 +1516,13 @@ NTSTATUS add_volume( const char *udi, const char *device, const char *mount_poin
+     else status = create_volume( udi, type, &volume );
+ 
+ found:
+-    if (!status) status = set_volume_info( volume, NULL, device, mount_point, type, guid );
++    if (!status) status = set_volume_info( volume, NULL, device, mount_point, type, guid, disk_serial );
+     if (volume) release_volume( volume );
+     LeaveCriticalSection( &device_section );
+     return status;
+ }
+ 
+-/* create a new disk volume */
++/* remove a disk volume */
+ NTSTATUS remove_volume( const char *udi )
+ {
+     NTSTATUS status = STATUS_NO_SUCH_DEVICE;
+@@ -1560,7 +1596,7 @@ NTSTATUS add_dos_device( int letter, const char *udi, const char *device,
+     p[0] = 'a' + drive->drive;
+     p[2] = 0;
+     update_symlink( path, mount_point, volume->device->unix_mount );
+-    set_volume_info( volume, drive, device, mount_point, type, guid );
++    set_volume_info( volume, drive, device, mount_point, type, guid, NULL );
+ 
+     TRACE( "added device %c: udi %s for %s on %s type %u\n",
+            'a' + drive->drive, wine_dbgstr_a(udi), wine_dbgstr_a(device),
+@@ -1713,7 +1749,7 @@ NTSTATUS query_unix_device( ULONGLONG unix_dev, enum device_type *type,
+     return status;
+ }
+ 
+-static void query_property(IRP *irp)
++static void query_property( struct disk_device *device, IRP *irp )
+ {
+     IO_STACK_LOCATION *irpsp = IoGetCurrentIrpStackLocation( irp );
+     STORAGE_PROPERTY_QUERY *query = irp->AssociatedIrp.SystemBuffer;
+@@ -1737,6 +1773,9 @@ static void query_property(IRP *irp)
+     case StorageDeviceProperty:
+     {
+         STORAGE_DEVICE_DESCRIPTOR *descriptor;
++        DWORD len = sizeof(*descriptor);
++
++        if (device->serial) len += strlen( device->serial ) + 1;
+ 
+         if (!irp->UserBuffer
+             || irpsp->Parameters.DeviceIoControl.OutputBufferLength < sizeof(STORAGE_DESCRIPTOR_HEADER))
+@@ -1745,7 +1784,7 @@ static void query_property(IRP *irp)
+         {
+             descriptor = irp->UserBuffer;
+             descriptor->Version = sizeof(STORAGE_DEVICE_DESCRIPTOR);
+-            descriptor->Size = sizeof(STORAGE_DEVICE_DESCRIPTOR);
++            descriptor->Size = len;
+             irp->IoStatus.Information = sizeof(STORAGE_DESCRIPTOR_HEADER);
+             irp->IoStatus.u.Status = STATUS_SUCCESS;
+         }
+@@ -1756,7 +1795,7 @@ static void query_property(IRP *irp)
+             memset( irp->UserBuffer, 0, irpsp->Parameters.DeviceIoControl.OutputBufferLength );
+             descriptor = irp->UserBuffer;
+             descriptor->Version = sizeof(STORAGE_DEVICE_DESCRIPTOR);
+-            descriptor->Size = sizeof(STORAGE_DEVICE_DESCRIPTOR);
++            descriptor->Size = len;
+             descriptor->DeviceType = FILE_DEVICE_DISK;
+             descriptor->DeviceTypeModifier = 0;
+             descriptor->RemovableMedia = FALSE;
+@@ -1764,11 +1803,15 @@ static void query_property(IRP *irp)
+             descriptor->VendorIdOffset = 0;
+             descriptor->ProductIdOffset = 0;
+             descriptor->ProductRevisionOffset = 0;
+-            descriptor->SerialNumberOffset = 0;
+             descriptor->BusType = BusTypeScsi;
+             descriptor->RawPropertiesLength = 0;
+-
+-            irp->IoStatus.Information = sizeof(STORAGE_DEVICE_DESCRIPTOR);
++            if (!device->serial) descriptor->SerialNumberOffset = 0;
++            else
++            {
++                descriptor->SerialNumberOffset = sizeof(*descriptor);
++                strcpy( (char *)descriptor + descriptor->SerialNumberOffset, device->serial );
++            }
++            irp->IoStatus.Information = len;
+             irp->IoStatus.u.Status = STATUS_SUCCESS;
+         }
+ 
+@@ -1854,7 +1897,7 @@ static NTSTATUS WINAPI harddisk_ioctl( DEVICE_OBJECT *device, IRP *irp )
+         break;
+     }
+     case IOCTL_STORAGE_QUERY_PROPERTY:
+-        query_property( irp );
++        query_property( dev, irp );
+         break;
+     default:
+     {
+diff --git a/dlls/mountmgr.sys/diskarb.c b/dlls/mountmgr.sys/diskarb.c
+index 8bbf43579c8..3d531b95ee5 100644
+--- a/dlls/mountmgr.sys/diskarb.c
++++ b/dlls/mountmgr.sys/diskarb.c
+@@ -148,7 +148,7 @@ static void appeared_callback( DADiskRef disk, void *context )
+     if ((ref = CFDictionaryGetValue( dict, CFSTR("DAMediaRemovable") )) && CFBooleanGetValue( ref ))
+         add_dos_device( -1, device, device, mount_point, type, guid_ptr, &devname );
+     else
+-        if (guid_ptr) add_volume( device, device, mount_point, DEVICE_HARDDISK_VOL, guid_ptr );
++        if (guid_ptr) add_volume( device, device, mount_point, DEVICE_HARDDISK_VOL, guid_ptr, NULL );
+ 
+     if ((fd = open( device, O_RDONLY )) >= 0)
+     {
+diff --git a/dlls/mountmgr.sys/mountmgr.h b/dlls/mountmgr.sys/mountmgr.h
+index 82d783a7a04..5fb43119c6a 100644
+--- a/dlls/mountmgr.sys/mountmgr.h
++++ b/dlls/mountmgr.sys/mountmgr.h
+@@ -51,7 +51,7 @@ enum device_type
+ };
+ 
+ extern NTSTATUS add_volume( const char *udi, const char *device, const char *mount_point,
+-                            enum device_type type, const GUID *guid ) DECLSPEC_HIDDEN;
++                            enum device_type type, const GUID *guid, const char *disk_serial ) DECLSPEC_HIDDEN;
+ extern NTSTATUS remove_volume( const char *udi ) DECLSPEC_HIDDEN;
+ extern NTSTATUS add_dos_device( int letter, const char *udi, const char *device,
+                                 const char *mount_point, enum device_type type, const GUID *guid,

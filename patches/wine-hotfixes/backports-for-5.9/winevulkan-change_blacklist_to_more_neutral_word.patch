@@ -1,0 +1,54 @@
+From 9b54cb9b8b7158060180ea6f12b33f504db57c5e Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Andr=C3=A9=20Hentschel?= <nerv@dawncrow.de>
+Date: Wed, 17 Jun 2020 13:33:21 +0200
+Subject: [PATCH] winevulkan: Change blacklist to a more neutral word.
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: André Hentschel <nerv@dawncrow.de>
+Signed-off-by: Liam Middlebrook <lmiddlebrook@nvidia.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/winevulkan/make_vulkan | 11 +++++------
+ 1 file changed, 5 insertions(+), 6 deletions(-)
+
+diff --git a/dlls/winevulkan/make_vulkan b/dlls/winevulkan/make_vulkan
+index 1dee769836f..7459b8f024c 100755
+--- a/dlls/winevulkan/make_vulkan
++++ b/dlls/winevulkan/make_vulkan
+@@ -84,7 +84,7 @@ WINE_VULKAN_THUNKS_H = "vulkan_thunks.h"
+ EXT_BASE = 1000000000
+ EXT_BLOCK_SIZE = 1000
+ 
+-BLACKLISTED_EXTENSIONS = [
++UNSUPPORTED_EXTENSIONS = [
+     # Instance extensions
+     "VK_EXT_debug_report",
+     # Handling of VK_EXT_debug_report requires some consideration. The win32
+@@ -2607,7 +2607,7 @@ class VkRegistry(object):
+     def _is_extension_supported(self, extension):
+         # We disable some extensions as either we haven't implemented
+         # support yet or because they are for platforms other than win32.
+-        return extension not in BLACKLISTED_EXTENSIONS
++        return extension not in UNSUPPORTED_EXTENSIONS
+ 
+     def _mark_command_required(self, command):
+         """ Helper function to mark a certain command and the datatypes it needs as required."""
+@@ -2847,13 +2847,12 @@ class VkRegistry(object):
+                 return
+ 
+             if not self._is_extension_supported(ext_name):
+-                LOGGER.debug("Skipping blacklisted extension: {0}".format(ext_name))
++                LOGGER.debug("Skipping unsupported extension: {0}".format(ext_name))
+                 return
+             elif "requires" in ext.attrib:
+-                # Check if this extension builds on top of another blacklisted
+-                # extension.
++                # Check if this extension builds on top of another unsupported extension.
+                 requires = ext.attrib["requires"].split(",")
+-                if len(set(requires).intersection(BLACKLISTED_EXTENSIONS)) > 0:
++                if len(set(requires).intersection(UNSUPPORTED_EXTENSIONS)) > 0:
+                     return
+ 
+             LOGGER.debug("Loading extension: {0}".format(ext_name))

@@ -1,0 +1,66 @@
+From 1dc3383389da636617bfa7d9570e7de5c94f7882 Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Wed, 24 Jun 2020 23:30:05 +0300
+Subject: [PATCH] ntdll: Call TLS callbacks also for main exe on thread attach.
+
+Wine-Bug: https://bugs.winehq.org/show_bug.cgi?id=49007
+Wine-Bug: https://bugs.winehq.org/show_bug.cgi?id=49098
+Wine-Bug: https://bugs.winehq.org/show_bug.cgi?id=49041
+Signed-off-by: Paul Gofman <pgofman@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/ntdll/loader.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/dlls/ntdll/loader.c b/dlls/ntdll/loader.c
+index 42cdc628021..bc437d1a589 100644
+--- a/dlls/ntdll/loader.c
++++ b/dlls/ntdll/loader.c
+@@ -3469,6 +3469,7 @@ void WINAPI LdrInitializeThunk( CONTEXT *context, void **entry, ULONG_PTR unknow
+         if ((status = alloc_thread_tls()) != STATUS_SUCCESS)
+             NtTerminateThread( GetCurrentThread(), status );
+         thread_attach();
++        if (wm->ldr.TlsIndex != -1) call_tls_callbacks( wm->ldr.DllBase, DLL_THREAD_ATTACH );
+     }
+ 
+     RtlLeaveCriticalSection( &loader_section );
+From 1f6423f778f7036a3875613e10b9c8c3b84584f0 Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Wed, 24 Jun 2020 23:30:06 +0300
+Subject: [PATCH] ntdll: Call TLS callbacks for main exe on thread detach.
+
+Signed-off-by: Paul Gofman <pgofman@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/ntdll/loader.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/dlls/ntdll/loader.c b/dlls/ntdll/loader.c
+index bc437d1a589..2a0f1d51a30 100644
+--- a/dlls/ntdll/loader.c
++++ b/dlls/ntdll/loader.c
+@@ -3178,6 +3178,7 @@ void WINAPI LdrShutdownThread(void)
+ {
+     PLIST_ENTRY mark, entry;
+     LDR_DATA_TABLE_ENTRY *mod;
++    WINE_MODREF *wm;
+     UINT i;
+     void **pointers;
+ 
+@@ -3187,6 +3188,7 @@ void WINAPI LdrShutdownThread(void)
+     if (process_detaching) return;
+ 
+     RtlEnterCriticalSection( &loader_section );
++    wm = get_modref( NtCurrentTeb()->Peb->ImageBaseAddress );
+ 
+     mark = &NtCurrentTeb()->Peb->LdrData->InInitializationOrderModuleList;
+     for (entry = mark->Blink; entry != mark; entry = entry->Blink)
+@@ -3202,6 +3204,8 @@ void WINAPI LdrShutdownThread(void)
+                         DLL_THREAD_DETACH, NULL );
+     }
+ 
++    if (wm->ldr.TlsIndex != -1) call_tls_callbacks( wm->ldr.DllBase, DLL_THREAD_DETACH );
++
+     RtlAcquirePebLock();
+     RemoveEntryList( &NtCurrentTeb()->TlsLinks );
+     if ((pointers = NtCurrentTeb()->ThreadLocalStoragePointer))

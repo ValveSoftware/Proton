@@ -50,7 +50,7 @@
     cd ..
 
     # VKD3D patches
-    cd vkd3d
+    cd vkd3d-proton
     git reset --hard HEAD
     git clean -xdf
     cd ..
@@ -68,9 +68,6 @@
     cd wine-staging
     git reset --hard HEAD
     git clean -xdf
-    
-    echo "rawinput staging rebase"
-    patch -Np1 < ../patches/wine-hotfixes/staging-restore-rawinput-hidewineexports-threadtime.patch
     cd ..
 
     #WINE
@@ -78,8 +75,9 @@
     git reset --hard HEAD
     git clean -xdf
 
-    echo "proton gamepad conflict fix"
+    # this conflicts with proton's gamepad changes and causes camera spinning
     git revert --no-commit da7d60bf97fb8726828e57f852e8963aacde21e9
+    
 
 # disable these when using proton's gamepad patches
 #    -W dinput-SetActionMap-genre \
@@ -88,17 +86,6 @@
 #    -W dinput-reconnect-joystick \
 #    -W dinput-remap-joystick \
 
-# disable if using remi's fakedll rework:
-#    -W winebuild-Fake_Dlls \
-#    -W ntdll-Syscall_Emulation \
-#    -W ntdll-ThreadHideFromDebugger \
-
-    echo "winevulkan hotfixes pending"
-    patch -Np1 < ../patches/wine-hotfixes/pending/winevulkan-dont_initialize_vulkan_driver_in_dllmain.patch
-    
-    echo "rawinput backports"
-    patch -Np1 < ../patches/wine-hotfixes/pending/rawinput_backports.patch
-    
     echo "applying staging patches"
     ../wine-staging/patches/patchinstall.sh DESTDIR="." --all \
     -W server-Desktop_Refcount \
@@ -110,27 +97,42 @@
     -W dinput-remap-joystick \
     -W user32-window-activation
     
-    echo "planet zoo/jurassic world hotfixes pending"
-    patch -Np1 < ../patches/wine-hotfixes/pending/planet-zoo-jurassic-world-pending-upstream-staging.patch
-
-    echo "nvidia locale backports"
-    patch -Np1 < ../patches/wine-hotfixes/pending/nvidia_locale_fix.patch
-
-    echo "evr/mf/quartz backports"
-    patch -Np1 < ../patches/wine-hotfixes/pending/evr_mf_quartz_pending.patch
     
+    echo "5.10 backports"
+    patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/25e9e91c3a4f6c1c134d96a5c11517178e31f111.patch
+    patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/4ed26b63ca0305ba750c4f38002cf1eb674f688c.patch
+    patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/ea9b507380b4415cf9edd3643d9bcea7ab934fbd.patch
+    patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/c96fa96c167808bf1c9a42b72c9e7ab6567eca75.patch
+
     echo "winhttp backports"
-    patch -Np1 < ../patches/wine-hotfixes/pending/winhttp_backports.patch
+    patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/winhttp_backports.patch
+
+    echo "game fix backports"
+    patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/ashes_of_the_singularity.patch
+    patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/sc_dos2_poe-multithread.patch
+    patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/mgs-ground-zeroes.patch
+    
+    echo "vulkan backports"
+    patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/winevulkan-1.2.142.patch
+    patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/winevulkan-change_blacklist_to_more_neutral_word.patch
+    patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/winevulkan-thunk_vkgetphysicaldeviceproperties2_and_vkgetphysicaldeviceproperties2khr.patch
+    patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/winevulkan-fill_vulkan_device_LUID_property.patch
+    patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/winevulkan-1.2.145.patch
+    patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/winevulkan-dont_initialize_vulkan_driver_in_dllmain.patch
+    patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/winevulkan_poe_backport.patch
+    
+    echo "planet zoo/jurassic world hotfixes pending"
+    patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/planet-zoo-jurassic-world-pending-upstream-staging.patch
 
     echo "Indiana Jones and the Emperor's Tomb pending"
     patch -Np1 < ../patches/wine-hotfixes/pending/indiana_jones_fix.patch
-        
+
     #WINE FAUDIO
     #echo "applying faudio patches"
     #patch -Np1 < ../patches/faudio/faudio-ffmpeg.patch
     
     ### GAME PATCH SECTION ###
-    
+
     #fix this
     echo "mech warrior online"
     patch -Np1 < ../patches/game-patches/mwo.patch
@@ -152,18 +154,21 @@
 
     echo "fix steep"
     patch -Np1 < ../patches/game-patches/steep_fix.patch
-    
+
     echo "rawinput virtual desktop fix"
     #https://bugs.winehq.org/show_bug.cgi?id=48419
     #https://bugs.winehq.org/show_bug.cgi?id=48462
     patch -Np1 < ../patches/game-patches/rawinput_v_desktop.patch
+ 
+#    echo "gta v key input fix"
+#    only needed if esync is disabled
+#    patch -Np1 < ../patches/game-patches/gta_v_keyboard_input.patch
     
-    echo "gta v key input fix"
-    patch -Np1 < ../patches/game-patches/gta_v_keyboard_input.patch
-    
-    echo "mgs ground zeroes fix"
-    patch -Np1 < ../patches/game-patches/mgs-ground-zeroes.patch
-    
+    echo "Denuvo anti-cheat DOOM Eternal hotfix"
+    patch -Np1 < ../patches/game-patches/gofman_dac.patch
+
+# Currently applied but not working:
+
 #  TODO: Add game-specific check
     echo "mk11 patch"
     patch -Np1 < ../patches/game-patches/mk11.patch
@@ -177,28 +182,27 @@
     #PROTON
     
     echo "clock monotonic"
-    patch -Np1 < ../patches/proton/proton-use_clock_monotonic.patch
+    patch -Np1 < ../patches/proton-5.9/proton-use_clock_monotonic.patch
 
     echo "amd ags"
-    patch -Np1 < ../patches/proton/proton-amd_ags.patch
+    patch -Np1 < ../patches/proton-5.9/proton-amd_ags.patch
     
     echo "bypass compositor"
-    patch -Np1 < ../patches/proton/proton-FS_bypass_compositor.patch
+    patch -Np1 < ../patches/proton-5.9/proton-FS_bypass_compositor.patch
 
     echo "applying winevulkan childwindow"
     patch -Np1 < ../patches/wine-hotfixes/winevulkan-childwindow.patch
 
-#  TODO: Esync and Fsync compatibility was broken and disabled in 5.10.
-#    #WINE FSYNC
-#    echo "applying fsync patches"
-#    patch -Np1 < ../patches/proton/proton-fsync_staging.patch
-#    patch -Np1 < ../patches/proton/proton-fsync-spincounts.patch
+    #WINE FSYNC
+    echo "applying fsync patches"
+    patch -Np1 < ../patches/proton-5.9/proton-fsync_staging.patch
+    patch -Np1 < ../patches/proton-5.9/proton-fsync-spincounts.patch
 
     echo "fix for Dark Souls III, Sekiro, Nier" 
     patch -Np1 < ../patches/game-patches/nier-nofshack.patch
 
     echo "LAA"
-    patch -Np1 < ../patches/proton/proton-LAA_staging.patch
+    patch -Np1 < ../patches/proton-5.9/proton-LAA_staging.patch
 
     echo "proton overlay mouse lag fix"
     patch -Np1 < ../patches/proton/proton-staging-rawinput-overlay.patch
@@ -210,63 +214,62 @@
     patch -Np1 < ../patches/proton/proton-alt-tab-focus-hotfixes.patch
 
     echo "steamclient swap"
-    patch -Np1 < ../patches/proton/proton-steamclient_swap.patch
+    patch -Np1 < ../patches/proton-5.9/proton-steamclient_swap.patch
 
 #    disabled for now -- was breaking Catherine Classic in 5.9
 #    echo "audio patch test"
 #    patch -Np1 < ../patches/proton/proton-xaudio2_stop_engine.patch
 
     echo "protonify"
-    patch -Np1 < ../patches/proton/proton-protonify_staging.patch
+    patch -Np1 < ../patches/proton-5.9/proton-protonify_staging.patch
 
     echo "protonify-audio"
-    patch -Np1 < ../patches/proton/proton-pa-staging.patch
+    patch -Np1 < ../patches/proton-5.9/proton-pa-staging.patch
     
     echo "steam bits"
-    patch -Np1 < ../patches/proton/proton-steam-bits.patch
+    patch -Np1 < ../patches/proton-5.9/proton-steam-bits.patch
 
     echo "seccomp"
-    patch -Np1 < ../patches/proton/proton-seccomp-envvar.patch
+    patch -Np1 < ../patches/proton-5.9/proton-seccomp-envvar.patch
 
     echo "SDL Joystick"
-    patch -Np1 < ../patches/proton/proton-sdl_joy.patch
-    patch -Np1 < ../patches/proton/proton-sdl_joy_2.patch
+    patch -Np1 < ../patches/proton-5.9/proton-sdl_joy.patch
+    patch -Np1 < ../patches/proton-5.9/proton-sdl_joy_2.patch
     
     echo "proton gamepad additions"
-    patch -Np1 < ../patches/proton/proton-gamepad-additions.patch
+    patch -Np1 < ../patches/proton-5.9/proton-gamepad-additions.patch
 
     echo "Valve VR patches"
-    # disable if using remi's fakedll rework
-    patch -Np1 < ../patches/proton/proton-vr.patch
+    patch -Np1 < ../patches/proton-5.9/proton-vr.patch
 
 #    echo "FS Hack integer scaling"
 #    patch -Np1 < ../patches/proton/proton_fs_hack_integer_scaling.patch
     
     echo "proton winevulkan"
-    patch -Np1 < ../patches/proton/proton-winevulkan-nofshack.patch
+    patch -Np1 < ../patches/proton-5.9/proton-winevulkan-nofshack.patch
     
     echo "msvcrt overrides"
-    patch -Np1 < ../patches/proton/proton-msvcrt_nativebuiltin.patch
+    patch -Np1 < ../patches/proton-5.9/proton-msvcrt_nativebuiltin.patch
 
     echo "valve registry entries"
-    patch -Np1 < ../patches/proton/proton-apply_LargeAddressAware_fix_for_Bayonetta.patch
-    patch -Np1 < ../patches/proton/proton-Set_amd_ags_x64_to_built_in_for_Wolfenstein_2.patch
+    patch -Np1 < ../patches/proton-5.9/proton-apply_LargeAddressAware_fix_for_Bayonetta.patch
+    patch -Np1 < ../patches/proton-5.9/proton-Set_amd_ags_x64_to_built_in_for_Wolfenstein_2.patch
     
     echo "set prefix win10"
-    patch -Np1 < ../patches/proton/proton-win10_default.patch
+    patch -Np1 < ../patches/proton-5.9/proton-win10_default.patch
 
     echo "dxvk_config"
-    patch -Np1 < ../patches/proton/proton-dxvk_config.patch
+    patch -Np1 < ../patches/proton-5.9/proton-dxvk_config.patch
 
     echo "hide wine prefix update"
-    patch -Np1 < ../patches/proton/proton-hide_wine_prefix_update_window.patch
+    patch -Np1 < ../patches/proton-5.9/proton-hide_wine_prefix_update_window.patch
 
     echo "applying WoW vkd3d wine patches"
     patch -Np1 < ../patches/wine-hotfixes/vkd3d/D3D12SerializeVersionedRootSignature.patch
     patch -Np1 < ../patches/wine-hotfixes/vkd3d/D3D12CreateVersionedRootSignatureDeserializer.patch
             
     echo "guy's media foundation alpha patches"
-    patch -Np1 < ../patches/wine-hotfixes/media_foundation/media_foundation_alpha.patch
+    patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/media_foundation_alpha.patch
     
     echo "proton-specific manual mfplat dll register patch"
     patch -Np1 < ../patches/wine-hotfixes/media_foundation/proton_mediafoundation_dllreg.patch
@@ -277,7 +280,13 @@
     echo "Paul's Diablo 1 menu fix"
     patch -Np1 < ../patches/game-patches/diablo_1_menu.patch
     
+
+#    echo "Remi's memory performance fixes"    
+#    patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/ntdll-Use_the_free_ranges_in_find_reserved_free_area.patch
+#    patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/makedep-Align_PE_sections_so_they_can_be_mmapped.patch
     
+
+
     ./dlls/winevulkan/make_vulkan
     ./tools/make_requests
     autoreconf -f

@@ -364,9 +364,9 @@ index 82d0c3a0a5e..8da14348c18 100644
  
  /* Functions for which we have custom implementations outside of the thunks. */
 +VkResult WINAPI wine_vkAcquireFullScreenExclusiveModeEXT(VkDevice device, VkSwapchainKHR swapchain) DECLSPEC_HIDDEN;
+ VkResult WINAPI wine_vkAcquireNextImageKHR(VkDevice device, VkSwapchainKHR swapchain, uint64_t timeout, VkSemaphore semaphore, VkFence fence, uint32_t *pImageIndex);
  VkResult WINAPI wine_vkAllocateCommandBuffers(VkDevice device, const VkCommandBufferAllocateInfo *pAllocateInfo, VkCommandBuffer *pCommandBuffers);
  void WINAPI wine_vkCmdExecuteCommands(VkCommandBuffer commandBuffer, uint32_t commandBufferCount, const VkCommandBuffer *pCommandBuffers);
- VkResult WINAPI wine_vkCreateCommandPool(VkDevice device, const VkCommandPoolCreateInfo *pCreateInfo, const VkAllocationCallbacks *pAllocator, VkCommandPool *pCommandPool);
 @@ -56,6 +57,8 @@ VkResult WINAPI wine_vkEnumeratePhysicalDeviceGroups(VkInstance instance, uint32
  VkResult WINAPI wine_vkEnumeratePhysicalDeviceGroupsKHR(VkInstance instance, uint32_t *pPhysicalDeviceGroupCount, VkPhysicalDeviceGroupProperties *pPhysicalDeviceGroupProperties) DECLSPEC_HIDDEN;
  VkResult WINAPI wine_vkEnumeratePhysicalDevices(VkInstance instance, uint32_t *pPhysicalDeviceCount, VkPhysicalDevice *pPhysicalDevices);
@@ -376,12 +376,14 @@ index 82d0c3a0a5e..8da14348c18 100644
  PFN_vkVoidFunction WINAPI wine_vkGetDeviceProcAddr(VkDevice device, const char *pName);
  void WINAPI wine_vkGetDeviceQueue(VkDevice device, uint32_t queueFamilyIndex, uint32_t queueIndex, VkQueue *pQueue);
  void WINAPI wine_vkGetDeviceQueue2(VkDevice device, const VkDeviceQueueInfo2 *pQueueInfo, VkQueue *pQueue);
-@@ -44,11 +44,16 @@ VkResult WINAPI wine_vkGetPhysicalDeviceImageFormatProperties2KHR(VkPhysicalDevi
- void WINAPI wine_vkGetPhysicalDeviceProperties2(VkPhysicalDevice physicalDevice, VkPhysicalDeviceProperties2 *pProperties);
- void WINAPI wine_vkGetPhysicalDeviceProperties2KHR(VkPhysicalDevice physicalDevice, VkPhysicalDeviceProperties2 *pProperties) DECLSPEC_HIDDEN;
+@@ -67,14 +70,19 @@ void WINAPI wine_vkGetPhysicalDeviceExternalSemaphoreProperties(VkPhysicalDevice
+ VkResult WINAPI wine_vkGetPhysicalDeviceImageFormatProperties2(VkPhysicalDevice physicalDevice, const VkPhysicalDeviceImageFormatInfo2 *pImageFormatInfo, VkImageFormatProperties2 *pImageFormatProperties);
+ VkResult WINAPI wine_vkGetPhysicalDeviceImageFormatProperties2KHR(VkPhysicalDevice physicalDevice, const VkPhysicalDeviceImageFormatInfo2 *pImageFormatInfo, VkImageFormatProperties2 *pImageFormatProperties) DECLSPEC_HIDDEN;
  VkResult WINAPI wine_vkGetPhysicalDeviceSurfaceCapabilitiesKHR(VkPhysicalDevice physicalDevice, VkSurfaceKHR surface, VkSurfaceCapabilitiesKHR *pSurfaceCapabilities);
 +VkResult WINAPI wine_vkGetPhysicalDeviceSurfacePresentModes2EXT(VkPhysicalDevice physicalDevice, const VkPhysicalDeviceSurfaceInfo2KHR *pSurfaceInfo, uint32_t *pPresentModeCount, VkPresentModeKHR *pPresentModes) DECLSPEC_HIDDEN;
 +VkResult WINAPI wine_vkGetPhysicalDeviceSurfacePresentModesKHR(VkPhysicalDevice physicalDevice, VkSurfaceKHR surface, uint32_t *pPresentModeCount, VkPresentModeKHR *pPresentModes);
+ VkResult WINAPI wine_vkGetSwapchainImagesKHR(VkDevice device, VkSwapchainKHR swapchain, uint32_t *pSwapchainImageCount, VkImage *pSwapchainImages);
+ VkResult WINAPI wine_vkQueuePresentKHR(VkQueue queue, const VkPresentInfoKHR *pPresentInfo);
  VkResult WINAPI wine_vkQueueSubmit(VkQueue queue, uint32_t submitCount, const VkSubmitInfo *pSubmits, VkFence fence);
 +VkResult WINAPI wine_vkReleaseFullScreenExclusiveModeEXT(VkDevice device, VkSwapchainKHR swapchain) DECLSPEC_HIDDEN;
  
@@ -389,10 +391,11 @@ index 82d0c3a0a5e..8da14348c18 100644
 +VkResult thunk_vkGetDeviceGroupSurfacePresentModesKHR(VkDevice device, VkSurfaceKHR surface, VkDeviceGroupPresentModeFlagsKHR *pModes) DECLSPEC_HIDDEN;
  VkResult thunk_vkGetPhysicalDeviceImageFormatProperties2(VkPhysicalDevice physicalDevice, const VkPhysicalDeviceImageFormatInfo2 *pImageFormatInfo, VkImageFormatProperties2 *pImageFormatProperties) DECLSPEC_HIDDEN;
  VkResult thunk_vkGetPhysicalDeviceImageFormatProperties2KHR(VkPhysicalDevice physicalDevice, const VkPhysicalDeviceImageFormatInfo2 *pImageFormatInfo, VkImageFormatProperties2 *pImageFormatProperties) DECLSPEC_HIDDEN;
-+VkResult thunk_vkGetPhysicalDeviceSurfacePresentModesKHR(VkPhysicalDevice physicalDevice, VkSurfaceKHR surface, uint32_t *pPresentModeCount, VkPresentModeKHR *pPresentModes) DECLSPEC_HIDDEN;
- void thunk_vkGetPhysicalDeviceProperties2(VkPhysicalDevice physicalDevice, VkPhysicalDeviceProperties2 *pProperties) DECLSPEC_HIDDEN;
- void thunk_vkGetPhysicalDeviceProperties2KHR(VkPhysicalDevice physicalDevice, VkPhysicalDeviceProperties2 *pProperties) DECLSPEC_HIDDEN;
  VkResult thunk_vkGetPhysicalDeviceSurfaceCapabilitiesKHR(VkPhysicalDevice physicalDevice, VkSurfaceKHR surface, VkSurfaceCapabilitiesKHR *pSurfaceCapabilities) DECLSPEC_HIDDEN;
++VkResult thunk_vkGetPhysicalDeviceSurfacePresentModesKHR(VkPhysicalDevice physicalDevice, VkSurfaceKHR surface, uint32_t *pPresentModeCount, VkPresentModeKHR *pPresentModes) DECLSPEC_HIDDEN;
+ 
+ typedef struct VkAcquireNextImageInfoKHR_host
+ {
 @@ -528,6 +540,13 @@ typedef struct VkMemoryRequirements2_host
      VkMemoryRequirements_host memoryRequirements;
  } VkMemoryRequirements2_host;
@@ -732,3 +735,64 @@ index 9bb33339af5..8f08ac19a2a 100644
  {
      X11DRV_vkCreateInstance,
      X11DRV_vkCreateSwapchainKHR,
+
+From 9c92a32fdd5c71e82e30fa3a85fd9f0c018915d3 Mon Sep 17 00:00:00 2001
+From: Joshua Ashton <joshua@froggi.es>
+Date: Tue, 24 Mar 2020 02:53:52 +0000
+Subject: [PATCH] winevulkan: Nuke unsupported pNexts from vkCreateSwapchainKHR
+
+Fixes RenderDoccing DXVK, and potential issues down the line in games using the fullscreen and other exts
+---
+ dlls/winevulkan/vulkan.c | 25 +++++++++++++++++++++++++
+ 1 file changed, 25 insertions(+)
+
+diff --git a/dlls/winevulkan/vulkan.c b/dlls/winevulkan/vulkan.c
+index f36315534b9..fdce58c9500 100644
+--- a/dlls/winevulkan/vulkan.c
++++ b/dlls/winevulkan/vulkan.c
+@@ -49,6 +49,15 @@ static void *wine_vk_find_struct_(void *s, VkStructureType t)
+     return NULL;
+ }
+ 
++#define wine_vk_exchange_pnext(a, b) wine_vk_exchange_pnext_((VkBaseOutStructure *)a, (VkBaseOutStructure *)b)
++static void wine_vk_exchange_pnext_(VkBaseOutStructure *a, VkBaseOutStructure *b)
++{
++    b->pNext = a->pNext;
++    a->pNext = b;
++}
++
++#define wine_vk_copy_pnext(a, ctype, stype, b) do { ctype* lookup = wine_vk_find_struct(a, stype); if (lookup) { b = *lookup; wine_vk_exchange_pnext(a, &b); } } while (0)
++
+ static void *wine_vk_get_global_proc_addr(const char *name);
+ 
+ static const struct vulkan_funcs *vk_funcs;
+@@ -1739,6 +1748,9 @@ VkResult WINAPI wine_vkCreateSwapchainKHR(VkDevice device, const VkSwapchainCrea
+ #else
+     VkSwapchainCreateInfoKHR our_createinfo;
+ #endif
++    VkDeviceGroupSwapchainCreateInfoKHR  our_device_group_swapchain_create_info;
++    VkImageFormatListCreateInfo       our_image_format_list_create_info;
++
+     VkExtent2D user_sz;
+     struct VkSwapchainKHR_T *object;
+     uint32_t i;
+@@ -1754,6 +1766,19 @@ VkResult WINAPI wine_vkCreateSwapchainKHR(VkDevice device, const VkSwapchainCrea
+ 
+     convert_VkSwapchainCreateInfoKHR_win_to_host(pCreateInfo, &our_createinfo);
+ 
++    our_createinfo.pNext = NULL;
++
++    wine_vk_copy_pnext(&our_createinfo, VkDeviceGroupSwapchainCreateInfoKHR, DEVICE_GROUP_SWAPCHAIN_CREATE_INFO_KHR, our_device_group_swapchain_create_info);
++
++    wine_vk_copy_pnext(&our_createinfo, VkImageFormatListCreateInfo, IMAGE_FORMAT_LIST_CREATE_INFO, our_image_format_list_create_info);
++
++    // VkSwapchainCounterCreateInfoEXT is not in our version of WineVulkan
++    // Come back to me when this gets into Proton Wine!
++
++    // Ignoring VkSurfaceFullScreenExclusiveInfoEXT and VkSurfaceFullScreenExclusiveWin32InfoEXT
++    // as we want to nuke those
++    // and VkSwapchainDisplayNativeHdrCreateInfoAMD (blacklisted for HDR for now)
++
+     if(our_createinfo.oldSwapchain)
+         our_createinfo.oldSwapchain = ((struct VkSwapchainKHR_T *)(UINT_PTR)our_createinfo.oldSwapchain)->swapchain;
+ 

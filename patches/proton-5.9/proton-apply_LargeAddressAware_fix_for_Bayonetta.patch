@@ -1,0 +1,33 @@
+From d7ff3995662debb178e853626d292a103a42b7d6 Mon Sep 17 00:00:00 2001
+From: Steven Noonan <steven@valvesoftware.com>
+Date: Tue, 23 Oct 2018 15:30:57 -0700
+Subject: [PATCH] wine.inf: apply LargeAddressAware fix for Bayonetta
+
+Signed-off-by: Steven Noonan <steven@valvesoftware.com>
+---
+ loader/wine.inf.in | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/loader/wine.inf.in b/loader/wine.inf.in
+index 518d6cbd77..2f389d3af7 100644
+--- a/loader/wine.inf.in
++++ b/loader/wine.inf.in
+@@ -3957,6 +3957,7 @@ HKLM,Software\Wine\LicenseInformation,"Shell-PremiumInBoxGames-Chess-EnableGame"
+ HKCU,Software\Wine\DllOverrides,"ucrtbase",0x2,"native,builtin"
+ HKCU,Software\Wine\DllOverrides,"vcomp140",0x2,"native,builtin"
+ HKCU,Software\Wine\DllOverrides,"vcruntime140",0x2,"native,builtin"
++HKCU,Software\Wine\AppDefaults\Bayonetta.exe,"LargeAddressAware",0x10003,1
+ 
+ [SteamClient.ntamd64]
+ HKCU,Software\Valve\Steam\ActiveProcess,"PID",0x10001,0x0000fffe
+@@ -3964,6 +3965,7 @@ HKCU,Software\Valve\Steam\ActiveProcess,"SteamClientDll",,"%16426%\Steam\steamcl
+ HKCU,Software\Wine\DllOverrides,"ucrtbase",0x2,"native,builtin"
+ HKCU,Software\Wine\DllOverrides,"vcomp140",0x2,"native,builtin"
+ HKCU,Software\Wine\DllOverrides,"vcruntime140",0x2,"native,builtin"
++HKCU,Software\Wine\AppDefaults\Bayonetta.exe,"LargeAddressAware",0x10003,1
+ 
+ [DestinationDirs]
+ l_intl_section = 11
+-- 
+2.21.0
+

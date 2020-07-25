@@ -9,8 +9,8 @@ Signed-off-by: Steven Noonan <steven@valvesoftware.com>
  dlls/kernel32/heap.c    |   9 ++-
  dlls/ntdll/loader.c     | 123 +++++++++++++++++++++++++++++++++++++++-
  dlls/ntdll/ntdll.spec   |   1 +
- dlls/ntdll/unix/unix_private.h |   2 +-
- dlls/ntdll/unix/virtual.c    |   5 +-
+ dlls/ntdll/ntdll_misc.h |   2 +-
+ dlls/ntdll/virtual.c    |   5 +-
  5 files changed, 135 insertions(+), 5 deletions(-)
 
 diff --git a/dlls/kernel32/heap.c b/dlls/kernel32/heap.c
@@ -132,13 +132,13 @@ index d7dbe573a4f..e03335a2709 100644
 +
 +    exename = get_basename(exename);
 +
-+    if (app_key != (HANDLE)-1) return TRUE;
++    if (app_key != (HANDLE)-1) return FALSE;
 +
 +    str = RtlAllocateHeap( GetProcessHeap(), 0,
-+                           sizeof(AppDefaultsW) + wcslen(exename) * sizeof(WCHAR) );
++                           sizeof(AppDefaultsW) + strlenW(exename) * sizeof(WCHAR) );
 +    if (!str) return FALSE;
-+    wcscpy( str, AppDefaultsW );
-+    wcscat( str, exename );
++    strcpyW( str, AppDefaultsW );
++    strcatW( str, exename );
 +
 +    RtlOpenCurrentUser( KEY_ALL_ACCESS, &root );
 +    attr.Length = sizeof(attr);
@@ -150,7 +150,7 @@ index d7dbe573a4f..e03335a2709 100644
 +    RtlInitUnicodeString( &nameW, str );
 +    RtlInitUnicodeString( &valueNameW, LargeAddressAwareW );
 +
-+    result = TRUE;
++    result = FALSE;
 +
 +    /* @@ Wine registry key: HKCU\Software\Wine\AppDefaults\app.exe */
 +    if (!NtOpenKey( &app_key, KEY_ALL_ACCESS, &attr ))
@@ -159,8 +159,8 @@ index d7dbe573a4f..e03335a2709 100644
 +        {
 +            if (info->DataLength >= sizeof(DWORD))
 +            {
-+                if ((*(DWORD *)info->Data) == 0)
-+                    result = FALSE;
++                if ((*(DWORD *)info->Data) != 0)
++                    result = TRUE;
 +            }
 +        }
 +        NtClose( app_key );
@@ -183,8 +183,8 @@ index d7dbe573a4f..e03335a2709 100644
      user_shared_data_init();
      hidden_exports_init( wm->ldr.FullDllName.Buffer );
  
--    unix_funcs->virtual_set_large_address_space();
-+    unix_funcs->virtual_set_large_address_space(needs_override_large_address_aware(NtCurrentTeb()->Peb->ProcessParameters->ImagePathName.Buffer));
+-    virtual_set_large_address_space();
++    virtual_set_large_address_space(needs_override_large_address_aware(NtCurrentTeb()->Peb->ProcessParameters->ImagePathName.Buffer));
  
      /* elevate process if necessary */
      status = RtlQueryInformationActivationContext( 0, NULL, 0, RunlevelInformationInActivationContext,
@@ -200,48 +200,36 @@ index fe96472cb86..42f6ee2576d 100644
  
  # Version
  @ cdecl wine_get_version() NTDLL_wine_get_version
-diff --git a/dlls/ntdll/unix/unix_private.h b/dlls/ntdll/unix/unix_private.h
-index c07a02a7a6..e552c636d1 100644
---- a/dlls/ntdll/unix/unix_private.h
-+++ b/dlls/ntdll/unix/unix_private.h
-@@ -99,7 +99,7 @@ extern NTSTATUS CDECL virtual_create_builtin_view( void *module ) DECLSPEC_HIDDE
- extern NTSTATUS CDECL virtual_alloc_thread_stack( INITIAL_TEB *stack, SIZE_T reserve_size, SIZE_T commit_size, SIZE_T *pthread_size ) DECLSPEC_HIDDEN;
- extern ssize_t CDECL virtual_locked_recvmsg( int fd, struct msghdr *hdr, int flags ) DECLSPEC_HIDDEN;
- extern void CDECL virtual_release_address_space(void) DECLSPEC_HIDDEN;
--extern void CDECL virtual_set_large_address_space(void) DECLSPEC_HIDDEN;
-+extern void CDECL virtual_set_large_address_space(BOOL force) DECLSPEC_HIDDEN;
- 
- extern void CDECL server_send_fd( int fd ) DECLSPEC_HIDDEN;
- extern void CDECL server_remove_fds_from_cache_by_type( enum server_fd_type type ) DECLSPEC_HIDDEN;
-diff --git a/dlls/ntdll/unix/virtual.c b/dlls/ntdll/unix/virtual.c
-index a1ae3a2f35..7718f08476 100644
---- a/dlls/ntdll/unix/virtual.c
-+++ b/dlls/ntdll/unix/virtual.c
-@@ -3584,11 +3584,12 @@ void CDECL virtual_release_address_space(void)
+diff --git a/dlls/ntdll/ntdll_misc.h b/dlls/ntdll/ntdll_misc.h
+index cf0d50de720..0acf2784669 100644
+--- a/dlls/ntdll/ntdll_misc.h
++++ b/dlls/ntdll/ntdll_misc.h
+@@ -189,7 +189,7 @@ extern SIZE_T virtual_uninterrupted_read_memory( const void *addr, void *buffer,
+ extern NTSTATUS virtual_uninterrupted_write_memory( void *addr, const void *buffer, SIZE_T size ) DECLSPEC_HIDDEN;
+ extern void VIRTUAL_SetForceExec( BOOL enable ) DECLSPEC_HIDDEN;
+ extern void virtual_release_address_space(void) DECLSPEC_HIDDEN;
+-extern void virtual_set_large_address_space(void) DECLSPEC_HIDDEN;
++extern void virtual_set_large_address_space( BOOL force ) DECLSPEC_HIDDEN;
+ extern void virtual_fill_image_information( const pe_image_info_t *pe_info,
+                                             SECTION_IMAGE_INFORMATION *info ) DECLSPEC_HIDDEN;
+ extern struct _KUSER_SHARED_DATA *user_shared_data DECLSPEC_HIDDEN;
+diff --git a/dlls/ntdll/virtual.c b/dlls/ntdll/virtual.c
+index 6ad2d21e01..e171b76950 100644
+--- a/dlls/ntdll/virtual.c
++++ b/dlls/ntdll/virtual.c
+@@ -2651,11 +2651,13 @@ void virtual_release_address_space(void)
   *
   * Enable use of a large address space when allowed by the application.
   */
--void CDECL virtual_set_large_address_space(void)
-+void CDECL virtual_set_large_address_space(BOOL force_large_address)
+-void virtual_set_large_address_space(void)
++void virtual_set_large_address_space(BOOL force_large_address)
  {
      IMAGE_NT_HEADERS *nt = RtlImageNtHeader( NtCurrentTeb()->Peb->ImageBaseAddress );
  
 -    if (!(nt->FileHeader.Characteristics & IMAGE_FILE_LARGE_ADDRESS_AWARE)) return;
++    if (is_win64) return;
 +    if (!(nt->FileHeader.Characteristics & IMAGE_FILE_LARGE_ADDRESS_AWARE) && !force_large_address) return;
 +
      /* no large address space on win9x */
      if (NtCurrentTeb()->Peb->OSPlatformId != VER_PLATFORM_WIN32_NT) return;
  
-diff --git a/dlls/ntdll/unixlib.h b/dlls/ntdll/unixlib.h
-index e3bb8f7ce8..f13c4e649a 100644
---- a/dlls/ntdll/unixlib.h
-+++ b/dlls/ntdll/unixlib.h
-@@ -298,7 +298,7 @@ struct unix_funcs
-     NTSTATUS      (CDECL *virtual_alloc_thread_stack)( INITIAL_TEB *stack, SIZE_T reserve_size, SIZE_T commit_size, SIZE_T *pthread_size );
-     ssize_t       (CDECL *virtual_locked_recvmsg)( int fd, struct msghdr *hdr, int flags );
-     void          (CDECL *virtual_release_address_space)(void);
--    void          (CDECL *virtual_set_large_address_space)(void);
-+    void          (CDECL *virtual_set_large_address_space)(BOOL force);
- 
-     /* thread/process functions */
-     TEB *         (CDECL *init_threading)( int *nb_threads_ptr, struct ldt_copy **ldt_copy, SIZE_T *size,

@@ -117,28 +117,27 @@ Subject: [PATCH] ntdll: Notice THREADNAME_INFO exceptions and set thread name
 
 Patch by Zeb.
 ---
- dlls/ntdll/unix/thread.c | 28 ++++++++++++++++++++++++++++
+ dlls/ntdll/exception.c | 28 ++++++++++++++++++++++++++++
  1 file changed, 28 insertions(+)
 
-diff --git a/dlls/ntdll/unix/thread.c b/dlls/ntdll/unix/thread.c
-index d26e0a98ca..ed17b497e6 100644
---- a/dlls/ntdll/unix/thread.c
-+++ b/dlls/ntdll/unix/thread.c
-@@ -29,6 +29,9 @@
+diff --git a/dlls/ntdll/exception.c b/dlls/ntdll/exception.c
+index f85381079a2..ffe048de8c0 100644
+--- a/dlls/ntdll/exception.c
++++ b/dlls/ntdll/exception.c
+@@ -26,6 +26,9 @@
  #include <errno.h>
- #include <limits.h>
+ #include <signal.h>
  #include <stdarg.h>
 +#ifdef HAVE_PRCTL
 +#include <sys/prctl.h>
 +#endif
- #include <stdio.h>
- #include <string.h>
- #include <pthread.h>
-@@ -380,7 +397,15 @@ void wait_suspend( CONTEXT *context )
-     errno = saved_errno;
+ 
+ #include "ntstatus.h"
+ #define WIN32_NO_STATUS
+@@ -143,6 +146,16 @@ void wait_suspend( CONTEXT *context )
  }
  
--
+ 
 +/* "How to: Set a Thread Name in Native Code"
 + * https://msdn.microsoft.com/en-us/library/xcb2z8hs.aspx */
 +typedef struct tagTHREADNAME_INFO
@@ -148,14 +147,14 @@ index d26e0a98ca..ed17b497e6 100644
 +   DWORD   dwThreadID; /* Thread ID (-1 = caller thread) */
 +   DWORD   dwFlags;    /* Reserved for future use.  Must be zero. */
 +} THREADNAME_INFO;
++
  /**********************************************************************
   *           send_debug_event
   *
-@@ -402,6 +427,21 @@ NTSTATUS send_debug_event( EXCEPTION_RECORD *rec, CONTEXT *context, BOOL first_c
- 
+@@ -162,6 +175,21 @@ NTSTATUS send_debug_event( EXCEPTION_RECORD *rec, int first_chance, CONTEXT *con
      for (i = 0; i < min( rec->NumberParameters, EXCEPTION_MAXIMUM_PARAMETERS ); i++)
          params[i] = rec->ExceptionInformation[i];
-+    
+ 
 +    if (rec->ExceptionCode == 0x406d1388)
 +    {
 +        const THREADNAME_INFO *threadname = (const THREADNAME_INFO *)rec->ExceptionInformation;
@@ -170,9 +169,10 @@ index d26e0a98ca..ed17b497e6 100644
 +#endif
 +        }
 +    }
- 
++
      SERVER_START_REQ( queue_exception_event )
      {
+         req->first   = first_chance;
 From 7e91b897e69854cb3afe761f48ef7c9b496ecf95 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?J=C3=B3zef=20Kucia?= <jkucia@codeweavers.com>
 Date: Wed, 1 May 2019 12:28:12 +0200
@@ -815,7 +815,7 @@ index 431c247a072..c9fcad79316 100644
 +            strcasestrW( libname, mfc42W ))
 +        {
 +            WARN_(loaddll)( "Using a fake mfc42 handle\n" );
-+            status = find_dll_file( load_path, kernel32W, nt_name, pwm, mfc42W, module, image_info, id );
++            status = find_dll_file( load_path, kernel32W, nt_name, pwm, mfc42W, module, image_info, st );
 +        }
 +    }
      return status;
@@ -1418,6 +1418,279 @@ index 868f898bbbb..95f498123ea 100644
      }
  
      if (TRACE_ON( bcrypt ))
+From f70d26ade963aab370f80ca33744ca258f839b25 Mon Sep 17 00:00:00 2001
+From: Derek Lesho <dlesho@codeweavers.com>
+Date: Mon, 24 Feb 2020 13:32:38 -0600
+Subject: [PATCH] ntdll: Partially implement
+ JobObjectBasicAccountingInformation.
+
+---
+ dlls/kernel32/tests/process.c  |  9 +++++++++
+ dlls/ntdll/sync.c              | 20 +++++++++++++++++---
+ include/wine/server_protocol.h | 18 +++++++++++++++++-
+ server/process.c               | 14 ++++++++++++++
+ server/protocol.def            |  8 ++++++++
+ server/request.h               |  7 +++++++
+ server/trace.c                 | 14 ++++++++++++++
+ 7 files changed, 86 insertions(+), 4 deletions(-)
+
+diff --git a/dlls/kernel32/tests/process.c b/dlls/kernel32/tests/process.c
+index 89ad4175c7e..0489f4c285f 100644
+--- a/dlls/kernel32/tests/process.c
++++ b/dlls/kernel32/tests/process.c
+@@ -2543,6 +2543,7 @@ static void test_QueryInformationJobObject(void)
+     PJOBOBJECT_BASIC_PROCESS_ID_LIST pid_list = (JOBOBJECT_BASIC_PROCESS_ID_LIST *)buf;
+     JOBOBJECT_EXTENDED_LIMIT_INFORMATION ext_limit_info;
+     JOBOBJECT_BASIC_LIMIT_INFORMATION *basic_limit_info = &ext_limit_info.BasicLimitInformation;
++    JOBOBJECT_BASIC_ACCOUNTING_INFORMATION basic_accounting_info;
+     DWORD ret_len;
+     PROCESS_INFORMATION pi[2];
+     char buffer[50];
+@@ -2647,6 +2648,14 @@ static void test_QueryInformationJobObject(void)
+     ok(ret_len == sizeof(ext_limit_info), "QueryInformationJobObject returned ret_len=%u\n", ret_len);
+     expect_eq_d(0, basic_limit_info->LimitFlags);
+ 
++    /* test JobObjectBasicAccountingInformation */
++    ret = pQueryInformationJobObject(job, JobObjectBasicAccountingInformation, &basic_accounting_info,
++                                     sizeof(basic_accounting_info), &ret_len);
++    ok(ret, "QueryInformationJobObject error %u\n", GetLastError());
++    ok(ret_len == sizeof(basic_accounting_info), "QueryInformationJobObject returned ret_len=%u\n", ret_len);
++    expect_eq_d(3, basic_accounting_info.TotalProcesses);
++    expect_eq_d(2, basic_accounting_info.ActiveProcesses);
++
+     TerminateProcess(pi[0].hProcess, 0);
+     CloseHandle(pi[0].hProcess);
+     CloseHandle(pi[0].hThread);
+diff --git a/dlls/ntdll/sync.c b/dlls/ntdll/sync.c
+index 0265ff96661..a6fe27d00ec 100644
+--- a/dlls/ntdll/sync.c
++++ b/dlls/ntdll/sync.c
+@@ -784,7 +784,9 @@ NTSTATUS WINAPI NtTerminateJobObject( HANDLE handle, NTSTATUS status )
+ NTSTATUS WINAPI NtQueryInformationJobObject( HANDLE handle, JOBOBJECTINFOCLASS class, PVOID info,
+                                              ULONG len, PULONG ret_len )
+ {
+-    FIXME( "stub: %p %u %p %u %p\n", handle, class, info, len, ret_len );
++    NTSTATUS ret;
++
++    TRACE( "semi-stub: %p %u %p %u %p\n", handle, class, info, len, ret_len );
+ 
+     if (class >= MaxJobObjectInfoClass)
+         return STATUS_INVALID_PARAMETER;
+@@ -798,9 +800,21 @@ NTSTATUS WINAPI NtQueryInformationJobObject( HANDLE handle, JOBOBJECTINFOCLASS c
+                 return STATUS_INFO_LENGTH_MISMATCH;
+ 
+             accounting = (JOBOBJECT_BASIC_ACCOUNTING_INFORMATION *)info;
+-            memset(accounting, 0, sizeof(*accounting));
++
++            SERVER_START_REQ(get_job_info)
++            {
++                req->handle = wine_server_obj_handle( handle );
++                if ((ret = wine_server_call( req )) == STATUS_SUCCESS)
++                {
++                    memset(accounting, 0, sizeof(*accounting));
++                    accounting->TotalProcesses = reply->total_processes;
++                    accounting->ActiveProcesses = reply->active_processes;
++                }
++            }
++            SERVER_END_REQ;
++
+             if (ret_len) *ret_len = sizeof(*accounting);
+-            return STATUS_SUCCESS;
++            return ret;
+         }
+ 
+     case JobObjectBasicProcessIdList:
+diff --git a/include/wine/server_protocol.h b/include/wine/server_protocol.h
+index 82d58f0f32b..5b8774a6aed 100644
+--- a/include/wine/server_protocol.h
++++ b/include/wine/server_protocol.h
+@@ -5794,6 +5794,19 @@ struct set_job_completion_port_reply
+ };
+ 
+ 
++struct get_job_info_request
++{
++    struct request_header __header;
++    obj_handle_t handle;
++};
++struct get_job_info_reply
++{
++    struct reply_header __header;
++    unsigned int total_processes;
++    unsigned int active_processes;
++};
++
++
+ 
+ struct terminate_job_request
+ {
+@@ -6301,6 +6314,7 @@ enum request
+     REQ_process_in_job,
+     REQ_set_job_limits,
+     REQ_set_job_completion_port,
++    REQ_get_job_info,
+     REQ_terminate_job,
+     REQ_suspend_process,
+     REQ_resume_process,
+@@ -6616,6 +6630,7 @@ union generic_request
+     struct process_in_job_request process_in_job_request;
+     struct set_job_limits_request set_job_limits_request;
+     struct set_job_completion_port_request set_job_completion_port_request;
++    struct get_job_info_request get_job_info_request;
+     struct terminate_job_request terminate_job_request;
+     struct suspend_process_request suspend_process_request;
+     struct resume_process_request resume_process_request;
+@@ -6929,6 +6944,7 @@ union generic_reply
+     struct process_in_job_reply process_in_job_reply;
+     struct set_job_limits_reply set_job_limits_reply;
+     struct set_job_completion_port_reply set_job_completion_port_reply;
++    struct get_job_info_reply get_job_info_reply;
+     struct terminate_job_reply terminate_job_reply;
+     struct suspend_process_reply suspend_process_reply;
+     struct resume_process_reply resume_process_reply;
+diff --git a/server/process.c b/server/process.c
+index f43f96cda08..dacca025572 100644
+--- a/server/process.c
++++ b/server/process.c
+@@ -164,6 +164,7 @@ struct job
+     struct object obj;             /* object header */
+     struct list process_list;      /* list of all processes */
+     int num_processes;             /* count of running processes */
++    int assign_counter;            /* Number of processes which have been assigned */
+     unsigned int limit_flags;      /* limit flags */
+     int terminating;               /* job is terminating */
+     int signaled;                  /* job is signaled */
+@@ -208,6 +209,7 @@ static struct job *create_job_object( struct object *root, const struct unicode_
+             /* initialize it if it didn't already exist */
+             list_init( &job->process_list );
+             job->num_processes = 0;
++            job->assign_counter = 0;
+             job->limit_flags = 0;
+             job->terminating = 0;
+             job->signaled = 0;
+@@ -250,6 +252,7 @@ static void add_job_process( struct job *job, struct process *process )
+     process->job = (struct job *)grab_object( job );
+     list_add_tail( &job->process_list, &process->job_entry );
+     job->num_processes++;
++    job->assign_counter++;
+ 
+     add_job_completion( job, JOB_OBJECT_MSG_NEW_PROCESS, get_process_id(process) );
+ }
+@@ -1750,6 +1753,17 @@ DECL_HANDLER(process_in_job)
+     release_object( process );
+ }
+ 
++/* retrieve information about a job */
++DECL_HANDLER(get_job_info)
++{
++    struct job *job = get_job_obj( current->process, req->handle, JOB_OBJECT_QUERY );
++
++    reply->total_processes = job->assign_counter;
++    reply->active_processes = job->num_processes;
++
++    release_object( job );
++}
++
+ /* terminate all processes associated with the job */
+ DECL_HANDLER(terminate_job)
+ {
+diff --git a/server/protocol.def b/server/protocol.def
+index 1dc9d81a2f5..932c67b1b00 100644
+--- a/server/protocol.def
++++ b/server/protocol.def
+@@ -3966,6 +3966,14 @@ struct handle_info
+     client_ptr_t key;             /* key to send with completion messages */
+ @END
+ 
++/* Retrieve information about a job */
++@REQ(get_job_info)
++    obj_handle_t handle;
++@REPLY
++    unsigned int total_processes;
++    unsigned int active_processes;
++@END
++
+ 
+ /* Terminate all processes associated with the job  */
+ @REQ(terminate_job)
+diff --git a/server/request.h b/server/request.h
+index 57d71403d0c..8521cc955e8 100644
+--- a/server/request.h
++++ b/server/request.h
+@@ -408,6 +408,7 @@ DECL_HANDLER(assign_job);
+ DECL_HANDLER(process_in_job);
+ DECL_HANDLER(set_job_limits);
+ DECL_HANDLER(set_job_completion_port);
++DECL_HANDLER(get_job_info);
+ DECL_HANDLER(terminate_job);
+ DECL_HANDLER(suspend_process);
+ DECL_HANDLER(resume_process);
+@@ -722,6 +723,7 @@ static const req_handler req_handlers[REQ_NB_REQUESTS] =
+     (req_handler)req_process_in_job,
+     (req_handler)req_set_job_limits,
+     (req_handler)req_set_job_completion_port,
++    (req_handler)req_get_job_info,
+     (req_handler)req_terminate_job,
+     (req_handler)req_suspend_process,
+     (req_handler)req_resume_process,
+@@ -2463,6 +2465,11 @@ C_ASSERT( FIELD_OFFSET(struct set_job_completion_port_request, job) == 12 );
+ C_ASSERT( FIELD_OFFSET(struct set_job_completion_port_request, port) == 16 );
+ C_ASSERT( FIELD_OFFSET(struct set_job_completion_port_request, key) == 24 );
+ C_ASSERT( sizeof(struct set_job_completion_port_request) == 32 );
++C_ASSERT( FIELD_OFFSET(struct get_job_info_request, handle) == 12 );
++C_ASSERT( sizeof(struct get_job_info_request) == 16 );
++C_ASSERT( FIELD_OFFSET(struct get_job_info_reply, total_processes) == 8 );
++C_ASSERT( FIELD_OFFSET(struct get_job_info_reply, active_processes) == 12 );
++C_ASSERT( sizeof(struct get_job_info_reply) == 16 );
+ C_ASSERT( FIELD_OFFSET(struct terminate_job_request, handle) == 12 );
+ C_ASSERT( FIELD_OFFSET(struct terminate_job_request, status) == 16 );
+ C_ASSERT( sizeof(struct terminate_job_request) == 24 );
+diff --git a/server/trace.c b/server/trace.c
+index f9d13167eb2..b407a7c478e 100644
+--- a/server/trace.c
++++ b/server/trace.c
+@@ -4607,6 +4607,17 @@ static void dump_set_job_completion_port_request( const struct set_job_completio
+     dump_uint64( ", key=", &req->key );
+ }
+ 
++static void dump_get_job_info_request( const struct get_job_info_request *req )
++{
++    fprintf( stderr, " handle=%04x", req->handle );
++}
++
++static void dump_get_job_info_reply( const struct get_job_info_reply *req )
++{
++    fprintf( stderr, " total_processes=%08x", req->total_processes );
++    fprintf( stderr, ", active_processes=%08x", req->active_processes );
++}
++
+ static void dump_terminate_job_request( const struct terminate_job_request *req )
+ {
+     fprintf( stderr, " handle=%04x", req->handle );
+@@ -5028,6 +5039,7 @@ static const dump_func req_dumpers[REQ_NB_REQUESTS] = {
+     (dump_func)dump_process_in_job_request,
+     (dump_func)dump_set_job_limits_request,
+     (dump_func)dump_set_job_completion_port_request,
++    (dump_func)dump_get_job_info_request,
+     (dump_func)dump_terminate_job_request,
+     (dump_func)dump_suspend_process_request,
+     (dump_func)dump_resume_process_request,
+@@ -5339,6 +5351,7 @@ static const dump_func reply_dumpers[REQ_NB_REQUESTS] = {
+     NULL,
+     NULL,
+     NULL,
++    (dump_func)dump_get_job_info_reply,
+     NULL,
+     NULL,
+     NULL,
+@@ -5650,6 +5663,7 @@ static const char * const req_names[REQ_NB_REQUESTS] = {
+     "process_in_job",
+     "set_job_limits",
+     "set_job_completion_port",
++    "get_job_info",
+     "terminate_job",
+     "suspend_process",
+     "resume_process",
 From 2f720e9aa8ded781ff457bdfab96f3651017299c Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
 Date: Tue, 21 Jan 2020 21:05:05 +0100
@@ -1454,19 +1727,19 @@ Subject: [PATCH] ntdll: Don't support reading/writing debug registers
 Monster Hunter World continually retrieves these registers, so fast-path
 this code. This will break setting debug registers on other threads.
 ---
- dlls/ntdll/unix/signal_x86_64.c | 14 +++++++++++---
+ dlls/ntdll/signal_x86_64.c | 14 +++++++++++---
  1 file changed, 11 insertions(+), 3 deletions(-)
 
-diff --git a/dlls/ntdll/unix/signal_x86_64.c b/dlls/ntdll/unix/signal_x86_64.c
-index 88ee18461a..b71c7c7e2b 100644
---- a/dlls/ntdll/unix/signal_x86_64.c
-+++ b/dlls/ntdll/unix/signal_x86_64.c
-@@ -675,13 +684,13 @@ NTSTATUS WINAPI NtSetContextThread( HANDLE handle, const CONTEXT *context )
+diff --git a/dlls/ntdll/signal_x86_64.c b/dlls/ntdll/signal_x86_64.c
+index 04f3854388c..9752c3889b6 100644
+--- a/dlls/ntdll/signal_x86_64.c
++++ b/dlls/ntdll/signal_x86_64.c
+@@ -2115,13 +2115,13 @@ NTSTATUS WINAPI NtSetContextThread( HANDLE handle, const CONTEXT *context )
      BOOL self = (handle == GetCurrentThread());
  
      /* debug registers require a server call */
--    if (self && (flags & CONTEXT_DEBUG_REGISTERS))
-+    /*if (self && (flags & CONTEXT_DEBUG_REGISTERS))
+-    if (self && (context->ContextFlags & (CONTEXT_DEBUG_REGISTERS & ~CONTEXT_AMD64)))
++    /*if (self && (context->ContextFlags & (CONTEXT_DEBUG_REGISTERS & ~CONTEXT_AMD64)))
          self = (amd64_thread_data()->dr0 == context->Dr0 &&
                  amd64_thread_data()->dr1 == context->Dr1 &&
                  amd64_thread_data()->dr2 == context->Dr2 &&
@@ -1477,7 +1750,7 @@ index 88ee18461a..b71c7c7e2b 100644
  
      if (!self)
      {
-@@ -727,7 +736,15 @@ NTSTATUS WINAPI NtGetContextThread( HANDLE handle, CONTEXT *context )
+@@ -2149,7 +2149,15 @@ NTSTATUS WINAPI NtGetContextThread( HANDLE handle, CONTEXT *context )
      needed_flags = context->ContextFlags;
  
      /* debug registers require a server call */
@@ -1678,6 +1951,41 @@ index 0ae3aadde92..e95ede8aed5 100644
      return FALSE;
  }
 
+From 9cffda4856b5e5057008d165dd38ec971b9af712 Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Fri, 24 Apr 2020 19:48:20 +0300
+Subject: [PATCH] ntdll: Handle NULL object name buffer in
+ nt_to_unix_file_name_attr().
+
+Signed-off-by: Paul Gofman <pgofman@codeweavers.com>
+Signed-off-by: Paul Gofman <gofmanp@gmail.com>
+---
+ dlls/ntdll/directory.c  |  8 ++++++++
+ dlls/ntdll/tests/file.c | 22 +++++++++++++++++++++-
+ 2 files changed, 29 insertions(+), 1 deletion(-)
+
+diff --git a/dlls/ntdll/directory.c b/dlls/ntdll/directory.c
+index 784e720edf8..56f9be0f06e 100644
+--- a/dlls/ntdll/directory.c
++++ b/dlls/ntdll/directory.c
+@@ -2701,8 +2701,16 @@ NTSTATUS nt_to_unix_file_name_attr( const OBJECT_ATTRIBUTES *attr, ANSI_STRING *
+     NTSTATUS status;
+     BOOLEAN check_case = !(attr->Attributes & OBJ_CASE_INSENSITIVE);
+ 
++    if (!attr->ObjectName->Buffer && attr->ObjectName->Length)
++        return STATUS_ACCESS_VIOLATION;
++
+     if (!attr->RootDirectory)  /* without root dir fall back to normal lookup */
++    {
++        if (!attr->ObjectName->Buffer)
++            return STATUS_OBJECT_PATH_SYNTAX_BAD;
++
+         return wine_nt_to_unix_file_name( attr->ObjectName, unix_name_ret, disposition );
++    }
+ 
+     name     = attr->ObjectName->Buffer;
+     name_len = attr->ObjectName->Length / sizeof(WCHAR);
+
 From cb427c70056654bf12fb0d7d6dcb13386d193ff4 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Gabriel=20Iv=C4=83ncescu?= <gabrielopcode@gmail.com>
 Date: Fri, 24 Apr 2020 14:37:58 +0300
@@ -1790,14 +2098,14 @@ Subject: [PATCH] ntdll: Add WINE_DISABLE_WRITE_WATCH env var to disable write
 Massively improves performance for corert games (Streets of Rage 4).
 Could be fixed properly with Linux kernel changes.
 ---
- dlls/ntdll/unix/virtual.c | 16 ++++++++++++++++
+ dlls/ntdll/virtual.c | 16 ++++++++++++++++
  1 file changed, 16 insertions(+)
 
-diff --git a/dlls/ntdll/unix/virtual.c b/dlls/ntdll/unix/virtual.c
-index 6166507871..09b340e607 100644
---- a/dlls/ntdll/unix/virtual.c
-+++ b/dlls/ntdll/unix/virtual.c
-@@ -3346,6 +3615,22 @@ NTSTATUS WINAPI NtAllocateVirtualMemory( HANDLE process, PVOID *ret, ULONG_PTR z
+diff --git a/dlls/ntdll/virtual.c b/dlls/ntdll/virtual.c
+index d0cd2639ee9..d2eb7bcc341 100644
+--- a/dlls/ntdll/virtual.c
++++ b/dlls/ntdll/virtual.c
+@@ -2684,6 +2684,22 @@ NTSTATUS WINAPI NtAllocateVirtualMemory( HANDLE process, PVOID *ret, ULONG_PTR z
  
      TRACE("%p %p %08lx %x %08x\n", process, *ret, size, type, protect );
  

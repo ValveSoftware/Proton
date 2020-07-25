@@ -5227,9 +5227,9 @@ index fb2e145ced2..c505d26f431 100644
      struct strarray install_dev;
      struct strarray extra_targets;
 +    struct strarray parent_dirs;
-     struct strarray extra_imports;
      struct list     sources;
      struct list     includes;
+     const char     *base_dir;
 @@ -189,7 +190,6 @@ struct makefile
      const char     *obj_dir;
      const char     *top_src_dir;

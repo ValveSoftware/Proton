@@ -1,0 +1,29 @@
+From 19aa67d1704a7060c81f345524660ae76f5a7696 Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Fri, 26 Jun 2020 12:42:39 +0300
+Subject: [PATCH] winebuild: Correct hotpatching prologue in import thunks for
+ x86_64.
+
+Wine-Bug: https://bugs.winehq.org/show_bug.cgi?id=48938
+Signed-off-by: Paul Gofman <pgofman@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ tools/winebuild/spec32.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tools/winebuild/spec32.c b/tools/winebuild/spec32.c
+index b1e20e0484..5f74d2f29b 100644
+--- a/tools/winebuild/spec32.c
++++ b/tools/winebuild/spec32.c
+@@ -576,7 +576,7 @@ void output_exports( DLLSPEC *spec )
+             else output( "\tjmp *__imp_%s\n", asm_name( get_link_name( odp )));
+             break;
+         case CPU_x86_64:
+-            output( "\t.byte 0x48\n" );  /* hotpatch prolog */
++            output( "\t.byte 0x48,0x8d,0xa4,0x24,0x00,0x00,0x00,0x00\n" );  /* hotpatch prolog */
+             output( "\tjmp *__imp_%s(%%rip)\n", asm_name( get_link_name( odp )));
+             break;
+         default:
+-- 
+2.20.1
+

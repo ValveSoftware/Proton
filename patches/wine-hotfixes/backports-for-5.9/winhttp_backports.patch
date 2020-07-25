@@ -1,0 +1,4879 @@
+From 93aea5d86fe2eb50a9bb0829533ca5da627908f6 Mon Sep 17 00:00:00 2001
+From: Alistair Leslie-Hughes <leslie_alistair@hotmail.com>
+Date: Thu, 11 Jun 2020 10:21:37 +0200
+Subject: [PATCH] include: Add winhttp web socket defines.
+
+Signed-off-by: Alistair Leslie-Hughes <leslie_alistair@hotmail.com>
+Signed-off-by: Hans Leidekker <hans@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ include/winhttp.h | 48 +++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 48 insertions(+)
+
+diff --git a/include/winhttp.h b/include/winhttp.h
+index 33fc1f915dd..ddfda480880 100644
+--- a/include/winhttp.h
++++ b/include/winhttp.h
+@@ -762,6 +762,54 @@ typedef struct _WINHTTP_REQUEST_STATS
+     ULONGLONG rgullStats[WinHttpRequestStatMax];
+ } WINHTTP_REQUEST_STATS, *PWINHTTP_REQUEST_STATS;
+ 
++typedef enum _WINHTTP_WEB_SOCKET_OPERATION
++{
++    WINHTTP_WEB_SOCKET_SEND_OPERATION     = 0,
++    WINHTTP_WEB_SOCKET_RECEIVE_OPERATION  = 1,
++    WINHTTP_WEB_SOCKET_CLOSE_OPERATION    = 2,
++    WINHTTP_WEB_SOCKET_SHUTDOWN_OPERATION = 3
++} WINHTTP_WEB_SOCKET_OPERATION;
++
++typedef enum _WINHTTP_WEB_SOCKET_BUFFER_TYPE
++{
++    WINHTTP_WEB_SOCKET_BINARY_MESSAGE_BUFFER_TYPE  = 0,
++    WINHTTP_WEB_SOCKET_BINARY_FRAGMENT_BUFFER_TYPE = 1,
++    WINHTTP_WEB_SOCKET_UTF8_MESSAGE_BUFFER_TYPE    = 2,
++    WINHTTP_WEB_SOCKET_UTF8_FRAGMENT_BUFFER_TYPE   = 3,
++    WINHTTP_WEB_SOCKET_CLOSE_BUFFER_TYPE           = 4
++} WINHTTP_WEB_SOCKET_BUFFER_TYPE;
++
++typedef enum _WINHTTP_WEB_SOCKET_CLOSE_STATUS
++{
++    WINHTTP_WEB_SOCKET_SUCCESS_CLOSE_STATUS                = 1000,
++    WINHTTP_WEB_SOCKET_ENDPOINT_TERMINATED_CLOSE_STATUS    = 1001,
++    WINHTTP_WEB_SOCKET_PROTOCOL_ERROR_CLOSE_STATUS         = 1002,
++    WINHTTP_WEB_SOCKET_INVALID_DATA_TYPE_CLOSE_STATUS      = 1003,
++    WINHTTP_WEB_SOCKET_EMPTY_CLOSE_STATUS                  = 1005,
++    WINHTTP_WEB_SOCKET_ABORTED_CLOSE_STATUS                = 1006,
++    WINHTTP_WEB_SOCKET_INVALID_PAYLOAD_CLOSE_STATUS        = 1007,
++    WINHTTP_WEB_SOCKET_POLICY_VIOLATION_CLOSE_STATUS       = 1008,
++    WINHTTP_WEB_SOCKET_MESSAGE_TOO_BIG_CLOSE_STATUS        = 1009,
++    WINHTTP_WEB_SOCKET_UNSUPPORTED_EXTENSIONS_CLOSE_STATUS = 1010,
++    WINHTTP_WEB_SOCKET_SERVER_ERROR_CLOSE_STATUS           = 1011,
++    WINHTTP_WEB_SOCKET_SECURE_HANDSHAKE_ERROR_CLOSE_STATUS = 1015
++} WINHTTP_WEB_SOCKET_CLOSE_STATUS;
++
++typedef struct _WINHTTP_WEB_SOCKET_ASYNC_RESULT
++{
++    WINHTTP_ASYNC_RESULT AsyncResult;
++    WINHTTP_WEB_SOCKET_OPERATION Operation;
++} WINHTTP_WEB_SOCKET_ASYNC_RESULT;
++
++typedef struct _WINHTTP_WEB_SOCKET_STATUS
++{
++    DWORD dwBytesTransferred;
++    WINHTTP_WEB_SOCKET_BUFFER_TYPE eBufferType;
++} WINHTTP_WEB_SOCKET_STATUS;
++
++#define WINHTTP_WEB_SOCKET_MAX_CLOSE_REASON_LENGTH   123
++#define WINHTTP_WEB_SOCKET_MIN_KEEPALIVE_VALUE     15000
++
+ #ifdef __cplusplus
+ extern "C" {
+ #endif
+From 0a90d0431d8d6d2f4913cdc6640edeb1ade833c0 Mon Sep 17 00:00:00 2001
+From: Alistair Leslie-Hughes <leslie_alistair@hotmail.com>
+Date: Thu, 11 Jun 2020 10:21:38 +0200
+Subject: [PATCH] winhttp: Add WinHttpWebSocket* function stubs.
+
+Signed-off-by: Alistair Leslie-Hughes <leslie_alistair@hotmail.com>
+Signed-off-by: Hans Leidekker <hans@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/winhttp/request.c    | 38 ++++++++++++++++++++++++++++++++++++++
+ dlls/winhttp/winhttp.spec |  6 ++++++
+ include/winhttp.h         |  6 ++++++
+ 3 files changed, 50 insertions(+)
+
+diff --git a/dlls/winhttp/request.c b/dlls/winhttp/request.c
+index fbccf0228b9..79d66fd5e80 100644
+--- a/dlls/winhttp/request.c
++++ b/dlls/winhttp/request.c
+@@ -3013,6 +3013,44 @@ BOOL WINAPI WinHttpWriteData( HINTERNET hrequest, LPCVOID buffer, DWORD to_write
+     return !ret;
+ }
+ 
++HINTERNET WINAPI WinHttpWebSocketCompleteUpgrade( HINTERNET hrequest, DWORD_PTR context )
++{
++    FIXME("%p, %08lx\n", hrequest, context);
++    return NULL;
++}
++
++DWORD WINAPI WinHttpWebSocketSend( HINTERNET hsocket, WINHTTP_WEB_SOCKET_BUFFER_TYPE type, void *buf, DWORD len )
++{
++    FIXME("%p, %u, %p, %u\n", hsocket, type, buf, len);
++    return ERROR_INVALID_PARAMETER;
++}
++
++DWORD WINAPI WinHttpWebSocketReceive( HINTERNET hsocket, void *buf, DWORD len, DWORD *read,
++                                      WINHTTP_WEB_SOCKET_BUFFER_TYPE *type )
++{
++    FIXME("%p, %p, %u, %p, %p\n", hsocket, buf, len, read, type);
++    return ERROR_INVALID_PARAMETER;
++}
++
++DWORD WINAPI WinHttpWebSocketShutdown( HINTERNET hsocket, USHORT status, void *reason, DWORD len )
++{
++    FIXME("%p, %u, %p, %u\n", hsocket, status, reason, len);
++    return ERROR_INVALID_PARAMETER;
++}
++
++DWORD WINAPI WinHttpWebSocketClose( HINTERNET hsocket, USHORT status, void *reason, DWORD len )
++{
++    FIXME("%p, %u, %p, %u\n", hsocket, status, reason, len);
++    return ERROR_INVALID_PARAMETER;
++}
++
++DWORD WINAPI WinHttpWebSocketQueryCloseStatus( HINTERNET hsocket, USHORT *status, void *reason, DWORD len,
++                                               DWORD *consumed )
++{
++    FIXME("%p, %p, %p, %u, %p\n", hsocket, status, reason, len, consumed);
++    return ERROR_INVALID_PARAMETER;
++}
++
+ enum request_state
+ {
+     REQUEST_STATE_INITIALIZED,
+diff --git a/dlls/winhttp/winhttp.spec b/dlls/winhttp/winhttp.spec
+index 28dcb1598b7..beace245a8c 100644
+--- a/dlls/winhttp/winhttp.spec
++++ b/dlls/winhttp/winhttp.spec
+@@ -28,4 +28,10 @@
+ @ stdcall WinHttpSetTimeouts(ptr long long long long)
+ @ stdcall WinHttpTimeFromSystemTime(ptr ptr)
+ @ stdcall WinHttpTimeToSystemTime(wstr ptr)
++@ stdcall WinHttpWebSocketClose(ptr long ptr long)
++@ stdcall WinHttpWebSocketCompleteUpgrade(ptr ptr)
++@ stdcall WinHttpWebSocketQueryCloseStatus(ptr ptr ptr long ptr)
++@ stdcall WinHttpWebSocketReceive(ptr ptr long ptr ptr)
++@ stdcall WinHttpWebSocketSend(ptr long ptr long)
++@ stdcall WinHttpWebSocketShutdown(ptr long ptr long)
+ @ stdcall WinHttpWriteData(ptr ptr long ptr)
+diff --git a/include/winhttp.h b/include/winhttp.h
+index ddfda480880..930c5891f5e 100644
+--- a/include/winhttp.h
++++ b/include/winhttp.h
+@@ -853,6 +853,12 @@ WINHTTP_STATUS_CALLBACK WINAPI WinHttpSetStatusCallback(HINTERNET,WINHTTP_STATUS
+ BOOL        WINAPI WinHttpSetTimeouts(HINTERNET,int,int,int,int);
+ BOOL        WINAPI WinHttpTimeFromSystemTime(const SYSTEMTIME *,LPWSTR);
+ BOOL        WINAPI WinHttpTimeToSystemTime(LPCWSTR,SYSTEMTIME*);
++DWORD       WINAPI WinHttpWebSocketClose(HINTERNET,USHORT,void *,DWORD);
++HINTERNET   WINAPI WinHttpWebSocketCompleteUpgrade(HINTERNET,DWORD_PTR);
++DWORD       WINAPI WinHttpWebSocketQueryCloseStatus(HINTERNET,USHORT*,void*,DWORD,DWORD*);
++DWORD       WINAPI WinHttpWebSocketReceive(HINTERNET,void*,DWORD,DWORD*,WINHTTP_WEB_SOCKET_BUFFER_TYPE*);
++DWORD       WINAPI WinHttpWebSocketSend(HINTERNET,WINHTTP_WEB_SOCKET_BUFFER_TYPE,void*,DWORD);
++DWORD       WINAPI WinHttpWebSocketShutdown(HINTERNET,USHORT,void*,DWORD);
+ BOOL        WINAPI WinHttpWriteData(HINTERNET,LPCVOID,DWORD,LPDWORD);
+ DWORD       WINAPI WinHttpWriteProxySettings(HINTERNET,BOOL,WINHTTP_PROXY_SETTINGS*);
+ 
+From a46d359e91e299142a27570bb202d8141b9625da Mon Sep 17 00:00:00 2001
+From: Alistair Leslie-Hughes <leslie_alistair@hotmail.com>
+Date: Tue, 16 Jun 2020 11:45:12 +0200
+Subject: [PATCH] winhttp/tests: Add WebSocket tests.
+
+Signed-off-by: Alistair Leslie-Hughes <leslie_alistair@hotmail.com>
+Signed-off-by: Hans Leidekker <hans@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/winhttp/tests/winhttp.c | 215 +++++++++++++++++++++++++++++++++++
+ 1 file changed, 215 insertions(+)
+
+diff --git a/dlls/winhttp/tests/winhttp.c b/dlls/winhttp/tests/winhttp.c
+index ab91940ebb8..f08f50b9a9d 100644
+--- a/dlls/winhttp/tests/winhttp.c
++++ b/dlls/winhttp/tests/winhttp.c
+@@ -37,6 +37,8 @@
+ 
+ DEFINE_GUID(GUID_NULL,0,0,0,0,0,0,0,0,0,0,0);
+ 
++static HINTERNET (WINAPI *pWinHttpWebSocketCompleteUpgrade)(HINTERNET,DWORD_PTR);
++
+ static BOOL proxy_active(void)
+ {
+     WINHTTP_PROXY_INFO proxy_info;
+@@ -2205,6 +2207,12 @@ static const char passportauth[] =
+ "WWW-Authenticate: Passport1.4\r\n"
+ "\r\n";
+ 
++static const char switchprotocols[] =
++"HTTP/1.1 101 Switching Protocols\r\n"
++"Server: winetest\r\n"
++"Upgrade: websocket\r\n"
++"Connection: Upgrade\r\n";
++
+ static const char unauthorized[] = "Unauthorized";
+ static const char hello_world[] = "Hello World";
+ static const char auth_unseen[] = "Auth Unseen";
+@@ -2217,6 +2225,31 @@ struct server_info
+ 
+ #define BIG_BUFFER_LEN 0x2250
+ 
++static void create_websocket_accept(const char *key, char *buf, unsigned int buflen)
++{
++    HCRYPTPROV provider;
++    HCRYPTHASH hash;
++    BYTE sha1[20];
++    char data[128];
++    DWORD len;
++
++    strcpy(data, key);
++    strcat(data, "258EAFA5-E914-47DA-95CA-C5AB0DC85B11");
++
++    CryptAcquireContextW(&provider, NULL, NULL, PROV_RSA_FULL, CRYPT_VERIFYCONTEXT);
++    CryptCreateHash(provider, CALG_SHA1, 0, 0, &hash);
++    CryptHashData(hash, (BYTE *)data, strlen(data), 0);
++
++    len = sizeof(sha1);
++    CryptGetHashParam(hash, HP_HASHVAL, sha1, &len, 0);
++    CryptDestroyHash(hash);
++    CryptReleaseContext(provider, 0);
++
++    buf[0] = 0;
++    len = buflen;
++    CryptBinaryToStringA( (BYTE *)sha1, sizeof(sha1), CRYPT_STRING_BASE64, buf, &len);
++}
++
+ static DWORD CALLBACK server_thread(LPVOID param)
+ {
+     struct server_info *si = param;
+@@ -2388,6 +2421,29 @@ static DWORD CALLBACK server_thread(LPVOID param)
+         {
+             send(c, passportauth, sizeof(passportauth) - 1, 0);
+         }
++        else if (strstr(buffer, "GET /websocket"))
++        {
++            char headers[256], key[32], accept[64];
++            const char *pos = strstr(buffer, "Sec-WebSocket-Key: ");
++            if (pos && strstr(buffer, "Connection: Upgrade\r\n") &&
++                (strstr(buffer, "Upgrade: websocket\r\n") || strstr(buffer, "Upgrade: Websocket\r\n")) &&
++                strstr(buffer, "Host: ") && strstr(buffer, "Sec-WebSocket-Version: 13\r\n"))
++            {
++                memcpy(headers, switchprotocols, sizeof(switchprotocols));
++                memcpy(key, pos + 19, 24);
++                key[24] = 0;
++
++                create_websocket_accept(key, accept, sizeof(accept));
++
++                strcat(headers, "Sec-WebSocket-Accept: ");
++                strcat(headers, accept);
++                strcat(headers, "\r\n\r\n");
++
++                send(c, headers, strlen(headers), 0);
++            }
++            else send(c, notokmsg, sizeof(notokmsg) - 1, 0);
++            continue;
++        }
+         if (strstr(buffer, "GET /quit"))
+         {
+             send(c, okmsg, sizeof okmsg - 1, 0);
+@@ -3039,6 +3095,161 @@ static void test_head_request(int port)
+     WinHttpCloseHandle(ses);
+ }
+ 
++static void test_websocket(int port)
++{
++    HINTERNET session, connection, request, socket;
++    DWORD size, len, count, status, index, error;
++    WCHAR header[32];
++    char buf[128];
++    BOOL ret;
++
++    if (!pWinHttpWebSocketCompleteUpgrade)
++    {
++        win_skip("WinHttpWebSocketCompleteUpgrade not supported\n");
++        return;
++    }
++
++    session = WinHttpOpen(L"winetest", 0, NULL, NULL, 0);
++    ok(session != NULL, "got %u\n", GetLastError());
++
++    connection = WinHttpConnect(session, L"localhost", port, 0);
++    ok(connection != NULL, "got %u\n", GetLastError());
++
++    request = WinHttpOpenRequest(connection, L"GET", L"/websocket", NULL, NULL, NULL, 0);
++    ok(request != NULL, "got %u\n", GetLastError());
++
++    ret = WinHttpSetOption(request, WINHTTP_OPTION_UPGRADE_TO_WEB_SOCKET, NULL, 0);
++    todo_wine ok(ret, "got %u\n", GetLastError());
++
++    size = sizeof(header);
++    SetLastError(0xdeadbeef);
++    ret = WinHttpQueryHeaders(request, WINHTTP_QUERY_UPGRADE, NULL, &header, &size, NULL);
++    error = GetLastError();
++    ok(!ret, "success\n");
++    todo_wine ok(error == ERROR_WINHTTP_INCORRECT_HANDLE_STATE, "got %u\n", error);
++
++    size = sizeof(header);
++    SetLastError(0xdeadbeef);
++    ret = WinHttpQueryHeaders(request, WINHTTP_QUERY_CONNECTION, NULL, &header, &size, NULL);
++    error = GetLastError();
++    ok(!ret, "success\n");
++    todo_wine ok(error == ERROR_WINHTTP_INCORRECT_HANDLE_STATE, "got %u\n", error);
++
++    index = 0;
++    size = sizeof(buf);
++    SetLastError(0xdeadbeef);
++    ret = WinHttpQueryHeaders(request, WINHTTP_QUERY_CUSTOM | WINHTTP_QUERY_FLAG_REQUEST_HEADERS,
++                              L"Sec-WebSocket-Key", buf, &size, &index);
++    error = GetLastError();
++    ok(!ret, "success\n");
++    ok(error == ERROR_WINHTTP_HEADER_NOT_FOUND, "got %u\n", error);
++
++    index = 0;
++    size = sizeof(buf);
++    SetLastError(0xdeadbeef);
++    ret = WinHttpQueryHeaders(request, WINHTTP_QUERY_CUSTOM | WINHTTP_QUERY_FLAG_REQUEST_HEADERS,
++                              L"Sec-WebSocket-Version", buf, &size, &index);
++    error = GetLastError();
++    ok(!ret, "success\n");
++    ok(error == ERROR_WINHTTP_HEADER_NOT_FOUND, "got %u\n", error);
++
++    ret = WinHttpSendRequest(request, NULL, 0, NULL, 0, 0, 0);
++    ok(ret, "got %u\n", GetLastError());
++
++    size = sizeof(header);
++    SetLastError(0xdeadbeef);
++    ret = WinHttpQueryHeaders(request, WINHTTP_QUERY_UPGRADE, NULL, &header, &size, NULL);
++    error = GetLastError();
++    ok(!ret, "success\n");
++    todo_wine ok(error == ERROR_WINHTTP_INCORRECT_HANDLE_STATE, "got %u\n", error);
++
++    size = sizeof(header);
++    SetLastError(0xdeadbeef);
++    ret = WinHttpQueryHeaders(request, WINHTTP_QUERY_CONNECTION, NULL, &header, &size, NULL);
++    error = GetLastError();
++    ok(!ret, "success\n");
++    todo_wine ok(error == ERROR_WINHTTP_INCORRECT_HANDLE_STATE, "got %u\n", error);
++
++    index = 0;
++    buf[0] = 0;
++    size = sizeof(buf);
++    ret = WinHttpQueryHeaders(request, WINHTTP_QUERY_CUSTOM | WINHTTP_QUERY_FLAG_REQUEST_HEADERS,
++                              L"Sec-WebSocket-Key", buf, &size, &index);
++    todo_wine ok(ret, "got %u\n", GetLastError());
++
++    index = 0;
++    buf[0] = 0;
++    size = sizeof(buf);
++    ret = WinHttpQueryHeaders(request, WINHTTP_QUERY_CUSTOM | WINHTTP_QUERY_FLAG_REQUEST_HEADERS,
++                              L"Sec-WebSocket-Version", buf, &size, &index);
++    todo_wine ok(ret, "got %u\n", GetLastError());
++
++    ret = WinHttpReceiveResponse(request, NULL);
++    todo_wine ok(ret, "got %u\n", GetLastError());
++
++    count = 0xdeadbeef;
++    ret = WinHttpQueryDataAvailable(request, &count);
++    ok(ret, "got %u\n", GetLastError());
++    todo_wine ok(!count, "got %u\n", count);
++
++    header[0] = 0;
++    size = sizeof(header);
++    ret = WinHttpQueryHeaders(request, WINHTTP_QUERY_UPGRADE, NULL, &header, &size, NULL);
++    todo_wine ok(ret, "got %u\n", GetLastError());
++    todo_wine ok(!wcscmp( header, L"websocket" ), "got %s\n", wine_dbgstr_w(header));
++
++    header[0] = 0;
++    size = sizeof(header);
++    ret = WinHttpQueryHeaders(request, WINHTTP_QUERY_CONNECTION, NULL, &header, &size, NULL);
++    todo_wine ok(ret, "got %u\n", GetLastError());
++    todo_wine ok(!wcscmp( header, L"Upgrade" ), "got %s\n", wine_dbgstr_w(header));
++
++    status = 0xdeadbeef;
++    size = sizeof(status);
++    ret = WinHttpQueryHeaders(request, WINHTTP_QUERY_STATUS_CODE | WINHTTP_QUERY_FLAG_NUMBER, NULL, &status,
++                              &size, NULL);
++    ok(ret, "got %u\n", GetLastError());
++    todo_wine ok(status == HTTP_STATUS_SWITCH_PROTOCOLS, "got %u\n", status);
++
++    len = 0xdeadbeef;
++    size = sizeof(len);
++    ret = WinHttpQueryHeaders(request, WINHTTP_QUERY_CONTENT_LENGTH | WINHTTP_QUERY_FLAG_NUMBER, NULL, &len,
++                              &size, 0);
++    ok(!ret, "success\n");
++
++    index = 0;
++    size = sizeof(buf);
++    ret = WinHttpQueryHeaders(request, WINHTTP_QUERY_CUSTOM, L"Sec-WebSocket-Accept", buf, &size, &index);
++    todo_wine ok(ret, "got %u\n", GetLastError());
++
++    socket = pWinHttpWebSocketCompleteUpgrade(request, 0);
++    todo_wine ok(socket != NULL, "got %u\n", GetLastError());
++
++    header[0] = 0;
++    size = sizeof(header);
++    ret = WinHttpQueryHeaders(request, WINHTTP_QUERY_UPGRADE, NULL, &header, &size, NULL);
++    todo_wine ok(ret, "got %u\n", GetLastError());
++    todo_wine ok(!wcscmp( header, L"websocket" ), "got %s\n", wine_dbgstr_w(header));
++
++    header[0] = 0;
++    size = sizeof(header);
++    ret = WinHttpQueryHeaders(request, WINHTTP_QUERY_CONNECTION, NULL, &header, &size, NULL);
++    todo_wine ok(ret, "got %u\n", GetLastError());
++    todo_wine ok(!wcscmp( header, L"Upgrade" ), "got %s\n", wine_dbgstr_w(header));
++
++    index = 0;
++    size = sizeof(buf);
++    ret = WinHttpQueryHeaders(request, WINHTTP_QUERY_CUSTOM, L"Sec-WebSocket-Accept", buf, &size, &index);
++    todo_wine ok(ret, "got %u\n", GetLastError());
++
++    /* Send/Receive on websock */
++
++    WinHttpCloseHandle(request);
++    WinHttpCloseHandle(socket);
++    WinHttpCloseHandle(connection);
++    WinHttpCloseHandle(session);
++}
++
+ static void test_not_modified(int port)
+ {
+     BOOL ret;
+@@ -4710,6 +4921,9 @@ START_TEST (winhttp)
+     struct server_info si;
+     HANDLE thread;
+     DWORD ret;
++    HMODULE mod = GetModuleHandleA("winhttp.dll");
++
++    pWinHttpWebSocketCompleteUpgrade = (void *)GetProcAddress(mod, "WinHttpWebSocketCompleteUpgrade");
+ 
+     test_WinHttpOpenRequest();
+     test_WinHttpSendRequest();
+@@ -4759,6 +4973,7 @@ START_TEST (winhttp)
+     test_cookies(si.port);
+     test_request_path_escapes(si.port);
+     test_passport_auth(si.port);
++    test_websocket(si.port);
+ 
+     /* send the basic request again to shutdown the server thread */
+     test_basic_request(si.port, NULL, L"/quit");
+From aa80ef20504660fa55914d40fb4bb296eef94c59 Mon Sep 17 00:00:00 2001
+From: Brendan Shanks <bshanks@codeweavers.com>
+Date: Tue, 16 Jun 2020 13:48:22 -0700
+Subject: [PATCH] winhttp: Treat a partial certificate chain as having an
+ unknown/invalid CA.
+
+Wine-Bug: https://bugs.winehq.org/show_bug.cgi?id=46726
+Signed-off-by: Brendan Shanks <bshanks@codeweavers.com>
+Signed-off-by: Hans Leidekker <hans@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/winhttp/net.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/dlls/winhttp/net.c b/dlls/winhttp/net.c
+index 2905d5c535a..0cc2bb2bef7 100644
+--- a/dlls/winhttp/net.c
++++ b/dlls/winhttp/net.c
+@@ -84,8 +84,10 @@ static DWORD netconn_verify_cert( PCCERT_CONTEXT cert, WCHAR *server, DWORD secu
+                 if (!(security_flags & SECURITY_FLAG_IGNORE_CERT_DATE_INVALID))
+                     err = ERROR_WINHTTP_SECURE_CERT_DATE_INVALID;
+             }
+-            else if (chain->TrustStatus.dwErrorStatus &
+-                     CERT_TRUST_IS_UNTRUSTED_ROOT)
++            else if ((chain->TrustStatus.dwErrorStatus &
++                      CERT_TRUST_IS_UNTRUSTED_ROOT) ||
++                     (chain->TrustStatus.dwErrorStatus &
++                      CERT_TRUST_IS_PARTIAL_CHAIN))
+             {
+                 if (!(security_flags & SECURITY_FLAG_IGNORE_UNKNOWN_CA))
+                     err = ERROR_WINHTTP_SECURE_INVALID_CA;
+From a6de059eef5e0aa4aa688885c1d91497c588576f Mon Sep 17 00:00:00 2001
+From: Alistair Leslie-Hughes <leslie_alistair@hotmail.com>
+Date: Wed, 17 Jun 2020 11:53:40 +0200
+Subject: [PATCH] winhttp: Status HTTP_STATUS_SWITCH_PROTOCOLS doesn't have any
+ content.
+
+Signed-off-by: Alistair Leslie-Hughes <leslie_alistair@hotmail.com>
+Signed-off-by: Hans Leidekker <hans@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/winhttp/request.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/dlls/winhttp/request.c b/dlls/winhttp/request.c
+index 79d66fd5e80..9173bdb56d1 100644
+--- a/dlls/winhttp/request.c
++++ b/dlls/winhttp/request.c
+@@ -2353,8 +2353,11 @@ static void set_content_length( struct request *request, DWORD status )
+     WCHAR encoding[20];
+     DWORD buflen = sizeof(request->content_length);
+ 
+-    if (status == HTTP_STATUS_NO_CONTENT || status == HTTP_STATUS_NOT_MODIFIED || !wcscmp( request->verb, L"HEAD" ))
++    if (status == HTTP_STATUS_NO_CONTENT || status == HTTP_STATUS_NOT_MODIFIED ||
++        status == HTTP_STATUS_SWITCH_PROTOCOLS || !wcscmp( request->verb, L"HEAD" ))
++    {
+         request->content_length = 0;
++    }
+     else
+     {
+         if (query_headers( request, WINHTTP_QUERY_CONTENT_LENGTH|WINHTTP_QUERY_FLAG_NUMBER,
+From 0b48050da58be2ee72bcc5c4848822d6853d857c Mon Sep 17 00:00:00 2001
+From: Hans Leidekker <hans@codeweavers.com>
+Date: Wed, 17 Jun 2020 11:53:41 +0200
+Subject: [PATCH] winhttp: Implement WinHttpWebSocketCompleteUpgrade.
+
+Signed-off-by: Hans Leidekker <hans@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/winhttp/request.c         | 101 ++++++++++++++++++++++++++++++++-
+ dlls/winhttp/session.c         |  13 ++---
+ dlls/winhttp/tests/winhttp.c   |  34 +++++------
+ dlls/winhttp/winhttp_private.h |  14 +++++
+ 4 files changed, 133 insertions(+), 29 deletions(-)
+
+diff --git a/dlls/winhttp/request.c b/dlls/winhttp/request.c
+index 9173bdb56d1..0511dd44eec 100644
+--- a/dlls/winhttp/request.c
++++ b/dlls/winhttp/request.c
+@@ -33,6 +33,7 @@
+ #include "httprequestid.h"
+ #include "schannel.h"
+ #include "winhttp.h"
++#include "ntsecapi.h"
+ 
+ #include "wine/debug.h"
+ #include "winhttp_private.h"
+@@ -2098,6 +2099,25 @@ static char *build_wire_request( struct request *request, DWORD *len )
+     return ret;
+ }
+ 
++static WCHAR *create_websocket_key(void)
++{
++    WCHAR *ret;
++    char buf[16];
++    DWORD base64_len = ((sizeof(buf) + 2) * 4) / 3;
++    if (!RtlGenRandom( buf, sizeof(buf) )) return NULL;
++    if ((ret = heap_alloc( (base64_len + 1) * sizeof(WCHAR) ))) encode_base64( buf, sizeof(buf), ret );
++    return ret;
++}
++
++static DWORD add_websocket_key_header( struct request *request )
++{
++    WCHAR *key = create_websocket_key();
++    if (!key) return ERROR_OUTOFMEMORY;
++    process_header( request, L"Sec-WebSocket-Key", key, WINHTTP_ADDREQ_FLAG_ADD | WINHTTP_ADDREQ_FLAG_REPLACE, TRUE );
++    heap_free( key );
++    return ERROR_SUCCESS;
++}
++
+ static DWORD send_request( struct request *request, const WCHAR *headers, DWORD headers_len, void *optional,
+                            DWORD optional_len, DWORD total_len, DWORD_PTR context, BOOL async )
+ {
+@@ -2125,7 +2145,14 @@ static DWORD send_request( struct request *request, const WCHAR *headers, DWORD
+         swprintf( length, ARRAY_SIZE(length), L"%ld", total_len );
+         process_header( request, L"Content-Length", length, WINHTTP_ADDREQ_FLAG_ADD_IF_NEW, TRUE );
+     }
+-    if (!(request->hdr.disable_flags & WINHTTP_DISABLE_KEEP_ALIVE))
++    if (request->flags & REQUEST_FLAG_WEBSOCKET_UPGRADE)
++    {
++        process_header( request, L"Upgrade", L"websocket", WINHTTP_ADDREQ_FLAG_ADD_IF_NEW, TRUE );
++        process_header( request, L"Connection", L"Upgrade", WINHTTP_ADDREQ_FLAG_ADD_IF_NEW, TRUE );
++        process_header( request, L"Sec-WebSocket-Version", L"13", WINHTTP_ADDREQ_FLAG_ADD_IF_NEW, TRUE );
++        if ((ret = add_websocket_key_header( request ))) return ret;
++    }
++    else if (!(request->hdr.disable_flags & WINHTTP_DISABLE_KEEP_ALIVE))
+     {
+         process_header( request, L"Connection", L"Keep-Alive", WINHTTP_ADDREQ_FLAG_ADD_IF_NEW, TRUE );
+     }
+@@ -3016,10 +3043,78 @@ BOOL WINAPI WinHttpWriteData( HINTERNET hrequest, LPCVOID buffer, DWORD to_write
+     return !ret;
+ }
+ 
++static BOOL socket_query_option( struct object_header *hdr, DWORD option, void *buffer, DWORD *buflen )
++{
++    FIXME("unimplemented option %u\n", option);
++    SetLastError( ERROR_WINHTTP_INVALID_OPTION );
++    return FALSE;
++}
++
++static void socket_destroy( struct object_header *hdr )
++{
++    struct socket *socket = (struct socket *)hdr;
++
++    TRACE("%p\n", socket);
++
++    release_object( &socket->request->hdr );
++    heap_free( socket );
++}
++
++static BOOL socket_set_option( struct object_header *hdr, DWORD option, void *buffer, DWORD buflen )
++{
++    FIXME("unimplemented option %u\n", option);
++    SetLastError( ERROR_WINHTTP_INVALID_OPTION );
++    return FALSE;
++}
++
++static const struct object_vtbl socket_vtbl =
++{
++    socket_destroy,
++    socket_query_option,
++    socket_set_option,
++};
++
+ HINTERNET WINAPI WinHttpWebSocketCompleteUpgrade( HINTERNET hrequest, DWORD_PTR context )
+ {
+-    FIXME("%p, %08lx\n", hrequest, context);
+-    return NULL;
++    struct socket *socket;
++    struct request *request;
++    HINTERNET hsocket = NULL;
++
++    TRACE("%p, %08lx\n", hrequest, context);
++
++    if (!(request = (struct request *)grab_object( hrequest )))
++    {
++        SetLastError( ERROR_INVALID_HANDLE );
++        return NULL;
++    }
++    if (request->hdr.type != WINHTTP_HANDLE_TYPE_REQUEST)
++    {
++        release_object( &request->hdr );
++        SetLastError( ERROR_WINHTTP_INCORRECT_HANDLE_TYPE );
++        return NULL;
++    }
++    if (!(socket = heap_alloc_zero( sizeof(struct socket) )))
++    {
++        release_object( &request->hdr );
++        return NULL;
++    }
++    socket->hdr.type = WINHTTP_HANDLE_TYPE_SOCKET;
++    socket->hdr.vtbl = &socket_vtbl;
++    socket->hdr.refs = 1;
++    socket->hdr.context = context;
++    list_init( &socket->hdr.children );
++
++    addref_object( &request->hdr );
++    socket->request = request;
++    list_add_head( &request->hdr.children, &socket->hdr.entry );
++
++    if ((hsocket = alloc_handle( &socket->hdr ))) socket->hdr.handle = hsocket;
++
++    release_object( &socket->hdr );
++    release_object( &request->hdr );
++    TRACE("returning %p\n", hsocket);
++    if (hsocket) SetLastError( ERROR_SUCCESS );
++    return hsocket;
+ }
+ 
+ DWORD WINAPI WinHttpWebSocketSend( HINTERNET hsocket, WINHTTP_WEB_SOCKET_BUFFER_TYPE type, void *buf, DWORD len )
+diff --git a/dlls/winhttp/session.c b/dlls/winhttp/session.c
+index 24455d858a6..87974ffbd8e 100644
+--- a/dlls/winhttp/session.c
++++ b/dlls/winhttp/session.c
+@@ -63,9 +63,6 @@ BOOL WINAPI WinHttpCheckPlatform( void )
+     return TRUE;
+ }
+ 
+-/***********************************************************************
+- *          session_destroy (internal)
+- */
+ static void session_destroy( struct object_header *hdr )
+ {
+     struct session *session = (struct session *)hdr;
+@@ -296,9 +293,6 @@ HINTERNET WINAPI WinHttpOpen( LPCWSTR agent, DWORD access, LPCWSTR proxy, LPCWST
+     return handle;
+ }
+ 
+-/***********************************************************************
+- *          connect_destroy (internal)
+- */
+ static void connect_destroy( struct object_header *hdr )
+ {
+     struct connect *connect = (struct connect *)hdr;
+@@ -581,9 +575,6 @@ HINTERNET WINAPI WinHttpConnect( HINTERNET hsession, LPCWSTR server, INTERNET_PO
+     return hconnect;
+ }
+ 
+-/***********************************************************************
+- *          request_destroy (internal)
+- */
+ static void request_destroy( struct object_header *hdr )
+ {
+     struct request *request = (struct request *)hdr;
+@@ -1038,6 +1029,10 @@ static BOOL request_set_option( struct object_header *hdr, DWORD option, void *b
+             return FALSE;
+         }
+ 
++    case WINHTTP_OPTION_UPGRADE_TO_WEB_SOCKET:
++        request->flags |= REQUEST_FLAG_WEBSOCKET_UPGRADE;
++        return TRUE;
++
+     case WINHTTP_OPTION_CONNECT_RETRIES:
+         FIXME("WINHTTP_OPTION_CONNECT_RETRIES\n");
+         return TRUE;
+diff --git a/dlls/winhttp/tests/winhttp.c b/dlls/winhttp/tests/winhttp.c
+index f08f50b9a9d..8083c4825b2 100644
+--- a/dlls/winhttp/tests/winhttp.c
++++ b/dlls/winhttp/tests/winhttp.c
+@@ -3119,7 +3119,7 @@ static void test_websocket(int port)
+     ok(request != NULL, "got %u\n", GetLastError());
+ 
+     ret = WinHttpSetOption(request, WINHTTP_OPTION_UPGRADE_TO_WEB_SOCKET, NULL, 0);
+-    todo_wine ok(ret, "got %u\n", GetLastError());
++    ok(ret, "got %u\n", GetLastError());
+ 
+     size = sizeof(header);
+     SetLastError(0xdeadbeef);
+@@ -3175,41 +3175,41 @@ static void test_websocket(int port)
+     size = sizeof(buf);
+     ret = WinHttpQueryHeaders(request, WINHTTP_QUERY_CUSTOM | WINHTTP_QUERY_FLAG_REQUEST_HEADERS,
+                               L"Sec-WebSocket-Key", buf, &size, &index);
+-    todo_wine ok(ret, "got %u\n", GetLastError());
++    ok(ret, "got %u\n", GetLastError());
+ 
+     index = 0;
+     buf[0] = 0;
+     size = sizeof(buf);
+     ret = WinHttpQueryHeaders(request, WINHTTP_QUERY_CUSTOM | WINHTTP_QUERY_FLAG_REQUEST_HEADERS,
+                               L"Sec-WebSocket-Version", buf, &size, &index);
+-    todo_wine ok(ret, "got %u\n", GetLastError());
++    ok(ret, "got %u\n", GetLastError());
+ 
+     ret = WinHttpReceiveResponse(request, NULL);
+-    todo_wine ok(ret, "got %u\n", GetLastError());
++    ok(ret, "got %u\n", GetLastError());
+ 
+     count = 0xdeadbeef;
+     ret = WinHttpQueryDataAvailable(request, &count);
+     ok(ret, "got %u\n", GetLastError());
+-    todo_wine ok(!count, "got %u\n", count);
++    ok(!count, "got %u\n", count);
+ 
+     header[0] = 0;
+     size = sizeof(header);
+     ret = WinHttpQueryHeaders(request, WINHTTP_QUERY_UPGRADE, NULL, &header, &size, NULL);
+-    todo_wine ok(ret, "got %u\n", GetLastError());
+-    todo_wine ok(!wcscmp( header, L"websocket" ), "got %s\n", wine_dbgstr_w(header));
++    ok(ret, "got %u\n", GetLastError());
++    ok(!wcscmp( header, L"websocket" ), "got %s\n", wine_dbgstr_w(header));
+ 
+     header[0] = 0;
+     size = sizeof(header);
+     ret = WinHttpQueryHeaders(request, WINHTTP_QUERY_CONNECTION, NULL, &header, &size, NULL);
+-    todo_wine ok(ret, "got %u\n", GetLastError());
+-    todo_wine ok(!wcscmp( header, L"Upgrade" ), "got %s\n", wine_dbgstr_w(header));
++    ok(ret, "got %u\n", GetLastError());
++    ok(!wcscmp( header, L"Upgrade" ), "got %s\n", wine_dbgstr_w(header));
+ 
+     status = 0xdeadbeef;
+     size = sizeof(status);
+     ret = WinHttpQueryHeaders(request, WINHTTP_QUERY_STATUS_CODE | WINHTTP_QUERY_FLAG_NUMBER, NULL, &status,
+                               &size, NULL);
+     ok(ret, "got %u\n", GetLastError());
+-    todo_wine ok(status == HTTP_STATUS_SWITCH_PROTOCOLS, "got %u\n", status);
++    ok(status == HTTP_STATUS_SWITCH_PROTOCOLS, "got %u\n", status);
+ 
+     len = 0xdeadbeef;
+     size = sizeof(len);
+@@ -3220,27 +3220,27 @@ static void test_websocket(int port)
+     index = 0;
+     size = sizeof(buf);
+     ret = WinHttpQueryHeaders(request, WINHTTP_QUERY_CUSTOM, L"Sec-WebSocket-Accept", buf, &size, &index);
+-    todo_wine ok(ret, "got %u\n", GetLastError());
++    ok(ret, "got %u\n", GetLastError());
+ 
+     socket = pWinHttpWebSocketCompleteUpgrade(request, 0);
+-    todo_wine ok(socket != NULL, "got %u\n", GetLastError());
++    ok(socket != NULL, "got %u\n", GetLastError());
+ 
+     header[0] = 0;
+     size = sizeof(header);
+     ret = WinHttpQueryHeaders(request, WINHTTP_QUERY_UPGRADE, NULL, &header, &size, NULL);
+-    todo_wine ok(ret, "got %u\n", GetLastError());
+-    todo_wine ok(!wcscmp( header, L"websocket" ), "got %s\n", wine_dbgstr_w(header));
++    ok(ret, "got %u\n", GetLastError());
++    ok(!wcscmp( header, L"websocket" ), "got %s\n", wine_dbgstr_w(header));
+ 
+     header[0] = 0;
+     size = sizeof(header);
+     ret = WinHttpQueryHeaders(request, WINHTTP_QUERY_CONNECTION, NULL, &header, &size, NULL);
+-    todo_wine ok(ret, "got %u\n", GetLastError());
+-    todo_wine ok(!wcscmp( header, L"Upgrade" ), "got %s\n", wine_dbgstr_w(header));
++    ok(ret, "got %u\n", GetLastError());
++    ok(!wcscmp( header, L"Upgrade" ), "got %s\n", wine_dbgstr_w(header));
+ 
+     index = 0;
+     size = sizeof(buf);
+     ret = WinHttpQueryHeaders(request, WINHTTP_QUERY_CUSTOM, L"Sec-WebSocket-Accept", buf, &size, &index);
+-    todo_wine ok(ret, "got %u\n", GetLastError());
++    ok(ret, "got %u\n", GetLastError());
+ 
+     /* Send/Receive on websock */
+ 
+diff --git a/dlls/winhttp/winhttp_private.h b/dlls/winhttp/winhttp_private.h
+index 657f82f6421..af695f86c3e 100644
+--- a/dlls/winhttp/winhttp_private.h
++++ b/dlls/winhttp/winhttp_private.h
+@@ -26,6 +26,8 @@
+ #include "sspi.h"
+ #include "wincrypt.h"
+ 
++#define WINHTTP_HANDLE_TYPE_SOCKET 4
++
+ struct object_header;
+ struct object_vtbl
+ {
+@@ -154,10 +156,16 @@ struct authinfo
+     BOOL finished; /* finished authenticating */
+ };
+ 
++enum request_flags
++{
++    REQUEST_FLAG_WEBSOCKET_UPGRADE = 0x01,
++};
++
+ struct request
+ {
+     struct object_header hdr;
+     struct connect *connect;
++    enum request_flags flags;
+     WCHAR *verb;
+     WCHAR *path;
+     WCHAR *version;
+@@ -201,6 +209,12 @@ struct request
+     } creds[TARGET_MAX][SCHEME_MAX];
+ };
+ 
++struct socket
++{
++    struct object_header hdr;
++    struct request *request;
++};
++
+ struct task_header
+ {
+     struct list entry;
+From 933665147704ab07e702bf4366f1a9a8aa6a62d7 Mon Sep 17 00:00:00 2001
+From: Hans Leidekker <hans@codeweavers.com>
+Date: Mon, 22 Jun 2020 21:39:20 +0200
+Subject: [PATCH] winhttp: Don't close child handles on release.
+
+Signed-off-by: Hans Leidekker <hans@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/winhttp/handle.c          | 14 ++------------
+ dlls/winhttp/request.c         |  2 --
+ dlls/winhttp/session.c         |  5 -----
+ dlls/winhttp/tests/winhttp.c   | 27 +++++++++++++++++++++++----
+ dlls/winhttp/winhttp_private.h |  1 -
+ 5 files changed, 25 insertions(+), 24 deletions(-)
+
+diff --git a/dlls/winhttp/handle.c b/dlls/winhttp/handle.c
+index 9c77d5166ad..08052b91ee3 100644
+--- a/dlls/winhttp/handle.c
++++ b/dlls/winhttp/handle.c
+@@ -79,7 +79,6 @@ void release_object( struct object_header *hdr )
+         send_callback( hdr, WINHTTP_CALLBACK_STATUS_HANDLE_CLOSING, &hdr->handle, sizeof(HINTERNET) );
+ 
+         TRACE("destroying object %p\n", hdr);
+-        if (hdr->type != WINHTTP_HANDLE_TYPE_SESSION) list_remove( &hdr->entry );
+         hdr->vtbl->destroy( hdr );
+     }
+ }
+@@ -89,7 +88,6 @@ HINTERNET alloc_handle( struct object_header *hdr )
+     struct object_header **p;
+     ULONG_PTR handle, num;
+ 
+-    list_init( &hdr->children );
+     hdr->handle = NULL;
+ 
+     EnterCriticalSection( &handle_cs );
+@@ -123,7 +121,7 @@ BOOL free_handle( HINTERNET hinternet )
+ {
+     BOOL ret = FALSE;
+     ULONG_PTR handle = (ULONG_PTR)hinternet;
+-    struct object_header *hdr = NULL, *child, *next;
++    struct object_header *hdr = NULL;
+ 
+     EnterCriticalSection( &handle_cs );
+ 
+@@ -141,15 +139,7 @@ BOOL free_handle( HINTERNET hinternet )
+ 
+     LeaveCriticalSection( &handle_cs );
+ 
+-    if (hdr)
+-    {
+-        LIST_FOR_EACH_ENTRY_SAFE( child, next, &hdr->children, struct object_header, entry )
+-        {
+-            TRACE("freeing child handle %p for parent handle 0x%lx\n", child->handle, handle + 1);
+-            free_handle( child->handle );
+-        }
+-        release_object( hdr );
+-    }
++    if (hdr) release_object( hdr );
+ 
+     EnterCriticalSection( &handle_cs );
+     if (next_handle > handle && !handles[handle]) next_handle = handle;
+diff --git a/dlls/winhttp/request.c b/dlls/winhttp/request.c
+index 0511dd44eec..08e9d7584ed 100644
+--- a/dlls/winhttp/request.c
++++ b/dlls/winhttp/request.c
+@@ -3102,11 +3102,9 @@ HINTERNET WINAPI WinHttpWebSocketCompleteUpgrade( HINTERNET hrequest, DWORD_PTR
+     socket->hdr.vtbl = &socket_vtbl;
+     socket->hdr.refs = 1;
+     socket->hdr.context = context;
+-    list_init( &socket->hdr.children );
+ 
+     addref_object( &request->hdr );
+     socket->request = request;
+-    list_add_head( &request->hdr.children, &socket->hdr.entry );
+ 
+     if ((hsocket = alloc_handle( &socket->hdr ))) socket->hdr.handle = hsocket;
+ 
+diff --git a/dlls/winhttp/session.c b/dlls/winhttp/session.c
+index 87974ffbd8e..13d228d8513 100644
+--- a/dlls/winhttp/session.c
++++ b/dlls/winhttp/session.c
+@@ -246,7 +246,6 @@ HINTERNET WINAPI WinHttpOpen( LPCWSTR agent, DWORD access, LPCWSTR proxy, LPCWST
+     session->hdr.flags = flags;
+     session->hdr.refs = 1;
+     session->hdr.redirect_policy = WINHTTP_OPTION_REDIRECT_POLICY_DISALLOW_HTTPS_TO_HTTP;
+-    list_init( &session->hdr.children );
+     session->resolve_timeout = DEFAULT_RESOLVE_TIMEOUT;
+     session->connect_timeout = DEFAULT_CONNECT_TIMEOUT;
+     session->send_timeout = DEFAULT_SEND_TIMEOUT;
+@@ -552,11 +551,9 @@ HINTERNET WINAPI WinHttpConnect( HINTERNET hsession, LPCWSTR server, INTERNET_PO
+     connect->hdr.notify_mask = session->hdr.notify_mask;
+     connect->hdr.context = session->hdr.context;
+     connect->hdr.redirect_policy = session->hdr.redirect_policy;
+-    list_init( &connect->hdr.children );
+ 
+     addref_object( &session->hdr );
+     connect->session = session;
+-    list_add_head( &session->hdr.children, &connect->hdr.entry );
+ 
+     if (!(connect->hostname = strdupW( server ))) goto end;
+     connect->hostport = port;
+@@ -1121,12 +1118,10 @@ HINTERNET WINAPI WinHttpOpenRequest( HINTERNET hconnect, LPCWSTR verb, LPCWSTR o
+     request->hdr.notify_mask = connect->hdr.notify_mask;
+     request->hdr.context = connect->hdr.context;
+     request->hdr.redirect_policy = connect->hdr.redirect_policy;
+-    list_init( &request->hdr.children );
+     list_init( &request->task_queue );
+ 
+     addref_object( &connect->hdr );
+     request->connect = connect;
+-    list_add_head( &connect->hdr.children, &request->hdr.entry );
+ 
+     request->resolve_timeout = connect->session->resolve_timeout;
+     request->connect_timeout = connect->session->connect_timeout;
+diff --git a/dlls/winhttp/tests/winhttp.c b/dlls/winhttp/tests/winhttp.c
+index 8083c4825b2..be02bbe2502 100644
+--- a/dlls/winhttp/tests/winhttp.c
++++ b/dlls/winhttp/tests/winhttp.c
+@@ -3099,6 +3099,7 @@ static void test_websocket(int port)
+ {
+     HINTERNET session, connection, request, socket;
+     DWORD size, len, count, status, index, error;
++    DWORD_PTR ctx;
+     WCHAR header[32];
+     char buf[128];
+     BOOL ret;
+@@ -3244,10 +3245,28 @@ static void test_websocket(int port)
+ 
+     /* Send/Receive on websock */
+ 
+-    WinHttpCloseHandle(request);
+-    WinHttpCloseHandle(socket);
+-    WinHttpCloseHandle(connection);
+-    WinHttpCloseHandle(session);
++    ret = WinHttpCloseHandle(connection);
++    ok(ret, "got %u\n", GetLastError());
++
++    /* request handle is still valid */
++    size = sizeof(ctx);
++    ret = WinHttpQueryOption(request, WINHTTP_OPTION_CONTEXT_VALUE, &ctx, &size);
++    ok(ret, "got %u\n", GetLastError());
++
++    ret = WinHttpCloseHandle(socket);
++    ok(ret, "got %u\n", GetLastError());
++
++    ret = WinHttpQueryOption(request, WINHTTP_OPTION_CONTEXT_VALUE, &ctx, &size);
++    ok(ret, "got %u\n", GetLastError());
++
++    ret = WinHttpCloseHandle(session);
++    ok(ret, "got %u\n", GetLastError());
++
++    ret = WinHttpQueryOption(request, WINHTTP_OPTION_CONTEXT_VALUE, &ctx, &size);
++    ok(ret, "got %u\n", GetLastError());
++
++    ret = WinHttpCloseHandle(request);
++    ok(ret, "got %u\n", GetLastError());
+ }
+ 
+ static void test_not_modified(int port)
+diff --git a/dlls/winhttp/winhttp_private.h b/dlls/winhttp/winhttp_private.h
+index af695f86c3e..9b07b64b090 100644
+--- a/dlls/winhttp/winhttp_private.h
++++ b/dlls/winhttp/winhttp_private.h
+@@ -51,7 +51,6 @@ struct object_header
+     WINHTTP_STATUS_CALLBACK callback;
+     DWORD notify_mask;
+     struct list entry;
+-    struct list children;
+ };
+ 
+ struct hostdata
+From 5c4f1e4c82ace138fa411cf06421440916d347c3 Mon Sep 17 00:00:00 2001
+From: Hans Leidekker <hans@codeweavers.com>
+Date: Mon, 22 Jun 2020 21:39:21 +0200
+Subject: [PATCH] winhttp: Get rid of some redundant assignments.
+
+Signed-off-by: Hans Leidekker <hans@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/winhttp/request.c |  2 +-
+ dlls/winhttp/session.c | 19 +++++++++----------
+ 2 files changed, 10 insertions(+), 11 deletions(-)
+
+diff --git a/dlls/winhttp/request.c b/dlls/winhttp/request.c
+index 08e9d7584ed..1324005f1d5 100644
+--- a/dlls/winhttp/request.c
++++ b/dlls/winhttp/request.c
+@@ -3106,7 +3106,7 @@ HINTERNET WINAPI WinHttpWebSocketCompleteUpgrade( HINTERNET hrequest, DWORD_PTR
+     addref_object( &request->hdr );
+     socket->request = request;
+ 
+-    if ((hsocket = alloc_handle( &socket->hdr ))) socket->hdr.handle = hsocket;
++    hsocket = alloc_handle( &socket->hdr );
+ 
+     release_object( &socket->hdr );
+     release_object( &request->hdr );
+diff --git a/dlls/winhttp/session.c b/dlls/winhttp/session.c
+index 13d228d8513..a5ec8b22f39 100644
+--- a/dlls/winhttp/session.c
++++ b/dlls/winhttp/session.c
+@@ -282,8 +282,7 @@ HINTERNET WINAPI WinHttpOpen( LPCWSTR agent, DWORD access, LPCWSTR proxy, LPCWST
+         if (bypass && !(session->proxy_bypass = strdupW( bypass ))) goto end;
+     }
+ 
+-    if (!(handle = alloc_handle( &session->hdr ))) goto end;
+-    session->hdr.handle = handle;
++    handle = alloc_handle( &session->hdr );
+ 
+ end:
+     release_object( &session->hdr );
+@@ -559,10 +558,10 @@ HINTERNET WINAPI WinHttpConnect( HINTERNET hsession, LPCWSTR server, INTERNET_PO
+     connect->hostport = port;
+     if (!set_server_for_hostname( connect, server, port )) goto end;
+ 
+-    if (!(hconnect = alloc_handle( &connect->hdr ))) goto end;
+-    connect->hdr.handle = hconnect;
+-
+-    send_callback( &session->hdr, WINHTTP_CALLBACK_STATUS_HANDLE_CREATED, &hconnect, sizeof(hconnect) );
++    if ((hconnect = alloc_handle( &connect->hdr )))
++    {
++        send_callback( &session->hdr, WINHTTP_CALLBACK_STATUS_HANDLE_CREATED, &hconnect, sizeof(hconnect) );
++    }
+ 
+ end:
+     release_object( &connect->hdr );
+@@ -1137,10 +1136,10 @@ HINTERNET WINAPI WinHttpOpenRequest( HINTERNET hconnect, LPCWSTR verb, LPCWSTR o
+     if (!(request->version = strdupW( version ))) goto end;
+     if (!(add_accept_types_header( request, types ))) goto end;
+ 
+-    if (!(hrequest = alloc_handle( &request->hdr ))) goto end;
+-    request->hdr.handle = hrequest;
+-
+-    send_callback( &request->hdr, WINHTTP_CALLBACK_STATUS_HANDLE_CREATED, &hrequest, sizeof(hrequest) );
++    if ((hrequest = alloc_handle( &request->hdr )))
++    {
++        send_callback( &request->hdr, WINHTTP_CALLBACK_STATUS_HANDLE_CREATED, &hrequest, sizeof(hrequest) );
++    }
+ 
+ end:
+     release_object( &request->hdr );
+From 6a98d5f524b74c0ec3ea5879be30c929c75042b2 Mon Sep 17 00:00:00 2001
+From: Hans Leidekker <hans@codeweavers.com>
+Date: Mon, 22 Jun 2020 21:39:22 +0200
+Subject: [PATCH] winhttp: Make the task queue implementation more generic.
+
+Signed-off-by: Hans Leidekker <hans@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/winhttp/request.c         | 174 +++++++++++++++++----------------
+ dlls/winhttp/session.c         |  12 ++-
+ dlls/winhttp/winhttp_private.h |  18 ++--
+ 3 files changed, 109 insertions(+), 95 deletions(-)
+
+diff --git a/dlls/winhttp/request.c b/dlls/winhttp/request.c
+index 1324005f1d5..9b72253a260 100644
+--- a/dlls/winhttp/request.c
++++ b/dlls/winhttp/request.c
+@@ -121,27 +121,25 @@ static const WCHAR *attribute_table[] =
+     NULL                            /* WINHTTP_QUERY_PASSPORT_CONFIG            = 78 */
+ };
+ 
+-static struct task_header *dequeue_task( struct request *request )
++static struct task_header *dequeue_task( struct queue *queue )
+ {
+     struct task_header *task;
+ 
+-    EnterCriticalSection( &request->task_cs );
+-    TRACE("%u tasks queued\n", list_count( &request->task_queue ));
+-    task = LIST_ENTRY( list_head( &request->task_queue ), struct task_header, entry );
++    EnterCriticalSection( &queue->cs );
++    TRACE("%u tasks queued in %p\n", list_count(&queue->tasks), queue);
++    task = LIST_ENTRY( list_head( &queue->tasks ), struct task_header, entry );
+     if (task) list_remove( &task->entry );
+-    LeaveCriticalSection( &request->task_cs );
++    LeaveCriticalSection( &queue->cs );
+ 
+     TRACE("returning task %p\n", task);
+     return task;
+ }
+ 
+-static void CALLBACK task_proc( TP_CALLBACK_INSTANCE *instance, void *ctx )
++static void CALLBACK run_queue( TP_CALLBACK_INSTANCE *instance, void *ctx )
+ {
+-    struct request *request = ctx;
+-    HANDLE handles[2];
++    struct queue *queue = ctx;
++    HANDLE handles[] = { queue->wait, queue->cancel };
+ 
+-    handles[0] = request->task_wait;
+-    handles[1] = request->task_cancel;
+     for (;;)
+     {
+         DWORD err = WaitForMultipleObjects( 2, handles, FALSE, INFINITE );
+@@ -150,21 +148,19 @@ static void CALLBACK task_proc( TP_CALLBACK_INSTANCE *instance, void *ctx )
+         case WAIT_OBJECT_0:
+         {
+             struct task_header *task;
+-            while ((task = dequeue_task( request )))
++            while ((task = dequeue_task( queue )))
+             {
+                 task->proc( task );
+-                release_object( &task->request->hdr );
++                release_object( task->object );
+                 heap_free( task );
+             }
+             break;
+         }
+         case WAIT_OBJECT_0 + 1:
+             TRACE("exiting\n");
+-            CloseHandle( request->task_cancel );
+-            CloseHandle( request->task_wait );
+-            request->task_cs.DebugInfo->Spare[0] = 0;
+-            DeleteCriticalSection( &request->task_cs );
+-            request->hdr.vtbl->destroy( &request->hdr );
++            CloseHandle( queue->wait );
++            CloseHandle( queue->cancel );
++            queue->object->vtbl->destroy( queue->object );
+             return;
+ 
+         default:
+@@ -174,38 +170,43 @@ static void CALLBACK task_proc( TP_CALLBACK_INSTANCE *instance, void *ctx )
+     }
+ }
+ 
+-static DWORD queue_task( struct task_header *task )
++static DWORD start_queue( struct object_header *object, struct queue *queue )
+ {
+-    struct request *request = task->request;
++    DWORD ret = ERROR_OUTOFMEMORY;
+ 
+-    if (!request->task_wait)
++    if (queue->wait) return ERROR_SUCCESS;
++
++    queue->object = object;
++    list_init( &queue->tasks );
++    if (!(queue->wait = CreateEventW( NULL, FALSE, FALSE, NULL ))) goto error;
++    if (!(queue->cancel = CreateEventW( NULL, FALSE, FALSE, NULL ))) goto error;
++    if (!TrySubmitThreadpoolCallback( run_queue, queue, NULL )) ret = GetLastError();
++    else
+     {
+-        if (!(request->task_wait = CreateEventW( NULL, FALSE, FALSE, NULL ))) return ERROR_OUTOFMEMORY;
+-        if (!(request->task_cancel = CreateEventW( NULL, FALSE, FALSE, NULL )))
+-        {
+-            CloseHandle( request->task_wait );
+-            request->task_wait = NULL;
+-            return ERROR_OUTOFMEMORY;
+-        }
+-        if (!TrySubmitThreadpoolCallback( task_proc, request, NULL ))
+-        {
+-            CloseHandle( request->task_wait );
+-            request->task_wait = NULL;
+-            CloseHandle( request->task_cancel );
+-            request->task_cancel = NULL;
+-            return GetLastError();
+-        }
+-        request->task_proc_running = TRUE;
+-        InitializeCriticalSection( &request->task_cs );
+-        request->task_cs.DebugInfo->Spare[0] = (DWORD_PTR)(__FILE__ ": request.task_cs");
++        queue->proc_running = TRUE;
++        TRACE("started %p\n", queue);
++        return ERROR_SUCCESS;
+     }
+ 
+-    EnterCriticalSection( &request->task_cs );
+-    TRACE("queueing task %p\n", task );
+-    list_add_tail( &request->task_queue, &task->entry );
+-    LeaveCriticalSection( &request->task_cs );
++error:
++    CloseHandle( queue->wait );
++    queue->wait = NULL;
++    CloseHandle( queue->cancel );
++    queue->cancel = NULL;
++    return ret;
++}
++
++static DWORD queue_task( struct object_header *object, struct queue *queue, struct task_header *task )
++{
++    DWORD ret;
++    if ((ret = start_queue( object, queue ))) return ret;
++
++    EnterCriticalSection( &queue->cs );
++    TRACE("queueing task %p in %p\n", task, queue);
++    list_add_tail( &queue->tasks, &task->entry );
++    LeaveCriticalSection( &queue->cs );
+ 
+-    SetEvent( request->task_wait );
++    SetEvent( queue->wait );
+     return ERROR_SUCCESS;
+ }
+ 
+@@ -2215,8 +2216,10 @@ static DWORD send_request( struct request *request, const WCHAR *headers, DWORD
+ 
+ static void task_send_request( struct task_header *task )
+ {
++    struct request *request = (struct request *)task->object;
+     struct send_request *s = (struct send_request *)task;
+-    send_request( s->hdr.request, s->headers, s->headers_len, s->optional, s->optional_len, s->total_len, s->context, TRUE );
++
++    send_request( request, s->headers, s->headers_len, s->optional, s->optional_len, s->total_len, s->context, TRUE );
+     heap_free( s->headers );
+ }
+ 
+@@ -2250,8 +2253,8 @@ BOOL WINAPI WinHttpSendRequest( HINTERNET hrequest, LPCWSTR headers, DWORD heade
+     {
+         struct send_request *s;
+ 
+-        if (!(s = heap_alloc( sizeof(struct send_request) ))) return FALSE;
+-        s->hdr.request  = request;
++        if (!(s = heap_alloc( sizeof(*s) ))) return FALSE;
++        s->hdr.object   = &request->hdr;
+         s->hdr.proc     = task_send_request;
+         s->headers      = strdupW( headers );
+         s->headers_len  = headers_len;
+@@ -2261,10 +2264,9 @@ BOOL WINAPI WinHttpSendRequest( HINTERNET hrequest, LPCWSTR headers, DWORD heade
+         s->context      = context;
+ 
+         addref_object( &request->hdr );
+-        ret = queue_task( (struct task_header *)s );
++        ret = queue_task( &request->hdr, &request->queue, (struct task_header *)s );
+     }
+-    else
+-        ret = send_request( request, headers, headers_len, optional, optional_len, total_len, context, FALSE );
++    else ret = send_request( request, headers, headers_len, optional, optional_len, total_len, context, FALSE );
+ 
+     release_object( &request->hdr );
+     SetLastError( ret );
+@@ -2795,8 +2797,8 @@ static DWORD receive_response( struct request *request, BOOL async )
+ 
+ static void task_receive_response( struct task_header *task )
+ {
+-    struct receive_response *r = (struct receive_response *)task;
+-    receive_response( r->hdr.request, TRUE );
++    struct request *request = (struct request *)task->object;
++    receive_response( request, TRUE );
+ }
+ 
+ /***********************************************************************
+@@ -2825,15 +2827,14 @@ BOOL WINAPI WinHttpReceiveResponse( HINTERNET hrequest, LPVOID reserved )
+     {
+         struct receive_response *r;
+ 
+-        if (!(r = heap_alloc( sizeof(struct receive_response) ))) return FALSE;
+-        r->hdr.request = request;
+-        r->hdr.proc    = task_receive_response;
++        if (!(r = heap_alloc( sizeof(*r) ))) return FALSE;
++        r->hdr.object = &request->hdr;
++        r->hdr.proc   = task_receive_response;
+ 
+         addref_object( &request->hdr );
+-        ret = queue_task( (struct task_header *)r );
++        ret = queue_task( &request->hdr, &request->queue, (struct task_header *)r );
+     }
+-    else
+-        ret = receive_response( request, FALSE );
++    else ret = receive_response( request, FALSE );
+ 
+     release_object( &request->hdr );
+     SetLastError( ret );
+@@ -2875,8 +2876,10 @@ static DWORD query_data_available( struct request *request, DWORD *available, BO
+ 
+ static void task_query_data_available( struct task_header *task )
+ {
++    struct request *request = (struct request *)task->object;
+     struct query_data *q = (struct query_data *)task;
+-    query_data_available( q->hdr.request, q->available, TRUE );
++
++    query_data_available( request, q->available, TRUE );
+ }
+ 
+ /***********************************************************************
+@@ -2905,16 +2908,15 @@ BOOL WINAPI WinHttpQueryDataAvailable( HINTERNET hrequest, LPDWORD available )
+     {
+         struct query_data *q;
+ 
+-        if (!(q = heap_alloc( sizeof(struct query_data) ))) return FALSE;
+-        q->hdr.request = request;
+-        q->hdr.proc    = task_query_data_available;
+-        q->available   = available;
++        if (!(q = heap_alloc( sizeof(*q) ))) return FALSE;
++        q->hdr.object = &request->hdr;
++        q->hdr.proc   = task_query_data_available;
++        q->available  = available;
+ 
+         addref_object( &request->hdr );
+-        ret = queue_task( (struct task_header *)q );
++        ret = queue_task( &request->hdr, &request->queue, (struct task_header *)q );
+     }
+-    else
+-        ret = query_data_available( request, available, FALSE );
++    else ret = query_data_available( request, available, FALSE );
+ 
+     release_object( &request->hdr );
+     SetLastError( ret );
+@@ -2923,8 +2925,10 @@ BOOL WINAPI WinHttpQueryDataAvailable( HINTERNET hrequest, LPDWORD available )
+ 
+ static void task_read_data( struct task_header *task )
+ {
++    struct request *request = (struct request *)task->object;
+     struct read_data *r = (struct read_data *)task;
+-    read_data( r->hdr.request, r->buffer, r->to_read, r->read, TRUE );
++
++    read_data( request, r->buffer, r->to_read, r->read, TRUE );
+ }
+ 
+ /***********************************************************************
+@@ -2953,18 +2957,17 @@ BOOL WINAPI WinHttpReadData( HINTERNET hrequest, LPVOID buffer, DWORD to_read, L
+     {
+         struct read_data *r;
+ 
+-        if (!(r = heap_alloc( sizeof(struct read_data) ))) return FALSE;
+-        r->hdr.request = request;
+-        r->hdr.proc    = task_read_data;
+-        r->buffer      = buffer;
+-        r->to_read     = to_read;
+-        r->read        = read;
++        if (!(r = heap_alloc( sizeof(*r) ))) return FALSE;
++        r->hdr.object = &request->hdr;
++        r->hdr.proc   = task_read_data;
++        r->buffer     = buffer;
++        r->to_read    = to_read;
++        r->read       = read;
+ 
+         addref_object( &request->hdr );
+-        ret = queue_task( (struct task_header *)r );
++        ret = queue_task( &request->hdr, &request->queue, (struct task_header *)r );
+     }
+-    else
+-        ret = read_data( request, buffer, to_read, read, FALSE );
++    else ret = read_data( request, buffer, to_read, read, FALSE );
+ 
+     release_object( &request->hdr );
+     SetLastError( ret );
+@@ -2995,8 +2998,10 @@ static DWORD write_data( struct request *request, const void *buffer, DWORD to_w
+ 
+ static void task_write_data( struct task_header *task )
+ {
++    struct request *request = (struct request *)task->object;
+     struct write_data *w = (struct write_data *)task;
+-    write_data( w->hdr.request, w->buffer, w->to_write, w->written, TRUE );
++
++    write_data( request, w->buffer, w->to_write, w->written, TRUE );
+ }
+ 
+ /***********************************************************************
+@@ -3025,18 +3030,17 @@ BOOL WINAPI WinHttpWriteData( HINTERNET hrequest, LPCVOID buffer, DWORD to_write
+     {
+         struct write_data *w;
+ 
+-        if (!(w = heap_alloc( sizeof(struct write_data) ))) return FALSE;
+-        w->hdr.request = request;
+-        w->hdr.proc    = task_write_data;
+-        w->buffer      = buffer;
+-        w->to_write    = to_write;
+-        w->written     = written;
++        if (!(w = heap_alloc( sizeof(*w) ))) return FALSE;
++        w->hdr.object = &request->hdr;
++        w->hdr.proc   = task_write_data;
++        w->buffer     = buffer;
++        w->to_write   = to_write;
++        w->written    = written;
+ 
+         addref_object( &request->hdr );
+-        ret = queue_task( (struct task_header *)w );
++        ret = queue_task( &request->hdr, &request->queue, (struct task_header *)w );
+     }
+-    else
+-        ret = write_data( request, buffer, to_write, written, FALSE );
++    else ret = write_data( request, buffer, to_write, written, FALSE );
+ 
+     release_object( &request->hdr );
+     SetLastError( ret );
+diff --git a/dlls/winhttp/session.c b/dlls/winhttp/session.c
+index a5ec8b22f39..186b70e4a2d 100644
+--- a/dlls/winhttp/session.c
++++ b/dlls/winhttp/session.c
+@@ -578,11 +578,11 @@ static void request_destroy( struct object_header *hdr )
+ 
+     TRACE("%p\n", request);
+ 
+-    if (request->task_proc_running)
++    if (request->queue.proc_running)
+     {
+         /* Signal to the task proc to quit. It will call this again when it does. */
+-        request->task_proc_running = FALSE;
+-        SetEvent( request->task_cancel );
++        request->queue.proc_running = FALSE;
++        SetEvent( request->queue.cancel );
+         return;
+     }
+     release_object( &request->connect->hdr );
+@@ -613,6 +613,9 @@ static void request_destroy( struct object_header *hdr )
+             heap_free( request->creds[i][j].password );
+         }
+     }
++
++    request->queue.cs.DebugInfo->Spare[0] = 0;
++    DeleteCriticalSection( &request->queue.cs );
+     heap_free( request );
+ }
+ 
+@@ -1117,7 +1120,8 @@ HINTERNET WINAPI WinHttpOpenRequest( HINTERNET hconnect, LPCWSTR verb, LPCWSTR o
+     request->hdr.notify_mask = connect->hdr.notify_mask;
+     request->hdr.context = connect->hdr.context;
+     request->hdr.redirect_policy = connect->hdr.redirect_policy;
+-    list_init( &request->task_queue );
++    InitializeCriticalSection( &request->queue.cs );
++    request->queue.cs.DebugInfo->Spare[0] = (DWORD_PTR)(__FILE__ ": request.queue.cs");
+ 
+     addref_object( &connect->hdr );
+     request->connect = connect;
+diff --git a/dlls/winhttp/winhttp_private.h b/dlls/winhttp/winhttp_private.h
+index 9b07b64b090..207696e674d 100644
+--- a/dlls/winhttp/winhttp_private.h
++++ b/dlls/winhttp/winhttp_private.h
+@@ -155,6 +155,16 @@ struct authinfo
+     BOOL finished; /* finished authenticating */
+ };
+ 
++struct queue
++{
++    struct object_header *object;
++    CRITICAL_SECTION cs;
++    BOOL proc_running;
++    HANDLE wait;
++    HANDLE cancel;
++    struct list tasks;
++};
++
+ enum request_flags
+ {
+     REQUEST_FLAG_WEBSOCKET_UPGRADE = 0x01,
+@@ -196,11 +206,7 @@ struct request
+     DWORD num_headers;
+     struct authinfo *authinfo;
+     struct authinfo *proxy_authinfo;
+-    HANDLE task_wait;
+-    HANDLE task_cancel;
+-    BOOL   task_proc_running;
+-    struct list task_queue;
+-    CRITICAL_SECTION task_cs;
++    struct queue queue;
+     struct
+     {
+         WCHAR *username;
+@@ -217,7 +223,7 @@ struct socket
+ struct task_header
+ {
+     struct list entry;
+-    struct request *request;
++    struct object_header *object;
+     void (*proc)( struct task_header * );
+ };
+ 
+From 57a1936053380de95c247d81619c5dc7bf73086d Mon Sep 17 00:00:00 2001
+From: Alistair Leslie-Hughes <leslie_alistair@hotmail.com>
+Date: Mon, 22 Jun 2020 21:39:23 +0200
+Subject: [PATCH] winhttp: Pass length in
+ WINHTTP_CALLBACK_STATUS_CONNECTING_TO_SERVER callback.
+
+Signed-off-by: Alistair Leslie-Hughes <leslie_alistair@hotmail.com>
+Signed-off-by: Hans Leidekker <hans@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/winhttp/request.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/dlls/winhttp/request.c b/dlls/winhttp/request.c
+index 9b72253a260..3129d4154ec 100644
+--- a/dlls/winhttp/request.c
++++ b/dlls/winhttp/request.c
+@@ -1592,7 +1592,8 @@ static DWORD open_connection( struct request *request )
+ 
+         TRACE("connecting to %s:%u\n", debugstr_w(addressW), port);
+ 
+-        send_callback( &request->hdr, WINHTTP_CALLBACK_STATUS_CONNECTING_TO_SERVER, addressW, 0 );
++        len = lstrlenW( addressW ) + 1;
++        send_callback( &request->hdr, WINHTTP_CALLBACK_STATUS_CONNECTING_TO_SERVER, addressW, len );
+ 
+         if ((ret = netconn_create( host, &connect->sockaddr, request->connect_timeout, &netconn )))
+         {
+From c8c0bc6d2e428129886bbecf9881645f3666b16f Mon Sep 17 00:00:00 2001
+From: Hans Leidekker <hans@codeweavers.com>
+Date: Mon, 22 Jun 2020 21:39:24 +0200
+Subject: [PATCH] winhttp: Set socket notification mask and callback from the
+ parent request.
+
+Signed-off-by: Hans Leidekker <hans@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/winhttp/request.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/dlls/winhttp/request.c b/dlls/winhttp/request.c
+index 3129d4154ec..d44baa26c2c 100644
+--- a/dlls/winhttp/request.c
++++ b/dlls/winhttp/request.c
+@@ -3106,6 +3106,8 @@ HINTERNET WINAPI WinHttpWebSocketCompleteUpgrade( HINTERNET hrequest, DWORD_PTR
+     socket->hdr.type = WINHTTP_HANDLE_TYPE_SOCKET;
+     socket->hdr.vtbl = &socket_vtbl;
+     socket->hdr.refs = 1;
++    socket->hdr.callback = request->hdr.callback;
++    socket->hdr.notify_mask = request->hdr.notify_mask;
+     socket->hdr.context = context;
+ 
+     addref_object( &request->hdr );
+From cc1c4759bacace8a8d1060e8b0e20dce592accd3 Mon Sep 17 00:00:00 2001
+From: Hans Leidekker <hans@codeweavers.com>
+Date: Mon, 22 Jun 2020 21:39:25 +0200
+Subject: [PATCH] winhttp: Send WINHTTP_CALLBACK_STATUS_HANDLE_CREATED
+ notification in WinHttpWebSocketCompleteUpgrade.
+
+Based on a patch by Alistair Leslie-Hughes.
+
+Signed-off-by: Hans Leidekker <hans@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/winhttp/request.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/dlls/winhttp/request.c b/dlls/winhttp/request.c
+index d44baa26c2c..0c038289f85 100644
+--- a/dlls/winhttp/request.c
++++ b/dlls/winhttp/request.c
+@@ -3113,7 +3113,10 @@ HINTERNET WINAPI WinHttpWebSocketCompleteUpgrade( HINTERNET hrequest, DWORD_PTR
+     addref_object( &request->hdr );
+     socket->request = request;
+ 
+-    hsocket = alloc_handle( &socket->hdr );
++    if ((hsocket = alloc_handle( &socket->hdr )))
++    {
++        send_callback( &request->hdr, WINHTTP_CALLBACK_STATUS_HANDLE_CREATED, &hsocket, sizeof(hsocket) );
++    }
+ 
+     release_object( &socket->hdr );
+     release_object( &request->hdr );
+
+From 68b44e305504c5e0fa8e9917478df96f8a08b62f Mon Sep 17 00:00:00 2001
+From: Hans Leidekker <hans@codeweavers.com>
+Date: Wed, 24 Jun 2020 10:33:03 +0200
+Subject: [PATCH] winhttp: Implement WinHttpWebSocketSend.
+
+Signed-off-by: Hans Leidekker <hans@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/winhttp/request.c         | 184 ++++++++++++++++++++++++++++++++-
+ dlls/winhttp/winhttp_private.h |  17 +++
+ 2 files changed, 199 insertions(+), 2 deletions(-)
+
+diff --git a/dlls/winhttp/request.c b/dlls/winhttp/request.c
+index 0c038289f85..9ac3c6e89ed 100644
+--- a/dlls/winhttp/request.c
++++ b/dlls/winhttp/request.c
+@@ -3061,7 +3061,16 @@ static void socket_destroy( struct object_header *hdr )
+ 
+     TRACE("%p\n", socket);
+ 
++    if (socket->send_q.proc_running)
++    {
++        socket->send_q.proc_running = FALSE;
++        SetEvent( socket->send_q.cancel );
++        return;
++    }
+     release_object( &socket->request->hdr );
++
++    socket->send_q.cs.DebugInfo->Spare[0] = 0;
++    DeleteCriticalSection( &socket->send_q.cs );
+     heap_free( socket );
+ }
+ 
+@@ -3109,6 +3118,8 @@ HINTERNET WINAPI WinHttpWebSocketCompleteUpgrade( HINTERNET hrequest, DWORD_PTR
+     socket->hdr.callback = request->hdr.callback;
+     socket->hdr.notify_mask = request->hdr.notify_mask;
+     socket->hdr.context = context;
++    InitializeCriticalSection( &socket->send_q.cs );
++    socket->send_q.cs.DebugInfo->Spare[0] = (DWORD_PTR)(__FILE__ ": socket.send_q.cs");
+ 
+     addref_object( &request->hdr );
+     socket->request = request;
+@@ -3125,10 +3136,179 @@ HINTERNET WINAPI WinHttpWebSocketCompleteUpgrade( HINTERNET hrequest, DWORD_PTR
+     return hsocket;
+ }
+ 
++static DWORD send_bytes( struct netconn *netconn, char *bytes, int len )
++{
++    int count;
++    DWORD err;
++    if ((err = netconn_send( netconn, bytes, len, &count ))) return err;
++    return (count == len) ? ERROR_SUCCESS : ERROR_INTERNAL_ERROR;
++}
++
++/* rfc6455 */
++enum opcode
++{
++    OPCODE_CONTINUE  = 0x00,
++    OPCODE_TEXT      = 0x01,
++    OPCODE_BINARY    = 0x02,
++    OPCODE_RESERVED3 = 0x03,
++    OPCODE_RESERVED4 = 0x04,
++    OPCODE_RESERVED5 = 0x05,
++    OPCODE_RESERVED6 = 0x06,
++    OPCODE_RESERVED7 = 0x07,
++    OPCODE_CLOSE     = 0x08,
++    OPCODE_PING      = 0x09,
++    OPCODE_PONG      = 0x0a,
++    OPCODE_INVALID   = 0xff,
++};
++
++static enum opcode map_buffer_type( WINHTTP_WEB_SOCKET_BUFFER_TYPE type )
++{
++    switch (type)
++    {
++    case WINHTTP_WEB_SOCKET_UTF8_MESSAGE_BUFFER_TYPE:   return OPCODE_TEXT;
++    case WINHTTP_WEB_SOCKET_BINARY_MESSAGE_BUFFER_TYPE: return OPCODE_BINARY;
++    case WINHTTP_WEB_SOCKET_CLOSE_BUFFER_TYPE:          return OPCODE_CLOSE;
++    default:
++        FIXME("buffer type %u not supported\n", type);
++        return OPCODE_INVALID;
++    }
++}
++
++#define FIN_BIT (1 << 7)
++#define MASK_BIT (1 << 7)
++#define RESERVED_BIT (7 << 4)
++
++static DWORD send_frame( struct netconn *netconn, WINHTTP_WEB_SOCKET_BUFFER_TYPE type, USHORT status, const char *buf,
++                         DWORD buflen, BOOL final )
++{
++    DWORD i = 0, j, ret, offset = 2, len = buflen;
++    enum opcode opcode = map_buffer_type( type );
++    char hdr[14], byte, *mask;
++
++    if (opcode == OPCODE_CLOSE) len += sizeof(status);
++
++    hdr[0] = final ? (char)FIN_BIT : 0;
++    hdr[0] |= opcode;
++    hdr[1] = (char)MASK_BIT;
++    if (len < 126) hdr[1] |= len;
++    else if (len < 65536)
++    {
++        hdr[1] |= 126;
++        hdr[2] = len >> 8;
++        hdr[3] = len & 0xff;
++        offset += 2;
++    }
++    else
++    {
++        hdr[1] |= 127;
++        hdr[2] = hdr[3] = hdr[4] = hdr[5] = 0;
++        hdr[6] = len >> 24;
++        hdr[7] = (len >> 16) & 0xff;
++        hdr[8] = (len >> 8) & 0xff;
++        hdr[9] = len & 0xff;
++        offset += 8;
++    }
++    mask = &hdr[offset];
++    RtlGenRandom( mask, 4 );
++    if ((ret = send_bytes( netconn, hdr, offset + 4 ))) return ret;
++
++    if (opcode == OPCODE_CLOSE) /* prepend status code */
++    {
++        byte = (status >> 8) ^ mask[i++ % 4];
++        if ((ret = send_bytes( netconn, &byte, 1 ))) return ret;
++
++        byte = (status & 0xff) ^ mask[i++ % 4];
++        if ((ret = send_bytes( netconn, &byte, 1 ))) return ret;
++    }
++
++    for (j = 0; j < buflen; j++)
++    {
++        byte = buf[j] ^ mask[i++ % 4];
++        if ((ret = send_bytes( netconn, &byte, 1 ))) return ret;
++    }
++
++    return ERROR_SUCCESS;
++}
++
++static DWORD socket_send( struct socket *socket, WINHTTP_WEB_SOCKET_BUFFER_TYPE type, const void *buf, DWORD len,
++                          BOOL async )
++{
++    DWORD ret;
++
++    ret = send_frame( socket->request->netconn, type, 0, buf, len, TRUE );
++    if (async)
++    {
++        if (!ret)
++        {
++            WINHTTP_WEB_SOCKET_STATUS status;
++            status.dwBytesTransferred = len;
++            status.eBufferType        = type;
++            send_callback( &socket->hdr, WINHTTP_CALLBACK_STATUS_WRITE_COMPLETE, &status, sizeof(status) );
++        }
++        else
++        {
++            WINHTTP_WEB_SOCKET_ASYNC_RESULT result;
++            result.AsyncResult.dwResult = API_WRITE_DATA;
++            result.AsyncResult.dwError  = ret;
++            result.Operation = WINHTTP_WEB_SOCKET_SEND_OPERATION;
++            send_callback( &socket->hdr, WINHTTP_CALLBACK_STATUS_REQUEST_ERROR, &result, sizeof(result) );
++        }
++    }
++    return ret;
++}
++
++static void task_socket_send( struct task_header *task )
++{
++    struct socket *socket = (struct socket *)task->object;
++    struct socket_send *s = (struct socket_send *)task;
++
++    socket_send( socket, s->type, s->buf, s->len, TRUE );
++}
++
+ DWORD WINAPI WinHttpWebSocketSend( HINTERNET hsocket, WINHTTP_WEB_SOCKET_BUFFER_TYPE type, void *buf, DWORD len )
+ {
+-    FIXME("%p, %u, %p, %u\n", hsocket, type, buf, len);
+-    return ERROR_INVALID_PARAMETER;
++    struct socket *socket;
++    DWORD ret;
++
++    TRACE("%p, %u, %p, %u\n", hsocket, type, buf, len);
++
++    if (len && !buf) return ERROR_INVALID_PARAMETER;
++    if (type != WINHTTP_WEB_SOCKET_UTF8_MESSAGE_BUFFER_TYPE && type != WINHTTP_WEB_SOCKET_BINARY_MESSAGE_BUFFER_TYPE)
++    {
++        FIXME("buffer type %u not supported\n", type);
++        return ERROR_NOT_SUPPORTED;
++    }
++
++    if (!(socket = (struct socket *)grab_object( hsocket ))) return ERROR_INVALID_HANDLE;
++    if (socket->hdr.type != WINHTTP_HANDLE_TYPE_SOCKET)
++    {
++        release_object( &socket->hdr );
++        return ERROR_WINHTTP_INCORRECT_HANDLE_TYPE;
++    }
++    if (socket->state != SOCKET_STATE_OPEN)
++    {
++        release_object( &socket->hdr );
++        return ERROR_WINHTTP_INCORRECT_HANDLE_STATE;
++    }
++
++    if (socket->request->connect->hdr.flags & WINHTTP_FLAG_ASYNC)
++    {
++        struct socket_send *s;
++
++        if (!(s = heap_alloc( sizeof(*s) ))) return FALSE;
++        s->hdr.object = &socket->hdr;
++        s->hdr.proc   = task_socket_send;
++        s->type       = type;
++        s->buf        = buf;
++        s->len        = len;
++
++        addref_object( &socket->hdr );
++        ret = queue_task( &socket->hdr, &socket->send_q, (struct task_header *)s );
++    }
++    else ret = socket_send( socket, type, buf, len, FALSE );
++
++    release_object( &socket->hdr );
++    return ret;
+ }
+ 
+ DWORD WINAPI WinHttpWebSocketReceive( HINTERNET hsocket, void *buf, DWORD len, DWORD *read,
+diff --git a/dlls/winhttp/winhttp_private.h b/dlls/winhttp/winhttp_private.h
+index 207696e674d..d9e99651abe 100644
+--- a/dlls/winhttp/winhttp_private.h
++++ b/dlls/winhttp/winhttp_private.h
+@@ -214,10 +214,19 @@ struct request
+     } creds[TARGET_MAX][SCHEME_MAX];
+ };
+ 
++enum socket_state
++{
++    SOCKET_STATE_OPEN     = 0,
++    SOCKET_STATE_SHUTDOWN = 1,
++    SOCKET_STATE_CLOSED   = 2,
++};
++
+ struct socket
+ {
+     struct object_header hdr;
+     struct request *request;
++    enum socket_state state;
++    struct queue send_q;
+ };
+ 
+ struct task_header
+@@ -265,6 +274,14 @@ struct write_data
+     DWORD *written;
+ };
+ 
++struct socket_send
++{
++    struct task_header hdr;
++    WINHTTP_WEB_SOCKET_BUFFER_TYPE type;
++    const void *buf;
++    DWORD len;
++};
++
+ struct object_header *addref_object( struct object_header * ) DECLSPEC_HIDDEN;
+ struct object_header *grab_object( HINTERNET ) DECLSPEC_HIDDEN;
+ void release_object( struct object_header * ) DECLSPEC_HIDDEN;
+From f18cbfcd5d1ce72b9869f35bb5bd81ea0e5ea8d7 Mon Sep 17 00:00:00 2001
+From: Hans Leidekker <hans@codeweavers.com>
+Date: Wed, 24 Jun 2020 10:33:04 +0200
+Subject: [PATCH] winhttp: Implement WinHttpWebSocketReceive.
+
+Signed-off-by: Hans Leidekker <hans@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/winhttp/request.c         | 159 ++++++++++++++++++++++++++++++++-
+ dlls/winhttp/winhttp_private.h |  10 +++
+ 2 files changed, 165 insertions(+), 4 deletions(-)
+
+diff --git a/dlls/winhttp/request.c b/dlls/winhttp/request.c
+index 9ac3c6e89ed..e6dd6d9068c 100644
+--- a/dlls/winhttp/request.c
++++ b/dlls/winhttp/request.c
+@@ -34,6 +34,7 @@
+ #include "schannel.h"
+ #include "winhttp.h"
+ #include "ntsecapi.h"
++#include "winternl.h"
+ 
+ #include "wine/debug.h"
+ #include "winhttp_private.h"
+@@ -3067,10 +3068,19 @@ static void socket_destroy( struct object_header *hdr )
+         SetEvent( socket->send_q.cancel );
+         return;
+     }
++    if (socket->recv_q.proc_running)
++    {
++        socket->recv_q.proc_running = FALSE;
++        SetEvent( socket->recv_q.cancel );
++        return;
++    }
+     release_object( &socket->request->hdr );
+ 
+     socket->send_q.cs.DebugInfo->Spare[0] = 0;
+     DeleteCriticalSection( &socket->send_q.cs );
++
++    socket->recv_q.cs.DebugInfo->Spare[0] = 0;
++    DeleteCriticalSection( &socket->recv_q.cs );
+     heap_free( socket );
+ }
+ 
+@@ -3120,6 +3130,8 @@ HINTERNET WINAPI WinHttpWebSocketCompleteUpgrade( HINTERNET hrequest, DWORD_PTR
+     socket->hdr.context = context;
+     InitializeCriticalSection( &socket->send_q.cs );
+     socket->send_q.cs.DebugInfo->Spare[0] = (DWORD_PTR)(__FILE__ ": socket.send_q.cs");
++    InitializeCriticalSection( &socket->recv_q.cs );
++    socket->recv_q.cs.DebugInfo->Spare[0] = (DWORD_PTR)(__FILE__ ": socket.recv_q.cs");
+ 
+     addref_object( &request->hdr );
+     socket->request = request;
+@@ -3311,11 +3323,150 @@ DWORD WINAPI WinHttpWebSocketSend( HINTERNET hsocket, WINHTTP_WEB_SOCKET_BUFFER_
+     return ret;
+ }
+ 
+-DWORD WINAPI WinHttpWebSocketReceive( HINTERNET hsocket, void *buf, DWORD len, DWORD *read,
+-                                      WINHTTP_WEB_SOCKET_BUFFER_TYPE *type )
++static DWORD receive_bytes( struct netconn *netconn, char *buf, DWORD len, DWORD *ret_len )
+ {
+-    FIXME("%p, %p, %u, %p, %p\n", hsocket, buf, len, read, type);
+-    return ERROR_INVALID_PARAMETER;
++    DWORD err;
++    if ((err = netconn_recv( netconn, buf, len, 0, (int *)ret_len ))) return err;
++    if (len && !*ret_len) return ERROR_WINHTTP_INVALID_SERVER_RESPONSE;
++    return ERROR_SUCCESS;
++}
++
++static WINHTTP_WEB_SOCKET_BUFFER_TYPE map_opcode( enum opcode opcode )
++{
++    switch (opcode)
++    {
++    case OPCODE_TEXT:   return WINHTTP_WEB_SOCKET_UTF8_MESSAGE_BUFFER_TYPE;
++    case OPCODE_BINARY: return WINHTTP_WEB_SOCKET_BINARY_MESSAGE_BUFFER_TYPE;
++    case OPCODE_CLOSE:  return WINHTTP_WEB_SOCKET_CLOSE_BUFFER_TYPE;
++    default:
++        ERR("opcode %u not handled\n", opcode);
++        return ~0u;
++    }
++}
++
++static DWORD receive_frame( struct netconn *netconn, DWORD *ret_len, WINHTTP_WEB_SOCKET_BUFFER_TYPE *ret_type )
++{
++    WINHTTP_WEB_SOCKET_BUFFER_TYPE type;
++    DWORD ret, len, count;
++    enum opcode opcode;
++    char hdr[2];
++
++    if ((ret = receive_bytes( netconn, hdr, sizeof(hdr), &count ))) return ret;
++    if (count != sizeof(hdr) || (hdr[0] & RESERVED_BIT) || (hdr[1] & MASK_BIT))
++    {
++        return ERROR_WINHTTP_INVALID_SERVER_RESPONSE;
++    }
++
++    opcode = hdr[0] & 0xf;
++    type = map_opcode( opcode );
++
++    len = hdr[1] & ~MASK_BIT;
++    if (len == 126)
++    {
++        USHORT len16;
++        if ((ret = receive_bytes( netconn, (char *)&len16, sizeof(len16), &count ))) return ret;
++        if (count != sizeof(len16)) return ERROR_WINHTTP_INVALID_SERVER_RESPONSE;
++        len = RtlUshortByteSwap( len16 );
++    }
++    else if (len == 127)
++    {
++        ULONGLONG len64;
++        if ((ret = receive_bytes( netconn, (char *)&len64, sizeof(len64), &count ))) return ret;
++        if (count != sizeof(len64)) return ERROR_WINHTTP_INVALID_SERVER_RESPONSE;
++        if ((len64 = RtlUlonglongByteSwap( len64 )) > ~0u) return ERROR_NOT_SUPPORTED;
++        len = len64;
++    }
++
++    *ret_len = len;
++    *ret_type = type;
++    return ERROR_SUCCESS;
++}
++
++static DWORD socket_receive( struct socket *socket, void *buf, DWORD len, DWORD *ret_len,
++                             WINHTTP_WEB_SOCKET_BUFFER_TYPE *ret_type, BOOL async )
++{
++    DWORD count, ret = ERROR_SUCCESS;
++
++    if (!socket->read_size) ret = receive_frame( socket->request->netconn, &socket->read_size, &socket->buf_type );
++    if (!ret) ret = receive_bytes( socket->request->netconn, buf, min(len, socket->read_size), &count );
++    if (!ret)
++    {
++        socket->read_size -= count;
++        if (!async)
++        {
++            *ret_len = count;
++            *ret_type = socket->buf_type;
++        }
++    }
++
++    if (async)
++    {
++        if (!ret)
++        {
++            WINHTTP_WEB_SOCKET_STATUS status;
++            status.dwBytesTransferred = count;
++            status.eBufferType        = socket->buf_type;
++            send_callback( &socket->hdr, WINHTTP_CALLBACK_STATUS_READ_COMPLETE, &status, sizeof(status) );
++        }
++        else
++        {
++            WINHTTP_WEB_SOCKET_ASYNC_RESULT result;
++            result.AsyncResult.dwResult = API_READ_DATA;
++            result.AsyncResult.dwError  = ret;
++            result.Operation = WINHTTP_WEB_SOCKET_RECEIVE_OPERATION;
++            send_callback( &socket->hdr, WINHTTP_CALLBACK_STATUS_REQUEST_ERROR, &result, sizeof(result) );
++        }
++    }
++    return ret;
++}
++
++static void task_socket_receive( struct task_header *task )
++{
++    struct socket *socket = (struct socket *)task->object;
++    struct socket_receive *r = (struct socket_receive *)task;
++
++    socket_receive( socket, r->buf, r->len, NULL, NULL, TRUE );
++}
++
++DWORD WINAPI WinHttpWebSocketReceive( HINTERNET hsocket, void *buf, DWORD len, DWORD *ret_len,
++                                      WINHTTP_WEB_SOCKET_BUFFER_TYPE *ret_type )
++{
++    struct socket *socket;
++    DWORD ret;
++
++    TRACE("%p, %p, %u, %p, %p\n", hsocket, buf, len, ret_len, ret_type);
++
++    if (!buf || !len) return ERROR_INVALID_PARAMETER;
++
++    if (!(socket = (struct socket *)grab_object( hsocket ))) return ERROR_INVALID_HANDLE;
++    if (socket->hdr.type != WINHTTP_HANDLE_TYPE_SOCKET)
++    {
++        release_object( &socket->hdr );
++        return ERROR_WINHTTP_INCORRECT_HANDLE_TYPE;
++    }
++    if (socket->state != SOCKET_STATE_OPEN)
++    {
++        release_object( &socket->hdr );
++        return ERROR_WINHTTP_INCORRECT_HANDLE_STATE;
++    }
++
++    if (socket->request->connect->hdr.flags & WINHTTP_FLAG_ASYNC)
++    {
++        struct socket_receive *r;
++
++        if (!(r = heap_alloc( sizeof(*r) ))) return FALSE;
++        r->hdr.object = &socket->hdr;
++        r->hdr.proc   = task_socket_receive;
++        r->buf        = buf;
++        r->len        = len;
++
++        addref_object( &socket->hdr );
++        ret = queue_task( &socket->hdr, &socket->recv_q, (struct task_header *)r );
++    }
++    else ret = socket_receive( socket, buf, len, ret_len, ret_type, FALSE );
++
++    release_object( &socket->hdr );
++    return ret;
+ }
+ 
+ DWORD WINAPI WinHttpWebSocketShutdown( HINTERNET hsocket, USHORT status, void *reason, DWORD len )
+diff --git a/dlls/winhttp/winhttp_private.h b/dlls/winhttp/winhttp_private.h
+index d9e99651abe..9cf9c396cb0 100644
+--- a/dlls/winhttp/winhttp_private.h
++++ b/dlls/winhttp/winhttp_private.h
+@@ -227,6 +227,9 @@ struct socket
+     struct request *request;
+     enum socket_state state;
+     struct queue send_q;
++    struct queue recv_q;
++    WINHTTP_WEB_SOCKET_BUFFER_TYPE buf_type;
++    DWORD read_size;
+ };
+ 
+ struct task_header
+@@ -282,6 +285,13 @@ struct socket_send
+     DWORD len;
+ };
+ 
++struct socket_receive
++{
++    struct task_header hdr;
++    void *buf;
++    DWORD len;
++};
++
+ struct object_header *addref_object( struct object_header * ) DECLSPEC_HIDDEN;
+ struct object_header *grab_object( HINTERNET ) DECLSPEC_HIDDEN;
+ void release_object( struct object_header * ) DECLSPEC_HIDDEN;
+From da0515c165826be545ec79c728271bf6b6727f24 Mon Sep 17 00:00:00 2001
+From: Hans Leidekker <hans@codeweavers.com>
+Date: Wed, 24 Jun 2020 10:33:05 +0200
+Subject: [PATCH] winhttp: Implement WinHttpWebSocketShutdown.
+
+Signed-off-by: Hans Leidekker <hans@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/winhttp/request.c         | 69 +++++++++++++++++++++++++++++++++-
+ dlls/winhttp/winhttp_private.h |  8 ++++
+ 2 files changed, 75 insertions(+), 2 deletions(-)
+
+diff --git a/dlls/winhttp/request.c b/dlls/winhttp/request.c
+index e6dd6d9068c..c5abfdb8e49 100644
+--- a/dlls/winhttp/request.c
++++ b/dlls/winhttp/request.c
+@@ -3469,10 +3469,75 @@ DWORD WINAPI WinHttpWebSocketReceive( HINTERNET hsocket, void *buf, DWORD len, D
+     return ret;
+ }
+ 
++static DWORD socket_shutdown( struct socket *socket, USHORT status, const void *reason, DWORD len, BOOL async )
++{
++    DWORD ret;
++
++    ret = send_frame( socket->request->netconn, WINHTTP_WEB_SOCKET_CLOSE_BUFFER_TYPE, status, reason, len, TRUE );
++    if (async)
++    {
++        if (!ret) send_callback( &socket->hdr, WINHTTP_CALLBACK_STATUS_SHUTDOWN_COMPLETE, NULL, 0 );
++        else
++        {
++            WINHTTP_WEB_SOCKET_ASYNC_RESULT result;
++            result.AsyncResult.dwResult = API_WRITE_DATA;
++            result.AsyncResult.dwError  = ret;
++            result.Operation = WINHTTP_WEB_SOCKET_SHUTDOWN_OPERATION;
++            send_callback( &socket->hdr, WINHTTP_CALLBACK_STATUS_REQUEST_ERROR, &result, sizeof(result) );
++        }
++    }
++
++    if (!ret) socket->state = SOCKET_STATE_SHUTDOWN;
++    return ret;
++}
++
++static void task_socket_shutdown( struct task_header *task )
++{
++    struct socket *socket = (struct socket *)task->object;
++    struct socket_shutdown *s = (struct socket_shutdown *)task;
++
++    socket_shutdown( socket, s->status, s->reason, s->len, TRUE );
++}
++
+ DWORD WINAPI WinHttpWebSocketShutdown( HINTERNET hsocket, USHORT status, void *reason, DWORD len )
+ {
+-    FIXME("%p, %u, %p, %u\n", hsocket, status, reason, len);
+-    return ERROR_INVALID_PARAMETER;
++    struct socket *socket;
++    DWORD ret;
++
++    TRACE("%p, %u, %p, %u\n", hsocket, status, reason, len);
++
++    if (len && !reason) return ERROR_INVALID_PARAMETER;
++
++    if (!(socket = (struct socket *)grab_object( hsocket ))) return ERROR_INVALID_HANDLE;
++    if (socket->hdr.type != WINHTTP_HANDLE_TYPE_SOCKET)
++    {
++        release_object( &socket->hdr );
++        return ERROR_WINHTTP_INCORRECT_HANDLE_TYPE;
++    }
++    if (socket->state >= SOCKET_STATE_SHUTDOWN)
++    {
++        release_object( &socket->hdr );
++        return ERROR_WINHTTP_INCORRECT_HANDLE_STATE;
++    }
++
++    if (socket->request->connect->hdr.flags & WINHTTP_FLAG_ASYNC)
++    {
++        struct socket_shutdown *s;
++
++        if (!(s = heap_alloc( sizeof(*s) ))) return FALSE;
++        s->hdr.object = &socket->hdr;
++        s->hdr.proc   = task_socket_shutdown;
++        s->status     = status;
++        s->reason     = reason;
++        s->len        = len;
++
++        addref_object( &socket->hdr );
++        ret = queue_task( &socket->hdr, &socket->send_q, (struct task_header *)s );
++    }
++    else ret = socket_shutdown( socket, status, reason, len, FALSE );
++
++    release_object( &socket->hdr );
++    return ret;
+ }
+ 
+ DWORD WINAPI WinHttpWebSocketClose( HINTERNET hsocket, USHORT status, void *reason, DWORD len )
+diff --git a/dlls/winhttp/winhttp_private.h b/dlls/winhttp/winhttp_private.h
+index 9cf9c396cb0..7d81e359344 100644
+--- a/dlls/winhttp/winhttp_private.h
++++ b/dlls/winhttp/winhttp_private.h
+@@ -292,6 +292,14 @@ struct socket_receive
+     DWORD len;
+ };
+ 
++struct socket_shutdown
++{
++    struct task_header hdr;
++    USHORT status;
++    const void *reason;
++    DWORD len;
++};
++
+ struct object_header *addref_object( struct object_header * ) DECLSPEC_HIDDEN;
+ struct object_header *grab_object( HINTERNET ) DECLSPEC_HIDDEN;
+ void release_object( struct object_header * ) DECLSPEC_HIDDEN;
+From 61ea74b457dc25e5f2a3b824aa9b4a1c0d2f6a01 Mon Sep 17 00:00:00 2001
+From: Hans Leidekker <hans@codeweavers.com>
+Date: Wed, 24 Jun 2020 10:33:06 +0200
+Subject: [PATCH] winhttp: Implement WinHttpWebSocketClose.
+
+Signed-off-by: Hans Leidekker <hans@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/winhttp/request.c         | 99 +++++++++++++++++++++++++++++++++-
+ dlls/winhttp/winhttp_private.h |  3 ++
+ 2 files changed, 100 insertions(+), 2 deletions(-)
+
+diff --git a/dlls/winhttp/request.c b/dlls/winhttp/request.c
+index c5abfdb8e49..60a9585d0d8 100644
+--- a/dlls/winhttp/request.c
++++ b/dlls/winhttp/request.c
+@@ -3540,10 +3540,105 @@ DWORD WINAPI WinHttpWebSocketShutdown( HINTERNET hsocket, USHORT status, void *r
+     return ret;
+ }
+ 
++static DWORD socket_close( struct socket *socket, USHORT status, const void *reason, DWORD len, BOOL async )
++{
++    struct netconn *netconn = socket->request->netconn;
++    DWORD ret, count;
++
++    while (socket->read_size) /* drain any pending data */
++    {
++        char buf[1024];
++        if ((ret = receive_bytes( netconn, buf, min(socket->read_size, sizeof(buf)), &count ))) goto done;
++        socket->read_size -= count;
++    }
++
++    if (socket->state < SOCKET_STATE_SHUTDOWN)
++    {
++        if ((ret = send_frame( netconn, WINHTTP_WEB_SOCKET_CLOSE_BUFFER_TYPE, status, reason, len, TRUE ))) goto done;
++        socket->state = SOCKET_STATE_SHUTDOWN;
++    }
++
++    if ((ret = receive_frame( netconn, &count, &socket->buf_type ))) goto done;
++    if (socket->buf_type != WINHTTP_WEB_SOCKET_CLOSE_BUFFER_TYPE || (count && count > sizeof(socket->reason)))
++    {
++        ret = ERROR_WINHTTP_INVALID_SERVER_RESPONSE;
++        goto done;
++    }
++
++    if ((ret = receive_bytes( netconn, (char *)&socket->status, sizeof(socket->status), &count ))) goto done;
++    if (count != sizeof(socket->status))
++    {
++        ret = ERROR_WINHTTP_INVALID_SERVER_RESPONSE;
++        goto done;
++    }
++    socket->status = RtlUshortByteSwap( socket->status );
++    ret = receive_bytes( netconn, socket->reason, sizeof(socket->reason), &socket->reason_len );
++
++done:
++    if (async)
++    {
++        if (!ret) send_callback( &socket->hdr, WINHTTP_CALLBACK_STATUS_CLOSE_COMPLETE, NULL, 0 );
++        else
++        {
++            WINHTTP_WEB_SOCKET_ASYNC_RESULT result;
++            result.AsyncResult.dwResult = API_READ_DATA; /* FIXME */
++            result.AsyncResult.dwError  = ret;
++            result.Operation = WINHTTP_WEB_SOCKET_CLOSE_OPERATION;
++            send_callback( &socket->hdr, WINHTTP_CALLBACK_STATUS_REQUEST_ERROR, &result, sizeof(result) );
++        }
++    }
++
++    if (!ret) socket->state = SOCKET_STATE_CLOSED;
++    return ret;
++}
++
++static void task_socket_close( struct task_header *task )
++{
++    struct socket *socket = (struct socket *)task->object;
++    struct socket_shutdown *s = (struct socket_shutdown *)task;
++
++    socket_close( socket, s->status, s->reason, s->len, TRUE );
++}
++
+ DWORD WINAPI WinHttpWebSocketClose( HINTERNET hsocket, USHORT status, void *reason, DWORD len )
+ {
+-    FIXME("%p, %u, %p, %u\n", hsocket, status, reason, len);
+-    return ERROR_INVALID_PARAMETER;
++    struct socket *socket;
++    DWORD ret;
++
++    TRACE("%p, %u, %p, %u\n", hsocket, status, reason, len);
++
++    if (len && !reason) return ERROR_INVALID_PARAMETER;
++
++    if (!(socket = (struct socket *)grab_object( hsocket ))) return ERROR_INVALID_HANDLE;
++    if (socket->hdr.type != WINHTTP_HANDLE_TYPE_SOCKET)
++    {
++        release_object( &socket->hdr );
++        return ERROR_WINHTTP_INCORRECT_HANDLE_TYPE;
++    }
++    if (socket->state >= SOCKET_STATE_CLOSED)
++    {
++        release_object( &socket->hdr );
++        return ERROR_WINHTTP_INCORRECT_HANDLE_STATE;
++    }
++
++    if (socket->request->connect->hdr.flags & WINHTTP_FLAG_ASYNC)
++    {
++        struct socket_shutdown *s;
++
++        if (!(s = heap_alloc( sizeof(*s) ))) return FALSE;
++        s->hdr.object = &socket->hdr;
++        s->hdr.proc   = task_socket_close;
++        s->status     = status;
++        s->reason     = reason;
++        s->len        = len;
++
++        addref_object( &socket->hdr );
++        ret = queue_task( &socket->hdr, &socket->recv_q, (struct task_header *)s );
++    }
++    else ret = socket_close( socket, status, reason, len, FALSE );
++
++    release_object( &socket->hdr );
++    return ret;
+ }
+ 
+ DWORD WINAPI WinHttpWebSocketQueryCloseStatus( HINTERNET hsocket, USHORT *status, void *reason, DWORD len,
+diff --git a/dlls/winhttp/winhttp_private.h b/dlls/winhttp/winhttp_private.h
+index 7d81e359344..41ada14c0ce 100644
+--- a/dlls/winhttp/winhttp_private.h
++++ b/dlls/winhttp/winhttp_private.h
+@@ -230,6 +230,9 @@ struct socket
+     struct queue recv_q;
+     WINHTTP_WEB_SOCKET_BUFFER_TYPE buf_type;
+     DWORD read_size;
++    USHORT status;
++    char reason[128];
++    DWORD reason_len;
+ };
+ 
+ struct task_header
+From 3b1d18fd6e61e5d27bc2b45c92bae58874626908 Mon Sep 17 00:00:00 2001
+From: Hans Leidekker <hans@codeweavers.com>
+Date: Wed, 24 Jun 2020 10:33:07 +0200
+Subject: [PATCH] winhttp: Implement WinHttpWebSocketQueryCloseStatus.
+
+Signed-off-by: Hans Leidekker <hans@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/winhttp/request.c | 34 +++++++++++++++++++++++++++++++---
+ 1 file changed, 31 insertions(+), 3 deletions(-)
+
+diff --git a/dlls/winhttp/request.c b/dlls/winhttp/request.c
+index 60a9585d0d8..631fbb004f1 100644
+--- a/dlls/winhttp/request.c
++++ b/dlls/winhttp/request.c
+@@ -3642,10 +3642,38 @@ DWORD WINAPI WinHttpWebSocketClose( HINTERNET hsocket, USHORT status, void *reas
+ }
+ 
+ DWORD WINAPI WinHttpWebSocketQueryCloseStatus( HINTERNET hsocket, USHORT *status, void *reason, DWORD len,
+-                                               DWORD *consumed )
++                                               DWORD *ret_len )
+ {
+-    FIXME("%p, %p, %p, %u, %p\n", hsocket, status, reason, len, consumed);
+-    return ERROR_INVALID_PARAMETER;
++    struct socket *socket;
++    DWORD ret;
++
++    TRACE("%p, %p, %p, %u, %p\n", hsocket, status, reason, len, ret_len);
++
++    if (!status || (len && !reason) || !ret_len) return ERROR_INVALID_PARAMETER;
++
++    if (!(socket = (struct socket *)grab_object( hsocket ))) return ERROR_INVALID_HANDLE;
++    if (socket->hdr.type != WINHTTP_HANDLE_TYPE_SOCKET)
++    {
++        release_object( &socket->hdr );
++        return ERROR_WINHTTP_INCORRECT_HANDLE_TYPE;
++    }
++    if (socket->state < SOCKET_STATE_CLOSED)
++    {
++        release_object( &socket->hdr );
++        return ERROR_WINHTTP_INCORRECT_HANDLE_STATE;
++    }
++
++    *status = socket->status;
++    *ret_len = socket->reason_len;
++    if (socket->reason_len > len) ret = ERROR_INSUFFICIENT_BUFFER;
++    else
++    {
++        memcpy( reason, socket->reason, socket->reason_len );
++        ret = ERROR_SUCCESS;
++    }
++
++    release_object( &socket->hdr );
++    return ret;
+ }
+ 
+ enum request_state
+From 938b3e5771671795397d94a84f14151e5fa390cd Mon Sep 17 00:00:00 2001
+From: Hans Leidekker <hans@codeweavers.com>
+Date: Wed, 24 Jun 2020 10:33:08 +0200
+Subject: [PATCH] winhttp/tests: Add asynchronous WebSocket tests.
+
+Signed-off-by: Hans Leidekker <hans@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/winhttp/tests/notification.c | 206 ++++++++++++++++++++++++++++++
+ 1 file changed, 206 insertions(+)
+
+diff --git a/dlls/winhttp/tests/notification.c b/dlls/winhttp/tests/notification.c
+index 435e262d18b..98e4024867f 100644
+--- a/dlls/winhttp/tests/notification.c
++++ b/dlls/winhttp/tests/notification.c
+@@ -28,12 +28,24 @@
+ 
+ #include "wine/test.h"
+ 
++static DWORD (WINAPI *pWinHttpWebSocketClose)(HINTERNET,USHORT,void*,DWORD);
++static HINTERNET (WINAPI *pWinHttpWebSocketCompleteUpgrade)(HINTERNET,DWORD_PTR);
++static DWORD (WINAPI *pWinHttpWebSocketQueryCloseStatus)(HINTERNET,USHORT*,void*,DWORD,DWORD*);
++static DWORD (WINAPI *pWinHttpWebSocketReceive)(HINTERNET,void*,DWORD,DWORD*,WINHTTP_WEB_SOCKET_BUFFER_TYPE*);
++static DWORD (WINAPI *pWinHttpWebSocketSend)(HINTERNET,WINHTTP_WEB_SOCKET_BUFFER_TYPE,void*,DWORD);
++static DWORD (WINAPI *pWinHttpWebSocketShutdown)(HINTERNET,USHORT,void*,DWORD);
++
+ enum api
+ {
+     winhttp_connect = 1,
+     winhttp_open_request,
+     winhttp_send_request,
+     winhttp_receive_response,
++    winhttp_websocket_complete_upgrade,
++    winhttp_websocket_send,
++    winhttp_websocket_receive,
++    winhttp_websocket_shutdown,
++    winhttp_websocket_close,
+     winhttp_query_data,
+     winhttp_read_data,
+     winhttp_write_data,
+@@ -615,6 +627,191 @@ static void test_async( void )
+     end_test( &info, __LINE__ );
+ }
+ 
++static const struct notification websocket_test[] =
++{
++    { winhttp_connect,                    WINHTTP_CALLBACK_STATUS_HANDLE_CREATED },
++    { winhttp_open_request,               WINHTTP_CALLBACK_STATUS_HANDLE_CREATED },
++    { winhttp_send_request,               WINHTTP_CALLBACK_STATUS_RESOLVING_NAME },
++    { winhttp_send_request,               WINHTTP_CALLBACK_STATUS_NAME_RESOLVED },
++    { winhttp_send_request,               WINHTTP_CALLBACK_STATUS_CONNECTING_TO_SERVER },
++    { winhttp_send_request,               WINHTTP_CALLBACK_STATUS_CONNECTED_TO_SERVER },
++    { winhttp_send_request,               WINHTTP_CALLBACK_STATUS_SENDING_REQUEST },
++    { winhttp_send_request,               WINHTTP_CALLBACK_STATUS_REQUEST_SENT },
++    { winhttp_send_request,               WINHTTP_CALLBACK_STATUS_SENDREQUEST_COMPLETE, NF_SIGNAL },
++    { winhttp_receive_response,           WINHTTP_CALLBACK_STATUS_RECEIVING_RESPONSE },
++    { winhttp_receive_response,           WINHTTP_CALLBACK_STATUS_RESPONSE_RECEIVED },
++    { winhttp_receive_response,           WINHTTP_CALLBACK_STATUS_HEADERS_AVAILABLE, NF_SIGNAL },
++    { winhttp_websocket_complete_upgrade, WINHTTP_CALLBACK_STATUS_HANDLE_CREATED, NF_SIGNAL },
++    { winhttp_websocket_send,             WINHTTP_CALLBACK_STATUS_WRITE_COMPLETE, NF_SIGNAL },
++    { winhttp_websocket_receive,          WINHTTP_CALLBACK_STATUS_READ_COMPLETE, NF_SIGNAL },
++    { winhttp_websocket_shutdown,         WINHTTP_CALLBACK_STATUS_SHUTDOWN_COMPLETE, NF_SIGNAL },
++    { winhttp_websocket_close,            WINHTTP_CALLBACK_STATUS_CLOSE_COMPLETE, NF_SIGNAL },
++    { winhttp_close_handle,               WINHTTP_CALLBACK_STATUS_HANDLE_CLOSING },
++    { winhttp_close_handle,               WINHTTP_CALLBACK_STATUS_CLOSING_CONNECTION, NF_WINE_ALLOW },
++    { winhttp_close_handle,               WINHTTP_CALLBACK_STATUS_CONNECTION_CLOSED, NF_WINE_ALLOW },
++    { winhttp_close_handle,               WINHTTP_CALLBACK_STATUS_HANDLE_CLOSING },
++    { winhttp_close_handle,               WINHTTP_CALLBACK_STATUS_HANDLE_CLOSING },
++    { winhttp_close_handle,               WINHTTP_CALLBACK_STATUS_HANDLE_CLOSING, NF_SIGNAL }
++};
++
++static void test_websocket(void)
++{
++    HANDLE session, connection, request, socket, event;
++    WINHTTP_WEB_SOCKET_BUFFER_TYPE type;
++    DWORD size, status, err;
++    BOOL ret, unload = TRUE;
++    struct info info, *context = &info;
++    char buffer[1024];
++    USHORT close_status;
++
++    if (!pWinHttpWebSocketCompleteUpgrade)
++    {
++        win_skip( "WinHttpWebSocketCompleteUpgrade not supported\n" );
++        return;
++    }
++
++    info.test  = websocket_test;
++    info.count = ARRAY_SIZE( websocket_test );
++    info.index = 0;
++    info.wait  = CreateEventW( NULL, FALSE, FALSE, NULL );
++
++    session = WinHttpOpen( L"winetest", 0, NULL, NULL, WINHTTP_FLAG_ASYNC );
++    ok( session != NULL, "got %u\n", GetLastError() );
++
++    event = CreateEventW( NULL, FALSE, FALSE, NULL );
++    ret = WinHttpSetOption( session, WINHTTP_OPTION_UNLOAD_NOTIFY_EVENT, &event, sizeof(event) );
++    if (!ret)
++    {
++        win_skip( "Unload event not supported\n" );
++        unload = FALSE;
++    }
++
++    SetLastError( 0xdeadbeef );
++    WinHttpSetStatusCallback( session, check_notification, WINHTTP_CALLBACK_FLAG_ALL_NOTIFICATIONS, 0 );
++    err = GetLastError();
++    ok( err == ERROR_SUCCESS || broken(err == 0xdeadbeef) /* < win7 */, "got %u\n", err );
++
++    SetLastError( 0xdeadbeef );
++    ret = WinHttpSetOption( session, WINHTTP_OPTION_CONTEXT_VALUE, &context, sizeof(context) );
++    err = GetLastError();
++    ok( ret, "got %u\n", err );
++    ok( err == ERROR_SUCCESS || broken(err == 0xdeadbeef) /* < win7 */, "got %u\n", err);
++
++    setup_test( &info, winhttp_connect, __LINE__ );
++    SetLastError( 0xdeadbeef );
++    connection = WinHttpConnect( session, L"echo.websocket.org", 0, 0 );
++    err = GetLastError();
++    ok( connection != NULL, "got %u\n", err);
++    ok( err == ERROR_SUCCESS || broken(err == WSAEINVAL) /* < win7 */, "got %u\n", err );
++
++    setup_test( &info, winhttp_open_request, __LINE__ );
++    SetLastError( 0xdeadbeef );
++    request = WinHttpOpenRequest( connection, NULL, L"/", NULL, NULL, NULL, 0 );
++    err = GetLastError();
++    ok( request != NULL, "got %u\n", err );
++    ok( err == ERROR_SUCCESS, "got %u\n", err );
++
++    ret = WinHttpSetOption( request, WINHTTP_OPTION_UPGRADE_TO_WEB_SOCKET, NULL, 0 );
++    ok( ret, "got %u\n", GetLastError() );
++
++    setup_test( &info, winhttp_send_request, __LINE__ );
++    SetLastError( 0xdeadbeef );
++    ret = WinHttpSendRequest( request, NULL, 0, NULL, 0, 0, 0 );
++    err = GetLastError();
++    if (!ret && (err == ERROR_WINHTTP_CANNOT_CONNECT || err == ERROR_WINHTTP_TIMEOUT))
++    {
++        skip( "connection failed, skipping\n" );
++        WinHttpCloseHandle( request );
++        WinHttpCloseHandle( connection );
++        WinHttpCloseHandle( session );
++        CloseHandle( info.wait );
++        return;
++    }
++    ok( ret, "got %u\n", err );
++    ok( err == ERROR_SUCCESS, "got %u\n", err );
++    WaitForSingleObject( info.wait, INFINITE );
++
++    setup_test( &info, winhttp_receive_response, __LINE__ );
++    SetLastError( 0xdeadbeef );
++    ret = WinHttpReceiveResponse( request, NULL );
++    err = GetLastError();
++    ok( ret, "got %u\n", err );
++    ok( err == ERROR_SUCCESS, "got %u\n", err );
++    WaitForSingleObject( info.wait, INFINITE );
++
++    size = sizeof(status);
++    SetLastError( 0xdeadbeef );
++    ret = WinHttpQueryHeaders( request, WINHTTP_QUERY_STATUS_CODE|WINHTTP_QUERY_FLAG_NUMBER, NULL, &status, &size, NULL );
++    err = GetLastError();
++    ok( ret, "failed unexpectedly %u\n", err );
++    ok( status == 101, "got %u\n", status );
++    ok( err == ERROR_SUCCESS || broken(err == 0xdeadbeef) /* < win7 */, "got %u\n", err );
++
++    setup_test( &info, winhttp_websocket_complete_upgrade, __LINE__ );
++    SetLastError( 0xdeadbeef );
++    socket = pWinHttpWebSocketCompleteUpgrade( request, (DWORD_PTR)context );
++    err = GetLastError();
++    ok( socket != NULL, "got %u\n", err );
++    ok( err == ERROR_SUCCESS, "got %u\n", err );
++    WaitForSingleObject( info.wait, INFINITE );
++
++    setup_test( &info, winhttp_websocket_send, __LINE__ );
++    err = pWinHttpWebSocketSend( socket, 0, (void *)"hello", sizeof("hello") );
++    ok( err == ERROR_SUCCESS, "got %u\n", err );
++    WaitForSingleObject( info.wait, INFINITE );
++
++    setup_test( &info, winhttp_websocket_receive, __LINE__ );
++    buffer[0] = 0;
++    size = 0xdeadbeef;
++    type = 0xdeadbeef;
++    err = pWinHttpWebSocketReceive( socket, buffer, sizeof(buffer), &size, &type );
++    ok( err == ERROR_SUCCESS, "got %u\n", err );
++    WaitForSingleObject( info.wait, INFINITE );
++    ok( size == 0xdeadbeef, "got %u\n", size );
++    ok( type == 0xdeadbeef, "got %u\n", type );
++    ok( buffer[0], "unexpected data\n" );
++
++    setup_test( &info, winhttp_websocket_shutdown, __LINE__ );
++    err = pWinHttpWebSocketShutdown( socket, 1000, (void *)"success", sizeof("success") );
++    ok( err == ERROR_SUCCESS, "got %u\n", err );
++    WaitForSingleObject( info.wait, INFINITE );
++
++    setup_test( &info, winhttp_websocket_close, __LINE__ );
++    ret = pWinHttpWebSocketClose( socket, 1000, (void *)"success", sizeof("success") );
++    ok( err == ERROR_SUCCESS, "got %u\n", err );
++    WaitForSingleObject( info.wait, INFINITE );
++
++    close_status = 0xdead;
++    size = sizeof(buffer) + 1;
++    err = pWinHttpWebSocketQueryCloseStatus( socket, &close_status, buffer, sizeof(buffer), &size );
++    ok( err == ERROR_SUCCESS, "got %u\n", err );
++    ok( close_status == 1000, "got %u\n", close_status );
++    ok( size <= sizeof(buffer), "got %u\n", size );
++
++    setup_test( &info, winhttp_close_handle, __LINE__ );
++    WinHttpCloseHandle( socket );
++    WinHttpCloseHandle( request );
++    WinHttpCloseHandle( connection );
++
++    if (unload)
++    {
++        status = WaitForSingleObject( event, 0 );
++        ok( status == WAIT_TIMEOUT, "got %08x\n", status );
++    }
++    WinHttpCloseHandle( session );
++    WaitForSingleObject( info.wait, INFINITE );
++    end_test( &info, __LINE__ );
++
++    if (unload)
++    {
++        status = WaitForSingleObject( event, 2000 );
++        ok( status == WAIT_OBJECT_0, "got %08x\n", status );
++    }
++    CloseHandle( event );
++    CloseHandle( info.wait );
++    end_test( &info, __LINE__ );
++}
++
+ static const char okmsg[] =
+ "HTTP/1.1 200 OK\r\n"
+ "Server: winetest\r\n"
+@@ -1001,13 +1198,22 @@ static void test_persistent_connection(int port)
+ 
+ START_TEST (notification)
+ {
++    HMODULE mod = GetModuleHandleA( "winhttp.dll" );
+     struct server_info si;
+     HANDLE thread;
+     DWORD ret;
+ 
++    pWinHttpWebSocketClose = (void *)GetProcAddress( mod, "WinHttpWebSocketClose" );
++    pWinHttpWebSocketCompleteUpgrade = (void *)GetProcAddress( mod, "WinHttpWebSocketCompleteUpgrade" );
++    pWinHttpWebSocketQueryCloseStatus = (void *)GetProcAddress( mod, "WinHttpWebSocketQueryCloseStatus" );
++    pWinHttpWebSocketReceive = (void *)GetProcAddress( mod, "WinHttpWebSocketReceive" );
++    pWinHttpWebSocketSend = (void *)GetProcAddress( mod, "WinHttpWebSocketSend" );
++    pWinHttpWebSocketShutdown = (void *)GetProcAddress( mod, "WinHttpWebSocketShutdown" );
++
+     test_connection_cache();
+     test_redirect();
+     test_async();
++    test_websocket();
+ 
+     si.event = CreateEventW( NULL, 0, 0, NULL );
+     si.port = 7533;
+From 6d564bd53e047654fd8e5b0265ad9eb485452e34 Mon Sep 17 00:00:00 2001
+From: Hans Leidekker <hans@codeweavers.com>
+Date: Wed, 24 Jun 2020 10:33:09 +0200
+Subject: [PATCH] winhttp: Add support for WebSocket fragment buffers.
+
+Signed-off-by: Hans Leidekker <hans@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/winhttp/request.c         | 73 ++++++++++++++--------------------
+ dlls/winhttp/winhttp_private.h | 19 ++++++++-
+ 2 files changed, 48 insertions(+), 44 deletions(-)
+
+diff --git a/dlls/winhttp/request.c b/dlls/winhttp/request.c
+index 631fbb004f1..457abb9f84c 100644
+--- a/dlls/winhttp/request.c
++++ b/dlls/winhttp/request.c
+@@ -3156,33 +3156,16 @@ static DWORD send_bytes( struct netconn *netconn, char *bytes, int len )
+     return (count == len) ? ERROR_SUCCESS : ERROR_INTERNAL_ERROR;
+ }
+ 
+-/* rfc6455 */
+-enum opcode
+-{
+-    OPCODE_CONTINUE  = 0x00,
+-    OPCODE_TEXT      = 0x01,
+-    OPCODE_BINARY    = 0x02,
+-    OPCODE_RESERVED3 = 0x03,
+-    OPCODE_RESERVED4 = 0x04,
+-    OPCODE_RESERVED5 = 0x05,
+-    OPCODE_RESERVED6 = 0x06,
+-    OPCODE_RESERVED7 = 0x07,
+-    OPCODE_CLOSE     = 0x08,
+-    OPCODE_PING      = 0x09,
+-    OPCODE_PONG      = 0x0a,
+-    OPCODE_INVALID   = 0xff,
+-};
+-
+-static enum opcode map_buffer_type( WINHTTP_WEB_SOCKET_BUFFER_TYPE type )
++static enum socket_opcode map_buffer_type( WINHTTP_WEB_SOCKET_BUFFER_TYPE type )
+ {
+     switch (type)
+     {
+-    case WINHTTP_WEB_SOCKET_UTF8_MESSAGE_BUFFER_TYPE:   return OPCODE_TEXT;
+-    case WINHTTP_WEB_SOCKET_BINARY_MESSAGE_BUFFER_TYPE: return OPCODE_BINARY;
+-    case WINHTTP_WEB_SOCKET_CLOSE_BUFFER_TYPE:          return OPCODE_CLOSE;
++    case WINHTTP_WEB_SOCKET_UTF8_MESSAGE_BUFFER_TYPE:   return SOCKET_OPCODE_TEXT;
++    case WINHTTP_WEB_SOCKET_BINARY_MESSAGE_BUFFER_TYPE: return SOCKET_OPCODE_BINARY;
++    case WINHTTP_WEB_SOCKET_CLOSE_BUFFER_TYPE:          return SOCKET_OPCODE_CLOSE;
+     default:
+         FIXME("buffer type %u not supported\n", type);
+-        return OPCODE_INVALID;
++        return SOCKET_OPCODE_INVALID;
+     }
+ }
+ 
+@@ -3194,10 +3177,10 @@ static DWORD send_frame( struct netconn *netconn, WINHTTP_WEB_SOCKET_BUFFER_TYPE
+                          DWORD buflen, BOOL final )
+ {
+     DWORD i = 0, j, ret, offset = 2, len = buflen;
+-    enum opcode opcode = map_buffer_type( type );
++    enum socket_opcode opcode = map_buffer_type( type );
+     char hdr[14], byte, *mask;
+ 
+-    if (opcode == OPCODE_CLOSE) len += sizeof(status);
++    if (opcode == SOCKET_OPCODE_CLOSE) len += sizeof(status);
+ 
+     hdr[0] = final ? (char)FIN_BIT : 0;
+     hdr[0] |= opcode;
+@@ -3224,7 +3207,7 @@ static DWORD send_frame( struct netconn *netconn, WINHTTP_WEB_SOCKET_BUFFER_TYPE
+     RtlGenRandom( mask, 4 );
+     if ((ret = send_bytes( netconn, hdr, offset + 4 ))) return ret;
+ 
+-    if (opcode == OPCODE_CLOSE) /* prepend status code */
++    if (opcode == SOCKET_OPCODE_CLOSE) /* prepend status code */
+     {
+         byte = (status >> 8) ^ mask[i++ % 4];
+         if ((ret = send_bytes( netconn, &byte, 1 ))) return ret;
+@@ -3331,34 +3314,39 @@ static DWORD receive_bytes( struct netconn *netconn, char *buf, DWORD len, DWORD
+     return ERROR_SUCCESS;
+ }
+ 
+-static WINHTTP_WEB_SOCKET_BUFFER_TYPE map_opcode( enum opcode opcode )
++static WINHTTP_WEB_SOCKET_BUFFER_TYPE map_opcode( enum socket_opcode opcode, BOOL fragment )
+ {
+     switch (opcode)
+     {
+-    case OPCODE_TEXT:   return WINHTTP_WEB_SOCKET_UTF8_MESSAGE_BUFFER_TYPE;
+-    case OPCODE_BINARY: return WINHTTP_WEB_SOCKET_BINARY_MESSAGE_BUFFER_TYPE;
+-    case OPCODE_CLOSE:  return WINHTTP_WEB_SOCKET_CLOSE_BUFFER_TYPE;
++    case SOCKET_OPCODE_TEXT:
++        if (fragment) return WINHTTP_WEB_SOCKET_UTF8_FRAGMENT_BUFFER_TYPE;
++        return WINHTTP_WEB_SOCKET_UTF8_MESSAGE_BUFFER_TYPE;
++
++    case SOCKET_OPCODE_BINARY:
++        if (fragment) return WINHTTP_WEB_SOCKET_BINARY_FRAGMENT_BUFFER_TYPE;
++        return WINHTTP_WEB_SOCKET_BINARY_MESSAGE_BUFFER_TYPE;
++
++    case SOCKET_OPCODE_CLOSE:
++        return WINHTTP_WEB_SOCKET_CLOSE_BUFFER_TYPE;
++
+     default:
+-        ERR("opcode %u not handled\n", opcode);
++        FIXME("opcode %u not handled\n", opcode);
+         return ~0u;
+     }
+ }
+ 
+-static DWORD receive_frame( struct netconn *netconn, DWORD *ret_len, WINHTTP_WEB_SOCKET_BUFFER_TYPE *ret_type )
++static DWORD receive_frame( struct netconn *netconn, DWORD *ret_len, enum socket_opcode *opcode )
+ {
+-    WINHTTP_WEB_SOCKET_BUFFER_TYPE type;
+     DWORD ret, len, count;
+-    enum opcode opcode;
+     char hdr[2];
+ 
+     if ((ret = receive_bytes( netconn, hdr, sizeof(hdr), &count ))) return ret;
+-    if (count != sizeof(hdr) || (hdr[0] & RESERVED_BIT) || (hdr[1] & MASK_BIT))
++    if (count != sizeof(hdr) || (hdr[0] & RESERVED_BIT) || (hdr[1] & MASK_BIT) ||
++        (map_opcode( hdr[0] & 0xf, FALSE ) == ~0u))
+     {
+         return ERROR_WINHTTP_INVALID_SERVER_RESPONSE;
+     }
+-
+-    opcode = hdr[0] & 0xf;
+-    type = map_opcode( opcode );
++    *opcode = hdr[0] & 0xf;
+ 
+     len = hdr[1] & ~MASK_BIT;
+     if (len == 126)
+@@ -3378,7 +3366,6 @@ static DWORD receive_frame( struct netconn *netconn, DWORD *ret_len, WINHTTP_WEB
+     }
+ 
+     *ret_len = len;
+-    *ret_type = type;
+     return ERROR_SUCCESS;
+ }
+ 
+@@ -3387,7 +3374,7 @@ static DWORD socket_receive( struct socket *socket, void *buf, DWORD len, DWORD
+ {
+     DWORD count, ret = ERROR_SUCCESS;
+ 
+-    if (!socket->read_size) ret = receive_frame( socket->request->netconn, &socket->read_size, &socket->buf_type );
++    if (!socket->read_size) ret = receive_frame( socket->request->netconn, &socket->read_size, &socket->opcode );
+     if (!ret) ret = receive_bytes( socket->request->netconn, buf, min(len, socket->read_size), &count );
+     if (!ret)
+     {
+@@ -3395,7 +3382,7 @@ static DWORD socket_receive( struct socket *socket, void *buf, DWORD len, DWORD
+         if (!async)
+         {
+             *ret_len = count;
+-            *ret_type = socket->buf_type;
++            *ret_type = map_opcode( socket->opcode, socket->read_size != 0 );
+         }
+     }
+ 
+@@ -3405,7 +3392,7 @@ static DWORD socket_receive( struct socket *socket, void *buf, DWORD len, DWORD
+         {
+             WINHTTP_WEB_SOCKET_STATUS status;
+             status.dwBytesTransferred = count;
+-            status.eBufferType        = socket->buf_type;
++            status.eBufferType        = map_opcode( socket->opcode, socket->read_size != 0 );
+             send_callback( &socket->hdr, WINHTTP_CALLBACK_STATUS_READ_COMPLETE, &status, sizeof(status) );
+         }
+         else
+@@ -3558,8 +3545,8 @@ static DWORD socket_close( struct socket *socket, USHORT status, const void *rea
+         socket->state = SOCKET_STATE_SHUTDOWN;
+     }
+ 
+-    if ((ret = receive_frame( netconn, &count, &socket->buf_type ))) goto done;
+-    if (socket->buf_type != WINHTTP_WEB_SOCKET_CLOSE_BUFFER_TYPE || (count && count > sizeof(socket->reason)))
++    if ((ret = receive_frame( netconn, &count, &socket->opcode ))) goto done;
++    if (socket->opcode != SOCKET_OPCODE_CLOSE || (count && count > sizeof(socket->reason)))
+     {
+         ret = ERROR_WINHTTP_INVALID_SERVER_RESPONSE;
+         goto done;
+diff --git a/dlls/winhttp/winhttp_private.h b/dlls/winhttp/winhttp_private.h
+index 41ada14c0ce..4a943750061 100644
+--- a/dlls/winhttp/winhttp_private.h
++++ b/dlls/winhttp/winhttp_private.h
+@@ -221,6 +221,23 @@ enum socket_state
+     SOCKET_STATE_CLOSED   = 2,
+ };
+ 
++/* rfc6455 */
++enum socket_opcode
++{
++    SOCKET_OPCODE_CONTINUE  = 0x00,
++    SOCKET_OPCODE_TEXT      = 0x01,
++    SOCKET_OPCODE_BINARY    = 0x02,
++    SOCKET_OPCODE_RESERVED3 = 0x03,
++    SOCKET_OPCODE_RESERVED4 = 0x04,
++    SOCKET_OPCODE_RESERVED5 = 0x05,
++    SOCKET_OPCODE_RESERVED6 = 0x06,
++    SOCKET_OPCODE_RESERVED7 = 0x07,
++    SOCKET_OPCODE_CLOSE     = 0x08,
++    SOCKET_OPCODE_PING      = 0x09,
++    SOCKET_OPCODE_PONG      = 0x0a,
++    SOCKET_OPCODE_INVALID   = 0xff,
++};
++
+ struct socket
+ {
+     struct object_header hdr;
+@@ -228,7 +245,7 @@ struct socket
+     enum socket_state state;
+     struct queue send_q;
+     struct queue recv_q;
+-    WINHTTP_WEB_SOCKET_BUFFER_TYPE buf_type;
++    enum socket_opcode opcode;
+     DWORD read_size;
+     USHORT status;
+     char reason[128];
+From e3ab70b82ac590e117dca4158041357541a8b23a Mon Sep 17 00:00:00 2001
+From: Hans Leidekker <hans@codeweavers.com>
+Date: Wed, 24 Jun 2020 10:33:10 +0200
+Subject: [PATCH] winhttp/tests: Add more WebSocket tests.
+
+Signed-off-by: Hans Leidekker <hans@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/winhttp/tests/winhttp.c | 156 +++++++++++++++++++++++++++++++++--
+ 1 file changed, 148 insertions(+), 8 deletions(-)
+
+diff --git a/dlls/winhttp/tests/winhttp.c b/dlls/winhttp/tests/winhttp.c
+index be02bbe2502..12f5136973f 100644
+--- a/dlls/winhttp/tests/winhttp.c
++++ b/dlls/winhttp/tests/winhttp.c
+@@ -27,7 +27,6 @@
+ #include <winhttp.h>
+ #include <wincrypt.h>
+ #include <winreg.h>
+-#include <stdio.h>
+ #include <initguid.h>
+ #include <httprequest.h>
+ #include <httprequestid.h>
+@@ -37,7 +36,12 @@
+ 
+ DEFINE_GUID(GUID_NULL,0,0,0,0,0,0,0,0,0,0,0);
+ 
++static DWORD (WINAPI *pWinHttpWebSocketClose)(HINTERNET,USHORT,void*,DWORD);
+ static HINTERNET (WINAPI *pWinHttpWebSocketCompleteUpgrade)(HINTERNET,DWORD_PTR);
++static DWORD (WINAPI *pWinHttpWebSocketQueryCloseStatus)(HINTERNET,USHORT*,void*,DWORD,DWORD*);
++static DWORD (WINAPI *pWinHttpWebSocketReceive)(HINTERNET,void*,DWORD,DWORD*,WINHTTP_WEB_SOCKET_BUFFER_TYPE*);
++static DWORD (WINAPI *pWinHttpWebSocketSend)(HINTERNET,WINHTTP_WEB_SOCKET_BUFFER_TYPE,void*,DWORD);
++static DWORD (WINAPI *pWinHttpWebSocketShutdown)(HINTERNET,USHORT,void*,DWORD);
+ 
+ static BOOL proxy_active(void)
+ {
+@@ -2440,9 +2444,9 @@ static DWORD CALLBACK server_thread(LPVOID param)
+                 strcat(headers, "\r\n\r\n");
+ 
+                 send(c, headers, strlen(headers), 0);
++                continue;
+             }
+             else send(c, notokmsg, sizeof(notokmsg) - 1, 0);
+-            continue;
+         }
+         if (strstr(buffer, "GET /quit"))
+         {
+@@ -3097,11 +3101,13 @@ static void test_head_request(int port)
+ 
+ static void test_websocket(int port)
+ {
+-    HINTERNET session, connection, request, socket;
++    HINTERNET session, connection, request, socket, socket2;
+     DWORD size, len, count, status, index, error;
+     DWORD_PTR ctx;
++    WINHTTP_WEB_SOCKET_BUFFER_TYPE type;
+     WCHAR header[32];
+-    char buf[128];
++    char buf[128], *large_buf;
++    USHORT close_status;
+     BOOL ret;
+ 
+     if (!pWinHttpWebSocketCompleteUpgrade)
+@@ -3215,7 +3221,7 @@ static void test_websocket(int port)
+     len = 0xdeadbeef;
+     size = sizeof(len);
+     ret = WinHttpQueryHeaders(request, WINHTTP_QUERY_CONTENT_LENGTH | WINHTTP_QUERY_FLAG_NUMBER, NULL, &len,
+-                              &size, 0);
++                              &size, NULL);
+     ok(!ret, "success\n");
+ 
+     index = 0;
+@@ -3226,6 +3232,12 @@ static void test_websocket(int port)
+     socket = pWinHttpWebSocketCompleteUpgrade(request, 0);
+     ok(socket != NULL, "got %u\n", GetLastError());
+ 
++    size = sizeof(header);
++    ret = WinHttpQueryHeaders(socket, WINHTTP_QUERY_UPGRADE, NULL, &header, &size, NULL);
++    error = GetLastError();
++    ok(!ret, "success\n");
++    ok(error == ERROR_WINHTTP_INCORRECT_HANDLE_TYPE, "got %u\n", error);
++
+     header[0] = 0;
+     size = sizeof(header);
+     ret = WinHttpQueryHeaders(request, WINHTTP_QUERY_UPGRADE, NULL, &header, &size, NULL);
+@@ -3243,16 +3255,24 @@ static void test_websocket(int port)
+     ret = WinHttpQueryHeaders(request, WINHTTP_QUERY_CUSTOM, L"Sec-WebSocket-Accept", buf, &size, &index);
+     ok(ret, "got %u\n", GetLastError());
+ 
+-    /* Send/Receive on websock */
+-
+-    ret = WinHttpCloseHandle(connection);
++    /* sending request again generates new key */
++    ret = WinHttpSendRequest(request, NULL, 0, NULL, 0, 0, 0);
+     ok(ret, "got %u\n", GetLastError());
+ 
++    /* and creates a new websocket */
++    socket2 = pWinHttpWebSocketCompleteUpgrade(request, 0);
++    ok(socket2 != NULL, "got %u\n", GetLastError());
++    ok(socket2 != socket, "got same socket\n");
++
++    WinHttpCloseHandle(connection);
+     /* request handle is still valid */
+     size = sizeof(ctx);
+     ret = WinHttpQueryOption(request, WINHTTP_OPTION_CONTEXT_VALUE, &ctx, &size);
+     ok(ret, "got %u\n", GetLastError());
+ 
++    ret = WinHttpCloseHandle(socket2);
++    ok(ret, "got %u\n", GetLastError());
++
+     ret = WinHttpCloseHandle(socket);
+     ok(ret, "got %u\n", GetLastError());
+ 
+@@ -3267,6 +3287,121 @@ static void test_websocket(int port)
+ 
+     ret = WinHttpCloseHandle(request);
+     ok(ret, "got %u\n", GetLastError());
++
++    session = WinHttpOpen(L"winetest", 0, NULL, NULL, 0);
++    ok(session != NULL, "got %u\n", GetLastError());
++
++    connection = WinHttpConnect(session, L"echo.websocket.org", 0, 0);
++    ok(connection != NULL, "got %u\n", GetLastError());
++
++    request = WinHttpOpenRequest(connection, L"GET", L"/", NULL, NULL, NULL, 0);
++    ok(request != NULL, "got %u\n", GetLastError());
++
++    ret = WinHttpSetOption(request, WINHTTP_OPTION_UPGRADE_TO_WEB_SOCKET, NULL, 0);
++    ok(ret, "got %u\n", GetLastError());
++
++    ret = WinHttpSendRequest(request, NULL, 0, NULL, 0, 0, 0);
++    ok(ret, "got %u\n", GetLastError());
++
++    ret = WinHttpReceiveResponse(request, NULL);
++    ok(ret, "got %u\n", GetLastError());
++
++    status = 0xdeadbeef;
++    size = sizeof(status);
++    ret = WinHttpQueryHeaders(request, WINHTTP_QUERY_STATUS_CODE | WINHTTP_QUERY_FLAG_NUMBER, NULL, &status,
++                              &size, NULL);
++    ok(ret, "got %u\n", GetLastError());
++    ok(status == HTTP_STATUS_SWITCH_PROTOCOLS, "got %u\n", status);
++
++    socket = pWinHttpWebSocketCompleteUpgrade(request, 0);
++    ok(socket != NULL, "got %u\n", GetLastError());
++
++    error = pWinHttpWebSocketSend(socket, WINHTTP_WEB_SOCKET_BINARY_MESSAGE_BUFFER_TYPE, NULL, 1);
++    ok(error == ERROR_INVALID_PARAMETER, "got %u\n", error);
++
++    large_buf = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(buf) * 2);
++    memcpy(large_buf, "hello", sizeof("hello"));
++    memcpy(large_buf + sizeof(buf), "world", sizeof("world"));
++    error = pWinHttpWebSocketSend(socket, WINHTTP_WEB_SOCKET_BINARY_MESSAGE_BUFFER_TYPE, large_buf, sizeof(buf) * 2);
++    ok(!error, "got %u\n", error);
++    HeapFree(GetProcessHeap(), 0, large_buf);
++
++    error = pWinHttpWebSocketReceive(socket, NULL, 0, NULL, NULL);
++    ok(error == ERROR_INVALID_PARAMETER, "got %u\n", error);
++
++    error = pWinHttpWebSocketReceive(socket, buf, 0, NULL, NULL);
++    ok(error == ERROR_INVALID_PARAMETER, "got %u\n", error);
++
++    error = pWinHttpWebSocketReceive(socket, NULL, 1, NULL, NULL);
++    ok(error == ERROR_INVALID_PARAMETER, "got %u\n", error);
++
++    buf[0] = 0;
++    count = 0;
++    type = 0xdeadbeef;
++    error = pWinHttpWebSocketReceive(socket, buf, sizeof(buf), &count, &type);
++    ok(!error, "got %u\n", error);
++    ok(buf[0] == 'h', "got %c\n", buf[0]);
++    ok(count == sizeof(buf), "got %u\n", count);
++    ok(type == WINHTTP_WEB_SOCKET_BINARY_FRAGMENT_BUFFER_TYPE, "got %u\n", type);
++
++    buf[0] = 0;
++    count = 0;
++    type = 0xdeadbeef;
++    error = pWinHttpWebSocketReceive(socket, buf, sizeof(buf), &count, &type);
++    ok(!error, "got %u\n", error);
++    ok(buf[0] == 'w', "got %c\n", buf[0]);
++    ok(count == sizeof(buf), "got %u\n", count);
++    ok(type == WINHTTP_WEB_SOCKET_BINARY_MESSAGE_BUFFER_TYPE, "got %u\n", type);
++
++    error = pWinHttpWebSocketShutdown(socket, WINHTTP_WEB_SOCKET_SUCCESS_CLOSE_STATUS, NULL, 1);
++    ok(error == ERROR_INVALID_PARAMETER, "got %u\n", error);
++
++    error = pWinHttpWebSocketShutdown(socket, WINHTTP_WEB_SOCKET_SUCCESS_CLOSE_STATUS, (void *)"success",
++                                      sizeof("success"));
++    ok(!error, "got %u\n", error);
++
++    error = pWinHttpWebSocketClose(socket, WINHTTP_WEB_SOCKET_SUCCESS_CLOSE_STATUS, NULL, 1);
++    ok(error == ERROR_INVALID_PARAMETER, "got %u\n", error);
++
++    error = pWinHttpWebSocketClose(socket, WINHTTP_WEB_SOCKET_SUCCESS_CLOSE_STATUS, (void *)"success2",
++                                   sizeof("success2"));
++    ok(!error, "got %u\n", error);
++
++    error = pWinHttpWebSocketQueryCloseStatus(socket, NULL, NULL, 0, NULL);
++    ok(error == ERROR_INVALID_PARAMETER, "got %u\n", error);
++
++    error = pWinHttpWebSocketQueryCloseStatus(socket, &close_status, NULL, 0, NULL);
++    ok(error == ERROR_INVALID_PARAMETER, "got %u\n", error);
++
++    error = pWinHttpWebSocketQueryCloseStatus(socket, &close_status, buf, 0, NULL);
++    ok(error == ERROR_INVALID_PARAMETER, "got %u\n", error);
++
++    error = pWinHttpWebSocketQueryCloseStatus(socket, &close_status, buf, sizeof(buf), NULL);
++    ok(error == ERROR_INVALID_PARAMETER, "got %u\n", error);
++
++    error = pWinHttpWebSocketQueryCloseStatus(socket, NULL, NULL, 0, &len);
++    ok(error == ERROR_INVALID_PARAMETER, "got %u\n", error);
++
++    len = 0;
++    error = pWinHttpWebSocketQueryCloseStatus(socket, &close_status, NULL, 0, &len);
++    ok(error == ERROR_INSUFFICIENT_BUFFER, "got %u\n", error);
++    ok(len, "len not set\n");
++
++    error = pWinHttpWebSocketQueryCloseStatus(socket, &close_status, NULL, 1, &len);
++    ok(error == ERROR_INVALID_PARAMETER, "got %u\n", error);
++
++    close_status = 0xdead;
++    len = 0xdeadbeef;
++    memset(buf, 0, sizeof(buf));
++    error = pWinHttpWebSocketQueryCloseStatus(socket, &close_status, buf, sizeof(buf), &len);
++    ok(!error, "got %u\n", error);
++    ok(close_status == 1000, "got %08x\n", close_status);
++    ok(len == sizeof("success"), "got %u\n", len);
++
++    WinHttpCloseHandle(socket);
++    WinHttpCloseHandle(request);
++    WinHttpCloseHandle(connection);
++    WinHttpCloseHandle(session);
+ }
+ 
+ static void test_not_modified(int port)
+@@ -4942,7 +5077,12 @@ START_TEST (winhttp)
+     DWORD ret;
+     HMODULE mod = GetModuleHandleA("winhttp.dll");
+ 
++    pWinHttpWebSocketClose = (void *)GetProcAddress(mod, "WinHttpWebSocketClose");
+     pWinHttpWebSocketCompleteUpgrade = (void *)GetProcAddress(mod, "WinHttpWebSocketCompleteUpgrade");
++    pWinHttpWebSocketQueryCloseStatus = (void *)GetProcAddress(mod, "WinHttpWebSocketQueryCloseStatus");
++    pWinHttpWebSocketSend = (void *)GetProcAddress(mod, "WinHttpWebSocketSend");
++    pWinHttpWebSocketShutdown = (void *)GetProcAddress(mod, "WinHttpWebSocketShutdown");
++    pWinHttpWebSocketReceive = (void *)GetProcAddress(mod, "WinHttpWebSocketReceive");
+ 
+     test_WinHttpOpenRequest();
+     test_WinHttpSendRequest();
+From b9038c736b829a3cd5b615d6c41df8b71f938f54 Mon Sep 17 00:00:00 2001
+From: Hans Leidekker <hans@codeweavers.com>
+Date: Thu, 25 Jun 2020 11:00:23 +0200
+Subject: [PATCH] winhttp: Set socket state before sending notifications.
+
+Signed-off-by: Hans Leidekker <hans@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/winhttp/request.c | 21 ++++++++++++---------
+ 1 file changed, 12 insertions(+), 9 deletions(-)
+
+diff --git a/dlls/winhttp/request.c b/dlls/winhttp/request.c
+index 457abb9f84c..623fdf5db59 100644
+--- a/dlls/winhttp/request.c
++++ b/dlls/winhttp/request.c
+@@ -3372,10 +3372,11 @@ static DWORD receive_frame( struct netconn *netconn, DWORD *ret_len, enum socket
+ static DWORD socket_receive( struct socket *socket, void *buf, DWORD len, DWORD *ret_len,
+                              WINHTTP_WEB_SOCKET_BUFFER_TYPE *ret_type, BOOL async )
+ {
++    struct netconn *netconn = socket->request->netconn;
+     DWORD count, ret = ERROR_SUCCESS;
+ 
+-    if (!socket->read_size) ret = receive_frame( socket->request->netconn, &socket->read_size, &socket->opcode );
+-    if (!ret) ret = receive_bytes( socket->request->netconn, buf, min(len, socket->read_size), &count );
++    if (!socket->read_size) ret = receive_frame( netconn, &socket->read_size, &socket->opcode );
++    if (!ret) ret = receive_bytes( netconn, buf, min(len, socket->read_size), &count );
+     if (!ret)
+     {
+         socket->read_size -= count;
+@@ -3385,7 +3386,6 @@ static DWORD socket_receive( struct socket *socket, void *buf, DWORD len, DWORD
+             *ret_type = map_opcode( socket->opcode, socket->read_size != 0 );
+         }
+     }
+-
+     if (async)
+     {
+         if (!ret)
+@@ -3458,9 +3458,13 @@ DWORD WINAPI WinHttpWebSocketReceive( HINTERNET hsocket, void *buf, DWORD len, D
+ 
+ static DWORD socket_shutdown( struct socket *socket, USHORT status, const void *reason, DWORD len, BOOL async )
+ {
++    struct netconn *netconn = socket->request->netconn;
+     DWORD ret;
+ 
+-    ret = send_frame( socket->request->netconn, WINHTTP_WEB_SOCKET_CLOSE_BUFFER_TYPE, status, reason, len, TRUE );
++    if (!(ret = send_frame( netconn, WINHTTP_WEB_SOCKET_CLOSE_BUFFER_TYPE, status, reason, len, TRUE )))
++    {
++        socket->state = SOCKET_STATE_SHUTDOWN;
++    }
+     if (async)
+     {
+         if (!ret) send_callback( &socket->hdr, WINHTTP_CALLBACK_STATUS_SHUTDOWN_COMPLETE, NULL, 0 );
+@@ -3473,8 +3477,6 @@ static DWORD socket_shutdown( struct socket *socket, USHORT status, const void *
+             send_callback( &socket->hdr, WINHTTP_CALLBACK_STATUS_REQUEST_ERROR, &result, sizeof(result) );
+         }
+     }
+-
+-    if (!ret) socket->state = SOCKET_STATE_SHUTDOWN;
+     return ret;
+ }
+ 
+@@ -3559,7 +3561,10 @@ static DWORD socket_close( struct socket *socket, USHORT status, const void *rea
+         goto done;
+     }
+     socket->status = RtlUshortByteSwap( socket->status );
+-    ret = receive_bytes( netconn, socket->reason, sizeof(socket->reason), &socket->reason_len );
++    if (!(ret = receive_bytes( netconn, socket->reason, sizeof(socket->reason), &socket->reason_len )))
++    {
++        socket->state = SOCKET_STATE_CLOSED;
++    }
+ 
+ done:
+     if (async)
+@@ -3574,8 +3579,6 @@ static DWORD socket_close( struct socket *socket, USHORT status, const void *rea
+             send_callback( &socket->hdr, WINHTTP_CALLBACK_STATUS_REQUEST_ERROR, &result, sizeof(result) );
+         }
+     }
+-
+-    if (!ret) socket->state = SOCKET_STATE_CLOSED;
+     return ret;
+ }
+ 
+From 968b3745bb02fde13bfafce102de973fec7c6bd2 Mon Sep 17 00:00:00 2001
+From: Hans Leidekker <hans@codeweavers.com>
+Date: Thu, 25 Jun 2020 11:00:24 +0200
+Subject: [PATCH] winhttp: Status and reason are optional in the close
+ response.
+
+Signed-off-by: Hans Leidekker <hans@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/winhttp/request.c | 25 ++++++++++---------------
+ 1 file changed, 10 insertions(+), 15 deletions(-)
+
+diff --git a/dlls/winhttp/request.c b/dlls/winhttp/request.c
+index 623fdf5db59..c15be385925 100644
+--- a/dlls/winhttp/request.c
++++ b/dlls/winhttp/request.c
+@@ -3310,7 +3310,7 @@ static DWORD receive_bytes( struct netconn *netconn, char *buf, DWORD len, DWORD
+ {
+     DWORD err;
+     if ((err = netconn_recv( netconn, buf, len, 0, (int *)ret_len ))) return err;
+-    if (len && !*ret_len) return ERROR_WINHTTP_INVALID_SERVER_RESPONSE;
++    if (*ret_len != len) return ERROR_WINHTTP_INVALID_SERVER_RESPONSE;
+     return ERROR_SUCCESS;
+ }
+ 
+@@ -3341,8 +3341,7 @@ static DWORD receive_frame( struct netconn *netconn, DWORD *ret_len, enum socket
+     char hdr[2];
+ 
+     if ((ret = receive_bytes( netconn, hdr, sizeof(hdr), &count ))) return ret;
+-    if (count != sizeof(hdr) || (hdr[0] & RESERVED_BIT) || (hdr[1] & MASK_BIT) ||
+-        (map_opcode( hdr[0] & 0xf, FALSE ) == ~0u))
++    if ((hdr[0] & RESERVED_BIT) || (hdr[1] & MASK_BIT) || (map_opcode( hdr[0] & 0xf, FALSE ) == ~0u))
+     {
+         return ERROR_WINHTTP_INVALID_SERVER_RESPONSE;
+     }
+@@ -3353,14 +3352,12 @@ static DWORD receive_frame( struct netconn *netconn, DWORD *ret_len, enum socket
+     {
+         USHORT len16;
+         if ((ret = receive_bytes( netconn, (char *)&len16, sizeof(len16), &count ))) return ret;
+-        if (count != sizeof(len16)) return ERROR_WINHTTP_INVALID_SERVER_RESPONSE;
+         len = RtlUshortByteSwap( len16 );
+     }
+     else if (len == 127)
+     {
+         ULONGLONG len64;
+         if ((ret = receive_bytes( netconn, (char *)&len64, sizeof(len64), &count ))) return ret;
+-        if (count != sizeof(len64)) return ERROR_WINHTTP_INVALID_SERVER_RESPONSE;
+         if ((len64 = RtlUlonglongByteSwap( len64 )) > ~0u) return ERROR_NOT_SUPPORTED;
+         len = len64;
+     }
+@@ -3548,23 +3545,21 @@ static DWORD socket_close( struct socket *socket, USHORT status, const void *rea
+     }
+ 
+     if ((ret = receive_frame( netconn, &count, &socket->opcode ))) goto done;
+-    if (socket->opcode != SOCKET_OPCODE_CLOSE || (count && count > sizeof(socket->reason)))
++    if (socket->opcode != SOCKET_OPCODE_CLOSE ||
++        (count && (count < sizeof(socket->status) || count > sizeof(socket->status) + sizeof(socket->reason))))
+     {
+         ret = ERROR_WINHTTP_INVALID_SERVER_RESPONSE;
+         goto done;
+     }
+ 
+-    if ((ret = receive_bytes( netconn, (char *)&socket->status, sizeof(socket->status), &count ))) goto done;
+-    if (count != sizeof(socket->status))
++    if (count)
+     {
+-        ret = ERROR_WINHTTP_INVALID_SERVER_RESPONSE;
+-        goto done;
+-    }
+-    socket->status = RtlUshortByteSwap( socket->status );
+-    if (!(ret = receive_bytes( netconn, socket->reason, sizeof(socket->reason), &socket->reason_len )))
+-    {
+-        socket->state = SOCKET_STATE_CLOSED;
++        DWORD reason_len = count - sizeof(socket->status);
++        if ((ret = receive_bytes( netconn, (char *)&socket->status, sizeof(socket->status), &count ))) goto done;
++        socket->status = RtlUshortByteSwap( socket->status );
++        if ((ret = receive_bytes( netconn, socket->reason, reason_len, &socket->reason_len ))) goto done;
+     }
++    socket->state = SOCKET_STATE_CLOSED;
+ 
+ done:
+     if (async)
+From 23db5357bb0b473ecaba6cb4466e474f07cf4645 Mon Sep 17 00:00:00 2001
+From: Hans Leidekker <hans@codeweavers.com>
+Date: Thu, 25 Jun 2020 11:00:25 +0200
+Subject: [PATCH] winhttp: Add stubs for new proxy functions.
+
+Signed-off-by: Hans Leidekker <hans@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/winhttp/session.c    | 107 ++++++++++++++++++++++++++++++++++++++
+ dlls/winhttp/winhttp.spec |  12 +++++
+ 2 files changed, 119 insertions(+)
+
+diff --git a/dlls/winhttp/session.c b/dlls/winhttp/session.c
+index 186b70e4a2d..228eb646ae0 100644
+--- a/dlls/winhttp/session.c
++++ b/dlls/winhttp/session.c
+@@ -2028,6 +2028,113 @@ BOOL WINAPI WinHttpSetDefaultProxyConfiguration( WINHTTP_PROXY_INFO *info )
+     return ret;
+ }
+ 
++/***********************************************************************
++ *          WinHttpCreateProxyResolver (winhttp.@)
++ */
++DWORD WINAPI WinHttpCreateProxyResolver( HINTERNET hsession, HINTERNET *hresolver )
++{
++    FIXME("%p, %p\n", hsession, hresolver);
++    return ERROR_WINHTTP_AUTO_PROXY_SERVICE_ERROR;
++}
++
++/***********************************************************************
++ *          WinHttpFreeProxyResult (winhttp.@)
++ */
++void WINAPI WinHttpFreeProxyResult( WINHTTP_PROXY_RESULT *result )
++{
++    FIXME("%p\n", result);
++}
++
++/***********************************************************************
++ *          WinHttpFreeProxyResultEx (winhttp.@)
++ */
++void WINAPI WinHttpFreeProxyResultEx( WINHTTP_PROXY_RESULT_EX *result )
++{
++    FIXME("%p\n", result);
++}
++
++/***********************************************************************
++ *          WinHttpFreeProxySettings (winhttp.@)
++ */
++void WINAPI WinHttpFreeProxySettings( WINHTTP_PROXY_SETTINGS *settings )
++{
++    FIXME("%p\n", settings);
++}
++
++/***********************************************************************
++ *          WinHttpGetProxyForUrlEx (winhttp.@)
++ */
++DWORD WINAPI WinHttpGetProxyForUrlEx( HINTERNET hresolver, const WCHAR *url, WINHTTP_AUTOPROXY_OPTIONS *options,
++                                      DWORD_PTR ctx )
++{
++    FIXME("%p, %s, %p, %lx\n", hresolver, debugstr_w(url), options, ctx);
++    return ERROR_WINHTTP_AUTO_PROXY_SERVICE_ERROR;
++}
++
++/***********************************************************************
++ *          WinHttpGetProxyForUrlEx2 (winhttp.@)
++ */
++DWORD WINAPI WinHttpGetProxyForUrlEx2( HINTERNET hresolver, const WCHAR *url, WINHTTP_AUTOPROXY_OPTIONS *options,
++                                       DWORD selection_len, BYTE *selection, DWORD_PTR ctx )
++{
++    FIXME("%p, %s, %p, %u, %p, %lx\n", hresolver, debugstr_w(url), options, selection_len, selection, ctx);
++    return ERROR_WINHTTP_AUTO_PROXY_SERVICE_ERROR;
++}
++
++/***********************************************************************
++ *          WinHttpGetProxyResult (winhttp.@)
++ */
++DWORD WINAPI WinHttpGetProxyResult( HINTERNET hresolver, WINHTTP_PROXY_RESULT *result )
++{
++    FIXME("%p, %p\n", hresolver, result);
++    return ERROR_WINHTTP_AUTO_PROXY_SERVICE_ERROR;
++}
++
++/***********************************************************************
++ *          WinHttpGetProxyResultEx (winhttp.@)
++ */
++DWORD WINAPI WinHttpGetProxyResultEx( HINTERNET hresolver, WINHTTP_PROXY_RESULT_EX *result )
++{
++    FIXME("%p, %p\n", hresolver, result);
++    return ERROR_WINHTTP_AUTO_PROXY_SERVICE_ERROR;
++}
++
++/***********************************************************************
++ *          WinHttpGetProxySettingsVersion (winhttp.@)
++ */
++DWORD WINAPI WinHttpGetProxySettingsVersion( HINTERNET hsession, DWORD *version )
++{
++    FIXME("%p, %p\n", hsession, version);
++    return ERROR_WINHTTP_AUTO_PROXY_SERVICE_ERROR;
++}
++
++/***********************************************************************
++ *          WinHttpReadProxySettings (winhttp.@)
++ */
++DWORD WINAPI WinHttpReadProxySettings( HINTERNET hsession, const WCHAR *connection, BOOL use_defaults,
++                                       BOOL set_autodiscover, DWORD *version, BOOL *defaults_returned,
++                                       WINHTTP_PROXY_SETTINGS *settings)
++{
++    FIXME("%p, %s, %d, %d, %p, %p, %p\n", hsession, debugstr_w(connection), use_defaults, set_autodiscover,
++          version, defaults_returned, settings);
++    return ERROR_WINHTTP_AUTO_PROXY_SERVICE_ERROR;
++}
++
++/***********************************************************************
++ *          WinHttpResetAutoProxy (winhttp.@)
++ */
++DWORD WINAPI WinHttpResetAutoProxy( HINTERNET hsession, DWORD flags )
++{
++    FIXME("%p, %08x\n", hsession, flags);
++    return ERROR_WINHTTP_AUTO_PROXY_SERVICE_ERROR;
++}
++
++DWORD WINAPI WinHttpWriteProxySettings( HINTERNET hsession, BOOL force, WINHTTP_PROXY_SETTINGS *settings )
++{
++    FIXME("%p, %d, %p\n", hsession, force, settings);
++    return ERROR_WINHTTP_AUTO_PROXY_SERVICE_ERROR;
++}
++
+ /***********************************************************************
+  *          WinHttpSetStatusCallback (winhttp.@)
+  */
+diff --git a/dlls/winhttp/winhttp.spec b/dlls/winhttp/winhttp.spec
+index beace245a8c..581918791e3 100644
+--- a/dlls/winhttp/winhttp.spec
++++ b/dlls/winhttp/winhttp.spec
+@@ -7,11 +7,20 @@
+ @ stdcall WinHttpCloseHandle(ptr)
+ @ stdcall WinHttpConnect(ptr wstr long long)
+ @ stdcall WinHttpCrackUrl(wstr long long ptr)
++@ stdcall WinHttpCreateProxyResolver(ptr ptr)
+ @ stdcall WinHttpCreateUrl(ptr long ptr ptr)
+ @ stdcall WinHttpDetectAutoProxyConfigUrl(long ptr)
++@ stdcall WinHttpFreeProxyResult(ptr)
++@ stdcall WinHttpFreeProxyResultEx(ptr)
++@ stdcall WinHttpFreeProxySettings(ptr)
+ @ stdcall WinHttpGetDefaultProxyConfiguration(ptr)
+ @ stdcall WinHttpGetIEProxyConfigForCurrentUser(ptr)
+ @ stdcall WinHttpGetProxyForUrl(ptr wstr ptr ptr)
++@ stdcall WinHttpGetProxyForUrlEx(ptr wstr ptr ptr)
++@ stdcall WinHttpGetProxyForUrlEx2(ptr wstr ptr long ptr ptr)
++@ stdcall WinHttpGetProxyResult(ptr ptr)
++@ stdcall WinHttpGetProxyResultEx(ptr ptr)
++@ stdcall WinHttpGetProxySettingsVersion(ptr ptr)
+ @ stdcall WinHttpOpen(wstr long wstr wstr long)
+ @ stdcall WinHttpOpenRequest(ptr wstr wstr wstr wstr ptr long)
+ @ stdcall WinHttpQueryAuthSchemes(ptr ptr ptr ptr)
+@@ -19,7 +28,9 @@
+ @ stdcall WinHttpQueryHeaders(ptr long wstr ptr ptr ptr)
+ @ stdcall WinHttpQueryOption(ptr long ptr ptr)
+ @ stdcall WinHttpReadData(ptr ptr long ptr)
++@ stdcall WinHttpReadProxySettings(ptr wstr long long ptr ptr ptr)
+ @ stdcall WinHttpReceiveResponse(ptr ptr)
++@ stdcall WinHttpResetAutoProxy(ptr long)
+ @ stdcall WinHttpSendRequest(ptr wstr long ptr long long long)
+ @ stdcall WinHttpSetCredentials(ptr long long wstr ptr ptr)
+ @ stdcall WinHttpSetDefaultProxyConfiguration(ptr)
+@@ -35,3 +46,4 @@
+ @ stdcall WinHttpWebSocketSend(ptr long ptr long)
+ @ stdcall WinHttpWebSocketShutdown(ptr long ptr long)
+ @ stdcall WinHttpWriteData(ptr ptr long ptr)
++@ stdcall WinHttpWriteProxySettings(ptr long ptr)
+
+From c7d140d34aa6f40a92f95fd8698501d3283c9296 Mon Sep 17 00:00:00 2001
+From: Hans Leidekker <hans@codeweavers.com>
+Date: Mon, 29 Jun 2020 15:46:10 +0200
+Subject: [PATCH] winhttp: Reimplement the task queue using thread pool work
+ objects.
+
+Simplifies cleanup.
+
+Signed-off-by: Hans Leidekker <hans@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/winhttp/request.c         | 336 ++++++++++++++++-----------------
+ dlls/winhttp/session.c         |  12 +-
+ dlls/winhttp/winhttp_private.h |  31 +--
+ 3 files changed, 169 insertions(+), 210 deletions(-)
+
+diff --git a/dlls/winhttp/request.c b/dlls/winhttp/request.c
+index c15be385925..bc3d365f7cd 100644
+--- a/dlls/winhttp/request.c
++++ b/dlls/winhttp/request.c
+@@ -122,92 +122,34 @@ static const WCHAR *attribute_table[] =
+     NULL                            /* WINHTTP_QUERY_PASSPORT_CONFIG            = 78 */
+ };
+ 
+-static struct task_header *dequeue_task( struct queue *queue )
++static DWORD start_queue( struct queue *queue )
+ {
+-    struct task_header *task;
++    if (queue->pool) return ERROR_SUCCESS;
+ 
+-    EnterCriticalSection( &queue->cs );
+-    TRACE("%u tasks queued in %p\n", list_count(&queue->tasks), queue);
+-    task = LIST_ENTRY( list_head( &queue->tasks ), struct task_header, entry );
+-    if (task) list_remove( &task->entry );
+-    LeaveCriticalSection( &queue->cs );
++    if (!(queue->pool = CreateThreadpool( NULL ))) return GetLastError();
++    SetThreadpoolThreadMinimum( queue->pool, 1 );
++    SetThreadpoolThreadMaximum( queue->pool, 1 );
+ 
+-    TRACE("returning task %p\n", task);
+-    return task;
+-}
+-
+-static void CALLBACK run_queue( TP_CALLBACK_INSTANCE *instance, void *ctx )
+-{
+-    struct queue *queue = ctx;
+-    HANDLE handles[] = { queue->wait, queue->cancel };
+-
+-    for (;;)
+-    {
+-        DWORD err = WaitForMultipleObjects( 2, handles, FALSE, INFINITE );
+-        switch (err)
+-        {
+-        case WAIT_OBJECT_0:
+-        {
+-            struct task_header *task;
+-            while ((task = dequeue_task( queue )))
+-            {
+-                task->proc( task );
+-                release_object( task->object );
+-                heap_free( task );
+-            }
+-            break;
+-        }
+-        case WAIT_OBJECT_0 + 1:
+-            TRACE("exiting\n");
+-            CloseHandle( queue->wait );
+-            CloseHandle( queue->cancel );
+-            queue->object->vtbl->destroy( queue->object );
+-            return;
+-
+-        default:
+-            ERR("wait failed %u (%u)\n", err, GetLastError());
+-            break;
+-        }
+-    }
+-}
++    memset( &queue->env, 0, sizeof(queue->env) );
++    queue->env.Version = 1;
++    queue->env.Pool = queue->pool;
+ 
+-static DWORD start_queue( struct object_header *object, struct queue *queue )
+-{
+-    DWORD ret = ERROR_OUTOFMEMORY;
+-
+-    if (queue->wait) return ERROR_SUCCESS;
+-
+-    queue->object = object;
+-    list_init( &queue->tasks );
+-    if (!(queue->wait = CreateEventW( NULL, FALSE, FALSE, NULL ))) goto error;
+-    if (!(queue->cancel = CreateEventW( NULL, FALSE, FALSE, NULL ))) goto error;
+-    if (!TrySubmitThreadpoolCallback( run_queue, queue, NULL )) ret = GetLastError();
+-    else
+-    {
+-        queue->proc_running = TRUE;
+-        TRACE("started %p\n", queue);
+-        return ERROR_SUCCESS;
+-    }
+-
+-error:
+-    CloseHandle( queue->wait );
+-    queue->wait = NULL;
+-    CloseHandle( queue->cancel );
+-    queue->cancel = NULL;
+-    return ret;
++    TRACE("started %p\n", queue);
++    return ERROR_SUCCESS;
+ }
+ 
+-static DWORD queue_task( struct object_header *object, struct queue *queue, struct task_header *task )
++static DWORD queue_task( struct queue *queue, PTP_WORK_CALLBACK task, void *ctx )
+ {
++    TP_WORK *work;
+     DWORD ret;
+-    if ((ret = start_queue( object, queue ))) return ret;
+ 
+-    EnterCriticalSection( &queue->cs );
+-    TRACE("queueing task %p in %p\n", task, queue);
+-    list_add_tail( &queue->tasks, &task->entry );
+-    LeaveCriticalSection( &queue->cs );
++    if ((ret = start_queue( queue ))) return ret;
++
++    if (!(work = CreateThreadpoolWork( task, ctx, &queue->env ))) return GetLastError();
++    TRACE("queueing %p in %p\n", work, queue);
++    SubmitThreadpoolWork( work );
++    CloseThreadpoolWork( work );
+ 
+-    SetEvent( queue->wait );
+     return ERROR_SUCCESS;
+ }
+ 
+@@ -2216,13 +2158,16 @@ static DWORD send_request( struct request *request, const WCHAR *headers, DWORD
+     return ret;
+ }
+ 
+-static void task_send_request( struct task_header *task )
++static void CALLBACK task_send_request( TP_CALLBACK_INSTANCE *instance, void *ctx, TP_WORK *work )
+ {
+-    struct request *request = (struct request *)task->object;
+-    struct send_request *s = (struct send_request *)task;
++    struct send_request *s = ctx;
++
++    TRACE("running %p\n", work);
++    send_request( s->request, s->headers, s->headers_len, s->optional, s->optional_len, s->total_len, s->context, TRUE );
+ 
+-    send_request( request, s->headers, s->headers_len, s->optional, s->optional_len, s->total_len, s->context, TRUE );
++    release_object( &s->request->hdr );
+     heap_free( s->headers );
++    heap_free( s );
+ }
+ 
+ /***********************************************************************
+@@ -2256,8 +2201,7 @@ BOOL WINAPI WinHttpSendRequest( HINTERNET hrequest, LPCWSTR headers, DWORD heade
+         struct send_request *s;
+ 
+         if (!(s = heap_alloc( sizeof(*s) ))) return FALSE;
+-        s->hdr.object   = &request->hdr;
+-        s->hdr.proc     = task_send_request;
++        s->request      = request;
+         s->headers      = strdupW( headers );
+         s->headers_len  = headers_len;
+         s->optional     = optional;
+@@ -2266,7 +2210,12 @@ BOOL WINAPI WinHttpSendRequest( HINTERNET hrequest, LPCWSTR headers, DWORD heade
+         s->context      = context;
+ 
+         addref_object( &request->hdr );
+-        ret = queue_task( &request->hdr, &request->queue, (struct task_header *)s );
++        if ((ret = queue_task( &request->queue, task_send_request, s )))
++        {
++            release_object( &request->hdr );
++            heap_free( s->headers );
++            heap_free( s );
++        }
+     }
+     else ret = send_request( request, headers, headers_len, optional, optional_len, total_len, context, FALSE );
+ 
+@@ -2797,10 +2746,15 @@ static DWORD receive_response( struct request *request, BOOL async )
+     return ret;
+ }
+ 
+-static void task_receive_response( struct task_header *task )
++static void CALLBACK task_receive_response( TP_CALLBACK_INSTANCE *instance, void *ctx, TP_WORK *work )
+ {
+-    struct request *request = (struct request *)task->object;
+-    receive_response( request, TRUE );
++    struct receive_response *r = ctx;
++
++    TRACE("running %p\n", work);
++    receive_response( r->request, TRUE );
++
++    release_object( &r->request->hdr );
++    heap_free( r );
+ }
+ 
+ /***********************************************************************
+@@ -2830,11 +2784,14 @@ BOOL WINAPI WinHttpReceiveResponse( HINTERNET hrequest, LPVOID reserved )
+         struct receive_response *r;
+ 
+         if (!(r = heap_alloc( sizeof(*r) ))) return FALSE;
+-        r->hdr.object = &request->hdr;
+-        r->hdr.proc   = task_receive_response;
++        r->request = request;
+ 
+         addref_object( &request->hdr );
+-        ret = queue_task( &request->hdr, &request->queue, (struct task_header *)r );
++        if ((ret = queue_task( &request->queue, task_receive_response, r )))
++        {
++            release_object( &request->hdr );
++            heap_free( r );
++        }
+     }
+     else ret = receive_response( request, FALSE );
+ 
+@@ -2876,12 +2833,15 @@ static DWORD query_data_available( struct request *request, DWORD *available, BO
+     return ret;
+ }
+ 
+-static void task_query_data_available( struct task_header *task )
++static void CALLBACK task_query_data_available( TP_CALLBACK_INSTANCE *instance, void *ctx, TP_WORK *work )
+ {
+-    struct request *request = (struct request *)task->object;
+-    struct query_data *q = (struct query_data *)task;
++    struct query_data *q = ctx;
+ 
+-    query_data_available( request, q->available, TRUE );
++    TRACE("running %p\n", work);
++    query_data_available( q->request, q->available, TRUE );
++
++    release_object( &q->request->hdr );
++    heap_free( q );
+ }
+ 
+ /***********************************************************************
+@@ -2911,12 +2871,15 @@ BOOL WINAPI WinHttpQueryDataAvailable( HINTERNET hrequest, LPDWORD available )
+         struct query_data *q;
+ 
+         if (!(q = heap_alloc( sizeof(*q) ))) return FALSE;
+-        q->hdr.object = &request->hdr;
+-        q->hdr.proc   = task_query_data_available;
+-        q->available  = available;
++        q->request   = request;
++        q->available = available;
+ 
+         addref_object( &request->hdr );
+-        ret = queue_task( &request->hdr, &request->queue, (struct task_header *)q );
++        if ((ret = queue_task( &request->queue, task_query_data_available, q )))
++        {
++            release_object( &request->hdr );
++            heap_free( q );
++        }
+     }
+     else ret = query_data_available( request, available, FALSE );
+ 
+@@ -2925,12 +2888,15 @@ BOOL WINAPI WinHttpQueryDataAvailable( HINTERNET hrequest, LPDWORD available )
+     return !ret;
+ }
+ 
+-static void task_read_data( struct task_header *task )
++static void CALLBACK task_read_data( TP_CALLBACK_INSTANCE *instance, void *ctx, TP_WORK *work )
+ {
+-    struct request *request = (struct request *)task->object;
+-    struct read_data *r = (struct read_data *)task;
++    struct read_data *r = ctx;
++
++    TRACE("running %p\n", work);
++    read_data( r->request, r->buffer, r->to_read, r->read, TRUE );
+ 
+-    read_data( request, r->buffer, r->to_read, r->read, TRUE );
++    release_object( &r->request->hdr );
++    heap_free( r );
+ }
+ 
+ /***********************************************************************
+@@ -2960,14 +2926,17 @@ BOOL WINAPI WinHttpReadData( HINTERNET hrequest, LPVOID buffer, DWORD to_read, L
+         struct read_data *r;
+ 
+         if (!(r = heap_alloc( sizeof(*r) ))) return FALSE;
+-        r->hdr.object = &request->hdr;
+-        r->hdr.proc   = task_read_data;
+-        r->buffer     = buffer;
+-        r->to_read    = to_read;
+-        r->read       = read;
++        r->request = request;
++        r->buffer  = buffer;
++        r->to_read = to_read;
++        r->read    = read;
+ 
+         addref_object( &request->hdr );
+-        ret = queue_task( &request->hdr, &request->queue, (struct task_header *)r );
++        if ((ret = queue_task( &request->queue, task_read_data, r )))
++        {
++            release_object( &request->hdr );
++            heap_free( r );
++        }
+     }
+     else ret = read_data( request, buffer, to_read, read, FALSE );
+ 
+@@ -2998,12 +2967,15 @@ static DWORD write_data( struct request *request, const void *buffer, DWORD to_w
+     return ret;
+ }
+ 
+-static void task_write_data( struct task_header *task )
++static void CALLBACK task_write_data( TP_CALLBACK_INSTANCE *instance, void *ctx, TP_WORK *work )
+ {
+-    struct request *request = (struct request *)task->object;
+-    struct write_data *w = (struct write_data *)task;
++    struct write_data *w = ctx;
+ 
+-    write_data( request, w->buffer, w->to_write, w->written, TRUE );
++    TRACE("running %p\n", work);
++    write_data( w->request, w->buffer, w->to_write, w->written, TRUE );
++
++    release_object( &w->request->hdr );
++    heap_free( w );
+ }
+ 
+ /***********************************************************************
+@@ -3033,14 +3005,17 @@ BOOL WINAPI WinHttpWriteData( HINTERNET hrequest, LPCVOID buffer, DWORD to_write
+         struct write_data *w;
+ 
+         if (!(w = heap_alloc( sizeof(*w) ))) return FALSE;
+-        w->hdr.object = &request->hdr;
+-        w->hdr.proc   = task_write_data;
+-        w->buffer     = buffer;
+-        w->to_write   = to_write;
+-        w->written    = written;
++        w->request  = request;
++        w->buffer   = buffer;
++        w->to_write = to_write;
++        w->written  = written;
+ 
+         addref_object( &request->hdr );
+-        ret = queue_task( &request->hdr, &request->queue, (struct task_header *)w );
++        if ((ret = queue_task( &request->queue, task_write_data, w )))
++        {
++            release_object( &request->hdr );
++            heap_free( w );
++        }
+     }
+     else ret = write_data( request, buffer, to_write, written, FALSE );
+ 
+@@ -3062,25 +3037,10 @@ static void socket_destroy( struct object_header *hdr )
+ 
+     TRACE("%p\n", socket);
+ 
+-    if (socket->send_q.proc_running)
+-    {
+-        socket->send_q.proc_running = FALSE;
+-        SetEvent( socket->send_q.cancel );
+-        return;
+-    }
+-    if (socket->recv_q.proc_running)
+-    {
+-        socket->recv_q.proc_running = FALSE;
+-        SetEvent( socket->recv_q.cancel );
+-        return;
+-    }
+-    release_object( &socket->request->hdr );
+-
+-    socket->send_q.cs.DebugInfo->Spare[0] = 0;
+-    DeleteCriticalSection( &socket->send_q.cs );
++    if (socket->send_q.pool) CloseThreadpool( socket->send_q.pool );
++    if (socket->recv_q.pool) CloseThreadpool( socket->recv_q.pool );
+ 
+-    socket->recv_q.cs.DebugInfo->Spare[0] = 0;
+-    DeleteCriticalSection( &socket->recv_q.cs );
++    release_object( &socket->request->hdr );
+     heap_free( socket );
+ }
+ 
+@@ -3128,10 +3088,6 @@ HINTERNET WINAPI WinHttpWebSocketCompleteUpgrade( HINTERNET hrequest, DWORD_PTR
+     socket->hdr.callback = request->hdr.callback;
+     socket->hdr.notify_mask = request->hdr.notify_mask;
+     socket->hdr.context = context;
+-    InitializeCriticalSection( &socket->send_q.cs );
+-    socket->send_q.cs.DebugInfo->Spare[0] = (DWORD_PTR)(__FILE__ ": socket.send_q.cs");
+-    InitializeCriticalSection( &socket->recv_q.cs );
+-    socket->recv_q.cs.DebugInfo->Spare[0] = (DWORD_PTR)(__FILE__ ": socket.recv_q.cs");
+ 
+     addref_object( &request->hdr );
+     socket->request = request;
+@@ -3252,12 +3208,15 @@ static DWORD socket_send( struct socket *socket, WINHTTP_WEB_SOCKET_BUFFER_TYPE
+     return ret;
+ }
+ 
+-static void task_socket_send( struct task_header *task )
++static void CALLBACK task_socket_send( TP_CALLBACK_INSTANCE *instance, void *ctx, TP_WORK *work )
+ {
+-    struct socket *socket = (struct socket *)task->object;
+-    struct socket_send *s = (struct socket_send *)task;
++    struct socket_send *s = ctx;
+ 
+-    socket_send( socket, s->type, s->buf, s->len, TRUE );
++    TRACE("running %p\n", work);
++    socket_send( s->socket, s->type, s->buf, s->len, TRUE );
++
++    release_object( &s->socket->hdr );
++    heap_free( s );
+ }
+ 
+ DWORD WINAPI WinHttpWebSocketSend( HINTERNET hsocket, WINHTTP_WEB_SOCKET_BUFFER_TYPE type, void *buf, DWORD len )
+@@ -3291,14 +3250,17 @@ DWORD WINAPI WinHttpWebSocketSend( HINTERNET hsocket, WINHTTP_WEB_SOCKET_BUFFER_
+         struct socket_send *s;
+ 
+         if (!(s = heap_alloc( sizeof(*s) ))) return FALSE;
+-        s->hdr.object = &socket->hdr;
+-        s->hdr.proc   = task_socket_send;
+-        s->type       = type;
+-        s->buf        = buf;
+-        s->len        = len;
++        s->socket = socket;
++        s->type   = type;
++        s->buf    = buf;
++        s->len    = len;
+ 
+         addref_object( &socket->hdr );
+-        ret = queue_task( &socket->hdr, &socket->send_q, (struct task_header *)s );
++        if ((ret = queue_task( &socket->send_q, task_socket_send, s )))
++        {
++            release_object( &socket->hdr );
++            heap_free( s );
++        }
+     }
+     else ret = socket_send( socket, type, buf, len, FALSE );
+ 
+@@ -3404,12 +3366,15 @@ static DWORD socket_receive( struct socket *socket, void *buf, DWORD len, DWORD
+     return ret;
+ }
+ 
+-static void task_socket_receive( struct task_header *task )
++static void CALLBACK task_socket_receive( TP_CALLBACK_INSTANCE *instance, void *ctx, TP_WORK *work )
+ {
+-    struct socket *socket = (struct socket *)task->object;
+-    struct socket_receive *r = (struct socket_receive *)task;
++    struct socket_receive *r = ctx;
++
++    TRACE("running %p\n", work);
++    socket_receive( r->socket, r->buf, r->len, NULL, NULL, TRUE );
+ 
+-    socket_receive( socket, r->buf, r->len, NULL, NULL, TRUE );
++    release_object( &r->socket->hdr );
++    heap_free( r );
+ }
+ 
+ DWORD WINAPI WinHttpWebSocketReceive( HINTERNET hsocket, void *buf, DWORD len, DWORD *ret_len,
+@@ -3439,13 +3404,16 @@ DWORD WINAPI WinHttpWebSocketReceive( HINTERNET hsocket, void *buf, DWORD len, D
+         struct socket_receive *r;
+ 
+         if (!(r = heap_alloc( sizeof(*r) ))) return FALSE;
+-        r->hdr.object = &socket->hdr;
+-        r->hdr.proc   = task_socket_receive;
+-        r->buf        = buf;
+-        r->len        = len;
++        r->socket = socket;
++        r->buf    = buf;
++        r->len    = len;
+ 
+         addref_object( &socket->hdr );
+-        ret = queue_task( &socket->hdr, &socket->recv_q, (struct task_header *)r );
++        if ((ret = queue_task( &socket->recv_q, task_socket_receive, r )))
++        {
++            release_object( &socket->hdr );
++            heap_free( r );
++        }
+     }
+     else ret = socket_receive( socket, buf, len, ret_len, ret_type, FALSE );
+ 
+@@ -3477,12 +3445,15 @@ static DWORD socket_shutdown( struct socket *socket, USHORT status, const void *
+     return ret;
+ }
+ 
+-static void task_socket_shutdown( struct task_header *task )
++static void CALLBACK task_socket_shutdown( TP_CALLBACK_INSTANCE *instance, void *ctx, TP_WORK *work )
+ {
+-    struct socket *socket = (struct socket *)task->object;
+-    struct socket_shutdown *s = (struct socket_shutdown *)task;
++    struct socket_shutdown *s = ctx;
+ 
+-    socket_shutdown( socket, s->status, s->reason, s->len, TRUE );
++    socket_shutdown( s->socket, s->status, s->reason, s->len, TRUE );
++
++    TRACE("running %p\n", work);
++    release_object( &s->socket->hdr );
++    heap_free( s );
+ }
+ 
+ DWORD WINAPI WinHttpWebSocketShutdown( HINTERNET hsocket, USHORT status, void *reason, DWORD len )
+@@ -3511,14 +3482,17 @@ DWORD WINAPI WinHttpWebSocketShutdown( HINTERNET hsocket, USHORT status, void *r
+         struct socket_shutdown *s;
+ 
+         if (!(s = heap_alloc( sizeof(*s) ))) return FALSE;
+-        s->hdr.object = &socket->hdr;
+-        s->hdr.proc   = task_socket_shutdown;
+-        s->status     = status;
+-        s->reason     = reason;
+-        s->len        = len;
++        s->socket = socket;
++        s->status = status;
++        s->reason = reason;
++        s->len    = len;
+ 
+         addref_object( &socket->hdr );
+-        ret = queue_task( &socket->hdr, &socket->send_q, (struct task_header *)s );
++        if ((ret = queue_task( &socket->send_q, task_socket_shutdown, s )))
++        {
++            release_object( &socket->hdr );
++            heap_free( s );
++        }
+     }
+     else ret = socket_shutdown( socket, status, reason, len, FALSE );
+ 
+@@ -3577,12 +3551,15 @@ static DWORD socket_close( struct socket *socket, USHORT status, const void *rea
+     return ret;
+ }
+ 
+-static void task_socket_close( struct task_header *task )
++static void CALLBACK task_socket_close( TP_CALLBACK_INSTANCE *instance, void *ctx, TP_WORK *work )
+ {
+-    struct socket *socket = (struct socket *)task->object;
+-    struct socket_shutdown *s = (struct socket_shutdown *)task;
++    struct socket_shutdown *s = ctx;
++
++    socket_close( s->socket, s->status, s->reason, s->len, TRUE );
+ 
+-    socket_close( socket, s->status, s->reason, s->len, TRUE );
++    TRACE("running %p\n", work);
++    release_object( &s->socket->hdr );
++    heap_free( s );
+ }
+ 
+ DWORD WINAPI WinHttpWebSocketClose( HINTERNET hsocket, USHORT status, void *reason, DWORD len )
+@@ -3611,14 +3588,17 @@ DWORD WINAPI WinHttpWebSocketClose( HINTERNET hsocket, USHORT status, void *reas
+         struct socket_shutdown *s;
+ 
+         if (!(s = heap_alloc( sizeof(*s) ))) return FALSE;
+-        s->hdr.object = &socket->hdr;
+-        s->hdr.proc   = task_socket_close;
+-        s->status     = status;
+-        s->reason     = reason;
+-        s->len        = len;
++        s->socket = socket;
++        s->status = status;
++        s->reason = reason;
++        s->len    = len;
+ 
+         addref_object( &socket->hdr );
+-        ret = queue_task( &socket->hdr, &socket->recv_q, (struct task_header *)s );
++        if ((ret = queue_task( &socket->recv_q, task_socket_close, s )))
++        {
++            release_object( &socket->hdr );
++            heap_free( s );
++        }
+     }
+     else ret = socket_close( socket, status, reason, len, FALSE );
+ 
+diff --git a/dlls/winhttp/session.c b/dlls/winhttp/session.c
+index 228eb646ae0..f3ab8c9b959 100644
+--- a/dlls/winhttp/session.c
++++ b/dlls/winhttp/session.c
+@@ -578,13 +578,7 @@ static void request_destroy( struct object_header *hdr )
+ 
+     TRACE("%p\n", request);
+ 
+-    if (request->queue.proc_running)
+-    {
+-        /* Signal to the task proc to quit. It will call this again when it does. */
+-        request->queue.proc_running = FALSE;
+-        SetEvent( request->queue.cancel );
+-        return;
+-    }
++    if (request->queue.pool) CloseThreadpool( request->queue.pool );
+     release_object( &request->connect->hdr );
+ 
+     if (request->cred_handle_initialized) FreeCredentialsHandle( &request->cred_handle );
+@@ -614,8 +608,6 @@ static void request_destroy( struct object_header *hdr )
+         }
+     }
+ 
+-    request->queue.cs.DebugInfo->Spare[0] = 0;
+-    DeleteCriticalSection( &request->queue.cs );
+     heap_free( request );
+ }
+ 
+@@ -1120,8 +1112,6 @@ HINTERNET WINAPI WinHttpOpenRequest( HINTERNET hconnect, LPCWSTR verb, LPCWSTR o
+     request->hdr.notify_mask = connect->hdr.notify_mask;
+     request->hdr.context = connect->hdr.context;
+     request->hdr.redirect_policy = connect->hdr.redirect_policy;
+-    InitializeCriticalSection( &request->queue.cs );
+-    request->queue.cs.DebugInfo->Spare[0] = (DWORD_PTR)(__FILE__ ": request.queue.cs");
+ 
+     addref_object( &connect->hdr );
+     request->connect = connect;
+diff --git a/dlls/winhttp/winhttp_private.h b/dlls/winhttp/winhttp_private.h
+index 4a943750061..ac7e9ff09b5 100644
+--- a/dlls/winhttp/winhttp_private.h
++++ b/dlls/winhttp/winhttp_private.h
+@@ -157,12 +157,8 @@ struct authinfo
+ 
+ struct queue
+ {
+-    struct object_header *object;
+-    CRITICAL_SECTION cs;
+-    BOOL proc_running;
+-    HANDLE wait;
+-    HANDLE cancel;
+-    struct list tasks;
++    TP_POOL *pool;
++    TP_CALLBACK_ENVIRON env;
+ };
+ 
+ enum request_flags
+@@ -252,16 +248,9 @@ struct socket
+     DWORD reason_len;
+ };
+ 
+-struct task_header
+-{
+-    struct list entry;
+-    struct object_header *object;
+-    void (*proc)( struct task_header * );
+-};
+-
+ struct send_request
+ {
+-    struct task_header hdr;
++    struct request *request;
+     WCHAR *headers;
+     DWORD headers_len;
+     void *optional;
+@@ -272,18 +261,18 @@ struct send_request
+ 
+ struct receive_response
+ {
+-    struct task_header hdr;
++    struct request *request;
+ };
+ 
+ struct query_data
+ {
+-    struct task_header hdr;
++    struct request *request;
+     DWORD *available;
+ };
+ 
+ struct read_data
+ {
+-    struct task_header hdr;
++    struct request *request;
+     void *buffer;
+     DWORD to_read;
+     DWORD *read;
+@@ -291,7 +280,7 @@ struct read_data
+ 
+ struct write_data
+ {
+-    struct task_header hdr;
++    struct request *request;
+     const void *buffer;
+     DWORD to_write;
+     DWORD *written;
+@@ -299,7 +288,7 @@ struct write_data
+ 
+ struct socket_send
+ {
+-    struct task_header hdr;
++    struct socket *socket;
+     WINHTTP_WEB_SOCKET_BUFFER_TYPE type;
+     const void *buf;
+     DWORD len;
+@@ -307,14 +296,14 @@ struct socket_send
+ 
+ struct socket_receive
+ {
+-    struct task_header hdr;
++    struct socket *socket;
+     void *buf;
+     DWORD len;
+ };
+ 
+ struct socket_shutdown
+ {
+-    struct task_header hdr;
++    struct socket *socket;
+     USHORT status;
+     const void *reason;
+     DWORD len;
+From 7b7fdb8585b78fcb9ead0b65472196c0fffe23c8 Mon Sep 17 00:00:00 2001
+From: Hans Leidekker <hans@codeweavers.com>
+Date: Mon, 29 Jun 2020 15:46:11 +0200
+Subject: [PATCH] winhttp: Copy the reason buffer.
+
+Signed-off-by: Hans Leidekker <hans@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/winhttp/request.c         | 8 ++++----
+ dlls/winhttp/tests/winhttp.c   | 6 ++++++
+ dlls/winhttp/winhttp_private.h | 4 ++--
+ 3 files changed, 12 insertions(+), 6 deletions(-)
+
+diff --git a/dlls/winhttp/request.c b/dlls/winhttp/request.c
+index bc3d365f7cd..06588d6f606 100644
+--- a/dlls/winhttp/request.c
++++ b/dlls/winhttp/request.c
+@@ -3463,7 +3463,7 @@ DWORD WINAPI WinHttpWebSocketShutdown( HINTERNET hsocket, USHORT status, void *r
+ 
+     TRACE("%p, %u, %p, %u\n", hsocket, status, reason, len);
+ 
+-    if (len && !reason) return ERROR_INVALID_PARAMETER;
++    if ((len && !reason) || len > sizeof(socket->reason)) return ERROR_INVALID_PARAMETER;
+ 
+     if (!(socket = (struct socket *)grab_object( hsocket ))) return ERROR_INVALID_HANDLE;
+     if (socket->hdr.type != WINHTTP_HANDLE_TYPE_SOCKET)
+@@ -3484,7 +3484,7 @@ DWORD WINAPI WinHttpWebSocketShutdown( HINTERNET hsocket, USHORT status, void *r
+         if (!(s = heap_alloc( sizeof(*s) ))) return FALSE;
+         s->socket = socket;
+         s->status = status;
+-        s->reason = reason;
++        memcpy( s->reason, reason, len );
+         s->len    = len;
+ 
+         addref_object( &socket->hdr );
+@@ -3569,7 +3569,7 @@ DWORD WINAPI WinHttpWebSocketClose( HINTERNET hsocket, USHORT status, void *reas
+ 
+     TRACE("%p, %u, %p, %u\n", hsocket, status, reason, len);
+ 
+-    if (len && !reason) return ERROR_INVALID_PARAMETER;
++    if ((len && !reason) || len > sizeof(socket->reason)) return ERROR_INVALID_PARAMETER;
+ 
+     if (!(socket = (struct socket *)grab_object( hsocket ))) return ERROR_INVALID_HANDLE;
+     if (socket->hdr.type != WINHTTP_HANDLE_TYPE_SOCKET)
+@@ -3590,7 +3590,7 @@ DWORD WINAPI WinHttpWebSocketClose( HINTERNET hsocket, USHORT status, void *reas
+         if (!(s = heap_alloc( sizeof(*s) ))) return FALSE;
+         s->socket = socket;
+         s->status = status;
+-        s->reason = reason;
++        memcpy( s->reason, reason, len );
+         s->len    = len;
+ 
+         addref_object( &socket->hdr );
+diff --git a/dlls/winhttp/tests/winhttp.c b/dlls/winhttp/tests/winhttp.c
+index 12f5136973f..84063fdc82a 100644
+--- a/dlls/winhttp/tests/winhttp.c
++++ b/dlls/winhttp/tests/winhttp.c
+@@ -3356,6 +3356,9 @@ static void test_websocket(int port)
+     error = pWinHttpWebSocketShutdown(socket, WINHTTP_WEB_SOCKET_SUCCESS_CLOSE_STATUS, NULL, 1);
+     ok(error == ERROR_INVALID_PARAMETER, "got %u\n", error);
+ 
++    error = pWinHttpWebSocketShutdown(socket, WINHTTP_WEB_SOCKET_SUCCESS_CLOSE_STATUS, buf, sizeof(buf));
++    ok(error == ERROR_INVALID_PARAMETER, "got %u\n", error);
++
+     error = pWinHttpWebSocketShutdown(socket, WINHTTP_WEB_SOCKET_SUCCESS_CLOSE_STATUS, (void *)"success",
+                                       sizeof("success"));
+     ok(!error, "got %u\n", error);
+@@ -3363,6 +3366,9 @@ static void test_websocket(int port)
+     error = pWinHttpWebSocketClose(socket, WINHTTP_WEB_SOCKET_SUCCESS_CLOSE_STATUS, NULL, 1);
+     ok(error == ERROR_INVALID_PARAMETER, "got %u\n", error);
+ 
++    error = pWinHttpWebSocketClose(socket, WINHTTP_WEB_SOCKET_SUCCESS_CLOSE_STATUS, buf, sizeof(buf));
++    ok(error == ERROR_INVALID_PARAMETER, "got %u\n", error);
++
+     error = pWinHttpWebSocketClose(socket, WINHTTP_WEB_SOCKET_SUCCESS_CLOSE_STATUS, (void *)"success2",
+                                    sizeof("success2"));
+     ok(!error, "got %u\n", error);
+diff --git a/dlls/winhttp/winhttp_private.h b/dlls/winhttp/winhttp_private.h
+index ac7e9ff09b5..9d0b9c308ab 100644
+--- a/dlls/winhttp/winhttp_private.h
++++ b/dlls/winhttp/winhttp_private.h
+@@ -244,7 +244,7 @@ struct socket
+     enum socket_opcode opcode;
+     DWORD read_size;
+     USHORT status;
+-    char reason[128];
++    char reason[123];
+     DWORD reason_len;
+ };
+ 
+@@ -305,7 +305,7 @@ struct socket_shutdown
+ {
+     struct socket *socket;
+     USHORT status;
+-    const void *reason;
++    char reason[123];
+     DWORD len;
+ };
+ 
+From dffd8e86475a8fd034c3167b576551ff7fd02f5b Mon Sep 17 00:00:00 2001
+From: Hans Leidekker <hans@codeweavers.com>
+Date: Mon, 29 Jun 2020 15:46:12 +0200
+Subject: [PATCH] winhttp: Add support for ping and pong messages.
+
+Signed-off-by: Hans Leidekker <hans@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/winhttp/request.c | 177 +++++++++++++++++++++++++++++++----------
+ 1 file changed, 136 insertions(+), 41 deletions(-)
+
+diff --git a/dlls/winhttp/request.c b/dlls/winhttp/request.c
+index 06588d6f606..7cb07b5c107 100644
+--- a/dlls/winhttp/request.c
++++ b/dlls/winhttp/request.c
+@@ -3112,29 +3112,18 @@ static DWORD send_bytes( struct netconn *netconn, char *bytes, int len )
+     return (count == len) ? ERROR_SUCCESS : ERROR_INTERNAL_ERROR;
+ }
+ 
+-static enum socket_opcode map_buffer_type( WINHTTP_WEB_SOCKET_BUFFER_TYPE type )
+-{
+-    switch (type)
+-    {
+-    case WINHTTP_WEB_SOCKET_UTF8_MESSAGE_BUFFER_TYPE:   return SOCKET_OPCODE_TEXT;
+-    case WINHTTP_WEB_SOCKET_BINARY_MESSAGE_BUFFER_TYPE: return SOCKET_OPCODE_BINARY;
+-    case WINHTTP_WEB_SOCKET_CLOSE_BUFFER_TYPE:          return SOCKET_OPCODE_CLOSE;
+-    default:
+-        FIXME("buffer type %u not supported\n", type);
+-        return SOCKET_OPCODE_INVALID;
+-    }
+-}
+-
+ #define FIN_BIT (1 << 7)
+ #define MASK_BIT (1 << 7)
+ #define RESERVED_BIT (7 << 4)
++#define CONTROL_BIT (1 << 3)
+ 
+-static DWORD send_frame( struct netconn *netconn, WINHTTP_WEB_SOCKET_BUFFER_TYPE type, USHORT status, const char *buf,
++static DWORD send_frame( struct netconn *netconn, enum socket_opcode opcode, USHORT status, const char *buf,
+                          DWORD buflen, BOOL final )
+ {
+     DWORD i = 0, j, ret, offset = 2, len = buflen;
+-    enum socket_opcode opcode = map_buffer_type( type );
+-    char hdr[14], byte, *mask;
++    char hdr[14], byte, *mask = NULL;
++
++    TRACE("sending %02x frame\n", opcode);
+ 
+     if (opcode == SOCKET_OPCODE_CLOSE) len += sizeof(status);
+ 
+@@ -3159,9 +3148,14 @@ static DWORD send_frame( struct netconn *netconn, WINHTTP_WEB_SOCKET_BUFFER_TYPE
+         hdr[9] = len & 0xff;
+         offset += 8;
+     }
+-    mask = &hdr[offset];
+-    RtlGenRandom( mask, 4 );
+-    if ((ret = send_bytes( netconn, hdr, offset + 4 ))) return ret;
++
++    if ((ret = send_bytes( netconn, hdr, offset ))) return ret;
++    if (len)
++    {
++        mask = &hdr[offset];
++        RtlGenRandom( mask, 4 );
++        if ((ret = send_bytes( netconn, mask, 4 ))) return ret;
++    }
+ 
+     if (opcode == SOCKET_OPCODE_CLOSE) /* prepend status code */
+     {
+@@ -3181,12 +3175,26 @@ static DWORD send_frame( struct netconn *netconn, WINHTTP_WEB_SOCKET_BUFFER_TYPE
+     return ERROR_SUCCESS;
+ }
+ 
++static enum socket_opcode map_buffer_type( WINHTTP_WEB_SOCKET_BUFFER_TYPE type )
++{
++    switch (type)
++    {
++    case WINHTTP_WEB_SOCKET_UTF8_MESSAGE_BUFFER_TYPE:   return SOCKET_OPCODE_TEXT;
++    case WINHTTP_WEB_SOCKET_BINARY_MESSAGE_BUFFER_TYPE: return SOCKET_OPCODE_BINARY;
++    case WINHTTP_WEB_SOCKET_CLOSE_BUFFER_TYPE:          return SOCKET_OPCODE_CLOSE;
++    default:
++        FIXME("buffer type %u not supported\n", type);
++        return SOCKET_OPCODE_INVALID;
++    }
++}
++
+ static DWORD socket_send( struct socket *socket, WINHTTP_WEB_SOCKET_BUFFER_TYPE type, const void *buf, DWORD len,
+                           BOOL async )
+ {
++    enum socket_opcode opcode = map_buffer_type( type );
+     DWORD ret;
+ 
+-    ret = send_frame( socket->request->netconn, type, 0, buf, len, TRUE );
++    ret = send_frame( socket->request->netconn, opcode, 0, buf, len, TRUE );
+     if (async)
+     {
+         if (!ret)
+@@ -3276,24 +3284,19 @@ static DWORD receive_bytes( struct netconn *netconn, char *buf, DWORD len, DWORD
+     return ERROR_SUCCESS;
+ }
+ 
+-static WINHTTP_WEB_SOCKET_BUFFER_TYPE map_opcode( enum socket_opcode opcode, BOOL fragment )
++static BOOL is_supported_opcode( enum socket_opcode opcode )
+ {
+     switch (opcode)
+     {
+     case SOCKET_OPCODE_TEXT:
+-        if (fragment) return WINHTTP_WEB_SOCKET_UTF8_FRAGMENT_BUFFER_TYPE;
+-        return WINHTTP_WEB_SOCKET_UTF8_MESSAGE_BUFFER_TYPE;
+-
+     case SOCKET_OPCODE_BINARY:
+-        if (fragment) return WINHTTP_WEB_SOCKET_BINARY_FRAGMENT_BUFFER_TYPE;
+-        return WINHTTP_WEB_SOCKET_BINARY_MESSAGE_BUFFER_TYPE;
+-
+     case SOCKET_OPCODE_CLOSE:
+-        return WINHTTP_WEB_SOCKET_CLOSE_BUFFER_TYPE;
+-
++    case SOCKET_OPCODE_PING:
++    case SOCKET_OPCODE_PONG:
++        return TRUE;
+     default:
+-        FIXME("opcode %u not handled\n", opcode);
+-        return ~0u;
++        FIXME( "opcode %02x not handled\n", opcode );
++        return FALSE;
+     }
+ }
+ 
+@@ -3303,11 +3306,12 @@ static DWORD receive_frame( struct netconn *netconn, DWORD *ret_len, enum socket
+     char hdr[2];
+ 
+     if ((ret = receive_bytes( netconn, hdr, sizeof(hdr), &count ))) return ret;
+-    if ((hdr[0] & RESERVED_BIT) || (hdr[1] & MASK_BIT) || (map_opcode( hdr[0] & 0xf, FALSE ) == ~0u))
++    if ((hdr[0] & RESERVED_BIT) || (hdr[1] & MASK_BIT) || !is_supported_opcode( hdr[0] & 0xf ))
+     {
+         return ERROR_WINHTTP_INVALID_SERVER_RESPONSE;
+     }
+     *opcode = hdr[0] & 0xf;
++    TRACE("received %02x frame\n", *opcode);
+ 
+     len = hdr[1] & ~MASK_BIT;
+     if (len == 126)
+@@ -3328,13 +3332,109 @@ static DWORD receive_frame( struct netconn *netconn, DWORD *ret_len, enum socket
+     return ERROR_SUCCESS;
+ }
+ 
++static void CALLBACK task_socket_send_pong( TP_CALLBACK_INSTANCE *instance, void *ctx, TP_WORK *work )
++{
++    struct socket_send *s = ctx;
++
++    TRACE("running %p\n", work);
++    send_frame( s->socket->request->netconn, SOCKET_OPCODE_PONG, 0, NULL, 0, TRUE );
++
++    release_object( &s->socket->hdr );
++    heap_free( s );
++}
++
++static DWORD socket_send_pong( struct socket *socket )
++{
++    if (socket->request->connect->hdr.flags & WINHTTP_FLAG_ASYNC)
++    {
++        struct socket_send *s;
++        DWORD ret;
++
++        if (!(s = heap_alloc( sizeof(*s) ))) return ERROR_OUTOFMEMORY;
++        s->socket = socket;
++
++        addref_object( &socket->hdr );
++        if ((ret = queue_task( &socket->send_q, task_socket_send_pong, s )))
++        {
++            release_object( &socket->hdr );
++            heap_free( s );
++        }
++        return ret;
++    }
++    return send_frame( socket->request->netconn, SOCKET_OPCODE_PONG, 0, NULL, 0, TRUE );
++}
++
++static DWORD socket_drain( struct socket *socket )
++{
++    struct netconn *netconn = socket->request->netconn;
++    DWORD ret, count;
++
++    while (socket->read_size)
++    {
++        char buf[1024];
++        if ((ret = receive_bytes( netconn, buf, min(socket->read_size, sizeof(buf)), &count ))) return ret;
++        socket->read_size -= count;
++    }
++    return ERROR_SUCCESS;
++}
++
++static DWORD handle_control_frame( struct socket *socket )
++{
++    switch (socket->opcode)
++    {
++    case SOCKET_OPCODE_PING:
++        return socket_send_pong( socket );
++
++    case SOCKET_OPCODE_PONG:
++        return socket_drain( socket );
++
++    default:
++        ERR("unhandled control opcode %02x\n", socket->opcode);
++        return ERROR_WINHTTP_INVALID_SERVER_RESPONSE;
++    }
++
++    return ERROR_SUCCESS;
++}
++
++static WINHTTP_WEB_SOCKET_BUFFER_TYPE map_opcode( enum socket_opcode opcode, BOOL fragment )
++{
++    switch (opcode)
++    {
++    case SOCKET_OPCODE_TEXT:
++        if (fragment) return WINHTTP_WEB_SOCKET_UTF8_FRAGMENT_BUFFER_TYPE;
++        return WINHTTP_WEB_SOCKET_UTF8_MESSAGE_BUFFER_TYPE;
++
++    case SOCKET_OPCODE_BINARY:
++        if (fragment) return WINHTTP_WEB_SOCKET_BINARY_FRAGMENT_BUFFER_TYPE;
++        return WINHTTP_WEB_SOCKET_BINARY_MESSAGE_BUFFER_TYPE;
++
++    case SOCKET_OPCODE_CLOSE:
++        return WINHTTP_WEB_SOCKET_CLOSE_BUFFER_TYPE;
++
++    default:
++        FIXME("opcode %02x not handled\n", opcode);
++        return ~0u;
++    }
++}
++
+ static DWORD socket_receive( struct socket *socket, void *buf, DWORD len, DWORD *ret_len,
+                              WINHTTP_WEB_SOCKET_BUFFER_TYPE *ret_type, BOOL async )
+ {
+     struct netconn *netconn = socket->request->netconn;
+     DWORD count, ret = ERROR_SUCCESS;
+ 
+-    if (!socket->read_size) ret = receive_frame( netconn, &socket->read_size, &socket->opcode );
++    if (!socket->read_size)
++    {
++        for (;;)
++        {
++            if (!(ret = receive_frame( netconn, &socket->read_size, &socket->opcode )))
++            {
++                if (!(socket->opcode & CONTROL_BIT) || (ret = handle_control_frame( socket ))) break;
++            }
++            else if (ret == WSAETIMEDOUT) ret = socket_send_pong( socket );
++            if (ret) break;
++        }
++    }
+     if (!ret) ret = receive_bytes( netconn, buf, min(len, socket->read_size), &count );
+     if (!ret)
+     {
+@@ -3426,7 +3526,7 @@ static DWORD socket_shutdown( struct socket *socket, USHORT status, const void *
+     struct netconn *netconn = socket->request->netconn;
+     DWORD ret;
+ 
+-    if (!(ret = send_frame( netconn, WINHTTP_WEB_SOCKET_CLOSE_BUFFER_TYPE, status, reason, len, TRUE )))
++    if (!(ret = send_frame( netconn, SOCKET_OPCODE_CLOSE, status, reason, len, TRUE )))
+     {
+         socket->state = SOCKET_STATE_SHUTDOWN;
+     }
+@@ -3505,16 +3605,11 @@ static DWORD socket_close( struct socket *socket, USHORT status, const void *rea
+     struct netconn *netconn = socket->request->netconn;
+     DWORD ret, count;
+ 
+-    while (socket->read_size) /* drain any pending data */
+-    {
+-        char buf[1024];
+-        if ((ret = receive_bytes( netconn, buf, min(socket->read_size, sizeof(buf)), &count ))) goto done;
+-        socket->read_size -= count;
+-    }
++    if ((ret = socket_drain( socket ))) goto done;
+ 
+     if (socket->state < SOCKET_STATE_SHUTDOWN)
+     {
+-        if ((ret = send_frame( netconn, WINHTTP_WEB_SOCKET_CLOSE_BUFFER_TYPE, status, reason, len, TRUE ))) goto done;
++        if ((ret = send_frame( netconn, SOCKET_OPCODE_CLOSE, status, reason, len, TRUE ))) goto done;
+         socket->state = SOCKET_STATE_SHUTDOWN;
+     }
+ 
+From 97f9dc7ff46a161468dcf7866381db23474a1031 Mon Sep 17 00:00:00 2001
+From: Hans Leidekker <hans@codeweavers.com>
+Date: Mon, 29 Jun 2020 15:46:13 +0200
+Subject: [PATCH] winhttp: Stop the send queue before sending the close
+ message.
+
+Signed-off-by: Hans Leidekker <hans@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/winhttp/request.c         | 14 ++++++++++++--
+ dlls/winhttp/session.c         |  2 +-
+ dlls/winhttp/winhttp_private.h |  1 +
+ 3 files changed, 14 insertions(+), 3 deletions(-)
+
+diff --git a/dlls/winhttp/request.c b/dlls/winhttp/request.c
+index 7cb07b5c107..e31803ccfed 100644
+--- a/dlls/winhttp/request.c
++++ b/dlls/winhttp/request.c
+@@ -138,6 +138,14 @@ static DWORD start_queue( struct queue *queue )
+     return ERROR_SUCCESS;
+ }
+ 
++void stop_queue( struct queue *queue )
++{
++    if (!queue->pool) return;
++    CloseThreadpool( queue->pool );
++    queue->pool = NULL;
++    TRACE("stopped %p\n", queue);
++}
++
+ static DWORD queue_task( struct queue *queue, PTP_WORK_CALLBACK task, void *ctx )
+ {
+     TP_WORK *work;
+@@ -3037,8 +3045,8 @@ static void socket_destroy( struct object_header *hdr )
+ 
+     TRACE("%p\n", socket);
+ 
+-    if (socket->send_q.pool) CloseThreadpool( socket->send_q.pool );
+-    if (socket->recv_q.pool) CloseThreadpool( socket->recv_q.pool );
++    stop_queue( &socket->send_q );
++    stop_queue( &socket->recv_q );
+ 
+     release_object( &socket->request->hdr );
+     heap_free( socket );
+@@ -3526,6 +3534,7 @@ static DWORD socket_shutdown( struct socket *socket, USHORT status, const void *
+     struct netconn *netconn = socket->request->netconn;
+     DWORD ret;
+ 
++    stop_queue( &socket->send_q );
+     if (!(ret = send_frame( netconn, SOCKET_OPCODE_CLOSE, status, reason, len, TRUE )))
+     {
+         socket->state = SOCKET_STATE_SHUTDOWN;
+@@ -3609,6 +3618,7 @@ static DWORD socket_close( struct socket *socket, USHORT status, const void *rea
+ 
+     if (socket->state < SOCKET_STATE_SHUTDOWN)
+     {
++        stop_queue( &socket->send_q );
+         if ((ret = send_frame( netconn, SOCKET_OPCODE_CLOSE, status, reason, len, TRUE ))) goto done;
+         socket->state = SOCKET_STATE_SHUTDOWN;
+     }
+diff --git a/dlls/winhttp/session.c b/dlls/winhttp/session.c
+index f3ab8c9b959..080837eb1ed 100644
+--- a/dlls/winhttp/session.c
++++ b/dlls/winhttp/session.c
+@@ -578,7 +578,7 @@ static void request_destroy( struct object_header *hdr )
+ 
+     TRACE("%p\n", request);
+ 
+-    if (request->queue.pool) CloseThreadpool( request->queue.pool );
++    stop_queue( &request->queue );
+     release_object( &request->connect->hdr );
+ 
+     if (request->cred_handle_initialized) FreeCredentialsHandle( &request->cred_handle );
+diff --git a/dlls/winhttp/winhttp_private.h b/dlls/winhttp/winhttp_private.h
+index 9d0b9c308ab..23aba00780e 100644
+--- a/dlls/winhttp/winhttp_private.h
++++ b/dlls/winhttp/winhttp_private.h
+@@ -317,6 +317,7 @@ BOOL free_handle( HINTERNET ) DECLSPEC_HIDDEN;
+ 
+ void send_callback( struct object_header *, DWORD, LPVOID, DWORD ) DECLSPEC_HIDDEN;
+ void close_connection( struct request * ) DECLSPEC_HIDDEN;
++void stop_queue( struct queue * ) DECLSPEC_HIDDEN;
+ 
+ void netconn_close( struct netconn * ) DECLSPEC_HIDDEN;
+ DWORD netconn_create( struct hostdata *, const struct sockaddr_storage *, int, struct netconn ** ) DECLSPEC_HIDDEN;
+
+From: Owen Rudge <orudge@codeweavers.com>
+Subject: [PATCH 1/2] winhttp/tests: Add tests for WINHTTP_OPTION_MAX_HTTP_AUTOMATIC_REDIRECTS.
+Message-Id: <184c7832-c2a6-7ff2-8333-bd25662597df@codeweavers.com>
+Date: Fri, 3 Jul 2020 10:21:37 +0100
+
+Signed-off-by: Owen Rudge <orudge@codeweavers.com>
+---
+  dlls/winhttp/tests/winhttp.c | 52 ++++++++++++++++++++++++++++++++++++
+  1 file changed, 52 insertions(+)
+
+diff --git a/dlls/winhttp/tests/winhttp.c b/dlls/winhttp/tests/winhttp.c
+index 84063fdc82a..79d700d4a12 100644
+--- a/dlls/winhttp/tests/winhttp.c
++++ b/dlls/winhttp/tests/winhttp.c
+@@ -5076,6 +5076,57 @@ done:
+     if (ses) WinHttpCloseHandle( ses );
+ }
+ 
++static void test_max_http_automatic_redirects (void)
++{
++    HINTERNET session, request, connection;
++    DWORD max_redirects, err;
++    BOOL ret;
++
++    session = WinHttpOpen(L"winetest", WINHTTP_ACCESS_TYPE_DEFAULT_PROXY,
++        WINHTTP_NO_PROXY_NAME, WINHTTP_NO_PROXY_BYPASS, 0);
++    ok(session != NULL, "WinHttpOpen failed to open session.\n");
++
++    connection = WinHttpConnect (session, L"test.winehq.org", INTERNET_DEFAULT_HTTP_PORT, 0);
++    ok(connection != NULL, "WinHttpConnect failed to open a connection, error: %u.\n", GetLastError());
++
++    /* Test with 2 redirects (page will try to redirect 3 times) */
++    request = WinHttpOpenRequest(connection, L"GET", L"tests/redirecttest.php?max=3", NULL, WINHTTP_NO_REFERER,
++        WINHTTP_DEFAULT_ACCEPT_TYPES, WINHTTP_FLAG_BYPASS_PROXY_CACHE);
++    if (request == NULL && GetLastError() == ERROR_WINHTTP_NAME_NOT_RESOLVED)
++    {
++        skip("Network unreachable, skipping.\n");
++        goto done;
++    }
++    ok(request != NULL, "WinHttpOpenRequest failed to open a request, error: %u.\n", GetLastError());
++    if (!request) goto done;
++
++    max_redirects = 2;
++    ret = WinHttpSetOption(request, WINHTTP_OPTION_MAX_HTTP_AUTOMATIC_REDIRECTS, &max_redirects, sizeof(max_redirects));
++    todo_wine ok(ret, "WinHttpSetOption failed: %u\n", GetLastError());
++
++    ret = WinHttpSendRequest(request, WINHTTP_NO_ADDITIONAL_HEADERS, 0, WINHTTP_NO_REQUEST_DATA, 0, 0, 0);
++    err = GetLastError();
++    if (!ret && (err == ERROR_WINHTTP_CANNOT_CONNECT || err == ERROR_WINHTTP_TIMEOUT))
++    {
++        skip("connection failed, skipping\n");
++        goto done;
++    }
++    ok(ret == TRUE, "WinHttpSendRequest failed: %u\n", GetLastError());
++
++    SetLastError(0xdeadbeef);
++    ret = WinHttpReceiveResponse(request, NULL);
++    todo_wine ok(!ret, "WinHttpReceiveResponse succeeded, expected failure\n");
++    todo_wine ok(GetLastError() == ERROR_WINHTTP_REDIRECT_FAILED, "Expected ERROR_WINHTTP_REDIRECT_FAILED, got %u.\n", GetLastError());
++
++ done:
++    ret = WinHttpCloseHandle(request);
++    ok(ret == TRUE, "WinHttpCloseHandle failed on closing request, got %d.\n", ret);
++    ret = WinHttpCloseHandle(connection);
++    ok(ret == TRUE, "WinHttpCloseHandle failed on closing connection, got %d.\n", ret);
++    ret = WinHttpCloseHandle(session);
++    ok(ret == TRUE, "WinHttpCloseHandle failed on closing session, got %d.\n", ret);
++}
++
+ START_TEST (winhttp)
+ {
+     struct server_info si;
+@@ -5108,6 +5159,7 @@ START_TEST (winhttp)
+     test_WinHttpGetIEProxyConfigForCurrentUser();
+     test_WinHttpGetProxyForUrl();
+     test_chunked_read();
++    test_max_http_automatic_redirects();
+ 
+     si.event = CreateEventW(NULL, 0, 0, NULL);
+     si.port = 7532;
+
+From: Owen Rudge <orudge@codeweavers.com>
+Subject: [PATCH 2/2] winhttp: Implement WINHTTP_OPTION_MAX_HTTP_AUTOMATIC_REDIRECTS.
+Message-Id: <a7511ce1-a6ad-f0b4-f8b6-a719cb518ef9@codeweavers.com>
+Date: Fri, 3 Jul 2020 10:21:40 +0100
+
+Signed-off-by: Owen Rudge <orudge@codeweavers.com>
+---
+  dlls/winhttp/request.c         |  2 ++
+  dlls/winhttp/session.c         | 17 +++++++++++++++++
+  dlls/winhttp/tests/winhttp.c   |  6 +++---
+  dlls/winhttp/winhttp_private.h |  2 ++
+  4 files changed, 24 insertions(+), 3 deletions(-)
+
+diff --git a/dlls/winhttp/request.c b/dlls/winhttp/request.c
+index e31803ccfed..31296cd02ba 100644
+--- a/dlls/winhttp/request.c
++++ b/dlls/winhttp/request.c
+@@ -2720,6 +2720,8 @@ static DWORD receive_response( struct request *request, BOOL async )
+             if (request->hdr.disable_flags & WINHTTP_DISABLE_REDIRECTS ||
+                 request->hdr.redirect_policy == WINHTTP_OPTION_REDIRECT_POLICY_NEVER) break;
+ 
++            if (++request->redirect_count > request->max_redirects) return ERROR_WINHTTP_REDIRECT_FAILED;
++
+             if ((ret = handle_redirect( request, status ))) break;
+ 
+             /* recurse synchronously */
+diff --git a/dlls/winhttp/session.c b/dlls/winhttp/session.c
+index 080837eb1ed..319066db55b 100644
+--- a/dlls/winhttp/session.c
++++ b/dlls/winhttp/session.c
+@@ -820,6 +820,11 @@ static BOOL request_query_option( struct object_header *hdr, DWORD option, void
+         str_to_buffer( buffer, request->connect->session->proxy_password, buflen );
+         return TRUE;
+ 
++    case WINHTTP_OPTION_MAX_HTTP_AUTOMATIC_REDIRECTS:
++        *(DWORD *)buffer = request->max_redirects;
++        *buflen = sizeof(DWORD);
++        return TRUE;
++
+     default:
+         FIXME("unimplemented option %u\n", option);
+         SetLastError( ERROR_INVALID_PARAMETER );
+@@ -1028,6 +1033,17 @@ static BOOL request_set_option( struct object_header *hdr, DWORD option, void *b
+         FIXME("WINHTTP_OPTION_CONNECT_RETRIES\n");
+         return TRUE;
+ 
++    case WINHTTP_OPTION_MAX_HTTP_AUTOMATIC_REDIRECTS:
++        if (buflen == sizeof(DWORD))
++        {
++            request->max_redirects = *(DWORD *)buffer;
++            SetLastError(NO_ERROR);
++            return TRUE;
++        }
++
++        SetLastError(ERROR_INVALID_PARAMETER);
++        return FALSE;
++
+     default:
+         FIXME("unimplemented option %u\n", option);
+         SetLastError( ERROR_WINHTTP_INVALID_OPTION );
+@@ -1121,6 +1137,7 @@ HINTERNET WINAPI WinHttpOpenRequest( HINTERNET hconnect, LPCWSTR verb, LPCWSTR o
+     request->send_timeout = connect->session->send_timeout;
+     request->receive_timeout = connect->session->receive_timeout;
+     request->receive_response_timeout = connect->session->receive_response_timeout;
++    request->max_redirects = 10;
+ 
+     if (!verb || !verb[0]) verb = L"GET";
+     if (!(request->verb = strdupW( verb ))) goto end;
+diff --git a/dlls/winhttp/tests/winhttp.c b/dlls/winhttp/tests/winhttp.c
+index 79d700d4a12..5379640d5fc 100644
+--- a/dlls/winhttp/tests/winhttp.c
++++ b/dlls/winhttp/tests/winhttp.c
+@@ -5102,7 +5102,7 @@ static void test_max_http_automatic_redirects (void)
+ 
+     max_redirects = 2;
+     ret = WinHttpSetOption(request, WINHTTP_OPTION_MAX_HTTP_AUTOMATIC_REDIRECTS, &max_redirects, sizeof(max_redirects));
+-    todo_wine ok(ret, "WinHttpSetOption failed: %u\n", GetLastError());
++    ok(ret, "WinHttpSetOption failed: %u\n", GetLastError());
+ 
+     ret = WinHttpSendRequest(request, WINHTTP_NO_ADDITIONAL_HEADERS, 0, WINHTTP_NO_REQUEST_DATA, 0, 0, 0);
+     err = GetLastError();
+@@ -5115,8 +5115,8 @@ static void test_max_http_automatic_redirects (void)
+ 
+     SetLastError(0xdeadbeef);
+     ret = WinHttpReceiveResponse(request, NULL);
+-    todo_wine ok(!ret, "WinHttpReceiveResponse succeeded, expected failure\n");
+-    todo_wine ok(GetLastError() == ERROR_WINHTTP_REDIRECT_FAILED, "Expected ERROR_WINHTTP_REDIRECT_FAILED, got %u.\n", GetLastError());
++    ok(!ret, "WinHttpReceiveResponse succeeded, expected failure\n");
++    ok(GetLastError() == ERROR_WINHTTP_REDIRECT_FAILED, "Expected ERROR_WINHTTP_REDIRECT_FAILED, got %u.\n", GetLastError());
+ 
+  done:
+     ret = WinHttpCloseHandle(request);
+diff --git a/dlls/winhttp/winhttp_private.h b/dlls/winhttp/winhttp_private.h
+index 23aba00780e..e279e58a5fe 100644
+--- a/dlls/winhttp/winhttp_private.h
++++ b/dlls/winhttp/winhttp_private.h
+@@ -189,6 +189,8 @@ struct request
+     int send_timeout;
+     int receive_timeout;
+     int receive_response_timeout;
++    DWORD max_redirects;
++    DWORD redirect_count; /* total number of redirects during this request */
+     WCHAR *status_text;
+     DWORD content_length; /* total number of bytes to be read */
+     DWORD content_read;   /* bytes read so far */
+
+From: Serge Gautherie <winehq-git_serge_180711@gautherie.fr>
+Subject: [PATCH] wininet: Increase user size to 'UNLEN + 1' in create_cookie_url().
+Message-Id: <20200701143418.2768-1-winehq-git_serge_180711@gautherie.fr>
+Date: Wed,  1 Jul 2020 16:34:18 +0200
+
+Signed-off-by: Serge Gautherie <winehq-git_serge_180711@gautherie.fr>
+---
+ dlls/wininet/cookie.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/dlls/wininet/cookie.c b/dlls/wininet/cookie.c
+index b5f779b..4d0967b 100644
+--- a/dlls/wininet/cookie.c
++++ b/dlls/wininet/cookie.c
+@@ -147,7 +147,7 @@ static cookie_domain_t *get_cookie_domain(substr_t domain, BOOL create)
+ 
+ static WCHAR *create_cookie_url(substr_t domain, substr_t path, substr_t *ret_path)
+ {
+-    WCHAR user[UNLEN], *p, *url;
++    WCHAR user[UNLEN + 1], *p, *url;
+     DWORD len, user_len, i;
+ 
+     static const WCHAR cookie_prefix[] = {'C','o','o','k','i','e',':'};
+
+-- 
+2.10.0.windows.1
+
+From 3e0369970d90b5ca42d2e1f7dc5810fec5477587 Mon Sep 17 00:00:00 2001
+From: Hans Leidekker <hans@codeweavers.com>
+Date: Thu, 2 Jul 2020 10:23:27 +0200
+Subject: [PATCH] iphlpapi: Return gateway address 0.0.0.0/255.255.255.255 from
+ GetAdaptersInfo if it's not set.
+
+Signed-off-by: Hans Leidekker <hans@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/iphlpapi/iphlpapi_main.c  | 2 ++
+ dlls/iphlpapi/tests/iphlpapi.c | 9 ++++++---
+ 2 files changed, 8 insertions(+), 3 deletions(-)
+
+diff --git a/dlls/iphlpapi/iphlpapi_main.c b/dlls/iphlpapi/iphlpapi_main.c
+index ff9d0d3a536..c0390862295 100644
+--- a/dlls/iphlpapi/iphlpapi_main.c
++++ b/dlls/iphlpapi/iphlpapi_main.c
+@@ -742,6 +742,8 @@ DWORD WINAPI GetAdaptersInfo(PIP_ADAPTER_INFO pAdapterInfo, PULONG pOutBufLen)
+               }
+               /* Find first router through this interface, which we'll assume
+                * is the default gateway for this adapter */
++              strcpy(ptr->GatewayList.IpAddress.String, "0.0.0.0");
++              strcpy(ptr->GatewayList.IpMask.String, "255.255.255.255");
+               for (i = 0; i < routeTable->dwNumEntries; i++)
+                 if (routeTable->table[i].dwForwardIfIndex == ptr->Index
+                  && routeTable->table[i].u1.ForwardType ==
+diff --git a/dlls/iphlpapi/tests/iphlpapi.c b/dlls/iphlpapi/tests/iphlpapi.c
+index d5690c11eee..6965ae84570 100644
+--- a/dlls/iphlpapi/tests/iphlpapi.c
++++ b/dlls/iphlpapi/tests/iphlpapi.c
+@@ -1120,10 +1120,13 @@ static void testGetAdaptersInfo(void)
+            apiReturn);
+         ptr = buf;
+         while (ptr) {
+-            ok(ptr->IpAddressList.IpAddress.String[0], "A valid IP must be present\n");
++            ok(ptr->IpAddressList.IpAddress.String[0], "A valid IP address must be present\n");
+             ok(ptr->IpAddressList.IpMask.String[0], "A valid mask must be present\n");
+-            trace("Adapter '%s', IP %s, Mask %s\n", ptr->AdapterName,
+-                  ptr->IpAddressList.IpAddress.String, ptr->IpAddressList.IpMask.String);
++            ok(ptr->GatewayList.IpAddress.String[0], "A valid IP address must be present\n");
++            ok(ptr->GatewayList.IpMask.String[0], "A valid mask must be present\n");
++            trace("adapter '%s', address %s/%s gateway %s/%s\n", ptr->AdapterName,
++                  ptr->IpAddressList.IpAddress.String, ptr->IpAddressList.IpMask.String,
++                  ptr->GatewayList.IpAddress.String, ptr->GatewayList.IpMask.String);
+             ptr = ptr->Next;
+         }
+         HeapFree(GetProcessHeap(), 0, buf);
+From d888f3ba3672a3e41af5d60c6494023cc38a0a02 Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Fri, 3 Jul 2020 17:30:09 +0300
+Subject: [PATCH] ws2_32: Consider socket with zero ifindex unbound.
+
+Real interface index can't be zero.
+getsockopt(..., IP_UNICAST_IF, ...) may return success and zero
+interface index if IP_UNICAST_IF was never set.
+
+Avoids error output which doesn't inidcate a real error condition
+for such case.
+
+Signed-off-by: Paul Gofman <pgofman@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/ws2_32/socket.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/dlls/ws2_32/socket.c b/dlls/ws2_32/socket.c
+index 402ee86d962..69fbb37af22 100644
+--- a/dlls/ws2_32/socket.c
++++ b/dlls/ws2_32/socket.c
+@@ -3788,7 +3788,7 @@ static void interface_bind_check(int fd, struct sockaddr_in *addr)
+     ret = getsockopt(fd, IPPROTO_IP, IP_UNICAST_IF, &ifindex, &len);
+     if (!ret) ifindex = ntohl(ifindex);
+ #endif
+-    if (!ret)
++    if (!ret && ifindex)
+     {
+         EnterCriticalSection(&cs_if_addr_cache);
+         if (ifindex < if_addr_cache_size)

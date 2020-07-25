@@ -1,0 +1,309 @@
+From 4e01369fc84fdfec784de0670f32b9920ab49247 Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Fri, 24 Apr 2020 20:08:38 +0300
+Subject: [PATCH 1/3] Avoid undefined result in ntdll_wcstoumbs() in case of
+ error.
+
+Undefined result is due to RtlUnicodeToUTF8N() not setting output
+length on error which is a correct behaviour according to
+existing tests.
+
+'Planet Zoo' is affected which passes NULL object name buffer to
+NtCreateFile().
+---
+ dlls/ntdll/locale.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/dlls/ntdll/locale.c b/dlls/ntdll/locale.c
+index 16a7f911173e..685923124696 100644
+--- a/dlls/ntdll/locale.c
++++ b/dlls/ntdll/locale.c
+@@ -769,7 +769,7 @@ DWORD ntdll_umbstowcs( const char *src, DWORD srclen, WCHAR *dst, DWORD dstlen )
+  */
+ int ntdll_wcstoumbs( const WCHAR *src, DWORD srclen, char *dst, DWORD dstlen, BOOL strict )
+ {
+-    DWORD i, reslen;
++    DWORD i, reslen = 0;
+ 
+     if (!unix_table.CodePage)
+         RtlUnicodeToUTF8N( dst, dstlen, &reslen, src, srclen * sizeof(WCHAR) );
+-- 
+2.26.2
+
+From f39cc0b0ce9d34de88aa1af96337ddb5331b8597 Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Fri, 24 Apr 2020 19:48:20 +0300
+Subject: [PATCH 2/3] ntdll: Handle NULL object name buffer in
+ nt_to_unix_file_name_attr().
+
+---
+ dlls/ntdll/tests/file.c | 22 +++++++++++++++++++++-
+ dlls/ntdll/unix/file.c  | 10 +++++++++-
+ 2 files changed, 30 insertions(+), 2 deletions(-)
+
+diff --git a/dlls/ntdll/tests/file.c b/dlls/ntdll/tests/file.c
+index ba9a22ff180d..a1e913f865e8 100644
+--- a/dlls/ntdll/tests/file.c
++++ b/dlls/ntdll/tests/file.c
+@@ -149,16 +149,36 @@ static void create_file_test(void)
+     static const char testdata[] = "Hello World";
+     static const WCHAR sepW[] = {'\\',0};
+     FILE_NETWORK_OPEN_INFORMATION info;
++    UNICODE_STRING nameW, null_string;
+     NTSTATUS status;
+     HANDLE dir, file;
+     WCHAR path[MAX_PATH], temp[MAX_PATH];
+     OBJECT_ATTRIBUTES attr;
+     IO_STATUS_BLOCK io;
+-    UNICODE_STRING nameW;
+     LARGE_INTEGER offset;
+     char buf[32];
+     DWORD ret;
+ 
++    attr.Length = sizeof(attr);
++    attr.RootDirectory = NULL;
++    attr.ObjectName = &null_string;
++    attr.Attributes = 0;
++    attr.SecurityDescriptor = NULL;
++    attr.SecurityQualityOfService = NULL;
++
++    null_string.Buffer = NULL;
++    null_string.Length = 256;
++
++    /* try various open modes and options on directories */
++    status = pNtCreateFile( &dir, GENERIC_READ|GENERIC_WRITE, &attr, &io, NULL, 0,
++                            FILE_SHARE_READ|FILE_SHARE_WRITE, FILE_OPEN, FILE_DIRECTORY_FILE, NULL, 0 );
++    ok( status == STATUS_ACCESS_VIOLATION, "Got unexpected status %#x.\n",  status );
++
++    null_string.Length = 0;
++    status = pNtCreateFile( &dir, GENERIC_READ|GENERIC_WRITE, &attr, &io, NULL, 0,
++                            FILE_SHARE_READ|FILE_SHARE_WRITE, FILE_OPEN, FILE_DIRECTORY_FILE, NULL, 0 );
++    ok( status == STATUS_OBJECT_PATH_SYNTAX_BAD, "Got unexpected status %#x.\n",  status );
++
+     GetCurrentDirectoryW( MAX_PATH, path );
+     pRtlDosPathNameToNtPathName_U( path, &nameW, NULL, NULL );
+     attr.Length = sizeof(attr);
+From fca69733a51776f769ac0294e706a8d32b2da1e1 Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Fri, 24 Apr 2020 20:50:25 +0300
+Subject: [PATCH] ntdll: Use case sensitive search for \??\unix file names
+ only.
+
+Files names are case insensitive on NTFS by default regardless
+of the OBJ_CASE_INSENSITIVE object attribute.
+
+'Planet Zoo' which calls NtCreateFile() directly and does not
+specify the attribute depends on that.
+
+Signed-off-by: Paul Gofman <gofmanp@gmail.com>
+---
+ dlls/kernel32/file.c    |  6 +++---
+ dlls/kernel32/path.c    | 12 ++++++------
+ dlls/kernel32/volume.c  |  4 ++--
+ dlls/ntdll/directory.c  |  8 ++++----
+ dlls/ntdll/file.c       |  2 +-
+ dlls/ntdll/loader.c     |  2 +-
+ dlls/ntdll/ntdll.spec   |  2 +-
+ dlls/ntdll/process.c    |  4 ++--
+ dlls/ntdll/tests/file.c |  2 +-
+ include/winternl.h      |  2 +-
+ 10 files changed, 22 insertions(+), 22 deletions(-)
+
+diff --git a/dlls/kernel32/path.c b/dlls/kernel32/path.c
+index bc30e03b01f..3a72ca5acc5 100644
+--- a/dlls/kernel32/path.c
++++ b/dlls/kernel32/path.c
+@@ -797,7 +797,7 @@ BOOL WINAPI RemoveDirectoryW( LPCWSTR path )
+         return FALSE;
+     }
+ 
+-    status = wine_nt_to_unix_file_name( &nt_name, &unix_name, FILE_OPEN, FALSE );
++    status = wine_nt_to_unix_file_name( &nt_name, &unix_name, FILE_OPEN );
+     if (status == STATUS_SUCCESS)
+     {
+         status = NtQueryAttributesFile( &attr, &info );
+@@ -885,7 +885,7 @@ char * CDECL wine_get_unix_file_name( LPCWSTR dosW )
+     NTSTATUS status;
+ 
+     if (!RtlDosPathNameToNtPathName_U( dosW, &nt_name, NULL, NULL )) return NULL;
+-    status = wine_nt_to_unix_file_name( &nt_name, &unix_name, FILE_OPEN_IF, FALSE );
++    status = wine_nt_to_unix_file_name( &nt_name, &unix_name, FILE_OPEN_IF );
+     RtlFreeUnicodeString( &nt_name );
+     if (status && status != STATUS_NO_SUCH_FILE)
+     {
+diff --git a/dlls/ntdll/directory.c b/dlls/ntdll/directory.c
+index 56f9be0f06e..92d96ad582e 100644
+--- a/dlls/ntdll/directory.c
++++ b/dlls/ntdll/directory.c
+@@ -2627,7 +2627,6 @@ NTSTATUS nt_to_unix_file_name_attr( const OBJECT_ATTRIBUTES *attr, ANSI_STRING *
+     char *unix_name;
+     int name_len, unix_len;
+     NTSTATUS status;
+-    BOOLEAN check_case = !(attr->Attributes & OBJ_CASE_INSENSITIVE);
+ 
+     if (!attr->ObjectName->Buffer && attr->ObjectName->Length)
+         return STATUS_ACCESS_VIOLATION;
+@@ -2629,7 +2629,7 @@ NTSTATUS nt_to_unix_file_name_attr( const OBJECT_ATTRIBUTES *attr, ANSI_STRING *
+     NTSTATUS status;
+ 
+     if (!attr->RootDirectory)  /* without root dir fall back to normal lookup */
+-        return wine_nt_to_unix_file_name( attr->ObjectName, unix_name_ret, disposition, check_case );
++        return wine_nt_to_unix_file_name( attr->ObjectName, unix_name_ret, disposition );
+ 
+     name     = attr->ObjectName->Buffer;
+     name_len = attr->ObjectName->Length / sizeof(WCHAR);
+@@ -2667,7 +2666,7 @@ NTSTATUS nt_to_unix_file_name_attr( const OBJECT_ATTRIBUTES *attr, ANSI_STRING *
+             if ((old_cwd = open( ".", O_RDONLY )) != -1 && fchdir( root_fd ) != -1)
+             {
+                 status = lookup_unix_name( name, name_len, &unix_name, unix_len, 1,
+-                                           disposition, check_case );
++                                           disposition, FALSE );
+                 if (fchdir( old_cwd ) == -1) chdir( "/" );
+             }
+             else status = FILE_GetNtStatus();
+@@ -2777,7 +2776,7 @@ NTSTATUS nt_to_unix_file_name_attr( const OBJECT_ATTRIBUTES *attr, ANSI_STRING *
+  * returned, but the unix name is still filled in properly.
+  */
+ NTSTATUS CDECL wine_nt_to_unix_file_name( const UNICODE_STRING *nameW, ANSI_STRING *unix_name_ret,
+-                                          UINT disposition, BOOLEAN check_case )
++                                          UINT disposition )
+ {
+     static const WCHAR unixW[] = {'u','n','i','x'};
+     static const WCHAR invalid_charsW[] = { INVALID_NT_CHARS, 0 };
+@@ -2896,6 +2896,7 @@ NTSTATUS CDECL wine_nt_to_unix_file_name( const UNICODE_STRING *nameW, ANSI_STRI
+     WCHAR *name, *ptr, *prefix, buffer[3] = {'c',':',0};
+     UNICODE_STRING dospathW;
+     size_t offset, name_len;
++    BOOLEAN check_case = FALSE;
+     NTSTATUS status;
+ 
+     if (!wcsnicmp( nameW->Buffer, deviceW, nameW->Length / sizeof(WCHAR) ))
+diff --git a/dlls/ntdll/file.c b/dlls/ntdll/file.c
+index 1cb45fa0d8c..1a36d75a76c 100644
+--- a/dlls/ntdll/file.c
++++ b/dlls/ntdll/file.c
+@@ -1726,7 +1726,7 @@ NTSTATUS FILE_CreateSymlink(HANDLE handle, REPARSE_DATA_BUFFER *buffer)
+     }
+ 
+     nt_dest_allocated = TRUE;
+-    status = wine_nt_to_unix_file_name( &nt_dest, &unix_dest, FILE_WINE_PATH, FALSE );
++    status = wine_nt_to_unix_file_name( &nt_dest, &unix_dest, FILE_WINE_PATH );
+     if (status != STATUS_SUCCESS && status != STATUS_NO_SUCH_FILE)
+         goto cleanup;
+     dest_allocated = TRUE;
+diff --git a/dlls/ntdll/loader.c b/dlls/ntdll/loader.c
+index 6ef10d6c18a..2979061a5e2 100644
+--- a/dlls/ntdll/loader.c
++++ b/dlls/ntdll/loader.c
+@@ -3076,7 +3076,7 @@ static NTSTATUS load_so_dll( LPCWSTR load_path, const UNICODE_STRING *nt_name,
+ 
+     if (!so_name)
+     {
+-        if (wine_nt_to_unix_file_name( nt_name, &unix_name, FILE_OPEN, FALSE ))
++        if (wine_nt_to_unix_file_name( nt_name, &unix_name, FILE_OPEN ))
+             return STATUS_DLL_NOT_FOUND;
+ 
+         /* remove .so extension from Windows name */
+diff --git a/dlls/ntdll/ntdll.spec b/dlls/ntdll/ntdll.spec
+index 1a8bd4e11e1..ba0776073fb 100644
+--- a/dlls/ntdll/ntdll.spec
++++ b/dlls/ntdll/ntdll.spec
+@@ -1575,7 +1575,7 @@
+ @ cdecl __wine_set_signal_handler(long ptr)
+ 
+ # Filesystem
+-@ cdecl wine_nt_to_unix_file_name(ptr ptr long long)
++@ cdecl wine_nt_to_unix_file_name(ptr ptr long)
+ @ cdecl wine_unix_to_nt_file_name(ptr ptr)
+ 
+ @ cdecl __wine_esync_set_queue_fd(long)
+diff --git a/dlls/ntdll/process.c b/dlls/ntdll/process.c
+index d7ff7fa2c6f..0f4f42a240f 100644
+--- a/dlls/ntdll/process.c
++++ b/dlls/ntdll/process.c
+@@ -1458,7 +1458,7 @@ static char *get_unix_curdir( const RTL_USER_PROCESS_PARAMETERS *params )
+ 
+     if (!RtlDosPathNameToNtPathName_U( params->CurrentDirectory.DosPath.Buffer, &nt_name, NULL, NULL ))
+         return NULL;
+-    status = wine_nt_to_unix_file_name( &nt_name, &unix_name, FILE_OPEN_IF, FALSE );
++    status = wine_nt_to_unix_file_name( &nt_name, &unix_name, FILE_OPEN_IF );
+     RtlFreeUnicodeString( &nt_name );
+     if (status && status != STATUS_NO_SUCH_FILE) return NULL;
+     return unix_name.Buffer;
+@@ -1479,7 +1479,7 @@ static NTSTATUS fork_and_exec( UNICODE_STRING *path, const RTL_USER_PROCESS_PARA
+     ANSI_STRING unix_name;
+     NTSTATUS status;
+ 
+-    status = wine_nt_to_unix_file_name( path, &unix_name, FILE_OPEN, FALSE );
++    status = wine_nt_to_unix_file_name( path, &unix_name, FILE_OPEN );
+     if (status) return status;
+ 
+ #ifdef HAVE_PIPE2
+diff --git a/dlls/ntdll/tests/file.c b/dlls/ntdll/tests/file.c
+index 9ebe41ac7d8..b7a2979506c 100644
+--- a/dlls/ntdll/tests/file.c
++++ b/dlls/ntdll/tests/file.c
+@@ -370,7 +370,7 @@ static void open_file_test(void)
+     attr.Length = sizeof(attr);
+     attr.RootDirectory = 0;
+     attr.ObjectName = &nameW;
+-    attr.Attributes = OBJ_CASE_INSENSITIVE;
++    attr.Attributes = 0;
+     attr.SecurityDescriptor = NULL;
+     attr.SecurityQualityOfService = NULL;
+     status = pNtOpenFile( &dir, SYNCHRONIZE|FILE_LIST_DIRECTORY, &attr, &io,
+diff --git a/include/winternl.h b/include/winternl.h
+index e67fcabb6a2..ecaf2af7f80 100644
+--- a/include/winternl.h
++++ b/include/winternl.h
+@@ -3021,7 +3021,7 @@ NTSYSAPI void      WINAPI TpWaitForWork(TP_WORK *,BOOL);
+ /* Wine internal functions */
+ 
+ NTSYSAPI NTSTATUS CDECL wine_nt_to_unix_file_name( const UNICODE_STRING *nameW, ANSI_STRING *unix_name_ret,
+-                                                   UINT disposition, BOOLEAN check_case );
++                                                   UINT disposition );
+ NTSYSAPI NTSTATUS CDECL wine_unix_to_nt_file_name( const ANSI_STRING *name, UNICODE_STRING *nt );
+ 
+ 
+diff --git a/dlls/nvcuda/nvcuda.c b/dlls/nvcuda/nvcuda.c
+index 0bae2fbe8a03..46df97550905 100644
+--- a/dlls/nvcuda/nvcuda.c
++++ b/dlls/nvcuda/nvcuda.c
+@@ -1922,7 +1922,7 @@ static BOOL get_unix_path(ANSI_STRING *unix_name, const char *filename)
+         return FALSE;
+     }
+ 
+-    status = wine_nt_to_unix_file_name(&ntpathW, unix_name, FILE_OPEN, FALSE);
++    status = wine_nt_to_unix_file_name(&ntpathW, unix_name, FILE_OPEN);
+ 
+     RtlFreeUnicodeString(&ntpathW);
+     RtlFreeUnicodeString(&dospathW);
+diff --git a/dlls/nvcuvid/nvcuvid.c b/dlls/nvcuvid/nvcuvid.c
+index 6da5d72da229..2704bfa9a637 100644
+--- a/dlls/nvcuvid/nvcuvid.c
++++ b/dlls/nvcuvid/nvcuvid.c
+@@ -288,7 +288,7 @@ static BOOL get_unix_path(ANSI_STRING *unix_name, const char *filename)
+         return FALSE;
+     }
+ 
+-    status = wine_nt_to_unix_file_name(&ntpathW, unix_name, FILE_OPEN, FALSE);
++    status = wine_nt_to_unix_file_name(&ntpathW, unix_name, FILE_OPEN);
+ 
+     RtlFreeUnicodeString(&ntpathW);
+     RtlFreeUnicodeString(&dospathW);
+diff --git a/include/winternl.h b/include/winternl.h
+index 5f4333ee3a1b..5e72dd46229c 100644
+--- a/include/winternl.h
++++ b/include/winternl.h
+@@ -3439,7 +3439,7 @@ NTSYSAPI void      WINAPI TpWaitForWork(TP_WORK *,BOOL);
+ /* Wine internal functions */
+ 
+ NTSYSAPI NTSTATUS CDECL wine_nt_to_unix_file_name( const UNICODE_STRING *nameW, ANSI_STRING *unix_name_ret,
+-                                                   UINT disposition, BOOLEAN check_case );
++                                                   UINT disposition );
+ NTSYSAPI NTSTATUS CDECL wine_unix_to_nt_file_name( const ANSI_STRING *name, UNICODE_STRING *nt );
+ 
+ 
+-- 
+2.26.2
+

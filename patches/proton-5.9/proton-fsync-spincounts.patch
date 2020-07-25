@@ -1,0 +1,484 @@
+From ecfa1989fe9bd940a7d8b0529eca0766b7aecb47 Mon Sep 17 00:00:00 2001
+From: Zebediah Figura <zfigura@codeweavers.com>
+Date: Mon, 19 Aug 2019 18:25:42 -0500
+Subject: [PATCH] ntdll/fsync: Introduce a configurable spin count.
+
+---
+ dlls/ntdll/fsync.c | 56 +++++++++++++++++++++++++++++++++++-----------
+ 1 file changed, 43 insertions(+), 13 deletions(-)
+
+diff --git a/dlls/ntdll/fsync.c b/dlls/ntdll/fsync.c
+index bcb927fd581..20de45bc595 100644
+--- a/dlls/ntdll/fsync.c
++++ b/dlls/ntdll/fsync.c
+@@ -64,6 +64,15 @@ struct futex_wait_block
+ };
+ #include "poppack.h"
+ 
++static inline void small_pause(void)
++{
++#if defined(__i386__) || defined(__x86_64__)
++    __asm__ __volatile__( "rep;nop" : : : "memory" );
++#else
++    __asm__ __volatile__( "" : : : "memory" );
++#endif
++}
++
+ static inline int futex_wait_multiple( const struct futex_wait_block *futexes,
+         int count, const struct timespec *timeout )
+ {
+@@ -80,6 +89,8 @@ static inline int futex_wait( int *addr, int val, struct timespec *timeout )
+     return syscall( __NR_futex, addr, 0, val, timeout, 0, 0 );
+ }
+ 
++static unsigned int spincount;
++
+ int do_fsync(void)
+ {
+ #ifdef __linux__
+@@ -90,6 +101,8 @@ int do_fsync(void)
+         static const struct timespec zero;
+         futex_wait_multiple( NULL, 0, &zero );
+         do_fsync_cached = getenv("WINEFSYNC") && atoi(getenv("WINEFSYNC")) && errno != ENOSYS;
++        if (getenv("WINEFSYNC_SPINCOUNT"))
++            spincount = atoi(getenv("WINEFSYNC_SPINCOUNT"));
+     }
+ 
+     return do_fsync_cached;
+@@ -735,6 +748,7 @@ static NTSTATUS __fsync_wait_objects( DWORD count, const HANDLE *handles,
+     int has_fsync = 0, has_server = 0;
+     BOOL msgwait = FALSE;
+     int dummy_futex = 0;
++    unsigned int spin;
+     LONGLONG timeleft;
+     LARGE_INTEGER now;
+     DWORD waitcount;
+@@ -844,10 +858,14 @@ static NTSTATUS __fsync_wait_objects( DWORD count, const HANDLE *handles,
+                         struct semaphore *semaphore = obj->shm;
+                         int current;
+ 
+-                        do
++                        for (spin = 0; spin < spincount + 1; ++spin)
+                         {
+-                            if (!(current = semaphore->count)) break;
+-                        } while (__sync_val_compare_and_swap( &semaphore->count, current, current - 1 ) != current);
++                            do
++                            {
++                                if (!(current = semaphore->count)) break;
++                            } while (__sync_val_compare_and_swap( &semaphore->count, current, current - 1 ) != current);
++                            small_pause();
++                        }
+ 
+                         if (current)
+                         {
+@@ -871,11 +889,15 @@ static NTSTATUS __fsync_wait_objects( DWORD count, const HANDLE *handles,
+                             return i;
+                         }
+ 
+-                        if (!(tid = __sync_val_compare_and_swap( &mutex->tid, 0, GetCurrentThreadId() )))
++                        for (spin = 0; spin < spincount + 1; ++spin)
+                         {
+-                            TRACE("Woken up by handle %p [%d].\n", handles[i], i);
+-                            mutex->count = 1;
+-                            return i;
++                            if (!(tid = __sync_val_compare_and_swap( &mutex->tid, 0, GetCurrentThreadId() )))
++                            {
++                                TRACE("Woken up by handle %p [%d].\n", handles[i], i);
++                                mutex->count = 1;
++                                return i;
++                            }
++                            small_pause();
+                         }
+ 
+                         futexes[i].addr = &mutex->tid;
+@@ -887,10 +909,14 @@ static NTSTATUS __fsync_wait_objects( DWORD count, const HANDLE *handles,
+                     {
+                         struct event *event = obj->shm;
+ 
+-                        if (__sync_val_compare_and_swap( &event->signaled, 1, 0 ))
++                        for (spin = 0; spin < spincount + 1; ++spin)
+                         {
+-                            TRACE("Woken up by handle %p [%d].\n", handles[i], i);
+-                            return i;
++                            if (__sync_val_compare_and_swap( &event->signaled, 1, 0 ))
++                            {
++                                TRACE("Woken up by handle %p [%d].\n", handles[i], i);
++                                return i;
++                            }
++                            small_pause();
+                         }
+ 
+                         futexes[i].addr = &event->signaled;
+@@ -903,10 +929,14 @@ static NTSTATUS __fsync_wait_objects( DWORD count, const HANDLE *handles,
+                     {
+                         struct event *event = obj->shm;
+ 
+-                        if (__atomic_load_n( &event->signaled, __ATOMIC_SEQ_CST ))
++                        for (spin = 0; spin < spincount + 1; ++spin)
+                         {
+-                            TRACE("Woken up by handle %p [%d].\n", handles[i], i);
+-                            return i;
++                            if (__atomic_load_n( &event->signaled, __ATOMIC_SEQ_CST ))
++                            {
++                                TRACE("Woken up by handle %p [%d].\n", handles[i], i);
++                                return i;
++                            }
++                            small_pause();
+                         }
+ 
+                         futexes[i].addr = &event->signaled;
+
+From 9b714d4047bf136b87b94fa27dac38bbbb7d68ac Mon Sep 17 00:00:00 2001
+From: "Pierre-Loup A. Griffais" <pgriffais@valvesoftware.com>
+Date: Tue, 10 Sep 2019 11:49:05 -0700
+Subject: [PATCH] ntdll: fix spin count for fsync semaphores
+
+---
+ dlls/ntdll/fsync.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/dlls/ntdll/fsync.c b/dlls/ntdll/fsync.c
+index 20de45bc595..b3871ad3834 100644
+--- a/dlls/ntdll/fsync.c
++++ b/dlls/ntdll/fsync.c
+@@ -862,11 +862,11 @@ static NTSTATUS __fsync_wait_objects( DWORD count, const HANDLE *handles,
+                         {
+                             do
+                             {
+-                                if (!(current = semaphore->count)) break;
++                                if (!(current = semaphore->count)) goto out;
+                             } while (__sync_val_compare_and_swap( &semaphore->count, current, current - 1 ) != current);
+                             small_pause();
+                         }
+-
++out:
+                         if (current)
+                         {
+                             TRACE("Woken up by handle %p [%d].\n", handles[i], i);
+From 455786a3e6750ae502376da06e41424d012d52bf Mon Sep 17 00:00:00 2001
+From: Zebediah Figura <zfigura@codeweavers.com>
+Date: Mon, 16 Sep 2019 12:11:36 -0500
+Subject: [PATCH] ntdll: fix for spincounts
+
+---
+ dlls/ntdll/fsync.c | 14 +++++---------
+ 1 file changed, 5 insertions(+), 9 deletions(-)
+
+diff --git a/dlls/ntdll/fsync.c b/dlls/ntdll/fsync.c
+index b3871ad3834..2c4c656d276 100644
+--- a/dlls/ntdll/fsync.c
++++ b/dlls/ntdll/fsync.c
+@@ -860,18 +860,14 @@ static NTSTATUS __fsync_wait_objects( DWORD count, const HANDLE *handles,
+ 
+                         for (spin = 0; spin < spincount + 1; ++spin)
+                         {
+-                            do
++                            if ((current = __atomic_load_n( &semaphore->count, __ATOMIC_SEQ_CST ))
++                                    && __sync_val_compare_and_swap( &semaphore->count, current, current - 1) == current)
+                             {
+-                                if (!(current = semaphore->count)) goto out;
+-                            } while (__sync_val_compare_and_swap( &semaphore->count, current, current - 1 ) != current);
++                                TRACE("Woken up by handle %p [%d].\n", handles[i], i);
++                                return i;
++                            }
+                             small_pause();
+                         }
+-out:
+-                        if (current)
+-                        {
+-                            TRACE("Woken up by handle %p [%d].\n", handles[i], i);
+-                            return i;
+-                        }
+ 
+                         futexes[i].addr = &semaphore->count;
+                         futexes[i].val = current;
+From 367e8f9e04164299c175ade7a77915d1698d4770 Mon Sep 17 00:00:00 2001
+From: Zebediah Figura <z.figura12@gmail.com>
+Date: Tue, 29 Oct 2019 19:09:17 -0500
+Subject: [PATCH] ntdll/fsync: Fix spincounts for semaphores, again.
+
+---
+ dlls/ntdll/fsync.c | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
+
+diff --git a/dlls/ntdll/fsync.c b/dlls/ntdll/fsync.c
+index 2c4c656d276..16bd38e7c8f 100644
+--- a/dlls/ntdll/fsync.c
++++ b/dlls/ntdll/fsync.c
+@@ -858,10 +858,14 @@ static NTSTATUS __fsync_wait_objects( DWORD count, const HANDLE *handles,
+                         struct semaphore *semaphore = obj->shm;
+                         int current;
+ 
+-                        for (spin = 0; spin < spincount + 1; ++spin)
++                        /* It would be a little clearer (and less error-prone)
++                         * to use a dedicated interlocked_dec_if_nonzero()
++                         * helper, but nesting loops like that is probably not
++                         * great for performance... */
++                        for (spin = 0; spin < spincount + 1 || current; ++spin)
+                         {
+                             if ((current = __atomic_load_n( &semaphore->count, __ATOMIC_SEQ_CST ))
+-                                    && __sync_val_compare_and_swap( &semaphore->count, current, current - 1) == current)
++                                    && __sync_val_compare_and_swap( &semaphore->count, current, current - 1 ) == current)
+                             {
+                                 TRACE("Woken up by handle %p [%d].\n", handles[i], i);
+                                 return i;
+@@ -870,7 +874,7 @@ static NTSTATUS __fsync_wait_objects( DWORD count, const HANDLE *handles,
+                         }
+ 
+                         futexes[i].addr = &semaphore->count;
+-                        futexes[i].val = current;
++                        futexes[i].val = 0;
+                         break;
+                     }
+                     case FSYNC_MUTEX:
+ 
+From 7a046421705a207e1e2c9bbfdcae77260c18401e Mon Sep 17 00:00:00 2001
+From: Zebediah Figura <z.figura12@gmail.com>
+Date: Mon, 17 Feb 2020 11:57:40 -0600
+Subject: [PATCH] ntdll, server: Abandon fsync mutexes on thread exit.
+
+---
+ dlls/ntdll/fsync.c | 35 ++++++++++++++++++++++++++++-------
+ server/fsync.c     | 34 ++++++++++++++++++++++++++++++++++
+ server/fsync.h     |  1 +
+ server/thread.c    |  2 ++
+ 4 files changed, 65 insertions(+), 7 deletions(-)
+
+diff --git a/dlls/ntdll/fsync.c b/dlls/ntdll/fsync.c
+index 19aacc6a090..e16c3142bd3 100644
+--- a/dlls/ntdll/fsync.c
++++ b/dlls/ntdll/fsync.c
+@@ -662,7 +662,7 @@ NTSTATUS fsync_query_mutex( HANDLE handle, MUTANT_INFORMATION_CLASS class,
+ 
+     out->CurrentCount = 1 - mutex->count;
+     out->OwnedByCaller = (mutex->tid == GetCurrentThreadId());
+-    out->AbandonedState = FALSE;
++    out->AbandonedState = (mutex->tid == ~0);
+     if (ret_len) *ret_len = sizeof(*out);
+ 
+     return STATUS_SUCCESS;
+@@ -897,6 +897,12 @@ static NTSTATUS __fsync_wait_objects( DWORD count, const HANDLE *handles,
+                                 mutex->count = 1;
+                                 return i;
+                             }
++                            else if (tid == ~0 && (tid = __sync_val_compare_and_swap( &mutex->tid, ~0, GetCurrentThreadId() )) == ~0)
++                            {
++                                TRACE("Woken up by abandoned mutex %p [%d].\n", handles[i], i);
++                                mutex->count = 1;
++                                return STATUS_ABANDONED_WAIT_0 + i;
++                            }
+                             small_pause();
+                         }
+ 
+@@ -1034,7 +1040,11 @@ static NTSTATUS __fsync_wait_objects( DWORD count, const HANDLE *handles,
+ 
+         while (1)
+         {
++            BOOL abandoned;
++
+ tryagain:
++            abandoned = FALSE;
++
+             /* First step: try to wait on each object in sequence. */
+ 
+             for (i = 0; i < count; i++)
+@@ -1086,11 +1096,9 @@ static NTSTATUS __fsync_wait_objects( DWORD count, const HANDLE *handles,
+                 if (obj && obj->type == FSYNC_MUTEX)
+                 {
+                     struct mutex *mutex = obj->shm;
++                    int tid = __atomic_load_n( &mutex->tid, __ATOMIC_SEQ_CST );
+ 
+-                    if (mutex->tid == GetCurrentThreadId())
+-                        continue;   /* ok */
+-
+-                    if (__atomic_load_n( &mutex->tid, __ATOMIC_SEQ_CST ))
++                    if (tid && tid != ~0 && tid != GetCurrentThreadId())
+                         goto tryagain;
+                 }
+                 else if (obj)
+@@ -1111,10 +1119,15 @@ static NTSTATUS __fsync_wait_objects( DWORD count, const HANDLE *handles,
+                 case FSYNC_MUTEX:
+                 {
+                     struct mutex *mutex = obj->shm;
+-                    if (mutex->tid == GetCurrentThreadId())
++                    int tid = __atomic_load_n( &mutex->tid, __ATOMIC_SEQ_CST );
++                    if (tid == GetCurrentThreadId())
+                         break;
+-                    if (__sync_val_compare_and_swap( &mutex->tid, 0, GetCurrentThreadId() ))
++                    if (tid && tid != ~0)
++                        goto tooslow;
++                    if (__sync_val_compare_and_swap( &mutex->tid, tid, GetCurrentThreadId() ) != tid)
+                         goto tooslow;
++                    if (tid == ~0)
++                        abandoned = TRUE;
+                     break;
+                 }
+                 case FSYNC_SEMAPHORE:
+@@ -1150,6 +1163,11 @@ static NTSTATUS __fsync_wait_objects( DWORD count, const HANDLE *handles,
+                 }
+             }
+ 
++            if (abandoned)
++            {
++                TRACE("Wait successful, but some object(s) were abandoned.\n");
++                return STATUS_ABANDONED;
++            }
+             TRACE("Wait successful.\n");
+             return STATUS_SUCCESS;
+ 
+@@ -1162,6 +1180,9 @@ static NTSTATUS __fsync_wait_objects( DWORD count, const HANDLE *handles,
+                 case FSYNC_MUTEX:
+                 {
+                     struct mutex *mutex = obj->shm;
++                    /* HACK: This won't do the right thing with abandoned
++                     * mutexes, but fixing it is probably more trouble than
++                     * it's worth. */
+                     __atomic_store_n( &mutex->tid, 0, __ATOMIC_SEQ_CST );
+                     break;
+                 }
+diff --git a/server/fsync.c b/server/fsync.c
+index 346f7492a51..0d60565455d 100644
+--- a/server/fsync.c
++++ b/server/fsync.c
+@@ -132,11 +132,14 @@ void fsync_init(void)
+     atexit( shm_cleanup );
+ }
+ 
++static struct list mutex_list = LIST_INIT(mutex_list);
++
+ struct fsync
+ {
+     struct object  obj;
+     unsigned int   shm_idx;
+     enum fsync_type type;
++    struct list     mutex_entry;
+ };
+ 
+ static void fsync_dump( struct object *obj, int verbose );
+@@ -195,6 +198,9 @@ static unsigned int fsync_map_access( struct object *obj, unsigned int access )
+ 
+ static void fsync_destroy( struct object *obj )
+ {
++    struct fsync *fsync = (struct fsync *)obj;
++    if (fsync->type == FSYNC_MUTEX)
++        list_remove( &fsync->mutex_entry );
+ }
+ 
+ static void *get_shm( unsigned int idx )
+@@ -297,6 +303,8 @@ struct fsync *create_fsync( struct object *root, const struct unicode_str *name,
+ 
+             fsync->shm_idx = fsync_alloc_shm( low, high );
+             fsync->type = type;
++            if (type == FSYNC_MUTEX)
++                list_add_tail( &mutex_list, &fsync->mutex_entry );
+         }
+         else
+         {
+@@ -397,6 +405,32 @@ void fsync_reset_event( struct fsync *fsync )
+     __atomic_store_n( &event->signaled, 0, __ATOMIC_SEQ_CST );
+ }
+ 
++struct mutex
++{
++    int tid;
++    int count;  /* recursion count */
++};
++
++void fsync_abandon_mutexes( struct thread *thread )
++{
++    unsigned int index = 0;
++    struct fsync *fsync;
++
++    LIST_FOR_EACH_ENTRY( fsync, &mutex_list, struct fsync, mutex_entry )
++    {
++        struct mutex *mutex = get_shm( fsync->shm_idx );
++
++        if (mutex->tid == thread->id)
++        {
++            if (debug_level)
++                fprintf( stderr, "fsync_abandon_mutexes() idx=%d\n", fsync->shm_idx );
++            mutex->tid = ~0;
++            mutex->count = 0;
++            futex_wake( &mutex->tid, INT_MAX );
++        }
++    }
++}
++
+ DECL_HANDLER(create_fsync)
+ {
+     struct fsync *fsync;
+diff --git a/server/fsync.h b/server/fsync.h
+index f6f1a48b31e..a91939b7f0a 100644
+--- a/server/fsync.h
++++ b/server/fsync.h
+@@ -31,3 +31,4 @@ struct fsync;
+ extern const struct object_ops fsync_ops;
+ extern void fsync_set_event( struct fsync *fsync );
+ extern void fsync_reset_event( struct fsync *fsync );
++extern void fsync_abandon_mutexes( struct thread *thread );
+diff --git a/server/thread.c b/server/thread.c
+index 4d33f357bf8..c8c44ecf51e 100644
+--- a/server/thread.c
++++ b/server/thread.c
+@@ -1250,6 +1250,8 @@ void kill_thread( struct thread *thread, int violent_death )
+     kill_console_processes( thread, 0 );
+     debug_exit_thread( thread );
+     abandon_mutexes( thread );
++    if (do_fsync())
++        fsync_abandon_mutexes( thread );
+     if (do_esync())
+         esync_abandon_mutexes( thread );
+     wake_up( &thread->obj, 0 );
+From 9756774948ed5364b52e3e797b92c40bbdd8aa07 Mon Sep 17 00:00:00 2001
+From: Zebediah Figura <z.figura12@gmail.com>
+Date: Mon, 17 Feb 2020 14:33:20 -0600
+Subject: [PATCH] kernel32/tests: Add a test for mutex abandonment.
+
+---
+ dlls/kernel32/tests/sync.c | 21 ++++++++++++++++++++-
+ 1 file changed, 20 insertions(+), 1 deletion(-)
+
+diff --git a/dlls/kernel32/tests/sync.c b/dlls/kernel32/tests/sync.c
+index b4f5d1f1f0b..492cb1f72f2 100644
+--- a/dlls/kernel32/tests/sync.c
++++ b/dlls/kernel32/tests/sync.c
+@@ -193,6 +193,13 @@ static DWORD WINAPI mutex_thread( void *param )
+     return 0;
+ }
+ 
++static DWORD WINAPI abandon_mutex_thread( void *param )
++{
++    DWORD ret = WaitForSingleObject( mutex, 0 );
++    ok(!ret, "got %u\n", ret);
++    return 0;
++}
++
+ static void test_mutex(void)
+ {
+     HANDLE thread;
+@@ -379,12 +386,24 @@ todo_wine_if(getenv("WINEESYNC"))   /* XFAIL: due to the above */
+     ret = ReleaseMutex( mutex2 );
+     ok(ret, "got error %u\n", GetLastError());
+ 
++    thread = CreateThread( NULL, 0, abandon_mutex_thread, NULL, 0, NULL );
++    ret = WaitForSingleObject( thread, 2000 );
++    ok(ret == 0, "wait failed: %u\n", ret);
++
++    ret = WaitForSingleObject( mutex, 0 );
++    ok(ret == WAIT_ABANDONED, "got %u\n", ret);
++
++    ret = ReleaseMutex( mutex );
++    ok(ret, "got error %u\n", GetLastError());
++
++    ret = WaitForSingleObject( mutex, 0 );
++    ok(!ret, "got %u\n", ret);
++
+     ret = CloseHandle( mutex );
+     ok(ret, "got error %u\n", GetLastError());
+ 
+     ret = CloseHandle( mutex2 );
+     ok(ret, "got error %u\n", GetLastError());
+-
+ }
+ 
+ static void test_slist(void)
