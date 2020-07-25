@@ -91,4 +91,155 @@ index 6c4e6a49f26..1aea54adfb2 100644
      }
      WINE_TRACE("winver is %s\n", winver);
  
+From c7961105a48bfc3d24be7f2a610eade07960b5b6 Mon Sep 17 00:00:00 2001
+From: Zebediah Figura <z.figura12@gmail.com>
+Date: Tue, 7 Jul 2020 10:02:39 -0500
+Subject: [PATCH] ntdll: Bump the Windows 10 build number to 17763.
+
+Corresponds with the "1809" release.
+
+Signed-off-by: Zebediah Figura <zfigura@codeweavers.com>
+---
+ dlls/ntdll/version.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/dlls/ntdll/version.c b/dlls/ntdll/version.c
+index 875a33c5b2b..f22ed9f8871 100644
+--- a/dlls/ntdll/version.c
++++ b/dlls/ntdll/version.c
+@@ -185,7 +185,7 @@ static const RTL_OSVERSIONINFOEXW VersionData[NB_WINDOWS_VERSIONS] =
+     },
+     /* WIN10 */
+     {
+-        sizeof(RTL_OSVERSIONINFOEXW), 10, 0, 0x42EE, VER_PLATFORM_WIN32_NT,
++        sizeof(RTL_OSVERSIONINFOEXW), 10, 0, 0x4563, VER_PLATFORM_WIN32_NT,
+         {0}, 0, 0, VER_SUITE_SINGLEUSERTS, VER_NT_WORKSTATION, 0
+     },
  
+From d88d6b3a770189c47b338d3252c6bbe888635db7 Mon Sep 17 00:00:00 2001
+From: Zebediah Figura <z.figura12@gmail.com>
+Date: Tue, 7 Jul 2020 10:02:40 -0500
+Subject: [PATCH] winecfg: Bump the Windows 10 build number to 17763.
+
+Corresponds with the "1809" release.
+
+Signed-off-by: Zebediah Figura <zfigura@codeweavers.com>
+---
+ programs/winecfg/appdefaults.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/programs/winecfg/appdefaults.c b/programs/winecfg/appdefaults.c
+index 1aea54adfb2..290eefe150e 100644
+--- a/programs/winecfg/appdefaults.c
++++ b/programs/winecfg/appdefaults.c
+@@ -48,7 +48,7 @@ static const struct
+     const char *szProductType;
+ } win_versions[] =
+ {
+-    { "win10",       "Windows 10",       10,  0, 0x42EE,VER_PLATFORM_WIN32_NT, "", 0, 0, "WinNT"},
++    { "win10",       "Windows 10",       10,  0, 0x4563,VER_PLATFORM_WIN32_NT, "", 0, 0, "WinNT"},
+     { "win81",       "Windows 8.1",       6,  3, 0x2580,VER_PLATFORM_WIN32_NT, "", 0, 0, "WinNT"},
+     { "win8",        "Windows 8",         6,  2, 0x23F0,VER_PLATFORM_WIN32_NT, "", 0, 0, "WinNT"},
+     { "win2008r2",   "Windows 2008 R2",   6,  1, 0x1DB1,VER_PLATFORM_WIN32_NT, "Service Pack 1", 1, 0, "ServerNT"},
+From b3ed562a02c30730a4472b966057d2c97ce294a7 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
+Date: Tue, 14 Jul 2020 18:43:17 +0200
+Subject: [PATCH] wine.inf: Bump CurrentBuild(Number) to 17763 (Win10 1809).
+
+---
+ loader/wine.inf.in | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/loader/wine.inf.in b/loader/wine.inf.in
+index 0b014dce63c..12ec40f872e 100644
+--- a/loader/wine.inf.in
++++ b/loader/wine.inf.in
+@@ -3758,8 +3758,8 @@ HKLM,"System\CurrentControlSet\Services\Winsock2\Parameters\Protocol_Catalog9\Ca
+ [VersionInfo]
+ HKLM,%CurrentVersionNT%,"CurrentVersion",2,"10.0"
+ HKLM,%CurrentVersionNT%,"CSDVersion",2,""
+-HKLM,%CurrentVersionNT%,"CurrentBuild",2,"17134"
+-HKLM,%CurrentVersionNT%,"CurrentBuildNumber",2,"17134"
++HKLM,%CurrentVersionNT%,"CurrentBuild",2,"17763"
++HKLM,%CurrentVersionNT%,"CurrentBuildNumber",2,"17763"
+ HKLM,%CurrentVersionNT%,"CurrentType",2,"Uniprocessor Free"
+ HKLM,%CurrentVersionNT%,"DigitalProductId",1,00,00,00,00,00,00,00,00,00,00,00,\
+ 00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,\
+@@ -3776,8 +3776,8 @@ HKLM,%Control%\Session Manager\Environment,"OS",2,"Windows_NT"
+ [VersionInfo.ntamd64]
+ HKLM,%CurrentVersionNT%,"CurrentVersion",2,"10.0"
+ HKLM,%CurrentVersionNT%,"CSDVersion",2,""
+-HKLM,%CurrentVersionNT%,"CurrentBuild",2,"17134"
+-HKLM,%CurrentVersionNT%,"CurrentBuildNumber",2,"17134"
++HKLM,%CurrentVersionNT%,"CurrentBuild",2,"17763"
++HKLM,%CurrentVersionNT%,"CurrentBuildNumber",2,"17763"
+ HKLM,%CurrentVersionNT%,"CurrentType",2,"Uniprocessor Free"
+ HKLM,%CurrentVersionNT%,"DigitalProductId",1,00,00,00,00,00,00,00,00,00,00,00,\
+ 00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,\
+From e9264df6e63b5df87d81e950675df7290ad43615 Mon Sep 17 00:00:00 2001
+From: Andrew Eikum <aeikum@codeweavers.com>
+Date: Wed, 15 Jul 2020 14:57:28 -0500
+Subject: [PATCH] wineboot: On prefix upgrade, update win10 build number
+
+Some games (Death Stranding) require later build numbers than we had
+shipped earlier. So fix it up on existing prefixes.
+---
+ programs/wineboot/wineboot.c | 38 ++++++++++++++++++++++++++++++++++++
+ 1 file changed, 38 insertions(+)
+
+diff --git a/programs/wineboot/wineboot.c b/programs/wineboot/wineboot.c
+index 569db5ee94d..a0a72040843 100644
+--- a/programs/wineboot/wineboot.c
++++ b/programs/wineboot/wineboot.c
+@@ -1451,6 +1451,43 @@ static void update_user_profile(void)
+     LocalFree(sid);
+ }
+ 
++static void update_win_version(void)
++{
++    static const WCHAR win10_buildW[] = L"17763";
++
++    HKEY cv_h;
++    DWORD type, sz;
++    WCHAR current_version[256];
++
++    if(RegOpenKeyExW(HKEY_LOCAL_MACHINE, L"Software\\Microsoft\\Windows NT\\CurrentVersion",
++                0, KEY_ALL_ACCESS, &cv_h) == ERROR_SUCCESS){
++        /* get the current windows version */
++        sz = sizeof(current_version);
++        if(RegQueryValueExW(cv_h, L"CurrentVersion", NULL, &type, (BYTE *)current_version, &sz) == ERROR_SUCCESS &&
++                type == REG_SZ){
++            if(!wcscmp(current_version, L"10.0")){
++                RegSetValueExW(cv_h, L"CurrentBuild", 0, REG_SZ, (const BYTE *)win10_buildW, sizeof(win10_buildW));
++                RegSetValueExW(cv_h, L"CurrentBuildNumber", 0, REG_SZ, (const BYTE *)win10_buildW, sizeof(win10_buildW));
++            }
++        }
++        RegCloseKey(cv_h);
++    }
++
++    if(RegOpenKeyExW(HKEY_LOCAL_MACHINE, L"Software\\Wow6432Node\\Microsoft\\Windows NT\\CurrentVersion",
++                0, KEY_ALL_ACCESS, &cv_h) == ERROR_SUCCESS){
++        /* get the current windows version */
++        sz = sizeof(current_version);
++        if(RegQueryValueExW(cv_h, L"CurrentVersion", NULL, &type, (BYTE *)current_version, &sz) == ERROR_SUCCESS &&
++                type == REG_SZ){
++            if(!wcscmp(current_version, L"10.0")){
++                RegSetValueExW(cv_h, L"CurrentBuild", 0, REG_SZ, (const BYTE *)win10_buildW, sizeof(win10_buildW));
++                RegSetValueExW(cv_h, L"CurrentBuildNumber", 0, REG_SZ, (const BYTE *)win10_buildW, sizeof(win10_buildW));
++            }
++        }
++        RegCloseKey(cv_h);
++    }
++}
++
+ /* execute rundll32 on the wine.inf file if necessary */
+ static void update_wineprefix( BOOL force )
+ {
+@@ -1496,6 +1533,7 @@ static void update_wineprefix( BOOL force )
+         install_root_pnp_devices();
+         update_user_profile();
+         create_etc_stub_files();
++        update_win_version();
+ 
+         WINE_MESSAGE( "wine: configuration in %s has been updated.\n", debugstr_w(prettyprint_configdir()) );
+     }

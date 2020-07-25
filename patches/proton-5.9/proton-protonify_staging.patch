@@ -776,25 +776,6 @@ diff --git a/dlls/ntdll/loader.c b/dlls/ntdll/loader.c
 index 431c247a072..c9fcad79316 100644
 --- a/dlls/ntdll/loader.c
 +++ b/dlls/ntdll/loader.c
-@@ -159,6 +159,18 @@ static inline void ascii_to_unicode( WCHAR *dst, const char *src, size_t len )
-     while (len--) *dst++ = (unsigned char)*src++;
- }
- 
-+static WCHAR *strcasestrW( const WCHAR *str, const WCHAR *sub )
-+{
-+    while (*str)
-+    {
-+        const WCHAR *p1 = str, *p2 = sub;
-+        while (*p1 && *p2 && RtlDowncaseUnicodeChar(*p1) == RtlDowncaseUnicodeChar(*p2)) { p1++; p2++; }
-+        if (!*p2) return (WCHAR *)str;
-+        str++;
-+    }
-+    return NULL;
-+}
-+
- #define RTL_UNLOAD_EVENT_TRACE_NUMBER 64
- 
- typedef struct _RTL_UNLOAD_EVENT_TRACE
 @@ -2869,6 +2881,25 @@ static NTSTATUS find_dll_file( const WCHAR *load_path, const WCHAR *libname,
  done:
      RtlFreeHeap( GetProcessHeap(), 0, dllname );
@@ -812,7 +793,7 @@ index 431c247a072..c9fcad79316 100644
 +        const char *sgi = getenv( "SteamGameId" );
 +        if (sgi &&
 +            !strcmp( sgi, "105450" ) && /* AoE3 */
-+            strcasestrW( libname, mfc42W ))
++            strstriW( libname, mfc42W ))
 +        {
 +            WARN_(loaddll)( "Using a fake mfc42 handle\n" );
 +            status = find_dll_file( load_path, kernel32W, nt_name, pwm, mfc42W, module, image_info, st );
@@ -2397,3 +2378,1826 @@ index c7881fe4516..bb4be45da5d 100644
      }
  
      blacklist_filename_count = 0;
+From eb9b688d1b5d8c2061137100609c0a9b8189301c Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
+Date: Tue, 14 Jul 2020 18:25:16 +0200
+Subject: [PATCH] dxgi: Implement IDXGIOutput5 and IDXGIOutput6 stubs.
+
+---
+ dlls/dxgi/adapter.c      |   2 +-
+ dlls/dxgi/dxgi_private.h |   2 +-
+ dlls/dxgi/output.c       | 140 ++++++++++++++++++++++++++-------------
+ 3 files changed, 97 insertions(+), 47 deletions(-)
+
+diff --git a/dlls/dxgi/adapter.c b/dlls/dxgi/adapter.c
+index a5563498cdd..ae01c860057 100644
+--- a/dlls/dxgi/adapter.c
++++ b/dlls/dxgi/adapter.c
+@@ -140,7 +140,7 @@ static HRESULT STDMETHODCALLTYPE dxgi_adapter_EnumOutputs(IWineDXGIAdapter *ifac
+         return hr;
+     }
+
+-    *output = (IDXGIOutput *)&output_object->IDXGIOutput4_iface;
++    *output = (IDXGIOutput *)&output_object->IDXGIOutput6_iface;
+
+     TRACE("Returning output %p.\n", *output);
+
+diff --git a/dlls/dxgi/dxgi_private.h b/dlls/dxgi/dxgi_private.h
+index 5b934498349..3338be7a8de 100644
+--- a/dlls/dxgi/dxgi_private.h
++++ b/dlls/dxgi/dxgi_private.h
+@@ -142,7 +142,7 @@ HRESULT dxgi_device_init(struct dxgi_device *device, struct dxgi_device_layer *l
+ /* IDXGIOutput */
+ struct dxgi_output
+ {
+-    IDXGIOutput4 IDXGIOutput4_iface;
++    IDXGIOutput6 IDXGIOutput6_iface;
+     LONG refcount;
+     struct wined3d_private_store private_store;
+     struct dxgi_adapter *adapter;
+diff --git a/dlls/dxgi/output.c b/dlls/dxgi/output.c
+index a2331358e69..5d02802c74c 100644
+--- a/dlls/dxgi/output.c
++++ b/dlls/dxgi/output.c
+@@ -183,18 +183,20 @@ static HRESULT dxgi_output_get_display_mode_list(struct dxgi_output *output,
+     return S_OK;
+ }
+
+-static inline struct dxgi_output *impl_from_IDXGIOutput4(IDXGIOutput4 *iface)
++static inline struct dxgi_output *impl_from_IDXGIOutput6(IDXGIOutput6 *iface)
+ {
+-    return CONTAINING_RECORD(iface, struct dxgi_output, IDXGIOutput4_iface);
++    return CONTAINING_RECORD(iface, struct dxgi_output, IDXGIOutput6_iface);
+ }
+
+ /* IUnknown methods */
+
+-static HRESULT STDMETHODCALLTYPE dxgi_output_QueryInterface(IDXGIOutput4 *iface, REFIID iid, void **object)
++static HRESULT STDMETHODCALLTYPE dxgi_output_QueryInterface(IDXGIOutput6 *iface, REFIID iid, void **object)
+ {
+     TRACE("iface %p, iid %s, object %p.\n", iface, debugstr_guid(iid), object);
+
+-    if (IsEqualGUID(iid, &IID_IDXGIOutput4)
++    if (IsEqualGUID(iid, &IID_IDXGIOutput6)
++            || IsEqualGUID(iid, &IID_IDXGIOutput5)
++            || IsEqualGUID(iid, &IID_IDXGIOutput4)
+             || IsEqualGUID(iid, &IID_IDXGIOutput3)
+             || IsEqualGUID(iid, &IID_IDXGIOutput2)
+             || IsEqualGUID(iid, &IID_IDXGIOutput1)
+@@ -213,9 +215,9 @@ static HRESULT STDMETHODCALLTYPE dxgi_output_QueryInterface(IDXGIOutput4 *iface,
+     return E_NOINTERFACE;
+ }
+
+-static ULONG STDMETHODCALLTYPE dxgi_output_AddRef(IDXGIOutput4 *iface)
++static ULONG STDMETHODCALLTYPE dxgi_output_AddRef(IDXGIOutput6 *iface)
+ {
+-    struct dxgi_output *output = impl_from_IDXGIOutput4(iface);
++    struct dxgi_output *output = impl_from_IDXGIOutput6(iface);
+     ULONG refcount = InterlockedIncrement(&output->refcount);
+
+     TRACE("%p increasing refcount to %u.\n", output, refcount);
+@@ -223,9 +225,9 @@ static ULONG STDMETHODCALLTYPE dxgi_output_AddRef(IDXGIOutput4 *iface)
+     return refcount;
+ }
+
+-static ULONG STDMETHODCALLTYPE dxgi_output_Release(IDXGIOutput4 *iface)
++static ULONG STDMETHODCALLTYPE dxgi_output_Release(IDXGIOutput6 *iface)
+ {
+-    struct dxgi_output *output = impl_from_IDXGIOutput4(iface);
++    struct dxgi_output *output = impl_from_IDXGIOutput6(iface);
+     ULONG refcount = InterlockedDecrement(&output->refcount);
+
+     TRACE("%p decreasing refcount to %u.\n", output, refcount);
+@@ -242,40 +244,40 @@ static ULONG STDMETHODCALLTYPE dxgi_output_Release(IDXGIOutput4 *iface)
+
+ /* IDXGIObject methods */
+
+-static HRESULT STDMETHODCALLTYPE dxgi_output_SetPrivateData(IDXGIOutput4 *iface,
++static HRESULT STDMETHODCALLTYPE dxgi_output_SetPrivateData(IDXGIOutput6 *iface,
+         REFGUID guid, UINT data_size, const void *data)
+ {
+-    struct dxgi_output *output = impl_from_IDXGIOutput4(iface);
++    struct dxgi_output *output = impl_from_IDXGIOutput6(iface);
+
+     TRACE("iface %p, guid %s, data_size %u, data %p.\n", iface, debugstr_guid(guid), data_size, data);
+
+     return dxgi_set_private_data(&output->private_store, guid, data_size, data);
+ }
+
+-static HRESULT STDMETHODCALLTYPE dxgi_output_SetPrivateDataInterface(IDXGIOutput4 *iface,
++static HRESULT STDMETHODCALLTYPE dxgi_output_SetPrivateDataInterface(IDXGIOutput6 *iface,
+         REFGUID guid, const IUnknown *object)
+ {
+-    struct dxgi_output *output = impl_from_IDXGIOutput4(iface);
++    struct dxgi_output *output = impl_from_IDXGIOutput6(iface);
+
+     TRACE("iface %p, guid %s, object %p.\n", iface, debugstr_guid(guid), object);
+
+     return dxgi_set_private_data_interface(&output->private_store, guid, object);
+ }
+
+-static HRESULT STDMETHODCALLTYPE dxgi_output_GetPrivateData(IDXGIOutput4 *iface,
++static HRESULT STDMETHODCALLTYPE dxgi_output_GetPrivateData(IDXGIOutput6 *iface,
+         REFGUID guid, UINT *data_size, void *data)
+ {
+-    struct dxgi_output *output = impl_from_IDXGIOutput4(iface);
++    struct dxgi_output *output = impl_from_IDXGIOutput6(iface);
+
+     TRACE("iface %p, guid %s, data_size %p, data %p.\n", iface, debugstr_guid(guid), data_size, data);
+
+     return dxgi_get_private_data(&output->private_store, guid, data_size, data);
+ }
+
+-static HRESULT STDMETHODCALLTYPE dxgi_output_GetParent(IDXGIOutput4 *iface,
++static HRESULT STDMETHODCALLTYPE dxgi_output_GetParent(IDXGIOutput6 *iface,
+         REFIID riid, void **parent)
+ {
+-    struct dxgi_output *output = impl_from_IDXGIOutput4(iface);
++    struct dxgi_output *output = impl_from_IDXGIOutput6(iface);
+
+     TRACE("iface %p, riid %s, parent %p.\n", iface, debugstr_guid(riid), parent);
+
+@@ -284,9 +286,9 @@ static HRESULT STDMETHODCALLTYPE dxgi_output_GetParent(IDXGIOutput4 *iface,
+
+ /* IDXGIOutput methods */
+
+-static HRESULT STDMETHODCALLTYPE dxgi_output_GetDesc(IDXGIOutput4 *iface, DXGI_OUTPUT_DESC *desc)
++static HRESULT STDMETHODCALLTYPE dxgi_output_GetDesc(IDXGIOutput6 *iface, DXGI_OUTPUT_DESC *desc)
+ {
+-    struct dxgi_output *output = impl_from_IDXGIOutput4(iface);
++    struct dxgi_output *output = impl_from_IDXGIOutput6(iface);
+     struct wined3d_output_desc wined3d_desc;
+     HRESULT hr;
+
+@@ -315,10 +317,10 @@ static HRESULT STDMETHODCALLTYPE dxgi_output_GetDesc(IDXGIOutput4 *iface, DXGI_O
+     return S_OK;
+ }
+
+-static HRESULT STDMETHODCALLTYPE dxgi_output_GetDisplayModeList(IDXGIOutput4 *iface,
++static HRESULT STDMETHODCALLTYPE dxgi_output_GetDisplayModeList(IDXGIOutput6 *iface,
+         DXGI_FORMAT format, UINT flags, UINT *mode_count, DXGI_MODE_DESC *modes)
+ {
+-    struct dxgi_output *output = impl_from_IDXGIOutput4(iface);
++    struct dxgi_output *output = impl_from_IDXGIOutput6(iface);
+
+     FIXME("iface %p, format %s, flags %#x, mode_count %p, modes %p partial stub!\n",
+             iface, debug_dxgi_format(format), flags, mode_count, modes);
+@@ -327,10 +329,10 @@ static HRESULT STDMETHODCALLTYPE dxgi_output_GetDisplayModeList(IDXGIOutput4 *if
+             format, mode_count, modes, DXGI_MODE_STRUCT_VERSION_0);
+ }
+
+-static HRESULT STDMETHODCALLTYPE dxgi_output_FindClosestMatchingMode(IDXGIOutput4 *iface,
++static HRESULT STDMETHODCALLTYPE dxgi_output_FindClosestMatchingMode(IDXGIOutput6 *iface,
+         const DXGI_MODE_DESC *mode, DXGI_MODE_DESC *closest_match, IUnknown *device)
+ {
+-    struct dxgi_output *output = impl_from_IDXGIOutput4(iface);
++    struct dxgi_output *output = impl_from_IDXGIOutput6(iface);
+     struct wined3d_display_mode wined3d_mode;
+     HRESULT hr;
+
+@@ -350,7 +352,7 @@ static HRESULT STDMETHODCALLTYPE dxgi_output_FindClosestMatchingMode(IDXGIOutput
+     return hr;
+ }
+
+-static HRESULT STDMETHODCALLTYPE dxgi_output_WaitForVBlank(IDXGIOutput4 *iface)
++static HRESULT STDMETHODCALLTYPE dxgi_output_WaitForVBlank(IDXGIOutput6 *iface)
+ {
+     static BOOL once = FALSE;
+
+@@ -362,9 +364,9 @@ static HRESULT STDMETHODCALLTYPE dxgi_output_WaitForVBlank(IDXGIOutput4 *iface)
+     return E_NOTIMPL;
+ }
+
+-static HRESULT STDMETHODCALLTYPE dxgi_output_TakeOwnership(IDXGIOutput4 *iface, IUnknown *device, BOOL exclusive)
++static HRESULT STDMETHODCALLTYPE dxgi_output_TakeOwnership(IDXGIOutput6 *iface, IUnknown *device, BOOL exclusive)
+ {
+-    struct dxgi_output *output = impl_from_IDXGIOutput4(iface);
++    struct dxgi_output *output = impl_from_IDXGIOutput6(iface);
+     HRESULT hr;
+
+     TRACE("iface %p, device %p, exclusive %d.\n", iface, device, exclusive);
+@@ -382,9 +384,9 @@ static HRESULT STDMETHODCALLTYPE dxgi_output_TakeOwnership(IDXGIOutput4 *iface,
+     return hr;
+ }
+
+-static void STDMETHODCALLTYPE dxgi_output_ReleaseOwnership(IDXGIOutput4 *iface)
++static void STDMETHODCALLTYPE dxgi_output_ReleaseOwnership(IDXGIOutput6 *iface)
+ {
+-    struct dxgi_output *output = impl_from_IDXGIOutput4(iface);
++    struct dxgi_output *output = impl_from_IDXGIOutput6(iface);
+
+     TRACE("iface %p.\n", iface);
+
+@@ -396,7 +398,7 @@ static void STDMETHODCALLTYPE dxgi_output_ReleaseOwnership(IDXGIOutput4 *iface)
+     wined3d_mutex_unlock();
+ }
+
+-static HRESULT STDMETHODCALLTYPE dxgi_output_GetGammaControlCapabilities(IDXGIOutput4 *iface,
++static HRESULT STDMETHODCALLTYPE dxgi_output_GetGammaControlCapabilities(IDXGIOutput6 *iface,
+         DXGI_GAMMA_CONTROL_CAPABILITIES *gamma_caps)
+ {
+     unsigned int i;
+@@ -417,7 +419,7 @@ static HRESULT STDMETHODCALLTYPE dxgi_output_GetGammaControlCapabilities(IDXGIOu
+     return S_OK;
+ }
+
+-static HRESULT STDMETHODCALLTYPE dxgi_output_SetGammaControl(IDXGIOutput4 *iface,
++static HRESULT STDMETHODCALLTYPE dxgi_output_SetGammaControl(IDXGIOutput6 *iface,
+         const DXGI_GAMMA_CONTROL *gamma_control)
+ {
+     FIXME("iface %p, gamma_control %p stub!\n", iface, gamma_control);
+@@ -425,7 +427,7 @@ static HRESULT STDMETHODCALLTYPE dxgi_output_SetGammaControl(IDXGIOutput4 *iface
+     return S_OK;
+ }
+
+-static HRESULT STDMETHODCALLTYPE dxgi_output_GetGammaControl(IDXGIOutput4 *iface,
++static HRESULT STDMETHODCALLTYPE dxgi_output_GetGammaControl(IDXGIOutput6 *iface,
+         DXGI_GAMMA_CONTROL *gamma_control)
+ {
+     FIXME("iface %p, gamma_control %p stub!\n", iface, gamma_control);
+@@ -433,21 +435,21 @@ static HRESULT STDMETHODCALLTYPE dxgi_output_GetGammaControl(IDXGIOutput4 *iface
+     return E_NOTIMPL;
+ }
+
+-static HRESULT STDMETHODCALLTYPE dxgi_output_SetDisplaySurface(IDXGIOutput4 *iface, IDXGISurface *surface)
++static HRESULT STDMETHODCALLTYPE dxgi_output_SetDisplaySurface(IDXGIOutput6 *iface, IDXGISurface *surface)
+ {
+     FIXME("iface %p, surface %p stub!\n", iface, surface);
+
+     return E_NOTIMPL;
+ }
+
+-static HRESULT STDMETHODCALLTYPE dxgi_output_GetDisplaySurfaceData(IDXGIOutput4 *iface, IDXGISurface *surface)
++static HRESULT STDMETHODCALLTYPE dxgi_output_GetDisplaySurfaceData(IDXGIOutput6 *iface, IDXGISurface *surface)
+ {
+     FIXME("iface %p, surface %p stub!\n", iface, surface);
+
+     return E_NOTIMPL;
+ }
+
+-static HRESULT STDMETHODCALLTYPE dxgi_output_GetFrameStatistics(IDXGIOutput4 *iface, DXGI_FRAME_STATISTICS *stats)
++static HRESULT STDMETHODCALLTYPE dxgi_output_GetFrameStatistics(IDXGIOutput6 *iface, DXGI_FRAME_STATISTICS *stats)
+ {
+     FIXME("iface %p, stats %p stub!\n", iface, stats);
+
+@@ -456,10 +458,10 @@ static HRESULT STDMETHODCALLTYPE dxgi_output_GetFrameStatistics(IDXGIOutput4 *if
+
+ /* IDXGIOutput1 methods */
+
+-static HRESULT STDMETHODCALLTYPE dxgi_output_GetDisplayModeList1(IDXGIOutput4 *iface,
++static HRESULT STDMETHODCALLTYPE dxgi_output_GetDisplayModeList1(IDXGIOutput6 *iface,
+         DXGI_FORMAT format, UINT flags, UINT *mode_count, DXGI_MODE_DESC1 *modes)
+ {
+-    struct dxgi_output *output = impl_from_IDXGIOutput4(iface);
++    struct dxgi_output *output = impl_from_IDXGIOutput6(iface);
+
+     FIXME("iface %p, format %s, flags %#x, mode_count %p, modes %p partial stub!\n",
+             iface, debug_dxgi_format(format), flags, mode_count, modes);
+@@ -468,10 +470,10 @@ static HRESULT STDMETHODCALLTYPE dxgi_output_GetDisplayModeList1(IDXGIOutput4 *i
+             format, mode_count, modes, DXGI_MODE_STRUCT_VERSION_1);
+ }
+
+-static HRESULT STDMETHODCALLTYPE dxgi_output_FindClosestMatchingMode1(IDXGIOutput4 *iface,
++static HRESULT STDMETHODCALLTYPE dxgi_output_FindClosestMatchingMode1(IDXGIOutput6 *iface,
+         const DXGI_MODE_DESC1 *mode, DXGI_MODE_DESC1 *closest_match, IUnknown *device)
+ {
+-    struct dxgi_output *output = impl_from_IDXGIOutput4(iface);
++    struct dxgi_output *output = impl_from_IDXGIOutput6(iface);
+     struct wined3d_display_mode wined3d_mode;
+     HRESULT hr;
+
+@@ -491,7 +493,7 @@ static HRESULT STDMETHODCALLTYPE dxgi_output_FindClosestMatchingMode1(IDXGIOutpu
+     return hr;
+ }
+
+-static HRESULT STDMETHODCALLTYPE dxgi_output_GetDisplaySurfaceData1(IDXGIOutput4 *iface,
++static HRESULT STDMETHODCALLTYPE dxgi_output_GetDisplaySurfaceData1(IDXGIOutput6 *iface,
+         IDXGIResource *resource)
+ {
+     FIXME("iface %p, resource %p stub!\n", iface, resource);
+@@ -499,7 +501,7 @@ static HRESULT STDMETHODCALLTYPE dxgi_output_GetDisplaySurfaceData1(IDXGIOutput4
+     return E_NOTIMPL;
+ }
+
+-static HRESULT STDMETHODCALLTYPE dxgi_output_DuplicateOutput(IDXGIOutput4 *iface,
++static HRESULT STDMETHODCALLTYPE dxgi_output_DuplicateOutput(IDXGIOutput6 *iface,
+         IUnknown *device, IDXGIOutputDuplication **output_duplication)
+ {
+     FIXME("iface %p, device %p, output_duplication %p stub!\n", iface, device, output_duplication);
+@@ -509,7 +511,7 @@ static HRESULT STDMETHODCALLTYPE dxgi_output_DuplicateOutput(IDXGIOutput4 *iface
+
+ /* IDXGIOutput2 methods */
+
+-static BOOL STDMETHODCALLTYPE dxgi_output_SupportsOverlays(IDXGIOutput4 *iface)
++static BOOL STDMETHODCALLTYPE dxgi_output_SupportsOverlays(IDXGIOutput6 *iface)
+ {
+     FIXME("iface %p stub!\n", iface);
+
+@@ -518,7 +520,7 @@ static BOOL STDMETHODCALLTYPE dxgi_output_SupportsOverlays(IDXGIOutput4 *iface)
+
+ /* IDXGIOutput3 methods */
+
+-static HRESULT STDMETHODCALLTYPE dxgi_output_CheckOverlaySupport(IDXGIOutput4 *iface,
++static HRESULT STDMETHODCALLTYPE dxgi_output_CheckOverlaySupport(IDXGIOutput6 *iface,
+         DXGI_FORMAT format, IUnknown *device, UINT *flags)
+ {
+     FIXME("iface %p, format %#x, device %p, flags %p stub!\n", iface, format, device, flags);
+@@ -528,7 +530,7 @@ static HRESULT STDMETHODCALLTYPE dxgi_output_CheckOverlaySupport(IDXGIOutput4 *i
+
+ /* IDXGIOutput4 methods */
+
+-static HRESULT STDMETHODCALLTYPE dxgi_output_CheckOverlayColorSpaceSupport(IDXGIOutput4 *iface,
++static HRESULT STDMETHODCALLTYPE dxgi_output_CheckOverlayColorSpaceSupport(IDXGIOutput6 *iface,
+         DXGI_FORMAT format, DXGI_COLOR_SPACE_TYPE color_space, IUnknown *device, UINT *flags)
+ {
+     FIXME("iface %p, format %#x, color_space %#x, device %p, flags %p stub!\n",
+@@ -537,7 +539,50 @@ static HRESULT STDMETHODCALLTYPE dxgi_output_CheckOverlayColorSpaceSupport(IDXGI
+     return E_NOTIMPL;
+ }
+
+-static const struct IDXGIOutput4Vtbl dxgi_output_vtbl =
++/* IDXGIOutput5 methods */
++
++static HRESULT STDMETHODCALLTYPE dxgi_output_DuplicateOutput1(IDXGIOutput6 *iface,
++        IUnknown *device, UINT flags, UINT format_count, const DXGI_FORMAT *formats,
++        IDXGIOutputDuplication **duplication)
++{
++    FIXME("iface %p, device %p, flags %#x, format_count %d, formats %p, "
++            "output_duplication %p stub!\n", iface, device, flags, format_count,
++            formats, duplication);
++
++    return E_NOTIMPL;
++}
++
++/* IDXGIOutput6 methods */
++
++static HRESULT STDMETHODCALLTYPE dxgi_output_GetDesc1(IDXGIOutput6 *iface,
++        DXGI_OUTPUT_DESC1 *desc)
++{
++    DXGI_OUTPUT_DESC base_desc;
++    HRESULT hr;
++
++    FIXME("iface %p, desc %p stub!\n", iface, desc);
++
++    if (!desc)
++        return E_INVALIDARG;
++
++    if (FAILED(hr = dxgi_output_GetDesc(iface, &base_desc)))
++        return hr;
++
++    memset(desc, 0, sizeof(*desc));
++    memcpy(desc, &base_desc, sizeof(base_desc));
++
++    return S_OK;
++}
++
++static HRESULT STDMETHODCALLTYPE dxgi_output_CheckHardwareCompositionSupport(IDXGIOutput6 *iface,
++        UINT *flags)
++{
++    FIXME("iface %p, flags %p stub!\n", iface, flags);
++
++    return E_NOTIMPL;
++}
++
++static const struct IDXGIOutput6Vtbl dxgi_output_vtbl =
+ {
+     dxgi_output_QueryInterface,
+     dxgi_output_AddRef,
+@@ -571,6 +616,11 @@ static const struct IDXGIOutput4Vtbl dxgi_output_vtbl =
+     dxgi_output_CheckOverlaySupport,
+     /* IDXGIOutput4 methods */
+     dxgi_output_CheckOverlayColorSpaceSupport,
++    /* IDXGIOutput5 methods */
++    dxgi_output_DuplicateOutput1,
++    /* IDXGIOutput6 methods */
++    dxgi_output_GetDesc1,
++    dxgi_output_CheckHardwareCompositionSupport,
+ };
+
+ struct dxgi_output *unsafe_impl_from_IDXGIOutput(IDXGIOutput *iface)
+@@ -578,13 +628,13 @@ struct dxgi_output *unsafe_impl_from_IDXGIOutput(IDXGIOutput *iface)
+     if (!iface)
+         return NULL;
+     assert(iface->lpVtbl == (IDXGIOutputVtbl *)&dxgi_output_vtbl);
+-    return CONTAINING_RECORD(iface, struct dxgi_output, IDXGIOutput4_iface);
++    return CONTAINING_RECORD(iface, struct dxgi_output, IDXGIOutput6_iface);
+ }
+
+ static void dxgi_output_init(struct dxgi_output *output, unsigned int output_idx,
+         struct dxgi_adapter *adapter)
+ {
+-    output->IDXGIOutput4_iface.lpVtbl = &dxgi_output_vtbl;
++    output->IDXGIOutput6_iface.lpVtbl = &dxgi_output_vtbl;
+     output->refcount = 1;
+     output->wined3d_output = wined3d_adapter_get_output(adapter->wined3d_adapter, output_idx);
+     wined3d_private_store_init(&output->private_store);
+From b3f778dcb0ba405cb05144b7edfa26ade4502a1e Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
+Date: Tue, 14 Jul 2020 22:29:08 +0200
+Subject: [PATCH] dxgi: Implement IDXGISwapChain4 stub.
+
+---
+ dlls/dxgi/swapchain.c | 157 +++++++++++++++++++++++-------------------
+ 1 file changed, 85 insertions(+), 72 deletions(-)
+
+diff --git a/dlls/dxgi/swapchain.c b/dlls/dxgi/swapchain.c
+index a3d0929a39b..97878093a6b 100644
+--- a/dlls/dxgi/swapchain.c
++++ b/dlls/dxgi/swapchain.c
+@@ -1062,7 +1062,7 @@ static HRESULT hresult_from_vk_result(VkResult vr)
+
+ struct d3d12_swapchain
+ {
+-    IDXGISwapChain3 IDXGISwapChain3_iface;
++    IDXGISwapChain4 IDXGISwapChain4_iface;
+     LONG refcount;
+     struct wined3d_private_store private_store;
+
+@@ -1850,14 +1850,14 @@ static HRESULT d3d12_swapchain_recreate_vulkan_swapchain(struct d3d12_swapchain
+     return hr;
+ }
+
+-static inline struct d3d12_swapchain *d3d12_swapchain_from_IDXGISwapChain3(IDXGISwapChain3 *iface)
++static inline struct d3d12_swapchain *d3d12_swapchain_from_IDXGISwapChain4(IDXGISwapChain4 *iface)
+ {
+-    return CONTAINING_RECORD(iface, struct d3d12_swapchain, IDXGISwapChain3_iface);
++    return CONTAINING_RECORD(iface, struct d3d12_swapchain, IDXGISwapChain4_iface);
+ }
+
+ /* IUnknown methods */
+
+-static HRESULT STDMETHODCALLTYPE d3d12_swapchain_QueryInterface(IDXGISwapChain3 *iface, REFIID iid, void **object)
++static HRESULT STDMETHODCALLTYPE d3d12_swapchain_QueryInterface(IDXGISwapChain4 *iface, REFIID iid, void **object)
+ {
+     TRACE("iface %p, iid %s, object %p.\n", iface, debugstr_guid(iid), object);
+
+@@ -1867,7 +1867,8 @@ static HRESULT STDMETHODCALLTYPE d3d12_swapchain_QueryInterface(IDXGISwapChain3
+             || IsEqualGUID(iid, &IID_IDXGISwapChain)
+             || IsEqualGUID(iid, &IID_IDXGISwapChain1)
+             || IsEqualGUID(iid, &IID_IDXGISwapChain2)
+-            || IsEqualGUID(iid, &IID_IDXGISwapChain3))
++            || IsEqualGUID(iid, &IID_IDXGISwapChain3)
++            || IsEqualGUID(iid, &IID_IDXGISwapChain4))
+     {
+         IUnknown_AddRef(iface);
+         *object = iface;
+@@ -1880,9 +1881,9 @@ static HRESULT STDMETHODCALLTYPE d3d12_swapchain_QueryInterface(IDXGISwapChain3
+     return E_NOINTERFACE;
+ }
+
+-static ULONG STDMETHODCALLTYPE d3d12_swapchain_AddRef(IDXGISwapChain3 *iface)
++static ULONG STDMETHODCALLTYPE d3d12_swapchain_AddRef(IDXGISwapChain4 *iface)
+ {
+-    struct d3d12_swapchain *swapchain = d3d12_swapchain_from_IDXGISwapChain3(iface);
++    struct d3d12_swapchain *swapchain = d3d12_swapchain_from_IDXGISwapChain4(iface);
+     ULONG refcount = InterlockedIncrement(&swapchain->refcount);
+
+     TRACE("%p increasing refcount to %u.\n", swapchain, refcount);
+@@ -1934,9 +1935,9 @@ static void d3d12_swapchain_destroy(struct d3d12_swapchain *swapchain)
+     wined3d_swapchain_state_destroy(swapchain->state);
+ }
+
+-static ULONG STDMETHODCALLTYPE d3d12_swapchain_Release(IDXGISwapChain3 *iface)
++static ULONG STDMETHODCALLTYPE d3d12_swapchain_Release(IDXGISwapChain4 *iface)
+ {
+-    struct d3d12_swapchain *swapchain = d3d12_swapchain_from_IDXGISwapChain3(iface);
++    struct d3d12_swapchain *swapchain = d3d12_swapchain_from_IDXGISwapChain4(iface);
+     ULONG refcount = InterlockedDecrement(&swapchain->refcount);
+
+     TRACE("%p decreasing refcount to %u.\n", swapchain, refcount);
+@@ -1952,39 +1953,39 @@ static ULONG STDMETHODCALLTYPE d3d12_swapchain_Release(IDXGISwapChain3 *iface)
+
+ /* IDXGIObject methods */
+
+-static HRESULT STDMETHODCALLTYPE d3d12_swapchain_SetPrivateData(IDXGISwapChain3 *iface,
++static HRESULT STDMETHODCALLTYPE d3d12_swapchain_SetPrivateData(IDXGISwapChain4 *iface,
+         REFGUID guid, UINT data_size, const void *data)
+ {
+-    struct d3d12_swapchain *swapchain = d3d12_swapchain_from_IDXGISwapChain3(iface);
++    struct d3d12_swapchain *swapchain = d3d12_swapchain_from_IDXGISwapChain4(iface);
+
+     TRACE("iface %p, guid %s, data_size %u, data %p.\n", iface, debugstr_guid(guid), data_size, data);
+
+     return dxgi_set_private_data(&swapchain->private_store, guid, data_size, data);
+ }
+
+-static HRESULT STDMETHODCALLTYPE d3d12_swapchain_SetPrivateDataInterface(IDXGISwapChain3 *iface,
++static HRESULT STDMETHODCALLTYPE d3d12_swapchain_SetPrivateDataInterface(IDXGISwapChain4 *iface,
+         REFGUID guid, const IUnknown *object)
+ {
+-    struct d3d12_swapchain *swapchain = d3d12_swapchain_from_IDXGISwapChain3(iface);
++    struct d3d12_swapchain *swapchain = d3d12_swapchain_from_IDXGISwapChain4(iface);
+
+     TRACE("iface %p, guid %s, object %p.\n", iface, debugstr_guid(guid), object);
+
+     return dxgi_set_private_data_interface(&swapchain->private_store, guid, object);
+ }
+
+-static HRESULT STDMETHODCALLTYPE d3d12_swapchain_GetPrivateData(IDXGISwapChain3 *iface,
++static HRESULT STDMETHODCALLTYPE d3d12_swapchain_GetPrivateData(IDXGISwapChain4 *iface,
+         REFGUID guid, UINT *data_size, void *data)
+ {
+-    struct d3d12_swapchain *swapchain = d3d12_swapchain_from_IDXGISwapChain3(iface);
++    struct d3d12_swapchain *swapchain = d3d12_swapchain_from_IDXGISwapChain4(iface);
+
+     TRACE("iface %p, guid %s, data_size %p, data %p.\n", iface, debugstr_guid(guid), data_size, data);
+
+     return dxgi_get_private_data(&swapchain->private_store, guid, data_size, data);
+ }
+
+-static HRESULT STDMETHODCALLTYPE d3d12_swapchain_GetParent(IDXGISwapChain3 *iface, REFIID iid, void **parent)
++static HRESULT STDMETHODCALLTYPE d3d12_swapchain_GetParent(IDXGISwapChain4 *iface, REFIID iid, void **parent)
+ {
+-    struct d3d12_swapchain *swapchain = d3d12_swapchain_from_IDXGISwapChain3(iface);
++    struct d3d12_swapchain *swapchain = d3d12_swapchain_from_IDXGISwapChain4(iface);
+
+     TRACE("iface %p, iid %s, parent %p.\n", iface, debugstr_guid(iid), parent);
+
+@@ -1993,9 +1994,9 @@ static HRESULT STDMETHODCALLTYPE d3d12_swapchain_GetParent(IDXGISwapChain3 *ifac
+
+ /* IDXGIDeviceSubObject methods */
+
+-static HRESULT STDMETHODCALLTYPE d3d12_swapchain_GetDevice(IDXGISwapChain3 *iface, REFIID iid, void **device)
++static HRESULT STDMETHODCALLTYPE d3d12_swapchain_GetDevice(IDXGISwapChain4 *iface, REFIID iid, void **device)
+ {
+-    struct d3d12_swapchain *swapchain = d3d12_swapchain_from_IDXGISwapChain3(iface);
++    struct d3d12_swapchain *swapchain = d3d12_swapchain_from_IDXGISwapChain4(iface);
+
+     TRACE("iface %p, iid %s, device %p.\n", iface, debugstr_guid(iid), device);
+
+@@ -2213,19 +2214,19 @@ static HRESULT d3d12_swapchain_present(struct d3d12_swapchain *swapchain,
+     return hresult_from_vk_result(vr);
+ }
+
+-static HRESULT STDMETHODCALLTYPE d3d12_swapchain_Present(IDXGISwapChain3 *iface, UINT sync_interval, UINT flags)
++static HRESULT STDMETHODCALLTYPE d3d12_swapchain_Present(IDXGISwapChain4 *iface, UINT sync_interval, UINT flags)
+ {
+-    struct d3d12_swapchain *swapchain = d3d12_swapchain_from_IDXGISwapChain3(iface);
++    struct d3d12_swapchain *swapchain = d3d12_swapchain_from_IDXGISwapChain4(iface);
+
+     TRACE("iface %p, sync_interval %u, flags %#x.\n", iface, sync_interval, flags);
+
+     return d3d12_swapchain_present(swapchain, sync_interval, flags);
+ }
+
+-static HRESULT STDMETHODCALLTYPE d3d12_swapchain_GetBuffer(IDXGISwapChain3 *iface,
++static HRESULT STDMETHODCALLTYPE d3d12_swapchain_GetBuffer(IDXGISwapChain4 *iface,
+         UINT buffer_idx, REFIID iid, void **surface)
+ {
+-    struct d3d12_swapchain *swapchain = d3d12_swapchain_from_IDXGISwapChain3(iface);
++    struct d3d12_swapchain *swapchain = d3d12_swapchain_from_IDXGISwapChain4(iface);
+
+     TRACE("iface %p, buffer_idx %u, iid %s, surface %p.\n",
+             iface, buffer_idx, debugstr_guid(iid), surface);
+@@ -2240,10 +2241,10 @@ static HRESULT STDMETHODCALLTYPE d3d12_swapchain_GetBuffer(IDXGISwapChain3 *ifac
+     return ID3D12Resource_QueryInterface(swapchain->buffers[buffer_idx], iid, surface);
+ }
+
+-static HRESULT STDMETHODCALLTYPE DECLSPEC_HOTPATCH d3d12_swapchain_SetFullscreenState(IDXGISwapChain3 *iface,
++static HRESULT STDMETHODCALLTYPE DECLSPEC_HOTPATCH d3d12_swapchain_SetFullscreenState(IDXGISwapChain4 *iface,
+         BOOL fullscreen, IDXGIOutput *target)
+ {
+-    struct d3d12_swapchain *swapchain = d3d12_swapchain_from_IDXGISwapChain3(iface);
++    struct d3d12_swapchain *swapchain = d3d12_swapchain_from_IDXGISwapChain4(iface);
+     DXGI_SWAP_CHAIN_FULLSCREEN_DESC *fullscreen_desc = &swapchain->fullscreen_desc;
+     const DXGI_SWAP_CHAIN_DESC1 *swapchain_desc = &swapchain->desc;
+     struct wined3d_swapchain_desc wined3d_desc;
+@@ -2262,7 +2263,7 @@ static HRESULT STDMETHODCALLTYPE DECLSPEC_HOTPATCH d3d12_swapchain_SetFullscreen
+     {
+         IDXGIOutput_AddRef(target);
+     }
+-    else if (FAILED(hr = IDXGISwapChain3_GetContainingOutput(iface, &target)))
++    else if (FAILED(hr = IDXGISwapChain4_GetContainingOutput(iface, &target)))
+     {
+         WARN("Failed to get target output for swapchain, hr %#x.\n", hr);
+         return hr;
+@@ -2296,10 +2297,10 @@ static HRESULT STDMETHODCALLTYPE DECLSPEC_HOTPATCH d3d12_swapchain_SetFullscreen
+     return DXGI_ERROR_NOT_CURRENTLY_AVAILABLE;
+ }
+
+-static HRESULT STDMETHODCALLTYPE d3d12_swapchain_GetFullscreenState(IDXGISwapChain3 *iface,
++static HRESULT STDMETHODCALLTYPE d3d12_swapchain_GetFullscreenState(IDXGISwapChain4 *iface,
+         BOOL *fullscreen, IDXGIOutput **target)
+ {
+-    struct d3d12_swapchain *swapchain = d3d12_swapchain_from_IDXGISwapChain3(iface);
++    struct d3d12_swapchain *swapchain = d3d12_swapchain_from_IDXGISwapChain4(iface);
+
+     TRACE("iface %p, fullscreen %p, target %p.\n", iface, fullscreen, target);
+
+@@ -2312,9 +2313,9 @@ static HRESULT STDMETHODCALLTYPE d3d12_swapchain_GetFullscreenState(IDXGISwapCha
+     return S_OK;
+ }
+
+-static HRESULT STDMETHODCALLTYPE d3d12_swapchain_GetDesc(IDXGISwapChain3 *iface, DXGI_SWAP_CHAIN_DESC *desc)
++static HRESULT STDMETHODCALLTYPE d3d12_swapchain_GetDesc(IDXGISwapChain4 *iface, DXGI_SWAP_CHAIN_DESC *desc)
+ {
+-    struct d3d12_swapchain *swapchain = d3d12_swapchain_from_IDXGISwapChain3(iface);
++    struct d3d12_swapchain *swapchain = d3d12_swapchain_from_IDXGISwapChain4(iface);
+     const DXGI_SWAP_CHAIN_FULLSCREEN_DESC *fullscreen_desc = &swapchain->fullscreen_desc;
+     const DXGI_SWAP_CHAIN_DESC1 *swapchain_desc = &swapchain->desc;
+
+@@ -2401,10 +2402,10 @@ static HRESULT d3d12_swapchain_resize_buffers(struct d3d12_swapchain *swapchain,
+     return d3d12_swapchain_recreate_vulkan_swapchain(swapchain);
+ }
+
+-static HRESULT STDMETHODCALLTYPE d3d12_swapchain_ResizeBuffers(IDXGISwapChain3 *iface,
++static HRESULT STDMETHODCALLTYPE d3d12_swapchain_ResizeBuffers(IDXGISwapChain4 *iface,
+         UINT buffer_count, UINT width, UINT height, DXGI_FORMAT format, UINT flags)
+ {
+-    struct d3d12_swapchain *swapchain = d3d12_swapchain_from_IDXGISwapChain3(iface);
++    struct d3d12_swapchain *swapchain = d3d12_swapchain_from_IDXGISwapChain4(iface);
+
+     TRACE("iface %p, buffer_count %u, width %u, height %u, format %s, flags %#x.\n",
+             iface, buffer_count, width, height, debug_dxgi_format(format), flags);
+@@ -2412,20 +2413,20 @@ static HRESULT STDMETHODCALLTYPE d3d12_swapchain_ResizeBuffers(IDXGISwapChain3 *
+     return d3d12_swapchain_resize_buffers(swapchain, buffer_count, width, height, format, flags);
+ }
+
+-static HRESULT STDMETHODCALLTYPE d3d12_swapchain_ResizeTarget(IDXGISwapChain3 *iface,
++static HRESULT STDMETHODCALLTYPE d3d12_swapchain_ResizeTarget(IDXGISwapChain4 *iface,
+         const DXGI_MODE_DESC *target_mode_desc)
+ {
+-    struct d3d12_swapchain *swapchain = d3d12_swapchain_from_IDXGISwapChain3(iface);
++    struct d3d12_swapchain *swapchain = d3d12_swapchain_from_IDXGISwapChain4(iface);
+
+     TRACE("iface %p, target_mode_desc %p.\n", iface, target_mode_desc);
+
+     return dxgi_swapchain_resize_target(swapchain->state, target_mode_desc);
+ }
+
+-static HRESULT STDMETHODCALLTYPE d3d12_swapchain_GetContainingOutput(IDXGISwapChain3 *iface,
++static HRESULT STDMETHODCALLTYPE d3d12_swapchain_GetContainingOutput(IDXGISwapChain4 *iface,
+         IDXGIOutput **output)
+ {
+-    struct d3d12_swapchain *swapchain = d3d12_swapchain_from_IDXGISwapChain3(iface);
++    struct d3d12_swapchain *swapchain = d3d12_swapchain_from_IDXGISwapChain4(iface);
+     IUnknown *device_parent;
+     IDXGIFactory *factory;
+     IDXGIAdapter *adapter;
+@@ -2453,7 +2454,7 @@ static HRESULT STDMETHODCALLTYPE d3d12_swapchain_GetContainingOutput(IDXGISwapCh
+     return hr;
+ }
+
+-static HRESULT STDMETHODCALLTYPE d3d12_swapchain_GetFrameStatistics(IDXGISwapChain3 *iface,
++static HRESULT STDMETHODCALLTYPE d3d12_swapchain_GetFrameStatistics(IDXGISwapChain4 *iface,
+         DXGI_FRAME_STATISTICS *stats)
+ {
+     FIXME("iface %p, stats %p stub!\n", iface, stats);
+@@ -2461,7 +2462,7 @@ static HRESULT STDMETHODCALLTYPE d3d12_swapchain_GetFrameStatistics(IDXGISwapCha
+     return E_NOTIMPL;
+ }
+
+-static HRESULT STDMETHODCALLTYPE d3d12_swapchain_GetLastPresentCount(IDXGISwapChain3 *iface,
++static HRESULT STDMETHODCALLTYPE d3d12_swapchain_GetLastPresentCount(IDXGISwapChain4 *iface,
+         UINT *last_present_count)
+ {
+     FIXME("iface %p, last_present_count %p stub!\n", iface, last_present_count);
+@@ -2471,9 +2472,9 @@ static HRESULT STDMETHODCALLTYPE d3d12_swapchain_GetLastPresentCount(IDXGISwapCh
+
+ /* IDXGISwapChain1 methods */
+
+-static HRESULT STDMETHODCALLTYPE d3d12_swapchain_GetDesc1(IDXGISwapChain3 *iface, DXGI_SWAP_CHAIN_DESC1 *desc)
++static HRESULT STDMETHODCALLTYPE d3d12_swapchain_GetDesc1(IDXGISwapChain4 *iface, DXGI_SWAP_CHAIN_DESC1 *desc)
+ {
+-    struct d3d12_swapchain *swapchain = d3d12_swapchain_from_IDXGISwapChain3(iface);
++    struct d3d12_swapchain *swapchain = d3d12_swapchain_from_IDXGISwapChain4(iface);
+
+     TRACE("iface %p, desc %p.\n", iface, desc);
+
+@@ -2487,10 +2488,10 @@ static HRESULT STDMETHODCALLTYPE d3d12_swapchain_GetDesc1(IDXGISwapChain3 *iface
+     return S_OK;
+ }
+
+-static HRESULT STDMETHODCALLTYPE d3d12_swapchain_GetFullscreenDesc(IDXGISwapChain3 *iface,
++static HRESULT STDMETHODCALLTYPE d3d12_swapchain_GetFullscreenDesc(IDXGISwapChain4 *iface,
+         DXGI_SWAP_CHAIN_FULLSCREEN_DESC *desc)
+ {
+-    struct d3d12_swapchain *swapchain = d3d12_swapchain_from_IDXGISwapChain3(iface);
++    struct d3d12_swapchain *swapchain = d3d12_swapchain_from_IDXGISwapChain4(iface);
+
+     TRACE("iface %p, desc %p.\n", iface, desc);
+
+@@ -2504,9 +2505,9 @@ static HRESULT STDMETHODCALLTYPE d3d12_swapchain_GetFullscreenDesc(IDXGISwapChai
+     return S_OK;
+ }
+
+-static HRESULT STDMETHODCALLTYPE d3d12_swapchain_GetHwnd(IDXGISwapChain3 *iface, HWND *hwnd)
++static HRESULT STDMETHODCALLTYPE d3d12_swapchain_GetHwnd(IDXGISwapChain4 *iface, HWND *hwnd)
+ {
+-    struct d3d12_swapchain *swapchain = d3d12_swapchain_from_IDXGISwapChain3(iface);
++    struct d3d12_swapchain *swapchain = d3d12_swapchain_from_IDXGISwapChain4(iface);
+
+     TRACE("iface %p, hwnd %p.\n", iface, hwnd);
+
+@@ -2520,7 +2521,7 @@ static HRESULT STDMETHODCALLTYPE d3d12_swapchain_GetHwnd(IDXGISwapChain3 *iface,
+     return S_OK;
+ }
+
+-static HRESULT STDMETHODCALLTYPE d3d12_swapchain_GetCoreWindow(IDXGISwapChain3 *iface,
++static HRESULT STDMETHODCALLTYPE d3d12_swapchain_GetCoreWindow(IDXGISwapChain4 *iface,
+         REFIID iid, void **core_window)
+ {
+     FIXME("iface %p, iid %s, core_window %p stub!\n", iface, debugstr_guid(iid), core_window);
+@@ -2531,10 +2532,10 @@ static HRESULT STDMETHODCALLTYPE d3d12_swapchain_GetCoreWindow(IDXGISwapChain3 *
+     return DXGI_ERROR_INVALID_CALL;
+ }
+
+-static HRESULT STDMETHODCALLTYPE d3d12_swapchain_Present1(IDXGISwapChain3 *iface,
++static HRESULT STDMETHODCALLTYPE d3d12_swapchain_Present1(IDXGISwapChain4 *iface,
+         UINT sync_interval, UINT flags, const DXGI_PRESENT_PARAMETERS *present_parameters)
+ {
+-    struct d3d12_swapchain *swapchain = d3d12_swapchain_from_IDXGISwapChain3(iface);
++    struct d3d12_swapchain *swapchain = d3d12_swapchain_from_IDXGISwapChain4(iface);
+
+     TRACE("iface %p, sync_interval %u, flags %#x, present_parameters %p.\n",
+             iface, sync_interval, flags, present_parameters);
+@@ -2545,14 +2546,14 @@ static HRESULT STDMETHODCALLTYPE d3d12_swapchain_Present1(IDXGISwapChain3 *iface
+     return d3d12_swapchain_present(swapchain, sync_interval, flags);
+ }
+
+-static BOOL STDMETHODCALLTYPE d3d12_swapchain_IsTemporaryMonoSupported(IDXGISwapChain3 *iface)
++static BOOL STDMETHODCALLTYPE d3d12_swapchain_IsTemporaryMonoSupported(IDXGISwapChain4 *iface)
+ {
+     FIXME("iface %p stub!\n", iface);
+
+     return FALSE;
+ }
+
+-static HRESULT STDMETHODCALLTYPE d3d12_swapchain_GetRestrictToOutput(IDXGISwapChain3 *iface, IDXGIOutput **output)
++static HRESULT STDMETHODCALLTYPE d3d12_swapchain_GetRestrictToOutput(IDXGISwapChain4 *iface, IDXGIOutput **output)
+ {
+     FIXME("iface %p, output %p stub!\n", iface, output);
+
+@@ -2566,28 +2567,28 @@ static HRESULT STDMETHODCALLTYPE d3d12_swapchain_GetRestrictToOutput(IDXGISwapCh
+     return E_NOTIMPL;
+ }
+
+-static HRESULT STDMETHODCALLTYPE d3d12_swapchain_SetBackgroundColor(IDXGISwapChain3 *iface, const DXGI_RGBA *color)
++static HRESULT STDMETHODCALLTYPE d3d12_swapchain_SetBackgroundColor(IDXGISwapChain4 *iface, const DXGI_RGBA *color)
+ {
+     FIXME("iface %p, color %p stub!\n", iface, color);
+
+     return E_NOTIMPL;
+ }
+
+-static HRESULT STDMETHODCALLTYPE d3d12_swapchain_GetBackgroundColor(IDXGISwapChain3 *iface, DXGI_RGBA *color)
++static HRESULT STDMETHODCALLTYPE d3d12_swapchain_GetBackgroundColor(IDXGISwapChain4 *iface, DXGI_RGBA *color)
+ {
+     FIXME("iface %p, color %p stub!\n", iface, color);
+
+     return E_NOTIMPL;
+ }
+
+-static HRESULT STDMETHODCALLTYPE d3d12_swapchain_SetRotation(IDXGISwapChain3 *iface, DXGI_MODE_ROTATION rotation)
++static HRESULT STDMETHODCALLTYPE d3d12_swapchain_SetRotation(IDXGISwapChain4 *iface, DXGI_MODE_ROTATION rotation)
+ {
+     FIXME("iface %p, rotation %#x stub!\n", iface, rotation);
+
+     return E_NOTIMPL;
+ }
+
+-static HRESULT STDMETHODCALLTYPE d3d12_swapchain_GetRotation(IDXGISwapChain3 *iface, DXGI_MODE_ROTATION *rotation)
++static HRESULT STDMETHODCALLTYPE d3d12_swapchain_GetRotation(IDXGISwapChain4 *iface, DXGI_MODE_ROTATION *rotation)
+ {
+     FIXME("iface %p, rotation %p stub!\n", iface, rotation);
+
+@@ -2596,23 +2597,23 @@ static HRESULT STDMETHODCALLTYPE d3d12_swapchain_GetRotation(IDXGISwapChain3 *if
+
+ /* IDXGISwapChain2 methods */
+
+-static HRESULT STDMETHODCALLTYPE d3d12_swapchain_SetSourceSize(IDXGISwapChain3 *iface, UINT width, UINT height)
++static HRESULT STDMETHODCALLTYPE d3d12_swapchain_SetSourceSize(IDXGISwapChain4 *iface, UINT width, UINT height)
+ {
+     FIXME("iface %p, width %u, height %u stub!\n", iface, width, height);
+
+     return E_NOTIMPL;
+ }
+
+-static HRESULT STDMETHODCALLTYPE d3d12_swapchain_GetSourceSize(IDXGISwapChain3 *iface, UINT *width, UINT *height)
++static HRESULT STDMETHODCALLTYPE d3d12_swapchain_GetSourceSize(IDXGISwapChain4 *iface, UINT *width, UINT *height)
+ {
+     FIXME("iface %p, width %p, height %p stub!\n", iface, width, height);
+
+     return E_NOTIMPL;
+ }
+
+-static HRESULT STDMETHODCALLTYPE d3d12_swapchain_SetMaximumFrameLatency(IDXGISwapChain3 *iface, UINT max_latency)
++static HRESULT STDMETHODCALLTYPE d3d12_swapchain_SetMaximumFrameLatency(IDXGISwapChain4 *iface, UINT max_latency)
+ {
+-    struct d3d12_swapchain *swapchain = d3d12_swapchain_from_IDXGISwapChain3(iface);
++    struct d3d12_swapchain *swapchain = d3d12_swapchain_from_IDXGISwapChain4(iface);
+
+     TRACE("iface %p, max_latency %u.\n", iface, max_latency);
+
+@@ -2632,9 +2633,9 @@ static HRESULT STDMETHODCALLTYPE d3d12_swapchain_SetMaximumFrameLatency(IDXGISwa
+     return S_OK;
+ }
+
+-static HRESULT STDMETHODCALLTYPE d3d12_swapchain_GetMaximumFrameLatency(IDXGISwapChain3 *iface, UINT *max_latency)
++static HRESULT STDMETHODCALLTYPE d3d12_swapchain_GetMaximumFrameLatency(IDXGISwapChain4 *iface, UINT *max_latency)
+ {
+-    struct d3d12_swapchain *swapchain = d3d12_swapchain_from_IDXGISwapChain3(iface);
++    struct d3d12_swapchain *swapchain = d3d12_swapchain_from_IDXGISwapChain4(iface);
+
+     TRACE("iface %p, max_latency %p.\n", iface, max_latency);
+
+@@ -2648,16 +2649,16 @@ static HRESULT STDMETHODCALLTYPE d3d12_swapchain_GetMaximumFrameLatency(IDXGISwa
+     return S_OK;
+ }
+
+-static HANDLE STDMETHODCALLTYPE d3d12_swapchain_GetFrameLatencyWaitableObject(IDXGISwapChain3 *iface)
++static HANDLE STDMETHODCALLTYPE d3d12_swapchain_GetFrameLatencyWaitableObject(IDXGISwapChain4 *iface)
+ {
+-    struct d3d12_swapchain *swapchain = d3d12_swapchain_from_IDXGISwapChain3(iface);
++    struct d3d12_swapchain *swapchain = d3d12_swapchain_from_IDXGISwapChain4(iface);
+
+     TRACE("iface %p.\n", iface);
+
+     return swapchain->frame_latency_event;
+ }
+
+-static HRESULT STDMETHODCALLTYPE d3d12_swapchain_SetMatrixTransform(IDXGISwapChain3 *iface,
++static HRESULT STDMETHODCALLTYPE d3d12_swapchain_SetMatrixTransform(IDXGISwapChain4 *iface,
+         const DXGI_MATRIX_3X2_F *matrix)
+ {
+     FIXME("iface %p, matrix %p stub!\n", iface, matrix);
+@@ -2665,7 +2666,7 @@ static HRESULT STDMETHODCALLTYPE d3d12_swapchain_SetMatrixTransform(IDXGISwapCha
+     return E_NOTIMPL;
+ }
+
+-static HRESULT STDMETHODCALLTYPE d3d12_swapchain_GetMatrixTransform(IDXGISwapChain3 *iface,
++static HRESULT STDMETHODCALLTYPE d3d12_swapchain_GetMatrixTransform(IDXGISwapChain4 *iface,
+         DXGI_MATRIX_3X2_F *matrix)
+ {
+     FIXME("iface %p, matrix %p stub!\n", iface, matrix);
+@@ -2675,9 +2676,9 @@ static HRESULT STDMETHODCALLTYPE d3d12_swapchain_GetMatrixTransform(IDXGISwapCha
+
+ /* IDXGISwapChain3 methods */
+
+-static UINT STDMETHODCALLTYPE d3d12_swapchain_GetCurrentBackBufferIndex(IDXGISwapChain3 *iface)
++static UINT STDMETHODCALLTYPE d3d12_swapchain_GetCurrentBackBufferIndex(IDXGISwapChain4 *iface)
+ {
+-    struct d3d12_swapchain *swapchain = d3d12_swapchain_from_IDXGISwapChain3(iface);
++    struct d3d12_swapchain *swapchain = d3d12_swapchain_from_IDXGISwapChain4(iface);
+
+     TRACE("iface %p.\n", iface);
+
+@@ -2686,7 +2687,7 @@ static UINT STDMETHODCALLTYPE d3d12_swapchain_GetCurrentBackBufferIndex(IDXGISwa
+     return swapchain->current_buffer_index;
+ }
+
+-static HRESULT STDMETHODCALLTYPE d3d12_swapchain_CheckColorSpaceSupport(IDXGISwapChain3 *iface,
++static HRESULT STDMETHODCALLTYPE d3d12_swapchain_CheckColorSpaceSupport(IDXGISwapChain4 *iface,
+         DXGI_COLOR_SPACE_TYPE colour_space, UINT *colour_space_support)
+ {
+     UINT support_flags = 0;
+@@ -2704,7 +2705,7 @@ static HRESULT STDMETHODCALLTYPE d3d12_swapchain_CheckColorSpaceSupport(IDXGISwa
+     return S_OK;
+ }
+
+-static HRESULT STDMETHODCALLTYPE d3d12_swapchain_SetColorSpace1(IDXGISwapChain3 *iface,
++static HRESULT STDMETHODCALLTYPE d3d12_swapchain_SetColorSpace1(IDXGISwapChain4 *iface,
+         DXGI_COLOR_SPACE_TYPE colour_space)
+ {
+     FIXME("iface %p, colour_space %#x semi-stub!\n", iface, colour_space);
+@@ -2718,11 +2719,11 @@ static HRESULT STDMETHODCALLTYPE d3d12_swapchain_SetColorSpace1(IDXGISwapChain3
+     return S_OK;
+ }
+
+-static HRESULT STDMETHODCALLTYPE d3d12_swapchain_ResizeBuffers1(IDXGISwapChain3 *iface,
++static HRESULT STDMETHODCALLTYPE d3d12_swapchain_ResizeBuffers1(IDXGISwapChain4 *iface,
+         UINT buffer_count, UINT width, UINT height, DXGI_FORMAT format, UINT flags,
+         const UINT *node_mask, IUnknown * const *present_queue)
+ {
+-    struct d3d12_swapchain *swapchain = d3d12_swapchain_from_IDXGISwapChain3(iface);
++    struct d3d12_swapchain *swapchain = d3d12_swapchain_from_IDXGISwapChain4(iface);
+     size_t i, count;
+
+     TRACE("iface %p, buffer_count %u, width %u, height %u, format %s, flags %#x, "
+@@ -2744,7 +2745,17 @@ static HRESULT STDMETHODCALLTYPE d3d12_swapchain_ResizeBuffers1(IDXGISwapChain3
+     return d3d12_swapchain_resize_buffers(swapchain, buffer_count, width, height, format, flags);
+ }
+
+-static const struct IDXGISwapChain3Vtbl d3d12_swapchain_vtbl =
++/* IDXGISwapChain4 methods */
++
++static HRESULT STDMETHODCALLTYPE d3d12_swapchain_SetHDRMetaData(IDXGISwapChain4 *iface,
++        DXGI_HDR_METADATA_TYPE type, UINT size, void *metadata)
++{
++    FIXME("iface %p, type %#x size %#x, metadata %p stub!\n", iface, type, size, metadata);
++
++    return E_NOTIMPL;
++}
++
++static const struct IDXGISwapChain4Vtbl d3d12_swapchain_vtbl =
+ {
+     /* IUnknown methods */
+     d3d12_swapchain_QueryInterface,
+@@ -2793,6 +2804,8 @@ static const struct IDXGISwapChain3Vtbl d3d12_swapchain_vtbl =
+     d3d12_swapchain_CheckColorSpaceSupport,
+     d3d12_swapchain_SetColorSpace1,
+     d3d12_swapchain_ResizeBuffers1,
++    /* IDXGISwapChain4 methods */
++    d3d12_swapchain_SetHDRMetaData,
+ };
+
+ static BOOL load_vkd3d_functions(void *vkd3d_handle)
+@@ -2940,7 +2953,7 @@ static HRESULT d3d12_swapchain_init(struct d3d12_swapchain *swapchain, IWineDXGI
+         return E_ACCESSDENIED;
+     }
+
+-    swapchain->IDXGISwapChain3_iface.lpVtbl = &d3d12_swapchain_vtbl;
++    swapchain->IDXGISwapChain4_iface.lpVtbl = &d3d12_swapchain_vtbl;
+     swapchain->refcount = 1;
+
+     swapchain->window = window;
+@@ -3126,7 +3139,7 @@ HRESULT d3d12_swapchain_create(IWineDXGIFactory *factory, ID3D12CommandQueue *qu
+
+     TRACE("Created swapchain %p.\n", object);
+
+-    *swapchain = (IDXGISwapChain1 *)&object->IDXGISwapChain3_iface;
++    *swapchain = (IDXGISwapChain1 *)&object->IDXGISwapChain4_iface;
+
+     return S_OK;
+ }
+From 6085222f76135e10abefdd5f58d3fdcf86a904c8 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
+Date: Wed, 15 Jul 2020 09:41:11 +0200
+Subject: [PATCH] windows.gaming.input: Add stub dll.
+
+All these interfaces are required for Death Stranding to start.
+---
+ configure                                     |   2 +
+ configure.ac                                  |   1 +
+ dlls/combase/Makefile.in                      |   1 +
+ dlls/windows.gaming.input/Makefile.in         |   5 +
+ .../windows.gaming.input.spec                 |   3 +
+ .../windows.gaming.input_main.c               | 703 ++++++++++++++++++
+ loader/wine.inf.in                            |   2 +
+ 7 files changed, 717 insertions(+)
+ create mode 100644 dlls/windows.gaming.input/Makefile.in
+ create mode 100644 dlls/windows.gaming.input/windows.gaming.input.spec
+ create mode 100644 dlls/windows.gaming.input/windows.gaming.input_main.c
+
+diff --git a/configure b/configure
+index 4a01c08a0ac..68b56b994e7 100755
+--- a/configure
++++ b/configure
+@@ -1629,6 +1629,7 @@ enable_wiaservc
+ enable_wimgapi
+ enable_windowscodecs
+ enable_windowscodecsext
++enable_windows_gaming_input
+ enable_winealsa_drv
+ enable_wineandroid_drv
+ enable_winebus_sys
+@@ -21086,6 +21087,7 @@ wine_fn_config_makefile dlls/windowscodecs enable_windowscodecs
+ wine_fn_config_makefile dlls/windowscodecs/tests enable_tests
+ wine_fn_config_makefile dlls/windowscodecsext enable_windowscodecsext
+ wine_fn_config_makefile dlls/windowscodecsext/tests enable_tests
++wine_fn_config_makefile dlls/windows.gaming.input enable_windows_gaming_input
+ wine_fn_config_makefile dlls/winealsa.drv enable_winealsa_drv
+ wine_fn_config_makefile dlls/wineandroid.drv enable_wineandroid_drv
+ wine_fn_config_makefile dlls/winebus.sys enable_winebus_sys
+diff --git a/configure.ac b/configure.ac
+index a148cf02361..8d97bb611b6 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -3804,6 +3804,7 @@ WINE_CONFIG_MAKEFILE(dlls/windowscodecs)
+ WINE_CONFIG_MAKEFILE(dlls/windowscodecs/tests)
+ WINE_CONFIG_MAKEFILE(dlls/windowscodecsext)
+ WINE_CONFIG_MAKEFILE(dlls/windowscodecsext/tests)
++WINE_CONFIG_MAKEFILE(dlls/windows.gaming.input)
+ WINE_CONFIG_MAKEFILE(dlls/winealsa.drv)
+ WINE_CONFIG_MAKEFILE(dlls/wineandroid.drv)
+ WINE_CONFIG_MAKEFILE(dlls/winebus.sys)
+diff --git a/dlls/combase/Makefile.in b/dlls/combase/Makefile.in
+index 0f3c9f86322..ce1b08b6a24 100644
+--- a/dlls/combase/Makefile.in
++++ b/dlls/combase/Makefile.in
+@@ -1,4 +1,5 @@
+ MODULE    = combase.dll
++IMPORTLIB = combase
+ IMPORTS   = advapi32 ole32 uuid
+
+ EXTRADLLFLAGS = -mno-cygwin
+diff --git a/dlls/windows.gaming.input/Makefile.in b/dlls/windows.gaming.input/Makefile.in
+new file mode 100644
+index 00000000000..882d3388bf9
+--- /dev/null
++++ b/dlls/windows.gaming.input/Makefile.in
+@@ -0,0 +1,5 @@
++MODULE = windows.gaming.input.dll
++IMPORTS = combase
++EXTRADLLFLAGS = -mno-cygwin
++C_SRCS = \
++	windows.gaming.input_main.c
+diff --git a/dlls/windows.gaming.input/windows.gaming.input.spec b/dlls/windows.gaming.input/windows.gaming.input.spec
+new file mode 100644
+index 00000000000..721493229c2
+--- /dev/null
++++ b/dlls/windows.gaming.input/windows.gaming.input.spec
+@@ -0,0 +1,3 @@
++1 stdcall -private DllCanUnloadNow()
++2 stdcall -private DllGetActivationFactory(ptr ptr)
++3 stdcall -private DllGetClassObject(ptr ptr ptr)
+diff --git a/dlls/windows.gaming.input/windows.gaming.input_main.c b/dlls/windows.gaming.input/windows.gaming.input_main.c
+new file mode 100644
+index 00000000000..3a65e2554d0
+--- /dev/null
++++ b/dlls/windows.gaming.input/windows.gaming.input_main.c
+@@ -0,0 +1,703 @@
++#include <stdarg.h>
++
++#define COBJMACROS
++#include "windef.h"
++#include "winbase.h"
++#include "winstring.h"
++#include "wine/debug.h"
++#include "activation.h"
++#include "objbase.h"
++#include "initguid.h"
++
++WINE_DEFAULT_DEBUG_CHANNEL(uwp);
++
++static const char *debugstr_hstring(HSTRING hstr)
++{
++    const WCHAR *str;
++    UINT32 len;
++    if (hstr && !((ULONG_PTR)hstr >> 16)) return "(invalid)";
++    str = WindowsGetStringRawBuffer(hstr, &len);
++    return wine_dbgstr_wn(str, len);
++}
++
++DEFINE_GUID(IID_IGamepadStatics,0x8bbce529,0xd49c,0x39e9,0x95,0x60,0xe4,0x7d,0xde,0x96,0xb7,0xc8);
++DEFINE_GUID(IID_IRawGameControllerStatics,0xeb8d0792,0xe95a,0x4b19,0xaf,0xc7,0x0a,0x59,0xf8,0xbf,0x75,0x9e);
++DEFINE_GUID(IID_IAgileObject,0x94ea2b94,0xe9cc,0x49e0,0xc0,0xff,0xee,0x64,0xca,0x8f,0x5b,0x90);
++
++typedef struct EventRegistrationToken
++{
++  __int64 value;
++} EventRegistrationToken;
++
++typedef struct IVectorView IVectorView;
++
++typedef struct IVectorViewVtbl
++{
++    /*** IUnknown methods ***/
++    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
++        IVectorView *This,
++        REFIID riid,
++        void **ppvObject);
++
++    ULONG (STDMETHODCALLTYPE *AddRef)(
++        IVectorView *This);
++
++    ULONG (STDMETHODCALLTYPE *Release)(
++        IVectorView *This);
++
++    /*** IInspectable methods ***/
++    HRESULT (STDMETHODCALLTYPE *GetIids)(
++        IVectorView *This,
++        ULONG *iidCount,
++        IID **iids);
++
++    HRESULT (STDMETHODCALLTYPE *GetRuntimeClassName)(
++        IVectorView *This,
++        HSTRING *className);
++
++    HRESULT (STDMETHODCALLTYPE *GetTrustLevel)(
++        IVectorView *This,
++        TrustLevel *trustLevel);
++
++    /*** IVectorView<T> methods ***/
++    HRESULT (STDMETHODCALLTYPE *GetAt)(
++        IVectorView *This,
++        ULONG index,
++        /* T */ void *out_value);
++
++    HRESULT (STDMETHODCALLTYPE *get_Size)(
++        IVectorView *This,
++        ULONG *out_value);
++
++    HRESULT (STDMETHODCALLTYPE *IndexOf)(
++        IVectorView *This,
++        /* T */ void *value,
++        ULONG *index,
++        BOOLEAN *out_value);
++
++    HRESULT (STDMETHODCALLTYPE *GetMany)(
++        IVectorView *This,
++        ULONG start_index,
++        /* T[] */ void **items,
++        UINT *out_value);
++} IVectorViewVtbl;
++
++struct IVectorView
++{
++    CONST_VTBL IVectorViewVtbl* lpVtbl;
++};
++
++typedef struct IGamepadStatics IGamepadStatics;
++
++typedef struct IGamepadStaticsVtbl
++{
++    BEGIN_INTERFACE
++
++    /*** IUnknown methods ***/
++    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
++        IGamepadStatics *This,
++        REFIID riid,
++        void **ppvObject);
++
++    ULONG (STDMETHODCALLTYPE *AddRef)(
++        IGamepadStatics *This);
++
++    ULONG (STDMETHODCALLTYPE *Release)(
++        IGamepadStatics *This);
++
++    /*** IInspectable methods ***/
++    HRESULT (STDMETHODCALLTYPE *GetIids)(
++        IGamepadStatics *This,
++        ULONG *iidCount,
++        IID **iids);
++
++    HRESULT (STDMETHODCALLTYPE *GetRuntimeClassName)(
++        IGamepadStatics *This,
++        HSTRING *className);
++
++    HRESULT (STDMETHODCALLTYPE *GetTrustLevel)(
++        IGamepadStatics *This,
++        TrustLevel *trustLevel);
++
++    /*** IGamepadStatics methods ***/
++    HRESULT (STDMETHODCALLTYPE *eventadd_GamepadAdded)(
++        IGamepadStatics *This,
++        /* Windows.Foundation.EventHandler<Windows.Gaming.Input.Gamepad*> */
++        void *value,
++        EventRegistrationToken* token);
++    HRESULT (STDMETHODCALLTYPE *eventremove_GamepadAdded)(
++        IGamepadStatics *This,
++        EventRegistrationToken token);
++
++    HRESULT (STDMETHODCALLTYPE *eventadd_GamepadRemoved)(
++        IGamepadStatics *This,
++        /* Windows.Foundation.EventHandler<Windows.Gaming.Input.Gamepad*> */
++        void *value,
++        EventRegistrationToken* token);
++    HRESULT (STDMETHODCALLTYPE *eventremove_GamepadRemoved)(
++        IGamepadStatics *This,
++        EventRegistrationToken token);
++
++    HRESULT (STDMETHODCALLTYPE *get_Gamepads)(
++        IGamepadStatics *This,
++        /* Windows.Foundation.Collections.IVectorView<Windows.Gaming.Input.Gamepad*>* */
++        void **value);
++
++    END_INTERFACE
++} IGamepadStaticsVtbl;
++
++struct IGamepadStatics
++{
++    CONST_VTBL IGamepadStaticsVtbl* lpVtbl;
++};
++
++typedef struct IRawGameControllerStatics IRawGameControllerStatics;
++
++typedef struct IRawGameControllerStaticsVtbl
++{
++    BEGIN_INTERFACE
++
++    /*** IUnknown methods ***/
++    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
++        IRawGameControllerStatics *This,
++        REFIID riid,
++        void **ppvObject);
++
++    ULONG (STDMETHODCALLTYPE *AddRef)(
++        IRawGameControllerStatics *This);
++
++    ULONG (STDMETHODCALLTYPE *Release)(
++        IRawGameControllerStatics *This);
++
++    /*** IInspectable methods ***/
++    HRESULT (STDMETHODCALLTYPE *GetIids)(
++        IRawGameControllerStatics *This,
++        ULONG *iidCount,
++        IID **iids);
++
++    HRESULT (STDMETHODCALLTYPE *GetRuntimeClassName)(
++        IRawGameControllerStatics *This,
++        HSTRING *className);
++
++    HRESULT (STDMETHODCALLTYPE *GetTrustLevel)(
++        IRawGameControllerStatics *This,
++        TrustLevel *trustLevel);
++
++    /*** IRawGameControllerStatics methods ***/
++    HRESULT (STDMETHODCALLTYPE *eventadd_RawGameControllerAdded)(
++        IRawGameControllerStatics *This,
++        /* Windows.Foundation.EventHandler<Windows.Gaming.Input.RawGameController*> */
++        void *value,
++        EventRegistrationToken* token);
++    HRESULT (STDMETHODCALLTYPE *eventremove_RawGameControllerAdded)(
++        IRawGameControllerStatics *This,
++        EventRegistrationToken token);
++
++    HRESULT (STDMETHODCALLTYPE *eventadd_RawGameControllerRemoved)(
++        IRawGameControllerStatics *This,
++        /* Windows.Foundation.EventHandler<Windows.Gaming.Input.RawGameController*> */
++        void *value,
++        EventRegistrationToken* token);
++    HRESULT (STDMETHODCALLTYPE *eventremove_RawGameControllerRemoved)(
++        IRawGameControllerStatics *This,
++        EventRegistrationToken token);
++
++    HRESULT (STDMETHODCALLTYPE *get_RawGameControllers)(
++        IRawGameControllerStatics *This,
++        /* Windows.Foundation.Collections.IVectorView<Windows.Gaming.Input.RawGameController*>* */
++        void **value);
++
++    HRESULT (STDMETHODCALLTYPE *FromGameController)(
++        IRawGameControllerStatics *This,
++        /* Windows.Gaming.Input.IGameController* */
++        void *game_controller,
++        /* Windows.Gaming.Input.RawGameController** */
++        void **value);
++
++    END_INTERFACE
++} IRawGameControllerStaticsVtbl;
++
++struct IRawGameControllerStatics
++{
++    CONST_VTBL IRawGameControllerStaticsVtbl* lpVtbl;
++};
++
++struct windows_gaming_input
++{
++    IActivationFactory IActivationFactory_iface;
++    IGamepadStatics IGamepadStatics_iface;
++    IRawGameControllerStatics IRawGameControllerStatics_iface;
++    IVectorView IVectorView_iface;
++    LONG refcount;
++};
++
++static inline struct windows_gaming_input *impl_from_IActivationFactory(IActivationFactory *iface)
++{
++    return CONTAINING_RECORD(iface, struct windows_gaming_input, IActivationFactory_iface);
++}
++
++static inline struct windows_gaming_input *impl_from_IGamepadStatics(IGamepadStatics *iface)
++{
++    return CONTAINING_RECORD(iface, struct windows_gaming_input, IGamepadStatics_iface);
++}
++
++static inline struct windows_gaming_input *impl_from_IRawGameControllerStatics(IRawGameControllerStatics *iface)
++{
++    return CONTAINING_RECORD(iface, struct windows_gaming_input, IRawGameControllerStatics_iface);
++}
++
++static inline struct windows_gaming_input *impl_from_IVectorView(IVectorView *iface)
++{
++    return CONTAINING_RECORD(iface, struct windows_gaming_input, IVectorView_iface);
++}
++
++static HRESULT STDMETHODCALLTYPE vector_view_QueryInterface(
++        IVectorView *iface, REFIID iid, void **object)
++{
++    TRACE("iface %p, iid %s, object %p stub!\n", iface, debugstr_guid(iid), object);
++    WARN("%s not implemented, returning E_NOINTERFACE.\n", debugstr_guid(iid));
++    *object = NULL;
++    return E_NOINTERFACE;
++}
++
++static ULONG STDMETHODCALLTYPE vector_view_AddRef(
++        IVectorView *iface)
++{
++    struct windows_gaming_input *impl = impl_from_IVectorView(iface);
++    ULONG rc = InterlockedIncrement(&impl->refcount);
++    TRACE("%p increasing refcount to %u.\n", impl, rc);
++    return rc;
++}
++
++static ULONG STDMETHODCALLTYPE vector_view_Release(
++        IVectorView *iface)
++{
++    struct windows_gaming_input *impl = impl_from_IVectorView(iface);
++    ULONG rc = InterlockedDecrement(&impl->refcount);
++    TRACE("%p decreasing refcount to %u.\n", impl, rc);
++    return rc;
++}
++
++static HRESULT STDMETHODCALLTYPE vector_view_GetIids(
++        IVectorView *iface, ULONG *iid_count, IID **iids)
++{
++    FIXME("iface %p, iid_count %p, iids %p stub!\n", iface, iid_count, iids);
++    return E_NOTIMPL;
++}
++
++static HRESULT STDMETHODCALLTYPE vector_view_GetRuntimeClassName(
++        IVectorView *iface, HSTRING *class_name)
++{
++    FIXME("iface %p, class_name %p stub!\n", iface, class_name);
++    return E_NOTIMPL;
++}
++
++static HRESULT STDMETHODCALLTYPE vector_view_GetTrustLevel(
++        IVectorView *iface, TrustLevel *trust_level)
++{
++    FIXME("iface %p, trust_level %p stub!\n", iface, trust_level);
++    return E_NOTIMPL;
++}
++
++static HRESULT STDMETHODCALLTYPE vector_view_GetAt(
++    IVectorView *iface, ULONG index, void *out_value)
++{
++    FIXME("iface %p, index %#x, out_value %p stub!\n", iface, index, out_value);
++    return S_OK;
++}
++
++static HRESULT STDMETHODCALLTYPE vector_view_get_Size(
++    IVectorView *iface, ULONG *out_value)
++{
++    FIXME("iface %p, out_value %p stub!\n", iface, out_value);
++    *out_value = 0;
++    return S_OK;
++}
++
++static HRESULT STDMETHODCALLTYPE vector_view_IndexOf(
++    IVectorView *iface, void *value, ULONG *index, BOOLEAN *out_value)
++{
++    FIXME("iface %p, value %p, index %p, out_value %p stub!\n", iface, value, index, out_value);
++    *out_value = FALSE;
++    return S_OK;
++}
++
++static HRESULT STDMETHODCALLTYPE vector_view_GetMany(
++    IVectorView *iface, ULONG start_index, void **items, UINT *out_value)
++{
++    FIXME("iface %p, start_index %#x, items %p, out_value %p stub!\n", iface, start_index, items, out_value);
++    *out_value = 0;
++    return S_OK;
++}
++
++static const struct IVectorViewVtbl vector_view_vtbl =
++{
++    vector_view_QueryInterface,
++    vector_view_AddRef,
++    vector_view_Release,
++    /* IInspectable methods */
++    vector_view_GetIids,
++    vector_view_GetRuntimeClassName,
++    vector_view_GetTrustLevel,
++    /*** IVectorView<T> methods ***/
++    vector_view_GetAt,
++    vector_view_get_Size,
++    vector_view_IndexOf,
++    vector_view_GetMany,
++};
++
++static HRESULT STDMETHODCALLTYPE gamepad_statics_QueryInterface(
++        IGamepadStatics *iface, REFIID iid, void **object)
++{
++    TRACE("iface %p, iid %s, object %p stub!\n", iface, debugstr_guid(iid), object);
++
++    if (IsEqualGUID(iid, &IID_IAgileObject))
++    {
++        IUnknown_AddRef(iface);
++        *object = iface;
++        return S_OK;
++    }
++
++    WARN("%s not implemented, returning E_NOINTERFACE.\n", debugstr_guid(iid));
++    *object = NULL;
++    return E_NOINTERFACE;
++}
++
++static ULONG STDMETHODCALLTYPE gamepad_statics_AddRef(
++        IGamepadStatics *iface)
++{
++    struct windows_gaming_input *impl = impl_from_IGamepadStatics(iface);
++    ULONG rc = InterlockedIncrement(&impl->refcount);
++    TRACE("%p increasing refcount to %u.\n", impl, rc);
++    return rc;
++}
++
++static ULONG STDMETHODCALLTYPE gamepad_statics_Release(
++        IGamepadStatics *iface)
++{
++    struct windows_gaming_input *impl = impl_from_IGamepadStatics(iface);
++    ULONG rc = InterlockedDecrement(&impl->refcount);
++    TRACE("%p decreasing refcount to %u.\n", impl, rc);
++    return rc;
++}
++
++static HRESULT STDMETHODCALLTYPE gamepad_statics_GetIids(
++        IGamepadStatics *iface, ULONG *iid_count, IID **iids)
++{
++    FIXME("iface %p, iid_count %p, iids %p stub!\n", iface, iid_count, iids);
++    return E_NOTIMPL;
++}
++
++static HRESULT STDMETHODCALLTYPE gamepad_statics_GetRuntimeClassName(
++        IGamepadStatics *iface, HSTRING *class_name)
++{
++    FIXME("iface %p, class_name %p stub!\n", iface, class_name);
++    return E_NOTIMPL;
++}
++
++static HRESULT STDMETHODCALLTYPE gamepad_statics_GetTrustLevel(
++        IGamepadStatics *iface, TrustLevel *trust_level)
++{
++    FIXME("iface %p, trust_level %p stub!\n", iface, trust_level);
++    return E_NOTIMPL;
++}
++
++static HRESULT STDMETHODCALLTYPE gamepad_statics_eventadd_GamepadAdded(
++    IGamepadStatics *iface, void *value, EventRegistrationToken* token)
++{
++    FIXME("iface %p, value %p, token %p stub!\n", iface, value, token);
++    return S_OK;
++}
++
++static HRESULT STDMETHODCALLTYPE gamepad_statics_eventremove_GamepadAdded(
++    IGamepadStatics *iface, EventRegistrationToken token)
++{
++    FIXME("iface %p, token %#I64x stub!\n", iface, token.value);
++    return S_OK;
++}
++
++static HRESULT STDMETHODCALLTYPE gamepad_statics_eventadd_GamepadRemoved(
++    IGamepadStatics *iface, void *value, EventRegistrationToken* token)
++{
++    FIXME("iface %p, value %p, token %p stub!\n", iface, value, token);
++    return S_OK;
++}
++
++static HRESULT STDMETHODCALLTYPE gamepad_statics_eventremove_GamepadRemoved(
++    IGamepadStatics *iface, EventRegistrationToken token)
++{
++    FIXME("iface %p, token %#I64x stub!\n", iface, token.value);
++    return S_OK;
++}
++
++static HRESULT STDMETHODCALLTYPE gamepad_statics_get_Gamepads(
++    IGamepadStatics *iface, void **value)
++{
++    struct windows_gaming_input *impl = impl_from_IGamepadStatics(iface);
++    FIXME("iface %p, value %p stub!\n", iface, value);
++    *value = &impl->IVectorView_iface;
++    return S_OK;
++}
++
++static const struct IGamepadStaticsVtbl gamepad_statics_vtbl =
++{
++    gamepad_statics_QueryInterface,
++    gamepad_statics_AddRef,
++    gamepad_statics_Release,
++    /* IInspectable methods */
++    gamepad_statics_GetIids,
++    gamepad_statics_GetRuntimeClassName,
++    gamepad_statics_GetTrustLevel,
++    /* IGamepadStatics methods */
++    gamepad_statics_eventadd_GamepadAdded,
++    gamepad_statics_eventremove_GamepadAdded,
++    gamepad_statics_eventadd_GamepadRemoved,
++    gamepad_statics_eventremove_GamepadRemoved,
++    gamepad_statics_get_Gamepads,
++};
++
++static HRESULT STDMETHODCALLTYPE raw_game_controller_statics_QueryInterface(
++        IRawGameControllerStatics *iface, REFIID iid, void **object)
++{
++    TRACE("iface %p, iid %s, object %p stub!\n", iface, debugstr_guid(iid), object);
++
++    if (IsEqualGUID(iid, &IID_IAgileObject))
++    {
++        IUnknown_AddRef(iface);
++        *object = iface;
++        return S_OK;
++    }
++
++    WARN("%s not implemented, returning E_NOINTERFACE.\n", debugstr_guid(iid));
++    *object = NULL;
++    return E_NOINTERFACE;
++}
++
++static ULONG STDMETHODCALLTYPE raw_game_controller_statics_AddRef(
++        IRawGameControllerStatics *iface)
++{
++    struct windows_gaming_input *impl = impl_from_IRawGameControllerStatics(iface);
++    ULONG rc = InterlockedIncrement(&impl->refcount);
++    TRACE("%p increasing refcount to %u.\n", impl, rc);
++    return rc;
++}
++
++static ULONG STDMETHODCALLTYPE raw_game_controller_statics_Release(
++        IRawGameControllerStatics *iface)
++{
++    struct windows_gaming_input *impl = impl_from_IRawGameControllerStatics(iface);
++    ULONG rc = InterlockedDecrement(&impl->refcount);
++    TRACE("%p decreasing refcount to %u.\n", impl, rc);
++    return rc;
++}
++
++static HRESULT STDMETHODCALLTYPE raw_game_controller_statics_GetIids(
++        IRawGameControllerStatics *iface, ULONG *iid_count, IID **iids)
++{
++    FIXME("iface %p, iid_count %p, iids %p stub!\n", iface, iid_count, iids);
++    return E_NOTIMPL;
++}
++
++static HRESULT STDMETHODCALLTYPE raw_game_controller_statics_GetRuntimeClassName(
++        IRawGameControllerStatics *iface, HSTRING *class_name)
++{
++    FIXME("iface %p, class_name %p stub!\n", iface, class_name);
++    return E_NOTIMPL;
++}
++
++static HRESULT STDMETHODCALLTYPE raw_game_controller_statics_GetTrustLevel(
++        IRawGameControllerStatics *iface, TrustLevel *trust_level)
++{
++    FIXME("iface %p, trust_level %p stub!\n", iface, trust_level);
++    return E_NOTIMPL;
++}
++
++static HRESULT STDMETHODCALLTYPE raw_game_controller_statics_eventadd_RawGameControllerAdded(
++    IRawGameControllerStatics *iface, void *value, EventRegistrationToken* token)
++{
++    FIXME("iface %p, value %p, token %p stub!\n", iface, value, token);
++    return S_OK;
++}
++
++static HRESULT STDMETHODCALLTYPE raw_game_controller_statics_eventremove_RawGameControllerAdded(
++    IRawGameControllerStatics *iface, EventRegistrationToken token)
++{
++    FIXME("iface %p, token %#I64x stub!\n", iface, token.value);
++    return S_OK;
++}
++
++static HRESULT STDMETHODCALLTYPE raw_game_controller_statics_eventadd_RawGameControllerRemoved(
++    IRawGameControllerStatics *iface, void *value, EventRegistrationToken* token)
++{
++    FIXME("iface %p, value %p, token %p stub!\n", iface, value, token);
++    return S_OK;
++}
++
++static HRESULT STDMETHODCALLTYPE raw_game_controller_statics_eventremove_RawGameControllerRemoved(
++    IRawGameControllerStatics *iface, EventRegistrationToken token)
++{
++    FIXME("iface %p, token %#I64x stub!\n", iface, token.value);
++    return S_OK;
++}
++
++static HRESULT STDMETHODCALLTYPE raw_game_controller_statics_get_RawGameControllers(
++    IRawGameControllerStatics *iface, void **value)
++{
++    struct windows_gaming_input *impl = impl_from_IRawGameControllerStatics(iface);
++    FIXME("iface %p, value %p stub!\n", iface, value);
++    *value = &impl->IVectorView_iface;
++    return S_OK;
++}
++
++static HRESULT STDMETHODCALLTYPE raw_game_controller_statics_FromGameController(
++    IRawGameControllerStatics *iface, void *game_controller, void **value)
++{
++    FIXME("iface %p, game_controller %p, value %p stub!\n", iface, game_controller, value);
++    return E_NOTIMPL;
++}
++
++static const struct IRawGameControllerStaticsVtbl raw_game_controller_statics_vtbl =
++{
++    raw_game_controller_statics_QueryInterface,
++    raw_game_controller_statics_AddRef,
++    raw_game_controller_statics_Release,
++    /* IInspectable methods */
++    raw_game_controller_statics_GetIids,
++    raw_game_controller_statics_GetRuntimeClassName,
++    raw_game_controller_statics_GetTrustLevel,
++    /* IRawGameControllerStatics methods */
++    raw_game_controller_statics_eventadd_RawGameControllerAdded,
++    raw_game_controller_statics_eventremove_RawGameControllerAdded,
++    raw_game_controller_statics_eventadd_RawGameControllerRemoved,
++    raw_game_controller_statics_eventremove_RawGameControllerRemoved,
++    raw_game_controller_statics_get_RawGameControllers,
++    raw_game_controller_statics_FromGameController,
++};
++
++static HRESULT STDMETHODCALLTYPE windows_gaming_input_QueryInterface(
++        IActivationFactory *iface, REFIID iid, void **object)
++{
++    struct windows_gaming_input *impl = impl_from_IActivationFactory(iface);
++    TRACE("iface %p, iid %s, object %p stub!\n", iface, debugstr_guid(iid), object);
++
++    if (IsEqualGUID(iid, &IID_IGamepadStatics))
++    {
++        IUnknown_AddRef(iface);
++        *object = &impl->IGamepadStatics_iface;
++        return S_OK;
++    }
++
++    if (IsEqualGUID(iid, &IID_IRawGameControllerStatics))
++    {
++        IUnknown_AddRef(iface);
++        *object = &impl->IRawGameControllerStatics_iface;
++        return S_OK;
++    }
++
++    WARN("%s not implemented, returning E_NOINTERFACE.\n", debugstr_guid(iid));
++    *object = NULL;
++    return E_NOINTERFACE;
++}
++
++static ULONG STDMETHODCALLTYPE windows_gaming_input_AddRef(
++        IActivationFactory *iface)
++{
++    struct windows_gaming_input *impl = impl_from_IActivationFactory(iface);
++    ULONG rc = InterlockedIncrement(&impl->refcount);
++    TRACE("%p increasing refcount to %u.\n", impl, rc);
++    return rc;
++}
++
++static ULONG STDMETHODCALLTYPE windows_gaming_input_Release(
++        IActivationFactory *iface)
++{
++    struct windows_gaming_input *impl = impl_from_IActivationFactory(iface);
++    ULONG rc = InterlockedDecrement(&impl->refcount);
++    TRACE("%p decreasing refcount to %u.\n", impl, rc);
++    return rc;
++}
++
++static HRESULT STDMETHODCALLTYPE windows_gaming_input_GetIids(
++        IActivationFactory *iface, ULONG *iid_count, IID **iids)
++{
++    FIXME("iface %p, iid_count %p, iids %p stub!\n", iface, iid_count, iids);
++    return E_NOTIMPL;
++}
++
++static HRESULT STDMETHODCALLTYPE windows_gaming_input_GetRuntimeClassName(
++        IActivationFactory *iface, HSTRING *class_name)
++{
++    FIXME("iface %p, class_name %p stub!\n", iface, class_name);
++    return E_NOTIMPL;
++}
++
++static HRESULT STDMETHODCALLTYPE windows_gaming_input_GetTrustLevel(
++        IActivationFactory *iface, TrustLevel *trust_level)
++{
++    FIXME("iface %p, trust_level %p stub!\n", iface, trust_level);
++    return E_NOTIMPL;
++}
++
++static HRESULT STDMETHODCALLTYPE windows_gaming_input_ActivateInstance(
++        IActivationFactory *iface, IInspectable **instance)
++{
++    FIXME("iface %p, instance %p stub!\n", iface, instance);
++    return E_NOTIMPL;
++}
++
++static const struct IActivationFactoryVtbl activation_factory_vtbl =
++{
++    windows_gaming_input_QueryInterface,
++    windows_gaming_input_AddRef,
++    windows_gaming_input_Release,
++    /* IInspectable methods */
++    windows_gaming_input_GetIids,
++    windows_gaming_input_GetRuntimeClassName,
++    windows_gaming_input_GetTrustLevel,
++    /* IActivationFactory methods */
++    windows_gaming_input_ActivateInstance,
++};
++
++static struct windows_gaming_input windows_gaming_input =
++{
++    {&activation_factory_vtbl},
++    {&gamepad_statics_vtbl},
++    {&raw_game_controller_statics_vtbl},
++    {&vector_view_vtbl},
++    0
++};
++
++BOOL WINAPI DllMain(HINSTANCE instance, DWORD reason, void *reserved)
++{
++    TRACE("(%p, %u, %p)\n", instance, reason, reserved);
++
++    switch (reason)
++    {
++    case DLL_WINE_PREATTACH:
++        return FALSE;    /* prefer native version */
++    case DLL_PROCESS_ATTACH:
++        DisableThreadLibraryCalls(instance);
++        break;
++    }
++
++    return TRUE;
++}
++
++HRESULT WINAPI DllCanUnloadNow(void)
++{
++    return S_FALSE;
++}
++
++HRESULT WINAPI DllGetClassObject(REFCLSID clsid, REFIID riid, LPVOID *object)
++{
++    FIXME("clsid %s, riid %s, object %p stub!\n", debugstr_guid(clsid), debugstr_guid(riid), object);
++    return CLASS_E_CLASSNOTAVAILABLE;
++}
++
++HRESULT WINAPI DllGetActivationFactory(HSTRING classid, IActivationFactory **factory)
++{
++    TRACE("classid %s, factory %p.\n", debugstr_hstring(classid), factory);
++    *factory = &windows_gaming_input.IActivationFactory_iface;
++    IUnknown_AddRef(*factory);
++    return S_OK;
++}
+diff --git a/loader/wine.inf.in b/loader/wine.inf.in
+index 12ec40f872e..6a4526afc75 100644
+--- a/loader/wine.inf.in
++++ b/loader/wine.inf.in
+@@ -707,6 +707,8 @@ HKLM,%MciExtStr%,"wmx",,"MPEGVideo"
+ HKLM,%MciExtStr%,"wvx",,"MPEGVideo"
+
+ [Misc]
++HKLM,Software\Microsoft\WindowsRuntime\ActivatableClassId\Windows.Gaming.Input.Gamepad,"DllPath",2,"Windows.Gaming.Input.dll"
++HKLM,Software\Microsoft\WindowsRuntime\ActivatableClassId\Windows.Gaming.Input.RawGameController,"DllPath",2,"Windows.Gaming.Input.dll"
+ HKLM,Software\Borland\Database Engine\Settings\SYSTEM\INIT,SHAREDMEMLOCATION,,9000
+ HKLM,Software\Clients\Mail,,2,"Native Mail Client"
+ HKLM,Software\Clients\Mail\Native Mail Client,,2,"Native Mail Client"
+From c993e4b5656aeedb176e6adbe614fc95ad5fd1e8 Mon Sep 17 00:00:00 2001
+From: Zebediah Figura <zfigura@codeweavers.com>
+Date: Tue, 7 Jul 2020 10:05:59 -0500
+Subject: [PATCH] api-ms-win-core-systemtopology-l1-1-0: New DLL.
+
+Signed-off-by: Zebediah Figura <zfigura@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+(cherry picked from commit 37238a74a5fea133b8dbcf55ca62cd0d80dc49f7)
+---
+ configure                                                       | 2 ++
+ configure.ac                                                    | 1 +
+ dlls/api-ms-win-core-systemtopology-l1-1-0/Makefile.in          | 1 +
+ .../api-ms-win-core-systemtopology-l1-1-0.spec                  | 2 ++
+ tools/make_specfiles                                            | 1 +
+ 5 files changed, 7 insertions(+)
+ create mode 100644 dlls/api-ms-win-core-systemtopology-l1-1-0/Makefile.in
+ create mode 100644 dlls/api-ms-win-core-systemtopology-l1-1-0/api-ms-win-core-systemtopology-l1-1-0.spec
+
+diff --git a/configure b/configure
+index 673ea905fd8..4a01c08a0ac 100755
+--- a/configure
++++ b/configure
+@@ -1024,6 +1024,7 @@ enable_api_ms_win_core_synch_l1_2_1
+ enable_api_ms_win_core_sysinfo_l1_1_0
+ enable_api_ms_win_core_sysinfo_l1_2_0
+ enable_api_ms_win_core_sysinfo_l1_2_1
++enable_api_ms_win_core_systemtopology_l1_1_0
+ enable_api_ms_win_core_threadpool_l1_1_0
+ enable_api_ms_win_core_threadpool_l1_2_0
+ enable_api_ms_win_core_threadpool_legacy_l1_1_0
+@@ -20228,6 +20229,7 @@ wine_fn_config_makefile dlls/api-ms-win-core-synch-l1-2-1 enable_api_ms_win_core
+ wine_fn_config_makefile dlls/api-ms-win-core-sysinfo-l1-1-0 enable_api_ms_win_core_sysinfo_l1_1_0
+ wine_fn_config_makefile dlls/api-ms-win-core-sysinfo-l1-2-0 enable_api_ms_win_core_sysinfo_l1_2_0
+ wine_fn_config_makefile dlls/api-ms-win-core-sysinfo-l1-2-1 enable_api_ms_win_core_sysinfo_l1_2_1
++wine_fn_config_makefile dlls/api-ms-win-core-systemtopology-l1-1-0 enable_api_ms_win_core_systemtopology_l1_1_0
+ wine_fn_config_makefile dlls/api-ms-win-core-threadpool-l1-1-0 enable_api_ms_win_core_threadpool_l1_1_0
+ wine_fn_config_makefile dlls/api-ms-win-core-threadpool-l1-2-0 enable_api_ms_win_core_threadpool_l1_2_0
+ wine_fn_config_makefile dlls/api-ms-win-core-threadpool-legacy-l1-1-0 enable_api_ms_win_core_threadpool_legacy_l1_1_0
+diff --git a/configure.ac b/configure.ac
+index 33b0a22e594..a148cf02361 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -2947,6 +2947,7 @@ WINE_CONFIG_MAKEFILE(dlls/api-ms-win-core-synch-l1-2-1)
+ WINE_CONFIG_MAKEFILE(dlls/api-ms-win-core-sysinfo-l1-1-0)
+ WINE_CONFIG_MAKEFILE(dlls/api-ms-win-core-sysinfo-l1-2-0)
+ WINE_CONFIG_MAKEFILE(dlls/api-ms-win-core-sysinfo-l1-2-1)
++WINE_CONFIG_MAKEFILE(dlls/api-ms-win-core-systemtopology-l1-1-0)
+ WINE_CONFIG_MAKEFILE(dlls/api-ms-win-core-threadpool-l1-1-0)
+ WINE_CONFIG_MAKEFILE(dlls/api-ms-win-core-threadpool-l1-2-0)
+ WINE_CONFIG_MAKEFILE(dlls/api-ms-win-core-threadpool-legacy-l1-1-0)
+diff --git a/dlls/api-ms-win-core-systemtopology-l1-1-0/Makefile.in b/dlls/api-ms-win-core-systemtopology-l1-1-0/Makefile.in
+new file mode 100644
+index 00000000000..beed9fb9c2e
+--- /dev/null
++++ b/dlls/api-ms-win-core-systemtopology-l1-1-0/Makefile.in
+@@ -0,0 +1 @@
++MODULE    = api-ms-win-core-systemtopology-l1-1-0.dll
+diff --git a/dlls/api-ms-win-core-systemtopology-l1-1-0/api-ms-win-core-systemtopology-l1-1-0.spec b/dlls/api-ms-win-core-systemtopology-l1-1-0/api-ms-win-core-systemtopology-l1-1-0.spec
+new file mode 100644
+index 00000000000..b5365eb9303
+--- /dev/null
++++ b/dlls/api-ms-win-core-systemtopology-l1-1-0/api-ms-win-core-systemtopology-l1-1-0.spec
+@@ -0,0 +1,2 @@
++@ stdcall GetNumaHighestNodeNumber(ptr) kernelbase.GetNumaHighestNodeNumber
++@ stdcall GetNumaNodeProcessorMaskEx(long ptr) kernelbase.GetNumaNodeProcessorMaskEx
+diff --git a/tools/make_specfiles b/tools/make_specfiles
+index 7fef3a6821a..fa57df59f47 100755
+--- a/tools/make_specfiles
++++ b/tools/make_specfiles
+@@ -320,6 +320,7 @@ my @dll_groups =
+   "api-ms-win-appmodel-runtime-l1-1-2",
+   "api-ms-win-core-path-l1-1-0",
+   "api-ms-win-core-quirks-l1-1-0",
++  "api-ms-win-core-systemtopology-l1-1-0",
+   "api-ms-win-security-grouppolicy-l1-1-0",
+  ],
+  [
+

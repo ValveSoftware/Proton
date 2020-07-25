@@ -362,7 +362,7 @@ index 8dfabde44c3..b25c48b52ca 100644
 +    while (*str)
 +    {
 +        const WCHAR *p1 = str, *p2 = sub;
-+        while (*p1 && *p2 && tolowerW(*p1) == tolowerW(*p2)) { p1++; p2++; }
++        while (*p1 && *p2 && RtlDowncaseUnicodeChar(*p1) == RtlDowncaseUnicodeChar(*p2)) { p1++; p2++; }
 +        if (!*p2) return (WCHAR *)str;
 +        str++;
 +    }
@@ -496,6 +496,7 @@ index 8dfabde44c3..b25c48b52ca 100644
      RtlLeaveCriticalSection( &loader_section );
      *address = ret;
      return ret;
+
 From cb95c72878a011d59e8d6f91f84cd0539d899661 Mon Sep 17 00:00:00 2001
 From: Jan Sikorski <jsikorski@codeweavers.com>
 Date: Mon, 20 Apr 2020 16:41:52 +0200
@@ -540,6 +541,50 @@ index 2979061a5e2..360b43dc382 100644
 +    if (!(flags & LDR_STEAM_INTERNAL) && (basename = get_basename(libname->Buffer)) &&
 +        !RtlCompareUnicodeStrings(steamclient_w, wcslen(steamclient_w),
 +                                  basename, wcslen(basename), TRUE))
+     {
+         *hModule = get_builtin_steamclient_mod(TRUE);
+         swap_builtin_to_native_steamclient_hack(hModule);
+
+From 5a2cff762dc8ddabff4503347108d3970cd6a273 Mon Sep 17 00:00:00 2001
+From: Jan Sikorski <jsikorski@codeweavers.com>
+Date: Mon, 8 Jun 2020 12:23:16 +0200
+Subject: [PATCH] ntdll: Look for both steamclient and steamclient.dll to swap
+
+---
+ dlls/ntdll/loader.c | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
+
+diff --git a/dlls/ntdll/loader.c b/dlls/ntdll/loader.c
+index 360b43dc382..f0a83fed5a6 100644
+--- a/dlls/ntdll/loader.c
++++ b/dlls/ntdll/loader.c
+@@ -1604,13 +1604,15 @@ static WCHAR builtin_steamclient_w[] = {'C',':','\\','w','i','n','d','o','w','s'
+                                         's','t','e','a','m','c','l','i','e','n','t','6','4','.','d','l','l',0};
+ static WCHAR native_steamclient_w[] = {'C',':','\\','P','r','o','g','r','a','m',' ','F','i','l','e','s',' ','(','x','8','6',')','\\','S','t','e','a','m','\\',
+                                        's','t','e','a','m','c','l','i','e','n','t','6','4','.','d','l','l',0};
+-static WCHAR steamclient_w[] = {'s','t','e','a','m','c','l','i','e','n','t','6','4','.','d','l','l',0};
++static WCHAR steamclient_w[] = {'s','t','e','a','m','c','l','i','e','n','t','6','4',0};
++static WCHAR steamclient_dll_w[] = {'s','t','e','a','m','c','l','i','e','n','t','6','4','.','d','l','l',0};
+ #else
+ static WCHAR builtin_steamclient_w[] = {'C',':','\\','w','i','n','d','o','w','s','\\','s','y','s','t','e','m','3','2','\\',
+                                         's','t','e','a','m','c','l','i','e','n','t','.','d','l','l',0};
+ static WCHAR native_steamclient_w[] = {'C',':','\\','P','r','o','g','r','a','m',' ','F','i','l','e','s',' ','(','x','8','6',')','\\','S','t','e','a','m','\\',
+                                        's','t','e','a','m','c','l','i','e','n','t','.','d','l','l',0};
+-static WCHAR steamclient_w[] = {'s','t','e','a','m','c','l','i','e','n','t','.','d','l','l',0};
++static WCHAR steamclient_w[] = {'s','t','e','a','m','c','l','i','e','n','t',0};
++static WCHAR steamclient_dll_w[] = {'s','t','e','a','m','c','l','i','e','n','t','.','d','l','l',0};
+ #endif
+ 
+ static WCHAR *strstriW( const WCHAR *str, const WCHAR *sub )
+@@ -3368,7 +3370,9 @@ NTSTATUS WINAPI DECLSPEC_HOTPATCH LdrLoadDll(LPCWSTR path_name, DWORD flags,
+ 
+     if (!(flags & LDR_STEAM_INTERNAL) && (basename = get_basename(libname->Buffer)) &&
+-        !RtlCompareUnicodeStrings(steamclient_w, wcslen(steamclient_w),
++        (!RtlCompareUnicodeStrings(steamclient_w, wcslen(steamclient_w),
+-                                  basename, wcslen(basename), TRUE))
++                                  basename, wcslen(basename), TRUE) ||
++        !RtlCompareUnicodeStrings(steamclient_w, wcslen(steamclient_dll_w),
++                                  basename, wcslen(basename), TRUE)))
      {
          *hModule = get_builtin_steamclient_mod(TRUE);
          swap_builtin_to_native_steamclient_hack(hModule);
