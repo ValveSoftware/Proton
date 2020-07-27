@@ -1,5 +1,3 @@
-# Generated from /home/valve/steampfx/drive_c/Program Files/Steam/steamclient.dll by winedump
-
 1 cdecl Breakpad_SteamMiniDumpInit(long ptr ptr)
 2 cdecl Breakpad_SteamSetAppID(long)
 3 cdecl Breakpad_SteamSetSteamID(int64)
@@ -56,3 +54,20 @@
 54 stub hid_send_feature_report
 55 stub hid_set_nonblocking
 56 stub hid_write
+57 stub hid_write_output_report
+
+# GameOverlayRenderer entry points
+@ stub BOverlayNeedsPresent
+@ stub IsOverlayEnabled
+@ stub OverlayHookD3D3
+@ stub SetNotificationInset
+@ stub SetNotificationPosition
+@ stub SteamOverlayIsUsingGamepad
+@ stub SteamOverlayIsUsingKeyboard
+@ stub SteamOverlayIsUsingMouse
+@ stub ValveHookScreenshots
+@ stub ValveIsScreenshotsHooked
+@ stub VirtualFreeWrapper
+@ stub VulkanSteamOverlayGetScaleFactors
+@ stub VulkanSteamOverlayPresent
+@ stub VulkanSteamOverlayProcessCapturedFrame
