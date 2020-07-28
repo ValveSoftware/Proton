@@ -219,19 +219,11 @@ WINE := $(SRCDIR)/wine
 WINE_DST32 := ./dist-wine32
 WINE_OBJ32 := ./obj-wine32
 WINE_OBJ64 := ./obj-wine64
-WINEMAKER := $(abspath $(WINE)/tools/winemaker/winemaker)
 
 # Wine outputs that need to exist for other steps (dist)
 WINE_OUT_BIN := $(DST_DIR)/bin/wine64
 WINE_OUT_SERVER := $(DST_DIR)/bin/wineserver
 WINE_OUT := $(WINE_OUT_BIN) $(WINE_OUT_SERVER)
-# Tool-only build outputs needed for other projects
-WINEGCC32 := $(TOOLS_DIR32)/bin/winegcc
-WINEBUILD32 := $(TOOLS_DIR32)/bin/winebuild
-WINE_BUILDTOOLS32 := $(WINEGCC32) $(WINEBUILD32)
-WINEGCC64 := $(TOOLS_DIR64)/bin/winegcc
-WINEBUILD64 := $(TOOLS_DIR64)/bin/winebuild
-WINE_BUILDTOOLS64 := $(WINEGCC64) $(WINEBUILD64)
 
 VRCLIENT := $(SRCDIR)/vrclient_x64
 VRCLIENT32 := ./syn-vrclient32
@@ -722,9 +714,10 @@ LSTEAMCLIENT_CONFIGURE_FILES64 := $(LSTEAMCLIENT_OBJ64)/Makefile
 
 # 64bit-configure
 $(LSTEAMCLIENT_CONFIGURE_FILES64): SHELL = $(CONTAINER_SHELL)
-$(LSTEAMCLIENT_CONFIGURE_FILES64): $(LSTEAMCLIENT64) $(MAKEFILE_DEP) | $(LSTEAMCLIENT_OBJ64) $(WINEMAKER)
+$(LSTEAMCLIENT_CONFIGURE_FILES64): $(LSTEAMCLIENT64) $(MAKEFILE_DEP) wine64 | $(LSTEAMCLIENT_OBJ64)
 	cd $(dir $@) && \
-		$(WINEMAKER) --nosource-fix --nolower-include --nodlls --nomsvcrt \
+	env PATH="$(abspath $(TOOLS_DIR64))/bin:$(PATH)" \
+		winemaker --nosource-fix --nolower-include --nodlls --nomsvcrt \
 			-DSTEAM_API_EXPORTS \
 			-Dprivate=public -Dprotected=public \
 			-I"../$(TOOLS_DIR64)"/include/ \
@@ -741,9 +734,10 @@ $(LSTEAMCLIENT_CONFIGURE_FILES64): $(LSTEAMCLIENT64) $(MAKEFILE_DEP) | $(LSTEAMC
 
 # 32-bit configure
 $(LSTEAMCLIENT_CONFIGURE_FILES32): SHELL = $(CONTAINER_SHELL)
-$(LSTEAMCLIENT_CONFIGURE_FILES32): $(LSTEAMCLIENT32) $(MAKEFILE_DEP) | $(LSTEAMCLIENT_OBJ32) $(WINEMAKER)
+$(LSTEAMCLIENT_CONFIGURE_FILES32): $(LSTEAMCLIENT32) $(MAKEFILE_DEP) wine32 | $(LSTEAMCLIENT_OBJ32)
 	cd $(dir $@) && \
-		$(WINEMAKER) --nosource-fix --nolower-include --nodlls --nomsvcrt --wine32 \
+	env PATH="$(abspath $(TOOLS_DIR32))/bin:$(PATH)" \
+		winemaker --nosource-fix --nolower-include --nodlls --nomsvcrt --wine32 \
 			-DSTEAM_API_EXPORTS \
 			-Dprivate=public -Dprotected=public \
 			-I"../$(TOOLS_DIR32)"/include/ \
@@ -775,7 +769,7 @@ lsteamclient_configure32: $(LSTEAMCLIENT_CONFIGURE_FILES32)
 lsteamclient: lsteamclient32 lsteamclient64
 
 lsteamclient64: SHELL = $(CONTAINER_SHELL)
-lsteamclient64: $(LSTEAMCLIENT_CONFIGURE_FILES64) | $(WINE_BUILDTOOLS64) $(filter $(MAKECMDGOALS),wine64 wine32 wine)
+lsteamclient64: $(LSTEAMCLIENT_CONFIGURE_FILES64) wine64 | $(filter $(MAKECMDGOALS),wine64 wine32 wine)
 	+env PATH="$(abspath $(TOOLS_DIR64))/bin:$(PATH)" CXXFLAGS="-Wno-attributes $(COMMON_FLAGS) -std=gnu++11 -g" CFLAGS="$(COMMON_FLAGS) -g" \
 		$(MAKE) -C $(LSTEAMCLIENT_OBJ64)
 	[ x"$(STRIP)" = x ] || $(STRIP) $(LSTEAMCLIENT_OBJ64)/lsteamclient.dll.so
@@ -783,7 +777,7 @@ lsteamclient64: $(LSTEAMCLIENT_CONFIGURE_FILES64) | $(WINE_BUILDTOOLS64) $(filte
 	cp -af $(LSTEAMCLIENT_OBJ64)/lsteamclient.dll.so $(DST_DIR)/lib64/wine/
 
 lsteamclient32: SHELL = $(CONTAINER_SHELL)
-lsteamclient32: $(LSTEAMCLIENT_CONFIGURE_FILES32) | $(WINE_BUILDTOOLS32) $(filter $(MAKECMDGOALS),wine64 wine32 wine)
+lsteamclient32: $(LSTEAMCLIENT_CONFIGURE_FILES32) wine32 | $(filter $(MAKECMDGOALS),wine64 wine32 wine)
 	+env CC="$(CC32)" CXX="$(CXX32)" PATH="$(abspath $(TOOLS_DIR32))/bin:$(PATH)" LDFLAGS="-m32" CXXFLAGS="-m32 -Wno-attributes $(COMMON_FLAGS) -std=gnu++11 -g" CFLAGS="-m32 $(COMMON_FLAGS) -g" \
 		$(MAKE) -C $(LSTEAMCLIENT_OBJ32)
 	[ x"$(STRIP)" = x ] || $(STRIP) $(LSTEAMCLIENT_OBJ32)/lsteamclient.dll.so
@@ -880,9 +874,10 @@ STEAMEXE_CONFIGURE_FILES := $(STEAMEXE_OBJ)/Makefile
 
 # 32-bit configure
 $(STEAMEXE_CONFIGURE_FILES): SHELL = $(CONTAINER_SHELL)
-$(STEAMEXE_CONFIGURE_FILES): $(STEAMEXE_SYN) $(MAKEFILE_DEP) | $(STEAMEXE_OBJ) $(WINEMAKER)
+$(STEAMEXE_CONFIGURE_FILES): $(STEAMEXE_SYN) $(MAKEFILE_DEP) wine32 | $(STEAMEXE_OBJ)
 	cd $(dir $@) && \
-		$(WINEMAKER) --nosource-fix --nolower-include --nodlls --wine32 \
+	env PATH="$(abspath $(TOOLS_DIR32))/bin:$(PATH)" \
+		winemaker --nosource-fix --nolower-include --nodlls --wine32 \
 			-I"../$(TOOLS_DIR32)"/include/ \
 			-I"../$(TOOLS_DIR32)"/include/wine/ \
 			-I"../$(TOOLS_DIR32)"/include/wine/windows/ \
@@ -907,7 +902,7 @@ GOAL_TARGETS_LIBS += steam
 steam_configure: $(STEAMEXE_CONFIGURE_FILES)
 
 steam: SHELL = $(CONTAINER_SHELL)
-steam: $(STEAMEXE_CONFIGURE_FILES) | $(WINE_BUILDTOOLS32) $(filter $(MAKECMDGOALS),wine64 wine32 wine)
+steam: $(STEAMEXE_CONFIGURE_FILES) wine32 | $(filter $(MAKECMDGOALS),wine64 wine32 wine)
 	+env CC="$(CC32)" CXX="$(CXX32)" PATH="$(abspath $(TOOLS_DIR32))/bin:$(PATH)" LDFLAGS="-m32" CXXFLAGS="-std=gnu++11 -m32 -Wno-attributes $(COMMON_FLAGS) -g" CFLAGS="-m32 $(COMMON_FLAGS) -g" \
 		$(MAKE) -C $(STEAMEXE_OBJ)
 	[ x"$(STRIP)" = x ] || $(STRIP) $(STEAMEXE_OBJ)/steam.exe.so
@@ -997,12 +992,12 @@ wine_configure32: $(WINE_CONFIGURE_FILES32)
 
 wine: wine32 wine64
 
-# WINE_OUT and WINE_BUILDTOOLS are outputs needed by other rules, though we don't explicitly track all state here --
+# WINE_OUT outputs needed by other rules, though we don't explicitly track all state here --
 # make all or make wine are needed to ensure all deps are up to date, this just ensures 'make dist' or 'make vrclient'
 # will drag in wine if you've never built wine.
 .INTERMEDIATE: wine64-intermediate wine32-intermediate
 
-$(WINE_BUILDTOOLS64) $(WINE_OUT) wine64: wine64-intermediate
+$(WINE_OUT) wine64: wine64-intermediate
 
 wine64-intermediate: SHELL = $(CONTAINER_SHELL)
 wine64-intermediate: $(WINE_CONFIGURE_FILES64)
@@ -1016,7 +1011,7 @@ wine64-intermediate: $(WINE_CONFIGURE_FILES64)
 
 ## This installs 32-bit stuff manually, see
 ##   https://wiki.winehq.org/Packaging#WoW64_Workarounds
-$(WINE_BUILDTOOLS32) wine32: wine32-intermediate
+wine32: wine32-intermediate
 
 wine32-intermediate: SHELL = $(CONTAINER_SHELL)
 wine32-intermediate: $(WINE_CONFIGURE_FILES32)
@@ -1050,9 +1045,10 @@ $(VRCLIENT32): $(VRCLIENT) $(MAKEFILE_DEP)
 
 # 64bit-configure
 $(VRCLIENT_CONFIGURE_FILES64): SHELL = $(CONTAINER_SHELL)
-$(VRCLIENT_CONFIGURE_FILES64): $(MAKEFILE_DEP) $(VRCLIENT) $(VRCLIENT)/vrclient_x64 | $(VRCLIENT_OBJ64) $(WINEMAKER)
+$(VRCLIENT_CONFIGURE_FILES64): $(MAKEFILE_DEP) $(VRCLIENT) $(VRCLIENT)/vrclient_x64 wine64 | $(VRCLIENT_OBJ64)
 	cd $(VRCLIENT) && \
-		$(WINEMAKER) --nosource-fix --nolower-include --nodlls --nomsvcrt \
+	env PATH="$(abspath $(TOOLS_DIR64))/bin:$(PATH)" \
+		winemaker --nosource-fix --nolower-include --nodlls --nomsvcrt \
 			--nosource-fix --nolower-include --nodlls --nomsvcrt \
 			-I"$(abspath $(TOOLS_DIR64))"/include/ \
 			-I"$(abspath $(TOOLS_DIR64))"/include/wine/ \
@@ -1068,8 +1064,9 @@ $(VRCLIENT_CONFIGURE_FILES64): $(MAKEFILE_DEP) $(VRCLIENT) $(VRCLIENT)/vrclient_
 
 # 32-bit configure
 $(VRCLIENT_CONFIGURE_FILES32): SHELL = $(CONTAINER_SHELL)
-$(VRCLIENT_CONFIGURE_FILES32): $(MAKEFILE_DEP) $(VRCLIENT32) | $(VRCLIENT_OBJ32) $(WINEMAKER)
-	$(WINEMAKER) --nosource-fix --nolower-include --nodlls --nomsvcrt \
+$(VRCLIENT_CONFIGURE_FILES32): $(MAKEFILE_DEP) $(VRCLIENT32) wine32 | $(VRCLIENT_OBJ32)
+	env PATH="$(abspath $(TOOLS_DIR32))/bin:$(PATH)" \
+	winemaker --nosource-fix --nolower-include --nodlls --nomsvcrt \
 		--wine32 \
 		-I"$(abspath $(TOOLS_DIR32))"/include/ \
 		-I"$(abspath $(TOOLS_DIR32))"/include/wine/ \
@@ -1101,7 +1098,7 @@ vrclient_configure64: $(VRCLIENT_CONFIGURE_FILES64)
 vrclient: vrclient32 vrclient64
 
 vrclient64: SHELL = $(CONTAINER_SHELL)
-vrclient64: $(VRCLIENT_CONFIGURE_FILES64) | $(WINE_BUILDTOOLS64) $(filter $(MAKECMDGOALS),wine64 wine32 wine)
+vrclient64: $(VRCLIENT_CONFIGURE_FILES64) wine64 | $(filter $(MAKECMDGOALS),wine64 wine32 wine)
 	+env CXXFLAGS="-Wno-attributes -std=c++0x $(COMMON_FLAGS) -g" CFLAGS="$(COMMON_FLAGS) -g" PATH="$(abspath $(TOOLS_DIR64))/bin:$(PATH)" \
 		$(MAKE) -C $(VRCLIENT_OBJ64)
 	cd $(VRCLIENT_OBJ64) && \
@@ -1113,7 +1110,7 @@ vrclient64: $(VRCLIENT_CONFIGURE_FILES64) | $(WINE_BUILDTOOLS64) $(filter $(MAKE
 		cp -af ../$(VRCLIENT_OBJ64)/vrclient_x64.dll.fake ../$(DST_DIR)/lib64/wine/fakedlls/vrclient_x64.dll
 
 vrclient32: SHELL = $(CONTAINER_SHELL)
-vrclient32: $(VRCLIENT_CONFIGURE_FILES32) | $(WINE_BUILDTOOLS32) $(filter $(MAKECMDGOALS),wine64 wine32 wine)
+vrclient32: $(VRCLIENT_CONFIGURE_FILES32) wine32 | $(filter $(MAKECMDGOALS),wine64 wine32 wine)
 	+env CC="$(CC32)" CXX="$(CXX32)" LDFLAGS="-m32" CXXFLAGS="-m32 -Wno-attributes -std=c++0x $(COMMON_FLAGS) -g" CFLAGS="-m32 $(COMMON_FLAGS) -g" PATH="$(abspath $(TOOLS_DIR32))/bin:$(PATH)" \
 		$(MAKE) -C $(VRCLIENT_OBJ32)
 	cd $(VRCLIENT_OBJ32) && \
