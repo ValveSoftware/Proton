@@ -70,6 +70,22 @@ def try_copy(src, dst):
         else:
             raise
 
+def try_copyfile(src, dst):
+    try:
+        if os.path.isdir(dst):
+            dstfile = dst + "/" + os.path.basename(src)
+            if os.path.lexists(dstfile):
+                os.remove(dstfile)
+        elif os.path.lexists(dst):
+            os.remove(dst)
+        shutil.copyfile(src, dst)
+    except PermissionError as e:
+        if e.errno == errno.EPERM:
+            #be forgiving about permissions errors; if it's a real problem, things will explode later anyway
+            log('Error while copying to \"' + dst + '\": ' + e.strerror)
+        else:
+            raise
+
 def getmtimestr(*path_fragments):
     path = os.path.join(*path_fragments)
     try:
@@ -263,7 +279,7 @@ class CompatData:
             #Just let the Wine upgrade happen and hope it works...
             return
 
-    def real_copy(self, src, dst, dll_copy=False):
+    def pfx_copy(self, src, dst, dll_copy=False):
         if os.path.islink(src):
             contents = os.readlink(src)
             if os.path.dirname(contents).endswith(('/lib/wine', '/lib/wine/fakedlls', '/lib64/wine', '/lib64/wine/fakedlls')):
@@ -271,11 +287,11 @@ class CompatData:
                 # make the destination an absolute symlink
                 contents = os.path.normpath(os.path.join(os.path.dirname(src), contents))
             if dll_copy:
-                try_copy(src, dst)
+                try_copyfile(src, dst)
             else:
                 os.symlink(contents, dst)
         else:
-            try_copy(src, dst)
+            try_copyfile(src, dst)
 
     def copy_pfx(self):
         with open(self.tracked_files_file, "w") as tracked_files:
@@ -291,12 +307,12 @@ class CompatData:
                     src_file = os.path.join(src_dir, dir_)
                     dst_file = os.path.join(dst_dir, dir_)
                     if os.path.islink(src_file) and not os.path.exists(dst_file):
-                        self.real_copy(src_file, dst_file)
+                        self.pfx_copy(src_file, dst_file)
                 for file_ in files:
                     src_file = os.path.join(src_dir, file_)
                     dst_file = os.path.join(dst_dir, file_)
                     if not os.path.exists(dst_file):
-                        self.real_copy(src_file, dst_file)
+                        self.pfx_copy(src_file, dst_file)
                         tracked_files.write(rel_dir + file_ + "\n")
 
     def update_builtin_libs(self, dll_copy_patterns):
@@ -328,7 +344,7 @@ class CompatData:
                     else:
                         os.makedirs(dst_dir, exist_ok=True)
                     dll_copy = any(fnmatch.fnmatch(file_, pattern) for pattern in dll_copy_patterns)
-                    self.real_copy(src_file, dst_file, dll_copy)
+                    self.pfx_copy(src_file, dst_file, dll_copy)
                     tracked_name = rel_dir + file_
                     if tracked_name not in prev_tracked_files:
                         tracked_files.write(tracked_name + "\n")
