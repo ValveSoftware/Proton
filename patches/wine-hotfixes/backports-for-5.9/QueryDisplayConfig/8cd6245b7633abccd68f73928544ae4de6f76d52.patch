@@ -1,0 +1,92 @@
+From 8cd6245b7633abccd68f73928544ae4de6f76d52 Mon Sep 17 00:00:00 2001
+From: Brendan Shanks <bshanks@codeweavers.com>
+Date: Thu, 28 May 2020 18:09:16 +0800
+Subject: [PATCH] winex11.drv: Set GPU LUID property for monitors.
+
+Signed-off-by: Brendan Shanks <bshanks@codeweavers.com>
+Signed-off-by: Zhiyi Zhang <zzhang@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/winex11.drv/display.c | 19 ++++++++++++++-----
+ 1 file changed, 14 insertions(+), 5 deletions(-)
+
+diff --git a/dlls/winex11.drv/display.c b/dlls/winex11.drv/display.c
+index daea434dabf..55533255f36 100644
+--- a/dlls/winex11.drv/display.c
++++ b/dlls/winex11.drv/display.c
+@@ -40,6 +40,7 @@
+ WINE_DEFAULT_DEBUG_CHANNEL(x11drv);
+ 
+ DEFINE_DEVPROPKEY(DEVPROPKEY_GPU_LUID, 0x60b193cb, 0x5276, 0x4d0f, 0x96, 0xfc, 0xf1, 0x73, 0xab, 0xad, 0x3e, 0xc6, 2);
++DEFINE_DEVPROPKEY(DEVPROPKEY_MONITOR_GPU_LUID, 0xca085853, 0x16ce, 0x48aa, 0xb1, 0x14, 0xde, 0x9c, 0x72, 0x33, 0x42, 0x23, 1);
+ 
+ /* Wine specific monitor properties */
+ DEFINE_DEVPROPKEY(WINE_DEVPROPKEY_MONITOR_STATEFLAGS, 0x233a9ef3, 0xafc4, 0x4abd, 0xb5, 0x64, 0xc3, 0x2f, 0x21, 0xf1, 0x53, 0x5b, 2);
+@@ -317,9 +318,10 @@ void X11DRV_DisplayDevices_Update(BOOL send_display_change)
+     EnumWindows(update_windows_on_display_change, (LPARAM)mask);
+ }
+ 
+-/* Initialize a GPU instance and return its GUID string in guid_string and driver value in driver parameter */
++/* Initialize a GPU instance.
++ * Return its GUID string in guid_string, driver value in driver parameter and LUID in gpu_luid */
+ static BOOL X11DRV_InitGpu(HDEVINFO devinfo, const struct x11drv_gpu *gpu, INT gpu_index, WCHAR *guid_string,
+-                           WCHAR *driver)
++                           WCHAR *driver, LUID *gpu_luid)
+ {
+     static const BOOL present = TRUE;
+     SP_DEVINFO_DATA device_data = {sizeof(device_data)};
+@@ -365,6 +367,7 @@ static BOOL X11DRV_InitGpu(HDEVINFO devinfo, const struct x11drv_gpu *gpu, INT g
+                                        DEVPROP_TYPE_UINT64, (const BYTE *)&luid, sizeof(luid), 0))
+             goto done;
+     }
++    *gpu_luid = luid;
+     TRACE("GPU id:0x%s name:%s LUID:%08x:%08x.\n", wine_dbgstr_longlong(gpu->id),
+           wine_dbgstr_w(gpu->name), luid.HighPart, luid.LowPart);
+ 
+@@ -480,7 +483,7 @@ static BOOL X11DRV_InitAdapter(HKEY video_hkey, INT video_index, INT gpu_index,
+ }
+ 
+ static BOOL X11DRV_InitMonitor(HDEVINFO devinfo, const struct x11drv_monitor *monitor, int monitor_index,
+-                               int video_index)
++                               int video_index, const LUID *gpu_luid)
+ {
+     SP_DEVINFO_DATA device_data = {sizeof(SP_DEVINFO_DATA)};
+     WCHAR bufferW[MAX_PATH];
+@@ -498,6 +501,11 @@ static BOOL X11DRV_InitMonitor(HDEVINFO devinfo, const struct x11drv_monitor *mo
+                                            (const BYTE *)monitor_hardware_idW, sizeof(monitor_hardware_idW)))
+         goto done;
+ 
++    /* Write DEVPROPKEY_MONITOR_GPU_LUID */
++    if (!SetupDiSetDevicePropertyW(devinfo, &device_data, &DEVPROPKEY_MONITOR_GPU_LUID,
++                                   DEVPROP_TYPE_INT64, (const BYTE *)gpu_luid, sizeof(*gpu_luid), 0))
++        goto done;
++
+     /* Create driver key */
+     hkey = SetupDiCreateDevRegKeyW(devinfo, &device_data, DICS_FLAG_GLOBAL, 0, DIREG_DRV, NULL, NULL);
+     RegCloseKey(hkey);
+@@ -599,6 +607,7 @@ void X11DRV_DisplayDevices_Init(BOOL force)
+     DWORD disposition = 0;
+     WCHAR guidW[40];
+     WCHAR driverW[1024];
++    LUID gpu_luid;
+ 
+     mutex = get_display_device_init_mutex();
+ 
+@@ -627,7 +636,7 @@ void X11DRV_DisplayDevices_Init(BOOL force)
+ 
+     for (gpu = 0; gpu < gpu_count; gpu++)
+     {
+-        if (!X11DRV_InitGpu(gpu_devinfo, &gpus[gpu], gpu, guidW, driverW))
++        if (!X11DRV_InitGpu(gpu_devinfo, &gpus[gpu], gpu, guidW, driverW, &gpu_luid))
+             goto done;
+ 
+         /* Initialize adapters */
+@@ -649,7 +658,7 @@ void X11DRV_DisplayDevices_Init(BOOL force)
+             for (monitor = 0; monitor < monitor_count; monitor++)
+             {
+                 TRACE("monitor: %#x %s\n", monitor, wine_dbgstr_w(monitors[monitor].name));
+-                if (!X11DRV_InitMonitor(monitor_devinfo, &monitors[monitor], monitor, video_index))
++                if (!X11DRV_InitMonitor(monitor_devinfo, &monitors[monitor], monitor, video_index, &gpu_luid))
+                     goto done;
+             }
+ 

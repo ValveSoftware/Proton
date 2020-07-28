@@ -1,0 +1,195 @@
+From 145cfce1135a7e59cc4c89cd05b572403f188161 Mon Sep 17 00:00:00 2001
+From: Zhiyi Zhang <zzhang@codeweavers.com>
+Date: Wed, 17 Jun 2020 20:02:04 +0800
+Subject: [PATCH] winex11.drv: Add a Vulkan UUID property for GPUs.
+
+A Vulkan UUID property is used to find the corresponding GPU in SetupAPI.
+
+Signed-off-by: Zhiyi Zhang <zzhang@codeweavers.com>
+Signed-off-by: Liam Middlebrook <lmiddlebrook@nvidia.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/winex11.drv/display.c | 15 ++++--
+ dlls/winex11.drv/x11drv.h  |  2 +
+ dlls/winex11.drv/xrandr.c  | 99 ++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 113 insertions(+), 3 deletions(-)
+
+diff --git a/dlls/winex11.drv/display.c b/dlls/winex11.drv/display.c
+index 1dedf32a52f..a6fe23ea68a 100644
+--- a/dlls/winex11.drv/display.c
++++ b/dlls/winex11.drv/display.c
+@@ -43,7 +43,8 @@ DEFINE_DEVPROPKEY(DEVPROPKEY_GPU_LUID, 0x60b193cb, 0x5276, 0x4d0f, 0x96, 0xfc, 0
+ DEFINE_DEVPROPKEY(DEVPROPKEY_MONITOR_GPU_LUID, 0xca085853, 0x16ce, 0x48aa, 0xb1, 0x14, 0xde, 0x9c, 0x72, 0x33, 0x42, 0x23, 1);
+ DEFINE_DEVPROPKEY(DEVPROPKEY_MONITOR_OUTPUT_ID, 0xca085853, 0x16ce, 0x48aa, 0xb1, 0x14, 0xde, 0x9c, 0x72, 0x33, 0x42, 0x23, 2);
+ 
+-/* Wine specific monitor properties */
++/* Wine specific properties */
++DEFINE_DEVPROPKEY(WINE_DEVPROPKEY_GPU_VULKAN_UUID, 0x233a9ef3, 0xafc4, 0x4abd, 0xb5, 0x64, 0xc3, 0x2f, 0x21, 0xf1, 0x53, 0x5c, 2);
+ DEFINE_DEVPROPKEY(WINE_DEVPROPKEY_MONITOR_STATEFLAGS, 0x233a9ef3, 0xafc4, 0x4abd, 0xb5, 0x64, 0xc3, 0x2f, 0x21, 0xf1, 0x53, 0x5b, 2);
+ DEFINE_DEVPROPKEY(WINE_DEVPROPKEY_MONITOR_RCMONITOR, 0x233a9ef3, 0xafc4, 0x4abd, 0xb5, 0x64, 0xc3, 0x2f, 0x21, 0xf1, 0x53, 0x5b, 3);
+ DEFINE_DEVPROPKEY(WINE_DEVPROPKEY_MONITOR_RCWORK, 0x233a9ef3, 0xafc4, 0x4abd, 0xb5, 0x64, 0xc3, 0x2f, 0x21, 0xf1, 0x53, 0x5b, 4);
+@@ -337,6 +338,8 @@ static BOOL X11DRV_InitGpu(HDEVINFO devinfo, const struct x11drv_gpu *gpu, INT g
+     BOOL ret = FALSE;
+     FILETIME filetime;
+ 
++    TRACE("GPU id:0x%s name:%s.\n", wine_dbgstr_longlong(gpu->id), wine_dbgstr_w(gpu->name));
++
+     sprintfW(instanceW, gpu_instance_fmtW, gpu->vendor_id, gpu->device_id, gpu->subsys_id, gpu->revision_id, gpu_index);
+     if (!SetupDiOpenDeviceInfoW(devinfo, instanceW, NULL, 0, &device_data))
+     {
+@@ -369,8 +372,14 @@ static BOOL X11DRV_InitGpu(HDEVINFO devinfo, const struct x11drv_gpu *gpu, INT g
+             goto done;
+     }
+     *gpu_luid = luid;
+-    TRACE("GPU id:0x%s name:%s LUID:%08x:%08x.\n", wine_dbgstr_longlong(gpu->id),
+-          wine_dbgstr_w(gpu->name), luid.HighPart, luid.LowPart);
++    TRACE("LUID:%08x:%08x.\n", luid.HighPart, luid.LowPart);
++
++    /* Write WINE_DEVPROPKEY_GPU_VULKAN_UUID property */
++    if (!SetupDiSetDevicePropertyW(devinfo, &device_data, &WINE_DEVPROPKEY_GPU_VULKAN_UUID,
++                                   DEVPROP_TYPE_GUID, (const BYTE *)&gpu->vulkan_uuid,
++                                   sizeof(gpu->vulkan_uuid), 0))
++        goto done;
++    TRACE("Vulkan UUID:%s.\n", wine_dbgstr_guid(&gpu->vulkan_uuid));
+ 
+     /* Open driver key.
+      * This is where HKLM\System\CurrentControlSet\Control\Video\{GPU GUID}\{Adapter Index} links to */
+diff --git a/dlls/winex11.drv/x11drv.h b/dlls/winex11.drv/x11drv.h
+index a9eaed20cab..cfce09bf11d 100644
+--- a/dlls/winex11.drv/x11drv.h
++++ b/dlls/winex11.drv/x11drv.h
+@@ -690,6 +690,8 @@ struct x11drv_gpu
+     UINT device_id;
+     UINT subsys_id;
+     UINT revision_id;
++    /* Vulkan device UUID */
++    GUID vulkan_uuid;
+ };
+ 
+ /* Represent an adapter in EnumDisplayDevices context */
+diff --git a/dlls/winex11.drv/xrandr.c b/dlls/winex11.drv/xrandr.c
+index 76e76806c55..f61a5b190e9 100644
+--- a/dlls/winex11.drv/xrandr.c
++++ b/dlls/winex11.drv/xrandr.c
+@@ -35,8 +35,13 @@ WINE_DECLARE_DEBUG_CHANNEL(winediag);
+ #include <X11/extensions/Xrandr.h>
+ #include "x11drv.h"
+ 
++#define VK_NO_PROTOTYPES
++#define WINE_VK_HOST
++
+ #include "wine/heap.h"
+ #include "wine/unicode.h"
++#include "wine/vulkan.h"
++#include "wine/vulkan_driver.h"
+ 
+ static void *xrandr_handle;
+ 
+@@ -680,6 +685,99 @@ static BOOL is_crtc_primary( RECT primary, const XRRCrtcInfo *crtc )
+            crtc->y + crtc->height == primary.bottom;
+ }
+ 
++VK_DEFINE_NON_DISPATCHABLE_HANDLE(VkDisplayKHR)
++
++static void get_vulkan_device_uuid( GUID *uuid, const XRRProviderInfo *provider_info )
++{
++    static const char *extensions[] =
++    {
++        VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME,
++        "VK_EXT_acquire_xlib_display",
++        "VK_EXT_direct_mode_display",
++    };
++    const struct vulkan_funcs *vulkan_funcs = get_vulkan_driver( WINE_VULKAN_DRIVER_VERSION );
++    VkResult (*pvkGetRandROutputDisplayEXT)( VkPhysicalDevice, Display *, RROutput, VkDisplayKHR * );
++    PFN_vkGetPhysicalDeviceProperties2 pvkGetPhysicalDeviceProperties2;
++    PFN_vkEnumeratePhysicalDevices pvkEnumeratePhysicalDevices;
++    uint32_t device_count, device_idx, output_idx;
++    VkPhysicalDevice *vk_physical_devices = NULL;
++    VkPhysicalDeviceProperties2 properties2;
++    VkInstanceCreateInfo create_info;
++    VkPhysicalDeviceIDProperties id;
++    VkInstance vk_instance = NULL;
++    VkDisplayKHR vk_display;
++    VkResult vr;
++
++    if (!vulkan_funcs)
++        goto done;
++
++    memset( &create_info, 0, sizeof(create_info) );
++    create_info.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
++    create_info.enabledExtensionCount = ARRAY_SIZE(extensions);
++    create_info.ppEnabledExtensionNames = extensions;
++
++    vr = vulkan_funcs->p_vkCreateInstance( &create_info, NULL, &vk_instance );
++    if (vr != VK_SUCCESS)
++    {
++        WARN("Failed to create a Vulkan instance, vr %d.\n", vr);
++        goto done;
++    }
++
++#define LOAD_VK_FUNC(f)                                                             \
++    if (!(p##f = (void *)vulkan_funcs->p_vkGetInstanceProcAddr( vk_instance, #f ))) \
++    {                                                                               \
++        WARN("Failed to load " #f ".\n");                                           \
++        goto done;                                                                  \
++    }
++
++    LOAD_VK_FUNC(vkEnumeratePhysicalDevices)
++    LOAD_VK_FUNC(vkGetPhysicalDeviceProperties2)
++    LOAD_VK_FUNC(vkGetRandROutputDisplayEXT)
++#undef LOAD_VK_FUNC
++
++    vr = pvkEnumeratePhysicalDevices( vk_instance, &device_count, NULL );
++    if (vr != VK_SUCCESS || !device_count)
++    {
++        WARN("No Vulkan device found, vr %d, device_count %d.\n", vr, device_count);
++        goto done;
++    }
++
++    if (!(vk_physical_devices = heap_calloc( device_count, sizeof(*vk_physical_devices) )))
++        goto done;
++
++    vr = pvkEnumeratePhysicalDevices( vk_instance, &device_count, vk_physical_devices );
++    if (vr != VK_SUCCESS)
++    {
++        WARN("vkEnumeratePhysicalDevices failed, vr %d.\n", vr);
++        goto done;
++    }
++
++    for (device_idx = 0; device_idx < device_count; ++device_idx)
++    {
++        for (output_idx = 0; output_idx < provider_info->noutputs; ++output_idx)
++        {
++            vr = pvkGetRandROutputDisplayEXT( vk_physical_devices[device_idx], gdi_display,
++                                              provider_info->outputs[output_idx], &vk_display );
++            if (vr != VK_SUCCESS || vk_display == VK_NULL_HANDLE)
++                continue;
++
++            memset( &id, 0, sizeof(id) );
++            id.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_ID_PROPERTIES;
++            properties2.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROPERTIES_2;
++            properties2.pNext = &id;
++
++            pvkGetPhysicalDeviceProperties2( vk_physical_devices[device_idx], &properties2 );
++            memcpy( uuid, id.deviceUUID, sizeof(id.deviceUUID) );
++            goto done;
++        }
++    }
++
++done:
++    heap_free( vk_physical_devices );
++    if (vk_instance)
++        vulkan_funcs->p_vkDestroyInstance( vk_instance, NULL );
++}
++
+ static BOOL xrandr14_get_gpus( struct x11drv_gpu **new_gpus, int *count )
+ {
+     static const WCHAR wine_adapterW[] = {'W','i','n','e',' ','A','d','a','p','t','e','r',0};
+@@ -742,6 +840,7 @@ static BOOL xrandr14_get_gpus( struct x11drv_gpu **new_gpus, int *count )
+         }
+ 
+         gpus[i].id = provider_resources->providers[i];
++        get_vulkan_device_uuid( &gpus[i].vulkan_uuid, provider_info );
+         MultiByteToWideChar( CP_UTF8, 0, provider_info->name, -1, gpus[i].name, ARRAY_SIZE(gpus[i].name) );
+         /* PCI IDs are all zero because there is currently no portable way to get it via XRandR. Some AMD drivers report
+          * their PCI address in the name but many others don't */

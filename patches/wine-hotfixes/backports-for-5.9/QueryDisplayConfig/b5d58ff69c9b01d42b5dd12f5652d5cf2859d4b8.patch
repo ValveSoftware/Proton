@@ -1,0 +1,63 @@
+From b5d58ff69c9b01d42b5dd12f5652d5cf2859d4b8 Mon Sep 17 00:00:00 2001
+From: Zhiyi Zhang <zzhang@codeweavers.com>
+Date: Thu, 11 Jun 2020 17:21:52 +0800
+Subject: [PATCH] explorer: Initialize registry display settings for all
+ adapters.
+
+Signed-off-by: Zhiyi Zhang <zzhang@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ programs/explorer/desktop.c | 29 +++++++++++++++++++++++------
+ 1 file changed, 23 insertions(+), 6 deletions(-)
+
+diff --git a/programs/explorer/desktop.c b/programs/explorer/desktop.c
+index 8a8e5bc0712..e7acb2db772 100644
+--- a/programs/explorer/desktop.c
++++ b/programs/explorer/desktop.c
+@@ -22,6 +22,8 @@
+ #include <stdio.h>
+ 
+ #define COBJMACROS
++#define NONAMELESSUNION
++#define NONAMELESSSTRUCT
+ #define OEMRESOURCE
+ #include <windows.h>
+ #include <rpc.h>
+@@ -881,16 +883,31 @@ static HMODULE load_graphics_driver( const WCHAR *driver, const GUID *guid )
+ 
+ static void initialize_display_settings(void)
+ {
++    DISPLAY_DEVICEW ddW;
+     DEVMODEW dmW;
++    DWORD i = 0;
+ 
+     /* Store current display mode in the registry */
+-    if (EnumDisplaySettingsExW( NULL, ENUM_CURRENT_SETTINGS, &dmW, 0 ))
++    ddW.cb = sizeof(ddW);
++    dmW.dmSize = sizeof(dmW);
++    while (EnumDisplayDevicesW( NULL, i++, &ddW, 0 ))
+     {
+-        WINE_TRACE( "Current display mode %ux%u %u bpp %u Hz\n", dmW.dmPelsWidth,
+-                    dmW.dmPelsHeight, dmW.dmBitsPerPel, dmW.dmDisplayFrequency );
+-        ChangeDisplaySettingsExW( NULL, &dmW, 0,
+-                                  CDS_GLOBAL | CDS_NORESET | CDS_UPDATEREGISTRY,
+-                                  NULL );
++        if (!EnumDisplaySettingsExW( ddW.DeviceName, ENUM_CURRENT_SETTINGS, &dmW, 0))
++        {
++            WINE_ERR( "Failed to query current display settings for %s.\n",
++                      wine_dbgstr_w( ddW.DeviceName ) );
++            continue;
++        }
++
++        WINE_TRACE( "Device %s current display mode %ux%u %uBits %uHz at %d,%d.\n",
++                    wine_dbgstr_w( ddW.DeviceName ), dmW.dmPelsWidth, dmW.dmPelsHeight,
++                    dmW.dmBitsPerPel, dmW.dmDisplayFrequency, dmW.u1.s2.dmPosition.x,
++                    dmW.u1.s2.dmPosition.y );
++
++        if (ChangeDisplaySettingsExW( ddW.DeviceName, &dmW, 0,
++                                      CDS_GLOBAL | CDS_NORESET | CDS_UPDATEREGISTRY, 0 ))
++            WINE_ERR( "Failed to initialize registry display settings for %s.\n",
++                       wine_dbgstr_w( ddW.DeviceName ) );
+     }
+ }
+ 

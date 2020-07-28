@@ -1,0 +1,41 @@
+From 6f9d20806e821ab07c8adf81ae6630fae94b00ef Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Thu, 18 Jun 2020 17:28:50 +0300
+Subject: [PATCH] winex11.drv: Handle X error from
+ vkGetRandROutputDisplayEXT().
+
+Nvidia implementation of vkGetRandROutputDisplayEXT() generates X exception
+when rrOutput is from different provider (or if rrOutput is just
+invalid). That can happen on certain multiple GPU configurations, on which
+Wine is currently unable to initialize display driver and thus create
+any window.
+
+According to Vulkan spec, vkGetRandROutputDisplayEXT is supposed to just
+return VK_NULL_HANDLE if there is no corresponding VkDisplayKHR. But it is
+probably better to workaround the problem to avoid long standing regression.
+
+Wine-Bug: https://bugs.winehq.org/show_bug.cgi?id=49407
+Signed-off-by: Paul Gofman <pgofman@codeweavers.com>
+Signed-off-by: Liam Middlebrook <lmiddlebrook@nvidia.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/winex11.drv/xrandr.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/dlls/winex11.drv/xrandr.c b/dlls/winex11.drv/xrandr.c
+index f61a5b190e9..b1a43e48eab 100644
+--- a/dlls/winex11.drv/xrandr.c
++++ b/dlls/winex11.drv/xrandr.c
+@@ -756,9 +756,11 @@ static void get_vulkan_device_uuid( GUID *uuid, const XRRProviderInfo *provider_
+     {
+         for (output_idx = 0; output_idx < provider_info->noutputs; ++output_idx)
+         {
++            X11DRV_expect_error( gdi_display, XRandRErrorHandler, NULL );
+             vr = pvkGetRandROutputDisplayEXT( vk_physical_devices[device_idx], gdi_display,
+                                               provider_info->outputs[output_idx], &vk_display );
+-            if (vr != VK_SUCCESS || vk_display == VK_NULL_HANDLE)
++            XSync( gdi_display, FALSE );
++            if (X11DRV_check_error() || vr != VK_SUCCESS || vk_display == VK_NULL_HANDLE)
+                 continue;
+ 
+             memset( &id, 0, sizeof(id) );

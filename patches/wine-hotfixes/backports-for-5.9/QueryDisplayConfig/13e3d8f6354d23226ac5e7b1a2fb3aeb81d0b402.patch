@@ -1,0 +1,67 @@
+From 13e3d8f6354d23226ac5e7b1a2fb3aeb81d0b402 Mon Sep 17 00:00:00 2001
+From: Zhiyi Zhang <zzhang@codeweavers.com>
+Date: Thu, 11 Jun 2020 17:22:24 +0800
+Subject: [PATCH] winemac.drv: Use helpers to get and release display device
+ init mutex.
+
+Signed-off-by: Zhiyi Zhang <zzhang@codeweavers.com>
+Signed-off-by: Ken Thomases <ken@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/winemac.drv/display.c | 22 +++++++++++++++++-----
+ 1 file changed, 17 insertions(+), 5 deletions(-)
+
+diff --git a/dlls/winemac.drv/display.c b/dlls/winemac.drv/display.c
+index 001906efdf8..c024885e2d3 100644
+--- a/dlls/winemac.drv/display.c
++++ b/dlls/winemac.drv/display.c
+@@ -136,6 +136,21 @@ static CRITICAL_SECTION modes_section = { &critsect_debug, -1, 0, 0, 0, 0 };
+ 
+ static BOOL inited_original_display_mode;
+ 
++static HANDLE get_display_device_init_mutex(void)
++{
++    static const WCHAR init_mutexW[] = {'d','i','s','p','l','a','y','_','d','e','v','i','c','e','_','i','n','i','t',0};
++    HANDLE mutex = CreateMutexW(NULL, FALSE, init_mutexW);
++
++    WaitForSingleObject(mutex, INFINITE);
++    return mutex;
++}
++
++static void release_display_device_init_mutex(HANDLE mutex)
++{
++    ReleaseMutex(mutex);
++    CloseHandle(mutex);
++}
++
+ static BOOL get_display_device_reg_key(char *key, unsigned len)
+ {
+     static const char display_device_guid_prop[] = "__wine_display_device_guid";
+@@ -1675,7 +1690,6 @@ static void cleanup_devices(void)
+  */
+ void macdrv_init_display_devices(BOOL force)
+ {
+-    static const WCHAR init_mutexW[] = {'d','i','s','p','l','a','y','_','d','e','v','i','c','e','_','i','n','i','t',0};
+     HANDLE mutex;
+     struct macdrv_gpu *gpus = NULL;
+     struct macdrv_adapter *adapters = NULL;
+@@ -1691,8 +1705,7 @@ void macdrv_init_display_devices(BOOL force)
+     LUID gpu_luid;
+     UINT output_id = 0;
+ 
+-    mutex = CreateMutexW(NULL, FALSE, init_mutexW);
+-    WaitForSingleObject(mutex, INFINITE);
++    mutex = get_display_device_init_mutex();
+ 
+     if (RegCreateKeyExW(HKEY_LOCAL_MACHINE, video_keyW, 0, NULL, REG_OPTION_VOLATILE, KEY_ALL_ACCESS, NULL, &video_hkey,
+                         &disposition))
+@@ -1760,8 +1773,7 @@ void macdrv_init_display_devices(BOOL force)
+     SetupDiDestroyDeviceInfoList(gpu_devinfo);
+     RegCloseKey(video_hkey);
+ 
+-    ReleaseMutex(mutex);
+-    CloseHandle(mutex);
++    release_display_device_init_mutex(mutex);
+ 
+     macdrv_free_gpus(gpus);
+     macdrv_free_adapters(adapters);

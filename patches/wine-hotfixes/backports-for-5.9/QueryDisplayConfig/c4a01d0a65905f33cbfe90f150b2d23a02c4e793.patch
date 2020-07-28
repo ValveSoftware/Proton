@@ -1,0 +1,42 @@
+From c4a01d0a65905f33cbfe90f150b2d23a02c4e793 Mon Sep 17 00:00:00 2001
+From: Zhiyi Zhang <zzhang@codeweavers.com>
+Date: Fri, 12 Jun 2020 15:29:33 +0800
+Subject: [PATCH] winex11.drv: Use the default frequency in
+ ChangeDisplaySettingsExW() if dmDisplayFrequency is 1.
+
+0 or 1 in dmDisplayFrequency means to use the default frequency.
+
+Fix Disgaea PC and Ostriv failing to launch in exclusive fullscreen mode.
+
+Signed-off-by: Zhiyi Zhang <zzhang@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/user32/tests/monitor.c | 1 -
+ dlls/winex11.drv/settings.c | 2 +-
+ 2 files changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/dlls/user32/tests/monitor.c b/dlls/user32/tests/monitor.c
+index 482e2f1301f..afde67cd034 100644
+--- a/dlls/user32/tests/monitor.c
++++ b/dlls/user32/tests/monitor.c
+@@ -448,7 +448,6 @@ static void test_ChangeDisplaySettingsEx(void)
+         dm.dmDisplayFrequency = vid_modes_test[i].freq;
+         dm.dmFields           = vid_modes_test[i].fields;
+         res = ChangeDisplaySettingsExA(NULL, &dm, NULL, CDS_TEST, NULL);
+-        todo_wine_if(i == 2)
+         ok(vid_modes_test[i].must_succeed ?
+            (res == DISP_CHANGE_SUCCESSFUL || res == DISP_CHANGE_RESTART) :
+            (res == DISP_CHANGE_SUCCESSFUL || res == DISP_CHANGE_RESTART ||
+diff --git a/dlls/winex11.drv/settings.c b/dlls/winex11.drv/settings.c
+index c3f31d0430d..bbbb6fdf0a3 100644
+--- a/dlls/winex11.drv/settings.c
++++ b/dlls/winex11.drv/settings.c
+@@ -420,7 +420,7 @@ LONG CDECL X11DRV_ChangeDisplaySettingsEx( LPCWSTR devname, LPDEVMODEW devmode,
+                 continue;
+         }
+         if ((devmode->dmFields & DM_DISPLAYFREQUENCY) &&
+-            devmode->dmDisplayFrequency != 0)
++            devmode->dmDisplayFrequency != 0 && devmode->dmDisplayFrequency != 1)
+         {
+             if (devmode->dmDisplayFrequency != dd_modes[i].refresh_rate)
+                 continue;

@@ -1,0 +1,65 @@
+From 27ed9c95a2bbdbf7d86309cf1b9c9fefc157a0fe Mon Sep 17 00:00:00 2001
+From: Brendan Shanks <bshanks@codeweavers.com>
+Date: Tue, 14 Jul 2020 13:34:23 -0700
+Subject: [PATCH] user32: Create separate FIXME() messages for each packet type
+ in DisplayConfigGetDeviceInfo().
+
+Signed-off-by: Brendan Shanks <bshanks@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/user32/sysparams.c | 14 +++++++++++++-
+ 1 file changed, 13 insertions(+), 1 deletion(-)
+
+diff --git a/dlls/user32/sysparams.c b/dlls/user32/sysparams.c
+index 8b2b3381dc3..3ec6c54023b 100644
+--- a/dlls/user32/sysparams.c
++++ b/dlls/user32/sysparams.c
+@@ -4815,7 +4815,7 @@ LONG WINAPI QueryDisplayConfig(UINT32 flags, UINT32 *numpathelements, DISPLAYCON
+  */
+ LONG WINAPI DisplayConfigGetDeviceInfo(DISPLAYCONFIG_DEVICE_INFO_HEADER *packet)
+ {
+-    FIXME("stub: %p\n", packet);
++    TRACE("(%p)\n", packet);
+ 
+     if (!packet || packet->size < sizeof(*packet))
+         return ERROR_GEN_FAILURE;
+@@ -4825,6 +4825,9 @@ LONG WINAPI DisplayConfigGetDeviceInfo(DISPLAYCONFIG_DEVICE_INFO_HEADER *packet)
+     case DISPLAYCONFIG_DEVICE_INFO_GET_SOURCE_NAME:
+     {
+         DISPLAYCONFIG_SOURCE_DEVICE_NAME *source_name = (DISPLAYCONFIG_SOURCE_DEVICE_NAME *)packet;
++
++        FIXME("DISPLAYCONFIG_DEVICE_INFO_GET_SOURCE_NAME: stub\n");
++
+         if (packet->size < sizeof(*source_name))
+             return ERROR_INVALID_PARAMETER;
+ 
+@@ -4833,6 +4836,9 @@ LONG WINAPI DisplayConfigGetDeviceInfo(DISPLAYCONFIG_DEVICE_INFO_HEADER *packet)
+     case DISPLAYCONFIG_DEVICE_INFO_GET_TARGET_NAME:
+     {
+         DISPLAYCONFIG_TARGET_DEVICE_NAME *target_name = (DISPLAYCONFIG_TARGET_DEVICE_NAME *)packet;
++
++        FIXME("DISPLAYCONFIG_DEVICE_INFO_GET_TARGET_NAME: stub\n");
++
+         if (packet->size < sizeof(*target_name))
+             return ERROR_INVALID_PARAMETER;
+ 
+@@ -4841,6 +4847,9 @@ LONG WINAPI DisplayConfigGetDeviceInfo(DISPLAYCONFIG_DEVICE_INFO_HEADER *packet)
+     case DISPLAYCONFIG_DEVICE_INFO_GET_TARGET_PREFERRED_MODE:
+     {
+         DISPLAYCONFIG_TARGET_PREFERRED_MODE *preferred_mode = (DISPLAYCONFIG_TARGET_PREFERRED_MODE *)packet;
++
++        FIXME("DISPLAYCONFIG_DEVICE_INFO_GET_TARGET_PREFERRED_MODE: stub\n");
++
+         if (packet->size < sizeof(*preferred_mode))
+             return ERROR_INVALID_PARAMETER;
+ 
+@@ -4849,6 +4858,9 @@ LONG WINAPI DisplayConfigGetDeviceInfo(DISPLAYCONFIG_DEVICE_INFO_HEADER *packet)
+     case DISPLAYCONFIG_DEVICE_INFO_GET_ADAPTER_NAME:
+     {
+         DISPLAYCONFIG_ADAPTER_NAME *adapter_name = (DISPLAYCONFIG_ADAPTER_NAME *)packet;
++
++        FIXME("DISPLAYCONFIG_DEVICE_INFO_GET_ADAPTER_NAME: stub\n");
++
+         if (packet->size < sizeof(*adapter_name))
+             return ERROR_INVALID_PARAMETER;
+ 

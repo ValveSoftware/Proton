@@ -1,0 +1,32 @@
+From 894c6566ab25d0fb4a1a6d7e061041fc14906662 Mon Sep 17 00:00:00 2001
+From: Brendan Shanks <bshanks@codeweavers.com>
+Date: Tue, 14 Jul 2020 13:34:25 -0700
+Subject: [PATCH] user32/tests: Test DisplayConfigGetDeviceInfo()
+ GET_SOURCE_NAME with valid ID and invalid LUID.
+
+Signed-off-by: Brendan Shanks <bshanks@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/user32/tests/monitor.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/dlls/user32/tests/monitor.c b/dlls/user32/tests/monitor.c
+index 8fe4701d003..6e8c9a275d7 100644
+--- a/dlls/user32/tests/monitor.c
++++ b/dlls/user32/tests/monitor.c
+@@ -1309,6 +1309,15 @@ static void test_QueryDisplayConfig_result(UINT32 flags,
+         ok(!ret, "Expected 0, got %d\n", ret);
+         ok(source_name.viewGdiDeviceName[0] != '\0', "Expected GDI device name, got empty string\n");
+ 
++        /* Test with an invalid adapter LUID */
++        source_name.header.type = DISPLAYCONFIG_DEVICE_INFO_GET_SOURCE_NAME;
++        source_name.header.size = sizeof(source_name);
++        source_name.header.adapterId.LowPart = 0xFFFF;
++        source_name.header.adapterId.HighPart = 0xFFFF;
++        source_name.header.id = pi[i].sourceInfo.id;
++        ret = pDisplayConfigGetDeviceInfo(&source_name.header);
++        ok(ret == ERROR_GEN_FAILURE, "Expected GEN_FAILURE, got %d\n", ret);
++
+         todo_wine {
+         target_name.header.type = DISPLAYCONFIG_DEVICE_INFO_GET_TARGET_NAME;
+         target_name.header.size = sizeof(target_name);

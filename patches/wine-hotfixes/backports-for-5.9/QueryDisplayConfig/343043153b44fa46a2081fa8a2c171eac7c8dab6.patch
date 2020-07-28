@@ -1,0 +1,31 @@
+From 343043153b44fa46a2081fa8a2c171eac7c8dab6 Mon Sep 17 00:00:00 2001
+From: Zhiyi Zhang <zzhang@codeweavers.com>
+Date: Wed, 3 Jun 2020 22:28:46 +0800
+Subject: [PATCH] winemac.drv: Set DM_POSITION and DM_DISPLAYORIENTATION when
+ reporting registry display settings.
+
+Set DM_POSITION and DM_DISPLAYORIENTATION when calling
+EnumDisplaySettings(ENUM_REGISTRY_SETTINGS). DM_DISPLAYFIXEDOUTPUT
+is not set because it is not necessarily reported according to tests.
+
+Signed-off-by: Zhiyi Zhang <zzhang@codeweavers.com>
+Signed-off-by: Ken Thomases <ken@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/winemac.drv/display.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/dlls/winemac.drv/display.c b/dlls/winemac.drv/display.c
+index 050bf05da92..1a3cc349b52 100644
+--- a/dlls/winemac.drv/display.c
++++ b/dlls/winemac.drv/display.c
+@@ -193,7 +193,9 @@ static BOOL read_registry_settings(DEVMODEW *dm)
+     dm->dmFields |= DM_DISPLAYFLAGS;
+     query_value("DefaultSettings.XPanning", &dm->dmPosition.x);
+     query_value("DefaultSettings.YPanning", &dm->dmPosition.y);
++    dm->dmFields |= DM_POSITION;
+     query_value("DefaultSettings.Orientation", &dm->dmDisplayOrientation);
++    dm->dmFields |= DM_DISPLAYORIENTATION;
+     query_value("DefaultSettings.FixedOutput", &dm->dmDisplayFixedOutput);
+ 
+ #undef query_value

@@ -1,0 +1,46 @@
+From 2affb854e524dde962f983a36628f22fe9e165c7 Mon Sep 17 00:00:00 2001
+From: Zhiyi Zhang <zzhang@codeweavers.com>
+Date: Tue, 16 Jun 2020 22:17:36 +0800
+Subject: [PATCH] user32: Change slave to a more neutral word.
+
+Signed-off-by: Zhiyi Zhang <zzhang@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/user32/sysparams.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/dlls/user32/sysparams.c b/dlls/user32/sysparams.c
+index 82ed8513646..768aeb5d4fb 100644
+--- a/dlls/user32/sysparams.c
++++ b/dlls/user32/sysparams.c
+@@ -3910,7 +3910,7 @@ static BOOL update_monitor_cache(void)
+     HANDLE mutex = NULL;
+     DWORD state_flags;
+     BOOL ret = FALSE;
+-    BOOL mirrored_slave;
++    BOOL is_replica;
+     DWORD i = 0, j;
+     DWORD type;
+ 
+@@ -3956,17 +3956,17 @@ static BOOL update_monitor_cache(void)
+                                         (BYTE *)&monitors[monitor_count].rcMonitor, sizeof(RECT), NULL, 0 ))
+             goto fail;
+ 
+-        /* Mirrored slave monitors also don't get enumerated */
+-        mirrored_slave = FALSE;
++        /* Replicas in mirroring monitor sets don't get enumerated */
++        is_replica = FALSE;
+         for (j = 0; j < monitor_count; j++)
+         {
+             if (EqualRect(&monitors[j].rcMonitor, &monitors[monitor_count].rcMonitor))
+             {
+-                mirrored_slave = TRUE;
++                is_replica = TRUE;
+                 break;
+             }
+         }
+-        if (mirrored_slave)
++        if (is_replica)
+             continue;
+ 
+         if (!SetupDiGetDevicePropertyW( devinfo, &device_data, &WINE_DEVPROPKEY_MONITOR_RCWORK, &type,

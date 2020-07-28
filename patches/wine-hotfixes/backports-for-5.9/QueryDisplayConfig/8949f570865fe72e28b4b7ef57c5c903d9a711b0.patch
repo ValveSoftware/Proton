@@ -1,0 +1,107 @@
+From 8949f570865fe72e28b4b7ef57c5c903d9a711b0 Mon Sep 17 00:00:00 2001
+From: Brendan Shanks <bshanks@codeweavers.com>
+Date: Tue, 14 Jul 2020 13:34:24 -0700
+Subject: [PATCH] user32: Handle GET_SOURCE_NAME in
+ DisplayConfigGetDeviceInfo().
+
+Signed-off-by: Brendan Shanks <bshanks@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/user32/sysparams.c     | 48 +++++++++++++++++++++++++++++++++++--
+ dlls/user32/tests/monitor.c |  2 --
+ 2 files changed, 46 insertions(+), 4 deletions(-)
+
+diff --git a/dlls/user32/sysparams.c b/dlls/user32/sysparams.c
+index 3ec6c54023b..6c0c3e76db7 100644
+--- a/dlls/user32/sysparams.c
++++ b/dlls/user32/sysparams.c
+@@ -4815,23 +4815,67 @@ LONG WINAPI QueryDisplayConfig(UINT32 flags, UINT32 *numpathelements, DISPLAYCON
+  */
+ LONG WINAPI DisplayConfigGetDeviceInfo(DISPLAYCONFIG_DEVICE_INFO_HEADER *packet)
+ {
++    LONG ret = ERROR_GEN_FAILURE;
++    HANDLE mutex;
++    HDEVINFO devinfo;
++    SP_DEVINFO_DATA device_data = {sizeof(device_data)};
++    DWORD index = 0, type;
++    LUID gpu_luid;
++
+     TRACE("(%p)\n", packet);
+ 
+     if (!packet || packet->size < sizeof(*packet))
+         return ERROR_GEN_FAILURE;
++    wait_graphics_driver_ready();
+ 
+     switch (packet->type)
+     {
+     case DISPLAYCONFIG_DEVICE_INFO_GET_SOURCE_NAME:
+     {
+         DISPLAYCONFIG_SOURCE_DEVICE_NAME *source_name = (DISPLAYCONFIG_SOURCE_DEVICE_NAME *)packet;
++        WCHAR device_name[CCHDEVICENAME];
++        LONG source_id;
+ 
+-        FIXME("DISPLAYCONFIG_DEVICE_INFO_GET_SOURCE_NAME: stub\n");
++        TRACE("DISPLAYCONFIG_DEVICE_INFO_GET_SOURCE_NAME\n");
+ 
+         if (packet->size < sizeof(*source_name))
+             return ERROR_INVALID_PARAMETER;
+ 
+-        return ERROR_NOT_SUPPORTED;
++        mutex = get_display_device_init_mutex();
++        devinfo = SetupDiGetClassDevsW(&GUID_DEVCLASS_MONITOR, DISPLAY, NULL, DIGCF_PRESENT);
++        if (devinfo == INVALID_HANDLE_VALUE)
++        {
++            release_display_device_init_mutex(mutex);
++            return ret;
++        }
++
++        while (SetupDiEnumDeviceInfo(devinfo, index++, &device_data))
++        {
++            if (!SetupDiGetDevicePropertyW(devinfo, &device_data, &DEVPROPKEY_MONITOR_GPU_LUID,
++                                           &type, (BYTE *)&gpu_luid, sizeof(gpu_luid), NULL, 0))
++                continue;
++
++            if ((source_name->header.adapterId.LowPart != gpu_luid.LowPart) ||
++                (source_name->header.adapterId.HighPart != gpu_luid.HighPart))
++                continue;
++
++            /* QueryDisplayConfig() derives the source ID from the adapter name. */
++            if (!SetupDiGetDevicePropertyW(devinfo, &device_data, &WINE_DEVPROPKEY_MONITOR_ADAPTERNAME,
++                                           &type, (BYTE *)device_name, sizeof(device_name), NULL, 0))
++                continue;
++
++            source_id = strtolW(device_name + ARRAY_SIZE(ADAPTER_PREFIX), NULL, 10);
++            source_id--;
++            if (source_name->header.id != source_id)
++                continue;
++
++            lstrcpyW(source_name->viewGdiDeviceName, device_name);
++            ret = ERROR_SUCCESS;
++            break;
++        }
++        SetupDiDestroyDeviceInfoList(devinfo);
++        release_display_device_init_mutex(mutex);
++        return ret;
+     }
+     case DISPLAYCONFIG_DEVICE_INFO_GET_TARGET_NAME:
+     {
+diff --git a/dlls/user32/tests/monitor.c b/dlls/user32/tests/monitor.c
+index f469111a26c..8fe4701d003 100644
+--- a/dlls/user32/tests/monitor.c
++++ b/dlls/user32/tests/monitor.c
+@@ -1300,7 +1300,6 @@ static void test_QueryDisplayConfig_result(UINT32 flags,
+ 
+     for (i = 0; i < paths; i++)
+     {
+-        todo_wine {
+         source_name.header.type = DISPLAYCONFIG_DEVICE_INFO_GET_SOURCE_NAME;
+         source_name.header.size = sizeof(source_name);
+         source_name.header.adapterId = pi[i].sourceInfo.adapterId;
+@@ -1309,7 +1308,6 @@ static void test_QueryDisplayConfig_result(UINT32 flags,
+         ret = pDisplayConfigGetDeviceInfo(&source_name.header);
+         ok(!ret, "Expected 0, got %d\n", ret);
+         ok(source_name.viewGdiDeviceName[0] != '\0', "Expected GDI device name, got empty string\n");
+-        }
+ 
+         todo_wine {
+         target_name.header.type = DISPLAYCONFIG_DEVICE_INFO_GET_TARGET_NAME;

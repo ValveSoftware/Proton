@@ -1,0 +1,72 @@
+From 3a3c7cbd209e23cc6ee88299b3ba877ab20a767f Mon Sep 17 00:00:00 2001
+From: Brendan Shanks <bshanks@codeweavers.com>
+Date: Mon, 6 Jul 2020 10:46:18 -0700
+Subject: [PATCH] winex11.drv: Retrieve PCI IDs and device name from Vulkan.
+
+Signed-off-by: Brendan Shanks <bshanks@codeweavers.com>
+Signed-off-by: Zhiyi Zhang <zzhang@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/winex11.drv/xrandr.c | 21 +++++++++++++++------
+ 1 file changed, 15 insertions(+), 6 deletions(-)
+
+diff --git a/dlls/winex11.drv/xrandr.c b/dlls/winex11.drv/xrandr.c
+index 14574e198f5..141c2ca17f6 100644
+--- a/dlls/winex11.drv/xrandr.c
++++ b/dlls/winex11.drv/xrandr.c
+@@ -687,7 +687,7 @@ static BOOL is_crtc_primary( RECT primary, const XRRCrtcInfo *crtc )
+ 
+ VK_DEFINE_NON_DISPATCHABLE_HANDLE(VkDisplayKHR)
+ 
+-static void get_vulkan_device_uuid( GUID *uuid, const XRRProviderInfo *provider_info )
++static BOOL get_gpu_properties_from_vulkan( struct x11drv_gpu *gpu, const XRRProviderInfo *provider_info )
+ {
+     static const char *extensions[] =
+     {
+@@ -706,6 +706,7 @@ static void get_vulkan_device_uuid( GUID *uuid, const XRRProviderInfo *provider_
+     VkPhysicalDeviceIDProperties id;
+     VkInstance vk_instance = NULL;
+     VkDisplayKHR vk_display;
++    BOOL ret = FALSE;
+     VkResult vr;
+ 
+     if (!vulkan_funcs)
+@@ -769,7 +770,15 @@ static void get_vulkan_device_uuid( GUID *uuid, const XRRProviderInfo *provider_
+             properties2.pNext = &id;
+ 
+             pvkGetPhysicalDeviceProperties2( vk_physical_devices[device_idx], &properties2 );
+-            memcpy( uuid, id.deviceUUID, sizeof(id.deviceUUID) );
++            memcpy( &gpu->vulkan_uuid, id.deviceUUID, sizeof(id.deviceUUID) );
++            /* Ignore Khronos vendor IDs */
++            if (properties2.properties.vendorID < 0x10000)
++            {
++                gpu->vendor_id = properties2.properties.vendorID;
++                gpu->device_id = properties2.properties.deviceID;
++            }
++            MultiByteToWideChar( CP_UTF8, 0, properties2.properties.deviceName, -1, gpu->name, ARRAY_SIZE(gpu->name) );
++            ret = TRUE;
+             goto done;
+         }
+     }
+@@ -778,6 +787,7 @@ static void get_vulkan_device_uuid( GUID *uuid, const XRRProviderInfo *provider_
+     heap_free( vk_physical_devices );
+     if (vk_instance)
+         vulkan_funcs->p_vkDestroyInstance( vk_instance, NULL );
++    return ret;
+ }
+ 
+ static BOOL xrandr14_get_gpus( struct x11drv_gpu **new_gpus, int *count )
+@@ -842,10 +852,9 @@ static BOOL xrandr14_get_gpus( struct x11drv_gpu **new_gpus, int *count )
+         }
+ 
+         gpus[i].id = provider_resources->providers[i];
+-        get_vulkan_device_uuid( &gpus[i].vulkan_uuid, provider_info );
+-        MultiByteToWideChar( CP_UTF8, 0, provider_info->name, -1, gpus[i].name, ARRAY_SIZE(gpus[i].name) );
+-        /* PCI IDs are all zero because there is currently no portable way to get it via XRandR. Some AMD drivers report
+-         * their PCI address in the name but many others don't */
++        if (!get_gpu_properties_from_vulkan( &gpus[i], provider_info ))
++            MultiByteToWideChar( CP_UTF8, 0, provider_info->name, -1, gpus[i].name, ARRAY_SIZE(gpus[i].name) );
++        /* FIXME: Add an alternate method of getting PCI IDs, for systems that don't support Vulkan */
+         pXRRFreeProviderInfo( provider_info );
+     }
+ 

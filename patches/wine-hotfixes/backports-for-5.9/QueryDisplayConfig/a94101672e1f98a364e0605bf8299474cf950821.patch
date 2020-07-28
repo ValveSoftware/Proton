@@ -1,0 +1,75 @@
+From a94101672e1f98a364e0605bf8299474cf950821 Mon Sep 17 00:00:00 2001
+From: Brendan Shanks <bshanks@codeweavers.com>
+Date: Mon, 29 Jun 2020 21:55:21 -0700
+Subject: [PATCH] user32: Implement GetDisplayConfigBufferSizes().
+
+Signed-off-by: Brendan Shanks <bshanks@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/user32/sysparams.c | 48 ++++++++++++++++++++++++++++++++++++++---
+ 1 file changed, 45 insertions(+), 3 deletions(-)
+
+diff --git a/dlls/user32/sysparams.c b/dlls/user32/sysparams.c
+index 768aeb5d4fb..402a8309ebf 100644
+--- a/dlls/user32/sysparams.c
++++ b/dlls/user32/sysparams.c
+@@ -4504,14 +4504,56 @@ BOOL WINAPI PhysicalToLogicalPoint( HWND hwnd, POINT *point )
+  */
+ LONG WINAPI GetDisplayConfigBufferSizes(UINT32 flags, UINT32 *num_path_info, UINT32 *num_mode_info)
+ {
+-    FIXME("(0x%x %p %p): stub\n", flags, num_path_info, num_mode_info);
++    LONG ret = ERROR_GEN_FAILURE;
++    HANDLE mutex;
++    HDEVINFO devinfo;
++    SP_DEVINFO_DATA device_data = {sizeof(device_data)};
++    DWORD monitor_index = 0, state_flags, type;
++
++    FIXME("(0x%x %p %p): semi-stub\n", flags, num_path_info, num_mode_info);
+ 
+     if (!num_path_info || !num_mode_info)
+         return ERROR_INVALID_PARAMETER;
+ 
+     *num_path_info = 0;
+-    *num_mode_info = 0;
+-    return ERROR_NOT_SUPPORTED;
++
++    if (flags != QDC_ALL_PATHS &&
++        flags != QDC_ONLY_ACTIVE_PATHS &&
++        flags != QDC_DATABASE_CURRENT)
++        return ERROR_INVALID_PARAMETER;
++
++    if (flags != QDC_ONLY_ACTIVE_PATHS)
++        FIXME("only returning active paths\n");
++
++    wait_graphics_driver_ready();
++    mutex = get_display_device_init_mutex();
++
++    /* Iterate through "targets"/monitors.
++     * Each target corresponds to a path, and each path references a source and a target mode.
++     */
++    devinfo = SetupDiGetClassDevsW(&GUID_DEVCLASS_MONITOR, DISPLAY, NULL, DIGCF_PRESENT);
++    if (devinfo == INVALID_HANDLE_VALUE)
++        goto done;
++
++    while (SetupDiEnumDeviceInfo(devinfo, monitor_index++, &device_data))
++    {
++        /* Only count active monitors */
++        if (!SetupDiGetDevicePropertyW(devinfo, &device_data, &WINE_DEVPROPKEY_MONITOR_STATEFLAGS,
++                                       &type, (BYTE *)&state_flags, sizeof(state_flags), NULL, 0))
++            goto done;
++
++        if (state_flags & DISPLAY_DEVICE_ACTIVE)
++            (*num_path_info)++;
++    }
++
++    *num_mode_info = *num_path_info * 2;
++    ret = ERROR_SUCCESS;
++    TRACE("returning %u path(s) %u mode(s)\n", *num_path_info, *num_mode_info);
++
++done:
++    SetupDiDestroyDeviceInfoList(devinfo);
++    release_display_device_init_mutex(mutex);
++    return ret;
+ }
+ 
+ /***********************************************************************
