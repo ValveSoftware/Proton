@@ -1,0 +1,41 @@
+[package]
+name = "proton-media-converter"
+version = "1.0.0"
+authors = ["Andrew Eikum <aeikum@codeweavers.com>"]
+repository = "https://github.com/ValveSoftware/Proton/"
+license = "MIT/Apache-2.0"
+edition = "2018"
+description = "Proton media converter"
+
+[dependencies]
+glib = "0.10.1"
+gstreamer = { git = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs", tag = "0.16.2" }
+gstreamer-base = { git = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs", tag = "0.16.2" }
+gstreamer-video = { git = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs", tag = "0.16.2" }
+gstreamer-audio = { git = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs", tag = "0.16.2" }
+once_cell = "1.0"
+crc32fast = "1.2"
+
+[lib]
+name = "protonmediaconverter"
+crate-type = ["cdylib"]
+path = "src/lib.rs"
+
+[build-dependencies]
+gst-plugin-version-helper = { git = "https://gitlab.freedesktop.org/gstreamer/gst-plugins-rs", tag = "0.6.0" }
+
+[profile.release]
+lto = true
+opt-level = 3
+debug = false
+panic = 'unwind'
+
+[profile.dev]
+opt-level = 1
+
+#if you need local modifications to gstreamer-rs you can point to it here
+#[patch.'https://gitlab.freedesktop.org/gstreamer/gstreamer-rs']
+#gstreamer = { path = "../gstreamer-rs/gstreamer" }
+#gstreamer-base = { path = "../gstreamer-rs/gstreamer-base" }
+#gstreamer-video = { path = "../gstreamer-rs/gstreamer-video" }
+#gstreamer-audio = { path = "../gstreamer-rs/gstreamer-audio" }

@@ -160,6 +160,7 @@ endif
 OPTIMIZE_FLAGS := -O2 -march=nocona $(call cc-option,$(CC),-mtune=core-avx2,) -mfpmath=sse
 SANITY_FLAGS   := -fwrapv -fno-strict-aliasing
 COMMON_FLAGS   := $(OPTIMIZE_FLAGS) $(SANITY_FLAGS)
+CARGO_BUILD_ARG := --release
 
 # Use $(call QUOTE,$(VAR)) to flatten a list to a single element (for feeding to a shell)
 
@@ -255,6 +256,10 @@ VKD3D := $(SRCDIR)/vkd3d-proton
 VKD3D_OBJ32 := ./obj-vkd3d32
 VKD3D_OBJ64 := ./obj-vkd3d64
 
+MEDIACONV := $(SRCDIR)/media-converter
+MEDIACONV_OBJ32 := ./obj-media-converter32
+MEDIACONV_OBJ64 := ./obj-media-converter64
+
 FONTS := $(SRCDIR)/fonts
 FONTS_OBJ := ./obj-fonts
 
@@ -271,6 +276,7 @@ OBJ_DIRS := $(TOOLS_DIR32)        $(TOOLS_DIR64)        \
             $(VRCLIENT_OBJ32)     $(VRCLIENT_OBJ64)     \
             $(DXVK_OBJ32)         $(DXVK_OBJ64)         \
             $(WINEWIDL_OBJ64)     \
+            $(MEDIACONV_OBJ32)    $(MEDIACONV_OBJ64)    \
             $(VKD3D_OBJ32)        $(VKD3D_OBJ64)
 
 $(OBJ_DIRS):
@@ -425,7 +431,7 @@ $(DIST_FONTS): fonts
 ALL_TARGETS += dist
 GOAL_TARGETS += dist
 
-dist: $(DIST_TARGETS) wine gst_good vrclient lsteamclient steam dxvk vkd3d-proton | $(DST_DIR)
+dist: $(DIST_TARGETS) wine gst_good vrclient lsteamclient steam dxvk vkd3d-proton mediaconv | $(DST_DIR)
 	echo `date '+%s'` `GIT_DIR=$(abspath $(SRCDIR)/.git) git describe --tags` > $(DIST_VERSION)
 	cp $(DIST_VERSION) $(DST_BASE)/
 	rm -rf $(abspath $(DIST_PREFIX))
@@ -731,7 +737,6 @@ GST_GOOD_MESON_ARGS := \
 	-Dauparse=disabled \
 	-Dcairo=disabled \
 	-Dcutter=disabled \
-	-Ddebugutils=disabled \
 	-Ddtmf=disabled \
 	-Deffectv=disabled \
 	-Dequalizer=disabled \
@@ -1069,12 +1074,11 @@ $(WINE_CONFIGURE_FILES64): $(MAKEFILE_DEP) | faudio64 gst_base64 $(WINE_OBJ64)
 			--enable-win64 \
 			--disable-tests \
 			--prefix=$(abspath $(DST_DIR)) \
+			LD_LIBRARY_PATH=$(abspath $(TOOLS_DIR64))/lib \
 			STRIP=$(STRIP_QUOTED) \
 			CFLAGS="-I$(abspath $(TOOLS_DIR64))/include -g $(COMMON_FLAGS)" \
-			CXXFLAGS="-I$(abspath $(TOOLS_DIR64))/include -g $(COMMON_FLAGS) -std=c++17" \
 			LDFLAGS=-L$(abspath $(TOOLS_DIR64))/lib \
 			PKG_CONFIG_PATH=$(abspath $(TOOLS_DIR64))/lib/pkgconfig \
-			LD_LIBRARY_PATH=$(abspath $(TOOLS_DIR64))/lib \
 			CC=$(CC_QUOTED) \
 			CXX=$(CXX_QUOTED) \
 			CROSSDEBUG=split-dwarf
@@ -1087,12 +1091,11 @@ $(WINE_CONFIGURE_FILES32): $(MAKEFILE_DEP) | faudio32 gst_base32 $(WINE_OBJ32)
 			--without-curses \
 			--disable-tests \
 			--prefix=$(abspath $(WINE_DST32)) \
+			LD_LIBRARY_PATH=$(abspath $(TOOLS_DIR32))/lib \
 			STRIP=$(STRIP_QUOTED) \
 			CFLAGS="-I$(abspath $(TOOLS_DIR32))/include -g $(COMMON_FLAGS)" \
-			CXXFLAGS="-I$(abspath $(TOOLS_DIR32))/include -g $(COMMON_FLAGS) -std=c++17" \
 			LDFLAGS=-L$(abspath $(TOOLS_DIR32))/lib \
 			PKG_CONFIG_PATH=$(abspath $(TOOLS_DIR32))/lib/pkgconfig \
-			LD_LIBRARY_PATH=$(abspath $(TOOLS_DIR32))/lib \
 			CC=$(CC_QUOTED) \
 			CXX=$(CXX_QUOTED) \
 			PKG_CONFIG="$(PKG_CONFIG32)" \
@@ -1382,6 +1385,23 @@ vkd3d-proton: vkd3d32 vkd3d64
 # TODO Tests
 #  build_vrclient64_tests
 #  build_vrclient32_tests
+
+mediaconv32: SHELL = $(CONTAINER_SHELL32)
+mediaconv32: $(MAKEFILE_DEP) gstreamer32 | $(MEDIACONV_OBJ32)
+	cd $(abspath $(MEDIACONV)) && \
+		PKG_CONFIG_ALLOW_CROSS=1 \
+		PKG_CONFIG_PATH=$(abspath $(TOOLS_DIR32))/lib/pkgconfig \
+		cargo build --target i686-unknown-linux-gnu --target-dir $(abspath $(MEDIACONV_OBJ32)) $(CARGO_BUILD_ARG)
+	cp -a $(abspath $(MEDIACONV_OBJ32))/i686-unknown-linux-gnu/release/libprotonmediaconverter.so $(abspath $(DST_DIR))/lib/gstreamer-1.0/
+
+mediaconv64: SHELL = $(CONTAINER_SHELL64)
+mediaconv64: $(MAKEFILE_DEP) gstreamer64 | $(MEDIACONV_OBJ64)
+	cd $(abspath $(MEDIACONV)) && \
+		PKG_CONFIG_PATH=$(abspath $(TOOLS_DIR64))/lib/pkgconfig \
+		cargo build --target x86_64-unknown-linux-gnu --target-dir $(abspath $(MEDIACONV_OBJ64)) $(CARGO_BUILD_ARG)
+	cp -a $(abspath $(MEDIACONV_OBJ64))/x86_64-unknown-linux-gnu/release/libprotonmediaconverter.so $(abspath $(DST_DIR))/lib64/gstreamer-1.0/
+
+mediaconv: mediaconv32 mediaconv64
 
 ALL_TARGETS += fonts
 GOAL_TARGETS += fonts

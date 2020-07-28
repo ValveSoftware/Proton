@@ -243,6 +243,116 @@ Visit orc at
 
 ---- ---- ---- ----
 
+This software contains the following Rust libraries under the MIT license:
+
+    gstreamer-rs <https://gitlab.freedesktop.org/gstreamer/gstreamer-rs>
+
+    array-init <https://github.com/Manishearth/array-init/>
+    Copyright (c) 2010 The Rust Project Developers
+
+    autocfg <https://github.com/cuviper/autocfg>
+    Copyright (c) 2018 Josh Stone
+
+    bitflags <https://github.com/bitflags/bitflags>
+    num-integer <https://github.com/rust-num/num-integer>
+    num-rational <https://github.com/rust-num/num-rational>
+    num-traits <https://github.com/rust-num/num-traits>
+    Copyright (c) 2014 The Rust Project Developers
+
+    cfg-if <https://github.com/alexcrichton/cfg-if>
+    pkg-config <https://github.com/rust-lang/pkg-config-rs>
+    proc-macro2 <https://github.com/alexcrichton/proc-macro2>
+    toml <https://github.com/alexcrichton/toml-rs>
+    Copyright (c) 2014 Alex Crichton
+
+    chrono <https://github.com/chronotope/chrono>
+    Copyright (c) 2014 Kang Seonghoon
+
+    crc32fast <https://github.com/srijs/rust-crc32fast>
+    Copyright (c) 2018 Sam Rijs, Alex Crichton and contributors
+
+    futures-channel <https://github.com/rust-lang/futures-rs>
+    futures-core <https://github.com/rust-lang/futures-rs>
+    futures-executor <https://github.com/rust-lang/futures-rs>
+    futures-macro <https://github.com/rust-lang/futures-rs>
+    futures-task <https://github.com/rust-lang/futures-rs>
+    futures-util <https://github.com/rust-lang/futures-rs>
+    Copyright (c) 2016 Alex Crichton
+    Copyright (c) 2017 The Tokio Authors
+
+    glib <https://github.com/gtk-rs/glib>
+    Copyright (c) 2013-2015 The Gtk-rs Project Developers
+
+    heck <https://github.com/withoutboats/heck>
+    unicode-segmentation <https://github.com/unicode-rs/unicode-segmentation>
+    unicode-xid <https://github.com/unicode-rs/unicode-xid>
+    Copyright (c) 2015 The Rust Project Developers
+
+    libc <https://github.com/rust-lang/libc>
+    Copyright (c) 2014-2020 The Rust Project Developers
+
+    muldiv <https://github.com/sdroege/rust-muldiv>
+    Copyright (c) 2017 Sebastian Dröge <sebastian@centricular.com>
+
+    murmur3 <https://github.com/stusmall/murmur3>
+    Copyright (c) 2016 Stu Small
+
+    pin-utils <https://github.com/rust-lang/pin-utils>
+    Copyright (c) 2018 The pin-utils authors
+
+    pretty-hex <https://github.com/wolandr/pretty-hex>
+    Copyright (c) 2018 Andrei Volnin
+
+    proc-macro-error <https://gitlab.com/CreepySkeleton/proc-macro-error>
+    Copyright (c) 2019-2020 CreepySkeleton
+
+    proc-macro-hack <https://github.com/dtolnay/proc-macro-hack>
+    Copyright (c) 2018 David Tolnay
+
+    quote <https://github.com/dtolnay/quote>
+    Copyright (c) 2016 The Rust Project Developers
+
+    slab <https://github.com/carllerche/slab>
+    Copyright (c) 2019 Carl Lerche
+
+    time <https://github.com/time-rs/time>
+    Copyright (c) 2019 Jacob Pratt
+
+    version_check <https://github.com/SergioBenitez/version_check>
+    Copyright (c) 2017-2018 Sergio Benitez
+
+    anyhow <https://github.com/dtolnay/anyhow>
+    either <https://github.com/bluss/either>
+    itertools <https://github.com/rust-itertools/itertools>
+    once_cell <https://github.com/matklad/once_cell>
+    paste <https://github.com/dtolnay/paste>
+    pin-project <https://github.com/taiki-e/pin-project>
+    proc-macro-crate <https://github.com/bkchr/proc-macro-crate>
+    serde <https://github.com/serde-rs/serde>
+    syn <https://github.com/dtolnay/syn>
+    syn-mid <https://github.com/taiki-e/syn-mid>
+    thiserror <https://github.com/dtolnay/thiserror>
+
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+
+    The above copyright notice and this permission notice shall be included in
+    all copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+    THE SOFTWARE.
+
+---- ---- ---- ----
+
 Parts of this software are based on the OpenVR SDK, which is
 
     Copyright (c) 2015, Valve Corporation

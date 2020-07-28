@@ -18,6 +18,11 @@ user_settings = {
     "WINE_MONO_TRACE": "E:System.NotImplementedException",
     #"MONO_LOG_LEVEL": "info",
 
+    #general purpose media logging
+#    "GST_DEBUG": "4",
+    #or, verbose converter logging (may impact playback performance):
+#    "GST_DEBUG": "4,protonaudioconverter:6,protonaudioconverterbin:6,protonvideoconverter:6",
+
     #Enable DXVK's HUD
 #    "DXVK_HUD": "devinfo,fps",
 
