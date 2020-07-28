@@ -409,20 +409,18 @@ class CompatData:
                 except IOError:
                     old_prefix_info = ""
 
-                if old_prefix_info == prefix_info:
-                    return
+                if old_prefix_info != prefix_info:
+                    # update builtin dll symlinks or copies
+                    self.update_builtin_libs(builtin_dll_copy)
 
-            with open(self.config_info_file, "w") as f:
-                f.write(prefix_info)
+                    with open(self.config_info_file, "w") as f:
+                        f.write(prefix_info)
 
             with open(self.version_file, "w") as f:
                 f.write(CURRENT_PREFIX_VERSION + "\n")
 
             #create font files symlinks
             self.create_fonts_symlinks()
-
-            # update builtin dll symlinks or copies
-            self.update_builtin_libs(builtin_dll_copy)
 
             #copy steam files into place
             dst = self.prefix_dir + "/drive_c/Program Files (x86)/"
