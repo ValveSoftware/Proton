@@ -398,7 +398,17 @@ class CompatData:
             use_wined3d = "wined3d" in g_session.compat_config
             use_dxvk_dxgi = "WINEDLLOVERRIDES" in os.environ and "dxgi=n" in os.environ["WINEDLLOVERRIDES"]
 
-            builtin_dll_copy = os.environ.get("PROTON_DLL_COPY", "d3dcompiler_*.dll,d3dx*.dll")
+            builtin_dll_copy = os.environ.get("PROTON_DLL_COPY",
+                    #dxsetup redist
+                    "d3dcompiler_*.dll," +
+                    "d3dcsx*.dll," +
+                    "d3dx*.dll," +
+                    "x3daudio*.dll," +
+                    "xactengine*.dll," +
+                    "xapofx*.dll," +
+                    "xaudio*.dll," +
+                    "xinput*.dll"
+                    )
 
             # If any of this info changes, we must rerun the tasks below
             prefix_info = '\n'.join((
