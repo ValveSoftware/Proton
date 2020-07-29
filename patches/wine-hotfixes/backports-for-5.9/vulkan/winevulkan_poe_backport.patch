@@ -1,4 +1,4 @@
-From 3f245724b06ff75421810f5069beadc6b7610f52 Mon Sep 17 00:00:00 2001
+From da32913e84869282c7e78c09f6b15cb71c4fb255 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?J=C3=B3zef=20Kucia?= <jkucia@codeweavers.com>
 Date: Wed, 24 Jun 2020 17:31:03 -0600
 Subject: [PATCH] winevulkan: Avoid returning 0 for swapchain maxImageCount.
@@ -14,7 +14,7 @@ AMDVLK also sets this to 16 when no maxImageCount is specified.
  4 files changed, 23 insertions(+), 3 deletions(-)
 
 diff --git a/dlls/winevulkan/make_vulkan b/dlls/winevulkan/make_vulkan
-index a0bf6b0859e..c28abe8ebb4 100755
+index b84eb39587e..59df1dbf407 100755
 --- a/dlls/winevulkan/make_vulkan
 +++ b/dlls/winevulkan/make_vulkan
 @@ -183,7 +183,7 @@ FUNCTION_OVERRIDES = {
@@ -27,11 +27,11 @@ index a0bf6b0859e..c28abe8ebb4 100755
      "vkGetPhysicalDeviceSurfacePresentModesKHR" : {"dispatch" : True, "driver" : True, "thunk" : True},
  
 diff --git a/dlls/winevulkan/vulkan.c b/dlls/winevulkan/vulkan.c
-index eb22e72ae36..543388abe8e 100644
+index 4642975ad0f..abb9e0a9063 100644
 --- a/dlls/winevulkan/vulkan.c
 +++ b/dlls/winevulkan/vulkan.c
-@@ -1358,6 +1358,25 @@ void WINAPI wine_vkGetPhysicalDeviceExternalSemaphorePropertiesKHR(VkPhysicalDev
-     properties->externalSemaphoreFeatures = 0;
+@@ -1409,6 +1409,25 @@ void WINAPI wine_vkGetPrivateDataEXT(VkDevice device, VkObjectType object_type,
+     device->funcs.p_vkGetPrivateDataEXT(device->device, object_type, object_handle, private_data_slot, data);
  }
  
 +VkResult WINAPI wine_vkGetPhysicalDeviceSurfaceCapabilitiesKHR(VkPhysicalDevice phys_dev,
@@ -57,7 +57,7 @@ index eb22e72ae36..543388abe8e 100644
  {
      TRACE("%p, %u, %p\n", hinst, reason, reserved);
 diff --git a/dlls/winevulkan/vulkan_thunks.c b/dlls/winevulkan/vulkan_thunks.c
-index f8d171a6db3..3dcbd824a30 100644
+index 94aa1e3fb7b..d5b39851eaf 100644
 --- a/dlls/winevulkan/vulkan_thunks.c
 +++ b/dlls/winevulkan/vulkan_thunks.c
 @@ -4956,9 +4956,8 @@ static VkResult WINAPI wine_vkGetPhysicalDeviceSurfaceCapabilities2KHR(VkPhysica
@@ -72,7 +72,7 @@ index f8d171a6db3..3dcbd824a30 100644
  }
  
 diff --git a/dlls/winevulkan/vulkan_thunks.h b/dlls/winevulkan/vulkan_thunks.h
-index 9580c6bbcd2..18e3ce5fe1c 100644
+index 7055d4fb135..f0f0ae787b5 100644
 --- a/dlls/winevulkan/vulkan_thunks.h
 +++ b/dlls/winevulkan/vulkan_thunks.h
 @@ -40,6 +40,7 @@ VkResult WINAPI wine_vkGetPhysicalDeviceImageFormatProperties2(VkPhysicalDevice
@@ -80,10 +80,10 @@ index 9580c6bbcd2..18e3ce5fe1c 100644
  void WINAPI wine_vkGetPhysicalDeviceProperties2(VkPhysicalDevice physicalDevice, VkPhysicalDeviceProperties2 *pProperties);
  void WINAPI wine_vkGetPhysicalDeviceProperties2KHR(VkPhysicalDevice physicalDevice, VkPhysicalDeviceProperties2 *pProperties) DECLSPEC_HIDDEN;
 +VkResult WINAPI wine_vkGetPhysicalDeviceSurfaceCapabilitiesKHR(VkPhysicalDevice physicalDevice, VkSurfaceKHR surface, VkSurfaceCapabilitiesKHR *pSurfaceCapabilities);
+ void WINAPI wine_vkGetPrivateDataEXT(VkDevice device, VkObjectType objectType, uint64_t objectHandle, VkPrivateDataSlotEXT privateDataSlot, uint64_t *pData) DECLSPEC_HIDDEN;
  VkResult WINAPI wine_vkQueueSubmit(VkQueue queue, uint32_t submitCount, const VkSubmitInfo *pSubmits, VkFence fence);
- 
- /* Private thunks */
-@@ -47,6 +48,7 @@ VkResult thunk_vkGetPhysicalDeviceImageFormatProperties2(VkPhysicalDevice physic
+ VkResult WINAPI wine_vkSetPrivateDataEXT(VkDevice device, VkObjectType objectType, uint64_t objectHandle, VkPrivateDataSlotEXT privateDataSlot, uint64_t data) DECLSPEC_HIDDEN;
+@@ -49,6 +50,7 @@ VkResult thunk_vkGetPhysicalDeviceImageFormatProperties2(VkPhysicalDevice physic
  VkResult thunk_vkGetPhysicalDeviceImageFormatProperties2KHR(VkPhysicalDevice physicalDevice, const VkPhysicalDeviceImageFormatInfo2 *pImageFormatInfo, VkImageFormatProperties2 *pImageFormatProperties) DECLSPEC_HIDDEN;
  void thunk_vkGetPhysicalDeviceProperties2(VkPhysicalDevice physicalDevice, VkPhysicalDeviceProperties2 *pProperties) DECLSPEC_HIDDEN;
  void thunk_vkGetPhysicalDeviceProperties2KHR(VkPhysicalDevice physicalDevice, VkPhysicalDeviceProperties2 *pProperties) DECLSPEC_HIDDEN;
@@ -93,4 +93,3 @@ index 9580c6bbcd2..18e3ce5fe1c 100644
  {
 -- 
 2.27.0
-

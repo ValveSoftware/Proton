@@ -1,0 +1,78 @@
+From 314cd9cdd542db658ce7a01ef0a7621fc2d9d335 Mon Sep 17 00:00:00 2001
+From: Brendan Shanks <bshanks@codeweavers.com>
+Date: Mon, 13 Jul 2020 11:45:30 -0700
+Subject: [PATCH] winevulkan: Export VK_KHR_get_surface_capabilities2 functions
+ from vulkan-1.
+
+Signed-off-by: Brendan Shanks <bshanks@codeweavers.com>
+Signed-off-by: Liam Middlebrook <lmiddlebrook@nvidia.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/vulkan-1/vulkan-1.spec     | 2 ++
+ dlls/winevulkan/make_vulkan     | 1 +
+ dlls/winevulkan/vulkan_thunks.c | 4 ++--
+ dlls/winevulkan/winevulkan.spec | 2 ++
+ 4 files changed, 7 insertions(+), 2 deletions(-)
+
+diff --git a/dlls/vulkan-1/vulkan-1.spec b/dlls/vulkan-1/vulkan-1.spec
+index e8fb64d82bd..026bd99dec7 100644
+--- a/dlls/vulkan-1/vulkan-1.spec
++++ b/dlls/vulkan-1/vulkan-1.spec
+@@ -179,7 +179,9 @@
+ @ stdcall vkGetPhysicalDeviceQueueFamilyProperties2(ptr ptr ptr) winevulkan.wine_vkGetPhysicalDeviceQueueFamilyProperties2
+ @ stdcall vkGetPhysicalDeviceSparseImageFormatProperties(ptr long long long long long ptr ptr) winevulkan.wine_vkGetPhysicalDeviceSparseImageFormatProperties
+ @ stdcall vkGetPhysicalDeviceSparseImageFormatProperties2(ptr ptr ptr ptr) winevulkan.wine_vkGetPhysicalDeviceSparseImageFormatProperties2
++@ stdcall vkGetPhysicalDeviceSurfaceCapabilities2KHR(ptr ptr ptr) winevulkan.wine_vkGetPhysicalDeviceSurfaceCapabilities2KHR
+ @ stdcall vkGetPhysicalDeviceSurfaceCapabilitiesKHR(ptr int64 ptr) winevulkan.wine_vkGetPhysicalDeviceSurfaceCapabilitiesKHR
++@ stdcall vkGetPhysicalDeviceSurfaceFormats2KHR(ptr ptr ptr ptr) winevulkan.wine_vkGetPhysicalDeviceSurfaceFormats2KHR
+ @ stdcall vkGetPhysicalDeviceSurfaceFormatsKHR(ptr int64 ptr ptr) winevulkan.wine_vkGetPhysicalDeviceSurfaceFormatsKHR
+ @ stdcall vkGetPhysicalDeviceSurfacePresentModesKHR(ptr int64 ptr ptr) winevulkan.wine_vkGetPhysicalDeviceSurfacePresentModesKHR
+ @ stdcall vkGetPhysicalDeviceSurfaceSupportKHR(ptr long int64 ptr) winevulkan.wine_vkGetPhysicalDeviceSurfaceSupportKHR
+diff --git a/dlls/winevulkan/make_vulkan b/dlls/winevulkan/make_vulkan
+index b84eb39587e..04b263e3e40 100755
+--- a/dlls/winevulkan/make_vulkan
++++ b/dlls/winevulkan/make_vulkan
+@@ -130,6 +130,7 @@ UNSUPPORTED_EXTENSIONS = [
+ CORE_EXTENSIONS = [
+     "VK_KHR_display",
+     "VK_KHR_display_swapchain",
++    "VK_KHR_get_surface_capabilities2",
+     "VK_KHR_surface",
+     "VK_KHR_swapchain",
+     "VK_KHR_win32_surface",
+diff --git a/dlls/winevulkan/vulkan_thunks.c b/dlls/winevulkan/vulkan_thunks.c
+index 94aa1e3fb7b..06d79b8faea 100644
+--- a/dlls/winevulkan/vulkan_thunks.c
++++ b/dlls/winevulkan/vulkan_thunks.c
+@@ -4939,7 +4939,7 @@ static VkResult WINAPI wine_vkGetPhysicalDeviceSupportedFramebufferMixedSamplesC
+     return physicalDevice->instance->funcs.p_vkGetPhysicalDeviceSupportedFramebufferMixedSamplesCombinationsNV(physicalDevice->phys_dev, pCombinationCount, pCombinations);
+ }
+ 
+-static VkResult WINAPI wine_vkGetPhysicalDeviceSurfaceCapabilities2KHR(VkPhysicalDevice physicalDevice, const VkPhysicalDeviceSurfaceInfo2KHR *pSurfaceInfo, VkSurfaceCapabilities2KHR *pSurfaceCapabilities)
++VkResult WINAPI wine_vkGetPhysicalDeviceSurfaceCapabilities2KHR(VkPhysicalDevice physicalDevice, const VkPhysicalDeviceSurfaceInfo2KHR *pSurfaceInfo, VkSurfaceCapabilities2KHR *pSurfaceCapabilities)
+ {
+ #if defined(USE_STRUCT_CONVERSION)
+     VkResult result;
+@@ -4962,7 +4962,7 @@ VkResult WINAPI wine_vkGetPhysicalDeviceSurfaceCapabilitiesKHR(VkPhysicalDevice
+     return physicalDevice->instance->funcs.p_vkGetPhysicalDeviceSurfaceCapabilitiesKHR(physicalDevice->phys_dev, surface, pSurfaceCapabilities);
+ }
+ 
+-static VkResult WINAPI wine_vkGetPhysicalDeviceSurfaceFormats2KHR(VkPhysicalDevice physicalDevice, const VkPhysicalDeviceSurfaceInfo2KHR *pSurfaceInfo, uint32_t *pSurfaceFormatCount, VkSurfaceFormat2KHR *pSurfaceFormats)
++VkResult WINAPI wine_vkGetPhysicalDeviceSurfaceFormats2KHR(VkPhysicalDevice physicalDevice, const VkPhysicalDeviceSurfaceInfo2KHR *pSurfaceInfo, uint32_t *pSurfaceFormatCount, VkSurfaceFormat2KHR *pSurfaceFormats)
+ {
+ #if defined(USE_STRUCT_CONVERSION)
+     VkResult result;
+diff --git a/dlls/winevulkan/winevulkan.spec b/dlls/winevulkan/winevulkan.spec
+index 44ac8c6d2fc..383e6b9b8f1 100644
+--- a/dlls/winevulkan/winevulkan.spec
++++ b/dlls/winevulkan/winevulkan.spec
+@@ -182,7 +182,9 @@
+ @ stdcall -private wine_vkGetPhysicalDeviceQueueFamilyProperties2(ptr ptr ptr)
+ @ stdcall -private wine_vkGetPhysicalDeviceSparseImageFormatProperties(ptr long long long long long ptr ptr)
+ @ stdcall -private wine_vkGetPhysicalDeviceSparseImageFormatProperties2(ptr ptr ptr ptr)
++@ stdcall -private wine_vkGetPhysicalDeviceSurfaceCapabilities2KHR(ptr ptr ptr)
+ @ stdcall -private wine_vkGetPhysicalDeviceSurfaceCapabilitiesKHR(ptr int64 ptr)
++@ stdcall -private wine_vkGetPhysicalDeviceSurfaceFormats2KHR(ptr ptr ptr ptr)
+ @ stdcall -private wine_vkGetPhysicalDeviceSurfaceFormatsKHR(ptr int64 ptr ptr)
+ @ stdcall -private wine_vkGetPhysicalDeviceSurfacePresentModesKHR(ptr int64 ptr ptr)
+ @ stdcall -private wine_vkGetPhysicalDeviceSurfaceSupportKHR(ptr long int64 ptr)

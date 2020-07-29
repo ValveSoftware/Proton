@@ -100,77 +100,41 @@
     echo "querydisplaconfig backports"
 patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/QueryDisplayConfig/8a4ec0addba76bf3b34a9782556364ab4161dc22.patch
 patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/QueryDisplayConfig/ae4804d502fecab835146043010f53377bf1b65a.patch
-echo "1"
 patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/QueryDisplayConfig/f1e7d5bbd6e8817f7266c7144b747115a52893da.patch
-echo "2"
 patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/QueryDisplayConfig/411fe4f1c3fc45ec6bed0a1beaf61c67f6cf6294.patch
-echo "3"
 patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/QueryDisplayConfig/8cd6245b7633abccd68f73928544ae4de6f76d52.patch
-echo "4"
 patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/QueryDisplayConfig/707fcb99a60015fcbb20c83e9031bc5be7a58618.patch
-echo "5"
 patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/QueryDisplayConfig/c36e26f41d1653d11ac47c7890497cc14ceb99ba.patch
-echo "6"
 patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/QueryDisplayConfig/b582ab26f91b1b189409cf9d058ffd7c8827ccb4.patch
-echo "7"
 patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/QueryDisplayConfig/1b33e0f72e87e3c3af905df27c339887f4cb5a18.patch
-echo "8"
 patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/QueryDisplayConfig/e3eb89d5ebb759e975698b97ed8b547a9de3853f.patch
-echo "9"
 patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/QueryDisplayConfig/988d31b696b2bdc7a0aa6fc626cd50f034dd05ec.patch
-echo "10"
 patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/QueryDisplayConfig/343043153b44fa46a2081fa8a2c171eac7c8dab6.patch
-echo "11"
 patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/QueryDisplayConfig/b5d58ff69c9b01d42b5dd12f5652d5cf2859d4b8.patch
-echo "12"
 patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/QueryDisplayConfig/3db619d46e70a398a06001573fb42b0a32d81209.patch
-echo "13"
 patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/QueryDisplayConfig/0a2d6378d80a1594cae6c7ab0e5d31b8fe11703b.patch
-echo "14"
 patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/QueryDisplayConfig/203bd057cf2268f03558be475ce2ba984f93e581.patch
-echo "15"
 patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/QueryDisplayConfig/c4a01d0a65905f33cbfe90f150b2d23a02c4e793.patch
-echo "16"
 patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/QueryDisplayConfig/ca1d31fc3b153a38c38b27b873052ce6f04cb5d4.patch
-echo "17"
 patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/QueryDisplayConfig/634cb775c27b61ad6ce1fbe3e9972b0edfa31dcb.patch
-echo "18"
 patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/QueryDisplayConfig/2affb854e524dde962f983a36628f22fe9e165c7.patch
-echo "19"
 patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/QueryDisplayConfig/13e3d8f6354d23226ac5e7b1a2fb3aeb81d0b402.patch
-echo "20"
 patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/QueryDisplayConfig/6b6a7124a67c6eadbe4408163f93dbf0379b6565.patch
-echo "21"
 patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/QueryDisplayConfig/145cfce1135a7e59cc4c89cd05b572403f188161.patch
-echo "22"
 patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/QueryDisplayConfig/408a5a86ec30e293bf9e6eec4890d552073a82e8.patch
-echo "23"
 patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/QueryDisplayConfig/8007d19c2792b5b177bd7200dc3567df4677dc0c.patch
-echo "24"
 patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/QueryDisplayConfig/6f9d20806e821ab07c8adf81ae6630fae94b00ef.patch
-echo "25"
 patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/QueryDisplayConfig/aec196878875e92d0b404a6f982cea6667768696.patch
-echo "26"
 patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/QueryDisplayConfig/5dd03cbc8f5cc8fa349d1ce0f155139094eff56c.patch
-echo "27"
 patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/QueryDisplayConfig/59c206f9dc25a9f9cfd772bf87288b7fb65f355f.patch
-echo "28"
 patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/QueryDisplayConfig/1899830b02218b89bb1669c265bd04d6750347fb.patch
-echo "29"
 patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/QueryDisplayConfig/a94101672e1f98a364e0605bf8299474cf950821.patch
-echo "30"
 patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/QueryDisplayConfig/2e1c48f3517fa967ae9f9a0794c88e6d4e5e77f2.patch
-echo "31"
 patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/QueryDisplayConfig/5fba152eea0bd8b7a2553beea05370dc140ed740.patch
-echo "32"
 patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/QueryDisplayConfig/cb127e11ad381789b11a3c40913f6186a48d0f37.patch
-echo "33"
 patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/QueryDisplayConfig/3a3c7cbd209e23cc6ee88299b3ba877ab20a767f.patch
-echo "34"
 patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/QueryDisplayConfig/27ed9c95a2bbdbf7d86309cf1b9c9fefc157a0fe.patch
-echo "35"
 patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/QueryDisplayConfig/8949f570865fe72e28b4b7ef57c5c903d9a711b0.patch
-echo "36"
 patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/QueryDisplayConfig/894c6566ab25d0fb4a1a6d7e061041fc14906662.patch
 
 echo "ac odyssey fix"
@@ -192,12 +156,17 @@ patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/QueryDisplayConfig/0001-
     patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/mgs-ground-zeroes.patch
     
     echo "vulkan backports"
-    patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/winevulkan-1.2.142.patch
-    patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/winevulkan-change_blacklist_to_more_neutral_word.patch
-    patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/winevulkan-1.2.145.patch
-    patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/winevulkan-dont_initialize_vulkan_driver_in_dllmain.patch
-    patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/winevulkan_poe_backport.patch
-    
+    patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/vulkan/winevulkan-1.2.142.patch
+    patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/vulkan/winevulkan-change_blacklist_to_more_neutral_word.patch
+    patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/vulkan/winevulkan-1.2.145.patch
+    patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/vulkan/winevulkan-dont_initialize_vulkan_driver_in_dllmain.patch
+    patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/vulkan/380b7f28253c048d04c1fbd0cfbc7e804bb1b0e1.patch
+    patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/vulkan/262e4ab9e0eeb126dde5cb4cba13fbf7f1d1cef0.patch
+    patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/vulkan/314cd9cdd542db658ce7a01ef0a7621fc2d9d335.patch
+    patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/vulkan/a455ff61b40ff73b48d0ccc9c1f14679bb65ab8d.patch
+    patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/vulkan/6299969a60b2bda85e69a3569c5d4970d47b3cc6.patch
+    patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/vulkan/8bd62231c3ab222c07063cb340e26c3c76ff4229.patch
+    patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/vulkan/winevulkan_poe_backport.patch
     
     echo "planet zoo/jurassic world hotfixes pending"
     patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/planet-zoo-jurassic-world-pending-upstream-staging.patch
@@ -325,7 +294,7 @@ patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/QueryDisplayConfig/0001-
 
 #    echo "FS Hack integer scaling"
 #    patch -Np1 < ../patches/proton/proton_fs_hack_integer_scaling.patch
-    
+
     echo "proton winevulkan"
     patch -Np1 < ../patches/proton-5.9/proton-winevulkan-nofshack.patch
     
