@@ -466,6 +466,16 @@ static BOOL WINAPI console_ctrl_handler(DWORD dwCtrlType)
     return TRUE;
 }
 
+static BOOL streq_niw(const WCHAR *l, const WCHAR *r, size_t len)
+{
+    while(len > 0){
+        if(towlower(*l) != towlower(*r))
+            return FALSE;
+        ++l; ++r; --len;
+    }
+    return TRUE;
+}
+
 static BOOL should_use_shell_execute(const WCHAR *cmdline)
 {
     BOOL use_shell_execute = TRUE;
@@ -492,7 +502,7 @@ static BOOL should_use_shell_execute(const WCHAR *cmdline)
     {
         static const WCHAR exeW[] = {'.','e','x','e',0};
 
-        if (!strncmpW(executable_name_end, exeW, wcslen(exeW)))
+        if (streq_niw(executable_name_end, exeW, sizeof(exeW) / sizeof(*exeW) - 1))
             use_shell_execute = FALSE;
     }
 
