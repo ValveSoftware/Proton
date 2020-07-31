@@ -308,6 +308,18 @@ function build_arch {
             PATH=$NEWPATH make $JOBS install
         popd
 
+        mkdir -p mingw-w64-tools/widl
+        pushd mingw-w64-tools/widl/
+            if [ ! -e Makefile ]; then
+                PATH=$NEWPATH ../../../$MINGW_W64_SRCDIR/mingw-w64-tools/widl/configure \
+                    --prefix=$DST_DIR/ \
+                    --target=$WIN32_TARGET_ARCH \
+                    --program-prefix="${WIN32_TARGET_ARCH}-"
+            fi
+            PATH=$NEWPATH make $JOBS
+            PATH=$NEWPATH make $JOBS install
+        popd
+
     popd
 }
 
