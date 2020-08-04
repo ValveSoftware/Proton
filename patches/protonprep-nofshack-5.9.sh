@@ -154,7 +154,7 @@ patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/QueryDisplayConfig/0001-
     patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/ashes_of_the_singularity.patch
     patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/sc_dos2_poe-multithread.patch
     patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/mgs-ground-zeroes.patch
-    
+
     echo "vulkan backports"
     patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/vulkan/winevulkan-1.2.142.patch
     patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/vulkan/winevulkan-change_blacklist_to_more_neutral_word.patch
@@ -329,6 +329,9 @@ patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/QueryDisplayConfig/0001-
     
     echo "Paul's Diablo 1 menu fix"
     patch -Np1 < ../patches/game-patches/diablo_1_menu.patch
+    
+    echo "geforce now backports"
+    patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/geforce-now-backport.patch
     
 
 #    echo "Remi's memory performance fixes"    
