@@ -1,0 +1,130 @@
+commit 5c5dafa7d060ec54b36d40216053e971a59f175c
+Author: Alexandre Abgrall <aabgrall98@gmail.com>
+Date:   Mon Jul 27 07:34:56 2020 +0200
+
+    rundll32: Allow DLL name and entrypoint to be separated by any combination of spaces/commas.
+
+ programs/rundll32/rundll32.c | 21 +++++++++++----------
+ 1 file changed, 11 insertions(+), 10 deletions(-)
+
+commit 32f282d0bf158c48491fe37f5c5a3ab546a0576e
+Author: Alexandre Abgrall <aabgrall98@gmail.com>
+Date:   Mon Jul 27 07:42:11 2020 +0200
+
+    rundll32: Restart process if DLL has different bitness and WoW64 is enabled.
+
+ programs/rundll32/rundll32.c | 55 ++++++++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 53 insertions(+), 2 deletions(-)
+
+commit e1db04b620ae8e441b9ecb735d52960a0bf044bc
+Author: Alexandre Abgrall <aabgrall98@gmail.com>
+Date:   Mon Jul 27 14:56:31 2020 +0200
+
+    iphlpapi: Implement GetIpInterfaceTable semi-stub.
+
+ dlls/iphlpapi/iphlpapi_main.c | 40 ++++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 38 insertions(+), 2 deletions(-)
+
+commit 7fc2c97e1f467de964524208dae8b74032bc1215
+Author: Alexandre Abgrall <aabgrall98@gmail.com>
+Date:   Mon Jul 27 15:20:55 2020 +0200
+
+    iphlpapi: Make NotifyUnicastIpAddressChange return an invalid handle instead of NULL.
+
+ dlls/iphlpapi/iphlpapi_main.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+commit c1058279f8a3c8ff2781d713cbda8952924fd79d
+Author: Alexandre Abgrall <aabgrall98@gmail.com>
+Date:   Mon Jul 27 15:46:54 2020 +0200
+
+    dxva2: Implement GetProcAmpRange semi-stub.
+
+ dlls/dxva2/videoservices.c | 16 ++++++++++++++--
+ 1 file changed, 14 insertions(+), 2 deletions(-)
+
+commit 3e431b2adb27738806c3588015e2afd74eb209cd
+Author: Alexandre Abgrall <aabgrall98@gmail.com>
+Date:   Mon Jul 27 15:51:11 2020 +0200
+
+    dxva2: Handle DXVA2_VideoProcProgressiveDevice in DirectXVideoProcessorService_CreateVideoProcessor.
+
+ dlls/dxva2/videoservices.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+commit 24d51f6877b29343ce3f26431ccb0d47cced1b7a
+Author: Alexandre Abgrall <aabgrall98@gmail.com>
+Date:   Mon Jul 27 16:01:43 2020 +0200
+
+    winepulse.drv: Call pa_mainloop_new() in pulse_connect() if it wasn't done before.
+
+ dlls/winepulse.drv/mmdevdrv.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+commit 85c4dd397849c94422ff7df500acb7c72310b898
+Author: Alexandre Abgrall <aabgrall98@gmail.com>
+Date:   Mon Jul 27 16:27:35 2020 +0200
+
+    winepulse.drv: Add stubs for IAudioClockAdjustment.
+
+ dlls/winepulse.drv/mmdevdrv.c | 65 +++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 65 insertions(+)
+
+commit 00fb25a55964397e08c662362e4b08d0e160c3dd
+Author: Alexandre Abgrall <aabgrall98@gmail.com>
+Date:   Tue Jul 28 18:54:02 2020 +0200
+
+    winealsa.drv: Add IAudioClockAdjustment with SetSampleRate stub.
+    
+    Signed-off-by: Alexandre Abgrall <aabgrall98@gmail.com>
+
+ dlls/winealsa.drv/mmdevdrv.c | 61 ++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 61 insertions(+)
+
+commit 7c82efa494770fde3fc080d72b9e85ec1e9eaae2
+Author: Alexandre Abgrall <aabgrall98@gmail.com>
+Date:   Wed Jul 29 12:44:26 2020 +0200
+
+    wbemprox: Temp fix (3rd re-push): add NULL checks for strings and init record_logicaldisk to zero
+
+ dlls/wbemprox/builtin.c | 136 +++++++++++++++++++++++++++---------------------
+ dlls/wbemprox/class.c   |   9 +++-
+ dlls/wbemprox/query.c   |  17 ++++--
+ dlls/wbemprox/table.c   |  21 ++++++--
+ 4 files changed, 116 insertions(+), 67 deletions(-)
+
+commit 50f1b757fc461b1f5edcff8a325afbe326ea7d78
+Author: Alexandre Abgrall <aabgrall98@gmail.com>
+Date:   Wed Jul 29 16:46:29 2020 +0200
+
+    ntdll: Always align value of FILE_NOTIFY_INFORMATION's NextEntryOffset to int
+
+ dlls/ntdll/file.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+commit 4b309ea49d0f733ec814e51bac17d0583d1421f4
+Author: Alexandre Abgrall <aabgrall98@gmail.com>
+Date:   Fri Jul 31 13:45:27 2020 +0200
+
+    dxva2: Hack: Consider NV12 format as valid if no VASurfaceAttribPixelFormat attribute is provided.
+    This is currently the case with the VDPAU VAAPI backend.
+    Similar bug: https://bugs.launchpad.net/ubuntu/+source/chromium-browser/+bug/1887172
+
+ dlls/dxva2/vaapi.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
+
+commit bb9ab42284d1757e9cd12643de91484a2ce2adcf
+Author: Richard Yao <ryao@gentoo.org>
+Date:   Sat Aug 1 16:04:11 2020 -0400
+
+    kernelbase: Implement TzSpecificLocalTimeToSystemTimeEx()
+    
+    We also reimplement TzSpecificLocalTimeToSystemTime using
+    TzSpecificLocalTimeToSystemTimeEx.
+    
+    Signed-off-by: Richard Yao <ryao@gentoo.org>
+
+ .../api-ms-win-core-timezone-l1-1-0.spec           |  2 +-
+ dlls/kernelbase/kernelbase.spec                    |  2 +-
+ dlls/kernelbase/locale.c                           | 42 ++++++++++++++++------
+ 3 files changed, 34 insertions(+), 12 deletions(-)
