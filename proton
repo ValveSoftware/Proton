@@ -451,15 +451,18 @@ class CompatData:
             #copy steam files into place
             dst = self.prefix_dir + "/drive_c/Program Files (x86)/"
             makedirs(dst + "Steam")
-            filestocopy = ["steamclient.dll",
-                    "steamclient64.dll",
-                    "Steam.dll"]
-            for f in filestocopy:
-                if os.path.isfile(steamdir + "/legacycompat/" + f):
-                    dstfile = dst + "Steam/" + f
+            filestocopy = [("steamclient.dll", "steamclient.dll"),
+                           ("steamclient64.dll", "steamclient64.dll"),
+                           ("GameOverlayRenderer64.dll", "GameOverlayRenderer64.dll"),
+                           ("SteamService.exe", "steam.exe"),
+                           ("Steam.dll", "Steam.dll")]
+            for (src,tgt) in filestocopy:
+                srcfile = steamdir + '/legacycompat/' + src
+                if os.path.isfile(srcfile):
+                    dstfile = dst + "Steam/" + tgt
                     if os.path.isfile(dstfile):
                         os.remove(dstfile)
-                    try_copy(steamdir + "/legacycompat/" + f, dstfile)
+                    try_copy(srcfile, dstfile)
 
             #copy openvr files into place
             dst = self.prefix_dir + "/drive_c/vrclient/bin/"
