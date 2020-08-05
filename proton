@@ -403,6 +403,7 @@ class CompatData:
                     "d3dcompiler_*.dll," +
                     "d3dcsx*.dll," +
                     "d3dx*.dll," +
+                    "ntdll.dll," +
                     "x3daudio*.dll," +
                     "xactengine*.dll," +
                     "xapofx*.dll," +
