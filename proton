@@ -403,12 +403,17 @@ class CompatData:
                     "d3dcompiler_*.dll," +
                     "d3dcsx*.dll," +
                     "d3dx*.dll," +
-                    "ntdll.dll," +
                     "x3daudio*.dll," +
                     "xactengine*.dll," +
                     "xapofx*.dll," +
                     "xaudio*.dll," +
-                    "xinput*.dll"
+                    "xinput*.dll," +
+
+                    #some games balk at ntdll symlink(?)
+                    "ntdll.dll," +
+
+                    #some games require official vulkan loader
+                    "vulkan-1.dll"
                     )
 
             # If any of this info changes, we must rerun the tasks below
