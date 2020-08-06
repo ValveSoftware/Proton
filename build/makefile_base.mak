@@ -554,6 +554,7 @@ GSTREAMER_MESON_ARGS := \
 	-Dgst_parse=false \
 	-Dbenchmarks=disabled \
 	-Dtools=disabled \
+	-Dbash-completion=disabled \
 	$(GST_COMMON_MESON_ARGS)
 
 GSTREAMER_CONFIGURE_FILES32 := $(GSTREAMER_OBJ32)/build.ninja
