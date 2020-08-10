@@ -454,21 +454,38 @@ class CompatData:
             #create font files symlinks
             self.create_fonts_symlinks()
 
-            #copy steam files into place
-            dst = self.prefix_dir + "/drive_c/Program Files (x86)/"
-            makedirs(dst + "Steam")
-            filestocopy = [("steamclient.dll", "steamclient.dll"),
-                           ("steamclient64.dll", "steamclient64.dll"),
-                           ("GameOverlayRenderer64.dll", "GameOverlayRenderer64.dll"),
-                           ("SteamService.exe", "steam.exe"),
-                           ("Steam.dll", "Steam.dll")]
-            for (src,tgt) in filestocopy:
-                srcfile = steamdir + '/legacycompat/' + src
-                if os.path.isfile(srcfile):
-                    dstfile = dst + "Steam/" + tgt
-                    if os.path.isfile(dstfile):
-                        os.remove(dstfile)
-                    try_copy(srcfile, dstfile)
+            with open(self.tracked_files_file, "a") as tracked_files:
+                #copy steam files into place
+                steam_dir = "drive_c/Program Files (x86)/Steam/"
+                dst = self.prefix_dir + steam_dir
+                makedirs(dst)
+                filestocopy = [("steamclient.dll", "steamclient.dll"),
+                               ("steamclient64.dll", "steamclient64.dll"),
+                               ("GameOverlayRenderer64.dll", "GameOverlayRenderer64.dll"),
+                               ("SteamService.exe", "steam.exe"),
+                               ("Steam.dll", "Steam.dll")]
+                for (src,tgt) in filestocopy:
+                    srcfile = steamdir + '/legacycompat/' + src
+                    if os.path.isfile(srcfile):
+                        dstfile = dst + tgt
+                        if os.path.isfile(dstfile):
+                            os.remove(dstfile)
+                        else:
+                            tracked_files.write(steam_dir + tgt + "\n")
+                        try_copy(srcfile, dstfile)
+
+                filestocopy = [("steamclient64.dll", "steamclient64.dll"),
+                               ("GameOverlayRenderer.dll", "GameOverlayRenderer.dll"),
+                               ("GameOverlayRenderer64.dll", "GameOverlayRenderer64.dll")]
+                for (src,tgt) in filestocopy:
+                    srcfile = g_proton.path(src)
+                    if os.path.isfile(srcfile):
+                        dstfile = dst + tgt
+                        if os.path.isfile(dstfile):
+                            os.remove(dstfile)
+                        else:
+                            tracked_files.write(steam_dir + tgt + "\n")
+                        try_copy(srcfile, dstfile)
 
             #copy openvr files into place
             dst = self.prefix_dir + "/drive_c/vrclient/bin/"
