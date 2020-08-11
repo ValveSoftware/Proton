@@ -10,9 +10,9 @@ extern int64 cppISteamNetworkingSockets_SteamNetworkingSockets008_GetConnectionU
 extern void cppISteamNetworkingSockets_SteamNetworkingSockets008_SetConnectionName(void *, HSteamNetConnection, const char *);
 extern bool cppISteamNetworkingSockets_SteamNetworkingSockets008_GetConnectionName(void *, HSteamNetConnection, char *, int);
 extern EResult cppISteamNetworkingSockets_SteamNetworkingSockets008_SendMessageToConnection(void *, HSteamNetConnection, const void *, uint32, int, int64 *);
-extern void cppISteamNetworkingSockets_SteamNetworkingSockets008_SendMessages(void *, int, winSteamNetworkingMessage_t_148a *const *, int64 *);
+extern void cppISteamNetworkingSockets_SteamNetworkingSockets008_SendMessages(void *, int, winSteamNetworkingMessage_t_149 *const *, int64 *);
 extern EResult cppISteamNetworkingSockets_SteamNetworkingSockets008_FlushMessagesOnConnection(void *, HSteamNetConnection);
-extern int cppISteamNetworkingSockets_SteamNetworkingSockets008_ReceiveMessagesOnConnection(void *, HSteamNetConnection, winSteamNetworkingMessage_t_148a **, int);
+extern int cppISteamNetworkingSockets_SteamNetworkingSockets008_ReceiveMessagesOnConnection(void *, HSteamNetConnection, winSteamNetworkingMessage_t_149 **, int);
 extern bool cppISteamNetworkingSockets_SteamNetworkingSockets008_GetConnectionInfo(void *, HSteamNetConnection, SteamNetConnectionInfo_t *);
 extern bool cppISteamNetworkingSockets_SteamNetworkingSockets008_GetQuickConnectionStatus(void *, HSteamNetConnection, SteamNetworkingQuickConnectionStatus *);
 extern int cppISteamNetworkingSockets_SteamNetworkingSockets008_GetDetailedConnectionStatus(void *, HSteamNetConnection, char *, int);
@@ -24,7 +24,7 @@ extern ESteamNetworkingAvailability cppISteamNetworkingSockets_SteamNetworkingSo
 extern HSteamNetPollGroup cppISteamNetworkingSockets_SteamNetworkingSockets008_CreatePollGroup(void *);
 extern bool cppISteamNetworkingSockets_SteamNetworkingSockets008_DestroyPollGroup(void *, HSteamNetPollGroup);
 extern bool cppISteamNetworkingSockets_SteamNetworkingSockets008_SetConnectionPollGroup(void *, HSteamNetConnection, HSteamNetPollGroup);
-extern int cppISteamNetworkingSockets_SteamNetworkingSockets008_ReceiveMessagesOnPollGroup(void *, HSteamNetPollGroup, winSteamNetworkingMessage_t_148a **, int);
+extern int cppISteamNetworkingSockets_SteamNetworkingSockets008_ReceiveMessagesOnPollGroup(void *, HSteamNetPollGroup, winSteamNetworkingMessage_t_149 **, int);
 extern bool cppISteamNetworkingSockets_SteamNetworkingSockets008_ReceivedRelayAuthTicket(void *, const void *, int, SteamDatagramRelayAuthTicket *);
 extern int cppISteamNetworkingSockets_SteamNetworkingSockets008_FindRelayAuthTicketForServer(void *, const SteamNetworkingIdentity *, int, SteamDatagramRelayAuthTicket *);
 extern HSteamNetConnection cppISteamNetworkingSockets_SteamNetworkingSockets008_ConnectToHostedDedicatedServer(void *, const SteamNetworkingIdentity *, int, int, const SteamNetworkingConfigValue_t *);
