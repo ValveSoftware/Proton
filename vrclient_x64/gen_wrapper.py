@@ -14,6 +14,7 @@ import os
 import re
 
 sdk_versions = [
+    "v1.12.5",
     "v1.11.11",
     "v1.10.30",
     "v1.9.16",
