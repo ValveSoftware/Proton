@@ -276,6 +276,7 @@ the Wine prefix. Removing the option will revert to the previous behavior.
 | <tt>noforcelgadd</tt> |                                | Disable forcelgadd. If both this and `forcelgadd` are set, enabled wins. |
 | <tt>oldglstr</tt>     | <tt>PROTON_OLD_GL_STRING</tt>  | Set some driver overrides to limit the length of the GL extension string, for old games that crash on very long extension strings. |
 | <tt>vkd3dfl12</tt>    |                                | Force the Direct3D 12 feature level to 12, regardless of driver support. |
+| <tt>hidenvgpu</tt>    | <tt>PROTON_HIDE_NVIDIA_GPU</tt>| Force Nvidia GPUs to always be reported as AMD GPUs. Some games require this if they depend on Windows-only Nvidia driver functionality. See also DXVK's nvapiHack config, which only affects reporting from Direct3D. |
 |                       | <tt>WINE_FULLSCREEN_INTEGER_SCALING</tt> | Enable integer scaling mode, to give sharp pixels when upscaling. |
 | <tt>cmdlineappend:</tt>|                               | Append the string after the colon as an argument to the game command. May be specified more than once. Escape commas and backslashes with a backslash. |
 | <tt>nowritewatch</tt> | <tt>PROTON_NO_WRITE_WATCH</tt> | Disable support for memory write watches in ntdll. This is a very dangerous hack and should only be applied if you have verified that the game can operate without write watches. This improves performance for some very specific games (e.g. CoreRT-based games). |
