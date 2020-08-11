@@ -23,9 +23,9 @@ int main(void)
     test_capi_thunks_IVRDriverManager_001();
     test_capi_thunks_IVRInput_010();
     test_capi_thunks_IVRIOBuffer_002();
+    test_capi_thunks_IVRClientCore_003();
     test_capi_thunks_IVRControlPanel_006();
     test_capi_thunks_IVRMailbox_001();
-    test_capi_thunks_IVRClientCore_003();
     test_capi_thunks_IVRCompositor_024();
     test_capi_thunks_IVROverlay_022();
     test_capi_thunks_IVRInput_007();
