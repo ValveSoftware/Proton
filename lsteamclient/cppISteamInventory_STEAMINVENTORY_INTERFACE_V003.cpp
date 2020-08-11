@@ -1,14 +1,14 @@
 #include "steam_defs.h"
 #pragma push_macro("__cdecl")
 #undef __cdecl
-#include "steamworks_sdk_148a/steam_api.h"
-#include "steamworks_sdk_148a/steamnetworkingtypes.h"
+#include "steamworks_sdk_149/steam_api.h"
+#include "steamworks_sdk_149/steamnetworkingtypes.h"
 #pragma pop_macro("__cdecl")
 #include "steamclient_private.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
-#define SDKVER_148a
+#define SDKVER_149
 #include "struct_converters.h"
 #include "cppISteamInventory_STEAMINVENTORY_INTERFACE_V003.h"
 EResult cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_GetResultStatus(void *linux_side, SteamInventoryResult_t resultHandle)
@@ -194,6 +194,11 @@ bool cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_SetProperty_4(void *linux_
 bool cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_SubmitUpdateProperties(void *linux_side, SteamInventoryUpdateHandle_t handle, SteamInventoryResult_t * pResultHandle)
 {
     return ((ISteamInventory*)linux_side)->SubmitUpdateProperties((SteamInventoryUpdateHandle_t)handle, (SteamInventoryResult_t *)pResultHandle);
+}
+
+bool cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_InspectItem(void *linux_side, SteamInventoryResult_t * pResultHandle, const char * pchItemToken)
+{
+    return ((ISteamInventory*)linux_side)->InspectItem((SteamInventoryResult_t *)pResultHandle, (const char *)pchItemToken);
 }
 
 #ifdef __cplusplus

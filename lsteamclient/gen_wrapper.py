@@ -5,7 +5,7 @@
 
 from __future__ import print_function
 
-CLANG_PATH='/usr/lib/clang/10.0.0'
+CLANG_PATH='/usr/lib/clang/10.0.1'
 
 import pprint
 import sys
@@ -15,6 +15,7 @@ import re
 import math
 
 sdk_versions = [
+    "149",
     "148a",
     "147",
     "146",

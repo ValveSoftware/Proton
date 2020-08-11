@@ -281,6 +281,13 @@ bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V003_SubmitUpdatePro
     return cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_SubmitUpdateProperties(_this->linux_side, handle, pResultHandle);
 }
 
+DEFINE_THISCALL_WRAPPER(winISteamInventory_STEAMINVENTORY_INTERFACE_V003_InspectItem, 12)
+bool __thiscall winISteamInventory_STEAMINVENTORY_INTERFACE_V003_InspectItem(winISteamInventory_STEAMINVENTORY_INTERFACE_V003 *_this, SteamInventoryResult_t * pResultHandle, const char * pchItemToken)
+{
+    TRACE("%p\n", _this);
+    return cppISteamInventory_STEAMINVENTORY_INTERFACE_V003_InspectItem(_this->linux_side, pResultHandle, pchItemToken);
+}
+
 extern vtable_ptr winISteamInventory_STEAMINVENTORY_INTERFACE_V003_vtable;
 
 #ifndef __GNUC__
@@ -324,6 +331,7 @@ void __asm_dummy_vtables(void) {
         VTABLE_ADD_FUNC(winISteamInventory_STEAMINVENTORY_INTERFACE_V003_SetProperty_2)
         VTABLE_ADD_FUNC(winISteamInventory_STEAMINVENTORY_INTERFACE_V003_SetProperty)
         VTABLE_ADD_FUNC(winISteamInventory_STEAMINVENTORY_INTERFACE_V003_SubmitUpdateProperties)
+        VTABLE_ADD_FUNC(winISteamInventory_STEAMINVENTORY_INTERFACE_V003_InspectItem)
     );
 #ifndef __GNUC__
 }

@@ -96,7 +96,8 @@ typedef uint32_t EUserUGCList,
         ESteamNetworkingAvailability,
         ESteamDeviceFormFactor,
         ESteamIPv6ConnectivityState,
-        ESteamIPv6ConnectivityProtocol
+        ESteamIPv6ConnectivityProtocol,
+        EDurationControlOnlineState
 ;
 
 /* XXX NO */

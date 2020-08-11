@@ -212,7 +212,7 @@ struct SteamIPAddress_t
 
 	static SteamIPAddress_t IPv4Any()
 	{
-            return {}
+            return {};
 	}
 
 	static SteamIPAddress_t IPv6Any()

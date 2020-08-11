@@ -72,3 +72,4 @@ extern bool cppISteamFriends_SteamFriends017_IsClanPublic(void *, CSteamID);
 extern bool cppISteamFriends_SteamFriends017_IsClanOfficialGameGroup(void *, CSteamID);
 extern int cppISteamFriends_SteamFriends017_GetNumChatsWithUnreadPriorityMessages(void *);
 extern void cppISteamFriends_SteamFriends017_ActivateGameOverlayRemotePlayTogetherInviteDialog(void *, CSteamID);
+extern bool cppISteamFriends_SteamFriends017_RegisterProtocolInOverlayBrowser(void *, const char *);

@@ -26,3 +26,4 @@ extern void cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_RequestAllProofOfPurcha
 extern SteamAPICall_t cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetFileDetails(void *, const char *);
 extern int cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetLaunchCommandLine(void *, char *, int);
 extern bool cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsSubscribedFromFamilySharing(void *);
+extern bool cppISteamApps_STEAMAPPS_INTERFACE_VERSION008_BIsTimedTrial(void *, uint32 *, uint32 *);
