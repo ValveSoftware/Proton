@@ -1,6 +1,6 @@
 #include "vrclient_private.h"
 #include "vrclient_defs.h"
-#include "openvr_v1.10.30/ivrclientcore.h"
+#include "openvr_v1.11.11/ivrclientcore.h"
 using namespace vr;
 extern "C" {
 #include "struct_converters.h"
@@ -229,15 +229,15 @@ vr::EVROverlayError cppIVROverlay_IVROverlay_024_GetTransformForOverlayCoordinat
     return ((IVROverlay*)linux_side)->GetTransformForOverlayCoordinates((vr::VROverlayHandle_t)ulOverlayHandle, (vr::ETrackingUniverseOrigin)eTrackingOrigin, (vr::HmdVector2_t)coordinatesInOverlay, (vr::HmdMatrix34_t *)pmatTransform);
 }
 
-bool cppIVROverlay_IVROverlay_024_PollNextOverlayEvent(void *linux_side, VROverlayHandle_t ulOverlayHandle, winVREvent_t_11030 * pEvent, uint32_t uncbVREvent)
+bool cppIVROverlay_IVROverlay_024_PollNextOverlayEvent(void *linux_side, VROverlayHandle_t ulOverlayHandle, winVREvent_t_11111 * pEvent, uint32_t uncbVREvent)
 {
     VREvent_t lin;
     bool _ret;
     if(pEvent)
-        struct_VREvent_t_11030_win_to_lin(pEvent, &lin);
+        struct_VREvent_t_11111_win_to_lin(pEvent, &lin);
     _ret = ((IVROverlay*)linux_side)->PollNextOverlayEvent((vr::VROverlayHandle_t)ulOverlayHandle, pEvent ? &lin : nullptr, uncbVREvent ? sizeof(lin) : 0);
     if(pEvent)
-        struct_VREvent_t_11030_lin_to_win(&lin, pEvent, uncbVREvent);
+        struct_VREvent_t_11111_lin_to_win(&lin, pEvent, uncbVREvent);
     return _ret;
 }
 
