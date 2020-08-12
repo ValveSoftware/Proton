@@ -126,7 +126,11 @@ module: configure
 	mkdir -p vagrant_share/$(module)/lib/wine/ vagrant_share/$(module)/lib64/wine/
 	vagrant ssh -c 'make -C $(BUILD_DIR)/ $(UNSTRIPPED) module=$(module) module && \
 		cp $(BUILD_DIR)/obj-wine32/dlls/$(module)/$(module)$(MODULE_SFX)* /vagrant/$(module)/lib/wine/ && \
-		cp $(BUILD_DIR)/obj-wine64/dlls/$(module)/$(module)$(MODULE_SFX)* /vagrant/$(module)/lib64/wine/'
+		cp $(BUILD_DIR)/obj-wine64/dlls/$(module)/$(module)$(MODULE_SFX)* /vagrant/$(module)/lib64/wine/ && \
+		if [ -e $(BUILD_DIR)/obj-wine64/dlls/$(module)/$(module).so ]; then \
+			cp $(BUILD_DIR)/obj-wine32/dlls/$(module)/$(module).so /vagrant/$(module)/lib/wine/ && \
+			cp $(BUILD_DIR)/obj-wine64/dlls/$(module)/$(module).so /vagrant/$(module)/lib64/wine/; \
+		fi'
 	rm -f vagrant_share/$(module)/lib*/wine/*.fake
 
 dxvk: configure
