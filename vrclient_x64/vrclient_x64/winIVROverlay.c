@@ -421,7 +421,7 @@ DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_024_SetOverlayTexture, 16)
 EVROverlayError __thiscall winIVROverlay_IVROverlay_024_SetOverlayTexture(winIVROverlay_IVROverlay_024 *_this, VROverlayHandle_t ulOverlayHandle, Texture_t * pTexture)
 {
     TRACE("%p\n", _this);
-    return cppIVROverlay_IVROverlay_024_SetOverlayTexture(_this->linux_side, ulOverlayHandle, pTexture);
+    return ivroverlay_set_overlay_texture(cppIVROverlay_IVROverlay_024_SetOverlayTexture, _this->linux_side, ulOverlayHandle, pTexture, 24);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_024_ClearOverlayTexture, 12)
@@ -1210,7 +1210,7 @@ DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_022_SetOverlayTexture, 16)
 EVROverlayError __thiscall winIVROverlay_IVROverlay_022_SetOverlayTexture(winIVROverlay_IVROverlay_022 *_this, VROverlayHandle_t ulOverlayHandle, Texture_t * pTexture)
 {
     TRACE("%p\n", _this);
-    return cppIVROverlay_IVROverlay_022_SetOverlayTexture(_this->linux_side, ulOverlayHandle, pTexture);
+    return ivroverlay_set_overlay_texture(cppIVROverlay_IVROverlay_022_SetOverlayTexture, _this->linux_side, ulOverlayHandle, pTexture, 22);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_022_ClearOverlayTexture, 12)
@@ -1951,7 +1951,7 @@ DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_021_SetOverlayTexture, 16)
 EVROverlayError __thiscall winIVROverlay_IVROverlay_021_SetOverlayTexture(winIVROverlay_IVROverlay_021 *_this, VROverlayHandle_t ulOverlayHandle, Texture_t * pTexture)
 {
     TRACE("%p\n", _this);
-    return cppIVROverlay_IVROverlay_021_SetOverlayTexture(_this->linux_side, ulOverlayHandle, pTexture);
+    return ivroverlay_set_overlay_texture(cppIVROverlay_IVROverlay_021_SetOverlayTexture, _this->linux_side, ulOverlayHandle, pTexture, 21);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_021_ClearOverlayTexture, 12)
@@ -2722,7 +2722,7 @@ DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_020_SetOverlayTexture, 16)
 EVROverlayError __thiscall winIVROverlay_IVROverlay_020_SetOverlayTexture(winIVROverlay_IVROverlay_020 *_this, VROverlayHandle_t ulOverlayHandle, Texture_t * pTexture)
 {
     TRACE("%p\n", _this);
-    return cppIVROverlay_IVROverlay_020_SetOverlayTexture(_this->linux_side, ulOverlayHandle, pTexture);
+    return ivroverlay_set_overlay_texture(cppIVROverlay_IVROverlay_020_SetOverlayTexture, _this->linux_side, ulOverlayHandle, pTexture, 20);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_020_ClearOverlayTexture, 12)
@@ -3515,7 +3515,7 @@ DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_019_SetOverlayTexture, 16)
 EVROverlayError __thiscall winIVROverlay_IVROverlay_019_SetOverlayTexture(winIVROverlay_IVROverlay_019 *_this, VROverlayHandle_t ulOverlayHandle, Texture_t * pTexture)
 {
     TRACE("%p\n", _this);
-    return cppIVROverlay_IVROverlay_019_SetOverlayTexture(_this->linux_side, ulOverlayHandle, pTexture);
+    return ivroverlay_set_overlay_texture(cppIVROverlay_IVROverlay_019_SetOverlayTexture, _this->linux_side, ulOverlayHandle, pTexture, 19);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_019_ClearOverlayTexture, 12)
@@ -4312,7 +4312,7 @@ DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_018_SetOverlayTexture, 16)
 EVROverlayError __thiscall winIVROverlay_IVROverlay_018_SetOverlayTexture(winIVROverlay_IVROverlay_018 *_this, VROverlayHandle_t ulOverlayHandle, Texture_t * pTexture)
 {
     TRACE("%p\n", _this);
-    return cppIVROverlay_IVROverlay_018_SetOverlayTexture(_this->linux_side, ulOverlayHandle, pTexture);
+    return ivroverlay_set_overlay_texture(cppIVROverlay_IVROverlay_018_SetOverlayTexture, _this->linux_side, ulOverlayHandle, pTexture, 18);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_018_ClearOverlayTexture, 12)
@@ -5116,7 +5116,7 @@ DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_017_SetOverlayTexture, 16)
 EVROverlayError __thiscall winIVROverlay_IVROverlay_017_SetOverlayTexture(winIVROverlay_IVROverlay_017 *_this, VROverlayHandle_t ulOverlayHandle, Texture_t * pTexture)
 {
     TRACE("%p\n", _this);
-    return cppIVROverlay_IVROverlay_017_SetOverlayTexture(_this->linux_side, ulOverlayHandle, pTexture);
+    return ivroverlay_set_overlay_texture(cppIVROverlay_IVROverlay_017_SetOverlayTexture, _this->linux_side, ulOverlayHandle, pTexture, 17);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_017_ClearOverlayTexture, 12)
@@ -5908,7 +5908,7 @@ DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_016_SetOverlayTexture, 16)
 EVROverlayError __thiscall winIVROverlay_IVROverlay_016_SetOverlayTexture(winIVROverlay_IVROverlay_016 *_this, VROverlayHandle_t ulOverlayHandle, Texture_t * pTexture)
 {
     TRACE("%p\n", _this);
-    return cppIVROverlay_IVROverlay_016_SetOverlayTexture(_this->linux_side, ulOverlayHandle, pTexture);
+    return ivroverlay_set_overlay_texture(cppIVROverlay_IVROverlay_016_SetOverlayTexture, _this->linux_side, ulOverlayHandle, pTexture, 16);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_016_ClearOverlayTexture, 12)
@@ -6661,7 +6661,7 @@ DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_014_SetOverlayTexture, 16)
 EVROverlayError __thiscall winIVROverlay_IVROverlay_014_SetOverlayTexture(winIVROverlay_IVROverlay_014 *_this, VROverlayHandle_t ulOverlayHandle, Texture_t * pTexture)
 {
     TRACE("%p\n", _this);
-    return cppIVROverlay_IVROverlay_014_SetOverlayTexture(_this->linux_side, ulOverlayHandle, pTexture);
+    return ivroverlay_set_overlay_texture(cppIVROverlay_IVROverlay_014_SetOverlayTexture, _this->linux_side, ulOverlayHandle, pTexture, 14);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_014_ClearOverlayTexture, 12)
@@ -7395,7 +7395,7 @@ DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_013_SetOverlayTexture, 16)
 EVROverlayError __thiscall winIVROverlay_IVROverlay_013_SetOverlayTexture(winIVROverlay_IVROverlay_013 *_this, VROverlayHandle_t ulOverlayHandle, Texture_t * pTexture)
 {
     TRACE("%p\n", _this);
-    return cppIVROverlay_IVROverlay_013_SetOverlayTexture(_this->linux_side, ulOverlayHandle, pTexture);
+    return ivroverlay_set_overlay_texture(cppIVROverlay_IVROverlay_013_SetOverlayTexture, _this->linux_side, ulOverlayHandle, pTexture, 13);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_013_ClearOverlayTexture, 12)
@@ -8083,7 +8083,7 @@ DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_012_SetOverlayTexture, 16)
 EVROverlayError __thiscall winIVROverlay_IVROverlay_012_SetOverlayTexture(winIVROverlay_IVROverlay_012 *_this, VROverlayHandle_t ulOverlayHandle, Texture_t * pTexture)
 {
     TRACE("%p\n", _this);
-    return cppIVROverlay_IVROverlay_012_SetOverlayTexture(_this->linux_side, ulOverlayHandle, pTexture);
+    return ivroverlay_set_overlay_texture(cppIVROverlay_IVROverlay_012_SetOverlayTexture, _this->linux_side, ulOverlayHandle, pTexture, 12);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_012_ClearOverlayTexture, 12)
@@ -8754,7 +8754,7 @@ DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_011_SetOverlayTexture, 16)
 EVROverlayError __thiscall winIVROverlay_IVROverlay_011_SetOverlayTexture(winIVROverlay_IVROverlay_011 *_this, VROverlayHandle_t ulOverlayHandle, Texture_t * pTexture)
 {
     TRACE("%p\n", _this);
-    return cppIVROverlay_IVROverlay_011_SetOverlayTexture(_this->linux_side, ulOverlayHandle, pTexture);
+    return ivroverlay_set_overlay_texture(cppIVROverlay_IVROverlay_011_SetOverlayTexture, _this->linux_side, ulOverlayHandle, pTexture, 11);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_011_ClearOverlayTexture, 12)
@@ -9402,7 +9402,7 @@ DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_010_SetOverlayTexture, 16)
 EVROverlayError __thiscall winIVROverlay_IVROverlay_010_SetOverlayTexture(winIVROverlay_IVROverlay_010 *_this, VROverlayHandle_t ulOverlayHandle, Texture_t * pTexture)
 {
     TRACE("%p\n", _this);
-    return cppIVROverlay_IVROverlay_010_SetOverlayTexture(_this->linux_side, ulOverlayHandle, pTexture);
+    return ivroverlay_set_overlay_texture(cppIVROverlay_IVROverlay_010_SetOverlayTexture, _this->linux_side, ulOverlayHandle, pTexture, 10);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_010_ClearOverlayTexture, 12)
@@ -10014,7 +10014,7 @@ DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_008_SetOverlayTexture, 16)
 EVROverlayError __thiscall winIVROverlay_IVROverlay_008_SetOverlayTexture(winIVROverlay_IVROverlay_008 *_this, VROverlayHandle_t ulOverlayHandle, Texture_t * pTexture)
 {
     TRACE("%p\n", _this);
-    return cppIVROverlay_IVROverlay_008_SetOverlayTexture(_this->linux_side, ulOverlayHandle, pTexture);
+    return ivroverlay_set_overlay_texture(cppIVROverlay_IVROverlay_008_SetOverlayTexture, _this->linux_side, ulOverlayHandle, pTexture, 8);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_008_ClearOverlayTexture, 12)
@@ -10606,7 +10606,7 @@ DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_007_SetOverlayTexture, 16)
 EVROverlayError __thiscall winIVROverlay_IVROverlay_007_SetOverlayTexture(winIVROverlay_IVROverlay_007 *_this, VROverlayHandle_t ulOverlayHandle, Texture_t * pTexture)
 {
     TRACE("%p\n", _this);
-    return cppIVROverlay_IVROverlay_007_SetOverlayTexture(_this->linux_side, ulOverlayHandle, pTexture);
+    return ivroverlay_set_overlay_texture(cppIVROverlay_IVROverlay_007_SetOverlayTexture, _this->linux_side, ulOverlayHandle, pTexture, 7);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_007_ClearOverlayTexture, 12)
@@ -11150,7 +11150,7 @@ DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_005_SetOverlayTexture, 20)
 VROverlayError __thiscall winIVROverlay_IVROverlay_005_SetOverlayTexture(winIVROverlay_IVROverlay_005 *_this, VROverlayHandle_t ulOverlayHandle, GraphicsAPIConvention eTextureType, void * pTexture)
 {
     TRACE("%p\n", _this);
-    return cppIVROverlay_IVROverlay_005_SetOverlayTexture(_this->linux_side, ulOverlayHandle, eTextureType, pTexture);
+    return ivroverlay_005_set_overlay_texture(cppIVROverlay_IVROverlay_005_SetOverlayTexture, _this->linux_side, ulOverlayHandle, eTextureType, pTexture, 5);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_005_ClearOverlayTexture, 12)
@@ -11670,7 +11670,7 @@ DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_004_SetOverlayTexture, 20)
 VROverlayError __thiscall winIVROverlay_IVROverlay_004_SetOverlayTexture(winIVROverlay_IVROverlay_004 *_this, VROverlayHandle_t ulOverlayHandle, GraphicsAPIConvention eTextureType, void * pTexture)
 {
     TRACE("%p\n", _this);
-    return cppIVROverlay_IVROverlay_004_SetOverlayTexture(_this->linux_side, ulOverlayHandle, eTextureType, pTexture);
+    return ivroverlay_005_set_overlay_texture(cppIVROverlay_IVROverlay_004_SetOverlayTexture, _this->linux_side, ulOverlayHandle, eTextureType, pTexture, 4);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_004_ClearOverlayTexture, 12)
@@ -12147,7 +12147,7 @@ DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_003_SetOverlayTexture, 20)
 VROverlayError __thiscall winIVROverlay_IVROverlay_003_SetOverlayTexture(winIVROverlay_IVROverlay_003 *_this, VROverlayHandle_t ulOverlayHandle, GraphicsAPIConvention eTextureType, void * pTexture)
 {
     TRACE("%p\n", _this);
-    return cppIVROverlay_IVROverlay_003_SetOverlayTexture(_this->linux_side, ulOverlayHandle, eTextureType, pTexture);
+    return ivroverlay_005_set_overlay_texture(cppIVROverlay_IVROverlay_003_SetOverlayTexture, _this->linux_side, ulOverlayHandle, eTextureType, pTexture, 3);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_003_ClearOverlayTexture, 12)
@@ -12599,7 +12599,7 @@ DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_002_SetOverlayTexture, 20)
 VROverlayError __thiscall winIVROverlay_IVROverlay_002_SetOverlayTexture(winIVROverlay_IVROverlay_002 *_this, VROverlayHandle_t ulOverlayHandle, GraphicsAPIConvention eTextureType, void * pTexture)
 {
     TRACE("%p\n", _this);
-    return cppIVROverlay_IVROverlay_002_SetOverlayTexture(_this->linux_side, ulOverlayHandle, eTextureType, pTexture);
+    return ivroverlay_005_set_overlay_texture(cppIVROverlay_IVROverlay_002_SetOverlayTexture, _this->linux_side, ulOverlayHandle, eTextureType, pTexture, 2);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_002_ClearOverlayTexture, 12)
@@ -13036,7 +13036,7 @@ DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_001_SetOverlayTexture, 16)
 VROverlayError __thiscall winIVROverlay_IVROverlay_001_SetOverlayTexture(winIVROverlay_IVROverlay_001 *_this, VROverlayHandle_t ulOverlayHandle, void * pTexture)
 {
     TRACE("%p\n", _this);
-    return cppIVROverlay_IVROverlay_001_SetOverlayTexture(_this->linux_side, ulOverlayHandle, pTexture);
+    return ivroverlay_001_set_overlay_texture(cppIVROverlay_IVROverlay_001_SetOverlayTexture, _this->linux_side, ulOverlayHandle, pTexture, 1);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_001_SetOverlayRaw, 28)

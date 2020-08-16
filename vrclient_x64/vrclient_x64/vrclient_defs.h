@@ -29,7 +29,6 @@ typedef int
         EVRNotificationType,
         EVRNotificationError,
         EVRNotificationStyle,
-        EVROverlayError,
         EGamepadTextInputLineMode,
         EOverlayDirection,
         EColorSpace,
@@ -311,5 +310,10 @@ typedef enum EVRRenderModelError
     VRRenderModelError_InvalidArg = 300,
     VRRenderModelError_InvalidTexture = 400,
 } EVRRenderModelError;
+
+typedef enum EVROverlayError
+{
+    VROverlayError_InvalidHandle = 11,
+} EVROverlayError;
 
 #endif

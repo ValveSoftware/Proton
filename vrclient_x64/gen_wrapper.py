@@ -350,6 +350,30 @@ def ivrmailbox_undoc3(cppname, method):
     assert "001" in cppname
     return "ivrmailbox_undoc3"
 
+def ivroverlay_set_overlay_texture(cppname, method):
+    if "001" in cppname:
+        return "ivroverlay_001_set_overlay_texture"
+    for version in ["002", "003", "004", "005"]:
+        if version in cppname:
+            return "ivroverlay_005_set_overlay_texture"
+    assert \
+            "007" in cppname or \
+            "008" in cppname or \
+            "010" in cppname or \
+            "011" in cppname or \
+            "012" in cppname or \
+            "013" in cppname or \
+            "014" in cppname or \
+            "016" in cppname or \
+            "017" in cppname or \
+            "018" in cppname or \
+            "019" in cppname or \
+            "020" in cppname or \
+            "021" in cppname or \
+            "022" in cppname or \
+            "024" in cppname
+    return "ivroverlay_set_overlay_texture"
+
 method_overrides = [
     ("IVRClientCore", "Init", ivrclientcore_init),
     ("IVRClientCore", "GetGenericInterface", ivrclientcore_get_generic_interface),
@@ -364,6 +388,7 @@ method_overrides = [
     ("IVRRenderModels", "FreeTextureD3D11", ivrrendermodels_free_texture_d3d11),
     ("IVRRenderModels", "LoadIntoTextureD3D11_Async", ivrrendermodels_load_into_texture_d3d11_async),
     ("IVRMailbox", "undoc3", ivrmailbox_undoc3),
+    ("IVROverlay", "SetOverlayTexture", ivroverlay_set_overlay_texture),
 ]
 
 method_overrides_data = [

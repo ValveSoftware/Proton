@@ -744,6 +744,83 @@ static EVRCompositorError ivrcompositor_submit_wined3d(
 }
 
 #ifdef VRCLIENT_HAVE_DXVK
+static Texture_t vrclient_translate_texture_dxvk(Texture_t *texture, struct VRVulkanTextureData_t *vkdata,
+        IDXGIVkInteropSurface *dxvk_surface, IDXGIVkInteropDevice **p_dxvk_device, VkImageLayout *image_layout,
+        VkImageCreateInfo *image_info)
+{
+    struct Texture_t vktexture;
+    VkImage image_handle;
+
+    dxvk_surface->lpVtbl->GetDevice(dxvk_surface, p_dxvk_device);
+
+    (*p_dxvk_device)->lpVtbl->GetVulkanHandles(*p_dxvk_device, &vkdata->m_pInstance,
+            &vkdata->m_pPhysicalDevice, &vkdata->m_pDevice);
+
+    (*p_dxvk_device)->lpVtbl->GetSubmissionQueue(*p_dxvk_device, &vkdata->m_pQueue, &vkdata->m_nQueueFamilyIndex);
+
+    image_info->sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
+    image_info->pNext = NULL;
+
+    dxvk_surface->lpVtbl->GetVulkanImageInfo(dxvk_surface, &image_handle, image_layout, image_info);
+
+    load_vk_unwrappers();
+
+    vkdata->m_nImage = (uint64_t)image_handle;
+    vkdata->m_pDevice = get_native_VkDevice(vkdata->m_pDevice);
+    vkdata->m_pPhysicalDevice = get_native_VkPhysicalDevice(vkdata->m_pPhysicalDevice);
+    vkdata->m_pInstance = get_native_VkInstance(vkdata->m_pInstance);
+    vkdata->m_pQueue = get_native_VkQueue(vkdata->m_pQueue);
+    vkdata->m_nWidth = image_info->extent.width;
+    vkdata->m_nHeight = image_info->extent.height;
+    vkdata->m_nFormat = image_info->format;
+    vkdata->m_nSampleCount = image_info->samples;
+
+    vktexture = *texture;
+    vktexture.handle = vkdata;
+    vktexture.eType = TextureType_Vulkan;
+
+    return vktexture;
+}
+
+static EVROverlayError ivroverlay_set_overlay_texture_dxvk(
+                EVROverlayError (*cpp_func)(void *, VROverlayHandle_t, Texture_t *),
+                void *linux_side, VROverlayHandle_t overlayHandle, Texture_t *texture,
+                unsigned int version, IDXGIVkInteropSurface *dxvk_surface)
+{
+    struct VRVulkanTextureData_t vkdata;
+    IDXGIVkInteropDevice *dxvk_device;
+    struct Texture_t vktexture;
+
+    VkImageLayout image_layout;
+    VkImageCreateInfo image_info;
+    VkImageSubresourceRange subresources;
+
+    EVRCompositorError err;
+
+    vktexture = vrclient_translate_texture_dxvk(texture, &vkdata, dxvk_surface, &dxvk_device, &image_layout, &image_info);
+
+    subresources.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+    subresources.baseMipLevel = 0;
+    subresources.levelCount = image_info.mipLevels;
+    subresources.baseArrayLayer = 0;
+    subresources.layerCount = image_info.arrayLayers;
+
+    dxvk_device->lpVtbl->TransitionSurfaceLayout(dxvk_device, dxvk_surface, &subresources,
+            image_layout, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
+    dxvk_device->lpVtbl->FlushRenderingCommands(dxvk_device);
+    dxvk_device->lpVtbl->LockSubmissionQueue(dxvk_device);
+
+    err = cpp_func(linux_side, overlayHandle, &vktexture);
+
+    dxvk_device->lpVtbl->ReleaseSubmissionQueue(dxvk_device);
+    dxvk_device->lpVtbl->TransitionSurfaceLayout(dxvk_device, dxvk_surface, &subresources,
+            VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, image_layout);
+
+    dxvk_device->lpVtbl->Release(dxvk_device);
+    dxvk_surface->lpVtbl->Release(dxvk_surface);
+    return err;
+}
+
 static EVRCompositorError ivrcompositor_submit_dxvk(
         EVRCompositorError (*cpp_func)(void *, EVREye, Texture_t *, VRTextureBounds_t *, EVRSubmitFlags),
         void *linux_side, EVREye eye, Texture_t *texture, VRTextureBounds_t *bounds, EVRSubmitFlags flags,
@@ -753,46 +830,18 @@ static EVRCompositorError ivrcompositor_submit_dxvk(
     IDXGIVkInteropDevice *dxvk_device;
     struct Texture_t vktexture;
 
-    VkImage image_handle;
     VkImageLayout image_layout;
     VkImageCreateInfo image_info;
     VkImageSubresourceRange subresources;
 
     EVRCompositorError err;
 
-    dxvk_surface->lpVtbl->GetDevice(dxvk_surface, &dxvk_device);
+    vktexture = vrclient_translate_texture_dxvk(texture, &vkdata, dxvk_surface, &dxvk_device, &image_layout, &image_info);
 
     user_data->dxvk_device = dxvk_device;
 
-    dxvk_device->lpVtbl->GetVulkanHandles(dxvk_device, &vkdata.m_pInstance,
-            &vkdata.m_pPhysicalDevice, &vkdata.m_pDevice);
-
-    dxvk_device->lpVtbl->GetSubmissionQueue(dxvk_device, &vkdata.m_pQueue, &vkdata.m_nQueueFamilyIndex);
-
-    /* DXVK needs this to be initialized correctly */
-    image_info.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
-    image_info.pNext = NULL;
-
-    dxvk_surface->lpVtbl->GetVulkanImageInfo(dxvk_surface, &image_handle, &image_layout, &image_info);
-
-    load_vk_unwrappers();
-
-    vkdata.m_nImage = (uint64_t)image_handle;
-    vkdata.m_pDevice = get_native_VkDevice(vkdata.m_pDevice);
-    vkdata.m_pPhysicalDevice = get_native_VkPhysicalDevice(vkdata.m_pPhysicalDevice);
-    vkdata.m_pInstance = get_native_VkInstance(vkdata.m_pInstance);
-    vkdata.m_pQueue = get_native_VkQueue(vkdata.m_pQueue);
-    vkdata.m_nWidth = image_info.extent.width;
-    vkdata.m_nHeight = image_info.extent.height;
-    vkdata.m_nFormat = image_info.format;
-    vkdata.m_nSampleCount = image_info.samples;
-
     if (flags & (Submit_TextureWithPose | Submit_TextureWithDepth))
         FIXME("Unhandled flags %#x.\n", flags & (Submit_TextureWithPose | Submit_TextureWithDepth));
-
-    vktexture = *texture;
-    vktexture.handle = &vkdata;
-    vktexture.eType = TextureType_Vulkan;
 
     subresources.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
     subresources.baseMipLevel = 0;
@@ -889,6 +938,65 @@ static EVRCompositorError ivrcompositor_submit_vulkan(
     }
 
     return cpp_func(linux_side, eye, tex, bounds, flags);
+}
+
+EVROverlayError ivroverlay_set_overlay_texture(
+                EVROverlayError (*cpp_func)(void *, VROverlayHandle_t, Texture_t *),
+                void *linux_side, VROverlayHandle_t overlayHandle, Texture_t *texture,
+                unsigned int version)
+{
+    IUnknown *texture_iface;
+    HRESULT hr;
+
+    TRACE("%p, overlayHandle = %#x, texture = %p\n", linux_side, overlayHandle, texture);
+
+    switch (texture->eType)
+    {
+        case TextureType_DirectX:
+            TRACE("D3D11\n");
+
+            if (!texture->handle) {
+                WARN("No D3D11 texture %p.\n", texture);
+                return cpp_func(linux_side, overlayHandle, texture);
+            }
+
+            texture_iface = texture->handle;
+
+#ifdef VRCLIENT_HAVE_DXVK
+            {
+                IDXGIVkInteropSurface *dxvk_surface;
+                if (SUCCEEDED(hr = texture_iface->lpVtbl->QueryInterface(texture_iface, &IID_IDXGIVkInteropSurface, (void **)&dxvk_surface))) {
+                    return ivroverlay_set_overlay_texture_dxvk(cpp_func, linux_side, overlayHandle, texture, version, dxvk_surface);
+                }
+            }
+#endif
+
+            WARN("Invalid D3D11 texture %p.\n", texture);
+            return cpp_func(linux_side, overlayHandle, texture);
+        default:
+            return cpp_func(linux_side, overlayHandle, texture);
+    }
+}
+
+EVROverlayError ivroverlay_005_set_overlay_texture(
+                EVROverlayError (*cpp_func)(void *, VROverlayHandle_t, GraphicsAPIConvention, void *),
+                void *linux_side, VROverlayHandle_t overlayHandle, GraphicsAPIConvention api, void *texture,
+                unsigned int version)
+{
+    /* hopefully no one actually uses this old interface... Vulkan support
+     * wasn't added until later; how can we pass in a DirectX texture? */
+    FIXME("unimplemented!\n");
+    return VROverlayError_InvalidHandle;
+}
+
+EVROverlayError ivroverlay_001_set_overlay_texture(
+                EVROverlayError (*cpp_func)(void *, VROverlayHandle_t, void *),
+                void *linux_side, VROverlayHandle_t overlayHandle, void *texture,
+                unsigned int version)
+{
+    /* probably no one actually uses this old interface... */
+    FIXME("unimplemented!\n");
+    return VROverlayError_InvalidHandle;
 }
 
 EVRCompositorError ivrcompositor_submit(

@@ -128,7 +128,7 @@ VRCompositorError ivrcompositor_008_submit(
         unsigned int version, struct compositor_data *user_data);
 EVRCompositorError ivrcompositor_submit(
         EVRCompositorError (*cpp_func)(void *, EVREye, Texture_t *, VRTextureBounds_t *, EVRSubmitFlags),
-        void *linux_side, EVREye eye, Texture_t *texture, VRTextureBounds_t *bounds, EVRSubmitFlags submit_flags,
+        void *linux_side, EVREye eye, Texture_t *texture, VRTextureBounds_t *bounds, EVRSubmitFlags flags,
         unsigned int version, struct compositor_data *user_data);
 
 void ivrcompositor_post_present_handoff(void (*cpp_func)(void *),
@@ -154,6 +154,21 @@ EVRRenderModelError ivrrendermodels_load_into_texture_d3d11_async(
 void ivrrendermodels_free_texture_d3d11(
         void (*cpp_func)(void *, void *),
         void *linux_side, void *dst_texture, unsigned int version);
+
+EVROverlayError ivroverlay_set_overlay_texture(
+        EVROverlayError (*cpp_func)(void *, VROverlayHandle_t, Texture_t *),
+        void *linux_side, VROverlayHandle_t overlayHandle, Texture_t *texture,
+        unsigned int version);
+
+EVROverlayError ivroverlay_005_set_overlay_texture(
+        EVROverlayError (*cpp_func)(void *, VROverlayHandle_t, GraphicsAPIConvention, void *),
+        void *linux_side, VROverlayHandle_t overlayHandle, GraphicsAPIConvention api, void *texture,
+        unsigned int version);
+
+EVROverlayError ivroverlay_001_set_overlay_texture(
+        EVROverlayError (*cpp_func)(void *, VROverlayHandle_t, void *),
+        void *linux_side, VROverlayHandle_t overlayHandle, void *texture,
+        unsigned int version);
 
 #endif  /* __cplusplus */
 
