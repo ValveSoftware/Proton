@@ -910,6 +910,14 @@ EVRCompositorError ivrcompositor_submit(
 
             texture_iface = texture->handle;
 
+            TRACE("texture_iface = %p\n", texture_iface);
+
+            if (texture_iface != NULL) {
+                    TRACE("texture_iface->lpVtbl = %p\n", texture_iface->lpVtbl);
+            } else {
+                    goto warn_out;
+            }
+
             if (SUCCEEDED(hr = texture_iface->lpVtbl->QueryInterface(texture_iface,
                     &IID_IWineD3D11Texture2D, (void **)&wine_texture)))
             {
@@ -930,6 +938,7 @@ EVRCompositorError ivrcompositor_submit(
             }
 #endif
 
+warn_out:
             WARN("Invalid D3D11 texture %p.\n", texture);
             return cpp_func(linux_side, eye, texture, bounds, flags);
         }
