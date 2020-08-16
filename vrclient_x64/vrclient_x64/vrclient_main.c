@@ -908,6 +908,11 @@ EVRCompositorError ivrcompositor_submit(
         {
             TRACE("D3D11\n");
 
+            if (!texture->handle) {
+                WARN("No D3D11 texture %p.\n", texture);
+                return cpp_func(linux_side, eye, texture, bounds, flags);
+            }
+
             texture_iface = texture->handle;
 
             if (SUCCEEDED(hr = texture_iface->lpVtbl->QueryInterface(texture_iface,
