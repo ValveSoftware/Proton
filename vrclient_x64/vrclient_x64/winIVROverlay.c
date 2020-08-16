@@ -3900,6 +3900,7 @@ void destroy_winIVROverlay_IVROverlay_019_FnTable(void *object)
 typedef struct __winIVROverlay_IVROverlay_018 {
     vtable_ptr *vtable;
     void *linux_side;
+    struct overlay_data user_data;
 } winIVROverlay_IVROverlay_018;
 
 DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_018_FindOverlay, 12)
@@ -4311,8 +4312,12 @@ EVROverlayError __thiscall winIVROverlay_IVROverlay_018_GetOverlayDualAnalogTran
 DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_018_SetOverlayTexture, 16)
 EVROverlayError __thiscall winIVROverlay_IVROverlay_018_SetOverlayTexture(winIVROverlay_IVROverlay_018 *_this, VROverlayHandle_t ulOverlayHandle, Texture_t * pTexture)
 {
-    TRACE("%p\n", _this);
-    return cppIVROverlay_IVROverlay_018_SetOverlayTexture(_this->linux_side, ulOverlayHandle, pTexture);
+    TRACE("%p, ulOverlayHandle = %#x, pTexture = %p\n", _this, ulOverlayHandle, pTexture);
+    if (pTexture != NULL) {
+	    TRACE("pTexture->handle = %p\n", pTexture->handle);
+    }
+    // return cppIVROverlay_IVROverlay_018_SetOverlayTexture(_this->linux_side, ulOverlayHandle, pTexture);
+    return ivroverlay_set_overlay_texture(cppIVROverlay_IVROverlay_018_SetOverlayTexture, _this->linux_side, ulOverlayHandle, pTexture, 22, &_this->user_data);
 }
 
 DEFINE_THISCALL_WRAPPER(winIVROverlay_IVROverlay_018_ClearOverlayTexture, 12)
