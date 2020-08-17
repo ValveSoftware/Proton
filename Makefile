@@ -125,11 +125,11 @@ deploy: configure
 module: configure
 	mkdir -p vagrant_share/$(module)/lib/wine/ vagrant_share/$(module)/lib64/wine/
 	vagrant ssh -c 'make -C $(BUILD_DIR)/ $(UNSTRIPPED) module=$(module) module && \
-		cp $(BUILD_DIR)/obj-wine32/dlls/$(module)/$(module)$(MODULE_SFX)* /vagrant/$(module)/lib/wine/ && \
-		cp $(BUILD_DIR)/obj-wine64/dlls/$(module)/$(module)$(MODULE_SFX)* /vagrant/$(module)/lib64/wine/ && \
+		cp -f $(BUILD_DIR)/obj-wine32/dlls/$(module)/$(module)$(MODULE_SFX)* /vagrant/$(module)/lib/wine/ && \
+		cp -f $(BUILD_DIR)/obj-wine64/dlls/$(module)/$(module)$(MODULE_SFX)* /vagrant/$(module)/lib64/wine/ && \
 		if [ -e $(BUILD_DIR)/obj-wine64/dlls/$(module)/$(module).so ]; then \
-			cp $(BUILD_DIR)/obj-wine32/dlls/$(module)/$(module).so /vagrant/$(module)/lib/wine/ && \
-			cp $(BUILD_DIR)/obj-wine64/dlls/$(module)/$(module).so /vagrant/$(module)/lib64/wine/; \
+			cp -f $(BUILD_DIR)/obj-wine32/dlls/$(module)/$(module).so /vagrant/$(module)/lib/wine/ && \
+			cp -f $(BUILD_DIR)/obj-wine64/dlls/$(module)/$(module).so /vagrant/$(module)/lib64/wine/; \
 		fi'
 	rm -f vagrant_share/$(module)/lib*/wine/*.fake
 
@@ -137,33 +137,33 @@ dxvk: configure
 	mkdir -p vagrant_share/dxvk/lib/wine/dxvk/
 	mkdir -p vagrant_share/dxvk/lib64/wine/dxvk/
 	vagrant ssh -c 'make -C $(BUILD_DIR)/ $(UNSTRIPPED) dxvk && \
-		cp $(BUILD_DIR)/dist/dist/lib/wine/dxvk/*.dll /vagrant/dxvk/lib/wine/dxvk/ && \
-		cp $(BUILD_DIR)/dist/dist/lib64/wine/dxvk/*.dll /vagrant/dxvk/lib64/wine/dxvk/'
+		cp -f $(BUILD_DIR)/dist/dist/lib/wine/dxvk/*.dll /vagrant/dxvk/lib/wine/dxvk/ && \
+		cp -f $(BUILD_DIR)/dist/dist/lib64/wine/dxvk/*.dll /vagrant/dxvk/lib64/wine/dxvk/'
 
 d9vk: configure
 	mkdir -p vagrant_share/d9vk/lib/wine/dxvk/
 	mkdir -p vagrant_share/d9vk/lib64/wine/dxvk/
 	vagrant ssh -c 'make -C $(BUILD_DIR)/ $(UNSTRIPPED) d9vk && \
-		cp $(BUILD_DIR)/dist/dist/lib/wine/dxvk/*.dll /vagrant/d9vk/lib/wine/dxvk/ && \
-		cp $(BUILD_DIR)/dist/dist/lib64/wine/dxvk/*.dll /vagrant/d9vk/lib64/wine/dxvk/'
+		cp -f $(BUILD_DIR)/dist/dist/lib/wine/dxvk/*.dll /vagrant/d9vk/lib/wine/dxvk/ && \
+		cp -f $(BUILD_DIR)/dist/dist/lib64/wine/dxvk/*.dll /vagrant/d9vk/lib64/wine/dxvk/'
 
 vkd3d-proton: configure
 	mkdir -p vagrant_share/vkd3d-proton/lib/wine/vkd3d-proton/
 	mkdir -p vagrant_share/vkd3d-proton/lib64/wine/vkd3d-proton/
 	vagrant ssh -c 'make -C $(BUILD_DIR)/ $(UNSTRIPPED) vkd3d-proton && \
-		cp $(BUILD_DIR)/dist/dist/lib/wine/vkd3d-proton/*.dll /vagrant/vkd3d-proton/lib/wine/vkd3d-proton/ && \
-		cp $(BUILD_DIR)/dist/dist/lib64/wine/vkd3d-proton/*.dll /vagrant/vkd3d-proton/lib64/wine/vkd3d-proton/'
+		cp -f $(BUILD_DIR)/dist/dist/lib/wine/vkd3d-proton/*.dll /vagrant/vkd3d-proton/lib/wine/vkd3d-proton/ && \
+		cp -f $(BUILD_DIR)/dist/dist/lib64/wine/vkd3d-proton/*.dll /vagrant/vkd3d-proton/lib64/wine/vkd3d-proton/'
 
 lsteamclient: configure
 	mkdir -p vagrant_share/lsteamclient/lib/wine
 	mkdir -p vagrant_share/lsteamclient/lib64/wine
 	vagrant ssh -c 'make -C $(BUILD_DIR)/ $(UNSTRIPPED) lsteamclient && \
-		cp $(BUILD_DIR)/dist/dist/lib/wine/lsteamclient.dll.so /vagrant/lsteamclient/lib/wine && \
-		cp $(BUILD_DIR)/dist/dist/lib64/wine/lsteamclient.dll.so /vagrant/lsteamclient/lib64/wine'
+		cp -f $(BUILD_DIR)/dist/dist/lib/wine/lsteamclient.dll.so /vagrant/lsteamclient/lib/wine && \
+		cp -f $(BUILD_DIR)/dist/dist/lib64/wine/lsteamclient.dll.so /vagrant/lsteamclient/lib64/wine'
 
 vrclient: configure
 	mkdir -p vagrant_share/vrclient/lib/wine
 	mkdir -p vagrant_share/vrclient/lib64/wine
 	vagrant ssh -c 'make -C $(BUILD_DIR)/ $(UNSTRIPPED) vrclient && \
-		cp $(BUILD_DIR)/dist/dist/lib/wine/vrclient.dll.so /vagrant/vrclient/lib/wine && \
-		cp $(BUILD_DIR)/dist/dist/lib64/wine/vrclient_x64.dll.so /vagrant/vrclient/lib64/wine'
+		cp -f $(BUILD_DIR)/dist/dist/lib/wine/vrclient.dll.so /vagrant/vrclient/lib/wine && \
+		cp -f $(BUILD_DIR)/dist/dist/lib64/wine/vrclient_x64.dll.so /vagrant/vrclient/lib64/wine'
