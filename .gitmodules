@@ -4,9 +4,6 @@
 [submodule "dxvk"]
 	path = dxvk
 	url = https://github.com/ValveSoftware/dxvk/
-[submodule "ffmpeg"]
-	path = ffmpeg
-	url = https://git.ffmpeg.org/ffmpeg.git
 [submodule "openvr"]
 	path = openvr
 	url = https://github.com/ValveSoftware/openvr

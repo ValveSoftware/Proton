@@ -26,7 +26,6 @@ else # (Rest of the file is the else)
 #   SRCDIR          - Path to source
 #   BUILD_NAME      - Name of the build for manifests etc.
 #   NO_DXVK         - 1 if skipping DXVK steps
-#   WITH_FFMPEG     - 1 if including ffmpeg steps
 #   STEAMRT64_MODE  - 'docker' or '' for automatic Steam Runtime container
 #   STEAMRT64_IMAGE - Name of the image if mode is set
 #   STEAMRT32_MODE  - Same as above for 32-bit container (can be different type)
@@ -192,12 +191,6 @@ GECKO64_TARBALL := wine-gecko-$(GECKO_VER)-x86_64.tar.bz2
 WINEMONO_VER := 5.1.0
 WINEMONO_TARBALL := wine-mono-$(WINEMONO_VER)-x86.tar.xz
 
-FFMPEG := $(SRCDIR)/ffmpeg
-FFMPEG_OBJ32 := ./obj-ffmpeg32
-FFMPEG_OBJ64 := ./obj-ffmpeg64
-FFMPEG_CROSS_CFLAGS :=
-FFMPEG_CROSS_LDFLAGS :=
-
 GST_ORC := $(SRCDIR)/gst-orc
 GST_ORC_OBJ32 := ./obj-gst-orc32
 GST_ORC_OBJ64 := ./obj-gst-orc64
@@ -267,7 +260,6 @@ FONTS_OBJ := ./obj-fonts
 
 ## Object directories
 OBJ_DIRS := $(TOOLS_DIR32)        $(TOOLS_DIR64)        \
-            $(FFMPEG_OBJ32)       $(FFMPEG_OBJ64)       \
             $(GST_ORC_OBJ32)      $(GST_ORC_OBJ64)       \
             $(GSTREAMER_OBJ32)    $(GSTREAMER_OBJ64)    \
             $(GST_BASE_OBJ32)     $(GST_BASE_OBJ64)     \
@@ -845,125 +837,10 @@ gst_good32: $(GST_GOOD_CONFIGURE_FILES32)
 
 
 ##
-## ffmpeg
-##
-
-ifeq ($(WITH_FFMPEG),1)
-
-FFMPEG_CONFIGURE_FILES32 := $(FFMPEG_OBJ32)/Makefile
-FFMPEG_CONFIGURE_FILES64 := $(FFMPEG_OBJ64)/Makefile
-
-# 64bit-configure
-$(FFMPEG_CONFIGURE_FILES64): SHELL = $(CONTAINER_SHELL64)
-$(FFMPEG_CONFIGURE_FILES64): $(FFMPEG)/configure $(MAKEFILE_DEP) | $(FFMPEG_OBJ64)
-	cd $(dir $@) && \
-		$(abspath $(FFMPEG))/configure \
-			--cc=$(CC_QUOTED) --cxx=$(CXX_QUOTED) \
-			--prefix=$(abspath $(TOOLS_DIR64)) \
-			--disable-static \
-			--enable-shared \
-			--disable-programs \
-			--disable-doc \
-			--disable-avdevice \
-			--disable-avformat \
-			--disable-swresample \
-			--disable-swscale \
-			--disable-postproc \
-			--disable-avfilter \
-			--disable-alsa \
-			--disable-iconv \
-			--disable-libxcb_shape \
-			--disable-libxcb_shm \
-			--disable-libxcb_xfixes \
-			--disable-sdl2 \
-			--disable-xlib \
-			--disable-zlib \
-			--disable-bzlib \
-			--disable-libxcb \
-			--disable-vaapi \
-			--disable-vdpau \
-			--disable-everything \
-			--enable-decoder=wmav2 \
-			--enable-decoder=adpcm_ms && \
-		[ ! -f ./Makefile ] || touch ./Makefile
-# ^ ffmpeg's configure script doesn't update the timestamp on this guy in the case of a no-op
-
-# 32-bit configure
-$(FFMPEG_CONFIGURE_FILES32): SHELL = $(CONTAINER_SHELL32)
-$(FFMPEG_CONFIGURE_FILES32): $(FFMPEG)/configure $(MAKEFILE_DEP) | $(FFMPEG_OBJ32)
-	cd $(dir $@) && \
-		$(abspath $(FFMPEG))/configure \
-			--cc=$(CC_QUOTED) --cxx=$(CXX_QUOTED) \
-			--prefix=$(abspath $(TOOLS_DIR32)) \
-			--extra-cflags=$(FFMPEG_CROSS_CFLAGS) --extra-ldflags=$(FFMPEG_CROSS_LDFLAGS) \
-			--disable-static \
-			--enable-shared \
-			--disable-programs \
-			--disable-doc \
-			--disable-avdevice \
-			--disable-avformat \
-			--disable-swresample \
-			--disable-swscale \
-			--disable-postproc \
-			--disable-avfilter \
-			--disable-alsa \
-			--disable-iconv \
-			--disable-libxcb_shape \
-			--disable-libxcb_shm \
-			--disable-libxcb_xfixes \
-			--disable-sdl2 \
-			--disable-xlib \
-			--disable-zlib \
-			--disable-bzlib \
-			--disable-libxcb \
-			--disable-vaapi \
-			--disable-vdpau \
-			--disable-everything \
-			--enable-decoder=wmav2 \
-			--enable-decoder=adpcm_ms && \
-		[ ! -f ./Makefile ] || touch ./Makefile
-# ^ ffmpeg's configure script doesn't update the timestamp on this guy in the case of a no-op
-
-## ffmpeg goals
-FFMPEG_TARGETS = ffmpeg ffmpeg_configure ffmpeg32 ffmpeg64 ffmpeg_configure32 ffmpeg_configure64
-
-ALL_TARGETS += $(FFMPEG_TARGETS)
-GOAL_TARGETS_LIBS += ffmpeg
-
-.PHONY: $(FFMPEG_TARGETS)
-
-ffmpeg_configure: $(FFMPEG_CONFIGURE_FILES32) $(FFMPEG_CONFIGURE_FILES64)
-
-ffmpeg_configure64: $(FFMPEG_CONFIGURE_FILES64)
-
-ffmpeg_configure32: $(FFMPEG_CONFIGURE_FILES32)
-
-ffmpeg: ffmpeg32 ffmpeg64
-
-ffmpeg64: SHELL = $(CONTAINER_SHELL64)
-ffmpeg64: $(FFMPEG_CONFIGURE_FILES64)
-	+$(MAKE) -C $(FFMPEG_OBJ64)
-	+$(MAKE) -C $(FFMPEG_OBJ64) install
-	mkdir -pv $(DST_DIR)/lib64
-	cp -a $(TOOLS_DIR64)/lib/{libavcodec,libavutil}* $(DST_DIR)/lib64
-
-ffmpeg32: SHELL = $(CONTAINER_SHELL32)
-ffmpeg32: $(FFMPEG_CONFIGURE_FILES32)
-	+$(MAKE) -C $(FFMPEG_OBJ32)
-	+$(MAKE) -C $(FFMPEG_OBJ32) install
-	mkdir -pv $(DST_DIR)/lib
-	cp -a $(TOOLS_DIR32)/lib/{libavcodec,libavutil}* $(DST_DIR)/lib
-
-endif # ifeq ($(WITH_FFMPEG),1)
-
-##
 ## FAudio
 ##
 
 FAUDIO_CMAKE_FLAGS = -DGSTREAMER=ON -DCMAKE_BUILD_TYPE=Release -DFORCE_ENABLE_DEBUGCONFIGURATION=ON -DLOG_ASSERTIONS=ON -DCMAKE_INSTALL_LIBDIR="lib" -DXNASONG=OFF
-ifeq ($(WITH_FFMPEG),1)
-FAUDIO_CMAKE_FLAGS += -DFFMPEG=ON
-endif # ifeq ($(WITH_FFMPEG),1)
 
 FAUDIO_TARGETS = faudio faudio32 faudio64
 
