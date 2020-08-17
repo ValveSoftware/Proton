@@ -38,16 +38,21 @@ endif
 
 # If CC is coming from make's defaults or nowhere, use our own default.  Otherwise respect environment.
 ifneq ($(filter default undefined,$(origin CC)),)
-#	CC = ccache gcc
 	CC = gcc
 endif
 ifneq ($(filter default undefined,$(origin CXX)),)
-#	CXX = ccache g++
 	CXX = g++
 endif
 
 export CC
 export CXX
+
+ifeq ($(ENABLE_CCACHE),1)
+	export PATH := /usr/lib/ccache:$(PATH)
+else
+	export CCACHE_DISABLE = 1
+	DOCKER_CCACHE_FLAG = -e CCACHE_DISABLE=1
+endif
 
 CC32 := gcc -m32 -mstackrealign
 CXX32 := g++ -m32 -mstackrealign
@@ -61,7 +66,7 @@ cc-option = $(shell if test -z "`echo 'void*p=1;' | \
 DOCKER_SHELL_BASE = docker run --rm --init --privileged --cap-add=SYS_ADMIN --security-opt apparmor:unconfined \
                                     -v $(HOME):$(HOME) -v /tmp:/tmp \
                                     -v /etc/passwd:/etc/passwd:ro -v /etc/group:/etc/group:ro  -v /etc/shadow:/etc/shadow:ro \
-                                    -w $(CURDIR) -e HOME=$(HOME) -e PATH=$(PATH) -u $(shell id -u):$(shell id -g) -h $(shell hostname) \
+                                    -w $(CURDIR) -e HOME=$(HOME) -e PATH=$(PATH) $(DOCKER_CCACHE_FLAG) -u $(shell id -u):$(shell id -g) -h $(shell hostname) \
                                     $(DOCKER_OPTS) \
                                     $(SELECT_DOCKER_IMAGE) /sbin/docker-init -sg -- /bin/bash
 

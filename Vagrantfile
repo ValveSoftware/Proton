@@ -76,7 +76,7 @@ Vagrant.configure(2) do |config|
 
       #install host build-time dependencies
       apt-get update
-      apt-get install -y texinfo gpgv2 gnupg2 git docker-ce docker-ce-cli containerd.io \
+      apt-get install -y ccache texinfo gpgv2 gnupg2 git docker-ce docker-ce-cli containerd.io \
           fontforge-nox python-debian python-pip meson libmpc-dev libmpc-dev:i386 \
           gcc g++ gcc-i686-linux-gnu g++-i686-linux-gnu binutils-i686-linux-gnu \
           gcc-mingw-w64-i686 gcc-mingw-w64-x86-64 \
@@ -106,6 +106,12 @@ Vagrant.configure(2) do |config|
 
       #ensure we use only the mingw-w64 that we built
       apt-get remove -y '*mingw-w64*'
+
+      #setup ccache
+      ln -s $(which ccache) /usr/lib/ccache/x86_64-w64-mingw32-gcc
+      ln -s $(which ccache) /usr/lib/ccache/x86_64-w64-mingw32-g++
+      ln -s $(which ccache) /usr/lib/ccache/i686-w64-mingw32-gcc
+      ln -s $(which ccache) /usr/lib/ccache/i686-w64-mingw32-g++
     SHELL
   end
 end
