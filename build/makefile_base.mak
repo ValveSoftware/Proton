@@ -37,11 +37,26 @@ ifeq ($(SRCDIR),)
 endif
 
 # If CC is coming from make's defaults or nowhere, use our own default.  Otherwise respect environment.
+ifeq ($(ENABLE_CCACHE),1)
+	CCACHE_BIN := ccache
+else
+	export CCACHE_DISABLE = 1
+	DOCKER_CCACHE_FLAG = -e CCACHE_DISABLE=1
+endif
+
 ifneq ($(filter default undefined,$(origin CC)),)
-	CC = gcc
+	CC = $(CCACHE_BIN) gcc
 endif
 ifneq ($(filter default undefined,$(origin CXX)),)
-	CXX = g++
+	CXX = $(CCACHE_BIN) g++
+endif
+ifneq ($(filter default undefined,$(origin CROSSCC)),)
+	CROSSCC32 = $(CCACHE_BIN) i686-w64-mingw32-gcc
+	CROSSCC64 = $(CCACHE_BIN) x86_64-w64-mingw32-gcc
+endif
+ifneq ($(filter default undefined,$(origin CROSSCXX)),)
+	CROSSCXX32 = $(CCACHE_BIN) i686-w64-mingw32-g++
+	CROSSCXX64 = $(CCACHE_BIN) x86_64-w64-mingw32-g++
 endif
 
 export CC
@@ -50,8 +65,6 @@ export CXX
 ifeq ($(ENABLE_CCACHE),1)
 	export PATH := /usr/lib/ccache:$(PATH)
 else
-	export CCACHE_DISABLE = 1
-	DOCKER_CCACHE_FLAG = -e CCACHE_DISABLE=1
 endif
 
 CC32 := gcc -m32 -mstackrealign
@@ -179,6 +192,8 @@ QUOTE_VARIABLE_LIST = $(foreach a,$(1),$(call QUOTE_VARIABLE,$(a)))
 STRIP_QUOTED = $(call QUOTE,$(STRIP))
 CC_QUOTED    = $(call QUOTE,$(CC))
 CXX_QUOTED   = $(call QUOTE,$(CXX))
+CROSSCC32_QUOTED = $(call QUOTE,$(CROSSCC32))
+CROSSCC64_QUOTED = $(call QUOTE,$(CROSSCC64))
 
 ##
 ## Target configs
@@ -1071,7 +1086,7 @@ $(WINE_CONFIGURE_FILES64): $(MAKEFILE_DEP) | faudio64 gst_base64 $(WINE_OBJ64)
 			LDFLAGS=-L$(abspath $(TOOLS_DIR64))/lib \
 			PKG_CONFIG_PATH=$(abspath $(TOOLS_DIR64))/lib/pkgconfig \
 			CC=$(CC_QUOTED) \
-			CXX=$(CXX_QUOTED) \
+			CROSSCC=$(CROSSCC64_QUOTED) \
 			CROSSDEBUG=split-dwarf
 
 # 32-bit configure
@@ -1089,7 +1104,7 @@ $(WINE_CONFIGURE_FILES32): $(MAKEFILE_DEP) | faudio32 gst_base32 $(WINE_OBJ32)
 			LDFLAGS=-L$(abspath $(TOOLS_DIR32))/lib \
 			PKG_CONFIG_PATH=$(abspath $(TOOLS_DIR32))/lib/pkgconfig \
 			CC=$(CC_QUOTED) \
-			CXX=$(CXX_QUOTED) \
+			CROSSCC=$(CROSSCC32_QUOTED) \
 			PKG_CONFIG="$(PKG_CONFIG32)" \
 			CROSSDEBUG=split-dwarf
 

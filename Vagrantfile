@@ -106,12 +106,6 @@ Vagrant.configure(2) do |config|
 
       #ensure we use only the mingw-w64 that we built
       apt-get remove -y '*mingw-w64*'
-
-      #setup ccache
-      ln -s $(which ccache) /usr/lib/ccache/x86_64-w64-mingw32-gcc
-      ln -s $(which ccache) /usr/lib/ccache/x86_64-w64-mingw32-g++
-      ln -s $(which ccache) /usr/lib/ccache/i686-w64-mingw32-gcc
-      ln -s $(which ccache) /usr/lib/ccache/i686-w64-mingw32-g++
     SHELL
   end
 end
