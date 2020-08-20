@@ -1,7 +1,7 @@
 "manifest"
 {
-  "commandline" "/proton run"
-  "commandline_getnativepath" "/proton getnativepath"
-  "commandline_getcompatpath" "/proton getcompatpath"
-  "commandline_waitforexitandrun" "/proton waitforexitandrun"
+  "version" "2"
+  "commandline" "/proton %verb%"
+  "require_tool_appid" "1391110"
+  "use_sessions" "1"
 }
