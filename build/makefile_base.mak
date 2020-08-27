@@ -879,6 +879,7 @@ $(FAUDIO_CONFIGURE_FILES64): SHELL = $(CONTAINER_SHELL64)
 $(FAUDIO_CONFIGURE_FILES64): $(FAUDIO)/CMakeLists.txt $(MAKEFILE_DEP) gst_base64 | $(FAUDIO_OBJ64)
 	cd $(dir $@) && \
 		PKG_CONFIG_PATH=$(abspath $(TOOLS_DIR64))/lib/pkgconfig \
+		CFLAGS="$(OPTIMIZE_FLAGS)" \
 		cmake $(abspath $(FAUDIO)) \
 			-DCMAKE_INSTALL_PREFIX="$(abspath $(TOOLS_DIR64))" \
 			$(FAUDIO_CMAKE_FLAGS)
