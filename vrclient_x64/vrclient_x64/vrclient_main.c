@@ -910,6 +910,30 @@ static EVRCompositorError ivrcompositor_submit_dxvk(
 }
 #endif
 
+static EVROverlayError ivroverlay_set_overlay_texture_vulkan(
+                EVROverlayError (*cpp_func)(void *, VROverlayHandle_t, Texture_t *),
+                void *linux_side, VROverlayHandle_t overlay_handle, Texture_t *texture,
+                unsigned int version, struct overlay_data *user_data)
+{
+        struct VRVulkanTextureData_t our_vkdata, *their_vkdata;
+        Texture_t our_texture;
+
+        load_vk_unwrappers();
+
+        their_vkdata = texture->handle;
+
+        our_vkdata = *their_vkdata;
+        our_vkdata.m_pDevice = get_native_VkDevice(our_vkdata.m_pDevice);
+        our_vkdata.m_pPhysicalDevice = get_native_VkPhysicalDevice(our_vkdata.m_pPhysicalDevice);
+        our_vkdata.m_pInstance = get_native_VkInstance(our_vkdata.m_pInstance);
+        our_vkdata.m_pQueue = get_native_VkQueue(our_vkdata.m_pQueue);
+
+        our_texture = *texture;
+        our_texture.handle = &our_vkdata;
+
+        return cpp_func(linux_side, overlay_handle, &our_texture);
+}
+
 static EVRCompositorError ivrcompositor_submit_vulkan(
         EVRCompositorError (*cpp_func)(void *, EVREye, Texture_t *, VRTextureBounds_t *, EVRSubmitFlags),
         void *linux_side, EVREye eye, Texture_t *texture, VRTextureBounds_t *bounds, EVRSubmitFlags flags,
@@ -1019,6 +1043,9 @@ EVROverlayError ivroverlay_set_overlay_texture(
 overlay_warn_out:
                         WARN("Invalid D3D11 texture %p.\n", texture);
                         return cpp_func(linux_side, overlayHandle, texture);
+                case TextureType_Vulkan:
+                        TRACE("Vulkan\n");
+                        return ivroverlay_set_overlay_texture_vulkan(cpp_func, linux_side, overlayHandle, texture, version, user_data);
                 default:
                         return cpp_func(linux_side, overlayHandle, texture);
         }
