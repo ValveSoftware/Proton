@@ -30,7 +30,7 @@ fi
 
 DST_DIR="$1"
 
-BINUTILS_VER=2.34
+BINUTILS_VER=2.35
 BINUTILS_SRCTARBALL=binutils-$BINUTILS_VER.tar.xz
 BINUTILS_URL="https://ftp.gnu.org/gnu/binutils/$BINUTILS_SRCTARBALL"
 BINUTILS_SRCDIR=binutils-$BINUTILS_VER
@@ -56,9 +56,6 @@ function setup_src {
 
     if [ ! -e "$BINUTILS_SRCDIR" ]; then
         tar -xf "$BINUTILS_SRCTARBALL"
-        for f in $(dirname $0)/mingw-w64-patches/binutils-*; do
-            patch -d "$BINUTILS_SRCDIR" -p1 < $f
-        done
     fi
 
     if [ ! -e "$ISL_SRCTARBALL" ]; then
