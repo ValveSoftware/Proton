@@ -227,6 +227,10 @@ FAUDIO := $(SRCDIR)/FAudio
 FAUDIO_OBJ32 := ./obj-faudio32
 FAUDIO_OBJ64 := ./obj-faudio64
 
+JXRLIB := $(SRCDIR)/jxrlib
+JXRLIB_OBJ32 := ./obj-jxrlib32
+JXRLIB_OBJ64 := ./obj-jxrlib64
+
 LSTEAMCLIENT := $(SRCDIR)/lsteamclient
 LSTEAMCLIENT32 := ./syn-lsteamclient32/lsteamclient
 LSTEAMCLIENT64 := ./syn-lsteamclient64/lsteamclient
@@ -282,6 +286,7 @@ OBJ_DIRS := $(TOOLS_DIR32)        $(TOOLS_DIR64)        \
             $(GST_BASE_OBJ32)     $(GST_BASE_OBJ64)     \
             $(GST_GOOD_OBJ32)     $(GST_GOOD_OBJ64)     \
             $(FAUDIO_OBJ32)       $(FAUDIO_OBJ64)       \
+            $(JXRLIB_OBJ32)       $(JXRLIB_OBJ64)       \
             $(LSTEAMCLIENT_OBJ32) $(LSTEAMCLIENT_OBJ64) \
             $(STEAMEXE_OBJ)                             \
             $(WINE_OBJ32)         $(WINE_OBJ64)         \
@@ -894,6 +899,62 @@ faudio64: $(FAUDIO_CONFIGURE_FILES64)
 	[ x"$(STRIP)" = x ] || $(STRIP) $(DST_DIR)/lib64/libFAudio.so
 
 ##
+## jxrlib
+##
+
+JXRLIB_CMAKE_FLAGS = -DCMAKE_BUILD_TYPE=Release -DJXRLIB_INSTALL_LIB_DIR=lib
+
+JXRLIB_TARGETS = jxrlib jxrlib32 jxrlib64
+
+ALL_TARGETS += $(JXRLIB_TARGETS)
+GOAL_TARGETS_LIBS += jxrlib
+
+.PHONY: jxrlib jxrlib32 jxrlib64
+
+jxrlib: jxrlib32 jxrlib64
+
+JXRLIB_CONFIGURE_FILES32 := $(JXRLIB_OBJ32)/Makefile
+JXRLIB_CONFIGURE_FILES64 := $(JXRLIB_OBJ64)/Makefile
+
+$(JXRLIB_CONFIGURE_FILES32): SHELL = $(CONTAINER_SHELL32)
+$(JXRLIB_CONFIGURE_FILES32): $(JXRLIB)/CMakeLists.txt $(MAKEFILE_DEP) | $(JXRLIB_OBJ32)
+	cd $(dir $@) && \
+		CC="$(CC32)" \
+		CXX="$(CXX32)" \
+		CFLAGS="$(OPTIMIZE_FLAGS)" \
+		cmake $(abspath $(JXRLIB)) \
+			-DCMAKE_INSTALL_PREFIX="$(abspath $(TOOLS_DIR32))" \
+			$(JXRLIB_CMAKE_FLAGS)
+
+$(JXRLIB_CONFIGURE_FILES64): SHELL = $(CONTAINER_SHELL64)
+$(JXRLIB_CONFIGURE_FILES64): $(JXRLIB)/CMakeLists.txt $(MAKEFILE_DEP) | $(JXRLIB_OBJ64)
+	cd $(dir $@) && \
+		CFLAGS="$(OPTIMIZE_FLAGS)" \
+		cmake $(abspath $(JXRLIB)) \
+			-DCMAKE_INSTALL_PREFIX="$(abspath $(TOOLS_DIR64))" \
+			$(JXRLIB_CMAKE_FLAGS)
+
+jxrlib32: SHELL = $(CONTAINER_SHELL32)
+jxrlib32: $(JXRLIB_CONFIGURE_FILES32)
+	+$(MAKE) -C $(JXRLIB_OBJ32) VERBOSE=1
+	+$(MAKE) -C $(JXRLIB_OBJ32) install VERBOSE=1
+	mkdir -p $(DST_DIR)/lib
+	cp -a $(TOOLS_DIR32)/lib/libjpegxr* $(DST_DIR)/lib/
+	cp -a $(TOOLS_DIR32)/lib/libjxrglue* $(DST_DIR)/lib/
+	[ x"$(STRIP)" = x ] || $(STRIP) $(DST_DIR)/lib/libjpegxr.so
+	[ x"$(STRIP)" = x ] || $(STRIP) $(DST_DIR)/lib/libjxrglue.so
+
+jxrlib64: SHELL = $(CONTAINER_SHELL64)
+jxrlib64: $(JXRLIB_CONFIGURE_FILES64)
+	+$(MAKE) -C $(JXRLIB_OBJ64) VERBOSE=1
+	+$(MAKE) -C $(JXRLIB_OBJ64) install VERBOSE=1
+	mkdir -p $(DST_DIR)/lib64
+	cp -a $(TOOLS_DIR64)/lib/libjpegxr* $(DST_DIR)/lib64/
+	cp -a $(TOOLS_DIR64)/lib/libjxrglue* $(DST_DIR)/lib64/
+	[ x"$(STRIP)" = x ] || $(STRIP) $(DST_DIR)/lib64/libjpegxr.so
+	[ x"$(STRIP)" = x ] || $(STRIP) $(DST_DIR)/lib64/libjxrglue.so
+
+##
 ## lsteamclient
 ##
 
@@ -1066,7 +1127,7 @@ WINE32_MAKE_ARGS := \
 
 # 64bit-configure
 $(WINE_CONFIGURE_FILES64): SHELL = $(CONTAINER_SHELL64)
-$(WINE_CONFIGURE_FILES64): $(MAKEFILE_DEP) | faudio64 gst_base64 $(WINE_OBJ64)
+$(WINE_CONFIGURE_FILES64): $(MAKEFILE_DEP) | faudio64 jxrlib64 gst_base64 $(WINE_OBJ64)
 	cd $(dir $@) && \
 		../$(WINE)/configure \
 			--without-curses \
@@ -1079,13 +1140,14 @@ $(WINE_CONFIGURE_FILES64): $(MAKEFILE_DEP) | faudio64 gst_base64 $(WINE_OBJ64)
 			CROSSCFLAGS="-g $(COMMON_FLAGS)" \
 			LDFLAGS=-L$(abspath $(TOOLS_DIR64))/lib \
 			PKG_CONFIG_PATH=$(abspath $(TOOLS_DIR64))/lib/pkgconfig \
+			JXRLIB_CFLAGS=-I$(abspath $(TOOLS_DIR64))/include/jxrlib \
 			CC=$(CC_QUOTED) \
 			CROSSCC=$(CROSSCC64_QUOTED) \
 			CROSSDEBUG=split-dwarf
 
 # 32-bit configure
 $(WINE_CONFIGURE_FILES32): SHELL = $(CONTAINER_SHELL32)
-$(WINE_CONFIGURE_FILES32): $(MAKEFILE_DEP) | faudio32 gst_base32 $(WINE_OBJ32)
+$(WINE_CONFIGURE_FILES32): $(MAKEFILE_DEP) | faudio32 jxrlib32 gst_base32 $(WINE_OBJ32)
 	cd $(dir $@) && \
 		../$(WINE)/configure \
 			--without-curses \
@@ -1097,6 +1159,7 @@ $(WINE_CONFIGURE_FILES32): $(MAKEFILE_DEP) | faudio32 gst_base32 $(WINE_OBJ32)
 			CROSSCFLAGS="-g $(COMMON_FLAGS)" \
 			LDFLAGS=-L$(abspath $(TOOLS_DIR32))/lib \
 			PKG_CONFIG_PATH=$(abspath $(TOOLS_DIR32))/lib/pkgconfig \
+			JXRLIB_CFLAGS=-I$(abspath $(TOOLS_DIR32))/include/jxrlib \
 			CC=$(CC_QUOTED) \
 			CROSSCC=$(CROSSCC32_QUOTED) \
 			PKG_CONFIG="$(PKG_CONFIG32)" \
