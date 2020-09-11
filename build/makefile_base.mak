@@ -199,10 +199,6 @@ GECKO64_TARBALL := wine-gecko-$(GECKO_VER)-x86_64.tar.xz
 WINEMONO_VER := 6.1.1
 WINEMONO_TARBALL := wine-mono-$(WINEMONO_VER)-x86.tar.xz
 
-JXRLIB := $(SRCDIR)/jxrlib
-JXRLIB_OBJ32 := ./obj-jxrlib32
-JXRLIB_OBJ64 := ./obj-jxrlib64
-
 LSTEAMCLIENT := $(SRCDIR)/lsteamclient
 LSTEAMCLIENT32 := ./syn-lsteamclient32/lsteamclient
 LSTEAMCLIENT64 := ./syn-lsteamclient64/lsteamclient
@@ -255,7 +251,6 @@ FONTS_OBJ := ./obj-fonts
 
 ## Object directories
 OBJ_DIRS := $(TOOLS_DIR32)        $(TOOLS_DIR64)        \
-            $(JXRLIB_OBJ32)       $(JXRLIB_OBJ64)       \
             $(LSTEAMCLIENT_OBJ32) $(LSTEAMCLIENT_OBJ64) \
             $(WINEOPENXR_OBJ64) \
             $(STEAMEXE_OBJ)                             \
@@ -668,61 +663,36 @@ $(OBJ)/.faudio-post-build64:
 	[ x"$(STRIP)" = x ] || $(STRIP) $(DST_DIR)/lib64/libFAudio.so
 	touch $@
 
+
 ##
 ## jxrlib
 ##
 
-JXRLIB_CMAKE_FLAGS = -DCMAKE_BUILD_TYPE=Release -DJXRLIB_INSTALL_LIB_DIR=lib
+JXRLIB_CMAKE_ARGS64 = -DJXRLIB_INSTALL_LIB_DIR=lib64
 
-JXRLIB_TARGETS = jxrlib jxrlib32 jxrlib64
+JXRLIB_INCDIR32 = $(JXRLIB_DST32)/include/jxrlib
+JXRLIB_INCDIR64 = $(JXRLIB_DST64)/include/jxrlib
 
-ALL_TARGETS += $(JXRLIB_TARGETS)
-GOAL_TARGETS_LIBS += jxrlib
+$(eval $(call rules-source,jxrlib,$(SRCDIR)/jxrlib))
+$(eval $(call rules-cmake,jxrlib,32))
+$(eval $(call rules-cmake,jxrlib,64))
 
-.PHONY: jxrlib jxrlib32 jxrlib64
-
-jxrlib: jxrlib32 jxrlib64
-
-JXRLIB_CONFIGURE_FILES32 := $(JXRLIB_OBJ32)/Makefile
-JXRLIB_CONFIGURE_FILES64 := $(JXRLIB_OBJ64)/Makefile
-
-$(JXRLIB_CONFIGURE_FILES32): SHELL = $(CONTAINER_SHELL)
-$(JXRLIB_CONFIGURE_FILES32): $(JXRLIB)/CMakeLists.txt $(MAKEFILE_DEP) | $(JXRLIB_OBJ32)
-	cd $(dir $@) && \
-		CC="$(CC32)" \
-		CXX="$(CXX32)" \
-		CFLAGS="$(OPTIMIZE_FLAGS)" \
-		cmake $(abspath $(JXRLIB)) \
-			-DCMAKE_INSTALL_PREFIX="$(abspath $(TOOLS_DIR32))" \
-			$(JXRLIB_CMAKE_FLAGS)
-
-$(JXRLIB_CONFIGURE_FILES64): SHELL = $(CONTAINER_SHELL)
-$(JXRLIB_CONFIGURE_FILES64): $(JXRLIB)/CMakeLists.txt $(MAKEFILE_DEP) | $(JXRLIB_OBJ64)
-	cd $(dir $@) && \
-		CFLAGS="$(OPTIMIZE_FLAGS)" \
-		cmake $(abspath $(JXRLIB)) \
-			-DCMAKE_INSTALL_PREFIX="$(abspath $(TOOLS_DIR64))" \
-			$(JXRLIB_CMAKE_FLAGS)
-
-jxrlib32: SHELL = $(CONTAINER_SHELL)
-jxrlib32: $(JXRLIB_CONFIGURE_FILES32)
-	+$(MAKE) -C $(JXRLIB_OBJ32) VERBOSE=1
-	+$(MAKE) -C $(JXRLIB_OBJ32) install VERBOSE=1
+$(OBJ)/.jxrlib-post-build32:
 	mkdir -p $(DST_DIR)/lib
 	cp -a $(TOOLS_DIR32)/lib/libjpegxr* $(DST_DIR)/lib/
 	cp -a $(TOOLS_DIR32)/lib/libjxrglue* $(DST_DIR)/lib/
 	[ x"$(STRIP)" = x ] || $(STRIP) $(DST_DIR)/lib/libjpegxr.so
 	[ x"$(STRIP)" = x ] || $(STRIP) $(DST_DIR)/lib/libjxrglue.so
+	touch $@
 
-jxrlib64: SHELL = $(CONTAINER_SHELL)
-jxrlib64: $(JXRLIB_CONFIGURE_FILES64)
-	+$(MAKE) -C $(JXRLIB_OBJ64) VERBOSE=1
-	+$(MAKE) -C $(JXRLIB_OBJ64) install VERBOSE=1
+$(OBJ)/.jxrlib-post-build64:
 	mkdir -p $(DST_DIR)/lib64
 	cp -a $(TOOLS_DIR64)/lib/libjpegxr* $(DST_DIR)/lib64/
 	cp -a $(TOOLS_DIR64)/lib/libjxrglue* $(DST_DIR)/lib64/
 	[ x"$(STRIP)" = x ] || $(STRIP) $(DST_DIR)/lib64/libjpegxr.so
 	[ x"$(STRIP)" = x ] || $(STRIP) $(DST_DIR)/lib64/libjxrglue.so
+	touch $@
+
 
 ##
 ## lsteamclient
