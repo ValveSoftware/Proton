@@ -76,32 +76,29 @@ cc-option = $(shell if test -z "`echo 'void*p=1;' | \
               then echo "$(2)"; else echo "$(3)"; fi ;)
 
 # Selected container mode shell
-DOCKER_SHELL_BASE = docker run --rm --init --privileged --cap-add=SYS_ADMIN --security-opt apparmor:unconfined \
+DOCKER_BASE = docker run --rm --init --privileged --cap-add=SYS_ADMIN --security-opt apparmor:unconfined \
                                     -v $(HOME):$(HOME) -v /tmp:/tmp \
                                     -v /etc/passwd:/etc/passwd:ro -v /etc/group:/etc/group:ro  -v /etc/shadow:/etc/shadow:ro \
                                     -w $(CURDIR) -e HOME=$(HOME) -e PATH=$(PATH) $(DOCKER_CCACHE_FLAG) -u $(shell id -u):$(shell id -g) -h $(shell hostname) \
                                     $(DOCKER_OPTS) \
-                                    $(SELECT_DOCKER_IMAGE) /sbin/docker-init -sg -- /bin/bash
+                                    $(SELECT_DOCKER_IMAGE) /sbin/docker-init -sg --
+
+STEAM_RUNTIME_RUNSH :=
 
 # If STEAMRT64_MODE/STEAMRT32_MODE is set, set the nested SELECT_DOCKER_IMAGE to the _IMAGE variable and eval
-# DOCKER_SHELL_BASE with it to create the CONTAINER_SHELL setting.
+# DOCKER_BASE with it to create the CONTAINER_SHELL setting.
 ifeq ($(STEAMRT64_MODE),docker)
 	SELECT_DOCKER_IMAGE := $(STEAMRT64_IMAGE)
-	CONTAINER_SHELL64 := $(DOCKER_SHELL_BASE)
+	CONTAINER_SHELL64 := $(DOCKER_BASE) /bin/bash
+	STEAM_RUNTIME_RUNSH := $(DOCKER_BASE)
 else ifneq ($(STEAMRT64_MODE),)
 	foo := $(error Unrecognized STEAMRT64_MODE $(STEAMRT64_MODE))
 endif
 ifeq ($(STEAMRT32_MODE),docker)
 	SELECT_DOCKER_IMAGE := $(STEAMRT32_IMAGE)
-	CONTAINER_SHELL32 := $(DOCKER_SHELL_BASE)
+	CONTAINER_SHELL32 := $(DOCKER_BASE) /bin/bash
 else ifneq ($(STEAMRT32_MODE),)
 	foo := $(error Unrecognized STEAMRT32_MODE $(STEAMRT32_MODE))
-endif
-
-ifneq ($(STEAMRT_PATH),)
-	STEAM_RUNTIME_RUNSH := $(STEAMRT_PATH)/run-in-soldier --
-else
-	STEAM_RUNTIME_RUNSH :=
 endif
 
 SELECT_DOCKER_IMAGE :=

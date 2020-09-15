@@ -94,7 +94,8 @@ Vagrant.configure(2) do |config|
       adduser vagrant docker
 
       #add steamrt docker
-      docker build -t "steam-proton-dev" -f "/home/vagrant/proton/steamrt/com.valvesoftware.SteamRuntime.Sdk-amd64,i386-soldier-sysroot.Dockerfile" /home/vagrant/proton/steamrt/
+      docker pull registry.gitlab.steamos.cloud/steamrt/soldier/sdk
+      docker image tag registry.gitlab.steamos.cloud/steamrt/soldier/sdk steam-proton-dev
 
       #allow user to run stuff in steamrt
       sysctl kernel.unprivileged_userns_clone=1

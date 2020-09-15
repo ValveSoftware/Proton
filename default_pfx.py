@@ -70,32 +70,28 @@ def setup_dll_symlinks(default_pfx_dir, dist_dir):
                 os.unlink(filename)
                 make_relative_symlink(target, filename)
 
-def get_runtime_ld_path(runtime):
-    env = subprocess.check_output(runtime + ["env"], text=True)
-    for line in env.splitlines():
-        if line.startswith("LD_LIBRARY_PATH"):
-            return line.split("=", maxsplit=1)[1]
-    return None
-
 def make_default_pfx(default_pfx_dir, dist_dir, runtime):
     local_env = dict(os.environ)
-    local_env["WINEPREFIX"] = default_pfx_dir
-    local_env["WINEDEBUG"] = "-all"
 
     ld_path = dist_dir + "/lib64:" + dist_dir + "/lib"
 
     if runtime is None:
         local_env["LD_LIBRARY_PATH"] = ld_path
+        local_env["WINEPREFIX"] = default_pfx_dir
+        local_env["WINEDEBUG"] = "-all"
         runtime_args = []
     else:
-        #the runtime overwrites LD_LIBRARY_PATH, so we pass it in on the CL via env
-        runtime_ld_path = get_runtime_ld_path(runtime)
-        if not runtime_ld_path is None:
-            ld_path = ld_path + ":" + runtime_ld_path
-        runtime_args = runtime + ["env", "LD_LIBRARY_PATH=" + ld_path]
+        #the runtime clears the environment, so we pass it in on the CL via env
+        runtime_args = runtime + ["env",
+                "LD_LIBRARY_PATH=" + ld_path,
+                "WINEPREFIX=" + default_pfx_dir,
+                "WINEDEBUG=-all"]
 
-    subprocess.run(runtime_args + [os.path.join(dist_dir, 'bin', 'wine'), "wineboot"], env=local_env, check=True)
-    subprocess.run(runtime_args + [os.path.join(dist_dir, 'bin', 'wineserver'), "-w"], env=local_env, check=True)
+    subprocess.run(runtime_args + ["/bin/bash", "-c",
+        os.path.join(dist_dir, 'bin', 'wine') + " wineboot && " +
+        os.path.join(dist_dir, 'bin', 'wineserver') + " -w"],
+
+        env=local_env, check=True)
     setup_dll_symlinks(default_pfx_dir, dist_dir)
 
 if __name__ == '__main__':
