@@ -10,6 +10,7 @@ import json
 import os
 import shutil
 import errno
+import stat
 import subprocess
 import sys
 import tarfile
@@ -54,15 +55,23 @@ def makedirs(path):
         #already exists
         pass
 
-def try_copy(src, dst):
+def try_copy(src, dst, add_write_perm=True):
     try:
         if os.path.isdir(dst):
             dstfile = dst + "/" + os.path.basename(src)
             if os.path.lexists(dstfile):
                 os.remove(dstfile)
-        elif os.path.lexists(dst):
-            os.remove(dst)
+        else:
+            dstfile = dst
+            if os.path.lexists(dst):
+                os.remove(dst)
+
         shutil.copy(src, dst)
+
+        if add_write_perm:
+            new_mode = os.lstat(dstfile).st_mode | stat.S_IWUSR | stat.S_IWGRP
+            os.chmod(dstfile, new_mode)
+
     except PermissionError as e:
         if e.errno == errno.EPERM:
             #be forgiving about permissions errors; if it's a real problem, things will explode later anyway
