@@ -30,7 +30,6 @@ else # (Rest of the file is the else)
 #   STEAMRT64_IMAGE - Name of the image if mode is set
 #   STEAMRT32_MODE  - Same as above for 32-bit container (can be different type)
 #   STEAMRT32_IMAGE - Same as above for 32-bit container
-#   STEAMRT_PATH    - Path to built runtime which contains run.sh
 
 ifeq ($(SRCDIR),)
 	foo := $(error SRCDIR not set, do not include makefile_base directly, run ./configure.sh to generate Makefile)
