@@ -1,0 +1,267 @@
+From c6e51f404dc52e00cd92ceae2a251288a46db0b3 Mon Sep 17 00:00:00 2001
+From: Edward Hervey <edward@centricular.com>
+Date: Wed, 9 Sep 2020 08:55:28 +0200
+Subject: [PATCH 1/4] avauddec: Avoid dropping non-OK flow return
+
+When sucessfully finishing out frames (or finishing configuration), we must make
+sure we don't override any failing GstFlowReturn that might have been detected
+previously.
+
+Failure to do this would result in not propagating not-linked, flushing,
+etc...
+
+Part-of: <https://gitlab.freedesktop.org/gstreamer/gst-libav/-/merge_requests/90>
+---
+ ext/libav/gstavauddec.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/ext/libav/gstavauddec.c b/ext/libav/gstavauddec.c
+index 756f92d6..f43bfad0 100644
+--- a/ext/libav/gstavauddec.c
++++ b/ext/libav/gstavauddec.c
+@@ -722,7 +722,10 @@ gst_ffmpegauddec_handle_frame (GstAudioDecoder * decoder, GstBuffer * inbuf)
+     }
+   } while (got_frame);
+ 
+-  if (is_header || got_any_frames) {
++  /* Only override the flow return value if previously did have a GST_FLOW_OK.
++   * Failure to do this would result in skipping downstream issues caught in
++   * earlier steps. */
++  if (ret == GST_FLOW_OK && (is_header || got_any_frames)) {
+     ret =
+         gst_audio_decoder_finish_frame (GST_AUDIO_DECODER (ffmpegdec), NULL, 1);
+   }
+-- 
+GitLab
+
+
+From 90a079cc8d5d92ec776d70ae4790fed9e9465c29 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Sebastian=20Dr=C3=B6ge?= <sebastian@centricular.com>
+Date: Mon, 14 Sep 2020 14:24:51 +0300
+Subject: [PATCH 2/4] avviddec: Forward flow returns from draining instead of
+ assuming OK
+
+It might be useful for upstream to know that draining/finishing didn't
+succeed, and why.
+
+Part-of: <https://gitlab.freedesktop.org/gstreamer/gst-libav/-/merge_requests/90>
+---
+ ext/libav/gstavviddec.c | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
+
+diff --git a/ext/libav/gstavviddec.c b/ext/libav/gstavviddec.c
+index aca53b1d..d9eb1782 100644
+--- a/ext/libav/gstavviddec.c
++++ b/ext/libav/gstavviddec.c
+@@ -1739,31 +1739,22 @@ static GstFlowReturn
+ gst_ffmpegviddec_drain (GstVideoDecoder * decoder)
+ {
+   GstFFMpegVidDec *ffmpegdec = (GstFFMpegVidDec *) decoder;
+-  GstFFMpegVidDecClass *oclass;
++  GstFlowReturn ret = GST_FLOW_OK;
++  gboolean got_frame = FALSE;
+ 
+   if (!ffmpegdec->opened)
+     return GST_FLOW_OK;
+ 
+-  oclass = (GstFFMpegVidDecClass *) (G_OBJECT_GET_CLASS (ffmpegdec));
+-
+-  if (oclass->in_plugin->capabilities & AV_CODEC_CAP_DELAY) {
+-    GstFlowReturn ret;
+-    gboolean got_frame = FALSE;
+-
+-    GST_LOG_OBJECT (ffmpegdec,
+-        "codec has delay capabilities, calling until ffmpeg has drained everything");
+-
+-    if (avcodec_send_packet (ffmpegdec->context, NULL))
+-      goto send_packet_failed;
++  if (avcodec_send_packet (ffmpegdec->context, NULL))
++    goto send_packet_failed;
+ 
+-    do {
+-      got_frame = gst_ffmpegviddec_frame (ffmpegdec, NULL, &ret);
+-    } while (got_frame && ret == GST_FLOW_OK);
+-    avcodec_flush_buffers (ffmpegdec->context);
+-  }
++  do {
++    got_frame = gst_ffmpegviddec_frame (ffmpegdec, NULL, &ret);
++  } while (got_frame && ret == GST_FLOW_OK);
++  avcodec_flush_buffers (ffmpegdec->context);
+ 
+ done:
+-  return GST_FLOW_OK;
++  return ret;
+ 
+ send_packet_failed:
+   GST_WARNING_OBJECT (ffmpegdec, "send packet failed, could not drain decoder");
+@@ -2003,12 +2003,15 @@ gst_ffmpegviddec_stop (GstVideoDecoder * decoder)
+ static GstFlowReturn
+ gst_ffmpegviddec_finish (GstVideoDecoder * decoder)
+ {
+-  gst_ffmpegviddec_drain (decoder);
++  GstFlowReturn flow_ret;
++
++  flow_ret = gst_ffmpegviddec_drain (decoder);
++
+   /* note that finish can and should clean up more drastically,
+    * but drain is also invoked on e.g. packet loss in GAP handling */
+   gst_ffmpegviddec_flush (decoder);
+ 
+-  return GST_FLOW_OK;
++  return flow_ret;
+ }
+ 
+ static gboolean
+-- 
+GitLab
+
+
+From 6ea6f1545bd2322bc102fec4e72aee4d3ed06b77 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Sebastian=20Dr=C3=B6ge?= <sebastian@centricular.com>
+Date: Mon, 14 Sep 2020 14:30:35 +0300
+Subject: [PATCH 3/4] avauddec: Forward flow returns from draining instead of
+ assuming OK
+
+It might be useful for upstream to know that draining/finishing didn't
+succeed, and why.
+
+Part-of: <https://gitlab.freedesktop.org/gstreamer/gst-libav/-/merge_requests/90>
+---
+ ext/libav/gstavauddec.c | 19 ++++++++++---------
+ 1 file changed, 10 insertions(+), 9 deletions(-)
+
+diff --git a/ext/libav/gstavauddec.c b/ext/libav/gstavauddec.c
+index f43bfad0..60d0c440 100644
+--- a/ext/libav/gstavauddec.c
++++ b/ext/libav/gstavauddec.c
+@@ -57,7 +57,7 @@ static GstFlowReturn gst_ffmpegauddec_handle_frame (GstAudioDecoder * decoder,
+ static gboolean gst_ffmpegauddec_negotiate (GstFFMpegAudDec * ffmpegdec,
+     AVCodecContext * context, AVFrame * frame, gboolean force);
+ 
+-static void gst_ffmpegauddec_drain (GstFFMpegAudDec * ffmpegdec);
++static GstFlowReturn gst_ffmpegauddec_drain (GstFFMpegAudDec * ffmpegdec);
+ 
+ #define GST_FFDEC_PARAMS_QDATA g_quark_from_static_string("avdec-params")
+ 
+@@ -594,40 +594,41 @@ no_codec:
+   }
+ }
+ 
+-static void
++static GstFlowReturn
+ gst_ffmpegauddec_drain (GstFFMpegAudDec * ffmpegdec)
+ {
+-  GstFFMpegAudDecClass *oclass;
++  GstFlowReturn ret = GST_FLOW_OK;
+   gboolean got_any_frames = FALSE;
++  gboolean got_frame;
+ 
+-  oclass = (GstFFMpegAudDecClass *) (G_OBJECT_GET_CLASS (ffmpegdec));
+-
+-  if (oclass->in_plugin->capabilities & AV_CODEC_CAP_DELAY) {
+-    gboolean got_frame;
++  if (avcodec_send_packet (ffmpegdec->context, NULL))
++    goto send_packet_failed;
+ 
+-    GST_LOG_OBJECT (ffmpegdec,
+-        "codec has delay capabilities, calling until libav has drained everything");
++  do {
+ 
+-    if (avcodec_send_packet (ffmpegdec->context, NULL))
+-      goto send_packet_failed;
++    got_frame = gst_ffmpegauddec_frame (ffmpegdec, &ret);
++    if (got_frame)
++      got_any_frames = TRUE;
++  } while (got_frame);
++  avcodec_flush_buffers (ffmpegdec->context);
+ 
+-    do {
+-      GstFlowReturn ret;
++  if (got_any_frames) {
++    GstFlowReturn new_ret =
++        gst_audio_decoder_finish_frame (GST_AUDIO_DECODER (ffmpegdec), NULL, 1);
+ 
+-      got_frame = gst_ffmpegauddec_frame (ffmpegdec, &ret);
+-      if (got_frame)
+-        got_any_frames = TRUE;
+-    } while (got_frame);
+-    avcodec_flush_buffers (ffmpegdec->context);
++    if (ret == GST_FLOW_OK)
++      ret = new_ret;
+   }
+ 
+-  if (got_any_frames)
+-    gst_audio_decoder_finish_frame (GST_AUDIO_DECODER (ffmpegdec), NULL, 1);
++done:
++  return ret;
+ 
+ send_packet_failed:
+   GST_WARNING_OBJECT (ffmpegdec, "send packet failed, could not drain decoder");
++  goto done;
+ }
+ 
++
+ static void
+ gst_ffmpegauddec_flush (GstAudioDecoder * decoder, gboolean hard)
+ {
+@@ -651,8 +653,7 @@ gst_ffmpegauddec_handle_frame (GstAudioDecoder * decoder, GstBuffer * inbuf)
+     goto not_negotiated;
+ 
+   if (inbuf == NULL) {
+-    gst_ffmpegauddec_drain (ffmpegdec);
+-    return GST_FLOW_OK;
++    return gst_ffmpegauddec_drain (ffmpegdec);
+   }
+ 
+   inbuf = gst_buffer_ref (inbuf);
+-- 
+GitLab
+
+
+From 7388b14423391a0701363cabaff86c19c2301cf1 Mon Sep 17 00:00:00 2001
+From: Seungha Yang <seungha@centricular.com>
+Date: Tue, 15 Sep 2020 02:12:23 +0900
+Subject: [PATCH 4/4] avauddec: Ensure finish_subframe() and finish_frame() are
+ paired
+
+audiodecoder baseclass implementation is expecting that
+finish_subframe() is followed by finish_frame() in order clear
+its internal state related to subframe.
+
+Part-of: <https://gitlab.freedesktop.org/gstreamer/gst-libav/-/merge_requests/90>
+---
+ ext/libav/gstavauddec.c | 25 ++++++++++++++++++-------
+ 1 file changed, 18 insertions(+), 7 deletions(-)
+
+diff --git a/ext/libav/gstavauddec.c b/ext/libav/gstavauddec.c
+index 60d0c440..ceaee129 100644
+--- a/ext/libav/gstavauddec.c
++++ b/ext/libav/gstavauddec.c
+@@ -723,12 +727,19 @@ gst_ffmpegauddec_handle_frame (GstAudioDecoder * decoder, GstBuffer * inbuf)
+     }
+   } while (got_frame);
+ 
+-  /* Only override the flow return value if previously did have a GST_FLOW_OK.
+-   * Failure to do this would result in skipping downstream issues caught in
+-   * earlier steps. */
+-  if (ret == GST_FLOW_OK && (is_header || got_any_frames)) {
+-    ret =
++  if (is_header || got_any_frames) {
++    /* Even if previous return wasn't GST_FLOW_OK, we need to call
++     * _finish_frame() since baseclass is expecting that _finish_frame()
++     * is followed by _finish_subframe()
++     */
++    GstFlowReturn new_ret =
+         gst_audio_decoder_finish_frame (GST_AUDIO_DECODER (ffmpegdec), NULL, 1);
++
++    /* Only override the flow return value if previously did have a GST_FLOW_OK.
++     * Failure to do this would result in skipping downstream issues caught in
++     * earlier steps. */
++    if (ret == GST_FLOW_OK)
++      ret = new_ret;
+   }
+ 
+ unmap:
+-- 
+GitLab
+
