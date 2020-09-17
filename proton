@@ -355,7 +355,7 @@ class CompatData:
                 wined3dfiles = []
 
             #if the user asked for dxvk's dxgi (dxgi=n), then copy it into place
-            if "WINEDLLOVERRIDES" in os.environ and "dxgi=n" in os.environ["WINEDLLOVERRIDES"]:
+            if "WINEDLLOVERRIDES" in g_session.env and "dxgi=n" in g_session.env["WINEDLLOVERRIDES"]:
                 dxvkfiles.append("dxgi")
             else:
                 wined3dfiles.append("dxgi")
@@ -554,8 +554,8 @@ class Session:
                 s = s + ";" + dll + "=" + setting
             else:
                 s = dll + "=" + setting
-        if "WINEDLLOVERRIDES" in os.environ:
-            self.env["WINEDLLOVERRIDES"] = os.environ["WINEDLLOVERRIDES"] + ";" + s
+        if "WINEDLLOVERRIDES" in self.env:
+            self.env["WINEDLLOVERRIDES"] = self.env["WINEDLLOVERRIDES"] + ";" + s
         else:
             self.env["WINEDLLOVERRIDES"] = s
 
