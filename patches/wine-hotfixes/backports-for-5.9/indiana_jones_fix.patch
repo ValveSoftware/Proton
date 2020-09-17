@@ -1,0 +1,107 @@
+From: Myah Caron <qsniyg@protonmail.com>
+Subject: [PATCH] msvcrt: Don't set MXCSR in _control87.
+Message-Id: <X3WfjyJjs6G2Z6Vcm3tUnFyn-wTtMYjXmQoYn0h1l6ZUg4JVCkL59iQgXUoutdYnjyH4TVvPZP55hpxxJl0ohwzl2O0Ol2u0EXEPLnbWeaI=@protonmail.com>
+Date: Thu, 02 Jul 2020 21:57:02 +0000
+
+Wine-Bug: https://bugs.winehq.org/show_bug.cgi?id=27594
+Signed-off-by: Myah Caron <qsniyg@protonmail.com>
+---
+This appears to match native MSVCRT's behavior, at least the one provided by vcrun6.
+
+I'm not sure if the style is correct (the helper being directly below the __control87_2 comment).
+---
+ dlls/msvcrt/math.c | 61 +++++++++++++++++++++++++++++-----------------
+ 1 file changed, 38 insertions(+), 23 deletions(-)
+
+diff --git a/dlls/msvcrt/math.c b/dlls/msvcrt/math.c
+index eae917076f..7ad79a07e5 100644
+--- a/dlls/msvcrt/math.c
++++ b/dlls/msvcrt/math.c
+@@ -1101,6 +1101,41 @@ double CDECL MSVCRT__chgsign(double num)
+  * Not exported by native msvcrt, added in msvcr80.
+  */
+ #ifdef __i386__
++static unsigned int get_flags_from_mxcsr(void) {
++#ifdef __GNUC__
++    unsigned long fpword;
++    unsigned int flags;
++
++    __asm__ __volatile__( "stmxcsr %0" : "=m" (fpword) );
++
++    /* Convert into mask constants */
++    flags = 0;
++    if (fpword & 0x80)   flags |= MSVCRT__EM_INVALID;
++    if (fpword & 0x100)  flags |= MSVCRT__EM_DENORMAL;
++    if (fpword & 0x200)  flags |= MSVCRT__EM_ZERODIVIDE;
++    if (fpword & 0x400)  flags |= MSVCRT__EM_OVERFLOW;
++    if (fpword & 0x800)  flags |= MSVCRT__EM_UNDERFLOW;
++    if (fpword & 0x1000) flags |= MSVCRT__EM_INEXACT;
++    switch (fpword & 0x6000)
++    {
++    case 0x6000: flags |= MSVCRT__RC_UP|MSVCRT__RC_DOWN; break;
++    case 0x4000: flags |= MSVCRT__RC_UP; break;
++    case 0x2000: flags |= MSVCRT__RC_DOWN; break;
++    }
++    switch (fpword & 0x8040)
++    {
++    case 0x0040: flags |= MSVCRT__DN_FLUSH_OPERANDS_SAVE_RESULTS; break;
++    case 0x8000: flags |= MSVCRT__DN_SAVE_OPERANDS_FLUSH_RESULTS; break;
++    case 0x8040: flags |= MSVCRT__DN_FLUSH; break;
++    }
++
++    return flags;
++#else
++    FIXME( "not implemented\n" );
++    return 0;
++#endif
++}
++
+ int CDECL __control87_2( unsigned int newval, unsigned int mask,
+                          unsigned int *x86_cw, unsigned int *sse2_cw )
+ {
+@@ -1170,28 +1205,7 @@ int CDECL __control87_2( unsigned int newval, unsigned int mask,
+
+     if (sse2_supported)
+     {
+-        __asm__ __volatile__( "stmxcsr %0" : "=m" (fpword) );
+-
+-        /* Convert into mask constants */
+-        flags = 0;
+-        if (fpword & 0x80)   flags |= MSVCRT__EM_INVALID;
+-        if (fpword & 0x100)  flags |= MSVCRT__EM_DENORMAL;
+-        if (fpword & 0x200)  flags |= MSVCRT__EM_ZERODIVIDE;
+-        if (fpword & 0x400)  flags |= MSVCRT__EM_OVERFLOW;
+-        if (fpword & 0x800)  flags |= MSVCRT__EM_UNDERFLOW;
+-        if (fpword & 0x1000) flags |= MSVCRT__EM_INEXACT;
+-        switch (fpword & 0x6000)
+-        {
+-        case 0x6000: flags |= MSVCRT__RC_UP|MSVCRT__RC_DOWN; break;
+-        case 0x4000: flags |= MSVCRT__RC_UP; break;
+-        case 0x2000: flags |= MSVCRT__RC_DOWN; break;
+-        }
+-        switch (fpword & 0x8040)
+-        {
+-        case 0x0040: flags |= MSVCRT__DN_FLUSH_OPERANDS_SAVE_RESULTS; break;
+-        case 0x8000: flags |= MSVCRT__DN_SAVE_OPERANDS_FLUSH_RESULTS; break;
+-        case 0x8040: flags |= MSVCRT__DN_FLUSH; break;
+-        }
++        flags = get_flags_from_mxcsr();
+
+         TRACE( "sse2 flags=%08x newval=%08x mask=%08x\n", flags, newval, mask );
+         if (mask)
+@@ -1241,7 +1255,8 @@ unsigned int CDECL _control87(unsigned int newval, unsigned int mask)
+ #ifdef __i386__
+     unsigned int sse2_cw;
+
+-    __control87_2( newval, mask, &flags, &sse2_cw );
++    __control87_2( newval, mask, &flags, 0 );
++    sse2_cw = get_flags_from_mxcsr();
+
+     if ((flags ^ sse2_cw) & (MSVCRT__MCW_EM | MSVCRT__MCW_RC)) flags |= MSVCRT__EM_AMBIGUOUS;
+ #elif defined(__x86_64__)
+--
+2.26.2
+
+
+
+

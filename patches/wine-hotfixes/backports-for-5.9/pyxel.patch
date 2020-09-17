@@ -1,0 +1,25 @@
+From 93937a53f1a7675976b4bb7e70b96db231d77996 Mon Sep 17 00:00:00 2001
+From: Fabian Maurer <dark.shadow4@web.de>
+Date: Thu, 10 Sep 2020 09:06:49 +0200
+Subject: [PATCH] user32/menu: Store application defined value as pointer.
+
+Wine-Bug: https://bugs.winehq.org/show_bug.cgi?id=49805
+Signed-off-by: Fabian Maurer <dark.shadow4@web.de>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/user32/menu.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/dlls/user32/menu.c b/dlls/user32/menu.c
+index 3b1e3f25f42..59c2083c17c 100644
+--- a/dlls/user32/menu.c
++++ b/dlls/user32/menu.c
+@@ -104,7 +104,7 @@ typedef struct {
+     UINT	cyMax;		/* max height of the whole menu, 0 is screen height */
+     HBRUSH	hbrBack;	/* brush for menu background */
+     DWORD	dwContextHelpID;
+-    DWORD	dwMenuData;	/* application defined value */
++    ULONG_PTR	dwMenuData;	/* application defined value */
+     HMENU       hSysMenuOwner;  /* Handle to the dummy sys menu holder */
+     WORD        textOffset;     /* Offset of text when items have both bitmaps and text */
+ } POPUPMENU, *LPPOPUPMENU;
