@@ -1,0 +1,13 @@
+diff --git a/patches/eventfd_synchronization/0023-ntdll-wineandroid.drv-winemac.drv-winex11.drv-Store-.patch b/patches/eventfd_synchronization/0023-ntdll-wineandroid.drv-winemac.drv-winex11.drv-Store-.patch
+index 0e0e1e1f..76cd66e3 100644
+--- a/patches/eventfd_synchronization/0023-ntdll-wineandroid.drv-winemac.drv-winex11.drv-Store-.patch
++++ b/patches/eventfd_synchronization/0023-ntdll-wineandroid.drv-winemac.drv-winex11.drv-Store-.patch
+@@ -46,7 +46,7 @@ index 44a65711c908..c24d4c807348 100644
+ +
+  # Server interface
+  @ cdecl -norelay wine_server_call(ptr)
+- @ cdecl wine_server_close_fds_by_type(long)
++ @ cdecl wine_server_fd_to_handle(long long long ptr)
+ diff --git a/dlls/ntdll/ntdll_misc.h b/dlls/ntdll/ntdll_misc.h
+ index dd5db3f18f32..e9262de93da9 100644
+ --- a/dlls/ntdll/ntdll_misc.h
