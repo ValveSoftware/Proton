@@ -1,130 +1,1543 @@
-commit 5c5dafa7d060ec54b36d40216053e971a59f175c
-Author: Alexandre Abgrall <aabgrall98@gmail.com>
-Date:   Mon Jul 27 07:34:56 2020 +0200
+From 5c5dafa7d060ec54b36d40216053e971a59f175c Mon Sep 17 00:00:00 2001
+From: Alexandre Abgrall <aabgrall98@gmail.com>
+Date: Mon, 27 Jul 2020 07:34:56 +0200
+Subject: [PATCH] rundll32: Allow DLL name and entrypoint to be separated by
+ any combination of spaces/commas.
 
-    rundll32: Allow DLL name and entrypoint to be separated by any combination of spaces/commas.
-
+---
  programs/rundll32/rundll32.c | 21 +++++++++++----------
  1 file changed, 11 insertions(+), 10 deletions(-)
 
-commit 32f282d0bf158c48491fe37f5c5a3ab546a0576e
-Author: Alexandre Abgrall <aabgrall98@gmail.com>
-Date:   Mon Jul 27 07:42:11 2020 +0200
+diff --git a/programs/rundll32/rundll32.c b/programs/rundll32/rundll32.c
+index d1caefc2e25..f0599a56f18 100644
+--- a/programs/rundll32/rundll32.c
++++ b/programs/rundll32/rundll32.c
+@@ -194,11 +194,12 @@ static void *get_entry_point32( HMODULE module, LPCWSTR entry, BOOL *unicode )
+     return ret;
+ }
+ 
+-static LPWSTR get_next_arg(LPWSTR *cmdline)
++static LPWSTR get_next_arg(LPWSTR *cmdline, BOOL can_have_commas)
+ {
+     LPWSTR s;
+     LPWSTR arg,d;
+     BOOL in_quotes;
++    BOOL is_separator;
+     int bcount,len=0;
+ 
+     /* count the chars */
+@@ -206,7 +207,8 @@ static LPWSTR get_next_arg(LPWSTR *cmdline)
+     in_quotes=FALSE;
+     s=*cmdline;
+     while (1) {
+-        if (*s==0 || ((*s=='\t' || *s==' ') && !in_quotes)) {
++        is_separator = (*s=='\t' || *s==' ' || (*s==',' && !can_have_commas));
++        if (*s==0 || (is_separator && !in_quotes)) {
+             /* end of this command line argument */
+             break;
+         } else if (*s=='\\') {
+@@ -232,7 +234,8 @@ static LPWSTR get_next_arg(LPWSTR *cmdline)
+     d=arg;
+     s=*cmdline;
+     while (*s) {
+-        if ((*s=='\t' || *s==' ') && !in_quotes) {
++        is_separator = (*s=='\t' || *s==' ' || (*s==',' && !can_have_commas));
++        if (is_separator && !in_quotes) {
+             /* end of this command line argument */
+             break;
+         } else if (*s=='\\') {
+@@ -266,8 +269,9 @@ static LPWSTR get_next_arg(LPWSTR *cmdline)
+     *d=0;
+     *cmdline=s;
+ 
+-    /* skip the remaining spaces */
+-    while (**cmdline=='\t' || **cmdline==' ') {
++    /* skip the remaining spaces/commas */
++    while (**cmdline=='\t' || **cmdline==' ' ||
++            (**cmdline==',' && !can_have_commas)) {
+         (*cmdline)++;
+     }
+ 
+@@ -295,14 +299,11 @@ int WINAPI wWinMain(HINSTANCE instance, HINSTANCE hOldInstance, LPWSTR szCmdLine
+ 
+     /* Get the dll name and API EntryPoint */
+     WINE_TRACE("CmdLine=%s\n",wine_dbgstr_w(szCmdLine));
+-    szDllName = get_next_arg(&szCmdLine);
++    szDllName = get_next_arg(&szCmdLine, 0);
+     if (!szDllName || *szDllName==0)
+         goto CLEANUP;
+     WINE_TRACE("DllName=%s\n",wine_dbgstr_w(szDllName));
+-    if ((szEntryPoint = wcschr(szDllName, ',' )))
+-        *szEntryPoint++=0;
+-    else
+-        szEntryPoint = get_next_arg(&szCmdLine);
++    szEntryPoint = get_next_arg(&szCmdLine, 1);
+     WINE_TRACE("EntryPoint=%s\n",wine_dbgstr_w(szEntryPoint));
+ 
+     /* Load the library */
+From 32f282d0bf158c48491fe37f5c5a3ab546a0576e Mon Sep 17 00:00:00 2001
+From: Alexandre Abgrall <aabgrall98@gmail.com>
+Date: Mon, 27 Jul 2020 07:42:11 +0200
+Subject: [PATCH] rundll32: Restart process if DLL has different bitness and
+ WoW64 is enabled.
 
-    rundll32: Restart process if DLL has different bitness and WoW64 is enabled.
-
- programs/rundll32/rundll32.c | 55 ++++++++++++++++++++++++++++++++++++++++++--
+---
+ programs/rundll32/rundll32.c | 55 ++++++++++++++++++++++++++++++++++--
  1 file changed, 53 insertions(+), 2 deletions(-)
 
-commit e1db04b620ae8e441b9ecb735d52960a0bf044bc
-Author: Alexandre Abgrall <aabgrall98@gmail.com>
-Date:   Mon Jul 27 14:56:31 2020 +0200
+diff --git a/programs/rundll32/rundll32.c b/programs/rundll32/rundll32.c
+index f0599a56f18..67f9a8ed9f8 100644
+--- a/programs/rundll32/rundll32.c
++++ b/programs/rundll32/rundll32.c
+@@ -42,6 +42,7 @@
+ 
+ WINE_DEFAULT_DEBUG_CHANNEL(rundll32);
+ 
++static const WCHAR SZ_RUNDLL32[]   = {'\\','r','u','n','d','l','l','3','2','.','e','x','e',0};
+ 
+ #ifdef __i386__
+ /* wrapper for dlls that declare the entry point incorrectly */
+@@ -278,6 +279,53 @@ static LPWSTR get_next_arg(LPWSTR *cmdline, BOOL can_have_commas)
+     return arg;
+ }
+ 
++static BOOL try_restart_process( LPWSTR szDllName )
++{
++    WCHAR path[MAX_PATH];
++    PROCESS_INFORMATION pi;
++    STARTUPINFOW si;
++    PVOID ov;
++    DWORD binary_type;
++    BOOL is_wow64;
++
++    if (!GetBinaryTypeW(szDllName, &binary_type))
++        return FALSE;
++
++    IsWow64Process( GetCurrentProcess(), &is_wow64 );
++
++    switch (binary_type)
++    {
++        case SCS_32BIT_BINARY:
++            if (is_wow64 || !GetSystemWow64DirectoryW( path, MAX_PATH - 1 - lstrlenW(SZ_RUNDLL32) ))
++                return FALSE;
++            WINE_TRACE("Restarting rundll32 process in 32-bit mode\n");
++            break;
++        case SCS_64BIT_BINARY:
++            Wow64DisableWow64FsRedirection(&ov);
++            if (!is_wow64 || !GetSystemDirectoryW( path, MAX_PATH - 1 - lstrlenW(SZ_RUNDLL32) ))
++                return FALSE;
++            WINE_TRACE("Restarting rundll32 process in 64-bit mode\n");
++            break;
++        default:
++            return FALSE;
++    }
++
++    lstrcatW(path, SZ_RUNDLL32);
++    memset(&si, 0, sizeof(si));
++    si.cb = sizeof(si);
++    if (CreateProcessW( path, GetCommandLineW(),
++            NULL, NULL, TRUE, 0, NULL, NULL, &si, &pi ))
++    {
++        WaitForSingleObject( pi.hProcess, INFINITE );
++        CloseHandle( pi.hProcess );
++        CloseHandle( pi.hThread );
++    }
++    else WINE_ERR("Failed to restart process (%s, err %u)\n",
++            wine_dbgstr_w(path), GetLastError());
++
++    return TRUE;
++}
++
+ int WINAPI wWinMain(HINSTANCE instance, HINSTANCE hOldInstance, LPWSTR szCmdLine, int nCmdShow)
+ {
+     HWND hWnd;
+@@ -318,8 +366,11 @@ int WINAPI wWinMain(HINSTANCE instance, HINSTANCE hOldInstance, LPWSTR szCmdLine
+         HINSTANCE16 dll = load_dll16( szDllName );
+         if (dll <= 32)
+         {
+-            /* Windows has a MessageBox here... */
+-            WINE_ERR("Unable to load %s\n",wine_dbgstr_w(szDllName));
++            if (!try_restart_process( szDllName ))
++            {
++                /* Windows has a MessageBox here... */
++                WINE_ERR("Unable to load %s\n",wine_dbgstr_w(szDllName));
++            }
+             goto CLEANUP;
+         }
+         win16 = TRUE;
+From e1db04b620ae8e441b9ecb735d52960a0bf044bc Mon Sep 17 00:00:00 2001
+From: Alexandre Abgrall <aabgrall98@gmail.com>
+Date: Mon, 27 Jul 2020 14:56:31 +0200
+Subject: [PATCH] iphlpapi: Implement GetIpInterfaceTable semi-stub.
 
-    iphlpapi: Implement GetIpInterfaceTable semi-stub.
-
- dlls/iphlpapi/iphlpapi_main.c | 40 ++++++++++++++++++++++++++++++++++++++--
+---
+ dlls/iphlpapi/iphlpapi_main.c | 40 +++++++++++++++++++++++++++++++++--
  1 file changed, 38 insertions(+), 2 deletions(-)
 
-commit 7fc2c97e1f467de964524208dae8b74032bc1215
-Author: Alexandre Abgrall <aabgrall98@gmail.com>
-Date:   Mon Jul 27 15:20:55 2020 +0200
+diff --git a/dlls/iphlpapi/iphlpapi_main.c b/dlls/iphlpapi/iphlpapi_main.c
+index ff9d0d3a536..9c512b96436 100644
+--- a/dlls/iphlpapi/iphlpapi_main.c
++++ b/dlls/iphlpapi/iphlpapi_main.c
+@@ -3384,8 +3384,44 @@ DWORD WINAPI GetIpNetTable2(ADDRESS_FAMILY family, PMIB_IPNET_TABLE2 *table)
+  */
+ DWORD WINAPI GetIpInterfaceTable(ADDRESS_FAMILY family, PMIB_IPINTERFACE_TABLE *table)
+ {
+-    FIXME("(%u %p): stub\n", family, table);
+-    return ERROR_NOT_SUPPORTED;
++    PMIB_IF_TABLE2 if_table2;
++    ULONG size;
++    ULONG i;
++    DWORD status;
++
++    FIXME("(%u %p): semi-stub\n", family, table);
++
++    if (!table || (family != AF_INET && family != AF_INET6 && family != AF_UNSPEC))
++        return ERROR_INVALID_PARAMETER;
++    size = sizeof(MIB_IFTABLE);
++    if (family != AF_INET)
++    {
++        if (!(*table = HeapAlloc( GetProcessHeap(), 0, size )))
++            return ERROR_OUTOFMEMORY;
++        return NO_ERROR;
++    }
++    if ((status = GetIfTable2Ex( MibIfTableNormal, &if_table2 )) != NO_ERROR)
++        return status;
++    if (if_table2->NumEntries > 1)
++      size += (if_table2->NumEntries - 1) * sizeof(MIB_IPINTERFACE_ROW);
++    if (!(*table = HeapAlloc( GetProcessHeap(), HEAP_ZERO_MEMORY, size )))
++        return ERROR_OUTOFMEMORY;
++    (*table)->NumEntries = if_table2->NumEntries;
++    for (i = 0; i < (*table)->NumEntries; i++) {
++        (*table)->Table[i].Family = AF_INET;
++        (*table)->Table[i].InterfaceLuid = if_table2->Table[i].InterfaceLuid;
++        (*table)->Table[i].InterfaceIndex = if_table2->Table[i].InterfaceIndex;
++        (*table)->Table[i].RouterDiscoveryBehavior = RouterDiscoveryDhcp;
++        (*table)->Table[i].DadTransmits = 3;
++        (*table)->Table[i].BaseReachableTime = 30000;
++        (*table)->Table[i].RetransmitTime = 1000;
++        (*table)->Table[i].LinkLocalAddressBehavior = LinkLocalDelayed;
++        (*table)->Table[i].NlMtu = if_table2->Table[i].Mtu;
++        if (if_table2->Table[i].AdminStatus == NET_IF_ADMIN_STATUS_UP)
++            (*table)->Table[i].Connected = 1;
++    }
++    HeapFree( GetProcessHeap(), 0, if_table2 );
++    return NO_ERROR;
+ }
+ 
+ /******************************************************************
+From 7fc2c97e1f467de964524208dae8b74032bc1215 Mon Sep 17 00:00:00 2001
+From: Alexandre Abgrall <aabgrall98@gmail.com>
+Date: Mon, 27 Jul 2020 15:20:55 +0200
+Subject: [PATCH] iphlpapi: Make NotifyUnicastIpAddressChange return an invalid
+ handle instead of NULL.
 
-    iphlpapi: Make NotifyUnicastIpAddressChange return an invalid handle instead of NULL.
-
+---
  dlls/iphlpapi/iphlpapi_main.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-commit c1058279f8a3c8ff2781d713cbda8952924fd79d
-Author: Alexandre Abgrall <aabgrall98@gmail.com>
-Date:   Mon Jul 27 15:46:54 2020 +0200
+diff --git a/dlls/iphlpapi/iphlpapi_main.c b/dlls/iphlpapi/iphlpapi_main.c
+index 9c512b96436..d7bde79c270 100644
+--- a/dlls/iphlpapi/iphlpapi_main.c
++++ b/dlls/iphlpapi/iphlpapi_main.c
+@@ -2861,7 +2861,7 @@ DWORD WINAPI NotifyUnicastIpAddressChange(ADDRESS_FAMILY family, PUNICAST_IPADDR
+ {
+     FIXME("(family %d, callback %p, context %p, init_notify %d, handle %p): semi-stub\n",
+           family, callback, context, init_notify, handle);
+-    if (handle) *handle = NULL;
++    if (handle) *handle = INVALID_HANDLE_VALUE;
+ 
+     if (init_notify)
+         callback(context, NULL, MibInitialNotification);
+From c1058279f8a3c8ff2781d713cbda8952924fd79d Mon Sep 17 00:00:00 2001
+From: Alexandre Abgrall <aabgrall98@gmail.com>
+Date: Mon, 27 Jul 2020 15:46:54 +0200
+Subject: [PATCH] dxva2: Implement GetProcAmpRange semi-stub.
 
-    dxva2: Implement GetProcAmpRange semi-stub.
-
+---
  dlls/dxva2/videoservices.c | 16 ++++++++++++++--
  1 file changed, 14 insertions(+), 2 deletions(-)
 
-commit 3e431b2adb27738806c3588015e2afd74eb209cd
-Author: Alexandre Abgrall <aabgrall98@gmail.com>
-Date:   Mon Jul 27 15:51:11 2020 +0200
+diff --git a/dlls/dxva2/videoservices.c b/dlls/dxva2/videoservices.c
+index 84222dce558..e3f9f52f4d2 100644
+--- a/dlls/dxva2/videoservices.c
++++ b/dlls/dxva2/videoservices.c
+@@ -367,11 +367,23 @@ static HRESULT WINAPI DirectXVideoProcessorService_GetProcAmpRange( IDirectXVide
+         const DXVA2_VideoDesc *pVideoDesc, D3DFORMAT RenderTargetFormat, UINT ProcAmpCap, DXVA2_ValueRange *pRange )
+ {
+     DirectXVideoAccelerationServiceImpl *This = impl_from_IDirectXVideoProcessorService(iface);
++    DXVA2_ValueRange range;
+ 
+-    FIXME("(%p/%p)->(%s, %p, %#x, %u, %p): stub\n",
++    FIXME("(%p/%p)->(%s, %p, %#x, %u, %p): semi-stub\n",
+         iface, This, debugstr_guid(VideoProcDeviceGuid), pVideoDesc, RenderTargetFormat, ProcAmpCap, pRange);
+ 
+-    return E_NOTIMPL;
++    range.MinValue.ll = 0;
++    range.MaxValue.ll = 100;
++    if (ProcAmpCap == DXVA2_ProcAmp_Brightness)
++        range.DefaultValue.ll = 100;
++    else
++        range.DefaultValue.ll = 50;
++    range.StepSize.ll = 1;
++
++    if (pRange)
++        *pRange = range;
++
++    return S_OK;
+ }
+ 
+ static HRESULT WINAPI DirectXVideoProcessorService_GetFilterPropertyRange( IDirectXVideoProcessorService *iface, REFGUID VideoProcDeviceGuid,
+From 3e431b2adb27738806c3588015e2afd74eb209cd Mon Sep 17 00:00:00 2001
+From: Alexandre Abgrall <aabgrall98@gmail.com>
+Date: Mon, 27 Jul 2020 15:51:11 +0200
+Subject: [PATCH] dxva2: Handle DXVA2_VideoProcProgressiveDevice in
+ DirectXVideoProcessorService_CreateVideoProcessor.
 
-    dxva2: Handle DXVA2_VideoProcProgressiveDevice in DirectXVideoProcessorService_CreateVideoProcessor.
-
+---
  dlls/dxva2/videoservices.c | 3 ++-
  1 file changed, 2 insertions(+), 1 deletion(-)
 
-commit 24d51f6877b29343ce3f26431ccb0d47cced1b7a
-Author: Alexandre Abgrall <aabgrall98@gmail.com>
-Date:   Mon Jul 27 16:01:43 2020 +0200
+diff --git a/dlls/dxva2/videoservices.c b/dlls/dxva2/videoservices.c
+index e3f9f52f4d2..454ca6d4965 100644
+--- a/dlls/dxva2/videoservices.c
++++ b/dlls/dxva2/videoservices.c
+@@ -405,7 +405,8 @@ static HRESULT WINAPI DirectXVideoProcessorService_CreateVideoProcessor( IDirect
+     FIXME("(%p/%p)->(%s, %#x, %u, %p): semi-stub\n",
+         iface, This, debugstr_guid(VideoProcDeviceGuid), RenderTargetFormat, MaxNumSubStreams, ppVidProcess);
+ 
+-    if (IsEqualIID(VideoProcDeviceGuid, &DXVA2_VideoProcSoftwareDevice))
++    if (IsEqualIID(VideoProcDeviceGuid, &DXVA2_VideoProcSoftwareDevice) ||
++            IsEqualIID(VideoProcDeviceGuid, &DXVA2_VideoProcProgressiveDevice))
+         return processor_software_create(iface, This->device, pVideoDesc, RenderTargetFormat, MaxNumSubStreams, ppVidProcess);
+ 
+     return E_NOTIMPL;
+From 24d51f6877b29343ce3f26431ccb0d47cced1b7a Mon Sep 17 00:00:00 2001
+From: Alexandre Abgrall <aabgrall98@gmail.com>
+Date: Mon, 27 Jul 2020 16:01:43 +0200
+Subject: [PATCH] winepulse.drv: Call pa_mainloop_new() in pulse_connect() if
+ it wasn't done before.
 
-    winepulse.drv: Call pa_mainloop_new() in pulse_connect() if it wasn't done before.
-
+---
  dlls/winepulse.drv/mmdevdrv.c | 3 +++
  1 file changed, 3 insertions(+)
 
-commit 85c4dd397849c94422ff7df500acb7c72310b898
-Author: Alexandre Abgrall <aabgrall98@gmail.com>
-Date:   Mon Jul 27 16:27:35 2020 +0200
+diff --git a/dlls/winepulse.drv/mmdevdrv.c b/dlls/winepulse.drv/mmdevdrv.c
+index 4c500241d01..7e457428984 100644
+--- a/dlls/winepulse.drv/mmdevdrv.c
++++ b/dlls/winepulse.drv/mmdevdrv.c
+@@ -669,6 +669,9 @@ static HRESULT pulse_connect(void)
+     WCHAR path[MAX_PATH], *name;
+     char *str;
+ 
++    if (!pulse_ml)
++        pulse_ml = pa_mainloop_new();
++
+     if (!pulse_thread)
+     {
+         if (!(pulse_thread = CreateThread(NULL, 0, pulse_mainloop_thread, NULL, 0, NULL)))
+From 85c4dd397849c94422ff7df500acb7c72310b898 Mon Sep 17 00:00:00 2001
+From: Alexandre Abgrall <aabgrall98@gmail.com>
+Date: Mon, 27 Jul 2020 16:27:35 +0200
+Subject: [PATCH] winepulse.drv: Add stubs for IAudioClockAdjustment.
 
-    winepulse.drv: Add stubs for IAudioClockAdjustment.
-
- dlls/winepulse.drv/mmdevdrv.c | 65 +++++++++++++++++++++++++++++++++++++++++++
+---
+ dlls/winepulse.drv/mmdevdrv.c | 65 +++++++++++++++++++++++++++++++++++
  1 file changed, 65 insertions(+)
 
-commit 00fb25a55964397e08c662362e4b08d0e160c3dd
-Author: Alexandre Abgrall <aabgrall98@gmail.com>
-Date:   Tue Jul 28 18:54:02 2020 +0200
+diff --git a/dlls/winepulse.drv/mmdevdrv.c b/dlls/winepulse.drv/mmdevdrv.c
+index 7e457428984..7d5f45d90f1 100644
+--- a/dlls/winepulse.drv/mmdevdrv.c
++++ b/dlls/winepulse.drv/mmdevdrv.c
+@@ -185,6 +185,7 @@ struct ACImpl {
+     IAudioCaptureClient IAudioCaptureClient_iface;
+     IAudioClock IAudioClock_iface;
+     IAudioClock2 IAudioClock2_iface;
++    IAudioClockAdjustment IAudioClockAdjustment_iface;
+     IAudioStreamVolume IAudioStreamVolume_iface;
+     IUnknown *marshal;
+     IMMDevice *parent;
+@@ -228,6 +229,7 @@ static const ISimpleAudioVolumeVtbl SimpleAudioVolume_Vtbl;
+ static const IChannelAudioVolumeVtbl ChannelAudioVolume_Vtbl;
+ static const IAudioClockVtbl AudioClock_Vtbl;
+ static const IAudioClock2Vtbl AudioClock2_Vtbl;
++static const IAudioClockAdjustmentVtbl AudioClockAdjustment_Vtbl;
+ static const IAudioStreamVolumeVtbl AudioStreamVolume_Vtbl;
+ 
+ static AudioSessionWrapper *AudioSessionWrapper_Create(ACImpl *client);
+@@ -267,6 +269,11 @@ static inline ACImpl *impl_from_IAudioClock(IAudioClock *iface)
+     return CONTAINING_RECORD(iface, ACImpl, IAudioClock_iface);
+ }
+ 
++static inline ACImpl *impl_from_IAudioClockAdjustment(IAudioClockAdjustment *iface)
++{
++    return CONTAINING_RECORD(iface, ACImpl, IAudioClockAdjustment_iface);
++}
++
+ static inline ACImpl *impl_from_IAudioClock2(IAudioClock2 *iface)
+ {
+     return CONTAINING_RECORD(iface, ACImpl, IAudioClock2_iface);
+@@ -1604,6 +1611,7 @@ HRESULT WINAPI AUDDRV_GetAudioEndpoint(GUID *guid, IMMDevice *dev, IAudioClient
+     This->IAudioCaptureClient_iface.lpVtbl = &AudioCaptureClient_Vtbl;
+     This->IAudioClock_iface.lpVtbl = &AudioClock_Vtbl;
+     This->IAudioClock2_iface.lpVtbl = &AudioClock2_Vtbl;
++    This->IAudioClockAdjustment_iface.lpVtbl = &AudioClockAdjustment_Vtbl;
+     This->IAudioStreamVolume_iface.lpVtbl = &AudioStreamVolume_Vtbl;
+     This->dataflow = dataflow;
+     This->parent = dev;
+@@ -2569,6 +2577,8 @@ static HRESULT WINAPI AudioClient_GetService(IAudioClient *iface, REFIID riid,
+         *ppv = &This->IAudioCaptureClient_iface;
+     } else if (IsEqualIID(riid, &IID_IAudioClock)) {
+         *ppv = &This->IAudioClock_iface;
++    } else if (IsEqualIID(riid, &IID_IAudioClockAdjustment)) {
++        *ppv = &This->IAudioClockAdjustment_iface;
+     } else if (IsEqualIID(riid, &IID_IAudioStreamVolume)) {
+         *ppv = &This->IAudioStreamVolume_iface;
+     } else if (IsEqualIID(riid, &IID_IAudioSessionControl) ||
+@@ -3087,6 +3097,61 @@ static const IAudioClock2Vtbl AudioClock2_Vtbl =
+     AudioClock2_GetDevicePosition
+ };
+ 
++static HRESULT WINAPI AudioClockAdjustment_QueryInterface(IAudioClockAdjustment *iface,
++        REFIID riid, void **ppv)
++{
++    ACImpl *This = impl_from_IAudioClockAdjustment(iface);
++
++    TRACE("(%p)->(%s, %p)\n", iface, debugstr_guid(riid), ppv);
++
++    if (!ppv)
++        return E_POINTER;
++    *ppv = NULL;
++
++    if (IsEqualIID(riid, &IID_IUnknown) || IsEqualIID(riid, &IID_IAudioClockAdjustment))
++        *ppv = iface;
++    if (*ppv) {
++        IUnknown_AddRef((IUnknown*)*ppv);
++        return S_OK;
++    }
++
++    if (IsEqualIID(riid, &IID_IMarshal))
++        return IUnknown_QueryInterface(This->marshal, riid, ppv);
++
++    WARN("Unknown interface %s\n", debugstr_guid(riid));
++    return E_NOINTERFACE;
++}
++
++static ULONG WINAPI AudioClockAdjustment_AddRef(IAudioClockAdjustment *iface)
++{
++    ACImpl *This = impl_from_IAudioClockAdjustment(iface);
++    return IAudioClient_AddRef(&This->IAudioClient_iface);
++}
++
++static ULONG WINAPI AudioClockAdjustment_Release(IAudioClockAdjustment *iface)
++{
++    ACImpl *This = impl_from_IAudioClockAdjustment(iface);
++    return IAudioClient_Release(&This->IAudioClient_iface);
++}
++
++static HRESULT WINAPI AudioClockAdjustment_SetSampleRate(IAudioClockAdjustment *iface,
++        float flSampleRate)
++{
++    ACImpl *This = impl_from_IAudioClockAdjustment(iface);
++
++    FIXME("(%p)->(%f): stub\n", This, flSampleRate);
++
++    return S_OK;
++}
++
++static const IAudioClockAdjustmentVtbl AudioClockAdjustment_Vtbl =
++{
++    AudioClockAdjustment_QueryInterface,
++    AudioClockAdjustment_AddRef,
++    AudioClockAdjustment_Release,
++    AudioClockAdjustment_SetSampleRate
++};
++
+ static HRESULT WINAPI AudioStreamVolume_QueryInterface(
+         IAudioStreamVolume *iface, REFIID riid, void **ppv)
+ {
+From 00fb25a55964397e08c662362e4b08d0e160c3dd Mon Sep 17 00:00:00 2001
+From: Alexandre Abgrall <aabgrall98@gmail.com>
+Date: Tue, 28 Jul 2020 18:54:02 +0200
+Subject: [PATCH] winealsa.drv: Add IAudioClockAdjustment with SetSampleRate
+ stub.
 
-    winealsa.drv: Add IAudioClockAdjustment with SetSampleRate stub.
-    
-    Signed-off-by: Alexandre Abgrall <aabgrall98@gmail.com>
-
- dlls/winealsa.drv/mmdevdrv.c | 61 ++++++++++++++++++++++++++++++++++++++++++++
+Signed-off-by: Alexandre Abgrall <aabgrall98@gmail.com>
+---
+ dlls/winealsa.drv/mmdevdrv.c | 61 ++++++++++++++++++++++++++++++++++++
  1 file changed, 61 insertions(+)
 
-commit 7c82efa494770fde3fc080d72b9e85ec1e9eaae2
-Author: Alexandre Abgrall <aabgrall98@gmail.com>
-Date:   Wed Jul 29 12:44:26 2020 +0200
+diff --git a/dlls/winealsa.drv/mmdevdrv.c b/dlls/winealsa.drv/mmdevdrv.c
+index 09f98dc7b85..ce7a4a7a130 100644
+--- a/dlls/winealsa.drv/mmdevdrv.c
++++ b/dlls/winealsa.drv/mmdevdrv.c
+@@ -92,6 +92,7 @@ struct ACImpl {
+     IAudioRenderClient IAudioRenderClient_iface;
+     IAudioCaptureClient IAudioCaptureClient_iface;
+     IAudioClock IAudioClock_iface;
++    IAudioClockAdjustment IAudioClockAdjustment_iface;
+     IAudioClock2 IAudioClock2_iface;
+     IAudioStreamVolume IAudioStreamVolume_iface;
+ 
+@@ -178,6 +179,7 @@ static const IAudioCaptureClientVtbl AudioCaptureClient_Vtbl;
+ static const IAudioSessionControl2Vtbl AudioSessionControl2_Vtbl;
+ static const ISimpleAudioVolumeVtbl SimpleAudioVolume_Vtbl;
+ static const IAudioClockVtbl AudioClock_Vtbl;
++static const IAudioClockAdjustmentVtbl AudioClockAdjustment_Vtbl;
+ static const IAudioClock2Vtbl AudioClock2_Vtbl;
+ static const IAudioStreamVolumeVtbl AudioStreamVolume_Vtbl;
+ static const IChannelAudioVolumeVtbl ChannelAudioVolume_Vtbl;
+@@ -220,6 +222,11 @@ static inline ACImpl *impl_from_IAudioClock(IAudioClock *iface)
+     return CONTAINING_RECORD(iface, ACImpl, IAudioClock_iface);
+ }
+ 
++static inline ACImpl *impl_from_IAudioClockAdjustment(IAudioClockAdjustment *iface)
++{
++    return CONTAINING_RECORD(iface, ACImpl, IAudioClockAdjustment_iface);
++}
++
+ static inline ACImpl *impl_from_IAudioClock2(IAudioClock2 *iface)
+ {
+     return CONTAINING_RECORD(iface, ACImpl, IAudioClock2_iface);
+@@ -792,6 +799,7 @@ HRESULT WINAPI AUDDRV_GetAudioEndpoint(GUID *guid, IMMDevice *dev, IAudioClient
+     This->IAudioRenderClient_iface.lpVtbl = &AudioRenderClient_Vtbl;
+     This->IAudioCaptureClient_iface.lpVtbl = &AudioCaptureClient_Vtbl;
+     This->IAudioClock_iface.lpVtbl = &AudioClock_Vtbl;
++    This->IAudioClockAdjustment_iface.lpVtbl = &AudioClockAdjustment_Vtbl;
+     This->IAudioClock2_iface.lpVtbl = &AudioClock2_Vtbl;
+     This->IAudioStreamVolume_iface.lpVtbl = &AudioStreamVolume_Vtbl;
+ 
+@@ -2603,6 +2611,9 @@ static HRESULT WINAPI AudioClient_GetService(IAudioClient *iface, REFIID riid,
+     }else if(IsEqualIID(riid, &IID_IAudioClock)){
+         IAudioClock_AddRef(&This->IAudioClock_iface);
+         *ppv = &This->IAudioClock_iface;
++    } else if (IsEqualIID(riid, &IID_IAudioClockAdjustment)) {
++        IAudioClockAdjustment_AddRef(&This->IAudioClockAdjustment_iface);
++        *ppv = &This->IAudioClockAdjustment_iface;
+     }else if(IsEqualIID(riid, &IID_IAudioStreamVolume)){
+         IAudioStreamVolume_AddRef(&This->IAudioStreamVolume_iface);
+         *ppv = &This->IAudioStreamVolume_iface;
+@@ -3148,6 +3159,56 @@ static const IAudioClockVtbl AudioClock_Vtbl =
+     AudioClock_GetCharacteristics
+ };
+ 
++static HRESULT WINAPI AudioClockAdjustment_QueryInterface(IAudioClockAdjustment *iface,
++        REFIID riid, void **ppv)
++{
++    TRACE("(%p)->(%s, %p)\n", iface, debugstr_guid(riid), ppv);
++
++    if (!ppv)
++        return E_POINTER;
++    *ppv = NULL;
++
++    if (IsEqualIID(riid, &IID_IUnknown) || IsEqualIID(riid, &IID_IAudioClockAdjustment))
++        *ppv = iface;
++    if (*ppv) {
++        IUnknown_AddRef((IUnknown*)*ppv);
++        return S_OK;
++    }
++
++    WARN("Unknown interface %s\n", debugstr_guid(riid));
++    return E_NOINTERFACE;
++}
++
++static ULONG WINAPI AudioClockAdjustment_AddRef(IAudioClockAdjustment *iface)
++{
++    ACImpl *This = impl_from_IAudioClockAdjustment(iface);
++    return IAudioClient_AddRef(&This->IAudioClient_iface);
++}
++
++static ULONG WINAPI AudioClockAdjustment_Release(IAudioClockAdjustment *iface)
++{
++    ACImpl *This = impl_from_IAudioClockAdjustment(iface);
++    return IAudioClient_Release(&This->IAudioClient_iface);
++}
++
++static HRESULT WINAPI AudioClockAdjustment_SetSampleRate(IAudioClockAdjustment *iface,
++        float flSampleRate)
++{
++    ACImpl *This = impl_from_IAudioClockAdjustment(iface);
++
++    FIXME("(%p)->(%f): stub\n", This, flSampleRate);
++
++    return S_OK;
++}
++
++static const IAudioClockAdjustmentVtbl AudioClockAdjustment_Vtbl =
++{
++    AudioClockAdjustment_QueryInterface,
++    AudioClockAdjustment_AddRef,
++    AudioClockAdjustment_Release,
++    AudioClockAdjustment_SetSampleRate
++};
++
+ static HRESULT WINAPI AudioClock2_QueryInterface(IAudioClock2 *iface,
+         REFIID riid, void **ppv)
+ {
+From 84857d27067afaa1ae5774afe27086332263bfb5 Mon Sep 17 00:00:00 2001
+From: Hans Leidekker <hans@codeweavers.com>
+Date: Tue, 26 May 2020 10:18:43 +0200
+Subject: [PATCH] wbemprox: Get the disk drive serial number from mountmgr.
 
-    wbemprox: Temp fix (3rd re-push): add NULL checks for strings and init record_logicaldisk to zero
+Wine-Bug: https://bugs.winehq.org/show_bug.cgi?id=49160
+Signed-off-by: Hans Leidekker <hans@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/wbemprox/builtin.c     | 41 +++++++++++++++++++++++++++++++++++--
+ dlls/wbemprox/tests/query.c | 26 +++++++++++++++++++++++
+ 2 files changed, 65 insertions(+), 2 deletions(-)
 
- dlls/wbemprox/builtin.c | 136 +++++++++++++++++++++++++++---------------------
- dlls/wbemprox/class.c   |   9 +++-
- dlls/wbemprox/query.c   |  17 ++++--
- dlls/wbemprox/table.c   |  21 ++++++--
+diff --git a/dlls/wbemprox/builtin.c b/dlls/wbemprox/builtin.c
+index ddd12d6ebcb..466611721ab 100644
+--- a/dlls/wbemprox/builtin.c
++++ b/dlls/wbemprox/builtin.c
+@@ -44,6 +44,7 @@
+ #include "ntsecapi.h"
+ #include "winspool.h"
+ #include "setupapi.h"
++#include "ntddstor.h"
+ 
+ #include "wine/asm.h"
+ #include "wine/debug.h"
+@@ -140,7 +141,7 @@ static const struct column col_diskdrive[] =
+     { L"MediaType",     CIM_STRING },
+     { L"Model",         CIM_STRING },
+     { L"PNPDeviceID",   CIM_STRING },
+-    { L"SerialNumber",  CIM_STRING },
++    { L"SerialNumber",  CIM_STRING|COL_FLAG_DYNAMIC },
+     { L"Size",          CIM_UINT64 },
+ };
+ static const struct column col_diskdrivetodiskpartition[] =
+@@ -2081,6 +2082,42 @@ static UINT64 get_freespace( const WCHAR *dir, UINT64 *disksize )
+     }
+     return free.QuadPart;
+ }
++static WCHAR *get_diskdrive_serialnumber( WCHAR letter )
++{
++    WCHAR *ret = NULL;
++    STORAGE_DEVICE_DESCRIPTOR *desc;
++    HANDLE handle = INVALID_HANDLE_VALUE;
++    STORAGE_PROPERTY_QUERY query = {0};
++    WCHAR drive[7];
++    DWORD size;
++
++    swprintf( drive, ARRAY_SIZE(drive), L"\\\\.\\%c:", letter );
++    handle = CreateFileW( drive, 0, FILE_SHARE_READ|FILE_SHARE_WRITE, NULL, OPEN_EXISTING, 0, 0 );
++    if (handle == INVALID_HANDLE_VALUE) goto done;
++
++    query.PropertyId = StorageDeviceProperty;
++    query.QueryType  = PropertyStandardQuery;
++
++    size = sizeof(*desc) + 256;
++    for (;;)
++    {
++        if (!(desc = heap_alloc( size ))) break;
++        if (DeviceIoControl( handle, IOCTL_STORAGE_QUERY_PROPERTY, &query, sizeof(query), desc, size, NULL, NULL ))
++        {
++            if (desc->SerialNumberOffset) ret = heap_strdupAW( (const char *)desc + desc->SerialNumberOffset );
++            heap_free( desc );
++            break;
++        }
++        heap_free( desc );
++        if (GetLastError() == ERROR_MORE_DATA) size = desc->Size;
++        else break;
++    }
++
++done:
++    if (handle != INVALID_HANDLE_VALUE) CloseHandle( handle );
++    if (!ret) ret = heap_strdupW( L"WINEHDISK" );
++    return ret;
++}
+ 
+ static enum fill_status fill_diskdrive( struct table *table, const struct expr *cond )
+ {
+@@ -2114,7 +2151,7 @@ static enum fill_status fill_diskdrive( struct table *table, const struct expr *
+             rec->mediatype     = (type == DRIVE_FIXED) ? L"Fixed hard disk" : L"Removable media";
+             rec->model         = L"Wine Disk Drive";
+             rec->pnpdevice_id  = L"IDE\\Disk\\VEN_WINE";
+-            rec->serialnumber  = L"WINEHDISK";
++            rec->serialnumber  = get_diskdrive_serialnumber( root[0] );
+             get_freespace( root, &size );
+             rec->size          = size;
+             if (!match_row( table, row, cond, &status ))
+diff --git a/dlls/wbemprox/tests/query.c b/dlls/wbemprox/tests/query.c
+index a9b4910ebfa..578e9308df7 100644
+--- a/dlls/wbemprox/tests/query.c
++++ b/dlls/wbemprox/tests/query.c
+@@ -1456,6 +1456,31 @@ static void test_Win32_DesktopMonitor( IWbemServices *services )
+     SysFreeString( wql );
+ }
+ 
++static void test_Win32_DiskDrive( IWbemServices *services )
++{
++    BSTR wql = SysAllocString( L"wql" ), query = SysAllocString( L"SELECT * FROM Win32_DiskDrive" );
++    IEnumWbemClassObject *result;
++    IWbemClassObject *obj;
++    HRESULT hr;
++    DWORD count;
++
++    hr = IWbemServices_ExecQuery( services, wql, query, 0, NULL, &result );
++    ok( hr == S_OK, "got %08x\n", hr );
++
++    for (;;)
++    {
++        hr = IEnumWbemClassObject_Next( result, 10000, 1, &obj, &count );
++        if (hr != S_OK) break;
++
++        check_property( obj, L"DeviceID", VT_BSTR, CIM_STRING );
++        IWbemClassObject_Release( obj );
++    }
++
++    IEnumWbemClassObject_Release( result );
++    SysFreeString( query );
++    SysFreeString( wql );
++}
++
+ static void test_Win32_DisplayControllerConfiguration( IWbemServices *services )
+ {
+     BSTR wql = SysAllocString( L"wql" );
+@@ -1561,6 +1586,7 @@ START_TEST(query)
+     test_Win32_ComputerSystemProduct( services );
+     test_Win32_Bios( services );
+     test_Win32_DesktopMonitor( services );
++    test_Win32_DiskDrive( services );
+     test_Win32_DisplayControllerConfiguration( services );
+     test_Win32_IP4RouteTable( services );
+     test_Win32_OperatingSystem( services );
+From 7c82efa494770fde3fc080d72b9e85ec1e9eaae2 Mon Sep 17 00:00:00 2001
+From: Alexandre Abgrall <aabgrall98@gmail.com>
+Date: Wed, 29 Jul 2020 12:44:26 +0200
+Subject: [PATCH] wbemprox: Temp fix (3rd re-push): add NULL checks for strings
+ and init record_logicaldisk to zero
+
+---
+ dlls/wbemprox/builtin.c | 136 ++++++++++++++++++++++------------------
+ dlls/wbemprox/class.c   |   9 ++-
+ dlls/wbemprox/query.c   |  17 ++++-
+ dlls/wbemprox/table.c   |  21 ++++++-
  4 files changed, 116 insertions(+), 67 deletions(-)
 
-commit 50f1b757fc461b1f5edcff8a325afbe326ea7d78
-Author: Alexandre Abgrall <aabgrall98@gmail.com>
-Date:   Wed Jul 29 16:46:29 2020 +0200
+diff --git a/dlls/wbemprox/builtin.c b/dlls/wbemprox/builtin.c
+index 466611721ab..97e7c4ff9bc 100644
+--- a/dlls/wbemprox/builtin.c
++++ b/dlls/wbemprox/builtin.c
+@@ -563,8 +563,8 @@ struct record_ip4routetable
+ struct record_logicaldisk
+ {
+     const WCHAR *device_id;
+-    UINT32       drivetype;
+-    const WCHAR *filesystem;
++    UINT32       drivetype;////
++    const WCHAR *filesystem;////
+     UINT64       freespace;
+     const WCHAR *name;
+     UINT64       size;
+@@ -923,11 +923,16 @@ static BOOL match_row( const struct table *table, UINT row, const struct expr *c
+     return val != 0;
+ }
+ 
++static inline void* __WINE_ALLOC_SIZE(2) heap_realloc_zero( LPVOID mem, SIZE_T size )
++{
++    return HeapReAlloc( GetProcessHeap(), HEAP_ZERO_MEMORY, mem, size );
++}
++
+ static BOOL resize_table( struct table *table, UINT row_count, UINT row_size )
+ {
+     if (!table->num_rows_allocated)
+     {
+-        if (!(table->data = heap_alloc( row_count * row_size ))) return FALSE;
++        if (!(table->data = heap_alloc_zero( row_count * row_size ))) return FALSE;
+         table->num_rows_allocated = row_count;
+         return TRUE;
+     }
+@@ -935,7 +940,7 @@ static BOOL resize_table( struct table *table, UINT row_count, UINT row_size )
+     {
+         BYTE *data;
+         UINT count = max( row_count, table->num_rows_allocated * 2 );
+-        if (!(data = heap_realloc( table->data, count * row_size ))) return FALSE;
++        if (!(data = heap_realloc_zero( table->data, count * row_size ))) return FALSE;
+         table->data = data;
+         table->num_rows_allocated = count;
+     }
+@@ -1122,7 +1127,7 @@ static enum fill_status fill_baseboard( struct table *table, const struct expr *
+     if (!resize_table( table, 1, sizeof(*rec) )) return FILL_STATUS_FAILED;
+ 
+     len = GetSystemFirmwareTable( RSMB, 0, NULL, 0 );
+-    if (!(buf = heap_alloc( len ))) return FILL_STATUS_FAILED;
++    if (!(buf = heap_alloc_zero( len ))) return FILL_STATUS_FAILED;
+     GetSystemFirmwareTable( RSMB, 0, buf, len );
+ 
+     rec = (struct record_baseboard *)table->data;
+@@ -1203,7 +1208,7 @@ static WCHAR *convert_bios_date( const WCHAR *str )
+     else if (q - p == 2) year = 1900 + (p[0] - '0') * 10 + p[1] - '0';
+     else return NULL;
+ 
+-    if (!(ret = heap_alloc( sizeof(fmtW) ))) return NULL;
++    if (!(ret = heap_alloc_zero( sizeof(fmtW) ))) return NULL;
+     swprintf( ret, ARRAY_SIZE(fmtW), fmtW, year, month, day );
+     return ret;
+ }
+@@ -1281,7 +1286,7 @@ static enum fill_status fill_bios( struct table *table, const struct expr *cond
+     if (!resize_table( table, 1, sizeof(*rec) )) return FILL_STATUS_FAILED;
+ 
+     len = GetSystemFirmwareTable( RSMB, 0, NULL, 0 );
+-    if (!(buf = heap_alloc( len ))) return FILL_STATUS_FAILED;
++    if (!(buf = heap_alloc_zero( len ))) return FILL_STATUS_FAILED;
+     GetSystemFirmwareTable( RSMB, 0, buf, len );
+ 
+     rec = (struct record_bios *)table->data;
+@@ -1372,7 +1377,7 @@ static UINT get_logical_processor_count( UINT *num_physical, UINT *num_packages
+     status = NtQuerySystemInformationEx( SystemLogicalProcessorInformationEx, &all, sizeof(all), NULL, 0, &len );
+     if (status != STATUS_INFO_LENGTH_MISMATCH) return get_processor_count();
+ 
+-    if (!(buf = heap_alloc( len ))) return get_processor_count();
++    if (!(buf = heap_alloc_zero( len ))) return get_processor_count();
+     status = NtQuerySystemInformationEx( SystemLogicalProcessorInformationEx, &all, sizeof(all), buf, len, NULL );
+     if (status != STATUS_SUCCESS)
+     {
+@@ -1425,7 +1430,7 @@ static WCHAR *get_computername(void)
+     WCHAR *ret;
+     DWORD size = MAX_COMPUTERNAME_LENGTH + 1;
+ 
+-    if (!(ret = heap_alloc( size * sizeof(WCHAR) ))) return NULL;
++    if (!(ret = heap_alloc_zero( size * sizeof(WCHAR) ))) return NULL;
+     GetComputerNameW( ret, &size );
+     return ret;
+ }
+@@ -1441,7 +1446,7 @@ static WCHAR *get_username(void)
+     usersize = 0;
+     GetUserNameW( NULL, &usersize );
+     size = compsize + usersize; /* two null terminators account for the \ */
+-    if (!(ret = heap_alloc( size * sizeof(WCHAR) ))) return NULL;
++    if (!(ret = heap_alloc_zero( size * sizeof(WCHAR) ))) return NULL;
+     GetComputerNameW( ret, &compsize );
+     ret[compsize] = '\\';
+     GetUserNameW( ret + compsize + 1, &usersize );
+@@ -1511,7 +1516,7 @@ static WCHAR *get_compsysproduct_uuid( const char *buf, UINT len )
+ 
+     if (!(hdr = find_smbios_entry( SMBIOS_TYPE_SYSTEM, buf, len )) || hdr->length < sizeof(*system)) goto done;
+     system = (const struct smbios_system *)hdr;
+-    if (!memcmp( system->uuid, none, sizeof(none) ) || !(ret = heap_alloc( 37 * sizeof(WCHAR) ))) goto done;
++    if (!memcmp( system->uuid, none, sizeof(none) ) || !(ret = heap_alloc_zero( 37 * sizeof(WCHAR) ))) goto done;
+ 
+     ptr = system->uuid;
+     swprintf( ret, 37, L"%02X%02X%02X%02X-%02X%02X-%02X%02X-%02X%02X-%02X%02X%02X%02X%02X%02X", ptr[0], ptr[1],
+@@ -1546,7 +1551,7 @@ static enum fill_status fill_compsysproduct( struct table *table, const struct e
+     if (!resize_table( table, 1, sizeof(*rec) )) return FILL_STATUS_FAILED;
+ 
+     len = GetSystemFirmwareTable( RSMB, 0, NULL, 0 );
+-    if (!(buf = heap_alloc( len ))) return FILL_STATUS_FAILED;
++    if (!(buf = heap_alloc_zero( len ))) return FILL_STATUS_FAILED;
+     GetSystemFirmwareTable( RSMB, 0, buf, len );
+ 
+     rec = (struct record_computersystemproduct *)table->data;
+@@ -1578,13 +1583,13 @@ static struct dirstack *alloc_dirstack( UINT size )
+ {
+     struct dirstack *dirstack;
+ 
+-    if (!(dirstack = heap_alloc( sizeof(*dirstack) ))) return NULL;
+-    if (!(dirstack->dirs = heap_alloc( sizeof(WCHAR *) * size )))
++    if (!(dirstack = heap_alloc_zero( sizeof(*dirstack) ))) return NULL;
++    if (!(dirstack->dirs = heap_alloc_zero( sizeof(WCHAR *) * size )))
+     {
+         heap_free( dirstack );
+         return NULL;
+     }
+-    if (!(dirstack->len_dirs = heap_alloc( sizeof(UINT) * size )))
++    if (!(dirstack->len_dirs = heap_alloc_zero( sizeof(UINT) * size )))
+     {
+         heap_free( dirstack->dirs );
+         heap_free( dirstack );
+@@ -1657,7 +1662,7 @@ static WCHAR *build_glob( WCHAR drive, const WCHAR *path, UINT len )
+     UINT i = 0;
+     WCHAR *ret;
+ 
+-    if (!(ret = heap_alloc( (len + 6) * sizeof(WCHAR) ))) return NULL;
++    if (!(ret = heap_alloc_zero( (len + 6) * sizeof(WCHAR) ))) return NULL;
+     ret[i++] = drive;
+     ret[i++] = ':';
+     ret[i++] = '\\';
+@@ -1683,7 +1688,7 @@ static WCHAR *build_name( WCHAR drive, const WCHAR *path )
+         if (*p == '\\') len += 2;
+         else len++;
+     };
+-    if (!(ret = heap_alloc( (len + 5) * sizeof(WCHAR) ))) return NULL;
++    if (!(ret = heap_alloc_zero( (len + 5) * sizeof(WCHAR) ))) return NULL;
+     ret[i++] = drive;
+     ret[i++] = ':';
+     ret[i++] = '\\';
+@@ -1716,7 +1721,7 @@ static WCHAR *build_dirname( const WCHAR *path, UINT *ret_len )
+     while (p >= start && *p != '\\') { len--; p--; };
+     while (p >= start && *p == '\\') { len--; p--; };
+ 
+-    if (!(ret = heap_alloc( (len + 1) * sizeof(WCHAR) ))) return NULL;
++    if (!(ret = heap_alloc_zero( (len + 1) * sizeof(WCHAR) ))) return NULL;
+     for (i = 0, p = start; p < start + len; p++)
+     {
+         if (p[0] == '\\' && p[1] == '\\')
+@@ -1795,7 +1800,7 @@ static WCHAR *append_path( const WCHAR *path, const WCHAR *segment, UINT *len )
+ 
+     *len = 0;
+     if (path) len_path = lstrlenW( path );
+-    if (!(ret = heap_alloc( (len_path + len_segment + 2) * sizeof(WCHAR) ))) return NULL;
++    if (!(ret = heap_alloc_zero( (len_path + len_segment + 2) * sizeof(WCHAR) ))) return NULL;
+     if (path && len_path)
+     {
+         memcpy( ret, path, len_path * sizeof(WCHAR) );
+@@ -1815,8 +1820,8 @@ static WCHAR *get_file_version( const WCHAR *filename )
+     void *block;
+     WCHAR *ret;
+ 
+-    if (!(ret = heap_alloc( len * sizeof(WCHAR) ))) return NULL;
+-    if (!(size = GetFileVersionInfoSizeW( filename, NULL )) || !(block = heap_alloc( size )))
++    if (!(ret = heap_alloc_zero( len * sizeof(WCHAR) ))) return NULL;
++    if (!(size = GetFileVersionInfoSizeW( filename, NULL )) || !(block = heap_alloc_zero( size )))
+     {
+         heap_free( ret );
+         return NULL;
+@@ -2101,7 +2106,7 @@ static WCHAR *get_diskdrive_serialnumber( WCHAR letter )
+     size = sizeof(*desc) + 256;
+     for (;;)
+     {
+-        if (!(desc = heap_alloc( size ))) break;
++        if (!(desc = heap_alloc_zero( size ))) break;
+         if (DeviceIoControl( handle, IOCTL_STORAGE_QUERY_PROPERTY, &query, sizeof(query), desc, size, NULL, NULL ))
+         {
+             if (desc->SerialNumberOffset) ret = heap_strdupAW( (const char *)desc + desc->SerialNumberOffset );
+@@ -2361,7 +2366,7 @@ static WCHAR *get_ip4_string( DWORD addr )
+     DWORD len = sizeof("ddd.ddd.ddd.ddd");
+     WCHAR *ret;
+ 
+-    if (!(ret = heap_alloc( len * sizeof(WCHAR) ))) return NULL;
++    if (!(ret = heap_alloc_zero( len * sizeof(WCHAR) ))) return NULL;
+     swprintf( ret, len, L"%u.%u.%u.%u", (addr >> 24) & 0xff, (addr >> 16) & 0xff, (addr >> 8) & 0xff, addr & 0xff );
+     return ret;
+ }
+@@ -2374,7 +2379,7 @@ static enum fill_status fill_ip4routetable( struct table *table, const struct ex
+     enum fill_status status = FILL_STATUS_UNFILTERED;
+ 
+     if (GetIpForwardTable( NULL, &size, TRUE ) != ERROR_INSUFFICIENT_BUFFER) return FILL_STATUS_FAILED;
+-    if (!(forwards = heap_alloc( size ))) return FILL_STATUS_FAILED;
++    if (!(forwards = heap_alloc_zero( size ))) return FILL_STATUS_FAILED;
+     if (GetIpForwardTable( forwards, &size, TRUE ))
+     {
+         heap_free( forwards );
+@@ -2457,8 +2462,18 @@ static enum fill_status fill_logicaldisk( struct table *table, const struct expr
+             rec->size               = size;
+             rec->volumename         = get_volumename( root );
+             rec->volumeserialnumber = get_volumeserialnumber( root );
++            TRACE("row_ind='%d' / rec->device_id=(%#lx)'%s' / rec->drivetype='%d' / rec->filesystem=(%#lx)'%s' / rec->freespace='%lld' / rec->size='%lld'"
++            " / rec->volumename=(%#lx)'%s' / rec->volumeserialnumber=(%#lx)'%s'\n",
++                row,
++                rec->device_id, debugstr_w(rec->device_id),
++                rec->drivetype,
++                rec->filesystem, debugstr_w(rec->filesystem),
++                rec->freespace, rec->size,
++                rec->volumename, debugstr_w(rec->volumename),
++                rec->volumeserialnumber, debugstr_w(rec->volumeserialnumber));
+             if (!match_row( table, row, cond, &status ))
+             {
++                TRACE("row not matched\n");
+                 free_row_values( table, row );
+                 continue;
+             }
+@@ -2491,6 +2506,7 @@ static struct association *get_logicaldisktopartition_pairs( UINT *count )
+     if (!(ret = heap_alloc_zero( query->view->result_count * sizeof(*ret) ))) goto done;
+ 
+     /* assume fixed and removable disks are enumerated in the same order as partitions */
++    TRACE("query->view->result_count='%d'\n",query->view->result_count);
+     for (i = 0; i < query->view->result_count; i++)
+     {
+         if ((hr = get_propval( query->view, i, L"__PATH", &val, NULL, NULL )) != S_OK) goto done;
+@@ -2568,7 +2584,7 @@ static UINT16 get_connection_status( IF_OPER_STATUS status )
+ static WCHAR *get_mac_address( const BYTE *addr, DWORD len )
+ {
+     WCHAR *ret;
+-    if (len != 6 || !(ret = heap_alloc( 18 * sizeof(WCHAR) ))) return NULL;
++    if (len != 6 || !(ret = heap_alloc_zero( 18 * sizeof(WCHAR) ))) return NULL;
+     swprintf( ret, 18, L"%02x:%02x:%02x:%02x:%02x:%02x", addr[0], addr[1], addr[2], addr[3], addr[4], addr[5] );
+     return ret;
+ }
+@@ -2616,7 +2632,7 @@ static enum fill_status fill_networkadapter( struct table *table, const struct e
+     ret = GetAdaptersAddresses( AF_UNSPEC, 0, NULL, NULL, &size );
+     if (ret != ERROR_BUFFER_OVERFLOW) return FILL_STATUS_FAILED;
+ 
+-    if (!(buffer = heap_alloc( size ))) return FILL_STATUS_FAILED;
++    if (!(buffer = heap_alloc_zero( size ))) return FILL_STATUS_FAILED;
+     if (GetAdaptersAddresses( AF_UNSPEC, 0, NULL, buffer, &size ))
+     {
+         heap_free( buffer );
+@@ -2685,8 +2701,8 @@ static struct array *get_defaultipgateway( IP_ADAPTER_GATEWAY_ADDRESS *list )
+     if (!list) return NULL;
+     for (gateway = list; gateway; gateway = gateway->Next) count++;
+ 
+-    if (!(ret = heap_alloc( sizeof(*ret) ))) return NULL;
+-    if (!(ptr = heap_alloc( sizeof(*ptr) * count )))
++    if (!(ret = heap_alloc_zero( sizeof(*ret) ))) return NULL;
++    if (!(ptr = heap_alloc_zero( sizeof(*ptr) * count )))
+     {
+         heap_free( ret );
+         return NULL;
+@@ -2718,8 +2734,8 @@ static struct array *get_dnsserversearchorder( IP_ADAPTER_DNS_SERVER_ADDRESS *li
+     if (!list) return NULL;
+     for (server = list; server; server = server->Next) count++;
+ 
+-    if (!(ret = heap_alloc( sizeof(*ret) ))) return NULL;
+-    if (!(ptr = heap_alloc( sizeof(*ptr) * count )))
++    if (!(ret = heap_alloc_zero( sizeof(*ret) ))) return NULL;
++    if (!(ptr = heap_alloc_zero( sizeof(*ptr) * count )))
+     {
+         heap_free( ret );
+         return NULL;
+@@ -2752,8 +2768,8 @@ static struct array *get_ipaddress( IP_ADAPTER_UNICAST_ADDRESS_LH *list )
+     if (!list) return NULL;
+     for (address = list; address; address = address->Next) count++;
+ 
+-    if (!(ret = heap_alloc( sizeof(*ret) ))) return NULL;
+-    if (!(ptr = heap_alloc( sizeof(*ptr) * count )))
++    if (!(ret = heap_alloc_zero( sizeof(*ret) ))) return NULL;
++    if (!(ptr = heap_alloc_zero( sizeof(*ptr) * count )))
+     {
+         heap_free( ret );
+         return NULL;
+@@ -2785,8 +2801,8 @@ static struct array *get_ipsubnet( IP_ADAPTER_UNICAST_ADDRESS_LH *list )
+     if (!list) return NULL;
+     for (address = list; address; address = address->Next) count++;
+ 
+-    if (!(ret = heap_alloc( sizeof(*ret) ))) return NULL;
+-    if (!(ptr = heap_alloc( sizeof(*ptr) * count )))
++    if (!(ret = heap_alloc_zero( sizeof(*ret) ))) return NULL;
++    if (!(ptr = heap_alloc_zero( sizeof(*ptr) * count )))
+     {
+         heap_free( ret );
+         return NULL;
+@@ -2849,7 +2865,7 @@ static enum fill_status fill_networkadapterconfig( struct table *table, const st
+     ret = GetAdaptersAddresses( AF_UNSPEC, GAA_FLAG_INCLUDE_ALL_GATEWAYS, NULL, NULL, &size );
+     if (ret != ERROR_BUFFER_OVERFLOW) return FILL_STATUS_FAILED;
+ 
+-    if (!(buffer = heap_alloc( size ))) return FILL_STATUS_FAILED;
++    if (!(buffer = heap_alloc_zero( size ))) return FILL_STATUS_FAILED;
+     if (GetAdaptersAddresses( AF_UNSPEC, GAA_FLAG_INCLUDE_ALL_GATEWAYS, NULL, buffer, &size ))
+     {
+         heap_free( buffer );
+@@ -2977,7 +2993,7 @@ static enum fill_status fill_printer( struct table *table, const struct expr *co
+     EnumPrintersW( PRINTER_ENUM_LOCAL, NULL, 2, NULL, 0, &size, &count );
+     if (!count) return FILL_STATUS_UNFILTERED;
+ 
+-    if (!(info = heap_alloc( size ))) return FILL_STATUS_FAILED;
++    if (!(info = heap_alloc_zero( size ))) return FILL_STATUS_FAILED;
+     if (!EnumPrintersW( PRINTER_ENUM_LOCAL, NULL, 2, (BYTE *)info, size, &size, &count ))
+     {
+         heap_free( info );
+@@ -3188,7 +3204,7 @@ static UINT get_processor_currentclockspeed( UINT index )
+     UINT ret = 1000, size = get_processor_count() * sizeof(PROCESSOR_POWER_INFORMATION);
+     NTSTATUS status;
+ 
+-    if ((info = heap_alloc( size )))
++    if ((info = heap_alloc_zero( size )))
+     {
+         status = NtPowerInformation( ProcessorInformation, NULL, 0, info, size );
+         if (!status) ret = info[index].CurrentMhz;
+@@ -3202,7 +3218,7 @@ static UINT get_processor_maxclockspeed( UINT index )
+     UINT ret = 1000, size = get_processor_count() * sizeof(PROCESSOR_POWER_INFORMATION);
+     NTSTATUS status;
+ 
+-    if ((info = heap_alloc( size )))
++    if ((info = heap_alloc_zero( size )))
+     {
+         status = NtPowerInformation( ProcessorInformation, NULL, 0, info, size );
+         if (!status) ret = info[index].MaxMhz;
+@@ -3272,7 +3288,7 @@ static WCHAR *get_lastbootuptime(void)
+     TIME_FIELDS tf;
+     WCHAR *ret;
+ 
+-    if (!(ret = heap_alloc( 26 * sizeof(WCHAR) ))) return NULL;
++    if (!(ret = heap_alloc_zero( 26 * sizeof(WCHAR) ))) return NULL;
+ 
+     NtQuerySystemInformation( SystemTimeOfDayInformation, &ti, sizeof(ti), NULL );
+     RtlTimeToTimeFields( &ti.liKeBootTime, &tf );
+@@ -3296,7 +3312,7 @@ static WCHAR *get_localdatetime(void)
+         Bias+= tzi.DaylightBias;
+     else
+         Bias+= tzi.StandardBias;
+-    if (!(ret = heap_alloc( 26 * sizeof(WCHAR) ))) return NULL;
++    if (!(ret = heap_alloc_zero( 26 * sizeof(WCHAR) ))) return NULL;
+ 
+     GetLocalTime(&st);
+     swprintf( ret, 26, L"%04u%02u%02u%02u%02u%02u.%06u%+03d", st.wYear, st.wMonth, st.wDay, st.wHour, st.wMinute,
+@@ -3308,7 +3324,7 @@ static WCHAR *get_systemdirectory(void)
+     void *redir;
+     WCHAR *ret;
+ 
+-    if (!(ret = heap_alloc( MAX_PATH * sizeof(WCHAR) ))) return NULL;
++    if (!(ret = heap_alloc_zero( MAX_PATH * sizeof(WCHAR) ))) return NULL;
+     Wow64DisableWow64FsRedirection( &redir );
+     GetSystemDirectoryW( ret, MAX_PATH );
+     Wow64RevertWow64FsRedirection( redir );
+@@ -3316,32 +3332,32 @@ static WCHAR *get_systemdirectory(void)
+ }
+ static WCHAR *get_systemdrive(void)
+ {
+-    WCHAR *ret = heap_alloc( 3 * sizeof(WCHAR) ); /* "c:" */
++    WCHAR *ret = heap_alloc_zero( 3 * sizeof(WCHAR) ); /* "c:" */
+     if (ret && GetEnvironmentVariableW( L"SystemDrive", ret, 3 )) return ret;
+     heap_free( ret );
+     return NULL;
+ }
+ static WCHAR *get_codeset(void)
+ {
+-    WCHAR *ret = heap_alloc( 11 * sizeof(WCHAR) );
++    WCHAR *ret = heap_alloc_zero( 11 * sizeof(WCHAR) );
+     if (ret) swprintf( ret, 11, L"%u", GetACP() );
+     return ret;
+ }
+ static WCHAR *get_countrycode(void)
+ {
+-    WCHAR *ret = heap_alloc( 6 * sizeof(WCHAR) );
++    WCHAR *ret = heap_alloc_zero( 6 * sizeof(WCHAR) );
+     if (ret) GetLocaleInfoW( LOCALE_SYSTEM_DEFAULT, LOCALE_ICOUNTRY, ret, 6 );
+     return ret;
+ }
+ static WCHAR *get_locale(void)
+ {
+-    WCHAR *ret = heap_alloc( 5 * sizeof(WCHAR) );
++    WCHAR *ret = heap_alloc_zero( 5 * sizeof(WCHAR) );
+     if (ret) GetLocaleInfoW( LOCALE_SYSTEM_DEFAULT, LOCALE_ILANGUAGE, ret, 5 );
+     return ret;
+ }
+ static WCHAR *get_osbuildnumber( OSVERSIONINFOEXW *ver )
+ {
+-    WCHAR *ret = heap_alloc( 11 * sizeof(WCHAR) );
++    WCHAR *ret = heap_alloc_zero( 11 * sizeof(WCHAR) );
+     if (ret) swprintf( ret, 11, L"%u", ver->dwBuildNumber );
+     return ret;
+ }
+@@ -3362,7 +3378,7 @@ static WCHAR *get_oscaption( OSVERSIONINFOEXW *ver )
+     int len = ARRAY_SIZE( windowsW ) - 1;
+     WCHAR *ret;
+ 
+-    if (!(ret = heap_alloc( len * sizeof(WCHAR) + sizeof(win2003W) ))) return NULL;
++    if (!(ret = heap_alloc_zero( len * sizeof(WCHAR) + sizeof(win2003W) ))) return NULL;
+     memcpy( ret, windowsW, sizeof(windowsW) );
+     if (ver->dwMajorVersion == 10 && ver->dwMinorVersion == 0) memcpy( ret + len, win10W, sizeof(win10W) );
+     else if (ver->dwMajorVersion == 6 && ver->dwMinorVersion == 3) memcpy( ret + len, win8W, sizeof(win8W) );
+@@ -3392,7 +3408,7 @@ static WCHAR *get_osname( const WCHAR *caption )
+     int len = lstrlenW( caption );
+     WCHAR *ret;
+ 
+-    if (!(ret = heap_alloc( len * sizeof(WCHAR) + sizeof(partitionW) ))) return NULL;
++    if (!(ret = heap_alloc_zero( len * sizeof(WCHAR) + sizeof(partitionW) ))) return NULL;
+     memcpy( ret, caption, len * sizeof(WCHAR) );
+     memcpy( ret + len, partitionW, sizeof(partitionW) );
+     return ret;
+@@ -3405,7 +3421,7 @@ static WCHAR *get_osserialnumber(void)
+ 
+     if (!RegOpenKeyExW( HKEY_LOCAL_MACHINE, L"Software\\Microsoft\\Windows NT\\CurrentVersion", 0, KEY_READ, &hkey ) &&
+         !RegQueryValueExW( hkey, L"ProductId", NULL, &type, NULL, &size ) && type == REG_SZ &&
+-        (ret = heap_alloc( size + sizeof(WCHAR) )))
++        (ret = heap_alloc_zero( size + sizeof(WCHAR) )))
+     {
+         size += sizeof(WCHAR);
+         if (RegQueryValueExW( hkey, L"ProductId", NULL, NULL, (BYTE *)ret, &size ))
+@@ -3420,7 +3436,7 @@ static WCHAR *get_osserialnumber(void)
+ }
+ static WCHAR *get_osversion( OSVERSIONINFOEXW *ver )
+ {
+-    WCHAR *ret = heap_alloc( 33 * sizeof(WCHAR) );
++    WCHAR *ret = heap_alloc_zero( 33 * sizeof(WCHAR) );
+     if (ret) swprintf( ret, 33, L"%u.%u.%u", ver->dwMajorVersion, ver->dwMinorVersion, ver->dwBuildNumber );
+     return ret;
+ }
+@@ -3534,7 +3550,7 @@ static QUERY_SERVICE_CONFIGW *query_service_config( SC_HANDLE manager, const WCH
+     if (!(service = OpenServiceW( manager, name, SERVICE_QUERY_CONFIG ))) return NULL;
+     QueryServiceConfigW( service, NULL, 0, &size );
+     if (GetLastError() != ERROR_INSUFFICIENT_BUFFER) goto done;
+-    if (!(config = heap_alloc( size ))) goto done;
++    if (!(config = heap_alloc_zero( size ))) goto done;
+     if (QueryServiceConfigW( service, config, size, &size )) goto done;
+     heap_free( config );
+     config = NULL;
+@@ -3557,7 +3573,7 @@ static enum fill_status fill_service( struct table *table, const struct expr *co
+     BOOL ret;
+ 
+     if (!(manager = OpenSCManagerW( NULL, NULL, SC_MANAGER_ENUMERATE_SERVICE ))) return FILL_STATUS_FAILED;
+-    if (!(services = heap_alloc( size ))) goto done;
++    if (!(services = heap_alloc_zero( size ))) goto done;
+ 
+     ret = EnumServicesStatusExW( manager, SC_ENUM_PROCESS_INFO, SERVICE_TYPE_ALL,
+                                  SERVICE_STATE_ALL, (BYTE *)services, size, &needed,
+@@ -3628,8 +3644,8 @@ static struct array *get_binaryrepresentation( PSID sid, UINT len )
+     struct array *ret;
+     UINT8 *ptr;
+ 
+-    if (!(ret = heap_alloc( sizeof(*ret) ))) return NULL;
+-    if (!(ptr = heap_alloc( len )))
++    if (!(ret = heap_alloc_zero( sizeof(*ret) ))) return NULL;
++    if (!(ptr = heap_alloc_zero( len )))
+     {
+         heap_free( ret );
+         return NULL;
+@@ -3747,8 +3763,8 @@ static int get_systemenclosure_lockpresent( const char *buf, UINT len )
+ static struct array *dup_array( const struct array *src )
+ {
+     struct array *dst;
+-    if (!(dst = heap_alloc( sizeof(*dst) ))) return NULL;
+-    if (!(dst->ptr = heap_alloc( src->count * src->elem_size )))
++    if (!(dst = heap_alloc_zero( sizeof(*dst) ))) return NULL;
++    if (!(dst->ptr = heap_alloc_zero( src->count * src->elem_size )))
+     {
+         heap_free( dst );
+         return NULL;
+@@ -3769,8 +3785,8 @@ static struct array *get_systemenclosure_chassistypes( const char *buf, UINT len
+     if (!(hdr = find_smbios_entry( SMBIOS_TYPE_CHASSIS, buf, len )) || hdr->length < sizeof(*chassis)) goto done;
+     chassis = (const struct smbios_chassis *)hdr;
+ 
+-    if (!(ret = heap_alloc( sizeof(*ret) ))) goto done;
+-    if (!(types = heap_alloc( sizeof(*types) )))
++    if (!(ret = heap_alloc_zero( sizeof(*ret) ))) goto done;
++    if (!(types = heap_alloc_zero( sizeof(*types) )))
+     {
+         heap_free( ret );
+         return NULL;
+@@ -3796,7 +3812,7 @@ static enum fill_status fill_systemenclosure( struct table *table, const struct
+     if (!resize_table( table, 1, sizeof(*rec) )) return FILL_STATUS_FAILED;
+ 
+     len = GetSystemFirmwareTable( RSMB, 0, NULL, 0 );
+-    if (!(buf = heap_alloc( len ))) return FILL_STATUS_FAILED;
++    if (!(buf = heap_alloc_zero( len ))) return FILL_STATUS_FAILED;
+     GetSystemFirmwareTable( RSMB, 0, buf, len );
+ 
+     rec = (struct record_systemenclosure *)table->data;
+@@ -3823,7 +3839,7 @@ static WCHAR *get_pnpdeviceid( DXGI_ADAPTER_DESC *desc )
+     UINT len = sizeof(fmtW) + 2;
+     WCHAR *ret;
+ 
+-    if (!(ret = heap_alloc( len * sizeof(WCHAR) ))) return NULL;
++    if (!(ret = heap_alloc_zero( len * sizeof(WCHAR) ))) return NULL;
+     swprintf( ret, len, fmtW, desc->VendorId, desc->DeviceId, desc->SubSysId, desc->Revision );
+     return ret;
+ }
+diff --git a/dlls/wbemprox/class.c b/dlls/wbemprox/class.c
+index ba7720b098d..817a2f803dd 100644
+--- a/dlls/wbemprox/class.c
++++ b/dlls/wbemprox/class.c
+@@ -344,6 +344,7 @@ static HRESULT WINAPI class_object_GetQualifierSet(
+     return WbemQualifierSet_create( co->name, NULL, (void **)ppQualSet );
+ }
+ 
++
+ static HRESULT record_get_value( const struct record *record, UINT index, VARIANT *var, CIMTYPE *type )
+ {
+     VARTYPE vartype = to_vartype( record->fields[index].type & CIM_TYPE_MASK );
+@@ -361,7 +362,13 @@ static HRESULT record_get_value( const struct record *record, UINT index, VARIAN
+     case CIM_STRING:
+     case CIM_DATETIME:
+     case CIM_REFERENCE:
+-        V_BSTR( var ) = SysAllocString( record->fields[index].u.sval );
++        if (!record->fields[index].u.sval)
++        {
++            V_BSTR( var ) = NULL;
++            FIXME("sval is NULL\n");
++        }
++        else
++            V_BSTR( var ) = SysAllocString( record->fields[index].u.sval );
+         break;
+     case CIM_SINT32:
+         V_I4( var ) = record->fields[index].u.ival;
+diff --git a/dlls/wbemprox/query.c b/dlls/wbemprox/query.c
+index 6ac5ad5b770..bf2a15824c3 100644
+--- a/dlls/wbemprox/query.c
++++ b/dlls/wbemprox/query.c
+@@ -750,7 +750,12 @@ void free_query( struct query *query )
+ 
+     if (!query) return;
+     destroy_view( query->view );
+-    LIST_FOR_EACH_SAFE( mem, next, &query->mem ) { heap_free( mem ); }
++    LIST_FOR_EACH_SAFE( mem, next, &query->mem ) {
++        if (mem && (long)(void *)mem > 0x1000)///////////////////////////////////////////////////////////
++            heap_free( mem );
++        else
++            FIXME("NOT FREEING MEM='%#lx'\n", mem);
++    }
+     heap_free( query );
+ }
+ 
+@@ -814,7 +819,10 @@ static BSTR build_proplist( const struct table *table, UINT row, UINT count, UIN
+         {
+             const WCHAR *name = table->columns[i].name;
+             values[j] = get_value_bstr( table, row, i );
+-            *len += lstrlenW( L"%s=%s" ) + lstrlenW( name ) + lstrlenW( values[j] );
++            if (values[j])
++                *len += lstrlenW( L"%s=%s" ) + lstrlenW( name ) + lstrlenW( values[j] );
++            else
++                *len += lstrlenW( L"%s=" ) + lstrlenW( name );
+             j++;
+         }
+     }
+@@ -826,7 +834,10 @@ static BSTR build_proplist( const struct table *table, UINT row, UINT count, UIN
+             if (table->columns[i].type & COL_FLAG_KEY)
+             {
+                 const WCHAR *name = table->columns[i].name;
+-                offset += swprintf( ret + offset, *len - offset, L"%s=%s", name, values[j] );
++                if (values[j])
++                    offset += swprintf( ret + offset, *len - offset, L"%s=%s", name, values[j] );
++                else
++                    offset += swprintf( ret + offset, *len - offset, L"%s=", name );
+                 if (j < count - 1) ret[offset++] = ',';
+                 j++;
+             }
+diff --git a/dlls/wbemprox/table.c b/dlls/wbemprox/table.c
+index 42971a420ea..277d1d03c51 100644
+--- a/dlls/wbemprox/table.c
++++ b/dlls/wbemprox/table.c
+@@ -112,10 +112,16 @@ HRESULT get_value( const struct table *table, UINT row, UINT column, LONGLONG *v
+     case CIM_BOOLEAN:
+         *val = *(const int *)ptr;
+         break;
++    case CIM_STRING:
++        if(!ptr)
++        {
++            FIXME("ptr is NULL\n");
++            *val = strdup("");
++            return WBEM_E_FAILED;
++        }
+     case CIM_DATETIME:
+     case CIM_REFERENCE:
+-    case CIM_STRING:
+-        *val = (INT_PTR)*(const WCHAR **)ptr;
++            *val = (INT_PTR)*(const WCHAR **)ptr;
+         break;
+     case CIM_SINT8:
+         *val = *(const INT8 *)ptr;
+@@ -175,7 +181,11 @@ BSTR get_value_bstr( const struct table *table, UINT row, UINT column )
+     case CIM_DATETIME:
+     case CIM_REFERENCE:
+     case CIM_STRING:
+-        if (!val) return NULL;
++        if (!val)
++        {
++            FIXME("val is null\n");
++            return NULL;
++        }
+         len = lstrlenW( (const WCHAR *)(INT_PTR)val ) + 2;
+         if (!(ret = SysAllocStringLen( NULL, len ))) return NULL;
+         swprintf( ret, len, L"\"%s\"", (const WCHAR *)(INT_PTR)val );
+@@ -223,6 +233,11 @@ HRESULT set_value( const struct table *table, UINT row, UINT column, LONGLONG va
+     case CIM_DATETIME:
+     case CIM_REFERENCE:
+     case CIM_STRING:
++        if (!val)
++        {
++            FIXME("pointer is NULL\n");
++            return WBEM_E_FAILED;
++        }
+         *(WCHAR **)ptr = (WCHAR *)(INT_PTR)val;
+         break;
+     case CIM_SINT8:
+From 50f1b757fc461b1f5edcff8a325afbe326ea7d78 Mon Sep 17 00:00:00 2001
+From: Alexandre Abgrall <aabgrall98@gmail.com>
+Date: Wed, 29 Jul 2020 16:46:29 +0200
+Subject: [PATCH] ntdll: Always align value of FILE_NOTIFY_INFORMATION's
+ NextEntryOffset to int
 
-    ntdll: Always align value of FILE_NOTIFY_INFORMATION's NextEntryOffset to int
-
+---
  dlls/ntdll/file.c | 5 ++++-
  1 file changed, 4 insertions(+), 1 deletion(-)
 
-commit 4b309ea49d0f733ec814e51bac17d0583d1421f4
-Author: Alexandre Abgrall <aabgrall98@gmail.com>
-Date:   Fri Jul 31 13:45:27 2020 +0200
+diff --git a/dlls/ntdll/file.c b/dlls/ntdll/file.c
+index 23b030b5f7b..efc19607897 100644
+--- a/dlls/ntdll/file.c
++++ b/dlls/ntdll/file.c
+@@ -2413,10 +2413,13 @@ static NTSTATUS read_changes_apc( void *user, IO_STATUS_BLOCK *iosb, NTSTATUS st
+                 pfni->Action = event->action;
+                 pfni->FileNameLength = ntdll_umbstowcs( event->name, event->len, pfni->FileName, len );
+                 last_entry_offset = &pfni->NextEntryOffset;
++                
++                pfni->NextEntryOffset = 0;
+ 
+                 if (pfni->FileNameLength == len) break;
+ 
+-                i = offsetof(FILE_NOTIFY_INFORMATION, FileName[pfni->FileNameLength]);
++                i = (offsetof(FILE_NOTIFY_INFORMATION, FileName[pfni->FileNameLength])
++                     + sizeof(int)-1) / sizeof(int) * sizeof(int);
+                 pfni->FileNameLength *= sizeof(WCHAR);
+                 pfni->NextEntryOffset = i;
+                 pfni = (FILE_NOTIFY_INFORMATION*)((char*)pfni + i);
+From 4b309ea49d0f733ec814e51bac17d0583d1421f4 Mon Sep 17 00:00:00 2001
+From: Alexandre Abgrall <aabgrall98@gmail.com>
+Date: Fri, 31 Jul 2020 13:45:27 +0200
+Subject: [PATCH] dxva2: Hack: Consider NV12 format as valid if no
+ VASurfaceAttribPixelFormat attribute is provided. This is currently the case
+ with the VDPAU VAAPI backend. Similar bug:
+ https://bugs.launchpad.net/ubuntu/+source/chromium-browser/+bug/1887172
 
-    dxva2: Hack: Consider NV12 format as valid if no VASurfaceAttribPixelFormat attribute is provided.
-    This is currently the case with the VDPAU VAAPI backend.
-    Similar bug: https://bugs.launchpad.net/ubuntu/+source/chromium-browser/+bug/1887172
-
+---
  dlls/dxva2/vaapi.c | 8 +++++++-
  1 file changed, 7 insertions(+), 1 deletion(-)
 
-commit bb9ab42284d1757e9cd12643de91484a2ce2adcf
-Author: Richard Yao <ryao@gentoo.org>
-Date:   Sat Aug 1 16:04:11 2020 -0400
+diff --git a/dlls/dxva2/vaapi.c b/dlls/dxva2/vaapi.c
+index 9f580fe879f..d613cd58cd7 100644
+--- a/dlls/dxva2/vaapi.c
++++ b/dlls/dxva2/vaapi.c
+@@ -342,7 +342,7 @@ BOOL vaapi_is_format_supported( VADisplay va_display, struct vaapi_profile *prof
+     VAConfigID config;
+     VAStatus status;
+     unsigned int i;
+-    BOOL ret = FALSE;
++    BOOL ret = FALSE, found_pixel_format_attrib = FALSE;
+ 
+     attrib.type  = VAConfigAttribRTFormat;
+     attrib.value = format->vaformat;
+@@ -366,6 +366,8 @@ BOOL vaapi_is_format_supported( VADisplay va_display, struct vaapi_profile *prof
+             {
+                 for (i = 0; i < numSurfaceAttribs; i++)
+                 {
++                    if (surfaceAttribs[i].type == VASurfaceAttribPixelFormat)
++                        found_pixel_format_attrib = TRUE;
+                     if (surfaceAttribs[i].type == VASurfaceAttribPixelFormat &&
+                         surfaceAttribs[i].value.value.i == format->vafourcc)
+                     {
+@@ -373,6 +375,10 @@ BOOL vaapi_is_format_supported( VADisplay va_display, struct vaapi_profile *prof
+                         break;
+                     }
+                 }
++                /* The vdpau backend doesn't give us a VASurfaceAttribPixelFormat attribute. */
++                /* HACK: We consider that in this case, a VA_FOURCC_NV12 format is valid. This format is used by e.g. GeForceNOW. */
++                if (!found_pixel_format_attrib && format->vafourcc == VA_FOURCC_NV12)
++                    ret = TRUE;
+             }
+             HeapFree(GetProcessHeap(), 0, surfaceAttribs);
+         }
+From 4c6485a0b90fb19693ed2c44bd30591389f3efa0 Mon Sep 17 00:00:00 2001
+From: Richard Yao <ryao@gentoo.org>
+Date: Sun, 2 Aug 2020 15:35:53 -0400
+Subject: [PATCH] kernelbase: Implement TzSpecificLocalTimeToSystemTimeEx()
 
-    kernelbase: Implement TzSpecificLocalTimeToSystemTimeEx()
-    
-    We also reimplement TzSpecificLocalTimeToSystemTime using
-    TzSpecificLocalTimeToSystemTimeEx.
+We also reimplement TzSpecificLocalTimeToSystemTime using
+TzSpecificLocalTimeToSystemTimeEx.
+
+Signed-off-by: Richard Yao <ryao@gentoo.org>
+---
+ .../api-ms-win-core-timezone-l1-1-0.spec      |  2 +-
+ dlls/kernelbase/kernelbase.spec               |  2 +-
+ dlls/kernelbase/locale.c                      | 42 ++++++++++++++-----
+ 3 files changed, 34 insertions(+), 12 deletions(-)
+
+diff --git a/dlls/api-ms-win-core-timezone-l1-1-0/api-ms-win-core-timezone-l1-1-0.spec b/dlls/api-ms-win-core-timezone-l1-1-0/api-ms-win-core-timezone-l1-1-0.spec
+index 0f42eda5d80..77283672e33 100644
+--- a/dlls/api-ms-win-core-timezone-l1-1-0/api-ms-win-core-timezone-l1-1-0.spec
++++ b/dlls/api-ms-win-core-timezone-l1-1-0/api-ms-win-core-timezone-l1-1-0.spec
+@@ -10,4 +10,4 @@
+ @ stdcall SystemTimeToTzSpecificLocalTime(ptr ptr ptr) kernel32.SystemTimeToTzSpecificLocalTime
+ @ stub SystemTimeToTzSpecificLocalTimeEx
+ @ stdcall TzSpecificLocalTimeToSystemTime(ptr ptr ptr) kernel32.TzSpecificLocalTimeToSystemTime
+-@ stub TzSpecificLocalTimeToSystemTimeEx
++@ stdcall TzSpecificLocalTimeToSystemTimeEx(ptr ptr ptr) kernel32.TzSpecificLocalTimeToSystemTimeEx
+diff --git a/dlls/kernelbase/kernelbase.spec b/dlls/kernelbase/kernelbase.spec
+index 10de1821d1c..bb55b7f1500 100644
+--- a/dlls/kernelbase/kernelbase.spec
++++ b/dlls/kernelbase/kernelbase.spec
+@@ -1611,7 +1611,7 @@
+ @ stdcall TryEnterCriticalSection(ptr) ntdll.RtlTryEnterCriticalSection
+ @ stdcall TrySubmitThreadpoolCallback(ptr ptr ptr)
+ @ stdcall TzSpecificLocalTimeToSystemTime(ptr ptr ptr)
+-@ stub TzSpecificLocalTimeToSystemTimeEx
++@ stdcall TzSpecificLocalTimeToSystemTimeEx(ptr ptr ptr)
+ @ stdcall UnhandledExceptionFilter(ptr)
+ @ stdcall UnlockFile(long long long long long)
+ @ stdcall UnlockFileEx(long long long long ptr)
+diff --git a/dlls/kernelbase/locale.c b/dlls/kernelbase/locale.c
+index 4f67a0d6d21..0a4aba59bd5 100644
+--- a/dlls/kernelbase/locale.c
++++ b/dlls/kernelbase/locale.c
+@@ -5712,39 +5712,61 @@ BOOL WINAPI DECLSPEC_HOTPATCH SystemTimeToTzSpecificLocalTime( const TIME_ZONE_I
+ 
+ 
+ /***********************************************************************
+- *	TzSpecificLocalTimeToSystemTime   (kernelbase.@)
++ *	TzSpecificLocalTimeToSystemTimeEx   (kernelbase.@)
+  */
+-BOOL WINAPI DECLSPEC_HOTPATCH TzSpecificLocalTimeToSystemTime( const TIME_ZONE_INFORMATION *info,
++BOOL WINAPI DECLSPEC_HOTPATCH TzSpecificLocalTimeToSystemTimeEx( const DYNAMIC_TIME_ZONE_INFORMATION *info,
+                                                                const SYSTEMTIME *local,
+                                                                SYSTEMTIME *system )
+ {
+-    TIME_ZONE_INFORMATION tzinfo;
++    DYNAMIC_TIME_ZONE_INFORMATION tzinfo;
+     LARGE_INTEGER ft;
++    LONG bias = 0;
+ 
+     if (!info)
+     {
+-        RtlQueryTimeZoneInformation( (RTL_TIME_ZONE_INFORMATION *)&tzinfo );
++        RtlQueryDynamicTimeZoneInformation( (RTL_TIME_ZONE_INFORMATION *)&tzinfo );
+         info = &tzinfo;
+     }
+ 
+     if (!SystemTimeToFileTime( local, (FILETIME *)&ft )) return FALSE;
+-    switch (get_timezone_id( info, ft, TRUE ))
++    switch (get_timezone_id( (const TIME_ZONE_INFORMATION *) info, ft, TRUE ))
+     {
+     case TIME_ZONE_ID_UNKNOWN:
+-        ft.QuadPart += info->Bias * (LONGLONG)600000000;
+-        break;
+-    case TIME_ZONE_ID_STANDARD:
+-        ft.QuadPart += (info->Bias + info->StandardBias) * (LONGLONG)600000000;
+         break;
+     case TIME_ZONE_ID_DAYLIGHT:
+-        ft.QuadPart += (info->Bias + info->DaylightBias) * (LONGLONG)600000000;
++        bias = info->DaylightBias;
++        if (FALSE == info->DynamicDaylightTimeDisabled)
++            break;
++    case TIME_ZONE_ID_STANDARD:
++        bias = info->StandardBias;
+         break;
+     default:
+         return FALSE;
+     }
++    ft.QuadPart += (info->Bias + bias) * (LONGLONG)600000000;
+     return FileTimeToSystemTime( (FILETIME *)&ft, system );
+ }
+ 
++/***********************************************************************
++ *	TzSpecificLocalTimeToSystemTime   (kernelbase.@)
++ */
++BOOL WINAPI DECLSPEC_HOTPATCH TzSpecificLocalTimeToSystemTime( const TIME_ZONE_INFORMATION *info,
++                                                               const SYSTEMTIME *local,
++                                                               SYSTEMTIME *system )
++{
++    DYNAMIC_TIME_ZONE_INFORMATION tzinfo;
++
++    if (info)
++    {
++        memset(&tzinfo, 0, sizeof(tzinfo));
++        *((TIME_ZONE_INFORMATION*)&tzinfo) = *info;
++    } else {
++        RtlQueryDynamicTimeZoneInformation( &tzinfo );
++    }
++
++    return TzSpecificLocalTimeToSystemTimeEx( &tzinfo, local, system );
++}
++
+ 
+ /***********************************************************************
+  *	VerLanguageNameA   (kernelbase.@)
+commit 85cade20fa0fe59d09c372b901497bc76608bfcc
+Author: Richard Yao <ryao@gentoo.org>
+Date:   Mon Aug 3 16:01:15 2020 -0400
+
+    Enable DXVA2 video acceleration by default
     
     Signed-off-by: Richard Yao <ryao@gentoo.org>
 
- .../api-ms-win-core-timezone-l1-1-0.spec           |  2 +-
- dlls/kernelbase/kernelbase.spec                    |  2 +-
- dlls/kernelbase/locale.c                           | 42 ++++++++++++++++------
- 3 files changed, 34 insertions(+), 12 deletions(-)
+diff --git a/loader/wine.inf.in b/loader/wine.inf.in
+index 037166ad159..69340c55135 100644
+--- a/loader/wine.inf.in
++++ b/loader/wine.inf.in
+@@ -717,6 +717,7 @@ HKLM,%MciExtStr%,"wmx",,"MPEGVideo"
+ HKLM,%MciExtStr%,"wvx",,"MPEGVideo"
+ 
+ [Misc]
++HKCU,Software\Wine\DXVA2,"backend",,"va"
+ HKLM,Software\Microsoft\WindowsRuntime\ActivatableClassId\Windows.Gaming.Input.Gamepad,"DllPath",2,"Windows.Gaming.Input.dll"
+ HKLM,Software\Microsoft\WindowsRuntime\ActivatableClassId\Windows.Gaming.Input.RawGameController,"DllPath",2,"Windows.Gaming.Input.dll"
+ HKLM,Software\Borland\Database Engine\Settings\SYSTEM\INIT,SHAREDMEMLOCATION,,9000
