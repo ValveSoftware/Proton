@@ -36,7 +36,8 @@ This is my build of Proton with the most recent releases of vanilla WINE. It has
 - FFXIV Launcher
 - FFXV Steam
 - Mech Warrior online
-- Assetto Corsa HUD
+- Assetto Corsa HUD fix
+- Assetto Corsa Competizione stutter fix
 - Sword Art Online gnutls
 - ORIGIN downloads fix
 - Monster Hunter World
@@ -52,12 +53,23 @@ This is my build of Proton with the most recent releases of vanilla WINE. It has
 - Divinity Original Sin 2
 - Persona 4
 - Sea of Thieves
+- Death Stranding
+- Horizon Zero Dawn
+- Fall Guys controller mapping fix
+- World War Z Vulkan renderer fix
+- rFactor 2
+- Ashes of the Singularity
+- Metal Gear Solid
+- Metal Gear Solid: Ground Zeroes
+- Indiana Jones and the Emperor's Tomb
+- Various EA Origin launcher fixes
+- Bloons TD6
+- Dark Souls III, Sekiro, Nier Automata graphics fix
 
 ### Non-Steam or winesteam game patches
 
 - World of Warcraft DX12 compatibility
 - Diablo 1 Menu fix
-- COD: Blackops II launch fix (requires running from steam in wine --"winesteam", does not work in proton)
 
 ### Quality of Life patches
 
@@ -88,6 +100,7 @@ This is my build of Proton with the most recent releases of vanilla WINE. It has
 - BlazBlue Centralfiction
 - Bloodstained: Ritual of the Night
 - Crazy Machines 3
+- Devil May Cry 5
 
 ### Notes
 
@@ -124,6 +137,29 @@ This section is for those that use the Flatpak'd version of Steam.
 4. Restart Steam.
 5. [Enable proton-ge-custom](#enabling).
 
+#### Using Proton-GE with Lutris
+
+Lutris auto-detects proton versions installed using the native method listed above, however there are additional environment variables needed for it to work properly and for media foundation.
+
+1. If you want to allow your save games to work when using proton within lutris, you need to set `WINEUSERNAME` environment variable.
+2. If you want proton's media foundation to work in lutris, you need to set `GST_PLUGIN_SYSTEM_PATH_1_0` environment variable to the full gstreamer 64 and 32 bit library paths within the Proton-GE folder.
+3. If you want proton's media foundation to work in lutris, you also need to set `WINE_GST_REGISTRY_DIR` to the gstreamer-1.0 registration folder within the game's prefix.
+
+So for example if I wanted to play the epic version of borderlands3, and my borderlands3 WINE prefix is located at `/home/gloriouseggroll/Games/borderlands3/`, we would do the following:
+
+1. Set our `WINEUSERNAME` for saves:
+```
+WINEUSERNAME=gloriouseggroll
+```
+2. Set our `GST_PLUGIN_SYSTEM_PATH_1_0` path to the one located inside the Proton-GE version we're using:
+```
+GST_PLUGIN_SYSTEM_PATH_1_0=/home/gloriouseggroll/.steam/steam/compatibilitytools.d/Proton-5.11-GE-2-MF/dist/lib64/gstreamer-1.0:/home/gloriouseggroll/.steam/steam/compatibilitytools.d/Proton-5.11-GE-2-MF/dist/lib/gstreamer-1.0
+```
+3. Set our `WINE_GST_REGISTRY_DIR` to the gstreamer registry inside our prefix:
+```
+WINE_GST_REGISTRY_DIR=/home/gloriouseggroll/Games/origin/gstreamer-1.0/
+```
+
 ## Building
 
 1. Install VirtualBox and its kernel modules. Make sure they are enabled at boot.
@@ -156,7 +192,7 @@ grep -i error patchlog.txt
 
 For future builds you only need to run:  
 
-`build_name=some_custom_build_name make redist`  
+`build_name=some_custom_build_name make redist | tee buildlog.txt`  
 `vagrant halt`  
 
 Builds will be placed in proton-ge-custom/vagrant_share/ as both the full folder and a .tar.gz of the folder.
