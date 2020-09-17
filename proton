@@ -405,7 +405,7 @@ class CompatData:
                 steamdir = os.environ["HOME"] + ".steam/root/"
 
             use_wined3d = "wined3d" in g_session.compat_config
-            use_dxvk_dxgi = "WINEDLLOVERRIDES" in os.environ and "dxgi=n" in os.environ["WINEDLLOVERRIDES"]
+            use_dxvk_dxgi = "WINEDLLOVERRIDES" in g_session.env and "dxgi=n" in g_session.env["WINEDLLOVERRIDES"]
 
             builtin_dll_copy = os.environ.get("PROTON_DLL_COPY",
                     #dxsetup redist
@@ -737,8 +737,8 @@ class Session:
                 s = s + ";" + dll + "=" + setting
             else:
                 s = dll + "=" + setting
-        if "WINEDLLOVERRIDES" in os.environ:
-            self.env["WINEDLLOVERRIDES"] = os.environ["WINEDLLOVERRIDES"] + ";" + s
+        if "WINEDLLOVERRIDES" in self.env:
+            self.env["WINEDLLOVERRIDES"] = self.env["WINEDLLOVERRIDES"] + ";" + s
         else:
             self.env["WINEDLLOVERRIDES"] = s
 
