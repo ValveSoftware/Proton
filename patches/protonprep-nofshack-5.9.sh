@@ -45,18 +45,24 @@
     patch -Np1 < ../patches/gstreamer/gst-libav-MR-81.patch
     cd ..
 
-    # warframe controller fix
-    git checkout lsteamclient
+    # lsteamclient
     cd lsteamclient
+    git reset --hard HEAD
+    git clean -xdf
+    # path of exile and alyx fixes
+    patch -Np1 < ../patches/proton-hotfixes/proton-lsteamclient-path-of-exile-and-alyx-fixes.patch
+    # warframe controller fix
     patch -Np1 < ../patches/proton-hotfixes/steamclient-disable_SteamController007_if_no_controller.patch
     patch -Np1 < ../patches/proton-hotfixes/steamclient-use_standard_dlopen_instead_of_the_libwine_wrappers.patch
     cd ..
-
+    
     # vrclient
-    git checkout vrclient_x64
     cd vrclient_x64
+    git reset --hard HEAD
+    git clean -xdf
     patch -Np1 < ../patches/proton-hotfixes/vrclient-use_standard_dlopen_instead_of_the_libwine_wrappers.patch
     cd ..
+
 
     # VKD3D patches
     cd vkd3d-proton
