@@ -1,0 +1,71 @@
+From e447e86ae2fbfbd9dee1b488e38a653aaea5447e Mon Sep 17 00:00:00 2001
+From: Liam Middlebrook <lmiddlebrook@nvidia.com>
+Date: Tue, 8 Sep 2020 12:46:27 -0700
+Subject: [PATCH] winevulkan: Fail on explicit layer usage.
+
+Fixes failure in dEQP-VK.api.device_init.create_instance_layer_name_abuse which
+expects all layers passed in as part of test to cause instance creation to
+fail.
+
+A quirk bit WINEVULKAN_QUIRK_IGNORE_EXPLICIT_LAYERS has been added to
+optionally restore the previous functionality.
+
+Signed-off-by: Liam Middlebrook <lmiddlebrook@nvidia.com>
+Signed-off-by: Daniel Koch <dkoch@nvidia.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/winevulkan/vulkan.c         | 14 ++++++++++----
+ dlls/winevulkan/vulkan_private.h |  1 +
+ 2 files changed, 11 insertions(+), 4 deletions(-)
+
+diff --git a/dlls/winevulkan/vulkan.c b/dlls/winevulkan/vulkan.c
+index 9f8e2451ad9..f730c04923a 100644
+--- a/dlls/winevulkan/vulkan.c
++++ b/dlls/winevulkan/vulkan.c
+@@ -335,7 +335,7 @@ static void wine_vk_init_once(void)
+  * driver is responsible for handling e.g. surface extensions.
+  */
+ static VkResult wine_vk_instance_convert_create_info(const VkInstanceCreateInfo *src,
+-        VkInstanceCreateInfo *dst)
++        VkInstanceCreateInfo *dst, struct VkInstance_T *object)
+ {
+     unsigned int i;
+     VkResult res;
+@@ -351,8 +351,14 @@ static VkResult wine_vk_instance_convert_create_info(const VkInstanceCreateInfo
+     /* ICDs don't support any layers, so nothing to copy. Modern versions of the loader
+      * filter this data out as well.
+      */
+-    dst->enabledLayerCount = 0;
+-    dst->ppEnabledLayerNames = NULL;
++    if (object->quirks & WINEVULKAN_QUIRK_IGNORE_EXPLICIT_LAYERS) {
++        dst->enabledLayerCount = 0;
++        dst->ppEnabledLayerNames = NULL;
++        WARN("Ignoring explicit layers!\n");
++    } else if (dst->enabledLayerCount) {
++        FIXME("Loading explicit layers is not supported by winevulkan!\n");
++        return VK_ERROR_LAYER_NOT_PRESENT;
++    }
+ 
+     TRACE("Enabled %u instance extensions.\n", dst->enabledExtensionCount);
+     for (i = 0; i < dst->enabledExtensionCount; i++)
+@@ -673,7 +679,7 @@ VkResult WINAPI wine_vkCreateInstance(const VkInstanceCreateInfo *create_info,
+     }
+     object->base.loader_magic = VULKAN_ICD_MAGIC_VALUE;
+ 
+-    res = wine_vk_instance_convert_create_info(create_info, &create_info_host);
++    res = wine_vk_instance_convert_create_info(create_info, &create_info_host, object);
+     if (res != VK_SUCCESS)
+     {
+         wine_vk_instance_free(object);
+diff --git a/dlls/winevulkan/vulkan_private.h b/dlls/winevulkan/vulkan_private.h
+index b048108f7a6..4bcc4de440d 100644
+--- a/dlls/winevulkan/vulkan_private.h
++++ b/dlls/winevulkan/vulkan_private.h
+@@ -39,6 +39,7 @@
+ 
+ #define WINEVULKAN_QUIRK_GET_DEVICE_PROC_ADDR 0x00000001
+ #define WINEVULKAN_QUIRK_ADJUST_MAX_IMAGE_COUNT 0x00000002
++#define WINEVULKAN_QUIRK_IGNORE_EXPLICIT_LAYERS 0x00000004
+ 
+ struct vulkan_func
+ {
