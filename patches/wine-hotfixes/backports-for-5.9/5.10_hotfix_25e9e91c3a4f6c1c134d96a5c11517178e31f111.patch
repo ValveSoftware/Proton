@@ -1,0 +1,37 @@
+From 25e9e91c3a4f6c1c134d96a5c11517178e31f111 Mon Sep 17 00:00:00 2001
+From: Torge Matthies <openglfreak@googlemail.com>
+Date: Fri, 5 Jun 2020 18:37:30 +0200
+Subject: [PATCH] joy.cpl: Fix pulsing buttons in joystick button state
+ display.
+
+Signed-off-by: Torge Matthies <openglfreak@googlemail.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/joy.cpl/main.c | 7 +------
+ 1 file changed, 1 insertion(+), 6 deletions(-)
+
+diff --git a/dlls/joy.cpl/main.c b/dlls/joy.cpl/main.c
+index 4ad9cf848c3..3921f59cbb5 100644
+--- a/dlls/joy.cpl/main.c
++++ b/dlls/joy.cpl/main.c
+@@ -404,8 +404,7 @@ static DWORD WINAPI input_thread(void *param)
+ 
+         /* Indicate pressed buttons */
+         for (i = 0; i < data->joysticks[data->chosen_joystick].num_buttons; i++)
+-            if (state.rgbButtons[i])
+-                SendMessageW(data->graphics.buttons[i], BM_SETSTATE, TRUE, 0);
++            SendMessageW(data->graphics.buttons[i], BM_SETSTATE, !!state.rgbButtons[i], 0);
+ 
+         /* Indicate axis positions, axes showing are hardcoded for now */
+         axes_pos[0][0] = state.lX;
+@@ -438,10 +437,6 @@ static DWORD WINAPI input_thread(void *param)
+         }
+ 
+         Sleep(TEST_POLL_TIME);
+-
+-        /* Reset button state */
+-        for (i = 0; i < data->joysticks[data->chosen_joystick].num_buttons; i++)
+-            SendMessageW(data->graphics.buttons[i], BM_SETSTATE, FALSE, 0);
+     }
+ 
+     return 0;

@@ -1,0 +1,25 @@
+From ea9b507380b4415cf9edd3643d9bcea7ab934fbd Mon Sep 17 00:00:00 2001
+From: Hans Leidekker <hans@codeweavers.com>
+Date: Thu, 4 Jun 2020 16:13:12 +0200
+Subject: [PATCH] mountmgr: Fix buffer length check.
+
+Wine-Bug: https://bugs.winehq.org/show_bug.cgi?id=49305
+Signed-off-by: Hans Leidekker <hans@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/mountmgr.sys/device.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/dlls/mountmgr.sys/device.c b/dlls/mountmgr.sys/device.c
+index c29ce9f9248..d99a096c612 100644
+--- a/dlls/mountmgr.sys/device.c
++++ b/dlls/mountmgr.sys/device.c
+@@ -1780,7 +1780,7 @@ static void query_property( struct disk_device *device, IRP *irp )
+         if (!irp->UserBuffer
+             || irpsp->Parameters.DeviceIoControl.OutputBufferLength < sizeof(STORAGE_DESCRIPTOR_HEADER))
+             irp->IoStatus.u.Status = STATUS_INVALID_PARAMETER;
+-        else if (irpsp->Parameters.DeviceIoControl.OutputBufferLength < sizeof(STORAGE_DEVICE_DESCRIPTOR))
++        else if (irpsp->Parameters.DeviceIoControl.OutputBufferLength < len)
+         {
+             descriptor = irp->UserBuffer;
+             descriptor->Version = sizeof(STORAGE_DEVICE_DESCRIPTOR);
