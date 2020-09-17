@@ -2586,19 +2586,3 @@ index f7031524d13..909c63078bb 100644
  
      if(!This->sdldev->has_ff){
          TRACE("No force feedback support\n");
-
-diff --git a/dlls/dinput/joystick_sdl.c b/dlls/dinput/joystick_sdl.c
-index f2d745ffe5..a40b9b60f6 100644
---- a/dlls/dinput/joystick_sdl.c
-+++ b/dlls/dinput/joystick_sdl.c
-@@ -1159,10 +1159,6 @@ static JoystickImpl *alloc_device(REFGUID rguid, IDirectInputImpl *dinput, unsig
- 
-     IDirectInput_AddRef(&newDevice->generic.base.dinput->IDirectInput7A_iface);
- 
--    EnterCriticalSection(&dinput->crit);
--    list_add_tail(&dinput->devices_list, &newDevice->generic.base.entry);
--    LeaveCriticalSection(&dinput->crit);
--
-     return newDevice;
- 
- failed:

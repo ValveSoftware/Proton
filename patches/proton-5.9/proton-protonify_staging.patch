@@ -1295,7 +1295,7 @@ index 1ed41bdcec5..0af6e1ded5f 100644
  static HRESULT filter_graph_common_create(IUnknown *outer, IUnknown **out, BOOL threaded)
  {
 +    static INIT_ONCE once = INIT_ONCE_STATIC_INIT;
-     IFilterGraphImpl *fimpl;
+     struct filter_graph *object;
      HRESULT hr;
  
 +    /* HACK: our build system makes it difficult to load gstreamer on prefix
@@ -1304,7 +1304,7 @@ index 1ed41bdcec5..0af6e1ded5f 100644
 +
      *out = NULL;
  
-     fimpl = CoTaskMemAlloc(sizeof(*fimpl));
+     if (!(object = calloc(1, sizeof(*object))))
 From aa6ab7464758508b3348b3ce390c1524c9ce32a2 Mon Sep 17 00:00:00 2001
 From: Andrew Eikum <aeikum@codeweavers.com>
 Date: Thu, 30 Jan 2020 10:16:19 -0600

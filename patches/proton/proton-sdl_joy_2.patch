@@ -88,3 +88,47 @@ index 909c63078bb..e6d7cc429dc 100644
          else
              lpddi->wUsage = 0x05; /* Game Pad */
  
+From b658ec59714a8cdb2f7c6cf6b1d5782f7d1de6fa Mon Sep 17 00:00:00 2001
+From: Brendan Shanks <bshanks@codeweavers.com>
+Date: Mon, 27 Apr 2020 10:35:45 -0700
+Subject: [PATCH] dinput: Set dwDevType specifically for steering wheels.
+
+Fixes wheel detection for WRC 7
+---
+ dlls/dinput/joystick_sdl.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/dlls/dinput/joystick_sdl.c b/dlls/dinput/joystick_sdl.c
+index f152336800b..f2d745ffe5c 100644
+--- a/dlls/dinput/joystick_sdl.c
++++ b/dlls/dinput/joystick_sdl.c
+@@ -109,6 +109,7 @@ struct SDLDev {
+     WORD product_id;
+     CHAR *name;
+ 
++    SDL_JoystickType type;
+     BOOL has_ff, is_joystick;
+     int autocenter;
+     int gain;
+@@ -312,6 +313,7 @@ static void find_sdldevs(void)
+ 
+         {
+             SDL_JoystickType type = SDL_JoystickGetType(device);
++            sdldev.type = type;
+             sdldev.is_joystick =
+                 type == SDL_JOYSTICK_TYPE_WHEEL ||
+                 type == SDL_JOYSTICK_TYPE_FLIGHT_STICK ||
+@@ -440,6 +442,13 @@ static void fill_joystick_dideviceinstanceA(LPDIDEVICEINSTANCEA lpddi, DWORD ver
+ 
+     lpddi->dwDevType = get_device_type(version, sdldevs[id].is_joystick);
+ 
++    /* DirectInput 8 has more-specific device types which some games look for */
++    if (version >= 0x800)
++    {
++        if (sdldevs[id].type == SDL_JOYSTICK_TYPE_WHEEL)
++            lpddi->dwDevType = DI8DEVTYPE_DRIVING | (DI8DEVTYPEDRIVING_DUALPEDALS << 8);
++    }
++
+     /* Assume the joystick as HID if it is attached to USB bus and has a valid VID/PID */
+     if ( sdldevs[id].vendor_id && sdldevs[id].product_id)
+     {

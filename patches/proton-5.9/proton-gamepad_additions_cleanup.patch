@@ -1,0 +1,195 @@
+diff --git a/dlls/dinput/joystick_sdl.c b/dlls/dinput/joystick_sdl.c
+index 18ffd1831f..778fdeaa69 100644
+--- a/dlls/dinput/joystick_sdl.c
++++ b/dlls/dinput/joystick_sdl.c
+@@ -109,6 +109,7 @@ struct SDLDev {
+ 
+     int n_buttons, n_axes, n_hats;
+ 
++    SDL_JoystickType type;
+     BOOL is_joystick;
+     int autocenter;
+     int gain;
+@@ -287,7 +288,7 @@ static void find_sdldevs(void)
+             TRACE("reconnected \"%s\"\n", sdldev->name);
+             device = SDL_JoystickOpen(i);
+             sdldev->instance_id = SDL_JoystickInstanceID(device);
+-            if (SDL_JoystickIsHaptic(device))
++            if (sdldev->is_joystick && SDL_JoystickIsHaptic(device))
+                 sdldev->sdl_haptic = SDL_HapticOpenFromJoystick(device);
+ 
+             InterlockedExchangePointer((void**)&sdldev->sdl_js, device);
+@@ -310,13 +311,22 @@ static void find_sdldevs(void)
+ 
+         TRACE("Found a joystick on %p: %s\n", device, sdldev->name);
+ 
++        {
++            SDL_JoystickType type = SDL_JoystickGetType(device);
++            sdldev->type = type;
++            sdldev->is_joystick =
++                type == SDL_JOYSTICK_TYPE_UNKNOWN ||
++                type == SDL_JOYSTICK_TYPE_WHEEL ||
++                type == SDL_JOYSTICK_TYPE_FLIGHT_STICK ||
++                type == SDL_JOYSTICK_TYPE_THROTTLE;
++        }
++
+         if (SDL_JoystickIsHaptic(device))
+         {
+-            haptic = SDL_HapticOpenFromJoystick(device);
+-            if (haptic)
+-            {
++            if (!sdldev->is_joystick)
++                WARN("Ignoring force feedback support for \"%s\"\n", sdldev->name);
++            else if ((haptic = SDL_HapticOpenFromJoystick(device)))
+                 TRACE(" ... with force feedback\n");
+-            }
+         }
+ 
+         if(pSDL_JoystickGetVendor){
+@@ -349,14 +359,6 @@ static void find_sdldevs(void)
+             sdldev->product_id = PID_MICROSOFT_XBOX_360;
+         }
+ 
+-        {
+-            SDL_JoystickType type = SDL_JoystickGetType(device);
+-            sdldev->is_joystick =
+-                type == SDL_JOYSTICK_TYPE_WHEEL ||
+-                type == SDL_JOYSTICK_TYPE_FLIGHT_STICK ||
+-                type == SDL_JOYSTICK_TYPE_THROTTLE;
+-        }
+-
+         sdldev->n_buttons = SDL_JoystickNumButtons(device);
+         sdldev->n_axes = SDL_JoystickNumAxes(device);
+         sdldev->n_hats = SDL_JoystickNumHats(device);
+@@ -440,6 +442,13 @@ static void fill_joystick_dideviceinstanceA(LPDIDEVICEINSTANCEA lpddi, DWORD ver
+ 
+     lpddi->dwDevType = get_device_type(version, sdldevs[id].is_joystick);
+ 
++    /* DirectInput 8 has more-specific device types which some games look for */
++    if (version >= 0x800)
++    {
++        if (sdldevs[id].type == SDL_JOYSTICK_TYPE_WHEEL)
++            lpddi->dwDevType = DI8DEVTYPE_DRIVING | (DI8DEVTYPEDRIVING_DUALPEDALS << 8);
++    }
++
+     /* Assume the joystick as HID if it is attached to USB bus and has a valid VID/PID */
+     if ( sdldevs[id].vendor_id && sdldevs[id].product_id)
+     {
+@@ -753,6 +762,83 @@ static BOOL enum_device_state_ds4_13button(SDL_Joystick *js, JoystickImpl *This,
+     return FALSE;
+ }
+ 
++static BOOL enum_device_state_ms_xb360(SDL_Joystick *js, JoystickImpl *This, struct device_state_item *st, int idx)
++{
++#define SPECIALCASE_TRIGGERS -1
++
++    static const struct {
++        int type;
++        int sdl_idx;
++        int dnp_id;
++    } map_ms_xb360[] = {
++        { ITEM_TYPE_AXIS, 1, 1 }, /* left vert */
++        { ITEM_TYPE_AXIS, 0, 0 }, /* left horiz */
++        { ITEM_TYPE_AXIS, 4, 4 }, /* right vert */
++        { ITEM_TYPE_AXIS, 3, 3 }, /* right horiz */
++        { ITEM_TYPE_AXIS, SPECIALCASE_TRIGGERS, 2 }, /* combined triggers */
++
++        { ITEM_TYPE_BUTTON, 0, 0}, /* A */
++        { ITEM_TYPE_BUTTON, 1, 1}, /* B */
++        { ITEM_TYPE_BUTTON, 2, 2}, /* X */
++        { ITEM_TYPE_BUTTON, 3, 3}, /* Y */
++        { ITEM_TYPE_BUTTON, 4, 4}, /* LB */
++        { ITEM_TYPE_BUTTON, 5, 5}, /* RB */
++        { ITEM_TYPE_BUTTON, 6, 6}, /* Back */
++        { ITEM_TYPE_BUTTON, 7, 7}, /* Start */
++        /* guide button (#8) is not reported by dinput */
++        { ITEM_TYPE_BUTTON, 9, 8}, /* LS */
++        { ITEM_TYPE_BUTTON, 10, 9}, /* RS */
++
++        { ITEM_TYPE_HAT, 0, 0 }, /* d-pad */
++    };
++
++    if(idx >= ARRAY_SIZE(map_ms_xb360))
++        return FALSE;
++
++    st->type = map_ms_xb360[idx].type;
++    st->id = map_ms_xb360[idx].dnp_id;
++
++    if(map_ms_xb360[idx].sdl_idx >= 0)
++    {
++        /* simple reads */
++        switch(map_ms_xb360[idx].type)
++        {
++        case ITEM_TYPE_BUTTON:
++            st->val = SDL_JoystickGetButton(js, map_ms_xb360[idx].sdl_idx);
++            return TRUE;
++
++        case ITEM_TYPE_AXIS:
++            st->val = SDL_JoystickGetAxis(js, map_ms_xb360[idx].sdl_idx);
++            return TRUE;
++
++        case ITEM_TYPE_HAT:
++            st->val = SDL_JoystickGetHat(js, map_ms_xb360[idx].sdl_idx);
++            return TRUE;
++        }
++    }
++
++    switch(map_ms_xb360[idx].sdl_idx){
++    case SPECIALCASE_TRIGGERS:
++    {
++        /* combined triggers axis */
++        static const int SDL_LTRIGGER = 2;
++        static const int SDL_RTRIGGER = 5;
++
++        int ltrigger = SDL_JoystickGetAxis(js, SDL_LTRIGGER);
++        int rtrigger = SDL_JoystickGetAxis(js, SDL_RTRIGGER);
++
++        /* yes, they are combined into one value and cannot be detangled */
++        st->val = (ltrigger - rtrigger) / 2;
++        return TRUE;
++    }
++    }
++
++    ERR("???\n"); /* error in static data above */
++    return FALSE;
++
++#undef SPECIALCASE_TRIGGERS
++}
++
+ /* straight 1:1 mapping of SDL items and dinput items */
+ static BOOL enum_device_state_standard(SDL_Joystick *js, JoystickImpl *This, struct device_state_item *st, int idx)
+ {
+@@ -917,6 +1003,21 @@ static enum_device_state_function select_enum_function(struct SDLDev *sdldev)
+             return enum_device_state_ds4_13button;
+         }
+         break;
++
++    case VID_MICROSOFT:
++        switch(sdldev->product_id){
++        case PID_MICROSOFT_XBOX_360:
++        case PID_MICROSOFT_XBOX_360_WIRELESS:
++        case PID_MICROSOFT_XBOX_360_ADAPTER:
++        case PID_MICROSOFT_XBOX_ONE:
++        case PID_MICROSOFT_XBOX_ONE_CF:
++        case PID_MICROSOFT_XBOX_ONE_ELITE:
++        case PID_MICROSOFT_XBOX_ONE_S:
++        case PID_MICROSOFT_XBOX_ONE_S_2:
++            TRACE("for %04x/%04x, polling xbox 360/one controller\n", sdldev->vendor_id, sdldev->product_id);
++            return enum_device_state_ms_xb360;
++        }
++        break;
+     }
+ 
+     TRACE("for %04x/%04x, using no maps\n", sdldev->vendor_id, sdldev->product_id);
+@@ -1434,7 +1535,10 @@ static HRESULT WINAPI JoystickWImpl_CreateEffect(IDirectInputDevice8W *iface,
+ 
+     if (lpeff != NULL)
+     {
+-        retval = IDirectInputEffect_SetParameters(new_effect->ref, lpeff, 0);
++        retval = IDirectInputEffect_SetParameters(new_effect->ref, lpeff,
++            DIEP_AXES | DIEP_DIRECTION | DIEP_DURATION | DIEP_ENVELOPE |
++            DIEP_GAIN | DIEP_SAMPLEPERIOD | DIEP_STARTDELAY | DIEP_TRIGGERBUTTON |
++            DIEP_TRIGGERREPEATINTERVAL | DIEP_TYPESPECIFICPARAMS);
+ 
+         if (retval != DI_OK && retval != DI_DOWNLOADSKIPPED)
+         {
