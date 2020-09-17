@@ -1,0 +1,5 @@
+"manifest"
+{
+  "version" "2"
+  "commandline" "/proton %verb%"
+}

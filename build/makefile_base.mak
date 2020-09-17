@@ -83,6 +83,7 @@ DOCKER_BASE = docker run --rm --init --privileged --cap-add=SYS_ADMIN --security
                                     $(SELECT_DOCKER_IMAGE) /sbin/docker-init -sg --
 
 STEAM_RUNTIME_RUNSH :=
+TOOLMANIFEST_VDF_SRC := toolmanifest_noruntime.vdf
 
 # If STEAMRT64_MODE/STEAMRT32_MODE is set, set the nested SELECT_DOCKER_IMAGE to the _IMAGE variable and eval
 # DOCKER_BASE with it to create the CONTAINER_SHELL setting.
@@ -90,6 +91,7 @@ ifeq ($(STEAMRT64_MODE),docker)
 	SELECT_DOCKER_IMAGE := $(STEAMRT64_IMAGE)
 	CONTAINER_SHELL64 := $(DOCKER_BASE) /bin/bash
 	STEAM_RUNTIME_RUNSH := $(DOCKER_BASE)
+	TOOLMANIFEST_VDF_SRC := toolmanifest_runtime.vdf
 else ifneq ($(STEAMRT64_MODE),)
 	foo := $(error Unrecognized STEAMRT64_MODE $(STEAMRT64_MODE))
 endif
@@ -335,9 +337,6 @@ $(DST_DIR):
 
 STEAM_DIR := $(HOME)/.steam/root
 
-TOOLMANIFEST_TARGET := $(addprefix $(DST_BASE)/,toolmanifest.vdf)
-$(TOOLMANIFEST_TARGET): $(addprefix $(SRCDIR)/,toolmanifest.vdf)
-
 FILELOCK_TARGET := $(addprefix $(DST_BASE)/,filelock.py)
 $(FILELOCK_TARGET): $(addprefix $(SRCDIR)/,filelock.py)
 
@@ -350,7 +349,7 @@ $(PROTON37_TRACKED_FILES_TARGET): $(addprefix $(SRCDIR)/,proton_3.7_tracked_file
 USER_SETTINGS_PY_TARGET := $(addprefix $(DST_BASE)/,user_settings.sample.py)
 $(USER_SETTINGS_PY_TARGET): $(addprefix $(SRCDIR)/,user_settings.sample.py)
 
-DIST_COPY_TARGETS := $(TOOLMANIFEST_TARGET) $(FILELOCK_TARGET) $(PROTON_PY_TARGET) \
+DIST_COPY_TARGETS := $(FILELOCK_TARGET) $(PROTON_PY_TARGET) \
                      $(PROTON37_TRACKED_FILES_TARGET) $(USER_SETTINGS_PY_TARGET)
 
 DIST_VERSION := $(DST_DIR)/version
@@ -359,6 +358,7 @@ DIST_OVR64 := $(DST_DIR)/lib64/wine/dxvk/openvr_api_dxvk.dll
 DIST_PREFIX := $(DST_DIR)/share/default_pfx/
 DIST_COMPAT_MANIFEST := $(DST_BASE)/compatibilitytool.vdf
 DIST_LICENSE := $(DST_BASE)/LICENSE
+DIST_TOOLMANIFEST := $(addprefix $(DST_BASE)/,toolmanifest.vdf)
 DIST_OFL_LICENSE := $(DST_BASE)/LICENSE.OFL
 DIST_GECKO_DIR := $(DST_DIR)/share/wine/gecko
 DIST_GECKO32 := $(DIST_GECKO_DIR)/wine-gecko-$(GECKO_VER)-x86
@@ -369,12 +369,15 @@ DIST_FONTS := $(DST_DIR)/share/fonts
 
 DIST_TARGETS := $(DIST_COPY_TARGETS) $(DIST_OVR32) $(DIST_OVR64) \
                 $(DIST_GECKO32) $(DIST_GECKO64) $(DIST_WINEMONO) \
-                $(DIST_COMPAT_MANIFEST) $(DIST_LICENSE) $(DIST_OFL_LICENSE) $(DIST_FONTS)
+                $(DIST_COMPAT_MANIFEST) $(DIST_LICENSE) $(DIST_TOOLMANIFEST) $(DIST_OFL_LICENSE) $(DIST_FONTS)
 
-DEPLOY_COPY_TARGETS := $(DIST_COPY_TARGETS) $(DIST_VERSION) $(DIST_LICENSE) $(DIST_OFL_LICENSE)
+DEPLOY_COPY_TARGETS := $(DIST_COPY_TARGETS) $(DIST_VERSION) $(DIST_LICENSE) $(DIST_TOOLMANIFEST) $(DIST_OFL_LICENSE)
 REDIST_COPY_TARGETS := $(DEPLOY_COPY_TARGETS) $(DIST_COMPAT_MANIFEST)
 
 $(DIST_LICENSE): $(LICENSE)
+	cp -a $< $@
+
+$(DIST_TOOLMANIFEST): $(addprefix $(SRCDIR)/,$(TOOLMANIFEST_VDF_SRC))
 	cp -a $< $@
 
 $(DIST_OFL_LICENSE): $(OFL_LICENSE)
