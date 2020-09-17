@@ -1,3 +1,791 @@
+From a294f755ceaeeb07bdf08e1cb445cbcd542fa533 Mon Sep 17 00:00:00 2001
+From: Alex Henrie <alexhenrie24@gmail.com>
+Date: Mon, 25 May 2020 22:36:24 -0600
+Subject: [PATCH] ws2_32: Reimplement inet_ntop on top of ntdll functions.
+
+And add a couple of tests for IPv6 addresses that Windows represents
+using dot-decimal notation for the last 32 bits but GNU/Linux does not.
+
+Signed-off-by: Alex Henrie <alexhenrie24@gmail.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ configure                |  3 ---
+ configure.ac             |  3 ---
+ dlls/ws2_32/socket.c     | 20 ++++++--------------
+ dlls/ws2_32/tests/sock.c |  6 ++++++
+ include/config.h.in      |  9 ---------
+ 5 files changed, 12 insertions(+), 29 deletions(-)
+
+diff --git a/configure b/configure
+index e2e03dc4ba7..a5516fe60eb 100755
+--- a/configure
++++ b/configure
+@@ -18296,9 +18296,6 @@ for ac_func in \
+ 	getprotobyname \
+ 	getprotobynumber \
+ 	getservbyport \
+-	inet_addr \
+-	inet_network \
+-	inet_ntop \
+ 
+ do :
+   as_ac_var=`$as_echo "ac_cv_func_$ac_func" | $as_tr_sh`
+diff --git a/configure.ac b/configure.ac
+index d81f5cc88ca..b43ec739294 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -2249,9 +2249,6 @@ AC_CHECK_FUNCS(\
+ 	getprotobyname \
+ 	getprotobynumber \
+ 	getservbyport \
+-	inet_addr \
+-	inet_network \
+-	inet_ntop \
+ )
+ 
+ dnl Check for clock_gettime which may be in -lrt
+diff --git a/dlls/ws2_32/socket.c b/dlls/ws2_32/socket.c
+index bdfe63ee191..199b7187a87 100644
+--- a/dlls/ws2_32/socket.c
++++ b/dlls/ws2_32/socket.c
+@@ -8351,10 +8351,8 @@ int WINAPI WSARemoveServiceClass(LPGUID info)
+  */
+ PCSTR WINAPI WS_inet_ntop( INT family, PVOID addr, PSTR buffer, SIZE_T len )
+ {
+-#ifdef HAVE_INET_NTOP
+-    struct WS_in6_addr *in6;
+-    struct WS_in_addr  *in;
+-    PCSTR pdst;
++    NTSTATUS status;
++    ULONG size = min( len, (ULONG)-1 );
+ 
+     TRACE("family %d, addr (%p), buffer (%p), len %ld\n", family, addr, buffer, len);
+     if (!buffer)
+@@ -8367,14 +8365,12 @@ PCSTR WINAPI WS_inet_ntop( INT family, PVOID addr, PSTR buffer, SIZE_T len )
+     {
+     case WS_AF_INET:
+     {
+-        in = addr;
+-        pdst = inet_ntop( AF_INET, &in->WS_s_addr, buffer, len );
++        status = RtlIpv4AddressToStringExA( (IN_ADDR *)addr, 0, buffer, &size );
+         break;
+     }
+     case WS_AF_INET6:
+     {
+-        in6 = addr;
+-        pdst = inet_ntop( AF_INET6, in6->WS_s6_addr, buffer, len );
++        status = RtlIpv6AddressToStringExA( (IN6_ADDR *)addr, 0, 0, buffer, &size );
+         break;
+     }
+     default:
+@@ -8382,13 +8378,9 @@ PCSTR WINAPI WS_inet_ntop( INT family, PVOID addr, PSTR buffer, SIZE_T len )
+         return NULL;
+     }
+ 
+-    if (!pdst) SetLastError( STATUS_INVALID_PARAMETER );
+-    return pdst;
+-#else
+-    FIXME( "not supported on this platform\n" );
+-    SetLastError( WSAEAFNOSUPPORT );
++    if (status == STATUS_SUCCESS) return buffer;
++    SetLastError( STATUS_INVALID_PARAMETER );
+     return NULL;
+-#endif
+ }
+ 
+ /***********************************************************************
+diff --git a/dlls/ws2_32/tests/sock.c b/dlls/ws2_32/tests/sock.c
+index c72dc7a77a1..cd9a13937ca 100644
+--- a/dlls/ws2_32/tests/sock.c
++++ b/dlls/ws2_32/tests/sock.c
+@@ -5008,6 +5008,12 @@ static void test_inet_pton(void)
+         "0x12345678", NULL, NULL},
+         {AF_INET6, 0, 0, /* windows bug */
+         "::1:2:3:4:5:6:7", NULL, NULL},
++        {AF_INET6, 1, 0,              /* Test 30 */
++        "::5efe:1.2.3.4", "::5efe:1.2.3.4",
++        "\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x5e\xfe\x01\x02\x03\x04"},
++        {AF_INET6, 1, 0,
++        "::ffff:0:1.2.3.4", "::ffff:0:1.2.3.4",
++        "\x00\x00\x00\x00\x00\x00\x00\x00\xff\xff\x00\x00\x01\x02\x03\x04"},
+     };
+     int i, ret;
+     DWORD err;
+diff --git a/include/config.h.in b/include/config.h.in
+index d2933eee65a..26424873129 100644
+--- a/include/config.h.in
++++ b/include/config.h.in
+@@ -296,18 +296,9 @@
+ /* Define to 1 if you have the `ilogbf' function. */
+ #undef HAVE_ILOGBF
+ 
+-/* Define to 1 if you have the `inet_addr' function. */
+-#undef HAVE_INET_ADDR
+-
+ /* Define to 1 if you have the <inet/mib2.h> header file. */
+ #undef HAVE_INET_MIB2_H
+ 
+-/* Define to 1 if you have the `inet_network' function. */
+-#undef HAVE_INET_NETWORK
+-
+-/* Define to 1 if you have the `inet_ntop' function. */
+-#undef HAVE_INET_NTOP
+-
+ /* Define to 1 if you have the <inttypes.h> header file. */
+ #undef HAVE_INTTYPES_H
+ 
+From 73ef942c6537b9faaf6401387b91d408e972beb8 Mon Sep 17 00:00:00 2001
+From: Alex Henrie <alexhenrie24@gmail.com>
+Date: Tue, 26 May 2020 23:33:32 -0600
+Subject: [PATCH] ws2_32/tests: Put WSAAddressToString tests in tables.
+
+Signed-off-by: Alex Henrie <alexhenrie24@gmail.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/ws2_32/tests/sock.c | 431 +++++++++++----------------------------
+ 1 file changed, 115 insertions(+), 316 deletions(-)
+
+diff --git a/dlls/ws2_32/tests/sock.c b/dlls/ws2_32/tests/sock.c
+index cd9a13937ca..d9ceca98cc6 100644
+--- a/dlls/ws2_32/tests/sock.c
++++ b/dlls/ws2_32/tests/sock.c
+@@ -3082,334 +3082,136 @@ static void test_WSAEnumNetworkEvents(void)
+     }
+ }
+ 
+-static void test_WSAAddressToStringA(void)
++static void test_WSAAddressToString(void)
+ {
+-    SOCKET v6 = INVALID_SOCKET;
+-    INT ret;
+-    DWORD len;
+-    int GLE;
++    static struct
++    {
++        ULONG address;
++        USHORT port;
++        char output[32];
++    }
++    ipv4_tests[] =
++    {
++        { 0, 0, "0.0.0.0" },
++        { 0xffffffff, 0, "255.255.255.255" },
++        { 0, 0xffff, "0.0.0.0:65535" },
++        { 0xffffffff, 0xffff, "255.255.255.255:65535" },
++    };
++    static struct
++    {
++        USHORT address[8];
++        ULONG scope;
++        USHORT port;
++        char output[64];
++    }
++    ipv6_tests[] =
++    {
++        { { 0, 0, 0, 0, 0, 0, 0, 0x100 }, 0, 0, "::1" },
++        { { 0xab20, 0, 0, 0, 0, 0, 0, 0x100 }, 0, 0, "20ab::1" },
++        { { 0xab20, 0, 0, 0, 0, 0, 0, 0x120 }, 0, 0xfa81, "[20ab::2001]:33274" },
++        { { 0xab20, 0, 0, 0, 0, 0, 0, 0x120 }, 0x1234, 0xfa81, "[20ab::2001%4660]:33274" },
++        { { 0xab20, 0, 0, 0, 0, 0, 0, 0x120 }, 0x1234, 0, "20ab::2001%4660" },
++    };
+     SOCKADDR_IN sockaddr;
+-    CHAR address[22]; /* 12 digits + 3 dots + ':' + 5 digits + '\0' */
+-
+-    CHAR expect1[] = "0.0.0.0";
+-    CHAR expect2[] = "255.255.255.255";
+-    CHAR expect3[] = "0.0.0.0:65535";
+-    CHAR expect4[] = "255.255.255.255:65535";
+-
+     SOCKADDR_IN6 sockaddr6;
+-    CHAR address6[54]; /* 32 digits + 7':' + '[' + '%" + 5 digits + ']:' + 5 digits + '\0' */
+-
+-    CHAR addr6_1[] = {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01};
+-    CHAR addr6_2[] = {0x20,0xab,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01};
+-    CHAR addr6_3[] = {0x20,0xab,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x20,0x01};
+-
+-    CHAR expect6_1[] = "::1";
+-    CHAR expect6_2[] = "20ab::1";
+-    CHAR expect6_3[] = "[20ab::2001]:33274";
+-    CHAR expect6_3_2[] = "[20ab::2001%4660]:33274";
+-    CHAR expect6_3_3[] = "20ab::2001%4660";
+-
+-    len = 0;
+-
+-    sockaddr.sin_family = AF_INET;
+-    sockaddr.sin_port = 0;
+-    sockaddr.sin_addr.s_addr = 0;
+-
+-    ret = WSAAddressToStringA( (SOCKADDR*)&sockaddr, sizeof(sockaddr), NULL, address, &len );
+-    GLE = WSAGetLastError();
+-    ok( (ret == SOCKET_ERROR && GLE == WSAEFAULT) || (ret == 0), 
+-        "WSAAddressToStringA() failed unexpectedly: WSAGetLastError()=%d, ret=%d\n",
+-        GLE, ret );
+-
+-    len = sizeof(address);
+-
+-    sockaddr.sin_family = AF_INET;
+-    sockaddr.sin_port = 0;
+-    sockaddr.sin_addr.s_addr = 0;
+-
+-    ret = WSAAddressToStringA( (SOCKADDR*)&sockaddr, sizeof(sockaddr), NULL, address, &len );
+-    ok( !ret, "WSAAddressToStringA() failed unexpectedly: %d\n", WSAGetLastError() );
+-
+-    ok( !strcmp( address, expect1 ), "Expected: %s, got: %s\n", expect1, address );
+-    ok( len == sizeof( expect1 ), "Got size %d\n", len);
+-
+-    len = sizeof(address);
+-
+-    sockaddr.sin_family = AF_INET;
+-    sockaddr.sin_port = 0;
+-    sockaddr.sin_addr.s_addr = 0xffffffff;
+-
+-    ret = WSAAddressToStringA( (SOCKADDR*)&sockaddr, sizeof(sockaddr), NULL, address, &len );
+-    ok( !ret, "WSAAddressToStringA() failed unexpectedly: %d\n", WSAGetLastError() );
+-
+-    ok( !strcmp( address, expect2 ), "Expected: %s, got: %s\n", expect2, address );
+-
+-    len = sizeof(address);
+-
+-    sockaddr.sin_family = AF_INET;
+-    sockaddr.sin_port = 0xffff;
+-    sockaddr.sin_addr.s_addr = 0;
+-
+-    ret = WSAAddressToStringA( (SOCKADDR*)&sockaddr, sizeof(sockaddr), NULL, address, &len );
+-    ok( !ret, "WSAAddressToStringA() failed unexpectedly: %d\n", WSAGetLastError() );
+-
+-    ok( !strcmp( address, expect3 ), "Expected: %s, got: %s\n", expect3, address );
+-
+-    len = sizeof(address);
+-
+-    sockaddr.sin_family = AF_INET;
+-    sockaddr.sin_port = 0xffff;
+-    sockaddr.sin_addr.s_addr = 0xffffffff;
+-
+-    ret = WSAAddressToStringA( (SOCKADDR*)&sockaddr, sizeof(sockaddr), NULL, address, &len );
+-    ok( !ret, "WSAAddressToStringA() failed unexpectedly: %d\n", WSAGetLastError() );
+-
+-    ok( !strcmp( address, expect4 ), "Expected: %s, got: %s\n", expect4, address );
+-    ok( len == sizeof( expect4 ), "Got size %d\n", len);
+-
+-    /*check to see it IPv6 is available */
+-    v6 = socket(AF_INET6, SOCK_STREAM, IPPROTO_TCP);
+-    if (v6 == INVALID_SOCKET) {
+-        skip("Could not create IPv6 socket (LastError: %d; %d expected if IPv6 not available).\n",
+-            WSAGetLastError(), WSAEAFNOSUPPORT);
+-        goto end;
+-    }
+-    /* Test a short IPv6 address */
+-    len = sizeof(address6);
+-
+-    sockaddr6.sin6_family = AF_INET6;
+-    sockaddr6.sin6_port = 0x0000;
+-    sockaddr6.sin6_scope_id = 0;
+-    memcpy (sockaddr6.sin6_addr.s6_addr, addr6_1, sizeof(addr6_1));
+-
+-    ret = WSAAddressToStringA( (SOCKADDR*)&sockaddr6, sizeof(sockaddr6), NULL, address6, &len );
+-    ok( !ret, "WSAAddressToStringA() failed unexpectedly: %d\n", WSAGetLastError() );
+-    ok( !strcmp( address6, expect6_1 ), "Expected: %s, got: %s\n", expect6_1, address6 );
+-    ok( len == sizeof(expect6_1), "Got size %d\n", len);
+-
+-    /* Test a longer IPv6 address */
+-    len = sizeof(address6);
+-
+-    sockaddr6.sin6_family = AF_INET6;
+-    sockaddr6.sin6_port = 0x0000;
+-    sockaddr6.sin6_scope_id = 0;
+-    memcpy (sockaddr6.sin6_addr.s6_addr, addr6_2, sizeof(addr6_2));
+-
+-    ret = WSAAddressToStringA( (SOCKADDR*)&sockaddr6, sizeof(sockaddr6), NULL, address6, &len );
+-    ok( !ret, "WSAAddressToStringA() failed unexpectedly: %d\n", WSAGetLastError() );
+-    ok( !strcmp( address6, expect6_2 ), "Expected: %s, got: %s\n", expect6_2, address6 );
+-    ok( len == sizeof(expect6_2), "Got size %d\n", len);
+-
+-    /* Test IPv6 address and port number */
+-    len = sizeof(address6);
+-
+-    sockaddr6.sin6_family = AF_INET6;
+-    sockaddr6.sin6_port = 0xfa81;
+-    sockaddr6.sin6_scope_id = 0;
+-    memcpy (sockaddr6.sin6_addr.s6_addr, addr6_3, sizeof(addr6_3));
+-
+-    ret = WSAAddressToStringA( (SOCKADDR*)&sockaddr6, sizeof(sockaddr6), NULL, address6, &len );
+-    ok( !ret, "WSAAddressToStringA() failed unexpectedly: %d\n", WSAGetLastError() );
+-    ok( !strcmp( address6, expect6_3 ), "Expected: %s, got: %s\n", expect6_3, address6 );
+-    ok( len == sizeof(expect6_3), "Got size %d\n", len );
+-
+-    /* Test IPv6 address, port number and scope_id */
+-    len = sizeof(address6);
+-
+-    sockaddr6.sin6_family = AF_INET6;
+-    sockaddr6.sin6_port = 0xfa81;
+-    sockaddr6.sin6_scope_id = 0x1234;
+-    memcpy (sockaddr6.sin6_addr.s6_addr, addr6_3, sizeof(addr6_3));
+-
+-    ret = WSAAddressToStringA( (SOCKADDR*)&sockaddr6, sizeof(sockaddr6), NULL, address6, &len );
+-    ok( !ret, "WSAAddressToStringA() failed unexpectedly: %d\n", WSAGetLastError() );
+-    ok( !strcmp( address6, expect6_3_2 ), "Expected: %s, got: %s\n", expect6_3_2, address6 );
+-    ok( len == sizeof(expect6_3_2), "Got size %d\n", len );
+-
+-    /* Test IPv6 address and scope_id */
+-    len = sizeof(address6);
+-
+-    sockaddr6.sin6_family = AF_INET6;
+-    sockaddr6.sin6_port = 0x0000;
+-    sockaddr6.sin6_scope_id = 0x1234;
+-    memcpy (sockaddr6.sin6_addr.s6_addr, addr6_3, sizeof(addr6_3));
+-
+-    ret = WSAAddressToStringA( (SOCKADDR*)&sockaddr6, sizeof(sockaddr6), NULL, address6, &len );
+-    ok( !ret, "WSAAddressToStringA() failed unexpectedly: %d\n", WSAGetLastError() );
+-    ok( !strcmp( address6, expect6_3_3 ), "Expected: %s, got: %s\n", expect6_3_3, address6 );
+-    ok( len == sizeof(expect6_3_3), "Got size %d\n", len );
+-
+-end:
+-    if (v6 != INVALID_SOCKET)
+-        closesocket(v6);
+-}
+-
+-static void test_WSAAddressToStringW(void)
+-{
+-    SOCKET v6 = INVALID_SOCKET;
++    char output[64];
++    WCHAR outputW[64], expected_outputW[64];
++    SOCKET v6;
+     INT ret;
+     DWORD len;
+-    int GLE;
+-    SOCKADDR_IN sockaddr;
+-    WCHAR address[22]; /* 12 digits + 3 dots + ':' + 5 digits + '\0' */
+-
+-    WCHAR expect1[] = { '0','.','0','.','0','.','0', 0 };
+-    WCHAR expect2[] = { '2','5','5','.','2','5','5','.','2','5','5','.','2','5','5', 0 };
+-    WCHAR expect3[] = { '0','.','0','.','0','.','0', ':', '6', '5', '5', '3', '5', 0 };
+-    WCHAR expect4[] = { '2','5','5','.','2','5','5','.','2','5','5','.','2','5','5', ':',
+-                        '6', '5', '5', '3', '5', 0 };
+-
+-    SOCKADDR_IN6 sockaddr6;
+-    WCHAR address6[54]; /* 32 digits + 7':' + '[' + '%" + 5 digits + ']:' + 5 digits + '\0' */
+-
+-    CHAR addr6_1[] = {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01};
+-    CHAR addr6_2[] = {0x20,0xab,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01};
+-    CHAR addr6_3[] = {0x20,0xab,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x20,0x01};
+-
+-    WCHAR expect6_1[] = {':',':','1',0};
+-    WCHAR expect6_2[] = {'2','0','a','b',':',':','1',0};
+-    WCHAR expect6_3[] = {'[','2','0','a','b',':',':','2','0','0','1',']',':','3','3','2','7','4',0};
+-    WCHAR expect6_3_2[] = {'[','2','0','a','b',':',':','2','0','0','1','%','4','6','6','0',']',':','3','3','2','7','4',0};
+-    WCHAR expect6_3_3[] = {'2','0','a','b',':',':','2','0','0','1','%','6','5','5','3','4',0};
++    int i, j;
+ 
+     len = 0;
+-
+     sockaddr.sin_family = AF_INET;
+-    sockaddr.sin_port = 0;
+     sockaddr.sin_addr.s_addr = 0;
+-
+-    ret = WSAAddressToStringW( (SOCKADDR*)&sockaddr, sizeof(sockaddr), NULL, address, &len );
+-    GLE = WSAGetLastError();
+-    ok( (ret == SOCKET_ERROR && GLE == WSAEFAULT) || (ret == 0), 
+-        "WSAAddressToStringW() failed unexpectedly: WSAGetLastError()=%d, ret=%d\n",
+-        GLE, ret );
+-
+-    len = sizeof(address);
+-
+-    sockaddr.sin_family = AF_INET;
+     sockaddr.sin_port = 0;
+-    sockaddr.sin_addr.s_addr = 0;
++    ret = WSAAddressToStringA( (SOCKADDR*)&sockaddr, sizeof(sockaddr), NULL, output, &len );
++    ok( ret == SOCKET_ERROR, "WSAAddressToStringA() returned %d, expected SOCKET_ERROR\n", ret );
++    ok( WSAGetLastError() == WSAEFAULT, "WSAAddressToStringA() gave error %d, expected WSAEFAULT\n", WSAGetLastError() );
++    ok( len == 8, "WSAAddressToStringA() gave length %d, expected 8\n", len );
+ 
+-    ret = WSAAddressToStringW( (SOCKADDR*)&sockaddr, sizeof(sockaddr), NULL, address, &len );
+-    ok( !ret, "WSAAddressToStringW() failed unexpectedly: %d\n", WSAGetLastError() );
+-
+-    ok( !lstrcmpW( address, expect1 ), "Expected different address string\n" );
+-    ok( len == ARRAY_SIZE(expect1), "Got size %d\n", len);
+-
+-    len = sizeof(address);
+-
+-    sockaddr.sin_family = AF_INET;
+-    sockaddr.sin_port = 0;
+-    sockaddr.sin_addr.s_addr = 0xffffffff;
+-
+-    ret = WSAAddressToStringW( (SOCKADDR*)&sockaddr, sizeof(sockaddr), NULL, address, &len );
+-    ok( !ret, "WSAAddressToStringW() failed unexpectedly: %d\n", WSAGetLastError() );
+-
+-    ok( !lstrcmpW( address, expect2 ), "Expected different address string\n" );
+-
+-    len = sizeof(address);
+-
+-    sockaddr.sin_family = AF_INET;
+-    sockaddr.sin_port = 0xffff;
+-    sockaddr.sin_addr.s_addr = 0;
+-
+-    ret = WSAAddressToStringW( (SOCKADDR*)&sockaddr, sizeof(sockaddr), NULL, address, &len );
+-    ok( !ret, "WSAAddressToStringW() failed unexpectedly: %d\n", WSAGetLastError() );
+-
+-    ok( !lstrcmpW( address, expect3 ), "Expected different address string\n" );
+-
+-    len = sizeof(address);
++    for (i = 0; i < 2; i++)
++    {
++        for (j = 0; j < ARRAY_SIZE(ipv4_tests); j++)
++        {
++            sockaddr.sin_family = AF_INET;
++            sockaddr.sin_addr.s_addr = ipv4_tests[j].address;
++            sockaddr.sin_port = ipv4_tests[j].port;
+ 
+-    sockaddr.sin_family = AF_INET;
+-    sockaddr.sin_port = 0xffff;
+-    sockaddr.sin_addr.s_addr = 0xffffffff;
++            if (i == 0)
++            {
++                len = sizeof(output);
++                memset(output, 0, len);
++                ret = WSAAddressToStringA( (SOCKADDR*)&sockaddr, sizeof(sockaddr), NULL, output, &len );
++                ok( !ret, "ipv4_tests[%d] failed unexpectedly: %d\n", j, WSAGetLastError() );
++                ok( lstrcmpA( output, ipv4_tests[j].output ) == 0,
++                    "ipv4_tests[%d]: got address %s, expected %s\n",
++                    j, wine_dbgstr_a(output), wine_dbgstr_a(ipv4_tests[j].output) );
++                ok( len == lstrlenA(ipv4_tests[j].output) + 1,
++                    "ipv4_tests[%d]: got length %d, expected %d\n",
++                    j, len, lstrlenA(ipv4_tests[j].output) + 1 );
++            }
++            else
++            {
++                len = sizeof(outputW);
++                memset(outputW, 0, len);
++                ret = WSAAddressToStringW( (SOCKADDR*)&sockaddr, sizeof(sockaddr), NULL, outputW, &len );
++                MultiByteToWideChar( CP_ACP, 0, ipv4_tests[j].output, -1,
++                                     expected_outputW, ARRAY_SIZE(expected_outputW) );
++                ok( !ret, "ipv4_tests[%d] failed unexpectedly: %d\n", j, WSAGetLastError() );
++                ok( lstrcmpW( outputW, expected_outputW ) == 0,
++                    "ipv4_tests[%d]: got address %s, expected %s\n",
++                    j, wine_dbgstr_w(outputW), wine_dbgstr_w(expected_outputW) );
++                ok( len == lstrlenW(expected_outputW) + 1,
++                    "ipv4_tests[%d]: got length %d, expected %d\n",
++                    j, len, lstrlenW(expected_outputW) + 1 );
++            }
++        }
+ 
+-    ret = WSAAddressToStringW( (SOCKADDR*)&sockaddr, sizeof(sockaddr), NULL, address, &len );
+-    ok( !ret, "WSAAddressToStringW() failed unexpectedly: %d\n", WSAGetLastError() );
++        /* check to see if IPv6 is available */
++        v6 = socket(AF_INET6, SOCK_STREAM, IPPROTO_TCP);
++        if (v6 == INVALID_SOCKET) {
++            skip("Could not create IPv6 socket (LastError: %d; %d expected if IPv6 not available).\n",
++                WSAGetLastError(), WSAEAFNOSUPPORT);
++            continue;
++        }
++        closesocket(v6);
+ 
+-    ok( !lstrcmpW( address, expect4 ), "Expected different address string\n" );
+-    ok( len == ARRAY_SIZE(expect4), "Got %d\n", len);
++        for (j = 0; j < ARRAY_SIZE(ipv6_tests); j++)
++        {
++            sockaddr6.sin6_family = AF_INET6;
++            sockaddr6.sin6_scope_id = ipv6_tests[j].scope;
++            sockaddr6.sin6_port = ipv6_tests[j].port;
++            memcpy( sockaddr6.sin6_addr.s6_addr, ipv6_tests[j].address, sizeof(ipv6_tests[j].address) );
+ 
+-    /*check to see it IPv6 is available */
+-    v6 = socket(AF_INET6, SOCK_STREAM, IPPROTO_TCP);
+-    if (v6 == INVALID_SOCKET) {
+-        skip("Could not create IPv6 socket (LastError: %d; %d expected if IPv6 not available).\n",
+-            WSAGetLastError(), WSAEAFNOSUPPORT);
+-        goto end;
++            if (i == 0)
++            {
++                len = sizeof(output);
++                ret = WSAAddressToStringA( (SOCKADDR*)&sockaddr6, sizeof(sockaddr6), NULL, output, &len );
++                ok( !ret, "ipv6_tests[%d] failed unexpectedly: %d\n", j, WSAGetLastError() );
++                ok( lstrcmpA( output, ipv6_tests[j].output ) == 0,
++                    "ipv6_tests[%d]: gave address %s, expected %s\n",
++                    j, wine_dbgstr_a(output), wine_dbgstr_a(ipv6_tests[j].output) );
++                ok( len == lstrlenA(ipv6_tests[j].output) + 1,
++                    "ipv6_tests[%d]: got length %d, expected %d\n",
++                    j, len, lstrlenA(ipv6_tests[j].output) + 1 );
++            }
++            else
++            {
++                len = sizeof(outputW);
++                ret = WSAAddressToStringW( (SOCKADDR*)&sockaddr6, sizeof(sockaddr6), NULL, outputW, &len );
++                MultiByteToWideChar( CP_ACP, 0, ipv6_tests[j].output, -1,
++                                     expected_outputW, ARRAY_SIZE(expected_outputW) );
++                ok( !ret, "ipv6_tests[%d] failed unexpectedly: %d\n", j, WSAGetLastError() );
++                ok( lstrcmpW( outputW, expected_outputW ) == 0,
++                    "ipv6_tests[%d]: got address %s, expected %s\n",
++                    j, wine_dbgstr_w(outputW), wine_dbgstr_w(expected_outputW) );
++                ok( len == lstrlenW(expected_outputW) + 1,
++                    "ipv6_tests[%d]: got length %d, expected %d\n",
++                    j, len, lstrlenW(expected_outputW) + 1 );
++            }
++        }
+     }
+-
+-    /* Test a short IPv6 address */
+-    len = ARRAY_SIZE(address6);
+-
+-    sockaddr6.sin6_family = AF_INET6;
+-    sockaddr6.sin6_port = 0x0000;
+-    sockaddr6.sin6_scope_id = 0;
+-    memcpy (sockaddr6.sin6_addr.s6_addr, addr6_1, sizeof(addr6_1));
+-
+-    ret = WSAAddressToStringW( (SOCKADDR*)&sockaddr6, sizeof(sockaddr6), NULL, address6, &len );
+-    ok( !ret, "WSAAddressToStringW() failed unexpectedly: %d\n", WSAGetLastError() );
+-    ok( !lstrcmpW( address6, expect6_1 ), "Wrong string returned\n" );
+-    ok( len == ARRAY_SIZE(expect6_1), "Got %d\n", len);
+-
+-    /* Test a longer IPv6 address */
+-    len = ARRAY_SIZE(address6);
+-
+-    sockaddr6.sin6_family = AF_INET6;
+-    sockaddr6.sin6_port = 0x0000;
+-    sockaddr6.sin6_scope_id = 0;
+-    memcpy (sockaddr6.sin6_addr.s6_addr, addr6_2, sizeof(addr6_2));
+-
+-    ret = WSAAddressToStringW( (SOCKADDR*)&sockaddr6, sizeof(sockaddr6), NULL, address6, &len );
+-    ok( !ret, "WSAAddressToStringW() failed unexpectedly: %d\n", WSAGetLastError() );
+-
+-    ok( !lstrcmpW( address6, expect6_2 ), "Wrong string returned\n" );
+-    ok( len == ARRAY_SIZE(expect6_2), "Got %d\n", len);
+-
+-    /* Test IPv6 address and port number */
+-    len = ARRAY_SIZE(address6);
+-
+-    sockaddr6.sin6_family = AF_INET6;
+-    sockaddr6.sin6_port = 0xfa81;
+-    sockaddr6.sin6_scope_id = 0;
+-    memcpy (sockaddr6.sin6_addr.s6_addr, addr6_3, sizeof(addr6_3));
+-
+-    ret = WSAAddressToStringW( (SOCKADDR*)&sockaddr6, sizeof(sockaddr6), NULL, address6, &len );
+-    ok( !ret, "WSAAddressToStringW() failed unexpectedly: %d\n", WSAGetLastError() );
+-    ok( !lstrcmpW( address6, expect6_3 ),
+-        "Expected: %s, got: %s\n", wine_dbgstr_w(expect6_3), wine_dbgstr_w(address6) );
+-    ok( len == ARRAY_SIZE(expect6_3), "Got %d\n", len );
+-
+-    /* Test IPv6 address, port number and scope_id */
+-    len = ARRAY_SIZE(address6);
+-
+-    sockaddr6.sin6_family = AF_INET6;
+-    sockaddr6.sin6_port = 0xfa81;
+-    sockaddr6.sin6_scope_id = 0x1234;
+-    memcpy (sockaddr6.sin6_addr.s6_addr, addr6_3, sizeof(addr6_3));
+-
+-    ret = WSAAddressToStringW( (SOCKADDR*)&sockaddr6, sizeof(sockaddr6), NULL, address6, &len );
+-    ok( !ret, "WSAAddressToStringW() failed unexpectedly: %d\n", WSAGetLastError() );
+-    ok( !lstrcmpW( address6, expect6_3_2 ),
+-        "Expected: %s, got: %s\n", wine_dbgstr_w(expect6_3_2), wine_dbgstr_w(address6) );
+-    ok( len == ARRAY_SIZE(expect6_3_2), "Got %d\n", len );
+-
+-    /* Test IPv6 address and scope_id */
+-    len = ARRAY_SIZE(address6);
+-
+-    sockaddr6.sin6_family = AF_INET6;
+-    sockaddr6.sin6_port = 0x0000;
+-    sockaddr6.sin6_scope_id = 0xfffe;
+-    memcpy (sockaddr6.sin6_addr.s6_addr, addr6_3, sizeof(addr6_3));
+-
+-    ret = WSAAddressToStringW( (SOCKADDR*)&sockaddr6, sizeof(sockaddr6), NULL, address6, &len );
+-    ok( !ret, "WSAAddressToStringW() failed unexpectedly: %d\n", WSAGetLastError() );
+-    ok( !lstrcmpW( address6, expect6_3_3 ),
+-        "Expected: %s, got: %s\n", wine_dbgstr_w(expect6_3_3), wine_dbgstr_w(address6) );
+-    ok( len == ARRAY_SIZE(expect6_3_3), "Got %d\n", len );
+-
+-end:
+-    if (v6 != INVALID_SOCKET)
+-        closesocket(v6);
+ }
+ 
+ static void test_WSAStringToAddress(void)
+@@ -11579,10 +11381,7 @@ START_TEST( sock )
+     test_WSASocket();
+     test_WSADuplicateSocket();
+     test_WSAEnumNetworkEvents();
+-
+-    test_WSAAddressToStringA();
+-    test_WSAAddressToStringW();
+-
++    test_WSAAddressToString();
+     test_WSAStringToAddress();
+ 
+     test_errors();
+
+From 60c8c78015b12493eb3984feef29103724a758af Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Wed, 10 Jun 2020 21:22:51 +0300
+Subject: [PATCH] ws2_32: Optimize interface_bind_check() by caching adapter
+ addresses.
+
+Wine-Bug: https://bugs.winehq.org/show_bug.cgi?id=48668
+Signed-off-by: Paul Gofman <pgofman@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/ws2_32/socket.c | 65 ++++++++++++++++++++++++++++++--------------
+ 1 file changed, 44 insertions(+), 21 deletions(-)
+
+diff --git a/dlls/ws2_32/socket.c b/dlls/ws2_32/socket.c
+index 199b7187a87..87446025646 100644
+--- a/dlls/ws2_32/socket.c
++++ b/dlls/ws2_32/socket.c
+@@ -277,6 +277,17 @@ static CRITICAL_SECTION_DEBUG critsect_debug =
+ };
+ static CRITICAL_SECTION csWSgetXXXbyYYY = { &critsect_debug, -1, 0, 0, 0, 0 };
+ 
++static in_addr_t *if_addr_cache;
++static unsigned int if_addr_cache_size;
++static CRITICAL_SECTION cs_if_addr_cache;
++static CRITICAL_SECTION_DEBUG cs_if_addr_cache_debug =
++{
++    0, 0, &cs_if_addr_cache,
++    { &cs_if_addr_cache_debug.ProcessLocksList, &cs_if_addr_cache_debug.ProcessLocksList },
++      0, 0, { (DWORD_PTR)(__FILE__ ": cs_if_addr_cache") }
++};
++static CRITICAL_SECTION cs_if_addr_cache = { &cs_if_addr_cache_debug, -1, 0, 0, 0, 0 };
++
+ union generic_unix_sockaddr
+ {
+     struct sockaddr addr;
+@@ -3348,6 +3359,33 @@ static BOOL interface_bind( SOCKET s, int fd, struct sockaddr *addr )
+             FIXME("Broadcast packets on interface-bound sockets are not currently supported on this platform, "
+                   "receiving broadcast packets will not work on socket %04lx.\n", s);
+ #endif
++            if (ret)
++            {
++                EnterCriticalSection(&cs_if_addr_cache);
++                if (if_addr_cache_size <= adapter->Index)
++                {
++                    unsigned int new_size;
++                    in_addr_t *new;
++
++                    new_size = max(if_addr_cache_size * 2, adapter->Index + 1);
++                    if (!(new = heap_realloc(if_addr_cache, sizeof(*if_addr_cache) * new_size)))
++                    {
++                        ERR("No memory.\n");
++                        ret = FALSE;
++                        LeaveCriticalSection(&cs_if_addr_cache);
++                        break;
++                    }
++                    memset(new + if_addr_cache_size, 0, sizeof(*if_addr_cache)
++                            * (new_size - if_addr_cache_size));
++                    if_addr_cache = new;
++                    if_addr_cache_size = new_size;
++                }
++                if (if_addr_cache[adapter->Index] && if_addr_cache[adapter->Index] != adapter_addr)
++                    WARN("Adapter addr for iface index %u has changed.\n", adapter->Index);
++
++                if_addr_cache[adapter->Index] = adapter_addr;
++                LeaveCriticalSection(&cs_if_addr_cache);
++            }
+             break;
+         }
+     }
+@@ -3752,27 +3790,12 @@ static void interface_bind_check(int fd, struct sockaddr_in *addr)
+ #endif
+     if (!ret)
+     {
+-        PIP_ADAPTER_INFO adapters, adapter;
+-        DWORD adap_size;
+-
+-        if (GetAdaptersInfo(NULL, &adap_size) != ERROR_BUFFER_OVERFLOW)
+-            return;
+-        adapters = HeapAlloc(GetProcessHeap(), 0, adap_size);
+-        if (adapters && GetAdaptersInfo(adapters, &adap_size) == NO_ERROR)
+-        {
+-            /* Search the IPv4 adapter list for the appropriate bound interface */
+-            for (adapter = adapters; adapter != NULL; adapter = adapter->Next)
+-            {
+-                in_addr_t adapter_addr;
+-                if (adapter->Index != ifindex) continue;
+-
+-                adapter_addr = inet_addr(adapter->IpAddressList.IpAddress.String);
+-                addr->sin_addr.s_addr = adapter_addr;
+-                TRACE("reporting interface address from adapter %d\n", ifindex);
+-                break;
+-            }
+-        }
+-        HeapFree(GetProcessHeap(), 0, adapters);
++        EnterCriticalSection(&cs_if_addr_cache);
++        if (ifindex < if_addr_cache_size)
++            addr->sin_addr.s_addr = if_addr_cache[ifindex];
++        else
++            ERR("No cache entry for ifindex %u.\n", ifindex);
++        LeaveCriticalSection(&cs_if_addr_cache);
+     }
+ #endif
+ }
+From 6d1fea9711d5062fdcfe5043091451c8aec56023 Mon Sep 17 00:00:00 2001
+From: Louis Lenders <xerox.xerox2000x@gmail.com>
+Date: Wed, 17 Jun 2020 00:43:22 +0200
+Subject: [PATCH] ws2_32: Add FreeAddrInfoEx.
+
+Wine-Bug: https://bugs.winehq.org/show_bug.cgi?id=48256
+Signed-off-by: Louis Lenders <xerox.xerox2000x@gmail.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/ws2_32/socket.c    | 18 ++++++++++++++++++
+ dlls/ws2_32/ws2_32.spec |  1 +
+ include/ws2tcpip.h      |  4 ++++
+ 3 files changed, 23 insertions(+)
+
+diff --git a/dlls/ws2_32/socket.c b/dlls/ws2_32/socket.c
+index 87446025646..402ee86d962 100644
+--- a/dlls/ws2_32/socket.c
++++ b/dlls/ws2_32/socket.c
+@@ -7268,6 +7268,24 @@ void WINAPI FreeAddrInfoW(PADDRINFOW ai)
+     }
+ }
+ 
++/***********************************************************************
++ *      FreeAddrInfoEx      (WS2_32.@)
++ */
++void WINAPI FreeAddrInfoEx(ADDRINFOEXA *ai)
++{
++    TRACE("(%p)\n", ai);
++
++    while (ai)
++    {
++        ADDRINFOEXA *next;
++        HeapFree(GetProcessHeap(), 0, ai->ai_canonname);
++        HeapFree(GetProcessHeap(), 0, ai->ai_addr);
++        next = ai->ai_next;
++        HeapFree(GetProcessHeap(), 0, ai);
++        ai = next;
++    }
++}
++
+ /***********************************************************************
+  *      FreeAddrInfoExW      (WS2_32.@)
+  */
+diff --git a/dlls/ws2_32/ws2_32.spec b/dlls/ws2_32/ws2_32.spec
+index d3c1e6214af..87e0bdfa2f0 100644
+--- a/dlls/ws2_32/ws2_32.spec
++++ b/dlls/ws2_32/ws2_32.spec
+@@ -50,6 +50,7 @@
+ 
+ 500 stub     WEP
+ 
++@ stdcall FreeAddrInfoEx(ptr)
+ @ stdcall FreeAddrInfoExW(ptr)
+ @ stdcall FreeAddrInfoW(ptr)
+ @ stdcall GetAddrInfoExCancel(ptr)
+diff --git a/include/ws2tcpip.h b/include/ws2tcpip.h
+index 43c277fa0cb..5a444dcb5f3 100644
+--- a/include/ws2tcpip.h
++++ b/include/ws2tcpip.h
+@@ -177,7 +177,11 @@ void WINAPI WS(freeaddrinfo)(LPADDRINFO);
+ #define     FreeAddrInfoA WS(freeaddrinfo)
+ void WINAPI FreeAddrInfoW(PADDRINFOW);
+ #define     FreeAddrInfo WINELIB_NAME_AW(FreeAddrInfo)
++void WINAPI FreeAddrInfoEx(ADDRINFOEXA*);
+ void WINAPI FreeAddrInfoExW(ADDRINFOEXW*);
++#ifdef UNICODE
++#define     FreeAddrInfoEx FreeAddrInfoExW
++#endif
+ int WINAPI  WS(getaddrinfo)(const char*,const char*,const struct WS(addrinfo)*,struct WS(addrinfo)**);
+ #define     GetAddrInfoA WS(getaddrinfo)
+ int WINAPI  GetAddrInfoW(PCWSTR,PCWSTR,const ADDRINFOW*,PADDRINFOW*);
+
 From 93aea5d86fe2eb50a9bb0829533ca5da627908f6 Mon Sep 17 00:00:00 2001
 From: Alistair Leslie-Hughes <leslie_alistair@hotmail.com>
 Date: Thu, 11 Jun 2020 10:21:37 +0200
@@ -4877,3 +5665,1536 @@ index 402ee86d962..69fbb37af22 100644
      {
          EnterCriticalSection(&cs_if_addr_cache);
          if (ifindex < if_addr_cache_size)
+From da6386df8b759672e051304711bb6a5dc6ce9bd2 Mon Sep 17 00:00:00 2001
+From: Alistair Leslie-Hughes <leslie_alistair@hotmail.com>
+Date: Tue, 14 Jul 2020 09:03:47 +1000
+Subject: [PATCH] ws2_32: Trace SIO_IDEAL_SEND_BACKLOG_* calls.
+
+Signed-off-by: Alistair Leslie-Hughes <leslie_alistair@hotmail.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/ws2_32/socket.c | 4 ++--
+ include/ws2ipdef.h   | 8 ++++++++
+ 2 files changed, 10 insertions(+), 2 deletions(-)
+
+diff --git a/dlls/ws2_32/socket.c b/dlls/ws2_32/socket.c
+index 69fbb37af22..d7eddde44d8 100644
+--- a/dlls/ws2_32/socket.c
++++ b/dlls/ws2_32/socket.c
+@@ -4554,8 +4554,8 @@ static const char *debugstr_wsaioctl(DWORD code)
+         IOCTL_NAME(WS_SIO_GET_INTERFACE_LIST);
+         /* IOCTL_NAME(WS_SIO_GET_INTERFACE_LIST_EX); */
+         IOCTL_NAME(WS_SIO_GET_QOS);
+-        /* IOCTL_NAME(WS_SIO_IDEAL_SEND_BACKLOG_CHANGE);
+-        IOCTL_NAME(WS_SIO_IDEAL_SEND_BACKLOG_QUERY); */
++        IOCTL_NAME(WS_SIO_IDEAL_SEND_BACKLOG_CHANGE);
++        IOCTL_NAME(WS_SIO_IDEAL_SEND_BACKLOG_QUERY);
+         IOCTL_NAME(WS_SIO_KEEPALIVE_VALS);
+         IOCTL_NAME(WS_SIO_MULTIPOINT_LOOPBACK);
+         IOCTL_NAME(WS_SIO_MULTICAST_SCOPE);
+diff --git a/include/ws2ipdef.h b/include/ws2ipdef.h
+index 4cae361e5fe..fc465804962 100644
+--- a/include/ws2ipdef.h
++++ b/include/ws2ipdef.h
+@@ -282,6 +282,14 @@ typedef struct WS(in_pktinfo) {
+ 
+ #define SS_PORT(ssp) (((PSOCKADDR_IN)(ssp))->sin_port)
+ 
++#ifndef USE_WS_PREFIX
++#define SIO_IDEAL_SEND_BACKLOG_CHANGE _IO ('t', 122)
++#define SIO_IDEAL_SEND_BACKLOG_QUERY  _IOR('t', 123, ULONG)
++#else
++#define WS_SIO_IDEAL_SEND_BACKLOG_CHANGE WS__IO ('t', 122)
++#define WS_SIO_IDEAL_SEND_BACKLOG_QUERY  WS__IOR('t', 123, ULONG)
++#endif
++
+ #ifdef __cplusplus
+ extern "C" {
+ #endif
+From a16f91ae366b9f3f8e371598e13f4ef242f50af3 Mon Sep 17 00:00:00 2001
+From: Alex Henrie <alexhenrie24@gmail.com>
+Date: Wed, 15 Jul 2020 01:19:04 -0600
+Subject: [PATCH] ws2_32: Avoid depending on system getprotoby(name|number)
+ functions.
+
+Signed-off-by: Alex Henrie <alexhenrie24@gmail.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ configure                    |   2 -
+ configure.ac                 |   2 -
+ dlls/ws2_32/socket.c         |  79 +++++----------------------
+ dlls/ws2_32/tests/protocol.c | 100 +++++++++++++++++++++++++++++++++++
+ include/config.h.in          |   6 ---
+ 5 files changed, 114 insertions(+), 75 deletions(-)
+
+diff --git a/configure b/configure
+index 24d0a1d8b47..35f8b63ae06 100755
+--- a/configure
++++ b/configure
+@@ -18332,8 +18332,6 @@ for ac_func in \
+ 	getaddrinfo \
+ 	getnameinfo \
+ 	getnetbyname \
+-	getprotobyname \
+-	getprotobynumber \
+ 	getservbyport \
+ 
+ do :
+diff --git a/configure.ac b/configure.ac
+index d914e3eca88..928f8ebd1b1 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -2245,8 +2245,6 @@ AC_CHECK_FUNCS(\
+ 	getaddrinfo \
+ 	getnameinfo \
+ 	getnetbyname \
+-	getprotobyname \
+-	getprotobynumber \
+ 	getservbyport \
+ )
+ 
+diff --git a/dlls/ws2_32/socket.c b/dlls/ws2_32/socket.c
+index d7eddde44d8..12126372d57 100644
+--- a/dlls/ws2_32/socket.c
++++ b/dlls/ws2_32/socket.c
+@@ -6509,56 +6509,23 @@ static const struct { int prot; const char *names[3]; } protocols[] =
+ {
+     {   0, { "ip", "IP" }},
+     {   1, { "icmp", "ICMP" }},
+-    {   2, { "igmp", "IGMP" }},
+     {   3, { "ggp", "GGP" }},
+     {   6, { "tcp", "TCP" }},
+     {   8, { "egp", "EGP" }},
+-    {   9, { "igp", "IGP" }},
+     {  12, { "pup", "PUP" }},
+     {  17, { "udp", "UDP" }},
+     {  20, { "hmp", "HMP" }},
+     {  22, { "xns-idp", "XNS-IDP" }},
+     {  27, { "rdp", "RDP" }},
+-    {  29, { "iso-tp4", "ISO-TP4" }},
+-    {  33, { "dccp", "DCCP" }},
+-    {  36, { "xtp", "XTP" }},
+-    {  37, { "ddp", "DDP" }},
+-    {  38, { "idpr-cmtp", "IDPR-CMTP" }},
+     {  41, { "ipv6", "IPv6" }},
+     {  43, { "ipv6-route", "IPv6-Route" }},
+     {  44, { "ipv6-frag", "IPv6-Frag" }},
+-    {  45, { "idrp", "IDRP" }},
+-    {  46, { "rsvp", "RSVP" }},
+-    {  47, { "gre", "GRE" }},
+     {  50, { "esp", "ESP" }},
+     {  51, { "ah", "AH" }},
+-    {  57, { "skip", "SKIP" }},
+     {  58, { "ipv6-icmp", "IPv6-ICMP" }},
+     {  59, { "ipv6-nonxt", "IPv6-NoNxt" }},
+     {  60, { "ipv6-opts", "IPv6-Opts" }},
+     {  66, { "rvd", "RVD" }},
+-    {  73, { "rspf", "RSPF" }},
+-    {  81, { "vmtp", "VMTP" }},
+-    {  88, { "eigrp", "EIGRP" }},
+-    {  89, { "ospf", "OSPFIGP" }},
+-    {  93, { "ax.25", "AX.25" }},
+-    {  94, { "ipip", "IPIP" }},
+-    {  97, { "etherip", "ETHERIP" }},
+-    {  98, { "encap", "ENCAP" }},
+-    { 103, { "pim", "PIM" }},
+-    { 108, { "ipcomp", "IPCOMP" }},
+-    { 112, { "vrrp", "VRRP" }},
+-    { 115, { "l2tp", "L2TP" }},
+-    { 124, { "isis", "ISIS" }},
+-    { 132, { "sctp", "SCTP" }},
+-    { 133, { "fc", "FC" }},
+-    { 135, { "mobility-header", "Mobility-Header" }},
+-    { 136, { "udplite", "UDPLite" }},
+-    { 137, { "mpls-in-ip", "MPLS-in-IP" }},
+-    { 139, { "hip", "HIP" }},
+-    { 140, { "shim6", "Shim6" }},
+-    { 141, { "wesp", "WESP" }},
+-    { 142, { "rohc", "ROHC" }},
+ };
+ 
+ /***********************************************************************
+@@ -6567,23 +6534,14 @@ static const struct { int prot; const char *names[3]; } protocols[] =
+ struct WS_protoent* WINAPI WS_getprotobyname(const char* name)
+ {
+     struct WS_protoent* retval = NULL;
+-#ifdef HAVE_GETPROTOBYNAME
+-    struct protoent*     proto;
+-    EnterCriticalSection( &csWSgetXXXbyYYY );
+-    if( (proto = getprotobyname(name)) != NULL )
+-        retval = WS_create_pe( proto->p_name, proto->p_aliases, proto->p_proto );
+-    LeaveCriticalSection( &csWSgetXXXbyYYY );
+-#endif
+-    if (!retval)
++    unsigned int i;
++
++    for (i = 0; i < ARRAY_SIZE(protocols); i++)
+     {
+-        unsigned int i;
+-        for (i = 0; i < ARRAY_SIZE(protocols); i++)
+-        {
+-            if (_strnicmp( protocols[i].names[0], name, -1 )) continue;
+-            retval = WS_create_pe( protocols[i].names[0], (char **)protocols[i].names + 1,
+-                                   protocols[i].prot );
+-            break;
+-        }
++        if (_strnicmp( protocols[i].names[0], name, -1 )) continue;
++        retval = WS_create_pe( protocols[i].names[0], (char **)protocols[i].names + 1,
++                               protocols[i].prot );
++        break;
+     }
+     if (!retval)
+     {
+@@ -6601,23 +6559,14 @@ struct WS_protoent* WINAPI WS_getprotobyname(const char* name)
+ struct WS_protoent* WINAPI WS_getprotobynumber(int number)
+ {
+     struct WS_protoent* retval = NULL;
+-#ifdef HAVE_GETPROTOBYNUMBER
+-    struct protoent*     proto;
+-    EnterCriticalSection( &csWSgetXXXbyYYY );
+-    if( (proto = getprotobynumber(number)) != NULL )
+-        retval = WS_create_pe( proto->p_name, proto->p_aliases, proto->p_proto );
+-    LeaveCriticalSection( &csWSgetXXXbyYYY );
+-#endif
+-    if (!retval)
++    unsigned int i;
++
++    for (i = 0; i < ARRAY_SIZE(protocols); i++)
+     {
+-        unsigned int i;
+-        for (i = 0; i < ARRAY_SIZE(protocols); i++)
+-        {
+-            if (protocols[i].prot != number) continue;
+-            retval = WS_create_pe( protocols[i].names[0], (char **)protocols[i].names + 1,
+-                                   protocols[i].prot );
+-            break;
+-        }
++        if (protocols[i].prot != number) continue;
++        retval = WS_create_pe( protocols[i].names[0], (char **)protocols[i].names + 1,
++                               protocols[i].prot );
++        break;
+     }
+     if (!retval)
+     {
+diff --git a/dlls/ws2_32/tests/protocol.c b/dlls/ws2_32/tests/protocol.c
+index 99bd1373a94..de5fe36d456 100644
+--- a/dlls/ws2_32/tests/protocol.c
++++ b/dlls/ws2_32/tests/protocol.c
+@@ -192,6 +192,104 @@ static void test_WSAEnumProtocolsW(void)
+     }
+ }
+ 
++struct protocol
++{
++    int prot;
++    const char *names[2];
++    BOOL missing_from_xp;
++};
++
++static const struct protocol protocols[] =
++{
++    {   0, { "ip", "IP" }},
++    {   1, { "icmp", "ICMP" }},
++    {   3, { "ggp", "GGP" }},
++    {   6, { "tcp", "TCP" }},
++    {   8, { "egp", "EGP" }},
++    {  12, { "pup", "PUP" }},
++    {  17, { "udp", "UDP" }},
++    {  20, { "hmp", "HMP" }},
++    {  22, { "xns-idp", "XNS-IDP" }},
++    {  27, { "rdp", "RDP" }},
++    {  41, { "ipv6", "IPv6" }, TRUE},
++    {  43, { "ipv6-route", "IPv6-Route" }, TRUE},
++    {  44, { "ipv6-frag", "IPv6-Frag" }, TRUE},
++    {  50, { "esp", "ESP" }},
++    {  51, { "ah", "AH" }},
++    {  58, { "ipv6-icmp", "IPv6-ICMP" }, TRUE},
++    {  59, { "ipv6-nonxt", "IPv6-NoNxt" }, TRUE},
++    {  60, { "ipv6-opts", "IPv6-Opts" }, TRUE},
++    {  66, { "rvd", "RVD" }},
++};
++
++static const struct protocol *find_protocol(int number)
++{
++    int i;
++    for (i = 0; i < ARRAY_SIZE(protocols); i++)
++    {
++        if (protocols[i].prot == number)
++            return &protocols[i];
++    }
++    return NULL;
++}
++
++static void test_getprotobyname(void)
++{
++    struct protoent *ent;
++    char all_caps_name[16];
++    int i, j;
++
++    for (i = 0; i < ARRAY_SIZE(protocols); i++)
++    {
++        for (j = 0; j < ARRAY_SIZE(protocols[0].names); j++)
++        {
++            ent = getprotobyname(protocols[i].names[j]);
++            ok((ent && ent->p_proto == protocols[i].prot) || broken(!ent && protocols[i].missing_from_xp),
++               "Expected %s to be protocol number %d, got %d\n",
++               wine_dbgstr_a(protocols[i].names[j]), protocols[i].prot, ent ? ent->p_proto : -1);
++        }
++
++        for (j = 0; protocols[i].names[0][j]; j++)
++            all_caps_name[j] = toupper(protocols[i].names[0][j]);
++        all_caps_name[j] = 0;
++        ent = getprotobyname(all_caps_name);
++        ok((ent && ent->p_proto == protocols[i].prot) || broken(!ent && protocols[i].missing_from_xp),
++           "Expected %s to be protocol number %d, got %d\n",
++           wine_dbgstr_a(all_caps_name), protocols[i].prot, ent ? ent->p_proto : -1);
++    }
++}
++
++static void test_getprotobynumber(void)
++{
++    struct protoent *ent;
++    const struct protocol *ref;
++    int i;
++
++    for (i = -1; i <= 256; i++)
++    {
++        ent = getprotobynumber(i);
++        ref = find_protocol(i);
++
++        if (!ref)
++        {
++            ok(!ent, "Expected protocol number %d to be undefined, got %s\n",
++               i, wine_dbgstr_a(ent ? ent->p_name : NULL));
++            continue;
++        }
++
++        ok((ent && ent->p_name && strcmp(ent->p_name, ref->names[0]) == 0) ||
++           broken(!ent && ref->missing_from_xp),
++           "Expected protocol number %d to be %s, got %s\n",
++           i, ref->names[0], wine_dbgstr_a(ent ? ent->p_name : NULL));
++
++        ok((ent && ent->p_aliases && ent->p_aliases[0] &&
++            strcmp(ent->p_aliases[0], ref->names[1]) == 0) ||
++           broken(!ent && ref->missing_from_xp),
++           "Expected protocol number %d alias 0 to be %s, got %s\n",
++           i, ref->names[0], wine_dbgstr_a(ent && ent->p_aliases ? ent->p_aliases[0] : NULL));
++    }
++}
++
+ START_TEST( protocol )
+ {
+     WSADATA data;
+@@ -201,4 +299,6 @@ START_TEST( protocol )
+ 
+     test_WSAEnumProtocolsA();
+     test_WSAEnumProtocolsW();
++    test_getprotobyname();
++    test_getprotobynumber();
+ }
+diff --git a/include/config.h.in b/include/config.h.in
+index 720cbd4a5d9..3a3277e613d 100644
+--- a/include/config.h.in
++++ b/include/config.h.in
+@@ -245,12 +245,6 @@
+ /* Define to 1 if you have the `getopt_long_only' function. */
+ #undef HAVE_GETOPT_LONG_ONLY
+ 
+-/* Define to 1 if you have the `getprotobyname' function. */
+-#undef HAVE_GETPROTOBYNAME
+-
+-/* Define to 1 if you have the `getprotobynumber' function. */
+-#undef HAVE_GETPROTOBYNUMBER
+-
+ /* Define to 1 if you have the `getservbyport' function. */
+ #undef HAVE_GETSERVBYPORT
+ 
+From 046475d88eed9b23b41189fe92c30d1caaef1184 Mon Sep 17 00:00:00 2001
+From: Alex Henrie <alexhenrie24@gmail.com>
+Date: Mon, 27 Jul 2020 00:25:46 -0600
+Subject: [PATCH] ws2_32/tests: Allow ESP and AH protocols to be missing on
+ Windows.
+
+Signed-off-by: Alex Henrie <alexhenrie24@gmail.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/ws2_32/tests/protocol.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/dlls/ws2_32/tests/protocol.c b/dlls/ws2_32/tests/protocol.c
+index de5fe36d456..d6e454a5fbd 100644
+--- a/dlls/ws2_32/tests/protocol.c
++++ b/dlls/ws2_32/tests/protocol.c
+@@ -214,8 +214,8 @@ static const struct protocol protocols[] =
+     {  41, { "ipv6", "IPv6" }, TRUE},
+     {  43, { "ipv6-route", "IPv6-Route" }, TRUE},
+     {  44, { "ipv6-frag", "IPv6-Frag" }, TRUE},
+-    {  50, { "esp", "ESP" }},
+-    {  51, { "ah", "AH" }},
++    {  50, { "esp", "ESP" }, TRUE},
++    {  51, { "ah", "AH" }, TRUE},
+     {  58, { "ipv6-icmp", "IPv6-ICMP" }, TRUE},
+     {  59, { "ipv6-nonxt", "IPv6-NoNxt" }, TRUE},
+     {  60, { "ipv6-opts", "IPv6-Opts" }, TRUE},
+From 587732acb7834a52a2af5bb45e59899ab8ec3f5d Mon Sep 17 00:00:00 2001
+From: Alistair Leslie-Hughes <leslie_alistair@hotmail.com>
+Date: Mon, 27 Jul 2020 12:51:46 +1000
+Subject: [PATCH] ws2_32: Correct returned error code for an invalid socket.
+
+Signed-off-by: Alistair Leslie-Hughes <leslie_alistair@hotmail.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/ws2_32/socket.c     | 32 +++++++-------------------------
+ dlls/ws2_32/tests/sock.c |  7 ++-----
+ 2 files changed, 9 insertions(+), 30 deletions(-)
+
+diff --git a/dlls/ws2_32/socket.c b/dlls/ws2_32/socket.c
+index 12126372d57..eb21e4b4b35 100644
+--- a/dlls/ws2_32/socket.c
++++ b/dlls/ws2_32/socket.c
+@@ -1119,8 +1119,8 @@ static DWORD NtStatusToWSAError( DWORD status )
+     {
+     case STATUS_SUCCESS:                    return 0;
+     case STATUS_PENDING:                    return WSA_IO_PENDING;
++    case STATUS_INVALID_HANDLE:
+     case STATUS_OBJECT_TYPE_MISMATCH:       return WSAENOTSOCK;
+-    case STATUS_INVALID_HANDLE:             return WSAEBADF;
+     case STATUS_INVALID_PARAMETER:          return WSAEINVAL;
+     case STATUS_PIPE_DISCONNECTED:          return WSAESHUTDOWN;
+     case STATUS_NETWORK_BUSY:               return WSAEALREADY;
+@@ -2889,19 +2889,11 @@ static BOOL WINAPI WS2_AcceptEx(SOCKET listener, SOCKET acceptor, PVOID dest, DW
+     }
+ 
+     fd = get_sock_fd( listener, FILE_READ_DATA, NULL );
+-    if (fd == -1)
+-    {
+-        SetLastError(WSAENOTSOCK);
+-        return FALSE;
+-    }
++    if (fd == -1) return FALSE;
+     release_sock_fd( listener, fd );
+ 
+     fd = get_sock_fd( acceptor, FILE_READ_DATA, NULL );
+-    if (fd == -1)
+-    {
+-        SetLastError(WSAENOTSOCK);
+-        return FALSE;
+-    }
++    if (fd == -1) return FALSE;
+     release_sock_fd( acceptor, fd );
+ 
+     wsa = (struct ws2_accept_async *)alloc_async_io( sizeof(*wsa), WS2_async_accept );
+@@ -3147,11 +3139,8 @@ static BOOL WINAPI WS2_TransmitFile( SOCKET s, HANDLE h, DWORD file_bytes, DWORD
+             buffers, flags );
+ 
+     fd = get_sock_fd( s, FILE_WRITE_DATA, NULL );
+-    if (fd == -1)
+-    {
+-        WSASetLastError( WSAENOTSOCK );
+-        return FALSE;
+-    }
++    if (fd == -1) return FALSE;
++
+     if (getpeername( fd, &uaddr.addr, &uaddrlen ) != 0)
+     {
+         release_sock_fd( s, fd );
+@@ -3497,8 +3486,6 @@ int WINAPI WS_closesocket(SOCKET s)
+             if (CloseHandle(SOCKET2HANDLE(s)))
+                 res = 0;
+         }
+-        else
+-            SetLastError(WSAENOTSOCK);
+     }
+     else
+         SetLastError(WSANOTINITIALISED);
+@@ -3609,11 +3596,7 @@ static BOOL WINAPI WS2_ConnectEx(SOCKET s, const struct WS_sockaddr* name, int n
+     }
+ 
+     fd = get_sock_fd( s, FILE_READ_DATA, NULL );
+-    if (fd == -1)
+-    {
+-        SetLastError( WSAENOTSOCK );
+-        return FALSE;
+-    }
++    if (fd == -1) return FALSE;
+ 
+     TRACE("socket %04lx, ptr %p %s, length %d, sendptr %p, len %d, ov %p\n",
+           s, name, debugstr_sockaddr(name), namelen, sendBuf, sendBufLen, ov);
+@@ -5207,8 +5190,7 @@ int WINAPI WS_listen(SOCKET s, int backlog)
+             SetLastError(wsaErrno());
+         release_sock_fd( s, fd );
+     }
+-    else
+-        SetLastError(WSAENOTSOCK);
++
+     return ret;
+ }
+ 
+diff --git a/dlls/ws2_32/tests/sock.c b/dlls/ws2_32/tests/sock.c
+index d9ceca98cc6..b7a3fc44539 100644
+--- a/dlls/ws2_32/tests/sock.c
++++ b/dlls/ws2_32/tests/sock.c
+@@ -1565,7 +1565,6 @@ todo_wine
+     size = sizeof(i);
+     i = 1234;
+     err = getsockopt(s, SOL_SOCKET, SO_ERROR, (char *) &i, &size);
+-todo_wine
+     ok( (err == SOCKET_ERROR) && (WSAGetLastError() == WSAENOTSOCK),
+         "got %d with %d (expected SOCKET_ERROR with WSAENOTSOCK)\n",
+         err, WSAGetLastError());
+@@ -3850,8 +3849,7 @@ static void test_select(void)
+     SetLastError(0xdeadbeef);
+     ret = select(0, &readfds, NULL, &exceptfds, &select_timeout);
+     ok(ret == SOCKET_ERROR, "expected -1, got %d\n", ret);
+-todo_wine
+-    ok(GetLastError() == WSAENOTSOCK, "expected 10038, got %d\n", GetLastError());
++    ok(GetLastError() == WSAENOTSOCK, "got %d\n", GetLastError());
+     /* descriptor sets are unchanged */
+     ok(readfds.fd_count == 2, "expected 2, got %d\n", readfds.fd_count);
+     ok(exceptfds.fd_count == 2, "expected 2, got %d\n", exceptfds.fd_count);
+@@ -3878,8 +3876,7 @@ todo_wine
+     ret = select(0, NULL, NULL, &exceptfds, &select_timeout);
+ todo_wine
+     ok(ret == SOCKET_ERROR, "expected -1, got %d\n", ret);
+-todo_wine
+-    ok(GetLastError() == WSAENOTSOCK, "expected 10038, got %d\n", GetLastError());
++    ok(GetLastError() == WSAENOTSOCK, "got %d\n", GetLastError());
+     WaitForSingleObject (thread_handle, 1000);
+     closesocket(fdRead);
+ 
+
+From c06e00ee6a15fd77faf66b28edac5e84ad30b550 Mon Sep 17 00:00:00 2001
+From: Jactry Zeng <jzeng@codeweavers.com>
+Date: Wed, 29 Jul 2020 13:39:28 +0200
+Subject: [PATCH] wininet: Handle empty expires for cookie setting.
+
+Signed-off-by: Jactry Zeng <jzeng@codeweavers.com>
+Signed-off-by: Jacek Caban <jacek@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/wininet/cookie.c         |  2 +-
+ dlls/wininet/tests/internet.c | 18 ++++++++++++++----
+ 2 files changed, 15 insertions(+), 5 deletions(-)
+
+diff --git a/dlls/wininet/cookie.c b/dlls/wininet/cookie.c
+index 1786b3d2819..66c012a0db0 100644
+--- a/dlls/wininet/cookie.c
++++ b/dlls/wininet/cookie.c
+@@ -977,7 +977,7 @@ DWORD set_cookie(substr_t domain, substr_t path, substr_t name, substr_t data, D
+ 
+             substr_skip(&data, len);
+ 
+-            if(end_ptr - data.str < ARRAY_SIZE(buf)-1) {
++            if(end_ptr > data.str && (end_ptr - data.str < ARRAY_SIZE(buf) - 1)) {
+                 memcpy(buf, data.str, data.len*sizeof(WCHAR));
+                 buf[data.len] = 0;
+ 
+diff --git a/dlls/wininet/tests/internet.c b/dlls/wininet/tests/internet.c
+index e69b45a7e6f..ef1adefd1a3 100644
+--- a/dlls/wininet/tests/internet.c
++++ b/dlls/wininet/tests/internet.c
+@@ -510,7 +510,7 @@ static void test_complicated_cookie(void)
+   len = 1024;
+   ret = InternetGetCookieA("http://testing.example.com/bar/foo", NULL, buffer, &len);
+   ok(ret == TRUE,"InternetGetCookie failed\n");
+-  ok(len == 24, "len = %u\n", 24);
++  ok(len == 24, "len = %u\n", len);
+   ok(strstr(buffer,"A=B")!=NULL,"A=B missing\n");
+   ok(strstr(buffer,"C=D")!=NULL,"C=D missing\n");
+   ok(strstr(buffer,"E=F")!=NULL,"E=F missing\n");
+@@ -524,16 +524,26 @@ static void test_complicated_cookie(void)
+   len = 1024;
+   ret = InternetGetCookieA("http://testing.example.com/bar/foo", "A", buffer, &len);
+   ok(ret == TRUE,"InternetGetCookie failed\n");
+-  ok(len == 24, "len = %u\n", 24);
++  ok(len == 24, "len = %u\n", len);
+ 
+   /* test persistent cookies */
+   ret = InternetSetCookieA("http://testing.example.com", NULL, "A=B; expires=Fri, 01-Jan-2038 00:00:00 GMT");
+   ok(ret, "InternetSetCookie failed with error %d\n", GetLastError());
+ 
++  /* test invalid expires parameter */
++  ret = InternetSetCookieA("http://testing.example.com", NULL, "Q=R; expires=");
++  ok(ret, "InternetSetCookie failed %#x.\n", GetLastError());
++  len = 1024;
++  memset(buffer, 0xac, sizeof(buffer));
++  ret = InternetGetCookieA("http://testing.example.com/", NULL, buffer, &len);
++  ok(ret, "InternetGetCookie failed %#x.\n", GetLastError());
++  ok(len == 29, "got len %u.\n", len);
++  ok(!!strstr(buffer, "Q=R"), "cookie is not present.\n");
++
+   len = sizeof(buffer);
+   ret = InternetGetCookieA("http://testing.example.com/foobar", NULL, buffer, &len);
+-  ok(ret, "got error %u\n", GetLastError());
+-  ok(len == 24, "got len %u\n", len);
++  ok(ret, "got error %#x\n", GetLastError());
++  ok(len == 29, "got len %u\n", len);
+   ok(!!strstr(buffer, "A=B"), "cookie is not present\n");
+ 
+   /* remove persistent cookie */
+From a41cb33afaee0adc6fdf3b8c69b9fb545dc15a96 Mon Sep 17 00:00:00 2001
+From: Daniel Lehman <dlehman25@gmail.com>
+Date: Sun, 2 Aug 2020 16:23:39 -0700
+Subject: [PATCH] wininet: Move INTERNET_OPTION_SECURITY_CERTIFICATE_STRUCT
+ handling to helper.
+
+Signed-off-by: Daniel Lehman <dlehman25@gmail.com>
+Signed-off-by: Jacek Caban <jacek@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/wininet/http.c | 62 ++++++++++++++++++++++++---------------------
+ 1 file changed, 33 insertions(+), 29 deletions(-)
+
+diff --git a/dlls/wininet/http.c b/dlls/wininet/http.c
+index 56c995805b2..220493718c3 100644
+--- a/dlls/wininet/http.c
++++ b/dlls/wininet/http.c
+@@ -2083,6 +2083,38 @@ static DWORD str_to_buffer(const WCHAR *str, void *buffer, DWORD *size, BOOL uni
+     }
+ }
+ 
++static DWORD get_security_cert_struct(http_request_t *req, INTERNET_CERTIFICATE_INFOA *info)
++{
++    PCCERT_CONTEXT context;
++    DWORD len;
++
++    context = (PCCERT_CONTEXT)NETCON_GetCert(req->netconn);
++    if(!context)
++        return ERROR_NOT_SUPPORTED;
++
++    memset(info, 0, sizeof(*info));
++    info->ftExpiry = context->pCertInfo->NotAfter;
++    info->ftStart = context->pCertInfo->NotBefore;
++    len = CertNameToStrA(context->dwCertEncodingType,
++             &context->pCertInfo->Subject, CERT_SIMPLE_NAME_STR|CERT_NAME_STR_CRLF_FLAG, NULL, 0);
++    info->lpszSubjectInfo = LocalAlloc(0, len);
++    if(info->lpszSubjectInfo)
++        CertNameToStrA(context->dwCertEncodingType,
++                 &context->pCertInfo->Subject, CERT_SIMPLE_NAME_STR|CERT_NAME_STR_CRLF_FLAG,
++                 info->lpszSubjectInfo, len);
++    len = CertNameToStrA(context->dwCertEncodingType,
++             &context->pCertInfo->Issuer, CERT_SIMPLE_NAME_STR|CERT_NAME_STR_CRLF_FLAG, NULL, 0);
++    info->lpszIssuerInfo = LocalAlloc(0, len);
++    if(info->lpszIssuerInfo)
++        CertNameToStrA(context->dwCertEncodingType,
++                 &context->pCertInfo->Issuer, CERT_SIMPLE_NAME_STR|CERT_NAME_STR_CRLF_FLAG,
++                 info->lpszIssuerInfo, len);
++    info->dwKeySize = NETCON_GetCipherStrength(req->netconn);
++
++    CertFreeCertificateContext(context);
++    return ERROR_SUCCESS;
++}
++
+ static DWORD HTTPREQ_QueryOption(object_header_t *hdr, DWORD option, void *buffer, DWORD *size, BOOL unicode)
+ {
+     http_request_t *req = (http_request_t*)hdr;
+@@ -2235,8 +2267,6 @@ static DWORD HTTPREQ_QueryOption(object_header_t *hdr, DWORD option, void *buffe
+     }
+ 
+     case INTERNET_OPTION_SECURITY_CERTIFICATE_STRUCT: {
+-        PCCERT_CONTEXT context;
+-
+         if(!req->netconn)
+             return ERROR_INTERNET_INVALID_OPERATION;
+ 
+@@ -2245,33 +2275,7 @@ static DWORD HTTPREQ_QueryOption(object_header_t *hdr, DWORD option, void *buffe
+             return ERROR_INSUFFICIENT_BUFFER;
+         }
+ 
+-        context = (PCCERT_CONTEXT)NETCON_GetCert(req->netconn);
+-        if(context) {
+-            INTERNET_CERTIFICATE_INFOA *info = (INTERNET_CERTIFICATE_INFOA*)buffer;
+-            DWORD len;
+-
+-            memset(info, 0, sizeof(*info));
+-            info->ftExpiry = context->pCertInfo->NotAfter;
+-            info->ftStart = context->pCertInfo->NotBefore;
+-            len = CertNameToStrA(context->dwCertEncodingType,
+-                     &context->pCertInfo->Subject, CERT_SIMPLE_NAME_STR|CERT_NAME_STR_CRLF_FLAG, NULL, 0);
+-            info->lpszSubjectInfo = LocalAlloc(0, len);
+-            if(info->lpszSubjectInfo)
+-                CertNameToStrA(context->dwCertEncodingType,
+-                         &context->pCertInfo->Subject, CERT_SIMPLE_NAME_STR|CERT_NAME_STR_CRLF_FLAG,
+-                         info->lpszSubjectInfo, len);
+-            len = CertNameToStrA(context->dwCertEncodingType,
+-                     &context->pCertInfo->Issuer, CERT_SIMPLE_NAME_STR|CERT_NAME_STR_CRLF_FLAG, NULL, 0);
+-            info->lpszIssuerInfo = LocalAlloc(0, len);
+-            if(info->lpszIssuerInfo)
+-                CertNameToStrA(context->dwCertEncodingType,
+-                         &context->pCertInfo->Issuer, CERT_SIMPLE_NAME_STR|CERT_NAME_STR_CRLF_FLAG,
+-                         info->lpszIssuerInfo, len);
+-            info->dwKeySize = NETCON_GetCipherStrength(req->netconn);
+-            CertFreeCertificateContext(context);
+-            return ERROR_SUCCESS;
+-        }
+-        return ERROR_NOT_SUPPORTED;
++        return get_security_cert_struct(req, (INTERNET_CERTIFICATE_INFOA*)buffer);
+     }
+     case INTERNET_OPTION_CONNECT_TIMEOUT:
+         if (*size < sizeof(DWORD))
+From a6d9f46b25a481648a2a06ed8d1594fc59a4e313 Mon Sep 17 00:00:00 2001
+From: Hans Leidekker <hans@codeweavers.com>
+Date: Tue, 11 Aug 2020 14:11:05 +0200
+Subject: [PATCH] ws2_32: Avoid a crash in WS_getaddrinfo when the specified
+ service doesn't exist.
+
+Wine-Bug: https://bugs.winehq.org/show_bug.cgi?id=49656
+Signed-off-by: Hans Leidekker <hans@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/ws2_32/socket.c     | 2 +-
+ dlls/ws2_32/tests/sock.c | 4 ++++
+ 2 files changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/dlls/ws2_32/socket.c b/dlls/ws2_32/socket.c
+index eb21e4b4b35..4d2afa946b7 100644
+--- a/dlls/ws2_32/socket.c
++++ b/dlls/ws2_32/socket.c
+@@ -6787,7 +6787,7 @@ int WINAPI WS_getaddrinfo(LPCSTR nodename, LPCSTR servname, const struct WS_addr
+     result = getaddrinfo(node, servname, punixhints, &unixaires);
+ 
+     if (result && (!hints || !(hints->ai_flags & WS_AI_NUMERICHOST))
+-            && (!strcmp(fqdn, node) || (!strncmp(fqdn, node, hostname_len) && !node[hostname_len])))
++            && node && (!strcmp(fqdn, node) || (!strncmp(fqdn, node, hostname_len) && !node[hostname_len])))
+     {
+         /* If it didn't work it means the host name IP is not in /etc/hosts, try again
+         * by sending a NULL host and avoid sending a NULL servname too because that
+diff --git a/dlls/ws2_32/tests/sock.c b/dlls/ws2_32/tests/sock.c
+index b7a3fc44539..b523c326d60 100644
+--- a/dlls/ws2_32/tests/sock.c
++++ b/dlls/ws2_32/tests/sock.c
+@@ -7778,6 +7778,10 @@ static void test_getaddrinfo(void)
+                 ok(0, "test %d: getaddrinfo failed with %d (err %d)\n", i, ret, err);
+         }
+     }
++
++    memset(&hint, 0, sizeof(hint));
++    ret = pgetaddrinfo(NULL, "nonexistentservice", &hint, &result);
++    ok(ret == WSATYPE_NOT_FOUND, "got %d\n", ret);
+ }
+ 
+ static void test_ConnectEx(void)
+From 652f1f9642b35a2a1d1c5b67e4326af7d45363b4 Mon Sep 17 00:00:00 2001
+From: Aaro Altonen <a.altonen@hotmail.com>
+Date: Tue, 25 Aug 2020 20:27:28 +0200
+Subject: [PATCH] ws2_32: Improve WSCGetProviderPath() stub.
+
+Wine-Bug: https://bugs.winehq.org/show_bug.cgi?id=45801
+Signed-off-by: Aaro Altonen <a.altonen@hotmail.com>
+Signed-off-by: Gijs Vermeulen <gijsvrm@gmail.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/ws2_32/socket.c     | 17 +++++++++--
+ dlls/ws2_32/tests/sock.c | 62 ++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 76 insertions(+), 3 deletions(-)
+
+diff --git a/dlls/ws2_32/socket.c b/dlls/ws2_32/socket.c
+index 4d2afa946b7..b7a570043cd 100644
+--- a/dlls/ws2_32/socket.c
++++ b/dlls/ws2_32/socket.c
+@@ -8940,10 +8940,21 @@ INT WINAPI WSCGetProviderPath( LPGUID provider, LPWSTR path, LPINT len, LPINT er
+ {
+     FIXME( "(%s %p %p %p) Stub!\n", debugstr_guid(provider), path, len, errcode );
+ 
+-    if (!errcode || !provider || !len) return WSAEFAULT;
++    if (!provider || !len)
++    {
++        if (errcode)
++            *errcode = WSAEFAULT;
++        return SOCKET_ERROR;
++    }
+ 
+-    *errcode = WSAEINVAL;
+-    return SOCKET_ERROR;
++    if (*len <= 0)
++    {
++        if (errcode)
++            *errcode = WSAEINVAL;
++        return SOCKET_ERROR;
++    }
++
++    return 0;
+ }
+ 
+ /***********************************************************************
+diff --git a/dlls/ws2_32/tests/sock.c b/dlls/ws2_32/tests/sock.c
+index b523c326d60..c7f88d6f3b1 100644
+--- a/dlls/ws2_32/tests/sock.c
++++ b/dlls/ws2_32/tests/sock.c
+@@ -86,6 +86,7 @@ static int   (WINAPI *pWSAEnumNameSpaceProvidersA)(LPDWORD,LPWSANAMESPACE_INFOA)
+ static int   (WINAPI *pWSAEnumNameSpaceProvidersW)(LPDWORD,LPWSANAMESPACE_INFOW);
+ static int   (WINAPI *pWSAPoll)(WSAPOLLFD *,ULONG,INT);
+ static int   (WINAPI *pWSCGetProviderInfo)(LPGUID,WSC_PROVIDER_INFO_TYPE,PBYTE,size_t*,DWORD,LPINT);
++static int   (WINAPI *pWSCGetProviderPath)(LPGUID, LPWSTR, LPINT, LPINT);
+ 
+ /* Function pointers from iphlpapi */
+ static DWORD (WINAPI *pGetAdaptersInfo)(PIP_ADAPTER_INFO,PULONG);
+@@ -1303,6 +1304,7 @@ static void Init (void)
+     pWSAEnumNameSpaceProvidersW = (void *)GetProcAddress(hws2_32, "WSAEnumNameSpaceProvidersW");
+     pWSAPoll = (void *)GetProcAddress(hws2_32, "WSAPoll");
+     pWSCGetProviderInfo = (void *)GetProcAddress(hws2_32, "WSCGetProviderInfo");
++    pWSCGetProviderPath = (void *)GetProcAddress(hws2_32, "WSCGetProviderPath");
+ 
+     hiphlpapi = LoadLibraryA("iphlpapi.dll");
+     if (hiphlpapi)
+@@ -11351,6 +11353,65 @@ static void test_WSCGetProviderInfo(void)
+     ok(errcode == WSANO_RECOVERY, "got %d, expected WSANO_RECOVERY\n", errcode);
+ }
+ 
++static void test_WSCGetProviderPath(void)
++{
++    GUID provider = {};
++    WCHAR buffer[256];
++    INT ret, err, len;
++
++    if (!pWSCGetProviderPath)
++    {
++        skip("WSCGetProviderPath is not available.\n");
++        return;
++    }
++
++    ret = pWSCGetProviderPath(NULL, NULL, NULL, NULL);
++    ok(ret == SOCKET_ERROR, "Got unexpected ret %d.\n", ret);
++
++    ret = pWSCGetProviderPath(&provider, NULL, NULL, NULL);
++    ok(ret == SOCKET_ERROR, "Got unexpected ret %d.\n", ret);
++
++    ret = pWSCGetProviderPath(NULL, buffer, NULL, NULL);
++    ok(ret == SOCKET_ERROR, "Got unexpected ret %d.\n", ret);
++
++    len = -1;
++    ret = pWSCGetProviderPath(NULL, NULL, &len, NULL);
++    ok(ret == SOCKET_ERROR, "Got unexpected ret %d.\n", ret);
++    ok(len == -1, "Got unexpected len %d.\n", len);
++
++    err = 0;
++    ret = pWSCGetProviderPath(NULL, NULL, NULL, &err);
++    ok(ret == SOCKET_ERROR, "Got unexpected ret %d.\n", ret);
++    ok(err == WSAEFAULT, "Got unexpected error %d.\n", err);
++
++    err = 0;
++    ret = pWSCGetProviderPath(&provider, NULL, NULL, &err);
++    ok(ret == SOCKET_ERROR, "Got unexpected ret %d.\n", ret);
++    ok(err == WSAEFAULT, "Got unexpected error %d.\n", err);
++
++    err = 0;
++    len = -1;
++    ret = pWSCGetProviderPath(&provider, NULL, &len, &err);
++    ok(ret == SOCKET_ERROR, "Got unexpected ret %d.\n", ret);
++    ok(err == WSAEINVAL, "Got unexpected error %d.\n", err);
++    ok(len == -1, "Got unexpected len %d.\n", len);
++
++    err = 0;
++    len = 256;
++    ret = pWSCGetProviderPath(&provider, NULL, &len, &err);
++    todo_wine ok(ret == SOCKET_ERROR, "Got unexpected ret %d.\n", ret);
++    todo_wine ok(err == WSAEINVAL, "Got unexpected error %d.\n", err);
++    ok(len == 256, "Got unexpected len %d.\n", len);
++
++    /* Valid pointers and length but invalid GUID */
++    err = 0;
++    len = 256;
++    ret = pWSCGetProviderPath(&provider, buffer, &len, &err);
++    todo_wine ok(ret == SOCKET_ERROR, "Got unexpected ret %d.\n", ret);
++    todo_wine ok(err == WSAEINVAL, "Got unexpected error %d.\n", err);
++    ok(len == 256, "Got unexpected len %d.\n", len);
++}
++
+ START_TEST( sock )
+ {
+     int i;
+@@ -11432,6 +11493,7 @@ START_TEST( sock )
+     test_address_list_query();
+ 
+     test_WSCGetProviderInfo();
++    test_WSCGetProviderPath();
+ 
+     /* this is an io heavy test, do it at the end so the kernel doesn't start dropping packets */
+     test_send();
+From 23dbfaadbb93eea84601d763d303273ab9872f66 Mon Sep 17 00:00:00 2001
+From: Zebediah Figura <z.figura12@gmail.com>
+Date: Thu, 10 Sep 2020 16:17:14 -0500
+Subject: [PATCH] ws2_32: Keep a list of open sockets.
+
+Signed-off-by: Zebediah Figura <z.figura12@gmail.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/ws2_32/socket.c | 99 ++++++++++++++++++++++++++++++++++----------
+ 1 file changed, 77 insertions(+), 22 deletions(-)
+
+diff --git a/dlls/ws2_32/socket.c b/dlls/ws2_32/socket.c
+index b7a570043cd..44214630296 100644
+--- a/dlls/ws2_32/socket.c
++++ b/dlls/ws2_32/socket.c
+@@ -267,26 +267,22 @@ static int WS2_recv_base( SOCKET s, LPWSABUF lpBuffers, DWORD dwBufferCount,
+                           LPWSAOVERLAPPED_COMPLETION_ROUTINE lpCompletionRoutine,
+                           LPWSABUF lpControlBuffer );
+ 
+-/* critical section to protect some non-reentrant net function */
+-static CRITICAL_SECTION csWSgetXXXbyYYY;
+-static CRITICAL_SECTION_DEBUG critsect_debug =
+-{
+-    0, 0, &csWSgetXXXbyYYY,
+-    { &critsect_debug.ProcessLocksList, &critsect_debug.ProcessLocksList },
+-      0, 0, { (DWORD_PTR)(__FILE__ ": csWSgetXXXbyYYY") }
+-};
+-static CRITICAL_SECTION csWSgetXXXbyYYY = { &critsect_debug, -1, 0, 0, 0, 0 };
++#define DECLARE_CRITICAL_SECTION(cs) \
++    static CRITICAL_SECTION cs; \
++    static CRITICAL_SECTION_DEBUG cs##_debug = \
++    { 0, 0, &cs, { &cs##_debug.ProcessLocksList, &cs##_debug.ProcessLocksList }, \
++      0, 0, { (DWORD_PTR)(__FILE__ ": " # cs) }}; \
++    static CRITICAL_SECTION cs = { &cs##_debug, -1, 0, 0, 0, 0 }
++
++DECLARE_CRITICAL_SECTION(csWSgetXXXbyYYY);
++DECLARE_CRITICAL_SECTION(cs_if_addr_cache);
++DECLARE_CRITICAL_SECTION(cs_socket_list);
+ 
+ static in_addr_t *if_addr_cache;
+ static unsigned int if_addr_cache_size;
+-static CRITICAL_SECTION cs_if_addr_cache;
+-static CRITICAL_SECTION_DEBUG cs_if_addr_cache_debug =
+-{
+-    0, 0, &cs_if_addr_cache,
+-    { &cs_if_addr_cache_debug.ProcessLocksList, &cs_if_addr_cache_debug.ProcessLocksList },
+-      0, 0, { (DWORD_PTR)(__FILE__ ": cs_if_addr_cache") }
+-};
+-static CRITICAL_SECTION cs_if_addr_cache = { &cs_if_addr_cache_debug, -1, 0, 0, 0, 0 };
++
++static SOCKET *socket_list;
++static unsigned int socket_list_size;
+ 
+ union generic_unix_sockaddr
+ {
+@@ -481,6 +477,48 @@ static inline const char *debugstr_optval(const char *optval, int optlenval)
+ #define SOCKET2HANDLE(s) ((HANDLE)(s))
+ #define HANDLE2SOCKET(h) ((SOCKET)(h))
+ 
++static BOOL socket_list_add(SOCKET socket)
++{
++    unsigned int i, new_size;
++    SOCKET *new_array;
++
++    EnterCriticalSection(&cs_socket_list);
++    for (i = 0; i < socket_list_size; ++i)
++    {
++        if (!socket_list[i])
++        {
++            socket_list[i] = socket;
++            LeaveCriticalSection(&cs_socket_list);
++            return TRUE;
++        }
++    }
++    new_size = max(socket_list_size * 2, 8);
++    if (!(new_array = heap_realloc(socket_list, new_size * sizeof(*socket_list))))
++        return FALSE;
++    socket_list = new_array;
++    memset(socket_list + socket_list_size, 0, (new_size - socket_list_size) * sizeof(*socket_list));
++    socket_list[socket_list_size] = socket;
++    socket_list_size = new_size;
++    LeaveCriticalSection(&cs_socket_list);
++    return TRUE;
++}
++
++static void socket_list_remove(SOCKET socket)
++{
++    unsigned int i;
++
++    EnterCriticalSection(&cs_socket_list);
++    for (i = 0; i < socket_list_size; ++i)
++    {
++        if (socket_list[i] == socket)
++        {
++            socket_list[i] = 0;
++            break;
++        }
++    }
++    LeaveCriticalSection(&cs_socket_list);
++}
++
+ /****************************************************************
+  * Async IO declarations
+  ****************************************************************/
+@@ -2832,6 +2870,11 @@ SOCKET WINAPI WS_accept(SOCKET s, struct WS_sockaddr *addr, int *addrlen32)
+         SERVER_END_REQ;
+         if (!err)
+         {
++            if (!socket_list_add(as))
++            {
++                CloseHandle(SOCKET2HANDLE(as));
++                return SOCKET_ERROR;
++            }
+             if (addr && addrlen32 && WS_getpeername(as, addr, addrlen32))
+             {
+                 WS_closesocket(as);
+@@ -3483,6 +3526,7 @@ int WINAPI WS_closesocket(SOCKET s)
+         if (fd >= 0)
+         {
+             release_sock_fd(s, fd);
++            socket_list_remove(s);
+             if (CloseHandle(SOCKET2HANDLE(s)))
+                 res = 0;
+         }
+@@ -7558,10 +7602,16 @@ SOCKET WINAPI WSASocketW(int af, int type, int protocol,
+     }
+ 
+     /* hack for WSADuplicateSocket */
+-    if (lpProtocolInfo && lpProtocolInfo->dwServiceFlags4 == 0xff00ff00) {
+-      ret = lpProtocolInfo->dwServiceFlags3;
+-      TRACE("\tgot duplicate %04lx\n", ret);
+-      return ret;
++    if (lpProtocolInfo && lpProtocolInfo->dwServiceFlags4 == 0xff00ff00)
++    {
++        ret = lpProtocolInfo->dwServiceFlags3;
++        TRACE("\tgot duplicate %04lx\n", ret);
++        if (!socket_list_add(ret))
++        {
++            CloseHandle(SOCKET2HANDLE(ret));
++            return INVALID_SOCKET;
++        }
++        return ret;
+     }
+ 
+     if (lpProtocolInfo)
+@@ -7685,7 +7735,12 @@ SOCKET WINAPI WSASocketW(int af, int type, int protocol,
+             }
+         }
+ #endif
+-       return ret;
++        if (!socket_list_add(ret))
++        {
++            CloseHandle(SOCKET2HANDLE(ret));
++            return INVALID_SOCKET;
++        }
++        return ret;
+     }
+ 
+     if (err == WSAEACCES) /* raw socket denied */
+From 470b9d037988cf5e79b039370e2c6c55daf3459c Mon Sep 17 00:00:00 2001
+From: Zebediah Figura <z.figura12@gmail.com>
+Date: Thu, 10 Sep 2020 16:17:15 -0500
+Subject: [PATCH] ws2_32: Close all open sockets in WSACleanup().
+
+Wine-Bug: https://bugs.winehq.org/show_bug.cgi?id=18670
+Signed-off-by: Zebediah Figura <z.figura12@gmail.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/ws2_32/socket.c     | 14 +++++++++++---
+ dlls/ws2_32/tests/sock.c |  3 ---
+ 2 files changed, 11 insertions(+), 6 deletions(-)
+
+diff --git a/dlls/ws2_32/socket.c b/dlls/ws2_32/socket.c
+index 44214630296..246a0e2819b 100644
+--- a/dlls/ws2_32/socket.c
++++ b/dlls/ws2_32/socket.c
+@@ -1770,9 +1770,17 @@ int WINAPI WSAStartup(WORD wVersionRequested, LPWSADATA lpWSAData)
+  */
+ INT WINAPI WSACleanup(void)
+ {
+-    if (num_startup) {
+-        num_startup--;
+-        TRACE("pending cleanups: %d\n", num_startup);
++    TRACE("decreasing startup count from %d\n", num_startup);
++    if (num_startup)
++    {
++        if (!--num_startup)
++        {
++            unsigned int i;
++
++            for (i = 0; i < socket_list_size; ++i)
++                CloseHandle(SOCKET2HANDLE(socket_list[i]));
++            memset(socket_list, 0, socket_list_size * sizeof(*socket_list));
++        }
+         return 0;
+     }
+     SetLastError(WSANOTINITIALISED);
+diff --git a/dlls/ws2_32/tests/sock.c b/dlls/ws2_32/tests/sock.c
+index c7f88d6f3b1..7835246397d 100644
+--- a/dlls/ws2_32/tests/sock.c
++++ b/dlls/ws2_32/tests/sock.c
+@@ -1221,7 +1221,6 @@ static void test_WithWSAStartup(void)
+     ok(res == 0, "WSAStartup() failed unexpectedly: %d\n", res);
+ 
+     /* show that sockets are destroyed automatically after WSACleanup */
+-    todo_wine {
+     SetLastError(0xdeadbeef);
+     res = send(pairs[0].src, "TEST", 4, 0);
+     error = WSAGetLastError();
+@@ -1258,8 +1257,6 @@ static void test_WithWSAStartup(void)
+         }
+     }
+ 
+-    }
+-
+     /* While wine is not fixed, close all sockets manually */
+     for (i = 0; i < socks; i++)
+     {
+From 0f515c8ebe990d34da74d3c2c760ba21d57cfaa9 Mon Sep 17 00:00:00 2001
+From: Alistair Leslie-Hughes <leslie_alistair@hotmail.com>
+Date: Mon, 14 Sep 2020 20:23:04 +1000
+Subject: [PATCH] ws2_32: Map AI ALL_option in getaddrinfo().
+
+Signed-off-by: Alistair Leslie-Hughes <leslie_alistair@hotmail.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/ws2_32/socket.c | 1 +
+ include/ws2tcpip.h   | 2 ++
+ 2 files changed, 3 insertions(+)
+
+diff --git a/dlls/ws2_32/socket.c b/dlls/ws2_32/socket.c
+index 246a0e2819b..0ed1af3092a 100644
+--- a/dlls/ws2_32/socket.c
++++ b/dlls/ws2_32/socket.c
+@@ -826,6 +826,7 @@ static const int ws_aiflag_map[][2] =
+ #ifdef  AI_V4MAPPED
+     MAP_OPTION( AI_V4MAPPED ),
+ #endif
++    MAP_OPTION( AI_ALL ),
+     MAP_OPTION( AI_ADDRCONFIG ),
+ };
+ 
+diff --git a/include/ws2tcpip.h b/include/ws2tcpip.h
+index 5a444dcb5f3..5ba891185b5 100644
+--- a/include/ws2tcpip.h
++++ b/include/ws2tcpip.h
+@@ -72,6 +72,7 @@ typedef ADDRINFOA ADDRINFO, *LPADDRINFO;
+ # define AI_CANONNAME              0x00000002
+ # define AI_NUMERICHOST            0x00000004
+ # define AI_NUMERICSERV            0x00000008
++# define AI_ALL                    0x00000100
+ # define AI_ADDRCONFIG             0x00000400
+ # define AI_V4MAPPED               0x00000800
+ # define AI_NON_AUTHORITATIVE      0x00004000
+@@ -93,6 +94,7 @@ typedef ADDRINFOA ADDRINFO, *LPADDRINFO;
+ # define WS_AI_CANONNAME              0x00000002
+ # define WS_AI_NUMERICHOST            0x00000004
+ # define WS_AI_NUMERICSERV            0x00000008
++# define WS_AI_ALL                    0x00000100
+ # define WS_AI_ADDRCONFIG             0x00000400
+ # define WS_AI_V4MAPPED               0x00000800
+ # define WS_AI_NON_AUTHORITATIVE      0x00004000
+From 98db626566f8d4bcc0de8ad17fe0dabb685d69fe Mon Sep 17 00:00:00 2001
+From: Sebastian Lackner <sebastian@fds-team.de>
+Date: Thu, 31 Aug 2017 01:15:05 +0200
+Subject: [PATCH] ws2_32: Fix handling of empty string in WS_getaddrinfo.
+
+Fixes a regression introduced in a2053597cc326e2305c44e1c1a954c2e0ee2853e.
+---
+ dlls/ws2_32/socket.c | 38 ++++++++++++++++++++++++++++++--------
+ 1 file changed, 30 insertions(+), 8 deletions(-)
+
+diff --git a/dlls/ws2_32/socket.c b/dlls/ws2_32/socket.c
+index 4d2afa946b7..ed1ca2f44b9 100644
+--- a/dlls/ws2_32/socket.c
++++ b/dlls/ws2_32/socket.c
+@@ -6673,6 +6673,22 @@ static int convert_eai_u2w(int unixret) {
+     return unixret;
+ }
+ 
++static char *get_hostname(void)
++{
++    char *ret;
++    DWORD size = 0;
++
++    GetComputerNameExA( ComputerNamePhysicalDnsHostname, NULL, &size );
++    if (GetLastError() != ERROR_MORE_DATA) return NULL;
++    if (!(ret = HeapAlloc( GetProcessHeap(), 0, size ))) return NULL;
++    if (!GetComputerNameExA( ComputerNamePhysicalDnsHostname, ret, &size ))
++    {
++        HeapFree( GetProcessHeap(), 0, ret );
++        return NULL;
++    }
++    return ret;
++}
++
+ static char *get_fqdn(void)
+ {
+     char *ret;
+@@ -6698,9 +6714,8 @@ int WINAPI WS_getaddrinfo(LPCSTR nodename, LPCSTR servname, const struct WS_addr
+     struct addrinfo *unixaires = NULL;
+     int   result;
+     struct addrinfo unixhints, *punixhints = NULL;
+-    char *dot, *nodeV6 = NULL, *fqdn;
++    char *nodeV6 = NULL, *hostname, *fqdn;
+     const char *node;
+-    size_t hostname_len = 0;
+ 
+     *res = NULL;
+     if (!nodename && !servname)
+@@ -6709,16 +6724,20 @@ int WINAPI WS_getaddrinfo(LPCSTR nodename, LPCSTR servname, const struct WS_addr
+         return WSAHOST_NOT_FOUND;
+     }
+ 
++    hostname = get_hostname();
++    if (!hostname) return WSA_NOT_ENOUGH_MEMORY;
++
+     fqdn = get_fqdn();
+-    if (!fqdn) return WSA_NOT_ENOUGH_MEMORY;
+-    dot = strchr(fqdn, '.');
+-    if (dot)
+-        hostname_len = dot - fqdn;
++    if (!fqdn)
++    {
++        HeapFree(GetProcessHeap(), 0, hostname);
++        return WSA_NOT_ENOUGH_MEMORY;
++    }
+ 
+     if (!nodename)
+         node = NULL;
+     else if (!nodename[0])
+-        node = fqdn;
++        node = hostname;
+     else
+     {
+         node = nodename;
+@@ -6733,6 +6752,7 @@ int WINAPI WS_getaddrinfo(LPCSTR nodename, LPCSTR servname, const struct WS_addr
+                 nodeV6 = HeapAlloc(GetProcessHeap(), 0, close_bracket - node);
+                 if (!nodeV6)
+                 {
++                    HeapFree(GetProcessHeap(), 0, hostname);
+                     HeapFree(GetProcessHeap(), 0, fqdn);
+                     return WSA_NOT_ENOUGH_MEMORY;
+                 }
+@@ -6762,6 +6782,7 @@ int WINAPI WS_getaddrinfo(LPCSTR nodename, LPCSTR servname, const struct WS_addr
+         if (punixhints->ai_socktype < 0)
+         {
+             SetLastError(WSAESOCKTNOSUPPORT);
++            HeapFree(GetProcessHeap(), 0, hostname);
+             HeapFree(GetProcessHeap(), 0, fqdn);
+             HeapFree(GetProcessHeap(), 0, nodeV6);
+             return SOCKET_ERROR;
+@@ -6787,7 +6808,7 @@ int WINAPI WS_getaddrinfo(LPCSTR nodename, LPCSTR servname, const struct WS_addr
+     result = getaddrinfo(node, servname, punixhints, &unixaires);
+ 
+     if (result && (!hints || !(hints->ai_flags & WS_AI_NUMERICHOST))
+-            && node && (!strcmp(fqdn, node) || (!strncmp(fqdn, node, hostname_len) && !node[hostname_len])))
++            && node && (!strcmp(node, hostname) || !strcmp(node, fqdn)))
+     {
+         /* If it didn't work it means the host name IP is not in /etc/hosts, try again
+         * by sending a NULL host and avoid sending a NULL servname too because that
+@@ -6796,6 +6817,7 @@ int WINAPI WS_getaddrinfo(LPCSTR nodename, LPCSTR servname, const struct WS_addr
+         result = getaddrinfo(NULL, servname ? servname : "0", punixhints, &unixaires);
+     }
+     TRACE("%s, %s %p -> %p %d\n", debugstr_a(nodename), debugstr_a(servname), hints, res, result);
++    HeapFree(GetProcessHeap(), 0, hostname);
+     HeapFree(GetProcessHeap(), 0, fqdn);
+     HeapFree(GetProcessHeap(), 0, nodeV6);
+ 
+-- 
+2.27.0
+From c29cd38f3c72aee2e02c60945fc5bda1fab4d556 Mon Sep 17 00:00:00 2001
+From: "Erich E. Hoover" <erich.e.hoover@wine-staging.com>
+Date: Wed, 4 Mar 2015 13:16:20 -0700
+Subject: [PATCH] ws2_32: Add support for TF_DISCONNECT to TransmitFile.
+
+---
+ dlls/ws2_32/socket.c     | 16 +++++++++++++---
+ dlls/ws2_32/tests/sock.c | 11 +++++++++++
+ 2 files changed, 24 insertions(+), 3 deletions(-)
+
+diff --git a/dlls/ws2_32/socket.c b/dlls/ws2_32/socket.c
+index 59dff66e37f..07f812b2391 100644
+--- a/dlls/ws2_32/socket.c
++++ b/dlls/ws2_32/socket.c
+@@ -3081,7 +3081,16 @@ static NTSTATUS WS2_transmitfile_base( int fd, struct ws2_transmitfile_async *ws
+             return wsaErrStatus();
+     }
+ 
+-    return status;
++    if (status != STATUS_SUCCESS)
++        return status;
++
++    if (wsa->flags & TF_DISCONNECT)
++    {
++        /* we can't use WS_closesocket because it modifies the last error */
++        NtClose( SOCKET2HANDLE(wsa->write.hSocket) );
++    }
++
++    return STATUS_SUCCESS;
+ }
+ 
+ /***********************************************************************
+@@ -3117,6 +3126,7 @@ static BOOL WINAPI WS2_TransmitFile( SOCKET s, HANDLE h, DWORD file_bytes, DWORD
+                                      LPOVERLAPPED overlapped, LPTRANSMIT_FILE_BUFFERS buffers,
+                                      DWORD flags )
+ {
++    DWORD unsupported_flags = flags & ~(TF_DISCONNECT);
+     union generic_unix_sockaddr uaddr;
+     socklen_t uaddrlen = sizeof(uaddr);
+     struct ws2_transmitfile_async *wsa;
+@@ -3138,8 +3148,8 @@ static BOOL WINAPI WS2_TransmitFile( SOCKET s, HANDLE h, DWORD file_bytes, DWORD
+         WSASetLastError( WSAENOTCONN );
+         return FALSE;
+     }
+-    if (flags)
+-        FIXME("Flags are not currently supported (0x%x).\n", flags);
++    if (unsupported_flags)
++        FIXME("Flags are not currently supported (0x%x).\n", unsupported_flags);
+ 
+     if (h && GetFileType( h ) != FILE_TYPE_DISK)
+     {
+diff --git a/dlls/ws2_32/tests/sock.c b/dlls/ws2_32/tests/sock.c
+index 60360bacc21..134bb9625a6 100644
+--- a/dlls/ws2_32/tests/sock.c
++++ b/dlls/ws2_32/tests/sock.c
+@@ -9057,6 +9057,17 @@ static void test_TransmitFile(void)
+     ok(memcmp(buf, &footer_msg[0], sizeof(footer_msg)) == 0,
+        "TransmitFile footer buffer did not match!\n");
+ 
++    /* Test TransmitFile w/ TF_DISCONNECT */
++    SetFilePointer(file, 0, NULL, FILE_BEGIN);
++    bret = pTransmitFile(client, file, 0, 0, NULL, NULL, TF_DISCONNECT);
++    ok(bret, "TransmitFile failed unexpectedly.\n");
++    compare_file(file, dest, 0);
++    closesocket(client);
++    ok(send(client, "test", 4, 0) == -1, "send() after TF_DISCONNECT succeeded unexpectedly.\n");
++    err = WSAGetLastError();
++    todo_wine ok(err == WSAENOTSOCK, "send() after TF_DISCONNECT triggered unexpected errno (%d != %d)\n",
++                 err, WSAENOTSOCK);
++
+     /* Test TransmitFile with a UDP datagram socket */
+     closesocket(client);
+     client = socket(AF_INET, SOCK_DGRAM, 0);
+-- 
+2.19.1
+From 89a20d7e379e9be6da4230e303b830d190ab1b2c Mon Sep 17 00:00:00 2001
+From: "Erich E. Hoover" <erich.e.hoover@gmail.com>
+Date: Thu, 16 Jan 2014 19:08:30 -0700
+Subject: [PATCH] ws2_32: Add support for TF_REUSE_SOCKET to TransmitFile.
+
+---
+ dlls/ws2_32/socket.c     | 13 ++++++++-
+ dlls/ws2_32/tests/sock.c |  1 -
+ include/winsock.h        |  1 +
+ server/protocol.def      |  6 ++++
+ server/sock.c            | 63 +++++++++++++++++++++++++++++++++++-----
+ 5 files changed, 74 insertions(+), 10 deletions(-)
+
+diff --git a/dlls/ws2_32/socket.c b/dlls/ws2_32/socket.c
+index fed5329b37a..ee449cce581 100644
+--- a/dlls/ws2_32/socket.c
++++ b/dlls/ws2_32/socket.c
+@@ -3147,6 +3147,17 @@ static NTSTATUS WS2_transmitfile_base( int fd, struct ws2_transmitfile_async *ws
+     if (status != STATUS_SUCCESS)
+         return status;
+ 
++    if (wsa->flags & TF_REUSE_SOCKET)
++    {
++        SERVER_START_REQ( reuse_socket )
++        {
++            req->handle = wine_server_obj_handle( wsa->write.hSocket );
++            status = wine_server_call( req );
++        }
++        SERVER_END_REQ;
++        if (status != STATUS_SUCCESS)
++            return status;
++    }
+     if (wsa->flags & TF_DISCONNECT)
+     {
+         /* we can't use WS_closesocket because it modifies the last error */
+@@ -3189,7 +3200,7 @@ static BOOL WINAPI WS2_TransmitFile( SOCKET s, HANDLE h, DWORD file_bytes, DWORD
+                                      LPOVERLAPPED overlapped, LPTRANSMIT_FILE_BUFFERS buffers,
+                                      DWORD flags )
+ {
+-    DWORD unsupported_flags = flags & ~(TF_DISCONNECT);
++    DWORD unsupported_flags = flags & ~(TF_DISCONNECT|TF_REUSE_SOCKET);
+     union generic_unix_sockaddr uaddr;
+     socklen_t uaddrlen = sizeof(uaddr);
+     struct ws2_transmitfile_async *wsa;
+diff --git a/dlls/ws2_32/tests/sock.c b/dlls/ws2_32/tests/sock.c
+index 3d338741e0e..492d68e037c 100644
+--- a/dlls/ws2_32/tests/sock.c
++++ b/dlls/ws2_32/tests/sock.c
+@@ -8874,7 +8874,6 @@ static void test_TransmitFile(void)
+                  err, WSAENOTSOCK);
+ 
+     /* Test TransmitFile with a UDP datagram socket */
+-    closesocket(client);
+     client = socket(AF_INET, SOCK_DGRAM, 0);
+     bret = pTransmitFile(client, NULL, 0, 0, NULL, NULL, 0);
+     err = WSAGetLastError();
+diff --git a/include/winsock.h b/include/winsock.h
+index a8bb35a4c41..42d8f751094 100644
+--- a/include/winsock.h
++++ b/include/winsock.h
+@@ -835,6 +835,7 @@ typedef struct WS(WSAData)
+ 
+ /* internal per-socket flags */
+ #ifdef __WINESRC__
++#define FD_WINE_REUSE              0x08000000
+ #define FD_WINE_LISTENING          0x10000000
+ #define FD_WINE_NONBLOCKING        0x20000000
+ #define FD_WINE_CONNECTED          0x40000000
+diff --git a/server/protocol.def b/server/protocol.def
+index 92290af701c..77b823caad8 100644
+--- a/server/protocol.def
++++ b/server/protocol.def
+@@ -1410,6 +1410,12 @@ enum server_fd_type
+ @END
+ 
+ 
++/* Mark a socket to be reused after "closed" */
++@REQ(reuse_socket)
++    obj_handle_t handle;       /* handle to the socket */
++@END
++
++
+ /* Set socket event parameters */
+ @REQ(set_socket_event)
+     obj_handle_t  handle;        /* handle to the socket */
+diff --git a/server/sock.c b/server/sock.c
+index 1a53ce4b091..03e4ca2eec5 100644
+--- a/server/sock.c
++++ b/server/sock.c
+@@ -86,6 +86,7 @@
+ #define FD_CLOSE                   0x00000020
+ 
+ /* internal per-socket flags */
++#define FD_WINE_REUSE              0x08000000
+ #define FD_WINE_LISTENING          0x10000000
+ #define FD_WINE_NONBLOCKING        0x20000000
+ #define FD_WINE_CONNECTED          0x40000000
+@@ -132,6 +133,7 @@ static enum server_fd_type sock_get_fd_type( struct fd *fd );
+ static int sock_ioctl( struct fd *fd, ioctl_code_t code, struct async *async );
+ static void sock_queue_async( struct fd *fd, struct async *async, int type, int count );
+ static void sock_reselect_async( struct fd *fd, struct async_queue *queue );
++static int sock_close_handle( struct object *obj, struct process *process, obj_handle_t handle );
+ 
+ static int sock_get_ntstatus( int err );
+ static unsigned int sock_get_error( int err );
+@@ -155,7 +157,7 @@ static const struct object_ops sock_ops =
+     NULL,                         /* unlink_name */
+     no_open_file,                 /* open_file */
+     no_kernel_obj_list,           /* get_kernel_obj_list */
+-    fd_close_handle,              /* close_handle */
++    sock_close_handle,            /* close_handle */
+     sock_destroy                  /* destroy */
+ };
+ 
+@@ -607,6 +609,46 @@ static struct fd *sock_get_fd( struct object *obj )
+     return (struct fd *)grab_object( sock->fd );
+ }
+ 
++static int init_sockfd( int family, int type, int protocol )
++{
++    int sockfd;
++
++    sockfd = socket( family, type, protocol );
++    if (sockfd == -1)
++    {
++        if (errno == EINVAL) set_win32_error( WSAESOCKTNOSUPPORT );
++        else set_win32_error( sock_get_error( errno ));
++        return sockfd;
++    }
++    fcntl(sockfd, F_SETFL, O_NONBLOCK); /* make socket nonblocking */
++    return sockfd;
++}
++
++static int sock_close_handle( struct object *obj, struct process *process, obj_handle_t handle )
++{
++    struct sock *sock = (struct sock *)obj;
++
++    assert( obj->ops == &sock_ops );
++    if (!fd_close_handle( obj, process, handle ))
++        return FALSE;
++
++    if (sock->state & FD_WINE_REUSE)
++    {
++        struct fd *fd;
++        int sockfd;
++
++        if ((sockfd = init_sockfd( sock->family, sock->type, sock->proto )) == -1)
++            return TRUE;
++        if (!(fd = create_anonymous_fd( &sock_fd_ops, sockfd, &sock->obj, get_fd_options(sock->fd) )))
++            return TRUE;
++        shutdown( get_unix_fd(sock->fd), SHUT_RDWR );
++        release_object( sock->fd );
++        sock->fd = fd;
++        return FALSE;
++    }
++    return TRUE;
++}
++
+ static void sock_destroy( struct object *obj )
+ {
+     struct sock *sock = (struct sock *)obj;
+@@ -660,14 +702,8 @@ static struct object *create_socket( int family, int type, int protocol, unsigne
+     struct sock *sock;
+     int sockfd;
+ 
+-    sockfd = socket( family, type, protocol );
+-    if (sockfd == -1)
+-    {
+-        if (errno == EINVAL) set_win32_error( WSAESOCKTNOSUPPORT );
+-        else set_win32_error( sock_get_error( errno ));
++    if ((sockfd = init_sockfd( family, type, protocol )) == -1)
+         return NULL;
+-    }
+-    fcntl(sockfd, F_SETFL, O_NONBLOCK); /* make socket nonblocking */
+     if (!(sock = alloc_object( &sock_ops )))
+     {
+         close( sockfd );
+@@ -1218,6 +1254,17 @@ DECL_HANDLER(accept_into_socket)
+     release_object( sock );
+ }
+ 
++/* mark a socket to be recreated on close */
++DECL_HANDLER(reuse_socket)
++{
++    struct sock *sock;
++
++    if (!(sock = (struct sock *)get_handle_obj( current->process, req->handle,
++                                                FILE_WRITE_ATTRIBUTES, &sock_ops))) return;
++    sock->state |= FD_WINE_REUSE;
++    release_object( &sock->obj );
++}
++
+ /* set socket event parameters */
+ DECL_HANDLER(set_socket_event)
+ {
+-- 
+2.28.0
+From 0f515c8ebe990d34da74d3c2c760ba21d57cfaa9 Mon Sep 17 00:00:00 2001
+From: Alistair Leslie-Hughes <leslie_alistair@hotmail.com>
+Date: Mon, 14 Sep 2020 20:23:04 +1000
+Subject: [PATCH] ws2_32: Map AI ALL_option in getaddrinfo().
+
+Signed-off-by: Alistair Leslie-Hughes <leslie_alistair@hotmail.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/ws2_32/socket.c | 1 +
+ include/ws2tcpip.h   | 2 ++
+ 2 files changed, 3 insertions(+)
+
+diff --git a/dlls/ws2_32/socket.c b/dlls/ws2_32/socket.c
+index 246a0e2819b..0ed1af3092a 100644
+--- a/dlls/ws2_32/socket.c
++++ b/dlls/ws2_32/socket.c
+@@ -826,6 +826,7 @@ static const int ws_aiflag_map[][2] =
+ #ifdef  AI_V4MAPPED
+     MAP_OPTION( AI_V4MAPPED ),
+ #endif
++    MAP_OPTION( AI_ALL ),
+     MAP_OPTION( AI_ADDRCONFIG ),
+ };
+ 
+diff --git a/include/ws2tcpip.h b/include/ws2tcpip.h
+index 5a444dcb5f3..5ba891185b5 100644
+--- a/include/ws2tcpip.h
++++ b/include/ws2tcpip.h
+@@ -72,6 +72,7 @@ typedef ADDRINFOA ADDRINFO, *LPADDRINFO;
+ # define AI_CANONNAME              0x00000002
+ # define AI_NUMERICHOST            0x00000004
+ # define AI_NUMERICSERV            0x00000008
++# define AI_ALL                    0x00000100
+ # define AI_ADDRCONFIG             0x00000400
+ # define AI_V4MAPPED               0x00000800
+ # define AI_NON_AUTHORITATIVE      0x00004000
+@@ -93,6 +94,7 @@ typedef ADDRINFOA ADDRINFO, *LPADDRINFO;
+ # define WS_AI_CANONNAME              0x00000002
+ # define WS_AI_NUMERICHOST            0x00000004
+ # define WS_AI_NUMERICSERV            0x00000008
++# define WS_AI_ALL                    0x00000100
+ # define WS_AI_ADDRCONFIG             0x00000400
+ # define WS_AI_V4MAPPED               0x00000800
+ # define WS_AI_NON_AUTHORITATIVE      0x00004000
