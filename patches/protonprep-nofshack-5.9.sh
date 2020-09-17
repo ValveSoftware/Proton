@@ -35,6 +35,15 @@
     patch -Np1 < ../patches/gstreamer/asfdemux-Only_forward_SEEK_event_when_in_push_mode.patch
     patch -Np1 < ../patches/gstreamer/asfdemux-gst_asf_demux_reset_GST_FORMAT_TIME_fix.patch
     cd ..
+    
+    cd gst-libav
+    git reset --hard HEAD
+    git clean -xdf
+    echo "this fixes various audio playback issues and is tagged for backporting into older versions"
+    patch -Np1 < ../patches/gstreamer/gst-libav-MR-90.patch
+    patch -Np1 < ../patches/gstreamer/gst-libav-MR-88.patch
+    patch -Np1 < ../patches/gstreamer/gst-libav-MR-81.patch
+    cd ..
 
     # warframe controller fix
     git checkout lsteamclient
@@ -69,6 +78,10 @@
     git reset --hard HEAD
     git clean -xdf
     patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/staging/8402c959617111ac13a2025c3eb7c7156a2520f8.patch
+    patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/staging/patchinstall.patch
+    patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/staging/esync_wsacleanup_fix.patch
+    patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/staging/0001-remove-dxva2-dependency-from-winedevice-Default_Driv.patch
+    
     cd ..
 
     #WINE
@@ -78,7 +91,13 @@
 
     # this conflicts with proton's gamepad changes and causes camera spinning
     git revert --no-commit da7d60bf97fb8726828e57f852e8963aacde21e9
-
+    
+    echo "winhttp backports"
+    patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/winhttp_backports.patch
+    
+    echo "media foundation backports 5.9->5.17"
+    patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/mf_backports_5.17.patch
+    
 # disable these when using proton's gamepad patches
 #    -W dinput-SetActionMap-genre \
 #    -W dinput-axis-recalc \
@@ -95,9 +114,15 @@
     -W dinput-joy-mappings \
     -W dinput-reconnect-joystick \
     -W dinput-remap-joystick \
-    -W user32-window-activation
+    -W user32-window-activation \
+    -W ws2_32-WSACleanup \
+    -W ws2_32-getaddrinfo \
+    -W ws2_32-TransmitFile \
+    -W dsdmo-new-dll \
+    -W dxva2-Video_Decoder \
+    -W xactengine-initial
     
-    echo "querydisplaconfig backports"
+    echo "querydisplayconfig backports"
 patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/QueryDisplayConfig/8a4ec0addba76bf3b34a9782556364ab4161dc22.patch
 patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/QueryDisplayConfig/ae4804d502fecab835146043010f53377bf1b65a.patch
 patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/QueryDisplayConfig/f1e7d5bbd6e8817f7266c7144b747115a52893da.patch
@@ -142,13 +167,10 @@ patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/QueryDisplayConfig/0001-
 
 
     echo "5.10 backports"
-    patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/25e9e91c3a4f6c1c134d96a5c11517178e31f111.patch
-    patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/4ed26b63ca0305ba750c4f38002cf1eb674f688c.patch
-    patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/ea9b507380b4415cf9edd3643d9bcea7ab934fbd.patch
-    patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/c96fa96c167808bf1c9a42b72c9e7ab6567eca75.patch
-
-    echo "winhttp backports"
-    patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/winhttp_backports.patch
+    patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/5.10_hotfix_25e9e91c3a4f6c1c134d96a5c11517178e31f111.patch
+    patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/5.10_hotfix_4ed26b63ca0305ba750c4f38002cf1eb674f688c.patch
+    patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/5.10_hotfix_ea9b507380b4415cf9edd3643d9bcea7ab934fbd.patch
+    patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/5.10_hotfix_c96fa96c167808bf1c9a42b72c9e7ab6567eca75.patch
 
     echo "game fix backports"
     patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/ashes_of_the_singularity.patch
@@ -166,7 +188,18 @@ patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/QueryDisplayConfig/0001-
     patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/vulkan/a455ff61b40ff73b48d0ccc9c1f14679bb65ab8d.patch
     patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/vulkan/6299969a60b2bda85e69a3569c5d4970d47b3cc6.patch
     patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/vulkan/8bd62231c3ab222c07063cb340e26c3c76ff4229.patch
-    patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/vulkan/winevulkan_poe_backport.patch
+    patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/vulkan/1e074c39f635c585595e9f3ece99aa290a7f9cf8.patch
+    patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/vulkan/18d7bc985990c1022a9f42d20cc819ba141af5cb.patch
+    patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/vulkan/72517ff1875431bd82f21f5f9269a6f949b6845c.patch
+    patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/vulkan/c5675ec615a5c2cd01a933fbf37f532a7aa0ce66.patch
+    patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/vulkan/e447e86ae2fbfbd9dee1b488e38a653aaea5447e.patch
+    
+    echo "wavebank correction backport"
+    patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/wavebank_correct.patch    
+    
+    echo "quartz backports 5.9->5.13"
+    patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/quartz_backports_5.17.patch
+    cp ../patches/wine-hotfixes/backports-for-5.9/quartz/test.avi ./dlls/amstream/tests/
     
     echo "planet zoo/jurassic world hotfixes pending"
     patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/planet-zoo-jurassic-world-pending-upstream-staging.patch
@@ -174,11 +207,15 @@ patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/QueryDisplayConfig/0001-
     echo "assetto stutter fix backport"
     patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/assetto_backport.patch
     
-    echo "rfactor2 backport"
-    patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/rfactor2_backport.patch
-
     echo "Indiana Jones and the Emperor's Tomb pending"
-    patch -Np1 < ../patches/wine-hotfixes/pending/indiana_jones_fix.patch
+    patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/indiana_jones_fix.patch
+    
+    echo "AC Black Flag crash fix"
+    patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/AC_black_flag_fix.patch
+
+    echo "pyxel fix"
+    patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/pyxel.patch
+
     
     #WINE FAUDIO
     #echo "applying faudio patches"
@@ -186,9 +223,11 @@ patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/QueryDisplayConfig/0001-
     
     ### GAME PATCH SECTION ###
 
-    #fix this
     echo "mech warrior online"
     patch -Np1 < ../patches/game-patches/mwo.patch
+
+    echo "horizon zero dawn crash fix"
+    patch -Np1 < ../patches/game-patches/hzd.patch
 
     echo "final fantasy XV denuvo fix"
     patch -Np1 < ../patches/game-patches/ffxv-steam-fix.patch
@@ -199,16 +238,11 @@ patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/QueryDisplayConfig/0001-
     echo "assetto corsa"
     patch -Np1 < ../patches/game-patches/assettocorsa-hud.patch
 
-    echo "sword art online"
-    patch -Np1 < ../patches/game-patches/sword-art-online-gnutls.patch
+#    echo "sword art online"
+#    patch -Np1 < ../patches/game-patches/sword-art-online-gnutls.patch
 
     echo "origin downloads fix" 
     patch -Np1 < ../patches/game-patches/origin-downloads_fix.patch
-
-    echo "rawinput virtual desktop fix"
-    #https://bugs.winehq.org/show_bug.cgi?id=48419
-    #https://bugs.winehq.org/show_bug.cgi?id=48462
-    patch -Np1 < ../patches/game-patches/rawinput_v_desktop.patch
  
 #    echo "gta v key input fix"
 #    only needed if esync is disabled
@@ -226,9 +260,12 @@ patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/QueryDisplayConfig/0001-
 #   The game uses CEG which does not work in proton.    
     echo "blackops 2 fix"
     patch -Np1 < ../patches/game-patches/blackops_2_fix.patch
-
-    ### END GAME PATCH SECTION ###
     
+    echo "bloons TD6 fix"
+    patch -Np1 < ../patches/game-patches/0001-wbemprox-HACK-Make-Bloons-TD6-happy-so-it-does-not-e.patch
+    
+    ### END GAME PATCH SECTION ###
+        
     #PROTON
     
     echo "clock monotonic"
@@ -288,6 +325,7 @@ patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/QueryDisplayConfig/0001-
     
     echo "proton gamepad additions"
     patch -Np1 < ../patches/proton-5.9/proton-gamepad-additions.patch
+    patch -Np1 < ../patches/proton-5.9/proton-gamepad_additions_cleanup.patch
 
     echo "Valve VR patches"
     patch -Np1 < ../patches/proton-5.9/proton-vr.patch
@@ -317,10 +355,13 @@ patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/QueryDisplayConfig/0001-
     echo "applying WoW vkd3d wine patches"
     patch -Np1 < ../patches/wine-hotfixes/vkd3d/D3D12SerializeVersionedRootSignature.patch
     patch -Np1 < ../patches/wine-hotfixes/vkd3d/D3D12CreateVersionedRootSignatureDeserializer.patch
-            
-    echo "guy's media foundation alpha patches"
-    patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/media_foundation_alpha.patch
     
+    echo "RtlIpv4AddressToString -- needed for ws2_32 changes"
+    patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/RtlIpv4AddressToString.patch
+
+    echo "guy's media foundation alpha patches"
+    patch -Np1 < ../patches/wine-hotfixes/media_foundation/media_foundation_alpha.patch
+        
     echo "proton-specific manual mfplat dll register patch"
     patch -Np1 < ../patches/wine-hotfixes/media_foundation/proton_mediafoundation_dllreg.patch
     
@@ -329,10 +370,6 @@ patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/QueryDisplayConfig/0001-
     
     echo "Paul's Diablo 1 menu fix"
     patch -Np1 < ../patches/game-patches/diablo_1_menu.patch
-    
-    echo "geforce now backports"
-    patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/geforce-now-backport.patch
-    
 
 #    echo "Remi's memory performance fixes"    
 #    patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/ntdll-Use_the_free_ranges_in_find_reserved_free_area.patch
