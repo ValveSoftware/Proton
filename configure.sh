@@ -98,11 +98,6 @@ function configure() {
     echo "SRCDIR     := $(escape_for_make "$srcdir")"
     echo "BUILD_NAME := $(escape_for_make "$build_name")"
 
-    # ffmpeg?
-    if [[ -n $arg_ffmpeg ]]; then
-      echo "WITH_FFMPEG := 1"
-    fi
-
     # SteamRT
     echo "STEAMRT64_MODE  := $(escape_for_make "$steamrt64_type")"
     echo "STEAMRT64_IMAGE := $(escape_for_make "$steamrt64_name")"
@@ -129,7 +124,6 @@ function configure() {
 arg_steamrt32=""
 arg_steamrt64=""
 arg_no_steamrt=""
-arg_ffmpeg=""
 arg_build_name=""
 arg_docker_opts=""
 arg_help=""
@@ -171,8 +165,6 @@ function parse_args() {
     elif [[ $arg = --docker-opts ]]; then
       arg_docker_opts="$val"
       val_used=1
-    elif [[ $arg = --with-ffmpeg ]]; then
-      arg_ffmpeg=1
     elif [[ $arg = --steam-runtime32 ]]; then
       val_used=1
       arg_steamrt32="$val"
@@ -223,8 +215,6 @@ usage() {
   "$1" "    --help / --usage     Show this help text and exit"
   "$1" ""
   "$1" "    --build-name=<name>  Set the name of the build that displays when used in Steam"
-  "$1" ""
-  "$1" "    --with-ffmpeg        Build ffmpeg for WMA audio support"
   "$1" ""
   "$1" "    --docker-opts='<options>' Extra options to pass to Docker when invoking the runtime."
   "$1" ""
