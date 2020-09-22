@@ -25,7 +25,6 @@ else # (Rest of the file is the else)
 # We expect the configure script to conditionally set the following:
 #   SRCDIR          - Path to source
 #   BUILD_NAME      - Name of the build for manifests etc.
-#   NO_DXVK         - 1 if skipping DXVK steps
 #   STEAMRT64_MODE  - 'docker' or '' for automatic Steam Runtime container
 #   STEAMRT64_IMAGE - Name of the image if mode is set
 #   STEAMRT32_MODE  - Same as above for 32-bit container (can be different type)
@@ -1439,8 +1438,6 @@ vrclient32: $(VRCLIENT_CONFIGURE_FILES32) | $(WINE_BUILDTOOLS32) $(filter $(MAKE
 
 ## Create & configure object directory for dxvk
 
-ifneq ($(NO_DXVK),1) # May be disabled by configure
-
 DXVK_CONFIGURE_FILES32 := $(DXVK_OBJ32)/build.ninja
 DXVK_CONFIGURE_FILES64 := $(DXVK_OBJ64)/build.ninja
 
@@ -1502,8 +1499,6 @@ dxvk32: $(DXVK_CONFIGURE_FILES32)
 	cp -f "$(DXVK_OBJ32)"/bin/d3d9.dll "$(DST_DIR)"/lib/wine/dxvk/
 	cp -f "$(DXVK_OBJ32)"/bin/dxvk_config.dll "$(DST_DIR)"/lib/wine/dxvk
 	rm -f "$(DST_DIR)"/lib/wine/dxvk/version && if test -e $(SRCDIR)/.git; then ( cd $(SRCDIR) && git submodule status -- dxvk ) > "$(DST_DIR)"/lib/wine/dxvk/version; fi
-
-endif # NO_DXVK
 
 # VKD3D
 
