@@ -198,10 +198,6 @@ GECKO64_TARBALL := wine-gecko-$(GECKO_VER)-x86_64.tar.xz
 WINEMONO_VER := 6.1.1
 WINEMONO_TARBALL := wine-mono-$(WINEMONO_VER)-x86.tar.xz
 
-GST_ORC := $(SRCDIR)/gst-orc
-GST_ORC_OBJ32 := ./obj-gst-orc32
-GST_ORC_OBJ64 := ./obj-gst-orc64
-
 GSTREAMER := $(SRCDIR)/gstreamer
 GSTREAMER_OBJ32 := ./obj-gstreamer32
 GSTREAMER_OBJ64 := ./obj-gstreamer64
@@ -281,7 +277,6 @@ FONTS_OBJ := ./obj-fonts
 
 ## Object directories
 OBJ_DIRS := $(TOOLS_DIR32)        $(TOOLS_DIR64)        \
-            $(GST_ORC_OBJ32)      $(GST_ORC_OBJ64)       \
             $(GSTREAMER_OBJ32)    $(GSTREAMER_OBJ64)    \
             $(GST_BASE_OBJ32)     $(GST_BASE_OBJ64)     \
             $(GST_GOOD_OBJ32)     $(GST_GOOD_OBJ64)     \
@@ -506,6 +501,10 @@ module: module32 module64
 
 endif # ifeq ($(CONTAINER),)
 
+##
+## gst-orc
+##
+
 GST_COMMON_MESON_ARGS := \
 	-Dexamples=disabled \
 	-Dtests=disabled \
@@ -517,72 +516,13 @@ GST_COMMON_MESON_ARGS := \
 	-Dnls=disabled \
 	-Dbenchmarks=disabled
 
-##
-## gst-orc
-##
-
 GST_ORC_MESON_ARGS := \
-	$(GST_COMMON_MESON_ARGS) \
-	-Dorc-test=disabled
+	-Dorc-test=disabled \
+	$(GST_COMMON_MESON_ARGS)
 
-
-GST_ORC_CONFIGURE_FILES32 := $(GST_ORC_OBJ32)/build.ninja
-GST_ORC_CONFIGURE_FILES64 := $(GST_ORC_OBJ64)/build.ninja
-
-# 64-bit configure.  Remove coredata file if already configured (due to e.g. makefile changing)
-$(GST_ORC_CONFIGURE_FILES64): SHELL = $(CONTAINER_SHELL)
-$(GST_ORC_CONFIGURE_FILES64): $(MAKEFILE_DEP) | $(GST_ORC_OBJ64)
-	if [ -e "$(abspath $(GST_ORC_OBJ64))"/build.ninja ]; then \
-		rm -f "$(abspath $(GST_ORC_OBJ64))"/meson-private/coredata.dat; \
-	fi
-	cd "$(abspath $(GST_ORC))" && \
-	PATH="$(abspath $(TOOLS_DIR64))/bin:$(PATH)" \
-		PKG_CONFIG_PATH=$(abspath $(TOOLS_DIR64))/lib/pkgconfig \
-		meson --prefix="$(abspath $(TOOLS_DIR64))" --libdir="lib" $(GST_ORC_MESON_ARGS) $(MESON_STRIP_ARG) "$(abspath $(GST_ORC_OBJ64))"
-
-# 32-bit configure.  Remove coredata file if already configured (due to e.g. makefile changing)
-$(GST_ORC_CONFIGURE_FILES32): SHELL = $(CONTAINER_SHELL)
-$(GST_ORC_CONFIGURE_FILES32): $(MAKEFILE_DEP) | $(GST_ORC_OBJ32)
-	if [ -e "$(abspath $(GST_ORC_OBJ32))"/build.ninja ]; then \
-		rm -f "$(abspath $(GST_ORC_OBJ32))"/meson-private/coredata.dat; \
-	fi
-	cd "$(abspath $(GST_ORC))" && \
-	PATH="$(abspath $(TOOLS_DIR32))/bin:$(PATH)" \
-		CC="$(CC32)" \
-		CXX="$(CXX32)" \
-		PKG_CONFIG="$(PKG_CONFIG32)" \
-		PKG_CONFIG_PATH=$(abspath $(TOOLS_DIR32))/lib/pkgconfig \
-		meson --prefix="$(abspath $(TOOLS_DIR32))" --libdir="lib" $(GST_ORC_MESON_ARGS) $(MESON_STRIP_ARG) "$(abspath $(GST_ORC_OBJ32))"
-
-## gst-orc goals
-GST_ORC_TARGETS = gst_orc gst_orc_configure gst_orc32 gst_orc64 gst_orc_configure32 gst_orc_configure64
-
-ALL_TARGETS += $(GST_ORC_TARGETS)
-GOAL_TARGETS_LIBS += gst_orc
-
-.PHONY: $(GST_ORC_TARGETS)
-
-gst_orc_configure: $(GST_ORC_CONFIGURE_FILES32) $(GST_ORC_CONFIGURE_FILES64)
-
-gst_orc_configure64: $(GST_ORC_CONFIGURE_FILES64)
-
-gst_orc_configure32: $(GST_ORC_CONFIGURE_FILES32)
-
-gst_orc: gst_orc32 gst_orc64
-
-gst_orc64: SHELL = $(CONTAINER_SHELL)
-gst_orc64: $(GST_ORC_CONFIGURE_FILES64)
-	PATH="$(abspath $(TOOLS_DIR64))/bin:$(PATH)" \
-	LD_LIBRARY_PATH="$(abspath $(TOOLS_DIR64))/lib:$(LD_LIBRARY_PATH)" \
-	ninja -C "$(GST_ORC_OBJ64)" install
-	cp -a $(TOOLS_DIR64)/lib/liborc* $(DST_DIR)/lib64/
-
-gst_orc32: SHELL = $(CONTAINER_SHELL)
-gst_orc32: $(GST_ORC_CONFIGURE_FILES32)
-	PATH="$(abspath $(TOOLS_DIR32))/bin:$(PATH)" \
-	LD_LIBRARY_PATH="$(abspath $(TOOLS_DIR32))/lib:$(LD_LIBRARY_PATH)" \
-	ninja -C "$(GST_ORC_OBJ32)" install
-	cp -a $(TOOLS_DIR32)/lib/liborc* $(DST_DIR)/lib/
+$(eval $(call rules-source,gst_orc,$(SRCDIR)/gst-orc))
+$(eval $(call rules-meson,gst_orc,32))
+$(eval $(call rules-meson,gst_orc,64))
 
 ##
 ## gstreamer
