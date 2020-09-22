@@ -38,23 +38,6 @@ cmd()      { showcmd "$@"; "$@"; }
 THIS_COMMAND="$0 $*" # For printing, not evaling
 MAKEFILE="./Makefile"
 
-function check_steamrt_image() {
-  local type="$1"
-  local name="$2"
-
-  # nil nil -> no container
-  [[ -n $type || -n $name ]] || return 0;
-
-  # Otherwise both needed
-  [[ -n $type && -n $name ]] || die "Steam Runtime SDK option must be of form type:image"
-
-  # Type known?
-  [[ $type = docker ]] || die "Only supported Steam Runtime type is currently docker"
-
-  # Name must be alphanumericish for dumping into makefile and sanity.
-  [[ $name =~ ^[a-zA-Z0-9_.-]+$ ]] || die "Runtime image name should be alphanumeric ($name)"
-}
-
 # This is not rigorous.  Do not use this for untrusted input.  Do not.  If you need a version of
 # this for untrusted input, rethink the path that got you here.
 function escape_for_make() {
@@ -67,14 +50,8 @@ function escape_for_make() {
 }
 
 function configure() {
-  local steamrt64_type="${1%:*}"
-  local steamrt64_name="${1#*:}"
-  local steamrt32_type="${2%:*}"
-  local steamrt32_name="${2#*:}"
-
-  check_steamrt_image "$steamrt64_type" "$steamrt64_name"
-  check_steamrt_image "$steamrt32_type" "$steamrt32_name"
-
+  local steamrt_image="$1"
+  local steamrt_name="$2"
   local srcdir
   srcdir="$(dirname "$0")"
 
@@ -99,10 +76,8 @@ function configure() {
     echo "BUILD_NAME := $(escape_for_make "$build_name")"
 
     # SteamRT
-    echo "STEAMRT64_MODE  := $(escape_for_make "$steamrt64_type")"
-    echo "STEAMRT64_IMAGE := $(escape_for_make "$steamrt64_name")"
-    echo "STEAMRT32_MODE  := $(escape_for_make "$steamrt32_type")"
-    echo "STEAMRT32_IMAGE := $(escape_for_make "$steamrt32_name")"
+    echo "STEAMRT_NAME  := $(escape_for_make "$steamrt_name")"
+    echo "STEAMRT_IMAGE := $(escape_for_make "$steamrt_image")"
 
     if [[ -n "$arg_docker_opts" ]]; then
       echo "DOCKER_OPTS := $arg_docker_opts"
@@ -121,8 +96,8 @@ function configure() {
 # Parse arguments
 #
 
-arg_steamrt32=""
-arg_steamrt64=""
+arg_steamrt="soldier"
+arg_steamrt_image=""
 arg_no_steamrt=""
 arg_build_name=""
 arg_docker_opts=""
@@ -165,12 +140,12 @@ function parse_args() {
     elif [[ $arg = --docker-opts ]]; then
       arg_docker_opts="$val"
       val_used=1
-    elif [[ $arg = --steam-runtime32 ]]; then
+    elif [[ $arg = --steam-runtime-image ]]; then
       val_used=1
-      arg_steamrt32="$val"
-    elif [[ $arg = --steam-runtime64 ]]; then
+      arg_steamrt_image="$val"
+    elif [[ $arg = --steam-runtime ]]; then
       val_used=1
-      arg_steamrt64="$val"
+      arg_steamrt="$val"
     elif [[ $arg = --no-steam-runtime ]]; then
       arg_no_steamrt=1
     else
@@ -207,7 +182,7 @@ function parse_args() {
 }
 
 usage() {
-  "$1" "Usage: $0 { --no-steam-runtime | --steam-runtime32=<image> --steam-runtime64=<image> }"
+  "$1" "Usage: $0 { --no-steam-runtime | --steam-runtime-image=<image> --steam-runtime=<name> }"
   "$1" "  Generate a Makefile for building Proton.  May be run from another directory to create"
   "$1" "  out-of-tree build directories (e.g. mkdir mybuild && cd mybuild && ../configure.sh)"
   "$1" ""
@@ -222,13 +197,11 @@ usage() {
   "$1" "    Proton builds that are to be installed & run under the steam client must be built with"
   "$1" "    the Steam Runtime SDK to ensure compatibility.  See README.md for more information."
   "$1" ""
-  "$1" "    --steam-runtime64=docker:<image>  Automatically invoke the Steam Runtime SDK in <image>"
-  "$1" "                                      for build steps that must be run in an SDK"
-  "$1" "                                      environment.  See README.md for instructions to"
-  "$1" "                                      create this image."
-  "$1" ""
-  "$1" "    --steam-runtime32=docker:<image>  The 32-bit docker image to use for steps that require"
-  "$1" "                                      a 32-bit environment.  See --steam-runtime64."
+  "$1" "    --steam-runtime-image=<image>  Automatically invoke the Steam Runtime SDK in <image>"
+  "$1" "                                   for build steps that must be run in an SDK"
+  "$1" "                                   environment.  See README.md for instructions to"
+  "$1" "                                   create this image."
+  "$1" "    --steam-runtime=soldier  Name of the steam runtime release to build for (soldier, scout)."
   "$1" ""
   "$1" "    --no-steam-runtime  Do not automatically invoke any runtime SDK as part of the build."
   "$1" "                        Build steps may still be manually run in a runtime environment."
@@ -240,10 +213,10 @@ parse_args "$@" || usage err
 [[ -z $arg_help ]] || usage info
 
 # Sanity check arguments
-if [[ -n $arg_no_steamrt && ( -n $arg_steamrt32 || -n $arg_steamrt64 ) ]]; then
-    die "Cannot specify a Steam Runtime SDK as well as --no-steam-runtime"
-elif [[ -z $arg_no_steamrt && ( -z $arg_steamrt32 || -z $arg_steamrt64 ) ]]; then
-    die "Must specify either --no-steam-runtime or all of --steam-runtime32 and --steam-runtime64"
+if [[ -n $arg_no_steamrt && -n $arg_steamrt_image ]]; then
+    die "Cannot specify --steam-runtime-image as well as --no-steam-runtime"
+elif [[ -z $arg_no_steamrt && -z $arg_steamrt_image ]]; then
+    die "Must specify either --no-steam-runtime or --steam-runtime-image"
 fi
 
-configure "$arg_steamrt64" "$arg_steamrt32"
+configure "$arg_steamrt_image" "$arg_steamrt"

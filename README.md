@@ -178,7 +178,7 @@ course use whatever paths you like.
 
         mkdir build/
         cd build
-        ../proton/configure.sh --steam-runtime64=docker:steam-proton-dev --steam-runtime32=docker:steam-proton-dev
+        ../proton/configure.sh --steam-runtime-image=steam-proton-dev
 
 If you are building without the Steam runtime, then instead use:
 
