@@ -2,7 +2,6 @@
 
 #ifndef ISTEAMNETWORKINGMESSAGES
 #define ISTEAMNETWORKINGMESSAGES
-#pragma once
 
 #include "steamnetworkingtypes.h"
 
