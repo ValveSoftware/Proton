@@ -56,7 +56,7 @@ Vagrant.configure(2) do |config|
     v.default_prefix = ENV['USER'].to_s.dup.concat('_').concat(File.basename(Dir.pwd))
   end
 
-  #deiban10-based build VM
+  #debian10-based build VM
   config.vm.define "debian10", primary: true do |debian10|
 
     debian10.vm.box = "generic/debian10"
