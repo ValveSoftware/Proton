@@ -80,7 +80,7 @@ This is my build of Proton with the most recent releases of vanilla WINE. It has
 - FAudio with FFmpeg enabled (fixes audio/voices in multiple games)
 - Various WINE hotfixes for WINE functionality that fix regressions per version
 - Various Proton hotfixes for Proton functionality that fix regressions per version
-- DXVK is compiled with async for faster shader compiling. See environment variables section for more information pm usage.
+- DXVK is compiled with async for faster shader compiling. See environment variables section for more information on usage.
 
 ### Media Foundation fixes (Fully working or playable)
 
@@ -213,7 +213,7 @@ Builds will be placed in proton-ge-custom/vagrant_share/ as both the full folder
 
 ## Modification
 
-vagrant syncs the Proton directory to any files in the cloned repo. So, if you want to make changes, close the VM with `vagrant halt`, make your changes, then launch vagrant again with `vagrant up`
+Vagrant syncs the Proton directory to any files in the cloned repo. So, if you want to make changes, close the VM with `vagrant halt`, make your changes, then launch Vagrant again with `vagrant up`
 
 Environment variable options:
 
@@ -282,7 +282,7 @@ Joshua is the creator of D9VK and also a huge contributor of DXVK. He is also kn
 
 - https://github.com/doitsujin/dxvk
 
-Philip is the creator of DXVK and a heavy contributor of VKD3D. He also put up a lot of my bug reporting for Warfram years ago, when DXVK started.
+Philip is the creator of DXVK and a heavy contributor of VKD3D. He also put up a lot of my bug reporting for Warframe years ago, when DXVK started.
 
 ### HansKristian/themaister (Hans-Kristian Arntzen)
 
