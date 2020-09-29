@@ -174,36 +174,49 @@ WINE_GST_REGISTRY_DIR=/home/gloriouseggroll/Games/origin/gstreamer-1.0/
 2. Install Vagrant.
 3. Clone this repo by executing:
 
-```
-git clone --recurse-submodules http://github.com/gloriouseggroll/proton-ge-custom
+```sh
+	git clone --recurse-submodules http://github.com/gloriouseggroll/proton-ge-custom
 ```
 
-4. Drop any custom patches into patches/, then open patches/protonprep.sh and add a patch line for them under #WINE CUSTOM PATCHES in the same way the others are done. 
+4. Drop any custom patches into patches/, then open patches/protonprep.sh and add a patch line for them under `#WINE CUSTOM PATCHES` in the same way the others are done. 
 
 5. Apply all of the patches in patches/ by running:
 
-```
-./patches/protonprep-nofshack.sh &> patchlog.txt
+```sh
+	./patches/protonprep-nofshack.sh &> patchlog.txt
 ```
 
 in the main proton-ge-custom directory. Open `patchlog.txt` and search for "fail" to make sure no patch failures occured. An easy way to do this is like so:
 
-grep -i fail patchlog.txt
-grep -i error patchlog.txt 
+```sh
+	grep -i fail patchlog.txt
+	grep -i error patchlog.txt 
+```
 
 6. Open proton-ge-custom a terminal and type the following:
 
-`vagrant up` (On the first run choose yes, it will ask you to run vagrant up again)  
-`vagrant up` (this will take a while on the first run, as it prepares everything)  
-`build_name=some_custom_build_name make redist | tee buildlog.txt` (this will start the build and log everything to buildlog.txt so that you can review the log if something fails)  
-`vagrant halt` (this will shut down the build afterwards)  
+```sh
+	# On the first run choose yes, it will ask you to run vagrant up again
+	vagrant up
+	# This will take a while on the first run, as it prepares everything
+	vagrant up
+
+	# This will start the build and log everything to buildlog.txt
+	# so that you can review the log if something fails)
+	build_name=some_custom_build_name make redist | tee buildlog.txt 
+
+	# This will shut down the build afterwards
+	vagrant halt
+```
 
 For future builds you only need to run:  
 
-`build_name=some_custom_build_name make redist | tee buildlog.txt`  
-`vagrant halt`  
+```sh
+	build_name=some_custom_build_name make redist | tee buildlog.txt  
+	vagrant halt
+```
 
-Builds will be placed in proton-ge-custom/vagrant_share/ as both the full folder and a .tar.gz of the folder.
+Builds will be placed in `proton-ge-custom/vagrant_share/` as both the full folder and a `.tar.gz` of the folder.
 
 ## Enabling
 
