@@ -198,4 +198,14 @@ void cppISteamNetworkingSockets_SteamNetworkingSockets009_SendMessages(
     }
 }
 
+int cppISteamNetworkingMessages_SteamNetworkingMessages002_ReceiveMessagesOnChannel(
+        void *linux_side, int nLocalChannel,
+        winSteamNetworkingMessage_t_150 ** ppOutMessages, int nMaxMessages)
+{
+    SteamNetworkingMessage_t *lin_ppOutMessages[nMaxMessages];
+    int retval = ((ISteamNetworkingMessages*)linux_side)->ReceiveMessagesOnChannel(nLocalChannel, lin_ppOutMessages, nMaxMessages);
+    lin_to_win_struct_SteamNetworkingMessage_t_150(retval, lin_ppOutMessages, ppOutMessages, nMaxMessages);
+    return retval;
+}
+
 }
