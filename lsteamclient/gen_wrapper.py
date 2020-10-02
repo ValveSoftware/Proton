@@ -212,6 +212,7 @@ manually_handled_methods = {
         ],
         "cppISteamNetworkingUtils_SteamNetworkingUtils003": [
             "AllocateMessage",
+            "SetConfigValue",
         ],
         "cppISteamNetworkingMessages_SteamNetworkingMessages002": [
             "ReceiveMessagesOnChannel"
