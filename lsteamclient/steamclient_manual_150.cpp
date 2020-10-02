@@ -21,6 +21,7 @@ WINE_DEFAULT_DEBUG_CHANNEL(steamclient);
 extern "C" {
 #define SDKVER_150
 #include "struct_converters.h"
+#include "cb_converters.h"
 
 #include "queue.h"
 
@@ -206,6 +207,159 @@ int cppISteamNetworkingMessages_SteamNetworkingMessages002_ReceiveMessagesOnChan
     int retval = ((ISteamNetworkingMessages*)linux_side)->ReceiveMessagesOnChannel(nLocalChannel, lin_ppOutMessages, nMaxMessages);
     lin_to_win_struct_SteamNetworkingMessage_t_150(retval, lin_ppOutMessages, ppOutMessages, nMaxMessages);
     return retval;
+}
+
+#pragma pack( push, 8 )
+struct winSteamNetConnectionStatusChangedCallback_t_712 {
+    HSteamNetConnection m_hConn;
+    SteamNetConnectionInfo_t m_info __attribute__((aligned(8)));
+    ESteamNetworkingConnectionState m_eOldState;
+}  __attribute__ ((ms_struct));
+#pragma pack( pop )
+
+typedef void (*CDECL win_FnSteamNetConnectionStatusChanged)(winSteamNetConnectionStatusChangedCallback_t_712 *);
+win_FnSteamNetConnectionStatusChanged win_SteamNetConnectionStatusChanged;
+
+void lin_SteamNetConnectionStatusChanged(SteamNetConnectionStatusChangedCallback_t *l_dat)
+{
+    win_FnSteamNetConnectionStatusChanged fn = win_SteamNetConnectionStatusChanged;
+    if(fn){
+        struct winSteamNetConnectionStatusChangedCallback_t_712 w_dat;
+        cb_SteamNetConnectionStatusChangedCallback_t_712(l_dat, &w_dat);
+        fn(&w_dat);
+    }
+}
+
+typedef void (*CDECL win_FnSteamNetAuthenticationStatusChanged)(SteamNetAuthenticationStatus_t *);
+win_FnSteamNetAuthenticationStatusChanged win_SteamNetAuthenticationStatusChanged;
+
+void lin_SteamNetAuthenticationStatusChanged(SteamNetAuthenticationStatus_t *dat)
+{
+    win_FnSteamNetAuthenticationStatusChanged fn = win_SteamNetAuthenticationStatusChanged;
+    if(fn)
+        fn(dat);
+}
+
+typedef void (*CDECL win_FnSteamRelayNetworkStatusChanged)(SteamRelayNetworkStatus_t *);
+win_FnSteamRelayNetworkStatusChanged win_SteamRelayNetworkStatusChanged;
+
+void lin_SteamRelayNetworkStatusChanged(SteamRelayNetworkStatus_t *dat)
+{
+    win_FnSteamRelayNetworkStatusChanged fn = win_SteamRelayNetworkStatusChanged;
+    if(fn)
+        fn(dat);
+}
+
+typedef void (*CDECL win_FnSteamNetworkingMessagesSessionRequest)(SteamNetworkingMessagesSessionRequest_t *);
+win_FnSteamNetworkingMessagesSessionRequest win_SteamNetworkingMessagesSessionRequest;
+
+void lin_SteamNetworkingMessagesSessionRequest(SteamNetworkingMessagesSessionRequest_t *dat)
+{
+    win_FnSteamNetworkingMessagesSessionRequest fn = win_SteamNetworkingMessagesSessionRequest;
+    if(fn)
+        fn(dat);
+}
+
+typedef void (*CDECL win_FnSteamNetworkingMessagesSessionFailed)(SteamNetworkingMessagesSessionFailed_t *);
+win_FnSteamNetworkingMessagesSessionFailed win_SteamNetworkingMessagesSessionFailed;
+
+void lin_SteamNetworkingMessagesSessionFailed(SteamNetworkingMessagesSessionFailed_t *dat)
+{
+    win_FnSteamNetworkingMessagesSessionFailed fn = win_SteamNetworkingMessagesSessionFailed;
+    if(fn)
+        fn(dat);
+}
+
+bool cppISteamNetworkingUtils_SteamNetworkingUtils003_SetConfigValue(void *linux_side,
+        ESteamNetworkingConfigValue eValue, ESteamNetworkingConfigScope eScopeType,
+        intptr_t scopeObj, ESteamNetworkingConfigDataType eDataType, const void *pArg)
+{
+    bool ret;
+    void *lin_fn; /* api requires passing pointer-to-pointer */
+    switch(eValue){
+    case k_ESteamNetworkingConfig_Callback_ConnectionStatusChanged:
+        if(!pArg){
+            ret = ((ISteamNetworkingUtils*)linux_side)->SetConfigValue(eValue, eScopeType, scopeObj, eDataType, NULL);
+        }else{
+            if(*(void **)pArg == NULL)
+                lin_fn = NULL;
+            else
+                lin_fn = (void *)&lin_SteamNetConnectionStatusChanged;
+
+            ret = ((ISteamNetworkingUtils*)linux_side)->SetConfigValue(eValue, eScopeType, scopeObj, eDataType, &lin_fn);
+
+            if(ret)
+                win_SteamNetConnectionStatusChanged = *(win_FnSteamNetConnectionStatusChanged*)pArg;
+        }
+        return ret;
+
+    case k_ESteamNetworkingConfig_Callback_AuthStatusChanged:
+        if(!pArg){
+            ret = ((ISteamNetworkingUtils*)linux_side)->SetConfigValue(eValue, eScopeType, scopeObj, eDataType, NULL);
+        }else{
+            if(*(void **)pArg == NULL)
+                lin_fn = NULL;
+            else
+                lin_fn = (void *)&lin_SteamNetAuthenticationStatusChanged;
+
+            ret = ((ISteamNetworkingUtils*)linux_side)->SetConfigValue(eValue, eScopeType, scopeObj, eDataType, &lin_fn);
+
+            if(ret)
+                win_SteamNetAuthenticationStatusChanged = *(win_FnSteamNetAuthenticationStatusChanged*)pArg;
+        }
+        return ret;
+
+    case k_ESteamNetworkingConfig_Callback_RelayNetworkStatusChanged:
+        if(!pArg){
+            ret = ((ISteamNetworkingUtils*)linux_side)->SetConfigValue(eValue, eScopeType, scopeObj, eDataType, NULL);
+        }else{
+            if(*(void **)pArg == NULL)
+                lin_fn = NULL;
+            else
+                lin_fn = (void *)&lin_SteamRelayNetworkStatusChanged;
+
+            ret = ((ISteamNetworkingUtils*)linux_side)->SetConfigValue(eValue, eScopeType, scopeObj, eDataType, &lin_fn);
+
+            if(ret)
+                win_SteamRelayNetworkStatusChanged = *(win_FnSteamRelayNetworkStatusChanged*)pArg;
+        }
+        return ret;
+
+    case k_ESteamNetworkingConfig_Callback_MessagesSessionRequest:
+        if(!pArg){
+            ret = ((ISteamNetworkingUtils*)linux_side)->SetConfigValue(eValue, eScopeType, scopeObj, eDataType, NULL);
+        }else{
+            if(*(void **)pArg == NULL)
+                lin_fn = NULL;
+            else
+                lin_fn = (void *)&lin_SteamNetworkingMessagesSessionRequest;
+
+            ret = ((ISteamNetworkingUtils*)linux_side)->SetConfigValue(eValue, eScopeType, scopeObj, eDataType, &lin_fn);
+
+            if(ret)
+                win_SteamNetworkingMessagesSessionRequest = *(win_FnSteamNetworkingMessagesSessionRequest*)pArg;
+        }
+        return ret;
+
+    case k_ESteamNetworkingConfig_Callback_MessagesSessionFailed:
+        if(!pArg){
+            ret = ((ISteamNetworkingUtils*)linux_side)->SetConfigValue(eValue, eScopeType, scopeObj, eDataType, NULL);
+        }else{
+            if(*(void **)pArg == NULL)
+                lin_fn = NULL;
+            else
+                lin_fn = (void *)&lin_SteamNetworkingMessagesSessionFailed;
+
+            ret = ((ISteamNetworkingUtils*)linux_side)->SetConfigValue(eValue, eScopeType, scopeObj, eDataType, &lin_fn);
+
+            if(ret)
+                win_SteamNetworkingMessagesSessionFailed = *(win_FnSteamNetworkingMessagesSessionFailed*)pArg;
+        }
+        return ret;
+
+    default:
+        return ((ISteamNetworkingUtils*)linux_side)->SetConfigValue((ESteamNetworkingConfigValue)eValue, (ESteamNetworkingConfigScope)eScopeType, (intptr_t)scopeObj, (ESteamNetworkingConfigDataType)eDataType, (const void *)pArg);
+    }
 }
 
 }
