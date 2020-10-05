@@ -4466,3 +4466,36 @@ index c5f96decb72..742fe86cc95 100644
  }
  
  static HRESULT WINAPI IXACT3CueImpl_SetMatrixCoefficients(IXACT3Cue *iface,
+From 2e408a6be5ebab5db76bc9fe803e5a566007c45a Mon Sep 17 00:00:00 2001
+From: Michael Stefaniuc <mstefani@winehq.org>
+Date: Tue, 22 Sep 2020 20:52:40 +0200
+Subject: [PATCH] xactengine3_7: Remove superfluous cast to self.
+
+Signed-off-by: Michael Stefaniuc <mstefani@winehq.org>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/xactengine3_7/xact_dll.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/dlls/xactengine3_7/xact_dll.c b/dlls/xactengine3_7/xact_dll.c
+index 742fe86cc95..84ed35d2c4d 100644
+--- a/dlls/xactengine3_7/xact_dll.c
++++ b/dlls/xactengine3_7/xact_dll.c
+@@ -259,7 +259,7 @@ static HRESULT WINAPI IXACT3SoundBankImpl_Prepare(IXACT3SoundBank *iface,
+ 
+     cue->IXACT3Cue_iface.lpVtbl = &XACT3Cue_Vtbl;
+     cue->fact_cue = fcue;
+-    *ppCue = (IXACT3Cue*)&cue->IXACT3Cue_iface;
++    *ppCue = &cue->IXACT3Cue_iface;
+ 
+     TRACE("Created Cue: %p\n", cue);
+ 
+@@ -301,7 +301,7 @@ static HRESULT WINAPI IXACT3SoundBankImpl_Play(IXACT3SoundBank *iface,
+ 
+         cue->IXACT3Cue_iface.lpVtbl = &XACT3Cue_Vtbl;
+         cue->fact_cue = fcue;
+-        *ppCue = (IXACT3Cue*)&cue->IXACT3Cue_iface;
++        *ppCue = &cue->IXACT3Cue_iface;
+     }
+ 
+     return hr;
