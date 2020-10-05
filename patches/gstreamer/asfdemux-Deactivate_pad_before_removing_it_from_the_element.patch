@@ -1,0 +1,29 @@
+From e1f564b2f0bc113d3e169712f988252c1733d8a3 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Sebastian=20Dr=C3=B6ge?= <sebastian@centricular.com>
+Date: Fri, 25 Oct 2019 13:56:56 +0300
+Subject: [PATCH] asfdemux: Deactivate pad before removing it from the element
+
+Otherwise we might have a pad floating around that is still activated,
+or even finalize a pad that is still activated.
+---
+ gst/asfdemux/gstasfdemux.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/gst/asfdemux/gstasfdemux.c b/gst/asfdemux/gstasfdemux.c
+index 58c3019de..169c1ef93 100644
+--- a/gst/asfdemux/gstasfdemux.c
++++ b/gst/asfdemux/gstasfdemux.c
+@@ -155,8 +155,9 @@ gst_asf_demux_free_stream (GstASFDemux * demux, AsfStream * stream)
+   }
+   if (stream->pad) {
+     if (stream->active) {
+-      gst_element_remove_pad (GST_ELEMENT_CAST (demux), stream->pad);
+       gst_flow_combiner_remove_pad (demux->flowcombiner, stream->pad);
++      gst_pad_set_active (stream->pad, FALSE);
++      gst_element_remove_pad (GST_ELEMENT_CAST (demux), stream->pad);
+     } else
+       gst_object_unref (stream->pad);
+     stream->pad = NULL;
+-- 
+GitLab
+
