@@ -1,0 +1,344 @@
+From: Liam Middlebrook <lmiddlebrook@nvidia.com>
+Subject: [PATCH 1/5] winevulkan: Invert MAX_IMAGE_COUNT quirk to default to zero
+Message-Id: <20200914123146.12912-1-lmiddlebrook@nvidia.com>
+Date: Mon, 14 Sep 2020 05:31:42 -0700
+
+Signed-off-by: Liam Middlebrook <lmiddlebrook@nvidia.com>
+Signed-off-by: Daniel Koch <dkoch@nvidia.com>
+---
+ dlls/winevulkan/vulkan.c         | 4 +---
+ dlls/winevulkan/vulkan_private.h | 2 +-
+ 2 files changed, 2 insertions(+), 4 deletions(-)
+
+diff --git a/dlls/winevulkan/vulkan.c b/dlls/winevulkan/vulkan.c
+index f730c04923a..a0dafbca46b 100644
+--- a/dlls/winevulkan/vulkan.c
++++ b/dlls/winevulkan/vulkan.c
+@@ -729,8 +729,6 @@ VkResult WINAPI wine_vkCreateInstance(const VkInstanceCreateInfo *create_info,
+             object->quirks |= WINEVULKAN_QUIRK_GET_DEVICE_PROC_ADDR;
+     }
+ 
+-    object->quirks |= WINEVULKAN_QUIRK_ADJUST_MAX_IMAGE_COUNT;
+-
+     *instance = object;
+     TRACE("Created instance %p (native instance %p).\n", object, object->instance);
+     return VK_SUCCESS;
+@@ -1580,7 +1578,7 @@ static inline void adjust_max_image_count(VkPhysicalDevice phys_dev, VkSurfaceCa
+      * https://vulkan.gpuinfo.org/displayreport.php?id=9122#surface
+      * https://vulkan.gpuinfo.org/displayreport.php?id=9121#surface
+      */
+-    if ((phys_dev->instance->quirks & WINEVULKAN_QUIRK_ADJUST_MAX_IMAGE_COUNT) && !capabilities->maxImageCount)
++    if (!(phys_dev->instance->quirks & WINEVULKAN_QUIRK_DONT_ADJUST_MAX_IMAGE_COUNT) && !capabilities->maxImageCount)
+     {
+         capabilities->maxImageCount = max(capabilities->minImageCount, 16);
+     }
+diff --git a/dlls/winevulkan/vulkan_private.h b/dlls/winevulkan/vulkan_private.h
+index 4bcc4de440d..00698aff4bb 100644
+--- a/dlls/winevulkan/vulkan_private.h
++++ b/dlls/winevulkan/vulkan_private.h
+@@ -38,7 +38,7 @@
+ #define VULKAN_ICD_MAGIC_VALUE 0x01CDC0DE
+ 
+ #define WINEVULKAN_QUIRK_GET_DEVICE_PROC_ADDR 0x00000001
+-#define WINEVULKAN_QUIRK_ADJUST_MAX_IMAGE_COUNT 0x00000002
++#define WINEVULKAN_QUIRK_DONT_ADJUST_MAX_IMAGE_COUNT 0x00000002
+ #define WINEVULKAN_QUIRK_IGNORE_EXPLICIT_LAYERS 0x00000004
+ 
+ struct vulkan_func
+
+-- 
+2.17.1
+From: Liam Middlebrook <lmiddlebrook@nvidia.com>
+Subject: [PATCH 2/5] winevulkan: Add registry key for manipulating quirks
+Message-Id: <20200914123146.12912-2-lmiddlebrook@nvidia.com>
+Date: Mon, 14 Sep 2020 05:31:43 -0700
+In-Reply-To: <20200914123146.12912-1-lmiddlebrook@nvidia.com>
+References: <20200914123146.12912-1-lmiddlebrook@nvidia.com>
+
+Tested with Vulkan CTS and WINEVULKAN_QUIRK_IGNORE_EXPLICIT_LAYERS.
+
+Signed-off-by: Liam Middlebrook <lmiddlebrook@nvidia.com>
+Signed-off-by: Daniel Koch <dkoch@nvidia.com>
+---
+ dlls/winevulkan/vulkan.c | 27 +++++++++++++++++++++++++++
+ 1 file changed, 27 insertions(+)
+
+diff --git a/dlls/winevulkan/vulkan.c b/dlls/winevulkan/vulkan.c
+index a0dafbca46b..57b0e65152a 100644
+--- a/dlls/winevulkan/vulkan.c
++++ b/dlls/winevulkan/vulkan.c
+@@ -655,6 +655,28 @@ fail:
+     return res;
+ }
+ 
++
++static void wine_vk_process_quirks(const VkApplicationInfo *pApplicationInfo, struct VkInstance_T *object)
++{
++    HKEY globalKey;
++
++    /* Load Global Quirks
++     * @@ Wine registry key: HKCU\Software\Wine\Vulkan
++     */
++    if (RegOpenKeyA(HKEY_CURRENT_USER, "Software\\Wine\\Vulkan", &globalKey) == 0)
++    {
++        DWORD type, value, size;
++        size = sizeof(value);
++        if (RegQueryValueExA(globalKey, "Quirks", NULL, &type, (LPBYTE)&value, &size) == 0
++            && type == REG_DWORD)
++        {
++            object->quirks = value;
++            TRACE("Loaded Quirks value %x\n", value);
++        }
++        RegCloseKey(globalKey);
++    }
++}
++
+ VkResult WINAPI wine_vkCreateInstance(const VkInstanceCreateInfo *create_info,
+         const VkAllocationCallbacks *allocator, VkInstance *instance)
+ {
+@@ -679,6 +701,11 @@ VkResult WINAPI wine_vkCreateInstance(const VkInstanceCreateInfo *create_info,
+     }
+     object->base.loader_magic = VULKAN_ICD_MAGIC_VALUE;
+ 
++    /* Load optional WineVulkan quirks bits from registry, see vulkan_private.h
++     * for a list of quirks.
++     */
++    wine_vk_process_quirks(create_info->pApplicationInfo, object);
++
+     res = wine_vk_instance_convert_create_info(create_info, &create_info_host, object);
+     if (res != VK_SUCCESS)
+     {
+
+-- 
+2.17.1
+From: Liam Middlebrook <lmiddlebrook@nvidia.com>
+Subject: [PATCH 3/5] winevulkan: Use array-based Quirk regkey processing
+Message-Id: <20200914123146.12912-3-lmiddlebrook@nvidia.com>
+Date: Mon, 14 Sep 2020 05:31:44 -0700
+In-Reply-To: <20200914123146.12912-1-lmiddlebrook@nvidia.com>
+References: <20200914123146.12912-1-lmiddlebrook@nvidia.com>
+
+Refactors existing handling of the Quirks regkey to allow for easier addition
+of future keys.
+
+Signed-off-by: Liam Middlebrook <lmiddlebrook@nvidia.com>
+Signed-off-by: Daniel Koch <dkoch@nvidia.com>
+---
+ dlls/winevulkan/vulkan.c | 36 ++++++++++++++++++++++++++++++------
+ 1 file changed, 30 insertions(+), 6 deletions(-)
+
+diff --git a/dlls/winevulkan/vulkan.c b/dlls/winevulkan/vulkan.c
+index 57b0e65152a..a9a341209f8 100644
+--- a/dlls/winevulkan/vulkan.c
++++ b/dlls/winevulkan/vulkan.c
+@@ -658,22 +658,46 @@ fail:
+ 
+ static void wine_vk_process_quirks(const VkApplicationInfo *pApplicationInfo, struct VkInstance_T *object)
+ {
+-    HKEY globalKey;
++    uint8_t validKeysMask = 0;
++    int keyIndex = 0;
++    HKEY keys[1];
++    int i;
+ 
+-    /* Load Global Quirks
+-     * @@ Wine registry key: HKCU\Software\Wine\Vulkan
++    memset(&keys, 0, sizeof(keys));
++
++    /* Match regkey settings in the following order, breaking early if settings
++     * are found:
++     *     global defaults
++     *         @@ Wine registry key: HKCU\Software\Wine\Vulkan
+      */
+-    if (RegOpenKeyA(HKEY_CURRENT_USER, "Software\\Wine\\Vulkan", &globalKey) == 0)
++    if (RegOpenKeyA(HKEY_CURRENT_USER, "Software\\Wine\\Vulkan", keys + keyIndex++) == 0)
++        validKeysMask |= (1 << (keyIndex - 1));
++
++    /* Load Global Quirks */
++    for (i = 0; i < ARRAY_SIZE(keys); i++)
+     {
+         DWORD type, value, size;
+         size = sizeof(value);
+-        if (RegQueryValueExA(globalKey, "Quirks", NULL, &type, (LPBYTE)&value, &size) == 0
++
++        if ((validKeysMask & (1 << i)) == 0)
++            continue;
++
++        if (RegQueryValueExA(keys[i], "Quirks", NULL, &type, (LPBYTE)&value, &size) == 0
+             && type == REG_DWORD)
+         {
+             object->quirks = value;
+             TRACE("Loaded Quirks value %x\n", value);
++            break;
+         }
+-        RegCloseKey(globalKey);
++    }
++
++    for (i = 0; i < ARRAY_SIZE(keys); i++)
++    {
++        if ((validKeysMask & (1 << i)) == 0)
++            continue;
++
++        validKeysMask &= ~(1 << i);
++        RegCloseKey(keys[i]);
+     }
+ }
+ 
+
+-- 
+2.17.1
+From: Liam Middlebrook <lmiddlebrook@nvidia.com>
+Subject: [PATCH 4/5] winevulkan: Add VkApplicationInfo specific Quirk regkey handling
+Message-Id: <20200914123146.12912-4-lmiddlebrook@nvidia.com>
+Date: Mon, 14 Sep 2020 05:31:45 -0700
+In-Reply-To: <20200914123146.12912-1-lmiddlebrook@nvidia.com>
+References: <20200914123146.12912-1-lmiddlebrook@nvidia.com>
+
+Add support for regkeys to set Quirks bits depending on VkInstance's
+pApplicationInfo->pApplicationName and pApplicationInfo->pEngineName properties.
+
+Signed-off-by: Liam Middlebrook <lmiddlebrook@nvidia.com>
+Signed-off-by: Daniel Koch <dkoch@nvidia.com>
+---
+ dlls/winevulkan/vulkan.c | 26 ++++++++++++++++++++++++--
+ 1 file changed, 24 insertions(+), 2 deletions(-)
+
+diff --git a/dlls/winevulkan/vulkan.c b/dlls/winevulkan/vulkan.c
+index a9a341209f8..e78ca1eda62 100644
+--- a/dlls/winevulkan/vulkan.c
++++ b/dlls/winevulkan/vulkan.c
+@@ -655,22 +655,44 @@ fail:
+     return res;
+ }
+ 
++static LSTATUS wine_vk_open_regkey_with_suffix(HKEY *key, const char *path_prefix, const char *path_suffix, BOOL allow_null_suffix)
++{
++    char buf[MAX_PATH];
++
++    if (!allow_null_suffix && !path_suffix)
++        return ERROR_INVALID_PARAMETER;
++
++    lstrcpynA(buf, path_prefix, MAX_PATH);
++    if (path_suffix)
++    {
++        strncat(buf, path_suffix, MAX_PATH - strlen(buf));
++    }
++    return RegOpenKeyA(HKEY_CURRENT_USER, buf, key);
++}
+ 
+ static void wine_vk_process_quirks(const VkApplicationInfo *pApplicationInfo, struct VkInstance_T *object)
+ {
+     uint8_t validKeysMask = 0;
+     int keyIndex = 0;
+-    HKEY keys[1];
++    HKEY keys[3];
+     int i;
+ 
+     memset(&keys, 0, sizeof(keys));
+ 
+     /* Match regkey settings in the following order, breaking early if settings
+      * are found:
++     *     pApplicationInfo->pApplicationName
++     *         @@ Wine registry key: HKCU\Software\Wine\Vulkan\pApplicationName\<pApplicationName>
++     *     pApplicationInfo->pEngineName
++     *         @@ Wine registry key: HKCU\Software\Wine\Vulkan\pEngineName\<pEngineName>
+      *     global defaults
+      *         @@ Wine registry key: HKCU\Software\Wine\Vulkan
+      */
+-    if (RegOpenKeyA(HKEY_CURRENT_USER, "Software\\Wine\\Vulkan", keys + keyIndex++) == 0)
++    if (wine_vk_open_regkey_with_suffix(keys + keyIndex++, "Software\\Wine\\Vulkan\\pApplicationName\\", pApplicationInfo->pApplicationName, FALSE) == 0)
++        validKeysMask |= (1 << (keyIndex - 1));
++    if (wine_vk_open_regkey_with_suffix(keys + keyIndex++, "Software\\Wine\\Vulkan\\pEngineName\\", pApplicationInfo->pEngineName, FALSE) == 0)
++        validKeysMask |= (1 << (keyIndex - 1));
++    if (wine_vk_open_regkey_with_suffix(keys + keyIndex++, "Software\\Wine\\Vulkan", NULL, TRUE) == 0)
+         validKeysMask |= (1 << (keyIndex - 1));
+ 
+     /* Load Global Quirks */
+
+-- 
+2.17.1
+From: Liam Middlebrook <lmiddlebrook@nvidia.com>
+Subject: [PATCH 5/5] winevulkan: Add executable name Quirk regkey handling
+Message-Id: <20200914123146.12912-5-lmiddlebrook@nvidia.com>
+Date: Mon, 14 Sep 2020 05:31:46 -0700
+In-Reply-To: <20200914123146.12912-1-lmiddlebrook@nvidia.com>
+References: <20200914123146.12912-1-lmiddlebrook@nvidia.com>
+
+Add support for regkeys to set Quirks bits depending the executable name of the
+currently running program.
+
+Signed-off-by: Liam Middlebrook <lmiddlebrook@nvidia.com>
+Signed-off-by: Daniel Koch <dkoch@nvidia.com>
+---
+ dlls/winevulkan/vulkan.c | 34 +++++++++++++++++++++++++++++++++-
+ 1 file changed, 33 insertions(+), 1 deletion(-)
+
+diff --git a/dlls/winevulkan/vulkan.c b/dlls/winevulkan/vulkan.c
+index e78ca1eda62..a77664a7e5f 100644
+--- a/dlls/winevulkan/vulkan.c
++++ b/dlls/winevulkan/vulkan.c
+@@ -670,21 +670,51 @@ static LSTATUS wine_vk_open_regkey_with_suffix(HKEY *key, const char *path_prefi
+     return RegOpenKeyA(HKEY_CURRENT_USER, buf, key);
+ }
+ 
++static uint32_t wine_vk_get_exe_name(char *name, uint32_t length)
++{
++    char buf[MAX_PATH];
++    uint32_t buf_len;
++    char *p, *exe_path;
++
++    buf_len = GetModuleFileNameA(0, buf, MAX_PATH);
++    if (!buf_len || buf_len == MAX_PATH)
++        return 0;
++
++    exe_path = buf;
++    if ((p = strrchr(exe_path, '/')))
++        exe_path = p + 1;
++    if ((p = strrchr(exe_path, '\\')))
++        exe_path = p + 1;
++
++    buf_len = strlen(exe_path) + 1;
++    if (buf_len > length)
++        return 0;
++
++    lstrcpynA(name, exe_path, length);
++    return length;
++}
++
+ static void wine_vk_process_quirks(const VkApplicationInfo *pApplicationInfo, struct VkInstance_T *object)
+ {
++    char exe_name[MAX_PATH];
+     uint8_t validKeysMask = 0;
+     int keyIndex = 0;
+-    HKEY keys[3];
++    HKEY keys[4];
+     int i;
+ 
+     memset(&keys, 0, sizeof(keys));
+ 
++    if (!wine_vk_get_exe_name(exe_name, MAX_PATH))
++        exe_name[0] = '\0';
++
+     /* Match regkey settings in the following order, breaking early if settings
+      * are found:
+      *     pApplicationInfo->pApplicationName
+      *         @@ Wine registry key: HKCU\Software\Wine\Vulkan\pApplicationName\<pApplicationName>
+      *     pApplicationInfo->pEngineName
+      *         @@ Wine registry key: HKCU\Software\Wine\Vulkan\pEngineName\<pEngineName>
++     *     executable name
++     *         @@ Wine registry key: HKCU\Software\Wine\Vulkan\exeName\app.exe
+      *     global defaults
+      *         @@ Wine registry key: HKCU\Software\Wine\Vulkan
+      */
+@@ -692,6 +722,8 @@ static void wine_vk_process_quirks(const VkApplicationInfo *pApplicationInfo, st
+         validKeysMask |= (1 << (keyIndex - 1));
+     if (wine_vk_open_regkey_with_suffix(keys + keyIndex++, "Software\\Wine\\Vulkan\\pEngineName\\", pApplicationInfo->pEngineName, FALSE) == 0)
+         validKeysMask |= (1 << (keyIndex - 1));
++    if (wine_vk_open_regkey_with_suffix(keys + keyIndex++, "Software\\Wine\\Vulkan\\exeName\\", exe_name, FALSE) == 0)
++        validKeysMask |= (1 << (keyIndex - 1));
+     if (wine_vk_open_regkey_with_suffix(keys + keyIndex++, "Software\\Wine\\Vulkan", NULL, TRUE) == 0)
+         validKeysMask |= (1 << (keyIndex - 1));
+ 
+
+-- 
+2.17.1

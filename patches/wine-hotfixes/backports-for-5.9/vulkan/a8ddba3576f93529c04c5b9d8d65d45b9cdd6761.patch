@@ -1,0 +1,208 @@
+From a8ddba3576f93529c04c5b9d8d65d45b9cdd6761 Mon Sep 17 00:00:00 2001
+From: Liam Middlebrook <lmiddlebrook@nvidia.com>
+Date: Tue, 29 Sep 2020 15:45:33 -0700
+Subject: [PATCH] winevulkan: Update to VK spec version 1.2.155.
+
+Signed-off-by: Liam Middlebrook <lmiddlebrook@nvidia.com>
+Signed-off-by: Andy Ritger <aritger@nvidia.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/winevulkan/make_vulkan     |  2 +-
+ dlls/winevulkan/vulkan_thunks.c | 18 ++++++++++
+ dlls/winevulkan/winevulkan.json |  2 +-
+ include/wine/vulkan.h           | 63 +++++++++++++++++++--------------
+ 4 files changed, 57 insertions(+), 28 deletions(-)
+
+diff --git a/dlls/winevulkan/make_vulkan b/dlls/winevulkan/make_vulkan
+index 23897b71856..7f89cfdabaa 100755
+--- a/dlls/winevulkan/make_vulkan
++++ b/dlls/winevulkan/make_vulkan
+@@ -64,7 +64,7 @@ from enum import Enum
+ LOGGER = logging.Logger("vulkan")
+ LOGGER.addHandler(logging.StreamHandler())
+ 
+-VK_XML_VERSION = "1.2.154"
++VK_XML_VERSION = "1.2.155"
+ WINE_VK_VERSION = (1, 2)
+ 
+ # Filenames to create.
+diff --git a/dlls/winevulkan/vulkan_thunks.c b/dlls/winevulkan/vulkan_thunks.c
+index bb5414c2298..368d29c4ef2 100644
+--- a/dlls/winevulkan/vulkan_thunks.c
++++ b/dlls/winevulkan/vulkan_thunks.c
+@@ -2960,6 +2960,23 @@ VkResult convert_VkDeviceCreateInfo_struct_chain(const void *pNext, VkDeviceCrea
+             break;
+         }
+ 
++        case VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_IMAGE_ATOMIC_INT64_FEATURES_EXT:
++        {
++            const VkPhysicalDeviceShaderImageAtomicInt64FeaturesEXT *in = (const VkPhysicalDeviceShaderImageAtomicInt64FeaturesEXT *)in_header;
++            VkPhysicalDeviceShaderImageAtomicInt64FeaturesEXT *out;
++
++            if (!(out = heap_alloc(sizeof(*out)))) goto out_of_memory;
++
++            out->sType = in->sType;
++            out->pNext = NULL;
++            out->shaderImageInt64Atomics = in->shaderImageInt64Atomics;
++            out->sparseImageInt64Atomics = in->sparseImageInt64Atomics;
++
++            out_header->pNext = (VkBaseOutStructure *)out;
++            out_header = out_header->pNext;
++            break;
++        }
++
+         default:
+             FIXME("Application requested a linked structure of type %u.\n", in_header->sType);
+         }
+@@ -6105,6 +6122,7 @@ static const char * const vk_device_extensions[] =
+     "VK_EXT_separate_stencil_usage",
+     "VK_EXT_shader_atomic_float",
+     "VK_EXT_shader_demote_to_helper_invocation",
++    "VK_EXT_shader_image_atomic_int64",
+     "VK_EXT_shader_stencil_export",
+     "VK_EXT_shader_subgroup_ballot",
+     "VK_EXT_shader_subgroup_vote",
+diff --git a/dlls/winevulkan/winevulkan.json b/dlls/winevulkan/winevulkan.json
+index 84d7ce18346..7b39e7de263 100644
+--- a/dlls/winevulkan/winevulkan.json
++++ b/dlls/winevulkan/winevulkan.json
+@@ -2,6 +2,6 @@
+     "file_format_version": "1.0.0",
+     "ICD": {
+         "library_path": ".\\winevulkan.dll",
+-        "api_version": "1.2.154"
++        "api_version": "1.2.155"
+     }
+ }
+diff --git a/include/wine/vulkan.h b/include/wine/vulkan.h
+index 4b4512e4483..f7225f01e8f 100644
+--- a/include/wine/vulkan.h
++++ b/include/wine/vulkan.h
+@@ -311,6 +311,8 @@
+ #define VK_AMD_SHADER_CORE_PROPERTIES_2_EXTENSION_NAME "VK_AMD_shader_core_properties2"
+ #define VK_AMD_DEVICE_COHERENT_MEMORY_SPEC_VERSION 1
+ #define VK_AMD_DEVICE_COHERENT_MEMORY_EXTENSION_NAME "VK_AMD_device_coherent_memory"
++#define VK_EXT_SHADER_IMAGE_ATOMIC_INT64_SPEC_VERSION 1
++#define VK_EXT_SHADER_IMAGE_ATOMIC_INT64_EXTENSION_NAME "VK_EXT_shader_image_atomic_int64"
+ #define VK_KHR_SPIRV_1_4_SPEC_VERSION 1
+ #define VK_KHR_SPIRV_1_4_EXTENSION_NAME "VK_KHR_spirv_1_4"
+ #define VK_EXT_MEMORY_BUDGET_SPEC_VERSION 1
+@@ -394,7 +396,7 @@
+ #define VK_API_VERSION_1_0 VK_MAKE_VERSION(1, 0, 0)
+ #define VK_API_VERSION_1_1 VK_MAKE_VERSION(1, 1, 0)
+ #define VK_API_VERSION_1_2 VK_MAKE_VERSION(1, 2, 0)
+-#define VK_HEADER_VERSION 154
++#define VK_HEADER_VERSION 155
+ #define VK_HEADER_VERSION_COMPLETE VK_MAKE_VERSION(1, 2, VK_HEADER_VERSION)
+ #define VK_DEFINE_HANDLE(object) typedef struct object##_T* object;
+ #define VK_DEFINE_NON_DISPATCHABLE_HANDLE(object) typedef uint64_t object;
+@@ -2823,6 +2825,7 @@ typedef enum VkStructureType
+     VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SUBGROUP_SIZE_CONTROL_FEATURES_EXT = 1000225002,
+     VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_CORE_PROPERTIES_2_AMD = 1000227000,
+     VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_COHERENT_MEMORY_FEATURES_AMD = 1000229000,
++    VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_IMAGE_ATOMIC_INT64_FEATURES_EXT = 1000234000,
+     VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_MEMORY_BUDGET_PROPERTIES_EXT = 1000237000,
+     VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_MEMORY_PRIORITY_FEATURES_EXT = 1000238000,
+     VK_STRUCTURE_TYPE_MEMORY_PRIORITY_ALLOCATE_INFO_EXT = 1000238001,
+@@ -4460,20 +4463,35 @@ typedef struct VkPhysicalDeviceShaderDrawParametersFeatures
+ } VkPhysicalDeviceShaderDrawParametersFeatures;
+ typedef VkPhysicalDeviceShaderDrawParametersFeatures VkPhysicalDeviceShaderDrawParameterFeatures;
+ 
+-typedef struct VkPhysicalDeviceShaderIntegerFunctions2FeaturesINTEL
++typedef struct VkPhysicalDeviceShaderImageFootprintFeaturesNV
+ {
+     VkStructureType sType;
+     void *pNext;
+-    VkBool32 shaderIntegerFunctions2;
+-} VkPhysicalDeviceShaderIntegerFunctions2FeaturesINTEL;
++    VkBool32 imageFootprint;
++} VkPhysicalDeviceShaderImageFootprintFeaturesNV;
+ 
+-typedef struct VkPhysicalDeviceShaderSMBuiltinsPropertiesNV
++typedef struct VkPhysicalDeviceShaderSMBuiltinsFeaturesNV
+ {
+     VkStructureType sType;
+     void *pNext;
+-    uint32_t shaderSMCount;
+-    uint32_t shaderWarpsPerSM;
+-} VkPhysicalDeviceShaderSMBuiltinsPropertiesNV;
++    VkBool32 shaderSMBuiltins;
++} VkPhysicalDeviceShaderSMBuiltinsFeaturesNV;
++
++typedef struct VkPhysicalDeviceShaderSubgroupExtendedTypesFeatures
++{
++    VkStructureType sType;
++    void *pNext;
++    VkBool32 shaderSubgroupExtendedTypes;
++} VkPhysicalDeviceShaderSubgroupExtendedTypesFeatures;
++typedef VkPhysicalDeviceShaderSubgroupExtendedTypesFeatures VkPhysicalDeviceShaderSubgroupExtendedTypesFeaturesKHR;
++
++typedef struct VkPhysicalDeviceShadingRateImageFeaturesNV
++{
++    VkStructureType sType;
++    void *pNext;
++    VkBool32 shadingRateImage;
++    VkBool32 shadingRateCoarseSampleOrder;
++} VkPhysicalDeviceShadingRateImageFeaturesNV;
+ 
+ typedef struct VkPhysicalDeviceSparseImageFormatInfo2
+ {
+@@ -5578,20 +5596,12 @@ typedef struct VkPhysicalDeviceShaderFloat16Int8Features
+ typedef VkPhysicalDeviceShaderFloat16Int8Features VkPhysicalDeviceShaderFloat16Int8FeaturesKHR;
+ typedef VkPhysicalDeviceShaderFloat16Int8Features VkPhysicalDeviceFloat16Int8FeaturesKHR;
+ 
+-typedef struct VkPhysicalDeviceShaderSMBuiltinsFeaturesNV
+-{
+-    VkStructureType sType;
+-    void *pNext;
+-    VkBool32 shaderSMBuiltins;
+-} VkPhysicalDeviceShaderSMBuiltinsFeaturesNV;
+-
+-typedef struct VkPhysicalDeviceShadingRateImageFeaturesNV
++typedef struct VkPhysicalDeviceShaderIntegerFunctions2FeaturesINTEL
+ {
+     VkStructureType sType;
+     void *pNext;
+-    VkBool32 shadingRateImage;
+-    VkBool32 shadingRateCoarseSampleOrder;
+-} VkPhysicalDeviceShadingRateImageFeaturesNV;
++    VkBool32 shaderIntegerFunctions2;
++} VkPhysicalDeviceShaderIntegerFunctions2FeaturesINTEL;
+ 
+ typedef struct VkPhysicalDeviceSubgroupSizeControlPropertiesEXT
+ {
+@@ -6305,13 +6315,13 @@ typedef struct VkPhysicalDeviceSampleLocationsPropertiesEXT
+     VkBool32 variableSampleLocations;
+ } VkPhysicalDeviceSampleLocationsPropertiesEXT;
+ 
+-typedef struct VkPhysicalDeviceShaderSubgroupExtendedTypesFeatures
++typedef struct VkPhysicalDeviceShaderSMBuiltinsPropertiesNV
+ {
+     VkStructureType sType;
+     void *pNext;
+-    VkBool32 shaderSubgroupExtendedTypes;
+-} VkPhysicalDeviceShaderSubgroupExtendedTypesFeatures;
+-typedef VkPhysicalDeviceShaderSubgroupExtendedTypesFeatures VkPhysicalDeviceShaderSubgroupExtendedTypesFeaturesKHR;
++    uint32_t shaderSMCount;
++    uint32_t shaderWarpsPerSM;
++} VkPhysicalDeviceShaderSMBuiltinsPropertiesNV;
+ 
+ typedef struct VkPhysicalDeviceSubgroupProperties
+ {
+@@ -6755,12 +6765,13 @@ typedef struct VkPhysicalDeviceProperties2
+ } VkPhysicalDeviceProperties2;
+ typedef VkPhysicalDeviceProperties2 VkPhysicalDeviceProperties2KHR;
+ 
+-typedef struct VkPhysicalDeviceShaderImageFootprintFeaturesNV
++typedef struct VkPhysicalDeviceShaderImageAtomicInt64FeaturesEXT
+ {
+     VkStructureType sType;
+     void *pNext;
+-    VkBool32 imageFootprint;
+-} VkPhysicalDeviceShaderImageFootprintFeaturesNV;
++    VkBool32 shaderImageInt64Atomics;
++    VkBool32 sparseImageInt64Atomics;
++} VkPhysicalDeviceShaderImageAtomicInt64FeaturesEXT;
+ 
+ typedef struct VkPhysicalDeviceTexelBufferAlignmentFeaturesEXT
+ {
