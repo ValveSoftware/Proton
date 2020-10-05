@@ -1,1598 +1,33 @@
-From 139b483754aee0188f68109dc593df6eb9e083c4 Mon Sep 17 00:00:00 2001
+From 073dde743ea2fe54e93c50ea24bb83c59adaddd1 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
-Date: Mon, 30 Mar 2020 14:19:35 -0500
-Subject: [PATCH 01/52] winegstreamer: Add a GstPad wrapping the media source's
- bytestream.
+Date: Tue, 15 Sep 2020 14:25:26 -0500
+Subject: [PATCH] winegstreamer: Insert parser into pipeline to rectify type
+ differences.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
 ---
- dlls/winegstreamer/gst_cbs.c      |  58 ++++++++
- dlls/winegstreamer/gst_cbs.h      |  12 +-
- dlls/winegstreamer/main.c         |   3 +
- dlls/winegstreamer/media_source.c | 219 +++++++++++++++++++++++++++++-
- 4 files changed, 288 insertions(+), 4 deletions(-)
+ dlls/winegstreamer/gst_private.h  |   1 +
+ dlls/winegstreamer/media_source.c | 149 +++++++++++++++++++++++++++++-
+ dlls/winegstreamer/mfplat.c       |  22 +++++
+ 3 files changed, 169 insertions(+), 3 deletions(-)
 
-diff --git a/dlls/winegstreamer/gst_cbs.c b/dlls/winegstreamer/gst_cbs.c
-index bf7103b1606..8f48368c96a 100644
---- a/dlls/winegstreamer/gst_cbs.c
-+++ b/dlls/winegstreamer/gst_cbs.c
-@@ -49,6 +49,8 @@ static void CALLBACK perform_cb(TP_CALLBACK_INSTANCE *instance, void *user)
- 
-     if (cbdata->type < GSTDEMUX_MAX)
-         perform_cb_gstdemux(cbdata);
-+    else if (cbdata->type < MEDIA_SOURCE_MAX)
-+        perform_cb_media_source(cbdata);
- 
-     pthread_mutex_lock(&cbdata->lock);
-     cbdata->finished = 1;
-@@ -301,3 +303,59 @@ gboolean query_sink_wrapper(GstPad *pad, GstObject *parent, GstQuery *query)
- 
-     return cbdata.u.query_sink_data.ret;
- }
-+
-+GstFlowReturn pull_from_bytestream_wrapper(GstPad *pad, GstObject *parent, guint64 ofs, guint len,
-+        GstBuffer **buf)
-+{
-+    struct cb_data cbdata = { PULL_FROM_BYTESTREAM };
-+
-+    cbdata.u.getrange_data.pad = pad;
-+    cbdata.u.getrange_data.parent = parent;
-+    cbdata.u.getrange_data.ofs = ofs;
-+    cbdata.u.getrange_data.len = len;
-+    cbdata.u.getrange_data.buf = buf;
-+
-+    call_cb(&cbdata);
-+
-+    return cbdata.u.getrange_data.ret;
-+}
-+
-+gboolean query_bytestream_wrapper(GstPad *pad, GstObject *parent, GstQuery *query)
-+{
-+    struct cb_data cbdata = { QUERY_BYTESTREAM };
-+
-+    cbdata.u.query_function_data.pad = pad;
-+    cbdata.u.query_function_data.parent = parent;
-+    cbdata.u.query_function_data.query = query;
-+
-+    call_cb(&cbdata);
-+
-+    return cbdata.u.query_function_data.ret;
-+}
-+
-+gboolean activate_bytestream_pad_mode_wrapper(GstPad *pad, GstObject *parent, GstPadMode mode, gboolean activate)
-+{
-+    struct cb_data cbdata = { ACTIVATE_BYTESTREAM_PAD_MODE };
-+
-+    cbdata.u.activate_mode_data.pad = pad;
-+    cbdata.u.activate_mode_data.parent = parent;
-+    cbdata.u.activate_mode_data.mode = mode;
-+    cbdata.u.activate_mode_data.activate = activate;
-+
-+    call_cb(&cbdata);
-+
-+    return cbdata.u.activate_mode_data.ret;
-+}
-+
-+gboolean process_bytestream_pad_event_wrapper(GstPad *pad, GstObject *parent, GstEvent *event)
-+{
-+    struct cb_data cbdata = { PROCESS_BYTESTREAM_PAD_EVENT };
-+
-+    cbdata.u.event_src_data.pad = pad;
-+    cbdata.u.event_src_data.parent = parent;
-+    cbdata.u.event_src_data.event = event;
-+
-+    call_cb(&cbdata);
-+
-+    return cbdata.u.event_src_data.ret;
-+}
-diff --git a/dlls/winegstreamer/gst_cbs.h b/dlls/winegstreamer/gst_cbs.h
-index 4725f23ad1a..10e999feea7 100644
---- a/dlls/winegstreamer/gst_cbs.h
-+++ b/dlls/winegstreamer/gst_cbs.h
-@@ -43,7 +43,12 @@ enum CB_TYPE {
-     AUTOPLUG_BLACKLIST,
-     UNKNOWN_TYPE,
-     QUERY_SINK,
--    GSTDEMUX_MAX
-+    GSTDEMUX_MAX,
-+    PULL_FROM_BYTESTREAM,
-+    QUERY_BYTESTREAM,
-+    ACTIVATE_BYTESTREAM_PAD_MODE,
-+    PROCESS_BYTESTREAM_PAD_EVENT,
-+    MEDIA_SOURCE_MAX,
- };
- 
- struct cb_data {
-@@ -138,6 +143,7 @@ struct cb_data {
- 
- void mark_wine_thread(void) DECLSPEC_HIDDEN;
- void perform_cb_gstdemux(struct cb_data *data) DECLSPEC_HIDDEN;
-+void perform_cb_media_source(struct cb_data *data) DECLSPEC_HIDDEN;
- 
- GstBusSyncReply watch_bus_wrapper(GstBus *bus, GstMessage *msg, gpointer user) DECLSPEC_HIDDEN;
- void existing_new_pad_wrapper(GstElement *bin, GstPad *pad, gpointer user) DECLSPEC_HIDDEN;
-@@ -154,5 +160,9 @@ GstAutoplugSelectResult autoplug_blacklist_wrapper(GstElement *bin, GstPad *pad,
- void unknown_type_wrapper(GstElement *bin, GstPad *pad, GstCaps *caps, gpointer user) DECLSPEC_HIDDEN;
- void Gstreamer_transform_pad_added_wrapper(GstElement *filter, GstPad *pad, gpointer user) DECLSPEC_HIDDEN;
- gboolean query_sink_wrapper(GstPad *pad, GstObject *parent, GstQuery *query) DECLSPEC_HIDDEN;
-+GstFlowReturn pull_from_bytestream_wrapper(GstPad *pad, GstObject *parent, guint64 ofs, guint len, GstBuffer **buf) DECLSPEC_HIDDEN;
-+gboolean query_bytestream_wrapper(GstPad *pad, GstObject *parent, GstQuery *query) DECLSPEC_HIDDEN;
-+gboolean activate_bytestream_pad_mode_wrapper(GstPad *pad, GstObject *parent, GstPadMode mode, gboolean activate) DECLSPEC_HIDDEN;
-+gboolean process_bytestream_pad_event_wrapper(GstPad *pad, GstObject *parent, GstEvent *event) DECLSPEC_HIDDEN;
- 
- #endif
-diff --git a/dlls/winegstreamer/main.c b/dlls/winegstreamer/main.c
-index 2872710b3e2..4ca371d58bd 100644
---- a/dlls/winegstreamer/main.c
-+++ b/dlls/winegstreamer/main.c
-@@ -146,6 +146,9 @@ HRESULT WINAPI DllGetClassObject(REFCLSID clsid, REFIID iid, void **out)
- 
-     TRACE("clsid %s, iid %s, out %p.\n", debugstr_guid(clsid), debugstr_guid(iid), out);
- 
-+    if (!init_gstreamer())
-+        return CLASS_E_CLASSNOTAVAILABLE;
-+
-     if (SUCCEEDED(hr = mfplat_get_class_object(clsid, iid, out)))
-         return hr;
- 
-diff --git a/dlls/winegstreamer/media_source.c b/dlls/winegstreamer/media_source.c
-index 84ecf305d4c..6b3bd4a7869 100644
---- a/dlls/winegstreamer/media_source.c
-+++ b/dlls/winegstreamer/media_source.c
-@@ -17,7 +17,12 @@
-  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
-  */
- 
-+#include "config.h"
-+
-+#include <gst/gst.h>
-+
- #include "gst_private.h"
-+#include "gst_cbs.h"
- 
- #include <stdarg.h>
- 
-@@ -27,6 +32,7 @@
- #include "mfapi.h"
- #include "mferror.h"
- #include "mfidl.h"
-+#include "mfobjects.h"
- 
- #include "wine/debug.h"
- #include "wine/heap.h"
-@@ -39,6 +45,8 @@ struct media_source
-     IMFMediaSource IMFMediaSource_iface;
-     LONG ref;
-     IMFMediaEventQueue *event_queue;
-+    IMFByteStream *byte_stream;
-+    GstPad *my_src;
-     enum
-     {
-         SOURCE_OPENING,
-@@ -52,6 +60,154 @@ static inline struct media_source *impl_from_IMFMediaSource(IMFMediaSource *ifac
-     return CONTAINING_RECORD(iface, struct media_source, IMFMediaSource_iface);
- }
- 
-+GstFlowReturn pull_from_bytestream(GstPad *pad, GstObject *parent, guint64 ofs, guint len,
-+        GstBuffer **buf)
-+{
-+    struct media_source *source = gst_pad_get_element_private(pad);
-+    IMFByteStream *byte_stream = source->byte_stream;
-+    ULONG bytes_read;
-+    GstMapInfo info;
-+    BOOL is_eof;
-+    HRESULT hr;
-+
-+    TRACE("gstreamer requesting %u bytes at %s from source %p into buffer %p\n", len, wine_dbgstr_longlong(ofs), source, buf);
-+
-+    if (ofs != GST_BUFFER_OFFSET_NONE)
-+    {
-+        if (FAILED(IMFByteStream_SetCurrentPosition(byte_stream, ofs)))
-+            return GST_FLOW_ERROR;
-+    }
-+
-+    if (FAILED(IMFByteStream_IsEndOfStream(byte_stream, &is_eof)))
-+        return GST_FLOW_ERROR;
-+    if (is_eof)
-+        return GST_FLOW_EOS;
-+
-+    if (!(*buf))
-+        *buf = gst_buffer_new_and_alloc(len);
-+    gst_buffer_map(*buf, &info, GST_MAP_WRITE);
-+    hr = IMFByteStream_Read(byte_stream, info.data, len, &bytes_read);
-+    gst_buffer_unmap(*buf, &info);
-+
-+    gst_buffer_set_size(*buf, bytes_read);
-+
-+    if (FAILED(hr))
-+    {
-+        return GST_FLOW_ERROR;
-+    }
-+    GST_BUFFER_OFFSET(*buf) = ofs;
-+    return GST_FLOW_OK;
-+}
-+
-+static gboolean query_bytestream(GstPad *pad, GstObject *parent, GstQuery *query)
-+{
-+    struct media_source *source = gst_pad_get_element_private(pad);
-+    GstFormat format;
-+    QWORD bytestream_len;
-+
-+    TRACE("GStreamer queries source %p for %s\n", source, GST_QUERY_TYPE_NAME(query));
-+
-+    if (FAILED(IMFByteStream_GetLength(source->byte_stream, &bytestream_len)))
-+        return FALSE;
-+
-+    switch (GST_QUERY_TYPE(query))
-+    {
-+        case GST_QUERY_DURATION:
-+        {
-+            gst_query_parse_duration (query, &format, NULL);
-+            if (format == GST_FORMAT_PERCENT) {
-+                gst_query_set_duration (query, GST_FORMAT_PERCENT, GST_FORMAT_PERCENT_MAX);
-+                return TRUE;
-+            }
-+            else if (format == GST_FORMAT_BYTES)
-+            {
-+                QWORD length;
-+                IMFByteStream_GetLength(source->byte_stream, &length);
-+                gst_query_set_duration (query, GST_FORMAT_BYTES, length);
-+                return TRUE;
-+            }
-+            return FALSE;
-+        }
-+        case GST_QUERY_SEEKING:
-+        {
-+            gst_query_parse_seeking (query, &format, NULL, NULL, NULL);
-+            if (format != GST_FORMAT_BYTES)
-+            {
-+                WARN("Cannot seek using format \"%s\".\n", gst_format_get_name(format));
-+                return FALSE;
-+            }
-+            gst_query_set_seeking(query, GST_FORMAT_BYTES, 1, 0, bytestream_len);
-+            return TRUE;
-+        }
-+        case GST_QUERY_SCHEDULING:
-+        {
-+            gst_query_set_scheduling(query, GST_SCHEDULING_FLAG_SEEKABLE, 1, -1, 0);
-+            gst_query_add_scheduling_mode(query, GST_PAD_MODE_PULL);
-+            return TRUE;
-+        }
-+        case GST_QUERY_CAPS:
-+        {
-+            GstStaticCaps any = GST_STATIC_CAPS_ANY;
-+            GstCaps *caps, *filter;
-+
-+            caps = gst_static_caps_get(&any);
-+            gst_query_parse_caps(query, &filter);
-+
-+            if (filter) {
-+                GstCaps* filtered;
-+                filtered = gst_caps_intersect_full(
-+                        filter, caps, GST_CAPS_INTERSECT_FIRST);
-+                gst_caps_unref(caps);
-+                caps = filtered;
-+            }
-+            gst_query_set_caps_result(query, caps);
-+            gst_caps_unref(caps);
-+            return TRUE;
-+        }
-+        default:
-+        {
-+            WARN("Unhandled query type %s\n", GST_QUERY_TYPE_NAME(query));
-+            return FALSE;
-+        }
-+    }
-+}
-+
-+static gboolean activate_bytestream_pad_mode(GstPad *pad, GstObject *parent, GstPadMode mode, gboolean activate)
-+{
-+    struct media_source *source = gst_pad_get_element_private(pad);
-+
-+    TRACE("%s source pad for mediasource %p in %s mode.\n",
-+            activate ? "Activating" : "Deactivating", source, gst_pad_mode_get_name(mode));
-+
-+    switch (mode) {
-+      case GST_PAD_MODE_PULL:
-+        return TRUE;
-+      default:
-+        return FALSE;
-+    }
-+    return FALSE;
-+}
-+
-+static gboolean process_bytestream_pad_event(GstPad *pad, GstObject *parent, GstEvent *event)
-+{
-+    struct media_source *source = gst_pad_get_element_private(pad);
-+
-+    TRACE("source %p, type \"%s\".\n", source, GST_EVENT_TYPE_NAME(event));
-+
-+    switch (event->type) {
-+        /* the seek event should fail in pull mode */
-+        case GST_EVENT_SEEK:
-+            return FALSE;
-+        default:
-+            WARN("Ignoring \"%s\" event.\n", GST_EVENT_TYPE_NAME(event));
-+        case GST_EVENT_TAG:
-+        case GST_EVENT_QOS:
-+        case GST_EVENT_RECONFIGURE:
-+            return gst_pad_event_default(pad, parent, event);
-+    }
-+    return TRUE;
-+}
-+
- static HRESULT WINAPI media_source_QueryInterface(IMFMediaSource *iface, REFIID riid, void **out)
- {
-     struct media_source *source = impl_from_IMFMediaSource(iface);
-@@ -211,8 +367,12 @@ static HRESULT WINAPI media_source_Shutdown(IMFMediaSource *iface)
- 
-     source->state = SOURCE_SHUTDOWN;
- 
-+    if (source->my_src)
-+        gst_object_unref(GST_OBJECT(source->my_src));
-     if (source->event_queue)
-         IMFMediaEventQueue_Shutdown(source->event_queue);
-+    if (source->byte_stream)
-+        IMFByteStream_Release(source->byte_stream);
- 
-     return S_OK;
- }
-@@ -236,19 +396,34 @@ static const IMFMediaSourceVtbl IMFMediaSource_vtbl =
- 
- static HRESULT media_source_constructor(IMFByteStream *bytestream, struct media_source **out_media_source)
- {
-+    GstStaticPadTemplate src_template = GST_STATIC_PAD_TEMPLATE(
-+        "mf_src",
-+        GST_PAD_SRC,
-+        GST_PAD_ALWAYS,
-+        GST_STATIC_CAPS_ANY);
-+
-     struct media_source *object = heap_alloc_zero(sizeof(*object));
-     HRESULT hr;
- 
-     if (!object)
-         return E_OUTOFMEMORY;
- 
-+    object->IMFMediaSource_iface.lpVtbl = &IMFMediaSource_vtbl;
-+    object->ref = 1;
-+    object->byte_stream = bytestream;
-+    IMFByteStream_AddRef(bytestream);
-+
-     if (FAILED(hr = MFCreateEventQueue(&object->event_queue)))
-         goto fail;
- 
--    object->state = SOURCE_STOPPED;
-+    object->my_src = gst_pad_new_from_static_template(&src_template, "mf-src");
-+    gst_pad_set_element_private(object->my_src, object);
-+    gst_pad_set_getrange_function(object->my_src, pull_from_bytestream_wrapper);
-+    gst_pad_set_query_function(object->my_src, query_bytestream_wrapper);
-+    gst_pad_set_activatemode_function(object->my_src, activate_bytestream_pad_mode_wrapper);
-+    gst_pad_set_event_function(object->my_src, process_bytestream_pad_event_wrapper);
- 
--    object->IMFMediaSource_iface.lpVtbl = &IMFMediaSource_vtbl;
--    object->ref = 1;
-+    object->state = SOURCE_STOPPED;
- 
-     *out_media_source = object;
-     return S_OK;
-@@ -717,3 +892,41 @@ HRESULT winegstreamer_stream_handler_create(REFIID riid, void **obj)
- 
-     return hr;
- }
-+
-+/* helper for callback forwarding */
-+void perform_cb_media_source(struct cb_data *cbdata)
-+{
-+    switch(cbdata->type)
-+    {
-+    case PULL_FROM_BYTESTREAM:
-+        {
-+            struct getrange_data *data = &cbdata->u.getrange_data;
-+            cbdata->u.getrange_data.ret = pull_from_bytestream(data->pad, data->parent,
-+                    data->ofs, data->len, data->buf);
-+            break;
-+        }
-+    case QUERY_BYTESTREAM:
-+        {
-+            struct query_function_data *data = &cbdata->u.query_function_data;
-+            cbdata->u.query_function_data.ret = query_bytestream(data->pad, data->parent, data->query);
-+            break;
-+        }
-+    case ACTIVATE_BYTESTREAM_PAD_MODE:
-+        {
-+            struct activate_mode_data *data = &cbdata->u.activate_mode_data;
-+            cbdata->u.activate_mode_data.ret = activate_bytestream_pad_mode(data->pad, data->parent, data->mode, data->activate);
-+            break;
-+        }
-+    case PROCESS_BYTESTREAM_PAD_EVENT:
-+        {
-+            struct event_src_data *data = &cbdata->u.event_src_data;
-+            cbdata->u.event_src_data.ret = process_bytestream_pad_event(data->pad, data->parent, data->event);
-+            break;
-+        }
-+    default:
-+        {
-+            ERR("Wrong callback forwarder called\n");
-+            return;
-+        }
-+    }
-+}
--- 
-2.28.0
-
-From 27ea26494dfa10570c1d2c838660e2169ac9add3 Mon Sep 17 00:00:00 2001
-From: Derek Lesho <dlesho@codeweavers.com>
-Date: Tue, 31 Mar 2020 13:34:57 -0500
-Subject: [PATCH 02/52] winegstreamer: Use decodebin to initialize media
- streams.
-
-Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
----
- dlls/winegstreamer/gst_cbs.c      |  45 ++++
- dlls/winegstreamer/gst_cbs.h      |   8 +
- dlls/winegstreamer/media_source.c | 416 +++++++++++++++++++++++++++++-
- 3 files changed, 468 insertions(+), 1 deletion(-)
-
-diff --git a/dlls/winegstreamer/gst_cbs.c b/dlls/winegstreamer/gst_cbs.c
-index 8f48368c96a..4755f5b42f1 100644
---- a/dlls/winegstreamer/gst_cbs.c
-+++ b/dlls/winegstreamer/gst_cbs.c
-@@ -359,3 +359,48 @@ gboolean process_bytestream_pad_event_wrapper(GstPad *pad, GstObject *parent, Gs
- 
-     return cbdata.u.event_src_data.ret;
- }
-+
-+GstBusSyncReply watch_source_bus_wrapper(GstBus *bus, GstMessage *message, gpointer user)
-+{
-+    struct cb_data cbdata = { WATCH_SOURCE_BUS };
-+
-+    cbdata.u.watch_bus_data.bus = bus;
-+    cbdata.u.watch_bus_data.msg = message;
-+    cbdata.u.watch_bus_data.user = user;
-+
-+    call_cb(&cbdata);
-+
-+    return cbdata.u.watch_bus_data.ret;
-+}
-+
-+void source_stream_added_wrapper(GstElement *bin, GstPad *pad, gpointer user)
-+{
-+    struct cb_data cbdata = { SOURCE_STREAM_ADDED };
-+
-+    cbdata.u.pad_added_data.element = bin;
-+    cbdata.u.pad_added_data.pad = pad;
-+    cbdata.u.pad_added_data.user = user;
-+
-+    call_cb(&cbdata);
-+}
-+
-+void source_stream_removed_wrapper(GstElement *element, GstPad *pad, gpointer user)
-+{
-+    struct cb_data cbdata = { SOURCE_STREAM_REMOVED };
-+
-+    cbdata.u.pad_removed_data.element = element;
-+    cbdata.u.pad_removed_data.pad = pad;
-+    cbdata.u.pad_removed_data.user = user;
-+
-+    call_cb(&cbdata);
-+}
-+
-+void source_all_streams_wrapper(GstElement *element, gpointer user)
-+{
-+    struct cb_data cbdata = { SOURCE_ALL_STREAMS };
-+
-+    cbdata.u.no_more_pads_data.element = element;
-+    cbdata.u.no_more_pads_data.user = user;
-+
-+    call_cb(&cbdata);
-+}
-diff --git a/dlls/winegstreamer/gst_cbs.h b/dlls/winegstreamer/gst_cbs.h
-index 10e999feea7..d87cc8c21e9 100644
---- a/dlls/winegstreamer/gst_cbs.h
-+++ b/dlls/winegstreamer/gst_cbs.h
-@@ -48,6 +48,10 @@ enum CB_TYPE {
-     QUERY_BYTESTREAM,
-     ACTIVATE_BYTESTREAM_PAD_MODE,
-     PROCESS_BYTESTREAM_PAD_EVENT,
-+    WATCH_SOURCE_BUS,
-+    SOURCE_STREAM_ADDED,
-+    SOURCE_STREAM_REMOVED,
-+    SOURCE_ALL_STREAMS,
-     MEDIA_SOURCE_MAX,
- };
- 
-@@ -164,5 +168,9 @@ GstFlowReturn pull_from_bytestream_wrapper(GstPad *pad, GstObject *parent, guint
- gboolean query_bytestream_wrapper(GstPad *pad, GstObject *parent, GstQuery *query) DECLSPEC_HIDDEN;
- gboolean activate_bytestream_pad_mode_wrapper(GstPad *pad, GstObject *parent, GstPadMode mode, gboolean activate) DECLSPEC_HIDDEN;
- gboolean process_bytestream_pad_event_wrapper(GstPad *pad, GstObject *parent, GstEvent *event) DECLSPEC_HIDDEN;
-+GstBusSyncReply watch_source_bus_wrapper(GstBus *bus, GstMessage *message, gpointer user) DECLSPEC_HIDDEN;
-+void source_stream_added_wrapper(GstElement *bin, GstPad *pad, gpointer user) DECLSPEC_HIDDEN;
-+void source_stream_removed_wrapper(GstElement *element, GstPad *pad, gpointer user) DECLSPEC_HIDDEN;
-+void source_all_streams_wrapper(GstElement *element, gpointer user) DECLSPEC_HIDDEN;
- 
- #endif
-diff --git a/dlls/winegstreamer/media_source.c b/dlls/winegstreamer/media_source.c
-index 6b3bd4a7869..29af2b72def 100644
---- a/dlls/winegstreamer/media_source.c
-+++ b/dlls/winegstreamer/media_source.c
-@@ -24,6 +24,7 @@
- #include "gst_private.h"
- #include "gst_cbs.h"
- 
-+#include <assert.h>
- #include <stdarg.h>
- 
- #define COBJMACROS
-@@ -40,21 +41,48 @@
- 
- WINE_DEFAULT_DEBUG_CHANNEL(mfplat);
- 
-+struct media_stream
-+{
-+    IMFMediaStream IMFMediaStream_iface;
-+    LONG ref;
-+    struct media_source *parent_source;
-+    IMFMediaEventQueue *event_queue;
-+    GstElement *appsink;
-+    GstPad *their_src, *my_sink;
-+    enum
-+    {
-+        STREAM_STUB,
-+        STREAM_INACTIVE,
-+        STREAM_SHUTDOWN,
-+    } state;
-+};
-+
- struct media_source
- {
-     IMFMediaSource IMFMediaSource_iface;
-     LONG ref;
-     IMFMediaEventQueue *event_queue;
-     IMFByteStream *byte_stream;
--    GstPad *my_src;
-+    struct media_stream **streams;
-+    ULONG stream_count;
-+    GstBus *bus;
-+    GstElement *container;
-+    GstElement *decodebin;
-+    GstPad *my_src, *their_sink;
-     enum
-     {
-         SOURCE_OPENING,
-         SOURCE_STOPPED,
-         SOURCE_SHUTDOWN,
-     } state;
-+    HANDLE all_streams_event;
- };
- 
-+static inline struct media_stream *impl_from_IMFMediaStream(IMFMediaStream *iface)
-+{
-+    return CONTAINING_RECORD(iface, struct media_stream, IMFMediaStream_iface);
-+}
-+
- static inline struct media_source *impl_from_IMFMediaSource(IMFMediaSource *iface)
- {
-     return CONTAINING_RECORD(iface, struct media_source, IMFMediaSource_iface);
-@@ -208,6 +236,243 @@ static gboolean process_bytestream_pad_event(GstPad *pad, GstObject *parent, Gst
-     return TRUE;
- }
- 
-+GstBusSyncReply watch_source_bus(GstBus *bus, GstMessage *message, gpointer user)
-+{
-+    struct media_source *source = (struct media_source *) user;
-+    gchar *dbg_info = NULL;
-+    GError *err = NULL;
-+
-+    TRACE("source %p message type %s\n", source, GST_MESSAGE_TYPE_NAME(message));
-+
-+    switch (message->type)
-+    {
-+        case GST_MESSAGE_ERROR:
-+            gst_message_parse_error(message, &err, &dbg_info);
-+            ERR("%s: %s\n", GST_OBJECT_NAME(message->src), err->message);
-+            ERR("%s\n", dbg_info);
-+            g_error_free(err);
-+            g_free(dbg_info);
-+            break;
-+        case GST_MESSAGE_WARNING:
-+            gst_message_parse_warning(message, &err, &dbg_info);
-+            WARN("%s: %s\n", GST_OBJECT_NAME(message->src), err->message);
-+            WARN("%s\n", dbg_info);
-+            g_error_free(err);
-+            g_free(dbg_info);
-+            break;
-+        default:
-+            break;
-+    }
-+
-+    return GST_BUS_PASS;
-+}
-+
-+static HRESULT WINAPI media_stream_QueryInterface(IMFMediaStream *iface, REFIID riid, void **out)
-+{
-+    struct media_stream *stream = impl_from_IMFMediaStream(iface);
-+
-+    TRACE("(%p)->(%s %p)\n", stream, debugstr_guid(riid), out);
-+
-+    if (IsEqualIID(riid, &IID_IMFMediaStream) ||
-+        IsEqualIID(riid, &IID_IMFMediaEventGenerator) ||
-+        IsEqualIID(riid, &IID_IUnknown))
-+    {
-+        *out = &stream->IMFMediaStream_iface;
-+    }
-+    else
-+    {
-+        FIXME("(%s, %p)\n", debugstr_guid(riid), out);
-+        *out = NULL;
-+        return E_NOINTERFACE;
-+    }
-+
-+    IUnknown_AddRef((IUnknown*)*out);
-+    return S_OK;
-+}
-+
-+static ULONG WINAPI media_stream_AddRef(IMFMediaStream *iface)
-+{
-+    struct media_stream *stream = impl_from_IMFMediaStream(iface);
-+    ULONG ref = InterlockedIncrement(&stream->ref);
-+
-+    TRACE("(%p) ref=%u\n", stream, ref);
-+
-+    return ref;
-+}
-+
-+static ULONG WINAPI media_stream_Release(IMFMediaStream *iface)
-+{
-+    struct media_stream *stream = impl_from_IMFMediaStream(iface);
-+
-+    ULONG ref = InterlockedDecrement(&stream->ref);
-+
-+    TRACE("(%p) ref=%u\n", stream, ref);
-+
-+    if (!ref)
-+    {
-+        if (stream->my_sink)
-+            gst_object_unref(GST_OBJECT(stream->my_sink));
-+        if (stream->event_queue)
-+            IMFMediaEventQueue_Release(stream->event_queue);
-+        if (stream->parent_source)
-+            IMFMediaSource_Release(&stream->parent_source->IMFMediaSource_iface);
-+
-+        heap_free(stream);
-+    }
-+
-+    return ref;
-+}
-+
-+static HRESULT WINAPI media_stream_GetEvent(IMFMediaStream *iface, DWORD flags, IMFMediaEvent **event)
-+{
-+    struct media_stream *stream = impl_from_IMFMediaStream(iface);
-+
-+    TRACE("(%p)->(%#x, %p)\n", stream, flags, event);
-+
-+    if (stream->state == STREAM_SHUTDOWN)
-+        return MF_E_SHUTDOWN;
-+
-+    return IMFMediaEventQueue_GetEvent(stream->event_queue, flags, event);
-+}
-+
-+static HRESULT WINAPI media_stream_BeginGetEvent(IMFMediaStream *iface, IMFAsyncCallback *callback, IUnknown *state)
-+{
-+    struct media_stream *stream = impl_from_IMFMediaStream(iface);
-+
-+    TRACE("(%p)->(%p, %p)\n", stream, callback, state);
-+
-+    if (stream->state == STREAM_SHUTDOWN)
-+        return MF_E_SHUTDOWN;
-+
-+    return IMFMediaEventQueue_BeginGetEvent(stream->event_queue, callback, state);
-+}
-+
-+static HRESULT WINAPI media_stream_EndGetEvent(IMFMediaStream *iface, IMFAsyncResult *result, IMFMediaEvent **event)
-+{
-+    struct media_stream *stream = impl_from_IMFMediaStream(iface);
-+
-+    TRACE("(%p)->(%p, %p)\n", stream, result, event);
-+
-+    if (stream->state == STREAM_SHUTDOWN)
-+        return MF_E_SHUTDOWN;
-+
-+    return IMFMediaEventQueue_EndGetEvent(stream->event_queue, result, event);
-+}
-+
-+static HRESULT WINAPI media_stream_QueueEvent(IMFMediaStream *iface, MediaEventType event_type, REFGUID ext_type,
-+        HRESULT hr, const PROPVARIANT *value)
-+{
-+    struct media_stream *stream = impl_from_IMFMediaStream(iface);
-+
-+    TRACE("(%p)->(%d, %s, %#x, %p)\n", stream, event_type, debugstr_guid(ext_type), hr, value);
-+
-+    if (stream->state == STREAM_SHUTDOWN)
-+        return MF_E_SHUTDOWN;
-+
-+    return IMFMediaEventQueue_QueueEventParamVar(stream->event_queue, event_type, ext_type, hr, value);
-+}
-+
-+static HRESULT WINAPI media_stream_GetMediaSource(IMFMediaStream *iface, IMFMediaSource **source)
-+{
-+    struct media_stream *stream = impl_from_IMFMediaStream(iface);
-+
-+    FIXME("stub (%p)->(%p)\n", stream, source);
-+
-+    if (stream->state == STREAM_SHUTDOWN)
-+        return MF_E_SHUTDOWN;
-+
-+    return E_NOTIMPL;
-+}
-+
-+static HRESULT WINAPI media_stream_GetStreamDescriptor(IMFMediaStream* iface, IMFStreamDescriptor **descriptor)
-+{
-+    struct media_stream *stream = impl_from_IMFMediaStream(iface);
-+
-+    TRACE("(%p)->(%p)\n", stream, descriptor);
-+
-+    if (stream->state == STREAM_SHUTDOWN)
-+        return MF_E_SHUTDOWN;
-+
-+    return E_NOTIMPL;
-+}
-+
-+static HRESULT WINAPI media_stream_RequestSample(IMFMediaStream *iface, IUnknown *token)
-+{
-+    struct media_stream *stream = impl_from_IMFMediaStream(iface);
-+
-+    TRACE("(%p)->(%p)\n", iface, token);
-+
-+    if (stream->state == STREAM_SHUTDOWN)
-+        return MF_E_SHUTDOWN;
-+
-+    return E_NOTIMPL;
-+}
-+
-+static const IMFMediaStreamVtbl media_stream_vtbl =
-+{
-+    media_stream_QueryInterface,
-+    media_stream_AddRef,
-+    media_stream_Release,
-+    media_stream_GetEvent,
-+    media_stream_BeginGetEvent,
-+    media_stream_EndGetEvent,
-+    media_stream_QueueEvent,
-+    media_stream_GetMediaSource,
-+    media_stream_GetStreamDescriptor,
-+    media_stream_RequestSample
-+};
-+
-+/* creates a stub stream */
-+static HRESULT new_media_stream(struct media_source *source, GstPad *pad, DWORD stream_id, struct media_stream **out_stream)
-+{
-+    struct media_stream *object = heap_alloc_zero(sizeof(*object));
-+    HRESULT hr;
-+
-+    TRACE("(%p %p)->(%p)\n", source, pad, out_stream);
-+
-+    object->IMFMediaStream_iface.lpVtbl = &media_stream_vtbl;
-+    object->ref = 1;
-+
-+    IMFMediaSource_AddRef(&source->IMFMediaSource_iface);
-+    object->parent_source = source;
-+    object->their_src = pad;
-+
-+    object->state = STREAM_STUB;
-+
-+    if (FAILED(hr = MFCreateEventQueue(&object->event_queue)))
-+        goto fail;
-+
-+    if (!(object->appsink = gst_element_factory_make("appsink", NULL)))
-+    {
-+        hr = E_OUTOFMEMORY;
-+        goto fail;
-+    }
-+    gst_bin_add(GST_BIN(object->parent_source->container), object->appsink);
-+
-+    g_object_set(object->appsink, "emit-signals", TRUE, NULL);
-+    g_object_set(object->appsink, "sync", FALSE, NULL);
-+    g_object_set(object->appsink, "max-buffers", 5, NULL);
-+    g_object_set(object->appsink, "wait-on-eos", FALSE, NULL);
-+
-+    object->my_sink = gst_element_get_static_pad(object->appsink, "sink");
-+    gst_pad_set_element_private(object->my_sink, object);
-+
-+    gst_pad_link(object->their_src, object->my_sink);
-+
-+    gst_element_sync_state_with_parent(object->appsink);
-+
-+    TRACE("->(%p)\n", object);
-+    *out_stream = object;
-+
-+    return S_OK;
-+
-+    fail:
-+    WARN("Failed to construct media stream, hr %#x.\n", hr);
-+
-+    IMFMediaStream_Release(&object->IMFMediaStream_iface);
-+    return hr;
-+}
-+
- static HRESULT WINAPI media_source_QueryInterface(IMFMediaSource *iface, REFIID riid, void **out)
- {
-     struct media_source *source = impl_from_IMFMediaSource(iface);
-@@ -367,13 +632,34 @@ static HRESULT WINAPI media_source_Shutdown(IMFMediaSource *iface)
- 
-     source->state = SOURCE_SHUTDOWN;
- 
-+    if (source->container)
-+    {
-+        gst_element_set_state(source->container, GST_STATE_NULL);
-+        gst_object_unref(GST_OBJECT(source->container));
-+    }
-+
-     if (source->my_src)
-         gst_object_unref(GST_OBJECT(source->my_src));
-+    if (source->their_sink)
-+        gst_object_unref(GST_OBJECT(source->their_sink));
-+
-     if (source->event_queue)
-         IMFMediaEventQueue_Shutdown(source->event_queue);
-     if (source->byte_stream)
-         IMFByteStream_Release(source->byte_stream);
- 
-+    for (unsigned int i = 0; i < source->stream_count; i++)
-+    {
-+        source->streams[i]->state = STREAM_SHUTDOWN;
-+        IMFMediaStream_Release(&source->streams[i]->IMFMediaStream_iface);
-+    }
-+
-+    if (source->stream_count)
-+        heap_free(source->streams);
-+
-+    if (source->all_streams_event)
-+        CloseHandle(source->all_streams_event);
-+
-     return S_OK;
- }
- 
-@@ -394,6 +680,63 @@ static const IMFMediaSourceVtbl IMFMediaSource_vtbl =
-     media_source_Shutdown,
- };
- 
-+static void source_stream_added(GstElement *element, GstPad *pad, gpointer user)
-+{
-+    struct media_source *source = (struct media_source *) user;
-+    struct media_stream **new_stream_array;
-+    struct media_stream *stream;
-+    gchar *g_stream_id;
-+    DWORD stream_id;
-+
-+    if (gst_pad_get_direction(pad) != GST_PAD_SRC)
-+        return;
-+
-+    /* Most/All seen randomly calculate the initial part of the stream id, the last three digits are the only deterministic part */
-+    g_stream_id = GST_PAD_NAME(pad);
-+    sscanf(strstr(g_stream_id, "_"), "_%u", &stream_id);
-+
-+    TRACE("stream-id: %u\n", stream_id);
-+
-+    if (FAILED(new_media_stream(source, pad, stream_id, &stream)))
-+    {
-+        goto leave;
-+    }
-+
-+    if (!(new_stream_array = heap_realloc(source->streams, (source->stream_count + 1) * (sizeof(*new_stream_array)))))
-+    {
-+        ERR("Failed to add stream to source\n");
-+        goto leave;
-+    }
-+
-+    source->streams = new_stream_array;
-+    source->streams[source->stream_count++] = stream;
-+
-+    leave:
-+    return;
-+}
-+
-+static void source_stream_removed(GstElement *element, GstPad *pad, gpointer user)
-+{
-+    struct media_source *source = (struct media_source *)user;
-+
-+    for (unsigned int i = 0; i < source->stream_count; i++)
-+    {
-+        struct media_stream *stream = source->streams[i];
-+        if (stream->their_src != pad)
-+            continue;
-+        stream->their_src = NULL;
-+        if (stream->state != STREAM_INACTIVE)
-+            stream->state = STREAM_INACTIVE;
-+    }
-+}
-+
-+static void source_all_streams(GstElement *element, gpointer user)
-+{
-+    struct media_source *source = (struct media_source *) user;
-+
-+    SetEvent(source->all_streams_event);
-+}
-+
- static HRESULT media_source_constructor(IMFByteStream *bytestream, struct media_source **out_media_source)
- {
-     GstStaticPadTemplate src_template = GST_STATIC_PAD_TEMPLATE(
-@@ -404,6 +747,7 @@ static HRESULT media_source_constructor(IMFByteStream *bytestream, struct media_
- 
-     struct media_source *object = heap_alloc_zero(sizeof(*object));
-     HRESULT hr;
-+    int ret;
- 
-     if (!object)
-         return E_OUTOFMEMORY;
-@@ -412,10 +756,16 @@ static HRESULT media_source_constructor(IMFByteStream *bytestream, struct media_
-     object->ref = 1;
-     object->byte_stream = bytestream;
-     IMFByteStream_AddRef(bytestream);
-+    object->all_streams_event = CreateEventA(NULL, FALSE, FALSE, NULL);
- 
-     if (FAILED(hr = MFCreateEventQueue(&object->event_queue)))
-         goto fail;
- 
-+    object->container = gst_bin_new(NULL);
-+    object->bus = gst_bus_new();
-+    gst_bus_set_sync_handler(object->bus, watch_source_bus_wrapper, object, NULL);
-+    gst_element_set_bus(object->container, object->bus);
-+
-     object->my_src = gst_pad_new_from_static_template(&src_template, "mf-src");
-     gst_pad_set_element_private(object->my_src, object);
-     gst_pad_set_getrange_function(object->my_src, pull_from_bytestream_wrapper);
-@@ -423,6 +773,46 @@ static HRESULT media_source_constructor(IMFByteStream *bytestream, struct media_
-     gst_pad_set_activatemode_function(object->my_src, activate_bytestream_pad_mode_wrapper);
-     gst_pad_set_event_function(object->my_src, process_bytestream_pad_event_wrapper);
- 
-+    object->decodebin = gst_element_factory_make("decodebin", NULL);
-+    if (!(object->decodebin))
-+    {
-+        WARN("Failed to create decodebin for source\n");
-+        hr = E_OUTOFMEMORY;
-+        goto fail;
-+    }
-+    /* the appsinks determine the maximum amount of buffering instead, this means that if one stream isn't read, a leak will happen, like on windows */
-+    g_object_set(object->decodebin, "max-size-buffers", 0, NULL);
-+    g_object_set(object->decodebin, "max-size-time", G_GUINT64_CONSTANT(0), NULL);
-+    g_object_set(object->decodebin, "max-size-bytes", 0, NULL);
-+
-+    gst_bin_add(GST_BIN(object->container), object->decodebin);
-+
-+    g_signal_connect(object->decodebin, "pad-added", G_CALLBACK(source_stream_added_wrapper), object);
-+    g_signal_connect(object->decodebin, "pad-removed", G_CALLBACK(source_stream_removed_wrapper), object);
-+    g_signal_connect(object->decodebin, "no-more-pads", G_CALLBACK(source_all_streams_wrapper), object);
-+
-+    object->their_sink = gst_element_get_static_pad(object->decodebin, "sink");
-+
-+    if ((ret = gst_pad_link(object->my_src, object->their_sink)) < 0)
-+    {
-+        WARN("Failed to link our bytestream pad to the demuxer input\n");
-+        hr = E_OUTOFMEMORY;
-+        goto fail;
-+    }
-+
-+    object->state = SOURCE_OPENING;
-+
-+    gst_element_set_state(object->container, GST_STATE_PAUSED);
-+    ret = gst_element_get_state(object->container, NULL, NULL, -1);
-+    if (ret == GST_STATE_CHANGE_FAILURE)
-+    {
-+        ERR("Failed to play source.\n");
-+        hr = E_OUTOFMEMORY;
-+        goto fail;
-+    }
-+
-+    WaitForSingleObject(object->all_streams_event, INFINITE);
-+
-     object->state = SOURCE_STOPPED;
- 
-     *out_media_source = object;
-@@ -923,6 +1313,30 @@ void perform_cb_media_source(struct cb_data *cbdata)
-             cbdata->u.event_src_data.ret = process_bytestream_pad_event(data->pad, data->parent, data->event);
-             break;
-         }
-+    case WATCH_SOURCE_BUS:
-+        {
-+            struct watch_bus_data *data = &cbdata->u.watch_bus_data;
-+            cbdata->u.watch_bus_data.ret = watch_source_bus(data->bus, data->msg, data->user);
-+            break;
-+        }
-+    case SOURCE_STREAM_ADDED:
-+        {
-+            struct pad_added_data *data = &cbdata->u.pad_added_data;
-+            source_stream_added(data->element, data->pad, data->user);
-+            break;
-+        }
-+    case SOURCE_STREAM_REMOVED:
-+        {
-+            struct pad_removed_data *data = &cbdata->u.pad_removed_data;
-+            source_stream_removed(data->element, data->pad, data->user);
-+            break;
-+        }
-+    case SOURCE_ALL_STREAMS:
-+        {
-+            struct no_more_pads_data *data = &cbdata->u.no_more_pads_data;
-+            source_all_streams(data->element, data->user);
-+            break;
-+        }
-     default:
-         {
-             ERR("Wrong callback forwarder called\n");
--- 
-2.28.0
-
-From 2bbf345d820cfb52620bfbde10ce5d920854baf1 Mon Sep 17 00:00:00 2001
-From: Derek Lesho <dlesho@codeweavers.com>
-Date: Tue, 31 Mar 2020 11:11:05 -0500
-Subject: [PATCH 03/52] winegstreamer: Implement
- IMFMediaStream::GetStreamDescriptor.
-
-Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
----
- dlls/winegstreamer/gst_cbs.c      |  13 ++
- dlls/winegstreamer/gst_cbs.h      |   8 ++
- dlls/winegstreamer/gst_private.h  |   5 +
- dlls/winegstreamer/media_source.c | 137 +++++++++++++++++++-
- dlls/winegstreamer/mfplat.c       | 208 ++++++++++++++++++++++++++++++
- 5 files changed, 368 insertions(+), 3 deletions(-)
-
-diff --git a/dlls/winegstreamer/gst_cbs.c b/dlls/winegstreamer/gst_cbs.c
-index 4755f5b42f1..e56c987eb38 100644
---- a/dlls/winegstreamer/gst_cbs.c
-+++ b/dlls/winegstreamer/gst_cbs.c
-@@ -404,3 +404,16 @@ void source_all_streams_wrapper(GstElement *element, gpointer user)
- 
-     call_cb(&cbdata);
- }
-+
-+GstPadProbeReturn caps_listener_wrapper(GstPad *pad, GstPadProbeInfo *info, gpointer user)
-+{
-+    struct cb_data cbdata = { STREAM_PAD_EVENT };
-+
-+    cbdata.u.pad_probe_data.pad = pad;
-+    cbdata.u.pad_probe_data.info = info;
-+    cbdata.u.pad_probe_data.user = user;
-+
-+    call_cb(&cbdata);
-+
-+    return cbdata.u.pad_probe_data.ret;
-+}
-diff --git a/dlls/winegstreamer/gst_cbs.h b/dlls/winegstreamer/gst_cbs.h
-index d87cc8c21e9..7173c09746e 100644
---- a/dlls/winegstreamer/gst_cbs.h
-+++ b/dlls/winegstreamer/gst_cbs.h
-@@ -52,6 +52,7 @@ enum CB_TYPE {
-     SOURCE_STREAM_ADDED,
-     SOURCE_STREAM_REMOVED,
-     SOURCE_ALL_STREAMS,
-+    STREAM_PAD_EVENT,
-     MEDIA_SOURCE_MAX,
- };
- 
-@@ -137,6 +138,12 @@ struct cb_data {
-             GstQuery *query;
-             gboolean ret;
-         } query_sink_data;
-+        struct pad_probe_data {
-+            GstPad *pad;
-+            GstPadProbeInfo *info;
-+            gpointer user;
-+            GstPadProbeReturn ret;
-+        } pad_probe_data;
-     } u;
- 
-     int finished;
-@@ -172,5 +179,6 @@ GstBusSyncReply watch_source_bus_wrapper(GstBus *bus, GstMessage *message, gpoin
- void source_stream_added_wrapper(GstElement *bin, GstPad *pad, gpointer user) DECLSPEC_HIDDEN;
- void source_stream_removed_wrapper(GstElement *element, GstPad *pad, gpointer user) DECLSPEC_HIDDEN;
- void source_all_streams_wrapper(GstElement *element, gpointer user) DECLSPEC_HIDDEN;
-+GstPadProbeReturn caps_listener_wrapper(GstPad *pad, GstPadProbeInfo *info, gpointer user);
- 
- #endif
 diff --git a/dlls/winegstreamer/gst_private.h b/dlls/winegstreamer/gst_private.h
-index ef07d3591e7..86392eea4e3 100644
+index 60b38a48f5a..7ec71d40800 100644
 --- a/dlls/winegstreamer/gst_private.h
 +++ b/dlls/winegstreamer/gst_private.h
-@@ -36,6 +36,7 @@
- #include "winuser.h"
- #include "dshow.h"
- #include "strmif.h"
-+#include "mfobjects.h"
- #include "wine/heap.h"
- #include "wine/strmbase.h"
- 
-@@ -54,6 +55,10 @@ void start_dispatch_thread(void) DECLSPEC_HIDDEN;
- 
+@@ -56,6 +56,7 @@ void start_dispatch_thread(void) DECLSPEC_HIDDEN;
  extern HRESULT mfplat_get_class_object(REFCLSID rclsid, REFIID riid, void **obj) DECLSPEC_HIDDEN;
  
-+HRESULT winegstreamer_stream_handler_create(REFIID riid, void **obj) DECLSPEC_HIDDEN;
-+GstCaps *make_mf_compatible_caps(GstCaps *caps);
-+IMFMediaType *mf_media_type_from_caps(GstCaps *caps);
-+
  HRESULT winegstreamer_stream_handler_create(REFIID riid, void **obj) DECLSPEC_HIDDEN;
++GstCaps *make_mf_compatible_caps(GstCaps *caps) DECLSPEC_HIDDEN;
+ IMFMediaType *mf_media_type_from_caps(const GstCaps *caps) DECLSPEC_HIDDEN;
  
- #endif /* __GST_PRIVATE_INCLUDED__ */
+ HRESULT winegstreamer_stream_handler_create(REFIID riid, void **obj) DECLSPEC_HIDDEN;
 diff --git a/dlls/winegstreamer/media_source.c b/dlls/winegstreamer/media_source.c
-index 29af2b72def..345b1fe4528 100644
+index 29947e1554f..92b4100f7bc 100644
 --- a/dlls/winegstreamer/media_source.c
 +++ b/dlls/winegstreamer/media_source.c
-@@ -47,14 +47,19 @@ struct media_stream
-     LONG ref;
-     struct media_source *parent_source;
-     IMFMediaEventQueue *event_queue;
-+    IMFStreamDescriptor *descriptor;
-     GstElement *appsink;
-     GstPad *their_src, *my_sink;
-+    GstCaps *their_caps;
-     enum
-     {
-         STREAM_STUB,
-         STREAM_INACTIVE,
-         STREAM_SHUTDOWN,
-     } state;
-+    /* used when in STUB state: */
-+    DWORD stream_id;
-+    HANDLE caps_event;
- };
- 
- struct media_source
-@@ -312,6 +317,8 @@ static ULONG WINAPI media_stream_Release(IMFMediaStream *iface)
-     {
-         if (stream->my_sink)
-             gst_object_unref(GST_OBJECT(stream->my_sink));
-+        if (stream->descriptor)
-+            IMFStreamDescriptor_Release(stream->descriptor);
-         if (stream->event_queue)
-             IMFMediaEventQueue_Release(stream->event_queue);
-         if (stream->parent_source)
-@@ -393,7 +400,10 @@ static HRESULT WINAPI media_stream_GetStreamDescriptor(IMFMediaStream* iface, IM
-     if (stream->state == STREAM_SHUTDOWN)
-         return MF_E_SHUTDOWN;
- 
--    return E_NOTIMPL;
-+    IMFStreamDescriptor_AddRef(stream->descriptor);
-+    *descriptor = stream->descriptor;
-+
-+    return S_OK;
- }
- 
- static HRESULT WINAPI media_stream_RequestSample(IMFMediaStream *iface, IUnknown *token)
-@@ -436,9 +446,12 @@ static HRESULT new_media_stream(struct media_source *source, GstPad *pad, DWORD
-     IMFMediaSource_AddRef(&source->IMFMediaSource_iface);
-     object->parent_source = source;
-     object->their_src = pad;
-+    object->stream_id = stream_id;
- 
-     object->state = STREAM_STUB;
- 
-+    object->caps_event = CreateEventA(NULL, TRUE, FALSE, NULL);
-+
-     if (FAILED(hr = MFCreateEventQueue(&object->event_queue)))
-         goto fail;
- 
-@@ -455,10 +468,10 @@ static HRESULT new_media_stream(struct media_source *source, GstPad *pad, DWORD
-     g_object_set(object->appsink, "wait-on-eos", FALSE, NULL);
- 
-     object->my_sink = gst_element_get_static_pad(object->appsink, "sink");
--    gst_pad_set_element_private(object->my_sink, object);
--
-     gst_pad_link(object->their_src, object->my_sink);
- 
-+    gst_pad_add_probe(object->my_sink, GST_PAD_PROBE_TYPE_EVENT_DOWNSTREAM, caps_listener_wrapper, object, NULL);
-+
-     gst_element_sync_state_with_parent(object->appsink);
- 
-     TRACE("->(%p)\n", object);
-@@ -473,6 +486,43 @@ static HRESULT new_media_stream(struct media_source *source, GstPad *pad, DWORD
-     return hr;
- }
- 
-+static HRESULT media_stream_init_desc(struct media_stream *stream)
-+{
-+    HRESULT hr;
-+    IMFMediaTypeHandler *type_handler;
-+    IMFMediaType *stream_type = NULL;
-+
-+    stream->their_caps = gst_caps_fixate(stream->their_caps);
-+
-+    stream_type = mf_media_type_from_caps(stream->their_caps);
-+    gst_caps_unref(stream->their_caps);
-+    if (!stream_type)
-+    {
-+        hr = E_FAIL;
-+        goto fail;
-+    }
-+
-+    if (FAILED(hr = MFCreateStreamDescriptor(stream->stream_id, 1, &stream_type, &stream->descriptor)))
-+        goto fail;
-+
-+    if (FAILED(hr = IMFStreamDescriptor_GetMediaTypeHandler(stream->descriptor, &type_handler)))
-+        goto fail;
-+
-+    if (FAILED(hr = IMFMediaTypeHandler_SetCurrentMediaType(type_handler, stream_type)))
-+        goto fail;
-+
-+    IMFMediaTypeHandler_Release(type_handler);
-+
-+    stream->state = STREAM_INACTIVE;
-+
-+    return S_OK;
-+    fail:
-+    ERR("media stream initialization failed with %x\n", hr);
-+    if (type_handler)
-+        IMFMediaTypeHandler_Release(type_handler);
-+    return hr;
-+}
-+
- static HRESULT WINAPI media_source_QueryInterface(IMFMediaSource *iface, REFIID riid, void **out)
- {
-     struct media_source *source = impl_from_IMFMediaSource(iface);
-@@ -680,6 +730,23 @@ static const IMFMediaSourceVtbl IMFMediaSource_vtbl =
-     media_source_Shutdown,
- };
- 
-+/* If this callback is extended to use any significant win32 APIs, a wrapper function
-+   should be added */
-+gboolean stream_found(GstElement *bin, GstPad *pad, GstCaps *caps, gpointer user)
-+{
-+    GstCaps *target_caps;
-+
-+    /* if the stream can be converted into an MF compatible type, we'll go that route
-+       otherwise, we'll rely on decodebin for the whole process */
-+
-+    if ((target_caps = make_mf_compatible_caps(caps)))
-+    {
-+        gst_caps_unref(target_caps);
-+        return FALSE;
-+    }
-+    return TRUE;
-+}
-+
- static void source_stream_added(GstElement *element, GstPad *pad, gpointer user)
- {
-     struct media_source *source = (struct media_source *) user;
-@@ -697,6 +764,36 @@ static void source_stream_added(GstElement *element, GstPad *pad, gpointer user)
- 
-     TRACE("stream-id: %u\n", stream_id);
- 
-+    /* This codepath is currently never triggered, as we don't need to ever restart the gstreamer pipeline.  It is retained in
-+       case this becomes necessary in the future, for example in a case where different media types require different
-+       post-processing elements. */
-+    for (unsigned int i = 0; i < source->stream_count; i++)
-+    {
-+        DWORD existing_stream_id;
-+        IMFStreamDescriptor *descriptor = source->streams[i]->descriptor;
-+
-+        if (source->streams[i]->state == STREAM_STUB)
-+            continue;
-+
-+        if (FAILED(IMFStreamDescriptor_GetStreamIdentifier(descriptor, &existing_stream_id)))
-+            goto leave;
-+
-+        if (existing_stream_id == stream_id)
-+        {
-+            struct media_stream *existing_stream = source->streams[i];
-+            GstPadLinkReturn ret;
-+
-+            TRACE("Found existing stream %p\n", existing_stream);
-+
-+            existing_stream->their_src = pad;
-+
-+            if ((ret = gst_pad_link(existing_stream->their_src, existing_stream->my_sink)) != GST_PAD_LINK_OK)
-+                ERR("Error linking decodebin pad to stream %p, err = %d\n", existing_stream, ret);
-+
-+            goto leave;
-+        }
-+    }
-+
-     if (FAILED(new_media_stream(source, pad, stream_id, &stream)))
-     {
-         goto leave;
-@@ -737,6 +834,26 @@ static void source_all_streams(GstElement *element, gpointer user)
-     SetEvent(source->all_streams_event);
- }
- 
-+static GstPadProbeReturn caps_listener(GstPad *pad, GstPadProbeInfo *info, gpointer user)
-+{
-+    struct media_stream *stream = (struct media_stream *) user;
-+    GstEvent *event = gst_pad_probe_info_get_event(info);
-+
-+    if (GST_EVENT_TYPE(event) == GST_EVENT_CAPS)
-+    {
-+        GstCaps *caps;
-+        TRACE("got caps for stream %p\n", stream);
-+
-+        gst_event_parse_caps(event, &caps);
-+        stream->their_caps = gst_caps_copy(caps);
-+        SetEvent(stream->caps_event);
-+
-+        return GST_PAD_PROBE_REMOVE;
-+    }
-+
-+    return GST_PAD_PROBE_OK;
-+}
-+
- static HRESULT media_source_constructor(IMFByteStream *bytestream, struct media_source **out_media_source)
- {
-     GstStaticPadTemplate src_template = GST_STATIC_PAD_TEMPLATE(
-@@ -787,6 +904,8 @@ static HRESULT media_source_constructor(IMFByteStream *bytestream, struct media_
- 
-     gst_bin_add(GST_BIN(object->container), object->decodebin);
- 
-+    if(!GetEnvironmentVariableA("MF_DECODE_IN_SOURCE", NULL, 0))
-+        g_signal_connect(object->decodebin, "autoplug-continue", G_CALLBACK(stream_found), object);
-     g_signal_connect(object->decodebin, "pad-added", G_CALLBACK(source_stream_added_wrapper), object);
-     g_signal_connect(object->decodebin, "pad-removed", G_CALLBACK(source_stream_removed_wrapper), object);
-     g_signal_connect(object->decodebin, "no-more-pads", G_CALLBACK(source_all_streams_wrapper), object);
-@@ -812,6 +931,12 @@ static HRESULT media_source_constructor(IMFByteStream *bytestream, struct media_
-     }
- 
-     WaitForSingleObject(object->all_streams_event, INFINITE);
-+    for (unsigned int i = 0; i < object->stream_count; i++)
-+    {
-+        WaitForSingleObject(object->streams[i]->caps_event, INFINITE);
-+        if (FAILED(hr = media_stream_init_desc(object->streams[i])))
-+            goto fail;
-+    }
- 
-     object->state = SOURCE_STOPPED;
- 
-@@ -1337,6 +1462,12 @@ void perform_cb_media_source(struct cb_data *cbdata)
-             source_all_streams(data->element, data->user);
-             break;
-         }
-+    case STREAM_PAD_EVENT:
-+        {
-+            struct pad_probe_data *data = &cbdata->u.pad_probe_data;
-+            cbdata->u.pad_probe_data.ret = caps_listener(data->pad, data->info, data->user);
-+            break;
-+        }
-     default:
-         {
-             ERR("Wrong callback forwarder called\n");
-diff --git a/dlls/winegstreamer/mfplat.c b/dlls/winegstreamer/mfplat.c
-index c996f06211e..3667bc3cc38 100644
---- a/dlls/winegstreamer/mfplat.c
-+++ b/dlls/winegstreamer/mfplat.c
-@@ -16,6 +16,11 @@
-  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
-  */
- 
-+#include "config.h"
-+#include <gst/gst.h>
-+
-+#include "gst_private.h"
-+
- #include <stdarg.h>
- 
- #include "gst_private.h"
-@@ -436,3 +441,206 @@ HRESULT mfplat_get_class_object(REFCLSID rclsid, REFIID riid, void **obj)
- 
-     return CLASS_E_CLASSNOTAVAILABLE;
- }
-+
-+const static struct
-+{
-+    const GUID *subtype;
-+    GstVideoFormat format;
-+}
-+uncompressed_formats[] =
-+{
-+    {&MFVideoFormat_ARGB32,  GST_VIDEO_FORMAT_BGRA},
-+    {&MFVideoFormat_RGB32,   GST_VIDEO_FORMAT_BGRx},
-+    {&MFVideoFormat_RGB24,   GST_VIDEO_FORMAT_BGR},
-+    {&MFVideoFormat_RGB565,  GST_VIDEO_FORMAT_BGR16},
-+    {&MFVideoFormat_RGB555,  GST_VIDEO_FORMAT_BGR15},
-+};
-+
-+/* caps will be modified to represent the exact type needed for the format */
-+static IMFMediaType* transform_to_media_type(GstCaps *caps)
-+{
-+    IMFMediaType *media_type;
-+    GstStructure *info;
-+    const char *mime_type;
-+
-+    if (TRACE_ON(mfplat))
-+    {
-+        gchar *human_readable = gst_caps_to_string(caps);
-+        TRACE("caps = %s\n", debugstr_a(human_readable));
-+        g_free(human_readable);
-+    }
-+
-+    if (FAILED(MFCreateMediaType(&media_type)))
-+    {
-+        return NULL;
-+    }
-+
-+    info = gst_caps_get_structure(caps, 0);
-+    mime_type = gst_structure_get_name(info);
-+
-+    if (!(strncmp(mime_type, "video", 5)))
-+    {
-+        GstVideoInfo video_info;
-+
-+        if (!(gst_video_info_from_caps(&video_info, caps)))
-+        {
-+            return NULL;
-+        }
-+
-+        IMFMediaType_SetGUID(media_type, &MF_MT_MAJOR_TYPE, &MFMediaType_Video);
-+
-+        IMFMediaType_SetUINT64(media_type, &MF_MT_FRAME_SIZE, ((UINT64)video_info.width << 32) | video_info.height);
-+
-+        IMFMediaType_SetUINT64(media_type, &MF_MT_FRAME_RATE, ((UINT64)video_info.fps_n << 32) | video_info.fps_d);
-+
-+        if (!(strcmp(mime_type, "video/x-raw")))
-+        {
-+            GUID fourcc_subtype = MFVideoFormat_Base;
-+            unsigned int i;
-+
-+            IMFMediaType_SetUINT32(media_type, &MF_MT_COMPRESSED, FALSE);
-+
-+            /* First try FOURCC */
-+            if ((fourcc_subtype.Data1 = gst_video_format_to_fourcc(video_info.finfo->format)))
-+            {
-+                IMFMediaType_SetGUID(media_type, &MF_MT_SUBTYPE, &fourcc_subtype);
-+            }
-+            else
-+            {
-+                for (i = 0; i < ARRAY_SIZE(uncompressed_formats); i++)
-+                {
-+                    if (uncompressed_formats[i].format == video_info.finfo->format)
-+                    {
-+                        IMFMediaType_SetGUID(media_type, &MF_MT_SUBTYPE, uncompressed_formats[i].subtype);
-+                        break;
-+                    }
-+                }
-+                if (i == ARRAY_SIZE(uncompressed_formats))
-+                    FIXME("Unrecognized format.\n");
-+            }
-+        }
-+        else
-+        {
-+            FIXME("Unrecognized video format %s\n", mime_type);
-+            IMFMediaType_Release(media_type);
-+            return NULL;
-+        }
-+    }
-+    else if (!(strncmp(mime_type, "audio", 5)))
-+    {
-+        gint rate, channels, bitrate;
-+        guint64 channel_mask;
-+        IMFMediaType_SetGUID(media_type, &MF_MT_MAJOR_TYPE, &MFMediaType_Audio);
-+
-+        if (gst_structure_get_int(info, "rate", &rate))
-+            IMFMediaType_SetUINT32(media_type, &MF_MT_AUDIO_SAMPLES_PER_SECOND, rate);
-+
-+        if (gst_structure_get_int(info, "channels", &channels))
-+            IMFMediaType_SetUINT32(media_type, &MF_MT_AUDIO_NUM_CHANNELS, channels);
-+
-+        if (gst_structure_get(info, "channel-mask", GST_TYPE_BITMASK, &channel_mask, NULL))
-+            IMFMediaType_SetUINT32(media_type, &MF_MT_AUDIO_CHANNEL_MASK, (DWORD)channel_mask);
-+
-+        if (gst_structure_get_int(info, "bitrate", &bitrate))
-+            IMFMediaType_SetUINT32(media_type, &MF_MT_AVG_BITRATE, bitrate);
-+
-+        if (!(strcmp(mime_type, "audio/x-raw")))
-+        {
-+            const char *format;
-+            if ((format = gst_structure_get_string(info, "format")))
-+            {
-+                char type;
-+                unsigned int bits_per_sample;
-+                char endian[2];
-+                char new_format[6];
-+                if ((strlen(format) > 5) || (sscanf(format, "%c%u%2c", &type, &bits_per_sample, endian) < 2))
-+                {
-+                    FIXME("Unhandled audio format %s\n", format);
-+                    IMFMediaType_Release(media_type);
-+                    return NULL;
-+                }
-+
-+                if (type == 'F')
-+                {
-+                    IMFMediaType_SetGUID(media_type, &MF_MT_SUBTYPE, &MFAudioFormat_Float);
-+                }
-+                else if (type == 'U' || type == 'S')
-+                {
-+                    IMFMediaType_SetGUID(media_type, &MF_MT_SUBTYPE, &MFAudioFormat_PCM);
-+                    if (bits_per_sample == 8)
-+                        type = 'U';
-+                    else
-+                        type = 'S';
-+                }
-+                else
-+                {
-+                    FIXME("Unrecognized audio format: %s\n", format);
-+                    IMFMediaType_Release(media_type);
-+                    return NULL;
-+                }
-+
-+                IMFMediaType_SetUINT32(media_type, &MF_MT_AUDIO_BITS_PER_SAMPLE, bits_per_sample);
-+
-+                if (endian[0] == 'B')
-+                    endian[0] = 'L';
-+
-+                sprintf(new_format, "%c%u%.2s", type, bits_per_sample, bits_per_sample > 8 ? endian : 0);
-+                gst_caps_set_simple(caps, "format", G_TYPE_STRING, new_format, NULL);
-+            }
-+            else
-+            {
-+                ERR("Failed to get audio format\n");
-+            }
-+        }
-+        else
-+        {
-+            FIXME("Unrecognized audio format %s\n", mime_type);
-+            IMFMediaType_Release(media_type);
-+            return NULL;
-+        }
-+    }
-+    else
-+    {
-+        IMFMediaType_Release(media_type);
-+        return NULL;
-+    }
-+
-+    return media_type;
-+}
-+
-+/* returns NULL if doesn't match exactly */
-+IMFMediaType *mf_media_type_from_caps(GstCaps *caps)
-+{
-+    GstCaps *writeable_caps;
-+    IMFMediaType *ret;
-+
-+    writeable_caps = gst_caps_copy(caps);
-+    ret = transform_to_media_type(writeable_caps);
-+
-+    if (!(gst_caps_is_equal(caps, writeable_caps)))
-+    {
-+        IMFMediaType_Release(ret);
-+        ret = NULL;
-+    }
-+    gst_caps_unref(writeable_caps);
-+    return ret;
-+}
-+
-+GstCaps *make_mf_compatible_caps(GstCaps *caps)
-+{
-+    GstCaps *ret;
-+    IMFMediaType *media_type;
-+
-+    ret = gst_caps_copy(caps);
-+
-+    if ((media_type = transform_to_media_type(ret)))
-+        IMFMediaType_Release(media_type);
-+
-+    if (!media_type)
-+    {
-+        gst_caps_unref(ret);
-+        return NULL;
-+    }
-+
-+    return ret;
-+}
--- 
-2.28.0
-
-From c8effecf2d89b5169b03f4d71243729b68d4c3ba Mon Sep 17 00:00:00 2001
-From: Derek Lesho <dlesho@codeweavers.com>
-Date: Tue, 31 Mar 2020 15:11:31 -0500
-Subject: [PATCH 04/52] winegstreamer: Insert parser into pipeline to rectify
- type differences.
-
-Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
----
- dlls/winegstreamer/media_source.c | 130 +++++++++++++++++++++++++++++-
- 1 file changed, 127 insertions(+), 3 deletions(-)
-
-diff --git a/dlls/winegstreamer/media_source.c b/dlls/winegstreamer/media_source.c
-index 345b1fe4528..f1e8c5799f7 100644
---- a/dlls/winegstreamer/media_source.c
-+++ b/dlls/winegstreamer/media_source.c
-@@ -432,6 +432,122 @@ static const IMFMediaStreamVtbl media_stream_vtbl =
+@@ -403,6 +403,122 @@ static const IMFMediaStreamVtbl media_stream_vtbl =
      media_stream_RequestSample
  };
  
@@ -1712,56 +147,119 @@ index 345b1fe4528..f1e8c5799f7 100644
 +}
 +
 +
- /* creates a stub stream */
  static HRESULT new_media_stream(struct media_source *source, GstPad *pad, DWORD stream_id, struct media_stream **out_stream)
  {
-@@ -467,8 +583,7 @@ static HRESULT new_media_stream(struct media_source *source, GstPad *pad, DWORD
+     struct media_stream *object = heap_alloc_zero(sizeof(*object));
+@@ -433,8 +549,7 @@ static HRESULT new_media_stream(struct media_source *source, GstPad *pad, DWORD
+     g_object_set(object->appsink, "sync", FALSE, NULL);
      g_object_set(object->appsink, "max-buffers", 5, NULL);
-     g_object_set(object->appsink, "wait-on-eos", FALSE, NULL);
  
 -    object->my_sink = gst_element_get_static_pad(object->appsink, "sink");
 -    gst_pad_link(object->their_src, object->my_sink);
 +    media_stream_align_with_mf(object);
  
-     gst_pad_add_probe(object->my_sink, GST_PAD_PROBE_TYPE_EVENT_DOWNSTREAM, caps_listener_wrapper, object, NULL);
+     gst_element_sync_state_with_parent(object->appsink);
  
-@@ -494,7 +609,16 @@ static HRESULT media_stream_init_desc(struct media_stream *stream)
+@@ -457,7 +572,16 @@ static HRESULT media_stream_init_desc(struct media_stream *stream)
+     IMFMediaType *stream_type = NULL;
+     HRESULT hr;
  
-     stream->their_caps = gst_caps_fixate(stream->their_caps);
- 
--    stream_type = mf_media_type_from_caps(stream->their_caps);
-+    if (strcmp(gst_structure_get_name(gst_caps_get_structure(stream->their_caps, 0)), "video/x-raw") &&
-+        strcmp(gst_structure_get_name(gst_caps_get_structure(stream->their_caps, 0)), "audio/x-raw"))
+-    stream_type = mf_media_type_from_caps(current_caps);
++    if (strcmp(gst_structure_get_name(gst_caps_get_structure(current_caps, 0)), "video/x-raw") &&
++        strcmp(gst_structure_get_name(gst_caps_get_structure(current_caps, 0)), "audio/x-raw"))
 +    {
-+        GstCaps *compatible_caps = make_mf_compatible_caps(stream->their_caps);
++        GstCaps *compatible_caps = make_mf_compatible_caps(current_caps);
 +        stream_type = mf_media_type_from_caps(compatible_caps);
 +        gst_caps_unref(compatible_caps);
 +    }
 +    else
-+        stream_type = mf_media_type_from_caps(stream->their_caps);
++        stream_type = mf_media_type_from_caps(current_caps);
 +
-     gst_caps_unref(stream->their_caps);
+     gst_caps_unref(current_caps);
      if (!stream_type)
-     {
+         return E_FAIL;
+@@ -687,6 +811,23 @@ static const IMFMediaSourceVtbl IMFMediaSource_vtbl =
+     media_source_Shutdown,
+ };
+ 
++/* If this callback is extended to use any significant win32 APIs, a wrapper function
++   should be added */
++gboolean stream_found(GstElement *bin, GstPad *pad, GstCaps *caps, gpointer user)
++{
++    GstCaps *target_caps;
++
++    /* if the stream can be converted into an MF compatible type, we'll go that route
++       otherwise, we'll rely on decodebin for the whole process */
++
++    if ((target_caps = make_mf_compatible_caps(caps)))
++    {
++        gst_caps_unref(target_caps);
++        return FALSE;
++    }
++    return TRUE;
++}
++
+ static void stream_added(GstElement *element, GstPad *pad, gpointer user)
+ {
+     struct media_source *source = user;
+@@ -787,6 +928,8 @@ static HRESULT media_source_constructor(IMFByteStream *bytestream, struct media_
+ 
+     gst_bin_add(GST_BIN(object->container), object->decodebin);
+ 
++    if(!GetEnvironmentVariableA("MF_DECODE_IN_SOURCE", NULL, 0))
++        g_signal_connect(object->decodebin, "autoplug-continue", G_CALLBACK(stream_found), object);
+     g_signal_connect(object->decodebin, "pad-added", G_CALLBACK(mf_src_stream_added_wrapper), object);
+     g_signal_connect(object->decodebin, "pad-removed", G_CALLBACK(mf_src_stream_removed_wrapper), object);
+     g_signal_connect(object->decodebin, "no-more-pads", G_CALLBACK(mf_src_no_more_pads_wrapper), object);
+diff --git a/dlls/winegstreamer/mfplat.c b/dlls/winegstreamer/mfplat.c
+index 2e8b0978648..a67cdef72fe 100644
+--- a/dlls/winegstreamer/mfplat.c
++++ b/dlls/winegstreamer/mfplat.c
+@@ -601,3 +601,25 @@ IMFMediaType *mf_media_type_from_caps(const GstCaps *caps)
+ 
+     return media_type;
+ }
++
++GstCaps *make_mf_compatible_caps(GstCaps *caps)
++{
++    GstCaps *ret;
++    IMFMediaType *media_type;
++
++    if (gst_caps_get_size(caps) != 1)
++        return NULL;
++
++    ret = gst_caps_copy(caps);
++
++    if ((media_type = mf_media_type_from_caps(ret)))
++        IMFMediaType_Release(media_type);
++
++    if (!media_type)
++    {
++        gst_caps_unref(ret);
++        return NULL;
++    }
++
++    return ret;
++}
 -- 
 2.28.0
 
-From 862d76c09ef0005d40e63b271a03c98874f78828 Mon Sep 17 00:00:00 2001
+From 99b43be87b11803938b12b08298406391b77d510 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Tue, 25 Aug 2020 17:35:49 -0500
-Subject: [PATCH 05/52] winegstreamer: Insert videoconvert into decoded-video
+Subject: [PATCH] winegstreamer: Insert videoconvert into decoded-video
  streams.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
 ---
- dlls/winegstreamer/media_source.c | 104 ++++++++++++++++++++++++++----
- 1 file changed, 91 insertions(+), 13 deletions(-)
+ dlls/winegstreamer/media_source.c | 104 ++++++++++++++++++++++++------
+ 1 file changed, 85 insertions(+), 19 deletions(-)
 
 diff --git a/dlls/winegstreamer/media_source.c b/dlls/winegstreamer/media_source.c
-index f1e8c5799f7..209753608b6 100644
+index 92b4100f7bc..a9aff0eb296 100644
 --- a/dlls/winegstreamer/media_source.c
 +++ b/dlls/winegstreamer/media_source.c
-@@ -459,8 +459,22 @@ static HRESULT media_stream_align_with_mf(struct media_stream *stream)
+@@ -430,8 +430,22 @@ static HRESULT media_stream_align_with_mf(struct media_stream *stream)
          g_free(source_caps_str);
      }
  
@@ -1786,22 +284,21 @@ index f1e8c5799f7..209753608b6 100644
      {
          stream->my_sink = gst_element_get_static_pad(stream->appsink, "sink");
          g_object_set(stream->appsink, "caps", source_caps, NULL);
-@@ -605,45 +619,109 @@ static HRESULT media_stream_init_desc(struct media_stream *stream)
+@@ -569,37 +583,89 @@ static HRESULT media_stream_init_desc(struct media_stream *stream)
  {
-     HRESULT hr;
+     GstCaps *current_caps = gst_pad_get_current_caps(stream->their_src);
      IMFMediaTypeHandler *type_handler;
 +    IMFMediaType **stream_types = NULL;
      IMFMediaType *stream_type = NULL;
 +    DWORD type_count = 0;
 +    unsigned int i;
+     HRESULT hr;
  
-     stream->their_caps = gst_caps_fixate(stream->their_caps);
- 
--    if (strcmp(gst_structure_get_name(gst_caps_get_structure(stream->their_caps, 0)), "video/x-raw") &&
--        strcmp(gst_structure_get_name(gst_caps_get_structure(stream->their_caps, 0)), "audio/x-raw"))
-+    if (!strcmp(gst_structure_get_name(gst_caps_get_structure(stream->their_caps, 0)), "video/x-raw"))
+-    if (strcmp(gst_structure_get_name(gst_caps_get_structure(current_caps, 0)), "video/x-raw") &&
+-        strcmp(gst_structure_get_name(gst_caps_get_structure(current_caps, 0)), "audio/x-raw"))
++    if (!strcmp(gst_structure_get_name(gst_caps_get_structure(current_caps, 0)), "video/x-raw"))
      {
--        GstCaps *compatible_caps = make_mf_compatible_caps(stream->their_caps);
+-        GstCaps *compatible_caps = make_mf_compatible_caps(current_caps);
 -        stream_type = mf_media_type_from_caps(compatible_caps);
 -        gst_caps_unref(compatible_caps);
 +        GstElementFactory *videoconvert_factory = gst_element_factory_find("videoconvert");
@@ -1816,20 +313,16 @@ index f1e8c5799f7..209753608b6 100644
 +                continue;
 +            src_caps = gst_static_pad_template_get_caps(template);
 +            gst_structure_get_list(gst_caps_get_structure(src_caps, 0), "format", &formats);
-+            type_count = formats->n_values;
-+            stream_types = heap_alloc( sizeof(IMFMediaType*) * type_count );
++            stream_types = heap_alloc( sizeof(IMFMediaType*) * formats->n_values );
 +            for (i = 0; i < formats->n_values; i++)
 +            {
 +                GValue *format = g_value_array_get_nth(formats, i);
-+                GstCaps *modified_caps = gst_caps_copy(stream->their_caps);
++                GstCaps *modified_caps = gst_caps_copy(current_caps);
 +                gst_caps_set_value(modified_caps, "format", format);
-+                stream_types[i] = mf_media_type_from_caps(modified_caps);
++                stream_types[type_count] = mf_media_type_from_caps(modified_caps);
 +                gst_caps_unref(modified_caps);
-+                if (!stream_types[i])
-+                {
-+                    i--;
-+                    type_count--;
-+                }
++                if (stream_types[type_count])
++                    type_count++;
 +            }
 +            g_value_array_free(formats);
 +            gst_caps_unref(src_caps);
@@ -1837,9 +330,9 @@ index f1e8c5799f7..209753608b6 100644
 +        }
      }
 -    else
-+    else if (!strcmp(gst_structure_get_name(gst_caps_get_structure(stream->their_caps, 0)), "audio/x-raw"))
++    else if (!strcmp(gst_structure_get_name(gst_caps_get_structure(current_caps, 0)), "audio/x-raw"))
 +    {
-         stream_type = mf_media_type_from_caps(stream->their_caps);
+         stream_type = mf_media_type_from_caps(current_caps);
 +        if (stream_type)
 +        {
 +            stream_types = &stream_type;
@@ -1848,7 +341,7 @@ index f1e8c5799f7..209753608b6 100644
 +    }
 +    else
 +    {
-+        GstCaps *compatible_caps = make_mf_compatible_caps(stream->their_caps);
++        GstCaps *compatible_caps = make_mf_compatible_caps(current_caps);
 +        if (compatible_caps)
 +        {
 +            stream_type = mf_media_type_from_caps(compatible_caps);
@@ -1861,59 +354,50 @@ index f1e8c5799f7..209753608b6 100644
 +        }
 +    }
  
-     gst_caps_unref(stream->their_caps);
+     gst_caps_unref(current_caps);
 -    if (!stream_type)
-+
 +    if (!type_count)
-     {
++    {
 +        ERR("Failed to establish an IMFMediaType from any of the possible stream caps!\n");
-         hr = E_FAIL;
-         goto fail;
-     }
+         return E_FAIL;
++    }
  
--    if (FAILED(hr = MFCreateStreamDescriptor(stream->stream_id, 1, &stream_type, &stream->descriptor)))
+-    hr = MFCreateStreamDescriptor(stream->stream_id, 1, &stream_type, &stream->descriptor);
+-
+-    IMFMediaType_Release(stream_type);
+-
+-    if (FAILED(hr))
+-        return hr;
 +    if (FAILED(hr = MFCreateStreamDescriptor(stream->stream_id, type_count, stream_types, &stream->descriptor)))
-         goto fail;
++        goto done;
  
      if (FAILED(hr = IMFStreamDescriptor_GetMediaTypeHandler(stream->descriptor, &type_handler)))
-         goto fail;
- 
--    if (FAILED(hr = IMFMediaTypeHandler_SetCurrentMediaType(type_handler, stream_type)))
-+    if (FAILED(hr = IMFMediaTypeHandler_SetCurrentMediaType(type_handler, stream_types[0])))
-         goto fail;
+-        return hr;
+-
+-    hr = IMFMediaTypeHandler_SetCurrentMediaType(type_handler, stream_type);
++        goto done;
  
 -    IMFMediaTypeHandler_Release(type_handler);
--
-     stream->state = STREAM_INACTIVE;
++    if (FAILED(hr = IMFMediaTypeHandler_SetCurrentMediaType(type_handler, stream_types[0])))
++        goto done;
  
-+    IMFMediaTypeHandler_Release(type_handler);
++done:
++    if (type_handler)
++        IMFMediaTypeHandler_Release(type_handler);
 +    for (i = 0; i < type_count; i++)
 +        IMFMediaType_Release(stream_types[i]);
 +    if (stream_types != &stream_type)
 +        heap_free(stream_types);
-+
-     return S_OK;
-     fail:
-     ERR("media stream initialization failed with %x\n", hr);
-     if (type_handler)
-         IMFMediaTypeHandler_Release(type_handler);
-+    if (stream_types)
-+    {
-+        for (i = 0; i < type_count; i++)
-+            IMFMediaType_Release(stream_types[i]);
-+        if (stream_types != &stream_type)
-+            heap_free(stream_types);
-+    }
      return hr;
  }
  
 -- 
 2.28.0
 
-From 35f58b2470a342db3fe665549ac1983b4877157a Mon Sep 17 00:00:00 2001
+From b5f1fc2793dce6165b509cc326163d71601d963c Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Tue, 25 Aug 2020 17:37:28 -0500
-Subject: [PATCH 06/52] winegstreamer: Insert audioconvert into decoded audio
+Subject: [PATCH] winegstreamer: Insert audioconvert into decoded audio
  streams.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
@@ -1922,10 +406,10 @@ Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
  1 file changed, 11 insertions(+), 2 deletions(-)
 
 diff --git a/dlls/winegstreamer/media_source.c b/dlls/winegstreamer/media_source.c
-index 209753608b6..66cfdbdc0fd 100644
+index a9aff0eb296..6190ac57e0e 100644
 --- a/dlls/winegstreamer/media_source.c
 +++ b/dlls/winegstreamer/media_source.c
-@@ -476,9 +476,18 @@ static HRESULT media_stream_align_with_mf(struct media_stream *stream)
+@@ -447,9 +447,18 @@ static HRESULT media_stream_align_with_mf(struct media_stream *stream)
      }
      else if(!strcmp(gst_structure_get_name(gst_caps_get_structure(source_caps, 0)), "audio/x-raw"))
      {
@@ -1949,18 +433,18 @@ index 209753608b6..66cfdbdc0fd 100644
 -- 
 2.28.0
 
-From 0cb401346e8c106fad5cf1cd4d9364e7508d282b Mon Sep 17 00:00:00 2001
+From 3a0e2a85e06e2026a430fe548374f36b9be7a53b Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Tue, 24 Mar 2020 16:00:26 -0500
-Subject: [PATCH 07/52] winegstreamer: Translate H.264 caps to attributes.
+Subject: [PATCH] winegstreamer: Translate H.264 caps to attributes.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
 ---
- dlls/winegstreamer/mfplat.c | 67 +++++++++++++++++++++++++++++++++++++
- 1 file changed, 67 insertions(+)
+ dlls/winegstreamer/mfplat.c | 80 +++++++++++++++++++++++++++++++++++++
+ 1 file changed, 80 insertions(+)
 
 diff --git a/dlls/winegstreamer/mfplat.c b/dlls/winegstreamer/mfplat.c
-index 3667bc3cc38..77a2dad093a 100644
+index a67cdef72fe..97b02d85a5d 100644
 --- a/dlls/winegstreamer/mfplat.c
 +++ b/dlls/winegstreamer/mfplat.c
 @@ -26,6 +26,7 @@
@@ -1971,14 +455,23 @@ index 3667bc3cc38..77a2dad093a 100644
  
  #include "wine/debug.h"
  #include "wine/heap.h"
-@@ -519,6 +520,72 @@ static IMFMediaType* transform_to_media_type(GstCaps *caps)
-                     FIXME("Unrecognized format.\n");
+@@ -521,6 +522,74 @@ IMFMediaType *mf_media_type_from_caps(const GstCaps *caps)
+                 }
              }
          }
 +        else if (!(strcmp(mime_type, "video/x-h264")))
 +        {
 +            const char *profile, *level;
 +
++            /* validation */
++            if (strcmp(gst_structure_get_string(info, "stream-format"), "byte-stream"))
++                return NULL;
++            if (strcmp(gst_structure_get_string(info, "alignment"), "au"))
++                return NULL;
++            if (gst_structure_get_value(info, "codec-data"))
++                return NULL;
++
++            /* conversion */
 +            IMFMediaType_SetGUID(media_type, &MF_MT_SUBTYPE, &MFVideoFormat_H264);
 +            IMFMediaType_SetUINT32(media_type, &MF_MT_COMPRESSED, TRUE);
 +
@@ -2033,24 +526,40 @@ index 3667bc3cc38..77a2dad093a 100644
 +                    FIXME("Unrecognized level %s", level);
 +                }
 +            }
-+            gst_caps_set_simple(caps, "stream-format", G_TYPE_STRING, "byte-stream", NULL);
-+            gst_caps_set_simple(caps, "alignment", G_TYPE_STRING, "au", NULL);
-+            for (unsigned int i = 0; i < gst_caps_get_size(caps); i++)
-+            {
-+                GstStructure *structure = gst_caps_get_structure (caps, i);
-+                gst_structure_remove_field(structure, "codec_data");
-+            }
 +        }
          else
          {
              FIXME("Unrecognized video format %s\n", mime_type);
+@@ -606,11 +675,22 @@ GstCaps *make_mf_compatible_caps(GstCaps *caps)
+ {
+     GstCaps *ret;
+     IMFMediaType *media_type;
++    GstStructure *structure;
++    const char *mime_type;
+ 
+     if (gst_caps_get_size(caps) != 1)
+         return NULL;
+ 
+     ret = gst_caps_copy(caps);
++    structure = gst_caps_get_structure(ret, 0);
++    mime_type = gst_structure_get_name(structure);
++
++    if (!strcmp(mime_type, "video/x-h264"))
++    {
++        gst_caps_set_simple(ret, "stream-format", G_TYPE_STRING, "byte-stream", NULL);
++        gst_caps_set_simple(ret, "alignment", G_TYPE_STRING, "au", NULL);
++        gst_structure_remove_field(structure, "codec_data");
++    }
+ 
+     if ((media_type = mf_media_type_from_caps(ret)))
+         IMFMediaType_Release(media_type);
 -- 
 2.28.0
 
-From 966b172363a8a3e22f9f5585cd41590f6c799b36 Mon Sep 17 00:00:00 2001
+From 3abc720777969b80c82c8e19215d765e4ddca913 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Tue, 24 Mar 2020 16:01:20 -0500
-Subject: [PATCH 08/52] winegstreamer: Translate WMV caps to attributes.
+Subject: [PATCH] winegstreamer: Translate WMV caps to attributes.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
 ---
@@ -2058,10 +567,10 @@ Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
  1 file changed, 51 insertions(+)
 
 diff --git a/dlls/winegstreamer/mfplat.c b/dlls/winegstreamer/mfplat.c
-index 77a2dad093a..3963d97041d 100644
+index 97b02d85a5d..1ef86a3cff5 100644
 --- a/dlls/winegstreamer/mfplat.c
 +++ b/dlls/winegstreamer/mfplat.c
-@@ -457,6 +457,24 @@ uncompressed_formats[] =
+@@ -457,6 +457,24 @@ uncompressed_video_formats[] =
      {&MFVideoFormat_RGB555,  GST_VIDEO_FORMAT_BGR15},
  };
  
@@ -2083,11 +592,11 @@ index 77a2dad093a..3963d97041d 100644
 +    }
 +}
 +
- /* caps will be modified to represent the exact type needed for the format */
- static IMFMediaType* transform_to_media_type(GstCaps *caps)
+ /* returns NULL if doesn't match exactly */
+ IMFMediaType *mf_media_type_from_caps(const GstCaps *caps)
  {
-@@ -586,6 +604,39 @@ static IMFMediaType* transform_to_media_type(GstCaps *caps)
-                 gst_structure_remove_field(structure, "codec_data");
+@@ -590,6 +608,39 @@ IMFMediaType *mf_media_type_from_caps(const GstCaps *caps)
+                 }
              }
          }
 +        else if (!(strcmp(mime_type, "video/x-wmv")))
@@ -2129,10 +638,10 @@ index 77a2dad093a..3963d97041d 100644
 -- 
 2.28.0
 
-From 8cf90bd8896f33646211c5ca6b2b18930789a2b2 Mon Sep 17 00:00:00 2001
+From 0a7b4fe24117d2c9e782b046819ffa7d3e646ae4 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Tue, 24 Mar 2020 16:02:27 -0500
-Subject: [PATCH 09/52] winegstreamer: Translate AAC caps to attributes.
+Subject: [PATCH] winegstreamer: Translate AAC caps to attributes.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
 ---
@@ -2140,10 +649,10 @@ Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
  1 file changed, 108 insertions(+)
 
 diff --git a/dlls/winegstreamer/mfplat.c b/dlls/winegstreamer/mfplat.c
-index 3963d97041d..4cff74f2d41 100644
+index 1ef86a3cff5..9239cf9eff9 100644
 --- a/dlls/winegstreamer/mfplat.c
 +++ b/dlls/winegstreamer/mfplat.c
-@@ -457,6 +457,15 @@ uncompressed_formats[] =
+@@ -457,6 +457,15 @@ uncompressed_video_formats[] =
      {&MFVideoFormat_RGB555,  GST_VIDEO_FORMAT_BGR15},
  };
  
@@ -2159,9 +668,9 @@ index 3963d97041d..4cff74f2d41 100644
  static void codec_data_to_user_data(GstStructure *structure, IMFMediaType *type)
  {
      const GValue *codec_data;
-@@ -710,6 +719,105 @@ static IMFMediaType* transform_to_media_type(GstCaps *caps)
-                 ERR("Failed to get audio format\n");
-             }
+@@ -706,6 +715,105 @@ IMFMediaType *mf_media_type_from_caps(const GstCaps *caps)
+ 
+             IMFMediaType_SetUINT32(media_type, &MF_MT_AUDIO_BITS_PER_SAMPLE, depth);
          }
 +        else if (!(strcmp(mime_type, "audio/mpeg")))
 +        {
@@ -2268,11 +777,10 @@ index 3963d97041d..4cff74f2d41 100644
 -- 
 2.28.0
 
-From 2100ecb112e69962c11e4d5c841cc0ab003db6bb Mon Sep 17 00:00:00 2001
+From ae279be0b4841c998dfa916f61f5bd7507190938 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Wed, 25 Mar 2020 13:36:19 -0500
-Subject: [PATCH 10/52] winegstreamer: Translate MPEG-4 Section-2 caps to
- attributes.
+Subject: [PATCH] winegstreamer: Translate MPEG-4 Section-2 caps to attributes.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
 ---
@@ -2280,10 +788,10 @@ Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
  1 file changed, 16 insertions(+)
 
 diff --git a/dlls/winegstreamer/mfplat.c b/dlls/winegstreamer/mfplat.c
-index 4cff74f2d41..f99e5c6636d 100644
+index 9239cf9eff9..4fde3a8a7fb 100644
 --- a/dlls/winegstreamer/mfplat.c
 +++ b/dlls/winegstreamer/mfplat.c
-@@ -646,6 +646,22 @@ static IMFMediaType* transform_to_media_type(GstCaps *caps)
+@@ -650,6 +650,22 @@ IMFMediaType *mf_media_type_from_caps(const GstCaps *caps)
  
              codec_data_to_user_data(info, media_type);
          }
@@ -2309,10 +817,10 @@ index 4cff74f2d41..f99e5c6636d 100644
 -- 
 2.28.0
 
-From 8b3eaedb9bb5ce6813f45e2553c657133d80718f Mon Sep 17 00:00:00 2001
+From 2010fec0d85988d7a0b7aaadd6438e1d5c727e4a Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Tue, 12 May 2020 17:05:41 -0500
-Subject: [PATCH 11/52] winegstreamer: Translate WMA caps to attributes.
+Subject: [PATCH] winegstreamer: Translate WMA caps to attributes.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
 ---
@@ -2320,10 +828,10 @@ Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
  1 file changed, 24 insertions(+)
 
 diff --git a/dlls/winegstreamer/mfplat.c b/dlls/winegstreamer/mfplat.c
-index f99e5c6636d..2a8c2050ff9 100644
+index 4fde3a8a7fb..4aedfea45e0 100644
 --- a/dlls/winegstreamer/mfplat.c
 +++ b/dlls/winegstreamer/mfplat.c
-@@ -834,6 +834,30 @@ static IMFMediaType* transform_to_media_type(GstCaps *caps)
+@@ -830,6 +830,30 @@ IMFMediaType *mf_media_type_from_caps(const GstCaps *caps)
                      FIXME("Unhandled mpegversion %d\n", mpeg_version);
              }
          }
@@ -2357,10 +865,10 @@ index f99e5c6636d..2a8c2050ff9 100644
 -- 
 2.28.0
 
-From 50c496fa883c7a3fae0e991b7bcc96136a77a3df Mon Sep 17 00:00:00 2001
+From 2fe4bd639fe92f050ab4c0be2a5e586d4ae5852a Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Tue, 31 Mar 2020 11:21:21 -0500
-Subject: [PATCH 12/52] winegstreamer: Implement
+Subject: [PATCH] winegstreamer: Implement
  IMFMediaSource::CreatePresentationDescriptor.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
@@ -2409,10 +917,10 @@ index 309f7b669a4..72d06e31880 100644
      ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
  
 diff --git a/dlls/winegstreamer/media_source.c b/dlls/winegstreamer/media_source.c
-index 66cfdbdc0fd..6c0c212a100 100644
+index 6190ac57e0e..5f203a946bc 100644
 --- a/dlls/winegstreamer/media_source.c
 +++ b/dlls/winegstreamer/media_source.c
-@@ -70,6 +70,7 @@ struct media_source
+@@ -67,6 +67,7 @@ struct media_source
      IMFByteStream *byte_stream;
      struct media_stream **streams;
      ULONG stream_count;
@@ -2420,7 +928,7 @@ index 66cfdbdc0fd..6c0c212a100 100644
      GstBus *bus;
      GstElement *container;
      GstElement *decodebin;
-@@ -837,12 +838,19 @@ static HRESULT WINAPI media_source_CreatePresentationDescriptor(IMFMediaSource *
+@@ -781,12 +782,19 @@ static HRESULT WINAPI media_source_CreatePresentationDescriptor(IMFMediaSource *
  {
      struct media_source *source = impl_from_IMFMediaSource(iface);
  
@@ -2442,7 +950,7 @@ index 66cfdbdc0fd..6c0c212a100 100644
  }
  
  static HRESULT WINAPI media_source_Start(IMFMediaSource *iface, IMFPresentationDescriptor *descriptor,
-@@ -904,6 +912,8 @@ static HRESULT WINAPI media_source_Shutdown(IMFMediaSource *iface)
+@@ -849,6 +857,8 @@ static HRESULT WINAPI media_source_Shutdown(IMFMediaSource *iface)
      if (source->their_sink)
          gst_object_unref(GST_OBJECT(source->their_sink));
  
@@ -2451,16 +959,16 @@ index 66cfdbdc0fd..6c0c212a100 100644
      if (source->event_queue)
          IMFMediaEventQueue_Shutdown(source->event_queue);
      if (source->byte_stream)
-@@ -1074,6 +1084,7 @@ static HRESULT media_source_constructor(IMFByteStream *bytestream, struct media_
-         GST_STATIC_CAPS_ANY);
+@@ -954,6 +964,7 @@ static HRESULT media_source_constructor(IMFByteStream *bytestream, struct media_
+         GST_STATIC_PAD_TEMPLATE("mf_src", GST_PAD_SRC, GST_PAD_ALWAYS, GST_STATIC_CAPS_ANY);
  
      struct media_source *object = heap_alloc_zero(sizeof(*object));
 +    IMFStreamDescriptor **descriptors = NULL;
+     unsigned int i;
      HRESULT hr;
      int ret;
- 
-@@ -1149,6 +1160,25 @@ static HRESULT media_source_constructor(IMFByteStream *bytestream, struct media_
-             goto fail;
+@@ -1043,6 +1054,25 @@ static HRESULT media_source_constructor(IMFByteStream *bytestream, struct media_
+         gst_sample_unref(preroll);
      }
  
 +    /* init presentation descriptor */
@@ -2485,7 +993,7 @@ index 66cfdbdc0fd..6c0c212a100 100644
      object->state = SOURCE_STOPPED;
  
      *out_media_source = object;
-@@ -1157,6 +1187,8 @@ static HRESULT media_source_constructor(IMFByteStream *bytestream, struct media_
+@@ -1051,6 +1081,8 @@ static HRESULT media_source_constructor(IMFByteStream *bytestream, struct media_
      fail:
      WARN("Failed to construct MFMediaSource, hr %#x.\n", hr);
  
@@ -2497,11 +1005,10 @@ index 66cfdbdc0fd..6c0c212a100 100644
 -- 
 2.28.0
 
-From 309bf9ba18c12e8f6eb9a29c7455983fa7bf3603 Mon Sep 17 00:00:00 2001
+From 04d17547828174ec264284752eb65b1b1e1b942d Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Tue, 24 Mar 2020 16:15:35 -0500
-Subject: [PATCH 13/52] winegstreamer: Introduce IMFMediaType -> GstCaps
- converter.
+Subject: [PATCH] winegstreamer: Introduce IMFMediaType -> GstCaps converter.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
 ---
@@ -2510,22 +1017,22 @@ Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
  2 files changed, 150 insertions(+)
 
 diff --git a/dlls/winegstreamer/gst_private.h b/dlls/winegstreamer/gst_private.h
-index 86392eea4e3..d0628cc8df3 100644
+index 7ec71d40800..00e28f1d092 100644
 --- a/dlls/winegstreamer/gst_private.h
 +++ b/dlls/winegstreamer/gst_private.h
 @@ -58,6 +58,7 @@ extern HRESULT mfplat_get_class_object(REFCLSID rclsid, REFIID riid, void **obj)
  HRESULT winegstreamer_stream_handler_create(REFIID riid, void **obj) DECLSPEC_HIDDEN;
- GstCaps *make_mf_compatible_caps(GstCaps *caps);
- IMFMediaType *mf_media_type_from_caps(GstCaps *caps);
-+GstCaps *caps_from_mf_media_type(IMFMediaType *type);
+ GstCaps *make_mf_compatible_caps(GstCaps *caps) DECLSPEC_HIDDEN;
+ IMFMediaType *mf_media_type_from_caps(const GstCaps *caps) DECLSPEC_HIDDEN;
++GstCaps *caps_from_mf_media_type(IMFMediaType *type) DECLSPEC_HIDDEN;
  
  HRESULT winegstreamer_stream_handler_create(REFIID riid, void **obj) DECLSPEC_HIDDEN;
  
 diff --git a/dlls/winegstreamer/mfplat.c b/dlls/winegstreamer/mfplat.c
-index 2a8c2050ff9..648cdd23421 100644
+index 4aedfea45e0..f0b611e7ef5 100644
 --- a/dlls/winegstreamer/mfplat.c
 +++ b/dlls/winegstreamer/mfplat.c
-@@ -910,3 +910,152 @@ GstCaps *make_mf_compatible_caps(GstCaps *caps)
+@@ -902,3 +902,152 @@ GstCaps *make_mf_compatible_caps(GstCaps *caps)
  
      return ret;
  }
@@ -2571,11 +1078,11 @@ index 2a8c2050ff9..648cdd23421 100644
 +
 +            output = gst_caps_new_empty_simple("video/x-raw");
 +
-+            for (i = 0; i < ARRAY_SIZE(uncompressed_formats); i++)
++            for (i = 0; i < ARRAY_SIZE(uncompressed_video_formats); i++)
 +            {
-+                if (IsEqualGUID(uncompressed_formats[i].subtype, &subtype))
++                if (IsEqualGUID(uncompressed_video_formats[i].subtype, &subtype))
 +                {
-+                    format = uncompressed_formats[i].format;
++                    format = uncompressed_video_formats[i].format;
 +                    break;
 +                }
 +            }
@@ -2681,10 +1188,10 @@ index 2a8c2050ff9..648cdd23421 100644
 -- 
 2.28.0
 
-From 98ccb2c72d763514c1e3232e93dab697bede4cad Mon Sep 17 00:00:00 2001
+From 3e0c22f47b91d130d1e136fa3282cbed1f275f0a Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Tue, 24 Mar 2020 16:18:40 -0500
-Subject: [PATCH 14/52] winegstreamer: Translate H.264 attributes to caps.
+Subject: [PATCH] winegstreamer: Translate H.264 attributes to caps.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
 ---
@@ -2692,10 +1199,10 @@ Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
  1 file changed, 48 insertions(+)
 
 diff --git a/dlls/winegstreamer/mfplat.c b/dlls/winegstreamer/mfplat.c
-index 648cdd23421..bc0259f2a64 100644
+index f0b611e7ef5..7370ae26f4f 100644
 --- a/dlls/winegstreamer/mfplat.c
 +++ b/dlls/winegstreamer/mfplat.c
-@@ -980,6 +980,54 @@ GstCaps *caps_from_mf_media_type(IMFMediaType *type)
+@@ -972,6 +972,54 @@ GstCaps *caps_from_mf_media_type(IMFMediaType *type)
              }
  
          }
@@ -2753,10 +1260,10 @@ index 648cdd23421..bc0259f2a64 100644
 -- 
 2.28.0
 
-From 884a00b050f17191a7c48364de4e55e5fcc17cc9 Mon Sep 17 00:00:00 2001
+From dc5b390262d808615e4b49eb86286d2f6a6f41b1 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Tue, 24 Mar 2020 16:20:17 -0500
-Subject: [PATCH 15/52] winegstreamer: Translate WMV attributes to caps.
+Subject: [PATCH] winegstreamer: Translate WMV attributes to caps.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
 ---
@@ -2764,10 +1271,10 @@ Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
  1 file changed, 51 insertions(+)
 
 diff --git a/dlls/winegstreamer/mfplat.c b/dlls/winegstreamer/mfplat.c
-index bc0259f2a64..a9abffedcd0 100644
+index 7370ae26f4f..5779f81ce39 100644
 --- a/dlls/winegstreamer/mfplat.c
 +++ b/dlls/winegstreamer/mfplat.c
-@@ -911,6 +911,21 @@ GstCaps *make_mf_compatible_caps(GstCaps *caps)
+@@ -903,6 +903,21 @@ GstCaps *make_mf_compatible_caps(GstCaps *caps)
      return ret;
  }
  
@@ -2789,7 +1296,7 @@ index bc0259f2a64..a9abffedcd0 100644
  GstCaps *caps_from_mf_media_type(IMFMediaType *type)
  {
      GUID major_type;
-@@ -1028,6 +1043,42 @@ GstCaps *caps_from_mf_media_type(IMFMediaType *type)
+@@ -1020,6 +1035,42 @@ GstCaps *caps_from_mf_media_type(IMFMediaType *type)
                      gst_caps_set_simple(output, "level", G_TYPE_STRING, level, NULL);
              }
          }
@@ -2835,10 +1342,10 @@ index bc0259f2a64..a9abffedcd0 100644
 -- 
 2.28.0
 
-From 7fd3f66161894a1242d43b6abd54e65ed6831270 Mon Sep 17 00:00:00 2001
+From f710ed4264cc6fb8c9ad1ffe15345c24e2d72aef Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Tue, 21 Apr 2020 10:31:02 -0500
-Subject: [PATCH 16/52] winegstreamer: Translate AAC attributes to caps.
+Subject: [PATCH] winegstreamer: Translate AAC attributes to caps.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
 ---
@@ -2846,10 +1353,10 @@ Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
  1 file changed, 66 insertions(+)
 
 diff --git a/dlls/winegstreamer/mfplat.c b/dlls/winegstreamer/mfplat.c
-index a9abffedcd0..75d8e338128 100644
+index 5779f81ce39..58d23a9ac15 100644
 --- a/dlls/winegstreamer/mfplat.c
 +++ b/dlls/winegstreamer/mfplat.c
-@@ -1128,6 +1128,72 @@ GstCaps *caps_from_mf_media_type(IMFMediaType *type)
+@@ -1120,6 +1120,72 @@ GstCaps *caps_from_mf_media_type(IMFMediaType *type)
                  return NULL;
              }
          }
@@ -2925,11 +1432,10 @@ index a9abffedcd0..75d8e338128 100644
 -- 
 2.28.0
 
-From f15f0c3530b20cff7de1e3295d2b7978e9b0d2c7 Mon Sep 17 00:00:00 2001
+From 7b3b63b25476f97aa1aad6636df47d6f540a52b3 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Mon, 11 May 2020 16:03:09 -0500
-Subject: [PATCH 17/52] winegstreamer: Translate MPEG-4 Section-2 attributes to
- caps.
+Subject: [PATCH] winegstreamer: Translate MPEG-4 Section-2 attributes to caps.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
 ---
@@ -2937,10 +1443,10 @@ Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
  1 file changed, 8 insertions(+)
 
 diff --git a/dlls/winegstreamer/mfplat.c b/dlls/winegstreamer/mfplat.c
-index 75d8e338128..b7fa283133c 100644
+index 58d23a9ac15..a6230121cbf 100644
 --- a/dlls/winegstreamer/mfplat.c
 +++ b/dlls/winegstreamer/mfplat.c
-@@ -1079,6 +1079,14 @@ GstCaps *caps_from_mf_media_type(IMFMediaType *type)
+@@ -1071,6 +1071,14 @@ GstCaps *caps_from_mf_media_type(IMFMediaType *type)
  
              user_data_to_codec_data(type, output);
          }
@@ -2958,10 +1464,10 @@ index 75d8e338128..b7fa283133c 100644
 -- 
 2.28.0
 
-From ccb8ad4ef7bc35a62f7ec58d4ce591f6e2678598 Mon Sep 17 00:00:00 2001
+From a8f54c1e644fcb185d3a6e3fc7b3e5e79a8b17d8 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Tue, 12 May 2020 17:05:59 -0500
-Subject: [PATCH 18/52] winegstreamer: Translate WMA attributes to caps.
+Subject: [PATCH] winegstreamer: Translate WMA attributes to caps.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
 ---
@@ -2969,10 +1475,10 @@ Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
  1 file changed, 15 insertions(+)
 
 diff --git a/dlls/winegstreamer/mfplat.c b/dlls/winegstreamer/mfplat.c
-index b7fa283133c..b291b21e8b5 100644
+index a6230121cbf..4b7a9760688 100644
 --- a/dlls/winegstreamer/mfplat.c
 +++ b/dlls/winegstreamer/mfplat.c
-@@ -1202,6 +1202,21 @@ GstCaps *caps_from_mf_media_type(IMFMediaType *type)
+@@ -1194,6 +1194,21 @@ GstCaps *caps_from_mf_media_type(IMFMediaType *type)
                  CoTaskMemFree(user_data);
              }
          }
@@ -2997,16 +1503,16 @@ index b7fa283133c..b291b21e8b5 100644
 -- 
 2.28.0
 
-From d883eb8c94f0778d4ef955480a3862d575f7130a Mon Sep 17 00:00:00 2001
+From 94891a5e484b97577df09a4e6ef3106c79d2391a Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Tue, 31 Mar 2020 15:10:03 -0500
-Subject: [PATCH 19/52] winegstreamer: Implement IMFMediaSource::Start.
+Subject: [PATCH] winegstreamer: Implement IMFMediaSource::Start.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
 ---
  dlls/mfplat/tests/mfplat.c        |   8 +-
- dlls/winegstreamer/media_source.c | 313 +++++++++++++++++++++++++++++-
- 2 files changed, 314 insertions(+), 7 deletions(-)
+ dlls/winegstreamer/media_source.c | 319 +++++++++++++++++++++++++++++-
+ 2 files changed, 317 insertions(+), 10 deletions(-)
 
 diff --git a/dlls/mfplat/tests/mfplat.c b/dlls/mfplat/tests/mfplat.c
 index 72d06e31880..e6a1694a11f 100644
@@ -3051,18 +1557,16 @@ index 72d06e31880..e6a1694a11f 100644
      IMFPresentationDescriptor_Release(descriptor);
  
 diff --git a/dlls/winegstreamer/media_source.c b/dlls/winegstreamer/media_source.c
-index 6c0c212a100..c893664fbec 100644
+index 5f203a946bc..d6ea8b52aca 100644
 --- a/dlls/winegstreamer/media_source.c
 +++ b/dlls/winegstreamer/media_source.c
-@@ -56,16 +56,41 @@ struct media_stream
-         STREAM_STUB,
+@@ -55,14 +55,39 @@ struct media_stream
+     {
          STREAM_INACTIVE,
          STREAM_SHUTDOWN,
 +        STREAM_RUNNING,
      } state;
-     /* used when in STUB state: */
      DWORD stream_id;
-     HANDLE caps_event;
 +    BOOL eos;
 +};
 +
@@ -3096,18 +1600,19 @@ index 6c0c212a100..c893664fbec 100644
      IMFMediaEventQueue *event_queue;
      IMFByteStream *byte_stream;
      struct media_stream **streams;
-@@ -79,6 +104,7 @@ struct media_source
+@@ -76,6 +101,7 @@ struct media_source
      {
          SOURCE_OPENING,
          SOURCE_STOPPED,
 +        SOURCE_RUNNING,
          SOURCE_SHUTDOWN,
      } state;
-     HANDLE all_streams_event;
-@@ -94,6 +120,264 @@ static inline struct media_source *impl_from_IMFMediaSource(IMFMediaSource *ifac
+     HANDLE no_more_pads_event;
+@@ -91,7 +117,265 @@ static inline struct media_source *impl_from_IMFMediaSource(IMFMediaSource *ifac
      return CONTAINING_RECORD(iface, struct media_source, IMFMediaSource_iface);
  }
  
+-static GstFlowReturn bytestream_wrapper_pull(GstPad *pad, GstObject *parent, guint64 ofs, guint len,
 +static inline struct media_source *impl_from_async_commands_callback_IMFAsyncCallback(IMFAsyncCallback *iface)
 +{
 +    return CONTAINING_RECORD(iface, struct media_source, async_commands_callback);
@@ -3366,10 +1871,22 @@ index 6c0c212a100..c893664fbec 100644
 +    source_async_commands_Invoke,
 +};
 +
- GstFlowReturn pull_from_bytestream(GstPad *pad, GstObject *parent, guint64 ofs, guint len,
++GstFlowReturn bytestream_wrapper_pull(GstPad *pad, GstObject *parent, guint64 ofs, guint len,
          GstBuffer **buf)
  {
-@@ -854,16 +1138,32 @@ static HRESULT WINAPI media_source_CreatePresentationDescriptor(IMFMediaSource *
+     struct media_source *source = gst_pad_get_element_private(pad);
+@@ -240,8 +524,8 @@ GstBusSyncReply bus_watch(GstBus *bus, GstMessage *message, gpointer user)
+             break;
+     }
+ 
+-    gst_message_unref(message);
+-    return GST_BUS_DROP;
++    /* FIXME: drop messages and find a substitute for gst_bus_poll */
++    return GST_BUS_PASS;
+ }
+ 
+ static HRESULT WINAPI media_stream_QueryInterface(IMFMediaStream *iface, REFIID riid, void **out)
+@@ -798,16 +1082,32 @@ static HRESULT WINAPI media_source_CreatePresentationDescriptor(IMFMediaSource *
  }
  
  static HRESULT WINAPI media_source_Start(IMFMediaSource *iface, IMFPresentationDescriptor *descriptor,
@@ -3405,9 +1922,9 @@ index 6c0c212a100..c893664fbec 100644
  }
  
  static HRESULT WINAPI media_source_Stop(IMFMediaSource *iface)
-@@ -931,6 +1231,9 @@ static HRESULT WINAPI media_source_Shutdown(IMFMediaSource *iface)
-     if (source->all_streams_event)
-         CloseHandle(source->all_streams_event);
+@@ -876,6 +1176,9 @@ static HRESULT WINAPI media_source_Shutdown(IMFMediaSource *iface)
+     if (source->no_more_pads_event)
+         CloseHandle(source->no_more_pads_event);
  
 +    if (source->async_commands_queue)
 +        MFUnlockWorkQueue(source->async_commands_queue);
@@ -3415,7 +1932,7 @@ index 6c0c212a100..c893664fbec 100644
      return S_OK;
  }
  
-@@ -1092,6 +1395,7 @@ static HRESULT media_source_constructor(IMFByteStream *bytestream, struct media_
+@@ -973,6 +1276,7 @@ static HRESULT media_source_constructor(IMFByteStream *bytestream, struct media_
          return E_OUTOFMEMORY;
  
      object->IMFMediaSource_iface.lpVtbl = &IMFMediaSource_vtbl;
@@ -3423,7 +1940,7 @@ index 6c0c212a100..c893664fbec 100644
      object->ref = 1;
      object->byte_stream = bytestream;
      IMFByteStream_AddRef(bytestream);
-@@ -1100,6 +1404,9 @@ static HRESULT media_source_constructor(IMFByteStream *bytestream, struct media_
+@@ -981,6 +1285,9 @@ static HRESULT media_source_constructor(IMFByteStream *bytestream, struct media_
      if (FAILED(hr = MFCreateEventQueue(&object->event_queue)))
          goto fail;
  
@@ -3432,14 +1949,14 @@ index 6c0c212a100..c893664fbec 100644
 +
      object->container = gst_bin_new(NULL);
      object->bus = gst_bus_new();
-     gst_bus_set_sync_handler(object->bus, watch_source_bus_wrapper, object, NULL);
+     gst_bus_set_sync_handler(object->bus, mf_src_bus_watch_wrapper, object, NULL);
 -- 
 2.28.0
 
-From 366946876d7a53f80d91749f290f511294415cf5 Mon Sep 17 00:00:00 2001
+From d6e46ad311f773daed7d065c5c46f55c430a544c Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Wed, 25 Mar 2020 10:43:03 -0500
-Subject: [PATCH 20/52] winegstreamer: Implement IMFMediaStream::RequestSample.
+Subject: [PATCH] winegstreamer: Implement IMFMediaStream::RequestSample.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
 ---
@@ -3476,22 +1993,22 @@ index e6a1694a11f..6dd2c3cbe96 100644
      IMFMediaTypeHandler_Release(handler);
      IMFPresentationDescriptor_Release(descriptor);
 diff --git a/dlls/winegstreamer/gst_private.h b/dlls/winegstreamer/gst_private.h
-index d0628cc8df3..664733c74cd 100644
+index 00e28f1d092..df1e643c3f6 100644
 --- a/dlls/winegstreamer/gst_private.h
 +++ b/dlls/winegstreamer/gst_private.h
 @@ -59,6 +59,7 @@ HRESULT winegstreamer_stream_handler_create(REFIID riid, void **obj) DECLSPEC_HI
- GstCaps *make_mf_compatible_caps(GstCaps *caps);
- IMFMediaType *mf_media_type_from_caps(GstCaps *caps);
- GstCaps *caps_from_mf_media_type(IMFMediaType *type);
-+IMFSample *mf_sample_from_gst_buffer(GstBuffer *in);
+ GstCaps *make_mf_compatible_caps(GstCaps *caps) DECLSPEC_HIDDEN;
+ IMFMediaType *mf_media_type_from_caps(const GstCaps *caps) DECLSPEC_HIDDEN;
+ GstCaps *caps_from_mf_media_type(IMFMediaType *type) DECLSPEC_HIDDEN;
++IMFSample *mf_sample_from_gst_buffer(GstBuffer *in) DECLSPEC_HIDDEN;
  
  HRESULT winegstreamer_stream_handler_create(REFIID riid, void **obj) DECLSPEC_HIDDEN;
  
 diff --git a/dlls/winegstreamer/media_source.c b/dlls/winegstreamer/media_source.c
-index c893664fbec..15ad1796563 100644
+index d6ea8b52aca..31f90443ee4 100644
 --- a/dlls/winegstreamer/media_source.c
 +++ b/dlls/winegstreamer/media_source.c
-@@ -67,6 +67,7 @@ struct media_stream
+@@ -64,6 +64,7 @@ struct media_stream
  enum source_async_op
  {
      SOURCE_ASYNC_START,
@@ -3499,7 +2016,7 @@ index c893664fbec..15ad1796563 100644
  };
  
  struct source_async_command
-@@ -82,6 +83,11 @@ struct source_async_command
+@@ -79,6 +80,11 @@ struct source_async_command
              GUID format;
              PROPVARIANT position;
          } start;
@@ -3511,7 +2028,7 @@ index c893664fbec..15ad1796563 100644
      } u;
  };
  
-@@ -341,6 +347,78 @@ static HRESULT start_pipeline(struct media_source *source, struct source_async_c
+@@ -338,6 +344,78 @@ static HRESULT start_pipeline(struct media_source *source, struct source_async_c
      return S_OK;
  }
  
@@ -3590,7 +2107,7 @@ index c893664fbec..15ad1796563 100644
  static HRESULT WINAPI source_async_commands_Invoke(IMFAsyncCallback *iface, IMFAsyncResult *result)
  {
      struct media_source *source = impl_from_async_commands_callback_IMFAsyncCallback(iface);
-@@ -360,6 +438,9 @@ static HRESULT WINAPI source_async_commands_Invoke(IMFAsyncCallback *iface, IMFA
+@@ -357,6 +435,9 @@ static HRESULT WINAPI source_async_commands_Invoke(IMFAsyncCallback *iface, IMFA
          case SOURCE_ASYNC_START:
              start_pipeline(source, command);
              break;
@@ -3600,7 +2117,7 @@ index c893664fbec..15ad1796563 100644
          default:
              ;
      }
-@@ -694,13 +775,37 @@ static HRESULT WINAPI media_stream_GetStreamDescriptor(IMFMediaStream* iface, IM
+@@ -665,13 +746,37 @@ static HRESULT WINAPI media_stream_GetStreamDescriptor(IMFMediaStream* iface, IM
  static HRESULT WINAPI media_stream_RequestSample(IMFMediaStream *iface, IUnknown *token)
  {
      struct media_stream *stream = impl_from_IMFMediaStream(iface);
@@ -3639,19 +2156,19 @@ index c893664fbec..15ad1796563 100644
  }
  
  static const IMFMediaStreamVtbl media_stream_vtbl =
-@@ -873,6 +978,7 @@ static HRESULT new_media_stream(struct media_source *source, GstPad *pad, DWORD
+@@ -843,6 +948,7 @@ static HRESULT new_media_stream(struct media_source *source, GstPad *pad, DWORD
      object->stream_id = stream_id;
  
-     object->state = STREAM_STUB;
+     object->state = STREAM_INACTIVE;
 +    object->eos = FALSE;
  
-     object->caps_event = CreateEventA(NULL, TRUE, FALSE, NULL);
- 
+     if (FAILED(hr = MFCreateEventQueue(&object->event_queue)))
+         goto fail;
 diff --git a/dlls/winegstreamer/mfplat.c b/dlls/winegstreamer/mfplat.c
-index b291b21e8b5..839f337538d 100644
+index 4b7a9760688..ce0c951ac0d 100644
 --- a/dlls/winegstreamer/mfplat.c
 +++ b/dlls/winegstreamer/mfplat.c
-@@ -1247,3 +1247,93 @@ GstCaps *caps_from_mf_media_type(IMFMediaType *type)
+@@ -1239,3 +1239,93 @@ GstCaps *caps_from_mf_media_type(IMFMediaType *type)
      FIXME("Unrecognized major type %s\n", debugstr_guid(&major_type));
      return NULL;
  }
@@ -3748,11 +2265,10 @@ index b291b21e8b5..839f337538d 100644
 -- 
 2.28.0
 
-From 625df79a05531671aeea9947ccd393372d32f6c1 Mon Sep 17 00:00:00 2001
+From d3687d998fc5cc3ef11d53554e42c591905ffae2 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Tue, 31 Mar 2020 15:15:07 -0500
-Subject: [PATCH 21/52] winegstreamer: Implement
- IMFMediaSource::GetCharacteristics.
+Subject: [PATCH] winegstreamer: Implement IMFMediaSource::GetCharacteristics.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
 ---
@@ -3760,10 +2276,10 @@ Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
  1 file changed, 4 insertions(+), 2 deletions(-)
 
 diff --git a/dlls/winegstreamer/media_source.c b/dlls/winegstreamer/media_source.c
-index 15ad1796563..b163472947b 100644
+index 31f90443ee4..536f0e5e140 100644
 --- a/dlls/winegstreamer/media_source.c
 +++ b/dlls/winegstreamer/media_source.c
-@@ -1216,12 +1216,14 @@ static HRESULT WINAPI media_source_GetCharacteristics(IMFMediaSource *iface, DWO
+@@ -1160,12 +1160,14 @@ static HRESULT WINAPI media_source_GetCharacteristics(IMFMediaSource *iface, DWO
  {
      struct media_source *source = impl_from_IMFMediaSource(iface);
  
@@ -3783,11 +2299,11 @@ index 15ad1796563..b163472947b 100644
 -- 
 2.28.0
 
-From 516f67ab33c1b418fa621a059ce0a5576b92cac1 Mon Sep 17 00:00:00 2001
+From 96232a45c5c32781ace6d14196e5c88603ad831f Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Tue, 31 Mar 2020 15:15:50 -0500
-Subject: [PATCH 22/52] winegstreamer: Calculate the MF_PD_DURATION of the
- media source's PD.
+Subject: [PATCH] winegstreamer: Calculate the MF_PD_DURATION of the media
+ source's PD.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
 ---
@@ -3795,10 +2311,10 @@ Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
  1 file changed, 40 insertions(+)
 
 diff --git a/dlls/winegstreamer/media_source.c b/dlls/winegstreamer/media_source.c
-index b163472947b..9c546bc4ac5 100644
+index 536f0e5e140..ff6b7c8eac9 100644
 --- a/dlls/winegstreamer/media_source.c
 +++ b/dlls/winegstreamer/media_source.c
-@@ -1594,6 +1594,46 @@ static HRESULT media_source_constructor(IMFByteStream *bytestream, struct media_
+@@ -1488,6 +1488,46 @@ static HRESULT media_source_constructor(IMFByteStream *bytestream, struct media_
      heap_free(descriptors);
      descriptors = NULL;
  
@@ -3848,22 +2364,22 @@ index b163472947b..9c546bc4ac5 100644
 -- 
 2.28.0
 
-From 7824e15960e00ffb11adae1a1e683aa1487f6317 Mon Sep 17 00:00:00 2001
+From c19ab97e7f9261b231d34a37999174d670cfafd3 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Wed, 29 Jan 2020 15:37:39 -0600
-Subject: [PATCH 23/52] tools: Add support for multiple parent directories.
+Subject: [PATCH] tools: Add support for multiple parent directories.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
 ---
  tools/make_makefiles | 45 +++++++++++++++++++++++++++-----------------
- tools/makedep.c      | 30 ++++++++++++++++++++---------
- 2 files changed, 49 insertions(+), 26 deletions(-)
+ tools/makedep.c      | 26 +++++++++++++++++--------
+ 2 files changed, 46 insertions(+), 25 deletions(-)
 
 diff --git a/tools/make_makefiles b/tools/make_makefiles
-index c18fa90e2d3..1e34a280a40 100755
+index a92987c2ab5..6bc1b47ca5d 100755
 --- a/tools/make_makefiles
 +++ b/tools/make_makefiles
-@@ -231,14 +231,14 @@ sub parse_makefile($)
+@@ -230,14 +230,14 @@ sub parse_makefile($)
          {
              die "Configure substitution is not allowed in $file" unless $file eq "Makefile";
          }
@@ -3880,7 +2396,7 @@ index c18fa90e2d3..1e34a280a40 100755
          {
              my $var = $1;
              my @list = split(/\s+/, $2);
-@@ -293,19 +293,27 @@ sub get_makedep_flags($)
+@@ -292,19 +292,27 @@ sub get_makedep_flags($)
      return %flags;
  }
  
@@ -3916,7 +2432,7 @@ index c18fa90e2d3..1e34a280a40 100755
  }
  
  # preserve shared source files that are listed in the existing makefile
-@@ -410,13 +418,16 @@ sub assign_sources_to_makefiles(@)
+@@ -409,13 +417,16 @@ sub assign_sources_to_makefiles(@)
      foreach my $file (@makefiles)
      {
          my $make = $makefiles{$file};
@@ -3941,7 +2457,7 @@ index c18fa90e2d3..1e34a280a40 100755
  }
  
 diff --git a/tools/makedep.c b/tools/makedep.c
-index 4bd20d469d6..a67add38afa 100644
+index df3805591ea..df07eec5ab7 100644
 --- a/tools/makedep.c
 +++ b/tools/makedep.c
 @@ -184,6 +184,7 @@ struct makefile
@@ -3990,8 +2506,8 @@ index 4bd20d469d6..a67add38afa 100644
      }
  
      if (ret) *filename = src_dir_path( make, path );
-@@ -4275,13 +4284,13 @@ static void load_sources( struct makefile *make )
-     strarray_set_value( &make->vars, "top_srcdir", top_src_dir_path( make, "" ));
+@@ -4119,13 +4126,13 @@ static void load_sources( struct makefile *make )
+     strarray_set_value( &make->vars, "top_srcdir", root_src_dir_path( "" ));
      strarray_set_value( &make->vars, "srcdir", src_dir_path( make, "" ));
  
 -    make->parent_dir    = get_expanded_make_variable( make, "PARENTSRC" );
@@ -4022,10 +2538,10 @@ index 4bd20d469d6..a67add38afa 100644
 -- 
 2.28.0
 
-From 8b0d448ce8e7c3698f7b77dd687fea0676c392c7 Mon Sep 17 00:00:00 2001
+From 84de00850d84c076164a50786317523507d41b4f Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Wed, 29 Jan 2020 15:30:49 -0600
-Subject: [PATCH 24/52] mf: Introduce handler helper.
+Subject: [PATCH] mf: Introduce handler helper.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
 ---
@@ -4034,8 +2550,8 @@ Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
  dlls/mf/handler.h                 |  30 +++
  dlls/mf/main.c                    | 373 ++++--------------------------
  dlls/winegstreamer/Makefile.in    |   3 +-
- dlls/winegstreamer/media_source.c | 335 ++-------------------------
- 6 files changed, 447 insertions(+), 655 deletions(-)
+ dlls/winegstreamer/media_source.c | 334 ++------------------------
+ 6 files changed, 447 insertions(+), 654 deletions(-)
  create mode 100644 dlls/mf/handler.c
  create mode 100644 dlls/mf/handler.h
 
@@ -4956,7 +3472,7 @@ index e578d194f7f..f2e87494459 100644
  	media_source.c \
  	mediatype.c \
 diff --git a/dlls/winegstreamer/media_source.c b/dlls/winegstreamer/media_source.c
-index 9c546bc4ac5..ca799446ad8 100644
+index ff6b7c8eac9..2721585e510 100644
 --- a/dlls/winegstreamer/media_source.c
 +++ b/dlls/winegstreamer/media_source.c
 @@ -23,6 +23,7 @@
@@ -4967,7 +3483,7 @@ index 9c546bc4ac5..ca799446ad8 100644
  
  #include <assert.h>
  #include <stdarg.h>
-@@ -1648,21 +1649,11 @@ static HRESULT media_source_constructor(IMFByteStream *bytestream, struct media_
+@@ -1542,21 +1543,11 @@ static HRESULT media_source_constructor(IMFByteStream *bytestream, struct media_
      return hr;
  }
  
@@ -4990,7 +3506,7 @@ index 9c546bc4ac5..ca799446ad8 100644
  };
  
  static struct winegstreamer_stream_handler *impl_from_IMFByteStreamHandler(IMFByteStreamHandler *iface)
-@@ -1670,11 +1661,6 @@ static struct winegstreamer_stream_handler *impl_from_IMFByteStreamHandler(IMFBy
+@@ -1564,11 +1555,6 @@ static struct winegstreamer_stream_handler *impl_from_IMFByteStreamHandler(IMFBy
      return CONTAINING_RECORD(iface, struct winegstreamer_stream_handler, IMFByteStreamHandler_iface);
  }
  
@@ -5258,7 +3774,7 @@ index 9c546bc4ac5..ca799446ad8 100644
  }
  
  static HRESULT WINAPI winegstreamer_stream_handler_GetMaxNumberOfBytesRequiredForResolution(IMFByteStreamHandler *iface, QWORD *bytes)
-@@ -1965,47 +1747,16 @@ static const IMFByteStreamHandlerVtbl winegstreamer_stream_handler_vtbl =
+@@ -1858,47 +1641,16 @@ static const IMFByteStreamHandlerVtbl winegstreamer_stream_handler_vtbl =
      winegstreamer_stream_handler_GetMaxNumberOfBytesRequiredForResolution,
  };
  
@@ -5309,7 +3825,7 @@ index 9c546bc4ac5..ca799446ad8 100644
  
          if (FAILED(hr = media_source_constructor(stream, &new_source)))
              return hr;
-@@ -2024,64 +1775,6 @@ static HRESULT winegstreamer_stream_handler_create_object(struct winegstreamer_s
+@@ -1917,64 +1669,6 @@ static HRESULT winegstreamer_stream_handler_create_object(struct winegstreamer_s
      }
  }
  
@@ -5374,7 +3890,7 @@ index 9c546bc4ac5..ca799446ad8 100644
  HRESULT winegstreamer_stream_handler_create(REFIID riid, void **obj)
  {
      struct winegstreamer_stream_handler *this;
-@@ -2093,11 +1786,9 @@ HRESULT winegstreamer_stream_handler_create(REFIID riid, void **obj)
+@@ -1986,11 +1680,9 @@ HRESULT winegstreamer_stream_handler_create(REFIID riid, void **obj)
      if (!this)
          return E_OUTOFMEMORY;
  
@@ -5390,10 +3906,10 @@ index 9c546bc4ac5..ca799446ad8 100644
 -- 
 2.28.0
 
-From bc33134566348dbd02788a8a203cd0b815056c06 Mon Sep 17 00:00:00 2001
+From 643e1db53f311779164c7967b3b960de37388023 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Wed, 25 Mar 2020 10:43:27 -0500
-Subject: [PATCH 25/52] Introduce IMFSample -> GstBuffer converter.
+Subject: [PATCH] Introduce IMFSample -> GstBuffer converter.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
 ---
@@ -5402,22 +3918,22 @@ Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
  2 files changed, 75 insertions(+)
 
 diff --git a/dlls/winegstreamer/gst_private.h b/dlls/winegstreamer/gst_private.h
-index 664733c74cd..d0737442cc3 100644
+index df1e643c3f6..db0ea881a83 100644
 --- a/dlls/winegstreamer/gst_private.h
 +++ b/dlls/winegstreamer/gst_private.h
-@@ -60,6 +60,7 @@ GstCaps *make_mf_compatible_caps(GstCaps *caps);
- IMFMediaType *mf_media_type_from_caps(GstCaps *caps);
- GstCaps *caps_from_mf_media_type(IMFMediaType *type);
- IMFSample *mf_sample_from_gst_buffer(GstBuffer *in);
-+GstBuffer *gst_buffer_from_mf_sample(IMFSample *in);
+@@ -60,6 +60,7 @@ GstCaps *make_mf_compatible_caps(GstCaps *caps) DECLSPEC_HIDDEN;
+ IMFMediaType *mf_media_type_from_caps(const GstCaps *caps) DECLSPEC_HIDDEN;
+ GstCaps *caps_from_mf_media_type(IMFMediaType *type) DECLSPEC_HIDDEN;
+ IMFSample *mf_sample_from_gst_buffer(GstBuffer *in) DECLSPEC_HIDDEN;
++GstBuffer *gst_buffer_from_mf_sample(IMFSample *in) DECLSPEC_HIDDEN;
  
  HRESULT winegstreamer_stream_handler_create(REFIID riid, void **obj) DECLSPEC_HIDDEN;
  
 diff --git a/dlls/winegstreamer/mfplat.c b/dlls/winegstreamer/mfplat.c
-index 839f337538d..ae5dcc31825 100644
+index ce0c951ac0d..633087e328d 100644
 --- a/dlls/winegstreamer/mfplat.c
 +++ b/dlls/winegstreamer/mfplat.c
-@@ -1337,3 +1337,77 @@ IMFSample* mf_sample_from_gst_buffer(GstBuffer *gst_buffer)
+@@ -1329,3 +1329,77 @@ IMFSample* mf_sample_from_gst_buffer(GstBuffer *gst_buffer)
      IMFSample_Release(out);
      return NULL;
  }
@@ -5498,10 +4014,10 @@ index 839f337538d..ae5dcc31825 100644
 -- 
 2.28.0
 
-From f01c8a6745cefd98198e0401a359302aba45ba57 Mon Sep 17 00:00:00 2001
+From 9000ed30ea0c6e5f526fa6a243083c2bcbb2e814 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Mon, 16 Mar 2020 12:09:39 -0500
-Subject: [PATCH 26/52] winegstreamer: Implement decoder MFT on gstreamer.
+Subject: [PATCH] winegstreamer: Implement decoder MFT on gstreamer.
 
 ---
  dlls/winegstreamer/Makefile.in               |    1 +
@@ -5529,7 +4045,7 @@ index f2e87494459..e2af4085827 100644
  	pin.c \
  	qualitycontrol.c \
 diff --git a/dlls/winegstreamer/gst_cbs.c b/dlls/winegstreamer/gst_cbs.c
-index e56c987eb38..0c0d0a26100 100644
+index 51aaefa911d..261a5b9f4ce 100644
 --- a/dlls/winegstreamer/gst_cbs.c
 +++ b/dlls/winegstreamer/gst_cbs.c
 @@ -51,6 +51,8 @@ static void CALLBACK perform_cb(TP_CALLBACK_INSTANCE *instance, void *user)
@@ -5541,9 +4057,9 @@ index e56c987eb38..0c0d0a26100 100644
  
      pthread_mutex_lock(&cbdata->lock);
      cbdata->finished = 1;
-@@ -417,3 +419,66 @@ GstPadProbeReturn caps_listener_wrapper(GstPad *pad, GstPadProbeInfo *info, gpoi
+@@ -404,3 +406,66 @@ void mf_src_no_more_pads_wrapper(GstElement *element, gpointer user)
  
-     return cbdata.u.pad_probe_data.ret;
+     call_cb(&cbdata);
  }
 +
 +gboolean activate_push_mode_wrapper(GstPad *pad, GstObject *parent, GstPadMode mode, gboolean activate)
@@ -5609,12 +4125,12 @@ index e56c987eb38..0c0d0a26100 100644
 +    return cbdata.u.new_sample_data.ret;
 +}
 diff --git a/dlls/winegstreamer/gst_cbs.h b/dlls/winegstreamer/gst_cbs.h
-index 7173c09746e..7dc60f961ba 100644
+index a48999bbf71..6659aedefa5 100644
 --- a/dlls/winegstreamer/gst_cbs.h
 +++ b/dlls/winegstreamer/gst_cbs.h
-@@ -54,6 +54,12 @@ enum CB_TYPE {
-     SOURCE_ALL_STREAMS,
-     STREAM_PAD_EVENT,
+@@ -53,6 +53,12 @@ enum CB_TYPE {
+     MF_SRC_STREAM_REMOVED,
+     MF_SRC_NO_MORE_PADS,
      MEDIA_SOURCE_MAX,
 +    ACTIVATE_PUSH_MODE,
 +    QUERY_INPUT_SRC,
@@ -5625,10 +4141,10 @@ index 7173c09746e..7dc60f961ba 100644
  };
  
  struct cb_data {
-@@ -144,6 +150,17 @@ struct cb_data {
-             gpointer user;
-             GstPadProbeReturn ret;
-         } pad_probe_data;
+@@ -137,6 +143,17 @@ struct cb_data {
+             GstQuery *query;
+             gboolean ret;
+         } query_sink_data;
 +        struct chain_data {
 +            GstPad *pad;
 +            GstObject *parent;
@@ -5643,7 +4159,7 @@ index 7173c09746e..7dc60f961ba 100644
      } u;
  
      int finished;
-@@ -155,6 +172,7 @@ struct cb_data {
+@@ -148,6 +165,7 @@ struct cb_data {
  void mark_wine_thread(void) DECLSPEC_HIDDEN;
  void perform_cb_gstdemux(struct cb_data *data) DECLSPEC_HIDDEN;
  void perform_cb_media_source(struct cb_data *data) DECLSPEC_HIDDEN;
@@ -5651,10 +4167,10 @@ index 7173c09746e..7dc60f961ba 100644
  
  GstBusSyncReply watch_bus_wrapper(GstBus *bus, GstMessage *msg, gpointer user) DECLSPEC_HIDDEN;
  void existing_new_pad_wrapper(GstElement *bin, GstPad *pad, gpointer user) DECLSPEC_HIDDEN;
-@@ -180,5 +198,10 @@ void source_stream_added_wrapper(GstElement *bin, GstPad *pad, gpointer user) DE
- void source_stream_removed_wrapper(GstElement *element, GstPad *pad, gpointer user) DECLSPEC_HIDDEN;
- void source_all_streams_wrapper(GstElement *element, gpointer user) DECLSPEC_HIDDEN;
- GstPadProbeReturn caps_listener_wrapper(GstPad *pad, GstPadProbeInfo *info, gpointer user);
+@@ -172,5 +190,10 @@ GstBusSyncReply mf_src_bus_watch_wrapper(GstBus *bus, GstMessage *message, gpoin
+ void mf_src_stream_added_wrapper(GstElement *bin, GstPad *pad, gpointer user) DECLSPEC_HIDDEN;
+ void mf_src_stream_removed_wrapper(GstElement *element, GstPad *pad, gpointer user) DECLSPEC_HIDDEN;
+ void mf_src_no_more_pads_wrapper(GstElement *element, gpointer user) DECLSPEC_HIDDEN;
 +gboolean activate_push_mode_wrapper(GstPad *pad, GstObject *parent, GstPadMode mode, gboolean activate) DECLSPEC_HIDDEN;
 +gboolean query_input_src_wrapper(GstPad *pad, GstObject *parent, GstQuery *query) DECLSPEC_HIDDEN;
 +GstBusSyncReply watch_decoder_bus_wrapper(GstBus *bus, GstMessage *message, gpointer user) DECLSPEC_HIDDEN;
@@ -5663,7 +4179,7 @@ index 7173c09746e..7dc60f961ba 100644
  
  #endif
 diff --git a/dlls/winegstreamer/gst_private.h b/dlls/winegstreamer/gst_private.h
-index d0737442cc3..5ff412c8e47 100644
+index db0ea881a83..707fc286a69 100644
 --- a/dlls/winegstreamer/gst_private.h
 +++ b/dlls/winegstreamer/gst_private.h
 @@ -53,6 +53,7 @@ BOOL init_gstreamer(void) DECLSPEC_HIDDEN;
@@ -5674,9 +4190,9 @@ index d0737442cc3..5ff412c8e47 100644
  extern HRESULT mfplat_get_class_object(REFCLSID rclsid, REFIID riid, void **obj) DECLSPEC_HIDDEN;
  
  HRESULT winegstreamer_stream_handler_create(REFIID riid, void **obj) DECLSPEC_HIDDEN;
-@@ -62,6 +63,12 @@ GstCaps *caps_from_mf_media_type(IMFMediaType *type);
- IMFSample *mf_sample_from_gst_buffer(GstBuffer *in);
- GstBuffer *gst_buffer_from_mf_sample(IMFSample *in);
+@@ -62,6 +63,12 @@ GstCaps *caps_from_mf_media_type(IMFMediaType *type) DECLSPEC_HIDDEN;
+ IMFSample *mf_sample_from_gst_buffer(GstBuffer *in) DECLSPEC_HIDDEN;
+ GstBuffer *gst_buffer_from_mf_sample(IMFSample *in) DECLSPEC_HIDDEN;
  
 +enum decoder_type
 +{
@@ -7029,7 +5545,7 @@ index 00000000000..025af7b91ae
 +    }
 +}
 diff --git a/dlls/winegstreamer/mfplat.c b/dlls/winegstreamer/mfplat.c
-index ae5dcc31825..167f2a185be 100644
+index 633087e328d..44b2a00708c 100644
 --- a/dlls/winegstreamer/mfplat.c
 +++ b/dlls/winegstreamer/mfplat.c
 @@ -406,6 +406,16 @@ failed:
@@ -7167,7 +5683,7 @@ index ae5dcc31825..167f2a185be 100644
 +    return S_OK;
 +}
 +
- const static struct
+ static const struct
  {
      const GUID *subtype;
 @@ -461,7 +578,6 @@ struct aac_user_data
@@ -7211,10 +5727,10 @@ index 4ceeb707bd0..61c9a565415 100644
 -- 
 2.28.0
 
-From 3f8659c74c63e1793000e82fa2a51e377bbc5f5e Mon Sep 17 00:00:00 2001
+From 19973ad0dbb301e6e70186d784234ee182c4a8cd Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Mon, 23 Mar 2020 11:55:41 -0500
-Subject: [PATCH 27/52] mfreadwrite: Select all streams when creating a source
+Subject: [PATCH] mfreadwrite: Select all streams when creating a source
  reader.
 
 ---
@@ -7239,10 +5755,10 @@ index 96a82b798ab..3b1dcbb9636 100644
 -- 
 2.28.0
 
-From d37c836567ce0d6a280b265c6748a072e0e8814f Mon Sep 17 00:00:00 2001
+From 951be0ccdf8259319d2243656d8aba7957246834 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Mon, 16 Mar 2020 15:27:27 -0500
-Subject: [PATCH 28/52] Miscellaneous
+Subject: [PATCH] Miscellaneous
 
 ---
  dlls/mfreadwrite/reader.c         |  12 ++-
@@ -7287,7 +5803,7 @@ index 3b1dcbb9636..f8c03e62d35 100644
  
  static HRESULT WINAPI src_reader_SetCurrentMediaType(IMFSourceReader *iface, DWORD index, DWORD *reserved,
 diff --git a/dlls/winegstreamer/gst_cbs.c b/dlls/winegstreamer/gst_cbs.c
-index 0c0d0a26100..cf8f33a0272 100644
+index 261a5b9f4ce..81692fdf919 100644
 --- a/dlls/winegstreamer/gst_cbs.c
 +++ b/dlls/winegstreamer/gst_cbs.c
 @@ -18,6 +18,9 @@
@@ -7313,7 +5829,7 @@ index 0c0d0a26100..cf8f33a0272 100644
  
      pthread_mutex_lock(&cbdata->lock);
      cbdata->finished = 1;
-@@ -460,17 +469,6 @@ GstBusSyncReply watch_decoder_bus_wrapper(GstBus *bus, GstMessage *message, gpoi
+@@ -447,17 +456,6 @@ GstBusSyncReply watch_decoder_bus_wrapper(GstBus *bus, GstMessage *message, gpoi
      return cbdata.u.watch_bus_data.ret;
  }
  
@@ -7332,10 +5848,10 @@ index 0c0d0a26100..cf8f33a0272 100644
  {
      struct cb_data cbdata = {DECODER_NEW_SAMPLE};
 diff --git a/dlls/winegstreamer/gst_cbs.h b/dlls/winegstreamer/gst_cbs.h
-index 7dc60f961ba..c6aa94d1632 100644
+index 6659aedefa5..825b46d13bb 100644
 --- a/dlls/winegstreamer/gst_cbs.h
 +++ b/dlls/winegstreamer/gst_cbs.h
-@@ -202,6 +202,5 @@ gboolean activate_push_mode_wrapper(GstPad *pad, GstObject *parent, GstPadMode m
+@@ -194,6 +194,5 @@ gboolean activate_push_mode_wrapper(GstPad *pad, GstObject *parent, GstPadMode m
  gboolean query_input_src_wrapper(GstPad *pad, GstObject *parent, GstQuery *query) DECLSPEC_HIDDEN;
  GstBusSyncReply watch_decoder_bus_wrapper(GstBus *bus, GstMessage *message, gpointer user) DECLSPEC_HIDDEN;
  GstFlowReturn decoder_new_sample_wrapper(GstElement *appsink, gpointer user) DECLSPEC_HIDDEN;
@@ -7343,10 +5859,10 @@ index 7dc60f961ba..c6aa94d1632 100644
  
  #endif
 diff --git a/dlls/winegstreamer/media_source.c b/dlls/winegstreamer/media_source.c
-index ca799446ad8..919f46fd714 100644
+index 2721585e510..3f83701ac72 100644
 --- a/dlls/winegstreamer/media_source.c
 +++ b/dlls/winegstreamer/media_source.c
-@@ -95,6 +95,8 @@ struct source_async_command
+@@ -92,6 +92,8 @@ struct source_async_command
  struct media_source
  {
      IMFMediaSource IMFMediaSource_iface;
@@ -7355,7 +5871,7 @@ index ca799446ad8..919f46fd714 100644
      IMFAsyncCallback async_commands_callback;
      LONG ref;
      DWORD async_commands_queue;
-@@ -127,6 +129,16 @@ static inline struct media_source *impl_from_IMFMediaSource(IMFMediaSource *ifac
+@@ -124,6 +126,16 @@ static inline struct media_source *impl_from_IMFMediaSource(IMFMediaSource *ifac
      return CONTAINING_RECORD(iface, struct media_source, IMFMediaSource_iface);
  }
  
@@ -7372,8 +5888,8 @@ index ca799446ad8..919f46fd714 100644
  static inline struct media_source *impl_from_async_commands_callback_IMFAsyncCallback(IMFAsyncCallback *iface)
  {
      return CONTAINING_RECORD(iface, struct media_source, async_commands_callback);
-@@ -564,6 +576,11 @@ static gboolean query_bytestream(GstPad *pad, GstObject *parent, GstQuery *query
-             gst_caps_unref(caps);
+@@ -540,6 +552,11 @@ static gboolean bytestream_query(GstPad *pad, GstObject *parent, GstQuery *query
+             gst_query_add_scheduling_mode(query, GST_PAD_MODE_PULL);
              return TRUE;
          }
 +        case GST_QUERY_LATENCY:
@@ -7384,7 +5900,7 @@ index ca799446ad8..919f46fd714 100644
          default:
          {
              WARN("Unhandled query type %s\n", GST_QUERY_TYPE_NAME(query));
-@@ -632,6 +649,23 @@ GstBusSyncReply watch_source_bus(GstBus *bus, GstMessage *message, gpointer user
+@@ -602,6 +619,23 @@ GstBusSyncReply bus_watch(GstBus *bus, GstMessage *message, gpointer user)
              g_error_free(err);
              g_free(dbg_info);
              break;
@@ -7408,7 +5924,7 @@ index ca799446ad8..919f46fd714 100644
          default:
              break;
      }
-@@ -1138,6 +1172,10 @@ static HRESULT WINAPI media_source_QueryInterface(IMFMediaSource *iface, REFIID
+@@ -1082,6 +1116,10 @@ static HRESULT WINAPI media_source_QueryInterface(IMFMediaSource *iface, REFIID
      {
          *out = &source->IMFMediaSource_iface;
      }
@@ -7419,7 +5935,7 @@ index ca799446ad8..919f46fd714 100644
      else
      {
          FIXME("(%s, %p)\n", debugstr_guid(riid), out);
-@@ -1222,7 +1260,7 @@ static HRESULT WINAPI media_source_GetCharacteristics(IMFMediaSource *iface, DWO
+@@ -1166,7 +1204,7 @@ static HRESULT WINAPI media_source_GetCharacteristics(IMFMediaSource *iface, DWO
      if (source->state == SOURCE_SHUTDOWN)
          return MF_E_SHUTDOWN;
  
@@ -7428,7 +5944,7 @@ index ca799446ad8..919f46fd714 100644
  
      return S_OK;
  }
-@@ -1363,6 +1401,99 @@ static const IMFMediaSourceVtbl IMFMediaSource_vtbl =
+@@ -1308,6 +1346,99 @@ static const IMFMediaSourceVtbl IMFMediaSource_vtbl =
      media_source_Shutdown,
  };
  
@@ -7528,7 +6044,7 @@ index ca799446ad8..919f46fd714 100644
  /* If this callback is extended to use any significant win32 APIs, a wrapper function
     should be added */
  gboolean stream_found(GstElement *bin, GstPad *pad, GstCaps *caps, gpointer user)
-@@ -1504,6 +1635,8 @@ static HRESULT media_source_constructor(IMFByteStream *bytestream, struct media_
+@@ -1385,6 +1516,8 @@ static HRESULT media_source_constructor(IMFByteStream *bytestream, struct media_
          return E_OUTOFMEMORY;
  
      object->IMFMediaSource_iface.lpVtbl = &IMFMediaSource_vtbl;
@@ -7537,7 +6053,7 @@ index ca799446ad8..919f46fd714 100644
      object->async_commands_callback.lpVtbl = &source_async_commands_callback_vtbl;
      object->ref = 1;
      object->byte_stream = bytestream;
-@@ -1595,7 +1728,6 @@ static HRESULT media_source_constructor(IMFByteStream *bytestream, struct media_
+@@ -1489,7 +1622,6 @@ static HRESULT media_source_constructor(IMFByteStream *bytestream, struct media_
      heap_free(descriptors);
      descriptors = NULL;
  
@@ -7545,7 +6061,7 @@ index ca799446ad8..919f46fd714 100644
      {
          IMFAttributes *byte_stream_attributes;
          gint64 total_pres_time = 0;
-@@ -1612,6 +1744,7 @@ static HRESULT media_source_constructor(IMFByteStream *bytestream, struct media_
+@@ -1506,6 +1638,7 @@ static HRESULT media_source_constructor(IMFByteStream *bytestream, struct media_
              IMFAttributes_Release(byte_stream_attributes);
          }
  
@@ -7556,10 +6072,10 @@ index ca799446ad8..919f46fd714 100644
 -- 
 2.28.0
 
-From 827be0fc103c7439b64429e0063c57be4c1f3616 Mon Sep 17 00:00:00 2001
+From ceb6638efaf982aa9781889217432131db53d4ad Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Wed, 25 Mar 2020 19:07:11 -0500
-Subject: [PATCH 29/52] WMV
+Subject: [PATCH] WMV
 
 ---
  dlls/winegstreamer/gst_private.h             |  1 +
@@ -7570,7 +6086,7 @@ Subject: [PATCH 29/52] WMV
  5 files changed, 59 insertions(+)
 
 diff --git a/dlls/winegstreamer/gst_private.h b/dlls/winegstreamer/gst_private.h
-index 5ff412c8e47..8651e3440e4 100644
+index 707fc286a69..73359dd622d 100644
 --- a/dlls/winegstreamer/gst_private.h
 +++ b/dlls/winegstreamer/gst_private.h
 @@ -67,6 +67,7 @@ enum decoder_type
@@ -7610,7 +6126,7 @@ index 025af7b91ae..7f2dfc8f292 100644
  };
  
 diff --git a/dlls/winegstreamer/mfplat.c b/dlls/winegstreamer/mfplat.c
-index 167f2a185be..3e5925e32d2 100644
+index 44b2a00708c..4d08729e61b 100644
 --- a/dlls/winegstreamer/mfplat.c
 +++ b/dlls/winegstreamer/mfplat.c
 @@ -416,6 +416,10 @@ static HRESULT aac_decoder_create(REFIID riid, void **ret)
@@ -7709,10 +6225,10 @@ index 61c9a565415..0885e4e3007 100644
 -- 
 2.28.0
 
-From 399609086d4527338991fae58e915da26c35ab7b Mon Sep 17 00:00:00 2001
+From f1ba645100835851a8421e33084866c3999fc894 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Thu, 2 Apr 2020 15:42:18 -0500
-Subject: [PATCH 30/52] mf: Ask for more samples from upstream node when upon
+Subject: [PATCH] mf: Ask for more samples from upstream node when upon
  MF_E_TRANSFORM_NEED_MORE_INPUT
 
 ---
@@ -7751,21 +6267,20 @@ index a1b54b7080e..5bbbfe7d43e 100644
 -- 
 2.28.0
 
-From 5f2a5bce733fbe36f776d4bf4d823f6c7bc804ad Mon Sep 17 00:00:00 2001
+From 93652789576b5203a85f2876834ff2cf82a07686 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Thu, 2 Apr 2020 15:46:25 -0500
-Subject: [PATCH 31/52] winegstreamer:  Implement
- IMFMedisStream::GetMediaSource.
+Subject: [PATCH] winegstreamer:  Implement IMFMedisStream::GetMediaSource.
 
 ---
  dlls/winegstreamer/media_source.c | 7 +++++--
  1 file changed, 5 insertions(+), 2 deletions(-)
 
 diff --git a/dlls/winegstreamer/media_source.c b/dlls/winegstreamer/media_source.c
-index 919f46fd714..f0a654d1fa4 100644
+index 3f83701ac72..f520670fe8f 100644
 --- a/dlls/winegstreamer/media_source.c
 +++ b/dlls/winegstreamer/media_source.c
-@@ -784,12 +784,15 @@ static HRESULT WINAPI media_stream_GetMediaSource(IMFMediaStream *iface, IMFMedi
+@@ -755,12 +755,15 @@ static HRESULT WINAPI media_stream_GetMediaSource(IMFMediaStream *iface, IMFMedi
  {
      struct media_stream *stream = impl_from_IMFMediaStream(iface);
  
@@ -7786,10 +6301,10 @@ index 919f46fd714..f0a654d1fa4 100644
 -- 
 2.28.0
 
-From 5c4b42745f37fbe626bdc540eca0e3fbe03fa9b2 Mon Sep 17 00:00:00 2001
+From e0c4adb4d3d4a45fc9fe42a87101e2ddd1cc32bb Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Fri, 3 Apr 2020 11:12:33 -0500
-Subject: [PATCH 32/52] Expose PCM output type on AAC decoder.
+Subject: [PATCH] Expose PCM output type on AAC decoder.
 
 ---
  dlls/winegstreamer/mf_decode.c | 2 +-
@@ -7811,10 +6326,10 @@ index 7f2dfc8f292..34bcde27a91 100644
 -- 
 2.28.0
 
-From 6e418d70ca7aa8e5e9468a1bdbcfc1ebec510f26 Mon Sep 17 00:00:00 2001
+From 88fb639e27983d3b8b0fde3376855ad407f97127 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Fri, 1 May 2020 11:46:26 -0500
-Subject: [PATCH 33/52] mfplat: Add I420 format information.
+Subject: [PATCH] mfplat: Add I420 format information.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
 ---
@@ -7836,10 +6351,10 @@ index 5eaa4fdd08d..db789c4f8e0 100644
 -- 
 2.28.0
 
-From e37aca973f33356cbf1a4098d70a5ba4277be059 Mon Sep 17 00:00:00 2001
+From df94896976273c69f3b1effdb0953a16370a8c44 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Fri, 1 May 2020 13:20:49 -0500
-Subject: [PATCH 34/52] winegstreamer: Implement Color Converter MFT.
+Subject: [PATCH] winegstreamer: Implement Color Converter MFT.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
 ---
@@ -8575,18 +7090,18 @@ index 00000000000..f01373907ee
 +}
 \ No newline at end of file
 diff --git a/dlls/winegstreamer/gst_private.h b/dlls/winegstreamer/gst_private.h
-index 8651e3440e4..c41f231f35f 100644
+index 73359dd622d..870344e9273 100644
 --- a/dlls/winegstreamer/gst_private.h
 +++ b/dlls/winegstreamer/gst_private.h
 @@ -72,4 +72,6 @@ enum decoder_type
  HRESULT generic_decoder_construct(REFIID riid, void **obj, enum decoder_type) DECLSPEC_HIDDEN;
  HRESULT winegstreamer_stream_handler_create(REFIID riid, void **obj) DECLSPEC_HIDDEN;
  
-+HRESULT color_converter_create(REFIID riid, void **ret);
++HRESULT color_converter_create(REFIID riid, void **ret) DECLSPEC_HIDDEN;
 +
  #endif /* __GST_PRIVATE_INCLUDED__ */
 diff --git a/dlls/winegstreamer/mfplat.c b/dlls/winegstreamer/mfplat.c
-index 3e5925e32d2..429a2cfda1c 100644
+index 4d08729e61b..ba261c9613e 100644
 --- a/dlls/winegstreamer/mfplat.c
 +++ b/dlls/winegstreamer/mfplat.c
 @@ -420,6 +420,9 @@ static HRESULT wmv_decoder_create(REFIID riid, void **ret)
@@ -8670,10 +7185,10 @@ index f9b0158fa6a..1556b6cff9f 100644
 -- 
 2.28.0
 
-From b4985eaef1d9feb4c67b2b468a67bd550b68c545 Mon Sep 17 00:00:00 2001
+From 6b560402d6d3d7cfa5c15e801ab6489914d893ca Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Fri, 1 May 2020 22:36:02 -0500
-Subject: [PATCH 35/52] HACK: Set BPS to 16 for output template.
+Subject: [PATCH] HACK: Set BPS to 16 for output template.
 
 ---
  dlls/winegstreamer/mf_decode.c | 5 +++++
@@ -8698,10 +7213,10 @@ index 34bcde27a91..a86e9db410e 100644
 -- 
 2.28.0
 
-From 6d317b1d419627dd0894ee4e19e0f7e30e564f74 Mon Sep 17 00:00:00 2001
+From eec41104d35b3045d133ec2be6935cb2cf0833d5 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Mon, 9 Mar 2020 11:59:17 -0500
-Subject: [PATCH 36/52] Improve tests
+Subject: [PATCH] Improve tests
 
 ---
  dlls/mfplat/tests/mfplat.c         | 244 +++++++++++++++++++++++++++--
@@ -13968,10 +12483,10 @@ HcmV?d00001
 -- 
 2.28.0
 
-From 5e7790e37314e63183bed11cc5283b22383a2a41 Mon Sep 17 00:00:00 2001
+From 9c8dfb75e83775e5fb3b3d5ab299ce74c327e486 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Wed, 25 Mar 2020 13:58:36 -0500
-Subject: [PATCH 37/52] Revert "Improve tests"
+Subject: [PATCH] Revert "Improve tests"
 
 This reverts commit 603b1717a2b511a66d3be99ab5761d49cd5ef34d.
 ---
@@ -19239,29 +17754,29 @@ p$lCDV^w{Kgb))}cXN3$%0oA>6Mg|4R>N*%cfv|D$vvG28{1-l>vtIxJ
 -- 
 2.28.0
 
-From 7d34ffde0e719704327c261443d0e8dbead7d79f Mon Sep 17 00:00:00 2001
+From 804dfb705fa7df8079e1733a4eb35acb7c2d275c Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Tue, 5 May 2020 15:35:16 -0500
-Subject: [PATCH 38/52] Report streams backwards and only select one of each
- stream type.
+Subject: [PATCH] Report streams backwards and only select one of each stream
+ type.
 
 ---
  dlls/winegstreamer/media_source.c | 24 ++++++++++++++++++++++--
  1 file changed, 22 insertions(+), 2 deletions(-)
 
 diff --git a/dlls/winegstreamer/media_source.c b/dlls/winegstreamer/media_source.c
-index f0a654d1fa4..14b7571b80a 100644
+index f520670fe8f..1573a079a1b 100644
 --- a/dlls/winegstreamer/media_source.c
 +++ b/dlls/winegstreamer/media_source.c
-@@ -1630,6 +1630,7 @@ static HRESULT media_source_constructor(IMFByteStream *bytestream, struct media_
-         GST_STATIC_CAPS_ANY);
+@@ -1510,6 +1510,7 @@ static HRESULT media_source_constructor(IMFByteStream *bytestream, struct media_
+         GST_STATIC_PAD_TEMPLATE("mf_src", GST_PAD_SRC, GST_PAD_ALWAYS, GST_STATIC_CAPS_ANY);
  
      struct media_source *object = heap_alloc_zero(sizeof(*object));
 +    BOOL video_selected = FALSE, audio_selected = FALSE;
      IMFStreamDescriptor **descriptors = NULL;
+     unsigned int i;
      HRESULT hr;
-     int ret;
-@@ -1717,15 +1718,34 @@ static HRESULT media_source_constructor(IMFByteStream *bytestream, struct media_
+@@ -1611,15 +1612,34 @@ static HRESULT media_source_constructor(IMFByteStream *bytestream, struct media_
      descriptors = heap_alloc(object->stream_count * sizeof(IMFStreamDescriptor*));
      for (unsigned int i = 0; i < object->stream_count; i++)
      {
@@ -19301,10 +17816,10 @@ index f0a654d1fa4..14b7571b80a 100644
 -- 
 2.28.0
 
-From 0ccd1eb9ac722329ed137b49a260a0458ca86a0c Mon Sep 17 00:00:00 2001
+From 7d0d0e010c7ad246fc5324bae3f08315e479c3c8 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Thu, 7 May 2020 13:09:47 -0500
-Subject: [PATCH 39/52] winegstreamer: Implement IMFMediaSource::Stop.
+Subject: [PATCH] winegstreamer: Implement IMFMediaSource::Stop.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
 ---
@@ -19312,10 +17827,10 @@ Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
  1 file changed, 28 insertions(+), 2 deletions(-)
 
 diff --git a/dlls/winegstreamer/media_source.c b/dlls/winegstreamer/media_source.c
-index 14b7571b80a..a162bad99d8 100644
+index 1573a079a1b..e5bdfefc9d5 100644
 --- a/dlls/winegstreamer/media_source.c
 +++ b/dlls/winegstreamer/media_source.c
-@@ -68,6 +68,7 @@ struct media_stream
+@@ -65,6 +65,7 @@ struct media_stream
  enum source_async_op
  {
      SOURCE_ASYNC_START,
@@ -19323,7 +17838,7 @@ index 14b7571b80a..a162bad99d8 100644
      SOURCE_ASYNC_REQUEST_SAMPLE,
  };
  
-@@ -360,6 +361,23 @@ static HRESULT start_pipeline(struct media_source *source, struct source_async_c
+@@ -357,6 +358,23 @@ static HRESULT start_pipeline(struct media_source *source, struct source_async_c
      return S_OK;
  }
  
@@ -19347,7 +17862,7 @@ index 14b7571b80a..a162bad99d8 100644
  static void dispatch_end_of_presentation(struct media_source *source)
  {
      PROPVARIANT empty = {.vt = VT_EMPTY};
-@@ -451,6 +469,9 @@ static HRESULT WINAPI source_async_commands_Invoke(IMFAsyncCallback *iface, IMFA
+@@ -448,6 +466,9 @@ static HRESULT WINAPI source_async_commands_Invoke(IMFAsyncCallback *iface, IMFA
          case SOURCE_ASYNC_START:
              start_pipeline(source, command);
              break;
@@ -19357,7 +17872,7 @@ index 14b7571b80a..a162bad99d8 100644
          case SOURCE_ASYNC_REQUEST_SAMPLE:
              wait_on_sample(command->u.request_sample.stream, command->u.request_sample.token);
              break;
-@@ -1319,13 +1340,18 @@ static HRESULT WINAPI media_source_Start(IMFMediaSource *iface, IMFPresentationD
+@@ -1263,13 +1284,18 @@ static HRESULT WINAPI media_source_Start(IMFMediaSource *iface, IMFPresentationD
  static HRESULT WINAPI media_source_Stop(IMFMediaSource *iface)
  {
      struct media_source *source = impl_from_IMFMediaSource(iface);
@@ -19381,11 +17896,10 @@ index 14b7571b80a..a162bad99d8 100644
 -- 
 2.28.0
 
-From aa97104ccc89cd65593354eb51c480454f17e2dd Mon Sep 17 00:00:00 2001
+From 6aaaa5a3bd7d83ff19bb0ad89fdde795bee2cd79 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Mon, 11 May 2020 16:05:50 -0500
-Subject: [PATCH 40/52] winegstreamer: Introduce MPEG-4 Section-2 video
- decoder.
+Subject: [PATCH] winegstreamer: Introduce MPEG-4 Section-2 video decoder.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
 ---
@@ -19397,7 +17911,7 @@ Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
  5 files changed, 52 insertions(+)
 
 diff --git a/dlls/winegstreamer/gst_private.h b/dlls/winegstreamer/gst_private.h
-index c41f231f35f..b609afa555d 100644
+index 870344e9273..3ae89f511e9 100644
 --- a/dlls/winegstreamer/gst_private.h
 +++ b/dlls/winegstreamer/gst_private.h
 @@ -68,6 +68,7 @@ enum decoder_type
@@ -19437,7 +17951,7 @@ index a86e9db410e..c5d9cbad392 100644
  };
  
 diff --git a/dlls/winegstreamer/mfplat.c b/dlls/winegstreamer/mfplat.c
-index 429a2cfda1c..5fe7ac4d354 100644
+index ba261c9613e..59b6e2321a6 100644
 --- a/dlls/winegstreamer/mfplat.c
 +++ b/dlls/winegstreamer/mfplat.c
 @@ -421,6 +421,11 @@ static HRESULT wmv_decoder_create(REFIID riid, void **ret)
@@ -19534,10 +18048,10 @@ index 0885e4e3007..a344986a7aa 100644
 -- 
 2.28.0
 
-From 3babfd1eb77488359a9882eee9619689198c84de Mon Sep 17 00:00:00 2001
+From 21f46bf4ce4d91dc99c5f8aa79f789c1c081b582 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Tue, 12 May 2020 16:48:52 -0500
-Subject: [PATCH 41/52] HACK: Switch between all selection streams on
+Subject: [PATCH] HACK: Switch between all selection streams on
  MF_SOURCE_READER_ANY_STREAM.
 
 ---
@@ -19582,10 +18096,10 @@ index f8c03e62d35..423250e3cb7 100644
 -- 
 2.28.0
 
-From 311f686ac23db13323f18fa18b8e8c2b9b9143cd Mon Sep 17 00:00:00 2001
+From 3830be6070987cbca119fd705e32c6a18e29d10d Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Tue, 12 May 2020 16:50:41 -0500
-Subject: [PATCH 42/52] winegstreamer: Introduce WMA audio decoder.
+Subject: [PATCH] winegstreamer: Introduce WMA audio decoder.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
 ---
@@ -19597,7 +18111,7 @@ Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
  5 files changed, 51 insertions(+), 1 deletion(-)
 
 diff --git a/dlls/winegstreamer/gst_private.h b/dlls/winegstreamer/gst_private.h
-index b609afa555d..8e75beb82dd 100644
+index 3ae89f511e9..dc23d5201b1 100644
 --- a/dlls/winegstreamer/gst_private.h
 +++ b/dlls/winegstreamer/gst_private.h
 @@ -68,6 +68,7 @@ enum decoder_type
@@ -19637,7 +18151,7 @@ index c5d9cbad392..7ce72a9a6a3 100644
          &MFMediaType_Video,
          m4s2_input_types,
 diff --git a/dlls/winegstreamer/mfplat.c b/dlls/winegstreamer/mfplat.c
-index 5fe7ac4d354..28c9beb4649 100644
+index 59b6e2321a6..752682da6e3 100644
 --- a/dlls/winegstreamer/mfplat.c
 +++ b/dlls/winegstreamer/mfplat.c
 @@ -421,6 +421,11 @@ static HRESULT wmv_decoder_create(REFIID riid, void **ret)
@@ -19733,10 +18247,10 @@ index a344986a7aa..5154b798dfb 100644
 -- 
 2.28.0
 
-From f72479c9e576a766f38bcd9c8c377ee53adbdfe2 Mon Sep 17 00:00:00 2001
+From b84fcf190ec57862d3bcd6e2da85187db36bcf2c Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Wed, 13 May 2020 12:32:42 -0500
-Subject: [PATCH 43/52] Support stereo down folding.
+Subject: [PATCH] Support stereo down folding.
 
 ---
  dlls/winegstreamer/mf_decode.c | 4 +++-
@@ -19762,10 +18276,10 @@ index 7ce72a9a6a3..00f69aa76cc 100644
 -- 
 2.28.0
 
-From ada0cb5f81f858b27b3c52f6c10097a7444b8793 Mon Sep 17 00:00:00 2001
+From ba73171269de7991a8b113119889239864138b58 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Tue, 11 Aug 2020 13:41:15 -0500
-Subject: [PATCH 44/52] winegstreamer: Implement MF_SD_LANGUAGE.
+Subject: [PATCH] winegstreamer: Implement MF_SD_LANGUAGE.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
 ---
@@ -19773,10 +18287,10 @@ Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
  1 file changed, 31 insertions(+), 2 deletions(-)
 
 diff --git a/dlls/winegstreamer/media_source.c b/dlls/winegstreamer/media_source.c
-index a162bad99d8..07c16ac8a07 100644
+index e5bdfefc9d5..2beb48ace6f 100644
 --- a/dlls/winegstreamer/media_source.c
 +++ b/dlls/winegstreamer/media_source.c
-@@ -1796,8 +1796,12 @@ static HRESULT media_source_constructor(IMFByteStream *bytestream, struct media_
+@@ -1690,8 +1690,12 @@ static HRESULT media_source_constructor(IMFByteStream *bytestream, struct media_
          /* TODO: consider streams which don't start at T=0 */
          for (unsigned int i = 0; i < object->stream_count; i++)
          {
@@ -19791,7 +18305,7 @@ index a162bad99d8..07c16ac8a07 100644
              {
                  gint64 stream_pres_time;
                  gst_query_parse_duration(query, NULL, &stream_pres_time);
-@@ -1811,6 +1815,31 @@ static HRESULT media_source_constructor(IMFByteStream *bytestream, struct media_
+@@ -1705,6 +1709,31 @@ static HRESULT media_source_constructor(IMFByteStream *bytestream, struct media_
              {
                  WARN("Unable to get presentation time of stream %u\n", i);
              }
@@ -19826,11 +18340,11 @@ index a162bad99d8..07c16ac8a07 100644
 -- 
 2.28.0
 
-From dfa7779e8abad5caf9beeac2c459e074bc05dbe2 Mon Sep 17 00:00:00 2001
+From 9ef1327b688592e870d35545f2960794a9f257f7 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Tue, 11 Aug 2020 15:58:42 -0500
-Subject: [PATCH 45/52] Revert "mf/topoloader: Add a structure for iterative
- branch resolution."
+Subject: [PATCH] Revert "mf/topoloader: Add a structure for iterative branch
+ resolution."
 
 This reverts commit e308d81a617632fe0fedd243952f79e8d9ec05b4.
 ---
@@ -19839,7 +18353,7 @@ This reverts commit e308d81a617632fe0fedd243952f79e8d9ec05b4.
  2 files changed, 4 insertions(+), 143 deletions(-)
 
 diff --git a/dlls/mf/tests/mf.c b/dlls/mf/tests/mf.c
-index f01385cc46c..aa2c5199b95 100644
+index 2c02b1d8e54..1cefeb730b0 100644
 --- a/dlls/mf/tests/mf.c
 +++ b/dlls/mf/tests/mf.c
 @@ -1400,7 +1400,6 @@ static void test_topology_loader(void)
@@ -19850,7 +18364,7 @@ index f01385cc46c..aa2c5199b95 100644
      unsigned int count, value;
      IMFMediaType *media_type;
      IMFStreamDescriptor *sd;
-@@ -1513,19 +1512,15 @@ todo_wine
+@@ -1516,19 +1515,15 @@ todo_wine
      hr = IMFActivate_ActivateObject(sink_activate, &IID_IMFMediaSink, (void **)&sink);
      ok(hr == S_OK, "Failed to activate, hr %#x.\n", hr);
  
@@ -20072,11 +18586,11 @@ index 8032e438b73..840f1bd25f4 100644
 -- 
 2.28.0
 
-From 536cc47d3eaa127969d6a3137e28c7a388e54a58 Mon Sep 17 00:00:00 2001
+From 308e012c128d4e90e9a69bd524eaf6ce3bf7b075 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Tue, 11 Aug 2020 15:59:04 -0500
-Subject: [PATCH 46/52] Revert "mf/topoloader: Clone source nodes as a first
- layer of resulting topology."
+Subject: [PATCH] Revert "mf/topoloader: Clone source nodes as a first layer of
+ resulting topology."
 
 This reverts commit 16d44b61d15193905ef40661bc1547cb45e7b019.
 ---
@@ -20176,11 +18690,11 @@ index 840f1bd25f4..8522f569691 100644
 -- 
 2.28.0
 
-From 7a0d07917acb65ae5dd623231e5756b2371d1484 Mon Sep 17 00:00:00 2001
+From 823f96ad1f877d692f7ac9d325d512a4397717ca Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Tue, 11 Aug 2020 15:59:13 -0500
-Subject: [PATCH 47/52] Revert "mf/topoloader: Switch to public interface for
- initial topology validation."
+Subject: [PATCH] Revert "mf/topoloader: Switch to public interface for initial
+ topology validation."
 
 This reverts commit 8e343024b577892bd4908304ded34b758579698d.
 ---
@@ -20257,11 +18771,11 @@ index 8522f569691..abe66c45fd4 100644
 -- 
 2.28.0
 
-From 5c73b5ab912098d1399781cef97956c188bdc187 Mon Sep 17 00:00:00 2001
+From 6de8d406ea96655a3fe5ac72651029396657e906 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Sergio=20G=C3=B3mez=20Del=20Real?=
  <sdelreal@codeweavers.com>
 Date: Wed, 1 Apr 2020 16:11:07 -0500
-Subject: [PATCH 48/52] mf: Partially implement the topology loader.
+Subject: [PATCH] mf: Partially implement the topology loader.
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -20273,7 +18787,7 @@ Signed-off-by: Sergio Gómez Del Real <sdelreal@codeweavers.com>
  2 files changed, 321 insertions(+), 19 deletions(-)
 
 diff --git a/dlls/mf/tests/mf.c b/dlls/mf/tests/mf.c
-index aa2c5199b95..1a08604fb39 100644
+index 1cefeb730b0..77037b5ec9d 100644
 --- a/dlls/mf/tests/mf.c
 +++ b/dlls/mf/tests/mf.c
 @@ -1428,7 +1428,6 @@ static void test_topology_loader(void)
@@ -20284,7 +18798,7 @@ index aa2c5199b95..1a08604fb39 100644
      ok(hr == MF_E_TOPO_UNSUPPORTED, "Unexpected hr %#x.\n", hr);
  
      hr = MFCreateSourceResolver(&resolver);
-@@ -1473,7 +1472,6 @@ todo_wine
+@@ -1476,7 +1475,6 @@ todo_wine
  
      /* Source node only. */
      hr = IMFTopoLoader_Load(loader, topology, &full_topology, NULL);
@@ -20292,7 +18806,7 @@ index aa2c5199b95..1a08604fb39 100644
      ok(hr == MF_E_TOPO_UNSUPPORTED, "Unexpected hr %#x.\n", hr);
  
      /* Add grabber sink. */
-@@ -1499,7 +1497,6 @@ todo_wine
+@@ -1502,7 +1500,6 @@ todo_wine
      ok(hr == S_OK, "Failed to add sink node, hr %#x.\n", hr);
  
      hr = IMFTopoLoader_Load(loader, topology, &full_topology, NULL);
@@ -20676,10 +19190,10 @@ index abe66c45fd4..d4a59f7136e 100644
 -- 
 2.28.0
 
-From b66660df34eeb885c28a9381461255712a7b3bd1 Mon Sep 17 00:00:00 2001
+From 4044dfd59ca367fb91ae4b32c87c9ea0fcabd512 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Thu, 2 Apr 2020 15:43:52 -0500
-Subject: [PATCH 49/52] mf: Miscelaneous fixes to topology resolution.
+Subject: [PATCH] mf: Miscelaneous fixes to topology resolution.
 
 ---
  dlls/mf/topology.c | 16 +++++++++-------
@@ -20722,10 +19236,10 @@ index d4a59f7136e..2e849204343 100644
 -- 
 2.28.0
 
-From ebfd4c055be8d68a34b4bfd6a80e449afce5d9c8 Mon Sep 17 00:00:00 2001
+From 535dff3cfe4ad942848d7639cb7ce27cc4062f65 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Thu, 2 Apr 2020 15:45:52 -0500
-Subject: [PATCH 50/52] Rewrite branch resolver.
+Subject: [PATCH] Rewrite branch resolver.
 
 and a HACK: Set output type of found decoder, this should probably happen somewhere else.
 ---
@@ -21091,10 +19605,10 @@ index 2e849204343..91d29782582 100644
 -- 
 2.28.0
 
-From 7884831a19a53abf4b33b7c6cabf5a52247c2b32 Mon Sep 17 00:00:00 2001
+From 82bb9db7e107e615b1f505b19697f8ae9f451c9d Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Wed, 26 Aug 2020 10:23:58 -0500
-Subject: [PATCH 51/52] mf/sar: Compare against native media type in
+Subject: [PATCH] mf/sar: Compare against native media type in
  IsMediaTypeSupported.
 
 TODO: add tests.
@@ -21121,10 +19635,10 @@ index 6f1f1bd834e..547f8eb391c 100644
 -- 
 2.28.0
 
-From 779877a3e829ba787f289ea13047562652e79ad9 Mon Sep 17 00:00:00 2001
+From 4250c79abdedb230e0f89afa8a884c2e42743c89 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Wed, 26 Aug 2020 10:28:37 -0500
-Subject: [PATCH 52/52] winegstreamer: Implement audio conversion MFT.
+Subject: [PATCH] winegstreamer: Implement audio conversion MFT.
 
 Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
 ---
@@ -21918,18 +20432,18 @@ index 00000000000..acb842242f1
 +}
 \ No newline at end of file
 diff --git a/dlls/winegstreamer/gst_private.h b/dlls/winegstreamer/gst_private.h
-index 8e75beb82dd..b505387637b 100644
+index dc23d5201b1..6e718aa6ebe 100644
 --- a/dlls/winegstreamer/gst_private.h
 +++ b/dlls/winegstreamer/gst_private.h
 @@ -75,5 +75,6 @@ HRESULT generic_decoder_construct(REFIID riid, void **obj, enum decoder_type) DE
  HRESULT winegstreamer_stream_handler_create(REFIID riid, void **obj) DECLSPEC_HIDDEN;
  
- HRESULT color_converter_create(REFIID riid, void **ret);
-+HRESULT audio_converter_create(REFIID riid, void **ret);
+ HRESULT color_converter_create(REFIID riid, void **ret) DECLSPEC_HIDDEN;
++HRESULT audio_converter_create(REFIID riid, void **ret) DECLSPEC_HIDDEN;
  
  #endif /* __GST_PRIVATE_INCLUDED__ */
 diff --git a/dlls/winegstreamer/mfplat.c b/dlls/winegstreamer/mfplat.c
-index 28c9beb4649..3b50264d0f8 100644
+index 752682da6e3..9f469a45688 100644
 --- a/dlls/winegstreamer/mfplat.c
 +++ b/dlls/winegstreamer/mfplat.c
 @@ -433,6 +433,8 @@ static HRESULT m4s2_decoder_create(REFIID riid, void **ret)
@@ -22035,7 +20549,7 @@ index 21d44c498b8..7e482b77863 100644
 -- 
 2.28.0
 
-From 4275e2569a44939e04098fca9cf8beab4cb3941e Mon Sep 17 00:00:00 2001
+From d3952286014b94744574841c324bec62c84e2bcb Mon Sep 17 00:00:00 2001
 From: Alistair Leslie-Hughes <leslie_alistair@hotmail.com>
 Date: Sun, 13 Sep 2020 13:39:07 +1000
 Subject: [PATCH] winegstreamer: Support older versions
@@ -22043,13 +20557,13 @@ Subject: [PATCH] winegstreamer: Support older versions
 ---
  configure.ac                      | 4 +++-
  dlls/winegstreamer/media_source.c | 2 ++
- 3 files changed, 14 insertions(+), 1 deletion(-)
+ 2 files changed, 5 insertions(+), 1 deletion(-)
 
 diff --git a/configure.ac b/configure.ac
-index 5d882b94d99..8abd50e6690 100644
+index 6b8b6b27bac..efd36af9e5b 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -1665,7 +1665,9 @@ then
+@@ -1642,7 +1642,9 @@ then
                AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <gst/gst.h>]],
                                                   [[static int a[sizeof(gint64) > 4 ? 1 : -1]; if (a[0]) return 0;]])],
                  [AC_MSG_RESULT([yes])
@@ -22061,24 +20575,24 @@ index 5d882b94d99..8abd50e6690 100644
                   ac_glib2_broken=yes
                   WINE_NOTICE([glib-2.0 pkgconfig configuration is for the wrong architecture, winegstreamer won't be built.])])])])
 diff --git a/dlls/winegstreamer/media_source.c b/dlls/winegstreamer/media_source.c
-index 07c16ac8a07..3ef258937dc 100644
+index d99b8024599..a6ef561ecc9 100644
 --- a/dlls/winegstreamer/media_source.c
 +++ b/dlls/winegstreamer/media_source.c
-@@ -1087,6 +1087,7 @@ static HRESULT media_stream_init_desc(struct media_stream *stream)
+@@ -1059,6 +1059,7 @@ static HRESULT media_stream_init_desc(struct media_stream *stream)
  
-     if (!strcmp(gst_structure_get_name(gst_caps_get_structure(stream->their_caps, 0)), "video/x-raw"))
+     if (!strcmp(gst_structure_get_name(gst_caps_get_structure(current_caps, 0)), "video/x-raw"))
      {
 +#ifdef HAVE_GST_STRUCTURE_GET_LIST
          GstElementFactory *videoconvert_factory = gst_element_factory_find("videoconvert");
          /* output every format supported by videoconvert */
          const GList *template_list = gst_element_factory_get_static_pad_templates(videoconvert_factory);
-@@ -1118,6 +1119,7 @@ static HRESULT media_stream_init_desc(struct media_stream *stream)
+@@ -1086,6 +1087,7 @@ static HRESULT media_stream_init_desc(struct media_stream *stream)
              gst_caps_unref(src_caps);
              break;
          }
 +#endif
      }
-     else if (!strcmp(gst_structure_get_name(gst_caps_get_structure(stream->their_caps, 0)), "audio/x-raw"))
+     else if (!strcmp(gst_structure_get_name(gst_caps_get_structure(current_caps, 0)), "audio/x-raw"))
      {
 -- 
 2.28.0

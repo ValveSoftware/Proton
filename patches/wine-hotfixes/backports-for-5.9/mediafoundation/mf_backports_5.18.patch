@@ -5570,34 +5570,6 @@ index 75ddb3082e6..11ca8f90bb0 100644
      };
  
      if (!index)
-From fd25ba65e0eb9fedfb2cdfa2b7a4b16e0401dfdf Mon Sep 17 00:00:00 2001
-From: Zebediah Figura <z.figura12@gmail.com>
-Date: Mon, 22 Jun 2020 17:56:04 -0500
-Subject: [PATCH] winegstreamer: Avoid performing color matrix conversions in
- videoconvert.
-
-This reduces the time videoconvert takes to process I420 -> YV12 from 15 ms to 0.8 ms on my system.
-
-Signed-off-by: Zebediah Figura <z.figura12@gmail.com>
-Signed-off-by: Alexandre Julliard <julliard@winehq.org>
----
- dlls/winegstreamer/gstdemux.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/dlls/winegstreamer/gstdemux.c b/dlls/winegstreamer/gstdemux.c
-index 11ca8f90bb0..8f89935b82b 100644
---- a/dlls/winegstreamer/gstdemux.c
-+++ b/dlls/winegstreamer/gstdemux.c
-@@ -1022,6 +1022,9 @@ static void init_new_decoded_pad(GstElement *bin, GstPad *pad, struct gstdemux *
-             goto out;
-         }
- 
-+        /* Avoid expensive color matrix conversions. */
-+        gst_util_set_object_arg(G_OBJECT(vconv), "matrix-mode", "none");
-+
-         /* GStreamer outputs RGB video top-down, but DirectShow expects bottom-up. */
-         if (!(flip = gst_element_factory_make("videoflip", NULL)))
-         {
 From 0c8babdbcca1f74ea54b9466b7d5fe3899880cd4 Mon Sep 17 00:00:00 2001
 From: Nikolay Sivov <nsivov@codeweavers.com>
 Date: Fri, 19 Jun 2020 16:36:27 +0300
@@ -19981,3 +19953,255 @@ index 840f1bd25f4..8032e438b73 100644
      /* For now return original topology. */
  
      *ret_topology = output_topology;
+From deac29d411dccadcd12a815ab0a4a8cb6f5ebdee Mon Sep 17 00:00:00 2001
+From: Nikolay Sivov <nsivov@codeweavers.com>
+Date: Thu, 17 Sep 2020 14:24:38 +0300
+Subject: [PATCH] evr/mixer: Handle uninitialized input case in
+ GetOutputAvailableType().
+
+Signed-off-by: Nikolay Sivov <nsivov@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/evr/mixer.c     | 4 +++-
+ dlls/evr/tests/evr.c | 3 +++
+ 2 files changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/dlls/evr/mixer.c b/dlls/evr/mixer.c
+index 70199f37a1c..710e20815ab 100644
+--- a/dlls/evr/mixer.c
++++ b/dlls/evr/mixer.c
+@@ -533,7 +533,9 @@ static HRESULT WINAPI video_mixer_transform_GetOutputAvailableType(IMFTransform
+ 
+     EnterCriticalSection(&mixer->cs);
+ 
+-    if (index >= mixer->output.type_count)
++    if (!mixer->inputs[0].media_type)
++        hr = MF_E_TRANSFORM_TYPE_NOT_SET;
++    else if (index >= mixer->output.type_count)
+         hr = MF_E_NO_MORE_TYPES;
+     else
+     {
+diff --git a/dlls/evr/tests/evr.c b/dlls/evr/tests/evr.c
+index ecf1f850c77..a68952c42a0 100644
+--- a/dlls/evr/tests/evr.c
++++ b/dlls/evr/tests/evr.c
+@@ -835,6 +835,9 @@ static void test_default_mixer_type_negotiation(void)
+     hr = IMFTransform_GetInputCurrentType(transform, 0, &media_type);
+     ok(hr == MF_E_TRANSFORM_TYPE_NOT_SET, "Unexpected hr %#x.\n", hr);
+ 
++    hr = IMFTransform_GetOutputAvailableType(transform, 0, 0, &media_type);
++    ok(hr == MF_E_TRANSFORM_TYPE_NOT_SET, "Unexpected hr %#x.\n", hr);
++
+     hr = MFCreateMediaType(&media_type);
+     ok(hr == S_OK, "Failed to create media type, hr %#x.\n", hr);
+ 
+From 7c1b534a182f74835e84337e5c7ac6617755970a Mon Sep 17 00:00:00 2001
+From: Nikolay Sivov <nsivov@codeweavers.com>
+Date: Thu, 17 Sep 2020 14:24:39 +0300
+Subject: [PATCH] evr/tests: Add a test for returned input type instance.
+
+Signed-off-by: Nikolay Sivov <nsivov@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/evr/tests/evr.c | 14 +++++++++++++-
+ 1 file changed, 13 insertions(+), 1 deletion(-)
+
+diff --git a/dlls/evr/tests/evr.c b/dlls/evr/tests/evr.c
+index a68952c42a0..3e2675497a1 100644
+--- a/dlls/evr/tests/evr.c
++++ b/dlls/evr/tests/evr.c
+@@ -805,11 +805,11 @@ todo_wine
+ 
+ static void test_default_mixer_type_negotiation(void)
+ {
++    IMFMediaType *media_type, *media_type2;
+     IDirect3DDeviceManager9 *manager;
+     DXVA2_VideoProcessorCaps caps;
+     IMFVideoMediaType *video_type;
+     IMFVideoProcessor *processor;
+-    IMFMediaType *media_type;
+     IDirect3DDevice9 *device;
+     IMFTransform *transform;
+     GUID guid, *guids;
+@@ -896,6 +896,18 @@ static void test_default_mixer_type_negotiation(void)
+ todo_wine
+     ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
+ 
++    hr = IMFTransform_GetInputCurrentType(transform, 0, &media_type);
++todo_wine
++    ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++if (hr == S_OK)
++{
++    ok(media_type != (IMFMediaType *)video_type, "Unexpected media type instance.\n");
++    hr = IMFTransform_GetInputCurrentType(transform, 0, &media_type2);
++    ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++    ok(media_type == media_type2, "Unexpected media type instance.\n");
++    IMFMediaType_Release(media_type);
++    IMFMediaType_Release(media_type2);
++}
+     hr = IMFTransform_QueryInterface(transform, &IID_IMFVideoProcessor, (void **)&processor);
+     ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
+ 
+From 305aaec8773a7cbd0fdd4d12c5e0210e9cb5f33d Mon Sep 17 00:00:00 2001
+From: Nikolay Sivov <nsivov@codeweavers.com>
+Date: Fri, 18 Sep 2020 17:25:16 +0300
+Subject: [PATCH] evr/mixer: Fix error handling in output types collection
+ helper.
+
+Signed-off-by: Nikolay Sivov <nsivov@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/evr/mixer.c     | 6 +++++-
+ dlls/evr/tests/evr.c | 1 -
+ 2 files changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/dlls/evr/mixer.c b/dlls/evr/mixer.c
+index 710e20815ab..e19520fa7ed 100644
+--- a/dlls/evr/mixer.c
++++ b/dlls/evr/mixer.c
+@@ -604,6 +604,7 @@ static HRESULT video_mixer_collect_output_types(struct video_mixer *mixer, const
+             if (!(ptr = heap_realloc(rt_formats, (count + format_count) * sizeof(*rt_formats))))
+             {
+                 hr = E_OUTOFMEMORY;
++                count = 0;
+                 CoTaskMemFree(formats);
+                 break;
+             }
+@@ -641,12 +642,15 @@ static HRESULT video_mixer_collect_output_types(struct video_mixer *mixer, const
+             mixer->output.type_count = count;
+         }
+         else
++        {
+             hr = E_OUTOFMEMORY;
++            count = 0;
++        }
+     }
+ 
+     heap_free(rt_formats);
+ 
+-    return hr;
++    return count ? S_OK : hr;
+ }
+ 
+ static HRESULT WINAPI video_mixer_transform_SetInputType(IMFTransform *iface, DWORD id, IMFMediaType *media_type, DWORD flags)
+diff --git a/dlls/evr/tests/evr.c b/dlls/evr/tests/evr.c
+index 3e2675497a1..bf33051d6e1 100644
+--- a/dlls/evr/tests/evr.c
++++ b/dlls/evr/tests/evr.c
+@@ -893,7 +893,6 @@ static void test_default_mixer_type_negotiation(void)
+     ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
+ 
+     hr = IMFTransform_SetInputType(transform, 0, (IMFMediaType *)video_type, 0);
+-todo_wine
+     ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
+ 
+     hr = IMFTransform_GetInputCurrentType(transform, 0, &media_type);
+From 60a8f050a5b438ea06898f09d081206977ebde9a Mon Sep 17 00:00:00 2001
+From: Michael Stefaniuc <mstefani@winehq.org>
+Date: Mon, 21 Sep 2020 22:52:32 +0200
+Subject: [PATCH] winegstreamer: Drop redundant NULL check before heap_free().
+
+Signed-off-by: Michael Stefaniuc <mstefani@winehq.org>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/winegstreamer/media_source.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/dlls/winegstreamer/media_source.c b/dlls/winegstreamer/media_source.c
+index 84ecf305d4c..f365c8a1827 100644
+--- a/dlls/winegstreamer/media_source.c
++++ b/dlls/winegstreamer/media_source.c
+@@ -394,8 +394,7 @@ static ULONG WINAPI create_object_context_Release(IUnknown *iface)
+             IPropertyStore_Release(context->props);
+         if (context->stream)
+             IMFByteStream_Release(context->stream);
+-        if (context->url)
+-            heap_free(context->url);
++        heap_free(context->url);
+         heap_free(context);
+     }
+ 
+From 622f2ce9915f1089f8e4550d6dbcfb6fb25289a6 Mon Sep 17 00:00:00 2001
+From: Zebediah Figura <z.figura12@gmail.com>
+Date: Thu, 24 Sep 2020 22:22:54 -0500
+Subject: [PATCH] winegstreamer: Don't set the buffer offset in
+ request_buffer_src().
+
+Signed-off-by: Zebediah Figura <z.figura12@gmail.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/winegstreamer/gstdemux.c | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/dlls/winegstreamer/gstdemux.c b/dlls/winegstreamer/gstdemux.c
+index 724ac8fd25f..9a9fe01936b 100644
+--- a/dlls/winegstreamer/gstdemux.c
++++ b/dlls/winegstreamer/gstdemux.c
+@@ -906,7 +906,6 @@ static GstFlowReturn request_buffer_src(GstPad *pad, GstObject *parent, guint64
+         return GST_FLOW_ERROR;
+     }
+ 
+-    GST_BUFFER_OFFSET(*buf) = ofs;
+     return GST_FLOW_OK;
+ }
+ 
+From 025b3de29c63e5a05f66bd5354d7e90c2ccad417 Mon Sep 17 00:00:00 2001
+From: Zebediah Figura <z.figura12@gmail.com>
+Date: Thu, 24 Sep 2020 22:22:55 -0500
+Subject: [PATCH] winegstreamer: Avoid leaking a newly allocated buffer on
+ failure in request_buffer_src().
+
+According to the GStreamer documentation, the contents of "buffer" should be
+considered undefined on failure, which means that the caller has no way of
+freeing a newly allocated buffer.
+
+Signed-off-by: Zebediah Figura <z.figura12@gmail.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/winegstreamer/gstdemux.c | 20 ++++++++++++--------
+ 1 file changed, 12 insertions(+), 8 deletions(-)
+
+diff --git a/dlls/winegstreamer/gstdemux.c b/dlls/winegstreamer/gstdemux.c
+index 9a9fe01936b..acb15dc9238 100644
+--- a/dlls/winegstreamer/gstdemux.c
++++ b/dlls/winegstreamer/gstdemux.c
+@@ -878,13 +878,14 @@ static GstFlowReturn got_data_sink(GstPad *pad, GstObject *parent, GstBuffer *bu
+     return GST_FLOW_OK;
+ }
+ 
+-static GstFlowReturn request_buffer_src(GstPad *pad, GstObject *parent, guint64 ofs, guint len, GstBuffer **buf)
++static GstFlowReturn request_buffer_src(GstPad *pad, GstObject *parent, guint64 ofs, guint len, GstBuffer **buffer)
+ {
+     struct gstdemux *This = gst_pad_get_element_private(pad);
++    GstBuffer *new_buffer = NULL;
+     HRESULT hr;
+     GstMapInfo info;
+ 
+-    TRACE("pad %p, offset %s, length %u, buffer %p.\n", pad, wine_dbgstr_longlong(ofs), len, *buf);
++    TRACE("pad %p, offset %s, length %u, buffer %p.\n", pad, wine_dbgstr_longlong(ofs), len, *buffer);
+ 
+     if (ofs == GST_BUFFER_OFFSET_NONE)
+         ofs = This->nextpullofs;
+@@ -896,13 +897,16 @@ static GstFlowReturn request_buffer_src(GstPad *pad, GstObject *parent, guint64
+         len = This->filesize - ofs;
+     This->nextpullofs = ofs + len;
+ 
+-    if (!*buf)
+-        *buf = gst_buffer_new_and_alloc(len);
+-    gst_buffer_map(*buf, &info, GST_MAP_WRITE);
++    if (!*buffer)
++        *buffer = new_buffer = gst_buffer_new_and_alloc(len);
++    gst_buffer_map(*buffer, &info, GST_MAP_WRITE);
+     hr = IAsyncReader_SyncRead(This->reader, ofs, len, info.data);
+-    gst_buffer_unmap(*buf, &info);
+-    if (FAILED(hr)) {
+-        ERR("Returned %08x\n", hr);
++    gst_buffer_unmap(*buffer, &info);
++    if (FAILED(hr))
++    {
++        ERR("Failed to read data, hr %#x.\n", hr);
++        if (new_buffer)
++            gst_buffer_unref(new_buffer);
+         return GST_FLOW_ERROR;
+     }
+ 

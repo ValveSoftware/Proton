@@ -1,0 +1,184 @@
+From 3981be41287c799e43693d80a9c0f4d34d2c0135 Mon Sep 17 00:00:00 2001
+From: Nikolay Sivov <nsivov@codeweavers.com>
+Date: Fri, 2 Oct 2020 14:01:12 +0300
+Subject: [PATCH] evr/presenter: Maintain video position rectangles.
+
+Signed-off-by: Nikolay Sivov <nsivov@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/evr/presenter.c | 43 ++++++++++++++++++++++++-----
+ dlls/evr/tests/evr.c | 66 ++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 102 insertions(+), 7 deletions(-)
+
+diff --git a/dlls/evr/presenter.c b/dlls/evr/presenter.c
+index a8e9a507924..0663383b14f 100644
+--- a/dlls/evr/presenter.c
++++ b/dlls/evr/presenter.c
+@@ -59,6 +59,8 @@ struct video_presenter
+     IDirect3DDeviceManager9 *device_manager;
+     UINT reset_token;
+     HWND video_window;
++    MFVideoNormalizedRect src_rect;
++    RECT dst_rect;
+     unsigned int state;
+     CRITICAL_SECTION cs;
+ };
+@@ -467,19 +469,45 @@ static HRESULT WINAPI video_presenter_control_GetIdealVideoSize(IMFVideoDisplayC
+ }
+ 
+ static HRESULT WINAPI video_presenter_control_SetVideoPosition(IMFVideoDisplayControl *iface,
+-        const MFVideoNormalizedRect *source, const RECT *dest)
++        const MFVideoNormalizedRect *src_rect, const RECT *dst_rect)
+ {
+-    FIXME("%p, %p, %p.\n", iface, source, dest);
++    struct video_presenter *presenter = impl_from_IMFVideoDisplayControl(iface);
+ 
+-    return E_NOTIMPL;
++    TRACE("%p, %p, %s.\n", iface, src_rect, wine_dbgstr_rect(dst_rect));
++
++    if (!src_rect && !dst_rect)
++        return E_POINTER;
++
++    if (src_rect && (src_rect->left < 0.0f || src_rect->top < 0.0f ||
++                src_rect->right > 1.0f || src_rect->bottom > 1.0f))
++        return E_INVALIDARG;
++
++    EnterCriticalSection(&presenter->cs);
++    if (src_rect)
++        presenter->src_rect = *src_rect;
++    if (dst_rect)
++        presenter->dst_rect = *dst_rect;
++    LeaveCriticalSection(&presenter->cs);
++
++    return S_OK;
+ }
+ 
+-static HRESULT WINAPI video_presenter_control_GetVideoPosition(IMFVideoDisplayControl *iface, MFVideoNormalizedRect *source,
+-        RECT *dest)
++static HRESULT WINAPI video_presenter_control_GetVideoPosition(IMFVideoDisplayControl *iface, MFVideoNormalizedRect *src_rect,
++        RECT *dst_rect)
+ {
+-    FIXME("%p, %p, %p.\n", iface, source, dest);
++    struct video_presenter *presenter = impl_from_IMFVideoDisplayControl(iface);
+ 
+-    return E_NOTIMPL;
++    TRACE("%p, %p, %p.\n", iface, src_rect, dst_rect);
++
++    if (!src_rect || !dst_rect)
++        return E_POINTER;
++
++    EnterCriticalSection(&presenter->cs);
++    *src_rect = presenter->src_rect;
++    *dst_rect = presenter->dst_rect;
++    LeaveCriticalSection(&presenter->cs);
++
++    return S_OK;
+ }
+ 
+ static HRESULT WINAPI video_presenter_control_SetAspectRatioMode(IMFVideoDisplayControl *iface, DWORD mode)
+@@ -718,6 +746,7 @@ HRESULT evr_presenter_create(IUnknown *outer, void **out)
+     object->IUnknown_inner.lpVtbl = &video_presenter_inner_vtbl;
+     object->outer_unk = outer ? outer : &object->IUnknown_inner;
+     object->refcount = 1;
++    object->src_rect.right = object->src_rect.bottom = 1.0f;
+     InitializeCriticalSection(&object->cs);
+ 
+     if (FAILED(hr = DXVA2CreateDirect3DDeviceManager9(&object->reset_token, &object->device_manager)))
+diff --git a/dlls/evr/tests/evr.c b/dlls/evr/tests/evr.c
+index d77703b6c1f..48bf01a2ef5 100644
+--- a/dlls/evr/tests/evr.c
++++ b/dlls/evr/tests/evr.c
+@@ -970,6 +970,7 @@ static void test_default_presenter(void)
+     D3DPRESENT_PARAMETERS present_params = { 0 };
+     IMFVideoDisplayControl *display_control;
+     IDirect3DSwapChain9 *swapchain;
++    MFVideoNormalizedRect src_rect;
+     IMFVideoPresenter *presenter;
+     IMFRateSupport *rate_support;
+     IDirect3DDevice9 *d3d_device;
+@@ -977,6 +978,7 @@ static void test_default_presenter(void)
+     IMFVideoDeviceID *deviceid;
+     IMFGetService *gs;
+     HWND hwnd, hwnd2;
++    RECT dst_rect;
+     HANDLE handle;
+     IUnknown *unk;
+     float rate;
+@@ -1051,6 +1053,7 @@ static void test_default_presenter(void)
+     hr = IDirect3DDeviceManager9_UnlockDevice(dm, handle, FALSE);
+     ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
+ 
++    /* Video window */
+     hwnd = create_window();
+     ok(!!hwnd, "Failed to create a test window.\n");
+ 
+@@ -1067,6 +1070,69 @@ static void test_default_presenter(void)
+     ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
+     ok(hwnd2 == hwnd, "Unexpected window %p.\n", hwnd2);
+ 
++    /* Video position */
++    hr = IMFVideoDisplayControl_GetVideoPosition(display_control, NULL, &dst_rect);
++    ok(hr == E_POINTER, "Unexpected hr %#x.\n", hr);
++
++    hr = IMFVideoDisplayControl_GetVideoPosition(display_control, &src_rect, NULL);
++    ok(hr == E_POINTER, "Unexpected hr %#x.\n", hr);
++
++    SetRect(&dst_rect, 1, 2, 3, 4);
++    hr = IMFVideoDisplayControl_GetVideoPosition(display_control, &src_rect, &dst_rect);
++    ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++    ok(src_rect.left == 0.0f && src_rect.top == 0.0f && src_rect.right == 1.0f &&
++            src_rect.bottom == 1.0f, "Unexpected source rectangle.\n");
++    ok(dst_rect.left == 0 && dst_rect.right == 0 && dst_rect.top == 0 && dst_rect.bottom == 0,
++            "Unexpected destination rectangle %s.\n", wine_dbgstr_rect(&dst_rect));
++
++    hr = IMFVideoDisplayControl_SetVideoPosition(display_control, NULL, NULL);
++    ok(hr == E_POINTER, "Unexpected hr %#x.\n", hr);
++
++    SetRect(&dst_rect, 0, 0, 10, 10);
++    hr = IMFVideoDisplayControl_SetVideoPosition(display_control, NULL, &dst_rect);
++    ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++
++    SetRect(&dst_rect, 1, 2, 3, 4);
++    hr = IMFVideoDisplayControl_GetVideoPosition(display_control, &src_rect, &dst_rect);
++    ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++    ok(dst_rect.left == 0 && dst_rect.right == 10 && dst_rect.top == 0 && dst_rect.bottom == 10,
++            "Unexpected destination rectangle %s.\n", wine_dbgstr_rect(&dst_rect));
++
++    src_rect.left = src_rect.top = 0.0f;
++    src_rect.right = 2.0f;
++    src_rect.bottom = 1.0f;
++    hr = IMFVideoDisplayControl_SetVideoPosition(display_control, &src_rect, NULL);
++    ok(hr == E_INVALIDARG, "Unexpected hr %#x.\n", hr);
++
++    src_rect.left = -0.1f;
++    src_rect.top = 0.0f;
++    src_rect.right = 0.9f;
++    src_rect.bottom = 1.0f;
++    hr = IMFVideoDisplayControl_SetVideoPosition(display_control, &src_rect, NULL);
++    ok(hr == E_INVALIDARG, "Unexpected hr %#x.\n", hr);
++
++    src_rect.left = 0.1f;
++    src_rect.top = 0.2f;
++    src_rect.right = 0.8f;
++    src_rect.bottom = 0.9f;
++    hr = IMFVideoDisplayControl_SetVideoPosition(display_control, &src_rect, NULL);
++    ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++
++    hr = IMFVideoDisplayControl_GetVideoPosition(display_control, &src_rect, &dst_rect);
++    ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++    ok(src_rect.left == 0.1f && src_rect.top == 0.2f && src_rect.right == 0.8f &&
++            src_rect.bottom == 0.9f, "Unexpected source rectangle.\n");
++
++    SetRect(&dst_rect, 1, 2, 999, 1000);
++    hr = IMFVideoDisplayControl_SetVideoPosition(display_control, NULL, &dst_rect);
++    ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++
++    SetRect(&dst_rect, 0, 1, 3, 4);
++    hr = IMFVideoDisplayControl_GetVideoPosition(display_control, &src_rect, &dst_rect);
++    ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++    ok(dst_rect.left == 1 && dst_rect.right == 999 && dst_rect.top == 2 && dst_rect.bottom == 1000,
++            "Unexpected destination rectangle %s.\n", wine_dbgstr_rect(&dst_rect));
++
+     hr = IDirect3DDeviceManager9_CloseDeviceHandle(dm, handle);
+     ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
+ 

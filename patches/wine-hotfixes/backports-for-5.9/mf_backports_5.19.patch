@@ -5570,34 +5570,7 @@ index 75ddb3082e6..11ca8f90bb0 100644
      };
  
      if (!index)
-From fd25ba65e0eb9fedfb2cdfa2b7a4b16e0401dfdf Mon Sep 17 00:00:00 2001
-From: Zebediah Figura <z.figura12@gmail.com>
-Date: Mon, 22 Jun 2020 17:56:04 -0500
-Subject: [PATCH] winegstreamer: Avoid performing color matrix conversions in
- videoconvert.
 
-This reduces the time videoconvert takes to process I420 -> YV12 from 15 ms to 0.8 ms on my system.
-
-Signed-off-by: Zebediah Figura <z.figura12@gmail.com>
-Signed-off-by: Alexandre Julliard <julliard@winehq.org>
----
- dlls/winegstreamer/gstdemux.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/dlls/winegstreamer/gstdemux.c b/dlls/winegstreamer/gstdemux.c
-index 11ca8f90bb0..8f89935b82b 100644
---- a/dlls/winegstreamer/gstdemux.c
-+++ b/dlls/winegstreamer/gstdemux.c
-@@ -1022,6 +1022,9 @@ static void init_new_decoded_pad(GstElement *bin, GstPad *pad, struct gstdemux *
-             goto out;
-         }
- 
-+        /* Avoid expensive color matrix conversions. */
-+        gst_util_set_object_arg(G_OBJECT(vconv), "matrix-mode", "none");
-+
-         /* GStreamer outputs RGB video top-down, but DirectShow expects bottom-up. */
-         if (!(flip = gst_element_factory_make("videoflip", NULL)))
-         {
 From 0c8babdbcca1f74ea54b9466b7d5fe3899880cd4 Mon Sep 17 00:00:00 2001
 From: Nikolay Sivov <nsivov@codeweavers.com>
 Date: Fri, 19 Jun 2020 16:36:27 +0300
@@ -19981,3 +19954,2714 @@ index 840f1bd25f4..8032e438b73 100644
      /* For now return original topology. */
  
      *ret_topology = output_topology;
+From deac29d411dccadcd12a815ab0a4a8cb6f5ebdee Mon Sep 17 00:00:00 2001
+From: Nikolay Sivov <nsivov@codeweavers.com>
+Date: Thu, 17 Sep 2020 14:24:38 +0300
+Subject: [PATCH] evr/mixer: Handle uninitialized input case in
+ GetOutputAvailableType().
+
+Signed-off-by: Nikolay Sivov <nsivov@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/evr/mixer.c     | 4 +++-
+ dlls/evr/tests/evr.c | 3 +++
+ 2 files changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/dlls/evr/mixer.c b/dlls/evr/mixer.c
+index 70199f37a1c..710e20815ab 100644
+--- a/dlls/evr/mixer.c
++++ b/dlls/evr/mixer.c
+@@ -533,7 +533,9 @@ static HRESULT WINAPI video_mixer_transform_GetOutputAvailableType(IMFTransform
+ 
+     EnterCriticalSection(&mixer->cs);
+ 
+-    if (index >= mixer->output.type_count)
++    if (!mixer->inputs[0].media_type)
++        hr = MF_E_TRANSFORM_TYPE_NOT_SET;
++    else if (index >= mixer->output.type_count)
+         hr = MF_E_NO_MORE_TYPES;
+     else
+     {
+diff --git a/dlls/evr/tests/evr.c b/dlls/evr/tests/evr.c
+index ecf1f850c77..a68952c42a0 100644
+--- a/dlls/evr/tests/evr.c
++++ b/dlls/evr/tests/evr.c
+@@ -835,6 +835,9 @@ static void test_default_mixer_type_negotiation(void)
+     hr = IMFTransform_GetInputCurrentType(transform, 0, &media_type);
+     ok(hr == MF_E_TRANSFORM_TYPE_NOT_SET, "Unexpected hr %#x.\n", hr);
+ 
++    hr = IMFTransform_GetOutputAvailableType(transform, 0, 0, &media_type);
++    ok(hr == MF_E_TRANSFORM_TYPE_NOT_SET, "Unexpected hr %#x.\n", hr);
++
+     hr = MFCreateMediaType(&media_type);
+     ok(hr == S_OK, "Failed to create media type, hr %#x.\n", hr);
+ 
+From 7c1b534a182f74835e84337e5c7ac6617755970a Mon Sep 17 00:00:00 2001
+From: Nikolay Sivov <nsivov@codeweavers.com>
+Date: Thu, 17 Sep 2020 14:24:39 +0300
+Subject: [PATCH] evr/tests: Add a test for returned input type instance.
+
+Signed-off-by: Nikolay Sivov <nsivov@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/evr/tests/evr.c | 14 +++++++++++++-
+ 1 file changed, 13 insertions(+), 1 deletion(-)
+
+diff --git a/dlls/evr/tests/evr.c b/dlls/evr/tests/evr.c
+index a68952c42a0..3e2675497a1 100644
+--- a/dlls/evr/tests/evr.c
++++ b/dlls/evr/tests/evr.c
+@@ -805,11 +805,11 @@ todo_wine
+ 
+ static void test_default_mixer_type_negotiation(void)
+ {
++    IMFMediaType *media_type, *media_type2;
+     IDirect3DDeviceManager9 *manager;
+     DXVA2_VideoProcessorCaps caps;
+     IMFVideoMediaType *video_type;
+     IMFVideoProcessor *processor;
+-    IMFMediaType *media_type;
+     IDirect3DDevice9 *device;
+     IMFTransform *transform;
+     GUID guid, *guids;
+@@ -896,6 +896,18 @@ static void test_default_mixer_type_negotiation(void)
+ todo_wine
+     ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
+ 
++    hr = IMFTransform_GetInputCurrentType(transform, 0, &media_type);
++todo_wine
++    ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++if (hr == S_OK)
++{
++    ok(media_type != (IMFMediaType *)video_type, "Unexpected media type instance.\n");
++    hr = IMFTransform_GetInputCurrentType(transform, 0, &media_type2);
++    ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++    ok(media_type == media_type2, "Unexpected media type instance.\n");
++    IMFMediaType_Release(media_type);
++    IMFMediaType_Release(media_type2);
++}
+     hr = IMFTransform_QueryInterface(transform, &IID_IMFVideoProcessor, (void **)&processor);
+     ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
+ 
+From 305aaec8773a7cbd0fdd4d12c5e0210e9cb5f33d Mon Sep 17 00:00:00 2001
+From: Nikolay Sivov <nsivov@codeweavers.com>
+Date: Fri, 18 Sep 2020 17:25:16 +0300
+Subject: [PATCH] evr/mixer: Fix error handling in output types collection
+ helper.
+
+Signed-off-by: Nikolay Sivov <nsivov@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/evr/mixer.c     | 6 +++++-
+ dlls/evr/tests/evr.c | 1 -
+ 2 files changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/dlls/evr/mixer.c b/dlls/evr/mixer.c
+index 710e20815ab..e19520fa7ed 100644
+--- a/dlls/evr/mixer.c
++++ b/dlls/evr/mixer.c
+@@ -604,6 +604,7 @@ static HRESULT video_mixer_collect_output_types(struct video_mixer *mixer, const
+             if (!(ptr = heap_realloc(rt_formats, (count + format_count) * sizeof(*rt_formats))))
+             {
+                 hr = E_OUTOFMEMORY;
++                count = 0;
+                 CoTaskMemFree(formats);
+                 break;
+             }
+@@ -641,12 +642,15 @@ static HRESULT video_mixer_collect_output_types(struct video_mixer *mixer, const
+             mixer->output.type_count = count;
+         }
+         else
++        {
+             hr = E_OUTOFMEMORY;
++            count = 0;
++        }
+     }
+ 
+     heap_free(rt_formats);
+ 
+-    return hr;
++    return count ? S_OK : hr;
+ }
+ 
+ static HRESULT WINAPI video_mixer_transform_SetInputType(IMFTransform *iface, DWORD id, IMFMediaType *media_type, DWORD flags)
+diff --git a/dlls/evr/tests/evr.c b/dlls/evr/tests/evr.c
+index 3e2675497a1..bf33051d6e1 100644
+--- a/dlls/evr/tests/evr.c
++++ b/dlls/evr/tests/evr.c
+@@ -893,7 +893,6 @@ static void test_default_mixer_type_negotiation(void)
+     ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
+ 
+     hr = IMFTransform_SetInputType(transform, 0, (IMFMediaType *)video_type, 0);
+-todo_wine
+     ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
+ 
+     hr = IMFTransform_GetInputCurrentType(transform, 0, &media_type);
+From 622f2ce9915f1089f8e4550d6dbcfb6fb25289a6 Mon Sep 17 00:00:00 2001
+From: Zebediah Figura <z.figura12@gmail.com>
+Date: Thu, 24 Sep 2020 22:22:54 -0500
+Subject: [PATCH] winegstreamer: Don't set the buffer offset in
+ request_buffer_src().
+
+Signed-off-by: Zebediah Figura <z.figura12@gmail.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/winegstreamer/gstdemux.c | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/dlls/winegstreamer/gstdemux.c b/dlls/winegstreamer/gstdemux.c
+index 724ac8fd25f..9a9fe01936b 100644
+--- a/dlls/winegstreamer/gstdemux.c
++++ b/dlls/winegstreamer/gstdemux.c
+@@ -906,7 +906,6 @@ static GstFlowReturn request_buffer_src(GstPad *pad, GstObject *parent, guint64
+         return GST_FLOW_ERROR;
+     }
+ 
+-    GST_BUFFER_OFFSET(*buf) = ofs;
+     return GST_FLOW_OK;
+ }
+ 
+From 025b3de29c63e5a05f66bd5354d7e90c2ccad417 Mon Sep 17 00:00:00 2001
+From: Zebediah Figura <z.figura12@gmail.com>
+Date: Thu, 24 Sep 2020 22:22:55 -0500
+Subject: [PATCH] winegstreamer: Avoid leaking a newly allocated buffer on
+ failure in request_buffer_src().
+
+According to the GStreamer documentation, the contents of "buffer" should be
+considered undefined on failure, which means that the caller has no way of
+freeing a newly allocated buffer.
+
+Signed-off-by: Zebediah Figura <z.figura12@gmail.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/winegstreamer/gstdemux.c | 20 ++++++++++++--------
+ 1 file changed, 12 insertions(+), 8 deletions(-)
+
+diff --git a/dlls/winegstreamer/gstdemux.c b/dlls/winegstreamer/gstdemux.c
+index 9a9fe01936b..acb15dc9238 100644
+--- a/dlls/winegstreamer/gstdemux.c
++++ b/dlls/winegstreamer/gstdemux.c
+@@ -878,13 +878,14 @@ static GstFlowReturn got_data_sink(GstPad *pad, GstObject *parent, GstBuffer *bu
+     return GST_FLOW_OK;
+ }
+ 
+-static GstFlowReturn request_buffer_src(GstPad *pad, GstObject *parent, guint64 ofs, guint len, GstBuffer **buf)
++static GstFlowReturn request_buffer_src(GstPad *pad, GstObject *parent, guint64 ofs, guint len, GstBuffer **buffer)
+ {
+     struct gstdemux *This = gst_pad_get_element_private(pad);
++    GstBuffer *new_buffer = NULL;
+     HRESULT hr;
+     GstMapInfo info;
+ 
+-    TRACE("pad %p, offset %s, length %u, buffer %p.\n", pad, wine_dbgstr_longlong(ofs), len, *buf);
++    TRACE("pad %p, offset %s, length %u, buffer %p.\n", pad, wine_dbgstr_longlong(ofs), len, *buffer);
+ 
+     if (ofs == GST_BUFFER_OFFSET_NONE)
+         ofs = This->nextpullofs;
+@@ -896,13 +897,16 @@ static GstFlowReturn request_buffer_src(GstPad *pad, GstObject *parent, guint64
+         len = This->filesize - ofs;
+     This->nextpullofs = ofs + len;
+ 
+-    if (!*buf)
+-        *buf = gst_buffer_new_and_alloc(len);
+-    gst_buffer_map(*buf, &info, GST_MAP_WRITE);
++    if (!*buffer)
++        *buffer = new_buffer = gst_buffer_new_and_alloc(len);
++    gst_buffer_map(*buffer, &info, GST_MAP_WRITE);
+     hr = IAsyncReader_SyncRead(This->reader, ofs, len, info.data);
+-    gst_buffer_unmap(*buf, &info);
+-    if (FAILED(hr)) {
+-        ERR("Returned %08x\n", hr);
++    gst_buffer_unmap(*buffer, &info);
++    if (FAILED(hr))
++    {
++        ERR("Failed to read data, hr %#x.\n", hr);
++        if (new_buffer)
++            gst_buffer_unref(new_buffer);
+         return GST_FLOW_ERROR;
+     }
+ 
+From a4d6ad6d493467a4937d43a4c4ada343b0ed4c25 Mon Sep 17 00:00:00 2001
+From: Derek Lesho <dlesho@codeweavers.com>
+Date: Mon, 28 Sep 2020 15:59:52 -0500
+Subject: [PATCH] winegstreamer: Add a GstPad wrapping the media source's
+ bytestream.
+
+Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
+Signed-off-by: Nikolay Sivov <nsivov@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/winegstreamer/gst_cbs.c      |  58 +++++++++
+ dlls/winegstreamer/gst_cbs.h      |  12 +-
+ dlls/winegstreamer/main.c         |   3 +
+ dlls/winegstreamer/media_source.c | 189 +++++++++++++++++++++++++++++-
+ 4 files changed, 258 insertions(+), 4 deletions(-)
+
+diff --git a/dlls/winegstreamer/gst_cbs.c b/dlls/winegstreamer/gst_cbs.c
+index bf7103b1606..12b53bc5d68 100644
+--- a/dlls/winegstreamer/gst_cbs.c
++++ b/dlls/winegstreamer/gst_cbs.c
+@@ -49,6 +49,8 @@ static void CALLBACK perform_cb(TP_CALLBACK_INSTANCE *instance, void *user)
+ 
+     if (cbdata->type < GSTDEMUX_MAX)
+         perform_cb_gstdemux(cbdata);
++    else if (cbdata->type < MEDIA_SOURCE_MAX)
++        perform_cb_media_source(cbdata);
+ 
+     pthread_mutex_lock(&cbdata->lock);
+     cbdata->finished = 1;
+@@ -301,3 +303,59 @@ gboolean query_sink_wrapper(GstPad *pad, GstObject *parent, GstQuery *query)
+ 
+     return cbdata.u.query_sink_data.ret;
+ }
++
++GstFlowReturn bytestream_wrapper_pull_wrapper(GstPad *pad, GstObject *parent, guint64 ofs, guint len,
++        GstBuffer **buf)
++{
++    struct cb_data cbdata = { BYTESTREAM_WRAPPER_PULL };
++
++    cbdata.u.getrange_data.pad = pad;
++    cbdata.u.getrange_data.parent = parent;
++    cbdata.u.getrange_data.ofs = ofs;
++    cbdata.u.getrange_data.len = len;
++    cbdata.u.getrange_data.buf = buf;
++
++    call_cb(&cbdata);
++
++    return cbdata.u.getrange_data.ret;
++}
++
++gboolean bytestream_query_wrapper(GstPad *pad, GstObject *parent, GstQuery *query)
++{
++    struct cb_data cbdata = { BYTESTREAM_QUERY };
++
++    cbdata.u.query_function_data.pad = pad;
++    cbdata.u.query_function_data.parent = parent;
++    cbdata.u.query_function_data.query = query;
++
++    call_cb(&cbdata);
++
++    return cbdata.u.query_function_data.ret;
++}
++
++gboolean bytestream_pad_mode_activate_wrapper(GstPad *pad, GstObject *parent, GstPadMode mode, gboolean activate)
++{
++    struct cb_data cbdata = { BYTESTREAM_PAD_MODE_ACTIVATE };
++
++    cbdata.u.activate_mode_data.pad = pad;
++    cbdata.u.activate_mode_data.parent = parent;
++    cbdata.u.activate_mode_data.mode = mode;
++    cbdata.u.activate_mode_data.activate = activate;
++
++    call_cb(&cbdata);
++
++    return cbdata.u.activate_mode_data.ret;
++}
++
++gboolean bytestream_pad_event_process_wrapper(GstPad *pad, GstObject *parent, GstEvent *event)
++{
++    struct cb_data cbdata = { BYTESTREAM_PAD_EVENT_PROCESS };
++
++    cbdata.u.event_src_data.pad = pad;
++    cbdata.u.event_src_data.parent = parent;
++    cbdata.u.event_src_data.event = event;
++
++    call_cb(&cbdata);
++
++    return cbdata.u.event_src_data.ret;
++}
+diff --git a/dlls/winegstreamer/gst_cbs.h b/dlls/winegstreamer/gst_cbs.h
+index 4725f23ad1a..3459a9ef8ee 100644
+--- a/dlls/winegstreamer/gst_cbs.h
++++ b/dlls/winegstreamer/gst_cbs.h
+@@ -43,7 +43,12 @@ enum CB_TYPE {
+     AUTOPLUG_BLACKLIST,
+     UNKNOWN_TYPE,
+     QUERY_SINK,
+-    GSTDEMUX_MAX
++    GSTDEMUX_MAX,
++    BYTESTREAM_WRAPPER_PULL,
++    BYTESTREAM_QUERY,
++    BYTESTREAM_PAD_MODE_ACTIVATE,
++    BYTESTREAM_PAD_EVENT_PROCESS,
++    MEDIA_SOURCE_MAX,
+ };
+ 
+ struct cb_data {
+@@ -138,6 +143,7 @@ struct cb_data {
+ 
+ void mark_wine_thread(void) DECLSPEC_HIDDEN;
+ void perform_cb_gstdemux(struct cb_data *data) DECLSPEC_HIDDEN;
++void perform_cb_media_source(struct cb_data *data) DECLSPEC_HIDDEN;
+ 
+ GstBusSyncReply watch_bus_wrapper(GstBus *bus, GstMessage *msg, gpointer user) DECLSPEC_HIDDEN;
+ void existing_new_pad_wrapper(GstElement *bin, GstPad *pad, gpointer user) DECLSPEC_HIDDEN;
+@@ -154,5 +160,9 @@ GstAutoplugSelectResult autoplug_blacklist_wrapper(GstElement *bin, GstPad *pad,
+ void unknown_type_wrapper(GstElement *bin, GstPad *pad, GstCaps *caps, gpointer user) DECLSPEC_HIDDEN;
+ void Gstreamer_transform_pad_added_wrapper(GstElement *filter, GstPad *pad, gpointer user) DECLSPEC_HIDDEN;
+ gboolean query_sink_wrapper(GstPad *pad, GstObject *parent, GstQuery *query) DECLSPEC_HIDDEN;
++GstFlowReturn bytestream_wrapper_pull_wrapper(GstPad *pad, GstObject *parent, guint64 ofs, guint len, GstBuffer **buf) DECLSPEC_HIDDEN;
++gboolean bytestream_query_wrapper(GstPad *pad, GstObject *parent, GstQuery *query) DECLSPEC_HIDDEN;
++gboolean bytestream_pad_mode_activate_wrapper(GstPad *pad, GstObject *parent, GstPadMode mode, gboolean activate) DECLSPEC_HIDDEN;
++gboolean bytestream_pad_event_process_wrapper(GstPad *pad, GstObject *parent, GstEvent *event) DECLSPEC_HIDDEN;
+ 
+ #endif
+diff --git a/dlls/winegstreamer/main.c b/dlls/winegstreamer/main.c
+index 2872710b3e2..4ca371d58bd 100644
+--- a/dlls/winegstreamer/main.c
++++ b/dlls/winegstreamer/main.c
+@@ -146,6 +146,9 @@ HRESULT WINAPI DllGetClassObject(REFCLSID clsid, REFIID iid, void **out)
+ 
+     TRACE("clsid %s, iid %s, out %p.\n", debugstr_guid(clsid), debugstr_guid(iid), out);
+ 
++    if (!init_gstreamer())
++        return CLASS_E_CLASSNOTAVAILABLE;
++
+     if (SUCCEEDED(hr = mfplat_get_class_object(clsid, iid, out)))
+         return hr;
+ 
+diff --git a/dlls/winegstreamer/media_source.c b/dlls/winegstreamer/media_source.c
+index f365c8a1827..1accf55c6a2 100644
+--- a/dlls/winegstreamer/media_source.c
++++ b/dlls/winegstreamer/media_source.c
+@@ -17,9 +17,15 @@
+  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
+  */
+ 
++#include "config.h"
++
++#include <gst/gst.h>
++
+ #include "gst_private.h"
++#include "gst_cbs.h"
+ 
+ #include <stdarg.h>
++#include <assert.h>
+ 
+ #define COBJMACROS
+ #define NONAMELESSUNION
+@@ -27,6 +33,7 @@
+ #include "mfapi.h"
+ #include "mferror.h"
+ #include "mfidl.h"
++#include "mfobjects.h"
+ 
+ #include "wine/debug.h"
+ #include "wine/heap.h"
+@@ -39,6 +46,8 @@ struct media_source
+     IMFMediaSource IMFMediaSource_iface;
+     LONG ref;
+     IMFMediaEventQueue *event_queue;
++    IMFByteStream *byte_stream;
++    GstPad *my_src;
+     enum
+     {
+         SOURCE_OPENING,
+@@ -52,6 +61,127 @@ static inline struct media_source *impl_from_IMFMediaSource(IMFMediaSource *ifac
+     return CONTAINING_RECORD(iface, struct media_source, IMFMediaSource_iface);
+ }
+ 
++static GstFlowReturn bytestream_wrapper_pull(GstPad *pad, GstObject *parent, guint64 ofs, guint len,
++        GstBuffer **buf)
++{
++    struct media_source *source = gst_pad_get_element_private(pad);
++    IMFByteStream *byte_stream = source->byte_stream;
++    ULONG bytes_read;
++    GstMapInfo info;
++    BOOL is_eof;
++    HRESULT hr;
++
++    TRACE("requesting %u bytes at %s from source %p into buffer %p\n", len, wine_dbgstr_longlong(ofs), source, *buf);
++
++    if (ofs != GST_BUFFER_OFFSET_NONE)
++    {
++        if (FAILED(IMFByteStream_SetCurrentPosition(byte_stream, ofs)))
++            return GST_FLOW_ERROR;
++    }
++
++    if (FAILED(IMFByteStream_IsEndOfStream(byte_stream, &is_eof)))
++        return GST_FLOW_ERROR;
++    if (is_eof)
++        return GST_FLOW_EOS;
++
++    if (!(*buf))
++        *buf = gst_buffer_new_and_alloc(len);
++    gst_buffer_map(*buf, &info, GST_MAP_WRITE);
++    hr = IMFByteStream_Read(byte_stream, info.data, len, &bytes_read);
++    gst_buffer_unmap(*buf, &info);
++
++    gst_buffer_set_size(*buf, bytes_read);
++
++    if (FAILED(hr))
++        return GST_FLOW_ERROR;
++    return GST_FLOW_OK;
++}
++
++static gboolean bytestream_query(GstPad *pad, GstObject *parent, GstQuery *query)
++{
++    struct media_source *source = gst_pad_get_element_private(pad);
++    GstFormat format;
++    QWORD bytestream_len;
++
++    TRACE("GStreamer queries source %p for %s\n", source, GST_QUERY_TYPE_NAME(query));
++
++    if (FAILED(IMFByteStream_GetLength(source->byte_stream, &bytestream_len)))
++        return FALSE;
++
++    switch (GST_QUERY_TYPE(query))
++    {
++        case GST_QUERY_DURATION:
++        {
++            gst_query_parse_duration(query, &format, NULL);
++            if (format == GST_FORMAT_PERCENT)
++            {
++                gst_query_set_duration(query, GST_FORMAT_PERCENT, GST_FORMAT_PERCENT_MAX);
++                return TRUE;
++            }
++            else if (format == GST_FORMAT_BYTES)
++            {
++                QWORD length;
++                IMFByteStream_GetLength(source->byte_stream, &length);
++                gst_query_set_duration(query, GST_FORMAT_BYTES, length);
++                return TRUE;
++            }
++            return FALSE;
++        }
++        case GST_QUERY_SEEKING:
++        {
++            gst_query_parse_seeking (query, &format, NULL, NULL, NULL);
++            if (format != GST_FORMAT_BYTES)
++            {
++                WARN("Cannot seek using format \"%s\".\n", gst_format_get_name(format));
++                return FALSE;
++            }
++            gst_query_set_seeking(query, GST_FORMAT_BYTES, 1, 0, bytestream_len);
++            return TRUE;
++        }
++        case GST_QUERY_SCHEDULING:
++        {
++            gst_query_set_scheduling(query, GST_SCHEDULING_FLAG_SEEKABLE, 1, -1, 0);
++            gst_query_add_scheduling_mode(query, GST_PAD_MODE_PULL);
++            return TRUE;
++        }
++        default:
++        {
++            WARN("Unhandled query type %s\n", GST_QUERY_TYPE_NAME(query));
++            return FALSE;
++        }
++    }
++}
++
++static gboolean bytestream_pad_mode_activate(GstPad *pad, GstObject *parent, GstPadMode mode, gboolean activate)
++{
++    struct media_source *source = gst_pad_get_element_private(pad);
++
++    TRACE("%s source pad for mediasource %p in %s mode.\n",
++            activate ? "Activating" : "Deactivating", source, gst_pad_mode_get_name(mode));
++
++    return mode == GST_PAD_MODE_PULL;
++}
++
++static gboolean bytestream_pad_event_process(GstPad *pad, GstObject *parent, GstEvent *event)
++{
++    struct media_source *source = gst_pad_get_element_private(pad);
++
++    TRACE("source %p, type \"%s\".\n", source, GST_EVENT_TYPE_NAME(event));
++
++    switch (event->type) {
++        /* the seek event should fail in pull mode */
++        case GST_EVENT_SEEK:
++            return FALSE;
++        default:
++            WARN("Ignoring \"%s\" event.\n", GST_EVENT_TYPE_NAME(event));
++        case GST_EVENT_TAG:
++        case GST_EVENT_QOS:
++        case GST_EVENT_RECONFIGURE:
++            return gst_pad_event_default(pad, parent, event);
++    }
++    return TRUE;
++}
++
+ static HRESULT WINAPI media_source_QueryInterface(IMFMediaSource *iface, REFIID riid, void **out)
+ {
+     struct media_source *source = impl_from_IMFMediaSource(iface);
+@@ -211,8 +341,12 @@ static HRESULT WINAPI media_source_Shutdown(IMFMediaSource *iface)
+ 
+     source->state = SOURCE_SHUTDOWN;
+ 
++    if (source->my_src)
++        gst_object_unref(GST_OBJECT(source->my_src));
+     if (source->event_queue)
+         IMFMediaEventQueue_Shutdown(source->event_queue);
++    if (source->byte_stream)
++        IMFByteStream_Release(source->byte_stream);
+ 
+     return S_OK;
+ }
+@@ -236,19 +370,31 @@ static const IMFMediaSourceVtbl IMFMediaSource_vtbl =
+ 
+ static HRESULT media_source_constructor(IMFByteStream *bytestream, struct media_source **out_media_source)
+ {
++    GstStaticPadTemplate src_template =
++        GST_STATIC_PAD_TEMPLATE("mf_src", GST_PAD_SRC, GST_PAD_ALWAYS, GST_STATIC_CAPS_ANY);
++
+     struct media_source *object = heap_alloc_zero(sizeof(*object));
+     HRESULT hr;
+ 
+     if (!object)
+         return E_OUTOFMEMORY;
+ 
++    object->IMFMediaSource_iface.lpVtbl = &IMFMediaSource_vtbl;
++    object->ref = 1;
++    object->byte_stream = bytestream;
++    IMFByteStream_AddRef(bytestream);
++
+     if (FAILED(hr = MFCreateEventQueue(&object->event_queue)))
+         goto fail;
+ 
+-    object->state = SOURCE_STOPPED;
++    object->my_src = gst_pad_new_from_static_template(&src_template, "mf-src");
++    gst_pad_set_element_private(object->my_src, object);
++    gst_pad_set_getrange_function(object->my_src, bytestream_wrapper_pull_wrapper);
++    gst_pad_set_query_function(object->my_src, bytestream_query_wrapper);
++    gst_pad_set_activatemode_function(object->my_src, bytestream_pad_mode_activate_wrapper);
++    gst_pad_set_event_function(object->my_src, bytestream_pad_event_process_wrapper);
+ 
+-    object->IMFMediaSource_iface.lpVtbl = &IMFMediaSource_vtbl;
+-    object->ref = 1;
++    object->state = SOURCE_STOPPED;
+ 
+     *out_media_source = object;
+     return S_OK;
+@@ -716,3 +862,40 @@ HRESULT winegstreamer_stream_handler_create(REFIID riid, void **obj)
+ 
+     return hr;
+ }
++
++/* helper for callback forwarding */
++void perform_cb_media_source(struct cb_data *cbdata)
++{
++    switch(cbdata->type)
++    {
++    case BYTESTREAM_WRAPPER_PULL:
++        {
++            struct getrange_data *data = &cbdata->u.getrange_data;
++            cbdata->u.getrange_data.ret = bytestream_wrapper_pull(data->pad, data->parent,
++                    data->ofs, data->len, data->buf);
++            break;
++        }
++    case BYTESTREAM_QUERY:
++        {
++            struct query_function_data *data = &cbdata->u.query_function_data;
++            cbdata->u.query_function_data.ret = bytestream_query(data->pad, data->parent, data->query);
++            break;
++        }
++    case BYTESTREAM_PAD_MODE_ACTIVATE:
++        {
++            struct activate_mode_data *data = &cbdata->u.activate_mode_data;
++            cbdata->u.activate_mode_data.ret = bytestream_pad_mode_activate(data->pad, data->parent, data->mode, data->activate);
++            break;
++        }
++    case BYTESTREAM_PAD_EVENT_PROCESS:
++        {
++            struct event_src_data *data = &cbdata->u.event_src_data;
++            cbdata->u.event_src_data.ret = bytestream_pad_event_process(data->pad, data->parent, data->event);
++            break;
++        }
++    default:
++        {
++            assert(0);
++        }
++    }
++}
+From 7d4395a00e6a5222dae859746b61ab68039a8e3e Mon Sep 17 00:00:00 2001
+From: Derek Lesho <dlesho@codeweavers.com>
+Date: Mon, 28 Sep 2020 15:59:53 -0500
+Subject: [PATCH] winegstreamer: Use decodebin to initialize media streams.
+
+Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
+Signed-off-by: Nikolay Sivov <nsivov@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/winegstreamer/gst_cbs.c      |  45 ++++
+ dlls/winegstreamer/gst_cbs.h      |   8 +
+ dlls/winegstreamer/media_source.c | 401 +++++++++++++++++++++++++++++-
+ 3 files changed, 453 insertions(+), 1 deletion(-)
+
+diff --git a/dlls/winegstreamer/gst_cbs.c b/dlls/winegstreamer/gst_cbs.c
+index 12b53bc5d68..51aaefa911d 100644
+--- a/dlls/winegstreamer/gst_cbs.c
++++ b/dlls/winegstreamer/gst_cbs.c
+@@ -359,3 +359,48 @@ gboolean bytestream_pad_event_process_wrapper(GstPad *pad, GstObject *parent, Gs
+ 
+     return cbdata.u.event_src_data.ret;
+ }
++
++GstBusSyncReply mf_src_bus_watch_wrapper(GstBus *bus, GstMessage *message, gpointer user)
++{
++    struct cb_data cbdata = { MF_SRC_BUS_WATCH };
++
++    cbdata.u.watch_bus_data.bus = bus;
++    cbdata.u.watch_bus_data.msg = message;
++    cbdata.u.watch_bus_data.user = user;
++
++    call_cb(&cbdata);
++
++    return cbdata.u.watch_bus_data.ret;
++}
++
++void mf_src_stream_added_wrapper(GstElement *bin, GstPad *pad, gpointer user)
++{
++    struct cb_data cbdata = { MF_SRC_STREAM_ADDED };
++
++    cbdata.u.pad_added_data.element = bin;
++    cbdata.u.pad_added_data.pad = pad;
++    cbdata.u.pad_added_data.user = user;
++
++    call_cb(&cbdata);
++}
++
++void mf_src_stream_removed_wrapper(GstElement *element, GstPad *pad, gpointer user)
++{
++    struct cb_data cbdata = { MF_SRC_STREAM_REMOVED };
++
++    cbdata.u.pad_removed_data.element = element;
++    cbdata.u.pad_removed_data.pad = pad;
++    cbdata.u.pad_removed_data.user = user;
++
++    call_cb(&cbdata);
++}
++
++void mf_src_no_more_pads_wrapper(GstElement *element, gpointer user)
++{
++    struct cb_data cbdata = { MF_SRC_NO_MORE_PADS };
++
++    cbdata.u.no_more_pads_data.element = element;
++    cbdata.u.no_more_pads_data.user = user;
++
++    call_cb(&cbdata);
++}
+diff --git a/dlls/winegstreamer/gst_cbs.h b/dlls/winegstreamer/gst_cbs.h
+index 3459a9ef8ee..a48999bbf71 100644
+--- a/dlls/winegstreamer/gst_cbs.h
++++ b/dlls/winegstreamer/gst_cbs.h
+@@ -48,6 +48,10 @@ enum CB_TYPE {
+     BYTESTREAM_QUERY,
+     BYTESTREAM_PAD_MODE_ACTIVATE,
+     BYTESTREAM_PAD_EVENT_PROCESS,
++    MF_SRC_BUS_WATCH,
++    MF_SRC_STREAM_ADDED,
++    MF_SRC_STREAM_REMOVED,
++    MF_SRC_NO_MORE_PADS,
+     MEDIA_SOURCE_MAX,
+ };
+ 
+@@ -164,5 +168,9 @@ GstFlowReturn bytestream_wrapper_pull_wrapper(GstPad *pad, GstObject *parent, gu
+ gboolean bytestream_query_wrapper(GstPad *pad, GstObject *parent, GstQuery *query) DECLSPEC_HIDDEN;
+ gboolean bytestream_pad_mode_activate_wrapper(GstPad *pad, GstObject *parent, GstPadMode mode, gboolean activate) DECLSPEC_HIDDEN;
+ gboolean bytestream_pad_event_process_wrapper(GstPad *pad, GstObject *parent, GstEvent *event) DECLSPEC_HIDDEN;
++GstBusSyncReply mf_src_bus_watch_wrapper(GstBus *bus, GstMessage *message, gpointer user) DECLSPEC_HIDDEN;
++void mf_src_stream_added_wrapper(GstElement *bin, GstPad *pad, gpointer user) DECLSPEC_HIDDEN;
++void mf_src_stream_removed_wrapper(GstElement *element, GstPad *pad, gpointer user) DECLSPEC_HIDDEN;
++void mf_src_no_more_pads_wrapper(GstElement *element, gpointer user) DECLSPEC_HIDDEN;
+ 
+ #endif
+diff --git a/dlls/winegstreamer/media_source.c b/dlls/winegstreamer/media_source.c
+index 1accf55c6a2..6a63db4f584 100644
+--- a/dlls/winegstreamer/media_source.c
++++ b/dlls/winegstreamer/media_source.c
+@@ -24,6 +24,7 @@
+ #include "gst_private.h"
+ #include "gst_cbs.h"
+ 
++#include <assert.h>
+ #include <stdarg.h>
+ #include <assert.h>
+ 
+@@ -41,21 +42,47 @@
+ 
+ WINE_DEFAULT_DEBUG_CHANNEL(mfplat);
+ 
++struct media_stream
++{
++    IMFMediaStream IMFMediaStream_iface;
++    LONG ref;
++    struct media_source *parent_source;
++    IMFMediaEventQueue *event_queue;
++    GstElement *appsink;
++    GstPad *their_src, *my_sink;
++    enum
++    {
++        STREAM_INACTIVE,
++        STREAM_SHUTDOWN,
++    } state;
++};
++
+ struct media_source
+ {
+     IMFMediaSource IMFMediaSource_iface;
+     LONG ref;
+     IMFMediaEventQueue *event_queue;
+     IMFByteStream *byte_stream;
+-    GstPad *my_src;
++    struct media_stream **streams;
++    ULONG stream_count;
++    GstBus *bus;
++    GstElement *container;
++    GstElement *decodebin;
++    GstPad *my_src, *their_sink;
+     enum
+     {
+         SOURCE_OPENING,
+         SOURCE_STOPPED,
+         SOURCE_SHUTDOWN,
+     } state;
++    HANDLE no_more_pads_event;
+ };
+ 
++static inline struct media_stream *impl_from_IMFMediaStream(IMFMediaStream *iface)
++{
++    return CONTAINING_RECORD(iface, struct media_stream, IMFMediaStream_iface);
++}
++
+ static inline struct media_source *impl_from_IMFMediaSource(IMFMediaSource *iface)
+ {
+     return CONTAINING_RECORD(iface, struct media_source, IMFMediaSource_iface);
+@@ -182,6 +209,224 @@ static gboolean bytestream_pad_event_process(GstPad *pad, GstObject *parent, Gst
+     return TRUE;
+ }
+ 
++GstBusSyncReply bus_watch(GstBus *bus, GstMessage *message, gpointer user)
++{
++    struct media_source *source = user;
++    gchar *dbg_info = NULL;
++    GError *err = NULL;
++
++    TRACE("source %p message type %s\n", source, GST_MESSAGE_TYPE_NAME(message));
++
++    switch (message->type)
++    {
++        case GST_MESSAGE_ERROR:
++            gst_message_parse_error(message, &err, &dbg_info);
++            ERR("%s: %s\n", GST_OBJECT_NAME(message->src), err->message);
++            ERR("%s\n", dbg_info);
++            g_error_free(err);
++            g_free(dbg_info);
++            break;
++        case GST_MESSAGE_WARNING:
++            gst_message_parse_warning(message, &err, &dbg_info);
++            WARN("%s: %s\n", GST_OBJECT_NAME(message->src), err->message);
++            WARN("%s\n", dbg_info);
++            g_error_free(err);
++            g_free(dbg_info);
++            break;
++        default:
++            break;
++    }
++
++    gst_message_unref(message);
++    return GST_BUS_DROP;
++}
++
++static HRESULT WINAPI media_stream_QueryInterface(IMFMediaStream *iface, REFIID riid, void **out)
++{
++    struct media_stream *stream = impl_from_IMFMediaStream(iface);
++
++    TRACE("(%p)->(%s %p)\n", stream, debugstr_guid(riid), out);
++
++    if (IsEqualIID(riid, &IID_IMFMediaStream) ||
++        IsEqualIID(riid, &IID_IMFMediaEventGenerator) ||
++        IsEqualIID(riid, &IID_IUnknown))
++    {
++        *out = &stream->IMFMediaStream_iface;
++    }
++    else
++    {
++        FIXME("(%s, %p)\n", debugstr_guid(riid), out);
++        *out = NULL;
++        return E_NOINTERFACE;
++    }
++
++    IUnknown_AddRef((IUnknown*)*out);
++    return S_OK;
++}
++
++static ULONG WINAPI media_stream_AddRef(IMFMediaStream *iface)
++{
++    struct media_stream *stream = impl_from_IMFMediaStream(iface);
++    ULONG ref = InterlockedIncrement(&stream->ref);
++
++    TRACE("(%p) ref=%u\n", stream, ref);
++
++    return ref;
++}
++
++static ULONG WINAPI media_stream_Release(IMFMediaStream *iface)
++{
++    struct media_stream *stream = impl_from_IMFMediaStream(iface);
++
++    ULONG ref = InterlockedDecrement(&stream->ref);
++
++    TRACE("(%p) ref=%u\n", stream, ref);
++
++    if (!ref)
++    {
++        if (stream->event_queue)
++            IMFMediaEventQueue_Release(stream->event_queue);
++        heap_free(stream);
++    }
++
++    return ref;
++}
++
++static HRESULT WINAPI media_stream_GetEvent(IMFMediaStream *iface, DWORD flags, IMFMediaEvent **event)
++{
++    struct media_stream *stream = impl_from_IMFMediaStream(iface);
++
++    TRACE("(%p)->(%#x, %p)\n", stream, flags, event);
++
++    return IMFMediaEventQueue_GetEvent(stream->event_queue, flags, event);
++}
++
++static HRESULT WINAPI media_stream_BeginGetEvent(IMFMediaStream *iface, IMFAsyncCallback *callback, IUnknown *state)
++{
++    struct media_stream *stream = impl_from_IMFMediaStream(iface);
++
++    TRACE("(%p)->(%p, %p)\n", stream, callback, state);
++
++    return IMFMediaEventQueue_BeginGetEvent(stream->event_queue, callback, state);
++}
++
++static HRESULT WINAPI media_stream_EndGetEvent(IMFMediaStream *iface, IMFAsyncResult *result, IMFMediaEvent **event)
++{
++    struct media_stream *stream = impl_from_IMFMediaStream(iface);
++
++    TRACE("(%p)->(%p, %p)\n", stream, result, event);
++
++    return IMFMediaEventQueue_EndGetEvent(stream->event_queue, result, event);
++}
++
++static HRESULT WINAPI media_stream_QueueEvent(IMFMediaStream *iface, MediaEventType event_type, REFGUID ext_type,
++        HRESULT hr, const PROPVARIANT *value)
++{
++    struct media_stream *stream = impl_from_IMFMediaStream(iface);
++
++    TRACE("(%p)->(%d, %s, %#x, %p)\n", stream, event_type, debugstr_guid(ext_type), hr, value);
++
++    return IMFMediaEventQueue_QueueEventParamVar(stream->event_queue, event_type, ext_type, hr, value);
++}
++
++static HRESULT WINAPI media_stream_GetMediaSource(IMFMediaStream *iface, IMFMediaSource **source)
++{
++    struct media_stream *stream = impl_from_IMFMediaStream(iface);
++
++    FIXME("stub (%p)->(%p)\n", stream, source);
++
++    if (stream->state == STREAM_SHUTDOWN)
++        return MF_E_SHUTDOWN;
++
++    return E_NOTIMPL;
++}
++
++static HRESULT WINAPI media_stream_GetStreamDescriptor(IMFMediaStream* iface, IMFStreamDescriptor **descriptor)
++{
++    struct media_stream *stream = impl_from_IMFMediaStream(iface);
++
++    TRACE("(%p)->(%p)\n", stream, descriptor);
++
++    if (stream->state == STREAM_SHUTDOWN)
++        return MF_E_SHUTDOWN;
++
++    return E_NOTIMPL;
++}
++
++static HRESULT WINAPI media_stream_RequestSample(IMFMediaStream *iface, IUnknown *token)
++{
++    struct media_stream *stream = impl_from_IMFMediaStream(iface);
++
++    TRACE("(%p)->(%p)\n", iface, token);
++
++    if (stream->state == STREAM_SHUTDOWN)
++        return MF_E_SHUTDOWN;
++
++    return E_NOTIMPL;
++}
++
++static const IMFMediaStreamVtbl media_stream_vtbl =
++{
++    media_stream_QueryInterface,
++    media_stream_AddRef,
++    media_stream_Release,
++    media_stream_GetEvent,
++    media_stream_BeginGetEvent,
++    media_stream_EndGetEvent,
++    media_stream_QueueEvent,
++    media_stream_GetMediaSource,
++    media_stream_GetStreamDescriptor,
++    media_stream_RequestSample
++};
++
++static HRESULT new_media_stream(struct media_source *source, GstPad *pad, struct media_stream **out_stream)
++{
++    struct media_stream *object = heap_alloc_zero(sizeof(*object));
++    HRESULT hr;
++
++    TRACE("(%p %p)->(%p)\n", source, pad, out_stream);
++
++    object->IMFMediaStream_iface.lpVtbl = &media_stream_vtbl;
++    object->ref = 1;
++
++    IMFMediaSource_AddRef(&source->IMFMediaSource_iface);
++    object->parent_source = source;
++    object->their_src = pad;
++
++    object->state = STREAM_INACTIVE;
++
++    if (FAILED(hr = MFCreateEventQueue(&object->event_queue)))
++        goto fail;
++
++    if (!(object->appsink = gst_element_factory_make("appsink", NULL)))
++    {
++        hr = E_OUTOFMEMORY;
++        goto fail;
++    }
++    gst_bin_add(GST_BIN(object->parent_source->container), object->appsink);
++
++    g_object_set(object->appsink, "sync", FALSE, NULL);
++    g_object_set(object->appsink, "max-buffers", 5, NULL);
++
++    object->my_sink = gst_element_get_static_pad(object->appsink, "sink");
++    gst_pad_set_element_private(object->my_sink, object);
++
++    gst_pad_link(object->their_src, object->my_sink);
++
++    gst_element_sync_state_with_parent(object->appsink);
++
++    TRACE("->(%p)\n", object);
++    *out_stream = object;
++
++    return S_OK;
++
++fail:
++    WARN("Failed to construct media stream, hr %#x.\n", hr);
++
++    IMFMediaStream_Release(&object->IMFMediaStream_iface);
++    return hr;
++}
++
+ static HRESULT WINAPI media_source_QueryInterface(IMFMediaSource *iface, REFIID riid, void **out)
+ {
+     struct media_source *source = impl_from_IMFMediaSource(iface);
+@@ -333,6 +578,7 @@ static HRESULT WINAPI media_source_Pause(IMFMediaSource *iface)
+ static HRESULT WINAPI media_source_Shutdown(IMFMediaSource *iface)
+ {
+     struct media_source *source = impl_from_IMFMediaSource(iface);
++    unsigned int i;
+ 
+     TRACE("(%p)\n", source);
+ 
+@@ -341,13 +587,44 @@ static HRESULT WINAPI media_source_Shutdown(IMFMediaSource *iface)
+ 
+     source->state = SOURCE_SHUTDOWN;
+ 
++    if (source->container)
++    {
++        gst_element_set_state(source->container, GST_STATE_NULL);
++        gst_object_unref(GST_OBJECT(source->container));
++    }
++
+     if (source->my_src)
+         gst_object_unref(GST_OBJECT(source->my_src));
++    if (source->their_sink)
++        gst_object_unref(GST_OBJECT(source->their_sink));
++
+     if (source->event_queue)
+         IMFMediaEventQueue_Shutdown(source->event_queue);
+     if (source->byte_stream)
+         IMFByteStream_Release(source->byte_stream);
+ 
++    for (i = 0; i < source->stream_count; i++)
++    {
++        struct media_stream *stream = source->streams[i];
++
++        stream->state = STREAM_SHUTDOWN;
++
++        if (stream->my_sink)
++            gst_object_unref(GST_OBJECT(stream->my_sink));
++        if (stream->event_queue)
++            IMFMediaEventQueue_Shutdown(stream->event_queue);
++        if (stream->parent_source)
++            IMFMediaSource_Release(&stream->parent_source->IMFMediaSource_iface);
++
++        IMFMediaStream_Release(&stream->IMFMediaStream_iface);
++    }
++
++    if (source->stream_count)
++        heap_free(source->streams);
++
++    if (source->no_more_pads_event)
++        CloseHandle(source->no_more_pads_event);
++
+     return S_OK;
+ }
+ 
+@@ -368,6 +645,50 @@ static const IMFMediaSourceVtbl IMFMediaSource_vtbl =
+     media_source_Shutdown,
+ };
+ 
++static void stream_added(GstElement *element, GstPad *pad, gpointer user)
++{
++    struct media_source *source = user;
++    struct media_stream **new_stream_array;
++    struct media_stream *stream;
++
++    if (gst_pad_get_direction(pad) != GST_PAD_SRC)
++        return;
++
++    if (FAILED(new_media_stream(source, pad, &stream)))
++        return;
++
++    if (!(new_stream_array = heap_realloc(source->streams, (source->stream_count + 1) * (sizeof(*new_stream_array)))))
++    {
++        ERR("Failed to add stream to source\n");
++        IMFMediaStream_Release(&stream->IMFMediaStream_iface);
++        return;
++    }
++
++    source->streams = new_stream_array;
++    source->streams[source->stream_count++] = stream;
++}
++
++static void stream_removed(GstElement *element, GstPad *pad, gpointer user)
++{
++    struct media_source *source = user;
++    unsigned int i;
++
++    for (i = 0; i < source->stream_count; i++)
++    {
++        struct media_stream *stream = source->streams[i];
++        if (stream->their_src != pad)
++            continue;
++        stream->their_src = NULL;
++    }
++}
++
++static void no_more_pads(GstElement *element, gpointer user)
++{
++    struct media_source *source = user;
++
++    SetEvent(source->no_more_pads_event);
++}
++
+ static HRESULT media_source_constructor(IMFByteStream *bytestream, struct media_source **out_media_source)
+ {
+     GstStaticPadTemplate src_template =
+@@ -375,6 +696,7 @@ static HRESULT media_source_constructor(IMFByteStream *bytestream, struct media_
+ 
+     struct media_source *object = heap_alloc_zero(sizeof(*object));
+     HRESULT hr;
++    int ret;
+ 
+     if (!object)
+         return E_OUTOFMEMORY;
+@@ -383,10 +705,16 @@ static HRESULT media_source_constructor(IMFByteStream *bytestream, struct media_
+     object->ref = 1;
+     object->byte_stream = bytestream;
+     IMFByteStream_AddRef(bytestream);
++    object->no_more_pads_event = CreateEventA(NULL, FALSE, FALSE, NULL);
+ 
+     if (FAILED(hr = MFCreateEventQueue(&object->event_queue)))
+         goto fail;
+ 
++    object->container = gst_bin_new(NULL);
++    object->bus = gst_bus_new();
++    gst_bus_set_sync_handler(object->bus, mf_src_bus_watch_wrapper, object, NULL);
++    gst_element_set_bus(object->container, object->bus);
++
+     object->my_src = gst_pad_new_from_static_template(&src_template, "mf-src");
+     gst_pad_set_element_private(object->my_src, object);
+     gst_pad_set_getrange_function(object->my_src, bytestream_wrapper_pull_wrapper);
+@@ -394,6 +722,53 @@ static HRESULT media_source_constructor(IMFByteStream *bytestream, struct media_
+     gst_pad_set_activatemode_function(object->my_src, bytestream_pad_mode_activate_wrapper);
+     gst_pad_set_event_function(object->my_src, bytestream_pad_event_process_wrapper);
+ 
++    if (!(object->decodebin = gst_element_factory_make("decodebin", NULL)))
++    {
++        WARN("Failed to create decodebin for source\n");
++        hr = E_OUTOFMEMORY;
++        goto fail;
++    }
++
++    /* In Media Foundation, sources may read from any media source stream
++       without fear of blocking due to buffering limits on another.  Trailmakers,
++       a Unity3D engine game does this by only reading from the audio stream once,
++       and never deselecting this.  These properties replicate that behavior.
++
++       Note that with most elements, this causes excessive memory use, however
++       this is also what occurs on Windows.
++    */
++    g_object_set(object->decodebin, "max-size-buffers", 0, NULL);
++    g_object_set(object->decodebin, "max-size-time", G_GUINT64_CONSTANT(0), NULL);
++    g_object_set(object->decodebin, "max-size-bytes", 0, NULL);
++
++    gst_bin_add(GST_BIN(object->container), object->decodebin);
++
++    g_signal_connect(object->decodebin, "pad-added", G_CALLBACK(mf_src_stream_added_wrapper), object);
++    g_signal_connect(object->decodebin, "pad-removed", G_CALLBACK(mf_src_stream_removed_wrapper), object);
++    g_signal_connect(object->decodebin, "no-more-pads", G_CALLBACK(mf_src_no_more_pads_wrapper), object);
++
++    object->their_sink = gst_element_get_static_pad(object->decodebin, "sink");
++
++    if ((ret = gst_pad_link(object->my_src, object->their_sink)) < 0)
++    {
++        WARN("Failed to link our bytestream pad to the demuxer input, error %d.\n", ret);
++        hr = E_FAIL;
++        goto fail;
++    }
++
++    object->state = SOURCE_OPENING;
++
++    gst_element_set_state(object->container, GST_STATE_PAUSED);
++    ret = gst_element_get_state(object->container, NULL, NULL, -1);
++    if (ret == GST_STATE_CHANGE_FAILURE)
++    {
++        ERR("Failed to play source, error %d.\n", ret);
++        hr = E_FAIL;
++        goto fail;
++    }
++
++    WaitForSingleObject(object->no_more_pads_event, INFINITE);
++
+     object->state = SOURCE_STOPPED;
+ 
+     *out_media_source = object;
+@@ -893,6 +1268,30 @@ void perform_cb_media_source(struct cb_data *cbdata)
+             cbdata->u.event_src_data.ret = bytestream_pad_event_process(data->pad, data->parent, data->event);
+             break;
+         }
++    case MF_SRC_BUS_WATCH:
++        {
++            struct watch_bus_data *data = &cbdata->u.watch_bus_data;
++            cbdata->u.watch_bus_data.ret = bus_watch(data->bus, data->msg, data->user);
++            break;
++        }
++    case MF_SRC_STREAM_ADDED:
++        {
++            struct pad_added_data *data = &cbdata->u.pad_added_data;
++            stream_added(data->element, data->pad, data->user);
++            break;
++        }
++    case MF_SRC_STREAM_REMOVED:
++        {
++            struct pad_removed_data *data = &cbdata->u.pad_removed_data;
++            stream_removed(data->element, data->pad, data->user);
++            break;
++        }
++    case MF_SRC_NO_MORE_PADS:
++        {
++            struct no_more_pads_data *data = &cbdata->u.no_more_pads_data;
++            no_more_pads(data->element, data->user);
++            break;
++        }
+     default:
+         {
+             assert(0);
+From 4228016b0cb79b04e00b34acb6087a6e381fd41c Mon Sep 17 00:00:00 2001
+From: Derek Lesho <dlesho@codeweavers.com>
+Date: Mon, 28 Sep 2020 15:59:54 -0500
+Subject: [PATCH] winegstreamer: Implement IMFMediaStream::GetStreamDescriptor.
+
+Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
+Signed-off-by: Nikolay Sivov <nsivov@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/winegstreamer/gst_private.h  |   4 +
+ dlls/winegstreamer/media_source.c |  59 ++++++++++-
+ dlls/winegstreamer/mfplat.c       | 165 ++++++++++++++++++++++++++++++
+ 3 files changed, 223 insertions(+), 5 deletions(-)
+
+diff --git a/dlls/winegstreamer/gst_private.h b/dlls/winegstreamer/gst_private.h
+index ef07d3591e7..60b38a48f5a 100644
+--- a/dlls/winegstreamer/gst_private.h
++++ b/dlls/winegstreamer/gst_private.h
+@@ -36,6 +36,7 @@
+ #include "winuser.h"
+ #include "dshow.h"
+ #include "strmif.h"
++#include "mfobjects.h"
+ #include "wine/heap.h"
+ #include "wine/strmbase.h"
+ 
+@@ -54,6 +55,9 @@ void start_dispatch_thread(void) DECLSPEC_HIDDEN;
+ 
+ extern HRESULT mfplat_get_class_object(REFCLSID rclsid, REFIID riid, void **obj) DECLSPEC_HIDDEN;
+ 
++HRESULT winegstreamer_stream_handler_create(REFIID riid, void **obj) DECLSPEC_HIDDEN;
++IMFMediaType *mf_media_type_from_caps(const GstCaps *caps) DECLSPEC_HIDDEN;
++
+ HRESULT winegstreamer_stream_handler_create(REFIID riid, void **obj) DECLSPEC_HIDDEN;
+ 
+ #endif /* __GST_PRIVATE_INCLUDED__ */
+diff --git a/dlls/winegstreamer/media_source.c b/dlls/winegstreamer/media_source.c
+index 6a63db4f584..5f3c43a0204 100644
+--- a/dlls/winegstreamer/media_source.c
++++ b/dlls/winegstreamer/media_source.c
+@@ -48,6 +48,7 @@ struct media_stream
+     LONG ref;
+     struct media_source *parent_source;
+     IMFMediaEventQueue *event_queue;
++    IMFStreamDescriptor *descriptor;
+     GstElement *appsink;
+     GstPad *their_src, *my_sink;
+     enum
+@@ -55,6 +56,7 @@ struct media_stream
+         STREAM_INACTIVE,
+         STREAM_SHUTDOWN,
+     } state;
++    DWORD stream_id;
+ };
+ 
+ struct media_source
+@@ -350,7 +352,10 @@ static HRESULT WINAPI media_stream_GetStreamDescriptor(IMFMediaStream* iface, IM
+     if (stream->state == STREAM_SHUTDOWN)
+         return MF_E_SHUTDOWN;
+ 
+-    return E_NOTIMPL;
++    IMFStreamDescriptor_AddRef(stream->descriptor);
++    *descriptor = stream->descriptor;
++
++    return S_OK;
+ }
+ 
+ static HRESULT WINAPI media_stream_RequestSample(IMFMediaStream *iface, IUnknown *token)
+@@ -379,7 +384,7 @@ static const IMFMediaStreamVtbl media_stream_vtbl =
+     media_stream_RequestSample
+ };
+ 
+-static HRESULT new_media_stream(struct media_source *source, GstPad *pad, struct media_stream **out_stream)
++static HRESULT new_media_stream(struct media_source *source, GstPad *pad, DWORD stream_id, struct media_stream **out_stream)
+ {
+     struct media_stream *object = heap_alloc_zero(sizeof(*object));
+     HRESULT hr;
+@@ -392,6 +397,7 @@ static HRESULT new_media_stream(struct media_source *source, GstPad *pad, struct
+     IMFMediaSource_AddRef(&source->IMFMediaSource_iface);
+     object->parent_source = source;
+     object->their_src = pad;
++    object->stream_id = stream_id;
+ 
+     object->state = STREAM_INACTIVE;
+ 
+@@ -409,8 +415,6 @@ static HRESULT new_media_stream(struct media_source *source, GstPad *pad, struct
+     g_object_set(object->appsink, "max-buffers", 5, NULL);
+ 
+     object->my_sink = gst_element_get_static_pad(object->appsink, "sink");
+-    gst_pad_set_element_private(object->my_sink, object);
+-
+     gst_pad_link(object->their_src, object->my_sink);
+ 
+     gst_element_sync_state_with_parent(object->appsink);
+@@ -427,6 +431,35 @@ static HRESULT new_media_stream(struct media_source *source, GstPad *pad, struct
+     return hr;
+ }
+ 
++static HRESULT media_stream_init_desc(struct media_stream *stream)
++{
++    GstCaps *current_caps = gst_pad_get_current_caps(stream->their_src);
++    IMFMediaTypeHandler *type_handler;
++    IMFMediaType *stream_type = NULL;
++    HRESULT hr;
++
++    stream_type = mf_media_type_from_caps(current_caps);
++    gst_caps_unref(current_caps);
++    if (!stream_type)
++        return E_FAIL;
++
++    hr = MFCreateStreamDescriptor(stream->stream_id, 1, &stream_type, &stream->descriptor);
++
++    IMFMediaType_Release(stream_type);
++
++    if (FAILED(hr))
++        return hr;
++
++    if (FAILED(hr = IMFStreamDescriptor_GetMediaTypeHandler(stream->descriptor, &type_handler)))
++        return hr;
++
++    hr = IMFMediaTypeHandler_SetCurrentMediaType(type_handler, stream_type);
++
++    IMFMediaTypeHandler_Release(type_handler);
++
++    return hr;
++}
++
+ static HRESULT WINAPI media_source_QueryInterface(IMFMediaSource *iface, REFIID riid, void **out)
+ {
+     struct media_source *source = impl_from_IMFMediaSource(iface);
+@@ -613,6 +646,8 @@ static HRESULT WINAPI media_source_Shutdown(IMFMediaSource *iface)
+             gst_object_unref(GST_OBJECT(stream->my_sink));
+         if (stream->event_queue)
+             IMFMediaEventQueue_Shutdown(stream->event_queue);
++        if (stream->descriptor)
++            IMFStreamDescriptor_Release(stream->descriptor);
+         if (stream->parent_source)
+             IMFMediaSource_Release(&stream->parent_source->IMFMediaSource_iface);
+ 
+@@ -654,7 +689,7 @@ static void stream_added(GstElement *element, GstPad *pad, gpointer user)
+     if (gst_pad_get_direction(pad) != GST_PAD_SRC)
+         return;
+ 
+-    if (FAILED(new_media_stream(source, pad, &stream)))
++    if (FAILED(new_media_stream(source, pad, source->stream_count, &stream)))
+         return;
+ 
+     if (!(new_stream_array = heap_realloc(source->streams, (source->stream_count + 1) * (sizeof(*new_stream_array)))))
+@@ -679,6 +714,7 @@ static void stream_removed(GstElement *element, GstPad *pad, gpointer user)
+         if (stream->their_src != pad)
+             continue;
+         stream->their_src = NULL;
++        stream->state = STREAM_INACTIVE;
+     }
+ }
+ 
+@@ -695,6 +731,7 @@ static HRESULT media_source_constructor(IMFByteStream *bytestream, struct media_
+         GST_STATIC_PAD_TEMPLATE("mf_src", GST_PAD_SRC, GST_PAD_ALWAYS, GST_STATIC_CAPS_ANY);
+ 
+     struct media_source *object = heap_alloc_zero(sizeof(*object));
++    unsigned int i;
+     HRESULT hr;
+     int ret;
+ 
+@@ -768,6 +805,18 @@ static HRESULT media_source_constructor(IMFByteStream *bytestream, struct media_
+     }
+ 
+     WaitForSingleObject(object->no_more_pads_event, INFINITE);
++    for (i = 0; i < object->stream_count; i++)
++    {
++        GstSample *preroll;
++        g_signal_emit_by_name(object->streams[i]->appsink, "pull-preroll", &preroll);
++        if (FAILED(hr = media_stream_init_desc(object->streams[i])))
++        {
++            ERR("Failed to finish initialization of media stream %p, hr %x.\n", object->streams[i], hr);
++            IMFMediaStream_Release(&object->streams[i]->IMFMediaStream_iface);
++            goto fail;
++        }
++        gst_sample_unref(preroll);
++    }
+ 
+     object->state = SOURCE_STOPPED;
+ 
+diff --git a/dlls/winegstreamer/mfplat.c b/dlls/winegstreamer/mfplat.c
+index c996f06211e..2e8b0978648 100644
+--- a/dlls/winegstreamer/mfplat.c
++++ b/dlls/winegstreamer/mfplat.c
+@@ -16,6 +16,11 @@
+  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
+  */
+ 
++#include "config.h"
++#include <gst/gst.h>
++
++#include "gst_private.h"
++
+ #include <stdarg.h>
+ 
+ #include "gst_private.h"
+@@ -436,3 +441,163 @@ HRESULT mfplat_get_class_object(REFCLSID rclsid, REFIID riid, void **obj)
+ 
+     return CLASS_E_CLASSNOTAVAILABLE;
+ }
++
++static const struct
++{
++    const GUID *subtype;
++    GstVideoFormat format;
++}
++uncompressed_video_formats[] =
++{
++    {&MFVideoFormat_ARGB32,  GST_VIDEO_FORMAT_BGRA},
++    {&MFVideoFormat_RGB32,   GST_VIDEO_FORMAT_BGRx},
++    {&MFVideoFormat_RGB24,   GST_VIDEO_FORMAT_BGR},
++    {&MFVideoFormat_RGB565,  GST_VIDEO_FORMAT_BGR16},
++    {&MFVideoFormat_RGB555,  GST_VIDEO_FORMAT_BGR15},
++};
++
++/* returns NULL if doesn't match exactly */
++IMFMediaType *mf_media_type_from_caps(const GstCaps *caps)
++{
++    IMFMediaType *media_type;
++    GstStructure *info;
++    const char *mime_type;
++
++    if (TRACE_ON(mfplat))
++    {
++        gchar *human_readable = gst_caps_to_string(caps);
++        TRACE("caps = %s\n", debugstr_a(human_readable));
++        g_free(human_readable);
++    }
++
++    if (FAILED(MFCreateMediaType(&media_type)))
++        return NULL;
++
++    info = gst_caps_get_structure(caps, 0);
++    mime_type = gst_structure_get_name(info);
++
++    if (!strncmp(mime_type, "video", 5))
++    {
++        GstVideoInfo video_info;
++
++        if (!gst_video_info_from_caps(&video_info, caps))
++        {
++            return NULL;
++        }
++
++        IMFMediaType_SetGUID(media_type, &MF_MT_MAJOR_TYPE, &MFMediaType_Video);
++
++        IMFMediaType_SetUINT64(media_type, &MF_MT_FRAME_SIZE, ((UINT64)video_info.width << 32) | video_info.height);
++
++        IMFMediaType_SetUINT64(media_type, &MF_MT_FRAME_RATE, ((UINT64)video_info.fps_n << 32) | video_info.fps_d);
++
++        if (!strcmp(mime_type, "video/x-raw"))
++        {
++            GUID fourcc_subtype = MFVideoFormat_Base;
++            unsigned int i;
++
++            IMFMediaType_SetUINT32(media_type, &MF_MT_COMPRESSED, FALSE);
++
++            /* First try FOURCC */
++            if ((fourcc_subtype.Data1 = gst_video_format_to_fourcc(video_info.finfo->format)))
++            {
++                IMFMediaType_SetGUID(media_type, &MF_MT_SUBTYPE, &fourcc_subtype);
++            }
++            else
++            {
++                for (i = 0; i < ARRAY_SIZE(uncompressed_video_formats); i++)
++                {
++                    if (uncompressed_video_formats[i].format == video_info.finfo->format)
++                    {
++                        IMFMediaType_SetGUID(media_type, &MF_MT_SUBTYPE, uncompressed_video_formats[i].subtype);
++                        break;
++                    }
++                }
++                if (i == ARRAY_SIZE(uncompressed_video_formats))
++                {
++                    FIXME("Unrecognized uncompressed video format %s\n", gst_video_format_to_string(video_info.finfo->format));
++                    IMFMediaType_Release(media_type);
++                    return NULL;
++                }
++            }
++        }
++        else
++        {
++            FIXME("Unrecognized video format %s\n", mime_type);
++            return NULL;
++        }
++    }
++    else if (!strncmp(mime_type, "audio", 5))
++    {
++        gint rate, channels, bitrate;
++        guint64 channel_mask;
++        IMFMediaType_SetGUID(media_type, &MF_MT_MAJOR_TYPE, &MFMediaType_Audio);
++
++        if (gst_structure_get_int(info, "rate", &rate))
++            IMFMediaType_SetUINT32(media_type, &MF_MT_AUDIO_SAMPLES_PER_SECOND, rate);
++
++        if (gst_structure_get_int(info, "channels", &channels))
++            IMFMediaType_SetUINT32(media_type, &MF_MT_AUDIO_NUM_CHANNELS, channels);
++
++        if (gst_structure_get(info, "channel-mask", GST_TYPE_BITMASK, &channel_mask, NULL))
++            IMFMediaType_SetUINT32(media_type, &MF_MT_AUDIO_CHANNEL_MASK, channel_mask);
++
++        if (gst_structure_get_int(info, "bitrate", &bitrate))
++            IMFMediaType_SetUINT32(media_type, &MF_MT_AVG_BITRATE, bitrate);
++
++        if (!strcmp(mime_type, "audio/x-raw"))
++        {
++            GstAudioInfo audio_info;
++            DWORD depth;
++
++            if (!gst_audio_info_from_caps(&audio_info, caps))
++            {
++                ERR("Failed to get caps audio info\n");
++                IMFMediaType_Release(media_type);
++                return NULL;
++            }
++
++            depth = GST_AUDIO_INFO_DEPTH(&audio_info);
++
++            /* validation */
++            if ((audio_info.finfo->flags & GST_AUDIO_FORMAT_FLAG_INTEGER && depth > 8) ||
++                (audio_info.finfo->flags & GST_AUDIO_FORMAT_FLAG_SIGNED && depth <= 8) ||
++                (audio_info.finfo->endianness != G_LITTLE_ENDIAN && depth > 8))
++            {
++                IMFMediaType_Release(media_type);
++                return NULL;
++            }
++
++            /* conversion */
++            switch (audio_info.finfo->flags)
++            {
++                case GST_AUDIO_FORMAT_FLAG_FLOAT:
++                    IMFMediaType_SetGUID(media_type, &MF_MT_SUBTYPE, &MFAudioFormat_Float);
++                    break;
++                case GST_AUDIO_FORMAT_FLAG_INTEGER:
++                case GST_AUDIO_FORMAT_FLAG_SIGNED:
++                    IMFMediaType_SetGUID(media_type, &MF_MT_SUBTYPE, &MFAudioFormat_PCM);
++                    break;
++                default:
++                    FIXME("Unrecognized audio format %x\n", audio_info.finfo->format);
++                    IMFMediaType_Release(media_type);
++                    return NULL;
++            }
++
++            IMFMediaType_SetUINT32(media_type, &MF_MT_AUDIO_BITS_PER_SAMPLE, depth);
++        }
++        else
++        {
++            FIXME("Unrecognized audio format %s\n", mime_type);
++            IMFMediaType_Release(media_type);
++            return NULL;
++        }
++    }
++    else
++    {
++        IMFMediaType_Release(media_type);
++        return NULL;
++    }
++
++    return media_type;
++}
+From 82584160d42ebf0fd60eefe738d6a9e4fbf0223e Mon Sep 17 00:00:00 2001
+From: Nikolay Sivov <nsivov@codeweavers.com>
+Date: Wed, 30 Sep 2020 13:55:06 +0300
+Subject: [PATCH] mfreadwrite/tests: Add return value test (Coverity).
+
+Signed-off-by: Nikolay Sivov <nsivov@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/mfreadwrite/tests/mfplat.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/dlls/mfreadwrite/tests/mfplat.c b/dlls/mfreadwrite/tests/mfplat.c
+index 8ed94289703..84581f9be9a 100644
+--- a/dlls/mfreadwrite/tests/mfplat.c
++++ b/dlls/mfreadwrite/tests/mfplat.c
+@@ -438,11 +438,13 @@ static struct test_media_stream *create_test_stream(DWORD stream_index, IMFMedia
+     struct test_media_stream *stream;
+     IMFPresentationDescriptor *pd;
+     BOOL selected;
++    HRESULT hr;
+ 
+     stream = heap_alloc_zero(sizeof(*stream));
+     stream->IMFMediaStream_iface.lpVtbl = &test_media_stream_vtbl;
+     stream->refcount = 1;
+-    MFCreateEventQueue(&stream->event_queue);
++    hr = MFCreateEventQueue(&stream->event_queue);
++    ok(hr == S_OK, "Failed to create event queue, hr %#x.\n", hr);
+     stream->source = source;
+     IMFMediaSource_AddRef(stream->source);
+     stream->is_new = TRUE;
+From 5542942c8e1d7aee45121601fcdb1d7acfecf587 Mon Sep 17 00:00:00 2001
+From: Nikolay Sivov <nsivov@codeweavers.com>
+Date: Thu, 1 Oct 2020 15:59:30 +0300
+Subject: [PATCH] evr/mixer: Store input type attributes.
+
+Signed-off-by: Nikolay Sivov <nsivov@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/evr/mixer.c     | 11 ++++++++++-
+ dlls/evr/tests/evr.c | 31 +++++++++++--------------------
+ 2 files changed, 21 insertions(+), 21 deletions(-)
+
+diff --git a/dlls/evr/mixer.c b/dlls/evr/mixer.c
+index e19520fa7ed..9227e6a1777 100644
+--- a/dlls/evr/mixer.c
++++ b/dlls/evr/mixer.c
+@@ -686,7 +686,16 @@ static HRESULT WINAPI video_mixer_transform_SetInputType(IMFTransform *iface, DW
+                                 &count, &guids)))
+                         {
+                             if (SUCCEEDED(hr = video_mixer_collect_output_types(mixer, &video_desc, service, count, guids)))
+-                                FIXME("Set input type.\n");
++                            {
++                                GUID subtype = { 0 };
++
++                                if (FAILED(hr = IMFMediaType_GetGUID(media_type, &MF_MT_SUBTYPE, &subtype)))
++                                    WARN("Failed to get subtype %#x.\n", hr);
++
++                                if (SUCCEEDED(hr = MFCreateVideoMediaTypeFromSubtype(&subtype, &mixer->inputs[0].media_type)))
++                                    hr = IMFMediaType_CopyAllItems(media_type, (IMFAttributes *)mixer->inputs[0].media_type);
++
++                            }
+                             CoTaskMemFree(guids);
+                         }
+                     }
+diff --git a/dlls/evr/tests/evr.c b/dlls/evr/tests/evr.c
+index bf33051d6e1..e6f6251be60 100644
+--- a/dlls/evr/tests/evr.c
++++ b/dlls/evr/tests/evr.c
+@@ -896,17 +896,15 @@ static void test_default_mixer_type_negotiation(void)
+     ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
+ 
+     hr = IMFTransform_GetInputCurrentType(transform, 0, &media_type);
+-todo_wine
+     ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
+-if (hr == S_OK)
+-{
+     ok(media_type != (IMFMediaType *)video_type, "Unexpected media type instance.\n");
++
+     hr = IMFTransform_GetInputCurrentType(transform, 0, &media_type2);
+     ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
+     ok(media_type == media_type2, "Unexpected media type instance.\n");
+     IMFMediaType_Release(media_type);
+     IMFMediaType_Release(media_type2);
+-}
++
+     hr = IMFTransform_QueryInterface(transform, &IID_IMFVideoProcessor, (void **)&processor);
+     ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
+ 
+@@ -919,31 +917,24 @@ todo_wine
+     ok(hr == MF_E_TRANSFORM_TYPE_NOT_SET, "Unexpected hr %#x.\n", hr);
+ 
+     hr = IMFTransform_GetInputCurrentType(transform, 0, &media_type);
+-todo_wine
+     ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
+-    if (SUCCEEDED(hr))
+-    {
+-        ok(media_type != (IMFMediaType *)video_type, "Unexpected pointer.\n");
+-        hr = IMFMediaType_QueryInterface(media_type, &IID_IMFVideoMediaType, (void **)&unk);
+-        ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
+-        IUnknown_Release(unk);
+-        IMFMediaType_Release(media_type);
+-    }
++    ok(media_type != (IMFMediaType *)video_type, "Unexpected pointer.\n");
++    hr = IMFMediaType_QueryInterface(media_type, &IID_IMFVideoMediaType, (void **)&unk);
++    ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++    IUnknown_Release(unk);
++    IMFMediaType_Release(media_type);
+ 
+     hr = IMFVideoProcessor_GetAvailableVideoProcessorModes(processor, &count, &guids);
+ todo_wine
+     ok(hr == MF_E_TRANSFORM_TYPE_NOT_SET, "Unexpected hr %#x.\n", hr);
+ 
+     hr = IMFTransform_GetOutputAvailableType(transform, 0, 0, &media_type);
+-todo_wine
+     ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
+ 
+-    if (SUCCEEDED(hr))
+-    {
+-        hr = IMFTransform_SetOutputType(transform, 0, media_type, 0);
+-        ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
+-        IMFMediaType_Release(media_type);
+-    }
++    hr = IMFTransform_SetOutputType(transform, 0, media_type, 0);
++todo_wine
++    ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++    IMFMediaType_Release(media_type);
+ 
+     hr = IMFVideoProcessor_GetVideoProcessorMode(processor, &guid);
+ todo_wine
+From c303b08ba065a6dc85e5e43d1fd1c4c24c3f5881 Mon Sep 17 00:00:00 2001
+From: Nikolay Sivov <nsivov@codeweavers.com>
+Date: Thu, 1 Oct 2020 15:59:31 +0300
+Subject: [PATCH] evr/mixer: Add IMFQualityAdvise stub.
+
+Signed-off-by: Nikolay Sivov <nsivov@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/evr/mixer.c     | 76 ++++++++++++++++++++++++++++++++++++++++++++
+ dlls/evr/tests/evr.c |  4 +++
+ 2 files changed, 80 insertions(+)
+
+diff --git a/dlls/evr/mixer.c b/dlls/evr/mixer.c
+index 9227e6a1777..4ada26d074f 100644
+--- a/dlls/evr/mixer.c
++++ b/dlls/evr/mixer.c
+@@ -61,6 +61,7 @@ struct video_mixer
+     IMFVideoPositionMapper IMFVideoPositionMapper_iface;
+     IMFVideoProcessor IMFVideoProcessor_iface;
+     IMFAttributes IMFAttributes_iface;
++    IMFQualityAdvise IMFQualityAdvise_iface;
+     IUnknown IUnknown_inner;
+     IUnknown *outer_unk;
+     LONG refcount;
+@@ -129,6 +130,11 @@ static struct video_mixer *impl_from_IMFAttributes(IMFAttributes *iface)
+     return CONTAINING_RECORD(iface, struct video_mixer, IMFAttributes_iface);
+ }
+ 
++static struct video_mixer *impl_from_IMFQualityAdvise(IMFQualityAdvise *iface)
++{
++    return CONTAINING_RECORD(iface, struct video_mixer, IMFQualityAdvise_iface);
++}
++
+ static int video_mixer_compare_input_id(const void *a, const void *b)
+ {
+     const unsigned int *key = a;
+@@ -217,6 +223,10 @@ static HRESULT WINAPI video_mixer_inner_QueryInterface(IUnknown *iface, REFIID r
+     {
+         *obj = &mixer->IMFAttributes_iface;
+     }
++    else if (IsEqualIID(riid, &IID_IMFQualityAdvise))
++    {
++        *obj = &mixer->IMFQualityAdvise_iface;
++    }
+     else
+     {
+         WARN("Unsupported interface %s.\n", debugstr_guid(riid));
+@@ -1685,6 +1695,71 @@ static const IMFAttributesVtbl video_mixer_attributes_vtbl =
+     video_mixer_attributes_CopyAllItems
+ };
+ 
++static HRESULT WINAPI video_mixer_quality_advise_QueryInterface(IMFQualityAdvise *iface, REFIID riid, void **out)
++{
++    struct video_mixer *mixer = impl_from_IMFQualityAdvise(iface);
++    return IMFTransform_QueryInterface(&mixer->IMFTransform_iface, riid, out);
++}
++
++static ULONG WINAPI video_mixer_quality_advise_AddRef(IMFQualityAdvise *iface)
++{
++    struct video_mixer *mixer = impl_from_IMFQualityAdvise(iface);
++    return IMFTransform_AddRef(&mixer->IMFTransform_iface);
++}
++
++static ULONG WINAPI video_mixer_quality_Release(IMFQualityAdvise *iface)
++{
++    struct video_mixer *mixer = impl_from_IMFQualityAdvise(iface);
++    return IMFTransform_Release(&mixer->IMFTransform_iface);
++}
++
++static HRESULT WINAPI video_mixer_quality_advise_SetDropMode(IMFQualityAdvise *iface, MF_QUALITY_DROP_MODE mode)
++{
++    FIXME("%p, %u.\n", iface, mode);
++
++    return E_NOTIMPL;
++}
++
++static HRESULT WINAPI video_mixer_quality_advise_SetQualityLevel(IMFQualityAdvise *iface, MF_QUALITY_LEVEL level)
++{
++    FIXME("%p, %u.\n", iface, level);
++
++    return E_NOTIMPL;
++}
++
++static HRESULT WINAPI video_mixer_quality_advise_GetDropMode(IMFQualityAdvise *iface, MF_QUALITY_DROP_MODE *mode)
++{
++    FIXME("%p, %p.\n", iface, mode);
++
++    return E_NOTIMPL;
++}
++
++static HRESULT WINAPI video_mixer_quality_advise_GetQualityLevel(IMFQualityAdvise *iface, MF_QUALITY_LEVEL *level)
++{
++    FIXME("%p, %p.\n", iface, level);
++
++    return E_NOTIMPL;
++}
++
++static HRESULT WINAPI video_mixer_quality_advise_DropTime(IMFQualityAdvise *iface, LONGLONG interval)
++{
++    FIXME("%p, %s.\n", iface, wine_dbgstr_longlong(interval));
++
++    return E_NOTIMPL;
++}
++
++static const IMFQualityAdviseVtbl video_mixer_quality_advise_vtbl =
++{
++    video_mixer_quality_advise_QueryInterface,
++    video_mixer_quality_advise_AddRef,
++    video_mixer_quality_Release,
++    video_mixer_quality_advise_SetDropMode,
++    video_mixer_quality_advise_SetQualityLevel,
++    video_mixer_quality_advise_GetDropMode,
++    video_mixer_quality_advise_GetQualityLevel,
++    video_mixer_quality_advise_DropTime,
++};
++
+ HRESULT WINAPI MFCreateVideoMixer(IUnknown *owner, REFIID riid_device, REFIID riid, void **obj)
+ {
+     TRACE("%p, %s, %s, %p.\n", owner, debugstr_guid(riid_device), debugstr_guid(riid), obj);
+@@ -1715,6 +1790,7 @@ HRESULT evr_mixer_create(IUnknown *outer, void **out)
+     object->IMFVideoPositionMapper_iface.lpVtbl = &video_mixer_position_mapper_vtbl;
+     object->IMFVideoProcessor_iface.lpVtbl = &video_mixer_processor_vtbl;
+     object->IMFAttributes_iface.lpVtbl = &video_mixer_attributes_vtbl;
++    object->IMFQualityAdvise_iface.lpVtbl = &video_mixer_quality_advise_vtbl;
+     object->IUnknown_inner.lpVtbl = &video_mixer_inner_vtbl;
+     object->outer_unk = outer ? outer : &object->IUnknown_inner;
+     object->refcount = 1;
+diff --git a/dlls/evr/tests/evr.c b/dlls/evr/tests/evr.c
+index e6f6251be60..7fa28e75229 100644
+--- a/dlls/evr/tests/evr.c
++++ b/dlls/evr/tests/evr.c
+@@ -438,6 +438,10 @@ static void test_default_mixer(void)
+     hr = MFCreateVideoMixer(NULL, &IID_IDirect3DDevice9, &IID_IMFTransform, (void **)&transform);
+     ok(hr == S_OK, "Failed to create default mixer, hr %#x.\n", hr);
+ 
++    hr = IMFTransform_QueryInterface(transform, &IID_IMFQualityAdvise, (void **)&unk);
++    ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++    IUnknown_Release(unk);
++
+     hr = IMFTransform_QueryInterface(transform, &IID_IMFTopologyServiceLookupClient, (void **)&unk);
+     ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
+     IUnknown_Release(unk);
+From b21d2b7c9cd7ab319ff7781352dff998206bef44 Mon Sep 17 00:00:00 2001
+From: Nikolay Sivov <nsivov@codeweavers.com>
+Date: Thu, 1 Oct 2020 15:59:32 +0300
+Subject: [PATCH] evr/presenter: Add IMFGetService stub.
+
+Signed-off-by: Nikolay Sivov <nsivov@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/evr/presenter.c | 44 ++++++++++++++++++++++++++++++++++++++++++++
+ dlls/evr/tests/evr.c |  4 ++++
+ 2 files changed, 48 insertions(+)
+
+diff --git a/dlls/evr/presenter.c b/dlls/evr/presenter.c
+index a7da0704927..5e458f72f11 100644
+--- a/dlls/evr/presenter.c
++++ b/dlls/evr/presenter.c
+@@ -46,6 +46,7 @@ struct video_presenter
+     IMFTopologyServiceLookupClient IMFTopologyServiceLookupClient_iface;
+     IMFVideoDisplayControl IMFVideoDisplayControl_iface;
+     IMFRateSupport IMFRateSupport_iface;
++    IMFGetService IMFGetService_iface;
+     IUnknown IUnknown_inner;
+     IUnknown *outer_unk;
+     LONG refcount;
+@@ -88,6 +89,11 @@ static struct video_presenter *impl_from_IMFRateSupport(IMFRateSupport *iface)
+     return CONTAINING_RECORD(iface, struct video_presenter, IMFRateSupport_iface);
+ }
+ 
++static struct video_presenter *impl_from_IMFGetService(IMFGetService *iface)
++{
++    return CONTAINING_RECORD(iface, struct video_presenter, IMFGetService_iface);
++}
++
+ static HRESULT WINAPI video_presenter_inner_QueryInterface(IUnknown *iface, REFIID riid, void **obj)
+ {
+     struct video_presenter *presenter = impl_from_IUnknown(iface);
+@@ -119,6 +125,10 @@ static HRESULT WINAPI video_presenter_inner_QueryInterface(IUnknown *iface, REFI
+     {
+         *obj = &presenter->IMFRateSupport_iface;
+     }
++    else if (IsEqualIID(riid, &IID_IMFGetService))
++    {
++        *obj = &presenter->IMFGetService_iface;
++    }
+     else
+     {
+         WARN("Unimplemented interface %s.\n", debugstr_guid(riid));
+@@ -576,6 +586,39 @@ static const IMFRateSupportVtbl video_presenter_rate_support_vtbl =
+     video_presenter_rate_support_IsRateSupported,
+ };
+ 
++static HRESULT WINAPI video_presenter_getservice_QueryInterface(IMFGetService *iface, REFIID riid, void **obj)
++{
++    struct video_presenter *presenter = impl_from_IMFGetService(iface);
++    return IMFVideoPresenter_QueryInterface(&presenter->IMFVideoPresenter_iface, riid, obj);
++}
++
++static ULONG WINAPI video_presenter_getservice_AddRef(IMFGetService *iface)
++{
++    struct video_presenter *presenter = impl_from_IMFGetService(iface);
++    return IMFVideoPresenter_AddRef(&presenter->IMFVideoPresenter_iface);
++}
++
++static ULONG WINAPI video_presenter_getservice_Release(IMFGetService *iface)
++{
++    struct video_presenter *presenter = impl_from_IMFGetService(iface);
++    return IMFVideoPresenter_Release(&presenter->IMFVideoPresenter_iface);
++}
++
++static HRESULT WINAPI video_presenter_getservice_GetService(IMFGetService *iface, REFGUID service, REFIID riid, void **obj)
++{
++    FIXME("%p, %s, %s, %p.\n", iface, debugstr_guid(service), debugstr_guid(riid), obj);
++
++    return E_NOTIMPL;
++}
++
++static const IMFGetServiceVtbl video_presenter_getservice_vtbl =
++{
++    video_presenter_getservice_QueryInterface,
++    video_presenter_getservice_AddRef,
++    video_presenter_getservice_Release,
++    video_presenter_getservice_GetService,
++};
++
+ HRESULT WINAPI MFCreateVideoPresenter(IUnknown *owner, REFIID riid_device, REFIID riid, void **obj)
+ {
+     TRACE("%p, %s, %s, %p.\n", owner, debugstr_guid(riid_device), debugstr_guid(riid), obj);
+@@ -600,6 +643,7 @@ HRESULT evr_presenter_create(IUnknown *outer, void **out)
+     object->IMFTopologyServiceLookupClient_iface.lpVtbl = &video_presenter_service_client_vtbl;
+     object->IMFVideoDisplayControl_iface.lpVtbl = &video_presenter_control_vtbl;
+     object->IMFRateSupport_iface.lpVtbl = &video_presenter_rate_support_vtbl;
++    object->IMFGetService_iface.lpVtbl = &video_presenter_getservice_vtbl;
+     object->IUnknown_inner.lpVtbl = &video_presenter_inner_vtbl;
+     object->outer_unk = outer ? outer : &object->IUnknown_inner;
+     object->refcount = 1;
+diff --git a/dlls/evr/tests/evr.c b/dlls/evr/tests/evr.c
+index 7fa28e75229..b59da51e475 100644
+--- a/dlls/evr/tests/evr.c
++++ b/dlls/evr/tests/evr.c
+@@ -1002,6 +1002,10 @@ static void test_default_presenter(void)
+     ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
+     IUnknown_Release(unk);
+ 
++    hr = IMFVideoPresenter_QueryInterface(presenter, &IID_IMFGetService, (void **)&unk);
++    ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++    IUnknown_Release(unk);
++
+     /* Rate support. */
+     hr = IMFVideoPresenter_QueryInterface(presenter, &IID_IMFRateSupport, (void **)&rate_support);
+     ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
+From 2ff55d97d7e86fb80fa4f84a769523add3216ce8 Mon Sep 17 00:00:00 2001
+From: Nikolay Sivov <nsivov@codeweavers.com>
+Date: Thu, 1 Oct 2020 15:59:33 +0300
+Subject: [PATCH] evr/presenter: Create device manager for the presenter.
+
+Signed-off-by: Nikolay Sivov <nsivov@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/evr/Makefile.in |  2 +-
+ dlls/evr/presenter.c | 21 ++++++++++++++++++++-
+ dlls/evr/tests/evr.c | 37 +++++++++++++++++++++++++++++++++++--
+ 3 files changed, 56 insertions(+), 4 deletions(-)
+
+diff --git a/dlls/evr/Makefile.in b/dlls/evr/Makefile.in
+index c8178297dab..6d936d65b79 100644
+--- a/dlls/evr/Makefile.in
++++ b/dlls/evr/Makefile.in
+@@ -1,6 +1,6 @@
+ MODULE    = evr.dll
+ IMPORTLIB = evr
+-IMPORTS   = mfuuid strmiids strmbase uuid dxguid ole32 oleaut32
++IMPORTS   = mfuuid strmiids strmbase uuid dxguid ole32 oleaut32 dxva2
+ DELAYIMPORTS = mfplat
+ 
+ EXTRADLLFLAGS = -mno-cygwin
+diff --git a/dlls/evr/presenter.c b/dlls/evr/presenter.c
+index 5e458f72f11..b60de4b82a1 100644
+--- a/dlls/evr/presenter.c
++++ b/dlls/evr/presenter.c
+@@ -22,6 +22,7 @@
+ #include "d3d9.h"
+ #include "mfapi.h"
+ #include "mferror.h"
++#include "dxva2api.h"
+ 
+ #include "evr_classes.h"
+ #include "evr_private.h"
+@@ -55,6 +56,8 @@ struct video_presenter
+     IMFClock *clock;
+     IMediaEventSink *event_sink;
+ 
++    IDirect3DDeviceManager9 *device_manager;
++    UINT reset_token;
+     unsigned int state;
+     CRITICAL_SECTION cs;
+ };
+@@ -174,6 +177,8 @@ static ULONG WINAPI video_presenter_inner_Release(IUnknown *iface)
+     {
+         video_presenter_clear_container(presenter);
+         DeleteCriticalSection(&presenter->cs);
++        if (presenter->device_manager)
++            IDirect3DDeviceManager9_Release(presenter->device_manager);
+         heap_free(presenter);
+     }
+ 
+@@ -606,7 +611,14 @@ static ULONG WINAPI video_presenter_getservice_Release(IMFGetService *iface)
+ 
+ static HRESULT WINAPI video_presenter_getservice_GetService(IMFGetService *iface, REFGUID service, REFIID riid, void **obj)
+ {
+-    FIXME("%p, %s, %s, %p.\n", iface, debugstr_guid(service), debugstr_guid(riid), obj);
++    struct video_presenter *presenter = impl_from_IMFGetService(iface);
++
++    TRACE("%p, %s, %s, %p.\n", iface, debugstr_guid(service), debugstr_guid(riid), obj);
++
++    if (IsEqualGUID(&MR_VIDEO_ACCELERATION_SERVICE, service))
++        return IDirect3DDeviceManager9_QueryInterface(presenter->device_manager, riid, obj);
++
++    FIXME("Unimplemented service %s.\n", debugstr_guid(service));
+ 
+     return E_NOTIMPL;
+ }
+@@ -634,6 +646,7 @@ HRESULT WINAPI MFCreateVideoPresenter(IUnknown *owner, REFIID riid_device, REFII
+ HRESULT evr_presenter_create(IUnknown *outer, void **out)
+ {
+     struct video_presenter *object;
++    HRESULT hr;
+ 
+     if (!(object = heap_alloc_zero(sizeof(*object))))
+         return E_OUTOFMEMORY;
+@@ -649,6 +662,12 @@ HRESULT evr_presenter_create(IUnknown *outer, void **out)
+     object->refcount = 1;
+     InitializeCriticalSection(&object->cs);
+ 
++    if (FAILED(hr = DXVA2CreateDirect3DDeviceManager9(&object->reset_token, &object->device_manager)))
++    {
++        IUnknown_Release(&object->IUnknown_inner);
++        return hr;
++    }
++
+     *out = &object->IUnknown_inner;
+ 
+     return S_OK;
+diff --git a/dlls/evr/tests/evr.c b/dlls/evr/tests/evr.c
+index b59da51e475..0dff691b59f 100644
+--- a/dlls/evr/tests/evr.c
++++ b/dlls/evr/tests/evr.c
+@@ -966,9 +966,14 @@ todo_wine
+ 
+ static void test_default_presenter(void)
+ {
++    D3DDEVICE_CREATION_PARAMETERS device_params = { 0 };
+     IMFVideoPresenter *presenter;
+     IMFRateSupport *rate_support;
++    IDirect3DDevice9 *d3d_device;
++    IDirect3DDeviceManager9 *dm;
+     IMFVideoDeviceID *deviceid;
++    IMFGetService *gs;
++    HANDLE handle;
+     IUnknown *unk;
+     float rate;
+     HRESULT hr;
+@@ -1002,9 +1007,37 @@ static void test_default_presenter(void)
+     ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
+     IUnknown_Release(unk);
+ 
+-    hr = IMFVideoPresenter_QueryInterface(presenter, &IID_IMFGetService, (void **)&unk);
++    hr = IMFVideoPresenter_QueryInterface(presenter, &IID_IMFGetService, (void **)&gs);
+     ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
+-    IUnknown_Release(unk);
++
++    hr = IMFGetService_GetService(gs, &MR_VIDEO_ACCELERATION_SERVICE, &IID_IDirect3DDeviceManager9, (void **)&dm);
++    ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++
++    hr = IDirect3DDeviceManager9_OpenDeviceHandle(dm, &handle);
++todo_wine
++    ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++
++    hr = IDirect3DDeviceManager9_LockDevice(dm, handle, &d3d_device, FALSE);
++todo_wine
++    ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++
++if (SUCCEEDED(hr))
++{
++    hr = IDirect3DDevice9_GetCreationParameters(d3d_device, &device_params);
++    ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++    ok(device_params.hFocusWindow == GetDesktopWindow(), "Unexpected window %p.\n", device_params.hFocusWindow);
++
++    IDirect3DDevice9_Release(d3d_device);
++
++    hr = IDirect3DDeviceManager9_UnlockDevice(dm, handle, FALSE);
++    ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++
++    hr = IDirect3DDeviceManager9_CloseDeviceHandle(dm, handle);
++    ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++}
++    IDirect3DDeviceManager9_Release(dm);
++
++    IMFGetService_Release(gs);
+ 
+     /* Rate support. */
+     hr = IMFVideoPresenter_QueryInterface(presenter, &IID_IMFRateSupport, (void **)&rate_support);
+From 164c3b7f2ba5e98a3096ef9de37fc7cede9e7e68 Mon Sep 17 00:00:00 2001
+From: Nikolay Sivov <nsivov@codeweavers.com>
+Date: Fri, 2 Oct 2020 14:01:09 +0300
+Subject: [PATCH] evr/presenter: Create d3d device on presenter creation.
+
+Signed-off-by: Nikolay Sivov <nsivov@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/evr/Makefile.in |  2 +-
+ dlls/evr/presenter.c | 47 +++++++++++++++++++++++++++++++++----
+ dlls/evr/tests/evr.c | 55 +++++++++++++++++++++++++++++++++++++++-----
+ 3 files changed, 92 insertions(+), 12 deletions(-)
+
+diff --git a/dlls/evr/Makefile.in b/dlls/evr/Makefile.in
+index 6d936d65b79..02cdb9b820a 100644
+--- a/dlls/evr/Makefile.in
++++ b/dlls/evr/Makefile.in
+@@ -1,6 +1,6 @@
+ MODULE    = evr.dll
+ IMPORTLIB = evr
+-IMPORTS   = mfuuid strmiids strmbase uuid dxguid ole32 oleaut32 dxva2
++IMPORTS   = mfuuid strmiids strmbase uuid dxguid ole32 oleaut32 user32 d3d9 dxva2
+ DELAYIMPORTS = mfplat
+ 
+ EXTRADLLFLAGS = -mno-cygwin
+diff --git a/dlls/evr/presenter.c b/dlls/evr/presenter.c
+index b60de4b82a1..04653ff67ad 100644
+--- a/dlls/evr/presenter.c
++++ b/dlls/evr/presenter.c
+@@ -643,11 +643,47 @@ HRESULT WINAPI MFCreateVideoPresenter(IUnknown *owner, REFIID riid_device, REFII
+     return CoCreateInstance(&CLSID_MFVideoPresenter9, owner, CLSCTX_INPROC_SERVER, riid, obj);
+ }
+ 
++static HRESULT video_presenter_init_d3d(struct video_presenter *presenter)
++{
++    D3DPRESENT_PARAMETERS present_params = { 0 };
++    IDirect3DDevice9 *device;
++    IDirect3D9 *d3d;
++    HRESULT hr;
++
++    d3d = Direct3DCreate9(D3D_SDK_VERSION);
++
++    present_params.BackBufferCount = 1;
++    present_params.SwapEffect = D3DSWAPEFFECT_COPY;
++    present_params.hDeviceWindow = GetDesktopWindow();
++    present_params.Windowed = TRUE;
++    present_params.Flags = D3DPRESENTFLAG_VIDEO;
++    present_params.PresentationInterval = D3DPRESENT_INTERVAL_IMMEDIATE;
++    hr = IDirect3D9_CreateDevice(d3d, D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, GetDesktopWindow(),
++            0, &present_params, &device);
++
++    IDirect3D9_Release(d3d);
++
++    if (FAILED(hr))
++    {
++        WARN("Failed to create d3d device, hr %#x.\n", hr);
++        return hr;
++    }
++
++    hr = IDirect3DDeviceManager9_ResetDevice(presenter->device_manager, device, presenter->reset_token);
++    IDirect3DDevice9_Release(device);
++    if (FAILED(hr))
++        WARN("Failed to set new device for the manager, hr %#x.\n", hr);
++
++    return hr;
++}
++
+ HRESULT evr_presenter_create(IUnknown *outer, void **out)
+ {
+     struct video_presenter *object;
+     HRESULT hr;
+ 
++    *out = NULL;
++
+     if (!(object = heap_alloc_zero(sizeof(*object))))
+         return E_OUTOFMEMORY;
+ 
+@@ -663,12 +699,13 @@ HRESULT evr_presenter_create(IUnknown *outer, void **out)
+     InitializeCriticalSection(&object->cs);
+ 
+     if (FAILED(hr = DXVA2CreateDirect3DDeviceManager9(&object->reset_token, &object->device_manager)))
+-    {
+         IUnknown_Release(&object->IUnknown_inner);
+-        return hr;
+-    }
+ 
+-    *out = &object->IUnknown_inner;
++    if (FAILED(hr = video_presenter_init_d3d(object)))
++        IUnknown_Release(&object->IUnknown_inner);
+ 
+-    return S_OK;
++    if (SUCCEEDED(hr))
++        *out = &object->IUnknown_inner;
++
++    return hr;
+ }
+diff --git a/dlls/evr/tests/evr.c b/dlls/evr/tests/evr.c
+index 0dff691b59f..c2e17595559 100644
+--- a/dlls/evr/tests/evr.c
++++ b/dlls/evr/tests/evr.c
+@@ -39,7 +39,7 @@ static HWND create_window(void)
+ 
+     AdjustWindowRect(&r, WS_OVERLAPPEDWINDOW | WS_VISIBLE, FALSE);
+ 
+-    return CreateWindowA("static", "d3d9_test", WS_OVERLAPPEDWINDOW | WS_VISIBLE,
++    return CreateWindowA("static", "evr_test", WS_OVERLAPPEDWINDOW | WS_VISIBLE,
+             0, 0, r.right - r.left, r.bottom - r.top, NULL, NULL, NULL, NULL);
+ }
+ 
+@@ -967,12 +967,16 @@ todo_wine
+ static void test_default_presenter(void)
+ {
+     D3DDEVICE_CREATION_PARAMETERS device_params = { 0 };
++    D3DPRESENT_PARAMETERS present_params = { 0 };
++    IMFVideoDisplayControl *display_control;
++    IDirect3DSwapChain9 *swapchain;
+     IMFVideoPresenter *presenter;
+     IMFRateSupport *rate_support;
+     IDirect3DDevice9 *d3d_device;
+     IDirect3DDeviceManager9 *dm;
+     IMFVideoDeviceID *deviceid;
+     IMFGetService *gs;
++    HWND hwnd, hwnd2;
+     HANDLE handle;
+     IUnknown *unk;
+     float rate;
+@@ -1010,33 +1014,70 @@ static void test_default_presenter(void)
+     hr = IMFVideoPresenter_QueryInterface(presenter, &IID_IMFGetService, (void **)&gs);
+     ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
+ 
++    hr = IMFGetService_GetService(gs, &MR_VIDEO_RENDER_SERVICE, &IID_IMFVideoDisplayControl, (void **)&display_control);
++todo_wine
++    ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++    if (SUCCEEDED(hr))
++        IMFVideoDisplayControl_Release(display_control);
++
+     hr = IMFGetService_GetService(gs, &MR_VIDEO_ACCELERATION_SERVICE, &IID_IDirect3DDeviceManager9, (void **)&dm);
+     ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
+ 
++    hr = IMFVideoPresenter_QueryInterface(presenter, &IID_IMFVideoDisplayControl, (void **)&display_control);
++    ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++
+     hr = IDirect3DDeviceManager9_OpenDeviceHandle(dm, &handle);
+-todo_wine
+     ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
+ 
+     hr = IDirect3DDeviceManager9_LockDevice(dm, handle, &d3d_device, FALSE);
+-todo_wine
+     ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
+ 
+-if (SUCCEEDED(hr))
+-{
+     hr = IDirect3DDevice9_GetCreationParameters(d3d_device, &device_params);
+     ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
+     ok(device_params.hFocusWindow == GetDesktopWindow(), "Unexpected window %p.\n", device_params.hFocusWindow);
+ 
++    hr = IDirect3DDevice9_GetSwapChain(d3d_device, 0, &swapchain);
++    ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++
++    hr = IDirect3DSwapChain9_GetPresentParameters(swapchain, &present_params);
++    ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++
++    ok(present_params.hDeviceWindow == GetDesktopWindow(), "Unexpected device window.\n");
++    ok(present_params.Windowed, "Unexpected windowed mode.\n");
++    ok(present_params.SwapEffect == D3DSWAPEFFECT_COPY, "Unexpected swap effect.\n");
++    ok(present_params.Flags == D3DPRESENTFLAG_VIDEO, "Unexpected flags.\n");
++    ok(present_params.PresentationInterval == D3DPRESENT_INTERVAL_IMMEDIATE, "Unexpected present interval.\n");
++
+     IDirect3DDevice9_Release(d3d_device);
+ 
+     hr = IDirect3DDeviceManager9_UnlockDevice(dm, handle, FALSE);
+     ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
+ 
+-    hr = IDirect3DDeviceManager9_CloseDeviceHandle(dm, handle);
++    hwnd = create_window();
++    ok(!!hwnd, "Failed to create a test window.\n");
++
++    hwnd2 = hwnd;
++    hr = IMFVideoDisplayControl_GetVideoWindow(display_control, &hwnd2);
++todo_wine {
++    ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++    ok(hwnd2 == NULL, "Unexpected window %p.\n", hwnd2);
++}
++    hr = IMFVideoDisplayControl_SetVideoWindow(display_control, hwnd);
++todo_wine
+     ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++
++    hwnd2 = NULL;
++    hr = IMFVideoDisplayControl_GetVideoWindow(display_control, &hwnd2);
++todo_wine {
++    ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++    ok(hwnd2 == hwnd, "Unexpected window %p.\n", hwnd2);
+ }
++    hr = IDirect3DDeviceManager9_CloseDeviceHandle(dm, handle);
++    ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++
+     IDirect3DDeviceManager9_Release(dm);
+ 
++    IMFVideoDisplayControl_Release(display_control);
+     IMFGetService_Release(gs);
+ 
+     /* Rate support. */
+@@ -1066,6 +1107,8 @@ if (SUCCEEDED(hr))
+     IMFRateSupport_Release(rate_support);
+ 
+     IMFVideoPresenter_Release(presenter);
++
++    DestroyWindow(hwnd);
+ }
+ 
+ static void test_MFCreateVideoMixerAndPresenter(void)
+From 69e777c804e9803bef3e151fc20a363f699692ab Mon Sep 17 00:00:00 2001
+From: Nikolay Sivov <nsivov@codeweavers.com>
+Date: Fri, 2 Oct 2020 14:01:10 +0300
+Subject: [PATCH] evr/presenter: Expose IMFVideoDisplayControl as a service.
+
+Signed-off-by: Nikolay Sivov <nsivov@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/evr/presenter.c | 11 +++++++++++
+ dlls/evr/tests/evr.c |  4 +---
+ 2 files changed, 12 insertions(+), 3 deletions(-)
+
+diff --git a/dlls/evr/presenter.c b/dlls/evr/presenter.c
+index 04653ff67ad..8b5a7dd46ab 100644
+--- a/dlls/evr/presenter.c
++++ b/dlls/evr/presenter.c
+@@ -618,6 +618,17 @@ static HRESULT WINAPI video_presenter_getservice_GetService(IMFGetService *iface
+     if (IsEqualGUID(&MR_VIDEO_ACCELERATION_SERVICE, service))
+         return IDirect3DDeviceManager9_QueryInterface(presenter->device_manager, riid, obj);
+ 
++    if (IsEqualGUID(&MR_VIDEO_RENDER_SERVICE, service))
++    {
++        if (IsEqualIID(riid, &IID_IMFVideoDisplayControl))
++            return IMFVideoPresenter_QueryInterface(&presenter->IMFVideoPresenter_iface, riid, obj);
++        else
++        {
++            FIXME("Unsupported interface %s.\n", debugstr_guid(riid));
++            return E_NOTIMPL;
++        }
++    }
++
+     FIXME("Unimplemented service %s.\n", debugstr_guid(service));
+ 
+     return E_NOTIMPL;
+diff --git a/dlls/evr/tests/evr.c b/dlls/evr/tests/evr.c
+index c2e17595559..9665e2683dd 100644
+--- a/dlls/evr/tests/evr.c
++++ b/dlls/evr/tests/evr.c
+@@ -1015,10 +1015,8 @@ static void test_default_presenter(void)
+     ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
+ 
+     hr = IMFGetService_GetService(gs, &MR_VIDEO_RENDER_SERVICE, &IID_IMFVideoDisplayControl, (void **)&display_control);
+-todo_wine
+     ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
+-    if (SUCCEEDED(hr))
+-        IMFVideoDisplayControl_Release(display_control);
++    IMFVideoDisplayControl_Release(display_control);
+ 
+     hr = IMFGetService_GetService(gs, &MR_VIDEO_ACCELERATION_SERVICE, &IID_IDirect3DDeviceManager9, (void **)&dm);
+     ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
+From 77e04e221a609cb4b45625ccbc743d322a14189e Mon Sep 17 00:00:00 2001
+From: Nikolay Sivov <nsivov@codeweavers.com>
+Date: Fri, 2 Oct 2020 14:01:11 +0300
+Subject: [PATCH] evr/presenter: Keep video window handle.
+
+Signed-off-by: Nikolay Sivov <nsivov@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/evr/presenter.c | 19 +++++++++++++++----
+ dlls/evr/tests/evr.c |  7 ++-----
+ 2 files changed, 17 insertions(+), 9 deletions(-)
+
+diff --git a/dlls/evr/presenter.c b/dlls/evr/presenter.c
+index 8b5a7dd46ab..a8e9a507924 100644
+--- a/dlls/evr/presenter.c
++++ b/dlls/evr/presenter.c
+@@ -58,6 +58,7 @@ struct video_presenter
+ 
+     IDirect3DDeviceManager9 *device_manager;
+     UINT reset_token;
++    HWND video_window;
+     unsigned int state;
+     CRITICAL_SECTION cs;
+ };
+@@ -497,16 +498,26 @@ static HRESULT WINAPI video_presenter_control_GetAspectRatioMode(IMFVideoDisplay
+ 
+ static HRESULT WINAPI video_presenter_control_SetVideoWindow(IMFVideoDisplayControl *iface, HWND window)
+ {
+-    FIXME("%p, %p.\n", iface, window);
++    struct video_presenter *presenter = impl_from_IMFVideoDisplayControl(iface);
+ 
+-    return E_NOTIMPL;
++    TRACE("%p, %p.\n", iface, window);
++
++    EnterCriticalSection(&presenter->cs);
++    presenter->video_window = window;
++    LeaveCriticalSection(&presenter->cs);
++
++    return S_OK;
+ }
+ 
+ static HRESULT WINAPI video_presenter_control_GetVideoWindow(IMFVideoDisplayControl *iface, HWND *window)
+ {
+-    FIXME("%p, %p.\n", iface, window);
++    struct video_presenter *presenter = impl_from_IMFVideoDisplayControl(iface);
+ 
+-    return E_NOTIMPL;
++    TRACE("%p, %p.\n", iface, window);
++
++    *window = presenter->video_window;
++
++    return S_OK;
+ }
+ 
+ static HRESULT WINAPI video_presenter_control_RepaintVideo(IMFVideoDisplayControl *iface)
+diff --git a/dlls/evr/tests/evr.c b/dlls/evr/tests/evr.c
+index 9665e2683dd..d77703b6c1f 100644
+--- a/dlls/evr/tests/evr.c
++++ b/dlls/evr/tests/evr.c
+@@ -1056,20 +1056,17 @@ static void test_default_presenter(void)
+ 
+     hwnd2 = hwnd;
+     hr = IMFVideoDisplayControl_GetVideoWindow(display_control, &hwnd2);
+-todo_wine {
+     ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
+     ok(hwnd2 == NULL, "Unexpected window %p.\n", hwnd2);
+-}
++
+     hr = IMFVideoDisplayControl_SetVideoWindow(display_control, hwnd);
+-todo_wine
+     ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
+ 
+     hwnd2 = NULL;
+     hr = IMFVideoDisplayControl_GetVideoWindow(display_control, &hwnd2);
+-todo_wine {
+     ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
+     ok(hwnd2 == hwnd, "Unexpected window %p.\n", hwnd2);
+-}
++
+     hr = IDirect3DDeviceManager9_CloseDeviceHandle(dm, handle);
+     ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
+ 
+From 3981be41287c799e43693d80a9c0f4d34d2c0135 Mon Sep 17 00:00:00 2001
+From: Nikolay Sivov <nsivov@codeweavers.com>
+Date: Fri, 2 Oct 2020 14:01:12 +0300
+Subject: [PATCH] evr/presenter: Maintain video position rectangles.
+
+Signed-off-by: Nikolay Sivov <nsivov@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/evr/presenter.c | 43 ++++++++++++++++++++++++-----
+ dlls/evr/tests/evr.c | 66 ++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 102 insertions(+), 7 deletions(-)
+
+diff --git a/dlls/evr/presenter.c b/dlls/evr/presenter.c
+index a8e9a507924..0663383b14f 100644
+--- a/dlls/evr/presenter.c
++++ b/dlls/evr/presenter.c
+@@ -59,6 +59,8 @@ struct video_presenter
+     IDirect3DDeviceManager9 *device_manager;
+     UINT reset_token;
+     HWND video_window;
++    MFVideoNormalizedRect src_rect;
++    RECT dst_rect;
+     unsigned int state;
+     CRITICAL_SECTION cs;
+ };
+@@ -467,19 +469,45 @@ static HRESULT WINAPI video_presenter_control_GetIdealVideoSize(IMFVideoDisplayC
+ }
+ 
+ static HRESULT WINAPI video_presenter_control_SetVideoPosition(IMFVideoDisplayControl *iface,
+-        const MFVideoNormalizedRect *source, const RECT *dest)
++        const MFVideoNormalizedRect *src_rect, const RECT *dst_rect)
+ {
+-    FIXME("%p, %p, %p.\n", iface, source, dest);
++    struct video_presenter *presenter = impl_from_IMFVideoDisplayControl(iface);
+ 
+-    return E_NOTIMPL;
++    TRACE("%p, %p, %s.\n", iface, src_rect, wine_dbgstr_rect(dst_rect));
++
++    if (!src_rect && !dst_rect)
++        return E_POINTER;
++
++    if (src_rect && (src_rect->left < 0.0f || src_rect->top < 0.0f ||
++                src_rect->right > 1.0f || src_rect->bottom > 1.0f))
++        return E_INVALIDARG;
++
++    EnterCriticalSection(&presenter->cs);
++    if (src_rect)
++        presenter->src_rect = *src_rect;
++    if (dst_rect)
++        presenter->dst_rect = *dst_rect;
++    LeaveCriticalSection(&presenter->cs);
++
++    return S_OK;
+ }
+ 
+-static HRESULT WINAPI video_presenter_control_GetVideoPosition(IMFVideoDisplayControl *iface, MFVideoNormalizedRect *source,
+-        RECT *dest)
++static HRESULT WINAPI video_presenter_control_GetVideoPosition(IMFVideoDisplayControl *iface, MFVideoNormalizedRect *src_rect,
++        RECT *dst_rect)
+ {
+-    FIXME("%p, %p, %p.\n", iface, source, dest);
++    struct video_presenter *presenter = impl_from_IMFVideoDisplayControl(iface);
+ 
+-    return E_NOTIMPL;
++    TRACE("%p, %p, %p.\n", iface, src_rect, dst_rect);
++
++    if (!src_rect || !dst_rect)
++        return E_POINTER;
++
++    EnterCriticalSection(&presenter->cs);
++    *src_rect = presenter->src_rect;
++    *dst_rect = presenter->dst_rect;
++    LeaveCriticalSection(&presenter->cs);
++
++    return S_OK;
+ }
+ 
+ static HRESULT WINAPI video_presenter_control_SetAspectRatioMode(IMFVideoDisplayControl *iface, DWORD mode)
+@@ -718,6 +746,7 @@ HRESULT evr_presenter_create(IUnknown *outer, void **out)
+     object->IUnknown_inner.lpVtbl = &video_presenter_inner_vtbl;
+     object->outer_unk = outer ? outer : &object->IUnknown_inner;
+     object->refcount = 1;
++    object->src_rect.right = object->src_rect.bottom = 1.0f;
+     InitializeCriticalSection(&object->cs);
+ 
+     if (FAILED(hr = DXVA2CreateDirect3DDeviceManager9(&object->reset_token, &object->device_manager)))
+diff --git a/dlls/evr/tests/evr.c b/dlls/evr/tests/evr.c
+index d77703b6c1f..48bf01a2ef5 100644
+--- a/dlls/evr/tests/evr.c
++++ b/dlls/evr/tests/evr.c
+@@ -970,6 +970,7 @@ static void test_default_presenter(void)
+     D3DPRESENT_PARAMETERS present_params = { 0 };
+     IMFVideoDisplayControl *display_control;
+     IDirect3DSwapChain9 *swapchain;
++    MFVideoNormalizedRect src_rect;
+     IMFVideoPresenter *presenter;
+     IMFRateSupport *rate_support;
+     IDirect3DDevice9 *d3d_device;
+@@ -977,6 +978,7 @@ static void test_default_presenter(void)
+     IMFVideoDeviceID *deviceid;
+     IMFGetService *gs;
+     HWND hwnd, hwnd2;
++    RECT dst_rect;
+     HANDLE handle;
+     IUnknown *unk;
+     float rate;
+@@ -1051,6 +1053,7 @@ static void test_default_presenter(void)
+     hr = IDirect3DDeviceManager9_UnlockDevice(dm, handle, FALSE);
+     ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
+ 
++    /* Video window */
+     hwnd = create_window();
+     ok(!!hwnd, "Failed to create a test window.\n");
+ 
+@@ -1067,6 +1070,69 @@ static void test_default_presenter(void)
+     ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
+     ok(hwnd2 == hwnd, "Unexpected window %p.\n", hwnd2);
+ 
++    /* Video position */
++    hr = IMFVideoDisplayControl_GetVideoPosition(display_control, NULL, &dst_rect);
++    ok(hr == E_POINTER, "Unexpected hr %#x.\n", hr);
++
++    hr = IMFVideoDisplayControl_GetVideoPosition(display_control, &src_rect, NULL);
++    ok(hr == E_POINTER, "Unexpected hr %#x.\n", hr);
++
++    SetRect(&dst_rect, 1, 2, 3, 4);
++    hr = IMFVideoDisplayControl_GetVideoPosition(display_control, &src_rect, &dst_rect);
++    ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++    ok(src_rect.left == 0.0f && src_rect.top == 0.0f && src_rect.right == 1.0f &&
++            src_rect.bottom == 1.0f, "Unexpected source rectangle.\n");
++    ok(dst_rect.left == 0 && dst_rect.right == 0 && dst_rect.top == 0 && dst_rect.bottom == 0,
++            "Unexpected destination rectangle %s.\n", wine_dbgstr_rect(&dst_rect));
++
++    hr = IMFVideoDisplayControl_SetVideoPosition(display_control, NULL, NULL);
++    ok(hr == E_POINTER, "Unexpected hr %#x.\n", hr);
++
++    SetRect(&dst_rect, 0, 0, 10, 10);
++    hr = IMFVideoDisplayControl_SetVideoPosition(display_control, NULL, &dst_rect);
++    ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++
++    SetRect(&dst_rect, 1, 2, 3, 4);
++    hr = IMFVideoDisplayControl_GetVideoPosition(display_control, &src_rect, &dst_rect);
++    ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++    ok(dst_rect.left == 0 && dst_rect.right == 10 && dst_rect.top == 0 && dst_rect.bottom == 10,
++            "Unexpected destination rectangle %s.\n", wine_dbgstr_rect(&dst_rect));
++
++    src_rect.left = src_rect.top = 0.0f;
++    src_rect.right = 2.0f;
++    src_rect.bottom = 1.0f;
++    hr = IMFVideoDisplayControl_SetVideoPosition(display_control, &src_rect, NULL);
++    ok(hr == E_INVALIDARG, "Unexpected hr %#x.\n", hr);
++
++    src_rect.left = -0.1f;
++    src_rect.top = 0.0f;
++    src_rect.right = 0.9f;
++    src_rect.bottom = 1.0f;
++    hr = IMFVideoDisplayControl_SetVideoPosition(display_control, &src_rect, NULL);
++    ok(hr == E_INVALIDARG, "Unexpected hr %#x.\n", hr);
++
++    src_rect.left = 0.1f;
++    src_rect.top = 0.2f;
++    src_rect.right = 0.8f;
++    src_rect.bottom = 0.9f;
++    hr = IMFVideoDisplayControl_SetVideoPosition(display_control, &src_rect, NULL);
++    ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++
++    hr = IMFVideoDisplayControl_GetVideoPosition(display_control, &src_rect, &dst_rect);
++    ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++    ok(src_rect.left == 0.1f && src_rect.top == 0.2f && src_rect.right == 0.8f &&
++            src_rect.bottom == 0.9f, "Unexpected source rectangle.\n");
++
++    SetRect(&dst_rect, 1, 2, 999, 1000);
++    hr = IMFVideoDisplayControl_SetVideoPosition(display_control, NULL, &dst_rect);
++    ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++
++    SetRect(&dst_rect, 0, 1, 3, 4);
++    hr = IMFVideoDisplayControl_GetVideoPosition(display_control, &src_rect, &dst_rect);
++    ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++    ok(dst_rect.left == 1 && dst_rect.right == 999 && dst_rect.top == 2 && dst_rect.bottom == 1000,
++            "Unexpected destination rectangle %s.\n", wine_dbgstr_rect(&dst_rect));
++
+     hr = IDirect3DDeviceManager9_CloseDeviceHandle(dm, handle);
+     ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
+ 
+From 82c64b9c951777b0143e3125f4b95a3ac6e091c3 Mon Sep 17 00:00:00 2001
+From: Nikolay Sivov <nsivov@codeweavers.com>
+Date: Fri, 2 Oct 2020 14:01:13 +0300
+Subject: [PATCH] evr/presenter: Add missing method stubs.
+
+Signed-off-by: Nikolay Sivov <nsivov@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/evr/presenter.c | 48 ++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 48 insertions(+)
+
+diff --git a/dlls/evr/presenter.c b/dlls/evr/presenter.c
+index 0663383b14f..04e9a556840 100644
+--- a/dlls/evr/presenter.c
++++ b/dlls/evr/presenter.c
+@@ -563,6 +563,48 @@ static HRESULT WINAPI video_presenter_control_GetCurrentImage(IMFVideoDisplayCon
+     return E_NOTIMPL;
+ }
+ 
++static HRESULT WINAPI video_presenter_control_SetBorderColor(IMFVideoDisplayControl *iface, COLORREF color)
++{
++    FIXME("%p, %#x.\n", iface, color);
++
++    return E_NOTIMPL;
++}
++
++static HRESULT WINAPI video_presenter_control_GetBorderColor(IMFVideoDisplayControl *iface, COLORREF *color)
++{
++    FIXME("%p, %p.\n", iface, color);
++
++    return E_NOTIMPL;
++}
++
++static HRESULT WINAPI video_presenter_control_SetRenderingPrefs(IMFVideoDisplayControl *iface, DWORD flags)
++{
++    FIXME("%p, %#x.\n", iface, flags);
++
++    return E_NOTIMPL;
++}
++
++static HRESULT WINAPI video_presenter_control_GetRenderingPrefs(IMFVideoDisplayControl *iface, DWORD *flags)
++{
++    FIXME("%p, %p.\n", iface, flags);
++
++    return E_NOTIMPL;
++}
++
++static HRESULT WINAPI video_presenter_control_SetFullscreen(IMFVideoDisplayControl *iface, BOOL fullscreen)
++{
++    FIXME("%p, %d.\n", iface, fullscreen);
++
++    return E_NOTIMPL;
++}
++
++static HRESULT WINAPI video_presenter_control_GetFullscreen(IMFVideoDisplayControl *iface, BOOL *fullscreen)
++{
++    FIXME("%p, %p.\n", iface, fullscreen);
++
++    return E_NOTIMPL;
++}
++
+ static const IMFVideoDisplayControlVtbl video_presenter_control_vtbl =
+ {
+     video_presenter_control_QueryInterface,
+@@ -578,6 +620,12 @@ static const IMFVideoDisplayControlVtbl video_presenter_control_vtbl =
+     video_presenter_control_GetVideoWindow,
+     video_presenter_control_RepaintVideo,
+     video_presenter_control_GetCurrentImage,
++    video_presenter_control_SetBorderColor,
++    video_presenter_control_GetBorderColor,
++    video_presenter_control_SetRenderingPrefs,
++    video_presenter_control_GetRenderingPrefs,
++    video_presenter_control_SetFullscreen,
++    video_presenter_control_GetFullscreen,
+ };
+ 
+ static HRESULT WINAPI video_presenter_rate_support_QueryInterface(IMFRateSupport *iface, REFIID riid, void **obj)

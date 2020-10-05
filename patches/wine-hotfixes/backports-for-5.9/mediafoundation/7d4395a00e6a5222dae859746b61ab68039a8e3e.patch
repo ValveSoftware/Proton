@@ -1,0 +1,592 @@
+From 7d4395a00e6a5222dae859746b61ab68039a8e3e Mon Sep 17 00:00:00 2001
+From: Derek Lesho <dlesho@codeweavers.com>
+Date: Mon, 28 Sep 2020 15:59:53 -0500
+Subject: [PATCH] winegstreamer: Use decodebin to initialize media streams.
+
+Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
+Signed-off-by: Nikolay Sivov <nsivov@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/winegstreamer/gst_cbs.c      |  45 ++++
+ dlls/winegstreamer/gst_cbs.h      |   8 +
+ dlls/winegstreamer/media_source.c | 401 +++++++++++++++++++++++++++++-
+ 3 files changed, 453 insertions(+), 1 deletion(-)
+
+diff --git a/dlls/winegstreamer/gst_cbs.c b/dlls/winegstreamer/gst_cbs.c
+index 12b53bc5d68..51aaefa911d 100644
+--- a/dlls/winegstreamer/gst_cbs.c
++++ b/dlls/winegstreamer/gst_cbs.c
+@@ -359,3 +359,48 @@ gboolean bytestream_pad_event_process_wrapper(GstPad *pad, GstObject *parent, Gs
+ 
+     return cbdata.u.event_src_data.ret;
+ }
++
++GstBusSyncReply mf_src_bus_watch_wrapper(GstBus *bus, GstMessage *message, gpointer user)
++{
++    struct cb_data cbdata = { MF_SRC_BUS_WATCH };
++
++    cbdata.u.watch_bus_data.bus = bus;
++    cbdata.u.watch_bus_data.msg = message;
++    cbdata.u.watch_bus_data.user = user;
++
++    call_cb(&cbdata);
++
++    return cbdata.u.watch_bus_data.ret;
++}
++
++void mf_src_stream_added_wrapper(GstElement *bin, GstPad *pad, gpointer user)
++{
++    struct cb_data cbdata = { MF_SRC_STREAM_ADDED };
++
++    cbdata.u.pad_added_data.element = bin;
++    cbdata.u.pad_added_data.pad = pad;
++    cbdata.u.pad_added_data.user = user;
++
++    call_cb(&cbdata);
++}
++
++void mf_src_stream_removed_wrapper(GstElement *element, GstPad *pad, gpointer user)
++{
++    struct cb_data cbdata = { MF_SRC_STREAM_REMOVED };
++
++    cbdata.u.pad_removed_data.element = element;
++    cbdata.u.pad_removed_data.pad = pad;
++    cbdata.u.pad_removed_data.user = user;
++
++    call_cb(&cbdata);
++}
++
++void mf_src_no_more_pads_wrapper(GstElement *element, gpointer user)
++{
++    struct cb_data cbdata = { MF_SRC_NO_MORE_PADS };
++
++    cbdata.u.no_more_pads_data.element = element;
++    cbdata.u.no_more_pads_data.user = user;
++
++    call_cb(&cbdata);
++}
+diff --git a/dlls/winegstreamer/gst_cbs.h b/dlls/winegstreamer/gst_cbs.h
+index 3459a9ef8ee..a48999bbf71 100644
+--- a/dlls/winegstreamer/gst_cbs.h
++++ b/dlls/winegstreamer/gst_cbs.h
+@@ -48,6 +48,10 @@ enum CB_TYPE {
+     BYTESTREAM_QUERY,
+     BYTESTREAM_PAD_MODE_ACTIVATE,
+     BYTESTREAM_PAD_EVENT_PROCESS,
++    MF_SRC_BUS_WATCH,
++    MF_SRC_STREAM_ADDED,
++    MF_SRC_STREAM_REMOVED,
++    MF_SRC_NO_MORE_PADS,
+     MEDIA_SOURCE_MAX,
+ };
+ 
+@@ -164,5 +168,9 @@ GstFlowReturn bytestream_wrapper_pull_wrapper(GstPad *pad, GstObject *parent, gu
+ gboolean bytestream_query_wrapper(GstPad *pad, GstObject *parent, GstQuery *query) DECLSPEC_HIDDEN;
+ gboolean bytestream_pad_mode_activate_wrapper(GstPad *pad, GstObject *parent, GstPadMode mode, gboolean activate) DECLSPEC_HIDDEN;
+ gboolean bytestream_pad_event_process_wrapper(GstPad *pad, GstObject *parent, GstEvent *event) DECLSPEC_HIDDEN;
++GstBusSyncReply mf_src_bus_watch_wrapper(GstBus *bus, GstMessage *message, gpointer user) DECLSPEC_HIDDEN;
++void mf_src_stream_added_wrapper(GstElement *bin, GstPad *pad, gpointer user) DECLSPEC_HIDDEN;
++void mf_src_stream_removed_wrapper(GstElement *element, GstPad *pad, gpointer user) DECLSPEC_HIDDEN;
++void mf_src_no_more_pads_wrapper(GstElement *element, gpointer user) DECLSPEC_HIDDEN;
+ 
+ #endif
+diff --git a/dlls/winegstreamer/media_source.c b/dlls/winegstreamer/media_source.c
+index 1accf55c6a2..6a63db4f584 100644
+--- a/dlls/winegstreamer/media_source.c
++++ b/dlls/winegstreamer/media_source.c
+@@ -24,6 +24,7 @@
+ #include "gst_private.h"
+ #include "gst_cbs.h"
+ 
++#include <assert.h>
+ #include <stdarg.h>
+ #include <assert.h>
+ 
+@@ -41,21 +42,47 @@
+ 
+ WINE_DEFAULT_DEBUG_CHANNEL(mfplat);
+ 
++struct media_stream
++{
++    IMFMediaStream IMFMediaStream_iface;
++    LONG ref;
++    struct media_source *parent_source;
++    IMFMediaEventQueue *event_queue;
++    GstElement *appsink;
++    GstPad *their_src, *my_sink;
++    enum
++    {
++        STREAM_INACTIVE,
++        STREAM_SHUTDOWN,
++    } state;
++};
++
+ struct media_source
+ {
+     IMFMediaSource IMFMediaSource_iface;
+     LONG ref;
+     IMFMediaEventQueue *event_queue;
+     IMFByteStream *byte_stream;
+-    GstPad *my_src;
++    struct media_stream **streams;
++    ULONG stream_count;
++    GstBus *bus;
++    GstElement *container;
++    GstElement *decodebin;
++    GstPad *my_src, *their_sink;
+     enum
+     {
+         SOURCE_OPENING,
+         SOURCE_STOPPED,
+         SOURCE_SHUTDOWN,
+     } state;
++    HANDLE no_more_pads_event;
+ };
+ 
++static inline struct media_stream *impl_from_IMFMediaStream(IMFMediaStream *iface)
++{
++    return CONTAINING_RECORD(iface, struct media_stream, IMFMediaStream_iface);
++}
++
+ static inline struct media_source *impl_from_IMFMediaSource(IMFMediaSource *iface)
+ {
+     return CONTAINING_RECORD(iface, struct media_source, IMFMediaSource_iface);
+@@ -182,6 +209,224 @@ static gboolean bytestream_pad_event_process(GstPad *pad, GstObject *parent, Gst
+     return TRUE;
+ }
+ 
++GstBusSyncReply bus_watch(GstBus *bus, GstMessage *message, gpointer user)
++{
++    struct media_source *source = user;
++    gchar *dbg_info = NULL;
++    GError *err = NULL;
++
++    TRACE("source %p message type %s\n", source, GST_MESSAGE_TYPE_NAME(message));
++
++    switch (message->type)
++    {
++        case GST_MESSAGE_ERROR:
++            gst_message_parse_error(message, &err, &dbg_info);
++            ERR("%s: %s\n", GST_OBJECT_NAME(message->src), err->message);
++            ERR("%s\n", dbg_info);
++            g_error_free(err);
++            g_free(dbg_info);
++            break;
++        case GST_MESSAGE_WARNING:
++            gst_message_parse_warning(message, &err, &dbg_info);
++            WARN("%s: %s\n", GST_OBJECT_NAME(message->src), err->message);
++            WARN("%s\n", dbg_info);
++            g_error_free(err);
++            g_free(dbg_info);
++            break;
++        default:
++            break;
++    }
++
++    gst_message_unref(message);
++    return GST_BUS_DROP;
++}
++
++static HRESULT WINAPI media_stream_QueryInterface(IMFMediaStream *iface, REFIID riid, void **out)
++{
++    struct media_stream *stream = impl_from_IMFMediaStream(iface);
++
++    TRACE("(%p)->(%s %p)\n", stream, debugstr_guid(riid), out);
++
++    if (IsEqualIID(riid, &IID_IMFMediaStream) ||
++        IsEqualIID(riid, &IID_IMFMediaEventGenerator) ||
++        IsEqualIID(riid, &IID_IUnknown))
++    {
++        *out = &stream->IMFMediaStream_iface;
++    }
++    else
++    {
++        FIXME("(%s, %p)\n", debugstr_guid(riid), out);
++        *out = NULL;
++        return E_NOINTERFACE;
++    }
++
++    IUnknown_AddRef((IUnknown*)*out);
++    return S_OK;
++}
++
++static ULONG WINAPI media_stream_AddRef(IMFMediaStream *iface)
++{
++    struct media_stream *stream = impl_from_IMFMediaStream(iface);
++    ULONG ref = InterlockedIncrement(&stream->ref);
++
++    TRACE("(%p) ref=%u\n", stream, ref);
++
++    return ref;
++}
++
++static ULONG WINAPI media_stream_Release(IMFMediaStream *iface)
++{
++    struct media_stream *stream = impl_from_IMFMediaStream(iface);
++
++    ULONG ref = InterlockedDecrement(&stream->ref);
++
++    TRACE("(%p) ref=%u\n", stream, ref);
++
++    if (!ref)
++    {
++        if (stream->event_queue)
++            IMFMediaEventQueue_Release(stream->event_queue);
++        heap_free(stream);
++    }
++
++    return ref;
++}
++
++static HRESULT WINAPI media_stream_GetEvent(IMFMediaStream *iface, DWORD flags, IMFMediaEvent **event)
++{
++    struct media_stream *stream = impl_from_IMFMediaStream(iface);
++
++    TRACE("(%p)->(%#x, %p)\n", stream, flags, event);
++
++    return IMFMediaEventQueue_GetEvent(stream->event_queue, flags, event);
++}
++
++static HRESULT WINAPI media_stream_BeginGetEvent(IMFMediaStream *iface, IMFAsyncCallback *callback, IUnknown *state)
++{
++    struct media_stream *stream = impl_from_IMFMediaStream(iface);
++
++    TRACE("(%p)->(%p, %p)\n", stream, callback, state);
++
++    return IMFMediaEventQueue_BeginGetEvent(stream->event_queue, callback, state);
++}
++
++static HRESULT WINAPI media_stream_EndGetEvent(IMFMediaStream *iface, IMFAsyncResult *result, IMFMediaEvent **event)
++{
++    struct media_stream *stream = impl_from_IMFMediaStream(iface);
++
++    TRACE("(%p)->(%p, %p)\n", stream, result, event);
++
++    return IMFMediaEventQueue_EndGetEvent(stream->event_queue, result, event);
++}
++
++static HRESULT WINAPI media_stream_QueueEvent(IMFMediaStream *iface, MediaEventType event_type, REFGUID ext_type,
++        HRESULT hr, const PROPVARIANT *value)
++{
++    struct media_stream *stream = impl_from_IMFMediaStream(iface);
++
++    TRACE("(%p)->(%d, %s, %#x, %p)\n", stream, event_type, debugstr_guid(ext_type), hr, value);
++
++    return IMFMediaEventQueue_QueueEventParamVar(stream->event_queue, event_type, ext_type, hr, value);
++}
++
++static HRESULT WINAPI media_stream_GetMediaSource(IMFMediaStream *iface, IMFMediaSource **source)
++{
++    struct media_stream *stream = impl_from_IMFMediaStream(iface);
++
++    FIXME("stub (%p)->(%p)\n", stream, source);
++
++    if (stream->state == STREAM_SHUTDOWN)
++        return MF_E_SHUTDOWN;
++
++    return E_NOTIMPL;
++}
++
++static HRESULT WINAPI media_stream_GetStreamDescriptor(IMFMediaStream* iface, IMFStreamDescriptor **descriptor)
++{
++    struct media_stream *stream = impl_from_IMFMediaStream(iface);
++
++    TRACE("(%p)->(%p)\n", stream, descriptor);
++
++    if (stream->state == STREAM_SHUTDOWN)
++        return MF_E_SHUTDOWN;
++
++    return E_NOTIMPL;
++}
++
++static HRESULT WINAPI media_stream_RequestSample(IMFMediaStream *iface, IUnknown *token)
++{
++    struct media_stream *stream = impl_from_IMFMediaStream(iface);
++
++    TRACE("(%p)->(%p)\n", iface, token);
++
++    if (stream->state == STREAM_SHUTDOWN)
++        return MF_E_SHUTDOWN;
++
++    return E_NOTIMPL;
++}
++
++static const IMFMediaStreamVtbl media_stream_vtbl =
++{
++    media_stream_QueryInterface,
++    media_stream_AddRef,
++    media_stream_Release,
++    media_stream_GetEvent,
++    media_stream_BeginGetEvent,
++    media_stream_EndGetEvent,
++    media_stream_QueueEvent,
++    media_stream_GetMediaSource,
++    media_stream_GetStreamDescriptor,
++    media_stream_RequestSample
++};
++
++static HRESULT new_media_stream(struct media_source *source, GstPad *pad, struct media_stream **out_stream)
++{
++    struct media_stream *object = heap_alloc_zero(sizeof(*object));
++    HRESULT hr;
++
++    TRACE("(%p %p)->(%p)\n", source, pad, out_stream);
++
++    object->IMFMediaStream_iface.lpVtbl = &media_stream_vtbl;
++    object->ref = 1;
++
++    IMFMediaSource_AddRef(&source->IMFMediaSource_iface);
++    object->parent_source = source;
++    object->their_src = pad;
++
++    object->state = STREAM_INACTIVE;
++
++    if (FAILED(hr = MFCreateEventQueue(&object->event_queue)))
++        goto fail;
++
++    if (!(object->appsink = gst_element_factory_make("appsink", NULL)))
++    {
++        hr = E_OUTOFMEMORY;
++        goto fail;
++    }
++    gst_bin_add(GST_BIN(object->parent_source->container), object->appsink);
++
++    g_object_set(object->appsink, "sync", FALSE, NULL);
++    g_object_set(object->appsink, "max-buffers", 5, NULL);
++
++    object->my_sink = gst_element_get_static_pad(object->appsink, "sink");
++    gst_pad_set_element_private(object->my_sink, object);
++
++    gst_pad_link(object->their_src, object->my_sink);
++
++    gst_element_sync_state_with_parent(object->appsink);
++
++    TRACE("->(%p)\n", object);
++    *out_stream = object;
++
++    return S_OK;
++
++fail:
++    WARN("Failed to construct media stream, hr %#x.\n", hr);
++
++    IMFMediaStream_Release(&object->IMFMediaStream_iface);
++    return hr;
++}
++
+ static HRESULT WINAPI media_source_QueryInterface(IMFMediaSource *iface, REFIID riid, void **out)
+ {
+     struct media_source *source = impl_from_IMFMediaSource(iface);
+@@ -333,6 +578,7 @@ static HRESULT WINAPI media_source_Pause(IMFMediaSource *iface)
+ static HRESULT WINAPI media_source_Shutdown(IMFMediaSource *iface)
+ {
+     struct media_source *source = impl_from_IMFMediaSource(iface);
++    unsigned int i;
+ 
+     TRACE("(%p)\n", source);
+ 
+@@ -341,13 +587,44 @@ static HRESULT WINAPI media_source_Shutdown(IMFMediaSource *iface)
+ 
+     source->state = SOURCE_SHUTDOWN;
+ 
++    if (source->container)
++    {
++        gst_element_set_state(source->container, GST_STATE_NULL);
++        gst_object_unref(GST_OBJECT(source->container));
++    }
++
+     if (source->my_src)
+         gst_object_unref(GST_OBJECT(source->my_src));
++    if (source->their_sink)
++        gst_object_unref(GST_OBJECT(source->their_sink));
++
+     if (source->event_queue)
+         IMFMediaEventQueue_Shutdown(source->event_queue);
+     if (source->byte_stream)
+         IMFByteStream_Release(source->byte_stream);
+ 
++    for (i = 0; i < source->stream_count; i++)
++    {
++        struct media_stream *stream = source->streams[i];
++
++        stream->state = STREAM_SHUTDOWN;
++
++        if (stream->my_sink)
++            gst_object_unref(GST_OBJECT(stream->my_sink));
++        if (stream->event_queue)
++            IMFMediaEventQueue_Shutdown(stream->event_queue);
++        if (stream->parent_source)
++            IMFMediaSource_Release(&stream->parent_source->IMFMediaSource_iface);
++
++        IMFMediaStream_Release(&stream->IMFMediaStream_iface);
++    }
++
++    if (source->stream_count)
++        heap_free(source->streams);
++
++    if (source->no_more_pads_event)
++        CloseHandle(source->no_more_pads_event);
++
+     return S_OK;
+ }
+ 
+@@ -368,6 +645,50 @@ static const IMFMediaSourceVtbl IMFMediaSource_vtbl =
+     media_source_Shutdown,
+ };
+ 
++static void stream_added(GstElement *element, GstPad *pad, gpointer user)
++{
++    struct media_source *source = user;
++    struct media_stream **new_stream_array;
++    struct media_stream *stream;
++
++    if (gst_pad_get_direction(pad) != GST_PAD_SRC)
++        return;
++
++    if (FAILED(new_media_stream(source, pad, &stream)))
++        return;
++
++    if (!(new_stream_array = heap_realloc(source->streams, (source->stream_count + 1) * (sizeof(*new_stream_array)))))
++    {
++        ERR("Failed to add stream to source\n");
++        IMFMediaStream_Release(&stream->IMFMediaStream_iface);
++        return;
++    }
++
++    source->streams = new_stream_array;
++    source->streams[source->stream_count++] = stream;
++}
++
++static void stream_removed(GstElement *element, GstPad *pad, gpointer user)
++{
++    struct media_source *source = user;
++    unsigned int i;
++
++    for (i = 0; i < source->stream_count; i++)
++    {
++        struct media_stream *stream = source->streams[i];
++        if (stream->their_src != pad)
++            continue;
++        stream->their_src = NULL;
++    }
++}
++
++static void no_more_pads(GstElement *element, gpointer user)
++{
++    struct media_source *source = user;
++
++    SetEvent(source->no_more_pads_event);
++}
++
+ static HRESULT media_source_constructor(IMFByteStream *bytestream, struct media_source **out_media_source)
+ {
+     GstStaticPadTemplate src_template =
+@@ -375,6 +696,7 @@ static HRESULT media_source_constructor(IMFByteStream *bytestream, struct media_
+ 
+     struct media_source *object = heap_alloc_zero(sizeof(*object));
+     HRESULT hr;
++    int ret;
+ 
+     if (!object)
+         return E_OUTOFMEMORY;
+@@ -383,10 +705,16 @@ static HRESULT media_source_constructor(IMFByteStream *bytestream, struct media_
+     object->ref = 1;
+     object->byte_stream = bytestream;
+     IMFByteStream_AddRef(bytestream);
++    object->no_more_pads_event = CreateEventA(NULL, FALSE, FALSE, NULL);
+ 
+     if (FAILED(hr = MFCreateEventQueue(&object->event_queue)))
+         goto fail;
+ 
++    object->container = gst_bin_new(NULL);
++    object->bus = gst_bus_new();
++    gst_bus_set_sync_handler(object->bus, mf_src_bus_watch_wrapper, object, NULL);
++    gst_element_set_bus(object->container, object->bus);
++
+     object->my_src = gst_pad_new_from_static_template(&src_template, "mf-src");
+     gst_pad_set_element_private(object->my_src, object);
+     gst_pad_set_getrange_function(object->my_src, bytestream_wrapper_pull_wrapper);
+@@ -394,6 +722,53 @@ static HRESULT media_source_constructor(IMFByteStream *bytestream, struct media_
+     gst_pad_set_activatemode_function(object->my_src, bytestream_pad_mode_activate_wrapper);
+     gst_pad_set_event_function(object->my_src, bytestream_pad_event_process_wrapper);
+ 
++    if (!(object->decodebin = gst_element_factory_make("decodebin", NULL)))
++    {
++        WARN("Failed to create decodebin for source\n");
++        hr = E_OUTOFMEMORY;
++        goto fail;
++    }
++
++    /* In Media Foundation, sources may read from any media source stream
++       without fear of blocking due to buffering limits on another.  Trailmakers,
++       a Unity3D engine game does this by only reading from the audio stream once,
++       and never deselecting this.  These properties replicate that behavior.
++
++       Note that with most elements, this causes excessive memory use, however
++       this is also what occurs on Windows.
++    */
++    g_object_set(object->decodebin, "max-size-buffers", 0, NULL);
++    g_object_set(object->decodebin, "max-size-time", G_GUINT64_CONSTANT(0), NULL);
++    g_object_set(object->decodebin, "max-size-bytes", 0, NULL);
++
++    gst_bin_add(GST_BIN(object->container), object->decodebin);
++
++    g_signal_connect(object->decodebin, "pad-added", G_CALLBACK(mf_src_stream_added_wrapper), object);
++    g_signal_connect(object->decodebin, "pad-removed", G_CALLBACK(mf_src_stream_removed_wrapper), object);
++    g_signal_connect(object->decodebin, "no-more-pads", G_CALLBACK(mf_src_no_more_pads_wrapper), object);
++
++    object->their_sink = gst_element_get_static_pad(object->decodebin, "sink");
++
++    if ((ret = gst_pad_link(object->my_src, object->their_sink)) < 0)
++    {
++        WARN("Failed to link our bytestream pad to the demuxer input, error %d.\n", ret);
++        hr = E_FAIL;
++        goto fail;
++    }
++
++    object->state = SOURCE_OPENING;
++
++    gst_element_set_state(object->container, GST_STATE_PAUSED);
++    ret = gst_element_get_state(object->container, NULL, NULL, -1);
++    if (ret == GST_STATE_CHANGE_FAILURE)
++    {
++        ERR("Failed to play source, error %d.\n", ret);
++        hr = E_FAIL;
++        goto fail;
++    }
++
++    WaitForSingleObject(object->no_more_pads_event, INFINITE);
++
+     object->state = SOURCE_STOPPED;
+ 
+     *out_media_source = object;
+@@ -893,6 +1268,30 @@ void perform_cb_media_source(struct cb_data *cbdata)
+             cbdata->u.event_src_data.ret = bytestream_pad_event_process(data->pad, data->parent, data->event);
+             break;
+         }
++    case MF_SRC_BUS_WATCH:
++        {
++            struct watch_bus_data *data = &cbdata->u.watch_bus_data;
++            cbdata->u.watch_bus_data.ret = bus_watch(data->bus, data->msg, data->user);
++            break;
++        }
++    case MF_SRC_STREAM_ADDED:
++        {
++            struct pad_added_data *data = &cbdata->u.pad_added_data;
++            stream_added(data->element, data->pad, data->user);
++            break;
++        }
++    case MF_SRC_STREAM_REMOVED:
++        {
++            struct pad_removed_data *data = &cbdata->u.pad_removed_data;
++            stream_removed(data->element, data->pad, data->user);
++            break;
++        }
++    case MF_SRC_NO_MORE_PADS:
++        {
++            struct no_more_pads_data *data = &cbdata->u.no_more_pads_data;
++            no_more_pads(data->element, data->user);
++            break;
++        }
+     default:
+         {
+             assert(0);

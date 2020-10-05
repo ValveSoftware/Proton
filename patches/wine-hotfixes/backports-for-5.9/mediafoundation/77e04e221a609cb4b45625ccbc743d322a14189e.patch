@@ -1,0 +1,82 @@
+From 77e04e221a609cb4b45625ccbc743d322a14189e Mon Sep 17 00:00:00 2001
+From: Nikolay Sivov <nsivov@codeweavers.com>
+Date: Fri, 2 Oct 2020 14:01:11 +0300
+Subject: [PATCH] evr/presenter: Keep video window handle.
+
+Signed-off-by: Nikolay Sivov <nsivov@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/evr/presenter.c | 19 +++++++++++++++----
+ dlls/evr/tests/evr.c |  7 ++-----
+ 2 files changed, 17 insertions(+), 9 deletions(-)
+
+diff --git a/dlls/evr/presenter.c b/dlls/evr/presenter.c
+index 8b5a7dd46ab..a8e9a507924 100644
+--- a/dlls/evr/presenter.c
++++ b/dlls/evr/presenter.c
+@@ -58,6 +58,7 @@ struct video_presenter
+ 
+     IDirect3DDeviceManager9 *device_manager;
+     UINT reset_token;
++    HWND video_window;
+     unsigned int state;
+     CRITICAL_SECTION cs;
+ };
+@@ -497,16 +498,26 @@ static HRESULT WINAPI video_presenter_control_GetAspectRatioMode(IMFVideoDisplay
+ 
+ static HRESULT WINAPI video_presenter_control_SetVideoWindow(IMFVideoDisplayControl *iface, HWND window)
+ {
+-    FIXME("%p, %p.\n", iface, window);
++    struct video_presenter *presenter = impl_from_IMFVideoDisplayControl(iface);
+ 
+-    return E_NOTIMPL;
++    TRACE("%p, %p.\n", iface, window);
++
++    EnterCriticalSection(&presenter->cs);
++    presenter->video_window = window;
++    LeaveCriticalSection(&presenter->cs);
++
++    return S_OK;
+ }
+ 
+ static HRESULT WINAPI video_presenter_control_GetVideoWindow(IMFVideoDisplayControl *iface, HWND *window)
+ {
+-    FIXME("%p, %p.\n", iface, window);
++    struct video_presenter *presenter = impl_from_IMFVideoDisplayControl(iface);
+ 
+-    return E_NOTIMPL;
++    TRACE("%p, %p.\n", iface, window);
++
++    *window = presenter->video_window;
++
++    return S_OK;
+ }
+ 
+ static HRESULT WINAPI video_presenter_control_RepaintVideo(IMFVideoDisplayControl *iface)
+diff --git a/dlls/evr/tests/evr.c b/dlls/evr/tests/evr.c
+index 9665e2683dd..d77703b6c1f 100644
+--- a/dlls/evr/tests/evr.c
++++ b/dlls/evr/tests/evr.c
+@@ -1056,20 +1056,17 @@ static void test_default_presenter(void)
+ 
+     hwnd2 = hwnd;
+     hr = IMFVideoDisplayControl_GetVideoWindow(display_control, &hwnd2);
+-todo_wine {
+     ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
+     ok(hwnd2 == NULL, "Unexpected window %p.\n", hwnd2);
+-}
++
+     hr = IMFVideoDisplayControl_SetVideoWindow(display_control, hwnd);
+-todo_wine
+     ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
+ 
+     hwnd2 = NULL;
+     hr = IMFVideoDisplayControl_GetVideoWindow(display_control, &hwnd2);
+-todo_wine {
+     ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
+     ok(hwnd2 == hwnd, "Unexpected window %p.\n", hwnd2);
+-}
++
+     hr = IDirect3DDeviceManager9_CloseDeviceHandle(dm, handle);
+     ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
+ 
