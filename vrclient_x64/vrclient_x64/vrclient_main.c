@@ -1040,6 +1040,15 @@ EVROverlayError ivroverlay_set_overlay_texture(
                                 }
                         }
 #endif
+                        {
+                                IWineD3D11Texture2D *wine_texture;
+                                if (SUCCEEDED(hr = texture_iface->lpVtbl->QueryInterface(texture_iface,
+                                        &IID_IWineD3D11Texture2D, (void **)&wine_texture)))
+                                {
+                                        FIXME("WineD3D not yet supported by IVROverlay::SetOverlayTexture\n");
+                                        goto overlay_warn_out;
+                                }
+                        }
 overlay_warn_out:
                         WARN("Invalid D3D11 texture %p.\n", texture);
                         return cpp_func(linux_side, overlayHandle, texture);
