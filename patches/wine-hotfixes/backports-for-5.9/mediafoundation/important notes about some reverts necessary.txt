@@ -1,1 +1,12 @@
-fd25ba65e0eb9fedfb2cdfa2b7a4b16e0401dfdf needs to be reverted as it breaks color correction in endless space 2
+fd25ba65e0eb9fedfb2cdfa2b7a4b16e0401dfdf breaks color correction in endless space 2
+pending patch:
+
+https://source.winehq.org/patches/data/194388
+fixes it.
+
+These currently break catherine classic:
+6408aa3ab74d4740f276c0b8cc444dd6a9e6842e
+7b54ce1e07fe09b0734407db012c754c48aee4d9
+430c179fe86dd7f9b3ddfb6ef30f6359633ef0b8
+24c9d77cee95a778c95a03c6083739cc31989e50
+e2bcf44080070436bfae9888c8e6001d511192e3
