@@ -1,7 +1,7 @@
+From 2a92a6508a466f1c6468e35e47fc094e680c7140 Mon Sep 17 00:00:00 2001
 From: Georg Lehmann <dadschoorse@gmail.com>
-Subject: [PATCH v5 1/3] winevulkan: Generate helpers for wrapped handles.
-Message-Id: <20200925151638.28312-1-dadschoorse@gmail.com>
-Date: Fri, 25 Sep 2020 17:16:36 +0200
+Date: Fri, 25 Sep 2020 13:41:39 +0200
+Subject: [PATCH] winevulkan: Generate helpers for wrapped handles.
 
 Signed-off-by: Georg Lehmann <dadschoorse@gmail.com>
 ---
@@ -11,7 +11,7 @@ Signed-off-by: Georg Lehmann <dadschoorse@gmail.com>
  3 files changed, 53 insertions(+), 22 deletions(-)
 
 diff --git a/dlls/winevulkan/make_vulkan b/dlls/winevulkan/make_vulkan
-index 2cddb161d6..afea087a92 100755
+index 2cddb161d69..c79db37dfc7 100755
 --- a/dlls/winevulkan/make_vulkan
 +++ b/dlls/winevulkan/make_vulkan
 @@ -939,9 +939,6 @@ class VkHandle(object):
@@ -57,12 +57,12 @@ index 2cddb161d6..afea087a92 100755
 +
 +        f.write("BOOL wine_vk_is_type_wrapped(VkObjectType type)\n")
 +        f.write("{\n")
-+        f.write("    return ")
++        f.write("    return FALSE")
 +        for handle in self.registry.handles:
 +            if not handle.is_required() or not handle.is_wrapped():
 +                continue
-+            f.write("type == {} || ".format(handle.object_type()))
-+        f.write("FALSE;\n")
++            f.write(" ||\n        type == {}".format(handle.object_type()))
++        f.write(";\n")
 +        f.write("}\n\n")
 +
 +        f.write("uint64_t wine_vk_unwrap_handle(VkObjectType type, uint64_t handle)\n")
@@ -87,7 +87,7 @@ index 2cddb161d6..afea087a92 100755
  
      def generate_thunks_h(self, f, prefix):
 diff --git a/dlls/winevulkan/vulkan.c b/dlls/winevulkan/vulkan.c
-index f730c04923..3d1e8bd0ab 100644
+index f730c04923a..3d1e8bd0abd 100644
 --- a/dlls/winevulkan/vulkan.c
 +++ b/dlls/winevulkan/vulkan.c
 @@ -1534,30 +1534,13 @@ void WINAPI wine_vkGetPhysicalDeviceExternalSemaphorePropertiesKHR(VkPhysicalDev
@@ -132,7 +132,7 @@ index f730c04923..3d1e8bd0ab 100644
  }
  
 diff --git a/dlls/winevulkan/vulkan_private.h b/dlls/winevulkan/vulkan_private.h
-index 4bcc4de440..bf09401c52 100644
+index 4bcc4de440d..bf09401c52a 100644
 --- a/dlls/winevulkan/vulkan_private.h
 +++ b/dlls/winevulkan/vulkan_private.h
 @@ -138,4 +138,7 @@ void *wine_vk_get_instance_proc_addr(const char *name) DECLSPEC_HIDDEN;
@@ -143,15 +143,10 @@ index 4bcc4de440..bf09401c52 100644
 +uint64_t wine_vk_unwrap_handle(VkObjectType type, uint64_t handle) DECLSPEC_HIDDEN;
 +
  #endif /* __WINE_VULKAN_PRIVATE_H */
-
--- 
-2.28.0
+From 94232e2f0834133177cf80b43f5d080d1835ca1e Mon Sep 17 00:00:00 2001
 From: Georg Lehmann <dadschoorse@gmail.com>
-Subject: [PATCH v5 2/3] winevulkan: Store a mapping from native handles to wrappers.
-Message-Id: <20200925151638.28312-2-dadschoorse@gmail.com>
-Date: Fri, 25 Sep 2020 17:16:37 +0200
-In-Reply-To: <20200925151638.28312-1-dadschoorse@gmail.com>
-References: <20200925151638.28312-1-dadschoorse@gmail.com>
+Date: Thu, 17 Sep 2020 18:27:53 +0200
+Subject: [PATCH] winevulkan: Store a mapping from native handles to wrappers.
 
 Signed-off-by: Georg Lehmann <dadschoorse@gmail.com>
 ---
@@ -160,7 +155,7 @@ Signed-off-by: Georg Lehmann <dadschoorse@gmail.com>
  2 files changed, 100 insertions(+)
 
 diff --git a/dlls/winevulkan/vulkan.c b/dlls/winevulkan/vulkan.c
-index 3d1e8bd0ab..54b910c5e5 100644
+index 3d1e8bd0abd..c140ff3a0e8 100644
 --- a/dlls/winevulkan/vulkan.c
 +++ b/dlls/winevulkan/vulkan.c
 @@ -66,11 +66,59 @@ static VkResult (*p_vkEnumerateInstanceVersion)(uint32_t *version);
@@ -244,7 +239,7 @@ index 3d1e8bd0ab..54b910c5e5 100644
          {
              device->funcs.p_vkGetDeviceQueue(device->device, family_index, i, &queue->queue);
          }
-+        
++
 +        WINE_VK_ADD_DISPATCHABLE_MAPPING(device->phys_dev->instance, queue, queue->queue);
      }
  
@@ -348,7 +343,7 @@ index 3d1e8bd0ab..54b910c5e5 100644
      heap_free(pool);
  }
 diff --git a/dlls/winevulkan/vulkan_private.h b/dlls/winevulkan/vulkan_private.h
-index bf09401c52..7000da7133 100644
+index bf09401c52a..959a813a213 100644
 --- a/dlls/winevulkan/vulkan_private.h
 +++ b/dlls/winevulkan/vulkan_private.h
 @@ -60,6 +60,16 @@ struct wine_vk_base
@@ -386,7 +381,7 @@ index bf09401c52..7000da7133 100644
      uint32_t max_queue_families;
  
      unsigned int quirks;
-+    
++
 +    struct wine_vk_mapping mapping;
  };
  
@@ -400,7 +395,7 @@ index bf09401c52..7000da7133 100644
 +    SRWLOCK wrapper_lock;
 +
      unsigned int quirks;
-+    
++
 +    struct wine_vk_mapping mapping;
  };
  
@@ -409,7 +404,7 @@ index bf09401c52..7000da7133 100644
  
      VkExtensionProperties *extensions;
      uint32_t extension_count;
-+    
++
 +    struct wine_vk_mapping mapping;
  };
  
@@ -418,7 +413,7 @@ index bf09401c52..7000da7133 100644
      VkQueue queue; /* native queue */
  
      VkDeviceQueueCreateFlags flags;
-+    
++
 +    struct wine_vk_mapping mapping;
  };
  
@@ -427,32 +422,27 @@ index bf09401c52..7000da7133 100644
      VkCommandPool command_pool;
  
      struct list command_buffers;
-+    
++
 +    struct wine_vk_mapping mapping;
  };
  
  static inline struct wine_cmd_pool *wine_cmd_pool_from_handle(VkCommandPool handle)
-
--- 
-2.28.0
+From 322d329326f4daecde3e78b16fd11dae6abe9e33 Mon Sep 17 00:00:00 2001
 From: Georg Lehmann <dadschoorse@gmail.com>
-Subject: [PATCH v5 3/3] winevulkan: Implement VK_EXT_debug_utils.
-Message-Id: <20200925151638.28312-3-dadschoorse@gmail.com>
-Date: Fri, 25 Sep 2020 17:16:38 +0200
-In-Reply-To: <20200925151638.28312-1-dadschoorse@gmail.com>
-References: <20200925151638.28312-1-dadschoorse@gmail.com>
+Date: Fri, 18 Sep 2020 12:58:29 +0200
+Subject: [PATCH] winevulkan: Implement VK_EXT_debug_utils.
 
 Wine-Bug: https://bugs.winehq.org/show_bug.cgi?id=49813
 
 Signed-off-by: Georg Lehmann <dadschoorse@gmail.com>
 ---
- dlls/winevulkan/make_vulkan      |   8 +-
- dlls/winevulkan/vulkan.c         | 183 +++++++++++++++++++++++++++++++
- dlls/winevulkan/vulkan_private.h |  31 ++++++
- 3 files changed, 221 insertions(+), 1 deletion(-)
+ dlls/winevulkan/make_vulkan      |  10 +-
+ dlls/winevulkan/vulkan.c         | 207 +++++++++++++++++++++++++++++++
+ dlls/winevulkan/vulkan_private.h |  31 +++++
+ 3 files changed, 247 insertions(+), 1 deletion(-)
 
 diff --git a/dlls/winevulkan/make_vulkan b/dlls/winevulkan/make_vulkan
-index afea087a92..623d1b9cde 100755
+index c79db37dfc7..9ea69670c5d 100755
 --- a/dlls/winevulkan/make_vulkan
 +++ b/dlls/winevulkan/make_vulkan
 @@ -92,7 +92,6 @@ UNSUPPORTED_EXTENSIONS = [
@@ -463,7 +453,7 @@ index afea087a92..623d1b9cde 100755
      "VK_EXT_validation_features",
      "VK_EXT_validation_flags",
      "VK_KHR_display", # Needs WSI work.
-@@ -225,6 +224,11 @@ FUNCTION_OVERRIDES = {
+@@ -225,6 +224,13 @@ FUNCTION_OVERRIDES = {
      # VK_EXT_calibrated_timestamps
      "vkGetPhysicalDeviceCalibrateableTimeDomainsEXT" : {"dispatch" : True, "driver" : False, "thunk" : False},
      "vkGetCalibratedTimestampsEXT" : {"dispatch" : True, "driver" : False, "thunk" : False},
@@ -472,10 +462,12 @@ index afea087a92..623d1b9cde 100755
 +    "vkCreateDebugUtilsMessengerEXT" : {"dispatch": True, "driver" : False, "thunk" : False},
 +    "vkDestroyDebugUtilsMessengerEXT" : {"dispatch": True, "driver" : False, "thunk" : False},
 +    "vkSubmitDebugUtilsMessageEXT" : {"dispatch": True, "driver" : False, "thunk" : True, "private_thunk" : True},
++    "vkSetDebugUtilsObjectTagEXT" : {"dispatch": True, "driver" : False, "thunk" : True, "private_thunk" : True},
++    "vkSetDebugUtilsObjectNameEXT" : {"dispatch": True, "driver" : False, "thunk" : True, "private_thunk" : True},
  }
  
  STRUCT_CHAIN_CONVERSIONS = [
-@@ -941,6 +945,8 @@ class VkHandle(object):
+@@ -941,6 +947,8 @@ class VkHandle(object):
  
          if self.name == "VkCommandPool":
              return "wine_cmd_pool_from_handle({0})->command_pool".format(name)
@@ -485,7 +477,7 @@ index afea087a92..623d1b9cde 100755
          native_handle_name = None
  
 diff --git a/dlls/winevulkan/vulkan.c b/dlls/winevulkan/vulkan.c
-index 54b910c5e5..f831d486d0 100644
+index c140ff3a0e8..44bcf63c2d5 100644
 --- a/dlls/winevulkan/vulkan.c
 +++ b/dlls/winevulkan/vulkan.c
 @@ -57,6 +57,21 @@ static void *wine_vk_find_struct_(void *s, VkStructureType t)
@@ -635,7 +627,7 @@ index 54b910c5e5..f831d486d0 100644
      heap_free(instance);
  }
  
-@@ -1673,6 +1778,84 @@ VkResult WINAPI wine_vkGetPhysicalDeviceSurfaceCapabilities2KHR(VkPhysicalDevice
+@@ -1673,6 +1778,108 @@ VkResult WINAPI wine_vkGetPhysicalDeviceSurfaceCapabilities2KHR(VkPhysicalDevice
      return res;
  }
  
@@ -712,16 +704,40 @@ index 54b910c5e5..f831d486d0 100644
 +                wine_vk_unwrap_handle(callback_data->pObjects[i].objectType, callback_data->pObjects[i].objectHandle);
 +    }
 +
-+    thunk_vkSubmitDebugUtilsMessageEXT(instance->instance, severity, types, &native_callback_data);
++    thunk_vkSubmitDebugUtilsMessageEXT(instance, severity, types, &native_callback_data);
 +
 +    heap_free(object_names);
++}
++
++VkResult WINAPI wine_vkSetDebugUtilsObjectTagEXT(VkDevice device, const VkDebugUtilsObjectTagInfoEXT *tag_info)
++{
++    VkDebugUtilsObjectTagInfoEXT wine_tag_info;
++
++    TRACE("%p, %p\n", device, tag_info);
++
++    wine_tag_info = *tag_info;
++    wine_tag_info.objectHandle = wine_vk_unwrap_handle(tag_info->objectType, tag_info->objectHandle);
++
++    return thunk_vkSetDebugUtilsObjectTagEXT(device, &wine_tag_info);
++}
++
++VkResult WINAPI wine_vkSetDebugUtilsObjectNameEXT(VkDevice device, const VkDebugUtilsObjectNameInfoEXT *name_info)
++{
++    VkDebugUtilsObjectNameInfoEXT wine_name_info;
++
++    TRACE("%p, %p\n", device, name_info);
++
++    wine_name_info = *name_info;
++    wine_name_info.objectHandle = wine_vk_unwrap_handle(name_info->objectType, name_info->objectHandle);
++
++    return device->funcs.p_vkSetDebugUtilsObjectNameEXT(device, &wine_name_info);
 +}
 +
  BOOL WINAPI DllMain(HINSTANCE hinst, DWORD reason, void *reserved)
  {
      TRACE("%p, %u, %p\n", hinst, reason, reserved);
 diff --git a/dlls/winevulkan/vulkan_private.h b/dlls/winevulkan/vulkan_private.h
-index 7000da7133..8379fafecf 100644
+index 959a813a213..30b293e8b75 100644
 --- a/dlls/winevulkan/vulkan_private.h
 +++ b/dlls/winevulkan/vulkan_private.h
 @@ -95,6 +95,8 @@ struct VkDevice_T
@@ -741,7 +757,7 @@ index 7000da7133..8379fafecf 100644
 +    uint32_t utils_messenger_count;
 +
      unsigned int quirks;
-     
+ 
      struct wine_vk_mapping mapping;
 @@ -158,6 +163,32 @@ static inline VkCommandPool wine_cmd_pool_to_handle(struct wine_cmd_pool *cmd_po
      return (VkCommandPool)(uintptr_t)cmd_pool;
@@ -776,6 +792,3 @@ index 7000da7133..8379fafecf 100644
  void *wine_vk_get_device_proc_addr(const char *name) DECLSPEC_HIDDEN;
  void *wine_vk_get_instance_proc_addr(const char *name) DECLSPEC_HIDDEN;
  
-
--- 
-2.28.0
