@@ -1,7 +1,0 @@
-extern uint32 cppISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION001_GetSessionCount(void *);
-extern RemotePlaySessionID_t cppISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION001_GetSessionID(void *, int);
-extern CSteamID cppISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION001_GetSessionSteamID(void *, RemotePlaySessionID_t);
-extern const char * cppISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION001_GetSessionClientName(void *, RemotePlaySessionID_t);
-extern ESteamDeviceFormFactor cppISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION001_GetSessionClientFormFactor(void *, RemotePlaySessionID_t);
-extern bool cppISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION001_BGetSessionClientResolution(void *, RemotePlaySessionID_t, int *, int *);
-extern bool cppISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION001_BSendRemotePlayTogetherInvite(void *, CSteamID);
