@@ -14,11 +14,11 @@
 	path = openvr
 	url = https://github.com/ValveSoftware/openvr/
 [submodule "lsteamclient"]
-        path = lsteamclient
-        url = https://github.com/gloriouseggroll/lsteamclient/
+	path = lsteamclient
+	url = https://github.com/gloriouseggroll/lsteamclient/
 [submodule "vrclient_x64"]
-        path = vrclient_x64
-        url = https://github.com/gloriouseggroll/vrclient_x64/
+	path = vrclient_x64
+	url = https://github.com/gloriouseggroll/vrclient_x64
 [submodule "cmake"]
 	path = cmake
 	url = https://github.com/Kitware/CMake/
