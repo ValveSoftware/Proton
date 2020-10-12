@@ -4232,206 +4232,6 @@ index 074454d4906..3201e86e31a 100644
  
  cpp_quote("#ifdef XAUDIO2_HELPER_FUNCTIONS")
  cpp_quote("#define _USE_MATH_DEFINES")
-From 34fad63be385d80ebee850eb4ae613ea23f758b3 Mon Sep 17 00:00:00 2001
-From: Alistair Leslie-Hughes <leslie_alistair@hotmail.com>
-Date: Fri, 14 Aug 2020 17:16:07 +1000
-Subject: [PATCH 1/3] xactengine3_7: Implement IXACT3Engine PrepareWave
-
-v2: Deal with FACTAudioEngine_PrepareWave isn't implemented.
-
-Wine-bug: https://bugs.winehq.org/show_bug.cgi?id=49689
-
-Signed-off-by: Alistair Leslie-Hughes <leslie_alistair@hotmail.com>
----
- dlls/xactengine3_7/xact_dll.c | 32 ++++++++++++++++++++++++++++++--
- 1 file changed, 30 insertions(+), 2 deletions(-)
-
-diff --git a/dlls/xactengine3_7/xact_dll.c b/dlls/xactengine3_7/xact_dll.c
-index c5f96decb72..5bcd8a6202c 100644
---- a/dlls/xactengine3_7/xact_dll.c
-+++ b/dlls/xactengine3_7/xact_dll.c
-@@ -986,8 +986,36 @@ static HRESULT WINAPI IXACT3EngineImpl_PrepareWave(IXACT3Engine *iface,
-         IXACT3Wave **ppWave)
- {
-     XACT3EngineImpl *This = impl_from_IXACT3Engine(iface);
--    FIXME("(%p): stub!\n", This);
--    return E_NOTIMPL;
-+    XACT3WaveImpl *wave;
-+    FACTWave *fwave = NULL;
-+    UINT ret;
-+
-+    TRACE("(%p)->(0x%08x, %s, %d, %d, %d, %d, %p)\n", This, dwFlags, debugstr_a(szWavePath),
-+          wStreamingPacketSize, dwAlignment, dwPlayOffset, nLoopCount, ppWave);
-+
-+    ret = FACTAudioEngine_PrepareWave(This->fact_engine, dwFlags, szWavePath, wStreamingPacketSize,
-+            dwAlignment, dwPlayOffset, nLoopCount, &fwave);
-+    if(ret != 0 || !fwave)
-+    {
-+        ERR("Failed to CreateWave: %d (%p)\n", ret, fwave);
-+        return E_FAIL;
-+    }
-+
-+    wave = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(*wave));
-+    if (!wave)
-+    {
-+        FACTWave_Destroy(fwave);
-+        ERR("Failed to allocate XACT3WaveImpl!");
-+        return E_OUTOFMEMORY;
-+    }
-+
-+    wave->IXACT3Wave_iface.lpVtbl = &XACT3Wave_Vtbl;
-+    wave->fact_wave = fwave;
-+    *ppWave = &wave->IXACT3Wave_iface;
-+
-+    TRACE("Created Wave: %p\n", wave);
-+
-+    return S_OK;
- }
- 
- enum {
--- 
-2.28.0
-From ff3d57ac0bc2f08ab955c3ae734cb488566246c8 Mon Sep 17 00:00:00 2001
-From: Alistair Leslie-Hughes <leslie_alistair@hotmail.com>
-Date: Sat, 15 Aug 2020 17:36:23 +1000
-Subject: [PATCH 2/3] xactengine3_7: Implement IXACT3Engine
- PrepareStreamingWave
-
----
- dlls/xactengine3_7/xact_dll.c | 55 +++++++++++++++++++++++++++++++++--
- 1 file changed, 53 insertions(+), 2 deletions(-)
-
-diff --git a/dlls/xactengine3_7/xact_dll.c b/dlls/xactengine3_7/xact_dll.c
-index 5bcd8a6202c..99e4bd19049 100644
---- a/dlls/xactengine3_7/xact_dll.c
-+++ b/dlls/xactengine3_7/xact_dll.c
-@@ -976,8 +976,59 @@ static HRESULT WINAPI IXACT3EngineImpl_PrepareStreamingWave(IXACT3Engine *iface,
-         IXACT3Wave **ppWave)
- {
-     XACT3EngineImpl *This = impl_from_IXACT3Engine(iface);
--    FIXME("(%p): stub!\n", This);
--    return E_NOTIMPL;
-+    XACT3WaveImpl *wave;
-+    FACTWave *fwave = NULL;
-+    FACTStreamingParameters fakeParms;
-+    wrap_readfile_struct *fake;
-+    FACTWaveBankEntry fact_wavebank;
-+    UINT ret;
-+
-+    TRACE("(%p)->(0x%08x, %p, %p, %d, %p, %d, %d, %p)\n", This, dwFlags, &entry, &streamingParams,
-+            dwAlignment, pdwSeekTable, dwPlayOffset, nLoopCount, ppWave);
-+
-+    fake = (wrap_readfile_struct*) CoTaskMemAlloc(
-+            sizeof(wrap_readfile_struct));
-+    fake->engine = This;
-+    fake->file = streamingParams.file;
-+    fakeParms.file = fake;
-+    fakeParms.flags = streamingParams.flags;
-+    fakeParms.offset = streamingParams.offset;
-+    fakeParms.packetSize = streamingParams.packetSize;
-+
-+    fact_wavebank.dwFlagsAndDuration = entry.u.dwFlagsAndDuration;
-+    fact_wavebank.Format.dwValue = entry.Format.dwValue;
-+    fact_wavebank.PlayRegion.dwOffset = entry.PlayRegion.dwOffset;
-+    fact_wavebank.PlayRegion.dwLength = entry.PlayRegion.dwLength;
-+    fact_wavebank.LoopRegion.dwStartSample = entry.LoopRegion.dwStartSample;
-+    fact_wavebank.LoopRegion.dwTotalSamples = entry.LoopRegion.dwTotalSamples;
-+
-+    /* FAudio Prototype is incorrect and shouldn't take a buffer as an parameter,
-+     *   passing through NULL to ensure it's not used.
-+     */
-+    ret = FACTAudioEngine_PrepareStreamingWave(This->fact_engine, dwFlags, fact_wavebank, fakeParms,
-+            dwAlignment, pdwSeekTable, NULL, dwPlayOffset, nLoopCount, &fwave);
-+
-+    if(ret != 0 || !fwave)
-+    {
-+        ERR("Failed to CreateWave: %d (%p)\n", ret, fwave);
-+        return E_FAIL;
-+    }
-+
-+    wave = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(*wave));
-+    if (!wave)
-+    {
-+        FACTWave_Destroy(fwave);
-+        ERR("Failed to allocate XACT3WaveImpl!");
-+        return E_OUTOFMEMORY;
-+    }
-+
-+    wave->IXACT3Wave_iface.lpVtbl = &XACT3Wave_Vtbl;
-+    wave->fact_wave = fwave;
-+    *ppWave = &wave->IXACT3Wave_iface;
-+
-+    TRACE("Created Wave: %p\n", wave);
-+
-+    return S_OK;
- }
- 
- static HRESULT WINAPI IXACT3EngineImpl_PrepareWave(IXACT3Engine *iface,
--- 
-2.28.0
-From 8387b1a1a4a07b66246015e3791518cbe1a69244 Mon Sep 17 00:00:00 2001
-From: Alistair Leslie-Hughes <leslie_alistair@hotmail.com>
-Date: Mon, 15 Aug 2020 17:49:23 +1000
-Subject: [PATCH 3/3] xactengine3_7: Implement IXACT3Engine PrepareInMemoryWave
-
----
- dlls/xactengine3_7/xact_dll.c | 40 +++++++++++++++++++++++++++++++++--
- 1 file changed, 38 insertions(+), 2 deletions(-)
-
-diff --git a/dlls/xactengine3_7/xact_dll.c b/dlls/xactengine3_7/xact_dll.c
-index 99e4bd19049..e6c3863b9ee 100644
---- a/dlls/xactengine3_7/xact_dll.c
-+++ b/dlls/xactengine3_7/xact_dll.c
-@@ -965,8 +965,44 @@ static HRESULT WINAPI IXACT3EngineImpl_PrepareInMemoryWave(IXACT3Engine *iface,
-         IXACT3Wave **ppWave)
- {
-     XACT3EngineImpl *This = impl_from_IXACT3Engine(iface);
--    FIXME("(%p): stub!\n", This);
--    return E_NOTIMPL;
-+    XACT3WaveImpl *wave;
-+    FACTWave *fwave = NULL;
-+    FACTWaveBankEntry fact_wavebank;
-+    UINT ret;
-+
-+    TRACE("(%p)->(0x%08x, %p, %p, %p, %d, %d, %p)\n", This, dwFlags, &entry, pdwSeekTable,
-+          pbWaveData, dwPlayOffset, nLoopCount, ppWave);
-+
-+    fact_wavebank.dwFlagsAndDuration = entry.u.dwFlagsAndDuration;
-+    fact_wavebank.Format.dwValue = entry.Format.dwValue;
-+    fact_wavebank.PlayRegion.dwOffset = entry.PlayRegion.dwOffset;
-+    fact_wavebank.PlayRegion.dwLength = entry.PlayRegion.dwLength;
-+    fact_wavebank.LoopRegion.dwStartSample = entry.LoopRegion.dwStartSample;
-+    fact_wavebank.LoopRegion.dwTotalSamples = entry.LoopRegion.dwTotalSamples;
-+
-+    ret = FACTAudioEngine_PrepareInMemoryWave(This->fact_engine, dwFlags, fact_wavebank,
-+            pdwSeekTable, pbWaveData, dwPlayOffset, nLoopCount, &fwave);
-+    if(ret != 0 || !fwave)
-+    {
-+        ERR("Failed to CreateWave: %d (%p)\n", ret, fwave);
-+        return E_FAIL;
-+    }
-+
-+    wave = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(*wave));
-+    if (!wave)
-+    {
-+        FACTWave_Destroy(fwave);
-+        ERR("Failed to allocate XACT3WaveImpl!");
-+        return E_OUTOFMEMORY;
-+    }
-+
-+    wave->IXACT3Wave_iface.lpVtbl = &XACT3Wave_Vtbl;
-+    wave->fact_wave = fwave;
-+    *ppWave = &wave->IXACT3Wave_iface;
-+
-+    TRACE("Created Wave: %p\n", wave);
-+
-+    return S_OK;
- }
- 
- static HRESULT WINAPI IXACT3EngineImpl_PrepareStreamingWave(IXACT3Engine *iface,
--- 
-2.28.0
-
 From 14c6933f3f5a40d219a0597107bed379f5caeb03 Mon Sep 17 00:00:00 2001
 From: Alistair Leslie-Hughes <leslie_alistair@hotmail.com>
 Date: Tue, 15 Sep 2020 19:45:17 +1000
@@ -4499,3 +4299,53 @@ index 742fe86cc95..84ed35d2c4d 100644
      }
  
      return hr;
+From 8ea0607befc4c1ad349cd85c6587aa91a6d0220d Mon Sep 17 00:00:00 2001
+From: Alistair Leslie-Hughes <leslie_alistair@hotmail.com>
+Date: Fri, 2 Oct 2020 17:23:24 +1000
+Subject: [PATCH] xactengine3_7: Explicity copy the XACT_RUNTIME_PARAMETERS
+ members.
+
+Wine-Bug: https://bugs.winehq.org/show_bug.cgi?id=49911
+Signed-off-by: Alistair Leslie-Hughes <leslie_alistair@hotmail.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/xactengine3_7/xact_dll.c | 17 ++++++++++++-----
+ 1 file changed, 12 insertions(+), 5 deletions(-)
+
+diff --git a/dlls/xactengine3_7/xact_dll.c b/dlls/xactengine3_7/xact_dll.c
+index 84ed35d2c4d..281aecc154b 100644
+--- a/dlls/xactengine3_7/xact_dll.c
++++ b/dlls/xactengine3_7/xact_dll.c
+@@ -776,7 +776,16 @@ static HRESULT WINAPI IXACT3EngineImpl_Initialize(IXACT3Engine *iface,
+ 
+     TRACE("(%p)->(%p)\n", This, pParams);
+ 
+-    memcpy(&params, pParams, sizeof(FACTRuntimeParameters));
++    memset(&params, 0, sizeof(FACTRuntimeParameters));
++    /* Explicitly copy to the FAudio structure as the packing is wrong under 64 bits */
++    params.lookAheadTime = pParams->lookAheadTime;
++    params.pGlobalSettingsBuffer = pParams->pGlobalSettingsBuffer;
++    params.globalSettingsBufferSize = pParams->globalSettingsBufferSize;
++    params.globalSettingsFlags = pParams->globalSettingsFlags;
++    params.globalSettingsAllocAttributes = pParams->globalSettingsAllocAttributes;
++    params.pRendererID = (int16_t*)pParams->pRendererID;
++    params.pXAudio2 = NULL;
++    params.pMasteringVoice = NULL;
+ 
+     /* FIXME: pXAudio2 and pMasteringVoice are pointers to
+      * IXAudio2/IXAudio2MasteringVoice objects. FACT wants pointers to
+@@ -789,12 +798,10 @@ static HRESULT WINAPI IXACT3EngineImpl_Initialize(IXACT3Engine *iface,
+      * -flibit
+      */
+     if (pParams->pXAudio2 != NULL){
+-        FIXME("pXAudio2 parameter not supported! Falling back to NULL\n");
+-        params.pXAudio2 = NULL;
++        FIXME("pXAudio2 parameter not supported!\n");
+ 
+         if (pParams->pMasteringVoice != NULL){
+-            FIXME("pXAudio2 parameter not supported! Falling back to NULL\n");
+-            params.pMasteringVoice = NULL;
++            FIXME("pMasteringVoice parameter not supported!\n");
+         }
+     }
+ 

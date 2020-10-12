@@ -1,105 +1,3 @@
-From 9180fdea2d446513bdae681431cb4d872f9214cb Mon Sep 17 00:00:00 2001
-From: Andrew Eikum <aeikum@codeweavers.com>
-Date: Tue, 7 Apr 2020 11:05:47 -0500
-Subject: [PATCH] winepulse: Add stub IAudioClockAdjustment implementation
-
----
- dlls/winepulse.drv/mmdevdrv.c | 47 +++++++++++++++++++++++++++++++++++
- 1 file changed, 47 insertions(+)
-
-diff --git a/dlls/winepulse.drv/mmdevdrv.c b/dlls/winepulse.drv/mmdevdrv.c
-index 6a2906761a7..c5f12301c2e 100644
---- a/dlls/winepulse.drv/mmdevdrv.c
-+++ b/dlls/winepulse.drv/mmdevdrv.c
-@@ -162,6 +162,7 @@ struct ACImpl {
-     IAudioCaptureClient IAudioCaptureClient_iface;
-     IAudioClock IAudioClock_iface;
-     IAudioClock2 IAudioClock2_iface;
-+    IAudioClockAdjustment IAudioClockAdjustment_iface;
-     IAudioStreamVolume IAudioStreamVolume_iface;
-     IUnknown *marshal;
-     IMMDevice *parent;
-@@ -206,6 +207,7 @@ static const ISimpleAudioVolumeVtbl SimpleAudioVolume_Vtbl;
- static const IChannelAudioVolumeVtbl ChannelAudioVolume_Vtbl;
- static const IAudioClockVtbl AudioClock_Vtbl;
- static const IAudioClock2Vtbl AudioClock2_Vtbl;
-+static const IAudioClockAdjustmentVtbl AudioClockAdjustment_Vtbl;
- static const IAudioStreamVolumeVtbl AudioStreamVolume_Vtbl;
- 
- static AudioSessionWrapper *AudioSessionWrapper_Create(ACImpl *client);
-@@ -250,6 +252,11 @@ static inline ACImpl *impl_from_IAudioClock2(IAudioClock2 *iface)
-     return CONTAINING_RECORD(iface, ACImpl, IAudioClock2_iface);
- }
- 
-+static inline ACImpl *impl_from_IAudioClockAdjustment(IAudioClockAdjustment *iface)
-+{
-+    return CONTAINING_RECORD(iface, ACImpl, IAudioClockAdjustment_iface);
-+}
-+
- static inline ACImpl *impl_from_IAudioStreamVolume(IAudioStreamVolume *iface)
- {
-     return CONTAINING_RECORD(iface, ACImpl, IAudioStreamVolume_iface);
-@@ -1246,6 +1253,7 @@ HRESULT WINAPI AUDDRV_GetAudioEndpoint(GUID *guid, IMMDevice *dev, IAudioClient
-     This->IAudioCaptureClient_iface.lpVtbl = &AudioCaptureClient_Vtbl;
-     This->IAudioClock_iface.lpVtbl = &AudioClock_Vtbl;
-     This->IAudioClock2_iface.lpVtbl = &AudioClock2_Vtbl;
-+    This->IAudioClockAdjustment_iface.lpVtbl = &AudioClockAdjustment_Vtbl;
-     This->IAudioStreamVolume_iface.lpVtbl = &AudioStreamVolume_Vtbl;
-     This->dataflow = dataflow;
-     This->parent = dev;
-@@ -1278,6 +1286,8 @@ static HRESULT WINAPI AudioClient_QueryInterface(IAudioClient *iface,
-     *ppv = NULL;
-     if (IsEqualIID(riid, &IID_IUnknown) || IsEqualIID(riid, &IID_IAudioClient))
-         *ppv = iface;
-+    else if (IsEqualIID(riid, &IID_IAudioClockAdjustment))
-+        *ppv = &This->IAudioClockAdjustment_iface;
-     if (*ppv) {
-         IUnknown_AddRef((IUnknown*)*ppv);
-         return S_OK;
-@@ -2728,6 +2738,43 @@ static const IAudioClock2Vtbl AudioClock2_Vtbl =
-     AudioClock2_GetDevicePosition
- };
- 
-+static HRESULT WINAPI AudioClockAdjustment_QueryInterface(IAudioClockAdjustment *iface,
-+        REFIID riid, void **ppv)
-+{
-+    ACImpl *This = impl_from_IAudioClockAdjustment(iface);
-+    return IAudioClock_QueryInterface(&This->IAudioClock_iface, riid, ppv);
-+}
-+
-+static ULONG WINAPI AudioClockAdjustment_AddRef(IAudioClockAdjustment *iface)
-+{
-+    ACImpl *This = impl_from_IAudioClockAdjustment(iface);
-+    return IAudioClient_AddRef(&This->IAudioClient_iface);
-+}
-+
-+static ULONG WINAPI AudioClockAdjustment_Release(IAudioClockAdjustment *iface)
-+{
-+    ACImpl *This = impl_from_IAudioClockAdjustment(iface);
-+    return IAudioClient_Release(&This->IAudioClient_iface);
-+}
-+
-+static HRESULT WINAPI AudioClockAdjustment_SetSampleRate(IAudioClockAdjustment *iface,
-+        float new_rate)
-+{
-+    ACImpl *This = impl_from_IAudioClockAdjustment(iface);
-+
-+    TRACE("(%p)->(%f)\n", This, new_rate);
-+
-+    return E_NOTIMPL;
-+}
-+
-+static const IAudioClockAdjustmentVtbl AudioClockAdjustment_Vtbl =
-+{
-+    AudioClockAdjustment_QueryInterface,
-+    AudioClockAdjustment_AddRef,
-+    AudioClockAdjustment_Release,
-+    AudioClockAdjustment_SetSampleRate
-+};
-+
- static HRESULT WINAPI AudioStreamVolume_QueryInterface(
-         IAudioStreamVolume *iface, REFIID riid, void **ppv)
- {
 From 21888ad1af89c449b78d3fc5aaa71e9608d50e42 Mon Sep 17 00:00:00 2001
 From: Andrew Eikum <aeikum@codeweavers.com>
 Date: Tue, 7 Apr 2020 14:01:02 -0500
@@ -131,7 +29,7 @@ index c5f12301c2e..eeb153f78b1 100644
      else
          ret = pa_stream_connect_record(This->stream, NULL, &attr,
          PA_STREAM_START_CORKED|PA_STREAM_START_UNMUTED|PA_STREAM_ADJUST_LATENCY|moving);
-@@ -2757,14 +2757,81 @@ static ULONG WINAPI AudioClockAdjustment_Release(IAudioClockAdjustment *iface)
+@@ -3135,12 +3135,80 @@ static ULONG WINAPI AudioClockAdjustment_Release(IAudioClockAdjustment *iface)
      return IAudioClient_Release(&This->IAudioClient_iface);
  }
  
@@ -153,18 +51,20 @@ index c5f12301c2e..eeb153f78b1 100644
 +}
 +
  static HRESULT WINAPI AudioClockAdjustment_SetSampleRate(IAudioClockAdjustment *iface,
-         float new_rate)
+-        float flSampleRate)
++        float new_rate)
  {
      ACImpl *This = impl_from_IAudioClockAdjustment(iface);
+ 
+-    FIXME("(%p)->(%f): stub\n", This, flSampleRate);
 +    int success;
 +    uint32_t old_rate;
 +    pa_operation *o;
 +    HRESULT hr;
 +    pa_buffer_attr attr;
- 
-     TRACE("(%p)->(%f)\n", This, new_rate);
- 
--    return E_NOTIMPL;
++
++    TRACE("(%p)->(%f)\n", This, new_rate);
++
 +    pthread_mutex_lock(&pulse_lock);
 +    hr = pulse_stream_valid(This);
 +    if (FAILED(hr)) {
@@ -209,9 +109,6 @@ index c5f12301c2e..eeb153f78b1 100644
 +    TRACE("period_bytes now: %u\n", This->period_bytes);
 +
 +    pthread_mutex_unlock(&pulse_lock);
-+
-+    return S_OK;
+ 
+     return S_OK;
  }
- 
- static const IAudioClockAdjustmentVtbl AudioClockAdjustment_Vtbl =
- 
