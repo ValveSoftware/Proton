@@ -33,7 +33,7 @@
 	url = https://github.com/gloriouseggroll/protonfixes/
 [submodule "vkd3d-proton"]
 	path = vkd3d-proton
-	url = https://github.com/intersectRaven/vkd3d-proton/
+	url = https://github.com/HansKristian-Work/vkd3d-proton/
 [submodule "gstreamer"]
 	path = gstreamer
 	url = https://github.com/GStreamer/gstreamer/
