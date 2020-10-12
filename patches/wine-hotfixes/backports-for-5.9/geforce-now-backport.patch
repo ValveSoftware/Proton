@@ -310,69 +310,6 @@ index 9c512b96436..d7bde79c270 100644
  
      if (init_notify)
          callback(context, NULL, MibInitialNotification);
-From c1058279f8a3c8ff2781d713cbda8952924fd79d Mon Sep 17 00:00:00 2001
-From: Alexandre Abgrall <aabgrall98@gmail.com>
-Date: Mon, 27 Jul 2020 15:46:54 +0200
-Subject: [PATCH] dxva2: Implement GetProcAmpRange semi-stub.
-
----
- dlls/dxva2/videoservices.c | 16 ++++++++++++++--
- 1 file changed, 14 insertions(+), 2 deletions(-)
-
-diff --git a/dlls/dxva2/videoservices.c b/dlls/dxva2/videoservices.c
-index 84222dce558..e3f9f52f4d2 100644
---- a/dlls/dxva2/videoservices.c
-+++ b/dlls/dxva2/videoservices.c
-@@ -367,11 +367,23 @@ static HRESULT WINAPI DirectXVideoProcessorService_GetProcAmpRange( IDirectXVide
-         const DXVA2_VideoDesc *pVideoDesc, D3DFORMAT RenderTargetFormat, UINT ProcAmpCap, DXVA2_ValueRange *pRange )
- {
-     DirectXVideoAccelerationServiceImpl *This = impl_from_IDirectXVideoProcessorService(iface);
-+    DXVA2_ValueRange range;
- 
--    FIXME("(%p/%p)->(%s, %p, %#x, %u, %p): stub\n",
-+    FIXME("(%p/%p)->(%s, %p, %#x, %u, %p): semi-stub\n",
-         iface, This, debugstr_guid(VideoProcDeviceGuid), pVideoDesc, RenderTargetFormat, ProcAmpCap, pRange);
- 
--    return E_NOTIMPL;
-+    range.MinValue.ll = 0;
-+    range.MaxValue.ll = 100;
-+    if (ProcAmpCap == DXVA2_ProcAmp_Brightness)
-+        range.DefaultValue.ll = 100;
-+    else
-+        range.DefaultValue.ll = 50;
-+    range.StepSize.ll = 1;
-+
-+    if (pRange)
-+        *pRange = range;
-+
-+    return S_OK;
- }
- 
- static HRESULT WINAPI DirectXVideoProcessorService_GetFilterPropertyRange( IDirectXVideoProcessorService *iface, REFGUID VideoProcDeviceGuid,
-From 3e431b2adb27738806c3588015e2afd74eb209cd Mon Sep 17 00:00:00 2001
-From: Alexandre Abgrall <aabgrall98@gmail.com>
-Date: Mon, 27 Jul 2020 15:51:11 +0200
-Subject: [PATCH] dxva2: Handle DXVA2_VideoProcProgressiveDevice in
- DirectXVideoProcessorService_CreateVideoProcessor.
-
----
- dlls/dxva2/videoservices.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/dlls/dxva2/videoservices.c b/dlls/dxva2/videoservices.c
-index e3f9f52f4d2..454ca6d4965 100644
---- a/dlls/dxva2/videoservices.c
-+++ b/dlls/dxva2/videoservices.c
-@@ -405,7 +405,8 @@ static HRESULT WINAPI DirectXVideoProcessorService_CreateVideoProcessor( IDirect
-     FIXME("(%p/%p)->(%s, %#x, %u, %p): semi-stub\n",
-         iface, This, debugstr_guid(VideoProcDeviceGuid), RenderTargetFormat, MaxNumSubStreams, ppVidProcess);
- 
--    if (IsEqualIID(VideoProcDeviceGuid, &DXVA2_VideoProcSoftwareDevice))
-+    if (IsEqualIID(VideoProcDeviceGuid, &DXVA2_VideoProcSoftwareDevice) ||
-+            IsEqualIID(VideoProcDeviceGuid, &DXVA2_VideoProcProgressiveDevice))
-         return processor_software_create(iface, This->device, pVideoDesc, RenderTargetFormat, MaxNumSubStreams, ppVidProcess);
- 
-     return E_NOTIMPL;
 From 24d51f6877b29343ce3f26431ccb0d47cced1b7a Mon Sep 17 00:00:00 2001
 From: Alexandre Abgrall <aabgrall98@gmail.com>
 Date: Mon, 27 Jul 2020 16:01:43 +0200
@@ -1424,51 +1361,6 @@ index 23b030b5f7b..efc19607897 100644
                  pfni->FileNameLength *= sizeof(WCHAR);
                  pfni->NextEntryOffset = i;
                  pfni = (FILE_NOTIFY_INFORMATION*)((char*)pfni + i);
-From 4b309ea49d0f733ec814e51bac17d0583d1421f4 Mon Sep 17 00:00:00 2001
-From: Alexandre Abgrall <aabgrall98@gmail.com>
-Date: Fri, 31 Jul 2020 13:45:27 +0200
-Subject: [PATCH] dxva2: Hack: Consider NV12 format as valid if no
- VASurfaceAttribPixelFormat attribute is provided. This is currently the case
- with the VDPAU VAAPI backend. Similar bug:
- https://bugs.launchpad.net/ubuntu/+source/chromium-browser/+bug/1887172
-
----
- dlls/dxva2/vaapi.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
-
-diff --git a/dlls/dxva2/vaapi.c b/dlls/dxva2/vaapi.c
-index 9f580fe879f..d613cd58cd7 100644
---- a/dlls/dxva2/vaapi.c
-+++ b/dlls/dxva2/vaapi.c
-@@ -342,7 +342,7 @@ BOOL vaapi_is_format_supported( VADisplay va_display, struct vaapi_profile *prof
-     VAConfigID config;
-     VAStatus status;
-     unsigned int i;
--    BOOL ret = FALSE;
-+    BOOL ret = FALSE, found_pixel_format_attrib = FALSE;
- 
-     attrib.type  = VAConfigAttribRTFormat;
-     attrib.value = format->vaformat;
-@@ -366,6 +366,8 @@ BOOL vaapi_is_format_supported( VADisplay va_display, struct vaapi_profile *prof
-             {
-                 for (i = 0; i < numSurfaceAttribs; i++)
-                 {
-+                    if (surfaceAttribs[i].type == VASurfaceAttribPixelFormat)
-+                        found_pixel_format_attrib = TRUE;
-                     if (surfaceAttribs[i].type == VASurfaceAttribPixelFormat &&
-                         surfaceAttribs[i].value.value.i == format->vafourcc)
-                     {
-@@ -373,6 +375,10 @@ BOOL vaapi_is_format_supported( VADisplay va_display, struct vaapi_profile *prof
-                         break;
-                     }
-                 }
-+                /* The vdpau backend doesn't give us a VASurfaceAttribPixelFormat attribute. */
-+                /* HACK: We consider that in this case, a VA_FOURCC_NV12 format is valid. This format is used by e.g. GeForceNOW. */
-+                if (!found_pixel_format_attrib && format->vafourcc == VA_FOURCC_NV12)
-+                    ret = TRUE;
-             }
-             HeapFree(GetProcessHeap(), 0, surfaceAttribs);
-         }
 From 4c6485a0b90fb19693ed2c44bd30591389f3efa0 Mon Sep 17 00:00:00 2001
 From: Richard Yao <ryao@gentoo.org>
 Date: Sun, 2 Aug 2020 15:35:53 -0400
@@ -1583,23 +1475,3 @@ index 4f67a0d6d21..0a4aba59bd5 100644
  
  /***********************************************************************
   *	VerLanguageNameA   (kernelbase.@)
-commit 85cade20fa0fe59d09c372b901497bc76608bfcc
-Author: Richard Yao <ryao@gentoo.org>
-Date:   Mon Aug 3 16:01:15 2020 -0400
-
-    Enable DXVA2 video acceleration by default
-    
-    Signed-off-by: Richard Yao <ryao@gentoo.org>
-
-diff --git a/loader/wine.inf.in b/loader/wine.inf.in
-index 037166ad159..69340c55135 100644
---- a/loader/wine.inf.in
-+++ b/loader/wine.inf.in
-@@ -717,6 +717,7 @@ HKLM,%MciExtStr%,"wmx",,"MPEGVideo"
- HKLM,%MciExtStr%,"wvx",,"MPEGVideo"
- 
- [Misc]
-+HKCU,Software\Wine\DXVA2,"backend",,"va"
- HKLM,Software\Microsoft\WindowsRuntime\ActivatableClassId\Windows.Gaming.Input.Gamepad,"DllPath",2,"Windows.Gaming.Input.dll"
- HKLM,Software\Microsoft\WindowsRuntime\ActivatableClassId\Windows.Gaming.Input.RawGameController,"DllPath",2,"Windows.Gaming.Input.dll"
- HKLM,Software\Microsoft\WindowsRuntime\ActivatableClassId\Windows.Media.SpeechSynthesis.SpeechSynthesizer,"DllPath",2,"Windows.Media.Speech.dll"
