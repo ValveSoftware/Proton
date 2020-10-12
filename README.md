@@ -51,7 +51,6 @@ This is my build of Proton with the most recent releases of vanilla WINE. It has
 - Path of Exile vulkan renderer fixed
 - Mount and Blade Warband
 - Divinity Original Sin 2
-- Persona 4
 - Sea of Thieves
 - Death Stranding
 - Horizon Zero Dawn
@@ -65,6 +64,13 @@ This is my build of Proton with the most recent releases of vanilla WINE. It has
 - Various EA Origin launcher fixes
 - Bloons TD6
 - Dark Souls III, Sekiro, Nier Automata graphics fix
+- Baldur's Gate 3 Launcher workaround
+- Serious Sam 4 fixes
+- Just Cause 4 fixes
+- Age of Empires II: DE Online Multiplayer fixed
+- Halo: MCC Online coop campaign fixed
+- Death Stranding fixes
+- Horizon Zero Dawn fixes
 
 ### Non-Steam or winesteam game patches
 
@@ -109,7 +115,8 @@ This is my build of Proton with the most recent releases of vanilla WINE. It has
 - Warframe is problematic with VSync. Turn it off or on in game, do not set to `Auto`
 - Warframe needs a set a frame limit in game. Unlimited framerate can cause slowdowns
 - Warframe on Nvidia: you may need to disable GPU Particles in game otherwise the game can freeze randomly. On AMD they work fine
-- Borderlands 3 Marcus game intro audio does not work correctly, can skip it. Rest of the game is playable and videos work
+- Borderlands 3 Marcus game intro audio will freeze halfway through if you don't skip it. Rest of the game is playable and videos work
+- Soul Calibur VI main menu will freeze of you don't press a button before the audio ends. Rest of the game is playable and videos work
 - Injustice 2 and MK11 are missing cutscene audio
 
 Full patches can be viewed in [protonprep.sh](patches/protonprep.sh).
