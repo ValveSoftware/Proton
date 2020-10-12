@@ -76,7 +76,8 @@
     patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/staging/8402c959617111ac13a2025c3eb7c7156a2520f8.patch
     patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/staging/patchinstall.patch
     patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/staging/esync_wsacleanup_fix.patch
-    patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/staging/0001-remove-dxva2-dependency-from-winedevice-Default_Driv.patch    
+    patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/staging/0001-remove-dxva2-dependency-from-winedevice-Default_Driv.patch
+    patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/staging/0001-xaudio_backports.patch
     cd ..
 
     #WINE
@@ -92,7 +93,10 @@
     
     echo "media foundation backports 5.9->5.17"
     patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/mf_backports_5.19.patch
-    
+
+    echo "audio backports"
+    patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/wavebank_xaudio_backports.patch
+
 # disable these when using proton's gamepad patches
 #    -W dinput-SetActionMap-genre \
 #    -W dinput-axis-recalc \
@@ -114,8 +118,7 @@
     -W ws2_32-getaddrinfo \
     -W ws2_32-TransmitFile \
     -W dsdmo-new-dll \
-    -W dxva2-Video_Decoder \
-    -W xactengine-initial
+    -W dxva2-Video_Decoder
     
     echo "guy's media foundation alpha patches"
     patch -Np1 < ../patches/wine-hotfixes/media_foundation/media_foundation_alpha.patch
@@ -207,10 +210,7 @@ patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/QueryDisplayConfig/0001-
     echo "quartz backports 5.9->5.17"
     patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/quartz_backports_5.18.patch
     cp ../patches/wine-hotfixes/backports-for-5.9/quartz/test.avi ./dlls/amstream/tests/
-    
-    echo "audio backports"
-    patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/wavebank_xaudio_backports.patch
-    
+        
     echo "planet zoo/jurassic world hotfixes pending"
     patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/planet-zoo-jurassic-world-pending-upstream-staging.patch
     
@@ -269,7 +269,10 @@ patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/QueryDisplayConfig/0001-
 #   The game uses CEG which does not work in proton.    
     echo "blackops 2 fix"
     patch -Np1 < ../patches/game-patches/blackops_2_fix.patch
-    
+
+    # geforce now
+    patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/geforce-now-backport.patch
+
     echo "bloons TD6 fix"
     patch -Np1 < ../patches/game-patches/0001-wbemprox-HACK-Make-Bloons-TD6-happy-so-it-does-not-e.patch
     
@@ -319,9 +322,11 @@ patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/QueryDisplayConfig/0001-
 #    echo "audio patch test"
 #    patch -Np1 < ../patches/proton/proton-xaudio2_stop_engine.patch
 
+    # missing backport necessary for just cause 4
+    patch -Np1 < ../patches/wine-hotfixes/backports-for-5.9/windows.networking.connectivity/windows_networking_connectivity_oleidl_backport.patch
+
     echo "protonify"
     patch -Np1 < ../patches/proton-5.9/proton-protonify_staging.patch
-
     echo "protonify-audio"
     patch -Np1 < ../patches/proton-5.9/proton-pa-staging.patch
     
