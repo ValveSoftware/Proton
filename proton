@@ -414,6 +414,10 @@ class Session:
         #turn forcelgadd on by default unless it is disabled in compat config
         if not "noforcelgadd" in self.compat_config:
             self.compat_config.add("forcelgadd")
+            
+        if "vkd3dfl12" in self.compat_config:
+            if not "VKD3D_FEATURE_LEVEL" in self.env:
+                self.env["VKD3D_FEATURE_LEVEL"] = "12_0"
 
     def init_wine(self):
         if "HOST_LC_ALL" in self.env and len(self.env["HOST_LC_ALL"]) > 0:
