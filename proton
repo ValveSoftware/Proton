@@ -116,7 +116,7 @@ def set_dir_casefold_bit(dir_path):
         if fcntl.ioctl(dr, EXT2_IOC_GETFLAGS, dat, True) >= 0:
             dat[0] = dat[0] | EXT4_CASEFOLD_FL
             fcntl.ioctl(dr, EXT2_IOC_SETFLAGS, dat, False)
-    except OSError:
+    except (OSError, IOError):
         #no problem
         pass
     os.close(dr)
