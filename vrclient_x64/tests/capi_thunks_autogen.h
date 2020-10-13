@@ -11,101 +11,99 @@
 
 #include "capi_thunks.h"
 
-void test_capi_thunks_IVRSystem_021(void);
+void test_capi_thunks_IVRSystem_022(void);
 
-void __thiscall IVRSystem_021_GetRecommendedRenderTargetSize(void *_this, uint32_t * pnWidth, uint32_t * pnHeight);
+void __thiscall IVRSystem_022_GetRecommendedRenderTargetSize(void *_this, uint32_t * pnWidth, uint32_t * pnHeight);
 
-HmdMatrix44_t *__thiscall IVRSystem_021_GetProjectionMatrix(void *_this, HmdMatrix44_t *_r, EVREye eEye, float fNearZ, float fFarZ);
+HmdMatrix44_t *__thiscall IVRSystem_022_GetProjectionMatrix(void *_this, HmdMatrix44_t *_r, EVREye eEye, float fNearZ, float fFarZ);
 
-void __thiscall IVRSystem_021_GetProjectionRaw(void *_this, EVREye eEye, float * pfLeft, float * pfRight, float * pfTop, float * pfBottom);
+void __thiscall IVRSystem_022_GetProjectionRaw(void *_this, EVREye eEye, float * pfLeft, float * pfRight, float * pfTop, float * pfBottom);
 
-bool __thiscall IVRSystem_021_ComputeDistortion(void *_this, EVREye eEye, float fU, float fV, DistortionCoordinates_t * pDistortionCoordinates);
+bool __thiscall IVRSystem_022_ComputeDistortion(void *_this, EVREye eEye, float fU, float fV, DistortionCoordinates_t * pDistortionCoordinates);
 
-HmdMatrix34_t *__thiscall IVRSystem_021_GetEyeToHeadTransform(void *_this, HmdMatrix34_t *_r, EVREye eEye);
+HmdMatrix34_t *__thiscall IVRSystem_022_GetEyeToHeadTransform(void *_this, HmdMatrix34_t *_r, EVREye eEye);
 
-bool __thiscall IVRSystem_021_GetTimeSinceLastVsync(void *_this, float * pfSecondsSinceLastVsync, uint64_t * pulFrameCounter);
+bool __thiscall IVRSystem_022_GetTimeSinceLastVsync(void *_this, float * pfSecondsSinceLastVsync, uint64_t * pulFrameCounter);
 
-int32_t __thiscall IVRSystem_021_GetD3D9AdapterIndex(void *_this);
+int32_t __thiscall IVRSystem_022_GetD3D9AdapterIndex(void *_this);
 
-void __thiscall IVRSystem_021_GetDXGIOutputInfo(void *_this, int32_t * pnAdapterIndex);
+void __thiscall IVRSystem_022_GetDXGIOutputInfo(void *_this, int32_t * pnAdapterIndex);
 
-void __thiscall IVRSystem_021_GetOutputDevice(void *_this, uint64_t * pnDevice, ETextureType textureType, VkInstance_T * pInstance);
+void __thiscall IVRSystem_022_GetOutputDevice(void *_this, uint64_t * pnDevice, ETextureType textureType, VkInstance_T * pInstance);
 
-bool __thiscall IVRSystem_021_IsDisplayOnDesktop(void *_this);
+bool __thiscall IVRSystem_022_IsDisplayOnDesktop(void *_this);
 
-bool __thiscall IVRSystem_021_SetDisplayVisibility(void *_this, bool bIsVisibleOnDesktop);
+bool __thiscall IVRSystem_022_SetDisplayVisibility(void *_this, bool bIsVisibleOnDesktop);
 
-void __thiscall IVRSystem_021_GetDeviceToAbsoluteTrackingPose(void *_this, ETrackingUniverseOrigin eOrigin, float fPredictedSecondsToPhotonsFromNow, TrackedDevicePose_t * pTrackedDevicePoseArray, uint32_t unTrackedDevicePoseArrayCount);
+void __thiscall IVRSystem_022_GetDeviceToAbsoluteTrackingPose(void *_this, ETrackingUniverseOrigin eOrigin, float fPredictedSecondsToPhotonsFromNow, TrackedDevicePose_t * pTrackedDevicePoseArray, uint32_t unTrackedDevicePoseArrayCount);
 
-void __thiscall IVRSystem_021_ResetSeatedZeroPose(void *_this);
+HmdMatrix34_t *__thiscall IVRSystem_022_GetSeatedZeroPoseToStandingAbsoluteTrackingPose(void *_this, HmdMatrix34_t *_r);
 
-HmdMatrix34_t *__thiscall IVRSystem_021_GetSeatedZeroPoseToStandingAbsoluteTrackingPose(void *_this, HmdMatrix34_t *_r);
+HmdMatrix34_t *__thiscall IVRSystem_022_GetRawZeroPoseToStandingAbsoluteTrackingPose(void *_this, HmdMatrix34_t *_r);
 
-HmdMatrix34_t *__thiscall IVRSystem_021_GetRawZeroPoseToStandingAbsoluteTrackingPose(void *_this, HmdMatrix34_t *_r);
+uint32_t __thiscall IVRSystem_022_GetSortedTrackedDeviceIndicesOfClass(void *_this, ETrackedDeviceClass eTrackedDeviceClass, TrackedDeviceIndex_t * punTrackedDeviceIndexArray, uint32_t unTrackedDeviceIndexArrayCount, TrackedDeviceIndex_t unRelativeToTrackedDeviceIndex);
 
-uint32_t __thiscall IVRSystem_021_GetSortedTrackedDeviceIndicesOfClass(void *_this, ETrackedDeviceClass eTrackedDeviceClass, TrackedDeviceIndex_t * punTrackedDeviceIndexArray, uint32_t unTrackedDeviceIndexArrayCount, TrackedDeviceIndex_t unRelativeToTrackedDeviceIndex);
+EDeviceActivityLevel __thiscall IVRSystem_022_GetTrackedDeviceActivityLevel(void *_this, TrackedDeviceIndex_t unDeviceId);
 
-EDeviceActivityLevel __thiscall IVRSystem_021_GetTrackedDeviceActivityLevel(void *_this, TrackedDeviceIndex_t unDeviceId);
+void __thiscall IVRSystem_022_ApplyTransform(void *_this, TrackedDevicePose_t * pOutputPose, TrackedDevicePose_t * pTrackedDevicePose, HmdMatrix34_t * pTransform);
 
-void __thiscall IVRSystem_021_ApplyTransform(void *_this, TrackedDevicePose_t * pOutputPose, TrackedDevicePose_t * pTrackedDevicePose, HmdMatrix34_t * pTransform);
+TrackedDeviceIndex_t __thiscall IVRSystem_022_GetTrackedDeviceIndexForControllerRole(void *_this, ETrackedControllerRole unDeviceType);
 
-TrackedDeviceIndex_t __thiscall IVRSystem_021_GetTrackedDeviceIndexForControllerRole(void *_this, ETrackedControllerRole unDeviceType);
+ETrackedControllerRole __thiscall IVRSystem_022_GetControllerRoleForTrackedDeviceIndex(void *_this, TrackedDeviceIndex_t unDeviceIndex);
 
-ETrackedControllerRole __thiscall IVRSystem_021_GetControllerRoleForTrackedDeviceIndex(void *_this, TrackedDeviceIndex_t unDeviceIndex);
+ETrackedDeviceClass __thiscall IVRSystem_022_GetTrackedDeviceClass(void *_this, TrackedDeviceIndex_t unDeviceIndex);
 
-ETrackedDeviceClass __thiscall IVRSystem_021_GetTrackedDeviceClass(void *_this, TrackedDeviceIndex_t unDeviceIndex);
+bool __thiscall IVRSystem_022_IsTrackedDeviceConnected(void *_this, TrackedDeviceIndex_t unDeviceIndex);
 
-bool __thiscall IVRSystem_021_IsTrackedDeviceConnected(void *_this, TrackedDeviceIndex_t unDeviceIndex);
+bool __thiscall IVRSystem_022_GetBoolTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
 
-bool __thiscall IVRSystem_021_GetBoolTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
+float __thiscall IVRSystem_022_GetFloatTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
 
-float __thiscall IVRSystem_021_GetFloatTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
+int32_t __thiscall IVRSystem_022_GetInt32TrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
 
-int32_t __thiscall IVRSystem_021_GetInt32TrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
+uint64_t __thiscall IVRSystem_022_GetUint64TrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
 
-uint64_t __thiscall IVRSystem_021_GetUint64TrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
+HmdMatrix34_t *__thiscall IVRSystem_022_GetMatrix34TrackedDeviceProperty(void *_this, HmdMatrix34_t *_r, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
 
-HmdMatrix34_t *__thiscall IVRSystem_021_GetMatrix34TrackedDeviceProperty(void *_this, HmdMatrix34_t *_r, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
+uint32_t __thiscall IVRSystem_022_GetArrayTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, PropertyTypeTag_t propType, void * pBuffer, uint32_t unBufferSize, ETrackedPropertyError * pError);
 
-uint32_t __thiscall IVRSystem_021_GetArrayTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, PropertyTypeTag_t propType, void * pBuffer, uint32_t unBufferSize, ETrackedPropertyError * pError);
+uint32_t __thiscall IVRSystem_022_GetStringTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, char * pchValue, uint32_t unBufferSize, ETrackedPropertyError * pError);
 
-uint32_t __thiscall IVRSystem_021_GetStringTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, char * pchValue, uint32_t unBufferSize, ETrackedPropertyError * pError);
+const char * __thiscall IVRSystem_022_GetPropErrorNameFromEnum(void *_this, ETrackedPropertyError error);
 
-const char * __thiscall IVRSystem_021_GetPropErrorNameFromEnum(void *_this, ETrackedPropertyError error);
+bool __thiscall IVRSystem_022_PollNextEvent(void *_this, VREvent_t * pEvent, uint32_t uncbVREvent);
 
-bool __thiscall IVRSystem_021_PollNextEvent(void *_this, VREvent_t * pEvent, uint32_t uncbVREvent);
+bool __thiscall IVRSystem_022_PollNextEventWithPose(void *_this, ETrackingUniverseOrigin eOrigin, VREvent_t * pEvent, uint32_t uncbVREvent, TrackedDevicePose_t * pTrackedDevicePose);
 
-bool __thiscall IVRSystem_021_PollNextEventWithPose(void *_this, ETrackingUniverseOrigin eOrigin, VREvent_t * pEvent, uint32_t uncbVREvent, TrackedDevicePose_t * pTrackedDevicePose);
+const char * __thiscall IVRSystem_022_GetEventTypeNameFromEnum(void *_this, EVREventType eType);
 
-const char * __thiscall IVRSystem_021_GetEventTypeNameFromEnum(void *_this, EVREventType eType);
+HiddenAreaMesh_t *__thiscall IVRSystem_022_GetHiddenAreaMesh(void *_this, HiddenAreaMesh_t *_r, EVREye eEye, EHiddenAreaMeshType type);
 
-HiddenAreaMesh_t *__thiscall IVRSystem_021_GetHiddenAreaMesh(void *_this, HiddenAreaMesh_t *_r, EVREye eEye, EHiddenAreaMeshType type);
+bool __thiscall IVRSystem_022_GetControllerState(void *_this, TrackedDeviceIndex_t unControllerDeviceIndex, VRControllerState_t * pControllerState, uint32_t unControllerStateSize);
 
-bool __thiscall IVRSystem_021_GetControllerState(void *_this, TrackedDeviceIndex_t unControllerDeviceIndex, VRControllerState_t * pControllerState, uint32_t unControllerStateSize);
+bool __thiscall IVRSystem_022_GetControllerStateWithPose(void *_this, ETrackingUniverseOrigin eOrigin, TrackedDeviceIndex_t unControllerDeviceIndex, VRControllerState_t * pControllerState, uint32_t unControllerStateSize, TrackedDevicePose_t * pTrackedDevicePose);
 
-bool __thiscall IVRSystem_021_GetControllerStateWithPose(void *_this, ETrackingUniverseOrigin eOrigin, TrackedDeviceIndex_t unControllerDeviceIndex, VRControllerState_t * pControllerState, uint32_t unControllerStateSize, TrackedDevicePose_t * pTrackedDevicePose);
+void __thiscall IVRSystem_022_TriggerHapticPulse(void *_this, TrackedDeviceIndex_t unControllerDeviceIndex, uint32_t unAxisId, unsigned short usDurationMicroSec);
 
-void __thiscall IVRSystem_021_TriggerHapticPulse(void *_this, TrackedDeviceIndex_t unControllerDeviceIndex, uint32_t unAxisId, unsigned short usDurationMicroSec);
+const char * __thiscall IVRSystem_022_GetButtonIdNameFromEnum(void *_this, EVRButtonId eButtonId);
 
-const char * __thiscall IVRSystem_021_GetButtonIdNameFromEnum(void *_this, EVRButtonId eButtonId);
+const char * __thiscall IVRSystem_022_GetControllerAxisTypeNameFromEnum(void *_this, EVRControllerAxisType eAxisType);
 
-const char * __thiscall IVRSystem_021_GetControllerAxisTypeNameFromEnum(void *_this, EVRControllerAxisType eAxisType);
+bool __thiscall IVRSystem_022_IsInputAvailable(void *_this);
 
-bool __thiscall IVRSystem_021_IsInputAvailable(void *_this);
+bool __thiscall IVRSystem_022_IsSteamVRDrawingControllers(void *_this);
 
-bool __thiscall IVRSystem_021_IsSteamVRDrawingControllers(void *_this);
+bool __thiscall IVRSystem_022_ShouldApplicationPause(void *_this);
 
-bool __thiscall IVRSystem_021_ShouldApplicationPause(void *_this);
+bool __thiscall IVRSystem_022_ShouldApplicationReduceRenderingWork(void *_this);
 
-bool __thiscall IVRSystem_021_ShouldApplicationReduceRenderingWork(void *_this);
+EVRFirmwareError __thiscall IVRSystem_022_PerformFirmwareUpdate(void *_this, TrackedDeviceIndex_t unDeviceIndex);
 
-EVRFirmwareError __thiscall IVRSystem_021_PerformFirmwareUpdate(void *_this, TrackedDeviceIndex_t unDeviceIndex);
+void __thiscall IVRSystem_022_AcknowledgeQuit_Exiting(void *_this);
 
-void __thiscall IVRSystem_021_AcknowledgeQuit_Exiting(void *_this);
+uint32_t __thiscall IVRSystem_022_GetAppContainerFilePaths(void *_this, char * pchBuffer, uint32_t unBufferSize);
 
-uint32_t __thiscall IVRSystem_021_GetAppContainerFilePaths(void *_this, char * pchBuffer, uint32_t unBufferSize);
-
-const char * __thiscall IVRSystem_021_GetRuntimeVersion(void *_this);
+const char * __thiscall IVRSystem_022_GetRuntimeVersion(void *_this);
 
 void test_capi_thunks_IVRApplications_007(void);
 
@@ -193,23 +191,25 @@ void __thiscall IVRSettings_003_RemoveSection(void *_this, const char * pchSecti
 
 void __thiscall IVRSettings_003_RemoveKeyInSection(void *_this, const char * pchSection, const char * pchSettingsKey, EVRSettingsError * peError);
 
-void test_capi_thunks_IVRChaperone_003(void);
+void test_capi_thunks_IVRChaperone_004(void);
 
-ChaperoneCalibrationState __thiscall IVRChaperone_003_GetCalibrationState(void *_this);
+ChaperoneCalibrationState __thiscall IVRChaperone_004_GetCalibrationState(void *_this);
 
-bool __thiscall IVRChaperone_003_GetPlayAreaSize(void *_this, float * pSizeX, float * pSizeZ);
+bool __thiscall IVRChaperone_004_GetPlayAreaSize(void *_this, float * pSizeX, float * pSizeZ);
 
-bool __thiscall IVRChaperone_003_GetPlayAreaRect(void *_this, HmdQuad_t * rect);
+bool __thiscall IVRChaperone_004_GetPlayAreaRect(void *_this, HmdQuad_t * rect);
 
-void __thiscall IVRChaperone_003_ReloadInfo(void *_this);
+void __thiscall IVRChaperone_004_ReloadInfo(void *_this);
 
-void __thiscall IVRChaperone_003_SetSceneColor(void *_this, HmdColor_t color);
+void __thiscall IVRChaperone_004_SetSceneColor(void *_this, HmdColor_t color);
 
-void __thiscall IVRChaperone_003_GetBoundsColor(void *_this, HmdColor_t * pOutputColorArray, int nNumOutputColors, float flCollisionBoundsFadeDistance, HmdColor_t * pOutputCameraColor);
+void __thiscall IVRChaperone_004_GetBoundsColor(void *_this, HmdColor_t * pOutputColorArray, int nNumOutputColors, float flCollisionBoundsFadeDistance, HmdColor_t * pOutputCameraColor);
 
-bool __thiscall IVRChaperone_003_AreBoundsVisible(void *_this);
+bool __thiscall IVRChaperone_004_AreBoundsVisible(void *_this);
 
-void __thiscall IVRChaperone_003_ForceBoundsVisible(void *_this, bool bForce);
+void __thiscall IVRChaperone_004_ForceBoundsVisible(void *_this, bool bForce);
+
+void __thiscall IVRChaperone_004_ResetZeroPose(void *_this, ETrackingUniverseOrigin eTrackingUniverseOrigin);
 
 void test_capi_thunks_IVRChaperoneSetup_006(void);
 
@@ -756,6 +756,120 @@ bool __thiscall IVRClientCore_003_BIsHmdPresent(void *_this);
 const char * __thiscall IVRClientCore_003_GetEnglishStringForHmdError(void *_this, EVRInitError eError);
 
 const char * __thiscall IVRClientCore_003_GetIDForVRInitError(void *_this, EVRInitError eError);
+
+void test_capi_thunks_IVRSystem_021(void);
+
+void __thiscall IVRSystem_021_GetRecommendedRenderTargetSize(void *_this, uint32_t * pnWidth, uint32_t * pnHeight);
+
+HmdMatrix44_t *__thiscall IVRSystem_021_GetProjectionMatrix(void *_this, HmdMatrix44_t *_r, EVREye eEye, float fNearZ, float fFarZ);
+
+void __thiscall IVRSystem_021_GetProjectionRaw(void *_this, EVREye eEye, float * pfLeft, float * pfRight, float * pfTop, float * pfBottom);
+
+bool __thiscall IVRSystem_021_ComputeDistortion(void *_this, EVREye eEye, float fU, float fV, DistortionCoordinates_t * pDistortionCoordinates);
+
+HmdMatrix34_t *__thiscall IVRSystem_021_GetEyeToHeadTransform(void *_this, HmdMatrix34_t *_r, EVREye eEye);
+
+bool __thiscall IVRSystem_021_GetTimeSinceLastVsync(void *_this, float * pfSecondsSinceLastVsync, uint64_t * pulFrameCounter);
+
+int32_t __thiscall IVRSystem_021_GetD3D9AdapterIndex(void *_this);
+
+void __thiscall IVRSystem_021_GetDXGIOutputInfo(void *_this, int32_t * pnAdapterIndex);
+
+void __thiscall IVRSystem_021_GetOutputDevice(void *_this, uint64_t * pnDevice, ETextureType textureType, VkInstance_T * pInstance);
+
+bool __thiscall IVRSystem_021_IsDisplayOnDesktop(void *_this);
+
+bool __thiscall IVRSystem_021_SetDisplayVisibility(void *_this, bool bIsVisibleOnDesktop);
+
+void __thiscall IVRSystem_021_GetDeviceToAbsoluteTrackingPose(void *_this, ETrackingUniverseOrigin eOrigin, float fPredictedSecondsToPhotonsFromNow, TrackedDevicePose_t * pTrackedDevicePoseArray, uint32_t unTrackedDevicePoseArrayCount);
+
+void __thiscall IVRSystem_021_ResetSeatedZeroPose(void *_this);
+
+HmdMatrix34_t *__thiscall IVRSystem_021_GetSeatedZeroPoseToStandingAbsoluteTrackingPose(void *_this, HmdMatrix34_t *_r);
+
+HmdMatrix34_t *__thiscall IVRSystem_021_GetRawZeroPoseToStandingAbsoluteTrackingPose(void *_this, HmdMatrix34_t *_r);
+
+uint32_t __thiscall IVRSystem_021_GetSortedTrackedDeviceIndicesOfClass(void *_this, ETrackedDeviceClass eTrackedDeviceClass, TrackedDeviceIndex_t * punTrackedDeviceIndexArray, uint32_t unTrackedDeviceIndexArrayCount, TrackedDeviceIndex_t unRelativeToTrackedDeviceIndex);
+
+EDeviceActivityLevel __thiscall IVRSystem_021_GetTrackedDeviceActivityLevel(void *_this, TrackedDeviceIndex_t unDeviceId);
+
+void __thiscall IVRSystem_021_ApplyTransform(void *_this, TrackedDevicePose_t * pOutputPose, TrackedDevicePose_t * pTrackedDevicePose, HmdMatrix34_t * pTransform);
+
+TrackedDeviceIndex_t __thiscall IVRSystem_021_GetTrackedDeviceIndexForControllerRole(void *_this, ETrackedControllerRole unDeviceType);
+
+ETrackedControllerRole __thiscall IVRSystem_021_GetControllerRoleForTrackedDeviceIndex(void *_this, TrackedDeviceIndex_t unDeviceIndex);
+
+ETrackedDeviceClass __thiscall IVRSystem_021_GetTrackedDeviceClass(void *_this, TrackedDeviceIndex_t unDeviceIndex);
+
+bool __thiscall IVRSystem_021_IsTrackedDeviceConnected(void *_this, TrackedDeviceIndex_t unDeviceIndex);
+
+bool __thiscall IVRSystem_021_GetBoolTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
+
+float __thiscall IVRSystem_021_GetFloatTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
+
+int32_t __thiscall IVRSystem_021_GetInt32TrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
+
+uint64_t __thiscall IVRSystem_021_GetUint64TrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
+
+HmdMatrix34_t *__thiscall IVRSystem_021_GetMatrix34TrackedDeviceProperty(void *_this, HmdMatrix34_t *_r, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError);
+
+uint32_t __thiscall IVRSystem_021_GetArrayTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, PropertyTypeTag_t propType, void * pBuffer, uint32_t unBufferSize, ETrackedPropertyError * pError);
+
+uint32_t __thiscall IVRSystem_021_GetStringTrackedDeviceProperty(void *_this, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, char * pchValue, uint32_t unBufferSize, ETrackedPropertyError * pError);
+
+const char * __thiscall IVRSystem_021_GetPropErrorNameFromEnum(void *_this, ETrackedPropertyError error);
+
+bool __thiscall IVRSystem_021_PollNextEvent(void *_this, VREvent_t * pEvent, uint32_t uncbVREvent);
+
+bool __thiscall IVRSystem_021_PollNextEventWithPose(void *_this, ETrackingUniverseOrigin eOrigin, VREvent_t * pEvent, uint32_t uncbVREvent, TrackedDevicePose_t * pTrackedDevicePose);
+
+const char * __thiscall IVRSystem_021_GetEventTypeNameFromEnum(void *_this, EVREventType eType);
+
+HiddenAreaMesh_t *__thiscall IVRSystem_021_GetHiddenAreaMesh(void *_this, HiddenAreaMesh_t *_r, EVREye eEye, EHiddenAreaMeshType type);
+
+bool __thiscall IVRSystem_021_GetControllerState(void *_this, TrackedDeviceIndex_t unControllerDeviceIndex, VRControllerState_t * pControllerState, uint32_t unControllerStateSize);
+
+bool __thiscall IVRSystem_021_GetControllerStateWithPose(void *_this, ETrackingUniverseOrigin eOrigin, TrackedDeviceIndex_t unControllerDeviceIndex, VRControllerState_t * pControllerState, uint32_t unControllerStateSize, TrackedDevicePose_t * pTrackedDevicePose);
+
+void __thiscall IVRSystem_021_TriggerHapticPulse(void *_this, TrackedDeviceIndex_t unControllerDeviceIndex, uint32_t unAxisId, unsigned short usDurationMicroSec);
+
+const char * __thiscall IVRSystem_021_GetButtonIdNameFromEnum(void *_this, EVRButtonId eButtonId);
+
+const char * __thiscall IVRSystem_021_GetControllerAxisTypeNameFromEnum(void *_this, EVRControllerAxisType eAxisType);
+
+bool __thiscall IVRSystem_021_IsInputAvailable(void *_this);
+
+bool __thiscall IVRSystem_021_IsSteamVRDrawingControllers(void *_this);
+
+bool __thiscall IVRSystem_021_ShouldApplicationPause(void *_this);
+
+bool __thiscall IVRSystem_021_ShouldApplicationReduceRenderingWork(void *_this);
+
+EVRFirmwareError __thiscall IVRSystem_021_PerformFirmwareUpdate(void *_this, TrackedDeviceIndex_t unDeviceIndex);
+
+void __thiscall IVRSystem_021_AcknowledgeQuit_Exiting(void *_this);
+
+uint32_t __thiscall IVRSystem_021_GetAppContainerFilePaths(void *_this, char * pchBuffer, uint32_t unBufferSize);
+
+const char * __thiscall IVRSystem_021_GetRuntimeVersion(void *_this);
+
+void test_capi_thunks_IVRChaperone_003(void);
+
+ChaperoneCalibrationState __thiscall IVRChaperone_003_GetCalibrationState(void *_this);
+
+bool __thiscall IVRChaperone_003_GetPlayAreaSize(void *_this, float * pSizeX, float * pSizeZ);
+
+bool __thiscall IVRChaperone_003_GetPlayAreaRect(void *_this, HmdQuad_t * rect);
+
+void __thiscall IVRChaperone_003_ReloadInfo(void *_this);
+
+void __thiscall IVRChaperone_003_SetSceneColor(void *_this, HmdColor_t color);
+
+void __thiscall IVRChaperone_003_GetBoundsColor(void *_this, HmdColor_t * pOutputColorArray, int nNumOutputColors, float flCollisionBoundsFadeDistance, HmdColor_t * pOutputCameraColor);
+
+bool __thiscall IVRChaperone_003_AreBoundsVisible(void *_this);
+
+void __thiscall IVRChaperone_003_ForceBoundsVisible(void *_this, bool bForce);
 
 void test_capi_thunks_IVRControlPanel_006(void);
 
