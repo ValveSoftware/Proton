@@ -1,434 +1,427 @@
 /* This file is auto-generated, do not edit. */
 #include "capi_thunks_autogen.h"
 
-void test_capi_thunks_IVRSystem_021(void)
+void test_capi_thunks_IVRSystem_022(void)
 {
     struct thunk *t = alloc_thunks(1);
 
-    init_thunk(t, this_ptr_value, IVRSystem_021_GetRecommendedRenderTargetSize, 2, FALSE, FALSE);
-    void (__stdcall *capi_IVRSystem_021_GetRecommendedRenderTargetSize)(uint32_t * pnWidth, uint32_t * pnHeight) = (void *)t;
+    init_thunk(t, this_ptr_value, IVRSystem_022_GetRecommendedRenderTargetSize, 2, FALSE, FALSE);
+    void (__stdcall *capi_IVRSystem_022_GetRecommendedRenderTargetSize)(uint32_t * pnWidth, uint32_t * pnHeight) = (void *)t;
 
     clear_parameters();
-    capi_IVRSystem_021_GetRecommendedRenderTargetSize((void *)1, (void *)2);
-    check_ptr_parameter("IVRSystem_021_GetRecommendedRenderTargetSize", this_ptr_value);
-    check_ptr_parameter("IVRSystem_021_GetRecommendedRenderTargetSize", (void *)1);
-    check_ptr_parameter("IVRSystem_021_GetRecommendedRenderTargetSize", (void *)2);
+    capi_IVRSystem_022_GetRecommendedRenderTargetSize((void *)1, (void *)2);
+    check_ptr_parameter("IVRSystem_022_GetRecommendedRenderTargetSize", this_ptr_value);
+    check_ptr_parameter("IVRSystem_022_GetRecommendedRenderTargetSize", (void *)1);
+    check_ptr_parameter("IVRSystem_022_GetRecommendedRenderTargetSize", (void *)2);
 
-    init_thunk(t, this_ptr_value, IVRSystem_021_GetProjectionMatrix, 4, TRUE, TRUE);
-    HmdMatrix44_t *(__stdcall *capi_IVRSystem_021_GetProjectionMatrix)(HmdMatrix44_t *_r, EVREye eEye, float fNearZ, float fFarZ) = (void *)t;
-
-    clear_parameters();
-    capi_IVRSystem_021_GetProjectionMatrix(data_ptr_value, 1, 2.0f, 3.0f);
-    check_ptr_parameter("IVRSystem_021_GetProjectionMatrix", this_ptr_value);
-    check_ptr_parameter("IVRSystem_021_GetProjectionMatrix", data_ptr_value);
-    check_uint32_parameter("IVRSystem_021_GetProjectionMatrix", 1);
-    check_float_parameter("IVRSystem_021_GetProjectionMatrix", 2.0f);
-    check_float_parameter("IVRSystem_021_GetProjectionMatrix", 3.0f);
-
-    init_thunk(t, this_ptr_value, IVRSystem_021_GetProjectionRaw, 5, FALSE, FALSE);
-    void (__stdcall *capi_IVRSystem_021_GetProjectionRaw)(EVREye eEye, float * pfLeft, float * pfRight, float * pfTop, float * pfBottom) = (void *)t;
+    init_thunk(t, this_ptr_value, IVRSystem_022_GetProjectionMatrix, 4, TRUE, TRUE);
+    HmdMatrix44_t *(__stdcall *capi_IVRSystem_022_GetProjectionMatrix)(HmdMatrix44_t *_r, EVREye eEye, float fNearZ, float fFarZ) = (void *)t;
 
     clear_parameters();
-    capi_IVRSystem_021_GetProjectionRaw(1, (void *)2, (void *)3, (void *)4, (void *)5);
-    check_ptr_parameter("IVRSystem_021_GetProjectionRaw", this_ptr_value);
-    check_uint32_parameter("IVRSystem_021_GetProjectionRaw", 1);
-    check_ptr_parameter("IVRSystem_021_GetProjectionRaw", (void *)2);
-    check_ptr_parameter("IVRSystem_021_GetProjectionRaw", (void *)3);
-    check_ptr_parameter("IVRSystem_021_GetProjectionRaw", (void *)4);
-    check_ptr_parameter("IVRSystem_021_GetProjectionRaw", (void *)5);
+    capi_IVRSystem_022_GetProjectionMatrix(data_ptr_value, 1, 2.0f, 3.0f);
+    check_ptr_parameter("IVRSystem_022_GetProjectionMatrix", this_ptr_value);
+    check_ptr_parameter("IVRSystem_022_GetProjectionMatrix", data_ptr_value);
+    check_uint32_parameter("IVRSystem_022_GetProjectionMatrix", 1);
+    check_float_parameter("IVRSystem_022_GetProjectionMatrix", 2.0f);
+    check_float_parameter("IVRSystem_022_GetProjectionMatrix", 3.0f);
 
-    init_thunk(t, this_ptr_value, IVRSystem_021_ComputeDistortion, 4, TRUE, FALSE);
-    bool (__stdcall *capi_IVRSystem_021_ComputeDistortion)(EVREye eEye, float fU, float fV, DistortionCoordinates_t * pDistortionCoordinates) = (void *)t;
-
-    clear_parameters();
-    capi_IVRSystem_021_ComputeDistortion(1, 2.0f, 3.0f, (void *)4);
-    check_ptr_parameter("IVRSystem_021_ComputeDistortion", this_ptr_value);
-    check_uint32_parameter("IVRSystem_021_ComputeDistortion", 1);
-    check_float_parameter("IVRSystem_021_ComputeDistortion", 2.0f);
-    check_float_parameter("IVRSystem_021_ComputeDistortion", 3.0f);
-    check_ptr_parameter("IVRSystem_021_ComputeDistortion", (void *)4);
-
-    init_thunk(t, this_ptr_value, IVRSystem_021_GetEyeToHeadTransform, 2, FALSE, FALSE);
-    HmdMatrix34_t *(__stdcall *capi_IVRSystem_021_GetEyeToHeadTransform)(HmdMatrix34_t *_r, EVREye eEye) = (void *)t;
+    init_thunk(t, this_ptr_value, IVRSystem_022_GetProjectionRaw, 5, FALSE, FALSE);
+    void (__stdcall *capi_IVRSystem_022_GetProjectionRaw)(EVREye eEye, float * pfLeft, float * pfRight, float * pfTop, float * pfBottom) = (void *)t;
 
     clear_parameters();
-    capi_IVRSystem_021_GetEyeToHeadTransform(data_ptr_value, 1);
-    check_ptr_parameter("IVRSystem_021_GetEyeToHeadTransform", this_ptr_value);
-    check_ptr_parameter("IVRSystem_021_GetEyeToHeadTransform", data_ptr_value);
-    check_uint32_parameter("IVRSystem_021_GetEyeToHeadTransform", 1);
+    capi_IVRSystem_022_GetProjectionRaw(1, (void *)2, (void *)3, (void *)4, (void *)5);
+    check_ptr_parameter("IVRSystem_022_GetProjectionRaw", this_ptr_value);
+    check_uint32_parameter("IVRSystem_022_GetProjectionRaw", 1);
+    check_ptr_parameter("IVRSystem_022_GetProjectionRaw", (void *)2);
+    check_ptr_parameter("IVRSystem_022_GetProjectionRaw", (void *)3);
+    check_ptr_parameter("IVRSystem_022_GetProjectionRaw", (void *)4);
+    check_ptr_parameter("IVRSystem_022_GetProjectionRaw", (void *)5);
 
-    init_thunk(t, this_ptr_value, IVRSystem_021_GetTimeSinceLastVsync, 2, FALSE, FALSE);
-    bool (__stdcall *capi_IVRSystem_021_GetTimeSinceLastVsync)(float * pfSecondsSinceLastVsync, uint64_t * pulFrameCounter) = (void *)t;
-
-    clear_parameters();
-    capi_IVRSystem_021_GetTimeSinceLastVsync((void *)1, (void *)2);
-    check_ptr_parameter("IVRSystem_021_GetTimeSinceLastVsync", this_ptr_value);
-    check_ptr_parameter("IVRSystem_021_GetTimeSinceLastVsync", (void *)1);
-    check_ptr_parameter("IVRSystem_021_GetTimeSinceLastVsync", (void *)2);
-
-    init_thunk(t, this_ptr_value, IVRSystem_021_GetD3D9AdapterIndex, 0, FALSE, FALSE);
-    int32_t (__stdcall *capi_IVRSystem_021_GetD3D9AdapterIndex)() = (void *)t;
+    init_thunk(t, this_ptr_value, IVRSystem_022_ComputeDistortion, 4, TRUE, FALSE);
+    bool (__stdcall *capi_IVRSystem_022_ComputeDistortion)(EVREye eEye, float fU, float fV, DistortionCoordinates_t * pDistortionCoordinates) = (void *)t;
 
     clear_parameters();
-    capi_IVRSystem_021_GetD3D9AdapterIndex();
-    check_ptr_parameter("IVRSystem_021_GetD3D9AdapterIndex", this_ptr_value);
+    capi_IVRSystem_022_ComputeDistortion(1, 2.0f, 3.0f, (void *)4);
+    check_ptr_parameter("IVRSystem_022_ComputeDistortion", this_ptr_value);
+    check_uint32_parameter("IVRSystem_022_ComputeDistortion", 1);
+    check_float_parameter("IVRSystem_022_ComputeDistortion", 2.0f);
+    check_float_parameter("IVRSystem_022_ComputeDistortion", 3.0f);
+    check_ptr_parameter("IVRSystem_022_ComputeDistortion", (void *)4);
 
-    init_thunk(t, this_ptr_value, IVRSystem_021_GetDXGIOutputInfo, 1, FALSE, FALSE);
-    void (__stdcall *capi_IVRSystem_021_GetDXGIOutputInfo)(int32_t * pnAdapterIndex) = (void *)t;
-
-    clear_parameters();
-    capi_IVRSystem_021_GetDXGIOutputInfo((void *)1);
-    check_ptr_parameter("IVRSystem_021_GetDXGIOutputInfo", this_ptr_value);
-    check_ptr_parameter("IVRSystem_021_GetDXGIOutputInfo", (void *)1);
-
-    init_thunk(t, this_ptr_value, IVRSystem_021_GetOutputDevice, 3, FALSE, FALSE);
-    void (__stdcall *capi_IVRSystem_021_GetOutputDevice)(uint64_t * pnDevice, ETextureType textureType, VkInstance_T * pInstance) = (void *)t;
+    init_thunk(t, this_ptr_value, IVRSystem_022_GetEyeToHeadTransform, 2, FALSE, FALSE);
+    HmdMatrix34_t *(__stdcall *capi_IVRSystem_022_GetEyeToHeadTransform)(HmdMatrix34_t *_r, EVREye eEye) = (void *)t;
 
     clear_parameters();
-    capi_IVRSystem_021_GetOutputDevice((void *)1, 2, (void *)3);
-    check_ptr_parameter("IVRSystem_021_GetOutputDevice", this_ptr_value);
-    check_ptr_parameter("IVRSystem_021_GetOutputDevice", (void *)1);
-    check_uint32_parameter("IVRSystem_021_GetOutputDevice", 2);
-    check_ptr_parameter("IVRSystem_021_GetOutputDevice", (void *)3);
+    capi_IVRSystem_022_GetEyeToHeadTransform(data_ptr_value, 1);
+    check_ptr_parameter("IVRSystem_022_GetEyeToHeadTransform", this_ptr_value);
+    check_ptr_parameter("IVRSystem_022_GetEyeToHeadTransform", data_ptr_value);
+    check_uint32_parameter("IVRSystem_022_GetEyeToHeadTransform", 1);
 
-    init_thunk(t, this_ptr_value, IVRSystem_021_IsDisplayOnDesktop, 0, FALSE, FALSE);
-    bool (__stdcall *capi_IVRSystem_021_IsDisplayOnDesktop)() = (void *)t;
-
-    clear_parameters();
-    capi_IVRSystem_021_IsDisplayOnDesktop();
-    check_ptr_parameter("IVRSystem_021_IsDisplayOnDesktop", this_ptr_value);
-
-    init_thunk(t, this_ptr_value, IVRSystem_021_SetDisplayVisibility, 1, FALSE, FALSE);
-    bool (__stdcall *capi_IVRSystem_021_SetDisplayVisibility)(bool bIsVisibleOnDesktop) = (void *)t;
+    init_thunk(t, this_ptr_value, IVRSystem_022_GetTimeSinceLastVsync, 2, FALSE, FALSE);
+    bool (__stdcall *capi_IVRSystem_022_GetTimeSinceLastVsync)(float * pfSecondsSinceLastVsync, uint64_t * pulFrameCounter) = (void *)t;
 
     clear_parameters();
-    capi_IVRSystem_021_SetDisplayVisibility(1);
-    check_ptr_parameter("IVRSystem_021_SetDisplayVisibility", this_ptr_value);
-    check_bool_parameter("IVRSystem_021_SetDisplayVisibility", 1);
+    capi_IVRSystem_022_GetTimeSinceLastVsync((void *)1, (void *)2);
+    check_ptr_parameter("IVRSystem_022_GetTimeSinceLastVsync", this_ptr_value);
+    check_ptr_parameter("IVRSystem_022_GetTimeSinceLastVsync", (void *)1);
+    check_ptr_parameter("IVRSystem_022_GetTimeSinceLastVsync", (void *)2);
 
-    init_thunk(t, this_ptr_value, IVRSystem_021_GetDeviceToAbsoluteTrackingPose, 4, TRUE, FALSE);
-    void (__stdcall *capi_IVRSystem_021_GetDeviceToAbsoluteTrackingPose)(ETrackingUniverseOrigin eOrigin, float fPredictedSecondsToPhotonsFromNow, TrackedDevicePose_t * pTrackedDevicePoseArray, uint32_t unTrackedDevicePoseArrayCount) = (void *)t;
-
-    clear_parameters();
-    capi_IVRSystem_021_GetDeviceToAbsoluteTrackingPose(1, 2.0f, (void *)3, 4);
-    check_ptr_parameter("IVRSystem_021_GetDeviceToAbsoluteTrackingPose", this_ptr_value);
-    check_uint32_parameter("IVRSystem_021_GetDeviceToAbsoluteTrackingPose", 1);
-    check_float_parameter("IVRSystem_021_GetDeviceToAbsoluteTrackingPose", 2.0f);
-    check_ptr_parameter("IVRSystem_021_GetDeviceToAbsoluteTrackingPose", (void *)3);
-    check_uint32_parameter("IVRSystem_021_GetDeviceToAbsoluteTrackingPose", 4);
-
-    init_thunk(t, this_ptr_value, IVRSystem_021_ResetSeatedZeroPose, 0, FALSE, FALSE);
-    void (__stdcall *capi_IVRSystem_021_ResetSeatedZeroPose)() = (void *)t;
+    init_thunk(t, this_ptr_value, IVRSystem_022_GetD3D9AdapterIndex, 0, FALSE, FALSE);
+    int32_t (__stdcall *capi_IVRSystem_022_GetD3D9AdapterIndex)() = (void *)t;
 
     clear_parameters();
-    capi_IVRSystem_021_ResetSeatedZeroPose();
-    check_ptr_parameter("IVRSystem_021_ResetSeatedZeroPose", this_ptr_value);
+    capi_IVRSystem_022_GetD3D9AdapterIndex();
+    check_ptr_parameter("IVRSystem_022_GetD3D9AdapterIndex", this_ptr_value);
 
-    init_thunk(t, this_ptr_value, IVRSystem_021_GetSeatedZeroPoseToStandingAbsoluteTrackingPose, 1, FALSE, FALSE);
-    HmdMatrix34_t *(__stdcall *capi_IVRSystem_021_GetSeatedZeroPoseToStandingAbsoluteTrackingPose)(HmdMatrix34_t *_r) = (void *)t;
-
-    clear_parameters();
-    capi_IVRSystem_021_GetSeatedZeroPoseToStandingAbsoluteTrackingPose(data_ptr_value);
-    check_ptr_parameter("IVRSystem_021_GetSeatedZeroPoseToStandingAbsoluteTrackingPose", this_ptr_value);
-    check_ptr_parameter("IVRSystem_021_GetSeatedZeroPoseToStandingAbsoluteTrackingPose", data_ptr_value);
-
-    init_thunk(t, this_ptr_value, IVRSystem_021_GetRawZeroPoseToStandingAbsoluteTrackingPose, 1, FALSE, FALSE);
-    HmdMatrix34_t *(__stdcall *capi_IVRSystem_021_GetRawZeroPoseToStandingAbsoluteTrackingPose)(HmdMatrix34_t *_r) = (void *)t;
+    init_thunk(t, this_ptr_value, IVRSystem_022_GetDXGIOutputInfo, 1, FALSE, FALSE);
+    void (__stdcall *capi_IVRSystem_022_GetDXGIOutputInfo)(int32_t * pnAdapterIndex) = (void *)t;
 
     clear_parameters();
-    capi_IVRSystem_021_GetRawZeroPoseToStandingAbsoluteTrackingPose(data_ptr_value);
-    check_ptr_parameter("IVRSystem_021_GetRawZeroPoseToStandingAbsoluteTrackingPose", this_ptr_value);
-    check_ptr_parameter("IVRSystem_021_GetRawZeroPoseToStandingAbsoluteTrackingPose", data_ptr_value);
+    capi_IVRSystem_022_GetDXGIOutputInfo((void *)1);
+    check_ptr_parameter("IVRSystem_022_GetDXGIOutputInfo", this_ptr_value);
+    check_ptr_parameter("IVRSystem_022_GetDXGIOutputInfo", (void *)1);
 
-    init_thunk(t, this_ptr_value, IVRSystem_021_GetSortedTrackedDeviceIndicesOfClass, 4, FALSE, FALSE);
-    uint32_t (__stdcall *capi_IVRSystem_021_GetSortedTrackedDeviceIndicesOfClass)(ETrackedDeviceClass eTrackedDeviceClass, TrackedDeviceIndex_t * punTrackedDeviceIndexArray, uint32_t unTrackedDeviceIndexArrayCount, TrackedDeviceIndex_t unRelativeToTrackedDeviceIndex) = (void *)t;
-
-    clear_parameters();
-    capi_IVRSystem_021_GetSortedTrackedDeviceIndicesOfClass(1, (void *)2, 3, 4);
-    check_ptr_parameter("IVRSystem_021_GetSortedTrackedDeviceIndicesOfClass", this_ptr_value);
-    check_uint32_parameter("IVRSystem_021_GetSortedTrackedDeviceIndicesOfClass", 1);
-    check_ptr_parameter("IVRSystem_021_GetSortedTrackedDeviceIndicesOfClass", (void *)2);
-    check_uint32_parameter("IVRSystem_021_GetSortedTrackedDeviceIndicesOfClass", 3);
-    check_uint32_parameter("IVRSystem_021_GetSortedTrackedDeviceIndicesOfClass", 4);
-
-    init_thunk(t, this_ptr_value, IVRSystem_021_GetTrackedDeviceActivityLevel, 1, FALSE, FALSE);
-    EDeviceActivityLevel (__stdcall *capi_IVRSystem_021_GetTrackedDeviceActivityLevel)(TrackedDeviceIndex_t unDeviceId) = (void *)t;
+    init_thunk(t, this_ptr_value, IVRSystem_022_GetOutputDevice, 3, FALSE, FALSE);
+    void (__stdcall *capi_IVRSystem_022_GetOutputDevice)(uint64_t * pnDevice, ETextureType textureType, VkInstance_T * pInstance) = (void *)t;
 
     clear_parameters();
-    capi_IVRSystem_021_GetTrackedDeviceActivityLevel(1);
-    check_ptr_parameter("IVRSystem_021_GetTrackedDeviceActivityLevel", this_ptr_value);
-    check_uint32_parameter("IVRSystem_021_GetTrackedDeviceActivityLevel", 1);
+    capi_IVRSystem_022_GetOutputDevice((void *)1, 2, (void *)3);
+    check_ptr_parameter("IVRSystem_022_GetOutputDevice", this_ptr_value);
+    check_ptr_parameter("IVRSystem_022_GetOutputDevice", (void *)1);
+    check_uint32_parameter("IVRSystem_022_GetOutputDevice", 2);
+    check_ptr_parameter("IVRSystem_022_GetOutputDevice", (void *)3);
 
-    init_thunk(t, this_ptr_value, IVRSystem_021_ApplyTransform, 3, FALSE, FALSE);
-    void (__stdcall *capi_IVRSystem_021_ApplyTransform)(TrackedDevicePose_t * pOutputPose, TrackedDevicePose_t * pTrackedDevicePose, HmdMatrix34_t * pTransform) = (void *)t;
-
-    clear_parameters();
-    capi_IVRSystem_021_ApplyTransform((void *)1, (void *)2, (void *)3);
-    check_ptr_parameter("IVRSystem_021_ApplyTransform", this_ptr_value);
-    check_ptr_parameter("IVRSystem_021_ApplyTransform", (void *)1);
-    check_ptr_parameter("IVRSystem_021_ApplyTransform", (void *)2);
-    check_ptr_parameter("IVRSystem_021_ApplyTransform", (void *)3);
-
-    init_thunk(t, this_ptr_value, IVRSystem_021_GetTrackedDeviceIndexForControllerRole, 1, FALSE, FALSE);
-    TrackedDeviceIndex_t (__stdcall *capi_IVRSystem_021_GetTrackedDeviceIndexForControllerRole)(ETrackedControllerRole unDeviceType) = (void *)t;
+    init_thunk(t, this_ptr_value, IVRSystem_022_IsDisplayOnDesktop, 0, FALSE, FALSE);
+    bool (__stdcall *capi_IVRSystem_022_IsDisplayOnDesktop)() = (void *)t;
 
     clear_parameters();
-    capi_IVRSystem_021_GetTrackedDeviceIndexForControllerRole(1);
-    check_ptr_parameter("IVRSystem_021_GetTrackedDeviceIndexForControllerRole", this_ptr_value);
-    check_uint32_parameter("IVRSystem_021_GetTrackedDeviceIndexForControllerRole", 1);
+    capi_IVRSystem_022_IsDisplayOnDesktop();
+    check_ptr_parameter("IVRSystem_022_IsDisplayOnDesktop", this_ptr_value);
 
-    init_thunk(t, this_ptr_value, IVRSystem_021_GetControllerRoleForTrackedDeviceIndex, 1, FALSE, FALSE);
-    ETrackedControllerRole (__stdcall *capi_IVRSystem_021_GetControllerRoleForTrackedDeviceIndex)(TrackedDeviceIndex_t unDeviceIndex) = (void *)t;
-
-    clear_parameters();
-    capi_IVRSystem_021_GetControllerRoleForTrackedDeviceIndex(1);
-    check_ptr_parameter("IVRSystem_021_GetControllerRoleForTrackedDeviceIndex", this_ptr_value);
-    check_uint32_parameter("IVRSystem_021_GetControllerRoleForTrackedDeviceIndex", 1);
-
-    init_thunk(t, this_ptr_value, IVRSystem_021_GetTrackedDeviceClass, 1, FALSE, FALSE);
-    ETrackedDeviceClass (__stdcall *capi_IVRSystem_021_GetTrackedDeviceClass)(TrackedDeviceIndex_t unDeviceIndex) = (void *)t;
+    init_thunk(t, this_ptr_value, IVRSystem_022_SetDisplayVisibility, 1, FALSE, FALSE);
+    bool (__stdcall *capi_IVRSystem_022_SetDisplayVisibility)(bool bIsVisibleOnDesktop) = (void *)t;
 
     clear_parameters();
-    capi_IVRSystem_021_GetTrackedDeviceClass(1);
-    check_ptr_parameter("IVRSystem_021_GetTrackedDeviceClass", this_ptr_value);
-    check_uint32_parameter("IVRSystem_021_GetTrackedDeviceClass", 1);
+    capi_IVRSystem_022_SetDisplayVisibility(1);
+    check_ptr_parameter("IVRSystem_022_SetDisplayVisibility", this_ptr_value);
+    check_bool_parameter("IVRSystem_022_SetDisplayVisibility", 1);
 
-    init_thunk(t, this_ptr_value, IVRSystem_021_IsTrackedDeviceConnected, 1, FALSE, FALSE);
-    bool (__stdcall *capi_IVRSystem_021_IsTrackedDeviceConnected)(TrackedDeviceIndex_t unDeviceIndex) = (void *)t;
-
-    clear_parameters();
-    capi_IVRSystem_021_IsTrackedDeviceConnected(1);
-    check_ptr_parameter("IVRSystem_021_IsTrackedDeviceConnected", this_ptr_value);
-    check_uint32_parameter("IVRSystem_021_IsTrackedDeviceConnected", 1);
-
-    init_thunk(t, this_ptr_value, IVRSystem_021_GetBoolTrackedDeviceProperty, 3, FALSE, FALSE);
-    bool (__stdcall *capi_IVRSystem_021_GetBoolTrackedDeviceProperty)(TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError) = (void *)t;
+    init_thunk(t, this_ptr_value, IVRSystem_022_GetDeviceToAbsoluteTrackingPose, 4, TRUE, FALSE);
+    void (__stdcall *capi_IVRSystem_022_GetDeviceToAbsoluteTrackingPose)(ETrackingUniverseOrigin eOrigin, float fPredictedSecondsToPhotonsFromNow, TrackedDevicePose_t * pTrackedDevicePoseArray, uint32_t unTrackedDevicePoseArrayCount) = (void *)t;
 
     clear_parameters();
-    capi_IVRSystem_021_GetBoolTrackedDeviceProperty(1, 2, (void *)3);
-    check_ptr_parameter("IVRSystem_021_GetBoolTrackedDeviceProperty", this_ptr_value);
-    check_uint32_parameter("IVRSystem_021_GetBoolTrackedDeviceProperty", 1);
-    check_uint32_parameter("IVRSystem_021_GetBoolTrackedDeviceProperty", 2);
-    check_ptr_parameter("IVRSystem_021_GetBoolTrackedDeviceProperty", (void *)3);
+    capi_IVRSystem_022_GetDeviceToAbsoluteTrackingPose(1, 2.0f, (void *)3, 4);
+    check_ptr_parameter("IVRSystem_022_GetDeviceToAbsoluteTrackingPose", this_ptr_value);
+    check_uint32_parameter("IVRSystem_022_GetDeviceToAbsoluteTrackingPose", 1);
+    check_float_parameter("IVRSystem_022_GetDeviceToAbsoluteTrackingPose", 2.0f);
+    check_ptr_parameter("IVRSystem_022_GetDeviceToAbsoluteTrackingPose", (void *)3);
+    check_uint32_parameter("IVRSystem_022_GetDeviceToAbsoluteTrackingPose", 4);
 
-    init_thunk(t, this_ptr_value, IVRSystem_021_GetFloatTrackedDeviceProperty, 3, FALSE, FALSE);
-    float (__stdcall *capi_IVRSystem_021_GetFloatTrackedDeviceProperty)(TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError) = (void *)t;
-
-    clear_parameters();
-    capi_IVRSystem_021_GetFloatTrackedDeviceProperty(1, 2, (void *)3);
-    check_ptr_parameter("IVRSystem_021_GetFloatTrackedDeviceProperty", this_ptr_value);
-    check_uint32_parameter("IVRSystem_021_GetFloatTrackedDeviceProperty", 1);
-    check_uint32_parameter("IVRSystem_021_GetFloatTrackedDeviceProperty", 2);
-    check_ptr_parameter("IVRSystem_021_GetFloatTrackedDeviceProperty", (void *)3);
-
-    init_thunk(t, this_ptr_value, IVRSystem_021_GetInt32TrackedDeviceProperty, 3, FALSE, FALSE);
-    int32_t (__stdcall *capi_IVRSystem_021_GetInt32TrackedDeviceProperty)(TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError) = (void *)t;
+    init_thunk(t, this_ptr_value, IVRSystem_022_GetSeatedZeroPoseToStandingAbsoluteTrackingPose, 1, FALSE, FALSE);
+    HmdMatrix34_t *(__stdcall *capi_IVRSystem_022_GetSeatedZeroPoseToStandingAbsoluteTrackingPose)(HmdMatrix34_t *_r) = (void *)t;
 
     clear_parameters();
-    capi_IVRSystem_021_GetInt32TrackedDeviceProperty(1, 2, (void *)3);
-    check_ptr_parameter("IVRSystem_021_GetInt32TrackedDeviceProperty", this_ptr_value);
-    check_uint32_parameter("IVRSystem_021_GetInt32TrackedDeviceProperty", 1);
-    check_uint32_parameter("IVRSystem_021_GetInt32TrackedDeviceProperty", 2);
-    check_ptr_parameter("IVRSystem_021_GetInt32TrackedDeviceProperty", (void *)3);
+    capi_IVRSystem_022_GetSeatedZeroPoseToStandingAbsoluteTrackingPose(data_ptr_value);
+    check_ptr_parameter("IVRSystem_022_GetSeatedZeroPoseToStandingAbsoluteTrackingPose", this_ptr_value);
+    check_ptr_parameter("IVRSystem_022_GetSeatedZeroPoseToStandingAbsoluteTrackingPose", data_ptr_value);
 
-    init_thunk(t, this_ptr_value, IVRSystem_021_GetUint64TrackedDeviceProperty, 3, FALSE, FALSE);
-    uint64_t (__stdcall *capi_IVRSystem_021_GetUint64TrackedDeviceProperty)(TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError) = (void *)t;
+    init_thunk(t, this_ptr_value, IVRSystem_022_GetRawZeroPoseToStandingAbsoluteTrackingPose, 1, FALSE, FALSE);
+    HmdMatrix34_t *(__stdcall *capi_IVRSystem_022_GetRawZeroPoseToStandingAbsoluteTrackingPose)(HmdMatrix34_t *_r) = (void *)t;
 
     clear_parameters();
-    capi_IVRSystem_021_GetUint64TrackedDeviceProperty(1, 2, (void *)3);
-    check_ptr_parameter("IVRSystem_021_GetUint64TrackedDeviceProperty", this_ptr_value);
-    check_uint32_parameter("IVRSystem_021_GetUint64TrackedDeviceProperty", 1);
-    check_uint32_parameter("IVRSystem_021_GetUint64TrackedDeviceProperty", 2);
-    check_ptr_parameter("IVRSystem_021_GetUint64TrackedDeviceProperty", (void *)3);
+    capi_IVRSystem_022_GetRawZeroPoseToStandingAbsoluteTrackingPose(data_ptr_value);
+    check_ptr_parameter("IVRSystem_022_GetRawZeroPoseToStandingAbsoluteTrackingPose", this_ptr_value);
+    check_ptr_parameter("IVRSystem_022_GetRawZeroPoseToStandingAbsoluteTrackingPose", data_ptr_value);
 
-    init_thunk(t, this_ptr_value, IVRSystem_021_GetMatrix34TrackedDeviceProperty, 4, FALSE, FALSE);
-    HmdMatrix34_t *(__stdcall *capi_IVRSystem_021_GetMatrix34TrackedDeviceProperty)(HmdMatrix34_t *_r, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError) = (void *)t;
+    init_thunk(t, this_ptr_value, IVRSystem_022_GetSortedTrackedDeviceIndicesOfClass, 4, FALSE, FALSE);
+    uint32_t (__stdcall *capi_IVRSystem_022_GetSortedTrackedDeviceIndicesOfClass)(ETrackedDeviceClass eTrackedDeviceClass, TrackedDeviceIndex_t * punTrackedDeviceIndexArray, uint32_t unTrackedDeviceIndexArrayCount, TrackedDeviceIndex_t unRelativeToTrackedDeviceIndex) = (void *)t;
 
     clear_parameters();
-    capi_IVRSystem_021_GetMatrix34TrackedDeviceProperty(data_ptr_value, 1, 2, (void *)3);
-    check_ptr_parameter("IVRSystem_021_GetMatrix34TrackedDeviceProperty", this_ptr_value);
-    check_ptr_parameter("IVRSystem_021_GetMatrix34TrackedDeviceProperty", data_ptr_value);
-    check_uint32_parameter("IVRSystem_021_GetMatrix34TrackedDeviceProperty", 1);
-    check_uint32_parameter("IVRSystem_021_GetMatrix34TrackedDeviceProperty", 2);
-    check_ptr_parameter("IVRSystem_021_GetMatrix34TrackedDeviceProperty", (void *)3);
+    capi_IVRSystem_022_GetSortedTrackedDeviceIndicesOfClass(1, (void *)2, 3, 4);
+    check_ptr_parameter("IVRSystem_022_GetSortedTrackedDeviceIndicesOfClass", this_ptr_value);
+    check_uint32_parameter("IVRSystem_022_GetSortedTrackedDeviceIndicesOfClass", 1);
+    check_ptr_parameter("IVRSystem_022_GetSortedTrackedDeviceIndicesOfClass", (void *)2);
+    check_uint32_parameter("IVRSystem_022_GetSortedTrackedDeviceIndicesOfClass", 3);
+    check_uint32_parameter("IVRSystem_022_GetSortedTrackedDeviceIndicesOfClass", 4);
 
-    init_thunk(t, this_ptr_value, IVRSystem_021_GetArrayTrackedDeviceProperty, 6, FALSE, FALSE);
-    uint32_t (__stdcall *capi_IVRSystem_021_GetArrayTrackedDeviceProperty)(TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, PropertyTypeTag_t propType, void * pBuffer, uint32_t unBufferSize, ETrackedPropertyError * pError) = (void *)t;
-
-    clear_parameters();
-    capi_IVRSystem_021_GetArrayTrackedDeviceProperty(1, 2, 3, (void *)4, 5, (void *)6);
-    check_ptr_parameter("IVRSystem_021_GetArrayTrackedDeviceProperty", this_ptr_value);
-    check_uint32_parameter("IVRSystem_021_GetArrayTrackedDeviceProperty", 1);
-    check_uint32_parameter("IVRSystem_021_GetArrayTrackedDeviceProperty", 2);
-    check_uint32_parameter("IVRSystem_021_GetArrayTrackedDeviceProperty", 3);
-    check_ptr_parameter("IVRSystem_021_GetArrayTrackedDeviceProperty", (void *)4);
-    check_uint32_parameter("IVRSystem_021_GetArrayTrackedDeviceProperty", 5);
-    check_ptr_parameter("IVRSystem_021_GetArrayTrackedDeviceProperty", (void *)6);
-
-    init_thunk(t, this_ptr_value, IVRSystem_021_GetStringTrackedDeviceProperty, 5, FALSE, FALSE);
-    uint32_t (__stdcall *capi_IVRSystem_021_GetStringTrackedDeviceProperty)(TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, char * pchValue, uint32_t unBufferSize, ETrackedPropertyError * pError) = (void *)t;
+    init_thunk(t, this_ptr_value, IVRSystem_022_GetTrackedDeviceActivityLevel, 1, FALSE, FALSE);
+    EDeviceActivityLevel (__stdcall *capi_IVRSystem_022_GetTrackedDeviceActivityLevel)(TrackedDeviceIndex_t unDeviceId) = (void *)t;
 
     clear_parameters();
-    capi_IVRSystem_021_GetStringTrackedDeviceProperty(1, 2, (void *)3, 4, (void *)5);
-    check_ptr_parameter("IVRSystem_021_GetStringTrackedDeviceProperty", this_ptr_value);
-    check_uint32_parameter("IVRSystem_021_GetStringTrackedDeviceProperty", 1);
-    check_uint32_parameter("IVRSystem_021_GetStringTrackedDeviceProperty", 2);
-    check_ptr_parameter("IVRSystem_021_GetStringTrackedDeviceProperty", (void *)3);
-    check_uint32_parameter("IVRSystem_021_GetStringTrackedDeviceProperty", 4);
-    check_ptr_parameter("IVRSystem_021_GetStringTrackedDeviceProperty", (void *)5);
+    capi_IVRSystem_022_GetTrackedDeviceActivityLevel(1);
+    check_ptr_parameter("IVRSystem_022_GetTrackedDeviceActivityLevel", this_ptr_value);
+    check_uint32_parameter("IVRSystem_022_GetTrackedDeviceActivityLevel", 1);
 
-    init_thunk(t, this_ptr_value, IVRSystem_021_GetPropErrorNameFromEnum, 1, FALSE, FALSE);
-    const char * (__stdcall *capi_IVRSystem_021_GetPropErrorNameFromEnum)(ETrackedPropertyError error) = (void *)t;
+    init_thunk(t, this_ptr_value, IVRSystem_022_ApplyTransform, 3, FALSE, FALSE);
+    void (__stdcall *capi_IVRSystem_022_ApplyTransform)(TrackedDevicePose_t * pOutputPose, TrackedDevicePose_t * pTrackedDevicePose, HmdMatrix34_t * pTransform) = (void *)t;
 
     clear_parameters();
-    capi_IVRSystem_021_GetPropErrorNameFromEnum(1);
-    check_ptr_parameter("IVRSystem_021_GetPropErrorNameFromEnum", this_ptr_value);
-    check_uint32_parameter("IVRSystem_021_GetPropErrorNameFromEnum", 1);
+    capi_IVRSystem_022_ApplyTransform((void *)1, (void *)2, (void *)3);
+    check_ptr_parameter("IVRSystem_022_ApplyTransform", this_ptr_value);
+    check_ptr_parameter("IVRSystem_022_ApplyTransform", (void *)1);
+    check_ptr_parameter("IVRSystem_022_ApplyTransform", (void *)2);
+    check_ptr_parameter("IVRSystem_022_ApplyTransform", (void *)3);
 
-    init_thunk(t, this_ptr_value, IVRSystem_021_PollNextEvent, 2, FALSE, FALSE);
-    bool (__stdcall *capi_IVRSystem_021_PollNextEvent)(VREvent_t * pEvent, uint32_t uncbVREvent) = (void *)t;
-
-    clear_parameters();
-    capi_IVRSystem_021_PollNextEvent((void *)1, 2);
-    check_ptr_parameter("IVRSystem_021_PollNextEvent", this_ptr_value);
-    check_ptr_parameter("IVRSystem_021_PollNextEvent", (void *)1);
-    check_uint32_parameter("IVRSystem_021_PollNextEvent", 2);
-
-    init_thunk(t, this_ptr_value, IVRSystem_021_PollNextEventWithPose, 4, FALSE, FALSE);
-    bool (__stdcall *capi_IVRSystem_021_PollNextEventWithPose)(ETrackingUniverseOrigin eOrigin, VREvent_t * pEvent, uint32_t uncbVREvent, TrackedDevicePose_t * pTrackedDevicePose) = (void *)t;
+    init_thunk(t, this_ptr_value, IVRSystem_022_GetTrackedDeviceIndexForControllerRole, 1, FALSE, FALSE);
+    TrackedDeviceIndex_t (__stdcall *capi_IVRSystem_022_GetTrackedDeviceIndexForControllerRole)(ETrackedControllerRole unDeviceType) = (void *)t;
 
     clear_parameters();
-    capi_IVRSystem_021_PollNextEventWithPose(1, (void *)2, 3, (void *)4);
-    check_ptr_parameter("IVRSystem_021_PollNextEventWithPose", this_ptr_value);
-    check_uint32_parameter("IVRSystem_021_PollNextEventWithPose", 1);
-    check_ptr_parameter("IVRSystem_021_PollNextEventWithPose", (void *)2);
-    check_uint32_parameter("IVRSystem_021_PollNextEventWithPose", 3);
-    check_ptr_parameter("IVRSystem_021_PollNextEventWithPose", (void *)4);
+    capi_IVRSystem_022_GetTrackedDeviceIndexForControllerRole(1);
+    check_ptr_parameter("IVRSystem_022_GetTrackedDeviceIndexForControllerRole", this_ptr_value);
+    check_uint32_parameter("IVRSystem_022_GetTrackedDeviceIndexForControllerRole", 1);
 
-    init_thunk(t, this_ptr_value, IVRSystem_021_GetEventTypeNameFromEnum, 1, FALSE, FALSE);
-    const char * (__stdcall *capi_IVRSystem_021_GetEventTypeNameFromEnum)(EVREventType eType) = (void *)t;
+    init_thunk(t, this_ptr_value, IVRSystem_022_GetControllerRoleForTrackedDeviceIndex, 1, FALSE, FALSE);
+    ETrackedControllerRole (__stdcall *capi_IVRSystem_022_GetControllerRoleForTrackedDeviceIndex)(TrackedDeviceIndex_t unDeviceIndex) = (void *)t;
 
     clear_parameters();
-    capi_IVRSystem_021_GetEventTypeNameFromEnum(1);
-    check_ptr_parameter("IVRSystem_021_GetEventTypeNameFromEnum", this_ptr_value);
-    check_uint32_parameter("IVRSystem_021_GetEventTypeNameFromEnum", 1);
+    capi_IVRSystem_022_GetControllerRoleForTrackedDeviceIndex(1);
+    check_ptr_parameter("IVRSystem_022_GetControllerRoleForTrackedDeviceIndex", this_ptr_value);
+    check_uint32_parameter("IVRSystem_022_GetControllerRoleForTrackedDeviceIndex", 1);
 
-    init_thunk(t, this_ptr_value, IVRSystem_021_GetHiddenAreaMesh, 3, FALSE, FALSE);
-    HiddenAreaMesh_t *(__stdcall *capi_IVRSystem_021_GetHiddenAreaMesh)(HiddenAreaMesh_t *_r, EVREye eEye, EHiddenAreaMeshType type) = (void *)t;
-
-    clear_parameters();
-    capi_IVRSystem_021_GetHiddenAreaMesh(data_ptr_value, 1, 2);
-    check_ptr_parameter("IVRSystem_021_GetHiddenAreaMesh", this_ptr_value);
-    check_ptr_parameter("IVRSystem_021_GetHiddenAreaMesh", data_ptr_value);
-    check_uint32_parameter("IVRSystem_021_GetHiddenAreaMesh", 1);
-    check_uint32_parameter("IVRSystem_021_GetHiddenAreaMesh", 2);
-
-    init_thunk(t, this_ptr_value, IVRSystem_021_GetControllerState, 3, FALSE, FALSE);
-    bool (__stdcall *capi_IVRSystem_021_GetControllerState)(TrackedDeviceIndex_t unControllerDeviceIndex, VRControllerState_t * pControllerState, uint32_t unControllerStateSize) = (void *)t;
+    init_thunk(t, this_ptr_value, IVRSystem_022_GetTrackedDeviceClass, 1, FALSE, FALSE);
+    ETrackedDeviceClass (__stdcall *capi_IVRSystem_022_GetTrackedDeviceClass)(TrackedDeviceIndex_t unDeviceIndex) = (void *)t;
 
     clear_parameters();
-    capi_IVRSystem_021_GetControllerState(1, (void *)2, 3);
-    check_ptr_parameter("IVRSystem_021_GetControllerState", this_ptr_value);
-    check_uint32_parameter("IVRSystem_021_GetControllerState", 1);
-    check_ptr_parameter("IVRSystem_021_GetControllerState", (void *)2);
-    check_uint32_parameter("IVRSystem_021_GetControllerState", 3);
+    capi_IVRSystem_022_GetTrackedDeviceClass(1);
+    check_ptr_parameter("IVRSystem_022_GetTrackedDeviceClass", this_ptr_value);
+    check_uint32_parameter("IVRSystem_022_GetTrackedDeviceClass", 1);
 
-    init_thunk(t, this_ptr_value, IVRSystem_021_GetControllerStateWithPose, 5, FALSE, FALSE);
-    bool (__stdcall *capi_IVRSystem_021_GetControllerStateWithPose)(ETrackingUniverseOrigin eOrigin, TrackedDeviceIndex_t unControllerDeviceIndex, VRControllerState_t * pControllerState, uint32_t unControllerStateSize, TrackedDevicePose_t * pTrackedDevicePose) = (void *)t;
+    init_thunk(t, this_ptr_value, IVRSystem_022_IsTrackedDeviceConnected, 1, FALSE, FALSE);
+    bool (__stdcall *capi_IVRSystem_022_IsTrackedDeviceConnected)(TrackedDeviceIndex_t unDeviceIndex) = (void *)t;
 
     clear_parameters();
-    capi_IVRSystem_021_GetControllerStateWithPose(1, 2, (void *)3, 4, (void *)5);
-    check_ptr_parameter("IVRSystem_021_GetControllerStateWithPose", this_ptr_value);
-    check_uint32_parameter("IVRSystem_021_GetControllerStateWithPose", 1);
-    check_uint32_parameter("IVRSystem_021_GetControllerStateWithPose", 2);
-    check_ptr_parameter("IVRSystem_021_GetControllerStateWithPose", (void *)3);
-    check_uint32_parameter("IVRSystem_021_GetControllerStateWithPose", 4);
-    check_ptr_parameter("IVRSystem_021_GetControllerStateWithPose", (void *)5);
+    capi_IVRSystem_022_IsTrackedDeviceConnected(1);
+    check_ptr_parameter("IVRSystem_022_IsTrackedDeviceConnected", this_ptr_value);
+    check_uint32_parameter("IVRSystem_022_IsTrackedDeviceConnected", 1);
 
-    init_thunk(t, this_ptr_value, IVRSystem_021_TriggerHapticPulse, 3, FALSE, FALSE);
-    void (__stdcall *capi_IVRSystem_021_TriggerHapticPulse)(TrackedDeviceIndex_t unControllerDeviceIndex, uint32_t unAxisId, unsigned short usDurationMicroSec) = (void *)t;
+    init_thunk(t, this_ptr_value, IVRSystem_022_GetBoolTrackedDeviceProperty, 3, FALSE, FALSE);
+    bool (__stdcall *capi_IVRSystem_022_GetBoolTrackedDeviceProperty)(TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError) = (void *)t;
 
     clear_parameters();
-    capi_IVRSystem_021_TriggerHapticPulse(1, 2, 3);
-    check_ptr_parameter("IVRSystem_021_TriggerHapticPulse", this_ptr_value);
-    check_uint32_parameter("IVRSystem_021_TriggerHapticPulse", 1);
-    check_uint32_parameter("IVRSystem_021_TriggerHapticPulse", 2);
-    check_uint32_parameter("IVRSystem_021_TriggerHapticPulse", 3);
+    capi_IVRSystem_022_GetBoolTrackedDeviceProperty(1, 2, (void *)3);
+    check_ptr_parameter("IVRSystem_022_GetBoolTrackedDeviceProperty", this_ptr_value);
+    check_uint32_parameter("IVRSystem_022_GetBoolTrackedDeviceProperty", 1);
+    check_uint32_parameter("IVRSystem_022_GetBoolTrackedDeviceProperty", 2);
+    check_ptr_parameter("IVRSystem_022_GetBoolTrackedDeviceProperty", (void *)3);
 
-    init_thunk(t, this_ptr_value, IVRSystem_021_GetButtonIdNameFromEnum, 1, FALSE, FALSE);
-    const char * (__stdcall *capi_IVRSystem_021_GetButtonIdNameFromEnum)(EVRButtonId eButtonId) = (void *)t;
-
-    clear_parameters();
-    capi_IVRSystem_021_GetButtonIdNameFromEnum(1);
-    check_ptr_parameter("IVRSystem_021_GetButtonIdNameFromEnum", this_ptr_value);
-    check_uint32_parameter("IVRSystem_021_GetButtonIdNameFromEnum", 1);
-
-    init_thunk(t, this_ptr_value, IVRSystem_021_GetControllerAxisTypeNameFromEnum, 1, FALSE, FALSE);
-    const char * (__stdcall *capi_IVRSystem_021_GetControllerAxisTypeNameFromEnum)(EVRControllerAxisType eAxisType) = (void *)t;
+    init_thunk(t, this_ptr_value, IVRSystem_022_GetFloatTrackedDeviceProperty, 3, FALSE, FALSE);
+    float (__stdcall *capi_IVRSystem_022_GetFloatTrackedDeviceProperty)(TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError) = (void *)t;
 
     clear_parameters();
-    capi_IVRSystem_021_GetControllerAxisTypeNameFromEnum(1);
-    check_ptr_parameter("IVRSystem_021_GetControllerAxisTypeNameFromEnum", this_ptr_value);
-    check_uint32_parameter("IVRSystem_021_GetControllerAxisTypeNameFromEnum", 1);
+    capi_IVRSystem_022_GetFloatTrackedDeviceProperty(1, 2, (void *)3);
+    check_ptr_parameter("IVRSystem_022_GetFloatTrackedDeviceProperty", this_ptr_value);
+    check_uint32_parameter("IVRSystem_022_GetFloatTrackedDeviceProperty", 1);
+    check_uint32_parameter("IVRSystem_022_GetFloatTrackedDeviceProperty", 2);
+    check_ptr_parameter("IVRSystem_022_GetFloatTrackedDeviceProperty", (void *)3);
 
-    init_thunk(t, this_ptr_value, IVRSystem_021_IsInputAvailable, 0, FALSE, FALSE);
-    bool (__stdcall *capi_IVRSystem_021_IsInputAvailable)() = (void *)t;
-
-    clear_parameters();
-    capi_IVRSystem_021_IsInputAvailable();
-    check_ptr_parameter("IVRSystem_021_IsInputAvailable", this_ptr_value);
-
-    init_thunk(t, this_ptr_value, IVRSystem_021_IsSteamVRDrawingControllers, 0, FALSE, FALSE);
-    bool (__stdcall *capi_IVRSystem_021_IsSteamVRDrawingControllers)() = (void *)t;
+    init_thunk(t, this_ptr_value, IVRSystem_022_GetInt32TrackedDeviceProperty, 3, FALSE, FALSE);
+    int32_t (__stdcall *capi_IVRSystem_022_GetInt32TrackedDeviceProperty)(TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError) = (void *)t;
 
     clear_parameters();
-    capi_IVRSystem_021_IsSteamVRDrawingControllers();
-    check_ptr_parameter("IVRSystem_021_IsSteamVRDrawingControllers", this_ptr_value);
+    capi_IVRSystem_022_GetInt32TrackedDeviceProperty(1, 2, (void *)3);
+    check_ptr_parameter("IVRSystem_022_GetInt32TrackedDeviceProperty", this_ptr_value);
+    check_uint32_parameter("IVRSystem_022_GetInt32TrackedDeviceProperty", 1);
+    check_uint32_parameter("IVRSystem_022_GetInt32TrackedDeviceProperty", 2);
+    check_ptr_parameter("IVRSystem_022_GetInt32TrackedDeviceProperty", (void *)3);
 
-    init_thunk(t, this_ptr_value, IVRSystem_021_ShouldApplicationPause, 0, FALSE, FALSE);
-    bool (__stdcall *capi_IVRSystem_021_ShouldApplicationPause)() = (void *)t;
-
-    clear_parameters();
-    capi_IVRSystem_021_ShouldApplicationPause();
-    check_ptr_parameter("IVRSystem_021_ShouldApplicationPause", this_ptr_value);
-
-    init_thunk(t, this_ptr_value, IVRSystem_021_ShouldApplicationReduceRenderingWork, 0, FALSE, FALSE);
-    bool (__stdcall *capi_IVRSystem_021_ShouldApplicationReduceRenderingWork)() = (void *)t;
+    init_thunk(t, this_ptr_value, IVRSystem_022_GetUint64TrackedDeviceProperty, 3, FALSE, FALSE);
+    uint64_t (__stdcall *capi_IVRSystem_022_GetUint64TrackedDeviceProperty)(TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError) = (void *)t;
 
     clear_parameters();
-    capi_IVRSystem_021_ShouldApplicationReduceRenderingWork();
-    check_ptr_parameter("IVRSystem_021_ShouldApplicationReduceRenderingWork", this_ptr_value);
+    capi_IVRSystem_022_GetUint64TrackedDeviceProperty(1, 2, (void *)3);
+    check_ptr_parameter("IVRSystem_022_GetUint64TrackedDeviceProperty", this_ptr_value);
+    check_uint32_parameter("IVRSystem_022_GetUint64TrackedDeviceProperty", 1);
+    check_uint32_parameter("IVRSystem_022_GetUint64TrackedDeviceProperty", 2);
+    check_ptr_parameter("IVRSystem_022_GetUint64TrackedDeviceProperty", (void *)3);
 
-    init_thunk(t, this_ptr_value, IVRSystem_021_PerformFirmwareUpdate, 1, FALSE, FALSE);
-    EVRFirmwareError (__stdcall *capi_IVRSystem_021_PerformFirmwareUpdate)(TrackedDeviceIndex_t unDeviceIndex) = (void *)t;
-
-    clear_parameters();
-    capi_IVRSystem_021_PerformFirmwareUpdate(1);
-    check_ptr_parameter("IVRSystem_021_PerformFirmwareUpdate", this_ptr_value);
-    check_uint32_parameter("IVRSystem_021_PerformFirmwareUpdate", 1);
-
-    init_thunk(t, this_ptr_value, IVRSystem_021_AcknowledgeQuit_Exiting, 0, FALSE, FALSE);
-    void (__stdcall *capi_IVRSystem_021_AcknowledgeQuit_Exiting)() = (void *)t;
+    init_thunk(t, this_ptr_value, IVRSystem_022_GetMatrix34TrackedDeviceProperty, 4, FALSE, FALSE);
+    HmdMatrix34_t *(__stdcall *capi_IVRSystem_022_GetMatrix34TrackedDeviceProperty)(HmdMatrix34_t *_r, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError) = (void *)t;
 
     clear_parameters();
-    capi_IVRSystem_021_AcknowledgeQuit_Exiting();
-    check_ptr_parameter("IVRSystem_021_AcknowledgeQuit_Exiting", this_ptr_value);
+    capi_IVRSystem_022_GetMatrix34TrackedDeviceProperty(data_ptr_value, 1, 2, (void *)3);
+    check_ptr_parameter("IVRSystem_022_GetMatrix34TrackedDeviceProperty", this_ptr_value);
+    check_ptr_parameter("IVRSystem_022_GetMatrix34TrackedDeviceProperty", data_ptr_value);
+    check_uint32_parameter("IVRSystem_022_GetMatrix34TrackedDeviceProperty", 1);
+    check_uint32_parameter("IVRSystem_022_GetMatrix34TrackedDeviceProperty", 2);
+    check_ptr_parameter("IVRSystem_022_GetMatrix34TrackedDeviceProperty", (void *)3);
 
-    init_thunk(t, this_ptr_value, IVRSystem_021_GetAppContainerFilePaths, 2, FALSE, FALSE);
-    uint32_t (__stdcall *capi_IVRSystem_021_GetAppContainerFilePaths)(char * pchBuffer, uint32_t unBufferSize) = (void *)t;
-
-    clear_parameters();
-    capi_IVRSystem_021_GetAppContainerFilePaths((void *)1, 2);
-    check_ptr_parameter("IVRSystem_021_GetAppContainerFilePaths", this_ptr_value);
-    check_ptr_parameter("IVRSystem_021_GetAppContainerFilePaths", (void *)1);
-    check_uint32_parameter("IVRSystem_021_GetAppContainerFilePaths", 2);
-
-    init_thunk(t, this_ptr_value, IVRSystem_021_GetRuntimeVersion, 0, FALSE, FALSE);
-    const char * (__stdcall *capi_IVRSystem_021_GetRuntimeVersion)() = (void *)t;
+    init_thunk(t, this_ptr_value, IVRSystem_022_GetArrayTrackedDeviceProperty, 6, FALSE, FALSE);
+    uint32_t (__stdcall *capi_IVRSystem_022_GetArrayTrackedDeviceProperty)(TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, PropertyTypeTag_t propType, void * pBuffer, uint32_t unBufferSize, ETrackedPropertyError * pError) = (void *)t;
 
     clear_parameters();
-    capi_IVRSystem_021_GetRuntimeVersion();
-    check_ptr_parameter("IVRSystem_021_GetRuntimeVersion", this_ptr_value);
+    capi_IVRSystem_022_GetArrayTrackedDeviceProperty(1, 2, 3, (void *)4, 5, (void *)6);
+    check_ptr_parameter("IVRSystem_022_GetArrayTrackedDeviceProperty", this_ptr_value);
+    check_uint32_parameter("IVRSystem_022_GetArrayTrackedDeviceProperty", 1);
+    check_uint32_parameter("IVRSystem_022_GetArrayTrackedDeviceProperty", 2);
+    check_uint32_parameter("IVRSystem_022_GetArrayTrackedDeviceProperty", 3);
+    check_ptr_parameter("IVRSystem_022_GetArrayTrackedDeviceProperty", (void *)4);
+    check_uint32_parameter("IVRSystem_022_GetArrayTrackedDeviceProperty", 5);
+    check_ptr_parameter("IVRSystem_022_GetArrayTrackedDeviceProperty", (void *)6);
+
+    init_thunk(t, this_ptr_value, IVRSystem_022_GetStringTrackedDeviceProperty, 5, FALSE, FALSE);
+    uint32_t (__stdcall *capi_IVRSystem_022_GetStringTrackedDeviceProperty)(TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, char * pchValue, uint32_t unBufferSize, ETrackedPropertyError * pError) = (void *)t;
+
+    clear_parameters();
+    capi_IVRSystem_022_GetStringTrackedDeviceProperty(1, 2, (void *)3, 4, (void *)5);
+    check_ptr_parameter("IVRSystem_022_GetStringTrackedDeviceProperty", this_ptr_value);
+    check_uint32_parameter("IVRSystem_022_GetStringTrackedDeviceProperty", 1);
+    check_uint32_parameter("IVRSystem_022_GetStringTrackedDeviceProperty", 2);
+    check_ptr_parameter("IVRSystem_022_GetStringTrackedDeviceProperty", (void *)3);
+    check_uint32_parameter("IVRSystem_022_GetStringTrackedDeviceProperty", 4);
+    check_ptr_parameter("IVRSystem_022_GetStringTrackedDeviceProperty", (void *)5);
+
+    init_thunk(t, this_ptr_value, IVRSystem_022_GetPropErrorNameFromEnum, 1, FALSE, FALSE);
+    const char * (__stdcall *capi_IVRSystem_022_GetPropErrorNameFromEnum)(ETrackedPropertyError error) = (void *)t;
+
+    clear_parameters();
+    capi_IVRSystem_022_GetPropErrorNameFromEnum(1);
+    check_ptr_parameter("IVRSystem_022_GetPropErrorNameFromEnum", this_ptr_value);
+    check_uint32_parameter("IVRSystem_022_GetPropErrorNameFromEnum", 1);
+
+    init_thunk(t, this_ptr_value, IVRSystem_022_PollNextEvent, 2, FALSE, FALSE);
+    bool (__stdcall *capi_IVRSystem_022_PollNextEvent)(VREvent_t * pEvent, uint32_t uncbVREvent) = (void *)t;
+
+    clear_parameters();
+    capi_IVRSystem_022_PollNextEvent((void *)1, 2);
+    check_ptr_parameter("IVRSystem_022_PollNextEvent", this_ptr_value);
+    check_ptr_parameter("IVRSystem_022_PollNextEvent", (void *)1);
+    check_uint32_parameter("IVRSystem_022_PollNextEvent", 2);
+
+    init_thunk(t, this_ptr_value, IVRSystem_022_PollNextEventWithPose, 4, FALSE, FALSE);
+    bool (__stdcall *capi_IVRSystem_022_PollNextEventWithPose)(ETrackingUniverseOrigin eOrigin, VREvent_t * pEvent, uint32_t uncbVREvent, TrackedDevicePose_t * pTrackedDevicePose) = (void *)t;
+
+    clear_parameters();
+    capi_IVRSystem_022_PollNextEventWithPose(1, (void *)2, 3, (void *)4);
+    check_ptr_parameter("IVRSystem_022_PollNextEventWithPose", this_ptr_value);
+    check_uint32_parameter("IVRSystem_022_PollNextEventWithPose", 1);
+    check_ptr_parameter("IVRSystem_022_PollNextEventWithPose", (void *)2);
+    check_uint32_parameter("IVRSystem_022_PollNextEventWithPose", 3);
+    check_ptr_parameter("IVRSystem_022_PollNextEventWithPose", (void *)4);
+
+    init_thunk(t, this_ptr_value, IVRSystem_022_GetEventTypeNameFromEnum, 1, FALSE, FALSE);
+    const char * (__stdcall *capi_IVRSystem_022_GetEventTypeNameFromEnum)(EVREventType eType) = (void *)t;
+
+    clear_parameters();
+    capi_IVRSystem_022_GetEventTypeNameFromEnum(1);
+    check_ptr_parameter("IVRSystem_022_GetEventTypeNameFromEnum", this_ptr_value);
+    check_uint32_parameter("IVRSystem_022_GetEventTypeNameFromEnum", 1);
+
+    init_thunk(t, this_ptr_value, IVRSystem_022_GetHiddenAreaMesh, 3, FALSE, FALSE);
+    HiddenAreaMesh_t *(__stdcall *capi_IVRSystem_022_GetHiddenAreaMesh)(HiddenAreaMesh_t *_r, EVREye eEye, EHiddenAreaMeshType type) = (void *)t;
+
+    clear_parameters();
+    capi_IVRSystem_022_GetHiddenAreaMesh(data_ptr_value, 1, 2);
+    check_ptr_parameter("IVRSystem_022_GetHiddenAreaMesh", this_ptr_value);
+    check_ptr_parameter("IVRSystem_022_GetHiddenAreaMesh", data_ptr_value);
+    check_uint32_parameter("IVRSystem_022_GetHiddenAreaMesh", 1);
+    check_uint32_parameter("IVRSystem_022_GetHiddenAreaMesh", 2);
+
+    init_thunk(t, this_ptr_value, IVRSystem_022_GetControllerState, 3, FALSE, FALSE);
+    bool (__stdcall *capi_IVRSystem_022_GetControllerState)(TrackedDeviceIndex_t unControllerDeviceIndex, VRControllerState_t * pControllerState, uint32_t unControllerStateSize) = (void *)t;
+
+    clear_parameters();
+    capi_IVRSystem_022_GetControllerState(1, (void *)2, 3);
+    check_ptr_parameter("IVRSystem_022_GetControllerState", this_ptr_value);
+    check_uint32_parameter("IVRSystem_022_GetControllerState", 1);
+    check_ptr_parameter("IVRSystem_022_GetControllerState", (void *)2);
+    check_uint32_parameter("IVRSystem_022_GetControllerState", 3);
+
+    init_thunk(t, this_ptr_value, IVRSystem_022_GetControllerStateWithPose, 5, FALSE, FALSE);
+    bool (__stdcall *capi_IVRSystem_022_GetControllerStateWithPose)(ETrackingUniverseOrigin eOrigin, TrackedDeviceIndex_t unControllerDeviceIndex, VRControllerState_t * pControllerState, uint32_t unControllerStateSize, TrackedDevicePose_t * pTrackedDevicePose) = (void *)t;
+
+    clear_parameters();
+    capi_IVRSystem_022_GetControllerStateWithPose(1, 2, (void *)3, 4, (void *)5);
+    check_ptr_parameter("IVRSystem_022_GetControllerStateWithPose", this_ptr_value);
+    check_uint32_parameter("IVRSystem_022_GetControllerStateWithPose", 1);
+    check_uint32_parameter("IVRSystem_022_GetControllerStateWithPose", 2);
+    check_ptr_parameter("IVRSystem_022_GetControllerStateWithPose", (void *)3);
+    check_uint32_parameter("IVRSystem_022_GetControllerStateWithPose", 4);
+    check_ptr_parameter("IVRSystem_022_GetControllerStateWithPose", (void *)5);
+
+    init_thunk(t, this_ptr_value, IVRSystem_022_TriggerHapticPulse, 3, FALSE, FALSE);
+    void (__stdcall *capi_IVRSystem_022_TriggerHapticPulse)(TrackedDeviceIndex_t unControllerDeviceIndex, uint32_t unAxisId, unsigned short usDurationMicroSec) = (void *)t;
+
+    clear_parameters();
+    capi_IVRSystem_022_TriggerHapticPulse(1, 2, 3);
+    check_ptr_parameter("IVRSystem_022_TriggerHapticPulse", this_ptr_value);
+    check_uint32_parameter("IVRSystem_022_TriggerHapticPulse", 1);
+    check_uint32_parameter("IVRSystem_022_TriggerHapticPulse", 2);
+    check_uint32_parameter("IVRSystem_022_TriggerHapticPulse", 3);
+
+    init_thunk(t, this_ptr_value, IVRSystem_022_GetButtonIdNameFromEnum, 1, FALSE, FALSE);
+    const char * (__stdcall *capi_IVRSystem_022_GetButtonIdNameFromEnum)(EVRButtonId eButtonId) = (void *)t;
+
+    clear_parameters();
+    capi_IVRSystem_022_GetButtonIdNameFromEnum(1);
+    check_ptr_parameter("IVRSystem_022_GetButtonIdNameFromEnum", this_ptr_value);
+    check_uint32_parameter("IVRSystem_022_GetButtonIdNameFromEnum", 1);
+
+    init_thunk(t, this_ptr_value, IVRSystem_022_GetControllerAxisTypeNameFromEnum, 1, FALSE, FALSE);
+    const char * (__stdcall *capi_IVRSystem_022_GetControllerAxisTypeNameFromEnum)(EVRControllerAxisType eAxisType) = (void *)t;
+
+    clear_parameters();
+    capi_IVRSystem_022_GetControllerAxisTypeNameFromEnum(1);
+    check_ptr_parameter("IVRSystem_022_GetControllerAxisTypeNameFromEnum", this_ptr_value);
+    check_uint32_parameter("IVRSystem_022_GetControllerAxisTypeNameFromEnum", 1);
+
+    init_thunk(t, this_ptr_value, IVRSystem_022_IsInputAvailable, 0, FALSE, FALSE);
+    bool (__stdcall *capi_IVRSystem_022_IsInputAvailable)() = (void *)t;
+
+    clear_parameters();
+    capi_IVRSystem_022_IsInputAvailable();
+    check_ptr_parameter("IVRSystem_022_IsInputAvailable", this_ptr_value);
+
+    init_thunk(t, this_ptr_value, IVRSystem_022_IsSteamVRDrawingControllers, 0, FALSE, FALSE);
+    bool (__stdcall *capi_IVRSystem_022_IsSteamVRDrawingControllers)() = (void *)t;
+
+    clear_parameters();
+    capi_IVRSystem_022_IsSteamVRDrawingControllers();
+    check_ptr_parameter("IVRSystem_022_IsSteamVRDrawingControllers", this_ptr_value);
+
+    init_thunk(t, this_ptr_value, IVRSystem_022_ShouldApplicationPause, 0, FALSE, FALSE);
+    bool (__stdcall *capi_IVRSystem_022_ShouldApplicationPause)() = (void *)t;
+
+    clear_parameters();
+    capi_IVRSystem_022_ShouldApplicationPause();
+    check_ptr_parameter("IVRSystem_022_ShouldApplicationPause", this_ptr_value);
+
+    init_thunk(t, this_ptr_value, IVRSystem_022_ShouldApplicationReduceRenderingWork, 0, FALSE, FALSE);
+    bool (__stdcall *capi_IVRSystem_022_ShouldApplicationReduceRenderingWork)() = (void *)t;
+
+    clear_parameters();
+    capi_IVRSystem_022_ShouldApplicationReduceRenderingWork();
+    check_ptr_parameter("IVRSystem_022_ShouldApplicationReduceRenderingWork", this_ptr_value);
+
+    init_thunk(t, this_ptr_value, IVRSystem_022_PerformFirmwareUpdate, 1, FALSE, FALSE);
+    EVRFirmwareError (__stdcall *capi_IVRSystem_022_PerformFirmwareUpdate)(TrackedDeviceIndex_t unDeviceIndex) = (void *)t;
+
+    clear_parameters();
+    capi_IVRSystem_022_PerformFirmwareUpdate(1);
+    check_ptr_parameter("IVRSystem_022_PerformFirmwareUpdate", this_ptr_value);
+    check_uint32_parameter("IVRSystem_022_PerformFirmwareUpdate", 1);
+
+    init_thunk(t, this_ptr_value, IVRSystem_022_AcknowledgeQuit_Exiting, 0, FALSE, FALSE);
+    void (__stdcall *capi_IVRSystem_022_AcknowledgeQuit_Exiting)() = (void *)t;
+
+    clear_parameters();
+    capi_IVRSystem_022_AcknowledgeQuit_Exiting();
+    check_ptr_parameter("IVRSystem_022_AcknowledgeQuit_Exiting", this_ptr_value);
+
+    init_thunk(t, this_ptr_value, IVRSystem_022_GetAppContainerFilePaths, 2, FALSE, FALSE);
+    uint32_t (__stdcall *capi_IVRSystem_022_GetAppContainerFilePaths)(char * pchBuffer, uint32_t unBufferSize) = (void *)t;
+
+    clear_parameters();
+    capi_IVRSystem_022_GetAppContainerFilePaths((void *)1, 2);
+    check_ptr_parameter("IVRSystem_022_GetAppContainerFilePaths", this_ptr_value);
+    check_ptr_parameter("IVRSystem_022_GetAppContainerFilePaths", (void *)1);
+    check_uint32_parameter("IVRSystem_022_GetAppContainerFilePaths", 2);
+
+    init_thunk(t, this_ptr_value, IVRSystem_022_GetRuntimeVersion, 0, FALSE, FALSE);
+    const char * (__stdcall *capi_IVRSystem_022_GetRuntimeVersion)() = (void *)t;
+
+    clear_parameters();
+    capi_IVRSystem_022_GetRuntimeVersion();
+    check_ptr_parameter("IVRSystem_022_GetRuntimeVersion", this_ptr_value);
     VirtualFree(t, 0, MEM_RELEASE);
 }
 
@@ -825,74 +818,82 @@ void test_capi_thunks_IVRSettings_003(void)
     VirtualFree(t, 0, MEM_RELEASE);
 }
 
-void test_capi_thunks_IVRChaperone_003(void)
+void test_capi_thunks_IVRChaperone_004(void)
 {
     struct thunk *t = alloc_thunks(1);
 
-    init_thunk(t, this_ptr_value, IVRChaperone_003_GetCalibrationState, 0, FALSE, FALSE);
-    ChaperoneCalibrationState (__stdcall *capi_IVRChaperone_003_GetCalibrationState)() = (void *)t;
+    init_thunk(t, this_ptr_value, IVRChaperone_004_GetCalibrationState, 0, FALSE, FALSE);
+    ChaperoneCalibrationState (__stdcall *capi_IVRChaperone_004_GetCalibrationState)() = (void *)t;
 
     clear_parameters();
-    capi_IVRChaperone_003_GetCalibrationState();
-    check_ptr_parameter("IVRChaperone_003_GetCalibrationState", this_ptr_value);
+    capi_IVRChaperone_004_GetCalibrationState();
+    check_ptr_parameter("IVRChaperone_004_GetCalibrationState", this_ptr_value);
 
-    init_thunk(t, this_ptr_value, IVRChaperone_003_GetPlayAreaSize, 2, FALSE, FALSE);
-    bool (__stdcall *capi_IVRChaperone_003_GetPlayAreaSize)(float * pSizeX, float * pSizeZ) = (void *)t;
-
-    clear_parameters();
-    capi_IVRChaperone_003_GetPlayAreaSize((void *)1, (void *)2);
-    check_ptr_parameter("IVRChaperone_003_GetPlayAreaSize", this_ptr_value);
-    check_ptr_parameter("IVRChaperone_003_GetPlayAreaSize", (void *)1);
-    check_ptr_parameter("IVRChaperone_003_GetPlayAreaSize", (void *)2);
-
-    init_thunk(t, this_ptr_value, IVRChaperone_003_GetPlayAreaRect, 1, FALSE, FALSE);
-    bool (__stdcall *capi_IVRChaperone_003_GetPlayAreaRect)(HmdQuad_t * rect) = (void *)t;
+    init_thunk(t, this_ptr_value, IVRChaperone_004_GetPlayAreaSize, 2, FALSE, FALSE);
+    bool (__stdcall *capi_IVRChaperone_004_GetPlayAreaSize)(float * pSizeX, float * pSizeZ) = (void *)t;
 
     clear_parameters();
-    capi_IVRChaperone_003_GetPlayAreaRect((void *)1);
-    check_ptr_parameter("IVRChaperone_003_GetPlayAreaRect", this_ptr_value);
-    check_ptr_parameter("IVRChaperone_003_GetPlayAreaRect", (void *)1);
+    capi_IVRChaperone_004_GetPlayAreaSize((void *)1, (void *)2);
+    check_ptr_parameter("IVRChaperone_004_GetPlayAreaSize", this_ptr_value);
+    check_ptr_parameter("IVRChaperone_004_GetPlayAreaSize", (void *)1);
+    check_ptr_parameter("IVRChaperone_004_GetPlayAreaSize", (void *)2);
 
-    init_thunk(t, this_ptr_value, IVRChaperone_003_ReloadInfo, 0, FALSE, FALSE);
-    void (__stdcall *capi_IVRChaperone_003_ReloadInfo)() = (void *)t;
-
-    clear_parameters();
-    capi_IVRChaperone_003_ReloadInfo();
-    check_ptr_parameter("IVRChaperone_003_ReloadInfo", this_ptr_value);
-
-    init_thunk(t, this_ptr_value, IVRChaperone_003_SetSceneColor, 1, FALSE, FALSE);
-    void (__stdcall *capi_IVRChaperone_003_SetSceneColor)(HmdColor_t color) = (void *)t;
+    init_thunk(t, this_ptr_value, IVRChaperone_004_GetPlayAreaRect, 1, FALSE, FALSE);
+    bool (__stdcall *capi_IVRChaperone_004_GetPlayAreaRect)(HmdQuad_t * rect) = (void *)t;
 
     clear_parameters();
-    capi_IVRChaperone_003_SetSceneColor(DEFAULT_COLOR);
-    check_ptr_parameter("IVRChaperone_003_SetSceneColor", this_ptr_value);
-    check_HmdColor_parameter("IVRChaperone_003_SetSceneColor", DEFAULT_COLOR);
+    capi_IVRChaperone_004_GetPlayAreaRect((void *)1);
+    check_ptr_parameter("IVRChaperone_004_GetPlayAreaRect", this_ptr_value);
+    check_ptr_parameter("IVRChaperone_004_GetPlayAreaRect", (void *)1);
 
-    init_thunk(t, this_ptr_value, IVRChaperone_003_GetBoundsColor, 4, TRUE, FALSE);
-    void (__stdcall *capi_IVRChaperone_003_GetBoundsColor)(HmdColor_t * pOutputColorArray, int nNumOutputColors, float flCollisionBoundsFadeDistance, HmdColor_t * pOutputCameraColor) = (void *)t;
-
-    clear_parameters();
-    capi_IVRChaperone_003_GetBoundsColor((void *)1, 2, 3.0f, (void *)4);
-    check_ptr_parameter("IVRChaperone_003_GetBoundsColor", this_ptr_value);
-    check_ptr_parameter("IVRChaperone_003_GetBoundsColor", (void *)1);
-    check_uint32_parameter("IVRChaperone_003_GetBoundsColor", 2);
-    check_float_parameter("IVRChaperone_003_GetBoundsColor", 3.0f);
-    check_ptr_parameter("IVRChaperone_003_GetBoundsColor", (void *)4);
-
-    init_thunk(t, this_ptr_value, IVRChaperone_003_AreBoundsVisible, 0, FALSE, FALSE);
-    bool (__stdcall *capi_IVRChaperone_003_AreBoundsVisible)() = (void *)t;
+    init_thunk(t, this_ptr_value, IVRChaperone_004_ReloadInfo, 0, FALSE, FALSE);
+    void (__stdcall *capi_IVRChaperone_004_ReloadInfo)() = (void *)t;
 
     clear_parameters();
-    capi_IVRChaperone_003_AreBoundsVisible();
-    check_ptr_parameter("IVRChaperone_003_AreBoundsVisible", this_ptr_value);
+    capi_IVRChaperone_004_ReloadInfo();
+    check_ptr_parameter("IVRChaperone_004_ReloadInfo", this_ptr_value);
 
-    init_thunk(t, this_ptr_value, IVRChaperone_003_ForceBoundsVisible, 1, FALSE, FALSE);
-    void (__stdcall *capi_IVRChaperone_003_ForceBoundsVisible)(bool bForce) = (void *)t;
+    init_thunk(t, this_ptr_value, IVRChaperone_004_SetSceneColor, 1, FALSE, FALSE);
+    void (__stdcall *capi_IVRChaperone_004_SetSceneColor)(HmdColor_t color) = (void *)t;
 
     clear_parameters();
-    capi_IVRChaperone_003_ForceBoundsVisible(1);
-    check_ptr_parameter("IVRChaperone_003_ForceBoundsVisible", this_ptr_value);
-    check_bool_parameter("IVRChaperone_003_ForceBoundsVisible", 1);
+    capi_IVRChaperone_004_SetSceneColor(DEFAULT_COLOR);
+    check_ptr_parameter("IVRChaperone_004_SetSceneColor", this_ptr_value);
+    check_HmdColor_parameter("IVRChaperone_004_SetSceneColor", DEFAULT_COLOR);
+
+    init_thunk(t, this_ptr_value, IVRChaperone_004_GetBoundsColor, 4, TRUE, FALSE);
+    void (__stdcall *capi_IVRChaperone_004_GetBoundsColor)(HmdColor_t * pOutputColorArray, int nNumOutputColors, float flCollisionBoundsFadeDistance, HmdColor_t * pOutputCameraColor) = (void *)t;
+
+    clear_parameters();
+    capi_IVRChaperone_004_GetBoundsColor((void *)1, 2, 3.0f, (void *)4);
+    check_ptr_parameter("IVRChaperone_004_GetBoundsColor", this_ptr_value);
+    check_ptr_parameter("IVRChaperone_004_GetBoundsColor", (void *)1);
+    check_uint32_parameter("IVRChaperone_004_GetBoundsColor", 2);
+    check_float_parameter("IVRChaperone_004_GetBoundsColor", 3.0f);
+    check_ptr_parameter("IVRChaperone_004_GetBoundsColor", (void *)4);
+
+    init_thunk(t, this_ptr_value, IVRChaperone_004_AreBoundsVisible, 0, FALSE, FALSE);
+    bool (__stdcall *capi_IVRChaperone_004_AreBoundsVisible)() = (void *)t;
+
+    clear_parameters();
+    capi_IVRChaperone_004_AreBoundsVisible();
+    check_ptr_parameter("IVRChaperone_004_AreBoundsVisible", this_ptr_value);
+
+    init_thunk(t, this_ptr_value, IVRChaperone_004_ForceBoundsVisible, 1, FALSE, FALSE);
+    void (__stdcall *capi_IVRChaperone_004_ForceBoundsVisible)(bool bForce) = (void *)t;
+
+    clear_parameters();
+    capi_IVRChaperone_004_ForceBoundsVisible(1);
+    check_ptr_parameter("IVRChaperone_004_ForceBoundsVisible", this_ptr_value);
+    check_bool_parameter("IVRChaperone_004_ForceBoundsVisible", 1);
+
+    init_thunk(t, this_ptr_value, IVRChaperone_004_ResetZeroPose, 1, FALSE, FALSE);
+    void (__stdcall *capi_IVRChaperone_004_ResetZeroPose)(ETrackingUniverseOrigin eTrackingUniverseOrigin) = (void *)t;
+
+    clear_parameters();
+    capi_IVRChaperone_004_ResetZeroPose(1);
+    check_ptr_parameter("IVRChaperone_004_ResetZeroPose", this_ptr_value);
+    check_uint32_parameter("IVRChaperone_004_ResetZeroPose", 1);
     VirtualFree(t, 0, MEM_RELEASE);
 }
 
@@ -3369,6 +3370,508 @@ void test_capi_thunks_IVRClientCore_003(void)
     capi_IVRClientCore_003_GetIDForVRInitError(1);
     check_ptr_parameter("IVRClientCore_003_GetIDForVRInitError", this_ptr_value);
     check_uint32_parameter("IVRClientCore_003_GetIDForVRInitError", 1);
+    VirtualFree(t, 0, MEM_RELEASE);
+}
+
+void test_capi_thunks_IVRSystem_021(void)
+{
+    struct thunk *t = alloc_thunks(1);
+
+    init_thunk(t, this_ptr_value, IVRSystem_021_GetRecommendedRenderTargetSize, 2, FALSE, FALSE);
+    void (__stdcall *capi_IVRSystem_021_GetRecommendedRenderTargetSize)(uint32_t * pnWidth, uint32_t * pnHeight) = (void *)t;
+
+    clear_parameters();
+    capi_IVRSystem_021_GetRecommendedRenderTargetSize((void *)1, (void *)2);
+    check_ptr_parameter("IVRSystem_021_GetRecommendedRenderTargetSize", this_ptr_value);
+    check_ptr_parameter("IVRSystem_021_GetRecommendedRenderTargetSize", (void *)1);
+    check_ptr_parameter("IVRSystem_021_GetRecommendedRenderTargetSize", (void *)2);
+
+    init_thunk(t, this_ptr_value, IVRSystem_021_GetProjectionMatrix, 4, TRUE, TRUE);
+    HmdMatrix44_t *(__stdcall *capi_IVRSystem_021_GetProjectionMatrix)(HmdMatrix44_t *_r, EVREye eEye, float fNearZ, float fFarZ) = (void *)t;
+
+    clear_parameters();
+    capi_IVRSystem_021_GetProjectionMatrix(data_ptr_value, 1, 2.0f, 3.0f);
+    check_ptr_parameter("IVRSystem_021_GetProjectionMatrix", this_ptr_value);
+    check_ptr_parameter("IVRSystem_021_GetProjectionMatrix", data_ptr_value);
+    check_uint32_parameter("IVRSystem_021_GetProjectionMatrix", 1);
+    check_float_parameter("IVRSystem_021_GetProjectionMatrix", 2.0f);
+    check_float_parameter("IVRSystem_021_GetProjectionMatrix", 3.0f);
+
+    init_thunk(t, this_ptr_value, IVRSystem_021_GetProjectionRaw, 5, FALSE, FALSE);
+    void (__stdcall *capi_IVRSystem_021_GetProjectionRaw)(EVREye eEye, float * pfLeft, float * pfRight, float * pfTop, float * pfBottom) = (void *)t;
+
+    clear_parameters();
+    capi_IVRSystem_021_GetProjectionRaw(1, (void *)2, (void *)3, (void *)4, (void *)5);
+    check_ptr_parameter("IVRSystem_021_GetProjectionRaw", this_ptr_value);
+    check_uint32_parameter("IVRSystem_021_GetProjectionRaw", 1);
+    check_ptr_parameter("IVRSystem_021_GetProjectionRaw", (void *)2);
+    check_ptr_parameter("IVRSystem_021_GetProjectionRaw", (void *)3);
+    check_ptr_parameter("IVRSystem_021_GetProjectionRaw", (void *)4);
+    check_ptr_parameter("IVRSystem_021_GetProjectionRaw", (void *)5);
+
+    init_thunk(t, this_ptr_value, IVRSystem_021_ComputeDistortion, 4, TRUE, FALSE);
+    bool (__stdcall *capi_IVRSystem_021_ComputeDistortion)(EVREye eEye, float fU, float fV, DistortionCoordinates_t * pDistortionCoordinates) = (void *)t;
+
+    clear_parameters();
+    capi_IVRSystem_021_ComputeDistortion(1, 2.0f, 3.0f, (void *)4);
+    check_ptr_parameter("IVRSystem_021_ComputeDistortion", this_ptr_value);
+    check_uint32_parameter("IVRSystem_021_ComputeDistortion", 1);
+    check_float_parameter("IVRSystem_021_ComputeDistortion", 2.0f);
+    check_float_parameter("IVRSystem_021_ComputeDistortion", 3.0f);
+    check_ptr_parameter("IVRSystem_021_ComputeDistortion", (void *)4);
+
+    init_thunk(t, this_ptr_value, IVRSystem_021_GetEyeToHeadTransform, 2, FALSE, FALSE);
+    HmdMatrix34_t *(__stdcall *capi_IVRSystem_021_GetEyeToHeadTransform)(HmdMatrix34_t *_r, EVREye eEye) = (void *)t;
+
+    clear_parameters();
+    capi_IVRSystem_021_GetEyeToHeadTransform(data_ptr_value, 1);
+    check_ptr_parameter("IVRSystem_021_GetEyeToHeadTransform", this_ptr_value);
+    check_ptr_parameter("IVRSystem_021_GetEyeToHeadTransform", data_ptr_value);
+    check_uint32_parameter("IVRSystem_021_GetEyeToHeadTransform", 1);
+
+    init_thunk(t, this_ptr_value, IVRSystem_021_GetTimeSinceLastVsync, 2, FALSE, FALSE);
+    bool (__stdcall *capi_IVRSystem_021_GetTimeSinceLastVsync)(float * pfSecondsSinceLastVsync, uint64_t * pulFrameCounter) = (void *)t;
+
+    clear_parameters();
+    capi_IVRSystem_021_GetTimeSinceLastVsync((void *)1, (void *)2);
+    check_ptr_parameter("IVRSystem_021_GetTimeSinceLastVsync", this_ptr_value);
+    check_ptr_parameter("IVRSystem_021_GetTimeSinceLastVsync", (void *)1);
+    check_ptr_parameter("IVRSystem_021_GetTimeSinceLastVsync", (void *)2);
+
+    init_thunk(t, this_ptr_value, IVRSystem_021_GetD3D9AdapterIndex, 0, FALSE, FALSE);
+    int32_t (__stdcall *capi_IVRSystem_021_GetD3D9AdapterIndex)() = (void *)t;
+
+    clear_parameters();
+    capi_IVRSystem_021_GetD3D9AdapterIndex();
+    check_ptr_parameter("IVRSystem_021_GetD3D9AdapterIndex", this_ptr_value);
+
+    init_thunk(t, this_ptr_value, IVRSystem_021_GetDXGIOutputInfo, 1, FALSE, FALSE);
+    void (__stdcall *capi_IVRSystem_021_GetDXGIOutputInfo)(int32_t * pnAdapterIndex) = (void *)t;
+
+    clear_parameters();
+    capi_IVRSystem_021_GetDXGIOutputInfo((void *)1);
+    check_ptr_parameter("IVRSystem_021_GetDXGIOutputInfo", this_ptr_value);
+    check_ptr_parameter("IVRSystem_021_GetDXGIOutputInfo", (void *)1);
+
+    init_thunk(t, this_ptr_value, IVRSystem_021_GetOutputDevice, 3, FALSE, FALSE);
+    void (__stdcall *capi_IVRSystem_021_GetOutputDevice)(uint64_t * pnDevice, ETextureType textureType, VkInstance_T * pInstance) = (void *)t;
+
+    clear_parameters();
+    capi_IVRSystem_021_GetOutputDevice((void *)1, 2, (void *)3);
+    check_ptr_parameter("IVRSystem_021_GetOutputDevice", this_ptr_value);
+    check_ptr_parameter("IVRSystem_021_GetOutputDevice", (void *)1);
+    check_uint32_parameter("IVRSystem_021_GetOutputDevice", 2);
+    check_ptr_parameter("IVRSystem_021_GetOutputDevice", (void *)3);
+
+    init_thunk(t, this_ptr_value, IVRSystem_021_IsDisplayOnDesktop, 0, FALSE, FALSE);
+    bool (__stdcall *capi_IVRSystem_021_IsDisplayOnDesktop)() = (void *)t;
+
+    clear_parameters();
+    capi_IVRSystem_021_IsDisplayOnDesktop();
+    check_ptr_parameter("IVRSystem_021_IsDisplayOnDesktop", this_ptr_value);
+
+    init_thunk(t, this_ptr_value, IVRSystem_021_SetDisplayVisibility, 1, FALSE, FALSE);
+    bool (__stdcall *capi_IVRSystem_021_SetDisplayVisibility)(bool bIsVisibleOnDesktop) = (void *)t;
+
+    clear_parameters();
+    capi_IVRSystem_021_SetDisplayVisibility(1);
+    check_ptr_parameter("IVRSystem_021_SetDisplayVisibility", this_ptr_value);
+    check_bool_parameter("IVRSystem_021_SetDisplayVisibility", 1);
+
+    init_thunk(t, this_ptr_value, IVRSystem_021_GetDeviceToAbsoluteTrackingPose, 4, TRUE, FALSE);
+    void (__stdcall *capi_IVRSystem_021_GetDeviceToAbsoluteTrackingPose)(ETrackingUniverseOrigin eOrigin, float fPredictedSecondsToPhotonsFromNow, TrackedDevicePose_t * pTrackedDevicePoseArray, uint32_t unTrackedDevicePoseArrayCount) = (void *)t;
+
+    clear_parameters();
+    capi_IVRSystem_021_GetDeviceToAbsoluteTrackingPose(1, 2.0f, (void *)3, 4);
+    check_ptr_parameter("IVRSystem_021_GetDeviceToAbsoluteTrackingPose", this_ptr_value);
+    check_uint32_parameter("IVRSystem_021_GetDeviceToAbsoluteTrackingPose", 1);
+    check_float_parameter("IVRSystem_021_GetDeviceToAbsoluteTrackingPose", 2.0f);
+    check_ptr_parameter("IVRSystem_021_GetDeviceToAbsoluteTrackingPose", (void *)3);
+    check_uint32_parameter("IVRSystem_021_GetDeviceToAbsoluteTrackingPose", 4);
+
+    init_thunk(t, this_ptr_value, IVRSystem_021_ResetSeatedZeroPose, 0, FALSE, FALSE);
+    void (__stdcall *capi_IVRSystem_021_ResetSeatedZeroPose)() = (void *)t;
+
+    clear_parameters();
+    capi_IVRSystem_021_ResetSeatedZeroPose();
+    check_ptr_parameter("IVRSystem_021_ResetSeatedZeroPose", this_ptr_value);
+
+    init_thunk(t, this_ptr_value, IVRSystem_021_GetSeatedZeroPoseToStandingAbsoluteTrackingPose, 1, FALSE, FALSE);
+    HmdMatrix34_t *(__stdcall *capi_IVRSystem_021_GetSeatedZeroPoseToStandingAbsoluteTrackingPose)(HmdMatrix34_t *_r) = (void *)t;
+
+    clear_parameters();
+    capi_IVRSystem_021_GetSeatedZeroPoseToStandingAbsoluteTrackingPose(data_ptr_value);
+    check_ptr_parameter("IVRSystem_021_GetSeatedZeroPoseToStandingAbsoluteTrackingPose", this_ptr_value);
+    check_ptr_parameter("IVRSystem_021_GetSeatedZeroPoseToStandingAbsoluteTrackingPose", data_ptr_value);
+
+    init_thunk(t, this_ptr_value, IVRSystem_021_GetRawZeroPoseToStandingAbsoluteTrackingPose, 1, FALSE, FALSE);
+    HmdMatrix34_t *(__stdcall *capi_IVRSystem_021_GetRawZeroPoseToStandingAbsoluteTrackingPose)(HmdMatrix34_t *_r) = (void *)t;
+
+    clear_parameters();
+    capi_IVRSystem_021_GetRawZeroPoseToStandingAbsoluteTrackingPose(data_ptr_value);
+    check_ptr_parameter("IVRSystem_021_GetRawZeroPoseToStandingAbsoluteTrackingPose", this_ptr_value);
+    check_ptr_parameter("IVRSystem_021_GetRawZeroPoseToStandingAbsoluteTrackingPose", data_ptr_value);
+
+    init_thunk(t, this_ptr_value, IVRSystem_021_GetSortedTrackedDeviceIndicesOfClass, 4, FALSE, FALSE);
+    uint32_t (__stdcall *capi_IVRSystem_021_GetSortedTrackedDeviceIndicesOfClass)(ETrackedDeviceClass eTrackedDeviceClass, TrackedDeviceIndex_t * punTrackedDeviceIndexArray, uint32_t unTrackedDeviceIndexArrayCount, TrackedDeviceIndex_t unRelativeToTrackedDeviceIndex) = (void *)t;
+
+    clear_parameters();
+    capi_IVRSystem_021_GetSortedTrackedDeviceIndicesOfClass(1, (void *)2, 3, 4);
+    check_ptr_parameter("IVRSystem_021_GetSortedTrackedDeviceIndicesOfClass", this_ptr_value);
+    check_uint32_parameter("IVRSystem_021_GetSortedTrackedDeviceIndicesOfClass", 1);
+    check_ptr_parameter("IVRSystem_021_GetSortedTrackedDeviceIndicesOfClass", (void *)2);
+    check_uint32_parameter("IVRSystem_021_GetSortedTrackedDeviceIndicesOfClass", 3);
+    check_uint32_parameter("IVRSystem_021_GetSortedTrackedDeviceIndicesOfClass", 4);
+
+    init_thunk(t, this_ptr_value, IVRSystem_021_GetTrackedDeviceActivityLevel, 1, FALSE, FALSE);
+    EDeviceActivityLevel (__stdcall *capi_IVRSystem_021_GetTrackedDeviceActivityLevel)(TrackedDeviceIndex_t unDeviceId) = (void *)t;
+
+    clear_parameters();
+    capi_IVRSystem_021_GetTrackedDeviceActivityLevel(1);
+    check_ptr_parameter("IVRSystem_021_GetTrackedDeviceActivityLevel", this_ptr_value);
+    check_uint32_parameter("IVRSystem_021_GetTrackedDeviceActivityLevel", 1);
+
+    init_thunk(t, this_ptr_value, IVRSystem_021_ApplyTransform, 3, FALSE, FALSE);
+    void (__stdcall *capi_IVRSystem_021_ApplyTransform)(TrackedDevicePose_t * pOutputPose, TrackedDevicePose_t * pTrackedDevicePose, HmdMatrix34_t * pTransform) = (void *)t;
+
+    clear_parameters();
+    capi_IVRSystem_021_ApplyTransform((void *)1, (void *)2, (void *)3);
+    check_ptr_parameter("IVRSystem_021_ApplyTransform", this_ptr_value);
+    check_ptr_parameter("IVRSystem_021_ApplyTransform", (void *)1);
+    check_ptr_parameter("IVRSystem_021_ApplyTransform", (void *)2);
+    check_ptr_parameter("IVRSystem_021_ApplyTransform", (void *)3);
+
+    init_thunk(t, this_ptr_value, IVRSystem_021_GetTrackedDeviceIndexForControllerRole, 1, FALSE, FALSE);
+    TrackedDeviceIndex_t (__stdcall *capi_IVRSystem_021_GetTrackedDeviceIndexForControllerRole)(ETrackedControllerRole unDeviceType) = (void *)t;
+
+    clear_parameters();
+    capi_IVRSystem_021_GetTrackedDeviceIndexForControllerRole(1);
+    check_ptr_parameter("IVRSystem_021_GetTrackedDeviceIndexForControllerRole", this_ptr_value);
+    check_uint32_parameter("IVRSystem_021_GetTrackedDeviceIndexForControllerRole", 1);
+
+    init_thunk(t, this_ptr_value, IVRSystem_021_GetControllerRoleForTrackedDeviceIndex, 1, FALSE, FALSE);
+    ETrackedControllerRole (__stdcall *capi_IVRSystem_021_GetControllerRoleForTrackedDeviceIndex)(TrackedDeviceIndex_t unDeviceIndex) = (void *)t;
+
+    clear_parameters();
+    capi_IVRSystem_021_GetControllerRoleForTrackedDeviceIndex(1);
+    check_ptr_parameter("IVRSystem_021_GetControllerRoleForTrackedDeviceIndex", this_ptr_value);
+    check_uint32_parameter("IVRSystem_021_GetControllerRoleForTrackedDeviceIndex", 1);
+
+    init_thunk(t, this_ptr_value, IVRSystem_021_GetTrackedDeviceClass, 1, FALSE, FALSE);
+    ETrackedDeviceClass (__stdcall *capi_IVRSystem_021_GetTrackedDeviceClass)(TrackedDeviceIndex_t unDeviceIndex) = (void *)t;
+
+    clear_parameters();
+    capi_IVRSystem_021_GetTrackedDeviceClass(1);
+    check_ptr_parameter("IVRSystem_021_GetTrackedDeviceClass", this_ptr_value);
+    check_uint32_parameter("IVRSystem_021_GetTrackedDeviceClass", 1);
+
+    init_thunk(t, this_ptr_value, IVRSystem_021_IsTrackedDeviceConnected, 1, FALSE, FALSE);
+    bool (__stdcall *capi_IVRSystem_021_IsTrackedDeviceConnected)(TrackedDeviceIndex_t unDeviceIndex) = (void *)t;
+
+    clear_parameters();
+    capi_IVRSystem_021_IsTrackedDeviceConnected(1);
+    check_ptr_parameter("IVRSystem_021_IsTrackedDeviceConnected", this_ptr_value);
+    check_uint32_parameter("IVRSystem_021_IsTrackedDeviceConnected", 1);
+
+    init_thunk(t, this_ptr_value, IVRSystem_021_GetBoolTrackedDeviceProperty, 3, FALSE, FALSE);
+    bool (__stdcall *capi_IVRSystem_021_GetBoolTrackedDeviceProperty)(TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError) = (void *)t;
+
+    clear_parameters();
+    capi_IVRSystem_021_GetBoolTrackedDeviceProperty(1, 2, (void *)3);
+    check_ptr_parameter("IVRSystem_021_GetBoolTrackedDeviceProperty", this_ptr_value);
+    check_uint32_parameter("IVRSystem_021_GetBoolTrackedDeviceProperty", 1);
+    check_uint32_parameter("IVRSystem_021_GetBoolTrackedDeviceProperty", 2);
+    check_ptr_parameter("IVRSystem_021_GetBoolTrackedDeviceProperty", (void *)3);
+
+    init_thunk(t, this_ptr_value, IVRSystem_021_GetFloatTrackedDeviceProperty, 3, FALSE, FALSE);
+    float (__stdcall *capi_IVRSystem_021_GetFloatTrackedDeviceProperty)(TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError) = (void *)t;
+
+    clear_parameters();
+    capi_IVRSystem_021_GetFloatTrackedDeviceProperty(1, 2, (void *)3);
+    check_ptr_parameter("IVRSystem_021_GetFloatTrackedDeviceProperty", this_ptr_value);
+    check_uint32_parameter("IVRSystem_021_GetFloatTrackedDeviceProperty", 1);
+    check_uint32_parameter("IVRSystem_021_GetFloatTrackedDeviceProperty", 2);
+    check_ptr_parameter("IVRSystem_021_GetFloatTrackedDeviceProperty", (void *)3);
+
+    init_thunk(t, this_ptr_value, IVRSystem_021_GetInt32TrackedDeviceProperty, 3, FALSE, FALSE);
+    int32_t (__stdcall *capi_IVRSystem_021_GetInt32TrackedDeviceProperty)(TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError) = (void *)t;
+
+    clear_parameters();
+    capi_IVRSystem_021_GetInt32TrackedDeviceProperty(1, 2, (void *)3);
+    check_ptr_parameter("IVRSystem_021_GetInt32TrackedDeviceProperty", this_ptr_value);
+    check_uint32_parameter("IVRSystem_021_GetInt32TrackedDeviceProperty", 1);
+    check_uint32_parameter("IVRSystem_021_GetInt32TrackedDeviceProperty", 2);
+    check_ptr_parameter("IVRSystem_021_GetInt32TrackedDeviceProperty", (void *)3);
+
+    init_thunk(t, this_ptr_value, IVRSystem_021_GetUint64TrackedDeviceProperty, 3, FALSE, FALSE);
+    uint64_t (__stdcall *capi_IVRSystem_021_GetUint64TrackedDeviceProperty)(TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError) = (void *)t;
+
+    clear_parameters();
+    capi_IVRSystem_021_GetUint64TrackedDeviceProperty(1, 2, (void *)3);
+    check_ptr_parameter("IVRSystem_021_GetUint64TrackedDeviceProperty", this_ptr_value);
+    check_uint32_parameter("IVRSystem_021_GetUint64TrackedDeviceProperty", 1);
+    check_uint32_parameter("IVRSystem_021_GetUint64TrackedDeviceProperty", 2);
+    check_ptr_parameter("IVRSystem_021_GetUint64TrackedDeviceProperty", (void *)3);
+
+    init_thunk(t, this_ptr_value, IVRSystem_021_GetMatrix34TrackedDeviceProperty, 4, FALSE, FALSE);
+    HmdMatrix34_t *(__stdcall *capi_IVRSystem_021_GetMatrix34TrackedDeviceProperty)(HmdMatrix34_t *_r, TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, ETrackedPropertyError * pError) = (void *)t;
+
+    clear_parameters();
+    capi_IVRSystem_021_GetMatrix34TrackedDeviceProperty(data_ptr_value, 1, 2, (void *)3);
+    check_ptr_parameter("IVRSystem_021_GetMatrix34TrackedDeviceProperty", this_ptr_value);
+    check_ptr_parameter("IVRSystem_021_GetMatrix34TrackedDeviceProperty", data_ptr_value);
+    check_uint32_parameter("IVRSystem_021_GetMatrix34TrackedDeviceProperty", 1);
+    check_uint32_parameter("IVRSystem_021_GetMatrix34TrackedDeviceProperty", 2);
+    check_ptr_parameter("IVRSystem_021_GetMatrix34TrackedDeviceProperty", (void *)3);
+
+    init_thunk(t, this_ptr_value, IVRSystem_021_GetArrayTrackedDeviceProperty, 6, FALSE, FALSE);
+    uint32_t (__stdcall *capi_IVRSystem_021_GetArrayTrackedDeviceProperty)(TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, PropertyTypeTag_t propType, void * pBuffer, uint32_t unBufferSize, ETrackedPropertyError * pError) = (void *)t;
+
+    clear_parameters();
+    capi_IVRSystem_021_GetArrayTrackedDeviceProperty(1, 2, 3, (void *)4, 5, (void *)6);
+    check_ptr_parameter("IVRSystem_021_GetArrayTrackedDeviceProperty", this_ptr_value);
+    check_uint32_parameter("IVRSystem_021_GetArrayTrackedDeviceProperty", 1);
+    check_uint32_parameter("IVRSystem_021_GetArrayTrackedDeviceProperty", 2);
+    check_uint32_parameter("IVRSystem_021_GetArrayTrackedDeviceProperty", 3);
+    check_ptr_parameter("IVRSystem_021_GetArrayTrackedDeviceProperty", (void *)4);
+    check_uint32_parameter("IVRSystem_021_GetArrayTrackedDeviceProperty", 5);
+    check_ptr_parameter("IVRSystem_021_GetArrayTrackedDeviceProperty", (void *)6);
+
+    init_thunk(t, this_ptr_value, IVRSystem_021_GetStringTrackedDeviceProperty, 5, FALSE, FALSE);
+    uint32_t (__stdcall *capi_IVRSystem_021_GetStringTrackedDeviceProperty)(TrackedDeviceIndex_t unDeviceIndex, ETrackedDeviceProperty prop, char * pchValue, uint32_t unBufferSize, ETrackedPropertyError * pError) = (void *)t;
+
+    clear_parameters();
+    capi_IVRSystem_021_GetStringTrackedDeviceProperty(1, 2, (void *)3, 4, (void *)5);
+    check_ptr_parameter("IVRSystem_021_GetStringTrackedDeviceProperty", this_ptr_value);
+    check_uint32_parameter("IVRSystem_021_GetStringTrackedDeviceProperty", 1);
+    check_uint32_parameter("IVRSystem_021_GetStringTrackedDeviceProperty", 2);
+    check_ptr_parameter("IVRSystem_021_GetStringTrackedDeviceProperty", (void *)3);
+    check_uint32_parameter("IVRSystem_021_GetStringTrackedDeviceProperty", 4);
+    check_ptr_parameter("IVRSystem_021_GetStringTrackedDeviceProperty", (void *)5);
+
+    init_thunk(t, this_ptr_value, IVRSystem_021_GetPropErrorNameFromEnum, 1, FALSE, FALSE);
+    const char * (__stdcall *capi_IVRSystem_021_GetPropErrorNameFromEnum)(ETrackedPropertyError error) = (void *)t;
+
+    clear_parameters();
+    capi_IVRSystem_021_GetPropErrorNameFromEnum(1);
+    check_ptr_parameter("IVRSystem_021_GetPropErrorNameFromEnum", this_ptr_value);
+    check_uint32_parameter("IVRSystem_021_GetPropErrorNameFromEnum", 1);
+
+    init_thunk(t, this_ptr_value, IVRSystem_021_PollNextEvent, 2, FALSE, FALSE);
+    bool (__stdcall *capi_IVRSystem_021_PollNextEvent)(VREvent_t * pEvent, uint32_t uncbVREvent) = (void *)t;
+
+    clear_parameters();
+    capi_IVRSystem_021_PollNextEvent((void *)1, 2);
+    check_ptr_parameter("IVRSystem_021_PollNextEvent", this_ptr_value);
+    check_ptr_parameter("IVRSystem_021_PollNextEvent", (void *)1);
+    check_uint32_parameter("IVRSystem_021_PollNextEvent", 2);
+
+    init_thunk(t, this_ptr_value, IVRSystem_021_PollNextEventWithPose, 4, FALSE, FALSE);
+    bool (__stdcall *capi_IVRSystem_021_PollNextEventWithPose)(ETrackingUniverseOrigin eOrigin, VREvent_t * pEvent, uint32_t uncbVREvent, TrackedDevicePose_t * pTrackedDevicePose) = (void *)t;
+
+    clear_parameters();
+    capi_IVRSystem_021_PollNextEventWithPose(1, (void *)2, 3, (void *)4);
+    check_ptr_parameter("IVRSystem_021_PollNextEventWithPose", this_ptr_value);
+    check_uint32_parameter("IVRSystem_021_PollNextEventWithPose", 1);
+    check_ptr_parameter("IVRSystem_021_PollNextEventWithPose", (void *)2);
+    check_uint32_parameter("IVRSystem_021_PollNextEventWithPose", 3);
+    check_ptr_parameter("IVRSystem_021_PollNextEventWithPose", (void *)4);
+
+    init_thunk(t, this_ptr_value, IVRSystem_021_GetEventTypeNameFromEnum, 1, FALSE, FALSE);
+    const char * (__stdcall *capi_IVRSystem_021_GetEventTypeNameFromEnum)(EVREventType eType) = (void *)t;
+
+    clear_parameters();
+    capi_IVRSystem_021_GetEventTypeNameFromEnum(1);
+    check_ptr_parameter("IVRSystem_021_GetEventTypeNameFromEnum", this_ptr_value);
+    check_uint32_parameter("IVRSystem_021_GetEventTypeNameFromEnum", 1);
+
+    init_thunk(t, this_ptr_value, IVRSystem_021_GetHiddenAreaMesh, 3, FALSE, FALSE);
+    HiddenAreaMesh_t *(__stdcall *capi_IVRSystem_021_GetHiddenAreaMesh)(HiddenAreaMesh_t *_r, EVREye eEye, EHiddenAreaMeshType type) = (void *)t;
+
+    clear_parameters();
+    capi_IVRSystem_021_GetHiddenAreaMesh(data_ptr_value, 1, 2);
+    check_ptr_parameter("IVRSystem_021_GetHiddenAreaMesh", this_ptr_value);
+    check_ptr_parameter("IVRSystem_021_GetHiddenAreaMesh", data_ptr_value);
+    check_uint32_parameter("IVRSystem_021_GetHiddenAreaMesh", 1);
+    check_uint32_parameter("IVRSystem_021_GetHiddenAreaMesh", 2);
+
+    init_thunk(t, this_ptr_value, IVRSystem_021_GetControllerState, 3, FALSE, FALSE);
+    bool (__stdcall *capi_IVRSystem_021_GetControllerState)(TrackedDeviceIndex_t unControllerDeviceIndex, VRControllerState_t * pControllerState, uint32_t unControllerStateSize) = (void *)t;
+
+    clear_parameters();
+    capi_IVRSystem_021_GetControllerState(1, (void *)2, 3);
+    check_ptr_parameter("IVRSystem_021_GetControllerState", this_ptr_value);
+    check_uint32_parameter("IVRSystem_021_GetControllerState", 1);
+    check_ptr_parameter("IVRSystem_021_GetControllerState", (void *)2);
+    check_uint32_parameter("IVRSystem_021_GetControllerState", 3);
+
+    init_thunk(t, this_ptr_value, IVRSystem_021_GetControllerStateWithPose, 5, FALSE, FALSE);
+    bool (__stdcall *capi_IVRSystem_021_GetControllerStateWithPose)(ETrackingUniverseOrigin eOrigin, TrackedDeviceIndex_t unControllerDeviceIndex, VRControllerState_t * pControllerState, uint32_t unControllerStateSize, TrackedDevicePose_t * pTrackedDevicePose) = (void *)t;
+
+    clear_parameters();
+    capi_IVRSystem_021_GetControllerStateWithPose(1, 2, (void *)3, 4, (void *)5);
+    check_ptr_parameter("IVRSystem_021_GetControllerStateWithPose", this_ptr_value);
+    check_uint32_parameter("IVRSystem_021_GetControllerStateWithPose", 1);
+    check_uint32_parameter("IVRSystem_021_GetControllerStateWithPose", 2);
+    check_ptr_parameter("IVRSystem_021_GetControllerStateWithPose", (void *)3);
+    check_uint32_parameter("IVRSystem_021_GetControllerStateWithPose", 4);
+    check_ptr_parameter("IVRSystem_021_GetControllerStateWithPose", (void *)5);
+
+    init_thunk(t, this_ptr_value, IVRSystem_021_TriggerHapticPulse, 3, FALSE, FALSE);
+    void (__stdcall *capi_IVRSystem_021_TriggerHapticPulse)(TrackedDeviceIndex_t unControllerDeviceIndex, uint32_t unAxisId, unsigned short usDurationMicroSec) = (void *)t;
+
+    clear_parameters();
+    capi_IVRSystem_021_TriggerHapticPulse(1, 2, 3);
+    check_ptr_parameter("IVRSystem_021_TriggerHapticPulse", this_ptr_value);
+    check_uint32_parameter("IVRSystem_021_TriggerHapticPulse", 1);
+    check_uint32_parameter("IVRSystem_021_TriggerHapticPulse", 2);
+    check_uint32_parameter("IVRSystem_021_TriggerHapticPulse", 3);
+
+    init_thunk(t, this_ptr_value, IVRSystem_021_GetButtonIdNameFromEnum, 1, FALSE, FALSE);
+    const char * (__stdcall *capi_IVRSystem_021_GetButtonIdNameFromEnum)(EVRButtonId eButtonId) = (void *)t;
+
+    clear_parameters();
+    capi_IVRSystem_021_GetButtonIdNameFromEnum(1);
+    check_ptr_parameter("IVRSystem_021_GetButtonIdNameFromEnum", this_ptr_value);
+    check_uint32_parameter("IVRSystem_021_GetButtonIdNameFromEnum", 1);
+
+    init_thunk(t, this_ptr_value, IVRSystem_021_GetControllerAxisTypeNameFromEnum, 1, FALSE, FALSE);
+    const char * (__stdcall *capi_IVRSystem_021_GetControllerAxisTypeNameFromEnum)(EVRControllerAxisType eAxisType) = (void *)t;
+
+    clear_parameters();
+    capi_IVRSystem_021_GetControllerAxisTypeNameFromEnum(1);
+    check_ptr_parameter("IVRSystem_021_GetControllerAxisTypeNameFromEnum", this_ptr_value);
+    check_uint32_parameter("IVRSystem_021_GetControllerAxisTypeNameFromEnum", 1);
+
+    init_thunk(t, this_ptr_value, IVRSystem_021_IsInputAvailable, 0, FALSE, FALSE);
+    bool (__stdcall *capi_IVRSystem_021_IsInputAvailable)() = (void *)t;
+
+    clear_parameters();
+    capi_IVRSystem_021_IsInputAvailable();
+    check_ptr_parameter("IVRSystem_021_IsInputAvailable", this_ptr_value);
+
+    init_thunk(t, this_ptr_value, IVRSystem_021_IsSteamVRDrawingControllers, 0, FALSE, FALSE);
+    bool (__stdcall *capi_IVRSystem_021_IsSteamVRDrawingControllers)() = (void *)t;
+
+    clear_parameters();
+    capi_IVRSystem_021_IsSteamVRDrawingControllers();
+    check_ptr_parameter("IVRSystem_021_IsSteamVRDrawingControllers", this_ptr_value);
+
+    init_thunk(t, this_ptr_value, IVRSystem_021_ShouldApplicationPause, 0, FALSE, FALSE);
+    bool (__stdcall *capi_IVRSystem_021_ShouldApplicationPause)() = (void *)t;
+
+    clear_parameters();
+    capi_IVRSystem_021_ShouldApplicationPause();
+    check_ptr_parameter("IVRSystem_021_ShouldApplicationPause", this_ptr_value);
+
+    init_thunk(t, this_ptr_value, IVRSystem_021_ShouldApplicationReduceRenderingWork, 0, FALSE, FALSE);
+    bool (__stdcall *capi_IVRSystem_021_ShouldApplicationReduceRenderingWork)() = (void *)t;
+
+    clear_parameters();
+    capi_IVRSystem_021_ShouldApplicationReduceRenderingWork();
+    check_ptr_parameter("IVRSystem_021_ShouldApplicationReduceRenderingWork", this_ptr_value);
+
+    init_thunk(t, this_ptr_value, IVRSystem_021_PerformFirmwareUpdate, 1, FALSE, FALSE);
+    EVRFirmwareError (__stdcall *capi_IVRSystem_021_PerformFirmwareUpdate)(TrackedDeviceIndex_t unDeviceIndex) = (void *)t;
+
+    clear_parameters();
+    capi_IVRSystem_021_PerformFirmwareUpdate(1);
+    check_ptr_parameter("IVRSystem_021_PerformFirmwareUpdate", this_ptr_value);
+    check_uint32_parameter("IVRSystem_021_PerformFirmwareUpdate", 1);
+
+    init_thunk(t, this_ptr_value, IVRSystem_021_AcknowledgeQuit_Exiting, 0, FALSE, FALSE);
+    void (__stdcall *capi_IVRSystem_021_AcknowledgeQuit_Exiting)() = (void *)t;
+
+    clear_parameters();
+    capi_IVRSystem_021_AcknowledgeQuit_Exiting();
+    check_ptr_parameter("IVRSystem_021_AcknowledgeQuit_Exiting", this_ptr_value);
+
+    init_thunk(t, this_ptr_value, IVRSystem_021_GetAppContainerFilePaths, 2, FALSE, FALSE);
+    uint32_t (__stdcall *capi_IVRSystem_021_GetAppContainerFilePaths)(char * pchBuffer, uint32_t unBufferSize) = (void *)t;
+
+    clear_parameters();
+    capi_IVRSystem_021_GetAppContainerFilePaths((void *)1, 2);
+    check_ptr_parameter("IVRSystem_021_GetAppContainerFilePaths", this_ptr_value);
+    check_ptr_parameter("IVRSystem_021_GetAppContainerFilePaths", (void *)1);
+    check_uint32_parameter("IVRSystem_021_GetAppContainerFilePaths", 2);
+
+    init_thunk(t, this_ptr_value, IVRSystem_021_GetRuntimeVersion, 0, FALSE, FALSE);
+    const char * (__stdcall *capi_IVRSystem_021_GetRuntimeVersion)() = (void *)t;
+
+    clear_parameters();
+    capi_IVRSystem_021_GetRuntimeVersion();
+    check_ptr_parameter("IVRSystem_021_GetRuntimeVersion", this_ptr_value);
+    VirtualFree(t, 0, MEM_RELEASE);
+}
+
+void test_capi_thunks_IVRChaperone_003(void)
+{
+    struct thunk *t = alloc_thunks(1);
+
+    init_thunk(t, this_ptr_value, IVRChaperone_003_GetCalibrationState, 0, FALSE, FALSE);
+    ChaperoneCalibrationState (__stdcall *capi_IVRChaperone_003_GetCalibrationState)() = (void *)t;
+
+    clear_parameters();
+    capi_IVRChaperone_003_GetCalibrationState();
+    check_ptr_parameter("IVRChaperone_003_GetCalibrationState", this_ptr_value);
+
+    init_thunk(t, this_ptr_value, IVRChaperone_003_GetPlayAreaSize, 2, FALSE, FALSE);
+    bool (__stdcall *capi_IVRChaperone_003_GetPlayAreaSize)(float * pSizeX, float * pSizeZ) = (void *)t;
+
+    clear_parameters();
+    capi_IVRChaperone_003_GetPlayAreaSize((void *)1, (void *)2);
+    check_ptr_parameter("IVRChaperone_003_GetPlayAreaSize", this_ptr_value);
+    check_ptr_parameter("IVRChaperone_003_GetPlayAreaSize", (void *)1);
+    check_ptr_parameter("IVRChaperone_003_GetPlayAreaSize", (void *)2);
+
+    init_thunk(t, this_ptr_value, IVRChaperone_003_GetPlayAreaRect, 1, FALSE, FALSE);
+    bool (__stdcall *capi_IVRChaperone_003_GetPlayAreaRect)(HmdQuad_t * rect) = (void *)t;
+
+    clear_parameters();
+    capi_IVRChaperone_003_GetPlayAreaRect((void *)1);
+    check_ptr_parameter("IVRChaperone_003_GetPlayAreaRect", this_ptr_value);
+    check_ptr_parameter("IVRChaperone_003_GetPlayAreaRect", (void *)1);
+
+    init_thunk(t, this_ptr_value, IVRChaperone_003_ReloadInfo, 0, FALSE, FALSE);
+    void (__stdcall *capi_IVRChaperone_003_ReloadInfo)() = (void *)t;
+
+    clear_parameters();
+    capi_IVRChaperone_003_ReloadInfo();
+    check_ptr_parameter("IVRChaperone_003_ReloadInfo", this_ptr_value);
+
+    init_thunk(t, this_ptr_value, IVRChaperone_003_SetSceneColor, 1, FALSE, FALSE);
+    void (__stdcall *capi_IVRChaperone_003_SetSceneColor)(HmdColor_t color) = (void *)t;
+
+    clear_parameters();
+    capi_IVRChaperone_003_SetSceneColor(DEFAULT_COLOR);
+    check_ptr_parameter("IVRChaperone_003_SetSceneColor", this_ptr_value);
+    check_HmdColor_parameter("IVRChaperone_003_SetSceneColor", DEFAULT_COLOR);
+
+    init_thunk(t, this_ptr_value, IVRChaperone_003_GetBoundsColor, 4, TRUE, FALSE);
+    void (__stdcall *capi_IVRChaperone_003_GetBoundsColor)(HmdColor_t * pOutputColorArray, int nNumOutputColors, float flCollisionBoundsFadeDistance, HmdColor_t * pOutputCameraColor) = (void *)t;
+
+    clear_parameters();
+    capi_IVRChaperone_003_GetBoundsColor((void *)1, 2, 3.0f, (void *)4);
+    check_ptr_parameter("IVRChaperone_003_GetBoundsColor", this_ptr_value);
+    check_ptr_parameter("IVRChaperone_003_GetBoundsColor", (void *)1);
+    check_uint32_parameter("IVRChaperone_003_GetBoundsColor", 2);
+    check_float_parameter("IVRChaperone_003_GetBoundsColor", 3.0f);
+    check_ptr_parameter("IVRChaperone_003_GetBoundsColor", (void *)4);
+
+    init_thunk(t, this_ptr_value, IVRChaperone_003_AreBoundsVisible, 0, FALSE, FALSE);
+    bool (__stdcall *capi_IVRChaperone_003_AreBoundsVisible)() = (void *)t;
+
+    clear_parameters();
+    capi_IVRChaperone_003_AreBoundsVisible();
+    check_ptr_parameter("IVRChaperone_003_AreBoundsVisible", this_ptr_value);
+
+    init_thunk(t, this_ptr_value, IVRChaperone_003_ForceBoundsVisible, 1, FALSE, FALSE);
+    void (__stdcall *capi_IVRChaperone_003_ForceBoundsVisible)(bool bForce) = (void *)t;
+
+    clear_parameters();
+    capi_IVRChaperone_003_ForceBoundsVisible(1);
+    check_ptr_parameter("IVRChaperone_003_ForceBoundsVisible", this_ptr_value);
+    check_bool_parameter("IVRChaperone_003_ForceBoundsVisible", 1);
     VirtualFree(t, 0, MEM_RELEASE);
 }
 

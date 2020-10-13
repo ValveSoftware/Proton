@@ -5,10 +5,10 @@
 
 int main(void)
 {
-    test_capi_thunks_IVRSystem_021();
+    test_capi_thunks_IVRSystem_022();
     test_capi_thunks_IVRApplications_007();
     test_capi_thunks_IVRSettings_003();
-    test_capi_thunks_IVRChaperone_003();
+    test_capi_thunks_IVRChaperone_004();
     test_capi_thunks_IVRChaperoneSetup_006();
     test_capi_thunks_IVRCompositor_026();
     test_capi_thunks_IVRHeadsetView_001();
@@ -24,6 +24,8 @@ int main(void)
     test_capi_thunks_IVRInput_010();
     test_capi_thunks_IVRIOBuffer_002();
     test_capi_thunks_IVRClientCore_003();
+    test_capi_thunks_IVRSystem_021();
+    test_capi_thunks_IVRChaperone_003();
     test_capi_thunks_IVRControlPanel_006();
     test_capi_thunks_IVRMailbox_001();
     test_capi_thunks_IVRCompositor_024();

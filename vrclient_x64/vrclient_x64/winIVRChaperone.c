@@ -18,6 +18,144 @@
 
 WINE_DEFAULT_DEBUG_CHANNEL(vrclient);
 
+#include "cppIVRChaperone_IVRChaperone_004.h"
+
+typedef struct __winIVRChaperone_IVRChaperone_004 {
+    vtable_ptr *vtable;
+    void *linux_side;
+} winIVRChaperone_IVRChaperone_004;
+
+DEFINE_THISCALL_WRAPPER(winIVRChaperone_IVRChaperone_004_GetCalibrationState, 4)
+ChaperoneCalibrationState __thiscall winIVRChaperone_IVRChaperone_004_GetCalibrationState(winIVRChaperone_IVRChaperone_004 *_this)
+{
+    TRACE("%p\n", _this);
+    return cppIVRChaperone_IVRChaperone_004_GetCalibrationState(_this->linux_side);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVRChaperone_IVRChaperone_004_GetPlayAreaSize, 12)
+bool __thiscall winIVRChaperone_IVRChaperone_004_GetPlayAreaSize(winIVRChaperone_IVRChaperone_004 *_this, float * pSizeX, float * pSizeZ)
+{
+    TRACE("%p\n", _this);
+    return cppIVRChaperone_IVRChaperone_004_GetPlayAreaSize(_this->linux_side, pSizeX, pSizeZ);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVRChaperone_IVRChaperone_004_GetPlayAreaRect, 8)
+bool __thiscall winIVRChaperone_IVRChaperone_004_GetPlayAreaRect(winIVRChaperone_IVRChaperone_004 *_this, HmdQuad_t * rect)
+{
+    TRACE("%p\n", _this);
+    return cppIVRChaperone_IVRChaperone_004_GetPlayAreaRect(_this->linux_side, rect);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVRChaperone_IVRChaperone_004_ReloadInfo, 4)
+void __thiscall winIVRChaperone_IVRChaperone_004_ReloadInfo(winIVRChaperone_IVRChaperone_004 *_this)
+{
+    TRACE("%p\n", _this);
+    cppIVRChaperone_IVRChaperone_004_ReloadInfo(_this->linux_side);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVRChaperone_IVRChaperone_004_SetSceneColor, 20)
+void __thiscall winIVRChaperone_IVRChaperone_004_SetSceneColor(winIVRChaperone_IVRChaperone_004 *_this, HmdColor_t color)
+{
+    TRACE("%p\n", _this);
+    cppIVRChaperone_IVRChaperone_004_SetSceneColor(_this->linux_side, color);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVRChaperone_IVRChaperone_004_GetBoundsColor, 20)
+void __thiscall winIVRChaperone_IVRChaperone_004_GetBoundsColor(winIVRChaperone_IVRChaperone_004 *_this, HmdColor_t * pOutputColorArray, int nNumOutputColors, float flCollisionBoundsFadeDistance, HmdColor_t * pOutputCameraColor)
+{
+    TRACE("%p\n", _this);
+    cppIVRChaperone_IVRChaperone_004_GetBoundsColor(_this->linux_side, pOutputColorArray, nNumOutputColors, flCollisionBoundsFadeDistance, pOutputCameraColor);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVRChaperone_IVRChaperone_004_AreBoundsVisible, 4)
+bool __thiscall winIVRChaperone_IVRChaperone_004_AreBoundsVisible(winIVRChaperone_IVRChaperone_004 *_this)
+{
+    TRACE("%p\n", _this);
+    return cppIVRChaperone_IVRChaperone_004_AreBoundsVisible(_this->linux_side);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVRChaperone_IVRChaperone_004_ForceBoundsVisible, 5)
+void __thiscall winIVRChaperone_IVRChaperone_004_ForceBoundsVisible(winIVRChaperone_IVRChaperone_004 *_this, bool bForce)
+{
+    TRACE("%p\n", _this);
+    cppIVRChaperone_IVRChaperone_004_ForceBoundsVisible(_this->linux_side, bForce);
+}
+
+DEFINE_THISCALL_WRAPPER(winIVRChaperone_IVRChaperone_004_ResetZeroPose, 8)
+void __thiscall winIVRChaperone_IVRChaperone_004_ResetZeroPose(winIVRChaperone_IVRChaperone_004 *_this, ETrackingUniverseOrigin eTrackingUniverseOrigin)
+{
+    TRACE("%p\n", _this);
+    cppIVRChaperone_IVRChaperone_004_ResetZeroPose(_this->linux_side, eTrackingUniverseOrigin);
+}
+
+extern vtable_ptr winIVRChaperone_IVRChaperone_004_vtable;
+
+#ifndef __GNUC__
+void __asm_dummy_vtables(void) {
+#endif
+    __ASM_VTABLE(winIVRChaperone_IVRChaperone_004,
+        VTABLE_ADD_FUNC(winIVRChaperone_IVRChaperone_004_GetCalibrationState)
+        VTABLE_ADD_FUNC(winIVRChaperone_IVRChaperone_004_GetPlayAreaSize)
+        VTABLE_ADD_FUNC(winIVRChaperone_IVRChaperone_004_GetPlayAreaRect)
+        VTABLE_ADD_FUNC(winIVRChaperone_IVRChaperone_004_ReloadInfo)
+        VTABLE_ADD_FUNC(winIVRChaperone_IVRChaperone_004_SetSceneColor)
+        VTABLE_ADD_FUNC(winIVRChaperone_IVRChaperone_004_GetBoundsColor)
+        VTABLE_ADD_FUNC(winIVRChaperone_IVRChaperone_004_AreBoundsVisible)
+        VTABLE_ADD_FUNC(winIVRChaperone_IVRChaperone_004_ForceBoundsVisible)
+        VTABLE_ADD_FUNC(winIVRChaperone_IVRChaperone_004_ResetZeroPose)
+    );
+#ifndef __GNUC__
+}
+#endif
+
+winIVRChaperone_IVRChaperone_004 *create_winIVRChaperone_IVRChaperone_004(void *linux_side)
+{
+    winIVRChaperone_IVRChaperone_004 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRChaperone_IVRChaperone_004));
+    TRACE("-> %p\n", r);
+    r->vtable = &winIVRChaperone_IVRChaperone_004_vtable;
+    r->linux_side = linux_side;
+    return r;
+}
+
+void destroy_winIVRChaperone_IVRChaperone_004(void *object)
+{
+    TRACE("%p\n", object);
+    HeapFree(GetProcessHeap(), 0, object);
+}
+
+winIVRChaperone_IVRChaperone_004 *create_winIVRChaperone_IVRChaperone_004_FnTable(void *linux_side)
+{
+    winIVRChaperone_IVRChaperone_004 *r = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(winIVRChaperone_IVRChaperone_004));
+    struct thunk *thunks = alloc_thunks(9);
+    struct thunk **vtable = HeapAlloc(GetProcessHeap(), 0, 9 * sizeof(*vtable));
+    int i;
+
+    TRACE("-> %p, vtable %p, thunks %p\n", r, vtable, thunks);
+    init_thunk(&thunks[0], r, winIVRChaperone_IVRChaperone_004_GetCalibrationState, 0, FALSE, FALSE);
+    init_thunk(&thunks[1], r, winIVRChaperone_IVRChaperone_004_GetPlayAreaSize, 2, FALSE, FALSE);
+    init_thunk(&thunks[2], r, winIVRChaperone_IVRChaperone_004_GetPlayAreaRect, 1, FALSE, FALSE);
+    init_thunk(&thunks[3], r, winIVRChaperone_IVRChaperone_004_ReloadInfo, 0, FALSE, FALSE);
+    init_thunk(&thunks[4], r, winIVRChaperone_IVRChaperone_004_SetSceneColor, 1, FALSE, FALSE);
+    init_thunk(&thunks[5], r, winIVRChaperone_IVRChaperone_004_GetBoundsColor, 4, TRUE, FALSE);
+    init_thunk(&thunks[6], r, winIVRChaperone_IVRChaperone_004_AreBoundsVisible, 0, FALSE, FALSE);
+    init_thunk(&thunks[7], r, winIVRChaperone_IVRChaperone_004_ForceBoundsVisible, 1, FALSE, FALSE);
+    init_thunk(&thunks[8], r, winIVRChaperone_IVRChaperone_004_ResetZeroPose, 1, FALSE, FALSE);
+    for (i = 0; i < 9; i++)
+        vtable[i] = &thunks[i];
+    r->linux_side = linux_side;
+    r->vtable = (void *)vtable;
+    return r;
+}
+
+void destroy_winIVRChaperone_IVRChaperone_004_FnTable(void *object)
+{
+    winIVRChaperone_IVRChaperone_004 *win_object = object;
+    TRACE("%p\n", win_object);
+    VirtualFree(win_object->vtable[0], 0, MEM_RELEASE);
+    HeapFree(GetProcessHeap(), 0, win_object->vtable);
+    HeapFree(GetProcessHeap(), 0, win_object);
+}
+
 #include "cppIVRChaperone_IVRChaperone_003.h"
 
 typedef struct __winIVRChaperone_IVRChaperone_003 {
