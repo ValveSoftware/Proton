@@ -49,33 +49,8 @@ ifeq ($(ENABLE_CCACHE),1)
 	CCACHE_BIN := ccache
 else
 	export CCACHE_DISABLE = 1
-	DOCKER_CCACHE_FLAG = -e CCACHE_DISABLE=1
 endif
 
-CC := $(CCACHE_BIN) x86_64-linux-gnu-gcc
-CXX := $(CCACHE_BIN) x86_64-linux-gnu-g++
-CROSSCC32 := $(CCACHE_BIN) i686-w64-mingw32-gcc
-CROSSCC64 := $(CCACHE_BIN) x86_64-w64-mingw32-gcc
-CROSSCXX32 := $(CCACHE_BIN) i686-w64-mingw32-g++
-CROSSCXX64 := $(CCACHE_BIN) x86_64-w64-mingw32-g++
-
-export CC
-export CXX
-
-ifeq ($(ENABLE_CCACHE),1)
-	export PATH := /usr/lib/ccache:$(PATH)
-else
-endif
-
-CC32 := $(CCACHE_BIN) i686-linux-gnu-gcc -mstackrealign
-CXX32 := $(CCACHE_BIN) i686-linux-gnu-g++ -mstackrealign
-PKG_CONFIG32 := i686-linux-gnu-pkg-config
-
-cc-option = $(shell if test -z "`echo 'void*p=1;' | \
-              $(1) $(2) -S -o /dev/null -xc - 2>&1 | grep -- $(2) -`"; \
-              then echo "$(2)"; else echo "$(3)"; fi ;)
-
-# Selected container mode shell
 DOCKER_BASE = docker run --rm -e HOME -e USER -e USERID=$(shell id -u) -u $(shell id -u):$(shell id -g) \
                                     -v $(HOME):$(HOME) -v /tmp:/tmp \
                                     -w $(CURDIR) -e PATH=$(PATH) $(DOCKER_CCACHE_FLAG) \
@@ -169,23 +144,11 @@ else
 endif
 
 CROSSLDFLAGS   += -Wl,--file-alignment,4096
-OPTIMIZE_FLAGS := -O2 -march=nocona $(call cc-option,$(CC),-mtune=core-avx2,) -mfpmath=sse
+OPTIMIZE_FLAGS := -O2 -march=nocona -mtune=core-avx2 -mfpmath=sse
 SANITY_FLAGS   := -fwrapv -fno-strict-aliasing
 COMMON_FLAGS    = $(OPTIMIZE_FLAGS) $(SANITY_FLAGS) -ffile-prefix-map=$(CCACHE_BASEDIR)=.
 COMMON_FLAGS32 := -mstackrealign
 CARGO_BUILD_ARG := --release
-
-# These variables might need to be quoted, but might not
-#
-#   That is, $(STRIP) is how you invoke strip, STRIP=$(STRIP_QUOTED) is how you pass it to a shell script properly
-#   quoted
-STRIP_QUOTED = $(call QUOTE,$(STRIP))
-CC_QUOTED    = $(call QUOTE,$(CC))
-CC32_QUOTED  = $(call QUOTE,$(CC32))
-CXX_QUOTED   = $(call QUOTE,$(CXX))
-CXX32_QUOTED = $(call QUOTE,$(CXX32))
-CROSSCC32_QUOTED = $(call QUOTE,$(CROSSCC32))
-CROSSCC64_QUOTED = $(call QUOTE,$(CROSSCC64))
 
 ##
 ## Target configs
