@@ -52,10 +52,8 @@ else
 endif
 
 DOCKER_BASE = docker run --rm -e HOME -e USER -e USERID=$(shell id -u) -u $(shell id -u):$(shell id -g) \
-                                    -v $(HOME):$(HOME) -v /tmp:/tmp \
-                                    -w $(CURDIR) -e PATH=$(PATH) $(DOCKER_CCACHE_FLAG) \
-                                    $(DOCKER_OPTS) \
-                                    $(STEAMRT_IMAGE)
+                -v $(HOME):$(HOME) -v $(SRC):$(SRC) -v $(OBJ):$(OBJ) -w $(OBJ) \
+                $(DOCKER_OPTS) $(STEAMRT_IMAGE)
 
 STEAMRT_NAME ?= soldier
 ifeq ($(STEAMRT_NAME),soldier)
