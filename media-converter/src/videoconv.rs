@@ -216,10 +216,7 @@ impl<'a> Read for PadReader<'a> {
         if to_copy == out.len() {
             out.copy_from_slice(&self.chunk[self.chunk_offs..(self.chunk_offs + to_copy)]);
         }else{
-            /* FIXME: there's probably some cool functional way to do this */
-            for i in 0..to_copy {
-                out[i] = self.chunk[self.chunk_offs + i];
-            }
+            (0..to_copy).for_each(|i| out[i] = self.chunk[self.chunk_offs + i]);
         }
 
         self.chunk_offs += to_copy;
@@ -294,10 +291,7 @@ impl VideoConvState {
                     out.copy_from_slice(&blank[offs..(offs + out.len())]);
                     Ok(out.len())
                 }else{
-                    /* FIXME: there's probably some cool functional way to do this */
-                    for i in 0..remaining {
-                        out[i] = blank[offs + i];
-                    }
+                    (0..remaining).for_each(|i| out[i] = blank[offs + i]);
                     Ok(remaining)
                 }
             },
