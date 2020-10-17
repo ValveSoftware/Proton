@@ -891,6 +891,11 @@ if __name__ == "__main__":
 
     g_session.init_session()
 
+    #prevent out of bounds error
+    if len(sys.argv) < 1:
+        log("usage: proton run|waitforexitandrun|getcompatpath|getnativepath [PROGRAM]")
+        sys.exit(0)
+    
     #determine mode
     if sys.argv[1] == "run":
         #start target app
