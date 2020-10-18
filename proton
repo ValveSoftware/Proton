@@ -650,6 +650,9 @@ class Session:
             self.env.setdefault("VKD3D_DEBUG", "warn")
             self.env.setdefault("WINE_MONO_TRACE", "E:System.NotImplementedException")
 
+            if "PROTON_LOG_DIR" in self.env and nonzero(self.env["PROTON_LOG_DIR"]):
+                ldir_path = self.env["PROTON_LOG_DIR"]
+
         #for performance, logging is disabled by default; override with user_settings.py
         self.env.setdefault("WINEDEBUG", "-all")
         self.env.setdefault("DXVK_LOG_LEVEL", "none")
@@ -703,7 +706,11 @@ class Session:
 
         if "SteamGameId" in self.env:
             if self.env["WINEDEBUG"] != "-all":
-                lfile_path = os.environ["HOME"] + "/steam-" + os.environ["SteamGameId"] + ".log"
+                if "ldir_path" in locals():
+                    basedir = ldir_path
+                else:
+                    basedir = os.environ["HOME"]
+                lfile_path = basedir + "/steam-" + os.environ["SteamGameId"] + ".log"
                 if os.path.exists(lfile_path):
                     os.remove(lfile_path)
                 self.log_file = open(lfile_path, "w+")
