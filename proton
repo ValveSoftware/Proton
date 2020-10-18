@@ -703,7 +703,9 @@ class Session:
 
         if "SteamGameId" in self.env:
             if self.env["WINEDEBUG"] != "-all":
-                lfile_path = os.environ["HOME"] + "/steam-" + os.environ["SteamGameId"] + ".log"
+                basedir = os.environ.get("PROTON_LOG_DIR", os.environ["HOME"])
+                makedirs(basedir)
+                lfile_path = basedir + "/steam-" + os.environ["SteamGameId"] + ".log"
                 if os.path.exists(lfile_path):
                     os.remove(lfile_path)
                 self.log_file = open(lfile_path, "w+")
