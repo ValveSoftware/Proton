@@ -213,11 +213,7 @@ impl<'a> Read for PadReader<'a> {
             return Ok(0);
         }
 
-        if to_copy == out.len() {
-            out.copy_from_slice(&self.chunk[self.chunk_offs..(self.chunk_offs + to_copy)]);
-        }else{
-            (0..to_copy).for_each(|i| out[i] = self.chunk[self.chunk_offs + i]);
-        }
+        out[..to_copy].copy_from_slice(&self.chunk[self.chunk_offs..(self.chunk_offs + to_copy)]);
 
         self.chunk_offs += to_copy;
 
