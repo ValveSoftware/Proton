@@ -2666,25 +2666,28 @@ index a92987c2ab5..6bc1b47ca5d 100755
  }
  
 diff --git a/tools/makedep.c b/tools/makedep.c
-index 2eed620b429..8b89d0f4858 100644
+index df3805591ea..df07eec5ab7 100644
 --- a/tools/makedep.c
 +++ b/tools/makedep.c
-@@ -184,11 +184,11 @@ struct makefile
+@@ -184,6 +184,7 @@ struct makefile
+     struct strarray install_lib;
      struct strarray install_dev;
      struct strarray extra_targets;
-     struct strarray extra_imports;
 +    struct strarray parent_dirs;
      struct list     sources;
      struct list     includes;
-     const char     *src_dir;
+     const char     *base_dir;
+@@ -191,7 +192,6 @@ struct makefile
      const char     *obj_dir;
+     const char     *top_src_dir;
+     const char     *top_obj_dir;
 -    const char     *parent_dir;
      const char     *module;
      const char     *testdll;
      const char     *sharedlib;
-@@ -1382,14 +1382,21 @@ static struct file *open_local_file( const struct makefile *make, const char *pa
+@@ -1376,15 +1376,24 @@ static struct file *open_local_file( const struct makefile *make, const char *pa
  {
-     char *src_path = src_dir_path( make, path );
+     char *src_path = root_dir_path( base_dir_path( make, path ));
      struct file *ret = load_file( src_path );
 +    unsigned int i;
  
@@ -2697,18 +2700,22 @@ index 2eed620b429..8b89d0f4858 100644
 +
          free( src_path );
 -        path = strmake( "%s/%s", make->parent_dir, path );
--        src_path = src_dir_path( make, path );
+-        src_path = root_dir_path( base_dir_path( make, path ));
 +        new_path = strmake( "%s/%s", make->parent_dirs.str[i], path );
-+        src_path = src_dir_path( make, new_path );
++        src_path = root_dir_path( base_dir_path( make, new_path ));
          ret = load_file( src_path );
+-        if (ret) ret->flags |= FLAG_PARENTDIR;
 +        if (ret)
++        {
++            ret->flags |= FLAG_PARENTDIR;
 +            path = new_path;
++        }
 +        else
 +            free(new_path);
      }
  
-     if (ret) *filename = src_path;
-@@ -4120,13 +4127,13 @@ static void load_sources( struct makefile *make )
+     if (ret) *filename = src_dir_path( make, path );
+@@ -4119,13 +4126,13 @@ static void load_sources( struct makefile *make )
      strarray_set_value( &make->vars, "top_srcdir", root_src_dir_path( "" ));
      strarray_set_value( &make->vars, "srcdir", src_dir_path( make, "" ));
  
@@ -2723,7 +2730,7 @@ index 2eed620b429..8b89d0f4858 100644
      make->programs      = get_expanded_make_var_array( make, "PROGRAMS" );
      make->scripts       = get_expanded_make_var_array( make, "SCRIPTS" );
      make->imports       = get_expanded_make_var_array( make, "IMPORTS" );
-@@ -4171,8 +4178,11 @@ static void load_sources( struct makefile *make )
+@@ -4326,8 +4335,11 @@ static void load_sources( struct makefile *make )
      strarray_add( &make->include_args, strmake( "-I%s", obj_dir_path( make, "" )));
      if (make->src_dir)
          strarray_add( &make->include_args, strmake( "-I%s", make->src_dir ));
@@ -2734,11 +2741,11 @@ index 2eed620b429..8b89d0f4858 100644
 +        for (i = 0; i < make->parent_dirs.count; i++)
 +            strarray_add( &make->include_args, strmake( "-I%s", src_dir_path( make, make->parent_dirs.str[i] )));
 +    }
-     strarray_add( &make->include_args, "-Iinclude" );
-     if (root_src_dir) strarray_add( &make->include_args, strmake( "-I%s", root_src_dir_path( "include" )));
- 
+     strarray_add( &make->include_args, strmake( "-I%s", top_obj_dir_path( make, "include" )));
+     if (make->top_src_dir)
+         strarray_add( &make->include_args, strmake( "-I%s", top_src_dir_path( make, "include" )));
 -- 
-2.26.2
+2.28.0
 
 From 09d2c93517dd39d6696ffb7a58537c76f4af0847 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
