@@ -1,0 +1,43 @@
+From: Paul Gofman <pgofman@codeweavers.com>
+Subject: [PATCH] server: Add SeTcbPrivilege (SE_TCB_NAME) to the list of admin privileges.
+Message-Id: <20201014131917.1319919-1-pgofman@codeweavers.com>
+Date: Wed, 14 Oct 2020 16:19:17 +0300
+
+Fixes Origin client update failure.
+
+Signed-off-by: Paul Gofman <pgofman@codeweavers.com>
+---
+    Origin Client Service is run as a LocalSystem service and expects AdjustTokenPrivileges()
+    to succeed enabling this privilege.
+
+    SeTcbPrivilege is available for LocalSystem account on Windows but not for admin users. But
+    since we currently effectively have a single user for everything it looks reasonable
+    to add the privilege.
+
+ server/token.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/server/token.c b/server/token.c
+index 26d9708f2cd..30320851436 100644
+--- a/server/token.c
++++ b/server/token.c
+@@ -42,6 +42,7 @@
+ #define MAX_SUBAUTH_COUNT 1
+ 
+ const LUID SeIncreaseQuotaPrivilege        = {  5, 0 };
++const LUID SeTcbPrivilege                  = {  7, 0 };
+ const LUID SeSecurityPrivilege             = {  8, 0 };
+ const LUID SeTakeOwnershipPrivilege        = {  9, 0 };
+ const LUID SeLoadDriverPrivilege           = { 10, 0 };
+@@ -865,6 +866,7 @@ struct token *token_create_admin( void )
+         const LUID_AND_ATTRIBUTES admin_privs[] =
+         {
+             { SeChangeNotifyPrivilege        , SE_PRIVILEGE_ENABLED },
++            { SeTcbPrivilege                 , 0                    },
+             { SeSecurityPrivilege            , 0                    },
+             { SeBackupPrivilege              , 0                    },
+             { SeRestorePrivilege             , 0                    },
+
+-- 
+2.26.2
+
