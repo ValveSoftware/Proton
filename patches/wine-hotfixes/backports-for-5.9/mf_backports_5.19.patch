@@ -20096,6 +20096,31 @@ index 3e2675497a1..bf33051d6e1 100644
      ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
  
      hr = IMFTransform_GetInputCurrentType(transform, 0, &media_type);
+From 60a8f050a5b438ea06898f09d081206977ebde9a Mon Sep 17 00:00:00 2001
+From: Michael Stefaniuc <mstefani@winehq.org>
+Date: Mon, 21 Sep 2020 22:52:32 +0200
+Subject: [PATCH] winegstreamer: Drop redundant NULL check before heap_free().
+
+Signed-off-by: Michael Stefaniuc <mstefani@winehq.org>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/winegstreamer/media_source.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/dlls/winegstreamer/media_source.c b/dlls/winegstreamer/media_source.c
+index 84ecf305d4c..f365c8a1827 100644
+--- a/dlls/winegstreamer/media_source.c
++++ b/dlls/winegstreamer/media_source.c
+@@ -394,8 +394,7 @@ static ULONG WINAPI create_object_context_Release(IUnknown *iface)
+             IPropertyStore_Release(context->props);
+         if (context->stream)
+             IMFByteStream_Release(context->stream);
+-        if (context->url)
+-            heap_free(context->url);
++        heap_free(context->url);
+         heap_free(context);
+     }
+ 
 From 622f2ce9915f1089f8e4550d6dbcfb6fb25289a6 Mon Sep 17 00:00:00 2001
 From: Zebediah Figura <z.figura12@gmail.com>
 Date: Thu, 24 Sep 2020 22:22:54 -0500
@@ -24515,68 +24540,6 @@ index 5b5add409c7..e95205ca44a 100644
      }
      else if (IsEqualGUID(&pin->pin.pin.mt.formattype, &FORMAT_WaveFormatEx)
              && (IsEqualGUID(&pin->pin.pin.mt.subtype, &MEDIASUBTYPE_PCM)
-From e484056171bfd57473660243bc75935409320f37 Mon Sep 17 00:00:00 2001
-From: Anton Baskanov <baskanov@gmail.com>
-Date: Wed, 7 Oct 2020 01:04:58 +0700
-Subject: [PATCH] winegstreamer: Add a second videoconvert to handle 15/16-bit
- RGB formats.
-
-Signed-off-by: Anton Baskanov <baskanov@gmail.com>
-Signed-off-by: Zebediah Figura <z.figura12@gmail.com>
-Signed-off-by: Alexandre Julliard <julliard@winehq.org>
----
- dlls/winegstreamer/gstdemux.c | 19 +++++++++++++++++--
- 1 file changed, 17 insertions(+), 2 deletions(-)
-
-diff --git a/dlls/winegstreamer/gstdemux.c b/dlls/winegstreamer/gstdemux.c
-index e95205ca44a..90a129f29a4 100644
---- a/dlls/winegstreamer/gstdemux.c
-+++ b/dlls/winegstreamer/gstdemux.c
-@@ -1003,7 +1003,7 @@ static void init_new_decoded_pad(GstElement *bin, GstPad *pad, struct gstdemux *
- 
-     if (!strcmp(typename, "video/x-raw"))
-     {
--        GstElement *vconv, *flip, *deinterlace;
-+        GstElement *deinterlace, *vconv, *flip, *vconv2;
- 
-         /* DirectShow can express interlaced video, but downstream filters can't
-          * necessarily consume it. In particular, the video renderer can't. */
-@@ -1035,6 +1035,18 @@ static void init_new_decoded_pad(GstElement *bin, GstPad *pad, struct gstdemux *
-             goto out;
-         }
- 
-+        /* videoflip does not support 15 and 16-bit RGB so add a second videoconvert
-+         * to do the final conversion. */
-+        if (!(vconv2 = gst_element_factory_make("videoconvert", NULL)))
-+        {
-+            ERR("Failed to create videoconvert, are %u-bit GStreamer \"base\" plugins installed?\n",
-+                    8 * (int)sizeof(void *));
-+            goto out;
-+        }
-+
-+        /* Avoid expensive color matrix conversions. */
-+        gst_util_set_object_arg(G_OBJECT(vconv2), "matrix-mode", "none");
-+
-         /* The bin takes ownership of these elements. */
-         gst_bin_add(GST_BIN(This->container), deinterlace);
-         gst_element_sync_state_with_parent(deinterlace);
-@@ -1042,12 +1054,15 @@ static void init_new_decoded_pad(GstElement *bin, GstPad *pad, struct gstdemux *
-         gst_element_sync_state_with_parent(vconv);
-         gst_bin_add(GST_BIN(This->container), flip);
-         gst_element_sync_state_with_parent(flip);
-+        gst_bin_add(GST_BIN(This->container), vconv2);
-+        gst_element_sync_state_with_parent(vconv2);
- 
-         gst_element_link(deinterlace, vconv);
-         gst_element_link(vconv, flip);
-+        gst_element_link(flip, vconv2);
- 
-         pin->post_sink = gst_element_get_static_pad(deinterlace, "sink");
--        pin->post_src = gst_element_get_static_pad(flip, "src");
-+        pin->post_src = gst_element_get_static_pad(vconv2, "src");
-         pin->flip = flip;
-     }
-     else if (!strcmp(typename, "audio/x-raw"))
 From 0542a34c247f029a0394f308f9f44c5c41d904fc Mon Sep 17 00:00:00 2001
 From: Anton Baskanov <baskanov@gmail.com>
 Date: Wed, 7 Oct 2020 01:04:59 +0700
@@ -28144,3 +28107,4 @@ index ff17f57b7ef..6a69305c9e5 100644
  
  static void set_rect(MFVideoNormalizedRect *rect, float left, float top, float right, float bottom)
  {
+
