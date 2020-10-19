@@ -26666,3 +26666,1481 @@ index 5ffc191667b..351a6e1edab 100644
      hr = IMFMediaTypeHandler_SetCurrentMediaType(type_handler, media_type);
      ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
  
+From a6166a5e1aa119dd426c8482e8e66e627488ddbd Mon Sep 17 00:00:00 2001
+From: Nikolay Sivov <nsivov@codeweavers.com>
+Date: Mon, 12 Oct 2020 14:17:23 +0300
+Subject: [PATCH] mfplat/mediatype: Enable IMFVideoMediaType based on major
+ type.
+
+Signed-off-by: Nikolay Sivov <nsivov@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/mfplat/mediatype.c    | 108 +++++++++++++++++--------------------
+ dlls/mfplat/tests/mfplat.c |  53 +++++++++++++++++-
+ 2 files changed, 101 insertions(+), 60 deletions(-)
+
+diff --git a/dlls/mfplat/mediatype.c b/dlls/mfplat/mediatype.c
+index 5eaa4fdd08d..0c0d9620321 100644
+--- a/dlls/mfplat/mediatype.c
++++ b/dlls/mfplat/mediatype.c
+@@ -96,20 +96,32 @@ static struct presentation_desc *impl_from_IMFPresentationDescriptor(IMFPresenta
+ 
+ static HRESULT WINAPI mediatype_QueryInterface(IMFMediaType *iface, REFIID riid, void **out)
+ {
++    struct media_type *media_type = impl_from_IMFMediaType(iface);
++    GUID major = { 0 };
++
+     TRACE("%p, %s, %p.\n", iface, debugstr_guid(riid), out);
+ 
+-    if (IsEqualIID(riid, &IID_IMFMediaType) ||
++    attributes_GetGUID(&media_type->attributes, &MF_MT_MAJOR_TYPE, &major);
++
++    if (IsEqualGUID(&major, &MFMediaType_Video) && IsEqualIID(riid, &IID_IMFVideoMediaType))
++    {
++        *out = &media_type->IMFVideoMediaType_iface;
++    }
++    else if (IsEqualIID(riid, &IID_IMFMediaType) ||
+             IsEqualIID(riid, &IID_IMFAttributes) ||
+             IsEqualIID(riid, &IID_IUnknown))
+     {
+-        *out = iface;
+-        IMFMediaType_AddRef(iface);
+-        return S_OK;
++        *out = &media_type->IMFMediaType_iface;
++    }
++    else
++    {
++        WARN("Unsupported %s.\n", debugstr_guid(riid));
++        *out = NULL;
++        return E_NOINTERFACE;
+     }
+ 
+-    WARN("Unsupported %s.\n", debugstr_guid(riid));
+-    *out = NULL;
+-    return E_NOINTERFACE;
++    IUnknown_AddRef((IUnknown *)*out);
++    return S_OK;
+ }
+ 
+ static ULONG WINAPI mediatype_AddRef(IMFMediaType *iface)
+@@ -613,48 +625,20 @@ static const IMFMediaTypeVtbl mediatypevtbl =
+ 
+ static HRESULT WINAPI video_mediatype_QueryInterface(IMFVideoMediaType *iface, REFIID riid, void **out)
+ {
+-    TRACE("%p, %s, %p.\n", iface, debugstr_guid(riid), out);
+-
+-    if (IsEqualIID(riid, &IID_IMFVideoMediaType) ||
+-            IsEqualIID(riid, &IID_IMFMediaType) ||
+-            IsEqualIID(riid, &IID_IMFAttributes) ||
+-            IsEqualIID(riid, &IID_IUnknown))
+-    {
+-        *out = iface;
+-        IMFVideoMediaType_AddRef(iface);
+-        return S_OK;
+-    }
+-
+-    WARN("Unsupported %s.\n", debugstr_guid(riid));
+-    *out = NULL;
+-    return E_NOINTERFACE;
++    struct media_type *media_type = impl_from_IMFVideoMediaType(iface);
++    return IMFMediaType_QueryInterface(&media_type->IMFMediaType_iface, riid, out);
+ }
+ 
+ static ULONG WINAPI video_mediatype_AddRef(IMFVideoMediaType *iface)
+ {
+     struct media_type *media_type = impl_from_IMFVideoMediaType(iface);
+-    ULONG refcount = InterlockedIncrement(&media_type->attributes.ref);
+-
+-    TRACE("%p, refcount %u.\n", iface, refcount);
+-
+-    return refcount;
++    return IMFMediaType_AddRef(&media_type->IMFMediaType_iface);
+ }
+ 
+ static ULONG WINAPI video_mediatype_Release(IMFVideoMediaType *iface)
+ {
+     struct media_type *media_type = impl_from_IMFVideoMediaType(iface);
+-    ULONG refcount = InterlockedDecrement(&media_type->attributes.ref);
+-
+-    TRACE("%p, refcount %u.\n", iface, refcount);
+-
+-    if (!refcount)
+-    {
+-        clear_attributes_object(&media_type->attributes);
+-        CoTaskMemFree(media_type->video_format);
+-        heap_free(media_type);
+-    }
+-
+-    return refcount;
++    return IMFMediaType_Release(&media_type->IMFMediaType_iface);
+ }
+ 
+ static HRESULT WINAPI video_mediatype_GetItem(IMFVideoMediaType *iface, REFGUID key, PROPVARIANT *value)
+@@ -1039,6 +1023,28 @@ static const IMFVideoMediaTypeVtbl videomediatypevtbl =
+     video_mediatype_GetVideoRepresentation,
+ };
+ 
++static HRESULT create_media_type(struct media_type **ret)
++{
++    struct media_type *object;
++    HRESULT hr;
++
++    object = heap_alloc_zero(sizeof(*object));
++    if (!object)
++        return E_OUTOFMEMORY;
++
++    if (FAILED(hr = init_attributes_object(&object->attributes, 0)))
++    {
++        heap_free(object);
++        return hr;
++    }
++    object->IMFMediaType_iface.lpVtbl = &mediatypevtbl;
++    object->IMFVideoMediaType_iface.lpVtbl = &videomediatypevtbl;
++
++    *ret = object;
++
++    return S_OK;
++}
++
+ /***********************************************************************
+  *      MFCreateMediaType (mfplat.@)
+  */
+@@ -1052,16 +1058,8 @@ HRESULT WINAPI MFCreateMediaType(IMFMediaType **media_type)
+     if (!media_type)
+         return E_INVALIDARG;
+ 
+-    object = heap_alloc(sizeof(*object));
+-    if (!object)
+-        return E_OUTOFMEMORY;
+-
+-    if (FAILED(hr = init_attributes_object(&object->attributes, 0)))
+-    {
+-        heap_free(object);
++    if (FAILED(hr = create_media_type(&object)))
+         return hr;
+-    }
+-    object->IMFMediaType_iface.lpVtbl = &mediatypevtbl;
+ 
+     *media_type = &object->IMFMediaType_iface;
+ 
+@@ -2633,19 +2631,11 @@ HRESULT WINAPI MFCreateVideoMediaTypeFromSubtype(const GUID *subtype, IMFVideoMe
+     if (!media_type)
+         return E_INVALIDARG;
+ 
+-    object = heap_alloc(sizeof(*object));
+-    if (!object)
+-        return E_OUTOFMEMORY;
+-
+-    if (FAILED(hr = init_attributes_object(&object->attributes, 0)))
+-    {
+-        heap_free(object);
++    if (FAILED(hr = create_media_type(&object)))
+         return hr;
+-    }
+-    object->IMFVideoMediaType_iface.lpVtbl = &videomediatypevtbl;
+ 
+-    IMFVideoMediaType_SetGUID(&object->IMFVideoMediaType_iface, &MF_MT_MAJOR_TYPE, &MFMediaType_Video);
+-    IMFVideoMediaType_SetGUID(&object->IMFVideoMediaType_iface, &MF_MT_SUBTYPE, subtype);
++    IMFMediaType_SetGUID(&object->IMFMediaType_iface, &MF_MT_MAJOR_TYPE, &MFMediaType_Video);
++    IMFMediaType_SetGUID(&object->IMFMediaType_iface, &MF_MT_SUBTYPE, subtype);
+ 
+     *media_type = &object->IMFVideoMediaType_iface;
+ 
+diff --git a/dlls/mfplat/tests/mfplat.c b/dlls/mfplat/tests/mfplat.c
+index 309f7b669a4..c3558106548 100644
+--- a/dlls/mfplat/tests/mfplat.c
++++ b/dlls/mfplat/tests/mfplat.c
+@@ -763,8 +763,10 @@ static void init_functions(void)
+ static void test_media_type(void)
+ {
+     IMFMediaType *mediatype, *mediatype2;
++    IMFVideoMediaType *video_type;
++    IUnknown *unk, *unk2;
++    DWORD count, flags;
+     BOOL compressed;
+-    DWORD flags;
+     HRESULT hr;
+     GUID guid;
+ 
+@@ -862,6 +864,55 @@ if(0)
+ 
+     IMFMediaType_Release(mediatype2);
+     IMFMediaType_Release(mediatype);
++
++    /* IMFVideoMediaType */
++    hr = MFCreateMediaType(&mediatype);
++    ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++
++    hr = IMFMediaType_QueryInterface(mediatype, &IID_IMFVideoMediaType, (void **)&unk);
++    ok(hr == E_NOINTERFACE, "Unexpected hr %#x.\n", hr);
++    hr = IMFMediaType_QueryInterface(mediatype, &IID_IUnknown, (void **)&unk);
++    ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++    ok(unk == (IUnknown *)mediatype, "Unexpected pointer.\n");
++    IUnknown_Release(unk);
++
++    hr = IMFMediaType_SetGUID(mediatype, &MF_MT_MAJOR_TYPE, &MFMediaType_Video);
++    ok(hr == S_OK, "Failed to set GUID value, hr %#x.\n", hr);
++
++    hr = IMFMediaType_QueryInterface(mediatype, &IID_IMFVideoMediaType, (void **)&unk);
++    ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++    hr = IUnknown_QueryInterface(unk, &IID_IUnknown, (void **)&unk2);
++    ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++    ok(unk2 == (IUnknown *)mediatype, "Unexpected pointer.\n");
++    IUnknown_Release(unk2);
++    IUnknown_Release(unk);
++
++    hr = MFCreateVideoMediaTypeFromSubtype(&MFVideoFormat_RGB555, &video_type);
++    ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++    hr = IMFVideoMediaType_QueryInterface(video_type, &IID_IMFMediaType, (void **)&unk);
++    ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++    IUnknown_Release(unk);
++
++    hr = IMFVideoMediaType_QueryInterface(video_type, &IID_IMFVideoMediaType, (void **)&unk);
++    ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++    IUnknown_Release(unk);
++
++    /* Major and subtype are set on creation. */
++    hr = IMFVideoMediaType_GetCount(video_type, &count);
++    ok(count == 2, "Unexpected attribute count %#x.\n", hr);
++
++    hr = IMFVideoMediaType_DeleteAllItems(video_type);
++    ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++
++    hr = IMFVideoMediaType_GetCount(video_type, &count);
++    ok(!count, "Unexpected attribute count %#x.\n", hr);
++
++    hr = IMFVideoMediaType_QueryInterface(video_type, &IID_IMFVideoMediaType, (void **)&unk);
++    ok(hr == E_NOINTERFACE, "Unexpected hr %#x.\n", hr);
++
++    IMFVideoMediaType_Release(video_type);
++
++    IMFMediaType_Release(mediatype);
+ }
+ 
+ static void test_MFCreateMediaEvent(void)
+From ad65d03013a3e49dd970bf0a3c9e4fa22c1bca2a Mon Sep 17 00:00:00 2001
+From: Nikolay Sivov <nsivov@codeweavers.com>
+Date: Mon, 12 Oct 2020 14:17:24 +0300
+Subject: [PATCH] mfplat/mediatype: Add IMFAudioMediaType stub.
+
+Signed-off-by: Nikolay Sivov <nsivov@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/mfplat/mediatype.c    | 394 +++++++++++++++++++++++++++++++++++++
+ dlls/mfplat/tests/mfplat.c |  48 +++++
+ 2 files changed, 442 insertions(+)
+
+diff --git a/dlls/mfplat/mediatype.c b/dlls/mfplat/mediatype.c
+index 0c0d9620321..ccae999b7d7 100644
+--- a/dlls/mfplat/mediatype.c
++++ b/dlls/mfplat/mediatype.c
+@@ -39,6 +39,7 @@ struct media_type
+     struct attributes attributes;
+     IMFMediaType IMFMediaType_iface;
+     IMFVideoMediaType IMFVideoMediaType_iface;
++    IMFAudioMediaType IMFAudioMediaType_iface;
+     MFVIDEOFORMAT *video_format;
+ };
+ 
+@@ -79,6 +80,11 @@ static struct media_type *impl_from_IMFVideoMediaType(IMFVideoMediaType *iface)
+     return CONTAINING_RECORD(iface, struct media_type, IMFVideoMediaType_iface);
+ }
+ 
++static struct media_type *impl_from_IMFAudioMediaType(IMFAudioMediaType *iface)
++{
++    return CONTAINING_RECORD(iface, struct media_type, IMFAudioMediaType_iface);
++}
++
+ static inline struct stream_desc *impl_from_IMFStreamDescriptor(IMFStreamDescriptor *iface)
+ {
+     return CONTAINING_RECORD(iface, struct stream_desc, IMFStreamDescriptor_iface);
+@@ -107,6 +113,10 @@ static HRESULT WINAPI mediatype_QueryInterface(IMFMediaType *iface, REFIID riid,
+     {
+         *out = &media_type->IMFVideoMediaType_iface;
+     }
++    else if (IsEqualGUID(&major, &MFMediaType_Audio) && IsEqualIID(riid, &IID_IMFAudioMediaType))
++    {
++        *out = &media_type->IMFAudioMediaType_iface;
++    }
+     else if (IsEqualIID(riid, &IID_IMFMediaType) ||
+             IsEqualIID(riid, &IID_IMFAttributes) ||
+             IsEqualIID(riid, &IID_IUnknown))
+@@ -1023,6 +1033,389 @@ static const IMFVideoMediaTypeVtbl videomediatypevtbl =
+     video_mediatype_GetVideoRepresentation,
+ };
+ 
++static HRESULT WINAPI audio_mediatype_QueryInterface(IMFAudioMediaType *iface, REFIID riid, void **out)
++{
++    struct media_type *media_type = impl_from_IMFAudioMediaType(iface);
++    return IMFMediaType_QueryInterface(&media_type->IMFMediaType_iface, riid, out);
++}
++
++static ULONG WINAPI audio_mediatype_AddRef(IMFAudioMediaType *iface)
++{
++    struct media_type *media_type = impl_from_IMFAudioMediaType(iface);
++    return IMFMediaType_AddRef(&media_type->IMFMediaType_iface);
++}
++
++static ULONG WINAPI audio_mediatype_Release(IMFAudioMediaType *iface)
++{
++    struct media_type *media_type = impl_from_IMFAudioMediaType(iface);
++    return IMFMediaType_Release(&media_type->IMFMediaType_iface);
++}
++
++static HRESULT WINAPI audio_mediatype_GetItem(IMFAudioMediaType *iface, REFGUID key, PROPVARIANT *value)
++{
++    struct media_type *media_type = impl_from_IMFAudioMediaType(iface);
++
++    TRACE("%p, %s, %p.\n", iface, debugstr_attr(key), value);
++
++    return attributes_GetItem(&media_type->attributes, key, value);
++}
++
++static HRESULT WINAPI audio_mediatype_GetItemType(IMFAudioMediaType *iface, REFGUID key, MF_ATTRIBUTE_TYPE *type)
++{
++    struct media_type *media_type = impl_from_IMFAudioMediaType(iface);
++
++    TRACE("%p, %s, %p.\n", iface, debugstr_attr(key), type);
++
++    return attributes_GetItemType(&media_type->attributes, key, type);
++}
++
++static HRESULT WINAPI audio_mediatype_CompareItem(IMFAudioMediaType *iface, REFGUID key, REFPROPVARIANT value, BOOL *result)
++{
++    struct media_type *media_type = impl_from_IMFAudioMediaType(iface);
++
++    TRACE("%p, %s, %s, %p.\n", iface, debugstr_attr(key), debugstr_propvar(value), result);
++
++    return attributes_CompareItem(&media_type->attributes, key, value, result);
++}
++
++static HRESULT WINAPI audio_mediatype_Compare(IMFAudioMediaType *iface, IMFAttributes *attrs,
++        MF_ATTRIBUTES_MATCH_TYPE type, BOOL *result)
++{
++    struct media_type *media_type = impl_from_IMFAudioMediaType(iface);
++
++    TRACE("%p, %p, %d, %p.\n", iface, attrs, type, result);
++
++    return attributes_Compare(&media_type->attributes, attrs, type, result);
++}
++
++static HRESULT WINAPI audio_mediatype_GetUINT32(IMFAudioMediaType *iface, REFGUID key, UINT32 *value)
++{
++    struct media_type *media_type = impl_from_IMFAudioMediaType(iface);
++
++    TRACE("%p, %s, %p.\n", iface, debugstr_attr(key), value);
++
++    return attributes_GetUINT32(&media_type->attributes, key, value);
++}
++
++static HRESULT WINAPI audio_mediatype_GetUINT64(IMFAudioMediaType *iface, REFGUID key, UINT64 *value)
++{
++    struct media_type *media_type = impl_from_IMFAudioMediaType(iface);
++
++    TRACE("%p, %s, %p.\n", iface, debugstr_attr(key), value);
++
++    return attributes_GetUINT64(&media_type->attributes, key, value);
++}
++
++static HRESULT WINAPI audio_mediatype_GetDouble(IMFAudioMediaType *iface, REFGUID key, double *value)
++{
++    struct media_type *media_type = impl_from_IMFAudioMediaType(iface);
++
++    TRACE("%p, %s, %p.\n", iface, debugstr_attr(key), value);
++
++    return attributes_GetDouble(&media_type->attributes, key, value);
++}
++
++static HRESULT WINAPI audio_mediatype_GetGUID(IMFAudioMediaType *iface, REFGUID key, GUID *value)
++{
++    struct media_type *media_type = impl_from_IMFAudioMediaType(iface);
++
++    TRACE("%p, %s, %p.\n", iface, debugstr_attr(key), value);
++
++    return attributes_GetGUID(&media_type->attributes, key, value);
++}
++
++static HRESULT WINAPI audio_mediatype_GetStringLength(IMFAudioMediaType *iface, REFGUID key, UINT32 *length)
++{
++    struct media_type *media_type = impl_from_IMFAudioMediaType(iface);
++
++    TRACE("%p, %s, %p.\n", iface, debugstr_attr(key), length);
++
++    return attributes_GetStringLength(&media_type->attributes, key, length);
++}
++
++static HRESULT WINAPI audio_mediatype_GetString(IMFAudioMediaType *iface, REFGUID key, WCHAR *value,
++        UINT32 size, UINT32 *length)
++{
++    struct media_type *media_type = impl_from_IMFAudioMediaType(iface);
++
++    TRACE("%p, %s, %p, %u, %p.\n", iface, debugstr_attr(key), value, size, length);
++
++    return attributes_GetString(&media_type->attributes, key, value, size, length);
++}
++
++static HRESULT WINAPI audio_mediatype_GetAllocatedString(IMFAudioMediaType *iface, REFGUID key,
++        WCHAR **value, UINT32 *length)
++{
++    struct media_type *media_type = impl_from_IMFAudioMediaType(iface);
++
++    TRACE("%p, %s, %p, %p.\n", iface, debugstr_attr(key), value, length);
++
++    return attributes_GetAllocatedString(&media_type->attributes, key, value, length);
++}
++
++static HRESULT WINAPI audio_mediatype_GetBlobSize(IMFAudioMediaType *iface, REFGUID key, UINT32 *size)
++{
++    struct media_type *media_type = impl_from_IMFAudioMediaType(iface);
++
++    TRACE("%p, %s, %p.\n", iface, debugstr_attr(key), size);
++
++    return attributes_GetBlobSize(&media_type->attributes, key, size);
++}
++
++static HRESULT WINAPI audio_mediatype_GetBlob(IMFAudioMediaType *iface, REFGUID key, UINT8 *buf,
++        UINT32 bufsize, UINT32 *blobsize)
++{
++    struct media_type *media_type = impl_from_IMFAudioMediaType(iface);
++
++    TRACE("%p, %s, %p, %u, %p.\n", iface, debugstr_attr(key), buf, bufsize, blobsize);
++
++    return attributes_GetBlob(&media_type->attributes, key, buf, bufsize, blobsize);
++}
++
++static HRESULT WINAPI audio_mediatype_GetAllocatedBlob(IMFAudioMediaType *iface, REFGUID key, UINT8 **buf, UINT32 *size)
++{
++    struct media_type *media_type = impl_from_IMFAudioMediaType(iface);
++
++    TRACE("%p, %s, %p, %p.\n", iface, debugstr_attr(key), buf, size);
++
++    return attributes_GetAllocatedBlob(&media_type->attributes, key, buf, size);
++}
++
++static HRESULT WINAPI audio_mediatype_GetUnknown(IMFAudioMediaType *iface, REFGUID key, REFIID riid, void **obj)
++{
++    struct media_type *media_type = impl_from_IMFAudioMediaType(iface);
++
++    TRACE("%p, %s, %s, %p.\n", iface, debugstr_attr(key), debugstr_guid(riid), obj);
++
++    return attributes_GetUnknown(&media_type->attributes, key, riid, obj);
++}
++
++static HRESULT WINAPI audio_mediatype_SetItem(IMFAudioMediaType *iface, REFGUID key, REFPROPVARIANT value)
++{
++    struct media_type *media_type = impl_from_IMFAudioMediaType(iface);
++
++    TRACE("%p, %s, %s.\n", iface, debugstr_attr(key), debugstr_propvar(value));
++
++    return attributes_SetItem(&media_type->attributes, key, value);
++}
++
++static HRESULT WINAPI audio_mediatype_DeleteItem(IMFAudioMediaType *iface, REFGUID key)
++{
++    struct media_type *media_type = impl_from_IMFAudioMediaType(iface);
++
++    TRACE("%p, %s.\n", iface, debugstr_attr(key));
++
++    return attributes_DeleteItem(&media_type->attributes, key);
++}
++
++static HRESULT WINAPI audio_mediatype_DeleteAllItems(IMFAudioMediaType *iface)
++{
++    struct media_type *media_type = impl_from_IMFAudioMediaType(iface);
++
++    TRACE("%p.\n", iface);
++
++    return attributes_DeleteAllItems(&media_type->attributes);
++}
++
++static HRESULT WINAPI audio_mediatype_SetUINT32(IMFAudioMediaType *iface, REFGUID key, UINT32 value)
++{
++    struct media_type *media_type = impl_from_IMFAudioMediaType(iface);
++
++    TRACE("%p, %s, %u.\n", iface, debugstr_attr(key), value);
++
++    return attributes_SetUINT32(&media_type->attributes, key, value);
++}
++
++static HRESULT WINAPI audio_mediatype_SetUINT64(IMFAudioMediaType *iface, REFGUID key, UINT64 value)
++{
++    struct media_type *media_type = impl_from_IMFAudioMediaType(iface);
++
++    TRACE("%p, %s, %s.\n", iface, debugstr_attr(key), wine_dbgstr_longlong(value));
++
++    return attributes_SetUINT64(&media_type->attributes, key, value);
++}
++
++static HRESULT WINAPI audio_mediatype_SetDouble(IMFAudioMediaType *iface, REFGUID key, double value)
++{
++    struct media_type *media_type = impl_from_IMFAudioMediaType(iface);
++
++    TRACE("%p, %s, %f.\n", iface, debugstr_attr(key), value);
++
++    return attributes_SetDouble(&media_type->attributes, key, value);
++}
++
++static HRESULT WINAPI audio_mediatype_SetGUID(IMFAudioMediaType *iface, REFGUID key, REFGUID value)
++{
++    struct media_type *media_type = impl_from_IMFAudioMediaType(iface);
++
++    TRACE("%p, %s, %s.\n", iface, debugstr_attr(key), debugstr_mf_guid(value));
++
++    return attributes_SetGUID(&media_type->attributes, key, value);
++}
++
++static HRESULT WINAPI audio_mediatype_SetString(IMFAudioMediaType *iface, REFGUID key, const WCHAR *value)
++{
++    struct media_type *media_type = impl_from_IMFAudioMediaType(iface);
++
++    TRACE("%p, %s, %s.\n", iface, debugstr_attr(key), debugstr_w(value));
++
++    return attributes_SetString(&media_type->attributes, key, value);
++}
++
++static HRESULT WINAPI audio_mediatype_SetBlob(IMFAudioMediaType *iface, REFGUID key, const UINT8 *buf, UINT32 size)
++{
++    struct media_type *media_type = impl_from_IMFAudioMediaType(iface);
++
++    TRACE("%p, %s, %p, %u.\n", iface, debugstr_attr(key), buf, size);
++
++    return attributes_SetBlob(&media_type->attributes, key, buf, size);
++}
++
++static HRESULT WINAPI audio_mediatype_SetUnknown(IMFAudioMediaType *iface, REFGUID key, IUnknown *unknown)
++{
++    struct media_type *media_type = impl_from_IMFAudioMediaType(iface);
++
++    TRACE("%p, %s, %p.\n", iface, debugstr_attr(key), unknown);
++
++    return attributes_SetUnknown(&media_type->attributes, key, unknown);
++}
++
++static HRESULT WINAPI audio_mediatype_LockStore(IMFAudioMediaType *iface)
++{
++    struct media_type *media_type = impl_from_IMFAudioMediaType(iface);
++
++    TRACE("%p.\n", iface);
++
++    return attributes_LockStore(&media_type->attributes);
++}
++
++static HRESULT WINAPI audio_mediatype_UnlockStore(IMFAudioMediaType *iface)
++{
++    struct media_type *media_type = impl_from_IMFAudioMediaType(iface);
++
++    TRACE("%p.\n", iface);
++
++    return attributes_UnlockStore(&media_type->attributes);
++}
++
++static HRESULT WINAPI audio_mediatype_GetCount(IMFAudioMediaType *iface, UINT32 *count)
++{
++    struct media_type *media_type = impl_from_IMFAudioMediaType(iface);
++
++    TRACE("%p, %p.\n", iface, count);
++
++    return attributes_GetCount(&media_type->attributes, count);
++}
++
++static HRESULT WINAPI audio_mediatype_GetItemByIndex(IMFAudioMediaType *iface, UINT32 index, GUID *key, PROPVARIANT *value)
++{
++    struct media_type *media_type = impl_from_IMFAudioMediaType(iface);
++
++    TRACE("%p, %u, %p, %p.\n", iface, index, key, value);
++
++    return attributes_GetItemByIndex(&media_type->attributes, index, key, value);
++}
++
++static HRESULT WINAPI audio_mediatype_CopyAllItems(IMFAudioMediaType *iface, IMFAttributes *dest)
++{
++    struct media_type *media_type = impl_from_IMFAudioMediaType(iface);
++
++    TRACE("%p, %p.\n", iface, dest);
++
++    return attributes_CopyAllItems(&media_type->attributes, dest);
++}
++
++static HRESULT WINAPI audio_mediatype_GetMajorType(IMFAudioMediaType *iface, GUID *guid)
++{
++    struct media_type *media_type = impl_from_IMFAudioMediaType(iface);
++
++    TRACE("%p, %p.\n", iface, guid);
++
++    return attributes_GetGUID(&media_type->attributes, &MF_MT_MAJOR_TYPE, guid);
++}
++
++static HRESULT WINAPI audio_mediatype_IsCompressedFormat(IMFAudioMediaType *iface, BOOL *compressed)
++{
++    struct media_type *media_type = impl_from_IMFAudioMediaType(iface);
++
++    TRACE("%p, %p.\n", iface, compressed);
++
++    return mediatype_is_compressed(media_type, compressed);
++}
++
++static HRESULT WINAPI audio_mediatype_IsEqual(IMFAudioMediaType *iface, IMFMediaType *type, DWORD *flags)
++{
++    struct media_type *media_type = impl_from_IMFAudioMediaType(iface);
++
++    TRACE("%p, %p, %p.\n", iface, type, flags);
++
++    return media_type_is_equal(media_type, type, flags);
++}
++
++static HRESULT WINAPI audio_mediatype_GetRepresentation(IMFAudioMediaType *iface, GUID guid, void **representation)
++{
++    FIXME("%p, %s, %p.\n", iface, debugstr_guid(&guid), representation);
++
++    return E_NOTIMPL;
++}
++
++static HRESULT WINAPI audio_mediatype_FreeRepresentation(IMFAudioMediaType *iface, GUID guid, void *representation)
++{
++    FIXME("%p, %s, %p.\n", iface, debugstr_guid(&guid), representation);
++
++    return E_NOTIMPL;
++}
++
++static const WAVEFORMATEX * WINAPI audio_mediatype_GetAudioFormat(IMFAudioMediaType *iface)
++{
++    FIXME("%p.\n", iface);
++
++    return NULL;
++}
++
++static const IMFAudioMediaTypeVtbl audiomediatypevtbl =
++{
++    audio_mediatype_QueryInterface,
++    audio_mediatype_AddRef,
++    audio_mediatype_Release,
++    audio_mediatype_GetItem,
++    audio_mediatype_GetItemType,
++    audio_mediatype_CompareItem,
++    audio_mediatype_Compare,
++    audio_mediatype_GetUINT32,
++    audio_mediatype_GetUINT64,
++    audio_mediatype_GetDouble,
++    audio_mediatype_GetGUID,
++    audio_mediatype_GetStringLength,
++    audio_mediatype_GetString,
++    audio_mediatype_GetAllocatedString,
++    audio_mediatype_GetBlobSize,
++    audio_mediatype_GetBlob,
++    audio_mediatype_GetAllocatedBlob,
++    audio_mediatype_GetUnknown,
++    audio_mediatype_SetItem,
++    audio_mediatype_DeleteItem,
++    audio_mediatype_DeleteAllItems,
++    audio_mediatype_SetUINT32,
++    audio_mediatype_SetUINT64,
++    audio_mediatype_SetDouble,
++    audio_mediatype_SetGUID,
++    audio_mediatype_SetString,
++    audio_mediatype_SetBlob,
++    audio_mediatype_SetUnknown,
++    audio_mediatype_LockStore,
++    audio_mediatype_UnlockStore,
++    audio_mediatype_GetCount,
++    audio_mediatype_GetItemByIndex,
++    audio_mediatype_CopyAllItems,
++    audio_mediatype_GetMajorType,
++    audio_mediatype_IsCompressedFormat,
++    audio_mediatype_IsEqual,
++    audio_mediatype_GetRepresentation,
++    audio_mediatype_FreeRepresentation,
++    audio_mediatype_GetAudioFormat,
++};
++
+ static HRESULT create_media_type(struct media_type **ret)
+ {
+     struct media_type *object;
+@@ -1039,6 +1432,7 @@ static HRESULT create_media_type(struct media_type **ret)
+     }
+     object->IMFMediaType_iface.lpVtbl = &mediatypevtbl;
+     object->IMFVideoMediaType_iface.lpVtbl = &videomediatypevtbl;
++    object->IMFAudioMediaType_iface.lpVtbl = &audiomediatypevtbl;
+ 
+     *ret = object;
+ 
+diff --git a/dlls/mfplat/tests/mfplat.c b/dlls/mfplat/tests/mfplat.c
+index c3558106548..55c07adb1fe 100644
+--- a/dlls/mfplat/tests/mfplat.c
++++ b/dlls/mfplat/tests/mfplat.c
+@@ -881,10 +881,22 @@ if(0)
+ 
+     hr = IMFMediaType_QueryInterface(mediatype, &IID_IMFVideoMediaType, (void **)&unk);
+     ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++
+     hr = IUnknown_QueryInterface(unk, &IID_IUnknown, (void **)&unk2);
+     ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
+     ok(unk2 == (IUnknown *)mediatype, "Unexpected pointer.\n");
+     IUnknown_Release(unk2);
++
++    hr = IUnknown_QueryInterface(unk, &IID_IMFAttributes, (void **)&unk2);
++    ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++    ok(unk2 == (IUnknown *)mediatype, "Unexpected pointer.\n");
++    IUnknown_Release(unk2);
++
++    hr = IUnknown_QueryInterface(unk, &IID_IMFMediaType, (void **)&unk2);
++    ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++    ok(unk2 == (IUnknown *)mediatype, "Unexpected pointer.\n");
++    IUnknown_Release(unk2);
++
+     IUnknown_Release(unk);
+ 
+     hr = MFCreateVideoMediaTypeFromSubtype(&MFVideoFormat_RGB555, &video_type);
+@@ -913,6 +925,42 @@ if(0)
+     IMFVideoMediaType_Release(video_type);
+ 
+     IMFMediaType_Release(mediatype);
++
++    /* IMFAudioMediaType */
++    hr = MFCreateMediaType(&mediatype);
++    ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++
++    hr = IMFMediaType_QueryInterface(mediatype, &IID_IMFAudioMediaType, (void **)&unk);
++    ok(hr == E_NOINTERFACE, "Unexpected hr %#x.\n", hr);
++    hr = IMFMediaType_QueryInterface(mediatype, &IID_IUnknown, (void **)&unk);
++    ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++    ok(unk == (IUnknown *)mediatype, "Unexpected pointer.\n");
++    IUnknown_Release(unk);
++
++    hr = IMFMediaType_SetGUID(mediatype, &MF_MT_MAJOR_TYPE, &MFMediaType_Audio);
++    ok(hr == S_OK, "Failed to set GUID value, hr %#x.\n", hr);
++
++    hr = IMFMediaType_QueryInterface(mediatype, &IID_IMFAudioMediaType, (void **)&unk);
++    ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++
++    hr = IUnknown_QueryInterface(unk, &IID_IUnknown, (void **)&unk2);
++    ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++    ok(unk2 == (IUnknown *)mediatype, "Unexpected pointer.\n");
++    IUnknown_Release(unk2);
++
++    hr = IUnknown_QueryInterface(unk, &IID_IMFAttributes, (void **)&unk2);
++    ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++    ok(unk2 == (IUnknown *)mediatype, "Unexpected pointer.\n");
++    IUnknown_Release(unk2);
++
++    hr = IUnknown_QueryInterface(unk, &IID_IMFMediaType, (void **)&unk2);
++    ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++    ok(unk2 == (IUnknown *)mediatype, "Unexpected pointer.\n");
++    IUnknown_Release(unk2);
++
++    IUnknown_Release(unk);
++
++    IMFMediaType_Release(mediatype);
+ }
+ 
+ static void test_MFCreateMediaEvent(void)
+From 14d2b044785911ae8e0664167dce0ae40882d4cd Mon Sep 17 00:00:00 2001
+From: Nikolay Sivov <nsivov@codeweavers.com>
+Date: Mon, 12 Oct 2020 14:17:25 +0300
+Subject: [PATCH] evr/mixer: Add SetOutputBounds().
+
+Signed-off-by: Nikolay Sivov <nsivov@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/evr/mixer.c        | 17 +++++++++++++++--
+ dlls/evr/tests/evr.c    |  3 +++
+ include/basetsd.h       |  2 ++
+ include/mftransform.idl |  3 +++
+ 4 files changed, 23 insertions(+), 2 deletions(-)
+
+diff --git a/dlls/evr/mixer.c b/dlls/evr/mixer.c
+index 54da3a9ce1c..631cc796ea0 100644
+--- a/dlls/evr/mixer.c
++++ b/dlls/evr/mixer.c
+@@ -79,6 +79,8 @@ struct video_mixer
+     IMFAttributes *attributes;
+     IMFAttributes *internal_attributes;
+     unsigned int mixing_flags;
++    LONGLONG lower_bound;
++    LONGLONG upper_bound;
+     CRITICAL_SECTION cs;
+ };
+ 
+@@ -814,9 +816,18 @@ static HRESULT WINAPI video_mixer_transform_GetOutputStatus(IMFTransform *iface,
+ 
+ static HRESULT WINAPI video_mixer_transform_SetOutputBounds(IMFTransform *iface, LONGLONG lower, LONGLONG upper)
+ {
+-    FIXME("%p, %s, %s.\n", iface, wine_dbgstr_longlong(lower), wine_dbgstr_longlong(upper));
++    struct video_mixer *mixer = impl_from_IMFTransform(iface);
+ 
+-    return E_NOTIMPL;
++    TRACE("%p, %s, %s.\n", iface, wine_dbgstr_longlong(lower), wine_dbgstr_longlong(upper));
++
++    EnterCriticalSection(&mixer->cs);
++
++    mixer->lower_bound = lower;
++    mixer->upper_bound = upper;
++
++    LeaveCriticalSection(&mixer->cs);
++
++    return S_OK;
+ }
+ 
+ static HRESULT WINAPI video_mixer_transform_ProcessEvent(IMFTransform *iface, DWORD id, IMFMediaEvent *event)
+@@ -1879,6 +1890,8 @@ HRESULT evr_mixer_create(IUnknown *outer, void **out)
+     object->outer_unk = outer ? outer : &object->IUnknown_inner;
+     object->refcount = 1;
+     object->input_count = 1;
++    object->lower_bound = MFT_OUTPUT_BOUND_LOWER_UNBOUNDED;
++    object->upper_bound = MFT_OUTPUT_BOUND_UPPER_UNBOUNDED;
+     video_mixer_init_input(&object->inputs[0]);
+     InitializeCriticalSection(&object->cs);
+     if (FAILED(hr = MFCreateAttributes(&object->attributes, 0)))
+diff --git a/dlls/evr/tests/evr.c b/dlls/evr/tests/evr.c
+index 175c30e8188..13a07c42c5d 100644
+--- a/dlls/evr/tests/evr.c
++++ b/dlls/evr/tests/evr.c
+@@ -531,6 +531,9 @@ todo_wine
+     ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
+     IUnknown_Release(unk);
+ 
++    hr = IMFTransform_SetOutputBounds(transform, 100, 10);
++    ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++
+     hr = IMFTransform_QueryInterface(transform, &IID_IMFVideoDeviceID, (void **)&deviceid);
+     ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
+ 
+diff --git a/include/basetsd.h b/include/basetsd.h
+index c9f5c90e863..7087b592d1a 100644
+--- a/include/basetsd.h
++++ b/include/basetsd.h
+@@ -265,6 +265,8 @@ typedef ULONG_PTR SIZE_T, *PSIZE_T;
+ 
+ typedef ULONG_PTR KAFFINITY, *PKAFFINITY;
+ 
++#define MINLONGLONG             ((LONGLONG)~MAXLONGLONG)
++
+ /* Some Wine-specific definitions */
+ 
+ /* Architecture dependent settings. */
+diff --git a/include/mftransform.idl b/include/mftransform.idl
+index 1b402a5cc77..3f4b5500204 100644
+--- a/include/mftransform.idl
++++ b/include/mftransform.idl
+@@ -18,6 +18,9 @@
+ 
+ import "mfobjects.idl";
+ 
++cpp_quote("#define MFT_OUTPUT_BOUND_LOWER_UNBOUNDED MINLONGLONG")
++cpp_quote("#define MFT_OUTPUT_BOUND_UPPER_UNBOUNDED MAXLONGLONG")
++
+ typedef [v1_enum] enum _MFT_MESSAGE_TYPE
+ {
+     MFT_MESSAGE_COMMAND_FLUSH                   = 0x00000000,
+From 7ab646ad482d5a127d320c7c1f16ccb72569b863 Mon Sep 17 00:00:00 2001
+From: Nikolay Sivov <nsivov@codeweavers.com>
+Date: Mon, 12 Oct 2020 14:17:26 +0300
+Subject: [PATCH] evr/mixer: Use regular media type interface for input
+ streams.
+
+Signed-off-by: Nikolay Sivov <nsivov@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/evr/mixer.c | 12 +++---------
+ 1 file changed, 3 insertions(+), 9 deletions(-)
+
+diff --git a/dlls/evr/mixer.c b/dlls/evr/mixer.c
+index 631cc796ea0..a18df5c4b3b 100644
+--- a/dlls/evr/mixer.c
++++ b/dlls/evr/mixer.c
+@@ -40,7 +40,7 @@ struct input_stream
+ {
+     unsigned int id;
+     IMFAttributes *attributes;
+-    IMFVideoMediaType *media_type;
++    IMFMediaType *media_type;
+     MFVideoNormalizedRect rect;
+     unsigned int zorder;
+ };
+@@ -170,7 +170,7 @@ static void video_mixer_clear_types(struct video_mixer *mixer)
+     for (i = 0; i < mixer->input_count; ++i)
+     {
+         if (mixer->inputs[i].media_type)
+-            IMFVideoMediaType_Release(mixer->inputs[i].media_type);
++            IMFMediaType_Release(mixer->inputs[i].media_type);
+         mixer->inputs[i].media_type = NULL;
+     }
+     for (i = 0; i < mixer->output.type_count; ++i)
+@@ -714,14 +714,8 @@ static HRESULT WINAPI video_mixer_transform_SetInputType(IMFTransform *iface, DW
+                             if (SUCCEEDED(hr = video_mixer_collect_output_types(mixer, &video_desc, service, count,
+                                     guids, flags)) && !(flags & MFT_SET_TYPE_TEST_ONLY))
+                             {
+-                                GUID subtype = { 0 };
+-
+-                                if (FAILED(hr = IMFMediaType_GetGUID(media_type, &MF_MT_SUBTYPE, &subtype)))
+-                                    WARN("Failed to get subtype %#x.\n", hr);
+-
+-                                if (SUCCEEDED(hr = MFCreateVideoMediaTypeFromSubtype(&subtype, &mixer->inputs[0].media_type)))
++                                if (SUCCEEDED(hr = MFCreateMediaType(&mixer->inputs[0].media_type)))
+                                     hr = IMFMediaType_CopyAllItems(media_type, (IMFAttributes *)mixer->inputs[0].media_type);
+-
+                             }
+                             CoTaskMemFree(guids);
+                         }
+From 11594f563f13cd0fa7006d56250c16fe624a6129 Mon Sep 17 00:00:00 2001
+From: Nikolay Sivov <nsivov@codeweavers.com>
+Date: Mon, 12 Oct 2020 14:17:27 +0300
+Subject: [PATCH] evr/mixer: Use regular media type interface for the output
+ stream.
+
+Signed-off-by: Nikolay Sivov <nsivov@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/evr/mixer.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/dlls/evr/mixer.c b/dlls/evr/mixer.c
+index a18df5c4b3b..bb76fd88946 100644
+--- a/dlls/evr/mixer.c
++++ b/dlls/evr/mixer.c
+@@ -47,8 +47,8 @@ struct input_stream
+ 
+ struct output_stream
+ {
+-    IMFVideoMediaType *media_type;
+-    IMFVideoMediaType **media_types;
++    IMFMediaType *media_type;
++    IMFMediaType **media_types;
+     unsigned int type_count;
+ };
+ 
+@@ -175,11 +175,11 @@ static void video_mixer_clear_types(struct video_mixer *mixer)
+     }
+     for (i = 0; i < mixer->output.type_count; ++i)
+     {
+-        IMFVideoMediaType_Release(mixer->output.media_types[i]);
++        IMFMediaType_Release(mixer->output.media_types[i]);
+     }
+     heap_free(mixer->output.media_types);
+     if (mixer->output.media_type)
+-        IMFVideoMediaType_Release(mixer->output.media_type);
++        IMFMediaType_Release(mixer->output.media_type);
+     mixer->output.media_type = NULL;
+ }
+ 
+@@ -662,7 +662,7 @@ static HRESULT video_mixer_collect_output_types(struct video_mixer *mixer, const
+             for (i = 0; i < count; ++i)
+             {
+                 subtype.Data1 = rt_formats[i];
+-                MFCreateVideoMediaTypeFromSubtype(&subtype, &mixer->output.media_types[i]);
++                MFCreateVideoMediaTypeFromSubtype(&subtype, (IMFVideoMediaType **)&mixer->output.media_types[i]);
+             }
+             mixer->output.type_count = count;
+         }
+From b8e003c0e0d9904e1279cafbaa034ad5899006e2 Mon Sep 17 00:00:00 2001
+From: Nikolay Sivov <nsivov@codeweavers.com>
+Date: Mon, 12 Oct 2020 14:17:28 +0300
+Subject: [PATCH] evr/mixer: Implement SetOutputType().
+
+Signed-off-by: Nikolay Sivov <nsivov@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/evr/mixer.c     | 38 ++++++++++++++++++++++++++++++++++++--
+ dlls/evr/tests/evr.c | 11 +++++++++--
+ 2 files changed, 45 insertions(+), 4 deletions(-)
+
+diff --git a/dlls/evr/mixer.c b/dlls/evr/mixer.c
+index bb76fd88946..7cb35983f7b 100644
+--- a/dlls/evr/mixer.c
++++ b/dlls/evr/mixer.c
+@@ -738,9 +738,43 @@ static HRESULT WINAPI video_mixer_transform_SetInputType(IMFTransform *iface, DW
+ 
+ static HRESULT WINAPI video_mixer_transform_SetOutputType(IMFTransform *iface, DWORD id, IMFMediaType *type, DWORD flags)
+ {
+-    FIXME("%p, %u, %p, %#x.\n", iface, id, type, flags);
++    const unsigned int equality_flags = MF_MEDIATYPE_EQUAL_MAJOR_TYPES |
++            MF_MEDIATYPE_EQUAL_FORMAT_TYPES | MF_MEDIATYPE_EQUAL_FORMAT_DATA;
++    struct video_mixer *mixer = impl_from_IMFTransform(iface);
++    HRESULT hr = MF_E_INVALIDMEDIATYPE;
++    unsigned int i, compare_flags;
+ 
+-    return E_NOTIMPL;
++    TRACE("%p, %u, %p, %#x.\n", iface, id, type, flags);
++
++    if (id)
++        return MF_E_INVALIDSTREAMNUMBER;
++
++    EnterCriticalSection(&mixer->cs);
++
++    for (i = 0; i < mixer->output.type_count; ++i)
++    {
++        compare_flags = 0;
++        if (FAILED(IMFMediaType_IsEqual(type, mixer->output.media_types[i], &compare_flags)))
++            continue;
++
++        if ((compare_flags & equality_flags) == equality_flags)
++        {
++            hr = S_OK;
++            break;
++        }
++    }
++
++    if (SUCCEEDED(hr) && !(flags & MFT_SET_TYPE_TEST_ONLY))
++    {
++        if (mixer->output.media_type)
++            IMFMediaType_Release(mixer->output.media_type);
++        mixer->output.media_type = type;
++        IMFMediaType_AddRef(mixer->output.media_type);
++    }
++
++    LeaveCriticalSection(&mixer->cs);
++
++    return hr;
+ }
+ 
+ static HRESULT WINAPI video_mixer_transform_GetInputCurrentType(IMFTransform *iface, DWORD id, IMFMediaType **type)
+diff --git a/dlls/evr/tests/evr.c b/dlls/evr/tests/evr.c
+index 13a07c42c5d..58298159880 100644
+--- a/dlls/evr/tests/evr.c
++++ b/dlls/evr/tests/evr.c
+@@ -958,10 +958,11 @@ todo_wine
+     hr = IMFTransform_GetOutputAvailableType(transform, 0, 0, &media_type);
+     ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
+ 
++    hr = IMFTransform_SetOutputType(transform, 1, media_type, 0);
++    ok(hr == MF_E_INVALIDSTREAMNUMBER, "Unexpected hr %#x.\n", hr);
++
+     hr = IMFTransform_SetOutputType(transform, 0, media_type, 0);
+-todo_wine
+     ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
+-    IMFMediaType_Release(media_type);
+ 
+     hr = IMFVideoProcessor_GetVideoProcessorMode(processor, &guid);
+ todo_wine
+@@ -973,6 +974,12 @@ todo_wine
+     if (SUCCEEDED(hr))
+         CoTaskMemFree(guids);
+ 
++    hr = IMFTransform_GetOutputCurrentType(transform, 0, &media_type2);
++    ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++    ok(media_type == media_type2, "Unexpected media type instance.\n");
++    IMFMediaType_Release(media_type2);
++    IMFMediaType_Release(media_type);
++
+     IMFVideoProcessor_Release(processor);
+ 
+     IMFVideoMediaType_Release(video_type);
+From 4bdaeaeb48a9cd5fd08f7b2cdc17b5c062db787d Mon Sep 17 00:00:00 2001
+From: Nikolay Sivov <nsivov@codeweavers.com>
+Date: Tue, 13 Oct 2020 15:26:44 +0300
+Subject: [PATCH] mf/evr: Do not use IMFVideoMediaType when setting mixer
+ types.
+
+Signed-off-by: Nikolay Sivov <nsivov@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/mf/evr.c | 39 ++-------------------------------------
+ 1 file changed, 2 insertions(+), 37 deletions(-)
+
+diff --git a/dlls/mf/evr.c b/dlls/mf/evr.c
+index c3548170afb..298d320ec0c 100644
+--- a/dlls/mf/evr.c
++++ b/dlls/mf/evr.c
+@@ -362,35 +362,10 @@ static ULONG WINAPI video_stream_typehandler_Release(IMFMediaTypeHandler *iface)
+     return IMFStreamSink_Release(&stream->IMFStreamSink_iface);
+ }
+ 
+-/* Mixer expects special video media type instance. */
+-static HRESULT video_renderer_create_video_type(IMFMediaType *media_type, IMFVideoMediaType **video_type)
+-{
+-    GUID subtype;
+-    HRESULT hr;
+-
+-    *video_type = NULL;
+-
+-    if (FAILED(hr = IMFMediaType_GetGUID(media_type, &MF_MT_SUBTYPE, &subtype)))
+-        return hr;
+-
+-    if (FAILED(hr = MFCreateVideoMediaTypeFromSubtype(&subtype, video_type)))
+-        return hr;
+-
+-    hr = IMFMediaType_CopyAllItems(media_type, (IMFAttributes *)*video_type);
+-    if (FAILED(hr))
+-    {
+-        IMFVideoMediaType_Release(*video_type);
+-        *video_type = NULL;
+-    }
+-
+-    return hr;
+-}
+-
+ static HRESULT WINAPI video_stream_typehandler_IsMediaTypeSupported(IMFMediaTypeHandler *iface,
+         IMFMediaType *in_type, IMFMediaType **out_type)
+ {
+     struct video_stream *stream = impl_from_IMFMediaTypeHandler(iface);
+-    IMFVideoMediaType *video_type;
+     HRESULT hr;
+ 
+     TRACE("%p, %p, %p.\n", iface, in_type, out_type);
+@@ -401,17 +376,12 @@ static HRESULT WINAPI video_stream_typehandler_IsMediaTypeSupported(IMFMediaType
+     if (!stream->parent)
+         return MF_E_INVALIDMEDIATYPE;
+ 
+-    if (FAILED(hr = video_renderer_create_video_type(in_type, &video_type)))
+-        return hr;
+-
+-    if (SUCCEEDED(hr = IMFTransform_SetInputType(stream->parent->mixer, stream->id, (IMFMediaType *)video_type,
++    if (SUCCEEDED(hr = IMFTransform_SetInputType(stream->parent->mixer, stream->id, in_type,
+             MFT_SET_TYPE_TEST_ONLY)))
+     {
+         if (out_type) *out_type = NULL;
+     }
+ 
+-    IMFVideoMediaType_Release(video_type);
+-
+     return hr;
+ }
+ 
+@@ -438,7 +408,6 @@ static HRESULT WINAPI video_stream_typehandler_GetMediaTypeByIndex(IMFMediaTypeH
+ static HRESULT WINAPI video_stream_typehandler_SetCurrentMediaType(IMFMediaTypeHandler *iface, IMFMediaType *type)
+ {
+     struct video_stream *stream = impl_from_IMFMediaTypeHandler(iface);
+-    IMFVideoMediaType *video_type;
+     HRESULT hr;
+ 
+     TRACE("%p, %p.\n", iface, type);
+@@ -449,11 +418,7 @@ static HRESULT WINAPI video_stream_typehandler_SetCurrentMediaType(IMFMediaTypeH
+     if (!stream->parent)
+         return MF_E_STREAMSINK_REMOVED;
+ 
+-    if (FAILED(hr = video_renderer_create_video_type(type, &video_type)))
+-        return hr;
+-
+-    hr = IMFTransform_SetInputType(stream->parent->mixer, stream->id, (IMFMediaType *)video_type, 0);
+-    IMFVideoMediaType_Release(video_type);
++    hr = IMFTransform_SetInputType(stream->parent->mixer, stream->id, type, 0);
+ 
+     return hr;
+ }
+From 421924ae0a780e6e3304d123b68cb2214f79f626 Mon Sep 17 00:00:00 2001
+From: Nikolay Sivov <nsivov@codeweavers.com>
+Date: Tue, 13 Oct 2020 15:26:45 +0300
+Subject: [PATCH] mf/evr: Trigger media type negotiation through presenter for
+ reference stream.
+
+Signed-off-by: Nikolay Sivov <nsivov@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/mf/evr.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/dlls/mf/evr.c b/dlls/mf/evr.c
+index 298d320ec0c..1d55344fe16 100644
+--- a/dlls/mf/evr.c
++++ b/dlls/mf/evr.c
+@@ -419,6 +419,8 @@ static HRESULT WINAPI video_stream_typehandler_SetCurrentMediaType(IMFMediaTypeH
+         return MF_E_STREAMSINK_REMOVED;
+ 
+     hr = IMFTransform_SetInputType(stream->parent->mixer, stream->id, type, 0);
++    if (SUCCEEDED(hr) && !stream->id)
++        hr = IMFVideoPresenter_ProcessMessage(stream->parent->presenter, MFVP_MESSAGE_INVALIDATEMEDIATYPE, 0);
+ 
+     return hr;
+ }
+From 25872a51727d893296633c3734447304c566cc2f Mon Sep 17 00:00:00 2001
+From: Nikolay Sivov <nsivov@codeweavers.com>
+Date: Tue, 13 Oct 2020 15:26:46 +0300
+Subject: [PATCH] evr/tests: Add a test for MF_SA_REQUIRED_SAMPLE_COUNT.
+
+Signed-off-by: Nikolay Sivov <nsivov@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/evr/tests/evr.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/dlls/evr/tests/evr.c b/dlls/evr/tests/evr.c
+index 7a51b3c17db..72642110a78 100644
+--- a/dlls/evr/tests/evr.c
++++ b/dlls/evr/tests/evr.c
+@@ -658,6 +658,12 @@ todo_wine
+     attributes = NULL;
+     hr = IMFTransform_GetInputStreamAttributes(transform, 0, &attributes);
+     ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++    hr = IMFAttributes_GetCount(attributes, &count);
++    ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++    ok(count == 1, "Unexpected count %u.\n", count);
++    hr = IMFAttributes_GetUINT32(attributes, &MF_SA_REQUIRED_SAMPLE_COUNT, &count);
++    ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++    ok(count == 1, "Unexpected count %u.\n", count);
+     ok(!!attributes, "Unexpected attributes.\n");
+ 
+     attributes2 = NULL;
+From d6e5fa7bd37ff382b7e357c9bd51f3dfe17e0d74 Mon Sep 17 00:00:00 2001
+From: Nikolay Sivov <nsivov@codeweavers.com>
+Date: Tue, 13 Oct 2020 15:26:47 +0300
+Subject: [PATCH] evr/mixer: Keep original media type instances for inputs.
+
+Signed-off-by: Nikolay Sivov <nsivov@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/evr/mixer.c     |  6 ++--
+ dlls/evr/tests/evr.c | 79 +++++++++++++++++++++++---------------------
+ 2 files changed, 45 insertions(+), 40 deletions(-)
+
+diff --git a/dlls/evr/mixer.c b/dlls/evr/mixer.c
+index 7cb35983f7b..f199aaee110 100644
+--- a/dlls/evr/mixer.c
++++ b/dlls/evr/mixer.c
+@@ -714,8 +714,10 @@ static HRESULT WINAPI video_mixer_transform_SetInputType(IMFTransform *iface, DW
+                             if (SUCCEEDED(hr = video_mixer_collect_output_types(mixer, &video_desc, service, count,
+                                     guids, flags)) && !(flags & MFT_SET_TYPE_TEST_ONLY))
+                             {
+-                                if (SUCCEEDED(hr = MFCreateMediaType(&mixer->inputs[0].media_type)))
+-                                    hr = IMFMediaType_CopyAllItems(media_type, (IMFAttributes *)mixer->inputs[0].media_type);
++                                if (mixer->inputs[0].media_type)
++                                    IMFMediaType_Release(mixer->inputs[0].media_type);
++                                mixer->inputs[0].media_type = media_type;
++                                IMFMediaType_AddRef(mixer->inputs[0].media_type);
+                             }
+                             CoTaskMemFree(guids);
+                         }
+diff --git a/dlls/evr/tests/evr.c b/dlls/evr/tests/evr.c
+index 72642110a78..ff17f57b7ef 100644
+--- a/dlls/evr/tests/evr.c
++++ b/dlls/evr/tests/evr.c
+@@ -31,8 +31,6 @@
+ 
+ static const WCHAR sink_id[] = {'E','V','R',' ','I','n','p','u','t','0',0};
+ 
+-static HRESULT (WINAPI *pMFCreateVideoMediaTypeFromSubtype)(const GUID *subtype, IMFVideoMediaType **video_type);
+-
+ static void set_rect(MFVideoNormalizedRect *rect, float left, float top, float right, float bottom)
+ {
+     rect->left = left;
+@@ -418,6 +416,23 @@ static void test_pin_info(void)
+     ok(!ref, "Got outstanding refcount %d.\n", ref);
+ }
+ 
++static IMFMediaType * create_video_type(const GUID *subtype)
++{
++    IMFMediaType *video_type;
++    HRESULT hr;
++
++    hr = MFCreateMediaType(&video_type);
++    ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++
++    hr = IMFMediaType_SetGUID(video_type, &MF_MT_MAJOR_TYPE, &MFMediaType_Video);
++    ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++
++    hr = IMFMediaType_SetGUID(video_type, &MF_MT_SUBTYPE, subtype);
++    ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++
++    return video_type;
++}
++
+ static void test_default_mixer(void)
+ {
+     DWORD input_min, input_max, output_min, output_max;
+@@ -829,9 +844,9 @@ static void test_default_mixer_type_negotiation(void)
+     IMFMediaType *media_type, *media_type2;
+     IDirect3DDeviceManager9 *manager;
+     DXVA2_VideoProcessorCaps caps;
+-    IMFVideoMediaType *video_type;
+     IMFVideoProcessor *processor;
+     IDirect3DDevice9 *device;
++    IMFMediaType *video_type;
+     IMFTransform *transform;
+     GUID guid, *guids;
+     IDirect3D9 *d3d;
+@@ -841,12 +856,6 @@ static void test_default_mixer_type_negotiation(void)
+     HRESULT hr;
+     UINT token;
+ 
+-    if (!pMFCreateVideoMediaTypeFromSubtype)
+-    {
+-        win_skip("Skipping mixer types tests.\n");
+-        return;
+-    }
+-
+     hr = MFCreateVideoMixer(NULL, &IID_IDirect3DDevice9, &IID_IMFTransform, (void **)&transform);
+     ok(hr == S_OK, "Failed to create default mixer, hr %#x.\n", hr);
+ 
+@@ -906,31 +915,30 @@ static void test_default_mixer_type_negotiation(void)
+     ok(hr == MF_E_INVALIDMEDIATYPE, "Unexpected hr %#x.\n", hr);
+     IMFMediaType_Release(media_type);
+ 
+-    hr = pMFCreateVideoMediaTypeFromSubtype(&MFVideoFormat_RGB32, &video_type);
+-    ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++    video_type = create_video_type(&MFVideoFormat_RGB32);
+ 
+     /* Partially initialized type. */
+-    hr = IMFTransform_SetInputType(transform, 0, (IMFMediaType *)video_type, 0);
++    hr = IMFTransform_SetInputType(transform, 0, video_type, 0);
+     ok(hr == MF_E_INVALIDMEDIATYPE, "Unexpected hr %#x.\n", hr);
+ 
+     /* Only required data - frame size and uncompressed marker. */
+-    hr = IMFVideoMediaType_SetUINT64(video_type, &MF_MT_FRAME_SIZE, (UINT64)640 << 32 | 480);
++    hr = IMFMediaType_SetUINT64(video_type, &MF_MT_FRAME_SIZE, (UINT64)640 << 32 | 480);
+     ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
+-    hr = IMFVideoMediaType_SetUINT32(video_type, &MF_MT_ALL_SAMPLES_INDEPENDENT, TRUE);
++    hr = IMFMediaType_SetUINT32(video_type, &MF_MT_ALL_SAMPLES_INDEPENDENT, TRUE);
+     ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
+ 
+-    hr = IMFTransform_SetInputType(transform, 0, (IMFMediaType *)video_type, MFT_SET_TYPE_TEST_ONLY);
++    hr = IMFTransform_SetInputType(transform, 0, video_type, MFT_SET_TYPE_TEST_ONLY);
+     ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
+ 
+     hr = IMFTransform_GetInputCurrentType(transform, 0, &media_type);
+     ok(hr == MF_E_TRANSFORM_TYPE_NOT_SET, "Unexpected hr %#x.\n", hr);
+ 
+-    hr = IMFTransform_SetInputType(transform, 0, (IMFMediaType *)video_type, 0);
++    hr = IMFTransform_SetInputType(transform, 0, video_type, 0);
+     ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
+ 
+     hr = IMFTransform_GetInputCurrentType(transform, 0, &media_type);
+     ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
+-    ok(media_type != (IMFMediaType *)video_type, "Unexpected media type instance.\n");
++    ok(media_type == video_type, "Unexpected media type instance.\n");
+ 
+     hr = IMFTransform_GetInputCurrentType(transform, 0, &media_type2);
+     ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
+@@ -951,7 +959,7 @@ todo_wine
+ 
+     hr = IMFTransform_GetInputCurrentType(transform, 0, &media_type);
+     ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
+-    ok(media_type != (IMFMediaType *)video_type, "Unexpected pointer.\n");
++    ok(media_type == video_type, "Unexpected pointer.\n");
+     hr = IMFMediaType_QueryInterface(media_type, &IID_IMFVideoMediaType, (void **)&unk);
+     ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
+     IUnknown_Release(unk);
+@@ -988,7 +996,7 @@ todo_wine
+ 
+     IMFVideoProcessor_Release(processor);
+ 
+-    IMFVideoMediaType_Release(video_type);
++    IMFMediaType_Release(video_type);
+ 
+     IDirect3DDeviceManager9_Release(manager);
+ 
+@@ -1217,11 +1225,10 @@ static void test_MFCreateVideoSampleAllocator(void)
+ {
+     IMFVideoSampleAllocatorNotify test_notify = { &test_notify_callback_vtbl };
+     IMFVideoSampleAllocatorCallback *allocator_cb;
++    IMFMediaType *media_type, *video_type;
+     IMFVideoSampleAllocator *allocator;
+-    IMFVideoMediaType *video_type;
+     IMFSample *sample, *sample2;
+     IDirect3DSurface9 *surface;
+-    IMFMediaType *media_type;
+     IMFMediaBuffer *buffer;
+     IMFGetService *gs;
+     IUnknown *unk;
+@@ -1271,17 +1278,16 @@ todo_wine
+ todo_wine
+     ok(hr == E_NOINTERFACE, "Unexpected hr %#x.\n", hr);
+ 
+-    hr = MFCreateVideoMediaTypeFromSubtype(&MFVideoFormat_RGB32, &video_type);
+-    ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++    video_type = create_video_type(&MFVideoFormat_RGB32);
+ 
+-    hr = IMFVideoSampleAllocator_InitializeSampleAllocator(allocator, 2, (IMFMediaType *)video_type);
++    hr = IMFVideoSampleAllocator_InitializeSampleAllocator(allocator, 2, video_type);
+ todo_wine
+     ok(hr == MF_E_INVALIDMEDIATYPE, "Unexpected hr %#x.\n", hr);
+ 
+     /* Frame size is required. */
+-    hr = IMFVideoMediaType_SetUINT64(video_type, &MF_MT_FRAME_SIZE, (UINT64) 320 << 32 | 240);
++    hr = IMFMediaType_SetUINT64(video_type, &MF_MT_FRAME_SIZE, (UINT64) 320 << 32 | 240);
+     ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
+-    hr = IMFVideoSampleAllocator_InitializeSampleAllocator(allocator, 0, (IMFMediaType *)video_type);
++    hr = IMFVideoSampleAllocator_InitializeSampleAllocator(allocator, 0, video_type);
+ todo_wine
+     ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
+ 
+@@ -1302,7 +1308,7 @@ todo_wine
+     ok(hr == MF_E_SAMPLEALLOCATOR_EMPTY, "Unexpected hr %#x.\n", hr);
+ 
+     /* Reinitialize with active sample. */
+-    hr = IMFVideoSampleAllocator_InitializeSampleAllocator(allocator, 4, (IMFMediaType *)video_type);
++    hr = IMFVideoSampleAllocator_InitializeSampleAllocator(allocator, 4, video_type);
+ todo_wine
+     ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
+     if (sample)
+@@ -1640,7 +1646,7 @@ static void test_presenter_native_video_size(void)
+     IMFTransform *mixer;
+     SIZE size, ratio;
+     HRESULT hr;
+-    IMFVideoMediaType *video_type;
++    IMFMediaType *video_type;
+     IDirect3DDeviceManager9 *dm;
+ 
+     hr = MFCreateVideoMixer(NULL, &IID_IDirect3DDevice9, &IID_IMFTransform, (void **)&mixer);
+@@ -1680,15 +1686,14 @@ static void test_presenter_native_video_size(void)
+ 
+     IDirect3DDeviceManager9_Release(dm);
+ 
+-    hr = pMFCreateVideoMediaTypeFromSubtype(&MFVideoFormat_RGB32, &video_type);
+-    ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++    video_type = create_video_type(&MFVideoFormat_RGB32);
+ 
+-    hr = IMFVideoMediaType_SetUINT64(video_type, &MF_MT_FRAME_SIZE, (UINT64)640 << 32 | 480);
++    hr = IMFMediaType_SetUINT64(video_type, &MF_MT_FRAME_SIZE, (UINT64)640 << 32 | 480);
+     ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
+-    hr = IMFVideoMediaType_SetUINT32(video_type, &MF_MT_ALL_SAMPLES_INDEPENDENT, TRUE);
++    hr = IMFMediaType_SetUINT32(video_type, &MF_MT_ALL_SAMPLES_INDEPENDENT, TRUE);
+     ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
+ 
+-    hr = IMFTransform_SetInputType(mixer, 0, (IMFMediaType *)video_type, 0);
++    hr = IMFTransform_SetInputType(mixer, 0, video_type, 0);
+     ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
+ 
+     /* Native video size is cached on initialization. */
+@@ -1704,10 +1709,10 @@ static void test_presenter_native_video_size(void)
+             "Unexpected ratio %u x %u.\n", ratio.cx, ratio.cy);
+ 
+     /* Update input type. */
+-    hr = IMFVideoMediaType_SetUINT64(video_type, &MF_MT_FRAME_SIZE, (UINT64)320 << 32 | 240);
++    hr = IMFMediaType_SetUINT64(video_type, &MF_MT_FRAME_SIZE, (UINT64)320 << 32 | 240);
+     ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
+ 
+-    hr = IMFTransform_SetInputType(mixer, 0, (IMFMediaType *)video_type, 0);
++    hr = IMFTransform_SetInputType(mixer, 0, video_type, 0);
+     ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
+ 
+     hr = IMFVideoDisplayControl_GetNativeVideoSize(display_control, &size, &ratio);
+@@ -1726,7 +1731,7 @@ static void test_presenter_native_video_size(void)
+     ok((ratio.cx == 4 && ratio.cy == 3) || broken(!memcmp(&ratio, &size, sizeof(ratio))) /* < Win10 */,
+             "Unexpected ratio %u x %u.\n", ratio.cx, ratio.cy);
+ 
+-    IMFVideoMediaType_Release(video_type);
++    IMFMediaType_Release(video_type);
+     IMFVideoDisplayControl_Release(display_control);
+     IMFVideoPresenter_Release(presenter);
+     IMFTransform_Release(mixer);
+@@ -1930,8 +1935,6 @@ START_TEST(evr)
+ {
+     CoInitialize(NULL);
+ 
+-    pMFCreateVideoMediaTypeFromSubtype = (void *)GetProcAddress(GetModuleHandleA("mfplat.dll"), "MFCreateVideoMediaTypeFromSubtype");
+-
+     test_aggregation();
+     test_interfaces();
+     test_enum_pins();
+From a1dc382812726be7dea5ba6b46f851e7767826ee Mon Sep 17 00:00:00 2001
+From: Nikolay Sivov <nsivov@codeweavers.com>
+Date: Tue, 13 Oct 2020 15:26:48 +0300
+Subject: [PATCH] evr/tests: Use wide string literals.
+
+Signed-off-by: Nikolay Sivov <nsivov@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/evr/tests/evr.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/dlls/evr/tests/evr.c b/dlls/evr/tests/evr.c
+index ff17f57b7ef..6a69305c9e5 100644
+--- a/dlls/evr/tests/evr.c
++++ b/dlls/evr/tests/evr.c
+@@ -29,7 +29,7 @@
+ #include "initguid.h"
+ #include "evr9.h"
+ 
+-static const WCHAR sink_id[] = {'E','V','R',' ','I','n','p','u','t','0',0};
++static const WCHAR sink_id[] = L"EVR Input0";
+ 
+ static void set_rect(MFVideoNormalizedRect *rect, float left, float top, float right, float bottom)
+ {

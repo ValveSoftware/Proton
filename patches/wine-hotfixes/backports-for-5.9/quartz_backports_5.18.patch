@@ -33859,3 +33859,38 @@ index 58b0231420d..f5b28ed3f8d 100644
      hr = IDirect3DDeviceManager9_OpenDeviceHandle(manager, &handle);
      ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
  
+From 1829c196872bec9187e5ef2c2cb99683dbe22bb2 Mon Sep 17 00:00:00 2001
+From: Nikolay Sivov <nsivov@codeweavers.com>
+Date: Mon, 12 Oct 2020 14:19:23 +0300
+Subject: [PATCH] dxva2/tests: Add a test for GetVideoProcessorDeviceGuids().
+
+Signed-off-by: Nikolay Sivov <nsivov@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+---
+ dlls/dxva2/tests/dxva2.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/dlls/dxva2/tests/dxva2.c b/dlls/dxva2/tests/dxva2.c
+index f5b28ed3f8d..9dcd3e5bf4e 100644
+--- a/dlls/dxva2/tests/dxva2.c
++++ b/dlls/dxva2/tests/dxva2.c
+@@ -92,6 +92,7 @@ static void test_device_manager(void)
+     UINT token, count;
+     IDirect3D9 *d3d;
+     HWND window;
++    GUID *guids;
+     HRESULT hr;
+     RECT rect;
+ 
+@@ -309,6 +310,11 @@ static void test_device_manager(void)
+     video_desc.SampleHeight = 64;
+     video_desc.Format = D3DFMT_A8R8G8B8;
+ 
++    hr = IDirectXVideoProcessorService_GetVideoProcessorDeviceGuids(proc_service, &video_desc, &count, &guids);
++    ok(hr == S_OK, "Unexpected hr %#x.\n", hr);
++    ok(count, "Unexpected format count %u.\n", count);
++    CoTaskMemFree(guids);
++
+     count = 0;
+     hr = IDirectXVideoProcessorService_GetVideoProcessorRenderTargets(proc_service, &DXVA2_VideoProcSoftwareDevice,
+             &video_desc, &count, &formats);
