@@ -281,15 +281,11 @@ impl VideoConvState {
             None => {
                 let blank = include_bytes!("../blank.ogv");
 
-                let remaining = blank.len() - offs;
+                let to_copy = std::cmp::min(blank.len() - offs, out.len());
 
-                if out.len() <= remaining {
-                    out.copy_from_slice(&blank[offs..(offs + out.len())]);
-                    Ok(out.len())
-                }else{
-                    (0..remaining).for_each(|i| out[i] = blank[offs + i]);
-                    Ok(remaining)
-                }
+                out[..to_copy].copy_from_slice(&blank[offs..(offs + to_copy)]);
+
+                Ok(to_copy)
             },
         }
     }
