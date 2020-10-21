@@ -892,8 +892,12 @@ if __name__ == "__main__":
     g_session.init_session()
 
     #prevent out of bounds error
-    if len(sys.argv) < 1:
-        log("usage: proton run|waitforexitandrun|getcompatpath|getnativepath [PROGRAM]")
+    if len(sys.argv) < 2:
+        log("usage: proton run|waitforexitandrun|getcompatpath|getnativepath [PROGRAM]" + os.linesep
+            + os.linesep +
+            "The proton script isn't meant to be run by itself, "
+            "it's part of the Steam Play project and won't work "
+            "standalone unless you really know what you're doing.")
         sys.exit(0)
     
     #determine mode
@@ -914,7 +918,7 @@ if __name__ == "__main__":
         path = subprocess.check_output([g_proton.wine_bin, "winepath", sys.argv[2]], env=g_session.env, stderr=g_session.log_file)
         sys.stdout.buffer.write(path)
     else:
-        log("Need a verb.")
+        log("Need a correct verb.")
         sys.exit(1)
 
     sys.exit(0)
