@@ -164,7 +164,7 @@ bool steamclient_dos_path_to_unix_path(const char *src, char *dst, int is_url)
         const char *s;
         char *d;
 
-        for(s = src, d = dst; *src; ++s, ++d){
+        for(s = src, d = dst; *s; ++s, ++d){
             if(*s == '\\')
                 *d = '/';
             else
