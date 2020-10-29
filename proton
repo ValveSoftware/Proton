@@ -629,6 +629,19 @@ class Session:
             self.compat_config.discard(config_name)
         return True
 
+    def try_log_slr_versions(self):
+        try:
+            if "PRESSURE_VESSEL_RUNTIME_BASE" in self.env:
+                with open(self.env["PRESSURE_VESSEL_RUNTIME_BASE"] + "/VERSIONS.txt", "r") as f:
+                    for l in f:
+                        l = l.strip()
+                        if len(l) > 0 and not l.startswith("#"):
+                            cleaned = l.split("#")[0].strip().replace("\t", " ")
+                            split = cleaned.split(" ", maxsplit=1)
+                            self.log_file.write(split[0] + ": " + split[1] + "\n")
+        except (OSError, IOError, TypeError, KeyError):
+            pass
+
     def init_session(self):
         self.env["WINEPREFIX"] = g_compatdata.prefix_dir
 
@@ -715,6 +728,7 @@ class Session:
                 self.log_file.write("SteamGameId: " + self.env["SteamGameId"] + "\n")
                 self.log_file.write("Command: " + str(sys.argv[2:] + self.cmdlineappend) + "\n")
                 self.log_file.write("Options: " + str(self.compat_config) + "\n")
+                self.try_log_slr_versions()
                 self.log_file.write("======================\n")
                 self.log_file.flush()
         else:
