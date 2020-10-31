@@ -39,7 +39,7 @@
     # warframe controller fix
     git checkout lsteamclient
     cd lsteamclient
-    patch -Np1 < ../patches/proton-hotfixes/steamclient-disable_SteamController007_if_no_controller.patch
+    patch -Np1 < ../patches/proton-hotfixes/proton-lsteamclient_disable_SteamController007_if_no_controller.patch
     patch -Np1 < ../patches/proton-hotfixes/proton-lsteamclient-killer-instinct-match-end-fix.patch
     cd ..
 
@@ -53,8 +53,8 @@
     cd dxvk
     git reset --hard HEAD
     git clean -xdf
-    patch -Np1 < ../patches/dxvk/valve-dxvk-avoid-spamming-log-with-requests-for-IWineD3D11Texture2D.patch
-    patch -Np1 < ../patches/dxvk/proton-add_new_dxvk_config_library.patch
+    patch -Np1 < ../patches/dxvk/proton-dxvk_avoid_spamming_log_with_requests_for_IWineD3D11Texture2D.patch
+    patch -Np1 < ../patches/dxvk/proton-dxvk_add_new_dxvk_config_library.patch
     patch -Np1 < ../patches/dxvk/dxvk-async.patch
     cd ..
 
@@ -125,121 +125,127 @@
 #    patch -Np1 < ../patches/game-patches/blackops_2_fix.patch
 
     echo "bloons TD6 fix"
-    patch -Np1 < ../patches/game-patches/0001-wbemprox-HACK-Make-Bloons-TD6-happy-so-it-does-not-e.patch
+    patch -Np1 < ../patches/game-patches/bloons_TD6_fix.patch
     
     echo "avengers and mafia definitive edition patches"
     patch -Np1 < ../patches/game-patches/mafia_de.patch
     
     echo "killer instinct vulkan fix"
-    patch -Np1 < ../patches/game-patches/0001-winevulkan-HACK-Set-default-mxcsr-for-vkEnumeratePhy.patch
+    patch -Np1 < ../patches/game-patches/killer-instinct-winevulkan_fix.patch
     
     echo "warhammer 40k: inquisitor martyr loading fix"
     patch -Np1 < ../patches/game-patches/warhammer-40k-inquisitor-martyr-loading.patch
+    
+    echo "Paul's Diablo 1 menu fix"
+    patch -Np1 < ../patches/game-patches/diablo_1_menu.patch
+    
+    echo "Destiny 2 runtime timestamp fix"
+    patch -Np1 < ../patches/destiny2_runtime_timestamp_fix.patch
 
     ### END GAME PATCH SECTION ###
     
-    #PROTON
+    ### PROTON PATCH SECTION ###
     
     echo "clock monotonic"
-    patch -Np1 < ../patches/proton/proton-use_clock_monotonic.patch
-
-    echo "amd ags"
-    patch -Np1 < ../patches/proton/proton-amd_ags.patch
-    
-    echo "atiadlxx"
-    patch -Np1 < ../patches/proton/proton-atiadlxx.patch
+    patch -Np1 < ../patches/proton/01-proton-use_clock_monotonic.patch
     
     echo "bypass compositor"
-    patch -Np1 < ../patches/proton/proton-FS_bypass_compositor.patch
-
-    echo "applying winevulkan childwindow"
-    patch -Np1 < ../patches/wine-hotfixes/winevulkan-childwindow.patch
+    patch -Np1 < ../patches/proton/02-proton-FS_bypass_compositor.patch
 
     #WINE FSYNC
     echo "applying fsync patches"
-    patch -Np1 < ../patches/proton/proton-fsync_staging.patch
+    patch -Np1 < ../patches/proton/03-proton-fsync_staging.patch
 
     echo "LAA"
-    patch -Np1 < ../patches/proton/proton-LAA_staging.patch
+    patch -Np1 < ../patches/proton/04-proton-LAA_staging.patch
 
     echo "proton overlay mouse lag fix"
-    patch -Np1 < ../patches/proton/proton-staging-overlay.patch
+    patch -Np1 < ../patches/proton/05-proton-overlay_input_lag_fix.patch
     
     echo "proton force mouse fullscreen grab"
-    patch -Np1 < ../patches/proton/proton-nofshack-force-fullscreen-grab-mouse.patch
+    patch -Np1 < ../patches/proton/06-proton-nofshack-force-fullscreen-grab-mouse.patch
     
     echo "proton alt-tab hotfixes"
-    patch -Np1 < ../patches/proton/proton-alt-tab-focus-hotfixes.patch
+    patch -Np1 < ../patches/proton/07-proton-alt-tab-focus-hotfixes.patch
 
     echo "steamclient swap"
-    patch -Np1 < ../patches/proton/proton-steamclient_swap.patch
+    patch -Np1 < ../patches/proton/08-proton-steamclient_swap.patch
 
 #    disabled for now -- was breaking Catherine Classic in 5.9
 #    echo "audio patch test"
-#    patch -Np1 < ../patches/proton/proton-xaudio2_stop_engine.patch
+#    patch -Np1 < ../patches/proton/09-proton-xaudio2_stop_engine.patch
 
     echo "protonify"
-    patch -Np1 < ../patches/proton/proton-protonify_staging.patch
+    patch -Np1 < ../patches/proton/10-proton-protonify_staging.patch
 
     echo "protonify-audio"
-    patch -Np1 < ../patches/proton/proton-pa-staging.patch
+    patch -Np1 < ../patches/proton/11-proton-pa-staging.patch
     
     echo "steam bits"
-    patch -Np1 < ../patches/proton/proton-steam-bits.patch
+    patch -Np1 < ../patches/proton/12-proton-steam-bits.patch
 
     echo "SDL Joystick"
-    patch -Np1 < ../patches/proton/proton-sdl_joy.patch
-    patch -Np1 < ../patches/proton/proton-sdl_joy_2.patch
-    
+    patch -Np1 < ../patches/proton/13-proton-sdl_joy.patch
+    patch -Np1 < ../patches/proton/14-proton-sdl_joy_2.patch
+
     echo "proton gamepad additions"
-    patch -Np1 < ../patches/proton/proton-gamepad-additions.patch
+    patch -Np1 < ../patches/proton/15-proton-gamepad-additions.patch
 
     echo "Valve VR patches"
-    # disable if using remi's fakedll rework
-    patch -Np1 < ../patches/proton/proton-vrclient.patch
-
-#    echo "FS Hack integer scaling"
-#    patch -Np1 < ../patches/proton/proton_fs_hack_integer_scaling.patch
+    patch -Np1 < ../patches/proton/16-proton-vrclient.patch
     
     echo "proton winevulkan"
-    patch -Np1 < ../patches/proton/proton-winevulkan-nofshack.patch
-    
+    patch -Np1 < ../patches/proton/17-proton-winevulkan-nofshack.patch
+
+    echo "amd ags"
+    patch -Np1 < ../patches/proton/18-proton-amd_ags.patch
+
     echo "msvcrt overrides"
-    patch -Np1 < ../patches/proton/proton-msvcrt_nativebuiltin.patch
+    patch -Np1 < ../patches/proton/19-proton-msvcrt_nativebuiltin.patch
+
+    echo "atiadlxx"
+    patch -Np1 < ../patches/proton/20-proton-atiadlxx.patch
 
     echo "valve registry entries"
-    patch -Np1 < ../patches/proton/proton-wolfenstein_2-registry.patch
-    patch -Np1 < ../patches/proton/proton-rdr2-registry.patch
-    patch -Np1 < ../patches/proton/proton-nier-registry.patch
+    patch -Np1 < ../patches/proton/21-proton-01_wolfenstein2_registry.patch
+    patch -Np1 < ../patches/proton/22-proton-02_rdr2_registry.patch
+    patch -Np1 < ../patches/proton/23-proton-03_nier_sekiro_ds3_registry.patch
+    patch -Np1 < ../patches/proton/24-proton-04_cod_registry.patch
     
     echo "valve rdr2 fixes"
-    patch -Np1 < ../patches/proton/proton-rdr2-fixes.patch
+    patch -Np1 < ../patches/proton/25-proton-rdr2-fixes.patch
 
     #echo "valve cod fixes"
-    #patch -Np1 < ../patches/proton/proton-cod_gdi32_PE_conversion.patch
+    #patch -Np1 < ../patches/proton/26-proton-cod_gdi32_PE_conversion.patch
     
     echo "set prefix win10"
-    patch -Np1 < ../patches/proton/proton-win10_default.patch
+    patch -Np1 < ../patches/proton/27-proton-win10_default.patch
 
     echo "dxvk_config"
-    patch -Np1 < ../patches/proton/proton-dxvk_config.patch
+    patch -Np1 < ../patches/proton/28-proton-dxvk_config.patch
 
     echo "hide wine prefix update"
-    patch -Np1 < ../patches/proton/proton-hide_wine_prefix_update_window.patch
+    patch -Np1 < ../patches/proton/29-proton-hide_wine_prefix_update_window.patch
+
+    echo "proton-specific manual mfplat dll register patch"
+    patch -Np1 < ../patches/proton/30-proton-proton_mediafoundation_dllreg.patch
+    
+    ### END PROTON PATCH SECTION ###
+
+    ### WINE PATCH SECTION ###
+
+    echo "applying winevulkan childwindow"
+    patch -Np1 < ../patches/wine-hotfixes/winevulkan-childwindow.patch
 
     echo "applying WoW vkd3d wine patches"
     patch -Np1 < ../patches/wine-hotfixes/vkd3d/D3D12SerializeVersionedRootSignature.patch
     patch -Np1 < ../patches/wine-hotfixes/vkd3d/D3D12CreateVersionedRootSignatureDeserializer.patch
 
-    echo "proton-specific manual mfplat dll register patch"
-    patch -Np1 < ../patches/wine-hotfixes/media_foundation/proton_mediafoundation_dllreg.patch
+    ### END WINEPATCH SECTION ###
     
     #WINE CUSTOM PATCHES
     #add your own custom patch lines below
-    
-    echo "Paul's Diablo 1 menu fix"
-    patch -Np1 < ../patches/game-patches/diablo_1_menu.patch
-    
+        
     ./dlls/winevulkan/make_vulkan
     ./tools/make_requests
     autoreconf -f
