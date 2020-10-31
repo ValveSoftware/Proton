@@ -19,9 +19,6 @@
 [submodule "vrclient_x64"]
 	path = vrclient_x64
 	url = https://github.com/gloriouseggroll/vrclient_x64
-[submodule "cmake"]
-	path = cmake
-	url = https://github.com/Kitware/CMake/
 [submodule "fonts/liberation-fonts"]
 	path = fonts/liberation-fonts
 	url = https://github.com/liberationfonts/liberation-fonts/
@@ -55,6 +52,3 @@
 [submodule "gst-orc"]
         path = gst-orc
         url = https://github.com/GStreamer/orc/
-[submodule "glib"]
-	path = glib
-	url = https://github.com/GNOME/glib/
