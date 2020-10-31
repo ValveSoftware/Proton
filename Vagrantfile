@@ -76,7 +76,7 @@ Vagrant.configure(2) do |config|
 
       #install host build-time dependencies
       apt-get update
-      apt-get install -y gpgv2 gnupg2 git docker-ce docker-ce-cli containerd.io \
+      apt-get install -y ccache texinfo gpgv2 gnupg2 git docker-ce docker-ce-cli containerd.io \
           fontforge-nox python-debian python-pip meson libmpc-dev libmpc-dev:i386 \
           gcc g++ gcc-i686-linux-gnu g++-i686-linux-gnu binutils-i686-linux-gnu \
           gcc-mingw-w64-i686 gcc-mingw-w64-x86-64 \
@@ -92,6 +92,15 @@ Vagrant.configure(2) do |config|
 
       #allow vagrant user to run docker
       adduser vagrant docker
+
+      #add steamrt docker
+      docker pull registry.gitlab.steamos.cloud/steamrt/soldier/sdk
+      docker image tag registry.gitlab.steamos.cloud/steamrt/soldier/sdk steam-proton-dev
+
+      #allow user to run stuff in steamrt
+      sysctl kernel.unprivileged_userns_clone=1
+      mkdir -p /etc/sysctl.d/
+      echo kernel.unprivileged_userns_clone=1 > /etc/sysctl.d/docker_user.conf
 
       # the script below will set up the steam-runtime docker containers
       sudo -u vagrant /home/vagrant/proton/vagrant-user-setup.sh
