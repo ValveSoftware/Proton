@@ -1,0 +1,7 @@
+"manifest"
+{
+  "version" "2"
+  "commandline" "/proton %verb%"
+  "require_tool_appid" "1391110"
+  "use_sessions" "1"
+}

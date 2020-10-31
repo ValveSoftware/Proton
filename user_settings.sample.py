@@ -18,14 +18,16 @@ user_settings = {
     "WINE_MONO_TRACE": "E:System.NotImplementedException",
     #"MONO_LOG_LEVEL": "info",
 
+    #general purpose media logging
+#    "GST_DEBUG": "4",
+    #or, verbose converter logging (may impact playback performance):
+#    "GST_DEBUG": "4,protonaudioconverter:6,protonaudioconverterbin:6,protonvideoconverter:6",
+
     #Enable DXVK's HUD
 #    "DXVK_HUD": "devinfo,fps",
 
-    #Use OpenGL-based wined3d for d3d11 and d3d10 instead of Vulkan-based DXVK
+    #Use OpenGL-based wined3d for d3d11, d3d10, and d3d9 instead of Vulkan-based DXVK
 #    "PROTON_USE_WINED3D": "1",
-
-    #Use Vulkan-based D9VK instead of OpenGL-based wined3d for d3d9.
-#    "PROTON_USE_D9VK": "1",
 
     #Disable d3d11 entirely
 #    "PROTON_NO_D3D11": "1",
