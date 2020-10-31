@@ -12,15 +12,6 @@ diff --git a/dlls/wbemprox/builtin.c b/dlls/wbemprox/builtin.c
 index 43268221936..f39d6f0cd7b 100644
 --- a/dlls/wbemprox/builtin.c
 +++ b/dlls/wbemprox/builtin.c
-@@ -886,7 +886,7 @@ static const struct record_quickfixengineering data_quickfixengineering[] =
- };
- static const struct record_sounddevice data_sounddevice[] =
- {
--    { L"Wine Audio Device", L"Wine Audio Device", 3 /* enabled */, L"The Wine Project" }
-+    { L"Wine Audio Device", L"Wine Audio Device", 3 /* enabled */, L"The Proton Project" }
- };
- static const struct record_stdregprov data_stdregprov[] =
- {
 @@ -1181,7 +1181,7 @@ static WCHAR *get_bios_string( BYTE id, const char *buf, UINT len )
  static WCHAR *get_bios_manufacturer( const char *buf, UINT len )
  {
@@ -104,6 +95,15 @@ index 43268221936..f39d6f0cd7b 100644
      return ret;
  }
  
+@@ -3955,7 +3955,7 @@ static enum fill_status fill_sounddevice( struct table *table, const struct expr
+ 
+     rec = (struct record_sounddevice *)table->data;
+     rec->deviceid = get_sounddevice_pnpdeviceid( &desc );
+-    rec->manufacturer = L"The Wine Project";
++    rec->manufacturer = L"The Proton Project";
+     rec->name = L"Wine Audio Device";
+     rec->pnpdeviceid = get_sounddevice_pnpdeviceid( &desc );
+     rec->productname = L"Wine Audio Device";
 -- 
 2.26.2
 

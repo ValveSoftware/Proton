@@ -1,0 +1,1309 @@
+From 41d6087b61453a95078ac1b52d7cb42eccec6166 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
+Date: Mon, 6 Jul 2020 15:07:59 +0200
+Subject: [PATCH 3/5] gdi32: Extract freetype code to winefreetype DLL.
+
+---
+ configure.ac                            |   1 +
+ dlls/gdi32/Makefile.in                  |   8 +-
+ dlls/gdi32/driver.c                     |  20 ++++
+ dlls/gdi32/gdi32.spec                   |  12 ++-
+ dlls/gdi32/gdi_private.h                | 115 ++------------------
+ dlls/gdi32/resource.h                   |   1 +
+ dlls/winefreetype/Makefile.in           |  12 +++
+ dlls/{gdi32 => winefreetype}/freetype.c |  82 +++++++-------
+ dlls/{gdi32 => winefreetype}/vertical.c |   0
+ dlls/winefreetype/winefreetype.spec     |   8 ++
+ include/wine/gdi_font.h                 | 135 ++++++++++++++++++++++++
+ 11 files changed, 239 insertions(+), 155 deletions(-)
+ create mode 100644 dlls/winefreetype/Makefile.in
+ rename dlls/{gdi32 => winefreetype}/freetype.c (99%)
+ rename dlls/{gdi32 => winefreetype}/vertical.c (100%)
+ create mode 100644 dlls/winefreetype/winefreetype.spec
+ create mode 100644 include/wine/gdi_font.h
+
+diff --git a/configure.ac b/configure.ac
+index b0dfe9ce6c1..baff23ecbc6 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -3920,6 +3920,7 @@ WINE_CONFIG_MAKEFILE(dlls/winecoreaudio.drv)
+ WINE_CONFIG_MAKEFILE(dlls/winecrt0)
+ WINE_CONFIG_MAKEFILE(dlls/wined3d)
+ WINE_CONFIG_MAKEFILE(dlls/winegstreamer)
++WINE_CONFIG_MAKEFILE(dlls/winefreetype)
+ WINE_CONFIG_MAKEFILE(dlls/winehid.sys)
+ WINE_CONFIG_MAKEFILE(dlls/winejoystick.drv)
+ WINE_CONFIG_MAKEFILE(dlls/winemac.drv)
+diff --git a/dlls/gdi32/Makefile.in b/dlls/gdi32/Makefile.in
+index 32b2e6959c1..54506255657 100644
+--- a/dlls/gdi32/Makefile.in
++++ b/dlls/gdi32/Makefile.in
+@@ -1,9 +1,7 @@
+ EXTRADEFS = -D_GDI32_
+ MODULE    = gdi32.dll
+ IMPORTLIB = gdi32
+-IMPORTS   = advapi32
+-EXTRAINCL = $(FREETYPE_CFLAGS) $(FONTCONFIG_CFLAGS)
+-EXTRALIBS = $(CARBON_LIBS) $(APPKIT_LIBS)
++IMPORTS   = advapi32 winefreetype
+ DELAYIMPORTS = usp10 setupapi
+ 
+ C_SRCS = \
+@@ -29,7 +27,6 @@ C_SRCS = \
+ 	enhmfdrv/init.c \
+ 	enhmfdrv/objects.c \
+ 	font.c \
+-	freetype.c \
+ 	gdiobj.c \
+ 	icm.c \
+ 	mapping.c \
+@@ -47,9 +44,6 @@ C_SRCS = \
+ 	pen.c \
+ 	printdrv.c \
+ 	region.c \
+-	vertical.c \
+ 	vulkan.c
+ 
+ RC_SRCS = gdi32.rc
+-
+-freetype_EXTRADEFS = -DWINE_FONT_DIR=\"`$(MAKEDEP) -R ${datadir}/wine ${fontdir}`\"
+diff --git a/dlls/gdi32/driver.c b/dlls/gdi32/driver.c
+index 39812b5ca0a..4b53b23e790 100644
+--- a/dlls/gdi32/driver.c
++++ b/dlls/gdi32/driver.c
+@@ -1586,3 +1586,23 @@ NTSTATUS WINAPI D3DKMTCheckVidPnExclusiveOwnership( const D3DKMT_CHECKVIDPNEXCLU
+ 
+     return get_display_driver()->pD3DKMTCheckVidPnExclusiveOwnership( desc );
+ }
++
++WINAPI void __wine_gdi_check_not_lock(void)
++{
++    GDI_CheckNotLock();
++}
++
++WINAPI DC *__wine_gdi_get_physdev_dc( PHYSDEV dev )
++{
++    return get_physdev_dc( dev );
++}
++
++WINAPI DWORD __wine_gdi_get_dpi(void)
++{
++    return get_dpi();
++}
++
++WINAPI void __wine_gdi_set_font_driver(const struct gdi_dc_funcs *ptr)
++{
++    font_driver = ptr;
++}
+diff --git a/dlls/gdi32/gdi32.spec b/dlls/gdi32/gdi32.spec
+index 725afebb8eb..610a9a714c0 100644
+--- a/dlls/gdi32/gdi32.spec
++++ b/dlls/gdi32/gdi32.spec
+@@ -289,8 +289,8 @@
+ @ stdcall GetEnhMetaFileW(wstr)
+ # @ stub GetFontAssocStatus
+ @ stdcall GetFontData(long long long ptr long)
+-@ stdcall GetFontFileData(long long int64 ptr long)
+-@ stdcall GetFontFileInfo(long long ptr long ptr)
++@ stdcall GetFontFileData(long long int64 ptr long) winefreetype.GetFontFileData
++@ stdcall GetFontFileInfo(long long ptr long ptr) winefreetype.GetFontFileInfo
+ @ stdcall GetFontLanguageInfo(long)
+ @ stdcall GetFontRealizationInfo(long ptr)
+ @ stub GetFontResourceInfo
+@@ -332,7 +332,7 @@
+ @ stdcall GetPolyFillMode(long)
+ @ stdcall GetROP2(long)
+ @ stdcall GetRandomRgn(long long long)
+-@ stdcall GetRasterizerCaps(ptr long)
++@ stdcall GetRasterizerCaps(ptr long) winefreetype.GetRasterizerCaps
+ @ stdcall GetRegionData(long long ptr)
+ @ stdcall GetRelAbs(long long)
+ @ stdcall GetRgnBox(long ptr)
+@@ -536,3 +536,9 @@
+ 
+ # Vulkan
+ @ cdecl __wine_get_vulkan_driver(long long)
++
++# freetype.drv
++@ stdcall __wine_gdi_check_not_lock()
++@ stdcall __wine_gdi_get_physdev_dc(ptr)
++@ stdcall __wine_gdi_get_dpi()
++@ stdcall __wine_gdi_set_font_driver(ptr)
+diff --git a/dlls/gdi32/gdi_private.h b/dlls/gdi32/gdi_private.h
+index dc2cae565bb..8e2d3c17b01 100644
+--- a/dlls/gdi32/gdi_private.h
++++ b/dlls/gdi32/gdi_private.h
+@@ -29,6 +29,7 @@
+ #include "winbase.h"
+ #include "wingdi.h"
+ #include "wine/gdi_driver.h"
++#include "wine/gdi_font.h"
+ 
+ /* Metafile defines */
+ #define META_EOF 0x0000
+@@ -48,6 +49,8 @@ typedef struct {
+ /* extra stock object: default 1x1 bitmap for memory DCs */
+ #define DEFAULT_BITMAP (STOCK_LAST+1)
+ 
++struct font_fileinfo;
++
+ struct gdi_obj_funcs
+ {
+     HGDIOBJ (*pSelectObject)( HGDIOBJ handle, HDC hdc );
+@@ -57,92 +60,10 @@ struct gdi_obj_funcs
+     BOOL    (*pDeleteObject)( HGDIOBJ handle );
+ };
+ 
+-typedef struct tagDC
+-{
+-    HDC          hSelf;            /* Handle to this DC */
+-    struct gdi_physdev nulldrv;    /* physdev for the null driver */
+-    PHYSDEV      physDev;          /* current top of the physdev stack */
+-    DWORD        thread;           /* thread owning the DC */
+-    LONG         refcount;         /* thread refcount */
+-    LONG         dirty;            /* dirty flag */
+-    LONG         disabled;         /* get_dc_ptr() will return NULL.  Controlled by DCHF_(DISABLE|ENABLE)DC */
+-    INT          saveLevel;
+-    struct tagDC *saved_dc;
+-    DWORD_PTR    dwHookData;
+-    DCHOOKPROC   hookProc;         /* DC hook */
+-    BOOL         bounds_enabled:1; /* bounds tracking is enabled */
+-    BOOL         path_open:1;      /* path is currently open (only for saved DCs) */
+-
+-    POINT        wnd_org;          /* Window origin */
+-    SIZE         wnd_ext;          /* Window extent */
+-    POINT        vport_org;        /* Viewport origin */
+-    SIZE         vport_ext;        /* Viewport extent */
+-    SIZE         virtual_res;      /* Initially HORZRES,VERTRES. Changed by SetVirtualResolution */
+-    SIZE         virtual_size;     /* Initially HORZSIZE,VERTSIZE. Changed by SetVirtualResolution */
+-    RECT         vis_rect;         /* visible rectangle in screen coords */
+-    RECT         device_rect;      /* rectangle for the whole device */
+-    int          pixel_format;     /* pixel format (for memory DCs) */
+-    UINT         aa_flags;         /* anti-aliasing flags to pass to GetGlyphOutline for current font */
+-    FLOAT        miterLimit;
+-
+-    int           flags;
+-    DWORD         layout;
+-    HRGN          hClipRgn;      /* Clip region */
+-    HRGN          hMetaRgn;      /* Meta region */
+-    HRGN          hVisRgn;       /* Visible region */
+-    HRGN          region;        /* Total DC region (intersection of clip and visible) */
+-    HPEN          hPen;
+-    HBRUSH        hBrush;
+-    HFONT         hFont;
+-    HBITMAP       hBitmap;
+-    HPALETTE      hPalette;
+-
+-    struct gdi_path *path;
+-
+-    struct font_gamma_ramp *font_gamma_ramp;
+-
+-    UINT          font_code_page;
+-    WORD          ROPmode;
+-    WORD          polyFillMode;
+-    WORD          stretchBltMode;
+-    WORD          relAbsMode;
+-    WORD          backgroundMode;
+-    COLORREF      backgroundColor;
+-    COLORREF      textColor;
+-    COLORREF      dcBrushColor;
+-    COLORREF      dcPenColor;
+-    POINT         brush_org;
+-
+-    DWORD         mapperFlags;       /* Font mapper flags */
+-    WORD          textAlign;         /* Text alignment from SetTextAlign() */
+-    INT           charExtra;         /* Spacing from SetTextCharacterExtra() */
+-    INT           breakExtra;        /* breakTotalExtra / breakCount */
+-    INT           breakRem;          /* breakTotalExtra % breakCount */
+-    INT           MapMode;
+-    INT           GraphicsMode;      /* Graphics mode */
+-    ABORTPROC     pAbortProc;        /* AbortProc for Printing */
+-    POINT         cur_pos;           /* Current position */
+-    INT           ArcDirection;
+-    XFORM         xformWorld2Wnd;    /* World-to-window transformation */
+-    XFORM         xformWorld2Vport;  /* World-to-viewport transformation */
+-    XFORM         xformVport2World;  /* Inverse of the above transformation */
+-    BOOL          vport2WorldValid;  /* Is xformVport2World valid? */
+-    RECT          bounds;            /* Current bounding rect */
+-} DC;
+-
+ /* Certain functions will do no further processing if the driver returns this.
+    Used by mfdrv for example. */
+ #define GDI_NO_MORE_WORK 2
+ 
+-/* Rounds a floating point number to integer. The world-to-viewport
+- * transformation process is done in floating point internally. This function
+- * is then used to round these coordinates to integer values.
+- */
+-static inline INT GDI_ROUND(double val)
+-{
+-   return (int)floor(val + 0.5);
+-}
+-
+ #define GET_DC_PHYSDEV(dc,func) \
+     get_physdev_entry_point( (dc)->physDev, FIELD_OFFSET(struct gdi_dc_funcs,func))
+ 
+@@ -282,31 +203,11 @@ struct font_gamma_ramp
+ 
+ /* freetype.c */
+ 
+-/* Undocumented structure filled in by GetFontRealizationInfo */
+-struct font_realization_info
+-{
+-    DWORD size;        /* could be 16 or 24 */
+-    DWORD flags;       /* 1 for bitmap fonts, 3 for scalable fonts */
+-    DWORD cache_num;   /* keeps incrementing - num of fonts that have been created allowing for caching?? */
+-    DWORD instance_id; /* identifies a realized font instance */
+-    DWORD unk;         /* unknown */
+-    WORD  face_index;  /* face index in case of font collections */
+-    WORD  simulations; /* 0 bit - bold simulation, 1 bit - oblique simulation */
+-};
+-
+-/* Undocumented structure filled in by GetCharWidthInfo */
+-struct char_width_info
+-{
+-    INT lsb;   /* minimum left side bearing */
+-    INT rsb;   /* minimum right side bearing */
+-    INT unk;   /* unknown */
+-};
+-
+-extern INT WineEngAddFontResourceEx(LPCWSTR, DWORD, PVOID) DECLSPEC_HIDDEN;
+-extern HANDLE WineEngAddFontMemResourceEx(PVOID, DWORD, PVOID, LPDWORD) DECLSPEC_HIDDEN;
+-extern BOOL WineEngCreateScalableFontResource(DWORD, LPCWSTR, LPCWSTR, LPCWSTR) DECLSPEC_HIDDEN;
+-extern BOOL WineEngInit(void) DECLSPEC_HIDDEN;
+-extern BOOL WineEngRemoveFontResourceEx(LPCWSTR, DWORD, PVOID) DECLSPEC_HIDDEN;
++extern BOOL WINAPI WineEngInit(void) DECLSPEC_HIDDEN;
++extern INT WINAPI WineEngAddFontResourceEx(LPCWSTR, DWORD, PVOID) DECLSPEC_HIDDEN;
++extern HANDLE WINAPI WineEngAddFontMemResourceEx(PVOID, DWORD, PVOID, LPDWORD) DECLSPEC_HIDDEN;
++extern BOOL WINAPI WineEngCreateScalableFontResource(DWORD, LPCWSTR, LPCWSTR, LPCWSTR) DECLSPEC_HIDDEN;
++extern BOOL WINAPI WineEngRemoveFontResourceEx(LPCWSTR, DWORD, PVOID) DECLSPEC_HIDDEN;
+ 
+ /* gdiobj.c */
+ extern HGDIOBJ alloc_gdi_handle( void *obj, WORD type, const struct gdi_obj_funcs *funcs ) DECLSPEC_HIDDEN;
+diff --git a/dlls/gdi32/resource.h b/dlls/gdi32/resource.h
+index b9a0eb66735..2fd878a2568 100644
+--- a/dlls/gdi32/resource.h
++++ b/dlls/gdi32/resource.h
+@@ -19,6 +19,7 @@
+ #include <windef.h>
+ 
+ /* these are in the order of the fsCsb[0] bits */
++/* a few are also duplicated in freetype.c */
+ #define IDS_FIRST_SCRIPT     16
+ #define IDS_WESTERN          (IDS_FIRST_SCRIPT + 0)
+ #define IDS_CENTRAL_EUROPEAN (IDS_FIRST_SCRIPT + 1)
+diff --git a/dlls/winefreetype/Makefile.in b/dlls/winefreetype/Makefile.in
+new file mode 100644
+index 00000000000..4b8a24ffb5d
+--- /dev/null
++++ b/dlls/winefreetype/Makefile.in
+@@ -0,0 +1,12 @@
++MODULE    = winefreetype.dll
++IMPORTLIB = winefreetype
++IMPORTS   = gdi32 advapi32
++EXTRADEFS = -D_GDI32_
++EXTRAINCL = $(FREETYPE_CFLAGS) $(FONTCONFIG_CFLAGS)
++EXTRALIBS = $(CARBON_LIBS) $(APPKIT_LIBS)
++
++C_SRCS = \
++	freetype.c \
++	vertical.c
++
++freetype_EXTRADEFS = -DWINE_FONT_DIR=\"`$(MAKEDEP) -R ${datadir}/wine ${fontdir}`\"
+diff --git a/dlls/gdi32/freetype.c b/dlls/winefreetype/freetype.c
+similarity index 99%
+rename from dlls/gdi32/freetype.c
+rename to dlls/winefreetype/freetype.c
+index c9291260a3c..963dad220e0 100644
+--- a/dlls/gdi32/freetype.c
++++ b/dlls/winefreetype/freetype.c
+@@ -99,12 +99,15 @@
+ #include "winerror.h"
+ #include "winreg.h"
+ #include "wingdi.h"
+-#include "gdi_private.h"
++#include "wine/gdi_font.h"
+ #include "wine/unicode.h"
+ #include "wine/debug.h"
+ #include "wine/list.h"
+ 
+-#include "resource.h"
++/* from gdi32 resource.h */
++#define IDS_FIRST_SCRIPT     16
++#define IDS_OEM_DOS          (IDS_FIRST_SCRIPT + 32)
++#define IDS_OTHER            (IDS_FIRST_SCRIPT + 33)
+ 
+ WINE_DEFAULT_DEBUG_CHANNEL(font);
+ 
+@@ -3319,13 +3322,13 @@ static void delete_external_font_keys(void)
+  *    WineEngAddFontResourceEx
+  *
+  */
+-INT WineEngAddFontResourceEx(LPCWSTR file, DWORD flags, PVOID pdv)
++INT WINAPI WineEngAddFontResourceEx(LPCWSTR file, DWORD flags, PVOID pdv)
+ {
+     WCHAR path[MAX_PATH];
+     INT ret = 0;
+ 
+     RtlRunOnceExecuteOnce( &init_once, freetype_lazy_init, NULL, NULL );
+-    GDI_CheckNotLock();
++    __wine_gdi_check_not_lock();
+ 
+     if (ft_handle)  /* do it only if we have freetype up and running */
+     {
+@@ -3357,10 +3360,10 @@ INT WineEngAddFontResourceEx(LPCWSTR file, DWORD flags, PVOID pdv)
+  *    WineEngAddFontMemResourceEx
+  *
+  */
+-HANDLE WineEngAddFontMemResourceEx(PVOID pbFont, DWORD cbFont, PVOID pdv, DWORD *pcFonts)
++HANDLE WINAPI WineEngAddFontMemResourceEx(PVOID pbFont, DWORD cbFont, PVOID pdv, DWORD *pcFonts)
+ {
+     RtlRunOnceExecuteOnce( &init_once, freetype_lazy_init, NULL, NULL );
+-    GDI_CheckNotLock();
++    __wine_gdi_check_not_lock();
+ 
+     if (ft_handle)  /* do it only if we have freetype up and running */
+     {
+@@ -3394,13 +3397,13 @@ HANDLE WineEngAddFontMemResourceEx(PVOID pbFont, DWORD cbFont, PVOID pdv, DWORD
+  *    WineEngRemoveFontResourceEx
+  *
+  */
+-BOOL WineEngRemoveFontResourceEx(LPCWSTR file, DWORD flags, PVOID pdv)
++BOOL WINAPI WineEngRemoveFontResourceEx(LPCWSTR file, DWORD flags, PVOID pdv)
+ {
+     WCHAR path[MAX_PATH];
+     INT ret = 0;
+ 
+     RtlRunOnceExecuteOnce( &init_once, freetype_lazy_init, NULL, NULL );
+-    GDI_CheckNotLock();
++    __wine_gdi_check_not_lock();
+ 
+     if (ft_handle)  /* do it only if we have freetype up and running */
+     {
+@@ -3710,8 +3713,8 @@ static BOOL create_fot( const WCHAR *resource, const WCHAR *font_file, const str
+  *    WineEngCreateScalableFontResource
+  *
+  */
+-BOOL WineEngCreateScalableFontResource( DWORD hidden, LPCWSTR resource,
+-                                        LPCWSTR font_file, LPCWSTR font_path )
++BOOL WINAPI WineEngCreateScalableFontResource( DWORD hidden, LPCWSTR resource,
++                                               LPCWSTR font_file, LPCWSTR font_path )
+ {
+     char *unix_name;
+     struct fontdir fontdir;
+@@ -4057,7 +4060,7 @@ static void update_font_info(void)
+     DWORD screen_dpi, font_dpi = 0;
+     BOOL done = FALSE;
+ 
+-    screen_dpi = get_dpi();
++    screen_dpi = __wine_gdi_get_dpi();
+     if (!screen_dpi) screen_dpi = 96;
+ 
+     if (RegCreateKeyExA(HKEY_CURRENT_USER, "Software\\Wine\\Fonts", 0, NULL, 0, KEY_ALL_ACCESS, NULL, &hkey, NULL) != ERROR_SUCCESS)
+@@ -4467,13 +4470,13 @@ static DWORD WINAPI freetype_lazy_init(RTL_RUN_ONCE *once, void *param, void **c
+  *
+  * Initialize FreeType library and create a list of available faces
+  */
+-BOOL WineEngInit(void)
++BOOL WINAPI WineEngInit(void)
+ {
+     /* update locale dependent font info in registry */
+     update_font_info();
+ 
+     /* The rest will be initialized later in freetype_lazy_init */
+-    font_driver = &freetype_funcs;
++    __wine_gdi_set_font_driver(&freetype_funcs);
+     return TRUE;
+ }
+ 
+@@ -5566,7 +5569,7 @@ static HFONT CDECL freetype_SelectFont( PHYSDEV dev, HFONT hfont, UINT *aa_flags
+     CHARSETINFO csi;
+     FMAT2 dcmat;
+     FontSubst *psub = NULL;
+-    DC *dc = get_physdev_dc( dev );
++    DC *dc = __wine_gdi_get_physdev_dc( dev );
+     const SYSTEM_LINKS *font_link;
+ 
+     if (!hfont)  /* notification that the font has been changed by another driver */
+@@ -5616,7 +5619,7 @@ static HFONT CDECL freetype_SelectFont( PHYSDEV dev, HFONT hfont, UINT *aa_flags
+     TRACE("DC transform %f %f %f %f\n", dcmat.eM11, dcmat.eM12,
+                                         dcmat.eM21, dcmat.eM22);
+ 
+-    GDI_CheckNotLock();
++    __wine_gdi_check_not_lock();
+     EnterCriticalSection( &freetype_cs );
+ 
+     /* check the cache first */
+@@ -6036,13 +6039,15 @@ static INT load_script_name( UINT id, WCHAR buffer[LF_FACESIZE] )
+     HRSRC rsrc;
+     HGLOBAL hMem;
+     WCHAR *p;
+-    int i;
++    int i = 0;
++    HMODULE gdi32_module = GetModuleHandleA("gdi32.dll");
+ 
++    if (!gdi32_module) goto done;
+     id += IDS_FIRST_SCRIPT;
+     rsrc = FindResourceW( gdi32_module, (LPCWSTR)(ULONG_PTR)((id >> 4) + 1), (LPCWSTR)6 /*RT_STRING*/ );
+-    if (!rsrc) return 0;
++    if (!rsrc) goto done;
+     hMem = LoadResource( gdi32_module, rsrc );
+-    if (!hMem) return 0;
++    if (!hMem) goto done;
+ 
+     p = LockResource( hMem );
+     id &= 0x000f;
+@@ -6051,6 +6056,9 @@ static INT load_script_name( UINT id, WCHAR buffer[LF_FACESIZE] )
+     i = min(LF_FACESIZE - 1, *p);
+     memcpy(buffer, p + 1, i * sizeof(WCHAR));
+     buffer[i] = 0;
++
++done:
++    if (gdi32_module) CloseHandle(gdi32_module);
+     return i;
+ }
+ 
+@@ -6331,7 +6339,7 @@ static BOOL CDECL freetype_EnumFonts( PHYSDEV dev, LPLOGFONTW plf, FONTENUMPROCW
+ 
+     create_enum_charset_list(plf->lfCharSet, &enum_charsets);
+ 
+-    GDI_CheckNotLock();
++    __wine_gdi_check_not_lock();
+     EnterCriticalSection( &freetype_cs );
+     if(plf->lfFaceName[0]) {
+         WCHAR *face_name = plf->lfFaceName;
+@@ -6648,7 +6656,7 @@ static DWORD CDECL freetype_GetGlyphIndices( PHYSDEV dev, LPCWSTR lpstr, INT cou
+         got_default = TRUE;
+     }
+ 
+-    GDI_CheckNotLock();
++    __wine_gdi_check_not_lock();
+     EnterCriticalSection( &freetype_cs );
+ 
+     for(i = 0; i < count; i++)
+@@ -8297,7 +8305,7 @@ static DWORD CDECL freetype_GetGlyphOutline( PHYSDEV dev, UINT glyph, UINT forma
+         return dev->funcs->pGetGlyphOutline( dev, glyph, format, lpgm, buflen, buf, lpmat );
+     }
+ 
+-    GDI_CheckNotLock();
++    __wine_gdi_check_not_lock();
+     EnterCriticalSection( &freetype_cs );
+     ret = get_glyph_outline( physdev->font, glyph, format, lpgm, &abc, buflen, buf, lpmat );
+     LeaveCriticalSection( &freetype_cs );
+@@ -8318,7 +8326,7 @@ static BOOL CDECL freetype_GetTextMetrics( PHYSDEV dev, TEXTMETRICW *metrics )
+         return dev->funcs->pGetTextMetrics( dev, metrics );
+     }
+ 
+-    GDI_CheckNotLock();
++    __wine_gdi_check_not_lock();
+     EnterCriticalSection( &freetype_cs );
+     ret = get_text_metrics( physdev->font, metrics );
+     LeaveCriticalSection( &freetype_cs );
+@@ -8343,7 +8351,7 @@ static UINT CDECL freetype_GetOutlineTextMetrics( PHYSDEV dev, UINT cbSize, OUTL
+ 
+     if (!FT_IS_SCALABLE( physdev->font->ft_face )) return 0;
+ 
+-    GDI_CheckNotLock();
++    __wine_gdi_check_not_lock();
+     EnterCriticalSection( &freetype_cs );
+ 
+     if (physdev->font->potm || get_outline_text_metrics( physdev->font ))
+@@ -8468,7 +8476,7 @@ static BOOL CDECL freetype_GetCharWidth( PHYSDEV dev, UINT firstChar, UINT lastC
+ 
+     TRACE("%p, %d, %d, %p\n", physdev->font, firstChar, lastChar, buffer);
+ 
+-    GDI_CheckNotLock();
++    __wine_gdi_check_not_lock();
+     EnterCriticalSection( &freetype_cs );
+     for(c = firstChar; c <= lastChar; c++) {
+         if (get_glyph_outline( physdev->font, c, GGO_METRICS, &gm, &abc, 0, NULL, &identity ) == GDI_ERROR)
+@@ -8532,7 +8540,7 @@ static BOOL CDECL freetype_GetCharABCWidths( PHYSDEV dev, UINT firstChar, UINT l
+ 
+     TRACE("%p, %d, %d, %p\n", physdev->font, firstChar, lastChar, buffer);
+ 
+-    GDI_CheckNotLock();
++    __wine_gdi_check_not_lock();
+     EnterCriticalSection( &freetype_cs );
+ 
+     for(c = firstChar; c <= lastChar; c++, buffer++)
+@@ -8561,7 +8569,7 @@ static BOOL CDECL freetype_GetCharABCWidthsI( PHYSDEV dev, UINT firstChar, UINT
+     if(!FT_HAS_HORIZONTAL(physdev->font->ft_face))
+         return FALSE;
+ 
+-    GDI_CheckNotLock();
++    __wine_gdi_check_not_lock();
+     EnterCriticalSection( &freetype_cs );
+ 
+     for(c = 0; c < count; c++, buffer++)
+@@ -8591,7 +8599,7 @@ static BOOL CDECL freetype_GetTextExtentExPoint( PHYSDEV dev, LPCWSTR wstr, INT
+ 
+     TRACE("%p, %s, %d\n", physdev->font, debugstr_wn(wstr, count), count);
+ 
+-    GDI_CheckNotLock();
++    __wine_gdi_check_not_lock();
+     EnterCriticalSection( &freetype_cs );
+ 
+     for (idx = pos = 0; idx < count; idx++)
+@@ -8624,7 +8632,7 @@ static BOOL CDECL freetype_GetTextExtentExPointI( PHYSDEV dev, const WORD *indic
+ 
+     TRACE("%p, %p, %d\n", physdev->font, indices, count);
+ 
+-    GDI_CheckNotLock();
++    __wine_gdi_check_not_lock();
+     EnterCriticalSection( &freetype_cs );
+ 
+     for (idx = pos = 0; idx < count; idx++)
+@@ -8800,7 +8808,7 @@ static BOOL CDECL freetype_FontIsLinked( PHYSDEV dev )
+         return dev->funcs->pFontIsLinked( dev );
+     }
+ 
+-    GDI_CheckNotLock();
++    __wine_gdi_check_not_lock();
+     EnterCriticalSection( &freetype_cs );
+     ret = !list_empty(&physdev->font->child_fonts);
+     LeaveCriticalSection( &freetype_cs );
+@@ -9030,7 +9038,7 @@ static DWORD CDECL freetype_GetKerningPairs( PHYSDEV dev, DWORD cPairs, KERNINGP
+         return dev->funcs->pGetKerningPairs( dev, cPairs, kern_pair );
+     }
+ 
+-    GDI_CheckNotLock();
++    __wine_gdi_check_not_lock();
+     EnterCriticalSection( &freetype_cs );
+     if (font->total_kern_pairs != (DWORD)-1)
+     {
+@@ -9309,35 +9317,33 @@ static const struct gdi_dc_funcs freetype_funcs =
+ 
+ #else /* HAVE_FREETYPE */
+ 
+-struct font_fileinfo;
+-
+ /*************************************************************************/
+ 
+-BOOL WineEngInit(void)
++BOOL WINAPI WineEngInit(void)
+ {
+     return FALSE;
+ }
+ 
+-INT WineEngAddFontResourceEx(LPCWSTR file, DWORD flags, PVOID pdv)
++INT WINAPI WineEngAddFontResourceEx(LPCWSTR file, DWORD flags, PVOID pdv)
+ {
+     FIXME("(%s, %x, %p): stub\n", debugstr_w(file), flags, pdv);
+     return 1;
+ }
+ 
+-INT WineEngRemoveFontResourceEx(LPCWSTR file, DWORD flags, PVOID pdv)
++INT WINAPI WineEngRemoveFontResourceEx(LPCWSTR file, DWORD flags, PVOID pdv)
+ {
+     FIXME("(%s, %x, %p): stub\n", debugstr_w(file), flags, pdv);
+     return TRUE;
+ }
+ 
+-HANDLE WineEngAddFontMemResourceEx(PVOID pbFont, DWORD cbFont, PVOID pdv, DWORD *pcFonts)
++HANDLE WINAPI WineEngAddFontMemResourceEx(PVOID pbFont, DWORD cbFont, PVOID pdv, DWORD *pcFonts)
+ {
+     FIXME("(%p, %u, %p, %p): stub\n", pbFont, cbFont, pdv, pcFonts);
+     return NULL;
+ }
+ 
+-BOOL WineEngCreateScalableFontResource( DWORD hidden, LPCWSTR resource,
+-                                        LPCWSTR font_file, LPCWSTR font_path )
++BOOL WINAPI WineEngCreateScalableFontResource( DWORD hidden, LPCWSTR resource,
++                                               LPCWSTR font_file, LPCWSTR font_path )
+ {
+     FIXME("stub\n");
+     return FALSE;
+diff --git a/dlls/gdi32/vertical.c b/dlls/winefreetype/vertical.c
+similarity index 100%
+rename from dlls/gdi32/vertical.c
+rename to dlls/winefreetype/vertical.c
+diff --git a/dlls/winefreetype/winefreetype.spec b/dlls/winefreetype/winefreetype.spec
+new file mode 100644
+index 00000000000..970365b965d
+--- /dev/null
++++ b/dlls/winefreetype/winefreetype.spec
+@@ -0,0 +1,8 @@
++@ stdcall WineEngInit()
++@ stdcall WineEngAddFontResourceEx(ptr long ptr)
++@ stdcall WineEngRemoveFontResourceEx(ptr long ptr)
++@ stdcall WineEngAddFontMemResourceEx(ptr long ptr ptr)
++@ stdcall WineEngCreateScalableFontResource(long ptr ptr ptr)
++@ stdcall GetRasterizerCaps(ptr long)
++@ stdcall GetFontFileData(long long int64 ptr long)
++@ stdcall GetFontFileInfo(long long ptr long ptr)
+diff --git a/include/wine/gdi_font.h b/include/wine/gdi_font.h
+new file mode 100644
+index 00000000000..035241094f2
+--- /dev/null
++++ b/include/wine/gdi_font.h
+@@ -0,0 +1,135 @@
++/*
++ * Definitions for Wine GDI freetype interface
++ *
++ * Copyright 2020 Rémi Bernon for CodeWeavers
++ *
++ * This library is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU Lesser General Public
++ * License as published by the Free Software Foundation; either
++ * version 2.1 of the License, or (at your option) any later version.
++ *
++ * This library is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++ * Lesser General Public License for more details.
++ *
++ * You should have received a copy of the GNU Lesser General Public
++ * License along with this library; if not, write to the Free Software
++ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
++ */
++
++#ifndef __WINE_WINE_GDI_FONT_H
++#define __WINE_WINE_GDI_FONT_H
++
++#include <math.h>
++
++#include "wine/gdi_driver.h"
++
++typedef struct tagDC
++{
++    HDC          hSelf;            /* Handle to this DC */
++    struct gdi_physdev nulldrv;    /* physdev for the null driver */
++    PHYSDEV      physDev;          /* current top of the physdev stack */
++    DWORD        thread;           /* thread owning the DC */
++    LONG         refcount;         /* thread refcount */
++    LONG         dirty;            /* dirty flag */
++    LONG         disabled;         /* get_dc_ptr() will return NULL.  Controlled by DCHF_(DISABLE|ENABLE)DC */
++    INT          saveLevel;
++    struct tagDC *saved_dc;
++    DWORD_PTR    dwHookData;
++    DCHOOKPROC   hookProc;         /* DC hook */
++    BOOL         bounds_enabled:1; /* bounds tracking is enabled */
++    BOOL         path_open:1;      /* path is currently open (only for saved DCs) */
++
++    POINT        wnd_org;          /* Window origin */
++    SIZE         wnd_ext;          /* Window extent */
++    POINT        vport_org;        /* Viewport origin */
++    SIZE         vport_ext;        /* Viewport extent */
++    SIZE         virtual_res;      /* Initially HORZRES,VERTRES. Changed by SetVirtualResolution */
++    SIZE         virtual_size;     /* Initially HORZSIZE,VERTSIZE. Changed by SetVirtualResolution */
++    RECT         vis_rect;         /* visible rectangle in screen coords */
++    RECT         device_rect;      /* rectangle for the whole device */
++    int          pixel_format;     /* pixel format (for memory DCs) */
++    UINT         aa_flags;         /* anti-aliasing flags to pass to GetGlyphOutline for current font */
++    FLOAT        miterLimit;
++
++    int           flags;
++    DWORD         layout;
++    HRGN          hClipRgn;      /* Clip region */
++    HRGN          hMetaRgn;      /* Meta region */
++    HRGN          hVisRgn;       /* Visible region */
++    HRGN          region;        /* Total DC region (intersection of clip and visible) */
++    HPEN          hPen;
++    HBRUSH        hBrush;
++    HFONT         hFont;
++    HBITMAP       hBitmap;
++    HPALETTE      hPalette;
++
++    struct gdi_path *path;
++
++    struct font_gamma_ramp *font_gamma_ramp;
++
++    UINT          font_code_page;
++    WORD          ROPmode;
++    WORD          polyFillMode;
++    WORD          stretchBltMode;
++    WORD          relAbsMode;
++    WORD          backgroundMode;
++    COLORREF      backgroundColor;
++    COLORREF      textColor;
++    COLORREF      dcBrushColor;
++    COLORREF      dcPenColor;
++    POINT         brush_org;
++
++    DWORD         mapperFlags;       /* Font mapper flags */
++    WORD          textAlign;         /* Text alignment from SetTextAlign() */
++    INT           charExtra;         /* Spacing from SetTextCharacterExtra() */
++    INT           breakExtra;        /* breakTotalExtra / breakCount */
++    INT           breakRem;          /* breakTotalExtra % breakCount */
++    INT           MapMode;
++    INT           GraphicsMode;      /* Graphics mode */
++    ABORTPROC     pAbortProc;        /* AbortProc for Printing */
++    POINT         cur_pos;           /* Current position */
++    INT           ArcDirection;
++    XFORM         xformWorld2Wnd;    /* World-to-window transformation */
++    XFORM         xformWorld2Vport;  /* World-to-viewport transformation */
++    XFORM         xformVport2World;  /* Inverse of the above transformation */
++    BOOL          vport2WorldValid;  /* Is xformVport2World valid? */
++    RECT          bounds;            /* Current bounding rect */
++} DC;
++
++/* Undocumented structure filled in by GetFontRealizationInfo */
++struct font_realization_info
++{
++    DWORD size;        /* could be 16 or 24 */
++    DWORD flags;       /* 1 for bitmap fonts, 3 for scalable fonts */
++    DWORD cache_num;   /* keeps incrementing - num of fonts that have been created allowing for caching?? */
++    DWORD instance_id; /* identifies a realized font instance */
++    DWORD unk;         /* unknown */
++    WORD  face_index;  /* face index in case of font collections */
++    WORD  simulations; /* 0 bit - bold simulation, 1 bit - oblique simulation */
++};
++
++/* Undocumented structure filled in by GetCharWidthInfo */
++struct char_width_info
++{
++    INT lsb;   /* minimum left side bearing */
++    INT rsb;   /* minimum right side bearing */
++    INT unk;   /* unknown */
++};
++
++/* Rounds a floating point number to integer. The world-to-viewport
++ * transformation process is done in floating point internally. This function
++ * is then used to round these coordinates to integer values.
++ */
++static inline INT GDI_ROUND(double val)
++{
++   return (int)floor(val + 0.5);
++}
++
++extern WINAPI void __wine_gdi_check_not_lock(void) DECLSPEC_HIDDEN;
++extern WINAPI DC *__wine_gdi_get_physdev_dc( PHYSDEV dev ) DECLSPEC_HIDDEN;
++extern WINAPI DWORD __wine_gdi_get_dpi(void) DECLSPEC_HIDDEN;
++extern WINAPI void __wine_gdi_set_font_driver(const struct gdi_dc_funcs *) DECLSPEC_HIDDEN;
++
++#endif /* __WINE_WINE_GDI_FONT_H */
+-- 
+2.28.0
+
+From 226b755bbbfe2f8e3b235fe6c26929587028465f Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
+Date: Mon, 6 Jul 2020 15:04:59 +0200
+Subject: [PATCH 4/5] gdi32: Build with msvcrt.
+
+---
+ dlls/gdi32/Makefile.in         |  1 +
+ dlls/gdi32/bidi.c              |  2 --
+ dlls/gdi32/bitblt.c            |  2 --
+ dlls/gdi32/brush.c             |  2 --
+ dlls/gdi32/dc.c                |  8 +++-----
+ dlls/gdi32/dib.c               |  2 --
+ dlls/gdi32/dibdrv/graphics.c   |  7 +++----
+ dlls/gdi32/dibdrv/opengl.c     |  3 ---
+ dlls/gdi32/driver.c            | 24 ++++++++++--------------
+ dlls/gdi32/enhmetafile.c       |  3 ---
+ dlls/gdi32/enhmfdrv/graphics.c |  3 ---
+ dlls/gdi32/font.c              | 12 ++++--------
+ dlls/gdi32/gdiobj.c            |  2 --
+ dlls/gdi32/icm.c               |  3 ---
+ dlls/gdi32/metafile.c          |  2 --
+ dlls/gdi32/opengl.c            |  3 ---
+ dlls/gdi32/painting.c          |  3 ---
+ dlls/gdi32/path.c              |  3 ---
+ dlls/gdi32/pen.c               |  2 --
+ dlls/gdi32/vulkan.c            |  3 ---
+ 20 files changed, 21 insertions(+), 69 deletions(-)
+
+diff --git a/dlls/gdi32/Makefile.in b/dlls/gdi32/Makefile.in
+index 54506255657..4a85aa7b8ff 100644
+--- a/dlls/gdi32/Makefile.in
++++ b/dlls/gdi32/Makefile.in
+@@ -3,6 +3,7 @@ MODULE    = gdi32.dll
+ IMPORTLIB = gdi32
+ IMPORTS   = advapi32 winefreetype
+ DELAYIMPORTS = usp10 setupapi
++EXTRADLLFLAGS = -mno-cygwin
+ 
+ C_SRCS = \
+ 	bidi.c \
+diff --git a/dlls/gdi32/bidi.c b/dlls/gdi32/bidi.c
+index 1b2dca774c7..18971026395 100644
+--- a/dlls/gdi32/bidi.c
++++ b/dlls/gdi32/bidi.c
+@@ -41,8 +41,6 @@
+  * has been modified.
+  */
+ 
+-#include "config.h"
+-
+ #include <stdarg.h>
+ #include "windef.h"
+ #include "winbase.h"
+diff --git a/dlls/gdi32/bitblt.c b/dlls/gdi32/bitblt.c
+index f3b866057eb..c32dc32db5a 100644
+--- a/dlls/gdi32/bitblt.c
++++ b/dlls/gdi32/bitblt.c
+@@ -18,8 +18,6 @@
+  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
+  */
+ 
+-#include "config.h"
+-
+ #include <stdarg.h>
+ #include <limits.h>
+ #include <math.h>
+diff --git a/dlls/gdi32/brush.c b/dlls/gdi32/brush.c
+index 7d13649305d..517f8c17e22 100644
+--- a/dlls/gdi32/brush.c
++++ b/dlls/gdi32/brush.c
+@@ -18,8 +18,6 @@
+  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
+  */
+ 
+-#include "config.h"
+-
+ #include <stdarg.h>
+ #include <string.h>
+ 
+diff --git a/dlls/gdi32/dc.c b/dlls/gdi32/dc.c
+index ecc095dffec..1b3be4764d6 100644
+--- a/dlls/gdi32/dc.c
++++ b/dlls/gdi32/dc.c
+@@ -18,8 +18,6 @@
+  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
+  */
+ 
+-#include "config.h"
+-
+ #include <assert.h>
+ #include <stdarg.h>
+ #include <stdlib.h>
+@@ -28,10 +26,10 @@
+ #include "winbase.h"
+ #include "wingdi.h"
+ #include "winreg.h"
++#include "winnls.h"
+ #include "winternl.h"
+ #include "winerror.h"
+ #include "gdi_private.h"
+-#include "wine/unicode.h"
+ #include "wine/debug.h"
+ 
+ WINE_DEFAULT_DEBUG_CHANNEL(dc);
+@@ -640,7 +638,7 @@ HDC WINAPI CreateDCW( LPCWSTR driver, LPCWSTR device, LPCWSTR output,
+             ERR( "no device found for %s\n", debugstr_w(device) );
+             return 0;
+         }
+-        strcpyW(buf, driver);
++        wcscpy(buf, driver);
+     }
+ 
+     if (!(funcs = DRIVER_load_driver( buf )))
+@@ -700,7 +698,7 @@ HDC WINAPI CreateDCA( LPCSTR driver, LPCSTR device, LPCSTR output,
+     if (initData)
+     {
+         /* don't convert initData for DISPLAY driver, it's not used */
+-        if (!driverW.Buffer || strcmpiW( driverW.Buffer, displayW ))
++        if (!driverW.Buffer || wcsicmp( driverW.Buffer, displayW ))
+             initDataW = GdiConvertToDevmodeW(initData);
+     }
+ 
+diff --git a/dlls/gdi32/dib.c b/dlls/gdi32/dib.c
+index 3d267ba89c9..10a7a957973 100644
+--- a/dlls/gdi32/dib.c
++++ b/dlls/gdi32/dib.c
+@@ -59,8 +59,6 @@
+     Search for "Bitmap Structures" in MSDN
+ */
+ 
+-#include "config.h"
+-
+ #include <stdarg.h>
+ #include <stdlib.h>
+ #include <string.h>
+diff --git a/dlls/gdi32/dibdrv/graphics.c b/dlls/gdi32/dibdrv/graphics.c
+index 35f70174379..787ed48db73 100644
+--- a/dlls/gdi32/dibdrv/graphics.c
++++ b/dlls/gdi32/dibdrv/graphics.c
+@@ -22,7 +22,6 @@
+ #include "gdi_private.h"
+ #include "dibdrv.h"
+ 
+-#include "wine/unicode.h"
+ #include "wine/debug.h"
+ 
+ WINE_DEFAULT_DEBUG_CHANNEL(dib);
+@@ -615,9 +614,9 @@ static DWORD font_cache_hash( struct cached_font *font )
+         two_chars = *ptr;
+         pwc = (WCHAR *)&two_chars;
+         if (!*pwc) break;
+-        *pwc = toupperW(*pwc);
++        *pwc = towupper(*pwc);
+         pwc++;
+-        *pwc = toupperW(*pwc);
++        *pwc = towupper(*pwc);
+         hash ^= two_chars;
+         if (!*pwc) break;
+     }
+@@ -630,7 +629,7 @@ static int font_cache_cmp( const struct cached_font *p1, const struct cached_fon
+     if (!ret) ret = p1->aa_flags - p2->aa_flags;
+     if (!ret) ret = memcmp( &p1->xform, &p2->xform, sizeof(p1->xform) );
+     if (!ret) ret = memcmp( &p1->lf, &p2->lf, FIELD_OFFSET( LOGFONTW, lfFaceName ));
+-    if (!ret) ret = strcmpiW( p1->lf.lfFaceName, p2->lf.lfFaceName );
++    if (!ret) ret = wcsicmp( p1->lf.lfFaceName, p2->lf.lfFaceName );
+     return ret;
+ }
+ 
+diff --git a/dlls/gdi32/dibdrv/opengl.c b/dlls/gdi32/dibdrv/opengl.c
+index 5242e646e58..490693459c5 100644
+--- a/dlls/gdi32/dibdrv/opengl.c
++++ b/dlls/gdi32/dibdrv/opengl.c
+@@ -18,9 +18,6 @@
+  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
+  */
+ 
+-#include "config.h"
+-#include "wine/port.h"
+-
+ #include "gdi_private.h"
+ #include "dibdrv.h"
+ 
+diff --git a/dlls/gdi32/driver.c b/dlls/gdi32/driver.c
+index 4b53b23e790..c5a7ab62bc9 100644
+--- a/dlls/gdi32/driver.c
++++ b/dlls/gdi32/driver.c
+@@ -19,9 +19,6 @@
+  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
+  */
+ 
+-#include "config.h"
+-#include "wine/port.h"
+-
+ #include <assert.h>
+ #include <stdarg.h>
+ #include <string.h>
+@@ -42,7 +39,6 @@
+ #include "ddk/d3dkmthk.h"
+ 
+ #include "gdi_private.h"
+-#include "wine/unicode.h"
+ #include "wine/list.h"
+ #include "wine/debug.h"
+ #include "wine/heap.h"
+@@ -148,17 +144,17 @@ static BOOL is_display_device( LPCWSTR name )
+     static const WCHAR display_deviceW[] = {'\\','\\','.','\\','D','I','S','P','L','A','Y'};
+     const WCHAR *p = name;
+ 
+-    if (strncmpiW( name, display_deviceW, sizeof(display_deviceW) / sizeof(WCHAR) ))
++    if (wcsncmp( name, display_deviceW, sizeof(display_deviceW) / sizeof(WCHAR) ))
+         return FALSE;
+ 
+     p += sizeof(display_deviceW) / sizeof(WCHAR);
+ 
+-    if (!isdigitW( *p++ ))
++    if (!iswdigit( *p++ ))
+         return FALSE;
+ 
+     for (; *p; p++)
+     {
+-        if (!isdigitW( *p ))
++        if (!iswdigit( *p ))
+             return FALSE;
+     }
+ 
+@@ -190,7 +186,7 @@ const struct gdi_dc_funcs *DRIVER_load_driver( LPCWSTR name )
+     static const WCHAR displayW[] = { 'd','i','s','p','l','a','y',0 };
+ 
+     /* display driver is a special case */
+-    if (!strcmpiW( name, displayW ) || is_display_device( name )) return get_display_driver();
++    if (!wcsicmp( name, displayW ) || is_display_device( name )) return get_display_driver();
+ 
+     if ((module = GetModuleHandleW( name )))
+     {
+@@ -544,7 +540,7 @@ static INT CDECL nulldrv_GetTextFace( PHYSDEV dev, INT size, LPWSTR name )
+ 
+     if (GetObjectW( dc->hFont, sizeof(font), &font ))
+     {
+-        ret = strlenW( font.lfFaceName ) + 1;
++        ret = wcslen( font.lfFaceName ) + 1;
+         if (name)
+         {
+             lstrcpynW( name, font.lfFaceName, size );
+@@ -943,7 +939,7 @@ BOOL DRIVER_GetDriverName( LPCWSTR device, LPWSTR driver, DWORD size )
+     WCHAR *p;
+ 
+     /* display is a special case */
+-    if (!strcmpiW( device, displayW ) ||
++    if (!wcsicmp( device, displayW ) ||
+         is_display_device( device ))
+     {
+         lstrcpynW( driver, displayW, size );
+@@ -955,7 +951,7 @@ BOOL DRIVER_GetDriverName( LPCWSTR device, LPWSTR driver, DWORD size )
+         WARN("Unable to find %s in [devices] section of win.ini\n", debugstr_w(device));
+         return FALSE;
+     }
+-    p = strchrW(driver, ',');
++    p = wcschr(driver, ',');
+     if(!p)
+     {
+         WARN("%s entry in [devices] section of win.ini is malformed.\n", debugstr_w(device));
+@@ -1396,10 +1392,10 @@ NTSTATUS WINAPI D3DKMTOpenAdapterFromGdiDisplayName( D3DKMT_OPENADAPTERFROMGDIDI
+         return STATUS_UNSUCCESSFUL;
+ 
+     TRACE("DeviceName: %s\n", wine_dbgstr_w( desc->DeviceName ));
+-    if (strncmpiW( desc->DeviceName, displayW, ARRAY_SIZE(displayW) ))
++    if (wcsncmp( desc->DeviceName, displayW, ARRAY_SIZE(displayW) ))
+         return STATUS_UNSUCCESSFUL;
+ 
+-    index = strtolW( desc->DeviceName + ARRAY_SIZE(displayW), &end, 10 ) - 1;
++    index = wcstol( desc->DeviceName + ARRAY_SIZE(displayW), &end, 10 ) - 1;
+     if (*end)
+         return STATUS_UNSUCCESSFUL;
+ 
+@@ -1411,7 +1407,7 @@ NTSTATUS WINAPI D3DKMTOpenAdapterFromGdiDisplayName( D3DKMT_OPENADAPTERFROMGDIDI
+     mutex = get_display_device_init_mutex();
+ 
+     size = sizeof( bufferW );
+-    sprintfW( key_nameW, video_value_fmtW, index );
++    swprintf( key_nameW, MAX_PATH, video_value_fmtW, index );
+     if (RegGetValueW( HKEY_LOCAL_MACHINE, video_keyW, key_nameW, RRF_RT_REG_SZ, NULL, bufferW, &size ))
+         goto done;
+ 
+diff --git a/dlls/gdi32/enhmetafile.c b/dlls/gdi32/enhmetafile.c
+index fc3389ff23f..e4107682fb1 100644
+--- a/dlls/gdi32/enhmetafile.c
++++ b/dlls/gdi32/enhmetafile.c
+@@ -31,9 +31,6 @@
+  *
+  */
+ 
+-#include "config.h"
+-#include "wine/port.h"
+-
+ #include <stdarg.h>
+ #include <stdlib.h>
+ #include <string.h>
+diff --git a/dlls/gdi32/enhmfdrv/graphics.c b/dlls/gdi32/enhmfdrv/graphics.c
+index ed4254096a4..148030cea3b 100644
+--- a/dlls/gdi32/enhmfdrv/graphics.c
++++ b/dlls/gdi32/enhmfdrv/graphics.c
+@@ -18,9 +18,6 @@
+  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
+  */
+ 
+-#include "config.h"
+-#include "wine/port.h"
+-
+ #include <stdarg.h>
+ #include <stdlib.h>
+ #include <string.h>
+diff --git a/dlls/gdi32/font.c b/dlls/gdi32/font.c
+index e099bec5e81..434828dd61a 100644
+--- a/dlls/gdi32/font.c
++++ b/dlls/gdi32/font.c
+@@ -20,9 +20,6 @@
+  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
+  */
+ 
+-#include "config.h"
+-#include "wine/port.h"
+-
+ #include <limits.h>
+ #include <stdarg.h>
+ #include <stdlib.h>
+@@ -37,7 +34,6 @@
+ #include "gdi_private.h"
+ #include "wine/exception.h"
+ #include "wine/heap.h"
+-#include "wine/unicode.h"
+ #include "wine/debug.h"
+ 
+ WINE_DEFAULT_DEBUG_CHANNEL(font);
+@@ -272,7 +268,7 @@ static DWORD get_key_value( HKEY key, const WCHAR *name, DWORD *value )
+     if (!err)
+     {
+         if (type == REG_DWORD) memcpy( value, buf, sizeof(*value) );
+-        else *value = atoiW( buf );
++        else *value = _wtoi( buf );
+     }
+     return err;
+ }
+@@ -656,17 +652,17 @@ static DWORD get_associated_charset_info(void)
+ 
+         data_len = sizeof(dataW);
+         if (!RegQueryValueExW(hkey, ansiW, NULL, &type, (LPBYTE)dataW, &data_len) &&
+-            type == REG_SZ && !strcmpiW(dataW, yesW))
++            type == REG_SZ && !wcsicmp(dataW, yesW))
+             associated_charset |= ASSOC_CHARSET_ANSI;
+ 
+         data_len = sizeof(dataW);
+         if (!RegQueryValueExW(hkey, oemW, NULL, &type, (LPBYTE)dataW, &data_len) &&
+-            type == REG_SZ && !strcmpiW(dataW, yesW))
++            type == REG_SZ && !wcsicmp(dataW, yesW))
+             associated_charset |= ASSOC_CHARSET_OEM;
+ 
+         data_len = sizeof(dataW);
+         if (!RegQueryValueExW(hkey, symbolW, NULL, &type, (LPBYTE)dataW, &data_len) &&
+-            type == REG_SZ && !strcmpiW(dataW, yesW))
++            type == REG_SZ && !wcsicmp(dataW, yesW))
+             associated_charset |= ASSOC_CHARSET_SYMBOL;
+ 
+         RegCloseKey(hkey);
+diff --git a/dlls/gdi32/gdiobj.c b/dlls/gdi32/gdiobj.c
+index 083a5045692..e204079baf7 100644
+--- a/dlls/gdi32/gdiobj.c
++++ b/dlls/gdi32/gdiobj.c
+@@ -18,8 +18,6 @@
+  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
+  */
+ 
+-#include "config.h"
+-
+ #include <assert.h>
+ #include <stdlib.h>
+ #include <stdarg.h>
+diff --git a/dlls/gdi32/icm.c b/dlls/gdi32/icm.c
+index 9d0e2f61aaa..d0a42a55531 100644
+--- a/dlls/gdi32/icm.c
++++ b/dlls/gdi32/icm.c
+@@ -19,8 +19,6 @@
+  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
+  */
+ 
+-#include "config.h"
+-
+ #include <stdarg.h>
+ #include <string.h>
+ 
+@@ -33,7 +31,6 @@
+ #include "gdi_private.h"
+ 
+ #include "wine/debug.h"
+-#include "wine/unicode.h"
+ 
+ WINE_DEFAULT_DEBUG_CHANNEL(icm);
+ 
+diff --git a/dlls/gdi32/metafile.c b/dlls/gdi32/metafile.c
+index 28ad53cf57b..1c831ef83ef 100644
+--- a/dlls/gdi32/metafile.c
++++ b/dlls/gdi32/metafile.c
+@@ -45,8 +45,6 @@
+  * HDMD - 14/4/1999
+  */
+ 
+-#include "config.h"
+-
+ #include <stdarg.h>
+ #include <string.h>
+ #include <fcntl.h>
+diff --git a/dlls/gdi32/opengl.c b/dlls/gdi32/opengl.c
+index 578737994ab..57cdf8dd26b 100644
+--- a/dlls/gdi32/opengl.c
++++ b/dlls/gdi32/opengl.c
+@@ -20,9 +20,6 @@
+  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
+  */
+ 
+-#include "config.h"
+-#include "wine/port.h"
+-
+ #include <stdarg.h>
+ #include <string.h>
+ #include <stdlib.h>
+diff --git a/dlls/gdi32/painting.c b/dlls/gdi32/painting.c
+index 81937b8bbb4..96f4a1ede64 100644
+--- a/dlls/gdi32/painting.c
++++ b/dlls/gdi32/painting.c
+@@ -20,9 +20,6 @@
+  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
+  */
+ 
+-#include "config.h"
+-#include "wine/port.h"
+-
+ #include <stdarg.h>
+ #include <string.h>
+ #include <stdlib.h>
+diff --git a/dlls/gdi32/path.c b/dlls/gdi32/path.c
+index 8ecf9bf8e69..ea412610b7f 100644
+--- a/dlls/gdi32/path.c
++++ b/dlls/gdi32/path.c
+@@ -21,9 +21,6 @@
+  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
+  */
+ 
+-#include "config.h"
+-#include "wine/port.h"
+-
+ #include <assert.h>
+ #include <math.h>
+ #include <stdarg.h>
+diff --git a/dlls/gdi32/pen.c b/dlls/gdi32/pen.c
+index fa789e4cf91..fbac882a9c7 100644
+--- a/dlls/gdi32/pen.c
++++ b/dlls/gdi32/pen.c
+@@ -18,8 +18,6 @@
+  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
+  */
+ 
+-#include "config.h"
+-
+ #include <stdarg.h>
+ #include <stdlib.h>
+ #include <string.h>
+diff --git a/dlls/gdi32/vulkan.c b/dlls/gdi32/vulkan.c
+index 16548a51a55..25ac7b65d25 100644
+--- a/dlls/gdi32/vulkan.c
++++ b/dlls/gdi32/vulkan.c
+@@ -18,9 +18,6 @@
+  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
+  */
+ 
+-#include "config.h"
+-#include "wine/port.h"
+-
+ #include "gdi_private.h"
+ 
+ /***********************************************************************
+-- 
+2.28.0
+
+From 87cbd903fd228320e40c2c8350c7171b8d7b0995 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
+Date: Thu, 11 Jun 2020 10:59:06 +0200
+Subject: [PATCH 5/5] gdi32: Implement GdiDllInitialize stub.
+
+This is required by several Call of Duty games that are calling this
+directly after loading gdi32.dll from disk. The DLL has to be PE first,
+then this stub has to succeed.
+---
+ dlls/gdi32/gdi32.spec | 2 +-
+ dlls/gdi32/gdiobj.c   | 9 +++++++++
+ 2 files changed, 10 insertions(+), 1 deletion(-)
+
+diff --git a/dlls/gdi32/gdi32.spec b/dlls/gdi32/gdi32.spec
+index 610a9a714c0..90200914012 100644
+--- a/dlls/gdi32/gdi32.spec
++++ b/dlls/gdi32/gdi32.spec
+@@ -182,7 +182,7 @@
+ @ stub GdiDeleteLocalObject
+ # @ stub GdiDeleteSpoolFileHandle
+ @ stdcall GdiDescribePixelFormat(long long long ptr)
+-@ stub GdiDllInitialize
++@ stdcall GdiDllInitialize(ptr long ptr)
+ @ stdcall GdiDrawStream(long long ptr)
+ # @ stub GdiEndDocEMF
+ # @ stub GdiEndPageEMF
+diff --git a/dlls/gdi32/gdiobj.c b/dlls/gdi32/gdiobj.c
+index e204079baf7..8f850b09fab 100644
+--- a/dlls/gdi32/gdiobj.c
++++ b/dlls/gdi32/gdiobj.c
+@@ -734,6 +734,15 @@ BOOL WINAPI DllMain( HINSTANCE inst, DWORD reason, LPVOID reserved )
+     return TRUE;
+ }
+ 
++
++/* Stub entry point, some games (CoD: Black Ops 3) call it directly. */
++BOOL WINAPI GdiDllInitialize( HINSTANCE inst, DWORD reason, LPVOID reserved )
++{
++    FIXME("stub\n");
++    return TRUE;
++}
++
++
+ static const char *gdi_obj_type( unsigned type )
+ {
+     switch ( type )
+-- 
+2.28.0
+
+

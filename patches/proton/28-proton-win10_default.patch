@@ -82,65 +82,15 @@ diff --git a/programs/winecfg/appdefaults.c b/programs/winecfg/appdefaults.c
 index 6c4e6a49f26..1aea54adfb2 100644
 --- a/programs/winecfg/appdefaults.c
 +++ b/programs/winecfg/appdefaults.c
-@@ -144,7 +144,7 @@ static void update_comboboxes(HWND dialog)
-             return;
-         }
-         if (ver != -1) winver = strdupA( win_versions[ver].szVersion );
--        else winver = strdupA("win7");
-+        else winver = strdupA("win10");
-     }
-     WINE_TRACE("winver is %s\n", winver);
+@@ -74,7 +74,7 @@ static const struct win_version win_versions[] =
+ #endif
+ };
  
-From c7961105a48bfc3d24be7f2a610eade07960b5b6 Mon Sep 17 00:00:00 2001
-From: Zebediah Figura <z.figura12@gmail.com>
-Date: Tue, 7 Jul 2020 10:02:39 -0500
-Subject: [PATCH] ntdll: Bump the Windows 10 build number to 17763.
-
-Corresponds with the "1809" release.
-
-Signed-off-by: Zebediah Figura <zfigura@codeweavers.com>
----
- dlls/ntdll/version.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/dlls/ntdll/version.c b/dlls/ntdll/version.c
-index 875a33c5b2b..f22ed9f8871 100644
---- a/dlls/ntdll/version.c
-+++ b/dlls/ntdll/version.c
-@@ -185,7 +185,7 @@ static const RTL_OSVERSIONINFOEXW VersionData[NB_WINDOWS_VERSIONS] =
-     },
-     /* WIN10 */
-     {
--        sizeof(RTL_OSVERSIONINFOEXW), 10, 0, 0x42EE, VER_PLATFORM_WIN32_NT,
-+        sizeof(RTL_OSVERSIONINFOEXW), 10, 0, 0x4563, VER_PLATFORM_WIN32_NT,
-         {0}, 0, 0, VER_SUITE_SINGLEUSERTS, VER_NT_WORKSTATION, 0
-     },
+-#define DEFAULT_WIN_VERSION   "win7"
++#define DEFAULT_WIN_VERSION   "win10"
  
-From d88d6b3a770189c47b338d3252c6bbe888635db7 Mon Sep 17 00:00:00 2001
-From: Zebediah Figura <z.figura12@gmail.com>
-Date: Tue, 7 Jul 2020 10:02:40 -0500
-Subject: [PATCH] winecfg: Bump the Windows 10 build number to 17763.
-
-Corresponds with the "1809" release.
-
-Signed-off-by: Zebediah Figura <zfigura@codeweavers.com>
----
- programs/winecfg/appdefaults.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/programs/winecfg/appdefaults.c b/programs/winecfg/appdefaults.c
-index 1aea54adfb2..290eefe150e 100644
---- a/programs/winecfg/appdefaults.c
-+++ b/programs/winecfg/appdefaults.c
-@@ -48,7 +48,7 @@ static const struct
-     const char *szProductType;
- } win_versions[] =
- {
--    { "win10",       "Windows 10",       10,  0, 0x42EE,VER_PLATFORM_WIN32_NT, "", 0, 0, "WinNT"},
-+    { "win10",       "Windows 10",       10,  0, 0x4563,VER_PLATFORM_WIN32_NT, "", 0, 0, "WinNT"},
-     { "win81",       "Windows 8.1",       6,  3, 0x2580,VER_PLATFORM_WIN32_NT, "", 0, 0, "WinNT"},
-     { "win8",        "Windows 8",         6,  2, 0x23F0,VER_PLATFORM_WIN32_NT, "", 0, 0, "WinNT"},
-     { "win2008r2",   "Windows 2008 R2",   6,  1, 0x1DB1,VER_PLATFORM_WIN32_NT, "Service Pack 1", 1, 0, "ServerNT"},
+ static const char szKey9x[] = "Software\\Microsoft\\Windows\\CurrentVersion";
+ static const char szKeyNT[] = "Software\\Microsoft\\Windows NT\\CurrentVersion";
 From b3ed562a02c30730a4472b966057d2c97ce294a7 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
 Date: Tue, 14 Jul 2020 18:43:17 +0200

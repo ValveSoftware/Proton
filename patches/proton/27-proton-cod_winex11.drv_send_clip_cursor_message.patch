@@ -1,0 +1,26 @@
+From 232ccf2792ee724ccc5c296c230215f4411919ce Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
+Date: Thu, 6 Aug 2020 10:10:10 +0200
+Subject: [PATCH] winex11.drv: Send ClipCursor message.
+
+---
+ dlls/winex11.drv/mouse.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/dlls/winex11.drv/mouse.c b/dlls/winex11.drv/mouse.c
+index a8395b448cb..56f3bdcb0c9 100644
+--- a/dlls/winex11.drv/mouse.c
++++ b/dlls/winex11.drv/mouse.c
+@@ -1626,7 +1626,7 @@ BOOL CDECL X11DRV_ClipCursor( LPCRECT clip )
+         if (tid && tid != GetCurrentThreadId() && pid == GetCurrentProcessId())
+         {
+             TRACE( "forwarding clip request to %p\n", foreground );
+-            SendNotifyMessageW( foreground, WM_X11DRV_CLIP_CURSOR_REQUEST, FALSE, FALSE );
++            SendMessageW( foreground, WM_X11DRV_CLIP_CURSOR_REQUEST, FALSE, FALSE );
+             return TRUE;
+         }
+ 
+-- 
+2.28.0
+
+

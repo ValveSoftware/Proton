@@ -252,10 +252,10 @@ index 097aecabd9..a23b900fee 100755
      "VK_EXT_hdr_metadata", # Needs WSI work.
      "VK_EXT_pipeline_creation_feedback",
      "VK_GOOGLE_display_timing",
-@@ -230,6 +230,12 @@ FUNCTION_OVERRIDES = {
-     "vkSubmitDebugUtilsMessageEXT" : {"dispatch": True, "driver" : False, "thunk" : True, "private_thunk" : True},
-     "vkSetDebugUtilsObjectTagEXT" : {"dispatch": True, "driver" : False, "thunk" : True, "private_thunk" : True},
-     "vkSetDebugUtilsObjectNameEXT" : {"dispatch": True, "driver" : False, "thunk" : True, "private_thunk" : True},
+@@ -229,6 +229,12 @@ FUNCTION_OVERRIDES = {
+     # VK_EXT_debug_marker
+     "vkDebugMarkerSetObjectNameEXT" : {"dispatch": True, "driver" : False, "thunk" : True, "private_thunk" : True},
+     "vkDebugMarkerSetObjectTagEXT" : {"dispatch": True, "driver" : False, "thunk" : True, "private_thunk" : True},
 +    
 +    # VK_EXT_full_screen_exclusive
 +    "vkGetPhysicalDeviceSurfacePresentModes2EXT" : {"dispatch" : True, "driver" : False, "thunk" : False},

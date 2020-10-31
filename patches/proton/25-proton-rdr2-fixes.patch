@@ -107,9 +107,9 @@ index f7abce74185..5fdc24d5870 100644
  #include <time.h>
  #include <stdarg.h>
 +#include <stdlib.h>
- #include <math.h>
  
  #include "windef.h"
+ #include "winbase.h"
 @@ -1423,6 +1424,26 @@ static void release_display_device_init_mutex(HANDLE mutex)
      CloseHandle(mutex);
  }
@@ -321,7 +321,7 @@ index 00000000000..7f19f374c6e
 +#define __bool_true_false_are_defined 1
 +
 +#endif /* __WINE_STDBOOL_H */
-From 16aaf8ad216fbc88fbc32b889478580cc4b4fff9 Mon Sep 17 00:00:00 2001
+From 7f697380a9960311c752c4a23687955a7e2a0468 Mon Sep 17 00:00:00 2001
 From: Brendan Shanks <bshanks@codeweavers.com>
 Date: Fri, 10 Jul 2020 16:04:51 -0700
 Subject: [PATCH] include: Add DH-related bcrypt constants.
@@ -429,23 +429,26 @@ index a099f2f4b0e..e485023abb0 100644
  
  typedef struct _BCryptBuffer
  {
-From 8228cc1a058955bfaf0ba00f6259be76346a4651 Mon Sep 17 00:00:00 2001
+From 19bcc128389856390bf142be7c1ee996f5b7ef8b Mon Sep 17 00:00:00 2001
 From: Brendan Shanks <bshanks@codeweavers.com>
 Date: Mon, 3 Aug 2020 10:53:24 -0700
 Subject: [PATCH] HACK: bcrypt: Add stub Diffie-Hellman support for use only by
  Red Dead Redemption 2.
 
 ---
- dlls/bcrypt/bcrypt_internal.h |  4 +++
- dlls/bcrypt/bcrypt_main.c     | 41 +++++++++++++++++++++++
- dlls/bcrypt/gnutls.c          | 63 +++++++++++++++++++++++++++++++++++
- 3 files changed, 108 insertions(+)
+ dlls/bcrypt/bcrypt_internal.h |  3 ++
+ dlls/bcrypt/bcrypt_main.c     | 35 +++++++++++++++++
+ dlls/bcrypt/gcrypt.c          |  4 +-
+ dlls/bcrypt/gnutls.c          | 72 ++++++++++++++++++++++++++++++++++-
+ dlls/bcrypt/macos.c           | 16 +++++++-
+ dlls/bcrypt/unixlib.c         | 18 ++++++++-
+ 6 files changed, 143 insertions(+), 5 deletions(-)
 
 diff --git a/dlls/bcrypt/bcrypt_internal.h b/dlls/bcrypt/bcrypt_internal.h
-index 18343a6c749..985bcb2de6f 100644
+index 03254f72d92..5fa2596ec0b 100644
 --- a/dlls/bcrypt/bcrypt_internal.h
 +++ b/dlls/bcrypt/bcrypt_internal.h
-@@ -134,6 +134,7 @@ enum alg_id
+@@ -128,6 +128,7 @@ enum alg_id
      ALG_ID_RSA,
  
      /* secret agreement */
@@ -453,28 +456,28 @@ index 18343a6c749..985bcb2de6f 100644
      ALG_ID_ECDH_P256,
  
      /* signature */
-@@ -180,6 +181,7 @@ struct key_asymmetric
-     UCHAR            *pubkey;
-     ULONG             pubkey_len;
-     DSSSEED           dss_seed;
-+    gnutls_dh_params_t dh_params;
+@@ -216,6 +217,8 @@ struct key_funcs
+     NTSTATUS (CDECL *key_import_dsa_capi)( struct key *, UCHAR *, ULONG );
+     NTSTATUS (CDECL *key_import_ecc)( struct key *, UCHAR *, ULONG );
+     NTSTATUS (CDECL *key_compute_secret_ecc)( unsigned char *privkey_in, struct key *pubkey_in, struct secret *secret );
++    NTSTATUS (CDECL *key_export_dh)( struct key *, UCHAR *, ULONG, ULONG * );
++    NTSTATUS (CDECL *key_import_pair_dh)( struct key *, UCHAR *, ULONG );
  };
  
- struct key
-@@ -258,6 +260,8 @@ NTSTATUS key_export_dsa_capi( struct key *, UCHAR *, ULONG, ULONG * ) DECLSPEC_H
- NTSTATUS key_export_ecc( struct key *, UCHAR *, ULONG, ULONG * ) DECLSPEC_HIDDEN;
- NTSTATUS key_import_dsa_capi( struct key *, UCHAR *, ULONG ) DECLSPEC_HIDDEN;
- NTSTATUS key_import_ecc( struct key *, UCHAR *, ULONG ) DECLSPEC_HIDDEN;
-+NTSTATUS key_export_dh( struct key *, UCHAR *, ULONG, ULONG * ) DECLSPEC_HIDDEN;
-+NTSTATUS key_import_pair_dh( struct key *, UCHAR *, ULONG ) DECLSPEC_HIDDEN;
- 
- BOOL is_zero_vector( const UCHAR *, ULONG ) DECLSPEC_HIDDEN;
- BOOL is_equal_vector( const UCHAR *, ULONG, const UCHAR *, ULONG ) DECLSPEC_HIDDEN;
+ struct key_funcs *gnutls_lib_init(DWORD reason);
 diff --git a/dlls/bcrypt/bcrypt_main.c b/dlls/bcrypt/bcrypt_main.c
-index f4e59734cc4..1ec7a235b26 100644
+index a4eaec8af6a..eb1ae1183af 100644
 --- a/dlls/bcrypt/bcrypt_main.c
 +++ b/dlls/bcrypt/bcrypt_main.c
-@@ -115,6 +115,7 @@ builtin_algorithms[] =
+@@ -18,6 +18,7 @@
+  */
+ 
+ #include <stdarg.h>
++#include <stdlib.h>
+ 
+ #include "ntstatus.h"
+ #define WIN32_NO_STATUS
+@@ -110,6 +111,7 @@ builtin_algorithms[] =
      {  BCRYPT_MD4_ALGORITHM,        BCRYPT_HASH_INTERFACE,                  270,   16,  512 },
      {  BCRYPT_MD2_ALGORITHM,        BCRYPT_HASH_INTERFACE,                  270,   16,  128 },
      {  BCRYPT_RSA_ALGORITHM,        BCRYPT_ASYMMETRIC_ENCRYPTION_INTERFACE, 0,      0,    0 },
@@ -482,11 +485,11 @@ index f4e59734cc4..1ec7a235b26 100644
      {  BCRYPT_ECDH_P256_ALGORITHM,  BCRYPT_SECRET_AGREEMENT_INTERFACE,      0,      0,    0 },
      {  BCRYPT_RSA_SIGN_ALGORITHM,   BCRYPT_SIGNATURE_INTERFACE,             0,      0,    0 },
      {  BCRYPT_ECDSA_P256_ALGORITHM, BCRYPT_SIGNATURE_INTERFACE,             0,      0,    0 },
-@@ -245,6 +246,17 @@ NTSTATUS WINAPI BCryptOpenAlgorithmProvider( BCRYPT_ALG_HANDLE *handle, LPCWSTR
+@@ -240,6 +242,17 @@ NTSTATUS WINAPI BCryptOpenAlgorithmProvider( BCRYPT_ALG_HANDLE *handle, LPCWSTR
          return STATUS_NOT_IMPLEMENTED;
      }
  
-+    if (!strcmpW( id, BCRYPT_DH_ALGORITHM ))
++    if (!wcscmp( id, BCRYPT_DH_ALGORITHM ))
 +    {
 +        const char *sgi = getenv( "SteamGameId" );
 +        if (!sgi || strcmp( sgi, "1174180" ))
@@ -497,25 +500,25 @@ index f4e59734cc4..1ec7a235b26 100644
 +        }
 +    }
 +
-     if (implementation && strcmpW( implementation, MS_PRIMITIVE_PROVIDER ))
+     if (implementation && wcscmp( implementation, MS_PRIMITIVE_PROVIDER ))
      {
          FIXME( "implementation %s not supported\n", debugstr_w(implementation) );
-@@ -953,6 +965,10 @@ static NTSTATUS key_export( struct key *key, const WCHAR *type, UCHAR *output, U
+@@ -1020,6 +1033,10 @@ static NTSTATUS key_export( struct key *key, const WCHAR *type, UCHAR *output, U
      {
-         return key_export_dsa_capi( key, output, output_len, size );
+         return key_funcs->key_export_dsa_capi( key, output, output_len, size );
      }
-+    else if (!strcmpW( type, BCRYPT_DH_PUBLIC_BLOB ))
++    else if (!wcscmp( type, BCRYPT_DH_PUBLIC_BLOB ))
 +    {
-+        return key_export_dh( key, output, output_len, size );
++        return key_funcs->key_export_dh( key, output, output_len, size );
 +    }
  
      FIXME( "unsupported key type %s\n", debugstr_w(type) );
      return STATUS_NOT_IMPLEMENTED;
-@@ -1318,6 +1334,31 @@ static NTSTATUS key_import_pair( struct algorithm *alg, const WCHAR *type, BCRYP
+@@ -1341,6 +1358,24 @@ static NTSTATUS key_import_pair( struct algorithm *alg, const WCHAR *type, BCRYP
          *ret_key = key;
          return STATUS_SUCCESS;
      }
-+    else if (!strcmpW( type, BCRYPT_DH_PUBLIC_BLOB ))
++    else if (!wcscmp( type, BCRYPT_DH_PUBLIC_BLOB ))
 +    {
 +        BCRYPT_DH_KEY_BLOB *blob = (BCRYPT_DH_KEY_BLOB *)input;
 +
@@ -523,17 +526,10 @@ index f4e59734cc4..1ec7a235b26 100644
 +        if ((alg->id != ALG_ID_DH) || blob->dwMagic != BCRYPT_DH_PUBLIC_MAGIC)
 +            return STATUS_NOT_SUPPORTED;
 +
-+        if (!(key = heap_alloc_zero( sizeof(*key) ))) return STATUS_NO_MEMORY;
-+        key->hdr.magic = MAGIC_KEY;
-+
-+        if ((status = key_asymmetric_init( key, alg, blob->cbKey / 8, NULL, 0 )))
++        if ((status = key_asymmetric_create( &key, alg, blob->cbKey / 8, NULL, 0 ))) return status;
++        if ((status = key_funcs->key_import_pair_dh( key, input, input_len )))
 +        {
-+            heap_free( key );
-+            return status;
-+        }
-+        if ((status = key_import_pair_dh( key, input, input_len )))
-+        {
-+            heap_free( key );
++            BCryptDestroyKey( key );
 +            return status;
 +        }
 +
@@ -543,11 +539,38 @@ index f4e59734cc4..1ec7a235b26 100644
  
      FIXME( "unsupported key type %s\n", debugstr_w(type) );
      return STATUS_NOT_SUPPORTED;
+diff --git a/dlls/bcrypt/gcrypt.c b/dlls/bcrypt/gcrypt.c
+index 00849358c68..74aef449ea0 100644
+--- a/dlls/bcrypt/gcrypt.c
++++ b/dlls/bcrypt/gcrypt.c
+@@ -260,7 +260,9 @@ static struct key_funcs key_funcs =
+     NULL,
+     NULL,
+     NULL,
+-    key_compute_secret_ecc
++    key_compute_secret_ecc,
++    NULL,
++    NULL
+ };
+ 
+ struct key_funcs * gcrypt_lib_init( DWORD reason )
 diff --git a/dlls/bcrypt/gnutls.c b/dlls/bcrypt/gnutls.c
-index a80bce47f95..0b9e38508c2 100644
+index 4505a8d965c..6f6571ea3f4 100644
 --- a/dlls/bcrypt/gnutls.c
 +++ b/dlls/bcrypt/gnutls.c
-@@ -101,6 +101,9 @@ MAKE_FUNCPTR(gnutls_cipher_decrypt2);
+@@ -70,7 +70,10 @@ typedef enum
+ union key_data
+ {
+     gnutls_cipher_hd_t cipher;
+-    gnutls_privkey_t   privkey;
++    struct {
++        gnutls_privkey_t   privkey;
++        gnutls_dh_params_t dh_params;
++    };
+ };
+ C_ASSERT( sizeof(union key_data) <= sizeof(((struct key *)0)->private) );
+ 
+@@ -119,6 +122,9 @@ MAKE_FUNCPTR(gnutls_cipher_decrypt2);
  MAKE_FUNCPTR(gnutls_cipher_deinit);
  MAKE_FUNCPTR(gnutls_cipher_encrypt2);
  MAKE_FUNCPTR(gnutls_cipher_init);
@@ -557,7 +580,7 @@ index a80bce47f95..0b9e38508c2 100644
  MAKE_FUNCPTR(gnutls_global_deinit);
  MAKE_FUNCPTR(gnutls_global_init);
  MAKE_FUNCPTR(gnutls_global_set_log_function);
-@@ -216,6 +219,9 @@ BOOL gnutls_initialize(void)
+@@ -241,6 +247,9 @@ static BOOL gnutls_initialize(void)
      LOAD_FUNCPTR(gnutls_cipher_deinit)
      LOAD_FUNCPTR(gnutls_cipher_encrypt2)
      LOAD_FUNCPTR(gnutls_cipher_init)
@@ -567,7 +590,7 @@ index a80bce47f95..0b9e38508c2 100644
      LOAD_FUNCPTR(gnutls_global_deinit)
      LOAD_FUNCPTR(gnutls_global_init)
      LOAD_FUNCPTR(gnutls_global_set_log_function)
-@@ -450,6 +456,26 @@ NTSTATUS key_set_property( struct key *key, const WCHAR *prop, UCHAR *value, ULO
+@@ -483,6 +492,26 @@ static NTSTATUS CDECL key_set_property( struct key *key, const WCHAR *prop, UCHA
              return STATUS_NOT_IMPLEMENTED;
          }
      }
@@ -579,8 +602,8 @@ index a80bce47f95..0b9e38508c2 100644
 +        if (size < sizeof(*dh_params)) return STATUS_INVALID_PARAMETER;
 +        if (key->alg_id != ALG_ID_DH || dh_params->dwMagic != BCRYPT_DH_PARAMETERS_MAGIC) return STATUS_NOT_SUPPORTED;
 +
-+        if (!key->u.a.dh_params)
-+            pgnutls_dh_params_init(&key->u.a.dh_params);
++        if (!key_data(key)->dh_params)
++            pgnutls_dh_params_init(&key_data(key)->dh_params);
 +
 +        prime.data = value + sizeof(*dh_params);
 +        prime.size = dh_params->cbKeyLength;
@@ -588,13 +611,13 @@ index a80bce47f95..0b9e38508c2 100644
 +        generator.data = value + sizeof(*dh_params) + dh_params->cbKeyLength;
 +        generator.size = dh_params->cbKeyLength;
 +
-+        pgnutls_dh_params_import_raw2(key->u.a.dh_params, &prime, &generator, key->u.a.bitlen);
++        pgnutls_dh_params_import_raw2(key_data(key)->dh_params, &prime, &generator, key->u.a.bitlen);
 +        return STATUS_SUCCESS;
 +    }
  
      FIXME( "unsupported key property %s\n", debugstr_w(prop) );
      return STATUS_NOT_IMPLEMENTED;
-@@ -838,6 +864,9 @@ NTSTATUS key_asymmetric_generate( struct key *key )
+@@ -934,6 +963,9 @@ static NTSTATUS CDECL key_asymmetric_generate( struct key *key )
          bitlen = GNUTLS_CURVE_TO_BITS( GNUTLS_ECC_CURVE_SECP256R1 );
          break;
  
@@ -604,16 +627,16 @@ index a80bce47f95..0b9e38508c2 100644
      default:
          FIXME( "algorithm %u not supported\n", key->alg_id );
          return STATUS_NOT_SUPPORTED;
-@@ -1101,6 +1130,39 @@ NTSTATUS key_import_dsa_capi( struct key *key, UCHAR *buf, ULONG len )
+@@ -1235,12 +1267,46 @@ static NTSTATUS CDECL key_import_dsa_capi( struct key *key, UCHAR *buf, ULONG le
      return STATUS_SUCCESS;
  }
  
-+NTSTATUS key_export_dh( struct key *key, UCHAR *buf, ULONG len, ULONG *ret_len )
++static NTSTATUS CDECL key_export_dh( struct key *key, UCHAR *buf, ULONG len, ULONG *ret_len )
 +{
 +    BCRYPT_DH_KEY_BLOB blob;
 +    gnutls_datum_t p, g;
 +
-+    pgnutls_dh_params_export_raw(key->u.a.dh_params, &p, &g, NULL);
++    pgnutls_dh_params_export_raw(key_data(key)->dh_params, &p, &g, NULL);
 +
 +    *ret_len = sizeof(blob) + p.size + g.size /*+ public key size */;
 +
@@ -635,23 +658,110 @@ index a80bce47f95..0b9e38508c2 100644
 +    return STATUS_SUCCESS;
 +}
 +
-+NTSTATUS key_import_pair_dh( struct key *key, UCHAR *buf, ULONG len )
++static NTSTATUS CDECL key_import_pair_dh( struct key *key, UCHAR *buf, ULONG len )
 +{
 +    BCRYPT_DH_KEY_BLOB *blob = (BCRYPT_DH_KEY_BLOB *)buf;
 +    return STATUS_SUCCESS;
 +}
 +
- NTSTATUS key_asymmetric_init( struct key *key, struct algorithm *alg, ULONG bitlen, const UCHAR *pubkey,
-                               ULONG pubkey_len )
+ static NTSTATUS CDECL key_asymmetric_init( struct key *key )
  {
-@@ -1108,6 +1170,7 @@ NTSTATUS key_asymmetric_init( struct key *key, struct algorithm *alg, ULONG bitl
+     if (!libgnutls_handle) return STATUS_INTERNAL_ERROR;
  
-     switch (alg->id)
+     switch (key->alg_id)
      {
 +    case ALG_ID_DH:
      case ALG_ID_ECDH_P256:
      case ALG_ID_ECDSA_P256:
      case ALG_ID_ECDSA_P384:
+@@ -1849,7 +1915,9 @@ static const struct key_funcs key_funcs =
+     key_export_ecc,
+     key_import_dsa_capi,
+     key_import_ecc,
+-    NULL
++    NULL,
++    key_export_dh,
++    key_import_pair_dh
+ };
+ 
+ struct key_funcs * gnutls_lib_init( DWORD reason )
+diff --git a/dlls/bcrypt/macos.c b/dlls/bcrypt/macos.c
+index e44436a73fb..ed4a74b2796 100644
+--- a/dlls/bcrypt/macos.c
++++ b/dlls/bcrypt/macos.c
+@@ -265,6 +265,18 @@ static NTSTATUS CDECL key_asymmetric_duplicate( struct key *key_orig, struct key
+     return STATUS_NOT_IMPLEMENTED;
+ }
+ 
++static NTSTATUS CDECL key_export_dh( struct key *key, UCHAR *buf, ULONG len, ULONG *ret_len )
++{
++    FIXME( "not implemented on Mac\n" );
++    return STATUS_NOT_IMPLEMENTED;
++}
++
++static NTSTATUS CDECL key_import_pair_dh( struct key *key, UCHAR *buf, ULONG len )
++{
++    FIXME( "not implemented on Mac\n" );
++    return STATUS_NOT_IMPLEMENTED;
++}
++
+ static const struct key_funcs key_funcs =
+ {
+     key_set_property,
+@@ -285,7 +297,9 @@ static const struct key_funcs key_funcs =
+     key_export_ecc,
+     key_import_dsa_capi,
+     key_import_ecc,
+-    NULL
++    NULL,
++    key_export_dh,
++    key_import_pair_dh
+ };
+ 
+ struct key_funcs * macos_lib_init( DWORD reason )
+diff --git a/dlls/bcrypt/unixlib.c b/dlls/bcrypt/unixlib.c
+index a01e2ad02ed..2c04f46cef3 100644
+--- a/dlls/bcrypt/unixlib.c
++++ b/dlls/bcrypt/unixlib.c
+@@ -135,6 +135,18 @@ static NTSTATUS CDECL key_compute_secret_ecc (unsigned char *privkey_in, struct
+     return STATUS_NOT_IMPLEMENTED;
+ }
+ 
++static NTSTATUS CDECL key_export_dh( struct key *key, UCHAR *buf, ULONG len, ULONG *ret_len )
++{
++    FIXME( "not implemented\n" );
++    return STATUS_NOT_IMPLEMENTED;
++}
++
++static NTSTATUS CDECL key_import_pair_dh( struct key *key, UCHAR *buf, ULONG len )
++{
++    FIXME( "not implemented\n" );
++    return STATUS_NOT_IMPLEMENTED;
++}
++
+ static struct key_funcs key_funcs =
+ {
+     key_set_property,
+@@ -155,7 +167,9 @@ static struct key_funcs key_funcs =
+     key_export_ecc,
+     key_import_dsa_capi,
+     key_import_ecc,
+-    key_compute_secret_ecc
++    key_compute_secret_ecc,
++    key_export_dh,
++    key_import_pair_dh
+ };
+ 
+ NTSTATUS CDECL __wine_init_unix_lib( HMODULE module, DWORD reason, const void *ptr_in, void *ptr_out )
+@@ -193,6 +207,8 @@ NTSTATUS CDECL __wine_init_unix_lib( HMODULE module, DWORD reason, const void *p
+         RESOLVE_FUNC(import_dsa_capi)
+         RESOLVE_FUNC(import_ecc)
+         RESOLVE_FUNC(compute_secret_ecc)
++        RESOLVE_FUNC(export_dh)
++        RESOLVE_FUNC(import_pair_dh)
+ 
+ #undef RESOLVE_FUNC
+ 
 From d1bfdac0bdcfe3e985f7cb954db42fa3d8336a3b Mon Sep 17 00:00:00 2001
 From: Brendan Shanks <bshanks@codeweavers.com>
 Date: Wed, 15 Jul 2020 16:20:01 -0700

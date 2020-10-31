@@ -1314,8 +1314,11 @@ index 472cc5fe425..d0dcc9b6d20 100644
  
  [SteamClient.ntamd64]
  HKCU,Software\Valve\Steam,"SteamPath",,"%16422%\Steam"
-@@ -4041,3 +4042,4 @@ HKCU,Software\Wine\DllOverrides,"msvcr140",0x2,"native,builtin"
+@@ -4364,6 +4364,7 @@ HKCU,Software\Wine\DllOverrides,"msvcr140",0x2,"native,builtin"
  HKCU,Software\Wine\DllOverrides,"ucrtbase",0x2,"native,builtin"
  HKCU,Software\Wine\DllOverrides,"vcomp140",0x2,"native,builtin"
  HKCU,Software\Wine\DllOverrides,"vcruntime140",0x2,"native,builtin"
 +HKCU,Software\Wine\DllOverrides,"atiadlxx",,"disabled"
+ 
+ [NlsFiles]
+ c_037.nls

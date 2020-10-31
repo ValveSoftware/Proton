@@ -5,13 +5,13 @@ Subject: [PATCH] lsteamclient: Fix end of string check in relative path
  conversion.
 
 ---
- lsteamclient/steamclient_main.c | 2 +-
+ steamclient_main.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/lsteamclient/steamclient_main.c b/lsteamclient/steamclient_main.c
+diff --git a/steamclient_main.c b/steamclient_main.c
 index 9ff979a..9babce0 100644
---- a/lsteamclient/steamclient_main.c
-+++ b/lsteamclient/steamclient_main.c
+--- a/steamclient_main.c
++++ b/steamclient_main.c
 @@ -164,7 +164,7 @@ bool steamclient_dos_path_to_unix_path(const char *src, char *dst, int is_url)
          const char *s;
          char *d;

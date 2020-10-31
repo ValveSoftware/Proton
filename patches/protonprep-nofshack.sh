@@ -36,25 +36,22 @@
     patch -Np1 < ../patches/gstreamer/asfdemux-gst_asf_demux_reset_GST_FORMAT_TIME_fix.patch
     cd ..
 
-    # warframe controller fix
-    git checkout lsteamclient
     cd lsteamclient
+    git reset --hard HEAD
+    git clean -xdf
+    echo "add warframe 5 minute crash fix"
     patch -Np1 < ../patches/proton-hotfixes/proton-lsteamclient_disable_SteamController007_if_no_controller.patch
+    echo "add killer instinct match end crash fix"
     patch -Np1 < ../patches/proton-hotfixes/proton-lsteamclient-killer-instinct-match-end-fix.patch
     cd ..
 
-    # VKD3D patches
-    cd vkd3d
-    git reset --hard HEAD
-    git clean -xdf
-    cd ..
-
-    # Valve DXVK patches
     cd dxvk
     git reset --hard HEAD
     git clean -xdf
+    echo "add valve dxvk patches"
     patch -Np1 < ../patches/dxvk/proton-dxvk_avoid_spamming_log_with_requests_for_IWineD3D11Texture2D.patch
     patch -Np1 < ../patches/dxvk/proton-dxvk_add_new_dxvk_config_library.patch
+    echo "add dxvk async patch"
     patch -Np1 < ../patches/dxvk/dxvk-async.patch
     cd ..
 
@@ -135,12 +132,13 @@
     
     echo "warhammer 40k: inquisitor martyr loading fix"
     patch -Np1 < ../patches/game-patches/warhammer-40k-inquisitor-martyr-loading.patch
-    
-    echo "Paul's Diablo 1 menu fix"
-    patch -Np1 < ../patches/game-patches/diablo_1_menu.patch
+ 
+#    Disabled for now -- non-steam game, needs double check, may be fixed already
+#    echo "Paul's Diablo 1 menu fix"
+#    patch -Np1 < ../patches/game-patches/diablo_1_menu.patch
     
     echo "Destiny 2 runtime timestamp fix"
-    patch -Np1 < ../patches/destiny2_runtime_timestamp_fix.patch
+    patch -Np1 < ../patches/game-patches/destiny2_runtime_timestamp_fix.patch
 
     ### END GAME PATCH SECTION ###
     
@@ -215,20 +213,21 @@
     echo "valve rdr2 fixes"
     patch -Np1 < ../patches/proton/25-proton-rdr2-fixes.patch
 
-    #echo "valve cod fixes"
+    echo "valve cod fixes"
     #patch -Np1 < ../patches/proton/26-proton-cod_gdi32_PE_conversion.patch
-    
+    patch -Np1 < ../patches/proton/27-proton-cod_winex11.drv_send_clip_cursor_message.patch
+
     echo "set prefix win10"
-    patch -Np1 < ../patches/proton/27-proton-win10_default.patch
+    patch -Np1 < ../patches/proton/28-proton-win10_default.patch
 
     echo "dxvk_config"
-    patch -Np1 < ../patches/proton/28-proton-dxvk_config.patch
+    patch -Np1 < ../patches/proton/29-proton-dxvk_config.patch
 
     echo "hide wine prefix update"
-    patch -Np1 < ../patches/proton/29-proton-hide_wine_prefix_update_window.patch
+    patch -Np1 < ../patches/proton/30-proton-hide_wine_prefix_update_window.patch
 
     echo "proton-specific manual mfplat dll register patch"
-    patch -Np1 < ../patches/proton/30-proton-proton_mediafoundation_dllreg.patch
+    patch -Np1 < ../patches/proton/31-proton-proton_mediafoundation_dllreg.patch
     
     ### END PROTON PATCH SECTION ###
 
