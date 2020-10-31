@@ -1643,9 +1643,9 @@ index 5426fec6d3b..4233b25dccf 100644
  
 +    int n_buttons, n_axes, n_hats;
 +
+     SDL_JoystickType type;
      BOOL has_ff, is_joystick;
      int autocenter;
-     int gain;
 @@ -87,6 +100,8 @@ struct JoystickImpl
      SDL_Joystick *device;
      SDL_Haptic *haptic;
@@ -4026,7 +4026,7 @@ index 44e2a454651..98a2eb7b808 100644
  
          if (SDL_JoystickIsHaptic(device))
          {
-@@ -230,56 +240,48 @@ static void find_sdldevs(void)
+@@ -237,57 +237,49 @@ static void find_sdldevs(void)
              if (haptic)
              {
                  TRACE(" ... with force feedback\n");
@@ -4068,7 +4068,9 @@ index 44e2a454651..98a2eb7b808 100644
  
          {
              SDL_JoystickType type = SDL_JoystickGetType(device);
+-            sdldev.type = type;
 -            sdldev.is_joystick =
++            sdldev->type = type;
 +            sdldev->is_joystick =
                  type == SDL_JOYSTICK_TYPE_WHEEL ||
                  type == SDL_JOYSTICK_TYPE_FLIGHT_STICK ||
@@ -4459,9 +4461,9 @@ index a1680d7265d..059f048300e 100644
  struct SDLDev {
      BOOL valid;
 @@ -106,11 +106,12 @@ struct SDLDev {
- 
      int n_buttons, n_axes, n_hats;
  
+     SDL_JoystickType type;
 -    BOOL has_ff, is_joystick;
 +    BOOL is_joystick;
      int autocenter;

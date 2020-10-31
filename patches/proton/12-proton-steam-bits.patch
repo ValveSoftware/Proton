@@ -316,7 +316,7 @@ index 6ce8198aee5..f84d92cc860 100644
      return hres;
  }
 
-From 1ef83da3b15171782dc009bb6649665769122aa5 Mon Sep 17 00:00:00 2001
+From 12b7edaf69d1f9c94c18bd4cd8ae0e1d5ae97972 Mon Sep 17 00:00:00 2001
 From: Andrew Eikum <aeikum@codeweavers.com>
 Date: Tue, 15 Jan 2019 10:10:47 -0600
 Subject: [PATCH] ntdll: Don't pass SDL_AUDIODRIVER from Linux environment
@@ -326,242 +326,17 @@ Subject: [PATCH] ntdll: Don't pass SDL_AUDIODRIVER from Linux environment
  1 file changed, 1 insertion(+)
 
 diff --git a/dlls/ntdll/unix/env.c b/dlls/ntdll/unix/env.c
-index d90990c092..96b0c271ce 100644
+index 74cea11be5f..50bc2321eaa 100644
 --- a/dlls/ntdll/unix/env.c
 +++ b/dlls/ntdll/unix/env.c
-@@ -416,6 +416,7 @@ static inline BOOL is_special_env_var( const char *var )
-             !strncmp( var, "HOME=", sizeof("HOME=")-1 ) ||
+@@ -437,6 +437,7 @@ static inline BOOL is_special_env_var( const char *var )
              !strncmp( var, "TEMP=", sizeof("TEMP=")-1 ) ||
              !strncmp( var, "TMP=", sizeof("TMP=")-1 ) ||
-+            !strncmp( var, "SDL_AUDIODRIVER=", sizeof("SDL_AUDIODRIVER=")-1 ) ||
              !strncmp( var, "QT_", sizeof("QT_")-1 ) ||
++            !strncmp( var, "SDL_AUDIODRIVER=", sizeof("SDL_AUDIODRIVER=")-1 ) ||
              !strncmp( var, "VK_", sizeof("VK_")-1 ));
  }
-From 8a781a3ab721a14fed0a8c1aaccd357cdd71d0ac Mon Sep 17 00:00:00 2001
-From: Jactry Zeng <jzeng@codeweavers.com>
-Date: Thu, 13 Dec 2018 22:21:34 +0800
-Subject: [PATCH] gdi32: Add CJK font replacements.
-
----
- dlls/gdi32/freetype.c | 172 +++++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 171 insertions(+), 1 deletion(-)
-
-diff --git a/dlls/gdi32/freetype.c b/dlls/gdi32/freetype.c
-index 0fc41f39021..1d721f50760 100644
---- a/dlls/gdi32/freetype.c
-+++ b/dlls/gdi32/freetype.c
-@@ -513,11 +513,22 @@ static const WCHAR external_fonts_reg_key[] = {'S','o','f','t','w','a','r','e','
- static const WCHAR Lucida_Sans_Unicode[] = {'L','u','c','i','d','a',' ','S','a','n','s',' ','U','n','i','c','o','d','e',0};
- static const WCHAR Microsoft_Sans_Serif[] = {'M','i','c','r','o','s','o','f','t',' ','S','a','n','s',' ','S','e','r','i','f',0 };
- static const WCHAR Tahoma[] = {'T','a','h','o','m','a',0};
-+/* Japanese fonts */
- static const WCHAR MS_UI_Gothic[] = {'M','S',' ','U','I',' ','G','o','t','h','i','c',0};
-+static const WCHAR atMS_UI_Gothic[] = {'@','M','S',' ','U','I',' ','G','o','t','h','i','c',0};
-+static const WCHAR MS_PGothic_cp932[]= {0x30fb,0xff6d,0x30fb,0xff73,' ',0x30fb,0xff70,0x7e67,0xff74,0x7e67,0xff77,0x7e5d,0x30fb,0x3051,0};
-+/* Simplified Chinese fonts */
- static const WCHAR SimSun[] = {'S','i','m','S','u','n',0};
--static const WCHAR Gulim[] = {'G','u','l','i','m',0};
-+static const WCHAR atSimSun[] = {'@','S','i','m','S','u','n',0};
-+static const WCHAR Microsoft_YaHei[] = {'M','i','c','r','o','s','o','f','t',' ','Y','a','H','e','i',0};
-+static const WCHAR LiSu[] = {'L','i','S','u',0};
-+/* Traditional Chinese fonts */
- static const WCHAR PMingLiU[] = {'P','M','i','n','g','L','i','U',0};
-+static const WCHAR atPMingLiU[] = {'@','P','M','i','n','g','L','i','U',0};
-+/* Korean fonts */
- static const WCHAR Batang[] = {'B','a','t','a','n','g',0};
-+static const WCHAR Gulim[] = {'G','u','l','i','m',0};
-+static const WCHAR atGulim[] = {'@','G','u','l','i','m',0};
  
- static const WCHAR arial[] = {'A','r','i','a','l',0};
- static const WCHAR bitstream_vera_sans[] = {'B','i','t','s','t','r','e','a','m',' ','V','e','r','a',' ','S','a','n','s',0};
-@@ -2365,6 +2376,113 @@ static BOOL map_font_family(const WCHAR *orig, const WCHAR *repl)
-     return FALSE;
- }
- 
-+static const WCHAR new_sc_fonts[] = {
-+    /* Ubuntu 16.04 or later, Mint 19, Fedora 29 */
-+    'N','o','t','o',' ','S','a','n','s',' ','C','J','K',' ','S','C',' ','R','e','g','u','l','a','r',0,
-+    /* Manjaro 18 */
-+    'N','o','t','o',' ','S','a','n','s',' ','C','J','K',' ','S','C',0,
-+    /* Popular open source Chinese font */
-+    'W','e','n','Q','u','a','n','Y','i',' ','M','i','c','r','o',' ','H','e','i',0,
-+    0
-+};
-+
-+static const WCHAR vertical_new_sc_fonts[] = {
-+    /* Ubuntu 16.04 or later, Mint 19, Fedora 29 */
-+    '@','N','o','t','o',' ','S','a','n','s',' ','C','J','K',' ','S','C',' ','R','e','g','u','l','a','r',0,
-+    /* Manjaro 18 */
-+    '@','N','o','t','o',' ','S','a','n','s',' ','C','J','K',' ','S','C',0,
-+    /* popular open source Chinese font */
-+    '@','W','e','n','Q','u','a','n','Y','i',' ','M','i','c','r','o',' ','H','e','i',0,
-+    0
-+};
-+
-+static const WCHAR new_tc_fonts[] = {
-+    /* Ubuntu 16.04 or later, Mint 19, Fedora 29 */
-+    'N','o','t','o',' ','S','a','n','s',' ','C','J','K',' ','T','C',' ','R','e','g','u','l','a','r',0,
-+    /* Manjaro 18 */
-+    'N','o','t','o',' ','S','a','n','s',' ','C','J','K',' ','T','C',0,
-+    /* popular open source Chinese font */
-+    'W','e','n','Q','u','a','n','Y','i',' ','M','i','c','r','o',' ','H','e','i',0,
-+    0
-+};
-+
-+static const WCHAR vertical_new_tc_fonts[] = {
-+    /* Ubuntu 16.04 or later */
-+    '@','N','o','t','o',' ','S','a','n','s',' ','C','J','K',' ','T','C',' ','R','e','g','u','l','a','r',0,
-+    /* Manjaro 18 */
-+    '@','N','o','t','o',' ','S','a','n','s',' ','C','J','K',' ','T','C',0,
-+    /* popular open source Chinese font */
-+    '@','W','e','n','Q','u','a','n','Y','i',' ','M','i','c','r','o',' ','H','e','i',0,
-+    0
-+};
-+
-+static const WCHAR new_jp_fonts[] = {
-+    /* Ubuntu 16.04 or later */
-+    'N','o','t','o',' ','S','a','n','s',' ','C','J','K',' ','J','P',' ','R','e','g','u','l','a','r',0,
-+    /* Manjaro 18 */
-+    'N','o','t','o',' ','S','a','n','s',' ','C','J','K',' ','J','P',0,
-+    0
-+};
-+
-+static const WCHAR vertical_new_jp_fonts[] = {
-+    /* Ubuntu 16.04 or later */
-+    '@','N','o','t','o',' ','S','a','n','s',' ','C','J','K',' ','J','P',' ','R','e','g','u','l','a','r',0,
-+    /* Manjaro 18 */
-+    '@','N','o','t','o',' ','S','a','n','s',' ','C','J','K',' ','J','P',0,
-+    0
-+};
-+
-+static const WCHAR new_kr_fonts[] = {
-+    /* Ubuntu 16.04 or later */
-+    'N','o','t','o',' ','S','a','n','s',' ','C','J','K',' ','K','R',' ','R','e','g','u','l','a','r',0,
-+    /* Manjaro 18 */
-+    'N','o','t','o',' ','S','a','n','s',' ','C','J','K',' ','K','R',0,
-+    0
-+};
-+
-+static const WCHAR vertical_new_kr_fonts[] = {
-+    /* Ubuntu 16.04 or later */
-+    '@','N','o','t','o',' ','S','a','n','s',' ','C','J','K',' ','K','R',' ','R','e','g','u','l','a','r',0,
-+    /* Manjaro 18 */
-+    '@','N','o','t','o',' ','S','a','n','s',' ','C','J','K',' ','K','R',0,
-+    0
-+};
-+
-+static struct font_replacements
-+{
-+    const WCHAR *replacements[4];
-+    const int count;
-+    const WCHAR *new_fonts;
-+    const WCHAR *vertical_new_fonts;
-+    BOOL *font_seen;
-+} font_replacements_list[] =
-+{
-+    /* Simplified Chinese */
-+    {
-+        {
-+            SimSun, atSimSun, Microsoft_YaHei, LiSu
-+        }, 4, new_sc_fonts, vertical_new_sc_fonts, NULL
-+    },
-+    /* Traditional Chinese */
-+    {
-+        {
-+            PMingLiU, atPMingLiU
-+        }, 2, new_tc_fonts, vertical_new_tc_fonts, NULL
-+    },
-+    /* Japanese */
-+    {
-+        {
-+            MS_UI_Gothic, atMS_UI_Gothic, MS_PGothic_cp932
-+        }, 3, new_jp_fonts, vertical_new_jp_fonts, NULL
-+    },
-+    /* Korean */
-+    {
-+        {
-+            Gulim, atGulim
-+        }, 2, new_kr_fonts, vertical_new_kr_fonts, NULL
-+    }
-+};
-+
- /***********************************************************
-  * The replacement list is a way to map an entire font
-  * family onto another family.  For example adding
-@@ -2383,6 +2501,7 @@ static void LoadReplaceList(void)
-     DWORD valuelen, datalen, i = 0, type, dlen, vlen;
-     LPWSTR value;
-     LPVOID data;
-+    int replacement_count = sizeof(font_replacements_list)/sizeof(font_replacements_list[0]);
- 
-     /* @@ Wine registry key: HKCU\Software\Wine\Fonts\Replacements */
-     if(RegOpenKeyA(HKEY_CURRENT_USER, "Software\\Wine\\Fonts\\Replacements", &hkey) == ERROR_SUCCESS)
-@@ -2401,6 +2520,25 @@ static void LoadReplaceList(void)
-             /* "NewName"="Oldname" */
-             if(!find_family_from_any_name(value))
-             {
-+                int j;
-+
-+                for (j = 0; j < replacement_count; j++)
-+                {
-+                    int k;
-+
-+                    struct font_replacements *replacement = &font_replacements_list[j];
-+
-+                    replacement->font_seen = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY,
-+                                                       replacement->count * sizeof(BOOL));
-+                    for (k = 0; k < replacement->count; k++)
-+                    {
-+                        if (!replacement->font_seen[k] && !lstrcmpW(value, replacement->replacements[k]))
-+                        {
-+                            replacement->font_seen[k] = TRUE;
-+                            break;
-+                        }
-+                    }
-+                }
-                 if (type == REG_MULTI_SZ)
-                 {
-                     WCHAR *replace = data;
-@@ -2421,6 +2559,38 @@ static void LoadReplaceList(void)
- 	    dlen = datalen;
- 	    vlen = valuelen;
- 	}
-+
-+        for (i = 0; i < replacement_count; i++)
-+        {
-+            int j;
-+            struct font_replacements *replacement = &font_replacements_list[i];
-+
-+            for (j = 0; j < replacement->count; j++)
-+            {
-+                if (!replacement->font_seen ||
-+                    (!replacement->font_seen[j] && !find_family_from_any_name(replacement->replacements[j])))
-+                {
-+                    const WCHAR *replace;
-+
-+                    if (replacement->replacements[j][0] == '@')
-+                        replace = replacement->vertical_new_fonts;
-+                    else
-+                        replace = replacement->new_fonts;
-+
-+                    while (*replace)
-+                    {
-+                        if (map_font_family(replacement->replacements[j], replace))
-+                        {
-+                            TRACE("Replace %s with %s\n", wine_dbgstr_w(replacement->replacements[j]),
-+                                  wine_dbgstr_w(replace));
-+                            break;
-+                        }
-+                        replace += strlenW(replace) + 1;
-+                    }
-+                }
-+            }
-+            HeapFree(GetProcessHeap(), 0, replacement->font_seen);
-+        }
- 	HeapFree(GetProcessHeap(), 0, data);
- 	HeapFree(GetProcessHeap(), 0, value);
- 	RegCloseKey(hkey);
-
 From 17d19e1b23bce6fc6ff5b4e61131c9c58fd57ae5 Mon Sep 17 00:00:00 2001
 From: Andrew Eikum <aeikum@codeweavers.com>
 Date: Wed, 28 Mar 2018 09:21:41 -0500
@@ -747,7 +522,8 @@ index 7fe2f49dcd9..e72d0dcaba1 100644
  
  [DirectX]
  HKLM,Software\Microsoft\DirectX,"Version",,"4.09.00.0904"
-From a1cef95cf1500f6d94cf68d8bf6ae32b2883cb75 Mon Sep 17 00:00:00 2001
+
+From ec87f47caa8a9461c2a983cb4cf7d0b7816b1ded Mon Sep 17 00:00:00 2001
 From: Zebediah Figura <z.figura12@gmail.com>
 Date: Mon, 18 May 2020 14:20:30 -0500
 Subject: [PATCH] wine.inf: Associate the "steam" protocol with winebrowser.
@@ -768,3 +544,52 @@ index 247eb906422..0b014dce63c 100644
  
  HKCR,MIME\Database\Charset\_iso-2022-jp$ESC,"Codepage",0x10003,932
  HKCR,MIME\Database\Charset\_iso-2022-jp$ESC,"InternetEncoding",0x10003,50221
+
+From 4208548dbb789b3f3bd112a4dc1a19ebf0d1f307 Mon Sep 17 00:00:00 2001
+From: Andrew Eikum <aeikum@codeweavers.com>
+Date: Mon, 22 Jan 2018 14:35:51 -0600
+Subject: [PATCH] HACK: wineboot: Don't show "updating prefix" window
+
+---
+ programs/wineboot/wineboot.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/programs/wineboot/wineboot.c b/programs/wineboot/wineboot.c
+index b85a3b6b6ea..6dfc797313e 100644
+--- a/programs/wineboot/wineboot.c
++++ b/programs/wineboot/wineboot.c
+@@ -1035,6 +1035,7 @@ static INT_PTR CALLBACK wait_dlgproc( HWND hwnd, UINT msg, WPARAM wp, LPARAM lp
+     return 0;
+ }
+ 
++/*
+ static HWND show_wait_window(void)
+ {
+     const char *config_dir = wine_get_config_dir();
+@@ -1051,6 +1052,7 @@ static HWND show_wait_window(void)
+     HeapFree( GetProcessHeap(), 0, name );
+     return hwnd;
+ }
++*/
+ 
+ static HANDLE start_rundll32( const char *inf_path, BOOL wow64 )
+ {
+@@ -1127,7 +1129,7 @@ static void update_wineprefix( BOOL force )
+ 
+         if ((process = start_rundll32( inf_path, FALSE )))
+         {
+-            HWND hwnd = show_wait_window();
++/*            HWND hwnd = show_wait_window();*/
+             for (;;)
+             {
+                 MSG msg;
+@@ -1139,7 +1141,7 @@ static void update_wineprefix( BOOL force )
+                 }
+                 else while (PeekMessageW( &msg, 0, 0, 0, PM_REMOVE )) DispatchMessageW( &msg );
+             }
+-            DestroyWindow( hwnd );
++/*            DestroyWindow( hwnd );*/
+         }
+         WINE_MESSAGE( "wine: configuration in '%s' has been updated.\n", config_dir );
+     }
+ 

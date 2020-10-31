@@ -1,0 +1,307 @@
+From c9c923a600e0dc7bdee5b108bcc655129f8a1c55 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
+Date: Sun, 28 Jun 2020 02:18:54 +0200
+Subject: [PATCH] HACK: steam: ntdll: Setup steamclient trampolines to
+ lsteamclient.
+
+This uses exec page faults to jump from native steamclient into our
+lsteamclient entry points.
+---
+ dlls/ntdll/loader.c             | 22 +++++++++++
+ dlls/ntdll/unix/loader.c        | 66 +++++++++++++++++++++++++++++++++
+ dlls/ntdll/unix/signal_i386.c   |  7 ++++
+ dlls/ntdll/unix/signal_x86_64.c |  7 ++++
+ dlls/ntdll/unix/unix_private.h  |  2 +
+ dlls/ntdll/unixlib.h            |  3 ++
+ 6 files changed, 107 insertions(+)
+
+diff --git a/dlls/ntdll/loader.c b/dlls/ntdll/loader.c
+index 955bd186b56..fe9e9fd2315 100644
+--- a/dlls/ntdll/loader.c
++++ b/dlls/ntdll/loader.c
+@@ -1913,10 +1913,14 @@ static NTSTATUS build_module( LPCWSTR load_path, const UNICODE_STRING *nt_name,
+                               const pe_image_info_t *image_info, const struct file_id *id,
+                               DWORD flags, WINE_MODREF **pwm )
+ {
++    static HMODULE lsteamclient = NULL;
++    UNICODE_STRING lsteamclient_us;
+     IMAGE_NT_HEADERS *nt;
+     WINE_MODREF *wm;
+     NTSTATUS status;
+     SIZE_T map_size;
++    WCHAR *basename, *tmp;
++    ULONG basename_len;
+ 
+     if (!(nt = RtlImageNtHeader( *module ))) return STATUS_INVALID_IMAGE_FORMAT;
+ 
+@@ -1932,6 +1936,24 @@ static NTSTATUS build_module( LPCWSTR load_path, const UNICODE_STRING *nt_name,
+ 
+     set_security_cookie( *module, image_info->map_size );
+ 
++    basename = nt_name->Buffer;
++    if ((tmp = wcsrchr(basename, '\\'))) basename = tmp + 1;
++    if ((tmp = wcsrchr(basename, '/'))) basename = tmp + 1;
++    basename_len = wcslen(basename);
++    if (basename_len >= 4 && !wcscmp(basename + basename_len - 4, L".dll")) basename_len -= 4;
++
++    if ((!RtlCompareUnicodeStrings(basename, basename_len, L"steamclient", 11, TRUE) ||
++         !RtlCompareUnicodeStrings(basename, basename_len, L"steamclient64", 13, TRUE) ||
++         !RtlCompareUnicodeStrings(basename, basename_len, L"gameoverlayrenderer", 19, TRUE) ||
++         !RtlCompareUnicodeStrings(basename, basename_len, L"gameoverlayrenderer64", 21, TRUE)) &&
++        RtlCreateUnicodeStringFromAsciiz(&lsteamclient_us, "lsteamclient.dll") &&
++        (lsteamclient || LdrLoadDll(load_path, 0, &lsteamclient_us, &lsteamclient) == STATUS_SUCCESS))
++    {
++        unix_funcs->steamclient_setup_trampolines( *module, lsteamclient );
++        wm->ldr.Flags |= LDR_DONT_RESOLVE_REFS;
++        flags |= DONT_RESOLVE_DLL_REFERENCES;
++    }
++
+     /* fixup imports */
+ 
+     if (!(flags & DONT_RESOLVE_DLL_REFERENCES) &&
+diff --git a/dlls/ntdll/unix/loader.c b/dlls/ntdll/unix/loader.c
+index 0fe79ee499c..adaaa6acaf6 100644
+--- a/dlls/ntdll/unix/loader.c
++++ b/dlls/ntdll/unix/loader.c
+@@ -1385,6 +1385,71 @@ ULONG_PTR get_image_address(void)
+ }
+ 
+ 
++static void *steamclient_srcs[128];
++static void *steamclient_tgts[128];
++static int steamclient_count;
++
++void *steamclient_handle_fault( LPCVOID addr, DWORD err )
++{
++    int i;
++
++    if (!(err & EXCEPTION_EXECUTE_FAULT)) return NULL;
++
++    for (i = 0; i < steamclient_count; ++i)
++    {
++        if (addr == steamclient_srcs[i])
++            return steamclient_tgts[i];
++    }
++
++    return NULL;
++}
++
++static void CDECL steamclient_setup_trampolines(HMODULE src_mod, HMODULE tgt_mod)
++{
++    SYSTEM_BASIC_INFORMATION info;
++    IMAGE_NT_HEADERS *src_nt = (IMAGE_NT_HEADERS *)((UINT_PTR)src_mod + ((IMAGE_DOS_HEADER *)src_mod)->e_lfanew);
++    IMAGE_NT_HEADERS *tgt_nt = (IMAGE_NT_HEADERS *)((UINT_PTR)tgt_mod + ((IMAGE_DOS_HEADER *)tgt_mod)->e_lfanew);
++    IMAGE_SECTION_HEADER *src_sec = (IMAGE_SECTION_HEADER *)(src_nt + 1);
++    const IMAGE_EXPORT_DIRECTORY *src_exp = get_export_dir(src_mod), *tgt_exp = get_export_dir(tgt_mod);
++    const DWORD *names;
++    SIZE_T size;
++    void *addr, *src_addr, *tgt_addr;
++    char *name;
++    UINT_PTR page_mask;
++    int i;
++
++    virtual_get_system_info(&info);
++    page_mask = info.PageSize - 1;
++
++    for (i = 0; i < src_nt->FileHeader.NumberOfSections; ++i)
++    {
++        if (memcmp(src_sec[i].Name, ".text", 5)) continue;
++        addr = (void *)(((UINT_PTR)src_mod + src_sec[i].VirtualAddress) & ~page_mask);
++        size = (src_sec[i].Misc.VirtualSize + page_mask) & ~page_mask;
++        mprotect(addr, size, PROT_READ);
++    }
++
++    names = (const DWORD *)((UINT_PTR)src_mod + src_exp->AddressOfNames);
++    for (i = 0; i < src_exp->NumberOfNames; ++i)
++    {
++        if (!names[i] || !(name = (char *)((UINT_PTR)src_mod + names[i]))) continue;
++        if (!(src_addr = (void *)find_named_export(src_mod, src_exp, name))) continue;
++        if (!(tgt_addr = (void *)find_named_export(tgt_mod, tgt_exp, name))) continue;
++        assert(steamclient_count < ARRAY_SIZE(steamclient_srcs));
++        steamclient_srcs[steamclient_count] = src_addr;
++        steamclient_tgts[steamclient_count] = tgt_addr;
++        steamclient_count++;
++    }
++
++    src_addr = (void *)((UINT_PTR)src_mod + src_nt->OptionalHeader.AddressOfEntryPoint);
++    tgt_addr = (void *)((UINT_PTR)tgt_mod + tgt_nt->OptionalHeader.AddressOfEntryPoint);
++    assert(steamclient_count < ARRAY_SIZE(steamclient_srcs));
++    steamclient_srcs[steamclient_count] = src_addr;
++    steamclient_tgts[steamclient_count] = tgt_addr;
++    steamclient_count++;
++}
++
++
+ /* math function wrappers */
+ static double CDECL ntdll_atan( double d )  { return atan( d ); }
+ static double CDECL ntdll_ceil( double d )  { return ceil( d ); }
+@@ -1470,6 +1535,7 @@ static struct unix_funcs unix_funcs =
+     __wine_dbg_strdup,
+     __wine_dbg_output,
+     __wine_dbg_header,
++    steamclient_setup_trampolines,
+ };
+ 
+ 
+diff --git a/dlls/ntdll/unix/signal_i386.c b/dlls/ntdll/unix/signal_i386.c
+index 162a0b6a701..7a710f59f5e 100644
+--- a/dlls/ntdll/unix/signal_i386.c
++++ b/dlls/ntdll/unix/signal_i386.c
+@@ -1601,6 +1601,7 @@ static void segv_handler( int signal, siginfo_t *siginfo, void *sigcontext )
+     struct xcontext xcontext;
+     ucontext_t *ucontext = sigcontext;
+     void *stack = setup_exception_record( sigcontext, &rec, &xcontext );
++    void *steamclient_addr = NULL;
+ 
+     switch (TRAP_sig(ucontext))
+     {
+@@ -1635,6 +1636,12 @@ static void segv_handler( int signal, siginfo_t *siginfo, void *sigcontext )
+         }
+         break;
+     case TRAP_x86_PAGEFLT:  /* Page fault */
++        if ((steamclient_addr = steamclient_handle_fault( siginfo->si_addr, (ERROR_sig(ucontext) >> 1) & 0x09 )))
++        {
++            EIP_sig(ucontext) = (intptr_t)steamclient_addr;
++            return;
++        }
++
+         rec.NumberParameters = 2;
+         rec.ExceptionInformation[0] = (ERROR_sig(ucontext) >> 1) & 0x09;
+         rec.ExceptionInformation[1] = (ULONG_PTR)siginfo->si_addr;
+diff --git a/dlls/ntdll/unix/signal_x86_64.c b/dlls/ntdll/unix/signal_x86_64.c
+index befdf9fbd4f..7bea7dd937c 100644
+--- a/dlls/ntdll/unix/signal_x86_64.c
++++ b/dlls/ntdll/unix/signal_x86_64.c
+@@ -2168,6 +2168,7 @@ static void segv_handler( int signal, siginfo_t *siginfo, void *sigcontext )
+     EXCEPTION_RECORD rec = { 0 };
+     struct xcontext context;
+     ucontext_t *ucontext = sigcontext;
++    void *steamclient_addr = NULL;
+ 
+     rec.ExceptionAddress = (void *)RIP_sig(ucontext);
+     save_context( &context, sigcontext );
+@@ -2199,6 +2200,12 @@ static void segv_handler( int signal, siginfo_t *siginfo, void *sigcontext )
+         }
+         break;
+     case TRAP_x86_PAGEFLT:  /* Page fault */
++        if ((steamclient_addr = steamclient_handle_fault( siginfo->si_addr, (ERROR_sig(ucontext) >> 1) & 0x09 )))
++        {
++            RIP_sig(ucontext) = (intptr_t)steamclient_addr;
++            return;
++        }
++
+         rec.NumberParameters = 2;
+         rec.ExceptionInformation[0] = (ERROR_sig(ucontext) >> 1) & 0x09;
+         rec.ExceptionInformation[1] = (ULONG_PTR)siginfo->si_addr;
+diff --git a/dlls/ntdll/unix/unix_private.h b/dlls/ntdll/unix/unix_private.h
+index 8d6ab030adb..a3a418cfaa5 100644
+--- a/dlls/ntdll/unix/unix_private.h
++++ b/dlls/ntdll/unix/unix_private.h
+@@ -188,6 +188,8 @@ extern NTSTATUS get_thread_context( HANDLE handle, context_t *context, unsigned
+ extern NTSTATUS alloc_object_attributes( const OBJECT_ATTRIBUTES *attr, struct object_attributes **ret,
+                                          data_size_t *ret_len ) DECLSPEC_HIDDEN;
+ 
++extern void *steamclient_handle_fault( LPCVOID addr, DWORD err ) DECLSPEC_HIDDEN;
++
+ extern void *anon_mmap_fixed( void *start, size_t size, int prot, int flags ) DECLSPEC_HIDDEN;
+ extern void *anon_mmap_alloc( size_t size, int prot ) DECLSPEC_HIDDEN;
+ extern void virtual_init(void) DECLSPEC_HIDDEN;
+diff --git a/dlls/ntdll/unixlib.h b/dlls/ntdll/unixlib.h
+index 98f19346f77..ecd48427868 100644
+--- a/dlls/ntdll/unixlib.h
++++ b/dlls/ntdll/unixlib.h
+@@ -134,6 +134,9 @@ struct unix_funcs
+     int           (CDECL *dbg_output)( const char *str );
+     int           (CDECL *dbg_header)( enum __wine_debug_class cls, struct __wine_debug_channel *channel,
+                                        const char *function );
++
++    /* steamclient HACK */
++    void          (CDECL *steamclient_setup_trampolines)( HMODULE src_mod, HMODULE tgt_mod );
+ };
+ 
+ #endif /* __NTDLL_UNIXLIB_H */
+From 762405d42e29a60e6eb5620cbb6693c43777268f Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
+Date: Wed, 5 Aug 2020 10:35:50 +0200
+Subject: [PATCH] HACK: steam: ntdll: Patch entry points with jumps.
+
+As a preferred alternative to noexec pages which makes debugging
+painful. The noexec can be enabled with WINESTEAMNOEXEC=1 environmnent
+variable.
+---
+ dlls/ntdll/unix/loader.c | 29 +++++++++++++++++++++++++----
+ 1 file changed, 25 insertions(+), 4 deletions(-)
+
+diff --git a/dlls/ntdll/unix/loader.c b/dlls/ntdll/unix/loader.c
+index adaaa6acaf6..3f983244c42 100644
+--- a/dlls/ntdll/unix/loader.c
++++ b/dlls/ntdll/unix/loader.c
+@@ -1404,8 +1404,23 @@ void *steamclient_handle_fault( LPCVOID addr, DWORD err )
+     return NULL;
+ }
+ 
++static void steamclient_write_jump(void *src_addr, void *tgt_addr)
++{
++#ifdef _WIN64
++    static const char mov[] = {0x48, 0xb8};
++#else
++    static const char mov[] = {0xb8};
++#endif
++    static const char jmp[] = {0xff, 0xe0};
++    memcpy(src_addr, mov, sizeof(mov));
++    memcpy((char *)src_addr + sizeof(mov), &tgt_addr, sizeof(tgt_addr));
++    memcpy((char *)src_addr + sizeof(mov) + sizeof(tgt_addr), jmp, sizeof(jmp));
++}
++
+ static void CDECL steamclient_setup_trampolines(HMODULE src_mod, HMODULE tgt_mod)
+ {
++    static int noexec_cached = -1;
++
+     SYSTEM_BASIC_INFORMATION info;
+     IMAGE_NT_HEADERS *src_nt = (IMAGE_NT_HEADERS *)((UINT_PTR)src_mod + ((IMAGE_DOS_HEADER *)src_mod)->e_lfanew);
+     IMAGE_NT_HEADERS *tgt_nt = (IMAGE_NT_HEADERS *)((UINT_PTR)tgt_mod + ((IMAGE_DOS_HEADER *)tgt_mod)->e_lfanew);
+@@ -1414,10 +1429,13 @@ static void CDECL steamclient_setup_trampolines(HMODULE src_mod, HMODULE tgt_mod
+     const DWORD *names;
+     SIZE_T size;
+     void *addr, *src_addr, *tgt_addr;
+-    char *name;
++    char *name, *wsne;
+     UINT_PTR page_mask;
+     int i;
+ 
++    if (noexec_cached == -1)
++        noexec_cached = (wsne = getenv("WINESTEAMNOEXEC")) && atoi(wsne);
++
+     virtual_get_system_info(&info);
+     page_mask = info.PageSize - 1;
+ 
+@@ -1426,7 +1444,8 @@ static void CDECL steamclient_setup_trampolines(HMODULE src_mod, HMODULE tgt_mod
+         if (memcmp(src_sec[i].Name, ".text", 5)) continue;
+         addr = (void *)(((UINT_PTR)src_mod + src_sec[i].VirtualAddress) & ~page_mask);
+         size = (src_sec[i].Misc.VirtualSize + page_mask) & ~page_mask;
+-        mprotect(addr, size, PROT_READ);
++        if (noexec_cached) mprotect(addr, size, PROT_READ);
++        else mprotect(addr, size, PROT_READ|PROT_WRITE|PROT_EXEC);
+     }
+ 
+     names = (const DWORD *)((UINT_PTR)src_mod + src_exp->AddressOfNames);
+@@ -1438,7 +1457,8 @@ static void CDECL steamclient_setup_trampolines(HMODULE src_mod, HMODULE tgt_mod
+         assert(steamclient_count < ARRAY_SIZE(steamclient_srcs));
+         steamclient_srcs[steamclient_count] = src_addr;
+         steamclient_tgts[steamclient_count] = tgt_addr;
+-        steamclient_count++;
++        if (!noexec_cached) steamclient_write_jump(src_addr, tgt_addr);
++        else steamclient_count++;
+     }
+ 
+     src_addr = (void *)((UINT_PTR)src_mod + src_nt->OptionalHeader.AddressOfEntryPoint);
+@@ -1446,7 +1466,8 @@ static void CDECL steamclient_setup_trampolines(HMODULE src_mod, HMODULE tgt_mod
+     assert(steamclient_count < ARRAY_SIZE(steamclient_srcs));
+     steamclient_srcs[steamclient_count] = src_addr;
+     steamclient_tgts[steamclient_count] = tgt_addr;
+-    steamclient_count++;
++    if (!noexec_cached) steamclient_write_jump(src_addr, tgt_addr);
++    else steamclient_count++;
+ }
+ 
+ 

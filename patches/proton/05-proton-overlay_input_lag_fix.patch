@@ -1,0 +1,164 @@
+diff --git a/dlls/user32/cursoricon.c b/dlls/user32/cursoricon.c
+index e772d541235..9d0cf716fd7 100644
+--- a/dlls/user32/cursoricon.c
++++ b/dlls/user32/cursoricon.c
+@@ -113,7 +113,7 @@ static int get_display_bpp(void)
+ 
+ static INIT_ONCE init_once = INIT_ONCE_STATIC_INIT;
+ 
+-static const struct png_funcs *png_funcs;
++const struct png_funcs *png_funcs;
+ 
+ static BOOL WINAPI load_libpng( INIT_ONCE *once, void *param, void **context )
+ {
+@@ -121,7 +121,7 @@ static BOOL WINAPI load_libpng( INIT_ONCE *once, void *param, void **context )
+     return TRUE;
+ }
+ 
+-static BOOL have_libpng(void)
++BOOL have_libpng(void)
+ {
+     return InitOnceExecuteOnce( &init_once, load_libpng, NULL, NULL ) && png_funcs;
+ }
+diff --git a/dlls/user32/png.c b/dlls/user32/png.c
+index a994c6de5c2..3054fd901a8 100644
+--- a/dlls/user32/png.c
++++ b/dlls/user32/png.c
+@@ -293,10 +293,16 @@ static BITMAPINFO * CDECL load_png(const char *png_data, DWORD *size)
+     return info;
+ }
+ 
+-static const struct png_funcs png_funcs =
++int CDECL hack_unix_setenv(const char *name, const char *value, int overwrite)
++{
++    return setenv(name, value, overwrite);
++}
++
++static const struct png_funcs png_funcs_unix =
+ {
+     get_png_info,
+-    load_png
++    load_png,
++    hack_unix_setenv,
+ };
+ 
+ NTSTATUS CDECL __wine_init_unix_lib( HMODULE module, DWORD reason, const void *ptr_in, void *ptr_out )
+@@ -335,7 +341,7 @@ NTSTATUS CDECL __wine_init_unix_lib( HMODULE module, DWORD reason, const void *p
+     LOAD_FUNCPTR(png_set_read_fn);
+ #undef LOAD_FUNCPTR
+ 
+-    *(const struct png_funcs **)ptr_out = &png_funcs;
++    *(const struct png_funcs **)ptr_out = &png_funcs_unix;
+     return STATUS_SUCCESS;
+ }
+ 
+diff --git a/dlls/user32/user_private.h b/dlls/user32/user_private.h
+index 7761a1ceb4f..5e42027b3c7 100644
+--- a/dlls/user32/user_private.h
++++ b/dlls/user32/user_private.h
+@@ -373,8 +373,12 @@ struct png_funcs
+ {
+     BOOL (CDECL *get_png_info)(const void *png_data, DWORD size, int *width, int *height, int *bpp);
+     BITMAPINFO * (CDECL *load_png)(const char *png_data, DWORD *size);
++    int (CDECL *hack_unix_setenv)(const char *name, const char *value, int overwrite);
+ };
+ 
++extern BOOL have_libpng(void);
++extern const struct png_funcs *png_funcs;
++
+ /* Mingw's assert() imports MessageBoxA and gets confused by user32 exporting it */
+ #ifdef __MINGW32__
+ #undef assert
+diff --git a/dlls/user32/win.c b/dlls/user32/win.c
+index 680defc2071..0ced1a5cd91 100644
+--- a/dlls/user32/win.c
++++ b/dlls/user32/win.c
+@@ -45,6 +45,15 @@ static DWORD process_layout = ~0u;
+ 
+ static struct list window_surfaces = LIST_INIT( window_surfaces );
+ 
++static CRITICAL_SECTION desktop_section;
++static CRITICAL_SECTION_DEBUG desktop_critsect_debug =
++{
++    0, 0, &desktop_section,
++    { &desktop_critsect_debug.ProcessLocksList, &desktop_critsect_debug.ProcessLocksList },
++      0, 0, { (DWORD_PTR)(__FILE__ ": desktop_section") }
++};
++static CRITICAL_SECTION desktop_section = { &desktop_critsect_debug, -1, 0, 0, 0, 0 };
++
+ static CRITICAL_SECTION surfaces_section;
+ static CRITICAL_SECTION_DEBUG critsect_debug =
+ {
+@@ -2088,6 +2097,7 @@ HWND WINAPI GetDesktopWindow(void)
+         WCHAR app[MAX_PATH + ARRAY_SIZE( L"\\explorer.exe" )];
+         WCHAR cmdline[MAX_PATH + ARRAY_SIZE( L"\\explorer.exe /desktop" )];
+         WCHAR desktop[MAX_PATH];
++        char *ld_preload;
+         void *redir;
+ 
+         SERVER_START_REQ( set_user_object_info )
+@@ -2120,6 +2130,49 @@ HWND WINAPI GetDesktopWindow(void)
+         lstrcpyW( cmdline, app );
+         lstrcatW( cmdline, L" /desktop" );
+ 
++        /* HACK: Unset LD_PRELOAD before executing explorer.exe to disable buggy gameoverlayrenderer.so
++        * It's not going to work through the CreateProcessW env parameter, as it will not be used for the loader execv.
++        */
++        if (have_libpng())
++        {
++            EnterCriticalSection( &desktop_section);
++
++            if ((ld_preload = getenv("LD_PRELOAD")))
++            {
++                static char const gorso[] = "gameoverlayrenderer.so";
++                static unsigned int gorso_len = ARRAY_SIZE(gorso) - 1;
++                char *env, *next, *tmp;
++
++                env = HeapAlloc(GetProcessHeap(), 0, strlen(ld_preload) + 1);
++                strcpy(env, ld_preload);
++
++                tmp = env;
++                do
++                {
++                    if (!(next = strchr(tmp, ':')))
++                        next = tmp + strlen(tmp);
++
++                    if (next - tmp >= gorso_len &&
++                        strncmp(next - gorso_len, gorso, gorso_len) == 0)
++                    {
++                        if (*next)
++                            memmove(tmp, next + 1, strlen(next));
++                        else
++                            *tmp = 0;
++                        next = tmp;
++                    }
++                    else
++                    {
++                        tmp = next + 1;
++                    }
++                }
++                while (*next);
++
++                png_funcs->hack_unix_setenv("LD_PRELOAD", env, 1);
++                HeapFree(GetProcessHeap(), 0, env);
++            }
++        }
++
+         Wow64DisableWow64FsRedirection( &redir );
+         if (CreateProcessW( app, cmdline, NULL, NULL, FALSE, DETACHED_PROCESS,
+                             NULL, windir, &si, &pi ))
+@@ -2132,6 +2185,14 @@ HWND WINAPI GetDesktopWindow(void)
+         else WARN( "failed to start explorer, err %d\n", GetLastError() );
+         Wow64RevertWow64FsRedirection( redir );
+ 
++        /* HACK: Restore the previous value, just in case */
++        if (have_libpng())
++        {
++            if (ld_preload) png_funcs->hack_unix_setenv("LD_PRELOAD", ld_preload, 1);
++
++            LeaveCriticalSection( &desktop_section );
++        }
++
+         SERVER_START_REQ( get_desktop_window )
+         {
+             req->force = 1;

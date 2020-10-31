@@ -109,7 +109,7 @@ index 20d3c48c4d9..aca8738c4c0 100644
  
  /* parse-line args */
 
-From 971dc3c4225b33fb5346187cd37e8355f265800f Mon Sep 17 00:00:00 2001
+From ba15ba1c9b8ee40e13ef1bd7f018924259f36c1b Mon Sep 17 00:00:00 2001
 From: Andrew Eikum <aeikum@codeweavers.com>
 Date: Mon, 18 Jun 2018 07:56:35 -0500
 Subject: [PATCH] ntdll: Notice THREADNAME_INFO exceptions and set thread name
@@ -121,24 +121,23 @@ Patch by Zeb.
  1 file changed, 28 insertions(+)
 
 diff --git a/dlls/ntdll/unix/thread.c b/dlls/ntdll/unix/thread.c
-index d26e0a98ca..ed17b497e6 100644
+index 3b451a22577..ca5dac43bb0 100644
 --- a/dlls/ntdll/unix/thread.c
 +++ b/dlls/ntdll/unix/thread.c
-@@ -29,6 +29,9 @@
- #include <errno.h>
- #include <limits.h>
- #include <stdarg.h>
+@@ -43,6 +43,9 @@
+ #ifdef HAVE_SYS_SYSCALL_H
+ #include <sys/syscall.h>
+ #endif
 +#ifdef HAVE_PRCTL
 +#include <sys/prctl.h>
 +#endif
- #include <stdio.h>
- #include <string.h>
- #include <pthread.h>
-@@ -380,7 +397,15 @@ void wait_suspend( CONTEXT *context )
-     errno = saved_errno;
+ 
+ #define NONAMELESSUNION
+ #include "ntstatus.h"
+@@ -344,6 +347,16 @@ void wait_suspend( CONTEXT *context )
  }
  
--
+ 
 +/* "How to: Set a Thread Name in Native Code"
 + * https://msdn.microsoft.com/en-us/library/xcb2z8hs.aspx */
 +typedef struct tagTHREADNAME_INFO
@@ -148,14 +147,14 @@ index d26e0a98ca..ed17b497e6 100644
 +   DWORD   dwThreadID; /* Thread ID (-1 = caller thread) */
 +   DWORD   dwFlags;    /* Reserved for future use.  Must be zero. */
 +} THREADNAME_INFO;
++
  /**********************************************************************
   *           send_debug_event
   *
-@@ -402,6 +427,21 @@ NTSTATUS send_debug_event( EXCEPTION_RECORD *rec, CONTEXT *context, BOOL first_c
- 
+@@ -366,6 +379,21 @@ NTSTATUS send_debug_event( EXCEPTION_RECORD *rec, CONTEXT *context, BOOL first_c
      for (i = 0; i < min( rec->NumberParameters, EXCEPTION_MAXIMUM_PARAMETERS ); i++)
          params[i] = rec->ExceptionInformation[i];
-+    
+ 
 +    if (rec->ExceptionCode == 0x406d1388)
 +    {
 +        const THREADNAME_INFO *threadname = (const THREADNAME_INFO *)rec->ExceptionInformation;
@@ -170,9 +169,10 @@ index d26e0a98ca..ed17b497e6 100644
 +#endif
 +        }
 +    }
- 
++
      SERVER_START_REQ( queue_exception_event )
      {
+         req->first   = first_chance;
 From 7e91b897e69854cb3afe761f48ef7c9b496ecf95 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?J=C3=B3zef=20Kucia?= <jkucia@codeweavers.com>
 Date: Wed, 1 May 2019 12:28:12 +0200
@@ -760,67 +760,6 @@ index d2fc629c843..5a97590dbce 100644
  
      desc->VendorId = adapter_id.vendor_id;
      desc->DeviceId = adapter_id.device_id;
-From 304683886016ec940a9b331ce33fcbaf47e893c3 Mon Sep 17 00:00:00 2001
-From: Sven Baars <sbaars@codeweavers.com>
-Date: Thu, 5 Dec 2019 13:48:38 +0100
-Subject: [PATCH] HACK: ntdll: Return a handle to kernel32 when being asked for
- mfc42.
-
-For some applications mfc42 is loaded, but never actually used. We can
-add Steam game IDs when we find more of such applications.
----
- dlls/ntdll/loader.c | 31 +++++++++++++++++++++++++++++++
- 1 file changed, 31 insertions(+)
-
-diff --git a/dlls/ntdll/loader.c b/dlls/ntdll/loader.c
-index 431c247a072..c9fcad79316 100644
---- a/dlls/ntdll/loader.c
-+++ b/dlls/ntdll/loader.c
-@@ -159,6 +159,18 @@ static inline void ascii_to_unicode( WCHAR *dst, const char *src, size_t len )
-     while (len--) *dst++ = (unsigned char)*src++;
- }
- 
-+static WCHAR *strcasestrW( const WCHAR *str, const WCHAR *sub )
-+{
-+    while (*str)
-+    {
-+        const WCHAR *p1 = str, *p2 = sub;
-+        while (*p1 && *p2 && RtlDowncaseUnicodeChar(*p1) == RtlDowncaseUnicodeChar(*p2)) { p1++; p2++; }
-+        if (!*p2) return (WCHAR *)str;
-+        str++;
-+    }
-+    return NULL;
-+}
-+
- #define RTL_UNLOAD_EVENT_TRACE_NUMBER 64
- 
- typedef struct _RTL_UNLOAD_EVENT_TRACE
-@@ -2869,6 +2881,25 @@ static NTSTATUS find_dll_file( const WCHAR *load_path, const WCHAR *libname,
- done:
-     RtlFreeHeap( GetProcessHeap(), 0, dllname );
-     if (wow64_old_value) RtlWow64EnableFsRedirectionEx( 1, &wow64_old_value );
-+
-+    if (status != STATUS_SUCCESS)
-+    {
-+        /* HACK for Proton issue #17
-+         *
-+         * Some games try to load mfc42.dll, but then proceed to not use it.
-+         * Just return a handle to kernel32 in that case.
-+         */
-+        static const WCHAR mfc42W[] = {'m','f','c','4','2',0};
-+        static const WCHAR kernel32W[] = {'k','e','r','n','e','l','3','2','.','d','l','l',0};
-+        const char *sgi = getenv( "SteamGameId" );
-+        if (sgi &&
-+            !strcmp( sgi, "105450" ) && /* AoE3 */
-+            strcasestrW( libname, mfc42W ))
-+        {
-+            WARN_(loaddll)( "Using a fake mfc42 handle\n" );
-+            status = find_dll_file( load_path, kernel32W, nt_name, pwm, mfc42W, module, image_info, id );
-+        }
-+    }
-     return status;
- }
- 
 From 4aa052e0c8ae276fc07afcd93d6e290a88214837 Mon Sep 17 00:00:00 2001
 From: Andrew Eikum <aeikum@codeweavers.com>
 Date: Wed, 15 Jan 2020 10:17:23 -0600
@@ -1098,110 +1037,6 @@ index 6378a091f0b..e976fda77f2 100644
  }
  
  /**********************************************************************
-From 60ac9b821daf372aac3bc85fa97b60f2b6d56c82 Mon Sep 17 00:00:00 2001
-From: =?UTF-8?q?Gabriel=20Iv=C4=83ncescu?= <gabrielopcode@gmail.com>
-Date: Fri, 13 Dec 2019 15:54:29 +0200
-Subject: [PATCH] dwmapi/tests: Add basic tests for DwmGetWindowAttribute.
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-
-Signed-off-by: Gabriel Ivăncescu <gabrielopcode@gmail.com>
----
-diff --git a/dlls/dwmapi/tests/Makefile.in b/dlls/dwmapi/tests/Makefile.in
-index f365f96c72..947e3312b5 100644
---- a/dlls/dwmapi/tests/Makefile.in
-+++ b/dlls/dwmapi/tests/Makefile.in
-@@ -1,5 +1,5 @@
- TESTDLL   = dwmapi.dll
--IMPORTS   = dwmapi
-+IMPORTS   = dwmapi gdi32 user32
- 
- C_SRCS = \
- 	dwmapi.c
-diff --git a/dlls/dwmapi/tests/dwmapi.c b/dlls/dwmapi/tests/dwmapi.c
-index 7c51e77c4a..68babd6eb2 100644
---- a/dlls/dwmapi/tests/dwmapi.c
-+++ b/dlls/dwmapi/tests/dwmapi.c
-@@ -19,13 +19,40 @@
-  *
-  */
- 
-+#include <windows.h>
- #include "dwmapi.h"
--
- #include "wine/test.h"
- 
- static HRESULT (WINAPI *pDwmIsCompositionEnabled)(BOOL*);
- static HRESULT (WINAPI *pDwmEnableComposition)(UINT);
- static HRESULT (WINAPI *pDwmGetTransportAttributes)(BOOL*,BOOL*,DWORD*);
-+static HWND test_wnd;
-+static LRESULT WINAPI test_wndproc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
-+{
-+    return DefWindowProcA(hwnd, message, wParam, lParam);
-+}
-+
-+static void test_DwmGetWindowAttribute(void)
-+{
-+    BOOL nc_rendering;
-+    HRESULT hr;
-+
-+    hr = DwmGetWindowAttribute(NULL, DWMWA_NCRENDERING_ENABLED, &nc_rendering, sizeof(nc_rendering));
-+    ok(hr == E_HANDLE || broken(hr == E_INVALIDARG) /* Vista */, "DwmGetWindowAttribute(DWMWA_NCRENDERING_ENABLED) returned 0x%08x.\n", hr);
-+    hr = DwmGetWindowAttribute(test_wnd, DWMWA_NCRENDERING_ENABLED, NULL, sizeof(nc_rendering));
-+    ok(hr == E_INVALIDARG, "DwmGetWindowAttribute(DWMWA_NCRENDERING_ENABLED) returned 0x%08x.\n", hr);
-+    hr = DwmGetWindowAttribute(test_wnd, DWMWA_NCRENDERING_ENABLED, &nc_rendering, 0);
-+    ok(hr == E_INVALIDARG, "DwmGetWindowAttribute(DWMWA_NCRENDERING_ENABLED) returned 0x%08x.\n", hr);
-+    nc_rendering = FALSE;
-+    hr = DwmGetWindowAttribute(test_wnd, 0xdeadbeef, &nc_rendering, sizeof(nc_rendering));
-+    ok(hr == E_INVALIDARG, "DwmGetWindowAttribute(0xdeadbeef) returned 0x%08x.\n", hr);
-+
-+    nc_rendering = 0xdeadbeef;
-+    hr = DwmGetWindowAttribute(test_wnd, DWMWA_NCRENDERING_ENABLED, &nc_rendering, sizeof(nc_rendering));
-+    ok(hr == S_OK, "DwmGetWindowAttribute(DWMWA_NCRENDERING_ENABLED) failed 0x%08x.\n", hr);
-+    ok(nc_rendering == FALSE || nc_rendering == TRUE, "non-boolean value 0x%x.\n", nc_rendering);
-+}
-+
- 
- BOOL dwmenabled;
- 
-@@ -92,6 +119,21 @@ static void test_dwm_get_transport_attributes(void)
- START_TEST(dwmapi)
- {
-     HMODULE hmod = LoadLibraryA("dwmapi.dll");
-+    HINSTANCE inst = GetModuleHandleA(NULL);
-+    WNDCLASSA cls;
-+
-+    cls.style = 0;
-+    cls.lpfnWndProc = test_wndproc;
-+    cls.cbClsExtra = 0;
-+    cls.cbWndExtra = 0;
-+    cls.hInstance = inst;
-+    cls.hIcon = 0;
-+    cls.hCursor = LoadCursorA(0, (LPCSTR)IDC_ARROW);
-+    cls.hbrBackground = GetStockObject(WHITE_BRUSH);
-+    cls.lpszMenuName = NULL;
-+    cls.lpszClassName = "Test";
-+    RegisterClassA(&cls);
-+
- 
-     if (!hmod)
-     {
-@@ -105,4 +147,14 @@ START_TEST(dwmapi)
- 
-     test_isdwmenabled();
-     test_dwm_get_transport_attributes();
-+
-+    test_wnd = CreateWindowExA(0, "Test", "Test Window", WS_OVERLAPPEDWINDOW | WS_VISIBLE,
-+                               100, 100, 200, 200, 0, 0, 0, NULL);
-+    ok(test_wnd != NULL, "Failed to create test window.\n");
-+
-+    test_DwmGetWindowAttribute();
-+
-+    DestroyWindow(test_wnd);
-+    UnregisterClassA("Test", inst);
-+
- }
 From 1a2e600a9c35a9558b32e7986668d7dc81c8b5ae Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Gabriel=20Iv=C4=83ncescu?= <gabrielopcode@gmail.com>
 Date: Fri, 13 Dec 2019 15:54:30 +0200
@@ -1247,38 +1082,6 @@ index e976fda77f2..212c88c5a02 100644
      case DWMWA_CLOAKED:
          if (size < sizeof(DWORD)) return E_INVALIDARG;
  
-diff --git a/dlls/dwmapi/tests/dwmapi.c b/dlls/dwmapi/tests/dwmapi.c
-index 0fc8820b095..409f5c85876 100644
---- a/dlls/dwmapi/tests/dwmapi.c
-+++ b/dlls/dwmapi/tests/dwmapi.c
-@@ -29,6 +29,7 @@ static LRESULT WINAPI test_wndproc(HWND hwnd, UINT message, WPARAM wParam, LPARA
- static void test_DwmGetWindowAttribute(void)
- {
-     BOOL nc_rendering;
-+    RECT rc, rc2;
-     HRESULT hr;
- 
-     hr = DwmGetWindowAttribute(NULL, DWMWA_NCRENDERING_ENABLED, &nc_rendering, sizeof(nc_rendering));
-@@ -45,6 +46,19 @@ static void test_DwmGetWindowAttribute(void)
-     hr = DwmGetWindowAttribute(test_wnd, DWMWA_NCRENDERING_ENABLED, &nc_rendering, sizeof(nc_rendering));
-     ok(hr == S_OK, "DwmGetWindowAttribute(DWMWA_NCRENDERING_ENABLED) failed 0x%08x.\n", hr);
-     ok(nc_rendering == FALSE || nc_rendering == TRUE, "non-boolean value 0x%x.\n", nc_rendering);
-+
-+    hr = DwmGetWindowAttribute(test_wnd, DWMWA_EXTENDED_FRAME_BOUNDS, &rc, sizeof(rc) - 1);
-+    ok(hr == HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER) || broken(hr == E_INVALIDARG) /* Vista */,
-+       "DwmGetWindowAttribute(DWMWA_EXTENDED_FRAME_BOUNDS) returned 0x%08x.\n", hr);
-+    hr = DwmGetWindowAttribute(test_wnd, DWMWA_EXTENDED_FRAME_BOUNDS, &rc, sizeof(rc));
-+    if (hr != E_HANDLE && hr != DWM_E_COMPOSITIONDISABLED /* Vista */)  /* composition is on */
-+    {
-+        /* For top-level Windows, the returned rect is always at least as large as GetWindowRect */
-+        GetWindowRect(test_wnd, &rc2);
-+        ok(hr == S_OK, "DwmGetWindowAttribute(DWMWA_EXTENDED_FRAME_BOUNDS) failed 0x%08x.\n", hr);
-+        ok(rc.left >= rc2.left && rc.right <= rc2.right && rc.top >= rc2.top && rc.bottom <= rc2.bottom,
-+           "returned rect %s not enclosed in window rect %s.\n", wine_dbgstr_rect(&rc), wine_dbgstr_rect(&rc2));
-+    }
- }
- 
- START_TEST(dwmapi)
 From c099ae745b3a63edee1677a2da01cab5aa5b8562 Mon Sep 17 00:00:00 2001
 From: Zebediah Figura <z.figura12@gmail.com>
 Date: Tue, 28 Jan 2020 14:30:43 -0600
@@ -1314,7 +1117,7 @@ index 1ed41bdcec5..0af6e1ded5f 100644
  static HRESULT filter_graph_common_create(IUnknown *outer, IUnknown **out, BOOL threaded)
  {
 +    static INIT_ONCE once = INIT_ONCE_STATIC_INIT;
-     IFilterGraphImpl *fimpl;
+     struct filter_graph *object;
      HRESULT hr;
  
 +    /* HACK: our build system makes it difficult to load gstreamer on prefix
@@ -1364,31 +1167,6 @@ index 379f54ab4ec..0fb6b0b5ad3 100644
      argv[0] = argv0;
      argv[1] = argv1;
      argv[2] = NULL;
-From ddb3e721daa73dc07079e7a15612e274f96f104b Mon Sep 17 00:00:00 2001
-From: Derek Lesho <dlesho@codeweavers.com>
-Date: Fri, 6 Dec 2019 11:48:10 -0600
-Subject: [PATCH] bcrypt: Allow importing private ECDSA keys.
-
-Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
----
- dlls/bcrypt/bcrypt_main.c | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/dlls/bcrypt/bcrypt_main.c b/dlls/bcrypt/bcrypt_main.c
-index 2ac36d3db01..1daaa8ab599 100644
---- a/dlls/bcrypt/bcrypt_main.c
-+++ b/dlls/bcrypt/bcrypt_main.c
-@@ -1175,6 +1175,10 @@ static NTSTATUS key_import_pair( struct algorithm *alg, const WCHAR *type, BCRYP
-             key_size = 32;
-             magic = BCRYPT_ECDH_PRIVATE_P256_MAGIC;
-             break;
-+        case ALG_ID_ECDSA_P256:
-+            key_size = 32;
-+            magic = BCRYPT_ECDSA_PRIVATE_P256_MAGIC;
-+            break;
- 
-         default:
-             FIXME( "algorithm %u does not yet support importing blob of type %s\n", alg->id, debugstr_w(type) );
 From 52c36274080a6edc1f1420b08df1ecf0defa9ca3 Mon Sep 17 00:00:00 2001
 From: Derek Lesho <dlesho@codeweavers.com>
 Date: Thu, 5 Dec 2019 12:41:57 -0600
@@ -1446,54 +1224,6 @@ index a5235b69a8d..4b2c9bd41ae 100644
          /* forward request to the foreground window if it's in a different thread */
          tid = GetWindowThreadProcessId( foreground, &pid );
          if (tid && tid != GetCurrentThreadId() && pid == GetCurrentProcessId())
-From 24a8f709ec8fcf8fa4fcc349a7885c02cc184d74 Mon Sep 17 00:00:00 2001
-From: Derek Lesho <dlesho@codeweavers.com>
-Date: Wed, 26 Feb 2020 13:09:48 -0600
-Subject: [PATCH] ntdll: Don't support reading/writing debug registers
-
-Monster Hunter World continually retrieves these registers, so fast-path
-this code. This will break setting debug registers on other threads.
----
- dlls/ntdll/unix/signal_x86_64.c | 14 +++++++++++---
- 1 file changed, 11 insertions(+), 3 deletions(-)
-
-diff --git a/dlls/ntdll/unix/signal_x86_64.c b/dlls/ntdll/unix/signal_x86_64.c
-index 88ee18461a..b71c7c7e2b 100644
---- a/dlls/ntdll/unix/signal_x86_64.c
-+++ b/dlls/ntdll/unix/signal_x86_64.c
-@@ -675,13 +684,13 @@ NTSTATUS WINAPI NtSetContextThread( HANDLE handle, const CONTEXT *context )
-     BOOL self = (handle == GetCurrentThread());
- 
-     /* debug registers require a server call */
--    if (self && (flags & CONTEXT_DEBUG_REGISTERS))
-+    /*if (self && (flags & CONTEXT_DEBUG_REGISTERS))
-         self = (amd64_thread_data()->dr0 == context->Dr0 &&
-                 amd64_thread_data()->dr1 == context->Dr1 &&
-                 amd64_thread_data()->dr2 == context->Dr2 &&
-                 amd64_thread_data()->dr3 == context->Dr3 &&
-                 amd64_thread_data()->dr6 == context->Dr6 &&
--                amd64_thread_data()->dr7 == context->Dr7);
-+                amd64_thread_data()->dr7 == context->Dr7);*/
- 
-     if (!self)
-     {
-@@ -727,7 +736,15 @@ NTSTATUS WINAPI NtGetContextThread( HANDLE handle, CONTEXT *context )
-     needed_flags = context->ContextFlags;
- 
-     /* debug registers require a server call */
--    if (context->ContextFlags & (CONTEXT_DEBUG_REGISTERS & ~CONTEXT_AMD64)) self = FALSE;
-+    if (context->ContextFlags & (CONTEXT_DEBUG_REGISTERS & ~CONTEXT_AMD64)) //self = FALSE;
-+    {
-+        context->Dr0 = amd64_thread_data()->dr0;
-+        context->Dr1 = amd64_thread_data()->dr1;
-+        context->Dr2 = amd64_thread_data()->dr2;
-+        context->Dr3 = amd64_thread_data()->dr3;
-+        context->Dr6 = amd64_thread_data()->dr6;
-+        context->Dr7 = amd64_thread_data()->dr7;
-+    }
- 
-     if (!self)
-     {
 From 8fd9d6bd3d567893f933b7d55615446476745654 Mon Sep 17 00:00:00 2001
 From: Vincent Povirk <vincent@codeweavers.com>
 Date: Wed, 1 Apr 2020 11:47:05 -0500
@@ -1678,6 +1408,111 @@ index 0ae3aadde92..e95ede8aed5 100644
      return FALSE;
  }
 
+From fdc1acce7e81f08eb10652b7b39b3d3e4bbed8f8 Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Fri, 24 Apr 2020 20:08:38 +0300
+Subject: [PATCH] Avoid undefined result in ntdll_wcstoumbs() in case of error.
+
+Undefined result is due to RtlUnicodeToUTF8N() not setting output
+length on error which is a correct behaviour according to
+existing tests.
+
+'Planet Zoo' is affected which passes NULL object name buffer to
+NtCreateFile().
+
+Signed-off-by: Paul Gofman <gofmanp@gmail.com>
+---
+ dlls/ntdll/locale.c | 2 +-
+ 1 file changed, 1 insertions(+), 1 deletion(-)
+
+diff --git a/dlls/ntdll/locale.c b/dlls/ntdll/locale.c
+index d6bde700e42..4f03e3881f0 100644
+--- a/dlls/ntdll/locale.c
++++ b/dlls/ntdll/locale.c
+@@ -769,7 +769,7 @@ DWORD ntdll_umbstowcs( const char *src, DWORD srclen, WCHAR *dst, DWORD dstlen )
+  */
+ int ntdll_wcstoumbs( const WCHAR *src, DWORD srclen, char *dst, DWORD dstlen, BOOL strict )
+ {
+-    DWORD i, reslen;
++    DWORD i, reslen = 0;
+ 
+     if (!unix_table.CodePage)
+         RtlUnicodeToUTF8N( dst, dstlen, &reslen, src, srclen * sizeof(WCHAR) );
+
+From 0255dbc3afd3ff673fa701e7802474483252fcb2 Mon Sep 17 00:00:00 2001
+From: Paul Gofman <pgofman@codeweavers.com>
+Date: Mon, 13 Jul 2020 10:21:49 -0500
+Subject: [PATCH] ntdll: Handle NULL object name buffer in
+ nt_to_unix_file_name_attr().
+
+---
+ dlls/ntdll/tests/file.c | 22 +++++++++++++++++++++-
+ dlls/ntdll/unix/file.c  |  8 ++++++++
+ 2 files changed, 29 insertions(+), 1 deletion(-)
+
+diff --git a/dlls/ntdll/tests/file.c b/dlls/ntdll/tests/file.c
+index 6164b0c4bde..031be95e233 100644
+--- a/dlls/ntdll/tests/file.c
++++ b/dlls/ntdll/tests/file.c
+@@ -144,16 +144,36 @@ static void create_file_test(void)
+     static const char testdata[] = "Hello World";
+     static const WCHAR sepW[] = {'\\',0};
+     FILE_NETWORK_OPEN_INFORMATION info;
++    UNICODE_STRING nameW, null_string;
+     NTSTATUS status;
+     HANDLE dir, file;
+     WCHAR path[MAX_PATH], temp[MAX_PATH];
+     OBJECT_ATTRIBUTES attr;
+     IO_STATUS_BLOCK io;
+-    UNICODE_STRING nameW;
+     LARGE_INTEGER offset;
+     char buf[32];
+     DWORD ret;
+ 
++    attr.Length = sizeof(attr);
++    attr.RootDirectory = NULL;
++    attr.ObjectName = &null_string;
++    attr.Attributes = 0;
++    attr.SecurityDescriptor = NULL;
++    attr.SecurityQualityOfService = NULL;
++
++    null_string.Buffer = NULL;
++    null_string.Length = 256;
++
++    /* try various open modes and options on directories */
++    status = pNtCreateFile( &dir, GENERIC_READ|GENERIC_WRITE, &attr, &io, NULL, 0,
++                            FILE_SHARE_READ|FILE_SHARE_WRITE, FILE_OPEN, FILE_DIRECTORY_FILE, NULL, 0 );
++    ok( status == STATUS_ACCESS_VIOLATION, "Got unexpected status %#x.\n",  status );
++
++    null_string.Length = 0;
++    status = pNtCreateFile( &dir, GENERIC_READ|GENERIC_WRITE, &attr, &io, NULL, 0,
++                            FILE_SHARE_READ|FILE_SHARE_WRITE, FILE_OPEN, FILE_DIRECTORY_FILE, NULL, 0 );
++    ok( status == STATUS_OBJECT_PATH_SYNTAX_BAD, "Got unexpected status %#x.\n",  status );
++
+     GetCurrentDirectoryW( MAX_PATH, path );
+     pRtlDosPathNameToNtPathName_U( path, &nameW, NULL, NULL );
+     attr.Length = sizeof(attr);
+diff --git a/dlls/ntdll/unix/file.c b/dlls/ntdll/unix/file.c
+index 20eb6a05922..d99c6b462b2 100644
+--- a/dlls/ntdll/unix/file.c
++++ b/dlls/ntdll/unix/file.c
+@@ -3185,8 +3185,16 @@ static NTSTATUS nt_to_unix_file_name_attr( const OBJECT_ATTRIBUTES *attr, char *
+     int name_len, unix_len;
+     NTSTATUS status;
+ 
++    if (!attr->ObjectName->Buffer && attr->ObjectName->Length)
++        return STATUS_ACCESS_VIOLATION;
++
+     if (!attr->RootDirectory)  /* without root dir fall back to normal lookup */
++    {
++        if (!attr->ObjectName->Buffer)
++            return STATUS_OBJECT_PATH_SYNTAX_BAD;
++
+         return nt_to_unix_file_name( attr->ObjectName, name_ret, disposition );
++    }
+ 
+     name     = attr->ObjectName->Buffer;
+     name_len = attr->ObjectName->Length / sizeof(WCHAR);
 From cb427c70056654bf12fb0d7d6dcb13386d193ff4 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Gabriel=20Iv=C4=83ncescu?= <gabrielopcode@gmail.com>
 Date: Fri, 24 Apr 2020 14:37:58 +0300
@@ -1781,7 +1616,7 @@ index 0e43a8170df..7d614569a16 100644
                                   unsigned int options );
  extern struct fd *get_fd_object_for_mapping( struct fd *fd, unsigned int access, unsigned int sharing );
 
-From aa34cb2167da7685bc550f2073ebc4c610f28eda Mon Sep 17 00:00:00 2001
+From 514d3e11c999b11a95ab35df5b4ab454d34fe791 Mon Sep 17 00:00:00 2001
 From: Paul Gofman <pgofman@codeweavers.com>
 Date: Wed, 13 May 2020 13:55:55 +0300
 Subject: [PATCH] ntdll: Add WINE_DISABLE_WRITE_WATCH env var to disable write
@@ -1794,12 +1629,12 @@ Could be fixed properly with Linux kernel changes.
  1 file changed, 16 insertions(+)
 
 diff --git a/dlls/ntdll/unix/virtual.c b/dlls/ntdll/unix/virtual.c
-index 6166507871..09b340e607 100644
+index 7ea80852090..272e1c5b176 100644
 --- a/dlls/ntdll/unix/virtual.c
 +++ b/dlls/ntdll/unix/virtual.c
-@@ -3346,6 +3615,22 @@ NTSTATUS WINAPI NtAllocateVirtualMemory( HANDLE process, PVOID *ret, ULONG_PTR z
- 
-     TRACE("%p %p %08lx %x %08x\n", process, *ret, size, type, protect );
+@@ -3425,6 +3425,22 @@ NTSTATUS WINAPI NtAllocateVirtualMemory( HANDLE process, PVOID *ret, ULONG_PTR z
+     if (zero_bits > 21 && zero_bits < 32) return STATUS_INVALID_PARAMETER_3;
+     if (!is_win64 && !is_wow64 && zero_bits >= 32) return STATUS_INVALID_PARAMETER_3;
  
 +    if (type & MEM_WRITE_WATCH)
 +    {
@@ -1817,10 +1652,9 @@ index 6166507871..09b340e607 100644
 +            return STATUS_NOT_SUPPORTED;
 +    }
 +
-     if (!size) return STATUS_INVALID_PARAMETER;
-     if (zero_bits > 21 && zero_bits < 32) return STATUS_INVALID_PARAMETER_3;
-     if (!is_win64 && !is_wow64 && zero_bits >= 32) return STATUS_INVALID_PARAMETER_3;
-
+     if (process != NtCurrentProcess())
+     {
+         apc_call_t call;
 From 912701cb515acdc8e0ff263552f656cd49f60714 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
 Date: Fri, 15 May 2020 13:01:26 +0200
@@ -1992,20 +1826,20 @@ index eb2ef57c7d6..c7881fe4516 100644
      /* sanity checks */
  
      if (!filename || !filename[0])
-@@ -905,6 +905,13 @@ HANDLE WINAPI DECLSPEC_HOTPATCH CreateFileW( LPCWSTR filename, DWORD access, DWO
-            (sharing & FILE_SHARE_WRITE) ? "FILE_SHARE_WRITE " : "",
+@@ -479,6 +546,13 @@ HANDLE WINAPI DECLSPEC_HOTPATCH CreateFileW( LPCWSTR filename, DWORD access, DWO
             (sharing & FILE_SHARE_DELETE) ? "FILE_SHARE_DELETE " : "",
             creation, attributes);
-+    
+ 
 +    if (is_file_blacklisted(filename))
 +    {
 +        FIXME("\"%s\" is blacklisted.\n", debugstr_w(filename));
 +        SetLastError( ERROR_FILE_NOT_FOUND );
 +        return INVALID_HANDLE_VALUE;
 +    }
- 
++
      if (!wcsncmp( filename, L"\\\\.\\", 4 ))
      {
+         if ((filename[4] && filename[5] == ':' && !filename[6]) ||
 
 From 2409bd1f74be116172688a25df725290637c255a Mon Sep 17 00:00:00 2001
 From: Andrew Eikum <aeikum@codeweavers.com>
@@ -2089,3 +1923,179 @@ index c7881fe4516..bb4be45da5d 100644
      }
  
      blacklist_filename_count = 0;
+From 027ff0c658ac00a7b5c1df014043265c83e74dbc Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
+Date: Wed, 18 Dec 2019 13:49:00 +0100
+Subject: [PATCH] HACK: user32: Strip gameoverlayrenderer.so from LD_PRELOAD
+ before executing explorer.exe.
+
+Work around a bug in gameoverlayrenderer which introduces 50ms hangs
+during XCheckIfEvent after approx 40 minutes of gameplay.
+---
+ dlls/user32/win.c | 55 +++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 55 insertions(+)
+
+diff --git a/dlls/user32/cursoricon.c b/dlls/user32/cursoricon.c
+index e772d541235..9d0cf716fd7 100644
+--- a/dlls/user32/cursoricon.c
++++ b/dlls/user32/cursoricon.c
+@@ -113,7 +113,7 @@ static int get_display_bpp(void)
+ 
+ static INIT_ONCE init_once = INIT_ONCE_STATIC_INIT;
+ 
+-static const struct png_funcs *png_funcs;
++const struct png_funcs *png_funcs;
+ 
+ static BOOL WINAPI load_libpng( INIT_ONCE *once, void *param, void **context )
+ {
+@@ -121,7 +121,7 @@ static BOOL WINAPI load_libpng( INIT_ONCE *once, void *param, void **context )
+     return TRUE;
+ }
+ 
+-static BOOL have_libpng(void)
++BOOL have_libpng(void)
+ {
+     return InitOnceExecuteOnce( &init_once, load_libpng, NULL, NULL ) && png_funcs;
+ }
+diff --git a/dlls/user32/png.c b/dlls/user32/png.c
+index a994c6de5c2..3054fd901a8 100644
+--- a/dlls/user32/png.c
++++ b/dlls/user32/png.c
+@@ -293,10 +293,16 @@ static BITMAPINFO * CDECL load_png(const char *png_data, DWORD *size)
+     return info;
+ }
+ 
+-static const struct png_funcs png_funcs =
++int CDECL hack_unix_setenv(const char *name, const char *value, int overwrite)
++{
++    return setenv(name, value, overwrite);
++}
++
++static const struct png_funcs png_funcs_unix =
+ {
+     get_png_info,
+-    load_png
++    load_png,
++    hack_unix_setenv,
+ };
+ 
+ NTSTATUS CDECL __wine_init_unix_lib( HMODULE module, DWORD reason, const void *ptr_in, void *ptr_out )
+@@ -335,7 +341,7 @@ NTSTATUS CDECL __wine_init_unix_lib( HMODULE module, DWORD reason, const void *p
+     LOAD_FUNCPTR(png_set_read_fn);
+ #undef LOAD_FUNCPTR
+ 
+-    *(const struct png_funcs **)ptr_out = &png_funcs;
++    *(const struct png_funcs **)ptr_out = &png_funcs_unix;
+     return STATUS_SUCCESS;
+ }
+ 
+diff --git a/dlls/user32/user_private.h b/dlls/user32/user_private.h
+index 7761a1ceb4f..5e42027b3c7 100644
+--- a/dlls/user32/user_private.h
++++ b/dlls/user32/user_private.h
+@@ -373,8 +373,12 @@ struct png_funcs
+ {
+     BOOL (CDECL *get_png_info)(const void *png_data, DWORD size, int *width, int *height, int *bpp);
+     BITMAPINFO * (CDECL *load_png)(const char *png_data, DWORD *size);
++    int (CDECL *hack_unix_setenv)(const char *name, const char *value, int overwrite);
+ };
+ 
++extern BOOL have_libpng(void);
++extern const struct png_funcs *png_funcs;
++
+ /* Mingw's assert() imports MessageBoxA and gets confused by user32 exporting it */
+ #ifdef __MINGW32__
+ #undef assert
+diff --git a/dlls/user32/win.c b/dlls/user32/win.c
+index 680defc2071..0ced1a5cd91 100644
+--- a/dlls/user32/win.c
++++ b/dlls/user32/win.c
+@@ -45,6 +45,15 @@ static DWORD process_layout = ~0u;
+ 
+ static struct list window_surfaces = LIST_INIT( window_surfaces );
+ 
++static CRITICAL_SECTION desktop_section;
++static CRITICAL_SECTION_DEBUG desktop_critsect_debug =
++{
++    0, 0, &desktop_section,
++    { &desktop_critsect_debug.ProcessLocksList, &desktop_critsect_debug.ProcessLocksList },
++      0, 0, { (DWORD_PTR)(__FILE__ ": desktop_section") }
++};
++static CRITICAL_SECTION desktop_section = { &desktop_critsect_debug, -1, 0, 0, 0, 0 };
++
+ static CRITICAL_SECTION surfaces_section;
+ static CRITICAL_SECTION_DEBUG critsect_debug =
+ {
+@@ -2088,6 +2097,7 @@ HWND WINAPI GetDesktopWindow(void)
+         WCHAR app[MAX_PATH + ARRAY_SIZE( L"\\explorer.exe" )];
+         WCHAR cmdline[MAX_PATH + ARRAY_SIZE( L"\\explorer.exe /desktop" )];
+         WCHAR desktop[MAX_PATH];
++        char *ld_preload;
+         void *redir;
+ 
+         SERVER_START_REQ( set_user_object_info )
+@@ -2120,6 +2130,49 @@ HWND WINAPI GetDesktopWindow(void)
+         lstrcpyW( cmdline, app );
+         lstrcatW( cmdline, L" /desktop" );
+ 
++        /* HACK: Unset LD_PRELOAD before executing explorer.exe to disable buggy gameoverlayrenderer.so
++        * It's not going to work through the CreateProcessW env parameter, as it will not be used for the loader execv.
++        */
++        if (have_libpng())
++        {
++            EnterCriticalSection( &desktop_section);
++
++            if ((ld_preload = getenv("LD_PRELOAD")))
++            {
++                static char const gorso[] = "gameoverlayrenderer.so";
++                static unsigned int gorso_len = ARRAY_SIZE(gorso) - 1;
++                char *env, *next, *tmp;
++
++                env = HeapAlloc(GetProcessHeap(), 0, strlen(ld_preload) + 1);
++                strcpy(env, ld_preload);
++
++                tmp = env;
++                do
++                {
++                    if (!(next = strchr(tmp, ':')))
++                        next = tmp + strlen(tmp);
++
++                    if (next - tmp >= gorso_len &&
++                        strncmp(next - gorso_len, gorso, gorso_len) == 0)
++                    {
++                        if (*next)
++                            memmove(tmp, next + 1, strlen(next));
++                        else
++                            *tmp = 0;
++                        next = tmp;
++                    }
++                    else
++                    {
++                        tmp = next + 1;
++                    }
++                }
++                while (*next);
++
++                png_funcs->hack_unix_setenv("LD_PRELOAD", env, 1);
++                HeapFree(GetProcessHeap(), 0, env);
++            }
++        }
++
+         Wow64DisableWow64FsRedirection( &redir );
+         if (CreateProcessW( app, cmdline, NULL, NULL, FALSE, DETACHED_PROCESS,
+                             NULL, windir, &si, &pi ))
+@@ -2132,6 +2185,14 @@ HWND WINAPI GetDesktopWindow(void)
+         else WARN( "failed to start explorer, err %d\n", GetLastError() );
+         Wow64RevertWow64FsRedirection( redir );
+ 
++        /* HACK: Restore the previous value, just in case */
++        if (have_libpng())
++        {
++            if (ld_preload) png_funcs->hack_unix_setenv("LD_PRELOAD", ld_preload, 1);
++
++            LeaveCriticalSection( &desktop_section );
++        }
++
+         SERVER_START_REQ( get_desktop_window )
+         {
+             req->force = 1;

@@ -1,0 +1,812 @@
+From c375e70c7b7141994175f530d6a58ca6e6a97042 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
+Date: Fri, 31 Jul 2020 09:09:47 +0200
+Subject: [PATCH] ntdll: Use RTLD_NOLOAD to find already mapped modules.
+
+This makes it possible to detect modules that weren't unmapped from
+dlclose, and that we should not fixup again.
+---
+ dlls/ntdll/unix/loader.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/dlls/ntdll/unix/loader.c b/dlls/ntdll/unix/loader.c
+index 3f983244c42..83044462e0a 100644
+--- a/dlls/ntdll/unix/loader.c
++++ b/dlls/ntdll/unix/loader.c
+@@ -914,9 +914,11 @@ static NTSTATUS dlopen_dll( const char *so_name, void **ret_module )
+     struct builtin_module *builtin;
+     void *module, *handle;
+     const IMAGE_NT_HEADERS *nt;
++    BOOL mapped = FALSE;
+ 
+     callback_module = (void *)1;
+-    handle = dlopen( so_name, RTLD_NOW );
++    if ((handle = dlopen( so_name, RTLD_NOW | RTLD_NOLOAD ))) mapped = TRUE;
++    else handle = dlopen( so_name, RTLD_NOW );
+     if (!handle)
+     {
+         WARN( "failed to load .so lib %s: %s\n", debugstr_a(so_name), dlerror() );
+@@ -935,7 +937,7 @@ static NTSTATUS dlopen_dll( const char *so_name, void **ret_module )
+         module = (HMODULE)((nt->OptionalHeader.ImageBase + 0xffff) & ~0xffff);
+         LIST_FOR_EACH_ENTRY( builtin, &builtin_modules, struct builtin_module, entry )
+             if (builtin->module == module) goto already_loaded;
+-        if (map_so_dll( nt, module ))
++        if (!mapped && map_so_dll( nt, module ))
+         {
+             dlclose( handle );
+             return STATUS_NO_MEMORY;
+From 98d82982182c51548d3a2fd0e317890ccf28e773 Mon Sep 17 00:00:00 2001
+From: Brendan Shanks <bshanks@codeweavers.com>
+Date: Fri, 7 Aug 2020 11:40:52 -0700
+Subject: [PATCH] ntdll: Pad HEAP structure so 'flags' offset matches recent
+ Windows.
+
+Needed for Red Dead Redemption 2 to pass anti-debugger checks, it
+accesses 'flags' and 'force_flags' at a fixed offset of the ProcessHeap.
+
+Wine-Bug: https://bugs.winehq.org/show_bug.cgi?id=49666
+Signed-off-by: Brendan Shanks <bshanks@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+(cherry picked from commit fd80e0300cbec55fe637714d3b02128616cdd570)
+---
+ dlls/ntdll/heap.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/dlls/ntdll/heap.c b/dlls/ntdll/heap.c
+index 609c7895409..2ea303c3291 100644
+--- a/dlls/ntdll/heap.c
++++ b/dlls/ntdll/heap.c
+@@ -143,7 +143,13 @@ typedef struct tagSUBHEAP
+ typedef struct tagHEAP
+ {
+     DWORD_PTR        unknown1[2];
+-    DWORD            unknown2;
++    DWORD            unknown2[2];
++    DWORD_PTR        unknown3[4];
++    DWORD            unknown4;
++    DWORD_PTR        unknown5[2];
++    DWORD            unknown6[3];
++    DWORD_PTR        unknown7[2];
++    /* For Vista through 10, 'flags' is at offset 0x40 (x86) / 0x70 (x64) */
+     DWORD            flags;         /* Heap flags */
+     DWORD            force_flags;   /* Forced heap flags for debugging */
+     SUBHEAP          subheap;       /* First sub-heap */
+From d4bd4d88d9d0fcda827f6c5445b94d59e66743ef Mon Sep 17 00:00:00 2001
+From: Brendan Shanks <bshanks@codeweavers.com>
+Date: Fri, 21 Feb 2020 12:08:56 -0800
+Subject: [PATCH] HACK: winevulkan: Add vkGetPhysicalDeviceProperties thunks to
+ fake NVIDIA PCI IDs as AMD
+
+Needed for RDR2 with NVIDIA cards, otherwise game crashes or gets stuck
+trying to load nvapi64.dll
+---
+ dlls/winevulkan/make_vulkan     |  1 +
+ dlls/winevulkan/vulkan.c        | 45 +++++++++++++++++++++++++++++++++
+ dlls/winevulkan/vulkan_thunks.c |  5 +---
+ dlls/winevulkan/vulkan_thunks.h |  2 ++
+ 4 files changed, 49 insertions(+), 4 deletions(-)
+
+diff --git a/dlls/winevulkan/make_vulkan b/dlls/winevulkan/make_vulkan
+index 10c2ca94bf5..69a5e5fd73e 100755
+--- a/dlls/winevulkan/make_vulkan
++++ b/dlls/winevulkan/make_vulkan
+@@ -165,6 +165,7 @@ FUNCTION_OVERRIDES = {
+     "vkGetPhysicalDeviceExternalFenceProperties" : {"dispatch" : False, "driver" : False, "thunk" : False},
+     "vkGetPhysicalDeviceExternalSemaphoreProperties" : {"dispatch" : False, "driver" : False, "thunk" : False},
+     "vkGetPhysicalDeviceImageFormatProperties2" : {"dispatch" : True, "driver" : False, "thunk" : True, "private_thunk" : True},
++    "vkGetPhysicalDeviceProperties" : {"dispatch" : True, "driver" : False, "thunk" : True, "private_thunk" : True},
+     "vkGetPhysicalDeviceProperties2" : {"dispatch" : True, "driver" : False, "thunk" : True, "private_thunk" : True},
+     "vkGetPhysicalDeviceProperties2KHR" : {"dispatch" : True, "driver" : False, "thunk" : True, "private_thunk" : True},
+ 
+diff --git a/dlls/winevulkan/vulkan.c b/dlls/winevulkan/vulkan.c
+index f7abce74185..5fdc24d5870 100644
+--- a/dlls/winevulkan/vulkan.c
++++ b/dlls/winevulkan/vulkan.c
+@@ -20,6 +20,7 @@
+ #include "config.h"
+ #include <time.h>
+ #include <stdarg.h>
++#include <stdlib.h>
+ #include <math.h>
+ 
+ #include "windef.h"
+@@ -1423,6 +1424,26 @@ static void release_display_device_init_mutex(HANDLE mutex)
+     CloseHandle(mutex);
+ }
+ 
++void WINAPI wine_vkGetPhysicalDeviceProperties(VkPhysicalDevice physical_device,
++        VkPhysicalDeviceProperties *properties)
++{
++    TRACE("%p, %p\n", physical_device, properties);
++
++    thunk_vkGetPhysicalDeviceProperties(physical_device, properties);
++
++    {
++        const char *sgi = getenv("WINE_HIDE_NVIDIA_GPU");
++        if (sgi && *sgi != '0')
++        {
++            if (properties->vendorID == 0x10de /* NVIDIA */)
++            {
++                properties->vendorID = 0x1002; /* AMD */
++                properties->deviceID = 0x67df; /* RX 480 */
++            }
++        }
++    }
++}
++
+ /* Wait until graphics driver is loaded by explorer */
+ static void wait_graphics_driver_ready(void)
+ {
+@@ -1486,6 +1507,18 @@ void WINAPI wine_vkGetPhysicalDeviceProperties2(VkPhysicalDevice phys_dev,
+ 
+     thunk_vkGetPhysicalDeviceProperties2(phys_dev, properties2);
+     fill_luid_property(properties2);
++
++    {
++        const char *sgi = getenv("WINE_HIDE_NVIDIA_GPU");
++        if (sgi && *sgi != '0')
++        {
++            if (properties2->properties.vendorID == 0x10de /* NVIDIA */)
++            {
++                properties2->properties.vendorID = 0x1002; /* AMD */
++                properties2->properties.deviceID = 0x67df; /* RX 480 */
++            }
++        }
++    }
+ }
+ 
+ void WINAPI wine_vkGetPhysicalDeviceProperties2KHR(VkPhysicalDevice phys_dev,
+@@ -1495,6 +1528,18 @@ void WINAPI wine_vkGetPhysicalDeviceProperties2KHR(VkPhysicalDevice phys_dev,
+ 
+     thunk_vkGetPhysicalDeviceProperties2KHR(phys_dev, properties2);
+     fill_luid_property(properties2);
++
++    {
++        const char *sgi = getenv("WINE_HIDE_NVIDIA_GPU");
++        if (sgi && *sgi != '0')
++        {
++            if (properties2->properties.vendorID == 0x10de /* NVIDIA */)
++            {
++                properties2->properties.vendorID = 0x1002; /* AMD */
++                properties2->properties.deviceID = 0x67df; /* RX 480 */
++            }
++        }
++    }
+ }
+ 
+ void WINAPI wine_vkGetPhysicalDeviceExternalSemaphoreProperties(VkPhysicalDevice phys_dev,
+diff --git a/dlls/winevulkan/vulkan_thunks.c b/dlls/winevulkan/vulkan_thunks.c
+index 50755dd472a..ffddbd6cd9e 100644
+--- a/dlls/winevulkan/vulkan_thunks.c
++++ b/dlls/winevulkan/vulkan_thunks.c
+@@ -4826,17 +4826,14 @@ VkResult WINAPI wine_vkGetPhysicalDevicePresentRectanglesKHR(VkPhysicalDevice ph
+     return physicalDevice->instance->funcs.p_vkGetPhysicalDevicePresentRectanglesKHR(physicalDevice->phys_dev, surface, pRectCount, pRects);
+ }
+ 
+-void WINAPI wine_vkGetPhysicalDeviceProperties(VkPhysicalDevice physicalDevice, VkPhysicalDeviceProperties *pProperties)
++void thunk_vkGetPhysicalDeviceProperties(VkPhysicalDevice physicalDevice, VkPhysicalDeviceProperties *pProperties)
+ {
+ #if defined(USE_STRUCT_CONVERSION)
+     VkPhysicalDeviceProperties_host pProperties_host;
+-    TRACE("%p, %p\n", physicalDevice, pProperties);
+-
+     physicalDevice->instance->funcs.p_vkGetPhysicalDeviceProperties(physicalDevice->phys_dev, &pProperties_host);
+ 
+     convert_VkPhysicalDeviceProperties_host_to_win(&pProperties_host, pProperties);
+ #else
+-    TRACE("%p, %p\n", physicalDevice, pProperties);
+     physicalDevice->instance->funcs.p_vkGetPhysicalDeviceProperties(physicalDevice->phys_dev, pProperties);
+ #endif
+ }
+diff --git a/dlls/winevulkan/vulkan_thunks.h b/dlls/winevulkan/vulkan_thunks.h
+index 120904809dc..a02590000c2 100644
+--- a/dlls/winevulkan/vulkan_thunks.h
++++ b/dlls/winevulkan/vulkan_thunks.h
+@@ -44,6 +44,7 @@ void WINAPI wine_vkGetPhysicalDeviceExternalSemaphoreProperties(VkPhysicalDevice
+ void WINAPI wine_vkGetPhysicalDeviceExternalSemaphorePropertiesKHR(VkPhysicalDevice physicalDevice, const VkPhysicalDeviceExternalSemaphoreInfo *pExternalSemaphoreInfo, VkExternalSemaphoreProperties *pExternalSemaphoreProperties) DECLSPEC_HIDDEN;
+ VkResult WINAPI wine_vkGetPhysicalDeviceImageFormatProperties2(VkPhysicalDevice physicalDevice, const VkPhysicalDeviceImageFormatInfo2 *pImageFormatInfo, VkImageFormatProperties2 *pImageFormatProperties);
+ VkResult WINAPI wine_vkGetPhysicalDeviceImageFormatProperties2KHR(VkPhysicalDevice physicalDevice, const VkPhysicalDeviceImageFormatInfo2 *pImageFormatInfo, VkImageFormatProperties2 *pImageFormatProperties) DECLSPEC_HIDDEN;
++void WINAPI wine_vkGetPhysicalDeviceProperties(VkPhysicalDevice physicalDevice, VkPhysicalDeviceProperties *pProperties);
+ void WINAPI wine_vkGetPhysicalDeviceProperties2(VkPhysicalDevice physicalDevice, VkPhysicalDeviceProperties2 *pProperties);
+ void WINAPI wine_vkGetPhysicalDeviceProperties2KHR(VkPhysicalDevice physicalDevice, VkPhysicalDeviceProperties2 *pProperties) DECLSPEC_HIDDEN;
+ VkResult WINAPI wine_vkGetPhysicalDeviceSurfaceCapabilities2KHR(VkPhysicalDevice physicalDevice, const VkPhysicalDeviceSurfaceInfo2KHR *pSurfaceInfo, VkSurfaceCapabilities2KHR *pSurfaceCapabilities);
+@@ -57,6 +58,7 @@ VkResult WINAPI wine_vkSetPrivateDataEXT(VkDevice device, VkObjectType objectTyp
+ /* Private thunks */
+ VkResult thunk_vkGetPhysicalDeviceImageFormatProperties2(VkPhysicalDevice physicalDevice, const VkPhysicalDeviceImageFormatInfo2 *pImageFormatInfo, VkImageFormatProperties2 *pImageFormatProperties) DECLSPEC_HIDDEN;
+ VkResult thunk_vkGetPhysicalDeviceImageFormatProperties2KHR(VkPhysicalDevice physicalDevice, const VkPhysicalDeviceImageFormatInfo2 *pImageFormatInfo, VkImageFormatProperties2 *pImageFormatProperties) DECLSPEC_HIDDEN;
++void thunk_vkGetPhysicalDeviceProperties(VkPhysicalDevice physicalDevice, VkPhysicalDeviceProperties *pProperties) DECLSPEC_HIDDEN;
+ void thunk_vkGetPhysicalDeviceProperties2(VkPhysicalDevice physicalDevice, VkPhysicalDeviceProperties2 *pProperties) DECLSPEC_HIDDEN;
+ void thunk_vkGetPhysicalDeviceProperties2KHR(VkPhysicalDevice physicalDevice, VkPhysicalDeviceProperties2 *pProperties) DECLSPEC_HIDDEN;
+ VkResult thunk_vkGetPhysicalDeviceSurfaceCapabilities2KHR(VkPhysicalDevice physicalDevice, const VkPhysicalDeviceSurfaceInfo2KHR *pSurfaceInfo, VkSurfaceCapabilities2KHR *pSurfaceCapabilities) DECLSPEC_HIDDEN;
+From 4345670daf5beb4976023c1aec70dbb4148632b0 Mon Sep 17 00:00:00 2001
+From: Brendan Shanks <bshanks@codeweavers.com>
+Date: Wed, 15 Jul 2020 11:25:13 -0700
+Subject: [PATCH] HACK: winex11: Support faking AMD PCI IDs for NVIDIA cards
+
+---
+ dlls/winex11.drv/display.c | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
+
+diff --git a/dlls/winex11.drv/display.c b/dlls/winex11.drv/display.c
+index 577d9a738dc..ea4d6e3e9b4 100644
+--- a/dlls/winex11.drv/display.c
++++ b/dlls/winex11.drv/display.c
+@@ -21,6 +21,7 @@
+ #include "config.h"
+ 
+ #include <stdarg.h>
++#include <stdlib.h>
+ 
+ #include "windef.h"
+ #include "winbase.h"
+@@ -820,6 +821,18 @@ void X11DRV_DisplayDevices_Init(BOOL force)
+ 
+     for (gpu = 0; gpu < gpu_count; gpu++)
+     {
++        {
++            const char *sgi = getenv("WINE_HIDE_NVIDIA_GPU");
++            if (sgi && *sgi != '0')
++            {
++                if (gpus[gpu].vendor_id == 0x10de /* NVIDIA */)
++                {
++                    gpus[gpu].vendor_id = 0x1002; /* AMD */
++                    gpus[gpu].device_id = 0x67df; /* RX 480 */
++                }
++            }
++        }
++
+         if (!X11DRV_InitGpu(gpu_devinfo, &gpus[gpu], gpu, guidW, driverW, &gpu_luid))
+             goto done;
+ 
+From 8ba6754705e86e2966bb114d9d708672712d5656 Mon Sep 17 00:00:00 2001
+From: Brendan Shanks <bshanks@codeweavers.com>
+Date: Fri, 7 Aug 2020 09:38:20 -0700
+Subject: [PATCH] include/msvcrt: Add stdbool.h header.
+
+Signed-off-by: Brendan Shanks <bshanks@codeweavers.com>
+Signed-off-by: Alexandre Julliard <julliard@winehq.org>
+(cherry picked from commit bae98df3282e4d85cf797b47759db095ea7363f9)
+---
+ include/Makefile.in      |  1 +
+ include/msvcrt/stdbool.h | 31 +++++++++++++++++++++++++++++++
+ 2 files changed, 32 insertions(+)
+ create mode 100644 include/msvcrt/stdbool.h
+
+diff --git a/include/Makefile.in b/include/Makefile.in
+index 3bdf1425796..633c257a983 100644
+--- a/include/Makefile.in
++++ b/include/Makefile.in
+@@ -473,6 +473,7 @@ SOURCES = \
+ 	msvcrt/setjmp.h \
+ 	msvcrt/share.h \
+ 	msvcrt/signal.h \
++	msvcrt/stdbool.h \
+ 	msvcrt/stddef.h \
+ 	msvcrt/stdint.h \
+ 	msvcrt/stdio.h \
+diff --git a/include/msvcrt/stdbool.h b/include/msvcrt/stdbool.h
+new file mode 100644
+index 00000000000..7f19f374c6e
+--- /dev/null
++++ b/include/msvcrt/stdbool.h
+@@ -0,0 +1,31 @@
++/*
++ * Copyright 2020 Brendan Shanks for CodeWeavers
++ *
++ * This library is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU Lesser General Public
++ * License as published by the Free Software Foundation; either
++ * version 2.1 of the License, or (at your option) any later version.
++ *
++ * This library is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++ * Lesser General Public License for more details.
++ *
++ * You should have received a copy of the GNU Lesser General Public
++ * License along with this library; if not, write to the Free Software
++ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
++ */
++#ifndef __WINE_STDBOOL_H
++#define __WINE_STDBOOL_H
++
++#ifndef __cplusplus
++
++#define bool    _Bool
++#define true    1
++#define false   0
++
++#endif
++
++#define __bool_true_false_are_defined 1
++
++#endif /* __WINE_STDBOOL_H */
+From 16aaf8ad216fbc88fbc32b889478580cc4b4fff9 Mon Sep 17 00:00:00 2001
+From: Brendan Shanks <bshanks@codeweavers.com>
+Date: Fri, 10 Jul 2020 16:04:51 -0700
+Subject: [PATCH] include: Add DH-related bcrypt constants.
+
+Signed-off-by: Brendan Shanks <bshanks@codeweavers.com>
+---
+ include/bcrypt.h | 38 ++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 38 insertions(+)
+
+diff --git a/include/bcrypt.h b/include/bcrypt.h
+index a099f2f4b0e..e485023abb0 100644
+--- a/include/bcrypt.h
++++ b/include/bcrypt.h
+@@ -46,6 +46,7 @@ typedef LONG NTSTATUS;
+ #define BCRYPT_BLOCK_LENGTH         L"BlockLength"
+ #define BCRYPT_BLOCK_SIZE_LIST      L"BlockSizeList"
+ #define BCRYPT_CHAINING_MODE        L"ChainingMode"
++#define BCRYPT_DH_PARAMETERS        L"DHParameters"
+ #define BCRYPT_EFFECTIVE_KEY_LENGTH L"EffectiveKeyLength"
+ #define BCRYPT_HASH_BLOCK_LENGTH    L"HashBlockLength"
+ #define BCRYPT_HASH_LENGTH          L"HashDigestLength"
+@@ -74,6 +75,8 @@ typedef LONG NTSTATUS;
+ #define LEGACY_DSA_PRIVATE_BLOB     L"CAPIDSAPRIVATEBLOB"
+ #define LEGACY_DSA_V2_PUBLIC_BLOB   L"V2CAPIDSAPUBLICBLOB"
+ #define LEGACY_DSA_V2_PRIVATE_BLOB  L"V2CAPIDSAPRIVATEBLOB"
++#define BCRYPT_DH_PUBLIC_BLOB       L"DHPUBLICBLOB"
++#define BCRYPT_DH_PRIVATE_BLOB      L"DHPRIVATEBLOB"
+ 
+ #define MS_PRIMITIVE_PROVIDER       L"Microsoft Primitive Provider"
+ #define MS_PLATFORM_CRYPTO_PROVIDER L"Microsoft Platform Crypto Provider"
+@@ -81,6 +84,7 @@ typedef LONG NTSTATUS;
+ #define BCRYPT_3DES_ALGORITHM       L"3DES"
+ #define BCRYPT_AES_ALGORITHM        L"AES"
+ #define BCRYPT_DES_ALGORITHM        L"DES"
++#define BCRYPT_DH_ALGORITHM         L"DH"
+ #define BCRYPT_DSA_ALGORITHM        L"DSA"
+ #define BCRYPT_ECDH_P256_ALGORITHM  L"ECDH_P256"
+ #define BCRYPT_ECDSA_P256_ALGORITHM L"ECDSA_P256"
+@@ -117,6 +121,7 @@ static const WCHAR BCRYPT_AUTH_TAG_LENGTH[] = {'A','u','t','h','T','a','g','L','
+ static const WCHAR BCRYPT_BLOCK_LENGTH[] = {'B','l','o','c','k','L','e','n','g','t','h',0};
+ static const WCHAR BCRYPT_BLOCK_SIZE_LIST[] = {'B','l','o','c','k','S','i','z','e','L','i','s','t',0};
+ static const WCHAR BCRYPT_CHAINING_MODE[] = {'C','h','a','i','n','i','n','g','M','o','d','e',0};
++static const WCHAR BCRYPT_DH_PARAMETERS[] = {'D','H','P','a','r','a','m','e','t','e','r','s',0};
+ static const WCHAR BCRYPT_EFFECTIVE_KEY_LENGTH[] = {'E','f','f','e','c','t','i','v','e','K','e','y','L','e','n','g','t','h',0};
+ static const WCHAR BCRYPT_HASH_BLOCK_LENGTH[] = {'H','a','s','h','B','l','o','c','k','L','e','n','g','t','h',0};
+ static const WCHAR BCRYPT_HASH_LENGTH[] = {'H','a','s','h','D','i','g','e','s','t','L','e','n','g','t','h',0};
+@@ -145,6 +150,8 @@ static const WCHAR LEGACY_DSA_PUBLIC_BLOB[] = {'C','A','P','I','D','S','A','P','
+ static const WCHAR LEGACY_DSA_PRIVATE_BLOB[] = {'C','A','P','I','D','S','A','P','R','I','V','A','T','E','B','L','O','B',0};
+ static const WCHAR LEGACY_DSA_V2_PUBLIC_BLOB[] = {'V','2','C','A','P','I','D','S','A','P','U','B','L','I','C','B','L','O','B',0};
+ static const WCHAR LEGACY_DSA_V2_PRIVATE_BLOB[] = {'V','2','C','A','P','I','D','S','A','P','R','I','V','A','T','E','B','L','O','B',0};
++static const WCHAR BCRYPT_DH_PUBLIC_BLOB[] = {'D','H','P','U','B','L','I','C','B','L','O','B',0};
++static const WCHAR BCRYPT_DH_PRIVATE_BLOB[] = {'D','H','P','R','I','V','A','T','E','B','L','O','B',0};
+ 
+ static const WCHAR MS_PRIMITIVE_PROVIDER[] = \
+ {'M','i','c','r','o','s','o','f','t',' ','P','r','i','m','i','t','i','v','e',' ','P','r','o','v','i','d','e','r',0};
+@@ -154,6 +161,7 @@ static const WCHAR MS_PLATFORM_CRYPTO_PROVIDER[] = \
+ static const WCHAR BCRYPT_3DES_ALGORITHM[] = {'3','D','E','S',0};
+ static const WCHAR BCRYPT_AES_ALGORITHM[] = {'A','E','S',0};
+ static const WCHAR BCRYPT_DES_ALGORITHM[] = {'D','E','S',0};
++static const WCHAR BCRYPT_DH_ALGORITHM[] = {'D','H',0};
+ static const WCHAR BCRYPT_DSA_ALGORITHM[] = {'D','S','A',0};
+ static const WCHAR BCRYPT_ECDH_P256_ALGORITHM[] = {'E','C','D','H','_','P','2','5','6',0};
+ static const WCHAR BCRYPT_ECDSA_P256_ALGORITHM[] = {'E','C','D','S','A','_','P','2','5','6',0};
+@@ -322,6 +330,22 @@ typedef struct _BCRYPT_DSA_KEY_BLOB_V2
+     UCHAR               Count[4];
+ } BCRYPT_DSA_KEY_BLOB_V2, *PBCRYPT_DSA_KEY_BLOB_V2;
+ 
++#define BCRYPT_DH_PARAMETERS_MAGIC 0x4d504844
++#define BCRYPT_DH_PUBLIC_MAGIC     0x42504844
++#define BCRYPT_DH_PRIVATE_MAGIC    0x56504844
++
++typedef struct _BCRYPT_DH_PARAMETER_HEADER
++{
++    ULONG cbLength;
++    ULONG dwMagic;
++    ULONG cbKeyLength;
++} BCRYPT_DH_PARAMETER_HEADER;
++
++typedef struct _BCRYPT_DH_KEY_BLOB {
++    ULONG dwMagic;
++    ULONG cbKey;
++} BCRYPT_DH_KEY_BLOB, *PBCRYPT_DH_KEY_BLOB;
++
+ #define BCRYPT_AUTHENTICATED_CIPHER_MODE_INFO_VERSION 1
+ 
+ #define BCRYPT_AUTH_MODE_CHAIN_CALLS_FLAG 0x00000001
+@@ -360,6 +384,20 @@ typedef struct _BCRYPT_KEY_DATA_BLOB_HEADER
+ #define KDF_HASH_ALGORITHM 0x00000000
+ #define KDF_SECRET_PREPEND 0x00000001
+ #define KDF_SECRET_APPEND  0x00000002
++#define KDF_HMAC_KEY       0x00000003
++#define KDF_TLS_PRF_LABEL  0x00000004
++#define KDF_TLS_PRF_SEED   0x00000005
++#define KDF_SECRET_HANDLE  0x00000006
++#define KDF_TLS_PRF_PROTOCOL 0x000007
++#define KDF_ALGORITHMID    0x00000008
++#define KDF_PARTYUINFO     0x00000009
++#define KDF_PARTYVINFO     0x0000000A
++#define KDF_SUPPPUBINFO    0x0000000B
++#define KDF_SUPPPRIVINFO   0x0000000C
++#define KDF_LABEL          0x0000000D
++#define KDF_CONTEXT        0x0000000E
++#define KDF_SALT           0x0000000F
++#define KDF_ITERATION_COUNT 0x0000010
+ 
+ typedef struct _BCryptBuffer
+ {
+From 8228cc1a058955bfaf0ba00f6259be76346a4651 Mon Sep 17 00:00:00 2001
+From: Brendan Shanks <bshanks@codeweavers.com>
+Date: Mon, 3 Aug 2020 10:53:24 -0700
+Subject: [PATCH] HACK: bcrypt: Add stub Diffie-Hellman support for use only by
+ Red Dead Redemption 2.
+
+---
+ dlls/bcrypt/bcrypt_internal.h |  4 +++
+ dlls/bcrypt/bcrypt_main.c     | 41 +++++++++++++++++++++++
+ dlls/bcrypt/gnutls.c          | 63 +++++++++++++++++++++++++++++++++++
+ 3 files changed, 108 insertions(+)
+
+diff --git a/dlls/bcrypt/bcrypt_internal.h b/dlls/bcrypt/bcrypt_internal.h
+index 18343a6c749..985bcb2de6f 100644
+--- a/dlls/bcrypt/bcrypt_internal.h
++++ b/dlls/bcrypt/bcrypt_internal.h
+@@ -134,6 +134,7 @@ enum alg_id
+     ALG_ID_RSA,
+ 
+     /* secret agreement */
++    ALG_ID_DH,
+     ALG_ID_ECDH_P256,
+ 
+     /* signature */
+@@ -180,6 +181,7 @@ struct key_asymmetric
+     UCHAR            *pubkey;
+     ULONG             pubkey_len;
+     DSSSEED           dss_seed;
++    gnutls_dh_params_t dh_params;
+ };
+ 
+ struct key
+@@ -258,6 +260,8 @@ NTSTATUS key_export_dsa_capi( struct key *, UCHAR *, ULONG, ULONG * ) DECLSPEC_H
+ NTSTATUS key_export_ecc( struct key *, UCHAR *, ULONG, ULONG * ) DECLSPEC_HIDDEN;
+ NTSTATUS key_import_dsa_capi( struct key *, UCHAR *, ULONG ) DECLSPEC_HIDDEN;
+ NTSTATUS key_import_ecc( struct key *, UCHAR *, ULONG ) DECLSPEC_HIDDEN;
++NTSTATUS key_export_dh( struct key *, UCHAR *, ULONG, ULONG * ) DECLSPEC_HIDDEN;
++NTSTATUS key_import_pair_dh( struct key *, UCHAR *, ULONG ) DECLSPEC_HIDDEN;
+ 
+ BOOL is_zero_vector( const UCHAR *, ULONG ) DECLSPEC_HIDDEN;
+ BOOL is_equal_vector( const UCHAR *, ULONG, const UCHAR *, ULONG ) DECLSPEC_HIDDEN;
+diff --git a/dlls/bcrypt/bcrypt_main.c b/dlls/bcrypt/bcrypt_main.c
+index f4e59734cc4..1ec7a235b26 100644
+--- a/dlls/bcrypt/bcrypt_main.c
++++ b/dlls/bcrypt/bcrypt_main.c
+@@ -115,6 +115,7 @@ builtin_algorithms[] =
+     {  BCRYPT_MD4_ALGORITHM,        BCRYPT_HASH_INTERFACE,                  270,   16,  512 },
+     {  BCRYPT_MD2_ALGORITHM,        BCRYPT_HASH_INTERFACE,                  270,   16,  128 },
+     {  BCRYPT_RSA_ALGORITHM,        BCRYPT_ASYMMETRIC_ENCRYPTION_INTERFACE, 0,      0,    0 },
++    {  BCRYPT_DH_ALGORITHM,         BCRYPT_SECRET_AGREEMENT_INTERFACE,      0,      0,    0 },
+     {  BCRYPT_ECDH_P256_ALGORITHM,  BCRYPT_SECRET_AGREEMENT_INTERFACE,      0,      0,    0 },
+     {  BCRYPT_RSA_SIGN_ALGORITHM,   BCRYPT_SIGNATURE_INTERFACE,             0,      0,    0 },
+     {  BCRYPT_ECDSA_P256_ALGORITHM, BCRYPT_SIGNATURE_INTERFACE,             0,      0,    0 },
+@@ -245,6 +246,17 @@ NTSTATUS WINAPI BCryptOpenAlgorithmProvider( BCRYPT_ALG_HANDLE *handle, LPCWSTR
+         return STATUS_NOT_IMPLEMENTED;
+     }
+ 
++    if (!strcmpW( id, BCRYPT_DH_ALGORITHM ))
++    {
++        const char *sgi = getenv( "SteamGameId" );
++        if (!sgi || strcmp( sgi, "1174180" ))
++        {
++            /* Only allow the stub DH support to be used by Red Dead Redemption 2 (needed for online mode) */
++            FIXME( "algorithm %s not supported\n", debugstr_w(id) );
++            return STATUS_NOT_IMPLEMENTED;
++        }
++    }
++
+     if (implementation && strcmpW( implementation, MS_PRIMITIVE_PROVIDER ))
+     {
+         FIXME( "implementation %s not supported\n", debugstr_w(implementation) );
+@@ -953,6 +965,10 @@ static NTSTATUS key_export( struct key *key, const WCHAR *type, UCHAR *output, U
+     {
+         return key_export_dsa_capi( key, output, output_len, size );
+     }
++    else if (!strcmpW( type, BCRYPT_DH_PUBLIC_BLOB ))
++    {
++        return key_export_dh( key, output, output_len, size );
++    }
+ 
+     FIXME( "unsupported key type %s\n", debugstr_w(type) );
+     return STATUS_NOT_IMPLEMENTED;
+@@ -1318,6 +1334,31 @@ static NTSTATUS key_import_pair( struct algorithm *alg, const WCHAR *type, BCRYP
+         *ret_key = key;
+         return STATUS_SUCCESS;
+     }
++    else if (!strcmpW( type, BCRYPT_DH_PUBLIC_BLOB ))
++    {
++        BCRYPT_DH_KEY_BLOB *blob = (BCRYPT_DH_KEY_BLOB *)input;
++
++        if (input_len < sizeof(*blob)) return STATUS_INVALID_PARAMETER;
++        if ((alg->id != ALG_ID_DH) || blob->dwMagic != BCRYPT_DH_PUBLIC_MAGIC)
++            return STATUS_NOT_SUPPORTED;
++
++        if (!(key = heap_alloc_zero( sizeof(*key) ))) return STATUS_NO_MEMORY;
++        key->hdr.magic = MAGIC_KEY;
++
++        if ((status = key_asymmetric_init( key, alg, blob->cbKey / 8, NULL, 0 )))
++        {
++            heap_free( key );
++            return status;
++        }
++        if ((status = key_import_pair_dh( key, input, input_len )))
++        {
++            heap_free( key );
++            return status;
++        }
++
++        *ret_key = key;
++        return STATUS_SUCCESS;
++    }
+ 
+     FIXME( "unsupported key type %s\n", debugstr_w(type) );
+     return STATUS_NOT_SUPPORTED;
+diff --git a/dlls/bcrypt/gnutls.c b/dlls/bcrypt/gnutls.c
+index a80bce47f95..0b9e38508c2 100644
+--- a/dlls/bcrypt/gnutls.c
++++ b/dlls/bcrypt/gnutls.c
+@@ -101,6 +101,9 @@ MAKE_FUNCPTR(gnutls_cipher_decrypt2);
+ MAKE_FUNCPTR(gnutls_cipher_deinit);
+ MAKE_FUNCPTR(gnutls_cipher_encrypt2);
+ MAKE_FUNCPTR(gnutls_cipher_init);
++MAKE_FUNCPTR(gnutls_dh_params_export_raw);
++MAKE_FUNCPTR(gnutls_dh_params_import_raw2);
++MAKE_FUNCPTR(gnutls_dh_params_init);
+ MAKE_FUNCPTR(gnutls_global_deinit);
+ MAKE_FUNCPTR(gnutls_global_init);
+ MAKE_FUNCPTR(gnutls_global_set_log_function);
+@@ -216,6 +219,9 @@ BOOL gnutls_initialize(void)
+     LOAD_FUNCPTR(gnutls_cipher_deinit)
+     LOAD_FUNCPTR(gnutls_cipher_encrypt2)
+     LOAD_FUNCPTR(gnutls_cipher_init)
++    LOAD_FUNCPTR(gnutls_dh_params_export_raw)
++    LOAD_FUNCPTR(gnutls_dh_params_import_raw2)
++    LOAD_FUNCPTR(gnutls_dh_params_init)
+     LOAD_FUNCPTR(gnutls_global_deinit)
+     LOAD_FUNCPTR(gnutls_global_init)
+     LOAD_FUNCPTR(gnutls_global_set_log_function)
+@@ -450,6 +456,26 @@ NTSTATUS key_set_property( struct key *key, const WCHAR *prop, UCHAR *value, ULO
+             return STATUS_NOT_IMPLEMENTED;
+         }
+     }
++    else if (!strcmpW( prop, BCRYPT_DH_PARAMETERS ))
++    {
++        BCRYPT_DH_PARAMETER_HEADER *dh_params = (BCRYPT_DH_PARAMETER_HEADER *)value;
++        gnutls_datum_t prime, generator;
++
++        if (size < sizeof(*dh_params)) return STATUS_INVALID_PARAMETER;
++        if (key->alg_id != ALG_ID_DH || dh_params->dwMagic != BCRYPT_DH_PARAMETERS_MAGIC) return STATUS_NOT_SUPPORTED;
++
++        if (!key->u.a.dh_params)
++            pgnutls_dh_params_init(&key->u.a.dh_params);
++
++        prime.data = value + sizeof(*dh_params);
++        prime.size = dh_params->cbKeyLength;
++
++        generator.data = value + sizeof(*dh_params) + dh_params->cbKeyLength;
++        generator.size = dh_params->cbKeyLength;
++
++        pgnutls_dh_params_import_raw2(key->u.a.dh_params, &prime, &generator, key->u.a.bitlen);
++        return STATUS_SUCCESS;
++    }
+ 
+     FIXME( "unsupported key property %s\n", debugstr_w(prop) );
+     return STATUS_NOT_IMPLEMENTED;
+@@ -838,6 +864,9 @@ NTSTATUS key_asymmetric_generate( struct key *key )
+         bitlen = GNUTLS_CURVE_TO_BITS( GNUTLS_ECC_CURVE_SECP256R1 );
+         break;
+ 
++    case ALG_ID_DH:
++	return STATUS_SUCCESS;
++
+     default:
+         FIXME( "algorithm %u not supported\n", key->alg_id );
+         return STATUS_NOT_SUPPORTED;
+@@ -1101,6 +1130,39 @@ NTSTATUS key_import_dsa_capi( struct key *key, UCHAR *buf, ULONG len )
+     return STATUS_SUCCESS;
+ }
+ 
++NTSTATUS key_export_dh( struct key *key, UCHAR *buf, ULONG len, ULONG *ret_len )
++{
++    BCRYPT_DH_KEY_BLOB blob;
++    gnutls_datum_t p, g;
++
++    pgnutls_dh_params_export_raw(key->u.a.dh_params, &p, &g, NULL);
++
++    *ret_len = sizeof(blob) + p.size + g.size /*+ public key size */;
++
++    if (!buf)
++        return STATUS_SUCCESS;
++    if (*ret_len < len)
++        return STATUS_BUFFER_TOO_SMALL;
++
++    memset(&blob, 0, sizeof(blob));
++    blob.dwMagic = BCRYPT_DH_PUBLIC_MAGIC;
++    blob.cbKey = p.size;
++
++    memcpy( buf, &blob, sizeof(blob) );
++    memcpy( buf+sizeof(blob), p.data, p.size );
++    memcpy( buf+sizeof(blob)+p.size, g.data, g.size );
++    /* copy public key to buf+sizeof(blob)+prime.size+generator.size */
++
++    free( p.data ); free( g.data );
++    return STATUS_SUCCESS;
++}
++
++NTSTATUS key_import_pair_dh( struct key *key, UCHAR *buf, ULONG len )
++{
++    BCRYPT_DH_KEY_BLOB *blob = (BCRYPT_DH_KEY_BLOB *)buf;
++    return STATUS_SUCCESS;
++}
++
+ NTSTATUS key_asymmetric_init( struct key *key, struct algorithm *alg, ULONG bitlen, const UCHAR *pubkey,
+                               ULONG pubkey_len )
+ {
+@@ -1108,6 +1170,7 @@ NTSTATUS key_asymmetric_init( struct key *key, struct algorithm *alg, ULONG bitl
+ 
+     switch (alg->id)
+     {
++    case ALG_ID_DH:
+     case ALG_ID_ECDH_P256:
+     case ALG_ID_ECDSA_P256:
+     case ALG_ID_ECDSA_P384:
+From d1bfdac0bdcfe3e985f7cb954db42fa3d8336a3b Mon Sep 17 00:00:00 2001
+From: Brendan Shanks <bshanks@codeweavers.com>
+Date: Wed, 15 Jul 2020 16:20:01 -0700
+Subject: [PATCH] winebuild: Add symbols for Wine syscall numbers.
+
+---
+ tools/winebuild/import.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/tools/winebuild/import.c b/tools/winebuild/import.c
+index 21ee57a89a1..f8558345841 100644
+--- a/tools/winebuild/import.c
++++ b/tools/winebuild/import.c
+@@ -1586,6 +1586,13 @@ void output_syscalls( DLLSPEC *spec )
+         output( ".Lsyscall_args:\n" );
+         for (i = 0; i < count; i++)
+             output( "\t.byte %u\n", get_args_size( syscalls[i] ));
++
++        for (i = 0; i < count; i++)
++        {
++            output( "\t.align %d\n", get_alignment( get_ptr_size() ) );
++            output( "%s\n", asm_globl(strmake( "__wine_syscall_nr_%s", get_link_name( syscalls[i] ) )) );
++            output( "\t.long %u\n", i + 0xf000 );
++        }
+         return;
+     }
+ 
+From b620abe54c4b1ef7c0b15af447d921ec60e7eb28 Mon Sep 17 00:00:00 2001
+From: Brendan Shanks <bshanks@codeweavers.com>
+Date: Wed, 5 Aug 2020 14:26:23 -0700
+Subject: [PATCH] HACK: ntdll: Support x86_64 syscall emulation for Red Dead
+ Redemption 2.
+
+The game now seems to work fine without it, but it's still used to
+read/write the offline activation file (cfg.dat).
+---
+ dlls/ntdll/unix/signal_x86_64.c | 88 ++++++++++++++++++++++++++++++++-
+ 1 file changed, 87 insertions(+), 1 deletion(-)
+
+diff --git a/dlls/ntdll/unix/signal_x86_64.c b/dlls/ntdll/unix/signal_x86_64.c
+index 7bea7dd937c..dabe436bfe7 100644
+--- a/dlls/ntdll/unix/signal_x86_64.c
++++ b/dlls/ntdll/unix/signal_x86_64.c
+@@ -2026,6 +2026,62 @@ static void sigsys_handler( int signal, siginfo_t *siginfo, void *sigcontext )
+ 
+     ctx->uc_mcontext.gregs[REG_RIP] = (ULONG64)__wine_syscall_dispatcher;
+ }
++
++extern unsigned int __wine_syscall_nr_NtClose;
++extern unsigned int __wine_syscall_nr_NtCreateFile;
++extern unsigned int __wine_syscall_nr_NtGetContextThread;
++extern unsigned int __wine_syscall_nr_NtQueryInformationProcess;
++extern unsigned int __wine_syscall_nr_NtQuerySystemInformation;
++extern unsigned int __wine_syscall_nr_NtQueryVirtualMemory;
++extern unsigned int __wine_syscall_nr_NtReadFile;
++extern unsigned int __wine_syscall_nr_NtWriteFile;
++
++static void sigsys_handler_rdr2( int signal, siginfo_t *siginfo, void *sigcontext )
++{
++    ucontext_t *ctx = sigcontext;
++    void ***rsp;
++
++    TRACE("SIGSYS, rax %#llx, rip %#llx.\n", ctx->uc_mcontext.gregs[REG_RAX],
++            ctx->uc_mcontext.gregs[REG_RIP]);
++
++    rsp = (void ***)&ctx->uc_mcontext.gregs[REG_RSP];
++    *rsp -= 1;
++    **rsp = (void *)(ctx->uc_mcontext.gregs[REG_RIP] + 0xb);
++
++    ctx->uc_mcontext.gregs[REG_RIP] = (ULONG64)__wine_syscall_dispatcher;
++
++    /* syscall numbers are for Windows 10 1809 (build 17763) */
++    switch (ctx->uc_mcontext.gregs[REG_RAX])
++    {
++        case 0x19:
++            ctx->uc_mcontext.gregs[REG_RAX] = __wine_syscall_nr_NtQueryInformationProcess;
++            break;
++        case 0x36:
++            ctx->uc_mcontext.gregs[REG_RAX] = __wine_syscall_nr_NtQuerySystemInformation;
++            break;
++        case 0xec:
++            ctx->uc_mcontext.gregs[REG_RAX] = __wine_syscall_nr_NtGetContextThread;
++            break;
++        case 0x55:
++            ctx->uc_mcontext.gregs[REG_RAX] = __wine_syscall_nr_NtCreateFile;
++            break;
++        case 0x08:
++            ctx->uc_mcontext.gregs[REG_RAX] = __wine_syscall_nr_NtWriteFile;
++            break;
++        case 0x06:
++            ctx->uc_mcontext.gregs[REG_RAX] = __wine_syscall_nr_NtReadFile;
++            break;
++        case 0x0f:
++            ctx->uc_mcontext.gregs[REG_RAX] = __wine_syscall_nr_NtClose;
++            break;
++        case 0x23:
++            ctx->uc_mcontext.gregs[REG_RAX] = __wine_syscall_nr_NtQueryVirtualMemory;
++            break;
++         default:
++            FIXME("Unhandled syscall %#llx.\n", ctx->uc_mcontext.gregs[REG_RAX]);
++            break;
++    }
++}
+ #endif
+ 
+ #ifdef HAVE_SECCOMP
+@@ -2083,12 +2139,43 @@ static void install_bpf(struct sigaction *sig_act)
+        BPF_STMT(BPF_RET | BPF_K, SECCOMP_RET_TRAP),
+        BPF_STMT(BPF_RET | BPF_K, SECCOMP_RET_ALLOW),
+     };
++    static struct sock_filter filter_rdr2[] =
++    {
++        /* Trap anything called from RDR2 or the launcher (0x140000000 - 0x150000000)*/
++        /* > 0x140000000 */
++        BPF_STMT(BPF_LD | BPF_W | BPF_ABS, offsetof(struct seccomp_data, instruction_pointer) + 0),
++        BPF_JUMP(BPF_JMP | BPF_JGE | BPF_K, 0x40000000 /*lsb*/, 0, 7),
++        BPF_STMT(BPF_LD | BPF_W | BPF_ABS, offsetof(struct seccomp_data, instruction_pointer) + 4),
++        BPF_JUMP(BPF_JMP | BPF_JEQ | BPF_K, 0x1 /*msb*/, 0, 5),
++
++        /* < 0x150000000 */
++        BPF_STMT(BPF_LD | BPF_W | BPF_ABS, offsetof(struct seccomp_data, instruction_pointer) + 0),
++        BPF_JUMP(BPF_JMP | BPF_JGT | BPF_K, 0x50000000 /*lsb*/, 3, 0),
++        BPF_STMT(BPF_LD | BPF_W | BPF_ABS, offsetof(struct seccomp_data, instruction_pointer) + 4),
++        BPF_JUMP(BPF_JMP | BPF_JEQ | BPF_K, 0x1 /*msb*/, 0, 1),
++        BPF_STMT(BPF_RET | BPF_K, SECCOMP_RET_TRAP),
++
++        /* Allow everything else */
++        BPF_STMT(BPF_RET | BPF_K, SECCOMP_RET_ALLOW),
++    };
+     struct sock_fprog prog;
+     int ret;
+ 
+     memset(&prog, 0, sizeof(prog));
+     prog.len = ARRAY_SIZE(filter);
+     prog.filter = filter;
++    sig_act->sa_sigaction = sigsys_handler;
++
++    {
++        const char *sgi = getenv("SteamGameId");
++        if (sgi && !strcmp(sgi, "1174180"))
++        {
++            /* Use specific filter and signal handler for Red Dead Redemption 2 */
++            prog.len = ARRAY_SIZE(filter_rdr2);
++            prog.filter = filter_rdr2;
++            sig_act->sa_sigaction = sigsys_handler_rdr2;
++        }
++    }
+ 
+     if (!(ret = prctl(PR_GET_SECCOMP, 0, NULL, 0, 0)))
+     {
+@@ -2115,7 +2202,6 @@ static void install_bpf(struct sigaction *sig_act)
+             ERR("Seccomp filters cannot be installed, ret %d, error %s.\n", ret, strerror(errno));
+     }
+ 
+-    sig_act->sa_sigaction = sigsys_handler;
+     sigaction(SIGSYS, sig_act, NULL);
+ #else
+     WARN("Built without seccomp.\n");
