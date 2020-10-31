@@ -1,14 +1,14 @@
-From 36dddf8196753a29974e408715478f5ee681728b Mon Sep 17 00:00:00 2001
+From 8b9dbf9deec183db637a8738a5232c5a7aadb8bc Mon Sep 17 00:00:00 2001
 From: Paul Gofman <pgofman@codeweavers.com>
 Date: Wed, 16 Sep 2020 00:36:20 +0300
-Subject: [PATCH 1/3] server: Support noname named pipes.
+Subject: [PATCH] server: Support noname named pipes.
 
 ---
  server/named_pipe.c | 37 ++++++++++++++++++++++++++++++++++---
  1 file changed, 34 insertions(+), 3 deletions(-)
 
 diff --git a/server/named_pipe.c b/server/named_pipe.c
-index 01b58f21cea..f7dcfbb4efa 100644
+index 60bd059d93d..201d07326b4 100644
 --- a/server/named_pipe.c
 +++ b/server/named_pipe.c
 @@ -110,6 +110,12 @@ static struct object *named_pipe_open_file( struct object *obj, unsigned int acc
@@ -24,10 +24,10 @@ index 01b58f21cea..f7dcfbb4efa 100644
  static const struct object_ops named_pipe_ops =
  {
      sizeof(struct named_pipe),    /* size */
-@@ -126,7 +132,7 @@ static const struct object_ops named_pipe_ops =
-     named_pipe_map_access,        /* map_access */
+@@ -125,7 +131,7 @@ static const struct object_ops named_pipe_ops =
      default_get_sd,               /* get_sd */
      default_set_sd,               /* set_sd */
+     default_get_full_name,        /* get_full_name */
 -    no_lookup_name,               /* lookup_name */
 +    named_pipe_lookup_name,       /* lookup_name */
      named_pipe_link_name,         /* link_name */
@@ -54,16 +54,16 @@ index 01b58f21cea..f7dcfbb4efa 100644
  static const struct object_ops pipe_server_ops =
  {
      sizeof(struct pipe_server),   /* size */
-@@ -170,7 +190,7 @@ static const struct object_ops pipe_server_ops =
-     default_fd_map_access,        /* map_access */
+@@ -169,7 +189,7 @@ static const struct object_ops pipe_server_ops =
      pipe_end_get_sd,              /* get_sd */
      pipe_end_set_sd,              /* set_sd */
+     pipe_end_get_full_name,       /* get_full_name */
 -    no_lookup_name,               /* lookup_name */
 +    pipe_server_lookup_name,      /* lookup_name */
      no_link_name,                 /* link_name */
      NULL,                         /* unlink_name */
      no_open_file,                 /* open_file */
-@@ -1361,7 +1381,18 @@ DECL_HANDLER(create_named_pipe)
+@@ -1371,7 +1391,18 @@ DECL_HANDLER(create_named_pipe)
              set_error( STATUS_OBJECT_PATH_SYNTAX_BAD );
              return;
          }
@@ -83,317 +83,6 @@ index 01b58f21cea..f7dcfbb4efa 100644
      }
  
      pipe = create_named_object( root, &named_pipe_ops, &name, objattr->attributes | OBJ_OPENIF, NULL );
--- 
-2.26.2
-
-From 6ae6675abcfc295963ef9c8dc1c23ef9f115774a Mon Sep 17 00:00:00 2001
-From: Piotr Caban <piotr@codeweavers.com>
-Date: Fri, 18 Sep 2020 15:52:54 +0200
-Subject: [PATCH 2/3] msvcrt: Use default user locale when only codepage is
- passed to setlocale.
-
-Signed-off-by: Piotr Caban <piotr@codeweavers.com>
----
- dlls/msvcrt/locale.c | 172 ++++++++++++++++++-------------------------
- 1 file changed, 71 insertions(+), 101 deletions(-)
-
-diff --git a/dlls/msvcrt/locale.c b/dlls/msvcrt/locale.c
-index bde08f2117a..75245c10907 100644
---- a/dlls/msvcrt/locale.c
-+++ b/dlls/msvcrt/locale.c
-@@ -177,18 +177,17 @@ static void remap_synonym(char *name)
- }
- 
- /* Note: Flags are weighted in order of matching importance */
--#define FOUND_SNAME            0x8
--#define FOUND_LANGUAGE         0x4
--#define FOUND_COUNTRY          0x2
--#define FOUND_CODEPAGE         0x1
-+#define FOUND_SNAME            0x4
-+#define FOUND_LANGUAGE         0x2
-+#define FOUND_COUNTRY          0x1
- 
- typedef struct {
-   char search_language[MAX_ELEM_LEN];
-   char search_country[MAX_ELEM_LEN];
--  char search_codepage[MAX_ELEM_LEN];
-   DWORD found_codepage;
-   unsigned int match_flags;
-   LANGID found_lang_id;
-+  BOOL allow_sname;
- } locale_search_t;
- 
- #define CONTINUE_LOOKING TRUE
-@@ -227,8 +226,7 @@ find_best_locale_proc(HMODULE hModule, LPCSTR type, LPCSTR name, WORD LangID, LO
-     return CONTINUE_LOOKING;
- 
- #if _MSVCR_VER >= 110
--  if (!res->search_country[0] && !res->search_codepage[0] &&
--          compare_info(lcid,LOCALE_SNAME,buff,res->search_language, TRUE))
-+  if (res->allow_sname && compare_info(lcid,LOCALE_SNAME,buff,res->search_language, TRUE))
-   {
-     TRACE(":Found locale: %s->%s\n", res->search_language, buff);
-     res->match_flags = FOUND_SNAME;
-@@ -263,27 +261,14 @@ find_best_locale_proc(HMODULE hModule, LPCSTR type, LPCSTR name, WORD LangID, LO
-     return CONTINUE_LOOKING;
-   }
- 
--  /* Check codepage */
--  if (compare_info(lcid,LOCALE_IDEFAULTCODEPAGE,buff,res->search_codepage, TRUE) ||
--      (compare_info(lcid,LOCALE_IDEFAULTANSICODEPAGE,buff,res->search_codepage, TRUE)))
--  {
--    TRACE("Found codepage:%s->%s\n", res->search_codepage, buff);
--    flags |= FOUND_CODEPAGE;
--    res->found_codepage = atoi(res->search_codepage);
--  }
--  else if (!flags && (res->match_flags & FOUND_CODEPAGE))
--  {
--    return CONTINUE_LOOKING;
--  }
--
-   if (flags > res->match_flags)
-   {
-     /* Found a better match than previously */
-     res->match_flags = flags;
-     res->found_lang_id = LangID;
-   }
--  if ((flags & (FOUND_LANGUAGE | FOUND_COUNTRY | FOUND_CODEPAGE)) ==
--        (FOUND_LANGUAGE | FOUND_COUNTRY | FOUND_CODEPAGE))
-+  if ((flags & (FOUND_LANGUAGE | FOUND_COUNTRY)) ==
-+        (FOUND_LANGUAGE | FOUND_COUNTRY))
-   {
-     TRACE(":found exact locale match\n");
-     return STOP_LOOKING;
-@@ -291,15 +276,14 @@ find_best_locale_proc(HMODULE hModule, LPCSTR type, LPCSTR name, WORD LangID, LO
-   return CONTINUE_LOOKING;
- }
- 
--extern int atoi(const char *);
--
- /* Internal: Find the LCID for a locale specification */
- LCID MSVCRT_locale_to_LCID(const char *locale, unsigned short *codepage, BOOL *sname)
- {
-     thread_data_t *data = msvcrt_get_thread_data();
--    LCID lcid;
--    locale_search_t search;
-     const char *cp, *region;
-+    BOOL is_sname = FALSE;
-+    DWORD locale_cp;
-+    LCID lcid;
- 
-     if (!strcmp(locale, data->cached_locale)) {
-         if (codepage)
-@@ -309,88 +293,84 @@ LCID MSVCRT_locale_to_LCID(const char *locale, unsigned short *codepage, BOOL *s
-         return data->cached_lcid;
-     }
- 
--    memset(&search, 0, sizeof(locale_search_t));
--
-     cp = strchr(locale, '.');
-     region = strchr(locale, '_');
- 
--    lstrcpynA(search.search_language, locale, MAX_ELEM_LEN);
--    if(region) {
--        lstrcpynA(search.search_country, region+1, MAX_ELEM_LEN);
--        if(region-locale < MAX_ELEM_LEN)
--            search.search_language[region-locale] = '\0';
--    } else
--        search.search_country[0] = '\0';
--
--    if(cp) {
--        lstrcpynA(search.search_codepage, cp+1, MAX_ELEM_LEN);
--        if(region && cp-region-1<MAX_ELEM_LEN)
--          search.search_country[cp-region-1] = '\0';
--        if(cp-locale < MAX_ELEM_LEN)
--            search.search_language[cp-locale] = '\0';
--    } else
--        search.search_codepage[0] = '\0';
-+    if(!locale[0] || (cp == locale && !region)) {
-+        lcid = GetUserDefaultLCID();
-+    } else {
-+        locale_search_t search;
-+
-+        memset(&search, 0, sizeof(locale_search_t));
-+        lstrcpynA(search.search_language, locale, MAX_ELEM_LEN);
-+        if(region) {
-+            lstrcpynA(search.search_country, region+1, MAX_ELEM_LEN);
-+            if(region-locale < MAX_ELEM_LEN)
-+                search.search_language[region-locale] = '\0';
-+        } else
-+            search.search_country[0] = '\0';
-+
-+        if(cp) {
-+            if(region && cp-region-1<MAX_ELEM_LEN)
-+                search.search_country[cp-region-1] = '\0';
-+            if(cp-locale < MAX_ELEM_LEN)
-+                search.search_language[cp-locale] = '\0';
-+        }
-+
-+        if(!cp && !region)
-+        {
-+            remap_synonym(search.search_language);
-+            search.allow_sname = TRUE;
-+        }
- 
--    if(!search.search_country[0] && !search.search_codepage[0])
--        remap_synonym(search.search_language);
-+        if(!MSVCRT__stricmp(search.search_country, "China"))
-+            strcpy(search.search_country, "People's Republic of China");
- 
--    if(!MSVCRT__stricmp(search.search_country, "China"))
--        strcpy(search.search_country, "People's Republic of China");
-+        EnumResourceLanguagesA(GetModuleHandleA("KERNEL32"), (LPSTR)RT_STRING,
-+                (LPCSTR)LOCALE_ILANGUAGE,find_best_locale_proc,
-+                (LONG_PTR)&search);
- 
--    EnumResourceLanguagesA(GetModuleHandleA("KERNEL32"), (LPSTR)RT_STRING,
--            (LPCSTR)LOCALE_ILANGUAGE,find_best_locale_proc,
--            (LONG_PTR)&search);
-+        if (!search.match_flags)
-+            return -1;
- 
--    if (!search.match_flags)
--        return -1;
-+        /* If we were given something that didn't match, fail */
-+        if (search.search_language[0] && !(search.match_flags & (FOUND_SNAME | FOUND_LANGUAGE)))
-+            return -1;
-+        if (search.search_country[0] && !(search.match_flags & FOUND_COUNTRY))
-+            return -1;
-+
-+        lcid =  MAKELCID(search.found_lang_id, SORT_DEFAULT);
-+        is_sname = (search.match_flags & FOUND_SNAME) != 0;
-+    }
- 
--    /* If we were given something that didn't match, fail */
--    if (search.search_language[0] && !(search.match_flags & (FOUND_SNAME | FOUND_LANGUAGE)))
-+    /* Obtain code page */
-+    if (!cp || !cp[1] || !MSVCRT__strnicmp(cp, ".ACP", 4)) {
-+        GetLocaleInfoW(lcid, LOCALE_IDEFAULTANSICODEPAGE | LOCALE_RETURN_NUMBER,
-+                (WCHAR *)&locale_cp, sizeof(DWORD)/sizeof(WCHAR));
-+        if (!locale_cp)
-+            locale_cp = GetACP();
-+    } else if (!MSVCRT__strnicmp(cp, ".OCP", 4)) {
-+        GetLocaleInfoW(lcid, LOCALE_IDEFAULTCODEPAGE | LOCALE_RETURN_NUMBER,
-+                (WCHAR *)&locale_cp, sizeof(DWORD)/sizeof(WCHAR));
-+    } else {
-+        locale_cp = atoi(cp + 1);
-+    }
-+    if (!IsValidCodePage(locale_cp))
-         return -1;
--    if (search.search_country[0] && !(search.match_flags & FOUND_COUNTRY))
-+
-+    if (!locale_cp)
-         return -1;
- 
--    lcid =  MAKELCID(search.found_lang_id, SORT_DEFAULT);
--
--    /* Populate partial locale, translating LCID to locale string elements */
--    if (!(search.match_flags & FOUND_CODEPAGE)) {
--        /* Even if a codepage is not enumerated for a locale
--         * it can be set if valid */
--        if (search.search_codepage[0]) {
--            search.found_codepage = atoi(search.search_codepage);
--            if (!IsValidCodePage(atoi(search.search_codepage)))
--            {
--                /* Special codepage values: OEM & ANSI */
--                if (!MSVCRT__stricmp(search.search_codepage,"OCP")) {
--                    GetLocaleInfoW(lcid, LOCALE_IDEFAULTCODEPAGE | LOCALE_RETURN_NUMBER,
--                                   (WCHAR *)&search.found_codepage, sizeof(DWORD)/sizeof(WCHAR));
--                } else if (!MSVCRT__stricmp(search.search_codepage,"ACP")) {
--                    GetLocaleInfoW(lcid, LOCALE_IDEFAULTANSICODEPAGE | LOCALE_RETURN_NUMBER,
--                                   (WCHAR *)&search.found_codepage, sizeof(DWORD)/sizeof(WCHAR));
--                } else
--                    return -1;
--                if (!search.found_codepage)
--                    return -1;
--            }
--        } else {
--            /* Prefer ANSI codepages if present */
--            GetLocaleInfoW(lcid, LOCALE_IDEFAULTANSICODEPAGE | LOCALE_RETURN_NUMBER,
--                           (WCHAR *)&search.found_codepage, sizeof(DWORD)/sizeof(WCHAR));
--            if (!search.found_codepage)
--                GetLocaleInfoW(lcid, LOCALE_IDEFAULTCODEPAGE | LOCALE_RETURN_NUMBER,
--                               (WCHAR *)&search.found_codepage, sizeof(DWORD)/sizeof(WCHAR));
--        }
--    }
-     if (codepage)
--        *codepage = search.found_codepage;
-+        *codepage = locale_cp;
-     if (sname)
--        *sname = (search.match_flags & FOUND_SNAME) != 0;
-+        *sname = is_sname;
- 
-     if (strlen(locale) < sizeof(data->cached_locale)) {
-         strcpy(data->cached_locale, locale);
-         data->cached_lcid = lcid;
--        data->cached_cp = codepage ? *codepage : search.found_codepage;
--        data->cached_sname = (search.match_flags & FOUND_SNAME) != 0;
-+        data->cached_cp = locale_cp;
-+        data->cached_sname = is_sname;
-     }
- 
-     return lcid;
-@@ -1130,16 +1110,6 @@ static MSVCRT_pthreadlocinfo create_locinfo(int category,
-     if(locale[0]=='C' && !locale[1]) {
-         lcid[0] = 0;
-         cp[0] = CP_ACP;
--    } else if(!locale[0]) {
--        lcid[0] = GetSystemDefaultLCID();
--        GetLocaleInfoA(lcid[0], LOCALE_IDEFAULTANSICODEPAGE
--                |LOCALE_NOUSEROVERRIDE, buf, sizeof(buf));
--        cp[0] = atoi(buf);
--
--        for(i=1; i<6; i++) {
--            lcid[i] = lcid[0];
--            cp[i] = cp[0];
--        }
-     } else if (locale[0] == 'L' && locale[1] == 'C' && locale[2] == '_') {
-         const char *p;
- 
--- 
-2.26.2
-
-From 74a0845299813de3c04d9786ced50758b8e8c76f Mon Sep 17 00:00:00 2001
-From: Piotr Caban <piotr@codeweavers.com>
-Date: Fri, 18 Sep 2020 14:30:23 +0200
-Subject: [PATCH 3/3] msasn1: Fix buffer allocations.
-
-Signed-off-by: Piotr Caban <piotr@codeweavers.com>
----
- dlls/msasn1/main.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/dlls/msasn1/main.c b/dlls/msasn1/main.c
-index d1513629057..fc867e7b815 100644
---- a/dlls/msasn1/main.c
-+++ b/dlls/msasn1/main.c
-@@ -56,7 +56,7 @@ ASN1module_t WINAPI ASN1_CreateModule(ASN1uint32_t ver, ASN1encodingrule_e rule,
-     if (!encoder || !decoder || !freemem || !size)
-         return module;
- 
--    module = heap_alloc(sizeof(module));
-+    module = heap_alloc(sizeof(*module));
-     if (module)
-     {
-         module->nModuleName = magic;
-@@ -103,7 +103,7 @@ ASN1error_e WINAPI ASN1_CreateEncoder(ASN1module_t module, ASN1encoding_t *encod
-     if (!module || !encoder)
-         return ASN1_ERR_BADARGS;
- 
--    enc = heap_alloc(sizeof(enc));
-+    enc = heap_alloc(sizeof(*enc));
-     if (!enc)
-     {
-         return ASN1_ERR_MEMORY;
-@@ -153,7 +153,7 @@ ASN1error_e WINAPI ASN1_CreateDecoder(ASN1module_t module, ASN1decoding_t *decod
-     if (!module || !decoder)
-         return ASN1_ERR_BADARGS;
- 
--    dec = heap_alloc(sizeof(dec));
-+    dec = heap_alloc(sizeof(*dec));
-     if (!dec)
-     {
-         return ASN1_ERR_MEMORY;
 -- 
 2.26.2
 

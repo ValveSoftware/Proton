@@ -5,7 +5,6 @@ Subject: [PATCH 1/8] mk11_base
 
 ---
  dlls/ntdll/signal_x86_64.c | 11 +++++-
- dlls/wbemprox/builtin.c    |  8 +++--
  dlls/ws2_32/Makefile.in    |  1 +
  3 files changed, 20 insertions(+), 22 deletions(-)
 
@@ -13,7 +12,7 @@ diff --git a/dlls/ntdll/signal_x86_64.c b/dlls/ntdll/signal_x86_64.c
 index 89caca9f30f..6fb16333397 100644
 --- a/dlls/ntdll/signal_x86_64.c
 +++ b/dlls/ntdll/signal_x86_64.c
-@@ -2431,12 +2431,21 @@ static NTSTATUS call_stack_handlers( EXCEPTION_RECORD *rec, CONTEXT *orig_contex
+@@ -425,6 +425,8 @@ static NTSTATUS call_stack_handlers( EXCEPTION_RECORD *rec, CONTEXT *orig_contex
      UNWIND_HISTORY_TABLE table;
      DISPATCHER_CONTEXT dispatch;
      CONTEXT context;
@@ -22,6 +21,7 @@ index 89caca9f30f..6fb16333397 100644
      NTSTATUS status;
  
      context = *orig_context;
+@@ -433,6 +435,13 @@ static NTSTATUS call_stack_handlers( EXCEPTION_RECORD *rec, CONTEXT *orig_contex
      dispatch.TargetIp      = 0;
      dispatch.ContextRecord = &context;
      dispatch.HistoryTable  = &table;
@@ -44,49 +44,6 @@ index 89caca9f30f..6fb16333397 100644
          {
              TRACE( "found wine frame %p rsp %lx handler %p\n",
                      teb_frame, context.Rsp, teb_frame->Handler );
-diff --git a/dlls/wbemprox/builtin.c b/dlls/wbemprox/builtin.c
-index 24badb7bf92..e5d8b2400aa 100644
---- a/dlls/wbemprox/builtin.c
-+++ b/dlls/wbemprox/builtin.c
-@@ -374,6 +374,7 @@ static const struct column col_sounddevice[] =
-     { L"Name",        CIM_STRING },
-     { L"ProductName", CIM_STRING },
-     { L"StatusInfo",  CIM_UINT16 },
-+    { L"Manufacturer", CIM_STRING },
- };
- static const struct column col_stdregprov[] =
- {
-@@ -759,6 +760,7 @@ struct record_sounddevice
-     const WCHAR *name;
-     const WCHAR *productname;
-     UINT16       statusinfo;
-+    const WCHAR *manufacturer;
- };
- struct record_stdregprov
- {
-@@ -876,7 +878,7 @@ static const struct record_quickfixengineering data_quickfixengineering[] =
- };
- static const struct record_sounddevice data_sounddevice[] =
- {
--    { L"Wine Audio Device", L"Wine Audio Device", 3 /* enabled */ }
-+    { L"Wine Audio Device", L"Wine Audio Device", 3 /* enabled */, L"The Wine Project" }
- };
- static const struct record_stdregprov data_stdregprov[] =
- {
-@@ -2868,11 +2870,11 @@ static enum fill_status fill_physicalmemory( struct table *table, const struct e
- 
-     rec = (struct record_physicalmemory *)table->data;
-     rec->capacity             = get_total_physical_memory();
--    rec->configuredclockspeed = 0;
-+    rec->configuredclockspeed = 1600;
-     rec->devicelocator        = L"DIMM 0";
-     rec->formfactor           = 8; /* DIMM */
-     rec->memorytype           = 9; /* RAM */
--    rec->partnumber           = NULL;
-+    rec->partnumber           = L"BLS8G3D1609DS1S00";
-     if (!match_row( table, row, cond, &status )) free_row_values( table, row );
-     else row++;
- 
 diff --git a/dlls/ws2_32/Makefile.in b/dlls/ws2_32/Makefile.in
 index 9d7dfafeb3c..c7f24168dac 100644
 --- a/dlls/ws2_32/Makefile.in
@@ -99,55 +56,3 @@ index 9d7dfafeb3c..c7f24168dac 100644
  DELAYIMPORTS = iphlpapi user32
  EXTRALIBS = $(POLL_LIBS)
  
-From f445a9f05e4ad097c55d690f08fd5f1e71940d79 Mon Sep 17 00:00:00 2001
-From: Pnevmoslon <psn8402@gmail.com>
-Date: Wed, 27 May 2020 12:23:59 +0300
-Subject: [PATCH] mk11 gamepad fix
-
----
- dlls/wbemprox/class.c | 23 +++++++++++++----------
- 1 file changed, 13 insertions(+), 10 deletions(-)
-
-diff --git a/dlls/wbemprox/class.c b/dlls/wbemprox/class.c
-index ba7720b098..6cc439c6fb 100644
---- a/dlls/wbemprox/class.c
-+++ b/dlls/wbemprox/class.c
-@@ -116,6 +116,7 @@ static HRESULT WINAPI enum_class_object_Next(
-     struct table *table;
-     static int once = 0;
-     HRESULT hr;
-+    ULONG i;
- 
-     TRACE("%p, %d, %u, %p, %p\n", iface, lTimeout, uCount, apObjects, puReturned);
- 
-@@ -124,16 +125,18 @@ static HRESULT WINAPI enum_class_object_Next(
-     if (lTimeout != WBEM_INFINITE && !once++) FIXME("timeout not supported\n");
- 
-     *puReturned = 0;
--    if (ec->index >= view->result_count) return WBEM_S_FALSE;
--
--    table = get_view_table( view, ec->index );
--    hr = create_class_object( table->name, iface, ec->index, NULL, apObjects );
--    if (hr != S_OK) return hr;
--
--    ec->index++;
--    *puReturned = 1;
--    if (ec->index == view->result_count && uCount > 1) return WBEM_S_FALSE;
--    if (uCount > 1) return WBEM_S_TIMEDOUT;
-+    
-+    for (i=0; i<uCount; ++i)
-+    {
-+        if (ec->index >= view->result_count) return WBEM_S_FALSE;
-+        table = get_view_table( view, ec->index );
-+        hr = create_class_object( table->name, iface, ec->index, NULL, apObjects );
-+        if (hr != S_OK) return hr;
-+
-+        apObjects++;
-+        ec->index++;
-+        ++*puReturned;
-+    }
-     return WBEM_S_NO_ERROR;
- }
- 
--- 
-2.26.2
