@@ -43,12 +43,6 @@
     patch -Np1 < ../patches/proton-hotfixes/proton-lsteamclient-killer-instinct-match-end-fix.patch
     cd ..
 
-    # vrclient
-    git checkout vrclient_x64
-    cd vrclient_x64
-    patch -Np1 < ../patches/proton-hotfixes/proton-vrclient_remove_deprecated_wine_library_header.patch
-    cd ..
-
     # VKD3D patches
     cd vkd3d
     git reset --hard HEAD
