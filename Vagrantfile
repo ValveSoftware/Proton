@@ -66,6 +66,8 @@ Vagrant.configure(2) do |config|
 
     debian10.vm.provision "shell", privileged: "true", inline: <<-SHELL
       set -e
+      # Uncomment this is you have apt-cacher-ng running on your host machine
+      #export http_proxy="http://192.168.121.1:3142/"
       #install docker and steam-runtime dependencies
       dpkg --add-architecture i386
       apt-get update
