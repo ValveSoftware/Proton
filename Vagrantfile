@@ -68,6 +68,9 @@ Vagrant.configure(2) do |config|
       #install docker and steam-runtime dependencies
       dpkg --add-architecture i386
       apt-get update
+      apt-get install -y eatmydata
+      export LD_LIBRARY_PATH=${LD_LIBRARY_PATH:+"$LD_LIBRARY_PATH:"}/usr/lib/libeatmydata
+      export LD_PRELOAD=${LD_PRELOAD:+"$LD_PRELOAD "}libeatmydata.so
       apt-get install -y apt-transport-https ca-certificates curl gnupg2 software-properties-common
 
       #add docker repo
