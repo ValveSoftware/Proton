@@ -1,3 +1,6 @@
+SRC := $(abspath $(SRCDIR))
+OBJ := $(abspath $(CURDIR))
+
 ##
 ## Nested make
 ##
@@ -88,6 +91,30 @@ else
 CONTAINER_SHELL := $(SHELL)
 STEAM_RUNTIME_RUNSH :=
 endif
+
+
+MAKECMDGOALS32 := $(filter-out all32,$(filter %32,$(MAKECMDGOALS)))
+MAKECMDGOALS64 := $(filter-out all64,$(filter %64,$(MAKECMDGOALS)))
+
+all: all32 all64
+.PHONY: all
+
+all32 $(MAKECMDGOALS32):
+.PHONY: all32 $(MAKECMDGOALS32)
+
+all32 $(MAKECMDGOALS64):
+.PHONY: all64 $(MAKECMDGOALS64)
+
+ifeq ($(CONTAINER),)
+container-build: private SHELL := $(CONTAINER_SHELL)
+container-build:
+	+$(MAKE) -f $(firstword $(MAKEFILE_LIST)) $(MFLAGS) $(MAKEOVERRIDES) CONTAINER=1 $(MAKECMDGOALS32) $(MAKECMDGOALS64)
+.PHONY: container-build
+
+all32 $(MAKECMDGOALS32): container-build
+all64 $(MAKECMDGOALS64): container-build
+endif
+
 
 .PHONY: test-container
 test-container:
@@ -268,6 +295,7 @@ OBJ_DIRS := $(TOOLS_DIR32)        $(TOOLS_DIR64)        \
 $(OBJ_DIRS):
 	mkdir -p $@
 
+ifeq ($(CONTAINER),)
 
 ## downloads -- Convenience target to download packages used during the build
 ## process. Places them in subdirs one up from the Proton source dir, so
@@ -470,6 +498,8 @@ module64:
 	+$(MAKE) -C $(WINE_OBJ64)/dlls/$(module)
 
 module: module32 module64
+
+endif # ifeq ($(CONTAINER),)
 
 GST_COMMON_MESON_ARGS := \
 	-Dexamples=disabled \
@@ -1528,6 +1558,7 @@ mediaconv64: $(MAKEFILE_DEP) gstreamer64 | $(MEDIACONV_OBJ64)
 
 mediaconv: mediaconv32 mediaconv64
 
+ifeq ($(CONTAINER),)
 ALL_TARGETS += fonts
 GOAL_TARGETS += fonts
 
@@ -1668,4 +1699,5 @@ all32_configure: $(GOAL_TARGETS_CONFIGURE32)
 all64_configure: $(GOAL_TARGETS_CONFIGURE64)
 	@echo ":: make $@ succeeded"
 
+endif # ifeq ($(CONTAINER),)
 endif # End of NESTED_MAKE from beginning
