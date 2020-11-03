@@ -1237,8 +1237,10 @@ for sdkver in sdk_versions:
 
         diagnostics = list(linux_build.diagnostics)
         if len(diagnostics) > 0:
-            print('There were parse errors')
-            pprint.pprint(diagnostics)
+            # Ignore known and harmless issues
+            if not(len(diagnostics) == 1 and "This file isn't used any more" in diagnostics[0].spelling):
+                print('There were parse errors')
+                pprint.pprint(diagnostics)
         else:
             windows_build = index.parse(input_name, args=['-x', 'c++', '-m32', '-Isteamworks_sdk_%s/' % sdkver, '-I' + CLANG_PATH + '/include/', '-mms-bitfields', '-U__linux__', '-Wno-incompatible-ms-struct'])
             windows_build64 = index.parse(input_name, args=['-x', 'c++', '-Isteamworks_sdk_%s/' % sdkver, '-I' + CLANG_PATH + '/include/', '-mms-bitfields', '-U__linux__', '-Wno-incompatible-ms-struct'])
