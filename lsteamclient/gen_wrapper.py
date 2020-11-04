@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 
 #NOTE: If you make modifications here, consider whether they should
 #be duplicated in ../vrclient/gen_wrapper.py
@@ -1215,7 +1215,10 @@ prog = re.compile("^#define\s*(\w*)\s*\"(.*)\"")
 for sdkver in sdk_versions:
     iface_versions = {}
     for f in os.listdir("steamworks_sdk_%s" % sdkver):
-        x = open("steamworks_sdk_%s/%s" % (sdkver, f), "r")
+        # Some files from Valve have non-UTF-8 stuff in the comments
+        # (typically the copyright symbol); therefore we ignore UTF-8
+        # encoding errors
+        x = open("steamworks_sdk_%s/%s" % (sdkver, f), "r", errors='replace')
         for l in x:
             if "define STEAM" in l and "_VERSION" in l:
                 result = prog.match(l)
