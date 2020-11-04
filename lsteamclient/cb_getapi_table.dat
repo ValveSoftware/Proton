@@ -1,62 +1,56 @@
 #ifdef __i386__
-case 513:
-    switch(callback_len){
-    default:
-    case 16: cb_LobbyCreated_t_16(lin_callback, callback); break;
-    }
-    break;
-case 4524:
-    switch(callback_len){
-    default:
-    case 8: cb_HTML_ShowToolTip_t_8(lin_callback, callback); break;
-    }
-    break;
-case 3415:
-    switch(callback_len){
-    default:
-    case 24: cb_RemoveAppDependencyResult_t_24(lin_callback, callback); break;
-    }
-    break;
-case 4514:
-    switch(callback_len){
-    default:
-    case 8: cb_HTML_JSAlert_t_8(lin_callback, callback); break;
-    }
-    break;
-case 3416:
-    switch(callback_len){
-    default:
-    case 152: cb_GetAppDependenciesResult_t_152(lin_callback, callback); break;
-    }
-    break;
-case 4502:
-    switch(callback_len){
-    default:
-    case 48: cb_HTML_NeedsPaint_t_48(lin_callback, callback); break;
-    }
-    break;
-case 1303:
-    switch(callback_len){
-    default:
-    case 288: cb_RemoteStorageAppSyncProgress_t_288(lin_callback, callback); break;
-    }
-    break;
 case 152:
     switch(callback_len){
     default:
     case 24: cb_MicroTxnAuthorizationResponse_t_24(lin_callback, callback); break;
     }
     break;
-case 4505:
+case 209:
     switch(callback_len){
     default:
-    case 24: cb_HTML_URLChanged_t_24(lin_callback, callback); break;
+    case 40: cb_GSReputation_t_40(lin_callback, callback); break;
     }
     break;
-case 4506:
+case 513:
     switch(callback_len){
     default:
-    case 12: cb_HTML_FinishedRequest_t_12(lin_callback, callback); break;
+    case 16: cb_LobbyCreated_t_16(lin_callback, callback); break;
+    }
+    break;
+case 1023:
+    switch(callback_len){
+    default:
+    case 40: cb_FileDetailsResult_t_40(lin_callback, callback); break;
+    }
+    break;
+case 1106:
+    switch(callback_len){
+    default:
+    case 32: cb_LeaderboardScoreUploaded_t_32(lin_callback, callback); break;
+    }
+    break;
+case 1111:
+    switch(callback_len){
+    default:
+    case 16: cb_LeaderboardUGCSet_t_16(lin_callback, callback); break;
+    }
+    break;
+case 1112:
+    switch(callback_len){
+    default:
+    case 24: cb_PS3TrophiesInstalled_t_24(lin_callback, callback); break;
+    }
+    break;
+case 1221:
+    switch(callback_len){
+    default:
+    case 712: cb_SteamNetConnectionStatusChangedCallback_t_712(lin_callback, callback); break;
+    }
+    break;
+case 1303:
+    switch(callback_len){
+    default:
+    case 288: cb_RemoteStorageAppSyncProgress_t_288(lin_callback, callback); break;
     }
     break;
 case 1307:
@@ -66,10 +60,10 @@ case 1307:
     case 16: cb_RemoteStorageFileShareResult_t_16(lin_callback, callback); break;
     }
     break;
-case 4508:
+case 1308:
     switch(callback_len){
     default:
-    case 8: cb_HTML_ChangedTitle_t_8(lin_callback, callback); break;
+    case 40: cb_RemoteStorageDownloadUGCResult_t_40(lin_callback, callback); break;
     }
     break;
 case 1309:
@@ -147,6 +141,183 @@ case 1320:
     switch(callback_len){
     default:
     case 32: cb_RemoteStorageGetPublishedItemVoteDetailsResult_t_32(lin_callback, callback); break;
+    }
+    break;
+case 1324:
+    switch(callback_len){
+    default:
+    case 16: cb_RemoteStorageUpdateUserPublishedItemVoteResult_t_16(lin_callback, callback); break;
+    }
+    break;
+case 1325:
+    switch(callback_len){
+    default:
+    case 24: cb_RemoteStorageUserVoteDetails_t_24(lin_callback, callback); break;
+    }
+    break;
+case 1326:
+    switch(callback_len){
+    default:
+    case 416: cb_RemoteStorageEnumerateUserSharedWorkshopFilesResult_t_416(lin_callback, callback); break;
+    }
+    break;
+case 1327:
+    switch(callback_len){
+    default:
+    case 24: cb_RemoteStorageSetUserPublishedFileActionResult_t_24(lin_callback, callback); break;
+    }
+    break;
+case 1330:
+    switch(callback_len){
+    default:
+    case 24: cb_RemoteStoragePublishedFileUpdated_t_24(lin_callback, callback); break;
+    }
+    break;
+case 2101:
+    switch(callback_len){
+    default:
+    case 32: cb_HTTPRequestCompleted_t_32(lin_callback, callback); break;
+    case 24: cb_HTTPRequestCompleted_t_24(lin_callback, callback); break;
+    }
+    break;
+case 2102:
+    switch(callback_len){
+    default:
+    case 16: cb_HTTPRequestHeadersReceived_t_16(lin_callback, callback); break;
+    }
+    break;
+case 2103:
+    switch(callback_len){
+    default:
+    case 24: cb_HTTPRequestDataReceived_t_24(lin_callback, callback); break;
+    }
+    break;
+case 3402:
+    switch(callback_len){
+    default:
+    case 9784: cb_SteamUGCRequestUGCDetailsResult_t_9784(lin_callback, callback); break;
+    case 9776: cb_SteamUGCRequestUGCDetailsResult_t_9776(lin_callback, callback); break;
+    case 9768: cb_SteamUGCRequestUGCDetailsResult_t_9768(lin_callback, callback); break;
+    }
+    break;
+case 3403:
+    switch(callback_len){
+    default:
+    case 24: cb_CreateItemResult_t_24(lin_callback, callback); break;
+    }
+    break;
+case 3405:
+    switch(callback_len){
+    default:
+    case 16: cb_ItemInstalled_t_16(lin_callback, callback); break;
+    }
+    break;
+case 3406:
+    switch(callback_len){
+    default:
+    case 24: cb_DownloadItemResult_t_24(lin_callback, callback); break;
+    }
+    break;
+case 3412:
+    switch(callback_len){
+    default:
+    case 24: cb_AddUGCDependencyResult_t_24(lin_callback, callback); break;
+    }
+    break;
+case 3413:
+    switch(callback_len){
+    default:
+    case 24: cb_RemoveUGCDependencyResult_t_24(lin_callback, callback); break;
+    }
+    break;
+case 3414:
+    switch(callback_len){
+    default:
+    case 24: cb_AddAppDependencyResult_t_24(lin_callback, callback); break;
+    }
+    break;
+case 3415:
+    switch(callback_len){
+    default:
+    case 24: cb_RemoveAppDependencyResult_t_24(lin_callback, callback); break;
+    }
+    break;
+case 3416:
+    switch(callback_len){
+    default:
+    case 152: cb_GetAppDependenciesResult_t_152(lin_callback, callback); break;
+    }
+    break;
+case 3417:
+    switch(callback_len){
+    default:
+    case 16: cb_DeleteItemResult_t_16(lin_callback, callback); break;
+    }
+    break;
+case 4502:
+    switch(callback_len){
+    default:
+    case 48: cb_HTML_NeedsPaint_t_48(lin_callback, callback); break;
+    }
+    break;
+case 4503:
+    switch(callback_len){
+    default:
+    case 20: cb_HTML_StartRequest_t_20(lin_callback, callback); break;
+    }
+    break;
+case 4505:
+    switch(callback_len){
+    default:
+    case 24: cb_HTML_URLChanged_t_24(lin_callback, callback); break;
+    }
+    break;
+case 4506:
+    switch(callback_len){
+    default:
+    case 12: cb_HTML_FinishedRequest_t_12(lin_callback, callback); break;
+    }
+    break;
+case 4507:
+    switch(callback_len){
+    default:
+    case 8: cb_HTML_OpenLinkInNewTab_t_8(lin_callback, callback); break;
+    }
+    break;
+case 4508:
+    switch(callback_len){
+    default:
+    case 8: cb_HTML_ChangedTitle_t_8(lin_callback, callback); break;
+    }
+    break;
+case 4513:
+    switch(callback_len){
+    default:
+    case 20: cb_HTML_LinkAtPosition_t_20(lin_callback, callback); break;
+    }
+    break;
+case 4514:
+    switch(callback_len){
+    default:
+    case 8: cb_HTML_JSAlert_t_8(lin_callback, callback); break;
+    }
+    break;
+case 4515:
+    switch(callback_len){
+    default:
+    case 8: cb_HTML_JSConfirm_t_8(lin_callback, callback); break;
+    }
+    break;
+case 4516:
+    switch(callback_len){
+    default:
+    case 12: cb_HTML_FileOpenDialog_t_12(lin_callback, callback); break;
+    }
+    break;
+case 4517:
+    switch(callback_len){
+    default:
+    case 16: cb_HTML_ComboNeedsPaint_t_16(lin_callback, callback); break;
     }
     break;
 case 4521:
@@ -162,65 +333,10 @@ case 4523:
     case 8: cb_HTML_StatusText_t_8(lin_callback, callback); break;
     }
     break;
-case 1324:
+case 4524:
     switch(callback_len){
     default:
-    case 16: cb_RemoteStorageUpdateUserPublishedItemVoteResult_t_16(lin_callback, callback); break;
-    }
-    break;
-case 1325:
-    switch(callback_len){
-    default:
-    case 24: cb_RemoteStorageUserVoteDetails_t_24(lin_callback, callback); break;
-    }
-    break;
-case 1326:
-    switch(callback_len){
-    default:
-    case 416: cb_RemoteStorageEnumerateUserSharedWorkshopFilesResult_t_416(lin_callback, callback); break;
-    }
-    break;
-case 1327:
-    switch(callback_len){
-    default:
-    case 24: cb_RemoteStorageSetUserPublishedFileActionResult_t_24(lin_callback, callback); break;
-    }
-    break;
-case 1330:
-    switch(callback_len){
-    default:
-    case 24: cb_RemoteStoragePublishedFileUpdated_t_24(lin_callback, callback); break;
-    }
-    break;
-case 5301:
-    switch(callback_len){
-    default:
-    case 280: cb_JoinPartyCallback_t_280(lin_callback, callback); break;
-    }
-    break;
-case 5302:
-    switch(callback_len){
-    default:
-    case 16: cb_CreateBeaconCallback_t_16(lin_callback, callback); break;
-    }
-    break;
-case 2103:
-    switch(callback_len){
-    default:
-    case 24: cb_HTTPRequestDataReceived_t_24(lin_callback, callback); break;
-    }
-    break;
-case 4507:
-    switch(callback_len){
-    default:
-    case 8: cb_HTML_OpenLinkInNewTab_t_8(lin_callback, callback); break;
-    }
-    break;
-case 2101:
-    switch(callback_len){
-    default:
-    case 32: cb_HTTPRequestCompleted_t_32(lin_callback, callback); break;
-    case 24: cb_HTTPRequestCompleted_t_24(lin_callback, callback); break;
+    case 8: cb_HTML_ShowToolTip_t_8(lin_callback, callback); break;
     }
     break;
 case 4525:
@@ -229,108 +345,10 @@ case 4525:
     case 8: cb_HTML_UpdateToolTip_t_8(lin_callback, callback); break;
     }
     break;
-case 4503:
+case 4704:
     switch(callback_len){
     default:
-    case 20: cb_HTML_StartRequest_t_20(lin_callback, callback); break;
-    }
-    break;
-case 2102:
-    switch(callback_len){
-    default:
-    case 16: cb_HTTPRequestHeadersReceived_t_16(lin_callback, callback); break;
-    }
-    break;
-case 4513:
-    switch(callback_len){
-    default:
-    case 20: cb_HTML_LinkAtPosition_t_20(lin_callback, callback); break;
-    }
-    break;
-case 3402:
-    switch(callback_len){
-    default:
-    case 9784: cb_SteamUGCRequestUGCDetailsResult_t_9784(lin_callback, callback); break;
-    case 9776: cb_SteamUGCRequestUGCDetailsResult_t_9776(lin_callback, callback); break;
-    case 9768: cb_SteamUGCRequestUGCDetailsResult_t_9768(lin_callback, callback); break;
-    }
-    break;
-case 3403:
-    switch(callback_len){
-    default:
-    case 24: cb_CreateItemResult_t_24(lin_callback, callback); break;
-    }
-    break;
-case 1221:
-    switch(callback_len){
-    default:
-    case 712: cb_SteamNetConnectionStatusChangedCallback_t_712(lin_callback, callback); break;
-    }
-    break;
-case 3405:
-    switch(callback_len){
-    default:
-    case 16: cb_ItemInstalled_t_16(lin_callback, callback); break;
-    }
-    break;
-case 3406:
-    switch(callback_len){
-    default:
-    case 24: cb_DownloadItemResult_t_24(lin_callback, callback); break;
-    }
-    break;
-case 209:
-    switch(callback_len){
-    default:
-    case 40: cb_GSReputation_t_40(lin_callback, callback); break;
-    }
-    break;
-case 1106:
-    switch(callback_len){
-    default:
-    case 32: cb_LeaderboardScoreUploaded_t_32(lin_callback, callback); break;
-    }
-    break;
-case 4515:
-    switch(callback_len){
-    default:
-    case 8: cb_HTML_JSConfirm_t_8(lin_callback, callback); break;
-    }
-    break;
-case 3412:
-    switch(callback_len){
-    default:
-    case 24: cb_AddUGCDependencyResult_t_24(lin_callback, callback); break;
-    }
-    break;
-case 3413:
-    switch(callback_len){
-    default:
-    case 24: cb_RemoveUGCDependencyResult_t_24(lin_callback, callback); break;
-    }
-    break;
-case 3414:
-    switch(callback_len){
-    default:
-    case 24: cb_AddAppDependencyResult_t_24(lin_callback, callback); break;
-    }
-    break;
-case 1111:
-    switch(callback_len){
-    default:
-    case 16: cb_LeaderboardUGCSet_t_16(lin_callback, callback); break;
-    }
-    break;
-case 1112:
-    switch(callback_len){
-    default:
-    case 24: cb_PS3TrophiesInstalled_t_24(lin_callback, callback); break;
-    }
-    break;
-case 3417:
-    switch(callback_len){
-    default:
-    case 16: cb_DeleteItemResult_t_16(lin_callback, callback); break;
+    case 24: cb_SteamInventoryStartPurchaseResult_t_24(lin_callback, callback); break;
     }
     break;
 case 5211:
@@ -363,28 +381,36 @@ case 5215:
     case 16: cb_EndGameResultCallback_t_16(lin_callback, callback); break;
     }
     break;
-case 4704:
+case 5301:
     switch(callback_len){
     default:
-    case 24: cb_SteamInventoryStartPurchaseResult_t_24(lin_callback, callback); break;
+    case 280: cb_JoinPartyCallback_t_280(lin_callback, callback); break;
     }
     break;
-case 4517:
+case 5302:
     switch(callback_len){
     default:
-    case 16: cb_HTML_ComboNeedsPaint_t_16(lin_callback, callback); break;
+    case 16: cb_CreateBeaconCallback_t_16(lin_callback, callback); break;
     }
     break;
-case 1308:
+#endif
+#ifdef __x86_64__
+case 152:
     switch(callback_len){
     default:
-    case 40: cb_RemoteStorageDownloadUGCResult_t_40(lin_callback, callback); break;
+    case 24: cb_MicroTxnAuthorizationResponse_t_24(lin_callback, callback); break;
     }
     break;
-case 4516:
+case 209:
     switch(callback_len){
     default:
-    case 12: cb_HTML_FileOpenDialog_t_12(lin_callback, callback); break;
+    case 40: cb_GSReputation_t_40(lin_callback, callback); break;
+    }
+    break;
+case 513:
+    switch(callback_len){
+    default:
+    case 16: cb_LobbyCreated_t_16(lin_callback, callback); break;
     }
     break;
 case 1023:
@@ -393,66 +419,34 @@ case 1023:
     case 40: cb_FileDetailsResult_t_40(lin_callback, callback); break;
     }
     break;
-#endif
-#ifdef __x86_64__
-case 513:
+case 1106:
     switch(callback_len){
     default:
-    case 16: cb_LobbyCreated_t_16(lin_callback, callback); break;
+    case 32: cb_LeaderboardScoreUploaded_t_32(lin_callback, callback); break;
     }
     break;
-case 4524:
+case 1111:
     switch(callback_len){
     default:
-    case 16: cb_HTML_ShowToolTip_t_16(lin_callback, callback); break;
+    case 16: cb_LeaderboardUGCSet_t_16(lin_callback, callback); break;
     }
     break;
-case 3415:
+case 1112:
     switch(callback_len){
     default:
-    case 24: cb_RemoveAppDependencyResult_t_24(lin_callback, callback); break;
+    case 24: cb_PS3TrophiesInstalled_t_24(lin_callback, callback); break;
     }
     break;
-case 4514:
+case 1221:
     switch(callback_len){
     default:
-    case 16: cb_HTML_JSAlert_t_16(lin_callback, callback); break;
-    }
-    break;
-case 3416:
-    switch(callback_len){
-    default:
-    case 152: cb_GetAppDependenciesResult_t_152(lin_callback, callback); break;
-    }
-    break;
-case 4502:
-    switch(callback_len){
-    default:
-    case 56: cb_HTML_NeedsPaint_t_56(lin_callback, callback); break;
+    case 712: cb_SteamNetConnectionStatusChangedCallback_t_712(lin_callback, callback); break;
     }
     break;
 case 1303:
     switch(callback_len){
     default:
     case 288: cb_RemoteStorageAppSyncProgress_t_288(lin_callback, callback); break;
-    }
-    break;
-case 152:
-    switch(callback_len){
-    default:
-    case 24: cb_MicroTxnAuthorizationResponse_t_24(lin_callback, callback); break;
-    }
-    break;
-case 4505:
-    switch(callback_len){
-    default:
-    case 48: cb_HTML_URLChanged_t_48(lin_callback, callback); break;
-    }
-    break;
-case 4506:
-    switch(callback_len){
-    default:
-    case 24: cb_HTML_FinishedRequest_t_24(lin_callback, callback); break;
     }
     break;
 case 1307:
@@ -462,10 +456,10 @@ case 1307:
     case 16: cb_RemoteStorageFileShareResult_t_16(lin_callback, callback); break;
     }
     break;
-case 4508:
+case 1308:
     switch(callback_len){
     default:
-    case 16: cb_HTML_ChangedTitle_t_16(lin_callback, callback); break;
+    case 40: cb_RemoteStorageDownloadUGCResult_t_40(lin_callback, callback); break;
     }
     break;
 case 1309:
@@ -545,19 +539,6 @@ case 1320:
     case 32: cb_RemoteStorageGetPublishedItemVoteDetailsResult_t_32(lin_callback, callback); break;
     }
     break;
-case 4521:
-    switch(callback_len){
-    default:
-    case 40: cb_HTML_NewWindow_t_40(lin_callback, callback); break;
-    case 32: cb_HTML_NewWindow_t_32(lin_callback, callback); break;
-    }
-    break;
-case 4523:
-    switch(callback_len){
-    default:
-    case 16: cb_HTML_StatusText_t_16(lin_callback, callback); break;
-    }
-    break;
 case 1324:
     switch(callback_len){
     default:
@@ -588,47 +569,11 @@ case 1330:
     case 24: cb_RemoteStoragePublishedFileUpdated_t_24(lin_callback, callback); break;
     }
     break;
-case 5301:
-    switch(callback_len){
-    default:
-    case 280: cb_JoinPartyCallback_t_280(lin_callback, callback); break;
-    }
-    break;
-case 5302:
-    switch(callback_len){
-    default:
-    case 16: cb_CreateBeaconCallback_t_16(lin_callback, callback); break;
-    }
-    break;
-case 2103:
-    switch(callback_len){
-    default:
-    case 24: cb_HTTPRequestDataReceived_t_24(lin_callback, callback); break;
-    }
-    break;
-case 4507:
-    switch(callback_len){
-    default:
-    case 16: cb_HTML_OpenLinkInNewTab_t_16(lin_callback, callback); break;
-    }
-    break;
 case 2101:
     switch(callback_len){
     default:
     case 32: cb_HTTPRequestCompleted_t_32(lin_callback, callback); break;
     case 24: cb_HTTPRequestCompleted_t_24(lin_callback, callback); break;
-    }
-    break;
-case 4525:
-    switch(callback_len){
-    default:
-    case 16: cb_HTML_UpdateToolTip_t_16(lin_callback, callback); break;
-    }
-    break;
-case 4503:
-    switch(callback_len){
-    default:
-    case 40: cb_HTML_StartRequest_t_40(lin_callback, callback); break;
     }
     break;
 case 2102:
@@ -637,10 +582,10 @@ case 2102:
     case 16: cb_HTTPRequestHeadersReceived_t_16(lin_callback, callback); break;
     }
     break;
-case 4513:
+case 2103:
     switch(callback_len){
     default:
-    case 32: cb_HTML_LinkAtPosition_t_32(lin_callback, callback); break;
+    case 24: cb_HTTPRequestDataReceived_t_24(lin_callback, callback); break;
     }
     break;
 case 3402:
@@ -657,12 +602,6 @@ case 3403:
     case 24: cb_CreateItemResult_t_24(lin_callback, callback); break;
     }
     break;
-case 1221:
-    switch(callback_len){
-    default:
-    case 712: cb_SteamNetConnectionStatusChangedCallback_t_712(lin_callback, callback); break;
-    }
-    break;
 case 3405:
     switch(callback_len){
     default:
@@ -673,24 +612,6 @@ case 3406:
     switch(callback_len){
     default:
     case 24: cb_DownloadItemResult_t_24(lin_callback, callback); break;
-    }
-    break;
-case 209:
-    switch(callback_len){
-    default:
-    case 40: cb_GSReputation_t_40(lin_callback, callback); break;
-    }
-    break;
-case 1106:
-    switch(callback_len){
-    default:
-    case 32: cb_LeaderboardScoreUploaded_t_32(lin_callback, callback); break;
-    }
-    break;
-case 4515:
-    switch(callback_len){
-    default:
-    case 16: cb_HTML_JSConfirm_t_16(lin_callback, callback); break;
     }
     break;
 case 3412:
@@ -711,22 +632,119 @@ case 3414:
     case 24: cb_AddAppDependencyResult_t_24(lin_callback, callback); break;
     }
     break;
-case 1111:
+case 3415:
     switch(callback_len){
     default:
-    case 16: cb_LeaderboardUGCSet_t_16(lin_callback, callback); break;
+    case 24: cb_RemoveAppDependencyResult_t_24(lin_callback, callback); break;
     }
     break;
-case 1112:
+case 3416:
     switch(callback_len){
     default:
-    case 24: cb_PS3TrophiesInstalled_t_24(lin_callback, callback); break;
+    case 152: cb_GetAppDependenciesResult_t_152(lin_callback, callback); break;
     }
     break;
 case 3417:
     switch(callback_len){
     default:
     case 16: cb_DeleteItemResult_t_16(lin_callback, callback); break;
+    }
+    break;
+case 4502:
+    switch(callback_len){
+    default:
+    case 56: cb_HTML_NeedsPaint_t_56(lin_callback, callback); break;
+    }
+    break;
+case 4503:
+    switch(callback_len){
+    default:
+    case 40: cb_HTML_StartRequest_t_40(lin_callback, callback); break;
+    }
+    break;
+case 4505:
+    switch(callback_len){
+    default:
+    case 48: cb_HTML_URLChanged_t_48(lin_callback, callback); break;
+    }
+    break;
+case 4506:
+    switch(callback_len){
+    default:
+    case 24: cb_HTML_FinishedRequest_t_24(lin_callback, callback); break;
+    }
+    break;
+case 4507:
+    switch(callback_len){
+    default:
+    case 16: cb_HTML_OpenLinkInNewTab_t_16(lin_callback, callback); break;
+    }
+    break;
+case 4508:
+    switch(callback_len){
+    default:
+    case 16: cb_HTML_ChangedTitle_t_16(lin_callback, callback); break;
+    }
+    break;
+case 4513:
+    switch(callback_len){
+    default:
+    case 32: cb_HTML_LinkAtPosition_t_32(lin_callback, callback); break;
+    }
+    break;
+case 4514:
+    switch(callback_len){
+    default:
+    case 16: cb_HTML_JSAlert_t_16(lin_callback, callback); break;
+    }
+    break;
+case 4515:
+    switch(callback_len){
+    default:
+    case 16: cb_HTML_JSConfirm_t_16(lin_callback, callback); break;
+    }
+    break;
+case 4516:
+    switch(callback_len){
+    default:
+    case 24: cb_HTML_FileOpenDialog_t_24(lin_callback, callback); break;
+    }
+    break;
+case 4517:
+    switch(callback_len){
+    default:
+    case 24: cb_HTML_ComboNeedsPaint_t_24(lin_callback, callback); break;
+    }
+    break;
+case 4521:
+    switch(callback_len){
+    default:
+    case 40: cb_HTML_NewWindow_t_40(lin_callback, callback); break;
+    case 32: cb_HTML_NewWindow_t_32(lin_callback, callback); break;
+    }
+    break;
+case 4523:
+    switch(callback_len){
+    default:
+    case 16: cb_HTML_StatusText_t_16(lin_callback, callback); break;
+    }
+    break;
+case 4524:
+    switch(callback_len){
+    default:
+    case 16: cb_HTML_ShowToolTip_t_16(lin_callback, callback); break;
+    }
+    break;
+case 4525:
+    switch(callback_len){
+    default:
+    case 16: cb_HTML_UpdateToolTip_t_16(lin_callback, callback); break;
+    }
+    break;
+case 4704:
+    switch(callback_len){
+    default:
+    case 24: cb_SteamInventoryStartPurchaseResult_t_24(lin_callback, callback); break;
     }
     break;
 case 5211:
@@ -759,34 +777,16 @@ case 5215:
     case 16: cb_EndGameResultCallback_t_16(lin_callback, callback); break;
     }
     break;
-case 4704:
+case 5301:
     switch(callback_len){
     default:
-    case 24: cb_SteamInventoryStartPurchaseResult_t_24(lin_callback, callback); break;
+    case 280: cb_JoinPartyCallback_t_280(lin_callback, callback); break;
     }
     break;
-case 4517:
+case 5302:
     switch(callback_len){
     default:
-    case 24: cb_HTML_ComboNeedsPaint_t_24(lin_callback, callback); break;
-    }
-    break;
-case 1308:
-    switch(callback_len){
-    default:
-    case 40: cb_RemoteStorageDownloadUGCResult_t_40(lin_callback, callback); break;
-    }
-    break;
-case 4516:
-    switch(callback_len){
-    default:
-    case 24: cb_HTML_FileOpenDialog_t_24(lin_callback, callback); break;
-    }
-    break;
-case 1023:
-    switch(callback_len){
-    default:
-    case 40: cb_FileDetailsResult_t_40(lin_callback, callback); break;
+    case 16: cb_CreateBeaconCallback_t_16(lin_callback, callback); break;
     }
     break;
 #endif

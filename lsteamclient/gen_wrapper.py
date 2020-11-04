@@ -1263,7 +1263,7 @@ cbsizefile = open("cb_getapi_sizes.dat", "w")
 
 cbsizefile.write("#ifdef __i386__\n")
 getapifile.write("#ifdef __i386__\n")
-for cb in cb_table.keys():
+for cb in sorted(cb_table.keys()):
     cbsizefile.write("case %u: /* %s */\n" % (cb, cb_table[cb][1][0][1]))
     cbsizefile.write("    return %u;\n" % cb_table[cb][0])
     getapifile.write("case %u:\n" % cb)
@@ -1277,7 +1277,7 @@ getapifile.write("#endif\n")
 
 cbsizefile.write("#ifdef __x86_64__\n")
 getapifile.write("#ifdef __x86_64__\n")
-for cb in cb_table64.keys():
+for cb in sorted(cb_table64.keys()):
     cbsizefile.write("case %u: /* %s */\n" % (cb, cb_table64[cb][1][0][1]))
     cbsizefile.write("    return %u;\n" % cb_table64[cb][0])
     getapifile.write("case %u:\n" % cb)
