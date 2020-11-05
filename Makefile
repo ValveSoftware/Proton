@@ -13,8 +13,9 @@ endif
 # remove special chars
 override _build_name := $(shell echo $(_build_name) | tr -dc '[:alnum:] ._-')
 
+# make doesn't handle spaces well... replace them with underscores in paths
+BUILD_DIR := "build-$(shell echo $(_build_name) | sed -e 's/ /_/g')"
 STEAM_DIR := $(HOME)/.steam/root
-BUILD_DIR := $(_build_name)
 
 ifeq ($(build_name),)
     DEPLOY_DIR := $(shell git describe --tags --always)
@@ -45,8 +46,6 @@ CONFIGURE_CMD := ../proton/configure.sh \
 	--steam-runtime-image=registry.gitlab.steamos.cloud/proton/soldier/sdk:$(protonsdk_version) \
 	--build-name="$(_build_name)"
 
-# make doesn't handle spaces well... replace them with underscores in paths
-BUILD_DIR := "build-$(shell echo $(_build_name) | sed -e 's/ /_/g')"
 
 all: help
 
