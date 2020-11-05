@@ -5,10 +5,12 @@
 import fcntl
 import array
 import filecmp
+import fnmatch
 import json
 import os
 import shutil
 import errno
+import stat
 import subprocess
 import sys
 import tarfile
@@ -18,7 +20,7 @@ from filelock import FileLock
 #To enable debug logging, copy "user_settings.sample.py" to "user_settings.py"
 #and edit it if needed.
 
-CURRENT_PREFIX_VERSION="5.9-GE-8-ST"
+CURRENT_PREFIX_VERSION="5.20-GE-1"
 
 PFX="Proton: "
 ld_path_var = "LD_LIBRARY_PATH"
@@ -30,14 +32,19 @@ def log(msg):
     sys.stderr.write(PFX + msg + os.linesep)
     sys.stderr.flush()
 
-def file_is_wine_fake_dll(path):
+def file_is_wine_builtin_dll(path):
+    if os.path.islink(path):
+        contents = os.readlink(path)
+        if os.path.dirname(contents).endswith(('/lib/wine', '/lib/wine/fakedlls', '/lib64/wine', '/lib64/wine/fakedlls')):
+            # This may be a broken link to a dll in a removed Proton install
+            return True
     if not os.path.exists(path):
         return False
     try:
         sfile = open(path, "rb")
         sfile.seek(0x40)
         tag = sfile.read(20)
-        return tag == b"Wine placeholder DLL"
+        return tag.startswith((b"Wine placeholder DLL", b"Wine builtin DLL"))
     except IOError:
         return False
 
@@ -48,15 +55,23 @@ def makedirs(path):
         #already exists
         pass
 
-def try_copy(src, dst):
+def try_copy(src, dst, add_write_perm=True):
     try:
         if os.path.isdir(dst):
             dstfile = dst + "/" + os.path.basename(src)
             if os.path.lexists(dstfile):
                 os.remove(dstfile)
-        elif os.path.lexists(dst):
-            os.remove(dst)
+        else:
+            dstfile = dst
+            if os.path.lexists(dst):
+                os.remove(dst)
+
         shutil.copy(src, dst)
+
+        if add_write_perm:
+            new_mode = os.lstat(dstfile).st_mode | stat.S_IWUSR | stat.S_IWGRP
+            os.chmod(dstfile, new_mode)
+
     except PermissionError as e:
         if e.errno == errno.EPERM:
             #be forgiving about permissions errors; if it's a real problem, things will explode later anyway
@@ -64,11 +79,28 @@ def try_copy(src, dst):
         else:
             raise
 
-def real_copy(src, dst):
-    if os.path.islink(src):
-        os.symlink(os.readlink(src), dst)
-    else:
-        try_copy(src, dst)
+def try_copyfile(src, dst):
+    try:
+        if os.path.isdir(dst):
+            dstfile = dst + "/" + os.path.basename(src)
+            if os.path.lexists(dstfile):
+                os.remove(dstfile)
+        elif os.path.lexists(dst):
+            os.remove(dst)
+        shutil.copyfile(src, dst)
+    except PermissionError as e:
+        if e.errno == errno.EPERM:
+            #be forgiving about permissions errors; if it's a real problem, things will explode later anyway
+            log('Error while copying to \"' + dst + '\": ' + e.strerror)
+        else:
+            raise
+
+def getmtimestr(*path_fragments):
+    path = os.path.join(*path_fragments)
+    try:
+        return str(os.path.getmtime(path))
+    except IOError:
+        return "0"
 
 EXT2_IOC_GETFLAGS = 0x80086601
 EXT2_IOC_SETFLAGS = 0x40086602
@@ -84,7 +116,7 @@ def set_dir_casefold_bit(dir_path):
         if fcntl.ioctl(dr, EXT2_IOC_GETFLAGS, dat, True) >= 0:
             dat[0] = dat[0] | EXT4_CASEFOLD_FL
             fcntl.ioctl(dr, EXT2_IOC_SETFLAGS, dat, False)
-    except OSError:
+    except (OSError, IOError):
         #no problem
         pass
     os.close(dr)
@@ -149,6 +181,7 @@ class CompatData:
         self.base_dir = compatdata + "/"
         self.prefix_dir = self.path("pfx/")
         self.version_file = self.path("version")
+        self.config_info_file = self.path("config_info")
         self.tracked_files_file = self.path("tracked_files")
         self.prefix_lock = FileLock(self.path("pfx.lock"), timeout=-1)
 
@@ -219,7 +252,7 @@ class CompatData:
 
             #replace broken .NET installations with wine-mono support
             if os.path.exists(self.prefix_dir + "/drive_c/windows/Microsoft.NET/NETFXRepair.exe") and \
-                    file_is_wine_fake_dll(self.prefix_dir + "/drive_c/windows/system32/mscoree.dll"):
+                    file_is_wine_builtin_dll(self.prefix_dir + "/drive_c/windows/system32/mscoree.dll"):
                 log("Broken .NET installation detected, switching to wine-mono.")
                 #deleting this directory allows wine-mono to work
                 shutil.rmtree(self.prefix_dir + "/drive_c/windows/Microsoft.NET")
@@ -255,6 +288,20 @@ class CompatData:
             #Just let the Wine upgrade happen and hope it works...
             return
 
+    def pfx_copy(self, src, dst, dll_copy=False):
+        if os.path.islink(src):
+            contents = os.readlink(src)
+            if os.path.dirname(contents).endswith(('/lib/wine', '/lib/wine/fakedlls', '/lib64/wine', '/lib64/wine/fakedlls')):
+                # wine builtin dll
+                # make the destination an absolute symlink
+                contents = os.path.normpath(os.path.join(os.path.dirname(src), contents))
+            if dll_copy:
+                try_copyfile(src, dst)
+            else:
+                os.symlink(contents, dst)
+        else:
+            try_copyfile(src, dst)
+
     def copy_pfx(self):
         with open(self.tracked_files_file, "w") as tracked_files:
             for src_dir, dirs, files in os.walk(g_proton.default_pfx_dir):
@@ -269,13 +316,47 @@ class CompatData:
                     src_file = os.path.join(src_dir, dir_)
                     dst_file = os.path.join(dst_dir, dir_)
                     if os.path.islink(src_file) and not os.path.exists(dst_file):
-                        real_copy(src_file, dst_file)
+                        self.pfx_copy(src_file, dst_file)
                 for file_ in files:
                     src_file = os.path.join(src_dir, file_)
                     dst_file = os.path.join(dst_dir, file_)
                     if not os.path.exists(dst_file):
-                        real_copy(src_file, dst_file)
+                        self.pfx_copy(src_file, dst_file)
                         tracked_files.write(rel_dir + file_ + "\n")
+
+    def update_builtin_libs(self, dll_copy_patterns):
+        dll_copy_patterns = dll_copy_patterns.split(',')
+        prev_tracked_files = set()
+        with open(self.tracked_files_file, "r") as tracked_files:
+            for line in tracked_files:
+                prev_tracked_files.add(line.strip())
+        with open(self.tracked_files_file, "a") as tracked_files:
+            for src_dir, dirs, files in os.walk(g_proton.default_pfx_dir):
+                rel_dir = src_dir.replace(g_proton.default_pfx_dir, "", 1).lstrip('/')
+                if len(rel_dir) > 0:
+                    rel_dir = rel_dir + "/"
+                dst_dir = src_dir.replace(g_proton.default_pfx_dir, self.prefix_dir, 1)
+                if not os.path.exists(dst_dir):
+                    os.makedirs(dst_dir)
+                    tracked_files.write(rel_dir + "\n")
+                for file_ in files:
+                    src_file = os.path.join(src_dir, file_)
+                    dst_file = os.path.join(dst_dir, file_)
+                    if not file_is_wine_builtin_dll(src_file):
+                        # Not a builtin library
+                        continue
+                    if file_is_wine_builtin_dll(dst_file):
+                        os.unlink(dst_file)
+                    elif os.path.lexists(dst_file):
+                        # builtin library was replaced
+                        continue
+                    else:
+                        os.makedirs(dst_dir, exist_ok=True)
+                    dll_copy = any(fnmatch.fnmatch(file_, pattern) for pattern in dll_copy_patterns)
+                    self.pfx_copy(src_file, dst_file, dll_copy)
+                    tracked_name = rel_dir + file_
+                    if tracked_name not in prev_tracked_files:
+                        tracked_files.write(tracked_name + "\n")
 
     def create_fonts_symlinks(self):
         fontsmap = [
@@ -302,9 +383,11 @@ class CompatData:
         with self.prefix_lock:
             if os.path.exists(self.version_file):
                 with open(self.version_file, "r") as f:
-                    self.upgrade_pfx(f.readline().strip())
+                    old_ver = f.readline().strip()
             else:
-                self.upgrade_pfx(None)
+                old_ver = None
+
+            self.upgrade_pfx(old_ver)
 
             if not os.path.exists(self.prefix_dir):
                 makedirs(self.prefix_dir + "/drive_c")
@@ -313,30 +396,115 @@ class CompatData:
             if not os.path.exists(self.prefix_dir + "/user.reg"):
                 self.copy_pfx()
 
-            with open(self.version_file, "w") as f:
-                f.write(CURRENT_PREFIX_VERSION + "\n")
-
-            #create font files symlinks
-            self.create_fonts_symlinks()
-
-            #copy steam files into place
+            # collect configuration info
             if "STEAM_COMPAT_CLIENT_INSTALL_PATH" in os.environ:
                 #modern steam client sets this
                 steamdir = os.environ["STEAM_COMPAT_CLIENT_INSTALL_PATH"]
             else:
                 #linux-only fallback, really shouldn't get here
                 steamdir = os.environ["HOME"] + ".steam/root/"
-            dst = self.prefix_dir + "/drive_c/Program Files (x86)/"
-            makedirs(dst + "Steam")
-            filestocopy = ["steamclient.dll",
-                    "steamclient64.dll",
-                    "Steam.dll"]
-            for f in filestocopy:
-                if os.path.isfile(steamdir + "/legacycompat/" + f):
-                    dstfile = dst + "Steam/" + f
-                    if os.path.isfile(dstfile):
-                        os.remove(dstfile)
-                    try_copy(steamdir + "/legacycompat/" + f, dstfile)
+
+            use_wined3d = "wined3d" in g_session.compat_config
+            use_dxvk_dxgi = "WINEDLLOVERRIDES" in g_session.env and "dxgi=n" in g_session.env["WINEDLLOVERRIDES"]
+
+            builtin_dll_copy = os.environ.get("PROTON_DLL_COPY",
+                    #dxsetup redist
+                    "d3dcompiler_*.dll," +
+                    "d3dcsx*.dll," +
+                    "d3dx*.dll," +
+                    "x3daudio*.dll," +
+                    "xactengine*.dll," +
+                    "xapofx*.dll," +
+                    "xaudio*.dll," +
+                    "xinput*.dll," +
+
+                    #vcruntime redist
+                    "atl1*.dll," +
+                    "concrt1*.dll," +
+                    "msvcp1*.dll," +
+                    "msvcr1*.dll," +
+                    "vcamp1*.dll," +
+                    "vcomp1*.dll," +
+                    "vccorlib1*.dll," +
+                    "vcruntime1*.dll," +
+
+                    #some games balk at ntdll symlink(?)
+                    "ntdll.dll," +
+
+                    #some games require official vulkan loader
+                    "vulkan-1.dll"
+                    )
+
+            # If any of this info changes, we must rerun the tasks below
+            prefix_info = '\n'.join((
+                CURRENT_PREFIX_VERSION,
+                g_proton.fonts_dir,
+                g_proton.lib_dir,
+                g_proton.lib64_dir,
+                steamdir,
+                getmtimestr(steamdir, 'legacycompat', 'steamclient.dll'),
+                getmtimestr(steamdir, 'legacycompat', 'steamclient64.dll'),
+                getmtimestr(steamdir, 'legacycompat', 'Steam.dll'),
+                g_proton.default_pfx_dir,
+                getmtimestr(g_proton.default_pfx_dir, 'system.reg'),
+                str(use_wined3d),
+                str(use_dxvk_dxgi),
+                builtin_dll_copy,
+            ))
+
+            if old_ver == CURRENT_PREFIX_VERSION:
+                # check whether any prefix config has changed
+                try:
+                    with open(self.config_info_file, "r") as f:
+                        old_prefix_info = f.read()
+                except IOError:
+                    old_prefix_info = ""
+
+                if old_prefix_info != prefix_info:
+                    # update builtin dll symlinks or copies
+                    self.update_builtin_libs(builtin_dll_copy)
+
+                    with open(self.config_info_file, "w") as f:
+                        f.write(prefix_info)
+
+            with open(self.version_file, "w") as f:
+                f.write(CURRENT_PREFIX_VERSION + "\n")
+
+            #create font files symlinks
+            self.create_fonts_symlinks()
+
+            with open(self.tracked_files_file, "a") as tracked_files:
+                #copy steam files into place
+                steam_dir = "drive_c/Program Files (x86)/Steam/"
+                dst = self.prefix_dir + steam_dir
+                makedirs(dst)
+                filestocopy = [("steamclient.dll", "steamclient.dll"),
+                               ("steamclient64.dll", "steamclient64.dll"),
+                               ("GameOverlayRenderer64.dll", "GameOverlayRenderer64.dll"),
+                               ("SteamService.exe", "steam.exe"),
+                               ("Steam.dll", "Steam.dll")]
+                for (src,tgt) in filestocopy:
+                    srcfile = steamdir + '/legacycompat/' + src
+                    if os.path.isfile(srcfile):
+                        dstfile = dst + tgt
+                        if os.path.isfile(dstfile):
+                            os.remove(dstfile)
+                        else:
+                            tracked_files.write(steam_dir + tgt + "\n")
+                        try_copy(srcfile, dstfile)
+
+                filestocopy = [("steamclient64.dll", "steamclient64.dll"),
+                               ("GameOverlayRenderer.dll", "GameOverlayRenderer.dll"),
+                               ("GameOverlayRenderer64.dll", "GameOverlayRenderer64.dll")]
+                for (src,tgt) in filestocopy:
+                    srcfile = g_proton.path(src)
+                    if os.path.isfile(srcfile):
+                        dstfile = dst + tgt
+                        if os.path.isfile(dstfile):
+                            os.remove(dstfile)
+                        else:
+                            tracked_files.write(steam_dir + tgt + "\n")
+                        try_copy(srcfile, dstfile)
 
             #copy openvr files into place
             dst = self.prefix_dir + "/drive_c/vrclient/bin/"
@@ -347,7 +515,7 @@ class CompatData:
             try_copy(g_proton.lib_dir + "wine/dxvk/openvr_api_dxvk.dll", self.prefix_dir + "/drive_c/windows/syswow64/")
             try_copy(g_proton.lib64_dir + "wine/dxvk/openvr_api_dxvk.dll", self.prefix_dir + "/drive_c/windows/system32/")
 
-            if "wined3d" in g_session.compat_config:
+            if use_wined3d:
                 dxvkfiles = ["dxvk_config"]
                 wined3dfiles = ["d3d11", "d3d10", "d3d10core", "d3d10_1", "d3d9"]
             else:
@@ -355,7 +523,7 @@ class CompatData:
                 wined3dfiles = []
 
             #if the user asked for dxvk's dxgi (dxgi=n), then copy it into place
-            if "WINEDLLOVERRIDES" in os.environ and "dxgi=n" in os.environ["WINEDLLOVERRIDES"]:
+            if use_dxvk_dxgi:
                 dxvkfiles.append("dxgi")
             else:
                 wined3dfiles.append("dxgi")
@@ -372,12 +540,12 @@ class CompatData:
                 try_copy(g_proton.lib_dir + "wine/dxvk/" + f + ".dll",
                         self.prefix_dir + "drive_c/windows/syswow64/" + f + ".dll")
                 g_session.dlloverrides[f] = "n"
-                
+
             try_copy(g_proton.lib64_dir + "wine/vkd3d-proton/d3d12.dll",
                     self.prefix_dir + "drive_c/windows/system32/d3d12.dll")
             try_copy(g_proton.lib_dir + "wine/vkd3d-proton/d3d12.dll",
                     self.prefix_dir + "drive_c/windows/syswow64/d3d12.dll")
-            
+
 def comma_escaped(s):
     escaped = False
     idx = -1
@@ -414,10 +582,6 @@ class Session:
         #turn forcelgadd on by default unless it is disabled in compat config
         if not "noforcelgadd" in self.compat_config:
             self.compat_config.add("forcelgadd")
-            
-        if "vkd3dfl12" in self.compat_config:
-            if not "VKD3D_FEATURE_LEVEL" in self.env:
-                self.env["VKD3D_FEATURE_LEVEL"] = "12_0"
 
     def init_wine(self):
         if "HOST_LC_ALL" in self.env and len(self.env["HOST_LC_ALL"]) > 0:
@@ -443,6 +607,12 @@ class Session:
 
         self.env["GST_PLUGIN_SYSTEM_PATH_1_0"] = g_proton.lib64_dir + "gstreamer-1.0" + ":" + g_proton.lib_dir + "gstreamer-1.0"
         self.env["WINE_GST_REGISTRY_DIR"] = g_compatdata.path("gstreamer-1.0/")
+
+        if "STEAM_COMPAT_MEDIA_PATH" in os.environ:
+            self.env["MEDIACONV_AUDIO_DUMP_FILE"] = os.environ["STEAM_COMPAT_MEDIA_PATH"] + "/audio.foz"
+            self.env["MEDIACONV_AUDIO_TRANSCODED_FILE"] = os.environ["STEAM_COMPAT_MEDIA_PATH"] + "/transcoded_audio.foz"
+            self.env["MEDIACONV_VIDEO_DUMP_FILE"] = os.environ["STEAM_COMPAT_MEDIA_PATH"] + "/video.foz"
+            self.env["MEDIACONV_VIDEO_TRANSCODED_FILE"] = os.environ["STEAM_COMPAT_MEDIA_PATH"] + "/transcoded_video.foz"
 
         if "PATH" in os.environ:
             self.env["PATH"] = g_proton.bin_dir + ":" + os.environ["PATH"]
@@ -473,8 +643,6 @@ class Session:
                 log("%s" % sys.exc_info()[1])
                 log("************************************************")
 
-        import protonfixes
-
         if "PROTON_LOG" in self.env and nonzero(self.env["PROTON_LOG"]):
             self.env.setdefault("WINEDEBUG", "+timestamp,+pid,+tid,+seh,+debugstr,+loaddll,+mscoree")
             self.env.setdefault("DXVK_LOG_LEVEL", "info")
@@ -504,6 +672,7 @@ class Session:
         self.check_environment("PROTON_OLD_GL_STRING", "oldglstr")
         self.check_environment("PROTON_USE_SECCOMP", "seccomp")
         self.check_environment("PROTON_NO_WRITE_WATCH", "nowritewatch")
+        self.check_environment("PROTON_HIDE_NVIDIA_GPU", "hidenvgpu")
 
         if "noesync" in self.compat_config:
             self.env.pop("WINEESYNC", "")
@@ -529,6 +698,13 @@ class Session:
 
         if "forcelgadd" in self.compat_config:
             self.env["WINE_LARGE_ADDRESS_AWARE"] = "1"
+
+        if "vkd3dfl12" in self.compat_config:
+            if not "VKD3D_FEATURE_LEVEL" in self.env:
+                self.env["VKD3D_FEATURE_LEVEL"] = "12_0"
+
+        if "hidenvgpu" in self.compat_config:
+            self.env["WINE_HIDE_NVIDIA_GPU"] = "1"
 
         if "SteamGameId" in self.env:
             if self.env["WINEDEBUG"] != "-all":
@@ -573,8 +749,8 @@ class Session:
                 s = s + ";" + dll + "=" + setting
             else:
                 s = dll + "=" + setting
-        if "WINEDLLOVERRIDES" in os.environ:
-            self.env["WINEDLLOVERRIDES"] = os.environ["WINEDLLOVERRIDES"] + ";" + s
+        if "WINEDLLOVERRIDES" in self.env:
+            self.env["WINEDLLOVERRIDES"] = self.env["WINEDLLOVERRIDES"] + ";" + s
         else:
             self.env["WINEDLLOVERRIDES"] = s
 
@@ -599,6 +775,18 @@ class Session:
             f.write("\tSTEAM_COMPAT_CLIENT_INSTALL_PATH=\"" + self.env["STEAM_COMPAT_CLIENT_INSTALL_PATH"] + "\" \\\n")
         if "WINE_LARGE_ADDRESS_AWARE" in self.env:
             f.write("\tWINE_LARGE_ADDRESS_AWARE=\"" + self.env["WINE_LARGE_ADDRESS_AWARE"] + "\" \\\n")
+        if "GST_PLUGIN_SYSTEM_PATH_1_0" in self.env:
+            f.write("\tGST_PLUGIN_SYSTEM_PATH_1_0=\"" + self.env["GST_PLUGIN_SYSTEM_PATH_1_0"] + "\" \\\n")
+        if "WINE_GST_REGISTRY_DIR" in self.env:
+            f.write("\tWINE_GST_REGISTRY_DIR=\"" + self.env["WINE_GST_REGISTRY_DIR"] + "\" \\\n")
+        if "MEDIACONV_AUDIO_DUMP_FILE" in self.env:
+            f.write("\tMEDIACONV_AUDIO_DUMP_FILE=\"" + self.env["MEDIACONV_AUDIO_DUMP_FILE"] + "\" \\\n")
+        if "MEDIACONV_AUDIO_TRANSCODED_FILE" in self.env:
+            f.write("\tMEDIACONV_AUDIO_TRANSCODED_FILE=\"" + self.env["MEDIACONV_AUDIO_TRANSCODED_FILE"] + "\" \\\n")
+        if "MEDIACONV_VIDEO_DUMP_FILE" in self.env:
+            f.write("\tMEDIACONV_VIDEO_DUMP_FILE=\"" + self.env["MEDIACONV_VIDEO_DUMP_FILE"] + "\" \\\n")
+        if "MEDIACONV_VIDEO_TRANSCODED_FILE" in self.env:
+            f.write("\tMEDIACONV_VIDEO_TRANSCODED_FILE=\"" + self.env["MEDIACONV_VIDEO_TRANSCODED_FILE"] + "\" \\\n")
 
     def dump_dbg_scripts(self):
         exe_name = os.path.basename(sys.argv[2])
@@ -713,6 +901,8 @@ if __name__ == "__main__":
     if g_proton.missing_default_prefix():
         g_proton.make_default_prefix()
 
+    import protonfixes
+    
     g_session.init_session()
 
     #determine mode

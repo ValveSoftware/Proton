@@ -119,12 +119,21 @@ install: configure
 
 redist: configure
 	mkdir -p vagrant_share/$(DEPLOY_DIR)
-	vagrant ssh -c 'make -C $(BUILD_DIR)/ $(UNSTRIPPED) $(CCACHE_FLAG) redist && cp $(BUILD_DIR)/redist/* /vagrant/$(DEPLOY_DIR)'
+	vagrant ssh -c 'make -C $(BUILD_DIR)/ $(UNSTRIPPED) $(CCACHE_FLAG) redist && \
+	cp -Rf $(BUILD_DIR)/redist/* /vagrant/$(DEPLOY_DIR) && \
+	cd /vagrant/$(DEPLOY_DIR) && \
+	cd protonfixes && \
+	mv cabextract ../dist/bin/ && \
+	mv libmspack.so.0 ../dist/lib64/ && \
+	mv libmspack.so.0.1.0 ../dist/lib64/ && \
+	rm cabextract_1.9-1.debian.tar.xz libmspack_0.10.1-1.debian.tar.xz && \
+	cd /vagrant/ && \
+	tar -cvzf $(DEPLOY_DIR).tar.gz $(DEPLOY_DIR)'
 	echo "Proton build available at vagrant_share/$(DEPLOY_DIR)"
 
 deploy: configure
 	mkdir -p vagrant_share/$(DEPLOY_DIR)-deploy
-	vagrant ssh -c 'make -C $(BUILD_DIR)/ $(UNSTRIPPED) $(CCACHE_FLAG) deploy && cp $(BUILD_DIR)/deploy/* /vagrant/$(DEPLOY_DIR)-deploy'
+	vagrant ssh -c 'make -C $(BUILD_DIR)/ $(UNSTRIPPED) $(CCACHE_FLAG) deploy && cp -Rf $(BUILD_DIR)/deploy/* /vagrant/$(DEPLOY_DIR)-deploy'
 	echo "Proton deployed to vagrant_share/$(DEPLOY_DIR)-deploy"
 
 module: configure
