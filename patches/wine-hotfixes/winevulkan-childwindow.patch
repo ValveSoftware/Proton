@@ -12,8 +12,8 @@ index 28ae1a9e0e..a482109408 100644
 --- a/dlls/winex11.drv/vulkan.c
 +++ b/dlls/winex11.drv/vulkan.c
 @@ -33,6 +33,7 @@
+ #include "wine/debug.h"
  #include "wine/heap.h"
- #include "wine/library.h"
  #include "x11drv.h"
 +#include "xcomposite.h"
 
