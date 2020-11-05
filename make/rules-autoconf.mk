@@ -12,7 +12,7 @@ $$(OBJ)/.$(1)-configure$(3): $$($(2)_SRC)/configure.ac
 	rm -rf "$$($(2)_OBJ$(3))/config.cache"
 
 	cd "$$($(2)_OBJ$(3))" && env $$($(2)_ENV$(3)) \
-	$$($(2)_SRC)/configure -C \
+	$$($(2)_SRC)/configure $(--quiet?) -C \
 	    --prefix="$$($(2)_DST$(3))" \
 	    --libdir="$$($(2)_DST$(3))/lib$(subst 32,,$(3))" \
 	    $$($(2)_ENV$(3)) \
