@@ -516,7 +516,7 @@ index 216adf0d7ae..ba3a8454d7b 100644
 +++ b/include/Makefile.in
 @@ -737,6 +737,7 @@ SOURCES = \
  	wine/itss.idl \
- 	wine/library.h \
+ 	wine/orpc.idl \
  	wine/svcctl.idl \
 +	wine/wined3d-interop.idl \
  	wine/winedxgi.idl \

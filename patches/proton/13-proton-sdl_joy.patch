@@ -2489,14 +2489,6 @@ diff --git a/dlls/dinput/joystick_sdl.c b/dlls/dinput/joystick_sdl.c
 index 147e680d17a..f7031524d13 100644
 --- a/dlls/dinput/joystick_sdl.c
 +++ b/dlls/dinput/joystick_sdl.c
-@@ -39,6 +39,7 @@
- 
- #include "wine/debug.h"
- #include "wine/unicode.h"
-+#include "wine/library.h"
- #include "wine/list.h"
- #include "windef.h"
- #include "winbase.h"
 @@ -112,6 +113,9 @@ static struct SDLDev *sdldevs = NULL;
  static void find_sdldevs(void)
  {

@@ -55,6 +55,11 @@
     patch -Np1 < ../patches/dxvk/dxvk-async.patch
     cd ..
 
+    cd vkd3d-proton
+    git reset --hard HEAD
+    git clean -xdf
+    cd ..
+    
     #WINE STAGING
     cd wine-staging
     git reset --hard HEAD
@@ -73,9 +78,10 @@
     git revert --no-commit fd25ba65e0eb9fedfb2cdfa2b7a4b16e0401dfdf
     
     #https://bugs.winehq.org/show_bug.cgi?id=49990
-    echo "this breaks some game launchers"
+    echo "this reverts 370a538e to 6314a750 which breaks some game launchers"
     git revert --no-commit bd27af974a21085cd0dc78b37b715bbcc3cfab69
-
+    
+      
 # disable these when using proton's gamepad patches
 #    -W dinput-SetActionMap-genre \
 #    -W dinput-axis-recalc \
@@ -90,19 +96,12 @@
     -W dinput-joy-mappings \
     -W dinput-reconnect-joystick \
     -W dinput-remap-joystick
-            
-    #WINE FAUDIO
-    #echo "applying faudio patches"
-    #patch -Np1 < ../patches/faudio/faudio-ffmpeg.patch
-    
+ 
     ### GAME PATCH SECTION ###
     
     #fix this
     echo "mech warrior online"
     patch -Np1 < ../patches/game-patches/mwo.patch
-
-    echo "final fantasy XIV old launcher render fix"
-    patch -Np1 < ../patches/game-patches/ffxiv-launcher.patch
 
     echo "assetto corsa"
     patch -Np1 < ../patches/game-patches/assettocorsa-hud.patch
@@ -137,9 +136,12 @@
 #    echo "Paul's Diablo 1 menu fix"
 #    patch -Np1 < ../patches/game-patches/diablo_1_menu.patch
     
-    echo "Destiny 2 runtime timestamp fix"
-    patch -Np1 < ../patches/game-patches/destiny2_runtime_timestamp_fix.patch
-
+    # warning: currently you WILL get banned, despite this patch fixing timestamps and allowing the game to run.
+    # https://bugs.winehq.org/show_bug.cgi?id=44061
+    # disabled for now to prevent people from getting banned
+#    echo "Destiny 2 runtime timestamp fix"
+#    patch -Np1 < ../patches/game-patches/destiny2_runtime_timestamp_fix.patch
+    
     ### END GAME PATCH SECTION ###
     
     ### PROTON PATCH SECTION ###
@@ -201,7 +203,7 @@
     echo "msvcrt overrides"
     patch -Np1 < ../patches/proton/19-proton-msvcrt_nativebuiltin.patch
 
-    echo "atiadlxx"
+    echo "atiadlxx needed for cod games"
     patch -Np1 < ../patches/proton/20-proton-atiadlxx.patch
 
     echo "valve registry entries"
@@ -210,12 +212,14 @@
     patch -Np1 < ../patches/proton/23-proton-03_nier_sekiro_ds3_registry.patch
     patch -Np1 < ../patches/proton/24-proton-04_cod_registry.patch
     
-    echo "valve rdr2 fixes"
-    patch -Np1 < ../patches/proton/25-proton-rdr2-fixes.patch
+    #disabled -- pending work
+#    echo "valve rdr2 fixes"
+#    patch -Np1 < ../patches/proton/25-proton-rdr2-fixes.patch
 
-    echo "valve cod fixes"
-    #patch -Np1 < ../patches/proton/26-proton-cod_gdi32_PE_conversion.patch
-    patch -Np1 < ../patches/proton/27-proton-cod_winex11.drv_send_clip_cursor_message.patch
+    #disabled -- pending work
+#    echo "valve cod fixes"
+#    patch -Np1 < ../patches/proton/26-proton-cod_gdi32.patch
+#    patch -Np1 < ../patches/proton/27-proton-cod_winex11.drv_send_clip_cursor_message.patch
 
     echo "set prefix win10"
     patch -Np1 < ../patches/proton/28-proton-win10_default.patch
@@ -223,11 +227,9 @@
     echo "dxvk_config"
     patch -Np1 < ../patches/proton/29-proton-dxvk_config.patch
 
-    echo "hide wine prefix update"
-    patch -Np1 < ../patches/proton/30-proton-hide_wine_prefix_update_window.patch
-
+    #this is needed specifically for proton, not needed for normal wine
     echo "proton-specific manual mfplat dll register patch"
-    patch -Np1 < ../patches/proton/31-proton-proton_mediafoundation_dllreg.patch
+    patch -Np1 < ../patches/proton/30-proton-mediafoundation_dllreg.patch
     
     ### END PROTON PATCH SECTION ###
 
@@ -239,7 +241,7 @@
     echo "applying WoW vkd3d wine patches"
     patch -Np1 < ../patches/wine-hotfixes/vkd3d/D3D12SerializeVersionedRootSignature.patch
     patch -Np1 < ../patches/wine-hotfixes/vkd3d/D3D12CreateVersionedRootSignatureDeserializer.patch
-
+        
     ### END WINEPATCH SECTION ###
     
     #WINE CUSTOM PATCHES
