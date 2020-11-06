@@ -113,6 +113,9 @@ void *create_LinuxISteamMatchmakingServerListResponse(void *win, const char *ver
 {
     struct gccServerListResponse *ret;
 
+    if (!win)
+        return NULL;
+
     /* FIXME: When is it save to free this? CancelServerQuery? */
     ret = (struct gccServerListResponse *)HeapAlloc(GetProcessHeap(), 0, sizeof(*ret));
     if(!ret)
@@ -162,6 +165,9 @@ struct gccPingResponseVtbl {
 void *create_LinuxISteamMatchmakingPingResponse(void *win, const char *version)
 {
     struct gccPingResponse *ret;
+
+    if (!win)
+        return NULL;
 
     ret = (struct gccPingResponse *)HeapAlloc(GetProcessHeap(), 0, sizeof(*ret));
     if(!ret)
@@ -217,6 +223,9 @@ void *create_LinuxISteamMatchmakingPlayersResponse(void *win, const char *versio
 {
     struct gccPlayersResponse *ret;
 
+    if (!win)
+        return NULL;
+
     ret = (struct gccPlayersResponse *)HeapAlloc(GetProcessHeap(), 0, sizeof(*ret));
     if(!ret)
         return NULL;
@@ -270,6 +279,9 @@ struct gccRulesResponseVtbl {
 void *create_LinuxISteamMatchmakingRulesResponse(void *win, const char *version)
 {
     struct gccRulesResponse *ret;
+
+    if (!win)
+        return NULL;
 
     ret = (struct gccRulesResponse *)HeapAlloc(GetProcessHeap(), 0, sizeof(*ret));
     if(!ret)
