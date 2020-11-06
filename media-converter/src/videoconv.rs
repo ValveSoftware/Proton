@@ -361,6 +361,7 @@ impl ObjectSubclass for VideoConv {
             caps.append(gst::Caps::builder("video/x-ms-asf").build());
             caps.append(gst::Caps::builder("video/x-msvideo").build());
             caps.append(gst::Caps::builder("video/mpeg").build());
+            caps.append(gst::Caps::builder("video/quicktime").build());
         }
         let sink_pad_template = gst::PadTemplate::new(
             "sink",
