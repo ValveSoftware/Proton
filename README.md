@@ -66,7 +66,9 @@ targets to build Proton:
 `make install` - This will install Proton into your user's Steam directory.
 You may need to restart the Steam client to see it. The tool's name in the
 Steam client will be based on the currently checked out branch of Proton. You
-can override this name using the `build_name` variable.
+can override this name using the `build_name` make variable, which can be set 
+via an environment variable or an argument to the make command 
+[among other ways](https://www.gnu.org/software/make/manual/html_node/Values.html#Values).
 
 `make redist` - This will create a build which you can easily redistribute to
 other users.  The package will be dropped into a new directory in
