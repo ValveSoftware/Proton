@@ -20,7 +20,7 @@ from filelock import FileLock
 #To enable debug logging, copy "user_settings.sample.py" to "user_settings.py"
 #and edit it if needed.
 
-CURRENT_PREFIX_VERSION="5.20-GE-1"
+CURRENT_PREFIX_VERSION="5.21-GE-1"
 
 PFX="Proton: "
 ld_path_var = "LD_LIBRARY_PATH"
@@ -559,7 +559,8 @@ class Session:
         self.log_file = None
         self.env = dict(os.environ)
         self.dlloverrides = {
-                "steam.exe": "b" #always use our special built-in steam.exe
+                "steam.exe": "b", #always use our special built-in steam.exe
+                "dotnetfx35.exe": "b" #replace the broken installer, as does Windows
         }
 
         self.compat_config = set()
@@ -628,6 +629,19 @@ class Session:
             self.compat_config.discard(config_name)
         return True
 
+    def try_log_slr_versions(self):
+        try:
+            if "PRESSURE_VESSEL_RUNTIME_BASE" in self.env:
+                with open(self.env["PRESSURE_VESSEL_RUNTIME_BASE"] + "/VERSIONS.txt", "r") as f:
+                    for l in f:
+                        l = l.strip()
+                        if len(l) > 0 and not l.startswith("#"):
+                            cleaned = l.split("#")[0].strip().replace("\t", " ")
+                            split = cleaned.split(" ", maxsplit=1)
+                            self.log_file.write(split[0] + ": " + split[1] + "\n")
+        except (OSError, IOError, TypeError, KeyError):
+            pass
+
     def init_session(self):
         self.env["WINEPREFIX"] = g_compatdata.prefix_dir
 
@@ -670,7 +684,6 @@ class Session:
         self.check_environment("PROTON_NO_FSYNC", "nofsync")
         self.check_environment("PROTON_FORCE_LARGE_ADDRESS_AWARE", "forcelgadd")
         self.check_environment("PROTON_OLD_GL_STRING", "oldglstr")
-        self.check_environment("PROTON_USE_SECCOMP", "seccomp")
         self.check_environment("PROTON_NO_WRITE_WATCH", "nowritewatch")
         self.check_environment("PROTON_HIDE_NVIDIA_GPU", "hidenvgpu")
 
@@ -683,9 +696,6 @@ class Session:
             self.env.pop("WINEFSYNC", "")
         else:
             self.env["WINEFSYNC"] = "1" if "SteamGameId" in self.env else "0"
-
-        if "seccomp" in self.compat_config:
-            self.env["WINESECCOMP"] = "1"
 
         if "nowritewatch" in self.compat_config:
             self.env["WINE_DISABLE_WRITE_WATCH"] = "1"
@@ -708,7 +718,9 @@ class Session:
 
         if "SteamGameId" in self.env:
             if self.env["WINEDEBUG"] != "-all":
-                lfile_path = os.environ["HOME"] + "/steam-" + os.environ["SteamGameId"] + ".log"
+                basedir = os.environ.get("PROTON_LOG_DIR", os.environ["HOME"])
+                makedirs(basedir)
+                lfile_path = basedir + "/steam-" + os.environ["SteamGameId"] + ".log"
                 if os.path.exists(lfile_path):
                     os.remove(lfile_path)
                 self.log_file = open(lfile_path, "w+")
@@ -718,6 +730,7 @@ class Session:
                 self.log_file.write("SteamGameId: " + self.env["SteamGameId"] + "\n")
                 self.log_file.write("Command: " + str(sys.argv[2:] + self.cmdlineappend) + "\n")
                 self.log_file.write("Options: " + str(self.compat_config) + "\n")
+                self.try_log_slr_versions()
                 self.log_file.write("======================\n")
                 self.log_file.flush()
         else:
