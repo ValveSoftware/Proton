@@ -297,8 +297,8 @@ NASM_TARBALL := nasm-$(NASM_VER).tar.xz
 NASM := $(SRCDIR)/contrib/nasm-$(NASM_VER)
 NASM_OBJ32 := ./obj-nasm32
 NASM_OBJ64 := ./obj-nasm64
-NASM_BIN32 := $(NASM_OBJ32)/built/bin/nasm
-NASM_BIN64 := $(NASM_OBJ64)/built/bin/nasm
+NASM_BIN32 := $(TOOLS_DIR32)/bin/nasm
+NASM_BIN64 := $(TOOLS_DIR64)/bin/nasm
 
 MEDIACONV := $(SRCDIR)/media-converter
 MEDIACONV_OBJ32 := ./obj-media-converter32
@@ -1122,12 +1122,12 @@ FFMPEG_CONFIGURE_FILES64 := $(FFMPEG_OBJ64)/Makefile
 $(FFMPEG_CONFIGURE_FILES64): SHELL = $(CONTAINER_SHELL64)
 $(FFMPEG_CONFIGURE_FILES64): $(FFMPEG)/configure $(MAKEFILE_DEP) nasm64 | $(FFMPEG_OBJ64)
 	cd $(dir $@) && \
+		PATH="$(abspath $(TOOLS_DIR64))/bin:$(PATH)" \
 		PKG_CONFIG="$(PKG_CONFIG64)" \
 		PKG_CONFIG_PATH=$(abspath $(TOOLS_DIR64))/lib/pkgconfig \
 		$(abspath $(FFMPEG))/configure \
 			--cc=$(CC_QUOTED) --cxx=$(CXX_QUOTED) \
 			--prefix=$(abspath $(TOOLS_DIR64)) \
-			--x86asmexe=$(abspath $(NASM_BIN64))
 			--disable-static \
 			--enable-shared \
 			--disable-programs \
@@ -1174,12 +1174,12 @@ $(FFMPEG_CONFIGURE_FILES64): $(FFMPEG)/configure $(MAKEFILE_DEP) nasm64 | $(FFMP
 $(FFMPEG_CONFIGURE_FILES32): SHELL = $(CONTAINER_SHELL32)
 $(FFMPEG_CONFIGURE_FILES32): $(FFMPEG)/configure $(MAKEFILE_DEP) nasm32 | $(FFMPEG_OBJ32)
 	cd $(dir $@) && \
+		PATH="$(abspath $(TOOLS_DIR32))/bin:$(PATH)" \
 		PKG_CONFIG="$(PKG_CONFIG32)" \
 		PKG_CONFIG_PATH=$(abspath $(TOOLS_DIR32))/lib/pkgconfig \
 		$(abspath $(FFMPEG))/configure \
 			--cc="$(CC32)" --cxx="$(CXX32)" \
 			--prefix=$(abspath $(TOOLS_DIR32)) \
-			--x86asmexe=$(abspath $(NASM_BIN32))
 			--extra-cflags=$(FFMPEG_CROSS_CFLAGS) --extra-ldflags=$(FFMPEG_CROSS_LDFLAGS) \
 			--disable-static \
 			--enable-shared \
@@ -1241,14 +1241,14 @@ ffmpeg: ffmpeg32 ffmpeg64
 
 ffmpeg64: SHELL = $(CONTAINER_SHELL64)
 ffmpeg64: $(FFMPEG_CONFIGURE_FILES64)
-	+$(MAKE) -C $(FFMPEG_OBJ64)
+	+env PATH="$(abspath $(TOOLS_DIR64))/bin:$(PATH)" $(MAKE) -C $(FFMPEG_OBJ64)
 	+$(MAKE) -C $(FFMPEG_OBJ64) install
 	mkdir -pv $(DST_DIR)/lib64
 	cp -a $(TOOLS_DIR64)/lib/{libavcodec,libavfilter,libavformat,libavutil,libswresample}* $(DST_DIR)/lib64
 
 ffmpeg32: SHELL = $(CONTAINER_SHELL32)
 ffmpeg32: $(FFMPEG_CONFIGURE_FILES32)
-	+$(MAKE) -C $(FFMPEG_OBJ32)
+	+env PATH="$(abspath $(TOOLS_DIR32))/bin:$(PATH)" $(MAKE) -C $(FFMPEG_OBJ32)
 	+$(MAKE) -C $(FFMPEG_OBJ32) install
 	mkdir -pv $(DST_DIR)/lib
 	cp -a $(TOOLS_DIR32)/lib/{libavcodec,libavfilter,libavformat,libavutil,libswresample}* $(DST_DIR)/lib
@@ -1877,13 +1877,13 @@ NASM_CONFIGURE_FILES64 := $(NASM_OBJ64)/Makefile
 $(NASM_CONFIGURE_FILES64): SHELL = $(CONTAINER_SHELL64)
 $(NASM_CONFIGURE_FILES64): $(MAKEFILE_DEP) $(NASM) | $(NASM_OBJ64)
 	cd "$(NASM_OBJ64)" && \
-		../$(NASM)/configure --prefix=$(abspath $(NASM_OBJ64))/built LIBS='-lrt'
+		../$(NASM)/configure --prefix=$(abspath $(TOOLS_DIR64)) LIBS='-lrt'
 
 # 32-bit configure
 $(NASM_CONFIGURE_FILES32): SHELL = $(CONTAINER_SHELL32)
 $(NASM_CONFIGURE_FILES32): $(MAKEFILE_DEP) $(NASM) | $(NASM_OBJ32)
 	cd "$(NASM_OBJ32)" && \
-		../$(NASM)/configure --prefix=$(abspath $(NASM_OBJ32))/built LIBS='-lrt'
+		../$(NASM)/configure --prefix=$(abspath $(TOOLS_DIR32)) LIBS='-lrt'
 
 
 ## nasm goals
