@@ -213,14 +213,7 @@ impl<'a> Read for PadReader<'a> {
             return Ok(0);
         }
 
-        if to_copy == out.len() {
-            out.copy_from_slice(&self.chunk[self.chunk_offs..(self.chunk_offs + to_copy)]);
-        }else{
-            /* FIXME: there's probably some cool functional way to do this */
-            for i in 0..to_copy {
-                out[i] = self.chunk[self.chunk_offs + i];
-            }
-        }
+        out[..to_copy].copy_from_slice(&self.chunk[self.chunk_offs..(self.chunk_offs + to_copy)]);
 
         self.chunk_offs += to_copy;
 
@@ -288,18 +281,11 @@ impl VideoConvState {
             None => {
                 let blank = include_bytes!("../blank.ogv");
 
-                let remaining = blank.len() - offs;
+                let to_copy = std::cmp::min(blank.len() - offs, out.len());
 
-                if out.len() <= remaining {
-                    out.copy_from_slice(&blank[offs..(offs + out.len())]);
-                    Ok(out.len())
-                }else{
-                    /* FIXME: there's probably some cool functional way to do this */
-                    for i in 0..remaining {
-                        out[i] = blank[offs + i];
-                    }
-                    Ok(remaining)
-                }
+                out[..to_copy].copy_from_slice(&blank[offs..(offs + to_copy)]);
+
+                Ok(to_copy)
             },
         }
     }
@@ -375,6 +361,7 @@ impl ObjectSubclass for VideoConv {
             caps.append(gst::Caps::builder("video/x-ms-asf").build());
             caps.append(gst::Caps::builder("video/x-msvideo").build());
             caps.append(gst::Caps::builder("video/mpeg").build());
+            caps.append(gst::Caps::builder("video/quicktime").build());
         }
         let sink_pad_template = gst::PadTemplate::new(
             "sink",
