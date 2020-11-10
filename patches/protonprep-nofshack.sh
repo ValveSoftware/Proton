@@ -41,8 +41,6 @@
     git clean -xdf
     echo "add warframe 5 minute crash fix"
     patch -Np1 < ../patches/proton-hotfixes/proton-lsteamclient_disable_SteamController007_if_no_controller.patch
-    echo "add killer instinct match end crash fix"
-    patch -Np1 < ../patches/proton-hotfixes/proton-lsteamclient-killer-instinct-match-end-fix.patch
     cd ..
 
     cd dxvk
@@ -74,20 +72,19 @@
     echo "proton gamepad conflict fix"
     git revert --no-commit da7d60bf97fb8726828e57f852e8963aacde21e9
     
-    echo "video color fix endless space 2"
-    git revert --no-commit fd25ba65e0eb9fedfb2cdfa2b7a4b16e0401dfdf
+#    echo "video color fix endless space 2"
+#    git revert --no-commit fd25ba65e0eb9fedfb2cdfa2b7a4b16e0401dfdf
     
-    #https://bugs.winehq.org/show_bug.cgi?id=49990
-    echo "this reverts 370a538e to 6314a750 which breaks some game launchers"
+    # https://bugs.winehq.org/show_bug.cgi?id=49990
+    echo "this reverts bd27af974a21085cd0dc78b37b715bbcc3cfab69 which breaks some game launchers"
     git revert --no-commit bd27af974a21085cd0dc78b37b715bbcc3cfab69
-    
-      
-# disable these when using proton's gamepad patches
-#    -W dinput-SetActionMap-genre \
-#    -W dinput-axis-recalc \
-#    -W dinput-joy-mappings \
-#    -W dinput-reconnect-joystick \
-#    -W dinput-remap-joystick \
+
+    # disable these when using proton's gamepad patches
+    # -W dinput-SetActionMap-genre \
+    # -W dinput-axis-recalc \
+    # -W dinput-joy-mappings \
+    # -W dinput-reconnect-joystick \
+    # -W dinput-remap-joystick \
     
     echo "applying staging patches"
     ../wine-staging/patches/patchinstall.sh DESTDIR="." --all \
@@ -96,29 +93,24 @@
     -W dinput-joy-mappings \
     -W dinput-reconnect-joystick \
     -W dinput-remap-joystick
- 
-    ### GAME PATCH SECTION ###
-    
-    #fix this
+
+    ### GAME PATCH SECTION ###    
     echo "mech warrior online"
     patch -Np1 < ../patches/game-patches/mwo.patch
 
     echo "assetto corsa"
     patch -Np1 < ../patches/game-patches/assettocorsa-hud.patch
 
-    echo "sword art online"
-    patch -Np1 < ../patches/game-patches/sword-art-online-gnutls.patch
-
     echo "origin downloads fix" 
     patch -Np1 < ../patches/game-patches/origin-downloads_fix.patch
         
-#  TODO: Add game-specific check
+    # TODO: Add game-specific check
     echo "mk11 patch"
     patch -Np1 < ../patches/game-patches/mk11.patch
 
-#   The game uses CEG which does not work in proton.    
-#    echo "blackops 2 fix"
-#    patch -Np1 < ../patches/game-patches/blackops_2_fix.patch
+    # BLOPS2 uses CEG which does not work in proton. Disabled for now
+    # echo "blackops 2 fix"
+    # patch -Np1 < ../patches/game-patches/blackops_2_fix.patch
 
     echo "bloons TD6 fix"
     patch -Np1 < ../patches/game-patches/bloons_TD6_fix.patch
@@ -128,19 +120,19 @@
     
     echo "killer instinct vulkan fix"
     patch -Np1 < ../patches/game-patches/killer-instinct-winevulkan_fix.patch
-    
-    echo "warhammer 40k: inquisitor martyr loading fix"
-    patch -Np1 < ../patches/game-patches/warhammer-40k-inquisitor-martyr-loading.patch
- 
-#    Disabled for now -- non-steam game, needs double check, may be fixed already
-#    echo "Paul's Diablo 1 menu fix"
-#    patch -Np1 < ../patches/game-patches/diablo_1_menu.patch
+
+    echo "SKSE64 updated fix"
+    patch -Np1 < ../patches/game-patches/skse64_fix.patch
+
+    # Disabled for now -- non-steam game, needs double check, may be fixed already
+    # echo "Paul's Diablo 1 menu fix"
+    # patch -Np1 < ../patches/game-patches/diablo_1_menu.patch
     
     # warning: currently you WILL get banned, despite this patch fixing timestamps and allowing the game to run.
     # https://bugs.winehq.org/show_bug.cgi?id=44061
     # disabled for now to prevent people from getting banned
-#    echo "Destiny 2 runtime timestamp fix"
-#    patch -Np1 < ../patches/game-patches/destiny2_runtime_timestamp_fix.patch
+    # echo "Destiny 2 runtime timestamp fix"
+    # patch -Np1 < ../patches/game-patches/destiny2_runtime_timestamp_fix.patch
     
     ### END GAME PATCH SECTION ###
     
@@ -158,9 +150,6 @@
 
     echo "LAA"
     patch -Np1 < ../patches/proton/04-proton-LAA_staging.patch
-
-    echo "proton overlay mouse lag fix"
-    patch -Np1 < ../patches/proton/05-proton-overlay_input_lag_fix.patch
     
     echo "proton force mouse fullscreen grab"
     patch -Np1 < ../patches/proton/06-proton-nofshack-force-fullscreen-grab-mouse.patch
@@ -171,16 +160,12 @@
     echo "steamclient swap"
     patch -Np1 < ../patches/proton/08-proton-steamclient_swap.patch
 
-#    disabled for now -- was breaking Catherine Classic in 5.9
-#    echo "audio patch test"
-#    patch -Np1 < ../patches/proton/09-proton-xaudio2_stop_engine.patch
-
     echo "protonify"
     patch -Np1 < ../patches/proton/10-proton-protonify_staging.patch
 
     echo "protonify-audio"
     patch -Np1 < ../patches/proton/11-proton-pa-staging.patch
-    
+
     echo "steam bits"
     patch -Np1 < ../patches/proton/12-proton-steam-bits.patch
 
@@ -210,16 +195,12 @@
     patch -Np1 < ../patches/proton/21-proton-01_wolfenstein2_registry.patch
     patch -Np1 < ../patches/proton/22-proton-02_rdr2_registry.patch
     patch -Np1 < ../patches/proton/23-proton-03_nier_sekiro_ds3_registry.patch
-    patch -Np1 < ../patches/proton/24-proton-04_cod_registry.patch
+    patch -Np1 < ../patches/proton/32-proton-04_spellforce_registry.patch
+    patch -Np1 < ../patches/proton/24-proton-05_cod_registry.patch
     
-    #disabled -- pending work
-#    echo "valve rdr2 fixes"
-#    patch -Np1 < ../patches/proton/25-proton-rdr2-fixes.patch
-
-    #disabled -- pending work
-#    echo "valve cod fixes"
-#    patch -Np1 < ../patches/proton/26-proton-cod_gdi32.patch
-#    patch -Np1 < ../patches/proton/27-proton-cod_winex11.drv_send_clip_cursor_message.patch
+    # -- pending work
+    # echo "valve rdr2 fixes"
+    # patch -Np1 < ../patches/proton/25-proton-rdr2-fixes.patch
 
     echo "set prefix win10"
     patch -Np1 < ../patches/proton/28-proton-win10_default.patch
@@ -230,6 +211,18 @@
     #this is needed specifically for proton, not needed for normal wine
     echo "proton-specific manual mfplat dll register patch"
     patch -Np1 < ../patches/proton/30-proton-mediafoundation_dllreg.patch
+
+    # use the below patch only when disabling mfplat-streaming-support in staging
+    # when using this, find the 'class Session:' section of proton script and
+    # modify the self.dlloverrides section like so:
+    #
+    #    self.dlloverrides = {
+    #            "steam.exe": "b", #always use our special built-in steam.exe
+    #            "mfplay": "n" #disable built-in mfplay
+    #    }
+    #
+    # echo "mfplat proton hacks"
+    # patch -Np1 < ../patches/proton/31-proton-mfplat-hacks.patch
     
     ### END PROTON PATCH SECTION ###
 
@@ -241,6 +234,9 @@
     echo "applying WoW vkd3d wine patches"
     patch -Np1 < ../patches/wine-hotfixes/vkd3d/D3D12SerializeVersionedRootSignature.patch
     patch -Np1 < ../patches/wine-hotfixes/vkd3d/D3D12CreateVersionedRootSignatureDeserializer.patch
+    
+    echo "add missing xaudio2_9redist dll"
+    patch -Np1 < ../patches/wine-hotfixes/0001-xaudio2_9-Add-version-resource.patch
         
     ### END WINEPATCH SECTION ###
     
