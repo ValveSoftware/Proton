@@ -77,7 +77,7 @@ index 7bea7dd937c..dabe436bfe7 100644
  #endif
  
  #ifdef HAVE_SECCOMP
-@@ -2361,6 +2361,25 @@ static void install_bpf(struct sigaction *sig_act)
+@@ -2361,10 +2361,39 @@ static void install_bpf(struct sigaction *sig_act)
         BPF_STMT(BPF_RET | BPF_K, SECCOMP_RET_TRAP),
         BPF_STMT(BPF_RET | BPF_K, SECCOMP_RET_ALLOW),
      };
@@ -103,33 +103,43 @@ index 7bea7dd937c..dabe436bfe7 100644
      struct sock_fprog prog;
      NTSTATUS status;
  
-@@ -2380,6 +2399,18 @@ static void install_bpf(struct sigaction *sig_act)
+-    sig_act->sa_sigaction = sigsys_handler;
++    {
++        const char *sgi = getenv("SteamGameId");
++        if (sgi && !strcmp(sgi, "1174180"))
++        {
++            /* Use specific signal handler for Red Dead Redemption 2 */
++            sig_act->sa_sigaction = sigsys_handler_rdr2;
++        } else {
++            sig_act->sa_sigaction = sigsys_handler;
++        }
++    }
++    
+     sigaction(SIGSYS, sig_act, NULL);
+ 
+     if ((status = syscall(0xffff)) == STATUS_INVALID_PARAMETER)
+@@ -2379,8 +2408,19 @@ static void install_bpf(struct sigaction *sig_act)
+     }
+ 
      memset(&prog, 0, sizeof(prog));
-     prog.len = ARRAY_SIZE(filter);
-     prog.filter = filter;
-+    sig_act->sa_sigaction = sigsys_handler;
+-    prog.len = ARRAY_SIZE(filter);
+-    prog.filter = filter;
 +
 +    {
 +        const char *sgi = getenv("SteamGameId");
 +        if (sgi && !strcmp(sgi, "1174180"))
 +        {
-+            /* Use specific filter and signal handler for Red Dead Redemption 2 */
++            /* Use specific filter for Red Dead Redemption 2 */
 +            prog.len = ARRAY_SIZE(filter_rdr2);
 +            prog.filter = filter_rdr2;
-+            sig_act->sa_sigaction = sigsys_handler_rdr2;
++        } else {
++            prog.len = ARRAY_SIZE(filter);
++            prog.filter = filter;
 +        }
 +    }
  
      if (prctl(PR_SET_NO_NEW_PRIVS, 1, 0, 0, 0))
      {
-@@ -2383,7 +2383,6 @@ static void install_bpf(struct sigaction *sig_act)
-     struct sock_fprog prog;
-     NTSTATUS status;
- 
--    sig_act->sa_sigaction = sigsys_handler;
-     sigaction(SIGSYS, sig_act, NULL);
- 
-     if ((status = syscall(0xffff)) == STATUS_INVALID_PARAMETER)
 From d4bd4d88d9d0fcda827f6c5445b94d59e66743ef Mon Sep 17 00:00:00 2001
 From: Brendan Shanks <bshanks@codeweavers.com>
 Date: Fri, 21 Feb 2020 12:08:56 -0800

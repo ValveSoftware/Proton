@@ -1,0 +1,219 @@
+From 860ba55403f75c66a0abdfd7781afe2324619bce Mon Sep 17 00:00:00 2001
+From: Andrew Eikum <aeikum@codeweavers.com>
+Date: Mon, 15 Jul 2019 08:49:49 -0500
+Subject: [PATCH] mfreadwrite: HACK Stub out source reader
+
+This lets games like RE2 behave as they did before.
+---
+ dlls/mfreadwrite/reader.c | 48 ++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 47 insertions(+), 1 deletion(-)
+
+diff --git a/dlls/mfreadwrite/reader.c b/dlls/mfreadwrite/reader.c
+index 96a82b798ab..5da0ace84b2 100644
+--- a/dlls/mfreadwrite/reader.c
++++ b/dlls/mfreadwrite/reader.c
+@@ -491,6 +491,8 @@ static HRESULT WINAPI source_reader_source_events_callback_Invoke(IMFAsyncCallba
+ 
+     TRACE("%p, %p.\n", iface, result);
+ 
++    return E_NOTIMPL;
++
+     source = (IMFMediaSource *)IMFAsyncResult_GetStateNoAddRef(result);
+ 
+     if (FAILED(hr = IMFMediaSource_EndGetEvent(source, result, &event)))
+@@ -778,6 +780,8 @@ static HRESULT WINAPI source_reader_stream_events_callback_Invoke(IMFAsyncCallba
+ 
+     TRACE("%p, %p.\n", iface, result);
+ 
++    return E_NOTIMPL;
++
+     stream = (IMFMediaStream *)IMFAsyncResult_GetStateNoAddRef(result);
+ 
+     if (FAILED(hr = IMFMediaStream_EndGetEvent(stream, result, &event)))
+@@ -1133,6 +1137,8 @@ static HRESULT WINAPI source_reader_async_commands_callback_Invoke(IMFAsyncCallb
+     HRESULT hr, status;
+     IUnknown *state;
+ 
++    return E_NOTIMPL;
++
+     if (FAILED(hr = IMFAsyncResult_GetState(result, &state)))
+         return hr;
+ 
+@@ -1303,6 +1309,8 @@ static HRESULT WINAPI src_reader_GetStreamSelection(IMFSourceReader *iface, DWOR
+ 
+     TRACE("%p, %#x, %p.\n", iface, index, selected);
+ 
++    return E_NOTIMPL;
++
+     switch (index)
+     {
+         case MF_SOURCE_READER_FIRST_VIDEO_STREAM:
+@@ -1327,6 +1335,8 @@ static HRESULT WINAPI src_reader_SetStreamSelection(IMFSourceReader *iface, DWOR
+ 
+     TRACE("%p, %#x, %d.\n", iface, index, selection);
+ 
++    return E_NOTIMPL;
++
+     selection = !!selection;
+ 
+     EnterCriticalSection(&reader->cs);
+@@ -1435,6 +1445,8 @@ static HRESULT WINAPI src_reader_GetNativeMediaType(IMFSourceReader *iface, DWOR
+ 
+     TRACE("%p, %#x, %#x, %p.\n", iface, index, type_index, type);
+ 
++    return E_NOTIMPL;
++
+     return source_reader_get_native_media_type(reader, index, type_index, type);
+ }
+ 
+@@ -1445,6 +1457,8 @@ static HRESULT WINAPI src_reader_GetCurrentMediaType(IMFSourceReader *iface, DWO
+ 
+     TRACE("%p, %#x, %p.\n", iface, index, type);
+ 
++    return E_NOTIMPL;
++
+     switch (index)
+     {
+         case MF_SOURCE_READER_FIRST_VIDEO_STREAM:
+@@ -1658,6 +1672,8 @@ static HRESULT WINAPI src_reader_SetCurrentMediaType(IMFSourceReader *iface, DWO
+ 
+     TRACE("%p, %#x, %p, %p.\n", iface, index, reserved, type);
+ 
++    return E_NOTIMPL;
++
+     switch (index)
+     {
+         case MF_SOURCE_READER_FIRST_VIDEO_STREAM:
+@@ -1694,6 +1710,8 @@ static HRESULT WINAPI src_reader_SetCurrentPosition(IMFSourceReader *iface, REFG
+ 
+     TRACE("%p, %s, %p.\n", iface, debugstr_guid(format), position);
+ 
++    return E_NOTIMPL;
++
+     if (FAILED(hr = IMFMediaSource_GetCharacteristics(reader->source, &flags)))
+         return hr;
+ 
+@@ -1834,6 +1852,8 @@ static HRESULT WINAPI src_reader_ReadSample(IMFSourceReader *iface, DWORD index,
+ 
+     TRACE("%p, %#x, %#x, %p, %p, %p, %p\n", iface, index, flags, actual_index, stream_flags, timestamp, sample);
+ 
++    return E_NOTIMPL;
++
+     EnterCriticalSection(&reader->cs);
+ 
+     while (reader->flags & SOURCE_READER_SEEKING)
+@@ -1895,6 +1915,8 @@ static HRESULT WINAPI src_reader_Flush(IMFSourceReader *iface, DWORD index)
+ 
+     TRACE("%p, %#x.\n", iface, index);
+ 
++    return E_NOTIMPL;
++
+     EnterCriticalSection(&reader->cs);
+ 
+     if (reader->async_callback)
+@@ -1916,6 +1938,8 @@ static HRESULT WINAPI src_reader_GetServiceForStream(IMFSourceReader *iface, DWO
+ 
+     TRACE("%p, %#x, %s, %s, %p\n", iface, index, debugstr_guid(service), debugstr_guid(riid), object);
+ 
++    return E_NOTIMPL;
++
+     switch (index)
+     {
+         case MF_SOURCE_READER_MEDIASOURCE:
+@@ -1955,6 +1979,8 @@ static HRESULT WINAPI src_reader_GetPresentationAttribute(IMFSourceReader *iface
+ 
+     TRACE("%p, %#x, %s, %p.\n", iface, index, debugstr_guid(guid), value);
+ 
++    return E_NOTIMPL;
++
+     switch (index)
+     {
+         case MF_SOURCE_READER_MEDIASOURCE:
+@@ -2355,9 +2381,29 @@ static HRESULT create_source_reader_from_object(IUnknown *unk, IMFAttributes *at
+ HRESULT WINAPI MFCreateSourceReaderFromByteStream(IMFByteStream *stream, IMFAttributes *attributes,
+         IMFSourceReader **reader)
+ {
++    struct source_reader *object;
++
+     TRACE("%p, %p, %p.\n", stream, attributes, reader);
+ 
+-    return create_source_reader_from_object((IUnknown *)stream, attributes, &IID_IMFSourceReader, (void **)reader);
++    object = heap_alloc_zero(sizeof(*object));
++    if (!object)
++        return E_OUTOFMEMORY;
++
++    object->IMFSourceReader_iface.lpVtbl = &srcreader_vtbl;
++    object->source_events_callback.lpVtbl = &source_events_callback_vtbl;
++    object->stream_events_callback.lpVtbl = &stream_events_callback_vtbl;
++    object->async_commands_callback.lpVtbl = &async_commands_callback_vtbl;
++    object->refcount = 1;
++    list_init(&object->responses);
++    InitializeCriticalSection(&object->cs);
++    InitializeConditionVariable(&object->sample_event);
++    InitializeConditionVariable(&object->state_event);
++
++    *reader = &object->IMFSourceReader_iface;
++
++    return S_OK;
++
++    //return create_source_reader_from_object((IUnknown *)stream, attributes, &IID_IMFSourceReader, (void **)reader);
+ }
+ 
+ /***********************************************************************
+From 4f02f605103408be8c7f3faad69b5485792fb3ea Mon Sep 17 00:00:00 2001
+From: Nikolay Sivov <nsivov@codeweavers.com>
+Date: Fri, 12 Jul 2019 10:39:24 -0500
+Subject: [PATCH] mf: Return failure from IMFMediaSession::BeginGetEvent
+
+These APIs don't work yet anyway, so this avoids a crash.
+---
+ dlls/mf/session.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/dlls/mf/session.c b/dlls/mf/session.c
+index e2a6b868caf..c541a11a31d 100644
+--- a/dlls/mf/session.c
++++ b/dlls/mf/session.c
+@@ -1521,7 +1521,8 @@ static HRESULT WINAPI mfsession_BeginGetEvent(IMFMediaSession *iface, IMFAsyncCa
+ 
+     TRACE("%p, %p, %p.\n", iface, callback, state);
+ 
+-    return IMFMediaEventQueue_BeginGetEvent(session->event_queue, callback, state);
++    return E_NOTIMPL;
++//    return IMFMediaEventQueue_BeginGetEvent(session->event_queue, callback, state);
+ }
+ 
+ static HRESULT WINAPI mfsession_EndGetEvent(IMFMediaSession *iface, IMFAsyncResult *result, IMFMediaEvent **event)
+From 49abaf686ea80974e3ad2be3eb19d0b159ffee32 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
+Date: Thu, 23 Apr 2020 20:12:02 +0200
+Subject: [PATCH] HACK: mf: Unstub BeginGetEvent for Street Fighter 5.
+
+This was previously stubbed in a17557e47eabe80a6d1c442f9313dd202af69a18
+to fix several UE games that stay on intro videos forever, such as
+Bloodstained.
+---
+ dlls/mf/session.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/dlls/mf/session.c b/dlls/mf/session.c
+index c541a11a31d..110c96c5d08 100644
+--- a/dlls/mf/session.c
++++ b/dlls/mf/session.c
+@@ -1518,11 +1518,15 @@ static HRESULT WINAPI mfsession_GetEvent(IMFMediaSession *iface, DWORD flags, IM
+ static HRESULT WINAPI mfsession_BeginGetEvent(IMFMediaSession *iface, IMFAsyncCallback *callback, IUnknown *state)
+ {
+     struct media_session *session = impl_from_IMFMediaSession(iface);
++    const char *sgi = getenv("SteamGameId");
+ 
+     TRACE("%p, %p, %p.\n", iface, callback, state);
+ 
++    /* HACK: Street Fighter 5 */
++    if (sgi && !strcmp(sgi, "310950"))
++        return IMFMediaEventQueue_BeginGetEvent(session->event_queue, callback, state);
++
+     return E_NOTIMPL;
+-//    return IMFMediaEventQueue_BeginGetEvent(session->event_queue, callback, state);
+ }
+ 
+ static HRESULT WINAPI mfsession_EndGetEvent(IMFMediaSession *iface, IMFAsyncResult *result, IMFMediaEvent **event)

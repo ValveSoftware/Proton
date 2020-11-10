@@ -1,0 +1,71 @@
+From: Myah Caron <qsniyg@protonmail.com>
+Subject: [PATCH] ntdll: Map top-down if dll characteristics include DYNAMIC_BASE.
+Message-Id: <5zupjdLvdJ1Ln4zJEpQogefY0pyXGckHXW80VLr6SEkCSshyxjMzU0pT00AJRVabpRAdocDUMPapJO81VRqhSq5tsrUO3iTeGuqXjqHlHIA=@protonmail.com>
+Date: Tue, 13 Oct 2020 19:36:43 +0000
+
+Wine-bug: https://bugs.winehq.org/show_bug.cgi?id=44893
+Wine-bug: https://bugs.winehq.org/show_bug.cgi?id=48641
+Signed-off-by: Myah Caron <qsniyg@protonmail.com>
+---
+Since I don't know how to write a test for this with the wine build system, I've written one here:
+https://github.com/qsniyg/wine_dll_load_test/tree/b2b64bc8d7d1589cbfeb1dbb533674e4b32ed2b3/2
+
+The reason for the two DLLs in the test is because I initially believed the issue was caused by
+the conflict between both binkw64.dll and skse64_1_5_97.dll having a preferred imagebase of 0x180000000
+(as noted by Focht).
+
+If --dynamicbase is added to the linker options, it will allocate the DLL top-down rather than bottom-up.
+This patch fixes the SKSE issue, as it requires its base address to be > 0x78000000.
+
+ dlls/ntdll/loader.c      | 4 +++-
+ dlls/ntdll/unix/loader.c | 4 +++-
+ 2 files changed, 6 insertions(+), 2 deletions(-)
+
+diff --git a/dlls/ntdll/loader.c b/dlls/ntdll/loader.c
+index 8374dd97326..4d4ce3c6c6c 100644
+--- a/dlls/ntdll/loader.c
++++ b/dlls/ntdll/loader.c
+@@ -2230,6 +2230,7 @@ static NTSTATUS open_dll_file( UNICODE_STRING *nt_name, WINE_MODREF **pwm, void
+     SIZE_T len = 0;
+     NTSTATUS status;
+     HANDLE handle, mapping;
++    ULONG alloc_type;
+
+     if ((*pwm = find_fullname_module( nt_name )))
+     {
+@@ -2287,8 +2288,9 @@ static NTSTATUS open_dll_file( UNICODE_STRING *nt_name, WINE_MODREF **pwm, void
+             *module = NULL;
+         }
+         NtQuerySection( mapping, SectionImageInformation, image_info, sizeof(*image_info), NULL );
++        alloc_type = (image_info->DllCharacteristics & IMAGE_DLLCHARACTERISTICS_DYNAMIC_BASE) ? MEM_TOP_DOWN : 0;
+         status = NtMapViewOfSection( mapping, NtCurrentProcess(), module, 0, 0, NULL, &len,
+-                                     ViewShare, 0, PAGE_EXECUTE_READ );
++                                     ViewShare, alloc_type, PAGE_EXECUTE_READ );
+         if (status == STATUS_IMAGE_NOT_AT_BASE) status = STATUS_SUCCESS;
+         NtClose( mapping );
+     }
+diff --git a/dlls/ntdll/unix/loader.c b/dlls/ntdll/unix/loader.c
+index c2b6ea603e3..99ae50970de 100644
+--- a/dlls/ntdll/unix/loader.c
++++ b/dlls/ntdll/unix/loader.c
+@@ -1142,6 +1142,7 @@ static NTSTATUS open_dll_file( const char *name, void **module, SECTION_IMAGE_IN
+     SIZE_T len = 0;
+     NTSTATUS status;
+     HANDLE handle, mapping;
++    ULONG alloc_type;
+
+     if ((status = open_unix_file( &handle, name, GENERIC_READ | SYNCHRONIZE, &attr, 0,
+                                   FILE_SHARE_READ | FILE_SHARE_DELETE, FILE_OPEN,
+@@ -1186,8 +1187,9 @@ static NTSTATUS open_dll_file( const char *name, void **module, SECTION_IMAGE_IN
+         *module = NULL;
+     }
+     NtQuerySection( mapping, SectionImageInformation, image_info, sizeof(*image_info), NULL );
++    alloc_type = (image_info->DllCharacteristics & IMAGE_DLLCHARACTERISTICS_DYNAMIC_BASE) ? MEM_TOP_DOWN : 0;
+     status = NtMapViewOfSection( mapping, NtCurrentProcess(), module, 0, 0, NULL, &len,
+-                                 ViewShare, 0, PAGE_EXECUTE_READ );
++                                 ViewShare, alloc_type, PAGE_EXECUTE_READ );
+     if (status == STATUS_IMAGE_NOT_AT_BASE) status = STATUS_SUCCESS;
+     NtClose( mapping );
+     if (status) return status;
+--
+2.28.0
