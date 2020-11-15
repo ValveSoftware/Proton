@@ -1746,8 +1746,8 @@ index 78635f3fae1..824b930bba0 100644
  struct screen_buffer;
  
 @@ -82,6 +83,7 @@ static const struct object_ops console_input_ops =
-     NULL,                             /* remove_queue */
-     NULL,                             /* signaled */
+     remove_queue,                     /* remove_queue */
+     console_input_signaled,           /* signaled */
      NULL,                             /* get_esync_fd */
 +    NULL,                             /* get_fsync_idx */
      no_satisfied,                     /* satisfied */
@@ -1793,7 +1793,23 @@ index 78635f3fae1..824b930bba0 100644
      no_satisfied,                     /* satisfied */
      no_signal,                        /* signal */
      no_get_fd,                        /* get_fd */
-@@ -311,6 +318,7 @@ static const struct object_ops console_connection_ops =
+@@ -305,6 +305,7 @@ static const struct object_ops input_device_ops =
+     NULL,                             /* remove_queue */
+     NULL,                             /* signaled */
+     NULL,                             /* get_esync_fd */
++    NULL,                             /* get_fsync_idx */
+     no_satisfied,                     /* satisfied */
+     no_signal,                        /* signal */
+     input_device_get_fd,              /* get_fd */
+@@ -336,6 +337,7 @@ static const struct object_ops output_device_ops =
+     NULL,                             /* remove_queue */
+     NULL,                             /* signaled */
+     NULL,                             /* get_esync_fd */
++    NULL,                             /* get_fsync_idx */
+     no_satisfied,                     /* satisfied */
+     no_signal,                        /* signal */
+     output_device_get_fd,             /* get_fd */
+@@ -375,6 +377,7 @@ static const struct object_ops console_connection_ops =
      NULL,                             /* remove_queue */
      NULL,                             /* signaled */
      NULL,                             /* get_esync_fd */
