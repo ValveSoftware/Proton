@@ -13,9 +13,9 @@ index f474157a4d3..a66b740442c 100644
 --- a/loader/wine.inf.in
 +++ b/loader/wine.inf.in
 @@ -4007,6 +4007,7 @@ HKCU,Software\Valve\Steam\ActiveProcess,"SteamClientDll64",,"%16426%\Steam\steam
- HKCU,Software\Valve\Steam\ActiveProcess,"SteamPath",,"%16426%\Steam"
  HKLM,Software\Wow6432Node\Valve\Steam,"InstallPath",,"%16422%\Steam"
  HKCU,Software\Wine\AppDefaults\NewColossus_x64vk.exe\DllOverrides,"amd_ags_x64",0x2,"builtin,native"
+ HKCU,Software\Wine\AppDefaults\Youngblood_x64vk.exe\DllOverrides,"amd_ags_x64",0x2,"builtin,native"
 +HKCU,Software\Wine\AppDefaults\RDR2.exe\DllOverrides,"amd_ags_x64",0x2,"builtin,native"
  ;;Likely want *80 and *90 too, but those require removing Wine's manifest files.
  HKCU,Software\Wine\DllOverrides,"atl100",0x2,"native,builtin"

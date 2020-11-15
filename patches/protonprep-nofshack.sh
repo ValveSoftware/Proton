@@ -72,8 +72,8 @@
     echo "proton gamepad conflict fix"
     git revert --no-commit da7d60bf97fb8726828e57f852e8963aacde21e9
     
-#    echo "video color fix endless space 2"
-#    git revert --no-commit fd25ba65e0eb9fedfb2cdfa2b7a4b16e0401dfdf
+    echo "video color fix endless space 2"
+    git revert --no-commit fd25ba65e0eb9fedfb2cdfa2b7a4b16e0401dfdf
     
     # https://bugs.winehq.org/show_bug.cgi?id=49990
     echo "this reverts bd27af974a21085cd0dc78b37b715bbcc3cfab69 which breaks some game launchers"
@@ -93,6 +93,10 @@
     -W dinput-joy-mappings \
     -W dinput-reconnect-joystick \
     -W dinput-remap-joystick
+    
+    # this is only used when staging disables mfplat if Derek provides an updated rebase
+    # echo "mfplat rebase"
+    # patch -Np1 < ../patches/wine-hotfixes/mfplat_rebase.patch
 
     ### GAME PATCH SECTION ###    
     echo "mech warrior online"
@@ -195,12 +199,16 @@
     patch -Np1 < ../patches/proton/21-proton-01_wolfenstein2_registry.patch
     patch -Np1 < ../patches/proton/22-proton-02_rdr2_registry.patch
     patch -Np1 < ../patches/proton/23-proton-03_nier_sekiro_ds3_registry.patch
-    patch -Np1 < ../patches/proton/32-proton-04_spellforce_registry.patch
-    patch -Np1 < ../patches/proton/24-proton-05_cod_registry.patch
-    
+    patch -Np1 < ../patches/proton/24-proton-04_cod_registry.patch
+    patch -Np1 < ../patches/proton/32-proton-05_spellforce_registry.patch
+    patch -Np1 < ../patches/proton/33-proton-06_shadow_of_war_registry.patch
+
     # -- pending work
-    # echo "valve rdr2 fixes"
-    # patch -Np1 < ../patches/proton/25-proton-rdr2-fixes.patch
+    echo "valve rdr2 fixes"
+    patch -Np1 < ../patches/proton/25-proton-rdr2-fixes.patch
+
+    echo "cod fixes"
+    patch -Np1 < ../patches/proton/26-proton-cod_hotfixes.patch
 
     echo "set prefix win10"
     patch -Np1 < ../patches/proton/28-proton-win10_default.patch
@@ -235,9 +243,9 @@
     patch -Np1 < ../patches/wine-hotfixes/vkd3d/D3D12SerializeVersionedRootSignature.patch
     patch -Np1 < ../patches/wine-hotfixes/vkd3d/D3D12CreateVersionedRootSignatureDeserializer.patch
     
-    echo "add missing xaudio2_9redist dll"
-    patch -Np1 < ../patches/wine-hotfixes/0001-xaudio2_9-Add-version-resource.patch
-        
+    # temp -- this breaks The Outer Worlds
+    patch -Np1 < ../patches/wine-hotfixes/fd22009339383227896e771605c5e55e10ae9f00.patch
+
     ### END WINEPATCH SECTION ###
     
     #WINE CUSTOM PATCHES
