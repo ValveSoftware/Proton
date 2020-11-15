@@ -1,0 +1,75 @@
+diff --git a/dlls/mf/session.c b/dlls/mf/session.c
+index f433a5c208d..486a5e0196c 100644
+--- a/dlls/mf/session.c
++++ b/dlls/mf/session.c
+@@ -44,7 +44,6 @@ enum session_command
+     SESSION_CMD_STOP,
+     /* Internally used commands. */
+     SESSION_CMD_END,
+-    SESSION_CMD_QM_NOTIFY_TOPOLOGY,
+     SESSION_CMD_SA_READY,
+ };
+ 
+@@ -66,10 +65,6 @@ struct session_op
+             PROPVARIANT start_position;
+         } start;
+         struct
+-        {
+-            IMFTopology *topology;
+-        } notify_topology;
+-        struct
+         {
+             TOPOID node_id;
+         } sa_ready;
+@@ -512,10 +507,6 @@ static ULONG WINAPI session_op_Release(IUnknown *iface)
+             case SESSION_CMD_START:
+                 PropVariantClear(&op->u.start.start_position);
+                 break;
+-            case SESSION_CMD_QM_NOTIFY_TOPOLOGY:
+-                if (op->u.notify_topology.topology)
+-                    IMFTopology_Release(op->u.notify_topology.topology);
+-                break;
+             default:
+                 ;
+         }
+@@ -1430,21 +1421,9 @@ static HRESULT session_set_current_topology(struct media_session *session, IMFTo
+     DWORD caps, object_flags;
+     struct media_sink *sink;
+     struct topo_node *node;
+-    struct session_op *op;
+     IMFMediaEvent *event;
+     HRESULT hr;
+ 
+-    if (session->quality_manager)
+-    {
+-        if (SUCCEEDED(create_session_op(SESSION_CMD_QM_NOTIFY_TOPOLOGY, &op)))
+-        {
+-            op->u.notify_topology.topology = topology;
+-            IMFTopology_AddRef(op->u.notify_topology.topology);
+-            session_submit_command(session, op);
+-            IUnknown_Release(&op->IUnknown_iface);
+-        }
+-    }
+-
+     if (FAILED(hr = IMFTopology_CloneFrom(session->presentation.current_topology, topology)))
+     {
+         WARN("Failed to clone topology, hr %#x.\n", hr);
+@@ -2078,9 +2057,6 @@ static HRESULT WINAPI session_commands_callback_Invoke(IMFAsyncCallback *iface,
+         case SESSION_CMD_CLOSE:
+             session_close(session);
+             break;
+-        case SESSION_CMD_QM_NOTIFY_TOPOLOGY:
+-            IMFQualityManager_NotifyTopology(session->quality_manager, op->u.notify_topology.topology);
+-            break;
+         case SESSION_CMD_SA_READY:
+             topo_node = session_get_node_by_id(session, op->u.sa_ready.node_id);
+ 
+@@ -4696,7 +4672,7 @@ static HRESULT WINAPI standard_quality_manager_NotifyTopology(IMFQualityManager
+ {
+     FIXME("%p, %p stub.\n", iface, topology);
+ 
+-    return S_OK;
++    return E_NOTIMPL;
+ }
+ 
+ static HRESULT WINAPI standard_quality_manager_NotifyPresentationClock(IMFQualityManager *iface,
