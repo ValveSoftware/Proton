@@ -427,6 +427,13 @@ class CompatData:
                     "vcomp1*.dll," +
                     "vccorlib1*.dll," +
                     "vcruntime1*.dll," +
+                    "api-ms-win-crt-conio-l1-1-0.dll," +
+                    "api-ms-win-crt-heap-l1-1-0.dll," +
+                    "api-ms-win-crt-locale-l1-1-0.dll," +
+                    "api-ms-win-crt-math-l1-1-0.dll," +
+                    "api-ms-win-crt-runtime-l1-1-0.dll," +
+                    "api-ms-win-crt-stdio-l1-1-0.dll," +
+                    "ucrtbase.dll," +
 
                     #some games balk at ntdll symlink(?)
                     "ntdll.dll," +

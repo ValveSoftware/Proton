@@ -2065,7 +2065,7 @@ index 4010a727a08..c6d243e7960 100644
              if( res != ERANGE) break;
              ebufsize *=2;
              extrabuf=HeapReAlloc(GetProcessHeap(),0,extrabuf,ebufsize) ;
-@@ -6734,6 +6741,13 @@ int WINAPI WS_getaddrinfo(LPCSTR nodename, LPCSTR servname, const struct WS_addr
+@@ -6741,6 +6748,13 @@ int WINAPI WS_getaddrinfo(LPCSTR nodename, LPCSTR servname, const struct WS_addr
          return WSAHOST_NOT_FOUND;
      }
  
@@ -2076,9 +2076,9 @@ index 4010a727a08..c6d243e7960 100644
 +        return WSAHOST_NOT_FOUND;
 +    }
 +
-     fqdn = get_fqdn();
-     if (!fqdn) return WSA_NOT_ENOUGH_MEMORY;
-     dot = strchr(fqdn, '.');
+     if (!nodename)
+         node = NULL;
+     else if (!nodename[0])
 From: Paul Gofman <pgofman@codeweavers.com>
 Subject: [PATCH] kernelbase: Get language sort only when required in LCMapStringEx().
 Message-Id: <20201019180605.1225175-1-pgofman@codeweavers.com>
@@ -2116,104 +2116,6 @@ index 9cfb9f129ee..7e6ac2829d2 100644
 
 -- 
 2.26.2
-From 136fe2cf67f721c36fe87330536c9699c683d89c Mon Sep 17 00:00:00 2001
-From: Zhiyi Zhang <zzhang@codeweavers.com>
-Date: Fri, 6 Nov 2020 16:08:12 +0800
-Subject: [PATCH] winex11.drv: Do not use YXBanded after the rectangles were
- transformed by the fullscreen hack.
-
-Fix a bug that OCTOPATH TRAVELER may crash when changing resolution in fullscreen mode.
-
-Signed-off-by: Zhiyi Zhang <zzhang@codeweavers.com>
----
- dlls/winex11.drv/fs.c       | 42 +++++++++++++++++--------------------
- dlls/winex11.drv/graphics.c |  2 +-
- 2 files changed, 20 insertions(+), 24 deletions(-)
-
-diff --git a/dlls/winex11.drv/fs.c b/dlls/winex11.drv/fs.c
-index 690c59a316f..45f39813e9b 100644
---- a/dlls/winex11.drv/fs.c
-+++ b/dlls/winex11.drv/fs.c
-@@ -695,11 +695,17 @@ void fs_hack_point_real_to_user(POINT *pos)
- }
- 
- /* Transform RGNDATA in user virtual screen coordinates to real virtual screen coordinates.
-- * This is for clipping */
-+ * This is for clipping. Be sure to use Unsorted for Xlib calls after this transformation because
-+ * this may break the requirement of using YXBanded. For example, say there are two monitors aligned
-+ * horizontally with the primary monitor on the right. Each of monitor is of real resolution
-+ * 1920x1080 and the fake primary monitor resolution is 1024x768. Then (0, 10, 1024, 768) should be
-+ * transformed to (0, 14, 1920, 1080). While (1024, 10, 2944, 1080) should be transformed to
-+ * (1920, 10, 3840, 1080) and this is breaking YXBanded because it requires y in non-decreasing order */
- void fs_hack_rgndata_user_to_real(RGNDATA *data)
- {
-     unsigned int i;
-     XRectangle *xrect;
-+    RECT rect;
- 
-     if (!data || wm_is_steamcompmgr(NULL))
-         return;
-@@ -707,27 +713,17 @@ void fs_hack_rgndata_user_to_real(RGNDATA *data)
-     xrect = (XRectangle *)data->Buffer;
-     for (i = 0; i < data->rdh.nCount; i++)
-     {
--        struct fs_monitor *fs_monitor;
--        HMONITOR monitor;
--        POINT p;
--
--        p.x = xrect[i].x;
--        p.y = xrect[i].y;
--        monitor = MonitorFromPoint(p, MONITOR_DEFAULTTONULL);
--        EnterCriticalSection(&fs_section);
--        if ((fs_monitor = fs_find_monitor_by_handle(monitor)))
--        {
--            TRACE("from point %d, %d\n", p.x, p.y);
--            fs_hack_point_user_to_real(&p);
--            TRACE("to point %d, %d\n", p.x, p.y);
--            xrect[i].x = p.x;
--            xrect[i].y = p.y;
--            TRACE("from width %d height %d\n", xrect[i].width, xrect[i].height);
--            xrect[i].width *= fs_monitor->user_to_real_scale;
--            xrect[i].height *= fs_monitor->user_to_real_scale;
--            TRACE("to width %d height %d\n", xrect[i].width, xrect[i].height);
--        }
--        LeaveCriticalSection(&fs_section);
-+        rect.left = xrect[i].x;
-+        rect.top = xrect[i].y;
-+        rect.right = xrect[i].x + xrect[i].width;
-+        rect.bottom = xrect[i].y + xrect[i].height;
-+        TRACE("from rect %s\n", wine_dbgstr_rect(&rect));
-+        fs_hack_rect_user_to_real(&rect);
-+        TRACE("to rect %s\n", wine_dbgstr_rect(&rect));
-+        xrect[i].x = rect.left;
-+        xrect[i].y = rect.top;
-+        xrect[i].width = rect.right - rect.left;
-+        xrect[i].height = rect.bottom - rect.top;
-     }
- }
- 
-@@ -752,7 +748,7 @@ void fs_hack_rect_user_to_real(RECT *rect)
- 
-     point.x = rect->left;
-     point.y = rect->top;
--    monitor = MonitorFromPoint(point, MONITOR_DEFAULTTONULL);
-+    monitor = MonitorFromPoint(point, MONITOR_DEFAULTTONEAREST);
-     EnterCriticalSection(&fs_section);
-     fs_monitor = fs_find_monitor_by_handle(monitor);
-     if (!fs_monitor)
-diff --git a/dlls/winex11.drv/graphics.c b/dlls/winex11.drv/graphics.c
-index 979e7fddd30..f3d35ba53d2 100644
---- a/dlls/winex11.drv/graphics.c
-+++ b/dlls/winex11.drv/graphics.c
-@@ -253,7 +253,7 @@ static void update_x11_clipping( X11DRV_PDEVICE *physDev, HRGN rgn )
-     {
-         fs_hack_rgndata_user_to_real(data);
-         XSetClipRectangles( gdi_display, physDev->gc, physDev->dc_rect.left, physDev->dc_rect.top,
--                            (XRectangle *)data->Buffer, data->rdh.nCount, YXBanded );
-+                            (XRectangle *)data->Buffer, data->rdh.nCount, Unsorted );
-         HeapFree( GetProcessHeap(), 0, data );
-     }
- }
 From 8db5778b62749f5ed439aa8eb122ffa08e8e462b Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
 Date: Fri, 16 Oct 2020 23:37:09 +0200
@@ -2240,17 +2142,17 @@ index 848323bb057..d676b1c82ee 100755
  enable_cscript
  enable_dism
 +enable_dotnetfx35
+ enable_dplaysvr
  enable_dpnsvr
- enable_dxdiag
- enable_eject
+ enable_dpvsetup
 @@ -21579,6 +21580,7 @@ wine_fn_config_makefile programs/conhost enable_conhost
  wine_fn_config_makefile programs/control enable_control
  wine_fn_config_makefile programs/cscript enable_cscript
  wine_fn_config_makefile programs/dism enable_dism
 +wine_fn_config_makefile programs/dotnetfx35 enable_dotnetfx35
+ wine_fn_config_makefile programs/dplaysvr enable_dplaysvr
  wine_fn_config_makefile programs/dpnsvr enable_dpnsvr
- wine_fn_config_makefile programs/dxdiag enable_dxdiag
- wine_fn_config_makefile programs/eject enable_eject
+ wine_fn_config_makefile programs/dpvsetup enable_dpvsetup
 diff --git a/configure.ac b/configure.ac
 index 130dbeb8530..63d26ff123c 100644
 --- a/configure.ac
@@ -2260,9 +2162,9 @@ index 130dbeb8530..63d26ff123c 100644
  WINE_CONFIG_MAKEFILE(programs/cscript)
  WINE_CONFIG_MAKEFILE(programs/dism)
 +WINE_CONFIG_MAKEFILE(programs/dotnetfx35)
+ WINE_CONFIG_MAKEFILE(programs/dplaysvr)
  WINE_CONFIG_MAKEFILE(programs/dpnsvr)
- WINE_CONFIG_MAKEFILE(programs/dxdiag)
- WINE_CONFIG_MAKEFILE(programs/eject)
+ WINE_CONFIG_MAKEFILE(programs/dpvsetup)
 diff --git a/programs/dotnetfx35/Makefile.in b/programs/dotnetfx35/Makefile.in
 new file mode 100644
 index 00000000000..e50ed37f700
@@ -2314,130 +2216,3 @@ index 00000000000..cd6df5bcf41
 +    FIXME("stub!");
 +    return 0;
 +}
-From 6ce8742645a70bacfa814de212e978cde99a43d4 Mon Sep 17 00:00:00 2001
-From: Zebediah Figura <z.figura12@gmail.com>
-Date: Wed, 21 Oct 2020 16:03:21 -0500
-Subject: [PATCH] winegstreamer: Allow videoconvert to parallelize.
-
-Not sure if this should be called a hack. It's not the *best* solution to the problem, but it's not a wrong one either.
-
-Signed-off-by: Zebediah Figura <z.figura12@gmail.com>
----
- dlls/winegstreamer/gstdemux.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/dlls/winegstreamer/gstdemux.c b/dlls/winegstreamer/gstdemux.c
-index d079287678b..f3c55fe749f 100644
---- a/dlls/winegstreamer/gstdemux.c
-+++ b/dlls/winegstreamer/gstdemux.c
-@@ -1019,6 +1019,9 @@ static void init_new_decoded_pad(GstElement *bin, GstPad *pad, struct gstdemux *
-         /* Avoid expensive color matrix conversions. */
-         gst_util_set_object_arg(G_OBJECT(vconv), "matrix-mode", "none");
- 
-+        /* Let GStreamer choose a default number of threads. */
-+        gst_util_set_object_arg(G_OBJECT(vconv), "n-threads", "0");
-+
-         /* GStreamer outputs RGB video top-down, but DirectShow expects bottom-up. */
-         if (!(flip = gst_element_factory_make("videoflip", NULL)))
-         {
-From 6f19574d6f56d57a3d729fc22f71f303cc2067ea Mon Sep 17 00:00:00 2001
-From: Zebediah Figura <z.figura12@gmail.com>
-Date: Tue, 20 Oct 2020 17:03:24 -0500
-Subject: [PATCH] HACK: winegstreamer: Use capssetter to ignore non-default YUV
- color spaces.
-
----
- dlls/winegstreamer/gstdemux.c | 56 +++++++++++++++++++++++++++++++----
- 1 file changed, 51 insertions(+), 5 deletions(-)
-
-diff --git a/dlls/winegstreamer/gstdemux.c b/dlls/winegstreamer/gstdemux.c
-index f3c55fe749f..de129b36f29 100644
---- a/dlls/winegstreamer/gstdemux.c
-+++ b/dlls/winegstreamer/gstdemux.c
-@@ -995,7 +995,53 @@ static void init_new_decoded_pad(GstElement *bin, GstPad *pad, struct gstdemux *
- 
-     if (!strcmp(typename, "video/x-raw"))
-     {
--        GstElement *vconv, *flip, *deinterlace;
-+        GstElement *capssetter, *deinterlace, *vconv, *flip;
-+
-+        /* Hack?: Flatten down the colorimetry to default values, without
-+         * actually modifying the video at all.
-+         *
-+         * We want to do color matrix conversions when converting from YUV to
-+         * RGB or vice versa. We do *not* want to do color matrix conversions
-+         * when converting YUV <-> YUV or RGB <-> RGB, because these are slow
-+         * (it essentially means always using the slow path, never going through
-+         * liborc). However, we have two videoconvert elements, and it's
-+         * basically impossible to know what conversions each is going to do
-+         * until caps are negotiated (without depending on some implementation
-+         * details, and even then it'snot exactly trivial). And setting
-+         * matrix-mode after caps are negotiated has no effect.
-+         *
-+         * Nor can we just retain colorimetry information the way we retain
-+         * other caps values, because videoconvert automatically clears it if
-+         * not doing passthrough. I think that this would only happen if we have
-+         * to do a double conversion, but that is possible. Not likely, but I
-+         * don't want to have to be the one to find out that there's still a
-+         * game broken.
-+         *
-+         * [Note that we'd actually kind of like to retain colorimetry
-+         * information, just in case it does ever become relevant to pass that
-+         * on to the next DirectShow filter. Hence I think the correct solution
-+         * for upstream is to get videoconvert to Not Do That.]
-+         *
-+         * So as a fallback solution, we force an identity transformation of
-+         * the caps to those with a "default" color matrix—i.e. transform the
-+         * caps, but not the data. We do this by *pre*pending a capssetter to
-+         * the front of the chain, and we remove the matrix-mode setting for the
-+         * videoconvert elements.
-+         */
-+        if (!(capssetter = gst_element_factory_make("capssetter", NULL)))
-+        {
-+            ERR("Failed to create capssetter, are %u-bit GStreamer \"good\" plugins installed?\n",
-+                    8 * (int)sizeof(void *));
-+            goto out;
-+        }
-+        gst_util_set_object_arg(G_OBJECT(capssetter), "join", "true");
-+        /* Actually, this is invalid, but it causes videoconvert to use default
-+         * colorimetry as a result. Yes, this is depending on undocumented
-+         * implementation details. It's a hack.
-+         *
-+         * Sadly there doesn't seem to be a way to get capssetter to clear
-+         * certain fields while leaving others untouched. */
-+        gst_util_set_object_arg(G_OBJECT(capssetter), "caps", "video/x-raw,colorimetry=0:0:0:0");
- 
-         /* DirectShow can express interlaced video, but downstream filters can't
-          * necessarily consume it. In particular, the video renderer can't. */
-@@ -1016,9 +1062,6 @@ static void init_new_decoded_pad(GstElement *bin, GstPad *pad, struct gstdemux *
-             goto out;
-         }
- 
--        /* Avoid expensive color matrix conversions. */
--        gst_util_set_object_arg(G_OBJECT(vconv), "matrix-mode", "none");
--
-         /* Let GStreamer choose a default number of threads. */
-         gst_util_set_object_arg(G_OBJECT(vconv), "n-threads", "0");
- 
-@@ -1031,6 +1074,8 @@ static void init_new_decoded_pad(GstElement *bin, GstPad *pad, struct gstdemux *
-         }
- 
-         /* The bin takes ownership of these elements. */
-+        gst_bin_add(GST_BIN(This->container), capssetter);
-+        gst_element_sync_state_with_parent(capssetter);
-         gst_bin_add(GST_BIN(This->container), deinterlace);
-         gst_element_sync_state_with_parent(deinterlace);
-         gst_bin_add(GST_BIN(This->container), vconv);
-@@ -1038,10 +1083,11 @@ static void init_new_decoded_pad(GstElement *bin, GstPad *pad, struct gstdemux *
-         gst_bin_add(GST_BIN(This->container), flip);
-         gst_element_sync_state_with_parent(flip);
- 
-+        gst_element_link(capssetter, deinterlace);
-         gst_element_link(deinterlace, vconv);
-         gst_element_link(vconv, flip);
- 
--        pin->post_sink = gst_element_get_static_pad(deinterlace, "sink");
-+        pin->post_sink = gst_element_get_static_pad(capssetter, "sink");
-         pin->post_src = gst_element_get_static_pad(flip, "src");
-         pin->flip = flip;
-     }

@@ -42,9 +42,9 @@ index 5f9f61e2535..43cae2a2bc2 100644
  [Wow64Install.ntarm64]
  WineFakeDlls=FakeDllsWin32
 @@ -3867,6 +3870,22 @@ l_intl.nls
- winebus.inf
- winehid.inf
- wineusb.inf
+ winebus.inf,"@winebus.sys,-1"
+ winehid.inf,"@winehid.sys,-1"
+ wineusb.inf,"@wineusb.sys,-1"
 +
 +[SteamClient]
 +HKCU,Software\Valve\Steam,"SteamPath",,"%16422%\Steam"

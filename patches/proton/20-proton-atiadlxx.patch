@@ -1252,15 +1252,15 @@ index 00000000000..3518761b7f6
 +} ADLVersionsInfoX2, *LPADLVersionsInfoX2;
 +
 +static const ADLVersionsInfo version = {
-+    "16.11.2",
-+    "16.11.2",
++    "20.11.1",
++    "20.11.1",
 +    "",
 +};
 +
 +static const ADLVersionsInfoX2 version2 = {
-+    "16.11.2",
-+    "16.11.2",
-+    "16.11.2",
++    "20.11.1",
++    "20.11.1",
++    "20.11.1",
 +    "",
 +};
 +
@@ -1572,8 +1572,8 @@ index 3518761b7f6..66a64379ffe 100644
 +} ADLMemoryInfo, *LPADLMemoryInfo;
 +
  static const ADLVersionsInfo version = {
-     "16.11.2",
-     "16.11.2",
+     "20.11.1",
+     "20.11.1",
 @@ -56,38 +153,282 @@ static const ADLVersionsInfoX2 version2 = {
  int WINAPI ADL2_Main_Control_Create(ADL_MAIN_MALLOC_CALLBACK cb, int arg, ADL_CONTEXT_HANDLE *ptr)
  {
