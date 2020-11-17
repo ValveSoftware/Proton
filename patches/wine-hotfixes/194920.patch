@@ -1,0 +1,247 @@
+From: Paul Gofman <pgofman@codeweavers.com>
+Subject: [PATCH] ntdll: Restore non-volatile registers in call_user_exception_dispatcher() on x86_64.
+Message-Id: <20201022112037.675138-1-pgofman@codeweavers.com>
+Date: Thu, 22 Oct 2020 14:20:37 +0300
+
+Required to correctly restore non-volatile registers during unwind.
+
+Signed-off-by: Paul Gofman <pgofman@codeweavers.com>
+---
+ dlls/ntdll/tests/exception.c    | 56 +++++++++++++++++++++++++++----
+ dlls/ntdll/unix/signal_x86_64.c | 59 +++++++++++++++++++++++----------
+ 2 files changed, 91 insertions(+), 24 deletions(-)
+
+diff --git a/dlls/ntdll/tests/exception.c b/dlls/ntdll/tests/exception.c
+index b2331b739ac..47b4c6a8918 100644
+--- a/dlls/ntdll/tests/exception.c
++++ b/dlls/ntdll/tests/exception.c
+@@ -56,6 +56,7 @@ static void *    (WINAPI *pRtlLocateExtendedFeature)(CONTEXT_EX *context_ex, ULO
+ static void *    (WINAPI *pRtlLocateLegacyContext)(CONTEXT_EX *context_ex, ULONG *length);
+ static void      (WINAPI *pRtlSetExtendedFeaturesMask)(CONTEXT_EX *context_ex, ULONG64 feature_mask);
+ static ULONG64   (WINAPI *pRtlGetExtendedFeaturesMask)(CONTEXT_EX *context_ex);
++static NTSTATUS  (WINAPI *pNtRaiseException)(EXCEPTION_RECORD *rec, CONTEXT *context, BOOL first_chance);
+ static NTSTATUS  (WINAPI *pNtReadVirtualMemory)(HANDLE, const void*, void*, SIZE_T, SIZE_T*);
+ static NTSTATUS  (WINAPI *pNtTerminateProcess)(HANDLE handle, LONG exit_code);
+ static NTSTATUS  (WINAPI *pNtQueryInformationProcess)(HANDLE, PROCESSINFOCLASS, PVOID, ULONG, PULONG);
+@@ -3716,6 +3717,8 @@ static struct
+ }
+ test_kiuserexceptiondispatcher_regs;
+ 
++static ULONG64 test_kiuserexceptiondispatcher_saved_r12;
++
+ static DWORD dbg_except_continue_handler(EXCEPTION_RECORD *rec, EXCEPTION_REGISTRATION_RECORD *frame,
+         CONTEXT *context, EXCEPTION_REGISTRATION_RECORD **dispatcher)
+ {
+@@ -3738,6 +3741,13 @@ static LONG WINAPI dbg_except_continue_vectored_handler(struct _EXCEPTION_POINTE
+ 
+     trace("dbg_except_continue_vectored_handler, code %#x, Rip %#lx.\n", rec->ExceptionCode, context->Rip);
+ 
++    if (rec->ExceptionCode == 0xceadbeef)
++    {
++        ok(context->P1Home == (ULONG64)0xdeadbeeffeedcafe, "Got unexpected context->P1Home %#lx.\n", context->P1Home);
++        context->R12 = test_kiuserexceptiondispatcher_saved_r12;
++        return EXCEPTION_CONTINUE_EXECUTION;
++    }
++
+     ok(rec->ExceptionCode == 0x80000003, "Got unexpected exception code %#x.\n", rec->ExceptionCode);
+ 
+     got_exception = 1;
+@@ -3760,7 +3770,7 @@ void WINAPI hook_KiUserExceptionDispatcher(EXCEPTION_RECORD *rec, CONTEXT *conte
+ 
+     hook_called = TRUE;
+     /* Broken on Win2008, probably rec offset in stack is different. */
+-    ok(rec->ExceptionCode == 0x80000003 || broken(!rec->ExceptionCode),
++    ok(rec->ExceptionCode == 0x80000003 || rec->ExceptionCode == 0xceadbeef || broken(!rec->ExceptionCode),
+             "Got unexpected ExceptionCode %#x.\n", rec->ExceptionCode);
+ 
+     hook_KiUserExceptionDispatcher_rip = (void *)context->Rip;
+@@ -3769,7 +3779,7 @@ void WINAPI hook_KiUserExceptionDispatcher(EXCEPTION_RECORD *rec, CONTEXT *conte
+             sizeof(saved_KiUserExceptionDispatcher_bytes));
+ }
+ 
+-static void test_kiuserexceptiondispatcher(void)
++ void test_kiuserexceptiondispatcher(void)
+ {
+     LPVOID vectored_handler;
+     HMODULE hntdll = GetModuleHandleA("ntdll.dll");
+@@ -3810,15 +3820,15 @@ static void test_kiuserexceptiondispatcher(void)
+         0x48, 0x89, 0xe2,           /* mov %rsp,%rdx */
+         0x48, 0x8d, 0x8c, 0x24, 0xf0, 0x04, 0x00, 0x00,
+                                     /* lea 0x4f0(%rsp),%rcx */
+-
++        0x4c, 0x89, 0x22,           /* mov %r12,(%rdx) */
+         0xff, 0x14, 0x25,
+-        /* offset: 14 bytes */
++        /* offset: 17 bytes */
+         0x00, 0x00, 0x00, 0x00,     /* callq *addr */ /* call hook implementation. */
+         0x48, 0x31, 0xc9,           /* xor %rcx, %rcx */
+         0x48, 0x31, 0xd2,           /* xor %rdx, %rdx */
+ 
+         0xff, 0x24, 0x25,
+-        /* offset: 27 bytes */
++        /* offset: 30 bytes */
+         0x00, 0x00, 0x00, 0x00,     /* jmpq *addr */ /* jump to original function. */
+     };
+ 
+@@ -3827,6 +3837,8 @@ static void test_kiuserexceptiondispatcher(void)
+     DWORD old_protect1, old_protect2;
+     EXCEPTION_RECORD record;
+     void *bpt_address;
++    CONTEXT ctx;
++    LONG pass;
+     BYTE *ptr;
+     BOOL ret;
+ 
+@@ -3845,8 +3857,8 @@ static void test_kiuserexceptiondispatcher(void)
+     ok(((ULONG64)&pKiUserExceptionDispatcher & 0xffffffff) == ((ULONG64)&pKiUserExceptionDispatcher),
+             "Address is too long.\n");
+ 
+-    *(unsigned int *)(hook_trampoline + 14) = (unsigned int)(ULONG_PTR)&phook_KiUserExceptionDispatcher;
+-    *(unsigned int *)(hook_trampoline + 27) = (unsigned int)(ULONG_PTR)&pKiUserExceptionDispatcher;
++    *(unsigned int *)(hook_trampoline + 17) = (unsigned int)(ULONG_PTR)&phook_KiUserExceptionDispatcher;
++    *(unsigned int *)(hook_trampoline + 30) = (unsigned int)(ULONG_PTR)&pKiUserExceptionDispatcher;
+ 
+     ret = VirtualProtect(hook_trampoline, ARRAY_SIZE(hook_trampoline), PAGE_EXECUTE_READWRITE, &old_protect1);
+     ok(ret, "Got unexpected ret %#x, GetLastError() %u.\n", ret, GetLastError());
+@@ -3954,6 +3966,35 @@ static void test_kiuserexceptiondispatcher(void)
+ 
+     NtCurrentTeb()->Peb->BeingDebugged = 0;
+ 
++    vectored_handler = AddVectoredExceptionHandler(TRUE, dbg_except_continue_vectored_handler);
++    pass = 0;
++    InterlockedIncrement(&pass);
++    pRtlCaptureContext(&ctx);
++    if (InterlockedIncrement(&pass) == 2) /* interlocked to prevent compiler from moving before capture */
++    {
++        memcpy(pKiUserExceptionDispatcher, patched_KiUserExceptionDispatcher_bytes,
++                sizeof(patched_KiUserExceptionDispatcher_bytes));
++        got_exception = 0;
++        hook_called = FALSE;
++
++        record.ExceptionCode = 0xceadbeef;
++        test_kiuserexceptiondispatcher_saved_r12 = ctx.R12;
++        ctx.R12 = (ULONG64)0xdeadbeeffeedcafe;
++
++#ifdef __GNUC__
++        /* Spoil r12 value to make sure it doesn't come from the current userspace registers. */
++        __asm__ volatile("movq $0xdeadcafe, %%r12" : : : "%r12");
++#endif
++        pNtRaiseException(&record, &ctx, TRUE);
++        ok(0, "Shouldn't be reached.\n");
++    }
++    else
++    {
++        ok(pass == 3, "Got unexpected pass %d.\n", pass);
++    }
++    ok(hook_called, "Hook was not called.\n");
++    RemoveVectoredExceptionHandler(vectored_handler);
++
+     ret = VirtualProtect(pKiUserExceptionDispatcher, sizeof(saved_KiUserExceptionDispatcher_bytes),
+             old_protect2, &old_protect2);
+     ok(ret, "Got unexpected ret %#x, GetLastError() %u.\n", ret, GetLastError());
+@@ -8046,6 +8087,7 @@ START_TEST(exception)
+     X(NtQueryInformationThread);
+     X(NtSetInformationProcess);
+     X(NtSuspendProcess);
++    X(NtRaiseException);
+     X(NtResumeProcess);
+     X(RtlGetUnloadEventTrace);
+     X(RtlGetUnloadEventTraceEx);
+diff --git a/dlls/ntdll/unix/signal_x86_64.c b/dlls/ntdll/unix/signal_x86_64.c
+index 124032714c7..8cdf129f5cc 100644
+--- a/dlls/ntdll/unix/signal_x86_64.c
++++ b/dlls/ntdll/unix/signal_x86_64.c
+@@ -1551,6 +1551,34 @@ static void restore_context( const struct xcontext *xcontext, ucontext_t *sigcon
+ }
+ 
+ 
++/***********************************************************************
++ *           set_nonvolatile_regs_from_context
++ *
++ * Set the non-volatile registers from CPU context.
++ */
++extern void set_nonvolatile_regs_from_context( const CONTEXT *context );
++__ASM_GLOBAL_FUNC( set_nonvolatile_regs_from_context,
++                   "movq 0xa0(%rcx),%rbp\n\t"
++                   "movq 0x90(%rcx),%rbx\n\t"
++                   "movq 0xa8(%rcx),%rsi\n\t"
++                   "movq 0xb0(%rcx),%rdi\n\t"
++                   "movq 0xd8(%rcx),%r12\n\t"
++                   "movq 0xe0(%rcx),%r13\n\t"
++                   "movq 0xe8(%rcx),%r14\n\t"
++                   "movq 0xf0(%rcx),%r15\n\t"
++                   "movdqa 0x200(%rcx),%xmm6\n\t"
++                   "movdqa 0x210(%rcx),%xmm7\n\t"
++                   "movdqa 0x220(%rcx),%xmm8\n\t"
++                   "movdqa 0x230(%rcx),%xmm9\n\t"
++                   "movdqa 0x240(%rcx),%xmm10\n\t"
++                   "movdqa 0x250(%rcx),%xmm11\n\t"
++                   "movdqa 0x260(%rcx),%xmm12\n\t"
++                   "movdqa 0x270(%rcx),%xmm13\n\t"
++                   "movdqa 0x280(%rcx),%xmm14\n\t"
++                   "movdqa 0x290(%rcx),%xmm15\n\t"
++                   "ret" );
++
++
+ /***********************************************************************
+  *           set_full_cpu_context
+  *
+@@ -2081,19 +2109,7 @@ __ASM_GLOBAL_FUNC( call_raise_user_exception_dispatcher,
+ /***********************************************************************
+  *           call_user_exception_dispatcher
+  */
+-
+-extern void WINAPI user_exception_dispatcher_trampoline( struct stack_layout *stack,
+-        void *pKiUserExceptionDispatcher );
+-
+-__ASM_GLOBAL_FUNC( user_exception_dispatcher_trampoline,
+-                   "movq %rcx,%rsp\n\t"
+-                   "movq 0x98(%rsp),%rcx\n\t" /* context->Rsp */
+-                   "movq 0xa0(%rsp),%rbp\n\t"
+-                   "movq 0xa8(%rsp),%rsi\n\t"
+-                   "movq 0xb0(%rsp),%rdi\n\t"
+-                   "jmpq *%rdx")
+-
+-void WINAPI do_call_user_exception_dispatcher( EXCEPTION_RECORD *rec, CONTEXT *context,
++struct stack_layout * WINAPI setup_user_exception_dispatcher_stack( EXCEPTION_RECORD *rec, CONTEXT *context,
+                                                NTSTATUS (WINAPI *dispatcher)(EXCEPTION_RECORD*,CONTEXT*),
+                                                struct stack_layout *stack )
+ {
+@@ -2127,12 +2143,13 @@ void WINAPI do_call_user_exception_dispatcher( EXCEPTION_RECORD *rec, CONTEXT *c
+     /* fix up instruction pointer in context for EXCEPTION_BREAKPOINT */
+     if (stack->rec.ExceptionCode == EXCEPTION_BREAKPOINT) stack->context.Rip--;
+ 
+-    amd64_thread_data()->syscall_frame = NULL;
+-    user_exception_dispatcher_trampoline( stack, dispatcher );
++    return stack;
+ }
+ 
+ __ASM_GLOBAL_FUNC( call_user_exception_dispatcher,
+-                   "movq 0x98(%rdx),%r9\n\t" /* context->Rsp */
++                   "movq %gs:0x30,%rax\n\t"
++                   "movq $0,0x328(%rax)\n\t"   /* amd64_thread_data()->syscall_frame */
++                   "movq 0x98(%rdx),%r9\n\t"   /* context->Rsp */
+                    "andq $~0xf,%r9\n\t"
+                    "btl $6,0x30(%rdx)\n\t" /* context->ContextFlags, CONTEXT_XSTATE bit. */
+                    "jnc 1f\n\t"
+@@ -2141,7 +2158,15 @@ __ASM_GLOBAL_FUNC( call_user_exception_dispatcher,
+                    "1:\tsubq $0x5b0,%r9\n\t" /* sizeof(struct stack_layout) */
+                    "cmpq %rsp,%r9\n\t"
+                    "cmovbq %r9,%rsp\n\t"
+-                   "jmp " __ASM_NAME("do_call_user_exception_dispatcher") "\n\t")
++                   "pushq %r8\n\t"
++                   "subq $0x20,%rsp\n\t"
++                   "call " __ASM_NAME("setup_user_exception_dispatcher_stack") "\n\t"
++                   "mov %rax,%rcx\n\t"
++                   "call " __ASM_NAME("set_nonvolatile_regs_from_context") "\n\t"
++                   "addq $0x20,%rsp\n\t"
++                   "popq %r8\n\t"
++                   "mov %rcx,%rsp\n\t"
++                   "jmpq *%r8")
+ 
+ /***********************************************************************
+  *           is_privileged_instr
+
+-- 
+2.26.2
+

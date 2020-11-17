@@ -1,0 +1,28 @@
+diff --git a/dlls/ntdll/unix/signal_x86_64.c b/dlls/ntdll/unix/signal_x86_64.c
+index dd3f6ff4899..d8e9dfda2c0 100644
+--- a/dlls/ntdll/unix/signal_x86_64.c
++++ b/dlls/ntdll/unix/signal_x86_64.c
+@@ -2968,15 +2968,21 @@ void signal_init_early(void)
+  */
+ static void init_thread_context( CONTEXT *context, LPTHREAD_START_ROUTINE entry, void *arg )
+ {
++    const char *sgi = getenv("SteamGameId");
+     __asm__( "movw %%cs,%0" : "=m" (context->SegCs) );
+     __asm__( "movw %%ss,%0" : "=m" (context->SegSs) );
++    if (sgi && !strcmp(sgi, "257420"))
++    {
++        __asm__( "fxsave %0" : "=m" (context->u.FltSave) );
++    } else {
++        context->u.FltSave.ControlWord = 0x27f;
++        context->u.FltSave.MxCsr = context->MxCsr = 0x1f80;
++    }
+     context->Rcx    = (ULONG_PTR)entry;
+     context->Rdx    = (ULONG_PTR)arg;
+     context->Rsp    = (ULONG_PTR)NtCurrentTeb()->Tib.StackBase - 0x28;
+     context->Rip    = (ULONG_PTR)pRtlUserThreadStart;
+     context->EFlags = 0x200;
+-    context->u.FltSave.ControlWord = 0x27f;
+-    context->u.FltSave.MxCsr = context->MxCsr = 0x1f80;
+ }
+ 
+ 

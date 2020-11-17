@@ -1,0 +1,382 @@
+From: Akihiro Sagawa <sagawa.aki@gmail.com>
+Subject: [PATCH] winegstreamer: Fix YUV->RGB conversion by copying colorimetry information.
+Message-Id: <20201115233430.4563.375B48EC@gmail.com>
+Date: Sun, 15 Nov 2020 23:34:33 +0900
+
+
+This patch adds a new GStreamer element called yuvfixup, which copies
+colorimetry information from its super upstream source to its sink.
+By using yuvfixup element, the colorimetry informaiton match on
+videoconvert's sink pad and its source pad. Thus, we can avoid
+expensive YUV matrix conversions and do YUV->RGB conversion with matrix.
+
+Wine-Bug: https://bugs.winehq.org/show_bug.cgi?id=49535
+Signed-off-by: Akihiro Sagawa <sagawa.aki@gmail.com>
+---
+ dlls/winegstreamer/Makefile.in   |   3 +-
+ dlls/winegstreamer/gst_private.h |   1 +
+ dlls/winegstreamer/gstdemux.c    |  28 +++-
+ dlls/winegstreamer/main.c        |   2 +
+ dlls/winegstreamer/yuvfixup.c    | 248 +++++++++++++++++++++++++++++++
+ 5 files changed, 274 insertions(+), 8 deletions(-)
+ create mode 100644 dlls/winegstreamer/yuvfixup.c
+
+diff --git a/dlls/winegstreamer/Makefile.in b/dlls/winegstreamer/Makefile.in
+index e578d194f7f..435b691fb74 100644
+--- a/dlls/winegstreamer/Makefile.in
++++ b/dlls/winegstreamer/Makefile.in
+@@ -15,7 +15,8 @@ C_SRCS = \
+ 	mfplat.c \
+ 	pin.c \
+ 	qualitycontrol.c \
+-	seeking.c
++	seeking.c \
++	yuvfixup.c
+ 
+ IDL_SRCS = \
+ 	winegstreamer_classes.idl
+diff --git a/dlls/winegstreamer/gst_private.h b/dlls/winegstreamer/gst_private.h
+index 28e424439d8..08d16496394 100644
+--- a/dlls/winegstreamer/gst_private.h
++++ b/dlls/winegstreamer/gst_private.h
+@@ -84,4 +84,5 @@ IMFSample *mf_sample_from_gst_buffer(GstBuffer *in) DECLSPEC_HIDDEN;
+ 
+ HRESULT winegstreamer_stream_handler_create(REFIID riid, void **obj) DECLSPEC_HIDDEN;
+ 
++gboolean gst_wine_yuvfixup_plugin_init(void) DECLSPEC_HIDDEN;
+ #endif /* __GST_PRIVATE_INCLUDED__ */
+diff --git a/dlls/winegstreamer/gstdemux.c b/dlls/winegstreamer/gstdemux.c
+index 9f5e147b7ed..e986bac2205 100644
+--- a/dlls/winegstreamer/gstdemux.c
++++ b/dlls/winegstreamer/gstdemux.c
+@@ -1003,7 +1003,7 @@ static void init_new_decoded_pad(GstElement *bin, GstPad *pad, struct gstdemux *
+ 
+     if (!strcmp(typename, "video/x-raw"))
+     {
+-        GstElement *deinterlace, *vconv, *flip, *vconv2;
++        GstElement *deinterlace, *vconv, *yuvfix, *flip, *vconv2, *yuvfix2;
+ 
+         /* DirectShow can express interlaced video, but downstream filters can't
+          * necessarily consume it. In particular, the video renderer can't. */
+@@ -1024,8 +1024,12 @@ static void init_new_decoded_pad(GstElement *bin, GstPad *pad, struct gstdemux *
+             goto out;
+         }
+ 
+-        /* Avoid expensive color matrix conversions. */
+-        gst_util_set_object_arg(G_OBJECT(vconv), "matrix-mode", "none");
++        /* To avoid expensive color matrix conversions, keep YUV colorimetry info */
++        if (!(yuvfix = gst_element_factory_make("yuvfixup", NULL)))
++        {
++            ERR("Failed to create our yuvfixup element\n");
++            goto out;
++        }
+ 
+         /* GStreamer outputs RGB video top-down, but DirectShow expects bottom-up. */
+         if (!(flip = gst_element_factory_make("videoflip", NULL)))
+@@ -1044,25 +1048,35 @@ static void init_new_decoded_pad(GstElement *bin, GstPad *pad, struct gstdemux *
+             goto out;
+         }
+ 
+-        /* Avoid expensive color matrix conversions. */
+-        gst_util_set_object_arg(G_OBJECT(vconv2), "matrix-mode", "none");
++        /* To avoid expensive color matrix conversions, keep YUV colorimetry info */
++        if (!(yuvfix2 = gst_element_factory_make("yuvfixup", NULL)))
++        {
++            ERR("Failed to create our yuvfixup2 element\n");
++            goto out;
++        }
+ 
+         /* The bin takes ownership of these elements. */
+         gst_bin_add(GST_BIN(This->container), deinterlace);
+         gst_element_sync_state_with_parent(deinterlace);
+         gst_bin_add(GST_BIN(This->container), vconv);
+         gst_element_sync_state_with_parent(vconv);
++        gst_bin_add(GST_BIN(This->container), yuvfix);
++        gst_element_sync_state_with_parent(yuvfix);
+         gst_bin_add(GST_BIN(This->container), flip);
+         gst_element_sync_state_with_parent(flip);
+         gst_bin_add(GST_BIN(This->container), vconv2);
+         gst_element_sync_state_with_parent(vconv2);
++        gst_bin_add(GST_BIN(This->container), yuvfix2);
++        gst_element_sync_state_with_parent(yuvfix2);
+ 
+         gst_element_link(deinterlace, vconv);
+-        gst_element_link(vconv, flip);
++        gst_element_link(vconv, yuvfix);
++        gst_element_link(yuvfix, flip);
+         gst_element_link(flip, vconv2);
++        gst_element_link(vconv2, yuvfix2);
+ 
+         pin->post_sink = gst_element_get_static_pad(deinterlace, "sink");
+-        pin->post_src = gst_element_get_static_pad(vconv2, "src");
++        pin->post_src = gst_element_get_static_pad(yuvfix2, "src");
+         pin->flip = flip;
+     }
+     else if (!strcmp(typename, "audio/x-raw"))
+diff --git a/dlls/winegstreamer/main.c b/dlls/winegstreamer/main.c
+index 4ca371d58bd..5a913b36516 100644
+--- a/dlls/winegstreamer/main.c
++++ b/dlls/winegstreamer/main.c
+@@ -207,6 +207,8 @@ static BOOL CALLBACK init_gstreamer_proc(INIT_ONCE *once, void *param, void **ct
+         g_error_free(err);
+     }
+ 
++    gst_wine_yuvfixup_plugin_init();
++
+     return TRUE;
+ }
+ 
+diff --git a/dlls/winegstreamer/yuvfixup.c b/dlls/winegstreamer/yuvfixup.c
+new file mode 100644
+index 00000000000..9b1eb11bd98
+--- /dev/null
++++ b/dlls/winegstreamer/yuvfixup.c
+@@ -0,0 +1,248 @@
++/*
++ * GStreamer YUV color info fixup filter
++ *
++ * Copyright 2020 Akihiro Sagawa
++ *
++ * This library is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU Lesser General Public
++ * License as published by the Free Software Foundation; either
++ * version 2.1 of the License, or (at your option) any later version.
++ *
++ * This library is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++ * Lesser General Public License for more details.
++ *
++ * You should have received a copy of the GNU Lesser General Public
++ * License along with this library; if not, write to the Free Software
++ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
++ */
++
++#include "gst_private.h"
++#include <gst/base/gstbasetransform.h>
++
++typedef struct _GstWineYuvFixup GstWineYuvFixup;
++typedef struct _GstWineYuvFixupClass GstWineYuvFixupClass;
++
++#define GST_TYPE_WINE_YUVFIXUP                  \
++    (gst_wine_yuvfixup_get_type())
++
++struct _GstWineYuvFixup {
++    GstBaseTransform basetransform;
++};
++
++struct _GstWineYuvFixupClass {
++    GstBaseTransformClass parent_class;
++};
++
++#define GST_CAT_DEFAULT wine_yuvfixup
++GST_DEBUG_CATEGORY_STATIC(GST_CAT_DEFAULT);
++
++static GstCaps *
++gst_wine_yuvfixup_transform_caps(GstBaseTransform *trans,
++                                 GstPadDirection direction,
++                                 GstCaps *caps,
++                                 GstCaps *filter);
++
++static GstStaticPadTemplate gst_wine_yuvfixup_sink_template =
++    GST_STATIC_PAD_TEMPLATE("sink",
++                            GST_PAD_SINK,
++                            GST_PAD_ALWAYS,
++                            GST_STATIC_CAPS(GST_VIDEO_CAPS_MAKE(GST_VIDEO_FORMATS_ALL)));
++static GstStaticPadTemplate gst_wine_yuvfixup_src_template =
++    GST_STATIC_PAD_TEMPLATE("src",
++                            GST_PAD_SRC,
++                            GST_PAD_ALWAYS,
++                            GST_STATIC_CAPS(GST_VIDEO_CAPS_MAKE(GST_VIDEO_FORMATS_ALL)));
++
++#define gst_wine_yuvfixup_parent_class parent_class
++G_DEFINE_TYPE(GstWineYuvFixup, gst_wine_yuvfixup, GST_TYPE_BASE_TRANSFORM);
++
++static void
++gst_wine_yuvfixup_class_init(GstWineYuvFixupClass *klass)
++{
++    GstElementClass *element_class = GST_ELEMENT_CLASS(klass);
++    GstBaseTransformClass *base_transform_class =
++        GST_BASE_TRANSFORM_CLASS(klass);
++
++    GST_DEBUG_CATEGORY_INIT(wine_yuvfixup, "yuvfixup", 0, "YUV Fixup");
++    GST_DEBUG("gst_wine_yuvfixup_class_init");
++
++    gst_element_class_add_static_pad_template(element_class,
++                                              &gst_wine_yuvfixup_src_template);
++    gst_element_class_add_static_pad_template(element_class,
++                                              &gst_wine_yuvfixup_sink_template);
++
++    gst_element_class_set_static_metadata(element_class,
++                                          "Wine YUV color info fixup",
++                                          "Filter/Converter/Video",
++                                          "Fix up YUV color info caps",
++                                          "Wine Team <wine-devel@winehq.org");
++
++    base_transform_class->transform_caps =
++        GST_DEBUG_FUNCPTR(gst_wine_yuvfixup_transform_caps);
++}
++
++static void
++gst_wine_yuvfixup_init(GstWineYuvFixup *yuvfixup)
++{
++}
++
++static GstCaps * get_upstream_caps(GstBaseTransform *trans)
++{
++    GstPad *peer_pad = NULL, *upstream_sink = NULL, *upstream_src = NULL;
++    GstElement *peer_element = NULL;
++    GstCaps *upstream_caps = NULL;
++
++    if (!(peer_pad = gst_pad_get_peer(GST_BASE_TRANSFORM_SINK_PAD(trans))))
++    {
++        GST_DEBUG_OBJECT(trans, "peer pad not found");
++        goto exit;
++    }
++    if (!(peer_element = gst_pad_get_parent_element(peer_pad)))
++    {
++        GST_DEBUG_OBJECT(trans, "peer element not found");
++        goto exit;
++    }
++    if (!(upstream_sink = gst_element_get_static_pad(peer_element, "sink")))
++    {
++        GST_DEBUG_OBJECT(trans, "can't retrieve %" GST_PTR_FORMAT "'s sink pad",
++                         peer_element);
++        goto exit;
++    }
++    if (!(upstream_src = gst_pad_get_peer(upstream_sink)))
++    {
++        GST_DEBUG_OBJECT(trans, "can't retrieve %" GST_PTR_FORMAT "'s upstream src pad",
++                         upstream_sink);
++        goto exit;
++    }
++    if (!gst_pad_has_current_caps(upstream_src))
++    {
++        GST_DEBUG_OBJECT(trans, "upstream_src %" GST_PTR_FORMAT " doesn't have current caps",
++                         upstream_src);
++        goto exit;
++    }
++    upstream_caps = gst_pad_get_current_caps(upstream_src);
++    GST_DEBUG_OBJECT(trans, "gotcha! %" GST_PTR_FORMAT " has %" GST_PTR_FORMAT,
++                     upstream_src, upstream_caps);
++
++exit:
++    if (peer_pad)
++        gst_object_unref(peer_pad);
++    if (peer_element)
++        gst_object_unref(peer_element);
++    if (upstream_sink)
++        gst_object_unref(upstream_sink);
++    if (upstream_src)
++        gst_object_unref(upstream_src);
++    return upstream_caps;
++}
++
++static const GstVideoFormatInfo *
++get_caps_video_format_info(const GstCaps *caps)
++{
++    GstStructure *structure;
++    const gchar *str;
++    GstVideoFormat format;
++
++    if (!gst_caps_is_fixed(caps))
++        return NULL;
++    structure = gst_caps_get_structure(caps, 0);
++    if (!gst_structure_has_name(structure, "video/x-raw"))
++        return NULL;
++    str = gst_structure_get_string(structure, "format");
++    if (!str)
++        return NULL;
++    format = gst_video_format_from_string(str);
++    return gst_video_format_get_info(format);
++}
++
++static GstCaps *
++gst_wine_yuvfixup_transform_caps(GstBaseTransform *trans,
++                                 GstPadDirection direction,
++                                 GstCaps *caps,
++                                 GstCaps *filter)
++{
++    GstCaps *upstream_caps = NULL;
++    GstCaps *res_caps = NULL;
++    const GstVideoFormatInfo *info;
++    GstStructure *structure;
++
++    if ((info = get_caps_video_format_info(caps))
++        && !GST_VIDEO_FORMAT_INFO_IS_YUV(info))
++    {
++        /* remove YUV color info if we use other than YUV format */
++        structure = gst_caps_get_structure(caps, 0);
++        if (gst_structure_has_field(structure, "colorimetry")
++            || gst_structure_has_field(structure, "chroma-site"))
++        {
++            GST_DEBUG_OBJECT(trans, "remove color info from %" GST_PTR_FORMAT, caps);
++            res_caps = gst_caps_new_empty();
++            structure = gst_structure_copy(structure);
++            gst_structure_remove_fields(structure, "colorimetry", "chroma-site", NULL);
++            gst_caps_append_structure(res_caps, structure);
++        }
++    }
++    else if (direction == GST_PAD_SINK
++             && (upstream_caps = get_upstream_caps(trans))
++             && (info = get_caps_video_format_info(upstream_caps))
++             && GST_VIDEO_FORMAT_INFO_IS_YUV(info))
++    {
++        GValue colorimetry = G_VALUE_INIT, chroma_site = G_VALUE_INIT;
++        const gchar *str;
++
++        /* get YUV color info from upstream */
++        structure = gst_caps_get_structure(upstream_caps, 0);
++        if ((str = gst_structure_get_string(structure, "colorimetry")))
++        {
++            g_value_init(&colorimetry, G_TYPE_STRING);
++            g_value_set_string(&colorimetry, str);
++        }
++        if ((str = gst_structure_get_string(structure, "chroma-site")))
++        {
++            g_value_init(&chroma_site, G_TYPE_STRING);
++            g_value_set_string(&chroma_site, str);
++        }
++
++        /* if found, copy them to our caps candiates */
++        if (G_VALUE_HOLDS_STRING(&colorimetry)
++            || G_VALUE_HOLDS_STRING(&chroma_site))
++        {
++            guint i, n;
++
++            res_caps = gst_caps_new_empty();
++            n = gst_caps_get_size(caps);
++            for (i = 0; i < n; i++) {
++                structure = gst_caps_get_structure(caps, i);
++                structure = gst_structure_copy(structure);
++                if (G_VALUE_HOLDS_STRING(&colorimetry)
++                    && !gst_structure_has_field(structure, "colorimetry"))
++                    gst_structure_set_value(structure, "colorimetry", &colorimetry);
++                if (G_VALUE_HOLDS_STRING(&chroma_site)
++                    && !gst_structure_has_field(structure, "chroma-site"))
++                    gst_structure_set_value(structure, "chroma-site", &chroma_site);
++                gst_caps_append_structure(res_caps, structure);
++            }
++            g_value_unset(&colorimetry);
++            g_value_unset(&chroma_site);
++        }
++    }
++
++    if (upstream_caps)
++        gst_caps_unref(upstream_caps);
++    if (!res_caps)
++        res_caps = gst_caps_copy(caps);
++
++    if (filter) {
++        GstCaps *tmp_caps = res_caps;
++        res_caps = gst_caps_intersect_full(filter, tmp_caps, GST_CAPS_INTERSECT_FIRST);
++        gst_caps_unref(tmp_caps);
++    }
++    return res_caps;
++}
++
++gboolean
++gst_wine_yuvfixup_plugin_init(void)
++{
++    return gst_element_register(NULL, "yuvfixup", GST_RANK_NONE, GST_TYPE_WINE_YUVFIXUP);
++}

@@ -1,0 +1,23 @@
+From e2859b62368274d4e453298dd902eb93c0341849 Mon Sep 17 00:00:00 2001
+From: Derek Lesho <dlesho@codeweavers.com>
+Date: Mon, 16 Nov 2020 14:07:26 -0600
+Subject: [PATCH] mf: Call session_command_complete after NotifyTopology
+ command.
+
+Signed-off-by: Derek Lesho <dlesho@codeweavers.com>
+---
+ dlls/mf/session.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/dlls/mf/session.c b/dlls/mf/session.c
+index cf351c003e7..dffd5113ff9 100644
+--- a/dlls/mf/session.c
++++ b/dlls/mf/session.c
+@@ -2075,6 +2075,7 @@ static HRESULT WINAPI session_commands_callback_Invoke(IMFAsyncCallback *iface,
+             break;
+         case SESSION_CMD_QM_NOTIFY_TOPOLOGY:
+             IMFQualityManager_NotifyTopology(session->quality_manager, op->u.notify_topology.topology);
++            session_command_complete(session);
+             break;
+         case SESSION_CMD_SA_READY:
+             topo_node = session_get_node_by_id(session, op->u.sa_ready.node_id);

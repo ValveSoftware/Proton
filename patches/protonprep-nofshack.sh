@@ -72,9 +72,6 @@
     echo "proton gamepad conflict fix"
     git revert --no-commit da7d60bf97fb8726828e57f852e8963aacde21e9
     
-    echo "video color fix endless space 2"
-    git revert --no-commit fd25ba65e0eb9fedfb2cdfa2b7a4b16e0401dfdf
-    
     # https://bugs.winehq.org/show_bug.cgi?id=49990
     echo "this reverts bd27af974a21085cd0dc78b37b715bbcc3cfab69 which breaks some game launchers"
     git revert --no-commit bd27af974a21085cd0dc78b37b715bbcc3cfab69
@@ -127,6 +124,9 @@
 
     echo "SKSE64 updated fix"
     patch -Np1 < ../patches/game-patches/skse64_fix.patch
+    
+    echo "Serious Sam 4 flicker fix"
+    patch -Np1 < ../patches/game-patches/serious_sam_4_flicker_fix.patch
 
     # Disabled for now -- non-steam game, needs double check, may be fixed already
     # echo "Paul's Diablo 1 menu fix"
@@ -232,6 +232,9 @@
     # echo "mfplat proton hacks"
     # patch -Np1 < ../patches/proton/31-proton-mfplat-hacks.patch
     
+    echo "proton-specific winegstreamer patches"
+    patch -Np1 < ../patches/proton/34-proton-winegstreamer_updates.patch
+    
     ### END PROTON PATCH SECTION ###
 
     ### WINE PATCH SECTION ###
@@ -243,8 +246,13 @@
     patch -Np1 < ../patches/wine-hotfixes/vkd3d/D3D12SerializeVersionedRootSignature.patch
     patch -Np1 < ../patches/wine-hotfixes/vkd3d/D3D12CreateVersionedRootSignatureDeserializer.patch
     
-    # temp -- this breaks The Outer Worlds
-    patch -Np1 < ../patches/wine-hotfixes/fd22009339383227896e771605c5e55e10ae9f00.patch
+#    # The Outer Worlds hotfix
+#    patch -Np1 < ../patches/wine-hotfixes/fd2200-mfplat-hotfix.patch
+    
+    # Endless Space 2 video color fix
+    patch -Np1 < ../patches/wine-hotfixes/195961.patch
+    
+    patch -Np1 < ../patches/wine-hotfixes/194920.patch
 
     ### END WINEPATCH SECTION ###
     

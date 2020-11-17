@@ -1,0 +1,26 @@
+From 62f1b0993d9647b239ddd31c7d5cbfcf157573ca Mon Sep 17 00:00:00 2001
+From: Zebediah Figura <z.figura12@gmail.com>
+Date: Wed, 21 Oct 2020 16:03:21 -0500
+Subject: [PATCH] winegstreamer: Allow videoconvert to parallelize.
+
+Not sure if this should be called a hack. It's not the *best* solution to the problem, but it's not a wrong one either.
+
+Signed-off-by: Zebediah Figura <z.figura12@gmail.com>
+---
+ dlls/winegstreamer/gstdemux.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/dlls/winegstreamer/gstdemux.c b/dlls/winegstreamer/gstdemux.c
+index d079287678b..f3c55fe749f 100644
+--- a/dlls/winegstreamer/gstdemux.c
++++ b/dlls/winegstreamer/gstdemux.c
+@@ -1019,6 +1019,9 @@ static void init_new_decoded_pad(GstElement *bin, GstPad *pad, struct gstdemux *
+         /* Avoid expensive color matrix conversions. */
+         gst_util_set_object_arg(G_OBJECT(vconv), "matrix-mode", "none");
+ 
++        /* Let GStreamer choose a default number of threads. */
++        gst_util_set_object_arg(G_OBJECT(vconv), "n-threads", "0");
++
+         /* GStreamer outputs RGB video top-down, but DirectShow expects bottom-up. */
+         if (!(flip = gst_element_factory_make("videoflip", NULL)))
+         {

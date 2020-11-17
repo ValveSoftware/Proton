@@ -1,19 +1,19 @@
-From 982ed53412eb83693f4cedca4a051d8fddca354b Mon Sep 17 00:00:00 2001
+From 1a6c80eb6035fdcb740fbf2606401a6dc75586e2 Mon Sep 17 00:00:00 2001
 From: Andrew Eikum <aeikum@codeweavers.com>
 Date: Thu, 23 Jan 2020 09:14:56 -0600
 Subject: [PATCH] wine.inf: Set default Windows version to win10.
 
 ---
  dlls/ntdll/version.c           |  2 +-
- loader/wine.inf.in             | 24 ++++++++++++------------
+ loader/wine.inf.in             | 28 ++++++++++++++--------------
  programs/winecfg/appdefaults.c |  2 +-
- 3 files changed, 14 insertions(+), 14 deletions(-)
+ 3 files changed, 16 insertions(+), 16 deletions(-)
 
 diff --git a/dlls/ntdll/version.c b/dlls/ntdll/version.c
-index 61e48f6fbd0..875a33c5b2b 100644
+index 4fef2b5e439..aa0c6619145 100644
 --- a/dlls/ntdll/version.c
 +++ b/dlls/ntdll/version.c
-@@ -483,7 +483,7 @@ void version_init(void)
+@@ -479,7 +479,7 @@ void version_init(void)
      const WCHAR *p, *appname = NtCurrentTeb()->Peb->ProcessParameters->ImagePathName.Buffer;
      WCHAR appversion[MAX_PATH+20];
  
@@ -23,10 +23,10 @@ index 61e48f6fbd0..875a33c5b2b 100644
      RtlOpenCurrentUser( KEY_ALL_ACCESS, &root );
      attr.Length = sizeof(attr);
 diff --git a/loader/wine.inf.in b/loader/wine.inf.in
-index 1aa0a37338b..99a4844eabe 100644
+index a5c00cd3700..8873fa2353c 100644
 --- a/loader/wine.inf.in
 +++ b/loader/wine.inf.in
-@@ -3767,12 +3767,10 @@ HKLM,"System\CurrentControlSet\Services\Winsock\Parameters",,16
+@@ -3760,12 +3760,12 @@ HKLM,"System\CurrentControlSet\Services\Winsock\Parameters",,16
  HKLM,"System\CurrentControlSet\Services\Winsock2\Parameters\Protocol_Catalog9\Catalog_Entries",,16
  
  [VersionInfo]
@@ -37,13 +37,15 @@ index 1aa0a37338b..99a4844eabe 100644
 -HKLM,%CurrentVersionNT%,"CurrentBuild",2,"7601"
 -HKLM,%CurrentVersionNT%,"CurrentBuildNumber",2,"7601"
 +HKLM,%CurrentVersionNT%,"CurrentVersion",2,"10.0"
++HKLM,%CurrentVersionNT%,"CurrentMajorVersionNumber",0x10001,10
++HKLM,%CurrentVersionNT%,"CurrentMinorVersionNumber",0x10001,0
 +HKLM,%CurrentVersionNT%,"CSDVersion",2,""
 +HKLM,%CurrentVersionNT%,"CurrentBuild",2,"17134"
 +HKLM,%CurrentVersionNT%,"CurrentBuildNumber",2,"17134"
  HKLM,%CurrentVersionNT%,"CurrentType",2,"Uniprocessor Free"
  HKLM,%CurrentVersionNT%,"DigitalProductId",1,00,00,00,00,00,00,00,00,00,00,00,\
  00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,\
-@@ -3779,16 +3779,16 @@ HKLM,%CurrentVersionNT%,"DigitalProductId",1,00,00,00,00,00,00,00,00,00,00,00,\
+@@ -3774,16 +3774,16 @@ HKLM,%CurrentVersionNT%,"DigitalProductId",1,00,00,00,00,00,00,00,00,00,00,00,\
  00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,\
  00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,\
  00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00
@@ -66,7 +68,7 @@ index 1aa0a37338b..99a4844eabe 100644
  HKLM,%CurrentVersionNT%,"CurrentType",2,"Uniprocessor Free"
  HKLM,%CurrentVersionNT%,"DigitalProductId",1,00,00,00,00,00,00,00,00,00,00,00,\
  00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,\
-@@ -3797,9 +3797,9 @@ HKLM,%CurrentVersionNT%,"DigitalProductId",1,00,00,00,00,00,00,00,00,00,00,00,\
+@@ -3792,9 +3792,9 @@ HKLM,%CurrentVersionNT%,"DigitalProductId",1,00,00,00,00,00,00,00,00,00,00,00,\
  00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,\
  00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,\
  00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00
@@ -91,7 +93,7 @@ index 6c4e6a49f26..1aea54adfb2 100644
  
  static const char szKey9x[] = "Software\\Microsoft\\Windows\\CurrentVersion";
  static const char szKeyNT[] = "Software\\Microsoft\\Windows NT\\CurrentVersion";
-From b3ed562a02c30730a4472b966057d2c97ce294a7 Mon Sep 17 00:00:00 2001
+From 65ccd66ca58a8ec37864ca59063c2313a1d1a77a Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?R=C3=A9mi=20Bernon?= <rbernon@codeweavers.com>
 Date: Tue, 14 Jul 2020 18:43:17 +0200
 Subject: [PATCH] wine.inf: Bump CurrentBuild(Number) to 17763 (Win10 1809).
@@ -101,12 +103,12 @@ Subject: [PATCH] wine.inf: Bump CurrentBuild(Number) to 17763 (Win10 1809).
  1 file changed, 4 insertions(+), 4 deletions(-)
 
 diff --git a/loader/wine.inf.in b/loader/wine.inf.in
-index 0b014dce63c..12ec40f872e 100644
+index a66b740442c..b79788be3cb 100644
 --- a/loader/wine.inf.in
 +++ b/loader/wine.inf.in
-@@ -3758,8 +3758,8 @@ HKLM,"System\CurrentControlSet\Services\Winsock2\Parameters\Protocol_Catalog9\Ca
- [VersionInfo]
- HKLM,%CurrentVersionNT%,"CurrentVersion",2,"10.0"
+@@ -3765,8 +3765,8 @@ HKLM,%CurrentVersionNT%,"CurrentVersion",2,"10.0"
+ HKLM,%CurrentVersionNT%,"CurrentMajorVersionNumber",0x10001,10
+ HKLM,%CurrentVersionNT%,"CurrentMinorVersionNumber",0x10001,0
  HKLM,%CurrentVersionNT%,"CSDVersion",2,""
 -HKLM,%CurrentVersionNT%,"CurrentBuild",2,"17134"
 -HKLM,%CurrentVersionNT%,"CurrentBuildNumber",2,"17134"
@@ -115,7 +117,7 @@ index 0b014dce63c..12ec40f872e 100644
  HKLM,%CurrentVersionNT%,"CurrentType",2,"Uniprocessor Free"
  HKLM,%CurrentVersionNT%,"DigitalProductId",1,00,00,00,00,00,00,00,00,00,00,00,\
  00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,\
-@@ -3776,8 +3776,8 @@ HKLM,%Control%\Session Manager\Environment,"OS",2,"Windows_NT"
+@@ -3783,8 +3783,8 @@ HKLM,%Control%\Session Manager\Environment,"OS",2,"Windows_NT"
  [VersionInfo.ntamd64]
  HKLM,%CurrentVersionNT%,"CurrentVersion",2,"10.0"
  HKLM,%CurrentVersionNT%,"CSDVersion",2,""
