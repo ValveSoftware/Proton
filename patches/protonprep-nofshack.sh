@@ -229,8 +229,8 @@
     #            "mfplay": "n" #disable built-in mfplay
     #    }
     #
-    # echo "mfplat proton hacks"
-    # patch -Np1 < ../patches/proton/31-proton-mfplat-hacks.patch
+    #echo "mfplat proton hacks"
+    #patch -Np1 < ../patches/proton/31-proton-mfplat-hacks.patch
     
     echo "proton-specific winegstreamer patches"
     patch -Np1 < ../patches/proton/34-proton-winegstreamer_updates.patch
@@ -246,10 +246,9 @@
     patch -Np1 < ../patches/wine-hotfixes/vkd3d/D3D12SerializeVersionedRootSignature.patch
     patch -Np1 < ../patches/wine-hotfixes/vkd3d/D3D12CreateVersionedRootSignatureDeserializer.patch
     
-#    # The Outer Worlds hotfix
-#    patch -Np1 < ../patches/wine-hotfixes/fd2200-mfplat-hotfix.patch
+    patch -Np1 < ../patches/wine-hotfixes/mfplat-hotfix.patch
     
-    # Endless Space 2 video color fix
+    Endless Space 2 video color fix
     patch -Np1 < ../patches/wine-hotfixes/195961.patch
     
     patch -Np1 < ../patches/wine-hotfixes/194920.patch
