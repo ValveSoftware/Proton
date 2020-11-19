@@ -127,6 +127,9 @@
     
     echo "Serious Sam 4 flicker fix"
     patch -Np1 < ../patches/game-patches/serious_sam_4_flicker_fix.patch
+    
+    echo "gta v key input fix"
+    patch -Np1 < ../patches/game-patches/gta_v_keyboard_input.patch
 
     # Disabled for now -- non-steam game, needs double check, may be fixed already
     # echo "Paul's Diablo 1 menu fix"
@@ -246,10 +249,11 @@
     patch -Np1 < ../patches/wine-hotfixes/vkd3d/D3D12SerializeVersionedRootSignature.patch
     patch -Np1 < ../patches/wine-hotfixes/vkd3d/D3D12CreateVersionedRootSignatureDeserializer.patch
     
-    patch -Np1 < ../patches/wine-hotfixes/mfplat-hotfix.patch
-    
-    Endless Space 2 video color fix
+    echo "Endless Space 2 video color fix"
     patch -Np1 < ../patches/wine-hotfixes/195961.patch
+    
+    echo "warframe + ghostrunner audio fix"
+    patch -Np1 < ../patches/wine-hotfixes/0001-winepulse.drv-Support-older-version-of-the-AudioClie.patch
     
     patch -Np1 < ../patches/wine-hotfixes/194920.patch
 

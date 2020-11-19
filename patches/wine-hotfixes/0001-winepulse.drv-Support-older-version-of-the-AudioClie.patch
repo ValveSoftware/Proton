@@ -1,0 +1,31 @@
+From 7d5a30495bf7f8ecc5285c930f3bbf09b73fdc30 Mon Sep 17 00:00:00 2001
+From: Alistair Leslie-Hughes <leslie_alistair@hotmail.com>
+Date: Thu, 19 Nov 2020 14:12:07 +1100
+Subject: [PATCH] winepulse.drv: Support older version of the
+ AudioClientProperties structure
+
+---
+ dlls/winepulse.drv/mmdevdrv.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/dlls/winepulse.drv/mmdevdrv.c b/dlls/winepulse.drv/mmdevdrv.c
+index 8dbd9e5bd79..d27287ae6ef 100644
+--- a/dlls/winepulse.drv/mmdevdrv.c
++++ b/dlls/winepulse.drv/mmdevdrv.c
+@@ -2623,8 +2623,12 @@ static HRESULT WINAPI AudioClient_SetClientProperties(IAudioClient3 *iface,
+     if(!prop)
+         return E_POINTER;
+ 
+-    if(prop->cbSize != sizeof(*prop))
++    /* Windows 8 and below doesn't have the Options Field. */
++    if(prop->cbSize != sizeof(*prop) && prop->cbSize != FIELD_OFFSET(AudioClientProperties, Options))
++    {
++        WARN("Unsupported Size = %d\n", prop->cbSize);
+         return E_INVALIDARG;
++    }
+ 
+     TRACE("{ bIsOffload: %u, eCategory: 0x%x, Options: 0x%x }\n",
+             prop->bIsOffload,
+-- 
+2.29.2
+
