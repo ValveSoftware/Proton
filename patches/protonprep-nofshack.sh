@@ -56,6 +56,10 @@
     cd vkd3d-proton
     git reset --hard HEAD
     git clean -xdf
+    
+    echo "ac valhalla pending prs"
+    patch -Np1 < ../patches/vkd3d/410.patch
+    patch -Np1 < ../patches/vkd3d/411.patch
     cd ..
     
     #WINE STAGING

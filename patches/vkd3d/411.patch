@@ -1,0 +1,24 @@
+From fd2ebc20d5ad4bb7b540a5dd7d0fba7cc7e521fb Mon Sep 17 00:00:00 2001
+From: Philip Rebohle <philip.rebohle@tu-dortmund.de>
+Date: Thu, 19 Nov 2020 02:48:20 +0100
+Subject: [PATCH] vkd3d: Consider mip level for 3D UAV slice check.
+
+Signed-off-by: Philip Rebohle <philip.rebohle@tu-dortmund.de>
+---
+ libs/vkd3d/resource.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/libs/vkd3d/resource.c b/libs/vkd3d/resource.c
+index d6101bc4..72575b75 100644
+--- a/libs/vkd3d/resource.c
++++ b/libs/vkd3d/resource.c
+@@ -4563,7 +4563,8 @@ static void vkd3d_create_texture_uav(struct d3d12_desc *descriptor,
+                     key.u.texture.view_type = VK_IMAGE_VIEW_TYPE_3D;
+                     key.u.texture.miplevel_idx = desc->Texture3D.MipSlice;
+                     if (desc->Texture3D.FirstWSlice ||
+-                        ((desc->Texture3D.WSize != resource->desc.DepthOrArraySize) && (desc->Texture3D.WSize != UINT_MAX)))
++                        ((desc->Texture3D.WSize != max(1u, resource->desc.DepthOrArraySize >> desc->Texture3D.MipSlice)) &&
++                            (desc->Texture3D.WSize != UINT_MAX)))
+                     {
+                         FIXME("Unhandled depth view %u-%u.\n",
+                               desc->Texture3D.FirstWSlice, desc->Texture3D.WSize);
