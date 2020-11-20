@@ -115,8 +115,6 @@ This is my build of Proton with the most recent releases of vanilla WINE. It has
 - Warframe is problematic with VSync. Turn it off or on in game, do not set to `Auto`
 - Warframe needs a set a frame limit in game. Unlimited framerate can cause slowdowns
 - Warframe on Nvidia: you may need to disable GPU Particles in game otherwise the game can freeze randomly. On AMD they work fine
-- Borderlands 3 Marcus game intro audio will freeze halfway through if you don't skip it. Rest of the game is playable and videos work
-- Soul Calibur VI main menu will freeze of you don't press a button before the audio ends. Rest of the game is playable and videos work
 - Injustice 2 and MK11 are missing cutscene audio
 
 Full patches can be viewed in [protonprep.sh](patches/protonprep.sh).
