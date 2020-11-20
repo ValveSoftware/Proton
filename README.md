@@ -52,8 +52,8 @@ This is my build of Proton with the most recent releases of vanilla WINE. It has
 - Mount and Blade Warband
 - Divinity Original Sin 2
 - Sea of Thieves
-- Death Stranding
-- Horizon Zero Dawn
+- Death Stranding fixes
+- Horizon Zero Dawn fixes
 - Fall Guys controller mapping fix
 - World War Z Vulkan renderer fix
 - rFactor 2
@@ -69,8 +69,6 @@ This is my build of Proton with the most recent releases of vanilla WINE. It has
 - Just Cause 4 fixes
 - Age of Empires II: DE Online Multiplayer fixed
 - Halo: MCC Online coop campaign fixed
-- Death Stranding fixes
-- Horizon Zero Dawn fixes
 
 ### Non-Steam or winesteam game patches
 
