@@ -294,7 +294,7 @@ class CompatData:
             if os.path.dirname(contents).endswith(('/lib/wine', '/lib/wine/fakedlls', '/lib64/wine', '/lib64/wine/fakedlls')):
                 # wine builtin dll
                 # make the destination an absolute symlink
-                contents = os.path.normpath(os.path.join(os.path.dirname(src), contents))
+                contents = os.path.abspath(os.path.join(os.path.dirname(src), contents))
             if dll_copy:
                 try_copyfile(src, dst)
             else:
