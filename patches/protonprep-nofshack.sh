@@ -56,10 +56,6 @@
     cd vkd3d-proton
     git reset --hard HEAD
     git clean -xdf
-    
-    echo "ac valhalla pending prs"
-    patch -Np1 < ../patches/vkd3d/410.patch
-    patch -Np1 < ../patches/vkd3d/411.patch
     cd ..
     
     #WINE STAGING
@@ -79,7 +75,7 @@
     # https://bugs.winehq.org/show_bug.cgi?id=49990
     echo "this reverts bd27af974a21085cd0dc78b37b715bbcc3cfab69 which breaks some game launchers"
     git revert --no-commit bd27af974a21085cd0dc78b37b715bbcc3cfab69
-
+    
     # disable these when using proton's gamepad patches
     # -W dinput-SetActionMap-genre \
     # -W dinput-axis-recalc \
@@ -94,7 +90,7 @@
     -W dinput-joy-mappings \
     -W dinput-reconnect-joystick \
     -W dinput-remap-joystick
-    
+
     # this is only used when staging disables mfplat if Derek provides an updated rebase
     # echo "mfplat rebase"
     # patch -Np1 < ../patches/wine-hotfixes/mfplat_rebase.patch
@@ -128,10 +124,7 @@
 
     echo "SKSE64 updated fix"
     patch -Np1 < ../patches/game-patches/skse64_fix.patch
-    
-    echo "Serious Sam 4 flicker fix"
-    patch -Np1 < ../patches/game-patches/serious_sam_4_flicker_fix.patch
-    
+
     echo "gta v key input fix"
     patch -Np1 < ../patches/game-patches/gta_v_keyboard_input.patch
 
@@ -255,10 +248,7 @@
     
     echo "Endless Space 2 video color fix"
     patch -Np1 < ../patches/wine-hotfixes/195961.patch
-    
-    echo "warframe + ghostrunner audio fix"
-    patch -Np1 < ../patches/wine-hotfixes/0001-winepulse.drv-Support-older-version-of-the-AudioClie.patch
-    
+        
     patch -Np1 < ../patches/wine-hotfixes/194920.patch
 
     ### END WINEPATCH SECTION ###
