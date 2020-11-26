@@ -612,9 +612,11 @@ class Session:
 
         if "STEAM_COMPAT_MEDIA_PATH" in os.environ:
             self.env["MEDIACONV_AUDIO_DUMP_FILE"] = os.environ["STEAM_COMPAT_MEDIA_PATH"] + "/audio.foz"
-            self.env["MEDIACONV_AUDIO_TRANSCODED_FILE"] = os.environ["STEAM_COMPAT_MEDIA_PATH"] + "/transcoded_audio.foz"
             self.env["MEDIACONV_VIDEO_DUMP_FILE"] = os.environ["STEAM_COMPAT_MEDIA_PATH"] + "/video.foz"
-            self.env["MEDIACONV_VIDEO_TRANSCODED_FILE"] = os.environ["STEAM_COMPAT_MEDIA_PATH"] + "/transcoded_video.foz"
+
+        if "STEAM_COMPAT_TRANSCODED_MEDIA_PATH" in os.environ:
+            self.env["MEDIACONV_AUDIO_TRANSCODED_FILE"] = os.environ["STEAM_COMPAT_TRANSCODED_MEDIA_PATH"] + "/transcoded_audio.foz"
+            self.env["MEDIACONV_VIDEO_TRANSCODED_FILE"] = os.environ["STEAM_COMPAT_TRANSCODED_MEDIA_PATH"] + "/transcoded_video.foz"
 
         if "PATH" in os.environ:
             self.env["PATH"] = g_proton.bin_dir + ":" + os.environ["PATH"]
