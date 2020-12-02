@@ -40,7 +40,7 @@ GCC_SRCTARBALL=gcc-$GCC_VER.tar.xz
 GCC_URL="https://ftp.gnu.org/gnu/gcc/gcc-$GCC_VER/$GCC_SRCTARBALL"
 GCC_SRCDIR=gcc-$GCC_VER
 
-MINGW_W64_GITVER=v7.0.0
+MINGW_W64_GITVER=v8.0.0
 MINGW_W64_GITURL="git://git.code.sf.net/p/mingw-w64/mingw-w64"
 MINGW_W64_SRCDIR=mingw-w64-git
 
@@ -73,6 +73,9 @@ function setup_src {
     if [ ! -e "$GCC_SRCDIR" ]; then
         tar -xf "$GCC_SRCTARBALL"
         ln -s ../$ISL_SRCDIR $GCC_SRCDIR/isl
+        for f in $(dirname $0)/mingw-w64-patches/gcc-*; do
+            patch -d "$GCC_SRCDIR" -p1 < $f
+        done
     fi
 
     if [ ! -e "$MINGW_W64_SRCDIR" ]; then
