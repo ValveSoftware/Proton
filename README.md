@@ -29,10 +29,11 @@ or guarantee that anyone will help you with this process.
 
 We strongly recommend that most users use the production build of Proton.
 
-The most current source for Proton is here:
-  <https://github.com/ValveSoftware/Proton>
+Acquire Proton's source by cloning <https://github.com/ValveSoftware/Proton>
+and checking out the branch you desire. Be sure to update submodules when
+switching branches.
 
-Which you can clone to your system with this command:
+You can clone the latest Proton to your system with this command:
 
         git clone --recurse-submodules https://github.com/ValveSoftware/Proton.git proton
         cd proton
