@@ -710,6 +710,12 @@ class Session:
         if "forcelgadd" in self.compat_config:
             self.env["WINE_LARGE_ADDRESS_AWARE"] = "1"
 
+        if "vkd3dbindlesstb" in self.compat_config:
+            if not "VKD3D_CONFIG" in self.env:
+                self.env["VKD3D_CONFIG"] = "force_bindless_texel_buffer"
+            else:
+                self.env["VKD3D_CONFIG"] = self.env["VKD3D_CONFIG"] + ",force_bindless_texel_buffer"
+
         if "vkd3dfl12" in self.compat_config:
             if not "VKD3D_FEATURE_LEVEL" in self.env:
                 self.env["VKD3D_FEATURE_LEVEL"] = "12_0"
