@@ -153,6 +153,8 @@ This section is for those that use the Steam flatpak.
 	```bash
 	flatpak install com.valvesoftware.Steam.CompatibilityTool.Proton-GE
 	```
+3. [Enable proton-ge-custom](#enabling).
+
 ##### Manual
 
 1. Download a release from the [Releases](https://github.com/GloriousEggroll/proton-ge-custom/releases) page.
