@@ -28,6 +28,18 @@ ld_path_var = "LD_LIBRARY_PATH"
 def nonzero(s):
     return len(s) > 0 and s != "0"
 
+def prepend_to_env_str(env, variable, prepend_str, separator):
+    if not variable in env:
+        env[variable] = prepend_str
+    else:
+        env[variable] = prepend_str + separator + env[variable]
+
+def append_to_env_str(env, variable, append_str, separator):
+    if not variable in env:
+        env[variable] = append_str
+    else:
+        env[variable] = env[variable] + separator + append_str
+
 def log(msg):
     sys.stderr.write(PFX + msg + os.linesep)
     sys.stderr.flush()
@@ -600,10 +612,7 @@ class Session:
             # Allow wine to restore this when calling an external app.
             self.env['ORIG_'+ld_path_var] = os.environ.get(ld_path_var, '')
 
-        if ld_path_var in os.environ:
-            self.env[ld_path_var] = g_proton.lib64_dir + ":" + g_proton.lib_dir + ":" + os.environ[ld_path_var]
-        else:
-            self.env[ld_path_var] = g_proton.lib64_dir + ":" + g_proton.lib_dir
+        prepend_to_env_str(self.env, ld_path_var, g_proton.lib64_dir + ":" + g_proton.lib_dir, ":")
 
         self.env["WINEDLLPATH"] = g_proton.lib64_dir + "/wine:" + g_proton.lib_dir + "/wine"
 
@@ -618,10 +627,7 @@ class Session:
             self.env["MEDIACONV_AUDIO_TRANSCODED_FILE"] = os.environ["STEAM_COMPAT_TRANSCODED_MEDIA_PATH"] + "/transcoded_audio.foz"
             self.env["MEDIACONV_VIDEO_TRANSCODED_FILE"] = os.environ["STEAM_COMPAT_TRANSCODED_MEDIA_PATH"] + "/transcoded_video.foz"
 
-        if "PATH" in os.environ:
-            self.env["PATH"] = g_proton.bin_dir + ":" + os.environ["PATH"]
-        else:
-            self.env["PATH"] = g_proton.bin_dir
+        prepend_to_env_str(self.env, "PATH", g_proton.bin_dir, ":")
 
     def check_environment(self, env_name, config_name):
         if not env_name in self.env:
@@ -711,10 +717,7 @@ class Session:
             self.env["WINE_LARGE_ADDRESS_AWARE"] = "1"
 
         if "vkd3dbindlesstb" in self.compat_config:
-            if not "VKD3D_CONFIG" in self.env:
-                self.env["VKD3D_CONFIG"] = "force_bindless_texel_buffer"
-            else:
-                self.env["VKD3D_CONFIG"] = self.env["VKD3D_CONFIG"] + ",force_bindless_texel_buffer"
+            append_to_env_str(self.env, "VKD3D_CONFIG", "force_bindless_texel_buffer", ",")
 
         if "vkd3dfl12" in self.compat_config:
             if not "VKD3D_FEATURE_LEVEL" in self.env:
@@ -762,10 +765,7 @@ class Session:
                 s = s + ";" + dll + "=" + setting
             else:
                 s = dll + "=" + setting
-        if "WINEDLLOVERRIDES" in self.env:
-            self.env["WINEDLLOVERRIDES"] = self.env["WINEDLLOVERRIDES"] + ";" + s
-        else:
-            self.env["WINEDLLOVERRIDES"] = s
+        append_to_env_str(self.env, "WINEDLLOVERRIDES", s, ";")
 
     def dump_dbg_env(self, f):
         f.write("PATH=\"" + self.env["PATH"] + "\" \\\n")
