@@ -119,7 +119,7 @@ This is my build of Proton with the most recent releases of vanilla WINE. It has
 - Soul Calibur VI main menu will freeze of you don't press a button before the audio ends. Rest of the game is playable and videos work
 - Injustice 2 and MK11 are missing cutscene audio
 
-Full patches can be viewed in [protonprep.sh](patches/protonprep.sh).
+Full patches can be viewed in [protonprep.sh](patches/protonprep-nofshack.sh).
 
 ## Installation
 
