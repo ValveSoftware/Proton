@@ -6,10 +6,10 @@
 	- [Patches](#patches)
 	- [Notes](#notes)
 - [Installation](#installation)
-	- [Manual](#manual)
-		- [Native](#native)
-		- [Flatpak](#flatpak)
-	- [Automatic](#automatic)
+	- [Native](#native)
+	- [Flatpak](#flatpak)
+		- [Flathub](#flathub)
+		- [Manual](#manual)
 - [Building](#building)
 - [Enabling](#enabling)
 - [Modification](#modification)
@@ -144,7 +144,16 @@ This section is for those that use the native version of Steam.
 
 #### Flatpak
 
-This section is for those that use the Flatpak'd version of Steam.
+This section is for those that use the Steam flatpak.
+
+##### Flathub
+
+1. [Add the Flathub repository](https://flatpak.org/setup/).
+2. Run:
+	```bash
+	flatpak install com.valvesoftware.Steam.CompatibilityTool.Proton-GE
+	```
+##### Manual
 
 1. Download a release from the [Releases](https://github.com/GloriousEggroll/proton-ge-custom/releases) page.
 2. Create a `~/.var/app/com.valvesoftware.Steam/data/Steam/compatibilitytools.d/` directory if it does not exist.
